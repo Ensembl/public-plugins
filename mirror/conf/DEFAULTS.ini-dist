@@ -1,0 +1,43 @@
+[general]
+ENSEMBL_HOST       = my_mysql.my_domain.org
+ENSEMBL_HOST_PORT  = 3306
+ENSEMBL_WRITE_USER = my_mysql_write_user
+ENSEMBL_WRITE_PASS = my_mysql_write_pass
+ENSEMBL_DBUSER     = my_mysql_read_user
+ENSEMBL_DBPASS     = 
+
+ENSEMBL_WWW_PROXY            = http://my_webcache.my_domain.org:3128
+
+[ENSEMBL_INTERNAL_DAS_SOURCES]
+UniProt = 1
+Superfam  = 1
+Phenotypes = 1
+
+[UniProt]
+dsn         = aristotle
+description = Protein knowledgebase
+url         = http://www.ebi.ac.uk/das-srv/uniprot/das
+type        = uniprot/swissprot_acc
+authority   = http://www.uniprot.org
+on          = [ geneview protview ]
+col         = orchid4
+
+[Superfam]
+dsn         = to
+description = HMM library and genome assignments
+url         = http://supfam.mrc-lmb.cam.ac.uk/SUPERFAMILY/cgi-bin/das
+type        = ensembl_peptide
+authority   = http://supfam.mrc-lmb.cam.ac.uk/
+on          = [ protview ]
+col         = orchid1
+
+[Phenotypes]
+dsn         = phenotypes
+description = Associated directly or via orthologues or protein families
+url         = http://www.ebi.ac.uk/das-srv/genedas/das
+type        = ensembl_gene
+authority   =
+on          = [ geneview ]
+col         =
+
+[ENSEMBL_DICTIONARY] 
