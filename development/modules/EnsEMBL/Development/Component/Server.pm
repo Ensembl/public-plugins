@@ -28,4 +28,28 @@ sub spreadsheet_Apache {
   }
   return 1;
 }
+
+sub configuration_hash {
+  my( $panel, $object ) = @_;
+  $panel->add_row( 'Main Storage Hash', conf_dump($panel,0,$object->species_defs->{_storage}) );
+  $panel->add_row( 'MULTI Storage Hash', conf_dump($panel,0,$object->species_defs->{_multi}) );
+}
+
+sub conf_dump {
+  my( $panel, $level, $hashref ) = @_;
+  $panel->print( "<ul>" );
+  foreach (sort keys %$hashref) {
+    $panel->print( "<li><strong>$_</strong>" );
+    if( $hashref->{$_} =~/HASH/ ) {
+      conf_dump( $panel, $level+1, $hashref->{$_} );
+    } elsif( $hashref->{$_} =~/ARRAY/ ) {
+      $panel->print( " = [ ", join( ', ',@{$hashref->{$_}} )," ]" );
+    } else {
+      $panel->print( " = ".$hashref->{$_});
+    }
+    $panel->print( "</li>" );
+  }
+  $panel->print( "</ul>" );
+}
 1;
+

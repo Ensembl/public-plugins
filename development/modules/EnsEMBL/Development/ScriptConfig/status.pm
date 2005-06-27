@@ -8,6 +8,7 @@ sub init {
 
   $script_config->_set_defaults(qw(
     panel_apache on
+    panel_conf   off
   ));
 }
 1;
