@@ -1,0 +1,93 @@
+package location_image;
+
+##
+# parameters
+# red_edge      = yes/no
+# red_box_start = n
+# red_box_end   = n
+# l             = s:n-n - sr_name; sr_start; sr_end
+# start         = n - start
+# end           = n - end
+# strand        = n - orientation
+# image_width   = n - width in pixels....
+# user_config   = s - contigviewtop/contigviewbottom/cytoview/.....
+# h             = s - highlights
+# type          = s - form/imagemap/none
+##
+
+use strict;
+use warnings;
+no warnings "uninitialized";
+
+use EnsEMBL::Web::Document::WebPage;
+
+my $webpage= new EnsEMBL::Web::Document::WebPage(
+  'use_proxy'  => 1, 'renderer'   => 'Apache', 'outputtype' => 'HTML',
+  'scriptname' => 'contigview', 'objecttype' => 'Location',
+);
+
+## We need to create a Location object, so need a factory....
+## Create a "Location" object from the factory
+#if( $webpage->has_a_problem() ) {
+#  $webpage->render_error_page( $webpage->problem->[0] );
+#} else {
+#  foreach my $object( @{$webpage->dataObjects} ) {
+#    $webpage->configure( $object, 'karyoview', 'context_karyoview' );
+#  }
+#  $webpage->render();
+#}
+#
+#1;
+
+my $object = $webpage->dataObjects->[0];
+$object->[1]{'_script'} = 'contigview';
+my $scaling = $object->species_defs->ENSEMBL_GENOME_SIZE || 1;
+
+## Let's now get our slice - type and name come from location object
+## start/end come from URL... (all could come from URL...
+my $slice = $object->database('core')->get_SliceAdaptor()->fetch_by_region(
+  $object->seq_region_type, $object->seq_region_name,
+  $object->param('s'), $object->param('e'), 1
+);
+
+## Create userconfig...
+my $wuc = $object->user_config_hash( $object->param('user_config') );
+## Configure userconfig from parameters
+   $wuc->container_width( $object->param('e') - $object->param('s')+1 );
+   $wuc->set_width(       $object->param('image_width') );
+   $wuc->{'image_frame_colour'} = 'red' if $object->param( 'red_edge' ) eq 'yes';
+if( $object->param('red_start') ) {
+  $wuc->set( '_settings', 'draw_red_box',  'yes',  1 );
+  $wuc->set( '_settings', 'red_box_start', $object->param('red_start'), 1 );
+  $wuc->set( '_settings', 'red_box_end',   $object->param('red_end'),   1 );
+  $wuc->set( 'redbox', 'on',  'on' );
+}
+my $image    = $object->new_image( $slice, $wuc, $object->param('h') );
+warn ">>>>>>>>>>>>>>>>>>>>>>>>>>>> ", $object->script;
+if( $object->param('type') eq 'button' ) {
+  $image->set_button(
+    'form',
+    'name'   => 'click',
+    'extra'  => '_top',
+    'id'     => 'click_top',
+    'title'  => 'Click to centre display',
+    'URL'    => "/@{[$object->species]}/@{[$object->param('script')]}",
+    'hidden' => {
+      'click_left'        => int( $wuc->transform->{'translatex'} ),
+      'click_right'       => int( $wuc->transform->{'scalex'} * ($object->param('e')-$object->param('s')+1) + int( $wuc->transform->{'translatex'} ) ),
+      'seq_region_strand' => $object->param('strand'),
+      'seq_region_left'   => $object->param('s'),
+      'seq_region_right'  => $object->param('e'),
+      'seq_region_width'  => $object->length,
+      'seq_region_name'   => $object->seq_region_name,
+      'h'                 => $object->highlights_string,
+    }
+  );
+} elsif( $object->param('type') eq 'imagemap' ) {
+  $image->imagemap = 'yes';
+}
+CGI::header("text/plain");
+print $image->render;
+
+1;
+
