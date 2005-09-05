@@ -8,7 +8,7 @@ use POSIX qw(floor ceil);
 
 ## Function to configure contigview
 
-sub contigview { 
+sub xx_contigview { 
   my $self = shift;
   my $flag = "_".($self->{'flag'}+0);
   warn $self->{object}->script;
@@ -126,9 +126,8 @@ sub ajax_place_holder_basepair {
 
 sub ajax_place_holder {
   my( $panel, $object, $p ) = @_;
-  my $width = $object->param('image_width') - 2;
-  $panel->print( qq(<div style="width: ${width}px; border: solid 1px black;"
-    class="bg5 print_hide_block autocenter" id="$panel->{'code'}_image">
+  my $width = $object->param('image_width');
+  $panel->print( qq(<div style="width: ${width}px;" class="bg5 autocenter" id="$panel->{'code'}_image">
     <p style="padding: 2px; margin: 0px;">
       Generating image... please wait while image is fetched...<br />
       AJAX Call - WUC: $p->{'wuc'} of $p->{'sr'} $p->{'s'} -> $p->{'e'}
