@@ -5,12 +5,14 @@ use CGI qw(escapeHTML);
 sub common_menu_items {
   my($self,$doc) = @_;
   $doc->menu->add_entry( 'links',
+    'code' => 'vega',
     'href'  => 'http://vega.sanger.ac.uk/',
     'text'  => 'Vega',
     'icon'  => '/img/vegaicon.gif',
     'title' => "Vertebrate Genome Annotation"
   );
   $doc->menu->add_entry( 'links',
+    'code' => 'pre',
     'href'  => 'http://pre.ensembl.org/',
     'text'  => 'Pre Ensembl',
     'icon'  => '/img/preicon.gif',
