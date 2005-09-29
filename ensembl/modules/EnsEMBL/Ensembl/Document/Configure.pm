@@ -1,6 +1,14 @@
 package EnsEMBL::Ensembl::Document::Configure;
 
 use CGI qw(escapeHTML);
+use EnsEMBL::Web::DBSQL::NewsAdaptor;
+use EnsEMBL::Web::SpeciesDefs;
+my $SD = EnsEMBL::Web::SpeciesDefs->new;
+
+# Connect to web database and get news adaptor
+my $web_db = $SD->databases->{'ENSEMBL_WEBSITE'};
+warn "ENSEMBL_WEBSITE not defined in INI file" unless $web_db;
+my $wa = EnsEMBL::Web::DBSQL::NewsAdaptor->new($web_db);
 
 sub common_menu_items {
   my($self,$doc) = @_;
@@ -25,19 +33,51 @@ sub common_menu_items {
     'title' => "trace.ensembl.org - trace server"
   );
 
+
+# Archive stuff
   $doc->menu->add_entry( 'links',
-    'code' => 'archive',
-    'href' => 'http://archive.ensembl.org',
-    'text' => 'Archive! sites'
+			 'code' => 'archive',
+			 'href' => 'http://archive.ensembl.org',
+			 'text' => 'Archive! sites',
+			 'icon'  => '/img/ensemblicon.gif',
   );
 
-  my $URL = sprintf "http://%s.archive.ensembl.org%s",
+
+  my $stable_URL = sprintf "http://%s.archive.ensembl.org%s",
     CGI::escapeHTML($doc->species_defs->ARCHIVE_VERSION), CGI::escapeHTML($ENV{'REQUEST_URI'});
-  $doc->menu->add_entry( 'links',
-    'code' => 'archive_link',
-    'href' => $URL,
-    'text' => 'Stable Archive! link for this page'
+
+  $doc->menu->add_entry(
+			'links',
+			'code'    => 'archive_link',
+			'href'    => $stable_URL,
+			'text'    => 'Stable Archive! link for this page',
+			'icon'  => '/img/ensemblicon.gif',
   );
+
+  my $URL = CGI::escapeHTML($ENV{'REQUEST_URI'});
+  my @archive_sites;
+  foreach my $release ( @{$wa->fetch_releases()} ) {
+    (my $link  = $release->{short_date}) =~ s/\s+//;
+    my $text   = $release->{short_date};
+    my $number = $release->{release_id};
+    last if $number == 24;
+
+    push @archive_sites, { 'href' => "http://$link.archive.ensembl.org$URL", 
+			   'text' => "v$number $text", 
+			   'raw'  => 1,
+			 };
+
+  }
+
+  $doc->menu->add_entry(
+			'links',
+			'code'    => 'archive_link',
+			'href'    => $URL,
+			'text'    => 'View previous release of page in Archive!',
+			'title'   => "Link to archived version of this page",
+			'options' => \@archive_sites,
+			'icon'  => '/img/ensemblicon.gif',
+		       );
 
   $doc->menu->add_entry(
     'whattodo',
