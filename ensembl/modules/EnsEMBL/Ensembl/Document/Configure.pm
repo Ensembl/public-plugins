@@ -71,7 +71,7 @@ sub common_menu_items {
 
   $doc->menu->add_entry(
 			'links',
-			'code'    => 'archive_link',
+			'code'    => 'other_archive_sites',
 			'href'    => $URL,
 			'text'    => 'View previous release of page in Archive!',
 			'title'   => "Link to archived version of this page",
