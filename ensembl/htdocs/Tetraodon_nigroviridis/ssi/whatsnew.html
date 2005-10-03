@@ -1,9 +1,16 @@
-<h3 class="boxed">What's New in Ensembl 32</h3>
+<h3 class="boxed">What's New in Ensembl 34</h3>
 <ul class="spaced">
-<li><strong>HUGO name changes</strong><br />The display name for the HUGO database has been changed to 'HGNC symbol' in order to match current usage by SwissProt, etc.</li>
-<li><strong>New variation databases</strong><br />All species have new variation databases.</li>
-<li><strong>Bug fixes</strong><br />A number of small bugs in the new-style view pages have been fixed, including missing popup menus in SyntenyView.</li>
-<li><strong>Perl method status</strong><br />The Perldoc for the Perl API has been expanded to indicate the status of each method: 'stable', 'at risk', or 'medium risk'.</li>
-<li><strong>New column in external_db</strong><br />A new column, db_display_name, has been added to external_db, to replace the hardcoded web code hashmap previously used, and the API updated to support the change.</li>
-</ul><p><a href="/Tetraodon_nigroviridis/whatsnew.html">More news...</a></p>
+<ul>
+<li><strong>Compara database  </strong><br /><ul><li>Addition of pairwise (Translated BLAT) Mouse/Fugu</li>
+<Li>Addition of multiple alignments (Mercator/Mlagan) Human/Mouse/Rat/Dog </li></ul></li>
+<li><strong>News archive</strong><br /><p>"What's New" items from releases prior to the new website design have been imported into the database, and can now be accessed through a new dynamic page, <a href="/Multi/newsview">NewsView</a>.<br /><a href="/Multi/newsview?rel=34#item522">Read more</a>...
+</li>
+<li><strong>Display of regulatory factors</strong><br /><p>A new dynamic page, GeneRegulationView, displays all the regulatory factors for a given gene; it can be reached via the lefthand menu on a GeneView page where the gene has regulatory information available.<br /><a href="/Multi/newsview?rel=34#item524">Read more</a>...
+</li>
+<li><strong>Species statistics</strong><br /><p>The statistics table on each species home page now shows the correct date of the last full genebuild, rather than the date of the last database update.<br /><a href="/Multi/newsview?rel=34#item523">Read more</a>...
+</li>
+<li><strong>Schema version checking</strong><br /><p>The 'schema version' entries in the core 'meta' table have been changed to hold the current version numbers. This allows the API to check that the software and databases are using the same versions and give meaningful error messages.</p></li>
+</ul>
+
+</ul><p><a href="/Tetraodon_nigroviridis/newsview?rel=34">More news...</a></p>
 
