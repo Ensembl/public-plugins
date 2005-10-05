@@ -26,33 +26,9 @@ sub common_menu_items {
     'icon'  => '/img/preicon.gif',
     'title' => "New assemblies that have yet to get into Ensembl"
   );
-  $doc->menu->add_entry(
-    'links',
-    'href' => 'http://trace.ensembl.org/',
-    'text' => 'Trace server',
-    'title' => "trace.ensembl.org - trace server"
-  );
 
 
 # Archive stuff
-  $doc->menu->add_entry( 'links',
-			 'code' => 'archive',
-			 'href' => 'http://archive.ensembl.org',
-			 'text' => 'Archive! sites',
-			 'icon'  => '/img/ensemblicon.gif',
-  );
-
-
-  my $stable_URL = sprintf "http://%s.archive.ensembl.org%s",
-    CGI::escapeHTML($doc->species_defs->ARCHIVE_VERSION), CGI::escapeHTML($ENV{'REQUEST_URI'});
-
-  $doc->menu->add_entry(
-			'links',
-			'code'    => 'archive_link',
-			'href'    => $stable_URL,
-			'text'    => 'Stable Archive! link for this page',
-			'icon'  => '/img/ensemblicon.gif',
-  );
 
   my $URL = CGI::escapeHTML($ENV{'REQUEST_URI'});
   my @archive_sites;
@@ -79,7 +55,31 @@ sub common_menu_items {
 			'options' => \@archive_sites,
 			'icon'  => '/img/ensemblicon.gif',
 		       );
+  
+  my $stable_URL = sprintf "http://%s.archive.ensembl.org%s",
+    CGI::escapeHTML($doc->species_defs->ARCHIVE_VERSION), CGI::escapeHTML($ENV{'REQUEST_URI'});
 
+  $doc->menu->add_entry(
+			'links',
+			'code'    => 'archive_link',
+			'href'    => $stable_URL,
+			'text'    => 'Stable Archive! link for this page',
+			'icon'  => '/img/ensemblicon.gif',
+  );
+
+  $doc->menu->add_entry( 'links',
+			 'code' => 'archive',
+			 'href' => 'http://archive.ensembl.org',
+			 'text' => 'Archive! sites',
+			 'icon'  => '/img/ensemblicon.gif',
+  );
+
+  $doc->menu->add_entry(
+    'links',
+    'href' => 'http://trace.ensembl.org/',
+    'text' => 'Trace server',
+    'title' => "trace.ensembl.org - trace server"
+  );
   $doc->menu->add_entry(
     'whattodo',
     'href'=>"/info/data/download.html",
