@@ -13,6 +13,7 @@ sub update_conf {
   $SiteDefs::__species_aliases{ 'Bos_taurus'               } = [qw(bt cow moo)];
   $SiteDefs::__species_aliases{ 'Canis_familiaris'         } = [qw(cf dog)]; 
   $SiteDefs::__species_aliases{ 'Homo_sapiens'             } = [qw(hs human man default)]; 
+  $SiteDefs::__species_aliases{ 'Monodelphis_domestica'    } = [qw(md monodelphis opossum)];
   $SiteDefs::__species_aliases{ 'Mus_musculus'             } = [qw(mm mouse mus)];
   $SiteDefs::__species_aliases{ 'Pan_troglodytes'          } = [qw(pt chimp)];
   $SiteDefs::__species_aliases{ 'Rattus_norvegicus'        } = [qw(rn rat)];
