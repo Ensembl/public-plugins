@@ -32,18 +32,20 @@ sub common_menu_items {
 
   my $URL = CGI::escapeHTML($ENV{'REQUEST_URI'});
   my @archive_sites;
-  foreach my $release ( @{$wa->fetch_releases()} ) {
-    (my $link  = $release->{short_date}) =~ s/\s+//;
-    my $text   = $release->{short_date};
-    my $number = $release->{release_id};
-    last if $number == 24;
-    next if $number == $doc->species_defs->ENSEMBL_VERSION;
+  my @releases = @{$wa->fetch_releases()};
+  if (scalar(@releases)) {
+    foreach my $release (@releases) {
+      (my $link  = $release->{short_date}) =~ s/\s+//;
+      my $text   = $release->{short_date};
+      my $number = $release->{release_id};
+      last if $number == 24;
+      next if $number == $doc->species_defs->ENSEMBL_VERSION;
 
-    push @archive_sites, { 'href' => "http://$link.archive.ensembl.org$URL", 
+      push @archive_sites, { 'href' => "http://$link.archive.ensembl.org$URL", 
 			   'text' => "v$number $text", 
 			   'raw'  => 1,
 			 };
-
+    }
   }
 
   $doc->menu->add_entry(
