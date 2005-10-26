@@ -1,14 +1,7 @@
 package EnsEMBL::Ensembl::Document::Configure;
 
 use CGI qw(escapeHTML);
-use EnsEMBL::Web::DBSQL::NewsAdaptor;
 use EnsEMBL::Web::SpeciesDefs;
-my $SD = EnsEMBL::Web::SpeciesDefs->new;
-
-# Connect to web database and get news adaptor
-my $web_db = $SD->databases->{'ENSEMBL_WEBSITE'};
-warn "ENSEMBL_WEBSITE not defined in INI file" unless $web_db;
-my $wa = EnsEMBL::Web::DBSQL::NewsAdaptor->new($web_db);
 
 sub common_menu_items {
   my($self,$doc) = @_;
@@ -32,7 +25,7 @@ sub common_menu_items {
 
   my $URL = CGI::escapeHTML($ENV{'REQUEST_URI'});
   my @archive_sites;
-  my @releases = @{$wa->fetch_releases()};
+  my @releases = @{ $doc->species_defs->RELEASE_INFO || [] };
   if (scalar(@releases)) {
     foreach my $release (@releases) {
       (my $link  = $release->{short_date}) =~ s/\s+//;
