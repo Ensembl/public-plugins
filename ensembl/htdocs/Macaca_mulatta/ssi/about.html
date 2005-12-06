@@ -5,12 +5,10 @@
 
 <p><img src="/img/species/pic_Macaca_mulatta.png" height="100" width="100" class="float-left" alt="Rhesus macaque" title="oo oo!">
 Mmul_0.1 is a preliminary assembly of the rhesus monkey, <i>Macaca
-mulatta</i> using whole genome shotgun (WGS) reads from small and medium
-insert clones.
-</p>
+mulatta</i>, using whole genome shotgun (WGS) reads from small and medium
+insert clones.</p>
 
-<p>
-The release was produced by assembling whole genome shotgun
+<p>The release was produced by assembling whole genome shotgun
 reads with the Atlas genome assembly system at the <a href="http://www.hgsc.bcm.tmc.edu/">Baylor College of
 Medicine Human Genome Sequencing Center</a>. Several WGS libraries, with
 inserts of 2-4 kb and 10 kb were used to produce the data.
@@ -24,5 +22,15 @@ misassemblies of repeated sequences, collapses of repeated regions,
 and unmerged overlaps (e.g. due to polymorphisms) creating artificial
 duplications. However base accuracy in contigs (contiguous blocks of
 sequence) is usually very high with most errors near the ends of
-contigs. [<a href ="ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Rmacaque/fasta/README_Mmul.txt">More about the assembly</a>].
-</p>
+contigs. [<a href ="ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Rmacaque/fasta/README_Mmul.txt">More about the assembly</a>].</p>
+
+<h4>Annotation</h4>
+
+<p>The gene set for macaque was built using an modified version of the 
+ensembl pipeline. The species-specific resources for macaque are 
+relatively limited, so we decided to take a combined approach utilizing 
+macaque's great similarity to human to aid our annotation efforts. The 
+gene structures are mainly based on alignments to macaque protein 
+data and also use projected human gene structures. Both macaque and 
+human cDNAs were used to add UTR structures, and finally gene predictions 
+based on Uniprot proteins were used to fill gaps in the annotation.</p>
