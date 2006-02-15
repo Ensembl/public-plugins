@@ -134,3 +134,5 @@ sub ajax_place_holder {
     </p>
   </div>));
 }
+
+1;

@@ -3,6 +3,9 @@ package EnsEMBL::Ensembl::Document::Configure;
 use CGI qw(escapeHTML);
 use EnsEMBL::Web::SpeciesDefs;
 
+use EnsEMBL::Web::Root;
+our @ISA  = qw(EnsEMBL::Web::Root);
+
 sub common_menu_items {
   my($self,$doc) = @_;
   $doc->menu->add_entry( 'links',
@@ -25,7 +28,7 @@ sub common_menu_items {
 
   my $URL = CGI::escapeHTML($ENV{'REQUEST_URI'});
   my @archive_sites;
-  my @releases = @{ $doc->species_defs->RELEASE_INFO || [] };
+  my @releases = @{ $doc->species_defs->RELEASE_INFO || $doc->species_defs->anyother_species('RELEASE_INFO') || []};
   if (scalar(@releases)) {
     foreach my $release (@releases) {
       (my $link  = $release->{short_date}) =~ s/\s+//;
