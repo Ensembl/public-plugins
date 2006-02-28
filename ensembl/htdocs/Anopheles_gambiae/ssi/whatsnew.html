@@ -1,15 +1,15 @@
 <h3 class="boxed">What's New in Ensembl 37</h3>
-<h4><i>Anopheles gambiae</i> News</h4><ul class="spaced">
+<h4><i>Anopheles gambiae</i> News</h4><ul class="spaced flush">
 <li><strong>New mosquito assembly and genebuild</strong><br />Ensembl <i>Anopheles gambiae</i> has been updated to the improved assembly AgamP3, prepared primarily by the Collins group at Notre Dame, and a new set of gene predictions created.<br /><a href="/Multi/newsview?rel=37#item595">Read more</a>...
 </li>
+<li><strong>SSAHA2</strong><br />Transcript-based SSAHA2 servers are now available for all species. Go to <a href="/Multi/blastview">BlastView</a> and select SSAHA2 from the Search Tool box.</li>
 <li><strong>UniProt updates</strong><br /> Support has been added for variable splice UniProt records by adding an external db with a display label of  "UniprotKB/SpliceVariant" to the external_db table on all databases.<br /><a href="/Multi/newsview?rel=37#item603">Read more</a>...
+</li>
+<li><strong>GeneSeqalignView</strong><br />This new view is based on GeneSeqView, with the added ability to align the given sequence with one or more species.<br /><a href="/Multi/newsview?rel=37#item614">Read more</a>...
 </li>
 <li><strong>Bug fix to Transcript.pm</strong><br />Transcript.pm; is_known() was returning true if the 
 transcript had a display_xref set, which is both incorrect and 
 inconsistent with the is_known() method in Gene.pm. The new behaviour is to return true if the transcript's status is KNOWN.</li>
-<li><strong>Change to xref.display_label field</strong><br />The width of xref.display_label has been extended to 128 characters to cope with the longer labels produced by gene name & GO term projection.</li>
-<li><strong>Gene and peptide archive</strong><br />The peptide and gene archive schema has been updated and
-the API modified appropriately.</li>
 </ul>
 
 <p><a href="/Anopheles_gambiae/newsview?rel=37">More news...</a></p>
