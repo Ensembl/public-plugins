@@ -24,6 +24,7 @@ sub update_conf {
   $SiteDefs::__species_aliases{ 'Danio_rerio'              } = [qw(dr zfish zebrafish)];
   $SiteDefs::__species_aliases{ 'Fugu_rubripes'            } = [qw(fr ffish fugu takifugu takifugu_rubripes)];
   $SiteDefs::__species_aliases{ 'Tetraodon_nigroviridis'   } = [qw(tn tetraodon)];
+#  $SiteDefs::__species_aliases{ 'Oryzias_latipes'          } = [qw(ol medaka)];
 #-------------------- amphibians
   $SiteDefs::__species_aliases{ 'Xenopus_tropicalis'       } = [qw(xt xenopus frog)];
 #-------------------- flies
