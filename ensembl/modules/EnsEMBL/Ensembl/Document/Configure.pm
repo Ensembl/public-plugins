@@ -52,7 +52,7 @@ sub common_menu_items {
 			'title'   => "Link to archived version of this page",
 			'options' => \@archive_sites,
 			'icon'  => '/img/ensemblicon.gif',
-		       );
+		       ) unless $URL =~/familyview/;
   
   my $stable_URL = sprintf "http://%s.archive.ensembl.org%s",
     CGI::escapeHTML($doc->species_defs->ARCHIVE_VERSION), CGI::escapeHTML($ENV{'REQUEST_URI'});
