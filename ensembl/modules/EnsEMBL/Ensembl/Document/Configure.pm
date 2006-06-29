@@ -34,7 +34,7 @@ sub common_menu_items {
       (my $link  = $release->{short_date}) =~ s/\s+//;
       my $text   = $release->{short_date};
       my $number = $release->{release_id};
-      last if $number == 24;
+      last if $number < $doc->species_defs->EARLIEST_ARCHIVE;
       next if $number == $doc->species_defs->ENSEMBL_VERSION;
 
       push @archive_sites, { 'href' => "http://$link.archive.ensembl.org$URL", 
