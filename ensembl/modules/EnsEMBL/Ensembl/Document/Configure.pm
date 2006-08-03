@@ -37,39 +37,41 @@ sub common_menu_items {
       last if $number < $doc->species_defs->EARLIEST_ARCHIVE;
       next if $number == $doc->species_defs->ENSEMBL_VERSION;
 
-      push @archive_sites, { 'href' => "http://$link.archive.ensembl.org$URL", 
-			   'text' => "v$number $text", 
-			   'raw'  => 1,
-			 };
+      push @archive_sites, {
+        'href' => "javascript:archive('$link')", 
+        'text' => "Release $number: $text", 
+        'raw'  => 1,
+      };
     }
   }
 
   $doc->menu->add_entry(
-			'links',
-			'code'    => 'other_archive_sites',
-			'href'    => $URL,
-			'text'    => 'View previous release of page in Archive!',
-			'title'   => "Link to archived version of this page",
-			'options' => \@archive_sites,
-			'icon'  => '/img/ensemblicon.gif',
-		       ) unless $URL =~/familyview/;
+      'links',
+      'code'    => 'other_archive_sites',
+      'href'    => $archive_sites[0]{'href'},
+      'raw'     => 1, 
+      'text'    => 'View previous release of page in Archive!',
+      'title'   => "Link to archived version of this page",
+      'options' => \@archive_sites,
+      'icon'  => '/img/ensemblicon.gif',
+  ) unless $URL =~/familyview/;
   
   my $stable_URL = sprintf "http://%s.archive.ensembl.org%s",
     CGI::escapeHTML($doc->species_defs->ARCHIVE_VERSION), CGI::escapeHTML($ENV{'REQUEST_URI'});
 
   $doc->menu->add_entry(
-			'links',
-			'code'    => 'archive_link',
-			'href'    => $stable_URL,
-			'text'    => 'Stable Archive! link for this page',
-			'icon'  => '/img/ensemblicon.gif',
+      'links',
+      'code'    => 'archive_link',
+      'href'    => $stable_URL,
+      'text'    => 'Stable Archive! link for this page',
+      'icon'  => '/img/ensemblicon.gif',
   );
 
   $doc->menu->add_entry( 'links',
-			 'code' => 'archive',
-			 'href' => 'http://archive.ensembl.org',
-			 'text' => 'Archive! sites',
-			 'icon'  => '/img/ensemblicon.gif',
+       'code' => 'archive',
+       'href' => 'http://archive.ensembl.org',
+       'text' => 'Archive! sites',
+       'icon'  => '/img/ensemblicon.gif',
   );
 
   $doc->menu->add_entry(
