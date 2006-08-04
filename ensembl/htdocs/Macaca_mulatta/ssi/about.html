@@ -3,17 +3,24 @@
 
 <h4>Assembly</h4>
 
-<p><img src="/img/species/pic_Macaca_mulatta.png" height="100" width="100" class="float-left" alt="Rhesus macaque" title="coo coo!" />
-Mmul_0.1 is a preliminary assembly of the rhesus monkey, <i>Macaca
-mulatta</i>, using whole genome shotgun (WGS) reads from small and medium
-insert clones.</p>
+<p><img src="/img/species/pic_Macaca_mulatta.png" height="100" width="100" class="float-left" alt="Rhesus macaque" title="oo oo!">
+Mmul_1 is a preliminary assembly of the rhesus monkey, <i>Macaca
+mulatta</i> using whole genome shotgun (WGS) reads from small and medium
+insert clones.
+Several WGS libraries, with
+inserts of 2-4 kb and 10 kb, fosmids with ~35kb inserts, and BACs with 180kb inserts were used to produce the data.
+</p>
 
-<p>The release was produced by assembling whole genome shotgun
-reads with the Atlas genome assembly system at the <a href="http://www.hgsc.bcm.tmc.edu/">Baylor College of
-Medicine Human Genome Sequencing Center</a>. Several WGS libraries, with
-inserts of 2-4 kb and 10 kb were used to produce the data.
- Highly repeated sequences and sequences from BAC clones were
-omitted.</p>
+<p>
+The release was produced by the Macaque Genome Sequencing Consortium, led by
+the <a href="http://www.hgsc.bcm.tmc.edu/projects/rmacaque/">Baylor College 
+of Human Medicine</a>, melding 
+three separate complementary assemblies (created using the Atlas, Celera and
+PCAP systems). This involved iteratively splitting likely chimeric scaffolds
+and joining together existing scaffolds where possible. Chimeric scaffolds 
+(<100 total) were identified by breaks in synteny with the human genome, which
+were confirmed to be artefacts by the other assemblies.</p> 
+
 
 <p>This is a draft
 sequence and may contain errors so users should exercise
@@ -22,8 +29,16 @@ misassemblies of repeated sequences, collapses of repeated regions,
 and unmerged overlaps (e.g. due to polymorphisms) creating artificial
 duplications. However base accuracy in contigs (contiguous blocks of
 sequence) is usually very high with most errors near the ends of
-contigs. [<a href ="ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Rmacaque/fasta/README_Mmul.txt">More about the assembly</a>].</p>
+contigs. [<a href ="ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Rmacaque/fasta/README02142006.txt">More about the assembly</a>].
+</p>
 
 <h4>Annotation</h4>
 
-<p>The gene build was run via a reasonably standard Ensembl mammalian pipeline, modifed to make optimal choices of source proteins for each gene.</p>
+<p>The gene set for macaque was built using the ensembl pipeline. The 
+species-specific resources for macaque are relatively limited, so we 
+decided to take a combined approach utilizing macaque's great similarity 
+to human to aid our annotation efforts. The gene structures are mainly 
+based on alignments to human and macaque protein data. Both macaque and 
+human cDNAs were used to add UTR structures, and finally gene 
+predictions based on Uniprot proteins and human cdnas were used to fill 
+gaps in the annotation.</p>

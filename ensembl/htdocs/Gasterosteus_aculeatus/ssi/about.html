@@ -3,21 +3,30 @@
 
 <h4>Assembly</h4>
 
-<p><img src="/img/species/pic_Gasterosteus_aculeatus.png" height="100" width="100" class="float-left" alt="Stickleback" title="ouch! ouch! ouch!" />
+<p><img src="/img/species/pic_Gasterosteus_aculeatus.png" height="100" width="155" class="float-left" alt="Stickleback" title="ouch! ouch! ouch!" />
 This is the first release of the Stickleback genome (<i>Gasterosteus 
 aculeatus</i>). The genome sequencing and assembly are provided by the  
-<a href="http://www.broad.mit.edu/mammals/">Broad Institute</a>.
-The assembly, has a base coverage of approximately 5.93X, constructed from 1935 
-supercontigs, having N50 length of 10699.73Kb The total contig length is 0.45Gb 
-spanning 0.46Gb bases (including gaps).
-
+<a href="http://www.broad.mit.edu/mammals/">Broad Institute</a>,  with 
+cDNAs and ESTs being provided by the <a href="http://www-shgc.stanford.edu/resources/stickleback.html">Stanford Human Genome Center</a>.
+The assembly has been sequenced by whole-genome shotgun 
+sequencing with a base coverage of approximately 11x. The stickleback 
+genome is approximately 460 Mb in length and comprises 22 pairs of 
+chromosomes (groups) including a mitochondrial chromosome and an 
+additional 1,822 unplaced supercontigs.
 </p>
 
 <h4>Annotation</h4>
-<p>
-The annotation consists of aligned Stickleback proteins, cDNAs and ESTs. As well 
-as alignments to Uniprot Unigene and EMBL vertebrate mRNAs.
-</p>
 
-<h4>Full gene build</h4>
-<p>The release date for a full Ensembl gene build on this assembly is estimated for later this year. </p>
+<p>The gene set for stickleback was built using a modified version of the 
+standard Ensembl genebuild pipeline. The majority of gene models are 
+based on genewise alignments of proteins from species genetically 
+distant from stickleback. To improve accuracy, genewise alignments were 
+made to stretches of genomic sequence rather than to 'miniseqs'. cDNA  
+and EST sequences were used to add UTR to genes with 3' and 5' ESTs from 
+the same clone being paired where possible.</p>
+<p>The quality of the gene models was assessed by generating sets of 
+potential orthologs to genes from other species. Potentially missing 
+predictions and partial gene predictions were identified by examining 
+the orthologs and used to improve the gene models. 2,208 cDNAs from 
+Stanford Human Genome Center were used to further assess quality before 
+being incorporated into the final gene set.</p>
