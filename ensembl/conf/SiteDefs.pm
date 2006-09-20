@@ -29,7 +29,7 @@ sub update_conf {
   $SiteDefs::__species_aliases{ 'Danio_rerio'              } = [qw(dr zfish zebrafish)];
   $SiteDefs::__species_aliases{ 'Gasterosteus_aculeatus'   } = [qw(ga stickleback gasterosteus)];
   $SiteDefs::__species_aliases{ 'Takifugu_rubripes'        } = [qw(fr ffish fugu takifugu f_rubripes fugu_rubripes)];
-#  $SiteDefs::__species_aliases{ 'Oryzias_latipes'         } = [qw(ol medaka)];
+  $SiteDefs::__species_aliases{ 'Oryzias_latipes'         } = [qw(ol medaka)];
   $SiteDefs::__species_aliases{ 'Tetraodon_nigroviridis'   } = [qw(tn tetraodon)];
 #-------------------- amphibians
   $SiteDefs::__species_aliases{ 'Xenopus_tropicalis'       } = [qw(xt xenopus frog)];
