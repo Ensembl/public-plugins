@@ -2,7 +2,8 @@ package EnsEMBL::Ensembl::SiteDefs;
 use strict;
 
 sub update_conf {
-  $SiteDefs::ENSEMBL_PERL_SPECIES  = 'Homo_sapiens'; # Default species
+  $SiteDefs::ENSEMBL_PRIMARY_SPECIES    = 'Homo_sapiens'; # Default species
+  $SiteDefs::ENSEMBL_SECONDARY_SPECIES  = 'Mus_musculus'; # Default species
 
 ## This hash is used to configure the species available in this
 ## copy of EnsEMBL - comment out any lines which are not relevant
