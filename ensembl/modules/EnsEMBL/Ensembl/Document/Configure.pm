@@ -8,20 +8,6 @@ our @ISA  = qw(EnsEMBL::Web::Root);
 
 sub common_menu_items {
   my($self,$doc) = @_;
-  $doc->menu->add_entry( 'links',
-    'code' => 'vega',
-    'href'  => 'http://vega.sanger.ac.uk/',
-    'text'  => 'Vega',
-    'icon'  => '/img/vegaicon.gif',
-    'title' => "Vertebrate Genome Annotation"
-  );
-  $doc->menu->add_entry( 'links',
-    'code' => 'pre',
-    'href'  => 'http://pre.ensembl.org/',
-    'text'  => 'Pre Ensembl',
-    'icon'  => '/img/preicon.gif',
-    'title' => "New assemblies that have yet to get into Ensembl"
-  );
 
 
 # Archive stuff
@@ -46,7 +32,7 @@ sub common_menu_items {
   }
 
   $doc->menu->add_entry(
-      'links',
+      'local',
       'code'    => 'other_archive_sites',
       'href'    => $archive_sites[0]{'href'},
       'raw'     => 1, 
@@ -60,26 +46,13 @@ sub common_menu_items {
     CGI::escapeHTML($doc->species_defs->ARCHIVE_VERSION), CGI::escapeHTML($ENV{'REQUEST_URI'});
 
   $doc->menu->add_entry(
-      'links',
+      'local',
       'code'    => 'archive_link',
       'href'    => $stable_URL,
       'text'    => 'Stable Archive! link for this page',
       'icon'  => '/img/ensemblicon.gif',
   );
 
-  $doc->menu->add_entry( 'links',
-       'code' => 'archive',
-       'href' => 'http://archive.ensembl.org',
-       'text' => 'Archive! sites',
-       'icon'  => '/img/ensemblicon.gif',
-  );
-
-  $doc->menu->add_entry(
-    'links',
-    'href' => 'http://trace.ensembl.org/',
-    'text' => 'Trace server',
-    'title' => "trace.ensembl.org - trace server"
-  );
   $doc->menu->add_entry(
     'whattodo',
     'href'=>"/info/data/download.html",
@@ -90,7 +63,7 @@ sub common_menu_items {
 sub static_menu_items {
   my( $self, $doc ) = @_;
 # don't show species links on main home page
-  unless( $ENV{'REQUEST_URI'} eq '/index.html' ) {
+  unless( $ENV{'REQUEST_URI'} eq '/index.html' || $ENV{'REQUEST_URI'} eq '/sitemap.html') {
     $doc->menu->add_block( 'species', 'bulleted', 'Select a species', 'priority' => 20 );
 
   # do species popups from config
@@ -122,6 +95,36 @@ sub static_menu_items {
       );
     }
   }
+=pod
+  $doc->menu->add_block( 'links', 'bulleted', 'Other Ensembl sites', 'priority' => 30 );
+  $doc->menu->add_entry( 'links',
+    'code' => 'vega',
+    'href'  => 'http://vega.sanger.ac.uk/',
+    'text'  => 'Vega',
+    'icon'  => '/img/vegaicon.gif',
+    'title' => "Vertebrate Genome Annotation"
+  );
+  $doc->menu->add_entry( 'links',
+    'code' => 'pre',
+    'href'  => 'http://pre.ensembl.org/',
+    'text'  => 'Pre Ensembl',
+    'icon'  => '/img/preicon.gif',
+    'title' => "New assemblies that have yet to get into Ensembl"
+  );
+  $doc->menu->add_entry( 'links',
+       'code' => 'archive',
+       'href' => 'http://archive.ensembl.org',
+       'text' => 'Archive! sites',
+       'icon'  => '/img/ensemblicon.gif',
+  );
+
+  $doc->menu->add_entry(
+    'links',
+    'href' => 'http://trace.ensembl.org/',
+    'text' => 'Trace server',
+    'title' => "trace.ensembl.org - trace server"
+  );
+=cut
 }
 
 sub dynamic_menu_items {
