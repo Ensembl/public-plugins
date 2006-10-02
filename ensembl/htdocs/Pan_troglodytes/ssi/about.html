@@ -2,24 +2,21 @@
 
 <h4>Assembly</h4>
 
-<p><img src="/img/species/pic_Pan_troglodytes.png" alt="chimpanzee" title="Oo ooo!" class="float-left" />This site provides a data set based on the November
-	13th 2003 4x shotgun assembly from the Chimpanzee Sequencing 
+<p><img src="/img/species/pic_Pan_troglodytes.png" alt="chimpanzee" title="Oo ooo!" class="float-left" />This site provides a data set based on the March 
+2006 Pan_troglodytes-2.1 6x shotgun assembly from the Chimpanzee Sequencing 
         Consortium headed by the <a href="http://www.genome.wustl.edu/gsc/">GSC</a> (St. Louis) and <a href="http://www.broad.mit.edu/">The Broad Institute</a> (MIT).</p>  
-    
-<p>The assembly is a merge of a "modified de
-	novo" (MDN) assembly from the ARACHNE group, which used the human genome to establish that
-	particular inserts were not chimeric, and a separate "validated
-	chimp-on-human" (VCH) assembly which took the chimp reads which align
-	uniquely to human, formed them into contigs via this alignment, and
-	removed contigs which failed a two-haplotype consistency check.</p>
-	
-<p>Shared reads were used to align the two assemblies to each other, and where they were consistent, the VCH sequence was transferred to the MDN, resulting in the released merged assembly.</p>
-
+   
+<p>The chimpanzee 2.1 assembly is a merge of the initial  4X made in 
+collaboration with the Broad Institute at MIT and Harvard and an 
+additional (2X) whole genome coverage from the WUGSC (St. Louis) 
+utilizing a combination of whole genome plasmid reads as well as fosmid 
+and BAC end sequences.</p>
+ 
 <p>This release of the assembly has the following properties:</p>
 <ul>
-    <li>361782 contigs, having N50 length 15.7 Kb</li>
-	<li>contig length total 2.73 Gb, spanning 3.02 Gb </li>
-	<li>37849 supercontigs, having N50 length 8.6 Mb (not including gaps).</li>
+    <li>246876 contigs, having N50 length 30.8 Kb</li>
+	<li>contig length total 2.92 Gb</li>
+	<li>chromosome length total 3.35 Gb</li>
 </ul>
 
 <h4>Chromosome numbering</h4>
@@ -35,9 +32,15 @@ and endorsed by the International Chimpanzee Genome Consortium.</p>
 
 <h4>Annotation</h4>
 
-<p>The genome was aligned to human by UCSC using BLASTz. These alignments were used to transfer human gene structures (Human Build 34d) to chimpanzee. Owing to the low coverage commensurate with a 4x shotgun, there will inevitably be some mis-assemblies and mis-placements; however with better data it is expected that most chimpanzee genes will align with near-identical human genes.</p>
+<p>The genome was aligned to human NCBI36 by UCSC using BLASTz. These 
+alignments were used to transfer human ensembl gene structures (Human 
+Build 36b) to chimpanzee.
+94% of the genes were mapped by direct projection while only 0,1% of the 
+human ensembl genes were not mapped, the remaining 5.9% were aligned 
+directly into the chimpanzee genome by using Exonerate (G. Slater et 
+al., <i>BMC Bioinformatics.</i> 2005 6:31).</p>
 
 <ul>
     <li><a href= "/Pan_troglodytes/chimp_build.html">More information about the chimpanzee gene build</a>.</li>
-</ul>
 
+</ul>
