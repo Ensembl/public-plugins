@@ -1,17 +1,34 @@
-<h3 class="boxed">What's New in Ensembl 40</h3>
+<h3 class="boxed">What's New in Ensembl 41</h3>
 <h4><i>Danio rerio</i> News</h4><ul class="spaced">
-<li><strong>New ZFIN data</strong><br />The zebrafish expression pattern xrefs and dna
-align features in the <i>Danio rerio</i> core database have been updated with new data from ZFIN, and the expression pattern database updated in Mart.
+<li><strong>New genebuild on zebrafish assembly Zv6</strong><br />An updated gene set has been generated for the Zv6 assembly.<br /><a href="/Danio_rerio/newsview?rel=41#item704">Read more</a>...
 </li>
+<li><strong>Compara - whole genome alignments and syntenies</strong><br /><p><strong>Whole Genome Alignments</strong></p>
+<dl>
+<dt>Chimp (Pan troglodytes)</dt>
+<dd>Owing to the new Chimp assembly and genebuild, there is a new MLAGAN primate 3-way alignment of human, chimp and macaque.<br /><a href="/Homo_sapiens/newsview?rel=41#item709">Read more</a>...
+</li>
+<li><strong>RNA updates</strong><br /><p>Ensembl RNA data has been updated as follows:</p>
+<ul>
+<li>New ncRNAs for Zebrafish, Chimp, Medaka, Elephant, Rabbit, Armadillo and Tenrec</li>
+<li>Updated miRNAs for all chordates</li>
+</ul></li>
 </ul><h4>General News</h4><ul class="spaced">
-<li><strong>New orthologue display - GeneTreeView</strong><br />A new Ensembl view page, GeneTreeView, displays gene orthologies as tree diagrams (<a href="/Homo_sapiens/genetreeview?db=core;gene=ENSG00000139618">example</a>).<br /><a href="/Multi/newsview?rel=40#item690">Read more</a>...
+<li><strong>Compara updates</strong><br /><dl>
+<dt>Homologies</dt>
+<dd>Gene trees have been updated to include the 2X genomes and use a multifurcating species tree, and homologues added based on gene trees.<br /><a href="/Multi/newsview?rel=41#item708">Read more</a>...
 </li>
-<li><strong>Core data patches</strong><br /><p>The following non-schema changes have been made to the core database.<br /><a href="/Multi/newsview?rel=40#item681">Read more</a>...
+<li><strong>Minor schema changes</strong><br /><dl>
+<dt>analysis_description</dt>
+<dd>Now has a 'displayable' flag to control whether or not it is usually displayed in the web pages</dd>
+<dt>xref</dt>
+<dd>One column has been changed and one added
+<ul>
+<li>the info_type column has addition ENUM values to give more details about xref provenance</li>
+<li>A new column 'priority' supports the fetching of xrefs of the same type</li>
+</ul>
+</dd>
+</dl>
+<p>The API has of course been updated to reflect these changes</p>.<br /><a href="/Multi/newsview?rel=41#item705">Read more</a>...
 </li>
-<li><strong>API changes</strong><br />The API has been updated to reflect changes to the schema, including setting xref versions to 0 if undefined, and supporting ditag tables.<br /><a href="/Multi/newsview?rel=40#item683">Read more</a>...
-</li>
-<li><strong>Compara updates</strong><br /><p><strong>Protein/Protein</strong></p>
-<p>Updates of orthologues/paralogues and families to include the new species and gene sets announced.<br /><a href="/Multi/newsview?rel=40#item688">Read more</a>...
-</li>
-</ul><p><a href="/Danio_rerio/newsview?rel=40">More news...</a></p>
+</ul><p><a href="/Danio_rerio/newsview?rel=41">More news...</a></p>
 

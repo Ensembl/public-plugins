@@ -1,12 +1,29 @@
-<h3 class="boxed">What's New in Ensembl 40</h3>
+<h3 class="boxed">What's New in Ensembl 41</h3>
 <h4><i>Mus musculus</i> News</h4><ul class="spaced">
-<li><strong>New Vega Mouse</strong><br />The Vega website has been updated with a new database for <i>Mus musculus</i>. See the <a href="http://vega.sanger.ac.uk/">Vega website</a> for more information.</li>
-<li><strong>Ditag data</strong><br />The Ensembl schema has been extended with two new tables, <code>ditag</code> and <code>ditag_feature</code>, to support new data and functionality.<br /><a href="/Homo_sapiens/newsview?rel=40#item675">Read more</a>...
+<li><strong>Variation databases</strong><br /><p>Ensembl 41 includes the first release of variation data for chimp, to accompany the new assembly and genebuild.<br /><a href="/Homo_sapiens/newsview?rel=41#item711">Read more</a>...
 </li>
-<li><strong>New Affy mappings</strong><br /><p>Fourteen additional Affy arrays have been mapped to their respective genomes as follows.<br /><a href="/Homo_sapiens/newsview?rel=40#item677">Read more</a>...
+<li><strong>RNA updates</strong><br /><p>Ensembl RNA data has been updated as follows:</p>
+<ul>
+<li>New ncRNAs for Zebrafish, Chimp, Medaka, Elephant, Rabbit, Armadillo and Tenrec</li>
+<li>Updated miRNAs for all chordates</li>
+</ul></li>
+</ul><h4>General News</h4><ul class="spaced">
+<li><strong>Compara updates</strong><br /><dl>
+<dt>Homologies</dt>
+<dd>Gene trees have been updated to include the 2X genomes and use a multifurcating species tree, and homologues added based on gene trees.<br /><a href="/Multi/newsview?rel=41#item708">Read more</a>...
 </li>
-<li><strong>Patches for Ensembl Mouse database</strong><br /><p>The following updates have been made to the mouse data.<br /><a href="/Mus_musculus/newsview?rel=40#item678">Read more</a>...
+<li><strong>Minor schema changes</strong><br /><dl>
+<dt>analysis_description</dt>
+<dd>Now has a 'displayable' flag to control whether or not it is usually displayed in the web pages</dd>
+<dt>xref</dt>
+<dd>One column has been changed and one added
+<ul>
+<li>the info_type column has addition ENUM values to give more details about xref provenance</li>
+<li>A new column 'priority' supports the fetching of xrefs of the same type</li>
+</ul>
+</dd>
+</dl>
+<p>The API has of course been updated to reflect these changes</p>.<br /><a href="/Multi/newsview?rel=41#item705">Read more</a>...
 </li>
-<li><strong>Mouse variation database</strong><br />The Mouse variation database now includes data imported from dbSNP 126 (on NCBIm36 assembly). Also, Sanger-called SNPs and multiple strain tables have been added to Mart.</li>
-</ul><p><a href="/Mus_musculus/newsview?rel=40">More news...</a></p>
+</ul><p><a href="/Mus_musculus/newsview?rel=41">More news...</a></p>
 
