@@ -10,11 +10,15 @@ ENSEMBL_DBPASS     =
 
 [ENSEMBL_STYLE]
 ; name of font used for labels...
-; GRAPHIC_FONT         = arial
+; GRAPHIC_FONT         = arial     # For true type fonts
+; GRAPHIC_FONT         = small     # If true type fonts not installed
+
 ; name of font used for DNA/Peptide sequence in boxes...
-; GRAPHIC_FONT_FIXED   = cour
+; GRAPHIC_FONT_FIXED   = cour     # If using true type fonts
+; GRAPHIC_FONT_FIXED   = Small    # If true type fonts not installed
+
 ; path to ttfonts remember /
-; GRAPHIC_TTF_PATH     = /usr/local/share/fonts/ttfonts/
+; GRAPHIC_TTF_PATH     = /usr/local/share/fonts/ttfonts/  # Install from corefonts.sourceforge.net
 ; Default font-size for graphic text... (may need to change depending on fonts used above)
 ; GRAPHIC_FONTSIZE     = 8
 
