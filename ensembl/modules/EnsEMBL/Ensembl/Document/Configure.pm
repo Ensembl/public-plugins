@@ -9,25 +9,32 @@ our @ISA  = qw(EnsEMBL::Web::Root);
 sub common_menu_items {
   my($self,$doc) = @_;
 
-
 # Archive stuff
 
   my $URL = CGI::escapeHTML($ENV{'REQUEST_URI'});
   my @archive_sites;
   my @releases = @{ $doc->species_defs->RELEASE_INFO || $doc->species_defs->anyother_species('RELEASE_INFO') || []};
   if (scalar(@releases)) {
+    my $species = $ENV{'ENSEMBL_SPECIES'};
+    my %archive_info = %{$doc->species_defs->get_config($species, 'archive')};
+    my $assembly;
     foreach my $release (@releases) {
-      (my $link  = $release->{short_date}) =~ s/\s+//;
-      my $text   = $release->{short_date};
       my $number = $release->{release_id};
-      last if $number < $doc->species_defs->EARLIEST_ARCHIVE;
-      next if $number == $doc->species_defs->ENSEMBL_VERSION;
+      if (!$species || ($assembly = $archive_info{$number})) {
+        (my $link  = $release->{short_date}) =~ s/\s+//;
+        my $text   = $release->{short_date};
+        last if $number < $doc->species_defs->EARLIEST_ARCHIVE;
+        next if $number == $doc->species_defs->ENSEMBL_VERSION;
+        if ($assembly) {
+          $text .= " ($assembly)";  
+        }
 
-      push @archive_sites, {
-        'href' => "javascript:archive('$link')", 
-        'text' => "Release $number: $text", 
-        'raw'  => 1,
-      };
+        push @archive_sites, {
+          'href' => "javascript:archive('$link')", 
+          'text' => "e! $number: $text", 
+          'raw'  => 1,
+        };
+      }
     }
   }
 
@@ -40,7 +47,7 @@ sub common_menu_items {
       'title'   => "Link to archived version of this page",
       'options' => \@archive_sites,
       'icon'  => '/img/ensemblicon.gif',
-  ) unless $URL =~/familyview/;
+  ) unless ($URL =~/familyview/ || !@archive_sites) ;
   
   my $stable_URL = sprintf "http://%s.archive.ensembl.org%s",
     CGI::escapeHTML($doc->species_defs->ARCHIVE_VERSION), CGI::escapeHTML($ENV{'REQUEST_URI'});
@@ -62,8 +69,6 @@ sub common_menu_items {
 
 sub static_menu_items {
   my( $self, $doc ) = @_;
-# don't show species links on main home page
-  unless( $ENV{'REQUEST_URI'} eq '/index.html' || $ENV{'REQUEST_URI'} eq '/sitemap.html') {
     $doc->menu->add_block( 'species', 'bulleted', 'Select a species', 'priority' => 20 );
 
   # do species popups from config
@@ -94,37 +99,6 @@ sub static_menu_items {
         'options'=>$spp_tree{$group}{'species'}
       );
     }
-  }
-=pod
-  $doc->menu->add_block( 'links', 'bulleted', 'Other Ensembl sites', 'priority' => 30 );
-  $doc->menu->add_entry( 'links',
-    'code' => 'vega',
-    'href'  => 'http://vega.sanger.ac.uk/',
-    'text'  => 'Vega',
-    'icon'  => '/img/vegaicon.gif',
-    'title' => "Vertebrate Genome Annotation"
-  );
-  $doc->menu->add_entry( 'links',
-    'code' => 'pre',
-    'href'  => 'http://pre.ensembl.org/',
-    'text'  => 'Pre Ensembl',
-    'icon'  => '/img/preicon.gif',
-    'title' => "New assemblies that have yet to get into Ensembl"
-  );
-  $doc->menu->add_entry( 'links',
-       'code' => 'archive',
-       'href' => 'http://archive.ensembl.org',
-       'text' => 'Archive! sites',
-       'icon'  => '/img/ensemblicon.gif',
-  );
-
-  $doc->menu->add_entry(
-    'links',
-    'href' => 'http://trace.ensembl.org/',
-    'text' => 'Trace server',
-    'title' => "trace.ensembl.org - trace server"
-  );
-=cut
 }
 
 sub dynamic_menu_items {
