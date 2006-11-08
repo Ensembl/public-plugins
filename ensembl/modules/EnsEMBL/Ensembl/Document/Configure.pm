@@ -42,8 +42,10 @@ sub common_menu_items {
     }
   }
 
+  $doc->menu->add_block( 'archive', 'bulleted', 'Ensembl Archive', 'priority' => 100);
+
   $doc->menu->add_entry(
-      'local',
+      'archive',
       'code'    => 'other_archive_sites',
       'href'    => $archive_sites[0]{'href'},
       'raw'     => 1, 
@@ -58,18 +60,13 @@ sub common_menu_items {
     CGI::escapeHTML($doc->species_defs->ARCHIVE_VERSION), CGI::escapeHTML($ENV{'REQUEST_URI'});
 
   $doc->menu->add_entry(
-      'local',
+      'archive',
       'code'    => 'archive_link',
       'href'    => $stable_URL,
       'text'    => 'Stable Archive! link for this page',
       'icon'  => '/img/ensemblicon.gif',
   );
 
-  $doc->menu->add_entry(
-    'whattodo',
-    'href'=>"/info/data/download.html",
-    'text' => 'Download data'
-  );
 }
 
 sub static_menu_items {
@@ -77,7 +74,7 @@ sub static_menu_items {
 ### 1. Lists of current species
   my( $self, $doc ) = @_;
 
-  $doc->menu->add_block( 'species', 'bulleted', 'Select a species', 'priority' => 20 );
+  $doc->menu->add_block( 'species', 'bulleted', 'Select a species', 'priority' => 20);
 
   my @group_order = qw( Mammals Chordates Eukaryotes );
   my %spp_tree = (

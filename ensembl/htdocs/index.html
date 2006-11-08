@@ -5,19 +5,28 @@
 </head>
 <body>
 
+<script>
+var search = document.getElementById('search');
+var body = document.getElementById('ensembl-webpage');
+body.removeChild(search);
+/*var links = document.getElementById('searchlinks');
+search.removeChild(links);*/
+</script>
+
 <div class="col-wrapper">
     [[INCLUDE::ssi/search.html]]
 </div>
 
 <div class="col-wrapper">
     <div class="col2">
-    [[INCLUDE::ssi/release.html]]
-    [[INCLUDE::ssi/whatsnew.html]]
+    [[INCLUDE::ssi/quicklinks.html]]
+    [[INCLUDE::ssi/ensemblstart.html]]
+    [[INCLUDE::ssi/pre_species.html]]
+    [[INCLUDE::ssi/sites.html]]
     </div>
 
     <div class="col2">
-    [[INCLUDE::ssi/ensemblstart.html]]
-    [[INCLUDE::ssi/sites.html]]
+    [[INCLUDE::ssi/species.html]]
     </div>
 </div>
 
