@@ -1,0 +1,33 @@
+<script type="text/javascript" src="/js/prototype.js"></script>
+<script type="text/javascript" src="/js/scriptaculous.js"></script>
+<script language="javascript">
+  function show_pre() {
+    swap_tabs('pre','explore');
+    document.getElementById('species_content').className="tab_content pre_content";
+  }
+
+  function show_explore() {
+    swap_tabs('explore','pre');
+    document.getElementById('species_content').className="tab_content";
+  }
+
+  function swap_tabs(selected_tab, old_tab) {
+    document.getElementById(old_tab).style.display = 'none';
+    document.getElementById(old_tab + "_tab").className = 'tab';
+    document.getElementById(selected_tab).style.display = 'block';
+    document.getElementById(selected_tab + "_tab").className = 'tab selected';
+  }
+
+</script>
+
+
+<div class="box_tabs" style="margin-top: 7px;">
+  <div class="tab selected" id="explore_tab">
+    <a href="javascript:void(0);" onClick="show_explore();">Explore Ensembl 42</a>
+  </div>
+  <div class="tab" id="pre_tab">
+    <a href="javascript:void(0);" onClick="show_pre();">Pre! species</a>
+  </div>
+  <br clear="all" />
+  <div class="tab_content" id="species_content">
+  <div class="tab_content_panel" id="explore">

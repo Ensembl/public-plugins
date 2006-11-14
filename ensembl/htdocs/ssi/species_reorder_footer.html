@@ -1,0 +1,79 @@
+  </div>
+  <div class="tab_content_panel" id="pre" style="display: none;">
+
+<dl class="species-list-small">
+<!--- pre species -->
+      <dt><a href="http://pre.ensembl.org/Erinaceus_europaeus/"><img src="/img/species/thumb_Erinaceus_europaeus.png" alt="" title="Browse theHedgehog genome" class="sp-thumb" height="30" width="30" /></a><a href="http://pre.ensembl.org/Erinaceus_europaeus/">Erinaceus europaeus</a></dt>
+<dd><span class="small normal">eriEur1</span></dd>
+
+      <dt><a href="http://pre.ensembl.org/Felis_catus/"><img src="/img/species/thumb_Felis_catus.png" alt="" title="Browse the Cat genome" class="sp-thumb" height="30" width="30" /></a><a href="http://pre.ensembl.org/Felis_catus/">Felis catus</a></dt>
+<dd><span class="small normal">CAT</span></dd>
+
+      <dt><a href="http://pre.ensembl.org/Myotis_lucifugus/"><img src="/img/species/thumb_Myotis_lucifugus.png" alt="" title="Browse the Microbat genome" class="sp-thumb" height="30" width="30" /></a><a href="http://pre.ensembl.org/Myotis_lucifugus/">Myotis lucifugus</a></dt>
+<dd><span class="small normal">MICROBAT 1</span></dd>
+
+      <dt><a href="http://pre.ensembl.org/Otolemur_garnettii/"><img src="/img/species/thumb_Otolemur_garnettii.png" alt="" title="Browse the Bushbaby genome" class="sp-thumb" height="30" width="30" /></a><a href="http://pre.ensembl.org/Otolemur_garnettii/">Otolemur garnettii</a></dt>
+<dd><span class="small normal">BUSHBABY 1</span></dd>
+
+      <dt><a href="http://pre.ensembl.org/Sorex_araneus/"><img src="/img/species/thumb_Sorex_araneus.png" alt="" title="Browse the Shrew genome" class="sp-thumb" height="30" width="30" /></a><a href="http://pre.ensembl.org/Sorex_araneus/">Sorex araneus</a></dt>
+<dd><span class="small normal">sorAra1</span></dd>
+
+      <dt><a href="http://pre.ensembl.org/Sus_scrofa/"><img src="/img/species/thumb_Sus_scrofa.png" alt="" title="Browse the Pig genome" class="sp-thumb" height="30" width="30" /></a><a href="http://pre.ensembl.org/Sus_scrofa/">Sus scrofa</a></dt>
+<dd><span class="small normal">[clone map]</span></dd>
+
+
+</dl>
+
+  </div>
+</div>
+</div>
+
+<!-- javascript for reordering list -->
+<script type="text/javascript">
+ // <![CDATA[
+
+var performedSave = 0;
+
+function toggle_reorder() {
+  if (document.getElementById('reorder_species').style.display == 'none') {
+    document.getElementById('reorder_species').style.display = 'block';
+    document.getElementById('full_species').style.display = 'none';
+  } else {
+    document.getElementById('full_species').style.display = 'block';
+    document.getElementById('reorder_species').style.display = 'none';
+  }
+}
+
+function update_species(element) {
+  //alert(element.id);
+  if (!performedSave) {
+    performedSave = 1;
+    var url = "/common/save_favourites";
+    var data = "favourites=" + serialize('favourites_list');
+    data = data + "&list=" + serialize('species_list');
+    var prepare = new Ajax.Request(url,
+                         { method: 'get', parameters: data, onComplete: saved });
+  } 
+}
+
+function saved(response) {
+  document.getElementById('full_species').innerHTML = response.responseText;
+  performedSave = 0;
+}
+
+function serialize(element) {
+  // Based on on Sortable.serialize from Scriptaculous
+  var items = $(element).childNodes;
+  var queryComponents = new Array();
+  for(var i=0; i<items.length; i++) {
+    queryComponents.push(items[i].id.split("_")[1]);
+  }
+  return queryComponents.join(",");
+}
+
+Sortable.create('species_list', {"onUpdate":update_species, containment:["species_list","favourites_list"], dropOnEmpty:false});
+Sortable.create('favourites_list', {"onUpdate":update_species, containment:["species_list","favourites_list"], dropOnEmpty:false});
+ // ]]>
+</script>
+
+</div>

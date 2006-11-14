@@ -18,15 +18,14 @@ body.removeChild(search);
 <div class="col-wrapper">
     <div class="col2">
     [[INCLUDE::ssi/quicklinks.html]]
-    [[SCRIPT::EnsEMBL::Web::Document::HTML::UserLinks]]
     [[INCLUDE::ssi/whatsnew.html]]
-    [[INCLUDE::ssi/ensemblstart.html]]
-    [[INCLUDE::ssi/pre_species.html]]
     [[INCLUDE::ssi/sites.html]]
     </div>
 
     <div class="col2">
-    [[INCLUDE::ssi/species.html]]
+    [[INCLUDE::ssi/species_reorder_header.html]]
+    [[SCRIPT::EnsEMBL::Web::Document::HTML::SpeciesList]]
+    [[INCLUDE::ssi/species_reorder_footer.html]]
     </div>
 </div>
 
