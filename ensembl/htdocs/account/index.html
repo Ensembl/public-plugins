@@ -9,26 +9,9 @@
 <script type="text/javascript" src="/js/scriptaculous.js"></script>
 
 <script type='text/javascript'>
-
-var tabs = [ 'bookmarks', 'groups' ];
-
 function hide_intro() {
   Effect.Fade('intro');
 }
-
-function switch_tab(element) {
-  reset_tabs();
-  document.getElementById(element + "_tab").className = "tab selected";
-  document.getElementById(element).style.display = "block";
-}
-
-function reset_tabs() {
-  for (var n = 0; n < tabs.length; n++) {
-    document.getElementById(tabs[n] + "_tab").className = "tab";
-  document.getElementById(tabs[n]).style.display = "none";
-  }
-}
-
 </script>
 
 <div class="col-wrapper">
@@ -38,8 +21,12 @@ function reset_tabs() {
 This is your account page. From here you can manage your bookmarks, configurations and groups. 
 </div>
 
-<div style='margin-top: 10px;'>
+<div style='margin-top: 10px; margin-bottom: 15px;'>
 [[SCRIPT::EnsEMBL::Web::Document::HTML::AccountView]]
+</div>
+
+<div style='margin-top: 10px;'>
+[[SCRIPT::EnsEMBL::Web::Document::HTML::GroupView]]
 </div>
 
 </div>
