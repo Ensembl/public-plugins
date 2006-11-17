@@ -29,7 +29,7 @@ $data->populate;
 $page->data_definition($data);
 $page->title('Edit bookmark');
 $page->action('edit');
-$page->on_complete('/account/index.html');
+$page->on_complete('/common/accountview');
 $page->on_error('/account/bookmark_error.html');
 
 $page->add_text('Describe bookmark here'); 
