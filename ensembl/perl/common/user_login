@@ -16,7 +16,7 @@ my $data = EnsEMBL::Web::DBSQL::DataDefinition->new();
 my $db = $EnsEMBL::Web::Apache::Handlers::ENSEMBL_USER_DB_HANDLE;
 $data->adaptor(EnsEMBL::Web::DBSQL::ViewAdaptor->new((
                                                        handle => $db,
-                                                       table  => 'user_test'
+                                                       table  => 'user'
                                                     )) );
 
 $data->discover;

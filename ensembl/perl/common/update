@@ -19,7 +19,7 @@ if ($cgi->param('id') eq $ENV{'ENSEMBL_USER_ID'}) {
 
 $data->adaptor(EnsEMBL::Web::DBSQL::ViewAdaptor->new((
                                                        handle => $db,
-                                                       table  => 'user_test'
+                                                       table  => 'user'
                                                     )) );
 
 $data->discover;
