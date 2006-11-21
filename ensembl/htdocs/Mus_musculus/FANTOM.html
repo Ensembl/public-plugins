@@ -32,17 +32,31 @@
 
 <h4>Alignments</h4>
 
-
-The ditags were split in half and aligned to the unmasked genome
-sequence using <a href="http://www.ebi.ac.uk/%7Eguy/exonerate/">Exonerate</a>.
-The hits were filtered using the following strategy:
+<p>The ditags were split in half and aligned to the unmasked genome
+sequence using <a href="http://www.ebi.ac.uk/~guy/exonerate/">Exonerate</a>.
+The hits were filtered using the following strategy:</p>
 <ul>
-  <li>score &gt;= 80/85, considering only higest scoring hits</li>
+
+  <li>score &gt;= 75/85, considering only higest scoring hits</li>
+
   <li>hits for both ends</li>
+
   <li>both ends on same chromosome, same strand and within 600 kb</li>
-  <li>if the tags align to more than 4 genomic locations, they were discarded
+
+  <li>for GIS PETs: 5'/3' orientation has to remain correct</li>
+
+  <li>if the tags align to more than 4 genomic locations, they
+were discarded
 as being unreliable</li>
+
+  <li>sequences with non-(ATGC) characters were removed</li>
+
+  <li>sequences with poly(ATGC) &gt; 5 were removed</li>
+
 </ul>
+
+<p>Identical sequences and hits to the same location (start &amp; end
+of ditag) were collapsed into a non-redundant set.</p>
 
 <h4>Credits</h4>
 
