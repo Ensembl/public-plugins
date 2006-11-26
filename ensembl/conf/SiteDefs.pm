@@ -3,7 +3,7 @@ use strict;
 
 sub update_conf {
   $SiteDefs::ENSEMBL_PRIMARY_SPECIES    = 'Homo_sapiens'; # Default species
-  $SiteDefs::ENSEMBL_SECONDARY_SPECIES  = 'Mus_musculus'; # Default species
+  $SiteDefs::ENSEMBL_SECONDARY_SPECIES  = 'Mus_musculus'; # Secondardy species
 
 ## This hash is used to configure the species available in this
 ## copy of EnsEMBL - comment out any lines which are not relevant
@@ -23,7 +23,7 @@ sub update_conf {
   $SiteDefs::__species_aliases{ 'Mus_musculus'             } = [qw(mm mouse mus)];
   $SiteDefs::__species_aliases{ 'Pan_troglodytes'          } = [qw(pt chimp)];
   $SiteDefs::__species_aliases{ 'Rattus_norvegicus'        } = [qw(rn rat)];
-
+  $SiteDefs::__species_aliases{ 'Ornithorhynchus_anatinus' } = [qw(oa platypus)];
 #-------------------- birds
   $SiteDefs::__species_aliases{ 'Gallus_gallus'            } = [qw(gg chicken)];
 #-------------------- fish
