@@ -2,14 +2,16 @@
 <head>
 <meta name="navigation" content="Ensembl" />
 <title>Ensembl Genome Browser</title>
+<script type="text/javascript">
+  function remove_search_box() {
+    var searchDiv = $('search');
+    searchDiv.parentNode.removeChild(searchDiv);
+  }
+  addLoadEvent( remove_search_box );
+</script>
 </head>
 <body>
 
-<script>
-var search = document.getElementById('search');
-var body = document.getElementById('ensembl-webpage');
-body.removeChild(search);
-</script>
 
 <div class="col-wrapper">
     [[INCLUDE::ssi/search.html]]
