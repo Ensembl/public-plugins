@@ -43,7 +43,9 @@ sub common_menu_items {
   }
 
   if (!$doc->access_restrictions) {
-    $doc->menu->add_block( 'archive', 'bulleted', 'Ensembl Archive', 'priority' => 100);
+
+    $doc->menu->add_block( 'archive', 'bulleted', 'Ensembl Archive', 'priority' => 100, 
+                            'include_miniad'=>1);
 
     $doc->menu->add_entry(
       'archive',
