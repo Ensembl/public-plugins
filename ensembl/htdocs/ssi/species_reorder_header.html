@@ -2,12 +2,12 @@
 <script type="text/javascript" src="/js/scriptaculous.js"></script>
 <script language="javascript">
   function show_pre() {
-    swap_tabs('pre','explore');
+    swap_tabs('pre','current');
     document.getElementById('species_content').className="tab_content pre_content";
   }
 
-  function show_explore() {
-    swap_tabs('explore','pre');
+  function show_current() {
+    swap_tabs('current','pre');
     document.getElementById('species_content').className="tab_content";
   }
 
@@ -22,12 +22,12 @@
 
 
 <div class="box_tabs" style="margin-top: 7px;">
-  <div class="tab selected" id="explore_tab">
-    <a href="javascript:void(0);" onClick="show_explore();">Explore Ensembl 42</a>
+  <div class="tab selected" id="current_tab">
+    <a href="javascript:void(0);" onClick="show_current();">Ensembl 42</a>
   </div>
   <div class="tab" id="pre_tab">
     <a href="javascript:void(0);" onClick="show_pre();">Pre! species</a>
   </div>
   <br clear="all" />
   <div class="tab_content" id="species_content">
-  <div class="tab_content_panel" id="explore">
+  <div class="tab_content_panel" id="current">
