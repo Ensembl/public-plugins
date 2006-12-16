@@ -3,8 +3,6 @@ package EnsEMBL::Ensembl::Document::Configure;
 ### Plugin menu configuration for a standard Ensembl website
 
 use CGI qw(escapeHTML);
-use EnsEMBL::Web::SpeciesDefs;
-
 use EnsEMBL::Web::Root;
 our @ISA  = qw(EnsEMBL::Web::Root);
 

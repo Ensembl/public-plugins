@@ -28,13 +28,13 @@ use vars qw( @ISA
 	     $SPECIES_DEFS );
 
 use Bio::Tools::Run::Search::WuBlast;
-use EnsEMBL::Web::SpeciesDefs;
+use EnsEMBL::Web::RegObj;
 use Sys::Hostname qw(hostname);
 
 @ISA = qw( Bio::Tools::Run::Search::WuBlast );
 
 BEGIN{
-  $SPECIES_DEFS = EnsEMBL::Web::SpeciesDefs->new;
+  $SPECIES_DEFS = $ENSEMBL_WEB_REGISTRY->species_defs;
 
   $QSUB_RESOURCE = '-l h_rt=10:00:00,s_rt=10:00:00';
 
