@@ -88,12 +88,16 @@ sub static_menu_items {
   my @species_inconf = @{$doc->species_defs->ENSEMBL_SPECIES};
   foreach my $sp ( @species_inconf) {
     my $bio_name = $doc->species_defs->other_species($sp, "SPECIES_BIO_NAME");
+    my $common_name = $doc->species_defs->other_species($sp, "SPECIES_COMMON_NAME");
+    if ($common_name =~ /\./) {
+      $common_name = $doc->species_defs->other_species($sp, "SPECIES_DESCRIPTION");
+    }
     my $group    = $doc->species_defs->other_species($sp, "SPECIES_GROUP") || 'default_group';
     unless( $spp_tree{ $group } ) {
       push @group_order, $group;
       $spp_tree{ $group } = { 'label' => $group, 'species' => [] };
     }
-    my $hash_ref = { 'href'=>"/$sp/", 'text'=>"<i>$bio_name</i>", 'raw'=>1 };
+    my $hash_ref = { 'href'=>"/$sp/", 'text'=>"<i>$bio_name</i> ($common_name)", 'raw'=>1 };
     push @{ $spp_tree{$group}{'species'} }, $hash_ref;
   }
   ## output the info grouped by taxa
