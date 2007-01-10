@@ -20,7 +20,7 @@ sub update_conf {
   $SiteDefs::__species_aliases{ 'Gallus_gallus'            } = [qw(gg chicken)];
 #-------------------- fish
   $SiteDefs::__species_aliases{ 'Danio_rerio'              } = [qw(dr zfish zebrafish)];
-  $SiteDefs::__species_aliases{ 'Fugu_rubripes'            } = [qw(fr ffish fugu)];
+  $SiteDefs::__species_aliases{ 'Fugu_rubripes'            } = [qw(fr takifugu_rubripes ffish fugu)];
   $SiteDefs::__species_aliases{ 'Tetraodon_nigroviridis'   } = [qw(tn tetraodon)];
 #-------------------- amphibians
   $SiteDefs::__species_aliases{ 'Xenopus_tropicalis'       } = [qw(xt xenopus frog)];
