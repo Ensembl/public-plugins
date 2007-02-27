@@ -57,7 +57,7 @@ function update_species(element) {
   //alert(element.id);
   if (!performedSave) {
     performedSave = 1;
-    var url = "/common/save_favourites";
+    var url = "/common/user/save_favourites";
     var data = "favourites=" + serialize('favourites_list');
     data = data + "&list=" + serialize('species_list');
     var prepare = new Ajax.Request(url,
