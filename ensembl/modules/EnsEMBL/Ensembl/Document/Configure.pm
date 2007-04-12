@@ -73,39 +73,43 @@ sub common_menu_items {
 
 sub static_menu_items {
 ### Addition static-content-only menu items for site-specific content
-### 1. Lists of current species
   my( $self, $doc ) = @_;
 
-  $doc->menu->add_block( 'species', 'bulleted', 'Select a species', 'priority' => 20);
+### 1. Lists of current species (not shown on info pages)
+  my $URI = $doc->{_renderer}->{r}->uri;
+  unless ($URI =~ m#^/info# ) {
 
-  my @group_order = qw( Mammals Chordates Eukaryotes );
-  my %spp_tree = (
+    $doc->menu->add_block( 'species', 'bulleted', 'Select a species', 'priority' => 20);
+
+    my @group_order = qw( Mammals Chordates Eukaryotes );
+    my %spp_tree = (
       'Mammals'   => { 'label'=>'Mammals',          'species' => [] },
       'Chordates' => { 'label'=>'Other chordates',  'species' => [] },
       'Eukaryotes'=> { 'label'=>'Other eukaryotes', 'species' => [] },
-  );
-  ## get the info for all species
-  my @species_inconf = @{$doc->species_defs->ENSEMBL_SPECIES};
-  foreach my $sp ( @species_inconf) {
-    my $bio_name = $doc->species_defs->other_species($sp, "SPECIES_BIO_NAME");
-    my $group    = $doc->species_defs->other_species($sp, "SPECIES_GROUP") || 'default_group';
-    unless( $spp_tree{ $group } ) {
-      push @group_order, $group;
-      $spp_tree{ $group } = { 'label' => $group, 'species' => [] };
+    );
+    ## get the info for all species
+    my @species_inconf = @{$doc->species_defs->ENSEMBL_SPECIES};
+    foreach my $sp ( @species_inconf) {
+      my $bio_name = $doc->species_defs->other_species($sp, "SPECIES_BIO_NAME");
+      my $group    = $doc->species_defs->other_species($sp, "SPECIES_GROUP") || 'default_group';
+      unless( $spp_tree{ $group } ) {
+        push @group_order, $group;
+        $spp_tree{ $group } = { 'label' => $group, 'species' => [] };
+      }
+      my $hash_ref = { 'href'=>"/$sp/", 'text'=>"<i>$bio_name</i>", 'raw'=>1 };
+      push @{ $spp_tree{$group}{'species'} }, $hash_ref;
     }
-    my $hash_ref = { 'href'=>"/$sp/", 'text'=>"<i>$bio_name</i>", 'raw'=>1 };
-    push @{ $spp_tree{$group}{'species'} }, $hash_ref;
-  }
-  ## output the info grouped by taxa
-  foreach my $group (@group_order) {
-    next unless @{ $spp_tree{$group}{'species'} };
-    my $text = $spp_tree{$group}{'label'};
-    $doc->menu->add_entry(
+    ## output the info grouped by taxa
+    foreach my $group (@group_order) {
+      next unless @{ $spp_tree{$group}{'species'} };
+      my $text = $spp_tree{$group}{'label'};
+      $doc->menu->add_entry(
         'species',
         'href'=>'/',
         'text'=>$text,
         'options'=>$spp_tree{$group}{'species'}
-    );
+      );
+    }
   }
 }
 
