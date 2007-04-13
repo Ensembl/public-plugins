@@ -1,0 +1,10 @@
+<div class="mart_header">[% PROCESS 'header.tt' %]</div>
+<div id="mart_containerpanel">[% PROCESS 'biomart.tt' %]</div>
+<div class="mart_footer">[% PROCESS 'footer.tt' %]</div>
+
+[% IF session.param("__validationError") %]
+<script language="JavaScript" type="text/javascript" >//<![CDATA[
+alert('[% session.param("__validationError") | replace('\n', '\\n') | replace('\'', '\\\'') %]');
+//]]>
+</script>
+[% END %]
