@@ -3,12 +3,27 @@ use EnsEMBL::Web::RegObj;
 use EnsEMBL::Web::Document::Renderer::Apache;
 use EnsEMBL::Web::Document::Dynamic;
 use EnsEMBL::Web::Document::Static;
+use CGI::Session;
+use CGI::Session::Driver::mysql; # required by CGI::Session
+use Exporter;
+
+our @EXPORT = qw(generate_biomart_session);
+our @EXPORT_OK = qw(generate_biomart_session);
+our %EXPORT_TAGS = ('ALL'=>[qw(generate_biomart_session)]);
+our @ISA = qw(Exporter);
+sub generate_biomart_session {
+  my( $biomart_web_obj, $session_id ) = @_;
+  CGI::Session->find( sub {} );
+  return CGI::Session->new('driver:mysql', $session_id, {
+    'Handle' => $ENSEMBL_WEB_REGISTRY->dbAdaptor->get_dbhandle
+  });
+}
 
 sub new {
   my( $class, $session ) = @_;
+warn "INIT WEB MODULE...";
   my $renderer = new EnsEMBL::Web::Document::Renderer::Apache;
   my $page     = new EnsEMBL::Web::Document::Dynamic( $renderer,undef,$ENSEMBL_WEB_REGISTRY->species_defs );
-warn "PAGE STUB CALLED...................";
   $page->_initialize_HTML;
   #$page->set_doc_type( 'HTML', '4.01 Trans' );
   $page->masthead->sp_bio    ||= 'BioMart';
@@ -22,6 +37,7 @@ warn "PAGE STUB CALLED...................";
   bless $self, $class;
   return $self;
 }
+
 
 sub start {
   my $self = shift;
