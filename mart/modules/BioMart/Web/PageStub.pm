@@ -6,17 +6,20 @@ use EnsEMBL::Web::Document::Static;
 use CGI::Session;
 use CGI::Session::Driver::mysql; # required by CGI::Session
 use Exporter;
-
+use Data::Dumper;
 our @EXPORT = qw(generate_biomart_session);
 our @EXPORT_OK = qw(generate_biomart_session);
 our %EXPORT_TAGS = ('ALL'=>[qw(generate_biomart_session)]);
 our @ISA = qw(Exporter);
 sub generate_biomart_session {
   my( $biomart_web_obj, $session_id ) = @_;
+warn "CREATING SESSION...";
   CGI::Session->find( sub {} );
-  return CGI::Session->new('driver:mysql', $session_id, {
+warn "CREATING SESSION...";
+  my $T = CGI::Session->new('driver:mysql', $session_id, {
     'Handle' => $ENSEMBL_WEB_REGISTRY->dbAdaptor->get_dbhandle
   });
+  return $T;
 }
 
 sub new {
@@ -25,13 +28,13 @@ warn "INIT WEB MODULE...";
   my $renderer = new EnsEMBL::Web::Document::Renderer::Apache;
   my $page     = new EnsEMBL::Web::Document::Dynamic( $renderer,undef,$ENSEMBL_WEB_REGISTRY->species_defs );
   $page->_initialize_HTML;
-  #$page->set_doc_type( 'HTML', '4.01 Trans' );
+  $page->set_doc_type( 'none', 'none' );
   $page->masthead->sp_bio    ||= 'BioMart';
   $page->masthead->sp_common ||= 'BioMart';
-  $page->javascript->add_source( '/martview/js/martview.js'           );
+  $page->javascript->add_source( '/biomart/mview/js/martview.js' );
 #  $page->javascript->add_script( 'addLoadEvent( debug_window )' );
   $page->javascript->add_script( 'addLoadEvent( setVisibleStatus )' );
-  $page->stylesheet->add_sheet(  'all', '/martview/martview.css'      );
+  $page->stylesheet->add_sheet(  'all', '/biomart/mview/martview.css'      );
 
   my $self = { 'page' => $page, 'session' => $session };
   bless $self, $class;
