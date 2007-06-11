@@ -1,10 +1,15 @@
-<h3 class="boxed">What's New in Ensembl 44</h3>
+<h3 class="boxed">What's New in Ensembl 45</h3>
 <h4><i>Homo sapiens</i> News</h4><ul class="spaced">
-<li><strong>Patch for Ensembl Human database</strong><br />Ensembl <i>Homo sapiens</i> has been patched with a few extra transcripts and some new CCDS IDs, and the corresponding xrefs and variation databases have been updated.</li>
-<li><strong>cDNA Updates</strong><br />Ensembl human and mouse databases have received their usual cDNA updates.</li>
-<li><strong>Vega updates</strong><br />Vega human and mouse have both been updated since the last release of Ensembl. See <a href="http://vega.sanger.ac.uk/">VEGA</a> for more information.</li>
-<li><strong>Variation updates</strong><br />All species with variation data now have a failed_variation table. Also, in species that have duplicate variations (with the same mapping but different IDs), these have been put into the variation_synonym table.</li>
+<li><strong>CAGE data</strong><br />New human CAGE ditags and updated mouse CAGE ditags have been added to Ensembl 45.</li>
+<li><strong>CCDS update</strong><br />Some transcripts that were dropped from the CCDS set owing to poor quality have now been removed from Ensembl, and the stable ID archive updated accordingly.</li>
+<li><strong>Overlapping assembly entries</strong><br />Some overlapping entries in the mappings between NCBI35 and NCBI36 (on human) and NCBIm35 and NCBIm36 (on mouse) have been removed from Ensembl 45.</li>
 </ul><h4>General News</h4><ul class="spaced">
-<li><strong>ncRNAs for Ensembl chordates</strong><br />All Ensembl genebuild databases (i.e. excluding the imported invertebrate databases for mosquitoes, fruit fly, worm and yeast) have been updated with new ncRNA data. </li>
-</ul><p><a href="/Homo_sapiens/newsview?rel=44">More news...</a></p>
+<li><strong>Removal of viral genes</strong><br />Viral genes have been removed from all species with Ensembl genebuilds (i.e.<br /><a href="/Multi/newsview?rel=45#item810">Read more</a>...
+</li>
+<li><strong>Schema changes</strong><br /><p>Only minor changes to the database schema this release:</p>
+<ul>
+<li>An index has been added to marker.display_marker_synonym_id</li>
+<li>The "NOT NULL" constraint on external_db.db_release has been removed</li>
+</ul></li>
+</ul><p><a href="/Homo_sapiens/newsview?rel=45">More news...</a></p>
 
