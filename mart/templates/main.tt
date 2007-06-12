@@ -1,10 +1,39 @@
-<div class="mart_header">[% PROCESS 'header.tt' %]</div>
-<div id="mart_containerpanel">[% PROCESS 'biomart.tt' %]</div>
-<div class="mart_footer">[% PROCESS 'footer.tt' %]</div>
+[% # $Id$ %]
 
-[% IF session.param("__validationError") %]
-<script language="JavaScript" type="text/javascript" >//<![CDATA[
-alert('[% session.param("__validationError") | replace('\n', '\\n') | replace('\'', '\\\'') %]');
-//]]>
-</script>
-[% END %]
+[% #--------------------------------------------------------------------
+   # MAIN template where header.tt could be any site specific header.
+   # biomart.tt renders complete martView in its own container div
+   #--------------------------------------------------------------------
+%]
+<div id="mart_containerpanel" style=" width:100%; height:80%; overflow:visible;">
+<form name="mainform" action="[% form_action %]" method="post" enctype="multipart/form-data">
+	<table width="100%" height="500"  border="0" cellpadding="0" cellspacing="0">
+		[% PROCESS 'biomart.tt' %]
+	</table>
+	
+	<!-- following Iframes must be kept out of the above table otherwise FireFox starts moaning about auto scrolling -->
+	<!-- we set display:none (for all browsers) and visibility:hiddden (for Safari & Konqueror) through JS -->
+	<iframe id="countIFrameId" name="count_hiddenIFrame" src="about:blank" style="width:0px; height:0px;" 
+				onload="getCountAjax();">
+	</iframe>				
+	<iframe id="resultsIFrameId" name="results_hiddenIFrame" src="about:blank" style="width:0px; height:0px;" 
+				onload="getResultsAjax();">
+	</iframe>
+	
+  </form>
+</div>
+	
+
+	<script language="JavaScript" type="text/javascript" >
+		//<![CDATA[
+			datasetpanel_pre_onload([% tbuilder.perlhash2js(js_pushactions_of_datasetmenu) %] , [% tbuilder.perlhash2js(js_datasetpanel_sessions_values) %] , '[% session.param("__Schema") %]', '[% session.param("__Database") %]', '[% session.param("__Dataset") %]');
+		//]]>
+	</script>
+
+	[% IF session.param("__validationError") %]
+		<script language="JavaScript" type="text/javascript" >
+		//<![CDATA[
+			alert('[% session.param("__validationError") | replace('\n', '\\n') | replace('\'', '\\\'') %]');
+		//]]>
+		</script>
+	[% END %]
