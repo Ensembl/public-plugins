@@ -4,41 +4,141 @@
 </head>
 <body>
 
+<script type="text/javascript">
+
+function show_email(id, name, domain) {
+var EmailLink = document.getElementById(id);
+Address = 'mailto:' + name + '@' + domain + '.ac.uk';
+EmailLink.setAttribute('href', Address);
+}
+
+//-->
+</script>
+
   
 <h2>ENCODE resources at Ensembl</h2>
 
-<p> The <a href="http://www.genome.gov/10005107">ENCODE</a> project aims to discover the bulk of functional elements in the human genome by intensively annotating 1% of the genome.</p>
-
-<p>The ENCODE project has 44 separate regions across the genome.  These were either chosen by a stratified random selection or because they are
-biologically inspired regions and  chosen mainly for their existing density of
-experimental results (e.g. parts of chromosome 22 and the <a href="http://www.ensembl.org/Homo_sapiens/diseaseview?disease=Cystic%20fibrosis">CFTR</a> region on chromosome 7).</p>
-
-<p>This page coordinates the resources available via the Ensembl browser for
-the ENCODE project.  Through the links below, you can</p>
-<ul>
-    <li> browse the ENCODE regions in ContigView</li>
-    <li> simultaneously view other species data in MultiContigView</li>
-    <li> use the <a href="/biomart/martview">EnsMart</a> data mining tool to dump gene and gene-associated features in the ENCODE region</li>
-</ul>
-
-<p>As part of the Ensembl team's involvement in the ENCODE project we are
-generating repeat libraries for the genomes newly sequenced by NISC. The
-libraries and further information can be found on the EBI anonymous ftp site:</p>
-
-<p><kbd>
-ftp ftp.ebi.ac.uk<br />
-ftp&gt; cd pub/databases/ensembl/encode/repeat_libraries
-</kbd></p>
-
-
-<p>The ENCODE project primary data management is at <a href="http://genome.ucsc.edu/">UCSC</a> and we are coordinating with them to deliver genome resources
- for ENCODE.</p>
+<p>The ENCODE project aims to discover all functional elements in the
+human genome. Ensembl is involved in ENCODE in two ways:</p>
 
 <ul>
-    <li><a href="http://genome.ucsc.edu/ENCODE/">More information on ENCODE regions from UCSC</a>.</li>
+<li>Dr Ewan Birney, who is the joint leader of Ensembl from the EBI
+side, also leads the analysis group for ENCODE.</li>
+
+<li>Ensembl aims to integrate all genome-wide functional datasets,
+with ENCODE datasets expected to form a large proportion of these, to
+provide integrated functional annotation on the human genome. An
+initial dataset to this end was released on June 13th as part of
+Ensembl 45 (see below).</li>
 </ul>
 
-  
+<p>Ensembl works in tight coordination with the UCSC group, which is
+the data collection centre (DCC) for ENCODE.</p>
+
+<h3>Results of the recent ENCODE analysis</h3>
+
+<p>On June 14th, 2007, the paper detailing the analysis of the ENCODE pilot project 
+was published in <a href="http://www.nature.com/nature/journal/v447/n7146/full/nature05874.html">Nature</a>  
+along with 36 different companion papers in 
+<a href="http://www.genome.org/content/vol17/issue6">Genome Research</a>. 
+Dr Birney led the analysis for the main paper. The key results of this paper are:</p>
+
+<ul class="spaced">
+<li>Transcription is more complex than expected, with many non-coding
+transcripts intercalating with standard protein-coding genes. However
+there was little evidence for protein-coding genes outside of established
+sets.</li>
+
+<li>There are many more Transcription Start Sites (TSS) than expected, around
+10-fold more than the number of protein-coding genes.</li>
+
+<li>Regulatory information is distributed in a clustered manner across
+the genome, and its distribution near TSSs is symmetrical.</li>
+
+<li>There are many distal DNaseI Hypersensitive Sites (DHSs), some of which
+show binding by CTCF.</li>
+
+<li>Replication is correlated with histone structure in a more detailed
+manner than previously known.</li>
+
+<li>Evolutionary constraint be can detected at far higher resolution than was
+previously feasible; surprisingly, many experimentally identified features did
+not show constraint.</li>
+</ul>
+
+<p>A number of key <a href="ftp://anonymous@ftp.ensembl.org:/pub/release-45/multi_species_45/data/encode">intermediate files</a> 
+in the analysis, and resources for ENCODE are available for FTP download.</p>
+
+<h4>Press releases</h4>
+<ul>
+<li><a href="http://www.ebi.ac.uk/Information/News/news.html">European Bioinformatics Institute</a></li>
+<li><a href="http://www.sanger.ac.uk/Info/Press/2007/070613.shtml">Wellcome Trust Sanger Institute</a></li>
+</ul>
+
+
+<h3>Functional genomics in Ensembl</h3>
+
+<p>Building on this initial analysis, Ensembl aims to provide a richer
+annotation of the human genome. The key concept which we have
+introducted from Ensembl 45 is the concept of a "Regulatory
+Build". The regulatory build aims to provide a single "best guess" set
+of regulatory elements, with growing annotation of those elements from
+different experiments. This "Regulatory Build" augments the standard
+"Gene Build" (itself incorporating both protein coding and non protein
+coding Genes) to form the union of functional elements in the genome.</p>
+
+<p>We also will augment our Gene Build to take account of new functional
+datasets such as CAGE and PET tags across the genome. These tags are
+already available in Ensembl for Human and Mouse, using data generated
+by the RIKEN group in Japan and GIS group in Singapore. We will be
+using these markers of Transcription start sites and termini to provide
+more accurate transcript definition.</p>
+
+<p>An initial Regulatory Build has been developed in Ensembl by Paul
+Flicek and colleagues. It integrates 8 genome-wide datasets, mainly in
+pre-publication "resource" status, including the DNaseI Hypersensitive
+site set from Greg Crawford's group at Duke University, a set of 6
+histone modifications from Martin Hirst's group at the BGGC at Vancouver,
+and the CTCF dataset from Bing Ren's group at UCSD.</p> 
+
+<p>This set takes DNaseI Hypersensitive Sites, CTCF binding regions and H3K4me3
+as three "focus regions" each defining a potential element. The union of
+these three foci define 110,000 elements across the genome. We then took
+all the factors (with an additional 5 histone marks) to look for specific
+patterns diagnostic of certain features. A number of patterns which were
+high enriched for gene starts, genic regions and distal regions (away from
+genes) were developed.</p> 
+
+<p>The results of this analysis can be seen in the "Regulatory features" 
+track on Ensembl displays in human (on by default) and are available to
+<a href="ftp://anonymous@ftp.ensembl.org:/pub/release-45/homo_sapiens_45_36g/data/reg_build/">download</a> 
+from our FTP site.</p> 
+
+
+<p>We are extremely grateful to the Crawford and Hirst laboratories
+for use of their data in pre-publication status, in line with the open
+data access of ENCODE and the human genome project, and the CTCF dataset 
+from Bing Ren's group at UCSD (Kim, et al. 2007. <em>Cell 128</em>:1231-45). 
+In the future we hope to integrate more functional datasets and use genetic 
+association studies, such as those published in Stranger et al, to provide 
+the link between elements and genes.</p>
+
+
+<p>For general questions about the dataset or how to access it, please
+email the helpdesk as helpdesk@ensembl.org. If you wish to learn more
+about future plans, please email 
+<a href="" id="steve" onmouseover="show_email('steve', 'searle', 'sanger');">Steve Searle</a> 
+and <a href="" id="val" onmouseover="show_email('val', 'vac', 'sanger');">Val Curwen</a> 
+for questions on transcription information, and 
+<a href="" id="paul" onmouseover="show_email('paul', 'flicek', 'ebi');">Paul Flicek</a> 
+and <a href="" id="ewan" onmouseover="show_email('ewan', 'birney', 'ebi');">Ewan Birney</a>
+on regulatory information. (all of us are on the helpdesk email, 
+which is internally tracked to ensure a response to each question, 
+so we recommend this route. However, we realise that some people 
+have specific strategic questions to pose which they maybe
+more comfortable sending to us directly).</p>
+
+ 
 <h3>ENCODE regions</h3>
    
 [[INCLUDE::Homo_sapiens/ssi/encode_table.html]]
