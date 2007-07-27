@@ -32,28 +32,29 @@ sub update_conf {
   $SiteDefs::__species_aliases{ 'Sorex_araneus'             } = [qw(sa shrew)];
   $SiteDefs::__species_aliases{ 'Spermophilus_tridecemlineatus'  } = [qw(st stri squirrel spermophilus)];
   $SiteDefs::__species_aliases{ 'Ornithorhynchus_anatinus' } = [qw(oa oana platypus)];
+  $SiteDefs::__species_aliases{ 'Sorex_araneus' } = [qw(sa sorex shrew)];
 #-------------------- birds
-  $SiteDefs::__species_aliases{ 'Gallus_gallus'            } = [qw(gg ggal chicken)];
+  $SiteDefs::__species_aliases{ 'Gallus_gallus'                  } = [qw(gg ggal chicken)];
 #-------------------- fish
-  $SiteDefs::__species_aliases{ 'Danio_rerio'              } = [qw(dr drer zfish zebrafish)];
-  $SiteDefs::__species_aliases{ 'Gasterosteus_aculeatus'   } = [qw(ga gacu stickleback gasterosteus)];
-  $SiteDefs::__species_aliases{ 'Takifugu_rubripes'        } = [qw(fr trub ffish fugu takifugu f_rubripes fugu_rubripes)];
-  $SiteDefs::__species_aliases{ 'Oryzias_latipes'          } = [qw(ol olat medaka)];
-  $SiteDefs::__species_aliases{ 'Tetraodon_nigroviridis'   } = [qw(tn tnig tetraodon)];
+  $SiteDefs::__species_aliases{ 'Danio_rerio'                    } = [qw(dr drer zfish zebrafish)];
+  $SiteDefs::__species_aliases{ 'Gasterosteus_aculeatus'         } = [qw(ga gacu stickleback gasterosteus)];
+  $SiteDefs::__species_aliases{ 'Takifugu_rubripes'              } = [qw(fr trub ffish fugu takifugu f_rubripes fugu_rubripes)];
+  $SiteDefs::__species_aliases{ 'Oryzias_latipes'                } = [qw(ol olat medaka)];
+  $SiteDefs::__species_aliases{ 'Tetraodon_nigroviridis'         } = [qw(tn tnig tetraodon)];
 #-------------------- amphibians
-  $SiteDefs::__species_aliases{ 'Xenopus_tropicalis'       } = [qw(xt xtro xenopus frog)];
+  $SiteDefs::__species_aliases{ 'Xenopus_tropicalis'             } = [qw(xt xtro xenopus frog)];
 #-------------------- flies
-  $SiteDefs::__species_aliases{ 'Aedes_aegypti'            } = [qw(aa aaeg aedes )];
-  $SiteDefs::__species_aliases{ 'Anopheles_gambiae'        } = [qw(ag agam mosquito mos anopheles)];
-# $SiteDefs::__species_aliases{ 'Apis_mellifera'           } = [qw(am amel honeybee bee)];
-  $SiteDefs::__species_aliases{ 'Drosophila_melanogaster'  } = [qw(dm dmel fly)];
+  $SiteDefs::__species_aliases{ 'Aedes_aegypti'                  } = [qw(aa aaeg aedes )];
+  $SiteDefs::__species_aliases{ 'Anopheles_gambiae'              } = [qw(ag agam mosquito mos anopheles)];
+# $SiteDefs::__species_aliases{ 'Apis_mellifera'                 } = [qw(am amel honeybee bee)];
+  $SiteDefs::__species_aliases{ 'Drosophila_melanogaster'        } = [qw(dm dmel fly)];
 #-------------------- worms
-# $SiteDefs::__species_aliases{ 'Caenorhabditis_briggsae'  } = [qw(cb cbri briggsae)];
-  $SiteDefs::__species_aliases{ 'Caenorhabditis_elegans'   } = [qw(ce cele worm elegans)];
-  $SiteDefs::__species_aliases{ 'Ciona_intestinalis'       } = [qw(ci cint seasquirti cionai)];
-  $SiteDefs::__species_aliases{ 'Ciona_savignyi'           } = [qw(cs csav seasquirts cionas)];
+# $SiteDefs::__species_aliases{ 'Caenorhabditis_briggsae'        } = [qw(cb cbri briggsae)];
+  $SiteDefs::__species_aliases{ 'Caenorhabditis_elegans'         } = [qw(ce cele worm elegans)];
+  $SiteDefs::__species_aliases{ 'Ciona_intestinalis'             } = [qw(ci cint seasquirti cionai)];
+  $SiteDefs::__species_aliases{ 'Ciona_savignyi'                 } = [qw(cs csav seasquirts cionas)];
 #-------------------- yeast
-  $SiteDefs::__species_aliases{ 'Saccharomyces_cerevisiae' } = [qw(sc scer yeast saccharomyces )];
+  $SiteDefs::__species_aliases{ 'Saccharomyces_cerevisiae'       } = [qw(sc scer yeast saccharomyces )];
 }
 
 1;
