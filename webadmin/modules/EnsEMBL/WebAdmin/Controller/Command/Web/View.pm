@@ -46,12 +46,12 @@ sub render_page {
   $interface->script_name($self->get_action->script_name);
 
 ## Form elements
-  $interface->element_order('word', 'expanded', 'meaning');
+  $interface->element_order('title', 'keyword', 'content', 'status');
 
   #$interface->multi(0);
   $interface->dropdown(1);
-  $interface->option_columns('word');
-  $interface->option_order({'column'=>'word','order'=>'ASC'});
+  $interface->option_columns('title');
+  $interface->option_order({'column'=>'title','order'=>'ASC'});
 
 
   ## Render page or munge data, as appropriate

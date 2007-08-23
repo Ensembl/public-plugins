@@ -1,10 +1,10 @@
-package EnsEMBL::WebAdmin::Controller::Command::Web::Glossary;
+package EnsEMBL::WebAdmin::Controller::Command::Web::Component;
 
 use strict;
 use warnings;
 
 use Class::Std;
-use EnsEMBL::Web::Object::Data::Glossary;
+use EnsEMBL::Web::Object::Data::Component;
 
 use base 'EnsEMBL::WebAdmin::Controller::Command::Web';
 
@@ -36,17 +36,20 @@ sub render_page {
 
   ## Create interface object, which controls the forms
   my $interface = EnsEMBL::Web::Interface::InterfaceDef->new();
-  my $data = EnsEMBL::Web::Object::Data::Glossary->new();
+  my $data = EnsEMBL::Web::Object::Data::Component->new();
   $interface->data($data);
   $interface->discover;
 
   ## Customization
+
   ## Page components
   $interface->default_view('select_to_edit');
   $interface->script_name($self->get_action->script_name);
 
 ## Form elements
-  $interface->element_order('word', 'expanded', 'meaning');
+  $interface->customize_element('keyword', 'label', 'Component and method');
+  $interface->customize_element('keyword', 'default', 'EnsEMBL::Web::Component::');
+  $interface->element_order('keyword', 'content', 'status');
 
   #$interface->multi(0);
   $interface->dropdown(1);
