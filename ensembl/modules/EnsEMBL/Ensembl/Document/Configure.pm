@@ -89,14 +89,16 @@ sub static_menu_items {
     );
     ## get the info for all species
     my @species_inconf = @{$doc->species_defs->ENSEMBL_SPECIES};
-    foreach my $sp ( @species_inconf) {
+    foreach my $sp ( sort { $doc->species_defs->other_species( $a, "SPECIES_COMMON_NAME") cmp
+                            $doc->species_defs->other_species( $b, "SPECIES_COMMON_NAME") } @species_inconf ) {
       my $bio_name = $doc->species_defs->other_species($sp, "SPECIES_BIO_NAME");
+      my $com_name = $doc->species_defs->other_species($sp, "SPECIES_COMMON_NAME");
       my $group    = $doc->species_defs->other_species($sp, "SPECIES_GROUP") || 'default_group';
       unless( $spp_tree{ $group } ) {
         push @group_order, $group;
         $spp_tree{ $group } = { 'label' => $group, 'species' => [] };
       }
-      my $hash_ref = { 'href'=>"/$sp/", 'text'=>"<i>$bio_name</i>", 'raw'=>1 };
+      my $hash_ref = { 'href'=>"/$sp/", 'text'=>"$com_name", 'title' => $bio_name, }; #'raw'=>1 };
       push @{ $spp_tree{$group}{'species'} }, $hash_ref;
     }
     ## output the info grouped by taxa
