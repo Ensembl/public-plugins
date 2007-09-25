@@ -26,6 +26,23 @@ sub admin_home {
   }
 }
 
+sub all_articles {
+  my $self   = shift;
+
+  if (my $panel = $self->new_panel( 'Image',
+    'code'    => "info$self->{flag}",
+    'object'  => $self->{object},
+    'caption' => 'List of help articles (old schema)',
+    ) ) {
+    $panel->add_components(qw(
+        all_articles       EnsEMBL::WebAdmin::Component::User::all_articles
+    ));
+
+    ## add panel to page
+    $self->add_panel( $panel );
+  }
+}
+
 sub admin_menu {
   my $self = shift;
 
@@ -33,7 +50,7 @@ sub admin_menu {
     $self->add_block( $flag, 'bulleted', "Website Database" );
 
     $self->add_entry( $flag, 'text' => "View old articles",
-                                    'href' => "/common/web/old_help_article" );
+                                    'href' => "/common/web/all_articles" );
 }
 
 1;

@@ -1,6 +1,8 @@
 package EnsEMBL::WebAdmin::Component::User;
 
 use EnsEMBL::Web::Component;
+use EnsEMBL::Web::Interface::InterfaceDef;
+use EnsEMBL::Web::Object::Data::OldHelpArticle;
 
 use CGI;
 
@@ -26,7 +28,7 @@ sub admin_home {
 
   $html .= qq(
 <ul class="spaced">
-<li><strong>Articles</strong>: <a href="/common/web/old_article?dataview=add">Add</a> | <a href="/common/web/old_article">View/edit</a></li>
+<li><strong>Articles</strong>: <a href="/common/web/old_article?dataview=add">Add</a> | <a href="/common/web/old_article">View/edit</a> | <a href="/common/web/old_article">View/edit</a> | <a href="/common/web/all_articles">List all articles</a></li>
 <li><strong>Glossary</strong>: <a href="/common/web/old_glossary?dataview=add">Add</a> | <a href="/common/web/old_glossary">View/edit</a></li>
 </ul>
 );
@@ -55,6 +57,61 @@ sub admin_home {
   $panel->print($html);
   return 1;
 }
+
+sub all_articles {
+  my( $panel, $object ) = @_;
+
+  my $html;
+  my $interface = EnsEMBL::Web::Interface::InterfaceDef->new();
+  my $data = EnsEMBL::Web::Object::Data::OldHelpArticle->new();
+  $interface->data($data);
+  $interface->discover;
+
+  my %cat_lookup;
+  my $cats = EnsEMBL::Web::Object::Data::find_all('EnsEMBL::Web::Object::Data::OldHelpCategory');
+  foreach my $cat (@$cats) {
+    $cat_lookup{$cat->id} = $cat->name;
+  }
+
+
+  my $records = $interface->record_list;
+  if (scalar(@$records) > 0) {
+    my $count = 0;
+    $html = qq(<table class="ss tint">
+<tr>
+  <th>Title</th>
+  <th>Keyword</th>
+  <th>Category</th>
+  <th>Status</th>
+</tr>
+    );
+    foreach my $article (@$records) {
+      my $art_string;
+      if ($article->status eq 'in_use') {
+        $art_string = '<a href="/common/web/old_article?id='.$article->id.';dataview=edit">'.$article->title.'</a>';
+      }
+      else {
+        $art_string = $article->title;
+      }
+      my $bg = ($count % 2 == 0) ? 'bg1' : 'bg2';
+      $html .= sprintf(qq(<tr class="%s">
+  <td>%s</td>
+  <td>%s</td>
+  <td>%s</td>
+  <td>%s</td>
+</tr>
+      ), $bg, $art_string, $article->keyword, $cat_lookup{$article->category_id}, $article->status);
+      $count++;
+    }
+    $html .= "</table>\n";
+  }
+  else {
+    $html = "<p>Sorry, no articles were found</p>";
+  }
+  $panel->print($html);
+  return 1;
+}
+
 
 1;
 
