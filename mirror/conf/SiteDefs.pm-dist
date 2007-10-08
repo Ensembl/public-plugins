@@ -9,7 +9,7 @@ sub update_conf {
 #  $SiteDefs::ENSEMBL_SERVERADMIN            = 'my_user@my_domain.org';
 #  $SiteDefs::ENSEMBL_SERVERNAME             = 'my_ensembl.my_domain.org';
 #  $SiteDefs::ENSEMBL_MAIL_SERVER            = 'smtp.my_domain.org';
-#  $ENSEMBL_MAIL_COMMAND                     = '/usr/bin/Mail -s';
+#  $SiteDefs::ENSEMBL_MAIL_COMMAND           = '/usr/bin/Mail -s';
 #  $SiteDefs::ENSEMBL_MAIL_ERRORS            = 1;
 #  $SiteDefs::ENSEMBL_ERRORS_TO              = 'my_user@my_domain.org';
 
@@ -26,8 +26,6 @@ sub update_conf {
 #  $SiteDefs::ENSEMBL_USERDB_PASS            = 'my_mysql_write_pass';
 
 #  $SiteDefs::ENSEMBL_LOGINS                 = 0; ## Change to 1 to turn user logins on
-#  $SiteDefs::ENSEMBL_USER_DATA_TABLE        = 'user_record';
-#  $SiteDefs::ENSEMBL_GROUP_DATA_TABLE       = 'group_record';
 
 }
 
