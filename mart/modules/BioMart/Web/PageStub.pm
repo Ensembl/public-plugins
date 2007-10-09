@@ -5,17 +5,17 @@ use EnsEMBL::Web::Document::Dynamic;
 use EnsEMBL::Web::Document::Static;
 use CGI::Session;
 use CGI::Session::Driver::mysql; # required by CGI::Session
+use CGI qw(self_url);
 use Exporter;
 use Data::Dumper;
 our @EXPORT = qw(generate_biomart_session);
 our @EXPORT_OK = qw(generate_biomart_session);
 our %EXPORT_TAGS = ('ALL'=>[qw(generate_biomart_session)]);
 our @ISA = qw(Exporter);
+
 sub generate_biomart_session {
   my( $biomart_web_obj, $session_id ) = @_;
-warn "CREATING SESSION...";
   CGI::Session->find( sub {} );
-warn "CREATING SESSION...";
   my $T = CGI::Session->new('driver:mysql', $session_id, {
     'Handle' => $ENSEMBL_WEB_REGISTRY->dbAdaptor->get_dbhandle
   });
@@ -36,7 +36,11 @@ warn "INIT WEB MODULE...";
   $page->javascript->add_script( 'addLoadEvent( setVisibleStatus )' );
   $page->stylesheet->add_sheet(  'all', '/biomart/mview/martview.css'      );
 
-  my $self = { 'page' => $page, 'session' => $session };
+  my $self = {
+    'page'    => $page,
+    'session' => $session,
+    'ajax'    => CGI::self_url() =~ m/__.+ByAjax/ ? 1 : 0
+  };
   bless $self, $class;
   return $self;
 }
@@ -44,6 +48,7 @@ warn "INIT WEB MODULE...";
 
 sub start {
   my $self = shift;
+  return if $self->{'ajax'};
   $self->{'page'}->render_start;
 #  print '<script type="text/javascript">debug_window()</script>';
   $self->{'page'}->content->_start;
@@ -52,15 +57,16 @@ sub start {
 
 sub end {
   my $self = shift;
+  return if $self->{'ajax'};
   $self->{'page'}->content->_end;
   if($self->{'session'}->param('__validatorError')) {
-  ( my $inc = $self->{'session'}->param("__validationError") ) =~ s/\n/\\n/;
-  $inc =~s/\'/\\\'/;
-  print qq(<script language="JavaScript" type="text/javascript">
-        //<![CDATA[
-        alert('$inc');
-        //]]>
-        </script>);
+    ( my $inc = $self->{'session'}->param("__validationError") ) =~ s/\n/\\n/;
+    $inc =~s/\'/\\\'/;
+    print qq(<script language="JavaScript" type="text/javascript">
+  //<![CDATA[
+  alert('$inc');
+  //]]>
+  </script>);
   }
   $self->{'page'}->render_end;
 }
