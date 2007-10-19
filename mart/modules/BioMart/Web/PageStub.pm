@@ -26,21 +26,23 @@ sub new {
   my( $class, $session ) = @_;
 warn "INIT WEB MODULE...";
   my $renderer = new EnsEMBL::Web::Document::Renderer::Apache;
-  my $page     = new EnsEMBL::Web::Document::Dynamic( $renderer,undef,$ENSEMBL_WEB_REGISTRY->species_defs );
-  $page->_initialize_HTML;
-  $page->set_doc_type( 'none', 'none' );
-  $page->masthead->sp_bio    ||= 'BioMart';
-  $page->masthead->sp_common ||= 'BioMart';
-  $page->javascript->add_source( '/biomart/mview/js/martview.js' );
+  my $self = {};
+  unless( CGI::self_url() =~ m/__.+ByAjax/ ) {
+    $page     = new EnsEMBL::Web::Document::Dynamic( $renderer,undef,$ENSEMBL_WEB_REGISTRY->species_defs );
+    $page->_initialize_HTML unless $AJAX;
+    $page->set_doc_type( 'none', 'none' );
+    $page->masthead->sp_bio    ||= 'BioMart';
+    $page->masthead->sp_common ||= 'BioMart';
+    $page->javascript->add_source( '/biomart/mview/js/martview.js' );
 #  $page->javascript->add_script( 'addLoadEvent( debug_window )' );
-  $page->javascript->add_script( 'addLoadEvent( setVisibleStatus )' );
-  $page->stylesheet->add_sheet(  'all', '/biomart/mview/martview.css'      );
-
-  my $self = {
-    'page'    => $page,
-    'session' => $session,
-    'ajax'    => CGI::self_url() =~ m/__.+ByAjax/ ? 1 : 0
-  };
+    $page->javascript->add_script( 'addLoadEvent( setVisibleStatus )' );
+    $page->stylesheet->add_sheet(  'all', '/biomart/mview/martview.css'      );
+    $self = {
+      'page'     => $page,
+      'session'  => $session,
+      'not_ajax' => 1
+    };
+  }
   bless $self, $class;
   return $self;
 }
@@ -48,7 +50,7 @@ warn "INIT WEB MODULE...";
 
 sub start {
   my $self = shift;
-  return if $self->{'ajax'};
+  return unless $self->{'not_ajax'};
   $self->{'page'}->render_start;
 #  print '<script type="text/javascript">debug_window()</script>';
   $self->{'page'}->content->_start;
@@ -57,7 +59,7 @@ sub start {
 
 sub end {
   my $self = shift;
-  return if $self->{'ajax'};
+  return unless $self->{'not_ajax'};
   $self->{'page'}->content->_end;
   if($self->{'session'}->param('__validatorError')) {
     ( my $inc = $self->{'session'}->param("__validationError") ) =~ s/\n/\\n/;
