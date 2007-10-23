@@ -29,7 +29,6 @@ sub update_conf {
   $SiteDefs::__species_aliases{ 'Otolemur_garnettii'             } = [qw(og ogar bushbaby otolemur)];
   $SiteDefs::__species_aliases{ 'Pan_troglodytes'          } = [qw(pt ptro chimp)];
   $SiteDefs::__species_aliases{ 'Rattus_norvegicus'        } = [qw(rn rnor rat)];
-  $SiteDefs::__species_aliases{ 'Sorex_araneus'             } = [qw(sa shrew)];
   $SiteDefs::__species_aliases{ 'Spermophilus_tridecemlineatus'  } = [qw(st stri squirrel spermophilus)];
   $SiteDefs::__species_aliases{ 'Ornithorhynchus_anatinus' } = [qw(oa oana platypus)];
   $SiteDefs::__species_aliases{ 'Sorex_araneus' } = [qw(sa sorex shrew)];
