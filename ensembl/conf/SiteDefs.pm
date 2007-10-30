@@ -3,7 +3,7 @@ use strict;
 
 sub update_conf {
   $SiteDefs::ENSEMBL_PRIMARY_SPECIES    = 'Homo_sapiens'; # Default species
-  $SiteDefs::ENSEMBL_SECONDARY_SPECIES  = 'Mus_musculus'; # Secondardy species
+  $SiteDefs::ENSEMBL_SECONDARY_SPECIES  = 'Mus_musculus'; # Secondary species
 
 ## This hash is used to configure the species available in this
 ## copy of EnsEMBL - comment out any lines which are not relevant
