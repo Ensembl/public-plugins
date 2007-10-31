@@ -967,7 +967,7 @@ regions on a given slice and prints out their attributes:
 </p>
 
 <pre>
-my @encode_regions = @{ $slice->get_all_MiscFeatures('encode_regions') };
+my @encode_regions = @{ $slice->get_all_MiscFeatures('encode') };
 
 while ( my $encode_region = shift @encode_regions ) {
     my @attributes = @{ $encode_region->get_all_Attributes() };
