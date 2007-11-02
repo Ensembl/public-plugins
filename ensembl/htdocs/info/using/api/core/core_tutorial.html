@@ -180,17 +180,17 @@ my $first_clone = $clones_ref->[0];
 
 # Iterate through all of the genes on a clone
 foreach my $gene ( @{ $first_clone->get_all_Genes() } ) {
-    print $contig->stable_id(), "\n";
+    print $gene->stable_id(), "\n";
 }
 
 # More memory efficient way of doing the same thing
 my @genes = @{ $first_clone->get_all_Genes() };
 while ( my $gene = shift @genes ) {
-    print $contig->stable_id(), "\n";
+    print $gene->stable_id(), "\n";
 }
 
 # Retrieve a single Slice object (not a list reference)
-$clone = $slice_adaptor->fetch_by_region( 'clone', 'AL031658.11' );
+my $clone = $slice_adaptor->fetch_by_region( 'clone', 'AL031658.11' );
 # No dereferencing needed:
 print $clone->seq_region_name(), "\n";
 </pre>
