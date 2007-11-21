@@ -1,0 +1,498 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+
+
+  
+  <meta content="webteam" name="author">
+
+
+  
+  <meta content="Ensembl Funcgen" name="navigation">
+
+  
+  <title>Database Schema</title>
+</head>
+
+
+<body>
+
+
+<h2>Database Schema</h2>
+
+
+<p>
+This document refers to the schema of the Ensembl Funcgen version <strong>48</strong>.
+This is the revision <strong>0.1</strong> of this
+document.
+</p>
+<br>
+
+<h3 class="boxed">Introduction</h3>
+
+<p>
+The Ensembl Funcgen (eFG) DB can be thought of as containing three distinct types of inter-related data and a set of association data which connects these types. Alongside these there are also tables to facilitate the interaction between eFG and the core database to enable coordinate or 'seq_region' information to be stored about the various features withing eFG.
+</p>
+<ul>
+
+  <li><p><strong>Experimental data</strong> - This includes meta data about a given experiment alongside the raw experimental data.</p></li>
+
+  <li><p><strong>Platform data</strong> -  Experimental platform technology meta data and the necessary information to interpret experimental data produced using a given platform. e.g. Array designs</p></li>
+
+  <li><p><strong>Processed data</strong> - This consitutes any features which have been generated from experimental data, externally curated data or combined analyses of both.</p></li>
+
+  <li><p><strong>Association data</strong> - Some key tables which provides links between experimental data and processed data.</p></li>
+
+ <li><p><strong>Coordinate data</strong> - A registry of coordinate data to allow features to be stored on multiple coordinate systems originating from different version of the core DB.</p></li>
+  
+</ul>
+	
+<br>
+<h3 class="boxed">List of Tables</h3>
+
+<ul>
+
+	<li><p><strong>General Tables</strong></p>
+    
+    <ul>
+      <li><a href="#meta">meta</a></li>
+      <li><a href="#meta_coord">meta_coord</a></li>
+      <li><a href="#feature_type">feature_type</a></li>
+      <li><a href="#cell_type">cell_type</a></li>
+      <li><a href="#status">status</a></li>
+      <li><a href="#status_name">status_name</a></li>
+      <li><a href="#analysis">analysis</a></li>
+      <li><a href="#analysis_description">analysis_description</a></li>
+      <li><a href="#analysis_description">analysis_description</a></li>
+      <li><a href="#analysis_description">analysis_description</a></li>
+    </ul>
+
+  </li>
+
+  <li>
+    
+    <p><strong>Experimental Data Tables</strong>
+    </p>
+
+    <ul>
+      <li><a href="#egroup">egroup</a></li>
+      <li><a href="#experiment">experiment</a></li>
+      <li><a href="#mage_xml">mage_xml</a></li>
+      <li><a href="#experimental_design_type">experimental_design_type</a></li>
+      <li><a href="#design_type">design_type</a></li>
+      <li><a href="#experimental_variable">experimental_variable</a></li>
+      <li><a href="#experimental_chip">experimental_chip</a></li>
+	  <li><a href="#channel">channel</a></li>
+	  <li><a href="#chip_channel">chip_channel</a></li>
+	  <li><a href="#result">result</a></li>
+	  <li><a href="#result_set">result_set</a></li>
+      <li><a href="#experimental_set">experimental_set</a></li>
+	  <li><a href="#experimental_subset">experimental_subset</a></li>
+	</ul>
+
+
+  </li>
+
+
+  <li>
+    
+    <p><strong>Platform Data Tables</strong>
+    </p>
+
+    <ul>
+      <li><a href="#array">array</a></li>
+      <li><a href="#array_chip">array_chip</a></li>
+      <li><a href="#probe">probe</a></li>
+      <li><a href="#probe_set">probe_set</a></li>
+      <li><a href="#probe_design">probe_design</a></li>
+    </ul>
+
+
+  </li>
+
+
+</ul>
+<br>
+
+<!--
+#####################################################################
+#####################################################################
+GENERAL TABLES
+#####################################################################
+#####################################################################
+-->
+<h3 class="boxed">General Tables</h3>
+
+
+<!--
+#####################################################################
+TABLE META
+#####################################################################
+-->
+<h4 id="meta">meta</h4>
+
+
+<p>Contains configuration variables, meta table description:</p>
+
+<pre>
++------------+--------------+------+-----+---------+----------------+
+| Field      | Type         | Null | Key | Default | Extra          |
++------------+--------------+------+-----+---------+----------------+
+| meta_id    | int(10)      | NO   | PRI | NULL    | auto_increment |
+| meta_key   | varchar(40)  | NO   | MUL |         |                |
+| meta_value | varchar(255) | NO   | MUL |         |                |
++------------+--------------+------+-----+---------+----------------+
+</pre>
+<p>Meta table stores miscellaneous values about the database and it's contents:</p>
+
+
+<pre>mysql&gt; SELECT * FROM meta;
++---------+-----------------------------------+-------------------------------------------------------------------------------------------------+
+| meta_id | meta_key                          | meta_value                                                                                      |
++---------+-----------------------------------+-------------------------------------------------------------------------------------------------+
+|       2 | schema_version                    | 48                                                                                              |
+|      24 | regulatory_string_feature_set_id  | 31,20,29,30,32,33,34,35,51,36,37,49,38,39,40,41,42,43,44,45,46,47,50,48,21,22,13,14,15,16,17,12 |
+|      25 | regulatory_string_feature_type_id | 9,8,23,24,25,26,11,27,12,6,5,4,28,29,13,30,31,14,32,33,34,10,35,36,8,9,11,12,4,13,14,10         |
++---------+-----------------------------------+-------------------------------------------------------------------------------------------------+
+</pre>
+
+
+<p>This schema_version entry defines which API version must be used to access this database. The regulatory string entries are used during the regulatory build process. See the core <a href="http://www.ensembl.org/info/software/core/schema/schema_description.html#meta">meta</a> documentation for more details.</p>
+<br>
+
+<!--
+#####################################################################
+TABLE meta_coord
+#####################################################################
+-->
+<h4 id="meta_coord">meta_coord</h4>
+
+
+<p>Analagous to the core meta_coord table, this contains table and maximum length information for features.</p>
+
+<table class="spreadsheet">
+  <thead><tr><th>Table description</th><th>Column information</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><pre>
++-----------------+-------------+------+-----+---------+-------+
+| Field           | Type        | Null | Key | Default | Extra |
++-----------------+-------------+------+-----+---------+-------+
+| table_name      | varchar(40) | NO   | PRI |         |       |
+| coord_system_id | int(10)     | NO   | PRI | 0       |       |
+| max_length      | int(11)     | YES  |     | NULL    |       |
++-----------------+-------------+------+-----+---------+-------+
+</pre></td>
+      <td><pre>
+
+
+e.g. annotated_feature, probe_feature etc.
+the eFG coord_system_id
+used to make slice based range querys more efficient</pre></td>
+    </tr>
+  </tbody>
+</table>
+
+<p> See the core <a href="http://www.ensembl.org/info/software/core/schema/schema_description.html#meta_coord">meta_coord</a> documentation for more details.</p>
+<br>
+
+<!--
+#####################################################################
+TABLE feature_type
+#####################################################################
+-->
+<h4 id="feature_type">feature_type</h4>
+
+
+<p>Contains information about genomic features used in various tables within the schema e.g. the feature, set or experimental_chip tables</p>
+
+
+<table class="spreadsheet">
+ <thead><tr><th>Table description</th><th>Column information</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><pre>
++-----------------+---------------------------------------------+------+-----+---------+----------------+
+| Field           | Type                                        | Null | Key | Default | Extra          |
++-----------------+---------------------------------------------+------+-----+---------+----------------+
+| feature_type_id | int(10) unsigned                            | NO   | PRI | NULL    | auto_increment |
+| name            | varchar(40)                                 | NO   | MUL |         |                |
+| class           | enum('Insulator','DNA','Regulatory Feature',|      |     |         |                |
+|                 | 'Histone','RNA','Polymerase',               |      |     |         |                |
+|                 | 'Transcription Factor',                     |      |     |         |                | 
+|                 | 'Transcription Factor Complex','Overlap',   |      |     |         |                |
+|                 | 'Regulatory Motif','Region','Enhancer')     | YES  |     | NULL    |                |
+| description     | varchar(255)                                | YES  |     | NULL    |                |
++-----------------+---------------------------------------------+------+-----+---------+----------------+
+</pre></td>
+      <td><pre>
+
+
+Common abbreviated name, nomeclatures/ontologies used where possible 
+e.g. HGNC names, Brno histone nomenclatures etc.
+
+General class of feature
+
+
+
+</pre></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Here is an exmaple of some histone feature types:</p>
+
+<pre>
+mysql> select * from feature_type where class='HISTONE' limit 10;
++-----------------+----------+---------+-------------------------------------+
+| feature_type_id | name     | class   | description                         |
++-----------------+----------+---------+-------------------------------------+
+|               2 | H4ac     | Histone | Histone 4 Acetylation               |
+|               3 | H3ac     | Histone | Histone 3 Acetylation               |
+|               1 | H3K9ac   | Histone | Histone 3 Lysine 9 Acetylation      |
+|               4 | H3K4me3  | Histone | Histone 3 Lysine 4 Tri-Methylation  |
+|               5 | H3K4me2  | Histone | Histone 3 Lysine 4 Di-Methylation   |
+|               6 | H3K4me1  | Histone | Histone 3 Lysine 4 Mono-Methylation |
+|              10 | H4K20me3 | Histone | Histone 4 Lysine 20 Tri-Methylation |
+|              11 | H3K27me3 | Histone | Histone 3 Lysine 27 Tri-Methylation |
+|              12 | H3K36me3 | Histone | Histone 3 Lysine 36 Tri-Methylation |
+|              13 | H3K79me3 | Histone | Histone 3 Lysine 79 Tri-Methylation |
++-----------------+----------+---------+-------------------------------------+
+</pre>
+
+<br>
+
+<!--
+#####################################################################
+TABLE cell_type
+#####################################################################
+-->
+<h4 id="cell_type">cell_type</h4>
+
+
+<p>Contains information about cell/tissue types used in various tables within the schema e.g. the feature, set or experimental_chip tables</p>
+
+
+<table class="spreadsheet">
+<thead><tr><th>Table description</th><th>Column information</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><pre>
++---------------+------------------+------+-----+---------+----------------+
+| Field         | Type             | Null | Key | Default | Extra          |
++---------------+------------------+------+-----+---------+----------------+
+| cell_type_id  | int(10) unsigned | NO   | PRI | NULL    | auto_increment |
+| name          | varchar(120)     | NO   | UNI |         |                |
+| display_label | varchar(20)      | YES  |     | NULL    |                |
+| description   | varchar(40)      | YES  |     | NULL    |                |
++---------------+------------------+------+-----+---------+----------------+
+</pre></td>
+      <td><pre>
+
+
+Common abbreviated name
+
+</pre></td>
+    </tr>
+  </tbody>
+</table>
+<p>Here are a few examples of cell_type records:</p>
+<pre>
+mysql> select * from cell_type limit 5;
++--------------+---------+---------------+------------------------------------------+
+| cell_type_id | name    | display_label | description                              |
++--------------+---------+---------------+------------------------------------------+
+|            1 | HeLa    | NULL          | Human Epithelial Carcinoma Cells         |
+|            2 | GM06990 | NULL          | Human B-Lymphocyte Cells                 |
+|            3 | U2OS    | NULL          | Human Bone Osteosarcoma Epithelial Cells |
+|            4 | CD4     | NULL          | Human CD4 T-Cells                        |
+|            5 | IMR90   | NULL          | Human Fetal Lung Fibroblast              |
++--------------+---------+---------------+------------------------------------------+</pre>
+<br>
+<!--
+#####################################################################
+TABLE status
+#####################################################################
+-->
+<h4 id="status">status</h4>
+
+<p>A table for recording generic status entries for different table entries. e.g. experimental_chip, result_set.</p>
+
+<table class="spreadsheet">
+<thead><tr><th>Table description</th><th>Column information</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><pre>
++----------------+------------------+------+-----+---------+-------+
+| Field          | Type             | Null | Key | Default | Extra |
++----------------+------------------+------+-----+---------+-------+
+| table_id       | int(10) unsigned | NO   | PRI | 0       |       |
+| table_name     | varchar(20)      | NO   | PRI |         |       |
+| status_name_id | int(10)          | NO   | PRI | 0       |       |
++----------------+------------------+------+-----+---------+-------+
+</pre></td>
+      <td><pre>
+
+
+
+
+e.g. experimental_chip, result_set.
+
+
+</pre></td>
+    </tr>
+  </tbody>
+</table>
+
+<br>
+<!--
+#####################################################################
+TABLE status_name
+#####################################################################
+-->
+<h4 id="status_name">status_name</h4>
+
+
+<p>Contains the list of valid status names which can be assigned to variosu table records.</p>
+
+<table class="spreadsheet">
+<thead><tr><th>Table description</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><pre>
++----------------+------------------+------+-----+---------+----------------+
+| Field          | Type             | Null | Key | Default | Extra          |
++----------------+------------------+------+-----+---------+----------------+
+| status_name_id | int(10) unsigned | NO   | PRI | NULL    | auto_increment |
+| name           | varchar(20)      | YES  | UNI | NULL    |                |
++----------------+------------------+------+-----+---------+----------------+
+</pre></td></tr>
+  </tbody>
+</table>
+
+<p>The status and status_name tables allow multiple states to be assigned to an given record. The following table shows the current status to table associations.
+
+<pre>mysql> select distinct(s.table_name), sn.name from status_name sn left join status s on s.status_name_id=sn.status_name_id;</pre>
+<table class="spreadsheet">
+<tr><td><pre>
++-------------------+-----------------+
+| table_name        | name            |
++-------------------+-----------------+
+| NULL              | DAS DISPLAYABLE |
+| result_set        | DISPLAYABLE     |
+| data_set          | DISPLAYABLE     |
+| feature_set       | DISPLAYABLE     |
+| experimental_chip | DISPLAYABLE     |
+| array_chip        | IMPORTED        |
+| channel           | IMPORTED        |
+| array_chip        | RESOLVED        |
+| experimental_chip | VSN_GLOG        |
+| experimental_chip | Parzen          |
++-------------------+-----------------+</pre></td>
+<td><pre>
+
+
+Used for automatic display of DAS tracks
+
+
+Used for display in Ensembl web browser tracks
+
+Provides tracking of import processes
+
+Tracks resolution of array probe import
+Tracks which analyses have been performed
+Tracks which analyses have been performed
+</pre></td>
+</tr></table>
+<br>
+<!--
+#####################################################################
+TABLE analysis
+#####################################################################
+-->
+<h4 id="analysis">analysis</h4>
+
+
+<p>
+This table is identical to the core analysis table.  It stores information about analyses which can be assigned to features or feature sets.
+</p>
+<table class="spreadsheet">
+<thead><tr><th>Table description</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><pre>
++-----------------+------------------+------+-----+---------------------+----------------+
+| Field           | Type             | Null | Key | Default             | Extra          |
++-----------------+------------------+------+-----+---------------------+----------------+
+| analysis_id     | int(10) unsigned | NO   | PRI | NULL                | auto_increment |
+| created         | datetime         | NO   |     | 0000-00-00 00:00:00 |                |
+| logic_name      | varchar(40)      | NO   | UNI |                     |                |
+| db              | varchar(120)     | YES  |     | NULL                |                |
+| db_version      | varchar(40)      | YES  |     | NULL                |                |
+| db_file         | varchar(120)     | YES  |     | NULL                |                |
+| program         | varchar(80)      | YES  |     | NULL                |                |
+| program_version | varchar(40)      | YES  |     | NULL                |                |
+| program_file    | varchar(80)      | YES  |     | NULL                |                |
+| parameters      | varchar(255)     | YES  |     | NULL                |                |
+| module          | varchar(80)      | YES  |     | NULL                |                |
+| module_version  | varchar(40)      | YES  |     | NULL                |                |
+| gff_source      | varchar(40)      | YES  |     | NULL                |                |
+| gff_feature     | varchar(40)      | YES  |     | NULL                |                |
++-----------------+------------------+------+-----+---------------------+----------------+
+</pre></td>
+      </tr>
+  </tbody>
+</table>
+<p>See the core <a href="http://www.ensembl.org/info/software/core/schema/schema_description.html#analysis">analysis</a> documentation for more details.</p>
+<br>
+<!--
+#####################################################################
+#####################################################################
+TABLE analysis_description
+#####################################################################
+#####################################################################
+-->
+
+<h4 id="analysis_description">analysis_description</h4>
+
+<p>
+This table is identical to the core analysis_description table.  It stores descriptive information about analyses.
+</p>
+<table class="spreadsheet">
+<thead><tr><th>Table description</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><pre>
++---------------+------------------+------+-----+---------+-------+
+| Field         | Type             | Null | Key | Default | Extra |
++---------------+------------------+------+-----+---------+-------+
+| analysis_id   | int(10) unsigned | NO   | MUL | 0       |       |
+| description   | text             | YES  |     | NULL    |       |
+| display_label | varchar(255)     | YES  |     | NULL    |       |
+| displayable   | tinyint(1)       | NO   |     | 1       |       |
+| web_data      | text             | YES  |     | NULL    |       |
++---------------+------------------+------+-----+---------+-------+
+</pre></td>
+      </tr>
+  </tbody>
+</table>
+<p>See the core <a href="http://www.ensembl.org/info/software/core/schema/schema_description.html#analysis_description">analysis_description</a> documentation for more details.</p>
+<br>
+
+
+<!--
+#####################################################################
+#####################################################################
+Platform TABLES
+#####################################################################
+#####################################################################
+-->
+
+
+
+<h3 class="boxed">Platform Tables</h3>
+
+
+
+</body>
+</html>
