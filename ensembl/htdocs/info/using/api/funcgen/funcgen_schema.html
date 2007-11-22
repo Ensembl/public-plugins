@@ -486,6 +486,324 @@ This table is identical to the core analysis_description table.  It stores descr
 <p>See the core <a href="http://www.ensembl.org/info/software/core/schema/schema_description.html#analysis_description">analysis_description</a> documentation for more details.</p>
 <br>
 
+<!--
+#####################################################################
+#####################################################################
+Experimental data TABLES
+#####################################################################
+#####################################################################
+-->
+
+
+
+<h3 class="boxed">Experimental Data Tables</h3>
+
+<!--
+#####################################################################
+#####################################################################
+TABLE egroup
+#####################################################################
+#####################################################################
+-->
+
+<h4 id="egroup">egroup</h4>
+
+<p>
+The egroup or 'experimental group' table contains information about research groups which are associated with experiments. 
+</p>
+<table class="spreadsheet">
+<thead><tr><th>Table description</th><th>Field Information</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><pre>
++-----------+----------------------+------+-----+---------+----------------+
+| Field     | Type                 | Null | Key | Default | Extra          |
++-----------+----------------------+------+-----+---------+----------------+
+| egroup_id | smallint(6) unsigned | NO   | PRI | NULL    | auto_increment |
+| name      | varchar(40)          | NO   |     |         |                |
+| location  | varchar(120)         | YES  |     | NULL    |                |
+| contact   | varchar(40)          | YES  |     | NULL    |                |
++-----------+----------------------+------+-----+---------+----------------+
+</pre></td>
+	<td><pre>
+
+
+
+
+
+group location
+email of primary contact within the group
+
+</pre></td></tr>
+</tbody>
+</table>
+<p>Here is an example using our group information:</p>
+<pre>
+mysql> select * from egroup;
++-----------+------+----------+--------------------+
+| egroup_id | name | location | contact            |
++-----------+------+----------+--------------------+
+|         1 | efg  | Hinxton  | njohnson@ebi.ac.uk |
++-----------+------+----------+--------------------+
+</pre>
+<br>
+
+<!--
+#####################################################################
+#####################################################################
+TABLE experiment
+#####################################################################
+#####################################################################
+-->
+
+<h4 id="experiment">experiment</h4>
+
+<p>
+Contains information about individual experiments.
+</p>
+<table class="spreadsheet">
+<thead><tr><th>Table description</th><th>Field Information</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><pre>
++---------------------+----------------------+------+-----+------------+----------------+
+| Field               | Type                 | Null | Key | Default    | Extra          |
++---------------------+----------------------+------+-----+------------+----------------+
+| experiment_id       | int(10) unsigned     | NO   | PRI | NULL       | auto_increment |
+| name                | varchar(30)          | YES  | UNI | NULL       |                |
+| egroup_id           | smallint(6) unsigned | YES  | MUL | NULL       |                |
+| date                | date                 | YES  |     | 0000-00-00 |                |
+| primary_design_type | varchar(30)          | YES  | MUL | NULL       |                |
+| description         | varchar(255)         | YES  |     | NULL       |                |
+| mage_xml_id         | int(10) unsigned     | YES  |     | NULL       |                |
++---------------------+----------------------+------+-----+------------+----------------+
+</pre></td>
+	<td><pre>
+
+
+
+
+
+
+date of experiment
+The primary design type(MGED term) e.g. binding_site_identification
+
+Link to the mage_xml record
+
+</pre></td></tr>
+</tbody>
+</table>
+<p>Here is an example using the 'ctcf_ren' experiment:</p>
+<pre>
+mysql> select * from experiment where name like 'ctcf_ren';
++---------------+----------+-----------------------+------+-----------------------------+-------------+-------------+
+| experiment_id | name     | experimental_group_id | date | primary_design_type         | description | mage_xml_id |
++---------------+----------+-----------------------+------+-----------------------------+-------------+-------------+
+|            12 | ctcf_ren |                     1 | NULL | binding_site_identification | NULL        |           2 |
++---------------+----------+-----------------------+------+-----------------------------+-------------+-------------+
+</pre>
+<br>
+
+
+<!--
+#####################################################################
+#####################################################################
+TABLE mage_xml
+#####################################################################
+#####################################################################
+-->
+
+<h4 id="mage_xml">mage_xml</h4>
+
+<p>
+Mage XML records for a given experiment.
+</p>
+<table class="spreadsheet">
+<thead><tr><th>Table description</th><th>Field Information</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><pre>
++-------------+------------------+------+-----+---------+----------------+
+| Field       | Type             | Null | Key | Default | Extra          |
++-------------+------------------+------+-----+---------+----------------+
+| mage_xml_id | int(10) unsigned | NO   | PRI | NULL    | auto_increment |
+| xml         | text             | YES  |     | NULL    |                |
++-------------+------------------+------+-----+---------+----------------+
+</pre></td>
+	<td><pre>
+
+
+
+
+XML stored as text
+
+</pre></td></tr>
+</tbody>
+</table>
+<br>
+
+<!--
+#####################################################################
+#####################################################################
+TABLE experimental_design_type
+#####################################################################
+#####################################################################
+-->
+
+<h4 id="experimental_design_type">experimental_design_type</h4>
+
+<p>
+This is a generic link table between a design_type and any table where it might logically be applied e.g. experiment, experimental_chip etc.
+</p>
+<table class="spreadsheet">
+<thead><tr><th>Table description</th><th>Field Information</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><pre>
++----------------+------------------+------+-----+---------+----------------+
+| Field          | Type             | Null | Key | Default | Extra          |
++----------------+------------------+------+-----+---------+----------------+
+| design_type_id | int(10) unsigned | NO   | PRI | NULL    | auto_increment |
+| table_name     | varchar(40)      | NO   | PRI |         |                |
+| table_id       | int(10) unsigned | NO   | PRI | 0       |                |
++----------------+------------------+------+-----+---------+----------------+
+</pre></td>
+	<td><pre>
+
+
+
+design type to be associated
+table name of associated record 
+table id of associated record
+
+</pre></td></tr>
+</tbody>
+</table>
+<br>
+
+
+<!--
+#####################################################################
+#####################################################################
+TABLE design_type
+#####################################################################
+#####################################################################
+-->
+
+<h4 id="design_type">design_type</h4>
+
+<p>
+The design type table holds appropriate terms from ontologies such as MGED.
+</p>
+<table class="spreadsheet">
+<thead><tr><th>Table description</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><pre>
++----------------+------------------+------+-----+---------+----------------+
+| Field          | Type             | Null | Key | Default | Extra          |
++----------------+------------------+------+-----+---------+----------------+
+| design_type_id | int(10) unsigned | NO   | PRI | NULL    | auto_increment |
+| name           | varchar(255)     | YES  | MUL | NULL    |                |
++----------------+------------------+------+-----+---------+----------------+
+</pre></td></tr>
+</tbody>
+</table>
+<br>
+
+<!--
+#####################################################################
+#####################################################################
+TABLE experimental_variable
+#####################################################################
+#####################################################################
+-->
+
+<h4 id="experimental_variable">experimental_variable</h4>
+
+<p>
+The experimental_variable table is design to store any meta data which might be used for querying rather than simpluy storing in the mage_xml table.
+</p>
+<table class="spreadsheet">
+<thead><tr><th>Table description</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><pre>
++------------+------------------+------+-----+---------+-------+
+| Field      | Type             | Null | Key | Default | Extra |
++------------+------------------+------+-----+---------+-------+
+| table_id   | int(10) unsigned | NO   | PRI | 0       |       |
+| table_name | varchar(20)      | NO   | PRI |         |       |
+| name       | varchar(40)      | YES  |     | NULL    |       |
+| unit       | varchar(40)      | YES  |     | NULL    |       |
+| value      | varchar(40)      | YES  |     | NULL    |       |
++------------+------------------+------+-----+---------+-------+
+</pre></td></tr>
+</tbody>
+</table>
+<br>
+
+<!--
+#####################################################################
+#####################################################################
+TABLE experimental_chip
+#####################################################################
+#####################################################################
+-->
+
+<h4 id="experimental_chip">experimental_chip</h4>
+
+<p>
+Each record in this table represent the unique physical instance of an array_chip.
+</p>
+<table class="spreadsheet">
+<thead><tr><th>Table description</th><th>Field Information</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><pre>
++----------------------+------------------+------+-----+---------+----------------+
+| Field                | Type             | Null | Key | Default | Extra          |
++----------------------+------------------+------+-----+---------+----------------+
+| experimental_chip_id | int(10) unsigned | NO   | PRI | NULL    | auto_increment |
+| unique_id            | varchar(20)      | NO   | MUL | 0       |                |
+| experiment_id        | int(10) unsigned | NO   | MUL | 0       |                |
+| array_chip_id        | int(10) unsigned | NO   |     | 0       |                |
+| feature_type_id      | int(10) unsigned | YES  | MUL | NULL    |                |
+| cell_type_id         | int(10) unsigned | YES  |     | NULL    |                |
+| biological_replicate | varchar(40)      | YES  |     | NULL    |                |
+| technical_replicate  | varchar(40)      | YES  |     | NULL    |                |
++----------------------+------------------+------+-----+---------+----------------+
+</pre></td>
+	<td><pre>
+
+
+
+
+Unique id for the experimental_chip
+
+
+
+
+The biological replicate denomination
+The technical replicate denomination
+
+</pre></td></tr>
+</tbody>
+</table>
+<p>The biological_replicate and technical_replicate fields are populated dependent on the tab2MAGE file generated during the import procedure.  These values are then used dynamically to resolve individual results across replicates. Here we see the experimental_ships from the 'Stunnenberg_all_OID_1963' experiment:
+<pre>
+mysql> select ec.* from experimental_chip ec, experiment e where e.name='Stunnenberg_all_OID_1963' and  ec.experiment_id=e.experiment_id;
++----------------------+-----------+---------------+---------------+-----------------+--------------+----------------------+---------------------+
+| experimental_chip_id | unique_id | experiment_id | array_chip_id | feature_type_id | cell_type_id | biological_replicate | technical_replicate |
++----------------------+-----------+---------------+---------------+-----------------+--------------+----------------------+---------------------+
+|                    1 | 46092     |             1 |             1 |               1 |            3 | 1                    | NULL                |
+|                    2 | 46082     |             1 |             1 |               1 |            3 | 2                    | NULL                |
+|                    3 | 46075     |             1 |             2 |               1 |            3 | 2                    | NULL                |
+|                    4 | 46078     |             1 |             2 |               1 |            3 | 1                    | NULL                |
++----------------------+-----------+---------------+---------------+-----------------+--------------+----------------------+---------------------+
+</pre>
+<br>
+
 
 <!--
 #####################################################################
