@@ -52,8 +52,7 @@ The Ensembl Funcgen (eFG) DB can be thought of as containing three distinct type
 
 <ul>
 
-	<li><p><strong>General Tables</strong></p>
-    
+	<li><p><strong>General Tables</strong></p>    
     <ul>
       <li><a href="#meta">meta</a></li>
       <li><a href="#meta_coord">meta_coord</a></li>
@@ -63,17 +62,10 @@ The Ensembl Funcgen (eFG) DB can be thought of as containing three distinct type
       <li><a href="#status_name">status_name</a></li>
       <li><a href="#analysis">analysis</a></li>
       <li><a href="#analysis_description">analysis_description</a></li>
-      <li><a href="#analysis_description">analysis_description</a></li>
-      <li><a href="#analysis_description">analysis_description</a></li>
     </ul>
-
   </li>
 
-  <li>
-    
-    <p><strong>Experimental Data Tables</strong>
-    </p>
-
+  <li><p><strong>Experimental Data Tables</strong></p>
     <ul>
       <li><a href="#egroup">egroup</a></li>
       <li><a href="#experiment">experiment</a></li>
@@ -89,16 +81,10 @@ The Ensembl Funcgen (eFG) DB can be thought of as containing three distinct type
       <li><a href="#experimental_set">experimental_set</a></li>
 	  <li><a href="#experimental_subset">experimental_subset</a></li>
 	</ul>
-
-
   </li>
 
 
-  <li>
-    
-    <p><strong>Platform Data Tables</strong>
-    </p>
-
+  <li><p><strong>Platform Data Tables</strong></p>
     <ul>
       <li><a href="#array">array</a></li>
       <li><a href="#array_chip">array_chip</a></li>
@@ -106,10 +92,31 @@ The Ensembl Funcgen (eFG) DB can be thought of as containing three distinct type
       <li><a href="#probe_set">probe_set</a></li>
       <li><a href="#probe_design">probe_design</a></li>
     </ul>
-
-
   </li>
 
+  <li><p><strong>Processed Data Tables</strong></p>
+    <ul>
+      <li><a href="#feature_set">feature_set</a></li>
+      <li><a href="#annotated_feature">annotated_feature</a></li>
+      <li><a href="#external_feature">external_feature</a></li>
+      <li><a href="#regulatory_feature">regulatory_feature</a></li>
+      <li><a href="#regulatory_attribute">regulatory_attribute</a></li>
+     </ul>
+  </li>
+
+  <li><p><strong>Association Data Tables</strong></p>
+    <ul>
+      <li><a href="#data_set">data_set</a></li>
+      <li><a href="#supporting_set">supporting_set</a></li>
+    </ul>
+  </li>
+
+  <li><p><strong>Coordinate Data Tables</strong></p>
+    <ul>
+      <li><a href="#coord_system">coord_system</a></li>
+      <li><a href="#seq_region">seq_region</a></li>
+    </ul>
+  </li>
 
 </ul>
 <br>
@@ -171,7 +178,7 @@ TABLE meta_coord
 <p>Analagous to the core meta_coord table, this contains table and maximum length information for features.</p>
 
 <table class="spreadsheet">
-  <thead><tr><th>Table description</th><th>Column information</th></tr></thead>
+  <thead><tr><th>Table description</th><th>Field information</th></tr></thead>
   <tbody>
     <tr>
       <td><pre>
@@ -208,7 +215,7 @@ TABLE feature_type
 
 
 <table class="spreadsheet">
- <thead><tr><th>Table description</th><th>Column information</th></tr></thead>
+ <thead><tr><th>Table description</th><th>Field information</th></tr></thead>
   <tbody>
     <tr>
       <td><pre>
@@ -274,7 +281,7 @@ TABLE cell_type
 
 
 <table class="spreadsheet">
-<thead><tr><th>Table description</th><th>Column information</th></tr></thead>
+<thead><tr><th>Table description</th><th>Field information</th></tr></thead>
   <tbody>
     <tr>
       <td><pre>
@@ -319,7 +326,7 @@ TABLE status
 <p>A table for recording generic status entries for different table entries. e.g. experimental_chip, result_set.</p>
 
 <table class="spreadsheet">
-<thead><tr><th>Table description</th><th>Column information</th></tr></thead>
+<thead><tr><th>Table description</th><th>Field information</th></tr></thead>
   <tbody>
     <tr>
       <td><pre>
@@ -483,16 +490,745 @@ This table is identical to the core analysis_description table.  It stores descr
 <!--
 #####################################################################
 #####################################################################
-Platform TABLES
+Platform data TABLES
 #####################################################################
 #####################################################################
 -->
 
 
 
-<h3 class="boxed">Platform Tables</h3>
+<h3 class="boxed">Platform Data Tables</h3>
+
+<!--
+#####################################################################
+#####################################################################
+TABLE array
+#####################################################################
+#####################################################################
+-->
+
+<h4 id="array">array</h4>
+
+<p>
+This table contains information about an array product.
+</p>
+<table class="spreadsheet">
+<thead><tr><th>Table description</th><th>Field Information</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><pre>
++-------------+------------------+------+-----+---------+----------------+
+| Field       | Type             | Null | Key | Default | Extra          |
++-------------+------------------+------+-----+---------+----------------+
+| array_id    | int(10) unsigned | NO   | PRI | NULL    | auto_increment |
+| name        | varchar(40)      | YES  |     | NULL    |                |
+| format      | varchar(20)      | YES  |     | NULL    |                |
+| vendor      | varchar(40)      | YES  | MUL | NULL    |                |
+| description | varchar(255)     | YES  |     | NULL    |                |
+| type        | varchar(20)      | YES  |     | NULL    |                |
++-------------+------------------+------+-----+---------+----------------+
+</pre></td>
+	<td><pre>
 
 
+
+
+
+e.g. Tiled, Expression, SNP, Custom
+Array vendor e.g. Nimblegen
+
+e.g. OLIGO, PCR
+
+</pre></td></tr>
+</tbody>
+</table>
+<p>Here we see an entry for the latest version of the Sanger ENCODE PCR array:</p>
+<pre>
+mysql> select * from array where vendor='Sanger';
++----------+-------------+--------+--------+-------------------------------+------+
+| array_id | name        | format | vendor | description                   | type |
++----------+-------------+--------+--------+-------------------------------+------+
+|        2 | ENCODE3.1.1 | TILED  | SANGER | Sanger ENCODE PCR array 3.1.1 | PCR  |
++----------+-------------+--------+--------+-------------------------------+------+
+</pre>
+<br>
+
+<!--
+#####################################################################
+#####################################################################
+TABLE array_chip
+#####################################################################
+#####################################################################
+-->
+
+<h4 id="array_chip">array_chip</h4>
+
+<p>
+The array_chip table contains information about individual chips or slides which belong to a larger array set.
+</p>
+<table class="spreadsheet">
+<thead><tr><th>Table description</th><th>Field Information</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><pre>
++---------------+------------------+------+-----+---------+----------------+
+| Field         | Type             | Null | Key | Default | Extra          |
++---------------+------------------+------+-----+---------+----------------+
+| array_chip_id | int(10) unsigned | NO   | PRI | NULL    | auto_increment |
+| design_id     | varchar(20)      | YES  |     | NULL    |                |
+| array_id      | int(10) unsigned | NO   | MUL | 0       |                |
+| name          | varchar(40)      | YES  |     | NULL    |                |
++---------------+------------------+------+-----+---------+----------------+
+</pre></td>
+	<td><pre>
+
+
+
+
+
+This must be a unique id withing the array set.
+
+
+
+
+</pre></td></tr>
+</tbody>
+</table>
+<p>Here we see the first 10 of 38 array chips which consitute the Nimblegen 2005-05-10_HG17Tiling_Set array:</p>
+<pre>
+mysql> select * from array_chip order by design_id limit 10;
++---------------+-----------+----------+-----------------------------+
+| array_chip_id | design_id | array_id | name                        |
++---------------+-----------+----------+-----------------------------+
+|             4 | 2031      |        1 | 2005-05-10_HG17Tiling_Set01 |
+|             5 | 2032      |        1 | 2005-05-10_HG17Tiling_Set02 |
+|             6 | 2033      |        1 | 2005-05-10_HG17Tiling_Set03 |
+|             7 | 2034      |        1 | 2005-05-10_HG17Tiling_Set04 |
+|             8 | 2035      |        1 | 2005-05-10_HG17Tiling_Set05 |
+|             9 | 2036      |        1 | 2005-05-10_HG17Tiling_Set06 |
+|            10 | 2037      |        1 | 2005-05-10_HG17Tiling_Set07 |
+|            11 | 2038      |        1 | 2005-05-10_HG17Tiling_Set08 |
+|            12 | 2039      |        1 | 2005-05-10_HG17Tiling_Set09 |
+|            13 | 2040      |        1 | 2005-05-10_HG17Tiling_Set10 |
++---------------+-----------+----------+-----------------------------+
+</pre>
+<br>
+
+<!--
+#####################################################################
+#####################################################################
+TABLE probe
+#####################################################################
+#####################################################################
+-->
+
+<h4 id="probe">probe</h4>
+
+<p>
+The probe table contains information about unique probes.  As some vendors refer to the same probe within a probeset by a different name, depending on what array it is on, this table can have multiple entries for a given probe_id to reflect each instance of that probe, on a different array_chip or with a different name.
+</p>
+<table class="spreadsheet">
+<thead><tr><th>Table description</th><th>Field Information</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><pre>
++---------------+----------------------+------+-----+---------+----------------+
+| Field         | Type                 | Null | Key | Default | Extra          |
++---------------+----------------------+------+-----+---------+----------------+
+| probe_id      | int(10) unsigned     | NO   | PRI | NULL    | auto_increment |
+| probe_set_id  | int(10) unsigned     | YES  | MUL | NULL    |                |
+| name          | varchar(40)          | NO   | PRI |         |                |
+| length        | smallint(6) unsigned | NO   |     | 0       |                |
+| array_chip_id | int(10) unsigned     | NO   | MUL | 0       |                |
+| class         | varchar(20)          | YES  |     | NULL    |                |
++---------------+----------------------+------+-----+---------+----------------+
+</pre></td>
+<td><pre>
+
+
+
+
+
+
+
+
+e.g. EXPERIMENTAL, CONTROL, CLUSTER, SPIKE-IN etc.
+
+</pre></td></tr>
+</tbody>
+</table>
+<p>Here we see a handful of probes from the Nimblegen 2005-05-10_HG17Tiling_Set array which have no probe_set associations:</p>
+<pre>
+mysql> select * from probe limit 10;
++----------+--------------+----------------+--------+---------------+--------------+
+| probe_id | probe_set_id | name           | length | array_chip_id | class        |
++----------+--------------+----------------+--------+---------------+--------------+
+|  4368959 |            0 | chrXP23688251  |     50 |             2 | EXPERIMENTAL |
+|  4368960 |            0 | chr22P38797630 |     50 |             2 | EXPERIMENTAL |
+|  4368961 |            0 | chrXP19006022  |     50 |             2 | EXPERIMENTAL |
+|  4368962 |            0 | chr22P44857921 |     50 |             2 | EXPERIMENTAL |
+|  4368963 |            0 | chrXP35916231  |     50 |             2 | EXPERIMENTAL |
+|  4368964 |            0 | chrXP3578999   |     50 |             2 | EXPERIMENTAL |
+|  4368965 |            0 | chrXP30674179  |     50 |             2 | EXPERIMENTAL |
+|  4368966 |            0 | chrXP83863933  |     50 |             2 | EXPERIMENTAL |
+|  4368967 |            0 | chr22P47957550 |     50 |             2 | EXPERIMENTAL |
+|  4368968 |            0 | chrXP74276518  |     50 |             2 | EXPERIMENTAL |
++----------+--------------+----------------+--------+---------------+--------------+
+</pre>
+<br>
+
+<!--
+#####################################################################
+#####################################################################
+TABLE probe_set
+#####################################################################
+#####################################################################
+-->
+
+<h4 id="probe_set">probe_set</h4>
+
+<p>Information about probe sets.
+</p>
+<table class="spreadsheet">
+<thead><tr><th>Table description</th><th>Field Information</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><pre>
++--------------+----------------------+------+-----+---------+----------------+
+| Field        | Type                 | Null | Key | Default | Extra          |
++--------------+----------------------+------+-----+---------+----------------+
+| probe_set_id | int(10) unsigned     | NO   | PRI | NULL    | auto_increment |
+| name         | varchar(20)          | NO   |     |         |                |
+| size         | smallint(6) unsigned | NO   |     | 0       |                |
+| family       | varchar(20)          | YES  |     | NULL    |                |
++--------------+----------------------+------+-----+---------+----------------+
+</pre></td>
+<td><pre>
+
+
+
+
+
+Number of probes in probe_set
+Wider classification of probe_set
+
+</pre></td></tr>
+</tbody>
+</table>
+<br>
+
+<!--
+#####################################################################
+#####################################################################
+TABLE probe_design
+#####################################################################
+#####################################################################
+-->
+
+<h4 id="probe_design">probe_design</h4>
+
+<p>
+The probe_design table allows for storage of probe specific design information when using the eFG DB to facilitate custom array design.
+</p>
+<table class="spreadsheet">
+<thead><tr><th>Table description</th><th>Field Information</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><pre>
++-----------------+------------------+------+-----+---------+-------+
+| Field           | Type             | Null | Key | Default | Extra |
++-----------------+------------------+------+-----+---------+-------+
+| probe_id        | int(10) unsigned | NO   | PRI | 0       |       |
+| analysis_id     | int(10) unsigned | NO   | PRI | 0       |       |
+| score           | double           | YES  |     | NULL    |       |
+| coord_system_id | int(10) unsigned | NO   | PRI | 0       |       |
++-----------------+------------------+------+-----+---------+-------+
+</pre></td>
+<td><pre>
+
+
+
+
+Link to analysis which will contain design specfic paramters 
+Design score derived from analysis e.g. uniqueness score
+Required as designs are dependent on the genome assembly version
+
+</pre></td></tr>
+</tbody>
+</table>
+<br>
+
+<!--
+#####################################################################
+#####################################################################
+Processed data TABLES
+#####################################################################
+#####################################################################
+-->
+
+<h3 class="boxed">Processed Data Tables</h3>
+
+
+<!--
+#####################################################################
+#####################################################################
+TABLE feature_set
+#####################################################################
+#####################################################################
+-->
+
+<h4 id="feature_set">feature_set</h4>
+
+<p>
+Each record represents a set of common features based on the output of an analysis.
+</p>
+<table class="spreadsheet">
+<thead><tr><th>Table description</th><th>Field Information</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><pre>
++-----------------+-------------------------------------------+------+-----+---------+----------------+
+| Field           | Type                                      | Null | Key | Default | Extra          |
++-----------------+-------------------------------------------+------+-----+---------+----------------+
+| feature_set_id  | int(10) unsigned                          | NO   | PRI | NULL    | auto_increment |
+| feature_type_id | int(10) unsigned                          | NO   | MUL | 0       |                |
+| analysis_id     | int(10) unsigned                          | YES  |     | NULL    |                |
+| cell_type_id    | int(10) unsigned                          | YES  |     | NULL    |                |
+| name            | varchar(40)                               | YES  | UNI | NULL    |                |
+| type            | enum('annotated','regulatory','external') | YES  |     | NULL    |                |
++-----------------+-------------------------------------------+------+-----+---------+----------------+
+</pre></td>
+	<td><pre>
+
+
+
+
+The analysis used to generate this set of features
+Each feature should have the same feature_type
+Each feature should have the same cell_type
+
+Defines the type of feature contained by this feature_set
+
+</pre></td></tr>
+</tbody>
+</table>
+<p>Here we can see the current 'external' feature_sets:</p>
+<pre>
+mysql> select * from feature_set where type='external';
++----------------+-----------------+-------------+--------------+-----------------------+----------+
+| feature_set_id | feature_type_id | analysis_id | cell_type_id | name                  | type     |
++----------------+-----------------+-------------+--------------+-----------------------+----------+
+|             66 |              48 |          17 |         NULL | miRanda miRNA         | external |
+|             65 |              49 |          18 |         NULL | cisRED group motifs   | external |
+|             64 |              48 |          18 |         NULL | cisRED search regions | external |
+|             63 |              45 |          19 |         NULL | VISTA enhancer set    | external |
++----------------+-----------------+-------------+--------------+-----------------------+----------+
+</pre>
+<br>
+
+<!--
+#####################################################################
+#####################################################################
+TABLE annotated_feature
+#####################################################################
+#####################################################################
+-->
+
+<h4 id="annotated_feature">annotated_feature</h4>
+
+<p>
+Each record represents an annotation on the genome based on the output of an analysis.
+</p>
+<table class="spreadsheet">
+<thead><tr><th>Table description</th><th>Field Information</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><pre>
++----------------------+------------------+------+-----+---------+----------------+
+| Field                | Type             | Null | Key | Default | Extra          |
++----------------------+------------------+------+-----+---------+----------------+
+| annotated_feature_id | int(10) unsigned | NO   | PRI | NULL    | auto_increment |
+| seq_region_id        | int(10) unsigned | NO   | MUL | 0       |                |
+| seq_region_start     | int(10) unsigned | NO   |     | 0       |                |
+| seq_region_end       | int(10) unsigned | NO   |     | 0       |                |
+| seq_region_strand    | tinyint(1)       | NO   |     | 0       |                |
+| display_label        | varchar(60)      | YES  |     | NULL    |                |
+| score                | double           | YES  |     | NULL    |                |
+| feature_set_id       | int(10) unsigned | NO   | MUL | 0       |                |
++----------------------+------------------+------+-----+---------+----------------+
+</pre></td>
+	<td><pre>
+
+
+
+
+
+
+Coordinate information
+
+Generated from an analysis
+Links this feature to a wider set of features
+
+
+</pre></td></tr>
+</tbody>
+</table>
+<p>Here we see a handful of annotated_features from the H4ac-HeLa_IMPORT feature_set:</p>
+<pre>
+mysql> select af.* from annotated_feature af, feature_set fs where af.feature_set_id=fs.feature_set_id and fs.name='H4ac-HeLa_IMPORT' limit 10;
++----------------------+---------------+------------------+----------------+-------------------+---------------+-------+----------------+
+| annotated_feature_id | seq_region_id | seq_region_start | seq_region_end | seq_region_strand | display_label | score | feature_set_id |
++----------------------+---------------+------------------+----------------+-------------------+---------------+-------+----------------+
+|                11777 |            73 |        115638286 |      115640172 |                 0 |               |  5.52 |              2 |
+|                11778 |            73 |        115927096 |      115928972 |                 0 |               |  4.56 |              2 |
+|                11779 |            73 |        116099885 |      116102142 |                 0 |               |   4.8 |              2 |
+|                11780 |            73 |        116377509 |      116380481 |                 0 |               | 5.225 |              2 |
+|                11781 |            73 |        116381790 |      116385824 |                 0 |               |  3.31 |              2 |
+|                11782 |            73 |        116385805 |      116392279 |                 0 |               |  1.64 |              2 |
+|                11783 |            73 |        116696459 |      116699296 |                 0 |               |  2.53 |              2 |
+|                11784 |            45 |        131429336 |      131431902 |                 0 |               |  3.11 |              2 |
+|                11785 |            45 |        131431900 |      131435369 |                 0 |               |  2.32 |              2 |
+|                11786 |            45 |        131435349 |      131444027 |                 0 |               |  2.57 |              2 |
++----------------------+---------------+------------------+----------------+-------------------+---------------+-------+----------------+
+</pre>
+<br>
+
+<!--
+#####################################################################
+#####################################################################
+TABLE external_feature
+#####################################################################
+#####################################################################
+-->
+
+<h4 id="external_feature">external_feature</h4>
+
+<p>
+External features are analogous to annotated_features, but are sourced from and externally curated set of data e.g. The cisRED regulatory motif set.
+</p>
+<table class="spreadsheet">
+<thead><tr><th>Table description</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><pre>
++---------------------+------------------+------+-----+---------+----------------+
+| Field               | Type             | Null | Key | Default | Extra          |
++---------------------+------------------+------+-----+---------+----------------+
+| external_feature_id | int(10) unsigned | NO   | PRI | NULL    | auto_increment |
+| seq_region_id       | int(10) unsigned | NO   | MUL | 0       |                |
+| seq_region_start    | int(10) unsigned | NO   |     | 0       |                |
+| seq_region_end      | int(10) unsigned | NO   |     | 0       |                |
+| seq_region_strand   | tinyint(1)       | NO   |     | 0       |                |
+| display_label       | varchar(60)      | YES  |     | NULL    |                |
+| feature_type_id     | int(10) unsigned | YES  | MUL | NULL    |                |
+| feature_set_id      | int(10) unsigned | NO   | MUL | 0       |                |
++---------------------+------------------+------+-----+---------+----------------+
+</pre></td></tr>
+</tbody>
+</table>
+<br>
+
+
+<!--
+#####################################################################
+#####################################################################
+TABLE regulatory_feature
+#####################################################################
+#####################################################################
+-->
+
+<h4 id="regulatory_feature">regulatory_feature</h4>
+
+<p>
+Each record represents a regulatory annotation on the genome based on the output of the Ensmbl 'Regulatory Build'.
+</p>
+<table class="spreadsheet">
+<thead><tr><th>Table description</th><th>Field Information</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><pre>
++-----------------------+-----------------------+------+-----+---------+----------------+
+| Field                 | Type                  | Null | Key | Default | Extra          |
++-----------------------+-----------------------+------+-----+---------+----------------+
+| regulatory_feature_id | int(10) unsigned      | NO   | PRI | NULL    | auto_increment |
+| seq_region_id         | int(10) unsigned      | NO   | MUL | 0       |                |
+| seq_region_start      | int(10) unsigned      | NO   |     | 0       |                |
+| seq_region_end        | int(10) unsigned      | NO   |     | 0       |                |
+| seq_region_strand     | tinyint(1)            | NO   |     | 0       |                |
+| display_label         | varchar(60)           | YES  |     | NULL    |                |
+| feature_type_id       | int(10) unsigned      | YES  | MUL | NULL    |                |
+| feature_set_id        | int(10) unsigned      | YES  | MUL | NULL    |                |
+| stable_id             | mediumint(8) unsigned | YES  | MUL | NULL    |                |
++-----------------------+-----------------------+------+-----+---------+----------------+
+</pre></td>
+	<td><pre>
+
+
+
+
+
+Coordinate information
+
+
+Binary display string used to classify feature
+Regulatory feature type assigned by classfication of binary string
+Links this feature to a wider set of features
+Integer representation of the stable identifier for this regulatory feature
+
+</pre></td></tr>
+</tbody>
+</table>
+<p>Here we see some regulatory_feature recrods from the current regulatory build.</p>
+<pre>
+mysql> select rf.* from regulatory_feature rf, feature_set fs where rf.feature_Set_id=fs.feature_set_id and fs.name='RegulatoryFeatures' limit 10;
++-----------------------+---------------+------------------+----------------+-------------------+------------------------------------+-----------------+----------------+-----------+
+| regulatory_feature_id | seq_region_id | seq_region_start | seq_region_end | seq_region_strand | display_label                      | feature_type_id | feature_set_id | stable_id |
++-----------------------+---------------+------------------+----------------+-------------------+------------------------------------+-----------------+----------------+-----------+
+|                605239 |           137 |                2 |            363 |                 0 | 1001000100111111101101110000000011 |              44 |             57 |    113231 |
+|                605240 |           137 |              371 |            543 |                 0 | 1000000100001000101100010000000011 |              44 |             57 |    113232 |
+|                605241 |           137 |              560 |            641 |                 0 | 1000000100001000101100010000000011 |              44 |             57 |    113233 |
+|                605242 |           137 |              700 |            781 |                 0 | 1000000100011001101100010000000011 |              44 |             57 |    113234 |
+|                605243 |           137 |              792 |            885 |                 0 | 1000000100001000001000000000000011 |              44 |             57 |    113235 |
+|                605244 |           137 |              909 |           1044 |                 0 | 1000000100001000100000000000000011 |              44 |             57 |    113236 |
+|                605245 |           137 |             1263 |           1296 |                 0 | 1000000000000000000100000000000011 |              44 |             57 |    113237 |
+|                605246 |           137 |             1377 |           1463 |                 0 | 1000000100001000100100110000000011 |              44 |             57 |    113238 |
+|                605247 |           137 |             1515 |           1565 |                 0 | 1000000000000000000000000000000011 |              44 |             57 |    113239 |
+|                605248 |           137 |             1691 |           1734 |                 0 | 1000000100011000100000000000000011 |              44 |             57 |    113240 |
++-----------------------+---------------+------------------+----------------+-------------------+------------------------------------+-----------------+----------------+-----------+
+</pre>
+<br>
+
+<!--
+#####################################################################
+#####################################################################
+TABLE regulatory_attribute
+#####################################################################
+#####################################################################
+-->
+
+<h4 id="regulatory_attribute">regulatory_attribute</h4>
+
+<p>
+Regulatory features are built using co-occurrence analysis of other types of feature or attribute features. The regulatory_attribute table store information about these underlying attribute features for each regulatory_feature.
+</p>
+<table class="spreadsheet">
+<thead><tr><th>Table description</th><th>Field Information</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><pre>
++-------------------------+------------------------------+------+-----+-----------+-------+
+| Field                   | Type                         | Null | Key | Default   | Extra |
++-------------------------+------------------------------+------+-----+-----------+-------+
+| regulatory_feature_id   | int(10) unsigned             | NO   | PRI | 0         |       |
+| attribute_feature_id    | int(10) unsigned             | NO   | PRI | 0         |       |
+| attribute_feature_table | enum('annotated','external') | NO   | PRI | annotated |       |
++-------------------------+------------------------------+------+-----+-----------+-------+
+</pre></td>
+	<td><pre>
+
+
+
+
+The table id of the attribute feature
+The source feature table type of the attribute feature
+
+</pre></td></tr>
+</tbody>
+</table>
+<p>This table shows all the annotated_features which make up the regulatory_feature with stable_id ENSR00000113231, in this case 26 annotated_features.</p>
+<pre>
+mysql> select ra.* from regulatory_attribute ra, regulatory_feature rf where rf.stable_id=113231 and rf.regulatory_feature_id=ra.regulatory_feature_id;
++-----------------------+----------------------+-------------------------+
+| regulatory_feature_id | attribute_feature_id | attribute_feature_table |
++-----------------------+----------------------+-------------------------+
+|                605239 |             25853743 | annotated               |
+|                605239 |             25853797 | annotated               |
+|                605239 |             25853909 | annotated               |
+|                605239 |             25853980 | annotated               |
+|                605239 |             25854098 | annotated               |
+|                605239 |             25854099 | annotated               |
+|                605239 |             25854100 | annotated               |
+|                605239 |             25854190 | annotated               |
+|                605239 |             25854312 | annotated               |
+|                605239 |             25854313 | annotated               |
+|                605239 |             25854314 | annotated               |
+|                605239 |             25854315 | annotated               |
+|                605239 |             25854434 | annotated               |
+|                605239 |             25854435 | annotated               |
+|                605239 |             25854650 | annotated               |
+|                605239 |             25854732 | annotated               |
+|                605239 |             25854734 | annotated               |
+|                605239 |             25854891 | annotated               |
+|                605239 |             25855005 | annotated               |
+|                605239 |             25855192 | annotated               |
+|                605239 |             25855193 | annotated               |
+|                605239 |             25855296 | annotated               |
+|                605239 |             25855297 | annotated               |
+|                605239 |             25855298 | annotated               |
+|                605239 |             25855300 | annotated               |
+|                605239 |             25855327 | annotated               |
++-----------------------+----------------------+-------------------------+
+</pre>
+<br>
+
+<!--
+#####################################################################
+#####################################################################
+Association data TABLES
+#####################################################################
+#####################################################################
+-->
+
+<h3 class="boxed">Association Data Tables</h3>
+
+<p>These tables provide a link between processed feature_sets and there underlying data.
+<!--
+#####################################################################
+#####################################################################
+TABLE data_set
+#####################################################################
+#####################################################################
+-->
+
+<h4 id="data_set">data_set</h4>
+
+<p>
+This table represents the central entry point to a set of data and links to the product feature_set.
+</p>
+<table class="spreadsheet">
+<thead><tr><th>Table description</th><th>Field Information</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><pre>
++----------------+------------------+------+-----+---------+----------------+
+| Field          | Type             | Null | Key | Default | Extra          |
++----------------+------------------+------+-----+---------+----------------+
+| data_set_id    | int(10) unsigned | NO   | PRI | NULL    | auto_increment |
+| feature_set_id | int(10) unsigned | NO   | PRI | 0       |                |
+| name           | varchar(40)      | YES  | UNI | NULL    |                |
++----------------+------------------+------+-----+---------+----------------+
+</pre></td>
+	<td><pre>
+
+
+
+
+The product feature_set.
+
+
+</pre></td></tr>
+</tbody>
+</table>
+<p>Here we see some data_sets which represent H3K4me3 feature types:</p>
+<pre>
+mysql> select ds.* from data_set ds, feature_type ft, feature_set fs where ft.name='H3K4me3' and ds.feature_set_id=fs.feature_set_id and fs.feature_type_id=ft.feature_type_id;
++-------------+----------------+------------------------+
+| data_set_id | feature_set_id | name                   |
++-------------+----------------+------------------------+
+|           3 |              4 | H3K4Me3-HeLa_IMPORT    |
+|          10 |             11 | H3K4Me3-GM06990_IMPORT |
+|          15 |             15 | Wiggle_H3K4me3         |
+|          46 |             49 | CD4_H3K4me3            |
++-------------+----------------+------------------------+
+</pre>
+<br>
+
+<!--
+#####################################################################
+#####################################################################
+TABLE supporting_set
+#####################################################################
+#####################################################################
+-->
+
+<h4 id="supporting_set">supporting_set</h4>
+
+<p>
+This table provides the association between a data_set and it's underlying supporting sets.
+</p>
+<table class="spreadsheet">
+<thead><tr><th>Table description</th><th>Field Information</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><pre>
++-------------------+-----------------------------------------+------+-----+---------+-------+
+| Field             | Type                                    | Null | Key | Default | Extra |
++-------------------+-----------------------------------------+------+-----+---------+-------+
+| data_set_id       | int(10) unsigned                        | NO   | PRI | 0       |       |
+| supporting_set_id | int(10) unsigned                        | NO   | PRI | 0       |       |
+| type              | enum('result','feature','experimental') | YES  | MUL | NULL    |       |
++-------------------+-----------------------------------------+------+-----+---------+-------+
+</pre></td>
+	<td><pre>
+
+
+
+
+The table id of the supporting_set
+The type of set
+
+</pre></td></tr>
+</tbody>
+</table>
+<p>Here we see all the supporting sets for the current regulatory build:
+<pre>
+mysql> select ss.* from supporting_set ss, data_set ds where ds.name='RegulatoryFeatures' and ds.data_Set_id=ss.data_Set_id;
++-------------+-------------------+---------+
+| data_set_id | supporting_set_id | type    |
++-------------+-------------------+---------+
+|          54 |                12 | feature |
+|          54 |                13 | feature |
+|          54 |                14 | feature |
+|          54 |                15 | feature |
+|          54 |                16 | feature |
+|          54 |                17 | feature |
+|          54 |                20 | feature |
+|          54 |                21 | feature |
+|          54 |                22 | feature |
+|          54 |                29 | feature |
+|          54 |                30 | feature |
+|          54 |                31 | feature |
+|          54 |                32 | feature |
+|          54 |                33 | feature |
+|          54 |                34 | feature |
+|          54 |                35 | feature |
+|          54 |                36 | feature |
+|          54 |                37 | feature |
+|          54 |                38 | feature |
+|          54 |                39 | feature |
+|          54 |                40 | feature |
+|          54 |                41 | feature |
+|          54 |                42 | feature |
+|          54 |                43 | feature |
+|          54 |                44 | feature |
+|          54 |                45 | feature |
+|          54 |                46 | feature |
+|          54 |                47 | feature |
+|          54 |                48 | feature |
+|          54 |                49 | feature |
+|          54 |                50 | feature |
+|          54 |                51 | feature |
++-------------+-------------------+---------+
+</pre>
+<p>Here is the representation of a direct feature import from a ChIP-Seq experiment:</p>
+<pre>
+mysql> select ss.* from supporting_set ss, data_set ds where ds.name='CD4_H3K36me3' and ds.data_set_id=ss.data_set_id;
++-------------+-------------------+--------------+
+| data_set_id | supporting_set_id | type         |
++-------------+-------------------+--------------+
+|          48 |                10 | experimental |
++-------------+-------------------+--------------+
+</pre>
+<p>... and the supporting sets for the analysis performed on a ChIP-chip experiment:</p>
+<pre>
+mysql> select ss.* from supporting_set ss, data_set ds where ds.name='Nessie_NG_STD_2_ctcf_ren_BR1' and ds.data_set_id=ss.data_set_id;
++-------------+-------------------+--------+
+| data_set_id | supporting_set_id | type   |
++-------------+-------------------+--------+
+|          22 |                18 | result |
++-------------+-------------------+--------+
+</pre>
+<br>
 
 </body>
 </html>
