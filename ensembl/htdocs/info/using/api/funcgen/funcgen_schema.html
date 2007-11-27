@@ -790,7 +790,7 @@ The technical replicate denomination
 </pre></td></tr>
 </tbody>
 </table>
-<p>The biological_replicate and technical_replicate fields are populated dependent on the tab2MAGE file generated during the import procedure.  These values are then used dynamically to resolve individual results across replicates. Here we see the experimental_ships from the 'Stunnenberg_all_OID_1963' experiment:
+<p>The biological_replicate and technical_replicate fields are populated dependent on the tab2MAGE file generated during the import procedure.  These values are then used dynamically to resolve individual results across replicates. Here we see the experimental_chips from the 'Stunnenberg_all_OID_1963' experiment representing two biological replicates:
 <pre>
 mysql> select ec.* from experimental_chip ec, experiment e where e.name='Stunnenberg_all_OID_1963' and  ec.experiment_id=e.experiment_id;
 +----------------------+-----------+---------------+---------------+-----------------+--------------+----------------------+---------------------+
@@ -803,6 +803,381 @@ mysql> select ec.* from experimental_chip ec, experiment e where e.name='Stunnen
 +----------------------+-----------+---------------+---------------+-----------------+--------------+----------------------+---------------------+
 </pre>
 <br>
+
+<!--
+#####################################################################
+#####################################################################
+TABLE channel
+#####################################################################
+#####################################################################
+-->
+
+<h4 id="channel">channel</h4>
+
+<p>
+Each record in this table represents a channel of an experimental_chip.
+</p>
+<table class="spreadsheet">
+<thead><tr><th>Table description</th><th>Field Information</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><pre>
++----------------------+------------------+------+-----+---------+----------------+
+| Field                | Type             | Null | Key | Default | Extra          |
++----------------------+------------------+------+-----+---------+----------------+
+| channel_id           | int(10) unsigned | NO   | PRI | NULL    | auto_increment |
+| experimental_chip_id | int(11) unsigned | YES  | MUL | NULL    |                |
+| sample_id            | varchar(20)      | YES  |     | NULL    |                |
+| dye                  | varchar(20)      | YES  |     | NULL    |                |
+| type                 | varchar(20)      | YES  |     | NULL    |                |
+| description          | varchar(255)     | YES  |     | NULL    |                |
++----------------------+------------------+------+-----+---------+----------------+
+</pre></td>
+	<td><pre>
+
+
+
+
+
+
+e.g. Cy5 or Cy5
+e.g. 'EXPERIMENTAL' sample or 'TOTAL' or control sample
+
+
+</pre></td></tr>
+</tbody>
+</table>
+<p>Here we see each channel from the Stunnenberg_all_OID_1963 experiment.
+<pre>
+mysql> select c.* from experimental_chip ec, channel c, experiment e where e.name='Stunnenberg_all_OID_1963' and  ec.experiment_id=e.experiment_id and ec.experimental_chip_id=c.experimental_chip_id;
++------------+----------------------+-----------+------+--------------+-------------+
+| channel_id | experimental_chip_id | sample_id | dye  | type         | description |
++------------+----------------------+-----------+------+--------------+-------------+
+|          1 |                    1 | NULL      | Cy3  | TOTAL        | NULL        |
+|          2 |                    1 | NULL      | Cy5  | EXPERIMENTAL | NULL        |
+|          3 |                    2 | NULL      | Cy3  | TOTAL        | NULL        |
+|          4 |                    2 | NULL      | Cy5  | EXPERIMENTAL | NULL        |
+|          5 |                    3 | NULL      | Cy3  | TOTAL        | NULL        |
+|          6 |                    3 | NULL      | Cy5  | EXPERIMENTAL | NULL        |
+|          7 |                    4 | NULL      | Cy3  | TOTAL        | NULL        |
+|          8 |                    4 | NULL      | Cy5  | EXPERIMENTAL | NULL        |
++------------+----------------------+-----------+------+--------------+-------------+
+</pre>
+<br>
+
+<!--
+#####################################################################
+#####################################################################
+TABLE chip_channel
+#####################################################################
+#####################################################################
+-->
+
+<h4 id="chip_channel">chip_channel</h4>
+
+<p>
+This table allows a unique table ID to be assigned to each experimental_chip or channel to enable linkage to the result table. The chip_channel table also records the members of each result set, as such this table may be non-redundant, as the same chip or channel may be present in more than one result_set.
+</p>
+<table class="spreadsheet">
+<thead><tr><th>Table description</th><th>Field Information</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><pre>
++-----------------+------------------+------+-----+---------+----------------+
+| Field           | Type             | Null | Key | Default | Extra          |
++-----------------+------------------+------+-----+---------+----------------+
+| chip_channel_id | int(10) unsigned | NO   | PRI | NULL    | auto_increment |
+| result_set_id   | int(10) unsigned | NO   | PRI | 0       |                |
+| table_id        | int(10) unsigned | NO   |     | 0       |                |
+| table_name      | varchar(20)      | NO   |     |         |                |
++-----------------+------------------+------+-----+---------+----------------+
+</pre></td>
+	<td><pre>
+
+
+
+
+
+
+Generic 'table' fields allows linkage to the experimental_chip or channel tables
+
+
+</pre></td></tr>
+</tbody>
+</table>
+<p>Here we see channel and 'VSN' normalised experimental_chip level chip_channel entries:
+<pre>
+mysql> select cc.*, a.logic_name from chip_channel cc, result_set rs, analysis a where rs.name like 'Stunnenberg_all_OID_1963%' and rs.analysis_id=a.analysis_id and rs.result_set_id=cc.result_set_id order by cc.result_set_id;
++-----------------+---------------+----------+-------------------+------------+
+| chip_channel_id | result_set_id | table_id | table_name        | logic_name |
++-----------------+---------------+----------+-------------------+------------+
+|               7 |            11 |        7 | channel           | RawValue   |
+|               4 |            11 |        4 | channel           | RawValue   |
+|               1 |            11 |        1 | channel           | RawValue   |
+|               8 |            11 |        8 | channel           | RawValue   |
+|               5 |            11 |        5 | channel           | RawValue   |
+|               2 |            11 |        2 | channel           | RawValue   |
+|               6 |            11 |        6 | channel           | RawValue   |
+|               3 |            11 |        3 | channel           | RawValue   |
+|               9 |            12 |        1 | experimental_chip | VSN_GLOG   |
+|              12 |            12 |        4 | experimental_chip | VSN_GLOG   |
+|              11 |            13 |        3 | experimental_chip | VSN_GLOG   |
+|              10 |            13 |        2 | experimental_chip | VSN_GLOG   |
++-----------------+---------------+----------+-------------------+------------+
+</pre>
+
+<br>
+
+<!--
+#####################################################################
+#####################################################################
+TABLE result
+#####################################################################
+#####################################################################
+-->
+
+<h4 id="result">result</h4>
+
+<p>
+This table stores all raw and normalised probe level results.
+</p>
+<table class="spreadsheet">
+<thead><tr><th>Table description</th><th>Field Information</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><pre>
++-----------------+----------------------+------+-----+---------+----------------+
+| Field           | Type                 | Null | Key | Default | Extra          |
++-----------------+----------------------+------+-----+---------+----------------+
+| result_id       | int(10) unsigned     | NO   | PRI | NULL    | auto_increment |
+| probe_id        | int(10) unsigned     | YES  | MUL | NULL    |                |
+| score           | double               | YES  |     | NULL    |                |
+| chip_channel_id | int(10) unsigned     | NO   | MUL | 0       |                |
+| X               | smallint(4) unsigned | YES  |     | NULL    |                |
+| Y               | smallint(4) unsigned | YES  |     | NULL    |                |
++-----------------+----------------------+------+-----+---------+----------------+
+</pre></td>
+	<td><pre>
+
+
+
+
+
+
+
+X Y coords to resolve on plate replicates for the same 
+probe and enable plate plotting and spatial normalisation
+
+</pre></td></tr>
+</tbody>
+</table>
+<p>Here are a few example records:
+<pre>
+mysql> select * from result where X is not NULL limit 10;
++-----------+----------+---------+-----------------+------+------+
+| result_id | probe_id | score   | chip_channel_id | X    | Y    |
++-----------+----------+---------+-----------------+------+------+
+|   5961427 | 11584206 | 1304.44 |             123 |  104 |  686 |
+|   5961428 | 11394741 | 1185.56 |             123 |  108 |  184 |
+|   5961429 | 11704268 | 2087.78 |             123 |  586 | 1004 |
+|   5961430 | 11557658 |  937.56 |             123 |   80 |  616 |
+|   5961431 | 11456495 | 1375.78 |             123 |  487 |  347 |
+|   5961432 | 11569266 | 1495.44 |             123 |  464 |  646 |
+|   5961433 | 11500438 |  672.89 |             123 |  335 |  463 |
+|   5961434 | 11417312 |    2015 |             123 |  325 |  243 |
+|   5961435 | 11531252 | 1923.33 |             123 |   16 |  546 |
+|   5961436 | 11568810 |  639.11 |             123 |  317 |  645 |
++-----------+----------+---------+-----------------+------+------+
+</pre>
+
+<p>See also <a href="#probe">probe</a>.
+<br>
+
+<!--
+#####################################################################
+#####################################################################
+TABLE result_set
+#####################################################################
+#####################################################################
+-->
+
+<h4 id="result_set">result_set</h4>
+
+<p>
+Each record represent a distinct set of result. One may be a superset of another, with biological replicates being split up into individual technical replicate result_sets. Names can be replicated as it is possible to have the same set of data with differing analyses e.g. the raw data and the normalised data for a full experimental import set.
+</p>
+<table class="spreadsheet">
+<thead><tr><th>Table description</th><th>Field Information</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><pre>
++-----------------+------------------+------+-----+---------+----------------+
+| Field           | Type             | Null | Key | Default | Extra          |
++-----------------+------------------+------+-----+---------+----------------+
+| result_set_id   | int(10) unsigned | NO   | PRI | NULL    | auto_increment |
+| analysis_id     | int(10) unsigned | YES  |     | NULL    |                |
+| name            | varchar(40)      | YES  | MUL | NULL    |                |
+| cell_type_id    | int(10) unsigned | YES  |     | NULL    |                |
+| feature_type_id | int(10) unsigned | YES  |     | NULL    |                |
++-----------------+------------------+------+-----+---------+----------------+
+</pre></td>
+	<td><pre>
+
+
+
+
+Normalisation or RawValue analysis for experimental_chips or channels respectively
+
+
+
+
+</pre></td></tr>
+</tbody>
+</table>
+<p>Here are a few result sets from experiments using the SangerPCR Encode array:
+<pre>
+mysql> select rs.* from result_set rs, analysis a where a.logic_name='SangerPCR' and rs.analysis_id=a.analysis_id;
++---------------+-------------+------------------------+--------------+-----------------+
+| result_set_id | analysis_id | name                   | cell_type_id | feature_type_id |
++---------------+-------------+------------------------+--------------+-----------------+
+|             1 |           8 | H4ac-HeLa_IMPORT       |            1 |               2 |
+|             2 |           8 | H3ac-HeLa_IMPORT       |            1 |               3 |
+|             3 |           8 | H3K4Me3-HeLa_IMPORT    |            1 |               4 |
+|             4 |           8 | H3K4Me2-HeLa_IMPORT    |            1 |               5 |
+|             5 |           8 | H3K4Me1-HeLa_IMPORT    |            1 |               6 |
+|             6 |           8 | H3K4Me1-GM06990_IMPORT |            2 |               6 |
+|             7 |           8 | H3K4Me2-GM06990_IMPORT |            2 |               5 |
+|             8 |           8 | H3ac-GM06990_IMPORT    |            2 |               3 |
+|             9 |           8 | H4ac-GM06990_IMPORT    |            2 |               2 |
+|            10 |           8 | H3K4Me3-GM06990_IMPORT |            2 |               4 |
++---------------+-------------+------------------------+--------------+-----------------+
+</pre>
+<br>
+
+<!--
+#####################################################################
+#####################################################################
+TABLE experimental_set
+#####################################################################
+#####################################################################
+-->
+<h4 id="experimental_set">experimental_set</h4>
+
+<p>The experimental_set and experimental_subset tables provides a generic import for pre-processed functional genomics data which does follow the micro-array technology paradigm. As technology moves fast in the field of functional genoics, this provides a convenient way to incorporate new data which would otherwise be outside the eFG DB and the analyses it supports. This has been very useful with the rapid adoption of the various 2nd generation sequencing platforms.</p>
+
+
+<p>
+The experimental_set table can be thought of as analagous to the result_set table, defining technical and biological replicate sets within a given experiment.</p>
+<table class="spreadsheet">
+<thead><tr><th>Table description</th><th>Field Information</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><pre>
++---------------------+------------------+------+-----+---------+----------------+
+| Field               | Type             | Null | Key | Default | Extra          |
++---------------------+------------------+------+-----+---------+----------------+
+| experimental_set_id | int(10) unsigned | NO   | PRI | NULL    | auto_increment |
+| experiment_id       | int(10) unsigned | YES  | MUL | NULL    |                |
+| feature_type_id     | int(10) unsigned | YES  | MUL | NULL    |                |
+| cell_type_id        | int(10) unsigned | YES  | MUL | NULL    |                |
+| format              | varchar(20)      | YES  |     | NULL    |                |
+| vendor              | varchar(40)      | YES  |     | NULL    |                |
+| name                | varchar(40)      | NO   | UNI | 0       |                |
++---------------------+------------------+------+-----+---------+----------------+
+</pre></td>
+	<td><pre>
+
+
+
+
+
+
+
+
+Format of experimental platform technology
+Vendor of experimental platform technology
+
+
+</pre></td></tr>
+</tbody>
+</table>
+<p>Here are a few example showing experimental_set records for ChIP-Seq experiments:
+<pre>
+mysql> select * from experimental_set limit 10;
++---------------------+---------------+-----------------+--------------+------------+--------+---------------+
+| experimental_set_id | experiment_id | feature_type_id | cell_type_id | format     | vendor | name          |
++---------------------+---------------+-----------------+--------------+------------+--------+---------------+
+|                   1 |            13 |               8 |            4 | SEQUENCING | SOLEXA | CD4_DNASE     |
+|                   2 |            14 |               8 |            2 | SEQUENCING | SOLEXA | GM06990_DNASE |
+|                   3 |            19 |               9 |            4 | SEQUENCING | SOLEXA | CD4_CTCF      |
+|                   4 |            16 |              23 |            4 | SEQUENCING | SOLEXA | CD4_H2AZ      |
+|                   5 |            17 |              24 |            4 | SEQUENCING | SOLEXA | CD4_H2BK5me1  |
+|                   6 |            18 |              25 |            4 | SEQUENCING | SOLEXA | CD4_H3K27me1  |
+|                   7 |            20 |              26 |            4 | SEQUENCING | SOLEXA | CD4_H3K27me2  |
+|                   8 |            21 |              11 |            4 | SEQUENCING | SOLEXA | CD4_H3K27me3  |
+|                   9 |            22 |              27 |            4 | SEQUENCING | SOLEXA | CD4_H3K36me1  |
+|                  10 |            23 |              12 |            4 | SEQUENCING | SOLEXA | CD4_H3K36me3  |
++---------------------+---------------+-----------------+--------------+------------+--------+---------------+
+</pre>
+<br>
+
+<!--
+#####################################################################
+#####################################################################
+TABLE experimental_subset
+#####################################################################
+#####################################################################
+-->
+
+<h4 id="experimental_subset">experimental_subset</h4>
+
+<p>
+The experimental_subset table simply records the members of the experimental_set. The name field is generic to allow different types subset to be accomodated. Currently the filenames of contributory files are used to keep some form of import tracking. This allows for incremental import to an experimental_set</p>
+<table class="spreadsheet">
+<thead><tr><th>Table description</th><th>Field Information</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><pre>
++------------------------+------------------+------+-----+---------+----------------+
+| Field                  | Type             | Null | Key | Default | Extra          |
++------------------------+------------------+------+-----+---------+----------------+
+| experimental_subset_id | int(10) unsigned | NO   | PRI | NULL    | auto_increment |
+| experimental_set_id    | int(10) unsigned | NO   | MUL | 0       |                |
+| name                   | varchar(30)      | NO   |     | 0       |                |
++------------------------+------------------+------+-----+---------+----------------+
+</pre></td>
+	<td><pre>
+
+
+
+
+
+e.g. file name
+
+</pre></td></tr>
+</tbody>
+</table>
+<p>Here we see the filenames for each experimental_set have been recorded:
+<pre>
+mysql> select * from experimental_subset limit 10;
++------------------------+---------------------+--------------------------------+
+| experimental_subset_id | experimental_set_id | name                           |
++------------------------+---------------------+--------------------------------+
+|                      3 |                   3 | CD4_CTCF.clstr_gt1.bed         |
+|                      4 |                   1 | CD4_parzen_02.scores.bed       |
+|                      5 |                   2 | GM06990_parzen_0115.scores.bed |
+|                      6 |                   4 | CD4_H2AZ.clstr_gt1.bed         |
+|                      7 |                   5 | CD4_H2BK5me1.clstr_gt1.bed     |
+|                      8 |                   6 | CD4_H3K27me1.clstr_gt1.bed     |
+|                      9 |                   7 | CD4_H3K27me2.clstr_gt1.bed     |
+|                     10 |                   8 | CD4_H3K27me3.clstr_gt1.bed     |
+|                     11 |                   9 | CD4_H3K36me1.clstr_gt1.bed     |
+|                     12 |                  10 | CD4_H3K36me3.clstr_gt1.bed     |
++------------------------+---------------------+--------------------------------+
+</pre>
+<br>
+
+
 
 
 <!--
@@ -1547,6 +1922,154 @@ mysql> select ss.* from supporting_set ss, data_set ds where ds.name='Nessie_NG_
 +-------------+-------------------+--------+
 </pre>
 <br>
+
+
+<!--
+#####################################################################
+#####################################################################
+Coordinate data TABLES
+#####################################################################
+#####################################################################
+-->
+
+<h3 class="boxed">Coordinate Data Tables</h3>
+
+<!--
+#####################################################################
+#####################################################################
+TABLE coord_system
+#####################################################################
+#####################################################################
+-->
+
+<h4 id="coord_system">coord_system</h4>
+
+<p>
+This mirrors and extends the core coord_system table, holding core informnation alongside eFG information provides a reference back to the core DB which any given feature may have been imported with. Each non-redundant identical core coord_system is given a unique ID within the eFG DB.  This allows features on the same coord_system to be loaded using different core DBs.  To access the data loaded using these different core DBs simply requires the use of the correct coord_system.  This is essential to provide backwards compatibilty and to avoid having to update the coordinate information for every release of ensembl.
+</p>
+<table class="spreadsheet">
+<thead><tr><th>Table description</th><th>Field Information</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><pre>
++----------------------+-----------------------------------------+------+-----+---------+----------------+
+| Field                | Type                                    | Null | Key | Default | Extra          |
++----------------------+-----------------------------------------+------+-----+---------+----------------+
+| coord_system_id      | int(10)                                 | NO   | PRI | NULL    | auto_increment |
+| name                 | varchar(40)                             | NO   | MUL |         |                |
+| version              | varchar(40)                             | YES  |     | NULL    |                |
+| rank                 | int(11)                                 | NO   |     | 0       |                |
+| attrib               | set('default_version','sequence_level') | YES  |     | NULL    |                |
+| schema_build         | varchar(10)                             | NO   | PRI |         |                |
+| core_coord_system_id | int(10)                                 | NO   | PRI | 0       |                |
++----------------------+-----------------------------------------+------+-----+---------+----------------+
+</pre></td>
+	<td><pre>
+
+
+
+
+
+
+
+
+core DB of origin
+coord_system_id in core DB
+
+</pre></td></tr>
+</tbody>
+</table>
+<p>Here are the current coord_systems stored in the human eFG DB:</p>
+<pre>
+mysql> select * from coord_system order by schema_build;
++-----------------+-------------+---------+------+-----------------+--------------+----------------------+
+| coord_system_id | name        | version | rank | attrib          | schema_build | core_coord_system_id |
++-----------------+-------------+---------+------+-----------------+--------------+----------------------+
+|            2458 | chromosome  | NCBI34  |    1 | default_version | 25_34e       |                    1 |
+|               2 | chromosome  | NCBI35  |    1 | default_version | 36_35i       |                    1 |
+|               1 | chromosome  | NCBI36  |    1 | default_version | 42_36d       |                   22 |
+|               1 | chromosome  | NCBI36  |    1 | default_version | 43_36e       |                   17 |
+|              23 | supercontig | NCBI36  |    2 | default_version | 44_36f       |                   15 |
+|               1 | chromosome  | NCBI36  |    1 | default_version | 44_36f       |                   17 |
+|               1 | chromosome  | NCBI36  |    1 | default_version | 45_36g       |                    1 |
+|              23 | supercontig | NCBI36  |    2 | default_version | 45_36g       |                   15 |
+|               1 | chromosome  | NCBI36  |    1 | default_version | 46_36h       |                   17 |
+|              23 | supercontig | NCBI36  |    2 | default_version | 46_36h       |                   15 |
+|               1 | chromosome  | NCBI36  |    1 | default_version | 47_36i       |                   17 |
+|              23 | supercontig | NCBI36  |    2 | default_version | 47_36i       |                   15 |
+|               1 | chromosome  | NCBI36  |    1 | default_version | 48_36j       |                   17 |
+|              23 | supercontig | NCBI36  |    2 | default_version | 48_36j       |                   15 |
++-----------------+-------------+---------+------+-----------------+--------------+----------------------+
+</pre>
+
+<p>See the core <a href="http://www.ensembl.org/info/software/core/schema/schema_description.html#coord_system">coord_system</a> documentation for more details.</p>
+<br>
+<!--
+#####################################################################
+#####################################################################
+TABLE seq_region
+#####################################################################
+#####################################################################
+-->
+
+
+<h4 id="seq_region">seq_region</h4>
+
+<p>
+This table also mirrors and extends the core seq_region table, providing a reference table for an seq_region_id conversion which may be necessary when handling slice based queries using a slice generated from a given core DB. As internal seq_region_ids are not stable between releases using the same coord_systems, it is necessary to record their core DB of origin.
+
+</p>
+<table class="spreadsheet">
+<thead><tr><th>Table description</th><th>Field Information</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><pre>
+mysql> desc seq_region;
++--------------------+------------------+------+-----+---------+----------------+
+| Field              | Type             | Null | Key | Default | Extra          |
++--------------------+------------------+------+-----+---------+----------------+
+| seq_region_id      | int(10) unsigned | NO   | PRI | NULL    | auto_increment |
+| name               | varchar(40)      | NO   | PRI |         |                |
+| coord_system_id    | int(10) unsigned | NO   | MUL | 0       |                |
+| core_seq_region_id | int(10) unsigned | NO   |     | 0       |                |
+| schema_build       | varchar(10)      | NO   | PRI |         |                |
++--------------------+------------------+------+-----+---------+----------------+
+</pre></td>
+	<td><pre>
+
+
+
+
+
+
+
+core DB of origin
+coord_system_id in core DB
+
+</pre></td></tr>
+</tbody>
+</table>
+<p>Here see the differing core seq_regions for chromosome 12 and how they are represented in the eFG DB:
+<pre>
+mysql> select * from seq_region where name=12;
++---------------+------+-----------------+--------------------+--------------+
+| seq_region_id | name | coord_system_id | core_seq_region_id | schema_build |
++---------------+------+-----------------+--------------------+--------------+
+|            61 | 12   |               1 |             226056 | 45_36g       |
+|            61 | 12   |               1 |             226056 | 43_36e       |
+|            61 | 12   |               1 |             226056 | 44_36f       |
+|            61 | 12   |               1 |             226056 | 42_36d       |
+|           113 | 12   |               2 |             965907 | 36_35i       |
+|           283 | 12   |            2458 |             965488 | 25_34e       |
+|            61 | 12   |               1 |             226056 | 46_36h       |
+|            61 | 12   |               1 |             226056 | 47_36i       |
+|            61 | 12   |               1 |             226056 | 48_36j       |
++---------------+------+-----------------+--------------------+--------------+
+</pre>
+<br>
+
+<p>See the core <a href="http://www.ensembl.org/info/software/core/schema/schema_description.html#seq_region">seq_region</a> documentation for more details.
+
 
 </body>
 </html>
