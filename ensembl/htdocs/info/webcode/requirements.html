@@ -14,10 +14,10 @@
 
 <ul class="spaced">
   <li>A machine capable of running a UNIX-like OS* (e.g. Tru64, Solaris, Linux, OS X, etc.)</li>
-  <li>??? Gb of RAM</li>
+  <li>2/4 Gb of RAM (A minimum of 4G required to run BioMart)</li>
   <li>Up to 500 Mb hard drive space to install source code required by the web server</li>
-  <li>Depending on usage - temporary storage space for images/session information</li>
-  <li>??? Gb of hard drive space for a local MySQL (or SQLite) database to store session configurations</li>
+  <li>Depending on usage - temporary storage space for images/session information - for light usage less than 1G</li>
+  <li>about 1Gb of hard drive space for a local MySQL (or SQLite) database to store session configurations</li>
 </ul>
 
 <p>You can run an Ensembl installation locally and connect remotely to our public MySQL server
@@ -25,7 +25,7 @@ to retrieve genomic data. However if you require a full local installation, incl
 genomic databases, you will additionally need:</p>
 
 <ul>
-  <li>Around 0.5 Tb hard drive space in which to install the Ensembl MySQL databases,  and about
+  <li>Around 0.6 Tb hard drive space in which to install the Ensembl MySQL databases,  and about
     the same again for downloading and unpacking the data. Depending on your requirements, you
     may wish to only install data for one or more species. See below for the approximate
    size requirements for each species (note that the compara database is required, regardless of 
@@ -42,8 +42,8 @@ the installation guide.</p>
 To install a  local mirror of Ensembl you will need:</p>
 <ul class="spaced">
   <li>Apache 2 and mod_perl 2</li>
-  <li>Perl 5.8.? or better (used for running utility scripts)</li>
-  <li>MySQL ??? (if installing genomic databases locally)</li>
+  <li>Perl 5.8.x or better (used for running utility scripts)</li>
+  <li>MySQL 5.0.x (if installing genomic databases locally)</li>
 </ul>
 
 <h3 class="boxed">Species databases</h3>
