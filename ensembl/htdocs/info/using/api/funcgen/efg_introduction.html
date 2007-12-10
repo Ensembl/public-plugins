@@ -4,20 +4,11 @@
 <meta name="navigation" content="eFG introduction" />
 <title>Introduction to eFG</title>
 </head>
-
 <body>
-
-<h2>Introduction to Ensembl Functional Genomics</h2> 
-
-
-
-
+<h2>Introduction to Ensembl Functional Genomics</h2>
 <h3 class="boxed">Installation Requirements</h3>
-
-<p>Given that you have already followed the instructions for installation of the Ensembl core and functional genomics APIs (http://www.ensembl.org/info/using/api/api_installation.html), the next step is to set up the eFG specific requirements.  This is an exhaustive list and may not be necessary if you do not intend to use the full functionality of eFG.  Install the following as required:</p>
-
-<ul>
-1.  R<br>
+<p>Given that you have already followed the instructions for installation of the Ensembl core and functional genomics APIs (http://www.ensembl.org/info/software/api_installation.html), the next step is to set up the eFG specific requirements.  This is an exhaustive list and may not be necessary if you do not intend to use the full functionality of eFG.  Install the following as required:</p>
+<ul>1.  R<br>
 Required for normalisation, QC reports and analysis.<br>
 Available from http://cran.r-project.org/<br>
 <br>
@@ -34,78 +25,73 @@ Required for normalisation, QC reports and analysis.<br>
 Available from http://bioconductor.org/packages/2.1/bioc/html/Ringo.html<br>
 <br>
 5.  Tab2MAGE & MAGE.dtd<br>
-Required for meta data import and subsequent submission to ArrayExpress.	<br>
+Required for meta data import and subsequent submission to ArrayExpress.<br>
 Tab2MAGE is available from http://sourceforge.net/project/showfiles.php?group_id=120325<br>
+
 MAGE.dtd v1.1 is available from http://mged.sourceforge.net/software/docs.php<br>
 The MAGE.dtd should be placed in the root data directory ($EFG_DATA).<br>
 <br>
-Something about hardware here..................................
 </ul>
 
-
 <h3 class="boxed">Set Up</h3>
-
 <p>The eFG system uses a shell environment to set global variables and help perform common tasks.  You will need to edit the .efg file accordingly:</p>
 
+<pre>efg@bc-9-1-02>more ensembl-functgenomics/scripts/.efg
+#!/usr/local/bin/bash
 
-<font face='courier'>efg@bc-9-1-02>more ensembl-functgenomics/scripts/.efg<br>
-#!/usr/local/bin/bash<br>
-<br>
-echo "Setting up the Ensembl Function Genomics environment..."<br>
-<br>
-### ENV VARS ###<br>
-<br>
-#Prompt<br>
-export PS1='efg@$PS1HOST>'<br>
-<br>
-#Code/Data Directories<br>
-export SRC=~/src                                #Root source code directory. EDIT<br>
-export EFG_SRC=$SRC/ensembl-functgenomics       #eFG source directory<br>
-export EFG_SQL=$EFG_SRC/sql                     #eFG SQL<br>
-export EFG_DATA=/your/data/dir/efg              #Data directory. EDIT<br>
-export PATH=$PATH:$EFG_SRC/scripts              #eFG scripts directory<br>
-export PERL5LIB=$EFG_SRC/modules:$PERL5LIB      #Update PERL5LIB. EDIT add ensembl(core) etc. if required<br>
-<br>
-#Your efg DB connection params<br>
-export WRITE_USER='write_user'                  #EDIT<br>
-export READ_USER='read_user'                    #EDIT<br>
-export HOST='efg-host'                          #EDIT<br>
-export PORT=3306                                #EDIT<br>
-export MYSQL_ARGS="-h${HOST} -P${PORT}"   <br>      
-<br>
-#Your ensembl core DB connection params, read only<br>
-export CORE_USER='anonymous'                    #EDIT if required<br>
-export CORE_HOST='ensembldb.ensembl.org'        #EDIT if required<br>
-export CORE_PORT=3306                           #EDIT if required<br>
-<br>
-#Default norm and analysis methods<br>
-export NORM_METHOD='VSN_GLOG'                   #EDIT if required e.g. T.Biweight, Loess<br>
-export PEAK_METHOD='Nessie'                     #EDIT if required e.g. TileMap, MPeak, Chipotle<br>
-<br>
-#R config<br>
-export R_LIBS=${R_LIBS:=$SRC/R-modules}         #EDIT if required<br>
-export R_PATH=/software/bin/R                   #Location of local version of R. EDIT<br>
-export R_FARM_PATH=/software/R-2.4.0/bin/R      #Location of farm installed R. EDIT<br>
-export R_BSUB_OPTIONS="-R'select[type==LINUX64 && mem>6000] rusage[mem=6000]' -q bigmem" #EDIT<br>
-<br>
-</font>
+echo "Setting up the Ensembl Function Genomics environment..."
+
+### ENV VARS ###
+
+#Prompt
+export PS1='efg@$PS1HOST>'
+
+#Code/Data Directories
+export SRC=~/src                                #Root source code directory. EDIT
+export EFG_SRC=$SRC/ensembl-functgenomics       #eFG source directory
+export EFG_SQL=$EFG_SRC/sql                     #eFG SQL
+export EFG_DATA=/your/data/dir/efg              #Data directory. EDIT
+export PATH=$PATH:$EFG_SRC/scripts              #eFG scripts directory
+export PERL5LIB=$EFG_SRC/modules:$PERL5LIB      #Update PERL5LIB. EDIT add ensembl(core) etc. if required
+#Your efg DB connection params
+export WRITE_USER='write_user'                  #EDIT
+export READ_USER='read_user'                    #EDIT
+export HOST='efg-host'                          #EDIT
+export PORT=3306                                #EDIT
+export MYSQL_ARGS="-h${HOST} -P${PORT}"
+
+#Your ensembl core DB connection params, read only
+export CORE_USER='anonymous'                    #EDIT if required
+export CORE_HOST='ensembldb.ensembl.org'        #EDIT if required
+export CORE_PORT=3306                           #EDIT if required
+
+#Default norm and analysis methods
+export NORM_METHOD='VSN_GLOG'                   #EDIT if required e.g. T.Biweight, Loess
+export PEAK_METHOD='Nessie'                     #EDIT if required e.g. TileMap, MPeak, Chipotle
+
+#R config
+export R_LIBS=${R_LIBS:=$SRC/R-modules}         #EDIT if required
+export R_PATH=/software/bin/R                   #Location of local version of R. EDIT
+export R_FARM_PATH=/software/R-2.4.0/bin/R      #Location of farm installed R. EDIT
+export R_BSUB_OPTIONS="-R'select[type==LINUX64 && mem>6000] rusage[mem=6000]' -q bigmem" #EDIT
+</pre>
 <p>
 As is indicated at the head of the .efg file, to enable easy access to the eFG environment it is useful to add the following to your .*rc login file:</p>
 
-<font face='courier'>alias efg='. ~/src/ensembl-efg/.efg'<br></font>
+<pre>alias efg='. ~/src/ensembl-efg/.efg'</pre>
 <p>
 Once this is done simple type 'efg' to enter the envornment, which will give you access to some helper functions such as, CreateDB:</p>
-<font face='courier'>
-efg@bc-9-1-02>CreateDB my_homo_sapiens_funcgen_47_36i password<br>
-Creating DB my_homo_sapiens_funcgen_47_36i<br>
-</font>
+<pre>
+efg@bc-9-1-02>CreateDB my_homo_sapiens_funcgen_47_36i password
+Creating DB my_homo_sapiens_funcgen_47_36i
+</pre>
 <p>
 It is desirable to maintain the standard Ensembl nomenclature for a database and simply prefix it with some descriptive tag.  Failure to do so may cause problems in dynamically detecting the correct core DB to use.  The CreateDB function also supports overwriting of a particular instance of an eFG DB by specifying a third 'drop' argument:</p>
-<font face='courier'>
-efg@bc-9-1-02>CreateDB my_homo_sapiens_funcgen_47_36i password drop<br>
-Dropping DB my_homo_sapiens_funcgen_47_36i<br>
-Creating DB my_homo_sapiens_funcgen_47_36i<br>
-</font>
+<pre>
+efg@bc-9-1-02>CreateDB my_homo_sapiens_funcgen_47_36i password drop
+Dropping DB my_homo_sapiens_funcgen_47_36i
+Creating DB my_homo_sapiens_funcgen_47_36i
+</pre>
 <p>
 Once you have set up the environment, you are now ready to import data or query the central ensembl or a local copy of an eFG DB.  </p>
 <p>
@@ -144,56 +130,56 @@ See:	roll_back_experiment.pl<br>
 <h3 class="boxed">Importing an experiment</h3>
 
 <p>Prior to running your first experiment import, you will likely need to import the necessary features types first.</p>
-<font face='courier'>efg@bc-9-1-02>more run_import_type.sh <br>
-#!/bin/sh<br>
-<br>
-PASS=$1<br>
-shift<br>
-<br>
-$EFG_SRC/scripts/import_type.pl\<br>
-        -type FeatureType\<br>
-        -name H3K4me3\<br>
-        -dbname your_homo_sapiens_funcgen_48_36j\<br>
-        -description 'Histone 3 Lysine 4 Tri-methyl'\<br>
-        -class HISTONE\<br>
-        -pass $PASS<br>
-<br></font>
+<pre>efg@bc-9-1-02>more run_import_type.sh 
+#!/bin/sh
+
+PASS=$1
+shift
+
+$EFG_SRC/scripts/import_type.pl\
+        -type FeatureType\
+        -name H3K4me3\
+        -dbname your_homo_sapiens_funcgen_48_36j\
+        -description 'Histone 3 Lysine 4 Tri-methyl'\
+        -class HISTONE\
+        -pass $PASS
+</pre>
 <p>               
 Feature type names should correspond to a recognised ontology or nomenclature where appropriate e.g. Brno nomenclature for histones.  The class parameter is not required for CellType imports.</p>
 To import an experiment you must first create an input directory for the array vendor and your experiment e.g.<br>
 <br>
-<font face='courier'>mkdir $EFG_DATA/input/NIMBLEGEN/EXPERIMENT_NAME<br></font>    
+<pre>mkdir $EFG_DATA/input/NIMBLEGEN/EXPERIMENT_NAME</pre>    
 </p>
 <p>The eFG system currently expects only one experiment per input directory.  If your DVD contains more than one experiment, you will need to split the files up, recreating any meta files accordingly e.g. DesignNotes.txt, SampleKey.txt.  A Nimblegen experiment import can be done using the appropriate run script:</p>
 <br>
-<font face='courier'>efg@bc-9-1-02>more run_NIMBLEGEN.sh <br>
-#!/bin/sh<br>
-<br>
-PASS=$1<br>
-shift<br>
-<br>
-$EFG_SRC/scripts/parse_and_import.pl\<br>
-       -name 'DVD_OR_EXPERIMENT_NAME'\		Name of the data directory<br>
-       -format tiled\					Array format<br>
-	-vendor NIMBLEGEN<br>
-       -location Hinxton\				Your group location<br>
-       -contact 'your@email.com'\<br>
-       -species homo_sapiens\<br>
-       -fasta\						Flag to dump the array as a fasta file, useful for remapping<br>
-       -port 3306\<br>
+<pre>efg@bc-9-1-02>more run_NIMBLEGEN.sh
+#!/bin/sh
+
+PASS=$1
+shift
+
+$EFG_SRC/scripts/parse_and_import.pl\
+       -name 'DVD_OR_EXPERIMENT_NAME'\              #Name of the data directory
+       -format tiled\                               #Array format
+       -vendor NIMBLEGEN\
+       -location Hinxton\                           #Your group location
+       -contact 'your@email.com'\
+       -species homo_sapiens\
+       -fasta\                                      #Flag to dump the array as a fasta file, useful for remapping
+       -port 3306\
        -host dbhost\
-       -dbname 'your_homo_sapiens_funcgen_47_36i'\<br>
-       -array_set\					Flag to treat every chip/slide as part of one array<br>
-       -array_name "DESIGN_NAME"\<br>
-	-cell_type e.g. U2OS\<br>
-	-feature_type e.g. H3K4me3\<br>
-       -group efg\					Your groupname<br>
-       -data_version 41_36c\				The Ensembl data version corresponding to your data<br>
-       -verbose\<br>
-       -tee\<br>
-       -pass $PASS\<br>
-       -recover					Enables recovery mode for failed/partial imports<br>
-<br></font>    
+       -dbname 'your_homo_sapiens_funcgen_47_36i'\
+       -array_set\                                  #Flag to treat every chip/slide as part of one array
+       -array_name "DESIGN_NAME"\
+       -cell_type e.g. U2OS\
+       -feature_type e.g. H3K4me3\
+       -group efg\                                  #Your groupname
+       -data_version 41_36c\                        #The Ensembl data version corresponding to your data
+       -verbose\
+       -tee\
+       -pass $PASS\
+       -recover                                     #Enables recovery mode for failed/partial imports
+</pre>    
 <p>
 Running the above script will perform a preliminary import.  This involves validation checks and import of some basic meta data.  The meta data gleaned from the import parameters and available files is automatically populated within a tab2mage file located in the output directory, at which point the import stops to allow manual curation of the tab2mage file.  Due to the lack of comprehensive meta data associated with an experiment DVD, it is necessary to inspect, correct and annotate the tab2mage file where possible.  Failure to do so may result in permanent loss of meta data, an inability to submit to ArrayExpress and a corrupted import which ultimately may prevent any further analysis.</p>
 <p>
@@ -207,18 +193,24 @@ There are three main areas to be addressed, most of which may have been automati
 <br>
 The following fields should be checked explicitly:<br>
 <br>
-BioSource					CellType or specific source sample name if known.<br>
-Sample					Biological replicate name.<br>
-Extract					Technical replicate name.<br>
-LabeledExtract				Control/Experimental channel sample.<br>
-Immunoprecipitate				Description of IP, blank for control channel.<br>
-Hybridization				Description of Hybridisation.<br>
-BioSourceMaterial				e.g. cell, tissue MGED?<br>
-Dye						e.g. Cy3/5<br>
-BioMaterialCharacteristics[StrainOrLine]<br>
-BioMaterialCharacteristics[CellType]	<br>
-FactorValue[StrainOrLine]	<br>
-FactorValue[Immunoprecipitate]		e.g. anti-H3ac antibody<br>
+
+<table class="spreadsheet">
+  <thead><tr><th>tab2mage field</th><th>Value</th></tr></thead>
+  <tbody>
+    <tr><td>BioSource</td><td>CellType or specific source sample name if known.</td></tr>
+	<tr><td>Sample</td><td>Biological replicate name.</td></tr>
+	<tr><td>Extract</td><td>Technical replicate name.</td></tr>
+	<tr><td>LabeledExtract		</td><td>		Control/Experimental channel sample.</td></tr>
+	<tr><td>Immunoprecipitate	</td><td>			Description of IP, blank for control channel.</td></tr>
+	<tr><td>Hybridization		</td><td>		Description of Hybridisation.</td></tr>
+	<tr><td>BioSourceMaterial	</td><td>			e.g. cell, tissue MGED?</td></tr>
+	<tr><td>Dye				</td><td>		e.g. Cy3/5</td></tr>
+	<tr><td>BioMaterialCharacteristics[StrainOrLine]</td><td></td></tr>
+	<tr><td>BioMaterialCharacteristics[CellType]</td><td></td></tr>
+	<tr><td>FactorValue[StrainOrLine]</td><td></td></tr>
+	<tr><td>FactorValue[Immunoprecipitate]	</td><td>	e.g. anti-H3ac antibody</td></tr>
+</tbody>
+</table>
 <p>
 Some standard naming formats have been put in place to aid validation. Primarily these are the replicate names which have been given the BRN and TRN denominations for biological replicates and techniocal replicates respectively e.g. </p>
 EXPERIMENT_BR1_TR1<br>
