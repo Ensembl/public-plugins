@@ -26,15 +26,14 @@ sub update_conf {
   $SiteDefs::__species_aliases{ 'Microcebus_murinus'       } = [qw(mmur lemur)];
   $SiteDefs::__species_aliases{ 'Monodelphis_domestica'    } = [qw(md mdom monodelphis opossum)];
   $SiteDefs::__species_aliases{ 'Mus_musculus'             } = [qw(mm mmus mouse mus)];
-  $SiteDefs::__species_aliases{ 'Myotis_lucifugus'               } = [qw(ml mluc microbat myotis)];
+  $SiteDefs::__species_aliases{ 'Myotis_lucifugus'         } = [qw(ml mluc microbat myotis)];
   $SiteDefs::__species_aliases{ 'Ochotona_princeps'        } = [qw(op pika pikachu)];
-  $SiteDefs::__species_aliases{ 'Otolemur_garnettii'             } = [qw(og ogar bushbaby otolemur)];
+  $SiteDefs::__species_aliases{ 'Ornithorhynchus_anatinus' } = [qw(oa oana platypus)];
+  $SiteDefs::__species_aliases{ 'Otolemur_garnettii'       } = [qw(og ogar bushbaby otolemur)];
   $SiteDefs::__species_aliases{ 'Pan_troglodytes'          } = [qw(pt ptro chimp)];
   $SiteDefs::__species_aliases{ 'Rattus_norvegicus'        } = [qw(rn rnor rat)];
-  $SiteDefs::__species_aliases{ 'Sorex_araneus'             } = [qw(sa shrew)];
+  $SiteDefs::__species_aliases{ 'Sorex_araneus'            } = [qw(sa shrew)];
   $SiteDefs::__species_aliases{ 'Spermophilus_tridecemlineatus'  } = [qw(st stri squirrel spermophilus)];
-  $SiteDefs::__species_aliases{ 'Ornithorhynchus_anatinus' } = [qw(oa oana platypus)];
-  $SiteDefs::__species_aliases{ 'Sorex_araneus' } = [qw(sa sorex shrew)];
 #-------------------- birds
   $SiteDefs::__species_aliases{ 'Gallus_gallus'                  } = [qw(gg ggal chicken)];
 #-------------------- fish
