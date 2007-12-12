@@ -47,7 +47,7 @@ sub render {
   my $self = shift;
     
   my $home = $ENV{'SITE_LOGO_HREF'}; ## Assuming your logo links back to your mirror's home page
-  my $html = qq( &lt;a href="$home"&gt;HOME&lt;/a&gt;  &amp;middot; &lt;a href="/info/contact.html"&gt;CONTACT US&lt;/a&gt; );
+  my $html = qq( &lt;a href="$home"&gt;HOME&lt;/a&gt;  &amp;middot; &lt;a href="/info/about/contact.html"&gt;CONTACT US&lt;/a&gt; );
 
   $self-&gt;print( qq(
 &lt;div id="help"&gt;&lt;strong&gt;$html&lt;/strong&gt;&lt;/div&gt;
