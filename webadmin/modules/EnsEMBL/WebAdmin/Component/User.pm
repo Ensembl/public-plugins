@@ -2,7 +2,7 @@ package EnsEMBL::WebAdmin::Component::User;
 
 use EnsEMBL::Web::Component;
 use EnsEMBL::Web::Interface::InterfaceDef;
-use EnsEMBL::Web::Object::Data::OldHelpArticle;
+use EnsEMBL::Web::Object::Data::Article;
 
 use CGI;
 
@@ -63,12 +63,12 @@ sub all_articles {
 
   my $html;
   my $interface = EnsEMBL::Web::Interface::InterfaceDef->new();
-  my $data = EnsEMBL::Web::Object::Data::OldHelpArticle->new();
+  my $data = EnsEMBL::Web::Object::Data::Article->new();
   $interface->data($data);
   $interface->discover;
 
   my %cat_lookup;
-  my $cats = EnsEMBL::Web::Object::Data::find_all('EnsEMBL::Web::Object::Data::OldHelpCategory');
+  my $cats = EnsEMBL::Web::Object::Data::find_all('EnsEMBL::Web::Object::Data::Category');
   foreach my $cat (@$cats) {
     $cat_lookup{$cat->id} = $cat->name;
   }
