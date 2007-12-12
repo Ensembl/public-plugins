@@ -23,10 +23,10 @@ The following call will load all the "latest" databases from the public Ensembl 
 </p>
 
 <pre>
-Bio::EnsEMBL::Registry->load_registry_from_db(
-    -host => 'ensembldb.ensembl.org',
-    -user => 'anonymous',
-    -verbose => "1" );
+Bio::EnsEMBL::Registry-&gt;load_registry_from_db(
+    -host =&gt; 'ensembldb.ensembl.org',
+    -user =&gt; 'anonymous',
+    -verbose =&gt; "1" );
 </pre>
 
 <p>
@@ -39,7 +39,7 @@ Alternatively, a custom registry configuration file could be typically loaded at
 </p>
 
 <pre>
-Bio::EnsEMBL::Registry->load_all();
+Bio::EnsEMBL::Registry-&gt;load_all();
 </pre>
 
 <p>
@@ -84,18 +84,18 @@ Here is an example for the public human EnsEMBL Core database (release 30):
 
 <pre>
 new Bio::EnsEMBL::DBSQL::DBAdaptor(
-    -host    => 'ensembldb.ensembl.org',
-    -user    => 'anonymous',
-    -port    => 3306,
-    -species => 'Homo sapiens',
-    -group   => 'core',
-    -dbname  => 'homo_sapiens_core_30_35c' );
+    -host    =&gt; 'ensembldb.ensembl.org',
+    -user    =&gt; 'anonymous',
+    -port    =&gt; 3306,
+    -species =&gt; 'Homo sapiens',
+    -group   =&gt; 'core',
+    -dbname  =&gt; 'homo_sapiens_core_30_35c' );
 
 my @aliases = ('H_Sapiens', 'human');
 
-Bio::EnsEMBL::Utils::ConfigRegistry->add_alias(
-    -species => "Homo sapiens",
-    -alias   => \@aliases );
+Bio::EnsEMBL::Utils::ConfigRegistry-&gt;add_alias(
+    -species =&gt; "Homo sapiens",
+    -alias   =&gt; \@aliases );
 </pre>
 
 <p>
@@ -104,8 +104,8 @@ In order to find out the exact name of the new database you can use the "show da
 </p>
 
 <pre>
-shell> mysql -u anonymous -h ensembldb.ensembl.org -P 3306
-mysql> show databases like "homo_sapiens_core_%";
+shell&gt; mysql -u anonymous -h ensembldb.ensembl.org -P 3306
+mysql&gt; show databases like "homo_sapiens_core_%";
 </pre>
 
 <p>
@@ -135,17 +135,17 @@ For connecting to the EnsEMBL Compara database, you will have to create a Bio::E
 
 <pre>
 new Bio::EnsEMBL::Compara::DBSQL::DBAdaptor(
-    -host    => 'ensembldb.ensembl.org',
-    -user    => 'anonymous',
-    -port    => 3306,
-    -species => 'Compara30',
-    -dbname  => 'ensembl_compara_30' );
+    -host    =&gt; 'ensembldb.ensembl.org',
+    -user    =&gt; 'anonymous',
+    -port    =&gt; 3306,
+    -species =&gt; 'Compara30',
+    -dbname  =&gt; 'ensembl_compara_30' );
 
 @aliases = ('ensembl_compara_30', 'compara30', 'compara');
 
-Bio::EnsEMBL::Utils::ConfigRegistry->add_alias(
-		-species => "Compara30",
-		-alias   => \@aliases );
+Bio::EnsEMBL::Utils::ConfigRegistry-&gt;add_alias(
+		-species =&gt; "Compara30",
+		-alias   =&gt; \@aliases );
 </pre>
 
 <p>
@@ -196,7 +196,7 @@ setenv ENSEMBL_REGISTRY "/usr/local/share/ensembl_registry.conf"
 <p>
 Ensembl is an open project and we would like to encourage correspondence and discussions on any subject on any aspect of Ensembl.
 Please see the
-<a href="../../about/contact.html">Ensembl Contacts</a> page for suitable options getting in touch with us.
+<a href="/info/about/contact.html">Ensembl Contacts</a> page for suitable options getting in touch with us.
 </p>
 
 
