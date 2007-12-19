@@ -1,0 +1,103 @@
+<html>
+  <head>
+    <meta name="navigation" content="Website" />
+    <title>Private documentation</title>
+  </head>
+<body> 
+  <h2>Architecture: Apache request loop</h2>
+  <h3>The Loop</h3>
+  The Apache web server runs as a parent task, with one or more child processes. The parent is responsible for creating the children who in turn serve the actual pages and dynamic content. In Ensembl, the servers usually run with around 10 to 50 child processes.  The load average is the number of children plus one parent.<br /><br />
+<code>
+<pre style="padding: 15px; font-sizE: 14px;">
+   Apache request
+    &darr;                
+    &darr;                
+ parent forks to make 
+child process             
+    &darr;                
+    &darr;                
+mod_perl adds new version
+ of modules to new child  
+    &darr;                
+    &darr;                
+  child INIT_handler      
+</pre>
+</code>
+
+  When a new child is required (when the server load is high or the number of children falls below the configured minimum), the Apache parent creates one. The mod_perl environment of the parent is copied to the child, but in Ensembl's case, this is minimal. It is more efficient to put the modules in the parent process at the Apache startup time rather than in each child.  The majority of the Perl modules and configuration settings are loaded by the child init handler. Once the child is up and running, requests are sent to it and handled by the inner request loop.<br /><br />
+  The diagram below shows a simplified Ensembl request loop (although more specifically,  this diagram represents a portion of the <a href="http://f-m-c.org/projects/apache/html/4_4Request_Response_Loop.html">Apache keep-alive loop</a>).
+<code>
+<pre style="padding: 15px; font-sizE: 14px;">
+   Child init handler 
+        |
+        +------- &larr; -------+
+ R *    &darr;                 |
+ e *  Post read request   |
+ q *    &darr;                 |
+ u *    &darr;                 |
+ e *  Trans handler       |
+ s *    &darr;                 &uarr; 
+ t *    &darr;                 |
+   *  Script handler      |
+ l *    &darr;                 |
+ o *    &darr;                 |
+ o *  Clean up handler    |
+ p *    |                 |
+        +------- &rarr; -------+
+        &darr; 
+   Child exit handler
+</pre>
+</code>
+  <h3>Loop handlers</h3>
+  <ul>
+  <h4>Child init handler</h4>
+  The child init handler is called by the parent when a new child process is created, and sets up the initial configuration of the child to receive requests. 
+   <h4>Post read request handler</h4>
+    This handler is the first to be called by a request from a browser. As such, it is responsible for configuring settings that may be needed later in the loop. In Ensembl, this sets up various environmental variables: 
+    <ul>
+      <li>User ID: if a user has logged in</li>
+      <li>Session ID: if a session has been started <a name="footnote_link1"><sup></a><a href="#footnote1">1</a></sup></li>
+    </ul>
+    These values are read from a cookie on the requesting machine and stored in the <code>@ENV</code> hash. The cookie is set when the session starts, or the user logs in.
+    
+    It's worth noting that not all of Perl's usual CGI environment variables are made available by Ensembl.
+   <h4>Trans handler</h4>
+   Once the loop has been initialised by the post read request handler, the Trans handler is responsible for routing the request to the correct script or static page. The URL being requested is used to perform the routing:
+   <ul>
+   <code><pre style='font-size: 14px'>http://www.ensembl.org/Homo_sapiens/cytoview?l=2:87487831-87587831
+                       |--species--|-script-|-----parameters-----|
+   </code></pre>
+   </ul>
+   The species name determines which data is displayed in the script view, whilst the parameters configure the view in some way. Ensembl looks for the script in the following locations, in the following order:<br /><br/ >
+   <ul>
+    <li>Dynamic scripts in the plugin directories</li>
+    <li>Static pages in the plugin directories</li>
+    <li>Dynamic scriptts in the species directory (/perl/default)</li>
+    <li>Static pages in the species directory (/perl/default)</li>
+    <li>Dynamic scripts in the common directories (/perl/multi and /perl/common)</li>
+    <li>Static pages in the common directories (/perl/multi and /perl/common)</li>
+   </ul><br />
+   If no corresponding script or static page is found, Ensembl will display a 404 page not found error.<br /><br />
+   Ensembl supports the use of species name aliases. For example, HS will map to Homo Sapiens. These aliases are configurable in the SiteDefs.pm module (detailed in <a href="configuration.html">Configuration and sessions</a>).
+   <h4>Script handler</h4>
+   The script handler passes the request to the script or static page identified by the Trans handler. The process of building a new Ensembl page then begins. The dynamic script is executed (usually producing and configuring a new EnsEMBL::Web::Document::WebPage), or the HTML page is parsed and displayed. 
+   <h4>Clean up handler</h4>
+   The clean up handler is responsible for performing various maintenance and debugging tasks at the end of a request. This handler is currently used for the following, but can be extended by adding methods to EnsEMBL::Web::ApacheHandler.  The clean up handler is outside the users perceived request response time.
+  <br /><br />
+  <ul>
+    <li>Debugging: All requests are timed. Expensive requests will trigger a warning in the logs.  E.g. "Long Process"  </li>
+    <li>Child process management: child processes that use too much memory are killed (uses <a href="http://perl.apache.org/docs/1.0/api/Apache/SizeLimit.html">Apache::SizeLimit</a>)</li>
+    <li>Distaster recovery: killing all child processes in the worst case scenario <a name="footnote_link2"><sup></a><a href="#footnote2">2</a></sup></li>
+    <li>Blast ticket management: submitting, parsing and tidying up Blast searches</li>
+  </ul>
+</ul>
+  <h3>Configuring the loop</h3>
+  The Apache request loop is configured by the main Apache httpd.conf file. Any Perl method can be set to handle any of the stages in the event loop. 
+  <h3>Footnotes</h3>
+  <ul>
+    <li>1. A session is started when a configuration change is made to a view. For example, if a new track is displayed in ContigView. <a name="footnote1"></a><a href="#footnote_link1">&uarr;</a> 
+    <li>2. Any process can <code>touch /logs/ensembl.die</code> to force all child processes to be terminated at the next request. A new population of children will then be created by the Apache parent process. This is a rarely used last resort to overcome some bugs in Apache, mod_perl or both. <a name="footnote2"></a><a href="#footnote_link2">&uarr;</a> 
+  </ul>
+</body>
+</html>
+  
