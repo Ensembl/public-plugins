@@ -1,7 +1,6 @@
 <html>
 <head>
-<meta name="author" content="helpdesk" />
-<meta name="navigation" content="Software" />
+<meta name="navigation" content="Extending Ensembl" />
 <title>Customizing and Extending Ensembl</title>
 </head>
 
@@ -31,46 +30,19 @@ and static content.</li>
 further questions, please do contact us via the development 
 <a href="/info/about/mailing.html">mailing list</a>.</p>
 
+<p><a href="plugins.html">More about plugins &rarr;</a></p>
+
 <div class="notice"><strong>Important note</strong>: Regardless of any changes you may
 make to your Ensembl website, you <em>must</em> check out all the 
 api code, as it is not pluggable. The core API will not work if you
 do not have compara, variation and funcgen APIs as well.</div>
 
-<h3 class="boxed">More About Plugins</h3>
-
-<p>Plugins are used to complement the normal system of inheritance in 
-object-oriented Perl. Whereas a child object can inherit methods
-from multiple parents, a parent object normally cannot be overridden by
-multiple children. The plugin system "aggregates" the contents
-of several methods into one "master" method that can then be used by
-mod_perl when rendering the webpage.</p>
-
-<p>The module <code>conf/Plugins.pm</code> controls which plugins are
-used by an instance of Ensembl and their order of precedence. In a 
-standard Ensembl mirror, the module will define a plugin array as follows:</p>
-
-<pre>
-$SiteDefs::ENSEMBL_PLUGINS = [
-  'EnsEMBL::Mirror'    =&gt; $SiteDefs::ENSEMBL_SERVERROOT.'/public-plugins/mirror',
-  'EnsEMBL::Ensembl'   =&gt; $SiteDefs::ENSEMBL_SERVERROOT.'/public-plugins/ensembl'
-];
-</pre>
-
-<p>The plugins are processed in reverse order, starting with the last one:</p>
-
-<dl>
-<dt>/public-plugins/ensembl</dt>
-<dd>This is the plugin used by www.ensembl.org to add all Ensembl species
-and site-specific content to the base code</dd>
-<dt>/public-plugins/mirror</dt>
-<dd>This plugin over-rides /public-plugins/ensembl - normally it is used only 
-to configure local server settings</dd>
-</dl>
 
 <h3 class="boxed">Tutorials</h3>
 
 <ul class="spaced">
 <li><a href="makeovers.html">Changing the appearance of your Ensembl site</a></li>
+<li><a href="static.html">Adding static content</a> (documentation, etc)</li>
 <li><a href="species.html">Adding or removing species</a></li>
 <li><a href="advanced/index.html">Advanced customization</a></li>
 </ul>
