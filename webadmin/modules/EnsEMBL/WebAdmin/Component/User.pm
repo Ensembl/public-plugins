@@ -28,7 +28,7 @@ sub admin_home {
 
   $html .= qq(
 <ul class="spaced">
-<li><strong>Articles</strong>: <a href="/common/web/old_article?dataview=add">Add</a> | <a href="/common/web/old_article">View/edit</a> | <a href="/common/web/old_article">View/edit</a> | <a href="/common/web/all_articles">List all articles</a></li>
+<li><strong>Articles</strong>: <a href="/common/web/old_article?dataview=add">Add</a> | <a href="/common/web/old_article">View/edit</a> | <a href="/common/web/all_articles">List all articles</a></li>
 <li><strong>Glossary</strong>: <a href="/common/web/old_glossary?dataview=add">Add</a> | <a href="/common/web/old_glossary">View/edit</a></li>
 </ul>
 );
