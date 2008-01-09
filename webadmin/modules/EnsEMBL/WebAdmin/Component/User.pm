@@ -45,15 +45,6 @@ sub admin_home {
 );
   }
 
-  $html .= qq(
-<h3>News Database</h3>
-
-<ul class="spaced">
-<li><a href=""></a></li>
-</ul>
-
-);
-
   $panel->print($html);
   return 1;
 }
