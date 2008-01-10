@@ -49,8 +49,8 @@ sub admin_menu {
   my $flag = 'user';
     $self->add_block( $flag, 'bulleted', "Website Database" );
 
-    $self->add_entry( $flag, 'text' => "View old articles",
-                                    'href' => "/common/web/all_articles" );
+    $self->add_entry( $flag, 'text' => "Webadmin home page",
+                                    'href' => "/common/web/admin_home" );
 }
 
 1;

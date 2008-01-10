@@ -16,13 +16,9 @@ $controller->add_connection({ 'admin_home' => 'EnsEMBL::WebAdmin::Controller::Co
 
 ## Legacy schema
 $controller->add_connection({ 'old_article' => 'EnsEMBL::WebAdmin::Controller::Command::Web::OldArticle' });
-$controller->add_connection({ 'old_glossary' => 'EnsEMBL::WebAdmin::Controller::Command::Web::OldGlossary' });
 
 ## New schema
-$controller->add_connection({ 'view' => 'EnsEMBL::WebAdmin::Controller::Command::Web::View' });
 $controller->add_connection({ 'component' => 'EnsEMBL::WebAdmin::Controller::Command::Web::Component' });
-$controller->add_connection({ 'glossary' => 'EnsEMBL::WebAdmin::Controller::Command::Web::Glossary' });
-$controller->add_connection({ 'tutorial' => 'EnsEMBL::WebAdmin::Controller::Command::Web::Tutorial' });
 
 $controller->dispatch($ENV{REQUEST_URI});
 
