@@ -2,7 +2,7 @@ package EnsEMBL::WebAdmin::Component::User;
 
 use EnsEMBL::Web::Component;
 use EnsEMBL::Web::Interface::InterfaceDef;
-use EnsEMBL::Web::Object::Data::Article;
+use EnsEMBL::Web::Data::Article;
 
 use CGI;
 

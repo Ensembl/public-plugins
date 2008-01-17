@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use Class::Std;
-use EnsEMBL::Web::Object::Data::Glossary;
+use EnsEMBL::Web::Data::Glossary;
 
 use base 'EnsEMBL::WebAdmin::Controller::Command::Web';
 
@@ -36,7 +36,7 @@ sub render_page {
 
   ## Create interface object, which controls the forms
   my $interface = EnsEMBL::Web::Interface::InterfaceDef->new();
-  my $data = EnsEMBL::Web::Object::Data::Glossary->new();
+  my $data = EnsEMBL::Web::Data::Glossary->new();
   $interface->data($data);
   $interface->discover;
 

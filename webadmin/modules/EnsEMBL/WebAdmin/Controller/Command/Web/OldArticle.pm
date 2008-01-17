@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use Class::Std;
-use EnsEMBL::Web::Object::Data::Article;
+use EnsEMBL::Web::Data::Article;
 
 use base 'EnsEMBL::WebAdmin::Controller::Command::Web';
 
@@ -36,7 +36,7 @@ sub render_page {
 
   ## Create interface object, which controls the forms
   my $interface = EnsEMBL::Web::Interface::InterfaceDef->new();
-  my $data = EnsEMBL::Web::Object::Data::Article->new();
+  my $data = EnsEMBL::Web::Data::Article->new();
   $interface->data($data);
   $interface->discover;
 
@@ -47,7 +47,7 @@ sub render_page {
 
   ## Values for lookups
   my @help_cats;
-  my $cats = EnsEMBL::Web::Object::Data::find_all('EnsEMBL::Web::Object::Data::Category');
+  my $cats = EnsEMBL::Web::Data::find_all('EnsEMBL::Web::Data::Category');
   foreach my $cat (@$cats) {
     push @help_cats, {'name'=> $cat->name, 'value' => $cat->id};
   }
