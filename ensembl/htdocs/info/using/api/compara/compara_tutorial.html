@@ -14,10 +14,10 @@
 
 <p>
 This tutorial is an introduction to the
-<a href="./index.html">Ensembl Compara API</a>.
+<a href="index.html">Ensembl Compara API</a>.
 Knowledge of the 
-<a href="../core/index.html">Ensembl Core API</a> and of the concepts and conventions in the
-<a href="../core/core_tutorial.html">Ensembl Core API tutorial</a> is assumed.
+<a href="/info/using/api/core/index.html">Ensembl Core API</a> and of the concepts and conventions in the
+<a href="/info/using/api/core/core_tutorial.html">Ensembl Core API tutorial</a> is assumed.
 <!--
 This tutarial should be read first as it provides a comprehensive guide to the Ensembl environment.
 -->
@@ -29,98 +29,10 @@ an understanding of the database tables may help as many of the adaptor modules 
 </p>
 
 
-<h3 class="boxed">Obtaining the code</h3>
+<h3 class="boxed">Installing the API</h3>
 
 <p>
-The following are required to use Ensembl compara API (the same list as for the Ensembl core API): 
-</p>
-
-<ul>
-<li>perl 5.6 or later</li>
-<li>bioperl 1.2 or later</li>
-<li>DBI, DBD::mysql</li>
-<li>Ensembl core code.
-</li>
-</ul>
-<p>
-
-Please refer to the Ensembl core API tutorial for information on these modules, how and where to get them.
-Start by creating a directory for storing the API in your home directory:
-</p>
-
-<div class="example">
-<pre>
-cd
-mkdir src
-cd src
-</pre>
-</div>
-
-<p>
-In addition, you will need the ensembl compara code that is available by cvs from the ensembl cvs repository using the following cvs commands:
-</p>
-
-<div class="example">
-<pre>
-cvs -d :pserver:cvsuser@cvs.sanger.ac.uk:/cvsroot/ensembl login
-</pre>
-</div>
-
-<p>
-When prompted the password is &quot;CVSUSER&quot;.
-</p>
-
-<div class="example">
-<pre>
-cvs -d :pserver:cvsuser@cvs.sanger.ac.uk:/cvsroot/ensembl co -r branch-ensembl-45 ensembl-compara
-</pre>
-</div>
-
-<p>
-This will check out ensembl-compara code for stable branch 45.
-Make sure the ensembl core code you have already checked out is on the same branch.
-Note that the branch that is checked out should correspond to the database <a href="/info/using/api/versions.html">version</a> being used.
-Thus ensembl_compara_45 and e.g. homo_sapiens_core_45_36g and mus_musculus_core_45_36f should be used with the above ensembl branch 45 code.
-</p>
-
-<h3 class="boxed">Environment Variables</h3>
-
-<p>
-The following PERL5LIB environment variables should be set up:
-</p>
-
-<ul>
-
-<li>
-<p>
-under <strong>tcsh/csh</strong> shell with:
-</p>
-
-<div class="example">
-<pre>
-setenv PERL5LIB ${PERL5LIB}:{HOME}/src/bioperl-live: \
-${HOME}/src/ensembl/modules:${HOME}/src/ensembl-compara/modules
-</pre>
-</div>
-</li>
-
-<li>
-<p>
-- under <strong>bash</strong> shell with
-</p>
-
-<div class="example">
-<pre>
-export PERL5LIB=${PERL5LIB}:{HOME}/src/bioperl-live: \
-${HOME}/src/ensembl/modules:${HOME}/src/ensembl-compara/modules
-</pre>
-</div>
-</li>
-
-</ul>
-
-<p>
-Bioperl and Ensembl must be in a directory called src set up in your home directory for this to work.
+Follow the instructions on <a href="/info/using/api/api_installation.html">this webpage</a> to install or update your API.
 </p>
 
 
@@ -548,8 +460,8 @@ source of the Member and can be:
 <ul>
 <li><p>ENSEMBLPEP, derived from an ensembl translation</p></li>
 <li><p>ENSEMBLGENE, derived from an ensembl gene</p></li>
-<li><p>SWISSPROT, derived from a Uniprot/Swissprot entry</p></li>
-<li><p>SPTREMBL, derived from a Uniprot/SP-TrEMBL entry</p></li>
+<li><p>Uniprot/SWISSPROT, derived from a Uniprot/Swissprot entry</p></li>
+<li><p>Uniprot/SPTREMBL, derived from a Uniprot/SP-TrEMBL entry</p></li>
 </ul>
 
 <p>
