@@ -1,7 +1,7 @@
 <html>
   <head>
     <meta name="navigation" content="Site structure" />
-    <title>Install instructions - Site Structure</title>
+    <title>Site Structure</title>
   </head>
   <body>
   <h2>Site structure</h2>
@@ -23,12 +23,8 @@ located as described here then everything should work OK.
     <td>bio-modelling tools that Ensembl is based upon</td>
   </tr>
   <tr>
-    <td colspan="3"><tt>|--&nbsp;biomart-plib</tt></td>
+    <td colspan="3"><tt>|--&nbsp;biomart-perl</tt></td>
     <td>Code to access the mart data-retrieval system</td>
-  </tr>
-  <tr>
-    <td colspan="3"><tt>|--&nbsp;biomart-web</tt></td>
-    <td> Code to access the mart data-retrieval system</td>
   </tr>
   <tr>
     <td colspan="3"><tt>|--&nbsp;ensembl</tt> </td>
@@ -45,6 +41,10 @@ located as described here then everything should work OK.
   <tr>
     <td colspan="3"><tt>|--&nbsp;ensembl-external</tt> </td>
     <td>Code for data outside the core database</td>
+  </tr>
+  <tr>
+    <td colspan="3"><tt>|--&nbsp;ensembl-functgenomics</tt> </td>
+    <td>Code to access the functional genomics data</td>
   </tr>
   <tr>
     <td colspan="3"><tt>|--&nbsp;ensembl-variation</tt> </td>
@@ -74,15 +74,6 @@ located as described here then everything should work OK.
     <td colspan="3"><tt>`--&nbsp;public-plugins</tt></td>
     <td>Public plugin modules</td>
   </tr>
-  <tr>
-    <td rowspan="5" style="width: 3em">&nbsp; &nbsp;</td>
-    <td colspan="2"><tt>`--&nbsp;altavista-search &nbsp;</tt></td>
-    <td>e.g. Alta Vista search</td>
-  </tr>
-  <tr><td rowspan="4" style="width: 3em">&nbsp; &nbsp;</td><td><tt>|--&nbsp;conf</tt></td><td>Configuration files for Alta Vista search</td></tr>
-  <tr><td><tt>|--&nbsp;htdocs</tt></td><td>Static content for Alta Vista search</td></tr>
-  <tr><td><tt>|--&nbsp;modules</tt></td><td>Modules for Alta Vista search</td></tr>
-  <tr><td><tt>`--&nbsp;perl</tt></td><td>Extra perl scripts for Alta Vista search</td></tr>
 </table>
 </body>
 </html>
