@@ -93,40 +93,20 @@ CVS password: CVSUSER
 
 <li>
 <p>
-Install the <a href="./core/index.html">Ensembl Core</a> Perl API for
+Install the Ensembl Perl API for
 version [[SPECIESDEFS::ENSEMBL_VERSION]]
 </p>
 
 <pre>
-$ cvs -d :pserver:cvsuser@cvs.sanger.ac.uk:/cvsroot/ensembl checkout -r branch-ensembl-[[SPECIESDEFS::ENSEMBL_VERSION]] ensembl
+$ cvs -d :pserver:cvsuser@cvs.sanger.ac.uk:/cvsroot/ensembl checkout -r branch-ensembl-[[SPECIESDEFS::ENSEMBL_VERSION]] ensembl-api
 </pre>
+<p>Note that this will checkout all the api code, including <a href="./core/index.html">core</a>,
+<a href="./variation/index.html">variation</a>, <a href="./compara/index.html">compara</a> and
+<a href="./funcgen/index.html">functional genomics</a>. Even if you are not intending to use the
+non-core databases, you need all the code as some of the core API now depends on the presence of
+these modules.</p>
 </li>
 
-<li>
-<p>
-If required, install the <a href="./variation/index.html">Ensembl
-Variation</a> Perl API for version [[SPECIESDEFS::ENSEMBL_VERSION]]
-</p>
-
-<pre>
-$ cvs -d :pserver:cvsuser@cvs.sanger.ac.uk:/cvsroot/ensembl checkout -r branch-ensembl-[[SPECIESDEFS::ENSEMBL_VERSION]] ensembl-variation
-</pre>
-</li>
-
-<li>
-<p>
-If required, install the <a href="./compara/index.html">Ensembl
-Compara</a> Perl API for verion [[SPECIESDEFS::ENSEMBL_VERSION]]
-</p>
-
-<pre>
-$ cvs -d :pserver:cvsuser@cvs.sanger.ac.uk:/cvsroot/ensembl checkout -r branch-ensembl-[[SPECIESDEFS::ENSEMBL_VERSION]] ensembl-compara
-</pre>
-
-<p>
-NB: You can install as many Ensembl APIs as you need in this way.
-</p>
-</li>
 
 <li>
 <p>
