@@ -13,39 +13,32 @@ sub common_menu_items {
   my($self,$doc) = @_;
 
   ## Links to archive sites
-  my $URL = CGI::escapeHTML($ENV{'REQUEST_URI'});
   my @archive_sites;
-  my @releases = @{ $doc->species_defs->RELEASE_INFO || $doc->species_defs->anyother_species('RELEASE_INFO') || []};
-  if (scalar(@releases)) {
-    my $species = $ENV{'ENSEMBL_SPECIES'};
-    my %archive_info = %{$doc->species_defs->get_config($species, 'archive')};
-    my $assembly;
-    foreach my $release (@releases) {
-      my $number = $release->{release_id};
-      if (!$species || ($assembly = $archive_info{$number})) {
-        (my $link  = $release->{short_date}) =~ s/\s+//;
-        my $text   = $release->{short_date};
-        last if $number < $doc->species_defs->EARLIEST_ARCHIVE;
-        next if $number == $doc->species_defs->ENSEMBL_VERSION;
-        if ($assembly) {
-          $text .= " ($assembly)";  
-        }
-
-        push @archive_sites, {
-          'href' => "javascript:archive('$link')", 
-          'text' => "e! $number: $text", 
-          'raw'  => 1,
-        };
-      }
+  my $species = $ENV{'ENSEMBL_SPECIES'} || $doc->species_defs->ENSEMBL_PRIMARY_SPECIES;
+warn "SPECIES $species";
+  my %archive_info = %{$doc->species_defs->get_config($species, 'archive')};
+  my %archive_to_display = %{$archive_info{'online'}};
+  my %assembly_name = %{$archive_info{'assemblies'}};
+  my @archives = sort keys %archive_to_display;
+  foreach my $release_id (@archives) {
+    my $url = $archive_to_display{$release_id}; 
+    (my $archive = $url) =~ s/200/ 200/;
+    my $assembly = $assembly_name{$release_id};
+    my $text = "e! $release_id: $archive";
+    if ($ENV{'ENSEMBL_SPECIES'} && $assembly) {
+      $text .= " ($assembly)";
     }
+    push @archive_sites, {
+      'href' => "javascript:archive('$url')",
+      'text' => $text,
+      'raw'  => 1,
+    };
   }
 
-  if (!$doc->access_restrictions) {
-
-    $doc->menu->add_block( 'archive', 'bulleted', 'Ensembl Archive', 'priority' => 100, 
+  $doc->menu->add_block( 'archive', 'bulleted', 'Ensembl Archive', 'priority' => 100, 
                             'include_miniad'=>1);
 
-    $doc->menu->add_entry(
+  $doc->menu->add_entry(
       'archive',
       'code'    => 'other_archive_sites',
       'href'    => $archive_sites[0]{'href'},
@@ -54,20 +47,19 @@ sub common_menu_items {
       'title'   => "Link to archived version of this page",
       'options' => \@archive_sites,
       'icon'  => '/img/ensemblicon.gif',
-    ) unless ($URL =~/familyview/ || !@archive_sites) ;
+  ) unless ($URL =~/familyview/ || !@archive_sites) ;
   
-    ## Stable archive link for current release
-    my $stable_URL = sprintf "http://%s.archive.ensembl.org%s",
+  ## Stable archive link for current release
+  my $stable_URL = sprintf "http://%s.archive.ensembl.org%s",
       CGI::escapeHTML($doc->species_defs->ARCHIVE_VERSION), CGI::escapeHTML($ENV{'REQUEST_URI'});
 
-    $doc->menu->add_entry(
+  $doc->menu->add_entry(
       'archive',
       'code'    => 'archive_link',
       'href'    => $stable_URL,
       'text'    => 'Stable Archive! link for this page',
       'icon'  => '/img/ensemblicon.gif',
-    );
-  }
+  );
 
 }
 
