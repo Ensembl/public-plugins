@@ -13,11 +13,8 @@ sub save {
   my ($self, $object, $interface) = @_;
 
   my $script = $interface->script_name || $object->script;
-  my ($success, $url);
-  
-  my $primary_key = $interface->data->get_primary_key;
-  my $id = $object->param($primary_key);
-  $interface->cgi_populate($object, $id);
+
+  $interface->cgi_populate($object);
 
   ## Record-type-specific data munging
   if ($interface->data->type eq 'movie') {
@@ -44,16 +41,12 @@ Please check the server and commit the file to CVS.
 Thanks!));
   }
 
-  $success = $interface->data->save;
-
-  if ($success) {
+  if ($interface->data->save) {
     ## redirect to confirmation page 
-    $url = "/common/$script?dataview=success";
+    return "/common/$script?dataview=success";
+  } else {
+    return "/common/$script?dataview=failure";
   }
-  else {
-    $url = "/common/$script?dataview=failure";
-  }
-  return $url;
 }
 
 1;
