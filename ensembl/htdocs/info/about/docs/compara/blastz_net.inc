@@ -77,7 +77,7 @@
 <td class="bg4 center">-</td><!-- R.nor -->
 <td class="bg3 center">-</td><!-- C.por -->
 <td class="bg4 center">-</td><!-- O.cun -->
-<td class="bg3 center"><font color="blue"></font></td><!-- F.cat -->
+<td class="bg3 center"><font color="blue"> (on C.fam)</font></td><!-- F.cat -->
 <th class="bg4 center" style="width:5em"><i>C.fam</i></th>
 </tr>
 
