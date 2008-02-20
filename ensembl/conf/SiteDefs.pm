@@ -15,6 +15,7 @@ sub update_conf {
   $SiteDefs::__species_aliases{ 'Canis_familiaris'         } = [qw(cf cfam dog)]; 
   $SiteDefs::__species_aliases{ 'Dasypus_novemcinctus'     } = [qw(dn dnov dasypus armadillo)];
   $SiteDefs::__species_aliases{ 'Echinops_telfairi'        } = [qw(et etel echinops tenrec)];
+  $SiteDefs::__species_aliases{ 'Equus_caballus'           } = [qw(ec horse)];
   $SiteDefs::__species_aliases{ 'Felis_catus'              } = [qw(fc fcat cat)];
   $SiteDefs::__species_aliases{ 'Tupaia_belangeri'         } = [qw(tb tbel treeshrew shrew)];
   $SiteDefs::__species_aliases{ 'Erinaceus_europaeus'      } = [qw(ee eeur hedgehog)];
@@ -31,6 +32,7 @@ sub update_conf {
   $SiteDefs::__species_aliases{ 'Ornithorhynchus_anatinus' } = [qw(oa oana platypus)];
   $SiteDefs::__species_aliases{ 'Otolemur_garnettii'       } = [qw(og ogar bushbaby otolemur)];
   $SiteDefs::__species_aliases{ 'Pan_troglodytes'          } = [qw(pt ptro chimp)];
+  $SiteDefs::__species_aliases{ 'Pongo_pygmaeus'           } = [qw(pp orang orangutan librarian ook)];
   $SiteDefs::__species_aliases{ 'Rattus_norvegicus'        } = [qw(rn rnor rat)];
   $SiteDefs::__species_aliases{ 'Sorex_araneus'            } = [qw(sa shrew)];
   $SiteDefs::__species_aliases{ 'Spermophilus_tridecemlineatus'  } = [qw(st stri squirrel spermophilus)];
