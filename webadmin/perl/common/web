@@ -20,10 +20,6 @@ $controller->add_connection({ 'old_article' => 'EnsEMBL::WebAdmin::Controller::C
 ## New schema
 $controller->add_connection({ 'component' => 'EnsEMBL::WebAdmin::Controller::Command::Web::Component' });
 
-## News
-$controller->add_connection({ 'declaration' => 'EnsEMBL::WebAdmin::Controller::Command::Web::Declaration' });
-$controller->add_connection({ 'news_item' => 'EnsEMBL::WebAdmin::Controller::Command::Web::NewsItem' });
-
 $controller->dispatch($ENV{REQUEST_URI});
 
 }
