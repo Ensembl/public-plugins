@@ -49,7 +49,7 @@ sub admin_menu {
   my $flag = 'user';
     $self->add_block( $flag, 'bulleted', "Website Database" );
 
-    $self->add_entry( $flag, 'text' => "Webadmin home page",
+    $self->add_entry( $flag, 'text' => "Web Content Admin",
                                     'href' => "/common/web/admin_home" );
 }
 
