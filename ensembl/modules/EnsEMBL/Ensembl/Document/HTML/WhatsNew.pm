@@ -125,7 +125,7 @@ sub render {
   }
 
   $html .= qq(
-<p><a href="http://ensembl.blogspot.com/"><img src="/img/blogger.gif" alt="Blogger logo" class="sp-thumb" /> <strong><a href="http://ensembl.blogspot.com/">Ensembl Blog</a></strong> - Find out what we are doing between releases!</p>
+<p><a href="http://ensembl.blogspot.com/"><img src="/img/blogger.gif" alt="Blogger logo" class="sp-thumb" /> <strong><a href="http://ensembl.blogspot.com/">Ensembl Blog</a></strong> - get the latest news on upcoming releases, workshops and activities, from Ewan and the Ensembl team</p>
 );
 
   $html .= '</div>';
