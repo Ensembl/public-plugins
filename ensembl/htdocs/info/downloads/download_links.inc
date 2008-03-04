@@ -159,6 +159,18 @@
 </tr>
 	    
 <tr>
+<td><strong><i>Equus caballus</i></strong> (horse)</td>
+<td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_fasta/equus_caballus/dna/">FTP</a></td>
+<td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_fasta/equus_caballus/cdna/">FTP</a></td>
+<td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_fasta/equus_caballus/pep/">FTP</a></td>
+<td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_embl/equus_caballus/">FTP</a></td>
+<td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_genbank/equus_caballus/">FTP</a></td>
+<td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_mysql/">FTP</a></td>
+<td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_gtf/">FTP</a></td>
+<td>-</td>
+</tr>
+	    
+<tr>
 <td><strong><i>Erinaceus europaeus</i></strong> (western European hedgehog)</td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_fasta/erinaceus_europaeus/dna/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_fasta/erinaceus_europaeus/cdna/">FTP</a></td>
@@ -357,6 +369,18 @@
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_fasta/pan_troglodytes/pep/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_embl/pan_troglodytes/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_genbank/pan_troglodytes/">FTP</a></td>
+<td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_mysql/">FTP</a></td>
+<td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_gtf/">FTP</a></td>
+<td>-</td>
+</tr>
+	    
+<tr>
+<td><strong><i>Pongo pygmaeus</i></strong> (orangutan)</td>
+<td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_fasta/pongo_pygmaeus/dna/">FTP</a></td>
+<td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_fasta/pongo_pygmaeus/cdna/">FTP</a></td>
+<td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_fasta/pongo_pygmaeus/pep/">FTP</a></td>
+<td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_embl/pongo_pygmaeus/">FTP</a></td>
+<td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_genbank/pongo_pygmaeus/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_mysql/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_gtf/">FTP</a></td>
 <td>-</td>
