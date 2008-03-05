@@ -9,23 +9,8 @@
 <body>
 
 <h2>The Ensembl FTP Site</h2>
-
 <p>
-Ensembl provides sequence databases of gene, transcript and protein
-predictions.
-These sequences are suitable for a local installation of a sequence similarity
-search system.
-<a href="http://www.mysql.com/" target="external">MySQL</a> database table
-dumps are available for <strong>all</strong> databases underlying the Ensembl
-system.
-These text format dumps can be imported into relational database management
-systems which would enable
-<a href="/info/webcode/install/">installation</a> of a
-complete Ensembl mirror site.
-</p>
-
-<p>
-There are five types of data dumps for each species on the FTP site:
+The following types of data dumps are available on the FTP site:
 </p>
 
 <ul>
@@ -121,10 +106,11 @@ nucleotide sequence
 <li>
 <p>
 <b>MySQL</b> -
-Database table dumps in text format, as well as SQL table definition files
-should be portable to any SQL database.
+All Ensembl  <a href="http://www.mysql.com/" target="external">MySQL</a> databases are 
+available in text format as are the SQL table definition files.  These can be imported into to any SQL database for a local
+<a href="/info/webcode/install/">installation</a> of a mirror site.
 Generally, the FTP directory tree contains one one directory per database.
-For more information about these databases and their associated Application
+For more information about these databases and their Application
 Programming Interfaces (or APIs) see the
 <a href="../software/index.html">software</a> section.
 </p>
@@ -160,8 +146,7 @@ database which will be found in the <a href="ftp://ftp.ensembl.org/pub/current_m
 
 <p>
 These additional documents explain the FTP directory
-<a href="./ftp_structure.html">structure</a> and the 
-<a href="./ftp_files.html">FASTA file</a> naming and header conventions used on this site.
+<a href="./ftp_structure.html">structure</a>.
 </p>
 
 [[INCLUDE::/info/downloads/download_links.inc]]
