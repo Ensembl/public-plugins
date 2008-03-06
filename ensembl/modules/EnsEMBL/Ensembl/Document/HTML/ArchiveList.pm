@@ -22,7 +22,7 @@ sub render {
     my $subdomain = $archive_to_display{$release};
     (my $date = $subdomain) =~ s/20/ 20/; 
     $html .= qq(<li><strong><a href="http://$subdomain.archive.ensembl.org">Ensembl $release: $date</a>);
-    $html .= ' - currently www.ensembl.org' if $count == 0;
+    $html .= ' - currently www.ensembl.org' if $release == $SD->ENSEMBL_VERSION;
     $html .= '</strong></li>';
     $count++;
   }

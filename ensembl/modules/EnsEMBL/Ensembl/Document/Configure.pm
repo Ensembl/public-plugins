@@ -15,12 +15,12 @@ sub common_menu_items {
   ## Links to archive sites
   my @archive_sites;
   my $species = $ENV{'ENSEMBL_SPECIES'} || $doc->species_defs->ENSEMBL_PRIMARY_SPECIES;
-warn "SPECIES $species";
   my %archive_info = %{$doc->species_defs->get_config($species, 'archive')};
   my %archive_to_display = %{$archive_info{'online'}};
   my %assembly_name = %{$archive_info{'assemblies'}};
   my @archives = sort keys %archive_to_display;
   foreach my $release_id (@archives) {
+    next if $release_id == $doc->species_defs->ENSEMBL_VERSION;
     my $url = $archive_to_display{$release_id}; 
     (my $archive = $url) =~ s/200/ 200/;
     my $assembly = $assembly_name{$release_id};
