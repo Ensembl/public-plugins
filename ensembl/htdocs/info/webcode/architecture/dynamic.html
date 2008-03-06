@@ -30,7 +30,7 @@ simple_with_redirect( 'Gene' );
 
 <p> (<code>simple_with_redirect</code> create an object of type "Gene")</p>
 
-   <h3><a name="default_responses"></a>Renderers, output types and document types</h3> 
+   <h3 id="default_responses">Renderers, output types and document types</h3> 
    Before looking at the process by which a new page is constructed, configured and displayed, it is worth considering three important parts of the <code>WebPage</code> machinery:
   <ul>
   <h4>Renderers</h4>
@@ -64,7 +64,7 @@ simple_with_redirect( 'Gene' );
   <h4>START</h4>
   The pipeline starts with a call from the view script (e.g. <code>perl/default/geneview</code>) to <code>WebPage::simple_with_redirect()</code>. A single parameter is provided which informs <code>WebPage</code> of the type of page to create. In effect, this parameter (<code>Gene</code>, in the case of GeneView) configures which data objects to create, and how they are to be configured and collated for the final deliverable content.
   <h4>Initialise output</h4>
-  <code>WebPage</code> then initialises the various components necessary to produce output: the <a href="default_responses">renderer (e.g. Apache), the output type (e.g. HTML) and the document type (e.g. Dynamic)</a>. In addition, a <code>SpeciesDefs</code> object is created. This object plays an important part in configuring Ensembl, and is made available to all other layout and data objects created by <code>WebPage</code>. It is discussed in more detail on the <a href="configuration.html">Configuration and sessions page</a>. A timer is also set up for debugging and profiling.
+  <code>WebPage</code> then initialises the various components necessary to produce output: the <a href="#default_responses">renderer (e.g. Apache), the output type (e.g. HTML) and the document type (e.g. Dynamic)</a>. In addition, a <code>SpeciesDefs</code> object is created. This object plays an important part in configuring Ensembl, and is made available to all other layout and data objects created by <code>WebPage</code>. It is discussed in more detail on the <a href="configuration.html">Configuration and sessions page</a>. A timer is also set up for debugging and profiling.
    <h4>Setup common output components</h4>
    Almost all types of output (especially HTML) require a certain amount of common content.  These output components are independent of the data requested, and include items such as:<br /><br />
    <ul>
@@ -94,7 +94,7 @@ The templates for each section of the webpage are in an ordered array which is p
   <h4>Delivery</h4>
   Once rendered, the output is delivered to a final destination. In most cases this is served back to the user's browser via Apache, but it could also be sent to a gzip file for archival, to another server as a response to a web service, or returned over an alternate transport protocol for communication between processes.
   </ul>
-  <h3><a name="other_responses"></a>Building other responses with Document::WebPage</h3>
+  <h3 id="other_responses">Building other responses with Document::WebPage</h3>
   <code>EnsEMBL::Web::Document::WebPage</code> is something of a misnomer. Whilst a standard plain text HTML response is commonly used by Ensembl, <code>EnsEMBL::Web::Document::WebPage</code> can return data in a number of other formats by replacing the default <a href="#default_responses">renderer, output type and document type</a>. 
   <h3>Footnotes</h3>
   <ul>
