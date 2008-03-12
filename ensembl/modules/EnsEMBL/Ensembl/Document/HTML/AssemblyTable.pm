@@ -12,21 +12,26 @@ sub render {
   my ($class, $request) = @_;
 
   my $SD = $ENSEMBL_WEB_REGISTRY->species_defs;
-  my $adaptor = $ENSEMBL_WEB_REGISTRY->newsAdaptor();
   my $this_release = $SD->ENSEMBL_VERSION;
-  my $first_archive = $SD->EARLIEST_ARCHIVE;
+  my $adaptor = $ENSEMBL_WEB_REGISTRY->newsAdaptor();
+  my $releases =  $adaptor->fetch_releases();
+  my $archives =  $adaptor->fetch_archives();
+
+  my @archive_ids = sort keys %$archives;
+  my $first_archive = $archive_ids[0];
   my $release_break = int($this_release - (($this_release -$first_archive)/2));
-  my $html = render_assembly_table($adaptor, $this_release, $release_break);
+  my $html = render_assembly_table($adaptor, $releases, $archives, $this_release, $release_break);
   $html .= "<br />";
-  $html .= render_assembly_table($adaptor, $release_break-1, $first_archive);
+  $html .= render_assembly_table($adaptor, $releases, $archives, $release_break-1, $first_archive);
   return $html;
 }
 
 sub render_assembly_table {
-  my ($wa, $this_release, $release_break) = @_;
+  my ($wa, $releases, $archives, $start, $end) = @_;
 
-  my @release_data =  @{$wa->fetch_releases()};
-  my %archive_data =  %{$wa->fetch_archives()};
+  my @release_data = @$releases;
+  my %archive_data = %$archives;
+
   my $header_row = qq(<th>Species</th>\n);
   my $header_short = $header_row;
   my %info;
@@ -34,8 +39,8 @@ sub render_assembly_table {
 
   foreach my $data ( @release_data ) {
     my $release_id = $data->{release_id};
-    next if $release_id > $this_release;
-    last if $release_id == ($release_break - 1 );
+    next if $release_id > $start;
+    last if $release_id == ($end - 1 );
     my $is_online = $archive_data{$release_id} ? 1 : 0;
     $total_columns++;
 
@@ -77,7 +82,7 @@ sub render_assembly_table {
     my %assemblies = reverse %{ $info{$species} };
 
     my $release_text;
-    my $release_counter = $this_release;
+    my $release_counter = $start;
     my $col_counter = 0;
     foreach my $release (sort {$b <=> $a} keys %assemblies  ) {
       next unless $assemblies{$release};
@@ -86,10 +91,10 @@ sub render_assembly_table {
       $release_counter -= $colspan;
       $col_counter += $colspan;
       if ($assemblies{$release} eq 'removed') {
-  $release_text .= qq(   <td colspan="$colspan">$assemblies{$release}</td>\n);
+        $release_text .= qq(   <td colspan="$colspan">$assemblies{$release}</td>\n);
       }
       else {
-  $release_text .= qq(   <td $tint[0] colspan="$colspan">$assemblies{$release}</td>\n);
+        $release_text .= qq(   <td $tint[0] colspan="$colspan">$assemblies{$release}</td>\n);
       }
       push ( @tint, shift @tint );
     }
