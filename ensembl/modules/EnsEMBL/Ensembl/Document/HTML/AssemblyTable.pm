@@ -30,12 +30,14 @@ sub render_assembly_table {
   my $header_row = qq(<th>Species</th>\n);
   my $header_short = $header_row;
   my %info;
+  my $total_columns = 0;
 
   foreach my $data ( @release_data ) {
     my $release_id = $data->{release_id};
     next if $release_id > $this_release;
     last if $release_id == ($release_break - 1 );
     my $is_online = $archive_data{$release_id} ? 1 : 0;
+    $total_columns++;
 
     (my $link = $data->{short_date}) =~ s/\s+//;
     (my $display_date = $data->{short_date}) =~ s|\s+20||;
@@ -76,11 +78,13 @@ sub render_assembly_table {
 
     my $release_text;
     my $release_counter = $this_release;
+    my $col_counter = 0;
     foreach my $release (sort {$b <=> $a} keys %assemblies  ) {
       next unless $assemblies{$release};
       my $colspan = $release_counter - $release;
       $colspan++;# if $release_counter == $this_release;
       $release_counter -= $colspan;
+      $col_counter += $colspan;
       if ($assemblies{$release} eq 'removed') {
   $release_text .= qq(   <td colspan="$colspan">$assemblies{$release}</td>\n);
       }
@@ -88,6 +92,10 @@ sub render_assembly_table {
   $release_text .= qq(   <td $tint[0] colspan="$colspan">$assemblies{$release}</td>\n);
       }
       push ( @tint, shift @tint );
+    }
+    my $empty_columns = $total_columns - $col_counter;
+    if ($empty_columns > 0) {
+      $release_text .= qq(<td colspan="$empty_columns">&nbsp;</td>);
     }
     my $link = qq(<a href="http://www.ensembl.org/$species">$display_spp</a>);
     $link = $display_spp if $info{$species}{"removed"};
