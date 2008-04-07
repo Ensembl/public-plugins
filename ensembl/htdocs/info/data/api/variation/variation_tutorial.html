@@ -54,8 +54,8 @@ my $user = 'anonymous';
 my $dbname = 'mus_musculus_variation_38_35';
 
 my $dbVariation= new Bio::EnsEMBL::Variation::DBSQL::DBAdaptor(
-    -host	=&gt; $host,
-    -user	=&gt; $user,
+    -host  =&gt; $host,
+    -user  =&gt; $user,
     -dbname =&gt; $dbname);
 </pre>
 
@@ -128,8 +128,8 @@ Another way to use the registry without having to use any configuration file, bu
 and do not remember names, is to use the following method:
 
 Bio::EnsEMBL::Registry-&gt;load_registry_from_db(
-    -host	=&gt; 'ensembldb.ensembl.org',
-    -user	=&gt; 'anonymous',
+    -host  =&gt; 'ensembldb.ensembl.org',
+    -user  =&gt; 'anonymous',
 );
 This way, you will load the correct versions of the ensembl databases for the software release it can find on a database instance into the 
 registry and also adds a set of standard aliases.
@@ -190,8 +190,9 @@ my $slice = $slice_adaptor-&gt;fetch_by_region('chromosome',25); #get chromosome
 my $vf_adaptor = $dbVariation-&gt;get_VariationFeatureAdaptor(); #get adaptor to VariationFeature object
 my $vfs = $vf_adaptor-&gt;fetch_all_by_Slice($slice); #return ALL variations defined in $slice
 foreach my $vf (@{$vfs}){
-    print "Variation: ", $vf-&gt;variation_name, " with alleles ", $vf-&gt;allele_string, " in chromosome ", $slice-&gt;seq_region_name, " and position ", $vf-&gt;start,"-",$vf-&gt;end,"\n";
-
+  print "Variation: ", $vf-&gt;variation_name, " with alleles ", $vf-&gt;allele_string, 
+        " in chromosome ", $slice-&gt;seq_region_name, " and position ", $vf-&gt;start,"-",$vf-&gt;end,"\n";
+}
 exit 0;
 </pre>
 
@@ -235,8 +236,9 @@ my $trv_adaptor = $dbVariation-&gt;get_TranscriptVariationAdaptor; #get the adap
 my $trvs = $trv_adaptor-&gt;fetch_all_by_Transcripts([$transcript]); #get ALL effects of Variations in the Transcript
 
 foreach my $tv (@{$trvs}){
-    print "SNP :",$tv-&gt;variation_feature-&gt;variation_name, " has a consequence/s ", join(",",@{$tv-&gt;consequence_type}), " in transcript ", $stable_id, "\n";
-    #print the name of the variation and the effect (consequence_type) of the variation in the Transcript
+  print "SNP :",$tv-&gt;variation_feature-&gt;variation_name, " has a consequence/s ", 
+    join(",",@{$tv-&gt;consequence_type}), " in transcript ", $stable_id, "\n";
+  #print the name of the variation and the effect (consequence_type) of the variation in the Transcript
 }
 exit 0;
 </pre>
@@ -285,32 +287,34 @@ while (@rsIds){
 
 
 sub get_VariationFeatures{
-	my $var = shift;
-        # get all VariationFeature objects: might be more than 1 !!!
-	foreach my $vf (@{$vf_adaptor-&gt;fetch_all_by_Variation($var)}){
-	    print $vf-&gt;variation_name(),","; # print rsID
-            print $vf-&gt;allele_string(),","; # print alleles
-            print join(",",@{$vf-&gt;get_consequence_type()}),","; # print consequenceType
-	    print substr($var-&gt;five_prime_flanking_seq,-10) , "[",$vf-&gt;allele_string,"]"; #print the allele string
-	    print substr($var-&gt;three_prime_flanking_seq,0,10), ","; # print RefSeq
-	    print $vf-&gt;seq_region_name, ":", $vf-&gt;start,"-",$vf-&gt;end; # print position in Ref in format Chr:start-end
-            &amp;get_TranscriptVariations($vf); # get Transcript information
-	}
+  my $var = shift;
+  # get all VariationFeature objects: might be more than 1 !!!
+  foreach my $vf (@{$vf_adaptor-&gt;fetch_all_by_Variation($var)}){
+      print $vf-&gt;variation_name(),","; # print rsID
+      print $vf-&gt;allele_string(),","; # print alleles
+      print join(",",@{$vf-&gt;get_consequence_type()}),","; # print consequenceType
+      print substr($var-&gt;five_prime_flanking_seq,-10) , "[",$vf-&gt;allele_string,"]"; #print the allele string
+      print substr($var-&gt;three_prime_flanking_seq,0,10), ","; # print RefSeq
+      print $vf-&gt;seq_region_name, ":", $vf-&gt;start,"-",$vf-&gt;end; # print position in Ref in format Chr:start-end
+      &amp;get_TranscriptVariations($vf); # get Transcript information
+  }
 }
 
 sub get_TranscriptVariations{
-	my $vf = shift;
-        # get all TranscriptVariation objects: might be more than 1 !!!
-	my $transcript_variations = $vf-&gt;get_all_TranscriptVariations; #get ALL the effects of the variation in different Transcripts
-	if (defined $transcript_variations){
-	    foreach my $tv (@{$transcript_variations}){
-		print ",", $tv-&gt;pep_allele_string if (defined $tv-&gt;pep_allele_string);# the AA change, but only if it is in a coding region
-		my $gene = $gene_adaptor-&gt;fetch_by_transcript_id($tv-&gt;transcript-&gt;dbID);
-		print ",",$gene-&gt;stable_id if (defined $gene-&gt;external_name); # and the external gene name	   
-
-	    }
-	}
-	print "\n";
+  my $vf = shift; 
+  
+  # get all TranscriptVariation objects: might be more than 1 !!!
+  my $transcript_variations = $vf-&gt;get_all_TranscriptVariations; #get ALL the effects of the variation in 
+                                                                    # different Transcripts
+  if (defined $transcript_variations){
+    foreach my $tv (@{$transcript_variations}){
+      print ",", $tv-&gt;pep_allele_string if (defined $tv-&gt;pep_allele_string);
+                                              # the AA change, but only if it is in a coding region
+      my $gene = $gene_adaptor-&gt;fetch_by_transcript_id($tv-&gt;transcript-&gt;dbID);
+      print ",",$gene-&gt;stable_id if (defined $gene-&gt;external_name); # and the external gene name
+    }
+  }
+  print "\n";
 }
 exit 0;
 </pre>
@@ -359,10 +363,9 @@ my $ldFeatureContainerAdaptor = $dbVariation-&gt;get_LDFeatureContainerAdaptor; 
 my $ldFeatureContainer = $ldFeatureContainerAdaptor-&gt;fetch_by_Slice($slice,$population); #retrieve all LD values in the region
 
 foreach my $r_square (@{$ldFeatureContainer-&gt;get_all_r_square_values}){
-    if ($r_square-&gt;{r2} &gt; 0.8){ #only print high LD, where high is defined as r2 &gt; 0.8
-	print "High LD between variations ", $r_square-&gt;{variation1}-&gt;variation_name,"-",$r_square-&gt;{variation2}-&gt;variation_name, "\n";
-	
-    }
+  if ($r_square-&gt;{r2} &gt; 0.8){ #only print high LD, where high is defined as r2 &gt; 0.8
+    print "High LD between variations ", $r_square-&gt;{variation1}-&gt;variation_name,"-", $r_square-&gt;{variation2}-&gt;variation_name, "\n";
+  }
 }
 exit 0;
 </pre>
@@ -401,11 +404,13 @@ my $strain_name = "129X1/SvJ"; #mouse strain name
 my $exon_adaptor = $dbCore-&gt;get_ExonAdaptor; #get adaptor for Exon objects
 
 my $exon = $exon_adaptor-&gt;fetch_by_stable_id($exon_stable_id); #get exon object
-print "Reference sequence: ", substr($exon-&gt;seq-&gt;seq,0,5), "...", substr($exon-&gt;seq-&gt;seq,82,5),"...",substr($exon-&gt;seq-&gt;seq,90,5),"...", "\n"; #print exon sequence
+print "Reference sequence: ", substr($exon-&gt;seq-&gt;seq,0,5), "...", substr($exon-&gt;seq-&gt;seq,82,5),"...",
+  substr($exon-&gt;seq-&gt;seq,90,5),"...", "\n"; #print exon sequence
 
 my $strainSlice = $exon-&gt;feature_Slice-&gt;get_by_strain($strain_name); #get strainSlice for the exon
 #print the strain sequence for that exon
-print "Strain sequence:    ", substr($strainSlice-&gt;seq,0,5), "...", substr($strainSlice-&gt;seq,82,5),"...",substr($strainSlice-&gt;seq,90,5),"...", "\n";
+print "Strain sequence:    ", substr($strainSlice-&gt;seq,0,5), "...", substr($strainSlice-&gt;seq,82,5),"...",
+  substr($strainSlice-&gt;seq,90,5),"...", "\n";
 my $afs = $strainSlice-&gt;get_all_AlleleFeatures_Slice(); #get AlleleFeature between reference and strain sequence in the exon
 foreach my $af (@{$afs}){
   print "Allele Feature start-end-allele_string: ",$af-&gt;start,"-",$af-&gt;end,"-",$af-&gt;allele_string,"\n";
