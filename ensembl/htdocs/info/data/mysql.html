@@ -1,0 +1,35 @@
+<html>
+<head>
+<title>Public MySQL Server</title>
+</head>
+
+<body>
+
+<h1>The Ensembl public MySQL Server</h1>
+
+<p>For large amounts of data and more detailed analysis, we recommend you use our 
+publicly-accessible MySQL server, <strong>ensembldb.ensembl.org</strong>,
+which you can access as user 'anonymous'.</p>
+
+<p>There are two options for retrieving data from this database:</p>
+
+<dl>
+<dt>Perl API</dt>
+<dd>The easiest option is to use the Ensembl <a href="/info/data/api/">Perl API</a>. 
+The API uses an object-oriented approach to model real biological objects such as genes, 
+transcripts and 'slices' of DNA sequence, making it straightforward for you to write 
+scripts that retrieve and analyze data.</dd>
+<dt>MySQL client</dt>
+<dd>Alternatively, you can use a MySQL <a href="http://dev.mysql.com/downloads/mysql/5.0.html#downloads">client program</a> to query the database directly. However this does require knowledge of the
+complex <a href="/info/data/api/">database schemas</a> used by Ensembl, so we only recommend 
+it if you are unable to install our API (e.g. if you have no access to Perl).<br />
+<strong>Important note:</strong> From release 48 you need a MySQL5-compatible client and 
+to connect to port 5306; releases 47 and earlier are on MySQL4 and use the standard port (3306).</dd>
+</dl>
+
+<p class="notice center">All data produced by the Ensembl project is 
+<a href="/info/about/legal/">freely available</a> for your own use.</p>
+
+
+</body>
+</html>

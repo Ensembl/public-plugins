@@ -1,0 +1,137 @@
+<html>
+<head>
+<title>FTP Download</title>
+</head>
+
+<body>
+
+<h2>The Ensembl FTP Server</h2>
+
+<p>If required, entire databases can be downloaded from our FTP site 
+in a variety of formats, from flat files to MySQL dumps. Please be aware that these 
+files can run to many gigabytes of data.</p>
+
+<p>
+<strong>Please note:</strong>
+Ensembl supports downloading of many correlation tables via the highly
+customisable
+<a href="/biomart/martview">BioMart</a> data mining tool.
+You may find exploring this web-based data mining tool easier than extracting
+information from our normalised database dumps.
+</p>
+
+<ul>
+<li><a href="ftp_links.html">Table of links to Ensembl FTP files</a></li>
+<li><a href="ftp://ftp.sanger.ac.uk/pub/vega/">Vega FTP server</a></li>
+</ul>
+
+<p>For a list of which databases are needed for an Ensembl mirror site, please see the
+<a href="/info/docs/webcode/install/ensembl-data.html">website installation instructions</a>.</p>
+
+<h2>FTP directory structure</h2>
+
+<p>
+The URL
+<a href="ftp://ftp.ensembl.org/pub/" target="external">ftp://ftp.ensembl.org/pub/</a> is the basis of the directory structure outlined below.
+The structure is also described in the FTP site
+<a href="ftp://ftp.ensembl.org/pub/README">README</a>.
+The latest data sets are available via directories prefixed
+'<strong>current_</strong>'.
+For example 'current_embl' will always point to the latest data release files in EMBL format.
+</p>
+
+<p>
+The FTP directory has the following basic structure, although not all
+information is neccessarily available for each species.
+</p>
+
+<pre>
+
+   |-- embl       Gene predictions annotated on genomic DNA slices of 1 Mb in EMBL format.
+   |   |
+   |   |-- species
+   |
+   |
+   |-- emf            Alignment dumps in EMF format
+   |   |
+   |   |-- ensembl_compara        * protein trees and protein multiple alignments
+   |   |                            underlying orthologue/paralogue predictions
+   |   |--species                 * resequencing data
+   |
+   |
+   |-- fasta        Gene predictions in FASTA datatabase format
+   |   |
+   |   |--species
+   |      |
+   |      |-- cdna         * Transcript (cDNA) predictions
+   |      |-- dna          * Genomic DNA in assembled entities
+   |      |-- pep          * Translation (peptide) predictions
+   |      |-- rna          * Non-coding RNA predictions
+   |
+   |
+   |-- genbank        Gene predictions annotated on genomic DNA slices of 1 Mb in GenBank format.
+   |   |
+   |   |-- species
+   |
+   |
+   |-- gtf        Gene annotation in GTF format
+   |
+   |-- mysql          MySQL database table text dumps
+       |
+       |-- species_core       General genome annotation information
+       |
+       |                * Genome sequence assembly
+       |                * Ensembl gene predictions
+       |                * Ab initio gene predictions
+       |                * Marker information
+       |                * ...
+       |
+       |-- species_otherfeatures  Additional genome annotation
+       |
+       |                * Gene predictions based on EST information
+       |                * ...
+       |
+       |-- species_variation  Genetic variation information
+       |-- species_vega       Manually curated gene sets
+       |-- species_cdna       cDNA to genome alignments based on the latest EMBL database
+       |
+       |-- ensembl_compara      Cross-species comparative genomics data:
+       |
+       |                          * Orthologue/paralogue predictions
+       |                          * Protein families
+       |                          * Whole genome alignments
+       |                          * Synteny information
+       |
+       |-- ensembl_go           Gene Ontology database
+       |
+       |-- ensembl_web_user_db  SQL table definition for server-side user config database
+       |
+       |-- ensembl_website        Ensembl web site database:
+       |                            * Context-sensitive help articles
+       |                            * News articles
+       |                            * Mini-ads
+       |-- compara_mart_homology     Orthologue/paralogue predictions
+       |
+       |-- compara_mart_multiple_ga  Constrained elements predictions
+       |
+       |-- compara_mart_pairwise_ga  Whole genome pairwise alignments
+       |
+       |-- ensembl_mart              Cross-species data mining tables
+       |
+       |-- genomic_features_mart     Clone data sets
+       |
+       |-- sequence_mart             Genome sequences
+       |
+       |-- snp_mart                  Genetic variation information
+       |
+       |-- vega_mart                 Manually curated gene sets
+
+</pre>
+
+
+<p class="notice center">All data produced by the Ensembl project is
+<a href="/info/about/legal/">freely available</a> for your own use.</p>
+
+
+</body>
+</html>
