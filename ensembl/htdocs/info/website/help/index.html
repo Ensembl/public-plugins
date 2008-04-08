@@ -1,0 +1,92 @@
+<html>
+<head>
+<title>Help</title>
+</head>
+
+<body>
+
+<h1>Ensembl Online Help</h1>
+
+<div class="col-wrapper">
+  <div class="col2">
+
+    <div class="box box1">
+    <h2>Search our Help database</h2>
+
+    <form onSubmit="return( on_submit( helpsearch_vars ))" name="helpsearch" action="/Site/Help/Results" id="helpsearch" method="get">
+    <dl>
+    <dt><label for="helpsearch_1">Search for:</label></dt>
+      <dd><input type="text" name="kw" value="" id="helpsearch_1" size="20" class="normal" onKeyUp="os_check('String',this,0)" onChange="os_check( 'String', this, 0 )"  /></dd>
+    <dt><label for="helpsearch_2">Highlight search term(s)</label></dt>
+      <dd><input type="checkbox" name="hilite" id="helpsearch_2" value="yes" /></dd>
+    <dt></dt>
+      <dd><input type="submit" name="submit" value="Go" class="form-button" /></dd>
+    </dl>
+    </form>
+
+    <h3>Search Tips</h3>
+    <ul>
+    <li>Words shorter than 4 characters in length (eg SNP) are ignored.</li>
+    <li>Words that occur in more than 50% of the records are ignored.</li>
+    <li>Wildcard characters are not available.</li>
+    </ul>
+
+    </div>
+  </div>
+
+  <div class="col2">
+    <div class="box box0">
+    <h2>FAQs</h2>
+    <h3>Top 3 Frequently Asked Questions</h3>
+    <ul>
+    <li>How can I export the sequence from my favourite gene?<br /><a href="">See answer &rarr;</a></li> 
+    <li>What's the best way to extract a large dataset from Ensembl?<br /><a href="">See answer &rarr;</a></li> 
+    <li><br /><a href="">See answer &rarr;</a></li> 
+    </ul>
+    <p><a href="faq.html">More...</a></p>
+    </div>
+  </div>
+
+</div>
+
+<div class="col-wrapper">
+  <div class="col2">
+    <div class="box box0">
+    <h2>Glossary of Terms and Abbreviations</h2>
+
+    <form onSubmit="return( on_submit( glossarysearch_vars ))" name="glossarysearch" action="/common/help/results" id="glossarysearch" method="get">
+    <dl>
+      <dt><label for="glossarysearch_1">Search for:</label></dt>
+        <dd><input type="text" name="kw" value="" id="glossarysearch_1" size="20" class="normal" onKeyUp="os_check('String',this,0)" onChange="os_check( 'String', this, 0 )"  /></dd>
+      <dt><label for="glossarysearch_2">Highlight search term(s)</label></dt>
+        <dd><input type="checkbox" name="hilite" id="glossarysearch_2" value="yes" /></dd>
+      <dt></dt>
+        <dd><input type="submit" name="submit" value="Go" class="form-button" /></dd>
+    </dl>
+    </form>
+    <p>View <a href="glossary.html">complete list &rarr;</a></p>
+    </div>
+  </div>
+
+  <div class="col2">
+    <div class="box box0">
+    <h2>Supported browsers</h2>
+    <p>The following browsers are fully supported, i.e. all site features including
+JavaScript and CSS styles should work properly:</p>
+    <ul>
+      <li>Firefox - all versions</li>
+      <li>Mozilla 1/Netscape 6 (and higher) - all versions</li>
+      <li>Internet Explorer 6.0 (and higher) for Windows</li>
+      <li>Camino - Mac</li>
+      <li>Safari - Mac</li>
+      <li>Opera 7 (and higher) - all versions</li>
+    </ul>
+    <p>We recommend <a href="http://www.mozilla.org/products/firefox/" title="Get Firefox!">Firefox</a> for browsing Ensembl.</p>
+
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
