@@ -1,0 +1,100 @@
+<html>
+<head>
+<title>Changing the appearance of your Ensembl website</title>
+</head>
+
+<body>
+
+<h1>Changing the appearance of your Ensembl website</h1>
+
+<p>
+Here at the Ensembl project, in addition to www.ensembl.org  we run many different 
+websites based on Ensembl code, including public sites such as pre!, Vega and 
+the Ensembl archives, and private sites used for internal development.
+In order to distinguish these sites we use plugins to alter the colour scheme
+and/or site logo, in addition to the changes in content. For example, the Vega site 
+is blue, pre! is turquoise, and the archives are lilac.
+</p>
+
+<p>
+You may find it useful to do something similar with an Ensembl mirror,
+so that your users know they are looking at a local copy and not the actual
+Ensembl site.
+</p>
+
+<p>In the examples below, we'll assume that you are adding these changes
+to the normal <code>/public-plugins/mirror</code> directory.</p>
+
+<p><strong>Important note</strong>: if you make any changes to .ini files,
+you need to remove <code>/conf/config.packed</code> before restarting the
+server, to ensure your changes are recompiled.</p> 
+
+<h2>Changing the site logo</h2>
+
+<p>The Ensembl logo graphic can be found in <code>/htdocs/img/</code> directory.
+First you should make a directory</p>
+
+<p><code>/public-plugins/mirror/htdocs/img/</code></p>
+
+<p>and copy your logo into it. Ideally your logo should be around 
+40 pixels high, so that it does not break the template layout.</p> 
+
+<p>You will then need to add the following lines to 
+your <code>/public-plugins/mirror/conf/ini-files/DEFAULTS.ini</code> file,
+substituting the appropriate parameters:</p>
+
+<pre class="code">
+[ENSEMBL_STYLE]
+SITE_LOGO               = /img/mylogo.gif
+SITE_LOGO_WIDTH         = 100
+SITE_LOGO_HEIGHT        = 40
+SITE_LOGO_ALT           = Ensembl mirror
+SITE_LOGO_HREF          = /ensembl/             ; Optional (see note below) 
+</pre>
+
+<p>The <code>SITE_LOGO_HREF</code> parameter is only needed if your Ensembl mirror does not occupy the root
+of the host domain - omit this line to use the default link "/"</p>
+
+<h2>Changing the colour scheme</h2>
+
+<p>The colour scheme can be altered by adding the following to
+<code>/public-plugins/mirror/conf/ini-files/DEFAULTS.ini</code>
+(you can omit the [ENSEMBL_STYLE] header if you already have
+a custom logo defined, as above):
+
+<pre class="code">
+[ENSEMBL_STYLE]
+
+BACKGROUND1  = 333333 ; Edge colour for navigation menu / darkest background
+BACKGROUND2  = 666666 ;
+BACKGROUND3  = 999999 ; background colour used for LH navigation bar
+BACKGROUND4  = cccccc ; Light colour background used for dynamic images
+BACKGROUND5  = eeeeee ; Lightest colour background used for dynamic images
+
+DEFAULT_ICON = /img/bullet.gif ; image used for LH buttons.
+
+HEADING      = 999999 ; colour used for headings / buttons
+SPECIESNAME  = 666666 ; colour used for scriptname heading
+
+LINK         = 0000cc ;
+LINK_VISIT   = 993399 ;
+LINK_HOVER   = cc0000 ; colour used for active / hover links;
+
+RELEASE_BG   = 999999 ; This is the colour of the release bar
+RELEASE_EDGE = 333333 ; This is the colour of the edge of the release bar
+
+CONTIGBLUE1  = 368ec9 ; Contig-colours (light)
+CONTIGBLUE2  = 02599c ; Contig-colours (dark)
+
+HIGHLIGHT1   = ffff99 ; Highlight colour (pale)
+HIGHLIGHT2   = ffff66 ; Highlight colour (vivid)
+</pre>
+
+<p>Simple alter the hex values to the colours you want. These placeholder 
+values will be compiled into the Ensembl css files on server startup.</p>
+
+<p>Note: changing the bullet graphic is optional, but you may find that
+the default bullet does not look good on a different background colour!</p>
+
+</body>
+</html>
