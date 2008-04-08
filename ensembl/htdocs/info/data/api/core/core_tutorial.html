@@ -966,7 +966,7 @@ its name and prints out their location and other information:
 my $mf_adaptor = $registry-&gt;get_adaptor( 'Human', 'Core', 'MiscFeature' );
 
 my @clones =
-  @{ $mf_adaptor-&gt;fetch_all_by_attribute_type_value( 'Name', 'RP11-62N12' ) };
+  @{ $mf_adaptor-&gt;fetch_all_by_attribute_type_value( 'clone_name', 'RP11-62N12' ) };
 
 while ( my $clone = shift @clones ) {
     my $slice = $clone-&gt;slice();
