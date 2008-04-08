@@ -11,8 +11,13 @@ sub render {
   my ($class, $request) = @_;
 
   my $SD = $ENSEMBL_WEB_REGISTRY->species_defs;
-  
-  my $html = qq(
+ 
+  my $html;
+  my @movies;
+
+  if (scalar(@movies)) {
+ 
+    $html = qq(
 <table class="ss tint">
 <tr>
   <th style="width:60%">Title</th>
@@ -20,9 +25,10 @@ sub render {
 </tr>
 );
 
-  $html .= "</table>";
+    ## Loop through movie records and output table rows
 
-## Loop through movie records and output table rows
+    $html .= "</table>";
+  }
 
   return $html;
 }
