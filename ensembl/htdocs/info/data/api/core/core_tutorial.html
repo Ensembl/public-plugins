@@ -164,8 +164,8 @@ foreach my $gene ( @{ $first_clone-&gt;get_all_Genes() } ) {
 }
 
 # More memory efficient way of doing the same thing
-my @genes = @{ $first_clone-&gt;get_all_Genes() };
-while ( my $gene = shift @genes ) {
+my $genes = $first_clone-&gt;get_all_Genes();
+while ( my $gene = shift @{$genes} ) {
     print $gene-&gt;stable_id(), "\n";
 }
 
@@ -512,8 +512,8 @@ my $daf_adaptor   = $registry-&gt;get_adaptor( 'Human', 'Core', 'DnaAlignFeature
 my $slice = $slice_adaptor-&gt;fetch_by_region( 'chromosome', '20', 10e6, 11e6 );
 
 # Fetch all of the transcripts overlapping chromosome 20, 10MB-11MB
-my @transcripts = @{ $tr_adaptor-&gt;fetch_all_by_Slice($slice) };
-while ( my $tr = shift @transcripts ) {
+my $transcripts = $tr_adaptor-&gt;fetch_all_by_Slice($slice);
+while ( my $tr = shift @{$transcripts} ) {
     my $dbID      = $tr-&gt;dbID();
     my $start     = $tr-&gt;start();
     my $end       = $tr-&gt;end();
@@ -524,8 +524,8 @@ while ( my $tr = shift @transcripts ) {
 }
 
 # Fetch all of the DNA-DNA alignments overlapping chromosome 20, 10MB-11MB
-my @dafs = @{ $daf_adaptor-&gt;fetch_all_by_Slice($slice) };
-while ( my $daf = shift @dafs ) {
+my $dafs = $daf_adaptor-&gt;fetch_all_by_Slice($slice);
+while ( my $daf = shift @{$dafs} ) {
     my $dbID     = $daf-&gt;dbID();
     my $start    = $daf-&gt;start();
     my $end      = $daf-&gt;end();
@@ -605,18 +605,17 @@ sub feature2string
 my $slice_adaptor = $registry-&gt;get_adaptor( 'Human', 'Core', 'Slice' );
 my $slice = $slice_adaptor-&gt;fetch_by_region( 'chromosome', 'X', 1e6, 10e6 );
 
-my @genes = @{ $slice-&gt;get_all_Genes() };
-while ( my $gene = shift @genes ) {
+my $genes = $slice-&gt;get_all_Genes();
+while ( my $gene = shift @{$genes} ) {
     my $gstring = feature2string($gene);
     print "$gstring\n";
 
-    my @transcripts = @{ $gene-&gt;get_all_Transcripts() };
-    while ( my $transcript = shift @transcripts ) {
+    my $transcripts = $gene-&gt;get_all_Transcripts();
+    while ( my $transcript = shift @{$transcripts} ) {
         my $tstring = feature2string($transcript);
         print "\t$tstring\n";
 
-        my @exons = @{ $transcript-&gt;get_all_Exons() };
-        while ( my $exon = shift @exons ) {
+        foreach my $exon ( @{ $transcript-&gt;get_all_Exons() } ) {
             my $estring = feature2string($exon);
             print "\t\t$estring\n";
         }
@@ -693,8 +692,8 @@ a set of protein features from a Translation object.
 <pre class="code">
 $translation = $transcript-&gt;translation();
 
-my @pfeatures = @{ $translation-&gt;get_all_ProteinFeatures() };
-while ( my $pfeature = shift @pfeatures ) {
+my $pfeatures = $translation-&gt;get_all_ProteinFeatures();
+while ( my $pfeature = shift @{$pfeatures} ) {
     my $logic_name = $pfeature-&gt;analysis()-&gt;logic_name();
 
     printf(
@@ -730,15 +729,15 @@ thus they can be used in the same way.
 </p>
 
 <pre class="code">
-my @ptranscripts = @{ $slice-&gt;get_all_PredictionTranscripts() };
+my $ptranscripts = $slice-&gt;get_all_PredictionTranscripts();
 
-while ( my $ptranscript = shift @ptranscripts ) {
+while ( my $ptranscript = shift @{$ptranscripts} ) {
     my @exons = @{ $ptranscript-&gt;get_all_Exons() };
     my $type  = $ptranscript-&gt;analysis()-&gt;logic_name();
 
     printf "%s prediction, has %d exons\n", $type, scalar @exons;
 
-    while ( my $exon = shift @exons ) {
+    foreach my $exon (@exons) {
         printf( "%d - %d (%+d) %d\n",
             $exon-&gt;start(), $exon-&gt;end(), $exon-&gt;strand(), $exon-&gt;phase() );
     }
@@ -915,8 +914,8 @@ foreach my $marker_feature ( @{ $marker-&gt;get_all_MarkerFeatures() } ) {
 }
 
 # Retrieve all marker features in a given region
-my @marker_features = @{ $slice-&gt;get_all_MarkerFeatures() };
-while ( my $marker_feature = shift @marker_features ) {
+my $marker_features = $slice-&gt;get_all_MarkerFeatures();
+while ( my $marker_feature = shift @{$marker_features} ) {
     printf( "%s %s %d-%d\n",
         $marker_feature-&gt;display_id(), $marker_feature-&gt;seq_region_name(),
         $marker_feature-&gt;start(),      $marker_feature-&gt;end() );
@@ -947,11 +946,11 @@ regions on a given slice and prints out their attributes:
 </p>
 
 <pre class="code">
-my @encode_regions = @{ $slice-&gt;get_all_MiscFeatures('encode') };
+my $encode_regions = $slice-&gt;get_all_MiscFeatures('encode');
 
-while ( my $encode_region = shift @encode_regions ) {
+while ( my $encode_region = shift @{$encode_regions} ) {
     my @attributes = @{ $encode_region-&gt;get_all_Attributes() };
-    while ( my $attribute = shift @attributes ) {
+    foreach my $attribute ( @attributes ) {
         printf "%s:%s\n", $attribute-&gt;name(), $attribute-&gt;value();
     }
 }
@@ -965,10 +964,10 @@ its name and prints out their location and other information:
 <pre class="code">
 my $mf_adaptor = $registry-&gt;get_adaptor( 'Human', 'Core', 'MiscFeature' );
 
-my @clones =
-  @{ $mf_adaptor-&gt;fetch_all_by_attribute_type_value( 'clone_name', 'RP11-62N12' ) };
+my $clones =
+  $mf_adaptor-&gt;fetch_all_by_attribute_type_value( 'clone_name', 'RP11-62N12' );
 
-while ( my $clone = shift @clones ) {
+while ( my $clone = shift @{$clones} ) {
     my $slice = $clone-&gt;slice();
 
     printf( "%s %s %d-%d\n",
@@ -977,7 +976,7 @@ while ( my $clone = shift @clones ) {
         $clone-&gt;start(), $clone-&gt;end() );
 
     my @attributes = @{ $clone-&gt;get_all_Attributes() };
-    while ( my $attribute = shift @attributes ) {
+    foreach my $attribute ( @attributes ) {
         printf "\t%s:%s\n", $attribute-&gt;name(), $attribute-&gt;value();
     }
 }
