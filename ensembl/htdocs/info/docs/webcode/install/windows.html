@@ -11,7 +11,7 @@ help, you may find it useful to contact the Ensembl developer community
 via our <a href="http://www.ensembl.org/info/about/contact/mailing.html">mailing list</a>.</div>
 
 <p>In all the following instructions, "Ensembl server root" refers to the directory where you are
-installing the Ensembl website software.</p>
+installing the Ensembl website software. In the examples, we use <code>C:\\src\</code></p>
 
 <h2>Installing software needed by Ensembl</h2>
 
@@ -42,7 +42,6 @@ for installing this particular version of BioPerl.)
 <h2>Installing the Ensembl software</h2>
 
 <ol>
-<li>In your Ensembl server root, make directories <kbd>ensembl</kbd> and <kbd>ensembl-variation</kbd></li>
 <li>At the command prompt:
 <pre class="code">
 cvs -d :pserver:cvsuser@cvs.sanger.ac.uk:/cvsroot/ensembl login
@@ -50,13 +49,12 @@ cvs -d :pserver:cvsuser@cvs.sanger.ac.uk:/cvsroot/ensembl login
 Then enter the password: CVSUSER</li>
 <li>
 <pre class="code">
-cd ensembl
-cvs -d :pserver:cvsuser@cvs.sanger.ac.uk:/cvsroot/ensembl checkout -r branch-ensembl-[[SPECIESDEFS::ENSEMBL_VERSION]] ensembl
-cd ensembl-variation
-cvs -d :pserver:cvsuser@cvs.sanger.ac.uk:/cvsroot/ensembl checkout -r branch-ensembl-[[SPECIESDEFS::ENSEMBL_VERSION]] ensembl-variation
+cvs -d :pserver:cvsuser@cvs.sanger.ac.uk:/cvsroot/ensembl checkout -r branch-ensembl-[[SPECIESDEFS::ENSEMBL_VERSION]] ensembl-api ensembl-website
 </pre>
 </li>
-<li>Define system variable <kbd>PERL5LIB=<var>&lt;server root&gt;</var>\bioperl-live;<var>&lt;server root&gt;</var>:\ensembl\modules;<var>&lt;server root&gt;</var>\ensembl-variation\modules</kbd></li>
+<li>Define system variable <code>PERL5LIB=C:\src\bioperl-live;C:\src\modules;C:\src\ensembl\modules;
+\&nbsp;&nbsp;&nbsp;&nbsp;C:\src\ensembl-compara\modules;C:\src\ensembl-draw\modules;C:\src\ensembl-external\modules;
+\&nbsp;&nbsp;&nbsp;&nbsp;C:\src\ensembl-funcgen\modules;C:\src\ensembl-variation\modules</code></li>
 <li>If existing mysql-driver ("libmysql.dll") doesn't work: replace it, for example, by the one distributed with "php-5-2-3-win32- installer.msi"</li>
 </ol>
 
@@ -64,11 +62,10 @@ cvs -d :pserver:cvsuser@cvs.sanger.ac.uk:/cvsroot/ensembl checkout -r branch-ens
 
 <p>At the command prompt:</p>
 <pre class="code">
-cd ensembl
+cd C:\src\ensembl
 cvs -q update -d -P -r branch-ensembl-[[SPECIESDEFS::ENSEMBL_VERSION]] ensembl
-cd ensembl-variation
-cvs -q update -d -P -r branch-ensembl-[[SPECIESDEFS::ENSEMBL_VERSION]] ensembl-variation
 </pre>
+<p>and so on for each ensembl directory to be updated.</p>
 
 </body>
 </html>
