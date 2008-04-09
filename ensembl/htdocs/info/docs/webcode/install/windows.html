@@ -1,0 +1,73 @@
+<html>
+  <head>
+    <title>Windows</title>
+  </head>
+<body> 
+
+<h1>Additional Installation Instructions for Windows</h1>
+
+<div class="notice">Please note that Windows is not a supported platform - if you require further
+help, you may find it useful to contact the Ensembl developer community
+via our <a href="http://www.ensembl.org/info/about/contact/mailing.html">mailing list</a>.</div>
+
+<p>In all the following instructions, "Ensembl server root" refers to the directory where you are
+installing the Ensembl website software.</p>
+
+<h2>Installing software needed by Ensembl</h2>
+
+<p>If you do not already have Perl, CVS and BioPerl installed on your Windows system, you will need
+to install them first:</p> 
+
+<ol>
+<li>Download/install activeperl (ActivePerl-5.8.8.820-MSWin32-x86-274739.msi)</li>
+<li>Install DBD::mysql</li>
+<li>ownload/install cvs (e.g., TortoiseCVS-1.8.31.msi)</li>
+<li>Add TortoiseCVS directory to "path" system variable</li>
+<li>In your Ensembl server root, make directory <kbd>bioperl-live</kbd></li>
+<li>At the command prompt:
+<pre class="code">
+cvs -d :pserver:cvs@code.open-bio.org:/home/repository/bioperl login
+</pre>
+Then enter the password: cvs</li>
+<li>
+<pre class="code">
+cd bioperl-live
+cvs -d :pserver:cvs@code.open-bio.org:/home/repository/bioperl checkout -r bioperl-release-1-2-3 bioperl-live
+</pre>
+</li>
+</ol>
+
+<h2>Installing the Ensembl software</h2>
+
+<ol>
+<li>In your Ensembl server root, make directories <kbd>ensembl</kbd> and <kbd>enseml-variation</kbd></li>
+<li>At the command prompt:
+<pre class="code">
+cvs -d :pserver:cvsuser@cvs.sanger.ac.uk:/cvsroot/ensembl login
+</pre>
+Then enter the password: CVSUSER</li>
+<li>
+<pre class="code">
+cd ensembl
+cvs -d :pserver:cvsuser@cvs.sanger.ac.uk:/cvsroot/ensembl checkout -r branch-ensembl-[[SPECIESDEFS::ENSEMBL_VERSION]] ensembl
+cd ensembl-variation
+cvs -d :pserver:cvsuser@cvs.sanger.ac.uk:/cvsroot/ensembl checkout -r branch-ensembl-[[SPECIESDEFS::ENSEMBL_VERSION]] ensembl-variation
+</pre>
+</li>
+<li>Define system variable <kbd>PERL5LIB=<var>&lt;server root&gt;</var>\bioperl-live;<var>&lt;server root&gt;</var>:\ensembl\modules;<var>&lt;server root&gt;</var>\ensembl-variation\modules</kbd></li>
+<li>If existing mysql-driver ("libmysql.dll") doesn't work: replace it, for example, by the one distributed with "php-5-2-3-win32- installer.msi"</li>
+</ol>
+
+<h2>Updating your Windows checkout</h2>
+
+<p>At the command prompt:</p>
+<pre class="code">
+cd ensembl
+cvs -q update -d -P -r branch-ensembl-[[SPECIESDEFS::ENSEMBL_VERSION]] ensembl
+cd ensembl-variation
+cvs -q update -d -P -r branch-ensembl-[[SPECIESDEFS::ENSEMBL_VERSION]] ensembl-variation
+</pre>
+
+</body>
+</html>
+  
