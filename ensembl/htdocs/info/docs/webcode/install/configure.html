@@ -7,9 +7,30 @@
 
 <p>
   This section explains the configuration changes you have to
-  make so that Ensembl will run on your local set-up.
+  make so that Ensembl will run on your local set-up.</p>
+  
+<p>
+  N.B. If you installed Ensembl prior to release 31 you will have edited files
+  in the conf directory. From version 32 there is a new
+  approach to configure the site using plugins.
 </p>
 
+<h2>Setting up the "Mirror Plugin"</h2>
+
+<p>
+  In the main <kbd>conf</kbd> directory you will find a file called <strong>Plugins.pm-dist</strong>.
+  Copy this file and name it Plugins.pm (i.e. without the -dist extension).
+  This file sets up any plugins required by the website, including the mirror plugin mentioned above.
+</p>
+
+<pre class="code">
+$SiteDefs::ENSEMBL_PLUGINS = [
+  'EnsEMBL::Mirror'    =&gt; $SiteDefs::ENSEMBL_SERVERROOT.'/public-plugins/mirror',
+  'EnsEMBL::Ensembl'   =&gt; $SiteDefs::ENSEMBL_SERVERROOT.'/public-plugins/ensembl'
+];
+</pre>
+
+<div class="box box1 float-right" style="width:40%">
 <h2>Background: configuration</h2>
 
 <h3>Plugins</h3>
@@ -20,8 +41,6 @@
      The site-wide configuration (Apache config, global settings) 
      is stored in <kbd>conf/SiteDefs.pm</kbd>.  
 </p>
-
-
 
 <p>
   Elsewhere in the documentation you will read about how to <a href="/info/webcode/extend/">extend</a>
@@ -40,20 +59,20 @@
 <p>If you wish to add to or remove from the full list of species on the main 
 <a href="http://www.ensembl.org">ensembl website</a>, please see the documentation on 
 <a href="/info/docs/webcode/extend/">extending Ensembl</a>.</p>
+</div>
 
 
-<h2>Setting up the "Mirror Plugin"</h2>
-<p class="notice">
-  If you installed Ensembl prior to release 31 you will have edited files
-  in the conf directory. From version 32 there is a new
-  approach to configure the site using plugins.
-</p>
+<p>As you can see, the default mirror setup uses two plugins:</p>
+<ul>
+<li><code>public-plugins/ensembl</code>, which contains all the species configuration files, species
+home pages and public documentation</li>
+<li><code>public-plugins/mirror</code>, which contains only the files needed to configure your mirror</li>
+</ul>
 
-<p>
-  In the main <kbd>conf</kbd> directory you will find a file called <strong>Plugins.pm-dist</strong>.
-  Copy this file and name it Plugins.pm (i.e. without the -dist extension).
-  This file sets up the mirror plugin mentioned above.
-</p>
+<p>Note that the array of plugins is in order of precedence, so that in the default setup, the mirror
+plugin  overrides the base Ensembl one. <strong>DO NOT</strong> edit the files in <code>public-plugins/ensembl</code>,
+as your changes may be overwritten when you update to the next release.</p>
+
 <p>
   Now go into the <strong>public-plugins/mirror/conf</strong> directory and
   make the changes listed below to SiteDefs.pm and ini_files/DEFAULTS.ini:
