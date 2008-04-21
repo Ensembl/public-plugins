@@ -12,22 +12,25 @@
 </head>
 <body>
 
-<div class="col-wrapper">
-    [[SCRIPT::EnsEMBL::Web::Document::HTML::HomeSearch]]
+<div class="onecol tinted-box">
+  [[SCRIPT::EnsEMBL::Web::Document::HTML::HomeSearch]]
 </div>
 
-<div class="col-wrapper">
-    <div class="col2">
-    [[SCRIPT::EnsEMBL::Ensembl::Document::HTML::WhatsNew]]
-    [[INCLUDE::ssi/about.html]]
-    </div>
+<div class="twocol-left plain-box">
 
-    <div class="col2">
+  <h2 class="first">Browse a Genome</h2>
+  <p>The <a href="http://www.ensembl.org">Ensembl</a> project produces genome databases
+  for vertebrates and other eukaryotic species, and makes this information
+  freely available online.</p>
+
+  <p>Click on a species name below to browse the data.</p>
     [[SCRIPT::EnsEMBL::Web::Document::HTML::SpeciesList]]
-    </div>
+  <p>Other pre-build species are available in <a href="http://pre.ensembl.org" rel="external">Ensembl <em>Pre<span class="red">!</span></em> &rarr;</a></p>
+
 </div>
 
-<div class="col-wrapper">
+<div class="twocol-right plain-box">
+  [[SCRIPT::EnsEMBL::Ensembl::Document::HTML::WhatsNew]]
 </div>
 
 </body>
