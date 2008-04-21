@@ -22,7 +22,6 @@ sub admin_home {
 <li><strong>Glossary</strong>: <a href="/common/web/glossary?dataview=add">Add</a> | <a href="/common/web/glossary">Edit</a></li>
 </ul>
 );
-  }
 
   $panel->print($html);
   return 1;
