@@ -25,7 +25,7 @@ sub render {
     $sd->ASSEMBLY_ID
   );
 
-  $_[0]->print( qq(
+  $_[0]->print( qq(<br />
     <a href="http://www.ensembl.org/info/about/">About&nbsp;Ensembl</a> | 
     <a href="http://www.ensembl.org/info/about/contact/">Contact&nbsp;Us</a> | 
     <a href="/info/website/help/">Help</a> 
