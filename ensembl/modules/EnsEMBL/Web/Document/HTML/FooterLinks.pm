@@ -1,4 +1,7 @@
 package EnsEMBL::Web::Document::HTML::FooterLinks;
+
+### Replacement footer links for www.ensembl.org
+
 use strict;
 use CGI qw(escapeHTML);
 use EnsEMBL::Web::Document::HTML;
@@ -11,7 +14,7 @@ sub render {
 
   $_[0]->printf(
     q(
-    <div class="twocol-right right">
+    <div class="twocol-right right unpadded">
     <p>%s release %d - %s - %s
     <a class="modal_link" id="p_link" href="sorry.html">Permanent link</a> -
     <a class="modal_link" id="a_link" href="sorry.html">View in archive site</a></p>),
