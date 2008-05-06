@@ -43,12 +43,15 @@ the "Export..." links in the left-hand menu, and select your output options.</p>
 website, as this degrades the service for other web servers. The public MySQL server 
 (see below) is provided specifically for this purpose. Thank you.</p>
 
-<h3 class="boxed" id="mysql">Public MySQL server</h3>
+<h3 class="boxed" id="mysql">Public MySQL servers</h3>
 
-<p>Ensembl maintains a public MySQL database server, <strong>ensembldb.ensembl.org</strong>,
+<p>Ensembl maintains two public MySQL database servers,
 which you can access as user 'anonymous'.</p>
 
-<p>There are two options for retrieving data from this database:</p>
+<h4>ensembldb.ensembl.org</h4>
+
+<p>This server hosts the same Ensembl databases as www.ensembl.org. There are two options for 
+retrieving data from this server:</p>
 
 <dl class="spaced">
 <dt>Perl API</dt>
@@ -64,6 +67,15 @@ it if you are unable to install our API (e.g. if you have no access to Perl).<br
 to connect to port 5306; releases 47 and earlier are on MySQL4 and use the standard port (3306).</dd>
 </dl>
 
+<h4>martdb.ensembl.org</h4>
+
+<p>Mart data is stored on a separate server. You can extract data using a MySQL client program; note that
+non-standard ports are used:
+
+<ul>
+<li>for releases up to and including version 47 (MySQL 4), use port 3316</li>
+<li>for releases from version 48 onwards (MySQL 5), use port 5316</li>
+</ul>
 
 <h3 class="boxed" id="ftp">FTP</h3>
 
