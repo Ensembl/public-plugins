@@ -19,7 +19,12 @@ sub render {
 
   my $html = qq(<div class="species-news">
       <h2 class="first">What's New in Ensembl Release 50</h2>
-      <p class="red">No news yet!</p>
+      <ul>
+      <li>Cleaner interface!</li>
+      <li>Exciting new navigation!</li>
+      <li>Faster!</li>
+      <li>Some other stuff we haven't done yet...</li>
+      </ul>
     </div>
 );
 
