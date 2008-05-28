@@ -18,7 +18,15 @@ which you can access as user 'anonymous'.</p>
 <dd>The easiest option is to use the Ensembl <a href="/info/data/api/">Perl API</a>. 
 The API uses an object-oriented approach to model real biological objects such as genes, 
 transcripts and 'slices' of DNA sequence, making it straightforward for you to write 
-scripts that retrieve and analyze data.</dd>
+scripts that retrieve and analyze data.
+<pre class="code">
+# find gene stable ids corresponding to the MGI symbol 'Tyr'
+my $gene_adaptor = $dbCore-&gt;get_GeneAdaptor();
+my @genes = @{ $gene_adaptor-&gt;fetch_all_by_external_name('Tyr') };
+</pre>
+<p>Additional code examples and suggestions can be found in the 
+<a href="http://listserver.ebi.ac.uk/mailing-lists-archives/ensembl-dev/threads.html" rel="external">ensembl-dev mailing list archives</a>.</dd>
+
 <dt>MySQL client</dt>
 <dd>Alternatively, you can use a MySQL <a href="http://dev.mysql.com/downloads/mysql/5.0.html#downloads">client program</a> to query the database directly. However this does require knowledge of the
 complex <a href="/info/data/api/">database schemas</a> used by Ensembl, so we only recommend 
