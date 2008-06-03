@@ -10,22 +10,36 @@ use EnsEMBL::Web::RegObj;
 our @ISA = qw(EnsEMBL::Web::Document::HTML);
 
 sub render {
+  my $self = shift;
   my @time = localtime();
   my $year = @time[5] + 1900;
 
-  ## Stable archive link for current release
-  my $species_defs = $ENSEMBL_WEB_REGISTRY->species_defs;
-  my $stable_URL = sprintf "http://%s.archive.ensembl.org%s",
-      CGI::escapeHTML($species_defs->ARCHIVE_VERSION), CGI::escapeHTML($ENV{'REQUEST_URI'});
+  my $sd = $ENSEMBL_WEB_REGISTRY->species_defs;
 
-  $_[0]->print( qq(
+  my $URL = sprintf '/%s/%s/%s?%s', $ENV{'ENSEMBL_SPECIES'},$ENV{'ENSEMBL_TYPE'},$ENV{'ENSEMBL_ACTION'},$ENV{'QUERY_STRING'};
+
+  $self->printf(
+    q(
     <div class="twocol-left left unpadded">
-      <a href="http://www.sanger.ac.uk"><img src="/img/wtsi_rev.png" alt="WTSI" title="Wellcome Trust Sanger Institute" /></a>
-      <a href="http://www.ebi.ac.uk"><img src="/img/ebi_new.gif" alt="EMBL-EBI" title="European BioInformatics Institute" /></a>
+        %s release %d - %s - %s
+        <a class="modal_link" id="p_link" href="sorry.html">Permanent link</a> -
+        <a class="modal_link" id="a_link" href="sorry.html">View in archive site</a>
+      ),
+    $sd->ENSEMBL_SITE_NAME, $sd->ENSEMBL_VERSION,
+    $sd->ENSEMBL_RELEASE_DATE,
+    '',
+#    $sd->SPECIES_COMMON_NAME ? sprintf( '%s <i>%s</i> %s -', $sd->SPECIES_COMMON_NAME, $sd->SPECIES_BIO_NAME, $sd->ASSEMBLY_ID ): '',
+#    $sd->SPECIES_BIO_NAME,
+#    $sd->ASSEMBLY_ID,
+    $URL,
+    $URL,
+    $URL,
+    $URL
+  );
+
+  $self->print( qq(<br />
       &copy; $year <a href="http://www.sanger.ac.uk/" class="nowrap">WTSI</a> /
-      <a href="http://www.ebi.ac.uk/" style="white-space:nowrap">EBI</a>.<br />
-      Ensembl receives major funding from the Wellcome Trust.<br />
-      Our <a href="/info/about/credits.html">credits page</a> includes additional current and previous funding.
+      <a href="http://www.ebi.ac.uk/" style="white-space:nowrap">EBI</a>
     </div>) 
   );
 }
