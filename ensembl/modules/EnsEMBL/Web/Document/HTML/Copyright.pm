@@ -9,6 +9,10 @@ use EnsEMBL::Web::RegObj;
 
 our @ISA = qw(EnsEMBL::Web::Document::HTML);
 
+sub new { return shift->SUPER::new( 'sitename' => '?' ); }
+
+sub sitename    :lvalue { $_[0]{'sitename'};   }
+
 sub render {
   my $self = shift;
   my @time = localtime();
@@ -25,7 +29,7 @@ sub render {
         <a class="modal_link" id="p_link" href="sorry.html">Permanent link</a> -
         <a class="modal_link" id="a_link" href="sorry.html">View in archive site</a>
       ),
-    $sd->ENSEMBL_SITE_NAME, $sd->ENSEMBL_VERSION,
+    $sd->ENSEMBL_SITETYPE, $sd->ENSEMBL_VERSION,
     $sd->ENSEMBL_RELEASE_DATE,
     '',
 #    $sd->SPECIES_COMMON_NAME ? sprintf( '%s <i>%s</i> %s -', $sd->SPECIES_COMMON_NAME, $sd->SPECIES_BIO_NAME, $sd->ASSEMBLY_ID ): '',
