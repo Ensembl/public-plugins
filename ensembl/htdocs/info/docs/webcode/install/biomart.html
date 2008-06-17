@@ -30,8 +30,42 @@ end.</p>
   There are a number of reasons for this - mainly due to the size of the
   Apache processes Mart produces (these are all 0.5G) and the number of tables
   in the Mart database. These both have adverse effects on the performance of
-  the Ensembl website - so we have ring-fenced hardware specifically for
+  the Ensembl website, so we have ring-fenced hardware specifically for
   running BioMart.
+</p>
+<p>
+One solution is to use a reverse proxy to dispatch in-bound network
+traffic to a set of servers, while presenting a single interface to the caller (see Apache's
+<a href="http://httpd.apache.org/docs/2.0/mod/mod_proxy.html">mod-proxy documentation</a>),
+and <a href="http://httpd.apache.org/docs/2.0/mod/mod_rewrite.html">mod_rewrite</a> 
+to redirect users to the separate Mart machine.</p>
+
+<pre class="code">
+  RewriteEngine     on
+  ProxyPreserveHost On
+
+# requests going to the server
+  RewriteRule  ^/biomart/(martview.*)      http://your.mart.server/biomart/$1  [P,L]
+  RewriteRule  ^/biomart/(martservice.*)   http://your.mart.server/biomart/$1  [P,L]
+  RewriteRule  ^/biomart/(martresults.*)   http://your.mart.server/biomart/$1  [P,L]
+
+# requests coming back from server
+  ProxyPassReverse  / http://your.mart.server/
+</pre>
+
+<p>If you decide to do this, you also need to:</p>
+ 
+<ul>
+<li>Remove EnsEMBL::Mart from Plugins.pm to remove Biomart from the
+Ensembl Webserver</li> 
+<li>Keep the changes as described below to achieve the Ensembl look'n'feel and 
+temporary file management</li> 
+<li>Copy modules/EnsEMBL/Web/Document/HTML/ToolLinks.pm to your plugin and comment out the line:
+<pre class="code">if ($ENV{'ENSEMBL_MART_ENABLED'}) {
+</pre>
+and the closing curly bracket two lines below it.
+</li>
+</ul> 
 </p>
 
 <h2>Changes to code post CVS checkout</h2>
