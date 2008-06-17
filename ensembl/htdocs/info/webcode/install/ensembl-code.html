@@ -72,6 +72,14 @@ $ cvs -d :pserver:cvsuser@cvs.sanger.ac.uk:/cvsroot/CVSmaster co -r branch-ensem
 <h3 class="boxed"><a id="cvs_cobiomart">To install the BioMart modules</a> (BioMart 0.6)</h3>
 <ol start="4">
 <li>
+<p>If you haven't already done so, log into the Sanger CVS server (using a password of "CVSUSER"):</p>
+<pre class="code">
+$ cvs -d :pserver:cvsuser@cvs.sanger.ac.uk:/cvsroot/CVSmaster  login
+Logging in to :pserver:cvsuser@cvs.sanger.ac.uk:2401/cvsroot/CVSmaster
+CVS password: CVSUSER 
+</pre>
+</li>
+<li>
 <p>Check the BioMart code out of CVS (downloads the code from the Sanger CVS server onto your local
 machine):</p>
 <pre class="code">
@@ -82,7 +90,7 @@ $ cvs -d :pserver:cvsuser@cvs.sanger.ac.uk:/cvsroot/biomart co -r release-0_6 bi
 <p>More information on  <a href="biomart.html">tweaking and configuring BioMart to work within the Ensembl website</a> is available, for general instructions on installing biomart (including creating the cached configuration file and templates see the biomart website).</p>
 
 <h3 class="boxed">To install the BioPerl modules (BioPerl 1.2.3)</h3>
-<ol start="5">
+<ol start="6">
 <li>
   <p>Log into the BioPerl CVS server (using a password of: cvs):</p>
   <kbd>cvs -d :pserver:cvs@cvs.open-bio.org:/home/repository/bioperl login</kbd>
