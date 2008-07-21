@@ -11,6 +11,7 @@
 <th>MySQL</th>
 <th>GTF</th>
 <th>EMF</th>
+<th>GFF</th>
 </tr>
 
 
@@ -24,6 +25,7 @@
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_mysql/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_gtf/">FTP</a></td>
 <td>-</td>
+<td>-</td>
 </tr>
 	    
 <tr>
@@ -35,6 +37,7 @@
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_genbank/anopheles_gambiae/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_mysql/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_gtf/">FTP</a></td>
+<td>-</td>
 <td>-</td>
 </tr>
 	    
@@ -48,6 +51,7 @@
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_mysql/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_gtf/">FTP</a></td>
 <td>-</td>
+<td>-</td>
 </tr>
 	    
 <tr>
@@ -59,6 +63,7 @@
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_genbank/caenorhabditis_elegans/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_mysql/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_gtf/">FTP</a></td>
+<td>-</td>
 <td>-</td>
 </tr>
 	    
@@ -72,6 +77,7 @@
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_mysql/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_gtf/">FTP</a></td>
 <td>-</td>
+<td>-</td>
 </tr>
 	    
 <tr>
@@ -83,6 +89,7 @@
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_genbank/cavia_porcellus/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_mysql/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_gtf/">FTP</a></td>
+<td>-</td>
 <td>-</td>
 </tr>
 	    
@@ -96,6 +103,7 @@
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_mysql/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_gtf/">FTP</a></td>
 <td>-</td>
+<td>-</td>
 </tr>
 	    
 <tr>
@@ -107,6 +115,7 @@
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_genbank/ciona_savignyi/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_mysql/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_gtf/">FTP</a></td>
+<td>-</td>
 <td>-</td>
 </tr>
 	    
@@ -120,6 +129,7 @@
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_mysql/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_gtf/">FTP</a></td>
 <td>-</td>
+<td>-</td>
 </tr>
 	    
 <tr>
@@ -131,6 +141,7 @@
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_genbank/dasypus_novemcinctus/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_mysql/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_gtf/">FTP</a></td>
+<td>-</td>
 <td>-</td>
 </tr>
 	    
@@ -144,6 +155,7 @@
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_mysql/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_gtf/">FTP</a></td>
 <td>-</td>
+<td>-</td>
 </tr>
 	    
 <tr>
@@ -155,6 +167,7 @@
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_genbank/echinops_telfairi/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_mysql/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_gtf/">FTP</a></td>
+<td>-</td>
 <td>-</td>
 </tr>
 	    
@@ -168,6 +181,7 @@
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_mysql/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_gtf/">FTP</a></td>
 <td>-</td>
+<td>-</td>
 </tr>
 	    
 <tr>
@@ -179,6 +193,7 @@
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_genbank/erinaceus_europaeus/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_mysql/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_gtf/">FTP</a></td>
+<td>-</td>
 <td>-</td>
 </tr>
 	    
@@ -192,6 +207,7 @@
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_mysql/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_gtf/">FTP</a></td>
 <td>-</td>
+<td>-</td>
 </tr>
 	    
 <tr>
@@ -203,6 +219,7 @@
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_genbank/gallus_gallus/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_mysql/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_gtf/">FTP</a></td>
+<td>-</td>
 <td>-</td>
 </tr>
 	    
@@ -216,6 +233,7 @@
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_mysql/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_gtf/">FTP</a></td>
 <td>-</td>
+<td>-</td>
 </tr>
 	    
 <tr>
@@ -228,6 +246,7 @@
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_mysql/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_gtf/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_emf/homo_sapiens/">FTP</a></td>
+<td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_functional_genomics/homo_sapiens/">FTP</a></td>
 </tr>
 	    
 <tr>
@@ -239,6 +258,7 @@
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_genbank/loxodonta_africana/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_mysql/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_gtf/">FTP</a></td>
+<td>-</td>
 <td>-</td>
 </tr>
 	    
@@ -252,6 +272,7 @@
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_mysql/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_gtf/">FTP</a></td>
 <td>-</td>
+<td>-</td>
 </tr>
 	    
 <tr>
@@ -263,6 +284,7 @@
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_genbank/microcebus_murinus/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_mysql/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_gtf/">FTP</a></td>
+<td>-</td>
 <td>-</td>
 </tr>
 	    
@@ -276,6 +298,7 @@
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_mysql/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_gtf/">FTP</a></td>
 <td>-</td>
+<td>-</td>
 </tr>
 	    
 <tr>
@@ -288,6 +311,7 @@
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_mysql/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_gtf/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_emf/mus_musculus/">FTP</a></td>
+<td>-</td>
 </tr>
 	    
 <tr>
@@ -299,6 +323,7 @@
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_genbank/myotis_lucifugus/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_mysql/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_gtf/">FTP</a></td>
+<td>-</td>
 <td>-</td>
 </tr>
 	    
@@ -312,6 +337,7 @@
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_mysql/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_gtf/">FTP</a></td>
 <td>-</td>
+<td>-</td>
 </tr>
 	    
 <tr>
@@ -323,6 +349,7 @@
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_genbank/ornithorhynchus_anatinus/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_mysql/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_gtf/">FTP</a></td>
+<td>-</td>
 <td>-</td>
 </tr>
 	    
@@ -336,6 +363,7 @@
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_mysql/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_gtf/">FTP</a></td>
 <td>-</td>
+<td>-</td>
 </tr>
 	    
 <tr>
@@ -347,6 +375,7 @@
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_genbank/oryzias_latipes/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_mysql/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_gtf/">FTP</a></td>
+<td>-</td>
 <td>-</td>
 </tr>
 	    
@@ -360,6 +389,7 @@
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_mysql/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_gtf/">FTP</a></td>
 <td>-</td>
+<td>-</td>
 </tr>
 	    
 <tr>
@@ -371,6 +401,7 @@
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_genbank/pan_troglodytes/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_mysql/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_gtf/">FTP</a></td>
+<td>-</td>
 <td>-</td>
 </tr>
 	    
@@ -384,6 +415,7 @@
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_mysql/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_gtf/">FTP</a></td>
 <td>-</td>
+<td>-</td>
 </tr>
 	    
 <tr>
@@ -396,6 +428,7 @@
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_mysql/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_gtf/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_emf/rattus_norvegicus/">FTP</a></td>
+<td>-</td>
 </tr>
 	    
 <tr>
@@ -407,6 +440,7 @@
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_genbank/saccharomyces_cerevisiae/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_mysql/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_gtf/">FTP</a></td>
+<td>-</td>
 <td>-</td>
 </tr>
 	    
@@ -420,6 +454,7 @@
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_mysql/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_gtf/">FTP</a></td>
 <td>-</td>
+<td>-</td>
 </tr>
 	    
 <tr>
@@ -431,6 +466,7 @@
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_genbank/spermophilus_tridecemlineatus/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_mysql/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_gtf/">FTP</a></td>
+<td>-</td>
 <td>-</td>
 </tr>
 	    
@@ -444,6 +480,7 @@
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_mysql/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_gtf/">FTP</a></td>
 <td>-</td>
+<td>-</td>
 </tr>
 	    
 <tr>
@@ -455,6 +492,7 @@
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_genbank/tetraodon_nigroviridis/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_mysql/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_gtf/">FTP</a></td>
+<td>-</td>
 <td>-</td>
 </tr>
 	    
@@ -468,6 +506,7 @@
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_mysql/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_gtf/">FTP</a></td>
 <td>-</td>
+<td>-</td>
 </tr>
 	    
 <tr>
@@ -479,6 +518,7 @@
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_genbank/xenopus_tropicalis/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_mysql/">FTP</a></td>
 <td><a target="ftp" href="ftp://ftp.ensembl.org/pub/current_gtf/">FTP</a></td>
+<td>-</td>
 <td>-</td>
 </tr>
 	    
