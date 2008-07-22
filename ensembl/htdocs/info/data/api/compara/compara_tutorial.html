@@ -473,7 +473,11 @@ so from this object you can get additional information about the species.</li>
 
 <pre class="code">
 my $taxon = $member-&gt;taxon;
-print join &quot;; &quot;, map { $taxon-&gt;$_ } qw(common_name genus species binomial classification),&quot;\n&quot;;
+print &quot;common_name &quot;, $taxon-&gt;common_name,&quot;\n&quot;;
+print &quot;genus &quot;, $taxon-&gt;genus,&quot;\n&quot;;
+print &quot;species &quot;, $taxon-&gt;species,&quot;\n&quot;;
+print &quot;binomial &quot;, $taxon-&gt;binomial,&quot;\n&quot;;
+print &quot;classification &quot;, $taxon-&gt;classification,&quot;\n&quot;;
 </pre>
 
 <p>
@@ -521,8 +525,9 @@ foreach my $homology (@{$homologies}) {
 
   # And if they are defined dN and dS related values
 
-  print join &quot; &quot;, map { $homology-&gt;$_ } qw(dn ds n s lnl threshold_on_ds),&quot;\n&quot;;
-
+  print &quot; dn &quot;, $homology-&gt;dn,&quot;\n&quot;;
+  print &quot; ds &quot;, $homology-&gt;ds,&quot;\n&quot;;
+  print &quot; dnds_ratio &quot;, $homology-&gt;dnds_ratio,&quot;\n&quot;;
 }
 </pre>
 
