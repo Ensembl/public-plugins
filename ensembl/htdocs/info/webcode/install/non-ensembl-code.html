@@ -104,20 +104,20 @@ lot faster.</p>
 <ol>
 <li><p>
   Download the Apache2 source tarball from <a href="http://httpd.apache.org/dist/httpd/" target="_blank">http://httpd.apache.org/dist/httpd/</a>. Get the current stable
-version - at the time of writing, this is 2.2.4, and the file to download is httpd-2.2.4.tar.gz.
+version (Please NOTE 2.2.9 is buggy don't use!) so at the time of writing, this is 2.2.8, and the file to download is httpd-2.2.8.tar.gz.
 </p></li>
 <li>
   <p>Download the mod_perl source from <a href="http://www.cpan.org/modules/by-module/Apache2/" target="_blank">http://www.cpan.org/modules/by-module/Apache2/</a> . Again, get
-the latest version, currently this is 2.0.3 and the file to download is mod_perl-2.0.3.tar.gz.
+the latest version, currently this is 2.0.4 and the file to download is mod_perl-2.0.4.tar.gz.
   </p>
 </li>
 <li>
   <p>Unpack all the sources in a working directory with:</p>
-  <kbd>tar zxf httpd-2.2.4.tar.gz<br />
-  tar zxf mod_perl-2.0.3.tar.gz | tar xvf -<br />
-  cd httpd-2.2.4<br />
+  <kbd>tar zxf httpd-2.2.8.tar.gz<br />
+  tar zxf mod_perl-2.0.4.tar.gz<br />
+  cd httpd-2.2.8<br />
   ./configure --enable-deflate --prefix=<em>Apache directory</em><br />
-  cd ../mod_perl-2.0.3</kbd>
+  cd ../mod_perl-2.0.4</kbd>
   <p>The httpd.conf files etc assume you install this in an apache2 subdirectory of your websites server root.</p>
 </li>
 <li>
