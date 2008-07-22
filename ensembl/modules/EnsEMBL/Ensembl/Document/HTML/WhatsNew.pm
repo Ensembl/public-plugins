@@ -53,6 +53,7 @@ sub render {
   @headlines = @{$adaptor->fetch_headlines($criteria, '', '5')};
 
   my %current_spp = %{$adaptor->fetch_species($release_id)};
+  my $total_species = $species_defs->valid_species;
 
   if (scalar(@headlines) > 0) {
     
@@ -81,16 +82,18 @@ sub render {
       if ($sp_id) {
         $sp_dir = $current_spp{$sp_id};
         $sp_count = scalar(@sp_ids);
-        if ($sp_count > 1) {
-          for (my $j=0; $j<$sp_count; $j++) {
-            $sp_name .= ', ' unless $j == 0;
-            my @name_bits = split('_', $current_spp{$sp_ids[$j]});
-            $sp_name .= '<i>'.substr($name_bits[0], 0, 1).'. '.$name_bits[1].'</i>';
-          }
+        if ($sp_count > $total_species / 2) {
+         $sp_name = 'most species';
+        }
+        elsif ($sp_count > 5) {
+         $sp_name = 'multiple species';
         }
         else {
-          ($sp_name = $sp_dir) =~ s/_/ /g;
-          $sp_name = "<i>$sp_name</i>";
+          for (my $j=0; $j<$sp_count; $j++) {
+            $sp_name .= ', ' unless $j == 0;
+	    my @name_bits = split('_', $current_spp{$sp_ids[$j]});
+            $sp_name .= '<i>'.substr($name_bits[0], 0, 1).'. '.$name_bits[1].'</i>';
+          }
         }
       }
       else {
