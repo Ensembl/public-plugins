@@ -1,0 +1,24 @@
+<h4>23 eutherian mammals EPO</h4>
+Pan troglodytes<br />
+Mus musculus<br />
+Homo sapiens<br />
+Canis familiaris<br />
+Rattus norvegicus<br />
+Bos taurus<br />
+Macaca mulatta<br />
+Pongo pygmaeus<br />
+Equus caballus<br />
+Loxondonta africana<br />
+Dasypus novemcinctus<br />
+Echinops telfairi<br />
+Oryctolagus cuniculus<br />
+Cavia porcelus<br />
+Erinaceus europaeus<br />
+Sorex araneus<br />
+Myotis lucifugus<br />
+Tupaia belangeri<br />
+Spermophilus tridecemlineatus<br />
+Otolemur garnetii<br />
+Ochotona princeps<br />
+Microcebus murinus<br />
+Felis catus<br />
