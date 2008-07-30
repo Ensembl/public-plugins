@@ -2,6 +2,11 @@
 #                          WEBADMIN PLUGIN                                #
 ###########################################################################
 
+## IMPORTANT NOTE - this module has been emptied, as the old pages will
+## not work properly with the new web code. A new plugin will be released
+## in due course
+
+
 This plugin is optional. It is used to update the ENSEMBL_WEBSITE database,
 which contains help, news and other non-genomic content. We recommend that
 you run this plugin on a development server then copy the database to your
