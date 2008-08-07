@@ -35,7 +35,7 @@ sub render {
     $sd->ENSEMBL_RELEASE_DATE,
     );
   
-  unless ($ENV{'ENSEMBL_TYPE'} ] =~ /Help|Account|UserData/) {
+  unless ($ENV{'ENSEMBL_TYPE'} =~ /Help|Account|UserData/) {
     $self->printf(
       q(
       <br />
