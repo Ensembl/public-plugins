@@ -18,7 +18,7 @@ Did you know you can:
 <a href="/info/data/api/">Fetch only the data you want</a></dt>
 <dd>from our public database, using the Ensembl Perl API</dd>
 <dt><img src="/i/e-quest.gif" style="width:20px;height:19px;vertical-align:middle;padding-right:4px" alt="(e?)" />
-<a href="">Download our databases via FTP</a></dt>
+<a href="/info/data/ftp/">Download our databases via FTP</a></dt>
 <dd>in FASTA, MySQL and other formats</dd>
 <dt><img src="/i/e-quest.gif" style="width:20px;height:19px;vertical-align:middle;padding-right:4px" alt="(e?)" />
 <a href="/biomart/martview">Mine Ensembl with BioMart</a></dt>
