@@ -11,7 +11,7 @@ use base qw(EnsEMBL::Web::Document::HTML);
 sub render {
   $_[0]->print( qq(
     <div class="twocol-right right unpadded">
-      <a href="http://www.ensembl.org/info/about/">About&nbsp;Ensembl</a> | 
+      <a href="http://www.ensembl.org/info/about/intro.html">About&nbsp;Ensembl</a> | 
       <a href="http://www.ensembl.org/info/about/contact/">Contact&nbsp;Us</a> | 
       <a href="/info/website/help/">Help</a> 
     </div>) 
