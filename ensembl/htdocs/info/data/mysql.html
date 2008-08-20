@@ -24,13 +24,15 @@ scripts that retrieve and analyze data.
 my $gene_adaptor = $dbCore-&gt;get_GeneAdaptor();
 my @genes = @{ $gene_adaptor-&gt;fetch_all_by_external_name('Tyr') };
 </pre>
-<p>Additional code examples and suggestions can be found in the 
+<p>Additional code examples and suggestions can be found in the various <a href="/info/data/api/">API tutorials</a> and the 
 <a href="http://listserver.ebi.ac.uk/mailing-lists-archives/ensembl-dev/threads.html" rel="external">ensembl-dev mailing list archives</a>.</dd>
 
 <dt>MySQL client</dt>
 <dd>Alternatively, you can use a MySQL <a href="http://dev.mysql.com/downloads/mysql/5.0.html#downloads">client program</a> to query the database directly. However this does require knowledge of the
 complex <a href="/info/data/api/">database schemas</a> used by Ensembl, so we only recommend 
-it if you are unable to install our API (e.g. if you have no access to Perl).<br />
+it if you are unable to install our API (e.g. if you have no access to Perl). Also note that 
+direct MySQL queries on the database are not suited to retrieve sequences. To retrieve sequences 
+please use the Perl API.<br />
 <strong>Important note:</strong> From release 48 you need a MySQL5-compatible client and 
 to connect to port 5306; releases 47 and earlier are on MySQL4 and use the standard port (3306).</dd>
 </dl>
