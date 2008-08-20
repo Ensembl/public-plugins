@@ -1,0 +1,144 @@
+<html>
+<head>
+<meta name="navigation" content="Genome Annotation" />
+<title>Ensembl Gene Set</title>
+</head>
+
+<body>
+
+<h1>Ensembl Gene Set</h1>
+
+
+<h2>Background</h2>
+
+<p>
+<a href="http://www.ensembl.org/" rel="external">Ensembl</a> is a system providing <strong>automated</strong> genome annotation and subsequent visualisation of annotated genomes.
+The Ensembl analysis and annotation pipeline is based on a rule set of heuristics, a human annotator would use
+(<a href="/info/about/publications.html#Genome_Res_14_942">Curwen et al., 2004</a>).
+As genomes nowadays are sequenced on an industrial scale, labour intensive manual curation can no longer cope with the amount of information generated.
+The Ensembl genome annotation pipeline was thus conceived to facilitate annotation of genome sequences in a timely fashion.
+</p>
+
+<p>
+<strong>All</strong> Ensembl gene predictions are based on <strong>experimental evidence</strong>, which is imported via manually curated
+<a href="http://www.ebi.ac.uk/swissprot/" rel="external">UniProt/Swiss-Prot</a>, partially manually curated NCBI
+<a href="http://www.ncbi.nlm.nih.gov/RefSeq/" rel="external">RefSeq</a>, automatically annotated
+<a href="http://www.ebi.ac.uk/trembl/" rel="external">UniProt/TrEMBL</a> records.
+Untranslated regions (UTRs) are annotated to the extent supported by
+<a href="http://www.ebi.ac.uk/embl/" rel="external">EMBL</a> mRNA records.
+As there is no guarantee that UTR sequences in EMBL records are complete there is similarly no guarantee that the Ensembl genome analysis and annotation pipeline has enough biological evidence to predict complete UTR regions.
+Promoter regions are currently not annotated by Ensembl as the set of well-characterised promoters is still small and there is currently no algorithm yielding reliable results on a genomic scale.
+</p>
+
+
+<h2>Sources of Biological Evidence</h2>
+
+<ul>
+
+<li>
+<a href="http://www.ebi.ac.uk/embl/" rel="external">EMBL</a> is the European part of the International Nucleotide Sequence Database Collaboration
+(<a href="http://www.ebi.ac.uk/embl/Contact/collaboration.html" rel="external">INSD</a>) and maintained at the
+<a href="http://www.ebi.ac.uk/" rel="external">EBI</a>.
+All records are synchronised with
+<a href="http://www.ncbi.nlm.nih.gov/Genbank/" rel="external">GenBank</a> at the
+<a href="http://www.ncbi.nlm.nih.gov/" rel="external">NCBI</a> (North America) and the DNA Database of Japan
+(<a href="http://www.ddbj.nig.ac.jp/" rel="external">DDBJ</a>).
+</li>
+
+<li>
+<a href="http://www.ebi.ac.uk/swissprot/" rel="external">UniProt/Swiss-Prot</a> is a <strong>manually curated</strong> database so that both, protein sequences and annotation are assumed to be of <strong>highest quality and accuracy</strong>.
+</li>
+
+<li>
+<a href="http://www.ncbi.nlm.nih.gov/RefSeq/" rel="external">RefSeq</a> is a <strong>partially manually curated</strong> dataset maintained at the
+<a href="http://www.ncbi.nlm.nih.gov/" rel="external">NCBI</a>.
+RefSeq accession numbers prefixed with 'NM_' are curated mRNAs, while 'NP_' accession numbers represent curated proteins.
+Accession numbers prefixed with 'XM_' and 'XP_' are predicted mRNAs and predicted proteins, respectively.
+Since Ensembl bases its predictions solely on the basis of experimental evidence, both predicted RefSeq datasets are <strong>not</strong> included in the Ensembl database.
+</li>
+
+<li>
+UniProt/TrEMBL is <strong>automatically</strong> annotated and contains the translations of EMBL/GenBank/DDBJ coding sequence features (CDS).
+</li>
+
+</ul>
+
+<h2>Genebuild Procedure</h2>
+
+<p>
+Ensembl gene builds are rather complex and involve two important steps
+(<a href="#Genome_Res_14_942">Curwen et al., 2004</a>).
+The initial <strong>targeted build</strong> aligns all species-specific protein and mRNA information to the genome sequence.
+An additional <strong>similarity build</strong> is based on information from closely related species and aims to broaden the spectrum of transcript predictions.
+This second step is especially important for less popular model organisms with a much smaller amount of direct, species-specific protein and mRNA evidence available.
+</p>
+
+<p>For low-coverage genomes, a <a href="2x_genomes.html">modified version of the standard pipeline</a> 
+has been developed to compensate for the fragmentary nature of the assembly.</p>
+
+
+<h2>External References Mapping Procedure</h2>
+
+<p>
+Naming of transcripts occurs at a later step, <strong>after</strong> the gene-build is completed.
+If the transcript or protein models can be mapped to <strong>species-specific</strong>
+<a href="http://www.ebi.ac.uk/swissprot/" rel="external">UniProt/Swiss-Prot</a>,
+<a href="http://www.ncbi.nlm.nih.gov/RefSeq/" rel="external">RefSeq</a> or
+<a href="http://www.ebi.ac.uk/trembl/" rel="external">UniProt/TrEMBL</a> entries then Ensembl refers to them as <strong>known</strong> genes, if not (e.g. genes predicted on the basis of evidence from closely related species) they are called <strong>novel</strong> genes.
+</p>
+
+<p>
+The difference is thus due to evidence coming directly from a manually curated database (UniProt/Swiss-Prot), a partially manually curated (RefSeq) or a species-specific entry (UniProt/TrEMBL) or whether the gene model is inferred from a closely related species.
+For these reasons, <strong>known</strong> genes will dominate in all established model organisms, while less popular organisms will display a significantly larger fraction of <strong>novel</strong> genes.
+But again, <strong>all</strong> Ensembl gene predictions are based on experimental evidence.
+</p>
+
+
+<h2>Supporting Evidence</h2>
+
+<p>Supporting evidence is displayed in two ways:</p>
+<ul>
+<li>On the gene page, a per-trancript summary is displayed of the sequences used to identify the CDS, UTRs and exons</li>
+<li>On the transcript page, a visual display shows these sequences aligned to the particular transcript</li>
+</ul>
+
+
+<p>
+While <a href="http://www.ensembl.org/" rel="external">Ensembl</a> is a browser providing <strong>automatically annotated genomes</strong>, the Vertebrate Genome Annotation Browser
+(<a href="http://vega.sanger.ac.uk/" rel="external">Vega</a>) is its counterpart for <strong>manually curated</strong> genome annotation.
+Since manual curation is very labour-intensive it is currently limited to certain chromosomes of certain species.
+</p>
+
+
+<h2>References</h2>
+
+<ul>
+
+<li id="Genome_Res_14_942">
+Val Curwen,
+Eduardo Eyras,
+T. Daniel Andrews,
+Laura Clarke,
+Emmanuel Mongin,
+Steven M.J. Searle, and
+Michele Clamp
+<br />
+<strong>The Ensembl Automatic Gene Annotation System</strong>
+<br />
+Genome Res. 2004 May; 14(5):942-950.
+<br />
+[<a href="http://www.genome.org/cgi/content/abstract/14/5/942" rel="external">Abstract</a>]
+[<a href="http://www.genome.org/cgi/content/full/14/5/942" rel="external">Full text</a>]
+
+<br /><br />
+The above research article was published in an
+'<a href="http://www.genome.org/content/vol14/issue5/index.shtml#ENSEMBL_SPECIAL" rel="external">Ensembl Special</a>' and provides detailed information on the Ensembl gene-building algorithm.
+Please find additional references in the Ensembl
+<a href="/info/about/publications.html">scientiftic publications</a> document.
+</li>
+
+</ul>
+
+
+</body>
+</html>
