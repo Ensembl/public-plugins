@@ -13,10 +13,10 @@
 <div class="twocol-left tinted-box">
     <h2 class="first">Search our Help database</h2>
 
-    <form onSubmit="return( on_submit( helpsearch_vars ))" name="helpsearch" action="/Site/Help/Results" id="helpsearch" method="get">
+    <form name="helpsearch" action="/Help/DoSearch" id="helpsearch" method="get">
     <dl>
     <dt><label for="helpsearch_1">Search for:</label></dt>
-      <dd><input type="text" name="kw" value="" id="helpsearch_1" size="20" class="normal" onKeyUp="os_check('String',this,0)" onChange="os_check( 'String', this, 0 )"  /></dd>
+      <dd><input type="text" name="string" value="" id="helpsearch_1" size="20" class="normal" /></dd>
     <dt><label for="helpsearch_2">Highlight search term(s)</label></dt>
       <dd><input type="checkbox" name="hilite" id="helpsearch_2" value="yes" /></dd>
     <dt></dt>
