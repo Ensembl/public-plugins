@@ -13,15 +13,23 @@
 <div class="twocol-left tinted-box">
     <h2 class="first">Search our Help database</h2>
 
-    <form name="helpsearch" action="/Help/DoSearch" id="helpsearch" method="get">
-    <dl>
-    <dt><label for="helpsearch_1">Search for:</label></dt>
-      <dd><input type="text" name="string" value="" id="helpsearch_1" size="20" class="normal" /></dd>
-    <dt><label for="helpsearch_2">Highlight search term(s)</label></dt>
-      <dd><input type="checkbox" name="hilite" id="helpsearch_2" value="yes" /></dd>
-    <dt></dt>
-      <dd><input type="submit" name="submit" value="Go" class="form-button" /></dd>
-    </dl>
+    <form name="helpsearch" action="/Help/DoSearch" id="helpsearch" class="std check" method="get">
+      <fieldset>
+        <div><dl>
+          <dt><label for="helpsearch_1">Search for:</label></dt>
+          <dd><input type="text" name="string" value="" id="helpsearch_1" size="20" class="input-text _string required" /></dd>
+        </dl></div>
+        <div><dl>
+          <dt></dt>
+          <dd><label for="helpsearch_2">
+            <input type="checkbox" name="hilite" id="helpsearch_2" value="yes" class="input-checkbox _optional" />Highlight search term(s)</label>
+          </dd>
+        </dl></div>
+        <div><dl>
+          <dt></dt>
+          <dd><input type="submit" name="submit" value="Go" class="input-submit" /></dd>
+        </dl></div>
+      </fieldset>
     </form>
 
     <h3>Search Tips</h3>
