@@ -6,13 +6,14 @@
 
 <body>
 
-<h1>The Ensembl public MySQL Server</h1>
+<h1>The Ensembl public MySQL Servers</h1>
 
 <p>For large amounts of data and more detailed analysis, we recommend you use our 
 publicly-accessible MySQL server, <strong>ensembldb.ensembl.org</strong>,
-which you can access as user 'anonymous'.</p>
+which you can access as user 'anonymous'. A second server, <strong>martdb.ensembl.org</strong>
+provides public access to the BioMart databases.</p>
 
-<p>There are two options for retrieving data from this database:</p>
+<p>There are two options for retrieving data from the Ensembl databases:</p>
 
 <dl>
 <dt>Perl API</dt>
@@ -33,11 +34,23 @@ my @genes = @{ $gene_adaptor-&gt;fetch_all_by_external_name('Tyr') };
 complex <a href="/info/data/api/">database schemas</a> used by Ensembl, so we only recommend 
 it if you are unable to install our API (e.g. if you have no access to Perl). Also note that 
 direct MySQL queries on the database are not suited to retrieve sequences. To retrieve sequences 
-please use the Perl API.<br />
-<strong>Important note:</strong> From release 48 you need a MySQL5-compatible client and 
-to connect to port 5306; releases 47 and earlier are on MySQL4 and use the standard port (3306).</dd>
+please use the Perl API.</dd>
 </dl>
 
+<p>For <strong>BioMart</strong> access, we strongly recommend that you use the <a href="/Multi/martview">martview web interface</a>, 
+as the mart databases contain very many tables of denormalised data.</p> 
+
+<h2>Summary of servers and ports</h2>
+
+<p><strong>Important note:</strong> Because we are serving databases on both MySQL4 and MySQL5, 
+not all MySQL instances use the default port; please ensure that you specify the correct port when 
+trying to connect.</p>
+
+<table class="ss tint">
+<tr><th>Server</th><th class="center">Up to version 47</th><th class="center">Version 48 onwards</th></tr>
+<tr><td>ensembldb.ensembl.org</td><td class="center">3306</td><td class="center">5306</td></tr>
+<tr class="bg2"><td>martdb.ensembl.org</td><td class="center">3316</td><td class="center">5316</td></tr>
+</table>
 
 </body>
 </html>
