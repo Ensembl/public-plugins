@@ -15,10 +15,11 @@ sub update_conf {
   $SiteDefs::__species_aliases{ 'Canis_familiaris'         } = [qw(cf cfam dog)]; 
   $SiteDefs::__species_aliases{ 'Cavia_porcellus'          } = [qw(cp cpor guineapig)];
   $SiteDefs::__species_aliases{ 'Dasypus_novemcinctus'     } = [qw(dn dnov dasypus armadillo)];
+  $SiteDefs::__species_aliases{ 'Dipodomys_ordii'          } = [qw(do kangaroorat)];
   $SiteDefs::__species_aliases{ 'Echinops_telfairi'        } = [qw(et etel echinops tenrec)];
   $SiteDefs::__species_aliases{ 'Equus_caballus'           } = [qw(ec horse)];
-  $SiteDefs::__species_aliases{ 'Felis_catus'              } = [qw(fc fcat cat)];
   $SiteDefs::__species_aliases{ 'Erinaceus_europaeus'      } = [qw(ee eeur hedgehog)];
+  $SiteDefs::__species_aliases{ 'Felis_catus'              } = [qw(fc fcat cat)];
   $SiteDefs::__species_aliases{ 'Homo_sapiens'             } = [qw(hs hsap human man default)]; 
   $SiteDefs::__species_aliases{ 'Loxodonta_africana'       } = [qw(la lafr elephant africana loxodontai hathi nellie dumbo)];
   $SiteDefs::__species_aliases{ 'Oryctolagus_cuniculus'    } = [qw(oc ocun rabbit bugs bunny hutch harvey)];
@@ -32,10 +33,15 @@ sub update_conf {
   $SiteDefs::__species_aliases{ 'Otolemur_garnettii'       } = [qw(og ogar bushbaby otolemur)];
   $SiteDefs::__species_aliases{ 'Pan_troglodytes'          } = [qw(pt ptro chimp)];
   $SiteDefs::__species_aliases{ 'Pongo_pygmaeus'           } = [qw(pp orang orangutan librarian ook)];
+  $SiteDefs::__species_aliases{ 'Procavia_capensis'        } = [qw(pc hyrax dassy dassie pimbi)];
+  $SiteDefs::__species_aliases{ 'Pteropus_vampyrus'        } = [qw(pv megabat flyingfox)];
   $SiteDefs::__species_aliases{ 'Rattus_norvegicus'        } = [qw(rn rnor rat)];
   $SiteDefs::__species_aliases{ 'Sorex_araneus'            } = [qw(sa shrew)];
   $SiteDefs::__species_aliases{ 'Spermophilus_tridecemlineatus'  } = [qw(st stri squirrel spermophilus)];
+  $SiteDefs::__species_aliases{ 'Tarsius_syrichta'         } = [qw(ts tarsier gremlin)];
   $SiteDefs::__species_aliases{ 'Tupaia_belangeri'         } = [qw(tb tbel treeshrew shrew)];
+  $SiteDefs::__species_aliases{ 'Tursiops_truncatus'       } = [qw(tt dolphin flipper)];
+  $SiteDefs::__species_aliases{ 'Vicugna_pacos'            } = [qw(lp alpaca)];
 #-------------------- birds
   $SiteDefs::__species_aliases{ 'Gallus_gallus'                  } = [qw(gg ggal chicken)];
 #-------------------- fish
