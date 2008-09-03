@@ -45,7 +45,7 @@
             </tr>
          </table>
       </p>
-      <p>This document refers to version <strong>49</strong> of the EnsEMBL core schema.
+      <p>This document refers to version <strong>51</strong> of the EnsEMBL core schema.
       </p>
       <h2>Quick links to tables:</h2>
       <h3>Fundamental tables</h3>
@@ -412,7 +412,10 @@
       <h3><a name="meta">meta</a></h3>
       <p>Stores data about the data in the current schema. Taxonomy information, version information and the default value for the
          type column in the assembly table are stored here. Unlike other tables, data in the meta table is stored as key/value pairs.
-         Also stores (via assembly.mapping keys) the relationships between co-ordinate systms in the assembly table.
+         Also stores (via assembly.mapping keys) the relationships between co-ordinate systms in the assembly table. For databases
+         that contain more than one species, entries that apply to the database in general (such as schema_version and patch entries)
+         have a NULL species_id, while those that are species-specific have the appropriate species ID set. This defaults to 1 for
+         single-species databases.
       </p>
       <p><b>See also:</b></p>
       <p>Tables:</p>
