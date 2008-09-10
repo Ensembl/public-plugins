@@ -57,22 +57,22 @@ and a few non-vertebrates. We have thus divided our species as follows:</p>
 <li>Laurasiatheria</li>
 <li>Afrotheria</li>
 <li>Xenarthra</li>
-<li>Marsupials and Monotremes*</li>
-<li>Birds</li>
-<li>Reptiles and Amphibians*</li>
+<li>Marsupials and Monotremes</li>
+<li>Birds and Reptiles</li>
+<li>Amphibians</li>
 <li>Fish</li>
-<li>Other chordates</li>
+<li>Other chordates*</li>
 <li>Other eukaryotes</li>
 </ul>
 
-<p class="footnotes">* Although these are distinct groups, they have few representative genomes
-at present, so we list them together</p>
+<p class="footnotes">* Although this is a very broad set of phyla, they have few representative 
+genomes, having been sequenced primarily for comparative purposes, so we list them together.</p>
 
 <p>Once you have decided how to group your species, you need to sketch a taxonomic tree that 
 includes the identifying nodes. In the diagram below, the highlighted taxa are the ones that 
 will be needed to separate species into the required groups.</p>
 
-<p class="center"><img src="/img/info/taxonomy.gif" alt="tree diagram" /></p>
+<p class="center"><img src="/img/info/taxonomy.png" alt="tree diagram" style="width:353px;height:500px" /></p>
 
 <p>Finally you will need to set up your [plugin]/conf/ini-files/DEFAULTS.ini to contain 
 the groups you wish to select and the corresponding labels. The order of the groups
@@ -80,7 +80,7 @@ must follow your taxonomic tree from bottom to top:</p>
 
 <pre class="code">
 TAXON_ORDER = [Primates Euarchontoglires Laurasiatheria Afrotheria Xenarthra Metatheria 
-Monotremata Aves Sauropsida Amphibia Euteleostomi Chordata Eukaryota]</pre>
+Monotremata Sauropsida Amphibia Euteleostomi Chordata Eukaryota]</pre>
 
 <p>If you want any of these taxa to be grouped together, or to use labels other than their
 scientific name, you also need a hash of labels:
@@ -91,9 +91,8 @@ scientific name, you also need a hash of labels:
 Euarchontoglires   = Rodents etc.
 Metatheria         = Marsupials &amp; Monotremes
 Monotremata        = Marsupials &amp; Monotremes
-Aves               = Birds
-Sauropsida         = Reptiles &amp; Amphibians
-Amphibia           = Reptiles &amp; Amphibians
+Sauropsida         = Birds &amp; Reptiles
+Amphibia           = Amphibians
 Euteleostomi       = Fish
 Chordata           = Other chordates
 Eukaryota          = Other eukaryotes
