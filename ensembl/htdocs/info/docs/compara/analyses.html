@@ -36,7 +36,7 @@ A detailed description of the method is provided <a href="homology_method.html">
 proteins is extended using all the metazoan proteins from SwissProt and
 SPTrEMBL.</p>
 
-<h2>BlastZ-net Analysis</h2>
+<h2>BlastZ-net Pairwise Alignment Analysis</h2>
 
 <p>BlastZ-net (<a href="http://www.genome.org/cgi/content/abstract/13/1/103">Schwartz
 S et al., Genome Res.;13(1):103-7</a>, <a href="http://www.pnas.org/cgi/content/full/100/20/11484">Kent
@@ -49,7 +49,8 @@ species the best sub-chain in each region. The reference species in the
 BlastZ-net alignments is defined in this table:</p>
 
 [[INCLUDE::/info/docs/compara/blastz_net.inc]]
-<h2>Translated Blat Analysis</h2>
+
+<h2>Translated Blat Pairwise Alignment Analysis</h2>
 
 <p>Translated blat (<a href="http://www.genome.org/cgi/content/abstract/12/4/656">Kent
 W, Genome Res., 2002;12(4):656-64</a>) is used to look for
@@ -57,7 +58,9 @@ homologous regions between more distantly related pairs of species. We
 expect to find homologies mainly in coding regions.</p>
 
 [[INCLUDE::/info/docs/compara/tblat.inc]]
-<h2>PECAN Analysis</h2>
+
+<h2 id="pecan">PECAN Multiple Alignment Analysis</h2>
+
 
 <p>Pecan is used to provide global multiple genomic alignments. First,
 Mercator is used to build a synteny map between the genomes and then
@@ -74,13 +77,14 @@ entirely in Java and also requires the installation of Exonerate.
 <p>Additionally we use Gerp
 (<a href="http://www.genome.org/cgi/content/abstract/15/7/901">Cooper
 GM et al., Genome Res., 2005; 15:901-913</a>) to calculate conservation
-scores and call constrained elements on the 10 way multiple alignments.
+scores and call constrained elements on the 10-way multiple alignments.
 Conservation scores are estimated on a column-by-column basis.
 Constrained elements are stretches of the multiple alignment where the
 sequences are highly conserved according to the previous score.</p>
 
 [[INCLUDE::/info/docs/compara/pecan.inc]]
-<h2>EPO Analysis</h2>
+
+<h2>EPO Multiple Alignment Analysis</h2>
 
 <p>The 23-way eutherian mammal alignments were generated using the new EPO 
 (Enredo Pecan Ortheus) pipeline. Enredo produces colinear segments from 
