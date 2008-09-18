@@ -39,8 +39,14 @@ my $efg_db = Bio::EnsEMBL::Registry-&gt;get_DBAdaptor-&gt;('Human','funcgen');
 # Get the FeatureSetAdaptor
 my $fset_adaptor = $efg_db-&gt;get_FeatureSetAdaptor();
 
+#External FeatureSet names are:
+# miRanda miRNA         
+# cisRED search regions  
+# VISTA enhancer set     
+# cisRED motifs   
+
 # Get the FeatureSet
-my $fset = $fset_adaptor-&gt;fetch_by_name('cisRED group motifs');
+my $fset = $fset_adaptor-&gt;fetch_by_name('cisRED motifs');
 
 my @cisred_features = @{$fset-&gt;get_Features_by_Slice($slice)};
 
