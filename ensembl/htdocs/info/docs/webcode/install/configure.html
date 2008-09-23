@@ -177,14 +177,14 @@ server is started, these files are parsed and stored in a file called config.pac
 This config.packed file is regenerated whenever the server is restarted.</p>
 
 <h3>Database configuration</h3>
-<p>In the [general] section, change the values of ENSEMBL_DBUSER and ENSEMBL_DBPASS to the
-username and password you want MySQL to be accessed by. Set ENSEMBL_HOST and
+<p>In the [general] section, change the values of DATABASE_DBUSER and DATABASE_DBPASS to the
+username and password you want MySQL to be accessed by. Set DATABASE_HOST and
 ENSEMBL_HOST_PORT to be the database server and port that MySQL is running on.</p>
 
 <p>These are default settings - you can override them by adding a section for a particular database. For
 example, adding a section like the following into the mirror plugin would override the defaults in public-plugin for the ENSEMBL_WEBSITE database:</p>
 <pre class="code">
-[ENSEMBL_WEBSITE]
+[DATABASE_WEBSITE]
 USER=mysqluser2
 PASS=helppass
 HOST=mysqlserver2
@@ -223,19 +223,19 @@ GRAPHIC_FONTSIZE     = 8                               ; Default font-size for g
 <h2>public-plugins/mirror/conf/ini-files/MULTI.ini</h2>
 
 <p>Create this file to configure the multi species databases.  Configure the [general] section for connection to the MySQL server, as for the species-specific ini files.
-In the [databases] section, change the values of ENSEMBL_COMPARA and the various _MART entries
+In the [databases] section, change the values of DATABASE_COMPARA and the various _MART entries
 to match the name of the ensembl_compara and ensembl_mart databases that you created.</p>
 
 <p>In addition, if you chose to install a local GO database you can configure it here by adding an entry:</p>
 <pre class="code">
-ENSEMBL_GO = your_go_database_name
+DATABASE_GO = your_go_database_name
 </pre>
-<p>to the [databases] section along with ENSEMBL_COMPARA and the BioMart datbases.</p>
+<p>to the [databases] section along with DATABASE_COMPARA and the BioMart datbases.</p>
 
 <p>As in the other species.ini files, you can override the database connection settings for a particular
 database by adding a section similar to the following:</p>
 <pre class="code">
-[ENSEMBL_MART_ENSEMBL]
+[DATBASE_MART_ENSEMBL]
 USER=mysqluser2
 PASS=dbpass
 HOST=mysqlserver2

@@ -1,10 +1,10 @@
 [general]
-ENSEMBL_HOST       = my_mysql.my_domain.org
-ENSEMBL_HOST_PORT  = 3306
-ENSEMBL_WRITE_USER = my_mysql_write_user
-ENSEMBL_WRITE_PASS = my_mysql_write_pass
-ENSEMBL_DBUSER     = my_mysql_read_user
-ENSEMBL_DBPASS     = 
+DATABASE_HOST       = my_mysql.my_domain.org
+DATABASE_HOST_PORT  = 3306
+DATABASE_WRITE_USER = my_mysql_write_user
+DATABASE_WRITE_PASS = my_mysql_write_pass
+DATABASE_DBUSER     = my_mysql_read_user
+DATABASE_DBPASS     = 
 
 ; ENSEMBL_WWW_PROXY            = http://my_webcache.my_domain.org:3128
 
