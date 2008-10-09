@@ -648,18 +648,18 @@ my $thr_utr = $transcript-&gt;three_prime_utr();
 print "5' UTR: ", ( defined $fiv_utr ? $fiv_utr-&gt;seq() : "None" ), "\n";
 print "3' UTR: ", ( defined $thr_utr ? $thr_utr-&gt;seq() : "None" ), "\n";
 
-# The peptide sequence is obtained from the translate() method.  If the
+# The protein sequence is obtained from the translate() method.  If the
 # transcript is non-coding, undef is returned.
-my $peptide = $transcript-&gt;translate();
+my $protein = $transcript-&gt;translate();
 
-print "Translation: ", ( defined $peptide ? $peptide-&gt;seq() : "None" ), "\n";
+print "Translation: ", ( defined $protein ? $protein-&gt;seq() : "None" ), "\n";
 </pre>
 
 
 <h2>Translations and ProteinFeatures</h2>
 
 <p>
-Translation objects and peptide sequence can be extracted from a
+Translation objects and protein sequence can be extracted from a
 Transcript object.
 It is important to remember that some Ensembl transcripts are non-coding
 (pseudo-genes, ncRNAs, etc.) and have no translation.
@@ -667,7 +667,7 @@ The primary purpose of a Translation object is to define the CDS and
 UTRs of its associated Transcript object.
 Peptide sequence is obtained directly from a Transcript object not a
 Translation object as might be expected.
-The following example obtains the peptide sequence of a Transcript and
+The following example obtains the protein sequence of a Transcript and
 the Translation's stable identifier:
 </p>
 
@@ -748,7 +748,7 @@ while ( my $ptranscript = shift @{$ptranscripts} ) {
 
 <p>
 Two types of alignments are stored in the core Ensembl database:
-alignments of DNA sequence to the genome and alignments of peptide
+alignments of DNA sequence to the genome and alignments of protein
 sequence to the genome.
 These can be retrieved as DnaDnaAlignFeatures and DnaPepAlignFeatures
 respectively.
@@ -1051,7 +1051,7 @@ mean.
 Ensembl, and many other bioinformatics applications, use inclusive
 coordinates which start at 1.
 The first nucleotide of a DNA sequence is 1 and the first amino acid of
-a peptide sequence is also 1.
+a protein sequence is also 1.
 The <em>length</em> of a sequence is defined as <em>end - start +
 1</em>.
 </p>

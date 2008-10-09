@@ -9,8 +9,8 @@
 
 <p>
 Ensembl Ig Segment genes are annotations of the Immunoglobulin and
-T-cell receptor segments present in germ-line genomic DNA. During
-B-cell and T-cell maturation, these segments are rearranged and
+T-cell receptor genes present in germ-line genomic DNA. During
+B-cell and T-cell maturation, these genes are rearranged and
 brought together by V-D-J recombination to form functional
 Immunoglobulin and T-cell receptor genes.
 </p>
@@ -23,13 +23,13 @@ pipeline gives unsatisfactory results, for two main reasons:
 <ul>
 <li>
 The non-coding DNA that separates pairs of gene segments brought together by V-D-J recombination 
-is not an intron, and the segment boundaries display different sequence signals to splice sites. 
+is not an intron, and the gene boundaries display different sequence signals to splice sites. 
 Spliced alignment programs such as 
 <a rel="external" href="http://genome.cshlp.org/cgi/content/abstract/14/5/988?maxtoshow=&HITS=10&hits=10&RESULTFORMAT=&andorexactfulltext=and&searchid=1&FIRSTINDEX=0&sortspec=relevance&volume=14&firstpage=988&resourcetype=HWCIT">GeneWise</a>
-therefore require retuning in order to predict the segment structure correctly.
+therefore require retuning in order to predict the gene structure correctly.
 </li>
 <li>
-Some segments comprise multiple exons. Delineating a "spliced"
+Some genes comprise multiple exons. Delineating a "spliced"
 alignment of a mature Immunoglobulin/T-cell receptor sequence to the
 genome into its constituent segments is therefore not straightforward.
 </li>
@@ -40,13 +40,13 @@ For this reason, Immunoglobulin/T-cell receptor gene segments have
 been annotated differently to other Ensembl genes. Ensembl makes use of the 
 <a rel="external" href="http://imgt.cines.fr">IMGT database</a>, which provides annotation of
 individual gene segments on reference sequences. Ensembl extracts individual
-segment sequences and aligns them to the genome using the
+gene sequences and aligns them to the genome using the
 <a rel="external" href="http://www.biomedcentral.com/1471-2105/6/31">Exonerate</a> alignment tool.
 </p>
 <p>
 To reflect their role in the V-D-J recombination process, segments are
 annotated as belonging to one of four classes: V segment, D segment, J
-segment and C segment.  At present, Ensembl Ig segment annotations are only available for
+segment and C segment.  At present, Ensembl Ig gene annotations are only available for
 human and mouse.
 </p>
 
