@@ -11,9 +11,7 @@
 
 
 <p>
-This document refers to the schema of the Ensembl Funcgen version <strong>48</strong>.
-This is the revision <strong>0.1</strong> of this
-document.
+This document refers to the schema of the Ensembl Funcgen version <strong>51</strong>.
 </p>
 <br>
 
@@ -41,16 +39,27 @@ The Ensembl Funcgen (eFG) DB can be thought of as containing three distinct type
 
 <ul>
 
+	<li><p><strong>Core Tables</strong></p>    
+		<ul>
+		  <li><a href="../core/schema/index.html#meta">meta</a></li>
+		  <li><a href="../core/schema/index.html#meta_coord">meta_coord</a></li>
+		  <li><a href="../core/schema/index.html#analysis">analysis</a></li>
+		  <li><a href="../core/schema/index.html#analysis_description">analysis_description</a></li>
+		  <li><a href="../core/schema/index.html#xref">xref</a></li>
+		  <li><a href="../core/schema/index.html#object_xref">object_xref</a></li>
+		  <li><a href="../core/schema/index.html#identity_xref"></a></li>
+		  <li><a href="../core/schema/index.html#external_db">external_db</a></li>
+		  <li><a href="../core/schema/index.html#external_synonym">external_synonym</a></li>
+		</ul>
+	  </li>
+
 	<li><p><strong>General Tables</strong></p>    
     <ul>
-      <li><a href="#meta">meta</a></li>
-      <li><a href="#meta_coord">meta_coord</a></li>
       <li><a href="#feature_type">feature_type</a></li>
+      <li><a href="#associated_feature_type">associated_feature_type</a></li>
       <li><a href="#cell_type">cell_type</a></li>
       <li><a href="#status">status</a></li>
       <li><a href="#status_name">status_name</a></li>
-      <li><a href="#analysis">analysis</a></li>
-      <li><a href="#analysis_description">analysis_description</a></li>
     </ul>
   </li>
 
@@ -66,6 +75,7 @@ The Ensembl Funcgen (eFG) DB can be thought of as containing three distinct type
 	  <li><a href="#channel">channel</a></li>
 	  <li><a href="#chip_channel">chip_channel</a></li>
 	  <li><a href="#result">result</a></li>
+	  <li><a href="#result_feature">result_feature</a></li>	 	  
 	  <li><a href="#result_set">result_set</a></li>
       <li><a href="#experimental_set">experimental_set</a></li>
 	  <li><a href="#experimental_subset">experimental_subset</a></li>
@@ -85,11 +95,11 @@ The Ensembl Funcgen (eFG) DB can be thought of as containing three distinct type
 
   <li><p><strong>Processed Data Tables</strong></p>
     <ul>
-      <li><a href="#feature_set">feature_set</a></li>
-      <li><a href="#annotated_feature">annotated_feature</a></li>
-      <li><a href="#external_feature">external_feature</a></li>
-      <li><a href="#regulatory_feature">regulatory_feature</a></li>
-      <li><a href="#regulatory_attribute">regulatory_attribute</a></li>
+		  <li><a href="#feature_set">feature_set</a></li>
+		  <li><a href="#annotated_feature">annotated_feature</a></li>
+		  <li><a href="#external_feature">external_feature</a></li>
+		  <li><a href="#regulatory_feature">regulatory_feature</a></li>
+		  <li><a href="#regulatory_attribute">regulatory_attribute</a></li>
      </ul>
   </li>
 
@@ -120,77 +130,6 @@ GENERAL TABLES
 <h3>General Tables</h3>
 
 
-<!--
-#####################################################################
-TABLE META
-#####################################################################
--->
-<h4 id="meta">meta</h4>
-
-
-<p>Contains configuration variables, meta table description:</p>
-
-<pre>
-+------------+--------------+------+-----+---------+----------------+
-| Field      | Type         | Null | Key | Default | Extra          |
-+------------+--------------+------+-----+---------+----------------+
-| meta_id    | int(10)      | NO   | PRI | NULL    | auto_increment |
-| meta_key   | varchar(40)  | NO   | MUL |         |                |
-| meta_value | varchar(255) | NO   | MUL |         |                |
-+------------+--------------+------+-----+---------+----------------+
-</pre>
-<p>Meta table stores miscellaneous values about the database and it's contents:</p>
-
-
-<pre>mysql&gt; SELECT * FROM meta;
-+---------+-----------------------------------+-------------------------------------------------------------------------------------------------+
-| meta_id | meta_key                          | meta_value                                                                                      |
-+---------+-----------------------------------+-------------------------------------------------------------------------------------------------+
-|       2 | schema_version                    | 48                                                                                              |
-|      24 | regulatory_string_feature_set_id  | 31,20,29,30,32,33,34,35,51,36,37,49,38,39,40,41,42,43,44,45,46,47,50,48,21,22,13,14,15,16,17,12 |
-|      25 | regulatory_string_feature_type_id | 9,8,23,24,25,26,11,27,12,6,5,4,28,29,13,30,31,14,32,33,34,10,35,36,8,9,11,12,4,13,14,10         |
-+---------+-----------------------------------+-------------------------------------------------------------------------------------------------+
-</pre>
-
-
-<p>This schema_version entry defines which API version must be used to access this database. The regulatory string entries are used during the regulatory build process. See the core <a href="http://www.ensembl.org/info/using/api/core/schema/schema_description.html#meta">meta</a> documentation for more details.</p>
-<br>
-
-<!--
-#####################################################################
-TABLE meta_coord
-#####################################################################
--->
-<h4 id="meta_coord">meta_coord</h4>
-
-
-<p>Analagous to the core meta_coord table, this contains table and maximum length information for features.</p>
-
-<table class="spreadsheet">
-  <thead><tr><th>Table description</th><th>Field information</th></tr></thead>
-  <tbody>
-    <tr>
-      <td><pre>
-+-----------------+-------------+------+-----+---------+-------+
-| Field           | Type        | Null | Key | Default | Extra |
-+-----------------+-------------+------+-----+---------+-------+
-| table_name      | varchar(40) | NO   | PRI |         |       |
-| coord_system_id | int(10)     | NO   | PRI | 0       |       |
-| max_length      | int(11)     | YES  |     | NULL    |       |
-+-----------------+-------------+------+-----+---------+-------+
-</pre></td>
-      <td><pre>
-
-
-e.g. annotated_feature, probe_feature etc.
-the eFG coord_system_id
-used to make slice based range querys more efficient</pre></td>
-    </tr>
-  </tbody>
-</table>
-
-<p> See the core <a href="http://www.ensembl.org/info/using/api/core/schema/schema_description.html#meta_coord">meta_coord</a> documentation for more details.</p>
-<br>
 
 <!--
 #####################################################################
@@ -257,6 +196,36 @@ mysql> select * from feature_type where class='HISTONE' limit 10;
 </pre>
 
 <br>
+
+
+<!--
+#####################################################################
+TABLE associated_feature_type
+#####################################################################
+-->
+<h4 id="associated_feature_type">associated_feature_type</h4>
+
+
+<p>This is a simple link table to capture many to many relationships between feature_type and any feature table.</p>
+
+
+<table class="spreadsheet">
+ <thead><tr><th>Table description</th><th>Field information</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><pre>
++-----------------+-------------------------------------------+------+-----+-----------+-------+
+| Field           | Type                                      | Null | Key | Default   | Extra |
++-----------------+-------------------------------------------+------+-----+-----------+-------+
+| feature_id      | int(10) unsigned                          | NO   | PRI |           |       | 
+| feature_table   | enum('annotated','external','regulatory') | NO   | PRI | annotated |       | 
+| feature_type_id | int(10) unsigned                          | NO   | PRI |           |       | 
++-----------------+-------------------------------------------+------+-----+-----------+-------+
+</pre></td></tr>
+  </tbody>
+</table>
+
+
 
 <!--
 #####################################################################
@@ -981,6 +950,57 @@ mysql> select * from result where X is not NULL limit 10;
 
 <p>See also <a href="#probe">probe</a>.
 <br>
+
+<!--
+#####################################################################
+#####################################################################
+TABLE result
+#####################################################################
+#####################################################################
+-->
+
+<h4 id="result">result</h4>
+
+<p>
+This table stores a feature representation of results from a given result_set.  The are stored in precomputed windows to enable 
+faster display at greater levels of zoom. 
+</p>
+<table class="spreadsheet">
+<thead><tr><th>Table description</th><th>Field Information</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><pre>
++-------------------+----------------------+------+-----+---------+----------------+
+| Field             | Type                 | Null | Key | Default | Extra          |
++-------------------+----------------------+------+-----+---------+----------------+
+| result_feature_id | int(10) unsigned     | NO   | PRI | NULL    | auto_increment | 
+| result_set_id     | int(10) unsigned     | NO   | MUL |         |                | 
+| seq_region_id     | int(10) unsigned     | NO   |     |         |                | 
+| seq_region_start  | int(10)              | NO   |     |         |                | 
+| seq_region_end    | int(10)              | NO   |     |         |                | 
+| seq_region_strand | tinyint(4)           | NO   |     |         |                | 
+| window_size       | smallint(5) unsigned | NO   |     |         |                | 
+| score             | double               | YES  |     | NULL    |                | 
++-------------------+----------------------+------+-----+---------+----------------+
+</pre></td>
+	<td><pre>
+
+
+
+
+
+
+
+
+
+
+Size of window in bp over which score is calculated
+
+</pre></td></tr>
+</tbody>
+</table>
+<br>
+
 
 <!--
 #####################################################################
