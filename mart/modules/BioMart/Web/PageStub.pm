@@ -17,26 +17,26 @@ sub generate_biomart_session {
   my( $biomart_web_obj, $session_id ) = @_;
   CGI::Session->find( sub {} );
   my $T = CGI::Session->new('driver:mysql', $session_id, {
-    'Handle' => $ENSEMBL_WEB_REGISTRY->dbAdaptor->get_dbhandle
+    'Handle' => $ENSEMBL_WEB_REGISTRY->user_db_handler
   });
   return $T;
 }
 
 sub new {
   my( $class, $session ) = @_;
-warn "INIT WEB MODULE...";
   my $renderer = new EnsEMBL::Web::Document::Renderer::Apache;
   my $self = {};
   unless( CGI::self_url() =~ m/__.+ByAjax/ ) {
     $page     = new EnsEMBL::Web::Document::Dynamic( $renderer,undef,$ENSEMBL_WEB_REGISTRY->species_defs );
     $page->_initialize_HTML unless $AJAX;
     $page->set_doc_type( 'none', 'none' );
-    $page->masthead->sp_bio    ||= 'BioMart';
-    $page->masthead->sp_common ||= 'BioMart';
-    $page->javascript->add_source( '/biomart/mview/js/martview.js' );
+#    $page->masthead->sp_bio    ||= 'BioMart';
+#    $page->masthead->sp_common ||= 'BioMart';
+    $page->body_javascript->add_source( '/biomart/mview/js/martview.js' );
 #  $page->javascript->add_script( 'addLoadEvent( debug_window )' );
-    $page->javascript->add_script( 'addLoadEvent( setVisibleStatus )' );
+    $page->body_javascript->add_script( 'addLoadEvent( setVisibleStatus )' );
     $page->stylesheet->add_sheet(  'all', '/biomart/mview/martview.css'      );
+    $page->stylesheet->add_sheet(  'all', '/martview-hacks.css'      );
     $self = {
       'page'     => $page,
       'session'  => $session,
@@ -54,7 +54,7 @@ sub start {
   $self->{'page'}->render_start;
 #  print '<script type="text/javascript">debug_window()</script>';
   $self->{'page'}->content->_start;
-  $self->{'page'}->content->render_settings_list;
+#  $self->{'page'}->content->render_settings_list;
 }
 
 sub end {
