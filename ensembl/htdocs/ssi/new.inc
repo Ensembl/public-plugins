@@ -6,10 +6,10 @@ Did you know you can:
 
 <dl>
 <dt><img src="/i/e-quest.gif" style="width:20px;height:19px;vertical-align:middle;padding-right:4px" alt="(e?)" />
-<a href="">Add custom tracks</a></dt>
+<a href="/info/website/help/control_panel.html#cp-panel">Add custom tracks</a></dt>
 <dd>using our new Control Panel</dd>
 <dt><img src="/i/e-quest.gif" style="width:20px;height:19px;vertical-align:middle;padding-right:4px" alt="(e?)" />
-<a href="">Upload your own data</a></dt>
+<a href="/info/website/help/control_panel.html#cp-data">Upload your own data</a></dt>
 <dd>and save it to your Ensembl account</dd>
 <dt><img src="/i/e-quest.gif" style="width:20px;height:19px;vertical-align:middle;padding-right:4px" alt="(e?)" />
 <a href="/Multi/blastview">Search for a DNA or protein sequence</a></dt>
