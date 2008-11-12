@@ -50,7 +50,7 @@ warn "CREATING SESSION.... ";
       $self->get_db_adaptor->do("insert into session (last_session_no) values(?)",{}, $session_id);
     }
 #    $self->get_db_adaptor->do("unlock tables");
-#-- Create cookie and set the subprocess environment variable ENSEMBL_FIRSTSESSION;
+#-- Create cookie and set the subprocess environment variable ENSEMBL_SESSION;
 #warn "  ## Creating new user session $session_id";
     if( $r ) { # We have an apache request object yeah!
 #warn "  `-- storing cookie...";
