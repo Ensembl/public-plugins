@@ -13,8 +13,9 @@ Gene annotation provided by Ensembl includes both automatic annotation,
 i.e. genome-wide determination of transcripts, and manual curation, i.e. 
 reviewed determination of transcripts on a case-by-case basis (in this 
 case limited to some species such as human and mouse). Furthermore, 
-Ensembl imports annotation from FlyBase (http://flybase.org/), WormBase 
-(http://www.wormbase.org/) and SGD (http://www.yeastgenome.org/). 
+Ensembl imports annotation from <a href="http://flybase.org/">FlyBase</a>, 
+<a href="http://www.wormbase.org/">WormBase</a> and 
+<a href="http://www.yeastgenome.org/">SGD</a>. 
 Ensembl transcripts displayed on our website are products of the Ensembl 
 automatic pipeline, termed the Ensembl genebuild. All Ensembl 
 transcripts are based on experimental evidence and thus the automated 
@@ -28,7 +29,7 @@ group at the Welcome Trust Sanger Institute are displayed in a separate track on
 <p>
 Standard Ensembl genebuilds are performed on high-coverage genomes and usually take at least four months to complete. While the genebuild process is tailored to each species according to the data that are available, the main steps followed in a standard genebuild are the same for every species.
 
-The initial set-up for a genebuild involves loading the assembly into an Ensembl schema datababase and then running several analyses across the genome including masking of repeats and ab-initio gene predictions. The ab-initio gene predictions are run for website display purposes only and are not used as supporting evidence for the gene structures displayed on our website.
+The initial set-up for a genebuild involves loading the assembly into an Ensembl schema datababase and then running several analyses across the genome including masking of repeats and <em>ab initio</em> gene predictions. The <em>ab initio</em> gene predictions are run for website display purposes only and are not used as supporting evidence for the gene structures displayed on our website.
 
 The first stage of the genebuild is known as the Targetted stage. Here, species-specific proteins are aligned to the genome and Genewise is used to build a transcript structure for the protein on the genome. 
 
@@ -98,26 +99,22 @@ This does not take the place of the Ensembl gene ID, ENSG..., which is stable fr
 The goal is to be more consistent with the naming of our manually curated imports from Vega.
 </p>
 
-<h2 id="Status and colour">Gene Status and Colours</h2>
+<h2 id="Status and colour">Gene Status</h2>
 
-<p>
-Ensembl genes and transcripts are <strong>known, in red or gold</strong>, or <strong>novel, in black</strong>.
-</p> 
-<p>
-A <strong>known</strong> gene or transcript is coloured <strong>red</strong> and has a sequence match in a public sequence database such as UniProtKB and NCBI RefSeq. 
-The match must be for the same species, otherwise the gene is considered to be novel 
-for that species.  <strong>Novel</strong> genes and transcripts are coloured <strong>black</strong>.  
-<strong>Gold</strong> genes or transcripts indicate that the model produced by the Ensembl genbuild
-has identical coding sequence (CDS) to a manually annotated transcript. Comparison of Ensembl-produced gene and transcript models to manually curated data is limited to human and mouse, and thus gold gene and transcript models will only be seen for these species.
+<p>Ensembl genes and transcripts are classified as <strong>known</strong>, 
+<strong>novel</strong> or <strong>merged</strong>.</p>
 
-Known miRNAs must have a match in miRBase for the same species. 
-Matches to IDs in other databases, such as UniProtKB and NCBI EntrezGene, are listed in a link from the Transcript page. 
-</p>
-<p>
-NOTE: Names and known/novel status are assigned to a transcript AFTER it is determined using either the Ensembl genebuild or reviewed, manual curation.
-Names are obtained by comparing Ensembl transcript sequence to sequence in other databases.  If a sequence match is found for the same species, the transcript is 'known'.
-If not, the transcript is 'novel'.
-</p>
+<p>A known gene or transcript matches to a sequence in a public, scientific
+database such as UniProtKB and NCBI RefSeq. The match must be for the
+same species, otherwise the gene is considered to be novel for that
+species. Ensembl/Havana merges occur when a manually
+annotated transcript from the Havana (Vega) project matches to the 
+Ensembl coding sequence exactly.  Havana-Ensembl merged transcripts are 
+limited to human and mouse.  Matches to IDs in other databases, such as 
+UniProtKB and NCBI EntrezGene, are listed under External References in 
+the Transcript tab.</p>
+
+<p>Known <a href="/info/docs/genebuild/ncrna.html">miRNAs</a> must have a match in miRBase for the same species.</p>
 
 <h2 id="Other">Other transcripts</h2>
 <p>
