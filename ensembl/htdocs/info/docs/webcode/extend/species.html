@@ -48,15 +48,15 @@ $SiteDefs::__species_aliases{'Geococcyx_californianus'} = [qw(gc roadrunner)];
 <p>Note that all aliases should be unique, so check in 
 <kbd>/public-plugins/ensembl/conf/SiteDefs.pm</kbd> to see which 
 are already in use. These aliases allow quick access to pages, so that users
-can type, e.g. www.ensembl.org/worm/Gene?Y42H9B.1 instead of
-www.ensembl.org/Caenorhabditis_elegans/Gene?Y42H9B.1</p>
+can type, e.g. www.ensembl.org/worm/Gene?g=Y42H9B.1 instead of
+www.ensembl.org/Caenorhabditis_elegans/Gene?g=Y42H9B.1</p>
 
 <p>You will also need a .ini file for the new species. Copy one of the 
 existing files from <kbd>/public-plugins/ensembl/conf/ini-files/</kbd>
 to <kbd>/public-plugins/mirror/conf/ini-files/</kbd> and edit it to
-reflect the relevant settings. The section that will require the most
-extensive updates is the [SEARCH_LINKS] list at the end of the file,
-since this will need to point to useful examples from your own database.</p>
+reflect the relevant settings. Add sample data points to the species ini file 
+to get links into the data - see the [SAMPLE_DATA] section at the bottom of any 
+ini file for examples of the correct format</p>
 
 <p>If your species has chromosomes, make sure you have the correct names
 in the array ENSEMBL_CHROMOSOMES, as this is used to draw karyotypes.</p>
@@ -84,25 +84,16 @@ link your new species into the current release.</p>
 
 <h3>Static content</h3>
 
-<p>Whilst the above changes will ensure that dynamic content is automatically
-generated for your new species, users will need a way into that data. Each
-species in Ensembl has a home page which offers entry points and general
-information; for the sake of argument we will assume that you are keeping
-to the standard page format.</p>
+<p>Species home pages are now dynamically generated, so only a minimum of maintenance
+is required. Much of the content is now generated from the databases and ini files.</p>
 
-<p>First, make a directory <kbd>/public-plugins/mirror/htdocs/Canis_latrans/</kbd>,
-then copy the HTML files from a similarly-assembled species. That is, if 
-your data is assembled into chromosomes, choose a species with chromosomes; 
-if it only has scaffolds or contigs, choose a species without chromosomes.</p>
+<p>You can optionally display a piece of static HTML with information about the species -
+create a directory <kbd>public-plugins/mirror/htdocs/ssi/species</kbd> and in it a file
+about_Canis_latrans.html. This file does not need &lt;html&gt; or  &lt;body&gt; tags, just the
+content (including images such as photos or logos) you want to display.</p>
 
-<p>Then simply go through the copied files and change the content to suit your
-data. If the species has chromosomes, you can use karyoview to generate a
-blank karyotype; the clickable image map can be created in a suitable HTML
-editor, or you can edit the file manually (an image manipulation program 
-such as the GIMP can be used to find the coordinates of each clickable area).</p>
-
-<p><img src="/img/info/thumb_Canis_latrans.png" class="float-left" />
-Finally, you need some kind of species image for the favourites list on the
+<img src="/img/info/thumb_Canis_latrans.png" style="float:left;width:40px;height:40px;margin-right:10px" />
+<p>Finally, you need some kind of species image for the favourites list on the
 home page. This should be a 40x40 pixel PNG file named thumb_Canis_latrans.png and
 placed in <kbd>/public-plugins/mirror/htdocs/img/species/</kbd>.</p>
 
