@@ -31,10 +31,10 @@ server, to ensure your changes are recompiled.</p>
 
 <h2>Changing the site logo</h2>
 
-<p>The Ensembl logo graphic can be found in <code>/htdocs/img/</code> directory.
+<p>The Ensembl logo graphic can be found in <code>/htdocs/i/</code> directory.
 First you should make a directory</p>
 
-<p><code>/public-plugins/mirror/htdocs/img/</code></p>
+<p><code>/public-plugins/mirror/htdocs/i/</code></p>
 
 <p>and copy your logo into it. Ideally your logo should be around 
 40 pixels high, so that it does not break the template layout.</p> 
@@ -45,11 +45,11 @@ substituting the appropriate parameters:</p>
 
 <pre class="code">
 [ENSEMBL_STYLE]
-SITE_LOGO               = /img/mylogo.gif
-SITE_LOGO_WIDTH         = 100
-SITE_LOGO_HEIGHT        = 40
-SITE_LOGO_ALT           = Ensembl mirror
-SITE_LOGO_HREF          = /ensembl/             ; Optional (see note below) 
+SITE_LOGO        = e-ensembl.gif
+SITE_LOGO_ALT    = Ensembl Home
+SITE_LOGO_WIDTH  = 150
+SITE_LOGO_HEIGHT = 40
+SITE_LOGO_HREF   = /
 </pre>
 
 <p>The <code>SITE_LOGO_HREF</code> parameter is only needed if your Ensembl mirror does not occupy the root
@@ -64,37 +64,68 @@ a custom logo defined, as above):
 
 <pre class="code">
 [ENSEMBL_STYLE]
+# Main template colours
 
-BACKGROUND1  = 333333 ; Edge colour for navigation menu / darkest background
-BACKGROUND2  = 666666 ;
-BACKGROUND3  = 999999 ; background colour used for LH navigation bar
-BACKGROUND4  = cccccc ; Light colour background used for dynamic images
-BACKGROUND5  = eeeeee ; Lightest colour background used for dynamic images
+# General
+PAGE_BG         = ffffff
+PAGE_TEXT       = 555555
+PAGE_HEADER     = 666666
+PAGE_LINK       = 3366bb
+PAGE_VISITED    = 000066
+PAGE_HOVER      = cc0000
 
-DEFAULT_ICON = /img/bullet.gif ; image used for LH buttons.
+# Masthead
+MH_BG           = 333366
+MH_BORDER       = 336699
+MH_TEXT         = ccddff
+MH_LINK         = ffffff
+MH_VISITED      = ffffff
+MH_HOVER        = cc0000
 
-HEADING      = 999999 ; colour used for headings / buttons
-SPECIESNAME  = 666666 ; colour used for scriptname heading
+# Extras
+TINT_BG         = eaeeff ; used as 'tint' colour on spreadsheets [1]
+TINT_BORDER     = bbccff
+CONTRAST_TEXT   = 333333
+CONTRAST_BG     = ffffdd ; used as 'tint' colour on spreadsheets [1]
+CONTRAST_BORDER = ffee99 ; [2]
+CONTRAST_HEADER = 993333
 
-LINK         = 0000cc ;
-LINK_VISIT   = 993399 ;
-LINK_HOVER   = cc0000 ; colour used for active / hover links;
+# These probably won't need customising on your site unless your
+# colour scheme is very strange!
 
-RELEASE_BG   = 999999 ; This is the colour of the release bar
-RELEASE_EDGE = 333333 ; This is the colour of the edge of the release bar
+PANEL_BG        = ffffff ; normally same as PAGE_BG [1]
+PANEL_BORDER    = cccccc ; [2]
+PANEL_TEXT      = 555555 ; normally same as PAGE_TEXT
 
-CONTIGBLUE1  = 368ec9 ; Contig-colours (light)
-CONTIGBLUE2  = 02599c ; Contig-colours (dark)
+NEUTRAL_BG      = f0f0f0 ; used for spreadsheet table stripes [1]
+NEUTRAL_BORDER  = cccccc ; [2]
 
-HIGHLIGHT1   = ffff99 ; Highlight colour (pale)
-HIGHLIGHT2   = ffff66 ; Highlight colour (vivid)
+REVERSE_TEXT    = ffffff ; normally white
+
+ALERT_BG        = ffcccc ; [1]
+ALERT_BORDER    = 993333 ; [2]
+ALERT_TEXT      = 333333
+
+# [1] needs to be pale enough for links to show
+# [2] needs to be dark enough for REVERSE_TEXT to show
+
+# Styles for auto-generated images
+
+IMAGE_BG1       = ffffe7 ; default background color for image
+IMAGE_BG2       = ffffcc ; color for alternating stripes..
+
+HIGHLIGHT1      = e8ffcc ; Highlight colour (pale)
+HIGHLIGHT2      = ccff99 ; Highlight colour (vivid)
+
+CONTIGBLUE1     = 368ec9 ; Contig-colours (light)
+CONTIGBLUE2     = 02599c ; Contig-colours (dark)
+
 </pre>
 
-<p>Simple alter the hex values to the colours you want. These placeholder 
+<p>Simply alter the hex values to the colours you want. These placeholder 
 values will be compiled into the Ensembl css files on server startup.</p>
 
-<p>Note: changing the bullet graphic is optional, but you may find that
-the default bullet does not look good on a different background colour!</p>
+<p>Note: we recommend not changing the font sizes, or you may have problems with your graphics!</p>
 
 </body>
 </html>
