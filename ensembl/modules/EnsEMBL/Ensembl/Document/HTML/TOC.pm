@@ -58,7 +58,6 @@ sub _traverse_tree {
     $title = ucfirst($title);
     
     my $url = $subsection->{'_path'} || $path.$section;
-    warn "URL $url";
     push @page_list, {'title' => $title, 'url'=> $url} unless $subsection->{'_nolink'};
     $self->_traverse_tree($subsection, $subsection->{'_path'});
   }
