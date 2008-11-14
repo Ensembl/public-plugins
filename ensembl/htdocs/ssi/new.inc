@@ -1,7 +1,8 @@
 <h2 class="first">New to Ensembl?</h2>
 
-<div class="info-box" style="float:right;width:40%;padding:10px;margin:5px">
-<strong>The new Ensembl website</strong>
+<div class="info-box" style="float:right;width:50%;padding:10px;margin:5px">
+<img src="/i/new_star.gif" style="float:left;padding-right:5px" alt="NEW!" />
+<strong>The new Ensembl website</strong><br />
 We've made some changes to our site, to make it faster and easier to use.
 <br /><a href="/info/docs/webcode/version_4.html">Find out more about what we've changed and why</a>!
 </div>
