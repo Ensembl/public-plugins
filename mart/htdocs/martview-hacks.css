@@ -7,9 +7,9 @@
 div#mart_mainpanel { border: 1px solid #999 }
 div#mart_bottom_bar { border: 0px; border-top: 1px solid black }
 
-.mart_btn, .mart_btnhov, .mart_btn_go, .mart_btnhov_go { background-color: #993333; color: #fff; border: 2px outset #933 }
+.mart_btn, .mart_btnhov, .mart_btn_go, .mart_btnhov_go { background-color: #426fbf; color: #fff; border: 2px outset #426fbf }
 
-.mart_tableSummaryPanel { background-color: #ffd }
+.mart_tableSummaryPanel { background-color: #eaeeff }
 
 
 .mart_summarypanel_listheader, .mart_summarypanel_listheader_mouseover, .mart_summarypanel_listheader_highlighted, .mart_summarypanel_AttFiltHeader, .mart_summarypanel_AttFiltHeader_highlighted, .mart_summarypanel_AttFiltHeader_mouseover { color: #426fbf; padding: 0 2px }
@@ -18,6 +18,6 @@ div#mart_bottom_bar { border: 0px; border-top: 1px solid black }
 
 .mart_btnhov_go:hover, .mart_btnhov:hover { background-color: #933 }
 
-.mart_summarypanel_listheader_highlighted, .mart_summarypanel_AttFiltHeader_highlighted { background-color: #fc9 }
-.mart_btn_new, .mart_btn_count, .mart_btn_url, .mart_btn_results, .mart_btn_help, .mart_btn_xml, .mart_btn_perl { background-color: #993333 }
+.mart_summarypanel_listheader_highlighted, .mart_summarypanel_AttFiltHeader_highlighted { background-color: #99b0ff }
+.mart_btn_new, .mart_btn_count, .mart_btn_url, .mart_btn_results, .mart_btn_help, .mart_btn_xml, .mart_btn_perl { background-color: #426fbf }
 
