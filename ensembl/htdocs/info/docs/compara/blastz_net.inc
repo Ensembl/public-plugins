@@ -656,6 +656,44 @@
 <th class="bg1 center" style="width:5em"><i>G.gal</i></th>
 </tr>
 
+<tr>
+<th></th>
+<th class="bg1 center" style="width:5em"><i>H.sap</i></th>
+<th class="bg3 center" style="width:5em"><i>P.tro</i></th>
+<th class="bg1 center" style="width:5em"><i>P.pyg</i></th>
+<th class="bg3 center" style="width:5em"><i>M.mul</i></th>
+<th class="bg1 center" style="width:5em"><i>M.mur</i></th>
+<th class="bg3 center" style="width:5em"><i>T.syr</i></th>
+<th class="bg1 center" style="width:5em"><i>O.gar</i></th>
+<th class="bg3 center" style="width:5em"><i>M.mus</i></th>
+<th class="bg1 center" style="width:5em"><i>R.nor</i></th>
+<th class="bg3 center" style="width:5em"><i>C.por</i></th>
+<th class="bg1 center" style="width:5em"><i>O.cun</i></th>
+<th class="bg3 center" style="width:5em"><i>F.cat</i></th>
+<th class="bg1 center" style="width:5em"><i>C.fam</i></th>
+<th class="bg3 center" style="width:5em"><i>B.tau</i></th>
+<th class="bg1 center" style="width:5em"><i>D.nov</i></th>
+<th class="bg3 center" style="width:5em"><i>E.tel</i></th>
+<th class="bg1 center" style="width:5em"><i>L.afr</i></th>
+<th class="bg3 center" style="width:5em"><i>P.cap</i></th>
+<th class="bg1 center" style="width:5em"><i>S.ara</i></th>
+<th class="bg3 center" style="width:5em"><i>S.tri</i></th>
+<th class="bg1 center" style="width:5em"><i>M.luc</i></th>
+<th class="bg3 center" style="width:5em"><i>P.vam</i></th>
+<th class="bg1 center" style="width:5em"><i>E.eur</i></th>
+<th class="bg3 center" style="width:5em"><i>T.bel</i></th>
+<th class="bg1 center" style="width:5em"><i>D.ord</i></th>
+<th class="bg3 center" style="width:5em"><i>T.tru</i></th>
+<th class="bg1 center" style="width:5em"><i>E.cab</i></th>
+<th class="bg3 center" style="width:5em"><i>O.pri</i></th>
+<th class="bg1 center" style="width:5em"><i>V.pac</i></th>
+<th class="bg3 center" style="width:5em"><i>M.dom</i></th>
+<th class="bg1 center" style="width:5em"><i>O.ana</i></th>
+<th class="bg3 center" style="width:5em"><i>G.gal</i></th>
+<th></th>
+</tr>
+
+
 </table>
 
 
@@ -689,42 +727,10 @@
 
 <tr>
 <th></th>
-<th class="bg3 center" style="width:5em"><i>H.sap</i></th>
-<th class="bg1 center" style="width:5em"><i>P.tro</i></th>
-<th class="bg3 center" style="width:5em"><i>P.pyg</i></th>
-<th class="bg1 center" style="width:5em"><i>M.mul</i></th>
-<th class="bg3 center" style="width:5em"><i>M.mur</i></th>
-<th class="bg1 center" style="width:5em"><i>T.syr</i></th>
-<th class="bg3 center" style="width:5em"><i>O.gar</i></th>
-<th class="bg1 center" style="width:5em"><i>M.mus</i></th>
-<th class="bg3 center" style="width:5em"><i>R.nor</i></th>
-<th class="bg1 center" style="width:5em"><i>C.por</i></th>
-<th class="bg3 center" style="width:5em"><i>O.cun</i></th>
-<th class="bg1 center" style="width:5em"><i>F.cat</i></th>
-<th class="bg3 center" style="width:5em"><i>C.fam</i></th>
-<th class="bg1 center" style="width:5em"><i>B.tau</i></th>
-<th class="bg3 center" style="width:5em"><i>D.nov</i></th>
-<th class="bg1 center" style="width:5em"><i>E.tel</i></th>
-<th class="bg3 center" style="width:5em"><i>L.afr</i></th>
-<th class="bg1 center" style="width:5em"><i>P.cap</i></th>
-<th class="bg3 center" style="width:5em"><i>S.ara</i></th>
-<th class="bg1 center" style="width:5em"><i>S.tri</i></th>
-<th class="bg3 center" style="width:5em"><i>M.luc</i></th>
-<th class="bg1 center" style="width:5em"><i>P.vam</i></th>
-<th class="bg3 center" style="width:5em"><i>E.eur</i></th>
-<th class="bg1 center" style="width:5em"><i>T.bel</i></th>
-<th class="bg3 center" style="width:5em"><i>D.ord</i></th>
-<th class="bg1 center" style="width:5em"><i>T.tru</i></th>
-<th class="bg3 center" style="width:5em"><i>E.cab</i></th>
-<th class="bg1 center" style="width:5em"><i>O.pri</i></th>
-<th class="bg3 center" style="width:5em"><i>V.pac</i></th>
-<th class="bg1 center" style="width:5em"><i>M.dom</i></th>
-<th class="bg3 center" style="width:5em"><i>O.ana</i></th>
-<th class="bg1 center" style="width:5em"><i>G.gal</i></th>
-<th class="bg3 center" style="width:5em"><i>G.acu</i></th>
-<th class="bg1 center" style="width:5em"><i>O.lap</i></th>
-<th class="bg3 center" style="width:5em"><i>C.int</i></th>
-<th class="bg1 center" style="width:5em"><i>C.sav</i></th>
+<th class="bg1 center" style="width:5em"><i>G.acu</i></th>
+<th class="bg3 center" style="width:5em"><i>O.lap</i></th>
+<th class="bg1 center" style="width:5em"><i>C.int</i></th>
+<th class="bg3 center" style="width:5em"><i>C.sav</i></th>
 <th></th>
 </tr>
 
