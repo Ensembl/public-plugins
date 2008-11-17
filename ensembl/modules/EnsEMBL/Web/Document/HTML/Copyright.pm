@@ -20,7 +20,8 @@ sub render {
 
   my $sd = $ENSEMBL_WEB_REGISTRY->species_defs;
 
-  my $referer = CGI::escape($ENV{'REQUEST_URI'});
+  my $you_are_here = $ENV{'REQUEST_URI'};
+  my $referer = CGI::escape($you_are_here);
   my $stable_URL = sprintf "http://%s.archive.ensembl.org%s",
       CGI::escape($sd->ARCHIVE_VERSION), CGI::escape($ENV{'REQUEST_URI'});
 
@@ -39,12 +40,19 @@ sub render {
     $self->printf(
       q(
       <br />
-        <a class="modal_link" id="p_link" href="%s">Permanent link</a> -
-        <a class="modal_link" id="a_link" href="%s">View in archive site</a>
+        <a class="modal_link" id="p_link" href="%s">Permanent link</a>
       ),
     '/Help/Permalink?url='.$stable_URL,
-    '/Help/ArchiveList?url='.$referer,
-  );
+    );
+    unless ($you_are_here =~ /html$/ && $you_are_here ne '/index.html') {
+      ## Omit archive links from static content, which tends to change a lot
+      $self->printf(
+        q(
+         - <a class="modal_link" id="a_link" href="%s">View in archive site</a>
+        ),
+      '/Help/ArchiveList?url='.$referer,
+      );
+    }
   }
   $self->print('</div>');
 
