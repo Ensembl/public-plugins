@@ -9,32 +9,7 @@
 
 <body>
 
-<h1>Compara Analyses</h1>
-
-<h2>Protein Homology Analysis</h2>
-
-<p>Three types of homology relationships are provided.</p>
-
-<h4>Protein trees</h4>
-
-<p>Protein trees are calculated using the longest peptide of all
-the Ensembl protein coding genes. Proteins are clustered based on
-Best-Reciprocal Hits and Blast Score Ratios. Each cluster of protein is
-aligned using Muscle. NJTREE is used to get a gene tree from each
-multiple alignment. The gene tree is reconciliated with the species
-tree to call duplication events.</p>
-
-<h4>Homologues</h4>
-
-<p>Homologues (orthologues and paralogues) are deduced from the
-protein trees. These are built using the longest transcript of each gene only.
-A detailed description of the method is provided <a href="homology_method.html">here</a>.</p>
-
-<h4>Families</h4>
-
-<p>Families are groups of related genes. The full set of Ensembl
-proteins is extended using all the metazoan proteins from SwissProt and
-SPTrEMBL.</p>
+<h1>Genomic alignments</h1>
 
 <h2>BlastZ-net Pairwise Alignment Analysis</h2>
 
@@ -129,7 +104,7 @@ sequences are highly conserved according to the previous score.</p>
 
 
 
-<h2>Synteny Analysis</h2>
+<h2 id="synteny">Synteny Analysis</h2>
 
 <p>We calculate syntenic regions using blastz-net alignments. We look for
 stretches where the alignment blocks are in synteny. The search is run in
