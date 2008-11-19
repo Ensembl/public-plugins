@@ -28,6 +28,9 @@ sub render {
   }
 
   $html .= "</ul>\n";
+
+  $html .= qq(<p><a href="/info/website/archives/assembly.html">Table of archives showing assemblies present in each one</a>.</p>);
+
   return $html;
 }
 
