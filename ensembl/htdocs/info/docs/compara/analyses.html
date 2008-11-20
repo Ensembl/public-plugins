@@ -21,7 +21,7 @@ alignments are the results of post-processing the raw BlastZ results.
 In the first step, original blocks are chained according to their
 location in both genomes. The netting process chooses for the reference
 species the best sub-chain in each region. The reference species in the
-BlastZ-net alignments is defined in this table:</p>
+BlastZ-net alignments is in bold:</p>
 
 [[INCLUDE::/info/docs/compara/blastz_net.inc]]
 
@@ -30,8 +30,16 @@ BlastZ-net alignments is defined in this table:</p>
 <p>Translated blat (<a href="http://www.genome.org/cgi/content/abstract/12/4/656">Kent
 W, Genome Res., 2002;12(4):656-64</a>) is used to look for
 homologous regions between more distantly related pairs of species. We
-expect to find homologies mainly in coding regions.</p>
+expect to find homologies mainly in coding regions. There are 2 sets of
+translated blat analyses: a new set where the raw results were passed through 
+a chain and netting procedure similar to that used for the BlastZ-net analyses 
+to produce the best sub-chain for the reference species (Translated Blat Net); 
+and a few species that have not yet been reanalysed (Translated Blat) </p>
 
+<h3>Translated Blat Net</h3>
+[[INCLUDE::/info/docs/compara/tblat_net.inc]]
+
+<h3>Translated Blat</h3>
 [[INCLUDE::/info/docs/compara/tblat.inc]]
 
 <h2 id="pecan">PECAN Multiple Alignment Analysis</h2>
@@ -66,22 +74,15 @@ Further details on these methods can be found at:</p>
 <li><a href="http://dx.doi.org/10.1101/gr.076521.108">Genome-wide nucleotide-level mammalian ancestor reconstruction</a></li>
 </ul>
 
-<p>The 9-way eutherian mammal alignments correspond to the EPO alignments
-for all high-coverage genomes.</p>
+<p>The 4-way catarrhini-specific alignments and 9-way eutherian mammal alignments were generated using the new EPO (Enredo Pecan Ortheus) pipeline. The
+9-way alignment contains all the high-coverage mammalian genomes. </p>
 
-[[INCLUDE::/info/docs/compara/epo_9way.inc]]
-
-<p>The 21-way eutherian mammal alignments correspond to the 23-way eutherian mammal alignments available
-in the previous release, where guinea pig (<i>Cavia porcelus</i>) and elephant
-(<i>Loxodontea africana</i>) have been removed.</p>
-
-[[INCLUDE::/info/docs/compara/epo_21way.inc]]
+<p>The 29-way eutherian mammmal alignments were not generated using the EPO pipeline due to difficulties with running Ortheus on the low coverage genomes. Instead the 20 low coverage genomes were mapped onto the human sequence of the 9-way eutherian mammal alignments using the BlastZ-net alignments.</p>
 
 
-<p>The 4-way catarrhini-specific alignments were also generated using the new EPO 
-(Enredo Pecan Ortheus) pipeline.</p>
+[[INCLUDE::/info/docs/compara/epo.inc]]
 
-[[INCLUDE::/info/docs/compara/epo_4way.inc]]
+
 
 <p id="ancestral"><strong>Ancestral sequences</strong> are inferred from the EPO multiple alignments 
 using Ortheus. Ortheus is a probabilistic method for the inference of ancestor, a.k.a tree, 
@@ -90,7 +91,7 @@ gaps to infer insertion and deletion events. Ancestral sequences are predicted f
 of the phylogenetic tree that relates the sequences. Each ancestral sequence is named 
 according to the derived extant species. For example, a sequence named Hsap, Ptro, Mmul 
 corresponds to the ancestor of the <i>Homo sapiens</i>, </i>Pan troglodytes</i>, and 
-<i>Macaca mulatta</i> genomes.</p>
+<i>Macaca mulatta</i> genomes.  </p>
 
 <h2 id="conservation">Conservation Analysis</h2>
 
