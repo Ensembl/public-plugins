@@ -1,13 +1,14 @@
 <h4>12 amniota vertebrates Pecan</h4>
-Canis familiaris<br />
-Bos taurus<br />
-Mus musculus<br />
-Rattus norvegicus<br />
-Equus caballus<br />
-Homo sapiens<br />
-Pan troglodytes<br />
-Gallus gallus<br />
-Pongo pygmaeus<br />
-Monodelphis domestica<br />
-Ornithorhynchus anatinus<br />
-Macaca mulatta<br />
+Human (Homo sapiens)<br />
+Chimpanzee (Pan troglodytes)<br />
+Orangutan (Pongo pygmaeus)<br />
+Macaque (Macaca mulatta)<br />
+Mouse (Mus musculus)<br />
+Rat (Rattus norvegicus)<br />
+Dog (Canis familiaris)<br />
+Cow (Bos taurus)<br />
+Horse (Equus caballus)<br />
+Opossum (Monodelphis domestica)<br />
+Platypus (Ornithorhynchus anatinus)<br />
+Chicken (Gallus gallus)<br />
+
