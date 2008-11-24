@@ -19,6 +19,7 @@ sub update_conf {
   $SiteDefs::__species_aliases{ 'Echinops_telfairi'        } = [qw(et etel echinops tenrec)];
   $SiteDefs::__species_aliases{ 'Equus_caballus'           } = [qw(ec horse)];
   $SiteDefs::__species_aliases{ 'Erinaceus_europaeus'      } = [qw(ee eeur hedgehog)];
+  $SiteDefs::__species_aliases{ 'Gorilla_gorilla'           } = [qw(ggo kong)]; 
   $SiteDefs::__species_aliases{ 'Felis_catus'              } = [qw(fc fcat cat)];
   $SiteDefs::__species_aliases{ 'Homo_sapiens'             } = [qw(hs hsap human man default)]; 
   $SiteDefs::__species_aliases{ 'Loxodonta_africana'       } = [qw(la lafr elephant africana loxodontai hathi nellie dumbo)];
