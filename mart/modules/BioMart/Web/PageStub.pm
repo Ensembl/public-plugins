@@ -32,7 +32,7 @@ sub new {
     $page->set_doc_type( 'none', 'none' );
 #    $page->masthead->sp_bio    ||= 'BioMart';
 #    $page->masthead->sp_common ||= 'BioMart';
-    $page->body_javascript->add_source( '/biomart/mview/js/martview.js' );
+    $page->javascript->add_source( '/biomart/mview/js/martview.js' );
 #  $page->javascript->add_script( 'addLoadEvent( debug_window )' );
     $page->body_javascript->add_script( 'addLoadEvent( setVisibleStatus )' );
     $page->stylesheet->add_sheet(  'all', '/biomart/mview/martview.css'      );
