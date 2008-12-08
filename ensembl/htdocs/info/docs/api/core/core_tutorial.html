@@ -185,7 +185,7 @@ By using a <kbd>while</kbd>-<kbd>shift</kbd> loop rather than a
 lazy loading of data is more likely to stay small.
 This is why the comment on the last loop above says that it is a "more
 memory efficient way", and this is also why we use this convention for
-most similar loop constructs in the reminder of this API tutorial.
+most similar loop constructs in the remainder of this API tutorial.
 </p>
 
 <p>
@@ -556,7 +556,7 @@ by the Transcript method <kbd>get_all_Introns()</kbd>.
 Like all Ensembl features the start of an exon is always less than or
 equal to the end of the exon, regardless of the strand it is on.
 The start of the transcript is the start of the first exon of a
-transcript on the forward strand or the start of the last exon of a
+transcript on the forward strand or the end of the last exon of a
 transcript on the reverse strand.
 The start and end of a gene are defined to be the lowest start value of
 its transcripts and the highest end value respectively.
@@ -802,7 +802,7 @@ sub print_feature_pairs
 <p>
 Repetitive regions found by RepeatMasker and TRF (Tandem Repeat Finder)
 are represented in the Ensembl database as RepeatFeatures.
-Short non-repetitive regions between repeats are found by the program
+Low-complexity regions are found by the program
 Dust and are also stored as RepeatFeatures.
 RepeatFeatures can be retrieved and used in the same way as other
 Ensembl features.
@@ -1420,7 +1420,7 @@ printf( "%d-%d (%+d)\n",
 Another useful method is <kbd>display_id()</kbd>.
 This will return a string that can be used as the name or identifier for
 a particular feature.
-For a gene or transcript this method would return the stable ID, for an
+For a gene or transcript this method would return the name/symbol, for an
 alignment feature this would return the hit sequence name (hseqname),
 etc.
 </p>
