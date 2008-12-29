@@ -22,6 +22,12 @@ gene trees reconciled with their species tree have their internal nodes
 annotated to distinguish duplication or speciation events.
 </p>
 
+<p>
+This methodology was published in
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/19029536">EnsemblCompara GeneTrees: Analysis of complete, duplication aware phylogenetic trees in vertebrates.
+Vilella AJ, Severin J, Ureta-Vidal A, Durbin R, Heng L, Birney E. Genome Research 2008 Nov 4</a>. Please cite this
+publication if you use the homologies from Ensembl.
+</p>
 
 <p>
 There is a clear concordance with reciprocal best approaches in the
@@ -86,6 +92,9 @@ ratio. For each pair of species we calculate a threshold on dS
 which is 2 * median(dS).  When the dS of a given ortholog gene pair is larger than
 this threshold, we mask out the dN/dS ratio.</p>
 
+<!-- <p>For the (sub)trees that have all dS branches shorter than 1.8, we -->
+<!-- also calculate sitewise dN/dS values for every (sub)alignment using -->
+<!-- SLR<a href="#fn6" class="fn-link">6</a>.</p> -->
 
 <p>** A description of the tree building method in TreeBeST: the CDS
 back-translated protein alignment (i.e., codon alignment) is used to
@@ -203,6 +212,8 @@ of P1 and P2 themselves, limiting the number of spurious short matches.</li>
 <li id="fn4">Li, H et al., TreeBeST: <a href="http://treesoft.sourceforge.net/treebest.shtml">http://treesoft.sourceforge.net/treebest.shtml</a>. Manuscript in preparation. TreeBeST was previously known as NJTREE.</li>
 
 <li id="fn5">Yang, Z. "PAML: a program package for phylogenetic analysis by maximum likelihood" <a href="http://abacus.gene.ucl.ac.uk/software/paml.html">Comput Appl Biosci. 1997 Oct; 13(5):555-556.</a></li>
+
+<!-- <li id="fn6">Yang, Z. "PAML: a program package for phylogenetic analysis by maximum likelihood" <a href="http://abacus.gene.ucl.ac.uk/software/paml.html">Comput Appl Biosci. 1997 Oct; 13(5):555-556.</a></li> -->
 
 
 </body>
