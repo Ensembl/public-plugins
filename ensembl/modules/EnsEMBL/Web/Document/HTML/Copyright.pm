@@ -31,10 +31,10 @@ sub render {
         %s release %d - %s
       &copy; <span class="print_hide"><a href="http://www.sanger.ac.uk/" class="nowrap">WTSI</a> /
       <a href="http://www.ebi.ac.uk/" style="white-space:nowrap">EBI</a></span>
-      <span class="screen_hide_inline">WTSI / EBI</span>
+      <span class="screen_hide_inline">WTSI / EBI<br />http://%s</span>
     ),
     $sd->ENSEMBL_SITETYPE, $sd->ENSEMBL_VERSION,
-    $sd->ENSEMBL_RELEASE_DATE,
+    $sd->ENSEMBL_RELEASE_DATE, $sd->ENSEMBL_SERVERNAME,
     );
   
   $self->printf('<div class="print_hide">'); 
