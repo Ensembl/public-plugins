@@ -36,6 +36,7 @@ sub render {
     $sd->ENSEMBL_RELEASE_DATE,
     );
   
+  $self->printf('<div class="print_hide">'); 
   unless ($ENV{'ENSEMBL_TYPE'} =~ /Help|Account|UserData/) {
     $self->printf(
       q(
@@ -54,7 +55,7 @@ sub render {
       );
     }
   }
-  $self->print('</div>');
+  $self->print('</div></div>');
 
 }
 
