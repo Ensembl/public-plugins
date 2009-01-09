@@ -29,8 +29,9 @@ sub render {
     q(
     <div class="twocol-left left unpadded">
         %s release %d - %s
-      &copy; <a href="http://www.sanger.ac.uk/" class="nowrap">WTSI</a> /
-      <a href="http://www.ebi.ac.uk/" style="white-space:nowrap">EBI</a>
+      &copy; <span class="print_hide"><a href="http://www.sanger.ac.uk/" class="nowrap">WTSI</a> /
+      <a href="http://www.ebi.ac.uk/" style="white-space:nowrap">EBI</a></span>
+      <span class="screen_hide_inline">WTSI / EBI</span>
     ),
     $sd->ENSEMBL_SITETYPE, $sd->ENSEMBL_VERSION,
     $sd->ENSEMBL_RELEASE_DATE,
