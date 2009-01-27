@@ -163,14 +163,24 @@
       
       
       <h3><a name="coord_system">coord_system</a></h3>
-      <p>Stores information about the available co-ordinate systems for this species. Note that there must be one co-ordinate system
-         that has the attribute "top_level" and one that has the attribute "sequence_level".
+      <p>
+        Stores information about the available co-ordinate systems for
+        the species identified through the species_id field.  Note that
+        for each species, there must be one co-ordinate system that
+        has the attribute "top_level" and one that has the attribute
+        "sequence_level".
       </p>
       <p><b>See also:</b></p>
       <p>Tables:</p>
       <ul>
-         <li><a href="#seq_region">seq_region</a> - Has coord_system_id foreign key to allow joins with the coord_system table.
-         </li>
+        <li><a href="#seq_region">seq_region</a>
+          - Has coord_system_id foreign key to allow joins with the
+          coord_system table.
+        </li>
+        <li><a href="#meta">meta</a>
+          - Holds meta information about each of the species in a
+          database, no matter if it's a multi-species or single-species
+          database.
       </ul>
       
       
@@ -437,8 +447,14 @@
       <p><b>See also:</b></p>
       <p>Tables:</p>
       <ul>
-         <li><a href="#assembly">assembly</a> - The default value for assembly.type is stored in the meta table.
-         </li>
+        <li><a href="#assembly">assembly</a>
+          - The default value for assembly.type is stored in the meta
+          table.
+        </li>
+        <li><a href="#coord_system">coord_system</a>
+         - The species_id in the meta table is linked to the species_id
+         in the coord_system table.
+        </li>
       </ul>
       
       
