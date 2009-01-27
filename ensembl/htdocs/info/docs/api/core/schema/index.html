@@ -370,7 +370,7 @@
       
       <h3><a name="translation">translation</a></h3>
       <p>Describes which parts of which exons are used in translation. The seq_start and seq_end columns are 1-based offsets into the
-         *relative* coordinate system of start_exon_id and end_exon_id. i.e, if the translation starts at the first base of the exon,
+         <em>relative</em> coordinate system of start_exon_id and end_exon_id. i.e, if the translation starts at the first base of the exon,
          seq_start would be 1. Transcripts are related to translations by the transcript_id key in this table.
       </p>
       
@@ -462,7 +462,7 @@
       
       
       <h3><a name="analysis_description">analysis_description</a></h3>
-      <p>Allows the storage of a textual description of the analysis, as well as a "display label", primarily for the Ensembl web site.</p>
+      <p>Allows the storage of a textual description of the analysis, as well as a "display label", primarily for the EnsEMBL web site.</p>
       <p><b>See also:</b></p>
       <p>Tables:</p>
       <ul>
@@ -938,7 +938,7 @@
          </dt>
          <dd>
             <p>This allows the compact storage of gapped alignments by storing the maximum extent of the matches and then a text string which
-               encodes the placement of gaps inside the alignment. Colloquially inside Ensembl this is called a and its adoption has shrunk
+               encodes the placement of gaps inside the alignment. Colloquially inside EnsEMBL this is called a and its adoption has shrunk
                the number of rows in the feature table around 4-fold.
             </p>
          </dd>
