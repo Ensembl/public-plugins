@@ -414,10 +414,26 @@
       
       
       <h3><a name="meta">meta</a></h3>
-      <p>Stores data about the data in the current schema. Taxonomy information, version information and the default value for the
-         type column in the assembly table are stored here. Unlike other tables, data in the meta table is stored as key/value pairs.
-         Also stores (via assembly.mapping keys) the relationships between co-ordinate systems in the assembly table.
+      <p>
+        Stores data about the data in the current schema.  Taxonomy
+        information, version information and the default value for the
+        type column in the assembly table are stored here.  Unlike other
+        tables, data in the meta table is stored as key-value pairs.
+        Also stores (via assembly.mapping keys) the relationships
+        between co-ordinate systems in the assembly table.
       </p>
+      <p>
+        The species_id field of the meta table is used in multi-species
+        databases and makes it possible to have species-specific
+        meta key-value pairs.  The species-specific meta key-value
+        pairs needs to be repeated for each species_id.  Entries in
+        the meta table that are not specific to any one species,
+        such as the schema.version key and any other schema-related
+        information must have their species_id field set to NULL.  The
+        default species_id, and the only species_id value allowed in
+        single-species databases, is 1.
+      </p>
+
       <p><b>See also:</b></p>
       <p>Tables:</p>
       <ul>
