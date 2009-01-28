@@ -14,6 +14,7 @@ sub update_conf {
   $SiteDefs::__species_aliases{ 'Bos_taurus'               } = [qw(bt btau cow moo)];
   $SiteDefs::__species_aliases{ 'Canis_familiaris'         } = [qw(cf cfam dog)]; 
   $SiteDefs::__species_aliases{ 'Cavia_porcellus'          } = [qw(cp cpor guineapig)];
+  $SiteDefs::__species_aliases{ 'Choloepus_hoffmanni'      } = [qw(ch chof sloth)];
   $SiteDefs::__species_aliases{ 'Dasypus_novemcinctus'     } = [qw(dn dnov dasypus armadillo)];
   $SiteDefs::__species_aliases{ 'Dipodomys_ordii'          } = [qw(do kangaroorat)];
   $SiteDefs::__species_aliases{ 'Echinops_telfairi'        } = [qw(et etel echinops tenrec)];
@@ -21,6 +22,7 @@ sub update_conf {
   $SiteDefs::__species_aliases{ 'Erinaceus_europaeus'      } = [qw(ee eeur hedgehog)];
   $SiteDefs::__species_aliases{ 'Gorilla_gorilla'          } = [qw(ggo kong gorilla)]; 
   $SiteDefs::__species_aliases{ 'Felis_catus'              } = [qw(fc fcat cat)];
+  $SiteDefs::__species_aliases{ 'Gorilla_gorilla'				   } = [qw(ggo kong)];
   $SiteDefs::__species_aliases{ 'Homo_sapiens'             } = [qw(hs hsap human man default)]; 
   $SiteDefs::__species_aliases{ 'Loxodonta_africana'       } = [qw(la lafr elephant africana loxodontai hathi nellie dumbo)];
   $SiteDefs::__species_aliases{ 'Oryctolagus_cuniculus'    } = [qw(oc ocun rabbit bugs bunny hutch harvey)];
@@ -45,6 +47,7 @@ sub update_conf {
   $SiteDefs::__species_aliases{ 'Vicugna_pacos'            } = [qw(lp alpaca)];
 #-------------------- birds
   $SiteDefs::__species_aliases{ 'Gallus_gallus'                  } = [qw(gg ggal chicken)];
+  $SiteDefs::__species_aliases{ 'Taeniopygia_guttata'      } = [qw(tg zebrafinch finch)];
 #-------------------- fish
   $SiteDefs::__species_aliases{ 'Danio_rerio'                    } = [qw(dr drer zfish zebrafish)];
   $SiteDefs::__species_aliases{ 'Gasterosteus_aculeatus'         } = [qw(ga gacu stickleback gasterosteus)];
