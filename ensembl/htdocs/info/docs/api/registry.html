@@ -5,7 +5,7 @@
 
 <body>
 
-<h1>Ensembl Registry</h1>
+<h1>EnsEMBL Registry</h1>
 
 
 <h2>Introduction</h2>
@@ -17,7 +17,7 @@ The Registry system allows to tell your programs where to find the EnsEMBL datab
 <h2>Use</h2>
 
 <p>
-The following call will load all the "latest" databases from the public Ensembl MySQL server ensembldb.ensembl.org:
+The following call will load all the "latest" databases from the public EnsEMBL MySQL server ensembldb.ensembl.org:
 </p>
 
 <pre class="code">
@@ -100,12 +100,13 @@ Bio::EnsEMBL::Utils::ConfigRegistry-&gt;add_alias(
 
 <p>
 From release to release, you will have to change the dbname parameter.
-In order to find out the exact name of the new database you can use the "show databases" command of mysql:
+In order to find out the exact name of the new database you can use the
+"SHOW DATABASES" command of MySQL:
 </p>
 
 <pre class="code">
 shell&gt; mysql -u anonymous -h ensembldb.ensembl.org -P 3306
-mysql&gt; show databases like "homo_sapiens_core_%";
+mysql&gt; SHOW DATABASES LIKE "homo_sapiens_core_%";
 </pre>
 
 <p>
@@ -185,12 +186,12 @@ setenv ENSEMBL_REGISTRY "/usr/local/share/ensembl_registry.conf"
 </ul>
 
 
-<h2 id="support">Ensembl Software Support</h2>
+<h2 id="support">EnsEMBL Software Support</h2>
 
 <p>
-Ensembl is an open project and we would like to encourage correspondence and discussions on any subject on any aspect of Ensembl.
+EnsEMBL is an open project and we would like to encourage correspondence and discussions on any subject on any aspect of EnsEMBL.
 Please see the
-<a href="http://www.ensembl.org/info/about/contact/">Ensembl Contacts</a> page for suitable options for getting in touch with us.
+<a href="http://www.ensembl.org/info/about/contact/">EnsEMBL Contacts</a> page for suitable options for getting in touch with us.
 </p>
 
 
