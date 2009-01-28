@@ -56,6 +56,8 @@ sub update_conf {
   $SiteDefs::__species_aliases{ 'Tetraodon_nigroviridis'         } = [qw(tn tnig tetraodon)];
 #-------------------- amphibians
   $SiteDefs::__species_aliases{ 'Xenopus_tropicalis'             } = [qw(xt xtro xenopus frog)];
+#-------------------- reptiles
+  $SiteDefs::__species_aliases{ 'Anolis_carolinensis'            } = [qw(ac anolis anole lizard)];
 #-------------------- flies
   $SiteDefs::__species_aliases{ 'Aedes_aegypti'                  } = [qw(aa aaeg aedes )];
   $SiteDefs::__species_aliases{ 'Anopheles_gambiae'              } = [qw(ag agam mosquito mos anopheles)];
