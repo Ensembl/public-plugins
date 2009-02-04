@@ -1,0 +1,444 @@
+<html>
+<head>
+<title>Displaying External Data</title>
+</head>
+
+<body>
+  
+<h1>External Data</h1>
+
+<p>
+There are three ways to display your own data in Ensembl.
+</p>
+
+<ul>
+  <li>Attach a file with a URL address</li>
+  <li>Upload a file to Ensembl</li>
+  <li>Attach a <a href="/info/docs/das/index.html" class="cp-external">DAS</a> source</li>
+</ul>
+
+<p>
+  Data files can either be uploaded to Ensembl, or attached via a web location
+  (URL). These mechanisms differ in that uploaded files are saved by Ensembl
+  whereas attached files are pulled from a remote location every time a view is
+  loaded. The advantage of URL data is that the file can be placed in one
+  location and can be updated without having to re-upload the file. The
+  disadvantage is that pages can take a long time to load, especially for large
+  files.
+</p>
+
+<p>
+  It is also possible to attach a DAS source. This combines the advantages of
+  uploaded files and attached files in that it is faster for large volumes of
+  data but can be updated by the data provider at will. However, setting up a
+  DAS source is a rather more involved process. See the separate
+  <a href="/info/docs/das/index.html">DAS section</a> for more details.
+</p>
+
+<h2>Attaching Files</h2>
+
+<p>
+  URL data can be seen in the <a href="/Homo_sapiens/Location/View?r=6:133017695-133161157" class="cp-external">
+  Location tab</a> of the Ensembl browser. Click on "Add custom data to page"
+  at the left of a Location view (e.g. Region in detail). Once the Custom Data
+  window is open, provide a file URL. The window has to be closed for the new
+  track to be seen.
+</p>
+
+<p>
+  This system is based on the custom annotation track system of the
+  <a rel="external" href="http://www.ucsc.edu/">UCSC</a>
+  <a rel="external" href="http://genome.ucsc.edu/">Genome Browser</a> and more
+  details about the data formats can be found at:
+  <a rel="external" href="http://genome.ucsc.edu/goldenPath/help/customTrack.html">
+  http://genome.ucsc.edu/goldenPath/help/customTrack.html</a>.
+</p>
+
+<p>
+  To add your web-based track to Ensembl, you need to:
+</p>
+
+<ol>
+<li><a href="#part1">Format the data set</a></li>
+<li><a href="#part2">Define information about the track</a></li>
+<li><a href="#part3">Choose your window of the genome (Location line)</a></li>
+</ol>
+
+<h3 id="part1">Formatting the Data Set</h3>
+
+<p>
+Firstly format your data as tab or space separated file using one of the following formats:
+</p>
+
+<ul>
+
+<li>GFF</li>
+<li>GTF</li>
+<li>BED</li>
+<li>PSL</li>
+<li>WIG</li>
+</ul>
+
+<p>
+Details of some of these formats can be found at 
+<a rel="external" href="http://genome.ucsc.edu/goldenPath/help/customTrack.html">http://genome.ucsc.edu/goldenPath/help/customTrack.html</a>
+</p>
+
+<h4>Notes:</h4>
+
+<ol>
+<li>You may include information for multiple tracks in the same file.</li>
+<li>As entries in GFF/GTF files may contain spaces, then columns in GFF/GTF files MUST be separated by a tab or at least 2 spaces.</li>
+</ol>
+
+<p><strong>Wiggle plots </strong>can be viewed for WIG and BED URL-based data.</p>
+
+<h4>BED format</h4>
+
+<p>
+  To display data in BED file as a colour gradient, histogram, tiling array or a
+  wiggle plot you need to add "useScore=X" to the 
+  <a rel="external" href="http://genome.ucsc.edu/goldenPath/help/customTrack.html#TRACK">
+  track description</a>. For example:
+</p>
+
+<p>track name=&quot;Histogram&quot; description=&quot;Histogram demonstration&quot; visibility=2 useScore=X height=30 </p>
+<p>where X can be:</p>
+<ul>
+<li>1 - tiling array</li>
+<li>2 - colourgradient</li>
+<li>3 - histogram</li>
+<li>4 - points plot</li>
+</ul>
+
+<p>
+  In case of colourgradient you can specify which colours to use to build the
+  gradient (cgColour1, cgColour2, cgColour3) and how many colour grades to use
+  (cgGrades). These are an Ensembl extension and are optional parameters - by
+  default Ensembl will create 20 shades of our standard colourgradient:
+  Yellow-Green-Blue. For example:
+</p>
+
+<blockquote>
+<div class="code">track name=&quot;ColorGradient&quot; description=&quot;ColourGradient demonstration&quot; visibility=2 useScore=2 cgGrades=50 cgColour1=white cgColour2=yellow cgColour3=red height=30</div>
+</blockquote>
+
+<p>Here are some example files:</p>
+
+<ul>
+<li><a href="/info/using/external_data/examples/wiggle_plot.bed" class="cp-external">example 1</a></li>
+<li><a href="/info/using/external_data/examples/wiggle_hg.bed" class="cp-external">example 2</a></li>
+<li><a href="/info/using/external_data/examples/wiggle_cg.bed" class="cp-external">example 3</a></li>
+<li><a href="/info/using/external_data/examples/wiggle_ta.bed" class="cp-external">example 4</a></li>
+</ul>
+
+<p>
+  <strong>Note</strong> that for faster display of high density data sets we recommend to use WIG
+  format.
+</p>
+
+<h4>WIG format</h4>
+
+<p>
+  We support all <a rel="external" href="http://genome.ucsc.edu/goldenPath/help/wiggle.html">
+  wiggle</a> type data formats including BED style, fixed step and variable step.
+</p>
+
+<p>
+  At the moment we have limited support of the wiggle track definition lines.
+  The supported options are:
+</p>
+
+<ul>
+<li>type</li>
+<li>name</li>
+<li>description</li>
+<li>graphType</li>
+<li>viewLimits</li>
+<li>autoScale</li>
+</ul>
+
+<p>
+  Where <em>type</em> is required and should be set to wiggle_0, <br/>
+  <em>graphType</em> is one of signal | colour | points | bar
+</p>
+
+<p>
+  For the details of configuring wiggle tracks please see
+  <a rel="external" href="http://genome.ucsc.edu/goldenPath/help/hgWiggleTrackHelp.html">
+  http://genome.ucsc.edu/goldenPath/help/hgWiggleTrackHelp.html</a>, and for an
+  example see <a href="/info/using/external_data/examples/wiggle_example.wig">here</a>.
+</p>
+
+<h3 id="part2">Defining Information about the Track</h3>
+
+<p>
+For each track you can define a number of properties.
+The following are currently supported:
+</p>
+
+<dl>
+<dt><b>name</b></dt>
+<dd>A name for the track has to be unique - this is used to label the track.</dd>
+
+<dt><b>description</b></dt>
+<dd>A description of the track - displayed in the pop-up</dd>
+
+<dt><b>colour</b></dt>
+
+<dd>
+Colour of features to be rendered - may be one of: standard X11 colour map colours (e.g. red, navajowhite), a hex value (FFCC00), an RGB triple (255,204,0). 
+Defaults to red
+</dd>
+
+<dt><b>url</b></dt>
+<dd>
+Defines a URL for an external link associated with this track. This URL will be used in the details page for the track. Any '$$' in this string this will be substituted with the features identifier. There is no default for this attribute.
+</dd>
+</dl>
+
+<p>
+These are defined via a "track" line with the following format:
+</p>
+
+<pre>
+  track attr=value
+</pre>
+
+<p>
+For example:
+</p>
+
+<pre>
+  track name=BACs description="BAC ends" color=green
+</pre>
+
+
+
+<h3 id="part3">Location Line in the File</h3>
+
+<p>
+To ask Ensembl to go automatically to a specific chromosomal region, include these lines in the top of your file.
+</p>
+
+<blockquote>
+  <tt>browser position <em>chr:start-end</em></tt>
+</blockquote>
+<p>e.g.</p>
+<blockquote>
+  <tt>browser position 19:6900000-7400000</tt>
+</blockquote>
+
+
+
+
+<h3 id="Z">Example Data Sources</h3>
+
+<ul>
+<li>
+<p>
+
+<strong>BED: BAC end sequences:</strong>
+<a href="/info/using/external_data/examples/url_bed.txt">http://www.ensembl.org/info/using/external_data/examples/url_bed.txt</a>
+</p>
+</li>
+
+<li>
+<p>
+<strong>PSL: INSR Human:</strong>
+<a href="/info/using/external_data/examples/url_psl.txt">http://www.ensembl.org/info/using/external_data/examples/url_psl.txt</a>
+</p>
+</li>
+
+<li>
+
+<p>
+<strong>GFF: BAC end sequences:</strong>
+<a href="/info/using/external_data/examples/url_gff.txt">http://www.ensembl.org/info/using/external_data/examples/url_gff.txt</a>
+</p>
+</li>
+</ul>
+
+
+<h2>Uploading Files</h2>
+
+<p>
+  The process of uploading files to Ensembl is very similar to attaching them
+  by URL. Instead of entering a web location (URL), instead click "Browse" to
+  choose a file to upload. The rest of the process is identical.
+</p>
+
+<h3 id="UploadFormat">Data Format</h3>
+
+<p>
+There are two versions of the upload format; one simple and one slightly more complex.
+</p>
+
+<p>
+The simple upload format is based on the format used by the Lightweight DAS Server <a rel="external" href="http://biodas.org/servers/LDAS.html">LDAS</a>. This format may be used for annotations on genomic displays, such as Region in Detail.
+</p>
+
+<p>
+To use this format, create a text file containing your feature data with the following tab-separated column format:
+</p>
+
+
+
+<table>
+<tr><th>Column</th><th>Data type</th><th></th></tr>
+<tr><td>1</td><td>Group class</td><td><i>e.g.</i> gene</td></tr>
+<tr><td>2</td><td>Group name</td><td><i>e.g.</i> ABCD1</td></tr>
+<tr><td>3</td><td>Type</td><td><i>e.g.</i> exon</td></tr>
+<tr><td>4</td><td>Subtype</td><td><i>e.g.</i> curated</td></tr>
+<tr><td>5</td><td>Chromosome</td><td><i>e.g.</i> X</td></tr>
+<tr><td>6</td><td>Start position</td><td><i>e.g.</i> 152511170</td></tr>
+<tr><td>7</td><td>End position</td><td><i>e.g.</i> 152512468</td></tr>
+<tr><td>8</td><td>Strand</td><td><i>e.g.</i> +</td></tr>
+<tr><td>9</td><td>Phase</td><td><i>e.g.</i> .</td></tr>
+<tr><td>10</td><td>Score</td><td><i>e.g.</i> 100</td></tr>
+<tr><td>11</td><td>Similarity alignment range <b>!!!OPTIONAL!!!</b></td><td><i>e.g.</i> 1</td></tr>
+<tr><td>12</td><td>Similarity alignment range <b>!!!OPTIONAL!!!</b></td><td><i>e.g.</i> 1299</td></tr>
+</table>
+
+<p>
+The example above in one tab-delimited line:
+</p>
+
+<pre>
+Gene	ABCD1	exon	curated	X	152511170	152512468	+	.	1.0e-12	1	1299
+</pre>
+
+<p>
+See additional information in the
+<a rel="external" href="http://biodas.org/servers/LDAS.html#item_The_%5Bannotations%5D_Section">annotations section</a> of the LDAS documentation.
+</p>
+
+<p>
+The slightly more complicated format is an extension of this format and must be used for any annotation that is to be displayed on ProtView or GeneView.  Detailed information about this format may be found in the pdf located <a rel="external" href="/info/using/external_data/das/EnsemblUploadFormatV2.pdf">here</a>.
+</p>
+
+<p>
+"Save and Close" the window, which will refresh the page you started from.  Use the "Add/manage custom data" link at the left to edit or delete the source.
+</p>
+
+
+<h3>Coordinate Systems</h3>
+
+<p>
+Ensembl understands either chromosome or (finished) BAC clone coordinates in uploaded data sets.
+You should use either one of these when uploading data into Ensembl.
+</p>
+
+
+<h4>Chromosome Coordinate-based Data</h4>
+
+<p>
+Chromosome coordinates are the easiest to work with since features may be annotated across clone boundaries.
+However, this coordinate system is unstable and will change with each new genome sequence assembly build.
+Therefore, if you use chromosome coordinates for uploaded data you will have to delete the data source and re-upload it in the new coordinate system every time the genome sequence assembly is updated.
+</p>
+
+<p>
+Use this
+<a href="/info/using/external_data/examples/upload_chromosome.txt">test data file</a> for a more extensive chromosome-based example.
+</p>
+
+<h4>BAC Clone Coordinate-based Data</h4>
+
+<p>
+BAC clone coordinates are generally more stable and will be stable across genome sequence assembly builds <strong>provided the clone version number has not changed</strong>.
+However you cannot annotate features that span the boundary of two clones, although you can create "split-features" that annotate portions on two or more clones.
+</p>
+
+<p>
+You can only "annotate" finished clones, for which a single contig sequence spanning the full clone length is available.
+If you provide data on unfinished clones, which contain more than one contig sequence, they will be <strong>ignored</strong>.
+</p>
+
+<p>
+First enter any chromosomal and/or clone coordinate data you wish to display in the same <strong>tab-separated</strong> column format, as explained in the section above.
+</p>
+
+<p>
+Next you must provide a list of clones you have annotated without version suffixes, their type, usually just "Clone" and their total lengths in base pairs.
+This information needs to appear below the feature data and separated from it using the special heading "[references]" on a line of its own.
+</p>
+
+<p>
+eg:
+</p>
+
+<pre>
+Similarity	AL137655.1.1	homology	wutblastn	AP000869.2	4260	4340	+	.	373.0000
+Similarity	Hs.326048.2	homology	wutblastn	AP000869.2	5406	5534	+	.	373.0000
+
+[references]
+AP000869	Clone	159840
+
+AP001267	Clone	239314
+</pre>
+
+<p>
+<strong>Note: The [references] section must appear last in the file, after all features.</strong>
+</p>
+
+<p>
+Download this
+<a href="/info/using/external_data/examples/upload_clone.txt">test data file</a> for a more extensive clone-based example.
+</p>
+
+<hr align="center" width="50%" />
+
+
+<p>
+To allow others to see the data set you have uploaded simply send them the data source ID.
+They may then use this ID to attach the data to their displays.
+<b>Do not send them the password</b> for the data source unless you want them to have permission to administer the source (<i>i. e.</i> delete it).
+</p>
+</li>
+
+
+<p>
+Optionally, a DAS source name (DSN), which Ensembl issued after a previous upload may be provided, if a data set needs re-attachment, amendment or replacement.
+Select the path to a file on your local machine, which contains the annotation information.
+To reduce network transmission time for large data volumes you may compress the data file with
+<a rel="external" href="http://directory.fsf.org/gzip.html">GNU gzip</a>,
+<a rel="external" href="http://www.bzip.org/">bzip2</a> or UNIX compress.
+Alternatively, data sets could be directly pasted into the box provided.
+
+</p>
+
+
+
+<h2 id="Disclaimer">Data Upload Disclaimer</h2>
+
+<p>
+Although your data source is allocated a unique ID and any management operations on the data (<i>e. g.</i> deleting) require a password, <strong>this is only trivial security</strong>.
+Data uploads are made on an <strong>open, non-secure</strong> network connection.
+If your data is sensitive you should not upload it but contact Ensembl for more information.
+</p>
+
+<p>
+While we undertake everything to not make uploaded data available to any person other than the originator we <strong>DO NOT</strong> provide any assurance whatsoever concerning data security and/or privacy.
+</p>
+
+<p>
+If you are concerned about data privacy you should consider setting up your own secure DAS server.
+</p>
+
+<h2 id="X">Deleting Tracks</h2>
+
+<p>
+The track will remain on your display while you navigate around the genome - to remove it,click the "Add/manage custom data" link at the left of "Region in Detail". The tracks you have currently displayed will be listed.  Deselect your link there. The window will close and the main Ensembl window will refresh.
+
+</p>
+
+
+<h2 id="Y">Creating an Image</h2>
+
+<p>
+To create an image for a publication or your own use, use the "Export image" button at the bottom of the Region in Detail window.
+</p>
+
+</body>
+</html>
