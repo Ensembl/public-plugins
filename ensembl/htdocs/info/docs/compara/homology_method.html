@@ -45,7 +45,7 @@ internal node of the tree.
 
 
 
-<p>The gene orthology and paralogy prediction pipeline has 7 basic steps:</p>
+<p>The gene orthology and paralogy prediction pipeline has 6 basic steps:</p>
 
 
 
@@ -58,23 +58,18 @@ Ensembl</li>
 self and non-self species) in a genome-wise manner</li>
 
 
-<li>Build a graph of gene relations based on Best Reciprocal Hits
-(BRH)<a href="#fn1" class="fn-link">1</a> and Best Score Ratio (BSR)<a href="#fn2" class="fn-link">2</a> values</li>
-
-
-<li>Extract the connected components (=single linkage clusters), each
-cluster representing a gene family.</li>
+<li>Build a sparse graph of gene relations based on Blast scores and generate clusters using hcluster_sg<a href="#fn1" class="fn-link"><sup>1</sup></a></li>
 
 
 <li>For each cluster, build a multiple alignment based on the
-protein sequences using MUSCLE<a href="#fn3" class="fn-link">3</a></li>
+protein sequences using a combination of multiple aligners, consensified by MCoffee<a href="#fn2" class="fn-link"><sup>2</sup></a></li>
 
 
 <li>For each aligned cluster, build a phylogenetic tree using
-TreeBeST<sup>4</sup> using the CDS back-translation of the protein multiple alignment 
+TreeBeST<a href="#fn3" class="fn-link"><sup>3</sup></a> using the CDS back-translation of the protein multiple alignment 
 from the original DNA sequences<sup>**</sup>. A rooted tree with internal duplication tags is 
 obtained at this stage, reconciling it with the species tree in
-<kbd>ensembl-compara/scripts/pipeline/species_tree_njtree.taxon_id.nh</kbd>.</li>
+<kbd>ensembl-compara/scripts/pipeline/species_tree_njtree.taxon_id.nh</kbd> (refer to section "Create the species tree file" in <kbd>ensembl-compara/scripts/pipeline/README-genetree</kbd> for a more detailed explanation).</li>
 
 
 <li>From each gene tree, infer gene pairwise relations of orthology<sup>*</sup> and
@@ -83,7 +78,7 @@ paralogy types.</li>
 
 <p>* There is an extra optional step which calculates the dN/dS values for the
 orthology relationships of closely related pairs of species. We use codeml in the 
-PAML<sup>5</sup> package (model=0, NSsites=0) for this. </p>
+PAML<a href="#fn4" class="fn-link"><sup>4</sup></a> package (model=0, NSsites=0) for this (ensembl-compara/scripts/homology/codeml.ctl.hash). </p>
 
 <p>We only calculate these dN/dS values for closely-related pairs of
 species. When the species evolutionary distance is too large, the
@@ -107,8 +102,8 @@ build 5 different trees:</p>
 <li>a NJ tree using dS distance, based on the codon alignment.</li>
 </ol>
 
-<p>For (i) and (ii), TreeBeST uses a modified version of phyml release
-2.4.5 (Heng Li, manuscript in preparation) which takes an input
+<p>For (1) and (2), TreeBeST uses a modified version of phyml release
+2.4.5 which takes an input
 species tree, and tries to build a gene tree that is consistent with
 the topology of the species tree. This "species-guided" phyml uses the
 original phyml tree-search code. However, the objective function
@@ -162,7 +157,7 @@ speciation event. We predict several descriptions of orthologues:
 
 <p>
 A within_species_paralog corresponds to a relation between 2
-genes of the SAME species where the ancestor node
+genes of the *same* species where the ancestor node
 has been labelled as a duplication node e.g. H2:H2', M2:M2' but does
 not necessarily mean that the duplication event
 has occurred in this species only. For example, M2':M3' are
@@ -175,16 +170,16 @@ event to the ancestor of "Euarchontoglires".
 
 <p>
 A between_species_paralog corresponds to a relation between 2
-genes of DIFFERENT species where the ancestor node
+genes of *different* species where the ancestor node
 has been labelled as a duplication node e.g. M1:H2 or M1:H3.
 Special cases of between_species_paralog can be singled out where they
 can be characterised as one2one relations. Such cases are then relabelled
 apparent_ortholog_one2one. Apparent orthologs can be the results of real
 duplication followed
 by gene loss (as shown in the picture below), but can also be the results of a wrong gene tree topology
-and wrong duplication node labelling.
+and wrong duplication node labelling. The remaining between_species_paralogs only reflect long-distance relations aren't of much use for
+most phylogenetic/family analyses.
 </p>
-
 
 
 <img style="width: 618px; height: 470px;" alt="tree_example2" src="tree_example2.jpg">
@@ -193,25 +188,16 @@ and wrong duplication node labelling.
 <h2>Notes and References</h2>
 
 <ol>
-<li id="fn1">BRH: Best Reciprocal Hit. When a query gene translation has an
-unambiguous 'best' hit to a target translation, and that particular
-target translation has an unambiguous 'best' hit back to the starting
-query translation. The discrimination function for 'best' is a simple
-sort of blastp &gt; score, %identity &gt; %positivity.</li>
-
-
-<li id="fn2">BSR: Blast Score Ratio. When 2 proteins P1 and P2 are compared,
-BSR=scoreP1P2/max(self-scoreP1 or self-scoreP2). This is, the score between 
-P1 and P2 (numerator) is compared to the score of P1 against itself and the score of P2 
-against itself (denominator). The default threshold used in the initial clustering step 
-is 0.33. This effectively relates the length of the P1 vs P2 match against the length
-of P1 and P2 themselves, limiting the number of spurious short matches.</li>
-
-<li id="fn3">Edgar, R.C. "MUSCLE: a multiple sequence alignment method with reduced time and space complexity" <a href="http://www.biomedcentral.com/1471-2105/5/113">BMC Bioinformatics 2004 Aug 19;5:113.</a></li>
-
-<li id="fn4">Li, H et al., TreeBeST: <a href="http://treesoft.sourceforge.net/treebest.shtml">http://treesoft.sourceforge.net/treebest.shtml</a>. Manuscript in preparation. TreeBeST was previously known as NJTREE.</li>
-
-<li id="fn5">Yang, Z. "PAML: a program package for phylogenetic analysis by maximum likelihood" <a href="http://abacus.gene.ucl.ac.uk/software/paml.html">Comput Appl Biosci. 1997 Oct; 13(5):555-556.</a></li>
+<li id="fn1"><a href="http://treesoft.svn.sourceforge.net/viewvc/treesoft/branches/lh3/hcluster/">Hcluster_sg</a>
+: hierarchical clustering software for sparse graphs. hcluster_sg performs hierarchical clustering under mean distance. It reads an input file that describes the similarity between two sequences, and groups two nearest nodes at each step. When two nodes are joined, the distance between the joined node and all the other nodes are updated by mean distance. This procedure is iterated until one of the three rules is met: (a) Do not merge cluster A and B if the total number of edges between A and B is smaller than |A|*|B|/3, where |A| and |B| are the sizes of A and B, respectively. This rule guarantees each cluster is compact. (B) Do not join A to any other cluster if |A| < 500. This rule avoids huge clusters which may cause computational burden for multialignment and tree building as well. (C) Do not join A and B if both A and B contain plant genes or both A and B contain Fungi genes. This rule tries to find animal gene families. TreeFam clustering is done with outgroups. Hcluster_sg also introduces an additional edge breaking rule: removes an edge between cluster A and B if the number of edges between A and B is smaller than |A|*|B|/10. This heuristic rule removes weak relations which are quite unlikely to be joined at a later step.
+</li>
+<br>
+<li id="fn2">Wallace IM, O'Sullivan O, Higgins DG, Notredame C. "M-Coffee: combining multiple sequence alignment methods with T-Coffee." <a href="http://www.ncbi.nlm.nih.gov/pubmed/16556910">Nucleic Acid Research. 2006 Mar 23;34(6):1692-9.</a> The current aligner sets are divided into 3 levels, each alignment is tried with the first, and retried on the second or third on failure. First level: mafftgins_msa, muscle_msa, kalign_msa, probcons_msa; second level: mafft_msa, muscle_msa, clustalw_msa, kalign_msa; third level: mafft --auto.</li>
+<br>
+<li id="fn3">Li, H et al., TreeBeST: <a href="http://treesoft.sourceforge.net/treebest.shtml">http://treesoft.sourceforge.net/treebest.shtml</a>. Manuscript in preparation. TreeBeST was previously known as NJTREE.</li>
+<br>
+<li id="fn4">Yang, Z. "PAML: a program package for phylogenetic analysis by maximum likelihood" <a href="http://abacus.gene.ucl.ac.uk/software/paml.html">Comput Appl Biosci. 1997 Oct; 13(5):555-556.</a></li>
+<br>
 
 <!-- <li id="fn6">Yang, Z. "PAML: a program package for phylogenetic analysis by maximum likelihood" <a href="http://abacus.gene.ucl.ac.uk/software/paml.html">Comput Appl Biosci. 1997 Oct; 13(5):555-556.</a></li> -->
 
