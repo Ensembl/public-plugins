@@ -8,13 +8,17 @@
 
 <h1>Linking in to Ensembl</h1>
 
+<h2>URL structure</h2>
+
 <p>
   URLs for Ensembl views take the format:
 </p>
 
 <kbd>
-  http://www.ensembl.org/<em>species</em>/<em>section</em>/<em>view</em>?g=<em>gene</em>;t=<em>transcript</em>;r=<em>seq_region</em>:<em>start</em>-<em>end</em>
+  http://www.ensembl.org/<em>species</em>/<em>section</em>/<em>page</em>?g=<em>gene</em>;t=<em>transcript</em>;r=<em>seq_region</em>:<em>start</em>-<em>end</em>
 </kbd>
+
+<h3>Location-based views</h3>
 
 <p>
   Any combination of the gene, transcript and genomic region may be specified.
@@ -27,6 +31,16 @@
   <li><a href="http://www.ensembl.org/Homo_sapiens/Location/View?t=ENST00000309486">http://www.ensembl.org/Homo_sapiens/Location/View?t=ENST00000309486</a></li>
   <li><a href="http://www.ensembl.org/Homo_sapiens/Location/View?r=17:38449840-38530994">http://www.ensembl.org/Homo_sapiens/Location/View?r=17:38449840-38530994</a></li>
 </ul>
+
+<h3>Feature-based views</h3>
+
+<p>Views based on a gene, transcript or variation need the parameter of that type in their URL - a location alone is insufficient:</p>
+
+<ul>
+<li><strong>RIGHT</strong>: <a href="http://www.ensembl.org/Homo_sapiens/Gene/Summary?g=ENSG00000012048">http://www.ensembl.org/Homo_sapiens/Gene/Summary?g=ENSG00000012048</a></li>
+<li><strong>WRONG!</strong> http://www.ensembl.org/Homo_sapiens/Gene/Summary?r=17:38449840-38530994</li>
+</ul>
+
 
 <h2>Customising via links</h2>
 
@@ -69,7 +83,7 @@
   context1=key1=value1,key2=value2,key2=value2;context2=key3=value3
 </kbd>
 
-<h2>Global Page Settings</h2>
+<h3>Global Page Settings</h3>
 
 <p>
   Global page settings are changed using the <strong>config</strong> key. For
@@ -99,7 +113,7 @@
   <a href="http://www.ensembl.org/Homo_sapiens/Transcript/Exons?t=ENST00000309255;config=flanking=60,seq_cols=60,fullseq=yes">http://www.ensembl.org/Homo_sapiens/Transcript/Exons?t=ENST00000309255;config=flanking=60,seq_cols=60,fullseq=yes</a>
 </kbd>
 
-<h2>Configuring Panels</h2>
+<h3>Configuring Panels</h3>
 
 <p>
   To change configuration for an individual panel add a parameter referring to
@@ -122,7 +136,7 @@
   of the "renderer" to use - the latter depends on the type of track.
 </p>
 
-<h3>Track names</h3>
+<h4>Track names</h4>
 
 <p>
   Track names are systematically named. The following example identifies a track
@@ -133,7 +147,7 @@
   transcript_core_ensembl
 </kbd>
 
-<h3>Renderers</h3>
+<h4>Renderers</h4>
 
 <p>
   Renderers depend on the type of track:
@@ -150,7 +164,7 @@
   </li>
 </ul>
 
-<h3>Example - configure a track</h3>
+<h4>Example - configure a track</h4>
 
 <p>
   To collapse the Ensembl genes track down to a single line per
@@ -161,7 +175,7 @@
   <a href="http://www.ensembl.org/Homo_sapiens/Location/View?g=ENSG00000012048;contigviewbottom=transcript_core_ensembl=collapsed_nolabel;config=panel_top=off">http://www.ensembl.org/Homo_sapiens/Location/View?g=ENSG00000012048;contigviewbottom=transcript_core_ensembl=collapsed_nolabel;config=panel_top=off</a>
 </kbd>
 
-<h2>Attaching External Data</h2>
+<h3>Attaching External Data</h3>
 
 <p>
   To attach DAS or UCSC-style URL data, follow the procedure above for
@@ -178,7 +192,7 @@
   <em>source</em> is the location of the external data.
 </p>
 
-<h3>Renderers</h3>
+<h4>Renderers</h4>
 
 <p>
   Renderers for URL data are the same as for alignment tracks (see above. For
@@ -186,7 +200,7 @@
   <em>nolabels</em> (hide labels) and <em>off</em>.
 </p>
 
-<h3>Examples - attach external data</h3>
+<h4>Examples - attach external data</h4>
 
 <p>
   To attach an example data file by URL and display the features in an ungrouped
@@ -206,7 +220,7 @@
   http://www.ensembl.org/Homo_sapiens/Location/View?g=ENSG00000012048;contigviewbottom=das:http://www.ensembl.org/das/Homo_sapiens.NCBI36.transcript=labels
 </kbd>
 
-<h3>Important Note</h3>
+<h4>Important Note</h4>
 
 <p>
   It is <strong>only</strong> possible to add a DAS track that is
