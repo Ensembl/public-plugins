@@ -6,6 +6,9 @@ Did you know you can:
 
 <dl>
 <dt><img src="/i/e-quest.gif" style="width:20px;height:19px;vertical-align:middle;padding-right:4px" alt="(e?)" />
+<a href="/info/website/tutorials/">Learn how to use Ensembl</a></dt>
+<dd>with our video tutorials and walk-throughs</dd>
+<dt><img src="/i/e-quest.gif" style="width:20px;height:19px;vertical-align:middle;padding-right:4px" alt="(e?)" />
 <a href="/info/website/help/control_panel.html#cp-panel">Add custom tracks</a></dt>
 <dd>using our new Control Panel</dd>
 <dt><img src="/i/e-quest.gif" style="width:20px;height:19px;vertical-align:middle;padding-right:4px" alt="(e?)" />
