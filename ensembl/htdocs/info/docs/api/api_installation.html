@@ -96,6 +96,8 @@ Under <kbd>bash</kbd>, <kbd>ksh</kbd>, or any <kbd>sh</kbd>-derived shell:
 PERL5LIB=${PERL5LIB}:${HOME}/src/bioperl-live
 PERL5LIB=${PERL5LIB}:${HOME}/src/ensembl/modules
 PERL5LIB=${PERL5LIB}:${HOME}/src/ensembl-compara/modules
+PERL5LIB=${PERL5LIB}:${HOME}/src/ensembl-variation/modules
+PERL5LIB=${PERL5LIB}:${HOME}/src/ensembl-functgenomics/modules
 export PERL5LIB
 </pre>
 </li>
@@ -109,6 +111,8 @@ Under <kbd>csh</kbd> or <kbd>tcsh</kbd>:
 setenv PERL5LIB ${PERL5LIB}:${HOME}/src/bioperl-live
 setenv PERL5LIB ${PERL5LIB}:${HOME}/src/ensembl/modules
 setenv PERL5LIB ${PERL5LIB}:${HOME}/src/ensembl-compara/modules
+setenv PERL5LIB ${PERL5LIB}:${HOME}/src/ensembl-variation/modules
+setenv PERL5LIB ${PERL5LIB}:${HOME}/src/ensembl-functgenomics/modules
 </pre>
 </li>
 
@@ -118,14 +122,10 @@ Under Windows (assuming you installed the APIs in C:\src\):
 </p>
 
 <pre>
-set PERL5LIB=C:\src\bioperl-live;C:\src\ensembl\modules;C:\src\ensembl-compara\modules
+set PERL5LIB=C:\src\bioperl-live;C:\src\ensembl\modules;C:\src\ensembl-compara\modules;C:\src\ensembl-variation\modules;C:\src\ensembl-functgenomics\modules
 </pre>
 </ul>
 
-<p>
-NB: If you installed extra Ensembl APIs, don't forget to add their path
-to the <var>PERL5LIB</var> environment variable.
-</p>
 </li>
 
 </ol>
