@@ -40,17 +40,20 @@ sub render {
 sub render_assembly_table {
   my ($releases, $species, $release_species) = @_;
 
-  my $header = "<tr><th>Species</th>";
+  my $header = '<tr>
+    <th style="width:20%">Species</th>
+  ';
   my $body = "";
 
   my ($date, $version, $order, $species_name, $row, $rs, $cells, $assembly_name, $current_name, $class);
 
   my $c = { -1 => 'bg4', 1 => 'bg2', x => 1 }; # CSS class flip-flop for tds
 
+  my $style = sprintf( ' style="width:%0.3f%%"', 80 / @$releases );
   foreach my $rel (@$releases) {
     $date = $rel->online eq 'Y' ? qq{<a href="http://} . $rel->archive . qq{.archive.ensembl.org">} . $rel->shorter_date . "</a>" : $rel->shorter_date;
 
-    $header .= "<th>$date<br />v".$rel->id."</th>";
+    $header .= "<th$style>$date<br />v".$rel->id."</th>";
   }
 
   $header .= "</tr>\n";
