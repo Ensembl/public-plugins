@@ -127,19 +127,54 @@
 </tr>
 
 <tr>
+<td class="bg3 left"><b><i>Taeniopygia guttata</i></b></td>
+<td class="bg4 center"><font color="blue">YES</font></td><!-- H.sap -->
+<td class="bg3 center">-</td><!-- M.mus -->
+<td class="bg4 center">-</td><!-- R.nor -->
+<td class="bg3 center"><font color="blue">YES</font></td><!-- G.gal -->
+<td class="bg4 center">-</td><!-- X.tro -->
+<td class="bg3 center">-</td><!-- T.nig -->
+<td class="bg4 center">-</td><!-- T.rub -->
+<td class="bg3 center">-</td><!-- O.lat -->
+<td class="bg4 center">-</td><!-- G.acu -->
+<td class="bg3 center">-</td><!-- D.rer -->
+<td class="bg4 center">-</td><!-- C.sav -->
+<th class="bg3 center">-</td><!-- C.int -->
+<th class="bg4 center" style="width:5em"><i>T.gut</i></th>
+</tr>
+
+<tr>
+<td class="bg1 left"><b><i>Anolis carolinensis</i></b></td>
+<td class="bg3 center"><font color="blue">YES</font></td><!-- H.sap -->
+<td class="bg1 center">-</td><!-- M.mus -->
+<td class="bg3 center">-</td><!-- R.nor -->
+<td class="bg1 center"><font color="blue">YES</font></td><!-- G.gal -->
+<td class="bg3 center">-</td><!-- X.tro -->
+<td class="bg1 center">-</td><!-- T.nig -->
+<td class="bg3 center">-</td><!-- T.rub -->
+<td class="bg1 center">-</td><!-- O.lat -->
+<td class="bg3 center">-</td><!-- G.acu -->
+<td class="bg1 center">-</td><!-- D.rer -->
+<td class="bg3 center">-</td><!-- C.sav -->
+<th class="bg1 center">-</td><!-- C.int -->
+<td class="bg3 center">-</td><!-- T.gut -->
+<th class="bg1 center" style="width:5em"><i>A.car</i></th>
+</tr>
+
+<tr>
 <th></th>
-<th class="bg3 center" style="width:5em"><i>H.sap</i></th>
-<th class="bg1 center" style="width:5em"><i>M.mus</i></th>
-<th class="bg3 center" style="width:5em"><i>R.nor</i></th>
-<th class="bg1 center" style="width:5em"><i>G.gal</i></th>
-<th class="bg3 center" style="width:5em"><i>X.tro</i></th>
-<th class="bg1 center" style="width:5em"><i>T.nig</i></th>
-<th class="bg3 center" style="width:5em"><i>T.rub</i></th>
-<th class="bg1 center" style="width:5em"><i>O.lat</i></th>
-<th class="bg3 center" style="width:5em"><i>G.acu</i></th>
-<th class="bg1 center" style="width:5em"><i>D.rer</i></th>
-<th class="bg3 center" style="width:5em"><i>C.sav</i></th>
-<th class="bg1 center" style="width:5em"><i>C.int</i></th>
+<th class="bg4 center" style="width:5em"><i>H.sap</i></th>
+<th class="bg3 center" style="width:5em"><i>M.mus</i></th>
+<th class="bg4 center" style="width:5em"><i>R.nor</i></th>
+<th class="bg3 center" style="width:5em"><i>G.gal</i></th>
+<th class="bg4 center" style="width:5em"><i>X.tro</i></th>
+<th class="bg3 center" style="width:5em"><i>T.nig</i></th>
+<th class="bg4 center" style="width:5em"><i>T.rub</i></th>
+<th class="bg3 center" style="width:5em"><i>O.lat</i></th>
+<th class="bg4 center" style="width:5em"><i>G.acu</i></th>
+<th class="bg3 center" style="width:5em"><i>D.rer</i></th>
+<th class="bg4 center" style="width:5em"><i>C.sav</i></th>
+<th class="bg3 center" style="width:5em"><i>C.int</i></th>
 <th></th>
 </tr>
 
