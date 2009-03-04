@@ -1,48 +1,51 @@
 <h4>4 catarrhini primates EPO</h4>
-Human (Homo sapiens)<br />
-Chimpanzee (Pan troglodytes)<br />
-Orangutan (Pongo pygmaeus)<br />
-Macaque (Macaca mulatta)<br />
+Human <I>(Homo sapiens)</I><br />
+Chimpanzee <I>(Pan troglodytes)</I><br />
+Orangutan <I>(Pongo pygmaeus)</I><br />
+Macaque <I>(Macaca mulatta)</I><br />
+
 
 <h4>9 eutherian mammals EPO</h4>
-Human (Homo sapiens)<br />
-Chimpanzee (Pan troglodytes)<br />
-Orangutan (Pongo pygmaeus)<br />
-Macaque (Macaca mulatta)<br />
-Mouse (Mus musculus)<br />
-Rat (Rattus norvegicus)<br />
-Dog (Canis familiaris)<br />
-Cow (Bos taurus)<br />
-Horse (Equus caballus)<br />
+Human <I>(Homo sapiens)</I><br />
+Chimpanzee <I>(Pan troglodytes)</I><br />
+Orangutan <I>(Pongo pygmaeus)</I><br />
+Macaque <I>(Macaca mulatta)</I><br />
+Mouse <I>(Mus musculus)</I><br />
+Rat <I>(Rattus norvegicus)</I><br />
+Dog <I>(Canis familiaris)</I><br />
+Cow <I>(Bos taurus)</I><br />
+Horse <I>(Equus caballus)</I><br />
 
-<h4>29 eutherian mammals EPO</h4>
-Human (Homo sapiens)<br />
-Chimpanzee (Pan troglodytes)<br />
-Orangutan (Pongo pygmaeus)<br />
-Macaque (Macaca mulatta)<br />
+<h4>31 eutherian mammals EPO+low coverage projection</h4>
+Human <I>(Homo sapiens)</I><br />
+Chimpanzee <I>(Pan troglodytes)</I><br />
+Gorilla <I>(Gorilla gorilla)</I><br />
+Orangutan <I>(Pongo pygmaeus)</I><br />
+Macaque <I>(Macaca mulatta)</I><br />
 Tarsier (Tarsius syrichta)<br />
-Mouse Lemur (Microcebus murinus)<br />
-Bushbaby (Otolemur garnettii)<br />
-Mouse (Mus musculus)<br />
-Rat (Rattus norvegicus)<br />
-Squirrel (Spermophilus tridecemlineatus)<br />
-Kangaroo rat (Dipodomys ordii)<br />
-Guinea Pig (Cavia porcellus)<br />
-Rabbit (Oryctolagus cuniculus)<br />
-Pika (Ochotona princeps)<br />
-Tree Shrew (Tupaia belangeri)<br />
-Dog (Canis familiaris)<br />
-Cat (Felis catus)<br />
-Cow (Bos taurus)<br />
-Alpaca (Vicugna pacos)<br />
-Dolphin (Tursiops truncatus)<br />
-Microbat (Myotis lucifugus)<br />
-Megabat (Pteropus vampyrus)<br />
-Horse (Equus caballus)<br />
-Hedgehog (Erinaceus europaeus)<br />
-Shrew (Sorex araneus)<br />
-Hyrax (Procavia capensis)<br />
-Elephant (Loxodonta africana)<br />
-Lesser hedgehog tenrec (Echinops telfairi)<br />
-Armadillo (Dasypus novemcinctus)<br />
+Mouse Lemur <I>(Microcebus murinus)</I><br />
+Bushbaby <I>(Otolemur garnettii)</I><br />
+Mouse <I>(Mus musculus)</I><br />
+Rat <I>(Rattus norvegicus)</I><br />
+Squirrel <I>(Spermophilus tridecemlineatus)</I><br />
+Kangaroo rat <I>(Dipodomys ordii)</I><br />
+Guinea Pig <I>(Cavia porcellus)</I><br />
+Rabbit <I>(Oryctolagus cuniculus)</I><br />
+Pika <I>(Ochotona princeps)</I><br />
+Tree Shrew <I>(Tupaia belangeri)</I><br />
+Dog <I>(Canis familiaris)</I><br />
+Cat <I>(Felis catus)</I><br />
+Cow <I>(Bos taurus)</I><br />
+Alpaca <I>(Vicugna pacos)</I><br />
+Dolphin <I>(Tursiops truncatus)</I><br />
+Microbat <I>(Myotis lucifugus)</I><br />
+Megabat <I>(Pteropus vampyrus)</I><br />
+Horse <I>(Equus caballus)</I><br />
+Hedgehog <I>(Erinaceus europaeus)</I><br />
+Shrew <I>(Sorex araneus)</I><br />
+Hyrax <I>(Procavia capensis)</I><br />
+Elephant <I>(Loxodonta africana)</I><br />
+Lesser hedgehog tenrec <I>(Echinops telfairi)</I><br />
+Armadillo <I>(Dasypus novemcinctus)</I><br />
+Sloth <I>(Choloepus hoffmanni)</I><br />
 
