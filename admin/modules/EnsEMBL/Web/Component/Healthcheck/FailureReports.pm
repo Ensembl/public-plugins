@@ -39,7 +39,7 @@ sub content {
         $html .= qq(
 <p class="space-below"><strong>Note</strong>: you can annotate multiple reports by ticking the checkboxes then
 clicking on the 'Multi' button at the bottom of the table.</p>
-<form id="annotation" action="/Healthcheck/MultiAnnotate" method="post">
+<form id="annotation" action="/$species/Healthcheck/MultiAnnotate" method="post">
 );
   
         my $table = EnsEMBL::Web::Document::SpreadSheet->new();
