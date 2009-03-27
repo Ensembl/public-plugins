@@ -1,0 +1,52 @@
+<html>
+<head>
+<title>File locations and links</title>
+<meta name="navigation" content="Static Content">
+</head>
+
+<body>
+
+<h1>File locations and links</h1>
+
+<p>The Ensembl webcode now parses certain areas of the static content to enable 
+automation creation of navigation links. It is therefore essential that you 
+do not put content in the wrong place!</p>
+
+<p>Points to be aware of:</p>
+
+<ul>
+<li>Anything within an <kbd>htdocs/info/</kbd> folder in <strong>any</strong> plugin 
+will be automagically added to the documentation sitemap</li> 
+
+<li>For the sake of other projects using the Ensembl webcode, please do not place
+documentation in the top level <kbd>/htdocs/info/</kbd> directory</li>
+
+<li>Permanent, public documentation about Ensembl belongs in 
+<kbd>public-plugins/ensembl/htdocs/info/</kbd></li>
+
+<li>Temporary information that we want all visitors to be able to find (e.g. job ads)
+should go in <kbd>sanger-plugins/sanger/htdocs/info/</kbd></li>
+
+<li>Information that we want to make available to the wider world but not link to directly 
+(e.g. temporary information about workshops) should go in 
+</kbd>sanger-plugins/sanger/htdocs/pages/</kbd></li> 
+
+<li>Before adding a page to a plugin, please check if there is an existing folder hierarchy 
+in <kbd>htdocs</kbd> or <kbd>public-plugins/ensembl/htdocs</kbd>, as this will help to keep 
+related content together. For example, if you need to post a temporary page about extra data 
+that can be downloaded in this release, a good place to put it is in 
+<kbd>sanger-plugins/sanger/htdocs/info/downloads/</kbd>, as the link will then be added to the 
+'Data Downloads' section of the sitemap alongside the content from 
+<kbd>public-plugins/ensembl/htdocs/info/downloads/</kbd> </li>
+
+<li>Please do not make relative links to articles outside the content you control, e.g. 
+'../../about/contact.html', as these links are hard to trace when they break. Instead 
+use absolute links from the top of the document tree, e.g. '/info/about/contact.html' 
+(relative links to files in the same directory or in subdirectories are OK). </li>
+
+<li>Please do not hard-code links to www.ensembl.org unless there is a pressing reason, 
+as it can cause problems in archives</li> 
+</ul>
+
+</body>
+</html>
