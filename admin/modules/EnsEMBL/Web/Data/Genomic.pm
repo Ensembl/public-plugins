@@ -49,7 +49,7 @@ sub connect {
 sub db_Main {
     my $self = shift;
 
-    return $self->SUPER::db_Main
+    return undef
       unless ref $self;
       
     return $self->{__current_dbh};
