@@ -7,6 +7,7 @@ use base qw/EnsEMBL::Web::Data/;
 use DBI;
 
 my %dbh;
+my $current_dbh;
 
 ##
 ## EnsEMBL::Web::Data::Analysis::connect($db_info) - dynamic db connection
@@ -43,16 +44,19 @@ sub connect {
             return 0;
         }
     }
+    
+    $current_dbh = $self->{__current_dbh};
     return 1;
 }
  
 sub db_Main {
     my $self = shift;
-
-    return undef
-      unless ref $self;
-      
-    return $self->{__current_dbh};
+    
+    if (ref $self) {
+      return $self->{__current_dbh};
+    } else {
+      return $current_dbh;
+    }
 }
 
 1;
