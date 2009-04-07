@@ -12,7 +12,7 @@ use base qw(EnsEMBL::Web::Filter);
 
 sub BUILD {
   my ($self, $ident, $args) = @_;
-  $self->set_redirect('/Account/Login');
+  $self->set_redirect('/Account/Login?popup=no');
   ## Set the messages hash here
   $self->set_messages({
     'not_member' => 'You are either not logged in or you are not a member of this group. If you think this is incorrect, please contact the web team.',
