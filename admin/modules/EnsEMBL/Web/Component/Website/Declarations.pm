@@ -33,13 +33,19 @@ sub content {
     if ($item->team ne $previous) {
       $html .= '<h2>'.$item->team.'</h2>';
     }
+    my $title = $item->title || '(No title)';
+    my $user = EnsEMBL::Web::Data::User->new($item->created_by);
+    my $name = 'not logged';
+    if ($user) {
+      $name = $user->name;
+    }
     $html .= sprintf(qq(
 <h3>%s</h3>
 <pre>%s</pre>
-
+<p><strong>Declared by</strong>: %s</p> 
 <p><strong>Status</strong>: %s</p>
 ), 
-        $item->title, $item->declaration, $item->status
+        $title, $item->declaration, $name, $item->status
     );
     if ($item->team eq 'Genebuild') {
       $html .= sprintf(qq(
@@ -54,12 +60,6 @@ sub content {
       $item->assembly, $item->gene_set, $item->repeat_masking, $item->stable_id_mapping, $item->affy_mapping,
 );
     }
-    my $user = EnsEMBL::Web::Data::User->new($item->created_by);
-    my $name = 'not logged';
-    if ($user) {
-      $name = $user->name;
-    }
-    $html .= '<p><strong>Declared by</strong>: '.$name.'</p>';
     $html .= '<br />';
     $previous = $item->team;
   }
