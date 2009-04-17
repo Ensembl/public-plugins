@@ -71,6 +71,7 @@ protein coding Ensembl gene. Homologies are derived from them.
       <li><a href="#genomic_align_tree">genomic_align_tree</a></li>
       <li><a href="#genomic_align_group">genomic_align_group</a></li>
       <li><a href="#conservation_score">conservation_score</a></li>
+      <li><a href="#constrained_element">constrained_element</a></li>
       <li><a href="#synteny_region">synteny_region</a></li>
       <li><a href="#dnafrag_region">dnafrag_region</a></li>
     </ul>
@@ -1748,6 +1749,125 @@ TABLE CONSERVATION SCORE
 </table>
 
 <p>Several scores are stored per row. expected_score and diff_score are binary columns and you need to use the Perl API to access these data.</p>
+
+<!--
+#####################################################################
+TABLE CONSTRAINED ELEMENT
+#####################################################################
+-->
+<h4 id="constrained_element">constrained_element</h4>
+
+
+<p>Contains constrained elements calculated from the whole-genome multiple alignments stored in the genomic_align_block table.</p>
+
+
+<table class="spreadsheet">
+
+
+  <caption>constrained_element table description</caption>
+  <thead><tr>
+    <th>Field</th>
+    <th>Type</th>
+    <th>Null</th>
+    <th>Key</th>
+    <th>Default</th>
+    <th>Extra</th>
+    <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>constrained_element_id</td>
+      <td>bigint(20) unsigned</td>
+      <td>NO</td>
+      <td>MUL</td>
+      <td></td>
+      <td></td>
+      <td>internal ID</td>
+    </tr>
+    <tr>
+      <td>dnafrag_id</td>
+      <td>int(12) unsigned</td>
+      <td>NO</td>
+      <td>MUL</td>
+      <td></td>
+      <td></td>
+      <td>external reference to <a href="#dnafrag">dnafrag.dnafrag_id</a></td>
+    </tr>
+    <tr>
+      <td>dnafrag_start</td>
+      <td>int(12)</td>
+      <td>NO</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>start of the constrained element</td>
+    </tr>
+    <tr>
+      <td>dnafrag_end</td>
+      <td>int(12)</td>
+      <td>NO</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>end of the constrained element</td>
+    </tr>
+    <tr>
+      <td>method_link_species_set_id</td>
+      <td>int(10) unsigned</td>
+      <td>NO</td>
+      <td>MUL</td>
+      <td></td>
+      <td></td>
+      <td>external reference to <a href="#method_link_species_set">method_link_species_set.method_link_species_set_id</a></td>
+    </tr>
+    <tr>
+      <td>p_value</td>
+      <td>mediumtext</td>
+      <td>YES</td>
+      <td></td>
+      <td>NULL</td>
+      <td></td>
+      <td>p-value derived from Gerp</td>
+    </tr>
+    <tr>
+      <td>taxonomic_level</td>
+      <td>mediumtext</td>
+      <td>YES</td>
+      <td></td>
+      <td>NULL</td>
+      <td></td>
+      <td>indicates the taxonomic range of the alignments from which the constrained elements were derived</td>
+    </tr>
+    <tr>
+      <td>score</td>
+      <td>double</td>
+      <td>NO</td>
+      <td></td>
+      <td>0</td>
+      <td></td>
+      <td>score derived from Gerp</td>
+    </tr>
+  </tbody>
+</table>
+
+
+<p>E.g. the row</p>
+
+
+<pre>mysql&gt; select * from constrained_element limit 1;
++------------------------+------------+---------------+-------------+----------------------------+---------+---------------------+-------+
+| constrained_element_id | dnafrag_id | dnafrag_start | dnafrag_end | method_link_species_set_id | p_value | taxonomic_level     | score |
++------------------------+------------+---------------+-------------+----------------------------+---------+---------------------+-------+
+|          3390000000001 |     905404 |     114071407 |   114071438 |                        339 | NULL    | amniota vertebrates |  27.5 |
++------------------------+------------+---------------+-------------+----------------------------+---------+---------------------+-------+ 
+</pre>
+
+
+<p>
+refers to a constrained element from human chromosome 7 located between nucleotide positions 114071407 and 114071438.
+</p>
+
 
 <!--
 #####################################################################
