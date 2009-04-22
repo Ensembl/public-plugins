@@ -33,8 +33,9 @@ sub process {
   $interface->modify_element('stable_id_mapping', {'select' => 'radio', 'label' => 'Stable ID mapping needed'});
   $interface->modify_element('affy_mapping',    {'select' => 'radio', 'label' => 'Affy mapping needed'});
   $interface->modify_element('database',        {'select' => 'radio', 'label' => 'Database on ens-staging'});
+  $interface->modify_element('release_id', {'type' => 'Hidden', 'value' => $object->species_defs->ENSEMBL_VERSION});
 
-  $interface->element_order(['team', 'title', 'caveat', 'declaration', 'species', 'notes', 'assembly', 'gene_set', 'repeat_masking', 'stable_id_mapping', 'affy_mapping', 'database', 'status']);
+  $interface->element_order(['team', 'title', 'caveat', 'declaration', 'species', 'notes', 'assembly', 'gene_set', 'repeat_masking', 'stable_id_mapping', 'affy_mapping', 'database', 'status', 'release_id']);
   $interface->dropdown(1);
   $interface->option_columns(['team','declaration']);
 
