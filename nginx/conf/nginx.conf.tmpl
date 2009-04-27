@@ -1,0 +1,57 @@
+
+#the "user" directive makes sense only if the master process runs with super-user privileges
+#user       [[ $ENSEMBL_USER ]] [[ $ENSEMBL_GROUP ]];
+
+worker_processes  5;
+error_log  [[$SiteDefs::ENSEMBL_LOGDIR]]/nginx.error.log;
+pid        [[$SiteDefs::ENSEMBL_LOGDIR]]/nginx.pid;
+worker_rlimit_nofile 8192;
+ 
+events {
+  worker_connections  4096;
+}
+ 
+http {
+  include    [[$SiteDefs::ENSEMBL_NGINX_ROOT]]/conf/mime.types;
+
+  client_body_temp_path [[$SiteDefs::ENSEMBL_NGINX_ROOT]]/client_body_temp;
+  proxy_temp_path  	[[$SiteDefs::ENSEMBL_NGINX_ROOT]]/proxy_temp;
+  fastcgi_temp_path  	[[$SiteDefs::ENSEMBL_NGINX_ROOT]]/fastcgi_temp;
+ 
+  default_type application/octet-stream;
+  log_format   main '$remote_addr - $remote_user [$time_local]  $status '
+    '"$request" $body_bytes_sent "$http_referer" '
+    '"$http_user_agent" "$http_x_forwarded_for"';
+  access_log   [[$SiteDefs::ENSEMBL_LOGDIR]]/nginx.access.log main;
+  sendfile     on;
+  tcp_nopush   on;
+  server_names_hash_bucket_size 128; # this seems to be required for some vhosts
+
+  upstream memcached_servers {
+    [[ join( "\n    ", (map { "server $_;" } @{ $SiteDefs::ENSEMBL_MEMCACHED->{servers} || [] })) ]]
+    
+    hash $request_uri;
+  } 
+ 
+  server {
+    listen          [[$SiteDefs::ENSEMBL_NGINX_PORT || 8000]];
+    server_name     [[$ENSEMBL_SERVERNAME]];
+ 
+    location ~* \.(jpg|jpeg|png|gif|js|css|txt|csv|gff|fa|nh|gz|tar|zip|html)$ {
+      set $memcached_key [[$ENSEMBL_PROTOCOL]]://[[$ENSEMBL_SERVERNAME]]/$request_uri;
+      memcached_pass memcached_servers;
+      error_page 404 502 = /fetch;
+    }
+
+    location /fetch {
+        internal;
+        access_log   off;
+        proxy_pass [["$ENSEMBL_PROTOCOL://$ENSEMBL_SERVER:$ENSEMBL_PORT"]];
+        break;
+    }
+ 
+    location / {
+      proxy_pass      [["$ENSEMBL_PROTOCOL://$ENSEMBL_SERVER:$ENSEMBL_PORT"]];
+    }
+  }
+}

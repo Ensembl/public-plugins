@@ -1,0 +1,26 @@
+#!/usr/local/bin/perl
+
+use strict;
+use warnings;
+
+use SiteDefs;
+
+warn "Starting nginx...\n";
+
+die "can't find nginx root, ENSEMBL_NGINX_ROOT is not defined"
+  unless defined $SiteDefs::ENSEMBL_NGINX_ROOT;
+
+die "nginx root '$SiteDefs::ENSEMBL_NGINX_ROOT' does not exists"
+  unless -d $SiteDefs::ENSEMBL_NGINX_ROOT;
+
+die "file $SiteDefs::ENSEMBL_NGINX_ROOT/conf/nginx.conf does not exists"
+  unless -e $SiteDefs::ENSEMBL_NGINX_ROOT . '/conf/nginx.conf';
+
+die "file $SiteDefs::ENSEMBL_NGINX_ROOT/sbin/nginx is not executable"
+  unless -x $SiteDefs::ENSEMBL_NGINX_ROOT . '/sbin/nginx';
+
+my $cmd = "$SiteDefs::ENSEMBL_NGINX_ROOT/sbin/nginx -c $SiteDefs::ENSEMBL_NGINX_ROOT/conf/nginx.conf";
+
+system($cmd) == 0 or die " Could not start nginx server: $!.\n";
+
+1;
