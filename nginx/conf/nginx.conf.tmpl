@@ -37,7 +37,7 @@ http {
     listen          [[$SiteDefs::ENSEMBL_NGINX_PORT || 8000]];
     server_name     [[$ENSEMBL_SERVERNAME]];
  
-    location ~* \.(jpg|jpeg|png|gif|js|css|txt|csv|gff|fa|nh|gz|tar|zip|html)$ {
+    location ~* \.(jpg|jpeg|png|gif|js|css|txt|xml|csv|gff|fa|nh|gz|tar|zip|html)$ {
       set $memcached_key [[$SiteDefs::ENSEMBL_BASE_URL]]$request_uri;
       memcached_pass memcached_servers;
       error_page 404 502 = /fetch;
