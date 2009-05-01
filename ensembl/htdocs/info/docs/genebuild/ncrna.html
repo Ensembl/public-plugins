@@ -1,20 +1,30 @@
 <html>
 <head>
-<title>Annotation of Non-Coding RNA</title>
+<title>Annotation of Non-Coding RNAs</title>
 </head>
 
 <body>
 
-<h1>Non-coding RNA Overview</h1>
+<h1>Annotation of Non-Coding RNAs</h1>
+
+<h2>Non-coding RNA Overview</h2>
 
 <p>
-The majority of non-coding RNA, or ncRNA, in Ensembl has been generated using RFAM.  
-A small handpicked set is also available.  This
-<a href="ftp://ftp.genetics.wustl.edu/pub/eddy/annotation/human-hg16/" rel="external">ncRNA set</a>, 
-as well as a detailed
-<a href="ftp://ftp.genetics.wustl.edu/pub/eddy/annotation/human-chr2+4/methods-hg16_chr2+4" rel="external">description</a> 
-of the annotation methods can be obtained from
-<a href="ftp://ftp.genetics.wustl.edu/" rel="external">ftp.genetics.wustl.edu</a>.
+<strong>Non-coding RNAs</strong> (ncRNAs) are involved in many
+biological processes and are increasingly seen as important. As is the
+case with proteins, it is the overall structure of the molecule which
+imparts function. However, while similar protein structures are often
+reflected in a conserved amino acid sequence, sequences underlying RNA
+secondary structure are very variable; this makes ncRNAs difficult to
+detect using sequence alone.
+</p>
+
+<p>
+Because of this, we use a variety of techniques to detect
+ncRNAs. First, a combination of sensitive BLAST searches are used to
+identify likely targets, then a covariance model search is used to
+measure the probability that the targets can fold into the structures
+required. Other ncRNAs are added as part of the raw compute stage.
 </p>
 
 <p>
@@ -23,8 +33,8 @@ The following non-coding RNA gene types are annotated, along with pseudogenes
 
 <dl>
 
-<dt>tRNA</dt><dd>nuclear transfer RNA</dd>
-<dt>Mt-tRNA</dt><dd>mitochondrially-derived tRNA located in the nuclear genome</dd>
+<dt>tRNA</dt><dd>transfer RNA</dd>
+<dt>Mt-tRNA</dt><dd>transfer RNA located in the mitochondrial genome</dd>
 <dt>rRNA</dt><dd>ribosomal RNA</dd>
 <dt>scRNA</dt><dd>small cytoplasmic RNA</dd>
 <dt>snRNA</dt><dd>small nuclear RNA</dd> 
@@ -37,22 +47,34 @@ The following non-coding RNA gene types are annotated, along with pseudogenes
 <h2 id="Details">Annotation Details</h2>
 
 <p>
-Most <strong>ncRNA</strong> is annotated by aligning genomic sequence against 
-<a rel="external" href="http://rfam.sanger.ac.uk/">RFAM</a> using 
-<a rel="external" href="http://blast.wustl.edu/">BLASTN</a>. 
-The BLAST hits are clustered and filtered by E value and are used to seed Infernal 
-searches of the locus with the corresponding RFAM covariance models. The purpose of 
-this is to reduce the search space required, as to scan the entire genome with all 
-the RFAM covariance models would be extremely CPU-intensive. The resulting BLAST hits 
-are then used as supporting evidence for ncRNA genes.
+Most <strong>ncRNAs</strong> are annotated by aligning genomic
+sequence against <a rel="external"
+href="http://rfam.sanger.ac.uk/">RFAM</a> using <a rel="external"
+href="http://blast.wustl.edu/">BLASTN</a>. The BLAST hits are
+clustered and filtered by E value and are used to seed Infernal
+searches of the locus with the corresponding RFAM covariance
+models. The purpose of this is to reduce the search space required, as
+to scan the entire genome with all the RFAM covariance models would be
+extremely CPU-intensive. The resulting BLAST hits are then used as
+supporting evidence for ncRNA genes.
 </p>
+
 <p>
-<strong>miRNA</strong> is predicted by BLASTN of genomic sequence slices against 
-<a rel="external" href="http://microrna.sanger.ac.uk/">miRBase</a> sequences. 
-The BLAST hits are clustered and filtered by E value and the aligned genomic sequence 
-is then checked for possible secondary structure using RNAFold. If evidence is found 
-that the genomic sequence could form a stable hairpin structure, the locus is used to 
-create a miRNA gene model. The resulting BLAST hit is used as supporting evidence for the miRNA gene. 
+<strong>miRNAs</strong> are predicted by BLASTN of genomic sequence
+slices against <a rel="external"
+href="http://microrna.sanger.ac.uk/">miRBase</a> sequences. The BLAST
+hits are clustered and filtered by E value and the aligned genomic
+sequence is then checked for possible secondary structure using
+RNAFold. If evidence is found that the genomic sequence could form a
+stable hairpin structure, the locus is used to create a miRNA gene
+model. The resulting BLAST hit is used as supporting evidence for the
+miRNA gene.
+</p>
+
+<p>
+<strong>tRNAs</strong> are annotated as part of the raw compute
+process using <a rel="external"
+href="http://lowelab.ucsc.edu/tRNAscan-SE/">tRNAscan-SE</a>.
 </p>
 
 </body>
