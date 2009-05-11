@@ -2,7 +2,7 @@
 #the "user" directive makes sense only if the master process runs with super-user privileges
 #user       [[ $ENSEMBL_USER ]] [[ $ENSEMBL_GROUP ]];
 
-worker_processes  5;
+worker_processes  10;
 error_log  [[$SiteDefs::ENSEMBL_LOGDIR]]/nginx.error.log;
 pid        [[$SiteDefs::ENSEMBL_LOGDIR]]/nginx.pid;
 worker_rlimit_nofile 8192;
@@ -36,8 +36,26 @@ http {
   server {
     listen          [[$SiteDefs::ENSEMBL_NGINX_PORT || 8000]];
     server_name     [[$ENSEMBL_SERVERNAME]];
+
+    #proxy_pass_request_headers on;
+    #proxy_pass_request_body on;
+    proxy_pass_header Server;
+    proxy_pass_header Expires;
+    proxy_pass_header X-MEMCACHED;
+    proxy_pass_header X-MACHINE;
+    add_header X-NGINX-MACHINE [[$ENSEMBL_SERVER]];
+
+    gzip on;
+    gzip_comp_level 4;
+    gzip_min_length 1100;
+    gzip_proxied any;
+    gzip_types text/html text/plain text/xml text/javascript text/css application/x-javascript;
+
+    memcached_connect_timeout 50;
+    memcached_read_timeout 50;
  
-    location ~* \.(jpg|jpeg|png|gif|js|css|txt|xml|csv|gff|fa|nh|gz|tar|zip|html)$ {
+    location ~* \.(jpg|jpeg|png|gif|js|css|txt|xml|csv|gff|fa|nh|gz|tar|zip|pdf|swf)$ {
+      expires 30d;
       set $memcached_key [[$SiteDefs::ENSEMBL_BASE_URL]]$request_uri;
       memcached_pass memcached_servers;
       error_page 404 502 = /fetch;
