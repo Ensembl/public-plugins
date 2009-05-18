@@ -62,7 +62,7 @@ on creating/administering users.</p>
 <pre>/data/mysql/bin/mysql -u mysqldba homo_sapiens_core_[[SPECIESDEFS::ENSEMBL_VERSION]]_[[SPECIESINFO::Homo_sapiens:SPECIES_RELEASE_VERSION]] &lt; homo_sapiens_core_[[SPECIESDEFS::ENSEMBL_VERSION]]_[[SPECIESINFO::Homo_sapiens:SPECIES_RELEASE_VERSION]].sql</pre>
 </li>
 <li>Load the data into the database structure you have just built with the following command.
-<pre>/data/mysql/bin/mysqlimport -u mysqldba homo_sapiens_core_[[SPECIESDEFS::ENSEMBL_VERSION]]_[[SPECIESINFO::Homo_sapiens:SPECIES_RELEASE_VERSION]] -L *.txt.table</pre>
+<pre>/data/mysql/bin/mysqlimport -u mysqldba homo_sapiens_core_[[SPECIESDEFS::ENSEMBL_VERSION]]_[[SPECIESINFO::Homo_sapiens:SPECIES_RELEASE_VERSION]] -L *.txt</pre>
 </li>
 </ol>
 
