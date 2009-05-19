@@ -20,7 +20,7 @@ Knowledge of the
 Documentation about the Variation database schema is available at
 <a href="http://cvs.sanger.ac.uk/cgi-bin/viewvc.cgi/ensembl-variation/schema/?root=ensembl">
 http://cvs.sanger.ac.uk/cgi-bin/viewvc.cgi/ensembl-variation/schema/?root=ensembl</a> 
-, and while not necessary for this tutorial, an understanding of the database tables may help as many of the adaptor modules are table specific.
+, and while not necessary for this tutorial, an understanding of the database tables may help as many of the adaptor modules are table-specific.
 </p>
 
 <h2>Code Conventions (and unconventions)</h2>
@@ -41,9 +41,9 @@ use Bio::EnsEMBL::Registry;
 
 my $registry = 'Bio::EnsEMBL::Registry';
 
-$registry->load_registry_from_db(
-    -host => 'ensembldb.ensembl.org',
-    -user => 'anonymous'
+$registry-&gt;load_registry_from_db(
+    -host =&gt; 'ensembldb.ensembl.org',
+    -user =&gt; 'anonymous'
 );
 </pre>
 
@@ -60,18 +60,18 @@ use Bio::EnsEMBL::Registry;
 
 my $registry = 'Bio::EnsEMBL::Registry';
 
-$registry->load_registry_from_db(
-    -host => 'ensembldb.ensembl.org',
-    -user => 'anonymous'
+$registry-&gt;load_registry_from_db(
+    -host =&gt; 'ensembldb.ensembl.org',
+    -user =&gt; 'anonymous'
 );
 
-my $variation_adaptor = $registry->get_adaptor(
+my $variation_adaptor = $registry-&gt;get_adaptor(
 	'human',	# species
 	'variation',	# database
 	'variation'	# object type
 );
 
-my $variation = $variation_adaptor->fetch_by_name('rs1333049');
+my $variation = $variation_adaptor-&gt;fetch_by_name('rs1333049');
 </pre>
 
 <p>
@@ -111,9 +111,9 @@ use Bio::EnsEMBL::Registry;
 
 my $registry = 'Bio::EnsEMBL::Registry';
 
-$registry->load_registry_from_db(
-    -host => 'ensembldb.ensembl.org',
-    -user => 'anonymous'
+$registry-&gt;load_registry_from_db(
+    -host =&gt; 'ensembldb.ensembl.org',
+    -user =&gt; 'anonymous'
 );
 
 my $slice_adaptor = $registry-&gt;get_adaptor('danio_rerio', 'core', 'slice'); #get the database adaptor for Slice objects
@@ -144,9 +144,9 @@ use Bio::EnsEMBL::Registry;
 
 my $registry = 'Bio::EnsEMBL::Registry';
 
-$registry->load_registry_from_db(
-    -host => 'ensembldb.ensembl.org',
-    -user => 'anonymous'
+$registry-&gt;load_registry_from_db(
+    -host =&gt; 'ensembldb.ensembl.org',
+    -user =&gt; 'anonymous'
 );
 
 my $stable_id = 'ENSGALT00000007843'; #this is the stable_id of a chicken transcript
@@ -179,9 +179,9 @@ use Bio::EnsEMBL::Registry;
 
 my $registry = 'Bio::EnsEMBL::Registry';
 
-$registry->load_registry_from_db(
-    -host => 'ensembldb.ensembl.org',
-    -user => 'anonymous'
+$registry-&gt;load_registry_from_db(
+    -host =&gt; 'ensembldb.ensembl.org',
+    -user =&gt; 'anonymous'
 );
 
 my $va_adaptor = $registry-&gt;get_adaptor('human', 'variation', 'variation'); #get the different adaptors for the different objects needed
@@ -191,8 +191,8 @@ my $gene_adaptor = $registry-&gt;get_adaptor('human', 'core', 'gene');
 my @rsIds = qw(rs1367827 rs1367830);
 foreach my $id (@rsIds){
 # get Variation object
-  my $var = $va_adaptor->fetch_by_name($id); #get the Variation from the database using the name
-  &get_VariationFeatures($var);
+  my $var = $va_adaptor-&gt;fetch_by_name($id); #get the Variation from the database using the name
+  &amp;get_VariationFeatures($var);
 }
 
 sub get_VariationFeatures{
@@ -242,9 +242,9 @@ use Bio::EnsEMBL::Registry;
 
 my $registry = 'Bio::EnsEMBL::Registry';
 
-$registry->load_registry_from_db(
-    -host => 'ensembldb.ensembl.org',
-    -user => 'anonymous'
+$registry-&gt;load_registry_from_db(
+    -host =&gt; 'ensembldb.ensembl.org',
+    -user =&gt; 'anonymous'
 );
 
 my $chr = 6;  #defining the region in chromosome 6
@@ -287,23 +287,23 @@ my $reg = 'Bio::EnsEMBL::Registry';
 my $host= 'ensembldb.ensembl.org';
 my $user= 'anonymous';
 
-$reg->load_registry_from_db(
-	-host => $host,
-    -user => $user
+$reg-&gt;load_registry_from_db(
+	-host =&gt; $host,
+    -user =&gt; $user
 );
 
 # get exon adaptor from core
-my $sa = $reg->get_adaptor("human", "core", "slice");
+my $sa = $reg-&gt;get_adaptor("human", "core", "slice");
 
-my $slice = $sa->fetch_by_region('chromosome', 8, 9213000, 9216000);
+my $slice = $sa-&gt;fetch_by_region('chromosome', 8, 9213000, 9216000);
 
 # get strainSlice from the slice
-my $venter = $slice->get_by_strain("Venter");
+my $venter = $slice-&gt;get_by_strain("Venter");
 
-my @differences = @{$venter->get_all_AlleleFeatures_Slice()};
+my @differences = @{$venter-&gt;get_all_AlleleFeatures_Slice()};
 
 foreach my $diff (@differences){
-  print "Locus ", $diff->seq_region_start, "-", $diff->seq_region_end, ", Venter's alleles: ",$diff->allele_string, "\n";
+  print "Locus ", $diff-&gt;seq_region_start, "-", $diff-&gt;seq_region_end, ", Venter's alleles: ",$diff-&gt;allele_string, "\n";
 }
 </pre>
 
