@@ -57,13 +57,13 @@ clicking on the 'Multi' button at the bottom of the table.</p>
           my $testcase = '<div class="">'.$report->testcase.'</div>';
           my $annotate = 'Add?report_id='.$report->id;
           my $link_text = 'Add New';
-          my ($team_text, $comment, $action);
+          my (@team_text, $comment, $action);
           if (my $team = $report->team_responsible) {
-            $team_text .= $team.' ';
+            push @team_text, $team;
           }
           my $annotation = $report->annotation;
           if ($annotation) {
-            $annotate = 'Edit?id='.$annotation->id.';report_id='.$report->id;
+            $annotate = 'Edit?id='.$annotation->id; #.';report_id='.$report->id;
             $link_text = 'Edit';
             $comment = $annotation->comment;
             $action = $annotation->action;
@@ -79,13 +79,13 @@ clicking on the 'Multi' button at the bottom of the table.</p>
               }
             }
             if ($user) {
-              $team_text .= '<a href="mailto:'.$user->email.'" title="Email this user">'.$user->name.'</a>';
+              push @team_text, '<a href="mailto:'.$user->email.'" title="Email this user">'.$user->name.'</a>';
             }
           }
           $table->add_row({
             'testcase'  => $testcase,
             'text'      => $report->text,
-            'team'      => $team_text,
+            'team'      => join('<br />', @team_text),
             'comment'   => $comment,
             'date'      => $self->friendly_date($report->created),
             'single'    => '<a href="/'.$object->species.'/Healthcheck/Annotation/'.$annotate.'">'.$link_text.'</a>',
