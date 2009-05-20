@@ -6,7 +6,7 @@ use base qw(EnsEMBL::Web::Data::Trackable);
 use EnsEMBL::Web::DBSQL::HcDBConnection (__PACKAGE__->species_defs);
 
 __PACKAGE__->table('annotation');
-__PACKAGE__->set_primary_key('annotation_id');
+__PACKAGE__->set_primary_key('report_id');
 
 __PACKAGE__->add_queriable_fields(
   person      => 'varchar(255)',

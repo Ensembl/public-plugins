@@ -5,6 +5,7 @@ use warnings;
 
 use base qw/EnsEMBL::Web::Data/;
 use DBI;
+use Data::Dumper;
 
 my %dbh;
 my $current_dbh;
@@ -29,6 +30,7 @@ sub connect {
     if ($dbh{$dsn}) {
         $self->{__current_dbh} = $dbh{$dsn};
     } else {
+        warn "DSN $dsn";
         $self->{__current_dbh} = $dbh{$dsn} = DBI->connect_cached(
             $dsn,
             __PACKAGE__->species_defs->DATABASE_WRITE_USER,
@@ -39,6 +41,7 @@ sub connect {
               AutoCommit => 1,
             }
         );
+        warn "CONNECTED: ".Dumper($dbh{$dsn});
         if (not $self->{__current_dbh}) {
             warn "Could not connect to '$dsn' $DBI::errstr";
             return 0;

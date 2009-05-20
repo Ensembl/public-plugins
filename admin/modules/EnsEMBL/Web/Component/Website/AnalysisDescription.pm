@@ -46,10 +46,6 @@ sub content {
     'value' => $analysis->logic_name,
   );
 
-  #my $ad_obj = EnsEMBL::Web::Data::AnalysisDescription->new;
-  #$ad_obj->db_Main($core_object->db_Main);
-
-  #my $ad = $ad_obj->new($object->param('analysis_id'));
   my $ad = $analysis->analysis_description;
 
   my ($display_label, $description);
@@ -73,17 +69,15 @@ sub content {
   );
 
   $form->add_element(
-    'type' => 'Information',
-    'value' => 'This information will be saved to the human core database first and then copied to all the other species',
-  );
-
-  $form->add_element(
     'name' => 'submit',
     'type' => 'Submit',
     'value' => 'Next',
   );
 
   $html .= $form->render;
+
+  $html .= $self->_warning('Note', 'Saving each record may take some time, as the changes are copied to each species database in turn. Please be patient.', '50%');
+
   return $html;
 }
 

@@ -26,12 +26,12 @@ sub content {
   my $object_type = $ENV{'ENSEMBL_TYPE'};
   my $columns = $object->interface->option_columns || $object->interface->element_order;
   my @records;
-  if ($object_type eq 'Help') {
-    @records = $object->interface->record_list;
+  if ($object_type eq 'NewsItem') {
+    @records = sort {$a->team cmp $b->team}
+      $object->interface->data->search('release_id' => $object->species_defs->ENSEMBL_VERSION);
   }
   else {
-    @records = sort {$a->team cmp $b->team}
-          $object->interface->data->search('release_id' => $object->species_defs->ENSEMBL_VERSION);
+    @records = $object->interface->record_list;
   }
 
   my $table = new EnsEMBL::Web::Document::SpreadSheet( [], [], {'margin' => '0px'} );

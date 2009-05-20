@@ -59,6 +59,7 @@ sub process {
 ## Form elements
   $interface->no_preview(1); ## Keeps automated interface simple and in line with MultiAnnotate
   $interface->element_order(['report_header', 'report', 'annotation_header', 'action', 'comment', 'email']);
+  $interface->set_landing_page('/'.$object->species.'/Healthcheck/Details');
 
   $interface->configure($self->webpage, $object);
 

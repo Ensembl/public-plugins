@@ -21,11 +21,11 @@ sub process {
     ## Check if this report is already annotated
     my $annotation = EnsEMBL::Web::Data::HcAnnotation->find('report_id' => $id);
     unless ($annotation) {
-      EnsEMBL::Web::Data::HcAnnotation->new();
-      $annotation->report_id = $id;
+      $annotation = EnsEMBL::Web::Data::HcAnnotation->new();
+      $annotation->report_id($id);
     }
-    $annotation->action = $object->param('action');
-    $annotation->comment = $object->param('comment');
+    $annotation->action($object->param('action'));
+    $annotation->comment($object->param('comment'));
     $annotation->save;
   }
 

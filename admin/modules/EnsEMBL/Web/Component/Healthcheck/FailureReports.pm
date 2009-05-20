@@ -55,7 +55,7 @@ clicking on the 'Multi' button at the bottom of the table.</p>
         );
         foreach my $report (@reports) {
           my $testcase = '<div class="">'.$report->testcase.'</div>';
-          my $annotate = 'Add?report_id='.$report->id;
+          my $annotate = 'Add?id='.$report->id;
           my $link_text = 'Add New';
           my (@team_text, $comment, $action);
           if (my $team = $report->team_responsible) {

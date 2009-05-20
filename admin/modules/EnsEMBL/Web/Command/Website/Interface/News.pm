@@ -26,8 +26,20 @@ sub process {
   $interface->modify_element('notes',       {'rows' => 2, 'cols' => 80});
   $interface->modify_element('content',     {'type' => 'Html'});
   $interface->modify_element('news_category_id', {'label' => 'Category'});
+  $interface->modify_element('priority', {
+    'type'    => 'DropDown',
+    'select'  => 'select', 
+    'values'  => [
+      {'name' => '0', 'value' => ''},
+      {'name' => '1', 'value' => '1'},
+      {'name' => '2', 'value' => '2'},
+      {'name' => '3', 'value' => '3'},
+      {'name' => '4', 'value' => '4'},
+      {'name' => '5', 'value' => '5'},
+    ]
+  });
 
-  $interface->element_order(['team', 'declaration', 'notes', 'species', 'news_category_id', 'title', 'content', 'status', 'news_done']);
+  $interface->element_order(['team', 'declaration', 'notes', 'species', 'news_category_id', 'title', 'content', 'status', 'priority', 'news_done']);
   $interface->dropdown(1);
   $interface->option_columns(['title','content']);
 

@@ -2,6 +2,7 @@ package EnsEMBL::Web::Configuration::Healthcheck;
 
 use strict;
 use base qw( EnsEMBL::Web::Configuration );
+use EnsEMBL::Web::RegObj;
 
 sub set_default_action {
   my $self = shift;
@@ -17,8 +18,9 @@ sub content_panel  { return $_[0]->_content_panel;  }
 
 sub populate_tree {
   my $self = shift;
-
-  my $release_id = $self->{'object'}->species_defs->ENSEMBL_VERSION;
+  my $species_defs = $ENSEMBL_WEB_REGISTRY->species_defs; 
+  my $release_id = $species_defs->ENSEMBL_VERSION; 
+  #my $release_id = $self->{'object'}->species_defs->ENSEMBL_VERSION;
   $self->create_node( 'Summary', "Healthcheck Summary - Release $release_id",
     [qw(
       session_info    EnsEMBL::Web::Component::Healthcheck::SessionInfo

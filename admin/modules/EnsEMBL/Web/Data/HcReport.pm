@@ -60,7 +60,7 @@ __PACKAGE__->set_sql('failed_tests' => qq/
 );
 
 __PACKAGE__->set_sql('reports' => qq/
-      SELECT r.*, a.* 
+      SELECT r.* 
       FROM 
         __TABLE(=r)__
         LEFT JOIN

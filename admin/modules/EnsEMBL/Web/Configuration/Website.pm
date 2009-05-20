@@ -66,12 +66,6 @@ sub populate_tree {
     { 'availability' => 1, 'filters' => [qw(WebAdmin)]}
   ));
 
-  my $ad_menu = $self->create_submenu( 'AdMenu', 'Analyses' );
-  $dec_menu->append($self->create_node( 'SelectAnalysis', 'Edit Descriptions',
-    [qw(select_analysis EnsEMBL::Web::Component::Website::SelectAnalysis)], 
-    { 'availability' => 1}
-  ));
-
   $self->create_node( 'Declaration', '',
     [], { 'availability' => 1, 'no_menu_entry' => 1, 'filters' => [qw(WebAdmin)],
     'command' => 'EnsEMBL::Web::Command::Website::Interface::Declaration'}
@@ -80,15 +74,23 @@ sub populate_tree {
     [], { 'availability' => 1, 'no_menu_entry' => 1, 'filters' => [qw(WebAdmin)],
     'command' => 'EnsEMBL::Web::Command::Website::Interface::News'}
   );
-  $self->create_node( 'AnalysisDescription', '',
-    [qw(analysis_desc EnsEMBL::Web::Component::Website::AnalysisDescription)], 
-    { 'availability' => 1, 'no_menu_entry' => 1, 'filters' => [qw(WebAdmin)]}
-  );
-  $self->create_node( 'SaveAnalysisDesc', '',
-    [], 
-    { 'availability' => 1, 'no_menu_entry' => 1, 'filters' => [qw(WebAdmin)],
-    'command' => 'EnsEMBL::Web::Command::Website::SaveAnalysisDesc'}
-  );
+
+  ## DB INTERFACE NOT CURRENTLY IN USE
+  #my $ad_menu = $self->create_submenu( 'AdMenu', 'Analyses' );
+  #$dec_menu->append($self->create_node( 'SelectAnalysis', 'Edit Descriptions',
+  #  [qw(select_analysis EnsEMBL::Web::Component::Website::SelectAnalysis)], 
+  #  { 'availability' => 1}
+  #));
+  #$self->create_node( 'AnalysisDescription', '',
+  #  [qw(analysis_desc EnsEMBL::Web::Component::Website::AnalysisDescription)], 
+  #  { 'availability' => 1, 'no_menu_entry' => 1, 'filters' => [qw(WebAdmin)]}
+  #);
+  #$self->create_node( 'SaveAnalysisDesc', '',
+  #  [], 
+  #  { 'availability' => 1, 'no_menu_entry' => 1, 'filters' => [qw(WebAdmin)],
+  #  'command' => 'EnsEMBL::Web::Command::Website::SaveAnalysisDesc'}
+  #);
+
 }
 
 1;
