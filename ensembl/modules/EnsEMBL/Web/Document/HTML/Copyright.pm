@@ -21,9 +21,8 @@ sub render {
   my $sd = $ENSEMBL_WEB_REGISTRY->species_defs;
 
   my $you_are_here = $ENV{'REQUEST_URI'};
-  my $referer = CGI::escape($you_are_here);
-  my $stable_URL = sprintf "http://%s.archive.ensembl.org%s",
-      CGI::escape($sd->ARCHIVE_VERSION), CGI::escape($ENV{'REQUEST_URI'});
+  my $referer      = CGI::escape($you_are_here);
+  my $stable_URL   = CGI::escape('http://'. $sd->ARCHIVE_VERSION .'.archive.ensembl.org'. $you_are_here);
 
   $self->printf(
     q(
