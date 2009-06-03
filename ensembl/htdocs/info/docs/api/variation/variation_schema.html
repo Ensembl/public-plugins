@@ -73,7 +73,7 @@ variation schema.
 </UL>
 <HR>
 <H2>Samples and populations</H2>
-<H3><A NAME="individual">individual</H3>
+<H3><A NAME="individual"/>individual</H3>
 <P>Stores information about an identifiable individual, including
 gender and the identifiers of the individual's parents (if known).</P>
 <P><B>See also:</B></P>
@@ -85,7 +85,7 @@ gender and the identifiers of the individual's parents (if known).</P>
 	<LI><P STYLE="margin-bottom: 0cm"><A HREF="#individual_genotype_multiple_bp">individual_genotype_multiple_bp</A></P>
 	<LI><P STYLE="margin-bottom: 0cm"><A HREF="#compressed_genotype_single_bp">compressed_genotype_single_bp</A></P>
 </UL>
-<H3><A NAME="individual_population">individual_population</H3>
+<H3><A NAME="individual_population"/>individual_population</H3>
 <P>This table resolves the many-to-many relationship between the
 individual and population tables; i.e. samples may belong to more
 than one population. Hence it is composed of rows of individual and
@@ -96,7 +96,7 @@ population identifiers.</P>
 	<LI><P STYLE="margin-bottom: 0cm"><A HREF="#individual">individual</A></P>
 	<LI><P STYLE="margin-bottom: 0cm"><A HREF="#population">population</A></P>
 </UL>
-<H3><A NAME="individual_type"></A>individual_type</H3>
+<H3><A NAME="individual_type"/>individual_type</H3>
 <P>This table contains a set of common individual types and their
 descriptions. These types are currently: “fully_inbred”,
 “partly_inbred”, “outbred” and “mutant”.</P>
@@ -105,7 +105,7 @@ descriptions. These types are currently: “fully_inbred”,
 <UL>
 	<LI><P STYLE="margin-bottom: 0cm"><A HREF="#individual">individual</A></P>
 </UL>
-<H3><A NAME="sample">sample</H3>
+<H3><A NAME="sample"/>sample</H3>
 <P>Sample is used as a generic catch-all term to cover
 individuals, populations and strains; it contains a name and description, as
 well as a size if applicable to the population.</P>
@@ -115,7 +115,7 @@ well as a size if applicable to the population.</P>
 	<LI><P STYLE="margin-bottom: 0cm"><A HREF="#individual">individual</A></P>
 	<LI><P STYLE="margin-bottom: 0cm"><A HREF="#population">population</A></P>
 </UL>
-<H3><A NAME="sample_synonym"></A>sample_synonym</H3>
+<H3><A NAME="sample_synonym"/>sample_synonym</H3>
 <P>Used to store alternative names for populations when data comes
 from multiple sources.</P>
 <P><B>See also:</B></P>
@@ -125,7 +125,7 @@ from multiple sources.</P>
 	<LI><P STYLE="margin-bottom: 0cm"><A HREF="#population">population</A></P>
 	<LI><P STYLE="margin-bottom: 0cm"><A HREF="#source">source</A></P>
 </UL>
-<H3><A NAME="population">population</H3>
+<H3><A NAME="population"/>population</H3>
 <P>A table consisting simply of sample_ids representing populations;
 all data relating to the populations are stored in separate tables
 (see below).</P>
@@ -141,7 +141,7 @@ all data relating to the populations are stored in separate tables
 	<LI><P STYLE="margin-bottom: 0cm"><A HREF="#allele_group">allele_group</A></P>
 	<LI><P STYLE="margin-bottom: 0cm"><A HREF="#tagged_variation_feature">tagged_variation_feature</A></P>
 </UL>
-<H3><A NAME="population_structure"></A>population_structure</H3>
+<H3><A NAME="population_structure"/>population_structure</H3>
 <P>This table stores hierarchical relationships between populations
 by relating them as populations and sub-populations.</P>
 <P><B>See also:</B></P>
@@ -151,7 +151,7 @@ by relating them as populations and sub-populations.</P>
 </UL>
 <HR>
 <H2>Simple variations</H2>
-<H3><A NAME="source">source</H3>
+<H3><A NAME="source"/>source</H3>
 <P>This table contains details of the source from which a variation
 is derived. Most commonly this is NCBI's dbSNP; other sources include
 SNPs called by Ensembl.</P>
@@ -167,7 +167,7 @@ SNPs called by Ensembl.</P>
 	<LI><P STYLE="margin-bottom: 0cm"><A HREF="#sample_synonym">sample_synonym</A></P>
 	<LI><P STYLE="margin-bottom: 0cm"><A HREF="#httag">httag</A></P>
 </UL>
-<H3><A NAME="variation">variation</H3>
+<H3><A NAME="variation"/>variation</H3>
 <P>This is the schema's generic representation of a variation,
 defined as a genetic feature that varies between individuals of the
 same species. The most common type is the single nucleotide variation
@@ -190,7 +190,7 @@ ancestral (or reference) allele.</P>
 	<LI><P STYLE="margin-bottom: 0cm"><A HREF="#allele_group_allele">allele_group_allele</A></P>
 	<LI><P STYLE="margin-bottom: 0cm"><A HREF="#individual_genotype_multiple_bp">individual_genotype_multiple_bp</A></P>
 </UL>
-<H3><A NAME="variation_synonym">variation_synonym</H3>
+<H3><A NAME="variation_synonym"/>variation_synonym</H3>
 <P>This table allows for a variation to have multiple IDs, generally
 given by multiple sources.</P>
 <P><B>See also:</B></P>
@@ -199,7 +199,7 @@ given by multiple sources.</P>
 	<LI><P STYLE="margin-bottom: 0cm"><A HREF="#source">source</A></P>
 	<LI><P STYLE="margin-bottom: 0cm"><A HREF="#variation">variation</A></P>
 </UL>
-<H3><A NAME="flanking_sequence">flanking_sequence</H3>
+<H3><A NAME="flanking_sequence"/>flanking_sequence</H3>
 <P>This table contains the upstream and downstream sequence
 surrounding a variation. Since each variation is defined by its
 flanking sequence, this table has a one-to-one relationship with the
@@ -210,7 +210,7 @@ variation table.</P>
 	<LI><P STYLE="margin-bottom: 0cm"><A HREF="#seq_region">seq_region</A></P>
 	<LI><P STYLE="margin-bottom: 0cm"><A HREF="#variation">variation</A></P>
 </UL>
-<H3><A NAME="failed_variation">failed_variation</H3>
+<H3><A NAME="failed_variation"/>failed_variation</H3>
 <P>For various reasons it may be necessary to store information about
 a variation that has failed quality checks in the Variation pipeline.
 This table acts as a flag for such failures.</P>
@@ -220,7 +220,7 @@ This table acts as a flag for such failures.</P>
 	<LI><P STYLE="margin-bottom: 0cm"><A HREF="#failed_description">failed_description</A></P>
 	<LI><P STYLE="margin-bottom: 0cm"><A HREF="#variation">variation</A></P>
 </UL>
-<H3><A NAME="failed_description">failed_description</H3>
+<H3><A NAME="failed_description"/>failed_description</H3>
 <P>This table contains descriptions of reasons for a variation being
 flagged as failed.</P>
 <P><B>See also:</B></P>
@@ -228,7 +228,7 @@ flagged as failed.</P>
 <UL>
 	<LI><P STYLE="margin-bottom: 0cm"><A HREF="#failed_description">failed_description</A></P>
 </UL>
-<H3><A NAME="allele">allele</H3>
+<H3><A NAME="allele"/>allele</H3>
 <P>This table stores information about each of a variation's alleles,
 along with population frequencies.</P>
 <P><B>See also:</B></P>
@@ -237,7 +237,7 @@ along with population frequencies.</P>
 	<LI><P STYLE="margin-bottom: 0cm"><A HREF="#variation">variation</A></P>
 	<LI><P STYLE="margin-bottom: 0cm"><A HREF="#population">population</A></P>
 </UL>
-<H3><A NAME="variation_feature">variation_feature</H3>
+<H3><A NAME="variation_feature"/>variation_feature</H3>
 <P>This table represents mappings of variations to genomic locations.
 It stores an allele string representing the different possible
 alleles that are found at that locus e.g. “A/T” for a SNP, as
@@ -250,7 +250,7 @@ as part of the relationship between variations and transcripts.</P>
 	<LI><P STYLE="margin-bottom: 0cm"><A HREF="#tagged_variation_feature">tagged_variation_feature</A></P>
 	<LI><P STYLE="margin-bottom: 0cm"><A HREF="#transcript_variation">transcript_variation</A></P>
 </UL>
-<H3><A NAME="transcript_variation">transcript_variation</H3>
+<H3><A NAME="transcript_variation"/>transcript_variation</H3>
 <P>This table relates a variation_feature to a transcript (see Core
 documentation). It contains the consequence of the variation e.g.
 intronic, non-synonymous coding, stop etc, along with the change in
@@ -260,7 +260,7 @@ amino acid in the resulting protein if applicable.</P>
 <UL>
 	<LI><P STYLE="margin-bottom: 0cm"><A HREF="#variation_feature">variation_feature</A></P>
 </UL>
-<H3><A NAME="tagged_variation_feature">tagged_variation_feature</H3>
+<H3><A NAME="tagged_variation_feature"/>tagged_variation_feature</H3>
 <P>This table lists variation features that are tagged by another
 variation feature. Tag pairs are defined as having an r&sup2;
 &gt; 0.99.</P>
@@ -274,7 +274,7 @@ variation feature. Tag pairs are defined as having an r&sup2;
 <H2>Multi-marker variations</H2>
 <P>These tables are designed to represent alleles and haplotypes that
 consist of more than one variation.</P>
-<H3><A NAME="allele_group">allele_group</H3>
+<H3><A NAME="allele_group"/>allele_group</H3>
 <P>This table, along with allele_group_allele, represents a
 particular multi-marker allele of a given multi-marker variation, or
 haplotype. It stores an associated population frequency.</P>
@@ -286,7 +286,7 @@ haplotype. It stores an associated population frequency.</P>
 	<LI><P STYLE="margin-bottom: 0cm"><A HREF="#population">population</A></P>
 	<LI><P STYLE="margin-bottom: 0cm"><A HREF="#source">source</A></P>
 </UL>
-<H3><A NAME="allele_group_allele">allele_group_allele</H3>
+<H3><A NAME="allele_group_allele"/>allele_group_allele</H3>
 <P>This table represents an allele of one variation in a multi-marker
 variation, or haplotype. It stores a string of the allele.</P>
 <P><B>See also:</B></P>
@@ -295,7 +295,7 @@ variation, or haplotype. It stores a string of the allele.</P>
 	<LI><P STYLE="margin-bottom: 0cm"><A HREF="#allele_group">allele_group</A></P>
 	<LI><P STYLE="margin-bottom: 0cm"><A HREF="#variation">variation</A></P>
 </UL>
-<H3><A NAME="variation_group">variation_group</H3>
+<H3><A NAME="variation_group"/>variation_group</H3>
 <P>This table represents the equivalent of a variation for a
 multi-marker variation.</P>
 <P><B>See also:</B></P>
@@ -307,7 +307,7 @@ multi-marker variation.</P>
 	<LI><P STYLE="margin-bottom: 0cm"><A HREF="#source">source</A></P>
 	<LI><P STYLE="margin-bottom: 0cm"><A HREF="#httag">httag</A></P>
 </UL>
-<H3><A NAME="variation_group_variation">variation_group_variation</H3>
+<H3><A NAME="variation_group_variation"/>variation_group_variation</H3>
 <P>This table represents an individual variation that makes up a
 multi-marker variation, and resolves the many-to-many relationship
 between variation and variation_group.</P>
@@ -317,7 +317,7 @@ between variation and variation_group.</P>
 	<LI><P STYLE="margin-bottom: 0cm"><A HREF="#variation_group">variation_group</A></P>
 	<LI><P STYLE="margin-bottom: 0cm"><A HREF="#variation">variation</A></P>
 </UL>
-<H3><A NAME="variation_group_feature">variation_group_feature</H3>
+<H3><A NAME="variation_group_feature"/>variation_group_feature</H3>
 <P>This table represents the equivalent of a variation_feature for
 multi-marker variations, mapping a haplotype to a chromosomal
 coordinate system.</P>
@@ -327,7 +327,7 @@ coordinate system.</P>
 	<LI><P STYLE="margin-bottom: 0cm"><A HREF="#variation_group">variation_group</A></P>
 	<LI><P STYLE="margin-bottom: 0cm"><A HREF="#seq_region">seq_region</A></P>
 </UL>
-<H3><A NAME="httag">httag</H3>
+<H3><A NAME="httag"/>httag</H3>
 <P>This table represents the equivalent of a tagged_variation_feature
 for multi-marker variations, representing an instance where a
 haplotype is tagged by or tags another marker.</P>
@@ -339,7 +339,7 @@ haplotype is tagged by or tags another marker.</P>
 </UL>
 <HR>
 <H2>Genotypes, read coverage and annotations</H2>
-<H3><A NAME="compressed_genotype_single_bp">compressed_genotype_single_bp</H3>
+<H3><A NAME="compressed_genotype_single_bp"/>compressed_genotype_single_bp</H3>
 <P>This table holds genotypes compressed using the pack() method in
 Perl. These genotypes are mapped to particular genomic locations
 rather than variation objects. The data have been compressed to reduce table
@@ -350,7 +350,7 @@ size and increase the speed of the web code.</P>
 	<LI><P STYLE="margin-bottom: 0cm"><A HREF="#individual">individual</A></P>
 	<LI><P STYLE="margin-bottom: 0cm"><A HREF="#seq_region">seq_region</A></P>
 </UL>
-<H3><A NAME="individual_genotype_multiple_bp">individual_genotype_multiple_bp</H3>
+<H3><A NAME="individual_genotype_multiple_bp"/>individual_genotype_multiple_bp</H3>
 <P>This table holds uncompressed genotypes for given variations.</P>
 <P><B>See also:</B></P>
 <P>Tables:</P>
@@ -358,7 +358,7 @@ size and increase the speed of the web code.</P>
 	<LI><P STYLE="margin-bottom: 0cm"><A HREF="#individual">individual</A></P>
 	<LI><P STYLE="margin-bottom: 0cm"><A HREF="#variation">variation</A></P>
 </UL>
-<H3><A NAME="population_genotype">population_genotype</H3>
+<H3><A NAME="population_genotype"/>population_genotype</H3>
 <P>This table stores alleles and frequencies for variations in
 given populations.</P>
 <P><B>See also:</B></P>
@@ -367,7 +367,7 @@ given populations.</P>
 	<LI><P STYLE="margin-bottom: 0cm"><A HREF="#population">population</A></P>
 	<LI><P STYLE="margin-bottom: 0cm"><A HREF="#variation">variation</A></P>
 </UL>
-<H3><A NAME="read_coverage">read_coverage</H3>
+<H3><A NAME="read_coverage"/>read_coverage</H3>
 <P>This table stores the read coverage in the resequencing of
 individuals. Each row contains an individual ID, chromosomal
 coordinates and a read coverage level.</P>
@@ -377,7 +377,7 @@ coordinates and a read coverage level.</P>
 	<LI><P STYLE="margin-bottom: 0cm"><A HREF="#individual">individual</A></P>
 	<LI><P STYLE="margin-bottom: 0cm"><A HREF="#seq_region">seq_region</A></P>
 </UL>
-<H3><A NAME="variation_annotation">variation_annotation</H3>
+<H3><A NAME="variation_annotation"/>variation_annotation</H3>
 <P>This table stores information linking genotypes and phenotypes. It
 stores various fields pertaining to the study conducted, along with
 the associated gene, risk allele frequency and a p-value.</P>
@@ -388,7 +388,7 @@ the associated gene, risk allele frequency and a p-value.</P>
 	<LI><P STYLE="margin-bottom: 0cm"><A HREF="#phenotype">phenotype</A></P>
 	<LI><P STYLE="margin-bottom: 0cm"><A HREF="#source">source</A></P>
 </UL>
-<H3><A NAME="phenotype">phenotype</H3>
+<H3><A NAME="phenotype"/>phenotype</H3>
 <P>This table stores details of the phenotypes associated with
 variation annotations.</P>
 <P><B>See also:</B></P>
@@ -399,7 +399,7 @@ variation annotations.</P>
 <HR>
 <H2>Miscellaneous</H2>
 <P>Tables that don't fit anywhere else.</P>
-<H3><A NAME="seq_region">seq_region</H3>
+<H3><A NAME="seq_region"/>seq_region</H3>
 <P>This table stores the relationship between Ensembl's internal
 coordinate system identifiers and traditional chromosome names.</P>
 <P><B>See also:</B></P>
@@ -411,10 +411,10 @@ coordinate system identifiers and traditional chromosome names.</P>
 	<LI><P STYLE="margin-bottom: 0cm"><A HREF="#compressed_genotype_single_bp">compressed_genotype_single_bp</A></P>
 	<LI><P STYLE="margin-bottom: 0cm"><A HREF="#read_coverage">read_coverage</A></P>
 </UL>
-<H3><A NAME="seq_region_attrib">meta</H3>
+<H3><A NAME="seq_region_attrib"/>meta</H3>
 <P>This table stores various metadata relating to the database,
 generally used by the Ensembl web code.</P>
-<H3><A NAME="meta_coord">meta_coord</H3>
+<H3><A NAME="meta_coord"/>meta_coord</H3>
 <P>This table gives the coordinate system used by various tables in
 the database.</P>
 <HR>
