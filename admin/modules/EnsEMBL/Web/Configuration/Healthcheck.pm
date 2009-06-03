@@ -35,6 +35,12 @@ sub populate_tree {
     )], 
     { 'availability' => 1, 'filters' => [qw(WebAdmin)]}
   );
+  $self->create_node( 'UserDirectory', "User Directory",
+    [qw(
+      directory EnsEMBL::Web::Component::Healthcheck::UserDirectory
+    )], 
+    { 'availability' => 1, 'filters' => [qw(WebAdmin)]}
+  );
 
   $self->create_node( 'Annotation', '', [],
       { 'command' => 'EnsEMBL::Web::Command::Healthcheck::Interface::Annotation',
