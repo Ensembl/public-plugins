@@ -175,6 +175,8 @@
 <th class="bg3 center" style="width:5em"><i>D.rer</i></th>
 <th class="bg4 center" style="width:5em"><i>C.sav</i></th>
 <th class="bg3 center" style="width:5em"><i>C.int</i></th>
+<th class="bg3 center" style="width:5em"><i>T.gut</i></th>
+<th class="bg3 center" style="width:5em"><i>A.car</i></th>
 <th></th>
 </tr>
 
