@@ -31,6 +31,7 @@ Shrew <I>(Sorex araneus)</I><br />
 Squirrel <I>(Spermophilus tridecemlineatus)</I><br />
 Tarsier <I>(Tarsius syrichta)</I><br />
 Tree Shrew <I>(Tupaia belangeri)</I><br />
+Wallaby <I>(Macropus eugenii)</I><br />
 
 <h4>Mouse <I>(Mus musculus)</I></h4>
 Dog <I>(Canis familiaris)</I><br />
