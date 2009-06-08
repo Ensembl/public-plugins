@@ -96,6 +96,21 @@
 </tr>
 
 <tr>
+<td class="bg1 left"><b><i>Ornithorhynchus anatinus</i></b></td>
+<td class="bg3 center"><font color="blue">YES</font></td><!-- Hsap -->
+<td class="bg1 center">-</td><!-- Ptro -->
+<td class="bg3 center">-</td><!-- Ppyg -->
+<td class="bg1 center">-</td><!-- Mmul -->
+<td class="bg3 center">-</td><!-- Mmus -->
+<td class="bg1 center">-</td><!-- Rnor -->
+<td class="bg3 center">-</td><!-- Cfam -->
+<td class="bg1 center">-</td><!-- Btau -->
+<td class="bg3 center">-</td><!-- Ecab -->
+<td class="bg3 center">-</td><!-- Mdom -->
+<th class="bg1 center" style="width:5em"><i>Oana</i></th>
+</tr>
+
+<tr>
 <td class="bg3 left"><b><i>Gallus gallus</i></b></td>
 <td class="bg4 center"><font color="blue">YES</font></td><!-- Hsap -->
 <td class="bg3 center">-</td><!-- Ptro -->
@@ -107,6 +122,7 @@
 <td class="bg3 center">-</td><!-- Btau -->
 <td class="bg4 center">-</td><!-- Ecab -->
 <td class="bg3 center">-</td><!-- Mdom -->
+<td class="bg3 center">-</td><!-- Oana -->
 <th class="bg4 center" style="width:5em"><i>Ggal</i></th>
 </tr>
 
@@ -122,6 +138,7 @@
 <th class="bg1 center" style="width:5em"><i>Btau</i></th>
 <th class="bg3 center" style="width:5em"><i>Ecab</i></th>
 <th class="bg1 center" style="width:5em"><i>Mdom</i></th>
+<th class="bg1 center" style="width:5em"><i>Oana</i></th>
 <th class="bg3 center" style="width:5em"><i>Ggal</i></th>
 <th></th>
 </tr>
