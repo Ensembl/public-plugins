@@ -27,6 +27,7 @@ sub update_conf {
   $SiteDefs::__species_aliases{ 'Loxodonta_africana'       } = [qw(la lafr elephant africana loxodontai hathi nellie dumbo)];
   $SiteDefs::__species_aliases{ 'Oryctolagus_cuniculus'    } = [qw(oc ocun rabbit bugs bunny hutch harvey)];
   $SiteDefs::__species_aliases{ 'Macaca_mulatta'           } = [qw(mmu mmul rhesus macaque macaca)];
+  $SiteDefs::__species_aliases{ 'Macropus_eugenii'         } = [qw(me meug wallaby)];
   $SiteDefs::__species_aliases{ 'Microcebus_murinus'       } = [qw(mmur lemur)];
   $SiteDefs::__species_aliases{ 'Monodelphis_domestica'    } = [qw(md mdom monodelphis opossum)];
   $SiteDefs::__species_aliases{ 'Mus_musculus'             } = [qw(mm mmus mouse mus)];
