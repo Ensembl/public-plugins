@@ -62,13 +62,18 @@ supporting evidence for ncRNA genes.
 <p>
 <strong>miRNAs</strong> are predicted by BLASTN of genomic sequence
 slices against <a rel="external"
-href="http://microrna.sanger.ac.uk/">miRBase</a> sequences. The BLAST
-hits are clustered and filtered by E value and the aligned genomic
-sequence is then checked for possible secondary structure using
-RNAFold. If evidence is found that the genomic sequence could form a
-stable hairpin structure, the locus is used to create a miRNA gene
-model. The resulting BLAST hit is used as supporting evidence for the
-miRNA gene.
+href="http://microrna.sanger.ac.uk/">miRBase</a> sequences. All
+species are used. The BLAST hits are clustered and filtered by E value
+and the aligned genomic sequence is then checked for possible
+secondary structure using RNAFold. If evidence is found that the
+genomic sequence could form a stable hairpin structure, the locus is
+used to create a miRNA gene model. The resulting BLAST hit is used as
+supporting evidence for the miRNA gene.
+</p>
+
+<p>
+Note: The miRNA identifier and name are only associated to the
+resulting Ensembl miRNA if they are of the same species.
 </p>
 
 <p>
