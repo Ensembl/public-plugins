@@ -122,8 +122,8 @@
 <td class="bg3 center">-</td><!-- Btau -->
 <td class="bg4 center">-</td><!-- Ecab -->
 <td class="bg3 center">-</td><!-- Mdom -->
-<td class="bg3 center">-</td><!-- Oana -->
-<th class="bg4 center" style="width:5em"><i>Ggal</i></th>
+<td class="bg4 center">-</td><!-- Oana -->
+<th class="bg1 center" style="width:5em"><i>Ggal</i></th>
 </tr>
 
 <tr>
@@ -138,8 +138,8 @@
 <th class="bg1 center" style="width:5em"><i>Btau</i></th>
 <th class="bg3 center" style="width:5em"><i>Ecab</i></th>
 <th class="bg1 center" style="width:5em"><i>Mdom</i></th>
-<th class="bg1 center" style="width:5em"><i>Oana</i></th>
-<th class="bg3 center" style="width:5em"><i>Ggal</i></th>
+<th class="bg3 center" style="width:5em"><i>Oana</i></th>
+<th class="bg1 center" style="width:5em"><i>Ggal</i></th>
 <th></th>
 </tr>
 
