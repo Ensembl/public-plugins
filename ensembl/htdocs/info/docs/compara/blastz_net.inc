@@ -38,9 +38,11 @@ Dog <I>(Canis familiaris)</I><br />
 Human <I>(Homo sapiens)</I><br />
 Platypus <I>(Ornithorhynchus anatinus)</I><br />
 Rat <I>(Rattus norvegicus)</I><br />
+Medaka <I>(Oryzias latipes)</I><br />
 
 <h4>Medaka <I>(Oryzias latipes)</I></h4>
 Stickleback <I>(Gasterosteus aculeatus)</I><br />
+Mouse <I>(Mus musculus)</I><br />
 
 <h4>C.intestinalis <I>(Ciona intestinalis)</I></h4>
 C.savignyi <I>(Ciona savignyi)</I><br />
