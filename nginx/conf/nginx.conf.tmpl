@@ -53,6 +53,7 @@ http {
 
     memcached_connect_timeout 50;
     memcached_read_timeout 50;
+    memcached_send_timeout 50;
     error_page   502 503 /errors;
  
     location ~* \.(jpg|jpeg|png|gif|js|css|txt|xml|csv|gff|fa|nh|gz|tar|zip|pdf|swf)$ {
