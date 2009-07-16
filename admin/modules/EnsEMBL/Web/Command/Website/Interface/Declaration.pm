@@ -32,7 +32,7 @@ sub process {
     {'name' => 'Only some', 'value' => 'Some'},
   ];
   $interface->element('add_species', {'type' => 'DropDown', 'name' => 'add_species', 'label' => 'Which species does this declaration affect?', 'values' => $values});
-  $interface->element('species_note', {'type' => 'Information', 'value' => 'N.B. Species can be specified after you have previewed and saved your declaration.'});
+  $interface->element('species_note', {'type' => 'Information', 'value' => 'N.B. Species can only be added after you have previewed and saved your declaration.'});
 
   $interface->modify_element('assembly',        {'select' => 'radio', 'label' => 'New assembly'});
   $interface->modify_element('gene_set',        {'select' => 'radio', 'label' => 'New gene set'});
@@ -42,7 +42,7 @@ sub process {
   $interface->modify_element('database',        {'select' => 'radio', 'label' => 'Database on ens-staging'});
   $interface->modify_element('release_id', {'type' => 'Hidden', 'value' => $object->species_defs->ENSEMBL_VERSION});
 
-  $interface->element_order(['team', 'title', 'caveat', 'declaration', 'notes', 'add_species', 'assembly', 'gene_set', 'repeat_masking', 'stable_id_mapping', 'affy_mapping', 'database', 'status', 'release_id']);
+  $interface->element_order(['team', 'title', 'caveat', 'declaration', 'notes', 'add_species', 'species_note', 'assembly', 'gene_set', 'repeat_masking', 'stable_id_mapping', 'affy_mapping', 'database', 'status', 'release_id']);
   $interface->dropdown(1);
   $interface->option_columns(['team','declaration']);
   
