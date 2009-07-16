@@ -70,6 +70,14 @@ sub populate_tree {
     [], { 'availability' => 1, 'no_menu_entry' => 1, 'filters' => [qw(WebAdmin)],
     'command' => 'EnsEMBL::Web::Command::Website::Interface::Declaration'}
   );
+  $self->create_node( 'NewsSpecies', '',
+    [qw(news_species EnsEMBL::Web::Component::Website::NewsSpecies)], 
+    { 'availability' => 1, 'no_menu_entry' => 1, 'filters' => [qw(WebAdmin)]}
+  );
+  $self->create_node( 'LinkSpecies', '',
+    [], { 'availability' => 1, 'no_menu_entry' => 1, 'filters' => [qw(WebAdmin)],
+    'command' => 'EnsEMBL::Web::Command::Website::LinkSpecies'}
+  );
   $self->create_node( 'News', '',
     [], { 'availability' => 1, 'no_menu_entry' => 1, 'filters' => [qw(WebAdmin)],
     'command' => 'EnsEMBL::Web::Command::Website::Interface::News'}

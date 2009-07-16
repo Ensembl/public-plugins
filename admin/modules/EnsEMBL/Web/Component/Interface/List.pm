@@ -24,9 +24,11 @@ sub content {
   my $self = shift;
   my $object = $self->object;
   my $object_type = $ENV{'ENSEMBL_TYPE'};
+  my $action = $ENV{'ENSEMBL_ACTION'};
   my $columns = $object->interface->option_columns || $object->interface->element_order;
   my @records;
-  if ($object_type eq 'NewsItem') {
+  warn "TYPE $action";
+  if ($action eq 'NewsItem' || $action eq 'Declaration') {
     @records = sort {$a->team cmp $b->team}
       $object->interface->data->search('release_id' => $object->species_defs->ENSEMBL_VERSION);
   }

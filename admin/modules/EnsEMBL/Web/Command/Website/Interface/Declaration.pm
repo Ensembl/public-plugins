@@ -19,13 +19,20 @@ sub process {
   my $interface = EnsEMBL::Web::Interface->new();
 
   $data = EnsEMBL::Web::Data::NewsItem->new($object->param('id'));
-  
   $interface->data($data);
   $interface->discover;
 
   $interface->element('caveat', {'type' => 'Information', 'value' => 'Please do not enter text in all capitals, as it then has to be changed back to normal case for use in the news pages!'});
   $interface->modify_element('declaration', {'rows' => 20, 'cols' => 80});
   $interface->modify_element('notes', {'rows' => 5, 'cols' => 80});
+  
+  $interface->extra_data('add_species');
+  my $values = [
+    {'name' => 'All', 'value' => 'All'},
+    {'name' => 'Only some', 'value' => 'Some'},
+  ];
+  $interface->element('add_species', {'type' => 'DropDown', 'name' => 'add_species', 'label' => 'Which species does this declaration affect?', 'values' => $values});
+  $interface->element('species_note', {'type' => 'Information', 'value' => 'N.B. Species can be specified after you have previewed and saved your declaration.'});
 
   $interface->modify_element('assembly',        {'select' => 'radio', 'label' => 'New assembly'});
   $interface->modify_element('gene_set',        {'select' => 'radio', 'label' => 'New gene set'});
@@ -35,10 +42,10 @@ sub process {
   $interface->modify_element('database',        {'select' => 'radio', 'label' => 'Database on ens-staging'});
   $interface->modify_element('release_id', {'type' => 'Hidden', 'value' => $object->species_defs->ENSEMBL_VERSION});
 
-  $interface->element_order(['team', 'title', 'caveat', 'declaration', 'species', 'notes', 'assembly', 'gene_set', 'repeat_masking', 'stable_id_mapping', 'affy_mapping', 'database', 'status', 'release_id']);
+  $interface->element_order(['team', 'title', 'caveat', 'declaration', 'notes', 'add_species', 'assembly', 'gene_set', 'repeat_masking', 'stable_id_mapping', 'affy_mapping', 'database', 'status', 'release_id']);
   $interface->dropdown(1);
   $interface->option_columns(['team','declaration']);
-
+  
   $interface->configure($self->webpage, $object);
 
 }

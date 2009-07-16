@@ -47,7 +47,7 @@ sub content {
       );
       $form->add_element(
         'type'  => 'Hidden',
-        'name'  => 'report_id',
+        'name'  => 'id',
         'value' => $id,
       );
     }

@@ -55,9 +55,10 @@ sub content {
 <li><strong>Repeat masking?</strong> %s</li>
 <li><strong>Stable ID mapping?</strong> %s</li>
 <li><strong>Affy mapping?</strong> %s</li>
+<li><strong>Database new/patched?</strong> %s</li>
 </ul>
 ),
-      $item->assembly, $item->gene_set, $item->repeat_masking, $item->stable_id_mapping, $item->affy_mapping,
+      $item->assembly, $item->gene_set, $item->repeat_masking, $item->stable_id_mapping, $item->affy_mapping, $item->database
 );
     }
     $html .= '<br />';

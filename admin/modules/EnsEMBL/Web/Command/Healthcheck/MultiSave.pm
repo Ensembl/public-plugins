@@ -16,14 +16,12 @@ sub process {
   my $self = shift;
   my $object = $self->object;
 
-  my @report_ids = $object->param('report_id');
-  foreach my $id (@report_ids) {
+  my @ids = ($object->param('id'));
+  foreach my $id (@ids) {
+    next unless $id;
     ## Check if this report is already annotated
-    my $annotation = EnsEMBL::Web::Data::HcAnnotation->find('report_id' => $id);
-    unless ($annotation) {
-      $annotation = EnsEMBL::Web::Data::HcAnnotation->new();
-      $annotation->report_id($id);
-    }
+    my $annotation = EnsEMBL::Web::Data::HcAnnotation->find_or_create({'report_id' => $id});
+    $annotation->report_id($id);
     $annotation->action($object->param('action'));
     $annotation->comment($object->param('comment'));
     $annotation->save;
