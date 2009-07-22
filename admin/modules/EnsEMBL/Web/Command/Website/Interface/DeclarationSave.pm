@@ -30,8 +30,15 @@ sub process {
       $url .= 'List';
     }
     else {
-      $param->{'id'} = $success;
-      $url = '/Website/NewsSpecies';
+      $param->{'id'} = $interface->data->id;
+      if ($object->param('species')) {
+        $url = '/Website/LinkSpecies';
+        my @A = ($object->param('species'));
+        $param->{'species'} = \@A;
+      }
+      else {
+        $url = '/Website/NewsSpecies';
+      }
     }
   }
   else {
