@@ -20,7 +20,7 @@ pages, the Ensembl code includes automated navigation. This is implemented
 as follows:</p>
 
 <ol>
-<li>At server startup, the module EnsEMBL::Web::SpeciesDefs parses the
+<li>At server startup, the module EnsEMBL::Web::ConfigPacker parses the
 entire document tree for htdocs/info/ in all plugins, to produce a
 combined tree for the whole site</li>
 <li>This tree is then used to generate site navigation:
@@ -61,9 +61,13 @@ a "navigation" meta tag (see below)</li>
 &lt;/body&gt;
 &lt;/html&gt;</pre>
 
+<div class="tinted-box embedded-box">Note that if you add or remove a static page, 
+or change anything within the &lt;head&gt; tag, you need to delete 
+<code>/conf/packed/web_tree.packed</code> and restart the server.</div>
+
 <h3>Omitting content from the navigation</h3>
 
-<p>There may be instances where you do not wish to have SpeciesDefs parse sections of the tree.
+<p>There may be instances where you do not wish to have ConfigPacker parse sections of the tree.
 For example, we do not include the contents of 'Pdocs' in the Ensembl documentation tree as it
 contains many hundreds of files and has its own navigation menu.</p>
 
@@ -95,7 +99,6 @@ set the value to "NO INDEX"</li>
 &lt;/body&gt;
 &lt;/html&gt;
 </pre>
-
 
 </body>
 </html>
