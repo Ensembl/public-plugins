@@ -13,7 +13,7 @@ websites based on Ensembl code, including public sites such as pre!, Vega and
 the Ensembl archives, and private sites used for internal development.
 In order to distinguish these sites we use plugins to alter the colour scheme
 and/or site logo, in addition to the changes in content. For example, the Vega site 
-is blue, pre! is turquoise, and the archives are lilac.
+is light blue, pre! is green, and the archives are light brown.
 </p>
 
 <p>
@@ -126,6 +126,33 @@ CONTIGBLUE2     = 02599c ; Contig-colours (dark)
 values will be compiled into the Ensembl css files on server startup.</p>
 
 <p>Note: we recommend not changing the font sizes, or you may have problems with your graphics!</p>
+
+<h3>Changing the tab graphics</h3>
+
+<p>If you change the masthead background colour, you will also need to change the images used
+to draw the curved edges of the tabs at the tops of the Location, Gene and Transcript pages.
+First, make a copy of the following files from <code>/htdocs/i/</code>:</p>
+
+<ul>
+<li>tab-l-off.gif</li>
+<li>tab-l.gif</li>
+<li>tab-off.gif</li>
+<li>tab.gif</li>
+</ul>
+
+<p>In a suitable image editor such as The GIMP or Photoshop, use the 'magic wand selector' 
+and 'bucket' tools to change the colours of the tab, tab background and shading 
+(you will need to convert the image from indexed to RGB first!). The background colour
+should be the same as your masthead, and the tab 'off' colour should be an intermediate
+shade that contrasts with the link text.</p>
+
+<p><img src="/img/help/gimp.png" /></p>
+
+<p>Finally, copy the edited files to:</p>
+
+<p><code>/public-plugins/mirror/htdocs/i/</code></p>
+
+<p>and restart your server.</p>
 
 </body>
 </html>
