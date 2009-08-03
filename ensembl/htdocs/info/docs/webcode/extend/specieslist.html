@@ -9,18 +9,23 @@
 <p>If you are installing a subset of the standard Ensembl species, you can leave the plugins as-is
 and your home page will be generated automatically.</p>
 
-<p>If, however, you are adding species from taxa not found in Ensembl, e.g. plants or bacteria,
-you will need to create the appropriate files in your site plugin.</p>
+<p>If, however, you are making major changes to the list of species found in Ensembl,
+you may want to make changes to how those species are listed.</p>
 
 <p>For a site with few species, it is usually sufficient to provide a list of static links, or
 a simple list can be auto-generated using the information stored in SpeciesDefs. See
 <code>EnsEMBL::Web::Document::HTML::SpeciesList</code> for sample code.</p>
 
+<p>If your site has a lot of species, you may wish to automatically group these by taxa, 
+in a similar way to Ensembl.</p>
+
+
 <h2>Organising your species</h2>
 
-<p>If your site has a lot of species, you may wish to group these in a similar way to Ensembl.
-To do this, you need taxonomy data in the 'meta' table of your core database. The standard format 
-is for the taxa to be listed in ascending order when ordered by meta_id, e.g.</p>
+<p>To automatically group species by taxa, you need taxonomy data in the 'meta' table of 
+your core database. The standard format is for the taxa to be listed in ascending order 
+when ordered by meta_id, e.g.</p>
+
 <pre>
 mysql&gt; select * from meta where meta_key = 'species.classification' order by meta_id;
 +---------+------------------------+------------------+
@@ -48,8 +53,7 @@ mysql&gt; select * from meta where meta_key = 'species.classification' order by 
 your species into groups.</p>
 
 <p>The next step is therefore to identify the taxa that correspond to the groups you want.
-Ideally you want about 2-7 species in each group (the normal range for human short-term
-memory to handle). In Ensembl, we have many different mammal species, some other vertebrates, 
+In Ensembl, we have many different mammal species, some other vertebrates, 
 and a few non-vertebrates. We have thus divided our species as follows:</p>
 <ul>
 <li>Primates</li>
