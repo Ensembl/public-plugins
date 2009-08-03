@@ -48,8 +48,8 @@ $SiteDefs::__species_aliases{'Geococcyx_californianus'} = [qw(gc roadrunner)];
 <p>Note that all aliases should be unique, so check in 
 <kbd>/public-plugins/ensembl/conf/SiteDefs.pm</kbd> to see which 
 are already in use. These aliases allow quick access to pages, so that users
-can type, e.g. www.ensembl.org/worm/Gene?g=Y42H9B.1 instead of
-www.ensembl.org/Caenorhabditis_elegans/Gene?g=Y42H9B.1</p>
+can type, e.g. www.ensembl.org/worm/Transcript?t=ZK792.7 instead of
+www.ensembl.org/Caenorhabditis_elegans/Transcript?t=ZK792.7</p>
 
 <p>You will also need a .ini file for the new species. Copy one of the 
 existing files from <kbd>/public-plugins/ensembl/conf/ini-files/</kbd>
@@ -74,13 +74,24 @@ database, <kbd>ensembl_website</kbd>.
 
 <p>Using a MySQL client program, update the ensembl_website database as follows:</p>
 
-<p><kbd>insert into species values (1001, 'cl', 'Canis_latrans', 'Coyote');</kbd></p>
+<pre class="code">
+insert into species values (1001, 'cl', 'Canis_latrans', 'Coyote');
+</pre>
 
 <p>N.B. We suggest using a high primary key value so as to avoid conflict with 
 future releases of Ensembl.</p>
 
-<p>Then run the utility script <kbd>/utils/static_content/update_webdb.pl</kbd>, which will
-link your new species into the current release.</p>
+<p>A second insert is needed to link your new species to the current release and
+make the assembly details available to the species home page:</p>
+
+<pre class="code">
+insert into release_species set release_species_id = null, release_id = 56, 
+species_id = 1001, assembly_code = 'CanLat1.0', assembly_name = 'CanLat 1.0';
+</pre>
+
+<p>Note that 'assembly_code' is the exact value used in your database to identify the
+assembly, wherease 'assembly_name' can be a more human-readable version (if required).</p>
+
 
 <h3>Static content</h3>
 
