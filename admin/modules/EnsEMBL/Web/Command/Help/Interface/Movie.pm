@@ -1,4 +1,4 @@
-package EnsEMBL::Web::Command::Help::Interface::Video;
+package EnsEMBL::Web::Command::Help::Interface::Movie;
 
 use strict;
 use warnings;
