@@ -45,6 +45,7 @@ sub content {
     $table->add_columns({ 'key' => $column, 'title' => ucfirst($column), 'width' => $width.'%', 'align' => 'left' });
   }
   foreach my $record (@records) {
+    next unless $record;
     my $id = $record->id;
     my $url = "/$object_type/";
     if ($object_type eq 'Help') {
