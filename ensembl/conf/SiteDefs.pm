@@ -12,7 +12,8 @@ sub update_conf {
 
 #-------------------- mammals
   $SiteDefs::__species_aliases{ 'Bos_taurus'               } = [qw(bt btau cow moo)];
-  $SiteDefs::__species_aliases{ 'Canis_familiaris'         } = [qw(cf cfam dog)]; 
+ $SiteDefs::__species_aliases{ 'Callithrix_jacchus'       } = [qw(cj cjac marmoset)]; 
+ $SiteDefs::__species_aliases{ 'Canis_familiaris'         } = [qw(cf cfam dog)]; 
   $SiteDefs::__species_aliases{ 'Cavia_porcellus'          } = [qw(cp cpor guineapig)];
   $SiteDefs::__species_aliases{ 'Choloepus_hoffmanni'      } = [qw(ch chof sloth)];
   $SiteDefs::__species_aliases{ 'Dasypus_novemcinctus'     } = [qw(dn dnov dasypus armadillo)];
@@ -42,6 +43,7 @@ sub update_conf {
   $SiteDefs::__species_aliases{ 'Rattus_norvegicus'        } = [qw(rn rnor rat)];
   $SiteDefs::__species_aliases{ 'Sorex_araneus'            } = [qw(sa shrew)];
   $SiteDefs::__species_aliases{ 'Spermophilus_tridecemlineatus'  } = [qw(st stri squirrel spermophilus)];
+  $SiteDefs::__species_aliases{ 'Sus_scrofa'  } = [qw(ss sscr pig sus oink porky)];
   $SiteDefs::__species_aliases{ 'Tarsius_syrichta'         } = [qw(ts tarsier gremlin)];
   $SiteDefs::__species_aliases{ 'Tupaia_belangeri'         } = [qw(tb tbel treeshrew shrew)];
   $SiteDefs::__species_aliases{ 'Tursiops_truncatus'       } = [qw(tt dolphin flipper)];
@@ -60,8 +62,8 @@ sub update_conf {
 #-------------------- reptiles
   $SiteDefs::__species_aliases{ 'Anolis_carolinensis'            } = [qw(ac anolis anole lizard)];
 #-------------------- flies
-  $SiteDefs::__species_aliases{ 'Aedes_aegypti'            } = [qw(aa aaeg aedes )];
-  $SiteDefs::__species_aliases{ 'Anopheles_gambiae'        } = [qw(ag agam mosquito mos anopheles)];
+#  $SiteDefs::__species_aliases{ 'Aedes_aegypti'            } = [qw(aa aaeg aedes )];
+#  $SiteDefs::__species_aliases{ 'Anopheles_gambiae'        } = [qw(ag agam mosquito mos anopheles)];
 # $SiteDefs::__species_aliases{ 'Apis_mellifera'           } = [qw(am amel honeybee bee)];
   $SiteDefs::__species_aliases{ 'Drosophila_melanogaster'  } = [qw(dm dmel fly)];
 #-------------------- worms
