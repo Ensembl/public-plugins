@@ -56,7 +56,7 @@ http {
     memcached_send_timeout 50;
     error_page   502 503 /errors;
  
-    location ~* \.(jpg|jpeg|png|gif|js|css|txt|xml|csv|gff|fa|nh|gz|tar|zip|pdf|swf)$ {
+    location ~* \.(jpg|jpeg|png|gif|js|css|txt|xml|csv|gff|fa|nh|gz|tar|zip|pdf|swf|jar)$ {
       expires 30d;
       set $memcached_key [[$SiteDefs::ENSEMBL_BASE_URL]]$request_uri;
       memcached_pass memcached_servers;
