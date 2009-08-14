@@ -80,12 +80,11 @@ paralogy types.</li>
 orthology relationships of closely related pairs of species. We use codeml in the 
 PAML<a href="#fn4" class="fn-link"><sup>4</sup></a> package (model=0, NSsites=0) for this (ensembl-compara/scripts/homology/codeml.ctl.hash). </p>
 
-<p>We only calculate these dN/dS values for closely-related pairs of
+<p>We only calculate these dN/dS values for high-coverage closely-related pairs of
 species. When the species evolutionary distance is too large, the
 saturation of the dS values biases the estimated dN/dS
-ratio. For each pair of species we calculate a threshold on dS 
-which is 2 * median(dS).  When the dS of a given ortholog gene pair is larger than
-this threshold, we mask out the dN/dS ratio.</p>
+ratio. When the dS value of a given ortholog gene pair is too large, we mask out the dN/dS ratio, 
+although the N, S, dN, dS and log-likelihood (lnL) values can still be obtained for all pairs.</p>
 
 <!-- <p>For the (sub)trees that have all dS branches shorter than 1.8, we -->
 <!-- also calculate sitewise dN/dS values for every (sub)alignment using -->
@@ -139,7 +138,7 @@ speciation event. We predict several descriptions of orthologues:
 <li>ortholog_one2one</li>
 <li>ortholog_one2many</li>
 <li>ortholog_many2many</li>
-<li>apparent_ortholog_one2one (is a special case, see below)</li>
+<li>apparent_ortholog_one2one (is a special case, see [1] below)</li>
 </ul>
 </dd>
 
@@ -149,6 +148,9 @@ speciation event. We predict several descriptions of orthologues:
 <ul>
 <li>within_species_paralog</li>
 <li>between_species_paralog</li>
+<li>other_paralog (see [2] below)</li>
+<li>contiguous_gene_split (see [3] below)</li>
+<li>putative_gene_split (see [3] below)</li>
 </ul>
 
 <img style="width: 602px; height: 414px;" alt="tree_example1" src="tree_example1.jpg">
@@ -165,24 +167,40 @@ also within_species_paralog but the duplication event has occurred
 in the common ancestor between species H and species M. If H is human
 and M Mouse, the taxonomy level "times" the duplication
 event to the ancestor of "Euarchontoglires".
+[2] When paralogue genes are too distant to be in the same gene tree, but are still part of a 
+broader "super-family", they are labelled as other_paralog relationships. In this case, the precise taxonomic 
+level of the duplication event is left as undetermined.
 </p>
-
 
 <p>
 A between_species_paralog corresponds to a relation between 2
 genes of *different* species where the ancestor node
 has been labelled as a duplication node e.g. M1:H2 or M1:H3.
-Special cases of between_species_paralog can be singled out where they
+[1] Special cases of between_species_paralog can be singled out where they
 can be characterised as one2one relations. Such cases are then relabelled
-apparent_ortholog_one2one. Apparent orthologs can be the results of real
-duplication followed
-by gene loss (as shown in the picture below), but can also be the results of a wrong gene tree topology
-and wrong duplication node labelling. The remaining between_species_paralogs only reflect long-distance relations aren't of much use for
-most phylogenetic/family analyses.
+apparent_ortholog_one2one. These can be the results of real
+duplications followed
+by gene losses (as shown in the picture below), but can also be the results of a wrong gene tree topology
+and wrong duplication node labelling. When the tree topology cannot resolve real orthology pairs, they will remain
+in the database as between_species_paralogs, reflecting long-distance relations that may be upgraded to orthologies in 
+further versions of the gene tree pipeline, or for example, with improved gene builds.
 </p>
 
-
 <img style="width: 618px; height: 470px;" alt="tree_example2" src="tree_example2.jpg">
+
+<p>
+[3] A gene split paralog is an artefactual type of paralogy that commonly
+arises from a fragmented genome assembly or a gene prediction that is
+poor in supporting evidences (cDNA, ESTs, proteins, etc.). A
+putative_gene_split is called when there is no overlap between the
+gene fragments in the same species and they lie in different sequence
+regions in the assembly (See GeneB1/GeneB2 in the image below). 
+A contiguous_gene_split is called when the
+two fragments lie close to each other (<1MB) in the same sequence
+region and the same strand (See GeneA1/GeneA2 below).
+</p>
+
+<img style="width: 768px; height: 249px;" alt="gene split" src="gene_split.png">
 
 
 <h2>Notes and References</h2>
