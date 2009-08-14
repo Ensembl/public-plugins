@@ -27,7 +27,7 @@ sub process {
   $interface->modify_element('meaning', {'required' => 'yes'});
   $interface->element_order(['word', 'expanded', 'meaning', 'status']);
   $interface->dropdown(1);
-  $interface->option_columns(['word']);
+  $interface->option_columns(['word','id']);
 
   $interface->configure($self->webpage, $object);
 

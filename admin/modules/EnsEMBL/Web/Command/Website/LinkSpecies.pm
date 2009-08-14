@@ -8,6 +8,7 @@ use warnings;
 use EnsEMBL::Web::Data::NewsItem;
 use EnsEMBL::Web::Data::ItemSpecies;
 use base 'EnsEMBL::Web::Command';
+use Data::Dumper;
 
 {
 
@@ -16,15 +17,29 @@ sub process {
   my $object = $self->object;
   my $url = '/Website/Declaration/List';
   my $param = {};
- 
-  ## Then add species to item_species table 
-  my @species_ids = ($object->param('species_id'));
-  my $item = EnsEMBL::Web::Data::NewsItem->new($object->param('news_item_id'));
-  foreach my $id (@species_ids) {
-    next if $id =~ /\D/ || !$id;
-    $item->add_to_species({'species_id'=>$id});
+
+  my @ids;
+  if ($object->param('species_id')) {
+    @ids = ($object->param('species_id'));
   }
-  $item->save;
+  elsif ($object->param('species')) {
+    @ids = ($object->param('species'));
+  }
+
+  if (scalar(@ids)) {
+    my $item = EnsEMBL::Web::Data::NewsItem->new($object->param('id'));
+
+    ## Delete any existing species
+    $item->species->delete_all;
+ 
+    ## Then add species to item_species table 
+    foreach my $id (@ids) {
+      next if $id =~ /\D/ || !$id;
+      $item->add_to_species({'species_id'=>$id});
+    }
+    $item->save;
+  }
+
   $self->ajax_redirect($url, $param); 
 }
 

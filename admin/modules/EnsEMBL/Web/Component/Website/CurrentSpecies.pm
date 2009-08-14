@@ -24,7 +24,7 @@ sub content {
   my $self = shift;
   my $object = $self->object;
   my $html;
-  my $links = qq(<p><a href="/Website/AddSpecies" class="modal_link">Add a new species</a> | <a href="/Website/UpdateSpecies">Update database with current species</a></p>);
+  my $links = qq(<p><a href="/Website/AddSpecies">Add a new species</a> | <a href="/Website/UpdateSpecies">Update database with current species</a></p>);
 
   my $release_id = $object->species_defs->ENSEMBL_VERSION;
   my $release = EnsEMBL::Web::Data::Release->new($release_id);
