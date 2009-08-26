@@ -6,6 +6,10 @@ no warnings 'uninitialized';
 
 use EnsEMBL::Web::Constants;
 
+my @groups = 
+  ("mammals", "primates", "glires", "laurasiatheria",
+   "low-coverage", "saurias", "fish", "cionas", "diptera");
+
 sub init {
   my ($view_config) = @_;
   $view_config->_set_defaults(qw(
@@ -51,7 +55,7 @@ sub init {
     group_mammals_bgcolour d0fad0
 
     group_primates          default
-    group_primates_taxa     9478_9544_9593_9598_9600_9606_30608_30611
+    group_primates_taxa     9478_9544_9593_9598_9600_9606_30608_30611_9483
     group_primates_fgcolour 000050
     group_primates_bgcolour f0f0ff
 
@@ -61,7 +65,7 @@ sub init {
     group_glires_bgcolour  fff0e0
 
     group_laurasiatheria           default
-    group_laurasiatheria_taxa      9615_9365_59463_42254_9796_9913_9685_9739_30538_132908
+    group_laurasiatheria_taxa      9615_9365_59463_42254_9796_9913_9685_9739_30538_132908_9823
     group_laurasiatheria_fgcolour  005050
     group_laurasiatheria_bgcolour  d0fafa
 
@@ -103,8 +107,7 @@ sub form {
       });
 
 
-  foreach my $group ("mammals", "primates", "glires", "laurasiatheria",
-      "low-coverage", "saurias", "fish", "cionas", "diptera") {
+  foreach my $group (@groups) {
     $view_config->add_form_element({
       'type'     => 'DropDown', 'select'   => 'select',
       'required' => 'yes',      'name'     => "group_$group",
