@@ -1,48 +1,46 @@
-<h4>Human <I>(Homo sapiens)</I></h4>
-Alpaca <I>(Vicugna pacos)</I><br />
-Armadillo <I>(Dasypus novemcinctus)</I><br />
-Bushbaby <I>(Otolemur garnettii)</I><br />
-Cat <I>(Felis catus)</I><br />
-Chicken <I>(Gallus gallus)</I><br />
-Chimpanzee <I>(Pan troglodytes)</I><br />
-Cow <I>(Bos taurus)</I><br />
-Dog <I>(Canis familiaris)</I><br />
-Dolphin <I>(Tursiops truncatus)</I><br />
-Elephant <I>(Loxodonta africana)</I><br />
-Gorilla <I>(Gorilla gorilla)</I><br />
-Guinea Pig <I>(Cavia porcellus)</I><br />
-Hedgehog <I>(Erinaceus europaeus)</I><br />
-Horse <I>(Equus caballus)</I><br />
-Hyrax <I>(Procavia capensis)</I><br />
-Kangaroo rat <I>(Dipodomys ordii)</I><br />
-Lesser hedgehog tenrec <I>(Echinops telfairi)</I><br />
-Macaque <I>(Macaca mulatta)</I><br />
-Megabat <I>(Pteropus vampyrus)</I><br />
-Microbat <I>(Myotis lucifugus)</I><br />
-Mouse <I>(Mus musculus)</I><br />
-Mouse Lemur <I>(Microcebus murinus)</I><br />
-Opossum <I>(Monodelphis domestica)</I><br />
-Orangutan <I>(Pongo pygmaeus)</I><br />
-Pika <I>(Ochotona princeps)</I><br />
-Platypus <I>(Ornithorhynchus anatinus)</I><br />
-Rabbit <I>(Oryctolagus cuniculus)</I><br />
-Rat <I>(Rattus norvegicus)</I><br />
-Shrew <I>(Sorex araneus)</I><br />
-Squirrel <I>(Spermophilus tridecemlineatus)</I><br />
-Tarsier <I>(Tarsius syrichta)</I><br />
-Tree Shrew <I>(Tupaia belangeri)</I><br />
-Wallaby <I>(Macropus eugenii)</I><br />
-
-<h4>Mouse <I>(Mus musculus)</I></h4>
-Dog <I>(Canis familiaris)</I><br />
-Human <I>(Homo sapiens)</I><br />
-Platypus <I>(Ornithorhynchus anatinus)</I><br />
-Rat <I>(Rattus norvegicus)</I><br />
-Medaka <I>(Oryzias latipes)</I><br />
-
-<h4>Medaka <I>(Oryzias latipes)</I></h4>
-Stickleback <I>(Gasterosteus aculeatus)</I><br />
-Mouse <I>(Mus musculus)</I><br />
-
-<h4>C.intestinalis <I>(Ciona intestinalis)</I></h4>
-C.savignyi <I>(Ciona savignyi)</I><br />
+<h4>Human (Homo sapiens)</h4>
+Chimpanzee (Pan troglodytes)<br />
+Gorilla (Gorilla gorilla)<br />
+Orangutan (Pongo pygmaeus)<br />
+Macaque (Macaca mulatta)<br />
+Tarsier (Tarsius syrichta)<br />
+Marmoset (Callithrix jacchus)<br />
+Mouse Lemur (Microcebus murinus)<br />
+Bushbaby (Otolemur garnettii)<br />
+Tree Shrew (Tupaia belangeri)<br />
+Rabbit (Oryctolagus cuniculus)<br />
+Pika (Ochotona princeps)<br />
+Squirrel (Spermophilus tridecemlineatus)<br />
+Mouse (Mus musculus)<br />
+Rat (Rattus norvegicus)<br />
+Kangaroo rat (Dipodomys ordii)<br />
+Guinea Pig (Cavia porcellus)<br />
+Cow (Bos taurus)<br />
+Dolphin (Tursiops truncatus)<br />
+Alpaca (Vicugna pacos)<br />
+Pig (Sus scrofa)<br />
+Dog (Canis familiaris)<br />
+Cat (Felis catus)<br />
+Horse (Equus caballus)<br />
+Microbat (Myotis lucifugus)<br />
+Megabat (Pteropus vampyrus)<br />
+Hedgehog (Erinaceus europaeus)<br />
+Shrew (Sorex araneus)<br />
+Hyrax (Procavia capensis)<br />
+Elephant (Loxodonta africana)<br />
+Lesser hedgehog tenrec (Echinops telfairi)<br />
+Sloth (Choloepus hoffmanni)<br />
+Armadillo (Dasypus novemcinctus)<br />
+Wallaby (Macropus eugenii)<br />
+Opossum (Monodelphis domestica)<br />
+Platypus (Ornithorhynchus anatinus)<br />
+Chicken (Gallus gallus)<br />
+<h4>Mouse (Mus musculus)</h4>
+Rat (Rattus norvegicus)<br />
+Dog (Canis familiaris)<br />
+Platypus (Ornithorhynchus anatinus)<br />
+Medaka (Oryzias latipes)<br />
+<h4>Medaka (Oryzias latipes)</h4>
+Stickleback (Gasterosteus aculeatus)<br />
+<h4>C.intestinalis (Ciona intestinalis)</h4>
+C.savignyi (Ciona savignyi)<br />
