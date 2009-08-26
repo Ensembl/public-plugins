@@ -22,7 +22,7 @@ sub content {
   my $self = shift;
   my $object = $self->object;
 
-  my @species = @{ $object->species_defs->ENSEMBL_SPECIES || [] };
+  my @species = @{ $object->species_defs->ENSEMBL_DATASETS || [] };
   my $release = $object->release;
   my $last_release = $object->release -1;
 
