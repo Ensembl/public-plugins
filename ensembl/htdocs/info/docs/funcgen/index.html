@@ -9,84 +9,156 @@
 
 <h1>Regulatory Build</h1>
 <p>
-The regulatory build provides a single "best guess" set of regulatory elements.  These elements are based on the information contained within the ensembl <a href="/info/docs/api/index.html">functional genomics</a> database.
+The regulatory build provides a single "best guess" set of regulatory
+elements. These elements are based on the information contained
+within the ensembl <a href="/info/docs/api/index.html">functional
+genomics</a> database.
 </p>
 
 <h2>Regulatory Feature Construction</h2>
 <p>
-The main principle of building regulatory features is simply performing overlap analysis of annoations in each data set. Core regions are identified using the focus sets, which are chosen to define a set of potentially regions.  These tend to be broad coverage narrowly focused marks which are likely candidates for different types of regulatory elements or motifs.  Historically we have used DNase1 which is known to mark for accessible chromatin, H3K4me3 which has been associated with promoter regions, and CTCF which characterises 'insulator/enhancer' element. As such the core regions of regulatory features are likely to be positioned on or around any potential regualtory motif.  Core regions are extended only in the case of direct overlap with another focus feature.  To maintain resolution and to avoid chaining of regulatory features across regions of dense regulatory elements we have imposed a 2KB cut off for focus features.   Exceeding this cutoff causes the focus feature to be treated as an attribute feature and so does not extend the core region.</p>
+The main principle of building regulatory features is simply
+performing overlap analysis of annotations in each data set. Core
+regions are identified using the focus sets, which are chosen to
+define a set of potentially regions. These tend to be broad coverage
+narrowly focused marks which are likely candidates for different types
+of regulatory elements or motifs. Historically we have used DNase1
+which is known to mark for accessible chromatin, H3K4me3 which has
+been associated with promoter regions, and CTCF which characterises
+'insulator/enhancer' element. As such the core regions of regulatory
+features are likely to be positioned on or around any potential
+regulatory motif. Core regions are extended only in the case of
+direct overlap with another focus feature. To maintain resolution and
+to avoid chaining of regulatory features across regions of dense
+regulatory elements we have imposed a 2KB cut-off for focus features.
+Exceeding this cut-off causes the focus feature to be treated as an
+attribute feature and so does not extend the core region.
+</p>
 
 <p>
-The arms or bounds of a regulatory feature are defined by overlap of attribute features with respect to the core region.  Attribute feature sets are generally less discriminatory and less focused annotations which are used extend the immediate structure of the regulatory feature and to inform the annotation analysis. Directly overlapping attribute features are said to have one degree of sepration.  Attributes with two degrees of separation or only included is they are within 2KB of the core region and they are entirely contained within another longer attribute feature. This is done to capture information adjacent and indirectly associated with the core region, whilst avoiding longer range and potentially anomalous associations.</p>
-
-<!-- Do we really want to only include those attr features which are entirely contained? -->
-<!-- So long as they overlap and farthest bound is within 2KB? Cut off for attr feat length? -->
-<!-- Degradation of chained core regions greater than? -->
-
+The arms or bounds of a regulatory feature are defined by overlap of
+attribute features with respect to the core region. Attribute feature
+sets are generally less discriminatory and less focused annotations
+which are used extend the immediate structure of the regulatory
+feature and to inform the annotation analysis. Directly overlapping
+attribute features are said to have one degree of separation.
+Attributes with two degrees of separation or only included is they are
+within 2KB of the core region and they are entirely contained within
+another longer attribute feature. This is done to capture information
+adjacent and indirectly associated with the core region, whilst
+avoiding longer range and potentially anomalous associations.
 </p>
+
+<!-- Do we really want to only include those attribute features which are
+entirely contained? --> <!-- So long as they overlap and farthest
+bound is within 2KB? Cut-off for attribute feature length? -->
+<!-- Degradation of chained core regions greater than? -->
 
 <h2>Annotation</h2>
 <p>
-Regulatory features are classified by analysing the whole set of patterns of consituent attribute and focus features with respect to several classes of genomic feature. This enables us to identify clusters of patterns which are significantly over represented and allows us to generate annotations based on these patterns. Some preliminary analysis has identified patterns for the following annotations that are both common and statistically significant:
+Regulatory features are classified by analysing the whole set of
+patterns of constituent attribute and focus features with respect to
+several classes of genomic feature. This enables us to identify
+clusters of patterns which are significantly over represented and
+allows us to generate annotations based on these patterns. Some
+preliminary analysis has identified patterns for the following
+annotations that are both common and statistically significant:
 </p>
-<ul>
-<li>non-gene-associated = patterns under-represented in genic regions</li>
-<li>gene-associated = patterns over-represented in genic regions</li>
 
-<li>promoter-associated = patterns over-represented in the region of the first exon and 2500bp upstream of protein coding genes, but not in the downstream 'gene-body'. </li>
+<ul>
+
+<li>non-gene-associated = patterns under-represented in gene
+regions</li>
+
+<li>gene-associated = patterns over-represented in gene regions</li>
+
+<li>promoter-associated = patterns over-represented in the region of
+the first exon and 2500 bp upstream of protein coding genes, but not in
+the downstream 'gene-body'.</li>
+
 </ul>
 
 <p>
-These data sets can be displayed along the chromosome in <a href="/Help/View?id=140" class="modal_link">'Region in Detail'</a>, displayed for a gene in the <a href="/Help/View?id=142" class="modal_link">'GeneRegulation'</a> view or mined from the <a href="/info/docs/api/index.html">functional genomics</a> database.
-<p>
+These data sets can be displayed along the chromosome
+in <a href="/Help/View?id=140" class="modal_link">'Region in
+Detail'</a>, displayed for a gene in the <a href="/Help/View?id=142"
+class="modal_link">'GeneRegulation'</a> view or mined from
+the <a href="/info/docs/api/index.html">functional genomics</a>
+database.
+</p>
 
 <h2>Source data</h2>
 <p>
-Regulatory features are generated by using as a variety genome wide epigenomic data sets, currently comprising the following:
+Regulatory features are generated by using as a variety genome wide
+epigenomic data sets, currently comprising the following:
 </p>
 
 <table class="ss tint">
-<tr><th colspan=3>Human Regulatory Build Version 6</th></tr>
-<tr><th>Focus Sets</th><th class="center">Data type</th><th class="center">Reference</th></tr>
+
+<tr>
+<th colspan="3">Human Regulatory Build Version 6</th>
+</tr>
+<tr>
+<th>Focus Sets</th>
+<th class="center">Data type</th>
+<th class="center">Reference</th>
+</tr>
+
 <tr>
 <td>DNase1 Hypersensitivity site (GM06990 and CD4+ T cells)</td>
 <td>ChIP-Seq</td>
 <td>1</td>
 </tr>
+
 <tr>
 <td class="bg2">CCCTC-binding factor (CTCF)</td>
 <td>ChIP-Chip*</td>
 <td>2</td>
 </tr>
+
 <tr>
 <td>CCTC-binding factor (CTCF)</td>
 <td>ChIP-Seq</td>
 <td>4</td>
 </tr>
+
 </table>
 
 <table class="ss tint">
-<tr><th>Attribute Sets</th><th>Data type</th><th>Reference</th></tr>
+
+<tr>
+<th>Attribute Sets</th>
+<th>Data type</th>
+<th>Reference</th>
+</tr>
+
 <tr>
 <td>H4K20me3</td>
 <td>ChIP-Chip</td>
 <td>3</td>
 </tr>
+
 <tr class="bg2">
 <td>H3K27me3</td>
 <td>ChIP-Chip</td>
-<td>3</d>
-<tr>
-<tr>
-<td>H3K36me3</td>								<td>ChIP-Chip</td>
 <td>3</td>
 </tr>
+
+<tr>
+<td>H3K36me3</td>
+<td>ChIP-Chip</td>
+<td>3</td>
+</tr>
+
 <tr class="bg2">
-<td>H3K79me3</td>									<td>ChIP-Chip</td>
+<td>H3K79me3</td>
+<td>ChIP-Chip</td>
 <td>3</td>
 </tr>
+
 <tr>
-<td>H3K9me3</td>									<td>ChIP-Chip</td>
+<td>H3K9me3</td>
+<td>ChIP-Chip</td>
 <td>3</td>
 </tr>
 
@@ -155,7 +227,6 @@ Regulatory features are generated by using as a variety genome wide epigenomic d
 <td>ChIP-Seq</td>
 <td>4</td>
 </tr>
-
 
 <tr>
 <td>CD4_H2AK5ac</td>
@@ -266,12 +337,18 @@ Regulatory features are generated by using as a variety genome wide epigenomic d
 </tr>
 </table>
 
-
-<p>
-
 <table class="ss tint">
-<tr><th colspan=3>Mouse Regulatory Build Version 1</th></tr>
-<tr><th>Focus Sets</th><th class="center">Data type</th><th class="center">Reference</th></tr>
+
+<tr>
+<th colspan="3">Mouse Regulatory Build Version 1</th>
+</tr>
+
+<tr>
+<th>Focus Sets</th>
+<th class="center">Data type</th>
+<th class="center">Reference</th>
+</tr>
+
 <tr>
 <td>DNase1 Hypersensitivity site (ES Cells)</td>
 <td>ChIP-Seq</td>
@@ -280,7 +357,12 @@ Regulatory features are generated by using as a variety genome wide epigenomic d
 </table>
 
 <table class="ss tint">
-<tr><th>Attribute Sets</th><th>Data type</th><th>Reference</th></tr>
+<tr>
+<th>Attribute Sets</th>
+<th>Data type</th>
+<th>Reference</th>
+</tr>
+
 <tr>
 <td>ES: H3me, H3K4me3, H3K9me3, H3K27me3, H3K36me3, H4K20me3, PolII</td>
 <td>ChIP-Seq</td>
@@ -288,7 +370,7 @@ Regulatory features are generated by using as a variety genome wide epigenomic d
 </tr>
 
 <tr>
-<td>ES Hybrid:  H3K4me3, H3K9me3, H3K36me3</td>
+<td>ES Hybrid: H3K4me3, H3K9me3, H3K36me3</td>
 <td>ChIP-Seq</td>
 <td>7</td>
 </tr>
@@ -304,6 +386,7 @@ Regulatory features are generated by using as a variety genome wide epigenomic d
 <td>ChIP-Seq</td>
 <td>7</td>
 </tr>
+
 </table>
 
 
@@ -312,36 +395,64 @@ Regulatory features are generated by using as a variety genome wide epigenomic d
 <p>
 <strong>References</strong>
 </p>
+
 <p>
-1.  Genome-wide identification of DNaseI hypersensitive sites was performed by Greg Crawford and Terry Furey (Duke University) using a whole genome DNase-sequencing protocol (Crawford et al., Genome Research 2006).<br> DNase-sequencing was performed using the Illumina (Solexa) sequencing by synthesis method from a DNase treated library generated from the GM06990 cell line (Crawford and Furey, unpublished).
-</p>
-<p>
-2.  Kim, T.H.; Abdullaev, Z.K.; Smith, A.D.; Ching, K.A.; Loukinov, D.I.; Green, R.D.; Zhang, M.Q.; Lobanenkov, V.V. & Ren, B.<br>
-Analysis of the vertebrate insulator protein CTCF-binding sites in the human genome.<br>
-Cell, 2007 , 128 , 1231-1245
-</p>
-<p>
-3.  Hirst, M; Hurd, P.J.; Bainbridge, M.; Robertson, G.; Kirmizis, A.; Nelson, C.; Zhao, Y.; Zeng, T.; Pandoh, P.; Tam, A.; Prabhu, A.; Dhalla, N.; Sa, D.; Delaney, A.; Bilenky, M.; Jones, S.; Kouzarides, T.; Marra, M.  (In preparation)
-</p>
-<p>
-4. A. Barski, S. Cuddapah, K. Cui, T.Y. Roh, D.E. Schones, Z. Wang, G. Wei, I. Chepelev and K. Zhao, (2007). High-resolution profiling of histone methylations in the human genome, Cell 129 (2007), pp. 823-837.
-</p>
-<p>
-5. Wang Z, Zang C, Rosenfeld JA, Schones DE, Barski A, Cuddapah S, Cui K, Roh TY, Peng W, Zhang MQ, Zhao K. Combinatorial patterns of histone acetylations and methylations in the human genome. Nat Genet. 2008 Jul;40(7):897-903. Epub 2008 Jun 15. PMID: 18552846
+1. Genome-wide identification of DNaseI hypersensitive sites was
+performed by Greg Crawford and Terry Furey (Duke University) using a
+whole genome DNase-sequencing protocol (Crawford et al., Genome
+Research 2006).<br />DNase-sequencing was performed using the Illumina
+(Solexa) sequencing by synthesis method from a DNase treated library
+generated from the GM06990 cell line (Crawford and Furey,
+unpublished).
 </p>
 
 <p>
-6. Dnase1-sequencing was produced as a collaboration between Ensembl, David Adams (Wellcome Trust Sanger Institute), and Greg Crawford (Duke University).
+2. Kim, T.H.; Abdullaev, Z.K.; Smith, A.D.; Ching, K.A.; Loukinov,
+D.I.; Green, R.D.; Zhang, M.Q.; Lobanenkov, V.V. &amp; Ren, B.<br />
+Analysis of the vertebrate insulator protein CTCF-binding sites in the
+human genome.<br />Cell, 2007 , 128 , 1231-1245
 </p>
 
 <p>
-7. Mikkelsen TS, Ku M, Jaffe DB, Issac B, Lieberman E, Giannoukos G, Alvarez P, Brockman W, Kim TK, Koche RP, Lee W, Mendenhall E, O'Donovan A, Presser A, Russ C, Xie X, Meissner A, Wernig M, Jaenisch R, Nusbaum C, Lander ES, Bernstein BE. Genome-wide maps of chromatin state in pluripotent and lineage-committed cells. Nature. 2007 Aug 2;448(7153):548-9. PMID: 17603471
+3. Hirst, M; Hurd, P.J.; Bainbridge, M.; Robertson, G.; Kirmizis, A.;
+Nelson, C.; Zhao, Y.; Zeng, T.; Pandoh, P.; Tam, A.; Prabhu, A.;
+Dhalla, N.; Sa, D.; Delaney, A.; Bilenky, M.; Jones, S.; Kouzarides,
+T.; Marra, M. (In preparation)
 </p>
 
 <p>
-* The CTCF data was processed with the Nessie HMM (Flicek, unpublished).
+4. A. Barski, S. Cuddapah, K. Cui, T.Y. Roh, D.E. Schones, Z. Wang,
+G. Wei, I. Chepelev and K. Zhao, (2007). High-resolution profiling of
+histone methylations in the human genome, Cell 129 (2007),
+pp. 823-837.
 </p>
 
+<p>
+5. Wang Z, Zang C, Rosenfeld JA, Schones DE, Barski A, Cuddapah S, Cui
+K, Roh TY, Peng W, Zhang MQ, Zhao K. Combinatorial patterns of histone
+acetylations and methylations in the human genome. Nat Genet. 2008
+Jul;40(7):897-903. Epub 2008 Jun 15. PMID: 18552846
+</p>
+
+<p>
+6. Dnase1-sequencing was produced as a collaboration between Ensembl,
+David Adams (Wellcome Trust Sanger Institute), and Greg Crawford (Duke
+University).
+</p>
+
+<p>
+7. Mikkelsen TS, Ku M, Jaffe DB, Issac B, Lieberman E, Giannoukos G,
+Alvarez P, Brockman W, Kim TK, Koche RP, Lee W, Mendenhall E,
+O'Donovan A, Presser A, Russ C, Xie X, Meissner A, Wernig M, Jaenisch
+R, Nusbaum C, Lander ES, Bernstein BE. Genome-wide maps of chromatin
+state in pluripotent and lineage-committed cells. Nature. 2007 Aug
+2;448(7153):548-9. PMID: 17603471
+</p>
+
+<p>
+* The CTCF data was processed with the Nessie HMM (Flicek,
+unpublished).
+</p>
 
 </body>
 </html>
