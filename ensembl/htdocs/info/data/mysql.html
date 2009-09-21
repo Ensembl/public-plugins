@@ -8,53 +8,105 @@
 
 <h1>The Ensembl public MySQL Servers</h1>
 
-<p>For large amounts of data and more detailed analysis, we recommend you use our 
-publicly-accessible MySQL server, <strong>ensembldb.ensembl.org</strong>,
-which you can access as user 'anonymous'. A second server, <strong>martdb.ensembl.org</strong>
-provides public access to the BioMart databases.</p>
+<p>
+For large amounts of data and more detailed analysis, we recommend you
+use our publicly-accessible MySQL
+server, <strong>ensembldb.ensembl.org</strong>, which you can access
+as user 'anonymous'. A second
+server, <strong>martdb.ensembl.org</strong> provides public access to
+the BioMart databases.
+</p>
 
-<p>There are two options for retrieving data from the Ensembl databases:</p>
+<p>
+There are two options for retrieving data from the Ensembl databases:
+</p>
 
 <dl>
+
 <dt>Perl API</dt>
-<dd>The easiest option is to use the Ensembl <a href="/info/data/api.html">Perl API</a>. 
-The API uses an object-oriented approach to model real biological objects such as genes, 
-transcripts and 'slices' of DNA sequence, making it straightforward for you to write 
-scripts that retrieve and analyze data.
+
+<dd>
+<p>
+The easiest option is to use the
+Ensembl <a href="/info/data/api.html">Perl API</a>. The API uses an
+object-oriented approach to model real biological objects such as
+genes, transcripts and 'slices' of DNA sequence, making it
+straightforward for you to write scripts that retrieve and analyze
+data.
+</p>
+
 <pre class="code">
-# find gene stable ids corresponding to the MGI symbol 'Tyr'
-my $gene_adaptor = $dbCore-&gt;get_GeneAdaptor();
-my @genes = @{ $gene_adaptor-&gt;fetch_all_by_external_name('Tyr') };
+# find gene stable ids corresponding to the MGI symbol 'Tyr' my
+$gene_adaptor = $dbCore-&gt;get_GeneAdaptor(); my @genes = @{
+$gene_adaptor-&gt;fetch_all_by_external_name('Tyr') };
 </pre>
-<p>Additional code examples and suggestions can be found in the various <a href="/info/website/tutorials/">API tutorials</a> and the 
-<a href="http://listserver.ebi.ac.uk/mailing-lists-archives/ensembl-dev/threads.html" rel="external">ensembl-dev mailing list archives</a>.</dd>
+
+<p>
+Additional code examples and suggestions can be found in the
+various <a href="/info/website/tutorials/">API tutorials</a> and the 
+<a href="http://listserver.ebi.ac.uk/mailing-lists-archives/ensembl-dev/threads.html"
+rel="external">ensembl-dev mailing list archives</a>.
+</p>
+</dd>
 
 <dt>MySQL client</dt>
-<dd>Alternatively, you can use a MySQL <a href="http://dev.mysql.com/downloads/mysql/5.0.html#downloads">client program</a> to query the database directly. However this does require knowledge of the
-complex <a href="/info/docs/api/">database schemas</a> used by Ensembl, so we only recommend 
-it if you are unable to install our API (e.g. if you have no access to Perl). Also note that 
-direct MySQL queries on the database are not suited to retrieve sequences. To retrieve sequences 
-please use the Perl API.</dd>
+
+<dd>
+<p>
+Alternatively, you can use a
+MySQL <a href="http://dev.mysql.com/downloads/mysql/5.0.html#downloads">client
+program</a> to query the database directly. However this does require
+knowledge of the complex <a href="/info/docs/api/">database
+schemas</a> used by Ensembl, so we only recommend it if you are unable
+to install our API (e.g. if you have no access to Perl). Also note
+that direct MySQL queries on the database are not suited to retrieve
+sequences. To retrieve sequences please use the Perl API.
+</p>
+</dd>
+
 </dl>
 
-<p>For <strong>BioMart</strong> access, we strongly recommend that you use the <a href="/Multi/martview">martview web interface</a>, 
-as the mart databases contain very many tables of denormalised data. Data can also be retrieved from BioMart programmatically,
-using the <a href="http://www.biomart.org/martservice.html">Mart XML-based webservice</a>.</p> 
+<p>
+For <strong>BioMart</strong> access, we strongly recommend that you
+use the <a href="/Multi/martview">martview web interface</a>, as the
+mart databases contain very many tables of denormalised data. Data can
+also be retrieved from BioMart programmatically, using
+the <a href="http://www.biomart.org/martservice.html">Mart XML-based
+webservice</a>.
+</p> 
 
 <h2>Summary of servers and ports</h2>
 
-<p><strong>Important note:</strong> Because we are serving databases
-on both MySQL4 and MySQL5, not all MySQL instances use the default
-port; please ensure that you specify the correct port when trying to
+<p>
+<strong>Important note:</strong> Because we are serving databases on
+both MySQL4 and MySQL5, not all MySQL instances use the default port;
+please ensure that you specify the correct port when trying to
 connect. In addition, if your computer is behind a
 <strong>firewall</strong>, outgoing TCP/IP connections to the
 corresponding ports need to be allowed, too. Otherwise connections
-will not be established.</p>
+will not be established.
+</p>
 
 <table class="ss tint">
-<tr><th>Server</th><th class="center">Up to version 47</th><th class="center">Version 48 onwards</th></tr>
-<tr><td>ensembldb.ensembl.org</td><td class="center">3306</td><td class="center">5306</td></tr>
-<tr class="bg2"><td>martdb.ensembl.org</td><td class="center">3316</td><td class="center">5316</td></tr>
+
+<tr>
+<th>Server</th>
+<th class="center">Up to version 47</th>
+<th class="center">Version 48 onwards</th>
+</tr>
+
+<tr>
+<td>ensembldb.ensembl.org</td>
+<td class="center">3306</td>
+<td class="center">5306</td>
+</tr>
+
+<tr class="bg2">
+<td>martdb.ensembl.org</td>
+<td class="center">3316</td>
+<td class="center">5316</td>
+</tr>
+
 </table>
 
 </body>
