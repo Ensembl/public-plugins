@@ -19,22 +19,10 @@ mainly in the MHC region of chromosome 6.</p>
 
 <p class="space-below">From release 56 (September 2009) a number of improvements have
 been made to the merge process between the automatic annotation from Ensembl and the 
-manually curated annotation from <a href="http://www.sanger.ac.uk/HGP/havana">Havana</a>.</p>
-
-<p class="space-below">During the new merge process we start by taking the manually curated genes from the Vega
-database. The Ensembl set is then layered onto these. When an Ensembl gene overlaps a 
-manually curated gene, the Ensembl gene transcripts get transferred into those in the 
-manually curated model, and those transcripts with redundant CDS are merged into a
-single transcript.</p>
- 
-<p class="space-below">In cases where an Ensembl model ovelaps more than one Havana gene, 
-we determine which Havana gene has the most base pair overlap with the Ensembl model and
-only merge that pair of genes. For those regions where there is either only a Havana or
-only an Ensembl model, we include that annotation.</p>
-
-<p class="space-below">IG genes are now imported from Havana and merged with the annotation
-produced by Ensembl, using the data provided by the IMGT. The combined Ensembl-Havana geneset
-incorporates protein-coding and non-coding genes.</p> 
+manually curated annotation from <a href="http://www.sanger.ac.uk/HGP/havana">Havana</a>.
+This refined merge set is now the public output of the
+<a href="http://www.sanger.ac.uk/PostGenomics/encode/">GENCODE</a> project.
+The set displayed in release 56 corresponds to GENCODE release 3c.</p>
 
 <p class="space-below">The major genome browsers have come together to produce a common set of 
 identifiers where CDS annotations of transcripts can be agreed. This undertaking, the
