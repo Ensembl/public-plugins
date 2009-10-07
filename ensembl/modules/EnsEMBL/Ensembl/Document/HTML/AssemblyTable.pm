@@ -58,7 +58,7 @@ sub render_assembly_table {
 
   $header .= "</tr>\n";
   
-  (my $short_header = $header) =~ s/<br \/>.+?<\/th>//g; # Like the header, but without release numbers
+  (my $short_header = $header) =~ s/<br \/>.+?<\/th>/<\/th>/g; # Like the header, but without release numbers
  
   my @rows = ();
  
