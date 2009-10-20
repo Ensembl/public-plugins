@@ -7,6 +7,7 @@ use warnings;
 no warnings "uninitialized";
 use base qw(EnsEMBL::Web::Component);
 use EnsEMBL::Web::Data::NewsItem;
+use EnsEMBL::Web::Data::Species;
 
 sub _init {
   my $self = shift;
@@ -39,13 +40,30 @@ sub content {
     if ($user) {
       $name = $user->name;
     }
+    my $sp_text;
+    if (!$item->species) {
+      $sp_text = 'all species';
+    }
+    else {
+      my @names;
+      foreach my $sp ($item->species) {
+        if ($sp->common_name =~ /\./) {
+          push @names, '<i>'.$sp->common_name.'</i>';
+        }
+        else {
+          push @names, $sp->common_name;
+        }
+      }
+      $sp_text = join(', ', @names);
+    }
     $html .= sprintf(qq(
 <h3>%s</h3>
 <pre>%s</pre>
+<p><strong>Species</strong>: %s</p>
 <p><strong>Declared by</strong>: %s</p> 
 <p><strong>Status</strong>: %s</p>
 ), 
-        $title, $item->declaration, $name, $item->status
+        $title, $item->declaration, $sp_text, $name, $item->status
     );
     if ($item->team eq 'Genebuild') {
       $html .= sprintf(qq(
@@ -61,7 +79,7 @@ sub content {
       $item->assembly, $item->gene_set, $item->repeat_masking, $item->stable_id_mapping, $item->affy_mapping, $item->database
 );
     }
-    $html .= '<br />';
+    $html .= '<hr />';
     $previous = $item->team;
   }
 
