@@ -18,55 +18,24 @@ sub init {
     newick_mode          full_web
     nhx_mode             full
     scale                150
-
-    group_fish            default
-    group_fish_taxa       7955_8090_31033_69293_99883
-    group_fish_fgcolour   royalblue4
-    group_fish_bgcolour   lightblue1
-
-    group_saurias           default
-    group_saurias_taxa      28377_9031_59729
-    group_saurias_fgcolour  yellow4
-    group_saurias_bgcolour  lemonchiffon
-
-    group_vertebrates           default
-    group_vertebrates_taxa      7719_51511_7955_8090_31033_69293_99883_28377_9031_59729_9258_9315_9358_9361_9365_9371_9478_9544_9593_9598_9600_9606_9615_9685_9739_9785_9796_9813_9913_9978_9986_10020_10090_10116_10141_13616_30538_30608_30611_37347_42254_43179_59463_132908_8364_9483_9823
-    group_vertebrates_fgcolour  tomato3
-    group_vertebrates_bgcolour  ffe0f0
-
-    group_cionas           default
-    group_cionas_taxa      7719_51511
-
-    group_low-coverage      default
-    group_low-coverage_taxa 9315_9358_9361_9365_9371_9478_9593_9685_9739_9785_9813_9978_9986_10020_30538_30608_30611_37347_42254_43179_59463_132908
-
-    group_diptera          default
-    group_diptera_taxa     7159_7227_7165
-    group_diptera_fgcolour 604000
-    group_diptera_bgcolour ffd5d5
-
-    group_mammals          default
-    group_mammals_taxa      9258_9315_9358_9361_9365_9371_9478_9544_9593_9598_9600_9606_9615_9685_9739_9785_9796_9813_9913_9978_9986_10020_10090_10116_10141_13616_30538_30608_30611_37347_42254_43179_59463_132908_9483_9823
-    group_mammals_fgcolour 005000
-    group_mammals_bgcolour d0fad0
-
-    group_primates          default
-    group_primates_taxa     9478_9544_9593_9598_9600_9606_30608_30611_9483
-    group_primates_fgcolour 000050
-    group_primates_bgcolour f0f0ff
-
-    group_glires           default
-    group_glires_taxa      9978_9986_10020_10090_10116_10141_43179
-    group_glires_fgcolour  403000
-    group_glires_bgcolour  fff0e0
-
-    group_laurasiatheria           default
-    group_laurasiatheria_taxa      9615_9365_59463_42254_9796_9913_9685_9739_30538_132908_9823
-    group_laurasiatheria_fgcolour  005050
-    group_laurasiatheria_bgcolour  d0fafa
-
   ));
-  
+
+
+  # These data are read from the compara.species_set_tag table at startup time by the
+  # ConfigPacker. We want to get the species_sets with a genetree_display tag only.
+  # The other tags of interest are: name, genetree_fgcolour and genetree_bgcolour.
+  # We also want to strip out 'genetree' from the tags.
+  my $hash = $view_config->species_defs->multi_hash->{'DATABASE_COMPARA'}{'SPECIES_SET'}||{};
+  foreach my $name (grep { $hash->{$_}{'genetree_display'} } keys %$hash) {
+    while (my ($key, $value) = each %{$hash->{$name}}) {
+      $key =~ s/^genetree_//;
+      if (ref($value) eq "ARRAY") {
+        $value = join("_", @$value);
+      }
+      $view_config->_set_defaults("group_${name}_$key", $value);
+    }
+  }
+
   $view_config->storable = 1;
   $view_config->nav_tree = 1;
 }
@@ -74,7 +43,16 @@ sub init {
 sub form {
   my( $view_config, $object ) = @_;
   
-  my @groups = qw(mammals primates glires laurasiatheria low-coverage saurias fish cionas diptera);
+  my @groups;
+  # The groups are defined in the compara.species_set_tag tables. We want those that have
+  # a genetree_display tag. The groups are sorted by size first and then by name.
+  my $hash = $view_config->species_defs->multi_hash->{'DATABASE_COMPARA'}{'SPECIES_SET'}||{};
+  foreach my $name (sort {
+          @{$hash->{$b}->{genome_db_ids}} <=> @{$hash->{$a}->{genome_db_ids}} || $a cmp $b
+      } grep { $hash->{$_}{'genetree_display'} } keys %$hash) {
+    push(@groups, $name);
+  }
+
   my %formats = EnsEMBL::Web::Constants::ALIGNMENT_FORMATS;
 
   my $function = $object->function;
@@ -162,7 +140,7 @@ sub form {
       $view_config->add_form_element({
         type   => 'DropDown', 
         select => 'select',
-        name   => "group_$group",
+        name   => "group_${group}_display",
         label  => "Display options for $group",
         values => [ 
           { value => 'default',  name => 'Default behaviour' },
