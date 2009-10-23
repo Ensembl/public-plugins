@@ -124,17 +124,19 @@ sub form {
       ]
     });
     
-    $view_config->add_form_element({
-      type   => 'DropDown', 
-      select => 'select',
-      name   => 'colouring',
-      label  => 'Colour tree according to taxonomy',
-      values => [ 
-        { value => 'none',       name => 'No colouring' },
-        { value => 'background', name => 'Background' },
-        { value => 'foreground', name => 'Foreground' } 
-      ]
-    });
+    if (@groups) {
+      $view_config->add_form_element({
+        type   => 'DropDown', 
+        select => 'select',
+        name   => 'colouring',
+        label  => 'Colour tree according to taxonomy',
+        values => [ 
+          { value => 'none',       name => 'No colouring' },
+          { value => 'background', name => 'Background' },
+          { value => 'foreground', name => 'Foreground' } 
+        ]
+      });
+    }
     
     foreach my $group (@groups) {
       $view_config->add_form_element({
