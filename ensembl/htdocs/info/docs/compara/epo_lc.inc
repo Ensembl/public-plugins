@@ -1,10 +1,18 @@
-<h4>31 eutherian mammals EPO_LOW_COVERAGE</h4>
+<h4>5 catarrhini primates EPO_LOW_COVERAGE</h4>
+Human (Homo sapiens)<br />
+Chimpanzee (Pan troglodytes)<br />
+Gorilla (Gorilla gorilla)<br />
+Orangutan (Pongo pygmaeus)<br />
+Macaque (Macaca mulatta)<br />
+
+<h4>33 eutherian mammals EPO_LOW_COVERAGE</h4>
 Human (Homo sapiens)<br />
 Chimpanzee (Pan troglodytes)<br />
 Gorilla (Gorilla gorilla)<br />
 Orangutan (Pongo pygmaeus)<br />
 Macaque (Macaca mulatta)<br />
 Tarsier (Tarsius syrichta)<br />
+Marmoset (Callithrix jacchus)<br />
 Mouse Lemur (Microcebus murinus)<br />
 Bushbaby (Otolemur garnettii)<br />
 Tree Shrew (Tupaia belangeri)<br />
@@ -18,6 +26,7 @@ Guinea Pig (Cavia porcellus)<br />
 Cow (Bos taurus)<br />
 Dolphin (Tursiops truncatus)<br />
 Alpaca (Vicugna pacos)<br />
+Pig (Sus scrofa)<br />
 Dog (Canis familiaris)<br />
 Cat (Felis catus)<br />
 Horse (Equus caballus)<br />

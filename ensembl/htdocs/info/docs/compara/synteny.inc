@@ -64,7 +64,7 @@
 <td class="bg1 center">-</td><!-- M.mul -->
 <td class="bg3 center">-</td><!-- M.mus -->
 <td class="bg1 center">-</td><!-- R.nor -->
-<td class="bg3 center">-</td><!-- B.tau -->
+<td class="bg3 center"><font color="blue">YES</font></td><!-- B.tau -->
 <th class="bg1 center" style="width:5em"><i>S.scr</i></th>
 </tr>
 

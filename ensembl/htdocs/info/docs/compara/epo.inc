@@ -1,9 +1,3 @@
-<h4>4 catarrhini primates EPO</h4>
-Human (Homo sapiens)<br />
-Chimpanzee (Pan troglodytes)<br />
-Orangutan (Pongo pygmaeus)<br />
-Macaque (Macaca mulatta)<br />
-
 <h4>10 eutherian mammals EPO</h4>
 Human (Homo sapiens)<br />
 Chimpanzee (Pan troglodytes)<br />
