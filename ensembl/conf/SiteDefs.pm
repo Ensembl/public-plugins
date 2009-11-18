@@ -50,6 +50,7 @@ sub update_conf {
   $SiteDefs::__species_aliases{ 'Vicugna_pacos'            } = [qw(lp alpaca)];
 #-------------------- birds
   $SiteDefs::__species_aliases{ 'Gallus_gallus'            } = [qw(gg ggal chicken)];
+  $SiteDefs::__species_aliases{ 'Meleagris_gallopavo'      } = [qw(mg mgal turkey)];
   $SiteDefs::__species_aliases{ 'Taeniopygia_guttata'      } = [qw(tg taegut taeniopygia zebrafinch)];
 #-------------------- fish
   $SiteDefs::__species_aliases{ 'Danio_rerio'              } = [qw(dr drer zfish zebrafish)];
