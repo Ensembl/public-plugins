@@ -1,3 +1,8 @@
+<h4>3 neognath birds Pecan</h4>
+Chicken (Gallus gallus)<br />
+Turkey (Meleagris gallopavo)<br />
+Zebra Finch (Taeniopygia guttata)<br />
+
 <h4>13 amniota vertebrates Pecan</h4>
 Human (Homo sapiens)<br />
 Chimpanzee (Pan troglodytes)<br />
