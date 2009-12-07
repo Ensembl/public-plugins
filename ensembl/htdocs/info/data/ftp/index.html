@@ -53,6 +53,11 @@ conventions.
 <dd><a href="http://www.repeatmasker.org/" rel="external">Masked</a>
 and unmasked genome sequences associated with the assembly (contigs,
 chromosomes etc.).</dd>
+<dd>The header line in an FASTA dump files containing DNA sequence
+consists of the following attributes :
+coord_system:version:name:start:end:strand
+This coordinate-system string is used in the Ensembl API to retrieve
+slices with the SliceAdaptor.</dd>
 
 <dt>cDNA</dt>
 <dd>cDNA sequences for Ensembl or <i>ab
