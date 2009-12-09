@@ -37,10 +37,12 @@ browser displays:
 </p>
 
 <ul>
-<li>Region overview</li>
-<li>Region in detail</li>
-<li>Gene&#47;External data</li>
-<li>Transcript&#47;External data</li>
+<li>Location tab &gt; Region overview page &gt; cytoview panel</li>
+<li>Location tab &gt; Region in detail page &gt; contigviewtop panel</li>
+<li>Location tab &gt; Region in detail page &gt; contigviewbottom panel</li>
+<li>Gene tab &gt; Gene summary page &gt; gene_summary panel</li>
+<li>Gene tab &gt; External data page</li>
+<li>Transcript tab &gt; External data page</li>
 </ul>
 
 <p>
@@ -66,8 +68,7 @@ server. To attach a DAS source:
 </p>
 
 <ol>
-<li>Navigate to the appropriate tab and view. For example the <em>Location</em>
-tab and <em>Region in detail</em> section.</li>
+<li>Navigate to the appropriate tab and view.</li>
 <li>Click on the "Add custom data to page" link at the left.</li>
 <li>Click on "Attach DAS" at the left, and follow the instructions.</li>
 <li>Save and close the window. The source will be automatically enabled.</li>
@@ -100,10 +101,12 @@ tab and <em>Region in detail</em> section.</li>
 <p>Ensembl supports DAS on the following sections of the website:</p>
 
 <ul>
-<li>Region overview (positional annotations)</li>
-<li>Region in detail (positional annotations)</li>
-<li>Gene -> External data (non-positional annotations)</li>
-<li>Transcript -> External data (non-positional annotations)</li>
+<li>Location tab &gt; Region overview page &gt; cytoview panel (positional annotations)</li>
+<li>Location tab &gt; Region in detail page &gt; contigviewtop panel (positional annotations)</li>
+<li>Location tab &gt; Region in detail page &gt; contigviewbottom panel (positional annotations)</li>
+<li>Gene tab &gt; Gene summary page &gt; gene_summary panel (positional annotations)</li>
+<li>Gene tab &gt; External data page (non-positional annotations)</li>
+<li>Transcript tab &gt; External data page (non-positional annotations)</li>
 </ul>
 
 <p>
@@ -140,10 +143,10 @@ found as XML documents at:
 <p>For example:</p>
     
 <dl>
-<dt><a href="http://www.ensembl.org/das/Homo_sapiens.NCBI36.transcript/features?segment=13:31787617,31871806">http://www.ensembl.org/das/Homo_sapiens.NCBI36.transcript/features?segment=13:31787617,31871806</a></dt>
-<dd>Request all transcripts (exons really) in the region [31787617,31871806] on human chromosome 13 
-(this is where the gene BRCA2 is located in the NCBI&nbsp;36 assembly).</dd>
-<dt><a href="http://www.ensembl.org/das/Gallus_gallus.WASHUC1.reference/sequence?segment=1:1,1000">http://www.ensembl.org/das/Gallus_gallus.WASHUC1.reference/sequence?segment=1:1,1000</a></dt>
+<dt><a href="http://www.ensembl.org/das/Homo_sapiens.GRCh37.transcript/features?segment=13:32889611,32973347">http://www.ensembl.org/das/Homo_sapiens.GRCh37.transcript/features?segment=13:32889611,32973347</a></dt>
+<dd>Request all transcripts (exons really) in the region [32889611,32973347] on human chromosome 13 
+(this is where the gene BRCA2 is located in the GRCh37 assembly).</dd>
+<dt><a href="http://www.ensembl.org/das/Gallus_gallus.WASHUC2.reference/sequence?segment=1:1,1000">http://www.ensembl.org/das/Gallus_gallus.WASHUC2.reference/sequence?segment=1:1,1000</a></dt>
 <dd>Request the first 1000&nbsp;bp of the first chicken chromosome.</dd>
 </dl>
 
