@@ -35,6 +35,7 @@ sub content {
       {'key' => 'email', 'title' => 'Email', 'width' => '60%'},
     );
     foreach my $user (@members) {
+      next unless $user->member_status eq 'active';
       $table->add_row({
         'id' => $user->user_id,
         'name' => $user->name,

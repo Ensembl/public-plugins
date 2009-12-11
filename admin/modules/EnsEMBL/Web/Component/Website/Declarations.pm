@@ -41,12 +41,13 @@ sub content {
       $name = $user->name;
     }
     my $sp_text;
-    if (!$item->species) {
+    if (!$item->species_ids) {
       $sp_text = 'all species';
     }
     else {
       my @names;
-      foreach my $sp ($item->species) {
+      foreach my $species ($item->species_ids) {
+        my $sp = EnsEMBL::Web::Data::Species->new($species);
         if ($sp->common_name =~ /\./) {
           push @names, '<i>'.$sp->common_name.'</i>';
         }

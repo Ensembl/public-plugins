@@ -6,6 +6,7 @@ use warnings;
 use Class::Std;
 
 use EnsEMBL::Web::Data::NewsItem;
+use EnsEMBL::Web::Data::Species;
 use base 'EnsEMBL::Web::Command';
 
 {
@@ -23,6 +24,7 @@ sub process {
   $interface->discover;
 
   $interface->element('caveat', {'type' => 'Information', 'value' => 'Please do not enter text in all capitals, as it then has to be changed back to normal case for use in the news pages!'});
+  $interface->element('dec_blurb', {'type' => 'Information', 'value' => 'IMPORTANT: Please put "internal" information in the Notes field, and try to make the Declaration itself as comprehensible as possible - the Declaration field is exported to an email and sent out to users!'});
   $interface->modify_element('declaration', {'rows' => 20, 'cols' => 80});
   $interface->modify_element('notes', {'rows' => 5, 'cols' => 80});
  
@@ -34,23 +36,21 @@ sub process {
   $interface->modify_element('database',        {'select' => 'radio', 'label' => 'Database on ens-staging'});
   $interface->modify_element('release_id', {'type' => 'Hidden', 'value' => $object->species_defs->ENSEMBL_VERSION});
 
-  ## This interface has to vary depending on whether the record exists or not, owing to the many-to-many relationship
-  if ($data->id) {
-    $interface->element_order(['team', 'title', 'caveat', 'declaration', 'notes', 'species', 'assembly', 'gene_set', 'repeat_masking', 'stable_id_mapping', 'affy_mapping', 'database', 'status', 'release_id']);
+
+  my $values = [];
+  my $species = EnsEMBL::Web::Data::Species->new();
+  my @species = $species->species($object->species_defs->ENSEMBL_VERSION);
+  foreach my $sp (sort {$a->name cmp $b->name} @species) {
+    (my $name = $sp->name) =~ s/_/ /;
+    push @$values, {'name' => $name, 'value' => $sp->id},
   }
-  else { 
-    $interface->extra_data('add_species');
-    my $values = [
-      {'name' => 'All', 'value' => 'All'},
-      {'name' => 'Only some', 'value' => 'Some'},
-    ];
-    $interface->element('add_species', {'type' => 'DropDown', 'name' => 'add_species', 'label' => 'Which species does this declaration affect?', 'values' => $values});
-    $interface->element('species_note', {'type' => 'Information', 'value' => 'N.B. Species can only be added after you have previewed and saved your declaration.'});
-    $interface->element_order(['team', 'title', 'caveat', 'declaration', 'notes', 'add_species', 'species_note', 'assembly', 'gene_set', 'repeat_masking', 'stable_id_mapping', 'affy_mapping', 'database', 'status', 'release_id']);
-  }
+  my @item_species = $data->species_ids($data->id);
+
+  $interface->element('species', {'type' => 'MultiSelect', 'name' => 'species', 'label' => 'Species (leave blank for "all")', 'values' => $values, 'select' => 'select', 'value' => \@item_species});
+  $interface->element_order(['team', 'caveat', 'title', 'dec_blurb', 'declaration', 'notes', 'species', 'assembly', 'gene_set', 'repeat_masking', 'stable_id_mapping', 'affy_mapping', 'database', 'status', 'release_id']);
 
   $interface->dropdown(1);
-  $interface->option_columns(['team','declaration']);
+  $interface->option_columns(['team','title','declaration']);
   
   $interface->configure($self->webpage, $object);
 

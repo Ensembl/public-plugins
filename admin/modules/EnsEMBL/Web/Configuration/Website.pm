@@ -61,6 +61,10 @@ sub populate_tree {
     [qw(edit_news EnsEMBL::Web::Component::Website::Interface::NewsSelectToEdit)],
     { 'availability' => 1}
   ));
+  $news_menu->append($self->create_node( 'News/Add', 'Add News (no declaration)',
+    [],
+    { 'availability' => 1, 'command' => 'EnsEMBL::Web::Command::Website::Interface::News'}
+  ));
   $news_menu->append($self->create_node( 'SelectRelease', 'Select a Release',
     [qw(select_release EnsEMBL::Web::Component::Website::SelectRelease)], 
     { 'availability' => 1, 'filters' => [qw(WebAdmin)]}

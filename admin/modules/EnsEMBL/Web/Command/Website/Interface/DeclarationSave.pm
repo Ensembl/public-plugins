@@ -15,7 +15,7 @@ sub process {
   my $self = shift;
   my $object = $self->object;
   my $interface = $object->interface;
-  my $url = '/Website/Declaration/';
+  my $url = '/Website/Declaration/List';
 
   my $param = {
     '_referer'  => $object->param('_referer'),
@@ -23,23 +23,12 @@ sub process {
   };
 
   $interface->cgi_populate($object);
-  my $success = $interface->data->save;
+  my @species = $object->param('species');
+  my $success = $interface->data->save($object->param('id'), \@species);
 
   if ($success) {
-    if ($object->param('add_species') eq 'All') {
-      $url .= 'List';
-    }
-    else {
-      $param->{'id'} = $interface->data->id;
-      if ($object->param('species')) {
-        $url = '/Website/LinkSpecies';
-        my @A = ($object->param('species'));
-        $param->{'species'} = \@A;
-      }
-      else {
-        $url = '/Website/NewsSpecies';
-      }
-    }
+    $param->{'id'} = $success;
+    $param->{'release_id'} = $object->param('release_id');
   }
   else {
     $url .= 'Problem';
