@@ -47,7 +47,9 @@ sub content {
     else {
       my @names;
       foreach my $species ($item->species_ids) {
+        next unless $species > 0;
         my $sp = EnsEMBL::Web::Data::Species->new($species);
+        next unless $sp;
         if ($sp->common_name =~ /\./) {
           push @names, '<i>'.$sp->common_name.'</i>';
         }
