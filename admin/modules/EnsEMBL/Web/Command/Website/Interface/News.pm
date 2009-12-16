@@ -26,7 +26,6 @@ sub process {
   $interface->modify_element('notes',       {'rows' => 2, 'cols' => 80});
   $interface->modify_element('content',     {'type' => 'Html'});
   $interface->modify_element('news_category_id', {'label' => 'Category'});
-  $interface->modify_element('release_id', {'type' => 'Hidden', 'value' => $object->species_defs->ENSEMBL_VERSION});
   $interface->modify_element('priority', {
     'type'    => 'DropDown',
     'select'  => 'select', 
@@ -39,8 +38,9 @@ sub process {
       {'name' => '5', 'value' => '5'},
     ]
   });
+  $interface->element('release_id', {'name' => 'release_id', 'type' => 'Hidden', 'value' => $object->species_defs->ENSEMBL_VERSION});
 
-  $interface->element_order(['team', 'declaration', 'notes', 'species', 'news_category_id', 'title', 'content', 'status', 'priority', 'news_done']);
+  $interface->element_order(['team', 'declaration', 'notes', 'species', 'news_category_id', 'title', 'content', 'status', 'priority', 'news_done', 'release_id']);
   $interface->dropdown(1);
   $interface->option_columns(['title','content']);
 
