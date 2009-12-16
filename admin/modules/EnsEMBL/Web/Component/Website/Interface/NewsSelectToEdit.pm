@@ -30,8 +30,9 @@ sub content {
 
   my @values = ({'name' => '-- Select --', 'value' => ''});
   foreach my $story (@sorted) {
-    next unless $story->title;
-    push @values, {'name' => $story->team.' - '.substr($story->declaration, 0, 50), 'value' => $story->id};
+    next unless $story->title || $story->declaration;
+    my $text = $story->title ? $story->title : substr($story->declaration, 0, 50);
+    push @values, {'name' => $story->team." - text", 'value' => $story->id};
   }
 
   my $form = EnsEMBL::Web::Form->new('select_news', '/Website/News/Edit', 'post');
