@@ -39,6 +39,16 @@ sub process {
     ]
   });
   $interface->element('release_id', {'name' => 'release_id', 'type' => 'Hidden', 'value' => $object->species_defs->ENSEMBL_VERSION});
+  my $values = [];
+  my $species = EnsEMBL::Web::Data::Species->new();
+  my @species = $species->species($object->species_defs->ENSEMBL_VERSION);
+  foreach my $sp (sort {$a->name cmp $b->name} @species) {
+    (my $name = $sp->name) =~ s/_/ /;
+    push @$values, {'name' => $name, 'value' => $sp->id},
+  }
+  my @item_species = $data->species_ids($data->id);
+
+  $interface->element('species', {'type' => 'MultiSelect', 'name' => 'species', 'label' => 'Species (leave blank for "all")', 'values' => $values, 'select' => 'select', 'value' => \@item_species});
 
   $interface->element_order(['team', 'declaration', 'notes', 'species', 'news_category_id', 'title', 'content', 'status', 'priority', 'news_done', 'release_id']);
   $interface->dropdown(1);
