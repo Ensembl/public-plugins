@@ -23,8 +23,7 @@ re used).<p></li>
 
 <h2>Instructions</h2>
 <ol>
-<li><p>Cache MySQL connection parameters in a variable (they will work as eHive connection parameters as we
-ll) :</p>
+<li><p>Cache MySQL connection parameters in a variable (they will work as eHive connection parameters as well) :</p>
 <pre>export MYCONN="--host=hostname --port=port_number --user=username --password=secret"</pre>
 <p>also, set the ENS_CODE_ROOT to the directory where ensembl packages are installed:</p>
 <pre>export ENS_CODE_ROOT="$HOME/ensembl_main"</pre>
@@ -42,8 +41,8 @@ mysql $MYCONN -e 'CREATE DATABASE long_mult_test'</pre>
 <pre>mysql $MYCONN long_mult_test &lt;$ENS_CODE_ROOT/work/ensembl-hive/sql/load_long_mult.sql</pre>
 <p> or you can add your own task(s). Several tasks can be added at once:</p>
 <pre>mysql $MYCONN long_mult_test &lt;&lt;EoF
-INSERT INTO analysis_job (analysis_id, input_id) VALUES ( 1, &quot;{ 'a_multiplier' => '9750516269', 'b_multiplier' =&gt; '327358788' }&quot;);
-INSERT INTO analysis_job (analysis_id, input_id) VALUES ( 1, &quot;{ 'a_multiplier' => '327358788', 'b_multiplier' =&gt; '9750516269' }&quot;);
+INSERT INTO analysis_job (analysis_id, input_id) VALUES ( 1, &quot;{ 'a_multiplier' =&gt; '9750516269', 'b_multiplier' =&gt; '327358788' }&quot;);
+INSERT INTO analysis_job (analysis_id, input_id) VALUES ( 1, &quot;{ 'a_multiplier' =&gt; '327358788', 'b_multiplier' =&gt; '9750516269' }&quot;);
 EoF</pre>
 
 </li>
