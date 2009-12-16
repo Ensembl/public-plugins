@@ -26,6 +26,7 @@ sub process {
   $interface->modify_element('notes',       {'rows' => 2, 'cols' => 80});
   $interface->modify_element('content',     {'type' => 'Html'});
   $interface->modify_element('news_category_id', {'label' => 'Category'});
+  $interface->modify_element('release_id', {'type' => 'Hidden', 'value' => $object->species_defs->ENSEMBL_VERSION});
   $interface->modify_element('priority', {
     'type'    => 'DropDown',
     'select'  => 'select', 
