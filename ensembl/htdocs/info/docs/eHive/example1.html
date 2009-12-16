@@ -10,54 +10,55 @@
 <body>
 
 <h1>eHive production system - Toy example</h1>
+
 <h2>Distributed multiplication of long numbers</h2>
+
 <p>Bio::EnsEMBL::Hive::RunnableDB::LongMult is an example eHive pipeline that demonstates the following features:</p>
 <ul>
-<li><p>A pipeline can have multiple analyses (this one has three: 'start', 'part_multiply' and 'add_together').</p></li>
-<li><p>A job of one analysis can create jobs of another analysis (one 'start' job creates up to 8 'part_multiply' jobs).</p></li>
-<li><p>A job of one analysis can "flow the data" into another analysis (a 'start' job "flows into" an 'add_together' job).</p></li>
-<li><p>Execution of one analysis can be blocked until all jobs of another analysis have been successfully completed ('add_together' is blocked both by 'start' and 'part_multiply').</p></li>
-<li><p>As filesystems are frequently a bottleneck for big pipelines, it is advised that eHive processes store intermediate and final results in a database (in this pipeline, 'intermediate_result' and 'final_result' tables a
-re used).<p></li>
+<li>A pipeline can have multiple analyses (this one has three: 'start', 'part_multiply' and 'add_together').</li>
+<li>A job of one analysis can create jobs of another analysis (one 'start' job creates up to 8 'part_multiply' jobs).</li>
+<li>A job of one analysis can "flow the data" into another analysis (a 'start' job "flows into" an 'add_together' job).</li>
+<li>Execution of one analysis can be blocked until all jobs of another analysis have been successfully completed ('add_together' is blocked both by 'start' and 'part_multiply').</li>
+<li>As filesystems are frequently a bottleneck for big pipelines, it is advised that eHive processes store intermediate and final results in a database (in this pipeline, 'intermediate_result' and 'final_result' tables are used).</li>
 </ul>
 
 <h2>Instructions</h2>
 <ol>
-<li><p>Cache MySQL connection parameters in a variable (they will work as eHive connection parameters as well) :</p>
+<li>Cache MySQL connection parameters in a variable (they will work as eHive connection parameters as well) :
 <pre>export MYCONN="--host=hostname --port=port_number --user=username --password=secret"</pre>
-<p>also, set the ENS_CODE_ROOT to the directory where ensembl packages are installed:</p>
+also, set the ENS_CODE_ROOT to the directory where ensembl packages are installed:
 <pre>export ENS_CODE_ROOT="$HOME/ensembl_main"</pre>
 </li>
-<li><p>Create an empty database:</p>
+<li>Create an empty database:
 <pre>mysql $MYCONN -e 'DROP DATABASE IF EXISTS long_mult_test'
 mysql $MYCONN -e 'CREATE DATABASE long_mult_test'</pre>
 </li>
-<li><p>Create eHive infrastructure:</p>
+<li>Create eHive infrastructure:
 <pre>mysql $MYCONN long_mult_test &lt;$ENS_CODE_ROOT/work/ensembl-hive/sql/tables.sql</pre>
-<li><p>Create analyses/control_rules/dataflow_rules of the LongMult pipeline:</p>
+<li>Create analyses/control_rules/dataflow_rules of the LongMult pipeline:
 <pre>mysql $MYCONN long_mult_test &lt;$ENS_CODE_ROOT/work/ensembl-hive/sql/create_long_mult.sql</pre>
 </li>
-<li><p>"Load" the pipeline with a multiplication task:</p>
+<li>"Load" the pipeline with a multiplication task:
 <pre>mysql $MYCONN long_mult_test &lt;$ENS_CODE_ROOT/work/ensembl-hive/sql/load_long_mult.sql</pre>
-<p> or you can add your own task(s). Several tasks can be added at once:</p>
+or you can add your own task(s). Several tasks can be added at once:
 <pre>mysql $MYCONN long_mult_test &lt;&lt;EoF
 INSERT INTO analysis_job (analysis_id, input_id) VALUES ( 1, &quot;{ 'a_multiplier' =&gt; '9750516269', 'b_multiplier' =&gt; '327358788' }&quot;);
 INSERT INTO analysis_job (analysis_id, input_id) VALUES ( 1, &quot;{ 'a_multiplier' =&gt; '327358788', 'b_multiplier' =&gt; '9750516269' }&quot;);
 EoF</pre>
 
 </li>
-<li><p>Initialize the newly created eHive for the first time:</p>
+<li>Initialize the newly created eHive for the first time:
 <pre><a href="beekeeper.html">beekeeper.pl</a> $MYCONN --database=long_mult_test -sync</pre>
 </li>
-<li><p>You can either execute three individual workers (each picking one analysis of the pipeline):</p>
+<li>You can either execute three individual workers (each picking one analysis of the pipeline):
 <pre><a href="runWorker.html">runWorker.pl</a> $MYCONN --database=long_mult_test</pre>
-<p> or run an automatic loop that will run workers for you:</p>
+or run an automatic loop that will run workers for you:
 <pre><a href="beekeeper.html">beekeeper.pl</a> $MYCONN --database=long_mult_test -loop</pre>
 </li>
-<li><p>The results of the computations are to be found in 'final_result' table:</p>
+<li>The results of the computations are to be found in 'final_result' table:
 <pre>mysql $MYCONN long_mult_test -e 'SELECT * FROM final_result'</pre>
 </li>
-<li><p>You can add more multiplication tasks by repeating from step 5.</p>
+<li>You can add more multiplication tasks by repeating from step 5.
 </ol>
 
 <p><a href="index.html">Back</a></p>

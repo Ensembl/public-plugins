@@ -17,79 +17,79 @@
 
 <ol>
 <li>
-<p><a href="http://www.perl.com/download.csp">Perl 5.6 or higher</a>, since eHive code is written in Perl.</p>
+<a href="http://www.perl.com/download.csp">Perl 5.6 or higher</a>, since eHive code is written in Perl.
 </li>
 <li>
-<p><a href="http://dev.mysql.com/downloads/">MySQL 5.1 or higher</a></p>
-<p>eHive keeps its state in a MySQL database, so you will need</p>
+<a href="http://dev.mysql.com/downloads/">MySQL 5.1 or higher</a>
+<br />eHive keeps its state in a MySQL database, so you will need
 <ul>
 <li>a MySQL server installed on the machine where you want to maintain the state and</li>
 <li>MySQL clients installed on the machines where the jobs are to be executed.</li>
 </ul>
-<p>MySQL version 5.1 or higher is recommended to maintain compatibility with Compara pipelines.</p>
+MySQL version 5.1 or higher is recommended to maintain compatibility with Compara pipelines.
 </li>
 <li>
-<p><a href="http://dbi.perl.org/">Perl DBI API</a></p>
-<p>Perl database interface that includes API to MySQL</p>
+<a href="http://dbi.perl.org/">Perl DBI API</a>
+<br />Perl database interface that includes API to MySQL
 </li>
 <li>
-<p><a href="http://search.cpan.org/dist/Data-UUID/">Perl UUID API</a></p>
-<p>eHive uses Universally Unique Identifiers (UUIDs) to identify workers internally.</p>
+<a href="http://search.cpan.org/dist/Data-UUID/">Perl UUID API</a>
+<br />eHive uses Universally Unique Identifiers (UUIDs) to identify workers internally.
 </li>
 </ol>
 
 <h2>Download and install essential and optional packages from BioPerl and EnsEMBL CVS</h2>
 <ol>
 <li>
-<p>Create a directory for the source code</p>
-<p>It is advised to have a dedicated directory where EnsEMBL-related packages will be deployed. Unlike DBI or UUID modules that can be installed system-wide by the system administrator, you will benefit from full (read+write) access to the EnsEMBL files/directories, so it is best to install them under your home directory. For example,</p>
+Create a directory for the source code.
+<br />It is advised to have a dedicated directory where EnsEMBL-related packages will be deployed. Unlike DBI or UUID modules that can be installed system-wide by the system administrator, you will benefit from full (read+write) access to the EnsEMBL files/directories, so it is best to install them under your home directory. For example,
 
 <pre>$ mkdir $HOME/ensembl_main</pre>
 
-<p>It will be convenient to set a variable pointing at this directory for future use:</p>
+It will be convenient to set a variable pointing at this directory for future use:
 <ul>
 <li>
-<p>using bash syntax (for best results, append this line to your ~/.bashrc configuration file):</p>
+using bash syntax (for best results, append this line to your ~/.bashrc configuration file):
 <pre>$ export ENS_CODE_ROOT="$HOME/ensembl_main"</pre>
 </li>
 <li>
-<p>using [t]csh syntax (for best results, append this line to your ~/.cshrc or ~/.tcshrc configuration file):</p>
+using [t]csh syntax (for best results, append this line to your ~/.cshrc or ~/.tcshrc configuration file):
 <pre>$ setenv ENS_CODE_ROOT "$HOME/ensembl_main"</pre>
 </li>
 </ul>
 </li>
 
 <li>
-<p>Change into your ensembl codebase directory:</p>
+Change into your ensembl codebase directory:
 <pre>$ cd $ENS_CODE_ROOT</pre>
 </li>
 <li>
-<p>Log into the BioPerl CVS server (using "cvs" for password):</p>
+Log into the BioPerl CVS server (using "cvs" for password):
 <pre>$ cvs -d :pserver:cvs@code.open-bio.org:/home/repository/bioperl login</pre>
 </li>
 <li>
-<p>Export the bioperl-live package:</p>
+Export the bioperl-live package:
 <pre>$ cvs -d :pserver:cvs@code.open-bio.org:/home/repository/bioperl export bioperl-live</pre>
 </li>
 <li>
-<p>Log into the EnsEMBL CVS server at Sanger (using "CVSUSER" for password):</p>
+Log into the EnsEMBL CVS server at Sanger (using "CVSUSER" for password):
 <pre>$ cvs -d :pserver:cvsuser@cvs.sanger.ac.uk:/cvsroot/ensembl login
 Logging in to :pserver:cvsuser@cvs.sanger.ac.uk:2401/cvsroot/ensembl
 CVS password: CVSUSER</pre>
 </li>
 <li>
-<p>Export ensembl and ensembl-hive CVS modules:</p>
+Export ensembl and ensembl-hive CVS modules:
 <pre>$ cvs -d :pserver:cvsuser@cvs.sanger.ac.uk:/cvsroot/ensembl export ensembl
 $ cvs -d :pserver:cvsuser@cvs.sanger.ac.uk:/cvsroot/ensembl export ensembl-hive</pre>
 </li>
 <li>
-<p>In the likely case you are going to use eHive in the context of Compara pipelines, you will also need to install ensembl-compara:</p>
+In the likely case you are going to use eHive in the context of Compara pipelines, you will also need to install ensembl-compara:
 <pre>$ cvs -d :pserver:cvsuser@cvs.sanger.ac.uk:/cvsroot/ensembl export ensembl-compara</pre>
 </li>
 <li>
-<p>Add new packages to the PERL5LIB variable:</p>
+Add new packages to the PERL5LIB variable:
 <ul>
-<li><p>using bash syntax (for best results, append these lines to your ~/.bashrc configuration file):</p>
+<li>using bash syntax (for best results, append these lines to your ~/.bashrc configuration file):
 <pre>$ export PERL5LIB=${PERL5LIB}:${ENS_CODE_ROOT}/bioperl-live
 $ export PERL5LIB=${PERL5LIB}:${ENS_CODE_ROOT}/ensembl/modules
 $ export PERL5LIB=${PERL5LIB}:${ENS_CODE_ROOT}/ensembl-hive/modules
@@ -97,7 +97,7 @@ $ export PERL5LIB=${PERL5LIB}:${ENS_CODE_ROOT}/ensembl-compara/modules # optiona
 </pre>
 </li>
 <li>
-<p>using [t]csh syntax (for best results, append these lines to your ~/.cshrc or ~/.tcshrc configuration file):</p>
+using [t]csh syntax (for best results, append these lines to your ~/.cshrc or ~/.tcshrc configuration file):
 <pre>$ setenv PERL5LIB  ${PERL5LIB}:${ENS_CODE_ROOT}/bioperl-live
 $ setenv PERL5LIB  ${PERL5LIB}:${ENS_CODE_ROOT}/ensembl/modules
 $ setenv PERL5LIB  ${PERL5LIB}:${ENS_CODE_ROOT}/ensembl-hive/modules
@@ -111,11 +111,11 @@ $ setenv PERL5LIB  ${PERL5LIB}:${ENS_CODE_ROOT}/ensembl-compara/modules # option
 <p>It is convenient to set a variable with MySQL connection parameters to the MySQL instance where you'll be creating eHive pipelines (which means, you'll need priveleges to create databases and to write into them):</p>
 <ul>
 <li>
-<p>using bash syntax:</p>
+using bash syntax:</p>
 <pre>$ export MYCONN="--host=hostname --port=3306 --user=mysql_username --password=SeCrEt"</pre>
 </li>
 <li>
-<p>using [t]csh syntax:</p>
+using [t]csh syntax:</p>
 <pre>$ setenv MYCONN "--host=hostname --port=3306 --user=mysql_username --password=SeCrEt"</pre>
 </li>
 </ul>
@@ -128,7 +128,7 @@ $ setenv PERL5LIB  ${PERL5LIB}:${ENS_CODE_ROOT}/ensembl-compara/modules # option
 <pre>$ mysql $MYCONN -e 'CREATE DATABASE ehive_test'
 $ mysql $MYCONN ehive_test < $ENS_CODE_ROOT/ensembl-hive/sql/tables.sql</pre>
 
-<p>In this step you have created a database with empty tables that will have to be "loaded" with tasks to perform, depending on the particular pipeline we want to run.</p>
+<p>In this step you have created a database with empty tables that will have to be "loaded" with tasks to perform, depending on the particular pipeline you want to run.</p>
 
 <h2>Configure and load a pipeline</h2>
 

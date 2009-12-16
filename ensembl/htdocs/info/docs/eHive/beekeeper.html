@@ -22,35 +22,35 @@
 
 <h3>USAGE EXAMPLES</h3>
 <ul>
-<li><p>Usually run after the pipeline has been created to calculate the internal statistics necessary for eHive functioning</p>
+<li>Usually run after the pipeline has been created to calculate the internal statistics necessary for eHive functioning
 <pre>beekeeper.pl --host=hostname --port=3306 --user=username --password=secret --database=ehive_dbname -sync</pre>
 </li>
-<li><p>An alternative way of doing the same thing</p>
+<li>An alternative way of doing the same thing
 <pre>beekeeper.pl -url mysql://username:secret@hostname:port/ehive_dbname -sync</pre>
 </li>
-<li><p>Do not run any additional Workers, just check for the current status of the pipeline:</p>
+<li>Do not run any additional Workers, just check for the current status of the pipeline:
 <pre>beekeeper.pl -url mysql://username:secret@hostname:port/ehive_dbname</pre>
 </li>
-<li><p>Run the pipeline in automatic mode (-loop), run all the workers locally (-local) and allow for 3 parallel workers (-local_cpus 3)</p>
+<li>Run the pipeline in automatic mode (-loop), run all the workers locally (-local) and allow for 3 parallel workers (-local_cpus 3)
 <pre>beekeeper.pl -url mysql://username:secret@hostname:port/long_mult_test -local -local_cpus 3 -loop</pre>
 </li>
-<li><p>Run in automatic mode, but only restrict to running the 'fast_blast' analysis</p>
+<li>Run in automatic mode, but only restrict to running the 'fast_blast' analysis
 <pre>beekeeper.pl -url mysql://username:secret@hostname:port/long_mult_test -logic_name fast_blast -loop</pre>
 </li>
-<li><p>Restrict the normal execution to one iteration only - can be used for testing a newly set up pipeline</p>
+<li>Restrict the normal execution to one iteration only - can be used for testing a newly set-up pipeline
 <pre>beekeeper.pl -url mysql://username:secret@hostname:port/long_mult_test -run</pre>
 </li>
-<li><p>Reset all 'buggy_analysis' jobs to 'READY' state, so that they can be run again</p>
+<li>Reset all 'buggy_analysis' jobs to 'READY' state, so that they can be run again
 <pre>beekeeper.pl -url mysql://username:secret@hostname:port/long_mult_test -reset_all_jobs_for_analysis buggy_analysis</pre>
 </li>
-<li><p>Do a cleanup: find and bury dead workers, reclaim their jobs</p>
+<li>Do a cleanup: find and bury dead workers, reclaim their jobs
 <pre>beekeeper.pl -url mysql://username:secret@hostname:port/long_mult_test -dead</pre>
 </li>
 </ul>
 
 <h3>OPTIONS</h3>
 <ul>
-<li><p>Connection parameters</p>
+<li>Connection parameters
 <pre>  -conf &lt;path&gt;            : config file describing db connection
   -regfile &lt;path&gt;         : path to a Registry configuration file
   -regname &lt;string&gt;       : species/alias name for the Hive DBAdaptor
@@ -61,28 +61,28 @@
   -password &lt;pass&gt;        : mysql connection password &lt;pass&gt;
   -database &lt;name&gt;        : mysql database &lt;name&gt;
 </pre></li>
-<li><p>Looping control</p>
+<li>Looping control
 <pre>  -loop                   : run autonomously, loops and sleeps
   -max_loops &lt;num&gt;        : perform max this # of loops in autonomous mode
   -run                    : run 1 iteration of automation loop
   -run_job_id &lt;job_id&gt;    : run 1 iteration for this job_id
   -sleep &lt;num&gt;            : when looping, sleep &lt;num&gt; minutes (default 2min)
 </pre></li>
-<li><p>Meadow control</p>
+<li>Meadow control
 <pre>  -local                  : run jobs on local CPU (fork)
   -local_cpus &lt;num&gt;       : max # workers to be running locally
   -wlimit &lt;num&gt;           : max # workers to create per loop
   -no_pend                : don't adjust needed workers by pending workers
   -lsf_options &lt;string&gt;   : passes &lt;string&gt; to LSF bsub command as &lt;options&gt;
 </pre></li>
-<li><p>Worker control</p>
+<li>Worker control
 <pre>  -jlimit &lt;num&gt;           : #jobs to run before worker can die naturally
   -batch_size &lt;num&gt;       : #jobs a worker can claim at once
   -lifespan &lt;num&gt;         : lifespan limit for each worker
   -logic_name &lt;string&gt;    : restrict the pipeline stat/runs to this analysis logic_name
   -maximise_concurrency 1 : try to run more different analyses at the same time
 </pre></li>
-<li><p>Other commands/options</p>
+<li>Other commands/options
 <pre>  -help                   : print this help
   -dead                   : clean dead jobs for resubmission
   -alldead                : all outstanding workers
