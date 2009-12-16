@@ -17,8 +17,8 @@ disclose probe sequences for a given micro array. The mapping process is a two-s
 <p>In the first step individual probes (oligonucleotides) are mapped to both the 
 genome sequence and the cDNA sequence. Transcript alignments are performed to capture probes which span
 introns. All alignments are stored with reference to the genome sequence i.e. transcript alignments are 
-reconsituted as gapped alignments against the genome. Alignments are stored in the extended cigar format as 
-defined by the <a href="http://samtools.sourceforge.net/SAM1.pdf">SAMTools group</a>.
+reconsituted as gapped alignments against the genome. Alignments are stored as ProbeFeatures using the 
+extended cigar format as defined by the <a href="http://samtools.sourceforge.net/SAM1.pdf">SAMTools group</a>.
 Alignments are performed using the Ensembl analysis pipeline, implementing the
 <a href="http://www.biomedcentral.com/1471-2105/6/31/abstract">Exonerate</a> sequence 
 comparison and alignment tool (Slater et al., 2005).  A default 1 bp mismatch is permitted
@@ -27,12 +27,12 @@ locations (e.g. suspected Alu repeats) are discarded and not stored in the datab
 
 <h2>Step Two: Ensembl Transcript Annotation</h2>
 <p>In the second step, we aim to associate microarray probes or probe sets with Ensembl transcript 
-predictions (ENST...). For arrays with probe sets (e.g. Affymetrix<sup>&reg;</sup>) it is normally required that 
-more than 50% of the probes in a probe set hit a given transcript sequence. Probe set sizes are determined 
-dynamically on a per probe set basis, rather than taking the array-wide value documented by the manufacturer. 
-Arrays which do not contain probesets as part of their design have transcript annotations assigned directly to 
-individual probes.</p>
-<p>A probe is matched to a transcript if it overlaps with an exon or UTR region with a minimum of 1bp mismatch.
+predictions (ENST...) using the ProbeFeatures generated from step one. For arrays with probe sets 
+(e.g. Affymetrix<sup>&reg;</sup>) it is normally required that more than 50% of the probes in a probe set 
+hit a given transcript sequence. Probe set sizes are determined dynamically on a per probe set basis, 
+rather than taking the array-wide value documented by the manufacturer. Arrays which do not contain 
+probesets as part of their design have transcript annotations assigned directly to individual probes.</p>
+<p>A ProbeFeature is matched to a transcript if it overlaps with an exon or UTR region with a minimum of 1bp mismatch.
 To account for conservative UTR estimation, transcript cDNA sequences are extended by the length of the UTR. 
 Where annotated UTRs are absent a default UTR length is used, calculated for both five and three prime UTRs 
 as the highest of either the mean or the median of all annotated UTRs for a given species.</p>
