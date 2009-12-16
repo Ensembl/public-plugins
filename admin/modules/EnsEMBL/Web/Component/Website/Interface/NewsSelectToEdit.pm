@@ -30,7 +30,7 @@ sub content {
 
   my @values = ({'name' => '-- Select --', 'value' => ''});
   foreach my $story (@sorted) {
-    next unless $story->declaration;
+    next unless $story->title;
     push @values, {'name' => $story->team.' - '.substr($story->declaration, 0, 50), 'value' => $story->id};
   }
 
