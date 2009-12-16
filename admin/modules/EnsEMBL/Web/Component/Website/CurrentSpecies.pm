@@ -8,6 +8,7 @@ use warnings;
 no warnings "uninitialized";
 use base qw(EnsEMBL::Web::Component);
 use EnsEMBL::Web::Data::Release;
+use EnsEMBL::Web::Data::ReleaseSpecies;
 
 sub _init {
   my $self = shift;
@@ -42,8 +43,14 @@ N.B. You will normally only need to update the list of current species if it is 
 (e.g. at the beginning of the release cycle).
 </div>
     );
-  
-    my @species = $release->species;
+ 
+    my $rs = EnsEMBL::Web::Data::ReleaseSpecies->new(); 
+    my @xids = $rs->search({'release_id' => $release_id});
+    warn "XIDS @xids";
+    my @species;
+    foreach my $xid (@xids) {
+      push @species, EnsEMBL::Web::Data::Species->new($xid->species_id);
+    }
     if (@species) {
       $html .= $links;
       $html .= "<ul>\n";
