@@ -1,0 +1,76 @@
+<html>
+<head>
+<meta name="order" content="2" />
+  <meta name="navigation" content="eHive production system">
+  <title>eHive production system - runWorker</title>
+
+
+</head>
+
+<body>
+
+<h1>eHive production system</h1>
+
+<h2>runWorker manual</h2>
+
+<h3>NAME</h3>
+<p>runWorker.pl</p>
+
+<h3>DESCRIPTION</h3>
+<p>runWorker.pl is an eHive component script that does the work of a single Worker - specializes in one of the analyses and starts executing jobs of that analysis one-by-one or batch-by-batch.</p>
+
+<p>Most of the functionality of the eHive is accessible via <a href="beekeeper.html">beekeeper.pl script</a>, but feel free to run the runWorker.pl if you think you know what you are doing :)</p>
+
+<h3>USAGE EXAMPLES</h3>
+<p>Run one local worker process in ehive_dbname and let the system pick up the analysis</p>
+<pre>runWorker.pl --host=hostname --port=3306 --user=username --password=secret --database=ehive_dbname</pre>
+
+<p>Run one local worker process in ehive_dbname and let the system pick up the analysis (another connection syntax)</p>
+<pre>runWorker.pl -url mysql://username:secret@hostname:port/ehive_dbname</pre>
+
+<p>Run one local worker process in ehive_dbname and specify the logic_name</p>
+<pre>runWorker.pl -url mysql://username:secret@hostname:port/ehive_dbname -logic_name fast_blast</pre>
+
+<p>Create a job outside the eHive to test the specified input_id</p>
+<pre>runWorker.pl -url mysql://username:secret@hostname:port/ehive_dbname -logic_name fast_blast -input_id '{ "foo" => 1500 }'</pre>
+
+<h3>OPTIONS</h3>
+<ul>
+<li>Connection parameters
+<pre>  -conf &lt;path&gt;           : config file describing db connection
+  -regfile &lt;path&gt;        : path to a Registry configuration file
+  -regname &lt;string&gt;      : species/alias name for the Hive DBAdaptor
+  -url &lt;url string&gt;      : url defining where database is located
+  -host &lt;machine&gt;        : mysql database host &lt;machine&gt;
+  -port &lt;port#&gt;          : mysql port number
+  -user &lt;name&gt;           : mysql connection user &lt;name&gt;
+  -password &lt;pass&gt;       : mysql connection password
+  -database &lt;name&gt;       : mysql database &lt;name&gt;
+</pre></li>
+<li>Job/Analysis control parameters:
+<pre>  -analysis_id &lt;id&gt;      : analysis_id in db
+  -logic_name &lt;string&gt;   : logic_name of analysis to make this worker
+  -batch_size &lt;num&gt;      : #jobs to claim at a time
+  -limit &lt;num&gt;           : #jobs to run before worker can die naturally
+  -lifespan &lt;num&gt;        : number of minutes this worker is allowed to run
+  -outdir &lt;path&gt;         : directory where stdout/stderr is redirected
+  -bk &lt;string&gt;           : beekeeper identifier
+  -pid &lt;string&gt;          : externally set process_id descriptor (e.g. lsf job_id, array_id)
+  -input_id &lt;string&gt;     : test input_id on specified analysis (analysis_id or logic_name)
+  -job_id &lt;id&gt;           : run specific job defined by analysis_job_id
+  -analysis_stats        : show status of each analysis in hive
+  -no_cleanup            : don't perform global_cleanup when worker exits
+  -no_write              : don't write_output or auto_dataflow input_job
+</pre></li>
+<li>Other options:
+<pre>  -help                  : print this help
+  -debug &lt;level&gt;         : turn on debug messages at &lt;level&gt;
+</pre></li>
+</ul>
+<h3>CONTACT</h3>
+         Please contact ehive-users@ebi.ac.uk mailing list with questions/suggestions.
+
+
+<p><a href="index.html">Back</a></p>
+</body>
+</html>
