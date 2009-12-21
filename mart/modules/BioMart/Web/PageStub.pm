@@ -1,8 +1,7 @@
 package BioMart::Web::PageStub;
 use EnsEMBL::Web::RegObj;
 use EnsEMBL::Web::Document::Renderer::Apache;
-use EnsEMBL::Web::Document::Dynamic;
-use EnsEMBL::Web::Document::Static;
+use EnsEMBL::Web::Document::Page::Dynamic;
 use CGI::Session;
 use CGI::Session::Driver::mysql; # required by CGI::Session
 use CGI qw(self_url);
@@ -27,7 +26,7 @@ sub new {
   my $renderer = new EnsEMBL::Web::Document::Renderer::Apache;
   my $self = {};
   unless( CGI::self_url() =~ m/__.+ByAjax/ ) {
-    $page     = new EnsEMBL::Web::Document::Dynamic( $renderer,undef,$ENSEMBL_WEB_REGISTRY->species_defs );
+    $page     = new EnsEMBL::Web::Document::Page::Dynamic( $renderer,undef,$ENSEMBL_WEB_REGISTRY->species_defs );
     $page->_initialize_HTML unless $AJAX;
     $page->set_doc_type( 'none', 'none' );
 #    $page->masthead->sp_bio    ||= 'BioMart';
