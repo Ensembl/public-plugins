@@ -9,42 +9,37 @@
 <h1>Ensembl Variation</h1>
 
 <p>
-Ensembl imports variations including Single Nucleotide Polymorphisms
-(SNPs) and insertion-deletion mutations (Indels) and their flanking
-sequence from various sources. These sequences are aligned to the
-reference sequence. Variation positions are calculated in this way
-along with any effects on transcripts in the area. The majority of
-variations are obtained from NCBI <a rel="external"
-href="http://www.ncbi.nlm.nih.gov/projects/SNP/">dbSNP</a>. For human,
-other sources include <a rel="external"
-href="http://www.affymetrix.com/index.affx">Affy GeneChip Arrays</a>,
-The <a rel="external"
-href="http://www.ebi.ac.uk/ega/page.php">European Genome-phenome
-Archive (EGA)</a>, and whole genome alignments of individual sequences
-from Venter (Levy, 2007), Watson (Wheeler, 2008) and Celera
-individuals (Venter, 2001) to the reference sequence. Sources for
-other species include Sanger resequencing projects
-for <a rel="external"
-href="http://www.sanger.ac.uk/Projects/M_musculus/">mouse</a>, and
-alignments of sequences from
-the <a href="/Rattus_norvegicus/star/index.html"
-class="cp-external">STAR consortium</a> for rat. Ancestral alleles
-from <a rel="external"
-href="http://www.ncbi.nlm.nih.gov/projects/SNP/">dbSNP</a> were
-determined through a comparison study of human and chimp DNA (Spencer,
-2006).
+Ensembl stores structural variants as well as sequence variants i.e.
+Single Nucleotide Polymorphisms (SNPs) and insertion-deletion mutations (Indels).
+</p>
+
+<h2> Sources of Variation Data </h2>
+<p>
+The majority of variants are downloaded from NCBI <a rel="external"
+href="http://www.ncbi.nlm.nih.gov/projects/SNP/">dbSNP</a>. 
+The data is imported when it is released by dbSNP and incorporated
+into the next Ensembl release. If dbSNP releases the data on a different assembly,
+Ensembl will remap the variant positions onto the current assembly.
+Data from projects like 
+the <a rel="external" href="http://www.HapMap.org/">HapMap Project</a>
+ and <a rel="external" href="http://www.1000genomes.org/page.php">1000
+Genomes Project</a> is imported once it has been submitted to <a rel="external"
+href="http://www.ncbi.nlm.nih.gov/projects/SNP/">dbSNP</a>. 
 </p>
 
 <p>
-Future directions: Ensembl will be incorporating data from
-the <a rel="external" href="http://www.1000genomes.org/page.php">1000
-Genomes Project</a> including structural variation data once this has
-been submitted to <a rel="external"
-href="http://www.ncbi.nlm.nih.gov/projects/SNP/">dbSNP</a>. Ensembl is
-also working towards increasing the phenotype data resources and their
-relationship to genotypes.
-</p>
+Ensembl also includes data from other sources. For a complete list, go to
+a species Location page (e.g. <a href="http://www.ensembl.org/Homo_sapiens/Location/View?r=6:133017695-133161157"> for human</a>),
+ and click on the "Configure Your Page" link on the left-hand side.
+The variation section of this contains a detailed description of all sources of variation data
+for that species. For example, in human there is data from Illumina chips, 
+<a rel="external"
+href="http://www.affymetrix.com/index.affx">Affy GeneChip Arrays</a>, the
+<a rel="external"
+href="http://www.ebi.ac.uk/ega/page.php">European Genome-phenome
+Archive (EGA) </a> as well as an increasing amount of phenotype data.</p>
 
+<h2> Variation Displays </h2>
 <p>
 Variations and sources can be viewed in the browser through pages such
 as:
@@ -63,10 +58,34 @@ sources in DAS format such as <a rel="external"
 href="http://projects.tcag.ca/variation/">DGV loci</a>.)</li>
 </ul>
 
-<p><strong>Variation Types</strong></p>
+<p>
+Clicking on any variation on an Ensembl page will open a Variation tab
+with information about the flanking sequence and source for the
+selected variation. Links to linkage disequilibrium (LD) plots,
+phenotype information (for human) from EGA and <a rel="external"
+href="http://www.genome.gov/">NHGRI</a> and Ensembl genes and
+transcripts that include the variation can be found at the left of
+this tab. You may also view multiple genome alignments of various
+species, highlighting the
+variation. <a href="/info/docs/compara/analyses.html#ancestral"
+class="cp-external">Ancestral sequences</a> are included in this
+display. 
+</p>
 
 <p>
-The variation types describe the location or effect on the transcript.
+Variation information can also be accessed
+using <a href="/info/data/biomart.html"
+class="cp-external">BioMart</a> (gene or variation database), and
+the <a href="/info/docs/api/index.html" class="cp-external">Perl
+API</a> (<a href="/info/docs/api/variation/index.html"
+class="cp-external">variation databases</a>).
+</p>
+
+
+<h2> Predicted variation consequences</h2>
+
+<p>
+The variation consequence types describe the location or effect on the transcript.
 </p>
 
 <ul>
@@ -123,30 +142,6 @@ microRNA.</li>
 that does not code for a protein.</li>
 
 </ul>
-
-<p>
-Clicking on any variation on an Ensembl page will open a Variation tab
-with information about the flanking sequence and source for the
-selected variation. Links to linkage disequilibrium (LD) plots,
-phenotype information (for human) from EGA and <a rel="external"
-href="http://www.genome.gov/">NHGRI</a> and Ensembl genes and
-transcripts that include the variation can be found at the left of
-this tab. You may also view multiple genome alignments of various
-species, highlighting the
-variation. <a href="/info/docs/compara/analyses.html#ancestral"
-class="cp-external">Ancestral sequences</a> are included in this
-display. 
-</p>
-
-<p>
-Variation information can also be accessed
-using <a href="/info/data/biomart.html"
-class="cp-external">BioMart</a> (gene or variation database), and
-the <a href="/info/docs/api/index.html" class="cp-external">Perl
-API</a> (<a href="/info/docs/api/variation/index.html"
-class="cp-external">variation databases</a>).
-</p>
-
 <h2>References</h2>
 
 <p>
