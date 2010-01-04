@@ -16,7 +16,7 @@ sub process {
   my $object = $self->object;
 
   ## Create interface object, which controls the forms
-  my $interface = EnsEMBL::Web::Interface->new();
+  my $interface = $self->interface;
 
   my $data = EnsEMBL::Web::Data::HcAnnotation->find_or_create({'report_id' => $object->param('id')});
 

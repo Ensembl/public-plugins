@@ -14,7 +14,7 @@ use base 'EnsEMBL::Web::Command';
 sub process {
   my $self = shift;
   my $object = $self->object;
-  my $interface = $object->interface;
+  my $interface = $self->interface;
   my $url = '/Website/Declaration/List';
 
   my $param = {

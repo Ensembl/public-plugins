@@ -16,7 +16,7 @@ sub process {
   my $data;
 
   ## Create interface object, which controls the forms
-  my $interface = EnsEMBL::Web::Interface->new();
+  my $interface = $self->interface;
 
   $data = EnsEMBL::Web::Data::Glossary->new($object->param('id'));
   

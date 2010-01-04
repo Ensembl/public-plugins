@@ -17,7 +17,7 @@ sub process {
   my $data;
 
   ## Create interface object, which controls the forms
-  my $interface = EnsEMBL::Web::Interface->new();
+  my $interface = $self->interface;
 
   $data = EnsEMBL::Web::Data::NewsItem->new($object->param('id'));
   $interface->data($data);
