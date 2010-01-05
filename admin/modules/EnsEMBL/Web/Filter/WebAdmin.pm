@@ -8,26 +8,22 @@ use EnsEMBL::Web::Registry;
 
 use base qw(EnsEMBL::Web::Filter);
 
-{
+sub init {
+  my $self = shift;
 
-sub BUILD {
-  my ($self, $ident, $args) = @_;
-  $self->set_redirect('/Account/Login?popup=no');
-  ## Set the messages hash here
-  $self->set_messages({
-    'not_member' => 'You are either not logged in or you are not a member of this group. If you think this is incorrect, please contact the web team.',
-  });
+  $self->redirect = '/Account/Login?popup=no';
+  $self->messages = {
+    not_member => 'You are either not logged in or you are not a member of this group. If you think this is incorrect, please contact the web team.',
+  };
 }
 
 
 sub catch {
   my $self = shift;
-  my $user  = $EnsEMBL::Web::RegObj::ENSEMBL_WEB_REGISTRY->get_user;
+  my $user = $EnsEMBL::Web::RegObj::ENSEMBL_WEB_REGISTRY->get_user;
   unless ($user && $user->is_member_of($self->object->species_defs->ENSEMBL_WEBADMIN_ID)) {
-    $self->set_error_code('not_member');
+    $self->error_code = 'not_member';
   }
-}
-
 }
 
 1;
