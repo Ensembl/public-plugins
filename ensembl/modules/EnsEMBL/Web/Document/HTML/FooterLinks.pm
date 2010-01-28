@@ -3,8 +3,6 @@ package EnsEMBL::Web::Document::HTML::FooterLinks;
 ### Replacement footer links for www.ensembl.org
 
 use strict;
-use CGI qw(escapeHTML);
-use EnsEMBL::Web::RegObj;
 
 use base qw(EnsEMBL::Web::Document::HTML);
 

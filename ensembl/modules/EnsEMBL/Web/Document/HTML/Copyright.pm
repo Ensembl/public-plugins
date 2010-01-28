@@ -3,11 +3,10 @@ package EnsEMBL::Web::Document::HTML::Copyright;
 ### Replacement copyright notice for www.ensembl.org
 
 use strict;
-use CGI qw(escape);
-use EnsEMBL::Web::Document::HTML;
+use URI::Escape qw(uri_escape);
 use EnsEMBL::Web::RegObj;
 
-our @ISA = qw(EnsEMBL::Web::Document::HTML);
+use base qw(EnsEMBL::Web::Document::HTML);
 
 sub new { return shift->SUPER::new( 'sitename' => '?' ); }
 
@@ -21,8 +20,8 @@ sub render {
   my $sd = $ENSEMBL_WEB_REGISTRY->species_defs;
 
   my $you_are_here = $ENV{'REQUEST_URI'};
-  my $referer      = CGI::escape($you_are_here);
-  my $stable_URL   = CGI::escape('http://'. $sd->ARCHIVE_VERSION .'.archive.ensembl.org'. $you_are_here);
+  my $referer      = uri_escape($you_are_here);
+  my $stable_URL   = uri_escape('http://'. $sd->ARCHIVE_VERSION .'.archive.ensembl.org'. $you_are_here);
 
   $self->printf(
     q(
