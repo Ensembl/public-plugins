@@ -3,36 +3,36 @@ Chimpanzee (Pan troglodytes)<br />
 Gorilla (Gorilla gorilla)<br />
 Orangutan (Pongo pygmaeus)<br />
 Macaque (Macaca mulatta)<br />
-Tarsier (Tarsius syrichta)<br />
 Marmoset (Callithrix jacchus)<br />
+Tarsier (Tarsius syrichta)<br />
 Mouse Lemur (Microcebus murinus)<br />
 Bushbaby (Otolemur garnettii)<br />
 Tree Shrew (Tupaia belangeri)<br />
-Rabbit (Oryctolagus cuniculus)<br />
-Pika (Ochotona princeps)<br />
-Squirrel (Spermophilus tridecemlineatus)<br />
 Mouse (Mus musculus)<br />
 Rat (Rattus norvegicus)<br />
 Kangaroo rat (Dipodomys ordii)<br />
 Guinea Pig (Cavia porcellus)<br />
-Cow (Bos taurus)<br />
-Dolphin (Tursiops truncatus)<br />
+Squirrel (Spermophilus tridecemlineatus)<br />
+Rabbit (Oryctolagus cuniculus)<br />
+Pika (Ochotona princeps)<br />
 Alpaca (Vicugna pacos)<br />
+Dolphin (Tursiops truncatus)<br />
+Cow (Bos taurus)<br />
 Pig (Sus scrofa)<br />
-Dog (Canis familiaris)<br />
-Cat (Felis catus)<br />
 Horse (Equus caballus)<br />
+Cat (Felis catus)<br />
+Dog (Canis familiaris)<br />
 Microbat (Myotis lucifugus)<br />
 Megabat (Pteropus vampyrus)<br />
 Hedgehog (Erinaceus europaeus)<br />
 Shrew (Sorex araneus)<br />
-Hyrax (Procavia capensis)<br />
 Elephant (Loxodonta africana)<br />
+Hyrax (Procavia capensis)<br />
 Lesser hedgehog tenrec (Echinops telfairi)<br />
-Sloth (Choloepus hoffmanni)<br />
 Armadillo (Dasypus novemcinctus)<br />
-Wallaby (Macropus eugenii)<br />
+Sloth (Choloepus hoffmanni)<br />
 Opossum (Monodelphis domestica)<br />
+Wallaby (Macropus eugenii)<br />
 Platypus (Ornithorhynchus anatinus)<br />
 Chicken (Gallus gallus)<br />
 Turkey (Meleagris gallopavo)<br />
