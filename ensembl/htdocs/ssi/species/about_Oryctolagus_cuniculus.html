@@ -1,26 +1,34 @@
 <h3>Assembly</h3>
 
 <p><img src="/img/species/pic_Oryctolagus_cuniculus.png" style="height:100px;width:100px" class="float-left" alt="Rabbit" title="Eh, what's up, doc?" />
-This is the first release of the low-coverage 2X assembly of rabbit 
-(<i>Oryctolagus cuniculus</i>).
-The genome sequencing and assembly are provided by the <a href="http://www.broad.mit.edu">Broad Institute</a>.
+This is the new high-coverage assembly of rabbit (<i>Oryctolagus cuniculus</i>). The genome sequencing and assembly are provided by the <a href="http://www.broad.mit.edu">Broad Institute</a> within the mammalian genome project.
 </p>
 
-<p>The N50 size is the length such that 50% of the assembled genome lies in 
-blocks of the N50 size or longer.
-The N50 length for supercontigs is 54 kb and is 3.2 kb for contigs. The 
-total number of bases in supercontigs is
-3.45 Gb and in contigs is 2.08 Gb.</p>
+<p>
+The N50 size is the length such that 50% of the assembled genome
+lies in blocks of the N50 size or longer. The N50 length for
+supercontigs is 35 kb and is 0.6 kb for contigs. The total
+number of bases in supercontigs is 2.67 Gb and in contigs is 2.6
+Gb.
+</p>
 
 <h3 style="clear:left">Annotation</h3>
+<p>The gene set for rabbit was built using the Ensembl genebuild
+pipeline. Gene models are based on genewise alignments of glire
+proteins as well as genetically distant proteins from other
+species, including most mammal proteins from Uniprot. To improve
+the accuracy of models generated from distant species, the
+Genewise alignments were made to stretches of genomic sequence
+rather than to 'miniseqs'. Additionnaly, human and mouse
+one-to-one orthologues were aligned using exonerate, combined
+with rabbit-specific proteins. The protein based gene models
+were then extended using rabbit cDNA and EST alignments. The
+resulting gene models were then assessed by generating sets of
+potential orthologs to genes from other vertebrate species.
+Potentially missing predictions and partial gene predictions
+were identified by examining the orthologs, which were then used
+to build new gene models. </p>
 
-<p>Owing to the fragmentary nature of this preliminary assembly, it was
-necessary to arrange some scaffolds into "gene-scaffold"
-super-structures, in order to present complete genes. There
-are 7268 such gene-scaffolds, with identifiers of the form
-"GeneScaffold_1".</p>
-
-<ul><li><a href="/info/docs/genebuild/2x_genomes.html">Details of the gene-scaffold construction and subsequent gene-build</a></li></ul>
 
 
 <h3>Mammalian Genome Project</h3>
