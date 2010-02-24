@@ -1,0 +1,152 @@
+<html>
+<head>
+<meta name="order" content="2" />
+  <meta name="navigation" content="eHive production system">
+  <title>eHive production system - Installation</title>
+
+
+</head>
+
+<body>
+
+<h1>eHive production system - Installation</h1>
+
+<h2>Download and install the necessary external software</h2>
+
+<p>Note: You may have these packages already installed in your system.</p>
+
+<ol>
+<li>
+<a href="http://www.perl.com/download.csp">Perl 5.6 or higher</a>, since eHive code is written in Perl.
+</li>
+<li>
+<a href="http://dev.mysql.com/downloads/">MySQL 5.1 or higher</a>
+<br />eHive keeps its state in a MySQL database, so you will need
+<ul>
+<li>a MySQL server installed on the machine where you want to maintain the state and</li>
+<li>MySQL clients installed on the machines where the jobs are to be executed.</li>
+</ul>
+MySQL version 5.1 or higher is recommended to maintain compatibility with Compara pipelines.
+</li>
+<li>
+<a href="http://dbi.perl.org/">Perl DBI API</a>
+<br />Perl database interface that includes API to MySQL
+</li>
+<li>
+<a href="http://search.cpan.org/dist/Data-UUID/">Perl UUID API</a>
+<br />eHive uses Universally Unique Identifiers (UUIDs) to identify workers internally.
+</li>
+</ol>
+
+<h2>Download and install essential and optional packages from BioPerl and EnsEMBL CVS</h2>
+<ol>
+<li>
+Create a directory for the source code.
+<br />It is advised to have a dedicated directory where EnsEMBL-related packages will be deployed. Unlike DBI or UUID modules that can be installed system-wide by the system administrator, you will benefit from full (read+write) access to the EnsEMBL files/directories, so it is best to install them under your home directory. For example,
+
+<pre>$ mkdir $HOME/ensembl_main</pre>
+
+It will be convenient to set a variable pointing at this directory for future use:
+<ul>
+<li>
+using bash syntax (for best results, append this line to your ~/.bashrc configuration file):
+<pre>$ export ENS_CODE_ROOT="$HOME/ensembl_main"</pre>
+</li>
+<li>
+using [t]csh syntax (for best results, append this line to your ~/.cshrc or ~/.tcshrc configuration file):
+<pre>$ setenv ENS_CODE_ROOT "$HOME/ensembl_main"</pre>
+</li>
+</ul>
+</li>
+
+<li>
+Change into your ensembl codebase directory:
+<pre>$ cd $ENS_CODE_ROOT</pre>
+</li>
+<li>
+Log into the BioPerl CVS server (using "cvs" for password):
+<pre>$ cvs -d :pserver:cvs@code.open-bio.org:/home/repository/bioperl login</pre>
+</li>
+<li>
+Export the bioperl-live package:
+<pre>$ cvs -d :pserver:cvs@code.open-bio.org:/home/repository/bioperl export bioperl-live</pre>
+</li>
+<li>
+Log into the EnsEMBL CVS server at Sanger (using "CVSUSER" for password):
+<pre>$ cvs -d :pserver:cvsuser@cvs.sanger.ac.uk:/cvsroot/ensembl login
+Logging in to :pserver:cvsuser@cvs.sanger.ac.uk:2401/cvsroot/ensembl
+CVS password: CVSUSER</pre>
+</li>
+<li>
+Export ensembl and ensembl-hive CVS modules:
+<pre>$ cvs -d :pserver:cvsuser@cvs.sanger.ac.uk:/cvsroot/ensembl export ensembl
+$ cvs -d :pserver:cvsuser@cvs.sanger.ac.uk:/cvsroot/ensembl export ensembl-hive</pre>
+</li>
+<li>
+In the likely case you are going to use eHive in the context of Compara pipelines, you will also need to install ensembl-compara:
+<pre>$ cvs -d :pserver:cvsuser@cvs.sanger.ac.uk:/cvsroot/ensembl export ensembl-compara</pre>
+</li>
+<li>
+Add new packages to the PERL5LIB variable:
+<ul>
+<li>using bash syntax (for best results, append these lines to your ~/.bashrc configuration file):
+<pre>$ export PERL5LIB=${PERL5LIB}:${ENS_CODE_ROOT}/bioperl-live
+$ export PERL5LIB=${PERL5LIB}:${ENS_CODE_ROOT}/ensembl/modules
+$ export PERL5LIB=${PERL5LIB}:${ENS_CODE_ROOT}/ensembl-hive/modules
+$ export PERL5LIB=${PERL5LIB}:${ENS_CODE_ROOT}/ensembl-compara/modules # optional but recommended, see previous point.
+</pre>
+</li>
+<li>
+using [t]csh syntax (for best results, append these lines to your ~/.cshrc or ~/.tcshrc configuration file):
+<pre>$ setenv PERL5LIB  ${PERL5LIB}:${ENS_CODE_ROOT}/bioperl-live
+$ setenv PERL5LIB  ${PERL5LIB}:${ENS_CODE_ROOT}/ensembl/modules
+$ setenv PERL5LIB  ${PERL5LIB}:${ENS_CODE_ROOT}/ensembl-hive/modules
+$ setenv PERL5LIB  ${PERL5LIB}:${ENS_CODE_ROOT}/ensembl-compara/modules # optional but recommended, see previous point.
+</pre>
+</li>
+</ul>
+</ol>
+
+<h2>Create a variable with MySQL connection parameters</h2>
+<p>It is convenient to set a variable with MySQL connection parameters to the MySQL instance where you'll be creating eHive pipelines (which means, you'll need priveleges to create databases and to write into them):</p>
+<ul>
+<li>
+using bash syntax:</p>
+<pre>$ export MYCONN="--host=hostname --port=3306 --user=mysql_username --password=SeCrEt"</pre>
+</li>
+<li>
+using [t]csh syntax:</p>
+<pre>$ setenv MYCONN "--host=hostname --port=3306 --user=mysql_username --password=SeCrEt"</pre>
+</li>
+</ul>
+<p>The same syntax will work for eHive control scripts, so you'll be using the same variable.</p>
+
+
+<h2>Create an "empty" eHive database</h2>
+
+<p>The state of each eHive is maintained in a MySQL database that has to be created from the file ensembl-hive/sql/tables.sql:</p>
+<pre>$ mysql $MYCONN -e 'CREATE DATABASE ehive_test'
+$ mysql $MYCONN ehive_test < $ENS_CODE_ROOT/ensembl-hive/sql/tables.sql</pre>
+
+<p>In this step you have created a database with empty tables that will have to be "loaded" with tasks to perform, depending on the particular pipeline you want to run.</p>
+
+<h2>Configure and load a pipeline</h2>
+
+<p>Now the structure of a particular pipeline has to be defined:</p>
+<p><strong>(A)</strong> Each 'analysis' table entry describes a particular type of job that can be run, with the corresponding Perl module to run and the generic parameters for that module. Most of our pipelines have more than one analysis.</p>
+<p><strong>(B)</strong> Each 'control_rule' table entry links two analyses A and B in such a way that until all A-jobs have been completed none of the B-jobs can be started.</p>
+<p><strong>(C)</strong> Each 'dataflow_rule' table entry links two analyses A and B in such a way that when an A-job completes, it is said to "flow into" a B-job (a B-job is automatically created for each A-job, and parameters are passed from A to B individually).</p>
+<p><strong>(D)</strong> A particular pipeline may have extra tables defined to store the intermediate and final results of computation. They may need to be loaded with some initial data.</p>
+<p><strong>(E)</strong> A certain number of jobs will have to be loaded into 'analysis_job' table (this number won't usually reflect the total number of jobs, as jobs can create other jobs or "flow into" them).</p>
+<p>The task of loading all the components of pipelines is usually automated by a configuration script
+(or sometimes two, the first for loading "pipeline definition" (A-D) and the second for loading jobs (E) )</p>
+<p>Please familiarize yourself with the <a href="example1.html">Toy example</a> that gives step-by-step instructions on how to load and run our toy pipeline for distributed multiplication of long numbers. Although it is a toy pipeline, it gives a good example on how to address each of the points (A)..(E) listed above.</p>
+
+<h2>Scripts used for sending Workers to the farm</h2>
+
+<p>The scripts used to control the loading/execution of eHive pipelines are stored in "$ENS_CODE_ROOT/ensembl-hive/scripts" directory. (Again, we suggest that you add $ENS_CODE_ROOT/ensembl-hive/scripts to your executable PATH variable to avoid much typing.)</p>
+<p>The main script to query and run the eHive pipelines is '<a href="beekeeper.html">beekeeper.pl</a>', but the other two scripts '<a href="runWorker.html">runWorker.pl</a>' and 'cmd_hive.pl' may also become useful at some point. Running each script without parameters will provide the list of options and usage examples.</p>
+
+<p><a href="index.html">Back</a></p>
+</body>
+</html>

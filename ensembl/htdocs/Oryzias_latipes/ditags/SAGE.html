@@ -1,0 +1,86 @@
+<html>
+<head>
+<title>5'-SAGE tags from the University of Tokyo</title>
+</head>
+<body>
+     
+<h2>Medaka: University of Tokyo 5'-SAGE</h2>
+        
+<h3>Description</h3>
+
+<p>This track shows the start sequence tags of mRNA transcripts determined
+by 5'-end Serial Analysis of Gene Expression (5'-SAGE) sequencing. These
+5'-SAGE tags are composed of 19 bases from the 5'-end of a cDNA. See the
+<a href="/Homo_sapiens/ditags/GIS_PET.html#refs">Human tag pages</a> 
+for more details on 5'-SAGE sequencing.</p>
+
+<h4>5'-SAGE libraries</h4>
+
+<ul>
+<li>ACAAA from medaka 0 - 7-day-old embryos and adult body tissues. 
+<a href="ftp://ftp.ddbj.nig.ac.jp/database/mga/AC_resource_index.html">FTP link</a></li>
+</ul>
+
+<p>The 5'-SAGE tag features are represented as small boxes. Clicking on the
+feature brings up a menu with information about this tag and a link to
+this more detailed description.</p>
+
+<h3>Alignments</h3>
+
+<p>The 5'-SAGE tags were aligned to the unmasked genome
+sequence using <a href="http://www.ebi.ac.uk/%7Eguy/exonerate/">Exonerate</a>.
+The hits were filtered using the following strategy:</p>
+<ul>
+  <li>score &gt;= 90, considering only highest scoring hits</li>
+  <li>if a tag aligned to more than 4 genomic locations, it was discarded
+as being unreliable</li>
+  <li>if a tag aligned to a genomic location with more than one
+mismatch, it was discarded as being unreliable</li>
+  <li>sequences with non-(ATGC) characters were removed</li>
+  <li>sequences with poly(ATGC) &gt; 5 were removed</li>
+</ul>
+
+<h4>Credits</h4>
+
+<p>The <a href="ftp://ftp.ddbj.nig.ac.jp/database/mga/AC_resource_index.html">5'-SAGE libraries</a> 
+were produced at the <a href="http://www.u-tokyo.ac.jp/index_e.html">University of Tokyo</a>
+and <a href="http://www.bii.a-star.edu.sg/index.asp">Bioinformatics Institute</a>.
+The data was mapped and analyzed using code from the <a href="http://www.ensembl.org">EnsEMBL</a> project.</p>
+
+<h4 id="refs">References</h4>
+
+<p>Hashimoto,S., Ahsan,B., Takeda,H., Morishita,S. and Kohara,Y.<br />
+Submission of 356,693 entries (accession numbers
+ACAAA0000001-ACAAA0356693) to the DDBJ/EMBL/GenBank databases on 14
+November 2006.</p>
+
+<p>Kasahara,M., Naruse,K., Sasaki,S., Nakatani,Y., Qu,W., Ahsan,B.,
+Yamada,T., Nagayasu,Y., Doi,K., Kasai,Y., Jinbo,T., Kobayashi,D.,
+Shimada,A., Toyoda,A., Kuroki,Y., Fujiyama,A., Sasaki,T., Shimizu,A.,
+Asakawa,S., Shimizu,N., Hashimoto,S., Yang,J., Lee,Y., Matsushima,K.,
+Sugano,S., Sakaizumi,M., Narita,T., Ohishi,K., Haga,S., Ohta,F.,
+Nomoto,H., Nogata,K., Morishita,T., Endo,T., Shin-i,T., Takeda,H.,
+Morishita,S. and Kohara,Y.<br />
+_The medaka draft genome : new insights into vertebrate genome evolution_
+/Unpublished (2006)/</p>
+
+<p>Hashimoto,S., Suzuki,Y., Kasai,Y., Morohoshi,K., Yamada,T., Sese,J.,
+Morishita,S., Sugano,S. and Matsushima,K.<br />
+<a href="http://www.nature.com/nbt/journal/v22/n9/abs/nbt998.html">5'-end SAGE 
+for the analysis of transcriptional start sites</a><br />
+<em>Nat. Biotechnol.&nbsp;22</em>, 1146-1149 (2004)</p>
+
+
+<p>Slater,G.S. and Birney,E.<br />
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&list_uids=15713233&dopt=Abstract&holding=f1000,f1000m,igbwellib">Automated generation of heuristics for biological sequence comparison</a><br />
+<em>BMC Bioinformatics 6(1)</em>, 31 (2005).</p>
+
+<h4>Links</h4>
+<ul class="spaced">
+<li><a href="http://medaka.utgenome.org">UT Genome Browser (Medaka)</a></li>
+<li><a href="http://5sage.gi.k.u-tokyo.ac.jp">5' SAGE database search</a></li>
+</ul>
+
+</body>
+</html>
+

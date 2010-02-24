@@ -1,0 +1,49 @@
+<html>
+<head>
+<title>PETs from the Genome Institute of Singapore</title>
+</head>
+<body>
+     
+<h2>Genome Institute of Singapore: paired-end ditags of PolyA+ RNA</h2>
+        
+<h3 class="boxed">Mapping of transcript tags (ditags)</h3>
+
+<p><strong>Data version</strong>: ENCODE Oct 2005 Freeze</p>
+
+<h4>Description</h4>
+
+<p>This track shows the start and end sequence tags of mRNA transcripts determined by paired-end ditag (PET) sequencing. PETs are composed of 18 bases from either end of a cDNA; 36 bp PETs from many clones were concatenated together and cloned into pZero-1 for efficient sequencing. See the <a href="#methods">Methods</a> and <a href="#refs">References</a> sections below for more details on PET sequencing.</p>
+<p>The PET sequences in this track are full-length transcripts derived from the cell line MCF7.Only tags mapping to ENCODE regions are shown. The 5' and 3' ends of the ditag features are represented as small boxes connected by a horizontal arrow indicating the strand/direction. Clicking on the feature brings up a menu with information about this ditag and a link to this more detailed description.</p>
+
+<h4 id="methods">Methods</h4>
+
+<p>PolyA+ RNA was isolated from the cells. A full-length cDNA library was constructed and converted into a PET library for Gene Identification Signature analysis (Ng et al., 2005). Generation of PET sequences involved cloning of cDNA sequences into the plasmid vector, pGIS3. pGIS3 contains two MmeI recognition sites that flank the cloning site, which were used to produce a 36 bp PET. Each 36 bp PET sequence contains 18 bp from each of the 5' and 3' ends of the original full-length cDNA clone. The 18 bp 3' signature contains 16 bp 3'-specific nucleotides and an AA residual of the polyA tail to indicate the sequence orientation. PET sequences were mapped to the genome using the following specific criteria:</p>
+
+<ul>
+<li>a minimal continuous 16 bp match must exist for the 5' signature; the 3' signature must have a minimal continuous 14 bp match</li>
+<li>both 5' and 3' signatures must be present on the same chromosome</li>
+<li>their 5' to 3' orientation must be correct</li>
+<li>the maximal genomic span of a PET genomic alignment must be less than one million bp</li>
+</ul>
+
+<p>Most of the PET sequences (more than 90%) were mapped to specific locations (single mapping loci). PETs mapping to 2 - 10 locations are also included and may represent duplicated genes or pseudogenes in the genome.</p>
+
+<h4>Verification</h4>
+
+<p>To assess overall PET quality and mapping specificity, the top ten most abundant PET clusters that mapped to well-characterized known genes were examined. Over 99% of the PETs represented full-length transcripts, and the majority fell within ten bp of the known 5' and 3' boundaries of these transcripts. The PET mapping was further verified by confirming the existence of physical cDNA clones represented by the ditags. PCR primers were designed based on the PET sequences and amplified the corresponding cDNA inserts from the parental GIS flcDNA library for sequencing analysis. In a set of 86 arbitrarily-selected PETs representing a wide range of annotation categories including known genes (38 PETs), predicted genes (2 PETs), and novel transcripts (46 PETs) 84 (97.7%) confirmed the existence of bona fide transcripts.</p>
+
+<h4>Credits</h4>
+
+<p>The GIS-PET libraries and sequence data for transcriptome analysis were produced at the <a href="http://www.gis.a-star.edu.sg/">Genome Institute of Singapore</a>.</p>
+<p>The data were mapped and analyzed by scientists from the Genome Institute of Singapore and the <a href="http://www.bii.a-star.edu.sg/">Bioinformatics Institute of Singapore</a>.</p>
+
+<h4 id="refs">References</h4>
+
+<p>Ng P, Wei CL, Sung WK, Chiu KP, Lipovich L, Ang CC, Gupta S, Shahab A, Ridwan A, Wong CH, Liu ET, Ruan Y.
+<br /><a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=pubmed&dopt=Abstract&list_uids=15782207&query_hl=1">Gene identification signature (GIS) analysis for transcriptome characterization and genome annotation</a>.
+<br /><em>Nat. Methods 2(2)</em>, 105-11 (2005). </p>
+
+        
+</body>
+</html>
+

@@ -1,0 +1,60 @@
+<html>
+<head>
+<meta name="order" content="1" />
+<title>Gene Annotation</title>
+</head>
+
+<body>
+
+<h1>The Ensembl Annotation Process</h1>
+
+<h2>Main genebuild</h2>
+
+<p>
+Genes are annotated using an automated pipeline in the genebuild
+procedure. These transcripts are based on mRNA and proteins in public
+scientific databases. Transcripts from this pipeline are combined
+with a reviewed, manually curated set from the <a rel="external"
+href="http://vega.sanger.ac.uk/index.html">Vega project</a>, along
+with reviewed protein coding transcripts from
+the <a href="ccds.html">CCDS project</a>.
+</p>
+
+<p>
+See the <a href="genome_annotation.html">annotation article</a> for
+more about the Ensembl pipeline, gene names and annotation. A
+description of EST genes is also included in this article.
+</p>  
+
+<h2>More genes</h2>
+
+<p>
+Ensembl also includes automatically-annotated <a href="ig_tcr.html">Ig
+segments</a> and <a href="ncrna.html">non-coding RNAs</a>.
+</p>
+
+<h2>Annotation methods</h2>
+
+<ul>
+
+<li><a rel="external"
+href="http://www.ebi.ac.uk/~guy/exonerate/">Exonerate</a> is a tool
+for pairwise sequence comparison, used in the Ensembl genebuild to
+align mRNA to the assembly. This generic tool allows many alignment
+models to be used, either using exhaustive dynamic programming or a
+variety of heuristics.</li>
+
+<li><a rel="external"
+href="http://www.ebi.ac.uk/Tools/Wise2/index.html">Wise2</a>, also
+used in the genebuild, focuses on comparisons of biopolymers, commonly
+DNA and protein sequence. Algorithms in this package include genewise
+and estwise.</li>
+
+<li><a href="2x_genomes.html">Low-coverage genomes</a> are annotated
+using a modified pipeline which attempts to locate genes across
+multiple scaffolds. </li>
+
+</ul>
+
+</body>
+</html>

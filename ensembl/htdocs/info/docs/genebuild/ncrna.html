@@ -1,0 +1,130 @@
+<html>
+<head>
+<title>Annotation of Non-Coding RNAs</title>
+</head>
+
+<body>
+
+<h1>Annotation of Non-Coding RNAs</h1>
+
+<h2>Non-coding RNA Overview</h2>
+
+<p>
+<strong>Non-coding RNAs</strong> (ncRNAs) are involved in many
+biological processes and are increasingly seen as important. As is the
+case with proteins, it is the overall structure of the molecule which
+imparts function. However, while similar protein structures are often
+reflected in a conserved amino acid sequence, sequences underlying RNA
+secondary structure are very variable; this makes ncRNAs difficult to
+detect using sequence alone.
+</p>
+
+<p>
+Because of this, we use a variety of techniques to detect
+ncRNAs. First, a combination of sensitive BLAST searches are used to
+identify likely targets, then a covariance model search is used to
+measure the probability that the targets can fold into the structures
+required. Other ncRNAs are added as part of the raw compute stage.
+</p>
+
+<p>
+The following non-coding RNA gene types are annotated, along with
+pseudogenes
+</p>
+
+<dl>
+
+<dt>tRNA</dt><dd>transfer RNA</dd>
+<dt>Mt-tRNA</dt><dd>transfer RNA located in the mitochondrial genome</dd>
+<dt>rRNA</dt><dd>ribosomal RNA</dd>
+<dt>scRNA</dt><dd>small cytoplasmic RNA</dd>
+<dt>snRNA</dt><dd>small nuclear RNA</dd> 
+<dt>snoRNA</dt><dd>small nucleolar RNA</dd> 
+<dt>miRNA</dt><dd>microRNA precursors</dd> 
+<dt>misc_RNA</dt><dd>miscellaneous other RNA</dd>
+<dt>lincRNA</dt><dd>Long non-coding RNAs</dd>
+
+</dl>
+
+<h2 id="Details">Annotation Details</h2>
+
+<p>
+Most <strong>ncRNAs</strong> are annotated by aligning genomic
+sequence against <a rel="external"
+href="http://rfam.sanger.ac.uk/">RFAM</a> using <a rel="external"
+href="http://blast.wustl.edu/">BLASTN</a>. The BLAST hits are
+clustered and filtered by E value and are used to seed Infernal
+searches of the locus with the corresponding RFAM covariance
+models. The purpose of this is to reduce the search space required, as
+to scan the entire genome with all the RFAM covariance models would be
+extremely CPU-intensive. The resulting BLAST hits are then used as
+supporting evidence for ncRNA genes.
+</p>
+
+<p>
+<strong>miRNAs</strong> are predicted by BLASTN of genomic sequence
+slices against <a rel="external"
+href="http://www.mirbase.org/">miRBase</a> sequences. All species are
+used. The BLAST hits are clustered and filtered by E value and the
+aligned genomic sequence is then checked for possible secondary
+structure using RNAFold. If evidence is found that the genomic
+sequence could form a stable hairpin structure, the locus is used to
+create a miRNA gene model. The resulting BLAST hit is used as
+supporting evidence for the miRNA gene.
+</p>
+
+<p>
+Note: The miRNA identifier and name are only associated to the
+resulting Ensembl miRNA if they are of the same species.
+</p>
+
+<p>
+<strong>tRNAs</strong> are annotated as part of the raw compute
+process using <a rel="external"
+href="http://lowelab.ucsc.edu/tRNAscan-SE/">tRNAscan-SE</a>.
+</p>
+
+<p>
+<strong>lincRNA</strong> (Long non-coding RNAs)
+Chromatin-state map data, gene annotation, along with cDNA and
+next-generation sequencing data are used to predict lincRNAs for human
+and mouse. Regions of chromatin methylation (H3K4me3 and H3K36me3)
+outside of known protein-coding loci are identified [1]. A
+comparative approach identifies conserved regions using alignments
+determined by the Ensembl  compara project, following a similar method
+to C. Ponting [2]. A validation step investigates if cDNA or
+next-generation sequencing data overlap the identified conserved
+chromatin methylation regions. PFAM/tigrfam tests if ORFs of the
+identified ncRNAs contain protein domains.
+</p>
+
+<p>References</p>
+
+<ol>
+<li><p>Guttman M, Amit I, Garber M, French C, Lin MF, Feldser D, Huarte M,
+Zuk O, Carey BW, Cassady JP, Cabili MN, Jaenisch R, Mikkelsen TS,
+Jacks T, Hacohen N, Bernstein BE, Kellis M, Regev A, Rinn JL, Lander ES<br />
+<strong>Chromatin signature reveals over a thousand highly conserved
+large non-coding RNAs in mammals.</strong><br />
+<em>Nature</em> 458:223-227<br />
+<a href="http://dx.doi.org/10.1038/nature07672"
+target="external">doi:10.1038/nature07672</a></p>
+</li>
+
+<li>
+<p>Church DM, Goodstadt L, Hillier LW, Zody MC, Goldstein S, She X,
+Bult CJ, Agarwala R, Cherry JL, DiCuccio M, Hlavina W, Kapustin Y,
+Meric P, Maglott D, Birtle Z, Marques AC, Graves T, Zhou S, Teague B,
+Potamousis K, Churas C, Place M, Herschleb J, Runnheim R, Forrest D,
+Amos-Landgraf J, Schwartz DC, Cheng Z, Lindblad-Toh K, Eichler EE,
+Ponting CP; Mouse Genome Sequencing Consortium<br />
+<strong>Lineage-specific biology revealed by a finished genome
+assembly of the mouse</strong><br />
+<em>PLOS Biology</em> May 5;7(5):e1000112</li>
+<a href="http://dx.doi.org/10.1371/journal.pbio.1000112"
+target="external">doi:10.1371/journal.pbio.1000112</a></p>
+</li>
+</ol>
+
+</body>
+</html>
