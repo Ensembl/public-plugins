@@ -1,7 +1,7 @@
 <html>
 <head>
 <meta name="order" content="2" />
-  <meta name="navigation" content="eHive production system">
+  <meta name="navigation" content="eHive production system" />
   <title>eHive production system - Toy example</title>
 
 
@@ -35,6 +35,7 @@ mysql $MYCONN -e 'CREATE DATABASE long_mult_test'</pre>
 </li>
 <li>Create eHive infrastructure:
 <pre>mysql $MYCONN long_mult_test &lt;$ENS_CODE_ROOT/work/ensembl-hive/sql/tables.sql</pre>
+</li>
 <li>Create analyses/control_rules/dataflow_rules of the LongMult pipeline:
 <pre>mysql $MYCONN long_mult_test &lt;$ENS_CODE_ROOT/work/ensembl-hive/sql/create_long_mult.sql</pre>
 </li>
@@ -58,7 +59,7 @@ or run an automatic loop that will run workers for you:
 <li>The results of the computations are to be found in 'final_result' table:
 <pre>mysql $MYCONN long_mult_test -e 'SELECT * FROM final_result'</pre>
 </li>
-<li>You can add more multiplication tasks by repeating from step 5.
+<li>You can add more multiplication tasks by repeating from step 5.</li>
 </ol>
 
 <p><a href="index.html">Back</a></p>
