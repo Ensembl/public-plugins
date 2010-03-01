@@ -11,6 +11,7 @@ div#mart_bottom_bar { border: 0px; border-top: 1px solid black }
 
 .mart_tableSummaryPanel { background-color: #eaeeff }
 
+.mart_attributepage_selection_col a, .attribute a, .mart_attributecollection_title a { color:#000; }
 
 .mart_summarypanel_listheader, .mart_summarypanel_listheader_mouseover, .mart_summarypanel_listheader_highlighted, .mart_summarypanel_AttFiltHeader, .mart_summarypanel_AttFiltHeader_highlighted, .mart_summarypanel_AttFiltHeader_mouseover { color: #426fbf; padding: 0 2px }
 
