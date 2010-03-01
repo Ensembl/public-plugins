@@ -9,8 +9,10 @@ div#mart_bottom_bar { border: 0px; border-top: 1px solid black }
 
 .mart_btn, .mart_btnhov, .mart_btn_go, .mart_btnhov_go { background-color: #426fbf; color: #fff; border: 2px outset #426fbf }
 
-.mart_attributepage_selection_col a, .attribute a, .mart_attributecollection_title a { color:#000; }
-
+.mart_attributepage_selection_col a, .attribute a, 
+.mart_attributecollection_title a, 
+.mart_filtercollection a,
+.ctl_visible_AttFiltPanel a { color:#000; }
 
 .mart_tableSummaryPanel { background-color: #eaeeff }
 
