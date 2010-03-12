@@ -1,7 +1,7 @@
 <html>
 <head>
 <meta name="order" content="2" />
-  <meta name="navigation" content="eHive production system">
+  <meta name="navigation" content="eHive production system" />
   <title>eHive production system - Installation</title>
 
 
@@ -105,17 +105,18 @@ $ setenv PERL5LIB  ${PERL5LIB}:${ENS_CODE_ROOT}/ensembl-compara/modules # option
 </pre>
 </li>
 </ul>
+</li>
 </ol>
 
 <h2>Create a variable with MySQL connection parameters</h2>
 <p>It is convenient to set a variable with MySQL connection parameters to the MySQL instance where you'll be creating eHive pipelines (which means, you'll need priveleges to create databases and to write into them):</p>
 <ul>
 <li>
-using bash syntax:</p>
+using bash syntax:
 <pre>$ export MYCONN="--host=hostname --port=3306 --user=mysql_username --password=SeCrEt"</pre>
 </li>
 <li>
-using [t]csh syntax:</p>
+using [t]csh syntax:
 <pre>$ setenv MYCONN "--host=hostname --port=3306 --user=mysql_username --password=SeCrEt"</pre>
 </li>
 </ul>
@@ -126,7 +127,7 @@ using [t]csh syntax:</p>
 
 <p>The state of each eHive is maintained in a MySQL database that has to be created from the file ensembl-hive/sql/tables.sql:</p>
 <pre>$ mysql $MYCONN -e 'CREATE DATABASE ehive_test'
-$ mysql $MYCONN ehive_test < $ENS_CODE_ROOT/ensembl-hive/sql/tables.sql</pre>
+$ mysql $MYCONN ehive_test &lt; $ENS_CODE_ROOT/ensembl-hive/sql/tables.sql</pre>
 
 <p>In this step you have created a database with empty tables that will have to be "loaded" with tasks to perform, depending on the particular pipeline you want to run.</p>
 

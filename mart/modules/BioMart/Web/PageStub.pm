@@ -26,7 +26,7 @@ sub new {
   my $renderer = new EnsEMBL::Web::Document::Renderer::Apache;
   my $self = {};
   unless( CGI::self_url() =~ m/__.+ByAjax/ ) {
-    $page     = new EnsEMBL::Web::Document::Page::Dynamic( $renderer,undef,$ENSEMBL_WEB_REGISTRY->species_defs );
+    $page     = new EnsEMBL::Web::Document::Page::Dynamic( {'renderer' => $renderer, 'species_defs' => $ENSEMBL_WEB_REGISTRY->species_defs} );
     $page->_initialize_HTML unless $AJAX;
     $page->set_doc_type( 'none', 'none' );
 #    $page->masthead->sp_bio    ||= 'BioMart';
