@@ -64,6 +64,7 @@ sub content {
       {'value' => 'healthcheck_bug',          'name' => 'Healthcheck bug: error should not appear, requires changes to healthcheck'},
       {'value' => 'manual_ok',                'name' => 'Manual ok: not a problem for this release'},
       {'value' => 'manual_ok_this_assembly',  'name' => 'Manual ok this assembly: not a problem for this species and assembly'},
+      {'value' => 'manual_ok_this_genebuild', 'name' => 'Manual ok this genebuild: not a problem for this species and genebuild'},
       {'value' => 'manual_ok_all_releases',   'name' => 'Manual ok all release: not a problem for this species'},
     );
     $form->add_element(
