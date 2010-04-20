@@ -35,7 +35,6 @@ Opossum (Monodelphis domestica)<br />
 Wallaby (Macropus eugenii)<br />
 Platypus (Ornithorhynchus anatinus)<br />
 Chicken (Gallus gallus)<br />
-Turkey (Meleagris gallopavo)<br />
 <h4>Mouse (Mus musculus)</h4>
 Rat (Rattus norvegicus)<br />
 Dog (Canis familiaris)<br />
@@ -46,7 +45,6 @@ Cow (Bos taurus)<br />
 <h4>Opossum (Monodelphis domestica)</h4>
 Wallaby (Macropus eugenii)<br />
 <h4>Chicken (Gallus gallus)</h4>
-Turkey (Meleagris gallopavo)<br />
 Zebra Finch (Taeniopygia guttata)<br />
 <h4>Medaka (Oryzias latipes)</h4>
 Stickleback (Gasterosteus aculeatus)<br />
