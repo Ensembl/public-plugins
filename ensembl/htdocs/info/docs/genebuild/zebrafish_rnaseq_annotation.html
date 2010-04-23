@@ -1,0 +1,17 @@
+<html>
+<head>
+<title>Zebrafish RNASeq Gene ModelsGenome Annotation</title>
+</head>
+
+<body>
+
+<h1>Zebrafish RNASeq Gene Models</h1>
+
+<p>This is an experimental set of gene models produced using paired end Illumina RNASeq data from the Wellcome Trust Sanger Institute Zebrafish Transcriptome Sequencing Project Ref: <a rel="external"  href="http://www.ebi.ac.uk/ena/data/view/display=html&ERP000016">ERP000016</a>.</p>
+
+<p>The models are produced from a 2 step alignment process using <a rel="external" href="http://www.biomedcentral.com/1471-2105/6/31">Exonerate</a>. First, a local genomic alignment is created that is collapsed to create alignment blocks roughly corresponding to exons. Read pairing information is used to group exons into approximate transcript structures. Secondly, reads are realigned to the proto-transcripts using a splice model and a short word length to create a set of spliced alignments representing canonical and non-canonical introns.</p>
+
+<p>Gene models are created by combining the proto-transcripts with the spliced reads to create all possible variants, the variant with the most read support is displayed.</p>
+
+
+
