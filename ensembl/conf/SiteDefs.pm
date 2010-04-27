@@ -50,9 +50,9 @@ sub update_conf {
   $SiteDefs::__species_aliases{ 'Vicugna_pacos'            } = [qw(lp alpaca)];
 #-------------------- birds
   $SiteDefs::__species_aliases{ 'Gallus_gallus'            } = [qw(gg ggal chicken)];
-  $SiteDefs::__species_aliases{ 'Meleagris_gallopavo'      } = [qw(mg mgal turkey meleagris)];
+#  $SiteDefs::__species_aliases{ 'Meleagris_gallopavo'      } = [qw(mg mgal turkey meleagris)];
   $SiteDefs::__species_aliases{ 'Taeniopygia_guttata'      } = [qw(tg taegut taeniopygia zebrafinch)];
-  $SiteDefs::__species_aliases{ 'Meleagris_gallopavo'      } = [qw(mg mgal turkey)];
+#  $SiteDefs::__species_aliases{ 'Meleagris_gallopavo'      } = [qw(mg mgal turkey)];
 #-------------------- fish
   $SiteDefs::__species_aliases{ 'Danio_rerio'              } = [qw(dr drer zfish zebrafish)];
   $SiteDefs::__species_aliases{ 'Gasterosteus_aculeatus'   } = [qw(ga gacu stickleback gasterosteus)];
