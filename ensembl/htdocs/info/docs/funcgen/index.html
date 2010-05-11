@@ -17,36 +17,47 @@ genomics</a> database.
 
 <h2>Regulatory Feature Construction</h2>
 <p>
-The main principle of building regulatory features is simply
-performing overlap analysis of annotations in each data set. Core
-regions are identified using the focus sets, which are chosen to
-define a set of potentially regions. These tend to be broad coverage
-narrowly focused marks which are likely candidates for different types
-of regulatory elements or motifs. Historically we have used DNase1
-which is known to mark for accessible chromatin, H3K4me3 which has
-been associated with promoter regions, and CTCF which characterises
-'insulator/enhancer' element. As such the core regions of regulatory
-features are likely to be positioned on or around any potential
-regulatory motif. Core regions are extended only in the case of
-direct overlap with another focus feature. To maintain resolution and
-to avoid chaining of regulatory features across regions of dense
-regulatory elements we have imposed a 2KB cut-off for focus features.
+The main principle of the 'RegulatoryBuild' is performing overlap 
+analysis of peak call from data sets in a two stage cell type aware manner.
+</p>
+
+<p> 
+In stage one, core regions are identified across all available cell types 
+using 'focus' features which are chosen to define a set of potential binding sites. 
+These tend to be broad coverage narrowly focused marks which are likely 
+candidates for different types of regulatory elements or motifs. 
+Focus feature types include DNase1 which is known to mark for accessible 
+chromatin, transcription factor binding sites (TFBSs) and CTCF, which characterises 
+'insulator/enhancer' elements. As such the core regions of regulatory features are 
+likely to be positioned on or around any potential regulatory motif. 
+Core regions are extended only in the case of direct overlap with another focus 
+feature. To maintain resolution and to avoid chaining of regulatory features across 
+regions of dense regulatory elements we have imposed a 2KB cut-off for focus features.
 Exceeding this cut-off causes the focus feature to be treated as an
 attribute feature and so does not extend the core region.
 </p>
+<!-- as it is assumed that these will exist, either active or silenced, across all cell types 
+irrepective of the presence of supporting focus data for a given cell type. -->
+
 
 <p>
-The arms or bounds of a regulatory feature are defined by overlap of
-attribute features with respect to the core region. Attribute feature
-sets are generally less discriminatory and less focused annotations
-which are used extend the immediate structure of the regulatory
-feature and to inform the annotation analysis. Directly overlapping
-attribute features are said to have one degree of separation.
+Stage two extends the structure in a cell type specific manner using 'attribute' features.
+Attribute features do not define a binding site and are some times longer ranging 
+feature types which are useful for classification, such as Histone modifications.
+If core data exists for a given cell type, a RegulatoryFeature is seeded using the core 
+region defined in stage one. The arms or bounds are defined by overlap of attribute features 
+with respect to the core region. Directly overlapping attribute features are said to have one degree of separation.
 Attributes with two degrees of separation or only included is they are
 within 2KB of the core region and they are entirely contained within
-another longer attribute feature. This is done to capture information
+another longer associated attribute feature. This is done to capture information
 adjacent and indirectly associated with the core region, whilst
 avoiding longer range and potentially anomalous associations.
+</p>
+
+
+<p>
+These two stages give rise to regulatory FeatureSets for the core 'MultiCell' features 
+and for each available cell type.
 </p>
 
 <!-- Do we really want to only include those attribute features which are
