@@ -689,7 +689,18 @@ state in pluripotent and lineage-committed cells. Nature. 2007 Aug
 2;448(7153):548-9. PMID: 17603471
 </p>
 
-<P>* The CTCF data was processed with the Nessie HMM (Flicek,
+<p>
+	All Chip-Seq data was processed according to the following protocol: 
+	The raw sequence reads were aligned to the Human GRCh37 genome assembly 
+	using the bwa aligner software (Li H and Durbin R, 2010). All matches to 
+	mitochondria were filtered out, and the resulting alignments were passed to 
+	the SWEMBL peak caller software (S. Wilder et al, in preparation). The 
+	resulting peaks were then filtered out to avoid problematic areas identified 
+	in the ENCODE project. DNAse sets were called using less stringent parameters 
+	to accommodate for its broader distribution. 
+</p>
+
+<P>* The CTCF Chip-ChIP data was processed with the Nessie HMM (Flicek,
 unpublished). 
 </P>
 </BODY>
