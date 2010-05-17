@@ -111,12 +111,12 @@ $ setenv PERL5LIB  ${PERL5LIB}:${ENS_CODE_ROOT}/ensembl-compara/modules # option
 <LI>In ensembl-hive/scripts we keep perl scripts used for controlling the pipelines.
     Adding this directory to your $PATH may make your life easier.
     <UL>
-    <LI> init_pipeline.pl is used to create hive databases, populate hive-specific and pipeline-specific tables and load data</LI>
-    <LI> beekeeper.pl is used to run the pipeline; send 'Workers' to the 'Meadow' to run the jobs of the pipeline</LI>
+    <LI><B>init_pipeline.pl</B> is used to create hive databases, populate hive-specific and pipeline-specific tables and load data</LI>
+    <LI><B>beekeeper.pl</B>     is used to run the pipeline; send 'Workers' to the 'Meadow' to run the jobs of the pipeline</LI>
     </UL>
 </LI>
 
-<LI>In ensembl-hive/modules/Bio/EnsEMBL/Hive/PipeConfig we keep example pipeline configuration modules that can be used by init_pipeline.pl .
+<LI>In ensembl-hive/modules/Bio/EnsEMBL/Hive/PipeConfig we keep example pipeline configuration modules that can be used by <B>init_pipeline.pl</B> .
     A PipeConfig is a parametric module that defines the structure of the pipeline.
     That is, which analyses with what parameters will have to be run and in which order.
     The code for each analysis is contained in a RunnableDB module.
