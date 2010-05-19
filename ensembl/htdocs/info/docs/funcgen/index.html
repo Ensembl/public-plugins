@@ -52,12 +52,17 @@ region defined in stage one. The arms or bounds are defined by
 overlap of attribute features with respect to the core region.
 Directly overlapping attribute features are said to have one degree
 of separation. Attributes with two degrees of separation are only
-included if they are within 2KB of the core region and they are
-entirely contained within another longer associated attribute
+included if they are entirely contained within another longer associated attribute
 feature. This is done to capture information adjacent and indirectly
 associated with the core region, whilst avoiding longer range and
 potentially anomalous associations. 
 </P>
+
+<!--  Attributes with two degrees of separation are only
+included if they are within 2KB of the core region and they are
+entirely contained within another longer associated attribute
+feature. -->
+
 <P>These two stages give rise to regulatory FeatureSets for the core
 'MultiCell' features and for each available cell type. 
 </P>
