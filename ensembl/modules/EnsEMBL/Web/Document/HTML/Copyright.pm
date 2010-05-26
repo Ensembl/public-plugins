@@ -20,8 +20,7 @@ sub render {
   my $sd = $ENSEMBL_WEB_REGISTRY->species_defs;
 
   my $you_are_here = $ENV{'REQUEST_URI'};
-  my $referer      = uri_escape($you_are_here);
-  my $stable_URL   = uri_escape('http://'. $sd->ARCHIVE_VERSION .'.archive.ensembl.org'. $you_are_here);
+  my $stable_URL   = uri_escape('http://' . $sd->ARCHIVE_VERSION . '.archive.ensembl.org');
 
   $self->printf(
     q(
@@ -37,20 +36,18 @@ sub render {
   
   $self->printf('<div class="print_hide">'); 
   unless ($ENV{'ENSEMBL_TYPE'} =~ /Help|Account|UserData/) {
-    $self->printf(
-      q(
+    $self->print(
+      qq{
       <br />
-        <a class="modal_link" id="p_link" href="%s">Permanent link</a>
-      ),
-    '/Help/Permalink?url='.$stable_URL,
+        <a class="modal_link" id="p_link" href="/Help/Permalink?url=$stable_URL">Permanent link</a>
+      }
     );
     unless ($you_are_here =~ /html$/ && $you_are_here ne '/index.html') {
       ## Omit archive links from static content, which tends to change a lot
-      $self->printf(
-        q(
-         - <a class="modal_link" id="a_link" href="%s">View in archive site</a>
-        ),
-      '/Help/ArchiveList?url='.$referer,
+      $self->print(
+        '
+         - <a class="modal_link" id="a_link" href="/Help/ArchiveList">View in archive site</a>
+        '
       );
     }
   }
