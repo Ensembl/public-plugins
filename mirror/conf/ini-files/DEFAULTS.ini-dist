@@ -37,11 +37,10 @@ on          = [ geneview protview ]
 col         = orchid4
 
 [Superfam]
-dsn         = to
+; dsn       = CHANGEME
 description = HMM library and genome assignments
-url         = http://supfam.mrc-lmb.cam.ac.uk/SUPERFAMILY/cgi-bin/das
+url         = http://supfam.cs.bris.ac.uk/SUPERFAMILY/cgi-bin/das
 type        = ensembl_peptide
-authority   = http://supfam.mrc-lmb.cam.ac.uk/
 on          = [ protview ]
 col         = orchid1
 
