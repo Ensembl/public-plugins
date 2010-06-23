@@ -1,22 +1,17 @@
-package EnsEMBL::Web::Component::Interface::Problem;
+package EnsEMBL::Web::Component::DbFrontend::Problem;
 
 ### Module to create generic data display for Interface and its associated modules
 
 use strict;
 use warnings;
 no warnings "uninitialized";
-use base qw(EnsEMBL::Web::Component::Interface);
+use base qw(EnsEMBL::Web::Component::DbFrontend);
 use EnsEMBL::Web::Form;
 
 sub _init {
   my $self = shift;
   $self->cacheable( 0 );
   $self->ajaxable(  0 );
-}
-
-sub caption {
-  my $self = shift;
-  return $self->object->interface->caption('problem') || 'Problem';
 }
 
 sub content {
