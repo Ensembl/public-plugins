@@ -28,7 +28,7 @@ sub content {
   my $release = $hub->species_defs->ENSEMBL_VERSION;
   my $html = "<h1>Declarations for Release $release</h1>";
 
-  my $data = $self->model->object('Changelog')->data_objects;
+  my $data = $self->model->object('Changelog')->fetch_all;
 
   my $previous;
 
@@ -44,7 +44,7 @@ sub content {
     }
 
     my $sp_text;
-    my @species = @{$item->species};
+    my @species = @{$item->species || []};
    
     if (!@species) {
       $sp_text = 'all species';

@@ -14,6 +14,11 @@ use base qw(EnsEMBL::Web::DbFrontend);
 
 sub init {
   my $self = shift;
+
+  ## Custom values
+  $self->{'record_select_columns'} = [qw(team title)];
+  $self->{'record_table_columns'} = [qw(team created_by title status)];
+
   ## Alter default settings if required
   $self->{'show_fields'} = [qw(team title species content status assembly gene_set repeat_masking stable_id_mapping affy_mapping db_status notes)];
   $self->{'show_history'} = 1;

@@ -15,10 +15,7 @@ use base qw(EnsEMBL::Web::Data::Rose);
 
 sub _set_relationships {
   my $self = shift;
-  $self->{'_relationships'} = {
-    'created_by'  => 'EnsEMBL::Web::Data::Rose::User',
-    'modified_by' => 'EnsEMBL::Web::Data::Rose::User',
-  };
+  $self->set_edit_tracking;
 }
 
 sub fetch_all {
@@ -29,6 +26,7 @@ sub fetch_all {
     ],
     sort_by => 'team',
   );
+  $self->data_objects(@$objects);
   return $objects;
 }
 
