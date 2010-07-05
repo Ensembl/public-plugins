@@ -70,12 +70,15 @@ Further details on these methods can be found at:</p>
 <li><a href="http://dx.doi.org/10.1101/gr.076521.108">Genome-wide nucleotide-level mammalian ancestor reconstruction</a></li>
 </ul>
 
-<p>The 12-way eutherian mammal alignments were generated using the recent EPO (Enredo Pecan Ortheus) pipeline. The
-12-way alignment contains all the high-coverage mammalian genomes. </p>
+<p>The 11-way eutherian mammal alignments were generated using the recent EPO (Enredo Pecan Ortheus) pipeline. The
+11-way alignment contains all the high-coverage mammalian genomes except for pig. The previous release included the pig genome but due to inconsistencies found in the genome coverage it was decided to remove this genome until the reason for these inconsistencies could be found and fixed.  </p>
+
+<p>Each alignment set can be accessed using the <a href="http://www.ensembl.org/info/docs/Pdoc/ensembl-compara/index.html"> Compara API</a> via the Bio::EnsEMBL::DBSQL::MethodLinkSpeciesSetAdaptor using the method_link_type and either the list of the species or the species_set_name. </p>
+
 
 [[INCLUDE::/info/docs/compara/epo.inc]]
 
-<p>The 33-way eutherian mammmal alignments were not generated using the EPO pipeline due to difficulties with running Ortheus on the low coverage genomes. Instead the 21 low coverage genomes were projected on to the 12-way eutherian mammal alignments using BlastZ-net alignments. </p>
+<p>The 33-way eutherian mammmal alignments were not generated using the EPO pipeline due to difficulties with running Ortheus on the low coverage genomes. Instead the 21 low coverage genomes plus pig were projected on to the 11-way eutherian mammal alignments using BlastZ-net alignments. </p>
 
 [[INCLUDE::/info/docs/compara/epo_lc.inc]]
 
@@ -111,7 +114,6 @@ linked provided that no more than 2 non-syntenic groups are found between
 them and they are less than 3Mbp apart.</p>
 
 [[INCLUDE::/info/docs/compara/synteny.inc]]
-
 
 </body>
 </html>

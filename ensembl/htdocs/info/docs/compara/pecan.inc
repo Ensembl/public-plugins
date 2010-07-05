@@ -1,5 +1,4 @@
-<h4>16 amniota vertebrates Pecan</h4>
-Human (Homo sapiens)<br />
+<h4>16 amniota vertebrates Pecan</h4><h5>(method_link_type="PECAN" : species_set_name="amniotes")</h5>Human (Homo sapiens)<br />
 Chimpanzee (Pan troglodytes)<br />
 Gorilla (Gorilla gorilla)<br />
 Orangutan (Pongo pygmaeus)<br />
