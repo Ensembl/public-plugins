@@ -242,14 +242,25 @@ sub _add_preview_widgets {
     next if ($name eq 'modified_by' && $args{'previous'} eq 'Add');
 
     $p->{'type'} = 'Hidden';
-    ## Make sure we pass the _values_ of dropdowns, etc. not names!
-    if ($p->{'values'} || $name eq $self->model->object->primary_key) {
-      $p->{'value'} = $hub->param($name);
+    ## Deal with multi-value fields (e.g. dropdowns)
+    my @values = ($hub->param($name));
+    if (@values > 1) {
+      foreach my $v (@values) {
+        $p->{'value'} = $v;
+        $fieldset->add_element(%$p);
+      }
     }
-    if ($name eq 'created_by' || $name eq 'modified_by') {
-      $p->{'value'} = $hub->user->id;
+    else {
+      if ($name eq $self->model->object->primary_key) {
+        ## Always pass the primary key if it exists
+        $p->{'value'} = $hub->param($name);
+      }
+      elsif ($name eq 'created_by' || $name eq 'modified_by') {
+        ## Manually set ID of logged-in user
+        $p->{'value'} = $hub->user->id;
+      }
+      $fieldset->add_element(%$p);
     }
-    $fieldset->add_element(%$p);
   }
 }
 
