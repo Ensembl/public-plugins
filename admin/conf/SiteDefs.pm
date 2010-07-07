@@ -25,8 +25,6 @@ sub update_conf {
   $SiteDefs::ENSEMBL_BLAST_ENABLED = 0;
   $SiteDefs::ENSEMBL_MART_ENABLED = 0;
   $SiteDefs::ENSEMBL_MEMCACHED = {};
-};
-
 
 }
 
