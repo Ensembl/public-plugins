@@ -30,6 +30,7 @@ sub name    { return $_[0]->{'_name'}; }
 sub type    { return $_[0]->{'_type'}; }
 sub values  { return $_[0]->{'_values'}; }
 
+## These columns are never primary keys, but we need this method to keep Rose happy :)
 sub is_primary_key_member { return 0; }
 
 1;
