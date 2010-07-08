@@ -6,10 +6,13 @@ package EnsEMBL::ORM::Rose::Manager::News;
 ### STATUS: Under Development
 
 ### DESCRIPTION:
-### Enables fetching, counting, etc., of multiple E::D::NewsItem objects
+### Enables fetching, counting, etc., of multiple Rose::Object::NewsItem objects
 ### Note that we do not need a separate manager for NewsCategory,
-### because it is just a lookup table that we have no need to query
+### because it is just a lookup table that we have no need to update
 ### directly
+### Also note that the manager doesn't have to have the same name as the table -
+### the name can be configured manually in Data::Rose::[TableName] (indeed it
+### _has_ to be configured manually if the plugin namespace is not 'ORM').
 
 use strict;
 use warnings;

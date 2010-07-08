@@ -9,7 +9,12 @@ package EnsEMBL::ORM::Rose::Manager;
 ### DESCRIPTION:
 ### Children of this class auto-generate access methods for one or more
 ### domain objects, e.g. if the object's name is Thing, the manager can
-### auto-generate methods 'get_things', 'get_things_count', and so on
+### auto-generate the following methods: 
+### * get_things
+### * get_things_count
+### * get_things_iterator
+### * update_things
+### * delete_things
 
 use strict;
 use warnings;
