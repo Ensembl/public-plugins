@@ -46,8 +46,9 @@ package EnsEMBL::ORM::DbFrontend;
 ###                                 column to the specified value, e.g.
 ###                                 ['status', 'dead']
 
-### N.B. Do not alter this module to configure an individual interface - 
-### it should be sub-classed with a name matching that of the domain object
+### IMPORTANT - children of this class _must_ be put in the EnsEMBL::ORM namespace,
+### even if they are in a different plugin, as the CRUD framework relies on being able
+### to automatically configure itself based solely on the URL
 
 use strict;
 use warnings;
