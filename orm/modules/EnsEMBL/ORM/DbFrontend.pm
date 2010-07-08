@@ -8,7 +8,8 @@ package EnsEMBL::ORM::DbFrontend;
 ### DESCRIPTION:
 ### This module is used to configure the Component::DbFrontend modules used 
 ### by the Ensembl CRUD framework. It is a simple container for a set of 
-### configuration variables, most of which are optional:
+### configuration variables, most of which are optional as the interface falls
+### back to default values if they are not set:
 
 ### hub                     the Hub object (in case subclasses need access to 
 ###                         glabal variables)
@@ -123,8 +124,12 @@ sub init {
 sub modify_form {
 ### This stub can be overridden in child classes, where it will be used
 ### to modify individual form elements, e.g. setting default values and
-### 'required' flags, and customising labels (which default to the name of 
-### the table column).
+### 'required' flags, and customising labels (which default to the name 
+### of the table column).
+### Takes a reference to a hash of key-hashref pairs, where the keys are 
+### names of fields and the hashref defines form element parameters such 
+### as type and label (i.e. the arguments of the corresponding 
+### EnsEMBL::Web::Form::Element module)
 }
 
 
