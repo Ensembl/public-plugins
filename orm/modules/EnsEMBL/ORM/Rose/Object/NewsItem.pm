@@ -5,8 +5,6 @@ package EnsEMBL::ORM::Rose::Object::NewsItem;
 
 ### STATUS: Under Development
 
-### DESCRIPTION:
-
 ### TODO - add relationships to Species and Release
 
 use strict;

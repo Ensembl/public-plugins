@@ -6,7 +6,7 @@ package EnsEMBL::ORM::Rose::Manager::ProductionSpecies;
 ### STATUS: Under Development
 
 ### DESCRIPTION:
-### Enables fetching, counting, etc., of multiple E::D::ProductionSpecies objects
+### Enables fetching, counting, etc., of multiple Rose::Object::ProductionSpecies objects
 
 use strict;
 use warnings;
