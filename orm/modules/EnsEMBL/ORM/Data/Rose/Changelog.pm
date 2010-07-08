@@ -21,7 +21,7 @@ sub set_primary_keys {
 
 sub fetch_all {
 ### Custom query - for the changelog output, we normally only want to 
-## see the results for one release at a time
+### see the results for one release at a time
   my $self = shift;
   my $release_id = $self->hub->param('release') 
                       || $self->hub->species_defs->ENSEMBL_VERSION;

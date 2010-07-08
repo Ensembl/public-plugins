@@ -1,13 +1,17 @@
 package EnsEMBL::ORM::Data::Rose;
 
 ### NAME: EnsEMBL::ORM::Data::Rose
-### Base class - wrapper around one or more EnsEMBL::ORM::Rose objects 
+### Base class - wrapper around one or more EnsEMBL::ORM::Rose::Object objects 
 
 ### STATUS: Under Development
 
 ### DESCRIPTION:
 ### This module and its children provide additional data-handling
-### capabilities on top of those provided by Rose::DB::Object
+### capabilities on top of those provided by Rose::DB::Object, in particular,
+### access to web parameters via the Hub
+
+### Some wrapper methods are provided, but all Rose::Object::Manager functionality 
+### can be accessed directly, e.g. $self->manager_class->get_<tablename>s_count
 
 use strict;
 use warnings;
@@ -22,41 +26,10 @@ sub _init {
   $self->{'_object_class'}  = undef;
   $self->{'_manager_class'} = undef;
   $self->{'_primary_keys'}  = [];
-  $self->{'_relationships'} = {};
 
   $self->set_classes;
   $self->set_primary_keys;
   $self->populate;
-}
-
-##------- OBJECT INITIATION -----------
-
-## Some of these are set manually, to avoid the overhead 
-## of creating an empty object and then interrogating it
-
-sub set_classes {
-## Override this in children, if namespace is different
-  my $self = shift;
-  $self->{'_object_class'} = 'EnsEMBL::ORM::Rose::Object::'.$self->type;
-  $self->{'_manager_class'} = 'EnsEMBL::ORM::Rose::Manager::'.$self->type;
-}
-
-sub set_primary_keys {
-## This will probably need overriding unless you are creating 
-## a new table from scratch with a generic primary key
-  my $self = shift;
-  $self->{'_primary_keys'} = [qw(id)];
-}
-
-sub populate {
-  my $self = shift;
-  my @objects;
-
-  if ($self->hub->param('id')) {
-    my @ids = ($self->hub->param('id'));
-    @objects = @{$self->fetch_by_id(\@ids)};
-  }
-  $self->data_objects(@objects);
 }
 
 ##----------- ACCESSORS ---------------
@@ -67,9 +40,48 @@ sub manager_class { return $_[0]->{'_manager_class'}; }
 sub primary_keys { return $_[0]->{'_primary_keys'}; }
 sub primary_key  { return $_[0]->{'_primary_keys'}[0]; }
 
+##------- OBJECT INITIATION -----------
+
+sub set_classes {
+### Defines the classes of the Rose::Object and Rose::Manager - defaults
+### to the namespace of this plugin, but can be overridden in the child class
+### This is set manually, to avoid the overhead  of creating an empty object 
+### and then interrogating it
+  my $self = shift;
+  $self->{'_object_class'} = 'EnsEMBL::ORM::Rose::Object::'.$self->type;
+  $self->{'_manager_class'} = 'EnsEMBL::ORM::Rose::Manager::'.$self->type;
+}
+
+sub set_primary_keys {
+### Defines the primary key(s) used by the main object - defaults to 'id'
+### This is set manually, to avoid the overhead  of creating an empty object 
+### and then interrogating it
+### It will probably need overriding unless you are creating 
+### a new table from scratch with a primary key 'id'!
+  my $self = shift;
+  $self->{'_primary_keys'} = [qw(id)];
+}
+
+sub populate {
+### A factory-type method that can generate one or more domain objects from
+### a set of IDs - defaults to using the CGI parameter 'id' if no argument
+### is passed
+### Argument (optional) - an array of primary key values
+  my ($self, @ids) = @_;
+  my @objects;
+
+  if (!@ids && $self->hub->param('id')) {
+    @ids = ($self->hub->param('id'));
+    @objects = @{$self->fetch_by_id(\@ids)};
+  }
+  $self->data_objects(@objects);
+}
+
 ## ------ Data manipulation -----------
 
 sub fetch_all {
+### Wrapper around the Rose::Manager's get_objects method - defaults to returning all
+### the records in a table
   my $self = shift;
   my $objects = $self->manager_class->get_objects(object_class => $self->object_class);
   $self->data_objects(@$objects);
@@ -77,6 +89,8 @@ sub fetch_all {
 }
 
 sub fetch_by_id { 
+### Wrapper around the Rose::Manager's get_objects method
+### Argument - arrayref containing values of primary key
   my ($self, $ids) = @_;
   my $objects = $self->manager_class->get_objects(
                   query => [$self->primary_key => $ids], 
@@ -86,7 +100,7 @@ sub fetch_by_id {
 }
 
 sub get_table_columns {
-### Returns all database columns needed to populate a web form
+### Returns all columns from a table - used to populate a web form
   my $self = shift;
   my $data_object = $self->data_objects->[0] || $self->create_empty_object;
   my $columns = [];
@@ -100,7 +114,7 @@ sub get_table_columns {
 }
 
 sub get_related_columns {
-### Forms need dummy columns representing relational objects that can
+### Forms may need dummy columns, representing relational objects that can
 ### be attached to the main domain object
   my $self = shift;
   my $data_object = $self->data_objects->[0] || $self->create_empty_object;
@@ -121,6 +135,9 @@ sub get_related_columns {
 }
 
 sub _get_m2m_managers {
+### Helper method to get information about many-to-many relationships
+### Returns a hashref of object_name => manager_class_name pairs,
+### e.g. 'species' => 'EnsEMBL::ORM::Rose::Manager::Species'
   my ($self, $data_object) = @_;
   return unless $data_object;
   my $managers = {};
