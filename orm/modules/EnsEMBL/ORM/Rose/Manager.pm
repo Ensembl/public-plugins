@@ -4,11 +4,12 @@ package EnsEMBL::ORM::Rose::Manager;
 ### Base class for a Rose::DB::Object::Manager object 
 
 ### STATUS: Under Development
-### (Doesn't do much at the moment!)
 
 ### DESCRIPTION:
 ### This module and its children provide access to non-genomic
 ### databases, using the Rose::DB suite of ORM modules
+
+### (N.B. Doesn't really do anything at the moment, but who knows...)
 
 use strict;
 use warnings;

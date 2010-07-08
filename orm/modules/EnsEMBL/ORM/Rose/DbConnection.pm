@@ -4,14 +4,12 @@ package EnsEMBL::ORM::Rose::DbConnection;
 ### Subclass of Rose::DB, a wrapper around DBI 
 
 ### STATUS: Under Development
-### You will need to uncomment the use base line in order to test this code!
 
 ### DESCRIPTION:
-### This module defines the database connections available to EnsEMBL::Data
+### This module defines the database connections available to EnsEMBL::Rose
 ### objects, by pulling them in from SpeciesDefs.pm
 
-### TODO - make totally independent of web code if possible! Can we pull in a
-### config file if SpeciesDefs is not available?
+## TODO - get ensembl_production settings from SpeciesDefs (currently hard-coded)
 
 use strict;
 use warnings;

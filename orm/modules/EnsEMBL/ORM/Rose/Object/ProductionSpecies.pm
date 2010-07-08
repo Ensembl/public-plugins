@@ -3,9 +3,7 @@ package EnsEMBL::ORM::Rose::Object::ProductionSpecies;
 ### NAME: EnsEMBL::ORM::Rose::Object::ProductionSpecies
 ### ORM class for the species table in ensembl_production 
 
-### STATUS: Under Development
-
-### DESCRIPTION:
+### STATUS: Stable 
 
 use strict;
 use warnings;
@@ -31,8 +29,10 @@ __PACKAGE__->meta->setup(
   ],
 );
 
-## Define which db connection to use
-sub init_db { EnsEMBL::ORM::Rose::DbConnection->new('production'); }
+sub init_db { 
+### Set up the db connection
+  EnsEMBL::ORM::Rose::DbConnection->new('production'); 
+}
 
 
 1;

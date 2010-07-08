@@ -31,7 +31,9 @@ __PACKAGE__->meta->setup(
   ], 
 );
 
-## Define which db connection to use
-sub init_db { EnsEMBL::ORM::Rose::DbConnection->new('website'); }
+sub init_db { 
+  ## Set up the db connection  
+  EnsEMBL::ORM::Rose::DbConnection->new('website'); 
+}
 
 1;

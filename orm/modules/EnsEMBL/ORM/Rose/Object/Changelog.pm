@@ -3,11 +3,7 @@ package EnsEMBL::ORM::Rose::Object::Changelog;
 ### NAME: EnsEMBL::ORM::Rose::Object::Changelog
 ### ORM class for the changelog table in ensembl_production 
 
-### STATUS: Under Development
-
-### DESCRIPTION:
-
-### TODO - add relationships to Species
+### STATUS: Stable
 
 use strict;
 use warnings;
@@ -46,7 +42,9 @@ __PACKAGE__->meta->setup(
 
 );
 
-## Define which db connection to use
-sub init_db { EnsEMBL::ORM::Rose::DbConnection->new('production'); }
+sub init_db {
+  ### Set up the db connection 
+  EnsEMBL::ORM::Rose::DbConnection->new('production'); 
+}
 
 1;
