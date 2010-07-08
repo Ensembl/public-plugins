@@ -1,6 +1,7 @@
 package EnsEMBL::ORM::Data::Rose::Changelog;
 
 ### NAME: EnsEMBL::ORM::Data::Rose::Changelog;
+### Wrapper for one or more EnsEMBL::ORM::Rose::Object::Changelog objects
 
 ### STATUS: Under Development
 
@@ -19,11 +20,15 @@ sub set_primary_keys {
 }
 
 sub fetch_all {
+### Custom query - for the changelog output, we normally only want to 
+## see the results for one release at a time
   my $self = shift;
+  my $release_id = $self->hub->param('release') 
+                      || $self->hub->species_defs->ENSEMBL_VERSION;
 
   my $objects = EnsEMBL::ORM::Rose::Manager::Changelog->get_changelogs(
     query => [
-      release_id => $self->hub->species_defs->ENSEMBL_VERSION,
+      release_id => $release_id,
     ],
     sort_by => 'team',
   );
