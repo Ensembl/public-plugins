@@ -3,6 +3,11 @@ package EnsEMBL::ORM::Rose::Object::ProductionSpecies;
 ### NAME: EnsEMBL::ORM::Rose::Object::ProductionSpecies
 ### ORM class for the species table in ensembl_production 
 
+### N.B. Not to be confused with Ensembl::ORM::Rose::Object::Species - 
+### this module's name is intended to distinguish it from 
+### ensembl_website.species, which has a different schema and
+### different table relationships
+
 ### STATUS: Stable 
 
 use strict;
