@@ -17,6 +17,10 @@ sub add_dbfrontend_to_tree {
   my $type = $self->type;
 
   ## Starting pages visible
+  $self->create_node( 'List', 'List all',
+    [qw(list   EnsEMBL::ORM::Component::DbFrontend::List)],
+    {'availability' => 1, 'filters' => $filters},
+  );
   $self->create_node('Add', "Add $type",
     [qw(add   EnsEMBL::ORM::Component::DbFrontend::Input)],
     {'availability' => 1, 'filters' => $filters},
@@ -30,14 +34,10 @@ sub add_dbfrontend_to_tree {
   my $config = $self->get_frontend_config;
   if ($config->{'permit_delete'}) {
     $self->create_node( 'SelectToDelete', "Delete $type",
-      [qw(select   EnsEMBL::ORM::Component::DbFrontend::Select)],
+      [qw(select_delete   EnsEMBL::ORM::Component::DbFrontend::Select)],
       {'availability' => 1, 'filters' => $filters},
     );
   }
-  $self->create_node( 'List', 'List all',
-    [qw(list   EnsEMBL::ORM::Component::DbFrontend::List)],
-    {'availability' => 1, 'filters' => $filters},
-  );
 
   ## Invisible steps
   $self->create_node( 'Display', "$type",
@@ -49,7 +49,7 @@ sub add_dbfrontend_to_tree {
     {'availability' => 1, 'no_menu_entry' => 1, 'filters' => $filters }
   );
   $self->create_node( 'Preview', 'Preview changes',
-    [qw(previe   EnsEMBL::ORM::Component::DbFrontend::Preview)],
+    [qw(preview   EnsEMBL::ORM::Component::DbFrontend::Preview)],
     {'availability' => 1, 'no_menu_entry' => 1, 'filters' => $filters }
   );
   $self->create_node( 'Problem', 'Error',
