@@ -37,7 +37,7 @@ __PACKAGE__->meta->setup(
 
 sub init_db { 
   ## Set up the db connection
-  EnsEMBL::ORM::Rose::DbConnection->new('production'); 
+  EnsEMBL::ORM::Rose::DbConnection->new('website'); 
 }
 
 
