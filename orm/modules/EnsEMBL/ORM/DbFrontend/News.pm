@@ -15,8 +15,12 @@ use base qw(EnsEMBL::ORM::DbFrontend);
 sub init {
   my $self = shift;
 
+  ## Custom values
+  $self->{'record_select_columns'} = [qw(title)];
+  $self->{'record_table_columns'} = [qw(title status)];
+
   ## Alter default settings if required
-  $self->{'show_fields'} = [qw(title content)];
+  $self->{'show_fields'} = [qw(release_id title content priority status)];
   $self->{'show_primary_key'} = 0;
 }
 
