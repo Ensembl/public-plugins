@@ -26,6 +26,7 @@ sub content {
   my $model = $self->model;
   my $hub = $self->hub;
   my $release = $hub->species_defs->ENSEMBL_VERSION;
+  warn ">>> RELEASE $release";
   my $html = "<h1>Changelog for Release $release</h1>";
 
   my $data = $self->model->object('Changelog')->fetch_all;
@@ -111,7 +112,7 @@ sub content {
 <li><strong>Database new/patched?</strong> %s</li>
 </ul>
 ),
-          $item->assembly, $item->gene_set, $item->repeat_masking, $item->stable_id_mapping, $item->affy_mapping, $item->database
+          $item->assembly, $item->gene_set, $item->repeat_masking, $item->stable_id_mapping, $item->affy_mapping, $item->db_status
         );
       }
     }

@@ -99,6 +99,25 @@ sub fetch_by_id {
   return $objects; 
 }
 
+sub fetch_by_page {
+### Used with the (optional) pagination parameter to retrieve a set of objects
+  my ($self, $pagination, $start) = @_;
+  my $objects = $self->manager_class->get_objects(
+                  limit => $pagination,
+                  offset => $start,
+                  object_class => $self->object_class,
+                );
+  return $objects; 
+}
+
+sub count {
+  my $self = shift;
+  my $count = $self->manager_class->get_objects_count(
+                object_class => $self->object_class,
+              );
+  return $count;
+}
+
 sub get_table_columns {
 ### Returns all columns from a table - used to populate a web form
   my $self = shift;
@@ -204,7 +223,7 @@ sub populate_from_cgi {
 }
 
 sub save {
-## Wrapper to Rose::DB::Object's save method, automatically adding web-friendly error-handling
+### Wrapper to Rose::DB::Object's save method, automatically adding web-friendly error-handling
   my $self = shift;
   my $ids = [];
   my $primary_key = $self->primary_key;
@@ -220,5 +239,31 @@ sub save {
   }
   return $ids;
 }
+
+sub delete {
+  my $self = shift;
+}
+
+sub retire {
+### Alternative 'delete' - sets a flag in the database to a suitable status
+### such as 'dead' or 'cancelled'
+  my ($self, $permit_delete) = @_;
+  my ($field, $value) = @$permit_delete;
+
+  my $ids = [];
+  my $primary_key = $self->primary_key;
+  foreach (@{$self->data_objects}) {
+    $_->$field($value);
+    my $id = $_->save('update' => 1, 'changes_only' => 1);
+    if ($_->error) {
+      warn $_->error;
+    }
+    else {
+      push @$ids, $_->$primary_key;
+    }
+  }
+  return $ids;
+}
+
 
 1;

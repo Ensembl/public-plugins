@@ -1,6 +1,6 @@
 package EnsEMBL::ORM::DbFrontend;
 
-## NAME: EnsEMBL::ORM::DbFrontend
+### NAME: EnsEMBL::ORM::DbFrontend
 ### A base class for configuring automated database frontends
 
 ### STATUS: Under development
@@ -37,7 +37,7 @@ package EnsEMBL::ORM::DbFrontend;
 ###                         pages (default is 0)
 ### show_tracking           Boolean flag - if the table has created/modified fields,
 ###                         should these be shown (default is 0)
-### delete_mode             Defines whether and how records can be deleted/retired. 
+### permit_delete           Defines whether and how records can be deleted/retired. 
 ###                         Valid values are: 
 ###                             0 - no deletes of any kind (default)
 ###                             1 - records can be deleted
@@ -82,7 +82,7 @@ sub new {
     'show_preview'           => 1,
     'show_primary_key'       => 0,
     'show_tracking'          => 0,
-    'delete_mode'            => 0,
+    'permit_delete'            => 0,
   };
 
   bless $self, $class;
@@ -114,7 +114,7 @@ sub show_primary_key { my $self = shift; return $self->{'show_primary_key'}; }
 
 sub show_tracking { my $self = shift; return $self->{'show_tracking'}; }
 
-sub delete_mode { my $self = shift; return $self->{'delete_mode'}; }
+sub permit_delete { my $self = shift; return $self->{'permit_delete'}; }
 
 ##-------------- Stubs for optional subclass methods -------------------
 
@@ -132,7 +132,5 @@ sub modify_form {
 ### as type and label (i.e. the arguments of the corresponding 
 ### EnsEMBL::Web::Form::Element module)
 }
-
-
 
 1;

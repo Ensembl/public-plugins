@@ -13,6 +13,7 @@ package EnsEMBL::ORM::Component::DbFrontend::Display;
 use strict;
 use warnings;
 no warnings "uninitialized";
+
 use base qw(EnsEMBL::ORM::Component::DbFrontend);
 
 sub _init {
@@ -25,15 +26,24 @@ sub content {
   my $self = shift;
   my $hub = $self->hub;
   my $html;
-  my @records;
+  my (@records, $count);
 
   if ($hub->param('id')) {
     my @ids = ($hub->param('id'));
     @records = @{$self->model->object->fetch_by_id(\@ids)};
   }
   else {
-    @records = @{$self->model->object->fetch_all};
+    my $config = $self->get_frontend_config;
+    if ($config->pagination) {
+      @records = @{$self->model->object->fetch_by_page($config->pagination)};
+      $count = $self->model->object->count;
+      $html .= $self->create_pagination($config->pagination, $count);
+    }
+    else {
+      @records = @{$self->model->object->fetch_all};
+    }
   }
+
   if (@records) {
     my @column_names;
     my $config = $self->get_frontend_config;
@@ -62,6 +72,10 @@ sub content {
       }
       $html .= "</table>\n\n";
     }
+  }
+
+  if ($config->pagination) {
+    $html .= $self->create_pagination($config->pagination, $count);
   }
 
   return $html;
