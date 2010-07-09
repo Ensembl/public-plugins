@@ -19,22 +19,42 @@ __PACKAGE__->meta->setup(
     news_item_id      => {type => 'serial', primary_key => 1, not_null => 1}, 
     news_category_id  => {type => 'integer'},
     release_id        => {type => 'integer'},
-    title             => {type => 'text'},
+    title             => {type => 'varchar'},
     content           => {type => 'text'},
     priority          => {type => 'integer'},
-    status            => {type => 'enum', 'values' => [qw(declared handed_over postponed cancelled)]},
+    status            => {type => 'enum', 'values' => [qw(draft published dead)]},
+    created_by        => {type => 'integer'},
+    created_at        => {type => 'datetime'},
+    modified_by       => {type => 'integer'},
+    modified_at       => {type => 'datetime'},
+    declaration       => {type => 'text'},
+    notes             => {type => 'text'},
+    dec_status        => {type => 'enum', 'values' => [qw(declared handed_over postponed cancelled)]},
+    data              => {type => 'text'},
+    news_done         => {type => 'enum', 'values' => [qw(N Y X)]},
   ],
 
   relationships => [
-    news_category => {
-      'type'        => 'many to one',
-      'class'       => 'EnsEMBL::ORM::Rose::Object::NewsCategory',
-      'key_columns' => {'news_category_id' => 'news_category_id'},
+    category => {
+      'type'          => 'many to one',
+      'class'         => 'EnsEMBL::ORM::Rose::Object::NewsCategory',
+      'column_map'    => {'news_category_id' => 'news_category_id'},
     },
   ],
 
 );
 
+=pod
+    release => {
+      'type'        => 'many to one',
+      'class'       => 'EnsEMBL::ORM::Rose::Object::Release',
+      'key_columns' => {'release_id' => 'release_id'},
+    },
+    species => {
+      'type'        => 'many to many',
+      'map_class'   => 'EnsEMBL::ORM::Rose::Object::NewsSpecies',
+    },
+=cut
 sub init_db { 
   ## Set up the db connection
   EnsEMBL::ORM::Rose::DbConnection->new('website'); 
