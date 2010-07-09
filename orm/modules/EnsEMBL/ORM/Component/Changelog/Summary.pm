@@ -34,6 +34,7 @@ sub content {
   my $previous;
 
   foreach my $item (@$data) {
+    next unless $item->content;
     if ($item->team ne $previous) {
       $html .= '<h2>'.$item->team.'</h2>';
     }
