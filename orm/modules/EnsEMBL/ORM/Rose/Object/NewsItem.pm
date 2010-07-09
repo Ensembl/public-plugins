@@ -40,21 +40,19 @@ __PACKAGE__->meta->setup(
       'class'         => 'EnsEMBL::ORM::Rose::Object::NewsCategory',
       'column_map'    => {'news_category_id' => 'news_category_id'},
     },
-  ],
-
-);
-
-=pod
-    release => {
+    ens_release => {
       'type'        => 'many to one',
       'class'       => 'EnsEMBL::ORM::Rose::Object::Release',
-      'key_columns' => {'release_id' => 'release_id'},
+      'column_map'  => {'release_id' => 'release_id'},
     },
     species => {
       'type'        => 'many to many',
       'map_class'   => 'EnsEMBL::ORM::Rose::Object::NewsSpecies',
     },
-=cut
+  ],
+
+);
+
 sub init_db { 
   ## Set up the db connection
   EnsEMBL::ORM::Rose::DbConnection->new('website'); 
