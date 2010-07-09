@@ -72,6 +72,7 @@ sub populate {
 
   if (!@ids && $self->hub->param('id')) {
     @ids = ($self->hub->param('id'));
+    warn "IDs @ids";
     @objects = @{$self->fetch_by_id(\@ids)};
   }
   $self->data_objects(@objects);
@@ -135,9 +136,9 @@ sub get_table_columns {
   return $columns;
 }
 
-sub get_related_columns {
-### Forms may need dummy columns, representing relational objects that can
-### be attached to the main domain object
+sub get_m2m_columns {
+### Forms may need dummy columns, representing many-to-many relational 
+### objects that can be attached to the main domain object
   my $self = shift;
   my $data_object = $self->data_objects->[0] || $self->create_empty_object;
   my $managers = $self->_get_m2m_managers($data_object);
@@ -158,7 +159,7 @@ sub get_related_columns {
 
 sub _get_m2m_managers {
 ### Helper method to get information about many-to-many relationships
-### Returns a hashref of object_name => manager_class_name pairs,
+### Returns a hashref of relationship => manager_class_name pairs,
 ### e.g. 'species' => 'EnsEMBL::ORM::Rose::Manager::Species'
   my ($self, $data_object) = @_;
   return unless $data_object;
@@ -177,6 +178,28 @@ sub _get_m2m_managers {
     }
   }
   return $managers;
+}
+
+sub get_m2o_lookups {
+  my $self = shift;
+  my $data_object = $self->data_objects->[0] || $self->create_empty_object;
+  my $lookups = {};
+ 
+  foreach my $rel (@{$data_object->meta->relationships}) {
+    next unless $rel->type eq 'many to one';
+    my @keys = keys %{$rel->column_map};
+    my $fk = $keys[0];
+    my $class = $rel->manager_class;
+    ## Fall back to a default if undefined
+    unless ($class) {
+      ($class = $rel->class) =~ s/Object/Manager/;
+    }
+    if ($class && $self->dynamic_use($class)) {
+      $lookups->{$fk} = $class->get_lookup;
+    }
+  }
+
+  return $lookups;
 }
 
 sub create_empty_object {
