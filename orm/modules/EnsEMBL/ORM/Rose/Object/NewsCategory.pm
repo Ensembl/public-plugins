@@ -23,7 +23,7 @@ __PACKAGE__->meta->setup(
   ],
 
   relationships => [
-    news_item => {
+    newsitem => {
       'type'        => 'one to many',
       'class'       => 'EnsEMBL::Data::NewsItem',
       'column_map'  => {'news_category_id' => 'news_category_id'},
