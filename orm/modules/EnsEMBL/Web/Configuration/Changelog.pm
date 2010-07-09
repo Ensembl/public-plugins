@@ -1,5 +1,17 @@
 package EnsEMBL::Web::Configuration::Changelog;
 
+### NAME: EnsEMBL::Web::Configuration::Changelog
+### Default node and general settings for the Changelog pages
+
+### STATUS: Stable
+
+### DESCRIPTION:
+### A standard Configuration module. Note that by default, there are
+### no CRUD nodes - these are added in the admin plugin, since most
+### users won't need this functionality or wish it to be exposed on
+### the web. There is however a custom display node so that non-admin
+### users can view relevant entries from the changelog
+
 use strict;
 use base qw( EnsEMBL::Web::Configuration );
 

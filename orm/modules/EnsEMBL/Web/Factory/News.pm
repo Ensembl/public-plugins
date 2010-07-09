@@ -1,5 +1,10 @@
 package EnsEMBL::Web::Factory::News;
 
+### NAME: EnsEMBL::Web::Factory::News
+### Very simple factory to produce EnsEMBL::ORM::Data::Rose::News objects
+
+### STATUS: Stable
+
 use strict;
 use warnings;
 no warnings 'uninitialized';

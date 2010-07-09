@@ -1,5 +1,18 @@
 package EnsEMBL::Web::Configuration::News;
 
+### NAME: EnsEMBL::Web::Configuration:News
+### Default node and general settings for the News pages
+
+### STATUS: Stable
+
+### DESCRIPTION:
+### A standard Configuration module. Note that by default, there are
+### no CRUD nodes - these are added in the admin plugin, since most
+### users won't need this functionality or wish it to be exposed on
+### the web. There is however a custom display node so that non-admin
+### users can view site news
+
+
 use strict;
 use base qw( EnsEMBL::Web::Configuration );
 

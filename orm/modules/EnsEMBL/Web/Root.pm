@@ -1,6 +1,6 @@
 package EnsEMBL::Web::Root;
 
-### Extends E::W::Root by adding a method needed by both Components and Commands
+### Extends E::W::Root by adding a method needed by CRUD Components, Commands, etc
 
 sub get_frontend_config {
 ### Instantiates the config module for the Ensembl CRUD frontend
