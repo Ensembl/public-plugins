@@ -44,10 +44,26 @@ sub content {
 
   ## Add desired fields as form elements
   my @fields = ($self->model->object->primary_key);
-  push @fields, @{$config->show_fields};
-  if ($config->show_tracking && $form_type ne 'Add') {
-    push @fields, (qw(created_by created_at modified_by modified_at));
+  my $tracking_added = 0;
+  foreach my $field (@{$config->show_fields}) {
+    ## Only add tracking fields where appropriate
+    if ( ($field =~ /^created/ || $field =~ /^modified/)) {
+      if ($config->show_tracking && $form_type ne 'Add') {
+        push @fields, $field;
+        $tracking_added = 1;
+      }
+    }
+    else {
+      push @fields, $field;
+    }
   }
+  ## If no tracking fields have been  manually configured but show_tracking
+  ## is turned on in the config, add them all here
+  if (!$tracking_added && $config->show_tracking && $form_type ne 'Add') {
+    push @fields, qw(created_by created_at modified_by modified_at);
+  }
+
+  ## Now create the form parameters
   foreach my $name (@fields) {
     my $p = $param->{$name};
     if ($record) {
