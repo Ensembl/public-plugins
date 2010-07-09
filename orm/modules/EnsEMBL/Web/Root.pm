@@ -7,11 +7,13 @@ sub get_frontend_config {
   my $self = shift;
   my $config;
 
-  my $class = 'EnsEMBL::ORM::DbFrontend::'.$module = $self->model->hub->type;
+  my $class = 'EnsEMBL::ORM::DbFrontend::'.$self->model->hub->type;
 
-  if ($self->dynamic_use($class)) {
-    $config = $class->new($self->model);
+  if (!$self->dynamic_use($class)) {
+    ## Fall back to using generic configuration
+    $class = 'EnsEMBL::ORM::DbFrontend';
   }
+  $config = $class->new($self->model);
   return $config;
 }
 
