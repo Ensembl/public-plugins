@@ -116,7 +116,10 @@ sub unpack_db_table {
   my $data = $self->model->object;
 
   my @columns = @{$data->get_table_columns};
-  push @columns, @{$data->get_related_columns};
+  push @columns, @{$data->get_m2m_columns};
+
+  ## check for one-to-many foreign keys
+  my %m2o_lookups = %{$data->get_m2o_lookups};
 
   foreach my $column (@columns) {
     my $name = $column->name;
@@ -151,21 +154,17 @@ sub unpack_db_table {
         $param->{'type'} = 'NoEdit';
         $param->{'is_primary_key'} = 1 if $column->is_primary_key_member;
       }
-      elsif ($name =~ /password/) {
-        $param->{'type'} = 'Password';
-      }
-      elsif ($data_type eq 'integer') {
-        $param->{'type'} = 'Int';
-      }
-      elsif ($data_type eq 'text') {
-        $param->{'type'} = 'Text';
+      elsif ($m2o_lookups{$name}) {
+        $param->{'type'} = 'DropDown';
+        $param->{'select'}  = 'select';
+        $param->{'values'} = $m2o_lookups{$name};
       }
       elsif ($data_type eq 'enum' || $data_type eq 'set') {
         $param->{'select'}  = 'select';
         if ($data_type eq 'enum') {
-          ## Use radio buttons if only three options
+          ## Use radio buttons if only two options
           my $values = $column->values;
-          if (@$values < 4) {
+          if (@$values < 3) {
             $param->{'select'} = 'radio';
           }
           $param->{'type'} = 'DropDown';
@@ -184,6 +183,15 @@ sub unpack_db_table {
           }
           $param->{'values'} = $tmp;
         }
+      }
+      elsif ($name =~ /password/) {
+        $param->{'type'} = 'Password';
+      }
+      elsif ($data_type eq 'integer') {
+        $param->{'type'} = 'Int';
+      }
+      elsif ($data_type eq 'text') {
+        $param->{'type'} = 'Text';
       }
       else {
         $param->{'type'} = 'String';
