@@ -20,8 +20,15 @@ sub init {
   $self->{'record_table_columns'} = [qw(title status)];
 
   ## Alter default settings if required
-  $self->{'show_fields'} = [qw(release_id title content priority status)];
+  $self->{'show_fields'} = [qw(release_id title content species priority status)];
   $self->{'show_primary_key'} = 0;
+}
+
+sub modify_form {
+  my ($self, $param, $mode) = @_;
+
+  $param->{'release_id'}{'type'} = 'NoEdit';
+  $param->{'release_id'}{'value'} = $self->hub->species_defs->ENSEMBL_VERSION;
 }
 
 1;
