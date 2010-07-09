@@ -11,9 +11,11 @@ sub get_frontend_config {
 
   if (!$self->dynamic_use($class)) {
     ## Fall back to using generic configuration
+    use EnsEMBL::ORM::DbFrontend;
     $class = 'EnsEMBL::ORM::DbFrontend';
   }
   $config = $class->new($self->model);
   return $config;
 }
 
+1;
