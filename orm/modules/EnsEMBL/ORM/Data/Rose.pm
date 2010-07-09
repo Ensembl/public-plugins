@@ -101,10 +101,13 @@ sub fetch_by_id {
 
 sub fetch_by_page {
 ### Used with the (optional) pagination parameter to retrieve a set of objects
-  my ($self, $pagination, $start) = @_;
+  my ($self, $pagination) = @_;
+  my $page = $self->hub->param('page') || 1;
+  my $offset = ($page - 1) * $pagination;
+
   my $objects = $self->manager_class->get_objects(
                   limit => $pagination,
-                  offset => $start,
+                  offset => $offset,
                   object_class => $self->object_class,
                 );
   return $objects; 
