@@ -19,10 +19,14 @@ sub object_class { 'EnsEMBL::ORM::Rose::Object::Species' }
 __PACKAGE__->make_manager_methods('species');
 
 sub get_lookup {
+### For interface lookups, we only need those species that are in 
+### the current release
+  my ($class, $hub) = @_;
   my $lookup = [];
   my $current = get_species(
-    'query'   => [],
-    'sort_by' => 'common_name',
+    'with_objects'  => ['release'],
+    'query'         => ['t3.release_id' => $hub->species_defs->ENSEMBL_VERSION],
+    'sort_by'   => 'common_name',
   );
   foreach my $species (@$current) {
     push @$lookup, {'name' => $species->common_name, 'value' => $species->species_id}
