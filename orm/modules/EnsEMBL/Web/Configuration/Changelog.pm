@@ -33,7 +33,7 @@ sub content_panel  { return $_[0]->_content_panel;  }
 sub populate_tree {
   my $self = shift;
 
-  $self->create_node( 'Summary', 'Show all',
+  $self->create_node( 'Summary', 'View all',
     [qw(summary EnsEMBL::ORM::Component::Changelog::Summary)], 
     { 'availability' => 1}
   );

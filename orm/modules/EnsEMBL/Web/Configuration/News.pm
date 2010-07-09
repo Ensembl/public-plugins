@@ -18,7 +18,7 @@ use base qw( EnsEMBL::Web::Configuration );
 
 sub set_default_action {
   my $self = shift;
-  $self->{_data}{default} = 'Display';
+  $self->{_data}{default} = 'Summary';
 }
 
 sub short_caption {}
@@ -34,8 +34,8 @@ sub content_panel  { return $_[0]->_content_panel;  }
 sub populate_tree {
   my $self = shift;
 
-  $self->create_node( 'Display', 'Show all',
-    [qw(list   EnsEMBL::ORM::Component::DbFrontend::Display)],
+  $self->create_node( 'Summary', "What's New in Ensembl",
+    [qw(summary   EnsEMBL::ORM::Component::News::Summary)],
     {'availability' => 1},
   );
 
