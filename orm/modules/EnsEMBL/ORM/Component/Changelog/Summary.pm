@@ -117,6 +117,10 @@ sub content {
       }
     }
 
+    if ($user && $user->is_member_of($self->hub->species_defs->ENSEMBL_WEBADMIN_ID)) {
+      $html .= '<p style="margin-top:0.5em"><a href="/Changelog/Edit?id='.$item->changelog_id.'" style="text-decoration:none"><img src="/i/edit.gif" alt="" />  Edit this record</a> &middot; <a href="/Changelog/Display?id='.$item->changelog_id.'" style="text-decoration:none">View full record</a>';
+    }
+
     $html .= '<hr />';
     $previous = $item->team;
   }

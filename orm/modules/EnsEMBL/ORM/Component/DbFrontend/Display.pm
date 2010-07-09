@@ -27,13 +27,13 @@ sub content {
   my $hub = $self->hub;
   my $html;
   my (@records, $count);
+  my $config = $self->get_frontend_config;
 
   if ($hub->param('id')) {
     my @ids = ($hub->param('id'));
     @records = @{$self->model->object->fetch_by_id(\@ids)};
   }
   else {
-    my $config = $self->get_frontend_config;
     if ($config->pagination) {
       @records = @{$self->model->object->fetch_by_page($config->pagination)};
       $count = $self->model->object->count;
@@ -46,7 +46,6 @@ sub content {
 
   if (@records) {
     my @column_names;
-    my $config = $self->get_frontend_config;
     if ($config) {
       @column_names = @{$config->show_fields}; 
     }

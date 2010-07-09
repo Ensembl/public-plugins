@@ -21,6 +21,7 @@ sub init {
   ## Alter default settings if required
   $self->{'show_fields'} = [qw(release_id team title species content status assembly gene_set repeat_masking stable_id_mapping affy_mapping db_status notes)];
   $self->{'show_tracking'} = 1;
+  $self->{'pagination'} = 20;
 }
 
 sub modify_form {

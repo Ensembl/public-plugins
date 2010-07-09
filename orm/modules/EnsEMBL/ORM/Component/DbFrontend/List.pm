@@ -26,11 +26,19 @@ sub content {
   my $hub = $self->model->hub;
   my $html;
 
-  my @records = @{$self->model->object->fetch_all};
-  $html .= '<p>Total records: '.@records.'</p>';
-
   my $config  = $self->get_frontend_config;
   my $columns = $config->record_table_columns;
+  my (@records, $count);
+
+  if ($config->pagination) {
+    @records = @{$self->model->object->fetch_by_page($config->pagination)};
+    $count = $self->model->object->count;
+    $html .= $self->create_pagination($config->pagination, $count);
+  }
+  else {
+    @records = @{$self->model->object->fetch_all};
+    $html .= '<p>Total records: '.@records.'</p>';
+  }
 
   my $table = new EnsEMBL::Web::Document::SpreadSheet( [], [], {'margin' => '0px'} );
   $table->add_columns({'key' => 'edit_link', 'title' => 'Edit', 'width' => '10%', 'align' => 'center'});
@@ -58,6 +66,10 @@ sub content {
   }
   $html .= $table->render;
   
+  if ($config->pagination) {
+    $html .= $self->create_pagination($config->pagination, $count);
+  }
+
   return $html;
 }
 

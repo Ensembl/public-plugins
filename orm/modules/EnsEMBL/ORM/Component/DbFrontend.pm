@@ -31,18 +31,23 @@ sub create_pagination {
   my $hub = $self->model->hub;
 
   my ($prev_link, $next_link);
+  my $link_style = 'font-weight:bold;text-decoration:none';
+
   my $page = $hub->param('page') || 1; 
   my $start = ($page - 1) * $pagination + 1;
   my $end = $page * $pagination; 
+  if ($end >= $count) {
+    $end = $count;
+  }
   my $more = $count - $end;
 
   if ($page > 1) {
-    my $prev_url = '/'.$hub->type.'/'.$hub->action.'?page='.$page-1;
-    $prev_link = qq(<a href="$prev_url">&lt;&lt; Previous</a>);
+    my $prev_url = '/'.$hub->type.'/'.$hub->action.'?page='.($page-1);
+    $prev_link = qq(<a href="$prev_url" style="$link_style">&lt;&lt; Previous</a>);
   }
   if ($more) {
-    my $next_url = '/'.$hub->type.'/'.$hub->action.'?page='.$page+1;
-    $next_link = qq(<a href="$next_url">Next &gt;&gt;</a>);
+    my $next_url = '/'.$hub->type.'/'.$hub->action.'?page='.($page+1);
+    $next_link = qq(<a href="$next_url" style="$link_style">Next &gt;&gt;</a>);
   }
 
   my $html = qq(<table style="width:98%"><tr>
