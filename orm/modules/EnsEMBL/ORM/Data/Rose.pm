@@ -145,7 +145,7 @@ sub get_m2m_columns {
   my $columns = [];
   
   while (my ($name, $manager) = each (%$managers)) {
-    my $values = $manager->get_lookup;
+    my $values = $manager->get_lookup($self->hub);
     my $col = EnsEMBL::ORM::Rose::Column->new({ 
       'name'    => $name,
       'type'    => 'set',
@@ -195,7 +195,7 @@ sub get_m2o_lookups {
       ($class = $rel->class) =~ s/Object/Manager/;
     }
     if ($class && $self->dynamic_use($class)) {
-      $lookups->{$fk} = $class->get_lookup;
+      $lookups->{$fk} = $class->get_lookup($self->hub);
     }
   }
 
