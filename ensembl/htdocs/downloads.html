@@ -1,0 +1,86 @@
+<html>
+<head>
+<title>Ensembl: Downloads</title>
+</head>
+<body>
+
+<div class="twocol-left plain-box">
+
+<h2 class="first">Accessing Ensembl Data</h2>
+
+<h3>Exporting data from the website</h3>
+<p>Many of the pages displaying Ensembl genomic data offer an <a href="/info/data/export.html">export</a> 
+option, suitable for small amounts of data, e.g. a single gene sequence.</p>
+
+<p>Look for the 'Export' button in the left-hand menu:</p>
+<div id="local-tools">
+<div style="width:14em"><a class="export" title="You cannot export data from this page">Export data</a></div>
+</div>
+
+<p><a href="/info/data/export.html">More details...</a></p>
+
+<h3>Data-mining with BioMart</h3>
+<p><img src="/img/info/biomart-logo.gif" class="float-left" alt="BioMart logo" />Complex datasets can be retrieved using the <a href="http://www.ensembl.org/biomart/martview">BioMart</a> 
+data-mining tool.</p>
+<p>You may find exploring this web-based data mining tool easier than extracting information 
+from our normalised database dumps. </p>
+<p><a href="/info/data/biomart.html">More details...</a></p>
+
+<h3>Public MySQL server</h3>
+<p>If you require larger amounts of data (e.g. all the genes on a chromosome) or are 
+conducting a more detailed analysis, we recommend using our 
+publicly-accessible <a href="/info/data/mysql.html">MySQL server</a> We provide a 
+<a href="/info/docs/api/">Perl API</a> to these databases, so they can be 
+scripted against without needing to know the database schema.</p>
+<p><a href="/info/data/mysql.html">More details...</a></p>
+
+<h3>FTP site</h3>
+<p>If required, entire databases can be downloaded from our <a href="ftp/">FTP site</a> 
+in a variety of formats, from flat files to MySQL dumps.</p>
+<p>Please be aware, however, that an entire EnsEMBL release currently totals almost
+a terabyte of MySQL files, hence the other tools mentioned above may be more suitable
+for small queries!</p>
+<p><a href="/info/data/ftp.html">More details...</a></p>
+
+</div>
+
+<div class="twocol-right plain-box">
+
+<h2 class="first">Software Downloads</h2>
+<p><a href="http://www.perl.com/"><img src="/img/info/powered_by_perl.gif" class="float-left" alt="Powered by Perl!" /></a>At present all our software is written in Perl. Some external projects are available in
+other languages; for an up-to-date list, see our 
+<a href="http://www.ensembl.org/info/about/ensembl_powered.html">projects page</a>.</p>
+<p>All software produced by Ensembl is freely available to download and use, subject to our 
+<a href="http://www.ensembl.org/info/about/code_licence.html">licence</a>.</p>
+
+<h3>Perl API</h3>
+<p>For rapid access to small-to-medium datasets, we recommend use of our 
+<a href="/info/docs/api/">Perl API</a>.</p>
+<p>The API allows you to quickly write scripts to retrieve and query biological data objects
+such as genes, variation features and 'slices' of DNA sequence.</p>
+<pre class="code">
+# Fetch all clones from a slice adaptor 
+# (returns a list reference)
+my $clones_ref = $slice_adaptor-&gt;fetch_all('clone');
+</pre>
+<p><a href="/info/docs/api/">More details...</a></p>
+
+<h3>Genebuild pipeline</h3>
+<p>For projects that wish to create their own genomic databases, we also make our
+genebuild pipeline toolset available.</p>
+<p><a href="/info/docs/">More details...</a></p>
+
+<h3>Web code</h3>
+<p>If your project makes heavy use of Ensembl data or wishes to display confidential
+data alongside Ensembl tracks, you can download our webcode and set up your own
+personal mirror site.</p>
+<p>The web code is designed to be highly customisable, so you can brand your site,
+install only a subset of species, or even create a completely new site based on
+our web interface and/or drawing code.</p>
+<p class="screenshot"><img src="/img/info/webcode.png" alt="Screenshot of webcode in the vim editor" /></p>
+<p><a href="/info/docs/webcode/">More details...</a></p>
+
+</div>
+
+</body>
+</html>
