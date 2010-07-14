@@ -4,23 +4,40 @@
 </head>
 <body>
 
-<div class="twocol-left plain-box">
+<p>We provide a number of ready-made tools for processing your data. At the moment, small datasets can be uploaded to our servers and processed online; for larger datasets, we provide an API script that can be downloaded (you will also need to <a href="/info/docs/api/">install our Perl API</a> to use these).</p>
+<p>In the near future we aim to offer an intermediate service, whereby medium-to-large data sets can be submitted to a queue, similar to BLAST.</p>
+<p>Currently available:</p>
 
-<h2 class="first"></h2>
+<table class="ss" style="width:100%">
+<tr>
+  <th>Tool</th>
+  <th>Description</th>
+  <th>&nbsp;</th>
+  <th>&nbsp;</th>
+</tr>
 
-<p></p>
-<p></p>
+<tr>
+  <td>Assembly converter</td>
+  <td>Map your data to the current assembly. Accepted file formats: GFF, GTF, BED, PSL
+  <br />N.B. Export is currently in GFF only</td>
+  <td><a href="/Homo_sapiens/UserData/SelectFeatures" class="modal_link">Online version</a></td>
+  <td><a href="ftp://ftp.ensembl.org/pub/misc-scripts/Assembly_mapper_1.0/">API script</a></td>
+</tr>
 
-</div>
+<tr class="bg2">
+  <td>ID History converter</td>
+  <td>Convert a set of Ensembl IDs from a previous release into their current equivalents.</td>
+  <td><a href="/Homo_sapiens/UserData/UploadStableIDs" class="modal_link">Online version</a>(max 30 ids)</td>
+  <td><a href="ftp://ftp.ensembl.org/pub/misc-scripts/ID_mapper_1.0/">API script</a></td>
+</tr>
 
-<div class="twocol-right plain-box">
-
-<h2 class="first"></h2>
-
-<p></p>
-<p></p>
-
-</div>
+<tr>
+  <td>SNP Effect Predictor</td>
+  <td>Upload a set of SNPs in our <a href="">standard format</a> and export a file containing consequence types. Uploaded tracks can also be viewed on Location pages.</td>
+  <td><a href="/Homo_sapiens/UserData/UploadVariations" class="modal_link">Online version</a> (max 750 SNPs)</td>
+  <td><a href="ftp://ftp.ensembl.org/pub/misc-scripts/SNP_effect_predictor_1.0/">API script</a></td>
+</tr>
+</table>
 
 </body>
 </html>
