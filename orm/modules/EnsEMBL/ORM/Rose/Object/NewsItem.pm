@@ -40,7 +40,7 @@ __PACKAGE__->meta->setup(
       'class'         => 'EnsEMBL::ORM::Rose::Object::NewsCategory',
       'column_map'    => {'news_category_id' => 'news_category_id'},
     },
-    ens_release => {
+    release => {
       'type'        => 'many to one',
       'class'       => 'EnsEMBL::ORM::Rose::Object::Release',
       'column_map'  => {'release_id' => 'release_id'},
@@ -52,6 +52,9 @@ __PACKAGE__->meta->setup(
   ],
 
 );
+
+=pod
+=cut
 
 sub init_db { 
   ## Set up the db connection

@@ -35,6 +35,9 @@ __PACKAGE__->meta->setup(
 
 );
 
+=pod
+=cut
+
 sub init_db { 
   ## Set up the db connection  
   EnsEMBL::ORM::Rose::DbConnection->new('website'); 

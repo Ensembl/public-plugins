@@ -33,7 +33,6 @@ sub fetch_all {
   my $objects = $self->{'_manager_class'}->get_newsitems(
     query => [
       release_id  => $release_id,
-      !content    => '', ## not empty
     ],
   );
   $self->data_objects(@$objects);
@@ -50,7 +49,6 @@ sub fetch_published {
     query => [
       release_id => $release_id,
       status     => 'published',
-      !content    => '', ## not empty
     ],
   );
   $self->data_objects(@$objects);

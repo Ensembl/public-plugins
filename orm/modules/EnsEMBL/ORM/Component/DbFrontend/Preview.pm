@@ -30,7 +30,7 @@ sub content {
   my $hub = $self->hub;
   my $config = $self->get_frontend_config;
 
-  my $form = $self->create_form('Preview', 'Save');
+  my $form = $self->create_form('Save');
   my $fieldset = $form->add_fieldset;
   my $previous = $hub->param('form_type');
 

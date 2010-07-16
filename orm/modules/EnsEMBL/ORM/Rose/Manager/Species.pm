@@ -24,9 +24,7 @@ sub get_lookup {
   my ($class, $hub) = @_;
   my $lookup = [];
   my $current = get_species(
-    'with_objects'  => ['release'],
-    'query'         => ['t3.release_id' => $hub->species_defs->ENSEMBL_VERSION],
-    'sort_by'   => 'common_name',
+    'with_objects'  => ['releases'],
   );
   foreach my $species (@$current) {
     push @$lookup, {'name' => $species->common_name, 'value' => $species->species_id}
@@ -34,4 +32,9 @@ sub get_lookup {
   return $lookup;
 }
 
+=pod
+    'query'         => ['ens_release.release_id' => $hub->species_defs->ENSEMBL_VERSION],
+    'sort_by'   => 'common_name',
+
+=cut
 1;

@@ -1,7 +1,7 @@
 package EnsEMBL::ORM::Rose::Object::ReleaseSpecies;
 
 ### NAME: EnsEMBL::ORM::Rose::Object::ReleaseSpecies
-### ORM class defining the item_species table in ensembl_production 
+### ORM class defining the release_species table in ensembl_website 
 
 ### STATUS: Stable 
 
@@ -21,10 +21,11 @@ __PACKAGE__->meta->setup(
   primary_key_columns => ['release_id', 'species_id'],
 
   relationships => [
-    ens_release => {
+    release => {
       'type'        => 'many to one',
-      'class'       => 'EnsEMBL::ORM::Rose::Object::NewsItem',
+      'class'       => 'EnsEMBL::ORM::Rose::Object::Release',
       'column_map'  => {'release_id' => 'release_id'},
+      'manager_class' => 'EnsEMBL::ORM::Rose::Manager::Release',
     },
     species => {
       'type'        => 'many to one',

@@ -82,7 +82,7 @@ sub new {
     'show_preview'           => 1,
     'show_primary_key'       => 0,
     'show_tracking'          => 0,
-    'permit_delete'            => 0,
+    'permit_delete'          => 0,
   };
 
   bless $self, $class;

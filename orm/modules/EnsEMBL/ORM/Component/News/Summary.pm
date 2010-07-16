@@ -25,7 +25,7 @@ sub content {
   my $self = shift;
   my $model = $self->model;
   my $hub = $self->hub;
-  my $release = $hub->species_defs->ENSEMBL_VERSION;
+  my $release = $hub->param('release') || $hub->species_defs->ENSEMBL_VERSION;
 
   my $data = $self->model->object('News')->fetch_published;
   unless ($data && @$data) {
