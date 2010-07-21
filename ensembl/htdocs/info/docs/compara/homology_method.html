@@ -148,6 +148,7 @@ speciation event. We predict several descriptions of orthologues:</p>
 <ul>
 <li>within_species_paralog</li>
 <li>between_species_paralog</li>
+<li>possible_ortholog</li>
 <li>other_paralog (see [2] below)</li>
 <li>contiguous_gene_split (see [3] below)</li>
 <li>putative_gene_split (see [3] below)</li>
@@ -181,8 +182,8 @@ can be characterised as one2one relations. Such cases are then relabelled
 apparent_ortholog_one2one. These can be the results of real
 duplications followed
 by gene losses (as shown in the picture below), but can also be the results of a wrong gene tree topology
-and wrong duplication node labelling. When the tree topology cannot resolve real orthology pairs, they will remain
-in the database as between_species_paralogs, reflecting long-distance relations that may be upgraded to orthologies in 
+and wrong duplication node labelling. When the tree topology cannot resolve real orthology pairs, but the taxon sampling in that part of the gene tree indicates that the called duplication is not highly consistent, they will be stored
+in the database as possible_orthologs, reflecting long-distance relations that may be upgraded to bona-fide orthologies in 
 further versions of the gene tree pipeline, or for example, with improved gene builds.
 </p>
 
@@ -212,7 +213,7 @@ region and the same strand (See GeneA1/GeneA2 below).
 
 <li id="fn2">Wallace IM, O'Sullivan O, Higgins DG, Notredame C. "M-Coffee: combining multiple sequence alignment methods with T-Coffee." <a href="http://www.ncbi.nlm.nih.gov/pubmed/16556910">Nucleic Acid Research. 2006 Mar 23;34(6):1692-9.</a> The current aligner sets are divided into 3 levels, each alignment is tried with the first, and retried on the second or third on failure. First level: mafftgins_msa, muscle_msa, kalign_msa, t_coffee_msa; second level: mafft_msa, muscle_msa, clustalw_msa, kalign_msa; third level: mafft --auto.</li>
 
-<li id="fn3">Li, H et al., TreeBeST: <a href="http://treesoft.sourceforge.net/treebest.shtml">http://treesoft.sourceforge.net/treebest.shtml</a>. Manuscript in preparation. TreeBeST was previously known as NJTREE.</li>
+<li id="fn3">Li, H et al., TreeBeST: <a href="http://treesoft.sourceforge.net/treebest.shtml">http://treesoft.sourceforge.net/treebest.shtml</a>. TreeBeST was previously known as NJTREE.</li>
 
 <li id="fn4">Yang, Z. "PAML: a program package for phylogenetic analysis by maximum likelihood" <a href="http://abacus.gene.ucl.ac.uk/software/paml.html">Comput Appl Biosci. 1997 Oct; 13(5):555-556.</a></li>
 
