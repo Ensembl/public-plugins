@@ -15,41 +15,6 @@
 	</STYLE>
 </HEAD>
 <BODY LANG="en-GB" DIR="LTR">
-<H1>TF Binding Site Annotation</H1>
-<P>For each transcription factor (TF) which has both a ChIP-seq data
-set in the functional genomics database and a publicly available
-position weight matrix (PWM) we have annotated the position of
-putative TF binding sites within the peaks called using the ChIP-seq
-reads. 
-</P>
-<P>Initially PWMs are mapped to the genome using the find_pssm_dna
-program from the MOODS software (1) with the -f flag set and a
-permissive threshold of 0.001. We then filter these mappings using a
-log odds score threshold. The threshold is derived per PWM by
-considering the occurrence of mappings  in a sample of randomly
-positioned 'background' sequences matched in terms of size and
-chromosome to the ChIP-seq peaks for this TF. We select the threshold
-such that the proportion of these background peaks containing a
-mapping is approximately 5%.</P>
-<P>Only mappings which overlap the corresponding ChIP-seq peaks are
-included in the functional genomics database.</P>
-<P>PWMs are taken from JASPAR (2) and Transfac (3).</P>
-<P>1. Janne Korhonen, Petri Martinmaki, Cinzia Pizzi, Pasi Rastas,
-Esko Ukkonen. MOODS: fast search for position weight matrix matches
-in DNA sequences. Bioinformatics, Vol. 25, No. 23. (1 December 2009),
-pp. 3181-3182.</P>
-<P>2. Bryne JC, Valen E, Tang MH, Marstrand T, Winther O, da Piedade
-I, Krogh A, Lenhard B, Sandelin A. JASPAR, the open access database
-of transcription factor-binding profiles: new content and tools in
-the 2008 update. Nucleic Acids Res. 2008 Jan;36(Database
-issue):D102-6. 
-</P>
-<P>3. Matys, V., Kel-Margoulis, O.V., Fricke, E., Liebich, I., Land,
-S., Barre-Dirrie, A., Reuter, I., Chekmenev, D., Krull, M.,
-Hornischer, K., Voss, N., Stegmaier, P., Lewicki-Potapov, B., Saxel,
-H., Kel, A.E. and Wingender, E. (2006). TRANSFAC and its module
-TRANSCompel: transcriptional gene regulation in eukaryotes. Nucleic
-Acids Res., 34, D108-110.</P>
 <H1>Regulatory Build</H1>
 <P>The regulatory build provides a single &quot;best guess&quot; set
 of regulatory elements. These elements are based on the information
@@ -92,16 +57,19 @@ associated attribute feature. This is done to capture information
 adjacent and indirectly associated with the core region, whilst
 avoiding longer range and potentially anomalous associations. 
 </P>
-<P><!-- Attributes with two degrees of separation are only
+<!-- Attributes with two degrees of separation are only
 included if they are within 2KB of the core region and they are
 entirely contained within another longer associated attribute
-feature. -->These
-two stages give rise to regulatory FeatureSets for the core
+feature. -->
+<P>For some cell lines where the is no core data available, but there is
+substantial other attribute data present, a projection build method is employed. This 
+involves projecting the core region defined by the other cell lines to the 'sparse' cell line.
+The attribute extension detailed above is then carried out using the projected core region.
+</P>
+<P>These two stages give rise to regulatory FeatureSets for the core
 'MultiCell' features and for each available cell type. 
 </P>
-<H2 CLASS="western"><!-- Do we really want to only include those attribute features which are
-entirely contained? --><!-- So long as they overlap and farthest
-bound is within 2KB? Cut-off for attribute feature length? --><!-- Degradation of chained core regions greater than? -->Annotation</H2>
+<H2 CLASS="western">Regulatory Feature Annotation</H2>
 <P>Regulatory Features (regfeats) are classified by considering their
 position on the genome in relation to other classes of feature on the
 genome (eg genes, repeats, intergenic regions) together with the
@@ -174,6 +142,42 @@ in Detail'</A>, displayed for a gene in the <A HREF="/Help/View%3Fid=142">'GeneR
 view or mined from the <A HREF="/info/docs/api/index.html">functional
 genomics</A> database. 
 </P>
+<H2 CLASS="western">Transcription Factor Binding Site Annotation</H3>
+<P>For each transcription factor (TF) which has both a ChIP-seq data
+set in the functional genomics database and a publicly available
+position weight matrix (PWM) we have annotated the position of
+putative TF binding sites within the peaks called using the ChIP-seq
+reads. 
+</P>
+<P>Initially PWMs are mapped to the genome using the find_pssm_dna
+program from the MOODS software (1) with the -f flag set and a
+permissive threshold of 0.001. We then filter these mappings using a
+log odds score threshold. The threshold is derived per PWM by
+considering the occurrence of mappings  in a sample of randomly
+positioned 'background' sequences matched in terms of size and
+chromosome to the ChIP-seq peaks for this TF. We select the threshold
+such that the proportion of these background peaks containing a
+mapping is approximately 5%.</P>
+<P>Only mappings which overlap the corresponding ChIP-seq peaks are
+included in the functional genomics database.</P>
+<P>PWMs are taken from JASPAR (2) and Transfac (3).</P>
+<P>1. Janne Korhonen, Petri Martinmaki, Cinzia Pizzi, Pasi Rastas,
+Esko Ukkonen. MOODS: fast search for position weight matrix matches
+in DNA sequences. Bioinformatics, Vol. 25, No. 23. (1 December 2009),
+pp. 3181-3182.</P>
+<P>2. Bryne JC, Valen E, Tang MH, Marstrand T, Winther O, da Piedade
+I, Krogh A, Lenhard B, Sandelin A. JASPAR, the open access database
+of transcription factor-binding profiles: new content and tools in
+the 2008 update. Nucleic Acids Res. 2008 Jan;36(Database
+issue):D102-6. 
+</P>
+<P>3. Matys, V., Kel-Margoulis, O.V., Fricke, E., Liebich, I., Land,
+S., Barre-Dirrie, A., Reuter, I., Chekmenev, D., Krull, M.,
+Hornischer, K., Voss, N., Stegmaier, P., Lewicki-Potapov, B., Saxel,
+H., Kel, A.E. and Wingender, E. (2006). TRANSFAC and its module
+TRANSCompel: transcriptional gene regulation in eukaryotes. Nucleic
+Acids Res., 34, D108-110.</P>
+
 <H2 CLASS="western">Source data</H2>
 <P> Regulatory features are generated by using a variety of genome
 wide epigenomic data sets. 
