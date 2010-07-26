@@ -26,17 +26,28 @@ sub content {
   my $model = $self->model;
   my $hub = $self->hub;
   my $release = $hub->species_defs->ENSEMBL_VERSION;
-  warn ">>> RELEASE $release";
   my $html = "<h1>Changelog for Release $release</h1>";
 
   my $data = $self->model->object('Changelog')->fetch_all;
 
-  my $previous;
+  my ($item, $previous);
 
-  foreach my $item (@$data) {
+  ## Quick'n'dirty TOC
+  $html .= "<ul>\n";
+  foreach $item (@$data) {
+    if ($item->team ne $previous) {
+      $html .= sprintf '<li><a href="#team-%s">%s</a></li>', $item->team, $item->team;
+    }
+    $previous = $item->team;
+  }
+  $html .= "</ul>\n\n";
+  $previous = undef;
+
+  ## Entries
+  foreach $item (@$data) {
     next unless $item->content;
     if ($item->team ne $previous) {
-      $html .= '<h2>'.$item->team.'</h2>';
+      $html .= sprintf '<h2 id="team-%s">%s</h2>', $item->team, $item->team;
     }
     my $title = $item->title || '(No title)';
 
@@ -119,7 +130,7 @@ sub content {
     }
 
     if ($user && $user->is_member_of($self->hub->species_defs->ENSEMBL_WEBADMIN_ID)) {
-      $html .= '<p style="margin-top:0.5em"><a href="/Changelog/Edit?id='.$item->changelog_id.'" style="text-decoration:none"><img src="/i/edit.gif" alt="" />  Edit this record</a> &middot; <a href="/Changelog/Display?id='.$item->changelog_id.'" style="text-decoration:none">View full record</a>';
+      $html .= '<p style="margin-top:0.5em"><a href="/Changelog/Edit?id='.$item->changelog_id.'" style="text-decoration:none"><img src="/i/edit.gif" alt="" />  Edit this record</a> &middot; <a href="/Changelog/Display?id='.$item->changelog_id.'" style="text-decoration:none">View full record</a><div style="display:inline;float:right;margin-top:-20px;margin-right:20px"><a style="text-decoration: none;" href="#">Back to Top</a></div></p>';
     }
 
     $html .= '<hr />';
