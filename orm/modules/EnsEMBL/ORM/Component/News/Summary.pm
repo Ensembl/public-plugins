@@ -100,7 +100,7 @@ sub content {
     }
 
     if ($user && $user->is_member_of($self->hub->species_defs->ENSEMBL_WEBADMIN_ID)) {
-      $html .= '<p style="margin-top:0.5em"><a href="/News/Edit?id='.$story->news_item_id.'" style="text-decoration:none"><img src="/i/edit.gif" alt="" />  Edit this record</a> &middot; <a href="/News/Display?id='.$story->news_item_id.'" style="text-decoration:none">View full record</a>';
+      $html .= '<p style="margin-top:0.5em"><a href="/News/Edit?id='.$story->news_item_id.'" style="text-decoration:none"><img src="/i/edit.gif" alt="" />  Edit this record</a> &middot; <a href="/News/Display?id='.$story->news_item_id.'" style="text-decoration:none">View full record</a><div style="display:inline;float:right;margin-top:-20px;margin-right:20px"><a style="text-decoration: none;" href="#">Back to Top</a></div>';
     }
 
     $html .= '<hr />';
