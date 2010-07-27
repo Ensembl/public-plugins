@@ -1,7 +1,7 @@
-package EnsEMBL::Web::Configuration::Changelog;
+package EnsEMBL::Web::Configuration::News;
 
-### NAME: EnsEMBL::Web::Configuration::Changelog
-### Default node and general settings for the Changelog pages
+### NAME: EnsEMBL::Web::Configuration:News
+### Default node and general settings for the News pages
 
 ### STATUS: Stable
 
@@ -10,7 +10,8 @@ package EnsEMBL::Web::Configuration::Changelog;
 ### no CRUD nodes - these are added in the admin plugin, since most
 ### users won't need this functionality or wish it to be exposed on
 ### the web. There is however a custom display node so that non-admin
-### users can view relevant entries from the changelog
+### users can view site news
+
 
 use strict;
 use base qw( EnsEMBL::Web::Configuration );
@@ -33,18 +34,11 @@ sub content_panel  { return $_[0]->_content_panel;  }
 sub populate_tree {
   my $self = shift;
 
-  $self->create_node( 'Summary', 'View all',
-    [qw(summary EnsEMBL::ORM::Component::Changelog::Summary)], 
-    { 'availability' => 1}
+  $self->create_node( 'Summary', "What's New in Ensembl",
+    [qw(summary   EnsEMBL::ORM::Component::News::Summary)],
+    {'availability' => 1},
   );
 
-}
-
-sub modify_tree {
-  my $self = shift;
-
-  ## Add defaults
-  $self->add_dbfrontend_to_tree(['WebAdmin']);
 }
 
 1;
