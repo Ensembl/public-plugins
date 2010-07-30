@@ -20,24 +20,13 @@ rel="external">NCBI build statistics </a>. </p>
 
 <h3>Annotation</h3>
 
-<p>As of release 47 the gene annotation presented has been a combined 
-Ensembl-Havana geneset, which incorporates more than 15,000 full-length 
-protein-coding transcripts annotated by the Havana team in addition to the Ensembl 
-automatic gene build. The mouse genome sequence is now considered 
-sufficiently stable that since September 2006 the major genome browsers 
-have come together to produce a common set of identifiers where CDS 
-annotations of transcripts can be agreed and these identifiers are also 
-shown.</p>
-<ul>
-    <li>More information about the <a
-    href="/info/docs/genebuild/ccds.html">CCDS project</a>.</li>
-</ul>
 
-<p>Modifications to the systems have further improved the gene set. 95% of 
-the known genes and 47% of the novel genes from build m36 retain the 
-same Ensembl gene ids in this release.</p>
+<p>As in previous releases since October 2007, we provide a combined Ensembl-HAVANA gene set, where Ensembl annotations and HAVANA annotations from the <a href="http://vega.sanger.ac.uk/Mus_musculus/Info/Index">Vega database</a> are merged at the transcript level. Improvement to the Ensembl-HAVANA merging code means that in release 59,<br />we incorporated not only 28851 full-length protein-coding transcripts from HAVANA annotation into the Ensembl annotation, but also over 30000 HAVANA non-coding transcripts. Protein-coding transcripts from the two annotation sources were merged if they shared the same coding region,<br />while non-coding transcripts were merged if they shared identical exon-intron structures.</p><br />
+
+<p>There are 36536 genes and 88186 transcripts in the combined gene set. Of the 88186 transcripts, 17.82% (15711) are the result of merging Ensembl and HAVANA annotations, 22.55% (19890) are found only in Ensembl, 52.62% (46401) are found only in HAVANA, and a remaining 7% were incorporated from other sources (e.g. immunoglobulin gene segments/transcripts imported from <a href="http://imgt.cines.fr/">IMGT</a> data).</p><br />
+
+<p>Since September 2006, the mouse genome sequence has been considered sufficiently stable to start identifying those gene placements that are identical in the three major genome browsers. The <a href="http://www.ncbi.nlm.nih.gov/projects/CCDS/CcdsBrowse.cgi">CCDS project</a> was established and Ensembl is collaborating with <a href="http://vega.sanger.ac.uk/Mus_musculus/Info/Index">HAVANA,</a> <a href="http://www.ncbi.nlm.nih.gov/RefSeq/">NCBI</a> and <a href="http://genome.ucsc.edu/">UCSC</a> to identify a core set of protein coding regions that are consistently annotated and of high quality. All CCDS annotations (as of October 2009) are included in the Ensembl-HAVANA gene set, and the CCDS identifiers are shown where applicable.</p><br />
 
 <p><a href="http://vega.sanger.ac.uk/Mus_musculus/"> <img src="/img/vega_small.gif" alt="Vega logo" style="width:83px;height:30px" title="Vega - Vertebrate Genome Annotation database" /></a>
 Additional manual annotation of this genome can be found in
 <a href="http://vega.sanger.ac.uk/Mus_musculus/">Vega</a></p>
-
