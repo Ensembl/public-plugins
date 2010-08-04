@@ -1,6 +1,6 @@
-package EnsEMBL::Admin::Rose::Object::User;
+package EnsEMBL::ORM::Rose::Object::User;
 
-### NAME: EnsEMBL::Admin::Rose::Object::User
+### NAME: EnsEMBL::ORM::Rose::Object::User
 ### ORM class for the species table in ensembl_website 
 
 ### STATUS: Stable 
@@ -31,11 +31,11 @@ __PACKAGE__->meta->setup(
   relationships => [
     record => {
       'type'        => 'one to many',
-      'map_class'   => 'EnsEMBL::Admin::Rose::Object::UserRecord',
+      'map_class'   => 'EnsEMBL::ORM::Rose::Object::UserRecord',
     },
     group => {
       'type'        => 'many to many',
-      'map_class'   => 'EnsEMBL::Admin::Rose::Object::Group',
+      'map_class'   => 'EnsEMBL::ORM::Rose::Object::Group',
     },
   ],
 );
