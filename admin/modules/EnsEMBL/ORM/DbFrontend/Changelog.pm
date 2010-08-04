@@ -1,6 +1,6 @@
-package EnsEMBL::Admin::DbFrontend::Changelog;
+package EnsEMBL::ORM::DbFrontend::Changelog;
 
-### NAME: EnsEMBL::Admin::DbFrontend::Changelog;
+### NAME: EnsEMBL::ORM::DbFrontend::Changelog;
 ### Settings for the CRUD interface to ensembl_production.changelog
 
 ### STATUS: Under development
