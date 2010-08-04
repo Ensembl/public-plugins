@@ -63,9 +63,19 @@ __PACKAGE__->register_db(
 __PACKAGE__->register_db(
   type      => 'production',
   driver    => 'mysql',
-  database  => 'ensembl_production_59',
-  host      => 'ens-staging',
-  port      => '3306',
+  database  => $species_defs->multidb->{'DATABASE_PRODUCTION'}{'NAME'},
+  host      => $species_defs->multidb->{'DATABASE_PRODUCTION'}{'HOST'},
+  port      => $species_defs->multidb->{'DATABASE_PRODUCTION'}{'PORT'},
+  username  => $db_user,
+  password  => $db_pass,
+);
+
+__PACKAGE__->register_db(
+  type      => 'healthcheck',
+  driver    => 'mysql',
+  database  => $species_defs->multidb->{'DATABASE_HEALTHCHECK'}{'NAME'},
+  host      => $species_defs->multidb->{'DATABASE_HEALTHCHECK'}{'HOST'},
+  port      => $species_defs->multidb->{'DATABASE_HEALTHCHECK'}{'PORT'},
   username  => $db_user,
   password  => $db_pass,
 );
