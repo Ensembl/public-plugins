@@ -24,35 +24,35 @@ sub populate_tree {
 
   $self->create_node( 'Summary', "Healthcheck Summary - Release $release_id",
     [qw(
-      session_info    EnsEMBL::Web::Component::Healthcheck::SessionInfo
-      failure_summary EnsEMBL::Web::Component::Healthcheck::FailureSummary
+      session_info    EnsEMBL::Admin::Component::Healthcheck::SessionInfo
+      failure_summary EnsEMBL::Admin::Component::Healthcheck::FailureSummary
     )],
     { 'availability' => 1, 'filters' => [qw(WebAdmin)]}
   );
  $self->create_node( 'Details', "Healthcheck Details",
     [qw(
-      results         EnsEMBL::Web::Component::Healthcheck::DetailsSummary
-      species_failure EnsEMBL::Web::Component::Healthcheck::FailureReports
+      results         EnsEMBL::Admin::Component::Healthcheck::DetailsSummary
+      species_failure EnsEMBL::Admin::Component::Healthcheck::FailureReports
     )],
     { 'availability' => 1, 'filters' => [qw(WebAdmin)]}
   );
   $self->create_node( 'UserDirectory', "User Directory",
     [qw(
-      directory EnsEMBL::Web::Component::Healthcheck::UserDirectory
+      directory EnsEMBL::Admin::Component::Healthcheck::UserDirectory
     )],
     { 'availability' => 1, 'filters' => [qw(WebAdmin)]}
   );
 
   $self->create_node( 'Annotation', '', [],
-      { 'command' => 'EnsEMBL::Web::Command::Healthcheck::Interface::Annotation',
+      { 'command' => 'EnsEMBL::Admin::Command::Healthcheck::Interface::Annotation',
          'no_menu_entry' => 1, 'filters' => [qw(WebAdmin)]}
   );
   $self->create_node( 'MultiAnnotate', '',
-    [qw(multi_annotate  EnsEMBL::Web::Component::Healthcheck::MultiAnnotate)],
+    [qw(multi_annotate  EnsEMBL::Admin::Component::Healthcheck::MultiAnnotate)],
       {'no_menu_entry' => 1, 'filters' => [qw(WebAdmin)]}
   );
   $self->create_node( 'MultiSave', '', [],
-      { 'command' => 'EnsEMBL::Web::Command::Healthcheck::MultiSave',
+      { 'command' => 'EnsEMBL::Admin::Command::Healthcheck::MultiSave',
          'no_menu_entry' => 1, 'filters' => [qw(WebAdmin)]}
   );
 

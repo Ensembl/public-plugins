@@ -34,7 +34,7 @@ sub populate_tree {
   my $self = shift;
 
   $self->create_node( 'Summary', 'View all',
-    [qw(summary EnsEMBL::ORM::Component::Changelog::Summary)], 
+    [qw(summary EnsEMBL::Admin::Component::Changelog::Summary)], 
     { 'availability' => 1}
   );
 

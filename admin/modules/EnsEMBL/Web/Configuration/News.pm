@@ -35,7 +35,7 @@ sub populate_tree {
   my $self = shift;
 
   $self->create_node( 'Summary', "What's New in Ensembl",
-    [qw(summary   EnsEMBL::ORM::Component::News::Summary)],
+    [qw(summary   EnsEMBL::Admin::Component::News::Summary)],
     {'availability' => 1},
   );
 
