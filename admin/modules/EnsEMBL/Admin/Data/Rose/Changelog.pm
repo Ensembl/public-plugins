@@ -19,6 +19,13 @@ sub set_primary_keys {
   $self->{'_primary_keys'} = [qw(changelog_id)];
 }
 
+sub set_classes {
+### Set custom class names, as we're using the plugin namespace 
+  my $self = shift;
+  $self->{'_object_class'} = 'EnsEMBL::Admin::Rose::Object::Changelog';
+  $self->{'_manager_class'} = 'EnsEMBL::Admin::Rose::Manager::Changelog';
+}
+
 sub fetch_all {
 ### Custom query - for the changelog output, we normally only want to 
 ### see the results for one release at a time
