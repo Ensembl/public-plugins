@@ -30,10 +30,11 @@ sub create_pagination {
   $count ||= 0;
   my $hub = $self->model->hub;
 
-  my ($prev_link, $next_link);
+  my ($prev_link, $next_link,$release);
   my $link_style = 'font-weight:bold;text-decoration:none';
 
   my $page = $hub->param('page') || 1; 
+  $release = ";release=".$hub->param('release') if $hub->param('release');
   my $start = ($page - 1) * $pagination + 1;
   my $end = $page * $pagination; 
   if ($end >= $count) {
@@ -42,19 +43,25 @@ sub create_pagination {
   my $more = $count - $end;
 
   if ($page > 1) {
-    my $prev_url = '/'.$hub->type.'/'.$hub->action.'?page='.($page-1);
+    my $prev_url = '/'.$hub->type.'/'.$hub->action.'?page='.($page-1).$release;
     $prev_link = qq(<a href="$prev_url" style="$link_style">&lt;&lt; Previous</a>);
   }
   if ($more) {
-    my $next_url = '/'.$hub->type.'/'.$hub->action.'?page='.($page+1);
+    my $next_url = '/'.$hub->type.'/'.$hub->action.'?page='.($page+1).$release;
     $next_link = qq(<a href="$next_url" style="$link_style">Next &gt;&gt;</a>);
   }
 
-  my $html = qq(<table style="width:98%"><tr>
-  <td style="width:25%;text-align:left">$prev_link</td>
-  <td style="width:48%;text-align:center">Displaying records $start - $end of $count</td>
-  <td style="width:25%;text-align:right">$next_link</td>
-  </tr></table>);
+  my $html;
+  if ($count) {
+    $html .= qq(<table style="width:98%"><tr>
+<td style="width:25%;text-align:left">$prev_link</td>
+<td style="width:48%;text-align:center">Displaying records $start - $end of $count</td>
+<td style="width:25%;text-align:right">$next_link</td>
+</tr></table>);
+  }
+  else {
+    $html .= qq(<p>No records</p>);
+  }
 
   return $html;
 }
