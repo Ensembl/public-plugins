@@ -18,8 +18,8 @@ sub content_panel  { return $_[0]->_content_panel;  }
 
 sub populate_tree {
   my $self = shift;
-  my $hub = $self->model->hub;
-  my $species_defs = $hub->species_defs;
+  #my $hub = $self->model->hub;
+  my $species_defs = $self->object->species_defs;
   my $release_id = $species_defs->ENSEMBL_VERSION;
 
   $self->create_node( 'Summary', "Healthcheck Summary - Release $release_id",
@@ -34,6 +34,12 @@ sub populate_tree {
       results         EnsEMBL::Admin::Component::Healthcheck::DetailsSummary
       species_failure EnsEMBL::Admin::Component::Healthcheck::FailureReports
     )],
+    { 'availability' => 1, 'filters' => [qw(WebAdmin)]}
+  );
+  $self->create_node( 'Databases', "Databases",
+    [qw(
+      databases EnsEMBL::Web::Component::Healthcheck::Databases
+    )], 
     { 'availability' => 1, 'filters' => [qw(WebAdmin)]}
   );
   $self->create_node( 'UserDirectory', "User Directory",
