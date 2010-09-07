@@ -32,7 +32,7 @@
 <li>HMM-based classification of proteins for Families and Gene Trees</li>
 </ul>
 
-<h2> Variation updates</h2>
+<h2>Variation updates</h2>
 <ul>
   <li>import of malarial dataset from the EGA (European Genome-phenome Archive) </li>
   <li>update list of variants with UniProt annotation </li>
@@ -53,15 +53,9 @@
   <li>Refinements to gene name and description assignment</li>
 </ul>
 
-<h2>Biomart</h2>
+<h2>Functional Genomics updates</h2>
 <ul>
-  <li>Test new interface</li>
-  <li>Test new configurator tool</li>
-  <li>Migrate to new building code and tools if testing is successful</li>
-</ul>
-
-<h2>eFG updates</h2>
-<ul>
+<!--
   <li>Incorporation of CD133+ and CD36+ Haematopoietic Stem Cell
   histone modification data into Ensembl under the current schema (Cui
   et al 2009).</li>
@@ -72,6 +66,38 @@
   <li>Perform cell-specific regulatory builds</li>
   <li>Make (some) data visible in the region in detail view of the interface as wiggle type tracks.</li>
   <li>Development of the regulatory feature view</li>
+-->
+  <li>Establishment of transcription factor (TF) binding site (position
+weight matrix (PWM)) mapping pipeline for regulatory features. JASPAR
+and other PWMs for TFs used in ChIP-seq datasets will be identified
+within binding regions defined in the regulatory features.</li>
+  <li>Establishment of <i>de novo</i> PWM identification pipeline for TFs without
+known binding motifs.</li>
+  <li>Improved database storage of the relationships between ChIP-seq data,
+TF, ensembl gene and PWM.</li>
+  <li>Development of data tracking database.</li>
+  <li>Fine tuning of peak-calling parameters for histone modification
+ChIP-seq, including investigation of alternate methods.</li>
+  <li>Further development of uniform signal processing.</li>
+  <li>Enabling regulatory build information to be used by the SNP
+consequence predictor.</li>
+  <li>eFG Tools:
+  <ul>
+    <li>Nearest gene</li>
+    <li>PWM consequences</li>
+  </ul>
+  </li>
+  <li>Web display developments:
+  <ul>
+    <li>TF display within Regulatory displays including PWM mappings.</li>
+    <li>Further refinements of wiggle track config/display.</li>
+    <li>Data source display, including links to outside data sources for
+ChIP-seq data, antibodies, PWMs, etc.</li>
+  </ul>
+  </li>
+  <li>Incorporating ChIP-seq data from further species for possible
+additional regulatory builds e.g. Schmidt et al (PMID: 20378774).
+  </li>
 </ul>
 
 <h2>New web features</h2>
@@ -80,6 +106,13 @@
 <li>Replacement for GOView, using our new GO schema and API</li>
 <li>Ability to save user configurations</li>
 <li>Ability to create a custom page from a selection of existing components</li>
+</ul>
+
+<h2>Biomart</h2>
+<ul>
+  <li>Test new interface</li>
+  <li>Test new configurator tool</li>
+  <li>Migrate to new building code and tools if testing is successful</li>
 </ul>
 
 </body>
