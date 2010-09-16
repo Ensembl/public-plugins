@@ -6,17 +6,16 @@
 
 <body>
 
-<h1>Using the Ensembl dataset hosted on Amazon AWS</h1>
+<h1>Using the Ensembl datasets hosted on Amazon AWS</h1>
 
 <p>
-The MySQL data and index files for the current release of Ensembl can
-be accessed from within <a href="http://aws.amazon.com/ec2/">Amazon's
-Elastic Compute Cloud (EC2)</a> service. From the Amazon website:
-</p>
+There are two ways of accessing Ensembl data from within <a href="http://aws.amazon.com/ec2/">Amazon's Elastic Compute Cloud (EC2)</a> service.</p>
 
+<h2>Public Data Sets MySQL flat-file and FASTA dumps</h2>
+
+<p>From Amazon's website:</p>
 <blockquote>
-<p>
-AWS Hosted Public Data Sets provide a convenient way to share, access,
+<p>AWS Hosted Public Data Sets provide a convenient way to share, access,
 and use public domain or non-proprietary data within your Amazon EC2
 environment. Select public data sets are hosted on AWS for free as an
 Amazon EBS snapshot. Any Amazon EC2 customer can access this data by
@@ -28,10 +27,19 @@ use.
 </p>
 </blockquote>
 
-<p>
-Details of how to access the data can be found
-at <a href="http://aws.amazon.com/publicdatasets/">http://aws.amazon.com/publicdatasets/</a>.
-</p>
+<p>Details of how to access the data can be found at <a href="http://aws.amazon.com/publicdatasets/">http://aws.amazon.com/publicdatasets/</a>.</p>
+
+<h2>Mounting snapshots of raw MySQL data files</h2>
+
+<p>We also provide snapshots of EBS volumes containing the raw .MYI and .MYD data files. These are publically available and can be mounted as EBS volumes for your own use. Note that you will be charged by Amazon at their standard rate for the use of EBS. You can then configure your MySQL instance to point to the files on the new volume (via the datadir parameter in the MySQL configuration file). The snapshot IDs for each Ensembl release are listed below:</p>
+
+<ul>
+<li>59 - snap-fc1d3c97</li>
+<li>58 - snap-12183979</li>
+<li>57 - snap-6016370b</li>
+</ul>
+
+<p>Note that you will need to add a mysql/ directory/database containing the approporiate user accounts and grants.</p>
 
 </body>
 </html>
