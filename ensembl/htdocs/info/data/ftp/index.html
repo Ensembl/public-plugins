@@ -19,6 +19,12 @@ To facilitate storage and download all databases are
 Zip</a> (gzip, *.gz) compressed.
 </p>
 
+<p>Owing to the nature of some of the data in Ensembl it has been necessary to escape 
+the table fields when dumping the MySQL text files.  Hence to import successfully, 
+a field escape parameter needs to be specified when using mysqlimport, e.g.</p>
+
+<p><kbd>mysqlimport -h your_host -u write_user -p write_pass -P 3306 --fields_escaped_by=\\ database_name /full/path/to/table_name.txt</kbd></p>
+
 <p>
 <strong>Please note:</strong> Ensembl supports downloading of many
 correlation tables via the highly customisable
