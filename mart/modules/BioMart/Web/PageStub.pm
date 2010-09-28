@@ -124,7 +124,7 @@ $html_tag
             <div class="search_holder print_hide">$content->{'search_box'}</div>
           </div>
           $content->{'breadcrumbs'}
-          <div class="tabs_holder print_hide">$content->{'global_context'}</div>
+          <div class="tabs_holder print_hide">$content->{'tabs'}</div>
         </div>
       </div>
       <div class="invisible"></div>
@@ -144,7 +144,7 @@ sub render_end {
       </div>
     </div>
   </div>
-  $content->{'modal_context'}
+  $content->{'modal'}
   $content->{'body_javascript'}
 </body>
 </html>

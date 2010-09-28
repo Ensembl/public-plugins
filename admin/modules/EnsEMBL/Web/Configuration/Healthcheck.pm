@@ -12,8 +12,8 @@ sub set_default_action {
 sub modify_page_elements {
   my $self = shift;
   my $page = $self->page;
-  $page->remove_body_element('global_context');
-  $page->remove_body_element('context_panel');
+  $page->remove_body_element('tabs');
+  $page->remove_body_element('summary');
 }
 
 sub populate_tree {
