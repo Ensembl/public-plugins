@@ -28,7 +28,7 @@ sub create_pagination {
   my ($self, $pagination, $count) = @_;
   return unless ($pagination && $pagination > 0);
   $count ||= 0;
-  my $hub = $self->model->hub;
+  my $hub = $self->hub;
 
   my ($prev_link, $next_link,$release);
   my $link_style = 'font-weight:bold;text-decoration:none';
@@ -120,7 +120,7 @@ sub unpack_db_table {
 ### object
   my ($self, $mode) = @_;
   my $param_set;
-  my $data = $self->model->object;
+  my $data = $self->object;
 
   my @columns = @{$data->get_table_columns};
   push @columns, @{$data->get_m2m_columns};

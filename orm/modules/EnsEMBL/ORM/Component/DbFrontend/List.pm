@@ -23,21 +23,21 @@ sub caption {
 
 sub content {
   my $self = shift;
-  my $hub = $self->model->hub;
+  my $hub = $self->hub;
   my $html;
 
   my $config  = $self->get_frontend_config;
   my $columns = $config->record_table_columns;
-  my $primary_key = $self->model->object->primary_key;
+  my $primary_key = $self->object->primary_key;
   my (@records, $count);
 
   if ($config->pagination) {
-    @records = @{$self->model->object->fetch_by_page($config->pagination)};
-    $count = $self->model->object->count;
+    @records = @{$self->object->fetch_by_page($config->pagination)};
+    $count = $self->object->count;
     $html .= $self->create_pagination($config->pagination, $count);
   }
   else {
-    @records = @{$self->model->object->fetch_all};
+    @records = @{$self->object->fetch_all};
     $html .= '<p>Total records: '.@records.'</p>';
   }
 

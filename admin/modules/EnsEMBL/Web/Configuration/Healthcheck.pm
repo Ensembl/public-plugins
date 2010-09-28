@@ -1,26 +1,25 @@
 package EnsEMBL::Web::Configuration::Healthcheck;
 
 use strict;
-use base qw( EnsEMBL::Web::Configuration );
-use EnsEMBL::Web::RegObj;
+
+use base qw(EnsEMBL::Web::Configuration);
 
 sub set_default_action {
   my $self = shift;
-  $self->{_data}{default} = 'Summary';
+  $self->{'_data'}{'default'} = 'Summary';
 }
 
-sub global_context { return undef; }
-sub ajax_content   { return undef; }
-sub local_context  { return $_[0]->_local_context; }
-sub local_tools    { return $_[0]->_local_tools; }
-sub context_panel  { return undef; }
-sub content_panel  { return $_[0]->_content_panel;  }
+sub modify_page_elements {
+  my $self = shift;
+  my $page = $self->page;
+  $page->remove_body_element('global_context');
+  $page->remove_body_element('context_panel');
+}
 
 sub populate_tree {
-  my $self = shift;
-  #my $hub = $self->model->hub;
+  my $self         = shift;
   my $species_defs = $self->object->species_defs;
-  my $release_id = $species_defs->ENSEMBL_VERSION;
+  my $release_id   = $species_defs->ENSEMBL_VERSION;
 
   $self->create_node( 'Summary', "Healthcheck Summary - Release $release_id",
     [qw(
@@ -61,8 +60,6 @@ sub populate_tree {
       { 'command' => 'EnsEMBL::Admin::Command::Healthcheck::MultiSave',
          'no_menu_entry' => 1, 'filters' => [qw(WebAdmin)]}
   );
-
 }
 
 1;
-                  

@@ -18,9 +18,9 @@ use base qw(EnsEMBL::Web::Command);
 sub process {
   my $self = shift;
   my $param = {};
-  my $hub = $self->model->hub;
+  my $hub = $self->hub;
 
-  my $data = $self->model->object;
+  my $data = $self->object;
   $data->populate_from_cgi;
 
   ## Set timestamps

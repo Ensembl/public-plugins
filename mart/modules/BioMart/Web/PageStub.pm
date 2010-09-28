@@ -1,75 +1,154 @@
 package BioMart::Web::PageStub;
-use EnsEMBL::Web::RegObj;
-use EnsEMBL::Web::Document::Renderer::Apache;
-use EnsEMBL::Web::Document::Page::Dynamic;
+
+use strict;
+
+use CGI qw(self_url);
 use CGI::Session;
 use CGI::Session::Driver::mysql; # required by CGI::Session
-use CGI qw(self_url);
-use Exporter;
-use Data::Dumper;
-our @EXPORT = qw(generate_biomart_session);
-our @EXPORT_OK = qw(generate_biomart_session);
-our %EXPORT_TAGS = ('ALL'=>[qw(generate_biomart_session)]);
-our @ISA = qw(Exporter);
 
-sub generate_biomart_session {
-  my( $biomart_web_obj, $session_id ) = @_;
-  CGI::Session->find( sub {} );
-  my $T = CGI::Session->new('driver:mysql', $session_id, {
-    'Handle' => $ENSEMBL_WEB_REGISTRY->user_db_handler
-  });
-  return $T;
-}
+use EnsEMBL::Web::RegObj;
+use EnsEMBL::Web::Controller;
+
+
+our @EXPORT      = qw(generate_biomart_session);
+our @EXPORT_OK   = qw(generate_biomart_session);
+our %EXPORT_TAGS = ('ALL' => [ 'generate_biomart_session' ]);
+
+use base qw(Exporter);
 
 sub new {
-  my( $class, $session ) = @_;
-  my $renderer = new EnsEMBL::Web::Document::Renderer::Apache;
+  my ($class, $session) = @_;
   my $self = {};
-  unless( CGI::self_url() =~ m/__.+ByAjax/ ) {
-    $page     = new EnsEMBL::Web::Document::Page::Dynamic( {'renderer' => $renderer, 'species_defs' => $ENSEMBL_WEB_REGISTRY->species_defs} );
-    $page->_initialize_HTML unless $AJAX;
-    $page->set_doc_type( 'none', 'none' );
-#    $page->masthead->sp_bio    ||= 'BioMart';
-#    $page->masthead->sp_common ||= 'BioMart';
-    $page->javascript->add_source( '/biomart/mview/js/martview.js' );
-#  $page->javascript->add_script( 'addLoadEvent( debug_window )' );
-    $page->body_javascript->add_script( 'addLoadEvent( setVisibleStatus )' );
-    $page->stylesheet->add_sheet(  'all', '/biomart/mview/martview.css'      );
-    $page->stylesheet->add_sheet(  'all', '/martview-hacks.css'      );
+  
+  if (CGI::self_url !~ /__.+ByAjax/) {
+    my $controller = new EnsEMBL::Web::Controller(undef, { page_type => 'Static', renderer_type => 'Apache' });
+    my $page       = $controller->page;    
+
+    $page->include_navigation(0);
+    $page->initialize;
+    $page->remove_body_element('breadcrumbs');
+    $page->set_doc_type('none', 'none');
+    
+    my $elements = $page->elements;
+    my @order    = map $_->[0], @{$page->head_order}, @{$page->body_order};
+    my $content;
+    
+    foreach my $element (@order) {
+      my $html_module = $elements->{$element};
+      $html_module->init($controller) if $html_module->can('init');
+    }
+   
+    $page->javascript->add_source('/biomart/mview/js/martview.js');
+    $page->body_javascript->add_script('addLoadEvent(setVisibleStatus)');
+    $page->stylesheet->add_sheet('all', '/biomart/mview/martview.css');
+    $page->stylesheet->add_sheet('all', '/martview-hacks.css');
+ 
+    foreach my $element (@order) {
+      my $html_module = $elements->{$element};
+      $content->{$element} = $html_module->_content;
+    }
+    
     $self = {
-      'page'     => $page,
-      'session'  => $session,
-      'not_ajax' => 1
+      page     => $page,
+      session  => $session,
+      content  => $content,
+      not_ajax => 1
     };
   }
+  
   bless $self, $class;
   return $self;
 }
 
+sub generate_biomart_session {
+  my ($biomart_web_obj, $session_id) = @_;
+  
+  CGI::Session->find(sub {});
+  
+  return CGI::Session->new('driver:mysql', $session_id, {
+    Handle => $ENSEMBL_WEB_REGISTRY->user_db_handler
+  });
+}
 
 sub start {
   my $self = shift;
+  
   return unless $self->{'not_ajax'};
-  $self->{'page'}->render_start;
-#  print '<script type="text/javascript">debug_window()</script>';
-  $self->{'page'}->content->_start;
-#  $self->{'page'}->content->render_settings_list;
+  
+  $self->render_start;
 }
 
 sub end {
   my $self = shift;
+  
   return unless $self->{'not_ajax'};
-  $self->{'page'}->content->_end;
-  if($self->{'session'}->param('__validatorError')) {
-    ( my $inc = $self->{'session'}->param("__validationError") ) =~ s/\n/\\n/;
-    $inc =~s/\'/\\\'/;
-    print qq(<script language="JavaScript" type="text/javascript">
-  //<![CDATA[
-  alert('$inc');
-  //]]>
-  </script>);
+  
+  if ($self->{'session'}->param('__validatorError')) {
+    (my $inc = $self->{'session'}->param('__validationError')) =~ s/\n/\\n/;
+    $inc     =~ s/\'/\\\'/;
+    
+    print qq{
+      <script type="text/javascript">
+        //<![CDATA[
+        alert('$inc');
+        //]]>
+      </script>
+    };
   }
-  $self->{'page'}->render_end;
+  
+  $self->render_end;
+}
+
+sub render_start {
+  my $self       = shift;
+  my $page       = $self->{'page'};
+  my $content    = $self->{'content'};
+  my $html_tag   = join '', $page->doc_type, $page->html_tag;
+  my $head       = join "\n", map $content->{$_->[0]} || (), @{$page->head_order};   
+  my $body_attrs = join ' ', map { sprintf '%s="%s"', $_, $page->{'body_attr'}{$_} } grep $page->{'body_attr'}{$_}, keys %{$page->{'body_attr'}};
+  
+  print qq{
+$html_tag
+<head>
+  $head
+</head>
+<body $body_attrs>
+  <div id="min_width_container">
+    <div id="min_width_holder">
+      <div id="masthead" class="js_panel">
+        <input type="hidden" class="panel_type" value="Masthead" />
+        <div class="content">
+          <div class="mh print_hide">
+            <span class="logo_holder">$content->{'logo'}</span>
+            <div class="tools_holder">$content->{'tools'}</div>
+            <div class="search_holder print_hide">$content->{'search_box'}</div>
+          </div>
+          $content->{'breadcrumbs'}
+          <div class="tabs_holder print_hide">$content->{'global_context'}</div>
+        </div>
+      </div>
+      <div class="invisible"></div>
+      <div id="main_holder">
+        <div id="main">
+  };
+}
+
+
+sub render_end {
+  my $self     = shift;
+  my $content = $self->{'content'};
+  
+  print qq{
+        </div>
+        <div id="wide-footer">$content->{'copyright'}$content->{'footerlinks'}</div>
+      </div>
+    </div>
+  </div>
+  $content->{'modal_context'}
+  $content->{'body_javascript'}
+</body>
+</html>
+};
 }
 
 1;

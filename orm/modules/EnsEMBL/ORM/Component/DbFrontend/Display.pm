@@ -31,16 +31,16 @@ sub content {
 
   if ($hub->param('id')) {
     my @ids = ($hub->param('id'));
-    @records = @{$self->model->object->fetch_by_id(\@ids)};
+    @records = @{$self->object->fetch_by_id(\@ids)};
   }
   else {
     if ($config->pagination) {
-      @records = @{$self->model->object->fetch_by_page($config->pagination)};
-      $count = $self->model->object->count;
+      @records = @{$self->object->fetch_by_page($config->pagination)};
+      $count = $self->object->count;
       $html .= $self->create_pagination($config->pagination, $count);
     }
     else {
-      @records = @{$self->model->object->fetch_all};
+      @records = @{$self->object->fetch_all};
     }
   }
 
@@ -50,8 +50,8 @@ sub content {
       @column_names = @{$config->show_fields}; 
     }
     unless (@column_names) {
-      my @columns = @{$self->model->object->get_table_columns};
-      push @columns, @{$self->model->object->get_related_columns};
+      my @columns = @{$self->object->get_table_columns};
+      push @columns, @{$self->object->get_related_columns};
       foreach my $column (@columns) {
         push @column_names, $column->name;
       }

@@ -13,38 +13,37 @@ package EnsEMBL::Web::Configuration::Changelog;
 ### users can view relevant entries from the changelog
 
 use strict;
-use base qw( EnsEMBL::Web::Configuration );
+
+use base qw(EnsEMBL::Web::Configuration);
 
 sub set_default_action {
   my $self = shift;
-  $self->{_data}{default} = 'Summary';
+  $self->{'_data'}{'default'} = 'Summary';
 }
 
 sub short_caption {}
 sub caption {}
 
-sub global_context { return undef; }
-sub ajax_content   { return undef; }
-sub local_context  { return $_[0]->_local_context; }
-sub local_tools    { return undef; }
-sub context_panel  { return undef; }
-sub content_panel  { return $_[0]->_content_panel;  }
+sub modify_page_elements {
+  my $self = shift;
+  my $page = $self->page;
+  $page->remove_body_element('global_context');
+  $page->remove_body_element('local_tools');
+  $page->remove_body_element('context_panel');
+}
 
 sub populate_tree {
   my $self = shift;
 
   $self->create_node( 'Summary', 'View all',
     [qw(summary EnsEMBL::Admin::Component::Changelog::Summary)], 
-    { 'availability' => 1}
+    { 'availability' => 1 }
   );
-
 }
 
 sub modify_tree {
   my $self = shift;
-
-  ## Add defaults
-  $self->add_dbfrontend_to_tree(['WebAdmin']);
+  $self->add_dbfrontend_to_tree([ 'WebAdmin' ]); ## Add defaults
 }
 
 1;

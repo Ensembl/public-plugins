@@ -26,8 +26,8 @@ sub content {
 ### then modified by the configuration file for the individual frontend
   my $self = shift;
 
-  my $data = $self->model->object;
-  my $record = $self->model->object->data_object;
+  my $data = $self->object;
+  my $record = $self->object->data_object;
 
   my $hub = $self->hub;
   my $form_type = $hub->action;
@@ -43,7 +43,7 @@ sub content {
   $config->modify_form($param, 'input');
 
   ## Add desired fields as form elements
-  my @fields = ($self->model->object->primary_key);
+  my @fields = ($self->object->primary_key);
   my $tracking_added = 0;
   foreach my $field (@{$config->show_fields}) {
     ## Only add tracking fields where appropriate

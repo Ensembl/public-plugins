@@ -14,11 +14,11 @@ use base qw(EnsEMBL::Web::Command);
 
 sub process {
   my $self = shift;
-  my $hub = $self->model->hub;
+  my $hub = $self->hub;
   my $param = {};
   my $config = $self->get_frontend_config;
 
-  my $data = $self->model->object;
+  my $data = $self->object;
   my $permit_delete = $config->{'permit_delete'};
   my $success = 0;
 

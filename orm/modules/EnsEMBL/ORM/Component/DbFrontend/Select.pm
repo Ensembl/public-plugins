@@ -22,7 +22,7 @@ sub content {
   my $self = shift;
   my $html;
 
-  my @records = @{$self->model->object->fetch_all};
+  my @records = @{$self->object->fetch_all};
   
   if (@records) {
     ## Display warnings if deleting!
@@ -48,7 +48,7 @@ sub content {
       }
     }
 
-    my $data = $self->model->object;
+    my $data = $self->object;
 
     my $hub = $self->hub;
     my $config = $self->get_frontend_config;
@@ -84,7 +84,7 @@ sub content {
     if ($style eq 'select') {
       push @$options, {'name'=>'--- Choose ---', 'value'=>''};
     }
-    my $key = $self->model->object->primary_key;
+    my $key = $self->object->primary_key;
     my $columns = $config->record_select_columns;
 
     foreach my $record (@records) {

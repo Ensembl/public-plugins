@@ -57,8 +57,8 @@ no warnings 'uninitialized';
 use base qw(EnsEMBL::Web::Root);
 
 sub new {
-  my ($class, $model) = @_;
-  return unless ref($model->object) =~ /Data::Rose/;
+  my ($class, $builder) = @_;
+  return unless ref($builder->object) =~ /Data::Rose/;
 
   ## Show all columns by default
   ## FIXME - relational columns are not currently included by default, because 
@@ -67,12 +67,12 @@ sub new {
   ## that you want to show on the form, you _must_ manually set the show_fields
   ## parameter in your child class 
   my $all_columns = [];
-  foreach my $column (@{$model->object->get_table_columns}) {
+  foreach my $column (@{$builder->object->get_table_columns}) {
     push @$all_columns, $column->name; 
   } 
 
   my $self = {
-    'hub'                    => $model->hub,
+    'hub'                    => $builder->hub,
     'show_fields'            => $all_columns,
     'record_table_columns'   => [],
     'record_select_columns'  => [],
@@ -87,7 +87,7 @@ sub new {
 
   bless $self, $class;
 
-  $self->init($model->object);
+  $self->init($builder->object);
 
   return $self;
 }

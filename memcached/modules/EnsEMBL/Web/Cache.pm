@@ -26,7 +26,7 @@ sub new {
      
   return undef if $caller->isa('EnsEMBL::Web::Apache::Handlers')
                   && !$flags{PLUGGABLE_PATHS};
-  return undef if $caller->isa('EnsEMBL::Web::Apache::SendDecPage')
+  return undef if $caller->isa('EnsEMBL::Web::Apache::SSI')
                   && !$flags{STATIC_PAGES_CONTENT};
   return undef if $caller->isa('EnsEMBL::Web::DBSQL::UserDBConnection')
                   && !$flags{USER_DB_DATA};

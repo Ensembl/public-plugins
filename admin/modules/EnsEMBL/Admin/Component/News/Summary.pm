@@ -23,11 +23,11 @@ sub caption {
 
 sub content {
   my $self = shift;
-  my $model = $self->model;
+  my $builder = $self->builder;
   my $hub = $self->hub;
   my $release = $hub->param('release') || $hub->species_defs->ENSEMBL_VERSION;
 
-  my $data = $self->model->object('News')->fetch_published;
+  my $data = $self->builder->object('News')->fetch_published;
   unless ($data && @$data) {
     return "<p>No news found for release $release</p>";
   } 

@@ -44,7 +44,7 @@ sub content {
   my @fields;
   ## Force inclusion of primary key, as we need this for hidden form
   unless ($config->show_primary_key) {
-    push @fields, $self->model->object->primary_key;
+    push @fields, $self->object->primary_key;
   }
   ## Add normal viewable fields
   push @fields, @{$config->show_fields};
@@ -56,7 +56,7 @@ sub content {
   foreach my $name (@fields) {
     my $p = $param->{$name};
 
-    if ($name ne $self->model->object->primary_key || $config->show_primary_key) {
+    if ($name ne $self->object->primary_key || $config->show_primary_key) {
       ## Populate from CGI parameters where available
       if ($hub->param($name)) {
         if ($name eq 'created_by') {
@@ -113,7 +113,7 @@ sub content {
       }
     }
     else {
-      if ($name eq $self->model->object->primary_key) {
+      if ($name eq $self->object->primary_key) {
         ## Always pass the primary key if it exists
         $p->{'value'} = $hub->param($name);
       }
