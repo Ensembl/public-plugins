@@ -8,18 +8,18 @@ sub update_conf {
 
   ## ALLOWABLE DATA OBJECTS
   $SiteDefs::OBJECT_TO_SCRIPT = {
-    Config      => 'config',
-    Component   => 'component',
-    Zmenu       => 'zmenu',
+    Config      => 'Config',
+    Component   => 'Component',
+    ZMenu       => 'ZMenu',
 
-    Search      => 'action',
-    Changelog   => 'action',
-    Healthcheck => 'action',
-    News        => 'action',
+    Search      => 'Page',
+    Changelog   => 'Page',
+    Healthcheck => 'Page',
+    News        => 'Page',
 
-    Account     => 'modal',
-    UserData    => 'modal',
-    Help        => 'modal',
+    Account     => 'Modal',
+    UserData    => 'Modal',
+    Help        => 'Modal',
   };
 
   $SiteDefs::ENSEMBL_BLAST_ENABLED = 0;
