@@ -21,6 +21,7 @@ Cow (Bos taurus)<br />
 Pig (Sus scrofa)<br />
 Horse (Equus caballus)<br />
 Cat (Felis catus)<br />
+Giant Panda (Ailuropoda melanoleuca)<br />
 Dog (Canis familiaris)<br />
 Microbat (Myotis lucifugus)<br />
 Megabat (Pteropus vampyrus)<br />
@@ -42,6 +43,8 @@ Platypus (Ornithorhynchus anatinus)<br />
 Medaka (Oryzias latipes)<br />
 <h4>Pig (Sus scrofa)</h4>
 Cow (Bos taurus)<br />
+<h4>Dog (Canis familiaris)</h4>
+Giant Panda (Ailuropoda melanoleuca)<br />
 <h4>Opossum (Monodelphis domestica)</h4>
 Wallaby (Macropus eugenii)<br />
 <h4>Chicken (Gallus gallus)</h4>
