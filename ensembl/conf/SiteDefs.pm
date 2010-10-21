@@ -11,9 +11,10 @@ sub update_conf {
 ## array is the "SPECIES_CODE" defined in the species.ini file
 
 #-------------------- mammals
+  $SiteDefs::__species_aliases{ 'Ailuropoda_melanoleuca'   } = [qw(am amel panda)];   
   $SiteDefs::__species_aliases{ 'Bos_taurus'               } = [qw(bt btau cow moo)];
- $SiteDefs::__species_aliases{ 'Callithrix_jacchus'       } = [qw(cj cjac marmoset)]; 
- $SiteDefs::__species_aliases{ 'Canis_familiaris'         } = [qw(cf cfam dog)]; 
+  $SiteDefs::__species_aliases{ 'Callithrix_jacchus'       } = [qw(cj cjac marmoset)]; 
+  $SiteDefs::__species_aliases{ 'Canis_familiaris'         } = [qw(cf cfam dog)]; 
   $SiteDefs::__species_aliases{ 'Cavia_porcellus'          } = [qw(cp cpor guineapig)];
   $SiteDefs::__species_aliases{ 'Choloepus_hoffmanni'      } = [qw(ch chof sloth)];
   $SiteDefs::__species_aliases{ 'Dasypus_novemcinctus'     } = [qw(dn dnov dasypus armadillo)];
