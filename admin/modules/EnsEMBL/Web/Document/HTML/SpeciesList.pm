@@ -3,22 +3,15 @@ package EnsEMBL::Web::Document::HTML::SpeciesList;
 ## Alternative species listing style, that can show multiple links per species
 
 use strict;
-use warnings;
-
-use EnsEMBL::Web::RegObj;
-
-{
 
 sub render {
-  my $self = shift;
-
-  my $species_defs = $ENSEMBL_WEB_REGISTRY->species_defs;
-  my @species = sort $species_defs->valid_species;
+  my $self         = shift;
+  my $species_defs = $self->species_defs;
+  my @species      = sort $species_defs->valid_species;
   my $healthchecks = $species_defs->databases->{'DATABASE_HEALTHCHECK'};
   my $html;
 
   if ($healthchecks) {
-
     $html = qq(
 <h2>Healthchecks</h2>
 <ul>
@@ -81,9 +74,6 @@ sub render {
 </table>);
   
   return $html;
-}
-
-
 }
 
 1;
