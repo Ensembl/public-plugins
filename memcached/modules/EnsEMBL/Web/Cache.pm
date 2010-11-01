@@ -124,7 +124,7 @@ sub set {
   my ($key, $value, $exptime, @tags) = @_;
   return unless $value;
   
-  _warn("MEMCACHED->set($self->{namespace}$key)");
+  _warn("MEMCACHED->set($key)");
 
   my $result = $self->SUPER::set($key, $value, $exptime || $self->{default_exptime});
 
