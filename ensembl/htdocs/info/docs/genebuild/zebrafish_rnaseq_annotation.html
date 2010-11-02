@@ -13,11 +13,7 @@
 
 <p>Gene models are created by combining the proto-transcripts with the spliced reads to create all possible variants, the variant with the most read support is displayed.</p>
 
-<h1>Exon Supporting Features</h1>
-
-<p>These show the level of read support for each RNAseq gene model on the exon and transcript level. The features are created by realigning all the reads against the models in a tissue specific way, this is then used to create an RPKM value.  (reads per kilobase of model per million mapped reads, from Mortazavi Nature Methods 2008).</p>
-<p>Not all exons or transcripts will have expression in all tissues.</p>
-
 <h1>Intron Supporting Features</h1>
 
 <p>These represent the collapsed set of spliced reads used to inform the gene models. The features show the number of reads from each tissue that confirm a particular intron. Not all introns show expression in all tissues. Also, not all of the introns features were used in the gene models shown.</p>
+<p>The intron track can be configured to use a variable height display, this varies the height of the feature in accordance with the number of reads supporting the intron,( up to a maximum of 60 reads). This display also highlights non-canonical splices in red.</p>
