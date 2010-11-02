@@ -45,7 +45,7 @@ sub new {
  
     foreach my $element (@order) {
       my $html_module = $elements->{$element};
-      $content->{$element} = $html_module->_content;
+      $content->{$element} = $html_module->content;
     }
     
     $self = {
