@@ -3,42 +3,54 @@ package EnsEMBL::Ensembl::Document::HTML::AssemblyTable;
 use strict;
 use warnings;
 
-use EnsEMBL::Web::RegObj;
-use EnsEMBL::Web::Data::Release;
-use EnsEMBL::Web::Data::Species;
-use EnsEMBL::Web::Data::ReleaseSpecies;
+use EnsEMBL::Web::Hub;
+use EnsEMBL::Web::DBSQL::WebsiteAdaptor;
 
 sub render {
   my ($class, $request) = @_;
 
-  my $SD = $ENSEMBL_WEB_REGISTRY->species_defs;
+  my $hub = new EnsEMBL::Web::Hub;
+
+  my $SD = $hub->species_defs;
   my $this_release = $SD->ENSEMBL_VERSION;
   my $archives = $SD->ENSEMBL_ARCHIVES;
 
   my $first_archive = [sort keys %$archives]->[0];
 
+  my $adaptor = EnsEMBL::Web::DBSQL::WebsiteAdaptor->new($hub);
+
   ## get assembly info for each species
-  my @species = EnsEMBL::Web::Data::Species->find_all;
-  my @releases = EnsEMBL::Web::Data::Release->search({ release_id => { '>=' => $first_archive } }, { order_by => 'release_id desc' });
-  my @release_species = EnsEMBL::Web::Data::ReleaseSpecies->search({ release_id => { '>=' => $first_archive } });
+  my $species = $adaptor->fetch_all_species;
+  my @releases = reverse sort @{$adaptor->fetch_releases};
+  my @archives = @{$adaptor->fetch_archives($first_archive)};
+
+  my @archive_releases;
+  foreach (@releases) {
+    if ($_->{'id'} >= $first_archive) {
+      push @archive_releases, $_;
+    }
+  }
 
   ## Split the table in two so it isn't too wide
-  my $release_break = int(($this_release - $first_archive)/2);
+  my $release_break = int(scalar(@archive_releases)/2);
 
-  my $split_releases = [ [ splice (@releases, 0, $release_break) ], \@releases ];
+  my $split_releases = [ [ splice (@archive_releases, 0, $release_break) ], \@archive_releases ];
 
   my $release_to_species = {};
-  $release_to_species->{$_->species_id}{$_->release_id} = $_ for (@release_species);
+  foreach (@archives) {
+    $release_to_species->{$_->{'species_id'}}{$_->{'id'}} = $_->{'assembly'};
+  }
 
-  my $html = render_assembly_table($split_releases->[0], \@species, $release_to_species);
+  my $html = render_assembly_table($split_releases->[0], $species, $release_to_species);
   $html .= "<br />";
-  $html .= render_assembly_table($split_releases->[1], \@species, $release_to_species);
+  $html .= render_assembly_table($split_releases->[1], $species, $release_to_species);
   
   return $html;
 }
 
 sub render_assembly_table {
   my ($releases, $species, $release_species) = @_;
+  return unless @$releases;
 
   my $header = '<tr>
     <th style="width:20%">Species</th>
@@ -51,9 +63,9 @@ sub render_assembly_table {
 
   my $style = sprintf( ' style="width:%0.3f%%"', 80 / @$releases );
   foreach my $rel (@$releases) {
-    $date = $rel->online eq 'Y' ? qq{<a href="http://} . $rel->archive . qq{.archive.ensembl.org">} . $rel->shorter_date . "</a>" : $rel->shorter_date;
+    $date = $rel->{'online'} eq 'Y' ? qq{<a href="http://} . $rel->{'archive'} . qq{.archive.ensembl.org">} . $rel->{'date'} . "</a>" : $rel->{'date'};
 
-    $header .= "<th$style>$date<br />v".$rel->id."</th>";
+    $header .= "<th$style>$date<br />v".$rel->{'id'}."</th>";
   }
 
   $header .= "</tr>\n";
@@ -63,7 +75,7 @@ sub render_assembly_table {
   my @rows = ();
  
   foreach my $s (sort { $a->{'name'} cmp $b->{'name'} } @$species) {
-    ($species_name = $s->name) =~ s/_/ /g;
+    ($species_name = $s->{'name'}) =~ s/_/ /g;
     $cells = {};
     $assembly_name = "";
     $current_name = "";
@@ -71,11 +83,10 @@ sub render_assembly_table {
     
     $c->{'x'} = 1; # Reset the flip-flop
 
-    $row = "<tr><th>" . ( $s->online eq 'Y' ? qq{<a href="http://www.ensembl.org/} . $s->name . qq{"><i>$species_name</i></a>} : "<i>$species_name</i>" ) . "</th>";
+    $row = "<tr><th>" . ( $s->{'online'} eq 'Y' ? qq{<a href="http://www.ensembl.org/} . $s->{'name'} . qq{"><i>$species_name</i></a>} : "<i>$species_name</i>" ) . "</th>";
 
     foreach my $r (@$releases)  {
-      $rs = $release_species->{$s->id}->{$r->id};
-      $assembly_name = $rs ? $rs->assembly_name : "";
+      $assembly_name = $release_species->{$s->{'id'}}->{$r->{'id'}};
 
       $order++ if ($current_name ne $assembly_name);
 
