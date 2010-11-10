@@ -1,4 +1,4 @@
-package EnsEMBL::Web::Document::HTML::BodyJavascript;
+package EnsEMBL::Web::Document::Element::BodyJavascript;
 
 use strict;
 
