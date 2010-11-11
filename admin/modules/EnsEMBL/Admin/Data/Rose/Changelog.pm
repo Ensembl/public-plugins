@@ -44,4 +44,41 @@ sub fetch_all {
   return $objects;
 }
 
+sub fetch_by_page {
+### Custom query - for the changelog output, we normally only want to 
+### see the results for one release at a time
+  my ($self, $pagination) = @_;
+  my $page = $self->hub->param('page') || 1;
+  my $offset = ($page - 1) * $pagination;
+  my $release_id = $self->hub->param('release') 
+                      || $self->hub->species_defs->ENSEMBL_VERSION;
+
+  my $objects = $self->manager_class->get_objects(
+                  with_objects => 'species',
+                  query => [
+                    release_id => $release_id,
+                  ],
+                  sort_by => 'team',
+                  limit => $pagination,
+                  offset => $offset,
+                  object_class => $self->object_class,
+                );
+  return $objects;
+}
+
+sub count {
+  my $self = shift;
+  my $release_id = $self->hub->param('release') 
+                      || $self->hub->species_defs->ENSEMBL_VERSION;
+
+  my $count = $self->manager_class->get_objects_count(
+                query => [
+                  release_id => $release_id,
+                ],
+                object_class => $self->object_class,
+              );
+  return $count;
+}
+
+
 1;
