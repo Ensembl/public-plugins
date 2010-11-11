@@ -14,7 +14,8 @@ __PACKAGE__->meta->setup(
   table       => 'annotation',
 
   columns     => [
-    report_id     => {type => 'serial', primary_key => 1, not_null => 1}, 
+    annotation_id => {type => 'serial', primary_key => 1, not_null => 1}, 
+    report_id     => {type => 'integer'},
     action        => {type => 'enum', 
                       'values' => [qw(
                                     manual_ok 
@@ -35,7 +36,7 @@ __PACKAGE__->meta->setup(
   relationships => [
     report => {
       'type'        => 'one to one',
-      'map_class'   => 'EnsEMBL::Admin::Rose::Object::Report',
+      'class'       => 'EnsEMBL::Admin::Rose::Object::Report',
       'column_map'  => {'report_id' => 'report_id'},
     },
   ],
