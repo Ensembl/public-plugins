@@ -28,6 +28,8 @@ sub _get_default_list {
 }
 
 sub render_all_releases_selectbox {
+  ## Returns an HTML selectbox with all possible releases for healthchecks as options
+  ## $skip - release to be skipped in the select box
   
   my ($self, $skip) = @_;
 
@@ -42,6 +44,7 @@ sub render_all_releases_selectbox {
 }
 
 sub validate_release {
+  ## Validates whether or not the given release have healthchecks
 
   my ($self, $release)  = @_;
   my $current           = $self->hub->species_defs->ENSEMBL_VERSION;
@@ -50,7 +53,14 @@ sub validate_release {
 }
 
 sub get_healthcheck_link {
-  ##params keys - type, param, caption, title, release, cut_long
+  ## Returns a formatted link for healthcheck page depending upon following keys
+  ## params keys 
+  ##  - type: view type of the link eg. species, textcase etc.
+  ##  - param: value of the filter parameter
+  ##  - caption: caption to be displayed
+  ##  - title: goes in title attribute
+  ##  - release: release id
+  ##  - cut_long: flag stating whether or not to cut the long caption of the link
 
   my ($self, $params) = @_;
   
@@ -84,19 +94,19 @@ sub get_healthcheck_link {
 }
 
 sub hc_format_date {
-
+  ## Formates date for displaying
   my ($self, $datetime) = @_; 
   return format_date(parse_date($datetime), "%b %e, %Y at %H:%M");
 }
 
 sub hc_format_compressed_date {
-
+  ## Formates date for displaying the HC table column
   my ($self, $datetime) = @_; 
   return format_date(parse_date($datetime), "%d/%m/%y %H:%M");  
 }
 
 sub space_before_capitals {
-
+  ## Converts "SpaceBeforeCapitals" to "Space Before Capitals"
   my ($self, $string) = @_;
   return '' unless defined $string && $string ne '';
   $string =~ s/\b(\w)/\u$1/g;
@@ -105,7 +115,7 @@ sub space_before_capitals {
 }
 
 sub annotation_action {
-
+  ## Returns a label for the action enums for annotation.
   my ($self, $value) = @_;
   
   my $action = {
@@ -126,7 +136,13 @@ sub annotation_action {
 }
 
 sub content_failure_summary {
-  
+  ## Returns a filure summary table for given view types
+  ## $view - Species, Testcase etc
+  ## $last_session_id - Id of the session run most recently in the given release
+  ## $release - release id
+  ## $all_reports - ArrayRef of all Report objects
+  ## $release2 - release id of the release to which reports are to be compared
+  ## $compare_reports - ArrayRef of all Report objects for release2 
   my ($self, $view, $last_session_id, $release, $all_reports, $release_2, $compare_reports) = @_;
   
   my $table = $self->new_table();
@@ -182,13 +198,14 @@ sub content_failure_summary {
 }
 
 sub _group_fails {
-
-  my ($self, $reports, $view)  = @_;
-  my $fails             = {}; #{group_name => {new_fails => ?, total_fails => ?}}
+  ## generates stats for reports for new failures and all failures
+  ## returns HashRef {$group_name => {'new_fails' => ?, 'total_fails' => ?}}
+  my ($self, $reports, $view) = @_;
+  my $fails = {};
 
   for (@$reports) {
-    next unless defined $_->$view ;
-    my $key = $view eq 'species' ? ucfirst($_->$view) : $_->$view; #fix -  species should have first letter capital, but in hc.report table it is all lower case.
+    next unless defined $_->$view;
+    my $key = $view eq 'species' ? ucfirst($_->$view) : $_->$view; #coz species should have first letter capital, but in hc.report db table it is all lower case.
     $fails->{ $key } = {'new_fails' => 0, 'total_fails' => 0} unless exists $fails->{ $key };
     $fails->{ $key }{'total_fails'}++;
     $fails->{ $key }{'new_fails'}++    if $_->first_session_id == $_->last_session_id;
