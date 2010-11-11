@@ -16,8 +16,8 @@ __PACKAGE__->meta->setup(
   columns     => [
     session_id        => {type => 'serial', primary_key => 1, not_null => 1}, 
     db_release        => {type => 'integer'},
-    content           => {type => 'varchar', 'length' => '255'},
-    declaration       => {type => 'varchar', 'length' => '255'},
+    host              => {type => 'varchar', 'length' => '255'},
+    config            => {type => 'varchar', 'length' => '255'},
   ],
 );
 
