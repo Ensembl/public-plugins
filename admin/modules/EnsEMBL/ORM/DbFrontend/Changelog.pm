@@ -28,6 +28,13 @@ sub modify_form {
   my ($self, $param, $mode) = @_;
 
   $param->{'db_status'}{'label'} = 'Database changed';
+  $param->{'assembly'}{'label'} = 'Is this a new assembly?';
+  $param->{'gene_set'}{'label'} = 'Has the gene set changed?';
+  $param->{'repeat_masking'}{'label'} = 'Has the repeat masking changed?';
+  $param->{'stable_id_mapping'}{'label'} = 'Does it need stable ID mapping?';
+  $param->{'affy_mapping'}{'label'} = 'Does it need affy mapping?';
+#  $param->{'biomart_affected'}{'label'} = 'Will BioMart need manual configuration?';
+
   $param->{'release_id'}{'type'} = 'NoEdit';
   $param->{'release_id'}{'value'} = $self->hub->species_defs->ENSEMBL_VERSION;
 }
