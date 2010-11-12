@@ -93,7 +93,7 @@ sub content {
   
   return qq(<p class="hc_p">No healthcheck reports found for $type_title '$filter_param'.</p>) unless scalar @$reports;
   
-  my $all_admin_users   = $db_interface->data_interface('User')->fetch_by_group(0); #TODO replace 0 by group_id for admin users once fetch_by_group is working properly - hr5
+  my $all_admin_users   = $db_interface->data_interface('User')->fetch_by_group($hub->species_defs->ENSEMBL_WEBADMIN_ID);
   
   #group all reports by database_name
   my $grouped_reports   = {};
