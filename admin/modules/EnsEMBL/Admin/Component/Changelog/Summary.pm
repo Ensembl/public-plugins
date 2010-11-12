@@ -28,7 +28,7 @@ sub content {
   my $release = $hub->species_defs->ENSEMBL_VERSION;
   my $html = "<h1>Changelog for Release $release</h1>";
 
-  my $data = $self->builder->object('Changelog')->fetch_all;
+  my $data = $self->object('Changelog')->fetch_all;
 
   my ($item, $previous);
 
