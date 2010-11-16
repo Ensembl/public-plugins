@@ -27,7 +27,7 @@ sub content {
   my $self = shift;
 
   my $data = $self->object;
-  my $record = $self->object->data_object;
+  my $record = shift @{$self->object->data_objects};
 
   my $hub = $self->hub;
   my $form_type = $hub->action;
