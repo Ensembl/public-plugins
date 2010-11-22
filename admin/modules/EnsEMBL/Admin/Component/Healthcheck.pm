@@ -9,7 +9,7 @@ use Rose::DateTime::Util qw(format_date parse_date);
 
 use constant {
   FIRST_RELEASE_FOR_HEALTHCHECK => 42,   #healthchecks started from release 42
-  NO_HEALTHCHECK_FOUND          => '<p class="hc_p">Healthcheck has not been performed for this release</p>',
+  NO_HEALTHCHECK_FOUND          => '<p class="hc_p">Healthchecks have not been performed for this release.</p>',
 };
 
 sub _init {
