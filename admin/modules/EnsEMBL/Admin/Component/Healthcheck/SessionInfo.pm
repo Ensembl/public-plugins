@@ -21,14 +21,17 @@ sub content {
   my $hub                   = $self->hub;
   my $db_interface          = $self->object;
   my $release               = $hub->param('release') || $hub->species_defs->ENSEMBL_VERSION;
-                            
-  return $self->NO_HEALTHCHECK_FOUND unless $self->validate_release($release);
+  
+  my $previous  = $self->render_all_releases_selectbox($release);
+  $previous     = qq(<form action="" method="get"><label><b>Go to other release: </b></label>$previous&nbsp;<input type="submit" value="Go" /></form>);
+
+  return $self->NO_HEALTHCHECK_FOUND.$previous unless $self->validate_release($release);
                             
   my $session_db_interface  = $db_interface->data_interface('Session');
   my $last_session          = $session_db_interface->fetch_last($release);
   my $last_session_id       = $last_session ? $last_session->session_id || 0 : 0;
                             
-  return $self->NO_HEALTHCHECK_FOUND unless $last_session_id;
+  return $self->NO_HEALTHCHECK_FOUND.$previous unless $last_session_id;
                             
   my $report_db_interface   = $db_interface->data_interface('Report');
   my $start_time            = undef;
@@ -56,9 +59,6 @@ sub content {
     $testgroups_html .= "run on DB <b>$_</b></li>";
   }
   $testgroups_html   .= '</ul>';
-  
-  my $previous        = $self->render_all_releases_selectbox($release);
-  $previous           = qq(<form action="" method="get">$previous&nbsp;<input type="submit" value="Go" /></form>);
 
   my $table           = EnsEMBL::Web::Document::HTML::TwoColTable->new;
   
@@ -67,9 +67,8 @@ sub content {
   $table->add_row("Last session:", $last_session_id.$run_time);
   $table->add_row("Host:", $last_session->host || '');
   $table->add_row("Testgroups:", $testgroups_html);
-  $table->add_row("Go to other releases:", $previous);
 
-  return $table->render;
+  return $table->render.$previous;
 }
 
 1;
