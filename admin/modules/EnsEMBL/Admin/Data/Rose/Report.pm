@@ -5,10 +5,7 @@ package EnsEMBL::Admin::Data::Rose::Report;
 
 ### STATUS: Stable
 
-### DESCRIPTION:
-
 use strict;
-use warnings;
 
 use EnsEMBL::Admin::Rose::Manager::Report;
 use base qw(EnsEMBL::ORM::Data::Rose);
@@ -35,9 +32,9 @@ sub set_classes {
 sub fetch_by_id {
   ## fetches a report from the db with give report id
   ## #params $report_id ArrayRef of id(s) of the requested report(s)
-  ## @return ArrayRef to an EnsEMBL::Admin::Rose::Object::Report object, [] otherwise
+  ## @return ArrayRef to an EnsEMBL::Admin::Rose::Object::Report object
   my ($self, $report_id, $failed_only) = @_;
-  return [] unless $report_id;
+  return undef unless $report_id;
   
   $failed_only = $failed_only ? {'result' => 'PROBLEM'} : {};
   
@@ -49,7 +46,7 @@ sub fetch_by_id {
     ]
   );
   #$self->data_objects(@$reports);
-  return $reports || [];
+  return $reports;
 }
 
 sub fetch_last_for_session {
@@ -71,7 +68,7 @@ sub fetch_first_for_session {
 sub fetch_failed_for_session {
   ## fetches all failed reports from the db for single/or combination of given species, db or testcase) and given session
   ## #params $session_id id of the requested session
-  ## @return ArrayRef of EnsEMBL::Admin::Rose::Object::Report objects if found any, empty ArrayRef otherwise
+  ## @return ArrayRef of EnsEMBL::Admin::Rose::Object::Report objects if found any
   ## IMPORTANT - while calling this method, make sure (keys %$filter) is a subset of database column names
   my ($self, $session_id, $filter) = @_;
 
@@ -83,10 +80,10 @@ sub fetch_failed_for_session {
 sub fetch_for_session {
   ## fetches all reports from the db for single/or combination of given species, db or testcase) and given session
   ## #params $session_id id of the requested session
-  ## @return ArrayRef of EnsEMBL::Admin::Rose::Object::Report objects if found any, empty ArrayRef otherwise
+  ## @return ArrayRef of EnsEMBL::Admin::Rose::Object::Report objects if found any
   ## IMPORTANT - while calling this method, make sure (keys %$filter) is a subset of database column names
   my ($self, $session_id, $filter) = @_;
-  return [] unless $session_id && scalar $filter;
+  return undef unless $session_id && scalar $filter;
 
   my $objects = $self->manager_class->get_reports(
     with_objects                => 'annotation',
@@ -96,15 +93,15 @@ sub fetch_for_session {
     ]
   );
   #$self->data_objects(@$objects);
-  return $objects || [];
+  return $objects;
 }
 
 sub fetch_all_failed_for_session {
   ## fetches all reports from the db for the current species and given session
   ## #params $session_id id of the requested session
-  ## @return ArrayRef of EnsEMBL::Admin::Rose::Object::Report objects if found any, empty ArrayRef otherwise
+  ## @return ArrayRef of EnsEMBL::Admin::Rose::Object::Report objects if found any
   my ($self, $session_id) = @_;
-  return [] unless $session_id;
+  return undef unless $session_id;
 
   my $reports = $self->manager_class->get_reports(
     with_objects                => 'annotation',
@@ -123,16 +120,16 @@ sub fetch_all_failed_for_session {
     ],
   );
   #$self->data_objects(@$reports);
-  return $reports || [];
+  return $reports;
 }
 
 sub fetch_for_distinct_databases {
   ## fetches one reports for each db for a given session/release - basically you get a list of database which were healthchecked in the given session/release
   ## #params $session_id id of the requested session
   ## #params $release requested release
-  ## @return ArrayRef of EnsEMBL::Admin::Rose::Object::Report objects if found any, empty ArrayRef otherwise
+  ## @return ArrayRef of EnsEMBL::Admin::Rose::Object::Report objects if found any
   my ($self, $session_id, $release) = @_;
-  return [] unless $session_id || $release;
+  return undef unless $session_id || $release;
 
   my $query = defined $session_id ? [ 'last_session_id' => $session_id ] : [ 'database_name' => { 'like' => qq(%\_$release%) } ];
 
@@ -141,7 +138,7 @@ sub fetch_for_distinct_databases {
     group_by  => 'database_name'
   );
   #$self->data_objects(@$objects);
-  return $objects || [];
+  return $objects;
 }
 
 sub _fetch_single {
@@ -152,7 +149,7 @@ sub _fetch_single {
     limit     => 1
   );
   #$self->data_objects(@$reports);
-  return $reports->[0] || {};
+  return $reports->[0];
 }
 
 1;

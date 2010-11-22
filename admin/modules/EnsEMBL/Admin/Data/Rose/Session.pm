@@ -3,13 +3,11 @@ package EnsEMBL::Admin::Data::Rose::Session;
 ### NAME: EnsEMBL::Admin::Data::Rose::Session;
 ### Wrapper for one or more EnsEMBL::Admin::Rose::Object::Session objects
 
-### STATUS: Under Development - hr5
+### STATUS: Under Development
 
 ### DESCRIPTION:
 
 use strict;
-use warnings;
-no warnings qw(uninitialized);
 
 use EnsEMBL::Admin::Rose::Manager::Session;
 use base qw(EnsEMBL::ORM::Data::Rose);
@@ -35,9 +33,9 @@ sub set_classes {
 
 sub fetch_all {
   ## fetches all sessions from the db for the given release
-  ## @return ArrayRef of EnsEMBL::Admin::Rose::Object::Session objects if found any, empty ArrayRef otherwise
+  ## @return ArrayRef of EnsEMBL::Admin::Rose::Object::Session objects if found any
   my ($self, $release) = @_;
-  return [] unless $release;
+  return undef unless $release;
   
   my $objects = $self->manager_class->get_sessions(
     query   => [
@@ -46,14 +44,14 @@ sub fetch_all {
     sort_by => 'session_id',
   );
   $self->data_objects(@$objects);
-  return $objects || [];
+  return $objects;
 }
 
 sub fetch_last {
   ## fetches last session from the db for the given release
-  ## @return ArrayRef of EnsEMBL::Admin::Rose::Object::Session objects if found any, empty ArrayRef otherwise
+  ## @return ArrayRef of EnsEMBL::Admin::Rose::Object::Session objects if found any
   my ($self, $release) = @_;
-  return [] unless $release;
+  return undef unless $release;
 
   my $objects = $self->manager_class->get_sessions(
     query   => [
@@ -63,7 +61,7 @@ sub fetch_last {
     limit   => 1
   );
   $self->data_objects(@$objects);
-  return $objects->[0] || {};
+  return $objects->[0];
 }
 
 1;

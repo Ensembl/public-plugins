@@ -4,8 +4,6 @@ package EnsEMBL::ORM::Data::Rose::User;
 ### Wrapper for one or more EnsEMBL::ORM::Rose::Object::User objects
 
 use strict;
-use warnings;
-no warnings qw(uninitialized);
 
 use EnsEMBL::ORM::Rose::Manager::User;
 use base qw(EnsEMBL::ORM::Data::Rose);
@@ -18,7 +16,7 @@ sub set_primary_keys {
 #data mining methods
 sub fetch_by_group {
   my ($self, $group_id) = @_;
-  return [] unless $group_id;
+  return undef unless $group_id;
   
   my $users = $self->manager_class->get_users(
     with_objects    => 'membership',
@@ -28,7 +26,7 @@ sub fetch_by_group {
     sort_by        => 'name',
   );
   $self->data_objects(@$users);
-  return $users || [];
+  return $users;
 }
 
 1;
