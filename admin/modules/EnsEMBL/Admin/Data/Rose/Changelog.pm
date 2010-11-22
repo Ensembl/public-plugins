@@ -4,6 +4,7 @@ package EnsEMBL::Admin::Data::Rose::Changelog;
 ### Wrapper for one or more EnsEMBL::Admin::Rose::Object::Changelog objects
 
 ### STATUS: Under Development
+### TODO: Remove EnsEMBL::Web::Object from base when DbFrontend is fixed not to use E::W::Object
 
 ### DESCRIPTION:
 
@@ -12,7 +13,10 @@ use warnings;
 no warnings qw(uninitialized);
 
 use EnsEMBL::Admin::Rose::Manager::Changelog;
-use base qw(EnsEMBL::ORM::Data::Rose);
+use base qw(
+  EnsEMBL::ORM::Data::Rose
+  EnsEMBL::Web::Object
+);
 
 sub set_primary_keys {
   my $self = shift;
