@@ -13,6 +13,9 @@ sub new {
   return bless { 'hub'  => @_ }, $class;
 }
 
+sub caption { return "Healthcheck"; }
+sub short_caption { return "Healthcheck"; }
+
 sub data_interface {
   my ($self, $type) = @_;
 
