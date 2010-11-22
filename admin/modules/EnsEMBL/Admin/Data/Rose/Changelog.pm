@@ -19,6 +19,9 @@ sub set_primary_keys {
   $self->{'_primary_keys'} = [qw(changelog_id)];
 }
 
+sub caption { return "Changelog";}
+sub short_caption { return "Changelog";}
+
 sub set_classes {
 ### Set custom class names, as we're using the plugin namespace 
   my $self = shift;
