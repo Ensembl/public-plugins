@@ -1,9 +1,9 @@
 package EnsEMBL::ORM::Rose::Object::User;
 
 ### NAME: EnsEMBL::ORM::Rose::Object::User
-### ORM class for the species table in ensembl_website 
+### ORM class for the user table in ensembl_web_user_db 
 
-### STATUS: Stable 
+### STATUS: Under Development
 
 use strict;
 use warnings;
@@ -14,7 +14,7 @@ __PACKAGE__->meta->setup(
   table       => 'user',
 
   columns     => [
-    user_id        => {type => 'serial', primary_key => 1, not_null => 1}, 
+    user_id        => {type => 'serial', primary_key => 1, not_null => 1},
     name              => {type => 'varchar', 'length' => '255'},
     email             => {type => 'varchar', 'length' => '255'},
     salt              => {type => 'varchar', 'length' => '8'},
@@ -29,13 +29,14 @@ __PACKAGE__->meta->setup(
   ],
 
   relationships => [
-    record => {
+#     record => {
+#       'type'        => 'one to many',
+#       'map_class'   => 'EnsEMBL::ORM::Rose::Object::UserRecord',
+#     },
+    membership => {
       'type'        => 'one to many',
-      'map_class'   => 'EnsEMBL::ORM::Rose::Object::UserRecord',
-    },
-    group => {
-      'type'        => 'many to many',
-      'map_class'   => 'EnsEMBL::ORM::Rose::Object::Group',
+      'class'       => 'EnsEMBL::ORM::Rose::Object::Membership',
+      'column_map'  => {'user_id' => 'user_id'},
     },
   ],
 );
@@ -44,6 +45,5 @@ sub init_db {
 ### Set up the db connection
   EnsEMBL::ORM::Rose::DbConnection->new('user'); 
 }
-
 
 1;
