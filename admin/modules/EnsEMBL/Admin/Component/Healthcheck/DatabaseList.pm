@@ -27,7 +27,7 @@ sub content {
   my $last_session          = $session_db_interface->fetch_last($release);
   my $last_session_id       = $last_session ? $last_session->session_id || 0 : 0;
   
-  return 'No Healthcheck done in the current release.' unless $last_session_id;
+  return $self->NO_HEALTHCHECK_FOUND unless $last_session_id;
   
   my $report_db_interface = $db_interface->data_interface('Report');
   
