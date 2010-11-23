@@ -4,7 +4,11 @@ package EnsEMBL::Admin::Data::Rose::Changelog;
 ### Wrapper for one or more EnsEMBL::Admin::Rose::Object::Changelog objects
 
 ### STATUS: Under Development
-### TODO: Remove EnsEMBL::Web::Object from base when DbFrontend is fixed not to use E::W::Object
+### TODOs:
+### 1. Remove EnsEMBL::Web::Object from base when DbFrontend is fixed not to use E::W::Object
+### 2. Get rid of data_objects being called at the end of every sub
+### 3. Remove fetch_by_id - use the inherited method
+### 4. Remove sub data_object
 
 ### DESCRIPTION:
 
@@ -31,6 +35,19 @@ sub set_classes {
   my $self = shift;
   $self->{'_object_class'} = 'EnsEMBL::Admin::Rose::Object::Changelog';
   $self->{'_manager_class'} = 'EnsEMBL::Admin::Rose::Manager::Changelog';
+}
+
+sub data_object {
+  ## DbFrontend needs it.
+  return shift->data_objects->[0];
+}
+
+sub fetch_by_id {
+  ##overrides
+  my $self = shift;
+  my $result = $self->SUPER::fetch_by_id(@_);
+  $self->data_objects(@$result);
+  return $result;
 }
 
 sub fetch_all {
