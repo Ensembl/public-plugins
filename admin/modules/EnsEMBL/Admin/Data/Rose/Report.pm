@@ -11,17 +11,17 @@ use EnsEMBL::Admin::Rose::Manager::Report;
 use base qw(EnsEMBL::ORM::Data::Rose);
 
 sub set_primary_keys {
+  ## @overrides
   ## sets primary key for the object as in the database table
   ## called by Rose->_init
-  ## @overrides
   my $self = shift;
   $self->{'_primary_keys'} = [qw(report_id)];
 }
 
 sub set_classes {
+  ## @overrides
   ## links the corresponding Rose Object and Rose Object Manager classes
   ## called by Rose->_init
-  ## @overrides
   my $self = shift;
   $self->{'_object_class'}  = 'EnsEMBL::Admin::Rose::Object::Report';
   $self->{'_manager_class'} = 'EnsEMBL::Admin::Rose::Manager::Report';
@@ -30,6 +30,7 @@ sub set_classes {
 ### Following methods help for data mining for fetching data (each with different criteria) from the db table(s)
 
 sub fetch_by_id {
+  ## @overrides
   ## fetches a report from the db with give report id
   ## #params $report_id ArrayRef of id(s) of the requested report(s)
   ## @return ArrayRef to an EnsEMBL::Admin::Rose::Object::Report object
@@ -45,7 +46,6 @@ sub fetch_by_id {
       %$failed_only
     ]
   );
-  #$self->data_objects(@$reports);
   return $reports;
 }
 
@@ -67,7 +67,7 @@ sub fetch_first_for_session {
 
 sub fetch_failed_for_session {
   ## fetches all failed reports from the db for single/or combination of given species, db or testcase) and given session
-  ## #params $session_id id of the requested session
+  ## @params $session_id id of the requested session
   ## @return ArrayRef of EnsEMBL::Admin::Rose::Object::Report objects if found any
   ## IMPORTANT - while calling this method, make sure (keys %$filter) is a subset of database column names
   my ($self, $session_id, $filter) = @_;
@@ -79,7 +79,7 @@ sub fetch_failed_for_session {
 
 sub fetch_for_session {
   ## fetches all reports from the db for single/or combination of given species, db or testcase) and given session
-  ## #params $session_id id of the requested session
+  ## @params $session_id id of the requested session
   ## @return ArrayRef of EnsEMBL::Admin::Rose::Object::Report objects if found any
   ## IMPORTANT - while calling this method, make sure (keys %$filter) is a subset of database column names
   my ($self, $session_id, $filter) = @_;
@@ -92,13 +92,12 @@ sub fetch_for_session {
       %$filter
     ]
   );
-  #$self->data_objects(@$objects);
   return $objects;
 }
 
 sub fetch_all_failed_for_session {
   ## fetches all reports from the db for the current species and given session
-  ## #params $session_id id of the requested session
+  ## @params $session_id id of the requested session
   ## @return ArrayRef of EnsEMBL::Admin::Rose::Object::Report objects if found any
   my ($self, $session_id) = @_;
   return undef unless $session_id;
@@ -119,14 +118,13 @@ sub fetch_all_failed_for_session {
       ],
     ],
   );
-  #$self->data_objects(@$reports);
   return $reports;
 }
 
 sub fetch_for_distinct_databases {
   ## fetches one reports for each db for a given session/release - basically you get a list of database which were healthchecked in the given session/release
-  ## #params $session_id id of the requested session
-  ## #params $release requested release
+  ## @params $session_id id of the requested session
+  ## @params $release requested release
   ## @return ArrayRef of EnsEMBL::Admin::Rose::Object::Report objects if found any
   my ($self, $session_id, $release) = @_;
   return undef unless $session_id || $release;
@@ -137,7 +135,6 @@ sub fetch_for_distinct_databases {
     query     => $query,
     group_by  => 'database_name'
   );
-  #$self->data_objects(@$objects);
   return $objects;
 }
 
@@ -148,7 +145,6 @@ sub _fetch_single {
     sort_by   => 'timestamp '.(defined $first_or_last && $first_or_last eq 'last' ? 'DESC' : 'ASC'),
     limit     => 1
   );
-  #$self->data_objects(@$reports);
   return $reports->[0];
 }
 

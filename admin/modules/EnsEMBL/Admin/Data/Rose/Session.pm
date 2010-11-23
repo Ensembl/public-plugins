@@ -13,9 +13,9 @@ use EnsEMBL::Admin::Rose::Manager::Session;
 use base qw(EnsEMBL::ORM::Data::Rose);
 
 sub set_primary_keys {
+  ## @overrides
   ## sets primary key for the object as in the database table
   ## called by Rose->_init
-  ## @overrides
   my $self = shift;
   $self->{'_primary_keys'} = [qw(session_id)];
 }
@@ -43,7 +43,6 @@ sub fetch_all {
     ],
     sort_by => 'session_id',
   );
-  $self->data_objects(@$objects);
   return $objects;
 }
 
@@ -60,7 +59,6 @@ sub fetch_last {
     sort_by => 'session_id DESC',
     limit   => 1
   );
-  $self->data_objects(@$objects);
   return $objects->[0];
 }
 
