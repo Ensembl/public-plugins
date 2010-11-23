@@ -106,7 +106,8 @@ sub content {
     $p->{'type'} = 'Hidden';
     ## Deal with multi-value fields (e.g. dropdowns)
     my @values = ($hub->param($name));
-    if (@values > 1) {
+    if (@values > 1 || $name eq 'species') {
+      #TODO - What if only one value is selected in a multiple select dropdown? - remove the hack $name eq 'species' (is applied for admin changelogs)
       foreach my $v (@values) {
         $p->{'value'} = $v;
         $fieldset->add_element(%$p);
