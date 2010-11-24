@@ -16,7 +16,7 @@ sub render {
 <h2>Healthchecks</h2>
 <ul>
   <li><a href="/Healthcheck/Summary">Healthcheck summary</a></li>
-  <li><a href="/Healthcheck/Databases">List of databases</a></li>
+  <li><a href="/Healthcheck/DBList">List of databases</a></li>
 </ul>
 );
   }
