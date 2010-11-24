@@ -53,10 +53,10 @@ span.hc-new {
   color: #aa0000;
 }
 tr.bg1 .hc-cell-highlight {
-  background-color: #eef;
+  background-color: #ddf;
 }
 tr.bg2 .hc-cell-highlight {
-  background-color: #ddf;
+  background-color: #ccf;
 }
 h3 a {
   margin-left: 10px;
