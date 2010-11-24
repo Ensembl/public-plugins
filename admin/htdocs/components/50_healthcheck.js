@@ -8,7 +8,7 @@ Ensembl.extend({
 function HC_MultiSelector(classes, infoClass, problemClass, newClass, tableHeadingClass) {
 
   this.tables = Array();
-  this.info = ["Double click on any 'Select' or 'Deselect' to respectively select or deselect all annotations for that database for multi-annotation."];
+  this.info = ["Double click on any 'Select' or 'Deselect' to respectively select or deselect all reports for that database for multi-annotation."];
   this.configs = Array();
   this.showNewOnly = false;
   this.hideManualOK = false;
