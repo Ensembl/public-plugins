@@ -81,7 +81,7 @@ function HC_MultiSelector(classes, infoClass, problemClass, newClass, tableHeadi
     for (var i in this.tables) {
       if (
         this.tables[i].selectedIds === false ||  //coz a link in it has been changed
-        this.tables[i].selectedIds.length > 1    //coz it has links those need to be changed
+        this.tables[i].selectedIds.length > 0    //coz it has links that need to be changed
       ) tablesAffected.push(this.tables[i]);
     }
     var rid = Array();
