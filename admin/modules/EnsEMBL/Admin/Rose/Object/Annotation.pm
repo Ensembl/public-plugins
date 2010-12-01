@@ -26,7 +26,7 @@ __PACKAGE__->meta->setup(
                                     manual_ok_this_assembly 
                                     manual_ok_this_genebuild
                                   )]},
-    comment       => {type => 'varchar', 'length' => '255'},
+    comment       => {type => 'text'},
     created_by    => {type => 'integer'},
     created_at    => {type => 'datetime'},
     modified_by   => {type => 'integer'},
