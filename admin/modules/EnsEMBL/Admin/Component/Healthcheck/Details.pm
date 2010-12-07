@@ -113,7 +113,7 @@ sub content {
             <p>Reports appearing <span class="hc-problem hc-new">bold</span> (or <span class="hc-new">bold</span>) are for the recently appeared problems.</p>
   </div>};
   my $js_ref = 0;
-  foreach my $database_name (keys %$grouped_reports) {
+  foreach my $database_name (sort keys %$grouped_reports) {
   
     $js_ref++; #counter used by JavaScript only
     $html          .= qq(<a name="$database_name"></a><h3 class="hc-dbheading">$database_name</h3>);
