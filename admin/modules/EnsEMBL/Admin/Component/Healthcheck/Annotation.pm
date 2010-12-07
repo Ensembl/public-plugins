@@ -58,7 +58,7 @@ sub content {
   
   my $form = EnsEMBL::Web::Form->new('annotation', '/Healthcheck/AnnotationSave', 'post');
   
-  $form->add_fieldset('legend' => $heading);
+  $form->add_fieldset($heading);
   
   my $options = []; #options for action select box
   my $actions = $self->annotation_action('all');
