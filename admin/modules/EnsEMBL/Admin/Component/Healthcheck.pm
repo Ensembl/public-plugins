@@ -24,7 +24,20 @@ sub caption {
 }
 
 sub _get_default_list {
-  return [];
+  ## @overrides
+  my ($self, $view, $report_db_interface, $first_session_id) = @_;
+  my $list = [];
+  if ($view =~ /^testcase|database_name$/) {
+    my $query = $view =~ 'testcase' ? 'fetch_for_distinct_testcases' : 'fetch_for_distinct_databases';
+    $list = [ keys %{${\{ map {$_->$view => 1} @{$report_db_interface->$query({'session_id' => $first_session_id, 'include_all' => 1})} } } } ];
+  }
+  elsif ($view eq 'species') {
+    $list = $self->hub->species_defs->ENSEMBL_DATASETS || [];
+  }
+  elsif ($view eq 'database_type') {
+    $list = [qw(cdna core funcgen otherfeatures production variation vega)];
+  }
+  return $list;
 }
 
 sub render_all_releases_selectbox {
@@ -55,7 +68,7 @@ sub validate_release {
 sub get_healthcheck_link {
   ## Returns a formatted link for healthcheck page depending upon following keys
   ## params keys 
-  ##  - type: view type of the link eg. species, textcase etc.
+  ##  - type: view type of the link eg. species, testcase etc.
   ##  - param: value of the filter parameter
   ##  - caption: caption to be displayed
   ##  - title: goes in title attribute
@@ -137,59 +150,62 @@ sub annotation_action {
 
 sub content_failure_summary {
   ## Returns a filure summary table for given view types
-  ## $view - Species, Testcase etc
-  ## $last_session_id - Id of the session run most recently in the given release
-  ## $release - release id
-  ## $all_reports - ArrayRef of all Report objects
-  ## $release2 - release id of the release to which reports are to be compared
-  ## $compare_reports - ArrayRef of all Report objects for release2 
-  my ($self, $view, $last_session_id, $release, $all_reports, $release_2, $compare_reports) = @_;
-  
+  ## Params Hashref with keys:
+  ##  - view                Species, Testcase etc
+  ##  - last_session_id     Id of the session run most recently in the given release
+  ##  - first_session_id    Id of the first session run in the given release
+  ##  - release             release id
+  ##  - all_reports         ArrayRef of all Report objects
+  ##  - release2            release id of the release to which reports are to be compared
+  ##  - compare_reports     ArrayRef of all Report objects for release2
+  ##  - report_db_interface Report db interface object
+  my ($self, $params) = @_; 
+    
   my $table = $self->new_table();
 
-  (my $perspective = ucfirst($view)) =~ s/_/ /g;
+  (my $perspective = ucfirst($params->{'view'})) =~ s/_/ /g;
 
   $table->add_columns(
-    { 'key' => 'group',       'title' => $perspective, 'width' => qq(40%) },
-    { 'key' => 'new_failed',  'title' => "Newly failed for last run (Session $last_session_id in v$release)",  'align' => 'center' },
-    { 'key' => 'results',     'title' => "All failed for last run (v$release)",    'align' => 'center' },
+    { 'key' => 'group',         'title' => $perspective, 'width' => qq(40%) },
+    { 'key' => 'new_failed',    'title' => "Newly failed for last run (Session $params->{'last_session_id'} in v$params->{'release'})",  'align' => 'center' },
+    { 'key' => 'total_failed',  'title' => "All failed for last run (v$params->{'release'})",    'align' => 'center' },
   );
 
   $table->add_columns(#add 4th column if comparison is intended
-    { 'key' => 'comparison',  'title' => "Failed in  release $release_2", 'align' => 'center' },
-  ) if defined $compare_reports;
+    { 'key' => 'comparison',  'title' => "Failed in  release $params->{'release_2'}", 'align' => 'center' },
+  ) if exists $params->{'compare_reports'};
 
-  my $fails             = $self->_group_fails($all_reports, $view);
-  my $fails_2           = defined $compare_reports ? $self->_group_fails($compare_reports, $view) : {};
-  my $default_list      = { map {$_ => 1} @{ $self->_get_default_list || [] } }; #will work only for view specific pages
+  my $fails             = $self->_group_fails($params->{'all_reports'}, $params->{'view'});
+  my $fails_2           = exists $params->{'compare_reports'} ? $self->_group_fails($params->{'compare_reports'}, $params->{'view'}) : {};
+  my $default_list      = { map {$_ => 1} @{ $self->_get_default_list($params->{'view'}, $params->{'report_db_interface'}, $params->{'first_session_id'})} };
   my $groups            = { %$default_list, %$fails, %$fails_2};
 
   for ( sort keys (%$groups) ) {
 
-    my $title = $view eq 'species' ? ucfirst($_) : $_;
+    my $title = $params->{'view'} eq 'species' ? ucfirst($_) : $_;
 
-    my $fourth_cell     = defined $compare_reports ? {
+    my $fourth_cell     = exists $params->{'compare_reports'} ? {
       'comparison'  => $self->get_healthcheck_link({
-        'type'        => $view,
+        'type'        => $params->{'view'},
         'param'       => $title,
         'caption'     => $fails_2->{ $_ }{'total_fails'} || '0',
         'title'       => $title,
-        'release'     => $release_2
+        'release'     => $params->{'release_2'}
       })
     } : {};
     $table->add_row({
       'group'       => $self->get_healthcheck_link({
-        'type'        => $view,
+        'type'        => $params->{'view'},
         'param'       => $title,
-        'release'     => $release
+        'release'     => $params->{'release'}
       }),
       'new_failed'  => $fails->{ $_ }{'new_fails'} || '0',
-      'results'     => $self->get_healthcheck_link({
-        'type'        => $view,
+      'total_failed'  => $self->get_healthcheck_link({
+        'type'        => $params->{'view'},
         'param'       => $title,
         'caption'     => $fails->{ $_ }{'total_fails'} || '0',
         'title'       => $title,
-        'release'     => $release
+        'release'     => $params->{'release'}
       }),
       %$fourth_cell
     });

@@ -27,8 +27,4 @@ sub _get_first_column_for_report {
   return 'Species<br />Testcase';
 }
 
-sub _get_default_list {
-  return [qw(cdna core funcgen otherfeatures production variation vega)];
-}
-
 1;

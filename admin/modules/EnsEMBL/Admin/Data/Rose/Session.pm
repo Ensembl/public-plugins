@@ -46,6 +46,22 @@ sub fetch_all {
   return $objects;
 }
 
+sub fetch_first {
+  ## fetches first session from the db for the given release
+  ## @return ArrayRef of EnsEMBL::Admin::Rose::Object::Session objects if found any
+  my ($self, $release) = @_;
+  return undef unless $release;
+
+  my $objects = $self->manager_class->get_sessions(
+    query   => [
+      db_release => $release,
+    ],
+    sort_by => 'session_id ASC',
+    limit   => 1
+  );
+  return $objects->[0];
+}
+
 sub fetch_last {
   ## fetches last session from the db for the given release
   ## @return ArrayRef of EnsEMBL::Admin::Rose::Object::Session objects if found any

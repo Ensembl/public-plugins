@@ -27,10 +27,6 @@ sub _get_first_column_for_report {
   return 'DB Type<br />Species<br />Testcase';
 }
 
-sub _get_default_list {
-  return [];
-}
-
 sub _show_anchors {
   return 0;
 }

@@ -122,20 +122,21 @@ sub fetch_all_failed_for_session {
 }
 
 sub fetch_for_distinct_databases {
-  ## fetches one reports for each db for a given session/release - basically you get a list of database which were healthchecked in the given session/release
-  ## @params $session_id id of the requested session
-  ## @params $release requested release
+  ## fetches one report for each db for a given session/release - basically you get a list of database which were healthchecked in the given session/release
+  ## @params HashRef with keys:
+  ##  - session_id  Session id of the requested session
+  ##  - include_all Flag set on if all sessions are to be considered after the given session (including)
   ## @return ArrayRef of EnsEMBL::Admin::Rose::Object::Report objects if found any
-  my ($self, $session_id, $release) = @_;
-  return undef unless $session_id || $release;
+  return shift->_fetch_for_distinct(shift, 'database_name');
+}
 
-  my $query = defined $session_id ? [ 'last_session_id' => $session_id ] : [ 'database_name' => { 'like' => qq(%\_$release%) } ];
-
-  my $objects = $self->manager_class->get_reports(
-    query     => $query,
-    group_by  => 'database_name'
-  );
-  return $objects;
+sub fetch_for_distinct_testcases {
+  ## fetches one report for each testcase - basically you get a list of all testcases
+  ## @params HashRef with keys:
+  ##  - session_id  Session id of the requested session
+  ##  - include_all Flag set on if all sessions are to be considered after the given session (including)
+  ## @return ArrayRef of EnsEMBL::Admin::Rose::Object::Report objects if found any
+  return shift->_fetch_for_distinct(shift, 'testcase');
 }
 
 sub _fetch_single {
@@ -146,6 +147,19 @@ sub _fetch_single {
     limit     => 1
   );
   return $reports->[0];
+}
+
+sub _fetch_for_distinct {
+  my ($self, $params, $group_by) = @_;
+  return undef unless $params->{'session_id'};
+  
+  my $query = $params->{'include_all'} ? ['last_session_id' => {'ge' => $params->{'session_id'}}] : ['last_session_id' => $params->{'session_id'}];
+  
+  my $objects = $self->manager_class->get_reports(
+    group_by  => $group_by,
+    query     => $query,
+  );
+  return $objects;
 }
 
 1;

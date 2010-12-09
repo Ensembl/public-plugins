@@ -27,8 +27,4 @@ sub _get_first_column_for_report {
   return 'Database Type<br />Testcase';
 }
 
-sub _get_default_list {
-  return shift->hub->species_defs->ENSEMBL_DATASETS || [];
-}
-
 1;

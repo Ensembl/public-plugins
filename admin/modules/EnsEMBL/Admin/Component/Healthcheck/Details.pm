@@ -52,12 +52,6 @@ sub _show_anchors {
   return 1;
 }
 
-sub _get_default_list {
-  ##@return a list (ArrayRef) of all species/database types/database names etc based on child class
-  ##override it in the child class
-  return [];
-}
-
 sub content {
   ##this method is called by Panel to display this method's return HTML inside the page
   ##@return HTML to be displayed
@@ -77,16 +71,25 @@ sub content {
   
   my $last_session          = $db_interface->data_interface('Session')->fetch_last($release);
   my $last_session_id       = $last_session ? $last_session->session_id || 0 : 0;
-        
+          
   return $self->NO_HEALTHCHECK_FOUND unless $last_session_id;
+
+  my $first_session         = $db_interface->data_interface('Session')->fetch_first($release);
+  my $first_session_id      = $first_session ? $first_session->session_id || 0 : 0;
  
   my $report_db_interface   = $db_interface->data_interface('Report');
 
   unless ($filter_param) {
     #if no filter param is found, print a list of all Species/DBTypes (whichever required) etc
     my $reports = $report_db_interface->fetch_all_failed_for_session($last_session_id);
-    return qq(<p class="hc_p">Click on a $type_title to view details</p>).
-              $self->content_failure_summary($type, $last_session_id, $release, $reports);
+    return qq(<p class="hc_p">Click on a $type_title to view details</p>).$self->content_failure_summary({
+      'view'                => $type,
+      'first_session_id'    => $first_session_id,
+      'last_session_id'     => $last_session_id,
+      'release'             => $release,
+      'all_reports'         => $reports,
+      'report_db_interface' => $report_db_interface,
+    });
   }
   
   my $reports = $report_db_interface->fetch_failed_for_session($last_session_id, { $type => $filter_param });

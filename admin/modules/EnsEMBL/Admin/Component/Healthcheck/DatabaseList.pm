@@ -29,10 +29,13 @@ sub content {
   
   return $self->NO_HEALTHCHECK_FOUND unless $last_session_id;
   
+  my $first_session         = $session_db_interface->fetch_first($release);
+  my $first_session_id      = $first_session ? $first_session->session_id || 0 : 0;
+  
   my $report_db_interface = $db_interface->data_interface('Report');
   
-  my $hc_this_session = { map { $_->database_name => 1 } @{ $report_db_interface->fetch_for_distinct_databases($last_session_id)  || [] } };
-  my $hc_this_release = { map { $_->database_name => 1 } @{ $report_db_interface->fetch_for_distinct_databases(undef, $release)   || [] } };
+  my $hc_this_session = { map { $_->database_name => 1 } @{ $report_db_interface->fetch_for_distinct_databases({'session_id' => $last_session_id}) || [] } };
+  my $hc_this_release = { map { $_->database_name => 1 } @{ $report_db_interface->fetch_for_distinct_databases({'session_id' => $first_session_id, 'include_all' => 1}) || [] } };
 
   my $drh = DBI->install_driver('mysql');
   my $dbs = {};
