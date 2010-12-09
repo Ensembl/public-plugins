@@ -56,58 +56,55 @@ sub content {
   }
   $html   .= '</ul>';
   
-  my $form = EnsEMBL::Web::Form->new('annotation', '/Healthcheck/AnnotationSave', 'post');
+  my $form = $self->new_form({'id' => 'annotation', 'action' => '/Healthcheck/AnnotationSave'});
   
   $form->add_fieldset($heading);
   
   my $options = []; #options for action select box
   my $actions = $self->annotation_action('all');
   for (keys %$actions) {
-    push @$options, {'value' => $_, 'name' => $actions->{ $_ }};
+    push @$options, {'value' => $_, 'caption' => $actions->{ $_ }};
   }
   
-  $form->add_element(
+  $form->add_field([{
     'label'     => 'Action',
     'name'      => 'action',
     'value'     => $self->annotation_action($comment->{'action'})->{'value'},
     'type'      => 'DropDown',
     'select'    => 'select',
     'values'    => $options
-  );            
-                
-  $form->add_element(
+  },{
     'label'     => 'Comment',
-    'type'      => 'String',
-    'size'      => '60',
+    'type'      => 'Text',
     'name'      => 'comment',
     'value'     => $comment->{'text'}
-  );
-                  
-  $form->add_element(
+  }]);
+
+  $form->add_field({
     'label'     => 'Added by',
     'type'      => 'NoEdit',
     'name'      => 'added_by_name',
     'value'     => $comment->{'created_by'}
-  ) if $comment->{'created_by'} ne '';
+  }) if $comment->{'created_by'} ne '';
 
-  $form->add_element(
+  $form->add_field({
     'label'     => $label_done_by,
     'type'      => 'NoEdit',
     'name'      => 'user_name',
     'value'     => $current_user->name
-  );
-                
-  $form->add_element(
+  });
+
+  $form->add_button({
     'type'      =>  'Submit',
     'value'     =>  'Save',
     'name'      =>  'submit'
-  );
-  
-  $form->add_hidden({
-    'rid'       =>  join (',', @$rid),
-    'referrer'  =>  $referrer,
   });
-  
+
+  $form->add_hidden([
+    {'name' => 'rid',       'value' => join (',', @$rid)},
+    {'name' => 'referrer',  'value' => $referrer}
+  ]);
+
   return $html.$form->render;
 }
 
