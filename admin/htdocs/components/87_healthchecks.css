@@ -46,6 +46,17 @@ span.hc-new {
 .hc-done, .hc-done a {
   color: #006600;
 }
+.hc-config {
+  border: #666699 double 3px;
+  margin: 0 1px;
+}
+.hc-config label {
+  display: block;
+  padding: 4px 0 0 24px;
+}
+.hc-config input {
+  float: left;
+}
 .hc-releaseonly, .hc-releaseonly a {
   color: #aa9900;
 }

@@ -1,11 +1,11 @@
 Ensembl.extend({
   initialize: function () {
     this.base();
-    new HC_MultiSelector(['hc-comment-link'], 'hc-infobox', 'hc-problem-link', 'hc-new-link', 'hc-dbheading');
+    new HC_MultiSelector(['hc-comment-link'], 'hc-infobox', 'local-tools', 'hc-problem-link', 'hc-new-link', 'hc-dbheading');
   }
 });
 
-function HC_MultiSelector(classes, infoClass, problemClass, newClass, tableHeadingClass) {
+function HC_MultiSelector(classes, infoClass, localToolsId, problemClass, newClass, tableHeadingClass) {
 
   this.tables = Array();
   this.info = ["Double click on any 'Select' or 'Deselect' to respectively select or deselect all reports for that database for multi-annotation."];
@@ -51,8 +51,10 @@ function HC_MultiSelector(classes, infoClass, problemClass, newClass, tableHeadi
         labels[i].innerHTML = labelCaptions[i];
         configDiv.appendChild(p);
       }
-      infoDiv.parentNode.insertBefore(configDiv, infoDiv.nextSibling);
-      configDiv.className = infoDiv.className;
+      configDiv.className = 'hc-config';
+      var localTools = $('#' + localToolsId)[0];
+      if (localTools.nextSibling) localTools.parentNode.insertBefore(configDiv, localTools.nextSibling);
+      else localTools.parentNode.appendChild(configDiv);
     }
     catch (e) {}
     for (var i in this.tables) {
