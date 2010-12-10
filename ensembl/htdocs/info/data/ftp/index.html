@@ -5,35 +5,40 @@
 
 <body>
 
-<h1>The Ensembl FTP Server</h1>
+<div class="info-box embedded-box float-right" style="margin-bottom:1em;">
+<h2 class="first">Custom data sets</h2>
+<p>If you want to filter or customise your download, please try
+<a href="http://www.ensembl.org/biomart/martview">Biomart</a>, 
+a web-based querying tool.</p>
+</div>
+
+<h1>Database dumps</h1>
 
 <p>
-If required, entire databases can be downloaded from our FTP site in a
-variety of formats, from flat files to MySQL dumps. Please be aware
-that these files can run to many gigabytes of data.
+Entire databases can be downloaded from our FTP site in a
+variety of formats. Please be aware that some of these files 
+can run to many gigabytes of data.
 </p>
+
+<p><strong>Looking for MySQL dumps to install databases locally?</strong> See our
+<a href="/info/docs/webcode/install/ensembl-data.html">web installation instructions</a> 
+for full details.</p>
+
+<p>
+Each directory on 
+<a href="ftp://ftp.ensembl.org/pub/"
+rel="external">ftp.ensembl.org</a> contains a
+<a href="ftp://ftp.ensembl.org/pub/current_README">README</a> file,
+explaining the directory structure.
+</p>
+
+[[SCRIPT::EnsEMBL::Web::Document::HTML::FTPtable]]
 
 <p>
 To facilitate storage and download all databases are
 <a href="http://directory.fsf.org/project/gzip/" rel="external">GNU
 Zip</a> (gzip, *.gz) compressed.
 </p>
-
-<p>Owing to the nature of some of the data in Ensembl it has been necessary to escape
-the table fields when dumping the MySQL text files.  Hence to import successfully,
-a field escape parameter needs to be specified when using mysqlimport, e.g.</p>
-
-<p><kbd>mysqlimport -h your_host -u write_user -p write_pass -P 3306 --fields_escaped_by=\\ database_name /full/path/to/table_name.txt</kbd></p>
-
-<p>
-<strong>Please note:</strong> Ensembl supports downloading of many
-correlation tables via the highly customisable
-<a href="/biomart/martview">BioMart</a> data mining tool. You may find
-exploring this web-based data mining tool easier than extracting
-information from our database dumps.
-</p>
-
-[[SCRIPT::EnsEMBL::Web::Document::HTML::FTPtable]]
 
 <h2>About the data</h2>
 
@@ -152,27 +157,25 @@ format. For more information see the accompanying README file.
 </p>
 
 <p>
-BED format is a simple line-based format. The first 3 mandatory column
+BED format is a simple line-based format. The first 3 mandatory columns
 are:
 </p>
 
 <ul>
-<li>chromosome name, starting with chr to be compiant with UCSC
-browser. Example: chrX</li>
+<li>chromosome name (may start with 'chr' for compliance with UCSC)</li>
 <li>start position. This is a 0-based position</li>
 <li>end position.</li>
 </ul>
 
 <p>
-More information on the BED file format is
-available <a href="http://genome.ucsc.edu/FAQ/FAQformat#format1">here</a>.
+<a href="/info/website/upload/bed.html">More information on the BED file format</a>...
 </p>
 </dd>
 
 <dt>Tarball</dt>
 <dd>
 <p>
-The entire Ensembl API is gzipped and concatentated into a single TAR file. This is updated daily. 
+The entire Ensembl API is gzipped and concatenated into a single TAR file. This is updated daily. 
 </dd>
 
 
@@ -204,15 +207,6 @@ the context of transcripts and their translations.</p>
 </dd>
 
 </dl>
-
-<p>
-Each directory on 
-<a href="ftp://ftp.ensembl.org/pub/"
-rel="external">ftp.ensembl.org</a> contains a
-<a href="ftp://ftp.ensembl.org/pub/current_README">README</a> file.
- This additional document explains the FTP directory
-<a href="index.html">structure</a>.
-</p>
 
 </body>
 </html>
