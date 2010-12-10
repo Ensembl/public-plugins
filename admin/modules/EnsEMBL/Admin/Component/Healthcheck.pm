@@ -24,12 +24,11 @@ sub caption {
 }
 
 sub _get_default_list {
-  ## @overrides
   my ($self, $view, $report_db_interface, $first_session_id) = @_;
   my $list = [];
   if ($view =~ /^testcase|database_name$/) {
     my $query = $view =~ 'testcase' ? 'fetch_for_distinct_testcases' : 'fetch_for_distinct_databases';
-    $list = [ keys %{${\{ map {$_->$view => 1} @{$report_db_interface->$query({'session_id' => $first_session_id, 'include_all' => 1})} } } } ];
+    $list = [ keys %{{ map {$_->$view => 1} @{$report_db_interface->$query({'session_id' => $first_session_id, 'include_all' => 1}) || []} }} ];
   }
   elsif ($view eq 'species') {
     $list = $self->hub->species_defs->ENSEMBL_DATASETS || [];
@@ -43,7 +42,7 @@ sub _get_default_list {
 sub render_all_releases_selectbox {
   ## Returns an HTML selectbox with all possible releases for healthchecks as options
   ## $skip - release to be skipped in the select box
-  
+
   my ($self, $skip) = @_;
 
   my $current       = $self->hub->species_defs->ENSEMBL_VERSION;
