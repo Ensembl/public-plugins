@@ -47,12 +47,12 @@ sub render_all_releases_selectbox {
 
   my $current       = $self->hub->species_defs->ENSEMBL_VERSION;
   my $html          = qq(<select name="release">);
-    for (my $count  = $current; $count >= FIRST_RELEASE_FOR_HEALTHCHECK; $count--) {
-      next if defined $skip && $count == $skip;
-      $html        .= qq(<option value="$count">Release $count</option>);
-    }
-    $html          .= qq(</select>);
-    return $html;
+  for (my $count  = $current; $count >= FIRST_RELEASE_FOR_HEALTHCHECK; $count--) {
+    next if defined $skip && $count == $skip;
+    $html        .= qq(<option value="$count">Release $count</option>);
+  }
+  $html          .= qq(</select>);
+  return $html;
 }
 
 sub validate_release {
@@ -73,6 +73,7 @@ sub get_healthcheck_link {
   ##  - title: goes in title attribute
   ##  - release: release id
   ##  - cut_long: flag stating whether or not to cut the long caption of the link
+  ##  - class: Class attribute
 
   my ($self, $params) = @_;
   
@@ -85,20 +86,22 @@ sub get_healthcheck_link {
   my $release = $params->{'release'};
   $caption    = substr($caption, 0, 20).'&#133;'
     if exists $params->{'cut_long'} && $params->{'cut_long'} eq 'cut' && length $caption > 23;
+    
+  my $class = $params->{'class'} ? qq( class="$params->{'class'}") : '';
 
   if ($params->{'type'} eq 'species') {
     my $all_species = { map {$_ => 1} @{ $self->builder->hub->species_defs->ENSEMBL_DATASETS || [] } }; #species validation
     return $caption unless exists $all_species->{ $param };
-    return qq(<a href="/$param/Healthcheck/Species?release=$release" title="List all failed test reports for Speices $title in release $release">$caption</a>);
+    return qq(<a$class href="/$param/Healthcheck/Species?release=$release" title="List all failed test reports for Speices $title in release $release">$caption</a>);
   }
   elsif ($params->{'type'} eq 'testcase') {
-    return qq(<a href="/Healthcheck/Testcase?release=$release;test=$param" title="List all failed test reports for Testcase $title in release $release">$caption</a>);
+    return qq(<a$class href="/Healthcheck/Testcase?release=$release;test=$param" title="List all failed test reports for Testcase $title in release $release">$caption</a>);
   }
   elsif ($params->{'type'} eq 'database_type') {
-    return qq(<a href="/Healthcheck/DBType?release=$release;db=$param" title="List all failed test reports for Database Type $title in release $release">$caption</a>);
+    return qq(<a$class href="/Healthcheck/DBType?release=$release;db=$param" title="List all failed test reports for Database Type $title in release $release">$caption</a>);
   }
   elsif ($params->{'type'} eq 'database_name') {
-    return qq(<a href="/Healthcheck/Database?release=$release;db=$param" title="List all failed test reports for Database Name $title in release $release">$caption</a>);
+    return qq(<a$class href="/Healthcheck/Database?release=$release;db=$param" title="List all failed test reports for Database Name $title in release $release">$caption</a>);
   }
   else {
     return $caption;
@@ -183,7 +186,7 @@ sub content_failure_summary {
 
     my $title = $params->{'view'} eq 'species' ? ucfirst($_) : $_;
 
-    my $fourth_cell     = exists $params->{'compare_reports'} ? {
+    my %fourth_cell     = exists $params->{'compare_reports'} ? (
       'comparison'  => $self->get_healthcheck_link({
         'type'        => $params->{'view'},
         'param'       => $title,
@@ -191,7 +194,7 @@ sub content_failure_summary {
         'title'       => $title,
         'release'     => $params->{'release_2'}
       })
-    } : {};
+    ) : ();
     $table->add_row({
       'group'       => $self->get_healthcheck_link({
         'type'        => $params->{'view'},
@@ -204,9 +207,10 @@ sub content_failure_summary {
         'param'       => $title,
         'caption'     => $fails->{ $_ }{'total_fails'} || '0',
         'title'       => $title,
-        'release'     => $params->{'release'}
+        'release'     => $params->{'release'},
+        'class'       => $fails->{ $_ }{'total_fails'} ? '' : 'hc-nofailsrow',
       }),
-      %$fourth_cell
+      %fourth_cell
     });
   }
   return $table->render;
