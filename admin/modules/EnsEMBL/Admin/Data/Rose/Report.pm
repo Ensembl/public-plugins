@@ -111,7 +111,7 @@ sub fetch_all_failed_for_session {
         or                      =>
         [
           'annotation.action'   => undef,
-          '!annotation.action'  => ['manual_ok', 'manual_ok_this_assembly', 'manual_ok_all_releases', 'healthcheck_bug'],
+          '!annotation.action'  => ['manual_ok', 'manual_ok_this_assembly', 'manual_ok_all_releases', 'manual_ok_this_genebuild', 'healthcheck_bug'],
         ],
         'last_session_id'       => "$session_id",
         'result'                => 'PROBLEM'
