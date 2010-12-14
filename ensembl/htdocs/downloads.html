@@ -8,33 +8,37 @@
 
 <h2 class="first">Accessing Ensembl Data</h2>
 
-<h3>Exporting data from the website</h3>
+<h3>Export data from the website</h3>
 <p>Many of the pages displaying Ensembl genomic data offer an <a href="/info/data/export.html">export</a> 
 option, suitable for small amounts of data, e.g. a single gene sequence.</p>
 
-<p>Look for the 'Export' button in the left-hand menu:</p>
-<div id="local-tools">
-<div style="width:14em"><a class="export" title="You cannot export data from this page">Export data</a></div>
-</div>
+<p>Look for the 'Export' button in the left-hand menu.</p>
 
 <p><a href="/info/data/export.html">More details...</a></p>
 
-<h3>Data-mining with BioMart</h3>
+<h3 style="padding-top:1em">Create a custom download</h3>
 <p><img src="/img/info/biomart-logo.gif" class="float-left" alt="BioMart logo" />Complex datasets can be retrieved using the <a href="http://www.ensembl.org/biomart/martview">BioMart</a> 
 data-mining tool.</p>
 <p>You may find exploring this web-based data mining tool easier than extracting information 
 from our normalised database dumps. </p>
 <p><a href="/info/data/biomart.html">More details...</a></p>
 
-<h3>Public MySQL server</h3>
-<p>If you require larger amounts of data (e.g. all the genes on a chromosome) or are 
-conducting a more detailed analysis, we recommend using our 
-publicly-accessible <a href="/info/data/mysql.html">MySQL server</a> We provide a 
-<a href="/info/docs/api/">Perl API</a> to these databases, so they can be 
-scripted against without needing to know the database schema.</p>
-<p><a href="/info/data/mysql.html">More details...</a></p>
+<h3 style="padding-top:1em">Fetch data with our Perl API</h3>
+<p>For rapid access to small-to-medium datasets, we recommend use of our 
+<a href="/info/docs/api/">Perl API</a>.</p>
+<p>The API allows you to quickly write scripts to retrieve and query biological data objects
+such as genes, variation features and 'slices' of DNA sequence.</p>
+<pre class="code">
+# Fetch all clones from a slice adaptor 
+# (returns a list reference)
+my $clones_ref = $slice_adaptor-&gt;fetch_all('clone');
+</pre>
+<p>The API can connect to our publicly-accessible 
+<a href="/info/data/mysql.html">MySQL server</a>, so you
+may not need to download complete databases.</p>
+<p><a href="/info/docs/api/">More details...</a></p>
 
-<h3>FTP site</h3>
+<h3 style="padding-top:1em">Large datasets (file dumps via FTP)</h3>
 <p>If required, entire databases can be downloaded from our <a href="/info/data/ftp">FTP site</a> 
 in a variety of formats, from flat files to MySQL dumps.</p>
 <p>Please be aware, however, that an entire EnsEMBL release currently totals almost
@@ -54,16 +58,8 @@ other languages; for an up-to-date list, see our
 <a href="http://www.ensembl.org/info/about/code_licence.html">licence</a>.</p>
 
 <h3>Perl API</h3>
-<p>For rapid access to small-to-medium datasets, we recommend use of our 
-<a href="/info/docs/api/">Perl API</a>.</p>
-<p>The API allows you to quickly write scripts to retrieve and query biological data objects
-such as genes, variation features and 'slices' of DNA sequence.</p>
-<pre class="code">
-# Fetch all clones from a slice adaptor 
-# (returns a list reference)
-my $clones_ref = $slice_adaptor-&gt;fetch_all('clone');
-</pre>
-<p><a href="/info/docs/api/">More details...</a></p>
+<p>Use our Perl API to create scripts for analysing or downloading data - see the lefthand 
+column of this page.</p>
 
 <h3>Genebuild pipeline</h3>
 <p>For projects that wish to create their own genomic databases, we also make our
