@@ -1,55 +1,58 @@
 <h4>Human (Homo sapiens)</h4>
-<a href="mlss/mlss_388.html">Chimpanzee (Pan troglodytes)</a><br/>
-<a href="mlss/mlss_455.html">Gorilla (Gorilla gorilla)</a><br/>
-<a href="mlss/mlss_394.html">Orangutan (Pongo pygmaeus)</a><br/>
-<a href="mlss/mlss_428.html">Macaque (Macaca mulatta)</a><br/>
-<a href="mlss/mlss_473.html">Marmoset (Callithrix jacchus)</a><br/>
-<a href="mlss/mlss_412.html">Tarsier (Tarsius syrichta)</a><br/>
-<a href="mlss/mlss_429.html">Mouse Lemur (Microcebus murinus)</a><br/>
-<a href="mlss/mlss_399.html">Bushbaby (Otolemur garnettii)</a><br/>
-<a href="mlss/mlss_402.html">Tree Shrew (Tupaia belangeri)</a><br/>
-<a href="mlss/mlss_410.html">Mouse (Mus musculus)</a><br/>
-<a href="mlss/mlss_393.html">Rat (Rattus norvegicus)</a><br/>
-<a href="mlss/mlss_397.html">Kangaroo rat (Dipodomys ordii)</a><br/>
-<a href="mlss/mlss_391.html">Guinea Pig (Cavia porcellus)</a><br/>
-<a href="mlss/mlss_383.html">Squirrel (Spermophilus tridecemlineatus)</a><br/>
-<a href="mlss/mlss_478.html">Rabbit (Oryctolagus cuniculus)</a><br/>
-<a href="mlss/mlss_408.html">Pika (Ochotona princeps)</a><br/>
-<a href="mlss/mlss_407.html">Alpaca (Vicugna pacos)</a><br/>
-<a href="mlss/mlss_396.html">Dolphin (Tursiops truncatus)</a><br/>
-<a href="mlss/mlss_392.html">Cow (Bos taurus)</a><br/>
-<a href="mlss/mlss_433.html">Pig (Sus scrofa)</a><br/>
-<a href="mlss/mlss_405.html">Horse (Equus caballus)</a><br/>
-<a href="mlss/mlss_409.html">Cat (Felis catus)</a><br/>
-<a href="mlss/mlss_483.html">Giant Panda (Ailuropoda melanoleuca)</a><br/>
-<a href="mlss/mlss_404.html">Dog (Canis familiaris)</a><br/>
-<a href="mlss/mlss_398.html">Microbat (Myotis lucifugus)</a><br/>
-<a href="mlss/mlss_403.html">Megabat (Pteropus vampyrus)</a><br/>
-<a href="mlss/mlss_395.html">Hedgehog (Erinaceus europaeus)</a><br/>
-<a href="mlss/mlss_382.html">Shrew (Sorex araneus)</a><br/>
-<a href="mlss/mlss_447.html">Elephant (Loxodonta africana)</a><br/>
-<a href="mlss/mlss_389.html">Hyrax (Procavia capensis)</a><br/>
-<a href="mlss/mlss_400.html">Lesser hedgehog tenrec (Echinops telfairi)</a><br/>
-<a href="mlss/mlss_406.html">Armadillo (Dasypus novemcinctus)</a><br/>
-<a href="mlss/mlss_401.html">Sloth (Choloepus hoffmanni)</a><br/>
-<a href="mlss/mlss_385.html">Opossum (Monodelphis domestica)</a><br/>
-<a href="mlss/mlss_430.html">Wallaby (Macropus eugenii)</a><br/>
-<a href="mlss/mlss_384.html">Platypus (Ornithorhynchus anatinus)</a><br/>
-<a href="mlss/mlss_390.html">Chicken (Gallus gallus)</a><br/>
+Chimpanzee (Pan troglodytes)<br />
+Gorilla (Gorilla gorilla)<br />
+Orangutan (Pongo pygmaeus)<br />
+Macaque (Macaca mulatta)<br />
+Marmoset (Callithrix jacchus)<br />
+Tarsier (Tarsius syrichta)<br />
+Mouse Lemur (Microcebus murinus)<br />
+Bushbaby (Otolemur garnettii)<br />
+Tree Shrew (Tupaia belangeri)<br />
+Mouse (Mus musculus)<br />
+Rat (Rattus norvegicus)<br />
+Kangaroo rat (Dipodomys ordii)<br />
+Guinea Pig (Cavia porcellus)<br />
+Squirrel (Spermophilus tridecemlineatus)<br />
+Rabbit (Oryctolagus cuniculus)<br />
+Pika (Ochotona princeps)<br />
+Alpaca (Vicugna pacos)<br />
+Dolphin (Tursiops truncatus)<br />
+Cow (Bos taurus)<br />
+Pig (Sus scrofa)<br />
+Horse (Equus caballus)<br />
+Cat (Felis catus)<br />
+Giant Panda (Ailuropoda melanoleuca)<br />
+Dog (Canis familiaris)<br />
+Microbat (Myotis lucifugus)<br />
+Megabat (Pteropus vampyrus)<br />
+Hedgehog (Erinaceus europaeus)<br />
+Shrew (Sorex araneus)<br />
+Elephant (Loxodonta africana)<br />
+Hyrax (Procavia capensis)<br />
+Lesser hedgehog tenrec (Echinops telfairi)<br />
+Armadillo (Dasypus novemcinctus)<br />
+Sloth (Choloepus hoffmanni)<br />
+Opossum (Monodelphis domestica)<br />
+Wallaby (Macropus eugenii)<br />
+Platypus (Ornithorhynchus anatinus)<br />
+Chicken (Gallus gallus)<br />
 <h4>Mouse (Mus musculus)</h4>
-<a href="mlss/mlss_282.html">Rat (Rattus norvegicus)</a><br/>
-<a href="mlss/mlss_283.html">Dog (Canis familiaris)</a><br/>
-<a href="mlss/mlss_284.html">Platypus (Ornithorhynchus anatinus)</a><br/>
-<a href="mlss/mlss_370.html">Medaka (Oryzias latipes)</a><br/>
+Rat (Rattus norvegicus)<br />
+Dog (Canis familiaris)<br />
+Platypus (Ornithorhynchus anatinus)<br />
+Medaka (Oryzias latipes)<br />
 <h4>Pig (Sus scrofa)</h4>
-<a href="mlss/mlss_440.html">Cow (Bos taurus)</a><br/>
+Cow (Bos taurus)<br />
 <h4>Dog (Canis familiaris)</h4>
-<a href="mlss/mlss_482.html">Giant Panda (Ailuropoda melanoleuca)</a><br/>
+Horse (Equus caballus)<br />
+Giant Panda (Ailuropoda melanoleuca)<br />
 <h4>Opossum (Monodelphis domestica)</h4>
-<a href="mlss/mlss_443.html">Wallaby (Macropus eugenii)</a><br/>
+Wallaby (Macropus eugenii)<br />
 <h4>Chicken (Gallus gallus)</h4>
-<a href="mlss/mlss_441.html">Zebra Finch (Taeniopygia guttata)</a><br/>
+Turkey (Meleagris gallopavo)<br />
+Zebra Finch (Taeniopygia guttata)<br />
+Anole Lizard (Anolis carolinensis)<br />
 <h4>Medaka (Oryzias latipes)</h4>
-<a href="mlss/mlss_225.html">Stickleback (Gasterosteus aculeatus)</a><br/>
+Stickleback (Gasterosteus aculeatus)<br />
 <h4>C.intestinalis (Ciona intestinalis)</h4>
-<a href="mlss/mlss_215.html">C.savignyi (Ciona savignyi)</a><br/>
+C.savignyi (Ciona savignyi)<br />
