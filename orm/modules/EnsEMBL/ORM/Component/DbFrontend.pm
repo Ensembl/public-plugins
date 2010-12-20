@@ -78,7 +78,7 @@ sub create_form {
   $url .= '/'.$hub->type.'/'.$next;
 
   my $form = EnsEMBL::Web::Form->new($hub->action, $url, 'post');
-  $form->add_attribute('class', 'narrow-labels');
+  $form->set_attribute('class', 'narrow-labels');
   return $form;
 }
 
