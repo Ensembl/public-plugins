@@ -86,16 +86,17 @@ href="http://lowelab.ucsc.edu/tRNAscan-SE/">tRNAscan-SE</a>.
 
 <p>
 <strong>lincRNA</strong> (Long non-coding RNAs)
-Chromatin-state map data, gene annotation, along with cDNA and
-next-generation sequencing data are used to predict lincRNAs for human
-and mouse. Regions of chromatin methylation (H3K4me3 and H3K36me3)
-outside of known protein-coding loci are identified [1]. A
-comparative approach identifies conserved regions using alignments
-determined by the Ensembl  compara project, following a similar method
-to C. Ponting [2]. A validation step investigates if cDNA or
-next-generation sequencing data overlap the identified conserved
-chromatin methylation regions. PFAM/tigrfam tests if ORFs of the
-identified ncRNAs contain protein domains.
+Ensembl gene annotation, cDNA alignments and chromatin-state map data 
+from the Ensembl regulatory build are used to predict lincRNAs for human 
+and mouse. First, regions of chromatin methylation (H3K4me3 and H3K36me3) 
+outside known protein-coding loci are identified [1]. Next, cDNAs which 
+overlap with H3K4me3 or H3K36me3 features are identified as candidate 
+lincRNAs. A final evaluation step investigates if each candidate 
+lincRNA has any protein-coding potential. Any candidate lincRNA 
+containing a substantial open reading frame (ORF) covering 35% or more 
+of its length and containing PFAM/tigrfam protein domains will be 
+rejected. Candidate lincRNAs that pass the final evaluation step are 
+included in the human or mouse gene set as lincRNA genes.
 </p>
 
 <p>References</p>
@@ -111,19 +112,6 @@ large non-coding RNAs in mammals.</strong><br />
 target="external">doi:10.1038/nature07672</a></p>
 </li>
 
-<li>
-<p>Church DM, Goodstadt L, Hillier LW, Zody MC, Goldstein S, She X,
-Bult CJ, Agarwala R, Cherry JL, DiCuccio M, Hlavina W, Kapustin Y,
-Meric P, Maglott D, Birtle Z, Marques AC, Graves T, Zhou S, Teague B,
-Potamousis K, Churas C, Place M, Herschleb J, Runnheim R, Forrest D,
-Amos-Landgraf J, Schwartz DC, Cheng Z, Lindblad-Toh K, Eichler EE,
-Ponting CP; Mouse Genome Sequencing Consortium<br />
-<strong>Lineage-specific biology revealed by a finished genome
-assembly of the mouse</strong><br />
-<em>PLOS Biology</em> 2009 7(5):e1000112<br />
-<a href="http://dx.doi.org/10.1371/journal.pbio.1000112"
-target="external">doi:10.1371/journal.pbio.1000112</a></p>
-</li>
 </ol>
 
 </body>
