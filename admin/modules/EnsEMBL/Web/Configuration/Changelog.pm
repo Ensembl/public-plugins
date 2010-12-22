@@ -39,6 +39,11 @@ sub populate_tree {
     [qw(summary EnsEMBL::Admin::Component::Changelog::Summary)], 
     { 'availability' => 1 }
   );
+
+  $self->create_node( 'TextSummary', '',
+    [qw(text_summary EnsEMBL::Admin::Component::Changelog::TextSummary)], 
+    { 'availability' => 1, no_menu_entry => 1 }
+  );
 }
 
 sub modify_tree {
