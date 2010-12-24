@@ -51,9 +51,8 @@ sub update_conf {
   $SiteDefs::__species_aliases{ 'Vicugna_pacos'            } = [qw(lp alpaca)];
 #-------------------- birds
   $SiteDefs::__species_aliases{ 'Gallus_gallus'            } = [qw(gg ggal chicken)];
-#  $SiteDefs::__species_aliases{ 'Meleagris_gallopavo'      } = [qw(mg mgal turkey meleagris)];
+  $SiteDefs::__species_aliases{ 'Meleagris_gallopavo'      } = [qw(mg mgal turkey meleagris)];
   $SiteDefs::__species_aliases{ 'Taeniopygia_guttata'      } = [qw(tg taegut taeniopygia zebrafinch)];
-#  $SiteDefs::__species_aliases{ 'Meleagris_gallopavo'      } = [qw(mg mgal turkey)];
 #-------------------- fish
   $SiteDefs::__species_aliases{ 'Danio_rerio'              } = [qw(dr drer zfish zebrafish)];
   $SiteDefs::__species_aliases{ 'Gasterosteus_aculeatus'   } = [qw(ga gacu stickleback gasterosteus)];
@@ -76,6 +75,7 @@ sub update_conf {
   $SiteDefs::__species_aliases{ 'Ciona_savignyi'           } = [qw(cs csav seasquirts cionas)];
 #-------------------- yeast
   $SiteDefs::__species_aliases{ 'Saccharomyces_cerevisiae' } = [qw(sc scer yeast saccharomyces )];
+  $SiteDefs::__species_aliases{ 'Ailuropoda_melanoleuca'   } = [qw(panda giant_panda)];
 }
 
 1;
