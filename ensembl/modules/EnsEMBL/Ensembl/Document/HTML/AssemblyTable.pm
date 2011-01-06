@@ -88,7 +88,7 @@ sub render_assembly_table {
     foreach my $r (@$releases)  {
       $assembly_name = $release_species->{$s->{'id'}}->{$r->{'id'}};
 
-      $order++ if ($current_name ne $assembly_name);
+      $order++ if ($assembly_name && $current_name ne $assembly_name);
 
       $cells->{$order} ||= { name => $assembly_name, count => 0 };
       $cells->{$order}->{'count'}++;
