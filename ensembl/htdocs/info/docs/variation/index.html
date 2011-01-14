@@ -20,7 +20,7 @@ href="http://www.ncbi.nlm.nih.gov/projects/SNP/">dbSNP</a>.
 The data is imported when it is released by dbSNP and incorporated
 into the next Ensembl release. If dbSNP releases the data on a different assembly,
 Ensembl will remap the variant positions onto the current assembly.
-Data from projects like 
+For Human, data from projects like 
 the <a rel="external" href="http://www.HapMap.org/">HapMap Project</a>
  and <a rel="external" href="http://www.1000genomes.org/page.php">1000
 Genomes Project</a> is imported once it has been submitted to <a rel="external"
@@ -30,14 +30,27 @@ href="http://www.ncbi.nlm.nih.gov/projects/SNP/">dbSNP</a>.
 <p>
 Ensembl also includes data from other sources. For a complete list, go to
 a species Location page (e.g. <a href="http://www.ensembl.org/Homo_sapiens/Location/View?r=6:133017695-133161157"> for human</a>),
- and click on the "Configure Your Page" link on the left-hand side.
-The variation section of this contains a detailed description of all sources of variation data
-for that species. For example, in human there is data from Illumina chips, 
-<a rel="external"
-href="http://www.affymetrix.com/index.affx">Affy GeneChip Arrays</a>, the
-<a rel="external"
-href="http://www.ebi.ac.uk/ega/page.php">European Genome-phenome
-Archive (EGA) </a> as well as an increasing amount of phenotype data.</p>
+ and click on the &quot;Configure Your Page&quot; link on the left-hand side.
+The &quot;Germline variation&quot; section of this contains a detailed description of all sources of variation data
+for that species.<br>
+For example, in human there is data from;
+<ul>
+<li>Illumina chips</li>
+<li><a rel="external" href="http://www.affymetrix.com/index.affx">Affymetrix GeneChip Arrays</a></li> 
+<li><a rel="external" href="http://www.hgmd.cf.ac.uk/ac/index.php">Human Gene Mutation Database
+(HGMD)</a> (public identifiers)</li>
+<li><a rel="external" href="http://www.uniprot.org/">UniProt</a></li>
+<li><a rel="external" href="http://www.sanger.ac.uk/genetics/CGP/cosmic/">Catalogue Of Somatic Mutations In
+Cancer (COSMIC)</a></li>
+<li><a rel="external" href="http://www.ebi.ac.uk/dgva/page.php">DGVa</a> and <a
+rel="external" href="http://www.ncbi.nlm.nih.gov/dbvar/">dbVAR</a>: structural polymorphism data</li>
+<li><a rel="external"
+href="http://www.genome.gov/">NHGRI</a>, <a rel="external" href="http://www.ebi.ac.uk/ega/page.php">European
+Genome-phenome Archive (EGA)</a>, Open GWAS DB: phenotype information from genome-wide association studies</li>
+<li>Locus Reference Genomic sequences (<a rel="external"
+href="http://www.lrg-sequence.org/page.php">LRG</a>)</li>
+</ul>
+
 
 <h2> Variation Displays </h2>
 <p>
@@ -48,9 +61,9 @@ as:
 <ul>
 <li><strong>Gene:</strong> Variation table and Variation image (for
 all variations in a gene)</li>
-<li><strong>Transcript:</strong> Population comparison and Comparison
+<li><strong>Transcript:</strong> Population comparison, Comparison
 image (for all variations in a transcript across different
-sequences)</li>
+sequences) and the list of the coding variations (Protein information).</li>
 <li><strong>Location:</strong> Region in Detail (Variations can be
 drawn using &quot;Configure this page&quot; at the left. The menu allows
 display of information in Ensembl databases along with external
@@ -152,17 +165,6 @@ the 3prime end of a transcript.</li>
 upstream or downstream of a transcript.</li>
 
 </ul>
-
-<h2>Insertions and Deletions</h2>
-
-<p>An insertion is indicated by start coordinate = end coordinate +
-1. For example, for an insertion of 'C' between nucleotides 12600 and
-12601 the start = 12601 and end = 12600.</p>
-
-<p>A deletion is indicated by the exact nucleotide coordinates. For
-example, a three base pair deletion of nucleotides 12600, 12601, and
-12602 will have the start = 12600 and end = 12602.</p>
-
 <h2>References</h2>
 
 <p>
