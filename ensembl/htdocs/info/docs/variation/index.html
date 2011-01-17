@@ -13,13 +13,42 @@ Ensembl stores structural variants as well as sequence variants i.e.
 Single Nucleotide Polymorphisms (SNPs) and insertion-deletion mutations (Indels).
 </p>
 
+<h2> Variation species </h2>
+<p>Ensembl had variants for the following species:</p>
+<table><tr><td>
+<ul>
+	<li><i>Bos taurus</i></li>
+	<li><i>Canis familiaris</i></li>
+	<li><i>Danio rerio</i></li>
+	<li><i>Drosophila melanogaster</i></li>
+	<li><i>Equus caballus</i></li>
+	<li><i>Felis catus</i></li>
+	<li><i>Gallus gallus</i></li>
+	<li><i>Homo sapiens</i></li>
+	<li><i>Monodelphis domestica</i></li>
+</ul>
+</td><td>
+<ul>
+	<li><i>Mus musculus</i></li>
+	<li><i>Ornithorhynchus anatinus</i></li>
+	<li><i>Pan troglodytes</i></li>
+	<li><i>Pongo pygmaeus</i></li>
+	<li><i>Rattus norvegicus</i></li>
+	<li><i>Saccharomyces cerevisiae</i></li>
+	<li><i>Sus scrofa</i></li>
+	<li><i>Taeniopygia guttata</i></li>
+	<li><i>Tetraodon nigroviridis</i></li>
+</ul>
+</td></tr></table>
+
+
 <h2> Sources of Variation Data </h2>
 <p>
 The majority of variants are downloaded from NCBI <a rel="external"
 href="http://www.ncbi.nlm.nih.gov/projects/SNP/">dbSNP</a>. 
 The data is imported when it is released by dbSNP and incorporated
 into the next Ensembl release. If dbSNP releases the data on a different assembly,
-Ensembl will remap the variant positions onto the current assembly.
+Ensembl will remap the variant positions onto the current assembly.<br>
 For Human, data from projects like 
 the <a rel="external" href="http://www.HapMap.org/">HapMap Project</a>
  and <a rel="external" href="http://www.1000genomes.org/page.php">1000
@@ -35,6 +64,7 @@ The &quot;Germline variation&quot; section of this contains a detailed descripti
 for that species.<br>
 For example, in human there is data from;
 <ul>
+<li><a rel="external" href="http://www.ncbi.nlm.nih.gov/projects/SNP/">dbSNP</a></li>
 <li>Illumina chips</li>
 <li><a rel="external" href="http://www.affymetrix.com/index.affx">Affymetrix GeneChip Arrays</a></li> 
 <li><a rel="external" href="http://www.hgmd.cf.ac.uk/ac/index.php">Human Gene Mutation Database
@@ -94,6 +124,21 @@ API</a> (<a href="/info/docs/api/variation/index.html"
 class="cp-external">variation databases</a>).
 </p>
 
+<h2> Variation classes </h2>
+See the different classes, with the corresponding <a rel="external" href="http://www.sequenceontology.org/">Sequence
+Ontology</a> IDs in parenthesis:
+<ul>
+	<li>SNP (<a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001483">SO:0001483</a>)</li>
+	<li>CNV (<a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001019">SO:0001019</a>)</li>
+	<li>INSERTION (<a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0000667">SO:0000667</a>)</li>
+	<li>DELETION (<a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0000159">SO:0000159</a>)</li>
+	<li>INDEL (<a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:1000032">SO:1000032</a>)</li>
+	<li>SEQUENCE ALTERATION (<a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001059">SO:0001059</a>)</li>
+	<li>SUBSTITUTION (<a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:1000002">SO:1000002</a>)</li>
+	<li>TANDEM REPEAT (<a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0000705">SO:0000705</a>)</li>
+	
+	
+</ul>
 
 <h2> Predicted variation consequences</h2>
 
