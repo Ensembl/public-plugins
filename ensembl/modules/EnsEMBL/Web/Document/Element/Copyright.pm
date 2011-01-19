@@ -1,4 +1,4 @@
-package EnsEMBL::Web::Document::HTML::Copyright;
+package EnsEMBL::Web::Element::HTML::Copyright;
 
 ### Replacement copyright notice for www.ensembl.org
 
@@ -6,7 +6,7 @@ use strict;
 use URI::Escape qw(uri_escape);
 use EnsEMBL::Web::RegObj;
 
-use base qw(EnsEMBL::Web::Document::HTML);
+use base qw(EnsEMBL::Web::Element::HTML);
 
 sub new { return shift->SUPER::new('sitename' => '?'); }
 

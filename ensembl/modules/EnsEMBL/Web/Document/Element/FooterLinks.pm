@@ -1,10 +1,10 @@
-package EnsEMBL::Web::Document::HTML::FooterLinks;
+package EnsEMBL::Web::Element::HTML::FooterLinks;
 
 ### Replacement footer links for www.ensembl.org
 
 use strict;
 
-use base qw(EnsEMBL::Web::Document::HTML);
+use base qw(EnsEMBL::Web::Element::HTML);
 
 sub render {
   $_[0]->print( qq(
