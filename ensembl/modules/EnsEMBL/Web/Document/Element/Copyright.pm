@@ -1,4 +1,4 @@
-package EnsEMBL::Web::Element::HTML::Copyright;
+package EnsEMBL::Web::Document::Element::Copyright;
 
 ### Replacement copyright notice for www.ensembl.org
 
@@ -6,13 +6,13 @@ use strict;
 use URI::Escape qw(uri_escape);
 use EnsEMBL::Web::RegObj;
 
-use base qw(EnsEMBL::Web::Element::HTML);
+use base qw(EnsEMBL::Web::Document::Element);
 
 sub new { return shift->SUPER::new('sitename' => '?'); }
 
 sub sitename    :lvalue { $_[0]{'sitename'};   }
 
-sub render {
+sub content {
   my $self = shift;
   my @time = localtime();
   my $year = @time[5] + 1900;

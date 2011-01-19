@@ -1,12 +1,12 @@
-package EnsEMBL::Web::Element::HTML::FooterLinks;
+package EnsEMBL::Web::Document::Element::FooterLinks;
 
 ### Replacement footer links for www.ensembl.org
 
 use strict;
 
-use base qw(EnsEMBL::Web::Element::HTML);
+use base qw(EnsEMBL::Web::Document::Element);
 
-sub render {
+sub content {
   $_[0]->print( qq(
     <div class="twocol-right right unpadded print_hide">
       <a href="http://www.ensembl.org/info/about/intro.html" class="constant">About&nbsp;Ensembl</a> | 
