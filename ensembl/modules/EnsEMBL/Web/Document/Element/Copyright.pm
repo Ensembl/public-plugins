@@ -4,11 +4,15 @@ package EnsEMBL::Web::Document::Element::Copyright;
 
 use strict;
 use URI::Escape qw(uri_escape);
-use EnsEMBL::Web::RegObj;
 
 use base qw(EnsEMBL::Web::Document::Element);
 
-sub new { return shift->SUPER::new('sitename' => '?'); }
+sub new {
+  return shift->SUPER::new({
+    %{$_[0]},
+    sitename => '?'
+  });
+}
 
 sub sitename    :lvalue { $_[0]{'sitename'};   }
 
@@ -16,13 +20,14 @@ sub content {
   my $self = shift;
   my @time = localtime();
   my $year = @time[5] + 1900;
+  my $html;
 
-  my $sd = $ENSEMBL_WEB_REGISTRY->species_defs;
+  my $sd = $self->species_defs;
 
   my $you_are_here = $ENV{'REQUEST_URI'};
   my $stable_URL   = uri_escape('http://' . $sd->ARCHIVE_VERSION . '.archive.ensembl.org');
 
-  $self->printf(
+  $html .= sprintf(
     q(
     <div class="twocol-left left unpadded">
         %s release %d - %s
@@ -34,25 +39,19 @@ sub content {
     $sd->ENSEMBL_RELEASE_DATE, $sd->ENSEMBL_SERVERNAME,
     );
   
-  $self->printf('<div class="print_hide">'); 
+  $html .= '<div class="print_hide">'; 
   unless ($ENV{'ENSEMBL_TYPE'} =~ /Help|Account|UserData/) {
-    $self->print(
-      qq{
+    $html .= qq{
       <br />
         <a class="modal_link" id="p_link" href="/Help/Permalink?url=$stable_URL">Permanent link</a>
-      }
-    );
+    };
     unless ($you_are_here =~ /html$/ && $you_are_here ne '/index.html') {
       ## Omit archive links from static content, which tends to change a lot
-      $self->print(
-        '
-         - <a class="modal_link" id="a_link" href="/Help/ArchiveList">View in archive site</a>
-        '
-      );
+      $html .= ' - <a class="modal_link" id="a_link" href="/Help/ArchiveList">View in archive site</a>';
     }
   }
-  $self->print('</div></div>');
-
+  $html .= '</div></div>';
+  return $html;
 }
 
 1;
