@@ -139,6 +139,16 @@ Ontology</a> IDs in parenthesis:
 	<li>TANDEM REPEAT (<a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0000705">SO:0000705</a>)</li>
 </ul>
 
+<p>A variation is classified according to its component alleles and the class is
+displayed on the website using the Ensembl display term. These terms are
+intended to align with Sequence Ontology terms wherever possible, but some SO
+definitions do not match ours (specifically our term SNP is closer to the SO
+term SNV than the SO term SNP). The variation_class table in the variation
+database shows the mapping between display terms and SO terms, and API users can
+fetch either term from a Variation object. We also differentiate somatic
+mutations from germline variations in the display term, prefixing the term with
+'somatic_'.</p>
+
 <h2 id="consequences"> Predicted variation consequences</h2>
 
 <p> The variation consequence types describe the location or effect of a
