@@ -210,8 +210,59 @@ upstream or downstream of a transcript.</li>
 
 </ul>
 
+<h2 id="indel">Insertions and Deletions</h2>
 
-<h2>Notes</h2>
+<p>An insertion is indicated by start coordinate = end coordinate +
+1. For example, for an insertion of 'C' between nucleotides 12600 and
+12601 the start = 12601 and end = 12600.</p>
+
+<p>A deletion is indicated by the exact nucleotide coordinates. For
+example, a three base pair deletion of nucleotides 12600, 12601, and
+12602 will have the start = 12600 and end = 12602.</p>
+
+
+<h2 id="input">Input File Format</h2>
+
+<p>Data must be supplied in a simple <strong>tab-separated</strong> format,
+containing five columns, all required:
+</p>
+
+<ol>
+<li><strong>chromosome</strong> - just the name or number, with no 'chr' prefix</li>
+<li><strong>start</strong></li>
+<li><strong>end</strong></li>
+<li><strong>allele</strong> - pair of alleles separated by a '/', with the reference allele first</li>
+<li><strong>strand</strong> - defined as + (forward) or - (reverse).</li>
+</ol>
+
+<pre class="code">
+1   881907    881906    -/C   +
+5   140532    140532    T/C   +
+12  1017956   1017956   T/A   +
+2   946507    946507    G/C   +
+14  19584687  19584687  C/T   -
+19  66520     66520     G/A   +
+8   150029    150029    A/T   +
+</pre>
+
+<p>An insertion is indicated by start coordinate = end coordinate +
+1. For example, an insertion of 'C' between nucleotides 12600 and
+12601 on the forward strand of chromosome 8 is indicated as
+follows:</p>
+
+<pre>
+8   12601     12600     -/C   +
+</pre>
+<p>A deletion is indicated by the exact nucleotide coordinates. For
+example, a three base pair deletion of nucleotides 12600, 12601, and
+12602 of the reverse strand of chromosome 8 will be:</p>
+
+<pre>
+8   12600     12602     CGT/- -
+</pre>
+
+
+<h2 id="notes">Notes</h2>
 
 <p>For more detailed information on the variation specific help see <a href="/Help/View?id=168">here</a>.<br
 />
