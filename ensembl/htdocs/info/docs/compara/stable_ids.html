@@ -15,7 +15,7 @@ the resulting orthologs to assign stable IDs to GeneTrees.</p>
 
 <h2 id="Namespaces">Namespaces</h2>
 
-The format of the Stable IDs are <b>ENSFMRRRRXXXXXXXXXX</b> and <b>ENSGTRRRRXXXXXXXXXX</b>
+<p>The format of the Stable IDs are <b>ENSFMRRRRXXXXXXXXXX</b> and <b>ENSGTRRRRXXXXXXXXXX</b>
 respectively, where RRRR corresponds to the Ensembl release number when the stable ID was first assigned and XXXXXXXXXX
 is a number. For instance, ENSFM00550000743120 is a family first described in Ensembl 55 and ENSGT00560000077204 is a GeneTree first
 described in Ensembl 56.</p>
@@ -86,8 +86,9 @@ make it the name of the <b>"new"</b> class, if it has not been taken yet.
 
 <p>If 100% <b>SHARED</b> members of the <b>"old"</b> class become 100% <b>SHARED</b> members
 of the new class, we call this case an <b>EXACT</b> reuse.
-If there was only one <b>SHARED</b> member, we call it an <b>EXACT_o</b> for "orphan".</li>
+If there was only one <b>SHARED</b> member, we call it an <b>EXACT_o</b> for "orphan".
 </p>
+
 <p>Otherwise we have a split/join situation and iterate through the
   "contributors" (the <b>"old"</b> classes from which the <b>SHARED</b> members come
   from) in the decreasing order of the sizes of the shared parts.
