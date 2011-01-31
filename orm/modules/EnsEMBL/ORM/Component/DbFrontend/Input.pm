@@ -97,6 +97,9 @@ sub content {
       }
     }
     else {
+      if ($p->{'name'} eq 'species') {
+        $p->{'required'} = 1;
+      }
       $fieldset->add_element(%$p);
     }
   }
