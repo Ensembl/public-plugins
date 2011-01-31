@@ -13,6 +13,9 @@ package EnsEMBL::ORM::Component::DbFrontend::Preview;
 use strict;
 use warnings;
 no warnings "uninitialized";
+
+use HTML::Entities qw(encode_entities);
+
 use base qw(EnsEMBL::ORM::Component::DbFrontend);
 
 sub _init {
@@ -104,6 +107,7 @@ sub content {
     next if ($name eq 'modified_by' && $previous eq 'Add');
 
     $p->{'type'} = 'Hidden';
+    $p->{'value'} = encode_entities($p->{'value'});
     ## Deal with multi-value fields (e.g. dropdowns)
     my @values = ($hub->param($name));
     if (@values > 1 || $name eq 'species') {
