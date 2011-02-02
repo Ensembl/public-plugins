@@ -27,6 +27,8 @@ sub init {
 sub modify_form {
   my ($self, $param, $mode) = @_;
 
+  unshift @{$param->{'species'}{'values'}}, {'value' => '0', 'name' => 'All Species'};
+  $param->{'species'}{'required'} = 1;
   $param->{'db_status'}{'label'} = 'Database changed';
   $param->{'assembly'}{'label'} = 'Is this a new assembly?';
   $param->{'gene_set'}{'label'} = 'Has the gene set changed?';
