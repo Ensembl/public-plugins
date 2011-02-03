@@ -171,7 +171,7 @@ sub content {
       }
       my $temp          = $report->annotation ? $report->annotation->action || '' : '';
       my $text_class    = $temp =~ /manual_ok|healthcheck_bug/ ? 'hc-noproblem' : 'hc-problem';
-      $text_class      .= ' hc-new' if $report->first_session_id == $report->last_session_id;
+      $text_class      .= $report->first_session_id == $report->last_session_id ? ' hc-new' : ' hc-notnew';
 
       my $link_class    = join ' ', keys %{{ map { $_."-link" => 1 } split (' ', $text_class)}};
 

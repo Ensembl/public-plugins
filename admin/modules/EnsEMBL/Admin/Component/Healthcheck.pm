@@ -208,7 +208,7 @@ sub content_failure_summary {
         'caption'     => $fails->{ $_ }{'total_fails'} || '0',
         'title'       => $title,
         'release'     => $params->{'release'},
-        'class'       => $fails->{ $_ }{'total_fails'} ? '' : 'hc-nofailsrow',
+        'class'       => $fails->{ $_ }{'total_fails'} ? 'hc-failsrow' : 'hc-nofailsrow',
       }),
       %fourth_cell
     });
