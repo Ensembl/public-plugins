@@ -56,7 +56,7 @@ sub render {
     $html .= qq(</td>\n<td style="width:$column_width%;padding:2px;padding-bottom:1em">);
     if ($dir) {
       if ($healthchecks) {
-        $html .= qq(<span style="font-weight:bold;font-size:1.1em">$name</span><br /><a href="/$dir/Healthcheck/Details">Healthcheck</a> 
+        $html .= qq(<span style="font-weight:bold;font-size:1.1em">$name</span><br /><a href="/$dir/Healthcheck/Species">Healthcheck</a> 
           | <a href="http://staging.ensembl.org/$dir/">View on staging</a>);
       }
       else {
