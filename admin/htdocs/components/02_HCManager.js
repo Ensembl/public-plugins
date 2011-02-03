@@ -3,7 +3,9 @@ Ensembl.HCManager = new Base();
 Ensembl.HCManager.extend({
   initialize: function () {
     this.base();
-        
+    
+    var self = this;
+    
     this.constant = {
       classes:            ['hc-comment-link'],
       infoBoxClass:       'hc-infobox',
