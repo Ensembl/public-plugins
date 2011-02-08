@@ -10,11 +10,11 @@
 
 <p>
 Ensembl stores structural variants as well as sequence variants i.e.
-Single Nucleotide Polymorphisms (SNPs) and insertion-deletion mutations (Indels).
+Single Nucleotide Polymorphisms (SNPs), insertions, deletions and somatic mutations.
 </p>
 
 <h2> Variation species </h2>
-<p>Ensembl had variants for the following species:</p>
+<p>Ensembl has variants for the following species:</p>
 <table><tr><td>
 <ul>
 	<li><i>Bos taurus</i></li>
@@ -58,7 +58,7 @@ href="http://www.ncbi.nlm.nih.gov/projects/SNP/">dbSNP</a>.
 
 <p>
 Ensembl also includes data from other sources. For a complete list, go to
-a species Location page (e.g. <a href="http://www.ensembl.org/Homo_sapiens/Location/View?r=6:133017695-133161157"> for human</a>),
+a species Location page (e.g. <a href="/Homo_sapiens/Location/View?r=6:133017695-133161157"> for human</a>),
  and click on the &quot;Configure Your Page&quot; link on the left-hand side.
 The &quot;Germline variation&quot; section of this contains a detailed description of all sources of variation data
 for that species.<br>
@@ -85,16 +85,17 @@ href="http://www.lrg-sequence.org/page.php">LRG</a>)</li>
 
 <h2 id="displays"> Variation Displays </h2>
 <p>
-Variations and sources can be viewed in the browser through pages such
+Variation data can be viewed in the browser through pages such
 as:
 </p>
 
 <ul>
 <li><strong>Gene:</strong> Variation table and Variation image (for
-all variations in a gene)</li>
+all variations in a gene) e.g. for example <a href="/Homo_sapiens/Gene/Variation_Gene/Table?db=core;g=ENSG00000159197">for all variants in KCNE2</a> </li>
 <li><strong>Transcript:</strong> Population comparison, Comparison
-image (for all variations in a transcript across different
-sequences) and the list of the coding variations (Protein information).</li>
+image (for comparing variants in a transcript across different individual or strain
+sequences) e.g. <a href="/Mus_musculus/Transcript/Population/Image?g=ENSMUSG00000041143;r=4:138528820-138586500;t=ENSMUST00000084208"> compare Tmco4 in different mouse strains </a> </li>
+<li> <strong> Transcript: </strong> Sequence, protein: list of the coding variants in protein coordinates.</li>
 <li><strong>Location:</strong> Region in Detail (Variations can be
 drawn using &quot;Configure this page&quot; at the left. The menu allows
 display of information in Ensembl databases along with external
@@ -106,7 +107,7 @@ href="http://projects.tcag.ca/variation/">DGV loci</a>.)</li>
 Clicking on any variation on an Ensembl page will open a Variation tab
 with information about the flanking sequence and source for the
 selected variation. Links to linkage disequilibrium (LD) plots,
-phenotype information (for human) from EGA and <a rel="external"
+phenotype information (for human) from EGA, OMIM and <a rel="external"
 href="http://www.genome.gov/">NHGRI</a> and Ensembl genes and
 transcripts that include the variation can be found at the left of
 this tab. You may also view multiple genome alignments of various
@@ -149,12 +150,33 @@ fetch either term from a Variation object. We also differentiate somatic
 mutations from germline variations in the display term, prefixing the term with
 'somatic_'.</p>
 
+
+<h3 id="indel">Insertion and Deletion coordinates </h3>
+
+<p> In Ensembl, an insertion is indicated by start coordinate = end coordinate +
+1. For example, an insertion of 'C' between nucleotides 12600 and
+12601 on the forward strand is indicated with start and end coordinates as
+follows:</p>
+
+<pre>
+   12601     12600   
+</pre>
+<p>A deletion is indicated by the exact nucleotide coordinates. For
+example, a three base pair deletion of nucleotides 12600, 12601, and
+12602 of the reverse strand will have start and end coordinates of :</p>
+
+<pre>
+   12600     12602    
+</pre>
+
+
 <h2 id="consequences"> Predicted variation consequences</h2>
 
 <p> The variation consequence types describe the location or effect of a
-variation on a transcript. These are shown in order of severity as assigned by
-Ensembl and used by the Perl API. Click <a href="consequences.jpg">here</a>
-for a schematic showing the location of each type relative to the transcript
+variation on a transcript. These are shown in order of estimated severity as assigned by
+Ensembl and used by the Perl API for display purposes. Please note this order is subjective and works for the majority of cases.
+Click <a href="consequences.jpg">here</a>
+for a diagram showing the location of each type relative to the transcript
 structure.
 </p>
 
@@ -220,56 +242,11 @@ upstream or downstream of a transcript.</li>
 
 </ul>
 
-<h2 id="indel">Insertions and Deletions</h2>
+<h3 id="input"> Calculating variation consequences for your own data </h3>
 
-<p>An insertion is indicated by start coordinate = end coordinate +
-1. For example, for an insertion of 'C' between nucleotides 12600 and
-12601 the start = 12601 and end = 12600.</p>
-
-<p>A deletion is indicated by the exact nucleotide coordinates. For
-example, a three base pair deletion of nucleotides 12600, 12601, and
-12602 will have the start = 12600 and end = 12602.</p>
-
-
-<h2 id="input">Input File Format</h2>
-
-<p>Data must be supplied in a simple <strong>tab-separated</strong> format,
-containing five columns, all required:
+<p> You can also calculate consequences for your own data via the website. Please see
+<a href="/info/website/upload/var.html"> more information here </a>
 </p>
-
-<ol>
-<li><strong>chromosome</strong> - just the name or number, with no 'chr' prefix</li>
-<li><strong>start</strong></li>
-<li><strong>end</strong></li>
-<li><strong>allele</strong> - pair of alleles separated by a '/', with the reference allele first</li>
-<li><strong>strand</strong> - defined as + (forward) or - (reverse).</li>
-</ol>
-
-<pre class="code">
-1   881907    881906    -/C   +
-5   140532    140532    T/C   +
-12  1017956   1017956   T/A   +
-2   946507    946507    G/C   +
-14  19584687  19584687  C/T   -
-19  66520     66520     G/A   +
-8   150029    150029    A/T   +
-</pre>
-
-<p>An insertion is indicated by start coordinate = end coordinate +
-1. For example, an insertion of 'C' between nucleotides 12600 and
-12601 on the forward strand of chromosome 8 is indicated as
-follows:</p>
-
-<pre>
-8   12601     12600     -/C   +
-</pre>
-<p>A deletion is indicated by the exact nucleotide coordinates. For
-example, a three base pair deletion of nucleotides 12600, 12601, and
-12602 of the reverse strand of chromosome 8 will be:</p>
-
-<pre>
-8   12600     12602     CGT/- -
-</pre>
 
 
 <h2 id="notes">Notes</h2>
