@@ -4,8 +4,6 @@ use strict;
 
 use base qw(EnsEMBL::Admin::Component::Healthcheck);
 
-use EnsEMBL::Web::Form;
-
 sub caption {
   return 'Annotation';
 }
