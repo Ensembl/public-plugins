@@ -46,8 +46,8 @@ __PACKAGE__->register_db(
   database  => $species_defs->multidb->{'DATABASE_WEBSITE'}{'NAME'},
   host      => $species_defs->multidb->{'DATABASE_WEBSITE'}{'HOST'},
   port      => $species_defs->multidb->{'DATABASE_WEBSITE'}{'PORT'},
-  username  => $db_user,
-  password  => $db_pass,
+  username  => $species_defs->multidb->{'DATABASE_WEBSITE'}{'USER'} || $db_user,
+  password  => $species_defs->multidb->{'DATABASE_WEBSITE'}{'PASS'} || $db_pass,
 );
 
 __PACKAGE__->register_db(
@@ -56,8 +56,8 @@ __PACKAGE__->register_db(
   database  => $species_defs->ENSEMBL_USERDB_NAME,
   host      => $species_defs->ENSEMBL_USERDB_HOST,
   port      => $species_defs->ENSEMBL_USERDB_PORT,
-  username  => $db_user,
-  password  => $db_pass,
+  username  => $species_defs->ENSEMBL_USERDB_USER || $db_user,
+  password  => $species_defs->ENSEMBL_USERDB_PASS || $db_pass,
 );
 
 __PACKAGE__->register_db(
@@ -66,8 +66,8 @@ __PACKAGE__->register_db(
   database  => $species_defs->multidb->{'DATABASE_PRODUCTION'}{'NAME'},
   host      => $species_defs->multidb->{'DATABASE_PRODUCTION'}{'HOST'},
   port      => $species_defs->multidb->{'DATABASE_PRODUCTION'}{'PORT'},
-  username  => $db_user,
-  password  => $db_pass,
+  username  => $species_defs->multidb->{'DATABASE_PRODUCTION'}{'USER'} || $db_user,
+  password  => $species_defs->multidb->{'DATABASE_PRODUCTION'}{'PASS'} || $db_pass,
 );
 
 __PACKAGE__->register_db(
@@ -76,8 +76,8 @@ __PACKAGE__->register_db(
   database  => $species_defs->multidb->{'DATABASE_HEALTHCHECK'}{'NAME'},
   host      => $species_defs->multidb->{'DATABASE_HEALTHCHECK'}{'HOST'},
   port      => $species_defs->multidb->{'DATABASE_HEALTHCHECK'}{'PORT'},
-  username  => $db_user,
-  password  => $db_pass,
+  username  => $species_defs->multidb->{'DATABASE_HEALTHCHECK'}{'USER'} || $db_user,
+  password  => $species_defs->multidb->{'DATABASE_HEALTHCHECK'}{'PASS'} || $db_pass,
 );
 
 
