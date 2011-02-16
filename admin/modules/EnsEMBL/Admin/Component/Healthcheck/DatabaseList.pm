@@ -6,12 +6,6 @@ use DBI;
 
 use base qw(EnsEMBL::Admin::Component::Healthcheck);
 
-use constant {
-  SERVER    => 'ens-staging1 ens-staging2',
-  DB_USER   => 'ensro',
-  DB_PORT   => '3306',
-};
-
 sub caption {
   return 'Database List';
 }
@@ -41,9 +35,9 @@ sub content {
   my $dbs = {};
   
   #construct a data structure
-  for my $server (split ' ', $self->SERVER) {
-    $dbs->{ $server } = {};
-    my $db_list       = [ $drh->func($server, $self->DB_PORT, $self->DB_USER, '_ListDBs') ];
+  for my $server (@$SiteDefs::ENSEMBL_WEBADMIN_DB_SERVERS) {
+    $dbs->{ $server->{host} } = {};
+    my $db_list       = [ $drh->func($server->{host}, $server->{port}, $server->{user}, $server->{pass}, '_ListDBs') ];
     for (@$db_list) {
       my $species = '2others'; #'2' prefixed for sorting - '2' keeps 'others' at the end instead considering it alphabetically
       if ($_ =~ /_core|_otherfeatures|_cdna|_variation|_funcgen|_compara|_vega/) {
@@ -51,8 +45,8 @@ sub content {
         my $all_species = { map {$_ => 1} @{ $hub->species_defs->ENSEMBL_DATASETS || [] } }; #species validation
         $species = '1'.$1 if exists $all_species->{ ucfirst $1 }; #'1' prefixed for sorting -  keeps it always above 'others'
       }
-      $dbs->{ $server }{ $species }       = {} unless exists $dbs->{ $server }{ $species };
-      $dbs->{ $server }{ $species }{ $_ } = int ((1 * exists $hc_this_session->{ $_ }) + (2 * exists $hc_this_release->{ $_ }));
+      $dbs->{ $server->{host} }{ $species }       = {} unless exists $dbs->{ $server->{host} }{ $species };
+      $dbs->{ $server->{host} }{ $species }{ $_ } = int ((1 * exists $hc_this_session->{ $_ }) + (2 * exists $hc_this_release->{ $_ }));
     }
   }
   

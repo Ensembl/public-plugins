@@ -3,8 +3,20 @@ use strict;
 package EnsEMBL::Admin::SiteDefs;
 
 sub update_conf {
-  $SiteDefs::ENSEMBL_WEBADMIN_ID     = 0;
-
+  $SiteDefs::ENSEMBL_WEBADMIN_ID = 0;
+  $SiteDefs::ENSEMBL_WEBADMIN_HEALTHCHECK_FIRST_RELEASE = 42;
+  $SiteDefs::ENSEMBL_WEBADMIN_DB_SERVERS = [
+    {
+      host => 'ens-staging1',
+      port => '3306',
+      user => 'ensro',
+    },
+    {
+      host => 'ens-staging2',
+      port => '3306',
+      user => 'ensro',
+    }
+  ];
 
   ## ALLOWABLE DATA OBJECTS
   $SiteDefs::OBJECT_TO_SCRIPT = {
@@ -25,7 +37,7 @@ sub update_conf {
   $SiteDefs::ENSEMBL_BLAST_ENABLED = 0;
   $SiteDefs::ENSEMBL_MART_ENABLED = 0;
   $SiteDefs::ENSEMBL_MEMCACHED = {};
-
+   
 }
 
 1;

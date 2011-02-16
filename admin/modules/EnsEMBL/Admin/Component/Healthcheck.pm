@@ -8,8 +8,7 @@ use base qw(EnsEMBL::Web::Component);
 use Rose::DateTime::Util qw(format_date parse_date);
 
 use constant {
-  FIRST_RELEASE_FOR_HEALTHCHECK => 42,   #healthchecks started from release 42
-  NO_HEALTHCHECK_FOUND          => '<p class="hc_p">Healthchecks have not been performed for this release.</p>',
+  NO_HEALTHCHECK_FOUND => '<p class="hc_p">Healthchecks have not been performed for this release.</p>',
 };
 
 sub _init {
@@ -47,7 +46,7 @@ sub render_all_releases_selectbox {
 
   my $current       = $self->hub->species_defs->ENSEMBL_VERSION;
   my $html          = qq(<select name="release">);
-  for (my $count  = $current; $count >= FIRST_RELEASE_FOR_HEALTHCHECK; $count--) {
+  for (my $count  = $current; $count >= $SiteDefs::ENSEMBL_WEBADMIN_HEALTHCHECK_FIRST_RELEASE; $count--) {
     next if defined $skip && $count == $skip;
     $html        .= qq(<option value="$count">Release $count</option>);
   }
@@ -60,7 +59,7 @@ sub validate_release {
 
   my ($self, $release)  = @_;
   my $current           = $self->hub->species_defs->ENSEMBL_VERSION;
-  return $release >= $self->FIRST_RELEASE_FOR_HEALTHCHECK && $release <= $current;
+  return $release >= $SiteDefs::ENSEMBL_WEBADMIN_HEALTHCHECK_FIRST_RELEASE && $release <= $current;
 
 }
 
