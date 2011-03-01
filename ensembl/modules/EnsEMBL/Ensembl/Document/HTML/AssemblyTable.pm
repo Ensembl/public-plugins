@@ -1,7 +1,6 @@
 package EnsEMBL::Ensembl::Document::HTML::AssemblyTable;
 
 use strict;
-use warnings;
 
 use EnsEMBL::Web::Hub;
 use EnsEMBL::Web::DBSQL::WebsiteAdaptor;

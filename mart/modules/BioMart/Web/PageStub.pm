@@ -100,15 +100,21 @@ sub end {
 }
 
 sub render_start {
-  my $self       = shift;
-  my $page       = $self->{'page'};
+  my $self = shift;
+  my $page = $self->{'page'};
+
+  $page->add_body_attr('id',    'ensembl-webpage');
+  $page->add_body_attr('class', 'mac')                               if $ENV{'HTTP_USER_AGENT'} =~ /Macintosh/;
+  $page->add_body_attr('class', "ie ie$2" . ($2 < 8 ? ' ie67' : '')) if $ENV{'HTTP_USER_AGENT'} =~ /MSIE( (\d))?/ && $2 < 9; # Assumes that IE 9 will have support for everything we need. LOL.
+  $page->add_body_attr('class', 'no_tabs');
+  $page->add_body_attr('class', 'static');
+
   my $content    = $self->{'content'};
   my $html_tag   = join '', $page->doc_type, $page->html_tag;
   my $head       = join "\n", map $content->{$_->[0]} || (), @{$page->head_order};   
   my $body_attrs = join ' ', map { sprintf '%s="%s"', $_, $page->{'body_attr'}{$_} } grep $page->{'body_attr'}{$_}, keys %{$page->{'body_attr'}};
   
-  print qq{
-$html_tag
+  print qq{$html_tag
 <head>
   $head
 </head>
@@ -117,18 +123,14 @@ $html_tag
     <div id="min_width_holder">
       <div id="masthead" class="js_panel">
         <input type="hidden" class="panel_type" value="Masthead" />
-        <div class="content">
-          <div class="mh print_hide">
-            <span class="logo_holder">$content->{'logo'}</span>
-            <div class="tools_holder">$content->{'tools'}</div>
-            <div class="search_holder print_hide">$content->{'search_box'}</div>
-          </div>
-          $content->{'breadcrumbs'}
-          <div class="tabs_holder print_hide">$content->{'tabs'}</div>
+        <div class="logo_holder">$content->{'logo'}</div>
+        <div class="mh print_hide">
+          <div class="account_holder">$content->{'account'}</div>
+          <div class="tools_holder">$content->{'tools'}</div>
+          <div class="search_holder print_hide">$content->{'search_box'}</div>
         </div>
       </div>
-      <div class="invisible"></div>
-      <div id="main_holder">
+      <div id="main_holder"> 
         <div id="main">
   };
 }
