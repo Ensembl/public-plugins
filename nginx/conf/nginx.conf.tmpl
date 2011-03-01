@@ -35,7 +35,7 @@ http {
  
   server {
     listen          [[$SiteDefs::ENSEMBL_NGINX_PORT || 8000]];
-    server_name     [[$ENSEMBL_SERVERNAME]];
+    server_name     [[$SiteDefs::ENSEMBL_STATIC_SERVERNAME]];
 
     #proxy_pass_request_headers on;
     #proxy_pass_request_body on;
@@ -58,7 +58,7 @@ http {
  
     location ~* \.(jpg|jpeg|png|gif|js|css|txt|xml|csv|gff|fa|nh|gz|tar|zip|pdf|swf|jar)$ {
       expires 30d;
-      set $memcached_key [[$SiteDefs::ENSEMBL_BASE_URL]]$request_uri;
+      set $memcached_key [[$SiteDefs::ENSEMBL_STATIC_BASE_URL]]$request_uri;
       memcached_pass memcached_servers;
       error_page 404 502 = /fetch;
     }
