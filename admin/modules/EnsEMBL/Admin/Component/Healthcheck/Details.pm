@@ -12,121 +12,63 @@ sub _init {
 }
 
 sub caption {
-  return 'Healthcheck details';
-}
-
-sub _param {
-  ##@return the parameter for the requested view eg. 'core' if view is dbtype
-  ##override it in the child class
-  return '';
-}
-
-sub _type {
-  ##@return view type. eg. database_type, species etc
-  ##override it in the child class
-  return '';
-}
-
-sub _get_first_column_for_report {
-  ##@return heading for the first column of the spreadsheet
-  ##override it in the child class
-  return '';
-}
-
-sub _get_user_link {
-  ##looks up the given hash of all users for given id
-  ##@param $all     HashRef of all Rose::Object::User objects
-  ##@param $user_id ID of the required user
-  ##@return   <a href="mailto:$user_email">$user_id</a>
-  ##override it in the child class
-  my ($self, $all, $user_id) = @_;
-  for (@$all) {
-    return '<a href="mailto:'.$_->email.'">'.$_->name.'</a>' if $_->user_id == $user_id;
-  }
-  return 'unknown user';
-}
-
-sub _show_anchors {
-  ##@return flag to decide wheather to display links at the top of the page linking to tables inside the page
-  ##override it in the child class if no anchors need to be displayed
-  return 1;
+  my $object = shift->object;
+  my $extra  = $object->view_type && $object->view_param ? sprintf(' (%s)', $object->view_param) : '';
+  return "Healthcheck details$extra";
 }
 
 sub content {
-  ##this method is called by Panel to display this method's return HTML inside the page
-  ##@return HTML to be displayed
+  ## @return HTML to be displayed
   my $self = shift;
-  
-  my $hub               = $self->hub;
-  my $db_interface      = $self->object;
-  my $release           = $hub->param('release') || $hub->species_defs->ENSEMBL_VERSION; #switch back to current release if no GET param 'release' found
-  
-  my $html              = '';
-  my $html_anchors      = '';
-  my $filter_param      = $self->_param;
-  my $type              = $self->_type;
-  (my $type_title       = ucfirst($type)) =~ s/_/ /;  #for printing
 
-  return $self->NO_HEALTHCHECK_FOUND unless $self->validate_release($release);
-  
-  my $last_session          = $db_interface->data_interface('Session')->fetch_last($release);
-  my $last_session_id       = $last_session ? $last_session->session_id || 0 : 0;
-          
-  return $self->NO_HEALTHCHECK_FOUND unless $last_session_id;
+  my $object  = $self->object;
+  my $session = $object->rose_object;
+  my $param   = $object->view_param;
+  my $type    = $object->view_type;
+  my $reports;
 
-  my $first_session         = $db_interface->data_interface('Session')->fetch_first($release);
-  my $first_session_id      = $first_session ? $first_session->session_id || 0 : 0;
- 
-  my $report_db_interface   = $db_interface->data_interface('Report');
+  return $self->no_healthcheck_found unless $session && ($reports = $session->report);
 
-  unless ($filter_param) {
-    #if no filter param is found, print a list of all Species/DBTypes (whichever required) etc
-    my $reports = $report_db_interface->fetch_all_failed_for_session($last_session_id);
-    return qq(<p class="hc_p">Click on a $type_title to view details</p>).$self->content_failure_summary({
-      'view'                => $type,
-      'first_session_id'    => $first_session_id,
-      'last_session_id'     => $last_session_id,
-      'release'             => $release,
-      'all_reports'         => $reports,
-      'report_db_interface' => $report_db_interface,
-    });
-  }
-  
-  my $reports = $report_db_interface->fetch_failed_for_session($last_session_id, { $type => $filter_param });
-  
-  return qq(<p class="hc_p">No healthcheck reports found for $type_title '$filter_param'.</p>) unless scalar @$reports;
-  
-  my $all_admin_users   = $db_interface->data_interface('User')->fetch_by_group($hub->species_defs->ENSEMBL_WEBADMIN_ID);
+  return '<p class="hc_p">Click on a '.$object->view_title.' to view details</p>'.$self->content_failure_summary({
+    'reports'       => $reports,
+    'type'          => $type,
+    'session_id'    => $session->session_id,
+    'release'       => $object->requested_release,
+    'default_list'  => $object->get_default_list
+  }) unless $param;
+
+  my $html          = '';
+  my $html_anchors  = '';
   
   #group all reports by database_name
   my $grouped_reports   = {};
   for (@$reports) {
-    $grouped_reports->{ $_->database_name } = [] unless exists $grouped_reports->{ $_->database_name };
-    push @{ $grouped_reports->{ $_->database_name } }, $_ ;
+    $grouped_reports->{$_->database_name} = [] unless exists $grouped_reports->{$_->database_name};
+    push @{$grouped_reports->{$_->database_name}}, $_;
   }
-  
+
   $html_anchors    .= "<h3>List of affected databases:</h3><ul>";
   my $serial_number = 0;
   
-  my $hidden_input = $self->_param_name ne '' ? '<input type="hidden" name="'.$self->_param_name.'" value="'.$self->_param.'" />' : '';
-  $html .= qq(<form action="" method="get"><p class="hc_p_right">View in release: ).$self->render_all_releases_selectbox($release).qq(&nbsp;<input type="submit" value="Go" />$hidden_input</p></form>);
+  $html .= qq(<form action="" method="get"><p class="hc_p_right">View in release: ).$self->render_all_releases_selectbox;
+  $html .= qq(&nbsp;<input type="submit" value="Go" /><input type="hidden" name="q" value="$param" /></p></form>);
   $html .= qq{<div class="hc-infobox">
             <p>For each database, reports are sorted on the basis of Date (initial failure date) with latest report appearing on the top.</p>
             <p>Reports in <span class="hc-problem">this colour</span> have not been annotated 'manual ok'.</p>
             <p>Reports appearing <span class="hc-problem hc-new">bold</span> (or <span class="hc-new">bold</span>) are for the recently appeared problems.</p>
   </div>};
-  my $js_ref = 0;
+
+  my $js_ref = 0; #counter used by JavaScript only
   foreach my $database_name (sort keys %$grouped_reports) {
   
-    $js_ref++; #counter used by JavaScript only
+    $js_ref++;
     $html          .= qq(<a name="$database_name"></a><h3 class="hc-dbheading">$database_name</h3>);
     $html_anchors  .= qq(<li><a href="#$database_name">$database_name</a></li>);
 
     my $table       = $self->new_table;
     
     $table->add_columns(#note - use the space properly, we have too much to display in annotation and text columns
-#      {'key' => 'serial',   'title' => '',                                                'align' => 'right'},
-      {'key' => 'db_sp_tc', 'title' => $self->_get_first_column_for_report,               'width' => qq(20%)},
+      {'key' => 'db_sp_tc', 'title' => $self->_get_first_column($object->function),       'width' => qq(20%)},
       {'key' => 'text',     'title' => 'Text',                                            'width' => qq(40%)},
       {'key' => 'comment',  'title' => 'Annotation',                                      'width' => qq(40%)},
       {'key' => 'team',     'title' => 'Team/person responsible',                         'width' => '100px'},
@@ -136,15 +78,15 @@ sub content {
     #sort reports on the basis of creation time 
     my $i = 0;
     my $db_reports = [];
-    my $temp = { map { ($_->created || '0').++$i => $_ } @{ $grouped_reports->{ $database_name } } };
-    push @$db_reports, $temp->{ $_ } for reverse sort keys %$temp;
-      
-    foreach my $report (@{ $db_reports }) {
+    my $temp = { map { ($_->created || '0').++$i => $_ } @{$grouped_reports->{$database_name}} };
+    push @$db_reports, $temp->{$_} for reverse sort keys %$temp;
+
+    foreach my $report (@{$db_reports}) {
       my $report_id  = $report->report_id;
       my $db_sp_tc   = [];
       for (qw(database_type species testcase)) {
         next if $_ eq $type;
-        push @$db_sp_tc, $self->get_healthcheck_link({'type' => $_, 'param' => ucfirst($report->$_), 'release' => $release, 'cut_long' => 'cut'});
+        push @$db_sp_tc, $self->get_healthcheck_link({'type' => $_, 'param' => ucfirst($report->$_), 'release' => $object->requested_release, 'cut_long' => 'cut'});
       }
 
       #annotation column
@@ -153,13 +95,13 @@ sub content {
         $annotation    .= $report->annotation->comment if $report->annotation->comment;
         my $modified_by = '';
         my $created_by  = '';
-        if ($report->annotation->created_by) {      
-          $created_by  .= '<p class="hc-comment-info">Added by: '.$self->_get_user_link($all_admin_users, $report->annotation->created_by);
+        if ($report->annotation->created_by) {
+          $created_by  .= '<p class="hc-comment-info">Added by: '.$self->_get_user_link($report->annotation->created_by_user);
           $created_by  .= ' on '.$self->hc_format_date($report->annotation->created_at) if $report->annotation->created_at;
           $created_by  .= '</p>';
         }
         if ($report->annotation->modified_by) {
-          $modified_by .= '<p class="hc-comment-info">Modified by: '.$self->_get_user_link($all_admin_users, $report->annotation->modified_by);
+          $modified_by .= '<p class="hc-comment-info">Modified by: '.$self->_get_user_link($report->annotation->modified_by_user);
           $modified_by .= ' on '.$self->hc_format_date($report->annotation->modified_at) if $report->annotation->modified_at;
           $modified_by .= '</p>';
         }
@@ -180,10 +122,9 @@ sub content {
         : qq(<p class="hc-comment-link"><a class="$link_class" href="/Healthcheck/Annotation?rid=$report_id" rel="$js_ref">Edit</a></p>);
   
       $table->add_row({
-#        'serial'    => ++$serial_number.'.',
         'db_sp_tc'  => join ('<br />', @$db_sp_tc),
         'comment'   => $annotation,
-        'text'      => qq(<span class="$text_class">).join (', ', split (/,\s?/, $report->text)).'</span>', #split-joining is done to wrap long strings (with no space) tending to expand the table wider than the page
+        'text'      => qq(<span class="$text_class">).join (', ', split (/,\s?/, $report->text)).'</span>', #split-joining is done to wrap long strings
         'team'      => $self->space_before_capitals($report->team_responsible),
         'created'   => $report->created ? $self->hc_format_compressed_date($report->created) : '<i>unknown</i>',
       });
@@ -191,8 +132,27 @@ sub content {
 
     $html .= $table->render;
   }
+
   $html_anchors .= '</ul>';
-  return $self->_show_anchors ? $html_anchors.$html : $html; #return HTML (with anchors if flag is true)
+  return $object->function ne 'Database' ? $html_anchors.$html : $html;
 }
+
+sub _get_user_link {
+  ## private helper method to print a link for the user with his email
+  my ($self, $user) = @_;
+  return '<a href="mailto:'.$user->email.'">'.$user->name.'</a>' if $user;
+  return 'unknown user';
+}
+
+sub _get_first_column {
+  ## private helper method to give the first column of the table for a given view type
+  return {
+    'Database'  => 'DB Type<br />Species<br />Testcase',
+    'DBType'    => 'Species<br />Testcase',
+    'Species'   => 'Database Type<br />Testcase',
+    'Testcase'  => 'Database Type<br />Species'
+  }->{$_[-1]};
+}
+
 
 1;

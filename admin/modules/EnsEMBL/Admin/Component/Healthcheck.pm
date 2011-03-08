@@ -7,10 +7,6 @@ use base qw(EnsEMBL::Web::Component);
 
 use Rose::DateTime::Util qw(format_date parse_date);
 
-use constant {
-  NO_HEALTHCHECK_FOUND => '<p class="hc_p">Healthchecks have not been performed for this release.</p>',
-};
-
 sub _init {
   my $self = shift;
   $self->cacheable( 0 );
@@ -22,45 +18,27 @@ sub caption {
   return '';
 }
 
-sub _get_default_list {
-  my ($self, $view, $report_db_interface, $first_session_id) = @_;
-  my $list = [];
-  if ($view =~ /^testcase|database_name$/) {
-    my $query = $view =~ 'testcase' ? 'fetch_for_distinct_testcases' : 'fetch_for_distinct_databases';
-    $list = [ keys %{{ map {$_->$view => 1} @{$report_db_interface->$query({'session_id' => $first_session_id, 'include_all' => 1}) || []} }} ];
-  }
-  elsif ($view eq 'species') {
-    $list = $self->hub->species_defs->ENSEMBL_DATASETS || [];
-  }
-  elsif ($view eq 'database_type') {
-    $list = [qw(cdna core funcgen otherfeatures production variation vega)];
-  }
-  return $list;
+sub no_healthcheck_found {
+  ## @return Text to be displayed in case no healthcheck found
+  my $self   = shift;
+  my $object = $self->object;
+  return '<p class="hc_p">Healthchecks have not been performed for this release.</p>' unless $object->requested_release;
+  my $extra  = $object->view_type && $object->view_param ? sprintf(" for %s '%s'", $object->view_title, $object->view_param) : '';
+  return qq(<p class="hc_p">No healthcheck reports found$extra.</p>);
 }
 
 sub render_all_releases_selectbox {
   ## Returns an HTML selectbox with all possible releases for healthchecks as options
-  ## $skip - release to be skipped in the select box
+  my $self = shift;
+  
+  my $object = $self->object;
+  my $first  = $object->first_release;
+  my $last   = $object->current_release;
+  my $skip   = $object->requested_release;
 
-  my ($self, $skip) = @_;
-
-  my $current       = $self->hub->species_defs->ENSEMBL_VERSION;
-  my $html          = qq(<select name="release">);
-  for (my $count  = $current; $count >= $SiteDefs::ENSEMBL_WEBADMIN_HEALTHCHECK_FIRST_RELEASE; $count--) {
-    next if defined $skip && $count == $skip;
-    $html        .= qq(<option value="$count">Release $count</option>);
-  }
-  $html          .= qq(</select>);
-  return $html;
-}
-
-sub validate_release {
-  ## Validates whether or not the given release have healthchecks
-
-  my ($self, $release)  = @_;
-  my $current           = $self->hub->species_defs->ENSEMBL_VERSION;
-  return $release >= $SiteDefs::ENSEMBL_WEBADMIN_HEALTHCHECK_FIRST_RELEASE && $release <= $current;
-
+  my @options;
+  defined $skip && $_ == $skip or unshift @options, qq(<option value="$_">Release $_</option>) for $first..$last;
+  return '<select name="release">'.join('', @options).'</select>';
 }
 
 sub get_healthcheck_link {
@@ -87,20 +65,19 @@ sub get_healthcheck_link {
     if exists $params->{'cut_long'} && $params->{'cut_long'} eq 'cut' && length $caption > 23;
     
   my $class = $params->{'class'} ? qq( class="$params->{'class'}") : '';
-
+  
   if ($params->{'type'} eq 'species') {
-    my $all_species = { map {$_ => 1} @{ $self->builder->hub->species_defs->ENSEMBL_DATASETS || [] } }; #species validation
-    return $caption unless exists $all_species->{ $param };
-    return qq(<a$class href="/$param/Healthcheck/Species?release=$release" title="List all failed test reports for Speices $title in release $release">$caption</a>);
+    return $caption unless $self->object->validate_species($param);
+    return qq(<a$class href="/$param/Healthcheck/Details/Species?release=$release" title="List all failed test reports for Speices $title in release $release">$caption</a>);
   }
   elsif ($params->{'type'} eq 'testcase') {
-    return qq(<a$class href="/Healthcheck/Testcase?release=$release;test=$param" title="List all failed test reports for Testcase $title in release $release">$caption</a>);
+    return qq(<a$class href="/Healthcheck/Details/Testcase?release=$release;q=$param" title="List all failed test reports for Testcase $title in release $release">$caption</a>);
   }
   elsif ($params->{'type'} eq 'database_type') {
-    return qq(<a$class href="/Healthcheck/DBType?release=$release;db=$param" title="List all failed test reports for Database Type $title in release $release">$caption</a>);
+    return qq(<a$class href="/Healthcheck/Details/DBType?release=$release;q=$param" title="List all failed test reports for Database Type $title in release $release">$caption</a>);
   }
   elsif ($params->{'type'} eq 'database_name') {
-    return qq(<a$class href="/Healthcheck/Database?release=$release;db=$param" title="List all failed test reports for Database Name $title in release $release">$caption</a>);
+    return qq(<a$class href="/Healthcheck/Details/Database?release=$release;q=$param" title="List all failed test reports for Database Name $title in release $release">$caption</a>);
   }
   else {
     return $caption;
@@ -152,57 +129,54 @@ sub annotation_action {
 sub content_failure_summary {
   ## Returns a filure summary table for given view types
   ## Params Hashref with keys:
-  ##  - view                Species, Testcase etc
-  ##  - last_session_id     Id of the session run most recently in the given release
-  ##  - first_session_id    Id of the first session run in the given release
+  ##  - type                species, testcase, database_name etc
+  ##  - session_id          Id of the session run most recently in the given release
   ##  - release             release id
-  ##  - all_reports         ArrayRef of all Report objects
+  ##  - reports             ArrayRef of all Report objects
+  ##  - default_list        ArrayRef of default list of Testcases, DBTypes, Species or Databases as required
   ##  - release2            release id of the release to which reports are to be compared
   ##  - compare_reports     ArrayRef of all Report objects for release2
-  ##  - report_db_interface Report db interface object
   my ($self, $params) = @_; 
     
-  my $table = $self->new_table();
-
-  (my $perspective = ucfirst($params->{'view'})) =~ s/_/ /g;
+  (my $title  = ucfirst($params->{'type'})) =~ s/_/ /g;
+  my $table   = $self->new_table();
 
   $table->add_columns(
-    { 'key' => 'group',         'title' => $perspective, 'width' => qq(40%) },
-    { 'key' => 'new_failed',    'title' => "Newly failed for last run (Session $params->{'last_session_id'} in v$params->{'release'})",  'align' => 'center' },
+    { 'key' => 'group',         'title' => $title, 'width' => qq(40%) },
+    { 'key' => 'new_failed',    'title' => "Newly failed for last run (Session $params->{'session_id'} in v$params->{'release'})",  'align' => 'center' },
     { 'key' => 'total_failed',  'title' => "All failed for last run (v$params->{'release'})",    'align' => 'center' },
   );
 
-  $table->add_columns(#add 4th column if comparison is intended
-    { 'key' => 'comparison',  'title' => "Failed in  release $params->{'release_2'}", 'align' => 'center' },
-  ) if exists $params->{'compare_reports'};
+   $table->add_columns(#add 4th column if comparison is intended
+     { 'key' => 'comparison',  'title' => "Failed in  release $params->{'release2'}", 'align' => 'center' },
+   ) if exists $params->{'compare_reports'};
 
-  my $fails             = $self->_group_fails($params->{'all_reports'}, $params->{'view'});
-  my $fails_2           = exists $params->{'compare_reports'} ? $self->_group_fails($params->{'compare_reports'}, $params->{'view'}) : {};
-  my $default_list      = { map {$_ => 1} @{ $self->_get_default_list($params->{'view'}, $params->{'report_db_interface'}, $params->{'first_session_id'})} };
-  my $groups            = { %$default_list, %$fails, %$fails_2};
+  my $fails   = $self->_group_fails($params->{'reports'}, $params->{'type'});
+  my $fails_2 = exists $params->{'compare_reports'} ? $self->_group_fails($params->{'compare_reports'}, $params->{'type'}) : {};
+  my $groups  = { %$fails, %$fails_2, map {$_ => 1} @{$params->{'default_list'}} };
 
-  for ( sort keys (%$groups) ) {
+  for (sort keys %$groups) {
 
-    my $title = $params->{'view'} eq 'species' ? ucfirst($_) : $_;
+    $title = $params->{'type'} eq 'species' ? ucfirst($_) : $_;
 
-    my %fourth_cell     = exists $params->{'compare_reports'} ? (
+    my %fourth_cell = exists $params->{'compare_reports'} ? (
       'comparison'  => $self->get_healthcheck_link({
-        'type'        => $params->{'view'},
+        'type'        => $params->{'type'},
         'param'       => $title,
         'caption'     => $fails_2->{ $_ }{'total_fails'} || '0',
         'title'       => $title,
-        'release'     => $params->{'release_2'}
+        'release'     => $params->{'release2'}
       })
     ) : ();
     $table->add_row({
       'group'       => $self->get_healthcheck_link({
-        'type'        => $params->{'view'},
+        'type'        => $params->{'type'},
         'param'       => $title,
         'release'     => $params->{'release'}
       }),
       'new_failed'  => $fails->{ $_ }{'new_fails'} || '0',
       'total_failed'  => $self->get_healthcheck_link({
-        'type'        => $params->{'view'},
+        'type'        => $params->{'type'},
         'param'       => $title,
         'caption'     => $fails->{ $_ }{'total_fails'} || '0',
         'title'       => $title,
@@ -217,16 +191,16 @@ sub content_failure_summary {
 
 sub _group_fails {
   ## generates stats for reports for new failures and all failures
-  ## returns HashRef {$group_name => {'new_fails' => ?, 'total_fails' => ?}}
-  my ($self, $reports, $view) = @_;
+  ## @return HashRef {$name => {'new_fails' => ?, 'total_fails' => ?}}
+  my ($self, $reports, $type) = @_;
   my $fails = {};
 
   for (@$reports) {
-    next unless defined $_->$view;
-    my $key = $view eq 'species' ? ucfirst($_->$view) : $_->$view; #coz species should have first letter capital, but in hc.report db table it is all lower case.
+    next unless defined $_->$type;
+    my $key = $type eq 'species' ? ucfirst($_->$type) : $_->$type; #coz species should have first letter capital, but in hc.report db table it is all lower case.
     $fails->{ $key } = {'new_fails' => 0, 'total_fails' => 0} unless exists $fails->{ $key };
     $fails->{ $key }{'total_fails'}++;
-    $fails->{ $key }{'new_fails'}++    if $_->first_session_id == $_->last_session_id;
+    $fails->{ $key }{'new_fails'}++ if $_->first_session_id == $_->last_session_id;
   }
   return $fails;
 }

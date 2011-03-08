@@ -1,7 +1,7 @@
 package EnsEMBL::Admin::Component::Healthcheck::Annotation;
 
 use strict;
-
+use Data::Dumper;
 use base qw(EnsEMBL::Admin::Component::Healthcheck);
 
 sub caption {
@@ -11,20 +11,12 @@ sub caption {
 sub content {
   my $self = shift;
   
-  my $hub           = $self->hub;
-  my $referrer      = $hub->referer->{'uri'};
-  my $report_id     = $hub->param('rid') || 0;
-  my $db_interface  = $self->object;
-  
-  return '<p class="hc_p">No report found to annotate. (Missing report id)</p>' unless $report_id;
+  my $object  = $self->object;
+  my $reports = $object->rose_objects;
+  my $referer = $self->hub->referer->{'uri'};
+  my $user    = $self->hub->user;
 
-  $report_id  = [ split ',', $report_id ]; #for multiple reports
-  my $reports = $db_interface->data_interface('Report')->fetch_by_id($report_id, 1); #fetch_by_id(ArrayRef $report_id, Boolean $failed_only)
-
-  return '<p class="hc_p">No report found to annotate. (Invalid report id)</p>' unless scalar $reports;
-  
-  my $user_db_interface = $db_interface->data_interface('User');
-  my $current_user      = $user_db_interface->fetch_by_id($hub->user->user_id)->[0];
+  return '<p class="hc_p">No report found to annotate. (Missing report id)</p>' unless $reports && @$reports;
 
   my $heading       = 'Add annotation';
   my $label_done_by = 'Added by';
@@ -36,21 +28,21 @@ sub content {
   
   my $annotation;
   if (scalar @$reports == 1 && ($annotation = $reports->[0]->annotation)) {
+    my $created_by_user       = $annotation->created_by_user;
     $comment->{'text'}        = $annotation->comment;
     $comment->{'action'}      = $annotation->action;
-    $comment->{'created_by'}  = $user_db_interface->fetch_by_id($annotation->created_by)->[0]->name if $annotation->created_by;
+    $comment->{'created_by'}  = $created_by_user->name if $created_by_user;
     $heading                  = 'Edit annotation';
     $label_done_by            = 'Edited by';
   }
 
-  my $html = '<h4>Report'.(scalar @$reports > 1 ? 's' : '').'</h4><ul>';
+  my $html = sprintf('<h4>Report%s</h4><ul>', scalar @$reports > 1 ? 's' : '');
   my $rid  = []; #ArrayRef of report ids to be passed as POST param
   
   for (@$reports) {
-    $html .= '<li><b>'.$_->database_name.' ('.$_->testcase.')</b>: '
-                .join (', ', split (/,\s?/, $_->text))     #for wrapping the text ("a,b,c,d" converted to "a, b, c, d")
-                .'</li>' if $_->report_id;
-    push @$rid, $_->report_id if $_->report_id;
+    next unless $_->report_id;
+    $html .= sprintf('<li><b>%s (%s)</b>: %s</li>', $_->database_name, $_->testcase, join (', ', split (/,\s?/, $_->text)));
+    push @$rid, $_->report_id;
   }
   $html   .= '</ul>';
   
@@ -60,9 +52,7 @@ sub content {
   
   my $options = []; #options for action select box
   my $actions = $self->annotation_action('all');
-  for (keys %$actions) {
-    push @$options, {'value' => $_, 'caption' => $actions->{ $_ }};
-  }
+  push @$options, {'value' => $_, 'caption' => $actions->{$_}} for keys %$actions;
   
   $form->add_field([{
     'label'     => 'Action',
@@ -82,14 +72,14 @@ sub content {
     'label'     => 'Added by',
     'type'      => 'NoEdit',
     'name'      => 'added_by_name',
-    'value'     => $comment->{'created_by'}
+    'value'     => $comment->{'created_by'},
   }) if $comment->{'created_by'} ne '';
 
   $form->add_field({
     'label'     => $label_done_by,
     'type'      => 'NoEdit',
     'name'      => 'user_name',
-    'value'     => $current_user->name
+    'value'     => $user->name,
   });
 
   $form->add_button({
@@ -100,7 +90,7 @@ sub content {
 
   $form->add_hidden([
     {'name' => 'rid',       'value' => join (',', @$rid)},
-    {'name' => 'referrer',  'value' => $referrer}
+    {'name' => 'referrer',  'value' => $referer}
   ]);
 
   return $html.$form->render;

@@ -18,57 +18,42 @@ sub caption {
 sub content {
   my $self = shift;
 
-  my $hub                   = $self->hub;
-  my $db_interface          = $self->object;
-  my $release               = $hub->param('release') || $hub->species_defs->ENSEMBL_VERSION;
-  
-  my $previous  = $self->render_all_releases_selectbox($release);
-  $previous     = qq(<form action="" method="get"><label><b>Go to other release: </b></label>$previous&nbsp;<input type="submit" value="Go" /></form>);
+  my $object    = $self->object;
+  my $session   = $object->rose_object;
+  my $release   = $object->requested_release;
+  my $reports   = $object->rose_objects('reports');
+  my $dropdown  = sprintf ('<form action="" method="get"><label><b>Go to other release: </b></label>%s&nbsp;<input type="submit" value="Go" /></form>', $self->render_all_releases_selectbox);
 
-  return $self->NO_HEALTHCHECK_FOUND.$previous unless $self->validate_release($release);
-                            
-  my $session_db_interface  = $db_interface->data_interface('Session');
-  my $last_session          = $session_db_interface->fetch_last($release);
-  my $last_session_id       = $last_session ? $last_session->session_id || 0 : 0;
-                            
-  return $self->NO_HEALTHCHECK_FOUND.$previous unless $last_session_id;
-                            
-  my $report_db_interface   = $db_interface->data_interface('Report');
-  my $start_time            = undef;
-  my $end_time              = undef;
+  return $self->no_healthcheck_found.$dropdown unless $session;
+
+  my $start_time  = undef;
+  my $end_time    = undef;
   eval {
-    $start_time             = $self->hc_format_date($report_db_interface->fetch_first_for_session($last_session_id)->timestamp) || '';
-    $end_time               = $self->hc_format_date($report_db_interface->fetch_last_for_session ($last_session_id)->timestamp) || '';
-  };                        
-                            
-  my $testcase_names        = {};
+    $start_time   = $self->hc_format_date($reports->[0]->timestamp) || '';
+    $end_time     = $self->hc_format_date($reports->[1]->timestamp) || '';
+  };
+                        
+  my $testcase_names = {};
   
-  for (split ',', $last_session->config) {
-  
+  for (split ',', $session->config) {
+
     $_ =~ m/^([^:]+):(.+)$/;
-    
-    unless (exists $testcase_names->{ $1 }) {
-      $testcase_names->{ $1 } = [];
-    }
-    push @{$testcase_names->{ $1 }}, $2;
+    $testcase_names->{$1} ||= [];
+    push @{$testcase_names->{$1}}, $2;
   }
-  
-  my $testgroups_html = '<ul>';
-  for (keys %$testcase_names) {
-    $testgroups_html .= '<li><i>'.(join '</i>, <i>', @{$testcase_names->{ $_ }}).'</i> ';
-    $testgroups_html .= "run on DB <b>$_</b></li>";
-  }
-  $testgroups_html   .= '</ul>';
 
-  my $table           = EnsEMBL::Web::Document::HTML::TwoColTable->new;
-  
-  my $run_time        = defined $start_time && defined $end_time ? "<ul><li>Started: $start_time</li><li>Ended: $end_time</li></ul>" : " <i>(running time not known)</i>";
+  my $testgroups = '<ul>';
+  $testgroups   .= sprintf('<li><i>%s</i> run on DB <b>%s</b></li>', join('</i>, <i>', @{$testcase_names->{$_}}), $_) for keys %$testcase_names;
+  $testgroups   .= '</ul>';
 
-  $table->add_row("Last session:", $last_session_id.$run_time);
-  $table->add_row("Host:", $last_session->host || '');
-  $table->add_row("Testgroups:", $testgroups_html);
+  my $table      = EnsEMBL::Web::Document::HTML::TwoColTable->new;
+  my $run_time   = defined $start_time && defined $end_time ? "<ul><li>Started: $start_time</li><li>Ended: $end_time</li></ul>" : " <i>(running time not known)</i>";
 
-  return $table->render.$previous;
+  $table->add_row("Last session:", $session->session_id.$run_time);
+  $table->add_row("Host:", $session->host || '');
+  $table->add_row("Testgroups:", $testgroups);
+
+  return $table->render.$dropdown;
 }
 
 1;
