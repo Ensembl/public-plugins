@@ -10,7 +10,7 @@ Ensembl.HCManager.extend({
       classes:            ['hc-comment-link'],
       infoBoxClass:       'hc-infobox',
       configDivClass:     'hc-config',
-      localToolsId:       'local-tools',
+      localTools:         'tool_buttons',
       manualOkClass:      'hc-noproblem-link',
       notNewClass:        'hc-notnew-link',
       noFailsClass:       'hc-nofailsrow',
@@ -85,7 +85,7 @@ Ensembl.HCManager.extend({
 
       var configDiv = $(document.createElement('div'))
         .addClass(this.constant.configDivClass)
-        .insertAfter($('#' + this.constant.localToolsId)[0])
+        .insertAfter($('.' + this.constant.localTools)[0])
         .keepOnPage({marginTop: 3});
 
       for (var i in this.configs) {
