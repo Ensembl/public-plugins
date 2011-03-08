@@ -29,31 +29,31 @@ sub populate_tree {
     )],
     { 'availability' => 1, 'filters' => [qw(WebAdmin)]}
   );
- $self->create_node( 'DBType', "Details (by DB Type)",
+ $self->create_node( 'Details/DBType', "Details (by DB Type)",
     [qw(
-      database_report EnsEMBL::Admin::Component::Healthcheck::Details::DBType
+      database_report EnsEMBL::Admin::Component::Healthcheck::Details
     )],
     { 'availability' => 1, 'filters' => [qw(WebAdmin)]}
   );
- $self->create_node( 'Species', "Details (by Species)",
+ $self->create_node( 'Details/Species', "Details (by Species)",
     [qw(
-      species_report EnsEMBL::Admin::Component::Healthcheck::Details::Species
+      species_report EnsEMBL::Admin::Component::Healthcheck::Details
     )],
     { 'availability' => 1, 'filters' => [qw(WebAdmin)]}
   );
- $self->create_node( 'Testcase', "Details (by Testcase)",
+ $self->create_node( 'Details/Testcase', "Details (by Testcase)",
     [qw(
-      testcase_report EnsEMBL::Admin::Component::Healthcheck::Details::Testcase
+      testcase_report EnsEMBL::Admin::Component::Healthcheck::Details
     )],
     { 'availability' => 1, 'filters' => [qw(WebAdmin)]}
   );
- $self->create_node( 'Database', "Details (by Database)",
+ $self->create_node( 'Details/Database', "Details (by Database)",
     [qw(
-      database_report EnsEMBL::Admin::Component::Healthcheck::Details::Database
+      database_report EnsEMBL::Admin::Component::Healthcheck::Details
     )],
     { 'availability' => 1, 'filters' => [qw(WebAdmin)]}
   );
-  $self->create_node( 'DBList', "Database List",
+  $self->create_node( 'Database', "Database List",
     [qw(
       directory EnsEMBL::Admin::Component::Healthcheck::DatabaseList
     )],
