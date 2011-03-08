@@ -3,15 +3,13 @@ package EnsEMBL::ORM::Rose::Manager::Membership;
 ### NAME: EnsEMBL::ORM::Rose::Manager::Membership
 ### Module to handle multiple Membership entries 
 
-### STATUS: Under Development
-
 ### DESCRIPTION:
 ### Enables fetching, counting, etc., of multiple Rose::Object::Membership objects
 
 use strict;
 use warnings;
 
-use base qw(EnsEMBL::ORM::Rose::Manager);
+use base qw(EnsEMBL::ORM::Rose::Manager::Trackable);
 
 sub object_class { 'EnsEMBL::ORM::Rose::Object::Membership' }
 
