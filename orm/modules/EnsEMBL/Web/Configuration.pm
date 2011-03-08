@@ -29,15 +29,10 @@ sub add_dbfrontend_to_tree {
     [qw(select   EnsEMBL::ORM::Component::DbFrontend::Select)],
     {'availability' => 1, 'filters' => $filters},
   );
-  ## Note that we don't use 'availability' to control Delete nodes, as
-  ## we most likely want to hide deletion from the user if it not allowed 
-  my $config = $self->get_frontend_config;
-  if ($config->{'permit_delete'}) {
-    $self->create_node( 'SelectToDelete', "Delete $type",
-      [qw(select_delete   EnsEMBL::ORM::Component::DbFrontend::Select)],
-      {'availability' => 1, 'filters' => $filters},
-    );
-  }
+  $self->create_node( 'SelectToDelete', "Delete $type",
+    [qw(select_delete   EnsEMBL::ORM::Component::DbFrontend::Select)],
+    {'availability' => 1, 'no_menu_entry' => 1, 'filters' => $filters},
+  );
 
   ## Invisible steps
   $self->create_node( 'Display', "$type",
@@ -61,12 +56,10 @@ sub add_dbfrontend_to_tree {
     [], {'command' => 'EnsEMBL::ORM::Command::DbFrontend::Save',
     'no_menu_entry' => 1, 'filters' => $filters }
   );
-  if ($config->{'permit_delete'}) {
-    $self->create_node( 'Delete', '',
-      [], {'command' => 'EnsEMBL::ORM::Command::DbFrontend::Delete',
-      'no_menu_entry' => 1, 'filters' => $filters }
-    );
-  }
+  $self->create_node( 'Delete', '',
+    [], {'command' => 'EnsEMBL::ORM::Command::DbFrontend::Delete',
+    'no_menu_entry' => 1, 'filters' => $filters }
+  );
 }
 
 1;
