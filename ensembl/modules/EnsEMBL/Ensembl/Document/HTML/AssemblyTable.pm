@@ -56,7 +56,7 @@ sub render_assembly_table {
   ';
   my $body = "";
 
-  my ($date, $version, $order, $species_name, $row, $rs, $cells, $assembly_name, $current_name, $class);
+  my ($date, $version, $order, $species_name, $row, $rs, $cells, $assembly_name, $current_name, $online, $class);
 
   my $c = { -1 => 'bg4', 1 => 'bg2', x => 1 }; # CSS class flip-flop for tds
 
@@ -78,21 +78,22 @@ sub render_assembly_table {
     $cells = {};
     $assembly_name = "";
     $current_name = "";
+    $online = $s->{'online'} || 'N';
     $order = 1;
     
     $c->{'x'} = 1; # Reset the flip-flop
 
-    $row = "<tr><th>" . ( $s->{'online'} eq 'Y' ? qq{<a href="http://www.ensembl.org/} . $s->{'name'} . qq{"><i>$species_name</i></a>} : "<i>$species_name</i>" ) . "</th>";
+    $row = "<tr><th>" . ( $online eq 'Y' ? qq{<a href="http://www.ensembl.org/} . $s->{'name'} . qq{"><i>$species_name</i></a>} : "<i>$species_name</i>" ) . "</th>";
 
     foreach my $r (@$releases)  {
-      $assembly_name = $release_species->{$s->{'id'}}->{$r->{'id'}};
+      $assembly_name = $release_species->{$s->{'id'}}->{$r->{'id'}} || 'none';
 
-      $order++ if ($assembly_name && $current_name ne $assembly_name);
+      $order++ if ($current_name ne $assembly_name);
+      $current_name = $assembly_name;
+      $assembly_name = '' if $assembly_name eq 'none';
 
       $cells->{$order} ||= { name => $assembly_name, count => 0 };
       $cells->{$order}->{'count'}++;
-
-      $current_name = $assembly_name;
     }
 
     # Don't print empty row
@@ -115,6 +116,7 @@ sub render_assembly_table {
 
   # Insert the short header every [$breakpoint] rows ($j keeps track of the added rows)
   for (my $i = $breakpoint; $i < scalar @rows; $i += $breakpoint) {
+    next if $i+$j+1 > scalar @rows;
     splice (@rows, $i+$j++, 0, $short_header);
   }
 
