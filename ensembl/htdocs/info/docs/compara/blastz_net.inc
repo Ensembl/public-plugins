@@ -1,9 +1,10 @@
 <h4>Human (Homo sapiens)</h4>
 <a href="mlss/mlss_388.html">Chimpanzee (Pan troglodytes)</a><br/>
 <a href="mlss/mlss_455.html">Gorilla (Gorilla gorilla)</a><br/>
-<a href="mlss/mlss_394.html">Orangutan (Pongo pygmaeus)</a><br/>
+<a href="mlss/mlss_394.html">Orangutan (Pongo abelii)</a><br/>
+<a href="mlss/mlss_517.html">Gibbon (Nomascus leucogenys)</a><br/>
 <a href="mlss/mlss_428.html">Macaque (Macaca mulatta)</a><br/>
-<a href="mlss/mlss_473.html">Marmoset (Callithrix jacchus)</a><br/>
+<a href="mlss/mlss_507.html">Marmoset (Callithrix jacchus)</a><br/>
 <a href="mlss/mlss_412.html">Tarsier (Tarsius syrichta)</a><br/>
 <a href="mlss/mlss_429.html">Mouse Lemur (Microcebus murinus)</a><br/>
 <a href="mlss/mlss_399.html">Bushbaby (Otolemur garnettii)</a><br/>
@@ -21,7 +22,7 @@
 <a href="mlss/mlss_433.html">Pig (Sus scrofa)</a><br/>
 <a href="mlss/mlss_405.html">Horse (Equus caballus)</a><br/>
 <a href="mlss/mlss_409.html">Cat (Felis catus)</a><br/>
-<a href="mlss/mlss_483.html">Giant Panda (Ailuropoda melanoleuca)</a><br/>
+<a href="mlss/mlss_483.html">Panda (Ailuropoda melanoleuca)</a><br/>
 <a href="mlss/mlss_404.html">Dog (Canis familiaris)</a><br/>
 <a href="mlss/mlss_398.html">Microbat (Myotis lucifugus)</a><br/>
 <a href="mlss/mlss_403.html">Megabat (Pteropus vampyrus)</a><br/>
@@ -45,7 +46,7 @@
 <a href="mlss/mlss_440.html">Cow (Bos taurus)</a><br/>
 <h4>Dog (Canis familiaris)</h4>
 <a href="mlss/mlss_502.html">Horse (Equus caballus)</a><br/>
-<a href="mlss/mlss_482.html">Giant Panda (Ailuropoda melanoleuca)</a><br/>
+<a href="mlss/mlss_482.html">Panda (Ailuropoda melanoleuca)</a><br/>
 <h4>Opossum (Monodelphis domestica)</h4>
 <a href="mlss/mlss_443.html">Wallaby (Macropus eugenii)</a><br/>
 <h4>Chicken (Gallus gallus)</h4>

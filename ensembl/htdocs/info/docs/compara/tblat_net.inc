@@ -20,15 +20,15 @@
 
 <tr>
 <td class="bg1 left"><b><i>Gallus gallus</i></b></td>
-<td class="bg3 center"><font color="blue">YES</font></td><!-- H.sap -->
-<td class="bg1 center"><font color="blue">YES</font></td><!-- M.mus -->
+<td class="bg3 center"><font color="blue"><a href="mlss/mlss_421.html">YES</a></font></td><!-- H.sap -->
+<td class="bg1 center"><font color="blue"><a href="mlss/mlss_306.html">YES</a></font></td><!-- M.mus -->
 <td class="bg3 center">-</td><!-- R.nor -->
 <th class="bg1 center" style="width:5em"><i>G.gal</i></th>
 </tr>
 
 <tr>
 <td class="bg3 left"><b><i>Meleagris gallopavo</i></b></td>
-<td class="bg4 center"><font color="blue">YES</font></td><!-- H.sap -->
+<td class="bg4 center"><font color="blue"><a href="mlss/mlss_504.html">YES</a></font></td><!-- H.sap -->
 <td class="bg3 center">-</td><!-- M.mus -->
 <td class="bg4 center">-</td><!-- R.nor -->
 <td class="bg3 center">-</td><!-- G.gal -->
@@ -37,7 +37,7 @@
 
 <tr>
 <td class="bg1 left"><b><i>Taeniopygia guttata</i></b></td>
-<td class="bg3 center"><font color="blue">YES</font></td><!-- H.sap -->
+<td class="bg3 center"><font color="blue"><a href="mlss/mlss_413.html">YES</a></font></td><!-- H.sap -->
 <td class="bg1 center">-</td><!-- M.mus -->
 <td class="bg3 center">-</td><!-- R.nor -->
 <td class="bg1 center">-</td><!-- G.gal -->
@@ -47,7 +47,7 @@
 
 <tr>
 <td class="bg3 left"><b><i>Anolis carolinensis</i></b></td>
-<td class="bg4 center"><font color="blue">YES</font></td><!-- H.sap -->
+<td class="bg4 center"><font color="blue"><a href="mlss/mlss_503.html">YES</a></font></td><!-- H.sap -->
 <td class="bg3 center">-</td><!-- M.mus -->
 <td class="bg4 center">-</td><!-- R.nor -->
 <td class="bg3 center">-</td><!-- G.gal -->
@@ -58,10 +58,10 @@
 
 <tr>
 <td class="bg1 left"><b><i>Xenopus tropicalis</i></b></td>
-<td class="bg3 center"><font color="blue">YES</font></td><!-- H.sap -->
-<td class="bg1 center"><font color="blue">YES</font></td><!-- M.mus -->
+<td class="bg3 center"><font color="blue"><a href="mlss/mlss_515.html">YES</a></font></td><!-- H.sap -->
+<td class="bg1 center"><font color="blue"><a href="mlss/mlss_512.html">YES</a></font></td><!-- M.mus -->
 <td class="bg3 center">-</td><!-- R.nor -->
-<td class="bg1 center"><font color="blue">YES</font></td><!-- G.gal -->
+<td class="bg1 center"><font color="blue"><a href="mlss/mlss_513.html">YES</a></font></td><!-- G.gal -->
 <td class="bg3 center">-</td><!-- M.gal -->
 <td class="bg1 center">-</td><!-- T.gut -->
 <td class="bg3 center">-</td><!-- A.car -->
@@ -70,21 +70,21 @@
 
 <tr>
 <td class="bg3 left"><b><i>Tetraodon nigroviridis</i></b></td>
-<td class="bg4 center"><font color="blue">YES</font></td><!-- H.sap -->
-<td class="bg3 center"><font color="blue">YES</font></td><!-- M.mus -->
-<td class="bg4 center"><font color="blue">YES</font></td><!-- R.nor -->
+<td class="bg4 center"><font color="blue"><a href="mlss/mlss_420.html">YES</a></font></td><!-- H.sap -->
+<td class="bg3 center"><font color="blue"><a href="mlss/mlss_333.html">YES</a></font></td><!-- M.mus -->
+<td class="bg4 center"><font color="blue"><a href="mlss/mlss_335.html">YES</a></font></td><!-- R.nor -->
 <td class="bg3 center">-</td><!-- G.gal -->
 <td class="bg4 center">-</td><!-- M.gal -->
 <td class="bg3 center">-</td><!-- T.gut -->
 <td class="bg4 center">-</td><!-- A.car -->
-<td class="bg3 center"><font color="blue">YES</font></td><!-- X.tro -->
+<td class="bg3 center"><font color="blue"><a href="mlss/mlss_514.html">YES</a></font></td><!-- X.tro -->
 <th class="bg4 center" style="width:5em"><i>T.nig</i></th>
 </tr>
 
 <tr>
 <td class="bg1 left"><b><i>Takifugu rubripes</i></b></td>
-<td class="bg3 center"><font color="blue">YES</font></td><!-- H.sap -->
-<td class="bg1 center"><font color="blue">YES</font></td><!-- M.mus -->
+<td class="bg3 center"><font color="blue"><a href="mlss/mlss_418.html">YES</a></font></td><!-- H.sap -->
+<td class="bg1 center"><font color="blue"><a href="mlss/mlss_308.html">YES</a></font></td><!-- M.mus -->
 <td class="bg3 center">-</td><!-- R.nor -->
 <td class="bg1 center">-</td><!-- G.gal -->
 <td class="bg3 center">-</td><!-- M.gal -->
@@ -97,7 +97,7 @@
 
 <tr>
 <td class="bg3 left"><b><i>Gasterosteus aculeatus</i></b></td>
-<td class="bg4 center"><font color="blue">YES</font></td><!-- H.sap -->
+<td class="bg4 center"><font color="blue"><a href="mlss/mlss_414.html">YES</a></font></td><!-- H.sap -->
 <td class="bg3 center">-</td><!-- M.mus -->
 <td class="bg4 center">-</td><!-- R.nor -->
 <td class="bg3 center">-</td><!-- G.gal -->
@@ -112,7 +112,7 @@
 
 <tr>
 <td class="bg1 left"><b><i>Oryzias latipes</i></b></td>
-<td class="bg3 center"><font color="blue">YES</font></td><!-- H.sap -->
+<td class="bg3 center"><font color="blue"><a href="mlss/mlss_417.html">YES</a></font></td><!-- H.sap -->
 <td class="bg1 center">-</td><!-- M.mus -->
 <td class="bg3 center">-</td><!-- R.nor -->
 <td class="bg1 center">-</td><!-- G.gal -->
@@ -128,27 +128,27 @@
 
 <tr>
 <td class="bg3 left"><b><i>Danio rerio</i></b></td>
-<td class="bg4 center"><font color="blue">YES</font></td><!-- H.sap -->
-<td class="bg3 center"><font color="blue">YES</font></td><!-- M.mus -->
-<td class="bg4 center"><font color="blue">YES</font></td><!-- R.nor -->
-<td class="bg3 center"><font color="blue">YES</font></td><!-- G.gal -->
+<td class="bg4 center"><font color="blue"><a href="mlss/mlss_480.html">YES</a></font></td><!-- H.sap -->
+<td class="bg3 center"><font color="blue"><a href="mlss/mlss_479.html">YES</a></font></td><!-- M.mus -->
+<td class="bg4 center"><font color="blue"><a href="mlss/mlss_481.html">YES</a></font></td><!-- R.nor -->
+<td class="bg3 center"><font color="blue"><a href="mlss/mlss_484.html">YES</a></font></td><!-- G.gal -->
 <td class="bg4 center">-</td><!-- M.gal -->
 <td class="bg3 center">-</td><!-- T.gut -->
 <td class="bg4 center">-</td><!-- A.car -->
-<td class="bg3 center"><font color="blue">YES</font></td><!-- X.tro -->
-<td class="bg4 center"><font color="blue">YES</font></td><!-- T.nig -->
-<td class="bg3 center"><font color="blue">YES</font></td><!-- T.rub -->
-<td class="bg4 center"><font color="blue">YES</font></td><!-- G.acu -->
-<td class="bg3 center"><font color="blue">YES</font></td><!-- O.lat -->
+<td class="bg3 center"><font color="blue"><a href="mlss/mlss_516.html">YES</a></font></td><!-- X.tro -->
+<td class="bg4 center"><font color="blue"><a href="mlss/mlss_493.html">YES</a></font></td><!-- T.nig -->
+<td class="bg3 center"><font color="blue"><a href="mlss/mlss_486.html">YES</a></font></td><!-- T.rub -->
+<td class="bg4 center"><font color="blue"><a href="mlss/mlss_491.html">YES</a></font></td><!-- G.acu -->
+<td class="bg3 center"><font color="blue"><a href="mlss/mlss_492.html">YES</a></font></td><!-- O.lat -->
 <th class="bg4 center" style="width:5em"><i>D.rer</i></th>
 </tr>
 
 <tr>
 <td class="bg1 left"><b><i>Ciona savignyi</i></b></td>
-<td class="bg3 center"><font color="blue">YES</font></td><!-- H.sap -->
+<td class="bg3 center"><font color="blue"><a href="mlss/mlss_422.html">YES</a></font></td><!-- H.sap -->
 <td class="bg1 center">-</td><!-- M.mus -->
 <td class="bg3 center">-</td><!-- R.nor -->
-<td class="bg1 center"><font color="blue">YES</font></td><!-- G.gal -->
+<td class="bg1 center"><font color="blue"><a href="mlss/mlss_313.html">YES</a></font></td><!-- G.gal -->
 <td class="bg3 center">-</td><!-- M.gal -->
 <td class="bg1 center">-</td><!-- T.gut -->
 <td class="bg3 center">-</td><!-- A.car -->
@@ -157,16 +157,16 @@
 <td class="bg1 center">-</td><!-- T.rub -->
 <td class="bg3 center">-</td><!-- G.acu -->
 <td class="bg1 center">-</td><!-- O.lat -->
-<td class="bg3 center"><font color="blue">YES</font></td><!-- D.rer -->
+<td class="bg3 center"><font color="blue"><a href="mlss/mlss_490.html">YES</a></font></td><!-- D.rer -->
 <th class="bg1 center" style="width:5em"><i>C.sav</i></th>
 </tr>
 
 <tr>
 <td class="bg3 left"><b><i>Ciona intestinalis</i></b></td>
-<td class="bg4 center"><font color="blue">YES</font></td><!-- H.sap -->
+<td class="bg4 center"><font color="blue"><a href="mlss/mlss_423.html">YES</a></font></td><!-- H.sap -->
 <td class="bg3 center">-</td><!-- M.mus -->
 <td class="bg4 center">-</td><!-- R.nor -->
-<td class="bg3 center"><font color="blue">YES</font></td><!-- G.gal -->
+<td class="bg3 center"><font color="blue"><a href="mlss/mlss_312.html">YES</a></font></td><!-- G.gal -->
 <td class="bg4 center">-</td><!-- M.gal -->
 <td class="bg3 center">-</td><!-- T.gut -->
 <td class="bg4 center">-</td><!-- A.car -->
@@ -175,7 +175,7 @@
 <td class="bg3 center">-</td><!-- T.rub -->
 <td class="bg4 center">-</td><!-- G.acu -->
 <td class="bg3 center">-</td><!-- O.lat -->
-<td class="bg4 center"><font color="blue">YES</font></td><!-- D.rer -->
+<td class="bg4 center"><font color="blue"><a href="mlss/mlss_489.html">YES</a></font></td><!-- D.rer -->
 <td class="bg3 center">-</td><!-- C.sav -->
 <th class="bg4 center" style="width:5em"><i>C.int</i></th>
 </tr>
