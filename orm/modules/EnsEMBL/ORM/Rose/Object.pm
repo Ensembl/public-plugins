@@ -35,7 +35,7 @@ sub meta_setup {
 sub init_db {
   ## Creats connection to database
   ## Override ROSE_DB_NAME constant instead of this method
-  EnsEMBL::ORM::Rose::DbConnection->new($self->ROSE_DB_NAME);
+  EnsEMBL::ORM::Rose::DbConnection->new(shift->ROSE_DB_NAME);
 }
 
 sub get_user {
