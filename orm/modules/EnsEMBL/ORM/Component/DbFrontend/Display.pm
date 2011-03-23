@@ -58,7 +58,7 @@ sub content_tree {
     }
     $record_div->append_child($self->dom->create_element('div', {
       'class'       => "dbf-row-buttons",
-      'inner_HTML'  => sprintf('<a href="%s">Edit</a>%s', $hub->url({'action' => 'Edit', 'id' => $primary_key}), $object->permit_delete ? sprintf('<a href="%s">Delete</a>', $hub->url({'action' => 'Delete', 'id' => $primary_key})) : '')
+      'inner_HTML'  => sprintf('<a href="%s">Edit</a>%s', $hub->url({'action' => 'Edit', 'id' => $primary_key}), $object->permit_delete ? sprintf('<a href="%s">Delete</a>', $hub->url({'action' => 'Confirm', 'id' => $primary_key})) : '')
     }));
     $content->append_child($record_div);
   }
