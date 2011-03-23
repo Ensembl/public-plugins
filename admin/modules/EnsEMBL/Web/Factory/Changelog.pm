@@ -7,15 +7,12 @@ package EnsEMBL::Web::Factory::Changelog;
 
 use strict;
 use warnings;
-no warnings 'uninitialized';
 
-use EnsEMBL::Admin::Data::Rose::Changelog;
 use base qw(EnsEMBL::Web::Factory);
 
 sub createObjects {
   my $self = shift;
-  my $changelog = EnsEMBL::Admin::Data::Rose::Changelog->new($self->hub);
-  $self->DataObjects($changelog);
+  $self->DataObjects($self->new_object('Changelog', undef, $self->__data));
 }
 
 1;
