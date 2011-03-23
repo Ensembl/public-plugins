@@ -16,7 +16,7 @@ sub render {
 <h2>Healthchecks</h2>
 <ul>
   <li><a href="/Healthcheck/Summary">Healthcheck summary</a></li>
-  <li><a href="/Healthcheck/DBList">List of databases</a></li>
+  <li><a href="/Healthcheck/Database">List of databases</a></li>
 </ul>
 );
   }
@@ -48,7 +48,7 @@ sub render {
 
     $html .= qq(<td style="width:8%;text-align:right;padding-bottom:1em">);
     if ($dir) {
-      $html .= qq(<img src="/img/species/thumb_$dir.png" alt="$name">);
+      $html .= qq(<img height="40" width="40" src="/img/species/thumb_$dir.png" alt="$name">);
     }
     else {
       $html .= '&nbsp;';
@@ -56,7 +56,7 @@ sub render {
     $html .= qq(</td>\n<td style="width:$column_width%;padding:2px;padding-bottom:1em">);
     if ($dir) {
       if ($healthchecks) {
-        $html .= qq(<span style="font-weight:bold;font-size:1.1em">$name</span><br /><a href="/$dir/Healthcheck/Species">Healthcheck</a> 
+        $html .= qq(<span style="font-weight:bold;font-size:1.1em">$name</span><br /><a href="/$dir/Healthcheck/Details/Species">Healthcheck</a> 
           | <a href="http://staging.ensembl.org/$dir/">View on staging</a>);
       }
       else {
