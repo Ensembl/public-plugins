@@ -35,6 +35,7 @@ sub get_objects {
   ##   with_users   => ['created_by', 'record.created_by', 'record.modified_by'],
   ##   active_only  => 0
   ## )
+  ## IMP: If any query param contains INACTIVE_FLAG column, set active_only => 0 always.
   my ($self, %params) = shift->normalize_get_objects_args(@_);
 
   ######### This method is also called by Rose API sometimes. ###########
@@ -47,7 +48,8 @@ sub get_objects {
   my $active_only     = exists $params{'active_only'} ? delete $params{'active_only'} : 1;
 
   $params{'debug'}    = 1 if $self->DEBUG_SQL;
-  $params{'query'}  ||= [] and push @{$params{'query'}}, @{$self->_query_active_only($params{'object_class'})->{'query'} || []} if $active_only;
+
+  $self->_add_active_only_query(\%params) if $active_only;
 
   my $objects         = $self->SUPER::get_objects(%params);
 
@@ -75,7 +77,8 @@ sub get_objects {
 
     my $users = { map {$_->user_id => $_} @{$self->get_objects(
       'object_class'  => 'EnsEMBL::ORM::Rose::Object::User',
-      'query'         => ['user_id', [ keys %$all_ids ]]
+      'query'         => ['user_id', [ keys %$all_ids ]],
+      'active_only'   => 0
     )}};
     
     foreach my $object (@$objects) {
@@ -166,11 +169,14 @@ sub fetch_by_page {
 
 sub count {
   ## Gives the number of all the active rows in the table
-  ## @param HashRef to go to manager's get_objects_count method as arg
+  ## @param HashRef of Hash that goes to manager's get_objects_count method as arg
   ## @return int
   my ($self, $params) = @_;
+  
+  my $active_only     = exists $params->{'active_only'} ? delete $params->{'active_only'} : 1;
+  $self->_add_active_only_query($params) if $active_only;
 
-  return $self->get_objects_count(%{$self->_query_active_only($params->{'object_class'})}, %$params);
+  return $self->get_objects_count(%$params);
 }
 
 sub create_empty_object {
@@ -258,12 +264,15 @@ sub get_relationship_names {
   return [ map {$_->name} @{$self->get_relationships(@_)} ];
 }
 
-sub _query_active_only {
+sub _add_active_only_query {
   ## private helper method
-  my $self = shift;
-  my $object_class = shift || $self->object_class;
-
-  return $object_class->INACTIVE_FLAG ? {query => ['!'.$object_class->INACTIVE_FLAG => $object_class->INACTIVE_FLAG_VALUE]} : {};
+  my ($self, $params) = @_;
+  my $object_class = $params->{'object_class'} || $self->object_class;
+  
+  if ($object_class->INACTIVE_FLAG) {
+    $params->{'query'} ||= [];
+    push @{$params->{'query'}}, '!'.$object_class->INACTIVE_FLAG, $object_class->INACTIVE_FLAG_VALUE;
+  }
 }
 
 sub _objects_related_to_user {
