@@ -29,69 +29,88 @@ sub new {
   $self->{'_cmp_release'}   = 0 if $self->{'_cmp_release'} < $self->{'_first_release'} || $self->{'_cmp_release'} > $self->{'_curr_release'};
 
   return $self unless $self->{'_req_release'};
+  
+  my $method = lc 'fetch_for_'.$self->action;
+  
+  $self->$method if $self->can($method);
 
-  ## Healthcheck summary page
-  if ($self->action eq 'Summary') {
-    my $session = $self->rose_manager('Session')->fetch_last_with_failed_reports({'release' => $self->requested_release});
-    if ($session) {
-      $self->rose_objects($session);
-      $self->rose_objects('compare_session', $self->rose_manager('Session')->fetch_last_with_failed_reports({'release' => $self->compared_release})) if $self->compared_release;
-      $self->rose_objects('reports', [
-        $self->rose_manager('Report')->fetch_first_for_session($session->session_id),
-        $self->rose_manager('Report')->fetch_last_for_session ($session->session_id)
-      ]);
-    }
-  }
-  
-  ## Healthcheck details page
-  elsif ($self->action eq 'Details') {
-    my $query = {
-      'release'           => $self->requested_release,
-      'with_users'        => $self->view_type && $self->view_param ? 1 : 0,
-      'include_manual_ok' => $self->view_type && $self->view_param ? 1 : 0
-    };
-    $query->{'query'} = ['report.'.$self->view_type, $self->view_param] if $self->view_type && $self->view_param;
-  
-    $self->rose_objects($self->rose_manager('Session')->fetch_last_with_failed_reports($query));
-  }
-  
-  ## Annotation display page and saving command
-  elsif ($self->action =~ /^Annotation/) {
-    my $report_ids = $self->hub->param('rid');
-    $report_ids    = [ split ',', $report_ids ] if $report_ids;
-    
-    if ($report_ids && @$report_ids) {
-      $self->rose_objects($self->rose_manager('Report')->fetch_by_primary_keys($report_ids, {
-        'with_objects' => 'annotation',
-        'with_users'   => ['annotation.created_by', 'annotation.modified_by'],
-        'query'        => ['result' => 'PROBLEM']
-      }));
-    }
-  }
-  
-  ## Database list page
-  elsif ($self->action eq 'Database') {
-    
-    my $session_manager = $self->rose_manager('Session');
-    my $last_session    = $session_manager->fetch_last($self->current_release);
-    my $last_session_id = $last_session ? $last_session->session_id || 0 : 0;
-
-    if ($last_session_id) {
-
-      my $first_session    = $session_manager->fetch_first($self->current_release);
-      my $first_session_id = $first_session ? $first_session->session_id || 0 : 0;
-      my $reports_manager  = $self->rose_manager('Report');
-      $self->rose_objects('session_reports', $reports_manager->fetch_for_distinct_databases({'session_id' => $last_session_id}));
-      $self->rose_objects('release_reports', $reports_manager->fetch_for_distinct_databases({'session_id' => $first_session_id, 'include_all' => 1}));
-    }
-  }
-  
-  ## User directory
-  elsif ($self->action eq 'UserDirectory') {
-    $self->rose_objects($self->rose_manager('Group')->fetch_with_members($self->hub->species_defs->ENSEMBL_WEBADMIN_ID, 1));
-  }
-  
   return $self;
+}
+
+sub fetch_for_summary {
+  ## Healthcheck summary page
+  my $self = shift;
+
+  my $session = $self->rose_manager('Session')->fetch_last_with_failed_reports({'release' => $self->requested_release});
+  if ($session) {
+    $self->rose_objects($session);
+    $self->rose_objects('compare_session', $self->rose_manager('Session')->fetch_last_with_failed_reports({'release' => $self->compared_release})) if $self->compared_release;
+    $self->rose_objects('reports', [
+      $self->rose_manager('Report')->fetch_first_for_session($session->session_id),
+      $self->rose_manager('Report')->fetch_last_for_session ($session->session_id)
+    ]);
+  }
+}
+
+sub fetch_for_details {
+  ## Healthcheck details page
+  my $self = shift;
+
+  my $query = {
+    'release'           => $self->requested_release,
+    'with_users'        => $self->view_type && $self->view_param ? 1 : 0,
+    'include_manual_ok' => $self->view_type && $self->view_param ? 1 : 0
+  };
+  $query->{'query'} = ['report.'.$self->view_type, $self->view_param] if $self->view_type && $self->view_param;
+
+  $self->rose_objects($self->rose_manager('Session')->fetch_last_with_failed_reports($query));
+}
+
+sub fetch_for_annotation {
+  ## Annotation display page and saving command
+  my $self = shift;
+
+  my $report_ids = $self->hub->param('rid');
+  $report_ids    = [ split ',', $report_ids ] if $report_ids;
+  
+  if ($report_ids && @$report_ids) {
+    $self->rose_objects($self->rose_manager('Report')->fetch_by_primary_keys($report_ids, {
+      'with_objects' => 'annotation',
+      'with_users'   => ['annotation.created_by', 'annotation.modified_by'],
+      'query'        => ['result' => 'PROBLEM']
+    }));
+  }
+}
+
+sub fetch_for_database {
+  ## Database list page
+  my $self = shift;
+
+  my $session_manager = $self->rose_manager('Session');
+  my $last_session    = $session_manager->fetch_last($self->current_release);
+  my $last_session_id = $last_session ? $last_session->session_id || 0 : 0;
+
+  if ($last_session_id) {
+
+    my $first_session    = $session_manager->fetch_first($self->current_release);
+    my $first_session_id = $first_session ? $first_session->session_id || 0 : 0;
+    my $reports_manager  = $self->rose_manager('Report');
+    $self->rose_objects('session_reports', $reports_manager->fetch_for_distinct_databases({'session_id' => $last_session_id}));
+    $self->rose_objects('release_reports', $reports_manager->fetch_for_distinct_databases({'session_id' => $first_session_id, 'include_all' => 1}));
+  }
+}
+
+sub fetch_for_userdirectory {
+  ## User directory
+  my $self = shift;
+  $self->rose_objects($self->rose_manager('Group')->fetch_with_members($self->hub->species_defs->ENSEMBL_WEBADMIN_ID, 1));
+}
+
+sub fetch_for_annotationsave {
+  ## Saving annotations after editing/adding new
+  my $self = shift;
+  
+  $self->fetch_for_annotation;
 }
 
 sub get_database_list {
