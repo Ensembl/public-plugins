@@ -33,6 +33,8 @@ __PACKAGE__->meta_setup(
     changelog => {
       'type'        => 'many to many',
       'map_class'   => 'EnsEMBL::ORM::Rose::Object::ChangelogSpecies',
+      'map_to'      => 'changelog',
+      'map_from'    => 'species'
     },
   ],
 );
