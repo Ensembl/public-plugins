@@ -6,7 +6,7 @@ Ensembl.extend({
     this.HCManager.initialize();
 
     //JS for changelog (TinyMCE)
-    $('.tinymce').tinymce({
+    $('textarea._tinymce').tinymce({
       script_url: '/tiny_mce/jscripts/tiny_mce/tiny_mce.js',
       theme: "advanced",
       theme_advanced_buttons1: "bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,formatselect",
