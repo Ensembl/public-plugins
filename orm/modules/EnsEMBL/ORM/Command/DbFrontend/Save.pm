@@ -6,9 +6,7 @@ package EnsEMBL::ORM::Command::DbFrontend::Save;
 ### STATUS: Under Development
 
 ### DESCRIPTION:
-### This module saves a domain object that has been edited via form, and
-### redirects to a relevant output page. Note that timestamps are set here, 
-### rather than via MySQL now()
+### This module saves an opbject for the dbfrontend object that has been edited via form
 
 use strict;
 use warnings;
@@ -17,35 +15,15 @@ use base qw(EnsEMBL::Web::Command);
 
 sub process {
   my $self = shift;
-  my $param = {};
-  my $hub = $self->hub;
 
-  my $data = $self->object;
-  $data->populate_from_cgi;
-
-  ## Set timestamps
-  my ($sec, $min, $hour, $day, $mon, $year) = localtime();
-  my $now = (1900+$year).'-'.sprintf('%02d', $mon+1).'-'.sprintf('%02d', $day)
-              .' '.sprintf('%02d', $hour).':'.sprintf('%02d', $min).':'.sprintf('%02d', $sec);
-  if ($data->data_object->can('created_by') && $data->data_object->created_by) {
-    $data->data_object->created_at($now);
-  }
-  elsif ($data->data_object->can('modified_by') && $data->data_object->modified_by) {
-    $data->data_object->modified_at($now);
-  }
- 
-  my $success = $data->save;
-
-  my $url = '/'.$hub->type.'/';
-  if ($success && @$success) {
-    $url .= 'List';
-    $param->{'id'} = $success;
-  }
-  else {
-    $url .= 'Problem';
-  }
-
-  $self->ajax_redirect($url, $param);
+  my $object = $self->object;
+  my $done   = $object->save;
+  my $result = $done && @$done;
+  
+  my $url_params = {'action' => $result ? 'Display' : 'Problem'};
+  $url_params->{'id'} = $object->rose_object->get_primary_key_value if $result;
+  
+  $self->ajax_redirect($self->hub->url($url_params));
 }
 
 1;
