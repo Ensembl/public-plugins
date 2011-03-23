@@ -42,14 +42,15 @@ sub get_objects {
   my $caller = caller;                                                ###
   return $self->SUPER::get_objects(%params) if $caller !~ /EnsEMBL/;  ###
   #########                   That's it!                      ###########
-
+  
   my $with_users      = delete $params{'with_users'};
   my $active_only     = exists $params{'active_only'} ? delete $params{'active_only'} : 1;
 
   $params{'debug'}    = 1 if $self->DEBUG_SQL;
-  $params{'query'}  ||= [] and push @{$params{'query'}}, @{$self->_query_active_only->{'query'} || []} if $active_only;
+  $params{'query'}  ||= [] and push @{$params{'query'}}, @{$self->_query_active_only($params{'object_class'})->{'query'} || []} if $active_only;
+
   my $objects         = $self->SUPER::get_objects(%params);
-  
+
   # return objects if no user needed, or if no object found
   return $objects unless $with_users && @$with_users && $objects && @$objects;
 
@@ -97,16 +98,16 @@ sub object_class {
 
 sub primary_keys {
   ## Returns all the primary keys for the object table
-  ## @param  Rose::Object drived object for reference
+  ## @param Rose::Object drived object (or object class) for reference (optional)
   ## @return ArrayRef of Strings
   my ($self, $object) = @_;
 
-  return my $arrayref = ($object || $self->create_empty_object)->meta->primary_key_column_names;
+  return my $arrayref = ($object || $self->object_class)->meta->primary_key_column_names;
 }
 
 sub primary_key {
   ## Returns the primary key for the object table (use this if no composite primary keys)
-  ## @param  Rose::Object drived object for reference
+  ## @param Rose::Object drived object (or object class) for reference (optional)
   ## @return String
   my ($self, $object) = @_;
   return $self->primary_keys($object)->[0];
@@ -141,7 +142,7 @@ sub fetch_by_primary_keys {
   my ($self, $ids, $params) = @_;
 
   $params->{'query'} ||= [];
-  push @{$params->{'query'}}, $self->primary_key, $ids;
+  push @{$params->{'query'}}, $self->primary_key($params->{'object_class'}), $ids;
 
   return @$ids ? $self->get_objects(%$params) : undef;
 }
@@ -169,15 +170,18 @@ sub count {
   ## @return int
   my ($self, $params) = @_;
 
-  return $self->get_objects_count(%{$self->_query_active_only}, %$params);
+  return $self->get_objects_count(%{$self->_query_active_only($params->{'object_class'})}, %$params);
 }
 
 sub create_empty_object {
   ## Creates an new instance of the object class
+  ## @param Rose::Object drived object (or object class) for reference (optional)
   ## @return Rose::Object drived object
-  my $self = shift;
+  my ($self, $object) = @_;
 
-  return $self->object_class->new;
+  my $object_class = $object ? (ref $object ? ref $object : $object) : $self->object_class;
+
+  return $object_class->new;
 }
 
 sub is_trackable {
@@ -213,31 +217,31 @@ sub get_lookup {
 
 sub get_columns {
   ## Returns all column objects for a table
-  ## @param  Rose::Object drived object for reference (optional)
+  ## @param Rose::Object drived object (or object class) for reference (optional)
   ## @return ArrayRef of Rose::*::Column objects
   my ($self, $object) = @_;
 
-  return my $arrayref = ($object || $self->create_empty_object)->meta->columns;
+  return my $arrayref = ($object || $self->object_class)->meta->columns;
 }
 
 sub get_column_names {
   ## Returns all column's name for a table
-  ## @param  Rose::Object drived object for reference
+  ## @param Rose::Object drived object (or object class) for reference (optional)
   ## @return ArrayRef of strings
   my ($self, $object) = @_;
 
-  return my $arrayref = ($object || $self->create_empty_object)->meta->column_names;
+  return my $arrayref = ($object || $self->object_class)->meta->column_names;
 }
 
 sub get_relationships {
   ## Returns all relationships for an object
   ## @param Relationship type string (eg. 'many to many', 'one to one' etc) - Optional - will give all relationships if not provided
-  ## @param Rose::Object drived object for reference - Optional
+  ## @param Rose::Object drived object (or object class) for reference (optional)
   ## @return ArrayRef of Rose::DB::Object::Metadata::Relationship objects
   my ($self, $relation, $object) = @_;
 
   $relation and ref $relation and $object = $relation and $relation = undef;
-  $object ||= $self->create_empty_object;
+  $object ||= $self->object_class;
 
   my $relations = [];
   (!$relation || $relation && $_->type eq $relation) and push @$relations, $_ for @{$object->meta->relationships};
@@ -247,18 +251,19 @@ sub get_relationships {
 sub get_relationship_names {
   ## Returns all relationships' name for an object
   ## @param Relationship type string (eg. 'many to many', 'one to one' etc) - Optional - will give all relationships if not provided
-  ## @param Rose::Object drived object for reference - Optional
+  ## @param Rose::Object drived object (or object class) for reference (optional)
   ## @return ArrayRef of strings
   my $self = shift;
   
-  return [ map {$_->name} @{$self->get_relationships} ];
+  return [ map {$_->name} @{$self->get_relationships(@_)} ];
 }
 
 sub _query_active_only {
   ## private helper method
   my $self = shift;
+  my $object_class = shift || $self->object_class;
 
-  return $self->object_class->INACTIVE_FLAG ? {query => ['!'.$self->object_class->INACTIVE_FLAG => $self->object_class->INACTIVE_FLAG_VALUE]} : {};
+  return $object_class->INACTIVE_FLAG ? {query => ['!'.$object_class->INACTIVE_FLAG => $object_class->INACTIVE_FLAG_VALUE]} : {};
 }
 
 sub _objects_related_to_user {
