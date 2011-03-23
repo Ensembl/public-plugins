@@ -19,11 +19,9 @@ __PACKAGE__->meta_setup(
   table       => 'changelog_species',
 
   columns     => [
-    changelog_id      => {type => 'int', not_null => 1}, 
-    species_id        => {type => 'int', not_null => 1}, 
+    changelog_id      => {type => 'int', not_null => 1, primary_key => 1}, 
+    species_id        => {type => 'int', not_null => 1, primary_key => 1}, 
   ],
-
-  primary_key_columns => ['changelog_id', 'species_id'],
 
   relationships => [
     changelog => {
