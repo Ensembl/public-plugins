@@ -60,13 +60,19 @@ p.dbf-pagecount {
   font-weight: bold;
 }
 
+p.dbf-dialogue {
+  padding: 5px;
+  overflow: hidden;
+  font-weight: bold;
+}
+
 div.dbf-row-buttons {
   overflow: hidden;
   background-color: #ddd;
   padding: 1px 0;
 }
 
-div.dbf-row-buttons a {
+div.dbf-row-buttons a, a.dbf-confirm-buttons {
   border: #aaa solid 1px;
   margin: 2px 5px 2px 3px;
   text-decoration: none;
