@@ -1,0 +1,77 @@
+/* Styles for DbFrontend pages */
+/* TODO: Replace colours with colour constants from ini files */
+
+div.dbf-record {
+  border: #ccc solid 1px;
+  margin: 5px 0;
+}
+
+div.dbf-row {
+  overflow: hidden;
+  padding: 1px 0;
+}
+
+div.dbf-row-left {
+  width: 25%;
+  float: left;
+  font-weight: bold;
+  padding: 1px 5px;
+}
+
+div.dbf-row-right {
+  padding: 1px 5px 1px 25%;
+  margin-left: 10px;
+}
+
+div.dbf-pagination {
+  margin: 5px 0;
+}
+
+div.dbf-pagination * {
+  text-decoration: none;
+  margin: 2px 6px 2px 0;
+}
+
+div.dbf-pagination a:hover {
+  text-decoration: underline;
+}
+
+div.dbf-pagination span {
+  cursor: default;
+}
+
+div.dbf-pagination a.selected {
+  font-weight: bold;
+  color: #000;
+  cursor: default;
+  text-decoration: none;
+  padding: 0 2px;
+  border: #999 solid 1px;
+}
+
+div.dbf-pagination a.disabled {
+  color: #aaa;
+  cursor: default;
+  text-decoration: none;
+}
+
+p.dbf-pagecount {
+  float: right;
+  font-weight: bold;
+}
+
+div.dbf-row-buttons {
+  overflow: hidden;
+  background-color: #ddd;
+  padding: 1px 0;
+}
+
+div.dbf-row-buttons a {
+  border: #aaa solid 1px;
+  margin: 2px 5px 2px 3px;
+  text-decoration: none;
+  padding: 0px 4px;
+  display: block;
+  float: left;
+  background-color: #fff;
+}
