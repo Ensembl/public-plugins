@@ -7,6 +7,7 @@ package EnsEMBL::ORM::Rose::Manager;
 
 ### DESCRIPTION:
 ### Parent class for all the rose object manager classes. Provides some generic data mining methods.
+### Can be used directly, without the child classes, provided object_class parameter is given while making a method call.
 
 use strict;
 use warnings;
@@ -19,11 +20,12 @@ use constant DEBUG_SQL => 0;
 
 sub get_objects {
   ## @overrides
+  ## DO NOT OVERRIDE
   ## Wrapper to the manager's inbuilt get_objects method to provide 3 extra features:
   ##  - Getting all the linked users from the user table in single method call
   ##  - Excludes the 'retired' rows, by default; includes if flag set false
   ##  - Warns all the sql queries done by rose if DEBUG_SQL constant is set true
-  ## @param Hash, as accepted by default get_objects method along with two extra keys as below:
+  ## @param Hash, as accepted by default get_objects method (of Rose::DB::Object::Manager class) along with two extra keys as below:
   ##  - with_users  : ArrayRef of columns that contain user ids as foreign keys
   ##  - active_only : Flag, if on, will fetch active rows only (flag on by default)
   ## @return ArrayRef of objects, or undef if any error
@@ -33,13 +35,19 @@ sub get_objects {
   ##   with_users   => ['created_by', 'record.created_by', 'record.modified_by'],
   ##   active_only  => 0
   ## )
-  my ($self, %params) = @_;
+  my ($self, %params) = shift->normalize_get_objects_args(@_);
+
+  ######### This method is also called by Rose API sometimes. ###########
+  ###            We don't want to override it for Rose                ###
+  my $caller = caller;                                                ###
+  return $self->SUPER::get_objects(%params) if $caller !~ /EnsEMBL/;  ###
+  #########                   That's it!                      ###########
+
   my $with_users      = delete $params{'with_users'};
   my $active_only     = exists $params{'active_only'} ? delete $params{'active_only'} : 1;
 
   $params{'debug'}    = 1 if $self->DEBUG_SQL;
   $params{'query'}  ||= [] and push @{$params{'query'}}, @{$self->_query_active_only->{'query'} || []} if $active_only;
-
   my $objects         = $self->SUPER::get_objects(%params);
   
   # return objects if no user needed, or if no object found
@@ -82,8 +90,9 @@ sub get_objects {
 sub object_class {
   ## Returns the corresponding object class - defaults to the one in same namespace
   ## Override in the child classes, if required
-  (my $self = shift) =~ s/Rose::Manager/Rose::Object/;
-  return $self;
+  warn "Method object_class can not be called on base Manager class. Either provide 'object_class' as a key in the argument hash of the required method or call this method on Manager drived class." and return if $_[0] eq __PACKAGE__;
+  (my $object_class = shift) =~ s/Rose::Manager/Rose::Object/;
+  return $object_class;
 }
 
 sub primary_keys {
@@ -141,21 +150,26 @@ sub fetch_by_page {
   ## Returns objects from the database according to pagination parameters
   ## @param Number of objects to be returned
   ## @param Page number
+  ## @param HashRef of extra params for get_objects
   ## @return ArrayRef of Rose::Object drived objects OR undef if any error
-  my ($self, $pagination, $page) = @_;
+  my ($self, $pagination, $page, $params) = @_;
+  
+  $params ||= {};
+  if ($pagination) {
+    $params->{'per_page'} = $pagination;
+    $params->{'page'}     = $page;
+  }
 
-  return $self->get_objects(
-    per_page => $pagination,
-    page     => $page
-  );
+  return $self->get_objects(%$params);
 }
 
 sub count {
   ## Gives the number of all the active rows in the table
+  ## @param HashRef to go to manager's get_objects_count method as arg
   ## @return int
-  my $self = shift;
+  my ($self, $params) = @_;
 
-  return $self->get_objects_count(%{$self->_query_active_only});
+  return $self->get_objects_count(%{$self->_query_active_only}, %$params);
 }
 
 sub create_empty_object {
@@ -166,21 +180,30 @@ sub create_empty_object {
   return $self->object_class->new;
 }
 
+sub is_trackable {
+  ## Returns true if Object contains the trackable fields (created_by, modified_by etc)
+  ## @return 0/1 accordingly
+  return shift->object_class->is_trackable;
+}
+
 sub get_lookup {
   ## Gets lookups (name-value pairs) for all the object rows in the table
   ## Used for displaying options of dropdowns in forms for CRUD interface
   ## Skips the rows which are not active
+  ## @param Object class string (optional - defaults to manager's default object_class)
   ## @return HashRefs with keys as primary key value and values as title value OR undef if an error
   ##  - key   : primary key's value
   ##  - title : value of column as declared at Object::TITLE_COLUMN
-  my $self = shift;
+  my ($self, $object_class) = @_;
   
-  my $key   = $self->primary_key;
-  my $title = $self->object_class->TITLE_COLUMN;
+  $object_class ||= $self->object_class;
+
+  my $key   = $object_class->primary_key;
+  my $title = $object_class->TITLE_COLUMN;
 
   my $objects = $self->get_objects(
-    'select'      => $title ? [ $key, $title ] : $key,
-    'active_only' => 1,
+    'object_class'  => $object_class,
+    'select'        => $title ? [ $key, $title ] : $key,
   );
   
   return unless $objects;
@@ -204,6 +227,31 @@ sub get_column_names {
   my ($self, $object) = @_;
 
   return my $arrayref = ($object || $self->create_empty_object)->meta->column_names;
+}
+
+sub get_relationships {
+  ## Returns all relationships for an object
+  ## @param Relationship type string (eg. 'many to many', 'one to one' etc) - Optional - will give all relationships if not provided
+  ## @param Rose::Object drived object for reference - Optional
+  ## @return ArrayRef of Rose::DB::Object::Metadata::Relationship objects
+  my ($self, $relation, $object) = @_;
+
+  $relation and ref $relation and $object = $relation and $relation = undef;
+  $object ||= $self->create_empty_object;
+
+  my $relations = [];
+  (!$relation || $relation && $_->type eq $relation) and push @$relations, $_ for @{$object->meta->relationships};
+  return $relations;
+}
+
+sub get_relationship_names {
+  ## Returns all relationships' name for an object
+  ## @param Relationship type string (eg. 'many to many', 'one to one' etc) - Optional - will give all relationships if not provided
+  ## @param Rose::Object drived object for reference - Optional
+  ## @return ArrayRef of strings
+  my $self = shift;
+  
+  return [ map {$_->name} @{$self->get_relationships} ];
 }
 
 sub _query_active_only {
