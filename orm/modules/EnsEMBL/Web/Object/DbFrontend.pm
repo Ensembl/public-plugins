@@ -138,7 +138,7 @@ sub create_empty_object {
 
 sub delete {
   ## @overrides
-  ## Deletes the record according to the configuration
+  ## Deletes or retires the record according to the configuration
   my $self   = shift;
   my $method = $self->permit_delete;
   
