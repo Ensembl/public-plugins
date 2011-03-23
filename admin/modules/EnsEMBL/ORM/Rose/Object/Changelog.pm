@@ -11,8 +11,10 @@ use warnings;
 use base qw(EnsEMBL::ORM::Rose::Object::Trackable);
 
 use constant {
-  ROSE_DB_NAME  => 'production',
-  TITLE_COLUMN  => 'title',
+  ROSE_DB_NAME        => 'production',
+  TITLE_COLUMN        => 'title',
+  INACTIVE_FLAG       => 'is_current',
+  INACTIVE_FLAG_VALUE => '0'
 };
 
 ## Define schema
@@ -34,6 +36,7 @@ __PACKAGE__->meta_setup(
     affy_mapping      => {type => 'enum', 'values' => [qw(N Y)]},
     biomart_affected  => {type => 'enum', 'values' => [qw(N Y)]},
     db_status         => {type => 'enum', 'values' => [qw(N/A unchanged patched new)]},
+    is_current        => {type => 'integer', not_null => 1, default => 1}
   ],
 
   relationships => [
