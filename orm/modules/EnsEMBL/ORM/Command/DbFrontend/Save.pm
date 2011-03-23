@@ -6,7 +6,7 @@ package EnsEMBL::ORM::Command::DbFrontend::Save;
 ### STATUS: Under Development
 
 ### DESCRIPTION:
-### This module saves an opbject for the dbfrontend object that has been edited via form
+### This module saves an object for the dbfrontend object that has been edited via form
 
 use strict;
 use warnings;
