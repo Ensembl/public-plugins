@@ -1,7 +1,7 @@
 package EnsEMBL::Admin::Component::Healthcheck::Annotation;
 
 use strict;
-use Data::Dumper;
+
 use base qw(EnsEMBL::Admin::Component::Healthcheck);
 
 sub caption {
