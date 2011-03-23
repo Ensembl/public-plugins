@@ -1,216 +1,199 @@
 package EnsEMBL::ORM::Component::DbFrontend;
 
 ### NAME: EnsEMBL::ORM::Component::DbFrontend;
-### Base class for components that make up the Ensembl CRUD interface 
+### Base class for components that make up the Ensembl DbFrontend CRUD interface 
 
 ### STATUS: Under Development
 
 ### DESCRIPTION:
-### This module contains a lot of generic HTML/form generation code that
-### is shared between similar pages (e.g. Add and Edit are essentially
-### the same form, except that the latter loads a record from the db).
+### This module contains a lot of generic HTML/form generation code that is shared between DbFrontend CRUD pages.
 
 use strict;
 use warnings;
-no warnings 'uninitialized';
 
-use EnsEMBL::Web::Form;
-use EnsEMBL::Web::Data::User;
+use Rose::DateTime::Util qw(parse_date format_date);
+use EnsEMBL::ORM::Rose::Field;
 
 use base qw(EnsEMBL::Web::Component);
 
-sub create_pagination {
-### Creates a record navigation bar that allows the user to page 
-### through n records at a time (requires the 'pagination' parameter 
-### to be set to n in the interface configuration, where n is a 
-### positive integer).
-### Returns HTML
-  my ($self, $pagination, $count) = @_;
-  return unless ($pagination && $pagination > 0);
-  $count ||= 0;
-  my $hub = $self->hub;
-
-  my ($prev_link, $next_link,$release);
-  my $link_style = 'font-weight:bold;text-decoration:none';
-
-  my $page = $hub->param('page') || 1; 
-  $release = ";release=".$hub->param('release') if $hub->param('release');
-  my $start = ($page - 1) * $pagination + 1;
-  my $end = $page * $pagination; 
-  if ($end >= $count) {
-    $end = $count;
-  }
-  my $more = $count - $end;
-
-  if ($page > 1) {
-    my $prev_url = '/'.$hub->type.'/'.$hub->action.'?page='.($page-1).$release;
-    $prev_link = qq(<a href="$prev_url" style="$link_style">&lt;&lt; Previous</a>);
-  }
-  if ($more) {
-    my $next_url = '/'.$hub->type.'/'.$hub->action.'?page='.($page+1).$release;
-    $next_link = qq(<a href="$next_url" style="$link_style">Next &gt;&gt;</a>);
-  }
-
-  my $html;
-  if ($count) {
-    $html .= qq(<table style="width:98%"><tr>
-<td style="width:25%;text-align:left">$prev_link</td>
-<td style="width:48%;text-align:center">Displaying records $start - $end of $count</td>
-<td style="width:25%;text-align:right">$next_link</td>
-</tr></table>);
-  }
-  else {
-    $html .= qq(<p>No records</p>);
-  }
-
-  return $html;
+sub _init {
+  my $self = shift;
+  $self->cacheable( 0 );
+  $self->ajaxable(  0 );
 }
 
-sub create_form {
-### Utility method for easy form creation
-### Arguments: next (string) - action of this form
-### Returns an EnsEMBL::Web::Form object
-  my ($self, $next) = @_;
-  my $hub = $self->hub;
-
-  my $url = '/'.$hub->species_defs->species_path;
-  $url = '' if $url !~ /_/;
-  $url .= '/'.$hub->type.'/'.$next;
-
-  my $form = EnsEMBL::Web::Form->new($hub->action, $url, 'post');
-  $form->set_attribute('class', 'narrow-labels');
-  return $form;
+sub content {
+  ## Returns content HTML
+  return shift->content_tree->render;
 }
 
-sub get_user_name {
-### Utility method
-### Argument: user ID (integer)
-### Returns: user name (string)
-  my ($self, $user_id) = @_;
-  my $name = 'no-one';
+sub content_tree {
+  ## Returns content html's dom tree
+  ## Override in the child classes
+  my $self = shift;
+  return $self->dom->create_element('p', {'inner_HTML' => sprintf('No %s found in the database', $self->object->record_name->{'plural'})});
+}
+
+sub content_pagination {
+  ## Generates HTML for pagination links
+  ## @param Number of records being displayed on the page
+  ## @return html string
+  return shift->content_pagination_tree(@_)->render;
+}
+
+sub content_pagination_tree {
+  ## Generates and returns a DOM tree of pagination links
+  ## @param Number of records being displayed on the page
+  ## @return E::W::DOM::Node::Element::Div object
+  my ($self, $records_count) = @_;
+  
+  my $object      = $self->object;
+  my $hub         = $self->hub;
+  my $page        = $object->get_page_number;
+  my $page_count  = $object->get_page_count;
+  my $count       = $object->get_count;
+  my $offset      = ($page - 1) * $object->pagination;
+  my $pagination  = $self->dom->create_element('div');
+  my $links       = $pagination->append_child($self->dom->create_element('div', {'class' => 'dbf-pagination'}));
+
+  $page < 1 and $page = 1 or $page > $page_count and $page = $page_count;
+  
+  $pagination->prepend_child($self->dom->create_element('p', {
+    'class'       => 'dbf-pagecount',
+    'inner_HTML'  => sprintf("Page %d of %d (displaying %d - %d  of %d %s)", $page, $page_count, $offset + 1, $offset + $records_count, $count, $count == 1 ? $object->record_name->{'singular'} : $object->record_name->{'plural'})
+  }));
+  
+  $links->append_child($self->dom->create_element('a', {
+    'href'        => $hub->url({'page' => $page - 1 || 1}),
+    'class'       => $page == 1 ? 'disabled' : '',
+    'inner_HTML'  => '&laquo; Previous',
+  }));
+  
+  my $pages_needed = { map {$_ => 1} @{[1, 2, $page_count, $page_count - 1, $page, $page - 1, $page - 2, $page + 1, $page + 2]} };
+  
+  my $previous_num = 0;
+  for (sort {$a <=> $b} keys %$pages_needed) {
+    $_ > $previous_num + 1 and $links->append_child($self->dom->create_element('span', {'inner_HTML' => '&#133;'}));
+    $_ > 0 and $_ <= $page_count and $links->append_child($self->dom->create_element('a', {
+      'href'        => $hub->url({'page' => $_}),
+      'class'       => $page == $_ ? 'selected' : '',
+      'inner_HTML'  => $_,
+    }));
+    $previous_num = $_;
+  }
+
+  $links->append_child($self->dom->create_element('a', {
+    'href'        => $hub->url({'page' => $page_count - ($page_count - $page || 1) + 1}),
+    'class'       => $page == $page_count ? 'disabled' : '',
+    'inner_HTML'  => 'Next &raquo;',
+  }));
+  
+  return $pagination;
+}
+
+sub unpack_rose_object {
+  ## Converts a rose object, it's columns and relationships into a data structure that can easily be used to display frontend
+  ## @param Rose object to be unpacked
+  ## @return ArrayRef if E::ORM::Rose::Field objects
+  my ($self, $record) = @_;
+
+  my $object    = $self->object;
+  my $manager   = $object->manager_class;
+  $record     ||= $manager->create_empty_object;
+  my $fields    = $object->show_fields;
+  my $relations = { map {$_->name => $_ } @{$manager->get_relationships($record) || []} };
+  my $columns   = { map {$_->name => $_ } @{$manager->get_columns($record)       || []} };
+  my $unpacked  = [];
+
+  while (my $field_name = shift @$fields) {
+  
+    my $field = shift @$fields; # already a hashref with keys that should not be modified - keys as accepted by Form->add_field method
+    my $value = $field->{'value'} ||= $record->$field_name;
+    $field->{'name'} ||= $field_name;
+
+    ## if this field is a relationship
+    if (exists $relations->{$field_name}) {
+      my $relation = $relations->{$field_name};
+      $field->{'value_type'} = $relation->type;
+      
+      ## get lookup if type is either 'dropdown' or 'checklist'
+      if ($field->{'type'} && $field->{'type'} =~ /^(dropdown|checklist)$/i) {
         
-  if ($user_id > 0) {
-    my $user = EnsEMBL::Web::Data::User->new($user_id);
-    $name = $user->name if $user;
+        my $related_object_class;
+        my $ref_value;
+        if (!$value || ref $value eq 'ARRAY' && !@$value) {
+
+          if ($relation->can('class')) {
+            $related_object_class = $relation->class;
+          }
+          else {
+            $related_object_class = $relation->map_class->meta->relationship($relation->name)->class;
+          }
+        }
+        else {
+          $ref_value = ref $value eq 'ARRAY' ? $value->[0] : $value;
+          $related_object_class = ref $ref_value;
+        }
+
+        if ($ref_value) {
+          my $primary_key      = $ref_value->primary_key;
+          $field->{'selected'} = ref $value eq 'ARRAY' ? { map {$_->$primary_key => $_->get_title} @$value } : { $value->$primary_key => $value->get_title };
+        }
+
+        $field->{'multiple'} = $relation->is_singular ? 0 : 1;
+        $field->{'lookup'}   = $manager->get_lookup($related_object_class);
+      }
+    }
+
+    ## if this field is a column
+    elsif (exists $columns->{$field_name}) {
+      my $column = $columns->{$field_name};
+      $field->{'type'} = 'noedit' if $column->is_primary_key_member; #force readonly primary key
+      if (($field->{'value_type'} = $column->type) eq 'enum') {
+        $field->{'lookup'} = {};
+        for (@{$column->values}) {
+          (my $label = $_) =~ s/_/ /g;
+          $field->{'lookup'}{$_} = ucfirst $label;
+          $field->{'selected'}   = {$_ => ucfirst $label} if $value && $value eq $_;
+        }
+      }
+    }
+    
+    ## if any linked user
+    else {
+      $field->{'value_type'} = 'one to one';
+      $field->{'selected'}   = {$value->get_primary_key_value => $value->get_title} if $value;
+    }
+    
+    push @$unpacked, EnsEMBL::ORM::Rose::Field->new($field);
   }
-  return $name;
+  
+  return $unpacked;
 }
 
-sub get_pretty_date {
-### Utility method
-### Argument: date (in MySQL format)
-### Returns: date in user-friendly format (dd/mm/yy at hour::min)
-  my ($self, $date) = @_;
-  if ($date =~ /^0000-/) {
-    return '';
+sub _modify_trackable_field_params {
+  ## Modifies the tracklable field's params hash provided as argument, according to the trackable info
+  ## @param HashRef as accepted by Form->add_field method
+  ## @param 'by_user' or 'at'
+  ## @return HashRef as accepted by Form->add_field method, after some modifications
+  my ($self, $param, $type) = @_;
+  
+  return unless $type;
+
+  if ($type eq 'by_user') {
+    my $user = $self->hub->user;
+    $param->{'caption'} = $user->name;
+    $param->{'value'}   = $user->user_id;
   }
   else {
-    return $self->pretty_date($date, 'simple_datetime');
+    $param->{'caption'} = 'Now';
+    $param->{'value'}   = parse_date('now');
   }
 }
 
-sub unpack_db_table {
-### "Unpacks" the columns of a database into a hash of hashes
-### that can be used to produce form elements. Default is to
-### fully populate parameters with input form options
-### Argument: mode (string, optional) - set to 'noedit' to return
-###           all fields as type NoEdit and omit unnecessary steps
-### Returns a hashref of key/hashref pairs, where each entry
-### corresponds to the arguments of an EnsEMBL::Web::Form::Element
-### object
-  my ($self, $mode) = @_;
-  my $param_set;
-  my $data = $self->object;
-
-  my @columns = @{$data->get_table_columns};
-  push @columns, @{$data->get_m2m_columns};
-
-  ## check for one-to-many foreign keys
-  my %m2o_lookups = %{$data->get_m2o_lookups};
-
-  foreach my $column (@columns) {
-    my $name = $column->name;
-    my $param = {'name' => $name};
-    my $data_type = $column->type;
-
-    ## set label
-    my $label = ucfirst($name);
-    $label =~ s/_/ /g;
-    $param->{'label'} = $label;
-
-    if ($mode eq 'noedit') {
-      $param->{'type'} = 'NoEdit';
-      if ($data_type eq 'enum' || $data_type eq 'set') {
-        ## Set 'values' on lookups, so we can do reverse lookup later
-        my $values  = $column->values;
-        if (ref($values->[0]) eq 'HASH') {
-          $param->{'values'} = $values;
-        }
-        else {
-          my $tmp;
-          foreach my $v (@$values) {
-            push @$tmp, {'name' => $v, 'value' => $v};
-          }
-          $param->{'values'} = $tmp;
-        }
-        $param->{'values'} = $column->values;
-      }
-    }
-    else {
-      if ($column->is_primary_key_member || $name =~ /^created_|^modified_/) {
-        $param->{'type'} = 'NoEdit';
-        $param->{'is_primary_key'} = 1 if $column->is_primary_key_member;
-      }
-      elsif ($m2o_lookups{$name}) {
-        $param->{'type'} = 'DropDown';
-        $param->{'select'}  = 'select';
-        $param->{'values'} = $m2o_lookups{$name};
-      }
-      elsif ($data_type eq 'enum' || $data_type eq 'set') {
-        $param->{'select'}  = 'select';
-        if ($data_type eq 'enum') {
-          ## Use radio buttons if only two options
-          my $values = $column->values;
-          if (@$values < 3) {
-            $param->{'select'} = 'radio';
-          }
-          $param->{'type'} = 'DropDown';
-        }
-        else {
-          $param->{'type'} = 'MultiSelect';
-        }
-        my $values  = $column->values;
-        if (ref($values->[0]) eq 'HASH') {
-          $param->{'values'} = $values;
-        }
-        else {
-          my $tmp;
-          foreach my $v (@$values) {
-            push @$tmp, {'name' => $v, 'value' => $v};
-          }
-          $param->{'values'} = $tmp;
-        }
-      }
-      elsif ($name =~ /password/) {
-        $param->{'type'} = 'Password';
-      }
-      elsif ($data_type eq 'integer') {
-        $param->{'type'} = 'Int';
-      }
-      elsif ($data_type eq 'text') {
-        $param->{'type'} = 'Text';
-      }
-      else {
-        $param->{'type'} = 'String';
-        if ($data_type eq 'varchar') {
-          $param->{'maxlength'} = $column->length;
-        }
-      }
-    }
-    $param_set->{$name} = $param;
-  }
-
-  return $param_set;
+sub print_datetime {
+  ## Prints DateTime as a readable string
+  return format_date(parse_date($_[1]), "%b %e, %Y at %H:%M");
 }
 
 1;

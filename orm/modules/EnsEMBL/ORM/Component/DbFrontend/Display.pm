@@ -5,79 +5,103 @@ package EnsEMBL::ORM::Component::DbFrontend::Display;
 
 ### STATUS: Under development
 ### Note: This module should not be modified! 
-### To customise an individual record display, see (or create) the appropriate 
-### EnsEMBL::ORM::DbFrontend module in your plugin
-
-### DESCRIPTION:
+### To customise, either extend this module in your component, or EnsEMBL::Web::Object::DbFrontend in your E::W::object
 
 use strict;
 use warnings;
-no warnings "uninitialized";
 
 use base qw(EnsEMBL::ORM::Component::DbFrontend);
 
-sub _init {
-  my $self = shift;
-  $self->cacheable( 0 );
-  $self->ajaxable(  0 );
+sub content_tree {
+  ## Generates a DOM tree for content HTML
+  ## Override this one in the child class and do the DOM manipulation on the DOM tree if required
+  ## Flags are set on required HTML elements for 'selection and manipulation' purposes in child classes (get_nodes_by_flag)
+  my $self    = shift;
+  my $hub     = $self->hub;
+  my $object  = $self->object;
+  my $records = $object->rose_objects;
+  
+  return $self->SUPER::content_tree unless @$records;
+  
+  my $content = $self->dom->create_element('div', {'class' => $object->content_css});
+  my $page    = $object->get_page_number;
+  my $links   = defined $page ? $content->append_child($self->content_pagination_tree(scalar @$records)) : undef;
+
+  for my $record (@$records) {
+  
+    my $record_div  = $self->dom->create_element('div', {'class' => 'dbf-record'});
+    my $primary_key = $record->get_primary_key_value;
+    $record_div->set_flag('primary_key', $primary_key);
+
+    my @bg = qw(bg1 bg2);
+    my $fields  = $object->show_fields;
+
+    while (my $field_name = shift @$fields) {
+    
+      my $label = shift @$fields;
+      $label    = exists $label->{'label'} ? $label->{'label'} : '';
+      my $value = $record->$field_name;
+
+      my $row = $record_div->append_child($self->dom->create_element('div', {'class' => "dbf-row $bg[0]"}));
+      $row->set_flag($field_name);
+      $row->append_children(
+        $self->dom->create_element('div', {
+          'class'       => 'dbf-row-left',
+          'inner_HTML'  => $label
+        }),
+        $self->dom->create_element('div', {
+          'class'       => 'dbf-row-right',
+          'inner_HTML'  =>  $self->_display_field_value($value) || ''
+        })
+      );
+      @bg = reverse @bg;
+    }
+    $record_div->append_child($self->dom->create_element('div', {
+      'class'       => "dbf-row-buttons",
+      'inner_HTML'  => sprintf('<a href="%s">Edit</a>%s', $hub->url({'action' => 'Edit', 'id' => $primary_key}), $object->permit_delete ? sprintf('<a href="%s">Delete</a>', $hub->url({'action' => 'Delete', 'id' => $primary_key})) : '')
+    }));
+    $content->append_child($record_div);
+  }
+
+  $content->append_child($links->clone_node(1)) if $links; ## bottom pagination
+  
+  return $content;
 }
 
-sub content {
-  my $self = shift;
-  my $hub = $self->hub;
-  my $html;
-  my (@records, $count);
-  my $config = $self->get_frontend_config;
+sub _display_field_value {
+  ## Converts the field value into displayable form
+  ## Value, as returned by the rose's method call, can be a string, rose object or an arrayref of rose objects ;)
+  my ($self, $value) = @_;
 
-  if ($hub->param('id')) {
-    my @ids = ($hub->param('id'));
-    @records = @{$self->object->fetch_by_id(\@ids)};
-  }
-  else {
-    if ($config->pagination) {
-      @records = @{$self->object->fetch_by_page($config->pagination)};
-      $count = $self->object->count;
-      $html .= $self->create_pagination($config->pagination, $count);
-    }
-    else {
-      @records = @{$self->object->fetch_all};
-    }
+  ## if nothing
+  return '' unless defined $value;
+
+  ## if it's a string
+  return $value unless $value && ref $value;
+  
+  ## if it's an arrayref
+  if (ref $value eq 'ARRAY') {
+    my @return;
+    push @return, $self->_display_field_value($_) for @$value;
+    return @return ? sprintf('<ul><li>%s</li></ul>', join('</li><li>', @return)) : '';
   }
 
-  if (@records) {
-    my @column_names;
-    if ($config) {
-      @column_names = @{$config->show_fields}; 
-    }
-    unless (@column_names) {
-      my @columns = @{$self->object->get_table_columns};
-      push @columns, @{$self->object->get_related_columns};
-      foreach my $column (@columns) {
-        push @column_names, $column->name;
-      }
-    }
+  ## if it's DateTime (rose returns DateTime for datetime mysql type)
+  return $self->print_datetime($value) if UNIVERSAL::isa($value, 'DateTime');
 
-    $html .= '<p>Total records: '.@records.'</p>';
-    foreach my $record (@records) {
-      $html .= "<hr />\n\n";
-      $html .= '<table style="width:100%">';
-      foreach my $name (@column_names) {
-        my $value = $record->$name;
-        if (ref($value) eq 'ARRAY') {
-          $value = '(Multiple values)';
-        }
-        $html .= '<tr><th style="width:25%">'.ucfirst($name)
-                  .'</th><td style="width:75%">'.$value.'</td></tr>',
-      }
-      $html .= "</table>\n\n";
+  ## if it's a rose object
+  if (UNIVERSAL::isa($value, 'EnsEMBL::ORM::Rose::Object')) {
+    my $title = $value->get_title;
+    
+    ## if it's a user
+    if ($value->isa('EnsEMBL::ORM::Rose::Object::User') && $self->object->show_user_email) {
+      return sprintf('<a href="mailto:%s">%s</a>', $value->email, $title);
     }
+    return $title;
   }
-
-  if ($config->pagination) {
-    $html .= $self->create_pagination($config->pagination, $count);
-  }
-
-  return $html;
+  
+  ## unknown value type
+  return $value;
 }
 
 1;
