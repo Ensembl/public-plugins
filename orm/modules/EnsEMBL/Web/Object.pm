@@ -6,15 +6,15 @@ package EnsEMBL::Web::Object;
 use strict;
 use warnings;
 
-sub caption       { $_[0] =~ /[^:]+$/; return $1; }
-sub short_caption { $_[0] =~ /[^:]+$/; return $1; }
+sub caption       { ref($_[0]) =~ m/([^:]+)$/; return $1; }
+sub short_caption { ref($_[0]) =~ m/([^:]+)$/; return $1; }
 
 sub rose_manager {
   ## Returns the ORM::Rose::Manager class for the given type
   ## @return Manager Class (Static class reference) or undef if not found
   my ($self, $type) = @_;
   
-  $self->{'_rose_managers'} = {} unless exists $self->{'_rose_managers'};
+  $self->{'_rose_managers'} ||= {};
   return $self->{'_rose_managers'}{$type} ||= $self->dynamic_use_fallback("EnsEMBL::ORM::Rose::Manager::$type");
 }
 
@@ -59,8 +59,11 @@ sub save {
   ## @return ArrayRef of successfully saved rose objects
   my ($self, $type) = @_;
 
-  my $objs  = [];
-  $_->save('changes_only' => 1) and push @$objs, $_ or warn $_->error for @{$self->rose_objects($type || '0')};
+  my $objs = [];
+
+  my %user = ('user' => $self->hub->user);
+  
+  $_->save('changes_only' => 1, $_->is_trackable ? %user : ()) and push @$objs, $_ or $_->error and warn $_->error for @{$self->rose_objects($type || '0')};
   return $objs;
 }
 
@@ -75,14 +78,16 @@ sub retire {
   ## @return ArrayRef of successfully retired rose objects
   my ($self, $type) = @_;
   
-  my $objs  = [];
+  my $objs = [];
+
+  my %user = ('user' => $self->hub->user);
 
   for (@{$self->rose_objects($type || '0')}) {
     my $column  = $_->INACTIVE_FLAG;
     my $value   = $_->INACTIVE_FLAG_VALUE;
     if ($column) {
       $_->$column($value);
-      $_->save('changes_only' => 1) and push @$objs, $_ or warn $_->error;
+      $_->save('changes_only' => 1, $_->is_trackable ? %user : ()) and push @$objs, $_ or warn $_->error;
     }
   }
   return $objs;
