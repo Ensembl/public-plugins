@@ -30,7 +30,9 @@ our $db_pass = defined $species_defs->multidb->{'DATABASE_WEBSITE'}{'PASS'}
                   ? $species_defs->multidb->{'DATABASE_WEBSITE'}{'PASS'}
                   : $species_defs->DATABASE_WRITE_PASS;
 
-
+#get sepcies defs
+my $SPECIES_DEFS = EnsEMBL::Web::SpeciesDefs->new;
+  
 ## Use a private registry for this class
 __PACKAGE__->use_private_registry;
 
@@ -80,6 +82,45 @@ __PACKAGE__->register_db(
   password  => $species_defs->multidb->{'DATABASE_HEALTHCHECK'}{'PASS'} || $db_pass,
 );
 
+#get an array of species names, just actually really need 1 valid species scientific name, but it must always be there
+my @species_keys = keys %{$SPECIES_DEFS->{'_storage'}};
+
+  if ($SPECIES_DEFS->{'_storage'}->{$species_keys[0]}->{'databases'}->{'DATABASE_HELP_BASE'}){
+    my $PASS = $SPECIES_DEFS->{'_storage'}->{$species_keys[0]}->{'databases'}->{'DATABASE_HELP_BASE'}->{'PASS'};
+    my $HOST = $SPECIES_DEFS->{'_storage'}->{$species_keys[0]}->{'databases'}->{'DATABASE_HELP_BASE'}->{'HOST'};
+    my $NAME = $SPECIES_DEFS->{'_storage'}->{$species_keys[0]}->{'databases'}->{'DATABASE_HELP_BASE'}->{'NAME'};
+    my $USER = $SPECIES_DEFS->{'_storage'}->{$species_keys[0]}->{'databases'}->{'DATABASE_HELP_BASE'}->{'USER'};
+    my $DRIVER = $SPECIES_DEFS->{'_storage'}->{$species_keys[0]}->{'databases'}->{'DATABASE_HELP_BASE'}->{'DRIVER'};
+    my $PORT = $SPECIES_DEFS->{'_storage'}->{$species_keys[0]}->{'databases'}->{'DATABASE_HELP_BASE'}->{'PORT'};
+
+    __PACKAGE__->register_db(
+      type      => 'help',
+      driver    => $DRIVER,
+      database  => $NAME,
+      host      => $HOST,
+      port      => $PORT,
+      username  => $USER,
+      password  => $PASS,
+    );
+  }
+  if ($SPECIES_DEFS->{'_storage'}->{$species_keys[0]}->{'databases'}->{'DATABASE_HELP_OWN'}){
+    my $PASS = $SPECIES_DEFS->{'_storage'}->{$species_keys[0]}->{'databases'}->{'DATABASE_HELP_OWN'}->{'PASS'};
+    my $HOST = $SPECIES_DEFS->{'_storage'}->{$species_keys[0]}->{'databases'}->{'DATABASE_HELP_OWN'}->{'HOST'};
+    my $NAME = $SPECIES_DEFS->{'_storage'}->{$species_keys[0]}->{'databases'}->{'DATABASE_HELP_OWN'}->{'NAME'};
+    my $USER = $SPECIES_DEFS->{'_storage'}->{$species_keys[0]}->{'databases'}->{'DATABASE_HELP_OWN'}->{'USER'};
+    my $DRIVER = $SPECIES_DEFS->{'_storage'}->{$species_keys[0]}->{'databases'}->{'DATABASE_HELP_OWN'}->{'DRIVER'};
+    my $PORT = $SPECIES_DEFS->{'_storage'}->{$species_keys[0]}->{'databases'}->{'DATABASE_HELP_OWN'}->{'PORT'};
+
+    __PACKAGE__->register_db(
+      type      => 'help',
+      domain    => 'help_own',
+      driver    => $DRIVER,
+      database  => $NAME,
+      host      => $HOST,
+      port      => $PORT,
+      username  => $USER,
+      password  => $PASS,
+    );
+  }
 
 1;
-
