@@ -34,11 +34,12 @@ sub update_conf {
   $SiteDefs::__species_aliases{ 'Monodelphis_domestica'    } = [qw(md mdom monodelphis opossum)];
   $SiteDefs::__species_aliases{ 'Mus_musculus'             } = [qw(mm mmus mouse mus)];
   $SiteDefs::__species_aliases{ 'Myotis_lucifugus'         } = [qw(ml mluc microbat myotis)];
+  $SiteDefs::__species_aliases{ 'Nomascus_leucogenys'      } = [qw(nl nleu gibbon nomascus)];
   $SiteDefs::__species_aliases{ 'Ochotona_princeps'        } = [qw(op pika pikachu)];
   $SiteDefs::__species_aliases{ 'Ornithorhynchus_anatinus' } = [qw(oa oana platypus)];
   $SiteDefs::__species_aliases{ 'Otolemur_garnettii'       } = [qw(og ogar bushbaby otolemur)];
   $SiteDefs::__species_aliases{ 'Pan_troglodytes'          } = [qw(pt ptro chimp)];
-  $SiteDefs::__species_aliases{ 'Pongo_pygmaeus'           } = [qw(pp orang orangutan librarian ook)];
+  $SiteDefs::__species_aliases{ 'Pongo_abelii'             } = [qw(pp orang orangutan librarian ook)];
   $SiteDefs::__species_aliases{ 'Procavia_capensis'        } = [qw(pc hyrax dassy dassie pimbi)];
   $SiteDefs::__species_aliases{ 'Pteropus_vampyrus'        } = [qw(pv megabat flyingfox)];
   $SiteDefs::__species_aliases{ 'Rattus_norvegicus'        } = [qw(rn rnor rat)];
