@@ -14,11 +14,11 @@ sub content_tree {
   my $object  = $self->object;
   my $records = $object->rose_objects;
 
-  my $func    = $hub->function eq 'Delete' ? 'Delete' : 'Edit';
+  my $func    = $hub->function eq 'Delete' ? 'Confirm' : 'Edit';
   my $content = $self->dom->create_element('div', {'class' => $object->content_css});
   
   unless ($records && @$records) {
-    $content->inner_HTML(sprintf('<p>No %s found to %s.</p>', $object->record_name->{'singular'}, lc $func));
+    $content->inner_HTML(sprintf('<p>No %s found to %s.</p>', $object->record_name->{'singular'}, lc $hub->function));
   }
   else {
     my $form  = $content->append_child($self->new_form({'action' => $self->hub->url({'action' => $func}), 'method' => 'get'}));
@@ -26,7 +26,7 @@ sub content_tree {
     $form->add_field({
       'type'    => 'dropdown',
       'name'    => 'id',
-      'label'   => sprintf("Select a %s to %s", $object->record_name->{'singular'}, lc $func),
+      'label'   => sprintf("Select a %s to %s", $object->record_name->{'singular'}, lc $hub->function),
       'values'  => [ map {{'value' => $_->get_primary_key_value, 'caption' => $_->get_title}} @$records ],
     
     });
