@@ -70,7 +70,7 @@ sub fetch_for_select {
 
 sub pagination {
   ## @overrides
-  return 50;
+  return 0;
 }
 
 sub show_fields {
