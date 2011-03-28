@@ -58,6 +58,7 @@ div.dbf-pagination a.disabled {
 p.dbf-pagecount {
   float: right;
   font-weight: bold;
+  margin: 5px 0;
 }
 
 p.dbf-dialogue {
@@ -70,6 +71,7 @@ div.dbf-row-buttons {
   overflow: hidden;
   background-color: #ddd;
   padding: 1px 0;
+  clear: both;
 }
 
 div.dbf-row-buttons a, a.dbf-confirm-buttons {
@@ -80,4 +82,5 @@ div.dbf-row-buttons a, a.dbf-confirm-buttons {
   display: block;
   float: left;
   background-color: #fff;
+  font-weight: normal;
 }
