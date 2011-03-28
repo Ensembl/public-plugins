@@ -195,13 +195,11 @@ sub _populate_from_cgi {
   my %field_names = map {$_ => 1} keys %{{@$fields}};
   my %param_names = map {$_ => 1} @params;
   
-  delete $param_names{'id'};
-  delete $param_names{$rose_object->primary_key};
+  delete $field_names{'id'};
+  delete $field_names{$rose_object->primary_key};
 
-  for (keys %param_names) {
-
-    next unless exists $field_names{$_};
-
+  for (keys %field_names) {
+  
     my $value;
 
     if (exists $columns->{$_}) {
@@ -215,7 +213,9 @@ sub _populate_from_cgi {
       }
       else {
         my @val = $self->hub->param($_);
-        $value  = [@val];
+        $value  = { map {$_ => 1} @val };
+        delete $value->{'0'};
+        $value  = [ keys %$value ];
       }
       $rose_object->$_($value);
     }
