@@ -21,8 +21,8 @@ sub set_default_action {
   $self->{'_data'}{'default'} = 'Summary';
 }
 
-sub short_caption {}
-sub caption {}
+sub short_caption { 'Changelog'; }
+sub caption       { 'Changelog'; }
 
 sub modify_page_elements {
   my $self = shift;
@@ -35,20 +35,20 @@ sub modify_page_elements {
 sub populate_tree {
   my $self = shift;
 
-  $self->create_node( 'Summary', 'View all',
-    [qw(summary EnsEMBL::Admin::Component::Changelog::Summary)], 
-    { 'availability' => 1 }
-  );
-
   $self->create_node( 'TextSummary', '',
     [qw(text_summary EnsEMBL::Admin::Component::Changelog::TextSummary)], 
-    { 'availability' => 1, no_menu_entry => 1 }
+    { 'availability' => 1, 'no_menu_entry' => 1 }
   );
-}
+  $self->create_node( 'Summary', 'View summary',
+    [qw(summary   EnsEMBL::Admin::Component::Changelog::Summary)],
+    { 'availability' => 1 },
+  );
 
-sub modify_tree {
-  my $self = shift;
-  $self->add_dbfrontend_to_tree([ 'WebAdmin' ]); ## Add defaults
+  $self->create_dbfrontend_node({'Display' => {'filters' => ['WebAdmin'], 'no_menu_entry' => 1}});
+  $self->create_dbfrontend_node({$_        => {'filters' => ['WebAdmin']}}) for qw(List Select/Edit Select/Delete);
+  $self->create_dbfrontend_node({$_        => {'filters' => ['WebAdmin'], 'components' => [qw(input EnsEMBL::Admin::Component::Changelog::Input)]}}) for qw(Add Edit Preview);
+  $self->create_dbfrontend_node({$_        => {'filters' => ['WebAdmin']}}) for qw(Problem Confirm Save Delete);
+  
 }
 
 1;
