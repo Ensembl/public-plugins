@@ -55,13 +55,15 @@ sub content_pagination_tree {
   my $offset      = ($page - 1) * $object->pagination;
   my $pagination  = $self->dom->create_element('div');
   my $links       = $pagination->append_child($self->dom->create_element('div', {'class' => 'dbf-pagination'}));
+  $links->set_flag('pagination_links');
 
   $page < 1 and $page = 1 or $page > $page_count and $page = $page_count;
   
-  $pagination->prepend_child($self->dom->create_element('p', {
+  my $page_counter = $pagination->prepend_child($self->dom->create_element('p', {
     'class'       => 'dbf-pagecount',
     'inner_HTML'  => sprintf("Page %d of %d (displaying %d - %d  of %d %s)", $page, $page_count, $offset + 1, $offset + $records_count, $count, $count == 1 ? $object->record_name->{'singular'} : $object->record_name->{'plural'})
   }));
+  $page_counter->set_flag('page_counter');
   
   $links->append_child($self->dom->create_element('a', {
     'href'        => $hub->url({'page' => $page - 1 || 1}),
