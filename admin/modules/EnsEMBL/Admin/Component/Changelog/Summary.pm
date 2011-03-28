@@ -4,139 +4,64 @@ package EnsEMBL::Admin::Component::Changelog::Summary;
 
 use strict;
 use warnings;
-no warnings "uninitialized";
 
-use EnsEMBL::Web::Data::User;
+use base qw(EnsEMBL::ORM::Component::DbFrontend::Display);
 
-use base qw(EnsEMBL::Web::Component);
+sub content_tree {
+  ## @overrides
+  my $self    = shift;
+  my $dom     = $self->dom;
+  my $content = $self->SUPER::content_tree;
+  my $toc     = $content->prepend_child($dom->create_element('div', {'class' => 'cl-toc'}));
 
-sub _init {
-  my $self = shift;
-  $self->cacheable( 0 );
-  $self->ajaxable(  0 );
+  $content->prepend_child($dom->create_element('h1', {'inner_HTML' => sprintf('Changelog for release %d', $self->object->requested_release)}));
+
+  for (@{$content->get_nodes_by_flag('team_name')}) {
+    my $team = $_->get_flag('team_name');
+    $_->before($dom->create_element('h2', {'id' => "team_$team", 'inner_HTML' => $team, 'class' => 'cl-team-heading'}));
+    $toc->append_child($dom->create_element('p', {'inner_HTML' => qq(<a href="#team_$team">$team</a>)}));
+  }
+
+  $_->remove for @{$content->get_nodes_by_flag('pagination_links')};
+  return $content;
 }
 
-sub caption {
-  my $self = shift;
-  return '';
-}
+sub record_tree {
+  ## @overrides
+  my ($self, $record) = @_;
+  my $object = $self->object;
+  my $dom    = $self->dom;
 
-sub content {
-  my $self = shift;
-  my $builder = $self->builder;
-  my $hub = $self->hub;
-  my $release = $hub->species_defs->ENSEMBL_VERSION;
-  my $html = "<h1>Changelog for Release $release</h1>";
+  my $record_div  = $dom->create_element('div');
+  my $primary_key = $record->get_primary_key_value;
 
-  my $data = $self->object('Changelog')->fetch_all;
+  my $team = $record->team;
+  $record_div->set_flag('team_name', $self->{'__previous_team'} = $team) if !exists $self->{'__previous_team'} || $self->{'__previous_team'} ne $team;
 
-  my ($item, $previous);
+  $record_div->append_children(
+    $dom->create_element('h3',   {'inner_HTML' => $record->title }),
+    $dom->create_element('div',  {'inner_HTML' => $record->content }),
+    $dom->create_element('span', {'inner_HTML' => 'Species:', 'class' => 'cl-field-title'}),
+    $dom->create_element('span', {'inner_HTML' => $self->display_field_value((my $a = $record->species), ', ') || 'All Species', 'class' => 'cl-field-value'}),
+    $dom->create_element('span', {'inner_HTML' => 'Status:', 'class' => 'cl-field-title'}),
+    $dom->create_element('span', {'inner_HTML' => $self->display_field_value($record->status), 'class' => 'cl-field-value cl-fv-'.$record->status}),
+    $dom->create_element('span', {'inner_HTML' => 'Declared by:', 'class' => 'cl-field-title'}),
+    $dom->create_element('span', {'inner_HTML' => $self->display_field_value($record->created_by_user), 'class' => 'cl-field-value'}),
+    $dom->create_element('span', {'inner_HTML' => 'Last updated:', 'class' => 'cl-field-title'}),
+    $dom->create_element('span', {'inner_HTML' => $self->display_field_value($record->modified_at ? $record->modified_at : $record->created_at), 'class' => 'cl-field-value'}),
+  );
 
-  ## Quick'n'dirty TOC
-  $html .= "<ul>\n";
-  foreach $item (@$data) {
-    if ($item->team ne $previous) {
-      $html .= sprintf '<li><a href="#team-%s">%s</a></li>', $item->team, $item->team;
-    }
-    $previous = $item->team;
-  }
-  $html .= "</ul>\n\n";
-  $previous = undef;
+  $record_div->append_child($dom->create_element('div', {
+    'class'       => "dbf-row-buttons",
+    'inner_HTML'  => sprintf(
+      '<a href="%s">View</a><a href="%s">Edit</a>%s',
+      $self->hub->url({'action' => 'Display', 'id' => $primary_key}),
+      $self->hub->url({'action' => 'Edit', 'id' => $primary_key}),
+      $object->permit_delete ? sprintf('<a href="%s">Delete</a>', $self->hub->url({'action' => 'Confirm', 'id' => $primary_key})) : ''
+    )
+  }));
+  return $record_div;
 
-  ## Entries
-  foreach $item (@$data) {
-    next unless $item->content;
-    if ($item->team ne $previous) {
-      $html .= sprintf '<h2 id="team-%s">%s</h2>', $item->team, $item->team;
-    }
-    my $title = $item->title || '(No title)';
-
-    my $content = $item->content;
-    if ($content =~ /<p>/) {
-      $content = '<p>'.$content.'</p>';
-    }
-
-    my $sp_text;
-    my @species = @{$item->species || []};
-   
-    if (!@species) {
-      $sp_text = 'all species';
-    }
-    else {
-      my @names;
-      foreach my $sp (@species) {
-        if ($sp->web_name =~ /\./) {
-          push @names, '<i>'.$sp->web_name.'</i>';
-        }
-        else {
-          push @names, $sp->web_name;
-        }
-      }
-      $sp_text = join(', ', @names);
-    }
-
-    my $status_colour = '#000'; ## BLACK
-    if ($item->status eq 'handed_over') {
-       $status_colour =  '#090'; ## GREEN
-    }
-    elsif ($item->status eq 'declared') {
-      $status_colour = '#c00'; ## RED
-    }
-
-    $html .= sprintf(qq(
-<h3>%s</h3>
-<p>%s</p>
-<p><strong>Species</strong>: %s</p>
-<p><strong>Status</strong>: <span style="color:%s;font-weight:bold;">%s</span></p>
-), 
-        $title, $content, $sp_text, $status_colour, $item->status
-    );
-
-    ## Extra info for logged-in admin users 
-    my $user = $self->hub->user;
-    if ($user && $user->is_member_of($self->hub->species_defs->ENSEMBL_WEBADMIN_ID)) {
-      my $creator = EnsEMBL::Web::Data::User->new($item->created_by);
-      my $name = 'not logged';
-      if ($creator) {
-        $name = $creator->name;
-      }
-
-      my $last_updated = $item->modified_by ? $item->modified_at : $item->created_at;
-      if ($item->modified_by && $item->modified_by != $item->created_by) {
-        my $modifier = EnsEMBL::Web::Data::User->new($item->modified_by);
-        $last_updated .= ' by '.$modifier->name if $modifier;
-      }
-      $html .= sprintf(qq(
-<p><strong>Declared by</strong>: %s</p> 
-<p><strong>Last updated</strong>: %s</p>
-), 
-        $name, $self->pretty_date($last_updated, 'full')
-      );
-
-      if ($item->team eq 'Genebuild') {
-        $html .= sprintf(qq(
-<ul>
-<li><strong>New assembly?</strong> %s</li>
-<li><strong>New gene set?</strong> %s</li>
-<li><strong>Repeat masking?</strong> %s</li>
-<li><strong>Stable ID mapping?</strong> %s</li>
-<li><strong>Affy mapping?</strong> %s</li>
-<li><strong>Database new/patched?</strong> %s</li>
-</ul>
-),
-          $item->assembly, $item->gene_set, $item->repeat_masking, $item->stable_id_mapping, $item->affy_mapping, $item->db_status
-        );
-      }
-    }
-
-    if ($user && $user->is_member_of($self->hub->species_defs->ENSEMBL_WEBADMIN_ID)) {
-      $html .= '<p style="margin-top:0.5em"><a href="/Changelog/Edit?id='.$item->changelog_id.'" style="text-decoration:none"><img src="/i/edit.gif" alt="" />  Edit this record</a> &middot; <a href="/Changelog/Display?id='.$item->changelog_id.'" style="text-decoration:none">View full record</a><div style="display:inline;float:right;margin-top:-20px;margin-right:20px"><a style="text-decoration: none;" href="#">Back to Top</a></div></p>';
-    }
-
-    $html .= '<hr />';
-    $previous = $item->team;
-  }
-  return $html;
 }
 
 1;
