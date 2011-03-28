@@ -56,14 +56,18 @@ sub rose_object {
 sub save {
   ## Wrapper to Rose::DB::Object's save method to handle multiple objects with web-friendly error-handling
   ## @param Key for the rose objects - optional - defaults to the primary rose objects
+  ## @param Hashref of the hash to be passed to rose object's save method as arg
   ## @return ArrayRef of successfully saved rose objects
-  my ($self, $type) = @_;
+  my ($self, $type, $params) = @_;
 
   my $objs = [];
-
-  my %user = ('user' => $self->hub->user);
   
-  $_->save('changes_only' => 1, $_->is_trackable ? %user : ()) and push @$objs, $_ or $_->error and warn $_->error for @{$self->rose_objects($type || '0')};
+  $params ||= {};
+  $params->{'changes_only'} = 1;
+
+  my %user = ('user' => delete $params->{'user'} || $self->hub->user);
+  
+  $_->save(%$params, $_->is_trackable ? %user : ()) and push @$objs, $_ or $_->error and warn $_->error for @{$self->rose_objects($type || '0')};
   return $objs;
 }
 
