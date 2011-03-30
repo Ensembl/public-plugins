@@ -68,11 +68,6 @@ sub fetch_for_select {
   $self->rose_objects($self->manager_class->get_objects('query' => ['release_id', $self->requested_release], 'sort_by' => $sort_by));
 }
 
-sub pagination {
-  ## @overrides
-  return 0;
-}
-
 sub show_fields {
   ## @overrides
   my $self = shift;
