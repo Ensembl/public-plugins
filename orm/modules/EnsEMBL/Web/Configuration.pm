@@ -9,31 +9,35 @@ use strict;
 
 use base qw(EnsEMBL::Web::Root);
 
-my $DBFRONTEND_NODES = {
-  'Display'       => {'caption' => 'View All', 'components' => [qw(display  EnsEMBL::ORM::Component::DbFrontend::Display)],       'availability' => 1},
-  'List'          => {'caption' => 'List All', 'components' => [qw(list     EnsEMBL::ORM::Component::DbFrontend::List)],          'availability' => 1},
-  'Add'           => {'caption' => 'Add',      'components' => [qw(add      EnsEMBL::ORM::Component::DbFrontend::Input)],         'availability' => 1},
-  'Select/Edit'   => {'caption' => 'Edit',     'components' => [qw(edit     EnsEMBL::ORM::Component::DbFrontend::Select)],        'availability' => 1},
-  'Select/Delete' => {'caption' => 'Delete',   'components' => [qw(delete   EnsEMBL::ORM::Component::DbFrontend::Select)],        'availability' => 1},
-  'Edit'          => {'caption' => 'Editing',  'components' => [qw(editing  EnsEMBL::ORM::Component::DbFrontend::Input)],         'availability' => 1, 'no_menu_entry' => 1},
-  'Preview'       => {'caption' => 'Preview',  'components' => [qw(preview  EnsEMBL::ORM::Component::DbFrontend::Input)],         'availability' => 1, 'no_menu_entry' => 1},
-  'Problem'       => {'caption' => 'Error',    'components' => [qw(error    EnsEMBL::ORM::Component::DbFrontend::Problem)],       'availability' => 1, 'no_menu_entry' => 1},
-  'Confirm'       => {'caption' => 'Confirm',  'components' => [qw(confirm  EnsEMBL::ORM::Component::DbFrontend::ConfirmDelete)], 'availability' => 1, 'no_menu_entry' => 1},
-  'Save'          => {'caption' => '',         'command'    => 'EnsEMBL::ORM::Command::DbFrontend::Save',                         'availability' => 1, 'no_menu_entry' => 1},
-  'Delete'        => {'caption' => '',         'command'    => 'EnsEMBL::ORM::Command::DbFrontend::Delete',                       'availability' => 1, 'no_menu_entry' => 1},
-};
+sub dbfrontend_nodes {
+  return [
+    'Display'       => {'caption' => 'View All', 'components' => [qw(display  EnsEMBL::ORM::Component::DbFrontend::Display)],       'availability' => 1},
+    'List'          => {'caption' => 'List All', 'components' => [qw(list     EnsEMBL::ORM::Component::DbFrontend::List)],          'availability' => 1},
+    'Add'           => {'caption' => 'Add',      'components' => [qw(add      EnsEMBL::ORM::Component::DbFrontend::Input)],         'availability' => 1},
+    'Select/Edit'   => {'caption' => 'Edit',     'components' => [qw(edit     EnsEMBL::ORM::Component::DbFrontend::Select)],        'availability' => 1},
+    'Select/Delete' => {'caption' => 'Delete',   'components' => [qw(delete   EnsEMBL::ORM::Component::DbFrontend::Select)],        'availability' => 1},
+    'Edit'          => {'caption' => 'Editing',  'components' => [qw(editing  EnsEMBL::ORM::Component::DbFrontend::Input)],         'availability' => 1, 'no_menu_entry' => 1},
+    'Preview'       => {'caption' => 'Preview',  'components' => [qw(preview  EnsEMBL::ORM::Component::DbFrontend::Input)],         'availability' => 1, 'no_menu_entry' => 1},
+    'Problem'       => {'caption' => 'Error',    'components' => [qw(error    EnsEMBL::ORM::Component::DbFrontend::Problem)],       'availability' => 1, 'no_menu_entry' => 1},
+    'Confirm'       => {'caption' => 'Confirm',  'components' => [qw(confirm  EnsEMBL::ORM::Component::DbFrontend::ConfirmDelete)], 'availability' => 1, 'no_menu_entry' => 1},
+    'Save'          => {'caption' => '',         'command'    => 'EnsEMBL::ORM::Command::DbFrontend::Save',                         'availability' => 1, 'no_menu_entry' => 1},
+    'Delete'        => {'caption' => '',         'command'    => 'EnsEMBL::ORM::Command::DbFrontend::Delete',                       'availability' => 1, 'no_menu_entry' => 1},
+  ];
+}
 
 sub create_dbfrontend_node {
   ## Creates a dbfrontend page node
-  ## @param Node name (or hashref of node name => hashref with keys caption, components, command, availability etc to override the ones given in $DBFRONTEND_NODES)
+  ## @param Node name (or hashref of node name => hashref with keys caption, components, command, availability etc to override the ones given in &dbfrontend_nodes)
   my ($self, $node) = @_;
 
   my $node_name = ref $node ? [keys %$node]->[0]  : $node;
   $node         = ref $node ? $node->{$node_name} : {};
   
-  warn 'Not a valid node name for DbFrontend' and return unless exists $DBFRONTEND_NODES->{$node_name};
+  my $all_nodes = {@{$self->dbfrontend_nodes}};
+  
+  warn 'Not a valid node name for DbFrontend' and return unless exists $all_nodes->{$node_name};
 
-  exists $node->{$_} or $node->{$_} = $DBFRONTEND_NODES->{$node_name}{$_} for keys %{$DBFRONTEND_NODES->{$node_name}};
+  exists $node->{$_} or $node->{$_} = $all_nodes->{$node_name}{$_} for keys %{$all_nodes->{$node_name}};
   
   $self->create_node($node_name, delete $node->{'caption'}, delete $node->{'components'} || [], $node);
 }
@@ -47,9 +51,14 @@ sub create_dbfrontend_nodes {
 
 sub create_all_dbfrontend_nodes {
   ## Adds all nodes to the config
-  my $self = shift;
+  my ($self, $filters) = @_;
+
+  my $all_nodes = $self->dbfrontend_nodes;
   
-  $self->create_dbfrontend_node($_) for keys %$DBFRONTEND_NODES;
+  while (my $node_name = shift @$all_nodes) {
+    shift @$all_nodes;
+    $self->create_dbfrontend_node({$node_name => {'filters' => $filters}});
+  }
 }
 
 1;
