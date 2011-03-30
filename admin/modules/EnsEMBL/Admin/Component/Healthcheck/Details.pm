@@ -4,13 +4,6 @@ use strict;
 
 use base qw(EnsEMBL::Admin::Component::Healthcheck);
 
-sub _init {
-  my $self = shift;
-  $self->cacheable( 0 );
-  $self->ajaxable( 0 );
-  $self->configurable( 0 );
-}
-
 sub caption {
   my $object = shift->object;
   my $extra  = $object->view_type && $object->view_param ? sprintf(' (%s)', $object->view_param) : '';

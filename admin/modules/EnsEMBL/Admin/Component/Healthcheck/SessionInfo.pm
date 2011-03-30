@@ -5,12 +5,6 @@ use strict;
 use base qw(EnsEMBL::Admin::Component::Healthcheck);
 use EnsEMBL::Web::Document::HTML::TwoColTable;
 
-sub _init {
-  my $self = shift;
-  $self->cacheable( 0 );
-  $self->ajaxable(  0 );
-}
-
 sub caption {
   return 'Healthcheck session summary';
 }

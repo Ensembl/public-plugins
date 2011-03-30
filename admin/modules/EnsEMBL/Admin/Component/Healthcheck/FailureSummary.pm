@@ -4,12 +4,6 @@ use strict;
 
 use base qw(EnsEMBL::Admin::Component::Healthcheck);
 
-sub _init {
-  my $self = shift;
-  $self->cacheable( 0 );
-  $self->ajaxable(  0 );
-}
-
 sub caption {
   return 'Summary of failed healthchecks';
 }
