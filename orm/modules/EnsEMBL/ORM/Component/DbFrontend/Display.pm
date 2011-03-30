@@ -26,6 +26,7 @@ sub content_tree {
   my $content = $self->dom->create_element('div', {'class' => $object->content_css});
   my $page    = $object->get_page_number;
   my $links   = defined $page ? $content->append_child($self->content_pagination_tree(scalar @$records)) : undef;
+  !$object->pagination and $links and map {$_->remove} @{$links->get_nodes_by_flag('pagination_links')};
   
   $content->append_child($self->record_tree($_)) for @$records;
 
@@ -79,6 +80,7 @@ sub display_field_value {
   ## Converts the field value into displayable form
   ## @param Value, as returned by the rose's method call, can be a string, rose object or an arrayref of rose objects ;)
   ## @param delimiter, to be used in join if multiple values
+  ## TODO - if applicable, return 'caption' instead of 'value'
   my ($self, $value, $delimiter) = @_;
 
   ## if nothing

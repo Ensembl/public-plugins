@@ -26,7 +26,8 @@ sub content_tree {
   my $content = $self->dom->create_element('div', {'class' => $object->content_css});
   my $page    = $object->get_page_number;
   my $links   = defined $page ? $content->append_child($self->content_pagination_tree(scalar @$records)) : undef;
-  
+  map {$_->remove} @{$links->get_nodes_by_flag('pagination_links')} unless $object->pagination;
+
   my $table   = $content->append_child($self->dom->create_element('table', {'class' => 'ss', 'cellpadding' => 0, 'cellspacing' => 0, 'border' => 0}));
   my $header;
   my @bg = qw(bg1 bg2);
@@ -79,7 +80,7 @@ sub _display_column_value {
   if (ref $value eq 'ARRAY') {
     my @return;
     push @return, $self->_display_column_value($_, $is_title) for @$value;
-    return @return ? join 'and ', reverse (pop @return, join(', ', @return)) : '';
+    return @return ? @return == 1 ? shift @return : join ' and ', reverse (pop @return, join(', ', @return)) : '';
   }
 
   ## if it's DateTime (rose returns DateTime for datetime mysql type)
