@@ -4,6 +4,7 @@
 div.dbf-record {
   border: #ccc solid 1px;
   margin: 5px 0;
+  clear: both;
 }
 
 div.dbf-row {
