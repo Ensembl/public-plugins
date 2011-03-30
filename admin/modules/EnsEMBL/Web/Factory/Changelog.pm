@@ -1,7 +1,7 @@
 package EnsEMBL::Web::Factory::Changelog;
 
 ### NAME: EnsEMBL::Web::Factory::Changelog
-### Very simple factory to produce EnsEMBL::Admin::Data::Rose::Changelog objects
+### Very simple factory to produce EnsEMBL::Web::Object::Changelog objects
 
 ### STATUS: Stable
 
