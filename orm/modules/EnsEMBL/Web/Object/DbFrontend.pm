@@ -30,7 +30,7 @@ sub new {
   return unless $self->manager_class;
 
   my $hub     = $self->hub;
-  my $method  = lc "fetch_for_".$self->action;
+  my $method  = lc "fetch_for_".($self->action || $self->default_action);
 
   ($self->can($method) or $method = lc "fetch_for_".$self->default_action and $self->can($method)) and $self->$method;
   return $self;
@@ -50,7 +50,8 @@ sub fetch_for_display {
     $self->rose_objects($self->manager_class->fetch_by_primary_keys([@ids], $self->_get_with_objects_params('Display')));
   }
   else {
-    $self->rose_objects($self->manager_class->fetch_by_page($self->pagination, $self->get_page_number, $self->_get_with_objects_params('Display')));
+    my $params = $self->manager_class->object_class->TITLE_COLUMN ? {'sort_by' => $self->manager_class->object_class->TITLE_COLUMN } : {};
+    $self->rose_objects($self->manager_class->fetch_by_page($self->pagination, $self->get_page_number, $self->_get_with_objects_params('Display', $params)));
   }
 }
 
@@ -91,7 +92,8 @@ sub fetch_for_list {
   ## Fetchs and saves rose objects to be displayed on 'List' page (table view)
   my $self = shift;
 
-  $self->rose_objects($self->manager_class->fetch_by_page($self->pagination, $self->get_page_number, $self->_get_with_objects_params('List')));
+  my $params = $self->manager_class->object_class->TITLE_COLUMN ? {'sort_by' => $self->manager_class->object_class->TITLE_COLUMN } : {};
+  $self->rose_objects($self->manager_class->fetch_by_page($self->pagination, $self->get_page_number, $self->_get_with_objects_params('List', $params)));
 }
 
 sub fetch_for_select {
@@ -156,10 +158,11 @@ sub retire {
 
 sub _get_with_objects_params {
   ## Constructs the extra query params that are to be passed to manager's get_objects to get the required objects for Display, List and Input pages
-  ## @params page type - Display/Input/List
-  my ($self, $page) = @_;
-  
-  my $params = {};
+  ## @param page type - Display/Input/List
+  ## @param Existing params if any
+  my ($self, $page, $params) = @_;
+
+  $params  ||= {};
   my $method = $page eq 'List' ? 'show_columns' : 'show_fields';
 
   my $relations   = [ map {$_->name} @{$self->manager_class->get_relationships($self->rose_object)} ];
@@ -201,20 +204,16 @@ sub _populate_from_cgi {
   for (keys %field_names) {
   
     my $value;
+    my $type;
 
-    if (exists $columns->{$_}) {
-      $value = $self->hub->param($_);
-      $rose_object->$_($value);
-    }
-    elsif (exists $relations->{$_}) {
-
-      if ($relations->{$_}->is_singular) {
+    if (exists $columns->{$_} && ($type = 'column') || exists $relations->{$_} && ($type = 'relation')) {
+      if ($type eq 'relation' && $relations->{$_}->is_singular || $type eq 'column' && $columns->{$_}->type ne 'set') {
         $value = $self->hub->param($_);
       }
       else {
         my @val = $self->hub->param($_);
         $value  = { map {$_ => 1} @val };
-        delete $value->{'0'};
+        delete $value->{'0'} if $type eq 'relation';
         $value  = [ keys %$value ];
       }
       $rose_object->$_($value);
@@ -241,7 +240,7 @@ sub _populate_from_cgi {
 ### record_select_style     Specifies the style of form element that will be displayed to select a record to edit
 ###                         Select box by default, if set to 'radio', then radio buttons
 ### pagination              Number of records that are to be displayed per page when show in a list List and Display page
-###                         Defaults to showing 20 records. If 0, undef or false - all records are shown
+###                         Defaults to showing all records. If 0, undef or false - all records are shown
 ### show_preview            Flag to tell whether a preview should be displayed before record is updated/added
 ###                         Defaults to displaying the preview always
 ### permit_delete           Tells whether deleting the record is allowed or not
@@ -257,7 +256,7 @@ sub _populate_from_cgi {
 sub show_fields           { return []; }
 sub show_columns          { return []; }
 sub record_select_style   { }
-sub pagination            { 20; }
+sub pagination            { 0;  }
 sub show_preview          { 1;  }
 sub permit_delete         { 'retire'; }
 sub content_css           { return 'dbf-content'; }
