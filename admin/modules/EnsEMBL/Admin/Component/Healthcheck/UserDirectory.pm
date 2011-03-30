@@ -4,15 +4,6 @@ use strict;
 
 use base qw(EnsEMBL::Admin::Component::Healthcheck);
 
-use EnsEMBL::Web::Data::Group;
-
-sub _init {
-  my $self = shift;
-  $self->cacheable( 0 );
-  $self->ajaxable(  0 );
-  $self->configurable( 0 );
-}
-
 sub caption {
   return '';
 }
