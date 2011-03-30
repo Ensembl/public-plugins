@@ -151,12 +151,32 @@ sub unpack_rose_object {
     elsif (exists $columns->{$field_name}) {
       my $column = $columns->{$field_name};
       $field->{'type'} = 'noedit' if $column->is_primary_key_member; #force readonly primary key
-      if (($field->{'value_type'} = $column->type) eq 'enum') {
-        $field->{'lookup'} = {};
-        for (@{$column->values}) {
-          (my $label = $_) =~ s/_/ /g;
-          $field->{'lookup'}{$_} = ucfirst $label;
-          $field->{'selected'}   = {$_ => ucfirst $label} if $value && $value eq $_;
+
+      if (($field->{'value_type'} = $column->type) =~ /^(enum|set)$/ || $field->{'type'} =~ /^(dropdown|checklist)$/i) {
+      
+        if (defined $value) {
+          $value = [ $value ] unless ref $value;
+          $value = { map {$_ => 1} @$value };
+        }
+        else {
+          $value = {};
+        }
+        
+        $field->{'lookup'}   = {};
+        $field->{'selected'} = {};
+        $field->{'multiple'} = $1 eq 'set' ? 1 : 0;
+
+        for (@{delete $field->{'values'} || ($column->can('values') ? $column->values : [])}) {
+          my $label;
+          if (ref $_) {
+            $label = $_->{'caption'};
+            $_     = $_->{'value'};
+          }
+          else {
+            ($label = ucfirst $_) =~ s/_/ /g;
+          }
+          $field->{'lookup'}{$_}   = $label;
+          $field->{'selected'}{$_} = $label if exists $value->{$_};
         }
       }
     }
@@ -166,7 +186,7 @@ sub unpack_rose_object {
       $field->{'value_type'} = 'one to one';
       $field->{'selected'}   = {$value->get_primary_key_value => $value->get_title} if $value;
     }
-    
+
     push @$unpacked, EnsEMBL::ORM::Rose::Field->new($field);
   }
   
