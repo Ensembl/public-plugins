@@ -15,12 +15,23 @@
 
 <br /><br />
 <p>
-Ensembl stores structural variants as well as sequence variants i.e.
-Single Nucleotide Polymorphisms (SNPs), insertions, deletions and somatic mutations.
+Ensembl stores both structural variants and sequence variants including
+Single Nucleotide Polymorphisms (SNPs), insertions, deletions and somatic mutations
+for several species and makes this data available on the website, via the Perl API,
+and provides direct access to the underlying databases.
+</p>
+
+<p>
+This data is also integrated with other sections of Ensembl, in particular we predict
+the effects of variants on the Ensembl transcripts for each species.
 </p>
 
 <h2> Variation species </h2>
-<p>Ensembl has variants for the following species:</p>
+<p>
+Ensembl stores variation data for the following species, but note that users can still use the 
+<a href="#VEP">Variant Effect Predictor</a> on species for which we do not currently have 
+a variation database.
+</p>
 <table><tr><td>
 <ul>
 	<li><i>Bos taurus</i></li>
@@ -49,12 +60,16 @@ Single Nucleotide Polymorphisms (SNPs), insertions, deletions and somatic mutati
 
 
 <h2 id="sources"> Sources of Variation Data </h2>
+
 <p>
-The majority of variants are downloaded from NCBI <a rel="external"
+The majority of variants are imported from NCBI <a rel="external"
 href="http://www.ncbi.nlm.nih.gov/projects/SNP/">dbSNP</a>. 
 The data is imported when it is released by dbSNP and incorporated
 into the next Ensembl release. If dbSNP releases the data on a different assembly,
-Ensembl will remap the variant positions onto the current assembly.<br>
+Ensembl will remap the variant positions onto the current assembly.<br/>
+</p>
+
+<p>
 For Human, data from projects like 
 the <a rel="external" href="http://www.HapMap.org/">HapMap Project</a>
  and <a rel="external" href="http://www.1000genomes.org/page.php">1000
@@ -65,10 +80,15 @@ href="http://www.ncbi.nlm.nih.gov/projects/SNP/">dbSNP</a>.
 <p>
 Ensembl also includes data from other sources. For a complete list, go to
 a species Location page (e.g. <a href="/Homo_sapiens/Location/View?r=6:133017695-133161157"> for human</a>),
- and click on the &quot;Configure Your Page&quot; link on the left-hand side.
-The &quot;Germline variation&quot; section of this contains a detailed description of all sources of variation data
-for that species.<br>
+and click on the &quot;Configure this page&squot; link on the left-hand side.
+The &quot;Germline variation&quot; and &quot;Somatic mutation&quot; sections contain a detailed description of 
+all sources of variation data for that species.
+</p>
+
+<p>
 For example, in human there is data from;
+</p>
+
 <ul>
 <li><a rel="external" href="http://www.ncbi.nlm.nih.gov/projects/SNP/">dbSNP</a></li>
 <li>Illumina chips</li>
@@ -91,8 +111,7 @@ href="http://www.lrg-sequence.org/page.php">LRG</a>)</li>
 <br />
 <h2 id="displays"> Variation Displays </h2>
 <p>
-Variation data can be viewed in the browser through pages such
-as:
+Variation data can be viewed in the browser through pages such as:
 </p>
 
 <ul>
@@ -133,6 +152,7 @@ class="cp-external">variation databases</a>).
 </p>
 
 <br />
+
 <h2 id="classes"> Variation classes </h2>
 
 We call the class of a variation according to its component alleles and its mapping 
@@ -142,7 +162,7 @@ map these to our own 'display' terms where common usage differs from the SO
 definition (e.g. our term SNP is closer to the SO term SNV). All the classes we call, 
 along with their equivalent SO term are shown in the table below. We also differentiate 
 somatic mutations from germline variations in the display term, prefixing the term with
-'somatic_'. API users can fetch either the SO term or the display term.</p>
+'somatic'. API users can fetch either the SO term or the display term.</p>
 
 <table id="variation_classes" class="ss" style="width:50%;">
 <tr>
@@ -236,7 +256,7 @@ example, a three base pair deletion of nucleotides 12600, 12601, and
 </pre>
 
 <br />
-<h2 id="consequences"> Predicted variation consequences</h2>
+<h2 id="consequences">Predicted variation consequences</h2>
 
 <p>
 For each variation that is mapped to the reference genome, we identify any
@@ -246,28 +266,24 @@ The set of consequence terms, defined by the <a rel="external"
 href="http://www.sequenceontology.org">Sequence Ontology</a> (SO), that can be
 currently be assigned to each combination of an allele and a transcript is shown
 in the table below. Note that each allele of each variation may have a different
-effect in different transcripts. </p>
+effect in different transcripts. 
+</p>
 
-<p> This approach is applied to all germline variations and somatic mutations
+<p> 
+This approach is applied to all germline variations and somatic mutations
 stored in the Ensembl variation databases (though we do not currently calculate
 consequences for structural variants). The resulting consequence type calls,
 along with information determined as part of the process, such as the cDNA and
 CDS coordinates, and the affected codons and amino acids in coding transcripts,
-are stored in the database and displayed on the website. </p>
-
-<p>This system can also be run by external users on novel mutations, using the
-Variant Effect Predictor (VEP), either from the Ensembl website or with a
-downloadable script, or by writing custom scripts against the Perl API. All
-these approaches use the same backend code. More documentation on running this
-system on your own data <a href="/info/website/upload/var.html">is available
-here </a>.
+are stored in the variation database and displayed on the website. 
 </p>
 
 <p>
 Prior to release 62 we used our own internal terms to describe the consequence
 types, and we continue to use these by default on the website. You can opt to
-see SO terms on some variation views using 'Configure this page', and VEP and
-API users can choose which terms to use. The SO terms are more specific than our
+see SO terms on some variation views using 'Configure this page', and 
+<a href="#VEP">VEP</a> and API users can choose which terms to use. The SO terms 
+are more specific than our
 display terms but we map all display terms to one or more SO terms, as shown in
 the table below. Where the NCBI have an equivalent term we also include it in
 this table (and again you can opt to use NCBI terms on some views via 'Configure
@@ -282,15 +298,15 @@ table are our own, not the SO definitions.
 </p>
 
 <p>
-The terms in the table are shown in order of estimated severity as assigned by
+The terms in the table are shown in order of severity as estimated by
 Ensembl, and this ordering is used on the website summary views. This ordering
 is necessarily subjective and API and VEP users can always get the full set of
 consequences for each allele and make their own severity judgement.
 </p>
 
 <p>
-A <a href="consequences.jpg">diagram</a> showing the location of each display term relative to 
-the transcript structure is available.
+A <a href="consequences.jpg">diagram</a> showing the location of each display 
+term relative to the transcript structure is available.
 </p>
 
 <table id="consequence_type_table" class="ss">
@@ -476,16 +492,24 @@ the transcript structure is available.
 <h2 id="nsSNP">Non-synonymous mutation protein function predictions</h2>
 
 <p>
-For mutations that are predicted to result in an amino acid substitution we also 
+For human mutations that are predicted to result in an amino acid substitution we also 
 provide SIFT and PolyPhen predictions for the effect of this substitution on the 
 encoded protein. We compute the predictions for each of these tools for all possible 
-single amino acid substitutions in the Ensembl protein set. This means we can provide 
-predictions for novel mutations for VEP and API users. We also use the Condel tool
+single amino acid substitutions in the Ensembl human protein set. This means we can provide 
+predictions for novel mutations for VEP and API users. We were able to compute predictions
+for over 95% of the proteins in Ensembl. We also use the Condel tool
 to provide a consensus prediction based on the SIFT and PolyPhen predictions.
+</p>
 
+<p>
 These tools are developed by external groups and we provide a brief explanation of
 the approach each takes below, and how we run it in Ensembl. For much more detail
 please see the relevant publications listed on each tool's website.
+</p>
+
+<p>
+We hope to be able to provide amino acid substitution predictions for species
+other than human in future releases.
 </p>
 
 <h3 id="sift">SIFT</h3>
@@ -494,9 +518,9 @@ please see the relevant publications listed on each tool's website.
 <a rel="external" href="http://sift.jcvi.org/">SIFT</a> predicts whether an amino acid 
 substitution is likely to affect protein function based on sequence homology and the
 physico-chemical similarity between the alternate amino acids. The data we provide for each amino
-acid substitution is a qualitative prediction (either 'tolerated' or 'deleterious') 
-and a score. The score is the normalized probability that the amino acid change is 
-tolerated so scores nearer 0 are predicted with greater confidence to be deleterious.
+acid substitution is a score and a qualitative prediction (either 'tolerated' or 'deleterious'). 
+The score is the normalized probability that the amino acid change is 
+tolerated so scores nearer 0 are more likely to be deleterious.
 The qualitative prediction is derived from this score such that substitutions with 
 a score < 0.05 are called 'deleterious' and all others are called 'tolerated'.
 </p>
@@ -517,9 +541,9 @@ the protein database. All data was downloaded from UniProt in February 2011.
 the effect of an amino acid substitution on the structure and function of a protein
 using sequence homology, Pfam annotations, 3D structures from PDB where available, and
 a number of other databases and tools (including DSSP, ncoils etc.). As with SIFT, for each amino
-acid substitution where we were able to calculate a prediction, we provide both a 
+acid substitution where we were able to calculate a prediction, we provide both a
 qualitative prediction (one of 'probably damaging', 'possibly damaging', 'benign'
-and 'unknown') and a score. This score represents the probability that a substitution 
+and 'unknown') and a score. The PolyPhen score represents the probability that a substitution 
 is damaging, so values nearer 1 are more confidently predicted to be deleterious (note 
 that this the opposite to SIFT). The qualitative prediction is based on the False 
 Positive Rate of the classifier model used to make the predictions.
@@ -528,11 +552,12 @@ Positive Rate of the classifier model used to make the predictions.
 <p>
 We ran PolyPhen-2 version 2.0.23 (available 
 <a rel="external" href="http://genetics.bwh.harvard.edu/pph2/dokuwiki/_media/polyphen-2.0.23r349.tar.gz">here</a>)
-and again, we followed all instructions from the authors, and used the UniProtKB 
+and again we followed all instructions from the authors, and used the UniProtKB 
 UniRef100 non-redundant protein set as the protein database, which was downloaded
-along with Pfam and DSSP annotations in February 2011. When calculating the final
-predictions we used the classifier model trained on the HumDiv training set (please
-refer to the PolyPhen publications for a more details of the classification system).
+along with PDB structures, and annotations from Pfam and DSSP in February 2011. When 
+computing the predictions we used the classifier model trained on the HumDiv training 
+set (please refer to the PolyPhen publications for a more details of the classification 
+system).
 </p>
 
 <h3 id="condel">Condel</h3>
@@ -540,18 +565,47 @@ refer to the PolyPhen publications for a more details of the classification syst
 <p>
 <a rel="external" href="http://bg.upf.edu/group/projects/condel.php">Condel</a> is
 a general method for calculating a consensus prediction from the output of tools
-designed to predict the effect of an amino acid substitution. It does so by computing
-a weighted average score of the scores of each component tool. The Condel authors 
+designed to predict the effect of an amino acid substitution. It does so by calculating
+a weighted average score of the scores of each component method. The Condel authors 
 provided us with a version specialised for finding a consensus between SIFT and 
 PolyPhen and we integrated this into the variation API. Tests run by the authors 
 on the HumVar dataset (a test set curated by the PolyPhen team), show that Condel 
 can improve both the sensitivity and specificity of predictions compared to either 
-SIFT or PolyPhen used alone. The Condel score along with a qualitative prediction 
-(one of 'neutral' or 'deleterious') are available in the VEP and via the API. The 
-Condel score is the probability that a substitution is deleterious, so values
-nearer 1 are predicted with greater confidence to affect protein function.
+SIFT or PolyPhen used alone (please contact the authors for details). The Condel 
+scorei, along with a qualitative prediction (one of 'neutral' or 'deleterious'), 
+are available in the VEP and via the API. The Condel score is the consensus probability 
+that a substitution is deleterious, so values nearer 1 are predicted with greater 
+confidence to affect protein function.
 </p>
 
+<h2 id="VEP">The Variant Effect Predictor (VEP)</h2>
+    
+<p>
+Users can run all the analyses described above on novel mutations themselves 
+using the Ensembl Variant Effect Predictor (VEP). Provided you have a 
+list of allele sequences and associated genomic coordinates you can use 
+the VEP to calculate consequences with respect to the Ensembl transcript set for
+your species of interest, and to retrieve SIFT, PolyPhen and Condel predictions 
+for any missense mutations (though we only provide these predictions for human 
+at the moment). The VEP can also identify if a mutation is already 
+known (i.e. already found in dbSNP or any of the other sources of variation 
+data listed above), and so can be used to filter your data for novel mutations. 
+The VEP works for any species in Ensembl and not just those for which we have 
+an existing variation database.
+</p>
+
+<p>
+The VEP can either be run online from the <a href="tools.html">Tools</a> 
+section of the website or you can download a script to run yourself on larger
+datasets. You can also write custom scripts using the Perl API.
+All of these approaches use the same backend code as is used to calculate the
+consequences displayed on the website. Please refer to the 
+<a href="info/website/upload/var.html">VEP</a> documentation for more
+details on running the VEP, including supported input formats, or the 
+<a href="info/docs/api/variation/index.html">variation API</a> documentation
+for help writing custom scripts. The VEP is under active development and
+<a href="info/about/contact/index.html">feedback</a> is welcome!
+</p>
 
 <br />
 <h2 id="notes">Notes</h2>
