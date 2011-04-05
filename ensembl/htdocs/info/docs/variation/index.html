@@ -144,7 +144,7 @@ along with their equivalent SO term are shown in the table below. We also differ
 somatic mutations from germline variations in the display term, prefixing the term with
 'somatic_'. API users can fetch either the SO term or the display term.</p>
 
-<table id="variation_classes">
+<table id="variation_classes" class="ss" style="width:50%;">
 <tr>
 	<th>Ensembl term</th>
 	<th>SO term</th>
@@ -158,12 +158,12 @@ somatic mutations from germline variations in the display term, prefixing the te
 <tr>
 	<td>somatic_SNV</td>
 </tr>
-<tr>
+<tr class="bg2">
 	<td>substitution</td>
 	<td rowspan=2>substitution</td>
 	<td rowspan=2><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:1000002">SO:1000002</a></td>
 </tr>
-<tr>
+<tr class="bg2">
 	<td>somatic_substitution</td>
 </tr>
 <tr>
@@ -174,12 +174,12 @@ somatic mutations from germline variations in the display term, prefixing the te
 <tr>
 	<td>somatic_CNV</td>
 </tr>
-<tr>
+<tr class="bg2">
 	<td>insertion</td>
 	<td rowspan=2>insertion</td>
 	<td rowspan=2><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0000667">SO:0000667</a></td>
 </tr>
-<tr>
+<tr class="bg2">
 	<td>somatic_insertion</td>
 </tr>
 <tr>
@@ -190,12 +190,12 @@ somatic mutations from germline variations in the display term, prefixing the te
 <tr>
 	<td>somatic_deletion</td>
 </tr>
-<tr>
+<tr class="bg2">
 	<td>indel</td>
 	<td rowspan=2>indel</td>
 	<td rowspan=2><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:1000032">SO:1000032</a></td>
 </tr>
-<tr>
+<tr class="bg2">
 	<td>somatic_indel</td>
 </tr>
 <tr>
@@ -206,12 +206,12 @@ somatic mutations from germline variations in the display term, prefixing the te
 <tr>
 	<td>somatic_tandem_repeat</td>
 </tr>
-<tr>
+<tr class="bg2">
 	<td>sequence_alteration</td>
 	<td rowspan=2>sequence_alteration</td>
 	<td rowspan=2><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001059">SO:0001059</a></td>
 </tr>
-<tr>
+<tr class="bg2">
 	<td>somatic_sequence_alteration</td>
 </tr>
 </table>
@@ -239,41 +239,53 @@ example, a three base pair deletion of nucleotides 12600, 12601, and
 <h2 id="consequences"> Predicted variation consequences</h2>
 
 <p>
-For each variation that is mapped to the reference genome, we identify any Ensembl 
-transcripts that overlap the variation and use a rule-based approach to predict the effect 
-that each allele of the variation may have on the transcript. The set of consequence terms, 
-defined by the <a rel="external" href="http://www.sequenceontology.org">Sequence Ontology</a> (SO), 
-that can be currently be assigned to each combination of an allele and a transcript is shown in the 
-table below. Note that each allele of each variation may have a different effect in different transcripts. 
-This approach is applied to all germline variations and somatic mutations stored in the Ensembl variation 
-databases (though we do not currently calculate consequences for structural variants). The resulting
-consequence type calls, along with information determined as part of the process, 
-such as the cDNA and CDS coordinates, and the affected codons and amino acids in coding transcripts, 
-are stored in the database and displayed on the website This system can also be run by external 
-users on novel mutations, using the Variant Effect Predictor (VEP), either from the Ensembl website or with a 
-downloadable script, or by writing custom scripts against the Perl API. All these approaches use the same 
-backend code.More documentation on running this system on your own data 
-<a href="/info/website/upload/var.html">is available here </a>.
+For each variation that is mapped to the reference genome, we identify any
+Ensembl transcripts that overlap the variation and use a rule-based approach to
+predict the effect that each allele of the variation may have on the transcript.
+The set of consequence terms, defined by the <a rel="external"
+href="http://www.sequenceontology.org">Sequence Ontology</a> (SO), that can be
+currently be assigned to each combination of an allele and a transcript is shown
+in the table below. Note that each allele of each variation may have a different
+effect in different transcripts. </p>
+
+<p> This approach is applied to all germline variations and somatic mutations
+stored in the Ensembl variation databases (though we do not currently calculate
+consequences for structural variants). The resulting consequence type calls,
+along with information determined as part of the process, such as the cDNA and
+CDS coordinates, and the affected codons and amino acids in coding transcripts,
+are stored in the database and displayed on the website. </p>
+
+<p>This system can also be run by external users on novel mutations, using the
+Variant Effect Predictor (VEP), either from the Ensembl website or with a
+downloadable script, or by writing custom scripts against the Perl API. All
+these approaches use the same backend code. More documentation on running this
+system on your own data <a href="/info/website/upload/var.html">is available
+here </a>.
 </p>
 
 <p>
-Before release 62 we used our own internal terms to describe the consequence types, and we continue
-to use these by default on the website. You can opt to see SO terms on some variation views using
-'Configure this page', and VEP and API users can choose which terms to use. The SO terms are more 
-specific than our display terms but we map all display terms to one or more SO terms, as 
-shown in the table below. Where the NCBI have an equivalent term we also include it in this table 
-(and again you can opt to use NCBI terms on some views via 'Configure this page' and in the VEP 
-and API). We follow the SO definition of the term as closely as possible, but in some cases 
-(e.g. non_synonymous_codon) we have slightly generalised the definition to include variants that 
-affect multiple codons as well as a single one. We are working with the SO to refine these 
-definitions. The descriptions shown in the table are our own, not the SO definitions.
+Prior to release 62 we used our own internal terms to describe the consequence
+types, and we continue to use these by default on the website. You can opt to
+see SO terms on some variation views using 'Configure this page', and VEP and
+API users can choose which terms to use. The SO terms are more specific than our
+display terms but we map all display terms to one or more SO terms, as shown in
+the table below. Where the NCBI have an equivalent term we also include it in
+this table (and again you can opt to use NCBI terms on some views via 'Configure
+this page' and in the VEP and API).
+</p>
+
+<p>We follow the SO definition of the term as closely as possible, but in some
+cases (e.g. non_synonymous_codon) we have slightly generalised the definition to
+include variants that affect multiple codons as well as a single one. We are
+working with the SO to refine these definitions. The descriptions shown in the
+table are our own, not the SO definitions.
 </p>
 
 <p>
-The terms in the table are shown in order of estimated severity as assigned by Ensembl, and this 
-ordering is used on the website summary views. This ordering is necessarily subjective and API 
-and VEP users can always get the full set of consequences for each allele and make their own
-severity judgement.
+The terms in the table are shown in order of estimated severity as assigned by
+Ensembl, and this ordering is used on the website summary views. This ordering
+is necessarily subjective and API and VEP users can always get the full set of
+consequences for each allele and make their own severity judgement.
 </p>
 
 <p>
@@ -281,7 +293,7 @@ A <a href="consequences.jpg">diagram</a> showing the location of each display te
 the transcript structure is available.
 </p>
 
-<table id="consequence_type_table">
+<table id="consequence_type_table" class="ss">
 <tr>
 	<th>Ensembl term</th>
 	<th>Ensembl description</th>
@@ -301,7 +313,7 @@ the transcript structure is available.
 	<td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001575">SO:0001575</a></td>
 	<td>splice-5</td>
 </tr>
-<tr>
+<tr class="bg2">
 	<td>Stop gained</td>
 	<td>In coding sequence, resulting in the gain of a stop codon</td>
 	<td>stop_gained</td>
@@ -315,7 +327,7 @@ the transcript structure is available.
 	<td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001578">SO:0001578</a></td>
 	<td>-</td>
 </tr>
-<tr>
+<tr class="bg2">
 	<td>Complex in/del</td>
 	<td>Insertion or deletion that spans an exon/intron or coding sequence/UTR border</td>
 	<td>complex_change_in_transcript</td>
@@ -329,6 +341,7 @@ the transcript structure is available.
 	<td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001582">SO:0001582</a></td>
 	<td>-</td>
 </tr>
+<tr>
 	<td>inframe_codon_gain</td>
 	<td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001651">SO:0001651</a></td>
 	<td>-</td>
@@ -344,7 +357,7 @@ the transcript structure is available.
 	<td>missense</td>
 </tr>
 
-<tr>
+<tr class="bg2">
 	<td>Frameshift coding</td>
 	<td>In coding sequence, resulting in a frameshift</td>
 	<td>frameshift_variant</td>
@@ -358,7 +371,7 @@ the transcript structure is available.
 	<td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001630">SO:0001630</a></td>
 	<td>-</td>
 </tr>
-<tr>
+<tr class="bg2">
 	<td>Partial codon</td>
 	<td>Located within the final, incomplete codon of a transcript whose end coordinate is unknown</td>
 	<td>incomplete_terminal_codon_variant</td>
@@ -377,7 +390,7 @@ the transcript structure is available.
 	<td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001588">SO:0001588</a></td>
 	<td>cds-synon</td>
 </tr>
-<tr>
+<tr class="bg2">
 	<td>Coding unknown</td>
 	<td>In coding sequence with indeterminate effect</td>
 	<td>coding_sequence_variant</td>
@@ -391,7 +404,7 @@ the transcript structure is available.
 	<td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001620">SO:0001620</a></td>
 	<td>-</td>
 </tr>
-<tr>
+<tr class="bg2">
 	<td>5 prime UTR</td>
 	<td>In 5 prime untranslated region</td>
 	<td>5_prime_UTR_variant</td>
@@ -405,7 +418,7 @@ the transcript structure is available.
 	<td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001624">SO:0001624</a></td>
 	<td>untranslated_3</td>
 </tr>
-<tr>
+<tr class="bg2">
 	<td>Intronic</td>
 	<td>In intron</td>
 	<td>intron_variant</td>
@@ -419,7 +432,7 @@ the transcript structure is available.
 	<td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001621">SO:0001621</a></td>
 	<td>-</td>
 </tr>
-<tr>
+<tr class="bg2">
 	<td>Within non-coding gene</td>
 	<td>Located within a gene that does not code for a protein</td>
 	<td>nc_transcript_variant</td>
@@ -438,14 +451,14 @@ the transcript structure is available.
 	<td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001635">SO:0001635</a></td>
 	<td>-</td>
 </tr>
-<tr>
+<tr class="bg2">
 	<td rowspan=2>Downstream</td>
 	<td rowspan=2>Within 5 kb downstream of the 3 prime end of a transcript</td>
 	<td>500B_downstream_variant</td>
 	<td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001634">SO:0001634</a></td>
 	<td>near-gene-3</td>
 </tr>
-<tr>
+<tr class="bg2">
 	<td>5KB_downstream_variant</td>
 	<td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001633">SO:0001633</a></td>
 	<td>-</td>
