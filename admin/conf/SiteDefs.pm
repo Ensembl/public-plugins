@@ -37,7 +37,11 @@ sub update_conf {
   $SiteDefs::ENSEMBL_BLAST_ENABLED = 0;
   $SiteDefs::ENSEMBL_MART_ENABLED = 0;
   $SiteDefs::ENSEMBL_MEMCACHED = {};
-   
+
+  $SiteDefs::ROSE_DB_DATABASES->{'healthcheck'} = 'DATABASE_HEALTHCHECK';
+  $SiteDefs::ROSE_DB_DATABASES->{'website'}     = 'DATABASE_WEBSITE';
+  $SiteDefs::ROSE_DB_DATABASES->{'production'}  = 'DATABASE_PRODUCTION';
+
 }
 
 1;
