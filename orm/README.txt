@@ -1,48 +1,64 @@
-*** This plugin is currently under development *** 
+********************* ORM PLUGIN *********************
 
-It will eventually contain all non-essential Ensembl functionality that requires 
-access to non-genomic databases, including user accounts, news, and the database 
-frontend framework. Display of online help will still be possible without this plugin.
+This plugin is ORM API  that can be used to be able to
+access the non-genomic datadase in ensembl. The plugin
+is based in Rose::DB suite, requiring  installation of
+the Rose::DB ORM suite  and its dependencies.
 
-Note that use of this plugin requires installation of the Rose::DB ORM suite and its 
-dependencies, which is why the above-mentioned functionality is being isolated in a plugin.
+DO NOT MODIFY ANY FILE IN THIS  PLUGIN. IF ANY SORT OF
+CUSTOMISATION IS  NEEDED, INHERIT THE REQUIRED CLASSES
+OR USE THE CUSTOMISATION METHODS PROVIDED
 
----------------------------------------------------------------------------
+------------------------------------------------------
 
-In order to create a CRUD interface for a database table (or set of linked tables), you
-will need the following (inserting the appropriate names into the placeholders):
+To  be able  to add custom  database mapping  with the
+help of this plugin, create a folder, ORM inside  your
+modules folder and place  these  files at  appropriate
+location:
 
-* EnsEMBL::[Plugin]::Rose::Object::[Table]    an ORM module to model your database table
-                                              (if you have linked tables, you will need 
-                                              one Rose::Object per table, with relationships 
-                                              defined)
-* EnsEMBL::[Plugin]::Rose::Manager::[Table]   a companion module to the above
-                                              (usually you need one per "real" data table 
-                                              - many-to-many linking tables don't generally 
-                                              need a manager)
+* EnsEMBL::ORM::Rose::Object::[Table]
 
-Regardless of relationships, you only need the following for the table you are going to save changes to:
+      an ORM module  to model  your database table (if
+      you  have  linked  tables,  you  will  need  one
+      class  inheited from  EnsEMBL::ORM::Rose::Object
+      per table, with relationships defined).
 
-* EnsEMBL::[Plugin]::Data::Rose::[Table]      a wrapper for the ORM object, giving access to the Hub
-* EnsEMBL::Web::Configuration::[Table]        a controller to add valid URLs for the interface
-                                              (note that this module _has_ to be in the Web namespace 
-                                              in order for it to be picked up by the core web code)
+* EnsEMBL::ORM::Rose::Manager::[Table]
 
+      a companion  module  to  the  above (usually you
+      need  one  per  "real" data  table  many-to-many
+      linking tables don't generally need  a manager).
+      (Inherited   from   EnsEMBL::ORM::Rose::Manager)
+      Additional data  manupulation and mining methods
+      should  be  added  to  this  manager class. This
+      static manager class can easily be obtained from
+      Web::Object
+    
 
-With these in place, all the CRUD pages will automagically be generated for you - you just need to link
-to them from somewhere on your site. The default URLs to link to are:
+$SiteDefs::ROSE_DB_DATABASES
 
-/[Table]/Display (with optional parameter 'id' - one or more primary key values)
-/[Table]/List (a table of records with links to the Edit form)
-/[Table]/Add
-/[Table]/SelectToEdit
-/[Table]/SelectToDelete
+      Add db connection details to this hashref inside
+      conf folder of your plugin.
 
-Other optional modules:
+------------------------------------------------------
 
-* EnsEMBL::[Plugin]::DbFrontend::[Table]              popular tweaks for the standard interface
-* EnsEMBL::[Plugin]::Component::[Table]::[Whatever]   additional custom pages 
-                                                      (or override standard CRUD modules if needed)
-* EnsEMBL::[Plugin]::Command::[Table]::[Whatever]     additional custom command nodes 
-                                                      (or override standard CRUD modules if needed)
+In order  to create  a CRUD  interface  for a database
+table (or  set of linked tables), you  will  need  the
+following  (inserting  the appropriate names  into the
+placeholders)
 
+* EnsEMBL::Web::Object::[Table]
+
+      a Web::Object::DbFrontend drived class acting as
+      a wrapper for the ORM object. Override  some  of
+      configuration methods to  customise the frontend
+
+DbFrontend's Web::Component  files  are  already there
+in this  plugin, but  can be  inherited  to modify the
+frontend. Changes  to  the  Web::Configuration  drived
+class will be required accordingly.
+
+At  the  moment,  only  one   table  (along  with  its
+relationships)  can be  mapped to  a frontend. Feature
+to enable  multiple  domain  editing  is  still  under
+development.
