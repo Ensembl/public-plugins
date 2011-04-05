@@ -572,39 +572,41 @@ PolyPhen and we integrated this into the variation API. Tests run by the authors
 on the HumVar dataset (a test set curated by the PolyPhen team), show that Condel 
 can improve both the sensitivity and specificity of predictions compared to either 
 SIFT or PolyPhen used alone (please contact the authors for details). The Condel 
-scorei, along with a qualitative prediction (one of 'neutral' or 'deleterious'), 
+score, along with a qualitative prediction (one of 'neutral' or 'deleterious'), 
 are available in the VEP and via the API. The Condel score is the consensus probability 
 that a substitution is deleterious, so values nearer 1 are predicted with greater 
 confidence to affect protein function.
 </p>
+
+<br />
 
 <h2 id="VEP">The Variant Effect Predictor (VEP)</h2>
     
 <p>
 Users can run all the analyses described above on novel mutations themselves 
 using the Ensembl Variant Effect Predictor (VEP). Provided you have a 
-list of allele sequences and associated genomic coordinates you can use 
+list of allele sequences and associated genomic coordinates, you can use 
 the VEP to calculate consequences with respect to the Ensembl transcript set for
 your species of interest, and to retrieve SIFT, PolyPhen and Condel predictions 
 for any missense mutations (though we only provide these predictions for human 
 at the moment). The VEP can also identify if a mutation is already 
 known (i.e. already found in dbSNP or any of the other sources of variation 
-data listed above), and so can be used to filter your data for novel mutations. 
-The VEP works for any species in Ensembl and not just those for which we have 
-an existing variation database.
+data listed <a href="#sources">above</a>), and so can be used to filter your 
+data for novel mutations. The VEP works for any species in Ensembl and not 
+just those for which we have an existing variation database.
 </p>
 
 <p>
-The VEP can either be run online from the <a href="tools.html">Tools</a> 
+The VEP can either be run online from the <a href="/tools.html">Tools</a> 
 section of the website or you can download a script to run yourself on larger
 datasets. You can also write custom scripts using the Perl API.
 All of these approaches use the same backend code as is used to calculate the
 consequences displayed on the website. Please refer to the 
-<a href="info/website/upload/var.html">VEP</a> documentation for more
+<a href="/info/website/upload/var.html">VEP</a> documentation for more
 details on running the VEP, including supported input formats, or the 
-<a href="info/docs/api/variation/index.html">variation API</a> documentation
+<a href="/info/docs/api/variation/index.html">variation API</a> documentation
 for help writing custom scripts. The VEP is under active development and
-<a href="info/about/contact/index.html">feedback</a> is welcome!
+<a href="/info/about/contact/index.html">feedback</a> is welcome!
 </p>
 
 <br />
