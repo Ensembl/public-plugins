@@ -493,23 +493,20 @@ term relative to the transcript structure is available.
 
 <p>
 For human mutations that are predicted to result in an amino acid substitution we also 
-provide SIFT and PolyPhen predictions for the effect of this substitution on the 
-encoded protein. We compute the predictions for each of these tools for all possible 
+provide SIFT and PolyPhen predictions for the effect of this substitution on
+protein function. We compute the predictions for each of these tools for all possible 
 single amino acid substitutions in the Ensembl human protein set. This means we can provide 
 predictions for novel mutations for VEP and API users. We were able to compute predictions
-for over 95% of the proteins in Ensembl. We also use the Condel tool
+from at least one tool for over 99% of the proteins in Ensembl. We also use the Condel tool
 to provide a consensus prediction based on the SIFT and PolyPhen predictions.
 </p>
 
 <p>
 These tools are developed by external groups and we provide a brief explanation of
 the approach each takes below, and how we run it in Ensembl. For much more detail
-please see the relevant publications listed on each tool's website.
-</p>
-
-<p>
-We hope to be able to provide amino acid substitution predictions for species
-other than human in future releases.
+please see the relevant publications listed on each tool's website. We hope to be 
+able to provide amino acid substitution predictions for species other than human 
+in future releases.
 </p>
 
 <h3 id="sift">SIFT</h3>
@@ -541,7 +538,7 @@ the protein database. All data was downloaded from UniProt in February 2011.
 the effect of an amino acid substitution on the structure and function of a protein
 using sequence homology, Pfam annotations, 3D structures from PDB where available, and
 a number of other databases and tools (including DSSP, ncoils etc.). As with SIFT, for each amino
-acid substitution where we were able to calculate a prediction, we provide both a
+acid substitution where we have been able to calculate a prediction, we provide both a
 qualitative prediction (one of 'probably damaging', 'possibly damaging', 'benign'
 and 'unknown') and a score. The PolyPhen score represents the probability that a substitution 
 is damaging, so values nearer 1 are more confidently predicted to be deleterious (note 
@@ -556,7 +553,7 @@ and again we followed all instructions from the authors, and used the UniProtKB
 UniRef100 non-redundant protein set as the protein database, which was downloaded
 along with PDB structures, and annotations from Pfam and DSSP in February 2011. When 
 computing the predictions we used the classifier model trained on the HumDiv training 
-set (please refer to the PolyPhen publications for a more details of the classification 
+set (please refer to the PolyPhen publications for more details of the classification 
 system).
 </p>
 
