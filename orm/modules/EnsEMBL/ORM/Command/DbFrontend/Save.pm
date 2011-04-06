@@ -18,12 +18,8 @@ sub process {
 
   my $object = $self->object;
   my $done   = $object->save;
-  my $result = $done && @$done;
   
-  my $url_params = {'action' => $result ? 'Display' : 'Problem'};
-  $url_params->{'id'} = $object->rose_object->get_primary_key_value if $result;
-  
-  $self->ajax_redirect($self->hub->url($url_params));
+  $self->ajax_redirect($self->hub->url($done && @$done ? {'action' => 'Display', 'id' => $object->rose_object->get_primary_key_value} : {'action' => 'Problem'}));
 }
 
 1;
