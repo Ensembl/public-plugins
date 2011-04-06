@@ -20,6 +20,7 @@ sub lookup      { return shift->{'_lookup'};  }
 sub selected    { return shift->{'_values'};  }
 sub multiple    { return shift->{'_multi'};   }
 sub value_type  { return shift->{'_v_type'};  }
+sub is_null     { return shift->{'_is_null'}; }
 sub extras      { return shift->{'_extras'};  }
 
 sub new {
@@ -43,6 +44,7 @@ sub new {
     '_f_type'  => delete $params->{'type'} || 'noedit',
     '_values'  => delete $params->{'selected'} || {},
     '_multi'   => delete $params->{'multiple'} || 0,
+    '_is_null' => delete $params->{'is_null'}  || 0,
     '_caption' => $caption,
     '_extras'  => $params
   }, $class;

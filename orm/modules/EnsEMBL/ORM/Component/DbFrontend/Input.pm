@@ -64,7 +64,7 @@ sub content_tree {
     else {
       $value = $field->value;
     }
-    
+
     my $element_params = {
       'name'      => $name,
       'type'      => $f_type,
@@ -75,13 +75,20 @@ sub content_tree {
       'no_input'  => $action eq 'Preview' ? 0 : 1,
     };
     $element_params->{$_} = $field_extras->{$_} for keys %$field_extras;
+    
+    my $is_null = $field->is_null;
 
     my $selected_values = {};
     if (scalar keys %$lookup) {
       if ($action eq 'Preview') {
         $selected_values = { map {$_ => $lookup->{$_}} @$value };
+        scalar keys %$selected_values or $is_null and $selected_values = {'0' => $is_null eq '1' ? 'None' : $is_null};
       }
       else {
+        if ($is_null) {
+          $element_params->{'value'}  = ['0'] unless scalar @{$element_params->{'value'}};
+          $element_params->{'values'} = [{'value' => '0', 'caption' => $is_null eq '1' ? 'None' : $is_null}];
+        }
         push @{$element_params->{'values'}}, {'value' => $_, 'caption' => $lookup->{$_}} for sort { $lookup->{$a} cmp $lookup->{$b} } keys %$lookup;
       }
     }
@@ -90,7 +97,6 @@ sub content_tree {
     if ($record->is_trackable && $name =~ /^(created|modified)_(at|by|by_user)$/) {
       next if $2 eq 'by';                       # force skip modified_by and created_by fields
       $element_params->{'type'}     = 'noedit'; # force noedit field type for trackable fields
-      $element_params->{'no_input'} = 1;        # force no input to prevent modification of trackable fields
       $element_params->{'is_html'}  = 1 if $2 eq 'by_user';
       $1 eq $trackable_key and $element_params->{'caption'} = $2 eq 'by_user' ? $hub->user->name : 'Now';
     }
