@@ -43,12 +43,13 @@ while (my ($key, $details) = each %{$SiteDefs::ROSE_DB_DATABASES}) {
 
   my $params = $details;
   if (!ref $params) {
+    $params = $species_defs->multidb->{$details} or warn "Database connection properties for '$details' could not be found in Species Def" and next;
     $params = {
-      'database'  => $species_defs->multidb->{$details}{'NAME'},
-      'host'      => $species_defs->multidb->{$details}{'HOST'},
-      'port'      => $species_defs->multidb->{$details}{'PORT'},
-      'username'  => $species_defs->multidb->{$details}{'USER'} || $species_defs->DATABASE_WRITE_USER,
-      'password'  => $species_defs->multidb->{$details}{'PASS'} || $species_defs->DATABASE_WRITE_PASS,
+      'database'  => $params->{'NAME'},
+      'host'      => $params->{'HOST'},
+      'port'      => $params->{'PORT'},
+      'username'  => $params->{'USER'} || $species_defs->DATABASE_WRITE_USER,
+      'password'  => $params->{'PASS'} || $species_defs->DATABASE_WRITE_PASS,
     };
   }
   $params->{'driver'} ||= 'mysql';
