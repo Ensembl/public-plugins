@@ -203,6 +203,8 @@ sub _populate_from_cgi {
 
   for (keys %field_names) {
   
+    next if $rose_object->is_trackable && $_ =~ /^(created|modified)_(by_user|at|by)$/; # dont get them from CGI
+
     my $value;
     my $type;
 
@@ -216,12 +218,8 @@ sub _populate_from_cgi {
         delete $value->{'0'} if $type eq 'relation';
         $value  = [ keys %$value ];
       }
-      $rose_object->$_($value);
     }
-    elsif ($_ =~ /^(created_by|modified_by)_user$/) {
-      $value = $self->hub->param($_);
-      $rose_object->$1($value);
-    }
+    $rose_object->$_($value);
   }
 }
 
@@ -234,6 +232,7 @@ sub _populate_from_cgi {
 ###                         Purpose of arrayref instead of hashref is to maintain order
 ###                         Fields can include name of any relationship (as relationships are also treated as columns)
 ###                         HashRef for each column name can contain keys as accepted by E::W::Form::Fieldset->add_field method
+###                         An extra key 'is_null' can be set true (or equal to the caption of the null option) in case type is dropdown. 
 ### show_columns            ArrayRef as [column names => labels] that are displayed when records are displayed in tabular form (List page)
 ###                         Purpose of arrayref instead of hashref is to maintain order
 ###                         Column_name can include name of any relationship (as relationships are also treated as columns)
