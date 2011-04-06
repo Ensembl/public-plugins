@@ -80,8 +80,8 @@ href="http://www.ncbi.nlm.nih.gov/projects/SNP/">dbSNP</a>.
 <p>
 Ensembl also includes data from other sources. For a complete list, go to
 a species Location page (e.g. <a href="/Homo_sapiens/Location/View?r=6:133017695-133161157"> for human</a>),
-and click on the &quot;Configure this page&squot; link on the left-hand side.
-The &quot;Germline variation&quot; and &quot;Somatic mutation&quot; sections contain a detailed description of 
+and click on the 'Configure this page' link on the left-hand side.
+The 'Germline variation' and 'Somatic mutations' sections contain a detailed description of 
 all sources of variation data for that species.
 </p>
 
@@ -163,6 +163,8 @@ definition (e.g. our term SNP is closer to the SO term SNV). All the classes we 
 along with their equivalent SO term are shown in the table below. We also differentiate 
 somatic mutations from germline variations in the display term, prefixing the term with
 'somatic'. API users can fetch either the SO term or the display term.</p>
+
+<br />
 
 <table id="variation_classes" class="ss" style="width:50%;">
 <tr>
@@ -308,6 +310,8 @@ consequences for each allele and make their own severity judgement.
 A <a href="consequences.jpg">diagram</a> showing the location of each display 
 term relative to the transcript structure is available.
 </p>
+
+<br />
 
 <table id="consequence_type_table" class="ss">
 <tr>
@@ -489,7 +493,7 @@ term relative to the transcript structure is available.
 </table>
 
 <br />
-<h2 id="nsSNP">Non-synonymous mutation protein function predictions</h2>
+<h2 id="nsSNP">Protein function predictions</h2>
 
 <p>
 For human mutations that are predicted to result in an amino acid substitution we also 
@@ -540,7 +544,7 @@ using sequence homology, Pfam annotations, 3D structures from PDB where availabl
 a number of other databases and tools (including DSSP, ncoils etc.). As with SIFT, for each amino
 acid substitution where we have been able to calculate a prediction, we provide both a
 qualitative prediction (one of 'probably damaging', 'possibly damaging', 'benign'
-and 'unknown') and a score. The PolyPhen score represents the probability that a substitution 
+or 'unknown') and a score. The PolyPhen score represents the probability that a substitution 
 is damaging, so values nearer 1 are more confidently predicted to be deleterious (note 
 that this the opposite to SIFT). The qualitative prediction is based on the False 
 Positive Rate of the classifier model used to make the predictions.
@@ -550,7 +554,7 @@ Positive Rate of the classifier model used to make the predictions.
 We ran PolyPhen-2 version 2.0.23 (available 
 <a rel="external" href="http://genetics.bwh.harvard.edu/pph2/dokuwiki/_media/polyphen-2.0.23r349.tar.gz">here</a>)
 and again we followed all instructions from the authors, and used the UniProtKB 
-UniRef100 non-redundant protein set as the protein database, which was downloaded
+UniRef100 non-redundant protein set as the protein database, which was downloaded,
 along with PDB structures, and annotations from Pfam and DSSP in February 2011. When 
 computing the predictions we used the classifier model trained on the HumDiv training 
 set (please refer to the PolyPhen publications for more details of the classification 
@@ -580,13 +584,12 @@ confidence to affect protein function.
 <h2 id="VEP">The Variant Effect Predictor (VEP)</h2>
     
 <p>
-Users can run all the analyses described above on novel mutations themselves 
+Users can run all the analyses described above on novel mutations 
 using the Ensembl Variant Effect Predictor (VEP). Provided you have a 
 list of allele sequences and associated genomic coordinates, you can use 
 the VEP to calculate consequences with respect to the Ensembl transcript set for
-your species of interest, and to retrieve SIFT, PolyPhen and Condel predictions 
-for any missense mutations (though we only provide these predictions for human 
-at the moment). The VEP can also identify if a mutation is already 
+your species of interest, and (for human) to retrieve SIFT, PolyPhen and Condel predictions 
+for any missense mutations. The VEP can also identify if a mutation is already 
 known (i.e. already found in dbSNP or any of the other sources of variation 
 data listed <a href="#sources">above</a>), and so can be used to filter your 
 data for novel mutations. The VEP works for any species in Ensembl and not 
