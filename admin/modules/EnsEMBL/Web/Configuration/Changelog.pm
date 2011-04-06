@@ -45,9 +45,7 @@ sub populate_tree {
   );
 
   $self->create_dbfrontend_node({'Display' => {'filters' => ['WebAdmin'], 'no_menu_entry' => 1}});
-  $self->create_dbfrontend_node({$_        => {'filters' => ['WebAdmin']}}) for qw(List Select/Edit Select/Delete);
-  $self->create_dbfrontend_node({$_        => {'filters' => ['WebAdmin'], 'components' => [qw(input EnsEMBL::Admin::Component::Changelog::Input)]}}) for qw(Add Edit Preview);
-  $self->create_dbfrontend_node({$_        => {'filters' => ['WebAdmin']}}) for qw(Problem Confirm Save Delete);
+  $self->create_dbfrontend_node({$_        => {'filters' => ['WebAdmin']}}) for qw(List Select/Edit Select/Delete Add Edit Preview Problem Confirm Save Delete);
   
 }
 
