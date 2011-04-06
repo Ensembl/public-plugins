@@ -90,6 +90,7 @@ sub show_fields {
     species           => {
       'type'      => 'dropdown',
       'label'     => 'Species affected',
+      'is_null'   => 'All Species',
       'required'  => 1
     },
     content           => {
