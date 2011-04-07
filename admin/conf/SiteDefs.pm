@@ -1,6 +1,6 @@
-use strict;
-
 package EnsEMBL::Admin::SiteDefs;
+
+use strict;
 
 sub update_conf {
   $SiteDefs::ENSEMBL_WEBADMIN_ID = 0;
@@ -20,18 +20,23 @@ sub update_conf {
 
   ## ALLOWABLE DATA OBJECTS
   $SiteDefs::OBJECT_TO_SCRIPT = {
-    Config      => 'Config',
-    Component   => 'Component',
-    ZMenu       => 'ZMenu',
+    Config          => 'Config',
+    Component       => 'Component',
+    ZMenu           => 'ZMenu',
 
-    Search      => 'Page',
-    Changelog   => 'Page',
-    Healthcheck => 'Page',
-    News        => 'Page',
-
-    Account     => 'Modal',
-    UserData    => 'Modal',
-    Help        => 'Modal',
+    Search          => 'Page',
+    Changelog       => 'Page',
+    Healthcheck     => 'Page',
+    Species         => 'Page',
+    Biotype         => 'Page',
+    Metakey         => 'Page',
+    Webdata         => 'Page',
+    AnalysisWebdata => 'Page',
+    Production      => 'Page',
+                    
+    Account         => 'Modal',
+    UserData        => 'Modal',
+    Help            => 'Modal',
   };
 
   $SiteDefs::ENSEMBL_BLAST_ENABLED = 0;
