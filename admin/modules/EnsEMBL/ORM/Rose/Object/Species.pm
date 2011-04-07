@@ -30,12 +30,23 @@ __PACKAGE__->meta_setup(
   ],
 
   relationships => [
-    changelog => {
+    changelog         => {
       'type'        => 'many to many',
       'map_class'   => 'EnsEMBL::ORM::Rose::Object::ChangelogSpecies',
+      'map_from'    => 'species',
       'map_to'      => 'changelog',
-      'map_from'    => 'species'
     },
+    meta_key          => {
+      'type'        => 'many to many',
+      'map_class'   => 'EnsEMBL::ORM::Rose::Object::MetaKeySpecies',
+      'map_from'    => 'species',
+      'map_to'      => 'meta_key',
+    },
+    analysis_web_data => {
+      'type'        => 'one to many',
+      'class'       => 'EnsEMBL::ORM::Rose::Object::AnalysisWebData',
+      'column_map'  => {'species_id' => 'species_id'}
+    }
   ],
 );
 
