@@ -53,13 +53,15 @@ sub content_tree {
     my $lookup = {};
     my $value  = '';
     my $f_type = $field->field_type;
+    my $select = $f_type =~ /^(dropdown|checklist|radiolist)$/ ? 1 : 0;
 
     my $form_field = $form->add_field($field_params);
     $form_field->set_flag($name);
 
-    if ($f_type =~ /^(dropdown|checklist)$/) {
+    if ($select) {
       $value  = [ keys %{$field->selected} ];
       $lookup = $field->lookup;
+      $f_type = $field->multiple ? 'checklist' : 'radiolist' if $f_type =~ /list$/;
     }
     else {
       $value = $field->value;
@@ -102,7 +104,7 @@ sub content_tree {
     }
     
     if ($action eq 'Preview') {
-      if ($f_type =~ /^(dropdown|checklist)$/) {
+      if ($select) {
         for (sort { $selected_values->{$a} cmp $selected_values->{$b} } keys %$selected_values) {
           $element_params->{'value'}   = $_;
           $element_params->{'caption'} = $selected_values->{$_};

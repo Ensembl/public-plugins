@@ -24,11 +24,10 @@ sub content_tree {
     my $form  = $content->append_child($self->new_form({'action' => $self->hub->url({'action' => $func}), 'method' => 'get'}));
     
     $form->add_field({
-      'type'    => 'dropdown',
+      'type'    => $object->record_select_style eq 'radio' ? 'radiolist' : 'dropdown',
       'name'    => 'id',
       'label'   => sprintf("Select a %s to %s", $object->record_name->{'singular'}, lc $hub->function),
       'values'  => [ map {{'value' => $_->get_primary_key_value, 'caption' => $_->get_title}} @$records ],
-    
     });
   
     $form->add_button({'type'  => 'submit', 'value' => 'Next &raquo;' });

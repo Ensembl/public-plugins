@@ -112,14 +112,16 @@ sub unpack_rose_object {
     my $field = shift @$fields; # already a hashref with keys that should not be modified - keys as accepted by Form->add_field method
     my $value = $field->{'value'} ||= $record->$field_name;
     $field->{'name'} ||= $field_name;
+    
+    my $select = $field->{'type'} && $field->{'type'} =~ /^(dropdown|checklist|radiolist)$/i ? 1 : 0;
 
     ## if this field is a relationship
     if (exists $relations->{$field_name}) {
       my $relation = $relations->{$field_name};
       $field->{'value_type'} = $relation->type;
       
-      ## get lookup if type is either 'dropdown' or 'checklist'
-      if ($field->{'type'} && $field->{'type'} =~ /^(dropdown|checklist)$/i) {
+      ## get lookup if type is either 'dropdown' or 'checklist' or 'radiolist'
+      if ($select) {
         
         my $related_object_class;
         my $ref_value;
@@ -152,7 +154,7 @@ sub unpack_rose_object {
       my $column = $columns->{$field_name};
       $field->{'type'} = 'noedit' if $column->is_primary_key_member; #force readonly primary key
 
-      if (($field->{'value_type'} = $column->type) =~ /^(enum|set)$/ || $field->{'type'} =~ /^(dropdown|checklist)$/i) {
+      if (($field->{'value_type'} = $column->type) =~ /^(enum|set)$/ || $select) {
       
         if (defined $value) {
           $value = [ $value ] unless ref $value;
