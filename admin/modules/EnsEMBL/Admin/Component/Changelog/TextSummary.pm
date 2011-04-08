@@ -4,9 +4,6 @@ package EnsEMBL::Admin::Component::Changelog::TextSummary;
 
 use strict;
 use warnings;
-no warnings "uninitialized";
-
-use EnsEMBL::Web::Data::User;
 
 use base qw(EnsEMBL::Web::Component);
 
@@ -17,68 +14,38 @@ sub _init {
 }
 
 sub caption {
-  my $self = shift;
   return '';
 }
 
 sub content {
-  my $self = shift;
-  my $builder = $self->builder;
-  my $hub = $self->hub;
-  my $release = $hub->species_defs->ENSEMBL_VERSION;
-  my $html = qq(
-<div style="font-family:monospace">
-<p class="space-below">
-=======================================<br />
-Declarations of Intentions - Ensembl $release<br />
-=======================================</p>
-);
+  my $self    = shift;
+  my $object  = $self->object;
+  my $records = $object->rose_objects;
+  my $release = $object->requested_release;
 
-  my $data = $self->object('Changelog')->fetch_all;
+  my $html    = "Declarations of Intentions - Ensembl $release";
+  $html       = sprintf('%s%s%s%s', '=' x length $html, "\n$html\n", '=' x length $html, "\n\n");
 
-  my ($item, $previous);
+  my $current_team = '';
 
-  ## Entries
-  foreach $item (@$data) {
-    next unless $item->content;
-    if ($item->team ne $previous) {
-      $html .= '<p class="space-below">'.$item->team.'<br />';
-      my $underline = '=' x length($item->team);
-      $html .= $underline.'</p>';
-    }
-    my $title = $item->title || '(No title)';
+  for my $record (@$records) {
 
-    (my $content = $item->content) =~ s/<ul>/<ul class="no-bullet">/g;
-    $content =~ s/<li>/<li>* /g;
-    
-    my $sp_text;
-    my @species = @{$item->species || []};
-   
-    if (!@species) {
-      $sp_text = 'all species';
-    }
-    else {
-      my @names;
-      foreach my $sp (@species) {
-        push @names, $sp->web_name;
-      }
-      $sp_text = join(', ', @names);
-    }
+    # Team name
+    my $team = $record->team;
+    $html   .= sprintf("\n%s\n%s\n\n", $team, '=' x length $team) and $current_team = $team unless $current_team eq $team;
 
-    my $title_length = length($title) + length($sp_text) + 3;
+    # Title
+    my $sp    = $record->species;
+    my $title = sprintf("%s (%s)",
+      $record->get_title || '(no title)',
+      $sp && @$sp ? @$sp == 1 ? $sp->[0]->get_title : join ' and ', reverse((pop @$sp)->get_title, join(', ', @{[ map {$_->get_title} @$sp ]})) : 'All Species');
+    $html .= sprintf("%s\n%s\n", $title, '-' x length $title);
 
-    $html .= sprintf(qq(
-<p>%s (%s)<br />%s</p>
-<p class="space-below">%s</p>
-<br /><br />
-), 
-        $title, $sp_text, ('-' x $title_length), $content
-    );
-
-    $previous = $item->team;
+    # Content
+    $html .= sprintf("%s\n\n", $self->dom->create_element('div', {'inner_HTML' => [ $record->content, 1, 1 ]})->render_text); #parse HTML, ignore error and get text
   }
-  $html .= '</div>';
-  return $html;
+
+  return qq(<pre>$html</pre>);
 }
 
 1;
