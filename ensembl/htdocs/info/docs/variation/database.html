@@ -63,12 +63,13 @@ The variations databases can be loaded using dumped files from the <a href="/inf
 FTP</a>.<br />
 For Ensembl 61, it takes a couple of minutes to load the largest tables for Human on our servers, e.g:
 </p>
-<table style="border: 1px outset #000;background-color:#FAFAFF">
-<tr><td>variation</td><td style="text-align:right">24 minutes</td></tr>
-<tr><td>variation_feature</td><td style="text-align:right">13 minutes</td></tr>
-<tr><td>flanking_sequence</td><td style="text-align:right">3 minutes</td></tr>
-<tr><td>compressed_genotype_single_bp</td><td style="text-align:right">13 minutes</td></tr>
-<tr><td>population_genotype</td><td style="text-align:right">30 minutes</td></tr>
+<table id="loading_times" class="ss" style="width:20%;">
+<tr><th>Table</th><th>Loading time</th></tr>
+<tr class="bg1"><td>variation</td><td style="text-align:right">24 minutes</td></tr>
+<tr class="bg2"><td>variation_feature</td><td style="text-align:right">13 minutes</td></tr>
+<tr class="bg1"><td>flanking_sequence</td><td style="text-align:right">3 minutes</td></tr>
+<tr class="bg2"><td>compressed_genotype_single_bp</td><td style="text-align:right">13 minutes</td></tr>
+<tr class="bg1"><td>population_genotype</td><td style="text-align:right">30 minutes</td></tr>
 </table>
 <p>
 The load of the largest table in the Human variation database (<b>allele</b> table) takes almost 3 hours.
@@ -76,14 +77,15 @@ The load of the largest table in the Human variation database (<b>allele</b> tab
 <p>
 See below some settings of our server:
 </p>
-<table style="border: 1px outset #000;background-color:#FAFAFF">
-<tr><td>myisam_data_pointer_size</td><td>6</td></tr>
-<tr><td>myisam_max_sort_file_size</td><td>9223372036853727232</td></tr>
-<tr><td>myisam_recover_options</td><td>OFF</td></tr>
-<tr><td>myisam_repair_threads</td><td>1</td></tr>
-<tr><td>myisam_sort_buffer_size</td><td>67108864</td></tr>
-<tr><td>myisam_stats_method</td><td>nulls_unequal</td></tr>
-<tr><td>myisam_use_mmap</td><td>OFF</td></tr>
+<table id="mysql_settings" class="ss" style="width:20%;">
+<tr><th>Variable</th><th>Value</th></tr>
+<tr class="bg1"><td>myisam_data_pointer_size</td><td>6</td></tr>
+<tr class="bg2"><td>myisam_max_sort_file_size</td><td>9223372036853727232</td></tr>
+<tr class="bg1"><td>myisam_recover_options</td><td>OFF</td></tr>
+<tr class="bg2"><td>myisam_repair_threads</td><td>1</td></tr>
+<tr class="bg1"><td>myisam_sort_buffer_size</td><td>67108864</td></tr>
+<tr class="bg2"><td>myisam_stats_method</td><td>nulls_unequal</td></tr>
+<tr class="bg1"><td>myisam_use_mmap</td><td>OFF</td></tr>
 </table>
 
 
