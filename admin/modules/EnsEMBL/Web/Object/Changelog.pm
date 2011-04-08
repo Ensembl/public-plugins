@@ -18,6 +18,16 @@ sub current_release {
   $self->{'_curr_release'} ||= $self->hub->species_defs->ENSEMBL_VERSION;
 }
 
+sub fetch_for_textsummary {
+  ## Populates rose_objects with the changelogs needed to display in the TextSummary page
+  my $self = shift;
+
+  my $params = $self->_get_with_objects_params('Display');
+  $params->{'query'}    = ['release_id', $self->requested_release];
+  $params->{'sort_by'}  = 'team';
+  $self->rose_objects($self->manager_class->fetch($params));
+}
+
 ### ### ### ### ### ### ### ### ###
 ### Inherited method overriding ###
 ### ### ### ### ### ### ### ### ###
