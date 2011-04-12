@@ -39,7 +39,7 @@ sub update_conf {
   $SiteDefs::__species_aliases{ 'Ornithorhynchus_anatinus' } = [qw(oa oana platypus)];
   $SiteDefs::__species_aliases{ 'Otolemur_garnettii'       } = [qw(og ogar bushbaby otolemur)];
   $SiteDefs::__species_aliases{ 'Pan_troglodytes'          } = [qw(pt ptro chimp)];
-  $SiteDefs::__species_aliases{ 'Pongo_abelii'             } = [qw(pp orang orangutan librarian ook)];
+  $SiteDefs::__species_aliases{ 'Pongo_abelii'             } = [qw(pp Pongo_pygmaeus orang orangutan librarian ook)];
   $SiteDefs::__species_aliases{ 'Procavia_capensis'        } = [qw(pc hyrax dassy dassie pimbi)];
   $SiteDefs::__species_aliases{ 'Pteropus_vampyrus'        } = [qw(pv megabat flyingfox)];
   $SiteDefs::__species_aliases{ 'Rattus_norvegicus'        } = [qw(rn rnor rat)];
