@@ -44,8 +44,7 @@ sub content {
     $params->{'compare_reports'} = $reports_2 and $params->{'release2'} = $object->compared_release if $reports_2;
     $html .= $self->content_failure_summary($params);
   }
-  $html_anchor = qq(<p class="hc_p">Go to perspective: ).$html_anchor.qq(</p>);
-  return $html_anchor.$html;
+  return sprintf('<p class="hc_p">Go to perspective: %s</p>%s', $html_anchor, $html);
 }
 
 1;
