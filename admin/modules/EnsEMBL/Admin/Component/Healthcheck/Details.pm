@@ -124,7 +124,7 @@ sub content {
     push @$db_list, $database_name || 'Unknown';
   }
 
-  return sprintf('%s%s', $object->function eq 'Database' ? '' : sprintf('<h3>List of affected databases:</h3><ul>%s</ul>', join('', map {sprintf('<li><a href="#%s">%1$s</li>', $_)} @$db_list)), $html);
+  return sprintf('%s%s', $object->function eq 'Database' ? '' : sprintf('<h3>List of affected databases:</h3><ul>%s</ul>', join('', map {sprintf('<li><a href="#%s">%1$s</a></li>', $_)} @$db_list)), $html);
 }
 
 sub _get_user_link {
