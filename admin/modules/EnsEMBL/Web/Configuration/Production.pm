@@ -45,14 +45,9 @@ sub populate_tree {
     )],
     { 'availability' => 1, 'filters' => [qw(WebAdmin)], 'no_menu_entry' => 1}
   );
-  $self->create_node( 'Preview', "Preview",
-    [qw(
-      database_report EnsEMBL::ORM::Component::DbFrontend::Input
-    )],
-    { 'availability' => 1, 'filters' => [qw(WebAdmin)], 'no_menu_entry' => 1}
-  );
   
-  ## - todo 'save' and 'delete' nodes
+  $self->create_dbfrontend_node({$_ => {'filters' => ['WebAdmin']}}) for qw(Preview Problem Confirm Save Delete);
+  
 }
 
 1;
