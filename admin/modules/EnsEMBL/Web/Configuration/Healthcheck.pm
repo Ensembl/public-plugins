@@ -41,6 +41,12 @@ sub populate_tree {
     )],
     { 'availability' => 1, 'filters' => [qw(WebAdmin)]}
   );
+ $self->create_node( 'Details/Team', "Details (by Team)",
+    [qw(
+      testcase_report EnsEMBL::Admin::Component::Healthcheck::Details
+    )],
+    { 'availability' => 1, 'filters' => [qw(WebAdmin)]}
+  );
  $self->create_node( 'Details/Testcase', "Details (by Testcase)",
     [qw(
       testcase_report EnsEMBL::Admin::Component::Healthcheck::Details
