@@ -13,7 +13,7 @@ sub first_release     { return shift->{'_first_release'}; }
 sub current_release   { return shift->{'_curr_release'}; }
 sub requested_release { return shift->{'_req_release'}; }
 sub compared_release  { return shift->{'_cmp_release'}; }
-sub available_views   { return {'DBType' => 'database_type', 'Database' => 'database_name', 'Testcase' => 'testcase', 'Species' => 'species'}; }
+sub available_views   { return {'DBType' => 'database_type', 'Database' => 'database_name', 'Testcase' => 'testcase', 'Species' => 'species', 'Team' => 'team_responsible'}; }
 
 sub new {
   my $class = shift;
@@ -141,6 +141,7 @@ sub get_default_list {
   ## Returns an arrayref of default list of testcases, species or databases required to display in the page
   ## @param View type (optional - defaults to current view type)
   ## @param View function (optional - defaults to current hub->function)
+  ## @return ArrayRef of strings
   my ($self, $type, $function) = @_;
 
   $type      ||= $self->view_type;
@@ -160,7 +161,11 @@ sub get_default_list {
   elsif ($function eq 'DBType') {
     return [qw(cdna core funcgen otherfeatures production variation vega)];
   }
-  warn "No type or function found.";
+  elsif ($function eq 'Team') {
+#     return [qw(compara core genebuild funcgen release_coordinator)];
+    return [qw(COMPARA CORE GENEBUILD FUNCGEN RELEASE_COORDINATOR)];
+  }
+  return [];
 }
 
 sub validate_release {

@@ -51,9 +51,8 @@ sub get_healthcheck_link {
   ##  - release: release id
   ##  - cut_long: flag stating whether or not to cut the long caption of the link
   ##  - class: Class attribute
-
   my ($self, $params) = @_;
-  
+
   my $caption = exists $params->{'caption'} && defined $params->{'caption'} ? $params->{'caption'} : '';
   $caption = $params->{'param'} || '<i>unknown</i>' if $caption eq '';
   return $caption unless $params->{'param'};
@@ -79,6 +78,12 @@ sub get_healthcheck_link {
   elsif ($params->{'type'} eq 'database_name') {
     return qq(<a$class href="/Healthcheck/Details/Database?release=$release;q=$param" title="List all failed test reports for Database Name $title in release $release">$caption</a>);
   }
+  elsif ($params->{'type'} eq 'team_responsible') {
+    $param   = lc $param;
+    $title   = join(' ', map {ucfirst lc $_} split('_', $param));
+    $caption = exists $params->{'caption'} ? $params->{'caption'} : $title;
+    return qq(<a$class href="/Healthcheck/Details/Team?release=$release;q=$param" title="List all failed test reports for Team $title in release $release">$caption</a>);
+  }
   else {
     return $caption;
   }
@@ -94,15 +99,6 @@ sub hc_format_compressed_date {
   ## Formates date for displaying the HC table column
   my ($self, $datetime) = @_; 
   return format_date(parse_date($datetime), "%d/%m/%y %H:%M");  
-}
-
-sub space_before_capitals {
-  ## Converts "SpaceBeforeCapitals" to "Space Before Capitals"
-  my ($self, $string) = @_;
-  return '' unless defined $string && $string ne '';
-  $string =~ s/\b(\w)/\u$1/g;
-  $string =~ s/ //;
-  return join (' ', split (/(?=[A-Z]{1}[^A-Z]*)/, $string));
 }
 
 sub annotation_action {

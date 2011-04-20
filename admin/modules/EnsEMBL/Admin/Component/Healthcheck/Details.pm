@@ -22,16 +22,16 @@ sub content {
 
   return $self->no_healthcheck_found unless $session && ($reports = $session->report);
 
-  return '<p class="hc_p">Click on a '.$object->view_title.' to view details</p>'.$self->content_failure_summary({
+  return sprintf('<p class="hc_p">Click on a %s to view details</p>%s', $object->view_title, $self->content_failure_summary({
     'reports'       => $reports,
     'type'          => $type,
     'session_id'    => $session->session_id,
     'release'       => $object->requested_release,
     'default_list'  => $object->get_default_list
-  }) unless $param;
+  })) unless $param;
 
-  my $html          = '';
-  my $html_anchors  = '';
+  my $html    = '';
+  my $db_list = [];
   
   #group all reports by database_name
   my $grouped_reports   = {};
@@ -40,7 +40,6 @@ sub content {
     push @{$grouped_reports->{$_->database_name}}, $_;
   }
 
-  $html_anchors    .= "<h3>List of affected databases:</h3><ul>";
   my $serial_number = 0;
   
   $html .= qq(<form action="" method="get"><p class="hc_p_right">View in release: ).$self->render_all_releases_selectbox;
@@ -55,10 +54,7 @@ sub content {
   foreach my $database_name (sort keys %$grouped_reports) {
   
     $js_ref++;
-    $html          .= qq(<a name="$database_name"></a><h3 class="hc-dbheading">$database_name</h3>);
-    $html_anchors  .= qq(<li><a href="#$database_name">$database_name</a></li>);
-
-    my $table       = $self->new_table;
+    my $table = $self->new_table;
     
     $table->add_columns(#note - use the space properly, we have too much to display in annotation and text columns
       {'key' => 'db_sp_tc', 'title' => $self->_get_first_column($object->function),       'width' => qq(20%)},
@@ -113,27 +109,28 @@ sub content {
       $annotation      .= $annotation eq ''
         ? qq(<p class="hc-comment-link"><a class="$link_class" href="/Healthcheck/Annotation?rid=$report_id" rel="$js_ref">Add Annotation</a></p>)
         : qq(<p class="hc-comment-link"><a class="$link_class" href="/Healthcheck/Annotation?rid=$report_id" rel="$js_ref">Edit</a></p>);
-  
+
       $table->add_row({
         'db_sp_tc'  => join ('<br />', @$db_sp_tc),
         'comment'   => $annotation,
         'text'      => qq(<span class="$text_class">).join (', ', split (/,\s?/, $report->text)).'</span>', #split-joining is done to wrap long strings
-        'team'      => $self->space_before_capitals($report->team_responsible),
         'created'   => $report->created ? $self->hc_format_compressed_date($report->created) : '<i>unknown</i>',
+        'team'      => join ', ', map { $self->get_healthcheck_link({'type' => 'team_responsible', 'param' => $_, 'release' => $object->requested_release}) } split(/\s*and\s*/, lc $report->team_responsible),
       });
     }
 
-    $html .= $table->render;
+
+    $html .= sprintf('<a name="%s"></a><h3 class="hc-dbheading">%1$s</h3>%s', $database_name || 'Unknown', $table->render);
+    push @$db_list, $database_name || 'Unknown';
   }
 
-  $html_anchors .= '</ul>';
-  return $object->function ne 'Database' ? $html_anchors.$html : $html;
+  return sprintf('%s%s', $object->function eq 'Database' ? '' : sprintf('<h3>List of affected databases:</h3><ul>%s</ul>', join('', map {sprintf('<li><a href="#%s">%1$s</li>', $_)} @$db_list)), $html);
 }
 
 sub _get_user_link {
   ## private helper method to print a link for the user with his email
   my ($self, $user) = @_;
-  return '<a href="mailto:'.$user->email.'">'.$user->name.'</a>' if $user;
+  return sprintf('<a href="mailto:%s">%s</a>', $user->email, $user->name) if $user;
   return 'unknown user';
 }
 
@@ -143,7 +140,8 @@ sub _get_first_column {
     'Database'  => 'DB Type<br />Species<br />Testcase',
     'DBType'    => 'Species<br />Testcase',
     'Species'   => 'Database Type<br />Testcase',
-    'Testcase'  => 'Database Type<br />Species'
+    'Testcase'  => 'Database Type<br />Species',
+    'Team'      => 'DB Type<br />Species<br />Testcase',
   }->{$_[-1]};
 }
 
