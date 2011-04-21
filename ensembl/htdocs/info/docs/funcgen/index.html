@@ -10,7 +10,7 @@
 <BODY LANG="en-GB" DIR="LTR">
 <H1>Regulatory Build</H1>
 <P>The regulatory build provides a single &quot;best guess&quot; set
-of regulatory elements. These elements are based on the information
+of regulatory features. These features are based on the information
 contained within the ensembl <A HREF="/info/docs/api/index.html">functional
 genomics</A> database. 
 </P>
@@ -125,13 +125,16 @@ are currently in use :-</P>
 	of the transcription start site plus or minus 2500 bp upstream of
 	protein coding genes, but not in the downstream 'gene-body'. 
 	</P>
+	<LI><P>polIII-associated = patterns over-represented in regions
+	2500 bp upstream of polIII transcribed regions like tRNAs. 
+	</P>
 </UL>
 <P>At present only cell-type specific regulatory features are
 classified as different cell types may give conflicting signals
 reflecting their unique combination of regulatory and transcriptional
 states.</P>
 <P>These data sets can be displayed along the chromosome in <A HREF="http://www.ensembl.org/Homo_sapiens/Location/View?r=6:133017695-133161157">'Region
-in Detail'</A>, displayed for a gene in the <A HREF="http://www.ensembl.org/Homo_sapiens/Regulation/Cell_line?fdb=funcgen;r=6:132128281-132130019;rf=ENSR00000953363">'Regulation View'</A>
+in Detail'</A>, displayed for a gene in the <A HREF="http://www.ensembl.org/Homo_sapiens/Regulation/Cell_line?fdb=funcgen;r=17:46618390-46620319;rf=ENSR00001348194">'Regulation View'</A>
 view or mined from the <A HREF="/info/docs/api/index.html">functional
 genomics</A> database. 
 </P>
@@ -186,14 +189,11 @@ most datasets were obtained using a strict set of parameters (-f 150
 -R 0.015) obtained using CTCF as a reference dataset. These parameters 
 are too strict for datasets that have a broad distribution of reads. Thus, 
 we applied a more relaxed set of parameters (-f 150 -R 0.0025) for the 
-DNAse1 datasets. This process is still under investigation and may change in 
-future releases. 
+DNAse1 datasets. 
 
 The resulting peaks were then filtered out to avoid problematic areas
 identified in the ENCODE project. 
 
-ChIP-chip data (currently only CTCF for IMR90) was processed using 
-the Nessie HMM algorithm (Flicek, unpublished). 
 </P>
 
 <H3>Correspondence of Transcription Factors to ENSEMBL Genes and Jaspar Matrices (Human)</H3>
