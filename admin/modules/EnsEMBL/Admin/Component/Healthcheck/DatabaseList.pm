@@ -15,9 +15,7 @@ sub content {
 
   my $session_reports = $object->rose_objects('session_reports');
   my $release_reports = $object->rose_objects('release_reports');
-  
-  return $self->no_healthcehck_found unless @$session_reports && @$release_reports;
-  
+
   my $hc_this_session = { map { $_->database_name => 1 } @$session_reports };
   my $hc_this_release = { map { $_->database_name => 1 } @$release_reports };
 
