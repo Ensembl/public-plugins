@@ -27,7 +27,7 @@ __PACKAGE__->meta_setup(
     title             => {type => 'varchar'},
     content           => {type => 'text'},
     notes             => {type => 'text'},
-    status            => {type => 'enum', 'values' => [qw(declared handed_over postponed cancelled)]},
+    status            => {type => 'enum', 'values' => [qw(declared handed_over postponed cancelled)], 'default' => 'declared'},
     team              => {type => 'enum', 'values' => [qw(Compara Core Funcgen EnsemblGenomes Genebuild Mart Outreach Variation Web Wormbase)]},
     assembly          => {type => 'enum', 'values' => [qw(N Y)]},
     gene_set          => {type => 'enum', 'values' => [qw(N Y)]},
