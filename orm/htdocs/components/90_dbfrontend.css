@@ -25,23 +25,27 @@ div.dbf-row-right {
 }
 
 div.dbf-pagination {
+  overflow: hidden;
+}
+
+div.dbf-pagelinks {
   margin: 5px 0;
 }
 
-div.dbf-pagination * {
+div.dbf-pagelinks * {
   text-decoration: none;
   margin: 2px 6px 2px 0;
 }
 
-div.dbf-pagination a:hover {
+div.dbf-pagelinks a:hover {
   text-decoration: underline;
 }
 
-div.dbf-pagination span {
+div.dbf-pagelinks span {
   cursor: default;
 }
 
-div.dbf-pagination a.selected {
+div.dbf-pagelinks a.selected {
   font-weight: bold;
   color: #000;
   cursor: default;
@@ -50,7 +54,7 @@ div.dbf-pagination a.selected {
   border: #999 solid 1px;
 }
 
-div.dbf-pagination a.disabled {
+div.dbf-pagelinks a.disabled {
   color: #aaa;
   cursor: default;
   text-decoration: none;
