@@ -85,7 +85,7 @@ sub render_assembly_table {
 
     $row = "<tr><th>" . ( $online eq 'Y' ? qq{<a href="http://www.ensembl.org/} . $s->{'name'} . qq{"><i>$species_name</i></a>} : "<i>$species_name</i>" ) . "</th>";
 
-    foreach my $r ( sort { $b->{'id'} <=> $a->{'id'} } @$releases)  {  
+    foreach my $r (@$releases)  {  
       $assembly_name = $release_species->{$s->{'id'}}->{$r->{'id'}} || 'none';
 
       $order++ if ($current_name ne $assembly_name);
