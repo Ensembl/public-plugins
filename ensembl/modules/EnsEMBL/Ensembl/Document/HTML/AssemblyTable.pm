@@ -20,13 +20,13 @@ sub render {
 
   ## get assembly info for each species
   my $species = $adaptor->fetch_all_species;
-  my @releases = reverse sort @{$adaptor->fetch_releases};
+  my @releases = sort { $b->{'id'} <=> $a->{'id'} } @{$adaptor->fetch_releases};
   my @archives = @{$adaptor->fetch_archives($first_archive)};
 
   my @archive_releases;
-  foreach (@releases) {
+  foreach (@releases) { 
     if ($_->{'id'} >= $first_archive) {
-      push @archive_releases, $_;
+      push @archive_releases, $_; 
     }
   }
 
@@ -85,7 +85,7 @@ sub render_assembly_table {
 
     $row = "<tr><th>" . ( $online eq 'Y' ? qq{<a href="http://www.ensembl.org/} . $s->{'name'} . qq{"><i>$species_name</i></a>} : "<i>$species_name</i>" ) . "</th>";
 
-    foreach my $r (@$releases)  {
+    foreach my $r ( sort { $b->{'id'} <=> $a->{'id'} } @$releases)  {  
       $assembly_name = $release_species->{$s->{'id'}}->{$r->{'id'}} || 'none';
 
       $order++ if ($current_name ne $assembly_name);
