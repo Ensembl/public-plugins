@@ -254,7 +254,7 @@ sub _populate_from_cgi {
 ### Configuration methods - Override the required ones in child class
 sub show_fields           { return []; }
 sub show_columns          { return []; }
-sub record_select_style   { }
+sub record_select_style   { ''; }
 sub pagination            { 0;  }
 sub show_preview          { 1;  }
 sub permit_delete         { 'retire'; }
