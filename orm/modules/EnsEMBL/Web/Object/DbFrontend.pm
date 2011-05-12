@@ -97,10 +97,10 @@ sub fetch_for_list {
 }
 
 sub fetch_for_select {
-  ## Fetchs and saves rose objects to be displayed on 'SelectToEdit' page (dropdown/radio buttons view)
+  ## Fetchs and saves rose objects to be displayed on 'Select/Edit' page (dropdown/radio buttons view)
   my $self = shift;
 
-  $self->rose_objects($self->manager_class->get_objects);
+  $self->rose_objects($self->manager_class->get_objects('sort_by' => $self->manager_class->object_class->TITLE_COLUMN || $self->manager_class->object_class->primary_key));
 }
 
 sub get_page_number {

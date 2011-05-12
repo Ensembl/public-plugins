@@ -214,6 +214,7 @@ sub get_lookup {
   my $objects = $self->get_objects(
     'object_class'  => $object_class,
     'select'        => $title ? [ $key, $title ] : $key,
+    'sort_by'       => $title || $key,
   );
   
   return unless $objects;
