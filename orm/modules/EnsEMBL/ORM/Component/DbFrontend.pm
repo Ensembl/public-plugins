@@ -64,21 +64,23 @@ sub content_pagination_tree {
     'inner_HTML'  => sprintf("Page %d of %d (displaying %d - %d  of %d %s)", $page, $page_count, $offset + 1, $offset + $records_count, $count, $count == 1 ? $object->record_name->{'singular'} : $object->record_name->{'plural'})
   }));
   $page_counter->set_flag('page_counter');
+
+  my $link_class = $self->modal_link;
   
   $links->append_child($self->dom->create_element('a', {
     'href'        => $hub->url({'page' => $page - 1 || 1}),
-    'class'       => $page == 1 ? 'disabled' : '',
+    'class'       => join(' ', $page == 1 ? 'disabled' : '', $link_class),
     'inner_HTML'  => '&laquo; Previous',
   }));
   
-  my $pages_needed = { map {$_ => 1} @{[1, 2, $page_count, $page_count - 1, $page, $page - 1, $page - 2, $page + 1, $page + 2]} };
+  my $pages_needed = { map {$_ => 1} 1, 2, $page_count, $page_count - 1, $page, $page - 1, $page - 2, $page + 1, $page + 2 };
   
   my $previous_num = 0;
   for (sort {$a <=> $b} keys %$pages_needed) {
     $_ > $previous_num + 1 and $links->append_child($self->dom->create_element('span', {'inner_HTML' => '&#133;'}));
     $_ > 0 and $_ <= $page_count and $links->append_child($self->dom->create_element('a', {
       'href'        => $hub->url({'page' => $_}),
-      'class'       => $page == $_ ? 'selected' : '',
+      'class'       => join(' ', $page == $_ ? 'selected' : '', $link_class),
       'inner_HTML'  => $_,
     }));
     $previous_num = $_;
@@ -86,7 +88,7 @@ sub content_pagination_tree {
 
   $links->append_child($self->dom->create_element('a', {
     'href'        => $hub->url({'page' => $page_count - ($page_count - $page || 1) + 1}),
-    'class'       => $page == $page_count ? 'disabled' : '',
+    'class'       => join(' ', $page == $page_count ? 'disabled' : '', $link_class),
     'inner_HTML'  => 'Next &raquo;',
   }));
   
