@@ -69,9 +69,10 @@ sub record_tree {
     );
     @bg = reverse @bg;
   }
+  my $link_class = $self->modal_link(1);
   $record_div->append_child($self->dom->create_element('div', {
     'class'       => "dbf-row-buttons",
-    'inner_HTML'  => sprintf('<a href="%s">Edit</a>%s', $self->hub->url({'action' => 'Edit', 'id' => $primary_key}), $object->permit_delete ? sprintf('<a href="%s">Delete</a>', $self->hub->url({'action' => 'Confirm', 'id' => $primary_key})) : '')
+    'inner_HTML'  => sprintf('<a%shref="%s">Edit</a>%s', $link_class, $self->hub->url({'action' => 'Edit', 'id' => $primary_key}), $object->permit_delete ? sprintf('<a%shref="%s">Delete</a>', $link_class, $self->hub->url({'action' => 'Confirm', 'id' => $primary_key})) : '')
   }));
   return $record_div;
 }

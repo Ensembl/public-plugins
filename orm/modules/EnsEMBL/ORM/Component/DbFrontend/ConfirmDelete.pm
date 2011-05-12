@@ -24,11 +24,12 @@ sub content_tree {
   my $content = $self->dom->create_element('div');
   
   if ($object->permit_delete =~ /^(delete|retire)$/) {
-    $content->inner_HTML(sprintf('<p class="dbf-dialogue">%s</p><p class="dbf-dialogue">Are you sure you want to continue?</p><p class="dbf-dialogue"><a class="dbf-confirm-buttons" href="%s">Yes</a><a class="dbf-confirm-buttons" href="%s">No</a></p>', $1 eq 'delete'
+    $content->inner_HTML(sprintf('<p class="dbf-dialogue">%s</p><p class="dbf-dialogue">Are you sure you want to continue?</p><p class="dbf-dialogue"><a class="dbf-confirm-buttons %s" href="%s">Yes</a><a class="dbf-confirm-buttons %2$s" href="%s">No</a></p>', $1 && $1 eq 'delete'
         ? sprintf('This will permanently remove %s (%s) from the database.', $object->record_name->{'singular'}, $record->get_title)
         : sprintf('%s (%s) will still remain in the database but will no longer be accessible.', ucfirst $object->record_name->{'singular'}, $record->get_title),
+      $self->modal_link,
       $hub->url({'action' => 'Delete', 'id' => $record->get_primary_key_value}),
-      $hub->referer->{'uri'}
+      $object->page_type eq 'modal' ? $hub->url({'action' => 'Display', 'id' => $record->get_primary_key_value}) : $hub->referer->{'uri'}
     ));
   }
   else {

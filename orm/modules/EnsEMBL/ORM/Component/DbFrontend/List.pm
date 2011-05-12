@@ -49,7 +49,7 @@ sub content_tree {
       my $is_title = $record->TITLE_COLUMN && $column_name eq $record->TITLE_COLUMN;
       
       $value = $self->_display_column_value($value, $is_title);
-      $value = sprintf('<a href="%s">%s</a>', $hub->url({'action' => 'Display', 'id' => $primary_key}), $value) if $is_title;
+      $value = sprintf('<a%shref="%s">%s</a>', $self->modal_link(1), $hub->url({'action' => 'Display', 'id' => $primary_key}), $value) if $is_title;
 
       $header->append_child($self->dom->create_element('th', {'inner_HTML' => $label})) if $header;
 
