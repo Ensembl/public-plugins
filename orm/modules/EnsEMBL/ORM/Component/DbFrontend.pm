@@ -222,4 +222,10 @@ sub print_datetime {
   return format_date(parse_date($_[1]), "%b %e, %Y at %H:%M");
 }
 
+sub modal_link {
+  ## returns the class name for a link (according to Object::DbFrontend->page_type)
+  ## @param Flag if on, returns 'class="modal_link"' otherwise 'modal_link'
+  shift and ($_ and return qq( class="$_" ) or return ' ') or return $_ for (shift->object->page_type eq 'modal' ? 'modal_link' : '');
+}
+
 1;
