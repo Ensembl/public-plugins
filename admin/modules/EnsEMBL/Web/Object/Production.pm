@@ -7,8 +7,10 @@ use base qw(EnsEMBL::Web::Object::DbFrontend);
 sub fetch_for_logicname {
   ## Rose objects for LogicName page (non-DbFrontend page)
   my $self = shift;
-  my $manager = $self->rose_manager('AnalysisDescription');
-  $self->rose_objects($manager->get_objects('with_objects' => ['analysis_web_data', 'analysis_web_data.species', 'analysis_web_data.web_data'], 'sort_by' => 'display_label'));
+  $self->rose_objects($self->manager_class->fetch_by_page($self->pagination, $self->get_page_number, {
+    'with_objects'  => ['analysis_web_data', 'analysis_web_data.species', 'analysis_web_data.web_data'],
+    'sort_by'       => 'display_label'
+  }));
 }
 
 sub default_action {
@@ -80,6 +82,16 @@ sub permit_delete {
   ## @overrides
   ## Record can not be deleted, but can be set inactive
   return 'retire';
+}
+
+sub page_type {
+  ## @overrides
+  return 'modal';
+}
+
+sub pagination {
+  ## @overrides
+  return 50;
 }
 
 1;

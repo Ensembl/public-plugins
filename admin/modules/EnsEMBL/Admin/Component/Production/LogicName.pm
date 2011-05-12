@@ -2,7 +2,7 @@ package EnsEMBL::Admin::Component::Production::LogicName;
 
 use strict;
 
-use base qw(EnsEMBL::Web::Component);
+use base qw(EnsEMBL::ORM::Component::DbFrontend);
 
 sub caption {
   return '';
@@ -21,12 +21,17 @@ sub content {
     map {$dom->create_element('td', {'inner_HTML' => $_, 'style' => sprintf('width:%s', shift @widths)})} ('', 'Species', 'Database Type', 'Displayable', 'Web Data')
   );
   
+  my $page_links = $content->append_child($self->content_pagination_tree(scalar @$records));
+
+  my $link_class = $self->modal_link(1);
+  
   foreach my $analysis_description (@$records) {
     
     my $id = $analysis_description->get_primary_key_value;
     $content->append_child($dom->create_element('h2',   {'inner_HTML' => sprintf('%s (%s)', $analysis_description->display_label, $analysis_description->logic_name), 'class' => 'prod-h2'}));
     $content->append_child($dom->create_element('div',  {
-      'inner_HTML'  => sprintf('<a href="%s">View</a><a href="%s">Edit</a><a href="%s">Link web data</a>',
+     'inner_HTML'  => sprintf('<a%shref="%s">View</a><a%1$shref="%s">Edit</a><a%1$shref="%s">Link web data</a>',
+       $link_class,
         $self->hub->url({'action' => 'Display', 'id'      => $id}),
         $self->hub->url({'action' => 'Edit',    'id'      => $id}),
         $self->hub->url({'type'   => 'AnalysisWebdata', 'action'  => 'Add', 'ad' => $id})),
@@ -41,10 +46,11 @@ sub content {
       my $tbl = $content->append_child($table->clone_node(1));
       
       foreach my $awd (@$analysis_web_data) {
-      
+
         $tbl->append_child($dom->create_element('tr', {'class' => [reverse @bg]->[0]}))->append_children(
           map {$dom->create_element('td', {'inner_HTML' => $_})} (
-            sprintf('<a href="%s"><img src="/i/edit.gif" height="16" width="16" border="0" title="Click to edit" alt="Edit" /></a>', $self->hub->url({'type' => 'AnalysisWebdata', 'action' => 'Edit', 'id' => $awd->get_primary_key_value})),
+            sprintf('<a%shref="%s"><img src="/i/edit.gif" height="16" width="16" border="0" title="Click to edit" alt="Edit" /></a>', $link_class, $self->hub->url({'type' => 'AnalysisWebdata', 'action' => 'Edit', 'id' => $awd->get_primary_key_value})),
+#            sprintf('<a href="%s"><img src="/i/edit.gif" height="16" width="16" border="0" title="Click to edit" alt="Edit" /></a>', $self->hub->url({'type' => 'AnalysisWebdata', 'action' => 'Edit', 'id' => $awd->get_primary_key_value})),
             $awd->species  ? $awd->species->db_name : '',
             $awd->db_type,
             $awd->displayable ? 'Yes' : 'No',
@@ -57,6 +63,8 @@ sub content {
       $content->append_child($dom->create_element('p', {'inner_HTML' => 'There is no web data linked to this analyais description.'}));
     }
   }
+
+  $content->append_child($page_links->clone_node(1));
   
   return $content->render;
 }

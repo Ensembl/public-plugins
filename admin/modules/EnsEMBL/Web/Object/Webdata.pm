@@ -67,4 +67,9 @@ sub permit_delete {
   return 'retire';
 }
 
+sub page_type {
+  ## @overrides
+  return 'modal';
+}
+
 1;
