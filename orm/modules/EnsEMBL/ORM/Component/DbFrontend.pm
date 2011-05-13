@@ -66,7 +66,7 @@ sub content_pagination_tree {
   $page_counter->set_flag('page_counter');
 
   my $link_class = $self->modal_link;
-  
+
   $links->append_child($self->dom->create_element('a', {
     'href'        => $hub->url({'page' => $page - 1 || 1}),
     'class'       => join(' ', $page == 1 ? 'disabled' : '', $link_class),
@@ -77,12 +77,17 @@ sub content_pagination_tree {
   
   my $previous_num = 0;
   for (sort {$a <=> $b} keys %$pages_needed) {
-    $_ > $previous_num + 1 and $links->append_child($self->dom->create_element('span', {'inner_HTML' => '&#133;'}));
-    $_ > 0 and $_ <= $page_count and $links->append_child($self->dom->create_element('a', {
-      'href'        => $hub->url({'page' => $_}),
-      'class'       => join(' ', $page == $_ ? 'selected' : '', $link_class),
-      'inner_HTML'  => $_,
-    }));
+  
+    next if $_ <= 0 || $_ > $page_count;
+    for my $num ($_ - $previous_num > 4 ? ($_) : ($previous_num + 1 .. $_)) {
+      $num > $previous_num + 1 and $links->append_child($self->dom->create_element('span', {'inner_HTML' => '&#133;'}));
+      $links->append_child($self->dom->create_element('a', {
+        'href'        => $hub->url({'page' => $num}),
+        'class'       => join(' ', $page == $num ? 'selected' : '', $link_class),
+        'inner_HTML'  => $num,
+      }));
+      $previous_num = $num;
+    }
     $previous_num = $_;
   }
 
