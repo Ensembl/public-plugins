@@ -17,6 +17,7 @@ div.dbf-row-left {
   float: left;
   font-weight: bold;
   padding: 1px 5px;
+  clear: left;
 }
 
 div.dbf-row-right {
