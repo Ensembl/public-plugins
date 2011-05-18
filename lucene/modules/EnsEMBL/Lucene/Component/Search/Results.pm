@@ -37,7 +37,7 @@ sub content {
         || $results_by_group->{'Help'}{'total'} )
     {
 
-        $html = qq(<h2>Your search of $display_species with '$q' returned the following results:</h2>);
+        $html = qq(<h3>Your search of $display_species with '$q' returned the following results:</h3>);
 
         my @group_classes = ('one-col');
         if ( $group_count > 1 ) {
