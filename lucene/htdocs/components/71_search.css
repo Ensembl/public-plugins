@@ -1,0 +1,142 @@
+/* Styling for Exalead search results */
+
+table.search_results {
+  width:100%;
+}
+
+table.search_results th, table.search_results td { 
+  color:[[PANEL_TEXT]]; 
+  background-color:[[TINT_BG]]; 
+  border:1px solid [[TINT_BORDER]]; 
+  padding:2px 4px;
+}
+
+table.search_results th {
+  font-weight:bold;
+}
+
+table.search_results td a {
+  text-decoration:none;
+}
+
+ul.open { display:block; }
+ul.shut { display:none; }
+
+ul.open li, ul.shut li {
+  list-style-image:none;
+  list-style:none;
+}
+
+a.no_arrow    { margin-left:18px; }
+
+
+div.paginate {
+
+   float:left;
+
+display: block;
+    padding: 3px 0px 15px 3px;
+    margin: 3px;
+    text-align:center;
+    font-size:.85em;
+    }
+
+div.paginate a {
+    border: 1px solid #cccccc;
+    margin-right:3px;
+    padding:2px 8px;
+
+    background-position:bottom;
+    text-decoration: none;
+
+    color: #336699;
+    }
+
+div.paginate a:hover, div.paginate a:active {
+
+    border: 1px solid #2b55af;
+    background-image:none;
+    background-color:#3666d4;
+    color: #fff;
+    }
+div.paginate span.current {
+    margin-right:3px;
+    padding:2px 6px;
+
+    font-weight: bold;
+    color: #000;
+    }
+div.paginate span.disabled {
+    display:none;
+    }
+div.paginate a.next{
+    border:2px solid #cccccc;
+    margin:0 0 0 10px;
+    
+    }
+div.paginate a.next:hover{
+    border:2px solid #2b55af;
+    }
+div.paginate a.prev{
+    border:2px solid #cccccc;
+    margin:0 10px 0 0;
+
+    }
+div.paginate a.prev:hover{
+    border:2px solid #2b55af;
+  
+}
+
+.nav_el_hidden {
+
+    visibility: hidden;
+}
+
+#search_summary_message {
+
+padding-top: 1.3em;
+padding-bottom: 0.5em;
+}
+
+.searchresults {
+    margin-left: 8px;
+    clear: both;
+}
+
+.hit {
+    margin-bottom: 20px;
+}
+
+.hit a  {
+    font-size: 1.25em;
+    color: #336699;
+}
+
+.hit td {
+    color: #555555;
+}
+
+.hit th {
+    color: #555555;
+}
+
+
+
+.hit_supplementary_text{
+    font-size: 0.9em;
+}
+
+span.hit_supplementary_text  a:hover, span.hit_supplementary_text a:active {
+    border:1px solid #2b55af;
+    background-image:none;
+    background-color:#3666d4;
+    color: #fff;
+    }
+
+
+
+
+
+
+
+
