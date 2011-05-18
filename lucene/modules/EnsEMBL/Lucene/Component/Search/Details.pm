@@ -214,7 +214,7 @@ sub _render_help_results {
     # $content = encode("utf8", $context_content);
     my $db_extra = $hit->{'db'} ? ';db=' . $hit->{'db'} : '';
     $html .= qq{
-  <p>$context_content</p>
+  <p style="margin-top:0.5em">$context_content</p>
     };
     ## DOES STATIC CONTENT EVER HAVE A LOCATION & FEATURE?
     if ($hit->{location} && $hit->{featuretype} eq 'Gene') {
