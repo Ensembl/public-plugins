@@ -28,12 +28,14 @@ sub content {
 }
 
 sub _format_message {
-  my ( $self, $idx, $count, $query ) = @_;
+  my ( $self, $idx, $count, $query, $species ) = @_;
   $idx =~ s/^\w+_(.*)/\u$1/;
   $idx .= " Document" if $idx =~ /Glossary|Help/;
   $idx = 'Document' if $idx eq 'Docs';
   $idx = uc($idx) if $idx eq 'Faq';
-  return NUM( $count, 'true' ) . ' ' . PL($idx) . ' ' . PL('matches') . " your query ('$query')";
+  my $message = NUM( $count, 'true' ) . ' ' . PL($idx) . ' ' . PL('matches') . " your query ('$query')";
+  $message .= " in $species" if $species;
+  return $message;
 }
 
 
@@ -41,14 +43,11 @@ sub render_summary {
   my $self = shift;
   my $hub = $self->hub;
 
-  my $species;
-  ( $species = $hub->param('species') ) =~ s/_/ /g;
-  $species = uri_escape($species);
+  my $species = $hub->param('species') || $self->species;
+  $species =~ s/_/ /g;
 
-  my $species_searched = ( $hub->param('species') && $hub->param('species') ne 'all' ? " in species $species" : '' );
-
-  my $escaped_query = uri_escape( $hub->param('q') );
-  my $search_term   = qq{'$escaped_query' in  $species_searched};
+  my $species_searched  = $species unless $species eq 'all';
+  my $search_term       = $hub->param('q');
 
   my $total_entries = $self->object->nhits;
 
@@ -56,24 +55,20 @@ sub render_summary {
     my $idx = $hub->param('idx');
 
     my $summary_message =
-      qq{<h2 id="search_summary_message">}
-      . $self->_format_message( $idx, $total_entries, $hub->param('q') )
-      . qq{</h2>};
+      qq{<h3 id="search_summary_message">}
+      . $self->_format_message( $idx, $total_entries, $search_term, $species_searched)
+      . qq{</h3>};
 
     if ( $total_entries > 10 ) {
       my $pager              = $self->object->pager || warn "No pager found in the Search Object";
       my $page_first_hit     = $pager->first;
       my $page_last_hit      = $pager->last;
-      my $escape_search_term = uri_unescape($search_term);
       $summary_message .= (
-         qq{<h4>Showing Results <strong>$page_first_hit-$page_last_hit</strong> for search string <strong>$escape_search_term.</strong></h4>}
-        ) . ( $page_last_hit >= 10000 ? qq{<h5>    Results beyond 10000 not shown.</h5>} : '' );
+         qq{<p class="space-below">Showing results <strong>$page_first_hit-$page_last_hit</strong></p>}
+        ) . ( $page_last_hit >= 10000 ? qq{<p class="small space-below">Results beyond 10000 not shown.</p>} : '' );
 
     }
-    else {
-      $summary_message .= qq{<h4></h4>};
-    }
-    return qq{<p>$summary_message</p>};
+    return $summary_message;
   }
   else {
     return
@@ -219,30 +214,19 @@ sub _render_help_results {
     # $content = encode("utf8", $context_content);
     my $db_extra = $hit->{'db'} ? ';db=' . $hit->{'db'} : '';
     $html .= qq{
-<table class="edge">
-  <tbody>
-    <tr>
-      <td>
-        <table>
-          <tbody>
-            <tr>
-              <th>&nbsp;</th>
-              <td>$context_content</td>
-            </tr>
-            <tr>
+<dl class="summary">
+  <dt>&nbsp;</dt>
+  <dd>$context_content</dd>
+</dl>
     };
 
     if ($hit->{location} && $hit->{featuretype} eq 'Gene') {
-      $html .= qq{<th>Location</th>
-              <td><a href="/$hit->{species}/Location/View?r=$hit->{location};g=$hit->{id}$db_extra">$hit->{location}</a></td>
-            </tr>
-          </tbody>
-        </table>
-      </td>
-    </tr>
-  </tbody>
-</table>
-    };
+      $html .= qq{
+<dl class="summary">
+  <dt>Location</dt>
+  <dd><a href="/$hit->{species}/Location/View?r=$hit->{location};g=$hit->{id}$db_extra">$hit->{location}</a></dd>
+</dl>
+      };
     }
     $html .= "</div> <!-- end hit -->";
   }
@@ -265,6 +249,7 @@ sub _render_genome_hits {
     my $species = $hit->{species};
 
     my $hit_tagline = eval { $hit_tagline_lookup->{ uc $hit->{featuretype} }($hit) } || '';
+    $hit_tagline =~ s/\[/ [/;
 
     $html .=
 qq{<div style="width: 85%;border-bottom: 1px solid #CCCCCC; "><a class="notext" href="/$url">$hit_tagline</a></div>};
@@ -275,46 +260,27 @@ qq{<div style="width: 85%;border-bottom: 1px solid #CCCCCC; "><a class="notext" 
     my $featuretype = $hit->{featuretype};
     my $description = $hit->{description};
     my $db_extra    = $hit->{'db'} ? ';db=' . $hit->{'db'} : '';
-    $html .= qq{    
-<table class="edge">
-  <tbody>
-    <tr>
-      <td>
-        <table>
-          <tbody>
-              <tr>
-                <th>Description</th>
-                <td>$description</td>
-              </tr>
-              <tr>};
-    if ($hit->{location} && $hit->{featuretype} =~ /Gene|Transcript/) {
-      $html .= qq{<th>Location</th>
-        <td>
-        <a href="/$hit->{species}/Location/View?r=$hit->{location};g=$hit->{id}$db_extra">$hit->{location}</a>
-        </td>
-      </tr>};
+    $html .= qq(   
+<dl class="summary">
+  <dt>Description</dt>
+  <dd>$description</dd>
+</dl>
+);
+    If ($hit->{location} && $hit->{featuretype} =~ /Gene|Transcript|Variation/) {
+      $html .= qq(
+<dl class="summary">
+  <dt>Location</dt>
+  <dd><a href="/$hit->{species}/Location/View?r=$hit->{location};g=$hit->{id}$db_extra">$hit->{location}</a></dd>
+</dl>
+);
     }
-    $html .= qq{<table>
-                  <tbody>
-                    <tr>
-                      <th></th>
-                      <td></td>
-                      <th>Source:</th>
-                      <td>$ensembl_version;</td>
-                      <th>Feature type:</th>
-                      <td>$featuretype;</td>
-                      <th>Species:</th>
-                      <td>$species_no_underscore;</td>
-                    </tr>
-                  </tbody>    
-              </table>
-          </tbody>
-        </table>
-      </td>
-    </tr>
-  </tbody>
-</table>
-};
+
+    $html .= qq(                      
+<dl class="summary">
+  <dt>Source</dt>
+  <dd>$ensembl_version</dd>
+</dl>
+);
 
     $html .= "</div> <!-- end hit -->";
 
