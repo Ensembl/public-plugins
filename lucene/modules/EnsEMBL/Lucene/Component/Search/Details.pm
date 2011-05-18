@@ -214,12 +214,9 @@ sub _render_help_results {
     # $content = encode("utf8", $context_content);
     my $db_extra = $hit->{'db'} ? ';db=' . $hit->{'db'} : '';
     $html .= qq{
-<dl class="summary">
-  <dt>&nbsp;</dt>
-  <dd>$context_content</dd>
-</dl>
+  <p>$context_content</p>
     };
-
+    ## DOES STATIC CONTENT EVER HAVE A LOCATION & FEATURE?
     if ($hit->{location} && $hit->{featuretype} eq 'Gene') {
       $html .= qq{
 <dl class="summary">
@@ -266,7 +263,7 @@ qq{<div style="width: 85%;border-bottom: 1px solid #CCCCCC; "><a class="notext" 
   <dd>$description</dd>
 </dl>
 );
-    If ($hit->{location} && $hit->{featuretype} =~ /Gene|Transcript|Variation/) {
+    if ($hit->{location} && $hit->{featuretype} =~ /Gene|Transcript|Variation/) {
       $html .= qq(
 <dl class="summary">
   <dt>Location</dt>
