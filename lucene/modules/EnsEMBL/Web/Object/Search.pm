@@ -56,71 +56,70 @@ sub results_summary {
 
 sub feature2url {
     my ( $self, $hit ) = @_;
-    my $species = $self->Obj->{species};
-    my $id      = $self->Obj->{id};
 
     my %lookup = (
-        'MARKER' => sub { return "$species/Marker/Details?m=$id;contigviewbottom=marker_core_marker" },
-        'DOMAIN' => sub { return "$species/Location/Genome/?ftype=$self->{featuretype};id=$id" },
-        'FAMILY' => sub { return "$species/Gene/Family/Genes?family=$id" },
-        'GENOMICALIGNMENT' => sub {
-            return "$self->{species_path}/featureview?type=$self->{Source};id=$id"
-              . ( $self->{db} ? '' : ";db=$self->{db}" );
-        },
-        'OLIGOPROBE' => sub { return "$self->{species_path}/featureview?type=OligoProbe;id=$id" },
-        'QTL'        => sub { return "$self->{species_path}/contigview/l&%s" },
-        'GENOMIC'    => sub {
+      'MARKER' => sub { return "$_[0]->{species}/Marker/Details?m=$_[0]->{id};contigviewbottom=marker_core_marker" },
+      'DOMAIN' => sub { return "$_[0]->{species}/Location/Genome/?ftype=$_[0]->{featuretype};id=$_[0]->{id}" },
+      'FAMILY' => sub { return "$_[0]->{species}/Gene/Family/Genes?family=$_[0]->{id}" },
+      'GENOMICALIGNMENT' => sub {
+            return "$_[0]->{species_path}/Location/Genome?ftype=$_[0]->{Source};id=$_[0]->{id}"
+              . ( $_[0]->{db} ? '' : ";db=$_[0]->{db}" );
+      },  
+      'OLIGOPROBE' => sub { return "$_[0]->{species_path}/Location/Genome?ftype=OligoProbe;id=$_[0]->{id}" },
+      'QTL'        => sub { return "$_[0]->{species_path}/contigview/l&%s" },
+      'GENOMIC'    => sub {
+            return 
+                "$_[0]->{species_path}/Location/"
+              . ( $_[0]->{length} > 0.5e6 ? 'View' : 'Overview' )
+              . "?mapfrag=$_[0]->{Name}";
+      },
+      'SNP'       => sub { return "$_[0]->{species}/Variation/Summary?v=$_[0]->{id};source=$_[0]->{source}" },
+      'VARIATION' => sub { return "$_[0]->{species}/Variation/Summary?v=$_[0]->{id};source=$_[0]->{source}" },
+      'GENE' =>
+          sub { return "$_[0]->{species}/Gene/Summary?g=$_[0]->{id}" . ( $_[0]->{db} ? ";db=$_[0]->{db}" : '' ) },
+      'TRANSCRIPT' =>
+          sub { return "$_[0]->{species}/Transcript/Summary?t=$_[0]->{id}" . ( $_[0]->{db} ? ";db=$_[0]->{db}" : '' ) },
+      'IDHISTORY_GENE'        => sub { return "$_[0]->{species}/Gene/Idhistory?g=$_[0]->{id}" },
+      'IDHISTORY_TRANSCRIPT'  => sub { return "$_[0]->{species}/Transcript/Idhistory?t=$_[0]->{id}" },
+      'IDHISTORY_TRANSLATION' => sub { return "$_[0]->{species}/Transcript/Idhistory?protein=$_[0]->{id}" },
+      'QTL'                   => sub { return "$_[0]->{species}/Location/View?r=$_[0]->{location}" },
+      'UNMAPPEDFEATURE'       => sub { return "$_[0]->{species_path}/Location/Genome?ftype=Gene;id=$_[0]->{id}" },
+      'PROBEFEATURE'          => sub {
+            return "$_[0]->{species}/Location/Genome?ftype=ProbeFeature;fdb=funcgen;id=$_[0]->{id};ptype="
+              . ( $_[0]->{description} =~ /set/ ? "pset;" : "probe;" );
+      },
+      'PROTEINALIGNFEATURE' => sub {
             return
-                "$self->{species_path}/"
-              . ( $self->{length} > 0.5e6 ? 'cytoview' : 'contigview' )
-              . "?mapfrag=$self->{Name}";
-        },
-        'SNP'       => sub { return "$species/Variation/Summary?v=$id;source=$self->{source}" },
-        'VARIATION' => sub { return "$species/Variation/Summary?v=$id;source=$self->{source}" },
-        'GENE' =>
-          sub { return "$species/Gene/Summary?g=$id" . ( $self->{db} ? ";db=$self->{db}" : '' ) },
-        'TRANSCRIPT' =>
-          sub { return "$species/Transcript/Summary?t=$id" . ( $self->{db} ? ";db=$self->{db}" : '' ) },
-        'IDHISTORY_GENE'        => sub { return "$species/Gene/Idhistory?g=$id" },
-        'IDHISTORY_TRANSCRIPT'  => sub { return "$species/Transcript/Idhistory?t=$id" },
-        'IDHISTORY_TRANSLATION' => sub { return "$species/Transcript/Idhistory?protein=$id" },
-        'QTL'                   => sub { return "$species/Location/View?r=$self->{location}" },
-        'UNMAPPEDFEATURE'       => sub { return "$self->{species_path}/featureview?type=Gene;id=$id" },
-        'PROBEFEATURE'          => sub {
-            return "$species/Location/Genome?ftype=ProbeFeature;fdb=funcgen;id=$id;ptype="
-              . ( $self->{description} =~ /set/ ? "pset;" : "probe;" );
-        },
-        'PROTEINALIGNFEATURE' => sub {
+                "$_[0]->{species}/Location/Genome?ftype=$_[0]->{featuretype};id=$_[0]->{id}"
+              . ( $_[0]->{db} ? ";db=$_[0]->{db}" : '' )
+              . ( $_[0]->{contigviewbottom} ? ";contigviewbottom=$_[0]->{contigviewbottom}" : '' );
+      },
+      'DNAALIGNFEATURE' => sub {
             return
-                "$species/Location/Genome?ftype=$self->{featuretype};id=$id"
-              . ( $self->{db} ? ";db=$self->{db}" : '' )
-              . ( $self->{contigviewbottom} ? ";contigviewbottom=$self->{contigviewbottom}" : '' );
-        },
-        'DNAALIGNFEATURE' => sub {
+                "$_[0]->{species}/Location/Genome?ftype=DnaAlignFeature;id=$_[0]->{id}"
+              . ( $_[0]->{db} ? ";db=$_[0]->{db}" : '' )
+              . ( $_[0]->{contigviewbottom} ? ";contigviewbottom=$_[0]->{contigviewbottom}" : '' );
+      },
+      'PHENOTYPE' => sub {
             return
-                "$species/Location/Genome?ftype=DnaAlignFeature;id=$id"
-              . ( $self->{db} ? ";db=$self->{db}" : '' )
-              . ( $self->{contigviewbottom} ? ";contigviewbottom=$self->{contigviewbottom}" : '' );
-        },
-        'PHENOTYPE' => sub {
-            return
-              "$species/Location/Genome?ftype=Phenotype;id=$id;phenotype_name=$self->{description}";
-        },
-        'SEQUENCE' => sub {
-            return $id =~ /^LRG/
-              ? "$species/LRG/Summary?lrg=$id"
-              : "$species/Location/View?r=$self->{location}";
-        },
-        'STRUCTURALVARIATION' => sub { return "$species/StructuralVariation/Summary?sv=$id" },
-        'REGULATORYFEATURE'   => sub {
-            return $id =~ /ENSR|ENSMUSR/
-              ? "$species/Regulation/Cell_line?rf=$id"
-              : "$species/Location/Genome?ftype=RegulatoryFactor;id=$id;fset=$self->{subtype}";
-        },
-        'FAQ'      => sub { return "common/Help/Faq#faq$id" },
-        'GLOSSARY' => sub { return "common/Help/Glossary?id=$id" },
-        'VIEW'     => sub { return "common/Help/View?id=$id" },
+              "$_[0]->{species}/Location/Genome?ftype=Phenotype;id=$_[0]->{id};phenotype_name=$_[0]->{description}";
+      },
+      'SEQUENCE' => sub {
+            return $_[0]->{id} =~ /^LRG/
+              ? "$_[0]->{species}/LRG/Summary?lrg=$_[0]->{id}"
+              : "$_[0]->{species}/Location/View?r=$_[0]->{location}";
+      },
+      'STRUCTURALVARIATION' => sub { return "$_[0]->{species}/StructuralVariation/Summary?sv=$_[0]->{id}" },
+      'REGULATORYFEATURE'   => sub {
+            return $_[0]->{id} =~ /ENSR|ENSMUSR/
+              ? "$_[0]->{species}/Regulation/Cell_line?rf=$_[0]->{id}"
+              : "$_[0]->{species}/Location/Genome?ftype=RegulatoryFactor;id=$_[0]->{id};fset=$_[0]->{subtype}";
+      },
+      'FAQ'      => sub { return "Help/Faq#faq$_[0]->{id}" },
+      'GLOSSARY' => sub { return "Help/Glossary?id=$_[0]->{id}" },
+      'VIEW'     => sub { return "Help/View?id=$_[0]->{id}" },
     );
+
     $hit->{species} =~ s/ /_/g;
     return eval { $lookup{ uc $hit->{featuretype} }($hit) } || '';
 }
