@@ -11,6 +11,7 @@ use warnings;
 
 use EnsEMBL::ORM::Rose::DbConnection;
 use EnsEMBL::ORM::Rose::Manager;
+use EnsEMBL::ORM::Rose::MetaData;
 
 use base qw(Rose::DB::Object);
 
@@ -39,7 +40,7 @@ sub primary_key {
 sub init_db {
   ## Method called by Rose to creat connection to database
   ## Override ROSE_DB_NAME constant instead of this method
-  EnsEMBL::ORM::Rose::DbConnection->new(shift->ROSE_DB_NAME);
+  EnsEMBL::ORM::Rose::DbConnection->new_or_cached(shift->ROSE_DB_NAME);
 }
 
 sub get_title {
@@ -86,7 +87,7 @@ sub set_user {
   ## @param User object
   my ($self, $column_name, $user) = @_;
   
-  $user = undef unless $user->isa('EnsEMBL::ORM::Rose::Object::User');
+  $user = undef unless UNIVERSAL::isa($user, 'EnsEMBL::ORM::Rose::Object::User');
 
   $self->$column_name($user ? $user->user_id : 0);
   $self->{$self->LINKED_USERS_KEY}{$column_name} = $user;
