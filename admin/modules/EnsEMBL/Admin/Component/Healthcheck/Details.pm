@@ -42,8 +42,10 @@ sub content {
 
   my $serial_number = 0;
   
-  $html .= qq(<form action="" method="get"><p class="hc_p_right">View in release: ).$self->render_all_releases_selectbox;
-  $html .= qq(&nbsp;<input type="submit" value="Go" /><input type="hidden" name="q" value="$param" /></p></form>);
+  $html .= sprintf('<form action="" method="get"><p class="hc_p_right">View in release: %s&nbsp;<input type="submit" value="Go" /><input type="hidden" name="q" value="%s" /></p></form>',
+    $self->render_all_releases_selectbox,
+    $param
+  ) if $type ne 'database_name';
   $html .= qq{<div class="hc-infobox">
             <p>For each database, reports are sorted on the basis of Date (initial failure date) with latest report appearing on the top.</p>
             <p>Reports in <span class="hc-problem">this colour</span> have not been annotated 'manual ok'.</p>
