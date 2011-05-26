@@ -9,10 +9,23 @@
 
 <BODY LANG="en-GB" DIR="LTR">
 <H1>Regulatory Build</H1>
-<P>The regulatory build provides a single &quot;best guess&quot; set
+<P>The regulatory build provides a single 'best guess' set
 of regulatory features. These features are based on the information
-contained within the ensembl <A HREF="/info/docs/api/index.html">functional
-genomics</A> database. 
+contained within the Ensembl <A HREF="/info/docs/api/index.html">funcgen</A> 
+database. Output and supporting data from the Regulatory Build
+ are available in 'Region In Detail' and the various regulation displays. 
+Configuration is available under the 'Regulation' menu item:
+<ul>
+<li><b>Regulatory Features</b> - These are the output of the Regulatory Build.
+
+<li><b>Regulatory Evidence</b> - These are the input to the Regulatory Build e.g. 
+Histone modifications, DNase1 sites, transcription factor binding sites (TFBSs) etc.<br>
+There are two visualsations availables:<br>
+<ul><li><b>Signal</b> - Shows a plot or wiggle representing the raw signal.
+<li><b>Peaks</b> - Shows significantly enriched 'peak' regions</ul>
+</ul>
+The rest of this document details the methodology and data used in this process.
+
 </P>
 <H2 CLASS="western">Regulatory Feature Construction</H2>
 <P>The 'Regulatory Build' is performed by overlap analysis of
@@ -23,8 +36,7 @@ cell types using 'focus' features, which are chosen to define a set
 of potential binding sites. These tend to be broad coverage, narrowly
 focused marks which are likely candidates for different types of
 regulatory elements or motifs. Focus feature types include DNase1
-which is known to mark accessible chromatin, transcription factor
-binding sites (TFBSs) and CTCF, which characterises
+which is known to mark accessible chromatin, TFBSs and CTCF, which characterises
 'insulator/enhancer' elements. As such the core regions of regulatory
 features are likely to be positioned on or around any potential
 regulatory motif. Core regions are extended only in the case of
