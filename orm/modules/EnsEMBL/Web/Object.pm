@@ -13,9 +13,9 @@ sub rose_manager {
   ## Returns the ORM::Rose::Manager class for the given type
   ## @return Manager Class (Static class reference) or undef if not found
   my ($self, $type) = @_;
-  
-  $self->{'_rose_managers'} ||= {};
-  return $self->{'_rose_managers'}{$type} ||= $self->dynamic_use_fallback("EnsEMBL::ORM::Rose::Manager::$type");
+  $type = $type ? "::$type" : '';
+
+  return $self->{'_rose_managers'}{$type} ||= $self->dynamic_use_fallback("EnsEMBL::ORM::Rose::Manager$type");
 }
 
 sub rose_objects {
@@ -36,7 +36,7 @@ sub rose_objects {
   
   $type and ref $type and $objs = $type and $type = '0';
 
-  $self->{'_rose_objects'} = {} unless exists $self->{'_rose_objects'};
+  $self->{'_rose_objects'} ||= {};
 
   if ($objs) {
     $objs = [ $objs ] unless ref $objs eq 'ARRAY';
