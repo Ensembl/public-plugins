@@ -131,7 +131,7 @@ sub content_tree {
   $form->add_button({'buttons' => [
     { 'type'  => 'submit', 'value' => $is_preview ? 'Preview' : 'Save'},
     $action eq 'Preview'  ? () : { 'type'  => 'reset',  'value' => 'Reset' },
-    $self->is_ajax_request ? { 'type'  => 'reset',  'value' => $is_preview ? 'Cancel' : 'Back', 'class' => $self->_JS_CLASS_CANCEL_BUTTON } : ()
+    $object->is_ajax_request ? { 'type'  => 'reset',  'value' => $is_preview ? 'Cancel' : 'Back', 'class' => $self->_JS_CLASS_CANCEL_BUTTON } : ()
   ]})->set_flag('buttons');
 
   return $content;
