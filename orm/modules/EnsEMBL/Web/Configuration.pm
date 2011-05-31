@@ -10,7 +10,11 @@ use strict;
 use base qw(EnsEMBL::Web::Root);
 
 sub dbfrontend_nodes {
-  return [
+  ## Gets all the default nodes needed by dbfrontend
+  ## @param HashRef with keys required to override keys in each nodes
+  ## @return Hash in ArrayRef syntax
+  my ($self, $params) = @_;
+  my $nodes = [
     'Display'       => {'caption' => 'View All', 'components' => [qw(display  EnsEMBL::ORM::Component::DbFrontend::Display)],       'availability' => 1},
     'List'          => {'caption' => 'List All', 'components' => [qw(list     EnsEMBL::ORM::Component::DbFrontend::List)],          'availability' => 1},
     'Add'           => {'caption' => 'Add',      'components' => [qw(add      EnsEMBL::ORM::Component::DbFrontend::Input)],         'availability' => 1},
@@ -23,6 +27,11 @@ sub dbfrontend_nodes {
     'Save'          => {'caption' => '',         'command'    => 'EnsEMBL::ORM::Command::DbFrontend::Save',                         'availability' => 1, 'no_menu_entry' => 1},
     'Delete'        => {'caption' => '',         'command'    => 'EnsEMBL::ORM::Command::DbFrontend::Delete',                       'availability' => 1, 'no_menu_entry' => 1},
   ];
+
+  foreach my $node (@$nodes) {
+    ref $node and map {$node->{$_} = $self->deepcopy($params->{$_})} keys %{$params || {}};
+  }
+  return $nodes;
 }
 
 sub create_dbfrontend_node {
@@ -44,21 +53,23 @@ sub create_dbfrontend_node {
 
 sub create_dbfrontend_nodes {
   ## Creates multiple dbfrontend nodes
-  ## @params ArrayRef of params as accepted by create_dbfrontend_node
+  ## @param ArrayRef of params as accepted by create_dbfrontend_node
+  ## @param Hashref with keys to override the ones in default dbfronend nodes 
   my ($self, $nodes) = @_;
   $self->create_dbfrontend_node($_) for @$nodes;
 }
 
 sub create_all_dbfrontend_nodes {
   ## Adds all nodes to the config
-  my ($self, $filters) = @_;
-
-  my $all_nodes = $self->dbfrontend_nodes;
+  my ($self, $params) = @_;
+  my $all_nodes = $self->dbfrontend_nodes($params);
+  my $nodes = [];
   
   while (my $node_name = shift @$all_nodes) {
-    shift @$all_nodes;
-    $self->create_dbfrontend_node({$node_name => {'filters' => $filters}});
+    my $node = shift @$all_nodes;
+    push @$nodes, $self->create_node($node_name, delete $node->{'caption'}, delete $node->{'components'} || [], $node);
   }
+  return $nodes;
 }
 
 1;
