@@ -36,6 +36,12 @@ sub new {
   return $self;
 }
 
+sub is_ajax_request {
+  ## Tells whether or not the request was sent by ajaxy frontend
+  my $self = shift;
+  return $self->{'_is_ajax'} ||= $self->hub->param('inline') ? 1 : 0;
+}
+
 ### Data fetching - rose_objects population from db
 ### Override the required one to customize the data available for viewing 
 
@@ -250,7 +256,7 @@ sub _populate_from_cgi {
 ### record_name             HashRef telling the name of the record {'singular' => ? , 'plural' => } 
 ###                         Defaults to 'records'
 ### show_user_email         Shows user with mailto link for List and Display page
-### page_type               Tells about the type of the page: 'page' means normal page view, 'modal' means page opens in a modal popup
+### use_ajax                Flag to tell whether or not to use AJAX for modification
 
 ### Configuration methods - Override the required ones in child class
 sub show_fields           { return []; }
@@ -262,6 +268,6 @@ sub permit_delete         { 'retire'; }
 sub content_css           { return 'dbf-content'; }
 sub record_name           { return {'singular' => 'record' , 'plural' => 'records'}; }
 sub show_user_email       { 1; }
-sub page_type             { 'page'; } 
+sub use_ajax              { 1; }
 
 1;
