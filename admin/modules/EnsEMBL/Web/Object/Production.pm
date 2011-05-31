@@ -84,11 +84,6 @@ sub permit_delete {
   return 'retire';
 }
 
-sub page_type {
-  ## @overrides
-  return 'modal';
-}
-
 sub pagination {
   ## @overrides
   return 50;
