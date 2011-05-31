@@ -1,6 +1,11 @@
 .mceLayout td { width: auto !important }
 
+div.dbf-record .cl-title {
+  padding-left: 3px;
+}
+
 span.cl-field-title {
+  padding-left: 3px;
   font-weight: bold;
   float: left;
   clear: left;
