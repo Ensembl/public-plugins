@@ -25,7 +25,7 @@ sub update_conf {
     ZMenu           => 'ZMenu',
 
     Search          => 'Page',
-    Changelog       => 'Page',
+    Changelog       => 'Modal',
     Healthcheck     => 'Page',
     Species         => 'Modal',
     Biotype         => 'Modal',
