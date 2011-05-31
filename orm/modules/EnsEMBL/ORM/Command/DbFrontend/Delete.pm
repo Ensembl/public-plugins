@@ -14,10 +14,8 @@ sub process {
   my $self    = shift;
   my $object  = $self->object;
   my $hub     = $self->hub;
-  
-  my $record  = $self->object->rose_object;
+  my $done    = $object->delete;
 
-  my $done   = $object->delete;
   $self->ajax_redirect($self->hub->url({'action' => $done && @$done ? 'Display' : 'Problem'}));
 }
 
