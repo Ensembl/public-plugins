@@ -16,6 +16,15 @@ use EnsEMBL::ORM::Rose::Field;
 
 use base qw(EnsEMBL::Web::Component);
 
+use constant {
+  _JS_CLASS_RESPONSE_ELEMENT  => '_dbf_response',
+  _JS_CLASS_EDIT_BUTTON       => '_dbf_button',
+  _JS_CLASS_DELETE_BUTTON     => '_dbf_delete',
+  _JS_CLASS_CANCEL_BUTTON     => '_dbf_cancel',
+  _JS_CLASS_PREVIEW_FORM      => '_dbf_preview',
+  _JS_CLASS_SAVE_FORM         => '_dbf_save',
+};
+
 sub _init {
   my $self = shift;
   $self->cacheable( 0 );
@@ -61,16 +70,15 @@ sub content_pagination_tree {
   
   my $page_counter = $pagination->prepend_child($self->dom->create_element('p', {
     'class'       => 'dbf-pagecount',
-    'inner_HTML'  => sprintf("Page %d of %d (displaying %d - %d  of %d %s)", $page, $page_count, $offset + 1, $offset + $records_count, $count, $count == 1 ? $object->record_name->{'singular'} : $object->record_name->{'plural'})
+    'inner_HTML'  => sprintf("Page %d of %d (displaying %d - %d  of %d %s)", $page, $page_count, $offset + 1, $offset + $records_count, $count, $object->record_name->{$count == 1 ? 'singular' : 'plural'})
   }));
   $page_counter->set_flag('page_counter');
 
-  my $link_class = $self->modal_link;
-
   $links->append_child($self->dom->create_element('a', {
     'href'        => $hub->url({'page' => $page - 1 || 1}),
-    'class'       => join(' ', $page == 1 ? 'disabled' : '', $link_class),
     'inner_HTML'  => '&laquo; Previous',
+    $page == 1 ?
+    ('class'      => 'disabled') : (),
   }));
   
   my $pages_needed = { map {$_ => 1} 1, 2, $page_count, $page_count - 1, $page, $page - 1, $page - 2, $page + 1, $page + 2 };
@@ -83,8 +91,9 @@ sub content_pagination_tree {
       $num > $previous_num + 1 and $links->append_child($self->dom->create_element('span', {'inner_HTML' => '&#133;'}));
       $links->append_child($self->dom->create_element('a', {
         'href'        => $hub->url({'page' => $num}),
-        'class'       => join(' ', $page == $num ? 'selected' : '', $link_class),
         'inner_HTML'  => $num,
+        $page == $num ?
+        ('class'      => 'selected') : ()
       }));
       $previous_num = $num;
     }
@@ -93,8 +102,9 @@ sub content_pagination_tree {
 
   $links->append_child($self->dom->create_element('a', {
     'href'        => $hub->url({'page' => $page_count - ($page_count - $page || 1) + 1}),
-    'class'       => join(' ', $page == $page_count ? 'disabled' : '', $link_class),
     'inner_HTML'  => 'Next &raquo;',
+    $page == $page_count ?
+    ('class'      => 'disabled') : (),
   }));
   
   return $pagination;
@@ -225,12 +235,6 @@ sub _modify_trackable_field_params {
 sub print_datetime {
   ## Prints DateTime as a readable string
   return format_date(parse_date($_[1]), "%b %e, %Y at %H:%M");
-}
-
-sub modal_link {
-  ## returns the class name for a link (according to Object::DbFrontend->page_type)
-  ## @param Flag if on, returns 'class="modal_link"' otherwise 'modal_link'
-  shift and ($_ and return qq( class="$_" ) or return ' ') or return $_ for (shift->object->page_type eq 'modal' ? 'modal_link' : '');
 }
 
 1;
