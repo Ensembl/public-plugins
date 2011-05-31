@@ -29,7 +29,7 @@ sub content_tree {
   my $links   = defined $page ? $content->append_child($self->content_pagination_tree(scalar @$records)) : undef;
   !$object->pagination and $links and map {$_->remove} @{$links->get_nodes_by_flag('pagination_links')};
 
-  my $js_class = $object->use_ajax ? $hub->param('inline') ? $self->_JS_CLASS_RESPONSE_ELEMENT : 'js_panel' : ();
+  my $js_class = $object->use_ajax ? $object->is_ajax_request ? $self->_JS_CLASS_RESPONSE_ELEMENT : 'js_panel' : ();
   for (@$records) {
     (my $record_div = $content->append_child($self->record_tree($_)))->prepend_child('input', {'type' => 'hidden', 'class' => 'panel_type', 'value' => 'DbFrontendRow'});
     $record_div->set_attributes({'class' => ['dbf-record', $js_class]});
