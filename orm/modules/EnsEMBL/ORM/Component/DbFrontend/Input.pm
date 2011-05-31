@@ -21,11 +21,16 @@ sub content_tree {
   my $hub     = $self->hub;
   my $action  = $hub->action;
   my $record  = $object->rose_object;
+  
+  my $is_preview = $object->show_preview && $action ne 'Preview';
 
   return $self->dom->create_element('p', {'inner_HTML' => sprintf('No %s selected to edit.', $object->record_name->{'singular'})}) unless $record;
   
-  my $content = $self->dom->create_element('div', {'class' => $object->content_css});
-  my $form    = $content->append_child($self->new_form({'action' => $hub->url({'action' => $object->show_preview && $action ne 'Preview' ? 'Preview' : 'Save'}) }) );
+  my $content = $self->dom->create_element('div', {'class' => [$object->content_css, $self->_JS_CLASS_RESPONSE_ELEMENT]});
+  my $form    = $content->append_child($self->new_form({
+    'action' => $hub->url({'action' => $is_preview ? 'Preview' : 'Save'}),
+    'class'  => $is_preview ? $self->_JS_CLASS_PREVIEW_FORM : $self->_JS_CLASS_SAVE_FORM
+  }));
   
   # include extra GET params to hidden inputs
   if ($object->show_preview && $action ne 'Preview') {
@@ -122,11 +127,12 @@ sub content_tree {
       $form_field->add_element($element_params);
     }
   }
-  
-  my $buttons = [{ 'type'  => 'submit', 'value' => $object->show_preview && $action ne 'Preview' ? 'Preview' : 'Save' }];
-  push @$buttons, { 'type'  => 'reset',  'value' => 'Reset' } if $action ne 'Preview';
 
-  $form->add_button({'buttons' => $buttons})->set_flag('buttons');
+  $form->add_button({'buttons' => [
+    { 'type'  => 'submit', 'value' => $is_preview ? 'Preview' : 'Save'},
+    $action eq 'Preview'  ? () : { 'type'  => 'reset',  'value' => 'Reset' },
+    $self->is_ajax_request ? { 'type'  => 'reset',  'value' => $is_preview ? 'Cancel' : 'Back', 'class' => $self->_JS_CLASS_CANCEL_BUTTON } : ()
+  ]})->set_flag('buttons');
 
   return $content;
 }

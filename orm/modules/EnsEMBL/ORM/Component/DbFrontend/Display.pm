@@ -6,6 +6,7 @@ package EnsEMBL::ORM::Component::DbFrontend::Display;
 ### STATUS: Under development
 ### Note: This module should not be modified! 
 ### To customise, either extend this module in your component, or EnsEMBL::Web::Object::DbFrontend in your E::W::object
+### To maintain AJAXy modification feature, provide the _JS_CLASS_* at corresponding places while extending this class
 
 use strict;
 use warnings;
@@ -27,11 +28,15 @@ sub content_tree {
   my $page    = $object->get_page_number;
   my $links   = defined $page ? $content->append_child($self->content_pagination_tree(scalar @$records)) : undef;
   !$object->pagination and $links and map {$_->remove} @{$links->get_nodes_by_flag('pagination_links')};
-  
-  $content->append_child($self->record_tree($_)) for @$records;
+
+  my $js_class = $object->use_ajax ? $hub->param('inline') ? $self->_JS_CLASS_RESPONSE_ELEMENT : 'js_panel' : ();
+  for (@$records) {
+    (my $record_div = $content->append_child($self->record_tree($_)))->prepend_child('input', {'type' => 'hidden', 'class' => 'panel_type', 'value' => 'DbFrontendRow'});
+    $record_div->set_attributes({'class' => ['dbf-record', $js_class]});
+  }
 
   $content->append_child($links->clone_node(1)) if $links; ## bottom pagination
-  
+
   return $content;
 }
 
@@ -39,11 +44,12 @@ sub record_tree {
   ## Generates a DOM tree for each database record
   ## Override this one in the child class and do the DOM manipulation on the DOM tree if required
   ## Flags are set on required HTML elements for 'selection and manipulation' purposes in child classes (get_nodes_by_flag)
+  ## If overriding, add _JS_CLASS_DELETE_BUTTON & _JS_CLASS_EDIT_BUTTON classes on the buttons if JavaScript functionality is required
   my ($self, $record) = @_;
   my $object = $self->object;
   
-  my $record_div  = $self->dom->create_element('div', {'class' => 'dbf-record'});
   my $primary_key = $record->get_primary_key_value;
+  my $record_div  = $self->dom->create_element('div');
   $record_div->set_flag('primary_key', $primary_key);
 
   my @bg = qw(bg1 bg2);
@@ -69,10 +75,19 @@ sub record_tree {
     );
     @bg = reverse @bg;
   }
-  my $link_class = $self->modal_link(1);
+
   $record_div->append_child($self->dom->create_element('div', {
     'class'       => "dbf-row-buttons",
-    'inner_HTML'  => sprintf('<a%shref="%s">Edit</a>%s', $link_class, $self->hub->url({'action' => 'Edit', 'id' => $primary_key}), $object->permit_delete ? sprintf('<a%shref="%s">Delete</a>', $link_class, $self->hub->url({'action' => 'Confirm', 'id' => $primary_key})) : '')
+    'inner_HTML'  => sprintf(
+      '<a class="%s" href="%s">Edit</a>%s',
+      $self->_JS_CLASS_EDIT_BUTTON,
+      $self->hub->url({'action' => 'Edit', 'id' => $primary_key}),
+      $object->permit_delete ? sprintf(
+        '<a class="%s" href="%s">Delete</a>',
+        $self->_JS_CLASS_EDIT_BUTTON,
+        $self->hub->url({'action' => 'Confirm', 'id' => $primary_key})
+      ) : ''
+    )
   }));
   return $record_div;
 }
