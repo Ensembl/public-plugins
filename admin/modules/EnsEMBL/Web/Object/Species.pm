@@ -19,15 +19,18 @@ sub show_fields {
   return [
     web_name          => {
       'type'      => 'string',
-      'label'     => 'Name on website'
+      'label'     => 'Name on website',
+      'required'  => 1,
     },
     db_name           => {
       'type'      => 'string',
       'label'     => 'Name in database',
+      'required'  => 1,
     },
     common_name       => {
       'type'      => 'string',
       'label'     => 'Common Name',
+      'required'  => 1,
     },
     created_by_user   => {
       'type'      => 'noedit',
@@ -69,11 +72,6 @@ sub permit_delete {
   ## @overrides
   ## Record can not be deleted, but can be set inactive
   return 'retire';
-}
-
-sub page_type {
-  ## @overrides
-  return 'modal';
 }
 
 1;
