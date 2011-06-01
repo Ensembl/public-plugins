@@ -29,17 +29,15 @@ sub content_tree {
   my $links   = defined $page ? $content->append_child($self->content_pagination_tree(scalar @$records)) : undef;
   !$object->pagination and $links and map {$_->remove} @{$links->get_nodes_by_flag('pagination_links')};
   
-  my $add_link = $object->use_ajax && !$object->is_ajax_request
-    ? $content->append_child('div', {
-      'class' => 'dbf-record js_panel',
-      'children' => [
-        {'node_name' => 'div', 'class' => 'dbf-row-buttons', 'children' => [
-          {'node_name' => 'input', 'type' => 'hidden', 'class' => 'panel_type', 'value' => 'DbFrontendRow'},
-          {'node_name' => 'a', 'inner_HTML' => 'Add new', 'class' => $self->_JS_CLASS_ADD_BUTTON, 'href' => $self->hub->url({'action' => 'Add'})}
-        ]}
-      ]
-    })
-    : undef;
+  $object->use_ajax and !$object->is_ajax_request and $content->append_child('div', {
+    'class' => 'dbf-record js_panel',
+    'children' => [
+      {'node_name' => 'div', 'class' => 'dbf-row-buttons', 'children' => [
+        {'node_name' => 'input', 'type' => 'hidden', 'class' => 'panel_type', 'value' => 'DbFrontendRow'},
+        {'node_name' => 'a', 'inner_HTML' => 'Add new', 'class' => $self->_JS_CLASS_ADD_BUTTON, 'href' => $self->hub->url({'action' => 'Add'})}
+      ]}
+    ]
+  });
 
   my $js_class = $object->use_ajax ? $object->is_ajax_request ? $self->_JS_CLASS_RESPONSE_ELEMENT : 'js_panel' : ();
   for (@$records) {
@@ -47,7 +45,6 @@ sub content_tree {
     $record_div->set_attributes({'class' => ['dbf-record', $js_class]});
   }
 
-  $content->append_child($add_link->clone_node(1))  if $add_link; ## bottom add link
   $content->append_child($links->clone_node(1))     if $links; ## bottom pagination
 
   return $content;
@@ -70,8 +67,7 @@ sub record_tree {
 
   while (my $field_name = shift @$fields) {
 
-    my $label = shift @$fields;
-    $label    = exists $label->{'label'} ? $label->{'label'} : '';
+    my $field = shift @$fields;
     my $value = $record->$field_name;
 
     my $row = $record_div->append_child($self->dom->create_element('div', {'class' => "dbf-row $bg[0]"}));
@@ -79,11 +75,11 @@ sub record_tree {
     $row->append_children(
       $self->dom->create_element('div', {
         'class'       => 'dbf-row-left',
-        'inner_HTML'  => $label
+        'inner_HTML'  => exists $field->{'label'} ? $field->{'label'} : ''
       }),
       $self->dom->create_element('div', {
         'class'       => 'dbf-row-right',
-        'inner_HTML'  =>  $self->display_field_value($value) || ''
+        'inner_HTML'  =>  $self->display_field_value($value, $field->{'values'} ? {'lookup' => $field->{'values'}} : {}) || ''
       })
     );
     @bg = reverse @bg;
@@ -108,27 +104,31 @@ sub record_tree {
 sub display_field_value {
   ## Converts the field value into displayable form
   ## @param Value, as returned by the rose's method call, can be a string, rose object or an arrayref of rose objects ;)
-  ## @param delimiter, to be used in join if multiple values
-  ## TODO - if applicable, return 'caption' instead of 'value'
-  my ($self, $value, $delimiter) = @_;
+  ## @param Hashref with some extra stuff with following keys
+  ##  - delimiter:  to be used in join if multiple values
+  ##  - lookup:     Arrayref with hashrefs of keys 'value' and 'caption'
+  my ($self, $value, $extras) = @_;
 
   ## if nothing
   return '' unless defined $value;
 
   ## if it's a string
-  return $value unless $value && ref $value;
+  if (!ref $value) {
+    $_->{'value'} eq $value and return $_->{'caption'} for @{$extras->{'lookup'} || []};
+    return $value;
+  }
   
   ## if it's an arrayref
   if (ref $value eq 'ARRAY') {
     my @return = map {$self->display_field_value($_)} @$value;
-    return @return ? sprintf($delimiter ? '%s' : '<ul><li>%s</li></ul>', join($delimiter || '</li><li>', @return)) : '';
+    return @return ? sprintf($extras->{'delimiter'} ? '%s' : '<ul><li>%s</li></ul>', join($extras->{'delimiter'} || '</li><li>', @return)) : '';
   }
 
   ## if it's DateTime (rose returns DateTime for datetime mysql type)
   return $self->print_datetime($value) if UNIVERSAL::isa($value, 'DateTime');
 
   ## if it's a rose object
-  if (ref $value && UNIVERSAL::isa($value, 'EnsEMBL::ORM::Rose::Object')) {
+  if (UNIVERSAL::isa($value, 'EnsEMBL::ORM::Rose::Object')) {
     my $title = $value->get_title;
     
     ## if it's a user
