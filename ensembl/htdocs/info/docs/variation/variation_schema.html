@@ -42,7 +42,7 @@ tables that they've not used before.
 </p>
 
 <p>
-This document refers to version <strong>62</strong> of the Ensembl
+This document refers to version <strong>63</strong> of the Ensembl
 variation schema. 
 </p>
 
@@ -218,8 +218,8 @@ A PDF document of the schema is available <a href="variation-database-schema.pdf
 	<table style="border:1px outset #222222">
 		<tr class="bg3 center"><th style="width:180px">Column</th><th style="width:150px">Type</th><th style="width:100px">Default value</th><th style="width:400px">Description</th><th style="width:150px">Index</th></tr>
 		<tr class="bg1"><td><b>attrib_id</b></td><td>INT(11)</td><td>0</td><td>Primary key</td><td>primary key</td></tr>
-		<tr class="bg2"><td><b>attrib_type_id</b></td><td>SMALLINT(5)</td><td>0</td><td>Key into the <a href="#attrib_type">attrib_type</a> table, identifies the type of this attribute</td><td>key: type_val_idx</td></tr>
-		<tr class="bg1"><td><b>value</b></td><td>TEXT</td><td></td><td>The value of this attribute</td><td>key: type_val_idx</td></tr>
+		<tr class="bg2"><td><b>attrib_type_id</b></td><td>SMALLINT(5)</td><td>0</td><td>Key into the <a href="#attrib_type">attrib_type</a> table, identifies the type of this attribute</td><td>unique key: type_val_idx</td></tr>
+		<tr class="bg1"><td><b>value</b></td><td>TEXT</td><td></td><td>The value of this attribute</td><td>unique key: type_val_idx</td></tr>
 </table>
 </div>
 <p><b>See also:</b></p>
@@ -773,8 +773,8 @@ A PDF document of the schema is available <a href="variation-database-schema.pdf
 		<tr class="bg3 center"><th style="width:180px">Column</th><th style="width:150px">Type</th><th style="width:100px">Default value</th><th style="width:400px">Description</th><th style="width:150px">Index</th></tr>
 		<tr class="bg1"><td><b>sample_synonym_id</b></td><td>int(10)</td><td></td><td>Primary key, internal identifier.</td><td>primary key</td></tr>
 		<tr class="bg2"><td><b>sample_id</b></td><td>int(10)</td><td></td><td>Foreign key references to the <a href="#sample">sample</a> table.</td><td>key: sample_idx</td></tr>
-		<tr class="bg1"><td><b>source_id</b></td><td>int(10)</td><td></td><td>Foreign key references to the <a href="#source">source</a> table.</td><td></td></tr>
-		<tr class="bg2"><td><b>name</b></td><td>varchar(255)</td><td></td><td>Name of the synonym (a different <b>sample_id</b>).</td><td></td></tr>
+		<tr class="bg1"><td><b>source_id</b></td><td>int(10)</td><td></td><td>Foreign key references to the <a href="#source">source</a> table.</td><td>key: </td></tr>
+		<tr class="bg2"><td><b>name</b></td><td>varchar(255)</td><td></td><td>Name of the synonym (a different <b>sample_id</b>).</td><td>key: </td></tr>
 </table>
 </div>
 <p><b>See also:</b></p>
@@ -886,10 +886,11 @@ A PDF document of the schema is available <a href="variation-database-schema.pdf
 		<tr class="bg2"><td><b>variation_name</b></td><td>varchar(255)</td><td>NULL</td><td>The external identifier or name of the variation. e.g. "esv9549".</td><td>key: name_idx</td></tr>
 		<tr class="bg1"><td><b>source_id</b></td><td>int(10)</td><td></td><td>Foreign key references to the <a href="#source">source</a> table.</td><td></td></tr>
 		<tr class="bg2"><td><b>study_id</b></td><td>int(10)</td><td>NULL</td><td>Foreign key references to the <a href="#study">study</a> table.	</td><td>key: study_idx</td></tr>
-		<tr class="bg1"><td><b>class</b></td><td>varchar(255)</td><td>NULL</td><td>The type of structural variation feature e.g. "SV"</td><td></td></tr>
-		<tr class="bg2"><td><b>bound_start</b></td><td>int(11)</td><td>NULL</td><td>The 5'-most bound defined for the feature.</td><td></td></tr>
-		<tr class="bg1"><td><b>bound_end</b></td><td>int(11)</td><td>NULL</td><td>The 3'-most bound defined for the feature.</td><td></td></tr>
+		<tr class="bg1"><td><b>class_attrib_id</b></td><td>int(10)</td><td>0</td><td>Foreign key references to the <a href="#attrib">attrib</a> table. Defines the type of structural variant. </td><td>key: attrib_idx</td></tr>
+		<tr class="bg2"><td><b>inner_start</b></td><td>int(11)</td><td>NULL</td><td>The 5' inner bound defined for the feature on the <a href="#seq_region">seq_region</a>.</td><td></td></tr>
+		<tr class="bg1"><td><b>inner_end</b></td><td>int(11)</td><td>NULL</td><td>The 3' inner bound defined for the feature on the <a href="#seq_region">seq_region</a>.</td><td></td></tr>
 		<tr class="bg2"><td><b>allele_string</b></td><td>longtext</td><td></td><td>The variant allele, where known.</td><td></td></tr>
+		<tr class="bg1"><td><b>validation_status</b></td><td>ENUM('validated','not validated','high quality')</td><td></td><td>Validation status of the variant.</td><td></td></tr>
 </table>
 </div>
 <p><b>See also:</b></p>
@@ -897,6 +898,7 @@ A PDF document of the schema is available <a href="variation-database-schema.pdf
 	<li><a href="#source">source</a></li>
 	<li><a href="#study">study</a></li>
 	<li><a href="#seq_region">seq_region</a></li>
+	<li><a href="#attrib">attrib</a></li>
 </ul>
 
 <br />
@@ -912,7 +914,7 @@ A PDF document of the schema is available <a href="variation-database-schema.pdf
 		<tr class="bg3 center"><th style="width:180px">Column</th><th style="width:150px">Type</th><th style="width:100px">Default value</th><th style="width:400px">Description</th><th style="width:150px">Index</th></tr>
 		<tr class="bg1"><td><b>study_id</b></td><td>int(10)</td><td></td><td>Primary key, internal identifier.</td><td>primary key</td></tr>
 		<tr class="bg2"><td><b>source_id</b></td><td>int(10)</td><td></td><td>Foreign key references to the <a href="#source">source</a> table.</td><td>key: source_idx</td></tr>
-		<tr class="bg1"><td><b>name</b></td><td>varchar(255)</td><td></td><td>Name of the study. e.g. "EGAS00000000001"</td><td></td></tr>
+		<tr class="bg1"><td><b>name</b></td><td>varchar(255)</td><td>null</td><td>Name of the study. e.g. "EGAS00000000001"</td><td></td></tr>
 		<tr class="bg2"><td><b>description</b></td><td>varchar(255)</td><td>NULL</td><td>Description of the study.</td><td></td></tr>
 		<tr class="bg1"><td><b>url</b></td><td>varchar(255)</td><td>NULL</td><td>URL to find the study data (http or ftp).</td><td></td></tr>
 		<tr class="bg2"><td><b>external_reference</b></td><td>varchar(255)</td><td>NULL</td><td>The pubmed/id or project name associated with this study.</td><td></td></tr>
@@ -962,7 +964,7 @@ A PDF document of the schema is available <a href="variation-database-schema.pdf
 	<table style="border:1px outset #222222">
 		<tr class="bg3 center"><th style="width:180px">Column</th><th style="width:150px">Type</th><th style="width:100px">Default value</th><th style="width:400px">Description</th><th style="width:150px">Index</th></tr>
 		<tr class="bg1"><td><b>supporting_structural_variation_id</b></td><td>int(10)</td><td></td><td>Primary key, internal identifier.</td><td>primary key</td></tr>
-		<tr class="bg2"><td><b>name</b></td><td>varchar(255)</td><td></td><td>The identifier or name of the supporting evidence.</td><td>unique key: name_idx</td></tr>
+		<tr class="bg2"><td><b>name</b></td><td>varchar(255)</td><td></td><td>The identifier or name of the supporting evidence.</td><td></td></tr>
 		<tr class="bg1"><td><b>structural_variation_id</b></td><td>int(10)</td><td></td><td>Foreign key references to the <a href="#structural_variation">structural_variation</a> table.</td><td>key: structural_variation_idx</td></tr>
 </table>
 </div>
@@ -1242,6 +1244,7 @@ A PDF document of the schema is available <a href="variation-database-schema.pdf
 		<tr class="bg1"><td><b>variation_set_id</b></td><td>int(10)</td><td></td><td>Primary key, internal identifier.</td><td>primary key</td></tr>
 		<tr class="bg2"><td><b>name</b></td><td>VARCHAR(255)</td><td></td><td>Name of the set e.g. "Phenotype-associated variations".</td><td>key: name_idx</td></tr>
 		<tr class="bg1"><td><b>description</b></td><td>TEXT</td><td></td><td>Description of the set.</td><td></td></tr>
+		<tr class="bg2"><td><b>short_name_attrib_id</b></td><td>INT(10)</td><td>NULL</td><td>Foreign key references to the <a href="#attrib">attrib</a> table. Short name used for web purpose.</td><td></td></tr>
 </table>
 </div>
 <p><b>See also:</b></p>
