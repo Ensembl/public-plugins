@@ -12,10 +12,6 @@ Ensembl.Panel.DbFrontendRow = Ensembl.Panel.extend({
     this.base();
     var self = this;
 
-    this.id = (($('._dbf_button', this.el).attr('href') || '').match(/(\?|&|;)id\=([0-9]+)/) || []).pop();
-    if (!this.id) {
-      return;
-    }
     this.form = $(document.createElement('div')).attr({'class': 'dbf-inline-form'}).hide().insertAfter(this.el);
 
     // Button's event - Edit and Delete button
@@ -24,7 +20,7 @@ Ensembl.Panel.DbFrontendRow = Ensembl.Panel.extend({
       self.makeRequest(this, self.form, {
         success: function(json) {
           this.form.append(this.getResponseNode(json));
-          this.bringToView({marginTop: 5});
+          this.scrollIn({marginTop: 5});
           $('input[type="text"], input[type="password"], input[type="file"], textarea, select', this.form).first().focus();
           Ensembl.EventManager.trigger('validateForms', this.form);
         }
@@ -43,41 +39,57 @@ Ensembl.Panel.DbFrontendRow = Ensembl.Panel.extend({
           $(this).empty();
         });
       }
-      self.bringToView({marginTop: 5, downOnly: true});
-    });
-
-    // Submit event of the form for saving the data
-    $('form._dbf_save', this.form[0]).live('submit', function(event) {
-      event.preventDefault();
-      self.makeRequest(this, self.form, {
-        success: function(json) {
-          if (json.redirectURL) {
-            var url = json.redirectURL.match(/Display/) ? window.location + (window.location.href.match(/\?/) ? '&' : '?') + 'id=' + this.id : json.redirectURL;
-            this.target = url.match(/Problem$/) ? this.form : $(this.el);
-            if (this.target != this.form) {
-              this.form.hide();
-            }
-            this.makeRequest(this, this.target, {
-              async: false,
-              url: url,
-              success: function(json) {
-                this.target.html(this.getResponseNode(json).html());
-                this.bringToView({marginTop: 5, downOnly: true});
-              }
-            });
-          }
-        }
-      });
+      self.scrollIn({marginTop: 5, upOnly: true});
     });
   
     // Submit event of the form for previewing the data
     $('form._dbf_preview', this.form[0]).live('submit', function(event) {
       event.preventDefault();
+      self.scrollIn({marginTop: 5, upOnly: true});
       self.form.children(':first').hide();
       self.makeRequest(this, $(document.createElement('div')).appendTo(self.form), {
         success: function(json) {
           this.form.children(':last').replaceWith(this.getResponseNode(json));
-          this.bringToView({marginTop: 5, downOnly: true});
+        }
+      });
+    });
+
+    // Submit event of the form for saving the data
+    $('form._dbf_save, form._dbf_add', this.form[0]).live('submit', function(event) {
+      event.preventDefault();
+      self.action = this.className.match(/_dbf_add/) ? 'add' : 'edit';
+      self.target = $(self.el)
+      self.makeRequest(this, self.form.children(':last'), {
+        success: function(json) {
+          if (json.redirectURL) {
+            var url = json.redirectURL;
+            if (url.match(/Display/)) {
+              this.form.empty().hide();
+              if (this.action == 'add') {
+                this.target = $(this.el).clone().empty().removeAttr('id').insertAfter(this.el.previousSibling && this.el.previousSibling.previousSibling ? this.el.previousSibling : this.form);
+              }
+              var id = (url.match(/(\?|&|;)id\=([0-9]+)/) || []).pop() || 0;
+              if (id) {
+                url = window.location.href + (window.location.href.match(/\?/) ? '&' : '?') + 'id=' + id;
+              }
+            }
+            else if (url.match(/Problem$/)) {
+              this.target = this.form.children().show().last();
+            }
+            this.makeRequest({}, this.target, {
+              async: false,
+              url: url,
+              success: function(json) {
+                if (this.action == 'edit') {
+                  this.target.html(this.getResponseNode(json).html());
+                }
+                else {
+                  Ensembl.EventManager.trigger('addPanel', undefined, 'DbFrontendRow', this.getResponseNode(json).html(), this.target);
+                }
+                this.scrollIn({marginTop: 5, upOnly: true});
+              }
+            });
+          }
         }
       });
     });
@@ -89,7 +101,7 @@ Ensembl.Panel.DbFrontendRow = Ensembl.Panel.extend({
         success: function(json) {
           if (json.redirectURL) {
             if (json.redirectURL.match(/Problem$/)) {
-              this.makeRequest(this, this.form, {
+              this.makeRequest({}, this.form, {
                 async: false,
                 url: json.redirectURL,
                 success: function(json) {
@@ -114,6 +126,7 @@ Ensembl.Panel.DbFrontendRow = Ensembl.Panel.extend({
   makeRequest: function(eventTarget, target, options) {
     if (this.ajax) {
       this.ajax.abort();
+      this.ajax = false;
     }
     $(target).empty().show().addClass('spinner');
     var isForm = eventTarget.nodeName == 'FORM';
@@ -138,9 +151,9 @@ Ensembl.Panel.DbFrontendRow = Ensembl.Panel.extend({
   },
   
   //method to scroll page to the row
-  bringToView: function(options) {
+  scrollIn: function(options) {
     var top = $(this.el).offset().top - options.marginTop;
-    if (!options.downOnly || top < $(document).scrollTop()) {
+    if (!options.upOnly || top < $(document).scrollTop()) {
       $('html,body').animate({ scrollTop: top }, options.speed);
     }
   }
