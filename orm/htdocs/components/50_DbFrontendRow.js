@@ -66,7 +66,7 @@ Ensembl.Panel.DbFrontendRow = Ensembl.Panel.extend({
             if (url.match(/Display/)) {
               this.form.empty().hide();
               if (this.action == 'add') {
-                this.target = $(this.el).clone().empty().removeAttr('id').insertAfter(this.el.previousSibling && this.el.previousSibling.previousSibling ? this.el.previousSibling : this.form);
+                this.target = $(this.el).clone().empty().removeAttr('id').insertAfter(this.form);
               }
               var id = (url.match(/(\?|&|;)id\=([0-9]+)/) || []).pop() || 0;
               if (id) {
@@ -140,6 +140,9 @@ Ensembl.Panel.DbFrontendRow = Ensembl.Panel.extend({
       success: options.success,
       complete: function() {
         $(target).removeClass('spinner');
+      },
+      error: options.error || function() {
+        $(target).empty().html('An error occoured at the server. Please try again.');
       },
       data: options.data || (isForm ? $(eventTarget).serialize() : '')
     });
