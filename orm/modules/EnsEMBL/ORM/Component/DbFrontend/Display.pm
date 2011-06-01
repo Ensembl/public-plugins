@@ -28,6 +28,18 @@ sub content_tree {
   my $page    = $object->get_page_number;
   my $links   = defined $page ? $content->append_child($self->content_pagination_tree(scalar @$records)) : undef;
   !$object->pagination and $links and map {$_->remove} @{$links->get_nodes_by_flag('pagination_links')};
+  
+  my $add_link = $object->use_ajax && !$object->is_ajax_request
+    ? $content->append_child('div', {
+      'class' => 'dbf-record js_panel',
+      'children' => [
+        {'node_name' => 'div', 'class' => 'dbf-row-buttons', 'children' => [
+          {'node_name' => 'input', 'type' => 'hidden', 'class' => 'panel_type', 'value' => 'DbFrontendRow'},
+          {'node_name' => 'a', 'inner_HTML' => 'Add new', 'class' => $self->_JS_CLASS_ADD_BUTTON, 'href' => $self->hub->url({'action' => 'Add'})}
+        ]}
+      ]
+    })
+    : undef;
 
   my $js_class = $object->use_ajax ? $object->is_ajax_request ? $self->_JS_CLASS_RESPONSE_ELEMENT : 'js_panel' : ();
   for (@$records) {
@@ -35,7 +47,8 @@ sub content_tree {
     $record_div->set_attributes({'class' => ['dbf-record', $js_class]});
   }
 
-  $content->append_child($links->clone_node(1)) if $links; ## bottom pagination
+  $content->append_child($add_link->clone_node(1))  if $add_link; ## bottom add link
+  $content->append_child($links->clone_node(1))     if $links; ## bottom pagination
 
   return $content;
 }
@@ -107,8 +120,7 @@ sub display_field_value {
   
   ## if it's an arrayref
   if (ref $value eq 'ARRAY') {
-    my @return;
-    push @return, $self->display_field_value($_) for @$value;
+    my @return = map {$self->display_field_value($_)} @$value;
     return @return ? sprintf($delimiter ? '%s' : '<ul><li>%s</li></ul>', join($delimiter || '</li><li>', @return)) : '';
   }
 
@@ -116,7 +128,7 @@ sub display_field_value {
   return $self->print_datetime($value) if UNIVERSAL::isa($value, 'DateTime');
 
   ## if it's a rose object
-  if (UNIVERSAL::isa($value, 'EnsEMBL::ORM::Rose::Object')) {
+  if (ref $value && UNIVERSAL::isa($value, 'EnsEMBL::ORM::Rose::Object')) {
     my $title = $value->get_title;
     
     ## if it's a user

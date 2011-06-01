@@ -22,14 +22,15 @@ sub content_tree {
   my $action  = $hub->action;
   my $record  = $object->rose_object;
   
-  my $is_preview = $object->show_preview && $action ne 'Preview';
+  my $is_preview        = $object->show_preview && $action ne 'Preview';
+  my $primary_key_value = $record->get_primary_key_value;
 
   return $self->dom->create_element('p', {'inner_HTML' => sprintf('No %s selected to edit.', $object->record_name->{'singular'})}) unless $record;
   
   my $content = $self->dom->create_element('div', {'class' => [$object->content_css, $self->_JS_CLASS_RESPONSE_ELEMENT]});
   my $form    = $content->append_child($self->new_form({
     'action' => $hub->url({'action' => $is_preview ? 'Preview' : 'Save'}),
-    'class'  => $is_preview ? $self->_JS_CLASS_PREVIEW_FORM : $self->_JS_CLASS_SAVE_FORM
+    'class'  => !$is_preview ? $primary_key_value ? $self->_JS_CLASS_SAVE_FORM : $self->_JS_CLASS_ADD_FORM : $self->_JS_CLASS_PREVIEW_FORM
   }));
   
   # include extra GET params to hidden inputs
@@ -41,7 +42,6 @@ sub content_tree {
   my $fields  = $self->unpack_rose_object($record);
 
   # primary key
-  my $primary_key_value = $record->get_primary_key_value;
   $form->add_hidden({'name' => 'id', 'value' => $primary_key_value})->set_flag($record->primary_key) if $primary_key_value;
 
   # trackable key prefix

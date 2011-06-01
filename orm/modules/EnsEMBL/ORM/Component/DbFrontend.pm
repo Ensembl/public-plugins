@@ -19,10 +19,12 @@ use base qw(EnsEMBL::Web::Component);
 use constant {
   _JS_CLASS_RESPONSE_ELEMENT  => '_dbf_response',
   _JS_CLASS_EDIT_BUTTON       => '_dbf_button',
+  _JS_CLASS_ADD_BUTTON        => '_dbf_button',
   _JS_CLASS_DELETE_BUTTON     => '_dbf_delete',
   _JS_CLASS_CANCEL_BUTTON     => '_dbf_cancel',
   _JS_CLASS_PREVIEW_FORM      => '_dbf_preview',
   _JS_CLASS_SAVE_FORM         => '_dbf_save',
+  _JS_CLASS_ADD_FORM          => '_dbf_add'
 };
 
 sub _init {
