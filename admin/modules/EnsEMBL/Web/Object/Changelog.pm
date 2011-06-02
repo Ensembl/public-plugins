@@ -114,23 +114,28 @@ sub show_fields {
     },
     assembly          => {
       'type'      => 'dropdown',
-      'label'     => 'Is this a new assembly?'
+      'label'     => 'Is this a new assembly?',
+      'values'    => [{'value' => 'Y', 'caption' => 'Yes'}, {'value' => 'N', 'caption' => 'No'}]
     },
     gene_set          => {
       'type'      => 'dropdown',
-      'label'     => 'Has the gene set changed?'
+      'label'     => 'Has the gene set changed?',
+      'values'    => [{'value' => 'Y', 'caption' => 'Yes'}, {'value' => 'N', 'caption' => 'No'}]
     },
     repeat_masking    => {
       'type'      => 'dropdown',
-      'label'     => 'Has the repeat masking changed?'
+      'label'     => 'Has the repeat masking changed?',
+      'values'    => [{'value' => 'Y', 'caption' => 'Yes'}, {'value' => 'N', 'caption' => 'No'}]
     },
     stable_id_mapping => {
       'type'      => 'dropdown',
-      'label'     => 'Does it need stable ID mapping?'
+      'label'     => 'Does it need stable ID mapping?',
+      'values'    => [{'value' => 'Y', 'caption' => 'Yes'}, {'value' => 'N', 'caption' => 'No'}]
     },
     affy_mapping      => {
       'type'      => 'dropdown',
-      'label'     => 'Does it need affy mapping?'
+      'label'     => 'Does it need affy mapping?',
+      'values'    => [{'value' => 'Y', 'caption' => 'Yes'}, {'value' => 'N', 'caption' => 'No'}]
     },
     db_status         => {
       'type'      => 'dropdown',
