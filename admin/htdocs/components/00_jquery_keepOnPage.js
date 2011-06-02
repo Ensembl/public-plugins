@@ -2,8 +2,6 @@
  * keepOnPage
  * A very small jQuery plugin to keep an element always on the page when page scrolled vertically
  * Not yet tested in all scenarios, but works for Ensembl Admin Healthcheck pages where required
- *
- * Harpreet Riat
  */
 
 (function($) {
