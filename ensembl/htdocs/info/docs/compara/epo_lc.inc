@@ -1,7 +1,7 @@
 <h4>35 eutherian mammals EPO_LOW_COVERAGE</h4><h5>(method_link_type="EPO_LOW_COVERAGE" : species_set_name="mammals")</h5>Human (Homo sapiens)<br />
 Chimpanzee (Pan troglodytes)<br />
 Gorilla (Gorilla gorilla)<br />
-Orangutan (Pongo abelii)<br />
+Pongo abelii<br />
 Gibbon (Nomascus leucogenys)<br />
 Macaque (Macaca mulatta)<br />
 Marmoset (Callithrix jacchus)<br />
