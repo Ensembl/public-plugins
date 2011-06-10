@@ -145,7 +145,7 @@ sub render_hits {
     'SEQUENCE'              => sub { return ( $_[0]->{id} =~ /LRG/ ? 'LRG' : '' ) . " Sequence: $_[0]->{id}" },
     'PROTEINALIGNFEATURE' => sub { return "Protein alignment feature : @{[$_[0]->{description} =~ /(^.*)\shits/]}" },
     'DNAALIGNFEATURE'     => sub { return "DNA alignment feature : @{[$_[0]->{description} =~ /(^.*)\shits/]}" },
-    'PHENOTYPE'           => sub { return "SNPPhenotype: $_[0]->{description}" },
+    'PHENOTYPE'           => sub { return "Variation Phenotype: $_[0]->{description}" },
     'STRUCTURALVARIATION' => sub { return "Structural Variation: $_[0]->{id}" },
     'MARKER'              => sub { return "Ensembl Marker: $_[0]->{id}" },
     'REGULATORYFEATURE'   => sub { return "RNA: $_[0]->{id}" },
