@@ -5,13 +5,11 @@ use strict;
 sub modify_tree {
   my $self   = shift;
 
-  ## Replace results node with one from Lucene namespace
-  $self->delete_node('Results');
-  $self->create_node('Results', 'Results Summary',
-    [qw(results   EnsEMBL::Lucene::Component::Search::Results)],
-    { no_menu_entry => 1 }
-  );
+  ## Replace results component with one from Lucene namespace
+  my $node = $self->get_node('Results');
+  $node->data->{'components'} = [qw(results   EnsEMBL::Lucene::Component::Search::Results)];
 
+  ## Extra step - Results is now a summary
   $self->create_node('Details', 'Result in Detail',
     [qw(details   EnsEMBL::Lucene::Component::Search::Details)],
     { 'no_menu_entry' => 1 }
