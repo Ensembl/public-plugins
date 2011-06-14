@@ -26,7 +26,7 @@ This data is also integrated with other sections of Ensembl, in particular we pr
 the effects of variants on the Ensembl transcripts for each species.
 </p>
 
-<h2> Variation species </h2>
+<h2 id="sources"> Variation species and data sources </h2>
 <p>
 Ensembl stores variation data for the following species, but note that users can still use the 
 <a href="#VEP">Variant Effect Predictor</a> on species for which we do not currently have 
@@ -34,83 +34,52 @@ a variation database.
 </p>
 <table><tr><td>
 <ul>
-	<li><i>Bos taurus</i></li>
-	<li><i>Canis familiaris</i></li>
-	<li><i>Danio rerio</i></li>
-	<li><i>Drosophila melanogaster</i></li>
-	<li><i>Equus caballus</i></li>
-	<li><i>Felis catus</i></li>
-	<li><i>Gallus gallus</i></li>
-	<li><i>Homo sapiens</i></li>
-	<li><i>Monodelphis domestica</i></li>
+	<li><i>Bos taurus</i> <a href="sources_documentation.html#bos_taurus">[sources]</a></li>
+	<li><i>Canis familiaris</i> <a href="sources_documentation.html#canis_familiaris">[sources]</a></li>
+	<li><i>Danio rerio</i> <a href="sources_documentation.html#danio_rerio">[sources]</a></li>
+	<li><i>Drosophila melanogaster</i> <a href="sources_documentation.html#drosophila_melanogaster">[sources]</a></li>
+	<li><i>Equus caballus</i> <a href="sources_documentation.html#equus_caballus">[sources]</a></li>
+	<li><i>Felis catus</i> <a href="sources_documentation.html#felis_catus">[sources]</a></li>
+	<li><i>Gallus gallus</i> <a href="sources_documentation.html#gallus_gallus">[sources]</a></li>
+	<li><i>Homo sapiens</i> <a href="sources_documentation.html#homo_sapiens">[sources]</a></li>
+	<li><i>Monodelphis domestica</i> <a href="sources_documentation.html#monodelphis_domestica">[sources]</a></li>
 </ul>
 </td><td>
 <ul>
-	<li><i>Mus musculus</i></li>
-	<li><i>Ornithorhynchus anatinus</i></li>
-	<li><i>Pan troglodytes</i></li>
-	<li><i>Pongo abelii</i></li>
-	<li><i>Rattus norvegicus</i></li>
-	<li><i>Saccharomyces cerevisiae</i></li>
-	<li><i>Sus scrofa</i></li>
-	<li><i>Taeniopygia guttata</i></li>
-	<li><i>Tetraodon nigroviridis</i></li>
+	<li><i>Mus musculus</i> <a href="sources_documentation.html#mus_musculus">[sources]</a></li>
+	<li><i>Ornithorhynchus anatinus</i> <a href="sources_documentation.html#ornithorhynchus_anatinus">[sources]</a></li>
+	<li><i>Pan troglodytes</i> <a href="sources_documentation.html#pan_troglodytes">[sources]</a></li>
+	<li><i>Pongo abelii</i> <a href="sources_documentation.html#pongo_abelii">[sources]</a></li>
+	<li><i>Rattus norvegicus</i> <a href="sources_documentation.html#rattus_norvegicus">[sources]</a></li>
+	<li><i>Saccharomyces cerevisiae</i> <a href="sources_documentation.html#saccharomyces_cerevisiae">[sources]</a></li>
+	<li><i>Sus scrofa</i> <a href="sources_documentation.html#sus_scrofa">[sources]</a></li>
+	<li><i>Taeniopygia guttata</i> <a href="sources_documentation.html#taeniopygia_guttata">[sources]</a></li>
+	<li><i>Tetraodon nigroviridis</i> <a href="sources_documentation.html#tetraodon_nigroviridis">[sources]</a></li>
 </ul>
 </td></tr></table>
 
-
-<h2 id="sources"> Sources of Variation Data </h2>
-
 <p>
 The majority of variants are imported from NCBI <a rel="external"
-href="http://www.ncbi.nlm.nih.gov/projects/SNP/">dbSNP</a>. 
-The data is imported when it is released by dbSNP and incorporated
-into the next Ensembl release. If dbSNP releases the data on a different assembly,
-Ensembl will remap the variant positions onto the current assembly.<br/>
+href="http://www.ncbi.nlm.nih.gov/projects/SNP/">dbSNP</a>. The data is
+imported when it is released by dbSNP and incorporated into the next
+Ensembl release. If dbSNP releases the data on a different assembly,
+Ensembl will remap the variant positions onto the current assembly.
+Data from projects like the <a rel="external" href="http://hapmap.ncbi.nlm.nih.gov/">HapMap Project</a> and <a
+rel="external" href="http://www.1000genomes.org/">1000 Genomes Project</a> is
+imported once it has been submitted to dbSNP.
 </p>
 
 <p>
-For Human, data from projects like 
-the <a rel="external" href="http://www.HapMap.org/">HapMap Project</a>
- and <a rel="external" href="http://www.1000genomes.org/page.php">1000
-Genomes Project</a> is imported once it has been submitted to <a rel="external"
-href="http://www.ncbi.nlm.nih.gov/projects/SNP/">dbSNP</a>. 
-</p>
-
-<p>
-Ensembl also includes data from other sources. For a complete list, go to
-a species Location page (e.g. <a href="/Homo_sapiens/Location/View?r=6:133017695-133161157"> for human</a>),
-and click on the 'Configure this page' link on the left-hand side.
-The 'Germline variation' and 'Somatic mutations' sections contain a detailed description of 
+Ensembl also includes data from other <a href="sources_documentation.html">sources</a>. To view data from these sources in the
+browser go to a species Location page (e.g. <a href="/Homo_sapiens/Location/View?r=6:133017695-133161157">for human</a>), and click on
+the <i>'Configure this page'</i> link on the left-hand side. The <i>'Germline
+variation'</i> and <i>'Somatic mutations'</i> sections contain a track list  of
 all sources of variation data for that species.
 </p>
 
-<p>
-For example, in human there is data from;
-</p>
-
-<ul>
-<li><a rel="external" href="http://www.ncbi.nlm.nih.gov/projects/SNP/">dbSNP</a></li>
-<li>Illumina chips</li>
-<li><a rel="external" href="http://www.affymetrix.com/index.affx">Affymetrix GeneChip Arrays</a></li> 
-<li><a rel="external" href="http://www.hgmd.cf.ac.uk/ac/index.php">Human Gene Mutation Database
-(HGMD)</a> (public identifiers)</li>
-<li><a rel="external" href="http://www.uniprot.org/">UniProt</a></li>
-<li><a rel="external" href="http://www.sanger.ac.uk/genetics/CGP/cosmic/">Catalogue Of Somatic Mutations In
-Cancer (COSMIC)</a></li>
-<li><a rel="external" href="http://www.ebi.ac.uk/dgva/page.php">DGVa</a> and <a
-rel="external" href="http://www.ncbi.nlm.nih.gov/dbvar/">dbVAR</a>: structural polymorphism data</li>
-<li><a rel="external"
-href="http://www.genome.gov/">NHGRI</a>, <a rel="external" href="http://www.ebi.ac.uk/ega/page.php">European
-Genome-phenome Archive (EGA)</a>, <a rel="external" href="http://www.biomedcentral.com/1471-2350/10/6">Open
-GWAS DB</a>: phenotype information from genome-wide association studies.</li>
-<li><a rel="external" href="http://www.ncbi.nlm.nih.gov/omim">OMIM</a>: phenotype information.</li>
-<li>Locus Reference Genomic sequences (<a rel="external"
-href="http://www.lrg-sequence.org/page.php">LRG</a>)</li>
-</ul>
 
 <br />
-<h2 id="displays"> Variation Displays </h2>
+<h2 id="displays"> Variation displays </h2>
 <p>
 Variation data can be viewed in the browser through pages such as:
 </p>
