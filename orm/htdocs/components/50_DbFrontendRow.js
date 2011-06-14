@@ -20,9 +20,11 @@ Ensembl.Panel.DbFrontendRow = Ensembl.Panel.extend({
       self.makeRequest(this, self.form, {
         success: function(json) {
           this.form.append(this.getResponseNode(json));
-          this.scrollIn({marginTop: 5});
           $('input[type="text"], input[type="password"], input[type="file"], textarea, select', this.form).first().focus();
           Ensembl.EventManager.trigger('validateForms', this.form);
+          window.setTimeout(function() {
+            self.scrollIn({margin: 5});
+          }, 0);
         }
       });
     });
@@ -39,13 +41,13 @@ Ensembl.Panel.DbFrontendRow = Ensembl.Panel.extend({
           $(this).empty();
         });
       }
-      self.scrollIn({marginTop: 5, upOnly: true});
+      self.scrollIn({margin: 5});
     });
   
     // Submit event of the form for previewing the data
     $('form._dbf_preview', this.form[0]).live('submit', function(event) {
       event.preventDefault();
-      self.scrollIn({marginTop: 5, upOnly: true});
+      self.scrollIn({margin: 5});
       self.form.children(':first').hide();
       self.makeRequest(this, $(document.createElement('div')).appendTo(self.form), {
         success: function(json) {
@@ -86,7 +88,7 @@ Ensembl.Panel.DbFrontendRow = Ensembl.Panel.extend({
                 else {
                   Ensembl.EventManager.trigger('addPanel', undefined, 'DbFrontendRow', this.getResponseNode(json).html(), this.target);
                 }
-                this.scrollIn({marginTop: 5, upOnly: true});
+                this.scrollIn({margin: 5});
               }
             });
           }
@@ -155,9 +157,34 @@ Ensembl.Panel.DbFrontendRow = Ensembl.Panel.extend({
   
   //method to scroll page to the row
   scrollIn: function(options) {
-    var top = $(this.el).offset().top - options.marginTop;
-    if (!options.upOnly || top < $(document).scrollTop()) {
-      $('html,body').animate({ scrollTop: top }, options.speed);
+  
+    var position   = 0;
+    var formHeight = this.form.outerHeight();
+    var formTop    = this.form.offset().top;
+    var elHeight   = $(this.el).outerHeight();
+    var elTop      = $(this.el).offset().top;
+    var scrollTop  = $(document).scrollTop();
+    var winHeight  = $(window).height();
+
+    //if el hidden above scroll
+    if (elTop - options.margin < scrollTop) {
+      position = elTop - options.margin;
+    }
+
+    //if form hidden below scroll
+    else if (formTop + formHeight + options.margin > scrollTop + winHeight) {
+    
+      //if el + form larger than window size
+      if (elHeight + formHeight + options.margin * 2 > winHeight) {
+        position = elTop - options.margin;
+      }
+      else {
+        position = formTop + formHeight + options.margin -winHeight;
+      }
+    }
+    
+    if (position) {
+      $('html,body').animate({ scrollTop: position}, options.speed);
     }
   }
 });
