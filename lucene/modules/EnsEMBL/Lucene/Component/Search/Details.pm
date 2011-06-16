@@ -147,7 +147,7 @@ sub render_hits {
     'DNAALIGNFEATURE'     => sub { return "DNA alignment feature : @{[$_[0]->{description} =~ /(^.*)\shits/]}" },
     'PHENOTYPE'           => sub { return "Variation Phenotype: $_[0]->{description}" },
     'STRUCTURALVARIATION' => sub { return "Structural Variation: $_[0]->{id}" },
-    'MARKER'              => sub { return "Ensembl Marker: $_[0]->{id}" },
+    'MARKER'              => sub { return "Marker: $_[0]->{id}" },
     'REGULATORYFEATURE'   => sub { return "RNA: $_[0]->{id}" },
     'QTL'                 => sub { return "QTL: $_[0]->{id}" },
     'PROBEFEATURE'        => sub { return "Probe: $_[0]->{id}" },
