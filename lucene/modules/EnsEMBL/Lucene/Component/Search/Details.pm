@@ -209,7 +209,7 @@ sub _render_help_results {
     unless ($context_content) {
       $context_content = "@content_words[0 .. 80] ...";
     }
-    $context_content =~ s/($search_term)/<strong>$1<\/strong>/g;
+    $context_content =~ s/($search_term)/<strong>$1<\/strong>/ig;
 
     # $content = encode("utf8", $context_content);
     my $db_extra = $hit->{'db'} ? ';db=' . $hit->{'db'} : '';
@@ -233,9 +233,12 @@ sub _render_help_results {
 
 sub _render_genome_hits {
   my ( $self, $hits, $hit_tagline_lookup ) = @_;
-  my $ensembl_version = 'e' . $self->hub->species_defs->ENSEMBL_VERSION;
-  my $html;
+  my $species_defs = EnsEMBL::Web::SpeciesDefs->new();
+  my $sitetype = lc($species_defs->ENSEMBL_SITETYPE);
+  my $prefix = $sitetype eq 'vega' ? 'v' :  $sitetype eq 'pre' ? 'pre' : 'e';
+  my $ensembl_version = $prefix . $species_defs->ENSEMBL_VERSION;
 
+  my $html;
   foreach my $hit (@$hits) {
     $html .= qq{<div class="hit">};
 
@@ -257,7 +260,7 @@ qq{<div style="width: 85%;border-bottom: 1px solid #CCCCCC; "><a class="notext" 
     my $featuretype = $hit->{featuretype};
     my $description = $hit->{description};
     my $db_extra    = $hit->{'db'} ? ';db=' . $hit->{'db'} : '';
-    $html .= qq(   
+    $html .= qq(
 <dl class="summary">
   <dt>Description</dt>
   <dd>$description</dd>
@@ -272,7 +275,7 @@ qq{<div style="width: 85%;border-bottom: 1px solid #CCCCCC; "><a class="notext" 
 );
     }
 
-    $html .= qq(                      
+    $html .= qq(
 <dl class="summary">
   <dt>Source</dt>
   <dd>$ensembl_version</dd>
@@ -284,8 +287,6 @@ qq{<div style="width: 85%;border-bottom: 1px solid #CCCCCC; "><a class="notext" 
   }
   return $html;
 }
-
-
 
 1;
 

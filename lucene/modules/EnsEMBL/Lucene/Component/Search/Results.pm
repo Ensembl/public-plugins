@@ -15,13 +15,8 @@ sub content {
   my $self    = shift;
   my $object  = $self->object;
   my $hub     = $self->hub;
-
-#     if ( $object->species eq 'Multi' ) {
-#         return
-# qq{<div class="info-box embedded-box">Searching all species at once is currently unavailable whilst the lucene backend is under development, this functionality will appear soon.   }
-#
-#     }
-#
+  my $species_defs = $hub->species_defs;
+  my $sitetype = lc($species_defs->ENSEMBL_SITETYPE);
   my $html;
 
   my $species = $hub->param('species');
@@ -33,24 +28,20 @@ sub content {
   my $results_by_group = $object->groups;
   my $group_count      = scalar keys %$results_by_group;
 
-  if (   $results_by_group->{'Species'}{'total'} && $results_by_group->{'Feature type'}{'total'}
-           || $results_by_group->{'Help'}{'total'} )
-    {
+  if (   $results_by_group->{'Species'}{'total'} && $results_by_group->{'Feature type'}{'total'} || $results_by_group->{'Help'}{'total'} ) {
+    $html = qq(<h3>Your search of $display_species with '$q' returned the following results:</h3>);
 
-      $html = qq(<h3>Your search of $display_species with '$q' returned the following results:</h3>);
-
-      my @group_classes = ('one-col');
-      if ( $group_count > 1 ) {
-        @group_classes =
-          $group_count > 1
+    my @group_classes = ('one-col');
+    if ( $group_count > 1 ) {
+      @group_classes = $group_count > 1
        ? ( 'threecol-left', 'threecol-middle', 'threecol-right' )
        : ( 'twocol-left', 'twocol-right' );
-      }
+    }
 
-      my $i = 0;
+    my $i = 0;
 
       #         foreach my $group_name ( sort { $a cmp $b } keys %$results_by_group ) {
-      foreach my $group_name ( 'Feature type', 'Species', 'Help' ) {
+    foreach my $group_name ( 'Feature type', 'Species', 'Help' ) {
 
         #             my $url = '/'
         #               . $object->species
@@ -59,72 +50,70 @@ sub content {
         #               . ';idx=all;' . ';q='
         #               . $object->param('q');
 
-        my $class = $group_classes[$i];
+      my $class = $group_classes[$i];
 
-        my $group       = $results_by_group->{$group_name}->{results};
-        my $group_total = delete $results_by_group->{$group_name}->{total};
-        next if $group_total < 1;
+      my $group       = $results_by_group->{$group_name}->{results};
+      my $group_total = delete $results_by_group->{$group_name}->{total};
+      next if $group_total < 1;
 
-        $html .= qq(<div class="$class">
+      $html .= qq(<div class="$class">
 <table class="search_results">
 <tr><th colspan="2">By $group_name</th></tr>
 <tr><td>Total</td><td>$group_total</td></tr>
       );
 
-        foreach my $child_name ( sort { $a cmp $b } keys %{$group} ) {
-
-          my $child = $group->{$child_name};
-
-          $child_name =~ s/ensembl_(.*)$/ucfirst($1)/e;
-          $html .= qq(<tr>
+      foreach my $child_name ( sort { $a cmp $b } keys %{$group} ) {
+        my $child = $group->{$child_name};
+        $child_name =~ s/${sitetype}_(.*)$/ucfirst($1)/e;
+        $html .= qq(<tr>
                               <td>);
 
-          my $child_name_no_underscore;
-          ( $child_name_no_underscore = $child_name ) =~ s/_/ /g;
+        my $child_name_no_underscore;
+        ( $child_name_no_underscore = $child_name ) =~ s/_/ /g;
 
-          $html .= qq(<a href="#" class="collapsible">$child_name_no_underscore</a><ul class="shut">\n);
-          my $grandchild  = $child->{results};
-          my $child_count = $child->{total};
-          my $g_clipped;
-          foreach my $g_name ( sort { $a cmp $b } keys %{$grandchild} ) {
-            my $g_count = $grandchild->{$g_name}->{count};
+        $html .= qq(<a href="#" class="collapsible">$child_name_no_underscore</a><ul class="shut">\n);
+        my $grandchild  = $child->{results};
+        my $child_count = $child->{total};
+        my $g_clipped;
+        foreach my $g_name ( sort { $a cmp $b } keys %{$grandchild} ) {
+          my $g_count = $grandchild->{$g_name}->{count};
 
             my $clipped = $grandchild->{$g_name}->{is_clipped_flag};
             $g_clipped = '>' if $clipped eq '>';
-            $g_name =~ s/ensembl_(.*)$/ucfirst($1)/e;
+            $g_name =~ s/${sitetype}_(.*)$/ucfirst($1)/e;
 
-            # Handle Docs Urls differently
-            my $g_url;
-            if ( $g_name =~ /faq|docs|glossary|help/i ) {
-              $g_url = "/Search/Details?species=all;idx=" . ucfirst($g_name) . ';q=' . $hub->param('q');
-            }
-            else {
-              my ( $sp, $idx );
-              ( $idx, $sp ) = $group_name =~ /species/i ? ( $g_name, $child_name ) : ( $child_name, $g_name );
-              $sp     =~ s/\s/_/;
-              $g_name =~ s/_/ /g;
-              $g_url = "/$sp/Search/Details?species=$sp;idx=$idx;end=$g_count;q=" . $hub->param('q');
-            }
-# yet more exceptions for Help and docs
-# change Help -> Page Help, Docs -> Documentation and Faq to FAQ
-# this needs fixed at source i.e. the Search Domain name
-            $g_name =~ s/Help/Page Help/;
-            $g_name =~ s/Docs/Documentation/;
-            $g_name =~ s/Faq/FAQ/;
-
-            $html .= qq#<li><a href="$g_url"> $g_name ($clipped$g_count)</a></li>#;
+          # Handle Docs Urls differently
+          my $g_url;
+          if ( $g_name =~ /faq|docs|glossary|help/i ) {
+            $g_url = "/Search/Details?species=all;idx=" . ucfirst($g_name) . ';q=' . $hub->param('q');
           }
-          $html .= "</ul>\n";
+          else {
+            my ( $sp, $idx );
+            ( $idx, $sp ) = $group_name =~ /species/i ? ( $g_name, $child_name ) : ( $child_name, $g_name );
+            $sp     =~ s/\s/_/;
+            $g_name =~ s/_/ /g;
+            $g_url = "/$sp/Search/Details?species=$sp;idx=$idx;end=$g_count;q=" . $hub->param('q');
+          }
+          # yet more exceptions for Help and docs
+          # change Help -> Page Help, Docs -> Documentation and Faq to FAQ
+          # this needs fixed at source i.e. the Search Domain name
+          $g_name =~ s/Help/Page Help/;
+          $g_name =~ s/Docs/Documentation/;
+          $g_name =~ s/Faq/FAQ/;
 
-          $html .= qq(</td>
+          $html .= qq#<li><a href="$g_url"> $g_name ($clipped$g_count)</a></li>#;
+        }
+        $html .= "</ul>\n";
+
+        $html .= qq(</td>
  <td style="width:5em"><a href="#"> $g_clipped$child_count</a>
  </tr>\n);
-        }
-
-        $html .= qq(</table>\n</div>\n\n);
-        $i++;
       }
+
+      $html .= qq(</table>\n</div>\n\n);
+      $i++;
     }
+  }
   else {
     warn "FOUND NOTHING";
     $html = $self->re_search;
