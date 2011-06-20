@@ -844,12 +844,39 @@ eliminates the need to connect to the database while the script is running
 
 <ol>
 	<li>
-		Download the archive file for your species from here
+		Download the archive file for your species:
+        <p>
+            <table class="ss" style="width:25%">
+                <tr>
+                    <th>Human <i>(Homo sapiens)</i></th>
+                    <td><a href="ftp://ftp.ensembl.org/pub/release-62/variation/homo_sapiens/homo_sapiens_vep_62.tar.gz">Download</a></td>
+                </tr>
+                <tr>
+                    <th>Mouse <i>(Mus musculus)</i></th>
+                    <td><a href="ftp://ftp.ensembl.org/pub/release-62/variation/mus_musculus/mus_musculus_vep_62.tar.gz">Download</a></td>
+                </tr>
+                <tr>
+                    <th>Rat <i>(Rattus norvegicus)</i></th>
+                    <td><a href="ftp://ftp.ensembl.org/pub/release-62/variation/rattus_norvegicus/rattus_norvegicus_vep_62.tar.gz">Download</a></td>
+                </tr>
+                <tr>
+                    <th>Zebrafish <i>(Danio rerio)</i></th>
+                    <td><a href="ftp://ftp.ensembl.org/pub/release-62/variation/danio_rerio/danio_rerio_vep_62.tar.gz">Download</a></td>
+                </tr>
+                <tr>
+                    <th>Cow <i>(Bos taurus)</i></th>
+                    <td><a href="ftp://ftp.ensembl.org/pub/release-62/variation/bos_taurus/bos_taurus_vep_62.tar.gz">Download</a></td>
+                </tr>
+            </table>
+        </p>
 	</li>
 	<li>
 		Extract the archive in your cache directory. By default the VEP uses
 		$HOME/.vep/ as the cache directory, where $HOME is your UNIX home
 		directory.
+        <pre class="code">
+cp homo_sapiens_vep_62.tar.gz ~/.vep/
+tar xfz homo_sapiens_vep_62.tar.gz</pre>
 	</li>
 	<li>
 		Run the VEP with the --cache option
