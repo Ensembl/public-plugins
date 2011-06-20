@@ -40,6 +40,7 @@ Perl script |
 			<li><a href="#build">Building your own cache</a></li>
 			<li><a href="#limitations">Limitations of the cache</a></li>
 			<li><a href="#privacy">Data privacy</a></li>
+			<!--<li><a href="#standalone">Standalone mode</a></li>-->
 		</ul>
 	</li>	
 </ul>
@@ -52,8 +53,6 @@ Perl script |
 <ul>
     <li>ability to use local file <a href="#cache">cache</a> in place of or
     alongside connecting to an Ensembl database</li>
-    <li>new <a href="#standalone">"standalone"</a> mode does not depend on API
-    installation or network connection</li>
 	<li>significant improvements to speed of script</li>
     <li>whole-genome mode now default (no disadvantage for smaller
     datasets)</li>
@@ -593,7 +592,7 @@ host          useastdb.ensembl.org</pre>
 			vary). <i>Default = "$HOME/.vep/"</i>
 		</td>
 	</tr>
-	<tr class="bg2">
+	<!--<tr class="bg2">
 		<td><pre>--standalone</pre></td>
 		<td>&nbsp;</td>
 		<td>
@@ -604,7 +603,7 @@ host          useastdb.ensembl.org</pre>
 			"Bio/" sub-directory found with the script. <i>Not used by
 			default</i>
 		</td>
-	</tr>
+	</tr>-->
 	<tr>
 		<td><pre>--buffer [number]</pre></td>
 		<td>&nbsp</td>
@@ -815,13 +814,13 @@ illustrate the model of caching that is used. </p>
         <th>Normal mode</th>
         <th>Cache mode</th>
         <th>Build mode</th>
-        <th>Standalone mode</th>
+        <!--<th>Standalone mode</th>-->
     </tr>
     <tr>
         <td><a href="/img/vep_cache_normal.png"><img src="/img/vep_cache_normal_thumb.png" /></a></td>
         <td><a href="/img/vep_cache_cache.png"><img src="/img/vep_cache_cache_thumb.png" /></a></td></td>
         <td valign="middle"><a href="/img/vep_cache_build.png"><img src="/img/vep_cache_build_thumb.png" /></a></td></td>
-        <td><a href="/img/vep_cache_standalone.png"><img src="/img/vep_cache_standalone_thumb.png" /></a></td></td>
+        <!--<td><a href="/img/vep_cache_standalone.png"><img src="/img/vep_cache_standalone_thumb.png" /></a></td></td>-->
     </tr>
 </table>
 
@@ -944,6 +943,30 @@ avoid completely any network connections to public servers, thus preserving
 absolutely the privacy of your data. </p>
 
 <a href="#top">[Back to top]</a>
+
+
+
+<!--<h3 id="standalone"> Standalone mode </h3>
+
+<p> <span style="color:red;">WARNING: EXPERIMENTAL!</span> It is possible to run
+the VEP script in a standalone mode that does not require the installation of
+any of the usual dependencies. This means users require only perl (version 5.8
+or greater) and the either zcat, gzcat or gzip utilities. To enable this mode,
+use the flag --standalone. You will need to have downloaded a <a
+href="#pre">complete cache</a> for your species of interest, since in standalone
+mode no database connections can be made. You will also need the mini package of
+modules contained in <a
+href="ftp://ftp.ensembl.org/pub/misc-scripts/Variant_effect_predictor_2.0/standalone_Bio.zip">this
+archive</a>, which you should decompress into the same directory as the script.
+Note that if you run the script from another directory,
+you will need to tell perl where to find the modules using the -I flag: </p>
+
+<pre> perl -I path/to/vep/ path/to/vep/variant_effect_predictor.pl </pre>
+
+<p> This mode is relatively untested, as such should be treated as "alpha" code.
+Feedback, however, would be very useful for the development of the script. </p>
+
+<a href="#top">[Back to top]</a>-->
 
 
 </body>
