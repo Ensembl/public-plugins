@@ -1,4 +1,3 @@
-
 <html>
 <head>
 <meta http-equiv="CONTENT-TYPE" content="text/html; charset=utf-8" />
@@ -48,10 +47,12 @@ variation schema.
 </p>
 
 <p>
-A PDF document of the schema is available <a href="variation-database-schema.pdf">here</a>.
+A PDF document of the schema is available <a href="variation-database-schema.pdf">here</a>.<br />
+A colour legend is available at the <a href="#legend">bottom of the page</a>.
 </p>
 <br />
 <hr />
+
 
 <h3>List of the tables:</h3>
 <table><tr><td>
@@ -112,10 +113,14 @@ A PDF document of the schema is available <a href="variation-database-schema.pdf
 <hr />
 
 <br />
-<table style="border: 2px groove #CCCCCC;height:10px;background-color:#FAFAFF"><tr style="vertical-align:middle;height:10px">
-<td style="width:500px;text-align:left;height:10px"><span id="allele" style="font-size:11pt;font-weight:bold">allele</span></td>
-<td style="width:100px;text-align:right"><a id="a_allele" style="cursor:pointer;text-decoration:underline" onclick="show_hide('allele')">Show</a> columns</td>
-</tr></table>
+	<table style="border: 2px groove #CCCCCC;background-color:#FAFAFF">
+		<tr style="vertical-align:middle">
+			<td style="padding:0px;width:10px;background-color:#000000"></td>
+			<td style="width:2px"></td>
+			<td style="width:500px;text-align:left;height:10px"><span id="allele" style="font-size:11pt;font-weight:bold">allele</span></td>
+			<td style="width:100px;text-align:right"><a id="a_allele" style="cursor:pointer;text-decoration:underline" onclick="show_hide('allele')">Show</a> columns</td>
+		</tr>
+	</table>
 <p>This table stores information about each of a variation's alleles, along with population frequencies.<p>
 
 	<div id="div_allele" style="display:none">
@@ -139,10 +144,14 @@ A PDF document of the schema is available <a href="variation-database-schema.pdf
 </ul>
 
 <br />
-<table style="border: 2px groove #CCCCCC;height:10px;background-color:#FAFAFF"><tr style="vertical-align:middle;height:10px">
-<td style="width:500px;text-align:left;height:10px"><span id="allele_group" style="font-size:11pt;font-weight:bold">allele_group</span></td>
-<td style="width:100px;text-align:right"><a id="a_allele_group" style="cursor:pointer;text-decoration:underline" onclick="show_hide('allele_group')">Show</a> columns</td>
-</tr></table>
+	<table style="border: 2px groove #CCCCCC;background-color:#FAFAFF">
+		<tr style="vertical-align:middle">
+			<td style="padding:0px;width:10px;background-color:#000000"></td>
+			<td style="width:2px"></td>
+			<td style="width:500px;text-align:left;height:10px"><span id="allele_group" style="font-size:11pt;font-weight:bold">allele_group</span></td>
+			<td style="width:100px;text-align:right"><a id="a_allele_group" style="cursor:pointer;text-decoration:underline" onclick="show_hide('allele_group')">Show</a> columns</td>
+		</tr>
+	</table>
 <p>This table, along with allele_group_allele, represents a particular multi-marker allele of a given multi-marker variation, or haplotype. It stores an associated population frequency.<p>
 
 	<div id="div_allele_group" style="display:none">
@@ -166,10 +175,14 @@ A PDF document of the schema is available <a href="variation-database-schema.pdf
 </ul>
 
 <br />
-<table style="border: 2px groove #CCCCCC;height:10px;background-color:#FAFAFF"><tr style="vertical-align:middle;height:10px">
-<td style="width:500px;text-align:left;height:10px"><span id="allele_group_allele" style="font-size:11pt;font-weight:bold">allele_group_allele</span></td>
-<td style="width:100px;text-align:right"><a id="a_allele_group_allele" style="cursor:pointer;text-decoration:underline" onclick="show_hide('allele_group_allele')">Show</a> columns</td>
-</tr></table>
+	<table style="border: 2px groove #CCCCCC;background-color:#FAFAFF">
+		<tr style="vertical-align:middle">
+			<td style="padding:0px;width:10px;background-color:#000000"></td>
+			<td style="width:2px"></td>
+			<td style="width:500px;text-align:left;height:10px"><span id="allele_group_allele" style="font-size:11pt;font-weight:bold">allele_group_allele</span></td>
+			<td style="width:100px;text-align:right"><a id="a_allele_group_allele" style="cursor:pointer;text-decoration:underline" onclick="show_hide('allele_group_allele')">Show</a> columns</td>
+		</tr>
+	</table>
 <p>This table represents an allele of one variation in a multi-marker variation, or haplotype. It stores a string of the allele.<p>
 
 	<div id="div_allele_group_allele" style="display:none">
@@ -188,10 +201,14 @@ A PDF document of the schema is available <a href="variation-database-schema.pdf
 </ul>
 
 <br />
-<table style="border: 2px groove #CCCCCC;height:10px;background-color:#FAFAFF"><tr style="vertical-align:middle;height:10px">
-<td style="width:500px;text-align:left;height:10px"><span id="associate_study" style="font-size:11pt;font-weight:bold">associate_study</span></td>
-<td style="width:100px;text-align:right"><a id="a_associate_study" style="cursor:pointer;text-decoration:underline" onclick="show_hide('associate_study')">Show</a> columns</td>
-</tr></table>
+	<table style="border: 2px groove #CCCCCC;background-color:#FAFAFF">
+		<tr style="vertical-align:middle">
+			<td style="padding:0px;width:10px;background-color:#7CFC00"></td>
+			<td style="width:2px"></td>
+			<td style="width:500px;text-align:left;height:10px"><span id="associate_study" style="font-size:11pt;font-weight:bold">associate_study</span></td>
+			<td style="width:100px;text-align:right"><a id="a_associate_study" style="cursor:pointer;text-decoration:underline" onclick="show_hide('associate_study')">Show</a> columns</td>
+		</tr>
+	</table>
 <p>This table contains identifiers of associated studies (e.g. NHGRI and EGA studies with the same pubmed identifier).<p>
 
 	<div id="div_associate_study" style="display:none">
@@ -208,10 +225,14 @@ A PDF document of the schema is available <a href="variation-database-schema.pdf
 </ul>
 
 <br />
-<table style="border: 2px groove #CCCCCC;height:10px;background-color:#FAFAFF"><tr style="vertical-align:middle;height:10px">
-<td style="width:500px;text-align:left;height:10px"><span id="attrib" style="font-size:11pt;font-weight:bold">attrib</span></td>
-<td style="width:100px;text-align:right"><a id="a_attrib" style="cursor:pointer;text-decoration:underline" onclick="show_hide('attrib')">Show</a> columns</td>
-</tr></table>
+	<table style="border: 2px groove #CCCCCC;background-color:#FAFAFF">
+		<tr style="vertical-align:middle">
+			<td style="padding:0px;width:10px;background-color:#FF0000"></td>
+			<td style="width:2px"></td>
+			<td style="width:500px;text-align:left;height:10px"><span id="attrib" style="font-size:11pt;font-weight:bold">attrib</span></td>
+			<td style="width:100px;text-align:right"><a id="a_attrib" style="cursor:pointer;text-decoration:underline" onclick="show_hide('attrib')">Show</a> columns</td>
+		</tr>
+	</table>
 <p>Defines various attributes used elsewhere in the database<p>
 
 	<div id="div_attrib" style="display:none">
@@ -230,10 +251,14 @@ A PDF document of the schema is available <a href="variation-database-schema.pdf
 </ul>
 
 <br />
-<table style="border: 2px groove #CCCCCC;height:10px;background-color:#FAFAFF"><tr style="vertical-align:middle;height:10px">
-<td style="width:500px;text-align:left;height:10px"><span id="attrib_set" style="font-size:11pt;font-weight:bold">attrib_set</span></td>
-<td style="width:100px;text-align:right"><a id="a_attrib_set" style="cursor:pointer;text-decoration:underline" onclick="show_hide('attrib_set')">Show</a> columns</td>
-</tr></table>
+	<table style="border: 2px groove #CCCCCC;background-color:#FAFAFF">
+		<tr style="vertical-align:middle">
+			<td style="padding:0px;width:10px;background-color:#FF0000"></td>
+			<td style="width:2px"></td>
+			<td style="width:500px;text-align:left;height:10px"><span id="attrib_set" style="font-size:11pt;font-weight:bold">attrib_set</span></td>
+			<td style="width:100px;text-align:right"><a id="a_attrib_set" style="cursor:pointer;text-decoration:underline" onclick="show_hide('attrib_set')">Show</a> columns</td>
+		</tr>
+	</table>
 <p>Groups related attributes together<p>
 
 	<div id="div_attrib_set" style="display:none">
@@ -251,10 +276,14 @@ A PDF document of the schema is available <a href="variation-database-schema.pdf
 </ul>
 
 <br />
-<table style="border: 2px groove #CCCCCC;height:10px;background-color:#FAFAFF"><tr style="vertical-align:middle;height:10px">
-<td style="width:500px;text-align:left;height:10px"><span id="attrib_type" style="font-size:11pt;font-weight:bold">attrib_type</span></td>
-<td style="width:100px;text-align:right"><a id="a_attrib_type" style="cursor:pointer;text-decoration:underline" onclick="show_hide('attrib_type')">Show</a> columns</td>
-</tr></table>
+	<table style="border: 2px groove #CCCCCC;background-color:#FAFAFF">
+		<tr style="vertical-align:middle">
+			<td style="padding:0px;width:10px;background-color:#FF0000"></td>
+			<td style="width:2px"></td>
+			<td style="width:500px;text-align:left;height:10px"><span id="attrib_type" style="font-size:11pt;font-weight:bold">attrib_type</span></td>
+			<td style="width:100px;text-align:right"><a id="a_attrib_type" style="cursor:pointer;text-decoration:underline" onclick="show_hide('attrib_type')">Show</a> columns</td>
+		</tr>
+	</table>
 <p>Defines the set of possible attribute types used in the attrib table<p>
 
 	<div id="div_attrib_type" style="display:none">
@@ -274,10 +303,14 @@ A PDF document of the schema is available <a href="variation-database-schema.pdf
 </ul>
 
 <br />
-<table style="border: 2px groove #CCCCCC;height:10px;background-color:#FAFAFF"><tr style="vertical-align:middle;height:10px">
-<td style="width:500px;text-align:left;height:10px"><span id="compressed_genotype_single_bp" style="font-size:11pt;font-weight:bold">compressed_genotype_single_bp</span></td>
-<td style="width:100px;text-align:right"><a id="a_compressed_genotype_single_bp" style="cursor:pointer;text-decoration:underline" onclick="show_hide('compressed_genotype_single_bp')">Show</a> columns</td>
-</tr></table>
+	<table style="border: 2px groove #CCCCCC;background-color:#FAFAFF">
+		<tr style="vertical-align:middle">
+			<td style="padding:0px;width:10px;background-color:#FF8500"></td>
+			<td style="width:2px"></td>
+			<td style="width:500px;text-align:left;height:10px"><span id="compressed_genotype_single_bp" style="font-size:11pt;font-weight:bold">compressed_genotype_single_bp</span></td>
+			<td style="width:100px;text-align:right"><a id="a_compressed_genotype_single_bp" style="cursor:pointer;text-decoration:underline" onclick="show_hide('compressed_genotype_single_bp')">Show</a> columns</td>
+		</tr>
+	</table>
 <p>This table holds genotypes compressed using the pack() method in Perl. These genotypes are mapped to particular genomic locations rather than variation objects. The data have been compressed to reduce table size and increase the speed of the web code.<p>
 
 	<div id="div_compressed_genotype_single_bp" style="display:none">
@@ -299,10 +332,14 @@ A PDF document of the schema is available <a href="variation-database-schema.pdf
 </ul>
 
 <br />
-<table style="border: 2px groove #CCCCCC;height:10px;background-color:#FAFAFF"><tr style="vertical-align:middle;height:10px">
-<td style="width:500px;text-align:left;height:10px"><span id="failed_allele" style="font-size:11pt;font-weight:bold">failed_allele</span></td>
-<td style="width:100px;text-align:right"><a id="a_failed_allele" style="cursor:pointer;text-decoration:underline" onclick="show_hide('failed_allele')">Show</a> columns</td>
-</tr></table>
+	<table style="border: 2px groove #CCCCCC;background-color:#FAFAFF">
+		<tr style="vertical-align:middle">
+			<td style="padding:0px;width:10px;background-color:#3CB371"></td>
+			<td style="width:2px"></td>
+			<td style="width:500px;text-align:left;height:10px"><span id="failed_allele" style="font-size:11pt;font-weight:bold">failed_allele</span></td>
+			<td style="width:100px;text-align:right"><a id="a_failed_allele" style="cursor:pointer;text-decoration:underline" onclick="show_hide('failed_allele')">Show</a> columns</td>
+		</tr>
+	</table>
 <p>Contains alleles that did not pass the Ensembl filters<p>
 
 	<div id="div_failed_allele" style="display:none">
@@ -321,10 +358,14 @@ A PDF document of the schema is available <a href="variation-database-schema.pdf
 </ul>
 
 <br />
-<table style="border: 2px groove #CCCCCC;height:10px;background-color:#FAFAFF"><tr style="vertical-align:middle;height:10px">
-<td style="width:500px;text-align:left;height:10px"><span id="failed_description" style="font-size:11pt;font-weight:bold">failed_description</span></td>
-<td style="width:100px;text-align:right"><a id="a_failed_description" style="cursor:pointer;text-decoration:underline" onclick="show_hide('failed_description')">Show</a> columns</td>
-</tr></table>
+	<table style="border: 2px groove #CCCCCC;background-color:#FAFAFF">
+		<tr style="vertical-align:middle">
+			<td style="padding:0px;width:10px;background-color:#3CB371"></td>
+			<td style="width:2px"></td>
+			<td style="width:500px;text-align:left;height:10px"><span id="failed_description" style="font-size:11pt;font-weight:bold">failed_description</span></td>
+			<td style="width:100px;text-align:right"><a id="a_failed_description" style="cursor:pointer;text-decoration:underline" onclick="show_hide('failed_description')">Show</a> columns</td>
+		</tr>
+	</table>
 <p>This table contains descriptions of reasons for a variation being flagged as failed.<p>
 
 	<div id="div_failed_description" style="display:none">
@@ -341,10 +382,14 @@ A PDF document of the schema is available <a href="variation-database-schema.pdf
 </ul>
 
 <br />
-<table style="border: 2px groove #CCCCCC;height:10px;background-color:#FAFAFF"><tr style="vertical-align:middle;height:10px">
-<td style="width:500px;text-align:left;height:10px"><span id="failed_variation" style="font-size:11pt;font-weight:bold">failed_variation</span></td>
-<td style="width:100px;text-align:right"><a id="a_failed_variation" style="cursor:pointer;text-decoration:underline" onclick="show_hide('failed_variation')">Show</a> columns</td>
-</tr></table>
+	<table style="border: 2px groove #CCCCCC;background-color:#FAFAFF">
+		<tr style="vertical-align:middle">
+			<td style="padding:0px;width:10px;background-color:#3CB371"></td>
+			<td style="width:2px"></td>
+			<td style="width:500px;text-align:left;height:10px"><span id="failed_variation" style="font-size:11pt;font-weight:bold">failed_variation</span></td>
+			<td style="width:100px;text-align:right"><a id="a_failed_variation" style="cursor:pointer;text-decoration:underline" onclick="show_hide('failed_variation')">Show</a> columns</td>
+		</tr>
+	</table>
 <p>For various reasons it may be necessary to store information about a variation that has failed quality checks in the Variation pipeline. This table acts as a flag for such failures.<p>
 
 	<div id="div_failed_variation" style="display:none">
@@ -363,10 +408,14 @@ A PDF document of the schema is available <a href="variation-database-schema.pdf
 </ul>
 
 <br />
-<table style="border: 2px groove #CCCCCC;height:10px;background-color:#FAFAFF"><tr style="vertical-align:middle;height:10px">
-<td style="width:500px;text-align:left;height:10px"><span id="flanking_sequence" style="font-size:11pt;font-weight:bold">flanking_sequence</span></td>
-<td style="width:100px;text-align:right"><a id="a_flanking_sequence" style="cursor:pointer;text-decoration:underline" onclick="show_hide('flanking_sequence')">Show</a> columns</td>
-</tr></table>
+	<table style="border: 2px groove #CCCCCC;background-color:#FAFAFF">
+		<tr style="vertical-align:middle">
+			<td style="padding:0px;width:10px;background-color:#000000"></td>
+			<td style="width:2px"></td>
+			<td style="width:500px;text-align:left;height:10px"><span id="flanking_sequence" style="font-size:11pt;font-weight:bold">flanking_sequence</span></td>
+			<td style="width:100px;text-align:right"><a id="a_flanking_sequence" style="cursor:pointer;text-decoration:underline" onclick="show_hide('flanking_sequence')">Show</a> columns</td>
+		</tr>
+	</table>
 <p>This table contains the upstream and downstream sequence surrounding a variation. Since each variation is defined by its flanking sequence, this table has a one-to-one relationship with the variation table.<p>
 
 	<div id="div_flanking_sequence" style="display:none">
@@ -391,10 +440,14 @@ A PDF document of the schema is available <a href="variation-database-schema.pdf
 </ul>
 
 <br />
-<table style="border: 2px groove #CCCCCC;height:10px;background-color:#FAFAFF"><tr style="vertical-align:middle;height:10px">
-<td style="width:500px;text-align:left;height:10px"><span id="httag" style="font-size:11pt;font-weight:bold">httag</span></td>
-<td style="width:100px;text-align:right"><a id="a_httag" style="cursor:pointer;text-decoration:underline" onclick="show_hide('httag')">Show</a> columns</td>
-</tr></table>
+	<table style="border: 2px groove #CCCCCC;background-color:#FAFAFF">
+		<tr style="vertical-align:middle">
+			<td style="padding:0px;width:10px;background-color:#000000"></td>
+			<td style="width:2px"></td>
+			<td style="width:500px;text-align:left;height:10px"><span id="httag" style="font-size:11pt;font-weight:bold">httag</span></td>
+			<td style="width:100px;text-align:right"><a id="a_httag" style="cursor:pointer;text-decoration:underline" onclick="show_hide('httag')">Show</a> columns</td>
+		</tr>
+	</table>
 <p>This table represents the equivalent of a tagged_variation_feature for multi-marker variations, representing an instance where a haplotype is tagged by or tags another marker.<p>
 
 	<div id="div_httag" style="display:none">
@@ -414,10 +467,14 @@ A PDF document of the schema is available <a href="variation-database-schema.pdf
 </ul>
 
 <br />
-<table style="border: 2px groove #CCCCCC;height:10px;background-color:#FAFAFF"><tr style="vertical-align:middle;height:10px">
-<td style="width:500px;text-align:left;height:10px"><span id="individual" style="font-size:11pt;font-weight:bold">individual</span></td>
-<td style="width:100px;text-align:right"><a id="a_individual" style="cursor:pointer;text-decoration:underline" onclick="show_hide('individual')">Show</a> columns</td>
-</tr></table>
+	<table style="border: 2px groove #CCCCCC;background-color:#FAFAFF">
+		<tr style="vertical-align:middle">
+			<td style="padding:0px;width:10px;background-color:#FF8500"></td>
+			<td style="width:2px"></td>
+			<td style="width:500px;text-align:left;height:10px"><span id="individual" style="font-size:11pt;font-weight:bold">individual</span></td>
+			<td style="width:100px;text-align:right"><a id="a_individual" style="cursor:pointer;text-decoration:underline" onclick="show_hide('individual')">Show</a> columns</td>
+		</tr>
+	</table>
 <p>Stores information about an identifiable individual, including gender and the identifiers of the individual's parents (if known).<p>
 
 	<div id="div_individual" style="display:none">
@@ -441,10 +498,14 @@ A PDF document of the schema is available <a href="variation-database-schema.pdf
 </ul>
 
 <br />
-<table style="border: 2px groove #CCCCCC;height:10px;background-color:#FAFAFF"><tr style="vertical-align:middle;height:10px">
-<td style="width:500px;text-align:left;height:10px"><span id="individual_genotype_multiple_bp" style="font-size:11pt;font-weight:bold">individual_genotype_multiple_bp</span></td>
-<td style="width:100px;text-align:right"><a id="a_individual_genotype_multiple_bp" style="cursor:pointer;text-decoration:underline" onclick="show_hide('individual_genotype_multiple_bp')">Show</a> columns</td>
-</tr></table>
+	<table style="border: 2px groove #CCCCCC;background-color:#FAFAFF">
+		<tr style="vertical-align:middle">
+			<td style="padding:0px;width:10px;background-color:#FF8500"></td>
+			<td style="width:2px"></td>
+			<td style="width:500px;text-align:left;height:10px"><span id="individual_genotype_multiple_bp" style="font-size:11pt;font-weight:bold">individual_genotype_multiple_bp</span></td>
+			<td style="width:100px;text-align:right"><a id="a_individual_genotype_multiple_bp" style="cursor:pointer;text-decoration:underline" onclick="show_hide('individual_genotype_multiple_bp')">Show</a> columns</td>
+		</tr>
+	</table>
 <p>This table holds uncompressed genotypes for given variations.<p>
 
 	<div id="div_individual_genotype_multiple_bp" style="display:none">
@@ -466,10 +527,14 @@ A PDF document of the schema is available <a href="variation-database-schema.pdf
 </ul>
 
 <br />
-<table style="border: 2px groove #CCCCCC;height:10px;background-color:#FAFAFF"><tr style="vertical-align:middle;height:10px">
-<td style="width:500px;text-align:left;height:10px"><span id="individual_population" style="font-size:11pt;font-weight:bold">individual_population</span></td>
-<td style="width:100px;text-align:right"><a id="a_individual_population" style="cursor:pointer;text-decoration:underline" onclick="show_hide('individual_population')">Show</a> columns</td>
-</tr></table>
+	<table style="border: 2px groove #CCCCCC;background-color:#FAFAFF">
+		<tr style="vertical-align:middle">
+			<td style="padding:0px;width:10px;background-color:#FF8500"></td>
+			<td style="width:2px"></td>
+			<td style="width:500px;text-align:left;height:10px"><span id="individual_population" style="font-size:11pt;font-weight:bold">individual_population</span></td>
+			<td style="width:100px;text-align:right"><a id="a_individual_population" style="cursor:pointer;text-decoration:underline" onclick="show_hide('individual_population')">Show</a> columns</td>
+		</tr>
+	</table>
 <p>This table resolves the many-to-many relationship between the individual and population tables; i.e. samples may belong to more than one population. Hence it is composed of rows of individual and population identifiers.<p>
 
 	<div id="div_individual_population" style="display:none">
@@ -487,10 +552,14 @@ A PDF document of the schema is available <a href="variation-database-schema.pdf
 </ul>
 
 <br />
-<table style="border: 2px groove #CCCCCC;height:10px;background-color:#FAFAFF"><tr style="vertical-align:middle;height:10px">
-<td style="width:500px;text-align:left;height:10px"><span id="individual_type" style="font-size:11pt;font-weight:bold">individual_type</span></td>
-<td style="width:100px;text-align:right"><a id="a_individual_type" style="cursor:pointer;text-decoration:underline" onclick="show_hide('individual_type')">Show</a> columns</td>
-</tr></table>
+	<table style="border: 2px groove #CCCCCC;background-color:#FAFAFF">
+		<tr style="vertical-align:middle">
+			<td style="padding:0px;width:10px;background-color:#FF8500"></td>
+			<td style="width:2px"></td>
+			<td style="width:500px;text-align:left;height:10px"><span id="individual_type" style="font-size:11pt;font-weight:bold">individual_type</span></td>
+			<td style="width:100px;text-align:right"><a id="a_individual_type" style="cursor:pointer;text-decoration:underline" onclick="show_hide('individual_type')">Show</a> columns</td>
+		</tr>
+	</table>
 <p>This table resolves the many-to-many relationship between the individual and population tables; i.e. samples may belong to more than one population. Hence it is composed of rows of individual and population identifiers.<p>
 
 	<div id="div_individual_type" style="display:none">
@@ -508,10 +577,14 @@ A PDF document of the schema is available <a href="variation-database-schema.pdf
 </ul>
 
 <br />
-<table style="border: 2px groove #CCCCCC;height:10px;background-color:#FAFAFF"><tr style="vertical-align:middle;height:10px">
-<td style="width:500px;text-align:left;height:10px"><span id="meta" style="font-size:11pt;font-weight:bold">meta</span></td>
-<td style="width:100px;text-align:right"><a id="a_meta" style="cursor:pointer;text-decoration:underline" onclick="show_hide('meta')">Show</a> columns</td>
-</tr></table>
+	<table style="border: 2px groove #CCCCCC;background-color:#FAFAFF">
+		<tr style="vertical-align:middle">
+			<td style="padding:0px;width:10px;background-color:#DA70D6"></td>
+			<td style="width:2px"></td>
+			<td style="width:500px;text-align:left;height:10px"><span id="meta" style="font-size:11pt;font-weight:bold">meta</span></td>
+			<td style="width:100px;text-align:right"><a id="a_meta" style="cursor:pointer;text-decoration:underline" onclick="show_hide('meta')">Show</a> columns</td>
+		</tr>
+	</table>
 <p>This table stores various metadata relating to the database, generally used by the Ensembl web code.<p>
 
 	<div id="div_meta" style="display:none">
@@ -526,10 +599,14 @@ A PDF document of the schema is available <a href="variation-database-schema.pdf
 </div>
 
 <br />
-<table style="border: 2px groove #CCCCCC;height:10px;background-color:#FAFAFF"><tr style="vertical-align:middle;height:10px">
-<td style="width:500px;text-align:left;height:10px"><span id="meta_coord" style="font-size:11pt;font-weight:bold">meta_coord</span></td>
-<td style="width:100px;text-align:right"><a id="a_meta_coord" style="cursor:pointer;text-decoration:underline" onclick="show_hide('meta_coord')">Show</a> columns</td>
-</tr></table>
+	<table style="border: 2px groove #CCCCCC;background-color:#FAFAFF">
+		<tr style="vertical-align:middle">
+			<td style="padding:0px;width:10px;background-color:#DA70D6"></td>
+			<td style="width:2px"></td>
+			<td style="width:500px;text-align:left;height:10px"><span id="meta_coord" style="font-size:11pt;font-weight:bold">meta_coord</span></td>
+			<td style="width:100px;text-align:right"><a id="a_meta_coord" style="cursor:pointer;text-decoration:underline" onclick="show_hide('meta_coord')">Show</a> columns</td>
+		</tr>
+	</table>
 <p>This table gives the coordinate system used by various tables in the database.<p>
 
 	<div id="div_meta_coord" style="display:none">
@@ -543,10 +620,14 @@ A PDF document of the schema is available <a href="variation-database-schema.pdf
 </div>
 
 <br />
-<table style="border: 2px groove #CCCCCC;height:10px;background-color:#FAFAFF"><tr style="vertical-align:middle;height:10px">
-<td style="width:500px;text-align:left;height:10px"><span id="phenotype" style="font-size:11pt;font-weight:bold">phenotype</span></td>
-<td style="width:100px;text-align:right"><a id="a_phenotype" style="cursor:pointer;text-decoration:underline" onclick="show_hide('phenotype')">Show</a> columns</td>
-</tr></table>
+	<table style="border: 2px groove #CCCCCC;background-color:#FAFAFF">
+		<tr style="vertical-align:middle">
+			<td style="padding:0px;width:10px;background-color:#000000"></td>
+			<td style="width:2px"></td>
+			<td style="width:500px;text-align:left;height:10px"><span id="phenotype" style="font-size:11pt;font-weight:bold">phenotype</span></td>
+			<td style="width:100px;text-align:right"><a id="a_phenotype" style="cursor:pointer;text-decoration:underline" onclick="show_hide('phenotype')">Show</a> columns</td>
+		</tr>
+	</table>
 <p>This table stores details of the phenotypes associated with variation annotations.<p>
 
 	<div id="div_phenotype" style="display:none">
@@ -564,10 +645,14 @@ A PDF document of the schema is available <a href="variation-database-schema.pdf
 </ul>
 
 <br />
-<table style="border: 2px groove #CCCCCC;height:10px;background-color:#FAFAFF"><tr style="vertical-align:middle;height:10px">
-<td style="width:500px;text-align:left;height:10px"><span id="polyphen_prediction" style="font-size:11pt;font-weight:bold">polyphen_prediction</span></td>
-<td style="width:100px;text-align:right"><a id="a_polyphen_prediction" style="cursor:pointer;text-decoration:underline" onclick="show_hide('polyphen_prediction')">Show</a> columns</td>
-</tr></table>
+	<table style="border: 2px groove #CCCCCC;background-color:#FAFAFF">
+		<tr style="vertical-align:middle">
+			<td style="padding:0px;width:10px;background-color:#1E90FF"></td>
+			<td style="width:2px"></td>
+			<td style="width:500px;text-align:left;height:10px"><span id="polyphen_prediction" style="font-size:11pt;font-weight:bold">polyphen_prediction</span></td>
+			<td style="width:100px;text-align:right"><a id="a_polyphen_prediction" style="cursor:pointer;text-decoration:underline" onclick="show_hide('polyphen_prediction')">Show</a> columns</td>
+		</tr>
+	</table>
 <p>Stores the PolyPhen 2 prediction for every possible amino acid substitution in the ensembl proteome<p>
 
 	<div id="div_polyphen_prediction" style="display:none">
@@ -590,10 +675,14 @@ A PDF document of the schema is available <a href="variation-database-schema.pdf
 </ul>
 
 <br />
-<table style="border: 2px groove #CCCCCC;height:10px;background-color:#FAFAFF"><tr style="vertical-align:middle;height:10px">
-<td style="width:500px;text-align:left;height:10px"><span id="population" style="font-size:11pt;font-weight:bold">population</span></td>
-<td style="width:100px;text-align:right"><a id="a_population" style="cursor:pointer;text-decoration:underline" onclick="show_hide('population')">Show</a> columns</td>
-</tr></table>
+	<table style="border: 2px groove #CCCCCC;background-color:#FAFAFF">
+		<tr style="vertical-align:middle">
+			<td style="padding:0px;width:10px;background-color:#FF8500"></td>
+			<td style="width:2px"></td>
+			<td style="width:500px;text-align:left;height:10px"><span id="population" style="font-size:11pt;font-weight:bold">population</span></td>
+			<td style="width:100px;text-align:right"><a id="a_population" style="cursor:pointer;text-decoration:underline" onclick="show_hide('population')">Show</a> columns</td>
+		</tr>
+	</table>
 <p>A table consisting simply of sample_ids representing populations; all data relating to the populations are stored in separate tables (see below).<br />A population may be an ethnic group (e.g. caucasian, hispanic), assay group (e.g. 24 europeans), strain, phenotypic group (e.g. blue eyed, diabetes) etc. Populations may be composed of other populations by defining relationships in the population_structure table.<p>
 
 	<div id="div_population" style="display:none">
@@ -616,10 +705,14 @@ A PDF document of the schema is available <a href="variation-database-schema.pdf
 </ul>
 
 <br />
-<table style="border: 2px groove #CCCCCC;height:10px;background-color:#FAFAFF"><tr style="vertical-align:middle;height:10px">
-<td style="width:500px;text-align:left;height:10px"><span id="population_genotype" style="font-size:11pt;font-weight:bold">population_genotype</span></td>
-<td style="width:100px;text-align:right"><a id="a_population_genotype" style="cursor:pointer;text-decoration:underline" onclick="show_hide('population_genotype')">Show</a> columns</td>
-</tr></table>
+	<table style="border: 2px groove #CCCCCC;background-color:#FAFAFF">
+		<tr style="vertical-align:middle">
+			<td style="padding:0px;width:10px;background-color:#FF8500"></td>
+			<td style="width:2px"></td>
+			<td style="width:500px;text-align:left;height:10px"><span id="population_genotype" style="font-size:11pt;font-weight:bold">population_genotype</span></td>
+			<td style="width:100px;text-align:right"><a id="a_population_genotype" style="cursor:pointer;text-decoration:underline" onclick="show_hide('population_genotype')">Show</a> columns</td>
+		</tr>
+	</table>
 <p>This table stores alleles and frequencies for variations in given populations.<p>
 
 	<div id="div_population_genotype" style="display:none">
@@ -644,10 +737,14 @@ A PDF document of the schema is available <a href="variation-database-schema.pdf
 </ul>
 
 <br />
-<table style="border: 2px groove #CCCCCC;height:10px;background-color:#FAFAFF"><tr style="vertical-align:middle;height:10px">
-<td style="width:500px;text-align:left;height:10px"><span id="population_structure" style="font-size:11pt;font-weight:bold">population_structure</span></td>
-<td style="width:100px;text-align:right"><a id="a_population_structure" style="cursor:pointer;text-decoration:underline" onclick="show_hide('population_structure')">Show</a> columns</td>
-</tr></table>
+	<table style="border: 2px groove #CCCCCC;background-color:#FAFAFF">
+		<tr style="vertical-align:middle">
+			<td style="padding:0px;width:10px;background-color:#FF8500"></td>
+			<td style="width:2px"></td>
+			<td style="width:500px;text-align:left;height:10px"><span id="population_structure" style="font-size:11pt;font-weight:bold">population_structure</span></td>
+			<td style="width:100px;text-align:right"><a id="a_population_structure" style="cursor:pointer;text-decoration:underline" onclick="show_hide('population_structure')">Show</a> columns</td>
+		</tr>
+	</table>
 <p>This table stores hierarchical relationships between populations by relating them as populations and sub-populations.<p>
 
 	<div id="div_population_structure" style="display:none">
@@ -664,10 +761,14 @@ A PDF document of the schema is available <a href="variation-database-schema.pdf
 </ul>
 
 <br />
-<table style="border: 2px groove #CCCCCC;height:10px;background-color:#FAFAFF"><tr style="vertical-align:middle;height:10px">
-<td style="width:500px;text-align:left;height:10px"><span id="protein_info" style="font-size:11pt;font-weight:bold">protein_info</span></td>
-<td style="width:100px;text-align:right"><a id="a_protein_info" style="cursor:pointer;text-decoration:underline" onclick="show_hide('protein_info')">Show</a> columns</td>
-</tr></table>
+	<table style="border: 2px groove #CCCCCC;background-color:#FAFAFF">
+		<tr style="vertical-align:middle">
+			<td style="padding:0px;width:10px;background-color:#1E90FF"></td>
+			<td style="width:2px"></td>
+			<td style="width:500px;text-align:left;height:10px"><span id="protein_info" style="font-size:11pt;font-weight:bold">protein_info</span></td>
+			<td style="width:100px;text-align:right"><a id="a_protein_info" style="cursor:pointer;text-decoration:underline" onclick="show_hide('protein_info')">Show</a> columns</td>
+		</tr>
+	</table>
 <p>Contains information about each translation in the ensembl proteome, used by the nsSNP prediction tables<p>
 
 	<div id="div_protein_info" style="display:none">
@@ -688,10 +789,14 @@ A PDF document of the schema is available <a href="variation-database-schema.pdf
 </ul>
 
 <br />
-<table style="border: 2px groove #CCCCCC;height:10px;background-color:#FAFAFF"><tr style="vertical-align:middle;height:10px">
-<td style="width:500px;text-align:left;height:10px"><span id="protein_position" style="font-size:11pt;font-weight:bold">protein_position</span></td>
-<td style="width:100px;text-align:right"><a id="a_protein_position" style="cursor:pointer;text-decoration:underline" onclick="show_hide('protein_position')">Show</a> columns</td>
-</tr></table>
+	<table style="border: 2px groove #CCCCCC;background-color:#FAFAFF">
+		<tr style="vertical-align:middle">
+			<td style="padding:0px;width:10px;background-color:#1E90FF"></td>
+			<td style="width:2px"></td>
+			<td style="width:500px;text-align:left;height:10px"><span id="protein_position" style="font-size:11pt;font-weight:bold">protein_position</span></td>
+			<td style="width:100px;text-align:right"><a id="a_protein_position" style="cursor:pointer;text-decoration:underline" onclick="show_hide('protein_position')">Show</a> columns</td>
+		</tr>
+	</table>
 <p>Table with a row for each position in every ensembl translation, used by the nsSNP prediction tables<p>
 
 	<div id="div_protein_position" style="display:none">
@@ -714,10 +819,14 @@ A PDF document of the schema is available <a href="variation-database-schema.pdf
 </ul>
 
 <br />
-<table style="border: 2px groove #CCCCCC;height:10px;background-color:#FAFAFF"><tr style="vertical-align:middle;height:10px">
-<td style="width:500px;text-align:left;height:10px"><span id="read_coverage" style="font-size:11pt;font-weight:bold">read_coverage</span></td>
-<td style="width:100px;text-align:right"><a id="a_read_coverage" style="cursor:pointer;text-decoration:underline" onclick="show_hide('read_coverage')">Show</a> columns</td>
-</tr></table>
+	<table style="border: 2px groove #CCCCCC;background-color:#FAFAFF">
+		<tr style="vertical-align:middle">
+			<td style="padding:0px;width:10px;background-color:#FF8500"></td>
+			<td style="width:2px"></td>
+			<td style="width:500px;text-align:left;height:10px"><span id="read_coverage" style="font-size:11pt;font-weight:bold">read_coverage</span></td>
+			<td style="width:100px;text-align:right"><a id="a_read_coverage" style="cursor:pointer;text-decoration:underline" onclick="show_hide('read_coverage')">Show</a> columns</td>
+		</tr>
+	</table>
 <p>This table stores the read coverage in the resequencing of individuals. Each row contains an individual ID, chromosomal coordinates and a read coverage level.<p>
 
 	<div id="div_read_coverage" style="display:none">
@@ -738,10 +847,14 @@ A PDF document of the schema is available <a href="variation-database-schema.pdf
 </ul>
 
 <br />
-<table style="border: 2px groove #CCCCCC;height:10px;background-color:#FAFAFF"><tr style="vertical-align:middle;height:10px">
-<td style="width:500px;text-align:left;height:10px"><span id="sample" style="font-size:11pt;font-weight:bold">sample</span></td>
-<td style="width:100px;text-align:right"><a id="a_sample" style="cursor:pointer;text-decoration:underline" onclick="show_hide('sample')">Show</a> columns</td>
-</tr></table>
+	<table style="border: 2px groove #CCCCCC;background-color:#FAFAFF">
+		<tr style="vertical-align:middle">
+			<td style="padding:0px;width:10px;background-color:#FF8500"></td>
+			<td style="width:2px"></td>
+			<td style="width:500px;text-align:left;height:10px"><span id="sample" style="font-size:11pt;font-weight:bold">sample</span></td>
+			<td style="width:100px;text-align:right"><a id="a_sample" style="cursor:pointer;text-decoration:underline" onclick="show_hide('sample')">Show</a> columns</td>
+		</tr>
+	</table>
 <p>Sample is used as a generic catch-all term to cover individuals, populations and strains; it contains a name and description, as well as a size if applicable to the population.<p>
 
 	<div id="div_sample" style="display:none">
@@ -762,10 +875,14 @@ A PDF document of the schema is available <a href="variation-database-schema.pdf
 </ul>
 
 <br />
-<table style="border: 2px groove #CCCCCC;height:10px;background-color:#FAFAFF"><tr style="vertical-align:middle;height:10px">
-<td style="width:500px;text-align:left;height:10px"><span id="sample_synonym" style="font-size:11pt;font-weight:bold">sample_synonym</span></td>
-<td style="width:100px;text-align:right"><a id="a_sample_synonym" style="cursor:pointer;text-decoration:underline" onclick="show_hide('sample_synonym')">Show</a> columns</td>
-</tr></table>
+	<table style="border: 2px groove #CCCCCC;background-color:#FAFAFF">
+		<tr style="vertical-align:middle">
+			<td style="padding:0px;width:10px;background-color:#FF8500"></td>
+			<td style="width:2px"></td>
+			<td style="width:500px;text-align:left;height:10px"><span id="sample_synonym" style="font-size:11pt;font-weight:bold">sample_synonym</span></td>
+			<td style="width:100px;text-align:right"><a id="a_sample_synonym" style="cursor:pointer;text-decoration:underline" onclick="show_hide('sample_synonym')">Show</a> columns</td>
+		</tr>
+	</table>
 <p>Used to store alternative names for populations when data comes from multiple sources.<p>
 
 	<div id="div_sample_synonym" style="display:none">
@@ -786,10 +903,14 @@ A PDF document of the schema is available <a href="variation-database-schema.pdf
 </ul>
 
 <br />
-<table style="border: 2px groove #CCCCCC;height:10px;background-color:#FAFAFF"><tr style="vertical-align:middle;height:10px">
-<td style="width:500px;text-align:left;height:10px"><span id="seq_region" style="font-size:11pt;font-weight:bold">seq_region</span></td>
-<td style="width:100px;text-align:right"><a id="a_seq_region" style="cursor:pointer;text-decoration:underline" onclick="show_hide('seq_region')">Show</a> columns</td>
-</tr></table>
+	<table style="border: 2px groove #CCCCCC;background-color:#FAFAFF">
+		<tr style="vertical-align:middle">
+			<td style="padding:0px;width:10px;background-color:#000000"></td>
+			<td style="width:2px"></td>
+			<td style="width:500px;text-align:left;height:10px"><span id="seq_region" style="font-size:11pt;font-weight:bold">seq_region</span></td>
+			<td style="width:100px;text-align:right"><a id="a_seq_region" style="cursor:pointer;text-decoration:underline" onclick="show_hide('seq_region')">Show</a> columns</td>
+		</tr>
+	</table>
 <p>This table stores the relationship between Ensembl's internal coordinate system identifiers and traditional chromosome names.<p>
 
 	<div id="div_seq_region" style="display:none">
@@ -810,10 +931,14 @@ A PDF document of the schema is available <a href="variation-database-schema.pdf
 </ul>
 
 <br />
-<table style="border: 2px groove #CCCCCC;height:10px;background-color:#FAFAFF"><tr style="vertical-align:middle;height:10px">
-<td style="width:500px;text-align:left;height:10px"><span id="sift_prediction" style="font-size:11pt;font-weight:bold">sift_prediction</span></td>
-<td style="width:100px;text-align:right"><a id="a_sift_prediction" style="cursor:pointer;text-decoration:underline" onclick="show_hide('sift_prediction')">Show</a> columns</td>
-</tr></table>
+	<table style="border: 2px groove #CCCCCC;background-color:#FAFAFF">
+		<tr style="vertical-align:middle">
+			<td style="padding:0px;width:10px;background-color:#1E90FF"></td>
+			<td style="width:2px"></td>
+			<td style="width:500px;text-align:left;height:10px"><span id="sift_prediction" style="font-size:11pt;font-weight:bold">sift_prediction</span></td>
+			<td style="width:100px;text-align:right"><a id="a_sift_prediction" style="cursor:pointer;text-decoration:underline" onclick="show_hide('sift_prediction')">Show</a> columns</td>
+		</tr>
+	</table>
 <p>Stores the SIFT prediction for every possible amino acid substitution in the ensembl proteome<p>
 
 	<div id="div_sift_prediction" style="display:none">
@@ -835,10 +960,14 @@ A PDF document of the schema is available <a href="variation-database-schema.pdf
 </ul>
 
 <br />
-<table style="border: 2px groove #CCCCCC;height:10px;background-color:#FAFAFF"><tr style="vertical-align:middle;height:10px">
-<td style="width:500px;text-align:left;height:10px"><span id="source" style="font-size:11pt;font-weight:bold">source</span></td>
-<td style="width:100px;text-align:right"><a id="a_source" style="cursor:pointer;text-decoration:underline" onclick="show_hide('source')">Show</a> columns</td>
-</tr></table>
+	<table style="border: 2px groove #CCCCCC;background-color:#FAFAFF">
+		<tr style="vertical-align:middle">
+			<td style="padding:0px;width:10px;background-color:#7CFC00"></td>
+			<td style="width:2px"></td>
+			<td style="width:500px;text-align:left;height:10px"><span id="source" style="font-size:11pt;font-weight:bold">source</span></td>
+			<td style="width:100px;text-align:right"><a id="a_source" style="cursor:pointer;text-decoration:underline" onclick="show_hide('source')">Show</a> columns</td>
+		</tr>
+	</table>
 <p>This table contains details of the source from which a variation is derived. Most commonly this is NCBI's dbSNP; other sources include SNPs called by Ensembl.<p>
 
 	<div id="div_source" style="display:none">
@@ -869,10 +998,14 @@ A PDF document of the schema is available <a href="variation-database-schema.pdf
 </ul>
 
 <br />
-<table style="border: 2px groove #CCCCCC;height:10px;background-color:#FAFAFF"><tr style="vertical-align:middle;height:10px">
-<td style="width:500px;text-align:left;height:10px"><span id="structural_variation" style="font-size:11pt;font-weight:bold">structural_variation</span></td>
-<td style="width:100px;text-align:right"><a id="a_structural_variation" style="cursor:pointer;text-decoration:underline" onclick="show_hide('structural_variation')">Show</a> columns</td>
-</tr></table>
+	<table style="border: 2px groove #CCCCCC;background-color:#FAFAFF">
+		<tr style="vertical-align:middle">
+			<td style="padding:0px;width:10px;background-color:#000000"></td>
+			<td style="width:2px"></td>
+			<td style="width:500px;text-align:left;height:10px"><span id="structural_variation" style="font-size:11pt;font-weight:bold">structural_variation</span></td>
+			<td style="width:100px;text-align:right"><a id="a_structural_variation" style="cursor:pointer;text-decoration:underline" onclick="show_hide('structural_variation')">Show</a> columns</td>
+		</tr>
+	</table>
 <p>This table stores information about structural variation features.<p>
 
 	<div id="div_structural_variation" style="display:none">
@@ -903,10 +1036,14 @@ A PDF document of the schema is available <a href="variation-database-schema.pdf
 </ul>
 
 <br />
-<table style="border: 2px groove #CCCCCC;height:10px;background-color:#FAFAFF"><tr style="vertical-align:middle;height:10px">
-<td style="width:500px;text-align:left;height:10px"><span id="study" style="font-size:11pt;font-weight:bold">study</span></td>
-<td style="width:100px;text-align:right"><a id="a_study" style="cursor:pointer;text-decoration:underline" onclick="show_hide('study')">Show</a> columns</td>
-</tr></table>
+	<table style="border: 2px groove #CCCCCC;background-color:#FAFAFF">
+		<tr style="vertical-align:middle">
+			<td style="padding:0px;width:10px;background-color:#7CFC00"></td>
+			<td style="width:2px"></td>
+			<td style="width:500px;text-align:left;height:10px"><span id="study" style="font-size:11pt;font-weight:bold">study</span></td>
+			<td style="width:100px;text-align:right"><a id="a_study" style="cursor:pointer;text-decoration:underline" onclick="show_hide('study')">Show</a> columns</td>
+		</tr>
+	</table>
 <p>This table contains details of the studies. The studies information can come from internal studies (DGVa, EGA) or from external studies (Uniprot, NHGRI, ...).<p>
 
 	<div id="div_study" style="display:none">
@@ -930,10 +1067,14 @@ A PDF document of the schema is available <a href="variation-database-schema.pdf
 </ul>
 
 <br />
-<table style="border: 2px groove #CCCCCC;height:10px;background-color:#FAFAFF"><tr style="vertical-align:middle;height:10px">
-<td style="width:500px;text-align:left;height:10px"><span id="subsnp_handle" style="font-size:11pt;font-weight:bold">subsnp_handle</span></td>
-<td style="width:100px;text-align:right"><a id="a_subsnp_handle" style="cursor:pointer;text-decoration:underline" onclick="show_hide('subsnp_handle')">Show</a> columns</td>
-</tr></table>
+	<table style="border: 2px groove #CCCCCC;background-color:#FAFAFF">
+		<tr style="vertical-align:middle">
+			<td style="padding:0px;width:10px;background-color:#000000"></td>
+			<td style="width:2px"></td>
+			<td style="width:500px;text-align:left;height:10px"><span id="subsnp_handle" style="font-size:11pt;font-weight:bold">subsnp_handle</span></td>
+			<td style="width:100px;text-align:right"><a id="a_subsnp_handle" style="cursor:pointer;text-decoration:underline" onclick="show_hide('subsnp_handle')">Show</a> columns</td>
+		</tr>
+	</table>
 <p>This table contains the SubSNP(ss) ID and the name of the submitter handle of dbSNP.<p>
 
 	<div id="div_subsnp_handle" style="display:none">
@@ -954,10 +1095,14 @@ A PDF document of the schema is available <a href="variation-database-schema.pdf
 </ul>
 
 <br />
-<table style="border: 2px groove #CCCCCC;height:10px;background-color:#FAFAFF"><tr style="vertical-align:middle;height:10px">
-<td style="width:500px;text-align:left;height:10px"><span id="supporting_structural_variation" style="font-size:11pt;font-weight:bold">supporting_structural_variation</span></td>
-<td style="width:100px;text-align:right"><a id="a_supporting_structural_variation" style="cursor:pointer;text-decoration:underline" onclick="show_hide('supporting_structural_variation')">Show</a> columns</td>
-</tr></table>
+	<table style="border: 2px groove #CCCCCC;background-color:#FAFAFF">
+		<tr style="vertical-align:middle">
+			<td style="padding:0px;width:10px;background-color:#000000"></td>
+			<td style="width:2px"></td>
+			<td style="width:500px;text-align:left;height:10px"><span id="supporting_structural_variation" style="font-size:11pt;font-weight:bold">supporting_structural_variation</span></td>
+			<td style="width:100px;text-align:right"><a id="a_supporting_structural_variation" style="cursor:pointer;text-decoration:underline" onclick="show_hide('supporting_structural_variation')">Show</a> columns</td>
+		</tr>
+	</table>
 <p>This table stores the name of the supporting evidence for the structural variants (e.g. DGVa structural variants).<p>
 
 	<div id="div_supporting_structural_variation" style="display:none">
@@ -975,10 +1120,14 @@ A PDF document of the schema is available <a href="variation-database-schema.pdf
 </ul>
 
 <br />
-<table style="border: 2px groove #CCCCCC;height:10px;background-color:#FAFAFF"><tr style="vertical-align:middle;height:10px">
-<td style="width:500px;text-align:left;height:10px"><span id="tagged_variation_feature" style="font-size:11pt;font-weight:bold">tagged_variation_feature</span></td>
-<td style="width:100px;text-align:right"><a id="a_tagged_variation_feature" style="cursor:pointer;text-decoration:underline" onclick="show_hide('tagged_variation_feature')">Show</a> columns</td>
-</tr></table>
+	<table style="border: 2px groove #CCCCCC;background-color:#FAFAFF">
+		<tr style="vertical-align:middle">
+			<td style="padding:0px;width:10px;background-color:#000000"></td>
+			<td style="width:2px"></td>
+			<td style="width:500px;text-align:left;height:10px"><span id="tagged_variation_feature" style="font-size:11pt;font-weight:bold">tagged_variation_feature</span></td>
+			<td style="width:100px;text-align:right"><a id="a_tagged_variation_feature" style="cursor:pointer;text-decoration:underline" onclick="show_hide('tagged_variation_feature')">Show</a> columns</td>
+		</tr>
+	</table>
 <p>This table lists variation features that are tagged by another variation feature. Tag pairs are defined as having an r<sup>2</sup> &gt; 0.99.<p>
 
 	<div id="div_tagged_variation_feature" style="display:none">
@@ -996,10 +1145,14 @@ A PDF document of the schema is available <a href="variation-database-schema.pdf
 </ul>
 
 <br />
-<table style="border: 2px groove #CCCCCC;height:10px;background-color:#FAFAFF"><tr style="vertical-align:middle;height:10px">
-<td style="width:500px;text-align:left;height:10px"><span id="tmp_individual_genotype_single_bp" style="font-size:11pt;font-weight:bold">tmp_individual_genotype_single_bp</span></td>
-<td style="width:100px;text-align:right"><a id="a_tmp_individual_genotype_single_bp" style="cursor:pointer;text-decoration:underline" onclick="show_hide('tmp_individual_genotype_single_bp')">Show</a> columns</td>
-</tr></table>
+	<table style="border: 2px groove #CCCCCC;background-color:#FAFAFF">
+		<tr style="vertical-align:middle">
+			<td style="padding:0px;width:10px;background-color:#FF8500"></td>
+			<td style="width:2px"></td>
+			<td style="width:500px;text-align:left;height:10px"><span id="tmp_individual_genotype_single_bp" style="font-size:11pt;font-weight:bold">tmp_individual_genotype_single_bp</span></td>
+			<td style="width:100px;text-align:right"><a id="a_tmp_individual_genotype_single_bp" style="cursor:pointer;text-decoration:underline" onclick="show_hide('tmp_individual_genotype_single_bp')">Show</a> columns</td>
+		</tr>
+	</table>
 <p>his table is only needed for create master schema when run healthcheck system. Needed for other species, but human, so keep it.<p>
 
 	<div id="div_tmp_individual_genotype_single_bp" style="display:none">
@@ -1021,10 +1174,14 @@ A PDF document of the schema is available <a href="variation-database-schema.pdf
 </ul>
 
 <br />
-<table style="border: 2px groove #CCCCCC;height:10px;background-color:#FAFAFF"><tr style="vertical-align:middle;height:10px">
-<td style="width:500px;text-align:left;height:10px"><span id="transcript_variation" style="font-size:11pt;font-weight:bold">transcript_variation</span></td>
-<td style="width:100px;text-align:right"><a id="a_transcript_variation" style="cursor:pointer;text-decoration:underline" onclick="show_hide('transcript_variation')">Show</a> columns</td>
-</tr></table>
+	<table style="border: 2px groove #CCCCCC;background-color:#FAFAFF">
+		<tr style="vertical-align:middle">
+			<td style="padding:0px;width:10px;background-color:#000000"></td>
+			<td style="width:2px"></td>
+			<td style="width:500px;text-align:left;height:10px"><span id="transcript_variation" style="font-size:11pt;font-weight:bold">transcript_variation</span></td>
+			<td style="width:100px;text-align:right"><a id="a_transcript_variation" style="cursor:pointer;text-decoration:underline" onclick="show_hide('transcript_variation')">Show</a> columns</td>
+		</tr>
+	</table>
 <p>This table relates a single allele of a variation_feature to a transcript (see Core documentation). It contains the consequence of the allele e.g. intron_variant, non_synonymous_codon, stop_lost etc, along with the change in amino acid in the resulting protein if applicable.<p>
 
 	<div id="div_transcript_variation" style="display:none">
@@ -1058,10 +1215,14 @@ A PDF document of the schema is available <a href="variation-database-schema.pdf
 </ul>
 
 <br />
-<table style="border: 2px groove #CCCCCC;height:10px;background-color:#FAFAFF"><tr style="vertical-align:middle;height:10px">
-<td style="width:500px;text-align:left;height:10px"><span id="variation" style="font-size:11pt;font-weight:bold">variation</span></td>
-<td style="width:100px;text-align:right"><a id="a_variation" style="cursor:pointer;text-decoration:underline" onclick="show_hide('variation')">Show</a> columns</td>
-</tr></table>
+	<table style="border: 2px groove #CCCCCC;background-color:#FAFAFF">
+		<tr style="vertical-align:middle">
+			<td style="padding:0px;width:10px;background-color:#000000"></td>
+			<td style="width:2px"></td>
+			<td style="width:500px;text-align:left;height:10px"><span id="variation" style="font-size:11pt;font-weight:bold">variation</span></td>
+			<td style="width:100px;text-align:right"><a id="a_variation" style="cursor:pointer;text-decoration:underline" onclick="show_hide('variation')">Show</a> columns</td>
+		</tr>
+	</table>
 <p>This is the schema's generic representation of a variation, defined as a genetic feature that varies between individuals of the same species.The most common type is the single nucleotide variation (SNP) though the schema also accommodates copy number variations (CNVs) and structural variations (SVs).A variation is defined by its flanking sequence rather than its mapped location on a chromosome; a variation may in fact have multiple mappings across a genome.This table stores a variation's name (commonly an ID of the form e.g. rs123456, assigned by dbSNP), along with a validation status and ancestral (or reference) allele.<p>
 
 	<div id="div_variation" style="display:none">
@@ -1092,10 +1253,14 @@ A PDF document of the schema is available <a href="variation-database-schema.pdf
 </ul>
 
 <br />
-<table style="border: 2px groove #CCCCCC;height:10px;background-color:#FAFAFF"><tr style="vertical-align:middle;height:10px">
-<td style="width:500px;text-align:left;height:10px"><span id="variation_annotation" style="font-size:11pt;font-weight:bold">variation_annotation</span></td>
-<td style="width:100px;text-align:right"><a id="a_variation_annotation" style="cursor:pointer;text-decoration:underline" onclick="show_hide('variation_annotation')">Show</a> columns</td>
-</tr></table>
+	<table style="border: 2px groove #CCCCCC;background-color:#FAFAFF">
+		<tr style="vertical-align:middle">
+			<td style="padding:0px;width:10px;background-color:#000000"></td>
+			<td style="width:2px"></td>
+			<td style="width:500px;text-align:left;height:10px"><span id="variation_annotation" style="font-size:11pt;font-weight:bold">variation_annotation</span></td>
+			<td style="width:100px;text-align:right"><a id="a_variation_annotation" style="cursor:pointer;text-decoration:underline" onclick="show_hide('variation_annotation')">Show</a> columns</td>
+		</tr>
+	</table>
 <p>This table stores information linking genotypes and phenotypes. It stores various fields pertaining to the study conducted, along with the associated gene, risk allele frequency and a p-value.<p>
 
 	<div id="div_variation_annotation" style="display:none">
@@ -1121,10 +1286,14 @@ A PDF document of the schema is available <a href="variation-database-schema.pdf
 </ul>
 
 <br />
-<table style="border: 2px groove #CCCCCC;height:10px;background-color:#FAFAFF"><tr style="vertical-align:middle;height:10px">
-<td style="width:500px;text-align:left;height:10px"><span id="variation_feature" style="font-size:11pt;font-weight:bold">variation_feature</span></td>
-<td style="width:100px;text-align:right"><a id="a_variation_feature" style="cursor:pointer;text-decoration:underline" onclick="show_hide('variation_feature')">Show</a> columns</td>
-</tr></table>
+	<table style="border: 2px groove #CCCCCC;background-color:#FAFAFF">
+		<tr style="vertical-align:middle">
+			<td style="padding:0px;width:10px;background-color:#000000"></td>
+			<td style="width:2px"></td>
+			<td style="width:500px;text-align:left;height:10px"><span id="variation_feature" style="font-size:11pt;font-weight:bold">variation_feature</span></td>
+			<td style="width:100px;text-align:right"><a id="a_variation_feature" style="cursor:pointer;text-decoration:underline" onclick="show_hide('variation_feature')">Show</a> columns</td>
+		</tr>
+	</table>
 <p>This table represents mappings of variations to genomic locations. It stores an allele string representing the different possible alleles that are found at that locus e.g. "A/T" for a SNP, as well as a "worst case" consequence of the mutation. It also acts as part of the relationship between variations and transcripts.<p>
 
 	<div id="div_variation_feature" style="display:none">
@@ -1159,10 +1328,14 @@ A PDF document of the schema is available <a href="variation-database-schema.pdf
 </ul>
 
 <br />
-<table style="border: 2px groove #CCCCCC;height:10px;background-color:#FAFAFF"><tr style="vertical-align:middle;height:10px">
-<td style="width:500px;text-align:left;height:10px"><span id="variation_group" style="font-size:11pt;font-weight:bold">variation_group</span></td>
-<td style="width:100px;text-align:right"><a id="a_variation_group" style="cursor:pointer;text-decoration:underline" onclick="show_hide('variation_group')">Show</a> columns</td>
-</tr></table>
+	<table style="border: 2px groove #CCCCCC;background-color:#FAFAFF">
+		<tr style="vertical-align:middle">
+			<td style="padding:0px;width:10px;background-color:#000000"></td>
+			<td style="width:2px"></td>
+			<td style="width:500px;text-align:left;height:10px"><span id="variation_group" style="font-size:11pt;font-weight:bold">variation_group</span></td>
+			<td style="width:100px;text-align:right"><a id="a_variation_group" style="cursor:pointer;text-decoration:underline" onclick="show_hide('variation_group')">Show</a> columns</td>
+		</tr>
+	</table>
 <p>This table represents the equivalent of a variation for a multi-marker variation.<p>
 
 	<div id="div_variation_group" style="display:none">
@@ -1185,10 +1358,14 @@ A PDF document of the schema is available <a href="variation-database-schema.pdf
 </ul>
 
 <br />
-<table style="border: 2px groove #CCCCCC;height:10px;background-color:#FAFAFF"><tr style="vertical-align:middle;height:10px">
-<td style="width:500px;text-align:left;height:10px"><span id="variation_group_feature" style="font-size:11pt;font-weight:bold">variation_group_feature</span></td>
-<td style="width:100px;text-align:right"><a id="a_variation_group_feature" style="cursor:pointer;text-decoration:underline" onclick="show_hide('variation_group_feature')">Show</a> columns</td>
-</tr></table>
+	<table style="border: 2px groove #CCCCCC;background-color:#FAFAFF">
+		<tr style="vertical-align:middle">
+			<td style="padding:0px;width:10px;background-color:#000000"></td>
+			<td style="width:2px"></td>
+			<td style="width:500px;text-align:left;height:10px"><span id="variation_group_feature" style="font-size:11pt;font-weight:bold">variation_group_feature</span></td>
+			<td style="width:100px;text-align:right"><a id="a_variation_group_feature" style="cursor:pointer;text-decoration:underline" onclick="show_hide('variation_group_feature')">Show</a> columns</td>
+		</tr>
+	</table>
 <p>This table represents the equivalent of a variation_feature for multi-marker variations, mapping a haplotype to a chromosomal coordinate system.<p>
 
 	<div id="div_variation_group_feature" style="display:none">
@@ -1211,10 +1388,14 @@ A PDF document of the schema is available <a href="variation-database-schema.pdf
 </ul>
 
 <br />
-<table style="border: 2px groove #CCCCCC;height:10px;background-color:#FAFAFF"><tr style="vertical-align:middle;height:10px">
-<td style="width:500px;text-align:left;height:10px"><span id="variation_group_variation" style="font-size:11pt;font-weight:bold">variation_group_variation</span></td>
-<td style="width:100px;text-align:right"><a id="a_variation_group_variation" style="cursor:pointer;text-decoration:underline" onclick="show_hide('variation_group_variation')">Show</a> columns</td>
-</tr></table>
+	<table style="border: 2px groove #CCCCCC;background-color:#FAFAFF">
+		<tr style="vertical-align:middle">
+			<td style="padding:0px;width:10px;background-color:#000000"></td>
+			<td style="width:2px"></td>
+			<td style="width:500px;text-align:left;height:10px"><span id="variation_group_variation" style="font-size:11pt;font-weight:bold">variation_group_variation</span></td>
+			<td style="width:100px;text-align:right"><a id="a_variation_group_variation" style="cursor:pointer;text-decoration:underline" onclick="show_hide('variation_group_variation')">Show</a> columns</td>
+		</tr>
+	</table>
 <p>This table represents an individual variation that makes up a multi-marker variation, and resolves the many-to-many relationship between variation and variation_group.<p>
 
 	<div id="div_variation_group_variation" style="display:none">
@@ -1232,10 +1413,14 @@ A PDF document of the schema is available <a href="variation-database-schema.pdf
 </ul>
 
 <br />
-<table style="border: 2px groove #CCCCCC;height:10px;background-color:#FAFAFF"><tr style="vertical-align:middle;height:10px">
-<td style="width:500px;text-align:left;height:10px"><span id="variation_set" style="font-size:11pt;font-weight:bold">variation_set</span></td>
-<td style="width:100px;text-align:right"><a id="a_variation_set" style="cursor:pointer;text-decoration:underline" onclick="show_hide('variation_set')">Show</a> columns</td>
-</tr></table>
+	<table style="border: 2px groove #CCCCCC;background-color:#FAFAFF">
+		<tr style="vertical-align:middle">
+			<td style="padding:0px;width:10px;background-color:#FFD700"></td>
+			<td style="width:2px"></td>
+			<td style="width:500px;text-align:left;height:10px"><span id="variation_set" style="font-size:11pt;font-weight:bold">variation_set</span></td>
+			<td style="width:100px;text-align:right"><a id="a_variation_set" style="cursor:pointer;text-decoration:underline" onclick="show_hide('variation_set')">Show</a> columns</td>
+		</tr>
+	</table>
 <p>This table containts the name of sets and subsets of variations stored in the database. It usually represents the name of the project or subproject where a group of variations has been identified.<p>
 
 	<div id="div_variation_set" style="display:none">
@@ -1255,10 +1440,14 @@ A PDF document of the schema is available <a href="variation-database-schema.pdf
 </ul>
 
 <br />
-<table style="border: 2px groove #CCCCCC;height:10px;background-color:#FAFAFF"><tr style="vertical-align:middle;height:10px">
-<td style="width:500px;text-align:left;height:10px"><span id="variation_set_structure" style="font-size:11pt;font-weight:bold">variation_set_structure</span></td>
-<td style="width:100px;text-align:right"><a id="a_variation_set_structure" style="cursor:pointer;text-decoration:underline" onclick="show_hide('variation_set_structure')">Show</a> columns</td>
-</tr></table>
+	<table style="border: 2px groove #CCCCCC;background-color:#FAFAFF">
+		<tr style="vertical-align:middle">
+			<td style="padding:0px;width:10px;background-color:#FFD700"></td>
+			<td style="width:2px"></td>
+			<td style="width:500px;text-align:left;height:10px"><span id="variation_set_structure" style="font-size:11pt;font-weight:bold">variation_set_structure</span></td>
+			<td style="width:100px;text-align:right"><a id="a_variation_set_structure" style="cursor:pointer;text-decoration:underline" onclick="show_hide('variation_set_structure')">Show</a> columns</td>
+		</tr>
+	</table>
 <p>This table stores hierarchical relationships between variation sets by relating them as variation sets and variation subsets.<p>
 
 	<div id="div_variation_set_structure" style="display:none">
@@ -1275,10 +1464,14 @@ A PDF document of the schema is available <a href="variation-database-schema.pdf
 </ul>
 
 <br />
-<table style="border: 2px groove #CCCCCC;height:10px;background-color:#FAFAFF"><tr style="vertical-align:middle;height:10px">
-<td style="width:500px;text-align:left;height:10px"><span id="variation_set_variation" style="font-size:11pt;font-weight:bold">variation_set_variation</span></td>
-<td style="width:100px;text-align:right"><a id="a_variation_set_variation" style="cursor:pointer;text-decoration:underline" onclick="show_hide('variation_set_variation')">Show</a> columns</td>
-</tr></table>
+	<table style="border: 2px groove #CCCCCC;background-color:#FAFAFF">
+		<tr style="vertical-align:middle">
+			<td style="padding:0px;width:10px;background-color:#FFD700"></td>
+			<td style="width:2px"></td>
+			<td style="width:500px;text-align:left;height:10px"><span id="variation_set_variation" style="font-size:11pt;font-weight:bold">variation_set_variation</span></td>
+			<td style="width:100px;text-align:right"><a id="a_variation_set_variation" style="cursor:pointer;text-decoration:underline" onclick="show_hide('variation_set_variation')">Show</a> columns</td>
+		</tr>
+	</table>
 <p>A table for mapping variations to variation_sets.<p>
 
 	<div id="div_variation_set_variation" style="display:none">
@@ -1296,10 +1489,14 @@ A PDF document of the schema is available <a href="variation-database-schema.pdf
 </ul>
 
 <br />
-<table style="border: 2px groove #CCCCCC;height:10px;background-color:#FAFAFF"><tr style="vertical-align:middle;height:10px">
-<td style="width:500px;text-align:left;height:10px"><span id="variation_synonym" style="font-size:11pt;font-weight:bold">variation_synonym</span></td>
-<td style="width:100px;text-align:right"><a id="a_variation_synonym" style="cursor:pointer;text-decoration:underline" onclick="show_hide('variation_synonym')">Show</a> columns</td>
-</tr></table>
+	<table style="border: 2px groove #CCCCCC;background-color:#FAFAFF">
+		<tr style="vertical-align:middle">
+			<td style="padding:0px;width:10px;background-color:#000000"></td>
+			<td style="width:2px"></td>
+			<td style="width:500px;text-align:left;height:10px"><span id="variation_synonym" style="font-size:11pt;font-weight:bold">variation_synonym</span></td>
+			<td style="width:100px;text-align:right"><a id="a_variation_synonym" style="cursor:pointer;text-decoration:underline" onclick="show_hide('variation_synonym')">Show</a> columns</td>
+		</tr>
+	</table>
 <p>This table allows for a variation to have multiple IDs, generally given by multiple sources.<p>
 
 	<div id="div_variation_synonym" style="display:none">
@@ -1320,7 +1517,18 @@ A PDF document of the schema is available <a href="variation-database-schema.pdf
 	<li><a href="#variation">variation</a></li>
 	<li><a href="#subsnp_handle">subsnp_handle</a></li>
 </ul>
-
+<br />
+<hr />
+<h3 id="legend">Colour legend</h3>
+<table><tr><td style="width:25px;height:15px;background-color:#000000"></td><td>Other tables</td></tr>
+<tr><td style="width:25px;height:15px;background-color:#FF8500"></td><td>Tables containing individual data</td></tr>
+<tr><td style="width:25px;height:15px;background-color:#FFD700"></td><td>Tables containing sets of variations</td></tr>
+<tr><td style="width:25px;height:15px;background-color:#7CFC00"></td><td>Tables containing source and study data</td></tr>
+<tr><td style="width:25px;height:15px;background-color:#DA70D6"></td><td>Tables containing metadata</td></tr>
+<tr><td style="width:25px;height:15px;background-color:#3CB371"></td><td>Tables containing &quot;failed&quot; data</td></tr>
+<tr><td style="width:25px;height:15px;background-color:#FF0000"></td><td>Tables containing attribute data</td></tr>
+<tr><td style="width:25px;height:15px;background-color:#1E90FF"></td><td>Tables concerning protein data</td></tr>
+</table>
 
 </body>
 </html>
