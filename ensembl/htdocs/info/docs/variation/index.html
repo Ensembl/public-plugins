@@ -127,6 +127,7 @@ class="cp-external">variation databases</a>).
 
 <h2 id="classes"> Variation classes </h2>
 
+<p>
 We call the class of a variation according to its component alleles and its mapping 
 to the reference genome, and then display this information on the website. Internally 
 we use <a href="http://www.sequenceontology.org/">Sequence Ontology</a> terms, but we 
@@ -134,7 +135,8 @@ map these to our own 'display' terms where common usage differs from the SO
 definition (e.g. our term SNP is closer to the SO term SNV). All the classes we call, 
 along with their equivalent SO term are shown in the table below. We also differentiate 
 somatic mutations from germline variations in the display term, prefixing the term with
-'somatic'. API users can fetch either the SO term or the display term.</p>
+'somatic'. API users can fetch either the SO term or the display term.
+</p>
 
 <br />
 
@@ -146,64 +148,64 @@ somatic mutations from germline variations in the display term, prefixing the te
 </tr>
 <tr>
 	<td>SNP</td>
-	<td rowspan=2>SNV</td>
-	<td rowspan=2><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001483">SO:0001483</a></td>
+	<td rowspan="2">SNV</td>
+	<td rowspan="2"><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001483">SO:0001483</a></td>
 </tr>
 <tr>
 	<td>somatic_SNV</td>
 </tr>
 <tr class="bg2">
 	<td>substitution</td>
-	<td rowspan=2>substitution</td>
-	<td rowspan=2><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:1000002">SO:1000002</a></td>
+	<td rowspan="2">substitution</td>
+	<td rowspan="2"><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:1000002">SO:1000002</a></td>
 </tr>
 <tr class="bg2">
 	<td>somatic_substitution</td>
 </tr>
 <tr>
 	<td>CNV</td>
-	<td rowspan=2>copy_number_variation</td>
-	<td rowspan=2><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001019">SO:0001019</a></td>
+	<td rowspan="2">copy_number_variation</td>
+	<td rowspan="2"><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001019">SO:0001019</a></td>
 </tr>
 <tr>
 	<td>somatic_CNV</td>
 </tr>
 <tr class="bg2">
 	<td>insertion</td>
-	<td rowspan=2>insertion</td>
-	<td rowspan=2><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0000667">SO:0000667</a></td>
+	<td rowspan="2">insertion</td>
+	<td rowspan="2"><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0000667">SO:0000667</a></td>
 </tr>
 <tr class="bg2">
 	<td>somatic_insertion</td>
 </tr>
 <tr>
 	<td>deletion</td>
-	<td rowspan=2>deletion</td>
-	<td rowspan=2><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0000159">SO:0000159</a></td>
+	<td rowspan="2">deletion</td>
+	<td rowspan="2"><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0000159">SO:0000159</a></td>
 </tr>
 <tr>
 	<td>somatic_deletion</td>
 </tr>
 <tr class="bg2">
 	<td>indel</td>
-	<td rowspan=2>indel</td>
-	<td rowspan=2><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:1000032">SO:1000032</a></td>
+	<td rowspan="2">indel</td>
+	<td rowspan="2"><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:1000032">SO:1000032</a></td>
 </tr>
 <tr class="bg2">
 	<td>somatic_indel</td>
 </tr>
 <tr>
 	<td>tandem_repeat</td>
-	<td rowspan=2>tandem_repeat</td>
-	<td rowspan=2><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0000705">SO:0000705</a></td>
+	<td rowspan="2">tandem_repeat</td>
+	<td rowspan="2"><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0000705">SO:0000705</a></td>
 </tr>
 <tr>
 	<td>somatic_tandem_repeat</td>
 </tr>
 <tr class="bg2">
 	<td>sequence_alteration</td>
-	<td rowspan=2>sequence_alteration</td>
-	<td rowspan=2><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001059">SO:0001059</a></td>
+	<td rowspan="2">sequence_alteration</td>
+	<td rowspan="2"><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001059">SO:0001059</a></td>
 </tr>
 <tr class="bg2">
 	<td>somatic_sequence_alteration</td>
@@ -294,8 +296,8 @@ term relative to the transcript structure is available.
 	<th>NCBI term</th>
 </tr>
 <tr>
-	<td rowspan=2>Essential splice site</td>
-	<td rowspan=2>In the first 2 or the last 2 basepairs of an intron</td>
+	<td rowspan="2">Essential splice site</td>
+	<td rowspan="2">In the first 2 or the last 2 basepairs of an intron</td>
 	<td>splice_acceptor_variant</td>
 	<td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001574">SO:0001574</a></td>
 	<td>splice-3</td>
@@ -327,8 +329,8 @@ term relative to the transcript structure is available.
 	<td>-</td>
 </tr>
 <tr>
-	<td rowspan=4>Non-synonymous coding</td>
-	<td rowspan=4>In coding sequence and results in an amino acid change in the encoded peptide sequence</td>
+	<td rowspan="4">Non-synonymous coding</td>
+	<td rowspan="4">In coding sequence and results in an amino acid change in the encoded peptide sequence</td>
 	<td>initiator_codon_change</td>
 	<td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001582">SO:0001582</a></td>
 	<td>-</td>
@@ -371,8 +373,8 @@ term relative to the transcript structure is available.
 	<td>-</td>
 </tr>
 <tr>
-	<td rowspan=2>Synonymous coding</td>
-	<td rowspan=2>In coding sequence, not resulting in an amino acid change (silent mutation)</td>
+	<td rowspan="2">Synonymous coding</td>
+	<td rowspan="2">In coding sequence, not resulting in an amino acid change (silent mutation)</td>
 	<td>stop_retained_variant</td>
 	<td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001567">SO:0001567</a></td>
 	<td>-</td>
@@ -432,8 +434,8 @@ term relative to the transcript structure is available.
 	<td>-</td>
 </tr>
 <tr>
-	<td rowspan=2>Upstream</td>
-	<td rowspan=2>Within 5 kb upstream of the 5 prime end of a transcript</td>
+	<td rowspan="2">Upstream</td>
+	<td rowspan="2">Within 5 kb upstream of the 5 prime end of a transcript</td>
 	<td>2KB_upstream_variant</td>
 	<td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001636">SO:0001636</a></td>
 	<td>near-gene-5</td>
@@ -444,8 +446,8 @@ term relative to the transcript structure is available.
 	<td>-</td>
 </tr>
 <tr class="bg2">
-	<td rowspan=2>Downstream</td>
-	<td rowspan=2>Within 5 kb downstream of the 3 prime end of a transcript</td>
+	<td rowspan="2">Downstream</td>
+	<td rowspan="2">Within 5 kb downstream of the 3 prime end of a transcript</td>
 	<td>500B_downstream_variant</td>
 	<td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001634">SO:0001634</a></td>
 	<td>near-gene-3</td>
@@ -603,9 +605,9 @@ The sets are constructed during production and are stored in the database. The t
 
 <table id="variation_set_table" class="ss">
 <tr>
-	<th>Name</td>
-	<th>Short name</td>
-	<th>Description</td>
+	<th>Name</th>
+	<th>Short name</th>
+	<th>Description</th>
 </tr>
 <tr>
 	<td>Clinical/LSDB variations from dbSNP</td>
