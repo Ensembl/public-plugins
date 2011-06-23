@@ -34,7 +34,7 @@ sub _species_sets {
       my $orth_info = $orthologue_list->{$species}{$stable_id};
       my $orth_desc = ucfirst($orthologue_map{$orth_info->{'homology_desc'}} || $orth_info->{'homology_desc'});
       $species_sets->{'all'}{$orth_desc}++;
-      $ortho_type->{$species}{$orth_desc}++;
+      $ortho_type->{$species}{$orth_desc} = 1;
     }
     if ($group eq 'Primates') {
       push @{$species_sets->{'primates'}{'species'}}, $species;
