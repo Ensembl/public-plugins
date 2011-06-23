@@ -82,7 +82,8 @@ sub content_tree {
       'no_input'  => $action eq 'Preview' ? 0 : 1,
     };
     $element_params->{$_} = $field_extras->{$_} for keys %$field_extras;
-    
+    $element_params->{'class'} .= ' '.$self->_JS_CLASS_DATASTRUCTURE if $field->value_type eq 'datastructure';
+
     my $is_null = $field->is_null;
 
     my $selected_values = {};
