@@ -29,7 +29,7 @@ sub content_tree {
   my $links   = defined $page ? $content->append_child($self->content_pagination_tree(scalar @$records)) : undef;
   !$object->pagination and $links and map {$_->remove} @{$links->get_nodes_by_flag('pagination_links')};
   
-  $object->use_ajax and !$object->is_ajax_request and $content->append_child('div', {
+  !$hub->param('id') and $object->use_ajax and !$object->is_ajax_request and $content->append_child('div', {
     'class' => 'dbf-record js_panel',
     'children' => [
       {'node_name' => 'div', 'class' => 'dbf-row-buttons', 'children' => [
@@ -45,7 +45,7 @@ sub content_tree {
     $record_div->set_attributes({'class' => ['dbf-record', $js_class]});
   }
 
-  $content->append_child($links->clone_node(1))     if $links; ## bottom pagination
+  $content->append_child($links->clone_node(1)) if $links; ## bottom pagination
 
   return $content;
 }
@@ -125,7 +125,9 @@ sub display_field_value {
   }
 
   ## if it's DateTime (rose returns DateTime for datetime mysql type)
-  return $self->print_datetime($value) if UNIVERSAL::isa($value, 'DateTime');
+  if (UNIVERSAL::isa($value, 'DateTime')) {
+    return $self->print_datetime($value);
+  }
 
   ## if it's a rose object
   if (UNIVERSAL::isa($value, 'EnsEMBL::ORM::Rose::Object')) {
