@@ -24,7 +24,8 @@ use constant {
   _JS_CLASS_CANCEL_BUTTON     => '_dbf_cancel',
   _JS_CLASS_PREVIEW_FORM      => '_dbf_preview',
   _JS_CLASS_SAVE_FORM         => '_dbf_save',
-  _JS_CLASS_ADD_FORM          => '_dbf_add'
+  _JS_CLASS_ADD_FORM          => '_dbf_add',
+  _JS_CLASS_DATASTRUCTURE     => '_datastructure',
 };
 
 sub _init {
@@ -175,14 +176,8 @@ sub unpack_rose_object {
 
       if (($field->{'value_type'} = $column->type) =~ /^(enum|set)$/ || $select) {
       
-        if (defined $value) {
-          $value = [ $value ] unless ref $value;
-          $value = { map {$_ => 1} @$value };
-        }
-        else {
-          $value = {};
-        }
-        
+        $value = defined $value ? { map {$_ => 1} (ref $value ? @$value : $value) } : {};
+
         $field->{'lookup'}   = {};
         $field->{'selected'} = {};
         $field->{'multiple'} = $1 eq 'set' ? 1 : 0;
@@ -212,26 +207,6 @@ sub unpack_rose_object {
   }
   
   return $unpacked;
-}
-
-sub _modify_trackable_field_params {
-  ## Modifies the tracklable field's params hash provided as argument, according to the trackable info
-  ## @param HashRef as accepted by Form->add_field method
-  ## @param 'by_user' or 'at'
-  ## @return HashRef as accepted by Form->add_field method, after some modifications
-  my ($self, $param, $type) = @_;
-  
-  return unless $type;
-
-  if ($type eq 'by_user') {
-    my $user = $self->hub->user;
-    $param->{'caption'} = $user->name;
-    $param->{'value'}   = $user->user_id;
-  }
-  else {
-    $param->{'caption'} = 'Now';
-    $param->{'value'}   = parse_date('now');
-  }
 }
 
 sub print_datetime {
