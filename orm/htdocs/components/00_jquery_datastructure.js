@@ -9,15 +9,16 @@
   $.datastructure = function (el) {
 
     el = $(el);
-    var data = {};
-
-    try {
-      data = eval('(' + el.val().replace(/\=>/gm, ':') + ')');
-    }
-    catch (e) {
-      //TODO
-      return;
-    }
+    
+    // private method to parse the string to a datastructure
+    var parse = function(str) {
+      try {
+        return eval('(' + el.val().replace(/\=>/gm, ':') + ')');
+      }
+      catch (e) {
+        throw 'Invalid data structure. Please change the source.';
+      }
+    };
 
     // private sorting method to ignore cases
     var ignoreCases = function(a, b) {
@@ -34,20 +35,6 @@
     // private method to close all popup menus
     var closeMenu = function() {
       $('#_ds_menu, #_ds_key_menu').hide();
-    };
-
-    // event method if text is changed, or form is reset
-    var reset = function() {
-      delete data;
-      setTimeout(
-        function() {
-          if ($.trim(el.val()) == '') {
-            el.val('{}');
-          }
-          el.replaceAll(wrapper).datastructure();
-          $('#_ds_menu, #_ds_key_menu').remove();
-        }, 100
-      );
     };
 
     // Tabs class
@@ -320,6 +307,7 @@
       this.string = function(val, doModify) {
         if (doModify) {
           this.value = val;
+          this.el.empty();
         }
         this.el.append($('<span class="-ds-hil _ds_string">').html(val || '<i>undef</i>').bind({ click: function(e) { self.getMenu(e); }}));
       };
@@ -469,23 +457,58 @@
       }
     };
     
+    var data = {};
+    try {
+      data = parse(el.val());
+    }
+    catch(e) {
+      return;
+    }
     data = new DSElement(data, undefined, el);
     data.updateText();
 
+    var error   = $('<p class="-ds-error">').hide();
     var wrapper = $('<div>')
       .html('<div class="-ds-tab"><a class="selected" href="#editor">Editor</a><a href="#source">Source</a></div><div class="-ds-tab-div"></div><div class="-ds-tab-div"></div>')
-      .replaceAll(el).children().last().append(el).prev().append($('<pre>').append(data.display())).parent();
+      .replaceAll(el).children().last().append(el).prev().append($('<pre>').append(data.display().addClass('_ds_toplevel'))).parent().before(error);
 
     new DSTabs($('a', wrapper), $('.-ds-tab-div', wrapper));
+
+    // event method if text is changed, or form is reset
+    var reset = function() {
+      if (data && data.destroy) data.destroy();
+      setTimeout(
+        function() {
+          if ($.trim(el.val()) == '') {
+            el.val('{}');
+          }
+          try {
+            data = parse(el.val());
+          }
+          catch(e) {
+            error.html(e).show();
+            $('._ds_toplevel', wrapper).empty();
+            return;
+          }
+          error.hide();
+          data = new DSElement(data, undefined, el);
+          data.updateText();
+          $('._ds_toplevel', wrapper).replaceWith(data.display().addClass('_ds_toplevel'));
+        }, 100
+      );
+    };
+
     el.bind({change: reset}).parents('form').bind({reset: reset});
   };
 
   $.fn.datastructure = function () {
 
     this.each(function() {
+
       new $.datastructure(this);
     });
 
     return this;
+
   };
 })(jQuery);
