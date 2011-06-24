@@ -2,11 +2,10 @@
  * datastructure
  * jQuery plugin to make a user friendly editor for perl hash datastructures
  * TODO - needs optimisation
- * TODO - allow hash keys to contain spaces - encode spaces while setting the key as className
  */
 
 (function($) {
-  
+
   $.datastructure = function (el) {
 
     el = $(el);
@@ -20,8 +19,39 @@
       return;
     }
 
+    // private sorting method to ignore cases
+    var ignoreCases = function(a, b) {
+      a = a.toLowerCase();
+      b = b.toLowerCase();
+      return a > b && 1 || a < b && -1 || 0;
+    };
+
+    // private method for encoding strings for class attribute
+    var encodeClassName = function(str) {
+      return encodeURIComponent(str).replace('_', '%5F').replace(/%/g, '_');
+    };
+
+    // private method to close all popup menus
+    var closeMenu = function() {
+      $('#_ds_menu, #_ds_key_menu').hide();
+    };
+
+    // event method if text is changed, or form is reset
+    var reset = function() {
+      delete data;
+      setTimeout(
+        function() {
+          if ($.trim(el.val()) == '') {
+            el.val('{}');
+          }
+          el.replaceAll(wrapper).datastructure();
+          $('#_ds_menu, #_ds_key_menu').remove();
+        }, 100
+      );
+    };
+
     // Tabs class
-    var HeTabs = function(buttons, tabs, active) {
+    var DSTabs = function(buttons, tabs, active) {
       buttons.each(function(i) {
         $(this).click(function(event) {
           event.preventDefault();
@@ -33,10 +63,14 @@
     };
 
     // Menu object
-    var HeMenu = {
+    var DSMenu = {
       construct: function() {
         var self = this;
         if (this.el) return;
+        if (document.getElementById('_ds_menu')) {
+          this.el = $('#_ds_menu');
+          return;
+        }
         this.el = $('<div>')
           .attr({id: '_ds_menu', 'class': '-ds-menu'})
           .append($('<p>').attr({'class': '-ds-menu-close'})
@@ -66,7 +100,7 @@
             )
           )
         });
-        new HeTabs($('#_ds_menu_tab a', this.el), $('div.-ds-tab-div', this.el));
+        new DSTabs($('#_ds_menu_tab a', this.el), $('div.-ds-tab-div', this.el));
         $('#_ds_menu_tab a', this.el).bind('click', function() {
           var type = this.href.split('#').pop();
           setTimeout(function() {
@@ -99,9 +133,13 @@
     };
     
     // Key renaming popup object
-    var HeKeyMenu = {
+    var DSKeyMenu = {
       construct: function() {
         if (this.el) return;
+        if (document.getElementById('_ds_key_menu')) {
+          this.el = $('#_ds_key_menu');
+          return;
+        }
         this.el = $('<div>').attr({id: '_ds_key_menu', 'class': '-ds-menu'})
           .append('<p id="_ds_key_error" class="-ds-error">')
           .append($('<form>').append($('<input>').attr({type: 'text'}).bind({
@@ -141,13 +179,8 @@
       }
     };
 
-    // private method to close all popup menus
-    var closeMenu = function() {
-      $('#_ds_menu, #_ds_key_menu').hide();
-    };
-
-    //private class for each Element
-    var HeElement = function(data, parent, ta) {
+    // private class for each Element
+    var DSElement = function(data, parent, ta) {
       var self = this;
       var n = '<br />';
       var t = '  ';
@@ -162,25 +195,18 @@
       this.keys   = [];
       this.indent = 1;
 
-      //private sorting method
-      var sortAlpha = function(a, b) {
-        a = a.toLowerCase();
-        b = b.toLowerCase();
-        return a > b && 1 || a < b && -1 || 0;
-      };
-
-      //updates the text representation of hash in the textarea
+      // updates the text representation of hash in the textarea
       this.updateText = function() {
         this.parent ? this.parent.updateText() : this.ta.val(this.toString());
       }
 
-      //add keys to hash
+      // adds a key to hash
       this.addKey = function(key, val, doModify) {
         var nextKey = false;
         if (doModify) {
           this.value[key] = val;
           this.keys.push(key);
-          this.keys = this.keys.sort(sortAlpha);
+          this.keys = this.keys.sort(ignoreCases);
           for (var i in this.keys) {
             if (this.keys[i] == key) {
               nextKey = this.keys[parseInt(i) + 1];
@@ -188,13 +214,12 @@
             }
           }
           if (nextKey) {
-            nextKey = $('>span._ds_key_' + nextKey, this.el).first().prev();
+            nextKey = $('>span._ds_key_' + encodeClassName(nextKey), this.el).first().prev();
           }
         }
-        var spans = [$('<span>').html(n + p + t), $('<span class="-ds-hil _ds_key _ds_key_' + key + '">').html(key), $('<span>').html(' =&gt; '), val.display(this.indent + 1)];
-        for (var i in spans) {
-          nextKey ? nextKey.before(spans[i]) : this.el.append(spans[i]);
-        }
+        $.each([$('<span class="-ds-remove-button">').html(n + p + t), $('<span class="-ds-hil -ds-key _ds_key _ds_key_' + encodeClassName(key) + '">').html(key), $('<span>').html(' =&gt; '), val.display(this.indent + 1)], function() {
+          nextKey ? nextKey.before(this) : self.el.append(this);
+        });
         $('>span._ds_key', this.el).bind({
           click: function(event) {
             self.getKeyMenu(event, this);
@@ -202,11 +227,9 @@
         }).prev().bind({
           mouseover: function(event) {
             event.stopImmediatePropagation();
-            $(this).addClass('-ds-remove-button');
             $.each([this, this.nextSibling, this.nextSibling.nextSibling, this.nextSibling.nextSibling.nextSibling], function() { $(this).addClass('-ds-remove')} );
           },
           mouseout: function() {
-            $(this).removeClass('-ds-remove-button');
             $.each([this, this.nextSibling, this.nextSibling.nextSibling, this.nextSibling.nextSibling.nextSibling], function() { $(this).removeClass('-ds-remove')} );
           }, 
           click: function(event) {
@@ -215,7 +238,8 @@
           }
         });
       };
-      
+
+      // renames a hash key
       this.renameKey = function(span, newKey) {
         var oldKey = span.innerHTML;
         if (oldKey == newKey) {
@@ -228,14 +252,15 @@
             k2.push(this.keys[i]);
           }
         }
-        this.keys = k2.sort(sortAlpha);
+        this.keys = k2.sort(ignoreCases);
         delete k2;
         this.value[newKey] = this.value[oldKey];
         delete this.value[oldKey];
-        $(span).removeClass('_ds_key_' + oldKey).addClass('_ds_key_' + newKey).html(newKey);
+        $(span).removeClass('_ds_key_' + encodeClassName(oldKey)).addClass('_ds_key_' + encodeClassName(newKey)).html(newKey);
         this.updateText();
       };
-      
+
+      // removes a hash key
       this.removeKey = function(span) {
         var key = span.innerHTML;
         var k2 = [];
@@ -244,14 +269,22 @@
             k2.push(this.keys[i]);
           }
         }
-        this.keys = k2.sort(sortAlpha);
+        this.keys = k2.sort(ignoreCases);
         delete k2;
         delete this.value[key];
         $.each([span.previousSibling, span.nextSibling.nextSibling, span.nextSibling, span], function() { $(this).remove(); });
         closeMenu();
         this.updateText();
       };
-      
+
+      // validates a key
+      this.checkKey = function(key) {
+        if ($.grep(this.keys, function(k) { return k == key; }).length) {
+          throw 'Duplicate key';
+        }
+      };
+
+      // removes a value from array
       this.removeArrVal = function(span) {
         var i = -1;
         var s = span;
@@ -263,30 +296,18 @@
         closeMenu();
         this.updateText();
       };
-      
-      this.checkKey = function(key) {
-        if (key.match(' ')) {
-          throw 'Hash key should not contain spaces';
-        }
-        if ($.grep(this.keys, function(a) { return a == key; }).length) {
-          throw 'Duplicate key';
-        }
-      };
 
-      //add element to array
+      // add element to array
       this.push = function(val, doModify) {
         if (doModify) {
           this.value.push(val);
-          //TODO - sort this.value
         }
-        this.el.append($('<span>').html(n + p + t).bind({
+        this.el.append($('<span class="-ds-remove-button">').html(n + p + t).bind({
           mouseover: function(event) {
             event.stopImmediatePropagation();
-            $(this).addClass('-ds-remove-button');
             $.each([this, this.nextSibling], function() { $(this).addClass('-ds-remove')} );
           },
           mouseout: function() {
-            $(this).removeClass('-ds-remove-button');
             $.each([this, this.nextSibling], function() { $(this).removeClass('-ds-remove')} );
           }, 
           click: function() {
@@ -295,16 +316,15 @@
         }), val.display(this.indent + 1));
       };
 
-      //change string value
+      // changes string value
       this.string = function(val, doModify) {
         if (doModify) {
           this.value = val;
-          this.el.empty();
         }
         this.el.append($('<span class="-ds-hil _ds_string">').html(val || '<i>undef</i>').bind({ click: function(e) { self.getMenu(e); }}));
       };
       
-      //returns the final modified string equivalent of the hash
+      //returns the final modified string equivalent of the element
       this.toString = function() {
         switch(this.type) {
           case 'string':
@@ -319,7 +339,8 @@
           return '{' + rtn.join(',') + '}';
         };
       };
-      
+
+      // modifies the element with given value, and to given type
       this.modify = function(type, value) {
         if (type == 'hash') {
           this.checkKey(value);
@@ -334,7 +355,7 @@
           this.keys = [];
           this.value = '';
           this.el.empty();
-          this.removeWrapper();
+          this.removeBraces();
         }
         this.type = type;
         switch(this.type) {
@@ -344,44 +365,47 @@
 
           case 'array':
           if (!this.value) {
-            this.addArrayWrapper();
+            this.addBraces('[]');
             this.value = [];
           }
-          if (value) this.push(new HeElement(value, this), true);
+          if (value) this.push(new DSElement(value, this), true);
           break;
 
           case 'hash':
           if (!this.value) {
-            this.addHashWrapper();
+            this.addBraces('{}');
             this.value = {};
           }
-          if (value) this.addKey(value, new HeElement('', this), true);
+          if (value) this.addKey(value, new DSElement('', this), true);
         }
         this.updateText();
       };
 
-      //returns the left click menu element
+      // shows the popup to modify the element
       this.getMenu = function(event) {
-        HeMenu.init(this, event);
+        DSMenu.init(this, event);
       };
-      
+
+      // shows the popup to rename a key
       this.getKeyMenu = function(event, eventTarget) {
-        HeKeyMenu.init(this, event, eventTarget);
-      };
-      
-      this.removeWrapper = function() {
-        $('span._ds_wrap', this.wrap).remove();
+        DSKeyMenu.init(this, event, eventTarget);
       };
 
-      this.addArrayWrapper = function() {
-        this.wrap.prepend($('<span class="_ds_wrap">').html('[')).append($('<span class="-ds-hil _ds_wrap">').html(n + p + ']').bind({ click: function(e) { self.getMenu(e); }}));
-      };
-      
-      this.addHashWrapper = function() {
-        this.wrap.prepend($('<span class="_ds_wrap">').html('{')).append($('<span class="-ds-hil _ds_wrap">').html(n + p + '}').bind({ click: function(e) { self.getMenu(e); }}));
+      // removes the braces from around an element eg. [] for an array, {} for a hash
+      this.removeBraces = function() {
+        $('span._ds_brace', this.wrap).remove();
       };
 
-      //method to display data
+      // adds wraping braces for an array or a hash
+      this.addBraces = function(braces) {
+        this.wrap.prepend($('<span class="_ds_brace">').html(braces.charAt(0))).append($('<span class="-ds-hil _ds_brace">').html(n + p + braces.charAt(1)).bind({
+          click: function(e) {
+            self.getMenu(e);
+          }
+        }));
+      };
+
+      // method to display element data
       this.display = function(indent) {
         this.indent = indent || 1;
         for (var i = 0; i < this.indent - 1; i++) p += '  ';
@@ -392,14 +416,14 @@
           break;
 
           case 'array':
-          this.addArrayWrapper();
+          this.addBraces('[]');
           for (var i in this.value) {
             this.push(this.value[i]);
           }
           break;
 
           case 'hash':
-          this.addHashWrapper();
+          this.addBraces('{}');
           for (var i in this.value) {
             this.addKey(i, this.value[i]);
           }
@@ -407,26 +431,29 @@
         return this.wrap;
       };
 
+      // destructor
       this.destroy = function() {
         for (var i in this) {
           delete this[i];
         }
       };
-    
+
+      /* initialisation */
+
       //string value
       if (typeof(data) != 'object') {
         this.type  = 'string';
         this.value = data + '';
       }
-      
+
       //array value
       else if (data.constructor.toString().match('Array')) {
         this.type  = 'array';
         this.value = $.map(data, function(d) {
-          return new HeElement(d, self);
+          return new DSElement(d, self);
         });
       }
-      
+
       //hash value
       else {
         this.type = 'hash';
@@ -434,48 +461,31 @@
         for (var i in data) {
           this.keys.push(i);
         }
-        this.keys = this.keys.sort(sortAlpha);
+        this.keys = this.keys.sort(ignoreCases);
         this.value = {};
         $.each(this.keys, function(i, key) {
-          self.value[key] = new HeElement(data[key], self);
+          self.value[key] = new DSElement(data[key], self);
         });
       }
     };
     
-    data = new HeElement(data, undefined, el);
+    data = new DSElement(data, undefined, el);
     data.updateText();
 
     var wrapper = $('<div>')
       .html('<div class="-ds-tab"><a class="selected" href="#editor">Editor</a><a href="#source">Source</a></div><div class="-ds-tab-div"></div><div class="-ds-tab-div"></div>')
       .replaceAll(el).children().last().append(el).prev().append($('<pre>').append(data.display())).parent();
 
-    new HeTabs($('a', wrapper), $('.-ds-tab-div', wrapper));
-
-    var reset = function() {
-      delete data;
-      setTimeout(
-        function() {
-          if ($.trim(el.val()) == '') {
-            el.val('{}');
-          }
-          el.replaceAll(wrapper).datastructure();
-          $('#_ds_menu, #_ds_key_menu').remove();
-        }, 100
-      );
-    };
-
-
+    new DSTabs($('a', wrapper), $('.-ds-tab-div', wrapper));
     el.bind({change: reset}).parents('form').bind({reset: reset});
   };
 
   $.fn.datastructure = function () {
 
     this.each(function() {
-
       new $.datastructure(this);
     });
 
     return this;
-
   };
 })(jQuery);
