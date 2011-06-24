@@ -47,6 +47,10 @@ span.-ds-hil:hover {
   cursor: pointer;
 }
 
+span.-ds-key {
+  font-weight: bold;
+}
+
 div.-ds-menu {
   position: absolute;
   border: #e2e2e2 solid 1px;
@@ -73,7 +77,7 @@ span.-ds-remove {
   background-color: #fdd;
 }
 
-span.-ds-remove-button {
+span.-ds-remove-button:hover {
   background-image: url(/i/cross.png);
   background-repeat: no-repeat;
 }
