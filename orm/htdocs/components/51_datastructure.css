@@ -1,8 +1,5 @@
 div.-ds-tab, div.-ds-tab-div {
   border-bottom: #ccc solid 1px;
-}
-
-div.-ds-tab {
   overflow: hidden;
 }
 
@@ -37,7 +34,7 @@ div.-ds-tab a.selected {
   font-weight: bold;
 }
 
-div.-ds-tab a.selected span.-hc-sel {
+div.-ds-tab a.selected span.-ds-sel {
   display: none;
 }
 
