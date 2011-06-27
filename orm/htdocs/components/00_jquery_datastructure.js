@@ -68,7 +68,7 @@
           )
           .append($('<p>').attr({id: '_ds_error', 'class': '-ds-error'}))
           .append($('<div id="_ds_menu_tab" class="-ds-tab">')
-            .html('<a href="#hash"><span class="-hc-sel">Make </span>Hash</a><a href="#array"><span class="-hc-sel">Make </span>Array</a><a href="#string"><span class="-hc-sel">Make </span>String</a>')
+            .html('<a href="#hash"><span class="-ds-sel">Make </span>Hash</a><a href="#array"><span class="-ds-sel">Make </span>Array</a><a href="#string"><span class="-ds-sel">Make </span>String</a>')
           )
           .appendTo(document.body);
 
@@ -250,6 +250,9 @@
       // removes a hash key
       this.removeKey = function(span) {
         var key = span.innerHTML;
+        if (!confirm("This will remove key '" + key + "' from the hash.")) {
+          return;
+        }
         var k2 = [];
         for (var i in this.keys) {
           if (this.keys[i] != key) {
@@ -278,7 +281,11 @@
         while (s = s.previousSibling) {
           i++;
         }
-        this.value = this.value.splice(0, Math.round(i/2)).concat(this.value.splice(1));
+        i = Math.round(i/2);
+        if (!confirm('This will remove the array element indexed at ' + i + '.')) {
+          return;
+        }
+        this.value = this.value.splice(0, i).concat(this.value.splice(1));
         $.each([span.previousSibling, span], function() { $(this).remove(); });
         closeMenu();
         this.updateText();
