@@ -25,6 +25,7 @@ sub _species_sets {
   my $ortho_type;
   foreach my $species (keys %$orthologue_list) {
     next if $skipped->{$species};
+    my $no_ortho = 0;
     my $group = $species_defs->get_config($species, 'SPECIES_GROUP');
     push @{$species_sets->{'all'}{'species'}}, $species;
     my $sets = [];
@@ -36,12 +37,18 @@ sub _species_sets {
       $species_sets->{'all'}{$orth_desc}++;
       $ortho_type->{$species}{$orth_desc} = 1;
     }
+    if (!$ortho_type->{$species}{'1-to-1'} && !$ortho_type->{$species}{'1-to-many'}
+          && !$ortho_type->{$species}{'Many-to-many'}) {
+      $no_ortho = 1;
+      $species_sets->{'all'}{'none'}++;
+    }
     if ($group eq 'Primates') {
       push @{$species_sets->{'primates'}{'species'}}, $species;
       push @$sets, 'primates';
       while (my ($k, $v) = each (%{$ortho_type->{$species}})) {
         $species_sets->{'primates'}{$k} += $v;
       }
+      $species_sets->{'primates'}{'none'}++ if $no_ortho;
     }
     if ($group eq 'Euarchontoglires') {
       push @$sets, 'rodents';
@@ -49,6 +56,7 @@ sub _species_sets {
       while (my ($k, $v) = each (%{$ortho_type->{$species}})) {
         $species_sets->{'rodents'}{$k} += $v;
       }
+      $species_sets->{'rodents'}{'none'}++ if $no_ortho;
     }
     if ($group eq 'Laurasiatheria') {
       push @$sets, 'laurasia';
@@ -56,6 +64,7 @@ sub _species_sets {
       while (my ($k, $v) = each (%{$ortho_type->{$species}})) {
         $species_sets->{'laurasia'}{$k} += $v;
       }
+      $species_sets->{'laurasia'}{'none'}++ if $no_ortho;
     }
     if ($group =~ /Primates|Euarchontoglires|Laurasiatheria|Xenarthra|Afrotheria/) {
       push @$sets, 'placental';
@@ -63,6 +72,7 @@ sub _species_sets {
       while (my ($k, $v) = each (%{$ortho_type->{$species}})) {
         $species_sets->{'placental'}{$k} += $v;
       }
+      $species_sets->{'placental'}{'none'}++ if $no_ortho;
     }
     if ($group eq 'Sauropsida') {
       push @$sets, 'sauria';
@@ -70,6 +80,7 @@ sub _species_sets {
       while (my ($k, $v) = each (%{$ortho_type->{$species}})) {
         $species_sets->{'sauria'}{$k} += $v;
       }
+      $species_sets->{'sauria'}{'none'}++ if $no_ortho;
     }
     if ($group eq 'Euteleostomi') {
       push @$sets, 'fish';
@@ -77,6 +88,7 @@ sub _species_sets {
       while (my ($k, $v) = each (%{$ortho_type->{$species}})) {
         $species_sets->{'fish'}{$k} += $v;
       }
+      $species_sets->{'fish'}{'none'}++ if $no_ortho;
     }
     $sets_by_species->{$species} = $sets;
   }
