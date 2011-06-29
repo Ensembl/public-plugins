@@ -206,6 +206,7 @@
         }
         $.each([$('<span class="-ds-remove-button">').html(n + p + t), $('<span class="-ds-hil -ds-key _ds_key _ds_key_' + encodeClassName(key) + '">').html(key), $('<span>').html(' =&gt; '), val.display(this.indent + 1)], function() {
           nextKey ? nextKey.before(this) : self.el.append(this);
+          if (doModify) this.effect('highlight', {}, 2000);
         });
         $('>span._ds_key', this.el).bind({
           click: function(event) {
@@ -243,7 +244,7 @@
         delete k2;
         this.value[newKey] = this.value[oldKey];
         delete this.value[oldKey];
-        $(span).removeClass('_ds_key_' + encodeClassName(oldKey)).addClass('_ds_key_' + encodeClassName(newKey)).html(newKey);
+        $(span).removeClass('_ds_key_' + encodeClassName(oldKey)).addClass('_ds_key_' + encodeClassName(newKey)).html(newKey).effect('highlight', {}, 1000);
         this.updateText();
       };
 
@@ -296,6 +297,7 @@
         if (doModify) {
           this.value.push(val);
         }
+        var newEl = val.display(this.indent + 1);
         this.el.append($('<span class="-ds-remove-button">').html(n + p + t).bind({
           mouseover: function(event) {
             event.stopImmediatePropagation();
@@ -307,16 +309,19 @@
           click: function() {
             self.removeArrVal(this.nextSibling);
           }
-        }), val.display(this.indent + 1));
+        }), newEl);
+        if (doModify) newEl.effect('highlight', {}, 2000);
       };
 
       // changes string value
       this.string = function(val, doModify) {
+        var newStr = $('<span class="-ds-hil _ds_string">').html(val || '<i>undef</i>').bind({ click: function(e) { self.getMenu(e); }});
         if (doModify) {
           this.value = val;
           this.el.empty();
+          newStr.effect('highlight', {}, 2000);
         }
-        this.el.append($('<span class="-ds-hil _ds_string">').html(val || '<i>undef</i>').bind({ click: function(e) { self.getMenu(e); }}));
+        this.el.append(newStr);
       };
       
       //returns the final modified string equivalent of the element
@@ -355,6 +360,7 @@
         this.type = type;
         switch(this.type) {
           case 'string':
+          if (value == this.value) return;
           this.string(value, true);
           break;
 
