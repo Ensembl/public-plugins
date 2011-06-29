@@ -482,9 +482,9 @@ to provide a consensus prediction based on the SIFT and PolyPhen predictions.
 <p>
 These tools are developed by external groups and we provide a brief explanation of
 the approach each takes below, and how we run it in Ensembl. For much more detail
-please see the relevant publications listed on each tool's website. We hope to be 
-able to provide amino acid substitution predictions for species other than human 
-in future releases.
+please see the representative papers listed <a href="#references">below</a>, and the 
+relevant publications available on each tool's website. We hope to be able to provide 
+amino acid substitution predictions for species other than human in future releases.
 </p>
 
 <h3 id="sift">SIFT</h3>
@@ -506,7 +506,7 @@ We ran SIFT version 4.0.3 (available
 following the instructions from the authors and used SIFT
 to choose homologous proteins rather than supplying them ourselves. We used all 
 protein sequences available from UniProtKB (both the SwissProt and TrEMBL sets) as 
-the protein database. All data was downloaded from UniProt in February 2011.
+the protein database. All data was downloaded from UniProt in May 2011.
 </p>
 
 <h3 id="polyphen">PolyPhen</h3>
@@ -532,7 +532,8 @@ UniRef100 non-redundant protein set as the protein database, which was downloade
 along with PDB structures, and annotations from Pfam and DSSP in February 2011. When 
 computing the predictions we used the classifier model trained on the HumDiv training 
 set (please refer to the PolyPhen publications for more details of the classification 
-system).
+system). For any Ensembl translations that were updated between releases 62 and 63 we 
+used data downloaded on May 2011.
 </p>
 
 <h3 id="condel">Condel</h3>
@@ -841,6 +842,24 @@ rel="external">doi:10.1186/1471-2105-11-238</a>
 <a href="http://dx.doi.org/10.1186/1471-2164-11-293"
 rel="external">doi:10.1186/1471-2164-11-293</a>
 </p>
+
+<p>Adzhubei IA, Schmidt S, Peshkin L, Ramensky VE, Gerasimova A, Bork P, Kondrashov AS, Sunyaev SR. <br />
+<strong>A method and server for predicting damaging missense mutations</strong><br />
+<em>Nature Methods</em> 7(4):248-249 (2010)<br />
+<a href="http://dx.doi.org/10.1038/nmeth0410-248" rel="external">doi:10.1038/nmeth0410-248</a>
+</p> 
+
+<p>Kumar P, Henikoff S, Ng PC.<br />
+<strong>Predicting the effects of coding non-synonymous variants on protein function using the SIFT algorithm</strong><br />
+<em>Nature Protocols</em> 4(8):1073-1081 (2009)<br />
+<a href="http://dx.doi.org/10.1038/nprot.2009.86" rel="external">doi:10.1038/nprot.2009.86</a>
+</p> 
+
+<p>Gonzalez-Perez A, Lopez-Bigas N.<br />
+<strong>Improving the assessment of the outcome of non-synonymous SNVs with a Consensus deleteriousness score (Condel)</strong><br />
+<em>Am J Hum Genet</em> 88(4):440-449 (2011)<br />
+<a href="http://dx.doi.org/10.1016/j.ajhg.2011.03.004" rel="external">doi:10.1016/j.ajhg.2011.03.004</a>
+</p> 
 
 <p>
 Redon, R. <i>et al.</i><br />
