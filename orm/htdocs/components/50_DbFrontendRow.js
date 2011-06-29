@@ -83,7 +83,7 @@ Ensembl.Panel.DbFrontendRow = Ensembl.Panel.extend({
               url: url,
               success: function(json) {
                 if (this.action == 'edit') {
-                  this.target.html(this.getResponseNode(json).html());
+                  this.target.html(this.getResponseNode(json).html()).children().effect('highlight', {'color': '#ddddff'}, 1000);
                 }
                 else {
                   Ensembl.EventManager.trigger('addPanel', undefined, 'DbFrontendRow', this.getResponseNode(json).html(), this.target);
