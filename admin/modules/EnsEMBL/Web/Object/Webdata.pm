@@ -19,8 +19,7 @@ sub show_fields {
   return [
     data          => {
       'type'         => 'html',
-      'label'        => 'Web Data',
-      'field_class'  => 'prod-hash',
+      'label'        => 'Web Data'
     },
     created_by_user   => {
       'type'      => 'noedit',
