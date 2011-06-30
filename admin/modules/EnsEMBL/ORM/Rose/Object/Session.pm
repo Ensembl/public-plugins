@@ -21,10 +21,12 @@ __PACKAGE__->meta_setup(
   columns       => [
     session_id        => {type => 'serial', primary_key => 1, not_null => 1}, 
     db_release        => {type => 'integer'},
+    start_time        => {type => 'datetime'},
+    end_time          => {type => 'datetime'},
     host              => {type => 'varchar', 'length' => '255'},
-    config            => {type => 'text'},
+    config            => {type => 'text'}
   ],
-  
+
   relationships => [
     report      => {
       'type'        => 'one to many',
