@@ -12,39 +12,44 @@ sub content {
   my $self = shift;
 
   my $object    = $self->object;
-  my $session   = $object->rose_object;
-  my $session_2 = $object->rose_objects('compare_session');
+  my $session   = $object->rose_objects('session');
+  my $reports   = $object->rose_objects('reports');
+  my $reports2  = $object->rose_objects('compare_reports');
   my $release   = $object->requested_release;
   my $views     = $object->available_views;
-  my $reports;
-  my $reports_2;
-  
-  return unless $session && ($reports = $session->report);
 
-  $reports_2 = $session_2 && @$session_2 ? $session_2->[0]->report : undef;
+  return unless @$session && @$reports;
+
+  $session  = $session->[0];
+  $reports  = $self->group_report_counts($reports,  [values %$views]);
+  $reports2 = $self->group_report_counts($reports2, [values %$views]) if $reports2;
 
   (my $select_box = $self->render_all_releases_selectbox) =~ s/"release"/"release2"/;
-  my $html_anchor = '';
-  my $html        = qq(<form action="" method="get"><p class="hc_p_right"><input type="hidden" name="release" value="$release" />Compare with: $select_box&nbsp;<input type="submit" value="Go" /></p></form>);
-  $html          .= qq(<div class="hc-infobox"><p>Tests listed as failed are of type 'PROBLEM', excluding those annotated 'manual ok', 'manual ok this assembly', 'manual ok all releases', 'healthcheck bug'</p></div>);
+  my $html = qq(<form action="" method="get"><p class="hc-p-right"><input type="hidden" name="release" value="$release" />Compare with: $select_box&nbsp;<input type="submit" value="Go" /></p></form>);
+  $html   .= qq(<div class="hc-infobox"><p>Tests listed as failed are of type 'PROBLEM', excluding those annotated 'manual ok', 'manual ok this assembly', 'manual ok all releases', 'healthcheck bug'</p></div>);
+
+  my $buttons = $self->dom->create_element('div', {'class' => 'hc-tabs-buttons'});
+  my $tabs    = $self->dom->create_element('div', {'class' => 'hc-tabs'});
+  my $js_tabs = $self->dom->create_element('div', {'class' => 'js_panel', 'children' => [{'node_name' => 'inputhidden', 'class' => 'panel_type', 'value' => 'HCTabSelector'}, $buttons, $tabs]});
 
   foreach my $view_function (sort keys %$views) {
 
     my $view_type = $views->{$view_function};
-    my $title     = $object->view_title($view_type);
-    $html_anchor .= qq(&nbsp;<a href="#$view_type">$title</a>&nbsp;);
-    $html        .= qq(<a name="$view_type"></a><p class="hc_p">Failure summary for: <b>$title</b></p>);
     my $params    = {
-      'reports'       => $reports,
+      'count'         => $reports->{$view_type},
       'type'          => $view_type,
       'session_id'    => $session->session_id,
       'release'       => $release,
-      'default_list'  => $object->get_default_list($view_type, $view_function)
+      'default_list'  => $object->get_default_list($view_type, $view_function),
+      $reports2 ? (
+      'compare_count' => $reports2->{$view_type},
+      'release2'      => $object->compared_release
+      ) : ()
     };
-    $params->{'compare_reports'} = $reports_2 and $params->{'release2'} = $object->compared_release if $reports_2;
-    $html .= $self->content_failure_summary($params);
+    $buttons->append_child('a', {'href' => "#$view_type", 'inner_HTML' => $object->view_title($view_type)});
+    $tabs->append_child('div', {'inner_HTML' => $self->failure_summary_table($params)});
   }
-  return sprintf('<p class="hc_p">Go to perspective: %s</p>%s', $html_anchor, $html);
+  return sprintf('%s%s', $html, $js_tabs->render);
 }
 
 1;
