@@ -133,7 +133,7 @@ Ensembl.Panel.DbFrontendRow = Ensembl.Panel.extend({
     $(target).empty().show().addClass('spinner');
     var isForm = eventTarget.nodeName == 'FORM';
     var url = options.url || eventTarget.action || eventTarget.href;
-    url += (url.match(/\?/) ? '&' : '?') + 'inline=1';
+    url += (url.match(/\?/) ? '&' : '?') + '_ajax=1';
     this.ajax = $.ajax({
       url: url,
       dataType: 'json',
@@ -146,7 +146,7 @@ Ensembl.Panel.DbFrontendRow = Ensembl.Panel.extend({
       error: options.error || function() {
         $(target).empty().html('An error occoured at the server. Please try again.');
       },
-      data: options.data || (isForm ? $(eventTarget).serialize() : '')
+      data: options.data || (isForm ? $(eventTarget).serialize() + '&_ajax=1' : '')
     });
   },
   
