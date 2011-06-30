@@ -33,10 +33,10 @@ sub content_tree {
     'class'  => !$is_preview ? $primary_key_value ? $self->_JS_CLASS_SAVE_FORM : $self->_JS_CLASS_ADD_FORM : $self->_JS_CLASS_PREVIEW_FORM
   }));
   
-  # include extra GET params to hidden inputs
+  # include extra GET params to hidden inputs (ignore primary keys and ajax flag)
   if ($object->show_preview && $action ne 'Preview') {
     my @params = $hub->param;
-    $_ ne 'id' and $_ ne $record->primary_key and $form->add_hidden({'name' => $_, 'value' => $hub->param($_)}) for @params;
+    $_ ne '_ajax' and $_ ne 'id' and $_ ne $record->primary_key and $form->add_hidden({'name' => $_, 'value' => $hub->param($_)}) for @params;
   }
 
   my $fields  = $self->unpack_rose_object($record);
