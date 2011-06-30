@@ -35,10 +35,8 @@ sub render_all_releases_selectbox {
   my $first  = $object->first_release;
   my $last   = $object->current_release;
   my $skip   = $object->requested_release;
-
-  my @options;
-  defined $skip && $_ == $skip or unshift @options, qq(<option value="$_">Release $_</option>) for $first..$last;
-  return '<select name="release">'.join('', @options).'</select>';
+  
+  return sprintf('<select name="release">%s</select>', join '', reverse map {$_ == $skip ? '' : qq(<option value="$_">Release $_</option>)} $first..$last);
 }
 
 sub get_healthcheck_link {
@@ -60,14 +58,14 @@ sub get_healthcheck_link {
   my $title   = $params->{'title'} || $caption;
   my $param   = $params->{'param'};
   my $release = $params->{'release'};
-  $caption    = substr($caption, 0, 20).'&#133;'
-    if exists $params->{'cut_long'} && $params->{'cut_long'} eq 'cut' && length $caption > 23;
+  exists $params->{'cut_long'} && $params->{'cut_long'} eq 'cut' && length $caption > 23 and $caption = substr($caption, 0, 20).'&#133;'
     
   my $class = $params->{'class'} ? qq( class="$params->{'class'}") : '';
   
   if ($params->{'type'} eq 'species') {
-    return $caption unless $self->object->validate_species($param);
-    return qq(<a$class href="/$param/Healthcheck/Details/Species?release=$release" title="List all failed test reports for Speices $title in release $release">$caption</a>);
+    return $self->object->validate_species($param) 
+      ? qq(<a$class href="/$param/Healthcheck/Details/Species?release=$release" title="List all failed test reports for Speices $title in release $release">$caption</a>)
+      : $caption;
   }
   elsif ($params->{'type'} eq 'testcase') {
     return qq(<a$class href="/Healthcheck/Details/Testcase?release=$release;q=$param" title="List all failed test reports for Testcase $title in release $release">$caption</a>);
@@ -122,18 +120,35 @@ sub annotation_action {
     : {'value' => '',      'title' => ''};
 }
 
-sub content_failure_summary {
+sub group_report_counts {
+  ## Creates a counting of all reports (rose objects) with failed_count key on the basis of parameter passed as views
+  ## @param Report Rose objects (generated from 'count - group by' query)
+  ## @param ArrayRef for all different views required
+  ## @return HashRef (with keys as views requested) containing counting of all reports wrt views requested
+  my ($self, $reports, $views) = @_;
+  my $counter = { map {$_ => {}} @$views };
+  foreach my $report (@$reports) {
+    my $count = $report->failed_count;
+    for (keys %$counter) {
+      $counter->{$_}{$report->$_ || 'unknown'}{'all'} += $count;
+      $counter->{$_}{$report->$_ || 'unknown'}{'new'} += $count if $report->first_session_id == $report->last_session_id;
+    }
+  }
+  return $counter;
+}
+
+sub failure_summary_table {
   ## Returns a filure summary table for given view types
   ## Params Hashref with keys:
   ##  - type                species, testcase, database_name etc
   ##  - session_id          Id of the session run most recently in the given release
   ##  - release             release id
-  ##  - reports             ArrayRef of all Report objects
+  ##  - count               Data structure containing counting of all reports wrt view type
   ##  - default_list        ArrayRef of default list of Testcases, DBTypes, Species or Databases as required
   ##  - release2            release id of the release to which reports are to be compared
-  ##  - compare_reports     ArrayRef of all Report objects for release2
-  my ($self, $params) = @_; 
-    
+  ##  - compare_count       Similar to count, but for compared reports
+  my ($self, $params) = @_;
+
   (my $title  = ucfirst($params->{'type'})) =~ s/_/ /g;
   my $table   = $self->new_table();
 
@@ -143,23 +158,24 @@ sub content_failure_summary {
     { 'key' => 'total_failed',  'title' => "All failed for last run (v$params->{'release'})",    'align' => 'center' },
   );
 
-   $table->add_columns(#add 4th column if comparison is intended
-     { 'key' => 'comparison',  'title' => "Failed in  release $params->{'release2'}", 'align' => 'center' },
-   ) if exists $params->{'compare_reports'};
+  # add 4th column if comparison is intended
+  $table->add_columns(
+    { 'key' => 'comparison',  'title' => "Failed in  release $params->{'release2'}", 'align' => 'center' },
+  ) if exists $params->{'compare_count'};
 
-  my $fails   = $self->_group_fails($params->{'reports'}, $params->{'type'});
-  my $fails_2 = exists $params->{'compare_reports'} ? $self->_group_fails($params->{'compare_reports'}, $params->{'type'}) : {};
-  my $groups  = { %$fails, %$fails_2, map {$_ => 1} @{$params->{'default_list'}} };
+  my $fails   = $params->{'count'};
+  my $fails2  = $params->{'compare_count'};
+  my $groups  = { map {$_ => 1} keys %$fails, keys %$fails2, @{$params->{'default_list'}} };
 
   for (sort keys %$groups) {
 
     $title = $params->{'type'} eq 'species' ? ucfirst($_) : $_;
 
-    my %fourth_cell = exists $params->{'compare_reports'} ? (
+    my %fourth_cell = exists $params->{'compare_count'} ? (
       'comparison'  => $self->get_healthcheck_link({
         'type'        => $params->{'type'},
         'param'       => $title,
-        'caption'     => $fails_2->{ $_ }{'total_fails'} || '0',
+        'caption'     => $fails2->{$_}{'all'} || '0',
         'title'       => $title,
         'release'     => $params->{'release2'}
       })
@@ -170,35 +186,19 @@ sub content_failure_summary {
         'param'       => $title,
         'release'     => $params->{'release'}
       }),
-      'new_failed'  => $fails->{ $_ }{'new_fails'} || '0',
+      'new_failed'  => $fails->{$_}{'new'} || '0',
       'total_failed'  => $self->get_healthcheck_link({
         'type'        => $params->{'type'},
         'param'       => $title,
-        'caption'     => $fails->{ $_ }{'total_fails'} || '0',
+        'caption'     => $fails->{$_}{'all'} || '0',
         'title'       => $title,
         'release'     => $params->{'release'},
-        'class'       => $fails->{ $_ }{'total_fails'} ? 'hc-failsrow' : 'hc-nofailsrow',
+        'class'       => $fails->{$_}{'all'} ? 'hc-failsrow' : 'hc-nofailsrow',
       }),
       %fourth_cell
     });
   }
   return $table->render;
-}
-
-sub _group_fails {
-  ## generates stats for reports for new failures and all failures
-  ## @return HashRef {$name => {'new_fails' => ?, 'total_fails' => ?}}
-  my ($self, $reports, $type) = @_;
-  my $fails = {};
-
-  for (@$reports) {
-    next unless defined $_->$type;
-    my $key = $type eq 'species' ? ucfirst($_->$type) : $_->$type; #coz species should have first letter capital, but in hc.report db table it is all lower case.
-    $fails->{ $key } = {'new_fails' => 0, 'total_fails' => 0} unless exists $fails->{ $key };
-    $fails->{ $key }{'total_fails'}++;
-    $fails->{ $key }{'new_fails'}++ if $_->first_session_id == $_->last_session_id;
-  }
-  return $fails;
 }
 
 1;
