@@ -24,10 +24,11 @@ sub rose_objects {
   ## Saves and returns Rose::Object drived objects
   ## @param Key name for saving the objects (optional) - defaults to saving (or retrieving from) as primary rose objects
   ## @param Rose::Object drived object (if adding new object) - ArrayRef of Rose::Object drived objects, in case of multiple objects
-  ## @return ArrayRef of the saved rose objects
+  ## @return ArrayRef of the saved rose objects or undef if nothing saved
   ## @example $object->rose_objects('users', \@users);  #saves under 'users' key
   ## @example $object->rose_objects('users', $user);    #saves under 'users' key an array with first element as $user
   ## @example $object->rose_objects(\@rose_objects);    #saves as primary rose objects
+  ## @example $object->rose_objects($rose_object);      #saves as primary rose object
   ## @example $object->rose_objects('users');           #returns the arrayref saved at 'users' key
   ## @example $object->rose_objects;                    #returns arrayref of primary rose objects
   my $self = shift;
