@@ -42,8 +42,9 @@ sub content {
 sub content_tree {
   ## Returns content html's dom tree
   ## Override in the child classes
-  my $self = shift;
-  return $self->dom->create_element('p', {'inner_HTML' => sprintf('No %s found in the database', $self->object->record_name->{'plural'})});
+  my $self    = shift;
+  my $object  = $self->object; 
+  return $self->dom->create_element('div', {'class' => $object->content_css, 'children' => [{'node_name' => 'p', 'inner_HTML' => sprintf('No %s found in the database', $object->record_name->{'plural'})}]});
 }
 
 sub content_pagination {
