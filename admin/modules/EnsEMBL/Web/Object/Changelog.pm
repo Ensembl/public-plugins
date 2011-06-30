@@ -4,6 +4,10 @@ use strict;
 
 use base qw(EnsEMBL::Web::Object::DbFrontend);
 
+sub default_action {
+  return 'Summary';
+}
+
 sub requested_release {
   ## Gets the requested release
   ## @return integer
@@ -16,6 +20,11 @@ sub current_release {
   ## @return integer
   my $self = shift;
   $self->{'_curr_release'} ||= $self->hub->species_defs->ENSEMBL_VERSION;
+}
+
+sub fetch_for_summary {
+  ## Populates rose_objects from db for summary page
+  return shift->fetch_for_display(@_);
 }
 
 sub fetch_for_textsummary {
