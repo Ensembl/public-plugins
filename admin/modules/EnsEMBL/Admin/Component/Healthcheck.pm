@@ -58,10 +58,9 @@ sub get_healthcheck_link {
   my $title   = $params->{'title'} || $caption;
   my $param   = $params->{'param'};
   my $release = $params->{'release'};
-  exists $params->{'cut_long'} && $params->{'cut_long'} eq 'cut' && length $caption > 23 and $caption = substr($caption, 0, 20).'&#133;'
-    
-  my $class = $params->{'class'} ? qq( class="$params->{'class'}") : '';
-  
+  my $class   = $params->{'class'} ? qq( class="$params->{'class'}") : '';
+  exists $params->{'cut_long'} && $params->{'cut_long'} eq 'cut' && length $caption > 23 and $caption = substr($caption, 0, 20).'&#133;';
+
   if ($params->{'type'} eq 'species') {
     return $self->object->validate_species($param) 
       ? qq(<a$class href="/$param/Healthcheck/Details/Species?release=$release" title="List all failed test reports for Speices $title in release $release">$caption</a>)
@@ -89,8 +88,8 @@ sub get_healthcheck_link {
 
 sub hc_format_date {
   ## Formates date for displaying
-  my ($self, $datetime) = @_; 
-  return format_date(parse_date($datetime), "%b %e, %Y at %H:%M");
+  my ($self, $datetime) = @_;
+  return $datetime ? format_date(parse_date($datetime), "%b %e, %Y at %H:%M") : '';
 }
 
 sub hc_format_compressed_date {
