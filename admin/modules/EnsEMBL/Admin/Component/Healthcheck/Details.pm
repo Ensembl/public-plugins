@@ -15,34 +15,33 @@ sub content {
   my $self = shift;
 
   my $object  = $self->object;
-  my $session = $object->rose_object;
+  my $reports = $object->rose_objects('reports');
   my $param   = $object->view_param;
   my $type    = $object->view_type;
-  my $reports;
 
-  return $self->no_healthcheck_found unless $session && ($reports = $session->report);
+  return $self->no_healthcheck_found unless $reports && @$reports;
 
-  return sprintf('<p class="hc_p">Click on a %s to view details</p>%s', $object->view_title, $self->content_failure_summary({
-    'reports'       => $reports,
-    'type'          => $type,
-    'session_id'    => $session->session_id,
-    'release'       => $object->requested_release,
-    'default_list'  => $object->get_default_list
-  })) unless $param;
+  # if no filter selected, display the failure summary table for the given view type
+  if (!$param) {
+    return sprintf('<p class="hc_p">Click on a %s to view details</p>%s', $object->view_title, $self->failure_summary_table({
+      'count'         => $self->group_report_counts($reports, [$type])->{$type},
+      'type'          => $type,
+      'session_id'    => $object->last_session_id,
+      'release'       => $object->requested_release,
+      'default_list'  => $object->get_default_list
+    }));
+  }
 
   my $html    = '';
   my $db_list = [];
-  
+
   #group all reports by database_name
-  my $grouped_reports   = {};
-  for (@$reports) {
-    $grouped_reports->{$_->database_name} = [] unless exists $grouped_reports->{$_->database_name};
-    push @{$grouped_reports->{$_->database_name}}, $_;
-  }
+  my $grouped_reports = {};
+  push @{$grouped_reports->{$_->database_name} ||= []}, $_ for @$reports;
 
   my $serial_number = 0;
   
-  $html .= sprintf('<form action="" method="get"><p class="hc_p_right">View in release: %s&nbsp;<input type="submit" value="Go" /><input type="hidden" name="q" value="%s" /></p></form>',
+  $html .= sprintf('<form action="" method="get"><p class="hc-p-right">View in release: %s&nbsp;<input type="submit" value="Go" /><input type="hidden" name="q" value="%s" /></p></form>',
     $self->render_all_releases_selectbox,
     $param
   ) if $type ne 'database_name';
@@ -72,7 +71,7 @@ sub content {
     my $temp = { map { ($_->created || '0').++$i => $_ } @{$grouped_reports->{$database_name}} };
     push @$db_reports, $temp->{$_} for reverse sort keys %$temp;
 
-    foreach my $report (@{$db_reports}) {
+    foreach my $report (@$db_reports) {
       my $report_id  = $report->report_id;
       my $db_sp_tc   = [];
       for (qw(database_type species testcase)) {
