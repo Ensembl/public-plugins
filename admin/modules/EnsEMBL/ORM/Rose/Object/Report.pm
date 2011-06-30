@@ -32,6 +32,7 @@ __PACKAGE__->meta_setup(
     result            => {type => 'enum', 'values' => [qw(PROBLEM CORRECT WARNING INFO)]},
     timestamp         => {type => 'datetime'},
     created           => {type => 'datetime'},
+    failed_count      => {type => 'integer', lazy => 1}
   ],
 
   relationships => [
