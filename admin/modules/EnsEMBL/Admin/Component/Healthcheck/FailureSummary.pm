@@ -12,15 +12,14 @@ sub content {
   my $self = shift;
 
   my $object    = $self->object;
-  my $session   = $object->rose_objects('session');
+  my $session   = $object->rose_object;
   my $reports   = $object->rose_objects('reports');
   my $reports2  = $object->rose_objects('compare_reports');
   my $release   = $object->requested_release;
   my $views     = $object->available_views;
 
-  return unless @$session && @$reports;
+  return unless $session && @$reports;
 
-  $session  = $session->[0];
   $reports  = $self->group_report_counts($reports,  [values %$views]);
   $reports2 = $self->group_report_counts($reports2, [values %$views]) if $reports2;
 
@@ -49,7 +48,7 @@ sub content {
     $buttons->append_child('a', {'href' => "#$view_type", 'inner_HTML' => $object->view_title($view_type)});
     $tabs->append_child('div', {'inner_HTML' => $self->failure_summary_table($params)});
   }
-  return sprintf('%s%s', $html, $js_tabs->render);
+  return sprintf('%s%s<div class="hc-padding"></div>', $html, $js_tabs->render);
 }
 
 1;
