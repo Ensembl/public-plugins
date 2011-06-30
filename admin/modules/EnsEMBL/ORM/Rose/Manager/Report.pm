@@ -12,63 +12,108 @@ package EnsEMBL::ORM::Rose::Manager::Report;
 use strict;
 use warnings;
 
-use base qw(EnsEMBL::ORM::Rose::Manager);
+use EnsEMBL::ORM::Rose::Object::Report;
 
-__PACKAGE__->make_manager_methods('reports'); ## Auto-generate query methods: get_reports, count_reports, etc
+use base qw(EnsEMBL::ORM::Rose::Manager);
 
 sub object_class { 'EnsEMBL::ORM::Rose::Object::Report' }
 
-sub fetch_last_for_session {
-  ## Fetches last report from the db for given session
-  ## @param  $session_id - session id for which result is required
-  ## @return EnsEMBL::ORM::Rose::Object::Report object
-  my ($self, $session_id) = @_;
-  return $self->_fetch_single($session_id, 'last');
+sub count_failed_for_session {
+  ## Counts reports failed during the given session, grouped wrt given column name
+  ## @param Hashref with keys:
+  ##  - session_id          Id of the session
+  ##  - group_by            ArrayRef of column names wrt which reports are to be grouped
+  ##  - include_manual_ok   Flag to tell whether or not to include manual oked reports (defaults to false)
+  ##  - query               To be added to the query key of hash passed to get_objects as argument
+  ## @return ArrayRef of Rose objects with a key 'failed_count' containing the number of reports along with the keys in 'group_by' param
+  my ($self, $params) = @_;
+
+  my %arg = (
+    'select'        => ['count(t1.report_id) AS failed_count', 'first_session_id', 'last_session_id', @{$params->{'group_by'}}],
+    'group_by'      => ['first_session_id', @{$params->{'group_by'}}],
+    'sort_by'       => 'first_session_id DESC',
+    'query'         => [
+      'result'          => 'PROBLEM',
+      'last_session_id' => $params->{'session_id'},
+      @{$params->{'query'} || []}
+    ]
+  );
+
+  unless($params->{'include_manual_ok'}) {
+    $arg{'with_objects'} = 'annotation';
+    push @{$arg{'query'}}, ('or', [
+      'annotation.action'   => undef,
+      '!annotation.action'  => [qw(manual_ok healthcheck_bug manual_ok_all_releases manual_ok_this_assembly manual_ok_this_genebuild)]
+    ]);
+  }
+
+  return $self->get_objects(%arg);
 }
 
-sub fetch_first_for_session {
-  ## Fetches first report from the db for given session
-  ## @param  $session_id - session id for which result is required
-  ## @return EnsEMBL::ORM::Rose::Object::Report object
-  my ($self, $session_id) = @_;
-  return $self->_fetch_single($session_id, 'first');
+sub fetch_for_session {
+  ## Fetches reports from the db for a given session, with or without their linked annotation and annotation's users
+  ## @param HashRef with the following keys:
+  ##  - session_id          Id of the session
+  ##  - query               Arrayref to be added to the query part of get_objects method (optional)
+  ##  - failed_only         Flag, possibly can have three values
+  ##    - false             Any boolean false value will get all the reports (default)
+  ##    - true              Any boolean true value will get only failed reports (reports with result 'PROBLEM')
+  ##    - include_warning   Will get warning reports along with failed reports (reports with result 'WARNING')
+  ##  - with_annotations    Flag (possibly can have three values)
+  ##    - false             Any boolean false value will not include any annotations of reports (default)
+  ##    - exclude_manual_ok Will exclude all the reports with 'manual ok' annotations
+  ##    - true              Any other boolean true value will include all annotations
+  my ($self, $params) = @_;
+
+  return unless $params->{'session_id'};
+  
+  my $args = {};
+  $args->{'query'} = $params->{'query'} || [];
+  push @{$args->{'query'}}, ('last_session_id' => $params->{'session_id'});
+  push @{$args->{'query'}}, ('result'          => ['PROBLEM', $params->{'failed_only'} eq 'include_warning' ? 'WARNING' : ()]) if $params->{'failed_only'};
+
+  if ($params->{'with_annotations'}) {
+    $args->{'with_objects'} = ['annotation'];
+    $args->{'with_users'}   = ['annotation.created_by', 'annotation.modified_by'];
+    if ($params->{'with_annotations'} eq 'exclude_manual_ok') {
+      push @{$args->{'query'}}, ('or', [
+        'annotation.action'  => undef,
+        '!annotation.action' => ['manual_ok', 'manual_ok_this_assembly', 'manual_ok_all_releases', 'manual_ok_this_genebuild', 'healthcheck_bug'],
+      ]);
+    }
+  }
+
+  return $self->get_objects('debug', '1', %$args);
 }
 
 sub fetch_for_distinct_databases {
   ## Fetches one report for each db for a given session/release - basically you get a list of database which were healthchecked in the given session/release
   ## @param HashRef with keys:
-  ##  - session_id  Session id of the requested session
+  ##  - last_session_id   Session id of the last session of the requested release (required)
+  ##  - first_session_id  Session id of the first session of the requested release (optional) - if missed, reports for only last_session_id are fetched
   ## @return ArrayRef of EnsEMBL::ORM::Rose::Object::Report objects if found any
-  return shift->_fetch_for_distinct(shift, 'database_name');
+  return shift->_fetch_for_distinct('database_name', @_);
 }
 
 sub fetch_for_distinct_testcases {
   ## Fetches one report for each testcase - basically you get a list of all testcases
   ## @param HashRef with keys:
-  ##  - session_id  Session id of the requested session
+  ##  - last_session_id   Session id of the last session of the requested release (required)
+  ##  - first_session_id  Session id of the first session of the requested release (optional) - if missed, reports for only last_session_id are fetched
   ## @return ArrayRef of EnsEMBL::ORM::Rose::Object::Report objects if found any
-  return shift->_fetch_for_distinct(shift, 'testcase');
-}
-
-sub _fetch_single {
-  my ($self, $session_id, $first_or_last) = @_;
-  my $reports = $self->get_reports(
-    query     => ['last_session_id' => "$session_id", '!timestamp' => undef],
-    sort_by   => 'timestamp '.(defined $first_or_last && $first_or_last eq 'last' ? 'DESC' : 'ASC'),
-    limit     => 1
-  );
-  return $reports->[0];
+  return shift->_fetch_for_distinct('testcase', @_);
 }
 
 sub _fetch_for_distinct {
-  my ($self, $params, $group_by) = @_;
-  return [] unless $params->{'session_id'};
-  
-  my $query = $params->{'include_all'} ? ['last_session_id' => {'ge' => $params->{'session_id'}}] : ['last_session_id' => $params->{'session_id'}];
-  
-  my $objects = $self->get_reports(
-    group_by  => $group_by,
-    query     => $query,
+  ## Private method to fetch reports keeping one column distinct
+  my ($self, $group_by, $params) = @_;
+  return [] unless $params->{'last_session_id'};
+
+  my $objects = $self->get_objects(
+    'group_by'  => $group_by,
+    'query'     => exists $params->{'first_session_id'}
+      ? ['last_session_id', {'ge' => $params->{'first_session_id'}}, 'last_session_id', {'le' => $params->{'last_session_id'}}]
+      : ['last_session_id', $params->{'last_session_id'}],
   );
   return $objects;
 }
