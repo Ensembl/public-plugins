@@ -14,6 +14,8 @@ sub current_release   { return shift->{'_curr_release'}; }
 sub requested_release { return shift->{'_req_release'}; }
 sub compared_release  { return shift->{'_cmp_release'}; }
 sub available_views   { return {'DBType' => 'database_type', 'Database' => 'database_name', 'Testcase' => 'testcase', 'Species' => 'species', 'Team' => 'team_responsible'}; }
+sub last_session_id   { return shift->_get_session_id('last'); }
+sub first_session_id  { return shift->_get_session_id('first'); }
 
 sub new {
   my $class = shift;
@@ -30,7 +32,7 @@ sub new {
 
   return $self unless $self->{'_req_release'};
   
-  my $method = lc 'fetch_for_'.$self->action;
+  my $method = lc 'fetch_for_'.($self->action || $self->default_action);
   
   $self->$method if $self->can($method);
 
@@ -41,29 +43,46 @@ sub fetch_for_summary {
   ## Healthcheck summary page
   my $self = shift;
 
-  my $session = $self->rose_manager('Session')->fetch_last_with_failed_reports({'release' => $self->requested_release});
+  my $session = $self->rose_manager('Session')->fetch_single($self->requested_release);
+  my $groupby = [qw(database_type database_name species testcase team_responsible)];
+
   if ($session) {
     $self->rose_objects($session);
-    $self->rose_objects('compare_session', $self->rose_manager('Session')->fetch_last_with_failed_reports({'release' => $self->compared_release})) if $self->compared_release;
-    $self->rose_objects('reports', [
-      $self->rose_manager('Report')->fetch_first_for_session($session->session_id),
-      $self->rose_manager('Report')->fetch_last_for_session ($session->session_id)
-    ]);
+    $self->rose_objects('reports', $self->rose_manager('Report')->count_failed_for_session({
+      'session_id' => $session->session_id,
+      'group_by'   => $groupby
+    }));
+
+    if (my $compared = $self->compared_release) {
+      if ($compared = $self->rose_manager('Session')->fetch_single($compared)) {
+        $self->rose_objects('compare_reports', $self->rose_manager('Report')->count_failed_for_session({
+          'session_id' => $compared->session_id,
+          'group_by'   => $groupby
+        }));
+      }
+    }
   }
 }
 
 sub fetch_for_details {
   ## Healthcheck details page
   my $self = shift;
-
-  my $query = {
-    'release'           => $self->requested_release,
-    'with_users'        => $self->view_type && $self->view_param ? 1 : 0,
-    'include_manual_ok' => $self->view_type && $self->view_param ? 1 : 0
-  };
-  $query->{'query'} = ['report.'.$self->view_type, $self->view_param] if $self->view_type && $self->view_param;
-
-  $self->rose_objects($self->rose_manager('Session')->fetch_last_with_failed_reports($query));
+  
+  if ($self->view_type && $self->view_param) {
+    $self->rose_objects('reports', $self->rose_manager('Report')->fetch_for_session({
+      'session_id'        => $self->last_session_id,
+      'with_users'        => 1,
+      'failed_only'       => 1,
+      'with_annotations'  => 1,
+      'query'             => [$self->view_type, $self->view_param]
+    }));
+  }
+  else {
+    $self->rose_objects('reports', $self->rose_manager('Report')->count_failed_for_session({
+      'session_id' => $self->last_session_id,
+      'group_by'   => [ $self->view_type ]
+    }));
+  }
 }
 
 sub fetch_for_annotation {
@@ -86,17 +105,10 @@ sub fetch_for_database {
   ## Database list page
   my $self = shift;
 
-  my $session_manager = $self->rose_manager('Session');
-  my $last_session    = $session_manager->fetch_last($self->current_release);
-  my $last_session_id = $last_session ? $last_session->session_id || 0 : 0;
-
-  if ($last_session_id) {
-
-    my $first_session    = $session_manager->fetch_first($self->current_release);
-    my $first_session_id = $first_session ? $first_session->session_id || 0 : 0;
-    my $reports_manager  = $self->rose_manager('Report');
-    $self->rose_objects('session_reports', $reports_manager->fetch_for_distinct_databases({'session_id' => $last_session_id}));
-    $self->rose_objects('release_reports', $reports_manager->fetch_for_distinct_databases({'session_id' => $first_session_id, 'include_all' => 1}));
+  if (my $last_session_id = $self->last_session_id) {
+    my $first_session_id = $self->first_session_id || 0;
+    $self->rose_objects('session_reports', $self->rose_manager('Report')->fetch_for_distinct_databases({'last_session_id' => $last_session_id}));
+    $self->rose_objects('release_reports', $self->rose_manager('Report')->fetch_for_distinct_databases({'last_session_id' => $last_session_id, 'first_session_id' => $first_session_id}));
   }
 }
 
@@ -148,12 +160,9 @@ sub get_default_list {
   $function  ||= $self->function;
   
   if ($function =~ /^Database|Testcase$/) {
-
-    $self->{'__first_session'} ||= $self->rose_manager('Session')->fetch_first($self->requested_release);#saves for next query if any
-    return [] unless $self->{'__first_session'};
-
+    return [] unless $self->first_session_id;
     my $method = lc "fetch_for_distinct_${function}s";
-    return [ keys %{{ map {$_->$type => 1} @{$self->rose_manager('Report')->$method({'session_id' => $self->{'__first_session'}->session_id, 'include_all' => 1}) || []} }} ];
+    return [ keys %{{ map {$_->$type => 1} @{$self->rose_manager('Report')->$method({'last_session_id' => $self->last_session_id, 'first_session_id' => $self->first_session_id}) || []} }} ];
   }
   elsif ($function eq 'Species') {
     return $self->hub->species_defs->ENSEMBL_DATASETS || [];
@@ -162,7 +171,6 @@ sub get_default_list {
     return [qw(cdna core funcgen otherfeatures production variation vega)];
   }
   elsif ($function eq 'Team') {
-#     return [qw(compara core genebuild funcgen release_coordinator)];
     return [qw(COMPARA CORE GENEBUILD FUNCGEN RELEASE_COORDINATOR)];
   }
   return [];
@@ -182,6 +190,14 @@ sub validate_species {
   
   $self->{'_valid_species'} ||= { map {$_ => 1} @{ $self->hub->species_defs->ENSEMBL_DATASETS || [] } };
   return $self->{'_valid_species'}->{$species} || 0;
+}
+
+sub _get_session_id {
+  ## gets first or last session id for requested release
+  my ($self, $which) = @_;
+  exists $self->{"_${which}_session"} and return $self->{"_${which}_session"};
+  my $s = $self->rose_manager('Session')->fetch_single($self->requested_release, $which);
+  return $s ? ($self->{"_${which}_session"} = $s->session_id) : undef;
 }
 
 1;
