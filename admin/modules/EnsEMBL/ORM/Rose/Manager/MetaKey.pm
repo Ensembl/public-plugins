@@ -11,10 +11,10 @@ package EnsEMBL::ORM::Rose::Manager::MetaKey;
 use strict;
 use warnings;
 
+use EnsEMBL::ORM::Rose::Object::MetaKey;
+
 use base qw(EnsEMBL::ORM::Rose::Manager::Trackable);
 
 sub object_class { 'EnsEMBL::ORM::Rose::Object::MetaKey' }
-
-__PACKAGE__->make_manager_methods('meta_key'); ## Auto-generate query methods: get_meta_key, count_meta_key, etc
 
 1;

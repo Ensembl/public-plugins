@@ -11,10 +11,10 @@ package EnsEMBL::ORM::Rose::Manager::WebData;
 use strict;
 use warnings;
 
+use EnsEMBL::ORM::Rose::Object::WebData;
+
 use base qw(EnsEMBL::ORM::Rose::Manager::Trackable);
 
 sub object_class { 'EnsEMBL::ORM::Rose::Object::WebData' }
-
-__PACKAGE__->make_manager_methods('web_data'); ## Auto-generate query methods: get_web_data, count_web_data, etc
 
 1;

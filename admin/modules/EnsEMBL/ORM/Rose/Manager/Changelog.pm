@@ -11,10 +11,10 @@ package EnsEMBL::ORM::Rose::Manager::Changelog;
 use strict;
 use warnings;
 
+use EnsEMBL::ORM::Rose::Object::Changelog;
+
 use base qw(EnsEMBL::ORM::Rose::Manager::Trackable);
 
 sub object_class { 'EnsEMBL::ORM::Rose::Object::Changelog' }
-
-__PACKAGE__->make_manager_methods('changelogs'); ## Auto-generate query methods: get_changelogs, count_changelogs, etc
 
 1;

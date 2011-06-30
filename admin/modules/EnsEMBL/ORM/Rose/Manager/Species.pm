@@ -11,10 +11,10 @@ package EnsEMBL::ORM::Rose::Manager::Species;
 use strict;
 use warnings;
 
+use EnsEMBL::ORM::Rose::Object::Species;
+
 use base qw(EnsEMBL::ORM::Rose::Manager::Trackable);
 
 sub object_class { 'EnsEMBL::ORM::Rose::Object::Species' }
-
-__PACKAGE__->make_manager_methods('species'); ## Auto-generate query methods: get_species, count_species, etc
 
 1;

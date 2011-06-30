@@ -11,10 +11,10 @@ package EnsEMBL::ORM::Rose::Manager::Biotype;
 use strict;
 use warnings;
 
+use EnsEMBL::ORM::Rose::Object::Biotype;
+
 use base qw(EnsEMBL::ORM::Rose::Manager::Trackable);
 
 sub object_class { 'EnsEMBL::ORM::Rose::Object::Biotype' }
-
-__PACKAGE__->make_manager_methods('biotype'); ## Auto-generate query methods: get_biotype, count_biotype, etc
 
 1;

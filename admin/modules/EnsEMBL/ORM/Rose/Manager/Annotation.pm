@@ -11,10 +11,10 @@ package EnsEMBL::ORM::Rose::Manager::Annotation;
 use strict;
 use warnings;
 
+use EnsEMBL::ORM::Rose::Object::Annotation;
+
 use base qw(EnsEMBL::ORM::Rose::Manager::Trackable);
 
 sub object_class { 'EnsEMBL::ORM::Rose::Object::Annotation' }
-
-__PACKAGE__->make_manager_methods('annotations'); ## Auto-generate query methods: get_annotations, count_annotations, etc
 
 1;

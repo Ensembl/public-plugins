@@ -11,10 +11,10 @@ package EnsEMBL::ORM::Rose::Manager::AnalysisDescription;
 use strict;
 use warnings;
 
+use EnsEMBL::ORM::Rose::Object::AnalysisDescription;
+
 use base qw(EnsEMBL::ORM::Rose::Manager::Trackable);
 
 sub object_class { 'EnsEMBL::ORM::Rose::Object::AnalysisDescription' }
-
-__PACKAGE__->make_manager_methods('analysis_description'); ## Auto-generate query methods: get_analysis_description, count_analysis_description, etc
 
 1;
