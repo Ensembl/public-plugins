@@ -1,3 +1,27 @@
+div.hc-tabs div {
+  display: none;
+}
+div.hc-tabs-buttons {
+  clear: both;
+  margin-top: 10px;
+}
+div.hc-tabs-buttons a {
+  display: block;
+  float: left;
+  margin: 0 3px;
+  padding: 4px 5px;
+  text-decoration: none;
+  outline: none;
+  font-weight: bold;
+  background-color: [[NEUTRAL_BG]];
+  border-radius: 5px 5px 0 0;
+  -moz-border-radius: 5px 5px 0 0;
+  -webkit-border-radius: 5px 5px 0 0;
+}
+div.hc-tabs-buttons a.selected {
+  background-color: [[NEUTRAL_BORDER]];
+  color: white;
+}
 .hc-info {
   background-color:#eefff8;
 }
@@ -14,10 +38,10 @@ div.hc-infobox {
 div.hc-infobox p {
   margin: 3px 0;
 }
-p.hc_p, p.hc_p_right {
+p.hc_p, p.hc-p-right {
   margin: 1em 0;
 }
-p.hc_p_right {
+p.hc-p-right {
   text-align: right;
 }
 p.hc-comment-link {
