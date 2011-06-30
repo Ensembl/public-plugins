@@ -25,6 +25,9 @@ div.hc-tabs-buttons a.selected {
 .hc-info {
   background-color:#eefff8;
 }
+div.hc-padding {
+  height: 30px;
+}
 p.hc-comment-info, p.hc-comment-info a {
   color: #aaa;
   font-style: italic;
