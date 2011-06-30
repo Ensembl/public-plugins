@@ -15,11 +15,11 @@ sub content_tree {
 
   $content->prepend_child('h1', {'inner_HTML' => sprintf('Changelog for release %d', $self->object->requested_release)});
 
-  for (@{$content->get_nodes_by_flag('team_name')}) {
-    my $team = $_->get_flag('team_name');
-    $_->before('h2', {'id' => "team_$team", 'inner_HTML' => $team, 'class' => 'cl-team-heading'});
-    $toc->append_child('p', {'inner_HTML' => qq(<a href="#team_$team">$team</a>)});
+  my $teams = [];
+  foreach my $team_div (@{$content->get_nodes_by_flag('team_name')}) {
+    $team_div->before('h2', {'id' => "team_$_", 'inner_HTML' => $_, 'class' => '_cl_team_heading cl-team-heading'}) and push @$teams, $_ for $team_div->get_flag('team_name');
   }
+  $toc->append_child('p', {'inner_HTML' => qq(<a href="#team_$_">$_</a>)}) for sort @$teams;
 
   return $content;
 }
@@ -46,6 +46,7 @@ sub record_tree {
   }
 
   $record_div->append_children(
+    {'node_name' => 'input','class' => '_cl_team_name',   'value'      => $record->team, 'type' => 'hidden'},
     {'node_name' => 'h3',   'class' => 'cl-title',        'inner_HTML' => $record->title},
     {'node_name' => 'div',  'class' => 'cl-title',        'inner_HTML' => $record->content},
     {'node_name' => 'span', 'class' => 'cl-field-title',  'inner_HTML' => 'Team:'},
