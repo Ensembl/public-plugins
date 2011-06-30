@@ -21,7 +21,7 @@ __PACKAGE__->meta_setup(
 
   columns     => [
     web_data_id => {type => 'serial', primary_key => 1, not_null => 1},
-    data        => {type => 'text' },
+    data        => {type => 'datastructure' },
   ],
 
   relationships => [
@@ -32,5 +32,6 @@ __PACKAGE__->meta_setup(
     },
   ],
 );
+
 
 1;
