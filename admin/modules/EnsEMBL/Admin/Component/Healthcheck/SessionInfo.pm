@@ -3,7 +3,6 @@ package EnsEMBL::Admin::Component::Healthcheck::SessionInfo;
 use strict;
 
 use base qw(EnsEMBL::Admin::Component::Healthcheck);
-use EnsEMBL::Web::Document::HTML::TwoColTable;
 
 sub caption {
   return 'Healthcheck session summary';
@@ -15,37 +14,29 @@ sub content {
   my $object    = $self->object;
   my $session   = $object->rose_object;
   my $release   = $object->requested_release;
-  my $reports   = $object->rose_objects('reports');
-  my $dropdown  = sprintf ('<form action="" method="get"><label><b>Go to other release: </b></label>%s&nbsp;<input type="submit" value="Go" /></form>', $self->render_all_releases_selectbox);
+  my $dropdown  = sprintf('<form action="" method="get"><label><b>Go to other release: </b></label>%s&nbsp;<input type="submit" value="Go" /></form>', $self->render_all_releases_selectbox);
 
   return $self->no_healthcheck_found.$dropdown unless $session;
-
-  my $start_time  = undef;
-  my $end_time    = undef;
-  eval {
-    $start_time   = $self->hc_format_date($reports->[0]->timestamp) || '';
-    $end_time     = $self->hc_format_date($reports->[1]->timestamp) || '';
-  };
-                        
-  my $testcase_names = {};
   
-  for (split ',', $session->config) {
+  my $start_time  = $self->hc_format_date($session->start_time) || '';
+  my $end_time    = $self->hc_format_date($session->end_time) || '';
 
-    $_ =~ m/^([^:]+):(.+)$/;
-    $testcase_names->{$1} ||= [];
-    push @{$testcase_names->{$1}}, $2;
+  my $testcases   = {};
+  $_ =~ m/^([^:]+):(.+)$/ and push @{$testcases->{$1} ||= []}, $2 for split ',', $session->config;
+  
+  my $data = [
+    'Last session:' => $session->session_id.($start_time && $end_time ? "<ul><li>Started: $start_time</li><li>Ended: $end_time</li></ul>" : " <i>(running time not known)</i>"),
+    'Host:'         => $session->host || '',
+    'Testgroups:'   => join '', '<ul>', (map {sprintf('<li><i>%s</i> run on DB <b>%s</b></li>', join('</i>, <i>', @{$testcases->{$_}}), $_)} keys %$testcases), '</ul>'
+  ];
+
+  my $table = $self->dom->create_element('table');
+  while (@$data) {
+    $table->append_child('tr', {'children' => [
+      {'node_name' => 'th', 'inner_HTML' => shift @$data},
+      {'node_name' => 'td', 'inner_HTML' => shift @$data}
+    ]});
   }
-
-  my $testgroups = '<ul>';
-  $testgroups   .= sprintf('<li><i>%s</i> run on DB <b>%s</b></li>', join('</i>, <i>', @{$testcase_names->{$_}}), $_) for keys %$testcase_names;
-  $testgroups   .= '</ul>';
-
-  my $table      = EnsEMBL::Web::Document::HTML::TwoColTable->new;
-  my $run_time   = defined $start_time && defined $end_time ? "<ul><li>Started: $start_time</li><li>Ended: $end_time</li></ul>" : " <i>(running time not known)</i>";
-
-  $table->add_row("Last session:", $session->session_id.$run_time);
-  $table->add_row("Host:", $session->host || '');
-  $table->add_row("Testgroups:", $testgroups);
 
   return $table->render.$dropdown;
 }
