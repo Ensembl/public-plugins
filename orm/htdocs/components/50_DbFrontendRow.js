@@ -72,7 +72,8 @@ Ensembl.Panel.DbFrontendRow = Ensembl.Panel.extend({
               }
               var id = (url.match(/(\?|&|;)id\=([0-9]+)/) || []).pop() || 0;
               if (id) {
-                url = window.location.href + (window.location.href.match(/\?/) ? '&' : '?') + 'id=' + id;
+                url = window.location.href.split('#')[0];
+                url = url + (url.match(/\?/) ? '&' : '?') + 'id=' + id;
               }
             }
             else if (url.match(/Problem$/)) {
@@ -88,7 +89,7 @@ Ensembl.Panel.DbFrontendRow = Ensembl.Panel.extend({
                 else {
                   Ensembl.EventManager.trigger('addPanel', undefined, 'DbFrontendRow', this.getResponseNode(json).html(), this.target);
                 }
-                this.scrollIn({margin: 5});
+                this.afterResponse(!url.match(/Problem$/));
               }
             });
           }
@@ -186,5 +187,11 @@ Ensembl.Panel.DbFrontendRow = Ensembl.Panel.extend({
     if (position) {
       $('html,body').animate({ scrollTop: position}, options.speed);
     }
+  },
+  
+  //method called after the response the recieved from the server after saving a record
+  afterResponse: function(success) {
+    this.scrollIn({margin: 5});
   }
+
 });
