@@ -58,11 +58,11 @@ sub content {
     my $table = $self->new_table;
     
     $table->add_columns(#note - use the space properly, we have too much to display in annotation and text columns
-      {'key' => 'db_sp_tc', 'title' => $self->_get_first_column($object->function),       'width' => qq(20%)},
-      {'key' => 'text',     'title' => 'Text',                                            'width' => qq(40%)},
-      {'key' => 'comment',  'title' => 'Annotation',                                      'width' => qq(40%)},
-      {'key' => 'team',     'title' => 'Team/person responsible',                         'width' => '100px'},
-      {'key' => 'created',  'title' => '<abbr title="Initial Failure Date">Date</abbr>',  'width' => '60px' },
+      {'key' => 'db_sp_tc', 'title' => $self->_get_first_column($object->function), 'width' => qq(20%)},
+      {'key' => 'text',     'title' => 'Text',                                      'width' => qq(40%)},
+      {'key' => 'comment',  'title' => 'Annotation',                                'width' => qq(40%)},
+      {'key' => 'team',     'title' => 'Team/person responsible',                   'width' => '100px'},
+      {'key' => 'created',  'title' => 'Initial Failure Date',                      'width' => '60px' },
     );
     
     #sort reports on the basis of creation time 
