@@ -59,7 +59,7 @@ sub fetch_for_display {
   my @ids = $self->hub->param('id') || ();
   scalar @ids == 1 and @ids = split ',', $ids[0];
   if (@ids) {
-    $self->rose_objects($self->manager_class->fetch_by_primary_keys([@ids], $self->_get_with_objects_params('Display')));
+    $self->rose_objects($self->manager_class->fetch_by_primary_keys([@ids], { %{$self->_get_with_objects_params('Display')}, 'sort_by' => 'team'}));
   }
   else {
     my $params = $self->_get_with_objects_params('Display');
