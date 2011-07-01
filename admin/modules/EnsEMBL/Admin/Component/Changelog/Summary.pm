@@ -13,13 +13,27 @@ sub content_tree {
   my $content = $self->SUPER::content_tree;
   my $toc     = $content->prepend_child('div', {'class' => 'cl-toc'});
 
+  $_->remove for @{$content->get_nodes_by_flag('pagination_div')};
+
   $content->prepend_child('h1', {'inner_HTML' => sprintf('Changelog for release %d', $self->object->requested_release)});
 
-  my $teams = [];
-  foreach my $team_div (@{$content->get_nodes_by_flag('team_name')}) {
-    $team_div->before('h2', {'id' => "team_$_", 'inner_HTML' => $_, 'class' => '_cl_team_heading cl-team-heading'}) and push @$teams, $_ for $team_div->get_flag('team_name');
+  my $teams = { map {$_ => {
+    'heading' => $self->dom->create_element('h2', {'id' => "team_$_",     'inner_HTML' => $_, 'class' => '_cl_team_heading cl-team-heading'}),
+    'link'    => $self->dom->create_element('p',  {'id' => "_cl_link_$_", 'inner_HTML' => qq(<a href="#team_$_">$_</a>)})
+  }} @{$self->object->manager_class->object_class->meta->column('team')->values} };
+
+  $_->before($teams->{$_->get_flag('team_name')}{'heading'}) for @{$content->get_nodes_by_flag('team_name')};
+  $toc->append_child($teams->{$_}{'link'}) for sort keys %$teams;
+
+  my $ref_heading;
+  for (reverse sort keys %$teams) {
+    my $heading = $teams->{$_}{'heading'};
+    if (!$heading->parent_node) {
+      $ref_heading ? $ref_heading->before($heading) : $content->append_child($heading);
+      $_->set_attribute('class', 'hidden') for $heading, $teams->{$_}{'link'};
+    }
+    $ref_heading = $heading;
   }
-  $toc->append_child('p', {'inner_HTML' => qq(<a href="#team_$_">$_</a>)}) for sort @$teams;
 
   return $content;
 }
@@ -33,7 +47,7 @@ sub record_tree {
   my $primary_key = $record->get_primary_key_value;
 
   my $team = $record->team;
-  $record_div->set_flag('team_name', $self->{'__previous_team'} = $team) if !exists $self->{'__previous_team'} || $self->{'__previous_team'} ne $team;
+  $record_div->set_flag('team_name', $self->{'__previous_team'} = $team) unless exists $self->{'__previous_team'} && $self->{'__previous_team'} eq $team;
   
   my @for_logged_in_user = ();
   if ($self->hub->user) {
@@ -46,11 +60,11 @@ sub record_tree {
   }
 
   $record_div->append_children(
-    {'node_name' => 'input','class' => '_cl_team_name',   'value'      => $record->team, 'type' => 'hidden'},
+    {'node_name' => 'input','class' => '_cl_team_name',   'value'      => $team, 'type' => 'hidden'},
     {'node_name' => 'h3',   'class' => 'cl-title',        'inner_HTML' => $record->title},
     {'node_name' => 'div',  'class' => 'cl-title',        'inner_HTML' => $record->content},
     {'node_name' => 'span', 'class' => 'cl-field-title',  'inner_HTML' => 'Team:'},
-    {'node_name' => 'span', 'class' => 'cl-field-value',  'inner_HTML' => $record->team},
+    {'node_name' => 'span', 'class' => 'cl-field-value',  'inner_HTML' => $team},
     {'node_name' => 'span', 'class' => 'cl-field-title',  'inner_HTML' => 'Species:'},
     {'node_name' => 'span', 'class' => 'cl-field-value',  'inner_HTML' => $self->display_field_value((my $a = $record->species), {'delimiter' => ', '}) || 'All Species'},
     {'node_name' => 'span', 'class' => 'cl-field-title',  'inner_HTML' => 'Status:'},
