@@ -66,9 +66,10 @@ sub content_pagination_tree {
   my $page_count  = $object->get_page_count;
   my $count       = $object->get_count;
   my $offset      = ($page - 1) * $object->pagination;
-  my $pagination  = $self->dom->create_element('div', {'class' => 'dbf-pagination'});
+  my $pagination  = $self->dom->create_element('div', {'class' => 'dbf-pagination _dbf_pagination'});
   my $links       = $pagination->append_child($self->dom->create_element('div', {'class' => 'dbf-pagelinks'}));
   $links->set_flag('pagination_links');
+  $pagination->set_flag('pagination_div');
 
   $page < 1 and $page = 1 or $page > $page_count and $page = $page_count;
   
