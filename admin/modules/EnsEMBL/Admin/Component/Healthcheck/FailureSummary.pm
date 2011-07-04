@@ -28,7 +28,7 @@ sub content {
   $html   .= qq(<div class="hc-infobox"><p>Tests listed as failed are of type 'PROBLEM', excluding those annotated 'manual ok', 'manual ok this assembly', 'manual ok all releases', 'healthcheck bug'</p></div>);
 
   my $buttons = $self->dom->create_element('div', {'class' => 'hc-tabs-buttons'});
-  my $tabs    = $self->dom->create_element('div', {'class' => 'hc-tabs'});
+  my $tabs    = $self->dom->create_element('div', {'class' => 'hc-tabs spinner hc-spinner'});
   my $js_tabs = $self->dom->create_element('div', {'class' => 'js_panel', 'children' => [{'node_name' => 'inputhidden', 'class' => 'panel_type', 'value' => 'HCTabSelector'}, $buttons, $tabs]});
 
   foreach my $view_function (sort keys %$views) {
