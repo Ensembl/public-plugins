@@ -83,7 +83,7 @@ sub fetch_for_session {
     }
   }
 
-  return $self->get_objects('debug', '1', %$args);
+  return $self->get_objects(%$args);
 }
 
 sub fetch_for_distinct_databases {
