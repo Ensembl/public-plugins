@@ -27,7 +27,7 @@ sub new {
     $page->include_navigation(0);
     $page->initialize;
     $page->remove_body_element('breadcrumbs');
-    $page->set_doc_type('none', 'none');
+    $page->set_doc_type('XHTML', '1.0 Trans');
     
     my $elements = $page->elements;
     my @order    = map $_->[0], @{$page->head_order}, @{$page->body_order};
