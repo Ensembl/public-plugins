@@ -59,6 +59,9 @@ span.hc-noproblem {
 span.hc-problem {
   color: #a00;
 }
+span.hc-warning {
+  color: #a60;
+}
 span.hc-new {
   font-weight: bold;
 }
