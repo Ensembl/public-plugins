@@ -1,6 +1,10 @@
 div.hc-tabs div {
   display: none;
 }
+div.hc-spinner {
+  border: [[NEUTRAL_BG]] solid 1px;
+  clear: both;
+}
 div.hc-tabs-buttons {
   clear: both;
   margin-top: 10px;
@@ -76,7 +80,7 @@ span.hc-new {
   color: #006600;
 }
 .hc-config {
-  background-color: #669;
+  background-color: [[BUTTON_BG]];
   border: 3px double #fff;
   color: #fff;
 }
