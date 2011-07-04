@@ -22,9 +22,6 @@ div.hc-tabs-buttons a.selected {
   background-color: [[NEUTRAL_BORDER]];
   color: white;
 }
-.hc-info {
-  background-color:#eefff8;
-}
 div.hc-padding {
   height: 30px;
 }
@@ -53,7 +50,7 @@ p.hc-comment-link {
 p.hc-comment-link a {
   margin: 0 3px 0 12px;
 }
-span.hc-noproblem {
+span.hc-oked {
   color: #444;
 }
 span.hc-problem {
@@ -61,6 +58,9 @@ span.hc-problem {
 }
 span.hc-warning {
   color: #a60;
+}
+span.hc-info {
+  color: #060;
 }
 span.hc-new {
   font-weight: bold;
