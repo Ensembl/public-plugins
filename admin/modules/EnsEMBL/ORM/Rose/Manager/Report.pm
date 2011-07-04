@@ -56,9 +56,8 @@ sub fetch_for_session {
   ##  - session_id          Id of the session
   ##  - query               Arrayref to be added to the query part of get_objects method (optional)
   ##  - failed_only         Flag, possibly can have three values
-  ##    - false             Any boolean false value will get all the reports (default)
+  ##    - false             Any boolean false value will get all the reports except with result 'CORRECT' (default)
   ##    - true              Any boolean true value will get only failed reports (reports with result 'PROBLEM')
-  ##    - include_warning   Will get warning reports along with failed reports (reports with result 'WARNING')
   ##  - with_annotations    Flag (possibly can have three values)
   ##    - false             Any boolean false value will not include any annotations of reports (default)
   ##    - exclude_manual_ok Will exclude all the reports with 'manual ok' annotations
@@ -69,8 +68,12 @@ sub fetch_for_session {
   
   my $args = {};
   $args->{'query'} = $params->{'query'} || [];
-  push @{$args->{'query'}}, ('last_session_id' => $params->{'session_id'});
-  push @{$args->{'query'}}, ('result'          => ['PROBLEM', $params->{'failed_only'} eq 'include_warning' ? 'WARNING' : ()]) if $params->{'failed_only'};
+  push @{$args->{'query'}}, (
+    $params->{'failed_only'}
+      ? ('result' => 'PROBLEM')
+      : ('result' => ['PROBLEM', 'WARNING', 'INFO'], 'text' => {'not like' => '#%'}),
+    'last_session_id' => $params->{'session_id'}
+  );
 
   if ($params->{'with_annotations'}) {
     $args->{'with_objects'} = ['annotation'];

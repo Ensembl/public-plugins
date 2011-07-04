@@ -46,9 +46,9 @@ sub content {
     $param
   ) if $type ne 'database_name';
   $html .= qq{<div class="hc-infobox">
-            <p>For each database, reports are sorted on the basis of Date (initial failure date) with latest report appearing on the top.</p>
-            <p>Reports that have not been annotated 'manual ok' are displayed in <span class="hc-problem">this colour</span> for problems, and <span class="hc-warning">this colour</span> for warnings.
-            <p>Reports appearing <span class="hc-new">bold</span> (or <span class="hc-problem hc-new">bold</span>/<span class="hc-warning hc-new">bold</span>) are for the recently appeared problems.</p>
+    <p>For each database, reports are sorted on the basis of Date (initial failure date) with latest report appearing on the top.</p>
+    <p>Reports that have not been annotated 'manual ok' are displayed in different colours for results <span class="hc-problem">problem</span>, <span class="hc-warning">warning</span> and <span class="hc-info">info</span>.</p>
+    <p>Reports appearing <span class="hc-new">bold</span> are for the recently appeared problems.</p>
   </div>};
 
   my $js_ref = 0; #counter used by JavaScript only
@@ -74,6 +74,7 @@ sub content {
 
     foreach my $report (@$db_reports) {
       my $report_id  = $report->report_id;
+      my $result     = $report->result;
       my $db_sp_tc   = [];
       for (qw(database_type species testcase)) {
         next if $_ eq $type;
@@ -103,7 +104,7 @@ sub content {
           if $report->annotation->action && $self->annotation_action($report->annotation->action)->{'value'} ne '';
       }
       my $temp          = $report->annotation ? $report->annotation->action || '' : '';
-      my $text_class    = $temp !~ /manual_ok|healthcheck_bug/ ? $report->result eq 'WARNING' ? 'hc-warning' : 'hc-problem' : 'hc-noproblem';
+      my $text_class    = $temp =~ /manual_ok|healthcheck_bug/ ? 'hc-oked' : sprintf('hc-%s', lc $result);
       $text_class      .= $report->first_session_id == $report->last_session_id ? ' hc-new' : ' hc-notnew';
 
       my $link_class    = join ' ', keys %{{ map { $_."-link" => 1 } split (' ', $text_class)}};
@@ -115,7 +116,7 @@ sub content {
       $table->add_row({
         'db_sp_tc'  => join ('<br />', @$db_sp_tc),
         'comment'   => $annotation,
-        'type'      => $report->result eq 'WARNING' ? '<abbr title="Warning">W</abbr>' : '<abbr title="Problem">P</abbr>',
+        'type'      => sprintf('<abbr title="%s">%s</abbr>', ucfirst lc $result, substr($result, 0, 1)),
         'text'      => qq(<span class="$text_class">).join (', ', split (/,\s?/, $report->text)).'</span>', #split-joining is done to wrap long strings
         'created'   => $report->created ? $self->hc_format_compressed_date($report->created) : '<i>unknown</i>',
         'team'      => join ', ', map { $self->get_healthcheck_link({'type' => 'team_responsible', 'param' => $_, 'release' => $object->requested_release}) } split(/\s*and\s*/, lc $report->team_responsible),
