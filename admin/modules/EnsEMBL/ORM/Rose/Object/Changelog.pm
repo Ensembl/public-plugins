@@ -22,21 +22,22 @@ __PACKAGE__->meta_setup(
   table       => 'changelog',
 
   columns     => [
-    changelog_id      => {type => 'serial', primary_key => 1, not_null => 1}, 
-    release_id        => {type => 'integer'},
-    title             => {type => 'varchar'},
-    content           => {type => 'text'},
-    notes             => {type => 'text'},
-    status            => {type => 'enum', 'values' => [qw(declared handed_over postponed cancelled)], 'default' => 'declared'},
-    team              => {type => 'enum', 'values' => [qw(Compara Core Funcgen EnsemblGenomes Genebuild Mart Outreach Variation Web Wormbase)]},
-    assembly          => {type => 'enum', 'values' => [qw(N Y)]},
-    gene_set          => {type => 'enum', 'values' => [qw(N Y)]},
-    repeat_masking    => {type => 'enum', 'values' => [qw(N Y)]},
-    stable_id_mapping => {type => 'enum', 'values' => [qw(N Y)]},
-    affy_mapping      => {type => 'enum', 'values' => [qw(N Y)]},
-    biomart_affected  => {type => 'enum', 'values' => [qw(N Y)]},
-    db_status         => {type => 'enum', 'values' => [qw(N/A unchanged patched new)]},
-    is_current        => {type => 'integer', not_null => 1, default => 1}
+    changelog_id          => {type => 'serial', primary_key => 1, not_null => 1}, 
+    release_id            => {type => 'integer'},
+    title                 => {type => 'varchar'},
+    content               => {type => 'text'},
+    notes                 => {type => 'text'},
+    status                => {type => 'enum', 'values' => [qw(declared handed_over postponed cancelled)], 'default' => 'declared'},
+    team                  => {type => 'enum', 'values' => [qw(Compara Core Funcgen EnsemblGenomes Genebuild Mart Outreach Variation Web Wormbase)]},
+    assembly              => {type => 'enum', 'values' => [qw(N Y)]},
+    gene_set              => {type => 'enum', 'values' => [qw(N Y)]},
+    repeat_masking        => {type => 'enum', 'values' => [qw(N Y)]},
+    stable_id_mapping     => {type => 'enum', 'values' => [qw(N Y)]},
+    affy_mapping          => {type => 'enum', 'values' => [qw(N Y)]},
+    biomart_affected      => {type => 'enum', 'values' => [qw(N Y)]},
+    variation_pos_changed => {type => 'enum', 'values' => [qw(N Y)]},
+    db_status             => {type => 'enum', 'values' => [qw(N/A unchanged patched new)]},
+    is_current            => {type => 'integer', not_null => 1, default => 1}
   ],
 
   relationships => [

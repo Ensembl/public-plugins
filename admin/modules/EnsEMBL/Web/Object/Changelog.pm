@@ -146,6 +146,11 @@ sub show_fields {
       'label'     => 'Does it need affy mapping?',
       'values'    => [{'value' => 'Y', 'caption' => 'Yes'}, {'value' => 'N', 'caption' => 'No'}]
     },
+    variation_pos_changed => {
+      'type'      => 'dropdown',
+      'label'     => 'Have any variation positions changed? (density features implications)',
+      'values'    => [{'value' => 'Y', 'caption' => 'Yes'}, {'value' => 'N', 'caption' => 'No'}]
+    },
     db_status         => {
       'type'      => 'dropdown',
       'label'     => 'Database changed'
