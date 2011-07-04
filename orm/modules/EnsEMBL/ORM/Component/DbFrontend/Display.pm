@@ -37,7 +37,7 @@ sub content_tree {
         {'node_name' => 'a', 'inner_HTML' => 'Add new', 'class' => $self->_JS_CLASS_ADD_BUTTON, 'href' => $self->hub->url({'action' => 'Add'})}
       ]}
     ]
-  });
+  })->set_flag('add_new_button');
 
   my $js_class = $object->use_ajax ? $object->is_ajax_request ? $self->_JS_CLASS_RESPONSE_ELEMENT : 'js_panel' : ();
   for (@$records) {
