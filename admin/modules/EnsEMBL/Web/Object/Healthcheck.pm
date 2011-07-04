@@ -73,7 +73,6 @@ sub fetch_for_details {
       'session_id'        => $self->last_session_id,
       'with_users'        => 1,
       'with_annotations'  => 1,
-      'failed_only'       => 'include_warning',
       'query'             => [$self->view_type, $self->view_param]
     }));
   }
