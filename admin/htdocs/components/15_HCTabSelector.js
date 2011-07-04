@@ -12,5 +12,7 @@ Ensembl.Panel.HCTabSelector = Ensembl.Panel.extend({
         $(buttons.removeClass('selected')[i]).addClass('selected');
       });
     }).first().trigger('click');
+    
+    $(this.el.childNodes[2]).removeClass('spinner hc-spinner');
   }
 });
