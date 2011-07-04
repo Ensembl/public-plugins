@@ -11,7 +11,7 @@ Ensembl.HCManager.extend({
       infoBoxClass:       'hc-infobox',
       configDivClass:     'hc-config',
       localTools:         'tool_buttons',
-      manualOkClass:      'hc-noproblem-link',
+      manualOkClass:      'hc-oked-link',
       notNewClass:        'hc-notnew-link',
       noFailsClass:       'hc-nofailsrow',
       failsClass:         'hc-failsrow',
