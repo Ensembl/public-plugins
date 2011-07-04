@@ -5,6 +5,7 @@ div.dbf-record, div.dbf-inline-form {
   border: #ccc solid 1px;
   margin: 5px 0;
   clear: both;
+  overflow: hidden;
 }
 
 div.dbf-row {
