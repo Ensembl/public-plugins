@@ -65,7 +65,7 @@ sub record_tree {
     {'node_name' => 'span', 'inner_HTML' => $self->display_field_value($record->created_by_user), 'class' => 'cl-field-value'},
     {'node_name' => 'span', 'inner_HTML' => 'Last updated:', 'class' => 'cl-field-title'},
     {'node_name' => 'span', 'inner_HTML' => $self->display_field_value($record->modified_at ? $record->modified_at : $record->created_at), 'class' => 'cl-field-value'},
-    {'node_name' => 'div',  'inner_HTML' => sprintf(
+    {'node_name' => 'div',  'class'      => 'dbf-row-buttons', 'inner_HTML' => sprintf(
       '<a href="%s">View</a><a href="%s" class="%s">Edit</a>%s',
       $hub->url({'action' => 'Display', 'id' => $primary_key}),
       $hub->url({'action' => 'Edit', 'id' => $primary_key}),
