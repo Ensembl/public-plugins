@@ -148,7 +148,7 @@ sub show_fields {
     },
     variation_pos_changed => {
       'type'      => 'dropdown',
-      'label'     => 'Have any variation positions changed? (density features implications)',
+      'label'     => 'Has any variation position changed? (density features implications)',
       'values'    => [{'value' => 'Y', 'caption' => 'Yes'}, {'value' => 'N', 'caption' => 'No'}]
     },
     db_status         => {
