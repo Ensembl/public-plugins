@@ -320,7 +320,7 @@ sub get_hits_details {
     my $fields = [
       'id',          'name', 'description',      'species', 'featuretype', 'source',
       'location',    'db',   'contigviewbottom', 'content', 'title',       'url',
-      'displayname', 'keyword'
+      'displayname', 'keyword', 'subtype'
     ];
   my $domain_hits = $wrapper->getResultsAsHashArray( $domain, $self->query_string, $fields, $start_hit, 10 );
 

@@ -148,7 +148,7 @@ sub render_hits {
     'PHENOTYPE'           => sub { return "Variation Phenotype: $_[0]->{description}" },
     'STRUCTURALVARIATION' => sub { return "Structural Variation: $_[0]->{id}" },
     'MARKER'              => sub { return "Marker: $_[0]->{id}" },
-    'REGULATORYFEATURE'   => sub { return "RNA: $_[0]->{id}" },
+    'REGULATORYFEATURE'   => sub { return ($_[0]->{subtype} eq 'RegulatoryFactor') ? "Regulatory region: $_[0]->{id}" : "Regulatory Feature: $_[0]->{id}"},
     'QTL'                 => sub { return "QTL: $_[0]->{id}" },
     'PROBEFEATURE'        => sub { return "Probe: $_[0]->{id}" },
   );
