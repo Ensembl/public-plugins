@@ -1,0 +1,29 @@
+.ts-spinner {
+  border: 1px solid [[NEUTRAL_BG]];
+  clear: both;
+  background-position: center center;
+}
+.ts-tab {
+  display: none;
+}
+.ts-buttons-wrap {
+  clear: both;
+  margin-top: 10px;
+}
+.ts-button {
+  display: block;
+  float: left;
+  margin: 0 3px;
+  padding: 4px 5px;
+  text-decoration: none;
+  outline: none;
+  font-weight: bold;
+  background-color: [[NEUTRAL_BG]];
+  border-radius: 5px 5px 0 0;
+  -moz-border-radius: 5px 5px 0 0;
+  -webkit-border-radius: 5px 5px 0 0;
+}
+.ts-button.selected {
+  background-color: [[NEUTRAL_BORDER]];
+  color: white;
+}
