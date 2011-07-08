@@ -2,7 +2,7 @@ package EnsEMBL::Web::Configuration::Species;
 
 use strict;
 
-use base qw(EnsEMBL::Web::Configuration);
+use base qw(EnsEMBL::Web::Configuration::Production);
 
 sub set_default_action {
   my $self = shift;
@@ -11,19 +11,5 @@ sub set_default_action {
 
 sub short_caption { 'Species'; }
 sub caption       { 'Species'; }
-
-sub modify_page_elements {
-  my $self = shift;
-  my $page = $self->page;
-  $page->remove_body_element('tabs');
-  $page->remove_body_element('tool_buttons');
-  $page->remove_body_element('summary');
-}
-
-sub populate_tree {
-  my $self = shift;
-
-  $self->create_all_dbfrontend_nodes(['WebAdmin']);
-}
 
 1;
