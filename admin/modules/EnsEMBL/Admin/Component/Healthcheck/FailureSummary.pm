@@ -27,9 +27,8 @@ sub content {
   my $html = qq(<form action="" method="get"><p class="hc-p-right"><input type="hidden" name="release" value="$release" />Compare with: $select_box&nbsp;<input type="submit" value="Go" /></p></form>);
   $html   .= qq(<div class="hc-infobox"><p>Tests listed as failed are of type 'PROBLEM', excluding those annotated 'manual ok', 'manual ok this assembly', 'manual ok all releases', 'healthcheck bug'</p></div>);
 
-  my $buttons = $self->dom->create_element('div', {'class' => 'hc-tabs-buttons'});
-  my $tabs    = $self->dom->create_element('div', {'class' => 'hc-tabs spinner hc-spinner'});
-  my $js_tabs = $self->dom->create_element('div', {'class' => 'js_panel', 'children' => [{'node_name' => 'inputhidden', 'class' => 'panel_type', 'value' => 'HCTabSelector'}, $buttons, $tabs]});
+  my $buttons = $self->dom->create_element('div', {'class' => 'ts-buttons-wrap'});
+  my $tabs    = $self->dom->create_element('div', {'class' => 'spinner ts-spinner _ts_loading'});
 
   foreach my $view_function (sort keys %$views) {
 
@@ -45,10 +44,10 @@ sub content {
       'release2'      => $object->compared_release
       ) : ()
     };
-    $buttons->append_child('a', {'href' => "#$view_type", 'inner_HTML' => $object->view_title($view_type)});
-    $tabs->append_child('div', {'inner_HTML' => $self->failure_summary_table($params)});
+    $buttons->append_child('a', {'class' => '_ts_button ts-button', 'href' => "#$view_type", 'inner_HTML' => $object->view_title($view_type)});
+    $tabs->append_child('div', {'class' => '_ts_tab ts-tab', 'inner_HTML' => $self->failure_summary_table($params)});
   }
-  return sprintf('%s%s<div class="hc-padding"></div>', $html, $js_tabs->render);
+  return sprintf('%s%s<div class="hc-padding"></div>', $html, $self->dom->create_element('div', {'class' => '_tabselector', 'children' => [$buttons, $tabs]})->render);
 }
 
 1;
