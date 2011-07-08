@@ -12,7 +12,7 @@ use base qw(EnsEMBL::ORM::Rose::Object::Trackable);
 
 use constant {
   ROSE_DB_NAME        => 'production',
-  TITLE_COLUMN        => 'display_label',
+  TITLE_COLUMN        => 'logic_name',
 };
 
 ## Define schema
