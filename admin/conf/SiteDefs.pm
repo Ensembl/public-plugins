@@ -31,8 +31,8 @@ sub update_conf {
     Biotype         => 'Modal',
     Metakey         => 'Modal',
     Webdata         => 'Modal',
-    AnalysisWebdata => 'Modal',
     Production      => 'Modal',
+    AnalysisDescription => 'Modal',
                     
     Account         => 'Modal',
     UserData        => 'Modal',
