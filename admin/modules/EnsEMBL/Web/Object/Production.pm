@@ -5,42 +5,62 @@ use strict;
 use base qw(EnsEMBL::Web::Object::DbFrontend);
 
 sub fetch_for_logicname {
-  ## Rose objects for LogicName page (non-DbFrontend page)
+  my $self  = shift;
+  my $hub   = $self->hub;
+  my $group = $hub->param('gp');
+  
+  if (exists { map {$_ => 1} qw(web_data_id analysis_description_id species_id db_type) }->{$group}) {
+    $self->rose_objects($self->manager_class->get_objects(
+      'with_objects'  => ['analysis_description', 'species', 'web_data'],
+      'sort_by'       => 'analysis_description.display_label',
+      'query'         => [$group, $hub->param('id')],
+    ));
+  }
+}
+
+sub fetch_for_analysiswebdata {
   my $self = shift;
-  $self->rose_objects($self->manager_class->fetch_by_page($self->pagination, $self->get_page_number, {
-    'with_objects'  => ['analysis_web_data', 'analysis_web_data.species', 'analysis_web_data.web_data'],
-    'sort_by'       => 'display_label'
-  }));
+  $self->rose_objects($self->manager_class->get_objects(
+    'with_objects'  => ['analysis_description', 'species', 'web_data'],
+    'sort_by'       => 'analysis_description.display_label'
+  ));
 }
 
 sub default_action {
   ## @overrides
-  return 'LogicName';
+  return 'AnalysisWebData';
 }
 
 sub manager_class {
   ## @overrides
-  return shift->rose_manager('AnalysisDescription');
+  return shift->rose_manager('AnalysisWebData');
 }
 
 sub show_fields {
   ## @overrides
   my $self = shift;
   return [
-    logic_name      => {
-      'type'      => 'string',
+    analysis_description => {
+      'type'      => 'dropdown',
       'label'     => 'Logic Name',
       'required'  => 1,
     },
-    display_label   => {
-      'type'      => 'string',
-      'label'     => 'Display Label',
-      'required'  => 1,
+    species           => {
+      'type'      => 'dropdown',
+      'label'     => 'Species',
     },
-    description     => {
-      'type'      => 'html',
-      'label'     => 'Description',
-      'required'  => 1,
+    db_type           => {
+      'type'      => 'dropdown',
+      'label'     => 'Database type',
+    },
+    web_data          => {
+      'type'      => 'radiolist',
+      'label'     => 'Web Data',
+    },
+    displayable       => {
+      'type'      => 'dropdown',
+      'label'     => 'Displayable',
+      'values'    => [{'value' => '1', 'caption' => 'Yes'}, {'value' => '0', 'caption' => 'No'}]
     },
     created_by_user   => {
       'type'      => 'noedit',
@@ -64,17 +84,17 @@ sub show_fields {
 sub show_columns {
   ## @overrides
   return [
-    logic_name    => 'Logic Name',
-    display_label => 'Display Label',
-    description   => 'Description',
+    species     => 'Species',
+    db_type     => 'DB Type',
+    displayable => 'Displayable',
   ];
 }
 
 sub record_name {
   ## @overrides
   return {
-    'singular' => 'analysis description',
-    'plural'   => 'analysis descriptions',
+    'singular' => 'analysis to web data link',
+    'plural'   => 'analysis to web data links',
   };
 }
 
@@ -86,7 +106,7 @@ sub permit_delete {
 
 sub pagination {
   ## @overrides
-  return 50;
+  return 0;
 }
 
 1;
