@@ -266,7 +266,7 @@ qq{<div style="width: 85%;border-bottom: 1px solid #CCCCCC; "><a class="notext" 
   <dd>$description</dd>
 </dl>
 );
-    if ($hit->{location} && $hit->{featuretype} =~ /Gene|Transcript|Variation/) {
+    if ($hit->{location} && $hit->{featuretype} =~ /Gene|Transcript/) {
       $html .= qq(
 <dl class="summary">
   <dt>Location</dt>
