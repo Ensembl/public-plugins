@@ -1,7 +1,23 @@
-.ss_admin {
+table.prod-ss {
   table-layout:fixed;
+}
+
+table.prod-ss th {
+  padding: 2px;
+}
+
+table.prod-ss td {
+  border-bottom: 1px solid [[NEUTRAL_BG]];
 }
 
 h2.prod-h2 {
   margin-top: 20px;
+}
+
+div.prod-group {
+  clear: both;
+  font-weight: bold;
+  background-color: [[NEUTRAL_BORDER]];
+  padding: 3px;
+  border-bottom: 1px solid [[NEUTRAL_BG]];
 }
