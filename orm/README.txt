@@ -37,8 +37,8 @@ location:
 
 $SiteDefs::ROSE_DB_DATABASES
 
-      Add db connection details to this hashref inside
-      conf folder of your plugin.
+      Add db connection details to this hashref in ini
+      file in the conf folder of your plugin.
 
 ------------------------------------------------------
 
@@ -62,3 +62,23 @@ At  the  moment,  only  one   table  (along  with  its
 relationships)  can be  mapped to  a frontend. Feature
 to enable  multiple  domain  editing  is  still  under
 development.
+
+------------------------------------------------------
+
+GETTING AJAXY DBFRONTEND PAGES WORKING
+
+If there  is  no  customisation  in  the  pages, Ajaxy
+dbfrontent interface should  work without  any trouble
+as long as  Web::Object  drived object for  the plugin
+page has sub use_ajax return true value, and  value of
+OBJECT_TO_SCRIPT for the given page type is configured
+as 'Modal'.
+
+
+But if pages are  customised, JavaScript may also need
+to be customised.
+
+Any method  inside  DbFrontendRow.js/DbFrontendList.js
+can be overridden/modified easily by using 'prototype'
+or 'extend' methods  provided  in Base.js to customise
+the page.
