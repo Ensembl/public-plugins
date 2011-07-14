@@ -6,9 +6,16 @@
 Ensembl.Panel.Content = Ensembl.Panel.Content.extend({
   init: function() {
     this.base();
-    this.elLk.tabSelector = $('._tabselector', this.el);
-    if (this.elLk.tabSelector.length) {
-      this.tabSelector();
+    var fnEls = {
+      tabSelector: $('._tabselector', this.el)
+    };
+    
+    $.extend(this.elLk, fnEls);
+    
+    for (var fn in fnEls) {
+      if (fnEls[fn].length) {
+        this[fn]();
+      }
     }
   },
   tabSelector: function() {
