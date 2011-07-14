@@ -43,7 +43,9 @@ Ensembl.DbFrontendListCell = Base.extend({
     $.extend(this, data);
 
     this.el = $('<div>').html(cell.innerHTML).appendTo($(cell).empty()).append($('<span class="dbf-list-edit">').click(function() {
-      if (!self.form) self.createForm();
+      if (!self.form) {
+        self.createForm();
+      }
       self.makeRequest(self.form, {
         url:      self.url,
         data:     {id: self.id, _ajax: 1, _no_preview: 1},
@@ -96,7 +98,7 @@ Ensembl.DbFrontendListCell = Base.extend({
                     this.parent.dbfRow(res.attr({'class': tr[0].className}).replaceAll(tr)[0]);
                   }
                 }
-                this.afterResponse(success);
+                this.afterResponse(this.success);
               }
             });
           }
