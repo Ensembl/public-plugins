@@ -26,35 +26,48 @@ sub content_tree {
   my $content = $self->dom->create_element('div', {'class' => $object->content_css});
   my $page    = $object->get_page_number;
   my $links   = defined $page ? $content->append_child($self->content_pagination_tree(scalar @$records)) : undef;
-  map {$_->remove} @{$links->get_nodes_by_flag('pagination_links')} unless $object->pagination;
+  map {$_->remove} @{$links->get_nodes_by_flag('pagination_links')} if $links && !$object->pagination;
+  
+  my $table   = $content->append_child('div', {'class' => 'js_panel', 'children' => [
+    {'node_name' => 'inputhidden', 'class' => 'panel_type', 'value' => 'DbFrontendList'}, 
+    {'node_name' => 'table', 'class' => sprintf('ss dbf-ss %s', $object->is_ajax_request ? $self->_JS_CLASS_RESPONSE_ELEMENT : ''), 'cellpadding' => 0, 'cellspacing' => 0, 'border' => 0}
+  ]})->last_child;
 
-  my $table   = $content->append_child($self->dom->create_element('table', {'class' => 'ss', 'cellpadding' => 0, 'cellspacing' => 0, 'border' => 0}));
   my $header;
   my @bg = qw(bg1 bg2);
 
   for my $record (@$records) {
   
-    $header = $table->append_child($self->dom->create_element('tr')) unless defined $header;
-    my $record_row  = $table->append_child($self->dom->create_element('tr', {'class' => "dbf-list-row $bg[0]"}));
+    $header = $table->append_child('tr') unless defined $header;
     my $primary_key = $record->get_primary_key_value;
+    my $record_row  = $table->append_child('tr', {'class' => "dbf-list-row $bg[0] _dbf_row_$primary_key"});
     $record_row->set_flag('primary_key', $primary_key);
 
     my $columns = $object->show_columns;
 
     while (my $column_name = shift @$columns) {
 
-      my $label = shift @$columns;
-      my $value = $record->$column_name;
+      my $label     = shift @$columns;
+      my $editable  = $record->is_trackable && $column_name =~ /^(created|modified)_(at|by|by_user)$/ ? 0 : 1;
+      my $value     = $record->$column_name;
+      my $width;
+
+      if (ref $label) {
+        $editable = $label->{'editable'} if $editable && exists $label->{'editable'};
+        $width    = $label->{'width'};
+        $label    = $label->{'title'};
+      }
 
       my $is_title = $record->TITLE_COLUMN && $column_name eq $record->TITLE_COLUMN;
-      
+
       $value = $self->_display_column_value($value, $is_title);
       $value = sprintf('<a href="%s">%s</a>', $hub->url({'action' => 'Display', 'id' => $primary_key}), $value) if $is_title;
 
-      $header->append_child($self->dom->create_element('th', {'inner_HTML' => $label})) if $header;
-
-      my $cell = $record_row->append_child($self->dom->create_element('td', {'inner_HTML' => $value}));
-      $cell->set_flag($column_name);
+      $header and $header->append_child('th', {
+        $width ? ('style' => {'width' => $width}) : (),
+        'inner_HTML' => $editable ? sprintf('<input class="%s" name="%s" value="%s" type="hidden" />%s', $self->_JA_CLASS_EDITABLE, $column_name, $hub->url({'action' => 'Edit'}), $label) : $label
+      });
+      $record_row->append_child('td', {'inner_HTML' => $value})->set_flag($column_name);
     }
     $header = 0;
     @bg = reverse @bg;
