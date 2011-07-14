@@ -60,7 +60,7 @@ Ensembl.Panel.DbFrontendRow = Ensembl.Panel.extend({
     $('form._dbf_save, form._dbf_add', this.form[0]).live('submit', function(event) {
       event.preventDefault();
       self.action = this.className.match(/_dbf_add/) ? 'add' : 'edit';
-      self.target = $(self.el)
+      self.target = $(self.el);
       self.makeRequest(this, self.form.children(':last'), {
         success: function(json) {
           if (json.redirectURL) {

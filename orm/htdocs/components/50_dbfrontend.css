@@ -1,6 +1,10 @@
 /* Styles for DbFrontend pages */
 /* TODO: Replace colours with colour constants from ini files */
 
+table.dbf-ss {
+  table-layout: fixed;
+}
+
 div.dbf-record, div.dbf-inline-form {
   border: #ccc solid 1px;
   margin: 5px 0;
@@ -90,4 +94,22 @@ div.dbf-row-buttons a, a.dbf-confirm-buttons {
   float: left;
   background-color: #fff;
   font-weight: normal;
+}
+
+td span.dbf-list-edit {
+  height: 16px;
+  width: 18px;
+  position: absolute;
+  display: none;
+  background: transparent url(/i/orm_edit.png) no-repeat 2px 0;
+  cursor: pointer;
+  margin-top: -1px;
+}
+
+td:hover span.dbf-list-edit {
+  display: inline;
+}
+
+div.dbf-list-buttons input {
+  margin: 3px 6px 3px 0;
 }
