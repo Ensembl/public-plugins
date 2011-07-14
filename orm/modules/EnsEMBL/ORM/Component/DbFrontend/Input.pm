@@ -21,8 +21,9 @@ sub content_tree {
   my $hub     = $self->hub;
   my $action  = $hub->action;
   my $record  = $object->rose_object;
-  
-  my $is_preview        = $object->show_preview && $action ne 'Preview';
+
+  my $is_ajax           = $object->is_ajax_request;
+  my $is_preview        = $is_ajax ne 'no_preview' && $object->show_preview && $action ne 'Preview';
   my $primary_key_value = $record->get_primary_key_value;
 
   return $self->dom->create_element('p', {'inner_HTML' => sprintf('No %s selected to edit.', $object->record_name->{'singular'})}) unless $record;
@@ -131,8 +132,8 @@ sub content_tree {
 
   $form->add_button({'buttons' => [
     { 'type'  => 'submit', 'value' => $is_preview ? 'Preview' : 'Save'},
-    $action eq 'Preview'  ? () : { 'type'  => 'reset',  'value' => 'Reset' },
-    $object->is_ajax_request ? { 'type'  => 'reset',  'value' => $is_preview ? 'Cancel' : 'Back', 'class' => $self->_JS_CLASS_CANCEL_BUTTON } : ()
+    $action eq 'Preview' || $is_ajax eq 'no_preview' ? () : { 'type'  => 'reset',  'value' => 'Reset' },
+    $is_ajax ? { 'type'  => 'reset',  'value' => $is_preview || $is_ajax eq 'no_preview' ? 'Cancel' : 'Back', 'class' => $self->_JS_CLASS_CANCEL_BUTTON } : ()
   ]})->set_flag('buttons');
 
   return $content;
