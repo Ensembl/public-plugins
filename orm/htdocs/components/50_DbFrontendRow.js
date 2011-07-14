@@ -60,15 +60,15 @@ Ensembl.Panel.DbFrontendRow = Ensembl.Panel.extend({
     $('form._dbf_save, form._dbf_add', this.form[0]).live('submit', function(event) {
       event.preventDefault();
       self.action = this.className.match(/_dbf_add/) ? 'add' : 'edit';
-      self.target = $(self.el);
+      self.target = self.el;
       self.makeRequest(this, self.form.children(':last'), {
         success: function(json) {
           if (json.redirectURL) {
             var url = json.redirectURL;
             if (url.match(/Display/)) {
               this.form.empty().hide();
-              if (this.action == 'add') {
-                this.target = $(this.el).clone().empty().removeAttr('id').insertAfter(this.form);
+              if (this.action === 'add') {
+                this.target = this.el.clone().empty().removeAttr('id').insertAfter(this.form);
               }
               var id = (url.match(/(\?|&|;)id\=([0-9]+)/) || []).pop() || 0;
               if (id) {
@@ -83,7 +83,7 @@ Ensembl.Panel.DbFrontendRow = Ensembl.Panel.extend({
               async: false,
               url: url,
               success: function(json) {
-                if (this.action == 'edit') {
+                if (this.action === 'edit') {
                   this.target.html(this.getResponseNode(json).html()).children().effect('highlight', {'color': '#ddddff'}, 1000);
                 }
                 else {
@@ -113,8 +113,8 @@ Ensembl.Panel.DbFrontendRow = Ensembl.Panel.extend({
               });
             }
             else {
-              this.form.slideUp('slow', function() {$(this).remove()});
-              $(this.el).slideUp('slow',   function() {$(this).remove()});
+              this.form.slideUp('slow', function() {$(this).remove(); });
+              this.el.slideUp('slow',   function() {$(this).remove(); });
               for (var i in this) {
                 delete this[i];
               }
@@ -132,7 +132,7 @@ Ensembl.Panel.DbFrontendRow = Ensembl.Panel.extend({
       this.ajax = false;
     }
     $(target).empty().show().addClass('spinner');
-    var isForm = eventTarget.nodeName == 'FORM';
+    var isForm = eventTarget.nodeName === 'FORM';
     var url = options.url || eventTarget.action || eventTarget.href;
     url += (url.match(/\?/) ? '&' : '?') + '_ajax=1';
     this.ajax = $.ajax({
@@ -162,8 +162,8 @@ Ensembl.Panel.DbFrontendRow = Ensembl.Panel.extend({
     var position   = 0;
     var formHeight = this.form.outerHeight();
     var formTop    = this.form.offset().top;
-    var elHeight   = $(this.el).outerHeight();
-    var elTop      = $(this.el).offset().top;
+    var elHeight   = this.el.outerHeight();
+    var elTop      = this.el.offset().top;
     var scrollTop  = $(document).scrollTop();
     var winHeight  = $(window).height();
 
