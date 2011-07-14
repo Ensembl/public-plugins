@@ -39,7 +39,7 @@ sub new {
 sub is_ajax_request {
   ## Tells whether or not the request was sent by ajaxy frontend
   my $self = shift;
-  return $self->{'_is_ajax'} ||= $self->hub->param('_ajax') ? 1 : 0;
+  return $self->{'_is_ajax'} ||= $self->hub->param('_ajax') ? $self->hub->param('_no_preview') ? 'no_preview' : 1 : 0;
 }
 
 ### Data fetching - rose_objects population from db
@@ -48,17 +48,14 @@ sub is_ajax_request {
 sub fetch_for_display {
   ## Fetchs and saves rose objects to be displayed on 'Display' page
   ## If 'id' provided, gets the object with id, otherwise gets all the rows wrt pagination
-  my $self = shift;
+  ## @param A hashref of extra parameters to be added to rose manager's get_objects method
+  shift->_fetch_all('Display', @_);
+}
 
-  my @ids = $self->hub->param('id') || ();
-  scalar @ids == 1 and @ids = split ',', $ids[0];
-  if (@ids) {
-    $self->rose_objects($self->manager_class->fetch_by_primary_keys([@ids], $self->_get_with_objects_params('Display')));
-  }
-  else {
-    my $params = $self->manager_class->object_class->TITLE_COLUMN ? {'sort_by' => $self->manager_class->object_class->TITLE_COLUMN } : {};
-    $self->rose_objects($self->manager_class->fetch_by_page($self->pagination, $self->get_page_number, $self->_get_with_objects_params('Display', $params)));
-  }
+sub fetch_for_list {
+  ## Fetchs and saves rose objects to be displayed on 'List' page (table view)
+  ## @param A hashref of extra parameters to be added to rose manager's get_objects method
+  shift->_fetch_all('List', @_);
 }
 
 sub fetch_for_add {
@@ -94,19 +91,32 @@ sub fetch_for_preview {
   shift->fetch_for_save;
 }
 
-sub fetch_for_list {
-  ## Fetchs and saves rose objects to be displayed on 'List' page (table view)
-  my $self = shift;
-
-  my $params = $self->manager_class->object_class->TITLE_COLUMN ? {'sort_by' => $self->manager_class->object_class->TITLE_COLUMN } : {};
-  $self->rose_objects($self->manager_class->fetch_by_page($self->pagination, $self->get_page_number, $self->_get_with_objects_params('List', $params)));
-}
-
 sub fetch_for_select {
   ## Fetchs and saves rose objects to be displayed on 'Select/Edit' page (dropdown/radio buttons view)
-  my $self = shift;
+  ## @param A hashref of extra parameters to be added to rose manager's get_objects method
+  my ($self, $params) = @_;
+  
+  $params ||= {};
+  $params->{'sort_by'} ||= $self->manager_class->object_class->TITLE_COLUMN || $self->manager_class->object_class->primary_key;
 
-  $self->rose_objects($self->manager_class->get_objects('sort_by' => $self->manager_class->object_class->TITLE_COLUMN || $self->manager_class->object_class->primary_key));
+  $self->rose_objects($self->manager_class->get_objects(%$params));
+}
+
+sub _fetch_all {
+  ## Private method, to fetch all the records for given params and page type
+  my ($self, $page, $params) = @_;
+  
+  $params ||= {};
+
+  my @ids = $self->hub->param('id') || ();
+  scalar @ids == 1 and @ids = split ',', $ids[0];
+  if (@ids) {
+    $self->rose_objects($self->manager_class->fetch_by_primary_keys([@ids], $self->_get_with_objects_params($page, $params)));
+  }
+  else {
+    !$params->{'sort_by'} and $self->manager_class->object_class->TITLE_COLUMN and $params->{'sort_by'} = $self->manager_class->object_class->TITLE_COLUMN;
+    $self->rose_objects($self->manager_class->fetch_by_page($self->pagination, $self->get_page_number, $self->_get_with_objects_params($page, $params)));
+  }
 }
 
 sub get_page_number {
@@ -209,6 +219,7 @@ sub _populate_from_cgi {
 
   for (keys %field_names) {
   
+    next unless exists $param_names{$_}; #ignore if variable not present among the post params
     next if $rose_object->is_trackable && $_ =~ /^(created|modified)_(by_user|at|by)$/; # dont get them from CGI
 
     my $value;
