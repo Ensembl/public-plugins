@@ -31,10 +31,10 @@ sub fetch_for_textsummary {
   ## Populates rose_objects with the changelogs needed to display in the TextSummary page
   my $self = shift;
 
-  my $params = $self->_get_with_objects_params('Display');
-  $params->{'query'}    = ['release_id', $self->requested_release];
-  $params->{'sort_by'}  = 'team';
-  $self->rose_objects($self->manager_class->fetch($params));
+  $self->rose_objects($self->manager_class->fetch($self->_get_with_objects_params('Display', {
+    'query'   => ['release_id', $self->requested_release],
+    'sort_by' => 'team'
+  })));
 }
 
 ### ### ### ### ### ### ### ### ###
@@ -56,35 +56,24 @@ sub fetch_for_display {
   ## @overrides
   my $self = shift;
 
-  my @ids = $self->hub->param('id') || ();
-  scalar @ids == 1 and @ids = split ',', $ids[0];
-  if (@ids) {
-    $self->rose_objects($self->manager_class->fetch_by_primary_keys([@ids], { %{$self->_get_with_objects_params('Display')}, 'sort_by' => 'team'}));
-  }
-  else {
-    my $params = $self->_get_with_objects_params('Display');
-    $params->{'query'}    = ['release_id', $self->requested_release];
-    $params->{'sort_by'}  = 'team';
-    $self->rose_objects($self->manager_class->fetch_by_page($self->pagination, $self->get_page_number, $params));
-  }
+  $self->SUPER::fetch_for_display({'sort_by', 'team', $self->hub->param('id') ? () : ('query', ['release_id', $self->requested_release])}); #ignore release number if id provided for the record
 }
 
 sub fetch_for_list {
   ## @overrides
   my $self = shift;
 
-  my $params = $self->_get_with_objects_params('List');
-  $params->{'query'}    = ['release_id', $self->requested_release];
-  $params->{'sort_by'}  = 'team';
-  $self->rose_objects($self->manager_class->fetch_by_page($self->pagination, $self->get_page_number, $params));
+  $self->SUPER::fetch_for_list({'sort_by', 'team', $self->hub->param('id') ? () : ('query', ['release_id', $self->requested_release])}); #ignore release number if id provided for the record
 }
 
 sub fetch_for_select {
   ## @overrides
   my $self = shift;
 
-  my $sort_by = $self->manager_class->object_class->TITLE_COLUMN || $self->manager_class->object_class->primary_key;
-  $self->rose_objects($self->manager_class->get_objects('query' => ['release_id', $self->requested_release], 'sort_by' => $sort_by));
+  $self->SUPER::fetch_for_select({
+    'sort_by' => $self->manager_class->object_class->TITLE_COLUMN || $self->manager_class->object_class->primary_key,
+    'query' => ['release_id', $self->requested_release]
+  });
 }
 
 sub show_fields {
@@ -181,10 +170,10 @@ sub show_fields {
 sub show_columns {
   ## @overrides
   return [
-    team              => 'Team',
-    title             => 'Title',
-    created_by_user   => 'Created by',
-    status            => 'Status'
+    team              => {'title' => 'Team',       'width' => '20%'},
+    title             => {'title' => 'Title',      'width' => '40%'},
+    created_by_user   => {'title' => 'Created by', 'width' => '20%'},
+    status            => {'title' => 'Status',     'width' => '20%'}
   ];
 }
 
