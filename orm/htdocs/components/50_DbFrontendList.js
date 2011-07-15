@@ -48,7 +48,7 @@ Ensembl.DbFrontendListCell = Base.extend({
       }
       self.makeRequest(self.form, {
         url:      self.url,
-        data:     {id: self.id, _ajax: 1, _no_preview: 1},
+        data:     {id: self.id, _ajax: 1, _list: 1},
         success:  function(json) {
           var form   = $('form', this.getResponseNode(json));
           var field  = $('[name=' + self.name + ']', form).first().parents('div').first().removeAttr('class');

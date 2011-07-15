@@ -39,7 +39,7 @@ sub new {
 sub is_ajax_request {
   ## Tells whether or not the request was sent by ajaxy frontend
   my $self = shift;
-  return $self->{'_is_ajax'} ||= $self->hub->param('_ajax') ? $self->hub->param('_no_preview') ? 'no_preview' : 1 : 0;
+  return $self->{'_is_ajax'} ||= $self->hub->param('_ajax') ? $self->hub->param('_list') ? 'list' : 1 : 0;
 }
 
 ### Data fetching - rose_objects population from db
