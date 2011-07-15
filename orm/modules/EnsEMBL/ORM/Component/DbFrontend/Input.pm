@@ -20,33 +20,30 @@ sub content_tree {
   my $object  = $self->object;
   my $hub     = $self->hub;
   my $action  = $hub->action;
-  my $record  = $object->rose_object;
 
-  my $is_ajax           = $object->is_ajax_request;
-  my $is_preview        = $is_ajax ne 'no_preview' && $object->show_preview && $action ne 'Preview';
-  my $primary_key_value = $record->get_primary_key_value;
+  my $record  = $object->rose_object or return $self->dom->create_element('p', {'inner_HTML' => sprintf('No %s selected to edit.', $object->record_name->{'singular'})});
+  my $is_ajax = $object->is_ajax_request;
+  my $preview = $object->show_preview && $action ne 'Preview' && $is_ajax ne 'list';
+  my $serial  = $record->get_primary_key_value;
 
-  return $self->dom->create_element('p', {'inner_HTML' => sprintf('No %s selected to edit.', $object->record_name->{'singular'})}) unless $record;
-  
   my $content = $self->dom->create_element('div', {'class' => [$object->content_css, $self->_JS_CLASS_RESPONSE_ELEMENT]});
   my $form    = $content->append_child($self->new_form({
-    'action' => $hub->url({'action' => $is_preview ? 'Preview' : 'Save'}),
-    'class'  => !$is_preview ? $primary_key_value ? $self->_JS_CLASS_SAVE_FORM : $self->_JS_CLASS_ADD_FORM : $self->_JS_CLASS_PREVIEW_FORM
+    'action' => $hub->url({'action' => $preview ? 'Preview' : 'Save'}),
+    'class'  => !$preview ? $serial ? $self->_JS_CLASS_SAVE_FORM : $self->_JS_CLASS_ADD_FORM : $self->_JS_CLASS_PREVIEW_FORM
   }));
   
-  # include extra GET params to hidden inputs (ignore primary keys and ajax flag)
-  if ($object->show_preview && $action ne 'Preview') {
-    my @params = $hub->param;
-    $_ ne '_ajax' and $_ ne 'id' and $_ ne $record->primary_key and $form->add_hidden({'name' => $_, 'value' => $hub->param($_)}) for @params;
+  # include extra GET params to hidden inputs (ignore primary keys and ajax flags)
+  if ($preview) {
+    $_ !~ /^_/ and $_ ne 'id' and $_ ne $record->primary_key and $form->add_hidden({'name' => $_, 'value' => $hub->param($_)}) for $hub->param;
   }
 
   my $fields  = $self->unpack_rose_object($record);
 
   # primary key
-  $form->add_hidden({'name' => 'id', 'value' => $primary_key_value})->set_flag($record->primary_key) if $primary_key_value;
+  $form->add_hidden({'name' => 'id', 'value' => $serial})->set_flag($record->primary_key) if $serial;
 
   # trackable key prefix
-  my $trackable_key = $primary_key_value ? 'modified' : 'created';
+  my $trackable_key = $serial ? 'modified' : 'created';
 
   # print fields  
   foreach my $field (@$fields) {
@@ -131,9 +128,9 @@ sub content_tree {
   }
 
   $form->add_button({'buttons' => [
-    { 'type'  => 'submit', 'value' => $is_preview ? 'Preview' : 'Save'},
-    $action eq 'Preview' || $is_ajax eq 'no_preview' ? () : { 'type'  => 'reset',  'value' => 'Reset' },
-    $is_ajax ? { 'type'  => 'reset',  'value' => $is_preview || $is_ajax eq 'no_preview' ? 'Cancel' : 'Back', 'class' => $self->_JS_CLASS_CANCEL_BUTTON } : ()
+    { 'type'  => 'submit', 'value' => $preview ? 'Preview' : 'Save'},
+    $action eq 'Preview' || $is_ajax eq 'list' ? () : { 'type'  => 'reset',  'value' => 'Reset' },
+    $is_ajax ? { 'type'  => 'reset',  'value' => $preview || $is_ajax eq 'list' ? 'Cancel' : 'Back', 'class' => $self->_JS_CLASS_CANCEL_BUTTON } : ()
   ]})->set_flag('buttons');
 
   return $content;
