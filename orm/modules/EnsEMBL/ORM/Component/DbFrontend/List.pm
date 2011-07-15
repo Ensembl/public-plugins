@@ -28,19 +28,27 @@ sub content_tree {
   my $links   = defined $page ? $content->append_child($self->content_pagination_tree(scalar @$records)) : undef;
   map {$_->remove} @{$links->get_nodes_by_flag('pagination_links')} if $links && !$object->pagination;
   
-  my $table   = $content->append_child('div', {'class' => 'js_panel', 'children' => [
-    {'node_name' => 'inputhidden', 'class' => 'panel_type', 'value' => 'DbFrontendList'}, 
-    {'node_name' => 'table', 'class' => sprintf('ss dbf-ss %s', $object->is_ajax_request ? $self->_JS_CLASS_RESPONSE_ELEMENT : ''), 'cellpadding' => 0, 'cellspacing' => 0, 'border' => 0}
-  ]})->last_child;
+  my ($thead, $tbody) = @{$content->append_child('div', {'class' => 'js_panel', 'children' => [{
+    'node_name'   => 'inputhidden',
+    'class'       => 'panel_type',
+    'value'       => 'DbFrontendList'
+  }, {
+    'node_name'   => 'table',
+    'class'       => sprintf('ss dbf-ss %s', $object->is_ajax_request ? $self->_JS_CLASS_RESPONSE_ELEMENT : $self->_JS_CLASS_LIST_TABLE),
+    'cellpadding' => 0,
+    'cellspacing' => 0,
+    'border'      => 0,
+    'children'    => ['thead', 'tbody']
+  }]})->last_child->child_nodes};
 
   my $header;
   my @bg = qw(bg1 bg2);
 
   for my $record (@$records) {
   
-    $header = $table->append_child('tr') unless defined $header;
+    $header = $thead->append_child('tr') unless defined $header;
     my $primary_key = $record->get_primary_key_value;
-    my $record_row  = $table->append_child('tr', {'class' => "dbf-list-row $bg[0] _dbf_row_$primary_key"});
+    my $record_row  = $tbody->append_child('tr', {'class' => "dbf-list-row $bg[0] _dbf_row_$primary_key"});
     $record_row->set_flag('primary_key', $primary_key);
 
     my $columns = $object->show_columns;
@@ -64,8 +72,9 @@ sub content_tree {
       $value = sprintf('<a href="%s">%s</a>', $hub->url({'action' => 'Display', 'id' => $primary_key}), $value) if $is_title;
 
       $header and $header->append_child('th', {
+        'inner_HTML'  => $editable ? sprintf('<input class="%s" name="%s" value="%s" type="hidden" />%s', $self->_JS_CLASS_EDITABLE, $column_name, $hub->url({'action' => 'Edit'}), $label) : $label,
+        'class'       => 'sorting sort_html',
         $width ? ('style' => {'width' => $width}) : (),
-        'inner_HTML' => $editable ? sprintf('<input class="%s" name="%s" value="%s" type="hidden" />%s', $self->_JA_CLASS_EDITABLE, $column_name, $hub->url({'action' => 'Edit'}), $label) : $label
       });
       $record_row->append_child('td', {'inner_HTML' => $value})->set_flag($column_name);
     }
