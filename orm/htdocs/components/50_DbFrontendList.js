@@ -13,15 +13,13 @@ Ensembl.Panel.DbFrontendList = Ensembl.Panel.extend({
     this.base();
     this.data = [];
     
-    $('>table', this.el).each(function() {
-      $('th', this.firstChild).each(function() {
+    $('table._dbf_list', this.el).each(function() {
+      $('thead th', this).each(function() {
         var inps = $('input[type=hidden]', this);
         self.data.push(inps.length ? {url: inps[0].value, name: inps[0].name} : false);
       });
-      $('tr', this).each(function () {
-        if (this.previousSibling) {
-          self.dbfRow(this);
-        }
+      $('tbody tr', this).each(function () {
+        self.dbfRow(this);
       });
       return false;
     });
@@ -94,8 +92,16 @@ Ensembl.DbFrontendListCell = Base.extend({
                 if (this.success) {
                   var res = $('._dbf_row_' + this.id, this.getResponseNode(json));
                   if (res.length) {
-                    var tr = this.el.parents('tr').first();
-                    this.parent.dbfRow(res.attr({'class': tr[0].className}).replaceAll(tr)[0]);
+                    var row = this.el.parents('tr').first();
+                    var td  = $('td', res);
+                    $('td', row).each(function(i) {
+                      this.innerHTML = td[i].innerHTML;
+                    });
+                    var table = row.parents('table').first();
+                    if (table.hasClass('data_table')) {
+                      table.dataTable().fnUpdate(($.map(row[0].cells, function(cell) {return cell.innerHTML; })), row[0]);
+                    }
+                    this.parent.dbfRow(row[0]);
                   }
                 }
                 this.afterResponse(this.success);
