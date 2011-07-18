@@ -68,18 +68,16 @@ sub content_pagination_tree {
   my $page_count  = $object->get_page_count;
   my $count       = $object->get_count;
   my $offset      = ($page - 1) * $object->pagination;
-  my $pagination  = $self->dom->create_element('div', {'class' => 'dbf-pagination _dbf_pagination'});
-  my $links       = $pagination->append_child($self->dom->create_element('div', {'class' => 'dbf-pagelinks'}));
-  $links->set_flag('pagination_links');
-  $pagination->set_flag('pagination_div');
+  my $pagination  = $self->dom->create_element('div', {'class' => 'dbf-pagination _dbf_pagination', 'flags' => 'pagination_div'});
+  my $links       = $pagination->append_child($self->dom->create_element('div', {'class' => 'dbf-pagelinks', 'flags' => 'pagination_links'}));
 
   $page < 1 and $page = 1 or $page > $page_count and $page = $page_count;
   
-  my $page_counter = $pagination->prepend_child($self->dom->create_element('p', {
+  my $page_counter = $pagination->prepend_child('p', {
     'class'       => 'dbf-pagecount',
+    'flags'       => 'page_counter',
     'inner_HTML'  => sprintf("Page %d of %d (displaying %d - %d  of %d %s)", $page, $page_count, $offset + 1, $offset + $records_count, $count, $object->record_name->{$count == 1 ? 'singular' : 'plural'})
-  }));
-  $page_counter->set_flag('page_counter');
+  });
 
   $links->append_child($self->dom->create_element('a', {
     'href'        => $hub->url({'page' => $page - 1 || 1}),
