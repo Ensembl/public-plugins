@@ -31,18 +31,21 @@ sub content_tree {
   
   !$hub->param('id') and $object->use_ajax and !$object->is_ajax_request and $content->append_child('div', {
     'class' => 'dbf-record js_panel',
+    'flags' => 'add_new_button',
     'children' => [
       {'node_name' => 'div', 'class' => 'dbf-row-buttons', 'children' => [
         {'node_name' => 'input', 'type' => 'hidden', 'class' => 'panel_type', 'value' => 'DbFrontendRow'},
         {'node_name' => 'a', 'inner_HTML' => 'Add new', 'class' => $self->_JS_CLASS_ADD_BUTTON, 'href' => $self->hub->url({'action' => 'Add'})}
       ]}
     ]
-  })->set_flag('add_new_button');
+  });
 
   my $js_class = $object->use_ajax ? $object->is_ajax_request ? $self->_JS_CLASS_RESPONSE_ELEMENT : 'js_panel' : ();
   for (@$records) {
-    (my $record_div = $content->append_child($self->record_tree($_)))->prepend_child('input', {'type' => 'hidden', 'class' => 'panel_type', 'value' => 'DbFrontendRow'});
-    $record_div->set_attributes({'class' => ['dbf-record', $js_class]});
+    $content->append_child($self->record_tree($_))
+      ->prepend_child('input', {'type' => 'hidden', 'class' => 'panel_type', 'value' => 'DbFrontendRow'})
+      ->parent_node
+      ->set_attributes({'class' => ['dbf-record', $js_class]});
   }
 
   $content->append_child($links->clone_node(1)) if $links; ## bottom pagination
@@ -59,8 +62,7 @@ sub record_tree {
   my $object = $self->object;
   
   my $primary_key = $record->get_primary_key_value;
-  my $record_div  = $self->dom->create_element('div');
-  $record_div->set_flag('primary_key', $primary_key);
+  my $record_div  = $self->dom->create_element('div', {'flags' => {'primary_key' => $primary_key}});
 
   my @bg = qw(bg1 bg2);
   my $fields  = $object->show_fields;
@@ -70,22 +72,23 @@ sub record_tree {
     my $field = shift @$fields;
     my $value = $record->$field_name;
 
-    my $row = $record_div->append_child($self->dom->create_element('div', {'class' => "dbf-row $bg[0]"}));
-    $row->set_flag($field_name);
-    $row->append_children(
-      $self->dom->create_element('div', {
+    $record_div->append_child('div', {
+      'class'     => "dbf-row $bg[0]",
+      'flags'     => $field_name,
+      'children'  => [{
+        'node_name'   => 'div',
         'class'       => 'dbf-row-left',
         'inner_HTML'  => exists $field->{'label'} ? $field->{'label'} : ''
-      }),
-      $self->dom->create_element('div', {
+      }, {
+        'node_name'   => 'div',
         'class'       => 'dbf-row-right',
         'inner_HTML'  =>  $self->display_field_value($value, $field->{'values'} ? {'lookup' => $field->{'values'}} : {}) || ''
-      })
-    );
+      }]
+    });
     @bg = reverse @bg;
   }
 
-  $record_div->append_child($self->dom->create_element('div', {
+  $record_div->append_child('div', {
     'class'       => "dbf-row-buttons",
     'inner_HTML'  => sprintf(
       '<a class="%s" href="%s">Edit</a>%s',
@@ -97,7 +100,7 @@ sub record_tree {
         $self->hub->url({'action' => 'Confirm', 'id' => $primary_key})
       ) : ''
     )
-  }));
+  });
   return $record_div;
 }
 
