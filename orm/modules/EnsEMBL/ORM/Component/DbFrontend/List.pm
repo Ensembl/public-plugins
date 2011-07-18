@@ -20,7 +20,7 @@ sub content_tree {
   my $object  = $self->object;
   my $records = $object->rose_objects;
   
-  return $self->SUPER::content_tree unless @$records;
+  return $self->SUPER::content_tree unless $records && @$records;
 
   my $links = $object->get_page_number ? $self->content_pagination_tree(scalar @$records) : undef;
   map {$_->remove} @{$links->get_nodes_by_flag('pagination_links')} if $links && !$object->pagination;
