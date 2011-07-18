@@ -17,47 +17,70 @@ sub content_tree {
   ## Override this one in the child class and do the DOM manipulation on the DOM tree if required
   ## Flags are set on required HTML elements for 'selection and manipulation' purposes in child classes (get_nodes_by_flag)
   my $self    = shift;
-  my $hub     = $self->hub;
   my $object  = $self->object;
   my $records = $object->rose_objects;
   
   return $self->SUPER::content_tree unless @$records;
-  
-  my $content = $self->dom->create_element('div', {'class' => $object->content_css});
-  my $page    = $object->get_page_number;
-  my $links   = defined $page ? $content->append_child($self->content_pagination_tree(scalar @$records)) : undef;
+
+  my $links = $object->get_page_number ? $self->content_pagination_tree(scalar @$records) : undef;
   map {$_->remove} @{$links->get_nodes_by_flag('pagination_links')} if $links && !$object->pagination;
-  
-  my ($thead, $tbody) = @{$content->append_child('div', {'class' => 'js_panel', 'children' => [{
-    'node_name'   => 'inputhidden',
-    'class'       => 'panel_type',
-    'value'       => 'DbFrontendList'
-  }, {
-    'node_name'   => 'table',
-    'class'       => sprintf('ss dbf-ss %s', $object->is_ajax_request ? $self->_JS_CLASS_RESPONSE_ELEMENT : $self->_JS_CLASS_LIST_TABLE),
-    'cellpadding' => 0,
-    'cellspacing' => 0,
-    'border'      => 0,
-    'children'    => ['thead', 'tbody']
-  }]})->last_child->child_nodes};
 
-  my $header;
   my @bg = qw(bg1 bg2);
-
-  for my $record (@$records) {
   
-    $header = $thead->append_child('tr') unless defined $header;
-    my $primary_key = $record->get_primary_key_value;
-    my $record_row  = $tbody->append_child('tr', {'class' => "dbf-list-row $bg[0] _dbf_row_$primary_key"});
-    $record_row->set_flag('primary_key', $primary_key);
+  return $self->dom->create_element('div', {
+    'class'     => $object->content_css,
+    'children'  => [
+      $links ? $links : (), # Top pagination
+      {
+        'node_name' => 'div',
+        'class'     => 'js_panel',
+        'children'  => [{
+          'node_name'   => 'inputhidden',
+          'class'       => 'panel_type',
+          'value'       => 'DbFrontendList'
+        }, {
+          'node_name'   => 'table',
+          'class'       => sprintf('ss dbf-ss %s', $object->is_ajax_request ? $self->_JS_CLASS_RESPONSE_ELEMENT : $self->_JS_CLASS_LIST_TABLE),
+          'cellpadding' => 0,
+          'cellspacing' => 0,
+          'border'      => 0,
+          'children'    => [{
+            'node_name'   => 'thead',
+            'children'    => [$self->record_tree($records->[0], '', 1)]
+          }, {
+            'node_name'   => 'tbody',
+            'children'    => [map {@bg = reverse @bg; $self->record_tree($_, $bg[1])} @$records]
+          }]
+        }]
+      },
+      $links ? $links->clone_node(1) : () # Bottom pagination
+    ]
+  });
+}
 
-    my $columns = $object->show_columns;
+sub record_tree {
+  ## Generates a DOM tree (TR node) for each database record
+  ## Override this one in the child class and do the DOM manipulation on the DOM tree if required
+  my ($self, $record, $css_class, $header_only) = @_;
 
-    while (my $column_name = shift @$columns) {
+  my $hub         = $self->hub;
+  my $object      = $self->object;
+  my $primary_key = $record->get_primary_key_value;
+  my $record_row  = $self->dom->create_element('tr', $header_only ? () : {'class' => "dbf-list-row _dbf_row_$primary_key $css_class", 'flags' => {'primary_key' => $primary_key}});
+  my $columns     = $object->show_columns;
 
-      my $label     = shift @$columns;
-      my $editable  = $record->is_trackable && $column_name =~ /^(created|modified)_(at|by|by_user)$/ ? 0 : 1;
-      my $value     = $record->$column_name;
+  while (my $column_name = shift @$columns) {
+
+    my $label     = shift @$columns;
+    my $value     = $record->$column_name;
+    my $is_title  = $record->TITLE_COLUMN && $column_name eq $record->TITLE_COLUMN;
+
+    $value = $self->_display_column_value($value, $is_title);
+    $value = sprintf('<a href="%s">%s</a>', $hub->url({'action' => 'Display', 'id' => $primary_key}), $value) if $is_title;
+
+    if ($header_only) {
+
+      my $editable = $record->is_trackable && $column_name =~ /^(created|modified)_(at|by|by_user)$/ ? 0 : 1;
       my $width;
 
       if (ref $label) {
@@ -66,25 +89,18 @@ sub content_tree {
         $label    = $label->{'title'};
       }
 
-      my $is_title = $record->TITLE_COLUMN && $column_name eq $record->TITLE_COLUMN;
-
-      $value = $self->_display_column_value($value, $is_title);
-      $value = sprintf('<a href="%s">%s</a>', $hub->url({'action' => 'Display', 'id' => $primary_key}), $value) if $is_title;
-
-      $header and $header->append_child('th', {
+      $record_row->append_child('th', {
         'inner_HTML'  => $editable ? sprintf('<input class="%s" name="%s" value="%s" type="hidden" />%s', $self->_JS_CLASS_EDITABLE, $column_name, $hub->url({'action' => 'Edit'}), $label) : $label,
         'class'       => 'sorting sort_html',
         $width ? ('style' => {'width' => $width}) : (),
       });
-      $record_row->append_child('td', {'inner_HTML' => $value})->set_flag($column_name);
     }
-    $header = 0;
-    @bg = reverse @bg;
+    else {
+      $record_row->append_child('td', {'inner_HTML' => $value, 'flags' => $column_name});
+    }
   }
 
-  $content->append_child($links->clone_node(1)) if $links; ## bottom pagination
-  
-  return $content;
+  return $record_row;
 }
 
 sub _display_column_value {
