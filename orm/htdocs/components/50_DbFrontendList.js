@@ -52,6 +52,7 @@ Ensembl.DbFrontendListCell = Base.extend({
           var field  = $('[name=' + self.name + ']', form).first().parents('div').first().removeAttr('class');
           var button = $('[type=submit]', form).first().parents('div').first().attr('class', 'dbf-list-buttons');
           this.form.empty().append(form.empty().append(field, $('<div>').append(button)));
+          Ensembl.EventManager.trigger('validateForms', this.form);
         }
       });
     }));
