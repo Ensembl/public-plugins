@@ -13,6 +13,8 @@ use EnsEMBL::ORM::Rose::DbConnection;
 use EnsEMBL::ORM::Rose::Manager;
 use EnsEMBL::ORM::Rose::MetaData;
 
+use Rose::DB::Object::Helpers qw(as_tree); ## Object->as_tree returns a hash ref of the actual rose object
+
 use base qw(Rose::DB::Object);
 
 use constant {                        ## Override in child class
@@ -26,6 +28,8 @@ use constant {                        ## Override in child class
 
 __PACKAGE__->meta->error_mode('return'); ## When debugging, change from 'return' to 'carp'/'cluck'/'confess'/'croak' to produce the desired Carp behaviour
 __PACKAGE__->meta->column_type_class('datastructure' => 'EnsEMBL::ORM::Rose::DataStructure'); ## Add datastructure column type
+
+#$Rose::DB::Object::Debug = 1;        ## Warns out insert and update queries if set true
 
 sub meta_class {
   return 'EnsEMBL::ORM::Rose::MetaData';
