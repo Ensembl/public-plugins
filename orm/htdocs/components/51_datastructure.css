@@ -75,6 +75,6 @@ span.-ds-remove {
 }
 
 span.-ds-remove-button:hover {
-  background-image: url(/i/cross.png);
+  background-image: url(/i/orm_delete.png);
   background-repeat: no-repeat;
 }
