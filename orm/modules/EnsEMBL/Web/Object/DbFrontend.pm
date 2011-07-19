@@ -70,8 +70,7 @@ sub fetch_for_edit {
   ## If 'id' provided, gets the object with id, otherwise undef
   my $self = shift;
 
-  my $id = $self->hub->param('id');
-  return unless $id;
+  my $id = $self->hub->param('id') or return;
 
   $self->rose_objects($self->manager_class->fetch_by_primary_key($id, $self->_get_with_objects_params('Input')));
 }
@@ -213,9 +212,8 @@ sub _populate_from_cgi {
   
   my %field_names = map {$_ => 1} keys %{{@$fields}};
   my %param_names = map {$_ => 1} @params;
-  
-  delete $field_names{'id'};
-  delete $field_names{$rose_object->primary_key};
+
+  delete $field_names{$_} for ('id', $rose_object->primary_key);
 
   for (keys %field_names) {
   
@@ -227,16 +225,22 @@ sub _populate_from_cgi {
 
     if (exists $columns->{$_} && ($type = 'column') || exists $relations->{$_} && ($type = 'relation')) {
       if ($type eq 'relation' && $relations->{$_}->is_singular || $type eq 'column' && $columns->{$_}->type ne 'set') {
-        $value = $self->hub->param($_);
+        $value = $hub->param($_);
+
+        # set mapped column value to the new value in case of 'many to one' or 'one to one' relationships
+        if ($type eq 'relation') {
+          my ($mapped_column) = $relations->{$_}->column_map;
+          $rose_object->$mapped_column($value);
+        }
       }
       else {
-        my @val = $self->hub->param($_);
+        my @val = $hub->param($_);
         $value  = { map {$_ => 1} @val };
-        delete $value->{'0'} if $type eq 'relation';
+        delete $value->{'0'} if $type eq 'relation'; #prevent adding a new row to related table
         $value  = [ keys %$value ];
       }
+      $rose_object->$_($value);
     }
-    $rose_object->$_($value);
   }
 }
 
