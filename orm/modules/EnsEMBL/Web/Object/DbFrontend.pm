@@ -8,6 +8,7 @@ use strict;
 use warnings;
 
 use EnsEMBL::ORM::Rose::Manager;
+use Rose::DB::Object::Helpers qw(clone_and_reset -force -target_class EnsEMBL::ORM::Rose::Object);
 
 use base qw(EnsEMBL::Web::Object);
 
@@ -73,6 +74,22 @@ sub fetch_for_edit {
   my $id = $self->hub->param('id') or return;
 
   $self->rose_objects($self->manager_class->fetch_by_primary_key($id, $self->_get_with_objects_params('Input')));
+}
+
+sub fetch_for_duplicate {
+  ## Fetchs and saves rose objects to be displayed on 'Input' page (duplicate page), after ignoring the primary key
+  ## If 'id' provided, gets the object with id, otherwise undef
+  my $self = shift;
+
+  my $id     = $self->hub->param('id') or return;
+  my $record = $self->manager_class->fetch_by_primary_key($id, $self->_get_with_objects_params('Input'));
+
+  if ($record) {
+    $record = $record->clone_and_reset;
+    $record->is_trackable and map {$record->$_(undef)} qw(created_by created_at modified_by modified_at);
+  }
+
+  $self->rose_objects($record);
 }
 
 sub fetch_for_save {
