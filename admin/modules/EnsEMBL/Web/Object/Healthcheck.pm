@@ -94,8 +94,7 @@ sub fetch_for_annotation {
   if ($report_ids && @$report_ids) {
     $self->rose_objects($self->rose_manager('Report')->fetch_by_primary_keys($report_ids, {
       'with_objects' => 'annotation',
-      'with_users'   => ['annotation.created_by', 'annotation.modified_by'],
-      'query'        => ['result' => 'PROBLEM']
+      'with_users'   => ['annotation.created_by', 'annotation.modified_by']
     }));
   }
 }
