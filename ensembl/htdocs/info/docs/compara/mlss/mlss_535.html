@@ -1,0 +1,109 @@
+<html>
+<head>
+  <meta name="navigation" content="Comparative Genomics">
+  <title>Pairwise Alignments</title>
+  <link rel="stylesheet" type="text/css" media="all" href="85_spreadsheet_table.css" />
+  <link rel="stylesheet" type="text/css" media="all" href="95_static_content.css" />
+</head>
+
+<body>
+
+<h2>Human vs tasmanian devil LastZ alignments</h2>
+
+<p>Human (<i>Homo sapiens</i>, GRCh37) and tasmanian devil (<i>Sarcophilus harrisii</i>, DEVIL7.0) were aligned using the LastZ alignment algorithm (<a href="http://www.bx.psu.edu/miller_lab/dist/README.lastz-1.02.00/README.lastz-1.02.00a.html">LastZ</a>) in Ensembl release 64. Human  was used as the reference species. After running LastZ , the raw LastZ  alignment blocks are chained according to their location in both genomes. During the final netting process, the best sub-chain is chosen in each region on the reference species.</p>
+
+<a href="/info/docs/compara/analyses.html" class="cp-external">Full list of 
+pairwise alignments</a>
+
+
+<h3 class="boxed">Configuration parameters</h3>
+
+<table class="ss tint species-stats">
+<tr class="bg2">
+<td class="data" style="width:75%">Gap open penalty (O)</td>
+<td class="value">400</td>
+</tr>
+<tr>
+<td class="data">Gap extend penalty (E)</td>
+<td class="value">30</td>
+</tr>
+<tr class="bg2">
+<td class="data">HSP threshold (K)</td>
+<td class="value">3000</td>
+</tr>
+<tr>
+<td class="data">Threshold for gapped extension (L)</td>
+<td class="value">2200</td>
+</tr>
+<tr class="bg2">
+<td class="data">Threshold for alignments between gapped alignment blocks (H)</td>
+<td class="value">2000</td>
+</tr>
+<tr>
+<td class="data">Masking count (M)</td>
+<td class="value">50</td>
+</tr>
+<tr class="bg2">
+<td class="data">Seed and Transition value (T)</td>
+<td class="value">1</td>
+</tr>
+<tr>
+<td class="data">Scoring matrix (Q)</td>
+<td class="value">Default</td>
+</tr>
+</table>
+
+<h3>Results</h3>
+
+<p>Number of alignment blocks: 579816</p>
+
+<table style="text-align: left; width: 100%;" border="0" cellpadding="2"
+cellspacing="2">
+<tbody>
+<tr>
+<td style="vertical-align: top;">
+</td>
+<th style="vertical-align: top;">Genome coverage(bp)
+</th>
+<th style="vertical-align: top;">Coding exon coverage (bp)
+</th>
+</tr>
+<tr>
+<th style="vertical-align: middle;">Human</th>
+<td style="vertical-align: top;"><img style="width: 200px; height: 200px;" alt=""
+src="./pie_ref_align_535.png"/>
+</td>
+<td style="vertical-align: top;"><img style="width: 200px; height: 200px;" alt=""
+src="./pie_ref_cod_align_535.png"/>
+</td>
+</tr>
+<tr>
+<td></td>
+<td style="vertical-align: top;">230,833,430 out of 3,098,825,702
+</td>
+<td style="vertical-align: top;">30,366,167 out of 35,483,623
+</td>
+</tr>
+<tr>
+<th style="vertical-align: middle;">tasmanian devil
+</th>
+<td style="vertical-align: top;"><img style="width: 200px; height: 200px;" alt=""
+src="./pie_non_ref_align_535.png"/>
+</td>
+<td style="vertical-align: top;"><img style="width: 200px; height: 200px;" alt=""
+src="./pie_non_ref_cod_align_535.png"/>
+</td>
+</tr>
+<tr>
+<td></td>
+<td style="vertical-align: top;">212,567,312 out of 3,174,693,010
+</td>
+<td style="vertical-align: top;">25,035,283 out of 29,265,941
+</td>
+</tr>
+</tbody>
+</table>
+
+
+</body>
+</html>
