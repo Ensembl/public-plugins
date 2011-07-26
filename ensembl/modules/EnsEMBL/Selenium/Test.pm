@@ -26,6 +26,7 @@ sub new {
     _ua       => $args{ua} || LWP::UserAgent->new(keep_alive => 5, env_proxy => 1),
     _conf     => {},
     _verbose  => $args{verbose},
+    _species  => $args{species},
   };
     
   if (ref $args{conf} eq 'HASH') {
@@ -59,6 +60,7 @@ sub browser {$_[0]->{_browser}};
 sub ua      {$_[0]->{_ua}};
 sub sel     {$_[0]->{_sel}};
 sub verbose {$_[0]->{_verbose}};
+sub species {$_[0]->{_species}};
 
 sub set_default {
   my ($self, $key, $value) = @_;
@@ -101,5 +103,11 @@ sub check_website {
     print"\nWEBSITE DOWN!!!!!\n";
     exit;
   }
+}
+
+#setting the species in conf
+sub set_species {
+ my ($self, $species) = @_; 
+ $self->{'_species'} = $species;  
 }
 1;
