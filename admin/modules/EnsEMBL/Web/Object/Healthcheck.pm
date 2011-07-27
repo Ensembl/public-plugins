@@ -166,7 +166,7 @@ sub get_default_list {
     return $self->hub->species_defs->ENSEMBL_DATASETS || [];
   }
   elsif ($function eq 'DBType') {
-    return [qw(cdna core funcgen otherfeatures production variation vega)];
+    return [qw(cdna core funcgen otherfeatures production rnaseq nariation vega)];
   }
   elsif ($function eq 'Team') {
     return [qw(COMPARA CORE GENEBUILD FUNCGEN RELEASE_COORDINATOR)];
