@@ -48,7 +48,7 @@ sub content {
   $html .= qq{<div class="hc-infobox">
     <p>For each database, reports are sorted on the basis of Date (initial failure date) with latest report appearing on the top.</p>
     <p>Reports that have not been annotated 'manual ok' are displayed in different colours for results <span class="hc-problem">problem</span>, <span class="hc-warning">warning</span> and <span class="hc-info">info</span>.</p>
-    <p>Reports appearing <span class="hc-new">bold</span> are for the recently appeared problems.</p>
+    <p>Reports that appeared for the first time in the recent healthcheck session are in <span class="hc-new">bold</span> letters.</p>
   </div>};
 
   my $js_ref = 0; #counter used by JavaScript only
