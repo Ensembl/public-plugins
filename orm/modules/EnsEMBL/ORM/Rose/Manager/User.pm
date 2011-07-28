@@ -11,10 +11,9 @@ use warnings;
 
 use base qw(EnsEMBL::ORM::Rose::Manager::Trackable);
 
-sub object_class { 'EnsEMBL::ORM::Rose::Object::User' }
+use EnsEMBL::ORM::Rose::Object::User;
 
-## Auto-generate query methods: get_users, count_users, etc
-__PACKAGE__->make_manager_methods('users');
+sub object_class { 'EnsEMBL::ORM::Rose::Object::User' }
 
 sub get_by_id {
   ## Gets user by id
@@ -29,7 +28,8 @@ sub get_by_email {
   ## Gets user by email
   ## @param String email
   ## @return ArrayRef of User objects, undef if any error
-  
+  my ($self, $email) = @_;
+
   return $email ? $self->get_objects('query' => [ 'email', $email ]) : undef;
 }
 1;
