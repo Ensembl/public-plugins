@@ -23,7 +23,7 @@ use constant {                        ## Override in child class
   INACTIVE_FLAG       => '',          ## Column that indicates that the row is to be considered deleted if its value is set as INACTIVE_FLAG_VALUE
   INACTIVE_FLAG_VALUE => '',          ## Value of the INACTIVE_FLAG
 
-  LINKED_USERS_KEY    => '__linked_users'
+  EXTERNAL_RELATION   => '__ens_external_relationships'
 };
 
 __PACKAGE__->meta->error_mode('return'); ## When debugging, change from 'return' to 'carp'/'cluck'/'confess'/'croak' to produce the desired Carp behaviour
@@ -37,6 +37,8 @@ sub meta_class {
 
 sub meta_setup {
   ## Wrapper around meta->setup method
+  my ($p, $f, $l) = caller;
+  warn "Use ${p}->meta->setup instead of ${p}->meta_setup at $f line $l\n";
   return shift->meta->setup(@_);
 }
 
@@ -68,38 +70,53 @@ sub get_primary_key_value {
   return $key ? $self->$key || undef : undef;
 }
 
-sub is_trackable {
-  ## Returns true if Object contains the trackable fields (created_by, modified_by etc)
-  ## @return 0/1 accordingly
-  return 0;
-}
+sub external_relationship {
+  ## Get/set an external relationships value
+  ## @param ExternalRelationship object
+  ## @param Value to be set (optional) - Foreign rose object or value of the mapped column of the foreign rose object (or arrayref of either for '* to many' relation)
+  ## @return Rose object
+  my $self     = shift;
+  my $relation = shift;
+  my $manager  = 'EnsEMBL::ORM::Rose::Manager';
 
-sub get_user {
-  ## Gets the user linked to the object with the given column
-  ## If user objects are required for multiple rows, use 'with_users' key in get_objects method to avoid multiple queries
-  ## @param Column name
-  ## @return User object if found, undef otherwise
-  my ($self, $column_name) = @_;
+  my ($r_name, $r_class, $r_is_singular, $r_map)  = map {$relation->$_} qw(name class is_singular column_map);
+  my ($column_internal, $column_external)         = %$r_map;
 
-  require EnsEMBL::ORM::Rose::Object::User; # Don't 'use' on top - circular dependency
+  if (@_) { # Set value
+    my $rose_value  = shift || []; # no '0' value
+    $rose_value     = [$rose_value] unless ref $rose_value eq 'ARRAY';
+    $rose_value     = $r_is_singular ? [shift @$rose_value] : $rose_value;
 
-  return $self->{$self->LINKED_USERS_KEY}{$column_name} if exists $self->{$self->LINKED_USERS_KEY} && exists $self->{$self->LINKED_USERS_KEY}{$column_name};
+    # Get related rose object(s) if only foreign key value(s) provided
+    if (@$rose_value && $rose_value->[0] && !UNIVERSAL::isa($rose_value->[0], $r_class)) {
+      $rose_value = $manager->get_objects(
+        'query'         => [$column_external, $rose_value],
+        'object_class'  => $r_class
+      ); #TODO - add error handling
+    }
 
-  return $self->{$self->LINKED_USERS_KEY}{$column_name} = $self->$column_name
-    ? EnsEMBL::ORM::Rose::Manager->fetch_by_primary_key($self->$column_name, {'object_class' => 'EnsEMBL::ORM::Rose::Object::User'})
-    : undef;
-}
+    # cache rose object
+    $self->{$self->EXTERNAL_RELATION}{$r_name} = $r_is_singular ? $rose_value->[0] : $rose_value;
 
-sub set_user {
-  ## Sets the user_id to a given column for a given user object
-  ## @param Column name
-  ## @param User object
-  my ($self, $column_name, $user) = @_;
-  
-  $user = undef unless UNIVERSAL::isa($user, 'EnsEMBL::ORM::Rose::Object::User');
+    # save foreign key(s)
+    $rose_value = [map {$_->$column_external} $r_is_singular ? $rose_value->[0] : @$rose_value];
+    $self->$column_internal($r_is_singular ? $rose_value->[0] : $rose_value);
+  }
 
-  $self->$column_name($user ? $user->user_id : 0);
-  $self->{$self->LINKED_USERS_KEY}{$column_name} = $user;
+  # return if already chached
+  return $self->{$self->EXTERNAL_RELATION}{$r_name} if exists $self->{$self->EXTERNAL_RELATION}{$r_name};
+
+  # otherwise get on from the db, cache and return
+  my $foreign_keys = $self->$column_internal || [];
+  $foreign_keys    = [$foreign_keys] unless ref $foreign_keys eq 'ARRAY';
+
+  my $value = @$foreign_keys ? $manager->get_objects(
+    'query'           => [$column_external, $foreign_keys],
+    'object_class'    => $r_class,
+    'active_only'     => 0,
+  ) : [];
+
+  return $self->{$self->EXTERNAL_RELATION}{$r_name} = $r_is_singular ? shift @$value : $value;
 }
 
 1;
