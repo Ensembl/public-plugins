@@ -68,7 +68,7 @@ sub save {
 
   my %user = ('user' => delete $params->{'user'} || $self->hub->user);
   
-  $_->save(%$params, $_->is_trackable ? %user : ()) and push @$objs, $_ or $_->error and warn $_->error for @{$self->rose_objects($type || '0')};
+  $_->save(%$params, $_->meta->is_trackable ? %user : ()) and push @$objs, $_ or $_->error and warn $_->error for @{$self->rose_objects($type || '0')};
   return $objs;
 }
 
@@ -92,7 +92,7 @@ sub retire {
     my $value   = $_->INACTIVE_FLAG_VALUE;
     if ($column) {
       $_->$column($value);
-      $_->save('changes_only' => 1, $_->is_trackable ? %user : ()) and push @$objs, $_ or warn $_->error;
+      $_->save('changes_only' => 1, $_->meta->is_trackable ? %user : ()) and push @$objs, $_ or warn $_->error;
     }
   }
   return $objs;
