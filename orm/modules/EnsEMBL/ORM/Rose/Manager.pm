@@ -3,11 +3,9 @@ package EnsEMBL::ORM::Rose::Manager;
 ### NAME: EnsEMBL::ORM::Rose::Manager
 ### Static class
 ### Sub-class of Rose::DB::Object::Manager
-### Contains some generic methods for data-mining, update and delete on the table and it's related table
 
 ### DESCRIPTION:
 ### Parent class for all the rose object manager classes. Provides some generic data mining methods.
-### Can be used directly, without the child classes, provided object_class parameter is given while making a method call.
 
 use strict;
 use warnings;
@@ -16,26 +14,29 @@ use EnsEMBL::ORM::Rose::Object::User;
 
 use base qw(Rose::DB::Object::Manager);
 
-use constant DEBUG_SQL => 0;
+use constant DEBUG_SQL => 1;
 
 sub get_objects {
   ## @overrides
   ## DO NOT OVERRIDE
-  ## Wrapper to the manager's inbuilt get_objects method to provide 3 extra features:
-  ##  - Getting all the linked users from the user table in single method call
+  ## Wrapper to the manager's inbuilt get_objects method to provide 5 extra features:
+  ##  - Getting all the externally related objects in a single method call, and a minimum possible number of sql queries
   ##  - Excludes the 'retired' rows, by default; includes if flag set false
   ##  - Warns all the sql queries done by rose if DEBUG_SQL constant is set true
+  ##  - Force returns an arrayref (no wantarray check)
+  ##  - Error handling - TODO
   ## @param Hash, as accepted by default get_objects method (of Rose::DB::Object::Manager class) along with two extra keys as below:
-  ##  - with_users  : ArrayRef of columns that contain user ids as foreign keys
-  ##  - active_only : Flag, if on, will fetch active rows only (flag on by default)
+  ##  - with_external_objects : ArrayRef of external relationship name as declared in meta->setup of the rose object
+  ##  - active_only           : Flag, if on, will fetch active rows only (flag on by default)
   ## @return ArrayRef of objects, or undef if any error
   ## @example $manager->get_objects(
-  ##   query        => ['record.record_id' => 1],
-  ##   with_objects => ['record'],
-  ##   with_users   => ['created_by', 'record.created_by', 'record.modified_by'],
-  ##   active_only  => 0
+  ##   query                  => ['record_id' => 1, '!annotation.text' => undef],
+  ##   with_objects           => ['annotation'],
+  ##   with_external_objects  => ['created_by_user', 'annotation.created_by_user', 'annotation.modified_by_user'], #annotation is intermediate object, also included in with_objects
+  ##   active_only            => 0
   ## )
-  ## IMP: If any query param contains INACTIVE_FLAG column, set active_only => 0 always.
+  ## @note If any query param contains INACTIVE_FLAG column, set active_only => 0 always.
+  ## @note If an externally related object is not directly related to the object, make sure the intermediate object is included in with_objects key.
   my ($self, %params) = shift->normalize_get_objects_args(@_);
 
   ######### This method is also called by Rose API sometimes. ###########
@@ -44,50 +45,63 @@ sub get_objects {
   return $self->SUPER::get_objects(%params) if $caller !~ /EnsEMBL/;  ###
   #########                   That's it!                      ###########
   
-  my $with_users      = delete $params{'with_users'};
-  my $active_only     = exists $params{'active_only'} ? delete $params{'active_only'} : 1;
-
+  my $with_e_objects  = delete $params{'with_external_objects'};
   $params{'debug'}    = 1 if $self->DEBUG_SQL;
 
-  $self->_add_active_only_query(\%params) if $active_only;
+  $self->_add_active_only_query(\%params) if exists $params{'active_only'} ? delete $params{'active_only'} : 1;
 
-  my $objects         = $self->SUPER::get_objects(%params);
+  my $objects = $self->SUPER::get_objects(%params);
 
-  # return objects if no user needed, or if no object found
-  return $objects unless $with_users && @$with_users && $objects && @$objects;
+  # return objects if no external object needed, or if no object found
+  return $objects unless $with_e_objects && @$with_e_objects && $objects && @$objects;
 
-  my $user_rels = [];
-  foreach my $with_user (@$with_users) {
-    $with_user = [ split /\./, $with_user ];
-    push @$user_rels, {
-      'column'    => pop @{$with_user},
-      'relations' => $with_user
+  # parse the with_external_objects string values
+  my $external_rels = [];
+  foreach my $with_e_object (@$with_e_objects) {
+    $with_e_object = [ split /\./, $with_e_object ];
+    push @$external_rels, {
+      'external_relation'       => pop @{$with_e_object},
+      'intermediate_relations'  => $with_e_object
     };
   }
 
-  my $all_ids = {};
+  # get foreign ids for getting all the externally related objects
+  my $relation_cache    = {}; # cache the ExternalRelationship object to avoid multiple queries to metadata of the object directly related to external object
+  my $required_objects  = {}; # example structure: {'EnsEMBL::ORM::Rose::Object::User' => {'user_id' => {'102' => Rose User object with user_id 102}}}
+  my $internal_objects  = [];
   foreach my $object (@$objects) {
-    foreach my $user_relation (@$user_rels) {
-      my $column = $user_relation->{'column'};
-      $_ = $_->$column and $_ and $all_ids->{$_} = 1 for @{$self->_objects_related_to_user($object, [ map {$_} @{$user_relation->{'relations'}} ])};
-    }
-  }
-
-  if (scalar keys %$all_ids) {
-
-    my $users = { map {$_->user_id => $_} @{$self->get_objects(
-      'object_class'  => 'EnsEMBL::ORM::Rose::Object::User',
-      'query'         => ['user_id', [ keys %$all_ids ]],
-      'active_only'   => 0
-    )}};
-    
-    foreach my $object (@$objects) {
-      foreach my $user_relation (@$user_rels) {
-        my $column = $user_relation->{'column'};
-        $_->{$self->object_class->LINKED_USERS_KEY}{$column} = $_->$column ? $users->{$_->$column} : undef for @{$self->_objects_related_to_user($object, [ map {$_} @{$user_relation->{'relations'}} ])};
+    foreach my $external_relation (@$external_rels) {
+      my $relationship_name = $external_relation->{'external_relation'};
+      foreach my $object_related_to_external_object (@{$self->_objects_related_to_external_object($object, [ map {$_} @{$external_relation->{'intermediate_relations'}} ])}) {
+        my $relationship = $relation_cache->{ref $object_related_to_external_object}{$relationship_name} ||= $object_related_to_external_object->meta->external_relationship($relationship_name);
+        my ($internal_column, $external_column) = %{$relationship->column_map};
+        if (my $foreign_key = $object_related_to_external_object->$internal_column) {
+          $required_objects->{$relationship->class}{$external_column}{$foreign_key} = 1;
+          push @$internal_objects, $object_related_to_external_object, $relationship_name, [$relationship->class, $external_column, $foreign_key];
+        }
       }
     }
   }
+
+  # Get all the external objects with min possible queries
+  while (my ($object_class, $column_values) = each %$required_objects) {
+    while (my ($foreign_key_name, $foreign_keys_map) = each %$column_values) {
+      $required_objects->{$object_class}{$foreign_key_name} = {map {$_->$foreign_key_name => $_} @{$self->get_objects(
+        'object_class'  => $object_class,
+        'query'         => [$foreign_key_name, [ keys %$foreign_keys_map ]],
+        'active_only'   => 0
+      )}};
+    }
+  }
+  
+  # save the external objects to the corresponding linked rose objects
+  my $hash_key_name = $self->object_class->EXTERNAL_RELATION;
+  while (my $object_related_to_external_object = shift @$internal_objects) {
+    my $relationship_name = shift @$internal_objects;
+    my $path = shift @$internal_objects;
+    $object_related_to_external_object->{$hash_key_name}{$relationship_name} = $required_objects->{$path->[0]}{$path->[1]}{$path->[2]};
+  }
+
   return $objects;
 }
 
@@ -185,7 +199,7 @@ sub create_empty_object {
   ## @return Rose::Object drived object
   my ($self, $object) = @_;
 
-  my $object_class = $object ? (ref $object ? ref $object : $object) : $self->object_class;
+  my $object_class = $object ? ref $object || $object : $self->object_class;
 
   return $object_class->new;
 }
@@ -193,7 +207,7 @@ sub create_empty_object {
 sub is_trackable {
   ## Returns true if Object contains the trackable fields (created_by, modified_by etc)
   ## @return 0/1 accordingly
-  return shift->object_class->is_trackable;
+  return shift->object_class->meta->is_trackable;
 }
 
 sub get_lookup {
@@ -276,9 +290,10 @@ sub _add_active_only_query {
   }
 }
 
-sub _objects_related_to_user {
+sub _objects_related_to_external_object {
   ## private helper method for get_objects method
-  ## Goes down to the object's relationships, recursively to get the sub-object that is directly related to user
+  ## Goes in to the object's relationships, recursively to get the sub-object that is directly related to the required external object
+  ## @return Array ref of all the intermediate objects, with the object  at the first index
   my ($self, $object, $relationships) = @_;
   
   return [] unless $object;
@@ -290,7 +305,7 @@ sub _objects_related_to_user {
   if (ref $object eq 'ARRAY') {
     my $return = [];
     my $relations_clone = [];
-    $relations_clone = [ map {$_} @$relationships ] and push @$return, @{$self->_objects_related_to_user($_, $relations_clone)} for @$object;
+    $relations_clone = [ map {$_} @$relationships ] and push @$return, @{$self->_objects_related_to_external_object($_, $relations_clone)} for @$object;
     return $return;
   }
 
@@ -298,7 +313,7 @@ sub _objects_related_to_user {
   my $sub_objects     = $object->$relationship;
   return [] unless $sub_objects;
 
-  return $self->_objects_related_to_user($sub_objects, $relationships) if scalar @$relationships;
+  return $self->_objects_related_to_external_object($sub_objects, $relationships) if scalar @$relationships;
 
   $sub_objects = [ $sub_objects ] unless ref $sub_objects eq 'ARRAY';
   return $sub_objects;
