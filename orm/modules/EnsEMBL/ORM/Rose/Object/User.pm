@@ -16,7 +16,7 @@ use constant {
 };
 
 ## Define schema
-__PACKAGE__->meta_setup(
+__PACKAGE__->meta->setup(
   user_db     => 1,
 
   table       => 'user',

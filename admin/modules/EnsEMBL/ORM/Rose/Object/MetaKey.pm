@@ -18,7 +18,7 @@ use constant {
 };
 
 ## Define schema
-__PACKAGE__->meta_setup(
+__PACKAGE__->meta->setup(
   table       => 'meta_key',
 
   columns     => [

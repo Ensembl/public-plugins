@@ -15,7 +15,7 @@ use constant {
 };
 
 ## Define schema
-__PACKAGE__->meta_setup(
+__PACKAGE__->meta->setup(
   table       => 'changelog_species',
 
   columns     => [

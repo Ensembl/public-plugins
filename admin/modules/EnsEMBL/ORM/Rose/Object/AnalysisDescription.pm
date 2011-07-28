@@ -11,12 +11,12 @@ use warnings;
 use base qw(EnsEMBL::ORM::Rose::Object::Trackable);
 
 use constant {
-  ROSE_DB_NAME        => 'production',
-  TITLE_COLUMN        => 'logic_name',
+  ROSE_DB_NAME  => 'production',
+  TITLE_COLUMN  => 'logic_name',
 };
 
 ## Define schema
-__PACKAGE__->meta_setup(
+__PACKAGE__->meta->setup(
   table       => 'analysis_description',
 
   columns     => [
