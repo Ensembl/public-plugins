@@ -86,7 +86,7 @@ sub fetch_for_duplicate {
 
   if ($record) {
     $record = $record->clone_and_reset;
-    $record->is_trackable and map {$record->$_(undef)} qw(created_by created_at modified_by modified_at);
+    $record->meta->is_trackable and map {$record->$_(undef)} qw(created_by created_at modified_by modified_at);
   }
 
   $self->rose_objects($record);
@@ -208,8 +208,8 @@ sub _get_with_objects_params {
   
   if ($self->manager_class->is_trackable) {
     my $with_users = [];
-    exists $needed_cols->{$_.'_user'} and push @$with_users, $_ for qw(created_by modified_by);
-    $params->{'with_users'} = $with_users if @$with_users;
+    exists $needed_cols->{$_} and push @$with_users, $_ for qw(created_by_user modified_by_user);
+    $params->{'with_external_objects'} = $with_users if @$with_users;
   }
   
   return $params;
@@ -235,7 +235,7 @@ sub _populate_from_cgi {
   for (keys %field_names) {
   
     next unless exists $param_names{$_}; #ignore if variable not present among the post params
-    next if $rose_object->is_trackable && $_ =~ /^(created|modified)_(by_user|at|by)$/; # dont get them from CGI
+    next if $rose_object->meta->is_trackable && $_ =~ /^(created|modified)_(by_user|at|by)$/; # dont get them from CGI
 
     my $value;
     my $type;
