@@ -7,8 +7,6 @@ package EnsEMBL::Web::Configuration;
 
 use strict;
 
-use base qw(EnsEMBL::Web::Root);
-
 sub dbfrontend_nodes {
   ## Gets all the default nodes needed by dbfrontend
   ## @param HashRef with keys required to override keys in each nodes
@@ -18,6 +16,7 @@ sub dbfrontend_nodes {
     'Display'       => {'caption' => 'View All', 'components' => [qw(display  EnsEMBL::ORM::Component::DbFrontend::Display)],       'availability' => 1},
     'List'          => {'caption' => 'List All', 'components' => [qw(list     EnsEMBL::ORM::Component::DbFrontend::List)],          'availability' => 1},
     'Add'           => {'caption' => 'Add',      'components' => [qw(add      EnsEMBL::ORM::Component::DbFrontend::Input)],         'availability' => 1},
+    'Duplicate'     => {'caption' => 'Duplicate','components' => [qw(add      EnsEMBL::ORM::Component::DbFrontend::Input)],         'availability' => 1},
     'Select/Edit'   => {'caption' => 'Edit',     'components' => [qw(edit     EnsEMBL::ORM::Component::DbFrontend::Select)],        'availability' => 1},
     'Select/Delete' => {'caption' => 'Delete',   'components' => [qw(delete   EnsEMBL::ORM::Component::DbFrontend::Select)],        'availability' => 1},
     'Edit'          => {'caption' => 'Editing',  'components' => [qw(editing  EnsEMBL::ORM::Component::DbFrontend::Input)],         'availability' => 1, 'no_menu_entry' => 1},
