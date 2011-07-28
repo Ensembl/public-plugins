@@ -3,7 +3,6 @@ package EnsEMBL::ORM::Rose::Object::Trackable;
 ### NAME: EnsEMBL::ORM::Rose::Object::Trackable
 
 ### DESCRIPTION: ORM parent class for any table that contains columns 'created_by','modified_by' (both user_id foreign keys), 'created_at' and 'modified_at'
-### If a class is inherited from this class, use meta_setup instead of meta->setup while object schema defination.
 
 use strict;
 use warnings;
