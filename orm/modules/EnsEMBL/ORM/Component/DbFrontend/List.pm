@@ -66,9 +66,15 @@ sub record_tree {
   my $hub         = $self->hub;
   my $object      = $self->object;
   my $primary_key = $record->get_primary_key_value;
-  my $record_row  = $self->dom->create_element('tr', $header_only ? () : {'class' => "dbf-list-row _dbf_row_$primary_key $css_class", 'flags' => {'primary_key' => $primary_key}});
-  my $columns     = $object->show_columns;
+  my $record_row  = $self->dom->create_element('tr', $header_only
+    ? {'children'   => [{'node_name' => 'th', 'class' => 'sort_none', 'style' => 'width: 40px'}]}
+    : {'children'   => [{'node_name' => 'td', 'class' => 'dbf-list-buttons', 'children' => [
+        {'node_name'  => 'a', 'href' => ''},
+        {'node_name'  => 'a', 'href' => '', 'class' => 'dbf-list-duplicate'}
+      ]}], 'class' => "dbf-list-row _dbf_row_$primary_key $css_class", 'flags' => {'primary_key' => $primary_key}});
 
+
+  my $columns = $object->show_columns;
   while (my $column_name = shift @$columns) {
 
     my $label     = shift @$columns;
@@ -80,18 +86,20 @@ sub record_tree {
 
     if ($header_only) {
 
-      my $editable = $record->is_trackable && $column_name =~ /^(created|modified)_(at|by|by_user)$/ ? 0 : 1;
+      my $editable  = $record->meta->is_trackable && $column_name =~ /^(created|modified)_(at|by|by_user)$/ ? 0 : 1;
+      my $css       = '';
       my $width;
 
       if (ref $label) {
         $editable = $label->{'editable'} if $editable && exists $label->{'editable'};
         $width    = $label->{'width'};
-        $label    = $label->{'title'};
+        $css      = $label->{'class'} || '';
+        $label    = $label->{'title'} || $column_name;
       }
 
       $record_row->append_child('th', {
         'inner_HTML'  => $editable ? sprintf('<input class="%s" name="%s" value="%s" type="hidden" />%s', $self->_JS_CLASS_EDITABLE, $column_name, $hub->url({'action' => 'Edit'}), $label) : $label,
-        'class'       => 'sorting sort_html',
+        'class'       => "sorting sort_html $css",
         $width ? ('style' => {'width' => $width}) : (),
       });
     }
@@ -99,7 +107,6 @@ sub record_tree {
       $record_row->append_child('td', {'inner_HTML' => $value, 'flags' => $column_name});
     }
   }
-
   return $record_row;
 }
 
