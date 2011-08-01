@@ -152,7 +152,7 @@ sub re_search {
     $species =~ s/_/ /g;
     $html = qq(<h2>Your search of annotated features from $display_species for the term '$q' returned no results</h2>);
     my $url = '/' . $hub->species . '/Search/Results?species=all;idx=' . $hub->param('idx') . ';q=' . $q;
-    $html .= sprintf qq(<h3>Would you like to search <a href="%s">the reset of the website</a> with this term ?</h3>), $url;
+    $html .= sprintf qq(<h3>Would you like to search <a href="%s">the rest of the website</a> with this term ?</h3>), $url;
     return $html;
   }
 
