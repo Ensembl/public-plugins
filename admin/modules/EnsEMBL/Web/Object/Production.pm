@@ -12,7 +12,7 @@ sub fetch_for_logicname {
   if (exists { map {$_ => 1} qw(web_data_id analysis_description_id species_id db_type) }->{$group}) {
     $self->rose_objects($self->manager_class->get_objects(
       'with_objects'  => ['analysis_description', 'species', 'web_data'],
-      'sort_by'       => 'analysis_description.display_label',
+      'sort_by'       => 'analysis_description.logic_name',
       'query'         => [$group, $hub->param('id')],
     ));
   }
@@ -84,9 +84,11 @@ sub show_fields {
 sub show_columns {
   ## @overrides
   return [
-    species     => 'Species',
-    db_type     => 'DB Type',
-    displayable => 'Displayable',
+    analysis_description  => 'Logic Name',
+    species               => 'Species',
+    db_type               => 'Database Type',
+    web_data              => {'title' => 'Web Data', 'width' => qq(50%)},
+    displayable           => 'Displayable'
   ];
 }
 
