@@ -45,7 +45,7 @@ sub populate_tree {
   );
 
   $self->create_dbfrontend_node({'Display' => {'filters' => ['WebAdmin'], 'no_menu_entry' => 1}});
-  $self->create_dbfrontend_node({$_        => {'filters' => ['WebAdmin']}}) for qw(List Select/Edit Select/Delete Add Edit Preview Problem Confirm Save Delete);
+  $self->create_dbfrontend_node({$_        => {'filters' => ['WebAdmin']}}) for qw(List Select/Edit Select/Delete Add Edit Duplicate Preview Problem Confirm Save Delete);
   
 }
 
