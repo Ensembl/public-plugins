@@ -40,7 +40,7 @@ sub content_tree {
           'value'       => 'DbFrontendList'
         }, {
           'node_name'   => 'table',
-          'class'       => sprintf('ss dbf-ss %s', $object->is_ajax_request ? $self->_JS_CLASS_RESPONSE_ELEMENT : $self->_JS_CLASS_LIST_TABLE),
+          'class'       => ['ss', 'dbf-ss', $object->is_ajax_request ? $self->_JS_CLASS_RESPONSE_ELEMENT : ($self->_JS_CLASS_LIST_TABLE, $object->list_is_datatable ? $self->_JS_CLASS_DATATABLE : ())],
           'cellpadding' => 0,
           'cellspacing' => 0,
           'border'      => 0,
@@ -66,13 +66,14 @@ sub record_tree {
   my $hub         = $self->hub;
   my $object      = $self->object;
   my $primary_key = $record->get_primary_key_value;
+  my $record_name = $object->record_name->{'singular'};
   my $record_row  = $self->dom->create_element('tr', $header_only
-    ? {'children'   => [{'node_name' => 'th', 'class' => 'sort_none', 'style' => 'width: 40px'}]}
-    : {'children'   => [{'node_name' => 'td', 'class' => 'dbf-list-buttons', 'children' => [
-        {'node_name'  => 'a', 'href' => ''},
-        {'node_name'  => 'a', 'href' => '', 'class' => 'dbf-list-duplicate'}
+    ? {'children'   => [{'node_name' => 'th', 'class' => 'sort_none', 'style' => 'width: 60px'}]}
+    : {'children'   => [{'node_name' => 'td', 'class' => ['dbf-list-buttons', $self->_JS_CLASS_LIST_ROW_HANDLE], 'children' => [
+        {'node_name'  => 'a', 'href' => $hub->url({'action' => 'Edit',      'id' => $primary_key}), 'title' => sprintf('Edit %s',      $record_name), 'class' => [$self->_JS_CLASS_EDIT_BUTTON, 'dbf-list-edit']},
+        {'node_name'  => 'a', 'href' => $hub->url({'action' => 'Confirm',   'id' => $primary_key}), 'title' => sprintf('Delete %s',    $record_name), 'class' => [$self->_JS_CLASS_EDIT_BUTTON, 'dbf-list-delete']},
+        {'node_name'  => 'a', 'href' => $hub->url({'action' => 'Duplicate', 'id' => $primary_key}), 'title' => sprintf('Duplicate %s', $record_name), 'class' => [$self->_JS_CLASS_ADD_BUTTON,  'dbf-list-duplicate']}
       ]}], 'class' => "dbf-list-row _dbf_row_$primary_key $css_class", 'flags' => {'primary_key' => $primary_key}});
-
 
   my $columns = $object->show_columns;
   while (my $column_name = shift @$columns) {
@@ -99,7 +100,7 @@ sub record_tree {
 
       $record_row->append_child('th', {
         'inner_HTML'  => $editable ? sprintf('<input class="%s" name="%s" value="%s" type="hidden" />%s', $self->_JS_CLASS_EDITABLE, $column_name, $hub->url({'action' => 'Edit'}), $label) : $label,
-        'class'       => "sorting sort_html $css",
+        'class'       => $object->list_is_datatable ? ['sorting', 'sort_html', ref $css eq 'ARRAY' ? @$css : split ' ', $css] : $css,
         $width ? ('style' => {'width' => $width}) : (),
       });
     }
