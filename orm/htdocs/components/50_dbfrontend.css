@@ -15,6 +15,10 @@ table.dbf-ss tr.bg2 td:hover {
 }
 */
 
+.dbf-heading {
+  margin-left: 6px;
+}
+
 div.dbf-record, div.dbf-inline-form {
   border: #ccc solid 1px;
   margin: 5px 0;
@@ -126,12 +130,17 @@ td.dbf-list-buttons a {
   position: absolute;
   height: 16px;
   width: 18px;
-  background: transparent url(/i/orm_delete.png) no-repeat 2px 0;
+  background: transparent url(/i/orm_edit.png) no-repeat 2px 0;
   outline: none;
 }
 
-td.dbf-list-buttons a.dbf-list-duplicate {
+td.dbf-list-buttons a.dbf-list-delete {
   margin-left: 20px;
+  background: transparent url(/i/orm_delete.png) no-repeat 2px 0;
+}
+
+td.dbf-list-buttons a.dbf-list-duplicate {
+  margin-left: 40px;
   background: transparent url(/i/orm_copy.png) no-repeat 2px 0;
 }
 
@@ -141,4 +150,13 @@ td.dbf-list-buttons:hover a {
 
 div.dbf-list-buttons input {
   margin: 3px 6px 3px 0;
+}
+
+tr.dbf-list-form td {
+  border: #ddd solid 1px;
+  border-width: 1px 0;
+}
+
+.dbf-error {
+  color: red;
 }
