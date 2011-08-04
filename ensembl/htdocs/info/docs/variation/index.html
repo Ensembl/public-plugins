@@ -473,10 +473,10 @@ term relative to the transcript structure is available.
 For human mutations that are predicted to result in an amino acid substitution we also 
 provide SIFT and PolyPhen predictions for the effect of this substitution on
 protein function. We compute the predictions for each of these tools for all possible 
-single amino acid substitutions in the Ensembl human protein set. This means we can provide 
+single amino acid substitutions in the Ensembl human proteome. This means we can provide 
 predictions for novel mutations for VEP and API users. We were able to compute predictions
 from at least one tool for over 95% of the proteins in Ensembl. We also use the Condel tool
-to provide a consensus prediction based on the SIFT and PolyPhen predictions.
+to provide a consensus prediction based on the SIFT and PolyPhen prediction scores.
 </p>
 
 <p>
@@ -484,7 +484,7 @@ These tools are developed by external groups and we provide a brief explanation 
 the approach each takes below, and how we run it in Ensembl. For much more detail
 please see the representative papers listed <a href="#references">below</a>, and the 
 relevant publications available on each tool's website. We hope to be able to provide 
-amino acid substitution predictions for species other than human in future releases.
+protein function predictions for species other than human in future releases.
 </p>
 
 <h3 id="sift">SIFT</h3>
@@ -525,15 +525,14 @@ Positive Rate of the classifier model used to make the predictions.
 </p>
 
 <p>
-We ran PolyPhen-2 version 2.0.23 (available 
-<a rel="external" href="http://genetics.bwh.harvard.edu/pph2/dokuwiki/_media/polyphen-2.0.23r349.tar.gz">here</a>)
+We ran PolyPhen-2 version 2.1.0 (available 
+<a rel="external" href="http://genetics.bwh.harvard.edu/pph2/dokuwiki/_media/polyphen-2.1.0r367.tar.gz">here</a>)
 and again we followed all instructions from the authors, and used the UniProtKB 
 UniRef100 non-redundant protein set as the protein database, which was downloaded,
-along with PDB structures, and annotations from Pfam and DSSP in February 2011. When 
+along with PDB structures, and annotations from Pfam and DSSP in May 2011. When 
 computing the predictions we used the classifier model trained on the HumDiv training 
 set (please refer to the PolyPhen publications for more details of the classification 
-system). For any Ensembl translations that were updated between releases 62 and 63 we 
-used data downloaded on May 2011.
+system).
 </p>
 
 <h3 id="condel">Condel</h3>
@@ -542,7 +541,7 @@ used data downloaded on May 2011.
 <a rel="external" href="http://bg.upf.edu/group/projects/condel.php">Condel</a> is
 a general method for calculating a consensus prediction from the output of tools
 designed to predict the effect of an amino acid substitution. It does so by calculating
-a weighted average score of the scores of each component method. The Condel authors 
+a weighted average score (WAS) of the scores of each component method. The Condel authors 
 provided us with a version specialised for finding a consensus between SIFT and 
 PolyPhen and we integrated this into the variation API. Tests run by the authors 
 on the HumVar dataset (a test set curated by the PolyPhen team), show that Condel 
@@ -552,6 +551,104 @@ score, along with a qualitative prediction (one of 'neutral' or 'deleterious'),
 are available in the VEP and via the API. The Condel score is the consensus probability 
 that a substitution is deleterious, so values nearer 1 are predicted with greater 
 confidence to affect protein function.
+</p>
+
+<h3 id="nsSNP_data_format">Prediction data format</h3>
+
+<p>
+The SIFT and PolyPhen predictions are precomputed and stored in the variation 
+databases and are accessible in the variation API by using the <i>sift_prediction</i>, 
+<i>sift_score</i>, <i>polyphen_prediction</i> and <i>polyphen_score</i> methods on a 
+<i>Bio::EnsEMBL::Variation::TranscriptVariationAllele</i> object. For users wanting
+to access the predictions directly from the MySQL database an explanation of
+the compressed format used is provided here.
+</p>
+
+<p>
+The predictions and associated scores are stored in the <i>protein_function_predictions</i>
+table, in either the <i>polyphen_predictions</i> or <i>sift_predictions</i> columns. The other
+columns in this table identify the stable ID of the Ensembl translation for each
+protein coding transcript, the stable ID of the transcript itself, and a hexadecimal 
+MD5 hash of the amino acid sequence of the translation. This can be used to ensure 
+the predictions apply to the correct translation sequence. The actual predictions are stored in the 
+<i>sift_predictions</i> and <i>polyphen_predictions</i> columns as a gzip compressed binary string which 
+represents the predictions from each tool for each possible amino acid substitution in 
+the translation. Once uncompressed, this string contains a 40 byte substring for each 
+position in the translation concatenated together in the same order as the amino acids 
+in the peptide sequence. Each 40 byte string is composed of 20 2-byte predictions, 
+one for each possible alternative amino acid in alphabetical order, though note that the 
+2-byte prediction value for the amino acid that matches the reference amino acid is 
+identified as a 2-byte value with all bits set, or <i>0xFFFF</i> in hexadecimal notation. 
+The prediction is packed as a 16 bit little-endian 
+("VAX" order, or "v" format if using the perl <i>pack</i> subroutine) unsigned short value. 
+The top 2 bits of this short 
+are used to encode the qualitative prediction (PolyPhen has 4 possible values, while SIFT just
+has 2), and the bottom 10 bits are used to encode the prediction score. To decode the qualitative 
+prediction you should mask off all bits except the top 2, and shift the resulting short
+right by 14 bits and treat this as an integer between 0 and 3. The corresponding prediction can then 
+be looked up in the table below. To decode the prediction score you should mask off the 
+top 6 bits and the resulting value can be treated as a number between 0 and 1000, which 
+should be divided by 1000 to give a 3 decimal place score (casting to a floating point type
+if necessary). Bits 11-13 are not used, except to encode the "same as reference" dummy prediction 
+<i>0xFFFF</i>.
+</p>
+
+<table id="prediction_values" class="ss">
+<tr>
+	<th>Tool</th>
+	<th>Numerical value</th>
+	<th>Qualitative prediction</th>
+</tr>
+<tr>
+	<td>PolyPhen</td>
+	<td>0</td>
+	<td>"probably damaging"</td>
+</tr>
+<tr>
+	<td>PolyPhen</td>
+	<td>1</td>
+	<td>"possibly damaging"</td>
+</tr>
+<tr>
+	<td>PolyPhen</td>
+	<td>2</td>
+	<td>"benign"</td>
+</tr>
+<tr>
+	<td>PolyPhen</td>
+	<td>3</td>
+	<td>"unknown"</td>
+</tr>
+<tr>
+    <td>SIFT</td>
+	<td>0</td>
+	<td>"tolerated"</td>
+</tr>
+<tr>
+	<td>SIFT</td>
+	<td>1</td>
+	<td>"benign"</td>
+</tr>
+</table>
+
+<p>
+To retrieve a prediction for a particular amino acid substitution at a given position
+in a translation, first you must retrieve the prediction string from the database and
+uncompress it using gzip. You can then calculate the offset into this string by multiplying 
+the desired position (starting at 0) by the index of the desired amino acid in an alphabetical ordering of
+amino acids (also starting at 0), and then multiply this value by 2 to take into account the fact that each 
+prediction uses 2 bytes. The 2 bytes at the calculated position can then be extracted and the approach
+described above can be used to retrieve the prediction and score. A perl implementation
+of this scheme can be found in the <i>Bio::EnsEMBL::Variation::Utils::ProteinFunctionUtils</i>
+module in the variation API and should hopefully inform attempts to reimplement this 
+scheme in other languages.
+</p>
+
+<p>
+Condel predictions are very fast to compute and so are not precomputed and stored in the
+database, instead we use the <i>get_condel_prediction</i> subroutine provided in the
+<i>Bio::EnsEMBL::Variation::Utils::Condel</i> module to calculate the Condel prediction from
+a precomputed SIFT and PolyPhen score on the fly.
 </p>
 
 <br />
@@ -567,7 +664,7 @@ your species of interest, and (for human) to retrieve SIFT, PolyPhen and Condel 
 for any missense variations. The VEP can also identify if a variation is co-located with a 
 known variation (i.e. already found in dbSNP or any of the other sources of variation 
 data listed <a href="#sources">above</a>), and so can be used to filter your 
-data for novel loci. The VEP works for any species in Ensembl and not 
+data for novel variant loci. The VEP works for any species in Ensembl and not 
 just those for which we have an existing variation database.
 </p>
 
