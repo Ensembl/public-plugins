@@ -17,9 +17,10 @@ sub show_fields {
   ## @overrides
   my $self = shift;
   return [
-    data          => {
-      'type'         => 'html',
-      'label'        => 'Web Data'
+    data              => {
+      'type'      => 'html',
+      'label'     => 'Web Data',
+      'value'     => '{}'
     },
     created_by_user   => {
       'type'      => 'noedit',
