@@ -54,9 +54,9 @@ sub show_fields {
 sub show_columns {
   ## @overrides
   return [
-    web_name    => 'Name (web)',
-    db_name     => 'Name (db)',
-    common_name => 'Name (common)'
+    web_name    => 'Web name',
+    db_name     => 'Database name',
+    common_name => 'Common name'
   ];
 }
 
