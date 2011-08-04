@@ -24,30 +24,27 @@ sub content_tree {
   
   return $self->SUPER::content_tree unless @$records;
   
-  my $content = $self->dom->create_element('div', {'class' => $object->content_css});
+  my $content = $self->dom->create_element('div', {
+    'class'     => [$object->content_css, 'js_panel'],
+    'children'  => [{'node_name' => 'input', 'type' => 'hidden', 'class' => 'panel_type', 'value' => 'DbFrontendRow'}]
+  });
+
   my $page    = $object->get_page_number;
   my $links   = defined $page ? $content->append_child($self->content_pagination_tree(scalar @$records)) : undef;
   !$object->pagination and $links and map {$_->remove} @{$links->get_nodes_by_flag('pagination_links')};
   
   !$hub->param('id') and $object->use_ajax and !$object->is_ajax_request and $content->append_child('div', {
-    'class' => 'dbf-record js_panel',
+    'class' => ['dbf-record', $object->use_ajax ? $self->_JS_CLASS_DBF_RECORD : ()],
     'flags' => 'add_new_button',
     'children' => [
       {'node_name' => 'div', 'class' => 'dbf-row-buttons', 'children' => [
-        {'node_name' => 'input', 'type' => 'hidden', 'class' => 'panel_type', 'value' => 'DbFrontendRow'},
         {'node_name' => 'a', 'inner_HTML' => 'Add new', 'class' => $self->_JS_CLASS_ADD_BUTTON, 'href' => $self->hub->url({'action' => 'Add'})}
       ]}
     ]
   });
 
-  my $js_class = $object->use_ajax ? $object->is_ajax_request ? $self->_JS_CLASS_RESPONSE_ELEMENT : 'js_panel' : ();
-  for (@$records) {
-    $content->append_child($self->record_tree($_))
-      ->prepend_child('input', {'type' => 'hidden', 'class' => 'panel_type', 'value' => 'DbFrontendRow'})
-      ->parent_node
-      ->set_attributes({'class' => ['dbf-record', $js_class]});
-  }
-
+  my $js_class = $object->use_ajax ? $object->is_ajax_request ? $self->_JS_CLASS_RESPONSE_ELEMENT : $self->_JS_CLASS_DBF_RECORD : ();
+  $content->append_child($self->record_tree($_))->set_attributes({'class' => ['dbf-record', $js_class]}) for @$records;
   $content->append_child($links->clone_node(1)) if $links; ## bottom pagination
 
   return $content;
@@ -91,13 +88,18 @@ sub record_tree {
   $record_div->append_child('div', {
     'class'       => "dbf-row-buttons",
     'inner_HTML'  => sprintf(
-      '<a class="%s" href="%s">Edit</a>%s',
+      '<a class="%s" href="%s">Edit</a>%s%s',
       $self->_JS_CLASS_EDIT_BUTTON,
       $self->hub->url({'action' => 'Edit', 'id' => $primary_key}),
       $object->permit_delete ? sprintf(
         '<a class="%s" href="%s">Delete</a>',
         $self->_JS_CLASS_EDIT_BUTTON,
         $self->hub->url({'action' => 'Confirm', 'id' => $primary_key})
+      ) : '',
+      $object->permit_duplicate ? sprintf(
+        '<a class="%s" href="%s">Duplicate</a>',
+        $self->_JS_CLASS_EDIT_BUTTON,
+        $self->hub->url({'action' => 'Duplicate', 'id' => $primary_key})
       ) : ''
     )
   });
@@ -112,38 +114,38 @@ sub display_field_value {
   ##  - lookup:     Arrayref with hashrefs of keys 'value' and 'caption'
   my ($self, $value, $extras) = @_;
 
-  ## if nothing
+  # if nothing
   return '' unless defined $value;
 
-  ## if it's a string
+  # if it's a string
   if (!ref $value) {
     $_->{'value'} eq $value and return $_->{'caption'} for @{$extras->{'lookup'} || []};
     return $value;
   }
   
-  ## if it's an arrayref
+  # if it's an arrayref
   if (ref $value eq 'ARRAY') {
     my @return = map {$self->display_field_value($_)} @$value;
     return @return ? sprintf($extras->{'delimiter'} ? '%s' : '<ul><li>%s</li></ul>', join($extras->{'delimiter'} || '</li><li>', @return)) : '';
   }
 
-  ## if it's DateTime (rose returns DateTime for datetime mysql type)
+  # if it's DateTime (rose returns DateTime for datetime mysql type)
   if (UNIVERSAL::isa($value, 'DateTime')) {
     return $self->print_datetime($value);
   }
 
-  ## if it's a rose object
+  # if it's a rose object
   if (UNIVERSAL::isa($value, 'EnsEMBL::ORM::Rose::Object')) {
     my $title = $value->get_title;
     
-    ## if it's a user
+    # if it's a user
     if ($value->isa('EnsEMBL::ORM::Rose::Object::User') && $self->object->show_user_email) {
       return sprintf('<a href="mailto:%s">%s</a>', $value->email, $title);
     }
     return $title;
   }
   
-  ## unknown value type
+  # unknown value type
   return $value;
 }
 
