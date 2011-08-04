@@ -76,8 +76,8 @@ sub fetch_for_session {
   );
 
   if ($params->{'with_annotations'}) {
-    $args->{'with_objects'} = ['annotation'];
-    $args->{'with_users'}   = ['annotation.created_by', 'annotation.modified_by'];
+    $args->{'with_objects'}           = ['annotation'];
+    $args->{'with_external_objects'}  = ['annotation.created_by_user', 'annotation.modified_by_user'];
     if ($params->{'with_annotations'} eq 'exclude_manual_ok') {
       push @{$args->{'query'}}, ('or', [
         'annotation.action'  => undef,

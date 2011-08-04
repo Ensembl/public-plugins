@@ -71,7 +71,6 @@ sub fetch_for_details {
   if ($self->view_type && $self->view_param) {
     $self->rose_objects('reports', $self->rose_manager('Report')->fetch_for_session({
       'session_id'        => $self->last_session_id,
-      'with_users'        => 1,
       'with_annotations'  => 1,
       'query'             => [$self->view_type, $self->view_param]
     }));
@@ -93,8 +92,8 @@ sub fetch_for_annotation {
   
   if ($report_ids && @$report_ids) {
     $self->rose_objects($self->rose_manager('Report')->fetch_by_primary_keys($report_ids, {
-      'with_objects' => 'annotation',
-      'with_users'   => ['annotation.created_by', 'annotation.modified_by']
+      'with_objects'          => 'annotation',
+      'with_external_objects' => ['annotation.created_by_user', 'annotation.modified_by_user']
     }));
   }
 }
@@ -140,7 +139,6 @@ sub get_database_list {
         $_ =~ /^([a-z]+_[a-z]+)/; #get species
         $species = '1'.$1 if $self->validate_species(ucfirst $1); #'1' prefixed for sorting -  keeps it always above 'others'
       }
-      $database_list->{$server->{'host'}}{$species} ||= [];
       push @{$database_list->{$server->{'host'}}{$species}}, $_;
     }
   }
