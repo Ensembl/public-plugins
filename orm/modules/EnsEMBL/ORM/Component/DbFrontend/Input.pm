@@ -26,7 +26,10 @@ sub content_tree {
   my $preview = $object->show_preview && $action ne 'Preview' && $is_ajax ne 'list';
   my $serial  = $record->get_primary_key_value;
 
-  my $content = $self->dom->create_element('div', {'class' => [$object->content_css, $self->_JS_CLASS_RESPONSE_ELEMENT]});
+  my $content = $self->dom->create_element('div', {
+    'class'     => [$object->content_css, $self->_JS_CLASS_RESPONSE_ELEMENT],
+    'children'  => [$is_ajax ? {'node_name' => 'h3', 'class' => 'dbf-heading', 'inner_HTML' => sprintf('%s %s:', $object->action, $object->record_name->{'singular'})} : ()]
+  });
   my $form    = $content->append_child($self->new_form({
     'action' => $hub->url({'action' => $preview ? 'Preview' : 'Save'}),
     'class'  => !$preview ? $serial ? $self->_JS_CLASS_SAVE_FORM : $self->_JS_CLASS_ADD_FORM : $self->_JS_CLASS_PREVIEW_FORM
