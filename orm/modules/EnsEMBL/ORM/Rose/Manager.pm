@@ -14,7 +14,7 @@ use EnsEMBL::ORM::Rose::Object::User;
 
 use base qw(Rose::DB::Object::Manager);
 
-use constant DEBUG_SQL => 1;
+use constant DEBUG_SQL => 0;
 
 sub get_objects {
   ## @overrides
