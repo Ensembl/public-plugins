@@ -22,7 +22,7 @@ sub content_tree {
   my $record  = $object->rose_object;
   
   my $content = $self->dom->create_element('div', {'class' => $self->_JS_CLASS_RESPONSE_ELEMENT});
-  
+
   if ($object->permit_delete =~ /^(delete|retire)$/) {
     $content->inner_HTML(
       sprintf('<p class="dbf-dialogue">%s</p><p class="dbf-dialogue">Are you sure you want to continue?</p><p class="dbf-dialogue"><a class="dbf-confirm-buttons %s" href="%s">Yes</a><a class="dbf-confirm-buttons %s" href="%s">No</a></p>',
@@ -32,7 +32,7 @@ sub content_tree {
       $self->_JS_CLASS_DELETE_BUTTON,
       $hub->url({'action' => 'Delete', 'id' => $record->get_primary_key_value}),
       $self->_JS_CLASS_CANCEL_BUTTON,
-      $hub->referer->{'uri'}
+      $hub->referer->{'uri'} || $hub->url({'action' => $object->default_action})
     ));
   }
   else {
