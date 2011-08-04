@@ -17,6 +17,7 @@ use EnsEMBL::ORM::Rose::Field;
 use base qw(EnsEMBL::Web::Component);
 
 use constant {
+  _JS_CLASS_DBF_RECORD        => '_dbf_record',
   _JS_CLASS_RESPONSE_ELEMENT  => '_dbf_response',
   _JS_CLASS_EDIT_BUTTON       => '_dbf_button',
   _JS_CLASS_ADD_BUTTON        => '_dbf_button',
@@ -27,7 +28,9 @@ use constant {
   _JS_CLASS_ADD_FORM          => '_dbf_add',
   _JS_CLASS_DATASTRUCTURE     => '_datastructure',
   _JS_CLASS_EDITABLE          => '_dbf_editable',
-  _JS_CLASS_LIST_TABLE        => '_dbf_list data_table no_col_toggle',
+  _JS_CLASS_LIST_TABLE        => '_dbf_list',
+  _JS_CLASS_LIST_ROW_HANDLE   => '_dbf_row_handle',
+  _JS_CLASS_DATATABLE         => 'data_table no_col_toggle'
 };
 
 sub _init {
@@ -131,8 +134,8 @@ sub unpack_rose_object {
 
   while (my $field_name = shift @$fields) {
   
-    my $field = shift @$fields; # already a hashref with keys that should not be modified - keys as accepted by Form->add_field method
-    my $value = $field->{'value'} ||= $record->$field_name;
+    my $field = shift @$fields; # already a hashref with keys that should not be modified (except 'value' key) - keys as accepted by Form->add_field method
+    my $value = $field->{'value'} = $record->$field_name || $field->{'value'};
     $field->{'name'} ||= $field_name;
     
     my $select = $field->{'type'} && $field->{'type'} =~ /^(dropdown|checklist|radiolist)$/i ? 1 : 0;
