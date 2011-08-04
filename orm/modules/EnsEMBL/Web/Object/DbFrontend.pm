@@ -80,6 +80,8 @@ sub fetch_for_duplicate {
   ## Fetchs and saves rose objects to be displayed on 'Input' page (duplicate page), after ignoring the primary key
   ## If 'id' provided, gets the object with id, otherwise undef
   my $self = shift;
+  
+  return unless $self->permit_duplicate;
 
   my $id     = $self->hub->param('id') or return;
   my $record = $self->manager_class->fetch_by_primary_key($id, $self->_get_with_objects_params('Input'));
@@ -268,7 +270,7 @@ sub _populate_from_cgi {
 
 ### show_fields             ArrayRef as [column names => {'label' => ? , 'type' => ?, etc}] that are displayed as form fields while adding/editing/viewing the data
 ###                         Purpose of arrayref instead of hashref is to maintain order
-###                         Fields can include name of any relationship (as relationships are also treated as columns)
+###                         Fields can include name of any relationship or 'external relationships' (as relationships are also treated as columns)
 ###                         HashRef for each column name can contain keys as accepted by E::W::Form::Fieldset->add_field method
 ###                         An extra key 'is_null' can be set true (or equal to the caption of the null option) in case type is dropdown.
 ### show_columns            ArrayRef as [column names => labels] or [column names => {title => ?, class => ?, editable => ?, width => ?}] that are displayed when records are displayed in tabular form (List page)
@@ -276,6 +278,8 @@ sub _populate_from_cgi {
 ###                         Column_name can include name of any relationship (as relationships are also treated as columns)
 ### record_select_style     Specifies the style of form element that will be displayed to select a record to edit
 ###                         Select box by default, if set to 'radio', then radio buttons
+### list_is_datatable       Flag to tell whether or not use jQuery dataTable for the List page
+###                         Default true
 ### pagination              Number of records that are to be displayed per page when show in a list List and Display page
 ###                         Defaults to showing all records. If 0, undef or false - all records are shown
 ### show_preview            Flag to tell whether a preview should be displayed before record is updated/added
@@ -284,6 +288,7 @@ sub _populate_from_cgi {
 ###                         'delete' means deleting is allowed
 ###                         'retire' means set the value of Rose::Object::INACTIVE_FLAG TO Rose::Object::INACTIVE_FLAG_VALUE
 ###                         Defaults to not allowing deletion
+### permit_duplicate        Tells whether duplicating a record is allowed or not
 ### content_css             Css class name to go to the container of content - override this to customise styles
 ### record_name             HashRef telling the name of the record {'singular' => ? , 'plural' => } 
 ###                         Defaults to 'records'
@@ -294,9 +299,11 @@ sub _populate_from_cgi {
 sub show_fields           { return []; }
 sub show_columns          { return []; }
 sub record_select_style   { ''; }
+sub list_is_datatable     { 1;  }
 sub pagination            { 0;  }
 sub show_preview          { 1;  }
 sub permit_delete         { 'retire'; }
+sub permit_duplicate      { 1; }
 sub content_css           { return 'dbf-content'; }
 sub record_name           { return {'singular' => 'record' , 'plural' => 'records'}; }
 sub show_user_email       { 1; }
