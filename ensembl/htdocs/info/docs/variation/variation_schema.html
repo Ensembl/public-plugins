@@ -1081,7 +1081,7 @@ A colour legend is available at the <a href="#legend">bottom of the page</a>.
 		<tr class="bg1"><td><b>supporting_structural_variation_id</b></td><td>int(10)</td><td></td><td>Primary key, internal identifier.</td><td>primary key</td></tr>
 		<tr class="bg2"><td><b>name</b></td><td>varchar(255)</td><td></td><td>The identifier or name of the supporting evidence.</td><td></td></tr>
 		<tr class="bg1"><td><b>structural_variation_id</b></td><td>int(10)</td><td></td><td>Foreign key references to the <a href="#structural_variation">structural_variation</a> table.</td><td>key: structural_variation_idx</td></tr>
-		<tr class="bg2"><td><b>class_attrib_id</b></td><td>int(10)</td><td>0</td><td>Foreign key references to the <a href="#attrib">attrib</a> table. Defines the type of supporting evidence. </td><td>key: attrib_idx</td></tr>
+		<tr class="bg2"><td><b>class_attrib_id</b></td><td>int(10)</td><td>0</td><td>Foreign key references to the <a href="#attrib">attrib</a> table. Defines the allele type of the supporting evidence. </td><td>key: attrib_idx</td></tr>
 </table>
 </div>
 <p><b>See also:</b></p>
