@@ -28,7 +28,7 @@ sub test_variation {
     #TODO Test the Show table link
     
     #Test ZMenu
-    print "Test ZMenu on Variation Genomic Context \n";
+    print "  Test ZMenu on Variation Genomic Context \n";
     $sel->ensembl_open_zmenu('Context','title^="Variation:"');
     $sel->pause(2000);
     $sel->click_ok("link=rs*properties")
@@ -37,7 +37,7 @@ sub test_variation {
     $sel->ensembl_wait_for_page_to_load;
     
     #Adding a track from the configuration panel
-    print "Test Configure page, adding a track \n";
+    print "  Test Configure page, adding a track \n";
     $sel->click_ok("link=Configure this page")
     and $sel->ensembl_wait_for_ajax('10000')
     and $sel->click_ok("link=Germline variation*")

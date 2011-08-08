@@ -87,7 +87,7 @@ sub test_location {
     }
 
   } else {
-    print "No Location \n";
+    print "  No Location \n";
     $sel->ensembl_is_text_present("Location (not available)");
   }
 }

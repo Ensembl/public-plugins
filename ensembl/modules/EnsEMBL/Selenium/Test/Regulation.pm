@@ -26,7 +26,7 @@ sub test_regulation {
     $sel->ensembl_click_links(["link=Summary"]);
         
     #Test ZMenu
-    print "Test ZMenu on Regulation Details by cell line \n";
+    print "  Test ZMenu on Regulation Details by cell line \n";
     $sel->ensembl_open_zmenu('FeatureDetails','title^="Regulatory Feature:"');
     $sel->pause(2000);
     $sel->click_ok("link=ENSMUSR*")
@@ -36,7 +36,7 @@ sub test_regulation {
     $sel->ensembl_wait_for_page_to_load;
     
     #Adding a track from the configuration panel
-    print "Test Configure page, adding a track \n";
+    print "  Test Configure page, adding a track \n";
     $sel->click_ok("link=Configure this page")
     and $sel->ensembl_wait_for_ajax('10000')
     and $sel->click_ok("link=Repeats*")

@@ -26,7 +26,7 @@ sub attach_das {
   my ($self, $links) = @_;
   my $sel = $self->sel;
   
-  print "Test Attach das\n";
+  print "  Test Attach das\n";
   $sel->click_ok("link=Manage your data")
   and $sel->ensembl_wait_for_ajax
   and $sel->click_ok("link=Attach DAS")
@@ -49,7 +49,7 @@ sub attach_remote_file {
   $format ||= 'BED'; 
   $file_url ||= 'http://ensweb-1-18.internal.sanger.ac.uk:11000/test.bed';
   
-  print "Test Attach remote file\n";
+  print "  Test Attach remote file\n";
  
   $sel->click_ok("link=Manage your data")
   and $sel->ensembl_wait_for_ajax
@@ -70,7 +70,7 @@ sub add_track {
   my $self = shift;
   my $sel  = $self->sel;
   
-  print "Test Upload data\n";   
+  print "  Test Upload data\n";   
   $self->upload_data;  
   $sel->click_ok("link=Configure Page")
   and $sel->ensembl_wait_for_ajax;
@@ -89,7 +89,7 @@ sub configure_page {
   my $self = shift;
   my $sel  = $self->sel;
 
-  print "Test Configure Page\n";
+  print "  Test Configure Page\n";
   $sel->click_ok("link=Configure this page")
   and $sel->ensembl_wait_for_ajax
   and $sel->ensembl_is_text_present("Configure Page");
@@ -174,7 +174,7 @@ sub export_data {
   
   $output ||= 'CSV (Comma separated values)';
   
-  print "Test Export Data\n";
+  print "  Test Export Data\n";
   $sel->click_ok("link=Export data")
   and $sel->ensembl_wait_for_ajax(10000)
   and $sel->ensembl_is_text_present("Output:");
@@ -200,7 +200,7 @@ sub features_karyotype {
 
   $feature_id ||= 'BRCA2';
 
-  print "Test Features on karyotype\n";
+  print "  Test Features on karyotype\n";
 
   $sel->click_ok("link=Manage your data")
   and $sel->ensembl_wait_for_ajax

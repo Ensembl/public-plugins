@@ -17,7 +17,7 @@ sub test_karyotype {
 
 #karyotype link test
   if(!scalar @{$SD->get_config(ucfirst($self->species), 'ENSEMBL_CHROMOSOMES')}) {
-    print "No Karyotype \n";
+    print "  No Karyotype \n";
     $sel->ensembl_is_text_present("Karyotype (not available)");
   } else {
     $sel->ensembl_click_links(["link=Karyotype"]);
@@ -39,7 +39,7 @@ sub test_karyotype {
 
     #Testing ZMenu on karyotype
     if($self->species eq 'homo_sapiens') {
-      print "Test ZMenu\n";
+      print "  Test ZMenu\n";
       $sel->ensembl_open_zmenu('Genome')
       and $sel->ensembl_is_text_present("Jump to location View")
       and $sel->ensembl_click_links(["link=Jump to location View"]);

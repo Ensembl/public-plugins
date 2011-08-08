@@ -23,7 +23,7 @@ sub test_gene {
     and $sel->ensembl_is_text_present("Gene: $gene_text ($gene_param)");    
     
     if(lc($self->species) eq 'homo_sapiens') {      
-      print "Test ZMenu on Gene Summary\n";
+      print "  Test ZMenu on Gene Summary\n";
       $sel->ensembl_open_zmenu('TranscriptsImage','class^="drag"');
       $sel->click_ok("link=Jump to location View")
       and $sel->ensembl_wait_for_ajax('50000','2000')
@@ -32,7 +32,7 @@ sub test_gene {
       $sel->ensembl_wait_for_page_to_load;
       
       #Adding a track from the configuration panel
-      print "Test Configure page, adding a track \n";
+      print "  Test Configure page, adding a track \n";
       $sel->click_ok("link=Configure this page")
       and $sel->ensembl_wait_for_ajax('10000')
       and $sel->click_ok("link=External data*")
@@ -54,7 +54,7 @@ sub test_gene {
     $sel->ensembl_click_links(["link=Regulation"]) if($SD->table_info_other(ucfirst($self->species),'funcgen', 'feature_set')->{'rows'} && $gene_text !~ /^ASMPATCH/);
     
     if(lc($self->species) eq 'homo_sapiens') {
-      print "Test ZMenu on Regulation\n";
+      print "  Test ZMenu on Regulation\n";
       $sel->ensembl_open_zmenu('RegulationImage','class^="group"');
       $sel->click_ok("link=ENSR*")
       and $sel->ensembl_wait_for_ajax('50000','2000')
@@ -95,7 +95,7 @@ sub test_gene {
     $self->export_data('FASTA sequence','cdna:') if(lc($self->species) eq 'homo_sapiens');
     
   } else {
-    print "No Gene \n";    
+    print "  No Gene \n";    
   }
 }
 

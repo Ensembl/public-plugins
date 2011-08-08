@@ -43,7 +43,7 @@ sub test_transcript {
     
     #Adding a track from the configuration panel
     if(lc($self->species) eq 'homo_sapiens') {          
-      print "Test Configure page, removing a track \n";
+      print "  Test Configure page, removing a track \n";
       $sel->click_ok("link=Configure this page")
       and $sel->ensembl_wait_for_ajax('10000')
       and $sel->click_ok("link=Information*")
@@ -70,7 +70,7 @@ sub test_transcript {
     $self->export_data('BED Format','Browser position') if(lc($self->species) eq 'homo_sapiens');
     
   } else {
-   print "No Transcript \n"; 
+   print "  No Transcript \n"; 
   }
   
 }
