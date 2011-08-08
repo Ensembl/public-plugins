@@ -27,11 +27,10 @@ sub ensembl_wait_for_page_to_load {
   my ($self, $timeout) = @_;
   
   $timeout ||= $self->_timeout;
-#  my $location = $self->get_location();  
-#  print "URL:: $location \n\n" unless 
+  
   $self->wait_for_page_to_load($timeout)
   and ok($self->get_title !~ /Internal Server Error|404 error/i, 'No Internal or 404 Server Error')
-  and $self->ensembl_wait_for_ajax('15000');
+  and $self->ensembl_wait_for_ajax('50000');
 }
 
 # Open a ZMenu by title for the given imagemap panel or if title not provided will get the coords based on the area tag for the given imagemap panel (id of div for class js_panel)
@@ -39,7 +38,8 @@ sub ensembl_wait_for_page_to_load {
 sub ensembl_open_zmenu {
   my ($self, $panel, $area_tag) = @_;
   my $tag = $area_tag ?  "area[$area_tag]" : 'area[href^=#vdrag]';  
-
+# $('area[class^="group"]','#RegulationImage').attr('coords').split(',')
+#Ensembl.PanelManager.panels.RegulationImage.makeZMenu({pageX:0, pageY:0}, {x:1763, y:148});
   $self->run_script(qq/
     var coords = \$('$tag', '#$panel').attr('coords').split(',');
     Ensembl.PanelManager.panels.$panel.makeZMenu({pageX:0, pageY:0}, {x:coords[0], y:coords[1]});
@@ -52,7 +52,7 @@ sub ensembl_open_zmenu {
 sub ensembl_open_zmenu_at {
   my ($self, $panel, $pos) = @_;
   
-  my ($x, $y) = split /,/, $pos;  
+  my ($x, $y) = split /,/, $pos;
   $self->run_script("Ensembl.PanelManager.panels['$panel'].makeZMenu({pageX:0, pageY:0}, {x:$x, y:$y});")
   and $self->ensembl_wait_for_ajax;
 }
@@ -61,8 +61,7 @@ sub ensembl_open_zmenu_at {
 # e.g. $sel->ensembl_click_links(["link=Tool","link=Human"], '5000');
 sub ensembl_click_links {
   my ($self, $links, $timeout) = @_;
-  my $location = $self->get_location();
-  
+  my $location = $self->get_location();  
   
   if (ref $links eq 'ARRAY') {
     foreach my $link (@{$links}) {
@@ -79,15 +78,8 @@ sub ensembl_click_links {
 
 # check if all the images (ajax one) on the page have been loaded successfully
 sub ensembl_images_loaded {
-  my ($self, $timeout) = @_;
-  
-  $timeout ||= '15000';
-  
-  $self->wait_for_condition(
-    'var $ = selenium.browserbot.getCurrentWindow().jQuery;
-    !($(".ajax_load").length)',
-    $timeout);
-     
+  my ($self) = @_;
+       
 #jQuery('img.imagemap')[0].complete  
   $self->run_script(qq{
     var complete = 0;
@@ -95,8 +87,8 @@ sub ensembl_images_loaded {
        if (this.complete) {
          complete++;
        }
-     });     
-     if (complete === jQuery('img.imagemap').length) {       
+     });
+     if (complete === jQuery('img.imagemap').length) {
        jQuery('body').append("<p>All images loaded successfully</p>");
      }
   });
