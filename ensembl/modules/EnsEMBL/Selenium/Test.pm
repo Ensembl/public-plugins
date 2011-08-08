@@ -62,6 +62,7 @@ sub sel     {$_[0]->{_sel}};
 sub verbose {$_[0]->{_verbose}};
 sub species {$_[0]->{_species}};
 
+
 sub set_default {
   my ($self, $key, $value) = @_;
   $DEFAULTS->{$key} = $value;
@@ -75,6 +76,16 @@ sub conf {
 sub testmore_output {
   # test builder output (this will be empty if we are in verbose mode)
   return $TESTMORE_OUTPUT;
+}
+
+#Getting the database information from the hub
+sub database {
+ my ($self, $db, $species) = @_;
+ 
+ my $hub  = new EnsEMBL::Web::Hub; 
+ my $database = $hub->database($db, $species);
+ 
+ return $database;
 }
 
 #getting species def from hub, can be used to check for species name, release version and other web related text
