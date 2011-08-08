@@ -10,18 +10,20 @@ __PACKAGE__->set_default('timeout', 5000);
 #------------------------------------------------------------------------------
 sub test_homepage {
  my ($self, $links) = @_;
- my $sel = $self->sel;
- my $SD = $self->get_species_def;   
+ my $sel          = $self->sel;
+ my $SD           = $self->get_species_def;   
  my $this_release = $SD->ENSEMBL_VERSION;
+ my $location     = $self->get_location();  
  
  $sel->open_ok("/"); 
- $sel->ensembl_wait_for_page_to_load_ok
+ $sel->ensembl_wait_for_page_to_load
  and $sel->is_text_present_ok("Ensembl release $this_release")
  and $sel->is_text_present_ok("What's New in Release $this_release")
  and $sel->is_text_present_ok('Did you know...?') 
  and $sel->ensembl_click_links(["link=View full list of all Ensembl species"]);
  
  $sel->go_back();
+ $sel->ensembl_wait_for_page_to_load;
  $sel->ensembl_click_links(["link=acknowledgements page"]); 
  
 }
@@ -38,6 +40,7 @@ sub test_species_list {
    my $species_label = $SD->species_label($species,1);
    $species_label =~ s/(\s\(.*?\))// if($species_label =~ /\(/);    
    $sel->ensembl_click_links(["link=$species_label"]);
+   #TODO:: CHECK FOR SPECIES IMAGES LOADED FINE
    $sel->go_back();
  }
 }
@@ -47,7 +50,7 @@ sub test_blog {
  my $sel = $self->sel;
  
  $sel->open_ok("/"); 
- $sel->ensembl_wait_for_page_to_load_ok;
+ #$sel->ensembl_wait_for_page_to_load_ok;
  $sel->click_ok("link=More release news on our blog ?");
  $sel->wait_for_page_to_load_ok("5000")
  and $sel->is_text_present_ok('Category Archives'); 
@@ -79,26 +82,28 @@ sub test_sitemap {
 #TODO:: NEED TO ADD MORE TEST
 sub test_doc {
  my ($self, $links) = @_;
- my $sel = $self->sel;
-
+ my $sel      = $self->sel;
+ my $location = $self->get_location();
+ 
  $sel->open_ok("/info/index.html");
- $sel->ensembl_wait_for_page_to_load_ok; 
+ print "URL:: $location \n\n" unless $sel->ensembl_wait_for_page_to_load; 
  $sel->ensembl_click_links(["link=Web code"]); 
 }
 
 sub test_login {
  my ($self, $links) = @_;
  my $sel = $self->sel;
+ my $location = $self->get_location(); 
 
  $sel->open_ok("/");
  $sel->click_ok("link=Login");
- $sel->ensembl_wait_for_ajax;
+ print "link Login FAILED" unless $sel->ensembl_wait_for_ajax;
  $sel->type_ok("name=email", "ma7\@sanger.ac.uk");
  $sel->type_ok("name=password", "selenium");
  $sel->click_ok("name=submit"); 
- $sel->ensembl_wait_for_page_to_load_ok; 
- $sel->click_ok("link=Logout");
- $sel->ensembl_wait_for_page_to_load_ok;
+ print "URL:: $location \n\n" unless $sel->ensembl_wait_for_page_to_load; 
+ $sel->ensembl_click_links(["link=Logout"]);
+ #$sel->ensembl_wait_for_page_to_load_ok;
 }
 
 sub test_register {
@@ -106,7 +111,7 @@ sub test_register {
  my $sel = $self->sel;
 
  $sel->open_ok("/");
- $sel->ensembl_wait_for_page_to_load_ok;
+ #$sel->ensembl_wait_for_page_to_load_ok;
  $sel->click_ok("link=Register");
  $sel->ensembl_wait_for_ajax;
  $sel->is_text_present_ok("Your name");
@@ -118,20 +123,21 @@ sub test_register {
 
 sub test_search {
  my ($self, $links) = @_;
- my $sel = $self->sel;
+ my $sel      = $self->sel;
+ my $location = $self->get_location();
 
  $sel->open_ok("/");
- $sel->ensembl_wait_for_page_to_load_ok;
+ #$sel->ensembl_wait_for_page_to_load_ok;
  
  $sel->type_ok("name=q", "BRCA2");
- $sel->click_ok("//input[\@type='image']");
- $sel->ensembl_wait_for_page_to_load_ok;
+ $sel->ensembl_click_links(["//input[\@type='image']"]);
+ #$sel->ensembl_wait_for_page_to_load_ok;
  $sel->is_text_present_ok("returned the following results:");
  $sel->click_ok("link=Gene");
  $sel->is_text_present_ok("Homo sapiens (");
  
- $sel->open_ok("/Homo_sapiens/Search/Details?species=Homo_sapiens;idx=Gene;q=brca2");
- $sel->ensembl_wait_for_page_to_load_ok;
+ $sel->open_ok("/Homo_sapiens/Search/Details?species=Homo_sapiens;idx=Gene;q=brca2");  
+ print "URL:: $location \n\n" unless $sel->ensembl_wait_for_page_to_load;
  $sel->is_text_present_ok("Genes match your query");  
 }
 
@@ -141,7 +147,7 @@ sub test_contact_us {
  my $sd = $self->get_species_def;
 
  $sel->open_ok("/");
- $sel->ensembl_wait_for_page_to_load_ok;
+ #$sel->ensembl_wait_for_page_to_load_ok;
  
  $sel->ensembl_click_links(["link=Contact Us"]);
  $sel->is_text_present_ok("Contact Ensembl");
