@@ -471,7 +471,6 @@ term relative to the transcript structure is available.
 	<td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001782">SO:0001782</a></td>
 	<td>-</td>
 </tr>
-
 <tr>
 	<td>Intergenic</td>
 	<td>More than 5 kb either upstream or downstream of a transcript</td>
@@ -581,7 +580,7 @@ the compressed format used is provided here.
 
 <p>
 The predictions and associated scores are stored in the <i>protein_function_predictions</i>
-table, in either the <i>polyphen_predictions</i> or <i>sift_predictions</i> columns. The other
+table, in the <i>polyphen_predictions</i> or <i>sift_predictions</i> columns. The other
 columns in this table identify the stable ID of the Ensembl translation for each
 protein coding transcript, the stable ID of the transcript itself, and a hexadecimal 
 MD5 hash of the amino acid sequence of the translation. This can be used to ensure 
@@ -604,8 +603,18 @@ right by 14 bits and treat this as an integer between 0 and 3. The corresponding
 be looked up in the table below. To decode the prediction score you should mask off the 
 top 6 bits and the resulting value can be treated as a number between 0 and 1000, which 
 should be divided by 1000 to give a 3 decimal place score (casting to a floating point type
-if necessary). Bits 11-13 are not used, except to encode the "same as reference" dummy prediction 
+if necessary). Bits 11-14 are not used, except to encode the "same as reference" dummy prediction 
 <i>0xFFFF</i>.
+</p>
+
+<<<<<<< index.html
+<img src="/img/protein_function_encoding.png">
+
+<p>
+A diagram of the encoding scheme is shown above. In this example from a polyphen prediction, 
+the top prediction bits are <i>0b01</i> which in decimal is the number 1, which corresponds to 
+"possibly damaging" in the table below. The score bits are <i>0b1110001010</i> which in decimal 
+is the number 906, which when divided by 1000, gives a score of 0.906.
 </p>
 
 <table id="prediction_values" class="ss" style="width:50%;">
