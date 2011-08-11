@@ -124,7 +124,7 @@ sub content {
 sub re_search {
   my $self   = shift;
   my $hub = $self->hub;
-
+  my $sitetype = ucfirst(lc($hub->species_defs->ENSEMBL_SITETYPE));
   my $html;
 
   my $species = $hub->param('species');
@@ -152,11 +152,11 @@ sub re_search {
     $species =~ s/_/ /g;
     $html = qq(<h2>Your search of annotated features from $display_species for the term '$q' returned no results</h2>);
     my $url = '/' . $hub->species . '/Search/Results?species=all;idx=' . $hub->param('idx') . ';q=' . $q;
-    $html .= sprintf qq(<h3>Would you like to search <a href="%s">the reset of the website</a> with this term ?</h3>), $url;
+    $html .= sprintf qq(<h3>Would you like to search <a href="%s">the rest of the website</a> with this term ?</h3>), $url;
     return $html;
   }
 
-  $html = qq(<h2>Your search of the Ensembl website for the term '$q' returned no results</h2>);
+  $html = qq(<h2>Your search of the $sitetype website for the term '$q' returned no results</h2>);
   $html .=
 qq(<h3>If you are expecting to find features with this search term and think the failure to do so is an error, please <a href="/Help/Contact" class="popup">contact helpdesk</a> and let us know</h3>);
   return $html;
