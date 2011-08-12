@@ -176,8 +176,7 @@ sub export_data {
   
   print "  Test Export Data\n";
   $sel->click_ok("link=Export data")
-  and $sel->ensembl_wait_for_ajax(10000)
-  and $sel->ensembl_is_text_present("Output:");
+  and $sel->ensembl_wait_for_page_to_load(10000);  
   
   $sel->select_ok("output","$output")
   and $sel->click_ok("name=next");
