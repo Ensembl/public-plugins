@@ -124,7 +124,7 @@ sub content {
 sub re_search {
   my $self   = shift;
   my $hub = $self->hub;
-
+  my $sitetype = ucfirst(lc($hub->species_defs->ENSEMBL_SITETYPE));
   my $html;
 
   my $species = $hub->param('species');
@@ -156,7 +156,7 @@ sub re_search {
     return $html;
   }
 
-  $html = qq(<h2>Your search of the Ensembl website for the term '$q' returned no results</h2>);
+  $html = qq(<h2>Your search of the $sitetype website for the term '$q' returned no results</h2>);
   $html .=
 qq(<h3>If you are expecting to find features with this search term and think the failure to do so is an error, please <a href="/Help/Contact" class="popup">contact helpdesk</a> and let us know</h3>);
   return $html;
