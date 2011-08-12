@@ -57,6 +57,14 @@ sub ensembl_open_zmenu_at {
   and $self->ensembl_wait_for_ajax;
 }
 
+#Overloading click_ok function so that it returns the current url when it fails
+sub ensembl_click {
+  my ($self, $link, $timeout) = @_;
+  my $url = $self->get_location();
+    
+  print "URL:: $url \n\n" unless $self->click_ok($link,$timeout);
+}
+
 # Click links on ensembl but can only be used for link opening page, not ajax popup
 # e.g. $sel->ensembl_click_links(["link=Tool","link=Human"], '5000');
 sub ensembl_click_links {
@@ -97,7 +105,7 @@ sub ensembl_images_loaded {
 }
 
 
-#TODO: OVerloading is_text_present function so that it returns the current url when it fails
+#Overloading is_text_present function so that it returns the current url when it fails
 sub ensembl_is_text_present {
   my ($self, $text) = @_;
   my $url = $self->get_location();
