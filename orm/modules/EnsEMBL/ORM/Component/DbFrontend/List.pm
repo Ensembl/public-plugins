@@ -78,12 +78,7 @@ sub record_tree {
   my $columns = $object->show_columns;
   while (my $column_name = shift @$columns) {
 
-    my $label     = shift @$columns;
-    my $value     = $record->$column_name;
-    my $is_title  = $record->TITLE_COLUMN && $column_name eq $record->TITLE_COLUMN;
-
-    $value = $self->_display_column_value($value, $is_title);
-    $value = sprintf('<a href="%s">%s</a>', $hub->url({'action' => 'Display', 'id' => $primary_key}), $value) if $is_title;
+    my $label = shift @$columns;
 
     if ($header_only) {
 
@@ -105,6 +100,9 @@ sub record_tree {
       });
     }
     else {
+      my $is_title  = $record->TITLE_COLUMN && $column_name eq $record->TITLE_COLUMN;
+      my $value     = $self->_display_column_value($record->$column_name, $is_title);
+      $value        = sprintf('<a href="%s">%s</a>', $hub->url({'action' => 'Display', 'id' => $primary_key}), $value) if $is_title;
       $record_row->append_child('td', {'inner_HTML' => $value, 'flags' => $column_name});
     }
   }
