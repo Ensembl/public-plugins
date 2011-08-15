@@ -66,8 +66,15 @@ sub record_tree {
 
   while (my $field_name = shift @$fields) {
 
-    my $field = shift @$fields;
-    my $value = $record->$field_name;
+    my $field   = shift @$fields;
+    my $value   = $record->$field_name;
+    my $jclass  = $self->{'_column_class_names'}{$field_name};
+
+    # add class attribute for datastructure type columns
+    unless (defined $jclass) {
+      my $column = $record->meta->column($field_name);
+      $jclass = $self->{'_column_class_names'}{$field_name} = $column && $column->type eq 'datastructure' ? $self->_JS_CLASS_DATASTRUCTURE : '';
+    }
 
     $record_div->append_child('div', {
       'class'     => "dbf-row $bg[0]",
@@ -78,10 +85,11 @@ sub record_tree {
         'inner_HTML'  => exists $field->{'label'} ? $field->{'label'} : ''
       }, {
         'node_name'   => 'div',
-        'class'       => 'dbf-row-right',
+        'class'       => "dbf-row-right $jclass",
         'inner_HTML'  =>  $self->display_field_value($value, $field->{'values'} ? {'lookup' => $field->{'values'}} : {}) || ''
       }]
     });
+
     @bg = reverse @bg;
   }
 
