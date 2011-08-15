@@ -3,79 +3,39 @@ package EnsEMBL::Web::Configuration::Production;
 use strict;
 use warnings;
 
-use base qw(EnsEMBL::Web::Configuration);
+use base qw(EnsEMBL::Web::Configuration::MultiDbFrontend);
 
-sub set_default_action {
-  my $self = shift;
-  $self->{'_data'}{'default'} = 'AnalysisWebData';
-}
+use constant DEFAULT_ACTION => 'Search';
+
+sub caption       { 'Production Database'; }
+sub short_caption { 'Production Database'; }
 
 sub modify_page_elements {
-  my $self = shift;
-  my $page = $self->page;
-  $page->remove_body_element('tabs');
-  $page->remove_body_element('summary');
+  my $page = shift->page;
+  $page->remove_body_element($_) for qw(tabs summary);
 }
 
 sub populate_tree {
   my $self = shift;
-  my $hub = $self->hub;
+  my $hub  = $self->hub;
 
-  $self->create_node( 'AnalysisWebData', "Analysis WebData",
-    [qw(
-      database_report EnsEMBL::Admin::Component::Production::AnalysisWebData
-    )],
-    { 'availability' => 1, 'filters' => [qw(WebAdmin)]}
-  );
-
-  $self->create_node( 'LogicName', "Analysis Descriptions",
-    [qw(
-      database_report EnsEMBL::Admin::Component::Production::LogicName
-    )],
-    { 'no_menu_entry' => 1, 'availability' => 1, 'filters' => [qw(WebAdmin)]}
-  );
-
-
-  $self->create_node( 'Add', "Add Analysis Web Data",
-    [qw(
-      database_report EnsEMBL::ORM::Component::DbFrontend::Input
-    )],
-    { 'availability' => 1, 'filters' => [qw(WebAdmin)]}
-  );
-  $self->create_node( 'Edit', "Add Analysis Description",
-    [qw(
-      database_report EnsEMBL::ORM::Component::DbFrontend::Input
-    )],
-    { 'availability' => 1, 'filters' => [qw(WebAdmin)], 'no_menu_entry' => 1}
-  );
-  $self->create_node( 'Display', "View Analysis Description",
-    [qw(
-      database_report EnsEMBL::ORM::Component::DbFrontend::Display
-    )],
-    { 'availability' => 1, 'filters' => [qw(WebAdmin)], 'no_menu_entry' => 1}
-  );
-  $self->create_dbfrontend_node({$_ => {'filters' => ['WebAdmin']}}) for qw(Preview Problem Confirm Save Delete);
-  
-  my $menus = [
-    'AnalysisDescription' => $self->dbfrontend_nodes({'filters' => [qw(WebAdmin)], 'raw' => 1}),
-    'Species'             => $self->dbfrontend_nodes({'filters' => [qw(WebAdmin)], 'raw' => 1}),
-    'Metakey'             => $self->dbfrontend_nodes({'filters' => [qw(WebAdmin)], 'raw' => 1}),
-    'Biotype'             => $self->dbfrontend_nodes({'filters' => [qw(WebAdmin)], 'raw' => 1}),
-    'Webdata'             => $self->dbfrontend_nodes({'filters' => [qw(WebAdmin)], 'raw' => 1}),
-  ];
-
-  while (my $menu_name = shift @$menus) {
-    my $menu_nodes = shift @$menus;
-    my $menu = $self->create_submenu($menu_name, $menu_name);
-    
-    while (my $node_name = shift @$menu_nodes) {
-      my $node_params = shift @$menu_nodes;
-      $node_params->{'url'} = "/$menu_name/$node_name";
-    
-      $menu->append($self->create_node("$menu_name$node_name", delete $node_params->{'caption'}, delete $node_params->{'components'}, $node_params));
-    }
-  }
+  $self->create_multidbfrontend_menu('Production', 'Analysis Web Data', {'filters' => [qw(WebAdmin)]}, [
+    'Search'          => {'caption' => 'Search',    'components' => [qw(s_analysis_webdata     EnsEMBL::Admin::Component::Production::Search)],          'availability' => 1},
+    'AnalysisWebData' => {'caption' => 'List All',  'components' => [qw(analysis_webdata       EnsEMBL::Admin::Component::Production::AnalysisWebData)], 'availability' => 1},
+    'LogicName'       => {'caption' => 'List',      'components' => [qw(view_analysis_webdata  EnsEMBL::Admin::Component::Production::LogicName)],       'availability' => 1, 'no_menu_entry' => 1},
+    'Add'             => {},
+    'Edit'            => {},
+    'Duplicate'       => {},
+    'Select/Edit'     => {},
+    'Select/Delete'   => {},
+    'Preview'         => {},
+    'Problem'         => {},
+    'Confirm'         => {},
+    'Save'            => {},
+    'Delete'          => {},
+  ]);
+  $self->create_multidbfrontend_menu('AnalysisDesc', 'Analysis Description', {'filters' => [qw(WebAdmin)]});
+  $self->create_multidbfrontend_menu($_, $_, {'filters' => [qw(WebAdmin)]}) for qw(Species Metakey Biotype Webdata);
 }
 
 1;
-                  
