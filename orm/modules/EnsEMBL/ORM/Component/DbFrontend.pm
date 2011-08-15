@@ -30,7 +30,9 @@ use constant {
   _JS_CLASS_EDITABLE          => '_dbf_editable',
   _JS_CLASS_LIST_TABLE        => '_dbf_list',
   _JS_CLASS_LIST_ROW_HANDLE   => '_dbf_row_handle',
-  _JS_CLASS_DATATABLE         => 'data_table no_col_toggle'
+  _JS_CLASS_DATATABLE         => 'data_table no_col_toggle',
+  
+  _FLAG_NO_CONTENT            => '_dbf_no_content'
 };
 
 sub _init {
@@ -49,7 +51,13 @@ sub content_tree {
   ## Override in the child classes
   my $self    = shift;
   my $object  = $self->object; 
-  return $self->dom->create_element('div', {'class' => $object->content_css, 'children' => [{'node_name' => 'p', 'inner_HTML' => sprintf('No %s found in the database', $object->record_name->{'plural'})}]});
+  return $self->dom->create_element('div', {
+    'class'     => $object->content_css,
+    'children'  => [
+      {'node_name' => 'h2', 'inner_HTML' => sprintf('No %s found', $object->record_name->{'plural'})},
+      {'node_name' => 'p',  'inner_HTML' => sprintf('No %s found in the database', $object->record_name->{'plural'}), 'flags' => $self->_FLAG_NO_CONTENT}
+    ]
+  });
 }
 
 sub content_pagination {
@@ -83,7 +91,7 @@ sub content_pagination_tree {
   });
 
   $links->append_child($self->dom->create_element('a', {
-    'href'        => $hub->url({'page' => $page - 1 || 1}),
+    'href'        => $hub->url({'page' => $page - 1 || 1}, undef, 1),
     'inner_HTML'  => '&laquo; Previous',
     $page == 1 ?
     ('class'      => 'disabled') : (),
@@ -98,7 +106,7 @@ sub content_pagination_tree {
     for my $num ($_ - $previous_num > 4 ? ($_) : ($previous_num + 1 .. $_)) {
       $num > $previous_num + 1 and $links->append_child($self->dom->create_element('span', {'inner_HTML' => '&#133;'}));
       $links->append_child($self->dom->create_element('a', {
-        'href'        => $hub->url({'page' => $num}),
+        'href'        => $hub->url({'page' => $num}, undef, 1),
         'inner_HTML'  => $num,
         $page == $num ?
         ('class'      => 'selected') : ()
@@ -109,7 +117,7 @@ sub content_pagination_tree {
   }
 
   $links->append_child($self->dom->create_element('a', {
-    'href'        => $hub->url({'page' => $page_count - ($page_count - $page || 1) + 1}),
+    'href'        => $hub->url({'page' => $page_count - ($page_count - $page || 1) + 1}, undef, 1),
     'inner_HTML'  => 'Next &raquo;',
     $page == $page_count ?
     ('class'      => 'disabled') : (),
@@ -142,34 +150,21 @@ sub unpack_rose_object {
 
     ## if this field is a relationship
     if (exists $relations->{$field_name}) {
-      my $relation = $relations->{$field_name};
-      $field->{'value_type'} = $relation->type;
+      my $relationship         = $relations->{$field_name};
+      my $related_object_class = $relationship->can('class') ? $relationship->class : $relationship->map_class->meta->relationship($relationship->name)->class;
+
+      $field->{'value_type'}        = $relationship->type;
+      $field->{'is_datastructure'}  = $related_object_class->TITLE_COLUMN && $related_object_class->meta->column($related_object_class->TITLE_COLUMN)->type eq 'datastructure';
       
       ## get lookup if type is either 'dropdown' or 'checklist' or 'radiolist'
       if ($select) {
-        
-        my $related_object_class;
-        my $ref_value;
-        if (!$value || ref $value eq 'ARRAY' && !@$value) {
 
-          if ($relation->can('class')) {
-            $related_object_class = $relation->class;
-          }
-          else {
-            $related_object_class = $relation->map_class->meta->relationship($relation->name)->class;
-          }
-        }
-        else {
-          $ref_value = ref $value eq 'ARRAY' ? $value->[0] : $value;
-          $related_object_class = ref $ref_value;
-        }
-
-        if ($ref_value) {
+        if (my $ref_value = $value ? ref $value eq 'ARRAY' ? scalar @$value ? $value->[0] : undef : $value : undef) {
           my $primary_key      = $ref_value->primary_key;
           $field->{'selected'} = ref $value eq 'ARRAY' ? { map {$_->$primary_key => $_->get_title} @$value } : { $value->$primary_key => $value->get_title };
         }
 
-        $field->{'multiple'} = $relation->is_singular ? 0 : 1;
+        $field->{'multiple'} = $relationship->is_singular ? 0 : 1;
         $field->{'lookup'}   = $manager->get_lookup($related_object_class);
       }
     }
@@ -177,7 +172,10 @@ sub unpack_rose_object {
     ## if this field is a column
     elsif (exists $columns->{$field_name}) {
       my $column = $columns->{$field_name};
-      $field->{'type'} = 'noedit' if $column->is_primary_key_member; #force readonly primary key
+
+      $field->{'value_type'}        = 'noedit' if $column->is_primary_key_member; #force readonly primary key
+      $field->{'is_datastructure'}  = $column->type eq 'datastructure';
+      $field->{'is_column'}         = 1;
 
       if (($field->{'value_type'} = $column->type) =~ /^(enum|set)$/ || $select) {
       
@@ -202,7 +200,7 @@ sub unpack_rose_object {
       }
     }
     
-    ## if any linked user
+    ## if any external relation
     else {
       $field->{'value_type'} = 'one to one';
       $field->{'selected'}   = {$value->get_primary_key_value => $value->get_title} if $value;
