@@ -183,7 +183,7 @@ sub fetch_by_page {
 
 sub count {
   ## Gives the number of all the active rows in the table
-  ## @param HashRef of Hash that goes to manager's get_objects_count method as arg
+  ## @param Ref of Hash that goes to manager's get_objects_count method as arg
   ## @return int
   my ($self, $params) = @_;
   
