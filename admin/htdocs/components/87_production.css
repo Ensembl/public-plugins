@@ -16,8 +16,23 @@ h2.prod-h2 {
 
 div.prod-group {
   clear: both;
-  font-weight: bold;
-  background-color: [[NEUTRAL_BORDER]];
   padding: 3px;
-  border-bottom: 1px solid [[NEUTRAL_BG]];
+  border: 1px solid [[NEUTRAL_BORDER]];
+  border-width: 0 1px;
+}
+
+div.prod-group-first {
+  border-top-width: 1px;
+}
+
+div.prod-group-last {
+  border-bottom-width: 1px;
+}
+
+div.prod-list div.bg1 {
+  background-color: [[PANEL_BG]];
+}
+
+div.prod-list div.bg2 {
+  background-color: [[NEUTRAL_BG]];
 }
