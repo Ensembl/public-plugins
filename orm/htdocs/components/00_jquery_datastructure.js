@@ -10,10 +10,12 @@
 
     el = $(el);
     
+    var isReadonly = !el[0].nodeName.match(/^(TEXTAREA|INPUT)$/);
+
     // private method to parse the string to a datastructure
     var parse = function(str) {
       try {
-        return eval('(' + el.val().replace(/\=>/gm, ':') + ')');
+        return eval('(' + str.replace(/\=>/gm, ':') + ')');
       }
       catch (e) {
         throw 'Invalid data structure. Please change the source.';
@@ -171,7 +173,8 @@
     };
 
     // private class for each Element
-    var DSElement = function(data, parent, ta) {
+    var DSElement = function(data, parent, ta, readOnly) {
+    
       var self = this;
       var n = '<br />';
       var t = '  ';
@@ -185,6 +188,7 @@
       this.value  = '';
       this.keys   = [];
       this.indent = 1;
+      this.readOnly = readOnly || this.parent && this.parent.readOnly || false;
 
       // updates the text representation of hash in the textarea
       this.updateText = function() {
@@ -214,23 +218,25 @@
             this.effect('highlight', {}, 2000);
           }
         });
-        $('>span._ds_key', this.el).bind({
-          click: function(event) {
-            self.getKeyMenu(event, this);
-          }
-        }).prev().bind({
-          mouseover: function(event) {
-            event.stopImmediatePropagation();
-            $.each([this, this.nextSibling, this.nextSibling.nextSibling, this.nextSibling.nextSibling.nextSibling], function() { $(this).addClass('-ds-remove'); } );
-          },
-          mouseout: function() {
-            $.each([this, this.nextSibling, this.nextSibling.nextSibling, this.nextSibling.nextSibling.nextSibling], function() { $(this).removeClass('-ds-remove'); } );
-          }, 
-          click: function(event) {
-            event.stopImmediatePropagation();
-            self.removeKey(this.nextSibling);
-          }
-        });
+        if (!this.readOnly) {
+          $('>span._ds_key', this.el).bind({
+            click: function(event) {
+              self.getKeyMenu(event, this);
+            }
+          }).prev().bind({
+            mouseover: function(event) {
+              event.stopImmediatePropagation();
+              $.each([this, this.nextSibling, this.nextSibling.nextSibling, this.nextSibling.nextSibling.nextSibling], function() { $(this).addClass('-ds-remove'); } );
+            },
+            mouseout: function() {
+              $.each([this, this.nextSibling, this.nextSibling.nextSibling, this.nextSibling.nextSibling.nextSibling], function() { $(this).removeClass('-ds-remove'); } );
+            }, 
+            click: function(event) {
+              event.stopImmediatePropagation();
+              self.removeKey(this.nextSibling);
+            }
+          });
+        }
       };
 
       // renames a hash key
@@ -302,18 +308,22 @@
           this.value.push(val);
         }
         var newEl = val.display(this.indent + 1);
-        this.el.append($('<span class="-ds-remove-button">').html(n + p + t).bind({
-          mouseover: function(event) {
-            event.stopImmediatePropagation();
-            $.each([this, this.nextSibling], function() { $(this).addClass('-ds-remove'); } );
-          },
-          mouseout: function() {
-            $.each([this, this.nextSibling], function() { $(this).removeClass('-ds-remove'); } );
-          }, 
-          click: function() {
-            self.removeArrVal(this.nextSibling);
-          }
-        }), newEl);
+        var newBt = $('<span class="-ds-remove-button">').html(n + p + t);
+        if (!this.readOnly) {
+          newBt.bind({
+            mouseover: function(event) {
+              event.stopImmediatePropagation();
+              $.each([this, this.nextSibling], function() { $(this).addClass('-ds-remove'); } );
+            },
+            mouseout: function() {
+              $.each([this, this.nextSibling], function() { $(this).removeClass('-ds-remove'); } );
+            }, 
+            click: function() {
+              self.removeArrVal(this.nextSibling);
+            }
+          });
+        }
+        this.el.append(newBt, newEl);
         if (doModify) {
           newEl.effect('highlight', {}, 2000);
         }
@@ -321,7 +331,10 @@
 
       // changes string value
       this.string = function(val, doModify) {
-        var newStr = $('<span class="-ds-hil _ds_string">').html(val || '<i>undef</i>').bind({ click: function(e) { self.getMenu(e); }});
+        var newStr = $('<span class="-ds-hil _ds_string">').html(val || '<i>undef</i>')
+        if (!this.readOnly) {
+          newStr.bind({ click: function(e) { self.getMenu(e); }});
+        }
         if (doModify) {
           this.value = val;
           this.el.empty();
@@ -412,11 +425,15 @@
 
       // adds wraping braces for an array or a hash
       this.addBraces = function(braces) {
-        this.wrap.prepend($('<span class="_ds_brace">').html(braces.charAt(0))).append($('<span class="-ds-hil _ds_brace">').html(n + p + braces.charAt(1)).bind({
-          click: function(e) {
-            self.getMenu(e);
-          }
-        }));
+        var closingBrace = $('<span class="-ds-hil _ds_brace">').html(n + p + braces.charAt(1));
+        if (!this.readOnly) {
+          closingBrace.bind({
+            click: function(e) {
+              self.getMenu(e);
+            }
+          });
+        }
+        this.wrap.prepend($('<span class="_ds_brace">').html(braces.charAt(0))).append(closingBrace);
       };
 
       // method to display element data
@@ -484,19 +501,29 @@
         });
       }
     };
-    
+
     var data = {};
     try {
-      data = parse(el.val());
+      data = parse(el[isReadonly ? 'text' : 'val']().toString());
     }
     catch(e) {
       return;
     }
-    data = new DSElement(data, undefined, el);
+    
+    if (!data) {
+      return;
+    }
+
+    data = new DSElement(data, undefined, el, isReadonly);
     data.updateText();
+    
+    if (isReadonly) {
+      $('<div class="-ds-readonly">').append($('<pre>').append(data.display())).appendTo(el.empty());
+      return;
+    }
 
     var error   = $('<p class="-ds-error">').hide();
-    var wrapper = $('<div>')
+    var wrapper = $('<div class="-ds-editable">')
       .html('<div class="-ds-tab"><a class="selected" href="#editor">Editor</a><a href="#source">Source</a></div><div class="-ds-tab-div"></div><div class="-ds-tab-div"></div>')
       .replaceAll(el).children().last().append(el).prev().append($('<pre>').append(data.display().addClass('_ds_toplevel'))).parent().before(error);
 
@@ -521,7 +548,7 @@
             return;
           }
           error.hide();
-          data = new DSElement(data, undefined, el);
+          data = new DSElement(data, undefined, el, isReadonly);
           data.updateText();
           $('._ds_toplevel', wrapper).replaceWith(data.display().addClass('_ds_toplevel'));
         }, 100
