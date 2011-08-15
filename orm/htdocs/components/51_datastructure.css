@@ -1,3 +1,7 @@
+div.-ds-editable pre, div.-ds-readonly pre {
+  margin: 2px 0;
+}
+
 div.-ds-tab, div.-ds-tab-div {
   border-bottom: #ccc solid 1px;
   overflow: hidden;
@@ -38,7 +42,7 @@ div.-ds-tab a.selected span.-ds-sel {
   display: none;
 }
 
-span.-ds-hil:hover {
+div.-ds-editable span.-ds-hil:hover {
   background-color: #def;
   font-weight: bold;
   cursor: pointer;
@@ -74,7 +78,11 @@ span.-ds-remove {
   background-color: #fdd;
 }
 
-span.-ds-remove-button:hover {
+div.-ds-editable span.-ds-remove-button:hover {
   background-image: url(/i/orm_delete.png);
   background-repeat: no-repeat;
+}
+
+form label div.-ds-readonly {
+  font-weight: normal;
 }
