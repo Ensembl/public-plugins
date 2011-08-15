@@ -1,15 +1,24 @@
 package EnsEMBL::Web::Configuration;
 
 ### NAME: EnsEMBL::Web::Configuration
-### Extension to the core Configuration module, enabling easy addition of all the standard nodes required by the CRUD interface  
+### Extension to the core Configuration module, enabling easy addition of all the standard nodes required by the CRUD interface
 
 ### STATUS: Under development
 
 use strict;
 
+use constant DEFAULT_ACTION => 'List';
+
+sub set_default_action {
+  ## @overrides
+  ## Override the constant DEFAULT_ACTION instead of overriding this method in child classes
+  my $self = shift;
+  $self->{'_data'}{'default'} = $self->DEFAULT_ACTION;
+}
+
 sub dbfrontend_nodes {
   ## Gets all the default nodes needed by dbfrontend
-  ## @param HashRef with keys required to override keys in each nodes
+  ## @param HashRef with keys required to override keys in each node
   ## @return Hash in ArrayRef syntax
   my ($self, $params) = @_;
 
@@ -18,8 +27,8 @@ sub dbfrontend_nodes {
     'List'          => {'caption' => 'List All', 'components' => [qw(list     EnsEMBL::ORM::Component::DbFrontend::List)],          'availability' => 1},
     'Add'           => {'caption' => 'Add',      'components' => [qw(add      EnsEMBL::ORM::Component::DbFrontend::Input)],         'availability' => 1},
     'Duplicate'     => {'caption' => 'Duplicate','components' => [qw(copy     EnsEMBL::ORM::Component::DbFrontend::Input)],         'availability' => 1, 'no_menu_entry' => 1},
-    'Select/Edit'   => {'caption' => 'Edit',     'components' => [qw(edit     EnsEMBL::ORM::Component::DbFrontend::Select)],        'availability' => 1},
-    'Select/Delete' => {'caption' => 'Delete',   'components' => [qw(delete   EnsEMBL::ORM::Component::DbFrontend::Select)],        'availability' => 1},
+    'Select/Edit'   => {'caption' => 'Edit',     'components' => [qw(edit     EnsEMBL::ORM::Component::DbFrontend::Select)],        'availability' => 1, 'no_menu_entry' => 1},
+    'Select/Delete' => {'caption' => 'Delete',   'components' => [qw(delete   EnsEMBL::ORM::Component::DbFrontend::Select)],        'availability' => 1, 'no_menu_entry' => 1},
     'Edit'          => {'caption' => 'Editing',  'components' => [qw(editing  EnsEMBL::ORM::Component::DbFrontend::Input)],         'availability' => 1, 'no_menu_entry' => 1},
     'Preview'       => {'caption' => 'Preview',  'components' => [qw(preview  EnsEMBL::ORM::Component::DbFrontend::Input)],         'availability' => 1, 'no_menu_entry' => 1},
     'Problem'       => {'caption' => 'Error',    'components' => [qw(error    EnsEMBL::ORM::Component::DbFrontend::Problem)],       'availability' => 1, 'no_menu_entry' => 1},
@@ -61,6 +70,7 @@ sub create_dbfrontend_nodes {
 
 sub create_all_dbfrontend_nodes {
   ## Adds all nodes to the config
+  ## @param Hashref that is added to each node's options
   my ($self, $params) = @_;
   my $all_nodes = $self->dbfrontend_nodes($params);
   my $nodes = [];
