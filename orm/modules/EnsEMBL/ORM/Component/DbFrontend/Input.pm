@@ -83,9 +83,10 @@ sub content_tree {
       'no_input'  => $action eq 'Preview' ? 0 : 1,
     };
     $element_params->{$_} = $field_extras->{$_} for keys %$field_extras;
-    $element_params->{'class'} .= ' '.$self->_JS_CLASS_DATASTRUCTURE if $field->value_type eq 'datastructure';
+    $element_params->{'class'} .= ' '.$self->_JS_CLASS_DATASTRUCTURE if $action ne 'Preview' && $field->is_datastructure && $field->is_column;
 
     my $is_null = $field->is_null;
+    my $is_datastructure;
 
     my $selected_values = {};
     if (scalar keys %$lookup) {
@@ -98,10 +99,10 @@ sub content_tree {
           $element_params->{'value'}  = ['0'] unless scalar @{$element_params->{'value'}};
           $element_params->{'values'} = [{'value' => '0', 'caption' => $is_null eq '1' ? 'None' : $is_null}];
         }
-        push @{$element_params->{'values'}}, {'value' => $_, 'caption' => $lookup->{$_}} for sort { $lookup->{$a} cmp $lookup->{$b} } keys %$lookup;
+        push @{$element_params->{'values'}}, {'value' => $_, 'caption' => {'inner_HTML' => $lookup->{$_}, $field->is_datastructure ? ('class' => $self->_JS_CLASS_DATASTRUCTURE) : ()}} for sort { $lookup->{$a} cmp $lookup->{$b} } keys %$lookup;
       }
     }
-    
+
     # trackable fields manipulation
     if ($record->meta->is_trackable && $name =~ /^(created|modified)_(at|by|by_user)$/) {
       next if $2 eq 'by';                       # force skip modified_by and created_by fields
@@ -116,13 +117,15 @@ sub content_tree {
           $element_params->{'value'}   = $_;
           $element_params->{'caption'} = $selected_values->{$_};
           $element_params->{'type'}    = 'noedit';
-          $form_field->add_element($element_params);
+          my $form_element = $form_field->add_element($element_params);
+          map {$_->set_attribute('class', $self->_JS_CLASS_DATASTRUCTURE)} @{$form_element->get_elements_by_tag_name('li')} if $field->is_datastructure;
         }
       }
       else {
         $element_params->{'type'}     = 'noedit';
         $element_params->{'is_html'}  = 1 if $f_type eq 'html';
-        $form_field->add_element($element_params);
+        my $form_element = $form_field->add_element($element_params);
+        $form_element->first_child->set_attribute('class', $self->_JS_CLASS_DATASTRUCTURE) if $field->is_datastructure;
       }
     }
     else {
