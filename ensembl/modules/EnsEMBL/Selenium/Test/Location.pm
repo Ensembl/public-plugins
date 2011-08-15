@@ -55,7 +55,7 @@ sub test_location {
     my ($alignment_count,$multi_species_count) = $self->alignments_count($SD);
 
     $sel->ensembl_click_links(["link=Alignments (image) ($alignment_count)","link=Alignments (text) ($alignment_count)","link=Multi-species view ($multi_species_count)"],'8000') if($alignment_count);
-    $sel->ensembl_click_links(["link=Synteny ($synteny_count)"], '8000') if(grep(/@location_array[0]/,@{$SD->get_config(ucfirst($self->species), 'ENSEMBL_CHROMOSOMES')}) && $synteny_count);
+    $sel->ensembl_click_links(["link=Synteny ($synteny_count)"], '20000') if(grep(/@location_array[0]/,@{$SD->get_config(ucfirst($self->species), 'ENSEMBL_CHROMOSOMES')}) && $synteny_count);
 
     #Markers        
     if($SD->table_info_other(ucfirst($self->species),'core', 'marker_feature')->{'rows'}) {
@@ -71,7 +71,7 @@ sub test_location {
 
     #Testing genetic variations last for human only
     if($self->species eq 'homo_sapiens') {
-      my $resequencing_counts = $SD->databases->{'DATABASE_VARIATION'}{'#STRAINS'} if exists $SD->databases->{'DATABASE_VARIATION'};
+      my $resequencing_counts = $SD->databases(ucfirst($self->species))->{'DATABASE_VARIATION'}{'#STRAINS'} if exists $SD->databases(ucfirst($self->species))->{'DATABASE_VARIATION'};
       $sel->ensembl_click_links(["link=Resequencing ($resequencing_counts)"], '8000');
       $sel->type_ok("loc_r", "6:27996744-27996844");
       $sel->click_ok("//input[\@value='Go']");

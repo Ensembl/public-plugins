@@ -50,7 +50,7 @@ sub test_gene {
       "link=Sequence",
       "link=External references*",
       "link=Comparative Genomics"
-     ]);
+     ],'20000');
     $sel->ensembl_click_links(["link=Regulation"]) if($SD->table_info_other(ucfirst($self->species),'funcgen', 'feature_set')->{'rows'} && $gene_text !~ /^ASMPATCH/);
     
     if(lc($self->species) eq 'homo_sapiens') {
@@ -62,12 +62,12 @@ sub test_gene {
     }
 
     my ($alignment_count,$multi_species_count) = $self->alignments_count($SD);
-    $sel->ensembl_click_links(["link=Genomic alignments"]) if($alignment_count);
+    $sel->ensembl_click_links(["link=Genomic alignments"],'20000') if($alignment_count);
     #"link=Gene Tree (image)", need to add back to array below
     $sel->ensembl_click_links([      
       "link=Gene Tree (text)",
       "link=Gene Tree (alignment)"
-    ]);
+    ]) if(lc($self->species) ne 'saccharomyces_cerevisia');
     
     my $counts = $self->count_homologues($gene_param);
     $sel->ensembl_click_links(["link=Orthologues ($counts->{'orthologs'})"]) if($counts->{'orthologs'});    
@@ -79,10 +79,10 @@ sub test_gene {
     and $sel->go_back() if(lc($self->species) eq 'homo_sapiens'); #testing for human only as this is opening too many java applet and making the server slow
 
     $sel->pause(1000);
-    $sel->ensembl_click_links(["link=all proteins in family"]);
+    $sel->ensembl_click_links(["link=all proteins in family"]) if($counts->{'families'});
 
     $sel->ensembl_click_links(["link=Variation Table", "link=Variation Image", "link=Structural Variation"]) if($species_db->{'database:variation'} && $gene_text !~ /^ASMPATCH/);
-    $sel->click_ok("link=External Data")
+    $sel->ensembl_click("link=External Data")
     and $sel->ensembl_wait_for_page_to_load
     and $sel->click_ok("link=Configure this page")
     and $sel->ensembl_wait_for_ajax

@@ -101,7 +101,7 @@ sub ensembl_images_loaded {
      }
   });
   my $location = $self->get_location();
-  print "URL:: $location \n\n" unless $self->is_text_present_ok("All images loaded successfully");  
+  $self->ensembl_is_text_present("All images loaded successfully");
 }
 
 

@@ -175,8 +175,8 @@ sub export_data {
   $output ||= 'CSV (Comma separated values)';
   
   print "  Test Export Data\n";
-  $sel->click_ok("link=Export data")
-  and $sel->ensembl_wait_for_page_to_load(10000);  
+  $sel->ensembl_click("link=Export data")
+  and $sel->ensembl_wait_for_ajax(20000);  
   
   $sel->select_ok("output","$output")
   and $sel->click_ok("name=next");
@@ -189,7 +189,7 @@ sub export_data {
     var \$ = selenium.browserbot.getCurrentWindow().jQuery; 
     \$('a.modal_close').attr('href')
   });
-  $sel->open_ok($output_url,10000);
+  next unless $sel->open_ok($output_url,10000);
   $sel->ensembl_is_text_present("$text_to_check");  
 }
 
@@ -263,7 +263,7 @@ chr21 31020000 31060000 cloneB 900 - 1020000 1060000 0 2 433,399, 0,3601
   and $sel->select_ok("format", "$format")
   and $sel->type_ok("text", "$data")
   and $sel->click_ok("name=submit")
-  and $sel->ensembl_wait_for_ajax(5000,5000); #timeout=5s and pause=5s
+  and $sel->ensembl_wait_for_ajax(20000,5000); #timeout=20s and pause=5s
   
   $sel->ensembl_is_text_present("Go to first region with data");  
 }
