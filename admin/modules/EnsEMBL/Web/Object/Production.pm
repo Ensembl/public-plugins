@@ -4,26 +4,37 @@ use strict;
 
 use base qw(EnsEMBL::Web::Object::DbFrontend);
 
-sub fetch_for_logicname {
-  my $self  = shift;
-  my $hub   = $self->hub;
-  my $group = $hub->param('gp');
-  
-  if (exists { map {$_ => 1} qw(web_data_id analysis_description_id species_id db_type) }->{$group}) {
-    $self->rose_objects($self->manager_class->get_objects(
-      'with_objects'  => ['analysis_description', 'species', 'web_data'],
-      'sort_by'       => 'analysis_description.logic_name',
-      'query'         => [$group, $hub->param('id')],
-    ));
-  }
-}
-
-sub fetch_for_analysiswebdata {
+sub fetch_for_search {
   my $self = shift;
   $self->rose_objects($self->manager_class->get_objects(
     'with_objects'  => ['analysis_description', 'species', 'web_data'],
     'sort_by'       => 'analysis_description.display_label'
   ));
+}
+
+sub fetch_for_analysiswebdata {
+  shift->fetch_for_search;
+}
+
+sub fetch_for_logicname {
+  my $self  = shift;
+  my $hub   = $self->hub;
+  my $query = $self->_get_filter_query;
+
+  if (@$query) {
+    $self->rose_objects($self->manager_class->fetch_by_page($self->pagination, $self->get_page_number, {
+      'with_objects'  => ['analysis_description', 'species', 'web_data'],
+      'sort_by'       => 'analysis_description.logic_name',
+      'query'         => $query
+    }));
+  }
+}
+
+sub get_count {
+  ## @overrides
+  my $self = shift;
+  
+  return $self->SUPER::get_count({'query' => $self->_get_filter_query});
 }
 
 sub default_action {
@@ -43,11 +54,12 @@ sub show_fields {
     analysis_description => {
       'type'      => 'dropdown',
       'label'     => 'Logic Name',
-      'required'  => 1,
+      'is_null'   => 'null',
     },
     species           => {
       'type'      => 'dropdown',
       'label'     => 'Species',
+      'is_null'   => 'null',
     },
     db_type           => {
       'type'      => 'dropdown',
@@ -56,6 +68,7 @@ sub show_fields {
     web_data          => {
       'type'      => 'radiolist',
       'label'     => 'Web Data',
+      'is_null'   => 'null',
     },
     displayable       => {
       'type'      => 'dropdown',
@@ -108,7 +121,26 @@ sub permit_delete {
 
 sub pagination {
   ## @overrides
-  return 0;
+  return 100;
+}
+
+sub _get_filter_query {
+  ## Private method to read the GET params and return an arrayref of query
+  my $self = shift;
+
+  unless (exists $self->{'_filter_query'}) {
+    my $hub  = $self->hub;
+
+    $self->{'_filter_query'} = [];
+    for (qw(web_data_id analysis_description_id species_id db_type)) {
+      my $value = $hub->param($_);
+      if ($value || $value eq '0') {
+        push @{$self->{'_filter_query'}}, $_, $value;
+      }
+    }
+  }
+
+  return $self->{'_filter_query'};
 }
 
 1;
