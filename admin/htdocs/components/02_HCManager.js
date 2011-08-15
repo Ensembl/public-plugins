@@ -20,7 +20,7 @@ Ensembl.HCManager.extend({
       filterTableClass:   '_filter_table',
       hilightedCell:      'hc-cell-highlight',
       isIE6:              $('body').hasClass('ie6'),
-      info:               ["Double click on any 'Select' or 'Deselect' to respectively select or deselect all reports for that database for multi-annotation."]
+      info:               ["Double click on any 'Select' or 'Deselect' to respectively select or deselect all reports for multi-annotation."]
     };
 
     this.tables   = [];
@@ -312,7 +312,7 @@ function HCSelector(manager, a) {
   };
 
   this.changeLink = function(rid) {
-    this.a.html(this.selected ? 'Multi Annotate' : this.defaultText).attr('href', this.selected ? this.link + '=' + rid : this.defaultLink);
+    this.a.html(this.selected ? 'Multi&nbsp;Annotate' : this.defaultText).attr('href', this.selected ? this.link + '=' + rid : this.defaultLink);
     this.highlight();
   };
 
