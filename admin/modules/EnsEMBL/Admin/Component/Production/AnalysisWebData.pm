@@ -11,9 +11,9 @@ sub caption {
 sub content {
   my $self = shift;
   
-  my $object  = $self->object;
   my $dom     = $self->dom;
-  my $records = $object->rose_objects;
+  my $hub     = $self->hub;
+  my $records = $self->object->rose_objects;
 
   my $content = $dom->create_element('div',   {'class' => '_tabselector'});
   my $buttons = $content->append_child('div', {'class' => 'ts-buttons-wrap'});
@@ -21,6 +21,7 @@ sub content {
 
   my $groups  = {};
 
+  ## create a data structure of all the records
   foreach my $record (@$records) {
     foreach my $groupby (qw(web_data_id analysis_description_id species_id db_type)) {
       my $val = $record->$groupby;
@@ -28,22 +29,34 @@ sub content {
     }
   }
 
+  ## Iterate through the data structure to print the list
   foreach my $key (sort keys %$groups) {
 
     (my $method = $key) =~ s/_id$//;
-    my $group_title = join ' ', map {(ucfirst $_)} split '_', $method;
 
-    $buttons->append_child('a', {'class' => '_ts_button ts-button', 'href' => "#$method", 'inner_HTML' => $group_title});
-    $tabs->append_child('div', {
-      'class'    => '_ts_tab ts-tab',
-      'children' => [
-        map {{
-          'node_name'   => 'div',
-          'class'       => 'prod-group',
-          'inner_HTML'  => sprintf('%s (<a href="%s">%d records</a>)', $self->get_printable($groups->{$key}{$_}[0]->$method, $_), $self->hub->url({'action' => 'LogicName', 'gp', $key, 'id', $_}), scalar @{$groups->{$key}{$_}})
-        }} sort keys %{$groups->{$key}}
-      ]
-    });
+    $buttons->append_child('a', {'class' => '_ts_button ts-button', 'href' => "#$method", 'inner_HTML' => join(' ', map {(ucfirst $_)} split '_', $method)});
+    my $tab = $tabs->append_child('div', {'class' => '_ts_tab ts-tab prod-list'});
+    my @bg  = qw(bg1 bg2);
+
+    for (sort keys %{$groups->{$key}}) {
+
+      ## add to the list
+      $tab->append_child('div', {
+        'class'       => "prod-group $bg[0]",
+        'inner_HTML'  => sprintf(
+          '<span%s>%s</span> (<a href="%s">%d records</a>)',
+          $method eq 'web_data' ? ' class="_datastructure"' : '',
+          $self->get_printable($groups->{$key}{$_}[0]->$method, $_),
+          $hub->url({'action' => 'LogicName', $key => $_}),
+          scalar @{$groups->{$key}{$_}})
+      });
+
+      @bg = reverse @bg;
+    }
+    
+    $tab->first_child->set_attribute('class', 'prod-group-first');
+    $tab->last_child->set_attribute('class', 'prod-group-last');
+
   }
 
   return $content->render;
