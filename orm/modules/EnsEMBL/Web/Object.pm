@@ -6,9 +6,6 @@ package EnsEMBL::Web::Object;
 use strict;
 use warnings;
 
-sub caption       { ref($_[0]) =~ m/([^:]+)$/; return $1; }
-sub short_caption { ref($_[0]) =~ m/([^:]+)$/; return $1; }
-
 sub rose_manager {
   ## Returns the ORM::Rose::Manager class for the given type
   ## @return Manager Class (Static class reference) or undef if not found
