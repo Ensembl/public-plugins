@@ -2,6 +2,7 @@
  * datastructure
  * jQuery plugin to make a user friendly editor for perl hash datastructures
  * TODO - needs optimisation
+ * TODO - change divs to span with display:block to prevent divs going inside inline elements
  */
 
 (function($) {
