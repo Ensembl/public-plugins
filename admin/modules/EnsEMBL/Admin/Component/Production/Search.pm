@@ -35,7 +35,7 @@ sub content {
       'values'  => [
         {'value' => '', 'caption' => {'inner_text' => 'null', 'class' => $self->_JS_CLASS_DATASTRUCTURE}},
         map {$_ ? {
-          'caption' => {'inner_HTML' => $self->get_printable($groups->{$key}{$_}[0]->$method, $_), $method eq 'web_data' ? ('class' => $self->_JS_CLASS_DATASTRUCTURE) : ()},
+          'caption' => {'inner_HTML' => $key eq 'db_type' ? $_ : $self->get_printable($groups->{$key}{$_}[0]->$method), $method eq 'web_data' ? ('class' => $self->_JS_CLASS_DATASTRUCTURE) : ()},
           'value'   => $_
         } : ()} sort keys %{$groups->{$key}}
       ],

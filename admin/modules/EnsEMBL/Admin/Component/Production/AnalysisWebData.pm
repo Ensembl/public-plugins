@@ -11,11 +11,10 @@ sub caption {
 sub content {
   my $self = shift;
   
-  my $dom     = $self->dom;
   my $hub     = $self->hub;
   my $records = $self->object->rose_objects;
 
-  my $content = $dom->create_element('div',   {'class' => '_tabselector'});
+  my $content = $self->dom->create_element('div', {'class' => '_tabselector'});
   my $buttons = $content->append_child('div', {'class' => 'ts-buttons-wrap'});
   my $tabs    = $content->append_child('div', {'class' => 'spinner ts-spinner _ts_loading'});
 
@@ -46,9 +45,10 @@ sub content {
         'inner_HTML'  => sprintf(
           '<span%s>%s</span> (<a href="%s">%d records</a>)',
           $method eq 'web_data' ? ' class="_datastructure"' : '',
-          $self->get_printable($groups->{$key}{$_}[0]->$method, $_),
+          $method eq 'db_type'  ? $_ : $self->get_printable($groups->{$key}{$_}[0]->$method),
           $hub->url({'action' => 'LogicName', $key => $_}),
-          scalar @{$groups->{$key}{$_}})
+          scalar @{$groups->{$key}{$_}}
+        )
       });
 
       @bg = reverse @bg;
