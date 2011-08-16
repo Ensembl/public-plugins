@@ -19,8 +19,13 @@ sub fetch_for_analysiswebdata {
 sub fetch_for_logicname {
   my $self  = shift;
   my $hub   = $self->hub;
-  my $query = $self->_get_filter_query;
 
+  if ($hub->param('id')) {
+    $self->fetch_for_list;
+    return;
+  }
+
+  my $query = $self->_get_filter_query;
   if (@$query) {
     $self->rose_objects($self->manager_class->fetch_by_page($self->pagination, $self->get_page_number, {
       'with_objects'  => ['analysis_description', 'species', 'web_data'],
@@ -135,7 +140,7 @@ sub _get_filter_query {
     for (qw(web_data_id analysis_description_id species_id db_type)) {
       my $value = $hub->param($_);
       if ($value || $value eq '0') {
-        push @{$self->{'_filter_query'}}, $_, $value;
+        push @{$self->{'_filter_query'}}, $_, $_ eq 'db_type' ? {'like' => "%$value%"} : $value;
       }
     }
   }
