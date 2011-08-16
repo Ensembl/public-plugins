@@ -263,7 +263,7 @@ chr21 31020000 31060000 cloneB 900 - 1020000 1060000 0 2 433,399, 0,3601
   and $sel->select_ok("format", "$format")
   and $sel->type_ok("text", "$data")
   and $sel->click_ok("name=submit")
-  and $sel->ensembl_wait_for_ajax(20000,5000); #timeout=20s and pause=5s
+  and $sel->ensembl_wait_for_ajax(50000,10000); #timeout=50s and pause=5s
   
   $sel->ensembl_is_text_present("Go to first region with data");  
 }

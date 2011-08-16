@@ -25,7 +25,7 @@ sub test_gene {
     if(lc($self->species) eq 'homo_sapiens') {      
       print "  Test ZMenu on Gene Summary\n";
       $sel->ensembl_open_zmenu('TranscriptsImage','class^="drag"');
-      $sel->click_ok("link=Jump to location View")
+      $sel->ensembl_click("link=Jump to location View")
       and $sel->ensembl_wait_for_ajax('50000','2000')
       and $sel->go_back();
       
@@ -33,13 +33,13 @@ sub test_gene {
       
       #Adding a track from the configuration panel
       print "  Test Configure page, adding a track \n";
-      $sel->click_ok("link=Configure this page")
+      $sel->ensembl_click("link=Configure this page")
       and $sel->ensembl_wait_for_ajax('10000')
-      and $sel->click_ok("link=External data*")
+      and $sel->ensembl_click("link=External data*")
       and $sel->ensembl_wait_for_ajax('10000')
-      and $sel->click_ok("//form[\@id='gene_transcriptsimage_configuration']/div[7]/ul/li[1]/img") #choosing the first track
-      and $sel->click_ok("//form[\@id='gene_transcriptsimage_configuration']/div[7]/ul/li[1]/ul/li[3]/img") #making it normal
-      and $sel->click_ok("modal_bg")
+      and $sel->ensembl_click("//form[\@id='gene_transcriptsimage_configuration']/div[7]/ul/li[1]/img") #choosing the first track
+      and $sel->ensembl_click("//form[\@id='gene_transcriptsimage_configuration']/div[7]/ul/li[1]/ul/li[3]/img") #making it normal
+      and $sel->ensembl_click("modal_bg")
       and $sel->ensembl_wait_for_ajax('15000')
       and $sel->ensembl_images_loaded;      
     }
@@ -56,7 +56,7 @@ sub test_gene {
     if(lc($self->species) eq 'homo_sapiens') {
       print "  Test ZMenu on Regulation\n";
       $sel->ensembl_open_zmenu('RegulationImage','class^="group"');
-      $sel->click_ok("link=ENSR*")
+      $sel->ensembl_click("link=ENSR*")
       and $sel->ensembl_wait_for_ajax('50000','2000')
       and $sel->go_back();
     }
@@ -67,14 +67,14 @@ sub test_gene {
     $sel->ensembl_click_links([      
       "link=Gene Tree (text)",
       "link=Gene Tree (alignment)"
-    ]) if(lc($self->species) ne 'saccharomyces_cerevisia');
+    ],'20000') if(lc($self->species) ne 'saccharomyces_cerevisia');
     
     my $counts = $self->count_homologues($gene_param);
     $sel->ensembl_click_links(["link=Orthologues ($counts->{'orthologs'})"]) if($counts->{'orthologs'});    
     $sel->ensembl_click_links(["link=Paralogues ($counts->{'paralogs'})"]) if($counts->{'paralogs'});
     $sel->ensembl_click_links(["link=Protein families*"]) if($counts->{'families'});
     
-    $sel->click_ok("link=JalView")
+    $sel->ensembl_click("link=JalView")
     and $sel->ensembl_wait_for_page_to_load
     and $sel->go_back() if(lc($self->species) eq 'homo_sapiens'); #testing for human only as this is opening too many java applet and making the server slow
 
@@ -82,12 +82,14 @@ sub test_gene {
     $sel->ensembl_click_links(["link=all proteins in family"]) if($counts->{'families'});
 
     $sel->ensembl_click_links(["link=Variation Table", "link=Variation Image", "link=Structural Variation"]) if($species_db->{'database:variation'} && $gene_text !~ /^ASMPATCH/);
+    
+    print "  Test Configure page on External Data \n";
     $sel->ensembl_click("link=External Data")
     and $sel->ensembl_wait_for_page_to_load
-    and $sel->click_ok("link=Configure this page")
+    and $sel->ensembl_click("link=Configure this page")
     and $sel->ensembl_wait_for_ajax
-    and $sel->click_ok("//div[\@class='ele-das']//input[\@type='checkbox'][1]") # tick first source
-    and $sel->click_ok("modal_bg")
+    and $sel->ensembl_click("//div[\@class='ele-das']//input[\@type='checkbox'][1]") # tick first source
+    and $sel->ensembl_click("modal_bg")
     and $sel->ensembl_wait_for_page_to_load;
 
     $sel->ensembl_click_links(["link=Gene history"]) if($SD->table_info_other(ucfirst($self->species),'core', 'stable_id_event')->{'rows'});
