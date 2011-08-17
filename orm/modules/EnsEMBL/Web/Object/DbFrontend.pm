@@ -123,7 +123,7 @@ sub fetch_for_select {
 sub _fetch_all {
   ## Private method, to fetch all the records for given params and page type
   my ($self, $page, $params) = @_;
-  
+
   $params ||= {};
 
   my @ids = $self->hub->param('id') || ();
@@ -190,6 +190,59 @@ sub retire {
   return shift->delete;
 }
 
+sub get_fields {
+  ## Gets all the fields according to show_fields and show_trackable_fields
+  my $self = shift;
+
+  unless (exists $self->{'_dbf_show_fields'}) {
+
+    $self->{'_dbf_show_fields'} = $self->show_fields;
+    
+    if ($self->manager_class->is_trackable) {
+
+      my $t_fields    = $self->show_trackable_fields;
+      my $field_names = [keys %{{@{$self->{'_dbf_show_fields'}}}}];
+      $t_fields       = {'created' => $t_fields, 'modified' => $t_fields} unless ref $t_fields eq 'HASH';
+
+      if (exists $t_fields->{'created'}) {
+        grep {$_ eq 'created_by_user'} @$field_names or push @{$self->{'_dbf_show_fields'}}, (
+          created_by_user   => {
+            'type'      => 'noedit',
+            'label'     => 'Created by',
+            'display'   => $t_fields->{'created'}
+          }
+        );
+        grep {$_ eq 'created_at'} @$field_names or push @{$self->{'_dbf_show_fields'}}, (
+          created_at        => {
+            'type'      => 'noedit',
+            'label'     => 'Created at',
+            'display'   => $t_fields->{'created'}
+          }
+        );
+      }
+      
+      if (exists $t_fields->{'modified'}) {
+        grep {$_ eq 'modified_by_user'} @$field_names or push @{$self->{'_dbf_show_fields'}}, (
+          modified_by_user  => {
+            'type'      => 'noedit',
+            'label'     => 'Modified by',
+            'display'   => $t_fields->{'modified'}
+          }
+        );
+        grep {$_ eq 'modified_at'} @$field_names or push @{$self->{'_dbf_show_fields'}}, (
+          modified_at       => {
+            'type'      => 'noedit',
+            'label'     => 'Modified at',
+            'display'   => $t_fields->{'modified'}
+          }
+        );
+      }
+    }
+  }
+
+  return $self->deepcopy($self->{'_dbf_show_fields'});
+}
+
 sub _get_with_objects_params {
   ## Constructs the extra query params that are to be passed to manager's get_objects to get the required objects for Display, List and Input pages
   ## @param page type - Display/Input/List
@@ -197,7 +250,7 @@ sub _get_with_objects_params {
   my ($self, $page, $params) = @_;
 
   $params  ||= {};
-  my $method = $page eq 'List' ? 'show_columns' : 'show_fields';
+  my $method = $page eq 'List' ? 'show_columns' : 'get_fields';
 
   my $relations   = [ map {$_->name} @{$self->manager_class->get_relationships($self->rose_object)} ];
   my $needed_cols = { map {$_ => 1} (keys %{{@{$self->$method}}}) };
@@ -225,7 +278,7 @@ sub _populate_from_cgi {
 
   my $rose_object = $self->rose_object;
 
-  my $fields    = $self->show_fields;
+  my $fields    = $self->get_fields;
   my $columns   = { map {$_->name => $_} @{$self->manager_class->get_columns($rose_object)} };
   my $relations = { map {$_->name => $_} @{$self->manager_class->get_relationships($rose_object)} };
   
@@ -272,7 +325,11 @@ sub _populate_from_cgi {
 ###                         Purpose of arrayref instead of hashref is to maintain order
 ###                         Fields can include name of any relationship or 'external relationships' (as relationships are also treated as columns)
 ###                         HashRef for each column name can contain keys as accepted by E::W::Form::Fieldset->add_field method
-###                         An extra key 'is_null' can be set true (or equal to the caption of the null option) in case type is dropdown.
+###                         Following extra key are also accepted:
+###                         'is_null' can be set true (or equal to the caption of the null option) in case type is dropdown.
+###                         'display' can contain values 'never' or 'optional' - never will not display this field while viewing data (Display page); optional will ignore this in Display page if value is null
+### show_trackable_fields   Tells whether or not to display trackable fields while adding/editing/viewing the data (only works for Trackable rose objects)
+###                         Can return string values 'always', 'optional', or 'never' OR a hashref with keys 'modified', 'trackable' with values of keys as 'always', 'never' (default), 'optional'
 ### show_columns            ArrayRef as [column names => labels] or [column names => {title => ?, class => ?, editable => ?, width => ?}] that are displayed when records are displayed in tabular form (List page)
 ###                         Purpose of arrayref instead of hashref is to maintain order
 ###                         Column_name can include name of any relationship (as relationships are also treated as columns)
@@ -297,6 +354,7 @@ sub _populate_from_cgi {
 
 ### Configuration methods - Override the required ones in child class
 sub show_fields           { return []; }
+sub show_trackable_fields { return {qw(created always modified optional)}; }
 sub show_columns          { return []; }
 sub record_select_style   { ''; }
 sub list_is_datatable     { 1;  }
