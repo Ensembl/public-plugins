@@ -135,7 +135,7 @@ sub unpack_rose_object {
   my $object    = $self->object;
   my $manager   = $object->manager_class;
   $record     ||= $manager->create_empty_object;
-  my $fields    = $object->show_fields;
+  my $fields    = $object->get_fields;
   my $relations = { map {$_->name => $_ } @{$manager->get_relationships($record) || []} };
   my $columns   = { map {$_->name => $_ } @{$manager->get_columns($record)       || []} };
   my $unpacked  = [];
