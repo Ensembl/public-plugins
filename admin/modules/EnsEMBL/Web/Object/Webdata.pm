@@ -17,34 +17,18 @@ sub show_fields {
   ## @overrides
   my $self = shift;
   return [
-    data              => {
-      'type'      => 'html',
-      'label'     => 'Web Data',
-      'value'     => '{}'
-    },
-    created_by_user   => {
-      'type'      => 'noedit',
-      'label'     => 'Created by'
-    },
-    created_at        => {
-      'type'      => 'noedit',
-      'label'     => 'Created at'
-    },
-    modified_by_user  => {
-      'type'      => 'noedit',
-      'label'     => 'Modified by'
-    },
-    modified_at       => {
-      'type'      => 'noedit',
-      'label'     => 'Modified at'
-    },
+    data  => {
+      'type'  => 'html',
+      'label' => 'Web Data',
+      'value' => '{}'
+    }
   ];
 }
 
 sub show_columns {
   ## @overrides
   return [
-    data        => 'Web Data',
+    data  => 'Web Data',
   ];
 }
 

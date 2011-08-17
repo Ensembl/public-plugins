@@ -28,23 +28,7 @@ sub show_fields {
     description       => {
       'type'      => 'text',
       'label'     => 'Description'
-    },
-    created_by_user   => {
-      'type'      => 'noedit',
-      'label'     => 'Created by'
-    },
-    created_at        => {
-      'type'      => 'noedit',
-      'label'     => 'Created at'
-    },
-    modified_by_user  => {
-      'type'      => 'noedit',
-      'label'     => 'Modified by'
-    },
-    modified_at       => {
-      'type'      => 'noedit',
-      'label'     => 'Modified at'
-    },
+    }
   ];
 }
 

@@ -147,23 +147,7 @@ sub show_fields {
     notes             => {
       'type'      => 'text',
       'label'     => 'Notes'
-    },
-    created_by_user   => {
-      'type'      => 'noedit',
-      'label'     => 'Created by'
-    },
-    created_at        => {
-      'type'      => 'noedit',
-      'label'     => 'Created at'
-    },
-    modified_by_user  => {
-      'type'      => 'noedit',
-      'label'     => 'Modified by'
-    },
-    modified_at       => {
-      'type'      => 'noedit',
-      'label'     => 'Modified at'
-    },
+    }
   ];
 }
 
