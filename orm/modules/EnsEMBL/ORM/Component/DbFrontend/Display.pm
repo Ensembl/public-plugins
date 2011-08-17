@@ -62,12 +62,14 @@ sub record_tree {
   my $record_div  = $self->dom->create_element('div', {'flags' => {'primary_key' => $primary_key}});
 
   my @bg = qw(bg1 bg2);
-  my $fields  = $object->show_fields;
+  my $fields  = $object->get_fields;
 
   while (my $field_name = shift @$fields) {
 
     my $field   = shift @$fields;
+    next if $field->{'display'} && $field->{'display'} eq 'never';
     my $value   = $record->$field_name;
+    next if !$value && $field->{'display'} && $field->{'display'} eq 'optional';
     my $jclass  = $self->{'_column_class_names'}{$field_name};
 
     # add class attribute for datastructure type columns
