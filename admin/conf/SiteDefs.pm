@@ -24,6 +24,10 @@ sub update_conf {
     Production      => 'Modal',
     Species         => 'Modal',
     Webdata         => 'Modal',
+    AttribType      => 'Modal',
+    ExternalDb      => 'Modal',
+
+#    HelpRecord      => 'Modal', #old help stuff
 
     Account         => 'Modal',
     UserData        => 'Modal',
