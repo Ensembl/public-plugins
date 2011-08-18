@@ -55,10 +55,11 @@ sub fetch_for_session {
   ## @param HashRef with the following keys:
   ##  - session_id          Id of the session
   ##  - query               Arrayref to be added to the query part of get_objects method (optional)
-  ##  - failed_only         Flag, possibly can have three values
+  ##  - control_only        Flag if on, will return only control reports (ones having '#' prefixed to the text in the db)
+  ##  - failed_only         Flag, possibly can have two values (will be ignored if control_only flag is on)
   ##    - false             Any boolean false value will get all the reports except with result 'CORRECT' (default)
   ##    - true              Any boolean true value will get only failed reports (reports with result 'PROBLEM')
-  ##  - with_annotations    Flag (possibly can have three values)
+  ##  - with_annotations    Flag (possibly can have three values) (will be ignored if control_only flag is on)
   ##    - false             Any boolean false value will not include any annotations of reports (default)
   ##    - exclude_manual_ok Will exclude all the reports with 'manual ok' annotations
   ##    - true              Any other boolean true value will include all annotations
@@ -68,14 +69,14 @@ sub fetch_for_session {
   
   my $args = {};
   $args->{'query'} = $params->{'query'} || [];
-  push @{$args->{'query'}}, (
-    $params->{'failed_only'}
-      ? ('result' => 'PROBLEM')
-      : ('result' => ['PROBLEM', 'WARNING', 'INFO'], 'text' => {'not like' => '#%'}),
-    'last_session_id' => $params->{'session_id'}
-  );
+  push @{$args->{'query'}}, ('last_session_id' => $params->{'session_id'}),
+    !$params->{'control_only'}
+      ? $params->{'failed_only'}
+        ? ('result' => 'PROBLEM')
+        : ('result' => ['PROBLEM', 'WARNING', 'INFO'], 'text' => {'not like' => '#%'})
+      : ('result' => 'INFO', 'text' => {'like' => '#%'});
 
-  if ($params->{'with_annotations'}) {
+  if (!$params->{'control_only'} && $params->{'with_annotations'}) {
     $args->{'with_objects'}           = ['annotation'];
     $args->{'with_external_objects'}  = ['annotation.created_by_user', 'annotation.modified_by_user'];
     if ($params->{'with_annotations'} eq 'exclude_manual_ok') {
