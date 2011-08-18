@@ -153,6 +153,7 @@ tr.dbf-list-form td {
   border-width: 1px 0;
 }
 
-.dbf-error {
+p.dbf-error {
   color: red;
+  padding: 10px;
 }
