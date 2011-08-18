@@ -19,15 +19,17 @@ sub object_class { 'EnsEMBL::ORM::Rose::Object::Session' }
 
 sub fetch_single {
   ## fetches first or last session from the db for the given release
-  ## @param Reslease
-  ## @param 'first' or 'last' (default to 'last')
+  ## @param Release
+  ## @param 'first' or 'last' (defaults to 'last')
   ## @return EnsEMBL::ORM::Rose::Object::Session object if found any
   my ($self, $release, $first_or_last) = @_;
   return undef unless $release;
 
   my $session = $self->get_objects(
     query   => [
-      db_release => $release,
+      'db_release'  => $release,
+#       '!start_time' => undef,
+#       '!end_time'   => undef,
     ],
     sort_by => sprintf('session_id %s', ($first_or_last ||= '') eq 'first' ? 'ASC' : 'DESC'),
     limit   => 1
