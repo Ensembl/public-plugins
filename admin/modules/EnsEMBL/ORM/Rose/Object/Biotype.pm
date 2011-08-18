@@ -40,16 +40,7 @@ __PACKAGE__->meta->setup(
                             vega)]
     },
     description       => {type => 'text'}
-  ],
-
-#   relationships => [
-#     changelog => {
-#       'type'        => 'many to many',
-#       'map_class'   => 'EnsEMBL::ORM::Rose::Object::ChangelogSpecies',
-#       'map_to'      => 'changelog',
-#       'map_from'    => 'species'
-#     },
-#   ],
+  ]
 );
 
 1;
