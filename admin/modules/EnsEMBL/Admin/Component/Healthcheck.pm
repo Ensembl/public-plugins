@@ -19,12 +19,26 @@ sub caption {
 }
 
 sub no_healthcheck_found {
+  ## @param Flag telling whether control reports were found for the applied filter 
   ## @return Text to be displayed in case no healthcheck found
-  my $self   = shift;
-  my $object = $self->object;
-  return '<p class="hc_p">Healthchecks have not been performed for this release.</p>' unless $object->requested_release;
-  my $extra  = $object->view_type && $object->view_param ? sprintf(" for %s '%s'", $object->view_title, $object->view_param) : '';
-  return qq(<p class="hc_p">No healthcheck reports found$extra.</p>);
+  my ($self, $flag) = @_;
+
+  my $object  = $self->object;
+  my $type    = $object->view_type;
+  my $param   = $object->view_param;
+  my $title   = $object->view_title;
+  my $release = $object->requested_release;
+
+  if ($flag) {
+    return sprintf q(<p class="hc_p">No 'PROBLEM' reports found%s.</p>), $type && $param ? sprintf(" for %s '%s'", $title, $param) : '';
+  }
+  if (!$release) {
+    return q(<p class="hc_p">Healthchecks have not been performed for this release.</p>);
+  }
+  if ($type && $param) {
+    return sprintf q(<p class="hc_p">Healthcheck for %s '%s' was not run during the last healtcheck session of release %s.</p>), lc $title, $param, $release;
+  }
+  return q(<p class="hc_p">No healthcheck reports found.</p>);
 }
 
 sub render_all_releases_selectbox {
