@@ -31,6 +31,17 @@ __PACKAGE__->meta->column_type_class('datastructure' => 'EnsEMBL::ORM::Rose::Dat
 
 #$Rose::DB::Object::Debug = 1;        ## Warns out insert and update queries if set true
 
+sub save {
+  ## Tries to save the object, but does not exit perl
+  ## If any error occours, object->error can return the string values of the error
+  ## @return Object if saved successfully, undef otherwise
+  ## @overrides
+  my $self = shift;
+  eval {
+    $self->SUPER::save(@_);
+  };
+}
+
 sub meta_class {
   return 'EnsEMBL::ORM::Rose::MetaData';
 }
