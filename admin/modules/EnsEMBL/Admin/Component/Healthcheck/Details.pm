@@ -19,7 +19,7 @@ sub content {
   my $param   = $object->view_param;
   my $type    = $object->view_type;
 
-  return $self->no_healthcheck_found unless $reports && @$reports;
+  return $self->no_healthcheck_found(scalar @{$object->rose_objects('control_reports') || []}) unless $reports && @$reports;
 
   # if no filter selected, display the failure summary table for the given view type
   if (!$param) {
