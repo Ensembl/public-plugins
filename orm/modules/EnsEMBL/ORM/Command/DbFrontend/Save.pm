@@ -21,7 +21,7 @@ sub process {
   
   $self->ajax_redirect($self->hub->url($done && @$done
     ? $object->is_ajax_request ? {'action' => 'Display', 'id' => $object->rose_object->get_primary_key_value} : {'action' => $object->default_action}
-    : {'action' => 'Problem'}
+    : {'action' => 'Problem', 'error' => $object->rose_error}
   ));
 }
 
