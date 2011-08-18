@@ -16,7 +16,7 @@ sub process {
   my $hub     = $self->hub;
   my $done    = $object->delete;
 
-  $self->ajax_redirect($self->hub->url({'action' => $done && @$done ? 'Display' : 'Problem'}));
+  $self->ajax_redirect($self->hub->url($done && @$done ? {'action' => 'Display'} : {'action' => 'Problem', 'error' => $object->rose_error}));
 }
 
 1;
