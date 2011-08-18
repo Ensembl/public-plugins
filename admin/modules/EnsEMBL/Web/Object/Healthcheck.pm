@@ -66,19 +66,31 @@ sub fetch_for_summary {
 
 sub fetch_for_details {
   ## Healthcheck details page
-  my $self = shift;
+  my $self    = shift;
   
-  if ($self->view_type && $self->view_param) {
-    $self->rose_objects('reports', $self->rose_manager('Report')->fetch_for_session({
+  my $type    = $self->view_type;
+  my $param   = $self->view_param;
+  my $manager = $self->rose_manager('Report');
+  
+  if ($type && $param) {
+    my $reports = $self->rose_objects('reports', $manager->fetch_for_session({
       'session_id'        => $self->last_session_id,
       'with_annotations'  => 1,
-      'query'             => [$self->view_type, $self->view_param]
+      'query'             => [$type, $param]
     }));
+  
+    unless (@$reports) {
+      $self->rose_objects('control_reports', $manager->fetch_for_session({
+        'session_id'      => $self->last_session_id,
+        'control_only'    => 1,
+        'query'           => [$type, $param]
+      }));
+    }
   }
   else {
-    $self->rose_objects('reports', $self->rose_manager('Report')->count_failed_for_session({
+    $self->rose_objects('reports', $manager->count_failed_for_session({
       'session_id' => $self->last_session_id,
-      'group_by'   => [ $self->view_type ]
+      'group_by'   => [ $type ]
     }));
   }
 }
