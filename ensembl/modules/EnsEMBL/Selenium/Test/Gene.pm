@@ -90,7 +90,7 @@ sub test_gene {
     and $sel->ensembl_wait_for_ajax
     and $sel->ensembl_click("//div[\@class='ele-das']//input[\@type='checkbox'][1]") # tick first source
     and $sel->ensembl_click("modal_bg")
-    and $sel->ensembl_wait_for_page_to_load;
+    and $sel->ensembl_wait_for_ajax;
 
     $sel->ensembl_click_links(["link=Gene history"]) if($SD->table_info_other(ucfirst($self->species),'core', 'stable_id_event')->{'rows'});
         
