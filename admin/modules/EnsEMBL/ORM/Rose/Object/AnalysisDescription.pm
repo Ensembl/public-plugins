@@ -25,6 +25,8 @@ __PACKAGE__->meta->setup(
     description             => {type => 'text'},
     display_label           => {type => 'varchar', 'length' => 256 },
   ],
+  
+  unique_key => ['logic_name'],
 
   relationships => [
     analysis_web_data  => {

@@ -28,6 +28,8 @@ __PACKAGE__->meta->setup(
     web_name          => {type => 'varchar', 'length' => 32 },
     is_current        => {type => 'integer'},
   ],
+  
+  unique_key => ['db_name'],
 
   relationships => [
     changelog         => {
