@@ -37,8 +37,8 @@ Ensembl.DbFrontendRow = Ensembl.DbFrontend.extend({
   // @override
   previewFormSubmit: function(form) {
     this.scrollIn({margin: 5});
-    this.form.children(':first').hide();
-    this.makeRequest(form, $('<div>').appendTo(this.form), {
+    var previewForm = this.form.children(':first').hide().next();
+    this.makeRequest(form, previewForm.length ? previewForm : $('<div>').appendTo(this.form), {
       success: function(json) {
         this.form.children(':last').replaceWith(this.getResponseNode(json));
       }
@@ -64,7 +64,7 @@ Ensembl.DbFrontendRow = Ensembl.DbFrontend.extend({
     this.makeRequest(button, this.form, {
       success: function(json) {
         if (json.redirectURL) {
-          if (json.redirectURL.match(/Problem$/)) {
+          if (json.redirectURL.match(/Problem/)) {
             this.makeRequest({}, this.form, {
               async: false,
               url: json.redirectURL,
@@ -92,8 +92,12 @@ Ensembl.DbFrontendRow = Ensembl.DbFrontend.extend({
     this.makeRequest(form, this.form.children(':last'), {
       success: function(json) {
         if (json.redirectURL) {
-          var url = json.redirectURL;
-          if (url.match(/Display/)) {
+          var url     = json.redirectURL;
+          var problem = url.match(/Problem/);
+          if (problem) {
+            this.target = this.form.children().show().last();
+          }
+          else {
             this.form.empty().hide();
             if (this.action === 'add') {
               this.target = this.el.clone().empty().removeAttr('id').insertAfter(this.form);
@@ -104,20 +108,20 @@ Ensembl.DbFrontendRow = Ensembl.DbFrontend.extend({
               url = url + (url.match(/\?/) ? '&' : '?') + 'id=' + id;
             }
           }
-          else if (url.match(/Problem$/)) {
-            this.target = this.form.children().show().last();
-          }
           this.makeRequest({}, this.target, {
             async: false,
             url: url,
             success: function(json) {
               if (this.action === 'edit') {
-                this.target.html(this.getResponseNode(json).html()).children().effect('highlight', {'color': '#ddddff'}, 1000);
+                this.target.html(this.getResponseNode(json).html());
+                if (!problem) {
+                  this.target.children().effect('highlight', {'color': '#ddddff'}, 1000);
+                }
               }
               else {
                 this.panel.initRow(this.target.html(this.getResponseNode(json).html()));
               }
-              this.afterResponse(!url.match(/Problem$/));
+              this.afterResponse(!problem);
             }
           });
         }

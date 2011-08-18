@@ -76,18 +76,24 @@ Ensembl.DbFrontendList = {
         data:    $(form).serialize() + '&id=' + this.row.id,
         success: function(json) {
           if (json.redirectURL) {
-            var url = window.location.href.split('#')[0];
-            this.success = !json.redirectURL.match(/Problem$/);
+            var url = json.redirectURL;
+            this.success = !url.match(/Problem/);
+            if (this.success) {
+              url = window.location.href.split('#')[0];
+              url = url + (url.match(/\?/) ? '&' : '?') + 'id=' + this.row.id;
+            }
             this.makeRequest({}, this.form, {
               async: false,
               url: url,
-              data: {id: this.row.id},
               success: function(json) {
                 if (this.success) {
                   var resTr = $('._dbf_row_' + this.row.id, this.getResponseNode(json));
                   if (resTr.length) {
                     this.row.panel.updateRow(resTr.children().map(function(i, cell) {return cell.innerHTML;}), this.el.parents('tr')[0]);
                   }
+                }
+                else {
+                  this.showError(this.form, this.getResponseNode(json).children('p').first().html(), this.el);
                 }
                 this.afterResponse(this.success);
               }
@@ -143,7 +149,7 @@ Ensembl.DbFrontendList = {
       this.makeRequest(button, this.form, {
         success: function(json) {
           if (json.redirectURL) {
-            if (json.redirectURL.match(/Problem$/)) {
+            if (json.redirectURL.match(/Problem/)) {
               this.makeRequest({}, this.form, {
                 async: false,
                 url: json.redirectURL,
@@ -171,7 +177,7 @@ Ensembl.DbFrontendList = {
         success: function(json) {
           if (json.redirectURL) {
             var url = json.redirectURL;
-            this.success = !url.match(/Problem$/);
+            this.success = !url.match(/Problem/);
             if (this.success) {
               var id = (url.match(/(\?|&|;)id\=([0-9]+)/) || []).pop() || 0;
               if (id) {
@@ -192,7 +198,7 @@ Ensembl.DbFrontendList = {
                   this.form.parents('tr').first().remove();
                 }
                 else {
-                  this.showError(this.form);
+                  this.showError(this.form, this.getResponseNode(json).children('p').first().html());
                 }
               }
             });
@@ -200,9 +206,6 @@ Ensembl.DbFrontendList = {
         }
       });
     }
-
-    // @override
-    //scrollIn: function() {}
   })
 };
 

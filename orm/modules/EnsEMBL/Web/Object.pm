@@ -51,8 +51,32 @@ sub rose_object {
   return $rose_objects && @$rose_objects ? $rose_objects->[0] : undef;
 }
 
+sub rose_errors {
+  ## Gets all the errors thrown by Rose api
+  ## @param Flag telling whether to return the errors as thrown by rose, or format them to a readable form - returns formatted error by default
+  ## @return ArrayRef of strings
+  my ($self, $raw) = @_;
+  my $errors = $self->deepcopy($self->{'_rose_error'} ||= []);
+  if (!$raw) {
+    for (0..scalar @$errors - 1) {
+      if ($errors->[$_] =~ /(Duplicate\sentry\s\'[^\']*\')/) {
+        $errors->[$_] = $1;
+      }
+      ## TODO - format other errors
+    }
+  }
+  return $errors;
+}
+
+sub rose_error {
+  ## Gets the last error thrown by Rose api while executing an sql query
+  ## @param Flas as in function rose_errors
+  return shift->rose_errors(@_)->[-1];  
+}
+
 sub save {
   ## Wrapper to Rose::DB::Object's save method to handle multiple objects with web-friendly error-handling
+  ## If any error occours while saving, it can be accessed with object->rose_errors
   ## @param Key for the rose objects - optional - defaults to the primary rose objects
   ## @param Hashref of the hash to be passed to rose object's save method as arg
   ## @return ArrayRef of successfully saved rose objects
@@ -60,12 +84,23 @@ sub save {
 
   my $objs = [];
   
+  ## reset errors
+  $self->{'_rose_error'} = [];
+  
   $params ||= {};
   $params->{'changes_only'} = 1;
 
   my %user = ('user' => delete $params->{'user'} || $self->hub->user);
-  
-  $_->save(%$params, $_->meta->is_trackable ? %user : ()) and push @$objs, $_ or $_->error and warn $_->error for @{$self->rose_objects($type || '0')};
+
+  for (@{$self->rose_objects($type || '0')}) {
+    if (my $obj = $_->save(%$params, $_->meta->is_trackable ? %user : ())) {
+      push @$objs, $_;
+    }
+    else {
+      push @{$self->{'_rose_error'}}, $_->error;
+    }
+  }
+
   return $objs;
 }
 
@@ -89,7 +124,12 @@ sub retire {
     my $value   = $_->INACTIVE_FLAG_VALUE;
     if ($column) {
       $_->$column($value);
-      $_->save('changes_only' => 1, $_->meta->is_trackable ? %user : ()) and push @$objs, $_ or warn $_->error;
+      if (my $obj = $_->save('changes_only' => 1, $_->meta->is_trackable ? %user : ())) {
+        push @$objs, $obj;
+      }
+      else {
+        push @{$self->{'_rose_error'}}, $_->error;
+      }
     }
   }
   return $objs;
