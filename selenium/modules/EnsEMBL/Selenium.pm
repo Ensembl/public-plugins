@@ -112,4 +112,9 @@ sub ensembl_is_text_present {
     
   print "URL:: $url \n\n" unless $self->is_text_present_ok($text);
 }
+
+sub ensembl_has_das_error {
+  my $self = shift;
+  return $self->is_element_present("//div[\@id='TextDAS']//div[\@class='error-pad']");
+}
 1;
