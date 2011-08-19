@@ -23,9 +23,11 @@ __PACKAGE__->meta->setup(
 
   columns     => [
     species_id        => {type => 'serial', primary_key => 1, not_null => 1}, 
-    db_name           => {type => 'varchar', 'length' => 32 },
-    common_name       => {type => 'varchar', 'length' => 32 },
-    web_name          => {type => 'varchar', 'length' => 32 },
+    db_name           => {type => 'varchar', 'length' => 255 },
+    common_name       => {type => 'varchar', 'length' => 255 },
+    web_name          => {type => 'varchar', 'length' => 255 },
+    taxon             => {type => 'varchar', 'length' => 20 },
+    species_prefix    => {type => 'varchar', 'length' => 20 },
     is_current        => {type => 'integer'},
   ],
   
