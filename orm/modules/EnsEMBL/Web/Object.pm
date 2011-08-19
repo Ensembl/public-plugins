@@ -81,6 +81,8 @@ sub save {
   ## @param Hashref of the hash to be passed to rose object's save method as arg
   ## @return ArrayRef of successfully saved rose objects
   my ($self, $type, $params) = @_;
+  
+  $type and ref $type eq 'HASH' and $params = $type and $type = '0';
 
   my $objs = [];
   
