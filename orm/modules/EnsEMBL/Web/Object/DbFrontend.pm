@@ -8,7 +8,7 @@ use strict;
 use warnings;
 
 use EnsEMBL::ORM::Rose::Manager;
-use Rose::DB::Object::Helpers qw(clone_and_reset -force -target_class EnsEMBL::ORM::Rose::Object);
+use Rose::DB::Object::Helpers qw(forget_related clone_and_reset -force -target_class EnsEMBL::ORM::Rose::Object);
 
 use base qw(EnsEMBL::Web::Object);
 
@@ -288,7 +288,6 @@ sub _populate_from_cgi {
   delete $field_names{$_} for ('id', $rose_object->primary_key);
 
   for (keys %field_names) {
-  
     next unless exists $param_names{$_}; #ignore if variable not present among the post params
     next if $rose_object->meta->is_trackable && $_ =~ /^(created|modified)_(by_user|at|by)$/; # dont get them from CGI
 
@@ -296,20 +295,25 @@ sub _populate_from_cgi {
     my $type;
 
     if (exists $columns->{$_} && ($type = 'column') || exists $relations->{$_} && ($type = 'relation')) {
+    
+      # For single value
       if ($type eq 'relation' && $relations->{$_}->is_singular || $type eq 'column' && $columns->{$_}->type ne 'set') {
         $value = $hub->param($_);
 
-        # set mapped column value to the new value in case of 'many to one' or 'one to one' relationships
         if ($type eq 'relation') {
           my ($mapped_column) = $relations->{$_}->column_map;
           $rose_object->$mapped_column($value);
+          unless ($value) {
+            $rose_object->forget_related($_); # get rid of old related object
+            next;                             # prevent adding a new row to related table
+          }
         }
       }
+      
+      # For multiple values
       else {
-        my @val = $hub->param($_);
-        $value  = { map {$_ => 1} @val };
-        delete $value->{'0'} if $type eq 'relation'; #prevent adding a new row to related table
-        $value  = [ keys %$value ];
+        $value = [ $hub->param($_) ];
+        $value = [ grep {$_} @$value ] if $type eq 'relation'; #prevent adding a new row to related table by filtering out null value
       }
       $rose_object->$_($value);
     }
