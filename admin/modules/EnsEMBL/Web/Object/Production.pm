@@ -59,12 +59,12 @@ sub show_fields {
     analysis_description => {
       'type'      => 'dropdown',
       'label'     => 'Logic Name',
-      'is_null'   => 'null',
+      'required'  => 1,
     },
     species           => {
       'type'      => 'dropdown',
       'label'     => 'Species',
-      'is_null'   => 'null',
+      'required'  => 1,
     },
     db_type           => {
       'type'      => 'dropdown',
@@ -124,6 +124,7 @@ sub _get_filter_query {
     for (qw(web_data_id analysis_description_id species_id db_type)) {
       my $value = $hub->param($_);
       if ($value || $value eq '0') {
+        $_ eq 'web_data_id' and $value eq '0' and $value = undef;
         push @{$self->{'_filter_query'}}, $_, $_ eq 'db_type' ? {'like' => "%$value%"} : $value;
       }
     }
