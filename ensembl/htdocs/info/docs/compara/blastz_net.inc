@@ -37,6 +37,7 @@
 <a href="mlss/mlss_430.html">Wallaby (Macropus eugenii)</a><br/>
 <a href="mlss/mlss_384.html">Platypus (Ornithorhynchus anatinus)</a><br/>
 <a href="mlss/mlss_390.html">Chicken (Gallus gallus)</a><br/>
+<a href="mlss/mlss_535.html">Tasmanian Devil (Sarcophilus harrisii)</a><br/>
 <h4>Mouse (Mus musculus)</h4>
 <a href="mlss/mlss_282.html">Rat (Rattus norvegicus)</a><br/>
 <a href="mlss/mlss_283.html">Dog (Canis familiaris)</a><br/>
@@ -49,6 +50,7 @@
 <a href="mlss/mlss_482.html">Panda (Ailuropoda melanoleuca)</a><br/>
 <h4>Opossum (Monodelphis domestica)</h4>
 <a href="mlss/mlss_443.html">Wallaby (Macropus eugenii)</a><br/>
+<a href="mlss/mlss_544.html">Tasmanian Devil (Sarcophilus harrisii)</a><br/>
 <h4>Chicken (Gallus gallus)</h4>
 <a href="mlss/mlss_498.html">Turkey (Meleagris gallopavo)</a><br/>
 <a href="mlss/mlss_441.html">Zebra Finch (Taeniopygia guttata)</a><br/>
