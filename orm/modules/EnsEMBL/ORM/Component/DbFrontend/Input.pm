@@ -8,7 +8,6 @@ package EnsEMBL::ORM::Component::DbFrontend::Input;
 ### To customise, extend either this module in your component, or EnsEMBL::Web::Object::DbFrontend in your plugin/E/W/Object
 
 use strict;
-use warnings;
 
 use base qw(EnsEMBL::ORM::Component::DbFrontend);
 
