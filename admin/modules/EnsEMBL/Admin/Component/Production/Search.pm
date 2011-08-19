@@ -32,12 +32,13 @@ sub content {
       'label'   => join (' ', map {ucfirst $_} split '_', $method),
       'type'    => $method eq 'web_data' ? 'radiolist' : 'dropdown',
       'name'    => $key,
+      'value'   => '',
       'values'  => [
-        {'value' => '', 'caption' => {'inner_text' => 'null', 'class' => $self->_JS_CLASS_DATASTRUCTURE}},
-        map {$_ ? {
+        {'value' => '', 'caption' => {'inner_text' => 'Any'}},
+        map {{
           'caption' => {'inner_HTML' => $key eq 'db_type' ? $_ : $self->get_printable($groups->{$key}{$_}[0]->$method), $method eq 'web_data' ? ('class' => $self->_JS_CLASS_DATASTRUCTURE) : ()},
-          'value'   => $_
-        } : ()} sort keys %{$groups->{$key}}
+          'value'   => ($_ || '0')
+        }} sort keys %{$groups->{$key}}
       ],
     });
   }
