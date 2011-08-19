@@ -24,7 +24,7 @@ sub content {
   foreach my $record (@$records) {
     foreach my $groupby (qw(web_data_id analysis_description_id species_id db_type)) {
       my $val = $record->$groupby;
-      push @{$groups->{$groupby}{$_} ||= []}, $record for ref $val eq 'ARRAY' ? @$val : $val;
+      push @{$groups->{$groupby}{$_ || '0'} ||= []}, $record for ref $val eq 'ARRAY' ? @$val : $val;
     }
   }
 
