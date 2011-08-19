@@ -1,6 +1,6 @@
 <h4>Human (Homo sapiens)</h4>
 <a href="mlss/mlss_388.html">Chimpanzee (Pan troglodytes)</a><br/>
-<a href="mlss/mlss_455.html">Gorilla (Gorilla gorilla)</a><br/>
+<a href="mlss/mlss_536.html">Gorilla (Gorilla gorilla)</a><br/>
 <a href="mlss/mlss_394.html">Pongo abelii</a><br/>
 <a href="mlss/mlss_517.html">Gibbon (Nomascus leucogenys)</a><br/>
 <a href="mlss/mlss_428.html">Macaque (Macaca mulatta)</a><br/>
