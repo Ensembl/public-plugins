@@ -31,6 +31,16 @@ sub show_fields {
       'type'      => 'string',
       'label'     => 'Common Name',
       'required'  => 1,
+    },
+    taxon             => {
+      'type'      => 'string',
+      'label'     => 'Taxon',
+      'maxlength' => '20'
+    },
+    species_prefix    => {
+      'type'      => 'string',
+      'label'     => 'Prefix',
+      'maxlength' => '20'
     }
   ];
 }
