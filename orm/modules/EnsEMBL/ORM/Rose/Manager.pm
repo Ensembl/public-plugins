@@ -10,8 +10,6 @@ package EnsEMBL::ORM::Rose::Manager;
 use strict;
 use warnings;
 
-use EnsEMBL::ORM::Rose::Object::User;
-
 use base qw(Rose::DB::Object::Manager);
 
 use constant DEBUG_SQL => 0;
@@ -67,7 +65,7 @@ sub get_objects {
 
   # get foreign ids for getting all the externally related objects
   my $relation_cache    = {}; # cache the ExternalRelationship object to avoid multiple queries to metadata of the object directly related to external object
-  my $required_objects  = {}; # example structure: {'EnsEMBL::ORM::Rose::Object::User' => {'user_id' => {'102' => Rose User object with user_id 102}}}
+  my $required_objects  = {}; # example structure: {'EnsEMBL::ORM::Rose::Object::Record' => {'record_id' => {'102' => Rose object with record_id 102}}}
   my $internal_objects  = [];
   foreach my $object (@$objects) {
     foreach my $external_relation (@$external_rels) {
