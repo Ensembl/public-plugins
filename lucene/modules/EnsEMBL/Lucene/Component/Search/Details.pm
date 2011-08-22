@@ -8,6 +8,7 @@ use base qw(EnsEMBL::Web::Component);
 use Lingua::EN::Inflect qw(PL NUM);
 use URI::Escape;
 use Encode qw(encode);
+use EnsEMBL::Web::Document::HTML::HomeSearch;
 
 sub content {
   my $self = shift;
