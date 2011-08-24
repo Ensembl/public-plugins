@@ -19,7 +19,7 @@ sub content {
   foreach my $record (@$records) {
     foreach my $groupby (qw(web_data_id analysis_description_id species_id db_type)) {
       my $val = $record->$groupby;
-      push @{$groups->{$groupby}{$_} ||= []}, $record for ref $val eq 'ARRAY' ? @$val : $val;
+      push @{$groups->{$groupby}{$_ || '0'} ||= []}, $record for ref $val eq 'ARRAY' ? @$val : $val;
     }
   }
 
@@ -27,6 +27,10 @@ sub content {
   foreach my $key (sort keys %$groups) {
 
     (my $method = $key) =~ s/_id$//;
+
+    my $options = $key eq 'db_type'
+      ? { map {$_         => "a$_"} sort keys %{$groups->{$key}}}
+      : { map {$_ || '0'  => ($_ ? 'b' : 'a').$self->get_printable($groups->{$key}{$_}[0]->$method)} sort keys %{$groups->{$key}} };
 
     $fieldset->add_field({
       'label'   => join (' ', map {ucfirst $_} split '_', $method),
@@ -36,9 +40,9 @@ sub content {
       'values'  => [
         {'value' => '', 'caption' => {'inner_text' => 'Any'}},
         map {{
-          'caption' => {'inner_HTML' => $key eq 'db_type' ? $_ : $self->get_printable($groups->{$key}{$_}[0]->$method), $method eq 'web_data' ? ('class' => $self->_JS_CLASS_DATASTRUCTURE) : ()},
-          'value'   => ($_ || '0')
-        }} sort keys %{$groups->{$key}}
+          'caption' => {'inner_HTML' => substr($options->{$_}, 1), $method eq 'web_data' ? ('class' => $self->_JS_CLASS_DATASTRUCTURE) : ()},
+          'value'   => $_
+        }} sort {lc $options->{$a} cmp lc $options->{$b}} keys %$options
       ],
     });
   }
