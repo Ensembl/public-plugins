@@ -5,6 +5,9 @@ use warnings;
 no warnings "uninitialized";
 use base qw(EnsEMBL::Web::Component);
 
+use Data::Dumper;
+#$Data::Dumper::Maxdepth=2;
+
 sub _init {
   my $self = shift;
   $self->cacheable(0);
@@ -20,9 +23,7 @@ sub content {
   my $html;
 
   my $species = $hub->param('species');
-  my $species_name = $species eq 'all' ? 'all species' : $species;
-  ( my $display_species = $species_name ) =~ s/_/ /;
-
+  my $display_species = $species eq 'all' ? "the ".ucfirst($sitetype)." website" : $hub->species_defs->get_config($species,'SPECIES_COMMON_NAME');
   my $q = $hub->param('q');
 
   my $results_by_group = $object->groups;
@@ -40,19 +41,9 @@ sub content {
 
     my $i = 0;
 
-      #         foreach my $group_name ( sort { $a cmp $b } keys %$results_by_group ) {
+#    foreach my $group_name ( sort { $a cmp $b } keys %$results_by_group ) {
     foreach my $group_name ( 'Feature type', 'Species', 'Help' ) {
-
-        #             my $url = '/'
-        #               . $object->species
-        #               . '/Search/Details?species='
-        #               . $object->param('species')
-        #               . ';idx=all;' . ';q='
-        #               . $object->param('q');
-
       my $class = $group_classes[$i];
-
-      my $group       = $results_by_group->{$group_name}->{results};
       my $group_total = delete $results_by_group->{$group_name}->{total};
       next if $group_total < 1;
 
@@ -62,25 +53,30 @@ sub content {
 <tr><td>Total</td><td>$group_total</td></tr>
       );
 
-      foreach my $child_name ( sort { $a cmp $b } keys %{$group} ) {
+      my $group     = $results_by_group->{$group_name}->{results};
+
+      foreach my $child_name ( sort { $group->{$a}{'sort_field'} cmp $group->{$b}{'sort_field'} } keys %{$group} ) {
         my $child = $group->{$child_name};
         $child_name =~ s/${sitetype}_(.*)$/ucfirst($1)/e;
+        my $display_n = $child->{'sort_field'};
+        $display_n =~ s/${sitetype}_(.*)$/ucfirst($1)/e;
+        $display_n =~  s/_/ /g;
+
         $html .= qq(<tr>
                               <td>);
 
-        my $child_name_no_underscore;
-        ( $child_name_no_underscore = $child_name ) =~ s/_/ /g;
-
-        $html .= qq(<a href="#" class="collapsible">$child_name_no_underscore</a><ul class="shut">\n);
+        $html .= qq(<a href="#" class="collapsible">$display_n</a><ul class="shut">\n);
         my $grandchild  = $child->{results};
         my $child_count = $child->{total};
         my $g_clipped;
-        foreach my $g_name ( sort { $a cmp $b } keys %{$grandchild} ) {
-          my $g_count = $grandchild->{$g_name}->{count};
-
-            my $clipped = $grandchild->{$g_name}->{is_clipped_flag};
-            $g_clipped = '>' if $clipped eq '>';
-            $g_name =~ s/${sitetype}_(.*)$/ucfirst($1)/e;
+        foreach my $g_name ( sort { $grandchild->{$a}{'sort_field'} cmp $grandchild->{$b}{'sort_field'} } keys %{$grandchild} ) {
+          my $gchild = $grandchild->{$g_name};
+          my $display_n = $gchild->{'sort_field'};
+          $display_n =~ s/${sitetype}_(.*)$/ucfirst($1)/e;
+          my $g_count = $gchild->{count};
+          my $clipped = $gchild->{is_clipped_flag};
+          $g_clipped = '>' if $clipped eq '>';
+          $g_name =~ s/${sitetype}_(.*)$/ucfirst($1)/e;
 
           # Handle Docs Urls differently
           my $g_url;
@@ -96,12 +92,14 @@ sub content {
           }
           # yet more exceptions for Help and docs
           # change Help -> Page Help, Docs -> Documentation and Faq to FAQ
-          # this needs fixed at source i.e. the Search Domain name
-          $g_name =~ s/Help/Page Help/;
-          $g_name =~ s/Docs/Documentation/;
-          $g_name =~ s/Faq/FAQ/;
+          # this should be fixed at source i.e. the Search Domain name
+          $display_n =~ s/Help/Page Help/;
+          $display_n =~ s/Docs/Documentation/;
+          $display_n =~ s/Faq/FAQ/;
 
-          $html .= qq#<li><a href="$g_url"> $g_name ($clipped$g_count)</a></li>#;
+          $display_n =~  s/_/ /g;
+
+          $html .= qq#<li><a href="$g_url"> $display_n ($clipped$g_count)</a></li>#;
         }
         $html .= "</ul>\n";
 
@@ -115,7 +113,6 @@ sub content {
     }
   }
   else {
-    warn "FOUND NOTHING";
     $html = $self->re_search;
   }
   return $html;
@@ -128,8 +125,7 @@ sub re_search {
   my $html;
 
   my $species = $hub->param('species');
-  my $species_name = $species eq 'all' ? 'all species' : $species;
-  ( my $display_species = $species_name ) =~ s/_/ /;
+  my $display_species = $species eq 'all' ? 'all species' : $hub->species_defs->get_config($species,'SPECIES_COMMON_NAME');
   my $q      = $hub->param('q');
   my $q_name = $q;
 
@@ -159,6 +155,7 @@ sub re_search {
   $html = qq(<h2>Your search of the $sitetype website for the term '$q' returned no results</h2>);
   $html .=
 qq(<h3>If you are expecting to find features with this search term and think the failure to do so is an error, please <a href="/Help/Contact" class="popup">contact helpdesk</a> and let us know</h3>);
+  warn "Found nothing when searching for \"$q\"";
   return $html;
 }
 
