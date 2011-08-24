@@ -35,7 +35,11 @@ sub _format_message {
   $idx = 'Document' if $idx eq 'Docs';
   $idx = uc($idx) if $idx eq 'Faq';
   my $message = NUM( $count, 'true' ) . ' ' . PL($idx) . ' ' . PL('matches') . " your query ('$query')";
-  $message .= " in $species" if $species;
+  my $display_species = $species eq 'all' ? 'all species' : $self->hub->species_defs->get_config($species,'SPECIES_COMMON_NAME');
+  #uncomment this to show latin name as well
+#  $species =~ s/_/ /g;
+#  $display_species .= " ($species).";
+  $message .= " in $display_species" if $display_species;
   return $message;
 }
 
@@ -45,8 +49,6 @@ sub render_summary {
   my $hub = $self->hub;
 
   my $species = $hub->param('species') || $self->species;
-  $species =~ s/_/ /g;
-
   my $species_searched  = $species unless $species eq 'all';
   my $search_term       = $hub->param('q');
 
