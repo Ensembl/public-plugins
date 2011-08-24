@@ -145,7 +145,7 @@ sub get_results_summary {
     }
     next if $new_res->{NumOfResults} <= 0;
 
-    my $subfield_results = $new_res->{subFieldResults}->{FieldResult};
+    my $subfield_results = $new_res->{subFieldResults}{FieldResult};
 
     if ( ref $subfield_results eq 'ARRAY' ) {
       $DB::single = 1;
@@ -153,26 +153,30 @@ sub get_results_summary {
 
         # Handle Help and Docs totals like this until it gets a dedicated subdmain in the lucene hierarchy
         if ( $new_res->{domainId} =~ /${sitetype}_faq|${sitetype}_glossary|${sitetype}_help|${sitetype}_docs/ ) {
-
-          $new_groups->{Help}->{results}->{"Docs"}->{results}->{ $new_res->{domainId} }->{count} =
-            $subfield_results->{fieldNumberOfResults};
-          $new_groups->{Help}->{results}->{"Docs"}->{total} += $subfield_results->{fieldNumberOfResults};
+          $new_groups->{Help}{results}{Docs}{results}{ $new_res->{domainId} }{count} = $subfield_results->{fieldNumberOfResults};
+          $new_groups->{Help}{results}{Docs}{results}{ $new_res->{domainId} }{sort_field} = 'Documentation';
+          $new_groups->{Help}{results}{Docs}{total} += $subfield_results->{fieldNumberOfResults};
+          $new_groups->{Help}{results}{Docs}{sort_field} = $new_res->{domainId};
           next;
 
         }
-        $new_groups->{Species}->{results}->{ $field_result->{fieldValue} }->{results}->{ $new_res->{domainId} }->{count} = $field_result->{fieldNumberOfResults};
 
-        $new_groups->{Species}->{results}->{ $field_result->{fieldValue} }->{total} +=  $field_result->{fieldNumberOfResults};
+        #add a sort_field to order the results by - species common name if it exists, domain type if it doesn't
+        my $sort_field = $field_result->{fieldValue};
+        $sort_field =~  s/ /_/g;
+        $sort_field = $species_defs->get_config($sort_field,'SPECIES_COMMON_NAME') || $sort_field;
 
-        #        $new_groups->{Species}->{results}->{ $field_result->{fieldValue} }->{is_clipped_flag} = '>'
+        $new_groups->{Species}{results}{ $field_result->{fieldValue} }{sort_field} = $sort_field;
+        $new_groups->{Species}{results}{ $field_result->{fieldValue} }{results}{ $new_res->{domainId} }{sort_field} = $new_res->{domainId};
+        $new_groups->{Species}{results}{ $field_result->{fieldValue} }{results}{ $new_res->{domainId} }{count} = $field_result->{fieldNumberOfResults};
+        $new_groups->{Species}{results}{ $field_result->{fieldValue} }{total} +=  $field_result->{fieldNumberOfResults};
+        $new_groups->{Species}{results}{ $field_result->{fieldValue} }{results}{ $new_res->{domainId} }{is_clipped_flag} = '>' if $field_result->{fieldNumberOfResults} == 10000;
 
-        $new_groups->{Species}->{results}->{ $field_result->{fieldValue} }->{results}->{ $new_res->{domainId} }->{is_clipped_flag} = '>' if $field_result->{fieldNumberOfResults} == 10000;
-
-        $new_groups->{'Feature type'}->{results}->{ $new_res->{domainId} }->{results}->{ $field_result->{fieldValue} }->{count} = $field_result->{fieldNumberOfResults};
-
-        $new_groups->{'Feature type'}->{results}->{ $new_res->{domainId} }->{total} += $field_result->{fieldNumberOfResults};
-
-        $new_groups->{'Feature type'}->{results}->{ $new_res->{domainId} }->{results}->{ $field_result->{fieldValue} }->{is_clipped_flag} = '>' if $field_result->{fieldNumberOfResults} == 10000;
+        $new_groups->{'Feature type'}{results}{ $new_res->{domainId} }{sort_field} = $new_res->{domainId};
+        $new_groups->{'Feature type'}{results}{ $new_res->{domainId} }{results}{ $field_result->{fieldValue} }{sort_field} = $sort_field;
+        $new_groups->{'Feature type'}{results}{ $new_res->{domainId} }{results}{ $field_result->{fieldValue} }{count} = $field_result->{fieldNumberOfResults};
+        $new_groups->{'Feature type'}{results}{ $new_res->{domainId} }{total} += $field_result->{fieldNumberOfResults};
+        $new_groups->{'Feature type'}{results}{ $new_res->{domainId} }{results}{ $field_result->{fieldValue} }{is_clipped_flag} = '>' if $field_result->{fieldNumberOfResults} == 10000;
       }
     }
     elsif ( ref $subfield_results eq 'HASH' ) {
@@ -180,34 +184,36 @@ sub get_results_summary {
 
       # Handle Help and Docs totals like this until it gets a dedicated subdmain in the lucene hierarchy
       if ( $new_res->{domainId} =~ /(faq|${sitetype}_glossary|${sitetype}_help|${sitetype}_docs)/ ) {
-
-        $new_groups->{Help}->{results}->{"Docs"}->{results}->{ $new_res->{domainId} }->{count} = $subfield_results->{fieldNumberOfResults};
-        $new_groups->{Help}->{results}->{"Docs"}->{total} += $subfield_results->{fieldNumberOfResults};
-
+        $new_groups->{Help}{results}{Docs}{results}{ $new_res->{domainId} }{count} = $subfield_results->{fieldNumberOfResults};
+        $new_groups->{Help}{results}{Docs}{total} += $subfield_results->{fieldNumberOfResults};
+        $new_groups->{Help}{results}{Docs}{sort_field} = 'Docs';
+        $new_groups->{Help}{results}{Docs}{results}{ $new_res->{domainId} }{sort_field} = $new_res->{domainId};
         next;
       }
 
-      $new_groups->{'Feature type'}->{results}->{ $new_res->{domainId} }->{total} += $subfield_results->{fieldNumberOfResults};
-      $new_groups->{Species}->{results}->{ $subfield_results->{fieldValue} }->{total} += $subfield_results->{fieldNumberOfResults};
+      my $sort_field = $subfield_results->{fieldValue};
+      $sort_field =~  s/ /_/g;
+      $sort_field = $species_defs->get_config($sort_field,'SPECIES_COMMON_NAME') || $sort_field;
 
-      $new_groups->{Species}->{results}->{ $subfield_results->{fieldValue} }->{results}->{ $new_res->{domainId} }->{count} = $subfield_results->{fieldNumberOfResults};
+      $new_groups->{Species}{results}{ $subfield_results->{fieldValue} }{sort_field} = $sort_field; 
+      $new_groups->{Species}{results}{ $subfield_results->{fieldValue} }{results}{ $new_res->{domainId} }{sort_field} = $new_res->{domainId};
+      $new_groups->{Species}{results}{ $subfield_results->{fieldValue} }{total} += $subfield_results->{fieldNumberOfResults};
+      $new_groups->{Species}{results}{ $subfield_results->{fieldValue} }{results}{ $new_res->{domainId} }{count} = $subfield_results->{fieldNumberOfResults};
+      $new_groups->{Species}{results}{ $subfield_results->{fieldValue} }{results}{ $new_res->{domainId} }{is_clipped_flag} = '>' if $subfield_results->{fieldNumberOfResults} == 10000;
 
-      $new_groups->{Species}->{results}->{ $subfield_results->{fieldValue} }->{results}->{ $new_res->{domainId} }->{is_clipped_flag} = '>' if $subfield_results->{fieldNumberOfResults} == 10000;
-
-      $new_groups->{'Feature type'}->{results}->{ $new_res->{domainId} }->{results}->{ $subfield_results->{fieldValue} }->{count} = $subfield_results->{fieldNumberOfResults};
-
-      $new_groups->{'Feature type'}->{results}->{ $new_res->{domainId} }->{results}->{ $subfield_results->{fieldValue} }->{is_clipped_flag} = '>' if $subfield_results->{fieldNumberOfResults} == 10000;
+      $new_groups->{'Feature type'}{results}{ $new_res->{domainId} }{sort_field} = $new_res->{domainId};
+      $new_groups->{'Feature type'}{results}{ $new_res->{domainId} }{results}{ $subfield_results->{fieldValue} }{sort_field} = $sort_field;
+      $new_groups->{'Feature type'}{results}{ $new_res->{domainId} }{total} += $subfield_results->{fieldNumberOfResults};
+      $new_groups->{'Feature type'}{results}{ $new_res->{domainId} }{results}{ $subfield_results->{fieldValue} }{count} = $subfield_results->{fieldNumberOfResults};
+      $new_groups->{'Feature type'}{results}{ $new_res->{domainId} }{results}{ $subfield_results->{fieldValue} }{is_clipped_flag} = '>' if $subfield_results->{fieldNumberOfResults} == 10000;
     }
   }
 
-  $new_groups->{Species}->{total} = $new_results->{total} - $new_groups->{Help}->{results}->{Docs}->{total};
-  $new_groups->{'Feature type'}->{total} = $new_results->{total} - $new_groups->{Help}->{results}->{Docs}->{total};
+  $new_groups->{Species}{total} = $new_results->{total} - $new_groups->{Help}{results}{Docs}{total};
+  $new_groups->{'Feature type'}{total} = $new_results->{total} - $new_groups->{Help}{results}{Docs}{total};
 
   # until help and docs gets a subdomain by itself....
-  $new_groups->{Help}->{total} = $new_groups->{Help}->{results}->{Docs}->{total};
-
-  #   $new_groups->{'Help and Docs'} = $new
-
+  $new_groups->{Help}{total} = $new_groups->{Help}{results}{Docs}{total};
   $self->groups($new_groups);
   $self->__status('search');
   return;
