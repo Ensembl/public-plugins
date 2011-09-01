@@ -100,9 +100,9 @@ sub feature2url {
           . ( $_[0]->{db} ? ";db=$_[0]->{db}" : '' )
           . ( $_[0]->{contigviewbottom} ? ";contigviewbottom=$_[0]->{contigviewbottom}" : '' );
       },
-      'PHENOTYPE' => sub {
-        return
-          "$_[0]->{species}/Location/Genome?ftype=Phenotype;id=$_[0]->{id};phenotype_name=$_[0]->{description}";
+    'PHENOTYPE' => sub {
+      return
+          "$_[0]->{species}/Phenotype/Locations?id=$_[0]->{id};name=$_[0]->{description}";
       },
     'SEQUENCE' => sub {
       return $_[0]->{id} =~ /^LRG/
