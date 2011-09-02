@@ -52,6 +52,9 @@ sub getHeadlineNumberOfResultsByDomain {
     else {
       warn "[ No data returned from webservice : headlineNumberOfResultsByDomain ]";
     }
+    if (my $c = $data->{NumOfResults} < 0 ) {
+      warn "[ Invalid count value ($c) returned, check Webservices are configured correctly ] ";
+    }
     return $hits;
 }
 
