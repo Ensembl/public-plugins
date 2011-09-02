@@ -43,6 +43,7 @@ sub update_conf {
   $SiteDefs::__species_aliases{ 'Procavia_capensis'        } = [qw(pc hyrax dassy dassie pimbi)];
   $SiteDefs::__species_aliases{ 'Pteropus_vampyrus'        } = [qw(pv megabat flyingfox)];
   $SiteDefs::__species_aliases{ 'Rattus_norvegicus'        } = [qw(rn rnor rat)];
+  $SiteDefs::__species_aliases{ 'Sarcophilus_harrisii'     } = [qw(sh devil tasmanian devil)];
   $SiteDefs::__species_aliases{ 'Sorex_araneus'            } = [qw(sa shrew)];
   $SiteDefs::__species_aliases{ 'Spermophilus_tridecemlineatus'  } = [qw(st stri squirrel spermophilus)];
   $SiteDefs::__species_aliases{ 'Sus_scrofa'  } = [qw(ss sscr pig sus oink porky)];
@@ -76,7 +77,8 @@ sub update_conf {
   $SiteDefs::__species_aliases{ 'Ciona_savignyi'           } = [qw(cs csav seasquirts cionas)];
 #-------------------- yeast
   $SiteDefs::__species_aliases{ 'Saccharomyces_cerevisiae' } = [qw(sc scer yeast saccharomyces )];
-  $SiteDefs::__species_aliases{ 'Ailuropoda_melanoleuca'   } = [qw(panda giant_panda)];
+#-------------------- lamprey
+  $SiteDefs::__species_aliases{ 'Petromyzon_marinus' } = [qw(pm lamprey sea lamprey )];
 }
 
 1;
