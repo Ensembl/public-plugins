@@ -18,6 +18,7 @@ Perl script |
 	<li><a href="#new">What's new</a></li>
 	<li><a href="#requirements">Requirements</a></li>
 	<li><a href="#download">Download</a></li>
+	<li><a href="#help">Help</a></li>
 	<li>
 		<a href="#running">Running the script</a>
 		<ul>
@@ -42,11 +43,42 @@ Perl script |
 			<li><a href="#privacy">Data privacy</a></li>
 			<!--<li><a href="#standalone">Standalone mode</a></li>-->
 		</ul>
-	</li>	
+	</li>
+    <li>
+        <a href="#misc">Other information</a>
+        <ul>
+            <li><a href="#hgvs">HGVS notation</a></li>
+            <li><a href="#refseq">RefSeq transcripts</a></li>
+            <li><a href="#convert">File conversion</a></li>
+        </ul>
+    </li>
 </ul>
 
+<hr/>
 
 <h2 id="new"> What's new </h2>
+
+<h3> New in version 2.2 <i>(September 2011)</i> </h3>
+
+<ul>
+    <li>SIFT, PolyPhen and Condel predictions and regulatory features now
+    accessible from the <a href="#cache">cache</a></li>
+    <li>support for calling consequences against <a href="#refseq">RefSeq</a>
+    transcripts</li>
+    <li>variant identifiers (e.g. dbSNP rsIDs) and <a href="#hgvs">HGVS
+    notations</a> supported as input format</li>
+    <li>variants can now be <a href="#filt">filtered</a> by frequency in HapMap
+    and 1000 genomes populations</li>
+    <li>script can be used to convert files between formats
+    (Ensembl/VCF/Pileup/HGVS to Ensembl/VCF/Pileup)</li>
+    <li>large amount of code moved to API modules to ensure consistency between
+    web and script VEP</li>
+    <li>memory usage optimisations</li>
+    <li>VEP script moved to <a
+    href="http://cvs.sanger.ac.uk/cgi-bin/viewvc.cgi/ensembl-tools/scripts/?root=ensembl"
+    target="_blank">ensembl-tools CVS module</a></li>
+    <li>Added --canonical, --per_gene and --no_intergenic options</li>
+</ul>
 
 <h3> New in version 2.1 <i>(June 2011)</i> </h3>
 
@@ -88,23 +120,21 @@ Perl script |
 
 
 
-
 <a href="#top">[Back to top]</a>
 
 <h2 id="requirements"> Requirements </h2>
 
 <p>
-Version 2.1 of the script requires at least version 63 of the Ensembl Core and
+Version 2.2 of the script requires at least version 64 of the Ensembl Core and
 Variation APIs and their relevant dependencies to be installed to use the script
 in normal mode. See <a href="http://www.ensembl.org/info/docs/api/index.html"
-target="_blank">instructions</a> for details. To use the <a
-href="#cache">cache</a>, the gzip and zcat utilities are required. No explicit
-installation of the script is necessary.
+target="_blank">instructions</a> for details. To analyse regulatory features,
+the Ensembl Regulation API should also be installed.
 </p>
 
-
-
-<a href="#top">[Back to top]</a>
+<p>
+To use the <a href="#cache">cache</a>, the gzip and zcat utilities are required.
+</p>
 
 <h2 id="download"> Download </h2>
 
@@ -113,12 +143,19 @@ site. </p>
 
 <p> <a href="ftp://ftp.ensembl.org/pub/misc-scripts/Variant_effect_predictor/">Go to download site</a> </p>
 
-<p>It is also included as part of the ensembl-variation module of the Ensembl
-API - you can find it in the ensembl-variation/scripts/examples/ directory.</p>
+<p>It is also included as part of the ensembl-tools module of the Ensembl API -
+you can find it in the ensembl-tools/scripts/variant_effect_predictor/
+directory.</p>
 
+<h2 id="help"> Help </h2>
 
+<p> For any questions not covered here or on the <a href="vep_faq.html">FAQ</a>
+page, please send an email to the Ensembl developer's mailing list, <a
+href="mailto:dev@ensembl.org">dev@ensembl.org</a> </p>
 
 <a href="#top">[Back to top]</a>
+
+<hr/>
 
 <h2 id="running"> Running the script </h2>
 
@@ -241,12 +278,14 @@ host          useastdb.ensembl.org</pre>
 		<td>Input file name. If not specified, the script will attempt to read from STDIN.</td>
 	</tr>
 	<tr>
-		<td><pre>--format [vcf<b>|</b>pileup]</pre></td>
+		<td><pre>--format [ensembl<b>|</b>vcf<b>|</b>pileup<b>|</b>hgvs<b>|</b>ids]</pre></td>
 		<td>&nbsp;</td>
 		<td>
-			Input file format. By default, the script auto-detects the input
-			file format. Using this option you can force the script to read the
-			input file as VCF or pileup format. <i>Not used by default</i>
+            Input file format. By default, the script auto-detects the input
+            file format. Using this option you can force the script to read the
+            input file as Ensembl, VCF, pileup or HGVS format, or a list of
+            variant identifiers (e.g. rsIDs from dbSNP). <i>Auto-detects format
+            by default</i>
 		</td>
 	</tr>
 	<tr class="bg2">
@@ -254,7 +293,7 @@ host          useastdb.ensembl.org</pre>
 		<td><pre>-o</pre></td>
 		<td>
 			Output file name. The script can write to STDOUT by specifying
-			STDOUT as the output file name - this will force --quiet mode.
+			STDOUT as the output file name - this will force quiet mode.
 			<i>Default = "variant_effect_output.txt"</i>
 		</td>
 	</tr>
@@ -316,7 +355,24 @@ host          useastdb.ensembl.org</pre>
 			Genomes</a> species. <i>Not used by default</i>
 		</td>
 	</tr>
-	<tr class="bg2">
+    <tr class="bg2">
+        <td><pre>--refseq</pre></td>
+        <td>&nbsp;</td>
+        <td>
+            Instead of using the core database, use the otherfeatures database
+            to retrieve transcripts. This database contains transcript objects
+            corresponding to RefSeq transcripts, along with CCDS and Ensembl
+            ESTs. Consequence output will be given relative to these transcripts
+            in place of the default Ensembl transcripts. See <a
+            href="/info/docs/api/core/index.html#est">here</a> for more details
+            on the contents of the otherfeatures database. The otherfeatures
+            database currently only exists for human and mouse. No SIFT,
+            PolyPhen or Condel predictions can be provided when using this
+            option. <i>Not used by
+            default</i>
+        </td>
+    </tr>
+	<tr>
 		<td><pre>--db_version [number]</pre></td>
 		<td><pre>--db</pre></td>
 		<td>
@@ -325,7 +381,7 @@ host          useastdb.ensembl.org</pre>
 			between software and database versions. <i>Not used by default</i>
 		</td>
 	</tr>
-	<tr>
+	<tr class="bg2">
 		<td><pre>--registry [filename]</pre></td>
 		<td>&nbsp;</td>
 		<td>
@@ -416,10 +472,7 @@ host          useastdb.ensembl.org</pre>
 			Look for overlaps with regulatory regions. The script can also call
 			if a variant falls in a high information position within a
 			transcription factor binding site. Output lines have a Feature type
-			of RegulatoryFeature or MotifFeature. Using this option requires a
-			database connection - while it can be used with --cache, the
-			database will still be accessed to retrieve regulatory data.
-			<i>Not used by default</i>
+			of RegulatoryFeature or MotifFeature. <i>Not used by default</i>
 		</td>
 	</tr>
 	<tr>
@@ -459,6 +512,14 @@ host          useastdb.ensembl.org</pre>
 		</td>
 	</tr>
 	<tr>
+		<td><pre>--canonical</pre></td>
+		<td>&nbsp;</td>
+		<td>
+            Adds a flag indicating if the transcript is the canonical transcript
+            for the gene. <i>Not used by default</i>
+		</td>
+	</tr>
+	<tr class="bg2">
 		<td><pre>--most_severe</pre></td>
 		<td>&nbsp;</td>
 		<td>
@@ -467,13 +528,32 @@ host          useastdb.ensembl.org</pre>
 			default</i>
 		</td>
 	</tr>
-	<tr class="bg2">
+	<tr>
 		<td><pre>--summary</pre></td>
 		<td>&nbsp;</td>
 		<td>
 			Output only a comma-separated list of all observed consequences per
 			variation. Transcript-specific columns will be left blank. <i>Not
 			used by default</i>
+		</td>
+	</tr>
+	<tr class="bg2">
+		<td><pre>--per_gene</pre></td>
+		<td>&nbsp;</td>
+		<td>
+            Output only the most severe consequence per gene. The transcript
+            selected is arbitrary if more than one has the same predicted
+            consequence. <i>Not used by default</i>
+		</td>
+	</tr>
+	<tr>
+		<td><pre>--convert [ensembl<b>|</b>vcf<b>|</b>pileup]</pre></td>
+		<td>&nbsp;</td>
+		<td>
+            Converts the input file to the specified format. See <a
+            href="#convert">below</a> for more details. Converted output is
+            written to the file specified with --output_file. No consequence
+            prediction is carried out. <i>Not used by default</i>
 		</td>
 	</tr>
 </table>
@@ -541,6 +621,86 @@ host          useastdb.ensembl.org</pre>
 			<pre>--chr 1-3,10,X</pre> <i>Not used by default</i>
 		</td>
 	</tr>
+	<tr class="bg2">
+		<td><pre>--no_intergenic</pre></td>
+		<td>&nbsp;</td>
+        <td>
+            Do not include intergenic consequences in the output. <i>Not used by
+            default</i>
+		</td>
+	</tr>
+	<tr>
+		<td><pre>--check_frequency</pre></td>
+		<td>&nbsp;</td>
+		<td>
+            Turns on frequency filtering. Use this to include or exclude
+            variants based on the frequency of co-located existing variants in
+            the Ensembl Variation database. You must also specify all of the
+            --freq flags below. Using this option requires a database connection
+            - while it can be used with --cache, the database will still be
+            accessed to retrieve frequency data. <i>Not used by default</i>
+		</td>
+	</tr>
+	<tr class="bg2">
+		<td><pre>--freq_pop [pop]</pre></td>
+		<td>&nbsp;</td>
+		<td>
+            Name of the population to use in frequency filter. This can be the
+            name of the population as it appears on the Ensembl website
+            (suitable for most species), or in the following short form for
+            human. 1000 genomes populations are currently pilot 1 (low
+            coverage).
+            <p>
+                <table class="ss">
+                    <tr>
+                        <th>Example value for --freq_pop</th><th>Description</th>
+                    </tr>
+                    <tr>
+                        <td>1kg_chb</td><td>1000 genomes CHB population</td>
+                    </tr>
+                    <tr>
+                        <td>hapmap_yri</td><td>HapMap YRI population</td>
+                    </tr>
+                    <tr>
+                        <td>1kg</td><td>Any 1000 genomes pilot 1 population</td>
+                    </tr>
+                    <tr>
+                        <td>ceu</td><td>Any of HapMap or 1000 genomes CEU populations</td>
+                    </tr>
+                    <tr>
+                        <td>any</td><td>Any HapMap or 1000 genomes population</td>
+                    </tr>
+                </table>
+            </p>
+		</td>
+	</tr>
+	<tr>
+		<td><pre>--freq_freq [freq]</pre></td>
+		<td>&nbsp;</td>
+        <td>
+            Minor allele frequency to use for filtering. Must be a float value
+            between 0 and 0.5
+		</td>
+	</tr>
+	<tr class="bg2">
+		<td><pre>--freq_gt_lt [gt<b>|</b>lt]</pre></td>
+		<td>&nbsp;</td>
+		<td>
+            Specify whether the frequency of the co-located variant must be
+            greater than (<b>gt</b>) or less than (<b>lt</b>) the value
+            specified with --freq_freq
+		</td>
+	</tr>
+	<tr>
+		<td><pre>--freq_filter [exclude<b>|</b>include]</pre></td>
+		<td>&nbsp;</td>
+        <td>
+            Specify whether to <b>exclude</b> or <b>include</b> only variants
+            that pass the frequency filter
+		</td>
+	</tr>
+    
+
 	<!--<tr class="bg2">
 		<td><pre>--failed [0<b>|</b>1]</pre></td>
 		<td>&nbsp;</td>
@@ -551,8 +711,6 @@ host          useastdb.ensembl.org</pre>
 		</td>
 	</tr>-->
 </table>
-
-
 
 <p><a href="#top">[Back to top]</a></p>
 
@@ -702,7 +860,7 @@ host          useastdb.ensembl.org</pre>
 	<li>
 		Specify DB connection parameters in registry file ensembl.registry, add SIFT
 		score and prediction, PolyPhen prediction, Condel score
-<pre class="code">perl variant_effect_predictor.pl -i variants.txt -r ensembl.registry -sift b -polyphen p -condel s</pre>
+<pre class="code">perl variant_effect_predictor.pl -i variants.txt -registry ensembl.registry -sift b -polyphen p -condel s</pre>
 	</li>
 	<li>
 		Connect to Ensembl Genomes db server for A.thaliana, run with buffer
@@ -717,8 +875,13 @@ host          useastdb.ensembl.org</pre>
 		Use cache in /home/vep/mycache/, use gzcat instead of zcat
 <pre class="code">perl variant_effect_predictor.pl -cache -dir /home/vep/mycache/ -i variants.txt -compress gzcat</pre>
 	</li>
+	<li>
+		Convert RefSeq-based HGVS notations to genomic coordinates in VCF format
+<pre class="code">perl variant_effect_predictor.pl -i hgvs.txt -o hgvs.vcf -refseq -convert vcf</pre>
+	</li>
 </ul>
 
+<hr/>
 
 <p><a href="#top">[Back to top]</a></p>
 
@@ -759,9 +922,11 @@ see <a href="/info/docs/webcode/install/ensembl-data.html"
 target="_blank">here</a>. You will need a MySQL server that you can connect to
 from the machine where you will run the script (this can be the same machine).
 For most of the functionality of the VEP, you will only need the Core database
-(e.g. homo_sapiens_core_63_37) installed. In order to find co-located variations
+(e.g. homo_sapiens_core_64_37) installed. In order to find co-located variations
 or to use SIFT, PolyPhen or Condel, it is also necessary to install the relevant
-variation database (e.g. homo_sapiens_variation_63_37). </p>
+variation database (e.g. homo_sapiens_variation_64_37). </p>
+
+<p> Note that unless you have custom data to insert in the database, in most cases it will be much more efficient to use a <a href="#pre">pre-built cache</a> in place of a local database. </p>
 
 <p> To connect to your mirror, you can either set the connection parameters
 using --host, --port, --user and --password, or use a registry file. Registry
@@ -780,7 +945,7 @@ Bio::EnsEMBL::DBSQL::DBAdaptor->new(
   '-host'    => 'ensembldb.ensembl.org',
   '-user'    => 'anonymous',
   '-pass'    => '',
-  '-dbname'  => 'homo_sapiens_core_63_37'
+  '-dbname'  => 'homo_sapiens_core_64_37'
 );
 
 Bio::EnsEMBL::Variation::DBSQL::DBAdaptor->new(
@@ -790,7 +955,7 @@ Bio::EnsEMBL::Variation::DBSQL::DBAdaptor->new(
   '-host'    => 'ensembldb.ensembl.org',
   '-user'    => 'anonymous',
   '-pass'    => '',
-  '-dbname'  => 'homo_sapiens_variation_63_37'
+  '-dbname'  => 'homo_sapiens_variation_64_37'
 );
 
 Bio::EnsEMBL::Registry->add_alias("Homo_sapiens","human");
@@ -847,26 +1012,31 @@ eliminates the need to connect to the database while the script is running
 	<li>
 		Download the archive file for your species:
         <p>
-            <table class="ss" style="width:25%">
+            <table class="ss" style="width:50%">
                 <tr>
                     <th>Human <i>(Homo sapiens)</i></th>
-                    <td><a href="ftp://ftp.ensembl.org/pub/release-63/variation/homo_sapiens/homo_sapiens_vep_63.tar.gz">Download</a></td>
+                    <td><a href="ftp://ftp.ensembl.org/pub/release-64/variation/homo_sapiens/homo_sapiens_vep_64_sift_polyphen.tar.gz">Download (with SIFT and PolyPhen)</a></td>
+                    <td><a href="ftp://ftp.ensembl.org/pub/release-64/variation/homo_sapiens/homo_sapiens_vep_64.tar.gz">Download (without SIFT and PolyPhen)</a></td>
                 </tr>
                 <tr>
                     <th>Mouse <i>(Mus musculus)</i></th>
-                    <td><a href="ftp://ftp.ensembl.org/pub/release-63/variation/mus_musculus/mus_musculus_vep_63.tar.gz">Download</a></td>
+                    <td><a href="ftp://ftp.ensembl.org/pub/release-64/variation/mus_musculus/mus_musculus_vep_64.tar.gz">Download</a></td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <th>Rat <i>(Rattus norvegicus)</i></th>
-                    <td><a href="ftp://ftp.ensembl.org/pub/release-63/variation/rattus_norvegicus/rattus_norvegicus_vep_63.tar.gz">Download</a></td>
+                    <td><a href="ftp://ftp.ensembl.org/pub/release-64/variation/rattus_norvegicus/rattus_norvegicus_vep_64.tar.gz">Download</a></td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <th>Zebrafish <i>(Danio rerio)</i></th>
-                    <td><a href="ftp://ftp.ensembl.org/pub/release-63/variation/danio_rerio/danio_rerio_vep_63.tar.gz">Download</a></td>
+                    <td><a href="ftp://ftp.ensembl.org/pub/release-64/variation/danio_rerio/danio_rerio_vep_64.tar.gz">Download</a></td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <th>Cow <i>(Bos taurus)</i></th>
-                    <td><a href="ftp://ftp.ensembl.org/pub/release-63/variation/bos_taurus/bos_taurus_vep_63.tar.gz">Download</a></td>
+                    <td><a href="ftp://ftp.ensembl.org/pub/release-64/variation/bos_taurus/bos_taurus_vep_64.tar.gz">Download</a></td>
+                    <td>&nbsp;</td>
                 </tr>
             </table>
         </p>
@@ -876,9 +1046,9 @@ eliminates the need to connect to the database while the script is running
 		$HOME/.vep/ as the cache directory, where $HOME is your UNIX home
 		directory.
         <pre class="code">
-mv homo_sapiens_vep_62.tar.gz ~/.vep/
+mv homo_sapiens_vep_64.tar.gz ~/.vep/
 cd ~/.vep/
-tar xfz homo_sapiens_vep_62.tar.gz</pre>
+tar xfz homo_sapiens_vep_64.tar.gz</pre>
 	</li>
 	<li>
 		Run the VEP with the --cache option
@@ -937,24 +1107,26 @@ to specify any of the usual input options when building a cache:</p>
     <li>Gene, protein and HGNC identifiers for each transcript (where
     applicable)</li>
 	<li>Location and alleles of existing variations</li>
+    <li>Regulatory regions</li>
+    <li>Predictions and scores for SIFT, PolyPhen (Condel predictions are an
+    algorithmic function of SIFT and PolyPhen)</li>
 </ul>
 
 <p> It does not store any information pertaining to, and therefore cannot be
 used for, the following: </p>
 
 <ul>
-    <li>SIFT</li>
-    <li>PolyPhen</li>
-    <li>Condel</li>
-    <li>Regulatory regions</li>
+    <li>Frequency filtering of input (--check_frequency)</li>
     <li>HGVS names - due to a limitation in the API, it is currently not
-    possible to create HGVS identifiers without using the database</li>
+    possible to create HGVS identifiers without using the database (--hgvs)</li>
+    <li>Using HGVS notation as input (--format hgvs)</li>
+    <li>Using variant identifiers as input (--format id)</li>
 </ul>
 
 <p> Enabling one of these options with --cache will cause the script to warn you
 in its status output with something like the following: </p>
 
-<pre class="code"> 2011-06-16 16:24:51 - INFO: Database will be accessed for SIFT/PolyPhen/Condel and HGVS </pre>
+<pre class="code"> 2011-06-16 16:24:51 - INFO: Database will be accessed when using --hgvs </pre>
 
 <a href="#top">[Back to top]</a>
 
@@ -997,6 +1169,68 @@ Feedback, however, would be very useful for the development of the script. </p>
 
 <a href="#top">[Back to top]</a>-->
 
+<hr/>
+
+<h2 id="misc"> Other information </h2>
+
+<h3 id="hgvs"> HGVS notation </h3>
+
+<p> The VEP script supports using HGVS notations as input. This feature is
+currently under development, and not all HGVS notation types are supported.
+Specifically, only notations relative to genomic (g) or coding (c) sequences are
+currently supported; protein (p) notations are not currently supported due to
+the complexity involved in determining the multiple possible underlying genomic
+sequence changes that could produce a single protein change. The script will
+warn the user if it fails to parse a particular notation. </p>
+
+<p> By default the VEP script uses Ensembl transcripts as its reference for
+determining consequences, and hence also for HGVS notations. However, it is
+possible to parse HGVS notations that use RefSeq transcripts as the reference
+sequence by using the --refseq flag when running the script. Such notations must
+include the version number of the transcript e.g. </p>
+
+<pre>NM_080794.3:c.1001C>T</pre>
+
+<p> where ".3" denotes that this is version 3 of the transcript NM_080794. <a
+href="#refseq">See below</a> for more details on how the VEP can use RefSeq
+transcripts. </p>
+
+<h3 id="refseq"> RefSeq transcripts </h3>
+
+<p> Ensembl produces Core schema databases containing alignments of RefSeq
+transcript objects to the reference genome. This is the <a
+href="/info/docs/api/core/index.html#est">otherfeatures database</a>, and is
+produced for human and mouse. The database also contains alignments of CCDS
+transcripts and Ensembl EST sequences. By passing the --refseq flag when running
+the VEP script, these alternative transcripts will be used as the reference for
+predicting variant consequences. Gene IDs given in the output when using this
+option are generally NCBI GeneIDs. </p>
+
+<p> Users should note that RefSeq sequences may disagree with the reference
+sequence to which they are aligned, hence results generated when using this
+option should be interpreted with a degree of caution. A much more complex and
+stringent process is used to produce the main Ensembl Core database, and this
+should be used in preference to the RefSeq transcripts. </p>
+
+<p> SIFT, PolyPhen and hence Condel predictions and scores are calculated for
+Ensembl transcripts only, hence none of these tools can be used when using the
+--refseq flag. </p>
+
+<h3 id="convert"> File conversion </h3>
+
+<p> The VEP script can be used to convert files between the various formats that
+it parses. This may be useful for a user with, for example, a number of variants
+given in HGVS notation against RefSeq transcript identifiers. The conversion
+process allows these notations to be converted into genomic reference
+coordinates, and then used to predict consequences in the VEP against Ensembl
+transcripts. This is especially useful for those who wish to retrieve SIFT,
+PolyPhen and Condel predictions for such variants, since no predictions are
+provided for RefSeq transcripts. </p>
+
+<pre class="code">perl variant_effect_predictor.pl -i refseq_hgvs_notations.txt -o converted.vcf -refseq -convert vcf
+perl variant_effect_predictor.pl -i converted.vcf -o consequences.txt -sift b</pre>
+
+<a href="#top">[Back to top]</a>
 
 </body>
 </html>
