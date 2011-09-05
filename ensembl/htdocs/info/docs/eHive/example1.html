@@ -73,10 +73,9 @@ The meaning of these parameters should become clearer after some experimentation
 <PRE>
 
         $ init_pipeline.pl Bio::EnsEMBL::Hive::PipeConfig::LongMult_conf \
-            -ensembl_cvs_root_dir $ENS_CODE_ROOT \
             -pipeline_db -host=&lt;your_mysql_host&gt; \
             -pipeline_db -user=&lt;your_mysql_username&gt; \
-            -pipeline_db -user=&lt;your_mysql_password&gt; \
+            -pipeline_db -pass=&lt;your_mysql_password&gt; \
 </PRE>
     This should create a fresh eHive database and initalize it with long multiplication pipeline data (the two numbers to be multiplied are taken from defaults).
 
