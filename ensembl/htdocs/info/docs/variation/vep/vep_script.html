@@ -126,8 +126,8 @@ Perl script |
 
 <p>
 Version 2.2 of the script requires at least version 64 of the Ensembl Core and
-Variation APIs and their relevant dependencies to be installed to use the script
-in normal mode. See <a href="http://www.ensembl.org/info/docs/api/index.html"
+Variation APIs and their relevant dependencies to be installed to use the
+script. See <a href="http://www.ensembl.org/info/docs/api/index.html"
 target="_blank">instructions</a> for details. To analyse regulatory features,
 the Ensembl Regulation API should also be installed.
 </p>
@@ -453,16 +453,19 @@ host          useastdb.ensembl.org</pre>
 		<td><pre>--condel [p<b>|</b>s<b>|</b>b]</pre></td>
 		<td>&nbsp;</td>
 		<td>
-			<span style="color:red;">Human only</span>
-			<a href="https://bg.upf.edu/forge/projects/condel/wiki/Condel"
-			target="_blank">Condel</a> computes a weighed average of the scores
-			(WAS) of several computational tools aimed at classifying missense
-			mutations as likely deleterious or likely neutral. The VEP currently
-			presents a Condel WAS from SIFT and PolyPhen. The VEP can output the
-			<b>p</b>rediction term, <b>s</b>core or <b>b</b>oth. Using Condel
-			requires a database connection - while it can be used with --cache,
-			the database will still be accessed to retrieve Condel data. <i>Not
-			used by default</i>
+            <span style="color:red;">Human only</span> <a
+            href="https://bg.upf.edu/forge/projects/condel/wiki/Condel"
+            target="_blank">Condel</a> computes a weighted average of the scores
+            (WAS) of several computational tools aimed at classifying missense
+            mutations as likely deleterious or likely neutral. The VEP currently
+            presents a Condel WAS from SIFT and PolyPhen. A new version of the
+            Condel algorithm that produces more conservative predictions is used
+            from v2.2 onwards of the VEP; to use the old version, add "1" to the
+            end of your option e.g. "--condel b1". The VEP can output the
+            <b>p</b>rediction term, <b>s</b>core or <b>b</b>oth. Using Condel
+            requires a database connection - while it can be used with --cache,
+            the database will still be accessed to retrieve Condel data. <i>Not
+            used by default</i>
 		</td>
 	</tr>
 	<tr>
@@ -1006,7 +1009,7 @@ cache. </p>
 
 <p> The easiest solution is to download a pre-built cache for your species; this
 eliminates the need to connect to the database while the script is running
-(except when using <a href="#limitations">certain output options</a>). <p>
+(except when using <a href="#limitations">certain options</a>). <p>
 
 <ol>
 	<li>
@@ -1059,6 +1062,10 @@ tar xfz homo_sapiens_vep_64.tar.gz</pre>
 same species, can be stored in the same cache base directory. The files are
 stored in the following directory hierarchy: $HOME -> .vep -> species -> version
 -> chromosome </p>
+
+<p> If a pre-built cache does not exist for your species, please contact us at
+<a href="mailto:dev@ensembl.org">dev@ensembl.org</a> and we will endeavour to
+add your species to the list of downloads. </p>
 
 
 <a href="#top">[Back to top]</a>
