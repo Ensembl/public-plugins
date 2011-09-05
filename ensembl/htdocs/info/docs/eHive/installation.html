@@ -29,17 +29,13 @@ MySQL version 5.1 or higher is recommended to maintain compatibility with Compar
 <A HREF="http://dbi.perl.org/">Perl DBI API</A>
 <BR />Perl database interface that includes API to MySQL
 </LI>
-<LI>
-<A HREF="http://search.cpan.org/dist/Data-UUID/">Perl UUID API</A>
-<BR />eHive uses Universally Unique Identifiers (UUIDs) to identify workers internally.
-</LI>
 </OL>
 
 <H2>Download and install essential and optional packages from BioPerl and EnsEMBL CVS</H2>
 <OL>
 <LI>
 Create a directory for the source code.
-<BR />It is advised to have a dedicated directory where EnsEMBL-related packages will be deployed. Unlike DBI or UUID modules that can be installed system-wide by the system administrator, you will benefit from full (read+write) access to the EnsEMBL files/directories, so it is best to install them under your home directory. For example,
+<BR />It is advised to have a dedicated directory where EnsEMBL-related packages will be deployed. Unlike DBI modules that can be installed system-wide by the system administrator, you will benefit from full (read+write) access to the EnsEMBL files/directories, so it is best to install them under your home directory. For example,
 
 <PRE>$ mkdir $HOME/ensembl_main</PRE>
 
@@ -47,18 +43,18 @@ It will be convenient to set a variable pointing at this directory for future us
 <UL>
 <LI>
 using bash syntax (for best results, append this line to your ~/.bashrc configuration file):
-<PRE>$ export ENS_CODE_ROOT="$HOME/ensembl_main"</PRE>
+<PRE>$ export ENSEMBL_CVS_ROOT_DIR="$HOME/ensembl_main"</PRE>
 </LI>
 <LI>
 using [t]csh syntax (for best results, append this line to your ~/.cshrc or ~/.tcshrc configuration file):
-<PRE>$ setenv ENS_CODE_ROOT "$HOME/ensembl_main"</PRE>
+<PRE>$ setenv ENSEMBL_CVS_ROOT_DIR "$HOME/ensembl_main"</PRE>
 </LI>
 </UL>
 </LI>
 
 <LI>
 Change into your ensembl codebase directory:
-<PRE>$ cd $ENS_CODE_ROOT</PRE>
+<PRE>$ cd $ENSEMBL_CVS_ROOT_DIR</PRE>
 </LI>
 <LI>
 Log into the BioPerl CVS server (using "cvs" for password):
@@ -76,29 +72,29 @@ CVS password: CVSUSER</PRE>
 </LI>
 <LI>
 Export ensembl and ensembl-hive CVS modules:
-<PRE>$ cvs -d :pserver:cvsuser@cvs.sanger.ac.uk:/cvsroot/ensembl export ensembl
-$ cvs -d :pserver:cvsuser@cvs.sanger.ac.uk:/cvsroot/ensembl export ensembl-hive</PRE>
+<PRE>$ cvs -d :pserver:cvsuser@cvs.sanger.ac.uk:/cvsroot/ensembl checkout ensembl
+$ cvs -d :pserver:cvsuser@cvs.sanger.ac.uk:/cvsroot/ensembl checkout ensembl-hive</PRE>
 </LI>
 <LI>
 In the likely case you are going to use eHive in the context of Compara pipelines, you will also need to install ensembl-compara:
-<PRE>$ cvs -d :pserver:cvsuser@cvs.sanger.ac.uk:/cvsroot/ensembl export ensembl-compara</PRE>
+<PRE>$ cvs -d :pserver:cvsuser@cvs.sanger.ac.uk:/cvsroot/ensembl checkout ensembl-compara</PRE>
 </LI>
 <LI>
 Add new packages to the PERL5LIB variable:
 <UL>
 <LI>using bash syntax (for best results, append these lines to your ~/.bashrc configuration file):
-<PRE>$ export PERL5LIB=${PERL5LIB}:${ENS_CODE_ROOT}/bioperl-live
-$ export PERL5LIB=${PERL5LIB}:${ENS_CODE_ROOT}/ensembl/modules
-$ export PERL5LIB=${PERL5LIB}:${ENS_CODE_ROOT}/ensembl-hive/modules
-$ export PERL5LIB=${PERL5LIB}:${ENS_CODE_ROOT}/ensembl-compara/modules # optional but recommended, see previous point.
+<PRE>$ export PERL5LIB=${PERL5LIB}:${ENSEMBL_CVS_ROOT_DIR}/bioperl-live
+$ export PERL5LIB=${PERL5LIB}:${ENSEMBL_CVS_ROOT_DIR}/ensembl/modules
+$ export PERL5LIB=${PERL5LIB}:${ENSEMBL_CVS_ROOT_DIR}/ensembl-hive/modules
+$ export PERL5LIB=${PERL5LIB}:${ENSEMBL_CVS_ROOT_DIR}/ensembl-compara/modules # optional but recommended, see previous point.
 </PRE>
 </LI>
 <LI>
 using [t]csh syntax (for best results, append these lines to your ~/.cshrc or ~/.tcshrc configuration file):
-<PRE>$ setenv PERL5LIB  ${PERL5LIB}:${ENS_CODE_ROOT}/bioperl-live
-$ setenv PERL5LIB  ${PERL5LIB}:${ENS_CODE_ROOT}/ensembl/modules
-$ setenv PERL5LIB  ${PERL5LIB}:${ENS_CODE_ROOT}/ensembl-hive/modules
-$ setenv PERL5LIB  ${PERL5LIB}:${ENS_CODE_ROOT}/ensembl-compara/modules # optional but recommended, see previous point.
+<PRE>$ setenv PERL5LIB  ${PERL5LIB}:${ENSEMBL_CVS_ROOT_DIR}/bioperl-live
+$ setenv PERL5LIB  ${PERL5LIB}:${ENSEMBL_CVS_ROOT_DIR}/ensembl/modules
+$ setenv PERL5LIB  ${PERL5LIB}:${ENSEMBL_CVS_ROOT_DIR}/ensembl-hive/modules
+$ setenv PERL5LIB  ${PERL5LIB}:${ENSEMBL_CVS_ROOT_DIR}/ensembl-compara/modules # optional but recommended, see previous point.
 </PRE>
 </LI>
 </UL>
