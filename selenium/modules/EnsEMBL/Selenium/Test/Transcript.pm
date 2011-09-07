@@ -18,8 +18,7 @@ sub test_transcript {
   my $transcript_text  = $SD->get_config(ucfirst($self->species), 'SAMPLE_DATA')->{TRANSCRIPT_TEXT};
   my $transcript_param = $SD->get_config(ucfirst($self->species), 'SAMPLE_DATA')->{'TRANSCRIPT_PARAM'};
   my $url = $self->get_location();
-
-  #Oryzias_latipes doesn't have any transcript info.
+  
   if($transcript_text) {
     $sel->ensembl_click_links(["link=Transcript ($transcript_text)"],'50000')
     and $sel->ensembl_is_text_present("$transcript_param");
@@ -29,7 +28,9 @@ sub test_transcript {
       print "ERROR: TRANSCRIPT NOT FOUND($transcript_text is not a valid transcript) at $url !!! \n" ;
       last;
     }
-
+    
+    next if (lc($self->species) eq 'oryzias_latipes'); #Oryzias_latipes doesn't have any transcript info.
+    
     #Testing ZMenu (doing only for human)
     if(lc($self->species) eq 'homo_sapiens') {
       $sel->ensembl_open_zmenu('TranscriptImage','title^="Transcript:"');
@@ -81,7 +82,7 @@ sub test_transcript {
     $sel->ensembl_click_links(["link=Transcript history", "link=Protein history"]) if $SD->table_info_other(ucfirst($self->species),'core', 'stable_id_event')->{'rows'};
 
     #Testing Export data
-    $self->export_data('BED Format','Browser position') if(lc($self->species) eq 'homo_sapiens');
+    $self->export_data('BED Format','Browser position') if(lc($self->species) eq 'homo_sapiens');    
   } else {
    print "  No Transcript \n"; 
   }
