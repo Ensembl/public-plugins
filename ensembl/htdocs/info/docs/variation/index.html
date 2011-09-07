@@ -87,8 +87,9 @@ Variation data can be viewed in the browser through pages such as:
 </p>
 
 <ul>
-<li><strong>Gene:</strong> Variation table and Variation image (for
-all variations in a gene) e.g. for example <a href="/Homo_sapiens/Gene/Variation_Gene/Table?db=core;g=ENSG00000159197">for all variants in KCNE2</a> </li>
+<li><strong>Gene:</strong> Variation Table and Variation Image (for all variations in a gene) 
+e.g. for example <a href="/Homo_sapiens/Gene/Variation_Gene/Table?db=core;g=ENSG00000159197">for all variants in KCNE2</a>. 
+Structural Variation to see all structural variants overlapping the gene.</li>
 <li><strong>Transcript:</strong> Population comparison, Comparison
 image (for comparing variants in a transcript across different individual or strain
 sequences) e.g. <a href="/Mus_musculus/Transcript/Population/Image?g=ENSMUSG00000041143;r=4:138528820-138586500;t=ENSMUST00000084208"> compare Tmco4 in different mouse strains </a> </li>
@@ -120,7 +121,7 @@ using <a href="/info/data/biomart.html"
 class="cp-external">BioMart</a> (gene or variation database), and
 the <a href="/info/docs/api/index.html" class="cp-external">Perl
 API</a> (<a href="/info/docs/api/variation/index.html"
-class="cp-external">variation databases</a>).
+class="cp-external">variation API</a>).
 </p>
 
 <br />
@@ -597,7 +598,8 @@ using the <i>ProteinFunctionPredictionMatrixAdaptor</i> which allows you to fetc
 using either a transcript or a translation stable ID. This adaptor returns a <i>ProteinFunctionPredictionMatrix</i>
 object and you can use the <i>get_prediction</i> method to retrieve a prediction for a given position
 and amino acid. Users who want to use entire matrices should use the <i>deserialize</i> method to decode
-an entire binary formatted matrix into a simple Perl hash. Please refer to the API documentation for both 
+an entire binary formatted matrix into a simple Perl hash. Please refer to the <a
+href="/info/docs/api/variation/index.html">API documentation</a> for both 
 of these classes for more details. For users who require direct access to the MySQL database (for instance 
 because they are accessing the database in a language other than Perl) we provide a description of the 
 binary format used below.
@@ -746,7 +748,8 @@ clicking the 'Configure this page' link in the left hand side navigation.
 </p>
 
 <p>
-The sets are constructed during production and are stored in the database. The table below lists the available variation sets in e!63 (subsets are indicated by bullet points).
+The sets are constructed during production and are stored in the database. The table below lists the available
+variation sets in the Ensembl variation database (subsets are indicated by bullet points).
 </p>
 
 <table id="variation_set_table" class="ss">
