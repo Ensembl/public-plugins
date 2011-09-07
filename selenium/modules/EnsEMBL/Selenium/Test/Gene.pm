@@ -35,10 +35,9 @@ sub test_gene {
       print "  Test Configure page, adding a track \n";
       $sel->ensembl_click("link=Configure this page")
       and $sel->ensembl_wait_for_ajax('10000')
-      and $sel->ensembl_click("link=External data*")
+      and $sel->ensembl_click("link=Somatic mutations*")
       and $sel->ensembl_wait_for_ajax('10000')
-      and $sel->ensembl_click("//form[\@id='gene_transcriptsimage_configuration']/div[7]/ul/li[1]/img") #choosing the first track
-      and $sel->ensembl_click("//form[\@id='gene_transcriptsimage_configuration']/div[7]/ul/li[1]/ul/li[3]/img") #making it normal
+      and $sel->click_ok("//form[\@id='gene_transcriptsimage_configuration']/div[4]/div/ul/li[1]/img") #selecting the first track      
       and $sel->ensembl_click("modal_bg")
       and $sel->ensembl_wait_for_ajax('15000')
       and $sel->ensembl_images_loaded;
@@ -67,7 +66,7 @@ sub test_gene {
     $sel->ensembl_click_links([
       "link=Gene Tree (text)",
       "link=Gene Tree (alignment)"
-    ],'20000') if(lc($self->species) ne 'saccharomyces_cerevisia');
+    ],'20000') if(lc($self->species) ne 'saccharomyces_cerevisiae');
 
     my $counts = $self->count_homologues($gene_param);
     $sel->ensembl_click_links(["link=Orthologues ($counts->{'orthologs'})"],'20000') if($counts->{'orthologs'});

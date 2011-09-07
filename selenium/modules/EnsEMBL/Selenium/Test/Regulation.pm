@@ -39,9 +39,9 @@ sub test_regulation {
     print "  Test Configure page, adding a track \n";
     $sel->click_ok("link=Configure this page")
     and $sel->ensembl_wait_for_ajax('10000')
-    and $sel->click_ok("link=Repeats*")
-    and $sel->ensembl_wait_for_ajax('20000')
-    and $sel->click_ok("//form[\@id='regulation_featuredetails_configuration']/div[6]/ul/li[1]/img") #choosing the first track    
+    and $sel->click_ok("link=Repeat*")
+    and $sel->ensembl_wait_for_ajax('20000')    
+    and $sel->click_ok("//html/body/div[3]/div[2]/div[2]/div/div/form/div[7]/div/ul/li/img")
     and $sel->click_ok("modal_bg")
     and $sel->ensembl_wait_for_ajax('15000')
     and $sel->ensembl_images_loaded;
