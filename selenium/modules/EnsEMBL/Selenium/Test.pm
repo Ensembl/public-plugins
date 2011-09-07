@@ -109,9 +109,10 @@ sub get_location {
 sub check_website {
   my $self = shift;
   
+  my $url = $self->url;
   $self->sel->open("/");
   if ($self->sel->get_title eq "The Ensembl Genome Browser (development)") {
-    print"\nWEBSITE DOWN!!!!!\n";
+    print"\n$url IS DOWN!!!!!\n";
     exit;
   }
 }
