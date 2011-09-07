@@ -25,6 +25,7 @@ sub alignments_count {
 sub attach_das {
   my ($self, $links) = @_;
   my $sel = $self->sel;
+  my $url = $sel->get_location();
   
   print "  Test Attach das\n";
   $sel->click_ok("link=Manage your data")
@@ -33,8 +34,7 @@ sub attach_das {
   and $sel->ensembl_wait_for_ajax
   and $sel->type_ok("name=preconf_das", "http://das.sanger.ac.uk/das")
   and $sel->click_ok("wizard_submit")
-  and $sel->ensembl_wait_for_ajax
-  and $sel->pause(5000)
+  and $sel->ensembl_wait_for_ajax(undef,5000)  
   and $sel->click_ok("//div[\@id='DasSources']//input[\@type='checkbox'][1]") # tick first das source
   and $sel->click_ok("wizard_submit")
   and $sel->wait_for_text_present_ok("The following DAS sources have now been attached")
@@ -189,7 +189,7 @@ sub export_data {
     var \$ = selenium.browserbot.getCurrentWindow().jQuery; 
     \$('a.modal_close').attr('href')
   });
-  $sel->open_ok($output_url,10000);
+  $sel->open_ok($output_url,50000);
   $sel->ensembl_is_text_present("$text_to_check");  
 }
 
