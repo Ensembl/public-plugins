@@ -570,34 +570,56 @@ confidence to affect protein function.
 <h3 id="nsSNP_data_format">Prediction data format</h3>
 
 <p>
-The SIFT and PolyPhen predictions are precomputed and stored in the variation 
-databases and are accessible in the variation API by using the <i>sift_prediction</i>, 
+The SIFT and PolyPhen predictions are precomputed and stored in the variation
+databases and predictions are accessible in the variation API by using the <i>sift_prediction</i>, 
 <i>sift_score</i>, <i>polyphen_prediction</i> and <i>polyphen_score</i> methods on a 
 <i>Bio::EnsEMBL::Variation::TranscriptVariationAllele</i> object. For users wanting
-to access the predictions directly from the MySQL database an explanation of
-the compressed format used is provided here.
+to access the complete set of predictions from the MySQL database or API, an explanation of
+the format used is provided here.
 </p>
 
 <p>
-The predictions and associated scores are stored in the <i>protein_function_predictions</i>
-table, in the <i>polyphen_predictions</i> or <i>sift_predictions</i> columns. The other
-columns in this table identify the stable ID of the Ensembl translation for each
+The predictions and associated scores are stored as a matrix, with a column for 
+each possible alternate amino acid and a row for each position in the translation. Each prediction
+for a position and amino acid is stored as a 2-byte value which encodes both the qualitative
+prediction and score encoded as described below. A simple example matrix is shown in the figure 
+below, though note we only show the decoded score rather than the actual binary value stored
+in the database.
+</p>
+
+<img src="/img/protein_function_prediction_matrix.png" style="width:500px;heigth:143px" alt="protein function encoding"/>
+
+<p>
+Prediction matrices can be fetched and manipulated in a user-friendly manner using the variation API, specifically
+using the <i>ProteinFunctionPredictionMatrixAdaptor</i> which allows you to fetch a prediction matrix
+using either a transcript or a translation stable ID. This adaptor returns a <i>ProteinFunctionPredictionMatrix</i>
+object and you can use the <i>get_prediction</i> method to retrieve a prediction for a given position
+and amino acid. Users who want to use entire matrices should use the <i>deserialize</i> method to decode
+an entire binary formatted matrix into a simple Perl hash. Please refer to the API documentation for both 
+of these classes for more details. For users who require direct access to the MySQL database (for instance 
+because they are accessing the database in a language other than Perl) we provide a description of the 
+binary format used below.
+</p>
+
+<p>
+Prediction matrices for each translation from each of SIFT and PolyPhen are stored in the 
+<i>protein_function_predictions</i> table, in the <i>polyphen_predictions</i> or 
+<i>sift_predictions</i> columns. The other columns in this table identify the stable ID of 
+the Ensembl translation for each
 protein coding transcript, the stable ID of the transcript itself, and a hexadecimal 
 MD5 hash of the amino acid sequence of the translation. This can be used to ensure 
-the predictions apply to the correct translation sequence. The actual predictions are stored in the 
-<i>sift_predictions</i> and <i>polyphen_predictions</i> columns as a gzip compressed binary string which 
-represents the predictions from each tool for each possible amino acid substitution in 
-the translation. Once uncompressed, this string contains a 40 byte substring for each 
-position in the translation concatenated together in the same order as the amino acids 
-in the peptide sequence. Each 40 byte string is composed of 20 2-byte predictions, 
+the predictions apply to the correct translation sequence. The prediction matrices are stored in the 
+<i>sift_predictions</i> and <i>polyphen_predictions</i> columns as a gzip compressed binary string.
+Once uncompressed, this string contains a 40 byte substring for each row in the matrix
+concatenated together in position order. Each row is composed of 20 2-byte predictions, 
 one for each possible alternative amino acid in alphabetical order, though note that the 
-2-byte prediction value for the amino acid that matches the reference amino acid is 
+value for the amino acid that matches the reference amino acid is 
 identified as a 2-byte value with all bits set, or <i>0xFFFF</i> in hexadecimal notation. 
-The prediction is packed as a 16 bit little-endian 
+The prediction itself is packed as a 16 bit little-endian 
 ("VAX" order, or "v" format if using the perl <i>pack</i> subroutine) unsigned short value. 
 The top 2 bits of this short 
-are used to encode the qualitative prediction (PolyPhen has 4 possible values, while SIFT just
-has 2), and the bottom 10 bits are used to encode the prediction score. To decode the qualitative 
+are used to encode the qualitative prediction (PolyPhen has 4 possible values, while SIFT has just
+2), and the bottom 10 bits are used to encode the prediction score. To decode the qualitative 
 prediction you should mask off all bits except the top 2, and shift the resulting short
 right by 14 bits and treat this as an integer between 0 and 3. The corresponding prediction can then 
 be looked up in the table below. To decode the prediction score you should mask off the 
@@ -656,13 +678,14 @@ is the number 906, which when divided by 1000, gives a score of 0.906.
 
 <p>
 To retrieve a prediction for a particular amino acid substitution at a given position
-in a translation, first you must retrieve the prediction string from the database and
+in a translation, first you must retrieve the binary matrix from the database and
 uncompress it using gzip. You can then calculate the offset into this string by multiplying 
 the desired position (starting at 0) by the index of the desired amino acid in an alphabetical ordering of
 amino acids (also starting at 0), and then multiply this value by 2 to take into account the fact that each 
-prediction uses 2 bytes. The 2 bytes at the calculated position can then be extracted and the approach
-described above can be used to retrieve the prediction and score. A perl implementation
-of this scheme can be found in the <i>Bio::EnsEMBL::Variation::Utils::ProteinFunctionUtils</i>
+prediction uses 2 bytes. Each matrix also includes a 3 byte header used check if the data is corrupted etc. so
+you will also need to add 3 to the calculated offset. The 2 bytes at the calculated position 
+can then be extracted and the approach described above can be used to retrieve the prediction and score. 
+A perl implementation of this scheme can be found in the <i>Bio::EnsEMBL::Variation::ProteinFunctionPredictionMatrix</i>
 module in the variation API and should hopefully inform attempts to reimplement this 
 scheme in other languages.
 </p>
