@@ -146,7 +146,7 @@ sub test_search {
  #$sel->ensembl_wait_for_page_to_load_ok;
  $sel->ensembl_is_text_present("returned the following results:");
  $sel->click_ok("link=Gene");
- $sel->ensembl_is_text_present("Homo sapiens (");
+ $sel->ensembl_is_text_present("Human (");
  
  next unless $sel->open_ok("/Homo_sapiens/Search/Details?species=Homo_sapiens;idx=Gene;q=brca2");  
  print "URL:: $location \n\n" unless $sel->ensembl_wait_for_page_to_load;
