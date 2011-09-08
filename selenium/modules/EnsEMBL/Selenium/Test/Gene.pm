@@ -35,9 +35,9 @@ sub test_gene {
       print "  Test Configure page, adding a track \n";
       $sel->ensembl_click("link=Configure this page")
       and $sel->ensembl_wait_for_ajax('10000')
-      and $sel->ensembl_click("link=Somatic mutations*")
+      and $sel->ensembl_click("link=Somatic mutations")
       and $sel->ensembl_wait_for_ajax('10000')
-      and $sel->click_ok("//form[\@id='gene_transcriptsimage_configuration']/div[4]/div/ul/li[1]/img") #selecting the first track      
+      and $sel->click_ok("//form[\@id='gene_transcriptsimage_configuration']/div[4]/div/ul/li[2]/img") #selecting the first track      
       and $sel->ensembl_click("modal_bg")
       and $sel->ensembl_wait_for_ajax('15000')
       and $sel->ensembl_images_loaded;
