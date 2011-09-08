@@ -68,11 +68,11 @@ sub fetch_for_list {
 
 sub fetch_for_select {
   ## @overrides
-  my $self = shift;
+  my $self          = shift;
 
   $self->SUPER::fetch_for_select({
-    'sort_by' => $self->manager_class->object_class->TITLE_COLUMN || $self->manager_class->object_class->primary_key,
-    'query' => ['release_id', $self->requested_release]
+    'sort_by' => 'title',
+    'query'   => ['release_id', $self->requested_release]
   });
 }
 
@@ -143,6 +143,10 @@ sub show_fields {
     db_status         => {
       'type'      => 'dropdown',
       'label'     => 'Database changed'
+    },
+    priority          => {
+      'type'      => 'dropdown',
+      'label'     => 'Priority'
     },
     notes             => {
       'type'      => 'text',
