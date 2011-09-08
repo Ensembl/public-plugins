@@ -35,7 +35,7 @@ sub test_transcript {
     if(lc($self->species) eq 'homo_sapiens') {
       $sel->ensembl_open_zmenu('TranscriptImage','title^="Transcript:"');
       $sel->ensembl_click("link=ENSG*")
-      and $sel->ensembl_wait_for_ajax('50000','5000')
+      and $sel->ensembl_wait_for_ajax_ok('50000','5000')
       and $sel->go_back();
     }
 
@@ -56,12 +56,12 @@ sub test_transcript {
     if(lc($self->species) eq 'homo_sapiens') {          
       print "  Test Configuration page \n";
       $sel->ensembl_click("link=Configure this page")
-      and $sel->ensembl_wait_for_ajax('10000')
+      and $sel->ensembl_wait_for_ajax_ok('10000')
 #      and $sel->ensembl_click("link=Information*")
-#      and $sel->ensembl_wait_for_ajax('10000')
+#      and $sel->ensembl_wait_for_ajax_ok('10000')
 #      and $sel->ensembl_click("//form[\@id='transcript_translationimage_configuration']/div[1]/ul/li[1]/img") #untick the first track      
       and $sel->ensembl_click("modal_bg")
-#      and $sel->ensembl_wait_for_ajax('15000')
+#      and $sel->ensembl_wait_for_ajax_ok('15000')
 #      and $sel->ensembl_images_loaded;
     }
     $sel->ensembl_click_links(["link=Domains & features*"],'20000') if ($SD->table_info_other(ucfirst($self->species),'core', 'protein_feature')->{'analyses'} && lc($self->species) ne 'meleagris_gallopavo');
@@ -71,18 +71,18 @@ sub test_transcript {
     $sel->ensembl_click("link=External Data")
     and $sel->ensembl_wait_for_page_to_load
     and $sel->ensembl_click("link=Configure this page")
-    and $sel->ensembl_wait_for_ajax('30000','5000')
+    and $sel->ensembl_wait_for_ajax_ok('30000','5000')
     and $sel->ensembl_click("//div[\@class='ele-das']//input[\@type='checkbox'][1]") # tick first source
     and $sel->ensembl_click("modal_bg")
-    and $sel->ensembl_wait_for_ajax(10000,5000);
+    and $sel->ensembl_wait_for_ajax_ok(10000,5000);
     
     my $url = $self->get_location();
     print "DAS ERROR at $url (click on configure page and choose the first das source) \n"  if $sel->ensembl_has_das_error;    
 
-    $sel->ensembl_click_links(["link=Transcript history", "link=Protein history"]) if $SD->table_info_other(ucfirst($self->species),'core', 'stable_id_event')->{'rows'};
+    $sel->ensembl_click_links(["link=Transcript history", "link=Protein history"],'50000') if $SD->table_info_other(ucfirst($self->species),'core', 'stable_id_event')->{'rows'};
 
     #Testing Export data
-    $self->export_data('BED Format','Browser position') if(lc($self->species) eq 'homo_sapiens');    
+    $self->export_data('BED Format','track name') if(lc($self->species) eq 'homo_sapiens');    
   } else {
    print "  No Transcript \n"; 
   }

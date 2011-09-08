@@ -26,7 +26,7 @@ sub test_gene {
       print "  Test ZMenu on Gene Summary\n";
       $sel->ensembl_open_zmenu('TranscriptsImage','class^="drag"');
       $sel->ensembl_click("link=Jump to location View")
-      and $sel->ensembl_wait_for_ajax('50000','2000')
+      and $sel->ensembl_wait_for_ajax_ok('50000','2000')
       and $sel->go_back();
 
       $sel->ensembl_wait_for_page_to_load;
@@ -34,12 +34,12 @@ sub test_gene {
       #Adding a track from the configuration panel
       print "  Test Configure page, adding a track \n";
       $sel->ensembl_click("link=Configure this page")
-      and $sel->ensembl_wait_for_ajax('10000')
+      and $sel->ensembl_wait_for_ajax_ok('10000')
       and $sel->ensembl_click("link=Somatic mutations")
-      and $sel->ensembl_wait_for_ajax('10000')
+      and $sel->ensembl_wait_for_ajax_ok('10000')
       and $sel->click_ok("//form[\@id='gene_transcriptsimage_configuration']/div[4]/div/ul/li[2]/img") #selecting the first track      
       and $sel->ensembl_click("modal_bg")
-      and $sel->ensembl_wait_for_ajax('15000')
+      and $sel->ensembl_wait_for_ajax_ok('15000')
       and $sel->ensembl_images_loaded;
     }
 
@@ -56,7 +56,7 @@ sub test_gene {
       print "  Test ZMenu on Regulation\n";
       $sel->ensembl_open_zmenu('RegulationImage','class^="group"');
       $sel->ensembl_click("link=ENSR*")
-      and $sel->ensembl_wait_for_ajax('50000','2000')
+      and $sel->ensembl_wait_for_ajax_ok('50000','2000')
       and $sel->go_back();
     }
 
@@ -86,10 +86,10 @@ sub test_gene {
     $sel->ensembl_click("link=External Data",'20000')
     and $sel->ensembl_wait_for_page_to_load
     and $sel->ensembl_click("link=Configure this page")
-    and $sel->ensembl_wait_for_ajax(10000)
+    and $sel->ensembl_wait_for_ajax_ok(10000)
     and $sel->ensembl_click("//div[\@class='ele-das']//input[\@type='checkbox'][1]") # tick first source
     and $sel->ensembl_click("modal_bg")
-    and $sel->ensembl_wait_for_ajax(10000,5000);
+    and $sel->ensembl_wait_for_ajax_ok(10000,5000);
 
     my $url  = $self->get_location();
     print "DAS ERROR at $url (click on configure page and choose the first das source) \n"  if ($sel->ensembl_has_das_error);

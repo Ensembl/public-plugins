@@ -109,7 +109,7 @@ sub test_login {
 
  $sel->open_ok("/");
  $sel->click_ok("link=Login");
- print "link Login FAILED" unless $sel->ensembl_wait_for_ajax;
+ print "link Login FAILED" unless $sel->ensembl_wait_for_ajax_ok;
  $sel->type_ok("name=email", "ma7\@sanger.ac.uk");
  $sel->type_ok("name=password", "selenium");
  $sel->click_ok("name=submit"); 
@@ -125,11 +125,11 @@ sub test_register {
  $sel->open_ok("/");
  #$sel->ensembl_wait_for_page_to_load_ok;
  $sel->click_ok("link=Register");
- $sel->ensembl_wait_for_ajax;
+ $sel->ensembl_wait_for_ajax_ok;
  $sel->ensembl_is_text_present("Your name");
  
  $sel->click_ok("link=Lost Password");
- $sel->ensembl_wait_for_ajax;
+ $sel->ensembl_wait_for_ajax_ok;
  $sel->ensembl_is_text_present("If you have lost your password");
 }
 

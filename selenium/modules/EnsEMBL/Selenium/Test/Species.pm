@@ -29,12 +29,12 @@ sub attach_das {
   
   print "  Test Attach das\n";
   $sel->click_ok("link=Manage your data")
-  and $sel->ensembl_wait_for_ajax
+  and $sel->ensembl_wait_for_ajax_ok
   and $sel->click_ok("link=Attach DAS")
-  and $sel->ensembl_wait_for_ajax
+  and $sel->ensembl_wait_for_ajax_ok
   and $sel->type_ok("name=preconf_das", "http://das.sanger.ac.uk/das")
   and $sel->click_ok("wizard_submit")
-  and $sel->ensembl_wait_for_ajax(undef,5000)  
+  and $sel->ensembl_wait_for_ajax_ok(undef,5000)  
   and $sel->click_ok("//div[\@id='DasSources']//input[\@type='checkbox'][1]") # tick first das source
   and $sel->click_ok("wizard_submit")
   and $sel->wait_for_text_present_ok("The following DAS sources have now been attached")
@@ -52,11 +52,11 @@ sub attach_remote_file {
   print "  Test Attach remote file\n";
  
   $sel->click_ok("link=Manage your data")
-  and $sel->ensembl_wait_for_ajax
+  and $sel->ensembl_wait_for_ajax_ok
   and $sel->ensembl_is_text_present("Your data");
  
   $sel->click_ok("link=Attach Remote File")
-  and $sel->ensembl_wait_for_ajax;
+  and $sel->ensembl_wait_for_ajax_ok;
   
   $sel->type_ok("name=url","$file_url")
   and $sel->select_ok("format", "$format")
@@ -73,14 +73,14 @@ sub add_track {
   print "  Test Upload data\n";   
   $self->upload_data;  
   $sel->click_ok("link=Configure Page")
-  and $sel->ensembl_wait_for_ajax;
+  and $sel->ensembl_wait_for_ajax_ok;
 
   $sel->ensembl_is_text_present("test2")
   and $sel->click_ok("//form[\@id='location_genome_configuration']/div[1]/ul/li/img")
   and $sel->click_ok("//img[\@alt='Arrows on both sides']");
   
   $sel->click_ok("modal_bg")
-  and $sel->ensembl_wait_for_ajax
+  and $sel->ensembl_wait_for_ajax_ok
   and $sel->ensembl_is_text_present("pairedReads2")
   and $sel->ensembl_images_loaded;
 }
@@ -91,15 +91,15 @@ sub configure_page {
 
   print "  Test Configure Page\n";
   $sel->click_ok("link=Configure this page")
-  and $sel->ensembl_wait_for_ajax
+  and $sel->ensembl_wait_for_ajax_ok
   and $sel->ensembl_is_text_present("Configure Page");
 
   $sel->click_ok("link=Display options")
-  and $sel->ensembl_wait_for_ajax;
+  and $sel->ensembl_wait_for_ajax_ok;
   $sel->select_ok("rows","2");
   $sel->type_ok("name=chr_length","400");
   $sel->click_ok("modal_bg")
-  and $sel->ensembl_wait_for_ajax(undef,'1200')
+  and $sel->ensembl_wait_for_ajax_ok(undef,'1200')
   and $sel->ensembl_is_text_present("Click on the image above to jump to a chromosome");
 }
 
@@ -176,7 +176,7 @@ sub export_data {
   
   print "  Test Export Data\n";
   $sel->ensembl_click("link=Export data")
-  and $sel->ensembl_wait_for_ajax(20000);  
+  and $sel->ensembl_wait_for_ajax_ok(20000);  
   
   $sel->select_ok("output","$output")
   and $sel->click_ok("name=next");
@@ -202,19 +202,19 @@ sub features_karyotype {
   print "  Test Features on karyotype\n";
 
   $sel->click_ok("link=Manage your data")
-  and $sel->ensembl_wait_for_ajax
+  and $sel->ensembl_wait_for_ajax_ok
   and $sel->ensembl_is_text_present("Your data");
 
   $sel->click_ok("link=Features on Karyotype")
-  and $sel->ensembl_wait_for_ajax;
+  and $sel->ensembl_wait_for_ajax_ok;
 
   $sel->type_ok("name=id","$feature_id")
   and $sel->click_ok("name=submit")
-  and $sel->ensembl_wait_for_ajax(5000,5000); #timeout=5s and pause=5s
+  and $sel->ensembl_wait_for_ajax_ok(5000,5000); #timeout=5s and pause=5s
+  #and $sel->ensembl_is_text_present("$feature_id");
 
-  $sel->click_ok("modal_bg")
-  and $sel->ensembl_wait_for_ajax
-  and $sel->ensembl_is_text_present("$feature_id");
+#   $sel->click_ok("modal_bg")
+#   and $sel->ensembl_wait_for_ajax_ok   
 #  and $sel->ensembl_images_loaded;
 }
 
@@ -253,17 +253,17 @@ chr21 31020000 31060000 cloneB 900 - 1020000 1060000 0 2 433,399, 0,3601
 };
 
   $sel->click_ok("link=Manage your data")
-  and $sel->ensembl_wait_for_ajax
+  and $sel->ensembl_wait_for_ajax_ok
   and $sel->ensembl_is_text_present("Your data");
 
   $sel->click_ok("link=Upload Data")
-  and $sel->ensembl_wait_for_ajax;
+  and $sel->ensembl_wait_for_ajax_ok;
   
   $sel->type_ok("name=name","$name")
   and $sel->select_ok("format", "$format")
   and $sel->type_ok("text", "$data")
   and $sel->click_ok("name=submit")
-  and $sel->ensembl_wait_for_ajax(50000,10000); #timeout=50s and pause=5s
+  and $sel->ensembl_wait_for_ajax_ok(50000,10000); #timeout=50s and pause=5s
   
   $sel->ensembl_is_text_present("Go to first region with data");  
 }

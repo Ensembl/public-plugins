@@ -26,11 +26,11 @@ sub test_location {
     #Test ZMENU (only for human)
     if($self->species eq 'homo_sapiens') {
       $self->attach_das;
-      $sel->ensembl_wait_for_ajax(15000);
+      $sel->ensembl_wait_for_ajax_ok(15000);
       
       $sel->ensembl_open_zmenu('Summary',"class^=drag");
       $sel->click_ok("link=Centre here")
-      and $sel->ensembl_wait_for_ajax(undef,'2000')      
+      and $sel->ensembl_wait_for_ajax_ok(undef,'2000')      
       and $sel->go_back();      
 
       #TODO:: ZMenu on viewtop and ViewBottom panel

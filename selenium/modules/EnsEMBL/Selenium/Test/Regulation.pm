@@ -30,7 +30,7 @@ sub test_regulation {
     $sel->ensembl_open_zmenu('FeatureDetails','title^="Regulatory Feature:"');
     $sel->pause(2000);
     $sel->click_ok("link=ENSMUSR*")
-    and $sel->ensembl_wait_for_ajax('50000','2000')
+    and $sel->ensembl_wait_for_ajax_ok('50000','2000')
     and $sel->go_back();
     
     $sel->ensembl_wait_for_page_to_load;
@@ -38,12 +38,12 @@ sub test_regulation {
     #Adding a track from the configuration panel
     print "  Test Configure page, adding a track \n";
     $sel->click_ok("link=Configure this page")
-    and $sel->ensembl_wait_for_ajax('10000')
+    and $sel->ensembl_wait_for_ajax_ok('10000')
     and $sel->click_ok("link=Repeat*")
-    and $sel->ensembl_wait_for_ajax('20000')    
+    and $sel->ensembl_wait_for_ajax_ok('20000')    
     and $sel->click_ok("//html/body/div[3]/div[2]/div[2]/div/div/form/div[7]/div/ul/li/img")
     and $sel->click_ok("modal_bg")
-    and $sel->ensembl_wait_for_ajax('15000')
+    and $sel->ensembl_wait_for_ajax_ok('15000')
     and $sel->ensembl_images_loaded;
     
     $sel->ensembl_click_links(["link=Feature Context", "link=Evidence"]);
