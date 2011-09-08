@@ -37,6 +37,7 @@ __PACKAGE__->meta->setup(
     biomart_affected      => {type => 'enum', 'values' => [qw(N Y)]},
     variation_pos_changed => {type => 'enum', 'values' => [qw(N Y)]},
     db_status             => {type => 'enum', 'values' => [qw(N/A unchanged patched new)]},
+    priority              => {type => 'enum', 'values' => [qw(very_high high normal low)], 'default' => 'normal'},
     is_current            => {type => 'integer', not_null => 1, default => 1}
   ],
 
