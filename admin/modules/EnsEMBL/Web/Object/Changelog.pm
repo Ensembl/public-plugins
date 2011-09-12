@@ -146,7 +146,8 @@ sub show_fields {
     },
     priority          => {
       'type'      => 'dropdown',
-      'label'     => 'Priority'
+      'label'     => 'Priority',
+      'values'    => [{'value' => '0', 'caption' => 'Low'}, {'value' => '1', 'caption' => 'Normal'}, {'value' => '2', 'caption' => 'High'}, {'value' => '3', 'caption' => 'Very high'}]
     },
     notes             => {
       'type'      => 'text',
