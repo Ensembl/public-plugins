@@ -1,3 +1,4 @@
+# $Id$
 package EnsEMBL::Selenium::Test::Species;
 use strict;
 use base 'EnsEMBL::Selenium::Test';
@@ -189,6 +190,8 @@ sub export_data {
     var \$ = selenium.browserbot.getCurrentWindow().jQuery; 
     \$('a.modal_close').attr('href')
   });
+  
+  $sel->click_ok("modal_bg");
   $sel->open_ok($output_url,50000);
   $sel->ensembl_is_text_present("$text_to_check");  
 }

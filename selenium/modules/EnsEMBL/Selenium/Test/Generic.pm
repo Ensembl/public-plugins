@@ -1,3 +1,4 @@
+# $Id$
 package EnsEMBL::Selenium::Test::Generic;
 use strict;
 use base 'EnsEMBL::Selenium::Test';

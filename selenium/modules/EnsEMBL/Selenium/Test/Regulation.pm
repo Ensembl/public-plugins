@@ -1,3 +1,4 @@
+# $Id$
 package EnsEMBL::Selenium::Test::Regulation;
 use strict;
 use base 'EnsEMBL::Selenium::Test::Species';

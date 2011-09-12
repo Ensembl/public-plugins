@@ -1,3 +1,4 @@
+# $Id$
 package EnsEMBL::Selenium::Test::Gene;
 use strict;
 use base 'EnsEMBL::Selenium::Test::Species';
@@ -37,7 +38,7 @@ sub test_gene {
       and $sel->ensembl_wait_for_ajax_ok('10000')
       and $sel->ensembl_click("link=Somatic mutations")
       and $sel->ensembl_wait_for_ajax_ok('10000')
-      and $sel->click_ok("//form[\@id='gene_transcriptsimage_configuration']/div[4]/div/ul/li[2]/img") #selecting the first track      
+      and $sel->click_ok("//form[\@id='gene_transcriptsimage_configuration']/div[4]/div/ul/li[2]/img") #selecting the second track
       and $sel->ensembl_click("modal_bg")
       and $sel->ensembl_wait_for_ajax_ok('15000')
       and $sel->ensembl_images_loaded;

@@ -1,3 +1,4 @@
+# $Id$
 package EnsEMBL::Selenium;
 use strict;
 use Test::More;
@@ -11,14 +12,17 @@ sub _timeout {  return $_[0]->{_timeout} || 5000 }
 #TODO::: Make ajax check when there are multiple ajax request see Selenium.pm.bk and 98_selenium.js
 sub ensembl_wait_for_ajax {
   my ($self, $timeout, $pause) = @_;
+  my $url = $self->get_location();
   
   $pause   ||= 500;   
-  $self->pause($pause)
-  and $self->wait_for_condition(
-    'var $ = selenium.browserbot.getCurrentWindow().jQuery;
-    !($(".ajax_load").length || $(".ajax_error").length || $(".syntax-error").length)',
+  $self->pause($pause);
+  #print "\nAJAX ERROR: $url !!! \n"  unless 
+  $self->wait_for_condition(
+    qq/var \$ = selenium.browserbot.getCurrentWindow().jQuery;
+    !(\$(".ajax_load").length || \$(".ajax_error").length || \$(".syntax-error").length)/,
     $timeout || $self->_timeout
-  ); 
+  );  
+  #$("#modal_panel .modal_content:visible .syntax-error").length
 }
 
 # Wait for a 200 Ok response, then wait until all ajax loaded

@@ -1,3 +1,4 @@
+# $Id$
 package EnsEMBL::Selenium::Test::Location;
 use strict;
 use base 'EnsEMBL::Selenium::Test::Species';

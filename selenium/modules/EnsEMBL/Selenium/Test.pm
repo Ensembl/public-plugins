@@ -1,3 +1,4 @@
+# $Id$
 package EnsEMBL::Selenium::Test;
 
 use strict;
