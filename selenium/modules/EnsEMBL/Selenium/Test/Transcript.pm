@@ -1,3 +1,4 @@
+# $Id$
 package EnsEMBL::Selenium::Test::Transcript;
 use strict;
 use base 'EnsEMBL::Selenium::Test::Species';
@@ -57,12 +58,12 @@ sub test_transcript {
       print "  Test Configuration page \n";
       $sel->ensembl_click("link=Configure this page")
       and $sel->ensembl_wait_for_ajax_ok('10000')
-#      and $sel->ensembl_click("link=Information*")
-#      and $sel->ensembl_wait_for_ajax_ok('10000')
-#      and $sel->ensembl_click("//form[\@id='transcript_translationimage_configuration']/div[1]/ul/li[1]/img") #untick the first track      
+      and $sel->ensembl_click("link=Somatic mutations")
+      and $sel->ensembl_wait_for_ajax_ok('10000')
+      and $sel->click_ok("//form[\@id='transcript_translationimage_configuration']/div[4]/div/ul/li[2]/img") #selecting the second track
       and $sel->ensembl_click("modal_bg")
 #      and $sel->ensembl_wait_for_ajax_ok('15000')
-#      and $sel->ensembl_images_loaded;
+      and $sel->ensembl_images_loaded;
     }
     $sel->ensembl_click_links(["link=Domains & features*"],'20000') if ($SD->table_info_other(ucfirst($self->species),'core', 'protein_feature')->{'analyses'} && lc($self->species) ne 'meleagris_gallopavo');
     $sel->ensembl_click_links(["link=Variations*"],'20000') if(lc($self->species) eq 'homo_sapiens' || lc($self->species) eq 'mus_musculus');
