@@ -1,0 +1,69 @@
+<html>
+<head>
+<meta name="order" content="1" />
+<title>Microarray Probeset Mapping</title>
+</head>
+
+<body>
+
+<h1>Microarray Probe Mapping</h1>
+
+<p>Ensembl annotates expression microarrays on the genome sequences if manufacturers 
+disclose probe sequences for a given micro array. The mapping process is a two-step procedure. 
+</p>
+
+
+<h2>Step One: Genome/Transcript Sequence Alignment</h2>
+<p>In the first step individual probes (oligonucleotides) are mapped to both the 
+genome sequence and the cDNA sequence. Transcript alignments are performed to capture probes which span
+introns. All alignments are stored with reference to the genome sequence i.e. transcript alignments are 
+reconsituted as gapped alignments against the genome. Alignments are stored as ProbeFeatures using the 
+extended cigar format as defined by the <a href="http://samtools.sourceforge.net/SAM1.pdf">SAMTools group</a>.
+Alignments are performed using the Ensembl analysis pipeline, implementing the
+<a href="http://www.biomedcentral.com/1471-2105/6/31/abstract">Exonerate</a> sequence 
+comparison and alignment tool (Slater et al., 2005).  A default 1 bp mismatch is permitted
+between the probe and the genome sequence assembly. Probes that match at 100 or more 
+locations (e.g. suspected Alu repeats) are discarded and not stored in the database.</p> 
+
+<h2>Step Two: Ensembl Transcript Annotation</h2>
+<p>In the second step, we aim to associate microarray probes or probe sets with Ensembl transcript 
+predictions (ENST...) using the ProbeFeatures generated from step one. For arrays with probe sets 
+(e.g. Affymetrix<sup>&reg;</sup>) it is normally required that more than 50% of the probes in a probe set 
+hit a given transcript sequence. Probe set sizes are determined dynamically on a per probe set basis, 
+rather than taking the array-wide value documented by the manufacturer. Arrays which do not contain 
+probesets as part of their design have transcript annotations assigned directly to individual probes.</p>
+<p>A ProbeFeature is matched to a transcript if it overlaps with an exon or UTR region with a minimum of 1bp mismatch.
+To account for conservative UTR estimation, transcript cDNA sequences are extended by the length of the UTR. 
+Where annotated UTRs are absent a default UTR length is used, calculated for both five and three prime UTRs 
+as the highest of either the mean or the median of all annotated UTRs for a given species.</p>
+
+<h2>Data Access</h2>
+
+<p>In the Ensembl browser, individual probe alignments from step one can be displayed in the 'Region in detail' view. 
+Probes that match to a transcript can be seen in the '<a href="http://www.ensembl.org/Homo_sapiens/Transcript/Oligos?t=ENST00000393489">Oligo probes</a>' view, accessible via the transcript page.</p>
+
+<p>The probe mappings and transcript annotations now reside in the functional genomics(funcgen) database. As such
+programatic access requires the use of the <a href="/info/docs/api/funcgen/index.html">ensembl-functgenomics API</a>.
+POD documentation is available here:<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="/info/docs/Doxygen/funcgen-api/classBio_1_1EnsEMBL_1_1Funcgen_1_1Array.html">Bio::EnsEMBL::Funcgen::Array</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="/info/docs/Doxygen/funcgen-api/classBio_1_1EnsEMBL_1_1Funcgen_1_1Probe.html">Bio::EnsEMBL::Funcgen::Probe</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="/info/docs/Doxygen/funcgen-api/classBio_1_1EnsEMBL_1_1Funcgen_1_1ProbeSet.html">Bio::EnsEMBL::Funcgen::ProbeSet</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="/info/docs/Doxygen/funcgen-api/classBio_1_1EnsEMBL_1_1Funcgen_1_1ProbeFeature.html">Bio::EnsEMBL::Funcgen::ProbeFeature</a><br />
+<br />
+Probe and ProbeSet level transcript annotations are now stored in the funcgen databases, along with information on individual ProbeFeatures and objects which fail the mapping criterion are stored as UnmappedObjects. An an example script for access to these data is available here:<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://cvs.sanger.ac.uk/cgi-bin/viewvc.cgi/ensembl-functgenomics/scripts/examples/microarray_annotation_example.pl?revision=1.1&amp;root=ensembl&amp;view=markup">ensembl-functgenomics/scripts/examples/microarray_annotation_example.pl</a>
+</p>
+
+<p>The transcript annotations generated from the Ensembl array mapping pipeline are also available in BioMart. These data are currently incorporated into the main Ensembl genes mart, see the 'Microarray' section in the 'Attributes' panel.</p>
+
+<h2>Running The Pipeline</h2>
+
+<p>Fancy running your own custom array array through the Ensembl array mapping pipeline? Further documentation about the efg array mapping environment can be found here:<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://cvs.sanger.ac.uk/cgi-bin/viewvc.cgi/ensembl-functgenomics/docs/array_mapping.txt?revision=1.10&amp;root=ensembl&amp;view=markup">ensembl-functgenomics/docs/array_mapping.txt</a><br />
+</p>
+
+</body>
+</html>
