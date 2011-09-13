@@ -103,7 +103,6 @@ sub render_start {
   my $self = shift;
   my $page = $self->{'page'};
   
-  $page->set_doc_type('XHTML',  '1.0 Trans');
   $page->add_body_attr('id',    'ensembl-webpage');
   $page->add_body_attr('class', 'mac')                               if $ENV{'HTTP_USER_AGENT'} =~ /Macintosh/;
   $page->add_body_attr('class', "ie ie$2" . ($2 < 8 ? ' ie67' : '')) if $ENV{'HTTP_USER_AGENT'} =~ /MSIE( (\d))?/ && $2 < 9; # Assumes that IE 9 will have support for everything we need. LOL.
