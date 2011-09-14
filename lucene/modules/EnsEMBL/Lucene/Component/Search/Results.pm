@@ -146,9 +146,11 @@ sub re_search {
   }
   if ( !$do_search && ( $species ne 'all' ) ) {
     $species =~ s/_/ /g;
-    $html = qq(<h2>Your search of annotated features from $display_species for the term '$q' returned no results</h2>);
+    $html .= '<div style="font-size:1.2em">';
+    $html .= qq(<p class="space-below">Your search of <strong>$display_species annotation</strong> for the term '$q' returned no results.</p>);
     my $url = '/' . $hub->species . '/Search/Results?species=all;idx=' . $hub->param('idx') . ';q=' . $q;
-    $html .= sprintf qq(<h3>Would you like to search <a href="%s">the rest of the website</a> with this term ?</h3>), $url;
+    $html .= sprintf qq(<p class="space-below"><strong>Would you like to <a href="%s">search the rest of the website</a> with this term ?</strong></p>), $url;
+    $html .= '</div>';
     return $html;
   }
 
