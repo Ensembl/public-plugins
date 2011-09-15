@@ -35,12 +35,12 @@ sub test_gene {
       #Adding a track from the configuration panel
       print "  Test Configure page, adding a track \n";
       $sel->ensembl_click("link=Configure this page")
-      and $sel->ensembl_wait_for_ajax_ok('10000')
+      and $sel->ensembl_wait_for_ajax_ok('10000','2000')
       and $sel->ensembl_click("link=Somatic mutations")
-      and $sel->ensembl_wait_for_ajax_ok('10000')
+      and $sel->ensembl_wait_for_ajax_ok('10000','2000')
       and $sel->click_ok("//form[\@id='gene_transcriptsimage_configuration']/div[4]/div/ul/li[2]/img") #selecting the second track
       and $sel->ensembl_click("modal_bg")
-      and $sel->ensembl_wait_for_ajax_ok('15000')
+      and $sel->ensembl_wait_for_ajax_ok('15000','2000')
       and $sel->ensembl_images_loaded;
     }
 
