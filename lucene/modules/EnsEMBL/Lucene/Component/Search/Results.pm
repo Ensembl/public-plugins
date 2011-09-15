@@ -132,8 +132,10 @@ sub re_search {
       my $url  = '/' . $hub->species . "/Search/Results?species=$species;idx=" . $hub->param('idx') . ';q=' . $newq;
       
       return qq{
-        <h2>Your search of $display_species with '$q' returned no results</h2>
-        <h3>Would you like to <a href="$url">search using $newq</a> (note number of digits)?</h3>
+        <div style="font-size:1.2em">
+          <p class="space-below">Your search of <strong>$display_species</strong> with <strong>'$q'</strong> returned no results.</p>
+          <p class="space-below"><strong>Would you like to <a href="$url">search using $newq</a> (note number of digits)?</strong></p>
+        </div>
       };
     }
   }
@@ -142,14 +144,20 @@ sub re_search {
     my $url = '/' . $hub->species . '/Search/Results?species=all;idx=' . $hub->param('idx') . ';q=' . $q;
     
     return qq{
-      <h2>Your search of annotated features from $display_species for the term '$q' returned no results</h2>
-      <h3>Would you like to search <a href="$url">the rest of the website</a> with this term?</h3>
+      <div style="font-size:1.2em">
+        <p class="space-below">Your search of <strong>$display_species annotation</strong> for the term <strong>'$q'</strong> returned no results.</p>
+        <p class="space-below"><strong>Would you like to <a href="$url">search the rest of the website</a> with this term?</strong></p>
+      </div>
     };
   }
 
   return qq{
-    <h2>Your search of the $sitetype website for the term '$q' returned no results</h2>
-    <h3>If you are expecting to find features with this search term and think the failure to do so is an error, please <a href="/Help/Contact" class="popup">contact helpdesk</a> and let us know</h3>
+    <div style="font-size:1.2em">
+      <p class="space-below">Your search of the <strong>$sitetype website</strong> for the term <strong>'$q'</strong> returned no results.</p>
+      <p class="space-below">
+        <strong>If you are expecting to find features with this search term and think the failure to do so is an error, please <a href="/Help/Contact" class="popup">contact helpdesk</a> and let us know.</strong>
+      </p>
+    </div>
   };
 }
 
