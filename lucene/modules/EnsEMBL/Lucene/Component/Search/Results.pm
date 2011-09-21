@@ -32,12 +32,21 @@ sub content {
     
     foreach my $group_name ('Feature type', 'Species', 'Help') {
       my $group_total = delete $results_by_group->{$group_name}->{'total'};
-      
+
+      if ($group_total < 0) {
+        my $st = ucfirst($sitetype);
+        return qq{
+        <div>
+          <p class="space-below">Sorry, $st search is currently unavailable.</p>
+        </div>
+        };
+      }
+
       next if $group_total < 1;
-      
+
       my $class = $group_classes[$i];
       my $group = $results_by_group->{$group_name}->{'results'};
-      
+
       $html .= qq{
       <div class="$class">
         <table class="search_results">
