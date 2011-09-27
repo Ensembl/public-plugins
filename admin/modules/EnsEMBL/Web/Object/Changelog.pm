@@ -169,8 +169,8 @@ sub show_columns {
 sub record_name {
   ## @overrides
   return {
-    'singular' => 'deceleration',
-    'plural'   => 'decelerations'
+    'singular' => 'declaration',
+    'plural'   => 'declarations'
   };
 }
 
