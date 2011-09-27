@@ -29,6 +29,11 @@ sub show_fields {
       'type'      => 'dropdown',
       'label'     => 'Database Type',
     },
+    attrib_type       => {
+      'type'      => 'dropdown',
+      'label'     => 'Attribute code (if the biotype is included in density feature calculations)',
+      'is_null'   => 'None',
+    },
     is_dumped         => {
       'type'      => 'dropdown',
       'label'     => 'Is this biotype dumped?',
