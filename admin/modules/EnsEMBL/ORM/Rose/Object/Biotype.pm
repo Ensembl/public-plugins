@@ -39,7 +39,16 @@ __PACKAGE__->meta->setup(
                             variation
                             vega)]
     },
+    attrib_type_id    => {type => 'integer'},
     description       => {type => 'text'}
+  ],
+  
+  relationships => [
+    attrib_type       => {
+      'type'        => 'one to one',
+      'class'       => 'EnsEMBL::ORM::Rose::Object::AttribType',
+      'column_map'  => {'attrib_type_id' => 'attrib_type_id'},
+    }
   ]
 );
 
