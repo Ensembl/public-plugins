@@ -55,8 +55,8 @@ sub content {
         $html .= qq{
           <tr>
             <td>
-              <a href="#" class="collapsible">$display_n</a>
-              <ul class="shut">
+              <a href="#" class="toggle closed">$display_n</a>
+              <ul class="toggleable">
         };
         
         my $grandchild  = $child->{'results'};
