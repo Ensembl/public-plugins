@@ -1,9 +1,10 @@
+# $Id$
 package EnsEMBL::Selenium::Test::GenomeStatistics;
 use strict;
 use base 'EnsEMBL::Selenium::Test::Species';
 use Test::More; 
 
-__PACKAGE__->set_default('timeout', 5000);
+__PACKAGE__->set_default('timeout', 50000);
 #------------------------------------------------------------------------------
 # Ensembl Genome Statistics test
 # Can add more cases or extend the existing test cases
