@@ -5,7 +5,7 @@ use Test::More;
 use base 'Test::WWW::Selenium';
 
 # return user defined timeout, or a default
-sub _timeout {  return $_[0]->{_timeout} || 5000 }
+sub _timeout {  return $_[0]->{_timeout} || 50000 }
 
 # Wait until there are no ajax loading indicators or errors shown in the page
 # Loading indicators are only shown if loading takes >500ms so need to pause before we start checking
@@ -15,7 +15,11 @@ sub ensembl_wait_for_ajax {
   my $url = $self->get_location();
   
   $pause   ||= 500;   
-  $self->pause($pause);
+  #increase the pause and timeout if we are testing mirrors since the site is slower.
+  $pause += 3000 if($url =~ /uswest|useast/);  
+  $timeout += 20000 if($url =~ /uswest|useast/);
+  $self->pause($pause); 
+  
   #print "\nAJAX ERROR: $url !!! \n"  unless 
   $self->wait_for_condition(
     qq/var \$ = selenium.browserbot.getCurrentWindow().jQuery;
@@ -30,7 +34,7 @@ sub ensembl_wait_for_ajax {
 sub ensembl_wait_for_page_to_load {
   my ($self, $timeout) = @_;
   
-  $timeout ||= $self->_timeout;
+  $timeout ||= $self->_timeout;  
   
   $self->wait_for_page_to_load($timeout)
   and ok($self->get_title !~ /Internal Server Error|404 error/i, 'No Internal or 404 Server Error')
