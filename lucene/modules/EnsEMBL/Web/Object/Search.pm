@@ -58,7 +58,7 @@ sub feature2url {
   my ( $self, $hit ) = @_;
 
   my %lookup = (
-    'MARKER' => sub { return "$_[0]->{species}/Marker/Details?m=$_[0]->{id};contigviewbottom=marker_core_marker" },
+    'MARKER' => sub { return "$_[0]->{species}/Marker/Details?m=$_[0]->{id};contigviewbottom=marker_core_marker;toggle_tracks=1" },
     'DOMAIN' => sub { return "$_[0]->{species}/Location/Genome/?ftype=$_[0]->{featuretype};id=$_[0]->{id}" },
     'FAMILY' => sub { return "$_[0]->{species}/Gene/Family/Genes?family=$_[0]->{id}" },
     'GENOMICALIGNMENT' => sub {
@@ -92,13 +92,13 @@ sub feature2url {
       return
         "$_[0]->{species}/Location/Genome?ftype=$_[0]->{featuretype};id=$_[0]->{id}"
           . ( $_[0]->{db} ? ";db=$_[0]->{db}" : '' )
-          . ( $_[0]->{contigviewbottom} ? ";contigviewbottom=$_[0]->{contigviewbottom}" : '' );
+          . ( $_[0]->{contigviewbottom} ? ";contigviewbottom=$_[0]->{contigviewbottom};toggle_tracks=1" : '' );
       },
     'DNAALIGNFEATURE' => sub {
       return
         "$_[0]->{species}/Location/Genome?ftype=DnaAlignFeature;id=$_[0]->{id}"
           . ( $_[0]->{db} ? ";db=$_[0]->{db}" : '' )
-          . ( $_[0]->{contigviewbottom} ? ";contigviewbottom=$_[0]->{contigviewbottom}" : '' );
+          . ( $_[0]->{contigviewbottom} ? ";contigviewbottom=$_[0]->{contigviewbottom};toggle_tracks=1" : '' );
       },
     'PHENOTYPE' => sub {
       return
