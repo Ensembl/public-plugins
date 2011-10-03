@@ -141,21 +141,24 @@ sub unpack_rose_object {
   my $unpacked  = [];
 
   while (my $field_name = shift @$fields) {
-  
+
     my $field = shift @$fields; # already a hashref with keys that should not be modified (except 'value' key) - keys as accepted by Form->add_field method
-    my $value = $field->{'value'} = $record->$field_name || $field->{'value'};
+    my $value = $record;
+    $value    = $field->{'value'} = [ map {$value = $value->$_;} split /\./, $field_name ]->[-1] || $field->{'value'}; # if fieldname is 'data.url', value required is $record->data->url
+
     $field->{'name'} ||= $field_name;
-    
+    $field_name        = shift @{[ split /\./, $field_name ]};
+
     my $select = $field->{'type'} && $field->{'type'} =~ /^(dropdown|checklist|radiolist)$/i ? 1 : 0;
 
     ## if this field is a relationship
     if (exists $relations->{$field_name}) {
       my $relationship         = $relations->{$field_name};
-      my $related_object_class = $relationship->can('class') ? $relationship->class : $relationship->map_class->meta->relationship($relationship->name)->class;
+      my $related_object_meta  = $relationship->can('class') ? $relationship->class->meta : $relationship->map_class->meta->relationship($relationship->name)->class->meta;
 
       $field->{'value_type'}        = $relationship->type;
-      $field->{'is_datastructure'}  = $related_object_class->TITLE_COLUMN && $related_object_class->meta->column($related_object_class->TITLE_COLUMN)->type eq 'datastructure';
-      
+      $field->{'is_datastructure'}  = $related_object_meta->title_column && $related_object_meta->column($related_object_meta->title_column)->type eq 'datastructure';
+
       ## get lookup if type is either 'dropdown' or 'checklist' or 'radiolist'
       if ($select) {
 
@@ -165,7 +168,7 @@ sub unpack_rose_object {
         }
 
         $field->{'multiple'} = $relationship->is_singular ? 0 : 1;
-        $field->{'lookup'}   = $manager->get_lookup($related_object_class);
+        $field->{'lookup'}   = $manager->get_lookup($related_object_meta->class);
       }
     }
 
