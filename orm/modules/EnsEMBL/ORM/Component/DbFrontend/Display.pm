@@ -38,7 +38,7 @@ sub content_tree {
     'flags' => 'add_new_button',
     'children' => [
       {'node_name' => 'div', 'class' => 'dbf-row-buttons', 'children' => [
-        {'node_name' => 'a', 'inner_HTML' => 'Add new', 'class' => $self->_JS_CLASS_ADD_BUTTON, 'href' => $self->hub->url({'action' => 'Add'})}
+        {'node_name' => 'a', 'inner_HTML' => 'Add new', 'class' => $self->_JS_CLASS_ADD_BUTTON, 'href' => $hub->url({'action' => 'Add', 'function' => $hub->function})}
       ]}
     ]
   });
@@ -57,6 +57,7 @@ sub record_tree {
   ## If overriding, add _JS_CLASS_DELETE_BUTTON & _JS_CLASS_EDIT_BUTTON classes on the buttons if JavaScript functionality is required
   my ($self, $record) = @_;
   my $object = $self->object;
+  my $hub    = $self->hub;
   
   my $primary_key = $record->get_primary_key_value;
   my $record_div  = $self->dom->create_element('div', {'flags' => {'primary_key' => $primary_key}});
@@ -68,7 +69,8 @@ sub record_tree {
 
     my $field   = shift @$fields;
     next if $field->{'display'} && $field->{'display'} eq 'never';
-    my $value   = $record->$field_name;
+    my $value   = $record;
+    $value      = $value->$_ for split /\./, $field_name;
     next if !$value && $field->{'display'} && $field->{'display'} eq 'optional';
     my $jclass  = $self->{'_column_class_names'}{$field_name};
 
@@ -100,16 +102,16 @@ sub record_tree {
     'inner_HTML'  => sprintf(
       '<a class="%s" href="%s">Edit</a>%s%s',
       $self->_JS_CLASS_EDIT_BUTTON,
-      $self->hub->url({'action' => 'Edit', 'id' => $primary_key}),
+      $hub->url({'action' => 'Edit', 'function' => $hub->function, 'id' => $primary_key}),
       $object->permit_delete ? sprintf(
         '<a class="%s" href="%s">Delete</a>',
         $self->_JS_CLASS_EDIT_BUTTON,
-        $self->hub->url({'action' => 'Confirm', 'id' => $primary_key})
+        $hub->url({'action' => 'Confirm', 'function' => $hub->function, 'id' => $primary_key})
       ) : '',
       $object->permit_duplicate ? sprintf(
         '<a class="%s" href="%s">Duplicate</a>',
         $self->_JS_CLASS_EDIT_BUTTON,
-        $self->hub->url({'action' => 'Duplicate', 'id' => $primary_key})
+        $hub->url({'action' => 'Duplicate', 'function' => $hub->function, 'id' => $primary_key})
       ) : ''
     )
   });
