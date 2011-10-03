@@ -10,10 +10,7 @@ use warnings;
 
 use base qw(EnsEMBL::ORM::Rose::Object::Trackable);
 
-use constant {
-  ROSE_DB_NAME  => 'healthcheck',
-  TITLE_COLUMN  => 'comment'
-};
+use constant ROSE_DB_NAME => 'healthcheck';
 
 ## Define schema
 __PACKAGE__->meta->setup(
@@ -36,6 +33,8 @@ __PACKAGE__->meta->setup(
     },
     comment       => {type => 'text'},
   ],
+
+  title_column  => 'comment',
 
   relationships => [
     report => {

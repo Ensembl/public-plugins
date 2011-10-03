@@ -10,12 +10,7 @@ use warnings;
 
 use base qw(EnsEMBL::ORM::Rose::Object::Trackable);
 
-use constant {
-  ROSE_DB_NAME        => 'production',
-  TITLE_COLUMN        => 'title',
-  INACTIVE_FLAG       => 'is_current',
-  INACTIVE_FLAG_VALUE => '0'
-};
+use constant ROSE_DB_NAME => 'production';
 
 ## Define schema
 __PACKAGE__->meta->setup(
@@ -41,7 +36,10 @@ __PACKAGE__->meta->setup(
     is_current            => {type => 'integer', 'not_null' => 1, 'default' => 1}
   ],
 
-  relationships => [
+  title_column          => 'title',
+  inactive_flag_column  => 'is_current',
+
+  relationships         => [
     species => {
       'type'        => 'many to many',
       'map_class'   => 'EnsEMBL::ORM::Rose::Object::ChangelogSpecies',

@@ -10,10 +10,7 @@ use warnings;
 
 use base qw(EnsEMBL::ORM::Rose::Object);
 
-use constant {
-  ROSE_DB_NAME  => 'healthcheck',
-  TITLE_COLUMN  => 'text',
-};
+use constant ROSE_DB_NAME => 'healthcheck';
 
 ## Define schema
 __PACKAGE__->meta->setup(
@@ -34,6 +31,8 @@ __PACKAGE__->meta->setup(
     created           => {type => 'datetime'},
     failed_count      => {type => 'integer', lazy => 1}
   ],
+
+  title_column  => 'text',
 
   relationships => [
     first_session => {

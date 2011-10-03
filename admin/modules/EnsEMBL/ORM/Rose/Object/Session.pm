@@ -10,9 +10,7 @@ use warnings;
 
 use base qw(EnsEMBL::ORM::Rose::Object);
 
-use constant {
-  ROSE_DB_NAME  => 'healthcheck',
-};
+use constant ROSE_DB_NAME => 'healthcheck';
 
 ## Define schema
 __PACKAGE__->meta->setup(
