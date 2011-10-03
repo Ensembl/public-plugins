@@ -30,7 +30,7 @@ sub content_tree {
     'children'  => [$is_ajax ? {'node_name' => 'h3', 'class' => 'dbf-heading', 'inner_HTML' => sprintf('%s %s:', $object->action, $object->record_name->{'singular'})} : ()]
   });
   my $form    = $content->append_child($self->new_form({
-    'action' => $hub->url({'action' => $preview ? 'Preview' : 'Save'}),
+    'action' => $hub->url({'action' => $preview ? 'Preview' : 'Save', 'function' => $hub->function}),
     'class'  => !$preview ? $serial ? $self->_JS_CLASS_SAVE_FORM : $self->_JS_CLASS_ADD_FORM : $self->_JS_CLASS_PREVIEW_FORM
   }));
   
@@ -59,6 +59,8 @@ sub content_tree {
     my $value  = '';
     my $f_type = $field->field_type;
     my $select = $f_type =~ /^(dropdown|checklist|radiolist)$/ ? 1 : 0;
+
+    map {delete $field_params->{$_}} qw(notes shortnote) if $action eq 'Preview';
 
     my $form_field = $form->add_field($field_params);
     $form_field->set_flag($name);
