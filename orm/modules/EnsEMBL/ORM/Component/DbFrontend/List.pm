@@ -67,6 +67,7 @@ sub record_tree {
   my $object      = $self->object;
   my $primary_key = $record->get_primary_key_value;
   my $record_name = $object->record_name->{'singular'};
+  my $record_meta = $record->meta;
   my $record_row  = $self->dom->create_element('tr', $header_only
     ? {'children'   => [{'node_name' => 'th', 'class' => 'sort_none', 'style' => 'width: 60px'}]}
     : {'children'   => [{'node_name' => 'td', 'class' => ['dbf-list-buttons', $self->_JS_CLASS_LIST_ROW_HANDLE], 'children' => [
@@ -82,7 +83,7 @@ sub record_tree {
 
     if ($header_only) {
 
-      my $editable  = $record->meta->is_trackable && $column_name =~ /^(created|modified)_(at|by|by_user)$/ ? 0 : 1;
+      my $editable  = $record_meta->is_trackable && $column_name =~ /^(created|modified)_(at|by|by_user)$/ ? 0 : 1;
       my $css       = '';
       my $width;
 
@@ -100,7 +101,7 @@ sub record_tree {
       });
     }
     else {
-      my $is_title  = $record->TITLE_COLUMN && $column_name eq $record->TITLE_COLUMN;
+      my $is_title  = $record_meta->title_column && $record_meta->title_column eq $column_name;
       my $value     = $record->$column_name;
       $value        = $self->_display_column_value($value, $is_title);
       $value        = sprintf('<a href="%s">%s</a>', $hub->url({'action' => 'Display', 'id' => $primary_key}), $value) if $is_title;

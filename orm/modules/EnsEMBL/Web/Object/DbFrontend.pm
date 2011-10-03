@@ -113,27 +113,30 @@ sub fetch_for_select {
   ## Fetchs and saves rose objects to be displayed on 'Select/Edit' page (dropdown/radio buttons view)
   ## @param A hashref of extra parameters to be added to rose manager's get_objects method
   my ($self, $params) = @_;
-  
-  $params ||= {};
-  $params->{'sort_by'} ||= $self->manager_class->object_class->TITLE_COLUMN || $self->manager_class->object_class->primary_key;
+  my $manager = $self->manager_class;
 
-  $self->rose_objects($self->manager_class->get_objects(%$params));
+  $params ||= {};
+  $params->{'sort_by'} ||= $manager->object_class->meta->title_column || $manager->object_class->primary_key;
+
+  $self->rose_objects($manager->get_objects(%$params));
 }
 
 sub _fetch_all {
   ## Private method, to fetch all the records for given params and page type
   my ($self, $page, $params) = @_;
 
-  $params ||= {};
+  $params   ||= {};
+  my $manager = $self->manager_class;
+  my $title   = $manager->object_class->meta->title_column;
 
   my @ids = $self->hub->param('id') || ();
   scalar @ids == 1 and @ids = split ',', $ids[0];
   if (@ids) {
-    $self->rose_objects($self->manager_class->fetch_by_primary_keys([@ids], $self->_get_with_objects_params($page, $params)));
+    $self->rose_objects($manager->fetch_by_primary_keys([@ids], $self->_get_with_objects_params($page, $params)));
   }
   else {
-    !$params->{'sort_by'} and $self->manager_class->object_class->TITLE_COLUMN and $params->{'sort_by'} = $self->manager_class->object_class->TITLE_COLUMN;
-    $self->rose_objects($self->manager_class->fetch_by_page($self->pagination, $self->get_page_number, $self->_get_with_objects_params($page, $params)));
+    !$params->{'sort_by'} and $title and $params->{'sort_by'} = $title;
+    $self->rose_objects($manager->fetch_by_page($self->pagination, $self->get_page_number, $self->_get_with_objects_params($page, $params)));
   }
 }
 
@@ -168,7 +171,6 @@ sub get_count {
 
 sub create_empty_object {
   ## Wrapper around the default manager's create_empty_object method
-  
   return shift->manager_class->create_empty_object;
 }
 
@@ -205,14 +207,14 @@ sub get_fields {
       $t_fields       = {'created' => $t_fields, 'modified' => $t_fields} unless ref $t_fields eq 'HASH';
 
       if (exists $t_fields->{'created'}) {
-        grep {$_ eq 'created_by_user'} @$field_names or push @{$self->{'_dbf_show_fields'}}, (
+        $t_fields->{'created'} eq 'never' or grep {$_ eq 'created_by_user'} @$field_names or push @{$self->{'_dbf_show_fields'}}, (
           created_by_user   => {
             'type'      => 'noedit',
             'label'     => 'Created by',
             'display'   => $t_fields->{'created'}
           }
         );
-        grep {$_ eq 'created_at'} @$field_names or push @{$self->{'_dbf_show_fields'}}, (
+        $t_fields->{'created'} eq 'never' or grep {$_ eq 'created_at'} @$field_names or push @{$self->{'_dbf_show_fields'}}, (
           created_at        => {
             'type'      => 'noedit',
             'label'     => 'Created at',
@@ -222,14 +224,14 @@ sub get_fields {
       }
       
       if (exists $t_fields->{'modified'}) {
-        grep {$_ eq 'modified_by_user'} @$field_names or push @{$self->{'_dbf_show_fields'}}, (
+        $t_fields->{'modified'} eq 'never' or grep {$_ eq 'modified_by_user'} @$field_names or push @{$self->{'_dbf_show_fields'}}, (
           modified_by_user  => {
             'type'      => 'noedit',
             'label'     => 'Modified by',
             'display'   => $t_fields->{'modified'}
           }
         );
-        grep {$_ eq 'modified_at'} @$field_names or push @{$self->{'_dbf_show_fields'}}, (
+        $t_fields->{'modified'} eq 'never' or grep {$_ eq 'modified_at'} @$field_names or push @{$self->{'_dbf_show_fields'}}, (
           modified_at       => {
             'type'      => 'noedit',
             'label'     => 'Modified at',
@@ -272,50 +274,56 @@ sub _get_with_objects_params {
 
 sub _populate_from_cgi {
   ## Private helper method used to set the values of different columns of the rose object from cgi parameters
-  my $self    = shift;
-  my $hub     = $self->hub;
-  my @params  = $hub->param;
-
+  my $self        = shift;
+  my $hub         = $self->hub;
+  my @params      = $hub->param;
   my $rose_object = $self->rose_object;
-
-  my $fields    = $self->get_fields;
-  my $columns   = { map {$_->name => $_} @{$self->manager_class->get_columns($rose_object)} };
-  my $relations = { map {$_->name => $_} @{$self->manager_class->get_relationships($rose_object)} };
-  
+  my $fields      = $self->get_fields;
+  my $columns     = { map {$_->name => $_} @{$self->manager_class->get_columns($rose_object)} };
+  my $relations   = { map {$_->name => $_} @{$self->manager_class->get_relationships($rose_object)} };
+  my $ext_rel     = {}; ## TODO - external relationships?
   my %field_names = map {$_ => 1} keys %{{@$fields}};
   my %param_names = map {$_ => 1} @params;
 
   delete $field_names{$_} for ('id', $rose_object->primary_key);
 
-  for (keys %field_names) {
-    next unless exists $param_names{$_}; #ignore if variable not present among the post params
-    next if $rose_object->meta->is_trackable && $_ =~ /^(created|modified)_(by_user|at|by)$/; # dont get them from CGI
+  foreach my $field_name (keys %field_names) {
+    next unless exists $param_names{$field_name}; #ignore if variable not present among the post params
+    next if $rose_object->meta->is_trackable && $field_name =~ /^(created|modified)_(by_user|at|by)$/; # dont get them from CGI
 
     my $value;
     my $type;
+    my $col = shift @{[ split /\./, $field_name ]}; # for datamap only
 
-    if (exists $columns->{$_} && ($type = 'column') || exists $relations->{$_} && ($type = 'relation')) {
-    
+    if (exists $columns->{$col} && ($type = 'column') || exists $relations->{$field_name} && ($type = 'relation')) {
+
       # For single value
-      if ($type eq 'relation' && $relations->{$_}->is_singular || $type eq 'column' && $columns->{$_}->type ne 'set') {
-        $value = $hub->param($_);
+      if ($type eq 'relation' && $relations->{$field_name}->is_singular || $type eq 'column' && $columns->{$col}->type ne 'set') {
+        $value = $hub->param($field_name);
 
         if ($type eq 'relation') {
-          my ($mapped_column) = $relations->{$_}->column_map;
+          my ($mapped_column) = $relations->{$field_name}->column_map;
           $rose_object->$mapped_column($value);
           unless ($value) {
-            $rose_object->forget_related($_); # get rid of old related object
-            next;                             # prevent adding a new row to related table
+            $rose_object->forget_related($field_name);  # get rid of old related object
+            next;                                       # prevent adding a new row to related table
           }
         }
       }
-      
-      # For multiple values
       else {
-        $value = [ $hub->param($_) ];
-        $value = [ grep {$_} @$value ] if $type eq 'relation'; #prevent adding a new row to related table by filtering out null value
+      # For multiple values
+        $value = [ $hub->param($field_name) ];
+        $value = [ grep {$field_name} @$value ] if $type eq 'relation'; #prevent adding a new row to related table by filtering out null value
       }
-      $rose_object->$_($value);
+
+      # Finally save the value to the rose object
+      my $object_to_modify = $rose_object;
+      if ($col ne $field_name) {
+        my $methods       = [ split /\./, $field_name ];
+        $field_name       = pop @$methods;
+        $object_to_modify = $object_to_modify->$_ for @$methods;
+      }
+      $object_to_modify->$field_name($value);
     }
   }
 }
@@ -347,7 +355,7 @@ sub _populate_from_cgi {
 ###                         Defaults to displaying the preview always
 ### permit_delete           Tells whether deleting the record is allowed or not
 ###                         'delete' means deleting is allowed
-###                         'retire' means set the value of Rose::Object::INACTIVE_FLAG TO Rose::Object::INACTIVE_FLAG_VALUE
+###                         'retire' means set the value of 'inactive_flag_column' to 'inactive_flag_value'
 ###                         Defaults to not allowing deletion
 ### permit_duplicate        Tells whether duplicating a record is allowed or not
 ### content_css             Css class name to go to the container of content - override this to customise styles
@@ -367,7 +375,7 @@ sub show_preview          { 1;  }
 sub permit_delete         { 'retire'; }
 sub permit_duplicate      { 1; }
 sub content_css           { return 'dbf-content'; }
-sub record_name           { return {'singular' => 'record' , 'plural' => 'records'}; }
+sub record_name           { return {qw(singular record plural records)}; }
 sub show_user_email       { 1; }
 sub use_ajax              { 1; }
 
