@@ -13,23 +13,20 @@ use EnsEMBL::ORM::Rose::DbConnection;
 use EnsEMBL::ORM::Rose::Manager;
 use EnsEMBL::ORM::Rose::MetaData;
 
-use Rose::DB::Object::Helpers qw(as_tree); ## Object->as_tree returns a hash ref of the actual rose object
+use Rose::DB::Object::Helpers qw(as_tree);  ## Object->as_tree returns a hash ref of the actual rose object
 
 use base qw(Rose::DB::Object);
 
-use constant {                        ## Override in child class
-  ROSE_DB_NAME        => undef,       ## Name of the database connection as registered with Rose::DB
-  TITLE_COLUMN        => '',          ## Column which contains the 'title' of the record (if any)
-  INACTIVE_FLAG       => '',          ## Column that indicates that the row is to be considered deleted if its value is set as INACTIVE_FLAG_VALUE
-  INACTIVE_FLAG_VALUE => '',          ## Value of the INACTIVE_FLAG
-
-  EXTERNAL_RELATION   => '__ens_external_relationships'
+use constant {
+  ROSE_DB_NAME  => undef,         ## Name of the database connection as registered with Rose::DB (Override in child class)
+  DEBUG_SQL     => undef,         ## Warns out all the mysql queries is flag is set '1'
 };
 
-__PACKAGE__->meta->error_mode('return'); ## When debugging, change from 'return' to 'carp'/'cluck'/'confess'/'croak' to produce the desired Carp behaviour
-__PACKAGE__->meta->column_type_class('datastructure' => 'EnsEMBL::ORM::Rose::DataStructure'); ## Add datastructure column type
-
-#$Rose::DB::Object::Debug = 1;        ## Warns out insert and update queries if set true
+__PACKAGE__->meta->error_mode('return');    ## When debugging, change from 'return' to 'carp'/'cluck'/'confess'/'croak' to produce the desired Carp behaviour
+__PACKAGE__->meta->column_type_class(       ## Add extra column type(s)
+  'datastructure' => 'EnsEMBL::ORM::Rose::DataStructure',
+  'datamap'       => 'EnsEMBL::ORM::Rose::DataMap',
+);
 
 sub save {
   ## Tries to save the object, but does not exit perl
@@ -37,6 +34,7 @@ sub save {
   ## @return Object if saved successfully, undef otherwise
   ## @overrides
   my $self = shift;
+  $Rose::DB::Object::Debug = $self->DEBUG_SQL;
   eval {
     $self->SUPER::save(@_);
   };
@@ -44,13 +42,6 @@ sub save {
 
 sub meta_class {
   return 'EnsEMBL::ORM::Rose::MetaData';
-}
-
-sub meta_setup {
-  ## Wrapper around meta->setup method
-  my ($p, $f, $l) = caller;
-  warn "Use ${p}->meta->setup instead of ${p}->meta_setup at $f line $l\n";
-  return shift->meta->setup(@_);
 }
 
 sub primary_key {
@@ -66,10 +57,10 @@ sub init_db {
 }
 
 sub get_title {
-  ## Returns the name of the object as defined by TITLE_COLUMN
+  ## Returns the name of the object as defined as title_column in meta
   ## @return String
   my $self  = shift;
-  my $title = $self->TITLE_COLUMN || $self->primary_key;
+  my $title = $self->meta->title_column || $self->primary_key;
   
   return $self->$title;
 }
@@ -89,6 +80,7 @@ sub external_relationship {
   my $self     = shift;
   my $relation = shift;
   my $manager  = 'EnsEMBL::ORM::Rose::Manager';
+  my $key_name = $self->meta->EXTERNAL_RELATION_KEY_NAME;
 
   my ($r_name, $r_class, $r_is_singular, $r_map)  = map {$relation->$_} qw(name class is_singular column_map);
   my ($column_internal, $column_external)         = %$r_map;
@@ -107,7 +99,7 @@ sub external_relationship {
     }
 
     # cache rose object
-    $self->{$self->EXTERNAL_RELATION}{$r_name} = $r_is_singular ? $rose_value->[0] : $rose_value;
+    $self->{$key_name}{$r_name} = $r_is_singular ? $rose_value->[0] : $rose_value;
 
     # save foreign key(s)
     $rose_value = [map {$_->$column_external} $r_is_singular ? $rose_value->[0] : @$rose_value];
@@ -115,7 +107,7 @@ sub external_relationship {
   }
 
   # return if already chached
-  return $self->{$self->EXTERNAL_RELATION}{$r_name} if exists $self->{$self->EXTERNAL_RELATION}{$r_name};
+  return $self->{$key_name}{$r_name} if exists $self->{$key_name}{$r_name};
 
   # otherwise get on from the db, cache and return
   my $foreign_keys = $self->$column_internal || [];
@@ -127,7 +119,7 @@ sub external_relationship {
     'active_only'     => 0,
   ) : [];
 
-  return $self->{$self->EXTERNAL_RELATION}{$r_name} = $r_is_singular ? shift @$value : $value;
+  return $self->{$key_name}{$r_name} = $r_is_singular ? shift @$value : $value;
 }
 
 1;

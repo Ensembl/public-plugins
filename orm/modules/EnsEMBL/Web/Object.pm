@@ -112,7 +112,7 @@ sub delete {
 }
 
 sub retire {
-  ## Alternative 'delete' - sets INACTIVE_FLAG to INACTIVE_FLAG_VALUE
+  ## Alternative 'delete' - sets 'inactive_flag_column' to 'inactive_flag_value'
   ## @param Key for the rose objects - optional - defaults to the primary rose objects
   ## @return ArrayRef of successfully retired rose objects
   my ($self, $type) = @_;
@@ -122,11 +122,12 @@ sub retire {
   my %user = ('user' => $self->hub->user);
 
   for (@{$self->rose_objects($type || '0')}) {
-    my $column  = $_->INACTIVE_FLAG;
-    my $value   = $_->INACTIVE_FLAG_VALUE;
+    my $meta    = $_->meta;
+    my $column  = $meta->inactive_flag_column;
+    my $value   = $meta->inactive_flag_value;
     if ($column) {
       $_->$column($value);
-      if (my $obj = $_->save('changes_only' => 1, $_->meta->is_trackable ? %user : ())) {
+      if (my $obj = $_->save('changes_only' => 1, $meta->is_trackable ? %user : ())) {
         push @$objs, $obj;
       }
       else {
