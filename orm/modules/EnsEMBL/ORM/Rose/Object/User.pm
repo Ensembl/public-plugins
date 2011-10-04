@@ -8,12 +8,7 @@ use warnings;
 
 use base qw(EnsEMBL::ORM::Rose::Object::Trackable);
 
-use constant {
-  ROSE_DB_NAME        => 'user',
-  TITLE_COLUMN        => 'name',
-  INACTIVE_FLAG       => 'status',
-  INACTIVE_FLAG_VALUE => 'suspended'
-};
+use constant ROSE_DB_NAME => 'user';
 
 ## Define schema
 __PACKAGE__->meta->setup(
@@ -31,6 +26,10 @@ __PACKAGE__->meta->setup(
     organisation      => {type => 'text'},
     status            => {type => 'enum', 'values' => [qw(active pending suspended)]}
   ],
+
+  title_column        => 'name',
+  inactive_flag       => 'status',
+  inactive_flag_value => 'suspended',
 
   relationships => [
 #     record => {
