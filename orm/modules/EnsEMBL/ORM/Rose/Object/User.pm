@@ -17,19 +17,19 @@ __PACKAGE__->meta->setup(
   table       => 'user',
 
   columns     => [
-    user_id           => {type => 'serial', primary_key => 1, not_null => 1},
-    name              => {type => 'varchar', 'length' => '255'},
-    email             => {type => 'varchar', 'length' => '255'},
-    salt              => {type => 'varchar', 'length' => '8'},
-    password          => {type => 'varchar', 'length' => '64'},
-    data              => {type => 'text'},
-    organisation      => {type => 'text'},
-    status            => {type => 'enum', 'values' => [qw(active pending suspended)]}
+    user_id             => {type => 'serial', primary_key => 1, not_null => 1},
+    name                => {type => 'varchar', 'length' => '255'},
+    email               => {type => 'varchar', 'length' => '255'},
+    salt                => {type => 'varchar', 'length' => '8'},
+    password            => {type => 'varchar', 'length' => '64'},
+    data                => {type => 'text'},
+    organisation        => {type => 'text'},
+    status              => {type => 'enum', 'values' => [qw(active pending suspended)]}
   ],
 
-  title_column        => 'name',
-  inactive_flag       => 'status',
-  inactive_flag_value => 'suspended',
+  title_column          => 'name',
+  inactive_flag_column  => 'status',
+  inactive_flag_value   => 'suspended',
 
   relationships => [
 #     record => {
