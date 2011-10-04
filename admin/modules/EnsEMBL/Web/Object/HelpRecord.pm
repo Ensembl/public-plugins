@@ -30,6 +30,7 @@ sub manager_class {
 }
 
 sub show_fields {
+  ## @overrides
   my $self = shift;
   my $type = $self->rose_object ? $self->rose_object->type : $self->record_type;
   my @datamap;
@@ -38,14 +39,14 @@ sub show_fields {
     @datamap = (
       'data.word'           => {'label' => 'Word',            'type' => 'string'  },
       'data.expanded'       => {'label' => 'Expanded',        'type' => 'text'    },
-      'data.meaning'        => {'label' => 'Meaning',         'type' => 'text'    }
+      'data.meaning'        => {'label' => 'Meaning',         'type' => 'html',     'notes' => 'Please make sure the text above is valid XHTML'}
     );
   }
   elsif ($type eq 'view') {
     @datamap = (
       'data.ensembl_object' => {'label' => 'Ensembl object',  'type' => 'string'  },
       'data.ensembl_action' => {'label' => 'Ensembl action',  'type' => 'string'  },
-      'data.content'        => {'label' => 'Content',         'type' => 'text'    }
+      'data.content'        => {'label' => 'Content',         'type' => 'html',     'notes' => 'Please make sure the text above is valid XHTML'}
     );
   }
   elsif ($type eq 'movie') {
@@ -72,8 +73,8 @@ sub show_fields {
         {'value' => 'variation_api',  'caption' => 'Variation API'                },
         {'value' => 'regulation_api', 'caption' => 'Regulation API'               }      
       ]},
-      'data.question'       => {'label' => 'Question',        'type' => 'text'    },
-      'data.answer'         => {'label' => 'Answer',          'type' => 'text',     'notes' => 'Please make sure the text above is valid XHTML'}
+      'data.question'       => {'label' => 'Question',        'type' => 'html',     'notes' => 'Please make sure the text above is valid XHTML'},
+      'data.answer'         => {'label' => 'Answer',          'type' => 'html',     'notes' => 'Please make sure the text above is valid XHTML'}
     );
   }
 
