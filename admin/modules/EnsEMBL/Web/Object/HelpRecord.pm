@@ -90,6 +90,8 @@ sub show_columns {
 }
 
 sub record_name {
+  my $type  = shift->record_type;
+  return [ map {'singular' => "$_", 'plural' => "${_}s"}, {'movie' => 'Movie', 'faq' => 'FAQ', 'glossary' => 'Word', 'view' => 'Page view'}->{$type} ]->[0] if $type;
   return {qw(singular Record plural Records)};
 }
 
