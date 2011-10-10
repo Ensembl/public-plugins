@@ -4,7 +4,7 @@ use strict;
 use base 'EnsEMBL::Selenium::Test::Species';
 use Test::More; 
 
-__PACKAGE__->set_default('timeout', 5000);
+__PACKAGE__->set_default('timeout', 50000);
 #------------------------------------------------------------------------------
 # Ensembl Transcript test
 # Can add more cases or extend the existing test cases
@@ -50,7 +50,7 @@ sub test_transcript {
     $sel->ensembl_click_links(["link=Oligo probes*"]) if($oligos);
 
     $sel->ensembl_click_links(["link=Ontology chart*", "link=Ontology table*"],'20000') if(lc($self->species) eq 'homo_sapiens' or lc($self->species) eq 'mus_musculus');
-    $sel->ensembl_click_links(["link=Population comparison", "link=Comparison image"],'20000') if($species_db->{'database:variation'} && $SD->databases(ucfirst($self->species))->{'DATABASE_VARIATION'}->{'#STRAINS'});
+    $sel->ensembl_click_links(["link=Population comparison", "link=Comparison image"],'50000') if($species_db->{'database:variation'} && $SD->databases(ucfirst($self->species))->{'DATABASE_VARIATION'}->{'#STRAINS'});
     $sel->ensembl_click_links(["link=Protein summary"],'20000');
 
     #Adding a track from the configuration panel

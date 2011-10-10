@@ -4,7 +4,7 @@ use strict;
 use base 'EnsEMBL::Selenium::Test::Species';
 use Test::More; 
 
-__PACKAGE__->set_default('timeout', 5000);
+__PACKAGE__->set_default('timeout', 50000);
 #------------------------------------------------------------------------------
 # Ensembl regulation test (FOR MOUSE ONLY).
 #------------------------------------------------------------------------------
@@ -43,6 +43,7 @@ sub test_regulation {
     and $sel->click_ok("link=Repeat*")
     and $sel->ensembl_wait_for_ajax_ok('20000')    
     and $sel->click_ok("//html/body/div[3]/div[2]/div[2]/div/div/form/div[7]/div/ul/li/img")
+    and $sel->ensembl_is_text_present("Repeat regions(1/*")
     and $sel->click_ok("modal_bg")
     and $sel->ensembl_wait_for_ajax_ok('15000')
     and $sel->ensembl_images_loaded;

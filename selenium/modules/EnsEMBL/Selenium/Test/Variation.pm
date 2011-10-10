@@ -4,7 +4,7 @@ use strict;
 use base 'EnsEMBL::Selenium::Test::Species';
 use Test::More; 
 
-__PACKAGE__->set_default('timeout', 5000);
+__PACKAGE__->set_default('timeout', 50000);
 #------------------------------------------------------------------------------
 # Ensembl variation test (FOR HUMAN ONLY).
 #------------------------------------------------------------------------------
