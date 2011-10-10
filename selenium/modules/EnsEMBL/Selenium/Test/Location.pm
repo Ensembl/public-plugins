@@ -4,7 +4,7 @@ use strict;
 use base 'EnsEMBL::Selenium::Test::Species';
 use Test::More; 
 
-__PACKAGE__->set_default('timeout', 5000);
+__PACKAGE__->set_default('timeout', 50000);
 #------------------------------------------------------------------------------
 # Ensembl Location link test
 # Can add more cases or extend the existing test cases
@@ -24,8 +24,15 @@ sub test_location {
     and $sel->ensembl_is_text_present("Region in detail");
 #    and $sel->ensembl_images_loaded;
 
+    #turn ncRNA track on/off, test to turn track on and off (excluding the two species since they dont have ncrna track)
+     if(lc($self->species) ne 'saccharomyces_cerevisiae' && lc($self->species) ne 'drosophila_melanogaster') {       
+      $self->track_on("ncRNA");
+      $self->track_off("ncRNA");
+      #next;
+    }
+
     #Test ZMENU (only for human)
-    if($self->species eq 'homo_sapiens') {
+    if(lc($self->species) eq 'homo_sapiens') {
       $self->attach_das;
       $sel->ensembl_wait_for_ajax_ok(15000);
       
@@ -55,14 +62,14 @@ sub test_location {
     
     my ($alignment_count,$multi_species_count) = $self->alignments_count($SD);
 
-    $sel->ensembl_click_links(["link=Alignments (image) ($alignment_count)","link=Alignments (text) ($alignment_count)","link=Multi-species view ($multi_species_count)"],'8000') if($alignment_count);
+    $sel->ensembl_click_links(["link=Alignments (image) ($alignment_count)","link=Alignments (text) ($alignment_count)","link=Multi-species view ($multi_species_count)"],'20000') if($alignment_count);
     $sel->ensembl_click_links(["link=Synteny ($synteny_count)"], '20000') if(grep(/@location_array[0]/,@{$SD->get_config(ucfirst($self->species), 'ENSEMBL_CHROMOSOMES')}) && $synteny_count);
 
     #Markers        
     if($SD->table_info_other(ucfirst($self->species),'core', 'marker_feature')->{'rows'}) {
       $sel->ensembl_click_links(["link=Markers"], '8000');
 
-      if($self->species eq 'homo_sapiens') {
+      if(lc($self->species) eq 'homo_sapiens') {
         $sel->ensembl_is_text_present("mapped markers found:");
         $sel->ensembl_click_links(["link=D6S989"]);
         $sel->ensembl_is_text_present("Marker D6S989");
@@ -71,7 +78,7 @@ sub test_location {
     }
 
     #Testing genetic variations last for human only
-    if($self->species eq 'homo_sapiens') {
+    if(lc($self->species) eq 'homo_sapiens') {
       my $resequencing_counts = $SD->databases(ucfirst($self->species))->{'DATABASE_VARIATION'}{'#STRAINS'} if exists $SD->databases(ucfirst($self->species))->{'DATABASE_VARIATION'};
       $sel->ensembl_click_links(["link=Resequencing ($resequencing_counts)"], '8000');
       $sel->type_ok("loc_r", "6:27996744-27996844");
