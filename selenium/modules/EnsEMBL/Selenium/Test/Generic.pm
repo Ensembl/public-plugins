@@ -4,7 +4,7 @@ use strict;
 use base 'EnsEMBL::Selenium::Test';
 use Test::More; 
 
-__PACKAGE__->set_default('timeout', 5000);
+__PACKAGE__->set_default('timeout', 50000);
 
 #------------------------------------------------------------------------------
 # Ensembl generic test
@@ -37,7 +37,7 @@ sub test_species_list {
  
  $sel->open_ok("/info/about/species.html");
 
- foreach my $species (@valid_species) {
+ foreach my $species (@valid_species) {   
    my $species_label = $SD->species_label($species,1);
 
    $species_label =~ s/(\s\(.*?\))// if($species_label =~ /\(/);    
@@ -52,9 +52,11 @@ sub test_species_list {
        jQuery('body').append("<p>Species images present</p>");
      }
   });
-  $sel->ensembl_is_text_present("Species images present");
+    (my $species_latin_name = $species) =~ s/_/ /g;
+    $sel->ensembl_is_text_present("Species images present")
+    and $sel->ensembl_is_text_present($species_latin_name);
 
-   $sel->go_back();
+    $sel->go_back();
  }
 }
 
