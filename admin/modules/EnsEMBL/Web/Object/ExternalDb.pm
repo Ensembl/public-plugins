@@ -18,10 +18,8 @@ sub show_fields {
   my $self = shift;
   return [
     external_db_id      => {
-      'type'      => 'noedit',
-      'label'     => 'Externam DB ID',
-      'value'     => '<i>to be assigned</i>',
-      'is_html'   => 1,
+      'type'      => 'int',
+      'label'     => 'External DB ID',
     },
     db_name             => {
       'type'      => 'string',
