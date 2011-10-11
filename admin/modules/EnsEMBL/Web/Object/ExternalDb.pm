@@ -17,6 +17,12 @@ sub show_fields {
   ## @overrides
   my $self = shift;
   return [
+    external_db_id      => {
+      'type'      => 'noedit',
+      'label'     => 'Externam DB ID',
+      'value'     => '<i>to be assigned</i>',
+      'is_html'   => 1,
+    },
     db_name             => {
       'type'      => 'string',
       'label'     => 'Name',
@@ -61,6 +67,7 @@ sub show_fields {
 sub show_columns {
   ## @overrides
   return [
+    external_db_id  => 'Ext. DB ID',
     db_name         => 'Name',
     db_release      => 'Release',
     status          => 'Status'
