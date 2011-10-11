@@ -1,0 +1,36 @@
+div.section {
+  border: [[PANEL_BORDER]] solid 1px;
+  padding: 5px;
+  overflow: hidden;
+  margin: 0 0 5px 0;
+}
+
+div.user-pref p.subsection {
+  background-color: [[NEUTRAL_BG]];
+  margin: 2px;
+  padding: 3px;
+}
+
+div.user-pref a.addnew {
+  display: block;
+  font-size: 20px;
+  font-weight: bold;
+  margin: -3px;
+  padding-left: 3px;
+  text-decoration: none;
+}
+
+div.user-pref a.addnew:hover {
+  background-color: [[PANEL_BORDER]];
+}
+
+div.user-pref a.addnew:focus {
+  outline: none;
+}
+
+div.user-pref p.notification {
+  background-color: [[CONTRAST_BG]];
+  border: 1px [[CONTRAST_BORDER]] solid;
+  margin-bottom: 10px;
+  padding: 4px;
+}
