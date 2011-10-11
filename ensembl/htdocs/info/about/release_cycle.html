@@ -9,7 +9,7 @@
 <h1>The Ensembl Release Cycle</h1>
 
 <p>
-Ensembl data is released on an approximately two-month cycle
+Ensembl data is released on an approximately three-month cycle
 (occasionally longer if a lot of development work is being
 undertaken). Whatever its length, the cycle works as follows:
 </p>
@@ -17,9 +17,8 @@ undertaken). Whatever its length, the cycle works as follows:
 <ol>
 <li><strong>Genebuild</strong>
 <p class="space-below">
-This stage varies in length for each species, as it takes longer if
-the genome is more complex complexity of the genome(s)
-involved. Individual species are updated on an irregular schedule,
+The genebuild stage varies in length depending on the species being annotated. Most species take from three to six months to annotate using the Ensembl automatic annotation system. The time it takes to do a genebuild depends on factors such as assembly quality, number of species-specific protein sequences available in UniProt, and amount of RNAseq data.
+ Individual species are updated on an irregular schedule,
 depending on the availability of new assemblies and evidence. New
 species are added frequently from a number of sequencing projects
 around the world, and all species databases may receive minor
@@ -30,13 +29,11 @@ mouse).<br />
 
 <p class="space-below">
 The genebuild team members take evidence for genes and transcripts,
-such as protein and mRNAs, and combine it with manual annotation data
-in the 
-<a href="/info/docs/genebuild/">analysis pipeline</a>, to create an Ensembl 
+such as protein and mRNAs, and combine these in the <a href="/info/docs/genebuild/">analysis pipeline</a> to create an Ensembl 
 <a href="/info/docs/api/core/index.html">core database</a> and optionally 
 <a href="/info/docs/api/core/index.html#est">otherfeatures</a> and
-<a href="/info/docs/api/core/index.html#est">cdna</a> databases.
-Once these are complete, they are handed over to the other Ensembl
+<a href="/info/docs/api/core/index.html#est">cdna</a> databases. For human, mouse and zebrafish, the Ensembl predictions are combined with manual annotation data. 
+Once these databases are complete, they are handed over to the other Ensembl
 data teams for further processing (see below).
 </p>
 </li>
