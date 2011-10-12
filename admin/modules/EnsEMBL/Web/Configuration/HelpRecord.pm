@@ -25,6 +25,10 @@ sub populate_tree {
 
   for ([qw(Movie movies)], [qw(FAQ FAQs)], [qw(View pages)], [qw(Glossary glossary)]) {
     my $menu = $self->create_submenu($_[0], ucfirst $_->[1]);
+    $menu->append($self->create_node( "List/$_->[0]", "List",
+      ["display$_->[0]" => 'EnsEMBL::ORM::Component::DbFrontend::List'],
+      { 'availability' => 1, 'filters' => ['WebAdmin'] }
+    ));
     $menu->append($self->create_node( "Display/$_->[0]", "View",
       ["display$_->[0]" => 'EnsEMBL::Admin::Component::HelpRecord::Display'],
       { 'availability' => 1, 'filters' => ['WebAdmin'] }
@@ -35,7 +39,7 @@ sub populate_tree {
     ));
   }
 
-  $self->create_dbfrontend_node({$_ => {'filters' => ['WebAdmin']}}) for qw(Select/Edit Select/Delete Edit Duplicate Preview Problem Confirm Save Delete);
+  $self->create_dbfrontend_node({$_ => {'filters' => ['WebAdmin']}}) for qw(Edit Duplicate Preview Problem Confirm Save Delete);
 }
 
 1;
