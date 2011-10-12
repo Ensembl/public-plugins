@@ -71,9 +71,9 @@ sub record_tree {
   my $record_row  = $self->dom->create_element('tr', $header_only
     ? {'children'   => [{'node_name' => 'th', 'class' => 'sort_none', 'style' => 'width: 60px'}]}
     : {'children'   => [{'node_name' => 'td', 'class' => ['dbf-list-buttons', $self->_JS_CLASS_LIST_ROW_HANDLE], 'children' => [
-        {'node_name'  => 'a', 'href' => $hub->url({'action' => 'Edit',      'id' => $primary_key}), 'title' => sprintf('Edit %s',      $record_name), 'class' => [$self->_JS_CLASS_EDIT_BUTTON, 'dbf-list-edit']},
-        {'node_name'  => 'a', 'href' => $hub->url({'action' => 'Confirm',   'id' => $primary_key}), 'title' => sprintf('Delete %s',    $record_name), 'class' => [$self->_JS_CLASS_EDIT_BUTTON, 'dbf-list-delete']},
-        {'node_name'  => 'a', 'href' => $hub->url({'action' => 'Duplicate', 'id' => $primary_key}), 'title' => sprintf('Duplicate %s', $record_name), 'class' => [$self->_JS_CLASS_ADD_BUTTON,  'dbf-list-duplicate']}
+        {'node_name'  => 'a', 'href' => $hub->url({'action' => 'Edit',      'function' => $hub->function, 'id' => $primary_key}), 'title' => sprintf('Edit %s',      $record_name), 'class' => [$self->_JS_CLASS_EDIT_BUTTON, 'dbf-list-edit']},
+        {'node_name'  => 'a', 'href' => $hub->url({'action' => 'Confirm',   'function' => $hub->function, 'id' => $primary_key}), 'title' => sprintf('Delete %s',    $record_name), 'class' => [$self->_JS_CLASS_EDIT_BUTTON, 'dbf-list-delete']},
+        {'node_name'  => 'a', 'href' => $hub->url({'action' => 'Duplicate', 'function' => $hub->function, 'id' => $primary_key}), 'title' => sprintf('Duplicate %s', $record_name), 'class' => [$self->_JS_CLASS_ADD_BUTTON,  'dbf-list-duplicate']}
       ]}], 'class' => "dbf-list-row _dbf_row_$primary_key $css_class", 'flags' => {'primary_key' => $primary_key}});
 
   my $columns = $object->show_columns;
@@ -95,16 +95,17 @@ sub record_tree {
       }
 
       $record_row->append_child('th', {
-        'inner_HTML'  => $editable ? sprintf('<input class="%s" name="%s" value="%s" type="hidden" />%s', $self->_JS_CLASS_EDITABLE, $column_name, $hub->url({'action' => 'Edit'}), $label) : $label,
+        'inner_HTML'  => $editable ? sprintf('<input class="%s" name="%s" value="%s" type="hidden" />%s', $self->_JS_CLASS_EDITABLE, $column_name, $hub->url({'action' => 'Edit', 'function' => $hub->function}), $label) : $label,
         'class'       => $object->list_is_datatable ? ['sorting', 'sort_html', ref $css eq 'ARRAY' ? @$css : split ' ', $css] : $css,
         $width ? ('style' => {'width' => $width}) : (),
       });
     }
     else {
       my $is_title  = $record_meta->title_column && $record_meta->title_column eq $column_name;
-      my $value     = $record->$column_name;
+      my $value     = $record;
+      $value        = $value->$_ for split /\./, $column_name;
       $value        = $self->_display_column_value($value, $is_title);
-      $value        = sprintf('<a href="%s">%s</a>', $hub->url({'action' => 'Display', 'id' => $primary_key}), $value) if $is_title;
+      $value        = sprintf('<a href="%s">%s</a>', $hub->url({'action' => 'Display', 'function' => $hub->function, 'id' => $primary_key}), $value) if $is_title;
       $record_row->append_child('td', {'inner_HTML' => $value, 'flags' => $column_name});
     }
   }
