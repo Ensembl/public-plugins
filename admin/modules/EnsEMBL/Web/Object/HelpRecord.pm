@@ -55,15 +55,15 @@ sub show_fields {
   if ($type eq 'glossary') {
     @datamap = (
       'data.word'           => {'label' => 'Word',            'type' => 'string'  },
-      'data.expanded'       => {'label' => 'Expanded',        'type' => 'text'    },
-      'data.meaning'        => {'label' => 'Meaning',         'type' => 'html',     'notes' => 'Please make sure the text above is valid XHTML'}
+      'data.expanded'       => {'label' => 'Expanded',        'type' => 'text',     'cols' => 60, 'rows'  => 5},
+      'data.meaning'        => {'label' => 'Meaning',         'type' => 'html',     'cols' => 60, 'notes' => 'Please make sure the text above is valid XHTML', 'rows' => 5}
     );
   }
   elsif ($type eq 'view') {
     @datamap = (
       'data.ensembl_object' => {'label' => 'Ensembl object',  'type' => 'string'  },
       'data.ensembl_action' => {'label' => 'Ensembl action',  'type' => 'string'  },
-      'data.content'        => {'label' => 'Content',         'type' => 'html',     'notes' => 'Please make sure the text above is valid XHTML'}
+      'data.content'        => {'label' => 'Content',         'type' => 'html',     'cols' => 60, 'notes' => 'Please make sure the text above is valid XHTML', 'rows' => 40}
     );
   }
   elsif ($type eq 'movie') {
@@ -90,14 +90,14 @@ sub show_fields {
         {'value' => 'variation_api',  'caption' => 'Variation API'                },
         {'value' => 'regulation_api', 'caption' => 'Regulation API'               }      
       ]},
-      'data.question'       => {'label' => 'Question',        'type' => 'html',     'notes' => 'Please make sure the text above is valid XHTML'},
-      'data.answer'         => {'label' => 'Answer',          'type' => 'html',     'notes' => 'Please make sure the text above is valid XHTML'}
+      'data.question'       => {'label' => 'Question',        'type' => 'html',     'cols' => 60, 'notes' => 'Please make sure the text above is valid XHTML'},
+      'data.answer'         => {'label' => 'Answer',          'type' => 'html',     'cols' => 60, 'notes' => 'Please make sure the text above is valid XHTML'}
     );
   }
 
   return [
     @datamap,
-    'keyword'               => {'label' => 'Keyword',         'type' => 'text'    },
+    'keyword'               => {'label' => 'Keyword',         'type' => 'text',     'cols' => 60},
     'status'                => {'label' => 'Status',          'type' => 'dropdown'},
   ];
 }
