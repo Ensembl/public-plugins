@@ -21,7 +21,7 @@ __PACKAGE__->meta->setup(
     db_name             => {'type' => 'varchar',  'not_null' => 1,  'length' => 100},
     db_release          => {'type' => 'varchar',                    'length' => 255},
     status              => {'type' => 'enum',     'not_null' => 1,  'values' => [qw(KNOWNXREF KNOWN XREF PRED ORTH PSEUDO)]},
-    priority            => {'type' => 'int',                        'length' => 11},
+    priority            => {'type' => 'int',      'not_null' => 1,  'length' => 11},
     db_display_name     => {'type' => 'varchar',                    'length' => 255},
     type                => {'type' => 'enum',                       'values' => [qw(ARRAY ALT_TRANS ALT_GENE MISC LIT PRIMARY_DB_SYNONYM ENSEMBL)]},
     secondary_db_name   => {'type' => 'varchar',                    'length' => 255},
