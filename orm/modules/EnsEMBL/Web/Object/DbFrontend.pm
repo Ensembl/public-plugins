@@ -299,14 +299,16 @@ sub _populate_from_cgi {
 
       # For single value
       if ($type eq 'relation' && $relations->{$field_name}->is_singular || $type eq 'column' && $columns->{$col}->type ne 'set') {
+
         $value = $hub->param($field_name);
+        $value = undef if $value eq '' && $type eq 'column' && !$columns->{$col}->not_null; # if column value can be NULL, set NULL value instead of an empty string
 
         if ($type eq 'relation') {
           my ($mapped_column) = $relations->{$field_name}->column_map;
           $rose_object->$mapped_column($value);
           unless ($value) {
             $rose_object->forget_related($field_name);  # get rid of old related object
-            next;                                       # prevent adding a new row to related table
+            next;                                       # skip to prevent adding a new row to related table
           }
         }
       }
