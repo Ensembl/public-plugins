@@ -46,7 +46,7 @@ Ensembl.DbFrontendList = {
         data:     {id: this.row.id, _list: 1},
         success:  function(json) {
           var form   = $('form', this.getResponseNode(json));
-          var field  = $('[name=' + this.name + ']', form).first().parents('div').first().removeAttr('class');
+          var field  = $('[name=' + this.name.replace('.', '\\.') + ']', form).first().parents('div').first().removeAttr('class');
           var button = $('[type=submit]', form).first().parents('div').first().attr('class', 'dbf-list-buttons');
           $('input', this.form.empty().append(form.empty().append(field, $('<div>').append(button)))).first().focus();
           this.validateForms(this.form);
