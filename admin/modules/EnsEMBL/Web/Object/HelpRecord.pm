@@ -63,7 +63,7 @@ sub show_fields {
     @datamap = (
       'data.ensembl_object' => {'label' => 'Ensembl object',  'type' => 'string'  },
       'data.ensembl_action' => {'label' => 'Ensembl action',  'type' => 'string'  },
-      'data.content'        => {'label' => 'Content',         'type' => 'html',     'cols' => 60, 'notes' => 'Please make sure the text above is valid XHTML', 'rows' => 40}
+      'data.content'        => {'label' => 'Content',         'type' => 'html',     'cols' => 80, 'notes' => 'Please make sure the text above is valid XHTML', 'rows' => 40}
     );
   }
   elsif ($type eq 'movie') {
@@ -90,8 +90,8 @@ sub show_fields {
         {'value' => 'variation_api',  'caption' => 'Variation API'                },
         {'value' => 'regulation_api', 'caption' => 'Regulation API'               }      
       ]},
-      'data.question'       => {'label' => 'Question',        'type' => 'html',     'cols' => 60, 'notes' => 'Please make sure the text above is valid XHTML'},
-      'data.answer'         => {'label' => 'Answer',          'type' => 'html',     'cols' => 60, 'notes' => 'Please make sure the text above is valid XHTML'}
+      'data.question'       => {'label' => 'Question',        'type' => 'html',     'cols' => 80, 'notes' => 'Please make sure the text above is valid XHTML'},
+      'data.answer'         => {'label' => 'Answer',          'type' => 'html',     'cols' => 80, 'notes' => 'Please make sure the text above is valid XHTML'}
     );
   }
 
