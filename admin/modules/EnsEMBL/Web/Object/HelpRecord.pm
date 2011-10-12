@@ -15,9 +15,26 @@ sub record_type {
 sub fetch_for_display {
   my $self   = shift;
   return $self->SUPER::fetch_for_display(@_) if $self->hub->param('id');
-  
+
   my $type   = $self->record_type;
-  return $type ? $self->SUPER::fetch_for_display({'query' => ['type' => $type]}) : $self->rose_objects([]);
+  $self->SUPER::fetch_for_display({'query' => ['type' => $type]}) if $type;
+
+  my $rose_objects  = $self->rose_objects;
+  my $order_by      = {qw(glossary word view ensembl_object movie title faq category)}->{$type};
+
+  $self->rose_objects([ sort {$a->data->$order_by cmp $b->data->$order_by} @$rose_objects ]) if $rose_objects;
+}
+
+sub fetch_for_list {
+  return shift->fetch_for_display(@_);
+}
+
+sub get_count {
+  ## @overrides
+  my $self = shift;
+  my $type = $self->record_type;
+  return 0 unless $type;
+  return $self->SUPER::get_count({'query' => ['type' => $type]});
 }
 
 ### ### ### ### ### ### ### ### ###
@@ -86,7 +103,41 @@ sub show_fields {
 }
 
 sub show_columns {
-  return [];
+  ## @overrides
+  my $self = shift;
+  my $type = $self->rose_object ? $self->rose_object->type : $self->record_type;
+  my @datamap;
+
+  if ($type eq 'glossary') {
+    @datamap = (
+      'data.word'           => {'title' => 'Word'},
+      'data.expanded'       => {'title' => 'Expanded'},
+    );
+  }
+  elsif ($type eq 'view') {
+    @datamap = (
+      'data.ensembl_object' => {'title' => 'Ensembl object'},
+      'data.ensembl_action' => {'title' => 'Ensembl action'},
+    );
+  }
+  elsif ($type eq 'movie') {
+    @datamap = (
+      'data.title'          => {'title' => 'Title'},
+      'data.youtube_id'     => {'title' => 'Youtube ID'},
+    );
+  }
+  elsif ($type eq 'faq') {
+    @datamap = (
+      'data.category'       => {'title' => 'Category'},
+      'data.question'       => {'title' => 'Question'},
+    );
+  }
+
+  return [
+    @datamap,
+    'keyword'               => {'title' => 'Keyword'},
+    'status'                => {'title' => 'Status'},
+  ];
 }
 
 sub record_name {
