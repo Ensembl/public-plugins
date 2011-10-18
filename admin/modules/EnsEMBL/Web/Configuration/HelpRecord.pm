@@ -22,19 +22,19 @@ sub modify_page_elements {
 
 sub populate_tree {
   my $self  = shift;
-
-  for ([qw(Movie movies)], [qw(FAQ FAQs)], [qw(View pages)], [qw(Glossary glossary)]) {
-    my $menu = $self->create_submenu($_[0], ucfirst $_->[1]);
-    $menu->append($self->create_node( "List/$_->[0]", "List",
-      ["display$_->[0]" => 'EnsEMBL::ORM::Component::DbFrontend::List'],
+  my @menus = qw(Movie Movies FAQ FAQs View Pages Glossary Glossary);
+  while (my @m = splice @menus, 0, 2) {
+    my $menu = $self->create_submenu($m[0], $m[1]);
+    $menu->append($self->create_node( "List/$m[0]", "List",
+      ["list$m[0]" => 'EnsEMBL::Admin::Component::HelpRecord::List'],
       { 'availability' => 1, 'filters' => ['WebAdmin'] }
     ));
-    $menu->append($self->create_node( "Display/$_->[0]", "View",
-      ["display$_->[0]" => 'EnsEMBL::Admin::Component::HelpRecord::Display'],
+    $menu->append($self->create_node( "Display/$m[0]", "View",
+      ["display$m[0]" => 'EnsEMBL::Admin::Component::HelpRecord::Display'],
       { 'availability' => 1, 'filters' => ['WebAdmin'] }
     ));
-    $menu->append($self->create_node( "Add/$_->[0]", "Add",
-      ["display$_->[0]" => 'EnsEMBL::ORM::Component::DbFrontend::Input'],
+    $menu->append($self->create_node( "Add/$m[0]", "Add",
+      ["add$m[0]" => 'EnsEMBL::ORM::Component::DbFrontend::Input'],
       { 'availability' => 1, 'filters' => ['WebAdmin'] }
     ));
   }
