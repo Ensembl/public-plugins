@@ -23,7 +23,7 @@ sub fetch_for_display {
   my $order_by_1    = {qw(glossary word view ensembl_object movie title faq category)}->{$type};
   my $order_by_2    = {qw(view ensembl_action faq question)}->{$type} || 0;
 
-  $self->rose_objects([ sort {($a->data->$order_by_1 cmp $b->data->$order_by_1) || $order_by_2 && ($a->data->$order_by_2 cmp $b->data->$order_by_2)} @$rose_objects ]) if $rose_objects;
+  $self->rose_objects([ sort { my $x = $a->data; my $y = $b->data; ($x->$order_by_1 cmp $y->$order_by_1) || $order_by_2 && ($x->$order_by_2 cmp $y->$order_by_2)} @$rose_objects ]) if $rose_objects;
 }
 
 sub fetch_for_list {
