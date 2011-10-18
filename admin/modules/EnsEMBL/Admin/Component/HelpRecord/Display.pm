@@ -13,7 +13,7 @@ sub record_tree {
   if (@$youtube_div) {
     $youtube_div = $youtube_div->[0]->last_child;
     if (my $youtube_id = $youtube_div->inner_HTML) {
-      $youtube_div->inner_HTML(sprintf '<a href="http://www.youtube.com/watch?v=%s">%1$s</a>', $youtube_id);
+      $youtube_div->inner_HTML(sprintf '%s (<a href="http://www.youtube.com/watch?v=%1$s" target="_blank">View on YouTube</a>)', $youtube_id);
     }
   }
   return $record_div;
