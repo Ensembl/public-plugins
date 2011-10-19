@@ -344,9 +344,10 @@ sub _populate_from_cgi {
 ###                         'display' can contain values 'never' or 'optional' - never will not display this field while viewing data (Display page); optional will ignore this in Display page if value is null
 ### show_trackable_fields   Tells whether or not to display trackable fields while adding/editing/viewing the data (only works for Trackable rose objects)
 ###                         Can return string values 'always', 'optional', or 'never' OR a hashref with keys 'modified', 'trackable' with values of keys as 'always', 'never' (default), 'optional'
-### show_columns            ArrayRef as [column names => labels] or [column names => {title => ?, class => ?, editable => ?, width => ?}] that are displayed when records are displayed in tabular form (List page)
+### show_columns            ArrayRef as [column_name => label] or [column_name => {title => ?, class => ?, editable => ?, width => ?, ensembl_object => ?}] that are displayed when records are displayed in tabular form (List page)
 ###                         Purpose of arrayref instead of hashref is to maintain order
 ###                         Column_name can include name of any relationship (as relationships are also treated as columns)
+###                         Key 'ensembl_object' is used in case of relationship only, if a link to view the related object is to be displayed - is ignored in '... to many' relationships
 ### record_select_style     Specifies the style of form element that will be displayed to select a record to edit
 ###                         Select box by default, if set to 'radio', then radio buttons
 ### list_is_datatable       Flag to tell whether or not use jQuery dataTable for the List page
