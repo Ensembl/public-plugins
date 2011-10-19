@@ -86,10 +86,10 @@ sub show_fields {
 sub show_columns {
   ## @overrides
   return [
-    analysis_description  => 'Logic Name',
+    analysis_description  => {'title' => 'Logic Name', 'ensembl_object' => 'AnalysisDesc'},
     species               => 'Species',
     db_type               => 'Database Type',
-    web_data              => {'title' => 'Web Data', 'width' => qq(50%)},
+    web_data              => {'title' => 'Web Data', 'width' => qq(50%), 'ensembl_object' => 'Webdata'},
     displayable           => 'Displayable'
   ];
 }
