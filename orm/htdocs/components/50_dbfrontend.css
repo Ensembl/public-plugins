@@ -110,7 +110,7 @@ div.dbf-row-buttons a, a.dbf-confirm-buttons {
   font-weight: normal;
 }
 
-td span.dbf-list-edit {
+td span.dbf-list-edit, td a.dbf-list-view {
   height: 16px;
   width: 18px;
   position: absolute;
@@ -119,8 +119,13 @@ td span.dbf-list-edit {
   cursor: pointer;
   margin-top: -1px;
 }
+td a.dbf-list-view {
+  background-image: url(/i/orm_view.png);
+  margin-left: 18px;
+  outline: none;
+}
 
-td:hover span.dbf-list-edit {
+td:hover span.dbf-list-edit, td:hover a.dbf-list-view {
   display: inline;
 }
 
