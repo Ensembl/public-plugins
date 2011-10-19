@@ -33,7 +33,7 @@ Ensembl.DbFrontendList = {
       this.url  = data.url;
       this.name = data.name;
       this.row  = row;
-      this.el   = $('<div>').html(cell.innerHTML).appendTo($(cell).empty()).append($('<span class="dbf-list-edit">').click(function() {
+      this.el   = $('<div>').html(cell.innerHTML).appendTo($(cell).empty()).append($('<span class="dbf-list-edit" title="Edit ' + data.title + '">').click(function() {
         self.buttonClick(this);
       }));
     },
@@ -220,7 +220,7 @@ Ensembl.Panel.DbFrontendList = Ensembl.Panel.extend({
     $('table._dbf_list', this.el).each(function() {
       $('thead th', this).each(function() {
         var inps = $('input[type=hidden]', this);
-        self.data.push(inps.length ? {url: inps[0].value, name: inps[0].name} : false);
+        self.data.push(inps.length ? {url: inps[0].value, name: inps[0].name, title: $(this).text()} : false);
       });
       $('tbody tr', this).each(function () {
         self.initRow(this);
