@@ -33,6 +33,8 @@ sub content {
     foreach my $group_name ('Feature type', 'Species', 'Help') {
       my $group_total = delete $results_by_group->{$group_name}->{'total'};
       
+      return sprintf '<div><p class="space-below">Sorry, %s search is currently unavailable.</p></div>', ucfirst $sitetype if $group_total < 0;
+      
       next if $group_total < 1;
       
       my $class = $group_classes[$i];
