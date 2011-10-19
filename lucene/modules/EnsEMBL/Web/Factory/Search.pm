@@ -35,7 +35,7 @@ sub createObjects {
     my $object = $self->new_object('Search', $lucene, $data);
     $object->parse;
     if ( $object->__error || $object->__status eq 'failure' ) {
-      $self->problem( 'fatal', 'Search Engine Error', '' );
+      $self->problem( 'fatal', 'Search Engine Error', 'Search is currently unavailable' );
       warn '!!!  SEARCH FAILURE: ' . $object->__error;
     }
     $self->DataObjects($object);
