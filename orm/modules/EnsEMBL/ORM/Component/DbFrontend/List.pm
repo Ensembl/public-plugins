@@ -79,7 +79,8 @@ sub record_tree {
   my $columns = $object->show_columns;
   while (my $column_name = shift @$columns) {
 
-    my $label = shift @$columns;
+    my $column = shift @$columns;
+    my $label  = (ref $column ? $column->{'title'} : $column) || $column_name;
 
     if ($header_only) {
 
@@ -87,11 +88,10 @@ sub record_tree {
       my $css       = '';
       my $width;
 
-      if (ref $label) {
-        $editable = $label->{'editable'} if $editable && exists $label->{'editable'};
-        $width    = $label->{'width'};
-        $css      = $label->{'class'} || '';
-        $label    = $label->{'title'} || $column_name;
+      if (ref $column) {
+        $editable = $column->{'editable'} if $editable && exists $column->{'editable'};
+        $width    = $column->{'width'};
+        $css      = $column->{'class'} || '';
       }
 
       $record_row->append_child('th', {
@@ -102,9 +102,10 @@ sub record_tree {
     }
     else {
       my $is_title  = $record_meta->title_column && $record_meta->title_column eq $column_name;
+      my $relation  = ref $column ? $column->{'ensembl_object'} : '';
       my $value     = $record;
       $value        = $value->$_ for split /\./, $column_name;
-      $value        = $self->_display_column_value($value, $is_title);
+      $value        = $self->_display_column_value($value, $is_title, $relation, $label);
       $value        = sprintf('<a href="%s">%s</a>', $hub->url({'action' => 'Display', 'function' => $hub->function, 'id' => $primary_key}), $value) if $is_title;
       $record_row->append_child('td', {'inner_HTML' => $value, 'flags' => $column_name});
     }
@@ -115,14 +116,14 @@ sub record_tree {
 sub _display_column_value {
   ## Converts the field value into displayable form
   ## Value, as returned by the rose's method call, can be a string, rose object or an arrayref of rose objects ;)
-  my ($self, $value, $is_title) = @_;
-  
+  my ($self, $value, $is_title, $relation, $label) = @_;
+
   ## if nothing
   return '' unless defined $value;
 
   ## if it's a string
   return $value unless ref $value;
-  
+
   ## if it's an arrayref
   if (ref $value eq 'ARRAY') {
     my @return;
@@ -136,14 +137,15 @@ sub _display_column_value {
   ## if it's a rose object
   if (UNIVERSAL::isa($value, 'EnsEMBL::ORM::Rose::Object')) {
     my $title = $value->get_title;
-    
+
     ## if it's a user
     if ($value->isa('EnsEMBL::ORM::Rose::Object::User') && $self->object->show_user_email && !$is_title) {
       return sprintf('<a href="mailto:%s">%s</a>', $value->email, $title);
     }
+    return sprintf('%s<a class="dbf-list-view" title="View related %s" href="%s"></a>', $title, $label, $self->hub->url({'type' => $relation, 'action' => 'Display', 'id' => $value->get_primary_key_value})) if $relation;
     return $title;
   }
-  
+
   ## unknown value type
   return $value;
 }
