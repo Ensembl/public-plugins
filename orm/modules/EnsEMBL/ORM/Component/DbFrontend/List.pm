@@ -84,6 +84,7 @@ sub record_tree {
 
     if ($header_only) {
 
+      my $is_column = grep {$_ eq $column_name} $record_meta->column_names;
       my $editable  = $record_meta->is_trackable && $column_name =~ /^(created|modified)_(at|by|by_user)$/ ? 0 : 1;
       my $css       = '';
       my $width;
@@ -95,7 +96,7 @@ sub record_tree {
       }
 
       $record_row->append_child('th', {
-        'inner_HTML'  => $editable ? sprintf('<input class="%s" name="%s" value="%s" type="hidden" />%s', $self->_JS_CLASS_EDITABLE, $column_name, $hub->url({'action' => 'Edit', 'function' => $hub->function}), $label) : $label,
+        'inner_HTML'  => $editable ? sprintf('<input class="%s" name="%s" value="%s" type="hidden" />%s', ($is_column ? 'column' : 'relation'), $column_name, $hub->url({'action' => 'Edit', 'function' => $hub->function}), $label) : $label,
         'class'       => $object->list_is_datatable ? ['sorting', 'sort_html', ref $css eq 'ARRAY' ? @$css : split ' ', $css] : $css,
         $width ? ('style' => {'width' => $width}) : (),
       });
