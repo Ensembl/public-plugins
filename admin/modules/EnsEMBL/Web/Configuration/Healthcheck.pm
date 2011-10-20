@@ -4,6 +4,9 @@ use strict;
 use warnings;
 use base qw(EnsEMBL::Web::Configuration);
 
+sub caption       { 'Healthcheck'; }
+sub short_caption { 'Healthcheck'; }
+
 sub set_default_action {
   my $self = shift;
   $self->{'_data'}{'default'} = 'Summary';
