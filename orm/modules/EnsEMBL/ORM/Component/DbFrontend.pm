@@ -27,7 +27,6 @@ use constant {
   _JS_CLASS_SAVE_FORM         => '_dbf_save',
   _JS_CLASS_ADD_FORM          => '_dbf_add',
   _JS_CLASS_DATASTRUCTURE     => '_datastructure',
-  _JS_CLASS_EDITABLE          => '_dbf_editable',
   _JS_CLASS_LIST_TABLE        => '_dbf_list',
   _JS_CLASS_LIST_ROW_HANDLE   => '_dbf_row_handle',
   _JS_CLASS_DATATABLE         => 'data_table no_col_toggle',
