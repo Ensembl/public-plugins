@@ -84,7 +84,8 @@ sub record_tree {
 
     if ($header_only) {
 
-      my $is_column = grep {$_ eq $column_name} $record_meta->column_names;
+      my $real_col  = [split /\./, $column_name]->[0]; # in case column name contains a dot for representing datamap etc
+      my $is_column = grep {$_ eq $real_col} $record_meta->column_names;
       my $editable  = $record_meta->is_trackable && $column_name =~ /^(created|modified)_(at|by|by_user)$/ ? 0 : 1;
       my $css       = '';
       my $width;
