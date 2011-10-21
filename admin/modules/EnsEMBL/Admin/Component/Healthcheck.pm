@@ -143,8 +143,10 @@ sub group_report_counts {
   foreach my $report (@$reports) {
     my $count = $report->failed_count;
     for (keys %$counter) {
-      $counter->{$_}{$report->$_ || 'unknown'}{'all'} += $count;
-      $counter->{$_}{$report->$_ || 'unknown'}{'new'} += $count if $report->first_session_id == $report->last_session_id;
+      my $val = $report->$_;
+      $val    = ucfirst $val if $_ eq 'species'; # always keep first character of species name capital
+      $counter->{$_}{$val || 'unknown'}{'all'} += $count;
+      $counter->{$_}{$val || 'unknown'}{'new'} += $count if $report->first_session_id == $report->last_session_id;
     }
   }
   return $counter;
@@ -168,7 +170,7 @@ sub failure_summary_table {
   $table->add_columns(
     { 'key' => 'group',         'title' => $title, 'width' => qq(40%) },
     { 'key' => 'new_failed',    'title' => "Newly failed for last run (Session $params->{'session_id'} in v$params->{'release'})",  'align' => 'center' },
-    { 'key' => 'total_failed',  'title' => "All failed for last run (v$params->{'release'})",    'align' => 'center' },
+    { 'key' => 'total_failed',  'title' => "All failed for last run (Session $params->{'session_id'} in v$params->{'release'})",    'align' => 'center' },
   );
 
   # add 4th column if comparison is intended
@@ -182,29 +184,27 @@ sub failure_summary_table {
 
   for (sort keys %$groups) {
 
-    $title = $params->{'type'} eq 'species' ? ucfirst($_) : $_;
-
     my %fourth_cell = exists $params->{'compare_count'} ? (
       'comparison'  => $self->get_healthcheck_link({
         'type'        => $params->{'type'},
-        'param'       => $title,
+        'param'       => $_,
         'caption'     => $fails2->{$_}{'all'} || '0',
-        'title'       => $title,
+        'title'       => $_,
         'release'     => $params->{'release2'}
       })
     ) : ();
     $table->add_row({
       'group'       => $self->get_healthcheck_link({
         'type'        => $params->{'type'},
-        'param'       => $title,
+        'param'       => $_,
         'release'     => $params->{'release'}
       }),
       'new_failed'  => $fails->{$_}{'new'} || '0',
       'total_failed'  => $self->get_healthcheck_link({
         'type'        => $params->{'type'},
-        'param'       => $title,
+        'param'       => $_,
         'caption'     => $fails->{$_}{'all'} || '0',
-        'title'       => $title,
+        'title'       => $_,
         'release'     => $params->{'release'},
         'class'       => $fails->{$_}{'all'} ? 'hc-failsrow' : 'hc-nofailsrow',
       }),
