@@ -26,7 +26,7 @@ sub test_gene {
     if(lc($self->species) eq 'homo_sapiens') {
       print "  Test ZMenu on Gene Summary\n";
       $sel->ensembl_open_zmenu('TranscriptsImage','class^="drag"');
-      $sel->ensembl_click("link=Jump to location View")
+      $sel->ensembl_click("link=Jump to location View")      
       and $sel->ensembl_wait_for_ajax_ok('50000','2000')
       and $sel->go_back();
 
@@ -35,10 +35,11 @@ sub test_gene {
       #Adding a track from the configuration panel
       print "  Test Configure page, adding a track \n";
       $sel->ensembl_click("link=Configure this page")
-      and $sel->ensembl_wait_for_ajax_ok('10000','2000')
+      and $sel->ensembl_wait_for_ajax_ok('10000','3000')
       and $sel->ensembl_click("link=Somatic mutations")
-      and $sel->ensembl_wait_for_ajax_ok('10000','2000')
+      and $sel->ensembl_wait_for_ajax_ok('10000','3000')
       and $sel->click_ok("//form[\@id='gene_transcriptsimage_configuration']/div[4]/div/ul/li[2]/img") #selecting the second track
+      and $sel->ensembl_is_text_present("Somatic mutations(1/*")
       and $sel->ensembl_click("modal_bg")
       and $sel->ensembl_wait_for_ajax_ok('15000','2000')
       and $sel->ensembl_images_loaded;
@@ -73,13 +74,25 @@ sub test_gene {
     $sel->ensembl_click_links(["link=Orthologues ($counts->{'orthologs'})"],'20000') if($counts->{'orthologs'});
     $sel->ensembl_click_links(["link=Paralogues ($counts->{'paralogs'})"],'20000') if($counts->{'paralogs'});
     $sel->ensembl_click_links(["link=Protein families*"],'20000') if($counts->{'families'});
-
+    
     $sel->ensembl_click("link=JalView")
     and $sel->ensembl_wait_for_page_to_load
     and $sel->go_back() if(lc($self->species) eq 'homo_sapiens'); #testing for human only as this is opening too many java applet and making the server slow
 
     $sel->pause(1000);
     $sel->ensembl_click_links(["link=all proteins in family"],'20000') if($counts->{'families'});
+    
+    $sel->ensembl_click_links(["link=Phenotype"]);
+    
+    if(lc($self->species) eq 'homo_sapiens') {
+      $sel->ensembl_click("link=view all locations")
+      and $sel->ensembl_wait_for_page_to_load
+      and $sel->go_back();     
+    
+      $sel->ensembl_click("link=[View on Karyotype]")
+      and $sel->ensembl_wait_for_page_to_load
+      and $sel->go_back();
+    }
 
     $sel->ensembl_click_links(["link=Variation Table", "link=Variation Image", "link=Structural Variation"]) if($species_db->{'database:variation'} && $gene_text !~ /^ASMPATCH/);
 
@@ -87,7 +100,7 @@ sub test_gene {
     $sel->ensembl_click("link=External Data",'20000')
     and $sel->ensembl_wait_for_page_to_load
     and $sel->ensembl_click("link=Configure this page")
-    and $sel->ensembl_wait_for_ajax_ok(10000)
+    and $sel->ensembl_wait_for_ajax_ok(10000,2000)
     and $sel->ensembl_click("//div[\@class='ele-das']//input[\@type='checkbox'][1]") # tick first source
     and $sel->ensembl_click("modal_bg")
     and $sel->ensembl_wait_for_ajax_ok(10000,5000);
