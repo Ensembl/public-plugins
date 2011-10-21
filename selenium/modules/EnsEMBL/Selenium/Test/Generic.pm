@@ -20,7 +20,7 @@ sub test_homepage {
  $sel->ensembl_wait_for_page_to_load
  and $sel->ensembl_is_text_present("Ensembl release $this_release")
  and $sel->ensembl_is_text_present("What's New in Release $this_release")
- and $sel->ensembl_is_text_present('Did you know...?') 
+ and $sel->ensembl_is_text_present('Did you know...?')
  and $sel->ensembl_click_links(["link=View full list of all Ensembl species"]);
  
  $sel->go_back();
@@ -111,12 +111,14 @@ sub test_login {
  my $location = $self->get_location(); 
 
  $sel->open_ok("/");
- $sel->click_ok("link=Login");
- print "link Login FAILED" unless $sel->ensembl_wait_for_ajax_ok;
- $sel->type_ok("name=email", "ma7\@sanger.ac.uk");
- $sel->type_ok("name=password", "selenium");
- $sel->click_ok("name=submit"); 
- print "URL:: $location \n\n" unless $sel->ensembl_wait_for_page_to_load; 
+ 
+ $sel->click_ok("link=Login")
+ and $sel->ensembl_wait_for_ajax_ok
+ and $sel->type_ok("name=email", "ma7\@sanger.ac.uk")
+ and $sel->type_ok("name=password", "selenium")
+ and $sel->click_ok("name=submit")
+ and $sel->ensembl_wait_for_page_to_load; 
+ 
  $sel->ensembl_click_links(["link=Logout"]);
  #$sel->ensembl_wait_for_page_to_load_ok;
 }
