@@ -16,8 +16,8 @@ sub ensembl_wait_for_ajax {
   
   $pause   ||= 500;   
   #increase the pause and timeout if we are testing mirrors since the site is slower.
-  $pause += 3000 if($url =~ /uswest|useast/);  
-  $timeout += 20000 if($url =~ /uswest|useast/);
+  $pause += 3000 if($url =~ /uswest|useast|ec2/);  
+  $timeout += 20000 if($url =~ /uswest|useast|ec2/);
   $self->pause($pause); 
   
   #print "\nAJAX ERROR: $url !!! \n"  unless 
@@ -47,7 +47,7 @@ sub ensembl_open_zmenu {
   my ($self, $panel, $area_tag) = @_;
   my $tag = $area_tag ?  "area[$area_tag]" : 'area[href^=#vdrag]';  
 # $('area[class^="group"]','#RegulationImage').attr('coords').split(',')
-#Ensembl.PanelManager.panels.RegulationImage.makeZMenu({pageX:0, pageY:0}, {x:1763, y:148});
+# Ensembl.PanelManager.panels.RegulationImage.makeZMenu({pageX:0, pageY:0}, {x:1763, y:148});
   $self->run_script(qq/
     var coords = \$('$tag', '#$panel').attr('coords').split(',');
     Ensembl.PanelManager.panels.$panel.makeZMenu({pageX:0, pageY:0}, {x:coords[0], y:coords[1]});
