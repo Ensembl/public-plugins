@@ -121,12 +121,6 @@ sub fetch_for_database {
   }
 }
 
-sub fetch_for_userdirectory {
-  ## User directory
-  my $self = shift;
-  $self->rose_objects($self->rose_manager('Group')->fetch_with_members($self->hub->species_defs->ENSEMBL_WEBADMIN_ID, 1));
-}
-
 sub fetch_for_annotationsave {
   ## Saving annotations after editing/adding new
   my $self = shift;
@@ -173,7 +167,7 @@ sub get_default_list {
     return [ keys %{{ map {$_->$type => 1} @{$self->rose_manager('Report')->$method({'last_session_id' => $self->last_session_id, 'first_session_id' => $self->first_session_id}) || []} }} ];
   }
   elsif ($function eq 'Species') {
-    return $self->hub->species_defs->ENSEMBL_DATASETS || [];
+    return [ map {ucfirst $_} @{$self->hub->species_defs->ENSEMBL_DATASETS || []} ];
   }
   elsif ($function eq 'DBType') {
     return [qw(cdna core funcgen otherfeatures production rnaseq variation vega)];
