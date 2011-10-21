@@ -17,6 +17,8 @@ sub update_conf {
 
     Healthcheck     => 'Page',
 
+    UserDirectory   => 'Page',
+
     AnalysisDesc    => 'Modal',
     Biotype         => 'Modal',
     Changelog       => 'Modal',
