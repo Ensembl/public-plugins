@@ -21,7 +21,7 @@ sub content {
 
   my $db_list = $object->get_database_list;
   
-  my $text_class = ['hc-notdone', 'hc-done', 'hc-releaseonly', 'hc-done'];
+  my $text_class = ['hc-notdone', '', 'hc-releaseonly', 'hc-done'];
   my $html = qq(<div class="hc-infobox"><p><b>Colour coding:</b></p><ul>
                 <li class="hc-done">Databases being healthchecked.</li>
                 <li class="hc-notdone">Databases not being healthchecked.</li>
@@ -39,7 +39,7 @@ sub content {
 
       $html .= '<h4>'.ucfirst substr ($species, 1).'</h4><ul>';
       $html .= '<li class="'.$text_class->[$db_stats->{$_} || 0].'">'
-                  .($db_stats->{$_} > 0 ? $self->get_healthcheck_link({ 'type' => 'database_name', 'param' => $_, 'release' => $release }) : $_)
+                  .($db_stats->{$_} > 2 ? $self->get_healthcheck_link({ 'type' => 'database_name', 'param' => $_, 'release' => $release }) : $_)
                   .'</li>' for @$db_list;
       $html .= '</ul>';
     }
