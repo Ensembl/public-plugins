@@ -105,7 +105,8 @@ sub render_start {
   
   $page->add_body_attr('id',    'ensembl-webpage');
   $page->add_body_attr('class', 'mac')                               if $ENV{'HTTP_USER_AGENT'} =~ /Macintosh/;
-  $page->add_body_attr('class', "ie ie$2" . ($2 < 8 ? ' ie67' : '')) if $ENV{'HTTP_USER_AGENT'} =~ /MSIE( (\d))?/ && $2 < 9; # Assumes that IE 9 will have support for everything we need. LOL.
+  $page->add_body_attr('class', "ie ie$1" . ($1 < 8 ? ' ie67' : '')) if $ENV{'HTTP_USER_AGENT'} =~ /MSIE (\d+)/ && $1 <  9;
+  $page->add_body_attr('class', "ienew ie$1")                        if $ENV{'HTTP_USER_AGENT'} =~ /MSIE (\d+)/ && $1 >= 9;
   $page->add_body_attr('class', 'no_tabs');
   $page->add_body_attr('class', 'static');
 
