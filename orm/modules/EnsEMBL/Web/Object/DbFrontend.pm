@@ -315,7 +315,7 @@ sub _populate_from_cgi {
       else {
       # For multiple values
         $value = [ $hub->param($field_name) ];
-        $value = [ grep {$field_name} @$value ] if $type eq 'relation'; #prevent adding a new row to related table by filtering out null value
+        $value = [ grep {$_} @$value ] if $type eq 'relation'; #prevent adding a new row to related table by filtering out null value
       }
 
       # Finally save the value to the rose object
