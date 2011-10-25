@@ -27,81 +27,76 @@ use.
 </p>
 </blockquote>
 
-<p>Details of how to access the data can be found at <a href="http://aws.amazon.com/publicdatasets/">http://aws.amazon.com/publicdatasets/</a>. The snapshot IDs you will need are:</p>
-
-<ul>
-<li>MySQL dumps (release 62) - snap-70ceab1e </li>
-<li>FASTA dumps (release 62) - snap-b4cfaada </li>
-</ul>
-
-<h3> Release 63 snapshots have been submitted to the public dataset program, amazon will be updating these in due course.</h3>
+<h3> Release 64 snapshots have been submitted to the public dataset program, amazon will be updating these in due course.</h3>
+<p>Details of how to access the data can be found at <a href="http://aws.amazon.com/publicdatasets/">http://aws.amazon.com/publicdatasets/</a>
 
 <h2>Pre-configured Single Species MySQL AMIs</h2>
 
 <p>
-
 We also provide pre-configured Ensembl MySQL EC2 cloud images. These are pre-built images that allow you to run your own private single species MySQL instances on EC2,There are images for each of our species; just start one up and connect with the API (or mysql client) just as you would with ensembldb, or useastdbl. More details and instructions are provided in this <a href="http://www.ensembl.info/?p=1149">post</a> on our blog.
 
 </p>
 <h3>List of Ensembl MySQL AMIs by Species (AWS useast region)</h3>
 <pre>
 .--------------+---------------------------------------------------------+------------.
-| Ami id       | Name                                                    | Size(GB)   |
+| Ami id       | Name                                                    | Size       |
 +--------------+---------------------------------------------------------+------------+
-| ami-8ecb0fe7 | Ensembl63 ailuropoda_melanoleuca MySQL AMI              | 17         |
-| ami-8acb0fe3 | Ensembl63 anolis_carolinensis MySQL AMI                 | 17         |
-| ami-d2cb0fbb | Ensembl63 bos_taurus MySQL AMI                          | 21         |
-| ami-7ed41017 | Ensembl63 caenorhabditis_elegans MySQL AMI              | 14         |
-| ami-becb0fd7 | Ensembl63 callithrix_jacchus MySQL AMI                  | 18         |
-| ami-d6cb0fbf | Ensembl63 canis_familiaris MySQL AMI                    | 21         |
-| ami-88cb0fe1 | Ensembl63 cavia_porcellus MySQL AMI                     | 17         |
-| ami-7ad41013 | Ensembl63 choloepus_hoffmanni MySQL AMI                 | 14         |
-| ami-72d4101b | Ensembl63 ciona_intestinalis MySQL AMI                  | 12         |
-| ami-70d41019 | Ensembl63 ciona_savignyi MySQL AMI                      | 12         |
-| ami-a0cb0fc9 | Ensembl63 danio_rerio MySQL AMI                         | 20         |
-| ami-96cb0fff | Ensembl63 dasypus_novemcinctus MySQL AMI                | 15         |
-| ami-d4cb0fbd | Ensembl63 dipodomys_ordii MySQL AMI                     | 21         |
-| ami-aecb0fc7 | Ensembl63 drosophila_melanogaster MySQL AMI             | 20         |
-| ami-9ecb0ff7 | Ensembl63 echinops_telfairi MySQL AMI                   | 16         |
-| ami-dacb0fb3 | Ensembl63 ensembl_compara_63 MySQL AMI                  | 209        |
-| ami-b8cb0fd1 | Ensembl63 equus_caballus MySQL AMI                      | 18         |
-| ami-b2cb0fdb | Ensembl63 erinaceus_europaeus MySQL AMI                 | 18         |
-| ami-9acb0ff3 | Ensembl63 felis_catus MySQL AMI                         | 16         |
-| ami-80cb0fe9 | Ensembl63 gallus_gallus MySQL AMI                       | 17         |
-| ami-6ed41007 | Ensembl63 gasterosteus_aculeatus MySQL AMI              | 15         |
-| ami-a6cb0fcf | Ensembl63 gorilla_gorilla MySQL AMI                     | 19         |
-| ami-dccb0fb5 | Ensembl63 homo_sapiens MySQL AMI                        | 186        |
-| ami-b6cb0fdf | Ensembl63 loxodonta_africana MySQL AMI                  | 18         |
-| ami-8ccb0fe5 | Ensembl63 macaca_mulatta MySQL AMI                      | 17         |
-| ami-9ccb0ff5 | Ensembl63 macropus_eugenii MySQL AMI                    | 16         |
-| ami-7cd41015 | Ensembl63 meleagris_gallopavo MySQL AMI                 | 14         |
-| ami-68d41001 | Ensembl63 microcebus_murinus MySQL AMI                  | 15         |
-| ami-accb0fc5 | Ensembl63 monodelphis_domestica MySQL AMI               | 20         |
-| ami-decb0fb7 | Ensembl63 mus_musculus MySQL AMI                        | 60         |
-| ami-86cb0fef | Ensembl63 myotis_lucifugus MySQL AMI                    | 16         |
-| ami-b0cb0fd9 | Ensembl63 nomascus_leucogenys MySQL AMI                 | 18         |
-| ami-a2cb0fcb | Ensembl63 ochotona_princeps MySQL AMI                   | 19         |
-| ami-bccb0fd5 | Ensembl63 ornithorhynchus_anatinus MySQL AMI            | 18         |
-| ami-bacb0fd3 | Ensembl63 oryctolagus_cuniculus MySQL AMI               | 18         |
-| ami-64d4100d | Ensembl63 oryzias_latipes MySQL AMI                     | 14         |
-| ami-6ad41003 | Ensembl63 otolemur_garnettii MySQL AMI                  | 15         |
-| ami-a8cb0fc1 | Ensembl63 pan_troglodytes MySQL AMI                     | 20         |
-| ami-a4cb0fcd | Ensembl63 pongo_abelii MySQL AMI                        | 19         |
-| ami-92cb0ffb | Ensembl63 procavia_capensis MySQL AMI                   | 16         |
-| ami-90cb0ff9 | Ensembl63 pteropus_vampyrus MySQL AMI                   | 16         |
-| ami-d0cb0fb9 | Ensembl63 rattus_norvegicus MySQL AMI                   | 24         |
-| ami-74d4101d | Ensembl63 saccharomyces_cerevisiae MySQL AMI            | 10         |
-| ami-6cd41005 | Ensembl63 sorex_araneus MySQL AMI                       | 15         |
-| ami-60d41009 | Ensembl63 spermophilus_tridecemlineatus MySQL AMI       | 15         |
-| ami-b4cb0fdd | Ensembl63 sus_scrofa MySQL AMI                          | 18         |
-| ami-82cb0feb | Ensembl63 taeniopygia_guttata MySQL AMI                 | 17         |
-| ami-62d4100b | Ensembl63 takifugu_rubripes MySQL AMI                   | 14         |
-| ami-94cb0ffd | Ensembl63 tarsius_syrichta MySQL AMI                    | 16         |
-| ami-66d4100f | Ensembl63 tetraodon_nigroviridis MySQL AMI              | 14         |
-| ami-84cb0fed | Ensembl63 tupaia_belangeri MySQL AMI                    | 17         |
-| ami-98cb0ff1 | Ensembl63 tursiops_truncatus MySQL AMI                  | 16         |
-| ami-78d41011 | Ensembl63 vicugna_pacos MySQL AMI                       | 14         |
-| ami-aacb0fc3 | Ensembl63 xenopus_tropicalis MySQL AMI                  | 20         |
+| ami-69488a00 | Ensembl64 ailuropoda_melanoleuca MySQL AMI              | 17         |
+| ami-854b89ec | Ensembl64 anolis_carolinensis MySQL AMI                 | 17         |
+| ami-af4b89c6 | Ensembl64 bos_taurus MySQL AMI                          | 25         |
+| ami-5d488a34 | Ensembl64 caenorhabditis_elegans MySQL AMI              | 14         |
+| ami-8d4b89e4 | Ensembl64 callithrix_jacchus MySQL AMI                  | 18         |
+| ami-a74b89ce | Ensembl64 canis_familiaris MySQL AMI                    | 20         |
+| ami-974b89fe | Ensembl64 cavia_porcellus MySQL AMI                     | 17         |
+| ami-59488a30 | Ensembl64 choloepus_hoffmanni MySQL AMI                 | 14         |
+| ami-53488a3a | Ensembl64 ciona_intestinalis MySQL AMI                  | 12         |
+| ami-51488a38 | Ensembl64 ciona_savignyi MySQL AMI                      | 12         |
+| ami-bf4b89d6 | Ensembl64 danio_rerio MySQL AMI                         | 20         |
+| ami-63498b0a | Ensembl64 dasypus_novemcinctus MySQL AMI                | 15         |
+| ami-bb4b89d2 | Ensembl64 dipodomys_ordii MySQL AMI                     | 20         |
+| ami-a54b89cc | Ensembl64 drosophila_melanogaster MySQL AMI             | 20         |
+| ami-7b488a12 | Ensembl64 echinops_telfairi MySQL AMI                   | 15         |
+| ami-a94b89c0 | Ensembl64 ensembl_compara_64 MySQL AMI                  | 217        |
+| ami-8b4b89e2 | Ensembl64 equus_caballus MySQL AMI                      | 18         |
+| ami-834b89ea | Ensembl64 erinaceus_europaeus MySQL AMI                 | 17         |
+| ami-67488a0e | Ensembl64 felis_catus MySQL AMI                         | 16         |
+| ami-6f488a06 | Ensembl64 gallus_gallus MySQL AMI                       | 16         |
+| ami-4d488a24 | Ensembl64 gasterosteus_aculeatus MySQL AMI              | 14         |
+| ami-894b89e0 | Ensembl64 gorilla_gorilla MySQL AMI                     | 18         |
+| ami-ab4b89c2 | Ensembl64 homo_sapiens MySQL AMI                        | 143        |
+| ami-61498b08 | Ensembl64 loxodonta_africana MySQL AMI                  | 17         |
+| ami-6b488a02 | Ensembl64 macaca_mulatta MySQL AMI                      | 17         |
+| ami-79488a10 | Ensembl64 macropus_eugenii MySQL AMI                    | 16         |
+| ami-5b488a32 | Ensembl64 meleagris_gallopavo MySQL AMI                 | 14         |
+| ami-77488a1e | Ensembl64 microcebus_murinus MySQL AMI                  | 15         |
+| ami-bd4b89d4 | Ensembl64 monodelphis_domestica MySQL AMI               | 20         |
+| ami-ad4b89c4 | Ensembl64 mus_musculus MySQL AMI                        | 58         |
+| ami-6d488a04 | Ensembl64 myotis_lucifugus MySQL AMI                    | 16         |
+| ami-8f4b89e6 | Ensembl64 nomascus_leucogenys MySQL AMI                 | 18         |
+| ami-b34b89da | Ensembl64 ochotona_princeps MySQL AMI                   | 19         |
+| ami-814b89e8 | Ensembl64 ornithorhynchus_anatinus MySQL AMI            | 17         |
+| ami-b74b89de | Ensembl64 oryctolagus_cuniculus MySQL AMI               | 18         |
+| ami-45488a2c | Ensembl64 oryzias_latipes MySQL AMI                     | 14         |
+| ami-73488a1a | Ensembl64 otolemur_garnettii MySQL AMI                  | 15         |
+| ami-b94b89d0 | Ensembl64 pan_troglodytes MySQL AMI                     | 20         |
+| ami-5f488a36 | Ensembl64 petromyzon_marinus MySQL AMI                  | 13         |
+| ami-b54b89dc | Ensembl64 pongo_abelii MySQL AMI                        | 18         |
+| ami-71488a18 | Ensembl64 procavia_capensis MySQL AMI                   | 15         |
+| ami-7d488a14 | Ensembl64 pteropus_vampyrus MySQL AMI                   | 15         |
+| ami-a14b89c8 | Ensembl64 rattus_norvegicus MySQL AMI                   | 23         |
+| ami-55488a3c | Ensembl64 saccharomyces_cerevisiae MySQL AMI            | 10         |
+| ami-b14b89d8 | Ensembl64 sarcophilus_harrisii MySQL AMI                | 19         |
+| ami-49488a20 | Ensembl64 sorex_araneus MySQL AMI                       | 15         |
+| ami-4b488a22 | Ensembl64 spermophilus_tridecemlineatus MySQL AMI       | 15         |
+| ami-954b89fc | Ensembl64 sus_scrofa MySQL AMI                          | 17         |
+| ami-63488a0a | Ensembl64 taeniopygia_guttata MySQL AMI                 | 16         |
+| ami-41488a28 | Ensembl64 takifugu_rubripes MySQL AMI                   | 14         |
+| ami-7f488a16 | Ensembl64 tarsius_syrichta MySQL AMI                    | 15         |
+| ami-47488a2e | Ensembl64 tetraodon_nigroviridis MySQL AMI              | 14         |
+| ami-61488a08 | Ensembl64 tupaia_belangeri MySQL AMI                    | 16         |
+| ami-65488a0c | Ensembl64 tursiops_truncatus MySQL AMI                  | 16         |
+| ami-43488a2a | Ensembl64 vicugna_pacos MySQL AMI                       | 14         |
+| ami-a34b89ca | Ensembl64 xenopus_tropicalis MySQL AMI                  | 20         |
 '--------------+---------------------------------------------------------+------------'
 
 </pre>
