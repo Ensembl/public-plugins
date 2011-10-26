@@ -28,11 +28,12 @@ sub no_healthcheck_found {
   my $param   = $object->view_param;
   my $title   = $object->view_title;
   my $release = $object->requested_release;
+  my $session = $object->last_session_id;
 
   if ($flag) {
     return sprintf q(<p class="hc_p">No 'PROBLEM' reports found%s.</p>), $type && $param ? sprintf(" for %s '%s'", $title, $param) : '';
   }
-  if (!$release) {
+  if (!$release || !$session) {
     return q(<p class="hc_p">Healthchecks have not been performed for this release.</p>);
   }
   if ($type && $param) {
