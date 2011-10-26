@@ -30,7 +30,8 @@ sub new {
   $self->{'_cmp_release'}   = $self->hub->param('release2') || 0;
   $self->{'_cmp_release'}   = 0 if $self->{'_cmp_release'} < $self->{'_first_release'} || $self->{'_cmp_release'} > $self->{'_curr_release'};
 
-  return $self unless $self->{'_req_release'};
+  return $self unless $self->{'_req_release'};    # for any invalid release
+  return unless $self->last_session_id;           # if release is valid, but no healthcheck has been performed for the release
   
   my $method = lc 'fetch_for_'.($self->action || $self->default_action);
   
