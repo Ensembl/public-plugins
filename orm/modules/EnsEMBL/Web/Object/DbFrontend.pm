@@ -279,8 +279,8 @@ sub _populate_from_cgi {
   my @params      = $hub->param;
   my $rose_object = $self->rose_object;
   my $fields      = $self->get_fields;
-  my $columns     = { map {$_->name => $_} @{$self->manager_class->get_columns($rose_object)} };
-  my $relations   = { map {$_->name => $_} @{$self->manager_class->get_relationships($rose_object)} };
+  my $columns     = { map {$_->name => $_} $rose_object->meta->columns };
+  my $relations   = { map {$_->name => $_} $rose_object->meta->relationships };
   my $ext_rel     = {}; ## TODO - external relationships?
   my %field_names = map {$_ => 1} keys %{{@$fields}};
   my %param_names = map {$_ => 1} @params;
@@ -288,45 +288,54 @@ sub _populate_from_cgi {
   delete $field_names{$_} for ('id', $rose_object->primary_key);
 
   foreach my $field_name (keys %field_names) {
-    next unless exists $param_names{$field_name}; #ignore if variable not present among the post params
-    next if $rose_object->meta->is_trackable && $field_name =~ /^(created|modified)_(by_user|at|by)$/; # dont get them from CGI
+    next unless exists $param_names{$field_name};                                                             # ignore if $field_name not present among the post params
+    next if $rose_object->meta->is_trackable && $field_name =~ /^(created|modified)_(by_user|at|by)$/;        # dont get them from CGI
 
-    my $value;
-    my $type;
-    my $col = shift @{[ split /\./, $field_name ]}; # for datamap only
+    my $value = [ $hub->param($field_name) ]; #CGI value
 
-    if (exists $columns->{$col} && ($type = 'column') || exists $relations->{$field_name} && ($type = 'relation')) {
+    ## Patch for datamap columns
+    ($field_name, my @datamap_keys) = split /\./, $field_name;
 
-      # For single value
-      if ($type eq 'relation' && $relations->{$field_name}->is_singular || $type eq 'column' && $columns->{$col}->type ne 'set') {
+    my $relation  = $relations->{$field_name};
+    my $column    = $columns->{$field_name};
 
-        $value = $hub->param($field_name);
-        $value = undef if $value eq '' && $type eq 'column' && !$columns->{$col}->not_null; # if column value can be NULL, set NULL value instead of an empty string
+    next unless $column || $relation; # ignore if $field_name is neither a column nor relationship
 
-        if ($type eq 'relation') {
-          my ($mapped_column) = $relations->{$field_name}->column_map;
-          $rose_object->$mapped_column($value);
-          unless ($value) {
-            $rose_object->forget_related($field_name);  # get rid of old related object
-            next;                                       # skip to prevent adding a new row to related table
-          }
-        }
+    my $mutator_method = $column ? $column->mutator_method_name : $relation->method_name('get_set_on_save'); # get method name to set values
+
+    # For single value
+    if ($relation && $relation->is_singular || $column && $column->type ne 'set') {
+
+      $value    = shift @$value;
+      $value    = undef if $column && $value eq '' && !$column->not_null;   # if column value can be NULL, set NULL value instead of an empty string
+      $value  ||= undef if $relation;                                       # no blank strings or zeros - zero will end up addind a new row to the related table
+
+      # Fix for saving singular relationships - Rose does not save them properly
+      if ($relation) {
+        my ($foreign_key)   = $relation->column_map;
+        my $accessor_method = $columns->{$foreign_key}->accessor_method_name;
+        my $old_value       = $rose_object->$accessor_method;
+        next if !$old_value && !$value || $old_value && $value && $old_value eq $value; # value not changed, so move to next field - this prevents an extra SQL query
+        $mutator_method     = $columns->{$foreign_key}->mutator_method_name;
+        $rose_object->forget_related($field_name);
       }
-      else {
-      # For multiple values
-        $value = [ $hub->param($field_name) ];
-        $value = [ grep {$_} @$value ] if $type eq 'relation'; #prevent adding a new row to related table by filtering out null value
-      }
-
-      # Finally save the value to the rose object
-      my $object_to_modify = $rose_object;
-      if ($col ne $field_name) {
-        my $methods       = [ split /\./, $field_name ];
-        $field_name       = pop @$methods;
-        $object_to_modify = $object_to_modify->$_ for @$methods;
-      }
-      $object_to_modify->$field_name($value);
     }
+    else {
+      # For multiple values
+      $value = [ grep {$_} @$value ] if $relation; # prevent adding a new row to related table by filtering out null value
+    }
+
+    # Some extra patch for datamap columns
+    if (@datamap_keys) {
+      my $object_to_modify  = $rose_object->$mutator_method;
+      $mutator_method       = pop @datamap_keys;
+      $object_to_modify     = $object_to_modify->$_ for @datamap_keys;
+      $object_to_modify->$mutator_method($value);
+      next;      
+    }
+
+    # Finally save the value to the rose object
+    $rose_object->$mutator_method($value);
   }
 }
 
