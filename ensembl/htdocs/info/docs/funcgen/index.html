@@ -2,908 +2,181 @@
 
 <head>
 <meta name="order" content="2" />
-  <meta name="navigation" content="Regulatory Build">
-  <title>Regulatory Build</title>
+  <meta name="navigation" content="Regulation">
+  <title>Regulation</title>
 </head>
 
 
 <BODY LANG="en-GB" DIR="LTR">
-<H1>Regulatory Build</H1>
+<H1>Regulation</H1>
+
+<a href="/info/docs/funcgen/regulatory_build.html">Regulatory Build</a> |
+<a href="/info/docs/funcgen/regulation_sources.html">Regulation Sources</a> |
+<a href="/info/docs/funcgen/microarray_probe_set_mapping.html">Microarray Probeset Mapping</a> |
+<a href="/info/docs/api/funcgen/index.html">Perl API</a> |
+<a href="/info/docs/api/funcgen/funcgen_schema.html">Database Description</a>
+
+<br /><br />
+
+<h2 id="classes">Regulatory features</h2>
+
+<p>
+Ensembl stores regulatory regions for human and mouse, inferred from experimental data through the 
+<a href="/info/docs/funcgen/regulatory_build.html">Regulatory Build</a> process. It also provides the
+experimental evidence supporting the regulatory features, which is derived from publicly
+available <a href="/info/docs/funcgen/regulation_sources.html">data sources</a>.
+</p>
+
+<br />
+
+<h3 id="classes">Cell-specific regulatory feature classification</h3>
+
+<p>
+We provide cell-specific classifications for the regulatory features 
+(see more details of this process <a href="regulatory_build.html#regannot">here</a>). 
+</p>
+
+<table id="regulation_classifications" class="ss" style="width:50%;">
+
+<tr>
+	<th>Regulatory feature classification</th>
+	<th>Meaning</th>
+</tr>
+<tr>
+	<td>promoter-associated</td>
+	<td>The regulatory feature is likely to correspond to a proximal regulatory element such as a promoter.</td>
+</tr>
+<tr class="bg2">
+	<td>non-gene-associated</td>
+	<td>The regulatory feature is likely to correspond to a distal regulatory element such as an insulator or distal enhancer.</td>
+</tr>
+<tr>
+	<td>gene-associated</td>
+	<td>These regulatory features are associated to gene bodies. They often seem to represent marks of a gene's transcriptional activity (expressed/repressed gene)</td>
+</tr>
+<tr class="bg2">
+	<td>Polymerase III-associated</td>
+	<td>The regulatory feature is likely to correspond to a proximal regulatory element specifically associated to Polymerase III transcription.</td>
+</tr>
+</table>
+
+<br/>
+
+<h3 id="classes">Transcription Factor binding sites</h3>
+
+We annotate regulatory features with putative Transcription Factor binding sites (TFBS). 
+These are visualized in the website as black boxes within regulatory features.
+Clicking on the black box will provide extra details on the TFBS, as the position weight matrix (PWM) and the matching score (relatively to the optimal site). 
+More information on the TFBS annotation process can be seen <a href="regulatory_build.html#tfbs">here</a>.
+Information regarding the PWMs used and their correspondence to transcription factors can be seen in the data source <a href="regulation_sources.html#tfgenehuman">documentation</a>.
+<br />
+
+<h2 id="classes">Other Regulatory data</h2>
+
+<p>
+Ensembl Regulation databases also store data directly imported from external sources (identified as <i>'Other regulatory regions'</i>):
+<ul>
+<li>Micro RNA target predictions for human and mouse (a stringent subset of MiRanda described <a rel="external" href='http://www.ebi.ac.uk/enright-srv/microcosm/htdocs/targets/v5/consset.html'>here</a>).</li>
+<li>Experimentally validated human non-coding fragments from the <a rel="external" href='http://enhancer.lbl.gov/'>VISTA Enhancer Browser</a>.</li>
+<li>Genome-wide regulatory module and element prediction from <a rel="external" href='http://www.cisred.org'>cisRED</a> for human and mouse.</li>
+</ul>
+</p>
+
+
+<p>
+Ensembl also provides access, via <a href='/info/data/ensembl_das.html'>DAS</a> tracks, to information regarding Human DNA Methylation. 
+This includes MeDIP-Chip methylation datasets for 17 cell lines and tissues from <a rel="external" href='http://www.ncbi.nlm.nih.gov/pubmed?term=18577705'>Rakyan et al (2008)</a>, and 
+RRBS (Reduced Representation Bisulfite Sequencing) data for 44 cell lines from <a rel="external" href='http://www.genome.gov/10005107'>ENCODE</a>. 
+Replicates were merged by averaging the percentage of methylation in each replicate, but only taking positions with at least 20 reads in the combined set.
+The methylation state is indicated by a color gradient which goes from dark blue, indicating highly methylated areas, through green and then towards yellow which indicates low methylation.
+</p>
+<br />
+
+<h2 id="microarray">Microarray Probe Mappings</h2>
+
+<p>
+Ensembl stores <a href="/info/docs/funcgen/microarray_probe_set_mapping.html">microarray probe mappings</a> for several species [link to list of species and available arrays].
+</p>
+
+<br />
+<h2 id="displays">Regulation displays</h2>
+<p>
+Regulation data can be viewed in the browser through pages such as:
+</p>
 
 <ul>
-<li><a href="#introduction">Introduction</a></li>
-<li><a href="#regfeats">Regulatory Feature Construction</a></li>
-<li> <a href="#regannot">Regulatory Feature Annotation</a></li>
-<li> <a href="#tfbs">Transcription Factor Binding Site Annotation</a></li>
-<li> <a href="#source">Source data</a></li>
-<li> <a href="#tfgenehuman">Correspondence of Transcription Factors to ENSEMBL Genes and Jaspar Matrices (Human)</a></li>
-<li> <a href="#tfgenemouse">Correspondence of Transcription Factors to ENSEMBL Genes and Jaspar Matrices (Mouse)</a></li>
-<li> <a href="#humanregbuild">Human Regulatory Build detailed data</a></li>
-<li> <a href="#mouseregbuild">Mouse Regulatory Build detailed data</a></li>
-<li> <a href="#datarefs">References for datasets</a></li>
+<li>
+<strong>Gene:</strong> Regulatory Regions surrounding a gene (e.g. <a href="/Homo_sapiens/Gene/Regulation?db=core;g=ENSG00000159197">for all regulatory features around KCNE2</a>).
+Note that even if a regulatory region is near or within a gene, this does not mean that it is acting on that gene.
+</li>
 
+<li><strong>Location:</strong> Region in Detail (by default 'MultiCell' regulatory features are displayed.
+Cell-specific annotations and evidence tracks can also be drawn using &quot;Configure this page&quot; at the left. 
+The menu allows display of information in Ensembl databases along with external sources in DAS format such as 
+Methylation data.)</li>
 </ul>
 
-<H2 id="introduction">Introduction</H2>
+<p>
+Clicking on any regulatory feature on an Ensembl page will open a Regulation tab with information about the 
+evidence supporting the selected regulatory feature, as well as cell-specific annotations.
+You can choose different views in the Regulation tab:
 
-<P>The regulatory build provides a single 'best guess' set
-of regulatory features. These features are based on the information
-contained within the Ensembl <A HREF="/info/docs/api/index.html">funcgen</A> 
-database. Output and supporting data from the Regulatory Build
- are available in 'Region In Detail' and the various regulation displays. 
-Configuration is available under the 'Regulation' menu item:
 <ul>
-<li><b>Regulatory Features</b> - These are the output of the Regulatory Build.
-
-<li><b>Regulatory Evidence</b> - These are the input to the Regulatory Build e.g. 
-Histone modifications, DNase1 sites, transcription factor binding sites (TFBSs) etc.<br>
-There are two visualisations available:<br>
-<ul><li><b>Signal</b> - Shows a plot or wiggle representing the raw signal.
-<li><b>Peaks</b> - Shows significantly enriched 'peak' regions</ul>
+<li>
+The <i>'Details by cell line'</i> view is the default view, where you get the generic 'MultiCell' regulatory feature 
+and cell-specific classifications, as well as part of their supporting evidence displayed as tracks. To display more evidence tracks, 
+you can go to the <i>'Configure this page'</i> link and select tracks within the <i>'Regulation'</i> subsection.
+'DNA Methylation' and external sources ('Other regulatory regions') are not used as evidence for regulatory regions.
+</li>
+<li>
+The <i>'Summary'</i> view will display the 'MultiCell' regulatory feature, along with it's core evidence and cell-specific annotations.
+By default, this view does not display cell-specific evidence.
+</li>
+<li>
+The <i>'Feature Context'</i> view displays the regulatory features in a wider context around the chosen regulatory feature. 
+</li>
+<li>
+The complete list of supporting core evidence (TF binding and open chromatin) for a regulatory feature can be obtained 
+via the <i>'Evidence'</i> view. 
+</li>
 </ul>
-The rest of this document details the methodology and data used in this process.
-
-</P>
-<H2 id="regfeats" CLASS="western">Regulatory Feature Construction</H2>
-<P>The 'Regulatory Build' is performed by overlap analysis of
-annotations from data sets in a two stage cell type aware manner. 
-</P>
-<P>In stage one, core regions are identified across all available
-cell types using 'focus' features, which are chosen to define a set
-of potential binding sites. These tend to be broad coverage, narrowly
-focused marks which are likely candidates for different types of
-regulatory elements or motifs. Focus feature types include DNase1
-which is known to mark accessible chromatin, TFBSs and CTCF, which characterises
-'insulator/enhancer' elements. As such the core regions of regulatory
-features are likely to be positioned on or around any potential
-regulatory motif. Core regions are extended only in the case of
-direct overlap with another focus feature. To maintain resolution and
-to avoid chaining of regulatory features across regions of dense
-regulatory elements a 2KB cut-off is imposed. Exceeding this cut-off
-causes the offending focus feature to be treated as an attribute
-feature (see below) and so does not extend the core region. 
-</P>
-<P><!-- as it is assumed that these will exist, either active or silenced, across all cell types 
-irrepective of the presence of supporting focus data for a given cell type. -->Stage
-two extends the structure in a cell type specific manner, using
-'attribute' features. Attribute features do not define a binding site
-and are some times longer ranging feature types which are useful for
-classification, such as histone modifications. If core data exists
-for a given cell type, a Regulatory Feature is seeded using the core
-region defined in stage one. The arms or bounds are defined by
-overlap of attribute features with respect to the core region.
-Directly overlapping attribute features are said to have one degree
-of separation. Attributes with two degrees of separation are only
-included if they are entirely contained within another longer
-associated attribute feature. This is done to capture information
-adjacent and indirectly associated with the core region, whilst
-avoiding longer range and potentially anomalous associations. 
-</P>
-<!-- Attributes with two degrees of separation are only
-included if they are within 2KB of the core region and they are
-entirely contained within another longer associated attribute
-feature. -->
-<P>For some cell lines where the is no core data available, but there is
-substantial other attribute data present, a projection build method is employed. This 
-involves projecting the core region defined by the other cell lines to the 'sparse' cell line.
-The attribute extension detailed above is then carried out using the projected core region.
-</P>
-<P>These two stages give rise to regulatory FeatureSets for the core
-'MultiCell' features and for each available cell type. 
-</P>
-<H2 id='regannot' CLASS="western">Regulatory Feature Annotation</H2>
-<P>Regulatory Features (regfeats) are classified by considering their
-position on the genome in relation to other classes of feature on the
-genome (eg genes, repeats, intergenic regions) together with the
-combination of regulatory attributes they possess as coded in their
-binary_string. In the binary string each position corresponds to a
-particular focus or attribute feature and a value of 1 indicates that
-the regulatory feature overlaps this particular type of focus or
-attribute feature. A set of randomly distributed features (mockfeats)
-corresponding to the regfeats in terms of length and chromosome are
-also generated so that we can judge if the placement of regfeats in
-relation to the genomic features is non-random.</P>
-<P>The first step in the procedure is to determine which genomic
-features (genfeats) each regfeat overlaps. A single common basepair
-is sufficient to consider two features overlapping. We do the same
-with the mockfeats. (Strictly speaking this is not the first step, as
-we know from experience that certain regulatory features are most
-probably artefacts and that others contain no useable information so
-these are filtered out before the procedure begins and the mockfeats
-correspond to only the filtered set of regfeats).</P>
-<P>Next we create a set of patterns of attributes we wish to
-evaluate. Currently this is all the patterns which occur in the
-display labels more than once, plus all the patterns which can be
-created by re-setting one bit of the existing patterns from 1 to 0.</P>
-<P>For each pattern, we look at all the regulatory features which
-have the same or more bits set. If there are more than 100 such
-regfeats we count the number of times these features overlap each
-class of genfeat. We do the same count with the set of mockfeats
-which correspond to the regfeats. If &gt;50% of the regfeats overlap
-a particular class of genfeat and the chi-squared statistic
-calculated using the mockfeat count as the 'expected' value is &gt;8.0
-(P0.005) we record that this pattern is associated with this class of
-genfeat.</P>
-<P>If the pattern IS associated with a genfeat we collect a second
-set of patterns which have this pattern's PLUS any other bits set.
-For each of these patterns we look at all the regulatory features
-which have the same or more bits set and we count the number of times
-these features overlap each class of genfeat. If less than 50% of the
-regfeats overlap we record that this second pattern is not associated
-with the class of genfeat involved.</P>
-<P>Having determined all the associated and non-associated patterns
-for each class of genfeat, we look at all the regfeats and use the
-'associated' and then 'not-associated' patterns to set or unset a
-flag indicating whether the particular regfeat is associated with a
-particular class of genfeat. During this process it is possible for a
-given regfeat to be associated with more than one class of genfeat
-and some of these can be contradictory. This is particularly the case
-where all or nearly all the bits are set.</P>
-<P>Finally, for the purposes of the regulatory build, there is a set
-of rules which 1. resolve conflicts amongst the above flags and 2.
-assign a regulatory feature_type to the regfeat. The following types
-are currently in use :-</P>
-<UL>
-	<LI><P STYLE="margin-bottom: 0cm">non-gene-associated = patterns
-	under-represented in gene regions 
-	</P>
-	<LI><P STYLE="margin-bottom: 0cm">gene-associated = patterns
-	over-represented in gene regions 
-	</P>
-	<LI><P>promoter-associated = patterns over-represented in the region
-	of the transcription start site plus or minus 2500 bp upstream of
-	protein coding genes, but not in the downstream 'gene-body'. 
-	</P>
-	<LI><P>polIII-associated = patterns over-represented in regions
-	2500 bp upstream of polIII transcribed regions like tRNAs. 
-	</P>
-</UL>
-<P>At present only cell-type specific regulatory features are
-classified as different cell types may give conflicting signals
-reflecting their unique combination of regulatory and transcriptional
-states.</P>
-<P>These data sets can be displayed along the chromosome in <A HREF="http://www.ensembl.org/Homo_sapiens/Location/View?r=6:133017695-133161157">'Region
-in Detail'</A>, displayed for a gene in the <A HREF="http://www.ensembl.org/Homo_sapiens/Regulation/Cell_line?fdb=funcgen;r=17:46618390-46620319;rf=ENSR00001348194">'Regulation View'</A>
-view or mined from the <A HREF="/info/docs/api/index.html">functional
-genomics</A> database. 
-</P>
-<H2 id='tfbs' CLASS="western">Transcription Factor Binding Site Annotation</H2>
-<P>For each transcription factor (TF) which has both a ChIP-seq data
-set in the functional genomics database and a publicly available
-position weight matrix (PWM) we have annotated the position of
-putative TF binding sites within the peaks called using the ChIP-seq
-reads. 
-</P>
-<P>Initially PWMs are mapped to the genome using the find_pssm_dna
-program from the MOODS software (1) with the -f flag set and a
-permissive threshold of 0.001. We then filter these mappings using a
-log odds score threshold. The threshold is derived per PWM by
-considering the occurrence of mappings  in a sample of randomly
-positioned 'background' sequences matched in terms of size and
-chromosome to the ChIP-seq peaks for this TF. We select the threshold
-such that the proportion of these background peaks containing a
-mapping is approximately 5%.</P>
-<P>Only mappings which overlap the corresponding ChIP-seq peaks are
-included in the functional genomics database.</P>
-<P>PWMs are taken from JASPAR (2).</P>
-<P>1. Janne Korhonen, Petri Martinmaki, Cinzia Pizzi, Pasi Rastas,
-Esko Ukkonen. MOODS: fast search for position weight matrix matches
-in DNA sequences. Bioinformatics, Vol. 25, No. 23. (1 December 2009),
-pp. 3181-3182.</P>
-<P>2. Bryne JC, Valen E, Tang MH, Marstrand T, Winther O, da Piedade
-I, Krogh A, Lenhard B, Sandelin A. JASPAR, the open access database
-of transcription factor-binding profiles: new content and tools in
-the 2008 update. Nucleic Acids Res. 2008 Jan;36(Database
-issue):D102-6. 
-</P>
-
-<H2 id='source' CLASS="western">Source data</H2>
-<P> Regulatory features are generated by using a variety of genome
-wide epigenomic data sets. 
-
-The vast majority of features are derived from ChIP-seq data. In order
-to offer a uniform set of features, we processed the raw reads from 
-each of the sets. Reads from pooled replicates were aligned to the 
-current genome assembly using the bwa algorithm (Li H and Durbin R, 
-2010) with default parameters. All matches to mitochondria were 
-filtered out, and the resulting alignments were passed to the SWEMBL 
-peak caller software (S. Wilder et al, in preparation). Peaks for 
-most datasets were obtained using a strict set of parameters (-f 150 
--R 0.015) obtained using CTCF as a reference dataset. These parameters 
-are too strict for datasets that have a broad distribution of reads. Thus, 
-we applied a more relaxed set of parameters (-f 150 -R 0.0025) for the 
-DNAse1 datasets. For H3K36me3 sets, which are of a broad nature, we applied 
-a specialized peak caller, <a href="http://cmb.gis.a-star.edu.sg/ChIPSeq/paperCCAT.htm">CCAT</a> 
-<a href="http://www.ncbi.nlm.nih.gov/pubmed?term=20371496">(Xu et al, 2010)</a> with parameters set for
-histone calling, and a window of 1000bp.
-
-The resulting peaks were then filtered out to avoid problematic areas
-identified in the ENCODE project. A description of these regions can
-be found <a href="http://hgwdev.cse.ucsc.edu/cgi-bin/hgFileUi?db=hg19&g=wgEncodeMapability">here</a>. 
-We used the 'DAC Blacklist regions', which are also also stored in Ensembl as 'encode_excluded' MiscFeatures.
-
-</P>
-
-<H3 id='tfgenehuman'>Correspondence of Transcription Factors to ENSEMBL Genes and Jaspar Matrices (Human)</H3>
-<table class="ss tint">
-<tr><th>Transcription Factor</th><th class="center">Ensembl Gene</th><th class="center">Jaspar Matrix(ces)</th></tr>
-<tr class="bg2"><td>ATF3</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000162772">ENSG00000162772</a></td><td></td></td></tr>
-<tr ><td>Ap2alpha</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000137203">ENSG00000137203</a></td><td> <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0003.1&rm=present&collection=CORE">MA0003.1</a>  <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=PB0085.1&rm=present&collection=CORE">PB0085.1</a>  <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=PB0189.1&rm=present&collection=CORE">PB0189.1</a> </td></td></tr>
-<tr class="bg2"><td>Ap2gamma</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000087510">ENSG00000087510</a></td><td> <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=PB0087.1&rm=present&collection=CORE">PB0087.1</a>  <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=PB0191.1&rm=present&collection=CORE">PB0191.1</a> </td></td></tr>
-<tr ><td>BAF155</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000173473">ENSG00000173473</a></td><td></td></td></tr>
-<tr class="bg2"><td>BAF170</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000139613">ENSG00000139613</a></td><td></td></td></tr>
-<tr ><td>BATF</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000156127">ENSG00000156127</a></td><td></td></td></tr>
-<tr class="bg2"><td>BCL11A</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000119866">ENSG00000119866</a></td><td></td></td></tr>
-<tr ><td>BCL3</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000069399">ENSG00000069399</a></td><td></td></td></tr>
-<tr class="bg2"><td>BHLHE40</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000134107">ENSG00000134107</a></td><td> <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=PB0007.1&rm=present&collection=CORE">PB0007.1</a>  <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=PB0111.1&rm=present&collection=CORE">PB0111.1</a> </td></td></tr>
-<tr ><td>Bdp1</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000145734">ENSG00000145734</a></td><td></td></td></tr>
-<tr class="bg2"><td>Brf1</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000185024">ENSG00000185024</a></td><td></td></td></tr>
-<tr ><td>Brf2</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000104221">ENSG00000104221</a></td><td></td></td></tr>
-<tr class="bg2"><td>Brg1</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000127616">ENSG00000127616</a></td><td></td></td></tr>
-<tr ><td>CBP</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000005339">ENSG00000005339</a></td><td></td></td></tr>
-<tr class="bg2"><td>CTCF</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000102974">ENSG00000102974</a></td><td> <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0139.1&rm=present&collection=CORE">MA0139.1</a> </td></td></tr>
-<tr ><td>Cfos</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000170345">ENSG00000170345</a></td><td> <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0099.1&rm=present&collection=CORE">MA0099.1</a>  <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0099.2&rm=present&collection=CORE">MA0099.2</a> </td></td></tr>
-<tr class="bg2"><td>Cjun</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000177606">ENSG00000177606</a></td><td> <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0099.2&rm=present&collection=CORE">MA0099.2</a> </td></td></tr>
-<tr ><td>Cmyc</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000136997">ENSG00000136997</a></td><td> <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0059.1&rm=present&collection=CORE">MA0059.1</a>  <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0147.1&rm=present&collection=CORE">MA0147.1</a> </td></td></tr>
-<tr class="bg2"><td>E2F1</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000101412">ENSG00000101412</a></td><td> <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0024.1&rm=present&collection=CORE">MA0024.1</a> </td></td></tr>
-<tr ><td>E2F4</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000205250">ENSG00000205250</a></td><td></td></td></tr>
-<tr class="bg2"><td>E2F6</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000169016">ENSG00000169016</a></td><td></td></td></tr>
-<tr ><td>EBF</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000164330">ENSG00000164330</a></td><td> <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0154.1&rm=present&collection=CORE">MA0154.1</a> </td></td></tr>
-<tr class="bg2"><td>Egr1</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000120738">ENSG00000120738</a></td><td> <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0162.1&rm=present&collection=CORE">MA0162.1</a>  <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=PB0010.1&rm=present&collection=CORE">PB0010.1</a>  <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=PB0114.1&rm=present&collection=CORE">PB0114.1</a> </td></td></tr>
-<tr ><td>FOSL2</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000075426">ENSG00000075426</a></td><td></td></td></tr>
-<tr class="bg2"><td>GTF2B</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000137947">ENSG00000137947</a></td><td></td></td></tr>
-<tr ><td>Gabp</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000154727">ENSG00000154727</a></td><td> <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0062.1&rm=present&collection=CORE">MA0062.1</a>  <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0062.2&rm=present&collection=CORE">MA0062.2</a>  <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=PB0020.1&rm=present&collection=CORE">PB0020.1</a>  <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=PB0124.1&rm=present&collection=CORE">PB0124.1</a> </td></td></tr>
-<tr class="bg2"><td>Gata1</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000102145">ENSG00000102145</a></td><td> <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0035.1&rm=present&collection=CORE">MA0035.1</a>  <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0035.2&rm=present&collection=CORE">MA0035.2</a>  <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0140.1&rm=present&collection=CORE">MA0140.1</a> </td></td></tr>
-<tr ><td>Gata2</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000179348">ENSG00000179348</a></td><td> <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0036.1&rm=present&collection=CORE">MA0036.1</a> </td></td></tr>
-<tr class="bg2"><td>HDAC1</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000116478">ENSG00000116478</a></td><td></td></td></tr>
-<tr ><td>HDAC2</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000196591">ENSG00000196591</a></td><td></td></td></tr>
-<tr class="bg2"><td>HDAC3</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000171720">ENSG00000171720</a></td><td></td></td></tr>
-<tr ><td>HDAC6</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000094631">ENSG00000094631</a></td><td></td></td></tr>
-<tr class="bg2"><td>HEY1</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000164683">ENSG00000164683</a></td><td></td></td></tr>
-<tr ><td>IRF4</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000137265">ENSG00000137265</a></td><td> <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=PB0034.1&rm=present&collection=CORE">PB0034.1</a>  <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=PB0138.1&rm=present&collection=CORE">PB0138.1</a> </td></td></tr>
-<tr class="bg2"><td>Ini1</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000099956">ENSG00000099956</a></td><td></td></td></tr>
-<tr ><td>Jund</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000130522">ENSG00000130522</a></td><td></td></td></tr>
-<tr class="bg2"><td>Max</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000125952">ENSG00000125952</a></td><td> <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0058.1&rm=present&collection=CORE">MA0058.1</a>  <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=PB0043.1&rm=present&collection=CORE">PB0043.1</a>  <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=PB0147.1&rm=present&collection=CORE">PB0147.1</a>  <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=PL0007.1&rm=present&collection=CORE">PL0007.1</a>  <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=PL0014.1&rm=present&collection=CORE">PL0014.1</a> </td></td></tr>
-<tr ><td>MOF</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000103510">ENSG00000103510</a></td><td></td></td></tr>
-<tr class="bg2"><td>NELFe</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000204356">ENSG00000204356</a></td><td></td></td></tr>
-<tr ><td>NFKB</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000109320">ENSG00000109320</a></td><td> <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0105.1&rm=present&collection=CORE">MA0105.1</a> </td></td></tr>
-<tr class="bg2"><td>Nfe2</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000123405">ENSG00000123405</a></td><td></td></td></tr>
-<tr ><td>Nfya</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000001167">ENSG00000001167</a></td><td> <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0060.1&rm=present&collection=CORE">MA0060.1</a> </td></td></tr>
-<tr class="bg2"><td>Nfyb</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000120837">ENSG00000120837</a></td><td></td></td></tr>
-<tr ><td>Nrf1</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000106459">ENSG00000106459</a></td><td></td></td></tr>
-<tr class="bg2"><td>Nrsf</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000084093">ENSG00000084093</a></td><td> <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0138.2&rm=present&collection=CORE">MA0138.2</a>  <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0138.1&rm=present&collection=CORE">MA0138.1</a> </td></td></tr>
-<tr ><td>PCAF</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000114166">ENSG00000114166</a></td><td></td></td></tr>
-<tr class="bg2"><td>POU2F2</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000028277">ENSG00000028277</a></td><td> <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=PH0144.1&rm=present&collection=CORE">PH0144.1</a> </td></td></tr>
-<tr ><td>PU1</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000066336">ENSG00000066336</a></td><td> <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0080.1&rm=present&collection=CORE">MA0080.1</a>  <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0080.2&rm=present&collection=CORE">MA0080.2</a>  <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=PB0058.1&rm=present&collection=CORE">PB0058.1</a>  <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=PB0162.1&rm=present&collection=CORE">PB0162.1</a> </td></td></tr>
-<tr class="bg2"><td>Pax5</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000196092">ENSG00000196092</a></td><td> <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0014.1&rm=present&collection=CORE">MA0014.1</a>  <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0239.1&rm=present&collection=CORE">MA0239.1</a> </td></td></tr>
-<tr ><td>Pbx3</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000167081">ENSG00000167081</a></td><td></td></td></tr>
-<tr class="bg2"><td>RPC155</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000148606">ENSG00000148606</a></td><td></td></td></tr>
-<tr ><td>RXRA</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000186350">ENSG00000186350</a></td><td> <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0016.1&rm=present&collection=CORE">MA0016.1</a>  <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=PB0057.1&rm=present&collection=CORE">PB0057.1</a>  <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=PB0161.1&rm=present&collection=CORE">PB0161.1</a>  <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0065.2&rm=present&collection=CORE">MA0065.2</a>  <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0074.1&rm=present&collection=CORE">MA0074.1</a>  <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0115.1&rm=present&collection=CORE">MA0115.1</a>  <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0159.1&rm=present&collection=CORE">MA0159.1</a> </td></td></tr>
-<tr class="bg2"><td>Rad21</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000164754">ENSG00000164754</a></td><td></td></td></tr>
-<tr ><td>SETDB1</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000143379">ENSG00000143379</a></td><td></td></td></tr>
-<tr class="bg2"><td>SIX5</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000177045">ENSG00000177045</a></td><td></td></td></tr>
-<tr ><td>SP1</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000185591">ENSG00000185591</a></td><td> <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0079.1&rm=present&collection=CORE">MA0079.1</a>  <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0079.2&rm=present&collection=CORE">MA0079.2</a> </td></td></tr>
-<tr class="bg2"><td>SRebp1</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000072310">ENSG00000072310</a></td><td></td></td></tr>
-<tr ><td>SRebp2</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000198911">ENSG00000198911</a></td><td></td></td></tr>
-<tr class="bg2"><td>Sin3Ak20</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000169375">ENSG00000169375</a></td><td></td></td></tr>
-<tr ><td>Sirt6</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000077463">ENSG00000077463</a></td><td></td></td></tr>
-<tr class="bg2"><td>Srf</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000112658">ENSG00000112658</a></td><td> <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0083.1&rm=present&collection=CORE">MA0083.1</a>  <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=PB0078.1&rm=present&collection=CORE">PB0078.1</a> </td></td></tr>
-<tr ><td>TAF1</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000147133">ENSG00000147133</a></td><td></td></td></tr>
-<tr class="bg2"><td>Tip60</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000172977">ENSG00000172977</a></td><td></td></td></tr>
-<tr ><td>TFIIIC-110</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000115207">ENSG00000115207</a></td><td></td></td></tr>
-<tr class="bg2"><td>Tcf12</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000140262">ENSG00000140262</a></td><td></td></td></tr>
-<tr ><td>Tr4</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000177463">ENSG00000177463</a></td><td></td></td></tr>
-<tr class="bg2"><td>USF1</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000158773">ENSG00000158773</a></td><td> <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0093.1&rm=present&collection=CORE">MA0093.1</a> </td></td></tr>
-<tr ><td>XRCC4</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000152422">ENSG00000152422</a></td><td></td></td></tr>
-<tr class="bg2"><td>Yy1</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000100811">ENSG00000100811</a></td><td> <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0095.1&rm=present&collection=CORE">MA0095.1</a> </td></td></tr>
-<tr ><td>ZBTB33</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000177485">ENSG00000177485</a></td><td></td></td></tr>
-<tr class="bg2"><td>ZNF274</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000171606">ENSG00000171606</a></td><td></td></td></tr>
-<tr ><td>ZZZ3</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000036549">ENSG00000036549</a></td><td></td></td></tr>
-<tr class="bg2"><td>Znf263</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000006194">ENSG00000006194</a></td><td></td></td></tr>
-<tr ><td>p300</td><td><a href="/homo_sapiens/Gene/Summary?g=ENSG00000100393">ENSG00000100393</a></td><td></td></td></tr>
-
-</table>
-
-<H3 id='tfgenemouse'>Correspondence of Transcription Factors to ENSEMBL Genes and Jaspar Matrices (Mouse)</H3>
-<table class="ss tint">
-<tr><th>Transcription Factor</th><th class="center">Ensembl Gene</th><th class="center">Jaspar Matrix(ces)</th></tr>
-<tr class="bg2"><td>cMyb</td><td><a href="/mus_musculus/Gene/Summary?g=ENSMUSG00000019982">ENSMUSG00000019982</a></td><td> <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0100.1&rm=present&collection=CORE">MA0100.1</a> <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=PB0149.1&rm=present&collection=CORE">PB0149.1</a> <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=PB0045.1&rm=present&collection=CORE">PB0045.1</a></td></td></tr>
-<tr ><td>CTCF</td><td><a href="/mus_musculus/Gene/Summary?g=ENSMUSG00000005698">ENSMUSG00000005698</a></td><td> <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0139.1&rm=present&collection=CORE">MA0139.1</a> </td></td></tr>
-<tr class="bg2"><td>Cmyc</td><td><a href="/mus_musculus/Gene/Summary?g=ENSMUSG00000022346">ENSMUSG00000022346</a></td><td> <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0147.1&rm=present&collection=CORE">MA0147.1</a> </td></td></tr>
-<tr ><td>E2F1</td><td><a href="/mus_musculus/Gene/Summary?g=ENSMUSG00000027490">ENSMUSG00000027490</a></td><td> <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0024.1&rm=present&collection=CORE">MA0024.1</a> </td></td></tr>
-<tr class="bg2"><td>Esrrb</td><td><a href="/mus_musculus/Gene/Summary?g=ENSMUSG00000021255">ENSMUSG00000021255</a></td><td> <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0141.1&rm=present&collection=CORE">MA0141.1</a> </td></td></tr>
-<tr ><td>Klf4</td><td><a href="/mus_musculus/Gene/Summary?g=ENSMUSG00000003032">ENSMUSG00000003032</a></td><td> <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0039.2&rm=present&collection=CORE">MA0039.2</a> </td></td></tr>
-<tr class="bg2"><td>Max</td><td><a href="/mus_musculus/Gene/Summary?g=ENSMUSG00000059436">ENSMUSG00000059436</a></td><td> <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=PB0147.1&rm=present&collection=CORE">PB0147.1</a> <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=PB0043.1&rm=present&collection=CORE">PB0043.1</a> <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=PL0007.1&rm=present&collection=CORE">PL0007.1</a></td></td></tr>
-<tr ><td>Nanog</td><td><a href="/mus_musculus/Gene/Summary?g=ENSMUSG00000012396">ENSMUSG00000012396</a></td><td></td></td></tr>
-<tr class="bg2"><td>NELFe</td><td><a href="/mus_musculus/Gene/Summary?g=ENSMUSG00000024369">ENSMUSG00000024369</a></td><td></td></td></tr>
-<tr ><td>nMyc</td><td><a href="/mus_musculus/Gene/Summary?g=ENSMUSG00000037169">ENSMUSG00000037169</a></td><td> <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0104.2&rm=present&collection=CORE">MA0104.2</a> </td></td></tr>
-<tr class="bg2"><td>Oct4</td><td><a href="/mus_musculus/Gene/Summary?g=ENSMUSG00000012396">ENSMUSG00000012396</a></td><td></td></td></tr>
-<tr ><td>p300</td><td><a href="/mus_musculus/Gene/Summary?g=ENSMUSG00000055024">ENSMUSG00000055024</a></td><td></td></td></tr>
-<tr class="bg2"><td>Rad21</td><td><a href="/mus_musculus/Gene/Summary?g=ENSMUSG00000022314">ENSMUSG00000022314</a></td><td></td></td></tr>
-<tr ><td>Smad1</td><td><a href="/mus_musculus/Gene/Summary?g=ENSMUSG00000031681">ENSMUSG00000031681</a></td><td></td></td></tr>
-<tr class="bg2"><td>Sox2</td><td><a href="/mus_musculus/Gene/Summary?g=ENSMUSG00000074637">ENSMUSG00000074637</a></td><td> <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0143.1&rm=present&collection=CORE">MA0143.1</a> </td></td></tr>
-<tr ><td>STAT3</td><td><a href="/mus_musculus/Gene/Summary?g=ENSMUSG00000004040">ENSMUSG00000004040</a></td><td> <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0144.1&rm=present&collection=CORE">MA0144.1</a> </td></td></tr>
-<tr class="bg2"><td>Suz12</td><td><a href="/mus_musculus/Gene/Summary?g=ENSMUSG00000017548">ENSMUSG00000017548</a></td><td></td></td></tr>
-<tr ><td>Tcfcp2l1</td><td><a href="/mus_musculus/Gene/Summary?g=ENSMUSG00000026380">ENSMUSG00000026380</a></td><td> <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0145.1&rm=present&collection=CORE">MA0145.1</a> </td></td></tr>
-<tr class="bg2"><td>USF2</td><td><a href="/mus_musculus/Gene/Summary?g=ENSMUSG00000058239">ENSMUSG00000058239</a></td><td></td></td></tr>
-<tr ><td>Zfx</td><td><a href="/mus_musculus/Gene/Summary?g=ENSMUSG00000079509">ENSMUSG00000079509</a></td><td> <a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0146.1&rm=present&collection=CORE">MA0146.1</a> </td></td></tr>
-</table>
-
-</br>
-</br>
-<p>
-The current release comprises of the following datasets: 
-</P>
-<H3 id='humanregbuild'>Human Regulatory Build version 11</H3>
-
-<table class="ss tint">
-
-<tr><th colspan="3">CD4</th></tr>
-<tr><th>Focus Sets</th><th class="center">Data type</th><th class="center">Reference</th></tr>
-<tr class="bg2"><td>CBP</td><td>ChIP-Seq</td><td>12</td></tr>
-<tr><td>CTCF</td><td>ChIP-Seq</td><td>3</td></tr>
-<tr class="bg2"><td>HDAC1</td><td>ChIP-Seq</td><td>12</td></tr>
-<tr><td>HDAC2</td><td>ChIP-Seq</td><td>12</td></tr>
-<tr class="bg2"><td>HDAC3</td><td>ChIP-Seq</td><td>12</td></tr>
-<tr><td>HDAC6</td><td>ChIP-Seq</td><td>12</td></tr>
-<tr class="bg2"><td>MOF</td><td>ChIP-Seq</td><td>12</td></tr>
-<tr><td>p300</td><td>ChIP-Seq</td><td>12</td></tr>
-<tr class="bg2"><td>PCAF</td><td>ChIP-Seq</td><td>12</td></tr>
-<tr><td>Tip60</td><td>ChIP-Seq</td><td>12</td></tr>
-
-<tr><th>Attribute Sets</th><th class="center">Data type</th><th class="center">Reference</th></tr>
-<tr ><td>H2AK5ac</td><td>ChIP-Seq</td><td>4</td></tr>
-<tr class="bg2"><td>H2AK9ac</td><td>ChIP-Seq</td><td>4</td></tr>
-<tr ><td>H2AZ</td><td>ChIP-Seq</td><td>3</td></tr>
-<tr class="bg2"><td>H2BK120ac</td><td>ChIP-Seq</td><td>4</td></tr>
-<tr ><td>H2BK12ac</td><td>ChIP-Seq</td><td>4</td></tr>
-<tr class="bg2"><td>H2BK20ac</td><td>ChIP-Seq</td><td>4</td></tr>
-<tr ><td>H2BK5ac</td><td>ChIP-Seq</td><td>4</td></tr>
-<tr class="bg2"><td>H2BK5me1</td><td>ChIP-Seq</td><td>3</td></tr>
-<tr ><td>H3K14ac</td><td>ChIP-Seq</td><td>4</td></tr>
-<tr class="bg2"><td>H3K18ac</td><td>ChIP-Seq</td><td>4</td></tr>
-<tr ><td>H3K23ac</td><td>ChIP-Seq</td><td>4</td></tr>
-<tr class="bg2"><td>H3K27ac</td><td>ChIP-Seq</td><td>4</td></tr>
-<tr ><td>H3K27me1</td><td>ChIP-Seq</td><td>3</td></tr>
-<tr class="bg2"><td>H3K27me2</td><td>ChIP-Seq</td><td>3</td></tr>
-<tr ><td>H3K27me3</td><td>ChIP-Seq</td><td>3</td></tr>
-<tr class="bg2"><td>H3K36ac</td><td>ChIP-Seq</td><td>4</td></tr>
-<tr ><td>H3K36me1</td><td>ChIP-Seq</td><td>3</td></tr>
-<tr class="bg2"><td>H3K36me3</td><td>ChIP-Seq</td><td>3</td></tr>
-<tr ><td>H3K4ac</td><td>ChIP-Seq</td><td>4</td></tr>
-<tr class="bg2"><td>H3K4me1</td><td>ChIP-Seq</td><td>3</td></tr>
-<tr ><td>H3K4me2</td><td>ChIP-Seq</td><td>3</td></tr>
-<tr class="bg2"><td>H3K4me3</td><td>ChIP-Seq</td><td>3</td></tr>
-<tr ><td>H3K79me1</td><td>ChIP-Seq</td><td>3</td></tr>
-<tr class="bg2"><td>H3K79me2</td><td>ChIP-Seq</td><td>3</td></tr>
-<tr ><td>H3K79me3</td><td>ChIP-Seq</td><td>3</td></tr>
-<tr class="bg2"><td>H3K9ac</td><td>ChIP-Seq</td><td>4</td></tr>
-<tr ><td>H3K9me1</td><td>ChIP-Seq</td><td>3</td></tr>
-<tr class="bg2"><td>H3K9me2</td><td>ChIP-Seq</td><td>3</td></tr>
-<tr ><td>H3K9me3</td><td>ChIP-Seq</td><td>3</td></tr>
-<tr class="bg2"><td>H3R2me1</td><td>ChIP-Seq</td><td>3</td></tr>
-<tr ><td>H3R2me2</td><td>ChIP-Seq</td><td>3</td></tr>
-<tr class="bg2"><td>H4K12ac</td><td>ChIP-Seq</td><td>4</td></tr>
-<tr ><td>H4K16ac</td><td>ChIP-Seq</td><td>4</td></tr>
-<tr class="bg2"><td>H4K20me1</td><td>ChIP-Seq</td><td>3</td></tr>
-<tr ><td>H4K20me3</td><td>ChIP-Seq</td><td>3</td></tr>
-<tr class="bg2"><td>H4K5ac</td><td>ChIP-Seq</td><td>4</td></tr>
-<tr ><td>H4K8ac</td><td>ChIP-Seq</td><td>4</td></tr>
-<tr class="bg2"><td>H4K91ac</td><td>ChIP-Seq</td><td>4</td></tr>
-<tr ><td>H4R3me2</td><td>ChIP-Seq</td><td>3</td></tr>
-<tr class="bg2"><td>PolII</td><td>ChIP-Seq</td><td>3</td></tr>
-
-<tr><th colspan="3">GM06990</th></tr>
-<tr><th>Focus Sets</th><th class="center">Data type</th><th class="center">Reference</th></tr>
-<tr ><td>CTCF</td><td>ChIP-Seq</td><td>5</td></tr>
-<tr class="bg2"><td>DNase1</td><td>Dnase-Seq</td><td>5</td></tr>
-<tr><th>Attribute Sets</th><th class="center">Data type</th><th class="center">Reference</th></tr>
-<tr ><td>H3K27me3</td><td>ChIP-Seq</td><td>5</td></tr>
-<tr class="bg2"><td>H3K36me3</td><td>ChIP-Seq</td><td>5</td></tr>
-<tr ><td>H3K4me3</td><td>ChIP-Seq</td><td>5</td></tr>
-
-<tr><th colspan="3">GM12878</th></tr>
-<tr><th>Focus Sets</th><th class="center">Data type</th><th class="center">Reference</th></tr>
-<tr class="bg2"><td>BATF</td><td>ChIP-Seq</td><td>10</td></tr>
-<tr ><td>BCL11A</td><td>ChIP-Seq</td><td>10</td></tr>
-<tr class="bg2"><td>BCL3</td><td>ChIP-Seq</td><td>10</td></tr>
-<tr ><td>CTCF</td><td>ChIP-Seq</td><td>7</td></tr>
-<tr class="bg2"><td>CTCF</td><td>ChIP-Seq</td><td>6</td></tr>
-<tr ><td>Cfos</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr class="bg2"><td>Cmyc</td><td>ChIP-Seq</td><td>6</td></tr>
-<tr ><td>DNase1</td><td>Dnase-Seq</td><td>6</td></tr>
-<tr class="bg2"><td>DNase1</td><td>Dnase-Seq</td><td>5</td></tr>
-<tr ><td>EBF</td><td>ChIP-Seq</td><td>10</td></tr>
-<tr class="bg2"><td>Egr1</td><td>ChIP-Seq</td><td>10</td></tr>
-<tr ><td>FAIRE</td><td>FAIRE-Seq</td><td>6</td></tr>
-<tr class="bg2"><td>Gabp</td><td>ChIP-Seq</td><td>10</td></tr>
-<tr ><td>IRF4</td><td>ChIP-Seq</td><td>10</td></tr>
-<tr class="bg2"><td>Jund</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr ><td>Max</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr class="bg2"><td>NFKB</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr ><td>Nrsf</td><td>ChIP-Seq</td><td>10</td></tr>
-<tr class="bg2"><td>POU2F2</td><td>ChIP-Seq</td><td>10</td></tr>
-<tr ><td>PU1</td><td>ChIP-Seq</td><td>10</td></tr>
-<tr class="bg2"><td>Pax5</td><td>ChIP-Seq</td><td>10</td></tr>
-<tr ><td>Pbx3</td><td>ChIP-Seq</td><td>10</td></tr>
-<tr class="bg2"><td>Rad21</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr ><td>SP1</td><td>ChIP-Seq</td><td>10</td></tr>
-<tr class="bg2"><td>Sin3Ak20</td><td>ChIP-Seq</td><td>10</td></tr>
-<tr ><td>Srf</td><td>ChIP-Seq</td><td>10</td></tr>
-<tr class="bg2"><td>TAF1</td><td>ChIP-Seq</td><td>10</td></tr>
-<tr ><td>Tcf12</td><td>ChIP-Seq</td><td>10</td></tr>
-<tr class="bg2"><td>Tr4</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr ><td>USF1</td><td>ChIP-Seq</td><td>10</td></tr>
-<tr class="bg2"><td>Yy1</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr ><td>ZBTB33</td><td>ChIP-Seq</td><td>10</td></tr>
-<tr class="bg2"><td>ZZZ3</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr ><td>p300</td><td>ChIP-Seq</td><td>10</td></tr>
-<tr><th>Attribute Sets</th><th class="center">Data type</th><th class="center">Reference</th></tr>
-<tr class="bg2"><td>H3K27ac</td><td>ChIP-Seq</td><td>7</td></tr>
-<tr ><td>H3K27me3</td><td>ChIP-Seq</td><td>7</td></tr>
-<tr class="bg2"><td>H3K27me3</td><td>ChIP-Seq</td><td>5</td></tr>
-<tr ><td>H3K36me3</td><td>ChIP-Seq</td><td>7</td></tr>
-<tr class="bg2"><td>H3K36me3</td><td>ChIP-Seq</td><td>5</td></tr>
-<tr ><td>H3K4me1</td><td>ChIP-Seq</td><td>7</td></tr>
-<tr class="bg2"><td>H3K4me2</td><td>ChIP-Seq</td><td>7</td></tr>
-<tr ><td>H3K4me3</td><td>ChIP-Seq</td><td>7</td></tr>
-<tr class="bg2"><td>H3K9ac</td><td>ChIP-Seq</td><td>7</td></tr>
-<tr ><td>H4K20me1</td><td>ChIP-Seq</td><td>7</td></tr>
-<tr class="bg2"><td>PolII</td><td>ChIP-Seq</td><td>10</td></tr>
-<tr ><td>PolII</td><td>ChIP-Seq</td><td>6</td></tr>
-<tr class="bg2"><td>PolII</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr ><td>PolIII</td><td>ChIP-Seq</td><td>9</td></tr>
-
-<tr><th colspan="3">H1ESC</th></tr>
-<tr><th>Focus Sets</th><th class="center">Data type</th><th class="center">Reference</th></tr>
-<tr class="bg2"><td>CTCF</td><td>ChIP-Seq</td><td>7</td></tr>
-<tr ><td>Cmyc</td><td>ChIP-Seq</td><td>6</td></tr>
-<tr class="bg2"><td>DNase1</td><td>Dnase-Seq</td><td>6</td></tr>
-<tr ><td>DNase1</td><td>Dnase-Seq</td><td>5</td></tr>
-<tr class="bg2"><td>FAIRE</td><td>FAIRE-Seq</td><td>6</td></tr>
-<tr ><td>Nrsf</td><td>ChIP-Seq</td><td>10</td></tr>
-<tr class="bg2"><td>TAF1</td><td>ChIP-Seq</td><td>10</td></tr>
-<tr><th>Attribute Sets</th><th class="center">Data type</th><th class="center">Reference</th></tr>
-<tr ><td>H3K27ac</td><td>ChIP-Seq</td><td>11</td></tr>
-<tr class="bg2"><td>H3K27me3</td><td>ChIP-Seq</td><td>7</td></tr>
-<tr ><td>H3K27me3</td><td>ChIP-Seq</td><td>11</td></tr>
-<tr class="bg2"><td>H3K27me3</td><td>ChIP-Seq</td><td>11</td></tr>
-<tr ><td>H3K27me3</td><td>ChIP-Seq</td><td>11</td></tr>
-<tr class="bg2"><td>H3K36me3</td><td>ChIP-Seq</td><td>7</td></tr>
-<tr ><td>H3K36me3</td><td>ChIP-Seq</td><td>11</td></tr>
-<tr class="bg2"><td>H3K36me3</td><td>ChIP-Seq</td><td>11</td></tr>
-<tr ><td>H3K36me3</td><td>ChIP-Seq</td><td>11</td></tr>
-<tr class="bg2"><td>H3K4me1</td><td>ChIP-Seq</td><td>7</td></tr>
-<tr ><td>H3K4me1</td><td>ChIP-Seq</td><td>11</td></tr>
-<tr class="bg2"><td>H3K4me1</td><td>ChIP-Seq</td><td>11</td></tr>
-<tr ><td>H3K4me1</td><td>ChIP-Seq</td><td>11</td></tr>
-<tr class="bg2"><td>H3K4me2</td><td>ChIP-Seq</td><td>7</td></tr>
-<tr ><td>H3K4me3</td><td>ChIP-Seq</td><td>7</td></tr>
-<tr class="bg2"><td>H3K4me3</td><td>ChIP-Seq</td><td>11</td></tr>
-<tr ><td>H3K4me3</td><td>ChIP-Seq</td><td>11</td></tr>
-<tr class="bg2"><td>H3K4me3</td><td>ChIP-Seq</td><td>11</td></tr>
-<tr ><td>H3K9ac</td><td>ChIP-Seq</td><td>7</td></tr>
-<tr class="bg2"><td>H3K9ac</td><td>ChIP-Seq</td><td>11</td></tr>
-<tr ><td>H3K9ac</td><td>ChIP-Seq</td><td>11</td></tr>
-<tr class="bg2"><td>H3K9ac</td><td>ChIP-Seq</td><td>11</td></tr>
-<tr ><td>H3K9me3</td><td>ChIP-Seq</td><td>11</td></tr>
-<tr class="bg2"><td>H3K9me3</td><td>ChIP-Seq</td><td>11</td></tr>
-<tr ><td>H3K9me3</td><td>ChIP-Seq</td><td>11</td></tr>
-<tr class="bg2"><td>H4K20me1</td><td>ChIP-Seq</td><td>7</td></tr>
-<tr ><td>PolII</td><td>ChIP-Seq</td><td>10</td></tr>
-<tr class="bg2"><td>PolII</td><td>ChIP-Seq</td><td>6</td></tr>
-
-<tr><th colspan="3">HUVEC</th></tr>
-<tr><th>Focus Sets</th><th class="center">Data type</th><th class="center">Reference</th></tr>
-<tr ><td>CTCF</td><td>ChIP-Seq</td><td>7</td></tr>
-<tr class="bg2"><td>CTCF</td><td>ChIP-Seq</td><td>6</td></tr>
-<tr ><td>CTCF</td><td>ChIP-Seq</td><td>5</td></tr>
-<tr class="bg2"><td>Cjun</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr ><td>Cmyc</td><td>ChIP-Seq</td><td>6</td></tr>
-<tr class="bg2"><td>DNase1</td><td>Dnase-Seq</td><td>6</td></tr>
-<tr ><td>DNase1</td><td>Dnase-Seq</td><td>5</td></tr>
-<tr class="bg2"><td>FAIRE</td><td>FAIRE-Seq</td><td>6</td></tr>
-<tr ><td>Max</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr><th>Attribute Sets</th><th class="center">Data type</th><th class="center">Reference</th></tr>
-<tr class="bg2"><td>H3K27ac</td><td>ChIP-Seq</td><td>7</td></tr>
-<tr ><td>H3K27me3</td><td>ChIP-Seq</td><td>7</td></tr>
-<tr class="bg2"><td>H3K27me3</td><td>ChIP-Seq</td><td>5</td></tr>
-<tr ><td>H3K36me3</td><td>ChIP-Seq</td><td>7</td></tr>
-<tr class="bg2"><td>H3K36me3</td><td>ChIP-Seq</td><td>5</td></tr>
-<tr ><td>H3K4me1</td><td>ChIP-Seq</td><td>7</td></tr>
-<tr class="bg2"><td>H3K4me2</td><td>ChIP-Seq</td><td>7</td></tr>
-<tr ><td>H3K4me3</td><td>ChIP-Seq</td><td>7</td></tr>
-<tr class="bg2"><td>H3K4me3</td><td>ChIP-Seq</td><td>5</td></tr>
-<tr ><td>H3K9ac</td><td>ChIP-Seq</td><td>7</td></tr>
-<tr class="bg2"><td>H3K9me1</td><td>ChIP-Seq</td><td>7</td></tr>
-<tr ><td>H4K20me1</td><td>ChIP-Seq</td><td>7</td></tr>
-<tr class="bg2"><td>PolII</td><td>ChIP-Seq</td><td>7</td></tr>
-<tr ><td>PolII</td><td>ChIP-Seq</td><td>6</td></tr>
-<tr class="bg2"><td>PolII</td><td>ChIP-Seq</td><td>9</td></tr>
-
-<tr><th colspan="3">HeLa</th></tr>
-<tr><th>Focus Sets</th><th class="center">Data type</th><th class="center">Reference</th></tr>
-<tr ><td>Ap2alpha</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr class="bg2"><td>Ap2gamma</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr ><td>BAF155</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr class="bg2"><td>BAF170</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr ><td>Bdp1</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr class="bg2"><td>Brf1</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr ><td>Brf2</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr class="bg2"><td>Brg1</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr ><td>CTCF</td><td>ChIP-Seq</td><td>6</td></tr>
-<tr class="bg2"><td>CTCF</td><td>ChIP-Seq</td><td>5</td></tr>
-<tr ><td>Cfos</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr class="bg2"><td>Cjun</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr ><td>Cmyc</td><td>ChIP-Seq</td><td>6</td></tr>
-<tr class="bg2"><td>Cmyc</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr ><td>DNase1</td><td>Dnase-Seq</td><td>6</td></tr>
-<tr class="bg2"><td>DNase1</td><td>Dnase-Seq</td><td>5</td></tr>
-<tr ><td>E2F1</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr class="bg2"><td>E2F4</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr ><td>E2F6</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr class="bg2"><td>FAIRE</td><td>FAIRE-Seq</td><td>6</td></tr>
-<tr ><td>Gabp</td><td>ChIP-Seq</td><td>10</td></tr>
-<tr class="bg2"><td>Ini1</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr ><td>Jund</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr class="bg2"><td>Max</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr ><td>Nrf1</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr class="bg2"><td>RPC155</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr ><td>TAF1</td><td>ChIP-Seq</td><td>10</td></tr>
-<tr class="bg2"><td>TFIIIC-110</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr ><td>Tr4</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr><th>Attribute Sets</th><th class="center">Data type</th><th class="center">Reference</th></tr>
-<tr class="bg2"><td>H3K27me3</td><td>ChIP-Seq</td><td>5</td></tr>
-<tr ><td>H3K36me3</td><td>ChIP-Seq</td><td>5</td></tr>
-<tr class="bg2"><td>H3K4me3</td><td>ChIP-Seq</td><td>5</td></tr>
-<tr ><td>PolII</td><td>ChIP-Seq</td><td>10</td></tr>
-<tr class="bg2"><td>PolII</td><td>ChIP-Seq</td><td>6</td></tr>
-<tr ><td>PolII</td><td>ChIP-Seq</td><td>9</td></tr>
-
-<tr><th colspan="3">HepG2</th></tr>
-<tr><th>Focus Sets</th><th class="center">Data type</th><th class="center">Reference</th></tr>
-<tr class="bg2"><td>BHLHE40</td><td>ChIP-Seq</td><td>10</td></tr>
-<tr ><td>CTCF</td><td>ChIP-Seq</td><td>7</td></tr>
-<tr class="bg2"><td>CTCF</td><td>ChIP-Seq</td><td>6</td></tr>
-<tr ><td>CTCF</td><td>ChIP-Seq</td><td>5</td></tr>
-<tr class="bg2"><td>Cmyc</td><td>ChIP-Seq</td><td>6</td></tr>
-<tr ><td>DNase1</td><td>Dnase-Seq</td><td>6</td></tr>
-<tr class="bg2"><td>DNase1</td><td>Dnase-Seq</td><td>5</td></tr>
-<tr ><td>FAIRE</td><td>FAIRE-Seq</td><td>6</td></tr>
-<tr class="bg2"><td>FOSL2</td><td>ChIP-Seq</td><td>10</td></tr>
-<tr ><td>Gabp</td><td>ChIP-Seq</td><td>10</td></tr>
-<tr class="bg2"><td>HEY1</td><td>ChIP-Seq</td><td>10</td></tr>
-<tr ><td>Jund</td><td>ChIP-Seq</td><td>10</td></tr>
-<tr class="bg2"><td>RXRA</td><td>ChIP-Seq</td><td>10</td></tr>
-<tr ><td>SRebp1</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr class="bg2"><td>SRebp2</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr ><td>Sin3Ak20</td><td>ChIP-Seq</td><td>10</td></tr>
-<tr class="bg2"><td>USF1</td><td>ChIP-Seq</td><td>10</td></tr>
-<tr ><td>ZBTB33</td><td>ChIP-Seq</td><td>10</td></tr>
-<tr class="bg2"><td>p300</td><td>ChIP-Seq</td><td>10</td></tr>
-<tr><th>Attribute Sets</th><th class="center">Data type</th><th class="center">Reference</th></tr>
-<tr ><td>H3K27ac</td><td>ChIP-Seq</td><td>7</td></tr>
-<tr class="bg2"><td>H3K27me3</td><td>ChIP-Seq</td><td>5</td></tr>
-<tr ><td>H3K36me3</td><td>ChIP-Seq</td><td>7</td></tr>
-<tr class="bg2"><td>H3K36me3</td><td>ChIP-Seq</td><td>5</td></tr>
-<tr ><td>H3K4me2</td><td>ChIP-Seq</td><td>7</td></tr>
-<tr class="bg2"><td>H3K4me3</td><td>ChIP-Seq</td><td>7</td></tr>
-<tr ><td>H3K4me3</td><td>ChIP-Seq</td><td>5</td></tr>
-<tr class="bg2"><td>H3K9ac</td><td>ChIP-Seq</td><td>7</td></tr>
-<tr ><td>H4K20me1</td><td>ChIP-Seq</td><td>7</td></tr>
-<tr class="bg2"><td>PolII</td><td>ChIP-Seq</td><td>6</td></tr>
-<tr ><td>PolII</td><td>ChIP-Seq</td><td>9</td></tr>
-
-<tr><th colspan="3">IMR90</th></tr>
-<tr><th>Focus Sets</th><th class="center">Data type</th><th class="center">Reference</th></tr>
-<tr class="bg2"><td>DNase1</td><td>Dnase-Seq</td><td>11</td></tr>
-<tr><th>Attribute Sets</th><th class="center">Data type</th><th class="center">Reference</th></tr>
-<tr ><td>H2AK5ac</td><td>ChIP-Seq</td><td>11</td></tr>
-<tr class="bg2"><td>H2BK120ac</td><td>ChIP-Seq</td><td>11</td></tr>
-<tr ><td>H2BK12ac</td><td>ChIP-Seq</td><td>11</td></tr>
-<tr class="bg2"><td>H2BK15ac</td><td>ChIP-Seq</td><td>11</td></tr>
-<tr ><td>H2BK20ac</td><td>ChIP-Seq</td><td>11</td></tr>
-<tr class="bg2"><td>H3K14ac</td><td>ChIP-Seq</td><td>11</td></tr>
-<tr ><td>H3K18ac</td><td>ChIP-Seq</td><td>11</td></tr>
-<tr class="bg2"><td>H3K23ac</td><td>ChIP-Seq</td><td>11</td></tr>
-<tr ><td>H3K27ac</td><td>ChIP-Seq</td><td>11</td></tr>
-<tr class="bg2"><td>H3K27me3</td><td>ChIP-Seq</td><td>11</td></tr>
-<tr ><td>H3K36me3</td><td>ChIP-Seq</td><td>11</td></tr>
-<tr class="bg2"><td>H3K4ac</td><td>ChIP-Seq</td><td>11</td></tr>
-<tr ><td>H3K4me1</td><td>ChIP-Seq</td><td>11</td></tr>
-<tr class="bg2"><td>H3K4me2</td><td>ChIP-Seq</td><td>11</td></tr>
-<tr ><td>H3K4me3</td><td>ChIP-Seq</td><td>11</td></tr>
-<tr class="bg2"><td>H3K56ac</td><td>ChIP-Seq</td><td>11</td></tr>
-<tr ><td>H3K79me1</td><td>ChIP-Seq</td><td>11</td></tr>
-<tr class="bg2"><td>H3K79me2</td><td>ChIP-Seq</td><td>11</td></tr>
-<tr ><td>H3K9ac</td><td>ChIP-Seq</td><td>11</td></tr>
-<tr class="bg2"><td>H3K9me3</td><td>ChIP-Seq</td><td>11</td></tr>
-<tr ><td>H4K20me1</td><td>ChIP-Seq</td><td>11</td></tr>
-<tr class="bg2"><td>H4K5ac</td><td>ChIP-Seq</td><td>11</td></tr>
-<tr ><td>H4K8ac</td><td>ChIP-Seq</td><td>11</td></tr>
-<tr class="bg2"><td>H4K91ac</td><td>ChIP-Seq</td><td>11</td></tr>
-
-<tr><th colspan="3">K562</th></tr>
-<tr><th>Focus Sets</th><th class="center">Data type</th><th class="center">Reference</th></tr>
-<tr ><td>ATF3</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr class="bg2"><td>Bdp1</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr ><td>Brf1</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr class="bg2"><td>Brf2</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr ><td>Brg1</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr class="bg2"><td>CTCF</td><td>ChIP-Seq</td><td>7</td></tr>
-<tr ><td>CTCF</td><td>ChIP-Seq</td><td>6</td></tr>
-<tr class="bg2"><td>CTCF</td><td>ChIP-Seq</td><td>5</td></tr>
-<tr ><td>Cfos</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr class="bg2"><td>Cjun</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr ><td>Cmyc</td><td>ChIP-Seq</td><td>6</td></tr>
-<tr class="bg2"><td>Cmyc</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr ><td>DNase1</td><td>Dnase-Seq</td><td>6</td></tr>
-<tr class="bg2"><td>DNase1</td><td>Dnase-Seq</td><td>5</td></tr>
-<tr ><td>Egr1</td><td>ChIP-Seq</td><td>10</td></tr>
-<tr class="bg2"><td>FAIRE</td><td>FAIRE-Seq</td><td>6</td></tr>
-<tr ><td>GTF2B</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr class="bg2"><td>Gabp</td><td>ChIP-Seq</td><td>10</td></tr>
-<tr ><td>HEY1</td><td>ChIP-Seq</td><td>10</td></tr>
-<tr class="bg2"><td>Ini1</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr ><td>Jund</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr class="bg2"><td>Max</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr ><td>NELFe</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr class="bg2"><td>Nfe2</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr ><td>Nfya</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr class="bg2"><td>Nfyb</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr ><td>Nrsf</td><td>ChIP-Seq</td><td>10</td></tr>
-<tr class="bg2"><td>PU1</td><td>ChIP-Seq</td><td>10</td></tr>
-<tr ><td>Rad21</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr class="bg2"><td>SIX5</td><td>ChIP-Seq</td><td>10</td></tr>
-<tr ><td>SP1</td><td>ChIP-Seq</td><td>10</td></tr>
-<tr class="bg2"><td>Sin3Ak20</td><td>ChIP-Seq</td><td>10</td></tr>
-<tr ><td>Sirt6</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr class="bg2"><td>Srf</td><td>ChIP-Seq</td><td>10</td></tr>
-<tr ><td>TAF1</td><td>ChIP-Seq</td><td>10</td></tr>
-<tr class="bg2"><td>TFIIIC-110</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr ><td>USF1</td><td>ChIP-Seq</td><td>10</td></tr>
-<tr class="bg2"><td>XRCC4</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr><th>Attribute Sets</th><th class="center">Data type</th><th class="center">Reference</th></tr>
-<tr class="bg2"><td>H3K27ac</td><td>ChIP-Seq</td><td>7</td></tr>
-<tr ><td>H3K27me3</td><td>ChIP-Seq</td><td>7</td></tr>
-<tr class="bg2"><td>H3K27me3</td><td>ChIP-Seq</td><td>5</td></tr>
-<tr ><td>H3K36me3</td><td>ChIP-Seq</td><td>7</td></tr>
-<tr class="bg2"><td>H3K36me3</td><td>ChIP-Seq</td><td>5</td></tr>
-<tr ><td>H3K4me1</td><td>ChIP-Seq</td><td>7</td></tr>
-<tr class="bg2"><td>H3K4me2</td><td>ChIP-Seq</td><td>7</td></tr>
-<tr ><td>H3K4me3</td><td>ChIP-Seq</td><td>7</td></tr>
-<tr class="bg2"><td>H3K4me3</td><td>ChIP-Seq</td><td>5</td></tr>
-<tr ><td>H3K9ac</td><td>ChIP-Seq</td><td>7</td></tr>
-<tr class="bg2"><td>H3K9me1</td><td>ChIP-Seq</td><td>7</td></tr>
-<tr ><td>H4K20me1</td><td>ChIP-Seq</td><td>7</td></tr>
-<tr class="bg2"><td>PolII</td><td>ChIP-Seq</td><td>7</td></tr>
-<tr ><td>PolII</td><td>ChIP-Seq</td><td>10</td></tr>
-<tr class="bg2"><td>PolII</td><td>ChIP-Seq</td><td>6</td></tr>
-<tr ><td>PolII</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr class="bg2"><td>PolIII</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr ><td>Znf263</td><td>ChIP-Seq</td><td>9</td></tr>
-
-<tr><th colspan="3">K562b (no Regulatory Features built, but data is available).</th></tr>
-<tr class="bg2"><td>E2F4</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr ><td>E2F6</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr class="bg2"><td>Gata1</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr ><td>Gata2</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr class="bg2"><td>SETDB1</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr ><td>Tr4</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr class="bg2"><td>Yy1</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr ><td>ZNF274</td><td>ChIP-Seq</td><td>9</td></tr>
-<tr class="bg2"><td>Znf263</td><td>ChIP-Seq</td><td>9</td></tr>
-
-<tr><th colspan="3">NHEK</th></tr>
-<tr><th>Focus Sets</th><th class="center">Data type</th><th class="center">Reference</th></tr>
-<tr ><td>CTCF</td><td>ChIP-Seq</td><td>7</td></tr>
-<tr class="bg2"><td>CTCF</td><td>ChIP-Seq</td><td>6</td></tr>
-<tr ><td>CTCF</td><td>ChIP-Seq</td><td>5</td></tr>
-<tr class="bg2"><td>DNase1</td><td>Dnase-Seq</td><td>6</td></tr>
-<tr ><td>DNase1</td><td>Dnase-Seq</td><td>5</td></tr>
-<tr class="bg2"><td>FAIRE</td><td>FAIRE-Seq</td><td>6</td></tr>
-<tr><th>Attribute Sets</th><th class="center">Data type</th><th class="center">Reference</th></tr>
-<tr ><td>H3K27ac</td><td>ChIP-Seq</td><td>7</td></tr>
-<tr class="bg2"><td>H3K27me3</td><td>ChIP-Seq</td><td>7</td></tr>
-<tr ><td>H3K27me3</td><td>ChIP-Seq</td><td>5</td></tr>
-<tr class="bg2"><td>H3K36me3</td><td>ChIP-Seq</td><td>7</td></tr>
-<tr ><td>H3K36me3</td><td>ChIP-Seq</td><td>5</td></tr>
-<tr class="bg2"><td>H3K4me1</td><td>ChIP-Seq</td><td>7</td></tr>
-<tr ><td>H3K4me2</td><td>ChIP-Seq</td><td>7</td></tr>
-<tr class="bg2"><td>H3K4me3</td><td>ChIP-Seq</td><td>7</td></tr>
-<tr ><td>H3K4me3</td><td>ChIP-Seq</td><td>5</td></tr>
-<tr class="bg2"><td>H3K9ac</td><td>ChIP-Seq</td><td>7</td></tr>
-<tr ><td>H3K9me1</td><td>ChIP-Seq</td><td>7</td></tr>
-<tr class="bg2"><td>H4K20me1</td><td>ChIP-Seq</td><td>7</td></tr>
-<tr ><td>PolII</td><td>ChIP-Seq</td><td>7</td></tr>
-</table>
-
-<H3 id='mouseregbuild'>Mouse Regulatory Build version 7</H3>
-
-<table class="ss tint"><tr><th colspan="3">ES</th></tr>
-
-<tr><th>Focus Sets</th><th class="center">Data type</th><th class="center">Reference</th></tr>
-<tr class="bg2"><td>DNase1</td><td>Dnase-Seq</td><td>13</td></tr>
-<tr><td>CTCF</td><td>ChIP-Seq</td><td>14</td></tr>
-<tr class="bg2"><td>Cmyc</td><td>ChIP-Seq</td><td>14</td></tr>
-<tr><td>E2F1</td><td>ChIP-Seq</td><td>14</td></tr>
-<tr class="bg2"><td>Esrrb</td><td>ChIP-Seq</td><td>14</td></tr>
-<tr><td>Klf4</td><td>ChIP-Seq</td><td>14</td></tr>
-<tr class="bg2"><td>Nanog</td><td>ChIP-Seq</td><td>14</td></tr>
-<tr><td>Oct4</td><td>ChIP-Seq</td><td>14</td></tr>
-<tr class="bg2"><td>STAT3</td><td>ChIP-Seq</td><td>14</td></tr>
-<tr><td>Smad1</td><td>ChIP-Seq</td><td>14</td></tr>
-<tr class="bg2"><td>Sox2</td><td>ChIP-Seq</td><td>14</td></tr>
-<tr><td>Suz12</td><td>ChIP-Seq</td><td>14</td></tr>
-<tr class="bg2"><td>Tcfcp2I1</td><td>ChIP-Seq</td><td>14</td></tr>
-<tr><td>Zfx</td><td>ChIP-Seq</td><td>14</td></tr>
-<tr class="bg2"><td>nMyc</td><td>ChIP-Seq</td><td>14</td></tr>
-<tr><td>p300</td><td>ChIP-Seq</td><td>14</td></tr>
-
-<tr><th>Attribute Sets</th><th>Data type</th><th>Reference</th></tr>
-<tr class="bg2"><td>H3</td><td>ChIP-Seq</td><td>15</td></tr>
-<tr><td>H3K4me3</td><td>ChIP-Seq</td><td>15</td></tr>
-<tr class="bg2"><td>H3K9me3</td><td>ChIP-Seq</td><td>15</td></tr>
-<tr><td>H3K27me3</td><td>ChIP-Seq</td><td>15</td></tr>
-<tr class="bg2"><td>H3K36me3</td><td>ChIP-Seq</td><td>15</td></tr>
-<tr><td>H4K20me3</td><td>ChIP-Seq</td><td>15</td></tr>
-<tr class="bg2"><td>PolII</td><td>ChIP-Seq</td><td>15</td></tr>
-
-<tr><th colspan="3">ES Hybrid</th></tr>
-
-<tr><th>Attribute Sets</th><th>Data type</th><th>Reference</th></tr>
-<tr><td>H3K36me3</td><td>ChIP-Seq</td><td>15</td></tr>
-<tr class="bg2"><td>H3K4me3</td><td>ChIP-Seq</td><td>15</td></tr>
-<tr><td>H3K9me3</td><td>ChIP-Seq</td><td>15</td></tr>
-
-<tr><th colspan="3">MEF</th></tr>
-
-<tr><th>Attribute Sets</th><th>Data type</th><th>Reference</th></tr>
-<tr class="bg2"><td>H3K27me3</td><td>ChIP-Seq</td><td>15</td></tr>
-<tr><td>H3K36me3</td><td>ChIP-Seq</td><td>15</td></tr>
-<tr class="bg2"><td>H3K4me3</td><td>ChIP-Seq</td><td>15</td></tr>
-<tr><td>H3K9me3</td><td>ChIP-Seq</td><td>15</td></tr>
-
-<tr><th colspan="3">MEL</th></tr>
-<tr><th>Focus Sets</th><th class="center">Data type</th><th class="center">Reference</th></tr>
-<tr class="bg2"><td>DNase1</td><td>Dnase-Seq</td><td>16</td></tr>
-<tr><td>cMyb</td><td>ChIP-Seq</td><td>17</td></tr>
-<tr class="bg2"><td>CTCF</td><td>ChIP-Seq</td><td>17</td></tr>
-<tr><td>Max</td><td>ChIP-Seq</td><td>17</td></tr>
-<tr class="bg2"><td>NELFe</td><td>ChIP-Seq</td><td>17</td></tr>
-<tr><td>p300</td><td>ChIP-Seq</td><td>17</td></tr>
-<tr class="bg2"><td>Rad21</td><td>ChIP-Seq</td><td>17</td></tr>
-<tr><td>USF2</td><td>ChIP-Seq</td><td>17</td></tr>
-
-<tr><th colspan="3">NPC</th></tr>
-
-<tr><th>Attribute Sets</th><th>Data type</th><th>Reference</th></tr>
-<tr class="bg2"><td>H3K27me3</td><td>ChIP-Seq</td><td>15</td></tr>
-<tr><td>H3K36me3</td><td>ChIP-Seq</td><td>15</td></tr>
-<tr class="bg2"><td>H3K4me3</td><td>ChIP-Seq</td><td>15</td></tr>
-<tr><td>H3K9me3</td><td>ChIP-Seq</td><td>15</td></tr>
-
-</TABLE>
-
-<h3 id='datarefs'>References for datasets</h3>
-<p>
-1. Genome-wide identification of DNaseI hypersensitive sites was
-performed by Greg Crawford and Terry Furey (Duke University) using a
-whole genome DNase-sequencing protocol (Crawford et al., Genome
-Research 2006).<br />DNase-sequencing was performed using the Illumina
-(Solexa) sequencing by synthesis method from a DNase treated library
-generated from the GM06990 cell line (Crawford and Furey,
-unpublished).
 </p>
 
-<p>
-2. Kim, T.H.; Abdullaev, Z.K.; Smith, A.D.; Ching, K.A.; Loukinov,
-D.I.; Green, R.D.; Zhang, M.Q.; Lobanenkov, V.V. &amp; Ren, B.<br />
-Analysis of the vertebrate insulator protein CTCF-binding sites in the
-human genome.<br />Cell, 2007 , 128 , 1231-1245
-</p>
+<h3>Display configuration</h3>
+
+Configuration of the various regulation displays is available under the 'Regulation' section, with the following subsections:
+
+<ul>
+<li><b>Regulatory Features</b> These are the output of the Regulatory Build. You can specifiy regulatory feature tracks for individual cell lines</li>
+<li><b>Open Chromatin and TFBS</b> Here you can configure the evidence tracks used in the Regulatory Build to build regulatory features. </li>
+<li><b>Histones and Polymerases</b> Here you can configure the evidence tracks used in the Regulatory Build to establish cell-specific boundaries for regulatory features. </li>
+<li><b>DNA Methylation</b> Here you can configure the methylation tracks you wish to visualise. </li>
+<li><b>Other regulatory regions</b> Here you can configure the external tracks you wish to visualise. </li>
+</ul>
 
 <p>
-3. A. Barski, S. Cuddapah, K. Cui, T.Y. Roh, D.E. Schones, Z. Wang,
-G. Wei, I. Chepelev and K. Zhao, (2007). High-resolution profiling of
-histone methylations in the human genome, Cell 129 (2007),
-pp. 823-837. <a href="http://www.ncbi.nlm.nih.gov/pubmed?term=17512414">PMID: 17512414</a>
+When diplaying the regulatory feature evidence, there are two visualisations available:<br/>
+<ul>
+<li><b>Peaks</b> - Shows significantly enriched 'peak' regions</li>
+<li><b>Signal</b> - Shows a plot or wiggle representing the raw signal.</li>
+</ul>
 </p>
+
+<p> 
+Species-specific microarray probe mappings can be visualized on the Location view by turning on tracks from the
+<i>'Oligo Probes'</i> section in the configuration panel.
+</p>
+
+<h2>Data Access</h2>
 
 <p>
-4. Wang Z, Zang C, Rosenfeld JA, Schones DE, Barski A, Cuddapah S, Cui
-K, Roh TY, Peng W, Zhang MQ, Zhao K. Combinatorial patterns of histone
-acetylations and methylations in the human genome. Nat Genet. 2008
-Jul;40(7):897-903. Epub 2008 Jun 15. <a href="http://www.ncbi.nlm.nih.gov/pubmed?term=18552846">PMID: 18552846</a>
+Regulation information stored in Ensembl databases can be accessed through the website, but also using <a href="/info/data/biomart.html"
+class="cp-external">BioMart</a> (regulation database), the <a href="/info/docs/api/index.html" class="cp-external">Perl API</a> 
+(<a href="/info/docs/api/funcgen/index.html">regulation API</a>) or by directly accessing the databases. 
+More information about programmatic access is available in the <a href="/info/docs/api/funcgen/regulation_tutorial.html">regulation API tutorial</a> page.
+A more detailed description of the regulation databases can be seen <a href='/info/docs/api/funcgen/funcgen_schema.html'>here</a>.
 </p>
 
-
-<p>
-5. This data was produced as part of the ENCODE project and is used in accordance to their <a href='http://genome.ucsc.edu/ENCODE/terms.html'>data release policy</a>. These data were 
-generated by the UW ENCODE group.
-More information <A HREF='http://genome.ucsc.edu/cgi-bin/hgTrackUi?g=wgEncodeUwDnaseSeq&db=hg18'>here</A> and 
-<A HREF='http://genome.ucsc.edu/cgi-bin/hgTrackUi?g=wgEncodeUwChIPSeq&db=hg18'>here</A>
-</p>
-
-<p>
-6. This data was produced as part of the ENCODE project and is used in accordance to their <a href='http://genome.ucsc.edu/ENCODE/terms.html'>data release policy</a>. These data and 
-annotations were created by a collaboration of multiple institutions.
-More information <A HREF='http://genome.ucsc.edu/cgi-bin/hgTrackUi?g=wgEncodeChromatinMap&db=hg18'>here</A> 
-</p>
-
-<p>
-7. This data was produced as part of the ENCODE project and is used in accordance to their <a href='http://genome.ucsc.edu/ENCODE/terms.html'>data release policy</a>. The ChIP-seq data were 
-generated at the Broad Institute and in the Bradley E. Bernstein lab at the 
-Massachusetts General Hospital/Harvard Medical School. 
-More information <A HREF='http://genome.ucsc.edu/cgi-bin/hgTrackUi?g=wgEncodeBroadChipSeq&db=hg18'>here</A> 
-</p>
-
-<p>
-8. Raha D, Wang Z, Moqtaderi Z, Wu L et al. Close association of RNA polymerase 
-II and many transcription factors with Pol III genes. Proc Natl Acad Sci USA 
-2010 Feb 23;107(8):3639-44. <a href="http://www.ncbi.nlm.nih.gov/pubmed?term=20139302">PMID: 20139302</a> 
-</p>
-
-<p>
-9. This data was produced as part of the ENCODE project and is used in accordance to their <a href='http://genome.ucsc.edu/ENCODE/terms.html'>data release policy</a>. These data were generated 
-and analyzed by the labs of Michael Snyder, Mark Gerstein and Sherman Weissman at 
-Yale University; Peggy Farnham at UC Davis; and Kevin Struhl at Harvard.    
-More information <A HREF='http://genome.ucsc.edu/cgi-bin/hgTrackUi?g=wgEncodeYaleChIPseq&db=hg18'>here</A> 
-</p>
-
-<p>
-10. This data was produced as part of the ENCODE project and is used in accordance to their <a href='http://genome.ucsc.edu/ENCODE/terms.html'>data release policy</a>. These data were 
-provided by the Myers Lab at the HudsonAlpha Institute for Biotechnology. 
-More information <A HREF='http://genome.ucsc.edu/cgi-bin/hgTrackUi?g=wgEncodeHudsonalphaChipSeq&db=hg18'>here</A> 
-</p>
-
-<p>
-11. This data was produced as part of the Epigenomics Roadmap and is used in accordance to their 
-<a href='http://www.nida.nih.gov/about/roadmap/epigenomics/data_access_policies.html'>data release policy</a>. 
-More information in here: <A HREF='http://nihroadmap.nih.gov/epigenomics/'>http://nihroadmap.nih.gov/epigenomics/</A> 
-</p>
-
-<p>
-12. Wang Z, Zang C, Cui K, Schones DE, Barski A, Peng W, Zhao K.
-Genome-wide mapping of HATs and HDACs reveals distinct functions in active and inactive genes.
-Cell. 2009 Sep 4;138(5):1019-31. <a href="http://www.ncbi.nlm.nih.gov/pubmed?term=18555785">PMID: 18555785</a>
-</p>
-
-<p>
-13. Dnase1-sequencing was produced as a collaboration between Ensembl,
-David Adams (Wellcome Trust Sanger Institute), and Greg Crawford (Duke
-University).
-</p>
-
-<p>
-14. Chen X, Xu H, Yuan P, Fang F, Huss M, Vega VB, Wong E, Orlov YL, Zhang W, 
-Jiang J, Loh YH, Yeo HC, Yeo ZX, Narang V, Govindarajan KR, Leong B, 
-Shahab A, Ruan Y, Bourque G, Sung WK, Clarke ND, Wei CL, Ng HH.
-Integration of external signaling pathways with the core transcriptional 
-network in embryonic stem cells. Cell. 2008 Jun 13;133(6):1106-17. 
-<a href="http://www.ncbi.nlm.nih.gov/pubmed?term=18555785">PMID: 18555785</a>
-</p>
-
-<p>
-15. Mikkelsen TS, Ku M, Jaffe DB, Issac B, Lieberman E, Giannoukos G,
-Alvarez P, Brockman W, Kim TK, Koche RP, Lee W, Mendenhall E,
-O'Donovan A, Presser A, Russ C, Xie X, Meissner A, Wernig M, Jaenisch
-R, Nusbaum C, Lander ES, Bernstein BE. Genome-wide maps of chromatin
-state in pluripotent and lineage-committed cells. Nature. 2007 Aug
-2;448(7153):548-9. <a href="http://www.ncbi.nlm.nih.gov/pubmed?term=17603471">PMID: 17603471</a>
-</p>
-
-<p>
-16. This data was produced as part of the ENCODE project and is used in accordance to their <a href='http://genome.ucsc.edu/ENCODE/terms.html'>data release policy</a>. 
-These data were generated by the UW ENCODE group. 
-More information <A HREF='http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=mm9&g=wgEncodeUwDnase'>here</A> 
-</p>
-
-<p>
-17. This data was produced as part of the ENCODE project and is used in accordance to their <a href='http://genome.ucsc.edu/ENCODE/terms.html'>data release policy</a>. 
-These data were generated and analyzed by the labs of Michael Snyder at Stanford University and Sherman Weissman at Yale University. 
-More information <A HREF='http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=mm9&g=wgEncodeSydhTfbs'>here</A> 
-</p>
 
 <P><BR><BR>
 </P>
