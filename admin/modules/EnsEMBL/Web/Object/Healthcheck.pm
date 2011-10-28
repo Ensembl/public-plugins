@@ -22,7 +22,7 @@ sub new {
   my $self  = $class->SUPER::new(@_);
   
   $self->{'_view_type'}     = $self->available_views->{$self->function};
-  $self->{'_view_param'}    = $self->function eq 'Species' ? ($self->hub->species eq 'common' ? '' : $self->hub->species) : $self->hub->param('q');
+  $self->{'_view_param'}    = $self->function eq 'Species' && $self->hub->species ne 'common' ? $self->hub->species : $self->hub->param('q');
   $self->{'_first_release'} = $SiteDefs::ENSEMBL_WEBADMIN_HEALTHCHECK_FIRST_RELEASE;
   $self->{'_curr_release'}  = $self->hub->species_defs->ENSEMBL_VERSION;
   $self->{'_req_release'}   = $self->hub->param('release') || $self->current_release;
