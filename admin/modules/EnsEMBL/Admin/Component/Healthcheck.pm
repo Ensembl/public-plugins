@@ -79,7 +79,7 @@ sub get_healthcheck_link {
   if ($params->{'type'} eq 'species') {
     return $self->object->validate_species($param) 
       ? qq(<a$class href="/$param/Healthcheck/Details/Species?release=$release" title="List all failed test reports for Speices $title in release $release">$caption</a>)
-      : $caption;
+      : qq(<a$class href="/Healthcheck/Details/Species?release=$release;q=$param" title="List all failed test reports for Speices $title in release $release">$caption</a>);
   }
   elsif ($params->{'type'} eq 'testcase') {
     return qq(<a$class href="/Healthcheck/Details/Testcase?release=$release;q=$param" title="List all failed test reports for Testcase $title in release $release">$caption</a>);
