@@ -106,7 +106,7 @@ sub external_relationship {
     $self->$column_internal($r_is_singular ? $rose_value->[0] : $rose_value);
   }
 
-  # return if already chached
+  # return if already cached
   return $self->{$key_name}{$r_name} if exists $self->{$key_name}{$r_name};
 
   # otherwise get on from the db, cache and return
