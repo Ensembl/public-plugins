@@ -3,6 +3,8 @@ package EnsEMBL::ORM::Rose::DataStructure;
 ## Name: EnsEMBL::ORM::Rose::DataStructure
 ## Class for column type 'datastructure' corresponding to Hash or Array
 
+## An extra boolean key 'trusted' is required (defaults to value being false) to initiate the column during setup (see &trusted below)
+
 use strict;
 
 use EnsEMBL::ORM::Rose::DataStructureValue;
@@ -17,6 +19,17 @@ sub value_class {
 sub type {
   ## Returns the type of the column (polymorphic method)
   return 'datastructure';
+}
+
+sub trusted {
+  ## Sets/Gets trusted flag on the column
+  ## If the column value is trusted to be safely 'eval'able, keep this flag on
+  ## @param Flag value
+  ##  - If on, string value is 'eval'ed straight without any security validation before setting it as a value of this column (insure but faster)
+  ##  - If off, value is set to this column after validation checks (secure but slower)
+  my $self = shift;
+  $self->{'_ens_trusted'} = shift @_ ? 1 : 0 if @_;
+  return $self->{'_ens_trusted'} || 0;
 }
 
 sub modify_methods {
@@ -35,12 +48,12 @@ sub modify_methods {
   my $new_accessor_method = sub {
     # modified method calls the actual accessor method to get the stringfied hash/array, then converts into hashref/arrayref before returning it
     my $object = shift;
-    return $self->value_class->new(map($object->$_, "_ensorm_old_$get_method"), $object);
+    return $self->value_class->new(map($object->$_, "_ensorm_old_$get_method"), $object, $self->trusted);
   };
   my $new_mutator_method  = sub {
     # modified method stringifies the hashref/arrayref before calling the actual mutator method
     my ($object, $value) = @_;
-    $value = $self->value_class->new($value, $object) unless UNIVERSAL::isa($value, $self->value_class);
+    $value = $self->value_class->new($value, $object, $self->trusted) unless UNIVERSAL::isa($value, $self->value_class);
     map($object->$_("$value"), "_ensorm_old_$set_method");
     return &$new_accessor_method($object);
   };
