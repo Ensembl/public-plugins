@@ -88,7 +88,7 @@ sub external_relationships {
   while (my ($name, $settings) = each %relationships) {
     $self->external_relationship($name, $settings);
   }
-  return $self->{$self->EXTERNAL_RELATION_KEY_NAME} ||= {};
+  return [values %{$self->{$self->EXTERNAL_RELATION_KEY_NAME} ||= {}}];
 }
 
 1;
