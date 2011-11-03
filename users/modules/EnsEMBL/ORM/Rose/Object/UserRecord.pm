@@ -20,7 +20,7 @@ __PACKAGE__->meta->setup(
     user_record_id    => {'type' => 'serial',  'primary_key' => 1, 'not_null' => 1},
     user_id           => {'type' => 'integer', 'length' => 11,     'not_null' => 1},
     type              => {'type' => 'varchar', 'length' => 255},
-    data              => {'type' => 'datamap', 'keys'   => [qw(url click name species)] }
+    data              => {'type' => 'datamap', 'trusted' => 1, 'keys' => [qw(url click name species)] }
   ],
   relationships => [
     user              => {
