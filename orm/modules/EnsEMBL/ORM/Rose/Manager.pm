@@ -56,7 +56,7 @@ sub get_objects {
   foreach my $with_e_object (@$with_e_objects) {
     $with_e_object = [ split /\./, $with_e_object ];
     push @$external_rels, {
-      'external_relation'       => pop @{$with_e_object},
+      'external_relation'       => pop @$with_e_object,
       'intermediate_relations'  => $with_e_object
     };
   }
@@ -94,7 +94,7 @@ sub get_objects {
   my $hash_key_name = $self->object_class->meta->EXTERNAL_RELATION_KEY_NAME;
   while (my $object_related_to_external_object = shift @$internal_objects) {
     my $relationship_name = shift @$internal_objects;
-    my $path = shift @$internal_objects;
+    my $path              = shift @$internal_objects;
     $object_related_to_external_object->{$hash_key_name}{$relationship_name} = $required_objects->{$path->[0]}{$path->[1]}{$path->[2]};
   }
 
@@ -301,9 +301,9 @@ sub _objects_related_to_external_object {
   }
 
   if (ref $object eq 'ARRAY') {
-    my $return = [];
+    my $return          = [];
     my $relations_clone = [];
-    $relations_clone = [ map {$_} @$relationships ] and push @$return, @{$self->_objects_related_to_external_object($_, $relations_clone)} for @$object;
+    $relations_clone    = [ map {$_} @$relationships ] and push @$return, @{$self->_objects_related_to_external_object($_, $relations_clone)} for @$object;
     return $return;
   }
 
