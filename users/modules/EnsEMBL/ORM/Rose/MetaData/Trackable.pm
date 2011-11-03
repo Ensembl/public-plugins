@@ -5,6 +5,8 @@ package EnsEMBL::ORM::Rose::MetaData::Trackable;
 
 use strict;
 
+use EnsEMBL::ORM::Rose::Object::User;
+
 use base qw(EnsEMBL::ORM::Rose::MetaData);
 
 sub setup {
@@ -20,7 +22,7 @@ sub setup {
     'modified_at', { type => 'datetime' }
   );
 
-  push @{$params{$self->class->ROSE_DB_NAME eq 'user' ? 'relationships' : 'external_relationships'}}, (
+  push @{$params{$self->class->ROSE_DB_NAME eq EnsEMBL::ORM::Rose::Object::User->ROSE_DB_NAME ? 'relationships' : 'external_relationships'}}, (
     created_by_user   => {
       'type'        => 'many to one',
       'class'       => 'EnsEMBL::ORM::Rose::Object::User',
@@ -32,6 +34,7 @@ sub setup {
       'column_map'  => {'modified_by' => 'user_id'}
     }
   );
+
   return $self->SUPER::setup(%params);
 }
 
