@@ -3,6 +3,9 @@ package EnsEMBL::ORM::Rose::DataMap;
 ## Name: EnsEMBL::ORM::Rose::DataMap
 ## Class for column type 'datamap' corresponding to single dimensional Hash
 
+## An extra key 'keys' is required during meta->setup to initiate a DataMap column to include the allowed keys for the datamap
+## These keys then can be accessed by calling them as method names on the value of this column
+
 use strict;
 
 use EnsEMBL::ORM::Rose::DataMapValue;
