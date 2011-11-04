@@ -8,6 +8,9 @@ package EnsEMBL::ORM::Rose::Object::Group;
 use strict;
 use warnings;
 
+use EnsEMBL::ORM::Rose::Object::Membership;
+use Rose::DB::Object::Helpers qw(forget_related has_loaded_related);
+
 use base qw(EnsEMBL::ORM::Rose::Object::Trackable);
 
 use constant ROSE_DB_NAME => 'user';
@@ -38,14 +41,43 @@ __PACKAGE__->meta->setup(
   ]
 );
 
+sub membership {
+  ## Returns the membership object for the given user, creates a new membership object if no existing found
+  ## @param Member - Rose User object
+  ## @param (Only considered if new membership is being created) User level (administrator, superuser or member) - defaults to 'member'
+  ## @return Membership object
+  my ($self, $member, $level) = @_;
+  my $membership = $self->get_membership($member);
+  unless ($membership) {
+    $self->forget_related('membership'); ## TODO - do some testing thing here about - is it really needed or does Rose update it automatically?
+    $membership = EnsEMBL::ORM::Rose::Object::Membership->new(
+      'user'  => $member,
+      'group' => $self,
+      'level' => $level =~ /^(administrator|superuser)$/ ? $level : 'member'
+    );
+  }
+  return $membership;
+}
+
 sub get_membership {
-  ## Gets the Membership object related to a the user for this group
+  ## Gets the Membership object related to a the user for this group only if found - no new membership is created
   ## @param Member - User rose object
   ## @return Rose Membership object or undef if user is not a member of this group
   my ($self, $member) = @_;
   my $member_id       = $member->user_id;
   my $membership      = undef;
-  $_->user_id == $member_id and $membership = $_ and last for $self->memberships;
+  if ($self->has_loaded_related('relationship' => 'memberships')) {   # Fetch only the required row if already not fetched
+    $_->user_id == $member_id and $membership = $_ and last for $self->memberships;
+  }
+  else {
+    ($membership) = @{EnsEMBL::ORM::Rose::Manager::Membership->get_objects(
+      'query' => [
+        'user_id'     => $member_id,
+        'webgroup_id' => $self->webgroup_id
+      ],
+      'limit' => 1
+    ) || []};
+  }
   return $membership;
 }
 
@@ -107,19 +139,14 @@ sub invite_user {
   ## @return 1 if invitation is created (or already exists), 0 - if user is already an active member of group or -1 if user has blocked the group
   my ($self, $member, $admin) = @_;
 
-  my $membership = $self->get_membership($member);
+  my $membership = $self->membership($member, 'member');
 
-  # if membership already exists, don't add a new row to the db
-  if ($membership) {
-    return 0  if $membership->is_active;
-    return -1 if $membership->is_group_blocked;
-    $membership->make_invitation unless $membership->is_pending_invitation;
-  }
-  else {
-    $membership = $self->meta->relationship('memberships')->class->new_invitation($self, $member);
-    $self->forget_related('memberships'); ## TODO test if this actually works and refreshes the related memberships when queried afterwards
-  }
+  return 0  if $membership->is_active;
+  return -1 if $membership->is_group_blocked;
+
+  $membership->make_invitation unless $membership->is_pending_invitation;
   $membership->save(user => $admin);
+
   return 1;
 }
 
@@ -168,7 +195,7 @@ sub activate_user {
     $membership->save(user => $admin);
     return 1;
   }
-  return undef;
+  return 0;
 }
 
 sub inactivate_user {
@@ -184,7 +211,7 @@ sub inactivate_user {
     $membership->save(user => $admin);
     return 1;
   }
-  return undef;
+  return 0;
 }
 
 ### 
