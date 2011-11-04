@@ -36,8 +36,8 @@ __PACKAGE__->meta->setup(
     webgroup_id       => {type => 'integer'},
     user_id           => {type => 'integer'},
     level             => {type => 'enum', 'values' => [qw(member administrator superuser)]},
-    status            => {type => 'enum', 'values' => [qw(active inactive pending barred)]},  #status set by the admin
-    member_status     => {type => 'enum', 'values' => [qw(active inactive pending barred)]},  #status set by the user
+    status            => {type => 'enum', 'values' => [qw(active inactive pending barred)], 'default' => 'active'  },  #status set by the admin
+    member_status     => {type => 'enum', 'values' => [qw(active inactive pending barred)], 'default' => 'inactive'},  #status set by the user
   ],
 
   relationships         => [
@@ -53,21 +53,6 @@ __PACKAGE__->meta->setup(
     }
   ]
 );
-
-sub new_invitation {
-  ## @constructor
-  ## Creates a new membership object with given group and member
-  ## @param Group
-  ## @param New member - Rose User object
-  my ($self, $group, $member) = @_;
-  return $self->new(
-    webgroup_id   =>  $group->webgroup_id,
-    user_id       =>  $member->user_id,
-    level         =>  'member',
-    status        =>  'active',
-    member_status =>  'pending'
-  );
-}
 
 sub is_active {
   ## Checks whether both status and member_status are active
