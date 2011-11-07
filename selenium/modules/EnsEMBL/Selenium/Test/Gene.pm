@@ -23,8 +23,7 @@ sub test_gene {
     $sel->ensembl_click_links(["link=Gene ($gene_text)"],"50000")
     and $sel->ensembl_is_text_present("Gene: $gene_text ($gene_param)");
 
-    if(lc($self->species) eq 'homo_sapiens') {
-      print "  Test ZMenu on Gene Summary\n";
+    if(lc($self->species) eq 'homo_sapiens') {      
       $sel->ensembl_open_zmenu('TranscriptsImage','class^="drag"');
       $sel->ensembl_click("link=Jump to location View")      
       and $sel->ensembl_wait_for_ajax_ok('50000','2000')
@@ -54,8 +53,7 @@ sub test_gene {
      ],'20000');
     $sel->ensembl_click_links(["link=Regulation"]) if($SD->table_info_other(ucfirst($self->species),'funcgen', 'feature_set')->{'rows'} && $gene_text !~ /^ASMPATCH/);
 
-    if(lc($self->species) eq 'homo_sapiens') {
-      print "  Test ZMenu on Regulation\n";
+    if(lc($self->species) eq 'homo_sapiens') {      
       $sel->ensembl_open_zmenu('RegulationImage','class^="group"');
       $sel->ensembl_click("link=ENSR*")
       and $sel->ensembl_wait_for_ajax_ok('50000','2000')
