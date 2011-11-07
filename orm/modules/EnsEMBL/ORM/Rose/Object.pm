@@ -13,7 +13,7 @@ use EnsEMBL::ORM::Rose::DbConnection;
 use EnsEMBL::ORM::Rose::Manager;
 use EnsEMBL::ORM::Rose::MetaData;
 
-use Rose::DB::Object::Helpers qw(as_tree);  ## Object->as_tree returns a hash ref of the actual rose object
+use Rose::DB::Object::Helpers qw(as_tree forget_related has_loaded_related);  ## Some extra methods that can be called on any child class object
 
 use base qw(Rose::DB::Object);
 
