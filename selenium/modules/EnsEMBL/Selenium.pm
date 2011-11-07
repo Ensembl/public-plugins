@@ -43,11 +43,18 @@ sub ensembl_wait_for_page_to_load {
 
 # Open a ZMenu by title for the given imagemap panel or if title not provided will get the coords based on the area tag for the given imagemap panel (id of div for class js_panel)
 # e.g. $sel->ensembl_open_zmenu('contigviewtop', 'ASN2') or $sel->ensembl_open_zmenu('GenomePanel')
+# params: $panel      - the id of the view panel for the ZMenu to be tested
+#         $aread_tag  - Anything within the area tag to be tested so that we can get the coords for the ZMenu. can be href or a class or title.
+#         $track_name - Just the name of the track for the ZMenu to be tested, used for display information only in the log.
+ 
 sub ensembl_open_zmenu {
-  my ($self, $panel, $area_tag) = @_;
+  my ($self, $panel, $area_tag, $track_name) = @_;
   my $tag = $area_tag ?  "area[$area_tag]" : 'area[href^=#vdrag]';  
+
 # $('area[class^="group"]','#RegulationImage').attr('coords').split(',')
 # Ensembl.PanelManager.panels.RegulationImage.makeZMenu({pageX:0, pageY:0}, {x:1763, y:148});
+
+  print "  Test ZMenu $track_name on the $panel panel \n";
   $self->run_script(qq/
     var coords = \$('$tag', '#$panel').attr('coords').split(',');
     Ensembl.PanelManager.panels.$panel.makeZMenu({pageX:0, pageY:0}, {x:coords[0], y:coords[1]});
