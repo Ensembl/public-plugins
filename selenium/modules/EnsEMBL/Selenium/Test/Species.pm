@@ -69,28 +69,58 @@ sub attach_remote_file {
   $sel->ensembl_click("modal_bg");
   
   #Checking if karyotype image loaded fine
-  $sel->ensembl_wait_for_page_to_load
+  $sel->ensembl_wait_for_ajax_ok
   and $sel->ensembl_images_loaded_ok;
 }
 sub add_track {  
   my $self = shift;
   my $sel  = $self->sel;
-  
-  print "  Test Upload data\n";   
-  $self->upload_data;
-     
-  print "  Test adding track(uploaded data)\n";
+    
+  $self->upload_data;   #BED
+  $self->upload_data('BEDGRAPH', 'bedGraph', undef, 'http://www.ensembl.org/info/website/upload/sample_files/bedgraph_example.bed' ); #bedgraph format  
+  $self->upload_data('GFF', 'GFF', undef, 'http://www.ensembl.org/info/website/upload/sample_files/example.gff' ); #GFF format
+  $self->upload_data('GTF', 'GTF', undef, 'http://www.ensembl.org/info/website/upload/sample_files/example.gtf' ); #GTF format
+  $self->upload_data('PSL', 'PSL', undef, 'http://www.ensembl.org/info/website/upload/sample_files/example.psl' ); #PSL format
+  $self->upload_data('WIG', 'WIG', undef, 'http://www.ensembl.org/info/website/upload/sample_files/example.wig' ); #WIG format
+
+  print "  Test selecting track(uploaded data)\n";
   $sel->ensembl_click("link=Configure Page")
   and $sel->ensembl_wait_for_ajax_ok;
  
-   $sel->ensembl_is_text_present("test2")
-   and $sel->ensembl_click("//form[\@id='location_genome_configuration']/div[1]/div/ul/li/img")
-   and $sel->ensembl_click("//img[\@alt='Arrows on both sides']");   
-   
-   $sel->ensembl_click("modal_bg")
-   and $sel->ensembl_wait_for_ajax_ok(undef,2000)   
-   #and $sel->ensembl_is_text_present("Click on the image above to jump to a chromosome, or click and drag to select a region")
-   and $sel->ensembl_is_text_present("test2");      #making sure karyotype displayed the track for the uploaded data   
+  $sel->ensembl_is_text_present("BED")
+  and $sel->ensembl_click("//form[\@id='location_genome_configuration']/div[1]/div/ul/li[1]/img")
+  and $sel->ensembl_click("//img[\@alt='Arrows on both sides']");
+  
+  $sel->ensembl_is_text_present("BEDGRAPH")
+  and $sel->ensembl_click("//form[\@id='location_genome_configuration']/div[1]/div/ul/li[2]/img")
+  and $sel->ensembl_click("//img[\@alt='Arrows on both sides']");
+  
+  $sel->ensembl_is_text_present("GFF")
+  and $sel->ensembl_click("//form[\@id='location_genome_configuration']/div[1]/div/ul/li[3]/img")
+  and $sel->ensembl_click("//img[\@alt='Arrows on both sides']");
+      
+  $sel->ensembl_is_text_present("GTF")
+  and $sel->ensembl_click("//form[\@id='location_genome_configuration']/div[1]/div/ul/li[4]/img")
+  and $sel->ensembl_click("//img[\@alt='Arrows on both sides']"); 
+  
+  $sel->ensembl_is_text_present("PSL")
+  and $sel->ensembl_click("//form[\@id='location_genome_configuration']/div[1]/div/ul/li[5]/img")
+  and $sel->ensembl_click("//img[\@alt='Arrows on both sides']"); 
+  
+  $sel->ensembl_is_text_present("WIG")
+  and $sel->ensembl_click("//form[\@id='location_genome_configuration']/div[1]/div/ul/li[6]/img")
+  and $sel->ensembl_click("//img[\@alt='Arrows on both sides']"); 
+    
+  $sel->ensembl_click("modal_bg")
+  and $sel->ensembl_wait_for_ajax_ok(undef,2000)   
+  #and $sel->ensembl_is_text_present("Click on the image above to jump to a chromosome, or click and drag to select a region")
+  and $sel->ensembl_is_text_present("BED")            #making sure karyotype displayed the track for the uploaded data(track name in the uploaded file)
+  and $sel->ensembl_is_text_present("filt.map.1")
+  and $sel->ensembl_is_text_present("GFF")
+  and $sel->ensembl_is_text_present("GTF")
+  and $sel->ensembl_is_text_present("PSL")
+  and $sel->ensembl_is_text_present("variableStep")   #name of track in the WIG upload file
+  and $sel->ensembl_is_text_present("fixedStep");     #name of track in the WIG upload file
 }
 
 sub configure_page {
@@ -243,44 +273,32 @@ sub features_karyotype {
   and $sel->ensembl_click("name=submit")
   and $sel->ensembl_wait_for_ajax_ok(5000,5000) #timeout=5s and pause=5s
   and $sel->ensembl_is_text_present("$feature_id");
-
-#   $sel->ensembl_click("modal_bg")
-#   and $sel->ensembl_wait_for_ajax_ok   
-#  and $sel->ensembl_images_loaded;
 }
 
 # function to get the number of tracks active (should be called before and after choosing the track to check if the counts has been updated correctly).
 # parameters: 
-# Note: Function should be called after link(track) has been clicked (link will have class active)
+# Note: Function should be called after link(track) has been clicked.
 sub get_track_counts {
-  my ($self, $track_title) = @_;
+  my ($self) = @_;
   my $sel = $self->sel;
 
   #$('.modal_nav li:not(.active) .on:first');   #TODO: get track count and track name for not active track (first one only) just to make sure they stay the same
-
-  #getting the count for the selected/highlighted track
-  my $track_count = $sel->get_eval(qq{
-      var \$ = selenium.browserbot.getCurrentWindow().jQuery;
-      \$('.modal_nav li.active > .count .on').html();
-  });
   
-  #getting track counts for parent track (the main track)
-  my $parent_track = $sel->get_eval(qq{
-      var \$ = selenium.browserbot.getCurrentWindow().jQuery;
-      \$('.modal_nav li.active').parents('.top_level').children('.count').children('.on').html() || '';
-  });
-  
-  # if there is a main track (parent track) get the parent track name and build the text to check for test
-  if($parent_track) {
-    my $parent_trackname = $sel->get_eval(qq{
+  # Getting the track count for the selected track, return a string containing _ to separate the child and parent track count.
+  my $track = $sel->get_eval(qq{
         var \$ = selenium.browserbot.getCurrentWindow().jQuery;
-        \$('.modal_nav li.active').parents('.top_level').children('a').html();
-    });
-    
-    $parent_track = qq{$parent_trackname($parent_track/*};
-  }
-  
-  return ($track_count, $parent_track)
+        var el = \$('.track:visible').eq(0);
+        var type = el.parents('.config').attr('class').replace(/config|active|first|\\s/g, '');
+        var subset = el.parents('.subset').attr('class').replace(/subset|active|first|\\s/g, '');
+        
+        \$('.modal_nav').find('a.' + type + ', a.' + type + '-' + subset).siblings('.count').children('.on').map(function(){ return \$(this).html(); }).toArray().join('_');        
+     });
+
+    my @count_array  = split('_',$track);
+    my $parent_track = @count_array[0]; #getting track counts for parent track (the main track)
+    my $sub_track    = @count_array[1];    #getting the count for the sub track (if there is any)
+
+  return ($sub_track, $parent_track)
 }
 
 sub open_species_homepage {
@@ -305,83 +323,103 @@ sub species_databases {
   return $hash; 
 }
 
-# function to turn RFAM ncRNA tracks ON under ncRNA section and check to see if the total track count increase by 1, if it does test successful
-# PARAMETERS: The track name as it is shown on the panel within the a tag(link)
-sub track_on {
-  my ($self, $track_name) = @_;
+# function to turn tracks ON/OFF and check to see if the total track count increase/decrease by 1
+# PARAMETERS: $track_name - The track name as it is shown on the left side of the configuration panel within the a tag(link) 
+#             $track_image_xpath - The track image (the square box to select the track) xpath for the track to be turn on/off (eg: //form[\@id='location_viewbottom_configuration']/div[4]/div/ul/li[1]/img)
+#             $action - whether to turn the track on or off (eg: 'on' or 'off')
+#             $search(optional) - should be the track name you want to search for in the search box.
+sub turn_track {
+  my ($self, $track_name, $track_image_xpath, $action, $search) = @_;
 
   my $sel = $self->sel;
-  
-  print "  Test turning $track_name track ON\n";
+  my $parent_test;
+    
   $sel->ensembl_click("link=Configure this page")  
   and $sel->ensembl_wait_for_ajax_ok(undef,2000)
   and $sel->ensembl_is_text_present("Active tracks");
+  
+  if($search) {
+    print "  Test searching for $search track and turning the track ".uc($action)."\n" ;
+    
+    $sel->click_ok("name=configuration_search_text")    
+    and $sel->type_keys_ok("configuration_search_text", "$search") #searching for the track in the search textfield    
+    and $sel->ensembl_wait_for_ajax_ok(undef,'1000');
+  }
+  
+  if(!$search) {
+    print "  Test turning $track_name track ".uc($action)."\n";
+    $sel->ensembl_click("link=$track_name")
+    and $sel->ensembl_wait_for_ajax_ok;
+  }
+  
+  #function to get the total count for track (parent_track is empty since there isn't any parent)
+  my ($sub_track, $parent_track) = $self->get_track_counts;
+
+  # if there is a main track (parent track) get the parent track name and build the text to check for test
+  if($sub_track) {
+    my $parent_trackname = $sel->get_eval(qq{
+      var \$ = selenium.browserbot.getCurrentWindow().jQuery;
+      var el = \$('.track:visible').eq(0);
+      var type = el.parents('.config').attr('class').replace(/config|active|first|\\s/g, '');
+      var subset = el.parents('.subset').attr('class').replace(/subset|active|first|\\s/g, '');
+  
+      \$('.modal_nav').find('a.' + type ).html();
+    });
+    $parent_track = lc($action) eq 'on' ? $parent_track + 1 : $parent_track - 1;
+    $parent_track  = qq{$parent_trackname($parent_track/*};
+    $parent_test   = 1;
+  } else {
+    $sub_track = $parent_track;
+  }
  
-  $sel->ensembl_click("link=$track_name")
-  and $sel->ensembl_wait_for_ajax_ok;
+  (my $track_input = $track_image_xpath) =~ s/img/input/g; #the hidden input to check if the track is on/off  
   
-  #function to get the total count for track (parent_track is empty since there isn't any parent)
-  my ($track_count, $parent_track) = $self->get_track_counts;  
-  $track_count = $track_count + 1 if($sel->get_value("//form[\@id='location_viewbottom_configuration']/div[4]/div/ul/li[1]/input") eq 'off'); #1 track is chosen, track count should increment by 1 only do this if track is off.
+  $sub_track += 1 if($sel->get_value($track_input) eq 'off' && lc($action) eq 'on');  # track is chosen, track count should increment by 1 only do this if track is off and action is turning track on.
+  $sub_track -= 1 if($sel->get_value($track_input) ne 'off' && lc($action) eq 'off'); # unselecting track, track count should decement by 1 only if it wasn't off before and action is turning track off.
 
-  $sel->ensembl_click("//form[\@id='location_viewbottom_configuration']/div[4]/div/ul/li[1]/img")
-  and $sel->ensembl_click("//form[\@id='location_viewbottom_configuration']/div[4]/div/ul/li[1]/ul/li[4]/img")
-  and $sel->ensembl_is_text_present("ncRNA($track_count/*")  #maybe add a different error if failure (use selenium is_text_present instead of ensembl one)  
-  and $sel->ensembl_click("modal_bg")
+  my $track_select_image = $track_image_xpath;
+  $track_select_image =~ s/img/ul\/li[4]\/img/g if(lc($action) eq 'on'); #generating the xpath for the track select image (the normal one)
+  $track_select_image =~ s/img/ul\/li[2]\/img/g if(lc($action) eq 'off');#generating the xpath for the track select image (the blank one)
+ 
+  $sel->ensembl_click($track_image_xpath)  
+  and $sel->ensembl_click($track_select_image)    
+  and $sel->ensembl_is_text_present("$track_name($sub_track/*");  #maybe add a different error if failure (use selenium is_text_present instead of ensembl one)  
+  
+  $sel->ensembl_is_text_present($parent_track) if($parent_test);
+  
+  $sel->ensembl_click("modal_bg")
   and $sel->ensembl_wait_for_ajax_ok
   and $sel->ensembl_images_loaded;
 }
 
-# function to turn RFAM ncRNA tracks OFF under ncRNA section and check to see if the total track count decrease by 1, if it does test successful
-# PARAMETERS: The track name as it is shown on the panel within the a tag(link)
-sub track_off {
-  my ($self, $track_name) = @_;
-  
-  my $sel = $self->sel;
-  
-  print "  Test turning $track_name track OFF\n";
-  $sel->ensembl_click("link=Configure this page")
-  and $sel->ensembl_wait_for_ajax_ok(undef,2000);
-  
-  #function to get the total counts associated with the main and sub track and then subsctract 1 from it to see if the counts is correct.
-  
-  $sel->ensembl_click("link=$track_name")
-  and $sel->ensembl_wait_for_ajax_ok;
-  
-  #function to get the total count for track (parent_track is empty since there isn't any parent)
-  my ($track_count_before, $parent_track) = $self->get_track_counts;
-  my $track_count_after = $track_count_before - 1 if($sel->get_value("//form[\@id='location_viewbottom_configuration']/div[4]/div/ul/li[1]/input") ne 'off');; #unselecting track, track count should decement by 1 only if it wasn't off before.
-  
-  $sel->ensembl_click("//form[\@id='location_viewbottom_configuration']/div[4]/div/ul/li[1]/img")  
-  and $sel->ensembl_click("//form[\@id='location_viewbottom_configuration']/div[4]/div/ul/li[1]/ul/li[2]/img")
-  and $sel->ensembl_is_text_present("ncRNA($track_count_after/*")
-  and $sel->ensembl_click("modal_bg")
-  and $sel->ensembl_wait_for_ajax_ok
-  and $sel->ensembl_images_loaded;
-}
+# Function: Uploading data from the manage your data in configuration panel 
+# params: $name        - name of the uploaded data/track (name field on the form - also will be the name that appears in the configuration panel when choosing the track)
+#         $format      - format of the data to be uploaded (should match the HTML of the format dropdown)
+#         $data        - include this is you want to upload data for the track. (will insert the data in the paste file textarea - optional)
+#         $upload_file - url for the file to be uploaded (optional)
 
 sub upload_data {
-  my ($self, $name, $format, $data) = @_;
+  my ($self, $name, $format, $data, $upload_file) = @_;
   my $sel  = $self->sel;
   
-  $name   ||= 'test2';
+  $name   ||= 'BED';
   $format ||= 'BED'; 
   $data   ||= qq{
-  track name=pairedReads2 description="test2" useScore=1 color=ff5cbc
+  track name=pairedReads2 description="BED" useScore=1 color=ff5cbc
   chr21 31010000 31050000 cloneA 960 + 1010000 1050000 0 2 567,488, 0,3512
   chr21 31020000 31060000 cloneB 900 - 1020000 1060000 0 2 433,399, 0,3601 
 };
 
+  print "  Test Upload data $format \n";
   $sel->ensembl_click("link=Manage your data")
   and $sel->ensembl_wait_for_ajax_ok
   and $sel->ensembl_is_text_present("Your data");
 
   $sel->ensembl_click("link=Upload Data")
-  and $sel->ensembl_wait_for_ajax_ok;
-  
-  $sel->type_ok("name=name","$name")
+  and $sel->ensembl_wait_for_ajax_ok
+  and $sel->type_ok("name=name","$name")
   and $sel->select_ok("format", "$format")
-  and $sel->type_ok("text", "$data")
+  and $upload_file ? $sel->type_ok("name=url", "$upload_file") : $sel->type_ok("text", "$data")  
   and $sel->ensembl_click("name=submit")
   and $sel->ensembl_wait_for_ajax_ok(50000,10000); #timeout=50s and pause=10s
   
