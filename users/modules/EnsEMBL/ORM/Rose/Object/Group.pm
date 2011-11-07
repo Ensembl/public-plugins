@@ -9,7 +9,7 @@ use strict;
 use warnings;
 
 use EnsEMBL::ORM::Rose::Object::Membership;
-use Rose::DB::Object::Helpers qw(forget_related has_loaded_related);
+use EnsEMBL::ORM::Rose::Manager::Membership;
 
 use base qw(EnsEMBL::ORM::Rose::Object::Trackable);
 
@@ -49,7 +49,8 @@ sub membership {
   my ($self, $member, $level) = @_;
   my $membership = $self->get_membership($member);
   unless ($membership) {
-    $self->forget_related('membership'); ## TODO - do some testing thing here about - is it really needed or does Rose update it automatically?
+    $self->forget_related('membership');    ## TODO - do some testing thing here about - is it really needed or does Rose update it automatically?
+    $member->forget_related('membership');  ## TODO - as above
     $membership = EnsEMBL::ORM::Rose::Object::Membership->new(
       'user'  => $member,
       'group' => $self,
@@ -65,15 +66,21 @@ sub get_membership {
   ## @return Rose Membership object or undef if user is not a member of this group
   my ($self, $member) = @_;
   my $member_id       = $member->user_id;
+  my $group_id        = $self->webgroup_id;
   my $membership      = undef;
-  if ($self->has_loaded_related('relationship' => 'memberships')) {   # Fetch only the required row if already not fetched
+
+  # Fetch only the required row if already not fetched
+  if ($member->has_loaded_related('memberships')) {
+    $_->webgroup_id == $group_id and $membership = $_ and last for $member->memberships;
+  }
+  elsif ($self->has_loaded_related('memberships')) {
     $_->user_id == $member_id and $membership = $_ and last for $self->memberships;
   }
   else {
     ($membership) = @{EnsEMBL::ORM::Rose::Manager::Membership->get_objects(
       'query' => [
         'user_id'     => $member_id,
-        'webgroup_id' => $self->webgroup_id
+        'webgroup_id' => $group_id
       ],
       'limit' => 1
     ) || []};
