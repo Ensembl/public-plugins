@@ -110,7 +110,7 @@ sub content {
       my $link_class    = join ' ', keys %{{ map { $_."-link" => 1 } split (' ', $text_class)}};
 
       $annotation      .= $annotation eq ''
-        ? qq(<p class="hc-comment-link"><a class="$link_class" href="/Healthcheck/Annotation?rid=$report_id" rel="$js_ref">Add Annotation</a></p>)
+        ? qq(<p class="hc-comment-link"><a class="$link_class" href="/Healthcheck/Annotation?rid=$report_id" rel="$js_ref">Add&nbsp;Annotation</a></p>)
         : qq(<p class="hc-comment-link"><a class="$link_class" href="/Healthcheck/Annotation?rid=$report_id" rel="$js_ref">Edit</a></p>);
 
       $table->add_row({
