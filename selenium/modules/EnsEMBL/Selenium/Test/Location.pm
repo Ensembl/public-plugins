@@ -24,22 +24,30 @@ sub test_location {
     and $sel->ensembl_is_text_present("Region in detail");
 #    and $sel->ensembl_images_loaded;
 
-    #turn ncRNA track on/off, test to turn track on and off (excluding the two species since they dont have ncrna track)
-     if(lc($self->species) ne 'saccharomyces_cerevisiae' && lc($self->species) ne 'drosophila_melanogaster') {       
-      $self->track_on("ncRNA");
-      $self->track_off("ncRNA");
+    #turn ncRNA track on/off(excluding the two species since they dont have ncrna track)
+     if(lc($self->species) ne 'saccharomyces_cerevisiae' && lc($self->species) ne 'drosophila_melanogaster') {      
+      $self->turn_track("ncRNA", "//form[\@id='location_viewbottom_configuration']/div[4]/div/ul/li[1]/img", "on");
+      $self->turn_track("ncRNA", "//form[\@id='location_viewbottom_configuration']/div[4]/div/ul/li[1]/img", "off");      
       #next;
-    }
+    }    
 
     #Test ZMENU (only for human)
     if(lc($self->species) eq 'homo_sapiens') {
+      #Searching and adding decipher track      
+      $self->turn_track("Germline variation","//form[\@id='location_viewbottom_configuration']/div[6]/div[4]/ul/li/img", "on", "decipher");
+      
+      #simulate ZMenu for this track (decipher)
+      $sel->ensembl_open_zmenu('ViewBottom',"href*=decipher","Decipher track");
+      $sel->ensembl_is_text_present("decipher:");      
+      
+      #Test attach das
       $self->attach_das;
       $sel->ensembl_wait_for_ajax_ok(15000);
       
       $sel->ensembl_open_zmenu('Summary',"class^=drag");
       $sel->click_ok("link=Centre here")
       and $sel->ensembl_wait_for_ajax_ok(undef,'2000')      
-      and $sel->go_back();      
+      and $sel->go_back();
 
       #TODO:: ZMenu on viewtop and ViewBottom panel
     }
@@ -65,7 +73,7 @@ sub test_location {
     $sel->ensembl_click_links(["link=Alignments (image) ($alignment_count)","link=Alignments (text) ($alignment_count)","link=Multi-species view ($multi_species_count)"],'20000') if($alignment_count);
     $sel->ensembl_click_links(["link=Synteny ($synteny_count)"], '20000') if(grep(/@location_array[0]/,@{$SD->get_config(ucfirst($self->species), 'ENSEMBL_CHROMOSOMES')}) && $synteny_count);
 
-    #Markers        
+    #Markers
     if($SD->table_info_other(ucfirst($self->species),'core', 'marker_feature')->{'rows'}) {
       $sel->ensembl_click_links(["link=Markers"], '8000');
 
