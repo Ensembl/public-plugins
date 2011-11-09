@@ -344,9 +344,7 @@ sub turn_track {
     $sel->click_ok("name=configuration_search_text")    
     and $sel->type_keys_ok("configuration_search_text", "$search") #searching for the track in the search textfield    
     and $sel->ensembl_wait_for_ajax_ok(undef,'1000');
-  }
-  
-  if(!$search) {
+  } else {
     print "  Test turning $track_name track ".uc($action)."\n";
     $sel->ensembl_click("link=$track_name")
     and $sel->ensembl_wait_for_ajax_ok;
@@ -388,7 +386,7 @@ sub turn_track {
   $sel->ensembl_is_text_present($parent_track) if($parent_test);
   
   $sel->ensembl_click("modal_bg")
-  and $sel->ensembl_wait_for_ajax_ok
+  and $sel->ensembl_wait_for_ajax_ok(undef,2000)
   and $sel->ensembl_images_loaded;
 }
 
