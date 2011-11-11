@@ -8,13 +8,19 @@
 
 <h2 id="Introduction">Introduction</h2>
 
+<p>Alternative splicing is a widespread mechanism for generating protein 
+diversity and regulating protein expression. 
+The term alternative splicing is used in biology to describe any case in which 
+a primary transcript can be spliced in more than one pattern to generate 
+multiple, distinct mRNAs.</p>
+
 <p>The set of alternative splicing events (AS events) is derived from
 Ensembl <a href="./genome_annotation.html">gene annotation</a>. The
 Ensembl gene set includes both automatic and manual annotation, with
-all transcripts based on experimental evidence. Alternatively spliced
-transcripts of the same Ensembl gene overlap in coding sequence and
-are compared to provide a comprehensive list of common alternative
-splicing events. These data can be found on the website in the gene
+all transcripts based on experimental evidence.</p>
+<p>Alternatively spliced transcripts from any given Ensembl gene are 
+compared to provide a comprehensive list of elementary alternative splicing events. 
+These data can be found on the website in the gene
 and/or transcript tab, and can be accessed by BioMart, or
 programmatically from the core database using the Perl API.</p>
 
@@ -30,10 +36,10 @@ programmatically from the core database using the Perl API.</p>
 </ul>
 
 
-<h2 id="Definition">Common Alternative Spliced Patterns</h2>
+<h2 id="Definition">Alternative Spliced Patterns</h2>
 
-<p>Seven common AS patterns are automatically annotated in Ensembl for
-the species mentioned:</p>
+<p>Seven common patterns of alternatively spliced exonic regions are automatically annotated 
+in Ensembl for the species mentioned. </p>
 
 <table>
 
@@ -60,8 +66,8 @@ mRNA transcript.</td>
 <tr>
 <td>Mutually exclusive exons</td>
 <td>MXE</td>
-<td>In the simpliest case, one or two consecutive exons are retained
-but not both.</td>
+<td>Refer to a case in which multiple cassette exons are used in a mutually exclusive manner. 
+In the simplest case: two consecutive exons that are never both included in the mature mRNA transcript.</td>
 </tr>
 
 <tr>
@@ -85,8 +91,8 @@ exon.</td>
 <tr>
 <td>Alternative first exon</td>
 <td>AFE</td>
-<td>The second exons of each variant have identical boundaries, but
-the first exons are mutually exclusive. This is to annotate possible
+<td>Second exons of each variant have identical boundaries, but
+first exons are mutually exclusive. This is to annotate possible
 alternative promoter usage*.</td>
 </tr>
 
@@ -94,8 +100,8 @@ alternative promoter usage*.</td>
 <td>Alternative last exon</td>
 <td>ALE</td>
 <td>Penultimate exons of each splice variant have identical
-boundaries, but the last exons are mutually exclusive. This is to
-allow annotatation of possible alternative polyadenylation
+boundaries, but last exons are mutually exclusive. This is to
+allow annotation of possible alternative polyadenylation
 usage*.</td>
 </tr>
 
