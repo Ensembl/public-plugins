@@ -13,7 +13,7 @@
 
 <tr>
 <td class="bg3 left"><b><i>Pan troglodytes</i></b></td>
-<td class="bg4 center"><font color="blue"><a href="mlss/mlss_10032.html">YES</a></font></td><!-- H.sap -->
+<td class="bg4 center"><font color="blue"><a href="mlss/mlss_10050.html">YES</a></font></td><!-- H.sap -->
 <td class="bg3 center">-</td><!-- G.gor -->
 <th class="bg4 center" style="width:5em"><i>P.tro</i></th>
 </tr>
