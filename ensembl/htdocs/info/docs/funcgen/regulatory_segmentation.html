@@ -1,0 +1,63 @@
+<html>
+  <head>
+  <meta name="order" content="2" />
+  <meta name="navigation" content="Regulatory Segmentation">
+  <title>Regulatory Segmentation</title>
+  </head>
+
+ 
+<BODY LANG="en-GB" DIR="LTR">
+<!--#include virtual="/info/docs/funcgen/doc_links.html" -->
+
+
+<h1>Regulatory Segmentation</h1>
+
+<p>
+The ENCODE combined segmentation classifies the genome into regions of similar signal over 14 assays to obtain, for six ENCODE cell types, a single-track summary of the functional architecture of the human genome.
+</p>
+<p>
+The assays were generated in the ENCODE project for GM12878, K562, H1-hESC, HepG2, HeLa-S3, and HUVEC, and were chosen to maximise distinct information about the state of the genome. These assays (including control input sequencing) were coordinated across all cell lines and constituted three classes of data:
+</p>
+	
+<table class="ss tint" style="width:60%;">
+<tr><th>Input Data Class</th><th>Description</th></tr>
+<tr><td class="bg2">Open chromatin</td><td>DNase1 hypersensitivity and <a href='http://www.ncbi.nlm.nih.gov/pubmed/19303047'>FAIRE</a></td></tr>
+<tr><td>Transcription factors</td><td>PolII and CTCF</td></tr>
+<tr><td class="bg2">Histone modifications</td><td>H3k4me1, H3k4me2, H3k4me3, H3k9ac, H3k27ac, H3k27me3, H3k36me3, H4k20me1</td></tr>
+</table>
+
+<p>
+Two unsupervised segmentation programs were used:
+
+<ul>	
+<table>
+<tr><td><li><b>ChromHMM (Ernst et al. 2011 <a href='http://www.ncbi.nlm.nih.gov/pubmed/21441907'>PMID 21441907</a>)</b></td></tr>
+<tr><td>In brief, ChromHMM labels each assay as high or low in 200 base pair bins over the whole human genome and runs a 25-state Hidden Markov Model.</td></tr>
+<tr></tr>
+<tr><td><li><b>Segway (Hoffman et al. In Preparation)</b></td></tr>
+<tr><td>A Dynamic Bayesian Network approach using base-pair resolution real valued signal data, trained over the ENCODE pilot regions (1% of the genome), and fitted over the whole genome.</td></tr>
+</table>
+</ul>
+</p>
+<p>
+The segmentations produced by these two methods were then combined, based on their agreements (Hoffman, Ernst et al., In Preparation) in an automated fashion, in order to maximise resolution and biological interpretability. The segments were then labelled according to their signal distribution and genomic location, giving the following classifications:
+</p>
+<table class="ss tint" style="width:60%;">
+<tr><th>Segment Class</th><th>Description</th></tr>
+<tr class="bg2"><td>CTCF enriched               </td><td>CTCF enriched element</td></tr>
+<tr><td>Predicted Weak Enhancer/Cis-reg element </td><td>Predicted weak enhancer or open chromatin cis regulatory element</td></tr>
+<tr class="bg2"><td>Predicted Transcribed Region</td><td>Predicted transcribed region</td></tr>
+<tr><td>Predicted Enhancer                      </td><td>Predicted enhancer</td></tr>          
+<tr class="bg2"><td>Predicted Promoter Flank    </td><td>Predicted promoter flanking region</td></tr>
+<tr><td>Predicted Repressed/Low Activity        </td><td>Predicted repressed or low activity region</td></tr>           
+<tr class="bg2"><td><Predicted Promoter with TSS </td><td>Predicted promoter region including transcription start site</td></tr>    
+</table>
+
+
+<h4>Regulatory Segmentation in the Browser</h4>
+<p>There a six segmentation tracks available reflecting this cell lines used in the segmentation analysis. These are tracks are on by default in most regulation views, and are also configurable in 'Location' view, by accessing the 'Regulation' section of the configuration panel. Colours used for each of the segmentation classes follows the agreed ENCODE standard (see legend).
+</p>
+
+    <hr>
+  </body>
+</html>
