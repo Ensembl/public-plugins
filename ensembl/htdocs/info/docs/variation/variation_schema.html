@@ -19,6 +19,32 @@
 			}
 		}
 	}
+	
+	// Function to show/hide all the tables
+	function show_hide_all () {
+		expand_flag = document.getElementById('expand');
+		divs = document.getElementsByName('sqltable');
+		for(var i=0; i < divs.length; i++){
+			param = divs[i].id.substring(4);
+			div   = document.getElementById('div_'+param);
+		  alink = document.getElementById('a_'+param);
+			
+			if (expand_flag.value=='0') {
+				div.style.display='inline';
+				alink.innerHTML='Hide';
+			}
+			else {
+				div.style.display='none';
+				alink.innerHTML='Show';
+			}
+		}
+		if (expand_flag.value=='0') {
+			expand_flag.value='1';
+		}
+		else {
+			expand_flag.value='0';
+		}
+	}
 </script>
 
 </head>
@@ -53,8 +79,7 @@ A colour legend is available at the <a href="#legend">bottom of the page</a>.
 <br />
 <hr />
 
-<h3 id="top">List of the tables:</h3>
-<table><tr><td>
+<h3 id="top">List of the tables:</h3><table><tr><td>
  <ul>
 		<li><a href="#allele"><b>allele</b></a></li>
 		<li><a href="#allele_code"><b>allele_code</b></a></li>
@@ -113,7 +138,10 @@ A colour legend is available at the <a href="#legend">bottom of the page</a>.
 		<li><a href="#variation_synonym"><b>variation_synonym</b></a></li>
 		</ul>
 </td></tr></table>
-<hr />
+
+		<input type="button" onclick="show_hide_all()" style="background-color:#933;color:#FFF;cursor:pointer" value="Show/hide all" />
+		<input type="hidden" id="expand" value="0" /> 
+		<hr />
 
 <br />
   <table style="border: 2px groove #CCCCCC;background-color:#FAFAFF">
@@ -127,7 +155,7 @@ A colour legend is available at the <a href="#legend">bottom of the page</a>.
   </table>
 <p>This table stores information about each of a variation's alleles, along with population frequencies.</p>
 
-	<div id="div_allele" style="display:none">
+	<div id="div_allele" name="sqltable" style="display:none">
 
 	<table style="border:1px outset #222222">
 		<tr class="bg3 center"><th style="width:180px">Column</th><th style="width:150px">Type</th><th style="width:100px">Default value</th><th style="width:400px">Description</th><th style="width:150px">Index</th></tr>
@@ -161,7 +189,7 @@ A colour legend is available at the <a href="#legend">bottom of the page</a>.
   </table>
 <p>This table stores the relationship between the internal allele identifiers and the alleles themselves.</p>
 
-	<div id="div_allele_code" style="display:none">
+	<div id="div_allele_code" name="sqltable" style="display:none">
 
 	<table style="border:1px outset #222222">
 		<tr class="bg3 center"><th style="width:180px">Column</th><th style="width:150px">Type</th><th style="width:100px">Default value</th><th style="width:400px">Description</th><th style="width:150px">Index</th></tr>
@@ -187,7 +215,7 @@ A colour legend is available at the <a href="#legend">bottom of the page</a>.
   </table>
 <p>This table, along with allele_group_allele, represents a particular multi-marker allele of a given multi-marker variation, or haplotype. It stores an associated population frequency.</p>
 
-	<div id="div_allele_group" style="display:none">
+	<div id="div_allele_group" name="sqltable" style="display:none">
 
 	<table style="border:1px outset #222222">
 		<tr class="bg3 center"><th style="width:180px">Column</th><th style="width:150px">Type</th><th style="width:100px">Default value</th><th style="width:400px">Description</th><th style="width:150px">Index</th></tr>
@@ -219,7 +247,7 @@ A colour legend is available at the <a href="#legend">bottom of the page</a>.
   </table>
 <p>This table represents an allele of one variation in a multi-marker variation, or haplotype. It stores a string of the allele.</p>
 
-	<div id="div_allele_group_allele" style="display:none">
+	<div id="div_allele_group_allele" name="sqltable" style="display:none">
 
 	<table style="border:1px outset #222222">
 		<tr class="bg3 center"><th style="width:180px">Column</th><th style="width:150px">Type</th><th style="width:100px">Default value</th><th style="width:400px">Description</th><th style="width:150px">Index</th></tr>
@@ -246,7 +274,7 @@ A colour legend is available at the <a href="#legend">bottom of the page</a>.
   </table>
 <p>This table contains identifiers of associated studies (e.g. NHGRI and EGA studies with the same pubmed identifier).</p>
 
-	<div id="div_associate_study" style="display:none">
+	<div id="div_associate_study" name="sqltable" style="display:none">
 
 	<table style="border:1px outset #222222">
 		<tr class="bg3 center"><th style="width:180px">Column</th><th style="width:150px">Type</th><th style="width:100px">Default value</th><th style="width:400px">Description</th><th style="width:150px">Index</th></tr>
@@ -271,7 +299,7 @@ A colour legend is available at the <a href="#legend">bottom of the page</a>.
   </table>
 <p>Defines various attributes used elsewhere in the database</p>
 
-	<div id="div_attrib" style="display:none">
+	<div id="div_attrib" name="sqltable" style="display:none">
 
 	<table style="border:1px outset #222222">
 		<tr class="bg3 center"><th style="width:180px">Column</th><th style="width:150px">Type</th><th style="width:100px">Default value</th><th style="width:400px">Description</th><th style="width:150px">Index</th></tr>
@@ -298,7 +326,7 @@ A colour legend is available at the <a href="#legend">bottom of the page</a>.
   </table>
 <p>Groups related attributes together</p>
 
-	<div id="div_attrib_set" style="display:none">
+	<div id="div_attrib_set" name="sqltable" style="display:none">
 
 	<table style="border:1px outset #222222">
 		<tr class="bg3 center"><th style="width:180px">Column</th><th style="width:150px">Type</th><th style="width:100px">Default value</th><th style="width:400px">Description</th><th style="width:150px">Index</th></tr>
@@ -324,7 +352,7 @@ A colour legend is available at the <a href="#legend">bottom of the page</a>.
   </table>
 <p>Defines the set of possible attribute types used in the attrib table</p>
 
-	<div id="div_attrib_type" style="display:none">
+	<div id="div_attrib_type" name="sqltable" style="display:none">
 
 	<table style="border:1px outset #222222">
 		<tr class="bg3 center"><th style="width:180px">Column</th><th style="width:150px">Type</th><th style="width:100px">Default value</th><th style="width:400px">Description</th><th style="width:150px">Index</th></tr>
@@ -352,7 +380,7 @@ A colour legend is available at the <a href="#legend">bottom of the page</a>.
   </table>
 <p>This table holds genotypes compressed using the pack() method in Perl. These genotypes are mapped to particular genomic locations rather than variation objects. The data have been compressed to reduce table size and increase the speed of the web code when retrieving strain slices and LD data. Only data from resequenced and individuals used for LD calculations are included in this table</p>
 
-	<div id="div_compressed_genotype_region" style="display:none">
+	<div id="div_compressed_genotype_region" name="sqltable" style="display:none">
 
 	<table style="border:1px outset #222222">
 		<tr class="bg3 center"><th style="width:180px">Column</th><th style="width:150px">Type</th><th style="width:100px">Default value</th><th style="width:400px">Description</th><th style="width:150px">Index</th></tr>
@@ -384,7 +412,7 @@ A colour legend is available at the <a href="#legend">bottom of the page</a>.
   </table>
 <p>This table holds genotypes compressed using the pack() method in Perl. These genotypes are mapped directly to variation objects. The data have been compressed to reduce table size. All genotypes in the database are included in this table (included duplicates of those genotypes contained in the compressed_genotype_region table). This table is optimised for retrieval from </p>
 
-	<div id="div_compressed_genotype_var" style="display:none">
+	<div id="div_compressed_genotype_var" name="sqltable" style="display:none">
 
 	<table style="border:1px outset #222222">
 		<tr class="bg3 center"><th style="width:180px">Column</th><th style="width:150px">Type</th><th style="width:100px">Default value</th><th style="width:400px">Description</th><th style="width:150px">Index</th></tr>
@@ -413,7 +441,7 @@ A colour legend is available at the <a href="#legend">bottom of the page</a>.
   </table>
 <p>Contains alleles that did not pass the Ensembl filters</p>
 
-	<div id="div_failed_allele" style="display:none">
+	<div id="div_failed_allele" name="sqltable" style="display:none">
 
 	<table style="border:1px outset #222222">
 		<tr class="bg3 center"><th style="width:180px">Column</th><th style="width:150px">Type</th><th style="width:100px">Default value</th><th style="width:400px">Description</th><th style="width:150px">Index</th></tr>
@@ -440,7 +468,7 @@ A colour legend is available at the <a href="#legend">bottom of the page</a>.
   </table>
 <p>This table contains descriptions of reasons for a variation being flagged as failed.</p>
 
-	<div id="div_failed_description" style="display:none">
+	<div id="div_failed_description" name="sqltable" style="display:none">
 
 	<table style="border:1px outset #222222">
 		<tr class="bg3 center"><th style="width:180px">Column</th><th style="width:150px">Type</th><th style="width:100px">Default value</th><th style="width:400px">Description</th><th style="width:150px">Index</th></tr>
@@ -467,7 +495,7 @@ A colour legend is available at the <a href="#legend">bottom of the page</a>.
   </table>
 <p>For various reasons it may be necessary to store information about a structural variation that has failed quality checks (mappings) in the Structural Variation pipeline. This table acts as a flag for such failures.</p>
 
-	<div id="div_failed_structural_variation" style="display:none">
+	<div id="div_failed_structural_variation" name="sqltable" style="display:none">
 
 	<table style="border:1px outset #222222">
 		<tr class="bg3 center"><th style="width:180px">Column</th><th style="width:150px">Type</th><th style="width:100px">Default value</th><th style="width:400px">Description</th><th style="width:150px">Index</th></tr>
@@ -494,7 +522,7 @@ A colour legend is available at the <a href="#legend">bottom of the page</a>.
   </table>
 <p>For various reasons it may be necessary to store information about a variation that has failed quality checks in the Variation pipeline. This table acts as a flag for such failures.</p>
 
-	<div id="div_failed_variation" style="display:none">
+	<div id="div_failed_variation" name="sqltable" style="display:none">
 
 	<table style="border:1px outset #222222">
 		<tr class="bg3 center"><th style="width:180px">Column</th><th style="width:150px">Type</th><th style="width:100px">Default value</th><th style="width:400px">Description</th><th style="width:150px">Index</th></tr>
@@ -521,7 +549,7 @@ A colour legend is available at the <a href="#legend">bottom of the page</a>.
   </table>
 <p>This table contains the upstream and downstream sequence surrounding a variation. Since each variation is defined by its flanking sequence, this table has a one-to-one relationship with the variation table.</p>
 
-	<div id="div_flanking_sequence" style="display:none">
+	<div id="div_flanking_sequence" name="sqltable" style="display:none">
 
 	<table style="border:1px outset #222222">
 		<tr class="bg3 center"><th style="width:180px">Column</th><th style="width:150px">Type</th><th style="width:100px">Default value</th><th style="width:400px">Description</th><th style="width:150px">Index</th></tr>
@@ -554,7 +582,7 @@ A colour legend is available at the <a href="#legend">bottom of the page</a>.
   </table>
 <p>This table stores genotype codes as multiple rows of allele_code identifiers, linked by genotype_code_id and ordered by haplotype_id.</p>
 
-	<div id="div_genotype_code" style="display:none">
+	<div id="div_genotype_code" name="sqltable" style="display:none">
 
 	<table style="border:1px outset #222222">
 		<tr class="bg3 center"><th style="width:180px">Column</th><th style="width:150px">Type</th><th style="width:100px">Default value</th><th style="width:400px">Description</th><th style="width:150px">Index</th></tr>
@@ -581,7 +609,7 @@ A colour legend is available at the <a href="#legend">bottom of the page</a>.
   </table>
 <p>This table represents the equivalent of a tagged_variation_feature for multi-marker variations, representing an instance where a haplotype is tagged by or tags another marker.</p>
 
-	<div id="div_httag" style="display:none">
+	<div id="div_httag" name="sqltable" style="display:none">
 
 	<table style="border:1px outset #222222">
 		<tr class="bg3 center"><th style="width:180px">Column</th><th style="width:150px">Type</th><th style="width:100px">Default value</th><th style="width:400px">Description</th><th style="width:150px">Index</th></tr>
@@ -609,7 +637,7 @@ A colour legend is available at the <a href="#legend">bottom of the page</a>.
   </table>
 <p>Stores information about an identifiable individual, including gender and the identifiers of the individual's parents (if known).</p>
 
-	<div id="div_individual" style="display:none">
+	<div id="div_individual" name="sqltable" style="display:none">
 
 	<table style="border:1px outset #222222">
 		<tr class="bg3 center"><th style="width:180px">Column</th><th style="width:150px">Type</th><th style="width:100px">Default value</th><th style="width:400px">Description</th><th style="width:150px">Index</th></tr>
@@ -640,7 +668,7 @@ A colour legend is available at the <a href="#legend">bottom of the page</a>.
   </table>
 <p>This table holds uncompressed genotypes for given variations.</p>
 
-	<div id="div_individual_genotype_multiple_bp" style="display:none">
+	<div id="div_individual_genotype_multiple_bp" name="sqltable" style="display:none">
 
 	<table style="border:1px outset #222222">
 		<tr class="bg3 center"><th style="width:180px">Column</th><th style="width:150px">Type</th><th style="width:100px">Default value</th><th style="width:400px">Description</th><th style="width:150px">Index</th></tr>
@@ -670,7 +698,7 @@ A colour legend is available at the <a href="#legend">bottom of the page</a>.
   </table>
 <p>This table resolves the many-to-many relationship between the individual and population tables; i.e. samples may belong to more than one population. Hence it is composed of rows of individual and population identifiers.</p>
 
-	<div id="div_individual_population" style="display:none">
+	<div id="div_individual_population" name="sqltable" style="display:none">
 
 	<table style="border:1px outset #222222">
 		<tr class="bg3 center"><th style="width:180px">Column</th><th style="width:150px">Type</th><th style="width:100px">Default value</th><th style="width:400px">Description</th><th style="width:150px">Index</th></tr>
@@ -696,7 +724,7 @@ A colour legend is available at the <a href="#legend">bottom of the page</a>.
   </table>
 <p>This table resolves the many-to-many relationship between the individual and population tables; i.e. samples may belong to more than one population. Hence it is composed of rows of individual and population identifiers.</p>
 
-	<div id="div_individual_type" style="display:none">
+	<div id="div_individual_type" name="sqltable" style="display:none">
 
 	<table style="border:1px outset #222222">
 		<tr class="bg3 center"><th style="width:180px">Column</th><th style="width:150px">Type</th><th style="width:100px">Default value</th><th style="width:400px">Description</th><th style="width:150px">Index</th></tr>
@@ -722,7 +750,7 @@ A colour legend is available at the <a href="#legend">bottom of the page</a>.
   </table>
 <p>This table stores various metadata relating to the database, generally used by the Ensembl web code.</p>
 
-	<div id="div_meta" style="display:none">
+	<div id="div_meta" name="sqltable" style="display:none">
 
 	<table style="border:1px outset #222222">
 		<tr class="bg3 center"><th style="width:180px">Column</th><th style="width:150px">Type</th><th style="width:100px">Default value</th><th style="width:400px">Description</th><th style="width:150px">Index</th></tr>
@@ -745,7 +773,7 @@ A colour legend is available at the <a href="#legend">bottom of the page</a>.
   </table>
 <p>This table gives the coordinate system used by various tables in the database.</p>
 
-	<div id="div_meta_coord" style="display:none">
+	<div id="div_meta_coord" name="sqltable" style="display:none">
 
 	<table style="border:1px outset #222222">
 		<tr class="bg3 center"><th style="width:180px">Column</th><th style="width:150px">Type</th><th style="width:100px">Default value</th><th style="width:400px">Description</th><th style="width:150px">Index</th></tr>
@@ -767,7 +795,7 @@ A colour legend is available at the <a href="#legend">bottom of the page</a>.
   </table>
 <p>This table stores details of the phenotypes associated with variation annotations.</p>
 
-	<div id="div_phenotype" style="display:none">
+	<div id="div_phenotype" name="sqltable" style="display:none">
 
 	<table style="border:1px outset #222222">
 		<tr class="bg3 center"><th style="width:180px">Column</th><th style="width:150px">Type</th><th style="width:100px">Default value</th><th style="width:400px">Description</th><th style="width:150px">Index</th></tr>
@@ -794,7 +822,7 @@ A colour legend is available at the <a href="#legend">bottom of the page</a>.
   </table>
 <p>A table consisting simply of sample_ids representing populations; all data relating to the populations are stored in separate tables (see below).<br />A population may be an ethnic group (e.g. caucasian, hispanic), assay group (e.g. 24 europeans), strain, phenotypic group (e.g. blue eyed, diabetes) etc. Populations may be composed of other populations by defining relationships in the population_structure table.</p>
 
-	<div id="div_population" style="display:none">
+	<div id="div_population" name="sqltable" style="display:none">
 
 	<table style="border:1px outset #222222">
 		<tr class="bg3 center"><th style="width:180px">Column</th><th style="width:150px">Type</th><th style="width:100px">Default value</th><th style="width:400px">Description</th><th style="width:150px">Index</th></tr>
@@ -825,7 +853,7 @@ A colour legend is available at the <a href="#legend">bottom of the page</a>.
   </table>
 <p>This table stores genotypes and frequencies for variations in given populations.</p>
 
-	<div id="div_population_genotype" style="display:none">
+	<div id="div_population_genotype" name="sqltable" style="display:none">
 
 	<table style="border:1px outset #222222">
 		<tr class="bg3 center"><th style="width:180px">Column</th><th style="width:150px">Type</th><th style="width:100px">Default value</th><th style="width:400px">Description</th><th style="width:150px">Index</th></tr>
@@ -858,7 +886,7 @@ A colour legend is available at the <a href="#legend">bottom of the page</a>.
   </table>
 <p>This table stores hierarchical relationships between populations by relating them as populations and sub-populations.</p>
 
-	<div id="div_population_structure" style="display:none">
+	<div id="div_population_structure" name="sqltable" style="display:none">
 
 	<table style="border:1px outset #222222">
 		<tr class="bg3 center"><th style="width:180px">Column</th><th style="width:150px">Type</th><th style="width:100px">Default value</th><th style="width:400px">Description</th><th style="width:150px">Index</th></tr>
@@ -883,7 +911,7 @@ A colour legend is available at the <a href="#legend">bottom of the page</a>.
   </table>
 <p>Contains encoded sift and polyphen predictions for every protein-coding transcript in this species</p>
 
-	<div id="div_protein_function_predictions" style="display:none">
+	<div id="div_protein_function_predictions" name="sqltable" style="display:none">
 
 	<table style="border:1px outset #222222">
 		<tr class="bg3 center"><th style="width:180px">Column</th><th style="width:150px">Type</th><th style="width:100px">Default value</th><th style="width:400px">Description</th><th style="width:150px">Index</th></tr>
@@ -907,7 +935,7 @@ A colour legend is available at the <a href="#legend">bottom of the page</a>.
   </table>
 <p>This table stores the read coverage in the resequencing of individuals. Each row contains an individual ID, chromosomal coordinates and a read coverage level.</p>
 
-	<div id="div_read_coverage" style="display:none">
+	<div id="div_read_coverage" name="sqltable" style="display:none">
 
 	<table style="border:1px outset #222222">
 		<tr class="bg3 center"><th style="width:180px">Column</th><th style="width:150px">Type</th><th style="width:100px">Default value</th><th style="width:400px">Description</th><th style="width:150px">Index</th></tr>
@@ -936,7 +964,7 @@ A colour legend is available at the <a href="#legend">bottom of the page</a>.
   </table>
 <p>Sample is used as a generic catch-all term to cover individuals, populations and strains; it contains a name and description, as well as a size if applicable to the population.</p>
 
-	<div id="div_sample" style="display:none">
+	<div id="div_sample" name="sqltable" style="display:none">
 
 	<table style="border:1px outset #222222">
 		<tr class="bg3 center"><th style="width:180px">Column</th><th style="width:150px">Type</th><th style="width:100px">Default value</th><th style="width:400px">Description</th><th style="width:150px">Index</th></tr>
@@ -965,7 +993,7 @@ A colour legend is available at the <a href="#legend">bottom of the page</a>.
   </table>
 <p>Used to store alternative names for populations when data comes from multiple sources.</p>
 
-	<div id="div_sample_synonym" style="display:none">
+	<div id="div_sample_synonym" name="sqltable" style="display:none">
 
 	<table style="border:1px outset #222222">
 		<tr class="bg3 center"><th style="width:180px">Column</th><th style="width:150px">Type</th><th style="width:100px">Default value</th><th style="width:400px">Description</th><th style="width:150px">Index</th></tr>
@@ -994,7 +1022,7 @@ A colour legend is available at the <a href="#legend">bottom of the page</a>.
   </table>
 <p>This table stores the relationship between Ensembl's internal coordinate system identifiers and traditional chromosome names.</p>
 
-	<div id="div_seq_region" style="display:none">
+	<div id="div_seq_region" name="sqltable" style="display:none">
 
 	<table style="border:1px outset #222222">
 		<tr class="bg3 center"><th style="width:180px">Column</th><th style="width:150px">Type</th><th style="width:100px">Default value</th><th style="width:400px">Description</th><th style="width:150px">Index</th></tr>
@@ -1023,7 +1051,7 @@ A colour legend is available at the <a href="#legend">bottom of the page</a>.
   </table>
 <p>This table contains details of the source from which a variation is derived. Most commonly this is NCBI's dbSNP; other sources include SNPs called by Ensembl.</p>
 
-	<div id="div_source" style="display:none">
+	<div id="div_source" name="sqltable" style="display:none">
 
 	<table style="border:1px outset #222222">
 		<tr class="bg3 center"><th style="width:180px">Column</th><th style="width:150px">Type</th><th style="width:100px">Default value</th><th style="width:400px">Description</th><th style="width:150px">Index</th></tr>
@@ -1062,7 +1090,7 @@ A colour legend is available at the <a href="#legend">bottom of the page</a>.
   </table>
 <p>This table stores information about structural variation.</p>
 
-	<div id="div_structural_variation" style="display:none">
+	<div id="div_structural_variation" name="sqltable" style="display:none">
 
 	<table style="border:1px outset #222222">
 		<tr class="bg3 center"><th style="width:180px">Column</th><th style="width:150px">Type</th><th style="width:100px">Default value</th><th style="width:400px">Description</th><th style="width:150px">Index</th></tr>
@@ -1094,7 +1122,7 @@ A colour legend is available at the <a href="#legend">bottom of the page</a>.
   </table>
 <p>This table stores phenotype and sample information for structural variants and their supporting evidences.</p>
 
-	<div id="div_structural_variation_annotation" style="display:none">
+	<div id="div_structural_variation_annotation" name="sqltable" style="display:none">
 
 	<table style="border:1px outset #222222">
 		<tr class="bg3 center"><th style="width:180px">Column</th><th style="width:150px">Type</th><th style="width:100px">Default value</th><th style="width:400px">Description</th><th style="width:150px">Index</th></tr>
@@ -1126,7 +1154,7 @@ A colour legend is available at the <a href="#legend">bottom of the page</a>.
   </table>
 <p>This table stores the associations between structural variations and their supporting evidences.</p>
 
-	<div id="div_structural_variation_association" style="display:none">
+	<div id="div_structural_variation_association" name="sqltable" style="display:none">
 
 	<table style="border:1px outset #222222">
 		<tr class="bg3 center"><th style="width:180px">Column</th><th style="width:150px">Type</th><th style="width:100px">Default value</th><th style="width:400px">Description</th><th style="width:150px">Index</th></tr>
@@ -1151,7 +1179,7 @@ A colour legend is available at the <a href="#legend">bottom of the page</a>.
   </table>
 <p>This table stores information about structural variation features (i.e. mappings of structural variations to genomic locations).</p>
 
-	<div id="div_structural_variation_feature" style="display:none">
+	<div id="div_structural_variation_feature" name="sqltable" style="display:none">
 
 	<table style="border:1px outset #222222">
 		<tr class="bg3 center"><th style="width:180px">Column</th><th style="width:150px">Type</th><th style="width:100px">Default value</th><th style="width:400px">Description</th><th style="width:150px">Index</th></tr>
@@ -1191,7 +1219,7 @@ A colour legend is available at the <a href="#legend">bottom of the page</a>.
   </table>
 <p>This table contains details of the studies. The studies information can come from internal studies (DGVa, EGA) or from external studies (Uniprot, NHGRI, ...).</p>
 
-	<div id="div_study" style="display:none">
+	<div id="div_study" name="sqltable" style="display:none">
 
 	<table style="border:1px outset #222222">
 		<tr class="bg3 center"><th style="width:180px">Column</th><th style="width:150px">Type</th><th style="width:100px">Default value</th><th style="width:400px">Description</th><th style="width:150px">Index</th></tr>
@@ -1223,7 +1251,7 @@ A colour legend is available at the <a href="#legend">bottom of the page</a>.
   </table>
 <p>This table contains the SubSNP(ss) ID and the name of the submitter handle of dbSNP.</p>
 
-	<div id="div_subsnp_handle" style="display:none">
+	<div id="div_subsnp_handle" name="sqltable" style="display:none">
 
 	<table style="border:1px outset #222222">
 		<tr class="bg3 center"><th style="width:180px">Column</th><th style="width:150px">Type</th><th style="width:100px">Default value</th><th style="width:400px">Description</th><th style="width:150px">Index</th></tr>
@@ -1252,7 +1280,7 @@ A colour legend is available at the <a href="#legend">bottom of the page</a>.
   </table>
 <p>This table lists variation features that are tagged by another variation feature. Tag pairs are defined as having an r<sup>2</sup> &gt; 0.99.</p>
 
-	<div id="div_tagged_variation_feature" style="display:none">
+	<div id="div_tagged_variation_feature" name="sqltable" style="display:none">
 
 	<table style="border:1px outset #222222">
 		<tr class="bg3 center"><th style="width:180px">Column</th><th style="width:150px">Type</th><th style="width:100px">Default value</th><th style="width:400px">Description</th><th style="width:150px">Index</th></tr>
@@ -1279,7 +1307,7 @@ A colour legend is available at the <a href="#legend">bottom of the page</a>.
   </table>
 <p>his table is only needed for create master schema when run healthcheck system. Needed for other species, but human, so keep it.</p>
 
-	<div id="div_tmp_individual_genotype_single_bp" style="display:none">
+	<div id="div_tmp_individual_genotype_single_bp" name="sqltable" style="display:none">
 
 	<table style="border:1px outset #222222">
 		<tr class="bg3 center"><th style="width:180px">Column</th><th style="width:150px">Type</th><th style="width:100px">Default value</th><th style="width:400px">Description</th><th style="width:150px">Index</th></tr>
@@ -1309,7 +1337,7 @@ A colour legend is available at the <a href="#legend">bottom of the page</a>.
   </table>
 <p>This table relates a single allele of a variation_feature to a transcript (see Core documentation). It contains the consequence of the allele e.g. intron_variant, non_synonymous_codon, stop_lost etc, along with the change in amino acid in the resulting protein if applicable.</p>
 
-	<div id="div_transcript_variation" style="display:none">
+	<div id="div_transcript_variation" name="sqltable" style="display:none">
 
 	<table style="border:1px outset #222222">
 		<tr class="bg3 center"><th style="width:180px">Column</th><th style="width:150px">Type</th><th style="width:100px">Default value</th><th style="width:400px">Description</th><th style="width:150px">Index</th></tr>
@@ -1353,7 +1381,7 @@ A colour legend is available at the <a href="#legend">bottom of the page</a>.
   </table>
 <p>This is the schema's generic representation of a variation, defined as a genetic feature that varies between individuals of the same species.The most common type is the single nucleotide variation (SNP) though the schema also accommodates copy number variations (CNVs) and structural variations (SVs).A variation is defined by its flanking sequence rather than its mapped location on a chromosome; a variation may in fact have multiple mappings across a genome.This table stores a variation's name (commonly an ID of the form e.g. rs123456, assigned by dbSNP), along with a validation status and ancestral (or reference) allele.</p>
 
-	<div id="div_variation" style="display:none">
+	<div id="div_variation" name="sqltable" style="display:none">
 
 	<table style="border:1px outset #222222">
 		<tr class="bg3 center"><th style="width:180px">Column</th><th style="width:150px">Type</th><th style="width:100px">Default value</th><th style="width:400px">Description</th><th style="width:150px">Index</th></tr>
@@ -1398,7 +1426,7 @@ A colour legend is available at the <a href="#legend">bottom of the page</a>.
   </table>
 <p>This table stores information linking genotypes and phenotypes. It stores various fields pertaining to the study conducted, along with the associated gene, risk allele frequency and a p-value.</p>
 
-	<div id="div_variation_annotation" style="display:none">
+	<div id="div_variation_annotation" name="sqltable" style="display:none">
 
 	<table style="border:1px outset #222222">
 		<tr class="bg3 center"><th style="width:180px">Column</th><th style="width:150px">Type</th><th style="width:100px">Default value</th><th style="width:400px">Description</th><th style="width:150px">Index</th></tr>
@@ -1433,7 +1461,7 @@ A colour legend is available at the <a href="#legend">bottom of the page</a>.
   </table>
 <p>This table represents mappings of variations to genomic locations. It stores an allele string representing the different possible alleles that are found at that locus e.g. "A/T" for a SNP, as well as a "worst case" consequence of the mutation. It also acts as part of the relationship between variations and transcripts.</p>
 
-	<div id="div_variation_feature" style="display:none">
+	<div id="div_variation_feature" name="sqltable" style="display:none">
 
 	<table style="border:1px outset #222222">
 		<tr class="bg3 center"><th style="width:180px">Column</th><th style="width:150px">Type</th><th style="width:100px">Default value</th><th style="width:400px">Description</th><th style="width:150px">Index</th></tr>
@@ -1477,7 +1505,7 @@ A colour legend is available at the <a href="#legend">bottom of the page</a>.
   </table>
 <p>This table represents the equivalent of a variation for a multi-marker variation.</p>
 
-	<div id="div_variation_group" style="display:none">
+	<div id="div_variation_group" name="sqltable" style="display:none">
 
 	<table style="border:1px outset #222222">
 		<tr class="bg3 center"><th style="width:180px">Column</th><th style="width:150px">Type</th><th style="width:100px">Default value</th><th style="width:400px">Description</th><th style="width:150px">Index</th></tr>
@@ -1508,7 +1536,7 @@ A colour legend is available at the <a href="#legend">bottom of the page</a>.
   </table>
 <p>This table represents the equivalent of a variation_feature for multi-marker variations, mapping a haplotype to a chromosomal coordinate system.</p>
 
-	<div id="div_variation_group_feature" style="display:none">
+	<div id="div_variation_group_feature" name="sqltable" style="display:none">
 
 	<table style="border:1px outset #222222">
 		<tr class="bg3 center"><th style="width:180px">Column</th><th style="width:150px">Type</th><th style="width:100px">Default value</th><th style="width:400px">Description</th><th style="width:150px">Index</th></tr>
@@ -1539,7 +1567,7 @@ A colour legend is available at the <a href="#legend">bottom of the page</a>.
   </table>
 <p>This table represents an individual variation that makes up a multi-marker variation, and resolves the many-to-many relationship between variation and variation_group.</p>
 
-	<div id="div_variation_group_variation" style="display:none">
+	<div id="div_variation_group_variation" name="sqltable" style="display:none">
 
 	<table style="border:1px outset #222222">
 		<tr class="bg3 center"><th style="width:180px">Column</th><th style="width:150px">Type</th><th style="width:100px">Default value</th><th style="width:400px">Description</th><th style="width:150px">Index</th></tr>
@@ -1565,7 +1593,7 @@ A colour legend is available at the <a href="#legend">bottom of the page</a>.
   </table>
 <p>This table containts the name of sets and subsets of variations stored in the database. It usually represents the name of the project or subproject where a group of variations has been identified.</p>
 
-	<div id="div_variation_set" style="display:none">
+	<div id="div_variation_set" name="sqltable" style="display:none">
 
 	<table style="border:1px outset #222222">
 		<tr class="bg3 center"><th style="width:180px">Column</th><th style="width:150px">Type</th><th style="width:100px">Default value</th><th style="width:400px">Description</th><th style="width:150px">Index</th></tr>
@@ -1594,7 +1622,7 @@ A colour legend is available at the <a href="#legend">bottom of the page</a>.
   </table>
 <p>A table for mapping structural variations to variation_sets.</p>
 
-	<div id="div_variation_set_structural_variation" style="display:none">
+	<div id="div_variation_set_structural_variation" name="sqltable" style="display:none">
 
 	<table style="border:1px outset #222222">
 		<tr class="bg3 center"><th style="width:180px">Column</th><th style="width:150px">Type</th><th style="width:100px">Default value</th><th style="width:400px">Description</th><th style="width:150px">Index</th></tr>
@@ -1620,7 +1648,7 @@ A colour legend is available at the <a href="#legend">bottom of the page</a>.
   </table>
 <p>This table stores hierarchical relationships between variation sets by relating them as variation sets and variation subsets.</p>
 
-	<div id="div_variation_set_structure" style="display:none">
+	<div id="div_variation_set_structure" name="sqltable" style="display:none">
 
 	<table style="border:1px outset #222222">
 		<tr class="bg3 center"><th style="width:180px">Column</th><th style="width:150px">Type</th><th style="width:100px">Default value</th><th style="width:400px">Description</th><th style="width:150px">Index</th></tr>
@@ -1645,7 +1673,7 @@ A colour legend is available at the <a href="#legend">bottom of the page</a>.
   </table>
 <p>A table for mapping variations to variation_sets.</p>
 
-	<div id="div_variation_set_variation" style="display:none">
+	<div id="div_variation_set_variation" name="sqltable" style="display:none">
 
 	<table style="border:1px outset #222222">
 		<tr class="bg3 center"><th style="width:180px">Column</th><th style="width:150px">Type</th><th style="width:100px">Default value</th><th style="width:400px">Description</th><th style="width:150px">Index</th></tr>
@@ -1671,7 +1699,7 @@ A colour legend is available at the <a href="#legend">bottom of the page</a>.
   </table>
 <p>This table allows for a variation to have multiple IDs, generally given by multiple sources.</p>
 
-	<div id="div_variation_synonym" style="display:none">
+	<div id="div_variation_synonym" name="sqltable" style="display:none">
 
 	<table style="border:1px outset #222222">
 		<tr class="bg3 center"><th style="width:180px">Column</th><th style="width:150px">Type</th><th style="width:100px">Default value</th><th style="width:400px">Description</th><th style="width:150px">Index</th></tr>
@@ -1698,7 +1726,7 @@ A colour legend is available at the <a href="#legend">bottom of the page</a>.
 <tr><td style="width:25px;height:15px;background-color:#FFD700"></td><td>Tables containing sets of variations</td></tr>
 <tr><td style="width:25px;height:15px;background-color:#7CFC00"></td><td>Tables containing source and study data</td></tr>
 <tr><td style="width:25px;height:15px;background-color:#DA70D6"></td><td>Tables containing metadata</td></tr>
-<tr><td style="width:25px;height:15px;background-color:#3CB371"></td><td>Tables containing &quot;failed&quot; data</td></tr>
+<tr><td style="width:25px;height:15px;background-color:#3CB371"></td><td>Tables containing "failed" data</td></tr>
 <tr><td style="width:25px;height:15px;background-color:#FF0000"></td><td>Tables containing attribute data</td></tr>
 <tr><td style="width:25px;height:15px;background-color:#1E90FF"></td><td>Tables concerning protein data</td></tr>
 </table>
