@@ -13,7 +13,7 @@ use EnsEMBL::ORM::Rose::DbConnection;
 use EnsEMBL::ORM::Rose::Manager;
 use EnsEMBL::ORM::Rose::MetaData;
 
-use Rose::DB::Object::Helpers qw(as_tree forget_related has_loaded_related);  ## Some extra methods that can be called on any child class object
+use Rose::DB::Object::Helpers qw(as_tree forget_related has_loaded_related clone_and_reset);  ## Some extra methods that can be called on any child class object
 
 use base qw(Rose::DB::Object);
 
