@@ -2,6 +2,7 @@ package EnsEMBL::ORM::Rose::DataMapValue;
 
 ## Name: EnsEMBL::ORM::Rose::DataMapValue
 ## Class representing the value provided to column type 'datamap'
+## Each key in the datamap can be called as a method to this class
 
 use strict;
 
@@ -55,10 +56,10 @@ sub _set_key {
   ## @param String value of the key
   ## @param New value of the key
   ## @param Mutator method name
-  ## @exception ORMException::KeyNotAccessible If tried to set the EXTRA_KEY
+  ## @exception ORMException::InaccessibleKeyException If tried to set the EXTRA_KEY
   my ($self, $key, $value, $mutator_method) = @_;
 
-  throw exception('ORMException::KeyNotAccessible', 'Key to be set can not be the EXTRA_KEY') if $key eq $self->EXTRA_KEY;
+  throw exception('ORMException::InaccessibleKeyException', 'Key to be set can not be the EXTRA_KEY') if $key eq $self->EXTRA_KEY;
 
   $self->{$key} = $value;
   $self->{$self->EXTRA_KEY}{'object'}->$mutator_method($self);
@@ -68,9 +69,11 @@ sub _get_key {
   ## Gets the value of a key in the datamap
   ## Don't use this method, use the name of the key as method on the object
   ## @param String value of the key
+  ## @exception ORMException::InaccessibleKeyException if tried to get the EXTRA_KEY
   my ($self, $key) = @_;
 
-  return if $key eq $self->EXTRA_KEY;
+  throw exception('ORMException::InaccessibleKeyException', 'Key to be set can not be the EXTRA_KEY') if $key eq $self->EXTRA_KEY;
+
   return $self->{$key};
 }
 
