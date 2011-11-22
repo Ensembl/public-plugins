@@ -54,8 +54,20 @@ The segmentations produced by these two methods were then combined, based on the
 <tr><td>Predicted Repressed/Low Activity        </td><td>Predicted repressed or low activity region</td></tr>           
 <tr class="bg2"><td>Predicted Promoter with TSS </td><td>Predicted promoter region including transcription start site</td></tr>    
 </table>
-
-
+<p>
+The following graphic shows clustering of informative features used to generate the different segment classifications, the x-axis refers to the segment class and the y-axis shows different groups of experiments for a given feature type e.g DNase1, H3K4me2 <i>etc</i>.
+<p>
+<table><tr><td><img src="/info/docs/funcgen/GM12878_signal_distribution.png" alt='GM12878 Signal Distribution'/></td>
+<td>
+ The 'Signal track' legend shows the signal distribution a particular feature type within each segment class (1 being the highest signal).<br>
+<br>A summary of this clustering shows the following associations:
+<ul>
+<li>Transcriptional Activation: H3k4me1, H3K4me2, H3k4me3, H3k9ac, H3k27ac
+<li>Transcriptional Elongation: H3k36me3 
+<li>(Transcriptional Repression: H3k27me3, H4k20me1
+</ul>
+</td</tr></table>
+</p>
 <h4>Regulatory Segmentation in the Browser</h4>
 <p>There a six segmentation tracks available reflecting this cell lines used in the segmentation analysis. These are tracks are on by default in most regulation views, and are also configurable in 'Location' view, by accessing the 'Regulation' section of the configuration panel. Colours used for each of the segmentation classes follows the agreed ENCODE standard (see legend).
 </p>
