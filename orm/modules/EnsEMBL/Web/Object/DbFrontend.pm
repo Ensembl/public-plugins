@@ -8,7 +8,6 @@ use strict;
 use warnings;
 
 use EnsEMBL::ORM::Rose::Manager;
-use Rose::DB::Object::Helpers qw(forget_related clone_and_reset -force -target_class EnsEMBL::ORM::Rose::Object);
 
 use base qw(EnsEMBL::Web::Object);
 
