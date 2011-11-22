@@ -1,9 +1,10 @@
 package EnsEMBL::ORM::Rose::DataStructure;
 
-## Name: EnsEMBL::ORM::Rose::DataStructure
-## Class for column type 'datastructure' corresponding to Hash or Array
+### Name: EnsEMBL::ORM::Rose::DataStructure
+### Class for column type 'datastructure' for saving a Hash or Array
 
-## An extra boolean key 'trusted' is required (defaults to value being false) to initiate the column during setup (see &trusted below)
+### An extra boolean key 'trusted' is required (defaults to value being false) to initiate the column during AnyRoseObject->meta->setup (see &trusted below)
+### In the Metadata class, method modify_methods is called on this column object soon after setup of the Object class to modify existing accessor and mutator method (see &modify_methods below)
 
 use strict;
 
@@ -46,12 +47,12 @@ sub modify_methods {
 
   # create new methods
   my $new_accessor_method = sub {
-    # modified method calls the actual accessor method to get the stringfied hash/array, then converts into hashref/arrayref before returning it
+    # modified accessor method calls the actual accessor method to get the stringfied hash/array, then converts into hashref/arrayref before returning it
     my $object = shift;
     return $self->value_class->new(map($object->$_, "_ensorm_old_$get_method"), $object, $self->trusted);
   };
   my $new_mutator_method  = sub {
-    # modified method stringifies the hashref/arrayref before calling the actual mutator method
+    # modified mutator method stringifies the hashref/arrayref and then calls the actual mutator method to save the stringified form
     my ($object, $value) = @_;
     $value = $self->value_class->new($value, $object, $self->trusted) unless UNIVERSAL::isa($value, $self->value_class);
     map($object->$_("$value"), "_ensorm_old_$set_method");
@@ -72,7 +73,7 @@ sub modify_methods {
     *{"${class}::${get_method}"} = $new_accessor_method;
     *{"${class}::${set_method}"} = $new_mutator_method;
   }
-  
+
   return $self;
 }
 

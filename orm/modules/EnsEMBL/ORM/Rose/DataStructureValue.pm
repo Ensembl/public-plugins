@@ -2,7 +2,7 @@ package EnsEMBL::ORM::Rose::DataStructureValue;
 
 ## Name: EnsEMBL::ORM::Rose::DataStructureValue
 ## Class representing the value provided to column type 'datastructure'
-## Purpose of this class is to stringify the datastructure if it's being used as a string
+## Purpose of this class is to stringify the datastructure if it's being used as a string, and keep it in a reference otherwise
 
 use strict;
 
@@ -21,7 +21,7 @@ sub new {
   ## @param datastructure (possibly unparsed stringified)
   ## @param Rose object itself
   ## @param Flag telling whether this column value is trusted to be valid datastructure or not
-  ## Can return a blessed hash or a blesses array depending upon the argument provided
+  ## @return Can return a blessed hash or a blessed array depending upon the argument provided
   ## @exception ORMException::DataStructureParsingException in case problem parsing the datastructure
   my ($class, $data, $object, $trusted) = @_;
 
