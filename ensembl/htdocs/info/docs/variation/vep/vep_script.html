@@ -45,6 +45,17 @@ Perl script |
 		</ul>
 	</li>
     <li>
+        <a href="#custom">Custom annotations</a>
+        <ul>
+            <li><a href="#custom_formats">Data formats</a></li>
+            <li><a href="#custom_prep">Preparing files</a></li>
+            <li><a href="#custom_options">Options for custom annotation</a></li>
+            <li><a href="#custom_remote">Using remote files</a></li>
+            <li><a href="#custom_existing">Adding custom annotations to existing VEP results</a></li>
+        </ul>
+    </li>
+    <li><a href="#plugins">Plugins</a></li>
+    <li>
         <a href="#misc">Other information</a>
         <ul>
             <li><a href="#hgvs">HGVS notation</a></li>
@@ -57,6 +68,15 @@ Perl script |
 <hr/>
 
 <h2 id="new"> What's new </h2>
+
+<h3> New in version 2.3 <i>(December 2011)</i> </h3>
+
+<ul>
+    <li>add custom annotations from tabix-indexed files (BED, GFF, GTF, VCF,
+    bigWig)</li>
+    <li>add new functionality to the VEP with user-written plugins</li>
+    <li>filter input on consequence type</li>
+</ul>
 
 <h3> New in version 2.2 <i>(September 2011)</i> </h3>
 
@@ -125,7 +145,7 @@ Perl script |
 <h2 id="requirements"> Requirements </h2>
 
 <p>
-Version 2.2 of the script requires at least version 64 of the Ensembl Core and
+Version 2.3 of the script requires at least version 65 of the Ensembl Core and
 Variation APIs and their relevant dependencies to be installed to use the
 script. See <a href="http://www.ensembl.org/info/docs/api/index.html"
 target="_blank">instructions</a> for details. To analyse regulatory features,
@@ -278,14 +298,15 @@ host          useastdb.ensembl.org</pre>
 		<td>Input file name. If not specified, the script will attempt to read from STDIN.</td>
 	</tr>
 	<tr>
-		<td><pre>--format [ensembl<b>|</b>vcf<b>|</b>pileup<b>|</b>hgvs<b>|</b>ids]</pre></td>
+		<td><pre>--format [ensembl<b>|</b>vcf<b>|</b>pileup<b>|</b>hgvs<b>|</b>ids<b>|</b>vep]</pre></td>
 		<td>&nbsp;</td>
 		<td>
             Input file format. By default, the script auto-detects the input
             file format. Using this option you can force the script to read the
-            input file as Ensembl, VCF, pileup or HGVS format, or a list of
-            variant identifiers (e.g. rsIDs from dbSNP). <i>Auto-detects format
-            by default</i>
+            input file as Ensembl, VCF, pileup or HGVS format, a list of
+            variant identifiers (e.g. rsIDs from dbSNP), or the output from the
+            VEP (e.g. to add custom annotation to an existing results file using
+            --custom). <i>Auto-detects format by default</i>
 		</td>
 	</tr>
 	<tr class="bg2">
@@ -515,6 +536,14 @@ host          useastdb.ensembl.org</pre>
 		</td>
 	</tr>
 	<tr>
+		<td><pre>--ccds</pre></td>
+		<td>&nbsp;</td>
+		<td>
+			Adds the CCDS transcript identifer (where available) to the output.
+			<i>Not used by default</i>
+		</td>
+	</tr>
+	<tr class="bg2">
 		<td><pre>--canonical</pre></td>
 		<td>&nbsp;</td>
 		<td>
@@ -522,7 +551,7 @@ host          useastdb.ensembl.org</pre>
             for the gene. <i>Not used by default</i>
 		</td>
 	</tr>
-	<tr class="bg2">
+	<tr>
 		<td><pre>--most_severe</pre></td>
 		<td>&nbsp;</td>
 		<td>
@@ -531,7 +560,7 @@ host          useastdb.ensembl.org</pre>
 			default</i>
 		</td>
 	</tr>
-	<tr>
+	<tr class="bg2">
 		<td><pre>--summary</pre></td>
 		<td>&nbsp;</td>
 		<td>
@@ -540,7 +569,7 @@ host          useastdb.ensembl.org</pre>
 			used by default</i>
 		</td>
 	</tr>
-	<tr class="bg2">
+	<tr>
 		<td><pre>--per_gene</pre></td>
 		<td>&nbsp;</td>
 		<td>
@@ -549,7 +578,7 @@ host          useastdb.ensembl.org</pre>
             consequence. <i>Not used by default</i>
 		</td>
 	</tr>
-	<tr>
+	<tr class="bg2">
 		<td><pre>--convert [ensembl<b>|</b>vcf<b>|</b>pileup]</pre></td>
 		<td>&nbsp;</td>
 		<td>
@@ -557,6 +586,55 @@ host          useastdb.ensembl.org</pre>
             href="#convert">below</a> for more details. Converted output is
             written to the file specified with --output_file. No consequence
             prediction is carried out. <i>Not used by default</i>
+		</td>
+	</tr>
+	<tr>
+		<td><pre>--vcf</pre></td>
+		<td>&nbsp;</td>
+		<td>
+            Writes output in VCF format. Consequences are added in the INFO
+            field of the VCF file, using the key "CSQ". Currently only a list of
+            all consequence types predicted is added; no further information is
+            added (e.g. positions, transcript identifiers). Specifying
+            --most_severe will force the script to add only the most severe
+            consequence. <i>Not used by default</i>
+		</td>
+	</tr>
+	<tr class="bg2">
+		<td><pre>--gvf</pre></td>
+		<td>&nbsp;</td>
+		<td>
+            Writes output in GVF format. <i>Not used by default</i>
+		</td>
+	</tr>
+	<tr>
+		<td><pre>--original</pre></td>
+		<td>&nbsp;</td>
+		<td>
+            Writes output as a filtered set of the input. Must be used with
+            --filter. Input lines are unchanged - consequences are calculated
+            but not written to the output. <i>Not used by default</i>
+		</td>
+	</tr>
+	<tr class="bg2">
+		<td><pre>--custom [filename[,short_name,format,type]]</pre></td>
+		<td>&nbsp;</td>
+		<td>
+            Add custom annotation to the output. Files must be tabix indexed or
+            in the bigWig format. Multiple files can be specified by supplying
+            the --custom flag multiple times. <a href="#custom">See here</a> for
+            full details. <i>Not used by default</i>
+		</td>
+	</tr>
+	<tr>
+		<td><pre>--plugin [plugin name]</pre></td>
+		<td>&nbsp;</td>
+		<td>
+            Use named plugin. Plugin modules should be installed in the Plugins
+            subdirectory of the VEP cache directory (defaults to $HOME/.vep/).
+            Multiple plugins can be used by supplying the --plugin flag multiple
+            times. For details on how to write a plugin, <a href="#plugins">see
+            here</a>. <i>Not used by default</i>
 		</td>
 	</tr>
 </table>
@@ -701,6 +779,47 @@ host          useastdb.ensembl.org</pre>
             Specify whether to <b>exclude</b> or <b>include</b> only variants
             that pass the frequency filter
 		</td>
+	</tr>    
+	<tr class="bg2">
+		<td><pre>--filter [filters]</pre></td>
+		<td>&nbsp;</td>
+		<td>
+            Filter the output on consequence type. Multiple allowed types can be
+            specified, separated by commas. SO terms should ideally be used,
+            although Ensembl and NCBI types are also allowed. Consequence types
+            can be excluded by adding "no_" to the start of the filter name.
+            Shortcuts to common groupings are available:
+            <p>
+                <table class="ss">
+                    <tr>
+                        <th>Shortcut name</th><th>Description</th>
+                    </tr>
+                    <tr>
+                        <td>upstream</td><td>Any upstream variant</td>
+                    </tr>
+                    <tr>
+                        <td>downstream</td><td>Any downstream variant</td>
+                    </tr>
+                    <tr>
+                        <td>utr</td><td>Any UTR variant</td>
+                    </tr>
+                    <tr>
+                        <td>splice</td><td>Any splicing region variants</td>
+                    </tr>
+                    <tr>
+                        <td>coding</td><td>Any variant that falls in the coding region of a transcript</td>
+                    </tr>
+                    <tr>
+                        <td>coding_change</td><td>Any variant that causes a coding change in the transcript</td>
+                    </tr>
+                    <tr>
+                        <td>regulatory</td><td>Any variant that falls in a regulatory or binding motif feature</td>
+                    </tr>
+                </table>
+            </p> To reproduce a filtered version of the input file, add the flag
+            --original<br/>
+            <i>Not used by default</i>
+		</td>
 	</tr>
     
 
@@ -766,7 +885,7 @@ host          useastdb.ensembl.org</pre>
 			default</i>
 		</td>
 	</tr>-->
-	<tr>
+	<tr class="bg2">
 		<td><pre>--buffer [number]</pre></td>
 		<td>&nbsp;</td>
 		<td>
@@ -776,14 +895,14 @@ host          useastdb.ensembl.org</pre>
 			use more memory with a faster run time. <i>Default = 5000</i>
 		</td>
 	</tr>
-	<tr class="bg2">
+	<tr>
 		<td><pre>--write_cache</pre></td>
 		<td>&nbsp;</td>
 		<td>
 			Enable writing to the cache. <i>Not used by default</i>
 		</td>
 	</tr>
-	<tr>
+	<tr class="bg2">
 		<td><pre>--build [all<b>|</b>list]</pre></td>
 		<td>&nbsp;</td>
 		<td>
@@ -796,7 +915,7 @@ host          useastdb.ensembl.org</pre>
 			</span><i>Not used by default</i>
 		</td>
 	</tr>
-	<tr class="bg2">
+	<tr>
 		<td><pre>--compress [command]</pre></td>
 		<td>&nbsp;</td>
 		<td>
@@ -807,7 +926,7 @@ host          useastdb.ensembl.org</pre>
 			problems. <i>Not used by default</i>
 		</td>
 	</tr>
-	<tr>
+	<tr class="bg2">
 		<td><pre>--skip_db_check</pre></td>
 		<td>&nbsp;</td>
 		<td>
@@ -819,7 +938,7 @@ host          useastdb.ensembl.org</pre>
             <i>Not used by default</i>
 		</td>
 	</tr>
-	<tr class="bg2">
+	<tr>
 		<td><pre>--cache_region_size [size]</pre></td>
 		<td>&nbsp;</td>
 		<td>
@@ -882,6 +1001,15 @@ host          useastdb.ensembl.org</pre>
 		Convert RefSeq-based HGVS notations to genomic coordinates in VCF format
 <pre class="code">perl variant_effect_predictor.pl -i hgvs.txt -o hgvs.vcf -refseq -convert vcf</pre>
 	</li>
+	<li>
+        Filter input file on consequence type to include only variants that
+        cause a coding sequence change, write output in original input format
+<pre class="code">perl variant_effect_predictor.pl -i variants.vcf -o variants_filtered.vcf -filter coding_change -original</pre>
+	</li>
+	<li>
+        Add custom position-based phenotype annotation from remote BED file
+<pre class="code">perl variant_effect_predictor.pl -i variants.vcf -custom ftp://ftp.myhost.org/data/phenotypes.bed.gz,phenotype</pre>
+	</li>
 </ul>
 
 <hr/>
@@ -894,8 +1022,6 @@ host          useastdb.ensembl.org</pre>
 information that is used to predict consequence types. Which one you choose to
 use should depend on your requirements and available resources. </p>
 
-
-<a href="#top">[Back to top]</a>
 
 <h3 id="public"> Public database servers </h3>
 
@@ -915,8 +1041,6 @@ use the script in a batch manner, should consider one of the alternatives below.
 </p>
 
 
-<a href="#top">[Back to top]</a>
-
 <h3 id="local"> Using a local database </h3>
 
 <p> It is possible to set up a local MySQL mirror with the databases for your
@@ -925,9 +1049,9 @@ see <a href="/info/docs/webcode/install/ensembl-data.html"
 target="_blank">here</a>. You will need a MySQL server that you can connect to
 from the machine where you will run the script (this can be the same machine).
 For most of the functionality of the VEP, you will only need the Core database
-(e.g. homo_sapiens_core_64_37) installed. In order to find co-located variations
+(e.g. homo_sapiens_core_65_37) installed. In order to find co-located variations
 or to use SIFT, PolyPhen or Condel, it is also necessary to install the relevant
-variation database (e.g. homo_sapiens_variation_64_37). </p>
+variation database (e.g. homo_sapiens_variation_65_37). </p>
 
 <p> Note that unless you have custom data to insert in the database, in most cases it will be much more efficient to use a <a href="#pre">pre-built cache</a> in place of a local database. </p>
 
@@ -948,7 +1072,7 @@ Bio::EnsEMBL::DBSQL::DBAdaptor->new(
   '-host'    => 'ensembldb.ensembl.org',
   '-user'    => 'anonymous',
   '-pass'    => '',
-  '-dbname'  => 'homo_sapiens_core_64_37'
+  '-dbname'  => 'homo_sapiens_core_65_37'
 );
 
 Bio::EnsEMBL::Variation::DBSQL::DBAdaptor->new(
@@ -958,7 +1082,7 @@ Bio::EnsEMBL::Variation::DBSQL::DBAdaptor->new(
   '-host'    => 'ensembldb.ensembl.org',
   '-user'    => 'anonymous',
   '-pass'    => '',
-  '-dbname'  => 'homo_sapiens_variation_64_37'
+  '-dbname'  => 'homo_sapiens_variation_65_37'
 );
 
 Bio::EnsEMBL::Registry->add_alias("Homo_sapiens","human");
@@ -968,15 +1092,13 @@ Bio::EnsEMBL::Registry->add_alias("Homo_sapiens","human");
 href="/info/docs/api/registry.html" target="_blank">here</a>. </p>
 
 
-<a href="#top">[Back to top]</a>
-
 <h3 id="cache"> Using the cache </h3>
 
 <p> From version 2.1 onwards, the VEP is able to use cached data on disk in
 place of reading from the database. Using the cache is probably the fastest and
-most efficient way to use the VEP script, as in most cases no network
-connections are made and most data is read from local disk. The diagrams below
-illustrate the model of caching that is used. </p>
+most efficient way to use the VEP script, as in most cases only a single initial
+network connection is made and most data is read from local disk. The diagrams
+below illustrate the model of caching that is used. </p>
 
 <table class="ss" style="width:75%;">
     <tr>
@@ -1003,8 +1125,6 @@ also - you must have one of these utilities installed in your path to use the
 cache. </p>
 
 
-<a href="#top">[Back to top]</a>
-
 <h3 id="pre">Pre-built caches</h3>
 
 <p> The easiest solution is to download a pre-built cache for your species; this
@@ -1018,27 +1138,27 @@ eliminates the need to connect to the database while the script is running
             <table class="ss" style="width:50%">
                 <tr>
                     <th>Human <i>(Homo sapiens)</i></th>
-                    <td><a href="ftp://ftp.ensembl.org/pub/release-64/variation/VEP/homo_sapiens/homo_sapiens_vep_64_sift_polyphen.tar.gz">Download (with SIFT and PolyPhen)</a></td>
-                    <td><a href="ftp://ftp.ensembl.org/pub/release-64/variation/VEP/homo_sapiens/homo_sapiens_vep_64.tar.gz">Download (without SIFT and PolyPhen)</a></td>
+                    <td><a href="ftp://ftp.ensembl.org/pub/release-65/variation/VEP/homo_sapiens/homo_sapiens_vep_65_sift_polyphen.tar.gz">Download (with SIFT and PolyPhen)</a></td>
+                    <td><a href="ftp://ftp.ensembl.org/pub/release-65/variation/VEP/homo_sapiens/homo_sapiens_vep_65.tar.gz">Download (without SIFT and PolyPhen)</a></td>
                 </tr>
                 <tr>
                     <th>Mouse <i>(Mus musculus)</i></th>
-                    <td><a href="ftp://ftp.ensembl.org/pub/release-64/variation/VEP/mus_musculus/mus_musculus_vep_64.tar.gz">Download</a></td>
+                    <td><a href="ftp://ftp.ensembl.org/pub/release-65/variation/VEP/mus_musculus/mus_musculus_vep_65.tar.gz">Download</a></td>
                     <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <th>Rat <i>(Rattus norvegicus)</i></th>
-                    <td><a href="ftp://ftp.ensembl.org/pub/release-64/variation/VEP/rattus_norvegicus/rattus_norvegicus_vep_64.tar.gz">Download</a></td>
+                    <td><a href="ftp://ftp.ensembl.org/pub/release-65/variation/VEP/rattus_norvegicus/rattus_norvegicus_vep_65.tar.gz">Download</a></td>
                     <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <th>Zebrafish <i>(Danio rerio)</i></th>
-                    <td><a href="ftp://ftp.ensembl.org/pub/release-64/variation/VEP/danio_rerio/danio_rerio_vep_64.tar.gz">Download</a></td>
+                    <td><a href="ftp://ftp.ensembl.org/pub/release-65/variation/VEP/danio_rerio/danio_rerio_vep_65.tar.gz">Download</a></td>
                     <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <th>Cow <i>(Bos taurus)</i></th>
-                    <td><a href="ftp://ftp.ensembl.org/pub/release-64/variation/VEP/bos_taurus/bos_taurus_vep_64.tar.gz">Download</a></td>
+                    <td><a href="ftp://ftp.ensembl.org/pub/release-65/variation/VEP/bos_taurus/bos_taurus_vep_65.tar.gz">Download</a></td>
                     <td>&nbsp;</td>
                 </tr>
             </table>
@@ -1049,9 +1169,9 @@ eliminates the need to connect to the database while the script is running
 		$HOME/.vep/ as the cache directory, where $HOME is your UNIX home
 		directory.
         <pre class="code">
-mv homo_sapiens_vep_64.tar.gz ~/.vep/
+mv homo_sapiens_vep_65.tar.gz ~/.vep/
 cd ~/.vep/
-tar xfz homo_sapiens_vep_64.tar.gz</pre>
+tar xfz homo_sapiens_vep_65.tar.gz</pre>
 	</li>
 	<li>
 		Run the VEP with the --cache option
@@ -1067,8 +1187,6 @@ stored in the following directory hierarchy: $HOME -> .vep -> species -> version
 <a href="mailto:dev@ensembl.org">dev@ensembl.org</a> and we will endeavour to
 add your species to the list of downloads. </p>
 
-
-<a href="#top">[Back to top]</a>
 
 <h3 id="build"> Building your own cache </h3>
 
@@ -1103,8 +1221,6 @@ to specify any of the usual input options when building a cache:</p>
 
 <pre class="code">perl variant_effect_predictor.pl -host dbhost -user username -pass password -port 3306 -build 21 -dir /my/cache/dir/</pre>
 
-<p><a href="#top">[Back to top]</a></p>
-
 <h3 id="limitations">Limitations of the cache</h3>
 
 <p> The cache stores the following information: </p>
@@ -1134,8 +1250,6 @@ used for, the following: </p>
 in its status output with something like the following: </p>
 
 <pre class="code"> 2011-06-16 16:24:51 - INFO: Database will be accessed when using --hgvs </pre>
-
-<a href="#top">[Back to top]</a>
 
 <h3 id="privacy"> Data privacy </h3>
 
@@ -1175,6 +1289,169 @@ you will need to tell perl where to find the modules using the -I flag: </p>
 Feedback, however, would be very useful for the development of the script. </p>
 
 <a href="#top">[Back to top]</a>-->
+
+<hr/>
+
+<h2 id="custom"> Custom annotations </h2>
+
+<p> The VEP script can integrate custom annotation from standard format files
+into your results by using the --custom flag. These files may be hosted locally
+or remotely, with no limit to the number or size of the files. The files must be
+indexed using the <a href="http://samtools.sourceforge.net/tabix.shtml"
+target="_blank">tabix</a> utility (BED, GFF, GTF, VCF); bigWig files contain
+their own indices. Users should note that the VEP will only look for overlaps
+(both exact and inexact) with these annotations; for example, any sequence in a
+GTF file will not be taken into account. </p>
+
+<p> Annotations appear as key=value pairs in the Extra column of the VEP output;
+they will also appear in the INFO column if using VCF format output. The value
+for a particular annotation is defined as the identifier for each feature; if
+not available, an identifier derived from the coordinates of the annotation is
+used. Annotations will appear in each line of output for the variant where
+multiple lines exist. </p>
+
+<h3 id="custom_formats"> Data formats </h3>
+
+<p> The VEP supports the following formats: </p>
+
+<ul>
+    <li><a href="/info/website/upload/bed.html" target="_blank">BED</a> : a
+    simple tab-delimited format containing 3-12 columns of data. The first 3
+    columns contain the coordinates of the feature. If available, the VEP will
+    use the 4th column of the file as the identifier of the feature. </li>
+    <li><a href="http://www.sanger.ac.uk/resources/software/gff/"
+    target="_blank">GFF</a> : a format for describing genes and other features.
+    If available, the VEP will use the "ID" field as the identifier of this
+    feature. </li>
+    <li><a href="/info/website/upload/gff.html" target="_blank">GTF</a> :
+    treated in an identical manner to GFF. </li>
+    <li><a
+    href="http://www.1000genomes.org/wiki/Analysis/Variant%20Call%20Format/vcf-variant-call-format-version-41"
+    target="_blank">VCF</a> : a format used to describe genomic variants. The
+    VEP will use the 3rd column of the file as the identifier. </li>
+    <li><a href="http://genome.ucsc.edu/goldenPath/help/bigWig.html"
+    target="_blank">bigWig</a> : a format for storage of dense continuous data.
+    The VEP uses the value for the given position as the "identifier". Note that
+    bigWig files contain their own indices, and do not need to be indexed by
+    tabix. </li>
+</ul>
+
+<p> Any other files can be easily converted to be compatible with the VEP; the
+easiest format to produce is a BED-like file containing coordinates and an
+identifier: </p>
+
+<pre class="code">chr1    10000    11000    Feature1
+chr3    25000    26000    Feature2
+chrX    99000    99001    Feature3</pre>
+
+<p> Chromosomes can be denoted by either e.g. "chr7" or "7", "chrX" or "X". </p>
+
+<h3 id="custom_prep"> Preparing files </h3>
+
+<p> Custom annotation files must be prepared in a particular way in order to
+work with tabix and therefore with the VEP. Files must be sorted in chromosome
+and position order, compressed using <a
+href="http://samtools.sourceforge.net/tabix.shtml" target="_blank">bgzip</a> and
+finally indexed using <a href="http://samtools.sourceforge.net/tabix.shtml"
+target="_blank">tabix</a>. Here is an example of that process for a BED file:
+</p>
+
+<pre class="code">sort -k1,1 -k2,2n -k3,3n myData.bed | bgzip > myData.bed.gz
+tabix -p bed myData.bed.gz</pre>
+
+<p> The tabix utility has several preset filetypes that it can process, and it
+can also process any arbitrary filetype containing at least a chromosome and
+position column. See the <a href="http://samtools.sourceforge.net/tabix.shtml"
+target="_blank">documenation</a> for details. </p>
+
+<p> If you are going to use the file remotely (i.e. over HTTP or FTP protocol),
+you should ensure the file is world-readable on your server. </p>
+
+<h3 id="custom_options"> Options for custom annotation </h3>
+
+<p> Each custom file that you configure the VEP to use can be configured. Beyond
+the filepath, there are 3 further options, each of which is specified in a
+comma-separated list, for example: </p>
+
+<pre class="code">perl variant_effect_predictor.pl -custom myFeatures.gff.gz,myFeatures,gff,overlap
+perl variant_effect_predictor.pl -custom frequencies.bw,Frequency,bigwig,exact
+perl variant_effect_predictor.pl -custom http://www.myserver.com/data/myPhenotypes.bed.gz,Phenotype,bed,exact</pre>
+
+<p> The options are as follows: </p>
+
+<ul>
+    <li><b>Filename</b> : The path to the file. For tabix indexed files, the VEP
+    will check that both the file and the corresponding .tbi file exist. For
+    remote files, the VEP will check that the tabix index is accessible on
+    startup. </li>
+    <li><b>Short name</b> : A name for the annotation that will appear as the
+    key in the key=value pairs in the results. If not defined, this will default
+    to e.g. "Custom1" for the first set of annotation added. </li>
+    <li><b>File type</b> : One of "bed", "gff", "gtf", "vcf", "bigwig". If not
+    specified, the VEP assumes the file is BED format. </li>
+    <li><b>Annotation type</b> : One of "exact", "overlap". When using "exact"
+    only annotations whose coordinates match exactly those of the variant will
+    be reported. This would be suitable for position specific information such
+    as conservation scores, allele frequencies or phenotype information. Using
+    "overlap", any annotation that overlaps the variant by even 1bp will be
+    reported. </li>
+</ul>
+
+<h3 id="custom_remote"> Using remote files </h3>
+
+<p> The tabix utility makes it possible to read annotation files from remote
+locations, for example over HTTP or FTP protocols. In order to do this, the .tbi
+index file is downloaded locally (to the current working directory) when the VEP
+is run. From this point on, only the portions of data requested by the script
+(i.e. those overlapping the variants in your input file) are downloaded. Users
+should be aware, however, that it is still possible to cause problems with
+network traffic in this manner by requesting data for a large number of
+variants. Users with large amounts of data should download the annotation file
+locally rather than risk causing any issues! </p>
+
+<p> bigWig files can also be used remotely in the same way as tabix-indexed
+files, although less stringent checks are carried out on VEP startup.
+Furthermore, when using bigWig files, the VEP generates temporary files that by
+default are written to the /tmp/ directory - to override this, use the "-tmpdir
+/my/tmp/dir" flag. </p>
+
+<h3 id="custom_existing"> Adding custom annotations to existing VEP results </h3>
+
+<p> It is possible to add custom annotation to existing VEP results files. To do
+this, you need to specify the --no_consequence option, and provide your VEP
+output file as the input file for the script. The script should auto-detect the
+format of the file; if it does not, you can force it to read the file as VEP
+output using "--format vep". </p>
+
+<a href="#top">[Back to top]</a>
+
+<hr/>
+
+<h2 id="misc"> Plugins </h2>
+
+<p> <span style="color:red;">ADVANCED</span> The VEP can use plugin modules
+written in Perl to add functionality to the script. Currently the functionality
+is limited to adding new fields to the Extra column of the output, but access is
+given to the whole internal object structure for a given consequence call, as
+well as the data structure containing the script's configuration. </p>
+
+<p> Plugins should (although do not absolutely need to) use as their base the
+Bio::EnsEMBL::Variation::Utils::BaseVepPlugin module. A synopsis for an abstract
+example can be seen in the <a
+href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Utils_1_1BaseVepPlugin.html"
+target="_blank">documentation</a> of this module. </p>
+
+<p> Each plugin should have at least a "get_header_info" and "run" method -
+details of each of these methods and the others can be seen in the documentation
+of the abstract base class linked to above. </p>
+
+<p> The "run" method operates on a TranscriptVariationAllele object; through
+this object it is possible to access the TranscriptVariation, Transcript and
+VariationFeature objects used to derive it. See the <a
+href="/info/docs/Doxygen/variation-api/index.html">Variation API
+documentation</a> for more details. </p>
+
+<a href="#top">[Back to top]</a>
 
 <hr/>
 
