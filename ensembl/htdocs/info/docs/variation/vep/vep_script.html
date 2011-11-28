@@ -206,6 +206,9 @@ the script. </p>
 unique string among the options (e.g. --form for --format, since there is
 another option --force_overwrite). </p>
 
+<p> Options can also be read from a configuration file - either passively stored
+as $HOME/.vep/vep.ini, or actively using --config. </p>
+
 <p> <span style="color:red;">NOTE</span> Whole-genome mode is now the default
 run mode for the VEP script. In the rare case that you would prefer to run the
 script in the old per-variant mode, you can force this with --no_whole_genome
@@ -258,13 +261,15 @@ script in the old per-variant mode, you can force this with --no_whole_genome
 species       mus_musculus
 format        vcf
 host          useastdb.ensembl.org</pre>
-			This is useful if you find yourself using the same configuration
-			options each time. You can create a quick version file of this by
-			setting the flags as normal and running the script in verbose (-v)
-			mode. This will output lines that can be copied to a config file
-			that can be loaded in on the next run using -config. Note that any
-			options specified in the normal way overwrite those in the config
-			file. <i>Not used by default</i>
+            A config file can also be implicitly read; save the file as
+            $HOME/.vep/vep.ini (or equivalent directory if using --dir). Any
+            options in this file will be overridden by those specified in a
+            config file using --config, and in turn by any options manually
+            specified on the command line. You can create a quick version file
+            of this by setting the flags as normal and running the script in
+            verbose (-v) mode. This will output lines that can be copied to a
+            config file that can be loaded in on the next run using -config.
+            <i>Not used by default</i>
 		</td>
 	</tr>
 </table>
