@@ -54,7 +54,16 @@ Perl script |
             <li><a href="#custom_existing">Adding custom annotations to existing VEP results</a></li>
         </ul>
     </li>
-    <li><a href="#plugins">Plugins</a></li>
+    <li>
+        <a href="#plugins">Plugins</a>
+        <ul>
+            <li><a href="#plugins_how">How it works</a></li>
+            <li><a href="#plugins_functionality">Functionality</a></li>
+            <li><a href="#plugins_filter">Filtering using plugins</a></li>
+            <li><a href="#plugins_use">Using plugins</a></li>
+            <li><a href="#plugins_examples">Examples</a></li>
+        </ul>
+    </li>
     <li>
         <a href="#misc">Other information</a>
         <ul>
@@ -1432,29 +1441,103 @@ output using "--format vep". </p>
 
 <hr/>
 
-<h2 id="misc"> Plugins </h2>
+<h2 id="plugins"> Plugins </h2>
 
 <p> <span style="color:red;">ADVANCED</span> The VEP can use plugin modules
-written in Perl to add functionality to the script. Currently the functionality
-is limited to adding new fields to the Extra column of the output, but access is
-given to the whole internal object structure for a given consequence call, as
-well as the data structure containing the script's configuration. </p>
+written in Perl to add functionality to the script. </p>
 
-<p> Plugins should (although do not absolutely need to) use as their base the
-Bio::EnsEMBL::Variation::Utils::BaseVepPlugin module. A synopsis for an abstract
-example can be seen in the <a
-href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Utils_1_1BaseVepPlugin.html"
-target="_blank">documentation</a> of this module. </p>
+<h3 id="plugins_how"> How it works </h3>
 
-<p> Each plugin should have at least a "get_header_info" and "run" method -
-details of each of these methods and the others can be seen in the documentation
-of the abstract base class linked to above. </p>
-
-<p> The "run" method operates on a TranscriptVariationAllele object; through
-this object it is possible to access the TranscriptVariation, Transcript and
-VariationFeature objects used to derive it. See the <a
-href="/info/docs/Doxygen/variation-api/index.html">Variation API
+<p> Plugins are run as the VEP produces each line of output and are passed a
+data structure with the contents of the line before it is printed and also a
+reference to a variation API object that represents the combination of a variant
+allele and a overlapping or nearby genomic feature (such as a transcript or
+regulatory region). This object provides access to all the relevant API objects
+that may be useful for further analysis (such as the current VariationFeature
+and Transcript); please refer to the <a
+href="/info/docs/Doxygen/variation-api/index.html">variation API
 documentation</a> for more details. </p>
+
+<h3 id="plugins_functionality"> Functionality </h3>
+
+<p> We expect that most plugins will simply add information to the Extra column
+of the output, and the plugin system assumes this in various places, but plugins
+are also free to alter the output line as desired. The only hard requirement for
+a plugin to work with the VEP is that it implements a number of required methods
+(such as 'new' which should create and return an instance of this plugin,
+'get_header_info' which should return descriptions of the type of data this
+plugin produces to be included in the VEP output's header, and 'run' which
+should actually perform the logic of the plugin). To make development of plugins
+easier, we suggest that users use the <a
+href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Utils_1_1BaseVepPlugin.html">Bio::EnsEMBL::Variation::Utils::BaseVepPlugin</a>
+module as their base class, which provides default implementations of all the
+necessary methods which can be overridden as required. Please refer to the
+documentation in this module for details of all required methods and a simple
+example of a plugin implementation. </p>
+
+<h3 id="plugins_filter"> Filtering using plugins </h3>
+
+<p> We expect that a common use for plugins will be to filter the output in some
+way, for example to limit output lines to non-synonymous mutations, and so we
+provide a simple mechanism to support this. The 'run' method of a plugin is
+assumed to return a reference to a hash containing information to be included in
+the output, and if a plugin does not want to add any data to a particular line
+it should return an empty hashref. If a plugin's 'run' method returns undef we
+assume that the plugin wants to filter this line and so it will be excluded from
+the output (and no further plugins will be run on the line). If you are
+developing a filter plugin, we suggest that you use the <a
+href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Utils_1_1BaseVepFilterPlugin.html">Bio::EnsEMBL::Variation::Utils::BaseVepFilterPlugin</a>
+as your base class and then you need only override the 'include_line' method to
+return true if you want to include this line, and false otherwise. Again, please
+refer to the documentation in this module for more details and an example
+implementation of a non-synonymous filter. </p>
+
+<h3 id="plugins_use"> Using plugins </h3>
+
+<p> Plugin modules should be included in Perl's library path somehow; by default
+the VEP includes the '&#126;/.vep/Plugins' directory in the path, so this is a
+convenient place to store plugins, but users are free to include modules by any
+other means. You can then run a plugin using the '--plugin' command line option,
+passing the name of the plugin module as the argument. For example, if your
+plugin is in a module called MyPlugin.pm, stored in &#126;/.vep/Plugins, you can
+run it with a command line like: </p>
+
+<pre class="code">perl variant_effect_predictor.pl -i input.vcf --plugin MyPlugin</pre>
+
+<p> You can pass arguments to the plugin's 'new' method by including them after
+the plugin name on the command line, separated by commas, e.g.: </p>
+
+<pre class="code">perl variant_effect_predictor.pl -i input.vcf --plugin MyPlugin,1,FOO</pre>
+
+<p> If your plugin inherits from BaseVepPlugin, you can then retrieve these
+parameters as a list from the 'params' method. </p>
+
+<p> You can run multiple plugins in the same run by supplying multiple --plugin
+arguments. Plugins are run serially in the order in which they are specified on
+the command line, so they can be run as a pipeline, with, for example, a later
+plugin filtering output based on the results from an earlier plugin. Note though
+that the first plugin to filter a line 'wins', and any later plugins won't get
+run on a filtered line. </p>
+
+<h3 id="plugins_examples"> Examples </h3>
+
+<p> We have written several example plugins that implement experimental
+functionality that we do not (yet) include in the variation API, and these are
+stored in a public github repository: </p>
+
+<a href="https://github.com/ensembl-variation/VEP_plugins"
+target="_blank">https://github.com/ensembl-variation/VEP_plugins</a>
+
+<p> We hope that these will serve as useful examples for users implementing new
+plugins. If you have any questions about the system, or suggestions for
+enhancements please let us know on the developer's mailing list: <a
+href="mailto:dev@ensembl.org">dev@ensembl.org</a>. We also encourage users to
+share any plugins they develop and we intend to create a central portal for VEP
+plugins and other scripts written using Ensembl resources in the near future. In
+the mean time, please contact the developers mailing list if you want to share
+your plugin. </p>
+
+
 
 <a href="#top">[Back to top]</a>
 
