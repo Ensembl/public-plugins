@@ -1444,7 +1444,8 @@ output using "--format vep". </p>
 <h2 id="plugins"> Plugins </h2>
 
 <p> <span style="color:red;">ADVANCED</span> The VEP can use plugin modules
-written in Perl to add functionality to the script. </p>
+written in Perl to add functionality to the script. Plugins are a powerful 
+way to extend, filter and manipulate the output of the program.</p>
 
 <h3 id="plugins_how"> How it works </h3>
 
@@ -1460,9 +1461,11 @@ documentation</a> for more details. </p>
 
 <h3 id="plugins_functionality"> Functionality </h3>
 
-<p> We expect that most plugins will simply add information to the Extra column
-of the output, and the plugin system assumes this in various places, but plugins
-are also free to alter the output line as desired. The only hard requirement for
+<p> We expect that most plugins will simply add information to the last column of
+the output file, the "Extra" column, and the plugin system assumes this in 
+various places, but plugins are also free to alter the output line as desired.</p>
+
+<p>The only hard requirement for
 a plugin to work with the VEP is that it implements a number of required methods
 (such as 'new' which should create and return an instance of this plugin,
 'get_header_info' which should return descriptions of the type of data this
@@ -1472,19 +1475,19 @@ easier, we suggest that users use the <a
 href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Utils_1_1BaseVepPlugin.html">Bio::EnsEMBL::Variation::Utils::BaseVepPlugin</a>
 module as their base class, which provides default implementations of all the
 necessary methods which can be overridden as required. Please refer to the
-documentation in this module for details of all required methods and a simple
+documentation in this module for details of all required methods and for a simple
 example of a plugin implementation. </p>
 
 <h3 id="plugins_filter"> Filtering using plugins </h3>
 
 <p> We expect that a common use for plugins will be to filter the output in some
-way, for example to limit output lines to non-synonymous mutations, and so we
+way, for example to limit output lines to non-synonymous variants, and so we
 provide a simple mechanism to support this. The 'run' method of a plugin is
 assumed to return a reference to a hash containing information to be included in
 the output, and if a plugin does not want to add any data to a particular line
-it should return an empty hashref. If a plugin's 'run' method returns undef we
-assume that the plugin wants to filter this line and so it will be excluded from
-the output (and no further plugins will be run on the line). If you are
+it should return an empty hashref. If a plugin instead wants to filter a line 
+and exclude it from the output, it should return 'undef' from its 'run' method, 
+this will also mean that no further plugins will be run on the line. If you are
 developing a filter plugin, we suggest that you use the <a
 href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Utils_1_1BaseVepFilterPlugin.html">Bio::EnsEMBL::Variation::Utils::BaseVepFilterPlugin</a>
 as your base class and then you need only override the 'include_line' method to
@@ -1494,10 +1497,12 @@ implementation of a non-synonymous filter. </p>
 
 <h3 id="plugins_use"> Using plugins </h3>
 
-<p> Plugin modules should be included in Perl's library path somehow; by default
-the VEP includes the '&#126;/.vep/Plugins' directory in the path, so this is a
-convenient place to store plugins, but users are free to include modules by any
-other means. You can then run a plugin using the '--plugin' command line option,
+<p> In order to run a plugin you need to include the plugin module in Perl's library 
+path somehow; by default the VEP includes the '&#126;/.vep/Plugins' directory in 
+the path, so this is a convenient place to store plugins, but you are also able 
+to include modules by any other means (e.g using the $PERL5LIB environment 
+variable in Unix-like systems). 
+You can then run a plugin using the '--plugin' command line option,
 passing the name of the plugin module as the argument. For example, if your
 plugin is in a module called MyPlugin.pm, stored in &#126;/.vep/Plugins, you can
 run it with a command line like: </p>
@@ -1512,7 +1517,7 @@ the plugin name on the command line, separated by commas, e.g.: </p>
 <p> If your plugin inherits from BaseVepPlugin, you can then retrieve these
 parameters as a list from the 'params' method. </p>
 
-<p> You can run multiple plugins in the same run by supplying multiple --plugin
+<p> You can run multiple plugins by supplying multiple --plugin
 arguments. Plugins are run serially in the order in which they are specified on
 the command line, so they can be run as a pipeline, with, for example, a later
 plugin filtering output based on the results from an earlier plugin. Note though
