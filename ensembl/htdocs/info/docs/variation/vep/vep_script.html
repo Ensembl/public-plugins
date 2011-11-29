@@ -1449,19 +1449,21 @@ way to extend, filter and manipulate the output of the VEP.</p>
 
 <h3 id="plugins_how"> How it works </h3>
 
-<p> Plugins are run as the VEP produces each line of output and are passed a
-data structure with the contents of the line before it is printed and also a
-reference to a variation API object that represents the combination of a variant
-allele and a overlapping or nearby genomic feature (such as a transcript or
-regulatory region). This object provides access to all the relevant API objects
-that may be useful for further analysis (such as the current VariationFeature
-and Transcript); please refer to the <a
-href="/info/docs/Doxygen/variation-api/index.html">variation API
-documentation</a> for more details. </p>
+<p>Plugins are run once the VEP has finished its analysis for each line of 
+the output, but before anything is printed to the output file. When each plugin 
+is called (using the 'run' method) it is passed two data structures to use in 
+its analysis; the first is a data structure containing all the data for the 
+current line, and the second is a reference to a a variation API object that 
+represents the combination of a variant allele and an overlapping or nearby 
+genomic feature (such as a transcript or regulatory region). This object 
+provides access to all the relevant API objects that may be useful for further 
+analysis by the plugin (such as the current VariationFeature and Transcript); 
+please refer to the <a href="/info/docs/Doxygen/variation-api/index.html">variation API
+documentation</a> for more details.</p>
 
 <h3 id="plugins_functionality"> Functionality </h3>
 
-<p> We expect that most plugins will simply add information to the last column of
+<p>We expect that most plugins will simply add information to the last column of
 the output file, the "Extra" column, and the plugin system assumes this in 
 various places, but plugins are also free to alter the output line as desired.</p>
 
