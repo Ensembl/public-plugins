@@ -1445,7 +1445,7 @@ output using "--format vep". </p>
 
 <p> <span style="color:red;">ADVANCED</span> The VEP can use plugin modules
 written in Perl to add functionality to the script. Plugins are a powerful 
-way to extend, filter and manipulate the output of the program.</p>
+way to extend, filter and manipulate the output of the VEP.</p>
 
 <h3 id="plugins_how"> How it works </h3>
 
@@ -1480,14 +1480,14 @@ example of a plugin implementation. </p>
 
 <h3 id="plugins_filter"> Filtering using plugins </h3>
 
-<p> We expect that a common use for plugins will be to filter the output in some
-way, for example to limit output lines to non-synonymous variants, and so we
+<p> A common use for plugins will be to filter the output in some
+way (for example to limit output lines to non-synonymous variants) and so we
 provide a simple mechanism to support this. The 'run' method of a plugin is
 assumed to return a reference to a hash containing information to be included in
 the output, and if a plugin does not want to add any data to a particular line
 it should return an empty hashref. If a plugin instead wants to filter a line 
 and exclude it from the output, it should return 'undef' from its 'run' method, 
-this will also mean that no further plugins will be run on the line. If you are
+this also means that no further plugins will be run on the line. If you are
 developing a filter plugin, we suggest that you use the <a
 href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Utils_1_1BaseVepFilterPlugin.html">Bio::EnsEMBL::Variation::Utils::BaseVepFilterPlugin</a>
 as your base class and then you need only override the 'include_line' method to
