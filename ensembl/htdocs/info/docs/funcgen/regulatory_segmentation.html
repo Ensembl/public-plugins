@@ -45,14 +45,14 @@ Two unsupervised segmentation programs were used:
 The segmentations produced by these two methods were then combined, based on their agreements (Hoffman, Ernst et al., In Preparation) in an automated fashion, in order to maximise resolution and biological interpretability. The segments were then labelled according to their signal distribution and genomic location, giving the following classifications:
 </p>
 <table class="ss tint" style="width:70%;">
-<tr><th>Segment Class</th><th>Description</th></tr>
-<tr class="bg2"><td>CTCF enriched               </td><td>CTCF enriched element</td></tr>
-<tr><td>Predicted Weak Enhancer/Cis-reg element </td><td>Predicted weak enhancer or open chromatin cis regulatory element</td></tr>
-<tr class="bg2"><td>Predicted Transcribed Region</td><td>Predicted transcribed region</td></tr>
-<tr><td>Predicted Enhancer                      </td><td>Predicted enhancer</td></tr>          
-<tr class="bg2"><td>Predicted Promoter Flank    </td><td>Predicted promoter flanking region</td></tr>
-<tr><td>Predicted Repressed/Low Activity        </td><td>Predicted repressed or low activity region</td></tr>           
-<tr class="bg2"><td>Predicted Promoter with TSS </td><td>Predicted promoter region including transcription start site</td></tr>    
+<tr><th>Segment Class</th><th>Abbreviation</th><th>Description</th></tr>
+<tr class="bg2"><td>CTCF enriched               </td><td>CTCF</td><td>CTCF enriched element</td></tr>
+<tr><td>Predicted Weak Enhancer/Cis-reg element </td><td>WE</td><td>Predicted weak enhancer or open chromatin cis regulatory element</td></tr>
+<tr class="bg2"><td>Predicted Transcribed Region</td><td>T</td><td>Predicted transcribed region</td></tr>
+<tr><td>Predicted Enhancer                      </td><td>E</td><td>Predicted enhancer</td></tr>          
+<tr class="bg2"><td>Predicted Promoter Flank    </td><td>PF</td><td>Predicted promoter flanking region</td></tr>
+<tr><td>Predicted Repressed/Low Activity        </td><td>R</td><td>Predicted repressed or low activity region</td></tr>           
+<tr class="bg2"><td>Predicted Promoter with TSS </td><td>TSS</td><td>Predicted promoter region including transcription start site</td></tr>    
 </table>
 <br>
 <p>
@@ -65,9 +65,11 @@ The following graphic shows clustering of informative features used to generate 
 <ul>
 <li>Transcriptional Activation: H3k4me1, H3K4me2, H3k4me3, H3k9ac, H3k27ac
 <li>Transcriptional Elongation: H3k36me3 
-<li>(Transcriptional Repression: H3k27me3, H4k20me1
+<li>Transcriptional Repression: H3k27me3, H4k20me1
 </ul>
+It may seem that the transcriptional represssion signals are not reflected in the heatmap, with H4K20me1 being apparently absent and the H3K27me3 being less intense than the CTCF signal. This is due to the fact that the 'R' state represents several so called dead states and fewer states for active repression and so called dead states <i>i.e.</i>the repressed state signal is being diluted.
 </td</tr></table>
+
 </p>
 <h4>Regulatory Segmentation in the Browser</h4>
 <p>There a six segmentation tracks available, reflecting the cell lines used in the segmentation analysis. These are tracks are on by default in most regulation views, and are also configurable in 'Location' view, by accessing the 'Regulation' section of the configuration panel. Colours used for each of the segmentation classes follows the agreed ENCODE standard (see legend).
