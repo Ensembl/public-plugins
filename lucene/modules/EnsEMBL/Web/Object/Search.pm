@@ -102,7 +102,7 @@ sub feature2url {
       },
     'PHENOTYPE' => sub {
       return
-          "$_[0]->{species}/Phenotype/Locations?id=$_[0]->{id};name=$_[0]->{description}";
+          "$_[0]->{species}/Phenotype/Locations?ph=$_[0]->{id}";
       },
     'SEQUENCE' => sub {
       return $_[0]->{id} =~ /^LRG/
