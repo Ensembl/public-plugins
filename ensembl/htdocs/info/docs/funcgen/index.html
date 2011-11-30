@@ -21,93 +21,71 @@
 <br /><br /><br />-->
 
 <H1>Regulation Summary</H1>
-
-<h2 id="classes">Regulatory features</h2>
-
+<br>
+<h2 id="regbuild">Regulatory Features</h2>
 <p>
-Ensembl stores regulatory regions for human and mouse, inferred from experimental data through the 
+Ensembl stores regulatory features for human and mouse, inferred from experimental data through the 
 <a href="/info/docs/funcgen/regulatory_build.html">Regulatory Build</a> process. It also provides the
 experimental evidence supporting the regulatory features, which is derived from publicly
-available <a href="/info/docs/funcgen/regulation_sources.html">data sources</a>.
+available <a href="/info/docs/funcgen/regulation_sources.html">data sources</a>. These data inlude:
+<ul>
+<li>Open Chromatin: Dnase1 Seq & <a href='http://www.ncbi.nlm.nih.gov/pubmed/19303047'>FAIRE</a>
+<li>Transcription Factor ChIP-Seq
+<li>Histone Modification  ChIP-Seq
+<li>Transcription Factor Binding Site Annotations (<a href="regulatory_build.html#tfbs">PWMs</a>)
+</ul>
 </p>
-
-<br />
-
-<h3 id="classes">Cell-specific regulatory feature classification</h3>
-
 <p>
-We provide cell-specific classifications for the regulatory features 
-(see more details of this process <a href="regulatory_build.html#regannot">here</a>). 
+The <a href="/info/docs/funcgen/regulatory_build.html">Regulatory Build</a> produces a special 'MultiCell' summary set of features, and cell specific feature sets with more detailed structures and classifications, such as: 
+<ul>
+<li>Promoter associated
+<li>Gene associated
+<li>Non-gene associated
+<li>Polymerase III associated
+<li>Unclassified
+</ul>
+Follow the link for more details about the <a href="regulatory_build.html#regannot">classification process</a>.
 </p>
 
-<table id="regulation_classifications" class="ss" style="width:50%;">
-
-<tr>
-	<th>Regulatory feature classification</th>
-	<th>Meaning</th>
-</tr>
-<tr>
-	<td>promoter-associated</td>
-	<td>The regulatory feature is likely to correspond to a proximal regulatory element such as a promoter.</td>
-</tr>
-<tr class="bg2">
-	<td>non-gene-associated</td>
-	<td>The regulatory feature is likely to correspond to a distal regulatory element such as an insulator or distal enhancer.</td>
-</tr>
-<tr>
-	<td>gene-associated</td>
-	<td>These regulatory features are associated to gene bodies. They often seem to represent marks of a gene's transcriptional activity (expressed/repressed gene)</td>
-</tr>
-<tr class="bg2">
-	<td>Polymerase III-associated</td>
-	<td>The regulatory feature is likely to correspond to a proximal regulatory element specifically associated to Polymerase III transcription.</td>
-</tr>
-</table>
-
-<br/>
-
-<h3 id="classes">Transcription Factor binding sites</h3>
-
-We annotate regulatory features with putative Transcription Factor binding sites (TFBS). 
-These are visualized in the website as black boxes within regulatory features.
-Clicking on the black box will provide extra details on the TFBS, as the position weight matrix (PWM) and the matching score (relatively to the optimal site). 
-More information on the TFBS annotation process can be seen <a href="regulatory_build.html#tfbs">here</a>.
-Information regarding the PWMs used and their correspondence to transcription factors can be seen in the data source <a href="regulation_sources.html#tfgenehuman">documentation</a>.
-<br />
-
-<h2 id="classes">Regulatory Segmentation</h2>
+<br>
 <p>
-Genome segmentation analyses from the ENCODE project, providing genome wide summary of regulatory function/status. See <a href="/info/docs/funcgen/regulatory_segmentation.html">here</a> for more details. 
+<h2 id="segmentation">Regulatory Segmentation</h2>
+Genome segmentation analyses from the <a href='http://encodeproject.org'>ENCODE</a> project, providing genome wide summary of regulatory function/status. See <a href="/info/docs/funcgen/regulatory_segmentation.html">here</a> for more details. 
 </p>
+<br>
 
-<h2 id="classes">Other Regulatory data</h2>
-
+<h2 id="other">Other Regulatory Data</h2>
 <p>
 Ensembl Regulation databases also store data directly imported from external sources (identified as <i>'Other regulatory regions'</i>):
 <ul>
-<li>Micro RNA target predictions for human and mouse (a stringent subset of MiRanda described <a rel="external" href='http://www.ebi.ac.uk/enright-srv/microcosm/htdocs/targets/v5/consset.html'>here</a>).</li>
-<li>Experimentally validated human non-coding fragments from the <a rel="external" href='http://enhancer.lbl.gov/'>VISTA Enhancer Browser</a>.</li>
-<li>Genome-wide regulatory module and element prediction from <a rel="external" href='http://www.cisred.org'>cisRED</a> for human and mouse.</li>
+<li>Micro RNA target predictions for human and mouse (a stringent subset of MiRanda described <a rel="external" href='http://www.ebi.ac.uk/enright-srv/microcosm/htdocs/targets/v5/consset.html'>here</a>).
+<li>Experimentally validated human non-coding fragments from the <a rel="external" href='http://enhancer.lbl.gov/'>VISTA Enhancer Browser</a>.
+<li>Genome-wide regulatory module and element prediction from <a rel="external" href='http://www.cisred.org'>cisRED</a> for human and mouse.
+<li>Human DNA Methylation <a href='/info/data/ensembl_das.html'>DAS</a> tracks, including:
+<ul><li>MeDIP-Chip methylation for 17 cell lines and tissues (<a rel="external" href='http://www.ncbi.nlm.nih.gov/pubmed?term=18577705'>Rakyan et al (2008)</a>)
+<li>
+RRBS (Reduced Representation Bisulfite Sequencing) for 44 cell lines (<a rel="external" href='http://www.genome.gov/10005107'>ENCODE</a>).<br>
+<!-- remove this if there is a help item/legend --> 
+Replicates were merged using mean percentage methylation, and a minimum 20x read coverage in the combined set.<br>
+Methylation state is indicated by a color gradient. Dark blue indicates highly methylated areas, green intermediate and yellow which shows low methylation.
+</ul>
 </ul>
 </p>
-
-
-<p>
-Ensembl also provides access, via <a href='/info/data/ensembl_das.html'>DAS</a> tracks, to information regarding Human DNA Methylation. 
-This includes MeDIP-Chip methylation datasets for 17 cell lines and tissues from <a rel="external" href='http://www.ncbi.nlm.nih.gov/pubmed?term=18577705'>Rakyan et al (2008)</a>, and 
-RRBS (Reduced Representation Bisulfite Sequencing) data for 44 cell lines from <a rel="external" href='http://www.genome.gov/10005107'>ENCODE</a>. 
-Replicates were merged by averaging the percentage of methylation in each replicate, but only taking positions with at least 20 reads in the combined set.
-The methylation state is indicated by a color gradient which goes from dark blue, indicating highly methylated areas, through green and then towards yellow which indicates low methylation.
-</p>
-<br />
+<br>
 
 <h2 id="microarray">Microarray Probe Mappings</h2>
-
 <p>
-Ensembl stores <a href="/info/docs/funcgen/microarray_probe_set_mapping.html">microarray probe mappings</a> for several species [link to list of species and available arrays].
+Ensembl stores <a href="/info/docs/funcgen/microarray_probe_set_mapping.html">microarray probe mappings</a> for several species and technologies, including:
+<ul>
+<li>Affymetrix: IVT & ST arrays
+<li>Codelink: Whole genome arrays
+<li>Agilent: Whole genome and CGH arrays <!-- add Sureprint here for 66-->
+<li>Illumina: Whole genome and Infinium methylation arrays
+<li>Phalanx
+</ul>
 </p>
+<br>
 
-<br />
 <h2 id="displays">Regulation displays</h2>
 <p>
 Regulation data can be viewed in the browser through pages such as:
@@ -176,7 +154,7 @@ Species-specific microarray probe mappings can be visualized on the Location vie
 <i>'Oligo Probes'</i> section in the configuration panel.
 </p>
 
-<h2>Data Access</h2>
+<h2 id="access">Data Access</h2>
 
 <p>
 Regulation information stored in Ensembl databases can be accessed through the website, but also using <a href="/info/data/biomart.html"

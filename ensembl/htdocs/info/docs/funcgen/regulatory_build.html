@@ -14,23 +14,25 @@
 
 <H1>Regulatory Build</H1>
 
+<!-- remove this for now, we can see the first 3 items on the page
 <ul>
 <li><a href="#introduction">Introduction</a></li>
 <li><a href="#regfeats">Regulatory Feature Construction</a></li>
 <li> <a href="#regannot">Regulatory Feature Annotation</a></li>
 <li> <a href="#tfbs">Transcription Factor Binding Site Annotation</a></li>
 </ul>
-
-<H2 id="introduction">Introduction</H2>
+-->
+<!-- <H2 id="introduction">Introduction</H2> -->
 
 <P>The regulatory build provides a single 'best guess' set
 of regulatory features. These features are based on the information
-contained within the Ensembl <A HREF="/info/docs/api/index.html">regulation</A> 
+contained within the Ensembl <A HREF="/info/docs/api/funcgen/index.html">regulation</A> 
 database. This document details the methodology used in this process.
 The complete list of sources of data for the current release is described
 <a href="/info/docs/funcgen/regulation_sources.html">here</a>.
-
 </P>
+<br>
+
 <H2 id="regfeats" CLASS="western">Regulatory Feature Construction</H2>
 <P>The 'Regulatory Build' is performed by overlap analysis of
 annotations from data sets in a two stage cell type aware manner. 
@@ -83,6 +85,8 @@ The attribute extension detailed above is then carried out using the projected c
 <P>These two stages give rise to regulatory FeatureSets for the core
 'MultiCell' features and for each available cell type. 
 </P>
+<br>
+
 <H2 id='regannot' CLASS="western">Regulatory Feature Annotation</H2>
 <P>Regulatory Features (regfeats) are classified by considering their
 position on the genome in relation to other classes of feature on the
@@ -134,22 +138,40 @@ where all or nearly all the bits are set.</P>
 <P>Finally, for the purposes of the regulatory build, there is a set
 of rules which 1. resolve conflicts amongst the above flags and 2.
 assign a regulatory feature_type to the regfeat. The following types
-are currently in use :-</P>
-<UL>
-	<LI><P STYLE="margin-bottom: 0cm">non-gene-associated = patterns
-	under-represented in gene regions 
-	</P>
-	<LI><P STYLE="margin-bottom: 0cm">gene-associated = patterns
-	over-represented in gene regions 
-	</P>
-	<LI><P>promoter-associated = patterns over-represented in the region
+are currently in use:
+</P>
+<br>
+
+<table id="regulation_classifications" class="ss" style="width:70%;">
+
+<tr>
+	<th width="20%">Classification</th>
+	<th>Description</th>
+</tr>
+<tr>
+	<td>Promoter Associated</td>
+	<td>Patterns over-represented in the region
 	of the transcription start site plus or minus 2500 bp upstream of
-	protein coding genes, but not in the downstream 'gene-body'. 
-	</P>
-	<LI><P>polIII-associated = patterns over-represented in regions
-	2500 bp upstream of polIII transcribed regions like tRNAs. 
-	</P>
-</UL>
+	protein coding genes, but not in the downstream gene body. Likely to be a 5' proximal promoter</td>
+</tr>
+	<td class="bg2">Gene Associated</td>
+	<td>Patterns over-represented in gene bodies. Often represent gene's transcriptional activity (expressed/repressed)</td>
+</tr>
+<tr>
+	<td>Non-gene Associated</td>
+	<td>Patterns over-represented in gene regions. Likely to correspond to a distal regulatory element such as an insulator or enhancer.</td>
+</tr>
+<tr class="bg2">
+	<td>Polymerase III Associated</td>
+	<td>Patterns over-represented in regions 2500 bp upstream of PolIII transcribed regions <i>e.g.</i> tRNAs. Likely to correspond to a proximal regulatory element specifically associated to Polymerase III transcription.</td>
+</tr>
+<tr>
+	<td>Unclassified</td>
+	<td>Patterns which are currently unclassifiable.</td>
+</tr>
+</table>
+
+
 <P>At present only cell-type specific regulatory features are
 classified as different cell types may give conflicting signals
 reflecting their unique combination of regulatory and transcriptional
@@ -158,6 +180,8 @@ states.</P>
 view or mined from the <A HREF="/info/docs/api/index.html">functional
 genomics</A> database. 
 </P>
+<br>
+
 <H2 id='tfbs' CLASS="western">Transcription Factor Binding Site Annotation</H2>
 <P>For each transcription factor (TF) which has both a ChIP-seq data
 set in the functional genomics database and a publicly available
@@ -165,7 +189,7 @@ position weight matrix (PWM) we have annotated the position of
 putative TF binding sites within the peaks called using the ChIP-seq
 reads. 
 </P>
-<P>Initially PWMs are mapped to the genome using the find_pssm_dna
+<P>Initially PWMs (currently taken from <a href='http://jaspar.genereg.net/'>JASPAR</a>, <a href='http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2238834'>Bryen et al, 2008</a>) are mapped to the genome using the find_pssm_dna
 program from the <a href='http://www.cs.helsinki.fi/group/pssmfind'>MOODS</a> software (<a href='http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2778336'>Korhonen et al, 2009</a>) with the -f flag set and a
 permissive threshold of 0.001. We then filter these mappings using a
 log odds score threshold. The threshold is derived per PWM by
@@ -173,11 +197,14 @@ considering the occurrence of mappings  in a sample of randomly
 positioned 'background' sequences matched in terms of size and
 chromosome to the ChIP-seq peaks for this TF. We select the threshold
 such that the proportion of these background peaks containing a
-mapping is approximately 5%.</P>
-<P>Only mappings which overlap the corresponding ChIP-seq peaks are
+mapping is approximately 5%. Only mappings which overlap the corresponding ChIP-seq peaks are
 included in the functional genomics database.</P>
-<P>PWMs are taken from <a href='http://jaspar.genereg.net/'>JASPAR</a> (<a href='http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2238834'>Bryen et al, 2008</a>).</P>
 
+<p>PWM features (or MotifFeatures) are visualized in the browser as black boxes within regulatory features and TF evidence peaks.
+Clicking on the black box will highlight specific information in the popup menu, such as and the matching score (relatively to the optimal site). 
+More information on the TFBS annotation process can be seen <a href="regulatory_build.html#tfbs">here</a>.
+Information regarding the PWMs used and their correspondence to transcription factors can be seen in the data source <a href="regulation_sources.html#tfgenehuman">documentation</a>.
+</p>
 <!-- add 'citations' section, i.e. where regulation info is used elsewhere in ensembl e.g. VEP 
 browser views/tutorial/help -->
 </BODY>
