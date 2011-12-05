@@ -18,9 +18,9 @@ sub rose_manager {
 
 sub rose_objects {
   ## Getter/Setter for the rose objects
-  ## Baiscally this method takes the data across from Web::Object to the Web::Component, to keep 'business logic' away from Components
+  ## Basically this method takes the data across from Web::Object to the Web::Component, to keep 'business logic' away from Components
   ## Saves and returns Rose::Object drived objects
-  ## @param Key name for saving the objects (optional) - defaults to saving (or retrieving from) as primary rose objects
+  ## @param Key name for saving the objects (optional) - defaults to saving as (or retrieving from) primary rose objects
   ## @param Rose::Object drived object (if adding new object) - ArrayRef of Rose::Object drived objects, in case of multiple objects
   ## @return ArrayRef of the saved rose objects or undef if nothing saved
   ## @example $object->rose_objects('users', \@users);  #saves under 'users' key
