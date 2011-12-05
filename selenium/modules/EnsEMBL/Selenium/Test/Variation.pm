@@ -28,17 +28,6 @@ sub test_variation {
     
     #TODO Test the Show table link
     
-    #Test ZMenu
-    print "  Test ZMenu on Variation Genomic Context \n";
-    $sel->ensembl_open_zmenu('Context','title^="Variation:"');
-    $sel->pause(2000);
-    $sel->click_ok("link=rs*properties")
-    and $sel->ensembl_wait_for_ajax_ok('50000','2000')
-    and $sel->go_back();    
-    
-    $sel->ensembl_wait_for_page_to_load;
-    $sel->pause(3000);
-    
     #Adding a track from the configuration panel
     print "  Test Configure page, adding a track \n";
     $sel->click_ok("link=Configure this page")
@@ -47,9 +36,19 @@ sub test_variation {
     and $sel->ensembl_wait_for_ajax_ok('10000','5000')
     and $sel->click_ok("//form[\@id='variation_context_configuration']/div[3]/div[1]/ul[1]/li[2]/img") #choosing the second track    
     and $sel->click_ok("modal_bg")
-    and $sel->ensembl_wait_for_ajax_ok('15000')
+    and $sel->ensembl_wait_for_ajax_ok('15000', '5000')
     and $sel->ensembl_images_loaded;
     
+    #Test ZMenu    
+    $sel->ensembl_open_zmenu('Context','title^="Variation:"');
+    $sel->pause(2000);
+    $sel->click_ok("link=rs*properties")
+    and $sel->ensembl_wait_for_ajax_ok('50000','2000')
+    and $sel->go_back();    
+    
+    $sel->ensembl_wait_for_page_to_load;
+    $sel->pause(3000);
+        
     $sel->ensembl_click_links(["link=Linkage disequilibrium", "link=Phenotype Data*"],'10000');
     
     $sel->ensembl_click_links(["link=[View on Karyotype]"],'50000');
