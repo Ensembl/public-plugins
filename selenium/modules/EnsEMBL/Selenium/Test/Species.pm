@@ -48,7 +48,7 @@ sub attach_remote_file {
   
   $name   ||= 'test';
   $format ||= 'BED'; 
-  $file_url ||= "http://staging.ensembl.org/test.bed";#'http://enssand-03.internal.sanger.ac.uk:11000/test.bed';
+  $file_url ||= "http://www.ensembl.org/info/website/upload/sample_files/example.bed";
   
   print "  Test Attach remote file\n";
  
@@ -227,7 +227,7 @@ sub export_data {
   
   print "  Test Export Data\n";
   $sel->ensembl_click("link=Export data")
-  and $sel->ensembl_wait_for_ajax_ok(20000);  
+  and $sel->ensembl_wait_for_ajax_ok(20000,'2000');  
   
   $sel->select_ok("output","$output")
   and $sel->ensembl_click("name=next");
