@@ -8,6 +8,7 @@ use warnings;
 
 sub rose_manager {
   ## Returns the ORM::Rose::Manager class for the given type
+  ## @param Manager type
   ## @return Manager Class (Static class reference) or undef if not found
   my ($self, $type) = @_;
   $type = $type ? "::$type" : '';
@@ -49,6 +50,12 @@ sub rose_object {
   my $rose_objects = shift->rose_objects;
 
   return $rose_objects && @$rose_objects ? $rose_objects->[0] : undef;
+}
+
+sub create_empty_object {
+  ## Wrapper around the default manager's create_empty_object method
+  ## @param Object type 
+  return shift->rose_manager(@_)->create_empty_object;
 }
 
 sub rose_errors {
