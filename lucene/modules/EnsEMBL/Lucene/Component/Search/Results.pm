@@ -135,7 +135,7 @@ sub re_search {
       
       return qq{
         <div style="font-size:1.2em">
-          <p class="space-below">Your search of <strong>$display_species</strong> with <strong>'$q'</strong> returned no results.</p>
+        <p class="space-below">No results found for <strong>'$q'</strong> in our <strong>$display_species</strong> databases.</p>
           <p class="space-below"><strong>Would you like to <a href="$url">search using $newq</a> (note number of digits)?</strong></p>
         </div>
       };
@@ -147,7 +147,7 @@ sub re_search {
     
     return qq{
       <div style="font-size:1.2em">
-        <p class="space-below">Your search of <strong>$display_species annotation</strong> for the term <strong>'$q'</strong> returned no results.</p>
+        <p class="space-below">No results found for <strong>'$q'</strong> in our <strong>$display_species</strong> databases.</p>
         <p class="space-below"><strong>Would you like to <a href="$url">search the rest of the website</a> with this term?</strong></p>
       </div>
     };
