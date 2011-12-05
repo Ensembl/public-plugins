@@ -7,8 +7,6 @@ package EnsEMBL::Web::Object::DbFrontend;
 use strict;
 use warnings;
 
-use EnsEMBL::ORM::Rose::Manager;
-
 use base qw(EnsEMBL::Web::Object);
 
 sub manager_class {
@@ -170,7 +168,9 @@ sub get_count {
 
 sub create_empty_object {
   ## Wrapper around the default manager's create_empty_object method
-  return shift->manager_class->create_empty_object;
+  ## @param Object type - Only needed if type different than default manager class
+  my $self = shift;
+  return @_ ? $self->SUPER::create_empty_object(@_) : $self->manager_class->create_empty_object;
 }
 
 sub delete {
