@@ -36,9 +36,9 @@ sub ensembl_wait_for_page_to_load {
   
   $timeout ||= $self->_timeout;  
   
-  $self->wait_for_page_to_load($timeout)
+  $self->wait_for_page_to_load_ok($timeout)
   and ok($self->get_title !~ /Internal Server Error|404 error/i, 'No Internal or 404 Server Error')
-  and $self->ensembl_wait_for_ajax('50000');
+  and $self->ensembl_wait_for_ajax_ok('50000');
 }
 
 # Open a ZMenu by title for the given imagemap panel or if title not provided will get the coords based on the area tag for the given imagemap panel (id of div for class js_panel)
@@ -90,9 +90,8 @@ sub ensembl_click_links {
     foreach my $link (@{$links}) {
       my ($locator, $timeout) = ref $link eq 'ARRAY' ? @$link : ($link, $timeout || $self->_timeout);
       if ($self->is_element_present($locator)) {
-        print "$locator FAILED in $location \n\n" unless $self->click_ok($locator) and $self->ensembl_wait_for_page_to_load_ok($timeout);
-      } else {
-        
+        print "$locator FAILED in $location \n\n" unless $self->click_ok($locator) and $self->ensembl_wait_for_page_to_load($timeout);
+      } else {        
         print "***missing*** $locator in $location \n";
       }
     }
