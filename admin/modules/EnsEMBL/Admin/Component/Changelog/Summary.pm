@@ -14,16 +14,17 @@ sub content_tree {
   my $hub     = $self->hub;
   my $object  = $self->object;
   my $release = $object->requested_release;
+  my $current = $object->current_release;
   my $toc     = $content->prepend_child('div', {'class' => 'cl-toc'});
 
   if (my $add_button = $content->get_nodes_by_flag('add_new_button')->[0]) {
     if ($hub->user) {
       $add_button = $add_button->get_elements_by_tag_name('a')->[0];
-      if ($release eq $object->current_release) {
+      if ($release eq $current) {
         $add_button->after({ 'node_name' => 'a', 'inner_HTML' => 'Pull from a previous release', 'href' => $hub->url({'action' => 'ListReleases', 'pull' => 1})});
       }
       else {
-        $add_button->before({'node_name' => 'a', 'inner_HTML' => 'View for current release', 'href' => $hub->url({'action' => 'Summary'})});
+        $add_button->before({'node_name' => 'a', 'inner_HTML' => 'View for current release', 'href' => $hub->url({'action' => 'Summary', 'release' => $current})});
       }
     }
     else {
