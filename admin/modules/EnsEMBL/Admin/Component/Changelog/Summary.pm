@@ -11,9 +11,20 @@ sub content_tree {
   ## @overrides
   my $self    = shift;
   my $content = $self->SUPER::content_tree;
+  my $hub     = $self->hub;
   my $toc     = $content->prepend_child('div', {'class' => 'cl-toc'});
 
-  $_->remove for @{$content->get_nodes_by_flag(['pagination_div', $self->hub->user ? () : 'add_new_button'])};
+  if (my $add_button = $content->get_nodes_by_flag('add_new_button')->[0]) {
+    if ($hub->user) {
+      $add_button = $add_button->get_elements_by_tag_name('a')->[0];
+      $add_button->after({'node_name' => 'a', 'inner_HTML' => 'Pull from a previous release', 'href' => $hub->url({'action' => 'ListReleases', 'pull' => 1})});
+    }
+    else {
+      $add_button->remove;
+    }
+  }
+
+  $_->remove for @{$content->get_nodes_by_flag(['pagination_div'])};
 
   $content->prepend_child('h1', {'inner_HTML' => sprintf('Changelog for release %d', $self->object->requested_release)});
 
