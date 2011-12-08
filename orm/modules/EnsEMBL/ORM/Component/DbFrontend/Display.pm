@@ -99,6 +99,7 @@ sub record_tree {
 
   $record_div->append_child('div', {
     'class'       => "dbf-row-buttons",
+    'flags'       => $self->_FLAG_RECORD_BUTTONS,
     'inner_HTML'  => sprintf(
       '<a class="%s" href="%s">Edit</a>%s%s',
       $self->_JS_CLASS_EDIT_BUTTON,
