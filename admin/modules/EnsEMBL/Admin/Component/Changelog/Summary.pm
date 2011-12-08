@@ -21,7 +21,7 @@ sub content_tree {
     if ($hub->user) {
       $add_button = $add_button->get_elements_by_tag_name('a')->[0];
       if ($release eq $current) {
-        $add_button->after({ 'node_name' => 'a', 'inner_HTML' => 'Pull from a previous release', 'href' => $hub->url({'action' => 'ListReleases', 'pull' => 1})});
+        $add_button->after({ 'node_name' => 'a', 'inner_HTML' => 'Copy from a previous release', 'href' => $hub->url({'action' => 'ListReleases', 'pull' => 1})});
       }
       else {
         $add_button->before({'node_name' => 'a', 'inner_HTML' => 'View for current release', 'href' => $hub->url({'action' => 'Summary', 'release' => $current})});
