@@ -37,6 +37,26 @@ sub fetch_for_textsummary {
   })));
 }
 
+sub fetch_for_listreleases {
+  ## Gets a list of all the releases that do have some declaration 
+  my $self = shift;
+  
+  $self->rose_objects($self->manager_class->fetch({
+    'select'    => 'release_id',
+    'sort_by'   => 'release_id DESC',
+    'group_by'  => 'release_id'
+  }));
+}
+
+sub fetch_for_duplicate {
+  ## @overrides
+  my $self = shift;
+  $self->SUPER::fetch_for_duplicate(@_);
+
+  my $rose_object = $self->rose_object;
+  $rose_object->release_id($self->requested_release) if $rose_object;
+}
+
 ### ### ### ### ### ### ### ### ###
 ### Inherited method overriding ###
 ### ### ### ### ### ### ### ### ###
