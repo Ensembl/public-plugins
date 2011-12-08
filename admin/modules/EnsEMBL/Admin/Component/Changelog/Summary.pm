@@ -12,12 +12,19 @@ sub content_tree {
   my $self    = shift;
   my $content = $self->SUPER::content_tree;
   my $hub     = $self->hub;
+  my $object  = $self->object;
+  my $release = $object->requested_release;
   my $toc     = $content->prepend_child('div', {'class' => 'cl-toc'});
 
   if (my $add_button = $content->get_nodes_by_flag('add_new_button')->[0]) {
     if ($hub->user) {
       $add_button = $add_button->get_elements_by_tag_name('a')->[0];
-      $add_button->after({'node_name' => 'a', 'inner_HTML' => 'Pull from a previous release', 'href' => $hub->url({'action' => 'ListReleases', 'pull' => 1})});
+      if ($release eq $object->current_release) {
+        $add_button->after({ 'node_name' => 'a', 'inner_HTML' => 'Pull from a previous release', 'href' => $hub->url({'action' => 'ListReleases', 'pull' => 1})});
+      }
+      else {
+        $add_button->before({'node_name' => 'a', 'inner_HTML' => 'View for current release', 'href' => $hub->url({'action' => 'Summary'})});
+      }
     }
     else {
       $add_button->remove;
@@ -26,12 +33,12 @@ sub content_tree {
 
   $_->remove for @{$content->get_nodes_by_flag(['pagination_div'])};
 
-  $content->prepend_child('h1', {'inner_HTML' => sprintf('Changelog for release %d', $self->object->requested_release)});
+  $content->prepend_child('h1', {'inner_HTML' => sprintf('Changelog for release %d', $release)});
 
   my $teams = { map {$_ => {
     'heading' => $self->dom->create_element('h2', {'id' => "team_$_",     'inner_HTML' => $_, 'class' => '_cl_team_heading cl-team-heading'}),
     'link'    => $self->dom->create_element('p',  {'id' => "_cl_link_$_", 'inner_HTML' => qq(<a href="#team_$_">$_</a>)})
-  }} @{$self->object->manager_class->object_class->meta->column('team')->values} };
+  }} @{$object->manager_class->object_class->meta->column('team')->values} };
 
   $_->before($teams->{$_->get_flag('team_name')}{'heading'}) for @{$content->get_nodes_by_flag('team_name')};
   $toc->append_child($teams->{$_}{'link'}) for sort keys %$teams;
