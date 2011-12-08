@@ -18,7 +18,7 @@ sub content {
     $_ = $_->release_id;
     $is_pull && $_ >= $cur_rel ? () : sprintf('<li><a href="%s">%s release %s</a></li>',
       $hub->url({'action' => 'List', 'release' => $_, $is_pull ? ('pull' => 1) : ()}),
-      $is_pull ? 'Copy declarations from ' : 'View all declarations for ',
+      $is_pull ? 'Copy a declaration from ' : 'View all declarations for ',
       $_
     );
   } @{$object->rose_objects};
