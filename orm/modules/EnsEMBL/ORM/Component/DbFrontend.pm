@@ -31,7 +31,8 @@ use constant {
   _JS_CLASS_LIST_ROW_HANDLE   => '_dbf_row_handle',
   _JS_CLASS_DATATABLE         => 'data_table no_col_toggle',
   
-  _FLAG_NO_CONTENT            => '_dbf_no_content'
+  _FLAG_NO_CONTENT            => '_dbf_no_content',
+  _FLAG_RECORD_BUTTONS        => '_dbf_record_buttons'
 };
 
 sub _init {
@@ -141,9 +142,13 @@ sub unpack_rose_object {
 
   while (my $field_name = shift @$fields) {
 
-    my $field = shift @$fields; # already a hashref with keys that should not be modified (except 'value' key) - keys as accepted by Form->add_field method
-    my $value = $record;
-    $value    = $field->{'value'} = [ map {$value = $value->$_;} split /\./, $field_name ]->[-1] || $field->{'value'}; # if fieldname is 'data.url', value required is $record->data->url
+    my $field = shift @$fields; # already a hashref with keys that should not be modified (except 'value' key unless 'force_value' key also provided) - keys as accepted by Form->add_field method
+    my $value = $field->{'value'};
+
+    unless (delete $field->{'force_value'}) { # mofidy 'value' key only if not 'force_value'
+      $value = $record;
+      $value = $field->{'value'} = [ map {$value = $value->$_;} split /\./, $field_name ]->[-1] || $field->{'value'}; # if fieldname is 'data.url', value required is $record->data->url
+    }
 
     $field->{'name'} ||= $field_name;
     $field_name        = shift @{[ split /\./, $field_name ]};
