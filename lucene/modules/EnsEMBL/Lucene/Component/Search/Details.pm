@@ -237,7 +237,7 @@ sub _render_help_results {
 sub _render_genome_hits {
   my ( $self, $hits, $hit_tagline_lookup ) = @_;
   my $species_defs = EnsEMBL::Web::SpeciesDefs->new();
-  my $sitetype = lc($species_defs->ENSEMBL_SITETYPE);
+  my $sitetype = $species_defs->ENSEMBL_SEARCHTYPE ? lc $species_defs->ENSEMBL_SEARCHTYPE : lc($species_defs->ENSEMBL_SITETYPE);
   my $prefix = $sitetype eq 'vega' ? 'v' :  $sitetype eq 'pre' ? 'pre' : 'e';
   my $ensembl_version = $prefix . $species_defs->ENSEMBL_VERSION;
 

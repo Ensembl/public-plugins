@@ -18,7 +18,7 @@ sub content {
   my $self             = shift;
   my $hub              = $self->hub;
   my $species_defs     = $hub->species_defs;
-  my $sitetype         = lc $species_defs->ENSEMBL_SITETYPE;
+  my $sitetype         = $species_defs->ENSEMBL_SEARCHTYPE ? lc $species_defs->ENSEMBL_SEARCHTYPE : lc $species_defs->ENSEMBL_SITETYPE;
   my $species          = $hub->param('species');
   my $display_species  = $species eq 'all' ? sprintf('the %s website', ucfirst $sitetype) : $hub->species_defs->get_config($species,'SPECIES_COMMON_NAME');
   my $q                = uri_escape($hub->param('q'));
@@ -121,7 +121,7 @@ sub content {
 sub re_search {
   my ($self, $q)      = @_;
   my $hub             = $self->hub;
-  my $sitetype        = ucfirst lc $hub->species_defs->ENSEMBL_SITETYPE;
+  my $sitetype        = $hub->species_defs->ENSEMBL_SEARCHTYPE ? ucfirst lc $hub->species_defs->ENSEMBL_SEARCHTYPE : ucfirst lc $hub->species_defs->ENSEMBL_SITETYPE;
   my $species         = $hub->param('species');
   my $display_species = $species eq 'all' ? 'all species' : $hub->species_defs->get_config($species,'SPECIES_COMMON_NAME');
   
@@ -135,7 +135,7 @@ sub re_search {
       
       return qq{
         <div style="font-size:1.2em">
-        <p class="space-below">No results found for <strong>'$q'</strong> in our <strong>$display_species</strong> databases.</p>
+          <p class="space-below">Your search of <strong>$display_species</strong> with <strong>'$q'</strong> returned no results.</p>
           <p class="space-below"><strong>Would you like to <a href="$url">search using $newq</a> (note number of digits)?</strong></p>
         </div>
       };
@@ -147,7 +147,7 @@ sub re_search {
     
     return qq{
       <div style="font-size:1.2em">
-        <p class="space-below">No results found for <strong>'$q'</strong> in our <strong>$display_species</strong> databases.</p>
+        <p class="space-below">Your search of <strong>$display_species annotation</strong> for the term <strong>'$q'</strong> returned no results.</p>
         <p class="space-below"><strong>Would you like to <a href="$url">search the rest of the website</a> with this term?</strong></p>
       </div>
     };
