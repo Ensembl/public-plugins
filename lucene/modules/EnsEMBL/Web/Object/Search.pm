@@ -130,7 +130,7 @@ sub get_results_summary {
   my $groups;
   my $query = $self->query_string;
   my $species_defs = $self->hub->species_defs;
-  my $sitetype    = lc($species_defs->ENSEMBL_SITETYPE);
+  my $sitetype    = $species_defs->ENSEMBL_SEARCHTYPE ? lc $species_defs->ENSEMBL_SEARCHTYPE : lc($species_defs->ENSEMBL_SITETYPE);
   my $domain_root  = $species_defs->LUCENE_DOMAINROOT || die "LUCENE_DOMAINROOT NOT SET";
   my $new_results  = $wrapper->getHeadlineNumberOfResultsByDomain( $domain_root, $query, 'species' );
 
@@ -273,8 +273,9 @@ sub get_hits_details {
   #warn "QUERY STRING ". $self->query_string;
   my $domain = $q->param('idx');
   my $species_defs = $self->hub->species_defs;
-  my $sitetype = lc($species_defs->ENSEMBL_SITETYPE);
+  my $sitetype = $species_defs->ENSEMBL_SEARCHTYPE ? lc $species_defs->ENSEMBL_SEARCHTYPE : lc($species_defs->ENSEMBL_SITETYPE);
   $domain = $sitetype . '_' . lc($domain);
+  
 
   my $cache = $self->hub->cache;
 

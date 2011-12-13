@@ -18,7 +18,7 @@ sub content {
   my $self             = shift;
   my $hub              = $self->hub;
   my $species_defs     = $hub->species_defs;
-  my $sitetype         = lc $species_defs->ENSEMBL_SITETYPE;
+  my $sitetype         = $species_defs->ENSEMBL_SEARCHTYPE ? lc $species_defs->ENSEMBL_SEARCHTYPE : lc $species_defs->ENSEMBL_SITETYPE;
   my $species          = $hub->param('species');
   my $display_species  = $species eq 'all' ? sprintf('the %s website', ucfirst $sitetype) : $hub->species_defs->get_config($species,'SPECIES_COMMON_NAME');
   my $q                = uri_escape($hub->param('q'));
@@ -128,7 +128,7 @@ sub content {
 sub re_search {
   my ($self, $q)      = @_;
   my $hub             = $self->hub;
-  my $sitetype        = ucfirst lc $hub->species_defs->ENSEMBL_SITETYPE;
+  my $sitetype        = $hub->species_defs->ENSEMBL_SEARCHTYPE ? ucfirst lc $hub->species_defs->ENSEMBL_SEARCHTYPE : ucfirst lc $hub->species_defs->ENSEMBL_SITETYPE;
   my $species         = $hub->param('species');
   my $display_species = $species eq 'all' ? 'all species' : $hub->species_defs->get_config($species,'SPECIES_COMMON_NAME');
   
