@@ -143,34 +143,26 @@ sub unpack_rose_object {
   while (my $field_name = shift @$fields) {
 
     my $field = shift @$fields; # already a hashref with keys that should not be modified (except 'value' key unless 'force_value' key also provided) - keys as accepted by Form->add_field method
-    my $value = $field->{'value'};
-
-    unless (delete $field->{'force_value'}) { # mofidy 'value' key only if not 'force_value'
-      $value = $record;
-      $value = $field->{'value'} = [ map {$value = $value->$_;} split /\./, $field_name ]->[-1] || $field->{'value'}; # if fieldname is 'data.url', value required is $record->data->url
-    }
+    my $value = $field->{'value'} = delete $field->{'force_value'} ? $field->{'value'} : $record->field_value($field_name) || $field->{'value'};
 
     $field->{'name'} ||= $field_name;
-    $field_name        = shift @{[ split /\./, $field_name ]};
+    $field_name        = $record->extract_column_name($field_name);
 
     my $select = $field->{'type'} && $field->{'type'} =~ /^(dropdown|checklist|radiolist)$/i ? 1 : 0;
 
     ## if this field is a relationship
     if (exists $relations->{$field_name}) {
-      my $relationship         = $relations->{$field_name};
-      my $related_object_meta  = $relationship->can('class') ? $relationship->class->meta : $relationship->map_class->meta->relationship($relationship->name)->class->meta;
 
+      my $relationship              = $relations->{$field_name};
+      my $related_object_meta       = $relationship->can('class') ? $relationship->class->meta : $relationship->map_class->meta->relationship($relationship->name)->class->meta;
+
+      my $title_column              = $related_object_meta->title_column;
       $field->{'value_type'}        = $relationship->type;
-      $field->{'is_datastructure'}  = $related_object_meta->title_column && $related_object_meta->column($related_object_meta->title_column)->type eq 'datastructure';
+      $field->{'is_datastructure'}  = $title_column && $title_column eq $record->extract_column_name($title_column) && $related_object_meta->column($title_column)->type eq 'datastructure';
 
       ## get lookup if type is either 'dropdown' or 'checklist' or 'radiolist'
       if ($select) {
-
-        if (my $ref_value = $value ? ref $value eq 'ARRAY' ? scalar @$value ? $value->[0] : undef : $value : undef) {
-          my $primary_key      = $ref_value->primary_key;
-          $field->{'selected'} = ref $value eq 'ARRAY' ? { map {$_->$primary_key => $_->get_title} @$value } : { $value->$primary_key => $value->get_title };
-        }
-
+        $field->{'selected'} = { map {$_->get_primary_key_value => $_->get_title} (ref $value eq 'ARRAY' ? @$value : $value) } if $value;
         $field->{'multiple'} = $relationship->is_singular ? 0 : 1;
         $field->{'lookup'}   = $manager->get_lookup($related_object_meta->class);
       }
