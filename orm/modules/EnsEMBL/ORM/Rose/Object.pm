@@ -12,6 +12,7 @@ use warnings;
 use EnsEMBL::ORM::Rose::DbConnection;
 use EnsEMBL::ORM::Rose::Manager;
 use EnsEMBL::ORM::Rose::MetaData;
+use EnsEMBL::Web::Exceptions;
 
 use Rose::DB::Object::Helpers qw(as_tree forget_related has_loaded_related clone_and_reset);  ## Some extra methods that can be called on any child class object
 
@@ -19,7 +20,7 @@ use base qw(Rose::DB::Object);
 
 use constant {
   ROSE_DB_NAME  => undef,         ## Name of the database connection as registered with Rose::DB (Override in child class)
-  DEBUG_SQL     => undef,         ## Warns out all the mysql queries is flag is set '1'
+  DEBUG_SQL     => undef,         ## Warns out all the mysql queries if flag is set '1'
 };
 
 __PACKAGE__->meta->error_mode('return');    ## When debugging, change from 'return' to 'carp'/'cluck'/'confess'/'croak' to produce the desired Carp behaviour
@@ -59,26 +60,93 @@ sub init_db {
 sub get_title {
   ## Returns the name of the object as defined as title_column in meta
   ## @return String
-  my $self  = shift;
-  my $title = $self->meta->title_column || $self->primary_key;
-  
-  return $self->$title;
+  my $self    = shift;
+  my $column  = $self->meta->title_column || $self->primary_key;
+
+  return $column ? $self->column_value($column) : '';
 }
 
 sub get_primary_key_value {
-  ## Gets the values of the primary key column
+  ## Gets the value of the primary key column
+  ## @return Value if primary key exists, undef otherwise
   my $self = shift;
   my $key  = $self->primary_key;
-  return $key ? $self->$key || undef : undef;
+  return $key ? $self->column_value($key) : undef;
 }
 
-sub external_relationship {
+sub extract_column_name {
+  ## Gets the name of the actual column after parsing any dot delimited string
+  ## @param Unparsed column name
+  ## @param Actual column name
+  my ($self, $column_name) = @_;
+  return [ split /\./, $column_name || '' ]->[0];
+}
+
+sub column_value {
+  ## Gets/sets value for a given column
+  ## It is recommended to use this method as it takes care of any column alias or datamap keys
+  ## @param Column name OR Rose::DB::Object::Metadata::Column drived object OR dot delimited string for column name and hash keys in case of datamap
+  ## @param Value (only if setting the value)
+  ## @return Column value when using as a getter
+  my $self    = shift;
+  my $column  = shift;
+  my @keys;
+
+  unless (ref $column) { # then it should be a Rose::DB::Object::Metadata::Column drived object
+    (my $column_name, @keys) = split /\./, $column;
+    $column = $self->meta->column($column_name) or throw exception('ORMException::UnknownColumnException', sprintf(q(No column with name '%s' found for %s), $column_name, ref $self));
+  }
+
+  unshift @keys, @_ ? $column->mutator_method_name : $column->accessor_method_name;
+  my $method  = pop @keys;
+  my $object  = $self;
+  $object     = $object->$_ for @keys; # for datamap stuff
+  return $object->$method(@_);
+}
+
+sub relationship_value {
+  ## Gets/sets value for a given relationship name
+  ## It is recommended to use this method as it takes care of any relationship alias, and can set relationships if only foreign key values are provided
+  ## @param Rose::DB::Object::Metadata::Relationship drived object, or relationship name
+  ## @param Value (only if setting the value) - Can be a Rose object or a foreign key value, or a hashref containing method name key and value for singular relationships,
+  ##   OR an arrayref of any of the options for multiple relationship
+  ## @return Relationship value when using as a getter
+  my $self      = shift;
+  my $meta      = $self->meta;
+  my $rel_name  = shift;
+  my $relation  = ref $rel_name ? $rel_name : $meta->relationship($rel_name) or throw exception('ORMException::UnknownRelationException', sprintf(q(No relationship with name '%s' found for %s), $rel_name, ref $self));
+  my $method    = $relation->method_name('get_set_on_save');
+  if (@_) {
+    my $value = ref $_[0] eq 'ARRAY' ? shift : [ shift ];
+    if ($relation->is_singular) {
+      $value = $value->[0] || undef; # no blank strings or zeros - zero will end up addind a new row to the related table
+      unless (ref $value) { # if foreign key value
+        my ($foreign_key)   = $relation->column_map;
+        my $accessor_method = $meta->column_accessor_method_name($foreign_key);
+        my $old_value       = $self->$accessor_method;
+        return 1 if !$old_value && !$value || $old_value && $value && $old_value eq $value; # ignore if value not changed - this may prevent an extra SQL query on save
+        $method             = $meta->column_mutator_method_name($foreign_key);
+        $self->forget_related($relation->name);
+      }
+    }
+    else {
+      $value = [ grep {$_} @$value ]; # prevent adding a new row to related table by filtering out null value
+    }
+    return $self->$method($value);
+  }
+  else {
+    return $self->$method;
+  }
+}
+
+sub external_relationship_value {
   ## Get/set an external relationships value
-  ## @param ExternalRelationship object
+  ## @param ExternalRelationship object or name
   ## @param Value to be set (optional) - Foreign rose object or value of the mapped column of the foreign rose object (or arrayref of either for '* to many' relation)
   ## @return Rose object
   my $self     = shift;
-  my $relation = shift;
+  my $meta     = $self->meta;
+  my $relation = ref $_[0] ? shift : $meta->external_relationship(shift);
   my $manager  = 'EnsEMBL::ORM::Rose::Manager';
   my $key_name = $self->meta->EXTERNAL_RELATION_KEY_NAME;
 
@@ -120,6 +188,29 @@ sub external_relationship {
   ) : [];
 
   return $self->{$key_name}{$r_name} = $r_is_singular ? shift @$value : $value;
+}
+
+sub field_value {
+  ## Gets/sets value for a column, relationship, external relationship or a key saved in a datamap column
+  ## Works as a combination of column_Value, relationship_value and external_relationship_value
+  ## @param Column/Relationship/ExternalRelationship name or object
+  ## @param Optional - value as required by column_Value, relationship_value or external_relationship_value methods
+  my ($self, $field, @args) = @_;
+  my $return;
+  my $error;
+  try {
+    $return = $self->column_value($field, @args);
+  } catch { try {
+    $return = $self->relationship_value($field, @args);
+  } catch { try {
+    $return = $self->external_relationship_value($field, @args);
+  } catch {
+    $error  = 1;
+  }}};
+
+  return $return unless $error;
+
+  throw exception('ORMException::UnknownFieldException', sprintf(q(No column, relationship or external relationship with name '%s' found for %s), $field, ref $self));
 }
 
 1;
