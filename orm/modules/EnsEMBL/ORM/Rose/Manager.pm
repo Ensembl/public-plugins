@@ -202,8 +202,9 @@ sub create_empty_object {
 
 sub is_trackable {
   ## Returns true if Object contains the trackable fields (created_by, modified_by etc)
+  ## @param Field name - column or relationship name or object - optional
   ## @return 0/1 accordingly
-  return shift->object_class->meta->is_trackable;
+  return shift->object_class->meta->is_trackable(@_);
 }
 
 sub get_lookup {
@@ -218,18 +219,20 @@ sub get_lookup {
   
   $object_class ||= $self->object_class;
 
-  my $key   = $object_class->primary_key;
-  my $title = $object_class->meta->title_column;
+  my $key     = $object_class->primary_key;
+  my $title   = $object_class->extract_column_name($object_class->meta->title_column);
 
   my $objects = $self->get_objects(
     'object_class'  => $object_class,
     'select'        => $title ? [ $key, $title ] : $key,
-    'sort_by'       => $title || $key,
   );
   
   return unless $objects;
 
-  return { map {$_->$key => $title ? $_->$title : $_->$key} @$objects };
+  return { map {
+    my $key = $_->get_primary_key_value;
+    $key    => $title ? $_->get_title : $key;
+  } @$objects };
 }
 
 sub get_columns {
