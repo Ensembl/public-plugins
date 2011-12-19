@@ -44,9 +44,6 @@ sub content_tree {
   # primary key
   $form->add_hidden({'name' => 'id', 'value' => $serial})->set_flag($record->primary_key) if $serial;
 
-  # trackable key prefix
-  my $trackable_key = $serial ? 'modified' : 'created';
-
   # print fields  
   foreach my $field (@$fields) {
 
@@ -105,11 +102,12 @@ sub content_tree {
     }
 
     # trackable fields manipulation
-    if ($record->meta->is_trackable && $name =~ /^(created|modified)_(at|by|by_user)$/) {
-      next if $2 eq 'by';                       # force skip modified_by and created_by fields
-      $element_params->{'type'}     = 'noedit'; # force noedit field type for trackable fields
-      $element_params->{'is_html'}  = 1 if $2 eq 'by_user';
-      $1 eq $trackable_key and $element_params->{'caption'} = $2 eq 'by_user' ? $hub->user->name : 'Now';
+    if ($record->meta->is_trackable($name)) {
+      if ($name =~ /^(created|modified)_(at|by_user)$/) {
+        $element_params->{'type'}     = 'noedit'; # force noedit field type for trackable fields
+        $element_params->{'is_html'}  = 1 if $2 eq 'by_user';
+        $element_params->{'caption'}  = $2 eq 'by_user' ? $hub->user->name : 'Now' if $1 eq ($serial ? 'modified' : 'created');
+      }
     }
     
     if ($action eq 'Preview') {
