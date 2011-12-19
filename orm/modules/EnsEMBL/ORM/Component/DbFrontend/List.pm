@@ -84,10 +84,10 @@ sub record_tree {
 
     if ($header_only) {
 
-      my $real_col  = [split /\./, $column_name]->[0]; # in case column name contains a dot for representing datamap etc
-      my $is_column = grep {$_ eq $real_col} $record_meta->column_names;
-      my $editable  = $record_meta->is_trackable && $column_name =~ /^(created|modified)_(at|by|by_user)$/ ? 0 : 1;
-      my $css       = '';
+      my $real_col    = $record->extract_column_name($column_name);
+      my $is_column   = grep {$_ eq $real_col} $record_meta->column_names;
+      my $editable    = !$record_meta->is_trackable($real_col);
+      my $css         = '';
       my $width;
 
       if (ref $column) {
@@ -105,9 +105,7 @@ sub record_tree {
     else {
       my $is_title  = $record_meta->title_column && $record_meta->title_column eq $column_name;
       my $relation  = ref $column ? $column->{'ensembl_object'} : '';
-      my $value     = $record;
-      $value        = $value->$_ for split /\./, $column_name;
-      $value        = $self->_display_column_value($value, $is_title, $relation, $label);
+      my $value     = $self->_display_column_value($record->field_value($column_name), $is_title, $relation, $label);
       $value        = sprintf('<a href="%s">%s</a>', $hub->url({'action' => 'Display', 'function' => $hub->function, 'id' => $primary_key}), $value) if $is_title;
       $record_row->append_child('td', {'inner_HTML' => $value, 'flags' => $column_name});
     }

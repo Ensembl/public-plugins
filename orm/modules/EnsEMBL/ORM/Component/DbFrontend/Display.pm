@@ -54,7 +54,7 @@ sub record_tree {
   ## Generates a DOM tree for each database record
   ## Override this one in the child class and do the DOM manipulation on the DOM tree if required
   ## Flags are set on required HTML elements for 'selection and manipulation' purposes in child classes (get_nodes_by_flag)
-  ## If overriding, add _JS_CLASS_DELETE_BUTTON & _JS_CLASS_EDIT_BUTTON classes on the buttons if JavaScript functionality is required
+  ## If overriding, make sure _JS_CLASS_DELETE_BUTTON & _JS_CLASS_EDIT_BUTTON classes are on the buttons if JavaScript functionality is required
   my ($self, $record) = @_;
   my $object = $self->object;
   my $hub    = $self->hub;
@@ -69,8 +69,7 @@ sub record_tree {
 
     my $field   = shift @$fields;
     next if $field->{'display'} && $field->{'display'} eq 'never';
-    my $value   = $record;
-    $value      = $value->$_ for split /\./, $field_name;
+    my $value   = $record->field_value($field_name);
     next if !$value && $field->{'display'} && $field->{'display'} eq 'optional';
     my $jclass  = $self->{'_column_class_names'}{$field_name};
 
