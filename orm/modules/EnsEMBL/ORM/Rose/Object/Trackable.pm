@@ -33,4 +33,14 @@ sub save {
   return $self->SUPER::save(%params);
 }
 
+sub clone_and_reset {
+  ## @overrides
+  ## Resets the values in the trackable columns along with other unique keys and primary keys
+  ## @return Cloned trackable rose object
+  my $self  = shift;
+  my $clone = $self->SUPER::clone_and_reset(@_);
+  $clone->$_(undef) for qw(created_by created_at modified_by modified_at);
+  return $clone;
+}
+
 1;
