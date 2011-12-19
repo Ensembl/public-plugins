@@ -23,6 +23,7 @@ sub setup {
 
 sub is_trackable {
   ## Tells whether the object isa Trackable object
+  ## Overridden in MetaData::Trackable
   return 0;
 }
 
@@ -70,11 +71,11 @@ sub external_relationship {
     no strict qw(refs);
     my $relationship = $self->{$key_name}{$relationship_name} = EnsEMBL::ORM::Rose::ExternalRelationship->new({'name', $relationship_name, %$params});
     *{"${object_class}::$relationship_name"} = sub {
-      return shift->external_relationship($relationship, @_);
+      return shift->external_relationship_value($relationship, @_);
     };
   }
 
-  throw exception('ORMException::UnknownRelation', "External relationship '$relationship_name' not registered with $object_class.") unless $self->{$key_name}{$relationship_name};
+  throw exception('ORMException::UnknownExternalRelationException', "External relationship '$relationship_name' not registered with $object_class.") unless $self->{$key_name}{$relationship_name};
 
   return $self->{$key_name}{$relationship_name};
 }
