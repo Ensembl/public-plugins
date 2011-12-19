@@ -82,11 +82,7 @@ sub fetch_for_duplicate {
 
   my $id     = $self->hub->param('id') or return;
   my $record = $self->manager_class->fetch_by_primary_key($id, $self->_get_with_objects_params('Input'));
-
-  if ($record) {
-    $record = $record->clone_and_reset;
-    $record->meta->is_trackable and map {$record->$_(undef)} qw(created_by created_at modified_by modified_at);
-  }
+  $record    = $record->clone_and_reset if $record;
 
   $self->rose_objects($record);
 }
@@ -112,8 +108,8 @@ sub fetch_for_select {
   my ($self, $params) = @_;
   my $manager = $self->manager_class;
 
-  $params ||= {};
-  $params->{'sort_by'} ||= $manager->object_class->meta->title_column || $manager->object_class->primary_key;
+  $params               ||= {};
+  $params->{'sort_by'}  ||= $self->_get_sort_by_column;
 
   $self->rose_objects($manager->get_objects(%$params));
 }
@@ -124,7 +120,6 @@ sub _fetch_all {
 
   $params   ||= {};
   my $manager = $self->manager_class;
-  my $title   = $manager->object_class->meta->title_column;
 
   my @ids = $self->hub->param('id') || ();
   scalar @ids == 1 and @ids = split ',', $ids[0];
@@ -132,7 +127,7 @@ sub _fetch_all {
     $self->rose_objects($manager->fetch_by_primary_keys([@ids], $self->_get_with_objects_params($page, $params)));
   }
   else {
-    !$params->{'sort_by'} and $title and $params->{'sort_by'} = $title;
+    $params->{'sort_by'} ||= $self->_get_sort_by_column;
     $self->rose_objects($manager->fetch_by_page($self->pagination, $self->get_page_number, $self->_get_with_objects_params($page, $params)));
   }
 }
@@ -271,70 +266,55 @@ sub _get_with_objects_params {
   return $params;
 }
 
+sub _get_sort_by_column {
+  ## Returns either title column name or primary column name depending upon the value of title column
+  my $self            = shift;
+  my $object_class    = $self->manager_class->object_class;
+  my $column          = $object_class->meta->title_column;
+
+  return $column if $column && $column eq $object_class->extract_column_name($column);
+  return $object_class->primary_key;
+}
+
 sub _populate_from_cgi {
   ## Private helper method used to set the values of different columns of the rose object from cgi parameters
+  ## TODO - external relationships
   my $self        = shift;
   my $hub         = $self->hub;
   my @params      = $hub->param;
   my $rose_object = $self->rose_object;
+  my $rose_meta   = $rose_object->meta;
   my $fields      = $self->get_fields;
-  my $columns     = { map {$_->name => $_} $rose_object->meta->columns };
-  my $relations   = { map {$_->name => $_} $rose_object->meta->relationships };
-  my $ext_rel     = {}; ## TODO - external relationships?
+  my $columns     = { map {$_->name => $_} $rose_meta->columns };
+  my $relations   = { map {$_->name => $_} $rose_meta->relationships };
+#   my $ext_rels    = { map {$_->name => $_} $rose_meta->external_relationships };
   my %field_names = map {$_ => 1} keys %{{@$fields}};
   my %param_names = map {$_ => 1} @params;
 
   delete $field_names{$_} for ('id', $rose_object->primary_key);
 
   foreach my $field_name (keys %field_names) {
-    next unless exists $param_names{$field_name};                                                             # ignore if $field_name not present among the post params
-    next if $rose_object->meta->is_trackable && $field_name =~ /^(created|modified)_(by_user|at|by)$/;        # dont get them from CGI
+    next unless exists $param_names{$field_name};   # ignore if $field_name not present among the post params
+    next if $rose_meta->is_trackable($field_name);  # dont get trackable info from CGI
 
-    my $value = [ $hub->param($field_name) ]; #CGI value
-
-    ## Patch for datamap columns
-    ($field_name, my @datamap_keys) = split /\./, $field_name;
-
+    my $value     = [ $hub->param($field_name) ]; #CGI value
     my $relation  = $relations->{$field_name};
-    my $column    = $columns->{$field_name};
+    my $column    = $columns->{$rose_object->extract_column_name($field_name)};
+#     my $ext_rel   = $ext_rels->{$field_name};
 
-    next unless $column || $relation; # ignore if $field_name is neither a column nor relationship
-
-    my $mutator_method = $column ? $column->mutator_method_name : $relation->method_name('get_set_on_save'); # get method name to set values
-
-    # For single value
-    if ($relation && $relation->is_singular || $column && $column->type ne 'set') {
-
-      $value    = shift @$value;
-      $value    = undef if $column && $value eq '' && !$column->not_null;   # if column value can be NULL, set NULL value instead of an empty string
-      $value  ||= undef if $relation;                                       # no blank strings or zeros - zero will end up addind a new row to the related table
-
-      # Fix for saving singular relationships - Rose does not save them properly
-      if ($relation) {
-        my ($foreign_key)   = $relation->column_map;
-        my $accessor_method = $columns->{$foreign_key}->accessor_method_name;
-        my $old_value       = $rose_object->$accessor_method;
-        next if !$old_value && !$value || $old_value && $value && $old_value eq $value; # value not changed, so move to next field - this prevents an extra SQL query
-        $mutator_method     = $columns->{$foreign_key}->mutator_method_name;
-        $rose_object->forget_related($field_name);
+    if ($column) {
+      if ($column->type ne 'set') {
+        $value = shift @$value;
+        $value = undef if $value eq '' && !$column->not_null; # if column value can be NULL, set NULL value instead of an empty string
       }
+      $rose_object->column_value($field_name, $value); # field_name may contain keys for datamap
     }
-    else {
-      # For multiple values
-      $value = [ grep {$_} @$value ] if $relation; # prevent adding a new row to related table by filtering out null value
+    elsif ($relation) {
+      $rose_object->relationship_value($relation, $value);
     }
-
-    # Some extra patch for datamap columns
-    if (@datamap_keys) {
-      my $object_to_modify  = $rose_object->$mutator_method;
-      $mutator_method       = pop @datamap_keys;
-      $object_to_modify     = $object_to_modify->$_ for @datamap_keys;
-      $object_to_modify->$mutator_method($value);
-      next;      
-    }
-
-    # Finally save the value to the rose object
-    $rose_object->$mutator_method($value);
+#     elsif ($ext_rel) {
+#       $rose_object->external_relationship_value($ext_rel, $value);
+#     }
   }
 }
 
