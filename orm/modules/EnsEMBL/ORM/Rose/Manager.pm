@@ -216,23 +216,18 @@ sub get_lookup {
   ##  - key   : primary key's value
   ##  - title : value of the title column (Object->meta->title_column)
   my ($self, $object_class) = @_;
-  
-  $object_class ||= $self->object_class;
 
-  my $key     = $object_class->primary_key;
-  my $title   = $object_class->extract_column_name($object_class->meta->title_column);
+  my $default_object_class  = $self->object_class;
+  $object_class           ||= $default_object_class;
+  my $title_column_name     = $object_class->extract_column_name($object_class->meta->title_column);
+  my $lookup                = {};
 
-  my $objects = $self->get_objects(
-    'object_class'  => $object_class,
-    'select'        => $title ? [ $key, $title ] : $key,
-  );
-  
-  return unless $objects;
-
-  return { map {
+  for (@{$self->get_objects('object_class', $object_class) || []}) {
+    next unless $_->include_in_lookup($default_object_class);
     my $key = $_->get_primary_key_value;
-    $key    => $title ? $_->get_title : $key;
-  } @$objects };
+    $lookup->{$key} = $title_column_name ? $_->get_title : $key;
+  }
+  return $lookup;
 }
 
 sub get_columns {
