@@ -1,7 +1,7 @@
 package EnsEMBL::ORM::Rose::Manager::HelpRecord;
 
 ### NAME: EnsEMBL::ORM::Rose::Manager::HelpRecord
-### Module to handle multiple HelpGlossary entries 
+### Module to handle multiple HelpRecord entries 
 
 use strict;
 use warnings;
