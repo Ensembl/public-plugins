@@ -62,9 +62,7 @@ sub show_fields {
   }
   elsif ($type eq 'view') {
     @datamap = (
-      'help_record_id'      => {'label' => 'ID',              'type' => 'noedit', 'value' => '<i>to be assigned</i>', 'is_html' => 1  },
-      'data.ensembl_object' => {'label' => 'Ensembl object',  'type' => 'string'  },
-      'data.ensembl_action' => {'label' => 'Ensembl action',  'type' => 'string'  },
+      'help_links'          => {'label' => 'Linked URLs',     'type' => 'checklist', 'multiple' => 1},
       'data.content'        => {'label' => 'Content',         'type' => 'html',     'cols' => 60, 'notes' => 'Please make sure the text above is valid XHTML', 'rows' => 40}
     );
   }
@@ -118,8 +116,7 @@ sub show_columns {
   }
   elsif ($type eq 'view') {
     @datamap = (
-      'data.ensembl_object' => {'title' => 'Ensembl object'},
-      'data.ensembl_action' => {'title' => 'Ensembl action'},
+      'help_links'          => {'title' => 'Help Links'}
     );
   }
   elsif ($type eq 'movie') {
