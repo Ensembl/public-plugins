@@ -45,6 +45,12 @@ sub meta_class {
   return 'EnsEMBL::ORM::Rose::MetaData';
 }
 
+sub include_in_lookup {
+  ## Flag to control wether or not to include this object in manager's get_lookup method's return value
+  ## @param Class name of the related rose object
+  return 1;
+}
+
 sub primary_key {
   ## Returns the name of the primary key (no composite keys)
   ## @return String
