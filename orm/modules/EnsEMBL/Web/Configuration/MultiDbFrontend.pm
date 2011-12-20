@@ -9,7 +9,7 @@ sub get_valid_action {
   my ($self, $action, $function) = @_;
   my $valid_action;
 
-  if ($valid_action = $self->tree->get_node(join '/', map {$_ || ()} $self->hub->type, $action, $action ? $function : ())) {
+  if ($valid_action = $self->tree->get_node(join '/', grep {$_} $self->hub->type, $action, $action ? $function : ())) {
     $valid_action = $valid_action->id;
   }
   return $valid_action;
@@ -39,7 +39,7 @@ sub create_multidbfrontend_menu {
   }
 
   while (my $node_name = shift @$nodes) {
-    my $node_options = {%{$dbf->{$node_name} || {}}, %{$options || {}}, %{shift @$nodes}, 'raw' => 1, 'url' => $hub->url({'type' => $menu_name, 'action' => $node_name})};
+    my $node_options = {%{$dbf->{$node_name} || {}}, %{$options || {}}, %{shift @$nodes}, 'raw' => 1, 'url' => $hub->url({'type' => $menu_name, 'action' => $node_name, 'function' => ''})};
     $menu->append($self->create_node("$menu_name/$node_name", delete $node_options->{'caption'}, delete $node_options->{'components'} || [], $node_options));
   }
   return $menu;
