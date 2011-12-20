@@ -29,7 +29,8 @@ sub update_conf {
     AttribType      => 'Modal',
     ExternalDb      => 'Modal',
 
-    HelpRecord      => 'Modal', #old help stuff
+    HelpRecord      => 'Modal',
+    HelpLink        => 'Modal',
 
     Account         => 'Modal',
     UserData        => 'Modal',
