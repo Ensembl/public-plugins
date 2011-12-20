@@ -1,0 +1,142 @@
+<html>
+<head>
+  <meta name="navigation" content="Comparative Genomics">
+  <title>Pairwise Alignments</title>
+  <link rel="stylesheet" type="text/css" media="all" href="85_spreadsheet_table.css" />
+  <link rel="stylesheet" type="text/css" media="all" href="95_static_content.css" />
+</head>
+
+<body>
+
+<h2>Human vs Gibbon LastZ alignments</h2>
+
+<p>Human (<i>Homo sapiens</i>, GRCh37) and Gibbon (<i>Nomascus leucogenys</i>, Nleu1.0) were aligned using the LastZ alignment algorithm (<a href="http://www.bx.psu.edu/miller_lab/dist/README.lastz-1.02.00/README.lastz-1.02.00a.html">LastZ</a>) in Ensembl release 66. Human  was used as the reference species. After running LastZ , the raw LastZ  alignment blocks are chained according to their location in both genomes. During the final netting process, the best sub-chain is chosen in each region on the reference species.</p>
+
+<a href="/info/docs/compara/analyses.html" class="cp-external">Full list of 
+pairwise alignments</a>
+
+
+<h3 class="boxed">Configuration parameters</h3>
+
+<table class="ss tint species-stats">
+<tr class="bg2">
+<td class="data" style="width:75%">Gap open penalty (O)</td>
+<td class="value">400</td>
+</tr>
+<tr>
+<td class="data">Gap extend penalty (E)</td>
+<td class="value">30</td>
+</tr>
+<tr class="bg2">
+<td class="data">HSP threshold (K)</td>
+<td class="value">5000</td>
+</tr>
+<tr>
+<td class="data">Threshold for gapped extension (L)</td>
+<td class="value">5000</td>
+</tr>
+<tr class="bg2">
+<td class="data">Threshold for alignments between gapped alignment blocks (H)</td>
+<td class="value">3000</td>
+</tr>
+<tr>
+<td class="data">Masking count (M)</td>
+<td class="value">10</td>
+</tr>
+<tr class="bg2">
+<td class="data">Seed and Transition value (T)</td>
+<td class="value">1</td>
+</tr>
+<tr>
+<td class="data">Scoring matrix (Q)</td>
+<td class="value">
+<table style="text-align: right;" border="0" cellpadding="0" cellspacing="5"> <tbody>
+<tr>
+<td>A</td>
+<td>C</td>
+<td>G</td>
+<td>T</td>
+</tr>
+<tr>
+<td>90</td>
+<td>-330</td>
+<td>-236</td>
+<td>-356</td>
+</tr>
+<tr>
+<td>-330</td>
+<td>100</td>
+<td>-318</td>
+<td>-236</td>
+</tr>
+<tr>
+<td>-236</td>
+<td>-318</td>
+<td>100</td>
+<td>-330</td>
+</tr>
+<tr>
+<td>-356</td>
+<td>-236</td>
+<td>-330</td>
+<td>90</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+</table>
+
+<h3>Results</h3>
+
+<p>Number of alignment blocks: 544826</p>
+
+<table style="text-align: left; width: 100%;" border="0" cellpadding="2"
+cellspacing="2">
+<tbody>
+<tr>
+<td style="vertical-align: top;">
+</td>
+<th style="vertical-align: top;">Genome coverage(bp)
+</th>
+<th style="vertical-align: top;">Coding exon coverage (bp)
+</th>
+</tr>
+<tr>
+<th style="vertical-align: middle;">Human</th>
+<td style="vertical-align: top;"><img style="width: 200px; height: 200px;" alt=""
+src="./pie_ref_align_561.png"/>
+</td>
+<td style="vertical-align: top;"><img style="width: 200px; height: 200px;" alt=""
+src="./pie_ref_cod_align_561.png"/>
+</td>
+</tr>
+<tr>
+<td></td>
+<td style="vertical-align: top;">2,554,803,234 out of 3,098,825,702
+</td>
+<td style="vertical-align: top;">33,706,188 out of 35,155,918
+</td>
+</tr>
+<tr>
+<th style="vertical-align: middle;">Gibbon
+</th>
+<td style="vertical-align: top;"><img style="width: 200px; height: 200px;" alt=""
+src="./pie_non_ref_align_561.png"/>
+</td>
+<td style="vertical-align: top;"><img style="width: 200px; height: 200px;" alt=""
+src="./pie_non_ref_cod_align_561.png"/>
+</td>
+</tr>
+<tr>
+<td></td>
+<td style="vertical-align: top;">2,463,035,754 out of 2,936,035,333
+</td>
+<td style="vertical-align: top;">29,635,696 out of 29,936,644
+</td>
+</tr>
+</tbody>
+</table>
+
+
+</body>
+</html>
