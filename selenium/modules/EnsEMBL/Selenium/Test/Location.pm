@@ -34,11 +34,11 @@ sub test_location {
     #Test ZMENU (only for human)
     if(lc($self->species) eq 'homo_sapiens') {
       #Searching and adding decipher track      
-      $self->turn_track("Germline variation","//form[\@id='location_viewbottom_configuration']/div[6]/div[4]/ul/li/img", "on", "decipher");
+      $self->turn_track("Germline variation","//form[\@id='location_viewbottom_configuration']/div[6]/div[7]/ul[2]/li/img", "on", "decipher");
       
       #simulate ZMenu for this track (decipher)
       $sel->ensembl_open_zmenu('ViewBottom',"href*=decipher","Decipher track");
-      $sel->ensembl_is_text_present("decipher:");      
+      $sel->ensembl_is_text_present("decipher:");
       
       #Test attach das
       $self->attach_das;
