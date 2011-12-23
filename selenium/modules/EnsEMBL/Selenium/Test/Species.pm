@@ -326,13 +326,13 @@ sub species_databases {
 # PARAMETERS: $track_name - The track name as it is shown on the left side of the configuration panel within the a tag(link) 
 #             $track_image_xpath - The track image (the square box to select the track) xpath for the track to be turn on/off (eg: //form[\@id='location_viewbottom_configuration']/div[4]/div/ul/li[1]/img)
 #             $action - whether to turn the track on or off (eg: 'on' or 'off')
-#             $search(optional) - should be the track name you want to search for in the search box.
+#             $search(optional) - the track name you want to search for in the search box.
 sub turn_track {
   my ($self, $track_name, $track_image_xpath, $action, $search) = @_;
 
   my $sel = $self->sel;
   my $parent_test;
-    
+  
   $sel->ensembl_click("link=Configure this page")  
   and $sel->ensembl_wait_for_ajax_ok(undef,2000)
   and $sel->ensembl_is_text_present("Active tracks");
@@ -348,7 +348,7 @@ sub turn_track {
     $sel->ensembl_click("link=$track_name")
     and $sel->ensembl_wait_for_ajax_ok;
   }
-  
+
   #function to get the total count for track (parent_track is empty since there isn't any parent)
   my ($sub_track, $parent_track) = $self->get_track_counts;
 
@@ -368,7 +368,13 @@ sub turn_track {
   } else {
     $sub_track = $parent_track;
   }
- 
+  
+  #Check if image_xpath exist/valid, if not go to label SKIP and carry on
+  if(!$sel->is_element_present($track_image_xpath)) {
+    print "ERROR:: Invalid xpath ($track_image_xpath) for track $track_name !!! \n";
+    goto SKIP;
+  }
+
   (my $track_input = $track_image_xpath) =~ s/img/input/g; #the hidden input to check if the track is on/off  
   
   $sub_track += 1 if($sel->get_value($track_input) eq 'off' && lc($action) eq 'on');  # track is chosen, track count should increment by 1 only do this if track is off and action is turning track on.
@@ -377,13 +383,14 @@ sub turn_track {
   my $track_select_image = $track_image_xpath;
   $track_select_image =~ s/img/ul\/li[4]\/img/g if(lc($action) eq 'on'); #generating the xpath for the track select image (the normal one)
   $track_select_image =~ s/img/ul\/li[2]\/img/g if(lc($action) eq 'off');#generating the xpath for the track select image (the blank one)
- 
+
   $sel->ensembl_click($track_image_xpath)  
   and $sel->ensembl_click($track_select_image)    
   and $sel->ensembl_is_text_present("$track_name($sub_track/*");  #maybe add a different error if failure (use selenium is_text_present instead of ensembl one)  
   
   $sel->ensembl_is_text_present($parent_track) if($parent_test);
   
+  SKIP:
   $sel->ensembl_click("modal_bg")
   and $sel->ensembl_wait_for_ajax_ok(undef,2000)
   and $sel->ensembl_images_loaded;
