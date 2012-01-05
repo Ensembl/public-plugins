@@ -37,7 +37,7 @@ sub test_gene {
       and $sel->ensembl_wait_for_ajax_ok('10000','3000')
       and $sel->ensembl_click("link=Somatic mutations")
       and $sel->ensembl_wait_for_ajax_ok('10000','3000')
-      and $sel->click_ok("//form[\@id='gene_transcriptsimage_configuration']/div[4]/div/ul/li[2]/img") #selecting the second track
+      and $sel->ensembl_click("//form[\@id='gene_transcriptsimage_configuration']/div[4]/div/ul/li[2]/img") #selecting the second track
       and $sel->ensembl_is_text_present("Somatic mutations(1/*")
       and $sel->ensembl_click("modal_bg")
       and $sel->ensembl_wait_for_ajax_ok('15000','2000')

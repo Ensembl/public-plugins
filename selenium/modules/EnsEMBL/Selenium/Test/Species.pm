@@ -112,7 +112,7 @@ sub add_track {
   and $sel->ensembl_click("//img[\@alt='Arrows on both sides']"); 
     
   $sel->ensembl_click("modal_bg")
-  and $sel->ensembl_wait_for_ajax_ok(undef,2000)   
+  and $sel->ensembl_wait_for_ajax_ok(undef,5000)   
   #and $sel->ensembl_is_text_present("Click on the image above to jump to a chromosome, or click and drag to select a region")
   and $sel->ensembl_is_text_present("BED")            #making sure karyotype displayed the track for the uploaded data(track name in the uploaded file)
   and $sel->ensembl_is_text_present("bedGraph")
@@ -340,7 +340,7 @@ sub turn_track {
   if($search) {
     print "  Test searching for $search track and turning the track ".uc($action)."\n" ;
     
-    $sel->click_ok("name=configuration_search_text")    
+    $sel->ensembl_click("name=configuration_search_text")    
     and $sel->type_keys_ok("configuration_search_text", "$search") #searching for the track in the search textfield    
     and $sel->ensembl_wait_for_ajax_ok(undef,'1000');
   } else {

@@ -37,7 +37,7 @@ sub test_location {
       $self->turn_track("Germline variation","//form[\@id='location_viewbottom_configuration']/div[6]/div[7]/ul[2]/li/img", "on", "decipher");
       
       #simulate ZMenu for this track (decipher)
-      $sel->ensembl_open_zmenu('ViewBottom',"href*=decipher","Decipher track");
+      $sel->ensembl_open_zmenu('ViewBottom',"href*=decipher","Decipher track");      
       $sel->ensembl_is_text_present("decipher:");
       
       #Test attach das
@@ -45,7 +45,7 @@ sub test_location {
       $sel->ensembl_wait_for_ajax_ok(15000);
       
       $sel->ensembl_open_zmenu('Summary',"class^=drag");
-      $sel->click_ok("link=Centre here")
+      $sel->ensembl_click("link=Centre here")
       and $sel->ensembl_wait_for_ajax_ok(undef,'2000')      
       and $sel->go_back();
 
@@ -90,7 +90,7 @@ sub test_location {
       my $resequencing_counts = $SD->databases(ucfirst($self->species))->{'DATABASE_VARIATION'}{'#STRAINS'} if exists $SD->databases(ucfirst($self->species))->{'DATABASE_VARIATION'};
       $sel->ensembl_click_links(["link=Resequencing ($resequencing_counts)"], '8000');
       $sel->type_ok("loc_r", "6:27996744-27996844");
-      $sel->click_ok("//input[\@value='Go']");
+      $sel->ensembl_click("//input[\@value='Go']");
       $sel->pause(5000);
       $sel->ensembl_is_text_present("Basepairs in secondary strains");
 

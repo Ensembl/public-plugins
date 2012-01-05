@@ -53,15 +53,14 @@ sub test_transcript {
     $sel->ensembl_click_links(["link=Population comparison", "link=Comparison image"],'50000') if($species_db->{'database:variation'} && $SD->databases(ucfirst($self->species))->{'DATABASE_VARIATION'}->{'#STRAINS'});
     $sel->ensembl_click_links(["link=Protein summary"],'20000');
 
-    #Adding a track from the configuration panel
-    # need to choose another track, there is no second track for somation
+    # Adding a track from the configuration panel (turning one off since all the tracks are turn on)    
     if(lc($self->species) eq 'homo_sapiens') {          
       print "  Test Configure page \n";
       $sel->ensembl_click("link=Configure this page")
       and $sel->ensembl_wait_for_ajax_ok('10000')
       and $sel->ensembl_click("link=Somatic mutations")
       and $sel->ensembl_wait_for_ajax_ok('10000')
-      and $sel->click_ok("//form[\@id='transcript_translationimage_configuration']/div[4]/div/ul/li[2]/img") #selecting the second track      
+      and $sel->ensembl_click("//form[\@id='transcript_translationimage_configuration']/div[4]/div/ul/li/img") #turning first track off     
       and $sel->ensembl_click("modal_bg")
 #      and $sel->ensembl_wait_for_ajax_ok('15000')
       and $sel->ensembl_images_loaded;

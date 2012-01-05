@@ -66,7 +66,7 @@ sub test_blog {
  
  $sel->open_ok("/"); 
  #$sel->ensembl_wait_for_page_to_load_ok;
- $sel->click_ok("link=More release news on our blog ?");
+ $sel->ensembl_click("link=More release news on our blog ?");
  $sel->wait_for_page_to_load_ok("5000")
  and $sel->ensembl_is_text_present('Category Archives'); 
 }
@@ -112,11 +112,11 @@ sub test_login {
 
  $sel->open_ok("/");
  
- $sel->click_ok("link=Login")
+ $sel->ensembl_click("link=Login")
  and $sel->ensembl_wait_for_ajax_ok
  and $sel->type_ok("name=email", "ma7\@sanger.ac.uk")
  and $sel->type_ok("name=password", "selenium")
- and $sel->click_ok("name=submit")
+ and $sel->ensembl_click("name=submit")
  and $sel->ensembl_wait_for_page_to_load; 
  
  $sel->ensembl_click_links(["link=Logout"]);
@@ -129,11 +129,11 @@ sub test_register {
 
  $sel->open_ok("/");
  #$sel->ensembl_wait_for_page_to_load_ok;
- $sel->click_ok("link=Register");
+ $sel->ensembl_click("link=Register");
  $sel->ensembl_wait_for_ajax_ok;
  $sel->ensembl_is_text_present("Your name");
  
- $sel->click_ok("link=Lost Password");
+ $sel->ensembl_click("link=Lost Password");
  $sel->ensembl_wait_for_ajax_ok;
  $sel->ensembl_is_text_present("If you have lost your password");
 }
@@ -150,7 +150,7 @@ sub test_search {
  $sel->ensembl_click_links(["//input[\@type='image']"]);
  #$sel->ensembl_wait_for_page_to_load_ok;
  $sel->ensembl_is_text_present("returned the following results:");
- $sel->click_ok("link=Gene");
+ $sel->ensembl_click("link=Gene");
  $sel->ensembl_is_text_present("Human (");
  
  next unless $sel->open_ok("/Homo_sapiens/Search/Details?species=Homo_sapiens;idx=Gene;q=brca2");  
@@ -168,7 +168,7 @@ sub test_contact_us {
  
  $sel->ensembl_click_links(["link=Contact Us"]);
  $sel->ensembl_is_text_present("Contact Ensembl");
- $sel->click_ok("link=email Helpdesk"); 
+ $sel->ensembl_click("link=email Helpdesk"); 
  $sel->wait_for_pop_up_ok("", "5000");
  $sel->select_window_ok("name=popup_selenium_main_app_window");  #thats only handling one popup with no window name cannot be used for multiple popups
  ok($sel->get_title !~ /Internal Server Error|404 error/i, 'No Internal or 404 Server Error')
