@@ -27,3 +27,48 @@
   background-color: [[NEUTRAL_BORDER]];
   color: white;
 }
+
+
+/* relco docs */
+.document_h {
+  padding: 12px 0 !important;
+  margin: 0 !important;
+}
+p.document_p {
+  line-height: 18px;
+  margin: 3px 0;
+}
+.code p.document_p {
+  margin: 0;
+}
+div.code {
+  font-family: Courier;
+  margin-bottom: 12px;
+}
+div.list_bullet, div.list_alphabet, div.list_number {
+  padding: 3px 3px 3px 20px;
+}
+
+/*div.list_bullet */
+div.list_element > p.document_p, div.list_element > document_div {
+  display: list-item;
+  line-height: 20px;
+}
+
+div.document_toc div {
+  padding: 6px 0 2px 10px;
+}
+
+/*
+div.list_bullet div.list_element {
+  list-style-type: disc;
+}
+
+div.list_number div.list_element {
+  list-style-type: decimal;
+}
+
+div.list_alphabet div.list_element {
+  list-style-type: lower-alpha;
+}
+*/
