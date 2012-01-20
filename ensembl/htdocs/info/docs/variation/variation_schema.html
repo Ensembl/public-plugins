@@ -1219,14 +1219,15 @@ A colour legend is available at the <a href="#legend">bottom of the page</a>.
 				&nbsp;<b>|</b>&nbsp;<a href="#top">[Back to top]</a></td>
     </tr>
   </table>
-<p>This table lists variation features that are tagged by another variation feature. Tag pairs are defined as having an r<sup>2</sup> &gt; 0.99.</p>
+<p>This table lists variation feature IDs that are tagged by another variation feature ID. Tag pairs are defined as having an r<sup>2</sup> &gt; 0.99.</p>
 
 	<div id="div_tagged_variation_feature" style="display:none">
 
 	<table style="border:1px outset #222222">
 		<tr class="bg3 center"><th style="width:180px">Column</th><th style="width:150px">Type</th><th style="width:100px">Default value</th><th style="width:400px">Description</th><th style="width:150px">Index</th></tr>
-		<tr class="bg1"><td><b>variation_feature_id</b></td><td>INT(10)</td><td></td><td>Primary key. Foreign key references to the <a href="#variation_feature">variation_feature</a> table.</td><td>primary key</td></tr>
-		<tr class="bg2"><td><b>sample_id</b></td><td>INT(10)</td><td></td><td>Primary key. Foreign key references to the <a href="#sample">sample</a> table.</td><td>primary key</td></tr>
+		<tr class="bg1"><td><b>variation_feature_id</b></td><td>int(10)</td><td></td><td>Foreign key references to the <a href="#variation_feature">variation_feature</a> table.</td><td>key: tag_idx</td></tr>
+		<tr class="bg2"><td><b>tagged_variation_feature_id</b></td><td>int(10)</td><td>NULL</td><td>Foreign key references to the <a href="#variation_feature">variation_feature</a> table.</td><td>key: tagged_idx</td></tr>
+		<tr class="bg1"><td><b>sample_id</b></td><td>int(10)</td><td></td><td>Foreign key references to the <a href="#sample">sample</a> table.</td><td>key: sample_idx</td></tr>
 </table>
 </div>
 <p><b>See also:</b></p>
