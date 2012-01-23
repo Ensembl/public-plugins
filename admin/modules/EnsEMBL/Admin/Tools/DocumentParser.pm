@@ -152,7 +152,7 @@ sub parse_file {
     append_text($pointer, $line);
   }
   close FILE;
-  
+
   build_toc(\@parsed_file);
 
   return \@parsed_file;
@@ -181,7 +181,6 @@ sub file_to_htmlnodes {
   if (my $content_section = shift @{$content->get_nodes_by_flag({'section' => '__content'}) || []}) {
     $content_section->before($toc_div);
   }
-
   return $content;
 }
 
@@ -285,8 +284,8 @@ sub to_url_hash {
 sub build_toc {
   my $file = shift;
   my $i    = 0;
-  $i++ while ref ($file->[$i] || '') || ($file->[$i] || '') ne '__content';
-  push @$file, '_toc', _build_toc($file->[++$i]{'children'});
+  $i++ while $i < @$file && (ref ($file->[$i] || '') || ($file->[$i] || '') ne '__content');
+  push @$file, '_toc', _build_toc($file->[++$i]{'children'}) if $i < @$file;
 }
 
 sub _build_toc {
