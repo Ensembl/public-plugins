@@ -622,15 +622,15 @@ sub get_multi {
                 my $bucket = $hv % $bcount;
 
                 # this segfaults perl 5.8.4 (and others?) if sock_to_host returns undef... wtf?
-                $sock = $buck2sock[$bucket] ||= $self->sock_to_host($self->{buckets}[ $bucket ])
-                    and last;
+                #$sock = $buck2sock[$bucket] ||= $self->sock_to_host($self->{buckets}[ $bucket ])
+                #    and last;
 
                 # but this variant doesn't crash:
-                #$sock = $self->{'buck2sock'}->[$bucket] || $self->sock_to_host($self->{buckets}[ $bucket ]);
-                #if ($sock) {
-                #    $self->{'buck2sock'}->[$bucket] = $sock;
-                #    last;
-                #}
+                $sock = $self->{'buck2sock'}->[$bucket] || $self->sock_to_host($self->{buckets}[ $bucket ]);
+                if ($sock) {
+                    $self->{'buck2sock'}->[$bucket] = $sock;
+                    last;
+                }
 
                 next KEY if $tries++ >= 20;
                 $hv += _hashfunc($tries . $real_key);
