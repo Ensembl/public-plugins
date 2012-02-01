@@ -38,13 +38,21 @@ p.document_p {
   line-height: 18px;
   margin: 3px 0;
 }
+.code {
+  font-family: Courier !important;
+}
 .code p.document_p {
   margin: 0;
 }
 div.code {
-  font-family: Courier;
   margin-bottom: 12px;
 }
+span.code {
+  margin: 0;
+  padding: 0 2px;
+  border: 0;
+}
+
 div.list_bullet, div.list_alphabet, div.list_number {
   padding: 3px 3px 3px 20px;
 }
