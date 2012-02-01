@@ -263,7 +263,9 @@ sub textsection_to_htmlnode {
     return $return_div;
   }
   else {
-    return $dom->create_element('p', {'class' => 'document_p', 'inner_text' => $text_section});
+    my $p = $dom->create_element('p', {'class' => 'document_p'});
+    inner_HTML($p, $text_section);
+    return $p;
   }
 }
 
@@ -303,6 +305,30 @@ sub _build_toc {
       'children'  => _build_toc($_->{'children'})
     }
   } @$blocks ];
+}
+
+sub inner_HTML {
+  my ($node, $text) = @_;
+  my $email_qr  = qr/\[email(\s*\=\s*([^\]]+))?\]([^\[]+)\[\/email\]/;
+  my $url_qr    = qr/\[url(\s*\=\s*([^\]]+))?\]([^\[]+)\[\/url\]/;
+  while ($text =~ /$email_qr/g) {
+    my $email = $2 || $3;
+    my $html  = $3;
+    $text     =~ s/$email_qr/\[a=mailto:$email\]$html\[\/a\]/;
+  }
+  while ($text =~ /$url_qr/g) {
+    my $url   = $2 || $3;
+    my $html  = $3;
+    $url      = "http://$url" unless $url =~ /^(ht|f)tp(s?):\/\//;
+    $text     =~ s/$url_qr/\[a=$url\]$html\[\/a\]/;
+  }
+
+  $text = $node->encode_htmlentities($text);
+  $text =~ s/\[a\s*\=\s*([^\]\s]+)]/<a href="$1">/g;
+  $text =~ s/\[(\/?(a|b|i))\]/<$1>/g;
+  $text =~ s/\[\s*code\s*\]/<span class="code">/g;
+  $text =~ s/\[\s*\/\s*code\s*\]/<\/span>/g;
+  $node->inner_HTML($text);
 }
 
 1;
