@@ -34,6 +34,13 @@
   padding: 12px 0 !important;
   margin: 0 !important;
 }
+.document_h a {
+  display: none;
+  text-decoration: none;
+}
+.document_h:hover a {
+  display: inline;
+}
 p.document_p {
   line-height: 18px;
   margin: 3px 0;
