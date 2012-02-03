@@ -231,12 +231,14 @@ sub textsection_to_htmlnode {
       $return_div->append_children(map {textsection_to_htmlnode($_, $dom)} @{$text_section->{'children'}});
 
     } elsif ($text_section->{'category'} eq 'heading') {
+    
+      my $url_hash = to_url_hash($text_section->{'level'}, $text_section->{'label'});
 
       $return_div->append_children(
         $dom->create_element(sprintf('h%d', $text_section->{'level'} + 1), {
           'class'       => 'document_h',
-          'id'          => to_url_hash($text_section->{'number'}),
-          'inner_text'  => sprintf('%s %s', $text_section->{'number'}, $text_section->{'label'})
+          'id'          => $url_hash,
+          'inner_HTML'  => sprintf('%s %s <a href="#%s">&para;</a>', $text_section->{'number'}, $return_div->encode_htmlentities($text_section->{'label'}), $url_hash)
         }),
         map {textsection_to_htmlnode($_, $dom)} @{$text_section->{'children'}}
       );
@@ -272,15 +274,16 @@ sub textsection_to_htmlnode {
 sub toc_to_htmlnode {
   my ($heading, $dom, $parent) = @_;
   my $div = $parent->append_child('div', {'children' => [
-    $dom->create_element('p', {'inner_HTML' => sprintf('%s&nbsp;<a href="#%s">%s</a>', $heading->{'number'}, to_url_hash($heading->{'number'}), $heading->{'label'})})
+    $dom->create_element('p', {'inner_HTML' => sprintf('%s&nbsp;<a href="#%s">%s</a>', $heading->{'number'}, to_url_hash($heading->{'level'}, $heading->{'label'}), $heading->{'label'})})
   ] });
   toc_to_htmlnode($_, $dom, $div) for @{$heading->{'children'}};
   return $parent;
 }
 
 sub to_url_hash {
-  (my $string = shift) =~ s/\./_/g;
-  return "sec_$string";
+  my ($level, $label) = @_;
+  $label =~ s/[^a-z0-9\-\_]+/_/gi;
+  return sprintf('%s%s', '_' x $level, $label);
 }
 
 sub build_toc {
