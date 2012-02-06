@@ -7,55 +7,39 @@
 </head>
 
 <body>
+<b>
+<a href="index.html">About Ensembl Variation</a> |
+<a href="data_description.html">Data Description</a> | 
+<a href="predicted_data.html">Predicted Data</a> |
+Database Description |  
+<a href="/info/docs/api/variation/index.html">Perl API</a> |
+<a href="vep/index.html">Variant Effect Predictor</a>
+</b>
+<br /><br />
 
-<h1>Ensembl Variation Database Description</h1>
-
-<a href="/info/docs/variation/index.html">About Variation Data</a> | 
-<a href="/info/docs/variation/database.html">Database Description</a> |
-<a href="/info/docs/variation/sources_documentation.html">Variation Sources</a> |
-<a href="/info/docs/variation/variation_schema.html">Variation Tables Description</a> |
-<a href="/info/docs/api/variation/index.html">Perl API</a>
-
-<h2 id="db_desc">Database Description</h2>
-
-<p>
-The Ensembl Variation database stores two types of variation data, depending it comes from an external source or data it is calculated on site.
-</p>
-
-<ul>
-<li>Data imported from external sources (dbSNP, Sanger,...):
-  <ul>
-  	<li>SNPs, in-dels</li>
-		<li>Structural variations</li>
-		<li>Copy number variations</li>
-  	<li>Locations for variations</li>
-  	<li>Alleles</li>
-  	<li>Populations</li>
-  	<li>Genotypes</li>
-		<li>Phenotypes</li>
-  </ul>
-</li>
-
-<li>Calculated data:
-  <ul>
-  	<li>Consequence of variations in transcripts (synonymous, non-synonymous,...)</li>
-  	<li>Linkage disequilibrium information</li>
-  	<li>Tagged variations</li>
-  	<li>Read coverage data</li>
-  </ul>
-</li>
-
-</ul>
+<h1>Ensembl Variation - Database description</h1>
 
 
 <br />
 <h2 id="db_schema">Database Schema</h2>
-
 <p>
-The tables of the database are described in the <a href="/info/docs/variation/variation_schema.html">Variation Tables Description</a> page.<br />
-The database schema is described in the following <a href="/info/docs/variation/variation-database-schema.pdf">pdf</a>. 
+The database schema is available in a pdf file: <a href="variation-database-schema.pdf">[PDF]</a>. 
+</p>
+<object data="variation-database-schema.pdf" type="application/pdf" width="800px" height="370px">
+</object>
+
+<br /><br />
+<h2 id="db_schema">Tables description</h2>
+<p>
+The tables of the database are described in the <a href="/info/docs/variation/variation_schema.html">Variation Tables Description</a> page.
 </p>
 
+<br />
+<h2 id="spec">Specifications</h2>
+<ul>
+	<li>Database management system: <b>MySQL</b></li>
+	<li>Storage engine: <b>MyISAM</b></li>
+</ul>
 
 <br />
 <h2 id="db_load">Database Load</h2>
