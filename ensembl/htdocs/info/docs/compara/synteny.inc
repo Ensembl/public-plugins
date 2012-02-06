@@ -7,20 +7,20 @@
 
 <tr>
 <td class="bg1 left"><b><i>Gorilla gorilla</i></b></td>
-<td class="bg3 center"><font color="blue"><a href="mlss/mlss_10048.html">YES</a></font></td><!-- H.sap -->
+<td class="bg3 center"><font color="blue"><a href="mlss/mlss_10052.html">YES</a></font></td><!-- H.sap -->
 <th class="bg1 center" style="width:5em"><i>G.gor</i></th>
 </tr>
 
 <tr>
 <td class="bg3 left"><b><i>Pan troglodytes</i></b></td>
-<td class="bg4 center"><font color="blue"><a href="mlss/mlss_10050.html">YES</a></font></td><!-- H.sap -->
+<td class="bg4 center"><font color="blue"><a href="mlss/mlss_10051.html">YES</a></font></td><!-- H.sap -->
 <td class="bg3 center">-</td><!-- G.gor -->
 <th class="bg4 center" style="width:5em"><i>P.tro</i></th>
 </tr>
 
 <tr>
 <td class="bg1 left"><b><i>Pongo abelii</i></b></td>
-<td class="bg3 center"><font color="blue"><a href="mlss/mlss_10030.html">YES</a></font></td><!-- H.sap -->
+<td class="bg3 center"><font color="blue"><a href="mlss/mlss_10053.html">YES</a></font></td><!-- H.sap -->
 <td class="bg1 center">-</td><!-- G.gor -->
 <td class="bg3 center">-</td><!-- P.tro -->
 <th class="bg1 center" style="width:5em"><i>P.abe</i></th>
@@ -28,7 +28,7 @@
 
 <tr>
 <td class="bg3 left"><b><i>Macaca mulatta</i></b></td>
-<td class="bg4 center"><font color="blue"><a href="mlss/mlss_10033.html">YES</a></font></td><!-- H.sap -->
+<td class="bg4 center"><font color="blue"><a href="mlss/mlss_10054.html">YES</a></font></td><!-- H.sap -->
 <td class="bg3 center">-</td><!-- G.gor -->
 <td class="bg4 center">-</td><!-- P.tro -->
 <td class="bg3 center">-</td><!-- P.abe -->
@@ -37,7 +37,7 @@
 
 <tr>
 <td class="bg1 left"><b><i>Callithrix jacchus</i></b></td>
-<td class="bg3 center"><font color="blue"><a href="mlss/mlss_10046.html">YES</a></font></td><!-- H.sap -->
+<td class="bg3 center"><font color="blue"><a href="mlss/mlss_10055.html">YES</a></font></td><!-- H.sap -->
 <td class="bg1 center">-</td><!-- G.gor -->
 <td class="bg3 center">-</td><!-- P.tro -->
 <td class="bg1 center">-</td><!-- P.abe -->

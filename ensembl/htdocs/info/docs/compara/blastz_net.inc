@@ -1,10 +1,10 @@
 <h4>Human (Homo sapiens)</h4>
-<a href="mlss/mlss_536.html">Gorilla (Gorilla gorilla)</a><br/>
-<a href="mlss/mlss_546.html">Chimpanzee (Pan troglodytes)</a><br/>
-<a href="mlss/mlss_394.html">Orangutan (Pongo abelii)</a><br/>
-<a href="mlss/mlss_517.html">Gibbon (Nomascus leucogenys)</a><br/>
-<a href="mlss/mlss_428.html">Macaque (Macaca mulatta)</a><br/>
-<a href="mlss/mlss_520.html">Marmoset (Callithrix jacchus)</a><br/>
+<a href="mlss/mlss_560.html">Gorilla (Gorilla gorilla)</a><br/>
+<a href="mlss/mlss_559.html">Chimpanzee (Pan troglodytes)</a><br/>
+<a href="mlss/mlss_557.html">Orangutan (Pongo abelii)</a><br/>
+<a href="mlss/mlss_561.html">Gibbon (Nomascus leucogenys)</a><br/>
+<a href="mlss/mlss_558.html">Macaque (Macaca mulatta)</a><br/>
+<a href="mlss/mlss_562.html">Marmoset (Callithrix jacchus)</a><br/>
 <a href="mlss/mlss_412.html">Tarsier (Tarsius syrichta)</a><br/>
 <a href="mlss/mlss_429.html">Mouse Lemur (Microcebus murinus)</a><br/>
 <a href="mlss/mlss_545.html">Bushbaby (Otolemur garnettii)</a><br/>
@@ -48,9 +48,8 @@
 <a href="mlss/mlss_482.html">Panda (Ailuropoda melanoleuca)</a><br/>
 <h4>Pig (Sus scrofa)</h4>
 <a href="mlss/mlss_533.html">Cow (Bos taurus)</a><br/>
-<h4>Tasmanian devil (Sarcophilus harrisii)</h4>
-<a href="mlss/mlss_544.html">Opossum (Monodelphis domestica)</a><br/>
 <h4>Opossum (Monodelphis domestica)</h4>
+<a href="mlss/mlss_544.html">Tasmanian devil (Sarcophilus harrisii)</a><br/>
 <a href="mlss/mlss_443.html">Wallaby (Macropus eugenii)</a><br/>
 <h4>Chicken (Gallus gallus)</h4>
 <a href="mlss/mlss_498.html">Turkey (Meleagris gallopavo)</a><br/>
@@ -63,4 +62,4 @@
 <h4>Stickleback (Gasterosteus aculeatus)</h4>
 <a href="mlss/mlss_555.html">Cod (Gadus morhua)</a><br/>
 <h4>C.intestinalis (Ciona intestinalis)</h4>
-<a href="mlss/mlss_215.html">C.savignyi (Ciona savignyi)</a><br/>
+<a href="mlss/mlss_569.html">C.savignyi (Ciona savignyi)</a><br/>
