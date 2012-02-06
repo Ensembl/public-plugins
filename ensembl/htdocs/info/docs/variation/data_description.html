@@ -1,0 +1,583 @@
+<html>
+<head>
+<meta name="order" content="1" />
+<title>Data Description</title>
+</head>
+
+<body>
+<b>
+<a href="index.html">About Ensembl Variation</a> | 
+Data Description |  
+<a href="predicted_data.html">Predicted Data</a> |
+<a href="database.html">Database Description</a> |  
+<a href="/info/docs/api/variation/index.html">Perl API</a> |
+<a href="vep/index.html">Variant Effect Predictor</a>
+</b>
+<br /><br />
+
+<h1>Ensembl Variation - Data description</h1>
+
+<p>
+Below is a description of the data we store in the databases for Ensembl Variation. For several different species in Ensembl, 
+we import variation data (SNPs, CNVs, allele frequencies, genotypes etc) from a variety of 
+<a href="sources_documentation.html">sources</a> (e.g. dbSNP).<br />We classify the variants into different
+classes and calculate the predicted consequence(s) of the variant. In human, we calculate the linkage disequilibrium for each variant, by population. 
+We have also created sets to help people retrieve a specific group of variants from a particular dataset.
+</p>
+
+
+<br />
+<h2 id="sources"> Variation species and data sources </h2>
+<p>
+Ensembl stores variation data for the following species, but note that users can still use the 
+<a href="#VEP">Variant Effect Predictor</a> on species for which we do not currently have 
+a variation database.
+</p>
+<table><tr><td>
+<ul>
+	<li><i>Bos taurus</i> <a href="sources_documentation.html#bos_taurus">[sources]</a></li>
+	<li><i>Canis familiaris</i> <a href="sources_documentation.html#canis_familiaris">[sources]</a></li>
+	<li><i>Danio rerio</i> <a href="sources_documentation.html#danio_rerio">[sources]</a></li>
+	<li><i>Drosophila melanogaster</i> <a href="sources_documentation.html#drosophila_melanogaster">[sources]</a></li>
+	<li><i>Equus caballus</i> <a href="sources_documentation.html#equus_caballus">[sources]</a></li>
+	<li><i>Felis catus</i> <a href="sources_documentation.html#felis_catus">[sources]</a></li>
+	<li><i>Gallus gallus</i> <a href="sources_documentation.html#gallus_gallus">[sources]</a></li>
+	<li><i>Homo sapiens</i> <a href="sources_documentation.html#homo_sapiens">[sources]</a></li>
+	<li><i>Monodelphis domestica</i> <a href="sources_documentation.html#monodelphis_domestica">[sources]</a></li>
+</ul>
+</td><td>
+<ul>
+	<li><i>Mus musculus</i> <a href="sources_documentation.html#mus_musculus">[sources]</a></li>
+	<li><i>Ornithorhynchus anatinus</i> <a href="sources_documentation.html#ornithorhynchus_anatinus">[sources]</a></li>
+	<li><i>Pan troglodytes</i> <a href="sources_documentation.html#pan_troglodytes">[sources]</a></li>
+	<li><i>Pongo abelii</i> <a href="sources_documentation.html#pongo_abelii">[sources]</a></li>
+	<li><i>Rattus norvegicus</i> <a href="sources_documentation.html#rattus_norvegicus">[sources]</a></li>
+	<li><i>Saccharomyces cerevisiae</i> <a href="sources_documentation.html#saccharomyces_cerevisiae">[sources]</a></li>
+	<li><i>Sus scrofa</i> <a href="sources_documentation.html#sus_scrofa">[sources]</a></li>
+	<li><i>Taeniopygia guttata</i> <a href="sources_documentation.html#taeniopygia_guttata">[sources]</a></li>
+	<li><i>Tetraodon nigroviridis</i> <a href="sources_documentation.html#tetraodon_nigroviridis">[sources]</a></li>
+</ul>
+</td></tr></table>
+
+<p>
+The majority of variants are imported from NCBI <a rel="external"
+href="http://www.ncbi.nlm.nih.gov/projects/SNP/">dbSNP</a>. The data is
+imported when it is released by dbSNP and incorporated into the next
+Ensembl release. If dbSNP releases the data on a different assembly,
+Ensembl will remap the variant positions onto the current assembly.
+Data from projects like the <a rel="external" href="http://hapmap.ncbi.nlm.nih.gov/">HapMap Project</a> and <a
+rel="external" href="http://www.1000genomes.org/">1000 Genomes Project</a> is
+imported once it has been submitted to dbSNP.
+</p>
+
+<p>
+Ensembl also includes data from other <a href="sources_documentation.html">sources</a>. To view data from these sources in the
+browser go to a species Location page (e.g. <a href="/Homo_sapiens/Location/View?r=6:133017695-133161157">for human</a>), and click on
+the <i>'Configure this page'</i> link on the left-hand side. The <i>'Germline
+variation'</i> and <i>'Somatic mutations'</i> sections contain a track list  of
+all sources of variation data for that species.
+</p>
+
+
+<br />
+<h2 id="displays">Variation displays</h2>
+<p>
+Variation data can be viewed in the browser through pages such as:
+</p>
+
+<ul>
+<li><strong>Gene:</strong> Variation Table and Variation Image (for all variations in a gene) 
+e.g. for example <a href="/Homo_sapiens/Gene/Variation_Gene/Table?db=core;g=ENSG00000159197">for all variants in KCNE2</a>. 
+Structural Variation to see all structural variants overlapping the gene.</li>
+<li><strong>Transcript:</strong> Population comparison, Comparison
+image (for comparing variants in a transcript across different individual or strain
+sequences) e.g. <a href="/Mus_musculus/Transcript/Population/Image?g=ENSMUSG00000041143;r=4:138528820-138586500;t=ENSMUST00000084208"> compare Tmco4 in different mouse strains </a> </li>
+<li> <strong> Transcript: </strong> Sequence, protein: list of the coding variants in protein coordinates.</li>
+<li><strong>Location:</strong> Region in Detail (Variations can be
+drawn using &quot;Configure this page&quot; at the left. The menu allows
+display of information in Ensembl databases along with external
+sources in DAS format such as <a rel="external"
+href="http://projects.tcag.ca/variation/">DGV loci</a>.)</li>
+</ul>
+
+<p>
+Clicking on any variation on an Ensembl page will open a Variation tab
+with information about the flanking sequence and source for the
+selected variation. Links to linkage disequilibrium (LD) plots,
+phenotype information (for human) from EGA, OMIM and <a rel="external"
+href="http://www.genome.gov/">NHGRI</a> and Ensembl genes and
+transcripts that include the variation can be found at the left of
+this tab. You may also view multiple genome alignments of various
+species, highlighting the
+variation. <a href="/info/docs/compara/analyses.html#ancestral"
+class="cp-external">Ancestral sequences</a> are included in this
+display. 
+</p>
+
+<p>
+Variation information can also be accessed
+using <a href="/info/data/biomart.html"
+class="cp-external">BioMart</a> (gene or variation database), and
+the <a href="/info/docs/api/index.html" class="cp-external">Perl
+API</a> (<a href="/info/docs/api/variation/index.html"
+class="cp-external">variation API</a>).
+</p>
+
+
+<br />
+<h2 id="datatypes">Data types</h2>
+<p>
+The Ensembl Variation database stores data imported from external sources and also data calculated on site.
+</p>
+
+<ul>
+	<li><b>Data imported</b> from external sources (dbSNP, Sanger,...):
+  	<ul>
+  		<li>SNPs, in-dels</li>
+			<li>Structural variations</li>
+			<li>Copy number variations</li>
+  		<li>Locations for variations</li>
+  		<li>Alleles</li>
+  		<li>Populations</li>
+  		<li>Genotypes</li>
+			<li>Phenotypes</li>
+  	</ul>
+	</li>
+	<li><b>Calculated data</b>: see the <a href="predicted_data.html">Predicted data page</a>.</li>
+</ul>
+
+
+<br />
+
+<h2 id="classes">Variation classes</h2>
+
+<p>
+We call the class of a variation according to its component alleles and its mapping 
+to the reference genome, and then display this information on the website. Internally 
+we use <a href="http://www.sequenceontology.org/">Sequence Ontology</a> terms, but we 
+map these to our own 'display' terms where common usage differs from the SO 
+definition (e.g. our term SNP is closer to the SO term SNV). All the classes we call, 
+along with their equivalent SO term are shown in the table below. We also differentiate 
+somatic mutations from germline variations in the display term, prefixing the term with
+'somatic'. API users can fetch either the SO term or the display term.
+</p>
+
+<br />
+
+<table id="variation_classes" class="ss" style="width:50%;">
+<tr>
+	<th>Ensembl term</th>
+	<th>SO term</th>
+	<th>SO accession</th>
+</tr>
+<tr>
+	<td>SNP</td>
+	<td rowspan="2">SNV</td>
+	<td rowspan="2"><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001483">SO:0001483</a></td>
+</tr>
+<tr>
+	<td>somatic_SNV</td>
+</tr>
+<tr class="bg2">
+	<td>substitution</td>
+	<td rowspan="2">substitution</td>
+	<td rowspan="2"><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:1000002">SO:1000002</a></td>
+</tr>
+<tr class="bg2">
+	<td>somatic_substitution</td>
+</tr>
+<tr>
+	<td>CNV</td>
+	<td rowspan="2">copy_number_variation</td>
+	<td rowspan="2"><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001019">SO:0001019</a></td>
+</tr>
+<tr>
+	<td>somatic_CNV</td>
+</tr>
+<tr class="bg2">
+	<td>insertion</td>
+	<td rowspan="2">insertion</td>
+	<td rowspan="2"><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0000667">SO:0000667</a></td>
+</tr>
+<tr class="bg2">
+	<td>somatic_insertion</td>
+</tr>
+<tr>
+	<td>deletion</td>
+	<td rowspan="2">deletion</td>
+	<td rowspan="2"><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0000159">SO:0000159</a></td>
+</tr>
+<tr>
+	<td>somatic_deletion</td>
+</tr>
+<tr class="bg2">
+	<td>indel</td>
+	<td rowspan="2">indel</td>
+	<td rowspan="2"><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:1000032">SO:1000032</a></td>
+</tr>
+<tr class="bg2">
+	<td>somatic_indel</td>
+</tr>
+<tr>
+	<td>tandem_repeat</td>
+	<td rowspan="2">tandem_repeat</td>
+	<td rowspan="2"><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0000705">SO:0000705</a></td>
+</tr>
+<tr>
+	<td>somatic_tandem_repeat</td>
+</tr>
+<tr class="bg2">
+	<td>sequence_alteration</td>
+	<td rowspan="2">sequence_alteration</td>
+	<td rowspan="2"><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001059">SO:0001059</a></td>
+</tr>
+<tr class="bg2">
+	<td>somatic_sequence_alteration</td>
+</tr>
+<tr>
+	<td>Complex</td>
+	<td rowspan="2">complex_structural_alteration</td>
+	<td rowspan="2"><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001784">SO:0001784</a></td>
+</tr>
+<tr>
+	<td>somatic_Complex</td>
+</tr>
+
+</table>
+<br />
+<img src="/img/var_class_dist.png" style="border:1px solid #888" alt="Variation classes distribution"/>
+
+<h3 id="indel">Insertion and Deletion coordinates </h3>
+
+<p> In Ensembl, an insertion is indicated by start coordinate = end coordinate +
+1. For example, an insertion of 'C' between nucleotides 12600 and
+12601 on the forward strand is indicated with start and end coordinates as
+follows:</p>
+
+<pre>
+   12601     12600   
+</pre>
+<p>A deletion is indicated by the exact nucleotide coordinates. For
+example, a three base pair deletion of nucleotides 12600, 12601, and
+12602 of the reverse strand will have start and end coordinates of :</p>
+
+<pre>
+   12600     12602    
+</pre>
+
+<br />
+
+<h2 id="variation_sets">Variation sets</h2>
+    
+<p>
+We use the concept of variation sets to group variations that share some property together. For example, we have grouped the variations identified in the three different
+1000 Genomes pilot studies into separate variation sets. The sets can be further subdivided into supersets and subsets to reflect hierarchical relationships between them. In the case
+of the 1000 Genomes pilot sets, these are divided into subsets based on population. For example, the set representing variations identified in the first 1000 Genomes pilot study is named 
+'1000 Genomes - Low coverage' and has three subsets: '1000 Genomes - Low coverage - CEU', '1000 Genomes - Low coverage - CHB+JPT' and '1000 Genomes - Low coverage - YRI'. 
+The variation sets can be displayed as separate tracks on the location view. This behaviour is controlled from the 'Germline variations' section on the configuration panel which is accessed by 
+clicking the 'Configure this page' link in the left hand side navigation.
+</p>
+
+<p>
+The sets are constructed during production and are stored in the database. The table below lists the available
+variation sets in the Ensembl variation database (subsets are indicated by bullet points).
+</p>
+
+<h3>Variation sets common to all the species</h3>
+<table id="variation_set_table" class="ss">
+
+	<tr>
+		<th>Name</th>
+		<th>Short name</th>
+		<th>Description</th>
+	</tr>
+
+	<tr>
+		<td>All failed variations</td>
+		<td>fail_all</td>
+		<td>Variations that have failed the Ensembl QC checks</td>
+	<tr>
+	<tr class="bg2">
+		<td><ul style="margin:0px"><li style="margin:0px">Failed: Alleles do not match reference</li></ul></td>
+		<td>fail_nonref</td>
+		<td>None of the variant alleles match the reference allele</td>
+	<tr>
+	<tr>
+		<td><ul style="margin:0px"><li style="margin:0px">Failed: Ambiguous alleles</li></ul></td>
+		<td>fail_ambig</td>
+		<td>Alleles contain ambiguity codes</td>
+	<tr>
+	<tr class="bg2">
+		<td><ul style="margin:0px"><li style="margin:0px">Failed: Genotype frequencies</li></ul></td>
+		<td>fail_gt_fq</td>
+		<td>Genotype frequencies do not add up to 1</td>
+	<tr>
+	<tr>
+		<td><ul style="margin:0px"><li style="margin:0px">Failed: Inconsistent mapping</li></ul></td>
+		<td>fail_incons_map</td>
+		<td>Mapped position is not compatible with reported alleles</td>
+	<tr>
+	<tr class="bg2">
+		<td><ul style="margin:0px"><li style="margin:0px">Failed: Multiple mappings</li></ul></td>
+		<td>fail_mult_map</td>
+		<td>Variation maps to more than 3 different locations</td>
+	<tr>
+	<tr>
+		<td><ul style="margin:0px"><li style="margin:0px">Failed: No alleles</li></ul></td>
+		<td>fail_no_alleles</td>
+		<td>Loci with no observed variant alleles in dbSNP</td>
+	<tr>
+	<tr class="bg2">
+		<td><ul style="margin:0px"><li style="margin:0px">Failed: No genotypes</li></ul></td>
+		<td>fail_no_gt</td>
+		<td>Variation has no genotypes</td>
+	<tr>
+	<tr>
+		<td><ul style="margin:0px"><li style="margin:0px">Failed: No mapping</li></ul></td>
+		<td>fail_no_map</td>
+		<td>Variation does not map to the genome</td>
+	<tr>
+	<tr class="bg2">
+		<td><ul style="margin:0px"><li style="margin:0px">Failed: No sequence</li></ul></td>
+		<td>fail_no_seq</td>
+		<td>Variation has no associated sequence</td>
+	<tr>
+	<tr>
+		<td><ul style="margin:0px"><li style="margin:0px">Failed: Non-nucleotide alleles</li></ul></td>
+		<td>fail_non_nt</td>
+		<td>Alleles contain non-nucleotide characters</td>
+	<tr>
+	<tr class="bg2">
+		<td><ul style="margin:0px"><li style="margin:0px">Failed: Too many alleles</li></ul></td>
+		<td>fail_mult_alleles</td>
+		<td>Variation has more than 3 different alleles</td>
+	<tr>
+	<tr>
+		<td>Failed: Flagged by dbSNP</td>
+		<td>fail_dbsnp_suspect</td>
+		<td>Flagged as suspect by dbSNP</td>
+	<tr>
+</table>
+<br />
+<h3>Variation sets specific to Human</h3>
+<table id="human_variation_set_table" class="ss">
+
+	<tr>
+		<th>Name</th>
+		<th>Short name</th>
+		<th>Description</th>
+	</tr>
+	<tr>
+		<td>1000 Genomes - High coverage - Trios</td>
+		<td>1kg_hct</td>
+		<td>Variations called by the 1000 Genomes project on high coverage sequence data from two family trios (Pilot 2)</td>
+	<tr>
+	<tr class="bg2">
+		<td><ul style="margin:0px"><li style="margin:0px">1000 Genomes - High coverage - Trios - CEU</li></ul></td>
+		<td>1kg_hct_ceu</td>
+		<td>Variations called by the 1000 Genomes project on high coverage sequence data from a CEU family trio (two parents and one daughter) (Pilot 2)</td>
+	<tr>
+	<tr>
+		<td><ul style="margin:0px"><li style="margin:0px">1000 Genomes - High coverage - Trios - YRI</li></ul></td>
+		<td>1kg_hct_yri</td>
+		<td>Variations called by the 1000 Genomes project on high coverage sequence data from a YRI family trio (two parents and one daughter) (Pilot 2)</td>
+	<tr>
+	<tr class="bg2">
+		<td>1000 Genomes - High coverage exons</td>
+		<td>1kg_hce</td>
+		<td>Variations called by the 1000 Genomes project on high coverage sequence data of 8,140 exons from 906 randomly selected genes in 697 individuals (Pilot 3)</td>
+	<tr>
+	<tr>
+		<td><ul style="margin:0px"><li style="margin:0px">1000 Genomes - High coverage exons - CEU</li></ul></td>
+		<td>1kg_hce_ceu</td>
+		<td>Variations called by the 1000 Genomes project on high coverage sequence data of exons from 90 CEU individuals (Pilot 3)</td>
+	<tr>
+	<tr class="bg2">
+		<td><ul style="margin:0px"><li style="margin:0px">1000 Genomes - High coverage exons - CHB</li></ul></td>
+		<td>1kg_hce_chb</td>
+		<td>Variations called by the 1000 Genomes project on high coverage sequence data of exons from 109 CHB individuals (Pilot 3)</td>
+	<tr>
+	<tr>
+		<td><ul style="margin:0px"><li style="margin:0px">1000 Genomes - High coverage exons - CHD</li></ul></td>
+		<td>1kg_hce_chd</td>
+		<td>Variations called by the 1000 Genomes project on high coverage sequence data of exons from 107 CHD individuals (Pilot 3)</td>
+	<tr>
+	<tr class="bg2">
+		<td><ul style="margin:0px"><li style="margin:0px">1000 Genomes - High coverage exons - JPT</li></ul></td>
+		<td>1kg_hce_jpt</td>
+		<td>Variations called by the 1000 Genomes project on high coverage sequence data of exons from 105 JPT individuals (Pilot 3)</td>
+	<tr>
+	<tr>
+		<td><ul style="margin:0px"><li style="margin:0px">1000 Genomes - High coverage exons - LWK</li></ul></td>
+		<td>1kg_hce_lwk</td>
+		<td>Variations called by the 1000 Genomes project on high coverage sequence data of exons from 108 LWK individuals (Pilot 3)</td>
+	<tr>
+	<tr class="bg2">
+		<td><ul style="margin:0px"><li style="margin:0px">1000 Genomes - High coverage exons - TSI</li></ul></td>
+		<td>1kg_hce_tsi</td>
+		<td>Variations called by the 1000 Genomes project on high coverage sequence data of exons from 66 TSI individuals (Pilot 3)</td>
+	<tr>
+	<tr>
+		<td><ul style="margin:0px"><li style="margin:0px">1000 Genomes - High coverage exons - YRI</li></ul></td>
+		<td>1kg_hce_yri</td>
+		<td>Variations called by the 1000 Genomes project on high coverage sequence data of exons from 112 YRI individuals (Pilot 3)</td>
+	<tr>
+	<tr class="bg2">
+		<td>1000 Genomes - Low coverage</td>
+		<td>1kg_lc</td>
+		<td>Variations called by the 1000 Genomes project on low coverage sequence data from 179 unrelated individuals (Pilot 1)</td>
+	<tr>
+	<tr>
+		<td><ul style="margin:0px"><li style="margin:0px">1000 Genomes - Low coverage - CEU</li></ul></td>
+		<td>1kg_lc_ceu</td>
+		<td>Variations called by the 1000 Genomes project on low coverage sequence data from 60 unrelated CEU individuals (Pilot 1)</td>
+	<tr>
+	<tr class="bg2">
+		<td><ul style="margin:0px"><li style="margin:0px">1000 Genomes - Low coverage - CHB+JPT</li></ul></td>
+		<td>1kg_lc_chb_jpt</td>
+		<td>Variations called by the 1000 Genomes project on low coverage sequence data from 60 unrelated CHB individuals and 60 unrelated JPT individuals (Pilot 1)</td>
+	<tr>
+	<tr>
+		<td><ul style="margin:0px"><li style="margin:0px">1000 Genomes - Low coverage - YRI</li></ul></td>
+		<td>1kg_lc_yri</td>
+		<td>Variations called by the 1000 Genomes project on low coverage sequence data from 59 unrelated YRI individuals (Pilot 1)</td>
+	<tr>
+	<tr class="bg2">
+		<td>All phenotype-associated variants</td>
+		<td>ph_variants</td>
+		<td>Variants that have been associated with a phenotype</td>
+	<tr>
+	<tr>
+		<td><ul style="margin:0px"><li style="margin:0px">COSMIC phenotype variants</li></ul></td>
+		<td>ph_cosmic</td>
+		<td>Phenotype annotations of somatic mutations found in human cancers from the COSMIC project</td>
+	<tr>
+	<tr class="bg2">
+		<td><ul style="margin:0px"><li style="margin:0px">HGMD-PUBLIC phenotype variants</li></ul></td>
+		<td>ph_hgmd_pub</td>
+		<td>Variants with phenotypes annotated by HGMD</td>
+	<tr>
+	<tr>
+		<td><ul style="margin:0px"><li style="margin:0px">Johnson & O'Donnell phenotype variants</li></ul></td>
+		<td>ph_johnson_et_al</td>
+		<td>Johnson & O'Donnell 'An Open Access Database of Genome-wide Association Results' PMID:19161620</td>
+	<tr>
+	<tr class="bg2">
+		<td><ul style="margin:0px"><li style="margin:0px">NHGRI catalog phenotype variants</li></ul></td>
+		<td>ph_nhgri</td>
+		<td>Variants associated with phenotype data from the NHGRI GWAS catalog [http://www.genome.gov/gwastudies/]</td>
+	<tr>
+	<tr>
+		<td><ul style="margin:0px"><li style="margin:0px">OMIM phenotype variants</li></ul></td>
+		<td>ph_omim</td>
+		<td>Variations linked to entries in the Online Mendelian Inheritance in Man (OMIM) database</td>
+	<tr>
+	<tr class="bg2">
+		<td><ul style="margin:0px"><li style="margin:0px">Uniprot phenotype variants</li></ul></td>
+		<td>ph_uniprot</td>
+		<td>Variations with phenotype annotations provided by Uniprot</td>
+	<tr>
+	<tr>
+		<td>Anonymous Irish Male</td>
+		<td>ind_irish</td>
+		<td>Variants genotyped in an anonymous Irish Male</td>
+	<tr>
+	<tr class="bg2">
+		<td>Anonymous Korean</td>
+		<td>ind_ak1</td>
+		<td>Variants genotyped in an anonymous Korean individual</td>
+	<tr>
+	<tr>
+		<td>Clinical/LSDB variations from dbSNP</td>
+		<td>precious</td>
+		<td>Variations that belong to a reserved or "precious" set of clinically associated SNPs from dbSNP [http://www.ncbi.nlm.nih.gov/projects/SNP/]</td>
+	<tr>
+	<tr class="bg2">
+		<td>ENSEMBL:Venter</td>
+		<td>ind_venter</td>
+		<td>Variants genotyped in Craig Venter</td>
+	<tr>
+	<tr>
+		<td>ENSEMBL:Watson</td>
+		<td>ind_watson</td>
+		<td>Variants genotyped in James Watson</td>
+	<tr>
+	<tr class="bg2">
+		<td>HapMap</td>
+		<td>hapmap</td>
+		<td>Variations which have been assayed by The International HapMap Project [http://hapmap.ncbi.nlm.nih.gov/]</td>
+	<tr>
+	<tr>
+		<td><ul style="margin:0px"><li style="margin:0px">HapMap - CEU</li></ul></td>
+		<td>hapmap_ceu</td>
+		<td>Variations which have been assayed by The International HapMap Project from CEU individuals</td>
+	<tr>
+	<tr class="bg2">
+		<td><ul style="margin:0px"><li style="margin:0px">HapMap - HCB</li></ul></td>
+		<td>hapmap_hcb</td>
+		<td>Variations which have been assayed by The International HapMap Project from HCB individuals</td>
+	<tr>
+	<tr>
+		<td><ul style="margin:0px"><li style="margin:0px">HapMap - JPT</li></ul></td>
+		<td>hapmap_jpt</td>
+		<td>Variations which have been assayed by The International HapMap Project from JPT individuals</td>
+	<tr>
+	<tr class="bg2">
+		<td><ul style="margin:0px"><li style="margin:0px">HapMap - YRI</li></ul></td>
+		<td>hapmap_yri</td>
+		<td>Variations which have been assayed by The International HapMap Project from YRI individuals</td>
+	<tr>
+	<tr>
+		<td>Henry Louis Gates Jr</td>
+		<td>ind_gates_jr</td>
+		<td>Variants genotyped in Henry Louis Gates Jr</td>
+	<tr>
+	<tr class="bg2">
+		<td>Henry Louis Gates Sr</td>
+		<td>ind_gates_sr</td>
+		<td>Variants genotyped in Henry Louis Gates Sr</td>
+	<tr>
+	<tr>
+		<td>Marjolein Kriek</td>
+		<td>ind_kriek</td>
+		<td>Variants genotyped in Marjolein Kriek</td>
+	<tr>
+	<tr class="bg2">
+		<td>Misha Angrist</td>
+		<td>ind_angrist</td>
+		<td>Variants genotyped in Misha Angrist</td>
+	<tr>
+	<tr>
+		<td>Rosalynn Gill</td>
+		<td>ind_gill</td>
+		<td>Variants genotyped in Rosalynn Gill</td>
+	<tr>
+	<tr class="bg2">
+		<td>Saqqaq</td>
+		<td>ind_saqqaq</td>
+		<td>Variants genotyped in a Palaeo-Eskimo Saqqaq individual</td>
+	<tr>
+	<tr>
+		<td>Saqqaq HC</td>
+		<td>ind_saqqaq_hc</td>
+		<td>Variants genotyped in a Palaeo-Eskimo Saqqaq individual (high confidence SNPs)</td>
+	<tr>
+	<tr class="bg2">
+		<td>Seong-Jin Kim</td>
+		<td>ind_sjk</td>
+		<td>Variants genotyped in Seong-Jin Kim</td>
+	<tr>
+	<tr>
+		<td>Stephen Quake</td>
+		<td>ind_quake</td>
+		<td>Variants genotyped in Stephen Quake</td>
+	<tr>
+	<tr class="bg2">
+		<td>YanHang</td>
+		<td>ind_yh</td>
+		<td>Variants genotyped in a Han Chinese individual (YanHuang Project)</td>
+	<tr>
+</table>
+
+</body>
+</html>
