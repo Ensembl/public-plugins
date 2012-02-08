@@ -1,23 +1,23 @@
 <html>
 <head>
-<title>RNASeq Gene Models</title>
+<title>RNA-seq Gene Models</title>
 </head>
 
 <body>
 
-<h1>RNASeq Gene Models</h1>
+<h1>RNA-seq Gene Models</h1>
 
-<h2>Human RNASeq Gene Models</h2>
+<h2>Human RNA-seq Gene Models</h2>
 
-<p>RNASeq data from Illumina's Human BodyMap 2.0 project have been used to generate gene models for human. The data, generated on HiSeq 2000 instruments in 2010, consist of 16 human tissue types including adrenal, adipose, brain, breast, colon, heart, kidney, liver, lung, lymph, ovary, prostate, skeletal muscle, testes, thyroid, and white blood cells. For each tissue, we have aligned the raw reads to the genome and then linked exons into tissue-specific transcript models using the reads that span an exon-exon boundary.</p>
+<p>RNA-seq data from Illumina's Human BodyMap 2.0 project have been used to generate gene models for human. The data, generated on HiSeq 2000 instruments in 2010, consist of 16 human tissue types including adrenal, adipose, brain, breast, colon, heart, kidney, liver, lung, lymph, ovary, prostate, skeletal muscle, testes, thyroid, and white blood cells. For each tissue, we have aligned the raw reads to the genome and then linked exons into tissue-specific transcript models using the reads that span an exon-exon boundary.</p>
 
 <p>You can view these data in the Region in Detail view. Click on `Configure this page' and choose `RNA-Seq' at the left of the main panel. Enable any or all of the 32 tracks and then close the configuration panel. Out of 32 possible tracks you can draw, 16 are tissue `gene model' tracks, and 16 are `intron' tracks.</p> 
 
 <p>The `gene model' track shows a transcript model. The `intron' track shows how many raw reads aligned across an exon-exon junction. The higher the intron block, the more highly expressed the transcript isoform is. When read coverage is high, the transcript's exon-intron structure produced for the gene track has a good chance of being correct. When read coverage is very low, it is not always possible to build a full-length transcript model.</p> <p></p>
 
-<h2>Zebrafish RNASeq Gene Models</h2>
+<h2>Zebrafish RNA-seq Gene Models</h2>
 
-<p>This is an experimental set of gene models produced using paired end Illumina RNASeq data from the Wellcome Trust Sanger Institute Zebrafish Transcriptome Sequencing Project Ref: <a rel="external"  href="http://www.ebi.ac.uk/ena/data/view/display=html&amp;ERP000016">ERP000016</a>.</p>
+<p>This is an experimental set of gene models produced using paired end Illumina RNA-seq data from the Wellcome Trust Sanger Institute Zebrafish Transcriptome Sequencing Project Ref: <a rel="external"  href="http://www.ebi.ac.uk/ena/data/view/display=html&amp;ERP000016">ERP000016</a>.</p>
 
 <p>The models are produced from a 2 step alignment process using <a rel="external" href="http://www.biomedcentral.com/1471-2105/6/31">Exonerate</a>. First, a local genomic alignment is created that is collapsed to create alignment blocks roughly corresponding to exons. Read pairing information is used to group exons into approximate transcript structures. Secondly, reads are realigned to the proto-transcripts using a splice model and a short word length to create a set of spliced alignments representing canonical and non-canonical introns.</p>
 
