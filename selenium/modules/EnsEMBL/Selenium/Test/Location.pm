@@ -70,7 +70,17 @@ sub test_location {
     
     my ($alignment_count,$multi_species_count) = $self->alignments_count($SD);
 
-    $sel->ensembl_click_links(["link=Alignments (image) ($alignment_count)","link=Alignments (text) ($alignment_count)","link=Multi-species view ($multi_species_count)"],'20000') if($alignment_count);
+    if($alignment_count) {
+      $sel->ensembl_click_links(["link=Alignments (image) ($alignment_count)"],'20000');
+      
+      if(lc($self->species) eq 'homo_sapiens' || lc($self->species) eq 'mus_musculus') {
+        $sel->select_ok("align", "label=12 eutherian mammals EPO")
+        and $sel->click_ok("//input[\@value='Go']")
+        and $sel->ensembl_wait_for_page_to_load(60000);
+      }
+      
+      $sel->ensembl_click_links(["link=Alignments (text) ($alignment_count)","link=Multi-species view ($multi_species_count)"],'20000');
+    }
     $sel->ensembl_click_links(["link=Synteny ($synteny_count)"], '20000') if(grep(/@location_array[0]/,@{$SD->get_config(ucfirst($self->species), 'ENSEMBL_CHROMOSOMES')}) && $synteny_count);
 
     #Markers
