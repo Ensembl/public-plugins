@@ -102,7 +102,7 @@ sub test_doc {
  
  $sel->open_ok("/info/index.html");
  print "URL:: $location \n\n" unless $sel->ensembl_wait_for_page_to_load; 
- $sel->ensembl_click_all_links('#main', @skip_link); 
+ $sel->ensembl_click_all_links('#main', \@skip_link); 
 }
 
 sub test_faq {
@@ -113,11 +113,11 @@ sub test_faq {
   $sel->open_ok("/");
   print "URL:: $location \n\n" unless $sel->ensembl_wait_for_page_to_load; 
   
-  my @skip_link = ("Home", "developers' mailing list");
-
+  my @skip_link = ("Home", "contact our HelpDesk", "developers' mailing list");
+  my $text = 'test';
   $sel->ensembl_click_ok("link=FAQs",'50000')
-  and $sel->select_pop_up_ok
-  and $sel->ensembl_click_all_links(".content", @skip_link);
+  and $sel->select_pop_up_ok  
+  and $sel->ensembl_click_all_links(".content", \@skip_link, 'More FAQs');
 }
 
 sub test_login {

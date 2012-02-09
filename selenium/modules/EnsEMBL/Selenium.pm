@@ -101,10 +101,11 @@ sub ensembl_click_links {
 # finding all links within an element and clicking each of them
 # params: $div - The id or class for the container of the links
 #         @skip_link - array of links you want to skip such as home 
+#         $text - text to look for on the pages from the link
 sub ensembl_click_all_links {
-  my ($self, $div, @skip_link) = @_;  
+  my ($self, $div, $skip_link, $text) = @_;  
   my $location = $self->get_location();
-  
+
   # get all the links on the page
   my $links_href = $self->get_eval(qq{
     var \$ = selenium.browserbot.getCurrentWindow().jQuery;
@@ -115,22 +116,24 @@ sub ensembl_click_all_links {
   my $i = 0;
 
   foreach my $link (@links_array) {    
-    #get the text for each link 
+    # get the text for each link, use link_text to click link if there is no id to the links
     my $link_text = $self->get_eval(qq{
       \var \$ = selenium.browserbot.getCurrentWindow().jQuery; 
       \$('$div').find('a:eq($i)').text();
     });
     
-    # see if there is an id for the links
+    # get id for the links
     my $link_id = $self->get_eval(qq{
       \var \$ = selenium.browserbot.getCurrentWindow().jQuery; 
       \$('$div').find('a:eq($i)').attr('id');
     });    
 
     $i++;
-    next if grep (/$link_text/, @skip_link);
+    next if grep (/$link_text/, @$skip_link);
 
     $link_id && $link_id ne 'null' ? $self->ensembl_click_links(["id=$link_id"]) : $self->ensembl_click_links(["link=$link_text"]);
+    
+    $self->ensembl_is_text_present($text) if($text);
     $self->go_back();
   }
 }
