@@ -94,15 +94,30 @@ sub test_sitemap {
  and ok($response->decoded_content =~ /sitemap_Homo_sapiens_1\.xml/, "Home Sapiens xml is present");
 }
 
-#TODO:: NEED TO ADD MORE TEST
 sub test_doc {
  my ($self, $links) = @_;
  my $sel      = $self->sel;
  my $location = $self->get_location();
+ my @skip_link = ("Home");
  
  $sel->open_ok("/info/index.html");
  print "URL:: $location \n\n" unless $sel->ensembl_wait_for_page_to_load; 
- $sel->ensembl_click_links(["link=Web code"]); 
+ $sel->ensembl_click_all_links('#main', @skip_link); 
+}
+
+sub test_faq {
+  my ($self, $links) = @_;
+  my $sel      = $self->sel;
+  my $location = $self->get_location(); 
+  
+  $sel->open_ok("/");
+  print "URL:: $location \n\n" unless $sel->ensembl_wait_for_page_to_load; 
+  
+  my @skip_link = ("Home", "developers' mailing list");
+
+  $sel->ensembl_click_ok("link=FAQs",'50000')
+  and $sel->select_pop_up_ok
+  and $sel->ensembl_click_all_links(".content", @skip_link);
 }
 
 sub test_login {
