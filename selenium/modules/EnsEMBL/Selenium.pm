@@ -72,7 +72,7 @@ sub ensembl_open_zmenu_at {
   and $self->ensembl_wait_for_ajax;
 }
 
-#Overloading click_ok function so that it returns the current url when it fails
+# Overloading click_ok function so that it returns the current url when it fails, only used this function when ensembl_click_links below does not work like an ajax button
 sub ensembl_click {
   my ($self, $link, $timeout) = @_;
   my $url = $self->get_location();
@@ -95,6 +95,43 @@ sub ensembl_click_links {
         print "***missing*** $locator in $location \n";
       }
     }
+  }
+}
+
+# finding all links within an element and clicking each of them
+# params: $div - The id or class for the container of the links
+#         @skip_link - array of links you want to skip such as home 
+sub ensembl_click_all_links {
+  my ($self, $div, @skip_link) = @_;  
+  my $location = $self->get_location();
+  
+  # get all the links on the page
+  my $links_href = $self->get_eval(qq{
+    var \$ = selenium.browserbot.getCurrentWindow().jQuery;
+    \$('$div').find('a');
+  });
+    
+  my @links_array = split(',',$links_href);
+  my $i = 0;
+
+  foreach my $link (@links_array) {    
+    #get the text for each link 
+    my $link_text = $self->get_eval(qq{
+      \var \$ = selenium.browserbot.getCurrentWindow().jQuery; 
+      \$('$div').find('a:eq($i)').text();
+    });
+    
+    # see if there is an id for the links
+    my $link_id = $self->get_eval(qq{
+      \var \$ = selenium.browserbot.getCurrentWindow().jQuery; 
+      \$('$div').find('a:eq($i)').attr('id');
+    });    
+
+    $i++;
+    next if grep (/$link_text/, @skip_link);
+
+    $link_id && $link_id ne 'null' ? $self->ensembl_click_links(["id=$link_id"]) : $self->ensembl_click_links(["link=$link_text"]);
+    $self->go_back();
   }
 }
 
@@ -131,4 +168,7 @@ sub ensembl_has_das_error {
   my $self = shift;
   return $self->is_element_present("//div[\@id='TextDAS']//div[\@class='error-pad']");
 }
+
+
+
 1;
