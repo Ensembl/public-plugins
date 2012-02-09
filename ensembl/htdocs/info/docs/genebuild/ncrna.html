@@ -88,8 +88,10 @@ href="http://lowelab.ucsc.edu/tRNAscan-SE/">tRNAscan-SE</a>.
 <strong>lincRNA</strong> (Long intergenic non-coding RNAs)
 Ensembl gene annotation, cDNA alignments and chromatin-state map data 
 from the Ensembl regulatory build are used to predict lincRNAs for human 
-and mouse. First, regions of chromatin methylation (H3K4me3 and H3K36me3) 
-outside known protein-coding loci are identified [1]. Next, cDNAs which 
+and mouse. We do not import the lincRNAs identified by Guttman et al [1], 
+but their publication guided us to our current approach for automatically annotating lincRNAs. 
+First, regions of chromatin methylation (H3K4me3 and H3K36me3) 
+outside known protein-coding loci are identified. Next, cDNAs which 
 overlap with H3K4me3 or H3K36me3 features are identified as candidate 
 lincRNAs. A final evaluation step investigates if each candidate 
 lincRNA has any protein-coding potential. Any candidate lincRNA 
