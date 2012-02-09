@@ -114,7 +114,7 @@ sub test_faq {
   print "URL:: $location \n\n" unless $sel->ensembl_wait_for_page_to_load; 
   
   my @skip_link = ("Home", "contact our HelpDesk", "developers' mailing list");
-  my $text = 'test';
+  
   $sel->ensembl_click_ok("link=FAQs",'50000')
   and $sel->select_pop_up_ok  
   and $sel->ensembl_click_all_links(".content", \@skip_link, 'More FAQs');
