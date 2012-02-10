@@ -8,9 +8,9 @@
 <h1 id="top">Frequently asked questions</h1>
 
 <a href="index.html#about">About</a> |
-<a href="index.html#formats">Data formats</a> |
 <a href="index.html#web">Web version</a> |
 <a href="vep_script.html">Perl script</a> |
+<a href="vep_formats.html">Data formats</a> |
 Frequently asked questions
 
 <ul>
@@ -27,17 +27,43 @@ using species X? </p>
 <p> A: Ensembl only has variation databases for a subset of all Ensembl species
 - see <a href="/info/docs/variation/index.html">this document</a> for
 details.</p>
+
+<p>&nbsp;</p>
+
+<p style="font-weight:bold;"> Q: Why has my insertion/deletion variant encoded in VCF
+disappeared from the VEP output? </p>
+
+<p> A: Ensembl treats unbalanced variants differently to VCF. You can solve this by giving your variants a unique identifier in the third column of the VCF file. See <a href="vep_formats.html#vcf">here</a> for a full discussion.</p>
+
 <p>&nbsp;</p>
 
 
-<p style="font-weight:bold;"> Q: Why are some in/dels in my Pileup format file
-being given incorrect coordinates and/or allele string in the output? </p>
 
-<p> A: This is a known issue with the Pileup parser - it is under investigation
-</p>
+<p style="font-weight:bold;"> Q: Why do I see so many lines of output for each variant in my input? </p>
+
+<p> A: While it can be convenient to search for a easy, one word answer to the
+question "What is the consequence of this variant?", in reality biology does not
+make it this simple! Many genes have more than one transcript, so the VEP
+provides a prediction for each transcript that a variant overlaps. The VEP
+script can help here; the --canonical and --ccds options indicate which
+transcripts are canonical and belong to the CCDS set respectively, while
+--per_gene, --summary and --most_severe allow you to give a more summary level
+assessment per variant.</p>
+
+<p> Furthermore, several "compound" consequences are also possible - if, for
+example, a variant falls in the final few bases of an exon, it may be considered
+to affect a splicing site, in addition to possibly affecting the coding
+sequence. </p>
+
+<p> Since we cannot possibly predict the exact biology of what will happen, what
+we provide is the most conservative estimate that covers all reasonable
+scenarios. It is up to you, the user, to interpret this information!</p>
+
 <p>&nbsp;</p>
+
 
 <a href="#top">[Back to top]</a>
+<hr/>
 
 <h2 id="web"> Web VEP questions </h2>
 
@@ -84,6 +110,7 @@ href="mailto:dev@ensembl.org">dev@ensembl.org</a>.</p>
 <p>&nbsp;</p>
 
 <a href="#top">[Back to top]</a>
+<hr/>
 
 <h2 id="script"> VEP script questions </h2>
 
@@ -104,6 +131,30 @@ with your script, which causes this error. This can happen when the server is
 busy, or due to various network issues. Consider using a <a
 href="vep_script.html#local">local copy of the database</a>, or the new <a
 href="vep_script.html#cache">caching system</a>. </p>
+
+<p>&nbsp;</p>
+
+<p style="font-weight:bold;"> Q: Can I download all of the SIFT and/or PolyPhen predictions? </p>
+
+<p> A: The Ensembl Variation database and the human VEP cache file contain
+precalculated SIFT and PolyPhen predictions for every possible amino acid change
+in every translated protein product in Ensembl. Since these data are huge, we
+store them in a compressed format. The best approach to extract them is to use
+our Perl API.</p>
+
+<p> The format in which the data are stored in our database is described <a href="http://www.ensembl.org/info/docs/variation/index.html#nsSNP_data_format">here</a></p>
+
+<p> The simplest way to access these matrices is to use an API script to fetch a
+ProteinFunctionPredictionMatrix for your protein of interest and then call its
+'get_prediction' method to get the score for a particular position and amino
+acid, looping over all possible amino acids for your position. There is some
+detailed documentation on this class in the API documentation <a
+href="http://www.ensembl.org/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1ProteinFunctionPredictionMatrix.html">here</a>.</p>
+
+<p>You would need to work out which peptide position your codon maps to, but
+there are methods in the <a
+href="http://www.ensembl.org/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1TranscriptVariation.html">TranscriptVariationAllele</a>
+class that should help you (probably translation_start and translation_end).</p>
 
 <p>&nbsp;</p>
 

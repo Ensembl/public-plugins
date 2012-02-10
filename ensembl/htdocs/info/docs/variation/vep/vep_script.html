@@ -8,9 +8,9 @@
 <h1 id="top">Variant Effect Predictor script</h1>
 
 <a href="index.html#about">About</a> |
-<a href="index.html#formats">Data formats</a> |
 <a href="index.html#web">Web version</a> |
 Perl script |
+<a href="vep_formats.html">Data formats</a> |
 <a href="vep_faq.html">Frequently asked questions</a>
 
 <h2 id="contents"> Contents </h2>
@@ -19,6 +19,12 @@ Perl script |
 	<li><a href="#requirements">Requirements</a></li>
 	<li><a href="#download">Download</a></li>
 	<li><a href="#help">Help</a></li>
+	<li>
+		<a href="#installer">The installer script</a>
+		<ul>
+			<li><a href="#run_install">Running the installer</a></li>
+		</ul>
+	</li>
 	<li>
 		<a href="#running">Running the script</a>
 		<ul>
@@ -41,7 +47,7 @@ Perl script |
 			<li><a href="#build">Building your own cache</a></li>
 			<li><a href="#limitations">Limitations of the cache</a></li>
 			<li><a href="#privacy">Data privacy</a></li>
-			<!--<li><a href="#standalone">Standalone mode</a></li>-->
+			<li><a href="#offline">Offline mode</a></li>
 		</ul>
 	</li>
     <li>
@@ -77,6 +83,19 @@ Perl script |
 <hr/>
 
 <h2 id="new"> What's new </h2>
+
+<h3> New in version 2.4 <i>(February 2012)</i> </h3>
+
+<ul>
+	<li>offline mode and new installer script make it easy to use the VEP
+	without the usual dependencies</li>
+    <li>output columns configurable using the --fields flag</li>
+	<li>VCF output support expanded, can now carry all fields</li>
+	<li>output affected exon and intron numbers with --numbers</li>
+	<li>output overlapping protein domains using --domains</li>
+    <li>enhanced support for LRGs</li>
+	<li>plugins now work on variants called as intergenic</li>
+</ul>
 
 <h3> New in version 2.3 <i>(December 2011)</i> </h3>
 
@@ -154,12 +173,15 @@ Perl script |
 <h2 id="requirements"> Requirements </h2>
 
 <p>
-Version 2.3 of the script requires at least version 65 of the Ensembl Core and
+Version 2.4 of the script requires at least version 66 of the Ensembl Core and
 Variation APIs and their relevant dependencies to be installed to use the
-script. See <a href="http://www.ensembl.org/info/docs/api/index.html"
+script. A minimal subset of these can be installed using the supplied <a
+href="#installer">installer script</a>. </p>
+
+<p> To perform a full install of the API, see the <a
+href="http://www.ensembl.org/info/docs/api/index.html"
 target="_blank">instructions</a> for details. To analyse regulatory features,
-the Ensembl Regulation API should also be installed.
-</p>
+the Ensembl Regulation API should also be installed. </p>
 
 <p>
 To use the <a href="#cache">cache</a>, the gzip and zcat utilities are required.
@@ -170,7 +192,7 @@ To use the <a href="#cache">cache</a>, the gzip and zcat utilities are required.
 <p> The Variant Effect Predictor script can be downloaded as a tarball from the
 Ensembl CVS server: </p>
 
-<p> <a href="http://cvs.sanger.ac.uk/cgi-bin/viewvc.cgi/ensembl-tools/scripts/variant_effect_predictor.tar.gz?view=tar&root=ensembl&pathrev=branch-ensembl-65">Download version 2.3 (latest)</a> </p>
+<p> <a href="http://cvs.sanger.ac.uk/cgi-bin/viewvc.cgi/ensembl-tools/scripts/variant_effect_predictor.tar.gz?view=tar&root=ensembl&pathrev=branch-ensembl-66">Download version 2.4 (latest)</a> </p>
 
 <p>It is also included as part of the ensembl-tools module of the Ensembl API -
 you can find it in the ensembl-tools/scripts/variant_effect_predictor/
@@ -179,9 +201,10 @@ directory.</p>
 <h3> Previous versions </h3>
 
 <ul>
-    <li><a href="http://cvs.sanger.ac.uk/cgi-bin/viewvc.cgi/ensembl-tools/scripts/variant_effect_predictor.tar.gz?view=tar&root=ensembl&pathrev=branch-ensembl-64">Download version 2.2</a> </li>
-    <li><a href="ftp://ftp.ensembl.org/pub/misc-scripts/Variant_effect_predictor/variant_effect_predictor_2.1.zip">Download version 2.1</a> </li>
-    <li><a href="ftp://ftp.ensembl.org/pub/misc-scripts/Variant_effect_predictor/variant_effect_predictor_2.0.zip">Download version 2.0</a> </li>
+	<li><a href="http://cvs.sanger.ac.uk/cgi-bin/viewvc.cgi/ensembl-tools/scripts/variant_effect_predictor.tar.gz?view=tar&root=ensembl&pathrev=branch-ensembl-65">Download version 2.3</a> (Ensembl 65) </li>
+    <li><a href="http://cvs.sanger.ac.uk/cgi-bin/viewvc.cgi/ensembl-tools/scripts/variant_effect_predictor.tar.gz?view=tar&root=ensembl&pathrev=branch-ensembl-64">Download version 2.2</a> (Ensembl 64) </li>
+    <li><a href="http://cvs.sanger.ac.uk/cgi-bin/viewvc.cgi/ensembl-variation/scripts/examples.tar.gz?view=tar&root=ensembl&pathrev=branch-ensembl-63">Download version 2.1</a> (Ensembl 63) </li>
+    <li><a href="http://cvs.sanger.ac.uk/cgi-bin/viewvc.cgi/ensembl-variation/scripts/examples.tar.gz?view=tar&root=ensembl&pathrev=branch-ensembl-62">Download version 2.0</a> (Ensembl 62) </li>
 </ul>
 
 <h2 id="help"> Help </h2>
@@ -191,8 +214,83 @@ page, please send an email to the Ensembl developer's mailing list, <a
 href="mailto:dev@ensembl.org">dev@ensembl.org</a> </p>
 
 <a href="#top">[Back to top]</a>
-
 <hr/>
+
+
+
+<h2 id="installer"> The INSTALL.pl installer script </h2>
+
+<p> The VEP installer script makes it easy to set up your environment for using
+the VEP. It will download and configure a minimal set of the Ensembl API for use
+by the VEP, and can also download and configure cache files for use by the VEP.
+</p>
+
+<p> Users who already have the latest version of the API installed do not need
+to run the script, although may find it useful for getting an up-to-date API
+install (with post-release patches applied), and for retrieving cache files. The
+API set installed by the script is local to the VEP, and will not affect any
+other Ensembl API installations. </p>
+
+<p> The installer script is also useful for users whose systems do not have all
+the modules required by the VEP, specifically DBI and DBI::mysql. After
+configuration using the installer, users can then use the VEP in <a
+href="#offline">offline mode</a> with a cache, eliminating dependency on
+an Ensembl database (with <a href="#limitations">limitations</a>). </p>
+
+<h3 id="run_install"> Running the installer </h3>
+
+<p> The installer script is run on the command line as follows: </p>
+
+<pre class="code"> perl INSTALL.pl [options] </pre>
+
+<p> Users then follow on-screen prompts. Please heed any warnings, as when the
+script says it will delete/overwrite something, it really will!</p>
+
+<p> Most users should not need to add any options, but configuration of the
+installer is possible with the following flags: </p>
+
+<table class="ss" style="width:75%;">
+	<tr>
+		<th>Flag</th>
+		<th>Alternate</th>
+		<th>Description</th>
+	</tr>
+	
+	<tr>
+		<td><pre>--DESTDIR [dir]</pre></td>
+		<td><pre>-d</pre></td>
+		<td>By default the script will install the API modules in a subdirectory
+		of the current directory named "Bio". Using this option users may
+		configure where the Bio directory is created. If something other than
+		the default is used, this directory must either be added to your
+		PERL5LIB environment variable when running the VEP, or included using
+		perl's -I flag: <pre>perl -I [dir] variant_effect_predictor.pl</pre>
+		</td>
+	</tr>
+	<tr class="bg2">
+		<td><pre>--API_VERSION [version]</pre></td>
+		<td><pre>-v</pre></td>
+		<td>By default the script will install the latest version of the Ensembl
+		API (currently 66). Users can force the script to install a different
+		version at their own risk</td>
+	</tr>
+	<tr>
+		<td><pre>--CACHE_DIR [dir]</pre></td>
+		<td><pre>-c</pre></td>
+		<td>By default the script will install the cache files in the ".vep"
+		subdirectory of the user's home area. Using this option users can
+		configure where cache files are installed. The --dir flag must be passed
+		when running the VEP if a non-default directory is given:
+		<pre>perl variant_effect_predictor.pl --dir [dir]</pre>
+		</td>
+	</tr>
+</table>
+
+<p><a href="#top">[Back to top]</a></p>
+<hr/>
+
+
+
 
 <h2 id="running"> Running the script </h2>
 
@@ -214,10 +312,10 @@ most the following command will be enough to get started with: </p>
 
 <pre class="code"> perl variant_effect_predictor.pl -i input.txt -o output.txt </pre>
 
-<p> where input.txt contains data in one of the compatible <a
-href="/info/website/upload/var.html#input">input formats</a>, and output.txt is
-the <a href="/info/website/upload/var.html#output">output file</a> created by
-the script. </p>
+<p> where input.txt contains data in one of the compatible input formats, and
+output.txt is the output file created by the script. See <a
+href="vep_formats.html">Data Formats</a> for more detail on input and output
+formats.</p>
 
 <p> Options can be passed as the full string (e.g. --format), or as the shortest
 unique string among the options (e.g. --form for --format, since there is
@@ -521,7 +619,7 @@ host          useastdb.ensembl.org</pre>
 			of RegulatoryFeature or MotifFeature. <i>Not used by default</i>
 		</td>
 	</tr>
-	<tr>
+	<tr class="bg2">
 		<td><pre>--hgvs</pre></td>
 		<td>&nbsp;</td>
 		<td>
@@ -533,7 +631,7 @@ host          useastdb.ensembl.org</pre>
 			<i>Not used by default</i>
 		</td>
 	</tr>
-	<tr class="bg2">
+	<tr>
 		<td><pre>--gene</pre></td>
 		<td>&nbsp;</td>
 		<td>
@@ -541,7 +639,7 @@ host          useastdb.ensembl.org</pre>
 			unless using --cache. <i>Gene column not populated by default</i>
 		</td>
 	</tr>
-	<tr>
+	<tr class="bg2">
 		<td><pre>--protein</pre></td>
 		<td>&nbsp;</td>
 		<td>
@@ -549,7 +647,7 @@ host          useastdb.ensembl.org</pre>
 			<i>Not used by default</i>
 		</td>
 	</tr>
-	<tr class="bg2">
+	<tr>
 		<td><pre>--hgnc</pre></td>
 		<td>&nbsp;</td>
 		<td>
@@ -557,7 +655,7 @@ host          useastdb.ensembl.org</pre>
 			<i>Not used by default</i>
 		</td>
 	</tr>
-	<tr>
+	<tr class="bg2">
 		<td><pre>--ccds</pre></td>
 		<td>&nbsp;</td>
 		<td>
@@ -565,7 +663,7 @@ host          useastdb.ensembl.org</pre>
 			<i>Not used by default</i>
 		</td>
 	</tr>
-	<tr class="bg2">
+	<tr>
 		<td><pre>--canonical</pre></td>
 		<td>&nbsp;</td>
 		<td>
@@ -573,7 +671,23 @@ host          useastdb.ensembl.org</pre>
             for the gene. <i>Not used by default</i>
 		</td>
 	</tr>
+	<tr class="bg2">
+		<td><pre>--numbers</pre></td>
+		<td>&nbsp;</td>
+		<td>
+			Adds affected exon and intron numbering to to output. Format is
+			Number/Total. <i>Not used by default</i>
+		</td>
+	</tr>
 	<tr>
+		<td><pre>--domains</pre></td>
+		<td>&nbsp;</td>
+		<td>
+			Adds names of overlapping protein domains to output. <i>Not used by
+			default</i>
+		</td>
+	</tr>
+	<tr class="bg2">
 		<td><pre>--most_severe</pre></td>
 		<td>&nbsp;</td>
 		<td>
@@ -582,7 +696,7 @@ host          useastdb.ensembl.org</pre>
 			default</i>
 		</td>
 	</tr>
-	<tr class="bg2">
+	<tr>
 		<td><pre>--summary</pre></td>
 		<td>&nbsp;</td>
 		<td>
@@ -591,7 +705,7 @@ host          useastdb.ensembl.org</pre>
 			used by default</i>
 		</td>
 	</tr>
-	<tr>
+	<tr class="bg2">
 		<td><pre>--per_gene</pre></td>
 		<td>&nbsp;</td>
 		<td>
@@ -600,7 +714,7 @@ host          useastdb.ensembl.org</pre>
             consequence. <i>Not used by default</i>
 		</td>
 	</tr>
-	<tr class="bg2">
+	<tr>
 		<td><pre>--convert [ensembl<b>|</b>vcf<b>|</b>pileup]</pre></td>
 		<td>&nbsp;</td>
 		<td>
@@ -610,16 +724,32 @@ host          useastdb.ensembl.org</pre>
             prediction is carried out. <i>Not used by default</i>
 		</td>
 	</tr>
+	<tr class="bg2">
+		<td><pre>--fields [list]</pre></td>
+		<td>&nbsp;</td>
+		<td>
+			Configure the output format using a comma separated list of fields.
+			Fields may be those present in the default output columns, or any of
+			those that appear in the Extra column (including those added by
+			plugins or custom annotations). Output remains tab-delimited. <i>Not
+			used by default</i>
+		</td>
+	</tr>
 	<tr>
 		<td><pre>--vcf</pre></td>
 		<td>&nbsp;</td>
 		<td>
-            Writes output in VCF format. Consequences are added in the INFO
-            field of the VCF file, using the key "CSQ". Currently only a list of
-            all consequence types predicted is added; no further information is
-            added (e.g. positions, transcript identifiers). Specifying
-            --most_severe will force the script to add only the most severe
-            consequence. <i>Not used by default</i>
+			Writes output in VCF format. Consequences are added in the INFO
+			field of the VCF file, using the key "CSQ". Data fields are encoded
+			separated by "&#124;"; the order of fields is written in the VCF
+			header. Output fields can be selected by using --fields.<br/><br/>
+			If the input format was VCF, the file will remain unchanged save for
+			the addition of the CSQ field (unless using any
+			filtering).<br/><br/>
+			Custom data added with --custom are added as separate fields, using
+			the key specified for each data file.<br/><br/>
+			Commas in fields are replaced with ampersands (&amp;) to preserve
+			VCF format.<br/><br/><i>Not used by default</i>
 		</td>
 	</tr>
 	<tr class="bg2">
@@ -843,17 +973,15 @@ host          useastdb.ensembl.org</pre>
             <i>Not used by default</i>
 		</td>
 	</tr>
-    
-
-	<!--<tr class="bg2">
-		<td><pre>--failed [0<b>|</b>1]</pre></td>
+	<tr>
+		<td><pre>--failed</pre></td>
 		<td>&nbsp;</td>
 		<td>
 			When checking for co-located variants, by default the script will
-			include variants that have been flagged as failed. Set this flag to
-			0 to exclude such variants. <i>Not used by default</i>
+			exclude variants that have been flagged as failed. Set this flag to
+			include such variants. <i>Exclude by default</i>
 		</td>
-	</tr>-->
+	</tr>
 </table>
 
 <p><a href="#top">[Back to top]</a></p>
@@ -895,19 +1023,17 @@ host          useastdb.ensembl.org</pre>
 			vary). <i>Default = "$HOME/.vep/"</i>
 		</td>
 	</tr>
-	<!--<tr class="bg2">
-		<td><pre>--standalone</pre></td>
+	<tr class="bg2">
+		<td><pre>--offline</pre></td>
 		<td>&nbsp;</td>
 		<td>
-			Enable standalone mode. No database connections will be made, and
-			only a complete cache (either downloaded or built using --build) can
-			be used for this mode. No installation of the Ensembl API is
-			required - a minimal set of modules is used that reside in the
-			"Bio/" sub-directory found with the script. <i>Not used by
-			default</i>
+			Enable <a href="#offline">offline mode</a>. No database
+			connections will be made, and only a complete cache (either
+			downloaded or built using --build) can be used for this mode. <i>Not
+			used by default</i>
 		</td>
-	</tr>-->
-	<tr class="bg2">
+	</tr>
+	<tr>
 		<td><pre>--buffer [number]</pre></td>
 		<td>&nbsp;</td>
 		<td>
@@ -917,14 +1043,14 @@ host          useastdb.ensembl.org</pre>
 			use more memory with a faster run time. <i>Default = 5000</i>
 		</td>
 	</tr>
-	<tr>
+	<tr class="bg2">
 		<td><pre>--write_cache</pre></td>
 		<td>&nbsp;</td>
 		<td>
 			Enable writing to the cache. <i>Not used by default</i>
 		</td>
 	</tr>
-	<tr class="bg2">
+	<tr>
 		<td><pre>--build [all<b>|</b>list]</pre></td>
 		<td>&nbsp;</td>
 		<td>
@@ -937,7 +1063,7 @@ host          useastdb.ensembl.org</pre>
 			</span><i>Not used by default</i>
 		</td>
 	</tr>
-	<tr>
+	<tr class="bg2">
 		<td><pre>--compress [command]</pre></td>
 		<td>&nbsp;</td>
 		<td>
@@ -948,7 +1074,7 @@ host          useastdb.ensembl.org</pre>
 			problems. <i>Not used by default</i>
 		</td>
 	</tr>
-	<tr class="bg2">
+	<tr>
 		<td><pre>--skip_db_check</pre></td>
 		<td>&nbsp;</td>
 		<td>
@@ -960,7 +1086,7 @@ host          useastdb.ensembl.org</pre>
             <i>Not used by default</i>
 		</td>
 	</tr>
-	<tr>
+	<tr class="bg2">
 		<td><pre>--cache_region_size [size]</pre></td>
 		<td>&nbsp;</td>
 		<td>
@@ -1032,11 +1158,16 @@ host          useastdb.ensembl.org</pre>
         Add custom position-based phenotype annotation from remote BED file
 <pre class="code">perl variant_effect_predictor.pl -i variants.vcf -custom ftp://ftp.myhost.org/data/phenotypes.bed.gz,phenotype</pre>
 	</li>
+	<li>
+        Use the plugin named MyPlugin, output only the variation name, feature, consequence type and MyPluginOutput fields
+<pre class="code">perl variant_effect_predictor.pl -i variants.vcf -plugin MyPlugin -fields Uploaded_variation,Feature,Consequence,MyPluginOutput</pre>
+	</li>
 </ul>
+
+<p><a href="#top">[Back to top]</a></p>
 
 <hr/>
 
-<p><a href="#top">[Back to top]</a></p>
 
 <h2 id="db"> Databases and caching </h2>
 
@@ -1071,9 +1202,9 @@ see <a href="/info/docs/webcode/install/ensembl-data.html"
 target="_blank">here</a>. You will need a MySQL server that you can connect to
 from the machine where you will run the script (this can be the same machine).
 For most of the functionality of the VEP, you will only need the Core database
-(e.g. homo_sapiens_core_65_37) installed. In order to find co-located variations
+(e.g. homo_sapiens_core_66_37) installed. In order to find co-located variations
 or to use SIFT, PolyPhen or Condel, it is also necessary to install the relevant
-variation database (e.g. homo_sapiens_variation_65_37). </p>
+variation database (e.g. homo_sapiens_variation_66_37). </p>
 
 <p> Note that unless you have custom data to insert in the database, in most cases it will be much more efficient to use a <a href="#pre">pre-built cache</a> in place of a local database. </p>
 
@@ -1094,7 +1225,7 @@ Bio::EnsEMBL::DBSQL::DBAdaptor->new(
   '-host'    => 'ensembldb.ensembl.org',
   '-user'    => 'anonymous',
   '-pass'    => '',
-  '-dbname'  => 'homo_sapiens_core_65_37'
+  '-dbname'  => 'homo_sapiens_core_66_37'
 );
 
 Bio::EnsEMBL::Variation::DBSQL::DBAdaptor->new(
@@ -1104,7 +1235,7 @@ Bio::EnsEMBL::Variation::DBSQL::DBAdaptor->new(
   '-host'    => 'ensembldb.ensembl.org',
   '-user'    => 'anonymous',
   '-pass'    => '',
-  '-dbname'  => 'homo_sapiens_variation_65_37'
+  '-dbname'  => 'homo_sapiens_variation_66_37'
 );
 
 Bio::EnsEMBL::Registry->add_alias("Homo_sapiens","human");
@@ -1127,13 +1258,11 @@ below illustrate the model of caching that is used. </p>
         <th>Normal mode</th>
         <th>Cache mode</th>
         <th>Build mode</th>
-        <!--<th>Standalone mode</th>-->
     </tr>
     <tr>
         <td><a href="/img/vep_cache_normal.png"><img src="/img/vep_cache_normal_thumb.png" /></a></td>
-        <td><a href="/img/vep_cache_cache.png"><img src="/img/vep_cache_cache_thumb.png" /></a></td></td>
-        <td valign="middle"><a href="/img/vep_cache_build.png"><img src="/img/vep_cache_build_thumb.png" /></a></td></td>
-        <!--<td><a href="/img/vep_cache_standalone.png"><img src="/img/vep_cache_standalone_thumb.png" /></a></td></td>-->
+        <td><a href="/img/vep_cache_cache.png"><img src="/img/vep_cache_cache_thumb.png" /></a></td>
+        <td valign="middle"><a href="/img/vep_cache_build.png"><img src="/img/vep_cache_build_thumb.png" /></a></td>
     </tr>
 </table>
 
@@ -1151,7 +1280,9 @@ cache. </p>
 
 <p> The easiest solution is to download a pre-built cache for your species; this
 eliminates the need to connect to the database while the script is running
-(except when using <a href="#limitations">certain options</a>). <p>
+(except when using <a href="#limitations">certain options</a>). Cache files can
+either be downloaded and unpacked as described here, or automatically downloaded
+and configured using the <a href="#installer">installer script</a>. <p>
 
 <ol>
 	<li>
@@ -1160,27 +1291,27 @@ eliminates the need to connect to the database while the script is running
             <table class="ss" style="width:50%">
                 <tr>
                     <th>Human <i>(Homo sapiens)</i></th>
-                    <td><a href="ftp://ftp.ensembl.org/pub/release-65/variation/VEP/homo_sapiens/homo_sapiens_vep_65_sift_polyphen.tar.gz">Download (with SIFT and PolyPhen)</a></td>
-                    <td><a href="ftp://ftp.ensembl.org/pub/release-65/variation/VEP/homo_sapiens/homo_sapiens_vep_65.tar.gz">Download (without SIFT and PolyPhen)</a></td>
+                    <td><a href="ftp://ftp.ensembl.org/pub/release-66/variation/VEP/homo_sapiens/homo_sapiens_vep_66_sift_polyphen.tar.gz">Download (with SIFT and PolyPhen)</a></td>
+                    <td><a href="ftp://ftp.ensembl.org/pub/release-66/variation/VEP/homo_sapiens/homo_sapiens_vep_66.tar.gz">Download (without SIFT and PolyPhen)</a></td>
                 </tr>
                 <tr>
                     <th>Mouse <i>(Mus musculus)</i></th>
-                    <td><a href="ftp://ftp.ensembl.org/pub/release-65/variation/VEP/mus_musculus/mus_musculus_vep_65.tar.gz">Download</a></td>
+                    <td><a href="ftp://ftp.ensembl.org/pub/release-66/variation/VEP/mus_musculus/mus_musculus_vep_66.tar.gz">Download</a></td>
                     <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <th>Rat <i>(Rattus norvegicus)</i></th>
-                    <td><a href="ftp://ftp.ensembl.org/pub/release-65/variation/VEP/rattus_norvegicus/rattus_norvegicus_vep_65.tar.gz">Download</a></td>
+                    <td><a href="ftp://ftp.ensembl.org/pub/release-66/variation/VEP/rattus_norvegicus/rattus_norvegicus_vep_66.tar.gz">Download</a></td>
                     <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <th>Zebrafish <i>(Danio rerio)</i></th>
-                    <td><a href="ftp://ftp.ensembl.org/pub/release-65/variation/VEP/danio_rerio/danio_rerio_vep_65.tar.gz">Download</a></td>
+                    <td><a href="ftp://ftp.ensembl.org/pub/release-66/variation/VEP/danio_rerio/danio_rerio_vep_66.tar.gz">Download</a></td>
                     <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <th>Cow <i>(Bos taurus)</i></th>
-                    <td><a href="ftp://ftp.ensembl.org/pub/release-65/variation/VEP/bos_taurus/bos_taurus_vep_65.tar.gz">Download</a></td>
+                    <td><a href="ftp://ftp.ensembl.org/pub/release-66/variation/VEP/bos_taurus/bos_taurus_vep_66.tar.gz">Download</a></td>
                     <td>&nbsp;</td>
                 </tr>
             </table>
@@ -1191,9 +1322,9 @@ eliminates the need to connect to the database while the script is running
 		$HOME/.vep/ as the cache directory, where $HOME is your UNIX home
 		directory.
         <pre class="code">
-mv homo_sapiens_vep_65.tar.gz ~/.vep/
+mv homo_sapiens_vep_66.tar.gz ~/.vep/
 cd ~/.vep/
-tar xfz homo_sapiens_vep_65.tar.gz</pre>
+tar xfz homo_sapiens_vep_66.tar.gz</pre>
 	</li>
 	<li>
 		Run the VEP with the --cache option
@@ -1282,35 +1413,33 @@ be suitable for those with sensitive or private data. Users should note that
 <b>only</b> the coordinates are transmitted to the server; no other information
 is sent. </p>
 
-<p> By using a full downloaded cache or a local database, it is possible to
+<p> By using a full downloaded cache (preferably in <a
+href="#offline">offline mode</a>) or a local database, it is possible to
 avoid completely any network connections to public servers, thus preserving
 absolutely the privacy of your data. </p>
 
+
+<h3 id="offline"> Offline mode </h3>
+
+<p> It is possible to run the VEP in a offline mode that does not use the
+database, and does not require a standard installation of the Ensembl API. This
+means users require only perl (version 5.8 or greater) and the either zcat,
+gzcat or gzip utilities. To enable this mode, use the flag --offline. </p>
+
+<p> The simplest way to set up your system is to use the <a
+href="#installer">installer script</a>, INSTALL.pl. This will download the
+required dependencies to your system, and download and set up any cache files
+that you require.</p>
+
+<p> The <a href="#limitations">limitations</a> described above apply absolutely
+when using offline mode. For example, if you specify --offline and --hgvs,
+the script will report an error and refuse to run. </p>
+
+<p> All other features, including the ability to use <a href="#custom">custom
+annotations</a> and <a href="#plugins">plugins</a>, are accessible in offline
+mode. </p>
+
 <a href="#top">[Back to top]</a>
-
-
-
-<!--<h3 id="standalone"> Standalone mode </h3>
-
-<p> <span style="color:red;">WARNING: EXPERIMENTAL!</span> It is possible to run
-the VEP script in a standalone mode that does not require the installation of
-any of the usual dependencies. This means users require only perl (version 5.8
-or greater) and the either zcat, gzcat or gzip utilities. To enable this mode,
-use the flag --standalone. You will need to have downloaded a <a
-href="#pre">complete cache</a> for your species of interest, since in standalone
-mode no database connections can be made. You will also need the mini package of
-modules contained in <a
-href="ftp://ftp.ensembl.org/pub/misc-scripts/Variant_effect_predictor_2.0/standalone_Bio.zip">this
-archive</a>, which you should decompress into the same directory as the script.
-Note that if you run the script from another directory,
-you will need to tell perl where to find the modules using the -I flag: </p>
-
-<pre> perl -I path/to/vep/ path/to/vep/variant_effect_predictor.pl </pre>
-
-<p> This mode is relatively untested, as such should be treated as "alpha" code.
-Feedback, however, would be very useful for the development of the script. </p>
-
-<a href="#top">[Back to top]</a>-->
 
 <hr/>
 
@@ -1360,7 +1489,7 @@ multiple lines exist. </p>
 
 <p> Any other files can be easily converted to be compatible with the VEP; the
 easiest format to produce is a BED-like file containing coordinates and an
-identifier: </p>
+(optional) identifier: </p>
 
 <pre class="code">chr1    10000    11000    Feature1
 chr3    25000    26000    Feature2
@@ -1392,12 +1521,12 @@ you should ensure the file is world-readable on your server. </p>
 <h3 id="custom_options"> Options for custom annotation </h3>
 
 <p> Each custom file that you configure the VEP to use can be configured. Beyond
-the filepath, there are 3 further options, each of which is specified in a
+the filepath, there are 4 further options, each of which is specified in a
 comma-separated list, for example: </p>
 
-<pre class="code">perl variant_effect_predictor.pl -custom myFeatures.gff.gz,myFeatures,gff,overlap
-perl variant_effect_predictor.pl -custom frequencies.bw,Frequency,bigwig,exact
-perl variant_effect_predictor.pl -custom http://www.myserver.com/data/myPhenotypes.bed.gz,Phenotype,bed,exact</pre>
+<pre class="code">perl variant_effect_predictor.pl -custom myFeatures.gff.gz,myFeatures,gff,overlap,0
+perl variant_effect_predictor.pl -custom frequencies.bw,Frequency,bigwig,exact,0
+perl variant_effect_predictor.pl -custom http://www.myserver.com/data/myPhenotypes.bed.gz,Phenotype,bed,exact,1</pre>
 
 <p> The options are as follows: </p>
 
@@ -1417,7 +1546,16 @@ perl variant_effect_predictor.pl -custom http://www.myserver.com/data/myPhenotyp
     as conservation scores, allele frequencies or phenotype information. Using
     "overlap", any annotation that overlaps the variant by even 1bp will be
     reported. </li>
+	<li><b>Force report coordinates</b> : One of "0" or "1" (if left blank
+	assumed to be "0") - if set to "1", this forces the VEP to output the
+	coordinates of an overlapping custom feature instead of any found identifier
+	(or value in the case of bigWig) field. If set to "0" (the default), the VEP
+	will output the identifier field if one is found; if none is found, then the
+	coordinates are used instead. </li>
 </ul>
+
+<p> All options (apart from the filename) are optional and their absence will
+invoke the default behaviour. </p>
 
 <h3 id="custom_remote"> Using remote files </h3>
 
@@ -1617,7 +1755,7 @@ provided for RefSeq transcripts. </p>
 <pre class="code">perl variant_effect_predictor.pl -i refseq_hgvs_notations.txt -o converted.vcf -refseq -convert vcf
 perl variant_effect_predictor.pl -i converted.vcf -o consequences.txt -sift b</pre>
 
-<a href="#top">[Back to top]</a>
+<p><a href="#top">[Back to top]</a></p>
 
 </body>
 </html>

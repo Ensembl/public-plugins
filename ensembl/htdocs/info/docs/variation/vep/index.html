@@ -7,10 +7,10 @@
 
 <h1>Variant Effect Predictor</h1>
 
-<a href="#about">About</a> |
-<a href="#formats">Data formats</a> |
+About |
 <a href="#web">Web version</a> |
 <a href="vep_script.html">Perl script</a> |
+<a href="vep_formats.html">Data formats</a> |
 <a href="vep_faq.html">Frequently asked questions</a>
 
 <h2 id="about"> About </h2>
@@ -21,9 +21,11 @@ the functionality of the VEP:
 </p>
 
 <ul>
-	<li> through the <a href="#web">web interface</a></li>
-	<li> using the standalone <a href="vep_script.html">perl script</a></li>
-	<li> using Ensembl's <a href="/info/docs/api/variation/index.html">perl API</a></li>
+	<li> through the web interface | <a href="#web">Documentation</a> | <a
+href="/[[SPECIESDEFS::ENSEMBL_PRIMARY_SPECIES]]/UserData/UploadVariations"
+class="modal_link">Launch web interface</a></li>
+	<li> using the standalone perl script | <a href="vep_script.html">Documentation</a> | <a href="http://cvs.sanger.ac.uk/cgi-bin/viewvc.cgi/ensembl-tools/scripts/variant_effect_predictor.tar.gz?view=tar&root=ensembl&pathrev=branch-ensembl-66">Download latest version</a></li>
+	<li> using Ensembl's perl API | <a href="/info/docs/api/variation/index.html">Documentation</a></li>
 </ul>
 
 <p>
@@ -46,23 +48,10 @@ this name. Please reference the following publication:
 rel="external">doi:10.1093/bioinformatics/btq330 </a>
 </p>
 
-<h2 id="formats"> Data formats </h2>
-
-<p>
-Both the web and script versions of the VEP use the same data formats as input
-and output. For input, the default is a simple <a
-href="/info/website/upload/var.html#input">tab-delimited format</a>, as is the
-<a href="/info/website/upload/var.html#output">output format</a>. The popular
-VCF (<a href="http://www.1000genomes.org/wiki/Analysis/vcf4.0"
-target="_blank">version 4.0</a>) and pileup formats are also supported as input.
-</p>
-
 <h2 id="web"> Web version </h2>
 
 <p>
-The <a
-href="/[[SPECIESDEFS::ENSEMBL_PRIMARY_SPECIES]]/UserData/UploadVariations"
-class="modal_link">web version</a> of the VEP can be accessed via the <a
+The web version of the VEP can be accessed via the <a
 href="/tools.html">Tools</a> link at the top of each Ensembl web page, or via
 the "Manage your data" link on any species-specific page.
 </p>
@@ -70,8 +59,8 @@ the "Manage your data" link on any species-specific page.
 <h3> Upload form </h3>
 
 <p> When you reach the VEP web interface, you will be presented with a form to
-enter <a href="#formats">your data</a>. Data can be uploaded in one of three
-ways:</p>
+enter <a href="vep_formats.html#input">your data</a>. Data can be uploaded in
+one of three ways:</p>
 
 <ul>
 	<li><b>File upload</b> - click the "Choose file" button and locate the file on your system</li>
@@ -136,11 +125,11 @@ The following options are currently available for human only.
             of a human protein using straightforward physical and comparative
             considerations.</li>
 			<li><b>Condel consensus predictions</b> - <a
-			href="https://bg.upf.edu/forge/projects/condel/wiki/Condel">Condel</a> computes a
-			weighed average of the scores (WAS) of several computational tools aimed
-			at classifying missense mutations as likely deleterious or likely
-			neutral. The VEP currently presents a Condel WAS from SIFT and
-			PolyPhen.</li>
+			href="https://bg.upf.edu/forge/projects/condel/wiki/Condel">Condel</a>
+			computes a weighed average of the scores (WAS) of several
+			computational tools aimed at classifying missense mutations as
+			likely deleterious or likely neutral. The VEP currently presents a
+			Condel WAS from SIFT and PolyPhen.</li>
 		</ul>
 	</li>
 </ul>
@@ -153,14 +142,14 @@ Both formats contain the same information:
 </p>
 
 <ul>
-    <li><b>Text</b> format is useful if you wish to use the output as the input for any
-    other tools.</li>
-    <li><b>HTML</b> presents the same information as the Text format, but formatted for
-    the web with links to genes, transcripts and locations in the Ensembl
-    browser. Links are also provided to genes, transcripts and co-located
-    variations. SIFT, PolyPhen and Condel predictions are coloured according to
-    severity, with red representing high severity, green low severity and blue
-    unknown.</li>
+	<li><b>Text</b> format is useful if you wish to use the output as the input
+	for any other tools.</li>
+	<li><b>HTML</b> presents the same information as the Text format, but
+	formatted for the web with links to genes, transcripts and locations in the
+	Ensembl browser. Links are also provided to genes, transcripts and
+	co-located variations. SIFT, PolyPhen and Condel predictions are coloured
+	according to severity, with red representing high severity, green low
+	severity and blue unknown.</li>
 </ul>
 
 <h3> Viewing your results in the browser </h3>
@@ -171,6 +160,24 @@ view; to view your data, either click a link in the Location column of the HTML
 output, or switch on the track on location view (click "Configure this page",
 then "User attached data" on Region in detail view to see uploaded tracks).
 </p>
+
+<h3> Issues with larger datasets </h3>
+
+<p> The web interface to the VEP has a hard limit of 750 variants in your
+uploaded file. However, it is possible that the tool will not work with fewer
+variants than this, depending on the content of your data and the features you
+switch on. For example, a relatively small file (e.g. 100 variants) may fail to
+return results if every variant in the file falls in a different gene and those
+genes are spread across many chromosomes. Contrastingly, a file containing 500
+variants may return results quickly if those variants all fall in just a few
+genes. </p>
+
+<p> To mitigate this issue, users should consider splitting up their input by
+chromosome and uploading each chromosome's variants as a separate file. The
+problem can also be solved by using the <a href="vep_script.html">VEP script</a>
+- it is a command line tool, but not as hard to use as you might think! It also
+offers many more features than the web interface and is a generally much more
+powerful tool. </p>
 
 </body>
 </html>
