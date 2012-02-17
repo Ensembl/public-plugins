@@ -18,12 +18,11 @@ sub content {
   my $reports = $object->rose_objects('reports');
   my $param   = $object->view_param;
   my $type    = $object->view_type;
-  my $rids    = $object->requested_reports;
 
   return $self->no_healthcheck_found(scalar @{$object->rose_objects('control_reports') || []}) unless $reports && @$reports;
 
   # if no filter selected, display the failure summary table for the given view type
-  if (!$param && !@$rids) {
+  if (!$param) {
     return sprintf('<p class="hc_p">Click on a %s to view details</p>%s', $object->view_title, $self->failure_summary_table({
       'count'         => $self->group_report_counts($reports, [$type])->{$type},
       'type'          => $type,

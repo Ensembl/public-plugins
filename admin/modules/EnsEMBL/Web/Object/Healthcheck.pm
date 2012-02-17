@@ -16,7 +16,6 @@ sub compared_release  { return shift->{'_cmp_release'}; }
 sub available_views   { return {'DBType' => 'database_type', 'Database' => 'database_name', 'Testcase' => 'testcase', 'Species' => 'species', 'Team' => 'team_responsible'}; }
 sub last_session_id   { return shift->_get_session_id('last'); }
 sub first_session_id  { return shift->_get_session_id('first'); }
-sub requested_reports { return shift->{'_report_ids'}; }
 
 sub new {
   my $class = shift;
@@ -30,7 +29,6 @@ sub new {
   $self->{'_req_release'}   = 0 if $self->{'_req_release'} < $self->{'_first_release'} || $self->{'_req_release'} > $self->{'_curr_release'};
   $self->{'_cmp_release'}   = $self->hub->param('release2') || 0;
   $self->{'_cmp_release'}   = 0 if $self->{'_cmp_release'} < $self->{'_first_release'} || $self->{'_cmp_release'} > $self->{'_curr_release'};
-  $self->{'_report_ids'}    = $self->hub->param('rid') ? [ split ',', $self->hub->param('rid') ] : [];
 
   return $self unless $self->{'_req_release'};    # for any invalid release
   return $self unless $self->last_session_id;     # if release is valid, but no healthcheck has been performed for the release
@@ -71,17 +69,11 @@ sub fetch_for_details {
   ## Healthcheck details page
   my $self    = shift;
   
-  my $rids    = $self->requested_reports;
   my $type    = $self->view_type;
   my $param   = $self->view_param;
   my $manager = $self->rose_manager('Report');
-
-  if (@$rids) {
-    $self->rose_objects('reports', $manager->fetch_by_primary_keys($rids, {
-      'with_annotations'  => 1
-    }));
-  }
-  elsif ($type && $param) {
+  
+  if ($type && $param) {
     my $reports = $self->rose_objects('reports', $manager->fetch_for_session({
       'session_id'        => $self->last_session_id,
       'with_annotations'  => 1,

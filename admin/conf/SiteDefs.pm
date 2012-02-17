@@ -32,8 +32,6 @@ sub update_conf {
     HelpRecord      => 'Modal',
     HelpLink        => 'Modal',
 
-    Documents       => 'Page',
-
     Account         => 'Modal',
     UserData        => 'Modal',
     Help            => 'Modal',
@@ -61,13 +59,6 @@ sub update_conf {
     user => 'myuser',
     pass => 'mypassword'
   }];
-  
-  ## Relco docs location
-  $SiteDefs::ENSEMBL_WEBADMIN_DOCUMENTS = [
-#    'RelCoDoc'   => ['Release Coordination Doc',  'path/to/relcodoc.txt'],
-#    'TestCases'  => ['Testcases Doc',             'path/to/textcasesdoc.txt'],
-#    'URLPart'    => ['Document title',            'path/to/xyzdocument.txt']
-  ];
 }
 
 1;

@@ -278,15 +278,6 @@ qq{<div style="width: 85%;border-bottom: 1px solid #CCCCCC; "><a class="notext" 
 );
     }
 
-    if ($species_defs->databases->{'DATABASE_VARIATION'} && $hit->{featuretype} =~ /Gene/) {
-      $html .= qq(
-<dl class="summary">
-  <dt>Variations</dt>
-  <dd><a href="/$hit->{species}/Gene/Variation_Gene/Table?g=$hit->{id}">$hit->{id}</a></dd>
-</dl>
-);
-    }
-
     $html .= qq(
 <dl class="summary">
   <dt>Source</dt>

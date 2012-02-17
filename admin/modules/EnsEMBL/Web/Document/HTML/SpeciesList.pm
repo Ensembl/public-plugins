@@ -15,15 +15,7 @@ sub render {
     $html = qq(
 <h2>Healthchecks</h2>
 <ul>
-  <li><a href="/Healthcheck/Summary">Healthcheck summary</a>
-    <ul>
-      <li><a href="/Healthcheck/Details/Species">Species</a></li>
-      <li><a href="/Healthcheck/Details/DBType">Database type</a></li>
-      <li><a href="/Healthcheck/Details/Database">Database name</a></li>
-      <li><a href="/Healthcheck/Details/Testcase">Testcase</a></li>
-      <li><a href="/Healthcheck/Details/Team">Team responsible</a></li>
-    </ul>
-  </li>
+  <li><a href="/Healthcheck/Summary">Healthcheck summary</a></li>
   <li><a href="/Healthcheck/Database">List of databases</a></li>
 </ul>
 );
