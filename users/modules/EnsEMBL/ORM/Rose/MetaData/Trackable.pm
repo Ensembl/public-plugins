@@ -40,6 +40,9 @@ sub setup {
 
 sub is_trackable {
   ## @overrides
+  ## @param Optional - column/relationship object/name - if checking whether the given column/relationship is among the columns/relationships that contains trackable info
+  my $self = shift;
+  return (ref $_[0] ? $_[0]->name : $_[0]) =~ /^(created|modified)_(by_user|at|by)$/ ? 1 : 0 if @_;
   return 1;
 }
 
