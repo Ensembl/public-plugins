@@ -24,7 +24,7 @@ sub test_variation {
     $sel->ensembl_click_links(["link=Variation ($variation_text)"],'20000');
     $sel->ensembl_is_text_present("Variation: $variation_text");
     
-    $sel->ensembl_click_links(["link=Gene/Transcript*", "link=Population genetics*", "link=Individual genotypes*","link=Genomic context"],'20000');
+    $sel->ensembl_click_links(["link=Genes and regulation*", "link=Population genetics*", "link=Individual genotypes*","link=Genomic context"],'20000');
     
     #TODO Test the Show table link
     
