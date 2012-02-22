@@ -116,7 +116,8 @@ sub test_faq {
   my @skip_link = ("Home", "contact our HelpDesk", "developers' mailing list");
   
   $sel->ensembl_click_ok("link=FAQs",'50000')
-  and $sel->select_pop_up_ok  
+  and $sel->wait_for_pop_up_ok("", "5000")
+  and $sel->select_window_ok("name=popup_selenium_main_app_window")  #thats only handling one popup with no window name cannot be used for multiple popups
   and $sel->ensembl_click_all_links(".content", \@skip_link, 'More FAQs');
 }
 
