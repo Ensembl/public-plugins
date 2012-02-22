@@ -56,7 +56,7 @@ sub test_gene {
     if(lc($self->species) eq 'homo_sapiens') {      
       $sel->ensembl_open_zmenu('RegulationImage','class^="group"');
       $sel->ensembl_click("link=ENSR*")
-      and $sel->ensembl_wait_for_ajax_ok('50000','2000')
+      and $sel->ensembl_wait_for_ajax_ok('50000','2000');
       $sel->go_back();
     }
 
