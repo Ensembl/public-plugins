@@ -23,22 +23,10 @@ my $species_defs = EnsEMBL::Web::SpeciesDefs->new;
 ## Use a private registry for this class
 __PACKAGE__->use_private_registry;
 
-## Set the default domain & type
+## Set the default domain
 __PACKAGE__->default_domain('ensembl');
-__PACKAGE__->default_type('user');
 
-## Register data source for users
-__PACKAGE__->register_db(
-  type      => 'user',
-  driver    => 'mysql',
-  database  => $species_defs->ENSEMBL_USERDB_NAME,
-  host      => $species_defs->ENSEMBL_USERDB_HOST,
-  port      => $species_defs->ENSEMBL_USERDB_PORT,
-  username  => $species_defs->ENSEMBL_USERDB_USER || $species_defs->DATABASE_WRITE_USER,
-  password  => $species_defs->ENSEMBL_USERDB_PASS || $species_defs->DATABASE_WRITE_PASS,
-);
-
-## Register other data sources from site defs
+## Register data sources from site defs
 while (my ($key, $details) = each %{$SiteDefs::ROSE_DB_DATABASES}) {
 
   my $params = $details;
