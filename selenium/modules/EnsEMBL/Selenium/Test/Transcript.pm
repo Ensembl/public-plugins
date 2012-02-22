@@ -36,8 +36,8 @@ sub test_transcript {
     if(lc($self->species) eq 'homo_sapiens') {
       $sel->ensembl_open_zmenu('TranscriptImage','title^="Transcript:"');
       $sel->ensembl_click("link=ENSG*")
-      and $sel->ensembl_wait_for_ajax_ok('50000','5000')
-      and $sel->go_back();
+      and $sel->ensembl_wait_for_ajax_ok('50000','5000');
+      $sel->go_back();
     }
 
     $sel->ensembl_click_links(["link=Supporting evidence*"]) if(!(lc($self->species) eq 'caenorhabditis_elegans' || lc($self->species) eq 'drosophila_melanogaster' || lc($self->species) eq 'saccharomyces_cerevisiae')); #for now that will do
