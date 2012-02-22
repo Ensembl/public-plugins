@@ -57,7 +57,7 @@ sub test_gene {
       $sel->ensembl_open_zmenu('RegulationImage','class^="group"');
       $sel->ensembl_click("link=ENSR*")
       and $sel->ensembl_wait_for_ajax_ok('50000','2000')
-      and $sel->go_back();
+      $sel->go_back();
     }
 
     my ($alignment_count,$multi_species_count) = $self->alignments_count($SD);
@@ -78,11 +78,10 @@ sub test_gene {
     and $sel->go_back() if(lc($self->species) eq 'homo_sapiens'); #testing for human only as this is opening too many java applet and making the server slow
 
     $sel->pause(1000);
-    $sel->ensembl_click_links(["link=all proteins in family"],'20000') if($counts->{'families'});
-    
+    $sel->ensembl_click_links(["link=all proteins in family"],'20000') if($counts->{'families'});    
     $sel->ensembl_click_links(["link=Phenotype"]);
     
-    if(lc($self->species) eq 'homo_sapiens') {
+    if(lc($self->species) eq 'homo_sapiens') {      
       $sel->ensembl_click("link=view all locations")
       and $sel->ensembl_wait_for_page_to_load
       and $sel->go_back();     
