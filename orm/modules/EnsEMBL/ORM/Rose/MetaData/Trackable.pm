@@ -3,6 +3,8 @@ package EnsEMBL::ORM::Rose::MetaData::Trackable;
 ## Name: EnsEMBL::ORM::Rose::MetaData::Trackable
 ## MetaData class for all Trackable rose Objects
 
+## Status: Dont edit -  will be moved to 'users' plugin soon
+
 use strict;
 
 use base qw(EnsEMBL::ORM::Rose::MetaData);

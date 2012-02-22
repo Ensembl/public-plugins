@@ -4,6 +4,8 @@ package EnsEMBL::ORM::Rose::Object::Trackable;
 
 ### DESCRIPTION: ORM parent class for any table that contains columns 'created_by','modified_by' (both user_id foreign keys), 'created_at' and 'modified_at'
 
+### Status: Dont edit, will be moved to 'users' plugin soon
+
 use strict;
 use warnings;
 
