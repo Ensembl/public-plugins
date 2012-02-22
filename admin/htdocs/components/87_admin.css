@@ -65,7 +65,7 @@ div.list_bullet, div.list_alphabet, div.list_number {
 }
 
 /*div.list_bullet */
-div.list_element > p.document_p, div.list_element > document_div {
+div.list_element > p.document_p, div.list_element > div.document_div {
   display: list-item;
   line-height: 20px;
 }
