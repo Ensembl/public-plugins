@@ -77,7 +77,7 @@ sub add_track {
   my $sel  = $self->sel;
     
   $self->upload_data;   #BED
-  $self->upload_data('BEDGRAPH', 'bedGraph', undef, 'http://www.ensembl.org/info/website/upload/sample_files/bedgraph_example.bed' ); #bedgraph format  
+  $self->upload_data('BEDGRAPH', 'BEDGRAPH', undef, 'http://www.ensembl.org/info/website/upload/sample_files/bedgraph_example.bed' ); #bedgraph format  
   $self->upload_data('GFF', 'GFF', undef, 'http://www.ensembl.org/info/website/upload/sample_files/example.gff' ); #GFF format
   $self->upload_data('GTF', 'GTF', undef, 'http://www.ensembl.org/info/website/upload/sample_files/example.gtf' ); #GTF format
   $self->upload_data('PSL', 'PSL', undef, 'http://www.ensembl.org/info/website/upload/sample_files/example.psl' ); #PSL format
@@ -115,7 +115,7 @@ sub add_track {
   and $sel->ensembl_wait_for_ajax_ok(undef,5000)   
   #and $sel->ensembl_is_text_present("Click on the image above to jump to a chromosome, or click and drag to select a region")
   and $sel->ensembl_is_text_present("BED")            #making sure karyotype displayed the track for the uploaded data(track name in the uploaded file)
-  and $sel->ensembl_is_text_present("bedGraph")
+  and $sel->ensembl_is_text_present("BEDGRAPH")
   and $sel->ensembl_is_text_present("GFF")
   and $sel->ensembl_is_text_present("GTF")
   and $sel->ensembl_is_text_present("PSL")
