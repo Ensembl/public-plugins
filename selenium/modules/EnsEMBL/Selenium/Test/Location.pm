@@ -37,7 +37,8 @@ sub test_location {
       $self->turn_track("Germline variation","//form[\@id='location_viewbottom_configuration']/div[6]/div[7]/ul[2]/li/img", "on", "decipher");
       
       #simulate ZMenu for this track (decipher)
-      $sel->ensembl_open_zmenu('ViewBottom',"href*=decipher","Decipher track");      
+      $sel->pause(5000); #pausing a bit to make sure the location panel loads fine from adding the track
+      $sel->ensembl_open_zmenu('ViewBottom',"href*=decipher","Decipher track");
       $sel->ensembl_is_text_present("decipher:");
       
       #Test attach das
