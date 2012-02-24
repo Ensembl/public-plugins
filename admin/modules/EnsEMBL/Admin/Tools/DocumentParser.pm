@@ -2,13 +2,19 @@ package EnsEMBL::Admin::Tools::DocumentParser;
 
 ### Rules for file formatting
 ### Three hashes, ### in the begining of a line create a new section
-### Two hashes, ## in the begining of a line create a new heading. Number of stats, * after # tells the level of heading
+### Two hashes, ## in the begining of a line create a new heading. Number of stars, * after # tells the level of heading
 ### Anything else starting with # is ignored
 ### Bullets and numbering:
 ### Lines with *, - or ~ in the begining, just after the indent are considered as list statements
 ### Indents can be increased and decreased by a differnce of 2 to actually increase the indent in the output document
 ### If total indent is odd, it's considered as code
-### Anything with [html] in the front is not parsed and saved as html
+### Anything with [html] in the beginning without any indent is not parsed but printed as html
+### [email]abc@example.com[/email] is printed as <a href="mailto:abc@example.com">abc@example.com</a>
+### [email=abc@example.com]EXAMPLE[/email] is printed as <a href="mailto:abc@example.com">EXAMPLE</a>
+### [url]www.ensembl.org[/url] is printed as <a href="http://www.ensembl.org">www.ensembl.org</a>
+### [url=http://www.ensembl.org]ensembl[/url] is printed as <a href="http://www.ensembl.org">ensembl</a>
+### Bold and italic text can be printed by wrapping it in [b][/b] & [i][/i] tags respectively
+### In-line code can be printed by wrapping it in [code][/code] tags
 
 use strict;
 use warnings;
