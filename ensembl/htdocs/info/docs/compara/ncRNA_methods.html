@@ -1,0 +1,54 @@
+<html>
+  <head>
+    <title>ncRNA orthologies</title>
+    <meta name="author" content="web" />
+    <meta name="navitagion" content="Comparative Genomics" />
+  </head>
+  <body>
+    <h1>ncRNA orthology determination</h1>
+    <h2>ncRNA trees</h2>
+    <p>
+      The detection of orthologies and paralogies for short ncRNA genes are generated
+      by a pipeline that applies an strategy similar to the one explained for
+      <a href="homology_method.html">Gene Trees</a> but adapter to the specific
+      characteristics of ncRNAs like conserved secondary structure of the RNA.
+    </p>
+
+    <p>
+      <pre>
+      Reference:
+      ncRNA orthologies in the vertebrate linage.
+      Pignatelli M, Vilella AJ, Gordon L, Flicek P and Herrero J.
+      Manuscript in preparation
+      </pre>
+    </p>
+
+    <p>
+      Traditionally homology inference studies have focused on protein-coding genes but there is an increasing interest in applying similar analysis to ncRNA genes. However, evolutionary models used for protein-coding genes assume the positions in the protein evolve independently. NcRNA genes are well known to form secondary structures where pairs of residues are matched to form loops and other structures. Substitution models that consider pairs of sites have been proposed and implemented in several packages like PHASE or RAxML.
+    </p>
+
+    <p>The ncRNA tree pipeline has the following steps:</p>
+    <img src="ncRNAtree.png" width=300/>
+    <ol>
+      <li>Get and store ncRNA Family Models from RFAM</li>
+      <li>Load and identification of all the ncRNA members annotated in all the EnsEMBL genomes</li>
+      <li>Filter out extra copies in low-coverage assemblies usin our <a href="analyses.html">EPO multiple alignments</a></li>
+      <li>Secondary structure alignment using <a href="http://infernal.janelia.org/">INFERNAL</a> and refinement of the covariance model</li>
+      <li>ncRNA trees with <a href="http://sco.h-its.org/exelixis/software.html">RAxML</a> using 16 different secondary structure models</li>
+      <li>In parallel with the secondary structure alignments and trees we performed multiple alignments with <a href="http://www.ebi.ac.uk/goldman-srv/prank/prank/">PRANK</a> of the genomic sequences of ncRNAs. For these alignments we extend the nucleotide sequence of the ncRNA gene with twice its length at both sides of the gene. This context is extracted from our <a href="analyses.html">EPO</a> multiple alignments. Prank is a phylogenetically-aware multiple sequence aligner that relies heavily on the phylogenetic tree among the sequences being aligned. It is feed with a phylogenetic tree built with RAxML using the GTRGAMMA model.</li>
+      <li>The genomic alignments are used to build a neighbour-joining (NJ) and a maximum-likelihood (ML) trees using <a href="http://treesoft.sourceforge.net/treebest.shtml">TreeBeST</a>.</li>
+      <li>The number of ncRNA genes we have per model is extremely variable. Some of the families are are too large to build the trees in a reasonable amount of time compatible with the EnsEMBL release cycle. For those families we build fast trees alternatives using <a href="http://www.microbesonline.org/fasttree/">FastTree</a> and <a href="http://sco.h-its.org/exelixis/software.html">RAxML-Light</a></li>
+      <li>For each family we add the species tree to the set of trees already obtained and reconcile them all using <a href="http://treesoft.sourceforge.net/treebest.shtml">TreeBeST</a> obtaining one final tree for each family.</li>
+      <img src="Tree_reconciliation.png" width=500/>
+      <li>The reconciled trees are used to infer orthology and paralogy relationships by comparing each pair of genes in each tree. The possible homology types are:
+	<ul>
+	  <li><strong>Paralogs</strong> - Two genes are from different species, no ancestral duplication events are found and these genes are only copies of the ancestor for their species</li>
+	  <li><strong>One-to-one Orthologs</strong> - Two genes are from different species, no ancestral duplication events are found and these genes are only copies of the ancestor for their species</li>
+	  <li><strong>Apparent Orthologs one-to-one</strong> - The two genes are from different species but there is evidence for duplication events elsewhere in the history even though these two genes are the only remaining representatives of the ancestor</li>
+	  <li><strong>One-to-many Orthologs</strong> - Two genes are from different species, there is evidence for duplication events in the history of the gene, one of the genes is the only remaining representative of the ancestor in its species but the other gene has multiple copies in its species</li>
+	  <li><strong>Possible orthologs</strong> - Two genes are from different species but there is evidence for duplication events in the history of the gene.</li>
+	</ul>
+	More information about these relationships can be found in the <a href="homology_method.html">Gene Trees</a> documentation.
+    </ol>
+</body>
+</html>
