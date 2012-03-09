@@ -46,7 +46,7 @@ sub populate_tree {
 
   $self->create_node( 'List', 'List all',
     [qw(list EnsEMBL::Admin::Component::Changelog::List)],
-    { 'availability' => 1 }
+    { 'availability' => 1, 'filters' => ['WebAdmin']}
   );
 
   $self->create_node( 'ListReleases', 'List all releases',
@@ -59,7 +59,7 @@ sub populate_tree {
     { 'availability' => 1, 'filters' => ['WebAdmin'], 'no_menu_entry' => 1 }
   );
 
-  $self->create_dbfrontend_node({$_        => {'filters' => ['WebAdmin']}}) for qw(Select/Edit Select/Delete Add Edit Duplicate Preview Problem Confirm Save Delete);
+  $self->create_dbfrontend_node({$_ => {'filters' => ['WebAdmin']}}) for qw(Select/Edit Select/Delete Add Edit Duplicate Preview Problem Confirm Save Delete);
   
 }
 
