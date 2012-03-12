@@ -1,3 +1,37 @@
+.admin-plain-box, .admin-left-box, .admin-right-box {
+  padding: 10px;
+  margin: 10px 0;
+}
+
+.admin-left-box {
+  float: left;
+  width: 400px;
+  margin-top: 0;
+}
+
+.admin-right-box {
+  margin-left: 432px;
+}
+
+.admin-species {
+  overflow: hidden;
+}
+
+.admin-species-grid {
+  float: left;
+  padding: 10px;
+  width: 250px;  
+}
+
+.admin-species-grid img {
+  float: left;
+  margin-right: 4px;
+}
+
+.admin-species-grid span {
+  font-weight: bold;  
+}
+
 .ts-spinner {
   border: 1px solid [[NEUTRAL_BG]];
   clear: both;
