@@ -51,7 +51,7 @@ sub populate_tree {
 
   $self->create_node( 'ListReleases', 'List all releases',
     [qw(releaselist EnsEMBL::Admin::Component::Changelog::ListReleases)],
-    { 'availability' => 1 }
+    { 'availability' => 1, 'filters' => ['WebAdmin']}
   );
 
   $self->create_node( 'Display', 'Display',
