@@ -437,7 +437,7 @@ Prediction matrices for each translation from each of SIFT and PolyPhen are stor
 is identified in the <i>analysis_attrib_id</i> column which refers to a value stored in the
 <i>attrib</i> table, and the protein sequence the predictions
 apply to is identified by the <i>translation_md5_id</i> column which refers to a hexadecimal 
-MD5 hash of the corresponding peptide sequences stored in the <i>translation_md5</i>. The 
+MD5 hash of the sequence stored in the <i>translation_md5</i> table. The 
 prediction matrices are stored in the <i>prediction_matrix</i> column as a gzip compressed binary string.
 Once uncompressed, this string contains a 40 byte substring for each row in the matrix
 concatenated together in position order. Each row is composed of 20 2-byte predictions, 
