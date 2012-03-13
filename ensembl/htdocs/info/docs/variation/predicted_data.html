@@ -433,13 +433,12 @@ binary format used below.
 
 <p>
 Prediction matrices for each translation from each of SIFT and PolyPhen are stored in the 
-<i>protein_function_predictions</i> table, in the <i>polyphen_predictions</i> or 
-<i>sift_predictions</i> columns. The other columns in this table identify the stable ID of 
-the Ensembl translation for each
-protein coding transcript, the stable ID of the transcript itself, and a hexadecimal 
-MD5 hash of the amino acid sequence of the translation. This can be used to ensure 
-the predictions apply to the correct translation sequence. The prediction matrices are stored in the 
-<i>sift_predictions</i> and <i>polyphen_predictions</i> columns as a gzip compressed binary string.
+<i>protein_function_predictions</i> table. The analysis used to calculate the predictions
+is identified in the <i>analysis_attrib_id</i> column which refers to a value stored in the
+<i>attrib</i> table, and the protein sequence the predictions
+apply to is identified by the <i>translation_md5_id</i> column which refers to a hexadecimal 
+MD5 hash of the corresponding peptide sequences stored in the <i>translation_md5</i>. The 
+prediction matrices are stored in the <i>prediction_matrix</i> column as a gzip compressed binary string.
 Once uncompressed, this string contains a 40 byte substring for each row in the matrix
 concatenated together in position order. Each row is composed of 20 2-byte predictions, 
 one for each possible alternative amino acid in alphabetical order, though note that the 
@@ -509,8 +508,8 @@ is the number 906, which when divided by 1000, gives a score of 0.906.
 <p>
 To retrieve a prediction for a particular amino acid substitution at a given position
 in a translation, first you must retrieve the binary matrix from the database and
-uncompress it using gzip. You can then calculate the offset into this string by multiplying 
-the desired position (starting at 0) by the index of the desired amino acid in an alphabetical ordering of
+uncompress it using gzip. You can calculate the offset into this string by multiplying 
+the desired position (starting at 0) by 20 and then adding the index of the desired amino acid in an alphabetical ordering of
 amino acids (also starting at 0), and then multiply this value by 2 to take into account the fact that each 
 prediction uses 2 bytes. Each matrix also includes a 3 byte header used check if the data is corrupted etc. so
 you will also need to add 3 to the calculated offset. The 2 bytes at the calculated position 
