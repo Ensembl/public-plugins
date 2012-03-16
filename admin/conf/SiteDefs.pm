@@ -9,11 +9,6 @@ sub update_conf {
 
   ## Allowable data objects
   $SiteDefs::OBJECT_TO_SCRIPT = {
-    Config          => 'Config',
-    Component       => 'Component',
-    ZMenu           => 'ZMenu',
-
-    Search          => 'Page',
 
     Healthcheck     => 'Page',
 
@@ -35,8 +30,6 @@ sub update_conf {
     Documents       => 'Page',
 
     Account         => 'Modal',
-    UserData        => 'Modal',
-    Help            => 'Modal',
   };
 
   $SiteDefs::ENSEMBL_BLAST_ENABLED  = 0;
