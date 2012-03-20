@@ -24,20 +24,27 @@ sub content {
   foreach my $record (@$records) {
     foreach my $groupby (qw(web_data_id analysis_description_id species_id db_type)) {
       my $val = $record->$groupby;
-      push @{$groups->{$groupby}{$_ || '0'} ||= []}, $record for ref $val eq 'ARRAY' ? @$val : $val;
+      for (ref $val eq 'ARRAY' ? @$val : $val) {
+        if (!$groups->{$groupby}{$_ || '0'}) {
+          (my $method = $groupby) =~ s/_id$//;
+          $groups->{$groupby}{$_ || '0'} = {'title' => $self->get_printable($record->$method)};
+        }
+        push @{$groups->{$groupby}{$_ || '0'}{'records'} ||= []}, $record;
+      }
     }
   }
 
   ## Iterate through the data structure to print the list
   foreach my $key (sort keys %$groups) {
 
+    my $group   = $groups->{$key};
     (my $method = $key) =~ s/_id$//;
 
     $buttons->append_child('a', {'class' => '_ts_button ts-button', 'href' => "#$method", 'inner_HTML' => join(' ', map {(ucfirst $_)} split '_', $method)});
     my $tab = $tabs->append_child('div', {'class' => '_ts_tab ts-tab prod-list'});
     my @bg  = qw(bg1 bg2);
 
-    for (sort keys %{$groups->{$key}}) {
+    for (sort {$group->{$a}{'title'} cmp $group->{$b}{'title'}} keys %$group) {
 
       ## add to the list
       $tab->append_child('div', {
@@ -45,9 +52,9 @@ sub content {
         'inner_HTML'  => sprintf(
           '<span%s>%s</span> (<a href="%s">%d records</a>)',
           $method eq 'web_data' ? ' class="_datastructure"' : '',
-          $method eq 'db_type'  ? $_ : $self->get_printable($groups->{$key}{$_}[0]->$method),
+          $group->{$_}{'title'},
           $hub->url({'action' => 'LogicName', $key => $_}),
-          scalar @{$groups->{$key}{$_}}
+          scalar @{$group->{$_}{'records'}}
         )
       });
 
