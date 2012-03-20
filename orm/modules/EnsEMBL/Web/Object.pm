@@ -114,8 +114,27 @@ sub save {
 }
 
 sub delete {
-  ## TODO
-  warn "Delete is not supported. Instead, use 'retire' to flag the row as inactive";
+  ## Deletes the data from the database
+  ## @param Key for the rose objects - optional - defaults to the primary rose objects
+  ## @return ArrayRef of flags corresponding to each rose objects
+  my ($self, $type) = @_;
+
+  my $flags = [];
+
+  ## reset errors
+  $self->{'_rose_error'} = [];
+
+
+  for (@{$self->rose_objects($type || '0')}) {
+
+    if ($_->delete('cascade' => 0)) {
+      push @$flags, 1;
+    }
+    else {
+      push @{$self->{'_rose_error'}}, $_->error;
+    }
+  }
+  return $flags;
 }
 
 sub retire {
@@ -126,20 +145,30 @@ sub retire {
   
   my $objs = [];
 
+  ## reset errors
+  $self->{'_rose_error'} = [];
+
   my %user = ('user' => $self->hub->user);
 
   for (@{$self->rose_objects($type || '0')}) {
     my $meta    = $_->meta;
     my $column  = $meta->inactive_flag_column;
     my $value   = $meta->inactive_flag_value;
-    if ($column) {
-      $_->$column($value);
-      if (my $obj = $_->save('changes_only' => 1, $meta->is_trackable ? %user : ())) {
-        push @$objs, $obj;
-      }
-      else {
-        push @{$self->{'_rose_error'}}, $_->error;
-      }
+
+    unless ($column) {
+      my $rose_object_type = ref $_;
+      warn sprintf('Could not retire object of type %s. Either specify an "inactive_column" in %1$s::meta_setup() or return '.
+        '"delete" from %s->permit_delete() so that it can be deleted from the database permanently.', $rose_object_type, ref $self);
+      push @{$self->{'_rose_error'}}, sprintf('Could not inactivate %s (%s)', $rose_object_type =~ /([^\:]+)$/, $_->get_primary_key_value);
+      next;
+    }
+
+    $_->$column($value);
+    if (my $obj = $_->save('changes_only' => 1, $meta->is_trackable ? %user : ())) {
+      push @$objs, $obj;
+    }
+    else {
+      push @{$self->{'_rose_error'}}, $_->error;
     }
   }
   return $objs;
