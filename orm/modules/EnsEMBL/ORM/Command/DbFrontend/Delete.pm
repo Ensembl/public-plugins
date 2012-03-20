@@ -15,8 +15,9 @@ sub process {
   my $object  = $self->object;
   my $hub     = $self->hub;
   my $done    = $object->delete;
+  my $errors  = $object->rose_errors;
 
-  $self->ajax_redirect($self->hub->url($done && @$done ? {'action' => 'Display'} : {'action' => 'Problem', 'error' => $object->rose_error}));
+  $self->ajax_redirect($self->hub->url($done && @$done && !@$errors ? {'action' => 'Display'} : {'action' => 'Problem', 'error' => join('. ', @$errors)}));
 }
 
 1;
