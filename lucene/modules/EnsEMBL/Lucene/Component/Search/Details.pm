@@ -177,11 +177,19 @@ sub _render_help_results {
 
 #    my $url                = $hit->{featuretype} =~ /Glossary|FAQ|View/ ?  $hit->{feature_url} : $hit->{feature_url};
     my $url = $hit->{feature_url} || $hit->{url};
+
     $url =~ s{http://.*?/}{};
 
     my $species = $hit->{species};
 
     my $hit_tagline = $hit->{title} || $hit->{displayname};
+
+    unless ($hit_tagline) {
+      if ($url =~ /pdf$/) {
+        ($hit_tagline) = $url =~ /\/(\w+.pdf)$/;
+        $hit_tagline ||= 'PDF download';
+      }
+    }
 
     $html .=
       qq{<div style="width: 85%;border-bottom: 1px solid #CCCCCC; "><a class="notext" href="/$url">$hit_tagline</a></div>};
