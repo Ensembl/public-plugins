@@ -128,6 +128,7 @@ sub delete {
   for (@{$self->rose_objects($type || '0')}) {
 
     if ($_->delete('cascade' => 0)) {
+      warn sprintf('Delete log: %s removed %s (%s) %s', $self->hub->user->email, ref $_, $_->get_title, "\n");  # this is the only way to trace who removed the data
       push @$flags, 1;
     }
     else {
