@@ -31,6 +31,7 @@ sub new {
   my $method  = lc "fetch_for_".($self->action || $self->default_action);
 
   ($self->can($method) or $method = lc "fetch_for_".$self->default_action and $self->can($method)) and $self->$method;
+
   return $self;
 }
 
@@ -112,6 +113,26 @@ sub fetch_for_select {
   $params->{'sort_by'}  ||= $self->_get_sort_by_column;
 
   $self->rose_objects($manager->get_objects(%$params));
+}
+
+sub fetch_for_problem {
+  ## Dummy method to ignore fetching anything from db for problem page
+}
+
+sub fetch_for_confirm {
+  ## Fetches the requried object to be deleted/retired from the database
+  my $self = shift;
+
+  my $id = $self->hub->param('id') or return;
+
+  $self->rose_objects($self->manager_class->fetch_by_primary_key($id));
+}
+
+sub fetch_for_delete {
+  ## Fetches the requried object to be deleted/retired from the database
+  ## Since deleting is done with rose object's method delete(cascade => 1), any related object fetched in this method along with the actual object will also be deleted
+  ## So override this method to provide extra hashref with key 'with_objects' to fetch_by_primary_key method if cascade deletion is required
+  shift->fetch_for_confirm;
 }
 
 sub _fetch_all {
