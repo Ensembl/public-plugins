@@ -22,9 +22,8 @@ sub update_conf {
   $SiteDefs::__species_aliases{ 'Echinops_telfairi'                 } = [qw(et etel echinops tenrec)];
   $SiteDefs::__species_aliases{ 'Equus_caballus'                    } = [qw(ec horse)];
   $SiteDefs::__species_aliases{ 'Erinaceus_europaeus'               } = [qw(ee eeur hedgehog)];
-  $SiteDefs::__species_aliases{ 'Gorilla_gorilla'                   } = [qw(ggo kong gorilla)]; 
+  $SiteDefs::__species_aliases{ 'Gorilla_gorilla'                   } = [qw(gg ggo ggor kong gorilla)]; 
   $SiteDefs::__species_aliases{ 'Felis_catus'                       } = [qw(fc fcat cat)];
-  $SiteDefs::__species_aliases{ 'Gorilla_gorilla'                   } = [qw(gg ggor gorilla kong)]; 
   $SiteDefs::__species_aliases{ 'Homo_sapiens'                      } = [qw(hs hsap human man default)]; 
   $SiteDefs::__species_aliases{ 'Latimeria_chalumnae'               } = [qw(lc ltch coelacanth living fossil)];
   $SiteDefs::__species_aliases{ 'Loxodonta_africana'                } = [qw(la lafr elephant africana loxodontai hathi nellie dumbo)];
@@ -45,7 +44,7 @@ sub update_conf {
   $SiteDefs::__species_aliases{ 'Pteropus_vampyrus'                 } = [qw(pv megabat flyingfox)];
   $SiteDefs::__species_aliases{ 'Rattus_norvegicus'                 } = [qw(rn rnor rat)];
   $SiteDefs::__species_aliases{ 'Sarcophilus_harrisii'              } = [qw(sh devil tasmanian devil)];
-  $SiteDefs::__species_aliases{ 'Sorex_araneus'                     } = [qw(sa shrew)];
+  $SiteDefs::__species_aliases{ 'Sorex_araneus'                     } = [qw(sa)];
   $SiteDefs::__species_aliases{ 'Spermophilus_tridecemlineatus'     } = [qw(st stri squirrel spermophilus)];
   $SiteDefs::__species_aliases{ 'Sus_scrofa'                        } = [qw(ss sscr pig sus oink porky)];
   $SiteDefs::__species_aliases{ 'Tarsius_syrichta'                  } = [qw(ts tarsier gremlin)];
@@ -53,7 +52,7 @@ sub update_conf {
   $SiteDefs::__species_aliases{ 'Tursiops_truncatus'                } = [qw(tt dolphin flipper)];
   $SiteDefs::__species_aliases{ 'Vicugna_pacos'                     } = [qw(lp alpaca)];
 #-------------------- birds
-  $SiteDefs::__species_aliases{ 'Gallus_gallus'                     } = [qw(gg ggal chicken)];
+  $SiteDefs::__species_aliases{ 'Gallus_gallus'                     } = [qw(ggal chicken)];
   $SiteDefs::__species_aliases{ 'Meleagris_gallopavo'               } = [qw(mg mgal turkey meleagris)];
   $SiteDefs::__species_aliases{ 'Taeniopygia_guttata'               } = [qw(tg taegut taeniopygia zebrafinch)];
 #-------------------- fish
@@ -77,7 +76,7 @@ sub update_conf {
   $SiteDefs::__species_aliases{ 'Caenorhabditis_elegans'            } = [qw(ce cele worm elegans)];
   $SiteDefs::__species_aliases{ 'Ciona_intestinalis'                } = [qw(ci cint seasquirti cionai)];
   $SiteDefs::__species_aliases{ 'Ciona_savignyi'                    } = [qw(cs csav seasquirts cionas)];
-  $SiteDefs::__species_aliases{ 'Petromyzon_marinus'                } = [qw(pm lamprey sea lamprey )];
+  $SiteDefs::__species_aliases{ 'Petromyzon_marinus'                } = [qw(pm lamprey sealamprey )];
 #-------------------- yeast
   $SiteDefs::__species_aliases{ 'Saccharomyces_cerevisiae'          } = [qw(sc scer yeast saccharomyces )];
 }
