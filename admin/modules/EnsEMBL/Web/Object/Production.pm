@@ -104,8 +104,7 @@ sub record_name {
 
 sub permit_delete {
   ## @overrides
-  ## Record can not be deleted, but can be set inactive
-  return 'retire';
+  return 'delete';
 }
 
 sub pagination {
