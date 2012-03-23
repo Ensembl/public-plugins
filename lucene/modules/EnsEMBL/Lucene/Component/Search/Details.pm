@@ -189,6 +189,9 @@ sub _render_help_results {
         ($hit_tagline) = $url =~ /\/(\w+.pdf)$/;
         $hit_tagline ||= 'PDF download';
       }
+      else {
+        $hit_tagline = $url;
+      }
     }
 
     $html .=
