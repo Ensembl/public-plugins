@@ -192,12 +192,12 @@ sub count {
 sub create_empty_object {
   ## Creates an new instance of the object class
   ## @param Rose::Object drived object (or object class) for reference (optional)
+  ## @param Hash of name value pair for the params to construct the new object with
   ## @return Rose::Object drived object
-  my ($self, $object) = @_;
+  my ($self, $object, $params) = @_;
 
-  my $object_class = $object ? ref $object || $object : $self->object_class;
-
-  return $object_class->new;
+  $params = $object and $object = undef if ref $object eq 'HASH';
+  return ($object ? ref $object || $object : $self->object_class)->new(%$params);
 }
 
 sub is_trackable {
