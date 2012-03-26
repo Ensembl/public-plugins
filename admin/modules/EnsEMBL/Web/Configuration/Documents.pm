@@ -17,6 +17,10 @@ sub populate_tree {
     [ 'view' => 'EnsEMBL::Admin::Component::Documents::View' ],
     { 'availability' => 1, 'filters' => ['WebAdmin'] }
   );
+
+  $self->create_node('Update', 'Update', [],
+    { 'command' => 'EnsEMBL::Admin::Command::Documents::Update', 'availability' => 1, 'filters' => ['WebAdmin'], 'no_menu_entry' => 1 }
+  );
 }
 
 1;
