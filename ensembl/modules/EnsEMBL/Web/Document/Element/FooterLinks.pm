@@ -9,9 +9,9 @@ use base qw(EnsEMBL::Web::Document::Element);
 sub content {
   return qq(
     <div class="twocol-right right unpadded print_hide">
-      <a href="/info/about/intro.html" class="constant">About&nbsp;Ensembl</a> | 
-      <a href="/info/about/contact/" class="constant">Contact&nbsp;Us</a> | 
-      <a href="/info/website/help/" class="constant">Help</a> 
+      <a href="http://www.ensembl.org/info/about/intro.html" class="constant">About&nbsp;Ensembl</a> | 
+      <a href="http://www.ensembl.org/info/about/legal/privacy.html" class="constant">Privacy&nbsp;Policy</a> | 
+      <a href="http://www.ensembl.org/info/about/contact/" class="constant">Contact&nbsp;Us</a>
     </div>
     <div class="twocol-right right unpadded screen_hide_block">
       helpdesk\@ensembl.org
