@@ -21,6 +21,7 @@ use warnings;
 
 use EnsEMBL::Web::DOM;
 use EnsEMBL::Web::Exceptions;
+use EnsEMBL::Admin::Tools::FileHandler qw(file_get_contents);
 
 use Exporter qw(import);
 our @EXPORT     = qw(parse_file file_to_htmlnodes);
@@ -28,21 +29,17 @@ our %LIST_STYLE = qw(number \* bullet \- alphabet \~);
 
 sub parse_file {
   ## Parses a file to a data structure
-  ## @param File location string
+  ## @param File location string or ArrayRef of lines of file
   ## @return ArrayRef of parsed file
-  my $file_location = shift;
-
+  my $file          = shift;
+  $file             = [ file_get_contents($file) ] unless ref $file;
   my $section_name  = '__';
   my $pointer       = new_block(undef, {'category' => 'section'});
   my @parsed_file   = ($section_name => $pointer);
   my $line_number   = 0;
   my $list_types    = {%LIST_STYLE};
 
-  open FILE, "<", $file_location;
-
-  ## TODO - throw exception('FileNotFound') if file missing
-
-  while (my $line = <FILE>) {
+  foreach my $line (@$file) {
     chomp $line;
     $line_number++;
 
@@ -157,7 +154,6 @@ sub parse_file {
     # Add text to the existing paragraph
     append_text($pointer, $line);
   }
-  close FILE;
 
   build_toc(\@parsed_file);
 
@@ -179,7 +175,7 @@ sub file_to_htmlnodes {
     } else {
       $content->append_child('div', {
         'flags'     => {'section' => $section_name},
-        'children'  => [ map {textsection_to_htmlnode($_, $dom)} @{$section->{'children'}} ]
+        'children'  => [ map textsection_to_htmlnode($_, $dom), @{$section->{'children'}} ]
       });
     }
   }
