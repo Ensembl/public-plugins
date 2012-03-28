@@ -8,29 +8,30 @@ use EnsEMBL::Admin::Tools::FileHandler qw(file_get_contents file_put_contents);
 
 use base qw(EnsEMBL::Web::Object);
 
-sub caption             { return 'Administration Documents'                                                 }
-sub short_caption       { shift->caption;                                                                   }
-sub get_raw_file        { return shift->{'_raw_file'};                                                      }
-sub get_parsed_file     { return shift->{'_parsed_file'};                                                   }
-sub header_message      { return shift->{'_header_message'} || '';                                          }
-sub available_documents { return [ map {ref $_ ? $_->[0] : $_} @{$SiteDefs::ENSEMBL_WEBADMIN_DOCUMENTS} ];  }
-sub document_title      { return ({@{$SiteDefs::ENSEMBL_WEBADMIN_DOCUMENTS}}->{shift->function} || [])->[0] }
-sub saved_successfully  { return shift->{'_save_success'};                                                  }
+sub caption             { return 'Administration Documents'                                             }
+sub short_caption       { shift->caption;                                                               }
+sub get_raw_file        { return shift->{'_raw_file'};                                                  }
+sub get_parsed_file     { return shift->{'_parsed_file'};                                               }
+sub header_message      { return shift->{'_header_message'} || '';                                      }
+sub available_documents { return [ map {$_} @{$SiteDefs::ENSEMBL_WEBADMIN_DOCUMENTS} ];                 }
+sub document_title      { return ({@{$_[0]->available_documents}}->{$_[0]->function} || {})->{'title'}; }
+sub saved_successfully  { return shift->{'_save_success'};                                              }
 
 sub new {
   my $self  = shift->SUPER::new(@_);
   my $hub   = $self->hub;
   my $func  = $self->function;
-  my $file  = {@{$SiteDefs::ENSEMBL_WEBADMIN_DOCUMENTS}}->{$func};
+  
+  my $file  = {@{$self->available_documents}}->{$func};
 
   if ($file) {
-    if (-e $file->[1]) {
-      my $action    = $self->action;
-      $file->[1]    =~ /(.+\/)([^\/]+)$/;
-      my $dir       = `pwd`;
+    if (-e $file->{'location'}) {
+      my $action          = $self->action;
+      $file->{'location'} =~ /(.+\/)([^\/]+)$/;
+      my $dir             = `pwd`;
       chdir($1);
-      my $filename  = $2;
-      my $cvsstatus = $self->_get_cvs_status($filename);
+      my $filename        = $2;
+      my $cvsstatus       = $self->_get_cvs_status($filename);
 
       if ($action eq 'Update') {
         system('cvs', 'update', $filename) if $cvsstatus eq 'Needs Patch';
@@ -81,7 +82,7 @@ sub new {
 
     } else {
       $self->{'_header_message'} = "There was no document found corresponding to $func";    
-      warn "File does not exist: $file->[1]";
+      warn "File does not exist: $file->{'location'}";
     }
   } else {
     $self->{'_header_message'} = "There was no document found corresponding to $func";    
