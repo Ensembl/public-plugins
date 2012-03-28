@@ -108,6 +108,10 @@ div.document_toc div {
   padding: 6px 0 2px 10px;
 }
 
+.admin-doc-preview {
+  text-align: center;
+}
+
 /*
 div.list_bullet div.list_element {
   list-style-type: disc;
