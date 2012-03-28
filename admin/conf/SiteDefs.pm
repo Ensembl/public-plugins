@@ -55,11 +55,11 @@ sub update_conf {
     pass => 'mypassword'
   }];
   
-  ## Relco docs location
+  ## List of Admin Documents
   $SiteDefs::ENSEMBL_WEBADMIN_DOCUMENTS = [
-#    'RelCoDoc'   => ['Release Coordination Doc',  'path/to/relcodoc.txt'],
-#    'TestCases'  => ['Testcases Doc',             'path/to/textcasesdoc.txt'],
-#    'URLPart'    => ['Document title',            'path/to/xyzdocument.txt']
+#    'URLPart'    => {'title' => 'Document title',            'location' => 'path/to/xyzdocument.txt',  'readonly' => 0 }
+#    'RelCoDoc'   => {'title' => 'Release Coordination Doc',  'location' => 'path/to/relcodoc.txt',     'readonly' => 1 },
+#    'TestCases'  => {'title' => 'Testcases Doc',             'location' => 'path/to/textcasesdoc.txt', 'readonly' => 0 },
   ];
 }
 
