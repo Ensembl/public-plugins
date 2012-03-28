@@ -19,24 +19,26 @@ sub populate_tree {
       { 'availability' => 1, 'filters' => ['WebAdmin'], 'no_menu_entry' => 1 }
   );
 
-  while (my ($func, $title) = splice @$docs, 0, 2) {
+  while (my ($func, $doc) = splice @$docs, 0, 2) {
 
-    my $menu  = $self->create_submenu($title, $title);
+    my $menu  = $self->create_submenu($doc->{'title'}, $doc->{'title'});
 
     $menu->append($self->create_node("View/$func", 'View',
       [ 'view' => 'EnsEMBL::Admin::Component::Documents::View' ],
       { 'availability' => 1, 'filters' => ['WebAdmin'] }
     ));
 
-    $menu->append($self->create_node("Edit/$func", 'Edit',
-      [ 'view' => 'EnsEMBL::Admin::Component::Documents::Edit' ],
-      { 'availability' => 1, 'filters' => ['WebAdmin'] }
-    ));
+    unless ($doc->{'readonly'}) {
+      $menu->append($self->create_node("Edit/$func", 'Edit',
+        [ 'view' => 'EnsEMBL::Admin::Component::Documents::Edit' ],
+        { 'availability' => 1, 'filters' => ['WebAdmin'] }
+      ));
 
-    $menu->append($self->create_node("Preview/$func", 'Preview',
-      [ 'view' => 'EnsEMBL::Admin::Component::Documents::Preview' ],
-      { 'availability' => 1, 'filters' => ['WebAdmin'], 'no_menu_entry' => 1 }
-    ));
+      $menu->append($self->create_node("Preview/$func", 'Preview',
+        [ 'view' => 'EnsEMBL::Admin::Component::Documents::Preview' ],
+        { 'availability' => 1, 'filters' => ['WebAdmin'], 'no_menu_entry' => 1 }
+      ));
+    }
 
     $menu->append($self->create_node("Update/$func", 'CVS Update', [],
       { 'command' => 'EnsEMBL::Admin::Command::Documents::Update', 'availability' => 1, 'filters' => ['WebAdmin'] }
@@ -46,7 +48,6 @@ sub populate_tree {
       { 'command' => 'EnsEMBL::Admin::Command::Documents::Save',   'availability' => 1, 'filters' => ['WebAdmin'], 'no_menu_entry' => 1 }
     );
   }
-
 }
 
 1;
