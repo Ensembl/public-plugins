@@ -50,9 +50,11 @@ sub render {
     <li><a href="/HelpRecord/List/Glossary">Glossary</a></li>
     <li><a href="/HelpRecord/List/Movie">Movies</a></li>
   </ul>
-  <h1>Release coordination documents</h1>
+  <h1>Documents</h1>
   <ul class="spaced">
-    <li><a href="/Documents/View/Relcodoc">Relco Doc</a></li>
+    <li><a href="/Documents/View/Relcodoc">Release Coordination</a></li>
+    <li><a href="/Documents/View/Testcases">Healthcheck Testcases</a></li>
+    <li><a href="/Documents/View/Genebuilders">List of Genebuilders</a></li>
   </ul>
   <h1>User Directory</h1>
   <ul class="spaced">
