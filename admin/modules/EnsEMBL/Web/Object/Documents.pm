@@ -78,7 +78,8 @@ sub new {
           $self->{'_header_message'} = "There was an error parsing the file:<br /><pre>$_</pre>";
         };
       }
-      chdir($dir);
+      chop  $dir;
+      chdir $dir;
 
     } else {
       $self->{'_header_message'} = "There was no document found corresponding to $func";    
