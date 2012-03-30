@@ -54,7 +54,6 @@ sub render {
   <ul class="spaced">
     <li><a href="/Documents/View/Relcodoc">Release Coordination</a></li>
     <li><a href="/Documents/View/Testcases">Healthcheck Testcases</a></li>
-    <li><a href="/Documents/View/Genebuilders">List of Genebuilders</a></li>
   </ul>
   <h1>User Directory</h1>
   <ul class="spaced">
