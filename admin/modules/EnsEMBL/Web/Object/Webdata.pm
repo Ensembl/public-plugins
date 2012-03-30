@@ -25,13 +25,6 @@ sub show_fields {
   ];
 }
 
-sub show_columns {
-  ## @overrides
-  return [
-    data  => 'Web Data',
-  ];
-}
-
 sub record_name {
   ## @overrides
   return {
