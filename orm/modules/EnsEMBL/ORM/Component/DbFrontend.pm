@@ -142,11 +142,12 @@ sub unpack_rose_object {
 
   while (my $field_name = shift @$fields) {
 
-    my $field = shift @$fields; # already a hashref with keys that should not be modified (except 'value' key unless 'force_value' key also provided) - keys as accepted by Form->add_field method
-    my $value = $field->{'value'} = delete $field->{'force_value'} ? $field->{'value'} : $record->field_value($field_name) || $field->{'value'};
-
-    $field->{'name'} ||= $field_name;
-    $field_name        = $record->extract_column_name($field_name);
+    my $field           = shift @$fields; # already a hashref with keys that should not be modified (except 'value' key unless 'force_value' key also provided) - keys as accepted by Form->add_field method
+    my $value           = delete $field->{'force_value'} ? $field->{'value'} : $record->field_value($field_name);
+    $value              = $field->{'value'} unless defined $value;
+    $field->{'value'}   = $value;
+    $field->{'name'}  ||= $field_name;
+    $field_name         = $record->extract_column_name($field_name);
 
     my $select = $field->{'type'} && $field->{'type'} =~ /^(dropdown|checklist|radiolist)$/i ? 1 : 0;
 
