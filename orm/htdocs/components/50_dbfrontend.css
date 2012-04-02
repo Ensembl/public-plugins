@@ -99,7 +99,7 @@ div.dbf-row-buttons {
   clear: both;
 }
 
-div.dbf-row-buttons a, a.dbf-confirm-buttons {
+div.dbf-row-buttons a, a.dbf-confirm-buttons, a.dbf-close-button {
   border: #aaa solid 1px;
   margin: 2px 5px 2px 3px;
   text-decoration: none;
