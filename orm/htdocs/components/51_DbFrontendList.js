@@ -10,15 +10,15 @@ Ensembl.DbFrontendList = {
 
   // Row Class
   Row: Base.extend({
-    constructor: function(row, panel, cellsOnly) {
+    constructor: function(row, panel) {
       this.id = (row.className.match(/_dbf_row_([^\s]+)/) || []).pop();
       this.panel = panel;
       for (var i in this.panel.data) {
         if (this.panel.data[i]) {
           new Ensembl.DbFrontendList.Cell(row.cells[i], this.panel.data[i], this);
         }
-        else if (row.cells[i].className.match(/_dbf_row_handle/) && !cellsOnly) {
-          new Ensembl.DbFrontendList.HandleCell(row.cells[i], this);
+        else if (row.cells[i].className.match(/_dbf_row_handle/)) {
+          this.handleCell = new Ensembl.DbFrontendList.HandleCell(row.cells[i], this);
         }
       }
     }
@@ -36,6 +36,22 @@ Ensembl.DbFrontendList = {
       this.el   = $('<div>').html(cell.innerHTML).appendTo($(cell).empty()).append($('<span class="dbf-list-edit" title="' + (data.type == 'relation' ? 'Choose different ' : 'Edit ') + data.title + '">').click(function() {
         self.buttonClick(this);
       }));
+      $('._dbf_list_view', this.el).click(function(e) {
+        e.preventDefault();
+        var handle = self.row.handleCell;
+        handle.initForm();
+        handle.makeRequest(this, handle.form, {
+          url:      this.href,
+          data:     {},
+          success:  function(json) {
+            handle.getResponseNode(json)
+              .children().wrapAll('<div class="dbf-list-view-response">').end()
+              .append($('<a class="_dbf_cancel" href="#Close">Close</a>'))
+              .appendTo(handle.form.empty())
+            ;
+          }
+        });
+      });
     },
 
     // @override
@@ -119,7 +135,7 @@ Ensembl.DbFrontendList = {
     // @override
     createForm: function() {
       var tr = this.el[0].parentNode;
-      return $('<div>').appendTo($('<td>').appendTo($('<tr>').append('<td>').insertAfter(tr).attr('class', 'dbf-list-form')).attr('colspan', tr.cells.length - 1));
+      return $('<div>').appendTo($('<td>').appendTo($('<tr>').insertAfter(tr).attr('class', 'dbf-list-form')).attr('colspan', tr.cells.length));
     },
 
     // @override
@@ -141,6 +157,7 @@ Ensembl.DbFrontendList = {
         this.form.children().first().slideUp(function() {
           $(this).parents('tr').first().remove();
         });
+        this.form = false;
       }
     },
 
@@ -261,7 +278,7 @@ Ensembl.Panel.DbFrontendList = Ensembl.Panel.extend({
     if (table.hasClass('data_table')) {
       table.dataTable().fnUpdate($.map(row.cells, function(cell) {return cell.innerHTML; }), row);
     }
-    new Ensembl.DbFrontendList.Row(row, this, true);
+    new Ensembl.DbFrontendList.Row(row, this);
     this.highlightRow(row);
   },
 
