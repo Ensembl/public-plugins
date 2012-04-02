@@ -46,7 +46,7 @@ Ensembl.DbFrontendList = {
           success:  function(json) {
             handle.getResponseNode(json)
               .children().wrapAll('<div class="dbf-list-view-response">').end()
-              .append($('<a class="_dbf_cancel" href="#Close">Close</a>'))
+              .append($('<a class="_dbf_cancel dbf-close-button" href="#Close">Close</a>'))
               .appendTo(handle.form.empty())
             ;
           }
