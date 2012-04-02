@@ -119,7 +119,7 @@ Ensembl.DbFrontendList = {
     // @override
     createForm: function() {
       var tr = this.el[0].parentNode;
-      return $('<div>').appendTo($('<td>').appendTo($('<tr>').append('<td>').insertAfter(tr).attr('class', 'dbf-list-form')).attr('colspan', tr.cells.length - 1));
+      return $('<div>').appendTo($('<td>').appendTo($('<tr>').insertAfter(tr).attr('class', 'dbf-list-form')).attr('colspan', tr.cells.length));
     },
 
     // @override
@@ -141,6 +141,7 @@ Ensembl.DbFrontendList = {
         this.form.children().first().slideUp(function() {
           $(this).parents('tr').first().remove();
         });
+        this.form = false;
       }
     },
 
