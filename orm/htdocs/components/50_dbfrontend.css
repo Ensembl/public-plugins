@@ -129,6 +129,11 @@ td:hover span.dbf-list-edit, td:hover a.dbf-list-view {
   display: inline;
 }
 
+div.dbf-list-view-response {
+  border: #ddd solid 1px;
+  margin: 10px;
+}
+
 td.dbf-list-buttons a {
   margin-top: -1px;
   display: none;
