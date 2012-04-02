@@ -9,7 +9,7 @@ Ensembl.DbFrontend = Base.extend({
     var self   = this;
     this.panel = panel;
     this.el = $(el);
-    $('._dbf_button', this.el).live('click', function(event) {
+    $('._dbf_button', this.el).die('click').live('click', function(event) {
       event.preventDefault();
       self.buttonClick(this);
     });
