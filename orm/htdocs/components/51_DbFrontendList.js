@@ -18,7 +18,7 @@ Ensembl.DbFrontendList = {
           new Ensembl.DbFrontendList.Cell(row.cells[i], this.panel.data[i], this);
         }
         else if (row.cells[i].className.match(/_dbf_row_handle/)) {
-          new Ensembl.DbFrontendList.HandleCell(row.cells[i], this);
+          this.handleCell = new Ensembl.DbFrontendList.HandleCell(row.cells[i], this);
         }
       }
     }
@@ -36,6 +36,22 @@ Ensembl.DbFrontendList = {
       this.el   = $('<div>').html(cell.innerHTML).appendTo($(cell).empty()).append($('<span class="dbf-list-edit" title="' + (data.type == 'relation' ? 'Choose different ' : 'Edit ') + data.title + '">').click(function() {
         self.buttonClick(this);
       }));
+      $('._dbf_list_view', this.el).click(function(e) {
+        e.preventDefault();
+        var handle = self.row.handleCell;
+        handle.initForm();
+        handle.makeRequest(this, handle.form, {
+          url:      this.href,
+          data:     {},
+          success:  function(json) {
+            handle.getResponseNode(json)
+              .children().wrapAll('<div class="dbf-list-view-response">').end()
+              .append($('<a class="_dbf_cancel" href="#Close">Close</a>'))
+              .appendTo(handle.form.empty())
+            ;
+          }
+        });
+      });
     },
 
     // @override
