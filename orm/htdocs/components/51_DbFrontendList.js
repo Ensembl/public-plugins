@@ -10,14 +10,14 @@ Ensembl.DbFrontendList = {
 
   // Row Class
   Row: Base.extend({
-    constructor: function(row, panel, cellsOnly) {
+    constructor: function(row, panel) {
       this.id = (row.className.match(/_dbf_row_([^\s]+)/) || []).pop();
       this.panel = panel;
       for (var i in this.panel.data) {
         if (this.panel.data[i]) {
           new Ensembl.DbFrontendList.Cell(row.cells[i], this.panel.data[i], this);
         }
-        else if (row.cells[i].className.match(/_dbf_row_handle/) && !cellsOnly) {
+        else if (row.cells[i].className.match(/_dbf_row_handle/)) {
           new Ensembl.DbFrontendList.HandleCell(row.cells[i], this);
         }
       }
@@ -261,7 +261,7 @@ Ensembl.Panel.DbFrontendList = Ensembl.Panel.extend({
     if (table.hasClass('data_table')) {
       table.dataTable().fnUpdate($.map(row.cells, function(cell) {return cell.innerHTML; }), row);
     }
-    new Ensembl.DbFrontendList.Row(row, this, true);
+    new Ensembl.DbFrontendList.Row(row, this);
     this.highlightRow(row);
   },
 
