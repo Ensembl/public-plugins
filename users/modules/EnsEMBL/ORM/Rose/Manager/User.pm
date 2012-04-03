@@ -19,18 +19,18 @@ sub get_by_id {
   ## Gets user by id
   ## @param String id
   ## @return User object
-  my ($self, $id) = @_;
+  my ($class, $id) = @_;
   
-  return $id ? $self->fetch_by_primary_key($id) : undef;
+  return $id ? $class->fetch_by_primary_key($id) : undef;
 }
 
 sub get_by_email {
   ## Gets user by email
   ## @param String email
   ## @return User object
-  my ($self, $email) = @_;
+  my ($class, $email) = @_;
 
-  return shift @{$email ? $self->get_objects('query' => [ 'email', $email ]) : []};
+  return shift @{$email ? $class->get_objects('query' => [ 'email', $email ]) : []};
 }
 
 1;
