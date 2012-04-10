@@ -80,7 +80,7 @@ sub test_location {
         and $sel->ensembl_wait_for_page_to_load(60000);
       }
       
-      $sel->ensembl_click_links(["link=Alignments (text) ($alignment_count)","link=Multi-species view ($multi_species_count)"],'20000');
+      $sel->ensembl_click_links(["link=Alignments (text) ($alignment_count)","link=Region Comparison ($multi_species_count)"],'20000');
     }
     $sel->ensembl_click_links(["link=Synteny ($synteny_count)"], '20000') if(grep(/@location_array[0]/,@{$SD->get_config(ucfirst($self->species), 'ENSEMBL_CHROMOSOMES')}) && $synteny_count);
 
