@@ -73,16 +73,16 @@ sub clone {
 sub _parse {
   ## @private
   ## Parses a datastructure
-  ## Wraps every string with single quotes and replaces double quotes with single quotes before evaling the whole stringified datastructure
+  ## If data is not from a trusted source, it tries to check its validity before evaling it
   my ($str, $trusted, $error_ref) = @_;
-  
+
   if (!$trusted) { # do validation check for the string before 'eval'ing it if it's not trusted
     my $str_copy = $str;
   
     ## Save the offsets of all the single or double qoutes, find the strings in the datastructure and save them.
     my (@strings, @offsets, $last);
     push @offsets, [ $2, $-[2], $1 ] while $str =~ /(\\*)(\'|\")/g;
-  
+
     for (@offsets) {
       if (!$last) {
         $$error_ref = "Unexpected quote found at $_->[1] in datastructure: $str_copy" and return if length($_->[2]) % 2;
@@ -91,46 +91,43 @@ sub _parse {
       next if length($_->[2]) % 2;
       if ($last->[0] eq $_->[0]) {
         my $pos     = $last->[1] + 1;
-        my $substr  = substr($str, $pos, $_->[1] - $pos + 1);
-        my $length  = length($substr) - 1;
-        if (chop $substr eq '"') {
-          $substr =~ s/\\\"/\"/g;
-          $substr =~ s/\'/\\\'/g;
-        }
-        push @strings, [ $substr, $pos, $length ];
+        my $substr  = substr($str, $pos, $_->[1] - $pos);
+        my $length  = length($substr);
+        push @strings, [ $substr, $pos, $length, $_->[0] ];
         $last = undef;
       }
     }
-  
+
     ## If odd number of quotes
     $$error_ref = "Unbalanced quote found at index $last->[1] in the datastructure: $str_copy" and return if $last;
-  
+
     ## Replace the strings temporarily with number (index from lookup)
     my $i = $#strings;
-    substr($str, $_->[1] - 1, $_->[2] + 2) = sprintf q("%s"), $i-- for reverse @strings;
-  
+    substr($str, $_->[1] - 1, $_->[2] + 2) = sprintf '%s%s%1$s', $_->[3], $i-- for reverse @strings;
+
     ## Wrap the unquoted hash keys with single quotes
     my $str_1 = $str;
     my $str_2 = $str;
     my $i     = 0;
-    while ($str_1 =~ /[\{\,]{1}[\n\s\t]*\"?([^\n\s\t\"]+)(\"?)[\n\s\t]*\=>/g) {
-      next if $2;
-      substr($str,   $-[1] + $i++ * 2, length $1) = qq('$1');
-      substr($str_2, $-[1],            length $1) = ' ' x length $1;
+    while ($str_1 =~ /[\{\,]{1}[\n\s\t]*(\'|\"?)([^\n\s\t\']+)(\'|\"?)[\n\s\t]*\=>/g) {
+      next if $1;
+      substr($str,   $-[2] + $i++ * 2, length $2) = qq('$2');
+      substr($str_2, $-[2],            length $2) = ' ' x length $2;
     }
-  
+
     ## If any unquoted string still remaining, throw exception
-    while ($str_2 =~ /([a-z]+)/ig) {
-      next if $1 eq 'undef';
-      $$error_ref = "Unquoted string '$1' found in the datastructure: $str_copy" and return if $1;
+    if ($str_2 =~ /([a-z]+)/i) {
+      $$error_ref = "Unquoted string '$1' found in the datastructure: $str_copy";
+      return;
     }
-  
+
     ## all checks done, now substitute the strings back in
     $str_1   = $str;
     my $last = 0;
-    while ($str_1 =~ /(\"([0-9]+)\")/g) {
-      substr($str, $-[1] + $last, length $1) = qq('$strings[$2][0]');
-      $last += length(qq('$strings[$2][0]')) - length $1;
+    while ($str_1 =~ /((\"|\')([0-9]+)(\"|\'))/g) {
+      my $qstr = sprintf '%s%s%1$s', $2, $strings[$3][0];
+      substr($str, $-[1] + $last, length $1) =  $qstr;
+      $last += length($qstr) - length $1;
     }
   }
 
