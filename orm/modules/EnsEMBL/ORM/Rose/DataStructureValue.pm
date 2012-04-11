@@ -21,7 +21,7 @@ sub new {
   ## @param datastructure (possibly unparsed stringified)
   ## @param Rose object itself
   ## @param Flag telling whether this column value is trusted to be valid datastructure or not
-  ## @return Can return a blessed hash or a blessed array depending upon the argument provided
+  ## @return Can return a blessed hash or a blessed array or a blessed scalar ref depending upon the argument provided
   ## @exception ORMException::DataStructureParsingException in case problem parsing the datastructure
   my ($class, $data, $object, $trusted) = @_;
 
@@ -45,9 +45,10 @@ sub to_string {
 
   my $str = Data::Dumper->new([$self->raw]);
   $str->Sortkeys(1);
-  $str->Indent(1);
+  $str->Useqq(1);
   $str = $str->Dump;
-  $str =~ s/^[^\=]+\=\s*|\;\n*$//g;
+  $str = join '', map {$_ =~ s/^\s*//; $_} split "\n", $str;
+  $str =~ s/^[^\=]+\=\s*|\;$//g;
   return $str;
 }
 
