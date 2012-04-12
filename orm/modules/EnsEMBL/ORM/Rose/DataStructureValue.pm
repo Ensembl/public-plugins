@@ -19,11 +19,10 @@ use overload (
 sub new {
   ## @constructor
   ## @param datastructure (possibly unparsed stringified)
-  ## @param Rose object itself
   ## @param Flag telling whether this column value is trusted to be valid datastructure or not
   ## @return Can return a blessed hash or a blessed array or a blessed scalar ref depending upon the argument provided
   ## @exception ORMException::DataStructureParsingException in case problem parsing the datastructure
-  my ($class, $data, $object, $trusted) = @_;
+  my ($class, $data, $trusted) = @_;
 
   if (ref $data) {
     $data = clone($data);
