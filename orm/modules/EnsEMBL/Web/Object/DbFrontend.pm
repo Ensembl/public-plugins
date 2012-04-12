@@ -289,12 +289,12 @@ sub _get_with_objects_params {
 
 sub _get_sort_by_column {
   ## Returns either title column name or primary column name depending upon the value of title column
-  my $self            = shift;
-  my $object_class    = $self->manager_class->object_class;
-  my $column          = $object_class->meta->title_column;
+  my $self          = shift;
+  my $object_class  = $self->manager_class->object_class;
+  my $meta          = $object_class->meta;
+  my $column        = $meta->title_column;
 
-  return $column if $column && $column eq $object_class->extract_column_name($column);
-  return $object_class->primary_key;
+  return $column && $meta->column($column) ? $column : $object_class->primary_key;
 }
 
 sub _populate_from_cgi {
@@ -306,8 +306,9 @@ sub _populate_from_cgi {
   my $rose_object = $self->rose_object;
   my $rose_meta   = $rose_object->meta;
   my $fields      = $self->get_fields;
-  my $columns     = { map {$_->name => $_} $rose_meta->columns };
-  my $relations   = { map {$_->name => $_} $rose_meta->relationships };
+  my $columns     = { map {$_->name => $_} $rose_meta->columns          };
+  my $v_columns   = { map {$_->name => $_} $rose_meta->virtual_columns  };
+  my $relations   = { map {$_->name => $_} $rose_meta->relationships    };
 #   my $ext_rels    = { map {$_->name => $_} $rose_meta->external_relationships };
   my %field_names = map {$_ => 1} keys %{{@$fields}};
   my %param_names = map {$_ => 1} @params;
@@ -320,22 +321,24 @@ sub _populate_from_cgi {
 
     my $value     = [ $hub->param($field_name) ]; #CGI value
     my $relation  = $relations->{$field_name};
-    my $column    = $columns->{$rose_object->extract_column_name($field_name)};
+    my $column    = $columns->{$field_name};
+    my $v_column  = $v_columns->{$field_name};
 #     my $ext_rel   = $ext_rels->{$field_name};
 
-    if ($column) {
-      if ($column->type ne 'set') {
+    if ($column || $v_column) {
+      if ($v_column || $column->type ne 'set') {
         $value = shift @$value;
-        $value = undef if $value eq '' && !$column->not_null; # if column value can be NULL, set NULL value instead of an empty string
+        $value = undef if $column && !$column->not_null && $value eq ''; # if column value can be NULL, set NULL value instead of an empty string
       }
-      $rose_object->column_value($field_name, $value); # field_name may contain keys for datamap
-    }
-    elsif ($relation) {
+      $rose_object->column_value($field_name, $value);
+
+    } elsif ($relation) {
       $rose_object->relationship_value($relation, $value);
-    }
-#     elsif ($ext_rel) {
+
+#     } elsif ($ext_rel) {
 #       $rose_object->external_relationship_value($ext_rel, $value);
-#     }
+
+    }
   }
 }
 
