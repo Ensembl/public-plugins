@@ -49,12 +49,12 @@ sub modify_methods {
   my $new_accessor_method = sub {
     # modified accessor method calls the actual accessor method to get the stringfied hash/array, then converts into hashref/arrayref before returning it
     my $object = shift;
-    return $self->value_class->new(map($object->$_, "_ensorm_old_$get_method"), $object, $self->trusted);
+    return $self->value_class->new(map($object->$_, "_ensorm_old_$get_method"), $self->trusted);
   };
   my $new_mutator_method  = sub {
     # modified mutator method stringifies the hashref/arrayref and then calls the actual mutator method to save the stringified form
     my ($object, $value) = @_;
-    $value = $self->value_class->new($value, $object, $self->trusted) unless UNIVERSAL::isa($value, $self->value_class);
+    $value = $self->value_class->new($value, $self->trusted) unless UNIVERSAL::isa($value, $self->value_class);
     map($object->$_("$value"), "_ensorm_old_$set_method");
     return &$new_accessor_method($object);
   };
