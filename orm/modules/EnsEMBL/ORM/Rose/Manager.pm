@@ -91,7 +91,7 @@ sub get_objects {
   }
   
   # save the external objects to the corresponding linked rose objects
-  my $hash_key_name = $self->object_class->meta->EXTERNAL_RELATION_KEY_NAME;
+  my $hash_key_name = $self->object_class->meta->EXTERNAL_RELATIONS_KEY_NAME;
   while (my $object_related_to_external_object = shift @$internal_objects) {
     my $relationship_name = shift @$internal_objects;
     my $path              = shift @$internal_objects;
@@ -219,7 +219,7 @@ sub get_lookup {
 
   my $default_object_class  = $self->object_class;
   $object_class           ||= $default_object_class;
-  my $title_column_name     = $object_class->extract_column_name($object_class->meta->title_column);
+  my $title_column_name     = $object_class->meta->title_column;
   my $lookup                = {};
 
   for (@{$self->get_objects('object_class', $object_class) || []}) {
@@ -246,6 +246,25 @@ sub get_column_names {
   my ($self, $object) = @_;
 
   return my $arrayref = ($object || $self->object_class)->meta->column_names;
+}
+
+
+sub get_virtual_columns {
+  ## Returns all virtual column objects for a table
+  ## @param Rose::Object drived object (or object class) for reference (optional)
+  ## @return ArrayRef of EnsEMBL::ORM::Rose::VirtualColumn objects
+  my ($self, $object) = @_;
+
+  return my $arrayref = ($object || $self->object_class)->meta->virtual_columns;
+}
+
+sub get_virtual_column_names {
+  ## Returns all virtual column's name for a table
+  ## @param Rose::Object drived object (or object class) for reference (optional)
+  ## @return ArrayRef of strings
+  my ($self, $object) = @_;
+
+  return my $arrayref = ($object || $self->object_class)->meta->virtual_column_names;
 }
 
 sub get_relationships {
