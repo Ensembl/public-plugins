@@ -135,9 +135,10 @@ sub unpack_rose_object {
   my $object    = $self->object;
   my $manager   = $object->manager_class;
   $record     ||= $manager->create_empty_object;
+  my $meta      = $record->meta;
   my $fields    = $object->get_fields;
-  my $relations = { map {$_->name => $_ } @{$manager->get_relationships($record) || []} };
-  my $columns   = { map {$_->name => $_ } @{$manager->get_columns($record)       || []} };
+  my $relations = { map {$_->name => $_ } $meta->relationships                    };
+  my $columns   = { map {$_->name => $_ } $meta->columns, $meta->virtual_columns  };
   my $unpacked  = [];
 
   while (my $field_name = shift @$fields) {
@@ -147,7 +148,6 @@ sub unpack_rose_object {
     $value              = $field->{'value'} unless defined $value;
     $field->{'value'}   = $value;
     $field->{'name'}  ||= $field_name;
-    $field_name         = $record->extract_column_name($field_name);
 
     my $select = $field->{'type'} && $field->{'type'} =~ /^(dropdown|checklist|radiolist)$/i ? 1 : 0;
 
@@ -157,9 +157,9 @@ sub unpack_rose_object {
       my $relationship              = $relations->{$field_name};
       my $related_object_meta       = $relationship->can('class') ? $relationship->class->meta : $relationship->map_class->meta->relationship($relationship->name)->class->meta;
 
-      my $title_column              = $related_object_meta->title_column;
+      my $title_column              = $related_object_meta->column($related_object_meta->title_column);
+      $field->{'is_datastructure'}  = $title_column && $title_column->type eq 'datastructure';
       $field->{'value_type'}        = $relationship->type;
-      $field->{'is_datastructure'}  = $title_column && $title_column eq $record->extract_column_name($title_column) && $related_object_meta->column($title_column)->type eq 'datastructure';
 
       ## get lookup if type is either 'dropdown' or 'checklist' or 'radiolist'
       if ($select) {
@@ -171,9 +171,10 @@ sub unpack_rose_object {
 
     ## if this field is a column
     elsif (exists $columns->{$field_name}) {
+
       my $column = $columns->{$field_name};
 
-      $field->{'value_type'}        = 'noedit' if $column->is_primary_key_member; #force readonly primary key
+      $field->{'value_type'}        = 'noedit' if $column->type ne 'virtual' && $column->is_primary_key_member; #force readonly primary key
       $field->{'is_datastructure'}  = $column->type eq 'datastructure';
       $field->{'is_column'}         = 1;
 
@@ -208,7 +209,7 @@ sub unpack_rose_object {
 
     push @$unpacked, EnsEMBL::ORM::Rose::Field->new($field);
   }
-  
+
   return $unpacked;
 }
 
