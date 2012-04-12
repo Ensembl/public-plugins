@@ -366,14 +366,16 @@ Positive Rate of the classifier model used to make the predictions.
 </p>
 
 <p>
-We ran PolyPhen-2 version 2.1.0 (available 
+We ran PolyPhen-2 version 2.2.2 (available 
 <a rel="external" href="http://genetics.bwh.harvard.edu/pph2/dokuwiki/downloads">here</a>)
 and again we followed all instructions from the authors, and used the UniProtKB 
 UniRef100 non-redundant protein set as the protein database, which was downloaded,
 along with PDB structures, and annotations from Pfam and DSSP in May 2011. When 
-computing the predictions we used the classifier model trained on the HumDiv training 
-set (please refer to the PolyPhen publications for more details of the classification 
-system).
+computing the predictions we store results for the classifier model trained on the HumDiv 
+and HumVar training variation API </a>.
+ (Please refer to the PolyPhen publications for more details of the classification 
+system on their <a rel="external" href="http://genetics.bwh.harvard.edu/pph2/dokuwiki/overview">website</a>).
+<!-- HumDiv aims to discriminate variants that alter protein function, whereas HumVar aims to discriminate functions that cause human disease.-->
 </p>
 
 <h3 id="condel">Condel</h3>
@@ -384,12 +386,14 @@ a general method for calculating a consensus prediction from the output of tools
 designed to predict the effect of an amino acid substitution. It does so by calculating
 a weighted average score (WAS) of the scores of each component method. The Condel authors 
 provided us with a version specialised for finding a consensus between SIFT and 
-PolyPhen and we integrated this into the variation API. Tests run by the authors 
+PolyPhen and we integrated this into a Variation Effect Predictor (VEP) 
+<a rel="external" href="https://github.com/ensembl-variation/VEP_plugins">plugin</a>. 
+Tests run by the authors 
 on the HumVar dataset (a test set curated by the PolyPhen team), show that Condel 
 can improve both the sensitivity and specificity of predictions compared to either 
 SIFT or PolyPhen used alone (please contact the authors for details). The Condel 
 score, along with a qualitative prediction (one of 'neutral' or 'deleterious'), 
-are available in the VEP and via the API. The Condel score is the consensus probability 
+are available in the VEP plugin. The Condel score is the consensus probability 
 that a substitution is deleterious, so values nearer 1 are predicted with greater 
 confidence to affect protein function.
 </p>
