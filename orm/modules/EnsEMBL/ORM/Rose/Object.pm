@@ -80,34 +80,43 @@ sub get_primary_key_value {
   return $key ? $self->column_value($key) : undef;
 }
 
-sub extract_column_name {
-  ## Gets the name of the actual column after parsing any dot delimited string
-  ## @param Unparsed column name
-  ## @param Actual column name
-  my ($self, $column_name) = @_;
-  return [ split /\./, $column_name || '' ]->[0];
-}
-
 sub column_value {
   ## Gets/sets value for a given column
-  ## It is recommended to use this method as it takes care of any column alias or datamap keys
-  ## @param Column name OR Rose::DB::Object::Metadata::Column drived object OR dot delimited string for column name and hash keys in case of datamap
+  ## It is recommended to use this method as it takes care of any column alias or datamap columns
+  ## @param Column name OR Rose::DB::Object::Metadata::Column drived object OR datamap column name
   ## @param Value (only if setting the value)
   ## @return Column value when using as a getter
-  my $self    = shift;
-  my $column  = shift;
-  my @keys;
+  my $self      = shift;
+  my $col_name  = shift;
+  my $meta      = $self->meta;
 
-  unless (ref $column) { # then it should be a Rose::DB::Object::Metadata::Column drived object
-    (my $column_name, @keys) = split /\./, $column;
-    $column = $self->meta->column($column_name) or throw exception('ORMException::UnknownColumnException', sprintf(q(No column with name '%s' found for %s), $column_name, ref $self));
+  my $column    = ref $col_name ? $col_name : $meta->column($col_name) || $meta->virtual_column($col_name) or throw exception('ORMException::UnknownColumnException', sprintf(q(No column with name '%s' found for %s), $col_name, ref $self));
+
+  return $self->virtual_column_value($column, @_) if $column->isa('EnsEMBL::ORM::Rose::VirtualColumn');
+  return $self->$_(@_) for (@_ ? $column->mutator_method_name : $column->accessor_method_name);
+}
+
+sub virtual_column_value {
+  ## Gets/sets value of a virtual column
+  ## @param Virtual column object or virtual column name
+  ## @param Value (only if setting the value)
+  ## @return Virtual column value when using as a getter
+  my $self      = shift;
+  my $col_name  = shift;
+
+  my $column    = ref $col_name ? $col_name : $self->meta->virtual_column($col_name) or throw exception('ORMException::UnknownColumnException', sprintf(q(No virtual column with name '%s' found for %s), $col_name, ref $self));
+
+  my $datamap   = $column->column;
+  my $accessor  = $datamap->accessor_method_name;
+  my $hash      = $self->$accessor;
+
+  if (@_) {
+    my $mutator       = $datamap->mutator_method_name;
+    $hash->{$column}  = shift;
+    $self->$mutator($hash);
   }
 
-  unshift @keys, @_ ? $column->mutator_method_name : $column->accessor_method_name;
-  my $method  = pop @keys;
-  my $object  = $self;
-  $object     = $object->$_ for @keys; # for datamap stuff
-  return $object->$method(@_);
+  return $hash->{$column};
 }
 
 sub relationship_value {
@@ -154,7 +163,7 @@ sub external_relationship_value {
   my $meta     = $self->meta;
   my $relation = ref $_[0] ? shift : $meta->external_relationship(shift);
   my $manager  = 'EnsEMBL::ORM::Rose::Manager';
-  my $key_name = $self->meta->EXTERNAL_RELATION_KEY_NAME;
+  my $key_name = $self->meta->EXTERNAL_RELATIONS_KEY_NAME;
 
   my ($r_name, $r_class, $r_is_singular, $r_map)  = map {$relation->$_} qw(name class is_singular column_map);
   my ($column_internal, $column_external)         = %$r_map;
@@ -198,9 +207,9 @@ sub external_relationship_value {
 
 sub field_value {
   ## Gets/sets value for a column, relationship, external relationship or a key saved in a datamap column
-  ## Works as a combination of column_Value, relationship_value and external_relationship_value
-  ## @param Column/Relationship/ExternalRelationship name or object
-  ## @param Optional - value as required by column_Value, relationship_value or external_relationship_value methods
+  ## Works as a combination of column_value, relationship_value and external_relationship_value
+  ## @param Column/Relationship/ExternalRelationship name or object or a datamap key
+  ## @param Optional - value as required by column_value, relationship_value or external_relationship_value methods
   my ($self, $field, @args) = @_;
   my $return;
   my $error;
