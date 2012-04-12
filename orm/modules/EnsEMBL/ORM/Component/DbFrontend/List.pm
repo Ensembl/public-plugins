@@ -84,20 +84,19 @@ sub record_tree {
 
     if ($header_only) {
 
-      my $real_col    = $record->extract_column_name($column_name);
-      my $is_column   = grep {$_ eq $real_col} $record_meta->column_names;
-      my $editable    = !$record_meta->is_trackable($real_col);
-      my $css         = '';
+      my $is_column = $record_meta->column($column_name) || $record_meta->virtual_column($column_name) ? 1 : 0;
+      my $readonly  = $record_meta->is_trackable($column_name);
+      my $css       = '';
       my $width;
 
       if (ref $column) {
-        $editable = $column->{'editable'} if $editable && exists $column->{'editable'};
-        $width    = $column->{'width'};
-        $css      = $column->{'class'} || '';
+        $readonly ||= $column->{'readonly'};
+        $width      = $column->{'width'};
+        $css        = $column->{'class'} || '';
       }
 
       $record_row->append_child('th', {
-        'inner_HTML'  => $editable ? sprintf('<input class="%s" name="%s" value="%s" type="hidden" />%s', ($is_column ? 'column' : 'relation'), $column_name, $hub->url({'action' => 'Edit', 'function' => $hub->function}), $label) : $label,
+        'inner_HTML'  => $readonly ? $label : sprintf('<input class="%s" name="%s" value="%s" type="hidden" />%s', ($is_column ? 'column' : 'relation'), $column_name, $hub->url({'action' => 'Edit', 'function' => $hub->function}), $label),
         'class'       => $object->list_is_datatable ? ['sorting', 'sort_html', ref $css eq 'ARRAY' ? @$css : split ' ', $css] : $css,
         $width ? ('style' => {'width' => $width}) : (),
       });
