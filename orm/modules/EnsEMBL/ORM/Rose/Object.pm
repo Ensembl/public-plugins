@@ -163,7 +163,7 @@ sub external_relationship_value {
   my $meta     = $self->meta;
   my $relation = ref $_[0] ? shift : $meta->external_relationship(shift);
   my $manager  = 'EnsEMBL::ORM::Rose::Manager';
-  my $key_name = $self->meta->EXTERNAL_RELATIONS_KEY_NAME;
+  my $key_name = $meta->EXTERNAL_RELATIONS_KEY_NAME;
 
   my ($r_name, $r_class, $r_is_singular, $r_map)  = map {$relation->$_} qw(name class is_singular column_map);
   my ($column_internal, $column_external)         = %$r_map;
