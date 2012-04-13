@@ -67,7 +67,7 @@ sub show_fields {
 sub show_columns {
   ## @overrides
   return [
-    external_db_id  => {'title' => 'Ext. DB ID', 'editable' => 0},
+    external_db_id  => {'title' => 'Ext. DB ID', 'readonly' => 1},
     db_name         => 'Name',
     db_release      => 'Release',
     status          => 'Status'
