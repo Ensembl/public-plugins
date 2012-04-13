@@ -33,4 +33,17 @@ sub type        { return shift->{'type'};                       }
 sub column_map  { return shift->{'column_map'};                 }
 sub is_singular { return shift->type =~ /to one$/ ? 1 : undef;  }
 
+sub make_methods {
+  ## Creates the method to access/modify the value of the related rose object
+  ## @param Hash with key target_class - rose object class name
+  my ($self, %params) = @_;
+  my $object_class = $params{'target_class'};
+  my $method_name  = $self->name;
+
+  no strict qw(refs);
+  *{"${object_class}::${method_name}"} = sub {
+    return shift->external_relationship_value($self, @_);
+  };
+}
+
 1;
