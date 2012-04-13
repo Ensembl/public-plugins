@@ -119,10 +119,7 @@ sub external_relationship {
   if ($params) {
     no strict qw(refs);
     my $relationship = $self->{$key_name}{$relationship_name} = EnsEMBL::ORM::Rose::ExternalRelationship->new({'name', $relationship_name, %$params});
-    ## TODO - $relationship->make_methods('target_class' => $object_class);
-    *{"${object_class}::$relationship_name"} = sub {
-      return shift->external_relationship_value($relationship, @_);
-    };
+    $relationship->make_methods('target_class' => $object_class);
   }
 
   throw exception('ORMException::UnknownExternalRelationException', "External relationship '$relationship_name' not registered with $object_class.") unless $self->{$key_name}{$relationship_name};
