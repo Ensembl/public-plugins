@@ -23,7 +23,7 @@ sub fetch_for_display {
   my $order_by_1    = {qw(glossary word view ensembl_object movie title faq category)}->{$type};
   my $order_by_2    = {qw(view ensembl_action faq question)}->{$type} || 0;
 
-  $self->rose_objects([ sort { my $x = $a->data; my $y = $b->data; ($x->$order_by_1 cmp $y->$order_by_1) || $order_by_2 && ($x->$order_by_2 cmp $y->$order_by_2)} @$rose_objects ]) if $rose_objects;
+  $self->rose_objects([ sort { ($a->virtual_column_value($order_by_1) cmp $b->virtual_column_value($order_by_1)) || $order_by_2 && ($a->virtual_column_value($order_by_2) cmp $b->virtual_column_value($order_by_2))} @$rose_objects ]) if $rose_objects;
 }
 
 sub fetch_for_list {
@@ -55,28 +55,28 @@ sub show_fields {
 
   if ($type eq 'glossary') {
     @datamap = (
-      'data.word'           => {'label' => 'Word',            'type' => 'string'  },
-      'data.expanded'       => {'label' => 'Expanded',        'type' => 'text',     'cols' => 60, 'rows'  => 5},
-      'data.meaning'        => {'label' => 'Meaning',         'type' => 'html',     'cols' => 60, 'notes' => 'Please make sure the text above is valid XHTML', 'rows' => 5}
+      'word'           => {'label' => 'Word',            'type' => 'string'  },
+      'expanded'       => {'label' => 'Expanded',        'type' => 'text',     'cols' => 60, 'rows'  => 5},
+      'meaning'        => {'label' => 'Meaning',         'type' => 'html',     'cols' => 60, 'notes' => 'Please make sure the text above is valid XHTML', 'rows' => 5}
     );
   }
   elsif ($type eq 'view') {
     @datamap = (
       'help_links'          => {'label' => 'Linked URLs',     'type' => 'checklist', 'multiple' => 1},
-      'data.content'        => {'label' => 'Content',         'type' => 'html',     'cols' => 60, 'notes' => 'Please make sure the text above is valid XHTML', 'rows' => 40}
+      'content'        => {'label' => 'Content',         'type' => 'html',     'cols' => 60, 'notes' => 'Please make sure the text above is valid XHTML', 'rows' => 40}
     );
   }
   elsif ($type eq 'movie') {
     @datamap = (
-      'data.title'          => {'label' => 'Title',           'type' => 'string'  },
-      'data.youtube_id'     => {'label' => 'Youtube ID',      'type' => 'string'  },
-      'data.list_position'  => {'label' => 'List position',   'type' => 'int'     },
-      'data.length'         => {'label' => 'Length',          'type' => 'string'  }
+      'title'          => {'label' => 'Title',           'type' => 'string'  },
+      'youtube_id'     => {'label' => 'Youtube ID',      'type' => 'string'  },
+      'list_position'  => {'label' => 'List position',   'type' => 'int'     },
+      'length'         => {'label' => 'Length',          'type' => 'string'  }
     );
   }
   elsif ($type eq 'faq') {
     @datamap = (
-      'data.category'       => {'label' => 'Category',        'type' => 'dropdown', 'values' => [
+      'category'       => {'label' => 'Category',        'type' => 'dropdown', 'values' => [
         {'value' => 'archives',       'caption' => 'Archives'                     },
         {'value' => 'genes',          'caption' => 'Genes'                        },
         {'value' => 'assemblies',     'caption' => 'Genome assemblies'            },
@@ -90,8 +90,8 @@ sub show_fields {
         {'value' => 'variation_api',  'caption' => 'Variation API'                },
         {'value' => 'regulation_api', 'caption' => 'Regulation API'               }      
       ]},
-      'data.question'       => {'label' => 'Question',        'type' => 'html',     'cols' => 80, 'notes' => 'Please make sure the text above is valid XHTML'},
-      'data.answer'         => {'label' => 'Answer',          'type' => 'html',     'cols' => 80, 'notes' => 'Please make sure the text above is valid XHTML'}
+      'question'       => {'label' => 'Question',        'type' => 'html',     'cols' => 80, 'notes' => 'Please make sure the text above is valid XHTML'},
+      'answer'         => {'label' => 'Answer',          'type' => 'html',     'cols' => 80, 'notes' => 'Please make sure the text above is valid XHTML'}
     );
   }
 
@@ -110,8 +110,8 @@ sub show_columns {
 
   if ($type eq 'glossary') {
     @datamap = (
-      'data.word'           => {'title' => 'Word'},
-      'data.expanded'       => {'title' => 'Expanded'},
+      'word'           => {'title' => 'Word'},
+      'expanded'       => {'title' => 'Expanded'},
     );
   }
   elsif ($type eq 'view') {
@@ -121,14 +121,14 @@ sub show_columns {
   }
   elsif ($type eq 'movie') {
     @datamap = (
-      'data.title'          => {'title' => 'Title'},
-      'data.youtube_id'     => {'title' => 'Youtube ID'},
+      'title'          => {'title' => 'Title'},
+      'youtube_id'     => {'title' => 'Youtube ID'},
     );
   }
   elsif ($type eq 'faq') {
     @datamap = (
-      'data.category'       => {'title' => 'Category'},
-      'data.question'       => {'title' => 'Question'},
+      'category'       => {'title' => 'Category'},
+      'question'       => {'title' => 'Question'},
     );
   }
 
