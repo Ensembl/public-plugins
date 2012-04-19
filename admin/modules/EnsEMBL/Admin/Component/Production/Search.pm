@@ -33,7 +33,7 @@ sub content {
       : { map {$_ || '0'  => ($_ ? 'b' : 'a').$self->get_printable($groups->{$key}{$_}[0]->$method)} sort keys %{$groups->{$key}} };
 
     $fieldset->add_field({
-      'label'   => join (' ', map {ucfirst $_} split '_', $method),
+      'label'   => $method eq 'analysis_description' ? 'Logic Name' : join (' ', map {ucfirst $_} split '_', $method),
       'type'    => $method eq 'web_data' ? 'radiolist' : 'dropdown',
       'name'    => $key,
       'value'   => '',
