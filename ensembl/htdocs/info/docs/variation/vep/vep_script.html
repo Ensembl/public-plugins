@@ -1524,7 +1524,7 @@ tabix -p bed myData.bed.gz</pre>
 <p> The tabix utility has several preset filetypes that it can process, and it
 can also process any arbitrary filetype containing at least a chromosome and
 position column. See the <a href="http://samtools.sourceforge.net/tabix.shtml"
-target="_blank">documenation</a> for details. </p>
+target="_blank">documentation</a> for details. </p>
 
 <p> If you are going to use the file remotely (i.e. over HTTP or FTP protocol),
 you should ensure the file is world-readable on your server. </p>
@@ -1748,9 +1748,9 @@ option should be interpreted with a degree of caution. A much more complex and
 stringent process is used to produce the main Ensembl Core database, and this
 should be used in preference to the RefSeq transcripts. </p>
 
-<p> SIFT, PolyPhen and hence Condel predictions and scores are calculated for
+<p> SIFT, PolyPhen predictions and scores are calculated for
 Ensembl transcripts only, hence none of these tools can be used when using the
---refseq flag. </p>
+--refseq flag. Likewise, if using the plugin for Condel. </p>
 
 <h3 id="convert"> File conversion </h3>
 
@@ -1759,8 +1759,8 @@ it parses. This may be useful for a user with, for example, a number of variants
 given in HGVS notation against RefSeq transcript identifiers. The conversion
 process allows these notations to be converted into genomic reference
 coordinates, and then used to predict consequences in the VEP against Ensembl
-transcripts. This is especially useful for those who wish to retrieve SIFT,
-PolyPhen and Condel predictions for such variants, since no predictions are
+transcripts. This is especially useful for those who wish to retrieve SIFT and
+PolyPhen predictions for such variants, since no predictions are
 provided for RefSeq transcripts. </p>
 
 <pre class="code">perl variant_effect_predictor.pl -i refseq_hgvs_notations.txt -o converted.vcf -refseq -convert vcf
