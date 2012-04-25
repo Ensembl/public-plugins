@@ -331,7 +331,7 @@ protein function predictions for species other than human in future releases.
 <h3 id="sift">SIFT</h3>
 
 <p>
-<a rel="external" href="http://sift.jcvi.org/">SIFT</a> predicts whether an amino acid 
+<a rel="external" href="http://sift.bii.a-star.edu.sg">SIFT</a> predicts whether an amino acid 
 substitution is likely to affect protein function based on sequence homology and the
 physico-chemical similarity between the alternate amino acids. The data we provide for each amino
 acid substitution is a score and a qualitative prediction (either 'tolerated' or 'deleterious'). 
@@ -342,12 +342,10 @@ a score &lt; 0.05 are called 'deleterious' and all others are called 'tolerated'
 </p>
 
 <p>
-We ran SIFT version 4.0.3 (available 
-<a rel="external" href="http://sift.jcvi.org/www/sift4.0.3.tar.gz">here</a>) 
-following the instructions from the authors and used SIFT
+We ran SIFT version 4.0.5 following the instructions from the authors and used SIFT
 to choose homologous proteins rather than supplying them ourselves. We used all 
-protein sequences available from UniProtKB (both the SwissProt and TrEMBL sets) as 
-the protein database. All data was downloaded from UniProt in May 2011.
+protein sequences available from UniProtKB (release 2012_01, both the SwissProt and TrEMBL sets) as 
+the protein database. 
 </p>
 
 <h3 id="polyphen">PolyPhen</h3>
@@ -368,9 +366,9 @@ Positive Rate of the classifier model used to make the predictions.
 <p>
 We ran PolyPhen-2 version 2.2.2 (available 
 <a rel="external" href="http://genetics.bwh.harvard.edu/pph2/dokuwiki/downloads">here</a>)
-and again we followed all instructions from the authors, and used the UniProtKB 
-UniRef100 non-redundant protein set as the protein database, which was downloaded,
-along with PDB structures, and annotations from Pfam and DSSP in February 2012. When 
+and again we followed all instructions from the authors, and used the UniProtKB
+UniRef100 (release 2011_12) non-redundant protein set as the protein database, which was downloaded,
+along with PDB structures, and annotations from Pfam and DSSP(snapshot 03-Jan-2012) in February 2012. When 
 computing the predictions we store results for the classifier models trained on the HumDiv 
 and HumVar datasets. Both result sets are available through the variation API which defaults to HumVar if no selection is made.</a>
  (Please refer to the PolyPhen  <a rel="external" href="http://genetics.bwh.harvard.edu/pph2/dokuwiki/overview">website</a> or publications for more details of the classification system).
