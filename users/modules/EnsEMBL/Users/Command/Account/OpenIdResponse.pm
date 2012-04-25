@@ -14,11 +14,11 @@ sub process {
   my $openid_consumer = $object->get_openid_consumer;
 
   $openid_consumer->handle_server_response(
-    'verified'      => sub { $self->handle_verified_identity(@_);               },
-    'cancelled'     => sub { $self->redirect_login('OpenIDCancelled');          },
-    'not_openid'    => sub { $self->redirect_login('OpenIDInvalid');            },
-    'setup_needed'  => sub { $self->redirect_login('OpenIDSetupNeeded');        },
-    'error'         => sub { $self->redirect_login('OpenIDError');              },
+    'verified'      => sub { $self->handle_verified_identity(@_);                         },
+    'cancelled'     => sub { $self->redirect_login($object->MESSAGE_OPENID_CANCELLED);    },
+    'not_openid'    => sub { $self->redirect_login($object->MESSAGE_OPENID_INVALID);      },
+    'setup_needed'  => sub { $self->redirect_login($object->MESSAGE_OPENID_SETUP_NEEDED); },
+    'error'         => sub { $self->redirect_login($object->MESSAGE_OPENID_ERROR);        },
   );
 }
 
