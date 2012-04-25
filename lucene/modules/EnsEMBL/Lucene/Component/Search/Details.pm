@@ -134,10 +134,10 @@ sub render_hits {
   my $hits = $self->object->hits;
   my %hit_tagline_lookup = (
     'GENE' => sub {
-      return qq{<strong>$_[0]->{name}</strong><span class="small">[ $_[0]->{source}: $_[0]->{id} ]</span> };
+      return qq{<strong>$_[0]->{name}</strong> };
     },
     'TRANSCRIPT' => sub {
-      return qq{<strong>$_[0]->{name}</strong><span class="small">[ $_[0]->{source}: $_[0]->{id} ]</span> };
+      return qq{<strong>$_[0]->{name}</strong> };
     },
     'IDHISTORY_GENE'        => sub { return "Archived Gene Stable ID: $_[0]->{id}" },
     'IDHISTORY_TRANSCRIPT'  => sub { return "Archived Transcript Stable ID: $_[0]->{id}" },
@@ -280,7 +280,20 @@ qq{<div style="width: 85%;border-bottom: 1px solid #CCCCCC; "><a class="notext" 
   <dd>$description</dd>
 </dl>
 );
-    if ($hit->{location} && $hit->{featuretype} =~ /Gene|Transcript/) {
+
+    if ($hit->{featuretype} =~ /Gene|Transcript/) {
+      my $label = $hit->{featuretype} eq 'Gene' ? 'Gene ID' : 'Transcript ID';
+      my $url = $hit->{featuretype} eq 'Gene' ? "/$hit->{species}/Gene/Summary?g=$hit->{id}$db_extra"
+               : "/$hit->{species}/Transcript/Summary?t=$hit->{id}$db_extra";
+      $html .= qq(
+<dl class="summary">
+  <dt>$label</dt>
+  <dd><a href="$url">$hit->{id}</a></dd>
+</dl>
+);
+    }
+
+    if ($hit->{location}) {
       $html .= qq(
 <dl class="summary">
   <dt>Location</dt>
@@ -293,7 +306,7 @@ qq{<div style="width: 85%;border-bottom: 1px solid #CCCCCC; "><a class="notext" 
       $html .= qq(
 <dl class="summary">
   <dt>Variations</dt>
-  <dd><a href="/$hit->{species}/Gene/Variation_Gene/Table?g=$hit->{id}">$hit->{id}</a></dd>
+  <dd><a href="/$hit->{species}/Gene/Variation_Gene/Table?g=$hit->{id}">Variation Table</a></dd>
 </dl>
 );
     }
