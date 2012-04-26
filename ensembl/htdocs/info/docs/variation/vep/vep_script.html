@@ -28,6 +28,7 @@ Perl script |
 	<li>
 		<a href="#running">Running the script</a>
 		<ul>
+			<li><a href="#performance">Performance</a></li>
 			<li><a href="#basic">Basic options</a></li>
 			<li><a href="#input">Input options</a></li>
 			<li><a href="#dbopt">Database options</a></li>
@@ -41,13 +42,13 @@ Perl script |
 		<a href="#db">Databases and caching</a>
 		<ul>
 			<li><a href="#public">Public database servers</a></li>
-			<li><a href="#local">Using a local database</a></li>
 			<li><a href="#cache">Using the cache</a></li>
 			<li><a href="#pre">Pre-built caches</a></li>
 			<li><a href="#build">Building your own cache</a></li>
 			<li><a href="#limitations">Limitations of the cache</a></li>
 			<li><a href="#privacy">Data privacy</a></li>
 			<li><a href="#offline">Offline mode</a></li>
+			<li><a href="#local">Using a local database</a></li>
 		</ul>
 	</li>
     <li>
@@ -83,6 +84,17 @@ Perl script |
 <hr/>
 
 <h2 id="new"> What's new </h2>
+
+<h3> New in version 2.5 <i>(May 2012)</i> </h3>
+
+<ul>
+    <li>SIFT and PolyPhen predictions now available for RefSeq transcripts</li>
+	<li>retrieve cell type-specific regulatory consequences</li>
+	<li>consequences can be retrieved based on a single individual's genotype a
+	VCF input file</li>
+	<li>find overlapping structural variants</li>
+	<li>Condel support removed from main script and moved to a plugin</li>
+</ul>
 
 <h3> New in version 2.4 <i>(February 2012)</i> </h3>
 
@@ -173,7 +185,7 @@ Perl script |
 <h2 id="requirements"> Requirements </h2>
 
 <p>
-Version 2.4 of the script requires at least version 66 of the Ensembl Core and
+Version 2.5 of the script requires at least version 67 of the Ensembl Core and
 Variation APIs and their relevant dependencies to be installed to use the
 script. A minimal subset of these can be installed using the supplied <a
 href="#installer">installer script</a>. </p>
@@ -192,7 +204,7 @@ To use the <a href="#cache">cache</a>, the gzip and zcat utilities are required.
 <p> The Variant Effect Predictor script can be downloaded as a tarball from the
 Ensembl CVS server: </p>
 
-<p> <a href="http://cvs.sanger.ac.uk/cgi-bin/viewvc.cgi/ensembl-tools/scripts/variant_effect_predictor.tar.gz?view=tar&root=ensembl&pathrev=branch-ensembl-66">Download version 2.4 (latest)</a> </p>
+<p> <a href="http://cvs.sanger.ac.uk/cgi-bin/viewvc.cgi/ensembl-tools/scripts/variant_effect_predictor.tar.gz?view=tar&root=ensembl&pathrev=branch-ensembl-67">Download version 2.5 (latest)</a> </p>
 
 <p>It is also included as part of the ensembl-tools module of the Ensembl API -
 you can find it in the ensembl-tools/scripts/variant_effect_predictor/
@@ -201,6 +213,7 @@ directory.</p>
 <h3> Previous versions </h3>
 
 <ul>
+	<li><a href="http://cvs.sanger.ac.uk/cgi-bin/viewvc.cgi/ensembl-tools/scripts/variant_effect_predictor.tar.gz?view=tar&root=ensembl&pathrev=branch-ensembl-66">Download version 2.4</a> (Ensembl 66) </li>
 	<li><a href="http://cvs.sanger.ac.uk/cgi-bin/viewvc.cgi/ensembl-tools/scripts/variant_effect_predictor.tar.gz?view=tar&root=ensembl&pathrev=branch-ensembl-65">Download version 2.3</a> (Ensembl 65) </li>
     <li><a href="http://cvs.sanger.ac.uk/cgi-bin/viewvc.cgi/ensembl-tools/scripts/variant_effect_predictor.tar.gz?view=tar&root=ensembl&pathrev=branch-ensembl-64">Download version 2.2</a> (Ensembl 64) </li>
     <li><a href="http://cvs.sanger.ac.uk/cgi-bin/viewvc.cgi/ensembl-variation/scripts/examples.tar.gz?view=tar&root=ensembl&pathrev=branch-ensembl-63">Download version 2.1</a> (Ensembl 63) </li>
@@ -271,7 +284,7 @@ installer is possible with the following flags: </p>
 		<td><pre>--API_VERSION [version]</pre></td>
 		<td><pre>-v</pre></td>
 		<td>By default the script will install the latest version of the Ensembl
-		API (currently 66). Users can force the script to install a different
+		API (currently 67). Users can force the script to install a different
 		version at their own risk</td>
 	</tr>
 	<tr>
@@ -330,8 +343,29 @@ script in the old per-variant mode, you can force this with --no_whole_genome
 </p>
 
 
+<h3 id="performance"> Performance </h3>
 
-<a href="#top">[Back to top]</a>
+<p> In optimal conditions, the VEP script is capable of processing ~500,000
+variants in 1 hour on a single processor core. Run time is dependent on various
+factors, and is especially affected by the chromosomal distribution of variants.
+Variants in exonic regions naturally take longer to process than those in
+intronic or intergenic regions. Due to the way transcript data is cached in
+memory, the VEP will, for example, process a file containing 100 variants that
+fall in one gene faster than it would a file containing 100 variants in 100
+different genes. </p>
+
+<p> The VEP is also optimised to run on input files that are sorted in
+chromosomal order. Unsorted files will still work, albeit more slowly. </p>
+
+<p> For very large files (for example those from whole-genome sequencing), the
+VEP process can be easily parallelised by dividing your file into chunks (e.g.
+by chromosome). The VEP will also work with tabix-indexed, bgzipped VCF files,
+and so the tabix utility could be used to divide the input file: </p>
+
+<pre class="code"> tabix -h variants.vcf.gz 12:1000000-20000000 | perl variant_effect_predictor.pl -vcf </pre>
+
+
+<p><a href="#top">[Back to top]</a></p>
 
 <h3 id="basic"> Basic options </h3>
 
@@ -385,6 +419,25 @@ host          useastdb.ensembl.org</pre>
             verbose (-v) mode. This will output lines that can be copied to a
             config file that can be loaded in on the next run using -config.
             <i>Not used by default</i>
+		</td>
+	</tr>
+	<tr class="bg2">
+		<td><pre>--everything</pre></td>
+		<td>&nbsp;</td>
+		<td>Shortcut flag to switch on all of the following:
+			<ul>
+				<li>--sift b</li>
+				<li>--polyphen b</li>
+				<li>--ccds</li>
+				<li>--hgvs</li>
+				<li>--hgnc</li>
+				<li>--numbers</li>
+				<li>--domains</li>
+				<li>--regulatory</li>
+				<li>--cell_type</li>
+				<li>--canonical</li>
+				<li>--protein</li>
+			</ul>
 		</td>
 	</tr>
 </table>
@@ -507,9 +560,7 @@ host          useastdb.ensembl.org</pre>
             in place of the default Ensembl transcripts. See <a
             href="/info/docs/api/core/index.html#est">here</a> for more details
             on the contents of the otherfeatures database. The otherfeatures
-            database currently only exists for human and mouse. No SIFT,
-            PolyPhen or Condel predictions can be provided when using this
-            option. <i>Not used by
+            database currently only exists for human and mouse. <i>Not used by
             default</i>
         </td>
     </tr>
@@ -570,9 +621,7 @@ host          useastdb.ensembl.org</pre>
 			whether an amino acid substitution affects protein function based on
 			sequence homology and the physical properties of amino acids. The
 			VEP can output the <b>p</b>rediction term, <b>s</b>core or
-			<b>b</b>oth. Using SIFT requires a database connection - while it
-			can be used with --cache, the database will still be accessed to
-			retrieve SIFT data. <i>Not used by default</i>
+			<b>b</b>oth. <i>Not used by default</i>
 		</td>
 	</tr>
 	<tr>
@@ -585,32 +634,10 @@ host          useastdb.ensembl.org</pre>
 			impact of an amino acid substitution on the structure and function
 			of a human protein using straightforward physical and comparative
 			considerations. The VEP can output the <b>p</b>rediction term,
-			<b>s</b>core or <b>b</b>oth. Using PolyPhen requires a database
-			connection - while it can be used with --cache, the database will
-			still be accessed to retrieve PolyPhen data. <i>Not used by
-			default</i>
+			<b>s</b>core or <b>b</b>oth. <i>Not used by default</i>
 		</td>
 	</tr>
 	<tr class="bg2">
-		<td><pre>--condel [p<b>|</b>s<b>|</b>b]</pre></td>
-		<td>&nbsp;</td>
-		<td>
-            <span style="color:red;">Human only</span> <a
-            href="https://bg.upf.edu/forge/projects/condel/wiki/Condel"
-            target="_blank">Condel</a> computes a weighted average of the scores
-            (WAS) of several computational tools aimed at classifying missense
-            mutations as likely deleterious or likely neutral. The VEP currently
-            presents a Condel WAS from SIFT and PolyPhen. A new version of the
-            Condel algorithm that produces more conservative predictions is used
-            from v2.2 onwards of the VEP; to use the old version, add "1" to the
-            end of your option e.g. "--condel b1". The VEP can output the
-            <b>p</b>rediction term, <b>s</b>core or <b>b</b>oth. Using Condel
-            requires a database connection - while it can be used with --cache,
-            the database will still be accessed to retrieve Condel data. <i>Not
-            used by default</i>
-		</td>
-	</tr>
-	<tr>
 		<td><pre>--regulatory</pre></td>
 		<td>&nbsp;</td>
 		<td>
@@ -618,6 +645,17 @@ host          useastdb.ensembl.org</pre>
 			if a variant falls in a high information position within a
 			transcription factor binding site. Output lines have a Feature type
 			of RegulatoryFeature or MotifFeature. <i>Not used by default</i>
+		</td>
+	</tr>
+	<tr>
+		<td><pre>--cell_type</pre></td>
+		<td>&nbsp;</td>
+		<td>
+			Report only regulatory regions that are found in the given cell
+			type(s). Can be a single cell type or a comma-separated list. The
+			functional type in each cell type is reported under CELL_TYPE in the
+			output. To retrieve a list of cell types, use "--cell_type list".
+			<i>Not used by default</i>
 		</td>
 	</tr>
 	<tr class="bg2">
@@ -855,6 +893,29 @@ host          useastdb.ensembl.org</pre>
 		</td>
 	</tr>
 	<tr>
+		<td><pre>--check_svs</pre></td>
+		<td>&nbsp;</td>
+		<td>
+			Checks for the existence of structural variants that overlap your
+			input. Currently requires database access. <i>Not used by
+			default</i>
+		</td>
+	</tr>
+	<tr class="bg2">
+		<td><pre>--individual [all|ind list]</pre></td>
+		<td>&nbsp;</td>
+		<td>
+			Consider only alternate alleles present in the genotypes of the
+			specified individual(s). May be a single individual, a
+			comma-separated list or "all" to assess all individuals separately.
+			Individual variant combinations homozygous for the given reference
+			allele will not be reported. Each individual and variant combination
+			is given on a separate line of output. Only works with VCF files
+			containing individual genotype data; individual IDs are taken from
+			column headers. <i>Not used by default</i>
+		</td>
+	</tr>
+	<tr>
 		<td><pre>--chr [list]</pre></td>
 		<td>&nbsp;</td>
 		<td>
@@ -991,6 +1052,16 @@ host          useastdb.ensembl.org</pre>
 			When checking for co-located variants, by default the script will
 			exclude variants that have been flagged as failed. Set this flag to
 			include such variants. <i>Exclude by default</i>
+		</td>
+	</tr>
+	<tr class="bg2">
+		<td><pre>--allow_non_variant</pre></td>
+		<td>&nbsp;</td>
+		<td>
+			When using VCF format as input and output, by default the VEP will
+			skip non-variant lines of input (where the ALT allele is null).
+			Enabling this option the lines will be printed in the VCF output
+			with no consequence data added.
 		</td>
 	</tr>
 </table>
@@ -1140,8 +1211,8 @@ host          useastdb.ensembl.org</pre>
 	</li>
 	<li>
 		Specify DB connection parameters in registry file ensembl.registry, add SIFT
-		score and prediction, PolyPhen prediction, Condel score
-<pre class="code">perl variant_effect_predictor.pl -i variants.txt -registry ensembl.registry -sift b -polyphen p -condel s</pre>
+		score and prediction, PolyPhen prediction
+<pre class="code">perl variant_effect_predictor.pl -i variants.txt -registry ensembl.registry -sift b -polyphen p</pre>
 	</li>
 	<li>
 		Connect to Ensembl Genomes db server for A.thaliana, run with buffer
@@ -1204,58 +1275,6 @@ connection settings adequate. Those with larger data sets, or those who wish to
 use the script in a batch manner, should consider one of the alternatives below.
 </p>
 
-
-<h3 id="local"> Using a local database </h3>
-
-<p> It is possible to set up a local MySQL mirror with the databases for your
-species of interest installed. For instructions on installing a local mirror,
-see <a href="/info/docs/webcode/install/ensembl-data.html"
-target="_blank">here</a>. You will need a MySQL server that you can connect to
-from the machine where you will run the script (this can be the same machine).
-For most of the functionality of the VEP, you will only need the Core database
-(e.g. homo_sapiens_core_66_37) installed. In order to find co-located variations
-or to use SIFT, PolyPhen or Condel, it is also necessary to install the relevant
-variation database (e.g. homo_sapiens_variation_66_37). </p>
-
-<p> Note that unless you have custom data to insert in the database, in most cases it will be much more efficient to use a <a href="#pre">pre-built cache</a> in place of a local database. </p>
-
-<p> To connect to your mirror, you can either set the connection parameters
-using --host, --port, --user and --password, or use a registry file. Registry
-files contain all the connection parameters for your database, as well as any
-species aliases you wish to set up: </p>
-
-<pre class="code">
-use Bio::EnsEMBL::DBSQL::DBAdaptor;
-use Bio::EnsEMBL::Variation::DBSQL::DBAdaptor;
-use Bio::EnsEMBL::Registry;
-
-Bio::EnsEMBL::DBSQL::DBAdaptor->new(
-  '-species' => "Homo_sapiens",
-  '-group'   => "core",
-  '-port'    => 5306,
-  '-host'    => 'ensembldb.ensembl.org',
-  '-user'    => 'anonymous',
-  '-pass'    => '',
-  '-dbname'  => 'homo_sapiens_core_66_37'
-);
-
-Bio::EnsEMBL::Variation::DBSQL::DBAdaptor->new(
-  '-species' => "Homo_sapiens",
-  '-group'   => "variation",
-  '-port'    => 5306,
-  '-host'    => 'ensembldb.ensembl.org',
-  '-user'    => 'anonymous',
-  '-pass'    => '',
-  '-dbname'  => 'homo_sapiens_variation_66_37'
-);
-
-Bio::EnsEMBL::Registry->add_alias("Homo_sapiens","human");
-</pre>
-
-<p> For more information on the registry and registry files, see <a
-href="/info/docs/api/registry.html" target="_blank">here</a>. </p>
-
-
 <h3 id="cache"> Using the cache </h3>
 
 <p> From version 2.1 onwards, the VEP is able to use cached data on disk in
@@ -1302,27 +1321,27 @@ and configured using the <a href="#installer">installer script</a>. <p>
             <table class="ss" style="width:50%">
                 <tr>
                     <th>Human <i>(Homo sapiens)</i></th>
-                    <td><a href="ftp://ftp.ensembl.org/pub/release-66/variation/VEP/homo_sapiens_vep_66_sift_polyphen.tar.gz">Download (with SIFT and PolyPhen)</a></td>
-                    <td><a href="ftp://ftp.ensembl.org/pub/release-66/variation/VEP/homo_sapiens_vep_66.tar.gz">Download (without SIFT and PolyPhen)</a></td>
+                    <td><a href="ftp://ftp.ensembl.org/pub/release-67/variation/VEP/homo_sapiens_vep_67_sift_polyphen.tar.gz">Download (with SIFT and PolyPhen)</a></td>
+                    <td><a href="ftp://ftp.ensembl.org/pub/release-67/variation/VEP/homo_sapiens_vep_67.tar.gz">Download (without SIFT and PolyPhen)</a></td>
                 </tr>
                 <tr>
                     <th>Mouse <i>(Mus musculus)</i></th>
-                    <td><a href="ftp://ftp.ensembl.org/pub/release-66/variation/VEP/mus_musculus_vep_66.tar.gz">Download</a></td>
+                    <td><a href="ftp://ftp.ensembl.org/pub/release-67/variation/VEP/mus_musculus_vep_67.tar.gz">Download</a></td>
                     <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <th>Rat <i>(Rattus norvegicus)</i></th>
-                    <td><a href="ftp://ftp.ensembl.org/pub/release-66/variation/VEP/rattus_norvegicus_vep_66.tar.gz">Download</a></td>
+                    <td><a href="ftp://ftp.ensembl.org/pub/release-67/variation/VEP/rattus_norvegicus_vep_67.tar.gz">Download</a></td>
                     <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <th>Zebrafish <i>(Danio rerio)</i></th>
-                    <td><a href="ftp://ftp.ensembl.org/pub/release-66/variation/VEP/danio_rerio_vep_66.tar.gz">Download</a></td>
+                    <td><a href="ftp://ftp.ensembl.org/pub/release-67/variation/VEP/danio_rerio_vep_67.tar.gz">Download</a></td>
                     <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <th>Cow <i>(Bos taurus)</i></th>
-                    <td><a href="ftp://ftp.ensembl.org/pub/release-66/variation/VEP/bos_taurus_vep_66.tar.gz">Download</a></td>
+                    <td><a href="ftp://ftp.ensembl.org/pub/release-67/variation/VEP/bos_taurus_vep_67.tar.gz">Download</a></td>
                     <td>&nbsp;</td>
                 </tr>
             </table>
@@ -1333,9 +1352,9 @@ and configured using the <a href="#installer">installer script</a>. <p>
 		$HOME/.vep/ as the cache directory, where $HOME is your UNIX home
 		directory.
         <pre class="code">
-mv homo_sapiens_vep_66.tar.gz ~/.vep/
+mv homo_sapiens_vep_67.tar.gz ~/.vep/
 cd ~/.vep/
-tar xfz homo_sapiens_vep_66.tar.gz</pre>
+tar xfz homo_sapiens_vep_67.tar.gz</pre>
 	</li>
 	<li>
 		Run the VEP with the --cache option
@@ -1395,8 +1414,7 @@ to specify any of the usual input options when building a cache:</p>
     applicable)</li>
 	<li>Location and alleles of existing variations</li>
     <li>Regulatory regions</li>
-    <li>Predictions and scores for SIFT, PolyPhen (Condel predictions are an
-    algorithmic function of SIFT and PolyPhen)</li>
+    <li>Predictions and scores for SIFT, PolyPhen</li>
 </ul>
 
 <p> It does not store any information pertaining to, and therefore cannot be
@@ -1449,6 +1467,60 @@ the script will report an error and refuse to run. </p>
 <p> All other features, including the ability to use <a href="#custom">custom
 annotations</a> and <a href="#plugins">plugins</a>, are accessible in offline
 mode. </p>
+
+
+
+<h3 id="local"> Using a local database </h3>
+
+<p> It is possible to set up a local MySQL mirror with the databases for your
+species of interest installed. For instructions on installing a local mirror,
+see <a href="/info/docs/webcode/install/ensembl-data.html"
+target="_blank">here</a>. You will need a MySQL server that you can connect to
+from the machine where you will run the script (this can be the same machine).
+For most of the functionality of the VEP, you will only need the Core database
+(e.g. homo_sapiens_core_67_37) installed. In order to find co-located variations
+or to use SIFT or PolyPhen, it is also necessary to install the relevant
+variation database (e.g. homo_sapiens_variation_67_37). </p>
+
+<p> Note that unless you have custom data to insert in the database, in most cases it will be much more efficient to use a <a href="#pre">pre-built cache</a> in place of a local database. </p>
+
+<p> To connect to your mirror, you can either set the connection parameters
+using --host, --port, --user and --password, or use a registry file. Registry
+files contain all the connection parameters for your database, as well as any
+species aliases you wish to set up: </p>
+
+<pre class="code">
+use Bio::EnsEMBL::DBSQL::DBAdaptor;
+use Bio::EnsEMBL::Variation::DBSQL::DBAdaptor;
+use Bio::EnsEMBL::Registry;
+
+Bio::EnsEMBL::DBSQL::DBAdaptor->new(
+  '-species' => "Homo_sapiens",
+  '-group'   => "core",
+  '-port'    => 5306,
+  '-host'    => 'ensembldb.ensembl.org',
+  '-user'    => 'anonymous',
+  '-pass'    => '',
+  '-dbname'  => 'homo_sapiens_core_67_37'
+);
+
+Bio::EnsEMBL::Variation::DBSQL::DBAdaptor->new(
+  '-species' => "Homo_sapiens",
+  '-group'   => "variation",
+  '-port'    => 5306,
+  '-host'    => 'ensembldb.ensembl.org',
+  '-user'    => 'anonymous',
+  '-pass'    => '',
+  '-dbname'  => 'homo_sapiens_variation_67_37'
+);
+
+Bio::EnsEMBL::Registry->add_alias("Homo_sapiens","human");
+</pre>
+
+<p> For more information on the registry and registry files, see <a
+href="/info/docs/api/registry.html" target="_blank">here</a>. </p>
+
+
 
 <a href="#top">[Back to top]</a>
 
@@ -1748,9 +1820,11 @@ option should be interpreted with a degree of caution. A much more complex and
 stringent process is used to produce the main Ensembl Core database, and this
 should be used in preference to the RefSeq transcripts. </p>
 
-<p> SIFT, PolyPhen predictions and scores are calculated for
-Ensembl transcripts only, hence none of these tools can be used when using the
---refseq flag. Likewise, if using the plugin for Condel. </p>
+<p> SIFT and PolyPhen predictions and scores are now calculated and referred to
+internally using the translated sequence, so predictions are available using the
+--refseq flag where the RefSeq translation matches the Ensembl translation (they
+will match in the vast majority of cases - most differences between Ensembl and
+RefSeq transcripts occur in non-coding regions). </p>
 
 <h3 id="convert"> File conversion </h3>
 
@@ -1759,12 +1833,7 @@ it parses. This may be useful for a user with, for example, a number of variants
 given in HGVS notation against RefSeq transcript identifiers. The conversion
 process allows these notations to be converted into genomic reference
 coordinates, and then used to predict consequences in the VEP against Ensembl
-transcripts. This is especially useful for those who wish to retrieve SIFT and
-PolyPhen predictions for such variants, since no predictions are
-provided for RefSeq transcripts. </p>
-
-<pre class="code">perl variant_effect_predictor.pl -i refseq_hgvs_notations.txt -o converted.vcf -refseq -convert vcf
-perl variant_effect_predictor.pl -i converted.vcf -o consequences.txt -sift b</pre>
+transcripts.</p>
 
 <p><a href="#top">[Back to top]</a></p>
 

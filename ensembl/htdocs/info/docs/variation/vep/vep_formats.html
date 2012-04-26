@@ -65,9 +65,9 @@ containing five required columns plus an optional identifier column:
 8   150029    150029    A/T   +    var2
 </pre>
 
-<p>An insertion is indicated by start coordinate = end coordinate + 1. For
-example, an insertion of 'C' between nucleotides 12600 and 12601 on the forward
-strand of chromosome 8 is indicated as follows:</p>
+<p>An insertion (of any size) is indicated by start coordinate = end coordinate
++ 1. For example, an insertion of 'C' between nucleotides 12600 and 12601 on the
+forward strand of chromosome 8 is indicated as follows:</p>
 
 <pre class="code">
 8   12601     12600     -/C   +
@@ -179,9 +179,9 @@ of the ssaha pileup package. </p>
 <p> See <a
 href="http://www.hgvs.org/mutnomen/">http://www.hgvs.org/mutnomen/</a> for
 details. These must be relative to genomic or Ensembl transcript coordinates. It
-is possible, although less reliable, to <a
-href="/info/docs/variation/vep/vep_script.html#hgvs">use notations relative to
-RefSeq transcripts</a> in the VEP script (feature not available in web version).
+is possible, although less reliable, to use RefSeq transcripts in both the web
+interface and the VEP script (see <a
+href="/info/docs/variation/vep/vep_script.html#hgvs">script documentation</a>).
 </p>
 
 <p> Examples: </p>
@@ -191,7 +191,8 @@ ENST00000471631.1:c.28_33delTCGCGG
 ENST00000285667.3:c.1047_1048insC
 5:g.140532T>C</pre>
 
-<p> Examples using RefSeq identifiers (using --refseq in the VEP script): </p>
+<p> Examples using RefSeq identifiers (using --refseq in the VEP script, or
+select the otherfeatures transcript database on the web interface): </p>
 
 <pre class="code">NM_153681.2:c.7C>T
 NM_005239.4:c.190G>A
@@ -234,16 +235,18 @@ columns are:</p>
 			<li><i>HGVSp</i> - the HGVS protein sequence name</li>
 			<li><i>SIFT</i> - the SIFT prediction and/or score, with both given as prediction(score)</li>
 			<li><i>PolyPhen</i> - the PolyPhen prediction and/or score</li>
-			<li><i>Condel</i> - the Condel consensus prediction and/or score</li>
 			<li><i>MOTIF_NAME</i> - the source and identifier of a transcription factor binding profile aligned at this position</li>
 			<li><i>MOTIF_POS</i> - The relative position of the variation in the aligned TFBP</li>
 			<li><i>HIGH_INF_POS</i> - a flag indicating if the variant falls in a high information position of a transcription factor binding profile (TFBP)</li>
 			<li><i>MOTIF_SCORE_CHANGE</i> - The difference in motif score of the reference and variant sequences for the TFBP</li>
+			<li><i>CELL_TYPE</i> - List of cell types and classifications for regulatory feature</li>
 			<li><i>CANONICAL</i> - a flag indicating if the transcript is denoted as the canonical transcript for this gene</li>
 			<li><i>CCDS</i> - the CCDS identifer for this transcript, where applicable</li>
 			<li><i>INTRON</i> - the intron number (out of total number)</li>
 			<li><i>EXON</i> - the exon number (out of total number)</li>
 			<li><i>DOMAINS</i> - the source and identifer of any overlapping protein domains</li>
+			<li><i>IND</i> - individual name</li>
+			<li><i>SV</i> - IDs of overlapping structural variants</li>
 		</ul>
 	</li>
 </ol>
@@ -280,7 +283,6 @@ key/value pairs used in the extra column. </p>
 ## HGVSp        : HGVS protein sequence name
 ## SIFT         : SIFT prediction
 ## PolyPhen     : PolyPhen prediction
-## Condel       : Condel SIFT/PolyPhen consensus prediction
 ## EXON         : Exon number
 ## INTRON       : Intron number
 ## DOMAINS      : The source and identifer of any overlapping protein domains
@@ -288,6 +290,9 @@ key/value pairs used in the extra column. </p>
 ## MOTIF_POS    : The relative position of the variation in the aligned TFBP
 ## HIGH_INF_POS : A flag indicating if the variant falls in a high information position of the TFBP
 ## MOTIF_SCORE_CHANGE : The difference in motif score of the reference and variant sequences for the TFBP
+## CELL_TYPE    : List of cell types and classifications for regulatory feature
+## IND          : Individual name
+## SV           : IDs of overlapping structural variants
 </pre>
 
 <p><a href="#top">[Back to top]</a></p>

@@ -78,6 +78,7 @@ continue when you are happy with the options. It is also possible to configure t
 </p>
 
 <ul>
+    <li><b>Transcript database</b> - choose either Ensembl or "otherfeatures" (including RefSeq) as the reference transcript set</li>
     <li><b>File format</b> - ensure you select the correct file format for your uploaded data</li>
 	<li><b>Species</b> - ensure you have selected the correct species for your data!</li>
 	<li><b>Get regulatory region consequences</b> - the VEP can check for
@@ -104,7 +105,8 @@ continue when you are happy with the options. It is also possible to configure t
 	Extra column of the output.</li>
 	<li><b>Show HGVS identifiers for variants where available</b> - adds <a
 	href="http://www.hgvs.org/mutnomen/" target="_blank">HGVS</a> nomenclature
-	based on Ensembl stable identifiers to the output. Coding and/or protein
+	based on Ensembl (or RefSeq if the Otherfeatures transcript database is
+	selected) stable identifiers to the output. Coding and/or protein
 	sequence names can be added where appropriate.</li>
 </ul>
 
@@ -127,12 +129,6 @@ The following options are currently available for human only.
             impact of an amino acid substitution on the structure and function
             of a human protein using straightforward physical and comparative
             considerations.</li>
-		<!--	<li><b>Condel consensus predictions</b> - <a
-			href="https://bg.upf.edu/forge/projects/condel/wiki/Condel">Condel</a>
-			computes a weighed average of the scores (WAS) of several
-			computational tools aimed at classifying missense mutations as
-			likely deleterious or likely neutral. The VEP currently presents a
-			Condel WAS from SIFT and PolyPhen.</li> -->
 		</ul>
 	</li>
 </ul>
@@ -150,7 +146,7 @@ Both formats contain the same information:
 	<li><b>HTML</b> presents the same information as the Text format, but
 	formatted for the web with links to genes, transcripts and locations in the
 	Ensembl browser. Links are also provided to genes, transcripts and
-	co-located variations. SIFT, PolyPhen and Condel predictions are coloured
+	co-located variations. SIFT and PolyPhen predictions are coloured
 	according to severity, with red representing high severity, green low
 	severity and blue unknown.</li>
 </ul>
