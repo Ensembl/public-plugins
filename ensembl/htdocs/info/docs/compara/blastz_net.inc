@@ -11,7 +11,7 @@
 <a href="mlss/mlss_410.html">Mouse (Mus musculus)</a><br/>
 <a href="mlss/mlss_393.html">Rat (Rattus norvegicus)</a><br/>
 <a href="mlss/mlss_397.html">Kangaroo rat (Dipodomys ordii)</a><br/>
-<a href="mlss/mlss_383.html">Squirrel (Spermophilus tridecemlineatus)</a><br/>
+<a href="mlss/mlss_576.html">Squirrel (Spermophilus tridecemlineatus)</a><br/>
 <a href="mlss/mlss_391.html">Guinea Pig (Cavia porcellus)</a><br/>
 <a href="mlss/mlss_408.html">Pika (Ochotona princeps)</a><br/>
 <a href="mlss/mlss_478.html">Rabbit (Oryctolagus cuniculus)</a><br/>
@@ -30,7 +30,7 @@
 <a href="mlss/mlss_404.html">Dog (Canis familiaris)</a><br/>
 <a href="mlss/mlss_483.html">Panda (Ailuropoda melanoleuca)</a><br/>
 <a href="mlss/mlss_396.html">Dolphin (Tursiops truncatus)</a><br/>
-<a href="mlss/mlss_433.html">Pig (Sus scrofa)</a><br/>
+<a href="mlss/mlss_577.html">Pig (Sus scrofa)</a><br/>
 <a href="mlss/mlss_534.html">Cow (Bos taurus)</a><br/>
 <a href="mlss/mlss_407.html">Alpaca (Vicugna pacos)</a><br/>
 <a href="mlss/mlss_535.html">Tasmanian devil (Sarcophilus harrisii)</a><br/>
@@ -47,7 +47,7 @@
 <a href="mlss/mlss_502.html">Horse (Equus caballus)</a><br/>
 <a href="mlss/mlss_482.html">Panda (Ailuropoda melanoleuca)</a><br/>
 <h4>Pig (Sus scrofa)</h4>
-<a href="mlss/mlss_533.html">Cow (Bos taurus)</a><br/>
+<a href="mlss/mlss_579.html">Cow (Bos taurus)</a><br/>
 <h4>Opossum (Monodelphis domestica)</h4>
 <a href="mlss/mlss_544.html">Tasmanian devil (Sarcophilus harrisii)</a><br/>
 <a href="mlss/mlss_443.html">Wallaby (Macropus eugenii)</a><br/>

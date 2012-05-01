@@ -1,5 +1,4 @@
-<h4>35 eutherian mammals EPO_LOW_COVERAGE</h4>
-Human (Homo sapiens)<br />
+<h4>35 eutherian mammals EPO_LOW_COVERAGE</h4><h5>(method_link_type="EPO_LOW_COVERAGE" : species_set_name="mammals")</h5>Human (Homo sapiens)<br />
 Gorilla (Gorilla gorilla)<br />
 Chimpanzee (Pan troglodytes)<br />
 Orangutan (Pongo abelii)<br />
