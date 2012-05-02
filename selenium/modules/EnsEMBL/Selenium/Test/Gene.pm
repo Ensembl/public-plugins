@@ -20,6 +20,14 @@ sub test_gene {
   my $species_db = $self->species_databases($SD);
 
   if($gene_text) {
+    #before going to the gene page test the default gene search on the species homepage.
+    $sel->ensembl_click("link=$gene_text")
+    and $sel->ensembl_wait_for_page_to_load
+    and $sel->ensembl_is_text_present("returned the following results");
+    
+    $sel->go_back()
+    and $sel->ensembl_wait_for_page_to_load;
+
     $sel->ensembl_click_links(["link=Gene ($gene_text)"],"50000")
     and $sel->ensembl_is_text_present("Gene: $gene_text ($gene_param)");
 
