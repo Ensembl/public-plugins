@@ -13,8 +13,9 @@ sub test_gene {
   my ($self) = @_;
   my $sel    = $self->sel;
   my $SD     = $self->get_species_def;
-
-  $self->open_species_homepage($self->species, '50000');
+  my $sp_bio_name = $SD->get_config($self->species,'SPECIES_BIO_NAME');  
+  
+  $self->open_species_homepage($self->species, '50000', $sp_bio_name);
   my $gene_text  = $SD->get_config(ucfirst($self->species), 'SAMPLE_DATA')->{'GENE_TEXT'};
   my $gene_param = $SD->get_config(ucfirst($self->species), 'SAMPLE_DATA')->{'GENE_PARAM'};
   my $species_db = $self->species_databases($SD);

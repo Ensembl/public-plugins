@@ -13,9 +13,10 @@ sub test_transcript {
   my ($self) = @_;
   my $sel    = $self->sel;
   my $SD     = $self->get_species_def;  
-  my $species_db = $self->species_databases($SD);
-
-  $self->open_species_homepage($self->species);
+  my $species_db = $self->species_databases($SD);    
+  my $sp_bio_name = $SD->get_config($self->species,'SPECIES_BIO_NAME');  
+  
+  $self->open_species_homepage($self->species,undef, $sp_bio_name);
   my $transcript_text  = $SD->get_config(ucfirst($self->species), 'SAMPLE_DATA')->{TRANSCRIPT_TEXT};
   my $transcript_param = $SD->get_config(ucfirst($self->species), 'SAMPLE_DATA')->{'TRANSCRIPT_PARAM'};
   my $url = $self->get_location();

@@ -77,7 +77,7 @@ sub add_track {
   my $sel  = $self->sel;
     
   $self->upload_data;   #BED
-  $self->upload_data('BEDGRAPH', 'BEDGRAPH', undef, 'http://www.ensembl.org/info/website/upload/sample_files/bedgraph_example.bed' ); #bedgraph format  
+  $self->upload_data('BEDGRAPH', 'bedGraph', undef, 'http://www.ensembl.org/info/website/upload/sample_files/bedgraph_example.bed' ); #bedgraph format  
   $self->upload_data('GFF', 'GFF', undef, 'http://www.ensembl.org/info/website/upload/sample_files/example.gff' ); #GFF format
   $self->upload_data('GTF', 'GTF', undef, 'http://www.ensembl.org/info/website/upload/sample_files/example.gtf' ); #GTF format
   $self->upload_data('PSL', 'PSL', undef, 'http://www.ensembl.org/info/website/upload/sample_files/example.psl' ); #PSL format
@@ -301,15 +301,15 @@ sub get_track_counts {
 }
 
 sub open_species_homepage {
-  my ($self, $species, $timeout) = @_;
+  my ($self, $species, $timeout, $species_bio_name) = @_;
   my $sel  = $self->sel;
-  my $species_name = $species;
-  $species_name    =~ s/_/ /;
+#  my $species_name = $species;
+#  $species_name    =~ s/_/ /;
 
   ##TODO::CHeck for species image loaded fine
   $sel->open_ok("$species/Info/Index")
   and $sel->ensembl_wait_for_page_to_load($timeout)
-  and $sel->ensembl_is_text_present(ucfirst($species_name));
+  and $sel->ensembl_is_text_present($species_bio_name);
 }
 
 #function to get all the databases available for the species, take species_def as argument

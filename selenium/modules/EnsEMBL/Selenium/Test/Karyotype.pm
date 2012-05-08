@@ -14,7 +14,8 @@ sub test_karyotype {
   my ($self) = @_;
   my $sel    = $self->sel;
   my $SD     = $self->get_species_def;
-  $self->open_species_homepage($self->species);
+  my $sp_bio_name = $SD->get_config($self->species,'SPECIES_BIO_NAME');  
+  $self->open_species_homepage($self->species, undef, $sp_bio_name);
 
 #karyotype link test
   if(!scalar @{$SD->get_config(ucfirst($self->species), 'ENSEMBL_CHROMOSOMES')}) {

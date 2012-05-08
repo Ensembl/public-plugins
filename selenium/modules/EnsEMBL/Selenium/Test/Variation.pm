@@ -13,8 +13,9 @@ sub test_variation {
   my $sel  = $self->sel;
   my $SD = $self->get_species_def;
   my $release_version = $SD->ENSEMBL_VERSION;
+  my $sp_bio_name = $SD->get_config($self->species,'SPECIES_BIO_NAME');
 
-  $self->open_species_homepage($self->species);
+  $self->open_species_homepage($self->species,undef, $sp_bio_name);
   
   if(lc($self->species) eq 'homo_sapiens') {
     my $variation_text  = $SD->get_config(ucfirst($self->species), 'SAMPLE_DATA')->{'VARIATION_TEXT'};
@@ -32,7 +33,7 @@ sub test_variation {
     print "  Test Configure page, adding a track \n";
     $sel->ensembl_click("link=Configure this page")
     and $sel->ensembl_wait_for_ajax_ok('10000')
-    and $sel->ensembl_click("link=Germline variation*")
+    and $sel->ensembl_click("link=Variation*")
     and $sel->ensembl_wait_for_ajax_ok('10000','5000')
     and $sel->ensembl_click("//form[\@id='variation_context_configuration']/div[3]/div[1]/ul[1]/li[2]/img") #choosing the second track    
     and $sel->ensembl_click("modal_bg")

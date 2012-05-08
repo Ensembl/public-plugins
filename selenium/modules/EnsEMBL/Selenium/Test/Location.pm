@@ -13,8 +13,9 @@ sub test_location {
   my ($self) = @_;
   my $sel    = $self->sel;
   my $SD     = $self->get_species_def;
+  my $sp_bio_name = $SD->get_config($self->species,'SPECIES_BIO_NAME'); 
 
-  $self->open_species_homepage($self->species);  
+  $self->open_species_homepage($self->species,undef, $sp_bio_name);  
   my $location_text = $SD->get_config(ucfirst($self->species), 'SAMPLE_DATA')->{LOCATION_TEXT};
 
   if($location_text) {
@@ -24,8 +25,8 @@ sub test_location {
     and $sel->ensembl_is_text_present("Region in detail");
 #    and $sel->ensembl_images_loaded;
 
-    #turn ncRNA track on/off(excluding the two species since they dont have ncrna track)
-     if(lc($self->species) ne 'saccharomyces_cerevisiae' && lc($self->species) ne 'drosophila_melanogaster') {      
+    #turn ncRNA track on/off(excluding the two species since they dont have ncrna track) - need to add this one as well Caenorhabditis_elegans (maybe used regex)
+     if(lc($self->species) ne 'saccharomyces_cerevisiae' && lc($self->species) ne 'drosophila_melanogaster' && lc($self->species) ne 'caenorhabditis_elegans') {
       $self->turn_track("ncRNA", "//form[\@id='location_viewbottom_configuration']/div[4]/div/ul/li[1]/img", "on");
       $self->turn_track("ncRNA", "//form[\@id='location_viewbottom_configuration']/div[4]/div/ul/li[1]/img", "off");      
       #next;
@@ -34,7 +35,7 @@ sub test_location {
     #Test ZMENU (only for human)
     if(lc($self->species) eq 'homo_sapiens') {
       #Searching and adding decipher track      
-      $self->turn_track("Germline variation","//form[\@id='location_viewbottom_configuration']/div[6]/div[7]/ul[2]/li/img", "on", "decipher");
+      $self->turn_track("Variation","//form[\@id='location_viewbottom_configuration']/div[6]/div[7]/ul[2]/li/img", "on", "decipher");
       
       #simulate ZMenu for this track (decipher)
       $sel->pause(5000); #pausing a bit to make sure the location panel loads fine from adding the track

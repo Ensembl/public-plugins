@@ -46,13 +46,13 @@ sub test_species_list {
    my $species_image = qq{pic_$species};
    $species_image = qq{pic_Pongo_pygmaeus} if($species eq 'Pongo_abelii'); #hack for Pongo as it is the only species which did not follow the species image naming rule. 
  
-   #TODO:: CHECK FOR SPECIES IMAGES LOADED FINE
+   #CHECK FOR SPECIES IMAGES
    $sel->run_script(qq{
      if (jQuery('img[src*=$species_image]')[0].complete) {
        jQuery('body').append("<p>Species images present</p>");
      }
   });
-    (my $species_latin_name = $species) =~ s/_/ /g;
+    my $species_latin_name = $SD->get_config($species,'SPECIES_BIO_NAME');
     $sel->ensembl_is_text_present("Species images present")
     and $sel->ensembl_is_text_present($species_latin_name);
 

@@ -13,9 +13,10 @@ sub test_genome_statistics {
   my $self = shift;
   my $sel  = $self->sel;
   my $SD = $self->get_species_def;
+  my $sp_bio_name = $SD->get_config($self->species,'SPECIES_BIO_NAME');  
   my $release_version = $SD->ENSEMBL_VERSION;
 
-  $self->open_species_homepage($self->species);
+  $self->open_species_homepage($self->species,undef, $sp_bio_name);
   
   $sel->ensembl_click_links(["//a[contains(\@href,'/Info/StatsTable')]"]); #Assembly and Genebuild page
   $sel->ensembl_is_text_present("Assembly:");

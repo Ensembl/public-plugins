@@ -12,9 +12,10 @@ sub test_regulation {
   my $self = shift;
   my $sel  = $self->sel;
   my $SD = $self->get_species_def;
+  my $sp_bio_name = $SD->get_config($self->species,'SPECIES_BIO_NAME');  
   my $release_version = $SD->ENSEMBL_VERSION;
 
-  $self->open_species_homepage($self->species);
+  $self->open_species_homepage($self->species,undef, $sp_bio_name);
   
   if(lc($self->species) eq 'mus_musculus') {
     my $regulation_text  = $SD->get_config(ucfirst($self->species), 'SAMPLE_DATA')->{'REGULATION_TEXT'};
