@@ -12,23 +12,21 @@ __PACKAGE__->set_default('timeout', 50000);
 sub test_blat {
   my ($self) = @_;
   my $sel    = $self->sel;
+  my $SD     = $self->get_species_def;    
+  my $sp_bio_name = $SD->get_config($self->species,'SPECIES_BIO_NAME'); 
 
-  $self->open_species_homepage($self->species);
-  $sel->ensembl_click_links(["link=Gene*"],"50000");
-  $sel->ensembl_click_links(["link=Sequence","link=BLAST this sequence"],"20000");  
+  $self->open_species_homepage($self->species,undef,$sp_bio_name);
+  $sel->ensembl_click_links(["link=Transcript*"],"50000");
+  $sel->ensembl_click_links(["link=cDNA","link=BLAST this sequence"],"20000");
   
   print "  Running BLAT(dna) for ".$self->species."\n";  
   $sel->click_ok("name=stage_results_run")
   and $sel->ensembl_wait_for_page_to_load  
   and $sel->ensembl_is_text_present("Alignment Locations vs. Karyotype")
-  and $sel->ensembl_is_text_present("Chromosome");  
-}
+  and $sel->ensembl_is_text_present("Start");  
 
-sub test_blastp {
-  my ($self) = @_;
-  my $sel    = $self->sel;
-
-  $self->open_species_homepage($self->species);
+  print "TESTING BLASTP \n";  
+  $self->open_species_homepage($self->species,undef, $sp_bio_name);
   $sel->ensembl_click_links(["link=Transcript*"],"50000");
   $sel->ensembl_click_links(["link=Protein","link=BLAST this sequence"],"20000");  
   
@@ -71,5 +69,4 @@ sub test_blastp {
   $sel->open_ok($result_link);
   $sel->ensembl_is_text_present("Sequences producing");  
 }
-
 1;
