@@ -33,7 +33,7 @@ sub test_variation {
     print "  Test Configure page, adding a track \n";
     $sel->ensembl_click("link=Configure this page")
     and $sel->ensembl_wait_for_ajax_ok('10000')
-    and $sel->ensembl_click("link=Variation*")
+    and $sel->ensembl_click("css=a.variation")  #don't know why link= wasn't working and css= works    
     and $sel->ensembl_wait_for_ajax_ok('10000','5000')
     and $sel->ensembl_click("//form[\@id='variation_context_configuration']/div[3]/div[1]/ul[1]/li[2]/img") #choosing the second track    
     and $sel->ensembl_click("modal_bg")
@@ -63,7 +63,7 @@ sub test_variation {
     
     print "  Test Configure page on External Data \n";
     $sel->ensembl_click("link=External Data")
-    and $sel->ensembl_wait_for_page_to_load    
+    and $sel->ensembl_wait_for_page_to_load
     and $sel->ensembl_click("link=Configure this page")
     and $sel->ensembl_wait_for_ajax_ok
     and $sel->ensembl_click("//div[\@class='ele-das']//input[\@type='checkbox'][1]") # tick first source
