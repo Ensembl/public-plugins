@@ -34,6 +34,7 @@ sub ensembl_wait_for_ajax {
 sub ensembl_wait_for_page_to_load {
   my ($self, $timeout) = @_;
   
+  my $url = $self->get_location();
   $timeout ||= $self->_timeout;
   $timeout += 20000 if($url =~ /uswest|useast|ec2/);
   
