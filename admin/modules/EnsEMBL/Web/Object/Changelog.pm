@@ -124,7 +124,7 @@ sub show_fields {
     content           => {
       'type'      => 'html',
       'label'     => 'Content',
-      'class'     => '_tinymce',
+      'class'     => '_tinymce _tinymce_h_600',
     },
     status            => {
       'type'      => 'dropdown',
