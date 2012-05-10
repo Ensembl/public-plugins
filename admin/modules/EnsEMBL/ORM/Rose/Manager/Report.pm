@@ -43,7 +43,7 @@ sub count_failed_for_session {
     $arg{'with_objects'} = 'annotation';
     push @{$arg{'query'}}, ('or', [
       'annotation.action'   => undef,
-      '!annotation.action'  => [qw(manual_ok healthcheck_bug manual_ok_all_releases manual_ok_this_assembly manual_ok_this_genebuild)]
+      '!annotation.action'  => [ keys %{{$self->object_class->meta->relationship('annotation')->class->annotation_actions('manual_ok')}} ]
     ]);
   }
 
@@ -82,7 +82,7 @@ sub fetch_for_session {
     if ($params->{'with_annotations'} eq 'exclude_manual_ok') {
       push @{$args->{'query'}}, ('or', [
         'annotation.action'  => undef,
-        '!annotation.action' => ['manual_ok', 'manual_ok_this_assembly', 'manual_ok_all_releases', 'manual_ok_this_genebuild', 'healthcheck_bug'],
+        '!annotation.action' => [ keys %{{$self->object_class->meta->relationship('annotation')->class->annotation_actions('manual_ok')}} ],
       ]);
     }
   }
