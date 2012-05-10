@@ -63,7 +63,7 @@ sub show_fields {
   elsif ($type eq 'view') {
     @datamap = (
       'help_links'          => {'label' => 'Linked URLs',     'type' => 'checklist', 'multiple' => 1},
-      'data.content'        => {'label' => 'Content',         'type' => 'html',     'cols' => 60, 'rows'  => 40,  'class' => '_tinymce'}
+      'data.content'        => {'label' => 'Content',         'type' => 'html',     'cols' => 60, 'rows'  => 40,  'class' => '_tinymce _tinymce_h_600'}
     );
   }
   elsif ($type eq 'movie') {
