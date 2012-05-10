@@ -51,9 +51,11 @@ sub content {
   $form->add_fieldset($heading);
   
   my $options = []; #options for action select box
-  my $actions = $self->annotation_action('all');
-  push @$options, {'value' => $_, 'caption' => $actions->{$_}} for keys %$actions;
-  
+  my @actions = $self->annotation_action('all');
+  while (my ($val, $cap) = splice @actions, 0, 2) {
+    push @$options, {'value' => $val, 'caption' => $cap};
+  }
+
   $form->add_field([{
     'label'     => 'Action',
     'name'      => 'action',
