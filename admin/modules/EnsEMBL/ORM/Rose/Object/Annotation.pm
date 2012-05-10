@@ -21,15 +21,7 @@ __PACKAGE__->meta->setup(
     report_id     => {type => 'integer'},
     action        => {
       'type'          => 'enum', 
-      'values'        => [qw(
-                            manual_ok 
-                            under_review 
-                            note 
-                            healthcheck_bug 
-                            manual_ok_all_releases 
-                            manual_ok_this_assembly 
-                            manual_ok_this_genebuild
-      )]
+      'values'        => [keys %{{__PACKAGE__->annotation_actions}}]
     },
     comment       => {type => 'text'},
   ],
@@ -44,5 +36,22 @@ __PACKAGE__->meta->setup(
     },
   ]
 );
+
+sub annotation_actions {
+  ## @static
+  my ($class, $flag) = @_;
+  my @manual_ok = (
+    'manual_ok'                       => 'Manual ok: not a problem for this release',
+    'manual_ok_all_releases'          => 'Manual ok all release: not a problem for this species',
+    'manual_ok_this_assembly'         => 'Manual ok this assembly',
+    'manual_ok_this_genebuild'        => 'Manual ok this genebuild',
+    'manual_ok_this_regulatory_build' => 'Manual ok this regulatory build',
+    'healthcheck_bug'                 => 'Healthcheck bug: error should not appear, requires changes to healthcheck',
+  );
+  return $flag && $flag eq 'manual_ok' ? @manual_ok : ( @manual_ok,
+    'under_review'                    => 'Under review: Fixed or will be fixed/reviewed',
+    'note'                            => 'Note or comment',
+  );
+}
 
 1;
