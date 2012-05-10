@@ -56,14 +56,14 @@ sub show_fields {
   if ($type eq 'glossary') {
     @datamap = (
       'word'           => {'label' => 'Word',            'type' => 'string'  },
-      'expanded'       => {'label' => 'Expanded',        'type' => 'text',     'cols' => 60, 'rows'  => 5},
-      'meaning'        => {'label' => 'Meaning',         'type' => 'html',     'cols' => 60, 'notes' => 'Please make sure the text above is valid XHTML', 'rows' => 5}
+      'expanded'       => {'label' => 'Expanded',        'type' => 'text',     'cols' => 60, 'rows' => 5},
+      'meaning'        => {'label' => 'Meaning',         'type' => 'html',     'cols' => 60, 'rows' => 5,   'class' => '_tinymce'}
     );
   }
   elsif ($type eq 'view') {
     @datamap = (
       'help_links'          => {'label' => 'Linked URLs',     'type' => 'checklist', 'multiple' => 1},
-      'content'        => {'label' => 'Content',         'type' => 'html',     'cols' => 60, 'notes' => 'Please make sure the text above is valid XHTML', 'rows' => 40}
+      'content'        => {'label' => 'Content',         'type' => 'html',     'cols' => 60, 'rows' => 40,  'class' => '_tinymce'}
     );
   }
   elsif ($type eq 'movie') {
@@ -88,10 +88,10 @@ sub show_fields {
         {'value' => 'core_api',       'caption' => 'Core API'                     },
         {'value' => 'compara_api',    'caption' => 'Compara API'                  },
         {'value' => 'variation_api',  'caption' => 'Variation API'                },
-        {'value' => 'regulation_api', 'caption' => 'Regulation API'               }      
+        {'value' => 'regulation_api', 'caption' => 'Regulation API'               }
       ]},
-      'question'       => {'label' => 'Question',        'type' => 'html',     'cols' => 80, 'notes' => 'Please make sure the text above is valid XHTML'},
-      'answer'         => {'label' => 'Answer',          'type' => 'html',     'cols' => 80, 'notes' => 'Please make sure the text above is valid XHTML'}
+      'question'       => {'label' => 'Question',        'type' => 'html',     'cols' => 80,  'class' => '_tinymce'},
+      'answer'         => {'label' => 'Answer',          'type' => 'html',     'cols' => 80,  'class' => '_tinymce'}
     );
   }
 
