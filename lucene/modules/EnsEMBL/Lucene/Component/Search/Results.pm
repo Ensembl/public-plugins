@@ -26,10 +26,9 @@ sub content {
   my $html;
   
   if ($results_by_group->{'Species'}{'total'} && $results_by_group->{'Feature type'}{'total'} || $results_by_group->{'Help'}{'total'}) {
-    my @group_classes = ('threecol-left', 'threecol-middle', 'threecol-right');
-    my $i             = 0;
-       $html          = "<h3>Your search of $display_species with '$q' returned the following results:</h3>";
-    
+    $html = qq(<h3>Your search of $display_species with '$q' returned the following results:</h3>
+      <div class="threecol-wrapper">);
+
     foreach my $group_name ('Feature type', 'Species', 'Help') {
       my $group_total = delete $results_by_group->{$group_name}->{'total'};
       
@@ -37,11 +36,10 @@ sub content {
       
       next if $group_total < 1;
       
-      my $class = $group_classes[$i];
       my $group = $results_by_group->{$group_name}->{'results'};
       
       $html .= qq{
-      <div class="$class">
+      <div class="threecol-column"><div class="threecol-padding">
         <table class="search_results">
           <tr><th colspan="2">By $group_name</th></tr>
           <tr><td>Total</td><td>$group_total</td></tr>
@@ -107,10 +105,11 @@ sub content {
 
       $html .= qq{
         </table>
-      </div>};
+      </div></div>};
       
-      $i++;
     }
+    $html .= "\n</div>"; #close threecol-wrapper
+
   } else {
     $html = $self->re_search($q);
   }
