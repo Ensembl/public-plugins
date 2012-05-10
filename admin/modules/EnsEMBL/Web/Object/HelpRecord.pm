@@ -57,13 +57,13 @@ sub show_fields {
     @datamap = (
       'data.word'           => {'label' => 'Word',            'type' => 'string'  },
       'data.expanded'       => {'label' => 'Expanded',        'type' => 'text',     'cols' => 60, 'rows'  => 5},
-      'data.meaning'        => {'label' => 'Meaning',         'type' => 'html',     'cols' => 60, 'notes' => 'Please make sure the text above is valid XHTML', 'rows' => 5}
+      'data.meaning'        => {'label' => 'Meaning',         'type' => 'html',     'cols' => 60, 'rows'  => 5,   'class' => '_tinymce'}
     );
   }
   elsif ($type eq 'view') {
     @datamap = (
       'help_links'          => {'label' => 'Linked URLs',     'type' => 'checklist', 'multiple' => 1},
-      'data.content'        => {'label' => 'Content',         'type' => 'html',     'cols' => 60, 'notes' => 'Please make sure the text above is valid XHTML', 'rows' => 40}
+      'data.content'        => {'label' => 'Content',         'type' => 'html',     'cols' => 60, 'rows'  => 40,  'class' => '_tinymce'}
     );
   }
   elsif ($type eq 'movie') {
@@ -88,10 +88,10 @@ sub show_fields {
         {'value' => 'core_api',       'caption' => 'Core API'                     },
         {'value' => 'compara_api',    'caption' => 'Compara API'                  },
         {'value' => 'variation_api',  'caption' => 'Variation API'                },
-        {'value' => 'regulation_api', 'caption' => 'Regulation API'               }      
+        {'value' => 'regulation_api', 'caption' => 'Regulation API'               }
       ]},
-      'data.question'       => {'label' => 'Question',        'type' => 'html',     'cols' => 80, 'notes' => 'Please make sure the text above is valid XHTML'},
-      'data.answer'         => {'label' => 'Answer',          'type' => 'html',     'cols' => 80, 'notes' => 'Please make sure the text above is valid XHTML'}
+      'data.question'       => {'label' => 'Question',        'type' => 'html',     'cols' => 80, 'class' => '_tinymce'},
+      'data.answer'         => {'label' => 'Answer',          'type' => 'html',     'cols' => 80, 'class' => '_tinymce'}
     );
   }
 
