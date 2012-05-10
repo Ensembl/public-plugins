@@ -5,6 +5,8 @@ use warnings;
 
 use base qw(EnsEMBL::Web::Component);
 
+use EnsEMBL::ORM::Rose::Object::Annotation;
+
 use Rose::DateTime::Util qw(format_date parse_date);
 
 sub _init {
@@ -116,22 +118,16 @@ sub hc_format_compressed_date {
 sub annotation_action {
   ## Returns a label for the action enums for annotation.
   my ($self, $value) = @_;
-  
-  my $action = {
-    'manual_ok'                 => 'Manual ok: not a problem for this release',
-    'under_review'              => 'Under review: Fixed or will be fixed/reviewed',
-    'note'                      => 'Note or comment',
-    'healthcheck_bug'           => 'Healthcheck bug: error should not appear, requires changes to healthcheck',
-    'manual_ok_all_releases'    => 'Manual ok all release: not a problem for this species',
-    'manual_ok_this_assembly'   => 'Manual ok this assembly: not a problem for this species and assembly',
-    'manual_ok_this_genebuild'  => 'Manual ok this assembly: not a problem for this genebiuld',
-  };
-  
-  return $action if $value eq 'all';
-  
-  return exists $action->{ $value }
-    ? {'value' => $value,  'title' => $action->{ $value }}
-    : {'value' => '',      'title' => ''};
+
+  my @actions = EnsEMBL::ORM::Rose::Object::Annotation->annotation_actions;
+
+  return @actions if $value eq 'all';
+
+  while (my ($val, $title) = splice @actions, 0, 2) {
+    return {'value' => $value, 'title' => $title} if $val eq $value;
+  }
+
+  return {'value' => '', 'title' => ''};
 }
 
 sub group_report_counts {
