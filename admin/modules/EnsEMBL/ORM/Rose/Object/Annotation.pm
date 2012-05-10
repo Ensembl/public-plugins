@@ -21,7 +21,7 @@ __PACKAGE__->meta->setup(
     report_id     => {type => 'integer'},
     action        => {
       'type'          => 'enum', 
-      'values'        => [keys %{{__PACKAGE__->annotation_actions}}]
+      'values'        => [ __PACKAGE__->annotation_actions('keys_only') ]
     },
     comment       => {type => 'text'},
   ],
@@ -39,8 +39,9 @@ __PACKAGE__->meta->setup(
 
 sub annotation_actions {
   ## @static
-  my ($class, $flag) = @_;
-  my @manual_ok = (
+  my ($class, @flags) = @_;
+  my $flags = { map {$_ => 1} @flags };
+  my @actions = (
     'manual_ok'                       => 'Manual ok: not a problem for this release',
     'manual_ok_all_releases'          => 'Manual ok all release: not a problem for this species',
     'manual_ok_this_assembly'         => 'Manual ok this assembly',
@@ -48,10 +49,13 @@ sub annotation_actions {
     'manual_ok_this_regulatory_build' => 'Manual ok this regulatory build',
     'healthcheck_bug'                 => 'Healthcheck bug: error should not appear, requires changes to healthcheck',
   );
-  return $flag && $flag eq 'manual_ok' ? @manual_ok : ( @manual_ok,
-    'under_review'                    => 'Under review: Fixed or will be fixed/reviewed',
-    'note'                            => 'Note or comment',
-  );
+  unless (exists $flags->{'manual_ok'}) {
+    push @actions, (
+      'under_review'                  => 'Under review: Fixed or will be fixed/reviewed',
+      'note'                          => 'Note or comment',
+    );
+  }
+  return exists $flags->{'keys_only'} ? keys %{{@actions}} : @actions;
 }
 
 1;
