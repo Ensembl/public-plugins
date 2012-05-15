@@ -31,7 +31,7 @@ sub test_transcript {
       last;
     }
     
-    next if (lc($self->species) eq 'oryzias_latipes'); #Oryzias_latipes doesn't have any transcript info.
+    #next if (lc($self->species) eq 'oryzias_latipes'); #Oryzias_latipes doesn't have any transcript info. - should be working fine now
     
     #Testing ZMenu (doing only for human)
     if(lc($self->species) eq 'homo_sapiens') {
