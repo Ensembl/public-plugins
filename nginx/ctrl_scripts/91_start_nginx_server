@@ -19,7 +19,9 @@ die "file $SiteDefs::ENSEMBL_NGINX_ROOT/conf/nginx.conf does not exists"
 die "file $SiteDefs::ENSEMBL_NGINX_ROOT/sbin/nginx is not executable"
   unless -x $SiteDefs::ENSEMBL_NGINX_ROOT . '/sbin/nginx';
 
-my $cmd = "$SiteDefs::ENSEMBL_NGINX_ROOT/sbin/nginx -c $SiteDefs::ENSEMBL_NGINX_ROOT/conf/nginx.conf";
+my $prefix = "$SiteDefs::ENSEMBL_NGINX_CMDPREFIX " || "";
+my $cmd = "$prefix$SiteDefs::ENSEMBL_NGINX_ROOT/sbin/nginx -c $SiteDefs::ENSEMBL_NGINX_ROOT/conf/nginx.conf";
+
 
 system($cmd) == 0 or die " Could not start nginx server: $!.\n";
 
