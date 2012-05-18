@@ -32,6 +32,21 @@ sub show_fields {
       'label'     => 'Common Name',
       'required'  => 1,
     },
+    scientific_name   => {
+      'type'      => 'string',
+      'label'     => 'Scientific Name',
+      'required'  => 1,
+    },
+    production_name   => {
+      'type'      => 'string',
+      'label'     => 'Production Name',
+      'required'  => 1,
+    },
+    url_name          => {
+      'type'      => 'string',
+      'label'     => 'URL Name',
+      'required'  => 1,
+    },
     taxon             => {
       'type'      => 'string',
       'label'     => 'Taxon',
@@ -48,9 +63,12 @@ sub show_fields {
 sub show_columns {
   ## @overrides
   return [
-    web_name    => 'Web name',
-    db_name     => 'Database name',
-    common_name => 'Common name'
+    web_name        => 'Web name',
+    db_name         => 'Db name',
+    common_name     => 'Common name',
+    scientific_name => 'Sci. name',
+    production_name => 'Prod. name',
+    url_name        => 'URL name',
   ];
 }
 
