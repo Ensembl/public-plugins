@@ -37,6 +37,7 @@ sub render {
     <li><a href="/Production/AnalysisWebData">Analysis WebData</a></li>
     <li><a href="/AnalysisDesc/List">Analysis Description</a></li>
     <li><a href="/Species/List">Species</a></li>
+    <li><a href="/SpeciesAlias/List">Species alias</a></li>
     <li><a href="/Metakey/List">Meta keys</a></li>
     <li><a href="/Biotype/Display">Biotypes</a></li>
     <li><a href="/Webdata/Display">Web Data</a></li>
