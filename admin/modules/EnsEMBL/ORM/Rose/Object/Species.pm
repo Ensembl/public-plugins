@@ -40,6 +40,11 @@ __PACKAGE__->meta->setup(
       'map_from'    => 'species',
       'map_to'      => 'changelog',
     },
+    alias             => {
+      'type'        => 'one to many',
+      'class'       => 'EnsEMBL::ORM::Rose::Object::SpeciesAlias',
+      'column_map'  => {'species_id' => 'species_id'}
+    },
     meta_key          => {
       'type'        => 'many to many',
       'map_class'   => 'EnsEMBL::ORM::Rose::Object::MetaKeySpecies',
