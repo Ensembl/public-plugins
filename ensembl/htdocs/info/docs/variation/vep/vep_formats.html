@@ -181,10 +181,10 @@ of the ssaha pileup package. </p>
 <p> See <a
 href="http://www.hgvs.org/mutnomen/">http://www.hgvs.org/mutnomen/</a> for
 details. These must be relative to genomic or Ensembl transcript coordinates. It
-is possible, although less reliable, to use RefSeq transcripts in both the web
+also is possible to use RefSeq transcripts in both the web
 interface and the VEP script (see <a
 href="/info/docs/variation/vep/vep_script.html#hgvs">script documentation</a>).
-</p>
+ This works for RefSeq transcripts that align to the genome correctly. </p>
 
 <p> Examples: </p>
 
@@ -194,7 +194,7 @@ ENST00000285667.3:c.1047_1048insC
 5:g.140532T>C</pre>
 
 <p> Examples using RefSeq identifiers (using --refseq in the VEP script, or
-select the otherfeatures transcript database on the web interface): </p>
+select the otherfeatures transcript database on the web interface and input type of HGVS): </p>
 
 <pre class="code">NM_153681.2:c.7C>T
 NM_005239.4:c.190G>A
