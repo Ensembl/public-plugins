@@ -47,6 +47,11 @@ sub show_fields {
       'label'     => 'URL Name',
       'required'  => 1,
     },
+    alias             => {
+      'type'      => 'noedit',
+      'label'     => 'Alias',
+      'field_class' => 'hidden' #TODO - fix this hack - add a 'readonly' key
+    },
     taxon             => {
       'type'      => 'string',
       'label'     => 'Taxon',
