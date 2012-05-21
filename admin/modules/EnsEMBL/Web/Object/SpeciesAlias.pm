@@ -8,6 +8,20 @@ use base qw(EnsEMBL::Web::Object::DbFrontend);
 ### Inherited method overriding ###
 ### ### ### ### ### ### ### ### ###
 
+sub fetch_for_list {
+  ## @overrides
+  my $self = shift;
+  $self->SUPER::fetch_for_list(@_);
+  $self->_sort_rose_objects;
+}
+
+sub fetch_for_display {
+  ## @overrides
+  my $self = shift;
+  $self->SUPER::fetch_for_display(@_);
+  $self->_sort_rose_objects;
+}
+
 sub manager_class {
   ## @overrides
   return shift->rose_manager('SpeciesAlias');
@@ -50,6 +64,13 @@ sub permit_delete {
   ## @overrides
   ## Record can not be deleted, but can be set inactive
   return 'retire';
+}
+
+sub _sort_rose_objects {
+  ## @private
+  ## Sorts the rose object wrt the species name
+  my $self = shift;
+  $self->rose_objects([ sort { $a->species->get_title cmp $b->species->get_title } @{$self->rose_objects} ]);
 }
 
 1;
