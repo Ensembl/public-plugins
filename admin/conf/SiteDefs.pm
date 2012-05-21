@@ -20,6 +20,7 @@ sub update_conf {
     Metakey         => 'Modal',
     Production      => 'Modal',
     Species         => 'Modal',
+    SpeciesAlias    => 'Modal',
     Webdata         => 'Modal',
     AttribType      => 'Modal',
     ExternalDb      => 'Modal',
