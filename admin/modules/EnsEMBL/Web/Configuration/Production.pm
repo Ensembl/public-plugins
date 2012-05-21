@@ -35,7 +35,7 @@ sub populate_tree {
     'Delete'          => {},
   ]);
   $self->create_multidbfrontend_menu('AnalysisDesc', 'Analysis Description', {'filters' => [qw(WebAdmin)]});
-  $self->create_multidbfrontend_menu($_, $_, {'filters' => [qw(WebAdmin)]}) for qw(Species Metakey Biotype Webdata AttribType ExternalDb);
+  $self->create_multidbfrontend_menu($_, $_, {'filters' => [qw(WebAdmin)]}) for qw(Species SpeciesAlias Metakey Biotype Webdata AttribType ExternalDb);
   $self->delete_node('Webdata/List');
 
 }
