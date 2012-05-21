@@ -33,7 +33,7 @@ sub show_fields {
 sub show_columns {
   ## @overrides
   return [
-    species         => 'Species',
+    species         => {'title' => 'Species', 'ensembl_object' => 'Species'},
     alias           => 'Alias',
   ];
 }
