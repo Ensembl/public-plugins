@@ -132,7 +132,7 @@ sub show_fields {
     },
     assembly          => {
       'type'      => 'dropdown',
-      'label'     => 'Is this a new assembly?',
+      'label'     => 'Is this a new or renamed assembly?',
       'values'    => [{'value' => 'Y', 'caption' => 'Yes'}, {'value' => 'N', 'caption' => 'No'}]
     },
     gene_set          => {
