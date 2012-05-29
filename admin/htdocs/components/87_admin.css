@@ -78,15 +78,19 @@
 p.document_p {
   line-height: 18px;
   margin: 3px 0;
+  text-align: justify;
 }
 .code {
   font-family: Courier !important;
 }
 .code p.document_p {
   margin: 0;
+  text-align: left;
+  width: 100%;
 }
 div.code {
   margin-bottom: 12px;
+  overflow: auto;
 }
 span.code {
   margin: 0;
