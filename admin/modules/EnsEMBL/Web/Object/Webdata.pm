@@ -20,7 +20,6 @@ sub show_fields {
     data  => {
       'type'  => 'html',
       'label' => 'Web Data',
-      'value' => '{}'
     },
     comment => {
       'type'  => 'text',
