@@ -87,6 +87,7 @@ p.document_p {
   margin: 0;
   text-align: left;
   width: 100%;
+  white-space: pre;
 }
 div.code {
   margin-bottom: 12px;
