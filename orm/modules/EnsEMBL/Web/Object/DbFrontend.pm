@@ -354,7 +354,6 @@ sub _populate_from_cgi {
 ###                         Following extra key are also accepted:
 ###                         'is_null' can be set true (or equal to the caption of the null option) in case type is dropdown.
 ###                         'display' can contain values 'never' or 'optional' - never will not display this field while viewing data (Display page); optional will ignore this in Display page if value is null
-###                         'force_value' Flag if on, will not let the 'value' key to be overwritten by another value
 ### show_trackable_fields   Tells whether or not to display trackable fields while adding/editing/viewing the data (only works for Trackable rose objects)
 ###                         Can return string values 'always', 'optional', or 'never' OR a hashref with keys 'modified', 'trackable' with values of keys as 'always', 'never' (default), 'optional'
 ### show_columns            ArrayRef as [column_name => label] or [column_name => {title => ?, class => ?, readonly => ?, width => ?, ensembl_object => ?}] that are displayed when records are displayed in tabular form (List page)
