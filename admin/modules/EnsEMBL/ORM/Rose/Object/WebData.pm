@@ -20,7 +20,7 @@ __PACKAGE__->meta->setup(
 
   columns         => [
     web_data_id => {type => 'serial', primary_key => 1, not_null => 1},
-    data        => {type => 'datastructure' },
+    data        => {type => 'datastructure', 'default' => '{}' },
     comment     => {type => 'text' }
   ],
   title_column    => 'data',
