@@ -254,7 +254,6 @@ sub textsection_to_htmlnode {
     } elsif ($text_section->{'category'} eq 'code') {
       $return_div->set_attribute('class', 'code');
       $return_div->append_children(map {
-        ($_ = $return_div->encode_htmlentities($_)) =~ s/\s/&nbsp;/g;
         $dom->create_element('p', {'class' => 'document_p', 'inner_HTML' => $_})
       } @{$text_section->{'children'}});
 
