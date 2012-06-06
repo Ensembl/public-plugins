@@ -26,7 +26,8 @@ Data Description |
 <p>
 Below is a description of the data we store in the databases for Ensembl Variation. For several different species in Ensembl, 
 we import variation data (SNPs, CNVs, allele frequencies, genotypes etc) from a variety of 
-<a href="sources_documentation.html">sources</a> (e.g. dbSNP).<br />We classify the variants into different
+<a href="sources_documentation.html">sources</a> (e.g. dbSNP). Imported variants and alleles are subjected to a <a href="#quality_control">quality control</a> process to flag suspect data .
+<br />We classify the variants into different
 <a href="#classes">classes</a> and calculate the <a href="predicted_data.html">predicted consequence(s)</a> of the variant. In human, we calculate the linkage disequilibrium for each variant, by population. 
 We have also created <a href="#variation_sets">sets</a> to help people retrieve a specific group of variants from a particular dataset.
 </p>
@@ -714,6 +715,86 @@ variation sets in the Ensembl variation database (subsets are indicated by bulle
 		<td>Variants genotyped in a Han Chinese individual (YanHuang Project)</td>
 	</tr>
 </table>
+
+<br>
+
+
+<h2 id="quality_control">Quality control </h2>
+
+<p>
+A quality control process is employed to check imported variation data. Suspect variations and alleles are flagged, but are not withheld from downstream annotation. Data failing the checks is available through the browser where failure reasons are prominently listed. The API does not extract failed data by default, unless the database adaptor is specifically configured to do so using 
+<a href ="http://www.ensembl.org/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1DBAdaptor.html#add8230ebca14116047cf7d17499f9e3b">Bio::EnsEMBL::Variation::DBSQL::DBAdaptor::include_failed_variations()</a>;
+
+
+</p>
+
+<h3>Failure reasons</h3>
+<table id="quality_control_table" class="ss">
+
+<tr class="bg2">
+<th>QC Type</th>
+<th>Reported failure reason</th>
+<th>Checking process</th>
+</tr>
+
+<tr >
+<td  rowspan="4" class="bg2"><b>Mapping checks</b></td>
+<td >Variation does not map to the genome </td>
+<td > Variations with flanking sequences which do not map to reference or non-reference genomic sequences are flagged as failed.</td>
+</tr>
+
+<tr>
+<td class="bg2">Variation maps to more than 3 different locations</td>
+<td class="bg2"> For variations with flanking sequences mapping to a reference sequence, the number of mappings within all reference sequences is counted and those mapping more than three times are flagged as failed.
+For variations with flanking sequences which do not map to a reference sequence, the number of mappings within all non-reference sequences is counted and those mapping more than three times are flagged as failed.
+</td>
+</tr>
+
+<tr>
+<td >Mapped position is not compatible with reported alleles </td>
+<td >The length of the reported alleles is compared to that expected given the coordinates specified for the variation. If none of the alleles match the expected length, the variation is flagged as failed. </td>
+</tr>
+<tr>
+<td class="bg2">None of the variant alleles match the reference allele </td>
+<td class="bg2"> The sequence at the coordinates specified for the variation are extracted from the reference genome and compared to the dbSNP refSNP alleles. If the extracted sequence does not match the expected alleles, the variation is flagged as failed.</td>
+</tr>
+
+<tr>
+<td  rowspan="4" class="bg2"><b>Checks on the alleles of refSNPs</b></td>
+<td>Loci with no observed variant alleles in dbSNP   </td>
+<td>Variations with dbSNP refSNP alleles reported as 'NOVARIATION' are flagged as failed.</td>
+</tr>
+<tr>
+<td class="bg2">Variation has more than 3 different alleles </td>
+<td class="bg2">Variations with all of A, T, G and C in the dbSNP refSNP alleles are flagged as failed.</td>
+</tr>
+<tr>
+<td>Alleles contain ambiguity codes  </td>
+<td>Variations with a IUPAC ambiguity code (eg.  M, Y, R, etc ) in the dbSNP refSNP alleles are reported as failed. </td>
+</tr>
+<tr>
+<td class="bg2">Alleles contain non-nucleotide characters  </td>
+<td class="bg2">Variations with unexpected characters in the dbSNP refSNP alleles are reported as failed.</td>
+</tr>
+
+
+<tr>
+<td  rowspan="1" class="bg2"><b>Checks on the alleles in dbSNP submissions</b></td>
+<td> Additional submitted allele data from dbSNP does not agree with the dbSNP refSNP alleles </td>
+<td> Alleles from dbSNP submissions ( primarily frequency submissions, but also variant discovery submissions which have been merged in the dbSNP pipeline with the pre-existing refSNP variation) are checked against the dbSNP refSNP alleles and discrepant sets flagged as failed. Often this will highlight a strand error in the submission of frequency information for a known variation.
+</td>
+</tr>
+
+
+<tr>
+<td  rowspan="1" class="bg2"><b>External failure classification</b></td>
+<td class="bg2"> Flagged as suspect by dbSNP </td>
+<td class="bg2">Variations reported as being suspect by dbSNP are imported but flagged as failures.</td>
+</tr>
+</table>
+<br>
+
+
 
 </body>
 </html>
