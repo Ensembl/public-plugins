@@ -27,7 +27,7 @@ sub content {
   
   if ($results_by_group->{'Species'}{'total'} && $results_by_group->{'Feature type'}{'total'} || $results_by_group->{'Help'}{'total'}) {
     $html = qq(<h3>Your search of $display_species with '$q' returned the following results:</h3>
-      <div class="threecol-wrapper">);
+      <div class="column-wrapper">);
 
     foreach my $group_name ('Feature type', 'Species', 'Help') {
       my $group_total = delete $results_by_group->{$group_name}->{'total'};
@@ -39,7 +39,7 @@ sub content {
       my $group = $results_by_group->{$group_name}->{'results'};
       
       $html .= qq{
-      <div class="threecol-column"><div class="threecol-padding">
+      <div class="column-three"><div class="column-padding">
         <table class="search_results">
           <tr><th colspan="2">By $group_name</th></tr>
           <tr><td>Total</td><td>$group_total</td></tr>
@@ -108,7 +108,7 @@ sub content {
       </div></div>};
       
     }
-    $html .= "\n</div>"; #close threecol-wrapper
+    $html .= "\n</div>"; #close column-wrapper
 
   } else {
     $html = $self->re_search($q);
