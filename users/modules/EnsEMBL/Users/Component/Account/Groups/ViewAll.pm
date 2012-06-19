@@ -15,8 +15,8 @@ sub content {
   my $user        = $hub->user->rose_object;
   my $memberships = $user->memberships;
   my $subsections = [
-    $self->js_link({'href' => {qw(action Groups function Add)},  'caption' => 'Create new group',       'class' => 'add', 'target' => 'section' }),
-    $self->js_link({'href' => {qw(action Groups function List)}, 'caption' => 'Join an existing group', 'class' => 'add', 'target' => 'page'    })
+    $self->js_link({'href' => {qw(action Groups function Add)},  'caption' => 'Create new group',       'class' => 'user-group-add',  'target' => 'section' }),
+    $self->js_link({'href' => {qw(action Groups function List)}, 'caption' => 'Join an existing group', 'class' => 'user-group-join', 'target' => 'page'    })
   ];
 
   if (@$memberships) {

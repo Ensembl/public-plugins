@@ -45,21 +45,21 @@ sub content {
       $self->js_link({
         'href'        => {'action' => 'Groups', 'function' => 'Edit', 'id' => $group_id},
         'caption'     => sprintf('Edit %s', $is_admin ? 'group' : 'settings'),
-        'class'       => 'edit'
+        'class'       => 'setting'
       }),
       $is_admin
       ? $self->js_link({
         'href'        => {'action' => 'Groups', 'function' => 'Delete', 'id' => $group_id},
         'caption'     => 'Delete group',
         'target'      => 'page',
-        'class'       => 'delete',
+        'class'       => 'user-group-delete',
         'confirm'     => "You are about to delete the group $group_name. This action can not be undone."
       })
       : $self->js_link({
         'href'        => {'action' => 'Membership', 'function' => 'Unjoin', 'id' => $membership->group_member_id},
         'caption'     => 'Unsubscribe',
         'target'      => 'page',
-        'class'       => 'delete',
+        'class'       => 'user-group-unjoin',
         'confirm'     => "You are about to remove yourself from the group $group_name. This action can not be undone."
       })
     ]
@@ -128,7 +128,7 @@ sub content {
     'subsections' => [
       $table->render,
       $is_admin
-      ? $self->js_link({'href' => {'action' => 'Group', 'function' => 'Invite', 'id' => $group_id}, 'caption' => 'Invite members', 'class' => 'add'})
+      ? $self->js_link({'href' => {'action' => 'Group', 'function' => 'Invite', 'id' => $group_id}, 'caption' => 'Invite members', 'class' => 'user-add'})
       : ()
     ]
   });
