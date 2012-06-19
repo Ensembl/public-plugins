@@ -34,7 +34,7 @@ sub content {
         } @{$rose_user->logins})
       ]),
       $self->js_link({
-        'class'   => 'edit',
+        'class'   => 'setting',
         'href'    => {qw(action Details function Edit)},
         'caption' => 'Edit'
       })
