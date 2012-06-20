@@ -10,7 +10,7 @@
 
 <h2>Human vs Squirrel LastZ alignments</h2>
 
-<p>Human (<i>Homo sapiens</i>, GRCh37) and Squirrel (<i>Spermophilus tridecemlineatus</i>, spetri2) were aligned using the LastZ alignment algorithm (<a href="http://www.bx.psu.edu/miller_lab/dist/README.lastz-1.02.00/README.lastz-1.02.00a.html">LastZ</a>) in Ensembl release 67. Human  was used as the reference species. After running LastZ, the raw LastZ  alignment blocks are chained according to their location in both genomes. During the final netting process, the best sub-chain is chosen in each region on the reference species.</p>
+<p>Human (<i>Homo sapiens</i>, GRCh37) and Squirrel (<i>Ictidomys tridecemlineatus</i>, spetri2) were aligned using the LastZ alignment algorithm (<a href="http://www.bx.psu.edu/miller_lab/dist/README.lastz-1.02.00/README.lastz-1.02.00a.html">LastZ</a>) in Ensembl release 67. Human  was used as the reference species. After running LastZ, the raw LastZ  alignment blocks are chained according to their location in both genomes. During the final netting process, the best sub-chain is chosen in each region on the reference species.</p>
 
 <a href="/info/docs/compara/analyses.html" class="cp-external">Full list of 
 pairwise alignments</a>
@@ -72,7 +72,7 @@ cellspacing="2">
 <tr>
 <th style="vertical-align: middle;">Chunk size
 </th>
-<td style="vertical-align: top;">0
+<td style="vertical-align: top;">30,000,000
 </td>
 <td style="vertical-align: top;">10,100,000
 </td>
@@ -96,7 +96,7 @@ cellspacing="2">
 <tr>
 <th style="vertical-align: middle;">Masking options
 </th>
-<td style="vertical-align: top;">
+<td style="vertical-align: top;">$ENSEMBL_CVS_ROOT_DIR/ensembl-compara/scripts/pipeline/human36.spec
 </td>
 <td style="vertical-align: top;">{default_soft_masking => 1}
 </td>
