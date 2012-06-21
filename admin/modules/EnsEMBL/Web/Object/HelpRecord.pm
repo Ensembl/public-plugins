@@ -69,6 +69,7 @@ sub show_fields {
   elsif ($type eq 'movie') {
     @datamap = (
       'data.title'          => {'label' => 'Title',           'type' => 'string'  },
+      'help_record_id'      => {'label' => 'Movie ID',        'type' => 'noedit' , 'value' => '<i>to be assigned</i>', 'is_html' => 1 },
       'data.youtube_id'     => {'label' => 'Youtube ID',      'type' => 'string'  },
       'data.list_position'  => {'label' => 'List position',   'type' => 'int'     },
       'data.length'         => {'label' => 'Length',          'type' => 'string'  }
