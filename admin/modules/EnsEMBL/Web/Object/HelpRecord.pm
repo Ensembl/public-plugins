@@ -62,13 +62,14 @@ sub show_fields {
   }
   elsif ($type eq 'view') {
     @datamap = (
-      'help_links'          => {'label' => 'Linked URLs',     'type' => 'checklist', 'multiple' => 1},
+      'help_links'     => {'label' => 'Linked URLs',     'type' => 'checklist', 'multiple' => 1},
       'content'        => {'label' => 'Content',         'type' => 'html',     'cols' => 60, 'rows' => 40,  'class' => '_tinymce _tinymce_h_600'}
     );
   }
   elsif ($type eq 'movie') {
     @datamap = (
       'title'          => {'label' => 'Title',           'type' => 'string'  },
+      'help_record_id' => {'label' => 'Movie ID',        'type' => 'noedit', 'value' => '<i>to be assigned</i>', 'is_html' => 1 },
       'youtube_id'     => {'label' => 'Youtube ID',      'type' => 'string'  },
       'list_position'  => {'label' => 'List position',   'type' => 'int'     },
       'length'         => {'label' => 'Length',          'type' => 'string'  }
