@@ -29,6 +29,10 @@ sub show_fields {
       'type'      => 'dropdown',
       'label'     => 'Database Type',
     },
+    biotype_group => {
+      'type'      => 'dropdown',
+      'label'     => 'Biotype Group',
+    },
     attrib_type       => {
       'type'      => 'dropdown',
       'label'     => 'Attribute code (if the biotype is included in density feature calculations)',
