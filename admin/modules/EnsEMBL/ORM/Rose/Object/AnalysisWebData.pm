@@ -27,7 +27,8 @@ __PACKAGE__->meta->setup(
                                   funcgen
                                   otherfeatures
                                   rnaseq
-                                  vega)]
+                                  vega
+                                  pre)]
     },
     displayable             => {type => 'integer', 'not_null' => 1, 'default' => 1 },
   ],
