@@ -21,6 +21,7 @@ __PACKAGE__->meta->setup(
     logic_name              => {type => 'varchar', 'length' => 128 },
     description             => {type => 'text'},
     display_label           => {type => 'varchar', 'length' => 256 },
+    db_version              => {type => 'integer', not_null => 1, default => 1 },
   ],
 
   title_column  => 'logic_name',
