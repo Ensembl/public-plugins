@@ -56,14 +56,14 @@ sub record_tree {
   ## Flags are set on required HTML elements for 'selection and manipulation' purposes in child classes (get_nodes_by_flag)
   ## If overriding, make sure _JS_CLASS_DELETE_BUTTON & _JS_CLASS_EDIT_BUTTON classes are on the buttons if JavaScript functionality is required
   my ($self, $record) = @_;
-  my $object = $self->object;
-  my $hub    = $self->hub;
+  my $object      = $self->object;
+  my $hub         = $self->hub;
   
   my $primary_key = $record->get_primary_key_value;
   my $record_div  = $self->dom->create_element('div', {'flags' => {'primary_key' => $primary_key}});
 
-  my @bg = qw(bg1 bg2);
-  my $fields  = $object->get_fields;
+  my @bg          = qw(bg1 bg2);
+  my $fields      = $object->get_fields;
 
   while (my $field_name = shift @$fields) {
 
@@ -79,6 +79,8 @@ sub record_tree {
       $jclass = $self->{'_column_class_names'}{$field_name} = $column && $column->type eq 'datastructure' ? $self->_JS_CLASS_DATASTRUCTURE : '';
     }
 
+    my $display_value = $self->display_field_value($value, $field->{'values'} ? {'lookup' => $field->{'values'}} : {});
+
     $record_div->append_child('div', {
       'class'     => "dbf-row $bg[0]",
       'flags'     => $field_name,
@@ -89,7 +91,7 @@ sub record_tree {
       }, {
         'node_name'   => 'div',
         'class'       => "dbf-row-right $jclass",
-        'inner_HTML'  =>  $self->display_field_value($value, $field->{'values'} ? {'lookup' => $field->{'values'}} : {}) || ''
+        'inner_HTML'  =>  defined $display_value ? $display_value : ''
       }]
     });
 
