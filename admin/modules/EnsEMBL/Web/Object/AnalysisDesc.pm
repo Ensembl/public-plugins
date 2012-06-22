@@ -28,6 +28,11 @@ sub show_fields {
     description       => {
       'type'      => 'text',
       'label'     => 'Description'
+    },
+    db_version        => {
+      'type'      => 'dropdown',
+      'label'     => 'DB Version',
+      'values'    => [{'value' => '1', 'caption' => 'Yes'}, {'value' => '0', 'caption' => 'No'}]
     }
   ];
 }
