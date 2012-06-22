@@ -35,7 +35,14 @@ __PACKAGE__->meta->setup(
                             vega)]
     },
     attrib_type_id    => {type => 'integer'},
-    description       => {type => 'text'}
+    description       => {type => 'text'},
+    biotype_group     => {type => 'enum', default => 'undefined', not_null => 1, 'values' => [qw(
+                            coding
+                            pseudogene
+                            non-coding
+                            polymorphic_pseudogene
+                            undefined)]
+    }
   ],
 
   title_column          => 'name',
