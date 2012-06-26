@@ -39,7 +39,7 @@ sub content {
         'target'  => 'none',
         'inline'  => 1,
       } : {
-        'href'    => {'action' => 'Group', 'function' => 'Join', 'id' => $_->webgroup_id},
+        'href'    => {'action' => 'Group', 'function' => 'Join', 'id' => $_->group_id},
         'caption' => $_->type eq 'open' ? 'Join' : 'Send request',
         'target'  => 'none',
         'inline'  => 1,
