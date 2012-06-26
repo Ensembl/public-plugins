@@ -1,0 +1,83 @@
+#masthead div.account_holder {
+  padding: 0 5px;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+#masthead div.account_holder a.account-link {
+  display: block;
+  height: 24px;
+  line-height: 24px;
+}
+#masthead div.account_holder a.account-link span.acc-email {
+  display: block;
+  float: left;
+  margin: 0 30px 0 0;
+}
+#masthead div.account_holder a.account-link span.acc-arrow {
+  display: block;
+  float: left;
+  padding: 0 3px;
+  position: absolute;
+  right: 10px;
+  z-index: 201;
+}
+#masthead div.account_holder a.account-link span.acc-arrow span.selected {
+  display: none;
+}
+#masthead div.account_holder a.selected span.acc-email {
+  color: [[MH_HOVER]];
+}
+#masthead div.account_holder a.selected span.acc-arrow {
+  color: [[PAGE_TEXT]];
+  background-color: [[TINT_BG]];
+  height: 25px;
+  border: 1px solid [[TINT_BORDER]];
+  border-width: 0 1px;
+}
+#masthead div.account_holder a.selected span.acc-arrow span {
+  display: none;
+}
+#masthead div.account_holder a.selected span.acc-arrow span.selected {
+  display: inline;
+}
+#masthead div.account_holder div.accounts-dropdown {
+  display: none;
+  background-color: [[TINT_BG]];
+  position: absolute;
+  z-index: 200;
+  padding: 0 5px;
+  right: 10px;
+  width: 250px;
+  text-align: right;
+  border: [[TINT_BORDER]] solid 1px;
+}
+#masthead div.account_holder div.accounts-dropdown h4 {
+  color: [[PAGE_TEXT]];
+  margin: 10px 0 0;
+  padding: 6px 0;
+}
+#masthead div.account_holder div.accounts-dropdown div {
+  border-top: [[TINT_BORDER]] solid 1px;
+  background-color: inherit;
+}
+#masthead div.account_holder div.accounts-dropdown p {
+  overflow: hidden;
+  line-height: 15px;
+  height: 15px;
+}
+#masthead div.account_holder div.accounts-dropdown a {
+  color: [[PAGE_LINK]];
+}
+#masthead div.account_holder div.accounts-dropdown p a span.acc-bookmark-overflow {
+  display: none;
+}
+#masthead div.account_holder div.accounts-dropdown p.acc-bookmark-overflow a span {
+  float: left;
+}
+#masthead div.account_holder div.accounts-dropdown p.acc-bookmark-overflow a span.acc-bookmark-overflow {
+  display: inline;
+  position: absolute;
+  right: 5px;
+  background-color: [[TINT_BG]];
+}
