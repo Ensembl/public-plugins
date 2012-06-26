@@ -77,8 +77,7 @@ sub activate_login {
 sub get_local_login {
   ## Gets the local login object related to the user
   my $self = shift;
-
-  $_->type eq 'local' and return $_ for @{$self->logins};
+  return shift @{$self->find_logins('query' => ['type' => 'local'])};
 }
 
 ############################
