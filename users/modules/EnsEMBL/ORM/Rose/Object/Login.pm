@@ -6,6 +6,7 @@ use warnings;
 use base qw(EnsEMBL::ORM::Rose::Object);
 
 use EnsEMBL::Web::Tools::RandomString qw(random_string);
+use EnsEMBL::Web::Tools::Encryption qw(encrypt_password);
 
 use constant ROSE_DB_NAME => 'user';
 
@@ -25,6 +26,7 @@ __PACKAGE__->meta->setup(
   virtual_columns => [
     provider        => {'column' => 'data'},
     password        => {'column' => 'data'},
+    ldap_user       => {'column' => 'data'},
     email           => {'column' => 'data'},
     name            => {'column' => 'data'},
     organisation    => {'column' => 'data'},
@@ -40,17 +42,67 @@ __PACKAGE__->meta->setup(
   ]
 );
 
+sub get_url_code {
+  ## Creates a url code for a given login
+  ## @return String
+  my $self = shift;
+  my $user = $self->user;
+
+  return sprintf('%s-%s-%s', $user ? $user->user_id : '0', $self->login_id, $self->salt);
+}
+
+sub has_trusted_provider {
+  ## In case of an openid login, tells whether the provider is trusted or not.
+  ## @return 1 if trusted openid provider, 0 if not trusted or if login is not of type openid
+  my $self = shift;
+
+  return $self->type eq 'openid' ? {@{$SiteDefs::OPENID_PROVIDERS}}->{$self->provider}->{'trusted'} : 0;
+}
+
 sub reset_salt {
   ## Resets the random key salt
   shift->salt(random_string(8));
 }
 
-sub activate {
-  ## Adds the information about user name, organisation, country it to the related user object (does not save to the database afterwards)
+sub reset_salt_and_save {
+  ## Resets the salt before saving the object - use this instead of regular save method unless reseting the salt is not needed
+  ## @params As requried by save method
   my $self = shift;
-  my $user = $self->user;
-  $user->$_ or $self->$_ and $user->$_($self->$_) for qw(name organisation country);
+  $self->reset_salt;
+  return $self->save(@_);
+}
+
+sub set_password {
+  ## Encrypts the password before saving it to the object
+  ## @param Unencrypted password string
+  my ($self, $password) = @_;
+  $self->password(encrypt_password($password));
+}
+
+sub verify_password {
+  ## Checks a plain text password against an encrypted password
+  ## @param Password string
+  ## @return Boolean accordingly
+  my ($self, $password) = @_;
+  warn "Password verification: ".encrypt_password($password)." <> ".$self->password;
+  return encrypt_password($password) eq $self->password;
+}
+
+sub activate {
+  ## Activates the login object after copying the information about user name, organisation, country it to the related user object (does not save to the database afterwards)
+  my $self = shift;
+  if (my $user = $self->user) {
+    $self->copy_details_to_user($user);
+  }
+  $self->reset_salt;
   $self->status('active');
+}
+
+sub copy_details_to_user {
+  ## Copies the information about user name, organisation, country it to the given user object (does not save to the database afterwards)
+  ## @param User object to copy the details to
+  my ($self, $user) = @_;
+  $self->$_ and $user->$_($self->$_) for qw(name organisation country);
 }
 
 1;
