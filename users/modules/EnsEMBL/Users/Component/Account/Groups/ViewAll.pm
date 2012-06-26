@@ -15,8 +15,8 @@ sub content {
   my $user        = $hub->user->rose_object;
   my $memberships = $user->memberships;
   my $subsections = [
-    $self->js_link({'href' => {qw(action Groups function Add)},  'caption' => 'Create new group',       'class' => 'user-group-add',  'target' => 'section' }),
-    $self->js_link({'href' => {qw(action Groups function List)}, 'caption' => 'Join an existing group', 'class' => 'user-group-join', 'target' => 'page'    })
+    $self->link_create_new_group,
+    $self->link_join_existing_group
   ];
 
   if (@$memberships) {
@@ -41,7 +41,7 @@ sub content {
             'caption' => 'Delete request',
             'target'  => 'none',
           ) : (
-            'href'    => {'action' => 'Groups', 'function' => 'View', 'id' => $_->webgroup_id},
+            'href'    => {'action' => 'Groups', 'function' => 'View', 'id' => $_->group_id},
             'caption' => $_->level eq 'member' ? 'View' : 'Moderate',
             'target'  => 'page',
           ),
