@@ -9,50 +9,61 @@ package EnsEMBL::Web::Object::Account;
 
 use strict;
 
-use Net::OpenID::Consumer;
-use LWP::UserAgent;
-
-use EnsEMBL::Web::Cookie;
 use EnsEMBL::ORM::Rose::Manager::User;
 use EnsEMBL::ORM::Rose::Manager::Login;
+use EnsEMBL::ORM::Rose::Manager::Group;
+use EnsEMBL::ORM::Rose::Manager::Membership;
 
 use base qw(EnsEMBL::Web::Object);
 
-sub new {
-  ## @overrides
-  my $self = shift->SUPER::new(@_);
-  $self->can($_) and $self->$_ for lc sprintf('fetch_for_%s', $self->action || $self->default_action);
-  return $self;
+sub _messages {## TODO change message texts
+  MESSAGE_OPENID_CANCELLED      => 135 => sub { sprintf q(Your request to login via %s was cancelled. Please try again, or use one of the alternative login options below.), shift->hub->param('provider') || 'OpenID' },
+  MESSAGE_OPENID_INVALID        => 153 => '_message__OPENID_INVALID',
+  MESSAGE_OPENID_SETUP_NEEDED   => 167 => '_message__OPENID_SETUP_NEEDED',
+  MESSAGE_OPENID_ERROR          => 278 => '_message__OPENID_ERROR',
+  MESSAGE_OPENID_EMAIL_MISSING  => 233 => '_message__OPENID_EMAIL_MISSING',
+  MESSAGE_EMAIL_NOT_FOUND       => 256 => 'The email address provided is not recognised. Please try again.',
+  MESSAGE_PASSWORD_WRONG        => 297 => 'The password provided is invalid. Please try again.',
+  MESSAGE_ALREADY_REGISTERED    => 345 => sub { sprintf q(The email address provided seems to be already registered. Please try to login with the email, or request to <a href="%s">retrieve your password</a> if you have lost one.), $_[0]->hub->url({'action' => 'Password', 'function' => 'Lost', 'email' => $_[0]->hub->param('email')}) },
+  MESSAGE_CONFIRMATION_FAILED   => 354 => 'The email address could not be confirmed.',
+  MESSAGE_VERIFICATION_FAILED   => 367 => 'The email address could not be verified.',
+  MESSAGE_INVALID_PASSWORD      => 374 => 'Password needs to be atleast 6 characters long.',
+  MESSAGE_PASSWORD_MISMATCH     => 457 => 'The passwords do not match. Please try again.',
+  MESSAGE_LOGIN_MISSING         => 436 => '_message__LOGIN_MISSING',
+  MESSAGE_EMAIL_INVALID         => 492 => 'Please enter a valid email address',
+  MESSAGE_NAME_MISSING          => 543 => 'Please provide a name',
+  MESSAGE_ACCOUNT_BLOCKED       => 563 => 'Your account seems to be blocked. Please contact the helpdesk in case you need any help.',
+  MESSAGE_VERIFICATION_SENT     => 528 => sub { sprintf q(A verification email has been sent to the email address '%s'. Please go to your inbox and click on the link provided in the email.), shift->hub->param('email') },
+  MESSAGE_PASSWORD_EMAIL_SENT   => 602 => sub { sprintf q(An email has been sent to the email address '%s'. Please go to your inbox and follow the instructions to reset your password provided in the email.), shift->hub->param('email') },
+  MESSAGE_EMAIL_CHANGED         => 645 => sub { sprintf q(You email address on our records has been successfully changed. Please <a href="%s">login</a> with your new email address to continue.), shift->hub->url({'action' => 'Preferences'})},
+  MESSAGE_CANT_DELETE_LOGIN     => 691 => 'You can not delete the only login option you have to access your account.',
+  MESSAGE_GROUP_NOT_FOUND       => 713 => 'Sorry, we could not find any group.',
+  MESSAGE_MEMBER_BLOCKED        => 735 => '_message_MESSAGE_MEMBER_BLOCKED',
+  MESSAGE_BOOKMARK_NOT_FOUND    => 782 => '_message_BOOKMARK_NOT_FOUND',
+  MESSAGE_UNKNOWN_ERROR         => 952 => 'An unknown error occurred. Please try again or contact the help desk.',
 }
 
-sub caption               { return 'Your Account';                            }
-sub short_caption         { return 'Account Management';                      }
-sub default_action        { return $_[0]->hub->user ? 'Preferences' : 'Login' }
+sub caption               { return 'Your Account';                                                      }
+sub short_caption         { return 'Your Account';                                                      }
+sub default_action        { return $_[0]->hub->user ? 'Preferences' : 'Login'                           }
 
-sub fetch_for_register    {}
-sub fetch_for_preferences {}
-sub fetch_for_setcookie   {}
-sub fetch_for_linkaccount { return shift->fetch_for_selectaccount;                                      }
+sub openid_providers      { return [ map {$_} @{shift->hub->species_defs->OPENID_PROVIDERS} ];          } ## TODO do I need to map?
 
 sub get_root_url          { return $_[0]->{'_root_url'} ||= $_[0]->hub->species_defs->ENSEMBL_BASE_URL; }
 sub get_user_by_id        { return EnsEMBL::ORM::Rose::Manager::User->get_by_id($_[1]);                 }
 sub get_user_by_email     { return EnsEMBL::ORM::Rose::Manager::User->get_by_email($_[1]);              }
-sub get_login_account     { return EnsEMBL::ORM::Rose::Manager::Login->get_by_identity($_[1]);          }
 sub new_login_account     { return EnsEMBL::ORM::Rose::Manager::Login->create_empty_object($_[1]);      }
+sub get_login_account     { return EnsEMBL::ORM::Rose::Manager::Login->get_with_user($_[1]);            }
+sub get_group             { return EnsEMBL::ORM::Rose::Manager::Group->fetch_by_primary_key($_[1]);       }
+sub get_all_groups        { return EnsEMBL::ORM::Rose::Manager::Group->get_objects;                       }
 
-sub get_url_code_for_login {
-  ## Creates a url code for a given login and user
-  ## @param Login object
-  ## @param User object (default to user linked to login object)
-  ## @return String
-  my ($self, $login, $user) = @_;
-  $user ||= $login->user;
+## TODO - change above methods to 'fetch'
 
-  return sprintf('%s-%s-%s', $user ? $user->user_id : '0', $login->login_id, $login->salt);
-}
+sub fetch_membership      { return EnsEMBL::ORM::Rose::Manager::Membership->fetch_by_primary_key($_[1]);  }
 
 sub get_login_from_url_code {
   ## Fetches and returns a login object by parsing the code parameter in the url
+  ## @param Flag if on, will ignore checking a valid user object related to the login object
   ## @return Login object for matching salt, login id and user id, undef otherwise
   my ($self, $ignore_user) = @_;
 
@@ -61,7 +72,7 @@ sub get_login_from_url_code {
   my $login = EnsEMBL::ORM::Rose::Manager::Login->get_objects(
     'with_objects'  => [ 'user' ],
     'query'         => [ 'login_id', $2, 'salt', $3 ],
-    'limit'         => 1
+    'limit'         => 1,
   )->[0];
 
   if ($login) {
@@ -80,121 +91,66 @@ sub new_user_account {
   return EnsEMBL::ORM::Rose::Manager::User->create_empty_object({
     'status'  => 'active',
     'email'   => delete $params->{'email'},
-    'name'    => delete $params->{'name'} || sprintf('%s User', $self->hub->species_defs->ENSEMBL_SITETYPE),
+    'name'    => delete $params->{'name'} || '',
     %$params
   });
 }
 
-sub fetch_for_selectaccount {
-  my $self = shift;
-
-  $self->rose_objects($self->get_login_from_url_code(1));
-}
-
-sub openid_providers {
-  return [ map {$_} @{shift->hub->species_defs->OPENID_PROVIDERS} ];
-}
-
-sub get_openid_consumer {
-  ## Gets the openid consumer object used to openid login process
-  ## @return Net::OpenID::Consumer
-  my $self    = shift;
-  my $hub     = $self->hub;
-  my $ua      = LWP::UserAgent->new;
-
-  $ua->proxy([qw(http https)], $_) for $hub->species_defs->ENSEMBL_WWW_PROXY || ();
-
-  return Net::OpenID::Consumer->new(
-    'ua'              => $ua,
-    'required_root'   => $self->get_root_url,
-    'args'            => $hub->input,
-    'consumer_secret' => 'ifyhvlksej14', # TODO
-  );
-}
-
-sub get_openid_url {
-  my ($self, $provider, $username) = @_;
-
-  my $openid_providers = $self->openid_providers;
-
-  while (my ($key, $value) = splice @$openid_providers, 0, 2) {
-    if ($key eq $provider) {
-      $value->{'url'} =~ s/\[USERNAME\]/$username/;
-      return $value->{'url'};
-    }
-  }
-}
-
-sub user_cookie {
-  ## Gets the cookie saved against ENSEMBL_USER_ID
-  my $species_defs = shift->hub->species_defs;
-  return EnsEMBL::Web::Cookie->new({
-    'host'    => $species_defs->ENSEMBL_COOKIEHOST,
-    'name'    => $species_defs->ENSEMBL_USER_COOKIE,
-    'value'   => '',
-    'env'     => 'ENSEMBL_USER_ID',
-    'hash'    => {
-      'offset'  => $species_defs->ENSEMBL_ENCRYPT_0,
-      'key1'    => $species_defs->ENSEMBL_ENCRYPT_1,
-      'key2'    => $species_defs->ENSEMBL_ENCRYPT_2,
-      'key3'    => $species_defs->ENSEMBL_ENCRYPT_3,
-      'expiry'  => $species_defs->ENSEMBL_ENCRYPT_EXPIRY,
-      'refresh' => $species_defs->ENSEMBL_ENCRYPT_REFRESH
-    }
-  });
-}
-
-sub activate_user {
-  ## Activates the user by reading 'code' GET parameter
-  ## @return Boolean true if activated successfully, false otherwise
-  my $self  = shift;
-  my $login = $self->get_login_from_url_code or return 0;
-
+sub activate_user_login {
+  ## Activates the user's login object
+  ## @param Login object
+  my ($self, $login) = @_;
+  my $user = $login->user;
   $login->activate;
-  return $login->save;
+  $user->save;
+  $login->save;
 }
 
-sub counts {
-  my $self         = shift;
-  my $hub          = $self->hub;
-  my $user         = $hub->user;
-  my $session      = $hub->session;
-  my $species_defs = $hub->species_defs;
-  my $counts       = {};
+sub get_group_types {
+  ## Gets the type of groups with the display text
+  return {
+    'open'          => 'Open - any user can see and join this group.',
+    'restricted'    => 'Restricted - any user can see this group, but can join only if an administrator sends him an invitation or approves his request.',
+    'private'       => 'Private - a user can not see this group, and can only join it if an administrator sends him a request.'
+  };
+}
 
-  if ($user && $user->id) {
-    $counts->{'bookmarks'}      = $user->bookmarks->count;
-    $counts->{'configurations'} = $user->configurations->count;
-    $counts->{'annotations'}    = $user->annotations->count;
-    
-    # EnsembleGenomes sites share session and user account - only count data that is attached to species in current site
-    $counts->{'userdata'} = 0;
-    my @userdata = (
-      $session->get_data('type' => 'upload'),
-      $session->get_data('type' => 'url'), 
-      $session->get_all_das,
-      $user->uploads,
-      $user->dases, 
-      $user->urls
-    );
-    foreach my $item (@userdata) {
-      next unless $item and $species_defs->valid_species(ref ($item) =~ /Record/ ? $item->species : $item->{species});
-      $counts->{'userdata'} ++;
-    }
-    
-    my @groups  = $user->find_nonadmin_groups;
-    foreach my $group (@groups) {
-      $counts->{'bookmarks'}      += $group->bookmarks->count;
-      $counts->{'configurations'} += $group->configurations->count;
-      $counts->{'annotations'}    += $group->annotations->count;
-    }
+sub get_notification_types {
+  ## Gets the type of notifications settings saved in the db for a group admin
+  return {
+    'notify_join'   => 'Email me when someone joins the group',
+    'notify_edit'   => 'Email me when someone edits the group information',
+    'notify_share'  => 'Email me when someone shares something with the group'
+  };
+}
 
-    $counts->{'news_filters'} = $user->newsfilters->count;
-    $counts->{'admin'}        = $user->find_administratable_groups;
-    $counts->{'member'}       = scalar(@groups);
-  }
+sub get_message {
+  ## Returns the message string for a given code
+  ## @param Numeric code for the message
+  ## @return HTML String message
+  my ($self, $code) = @_;
+  my $hub           = $self->hub;
+  my @messages      = $self->_messages;
+  $messages[1] eq $code and return ref $messages[2] eq 'CODE' ? $messages[2]->($self) : $messages[2] or splice @messages, 0, 3 while @messages;
+}
 
-  return $counts;
+sub get_message_code {
+  ## Returns the code of the message
+  ## @param Message keyword as in &_messages
+  ## @return code for url
+  my ($self, $key)  = @_;
+  my @messages      = $self->_messages;
+  $messages[0] eq $key and return $messages[1] or splice @messages, 0, 3 while @messages;
+}
+
+sub is_inline_request {
+  return shift->hub->param('_inline') ? 1 : undef;
+}
+
+sub list_of_countries {
+  ## Returns the list of all the countries in the world acc to ISO_3166
+  ## @return Hashref with ISO_3166-1 code as key and name of the country as value
+  return shift->hub->species_defs->COUNTRY_CODES;
 }
 
 1;
