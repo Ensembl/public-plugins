@@ -42,7 +42,6 @@ sub content {
   $html .= '<div class="print_hide">'; 
   unless ($ENV{'ENSEMBL_TYPE'} =~ /Help|Account|UserData/) {
     $html .= qq{
-      <br />
         <a class="modal_link" id="p_link" href="/Help/Permalink?url=$stable_URL">Permanent link</a>
     };
     unless ($you_are_here =~ /html$/ && $you_are_here ne '/index.html') {
