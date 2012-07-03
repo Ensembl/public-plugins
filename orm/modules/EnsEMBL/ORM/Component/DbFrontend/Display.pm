@@ -140,7 +140,7 @@ sub display_field_value {
   # if it's an arrayref
   if (ref $value eq 'ARRAY') {
     my @return = map {$self->display_field_value($_)} @$value;
-    return @return ? sprintf($extras->{'delimiter'} ? '%s' : '<ul><li>%s</li></ul>', join($extras->{'delimiter'} || '</li><li>', @return)) : '';
+    return @return ? sprintf($extras->{'delimiter'} ? '%s' : '<ul><li>%s</li></ul>', join($extras->{'delimiter'} || '</li><li>', sort @return)) : '';
   }
 
   # if it's DateTime (rose returns DateTime for datetime mysql type)
