@@ -47,10 +47,13 @@ sub show_fields {
       'label'     => 'URL Name',
       'required'  => 1,
     },
+    attrib_type       => {
+      'type'      => 'dropdown',
+      'label'     => 'Attrib Type',
+    },
     alias             => {
-      'type'      => 'noedit',
+      'type'      => 'dropdown',
       'label'     => 'Alias',
-      'field_class' => 'hidden' #TODO - fix this hack - add a 'readonly' key
     },
     taxon             => {
       'type'      => 'string',
