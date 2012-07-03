@@ -53,6 +53,7 @@ sub show_fields {
       'label'     => 'Attrib Type',
     },
     alias             => {
+      'is_null'   => 'No Alias',
       'type'      => 'dropdown',
       'label'     => 'Alias',
     },
