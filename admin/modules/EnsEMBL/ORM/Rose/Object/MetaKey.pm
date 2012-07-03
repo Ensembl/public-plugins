@@ -26,6 +26,7 @@ __PACKAGE__->meta->setup(
                             core
                             funcgen
                             otherfeatures
+                            pre_site
                             rnaseq
                             variation
                             vega)]

@@ -26,11 +26,11 @@ __PACKAGE__->meta->setup(
                                   core
                                   funcgen
                                   otherfeatures
+                                  pre_site
                                   rnaseq
-                                  vega
-                                  pre)]
+                                  vega)]
     },
-    displayable             => {type => 'integer', 'not_null' => 1, 'default' => 1 },
+    displayable             => {type => 'integer', 'not_null' => 1, 'default' => 1},
   ],
 
   relationships => [

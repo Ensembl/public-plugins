@@ -30,6 +30,7 @@ __PACKAGE__->meta->setup(
                             coreexpressiongnf
                             funcgen
                             otherfeatures
+                            pre_site
                             rnaseq
                             variation
                             vega)]
