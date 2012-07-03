@@ -25,6 +25,7 @@ sub update_conf {
   $SiteDefs::__species_aliases{ 'Gorilla_gorilla'                   } = [qw(gg ggo ggor kong gorilla)]; 
   $SiteDefs::__species_aliases{ 'Felis_catus'                       } = [qw(fc fcat cat)];
   $SiteDefs::__species_aliases{ 'Homo_sapiens'                      } = [qw(hs hsap human man default)]; 
+  $SiteDefs::__species_aliases{ 'Ictidomys_tridecemlineatus'        } = [qw(it itri squirrel ictidomys)];
   $SiteDefs::__species_aliases{ 'Latimeria_chalumnae'               } = [qw(lc ltch coelacanth living fossil)];
   $SiteDefs::__species_aliases{ 'Loxodonta_africana'                } = [qw(la lafr elephant africana loxodontai hathi nellie dumbo)];
   $SiteDefs::__species_aliases{ 'Oryctolagus_cuniculus'             } = [qw(oc ocun rabbit bugs bunny hutch harvey)];
@@ -45,7 +46,6 @@ sub update_conf {
   $SiteDefs::__species_aliases{ 'Rattus_norvegicus'                 } = [qw(rn rnor rat)];
   $SiteDefs::__species_aliases{ 'Sarcophilus_harrisii'              } = [qw(sh devil tasmanian devil)];
   $SiteDefs::__species_aliases{ 'Sorex_araneus'                     } = [qw(sa)];
-  $SiteDefs::__species_aliases{ 'Spermophilus_tridecemlineatus'     } = [qw(st stri squirrel spermophilus)];
   $SiteDefs::__species_aliases{ 'Sus_scrofa'                        } = [qw(ss sscr pig sus oink porky)];
   $SiteDefs::__species_aliases{ 'Tarsius_syrichta'                  } = [qw(ts tarsier gremlin)];
   $SiteDefs::__species_aliases{ 'Tupaia_belangeri'                  } = [qw(tb tbel treeshrew shrew)];
@@ -64,6 +64,7 @@ sub update_conf {
   $SiteDefs::__species_aliases{ 'Tetraodon_nigroviridis'            } = [qw(tn tnig tetraodon)];
   $SiteDefs::__species_aliases{ 'Gadus_morhua'                      } = [qw(gm gmor gadus cod)];
 #-------------------- amphibians
+  $SiteDefs::__species_aliases{ 'Pelodiscus_sinensis'               } = [qw(ps chinese softshell turtle)];
   $SiteDefs::__species_aliases{ 'Xenopus_tropicalis'                } = [qw(xt xtro xenopus frog)];
 #-------------------- reptiles
   $SiteDefs::__species_aliases{ 'Anolis_carolinensis'               } = [qw(ac anolis anole lizard)];
