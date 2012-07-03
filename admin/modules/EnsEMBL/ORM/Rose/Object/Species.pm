@@ -26,6 +26,7 @@ __PACKAGE__->meta->setup(
     url_name          => {type => 'varchar', 'length' => 255, not_null => 1},
     taxon             => {type => 'varchar', 'length' => 20 },
     species_prefix    => {type => 'varchar', 'length' => 20 },
+    attrib_type_id    => {type => 'integer', 'length' => 10 },
     is_current        => {type => 'integer'},
   ],
   
@@ -55,6 +56,11 @@ __PACKAGE__->meta->setup(
       'type'        => 'one to many',
       'class'       => 'EnsEMBL::ORM::Rose::Object::AnalysisWebData',
       'column_map'  => {'species_id' => 'species_id'}
+    },
+    attrib_type       => {
+      'type'        => 'many to one',
+      'class'       => 'EnsEMBL::ORM::Rose::Object::AttribType',
+      'column_map'  => {'attrib_type_id' => 'attrib_type_id'}
     }
   ],
 );
