@@ -48,6 +48,7 @@ sub show_fields {
       'required'  => 1,
     },
     attrib_type       => {
+      'is_null'   => 'None',
       'type'      => 'dropdown',
       'label'     => 'Attrib Type',
     },
