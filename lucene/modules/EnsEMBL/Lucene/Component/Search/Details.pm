@@ -34,6 +34,7 @@ sub _format_message {
   $idx .= " Document" if $idx =~ /Glossary|Help/;
   $idx = 'Document' if $idx eq 'Docs';
   $idx = uc($idx) if $idx eq 'Faq';
+  $idx = 'Somatic Mutation' if $idx eq 'Mutation';
   my $message = NUM( $count, 'true' ) . ' ' . PL($idx) . ' ' . PL('matches') . " your query ('$query')";
   my $display_species = $species eq 'all' ? 'all species' : $self->hub->species_defs->get_config($species,'SPECIES_COMMON_NAME');
   #uncomment this to show latin name as well
@@ -144,11 +145,11 @@ sub render_hits {
     'IDHISTORY_TRANSLATION' => sub { return "Archived Translation Stable ID: $_[0]->{id}" },
     'FAMILY'                => sub { return "Ensembl protein family: $_[0]->{id}" },
     'DOMAIN'                => sub { return "Interpro domain: $_[0]->{id}" },
-    'VARIATION'             => sub { return "$_[0]->{source} Variation: $_[0]->{id}" },
+    'VARIATION'             => sub { return "$_[0]->{id}" },
     'SEQUENCE'              => sub { return ( $_[0]->{id} =~ /LRG/ ? 'LRG' : '' ) . " Sequence: $_[0]->{id}" },
     'PROTEINALIGNFEATURE' => sub { return "Protein alignment feature : @{[$_[0]->{description} =~ /(^.*)\shits/]}" },
     'DNAALIGNFEATURE'     => sub { return "DNA alignment feature : @{[$_[0]->{description} =~ /(^.*)\shits/]}" },
-    'PHENOTYPE'           => sub { return "Variation Phenotype: $_[0]->{description}" },
+    'PHENOTYPE'           => sub { return "Phenotype: $_[0]->{description}" },
     'STRUCTURALVARIATION' => sub { return "Structural Variation: $_[0]->{id}" },
     'MARKER'              => sub { return "Marker: $_[0]->{id}" },
     'REGULATORYFEATURE'   => sub { return ($_[0]->{subtype} eq 'RegulatoryFactor') ? "Regulatory region: $_[0]->{id}" : "Regulatory Feature: $_[0]->{id}"},
@@ -259,7 +260,6 @@ sub _render_genome_hits {
     my $id                 = $hit->{id};
     my $display_identifier = $hit->{featuretype} eq 'Phenotype' ? $hit->{description} : $hit->{id};
     my $url                = $hit->{feature_url};
-
     my $species = $hit->{species};
 
     my $hit_tagline = eval { $hit_tagline_lookup->{ uc $hit->{featuretype} }($hit) } || '';
@@ -289,6 +289,16 @@ qq{<div style="width: 85%;border-bottom: 1px solid #CCCCCC; "><a class="notext" 
 <dl class="summary">
   <dt>$label</dt>
   <dd><a href="$url">$hit->{id}</a></dd>
+</dl>
+);
+    }
+
+    if ($hit->{featuretype} =~ /Variation/) {
+      my $label = 'Variation ID';
+      $html .= qq(
+<dl class="summary">
+  <dt>$label</dt>
+  <dd><a href="/$url">$hit->{id}</a></dd>
 </dl>
 );
     }
