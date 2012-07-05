@@ -26,8 +26,9 @@ __PACKAGE__->meta->setup(
                                   core
                                   funcgen
                                   otherfeatures
-                                  pre_site
+                                  presite
                                   rnaseq
+                                  sangervega
                                   vega)]
     },
     displayable             => {type => 'integer', 'not_null' => 1, 'default' => 1},
