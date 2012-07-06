@@ -6,8 +6,6 @@ package EnsEMBL::ORM::Rose::Object::User;
 use strict;
 use warnings;
 
-use EnsEMBL::Web::Exceptions;
-
 use base qw(EnsEMBL::ORM::Rose::Object::Trackable);
 
 use constant ROSE_DB_NAME => 'user';
