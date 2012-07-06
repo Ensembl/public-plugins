@@ -12,38 +12,60 @@ use constant ROSE_DB_NAME => 'user';
 #use constant DEBUG_SQL => 1;
 
 __PACKAGE__->meta->setup(
-  table       => 'user',
+  table                 => 'user',
 
-  columns     => [
-    user_id           => {'type' => 'serial', 'primary_key' => 1, 'not_null' => 1},
-    name              => {'type' => 'varchar', 'length' => '255'},
-    email             => {'type' => 'varchar', 'length' => '255'},
-    data              => {'type' => 'text'},
-    organisation      => {'type' => 'varchar', 'length' => '255'},
-    country           => {'type' => 'varchar', 'length' => '2'},
-    status            => {'type' => 'enum', 'values' => [qw(active suspended)], 'default' => 'active'},
+  columns               => [
+    user_id               => {
+      'type'                => 'serial',
+      'primary_key'         => 1,
+      'not_null'            => 1
+    },
+    name                  => {
+      'type'                => 'varchar',
+      'length'              => '255'
+    },
+    email                 => {
+      'type'                => 'varchar',
+      'length'              => '255'
+    },
+    data                  => {
+      'type'                => 'text'
+    },
+    organisation          => {
+      'type'                => 'varchar',
+      'length'              => '255'
+    },
+    country               => {
+      'type'                => 'varchar',
+      'length'              => '2'
+    },
+    status                => {
+      'type'                => 'enum',
+      'values'              => [qw(active suspended)],
+      'default'             => 'active'
+    }
   ],
 
-  relationships => [
-    logins            => {
-      'type'        => 'one to many',
-      'class'       => 'EnsEMBL::ORM::Rose::Object::Login',
-      'column_map'  => {'user_id' => 'user_id'},
+  relationships         => [
+    logins                => {
+      'type'                => 'one to many',
+      'class'               => 'EnsEMBL::ORM::Rose::Object::Login',
+      'column_map'          => {'user_id' => 'user_id'},
     },
-    records           => {
-      'type'        => 'one to many',
-      'class'       => 'EnsEMBL::ORM::Rose::Object::UserRecord',
-      'column_map'  => {'user_id' => 'user_id'},
+    records               => {
+      'type'                => 'one to many',
+      'class'               => 'EnsEMBL::ORM::Rose::Object::UserRecord',
+      'column_map'          => {'user_id' => 'user_id'},
     },
-    memberships       => {
-      'type'        => 'one to many',
-      'class'       => 'EnsEMBL::ORM::Rose::Object::Membership',
-      'column_map'  => {'user_id' => 'user_id'},
+    memberships           => {
+      'type'                => 'one to many',
+      'class'               => 'EnsEMBL::ORM::Rose::Object::Membership',
+      'column_map'          => {'user_id' => 'user_id'},
     },
-    admin_privilege   => {
-      'type'        => 'one to one',
-      'class'       => 'EnsEMBL::ORM::Rose::Object::AdminPrivilage',
-      'column_map'  => {'user_id' => 'user_id'}
+    admin_privilege       => {
+      'type'                => 'one to one',
+      'class'               => 'EnsEMBL::ORM::Rose::Object::AdminPrivilage',
+      'column_map'          => {'user_id' => 'user_id'}
     }
   ],
 
@@ -52,6 +74,46 @@ __PACKAGE__->meta->setup(
       'relationship'        => 'records',
       'condition'           => {'type' => 'bookmark'}
     },
+    configurations        => {
+      'relationship'        => 'records',
+      'condition'           => {'type' => 'configuration'}
+    },
+    annotations           => {
+      'relationship'        => 'records',
+      'condition'           => {'type' => 'annotation'}
+    },
+    dases                 => {
+      'relationship'        => 'records',
+      'condition'           => {'type' => 'das'}
+    },
+    newsfilters           => {
+      'relationship'        => 'records',
+      'condition'           => {'type' => 'newsfilter'}
+    },
+    sortables             => {
+      'relationship'        => 'records',
+      'condition'           => {'type' => 'sortable'}
+    },
+    currentconfigs        => {
+      'relationship'        => 'records',
+      'condition'           => {'type' => 'current_config'}
+    },
+    specieslists          => {
+      'relationship'        => 'records',
+      'condition'           => {'type' => 'specieslist'}
+    },
+    uploads               => {
+      'relationship'        => 'records',
+      'condition'           => {'type' => 'upload'}
+    },
+    urls                  => {
+      'relationship'        => 'records',
+      'condition'           => {'type' => 'url'}
+    },
+    histories             => {
+      'relationship'        => 'records',
+      'condition'           => {'type' => 'history'}
+    }
   ]
 );
 
@@ -115,19 +177,17 @@ sub create_membership_object {
   ## @return Memberhsip object with a new group (not yet saved to the database)
   my ($self, $params) = @_;
 
-  return $self->meta->relationship('memberships')->class->new(
+  return ($self->add_memberships([{
     'level'         => 'administrator',
-    'user_id'       => $self->user_id,  # many to one relation does not save related objects, so have to provide the foreign key value
+    'user_id'       => $self->user_id,  # this prevents from calling save on the user object to actually link the objects
     'status'        => 'active',
     'member_status' => 'active',
     'group'         => {
       'status'        => 'active'
     },
     %{$params || {}}    
-  );
+  }]))[0];
 }
-
-
 
 #####################
 ###               ###
@@ -168,7 +228,7 @@ sub is_nonadminmember_of {
 ####                 ####
 #########################
 
-sub create_record   {
+sub create_record {
   ## Creates a user record of a given type (does not save it to the db)
   ## @param Type of the record
   ## @param Hashref of name value pair for columns of the new object (optional)
@@ -180,17 +240,5 @@ sub create_record   {
     %{$params || {}}
   }]))[0];
 }
-
-
-sub configurations  { return [ grep {$_->type eq 'configuration'}   shift->records ]; } ## Gets all the configurations for the user   @return ArrayRef of UserRecord rose objects
-sub annotations     { return [ grep {$_->type eq 'annotation'}      shift->records ]; } ## Gets all the annotations for the user      @return ArrayRef of UserRecord rose objects
-sub dases           { return [ grep {$_->type eq 'das'}             shift->records ]; } ## Gets all the das sources for the user      @return ArrayRef of UserRecord rose objects
-sub newsfilters     { return [ grep {$_->type eq 'newsfilter'}      shift->records ]; } ## Gets all the newsfilters for the user      @return ArrayRef of UserRecord rose objects
-sub sortables       { return [ grep {$_->type eq 'sortable'}        shift->records ]; } ## Gets all the sortables for the user        @return ArrayRef of UserRecord rose objects
-sub currentconfigs  { return [ grep {$_->type eq 'current_config'}  shift->records ]; } ## Gets all the current configs for the user  @return ArrayRef of UserRecord rose objects
-sub specieslists    { return [ grep {$_->type eq 'specieslist'}     shift->records ]; } ## Gets all the specieslists for the user     @return ArrayRef of UserRecord rose objects
-sub uploads         { return [ grep {$_->type eq 'upload'}          shift->records ]; } ## Gets all the uploads for the user          @return ArrayRef of UserRecord rose objects
-sub urls            { return [ grep {$_->type eq 'url'}             shift->records ]; } ## Gets all the urls for the user             @return ArrayRef of UserRecord rose objects
-sub histories       { return [ grep {$_->type eq 'history'}         shift->records ]; } ## Gets all the history for the user          @return ArrayRef of UserRecord rose objects
 
 1;
