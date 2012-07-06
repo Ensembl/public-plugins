@@ -9,7 +9,6 @@ use warnings;
 use base qw(EnsEMBL::ORM::Rose::Object::Trackable);
 
 use constant ROSE_DB_NAME => 'user';
-#use constant DEBUG_SQL => 1;
 
 __PACKAGE__->meta->setup(
   table                 => 'user',
