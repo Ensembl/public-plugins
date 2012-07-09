@@ -49,11 +49,11 @@ sub content {
         }),
         $is_admin
         ? $self->js_link({
-          'href'        => {'action' => 'Groups', 'function' => 'Delete', 'id' => $group_id},
+          'href'        => {'action' => 'Group', 'function' => 'Delete', 'id' => $group_id},
           'caption'     => 'Delete group',
           'target'      => 'page',
           'class'       => 'user-group-delete',
-          'confirm'     => "You are about to delete the group $group_name. This action can not be undone."
+          'confirm'     => "You are about to delete the group $group_name. This action can not be undone. Alternatively, click 'cancel' and you can set this group to 'inactive' by editing settings."
         })
         : $self->js_link({
           'href'        => {'action' => 'Membership', 'function' => 'Unjoin', 'id' => $membership->group_member_id},
@@ -85,39 +85,64 @@ sub content {
     ## TODO
 
     # members
-    my $table = $self->new_table(
-      [{'key' => 'member', 'title' => 'Member', 'width' => '30%'}, {'key' => 'level', 'title' => 'Level', 'width' => $is_admin ? '20%' : '70%'}, $is_admin ? map {'key' => $_, 'title' => '', 'width' => '25%'}, qw(change_level remove) : ()],
-      [],
-      {'data_table' => 'no_col_toggle', 'exportable' => 0, 'data_table_config' => {'iDisplayLength' => 25}}
-    );
-    for (@{$group->memberships}) {
-      $_->is_active or next;
-      my $member          = $_->user or next;
+    $group->load('with' => [ 'memberships', 'memberships.user' ]);
+    my @memberships = grep {$_->user} @{$group->memberships};
+
+    my $table = $self->new_table([
+      {'key' => 'member',   'title' => 'Member',  'width' => '30%'                    },
+      {'key' => 'level',    'title' => 'Level',   'width' => $is_admin ? '20%' : '70%'},
+      $is_admin ?
+      {'key' => 'buttons',  'title' => '',        'width' => '50%'                    } : ()
+    ], [], {'data_table' => 'no_col_toggle', 'exportable' => 0, 'data_table_config' => {'iDisplayLength' => 25}});
+
+    for (sort {$a->user->name cmp $b->user->name} @memberships) {
+
+      my $is_pending_request    = $_->is_pending_request;
+      my $is_pending_invitation = $_->is_pending_invitation;
+      my $is_active             = $_->is_active;
+
+      next unless $is_active || $is_pending_request || $is_pending_invitation;
+
+      my $member          = $_->user;
       my $group_member_id = $_->group_member_id;
       my $member_id       = $member->user_id;
       my $member_name     = $self->html_encode($member->name);
       my $member_email    = $member->email;
       my $member_level    = $_->level;
-      my $row             = {'member' => $member_name, 'level' => ucfirst $member_level};
+      my $row             = {
+        'member'            => sprintf('%s%s', $member_name, $is_admin ? " ($member_email)" : ''),
+        'level'             => !$is_active ? $is_pending_request ? 'Request recieved' : 'Invitation sent' : ucfirst $member_level
+      };
+      my @buttons;
       if ($is_admin) {
-        if ($member_level ne 'administrator') { # can not remove an admin
-          $row->{'remove'} = $self->js_link({
-            'href'    => {'action' => 'Membership', 'function' => 'Remove', 'id' => $group_member_id},
-            'caption' => 'Remove',
-            'confirm' => "Are you sure you want to remove $member_name ($member_email) from the group $group_name?",
-            'target'  => 'page',
+        if ($is_pending_request) {
+          push @buttons,
+            $self->js_link({'href' => {'action' => 'Membership', 'function' => 'Allow',      'id' => $group_member_id}, 'inline' => 1, 'target' => 'page', 'caption' => 'Allow'}),
+            $self->js_link({'href' => {'action' => 'Membership', 'function' => 'Ignore',     'id' => $group_member_id}, 'inline' => 1, 'target' => 'page', 'caption' => 'Ignore'}),
+            $self->js_link({'href' => {'action' => 'Membership', 'function' => 'BlockUser',  'id' => $group_member_id}, 'inline' => 1, 'target' => 'page', 'caption' => 'Block user from sending further requests'})
+          ;
+        } else {
+          if ($member_level ne 'administrator') { # can not remove an admin
+            push @buttons, $self->js_link({
+              'href'    => {'action' => 'Membership', 'function' => 'Remove', 'id' => $group_member_id},
+              'caption' => $is_pending_invitation ? 'Remove invitation' : 'Remove',
+              'confirm' => $is_pending_invitation
+                ? "Are you sure you want to deactivate the invitation sent to $member_name ($member_email) for the group $group_name?"
+                : "Are you sure you want to remove $member_name ($member_email) from the group $group_name?",
+              'target'  => 'page',
+              'inline'  => 1,
+            });
+          }
+          push @buttons, $self->js_link({
+            'href'    => {'action' => 'Membership', 'function' => 'Change', 'id' => $group_member_id, 'level' => $member_level eq 'administrator' ? 'member' : 'administrator'},
+            'caption' => $member_level eq 'administrator' ? 'Demote to member' : 'Make administrator',
+            'confirm' => $member_id eq $user->user_id ? q(Are you sure you want to demote yourself to a member? You won't be able to undo this yourself.) : '',
+            'target'  => 'none',
             'inline'  => 1,
-          });
+          }) unless $is_pending_invitation;
         }
-        $row->{'change_level'} = $self->js_link({
-          'href'    => {'action' => 'Membership', 'function' => 'Change', 'id' => $group_member_id, 'level' => $member_level eq 'administrator' ? 'member' : 'administrator'},
-          'caption' => $member_level eq 'administrator' ? 'Demote to member' : 'Make administrator',
-          'confirm' => $member_id eq $user->user_id ? q(Are you sure you want to demote yourself to a member? You won't be able to undo this yourself.) : '',
-          'target'  => 'none',
-          'inline'  => 1,
-        });
-        $row->{'member'} .= " ($member_email)";
       }
+      $row->{'buttons'} = join '&nbsp;&middot;&nbsp;', @buttons;
       $table->add_row($row);
     }
 
