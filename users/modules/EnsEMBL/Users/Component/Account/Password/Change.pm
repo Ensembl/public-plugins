@@ -19,7 +19,7 @@ sub content {
   my $form      = $content->append_child($self->new_form({'action' => $hub->url({qw(action Password function Save)})}));
 
   my $user      = $hub->user;
-  my $login     = $user ? $user->rose_object->get_local_login : $object->get_login_from_url_code;
+  my $login     = $user ? $user->rose_object->get_local_login : $object->fetch_login_from_url_code;
 
   # If no login object found - user manually changed the url
   return $self->render_message($object->get_message_code('MESSAGE_UNKNOWN_ERROR'), {'error' => 1}) unless $login;

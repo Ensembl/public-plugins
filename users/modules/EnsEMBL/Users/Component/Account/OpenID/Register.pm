@@ -18,7 +18,7 @@ sub content {
   my $self      = shift;
   my $hub       = $self->hub;
   my $object    = $self->object;
-  my $login     = $object->get_login_from_url_code(1) or return $self->render_message($object->get_message_code('MESSAGE_LOGIN_MISSING'), {'error' => 1});
+  my $login     = $object->fetch_login_from_url_code(1) or return $self->render_message($object->get_message_code('MESSAGE_LOGIN_MISSING'), {'error' => 1});
   my $provider  = $login->provider;
   my $content   = $self->wrapper_div;
   my $form      = $content->append_child($self->new_form({'action' => $hub->url({'action' => 'LinkAccount'})}));
