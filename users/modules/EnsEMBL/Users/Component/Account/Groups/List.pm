@@ -22,7 +22,7 @@ sub content {
     {'title' => '',                   'key' => 'join',    'width' => '10%', 'class' => 'sort_html'    },
   ], [], {'data_table' => 'no_col_toggle', 'exportable' => 0, 'data_table_config' => {'iDisplayLength' => 25}});
 
-  for (sort {$b->memberships_count('query' => ['status' => 'active', 'member_status' => 'active']) <=> $a->memberships_count('query' => ['status' => 'active', 'member_status' => 'active'])} @{$object->fetch_all_groups}) {
+  for (sort {$b->memberships_count('query' => ['status' => 'active', 'member_status' => 'active']) <=> $a->memberships_count('query' => ['status' => 'active', 'member_status' => 'active'])} @{$object->fetch_groups}) {
     my $membership = $user->get_membership_object($_);
     next if $_->type eq 'private' || $membership && ($membership->is_active || $membership->is_user_blocked);
 
