@@ -17,7 +17,7 @@ sub content {
 
   my $owner       = $user;
   if ($record_type eq 'group') {
-    my $membership = $owner->get_membership_object($hub->param('group'));
+    my $membership = $object->fetch_accessible_membership_for_user($owner, $hub->param('group'), {'query' => ['group.status' => 'active']});
     $owner = $membership ? $membership->group : undef;
   }
 

@@ -12,13 +12,13 @@ sub content {
   my $object      = $self->object;
   my $hub         = $self->hub;
   my $user        = $hub->user->rose_object;
-  my $adminship   = $hub->param('id') ? $user->get_membership_object($hub->param('id'), 'administrator') : undef;
+  my $adminship   = $hub->param('id') ? $object->fetch_accessible_membership_for_user($user, $hub->param('id'), {'query' => ['level' => 'administrator']}) : undef;
   my $adminships  = $adminship ? [] : $user->admin_memberships; # if membership not found (or group id not specified), we display all the groups for the user to select one from.
 
   if ($adminship or @$adminships) {
 
     my $form = $self->new_form({'action' => $hub->url({'action' => 'Group', 'function' => 'Invite'})});
-  
+
     $form->add_notes({
       'text'        => sprintf('To invite new members to join %s group, enter one email address per person. Users not already registered with %s will be asked to do so before accepting your invitation.', $adminship ? 'the' : 'a', $self->site_name)
     });
@@ -66,7 +66,7 @@ sub content {
       'id'          => 'invite_members',
       'heading'     => 'Invite new members',
       'subsections' => [
-        '<p>You do not have administration rights for any of the group to invite any members. You can though create a new group and then add members to it.</p>',
+        '<p>You do not have administration rights for any of the groups to invite any members. You can though create a new group and then invite members to it.</p>',
         $self->link_create_new_group
       ]
     });

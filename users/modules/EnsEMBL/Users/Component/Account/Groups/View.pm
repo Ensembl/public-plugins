@@ -14,10 +14,7 @@ sub content {
   my $object      = $self->object;
   my $user        = $hub->user->rose_object;
   my $group_id    = $hub->param('id');
-  my $membership  = $user->get_membership_object($group_id, {
-    'with_objects'  => ['group', 'group.records', 'group.memberships', 'group.memberships.user'],
-    'query'         => ['or' => ['level' => 'administrator', 'group.status' => 'active'], 'status' => 'active', 'member_status' => 'active']
-  });
+  my $membership  = $object->fetch_accessible_membership_for_user($user, $group_id, {'with_objects' => ['group', 'group.records', 'group.memberships', 'group.memberships.user']});
 
   if ($membership) {
 

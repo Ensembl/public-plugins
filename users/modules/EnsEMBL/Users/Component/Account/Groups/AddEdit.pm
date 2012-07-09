@@ -13,8 +13,7 @@ sub content {
   my $hub         = $self->hub;
   my $user        = $hub->user->rose_object;
   my $is_add_new  = $hub->function eq 'Add';
-
-  my $membership  = $is_add_new ? $user->create_membership_object : $user->get_membership_object($hub->param('id'));
+  my $membership  = $is_add_new ? $user->create_membership_object : $object->fetch_accessible_membership_for_user($user, $hub->param('id'));
 
   if ($membership) {
 
