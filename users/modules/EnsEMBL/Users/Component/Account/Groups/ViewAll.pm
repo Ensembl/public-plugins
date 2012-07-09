@@ -13,7 +13,7 @@ sub content {
   my $hub         = $self->hub;
   my $object      = $self->object;
   my $user        = $hub->user->rose_object;
-  my $memberships = $user->memberships;
+  my $memberships = $user->find_memberships('with_objects' => 'group', 'query' => ['or' => ['level' => 'administrator', 'group.status' => 'active']]); # show inactive groups to admins only
   my $subsections = [
     $self->link_create_new_group,
     $self->link_join_existing_group
