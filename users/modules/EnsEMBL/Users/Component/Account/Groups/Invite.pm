@@ -17,18 +17,23 @@ sub content {
 
   if ($adminship or @$adminships) {
 
-    my $form = $self->new_form({'action' => $hub->url({'action' => 'Groups', 'function' => 'SendInvitation'})});
+    my $form = $self->new_form({'action' => $hub->url({'action' => 'Group', 'function' => 'Invite'})});
   
     $form->add_notes({
-      'text'        => sprintf('To invite new members to %s, enter one email address per person. Users not already registered with %s will be asked to do so before accepting your invitation.', $adminship ? 'the group <b>'.$self->html_encode($adminship->group->name).'</b>' : 'a group', $self->site_name)
+      'text'        => sprintf('To invite new members to join %s group, enter one email address per person. Users not already registered with %s will be asked to do so before accepting your invitation.', $adminship ? 'the' : 'a', $self->site_name)
     });
     if ($adminship) {
-      $form->add_hidden({
+      $form->add_field({
+        'label'     => 'Group',
+        'type'      => 'noedit',
         'name'      => 'group_id',
-        'value'     => $adminship->group->group_id
+        map {(
+          'caption' => $_->name,
+          'value'   => $_->group_id
+        )} $adminship->group
       });
-    }
-    else {
+
+    } else {
       $form->add_field({
         'type'      => 'dropdown',
         'name'      => 'group_id',
@@ -41,6 +46,7 @@ sub content {
       'name'        => 'emails',
       'label'       => 'Email addresses',
       'required'    => 1,
+      'value'       => $hub->param('emails') || '',
       'notes'       => 'Multiple email addresses should be separated by commas.'
     });
     $form->add_field({
@@ -51,7 +57,8 @@ sub content {
     return $self->js_section({
       'id'          => 'invite_members',
       'heading'     => 'Invite new members',
-      'subsections' => [ $form->render ]});
+      'subsections' => [ $form->render ]
+    });
 
   } else {
 
