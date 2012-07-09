@@ -14,13 +14,13 @@ sub content {
   my $self    = shift;
   my $hub     = $self->hub;
   my $object  = $self->object;
-  my $login   = $object->get_login_from_url_code;
+  my $login   = $object->fetch_login_from_url_code;
 
   return $self->render_message($object->get_message_code('MESSAGE_CONFIRMATION_FAILED'), {'error' => 1}) unless $login;
 
   my $user    = $login->user;
   my $content = $self->wrapper_div;
-  my $form    = $content->append_child($self->new_form({'action' => $hub->url({qw(action Details function Confirmed)})}));
+  my $form    = $content->append_child($self->new_form({'action' => $hub->url({qw(action Confirmed)})}));
 
   $form->add_hidden({'name' => 'code', 'value' => $login->get_url_code});
 
