@@ -12,7 +12,10 @@ sub content {
   my $self  = shift;
   my $hub   = $self->hub;
 
-  return $self->render_message($hub->param('err') ? ($hub->param('err'), {'error' => 1}) : ($hub->param('msg'), {'error' => 0}));
+  my $err   = $hub->param('err');
+  my $msg   = $hub->param('msg');
+
+  return $self->render_message($err ? ($err, {'error' => 1}) : $msg) if $err || $msg;
 }
 
 1;
