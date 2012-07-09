@@ -14,11 +14,12 @@ sub content {
   my $object      = $self->object;
   my $user        = $hub->user->rose_object;
   my $group_id    = $hub->param('id');
-  my $membership  = $user->get_membership_object($group_id);
+  my $membership  = $user->get_membership_object($group_id, {
+    'with_objects'  => ['group', 'group.records', 'group.memberships', 'group.memberships.user'],
+    'query'         => ['or' => ['level' => 'administrator', 'group.status' => 'active'], 'status' => 'active', 'member_status' => 'active']
+  });
 
-  if ($membership && $membership->is_active) {
-
-    $membership->load('with' => ['group', 'group.records', 'group.memberships', 'group.memberships.user']);
+  if ($membership) {
 
     my $group       = $membership->group;
     my $group_name  = $self->html_encode($group->name);
@@ -172,6 +173,5 @@ sub content {
       })->render ]
     });
   }
-
 }
 1;
