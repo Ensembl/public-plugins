@@ -116,11 +116,11 @@ __PACKAGE__->meta->setup(
   ]
 );
 
-############################
-####                    ####
-####    LOGIN METHOD    ####
-####                    ####
-############################
+#############################
+####                     ####
+####    LOGIN METHODS    ####
+####                     ####
+#############################
 
 sub activate_login {
   ## Activates the given login object after copying the information like name, organisation, country to the user and linking login object to the user object (does not save to the database afterwards)
@@ -139,11 +139,11 @@ sub get_local_login {
   return shift @{shift->find_logins('query' => ['type' => 'local'])};
 }
 
-############################
-####                    ####
-#### MEMBERSHIPS METHOD ####
-####                    ####
-############################
+##################################
+####                          ####
+####    MEMBERSHIP METHODS    ####
+####                          ####
+##################################
 
 sub get_membership_object {
   ## Gets membership object related to a given group
