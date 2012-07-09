@@ -148,11 +148,12 @@ sub get_local_login {
 sub get_membership_object {
   ## Gets membership object related to a given group
   ## @param Group object or id of the group
-  ## @param Level of the membership - optional - if provided, will return the object only if level is same the level provided
+  ## @param Hashref to go as arguments to find_memberships method after adding 'group_id' and 'limit' to it
   ## @return Membership object, if found, undef otherwise
-  my ($self, $group, $level) = @_;
+  my ($self, $group, $params) = @_;
   my $group_id = ref $group ? $group->group_id : $group or return undef;
-  return shift @{$self->find_memberships('query' => ['group_id' => $group_id, 'status' => 'active', 'member_status' => 'active', $level ? ('level' => $level) : ()])};
+  push @{$params->{'query'} ||= []}, 'group_id', $group_id;
+  return shift @{$self->find_memberships(%$params, 'limit' => 1)};
 }
 
 sub admin_memberships {
@@ -166,8 +167,8 @@ sub nonadmin_memberships {
 }
 
 sub active_memberships {
-  ## Gets all the active memberships for the user
-  return shift->find_memberships('query' => ['status' => 'active', 'member_status' => 'active']);
+  ## Gets all the active memberships (along with the related active groups) for the user
+  return shift->find_memberships('with_objects' => 'group', 'query' => ['status' => 'active', 'member_status' => 'active', 'group.status' => 'active']);
 }
 
 sub create_membership_object {
@@ -199,8 +200,8 @@ sub is_member_of {
   ## @param Group rose object or id of the group
   ## @return 1 or undef accordingly
   my ($self, $group) = @_;
-  my $membership = $self->get_membership_object($group);
-  return $membership && $membership->is_active ? 1 : undef;
+  my $membership = $self->get_membership_object($group, {'query' => ['status' => 'active', 'member_status' => 'active']});
+  return !!$membership;
 }
 
 sub is_admin_of {
@@ -208,8 +209,8 @@ sub is_admin_of {
   ## @param Group rose object or id of the group
   ## @return 1 or undef accordingly
   my ($self, $group) = @_;
-  my $membership = $self->get_membership_object($group, 'administrator');
-  return $membership && $membership->is_active ? 1 : undef;
+  my $membership = $self->get_membership_object($group, {'query' => ['status' => 'active', 'member_status' => 'active', 'level' => 'administrator']});
+  return !!$membership;
 }
 
 sub is_nonadminmember_of {
@@ -217,8 +218,8 @@ sub is_nonadminmember_of {
   ## @param Group rose object or id of the group
   ## @return 1 or undef accordingly
   my ($self, $group) = @_;
-  my $membership = $self->get_membership_object($group, 'member');
-  return $membership && $membership->is_active ? 1 : undef;
+  my $membership = $self->get_membership_object($group, {'query' => ['status' => 'active', 'member_status' => 'active', 'level' => 'member']});
+  return !!$membership;
 }
 
 #########################
