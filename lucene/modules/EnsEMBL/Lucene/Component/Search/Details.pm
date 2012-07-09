@@ -3,12 +3,13 @@ package EnsEMBL::Lucene::Component::Search::Details;
 use strict;
 use warnings;
 no warnings "uninitialized";
-use base qw(EnsEMBL::Web::Component);
+use base qw(EnsEMBL::Web::Component::Search);
 
 use Lingua::EN::Inflect qw(PL NUM);
 use URI::Escape;
 use Encode qw(encode);
 use EnsEMBL::Web::Document::HTML::HomeSearch;
+use EnsEMBL::Web::Component::Help::Faq;
 
 sub content {
   my $self = shift;
@@ -75,8 +76,7 @@ sub render_summary {
     return $summary_message;
   }
   else {
-    return
-     qq{<p>Your query <strong>- $search_term  -</strong> did not match any records in the database. Please make sure all terms are spelled correctly</p>};
+    return $self->no_results($search_term);
   }
 }
 
