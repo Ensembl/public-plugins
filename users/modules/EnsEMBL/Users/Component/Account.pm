@@ -48,11 +48,15 @@ sub render_message {
   ##  - back  URL to be provided to the back button, defaults to 'back' param in url (if missed, no back button is displayed)
   my ($self, $code, $params) = @_;
 
-  my $message     = $self->object->get_message($code);
-  my $css_class   = $params->{'error'} ? ' class="accounts-error"' : '';
-  my $back_button = ($params->{'back'} ||= $self->hub->param('back')) ? sprintf('<p><a href="%s" class="">Go&nbsp;back</a></p>', $params->{'back'}) : '';
+  if (my $message = $self->object->get_message($code)) {
+    my $css_class   = $params->{'error'} ? 'error error-accounts' : 'info info-accounts';
+    my $heading     = $params->{'error'} ? 'Error' : 'Message';
+    my $back_button = ($params->{'back'} ||= $self->hub->param('back')) ? $self->link_back_button($params->{'back'}) : '';
 
-  return $message ? $self->wrapper_div({'inner_HTML' => "<p$css_class>$message</p>$back_button"})->render : '';
+    return qq(<div class="$css_class"><h3>$heading</h3><div class="error-pad">$message</div></div>$back_button);
+  } else {
+    return '';
+  }
 }
 
 sub add_user_details_fields {
@@ -304,6 +308,14 @@ sub link_add_bookmark {
   ## Gets HTML for a button to add a bookmark
   ## @return HTML string
   return shift->js_link({'href' => {qw(action Bookmarks function Add)}, 'caption' => 'Add a bookmark', 'class' => 'bookmark-add'});
+}
+
+sub link_back_button {
+  ## Gets HTML for a button to add a bookmark
+  ## @param back button's href
+  ## @return HTML string
+  my ($self, $href) = @_;
+  return $self->js_link({'href' => $href, 'caption' => 'Go back', 'class' => 'arrow-left'});
 }
 
 1;
