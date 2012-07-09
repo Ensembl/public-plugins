@@ -3,28 +3,43 @@ package EnsEMBL::ORM::Rose::Object::Group;
 ### NAME: EnsEMBL::ORM::Rose::Object::Group
 ### ORM class for the webgroup table in ensembl_web_user_db
 
-### All methods provided to modify group's membership should only be called after verifying whether user is authorised to use them (ie. he is administrator of the group)
-
 use strict;
 use warnings;
-
-use EnsEMBL::ORM::Rose::Manager::Membership;
 
 use base qw(EnsEMBL::ORM::Rose::Object::Trackable);
 
 use constant ROSE_DB_NAME => 'user';
 
-## Define schema
 __PACKAGE__->meta->setup(
   table                 => 'webgroup',
 
   columns               => [
-    webgroup_id           => {'type' => 'serial', 'primary_key' => 1, 'not_null' => 1, 'alias' => 'group_id'},
-    name                  => {'type' => 'varchar', 'length' => '255'},
-    blurb                 => {'type' => 'text'},
-    data                  => {'type' => 'text'},
-    type                  => {'type' => 'enum', 'values' => [qw(open restricted private)], 'default' => 'restricted'},
-    status                => {'type' => 'enum', 'values' => [qw(active inactive)],         'default' => 'active'    }
+    webgroup_id           => {
+      'type'                => 'serial',
+      'primary_key'         => 1,
+      'not_null'            => 1,
+      'alias'               => 'group_id'
+    },
+    name                  => {
+      'type'                => 'varchar',
+      'length'              => '255'
+    },
+    blurb                 => {
+      'type'                => 'text'
+    },
+    data                  => {
+      'type'                => 'text'
+    },
+    type                  => {
+      'type'                => 'enum',
+      'values'              => [qw(open restricted private)],
+      'default'             => 'restricted'
+    },
+    status                => {
+      'type'                => 'enum',
+      'values'              => [qw(active inactive)],
+      'default'             => 'active'
+    }
   ],
 
   title_column          => 'name',
@@ -53,6 +68,10 @@ __PACKAGE__->meta->setup(
     bookmarks             => {
       'relationship'        => 'records',
       'condition'           => {'type' => 'bookmark'}
+    },
+    invitations           => { # this record only contains the invitations for the users who have not yet registered with ensembl, invitations for existing users are saved as Membership objects
+      'relationship'        => 'records',
+      'condition'           => {'type' => 'invitation'}
     }
   ]
 );
@@ -60,164 +79,33 @@ __PACKAGE__->meta->setup(
 sub membership {
   ## Returns the membership object for the given user, creates a new membership object if no existing found
   ## @param Member - Rose User object
-  ## @param (Only considered if new membership is being created) User level (administrator or member) - defaults to 'member'
-  ## @return Membership object
+  ## @param User level (administrator or member) - defaults to 'member' - Only considered if new membership is being created
+  ## @return Membership object, possibly a new unsaved one
   my ($self, $member, $level) = @_;
-  my $membership = $self->get_membership($member);
+  my $membership = $self->get_membership_object($member);
   unless ($membership) {
-    $membership = $self->meta->relationship('memberships')->class->new(
+    $membership = ($self->add_memberships([{
       'user_id'   => $member->user_id,
       'group_id'  => $self->group_id,
       'level'     => $level eq 'administrator' ? 'administrator' : 'member'
-    );
+    }]))[0];
   }
   return $membership;
 }
 
-sub get_membership { ##TODO use find_memberships
-  ## Gets the Membership object related to a the user for this group only if found - no new membership is created
+sub get_membership_object {
+  ## Gets the Membership object related to a the user for this group only if found
   ## @param Member - User rose object
   ## @return Rose Membership object or undef if user is not a member of this group
   my ($self, $member) = @_;
-  my $member_id       = $member->user_id;
-  my $group_id        = $self->group_id;
-  my $membership      = undef;
-
-  # Fetch only the required row if already not fetched
-  if ($member->has_loaded_related('memberships')) {
-    $_->group_id == $group_id and $membership = $_ and last for $member->memberships;
-  }
-  elsif ($self->has_loaded_related('memberships')) {
-    $_->user_id == $member_id and $membership = $_ and last for $self->memberships;
-  }
-  else {
-    ($membership) = @{EnsEMBL::ORM::Rose::Manager::Membership->get_objects( ## TODO use $self->meta->relationships('memberships')->class->new
-      'query' => [
-        'user_id'   => $member_id,
-        'group_id'  => $group_id
-      ],
-      'limit' => 1
-    ) || []};
-  }
-  return $membership;
+  return $self->find_memberships('query' => [ 'user_id', $member->user_id, 'group_id', $self->group_id ], 'limit' => 1)->[0];
 }
 
-sub members {
-  ## Gets all the members for the group - including administrators
-  ## @return Array of User rose objects
-  return shift->_get_members;
-}
-
-sub admins {
-  ## Gets all the admins for the group
-  ## @return Array of User rose objects
-  return shift->_get_members('administrator');
-}
-
-sub non_admin_members {
-  ## Gets all the members for the group - excluding administrators
-  ## @return Array of User rose objects
-  return shift->_get_members('member');
-}
-
-sub set_admin {
-  ## Sets an existing member as admin of the group
-  ## @param Rose User object - existing member who is to be made Admin
-  ## @param Web::User object to update the trackable info - logged in user
-  ## @return 1 if done successfully or level already the same, 0 if user is not a member if this group, -1 if user trying to change his own level
-  shift->_change_member_level('administrator', @_);
-}
-
-sub set_non_admin_member {
-  ## Sets an existing administrators as non-admin member of the group
-  ## @param Rose User object - existing member who is to be demoted
-  ## @param Web::User object to update the trackable info - logged in user
-  ## @return 1 if done successfully, undef if user is already a non admin member
-  ## @return 1 if done successfully or level already the same, 0 if user is not a member if this group, -1 if user trying to change his own level
-  shift->_change_member_level('member', @_);
-}
-
-sub invite_user {
-  ## Creates an invitation for a member - does NOT send any email
-  ## This adds a new row in the membership's table, but only if no existing row is found with same user_id and group_id
-  ## @param Rose User object to be sent invitation to be a member
-  ## @param Web::User object to update the trackable info - logged in user
-  ## @return 1 if invitation is created (or already exists), 0 - if user is already an active member of group or -1 if user has blocked the group
-  my ($self, $member, $admin) = @_;
-
-  my $membership = $self->membership($member, 'member');
-
-  return 0  if $membership->is_active;
-  return -1 if $membership->is_group_blocked;
-
-  $membership->make_invitation unless $membership->is_pending_invitation;
-  $membership->save(user => $admin);
-
-  return 1;
-}
-
-sub block_user {
-  ## Blocks a user from the group or from sending any further invitations to the group
-  ## @param Member to be blocked - Rose User object
-  ## @param Logged in user for trackable info - Web User obect
-  ## @return 1 if user blocked successfully (or was already blocked), 0 if user is not a member of the group or -1 if user is administrators
-  my ($self, $member, $admin) = @_;
-
-  if (my $membership = $self->get_membership($member)) {
-    return -1 if $membership->level ne 'member';
-    $membership->block_user;
-    $membership->save(user => $admin);
-    return 1;
-  }
-  return undef;
-}
-
-sub unblock_user {
-  ## Unblocks a previously blocked user
-  ## @param Member to be unblocked - Rose User object
-  ## @param Logged in user for trackable info - Web User object
-  ## @return 1 if unblocked successfully, 0 if user not a member of this group, -1 if member not blocked
-  my ($self, $member, $admin) = @_;
-
-  if (my $membership = $self->get_membership($member)) {
-    return -1 unless $membership->is_user_blocked;
-    $membership->inactivate_user;
-    $membership->save(user => $admin);
-    return 1;
-  }
-  return 0;
-}
-
-sub activate_user {
-  ## Makes the status of the user active - only if membership is a pending request from user
-  ## @param Member to be set as active - Rose User object
-  ## @param Logged in user for trackable info - Web User obect
-  ## @return 1 if user set active successfully, 0 if user not a member of this group, -1 if current status is anything other than pending request from user
-  my ($self, $member, $admin) = @_;
-
-  if (my $membership = $self->get_membership($member)) {
-    return -1 unless $membership->is_pending_request;
-    $membership->activate;
-    $membership->save(user => $admin);
-    return 1;
-  }
-  return 0;
-}
-
-sub inactivate_user {
-  ## Makes the status of the user inactive - only an active user or a pending invitation or a pending request can be inactivated
-  ## @param Member to be set as inactive - Rose User object
-  ## @param Logged in user for trackable info - Web User obect
-  ## @return 1 if user set inactive successfully, 0 if user not a member of this group, -1 if user is neither active nor is the membership status a pending invitation or request
-  my ($self, $member, $admin) = @_;
-
-  if (my $membership = $self->get_membership($member)) {
-    return -1 unless $membership->is_active || $membership->is_pending_invitation || $membership->is_pending_request;
-    $membership->inactivate_user;
-    $membership->save(user => $admin);
-    return 1;
-  }
-  return 0;
+sub admin_memberships {
+  ## Gets all the membership objects with administrator level
+  ## @return Arrayref of membership objects
+  my $self = shift;
+  return my $memberships = $self->find_memberships('query' => ['level' => 'administrator', 'status' => 'active', 'member_status' => 'active'], 'with_objects' => 'user');
 }
 
 #########################
@@ -226,28 +114,17 @@ sub inactivate_user {
 ####                 ####
 #########################
 
-##TODO
+sub create_record {
+  ## Creates a group record of a given type (does not save it to the db)
+  ## @param Type of the record
+  ## @param Hashref of name value pair for columns of the new object (optional)
+  my ($self, $type, $params) = @_;
 
-### 
-# Some private methods
-###
-
-sub _get_members {
-  my ($self, $level) = @_;
-  return [ map { $_->is_active && (!$level || $level eq $_->level) ? $_->user : () } shift->memberships ];
-}
-
-sub _change_member_level {
-  my ($self, $new_level, $member, $admin) = @_;
-
-  my $membership = $self->get_membership($member);
-
-  return 0  if !$membership;
-  return -1 if $membership->user_id eq $admin->user_id;
-
-  $membership->level($new_level);
-  $membership->save(user => $admin);
-  return 1;
+  return ($self->add_records([{
+    'user_id'       => $self->group_id,
+    'type'          => $type,
+    %{$params || {}}
+  }]))[0];
 }
 
 1;
