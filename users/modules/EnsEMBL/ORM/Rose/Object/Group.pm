@@ -82,7 +82,7 @@ sub membership {
   ## @param User level (administrator or member) - defaults to 'member' - Only considered if new membership is being created
   ## @return Membership object, possibly a new unsaved one
   my ($self, $member, $level) = @_;
-  my $membership = $self->get_membership_object($member);
+  my $membership = $member->get_membership_object($self);
   unless ($membership) {
     $membership = ($self->add_memberships([{
       'user_id'   => $member->user_id,
@@ -91,14 +91,6 @@ sub membership {
     }]))[0];
   }
   return $membership;
-}
-
-sub get_membership_object {
-  ## Gets the Membership object related to a the user for this group only if found
-  ## @param Member - User rose object
-  ## @return Rose Membership object or undef if user is not a member of this group
-  my ($self, $member) = @_;
-  return $self->find_memberships('query' => [ 'user_id', $member->user_id, 'group_id', $self->group_id ], 'limit' => 1)->[0];
 }
 
 sub admin_memberships {
