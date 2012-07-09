@@ -28,11 +28,12 @@ sub content {
     ], [], {'data_table' => 'no_col_toggle', 'exportable' => 0});
 
     for (sort {uc $a->group->name cmp uc $b->group->name} @$memberships) {
-      my $is_pending_request = $_->is_pending_request;
+      my $is_pending_request  = $_->is_pending_request;
       next unless $_->is_active || $is_pending_request;
-      my $group = $_->group;
+      my $group               = $_->group;
+      my $is_inactive_group   = $group->status eq 'inactive';
       $table->add_row({
-        'name'    => $self->html_encode($group->name),
+        'name'    => sprintf('%s%s', $self->html_encode($group->name), $is_inactive_group ? ' <i>(inactive)</i>' : ''),
         'number'  => $group->memberships_count('query' => ['status' => 'active', 'member_status' => 'active']),
         'desc'    => $self->html_encode($group->blurb),
         'edit'    => $self->js_link({
@@ -46,7 +47,8 @@ sub content {
             'target'  => 'page',
           ),
           'inline'  => 1
-        })
+        }),
+        $is_inactive_group ? ('options' => {'class' => 'inactive'}) : ()
       });
     }
     unshift @$subsections, $table->render;
