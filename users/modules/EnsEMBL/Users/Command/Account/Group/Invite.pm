@@ -17,7 +17,7 @@ sub process {
   my $admin       = $hub->user;
   my $group_id    = $hub->param('group_id');
 
-  my $membership  = $group_id ? $object->fetch_accessible_membership_for_user($admin->rose_object, $group_id, {'query' => ['level' => 'administrator']}) :  undef
+  my $membership  = $group_id ? $object->fetch_active_membership_for_user($admin->rose_object, $group_id, {'query' => ['level' => 'administrator']}) : undef
     or return $self->ajax_redirect($hub->url({'action' => 'Groups', 'function' => 'Invite', 'err' => $object->get_message_code('MESSAGE_GROUP_NOT_FOUND')}));
 
   my $group       = $membership->group;
