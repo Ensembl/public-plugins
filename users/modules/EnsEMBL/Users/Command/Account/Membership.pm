@@ -12,7 +12,10 @@ sub process {
   my $object      = $self->object;
   my $hub         = $self->hub;
   my $user        = $hub->user;
-  my $membership  = $hub->param('id') ? $object->fetch_membership($hub->param('id')) : undef or return $self->redirect_message($object->get_message_code('MESSAGE_GROUP_NOT_FOUND'), {'error' => 1});
+  my $membership  = $hub->param('id')
+    ? $object->fetch_membership($hub->param('id'), {'with_objects' => 'group', 'query' => ['group.status' => 'active']})
+    : undef or return $self->redirect_message($object->get_message_code('MESSAGE_GROUP_NOT_FOUND'), {'error' => 1, 'back' => $self->internal_referer})
+  ;
 
   $membership->save('user' => $user) if $self->modify_membership($membership);
 
