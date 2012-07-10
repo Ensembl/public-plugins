@@ -158,7 +158,7 @@ sub get_membership_object {
 
 sub admin_memberships {
   ## Gets all the admin memberships for the user
-  return shift->find_memberships('query' => ['level' => 'administrator', 'status' => 'active', 'member_status' => 'active']);
+  return shift->find_memberships('with_objects' => 'group', 'query' => ['level' => 'administrator', 'status' => 'active', 'member_status' => 'active', 'group.status' => 'active']);
 }
 
 sub nonadmin_memberships {
