@@ -35,7 +35,7 @@ sub process {
       $self->send_group_joining_notification_email($user, $group, $membership->is_active);
 
       $membership->save(user => $user);
-      return $self->ajax_redirect($group_type eq 'open' ? $hub->url({'action' => 'Group', 'function' => '', 'id' => $group->group_id}) : $self->internal_referer);
+      return $self->ajax_redirect($group_type eq 'open' ? $hub->url({'action' => 'Groups', 'function' => 'View', 'id' => $group->group_id}) : $self->internal_referer);
     }
   }
 
