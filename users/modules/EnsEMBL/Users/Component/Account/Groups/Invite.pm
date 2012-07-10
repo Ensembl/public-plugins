@@ -12,8 +12,14 @@ sub content {
   my $object      = $self->object;
   my $hub         = $self->hub;
   my $user        = $hub->user->rose_object;
-  my $adminship   = $hub->param('id') ? $object->fetch_accessible_membership_for_user($user, $hub->param('id'), {'query' => ['level' => 'administrator']}) : undef;
+  my $group_id    = $hub->param('id');
+  my $adminship   = $group_id ? $object->fetch_active_membership_for_user($user, $group_id, {'query' => ['level' => 'administrator']}) : undef;
   my $adminships  = $adminship ? [] : $user->admin_memberships; # if membership not found (or group id not specified), we display all the groups for the user to select one from.
+  my $html        = '';
+
+  if ($group_id && !$adminship) {
+    $html .= $self->render_message($object->get_message_code('MESSAGE_GROUP_NOT_FOUND'), {'error' => 1});
+  }
 
   if ($adminship or @$adminships) {
 
@@ -54,7 +60,7 @@ sub content {
       'value'       => 'Send'
     });
   
-    return $self->js_section({
+    $html .= $self->js_section({
       'id'          => 'invite_members',
       'heading'     => 'Invite new members',
       'subsections' => [ $form->render ]
@@ -62,7 +68,7 @@ sub content {
 
   } else {
 
-    return $self->js_section({
+    $html .= $self->js_section({
       'id'          => 'invite_members',
       'heading'     => 'Invite new members',
       'subsections' => [
@@ -71,6 +77,8 @@ sub content {
       ]
     });
   }
+
+  return $html;
 }
 
 1;
