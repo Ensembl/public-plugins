@@ -36,21 +36,7 @@ sub process {
     my $modified_values = $group_id ? { map { $_ => $group->$_ } qw(name type blurb status) } : {};
 
     # do we need to notify anyone about the changes?
-    if ( my @curious_admins = $group_id ? map {$_->user_id ne $user->user_id && $_->notify_edit && $_->user || ()} @{$group->admin_memberships} : () ) {
-      my $titles  = {
-        'name'      => 'Group name',
-        'blurb'     => 'Description',
-        'type'      => 'Type',
-        'status'    => 'Status'
-      };
-      if ( my @changes = map { $original_values->{$_} eq $modified_values->{$_}
-        ? ()
-        : sprintf(q( - %s changed from '%s' to '%s'), $titles->{$_}, $original_values->{$_} || '', $modified_values->{$_} || '')
-      } qw(name type blurb status) ) {
-        my $mailer = $self->get_mailer;
-        $mailer->send_group_editing_notification_email($user, $_, $group, join "\n", @changes) for @curious_admins;
-      }
-    }
+    $self->send_group_editing_notification_email($user, $group, $original_values, $modified_values);
 
     # Changes to membership object
     $membership->$_($hub->param($_)) for qw(notify_join notify_edit notify_share);
