@@ -97,7 +97,7 @@ sub admin_memberships {
   ## Gets all the membership objects with administrator level
   ## @return Arrayref of membership objects
   my $self = shift;
-  return my $memberships = $self->find_memberships('query' => ['level' => 'administrator', 'status' => 'active', 'member_status' => 'active'], 'with_objects' => 'user');
+  return my $memberships = $self->find_memberships('query' => ['level' => 'administrator', 'status' => 'active', 'member_status' => 'active', 'user.status' => 'active'], 'with_objects' => 'user');
 }
 
 #########################
