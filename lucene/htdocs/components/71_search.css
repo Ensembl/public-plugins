@@ -8,7 +8,7 @@ table.search_results th, table.search_results td {
   color:[[PANEL_TEXT]]; 
   background-color:[[TINT_BG]]; 
   border:1px solid [[TINT_BORDER]]; 
-  padding:2px 4px;
+  padding:0 4px;
 }
 
 table.search_results th {
