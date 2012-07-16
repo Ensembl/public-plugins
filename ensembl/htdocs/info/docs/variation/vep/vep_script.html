@@ -30,7 +30,12 @@ Perl script |
 	<li>
 		<a href="#running">Running the script</a>
 		<ul>
-			<li><a href="#performance">Performance</a></li>
+			<li>
+				<a href="#performance">Performance</a>
+				<ul>
+					<li><a href="#forking">Forking</a></li>
+				</ul>
+			</li>
 			<li><a href="#basic">Basic options</a></li>
 			<li><a href="#input">Input options</a></li>
 			<li><a href="#dbopt">Database options</a></li>
@@ -70,6 +75,7 @@ Perl script |
             <li><a href="#plugins_functionality">Functionality</a></li>
             <li><a href="#plugins_filter">Filtering using plugins</a></li>
             <li><a href="#plugins_use">Using plugins</a></li>
+			<li><a href="#plugins_intergenic">Plugins and intergenic variants</a></li>
             <li><a href="#plugins_examples">Examples</a></li>
         </ul>
     </li>
@@ -86,6 +92,16 @@ Perl script |
 <hr/>
 
 <h2 id="new"> What's new </h2>
+
+<h3> New in version 2.6 <i>(July 2012)</i> </h3>
+
+<ul>
+    <li>support for <a href="vep_formats.html#sv">structural variant</a> consequences</li>
+	<li>Sequence Ontology (SO) consequence terms now default</li>
+	<li>script runtime 3-4x faster when using <a href="#forking">forking</a></li>
+	<li>1000 Genomes global MAF available in cache files</li>
+	<li>improved memory usage</li>
+</ul>
 
 <h3> New in version 2.5 <i>(May 2012)</i> </h3>
 
@@ -187,7 +203,7 @@ Perl script |
 <h2 id="requirements"> Requirements </h2>
 
 <p>
-Version 2.5 of the script requires at least version 67 of the Ensembl Core and
+Version 2.6 of the script requires at least version 68 of the Ensembl Core and
 Variation APIs and their relevant dependencies to be installed to use the
 script. A minimal subset of these can be installed using the supplied <a
 href="#installer">installer script</a>. </p>
@@ -206,7 +222,7 @@ To use the <a href="#cache">cache</a>, the gzip and zcat utilities are required.
 <p> The Variant Effect Predictor script can be downloaded as a tarball from the
 Ensembl CVS server: </p>
 
-<p> <a href="http://cvs.sanger.ac.uk/cgi-bin/viewvc.cgi/ensembl-tools/scripts/variant_effect_predictor.tar.gz?view=tar&root=ensembl&pathrev=branch-ensembl-67">Download version 2.5 (latest)</a> </p>
+<p> <a href="http://cvs.sanger.ac.uk/cgi-bin/viewvc.cgi/ensembl-tools/scripts/variant_effect_predictor.tar.gz?view=tar&root=ensembl&pathrev=branch-ensembl-68">Download version 2.6 (latest)</a> </p>
 
 <p>It is also included as part of the ensembl-tools module of the Ensembl API -
 you can find it in the ensembl-tools/scripts/variant_effect_predictor/
@@ -286,7 +302,7 @@ installer is possible with the following flags: </p>
 		<td><pre>--API_VERSION [version]</pre></td>
 		<td><pre>-v</pre></td>
 		<td>By default the script will install the latest version of the Ensembl
-		API (currently 67). Users can force the script to install a different
+		API (currently 68). Users can force the script to install a different
 		version at their own risk</td>
 	</tr>
 	<tr>
@@ -347,14 +363,13 @@ script in the old per-variant mode, you can force this with --no_whole_genome
 
 <h3 id="performance"> Performance </h3>
 
-<p> In optimal conditions, the VEP script is capable of processing ~500,000
-variants in 1 hour on a single processor core. Run time is dependent on various
-factors, and is especially affected by the chromosomal distribution of variants.
-Variants in exonic regions naturally take longer to process than those in
-intronic or intergenic regions. Due to the way transcript data is cached in
-memory, the VEP will, for example, process a file containing 100 variants that
-fall in one gene faster than it would a file containing 100 variants in 100
-different genes. </p>
+<p> In optimal conditions, the VEP script is capable of processing >2 million
+variants in 1 hour. Run time is dependent on various factors, and is especially
+affected by the chromosomal distribution of variants. Variants in exonic regions
+naturally take longer to process than those in intronic or intergenic regions.
+Due to the way transcript data is cached in memory, the VEP will, for example,
+process a file containing 100 variants that fall in one gene faster than it
+would a file containing 100 variants in 100 different genes. </p>
 
 <p> The VEP is also optimised to run on input files that are sorted in
 chromosomal order. Unsorted files will still work, albeit more slowly. </p>
@@ -365,6 +380,29 @@ by chromosome). The VEP will also work with tabix-indexed, bgzipped VCF files,
 and so the tabix utility could be used to divide the input file: </p>
 
 <pre class="code"> tabix -h variants.vcf.gz 12:1000000-20000000 | perl variant_effect_predictor.pl -vcf </pre>
+
+<h4 id="forking"> Forking </h4>
+
+<p> Using forking enables the VEP to run multiple parallel "threads", with each
+thread processing a subset of your input. Most modern computers have more than
+one processor core, so running the VEP with forking enabled can give huge speed
+increases (3-4x faster in most cases). Even computers with a single core will
+see speed benefits due to overheads associated with using object-oriented code
+in Perl. </p>
+
+<p> To use forking, you must choose a number of forks to use with the --fork
+flag. Most users should use 4 forks: </p>
+
+<pre class=code>perl variant_effect_predictor.pl -i my_input.vcf -fork 4</pre>
+
+<p> but depending on various factors specific to your setup you may see faster
+performance with fewer or more forks. </p>
+
+<p> <b>NB:</b> VEP users writing plugins should be aware that while the VEP code
+attempts to preserve the state of any plugin-specific cached data between
+separate forks, there may be situations where data is lost. If you find this is
+the case, you should disable forking in the new() method of your plugin by
+deleting the "fork" key from the $config hash. </p>
 
 
 <p><a href="#top">[Back to top]</a></p>
@@ -439,7 +477,17 @@ host          useastdb.ensembl.org</pre>
 				<li>--cell_type</li>
 				<li>--canonical</li>
 				<li>--protein</li>
+				<li>--gmaf</li>
 			</ul>
+		</td>
+	</tr>
+	<tr>
+		<td><pre>--fork [num_forks]</pre></td>
+		<td>&nbsp;</td>
+		<td>
+			Enable <a href="#forking">forking</a>, using the specified number of
+			forks. Forking can dramatically improve the runtime of the script.
+            <i>Not used by default</i>
 		</td>
 	</tr>
 </table>
@@ -904,6 +952,15 @@ host          useastdb.ensembl.org</pre>
 		</td>
 	</tr>
 	<tr class="bg2">
+		<td><pre>--gmaf</pre></td>
+		<td>&nbsp;</td>
+		<td>
+			Add the global minor allele frequency (MAF) from 1000 Genomes Phase
+			1 data for any existing variant to the output. <i>Not used by
+			default</i>
+		</td>
+	</tr>
+	<tr>
 		<td><pre>--individual [all|ind list]</pre></td>
 		<td>&nbsp;</td>
 		<td>
@@ -915,6 +972,15 @@ host          useastdb.ensembl.org</pre>
 			is given on a separate line of output. Only works with VCF files
 			containing individual genotype data; individual IDs are taken from
 			column headers. <i>Not used by default</i>
+		</td>
+	</tr>
+	<tr class="bg2">
+		<td><pre>--phased</pre></td>
+		<td>&nbsp;</td>
+		<td>
+			Force VCF genotypes to be interpreted as phased. For use with
+			plugins that depend on phased data. <i>Not used by
+			default</i>
 		</td>
 	</tr>
 	<tr>
@@ -1325,27 +1391,27 @@ and configured using the <a href="#installer">installer script</a>. <p>
             <table class="ss" style="width:50%">
                 <tr>
                     <th>Human <i>(Homo sapiens)</i></th>
-                    <td><a href="ftp://ftp.ensembl.org/pub/release-67/variation/VEP/homo_sapiens_vep_67_sift_polyphen.tar.gz">Download (with SIFT and PolyPhen)</a></td>
-                    <td><a href="ftp://ftp.ensembl.org/pub/release-67/variation/VEP/homo_sapiens_vep_67.tar.gz">Download (without SIFT and PolyPhen)</a></td>
+                    <td><a href="ftp://ftp.ensembl.org/pub/release-68/variation/VEP/homo_sapiens_vep_68_sift_polyphen.tar.gz">Download (with SIFT and PolyPhen)</a></td>
+                    <td><a href="ftp://ftp.ensembl.org/pub/release-68/variation/VEP/homo_sapiens_vep_68.tar.gz">Download (without SIFT and PolyPhen)</a></td>
                 </tr>
                 <tr>
                     <th>Mouse <i>(Mus musculus)</i></th>
-                    <td><a href="ftp://ftp.ensembl.org/pub/release-67/variation/VEP/mus_musculus_vep_67.tar.gz">Download</a></td>
+                    <td><a href="ftp://ftp.ensembl.org/pub/release-68/variation/VEP/mus_musculus_vep_68.tar.gz">Download</a></td>
                     <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <th>Rat <i>(Rattus norvegicus)</i></th>
-                    <td><a href="ftp://ftp.ensembl.org/pub/release-67/variation/VEP/rattus_norvegicus_vep_67.tar.gz">Download</a></td>
+                    <td><a href="ftp://ftp.ensembl.org/pub/release-68/variation/VEP/rattus_norvegicus_vep_68.tar.gz">Download</a></td>
                     <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <th>Zebrafish <i>(Danio rerio)</i></th>
-                    <td><a href="ftp://ftp.ensembl.org/pub/release-67/variation/VEP/danio_rerio_vep_67.tar.gz">Download</a></td>
+                    <td><a href="ftp://ftp.ensembl.org/pub/release-68/variation/VEP/danio_rerio_vep_68.tar.gz">Download</a></td>
                     <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <th>Cow <i>(Bos taurus)</i></th>
-                    <td><a href="ftp://ftp.ensembl.org/pub/release-67/variation/VEP/bos_taurus_vep_67.tar.gz">Download</a></td>
+                    <td><a href="ftp://ftp.ensembl.org/pub/release-68/variation/VEP/bos_taurus_vep_68.tar.gz">Download</a></td>
                     <td>&nbsp;</td>
                 </tr>
             </table>
@@ -1356,9 +1422,9 @@ and configured using the <a href="#installer">installer script</a>. <p>
 		$HOME/.vep/ as the cache directory, where $HOME is your UNIX home
 		directory.
         <pre class="code">
-mv homo_sapiens_vep_67.tar.gz ~/.vep/
+mv homo_sapiens_vep_68.tar.gz ~/.vep/
 cd ~/.vep/
-tar xfz homo_sapiens_vep_67.tar.gz</pre>
+tar xfz homo_sapiens_vep_68.tar.gz</pre>
 	</li>
 	<li>
 		Run the VEP with the --cache option
@@ -1483,9 +1549,9 @@ see <a href="/info/docs/webcode/install/ensembl-data.html"
 target="_blank">here</a>. You will need a MySQL server that you can connect to
 from the machine where you will run the script (this can be the same machine).
 For most of the functionality of the VEP, you will only need the Core database
-(e.g. homo_sapiens_core_67_37) installed. In order to find co-located variations
+(e.g. homo_sapiens_core_68_37) installed. In order to find co-located variations
 or to use SIFT or PolyPhen, it is also necessary to install the relevant
-variation database (e.g. homo_sapiens_variation_67_37). </p>
+variation database (e.g. homo_sapiens_variation_68_37). </p>
 
 <p> Note that unless you have custom data to insert in the database, in most cases it will be much more efficient to use a <a href="#pre">pre-built cache</a> in place of a local database. </p>
 
@@ -1506,7 +1572,7 @@ Bio::EnsEMBL::DBSQL::DBAdaptor->new(
   '-host'    => 'ensembldb.ensembl.org',
   '-user'    => 'anonymous',
   '-pass'    => '',
-  '-dbname'  => 'homo_sapiens_core_67_37'
+  '-dbname'  => 'homo_sapiens_core_68_37'
 );
 
 Bio::EnsEMBL::Variation::DBSQL::DBAdaptor->new(
@@ -1516,7 +1582,7 @@ Bio::EnsEMBL::Variation::DBSQL::DBAdaptor->new(
   '-host'    => 'ensembldb.ensembl.org',
   '-user'    => 'anonymous',
   '-pass'    => '',
-  '-dbname'  => 'homo_sapiens_variation_67_37'
+  '-dbname'  => 'homo_sapiens_variation_68_37'
 );
 
 Bio::EnsEMBL::Registry->add_alias("Homo_sapiens","human");
@@ -1759,6 +1825,21 @@ the command line, so they can be run as a pipeline, with, for example, a later
 plugin filtering output based on the results from an earlier plugin. Note though
 that the first plugin to filter a line 'wins', and any later plugins won't get
 run on a filtered line. </p>
+
+<h3 id="plugins_intergenic"> Plugins and intergenic variants </h3>
+
+<p> When a variant falls in an intergenic region, it will usually not have any consequence types called, and hence will not have any associated VariationFeatureOverlap objects. In this special case, the VEP creates a new VariationFeatureOverlap that overlaps a feature of type "Intergenic". To force your plugin to handle these, you must add "Intergenic" to the feature types that it will recognize; you do this by writing your own feature_types sub-routine:</p>
+
+<pre class="code">sub feature_types {
+  return ['Transcript', 'Intergenic'];
+}</pre>
+
+<p> This will cause your plugin to handle any variation features that overlap transcripts or intergenic regions. To also include any regulatory features, you should use the generic type "Feature":</p>
+
+<pre class="code">sub feature_types {
+  return ['Feature', 'Intergenic'];
+}</pre>
+
 
 <h3 id="plugins_examples"> Examples </h3>
 
