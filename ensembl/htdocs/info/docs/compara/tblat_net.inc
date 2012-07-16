@@ -21,7 +21,7 @@
 <tr>
 <td class="bg1 left"><b><i>Gallus gallus</i></b></td>
 <td class="bg3 center"><font color=blue><a href=mlss/mlss_421.html">YES</a></font></td><!-- H.sap -->
-<td class="bg1 center"><font color=blue><a href=mlss/mlss_306.html">YES</a></font></td><!-- M.mus -->
+<td class="bg1 center">-</td><!-- M.mus -->
 <td class="bg3 center">-</td><!-- R.nor -->
 <th class="bg1 center" style="width:5em"><i>G.gal</i></th>
 </tr>
@@ -59,7 +59,7 @@
 <tr>
 <td class="bg1 left"><b><i>Xenopus tropicalis</i></b></td>
 <td class="bg3 center"><font color=blue><a href=mlss/mlss_515.html">YES</a></font></td><!-- H.sap -->
-<td class="bg1 center"><font color=blue><a href=mlss/mlss_512.html">YES</a></font></td><!-- M.mus -->
+<td class="bg1 center"><font color=blue><a href=mlss/mlss_591.html">YES</a></font></td><!-- M.mus -->
 <td class="bg3 center">-</td><!-- R.nor -->
 <td class="bg1 center"><font color=blue><a href=mlss/mlss_513.html">YES</a></font></td><!-- G.gal -->
 <td class="bg3 center">-</td><!-- M.gal -->
@@ -84,7 +84,7 @@
 <tr>
 <td class="bg1 left"><b><i>Danio rerio</i></b></td>
 <td class="bg3 center"><font color=blue><a href=mlss/mlss_480.html">YES</a></font></td><!-- H.sap -->
-<td class="bg1 center"><font color=blue><a href=mlss/mlss_479.html">YES</a></font></td><!-- M.mus -->
+<td class="bg1 center"><font color=blue><a href=mlss/mlss_589.html">YES</a></font></td><!-- M.mus -->
 <td class="bg3 center"><font color=blue><a href=mlss/mlss_481.html">YES</a></font></td><!-- R.nor -->
 <td class="bg1 center"><font color=blue><a href=mlss/mlss_484.html">YES</a></font></td><!-- G.gal -->
 <td class="bg3 center">-</td><!-- M.gal -->
@@ -113,7 +113,7 @@
 <tr>
 <td class="bg1 left"><b><i>Oreochromis niloticus</i></b></td>
 <td class="bg3 center"><font color=blue><a href=mlss/mlss_573.html">YES</a></font></td><!-- H.sap -->
-<td class="bg1 center"><font color=blue><a href=mlss/mlss_575.html">YES</a></font></td><!-- M.mus -->
+<td class="bg1 center">-</td><!-- M.mus -->
 <td class="bg3 center">-</td><!-- R.nor -->
 <td class="bg1 center">-</td><!-- G.gal -->
 <td class="bg3 center">-</td><!-- M.gal -->
@@ -129,7 +129,7 @@
 <tr>
 <td class="bg3 left"><b><i>Takifugu rubripes</i></b></td>
 <td class="bg4 center"><font color=blue><a href=mlss/mlss_418.html">YES</a></font></td><!-- H.sap -->
-<td class="bg3 center"><font color=blue><a href=mlss/mlss_308.html">YES</a></font></td><!-- M.mus -->
+<td class="bg3 center">-</td><!-- M.mus -->
 <td class="bg4 center">-</td><!-- R.nor -->
 <td class="bg3 center">-</td><!-- G.gal -->
 <td class="bg4 center">-</td><!-- M.gal -->
@@ -146,7 +146,7 @@
 <tr>
 <td class="bg1 left"><b><i>Tetraodon nigroviridis</i></b></td>
 <td class="bg3 center"><font color=blue><a href=mlss/mlss_420.html">YES</a></font></td><!-- H.sap -->
-<td class="bg1 center"><font color=blue><a href=mlss/mlss_333.html">YES</a></font></td><!-- M.mus -->
+<td class="bg1 center">-</td><!-- M.mus -->
 <td class="bg3 center"><font color=blue><a href=mlss/mlss_335.html">YES</a></font></td><!-- R.nor -->
 <td class="bg1 center">-</td><!-- G.gal -->
 <td class="bg3 center">-</td><!-- M.gal -->
@@ -224,7 +224,7 @@
 <tr>
 <td class="bg1 left"><b><i>Ciona intestinalis</i></b></td>
 <td class="bg3 center"><font color=blue><a href=mlss/mlss_570.html">YES</a></font></td><!-- H.sap -->
-<td class="bg1 center"><font color=blue><a href=mlss/mlss_564.html">YES</a></font></td><!-- M.mus -->
+<td class="bg1 center"><font color=blue><a href=mlss/mlss_590.html">YES</a></font></td><!-- M.mus -->
 <td class="bg3 center">-</td><!-- R.nor -->
 <td class="bg1 center">-</td><!-- G.gal -->
 <td class="bg3 center">-</td><!-- M.gal -->

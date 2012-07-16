@@ -118,7 +118,7 @@
 <td class="bg1 center">-</td><!-- P.abe -->
 <td class="bg3 center">-</td><!-- M.mul -->
 <td class="bg1 center">-</td><!-- C.jac -->
-<td class="bg3 center">-</td><!-- M.mus -->
+<td class="bg3 center"><font color=blue>YES</font></td><!-- M.mus -->
 <td class="bg1 center">-</td><!-- R.nor -->
 <td class="bg3 center">-</td><!-- O.cun -->
 <td class="bg1 center">-</td><!-- E.cab -->
@@ -134,7 +134,7 @@
 <td class="bg3 center">-</td><!-- P.abe -->
 <td class="bg4 center">-</td><!-- M.mul -->
 <td class="bg3 center">-</td><!-- C.jac -->
-<td class="bg4 center">-</td><!-- M.mus -->
+<td class="bg4 center"><font color=blue>YES</font></td><!-- M.mus -->
 <td class="bg3 center">-</td><!-- R.nor -->
 <td class="bg4 center">-</td><!-- O.cun -->
 <td class="bg3 center">-</td><!-- E.cab -->
@@ -169,7 +169,7 @@
 <td class="bg3 center">-</td><!-- P.abe -->
 <td class="bg4 center">-</td><!-- M.mul -->
 <td class="bg3 center">-</td><!-- C.jac -->
-<td class="bg4 center">-</td><!-- M.mus -->
+<td class="bg4 center"><font color=blue>YES</font></td><!-- M.mus -->
 <td class="bg3 center">-</td><!-- R.nor -->
 <td class="bg4 center">-</td><!-- O.cun -->
 <td class="bg3 center">-</td><!-- E.cab -->
@@ -188,7 +188,7 @@
 <td class="bg1 center">-</td><!-- P.abe -->
 <td class="bg3 center">-</td><!-- M.mul -->
 <td class="bg1 center">-</td><!-- C.jac -->
-<td class="bg3 center">-</td><!-- M.mus -->
+<td class="bg3 center"><font color=blue>YES</font></td><!-- M.mus -->
 <td class="bg1 center">-</td><!-- R.nor -->
 <td class="bg3 center">-</td><!-- O.cun -->
 <td class="bg1 center">-</td><!-- E.cab -->

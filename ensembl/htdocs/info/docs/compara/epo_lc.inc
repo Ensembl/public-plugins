@@ -11,14 +11,14 @@ Bushbaby (Otolemur garnettii)<br />
 Mouse (Mus musculus)<br />
 Rat (Rattus norvegicus)<br />
 Kangaroo rat (Dipodomys ordii)<br />
-Squirrel (Spermophilus tridecemlineatus)<br />
+Squirrel (Ictidomys tridecemlineatus)<br />
 Guinea Pig (Cavia porcellus)<br />
 Pika (Ochotona princeps)<br />
 Rabbit (Oryctolagus cuniculus)<br />
 Tree Shrew (Tupaia belangeri)<br />
 Sloth (Choloepus hoffmanni)<br />
 Armadillo (Dasypus novemcinctus)<br />
-Lesser hedgehog tenrec (Echinops telfairi)<br />
+Tenrec (Echinops telfairi)<br />
 Elephant (Loxodonta africana)<br />
 Hyrax (Procavia capensis)<br />
 Hedgehog (Erinaceus europaeus)<br />
