@@ -15,16 +15,12 @@
       <p>The Ensembl project produces genome databases
   for vertebrates and other eukaryotic species, and makes this information
   freely available online.</p>
-      <div class="column-wrapper js_panel">
+      <div class="js_panel">
         <input type="hidden" class="panel_type" value="SpeciesList" />
-        <div class="column-two"><div class="column-vpadding">
-          [[SCRIPT::EnsEMBL::Web::Document::HTML::FavouriteSpecies]]
-        </div></div>
-        <div class="column-two"><div class="column-vpadding">
-          [[SCRIPT::EnsEMBL::Web::Document::HTML::SpeciesList]]
-          <p style="padding-top:32px">Other species are available in <a href="http://pre.ensembl.org" rel="external">Ensembl&nbsp;<em>Pre<span class="red">!</span></em></a> and <a href="http://www.ensemblgenomes.org/" rel="external">EnsemblGenomes</a></p>
-        </div></div>
+        [[SCRIPT::EnsEMBL::Web::Document::HTML::FavouriteSpecies]]
       </div>
+      [[SCRIPT::EnsEMBL::Web::Document::HTML::SpeciesList]]
+       <p style="padding-top:32px">Other species are available in <a href="http://pre.ensembl.org" rel="external">Ensembl&nbsp;<em>Pre<span class="red">!</span></em></a> and <a href="http://www.ensemblgenomes.org/" rel="external">EnsemblGenomes</a></p>
     </div>
     <div class="plain-box">
       [[INCLUDE::/ssi/credits.inc]]
