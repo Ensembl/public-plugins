@@ -301,9 +301,30 @@ qq{<div style="width: 85%;border-bottom: 1px solid #CCCCCC; "><a class="notext" 
   <dd><a href="/$url">$hit->{id}</a></dd>
 </dl>
 );
+      #show some context for Variations
+      if ($hit->{location}) {
+        my ($chr,$loc,$strand) = split ':',$hit->{location};
+        my ($start,$end)       = split '-',$loc;
+        my $hit_location_label = $start-$end ? "$chr:$start-$end" : "$chr:$start";
+        my $context = 50;
+        if ($end < $start) {
+          $start += $context;
+          $end   -= $context;
+        }
+        else {
+          $start -= $context;
+          $end   += $context;
+        }
+        my $expanded_location = ($chr && $start && $end && $strand) ? "$chr:$start-$end:$strand" : $hit->{location};
+        $html .= qq(
+<dl class="summary">
+  <dt>Location</dt>
+  <dd>$hit_location_label (view in <a href="/$hit->{species}/Location/View?r=$expanded_location;v=$hit->{id}$db_extra">location tab</a>)</dd>
+</dl>
+);
+      }
     }
-
-    if ($hit->{location}) {
+    elsif ($hit->{location}) {
       $html .= qq(
 <dl class="summary">
   <dt>Location</dt>
