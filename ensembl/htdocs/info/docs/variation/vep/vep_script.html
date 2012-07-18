@@ -182,7 +182,7 @@
 	<h3> New in version 2.0 <i>(April 2011)</i> </h3>
 	
 	<ul>
-		<li>support for SIFT, PolyPhen and Condel non-synonymous predictions in human</li>
+		<li>support for SIFT, PolyPhen and Condel missense predictions in human</li>
 		<li>per-allele and compound consequence types</li>
 		<li>support for Sequence Ontology (SO) and NCBI consequence terms</li>
 		<li>
@@ -1934,7 +1934,7 @@ perl variant_effect_predictor.pl -custom http://www.myserver.com/data/myPhenotyp
 	<h3 id="plugins_filter"> Filtering using plugins </h3>
 	
 	<p> A common use for plugins will be to filter the output in some way (for
-	example to limit output lines to non-synonymous variants) and so we provide
+	example to limit output lines to missense variants) and so we provide
 	a simple mechanism to support this. The 'run' method of a plugin is assumed
 	to return a reference to a hash containing information to be included in the
 	output, and if a plugin does not want to add any data to a particular line
@@ -1946,7 +1946,7 @@ perl variant_effect_predictor.pl -custom http://www.myserver.com/data/myPhenotyp
 	as your base class and then you need only override the 'include_line' method
 	to return true if you want to include this line, and false otherwise. Again,
 	please refer to the documentation in this module for more details and an
-	example	implementation of a non-synonymous filter. </p>
+	example	implementation of a missense filter. </p>
 	
 	<h3 id="plugins_use"> Using plugins </h3>
 	
