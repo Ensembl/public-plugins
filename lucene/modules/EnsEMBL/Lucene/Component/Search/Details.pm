@@ -203,7 +203,8 @@ sub _render_help_results {
 
     my $featuretype = $hit->{featuretype};
     my $content = encode( "utf8", $hit->{content} ) || $hit->{description};
-
+    
+    $content =~ s/&nbsp;/ /g;
     $content =~ s/\n(?=\s)//g;
     my @content_words = split /\b/, $content;
 
@@ -218,11 +219,11 @@ sub _render_help_results {
       next if $word !~ /$search_term/i;
 
       # warn "MATCHED at $i", @content_words[$i-40 .. $i + 40] ;
-      $context_content = "... @content_words[$i-40 .. $i + 40] ...";
+      $context_content = '... ' . join('', map $content_words[$_], $i-40..$i+40) . ' ...';
       last;
     }
     unless ($context_content) {
-      $context_content = "@content_words[0 .. 80] ...";
+      $context_content = join('', map $content_words[$_], 0..80) . ' ...';
     }
     $context_content =~ s/($search_term)/<strong>$1<\/strong>/ig;
 
