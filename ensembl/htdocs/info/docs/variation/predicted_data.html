@@ -20,12 +20,11 @@ Predicted Data |
 <p>
 Ensembl imports variation data from a variety of different sources, as
 described on the <a href="data_description.html">Data description</a> page. Below we give more
-information about how the predictions ensembl makes for the effects of
-the variants. Ensembl calculates the:
+information about how Ensembl predicts the effects of variants. Ensembl calculates the:
 </p>
 <ul>
-	<li>Consequence of variations in transcripts (synonymous, non-synonymous,...)</li>
-	<li>Protein function prediction (SIFT, PolyPhen, Condel)</li>
+	<li>Consequence of variations in transcripts (synonymous, missense,...)</li>
+	<li>Protein function prediction (SIFT, PolyPhen)</li>
 	<li>Linkage disequilibrium information</li>
 	<li>Tagged variations</li>
 </ul>
@@ -34,9 +33,9 @@ the variants. Ensembl calculates the:
 <h2 id="consequences">Calculated variation consequences</h2>
 
 <p>
-For each variation that is mapped to the reference genome, we identify any
-Ensembl transcripts that overlap the variation and use a rule-based approach to
-predict the effect that each allele of the variation may have on the transcript.
+For each variation that is mapped to the reference genome, we identify each
+Ensembl transcript that overlap the variation. We then use a rule-based approach to
+predict the effects that each allele of the variation may have on the transcript.
 The set of consequence terms, defined by the <a rel="external"
 href="http://www.sequenceontology.org">Sequence Ontology</a> (SO), that can be
 currently assigned to each combination of an allele and a transcript is shown
@@ -46,7 +45,7 @@ effect in different transcripts.
 
 <p> 
 This approach is applied to all germline variations and somatic mutations
-stored in the Ensembl variation databases (though we do not currently calculate
+stored in the Ensembl variation databases (though we do not yet currently calculate
 consequences for structural variants). The resulting consequence type calls,
 along with information determined as part of the process, such as the cDNA and
 CDS coordinates, and the affected codons and amino acids in coding transcripts,
@@ -54,22 +53,19 @@ are stored in the variation database and displayed on the website.
 </p>
 
 <p>
-Prior to release 62 we used our own internal terms to describe the consequence
-types, and we continue to use these by default on the website. You can opt to
-see SO terms on some variation views using 'Configure this page', and 
-<a href="#VEP">VEP</a> and API users can choose which terms to use. The SO terms 
-are more specific than our
-display terms but we map all display terms to one or more SO terms, as shown in
-the table below. Where the NCBI have an equivalent term we also include it in
-this table (and again you can opt to use NCBI terms on some views via 'Configure
-this page' and in the VEP and API).
+Prior to release 68 we used our own internal terms to describe consequence
+types and these continue to be available as an option on the website using 
+'Configure this page', in the API and in the <a href="#VEP">VEP</a>. We refer
+to these as 'Old Ensembl terms' and list these and their SO equivalents in 
+the table below.
 </p>
 
-<p>We follow the SO definition of the term as closely as possible, but in some
-cases we have slightly generalised the definition to
-include variants that affect multiple codons as well as a single one. We are
-working with the SO to refine these definitions. The descriptions shown in the
-table are our own, not the SO definitions.
+<p>
+From release 68 however, we use <a rel="external"
+href="http://www.sequenceontology.org">SO terms </a> by default. The SO terms 
+are more specific than our previous Ensembl terms but we map all display terms 
+to one or more SO terms, as shown in the table below. The descriptions shown
+are the SO definitions.
 </p>
 
 <p>
