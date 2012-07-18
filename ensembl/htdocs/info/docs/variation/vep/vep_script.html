@@ -386,6 +386,72 @@
 		<li> Unpack the VEP package in Cygwin with <pre class="code">tar xvfz variant_effect_predictor.tar.gz</pre> </li>
 	</ol>
 	
+	<h4 id="activestate"> ActiveState Perl </h4>
+	
+	<p> ActiveState provide a version of Perl available for Windows. This can be
+	used to run the VEP on the Windows MS-DOS command line interface.
+	Instructions: </p>
+	
+	<ol>
+		<li> Download and install <a
+		href="http://www.activestate.com/activeperl/downloads">ActiveState
+		Perl</a>. 5.14.2 is the recommended version to use. </li>
+		<li> In your Windows Start menu, locate the entry created (it will look
+		something like "ActivePerl 5.14.2 Build 1402"), and click on "Perl
+		Package Manager" </li>
+		<li> In the package manager, click the grey "View all packages" icon in
+		the top-left </li>
+		<li> In the adjacent search box, type "DBI" </li>
+		<li> You should see a package named "DBI" in the list - click the
+		package icon to the left to highlight it and select it for installation
+		</li>
+		<li> You should also see a package named "DBD-mysql" - click the package
+		icon to select it for installation </li>
+		<li> Click the green arrow in the top right of the window to install the
+		packages </li>
+		<li> To install the Ensembl API you will need a program that can unpack
+		tar.gz archives - <a href="http://7-zip.org/">7-zip</a> is a freeware
+		program to do this. </li>
+		<li> Download and install the Ensembl API as per the <a
+		href="http://www.ensembl.org/info/docs/api/api_installation.html">instructions
+		here</a>. The best place to put them is alongside your other Perl
+		modules in C:\Perl\</li>
+		<li> In Windows you can add the path to your Ensembl API installation by
+		editing the PERL5LIB environment variable:
+			<ul>
+				<li>Right-click My Computer, click Properties</li>
+				<li>In the System Properties window, click on the Advanced
+				tab</li>
+				<li>Click the Environment Variables button</li>
+				<li>Click New, and enter "PERL5LIB" as the variable name</li>
+				<li>Then enter as the variable value the paths to your Bioperl,
+				Ensembl (core), Ensembl (variation) and Ensembl (functional
+				genomics if required), separated by semi-colons (";"). For
+				example, if you have installed all of your packages in C:\Perl\,
+				your variable value should look something like
+				<pre class="code">C:\Perl\bioperl-1.2.3\;C:\Perl\ensembl\modules\;C:\Perl\ensembl-variation\modules\;C:\Perl\ensembl-functgenomics\modules\</pre></li>
+				<li>Click OK to store the variable, and then OK in the
+				Environment Variables window to save the setting</li>
+			</ul>
+		</li>
+		<li> Download and unpack the VEP package from <a
+		href="#download">above</a> </li>
+		<li> Start an MS-DOS window by clicking on the Start Menu, then Run...,
+		type "cmd" in the box and press enter. Change directory to where you
+		unpacked the VEP package using the <b>cd</b> command:
+<pre class="code">cd C:\Perl\variant_effect_predictor\</pre></li>
+		<li> To use cache files, you will need to download the <a
+		href="http://www.gzip.org/">gzip utility</a> and put "gzip.exe" either
+		in your executable path or in the same directory as the
+		variant_effect_predictor.pl script </li>
+	</ol>
+	
+	<p><b>NB:</b> Under ActiveState Perl on Windows there is a known issue when
+	using the pre-built human cache file including SIFT and PolyPhen scores.
+	Users should use either the cache file without SIFT and PolyPhen (scores can
+	still be obtained by the script from the public database), or a virtual
+	machine or Cygwin as described above. </p>
+	
 	<p><a href="#top">[Back to top]</a></p>
 	
 	<hr/>
