@@ -49,7 +49,8 @@ stored in the Ensembl variation databases (though we do not yet currently calcul
 consequences for structural variants). The resulting consequence type calls,
 along with information determined as part of the process, such as the cDNA and
 CDS coordinates, and the affected codons and amino acids in coding transcripts,
-are stored in the variation database and displayed on the website. 
+are stored in the variation database and displayed on the website. You can use 
+this pipeline for your own data via the <a href="#VEP">VEP</a>. 
 </p>
 
 <p>
@@ -62,11 +63,16 @@ the table below.
 
 <p>
 From release 68 however, we use <a rel="external"
-href="http://www.sequenceontology.org">SO terms </a> by default. The SO terms 
-are more specific than our previous Ensembl terms but we map all display terms 
-to one or more SO terms, as shown in the table below. The descriptions shown
-are the SO definitions.
+href="http://www.sequenceontology.org">SO terms </a> by default. There is an equivalent 
+SO term for each of our old Ensembl terms but in a few cases there is a more specific 
+SO term available, as shown in the table below. If you have text files or VEP outputs 
+with our old Ensembl terms, you can easily update these to using the SO terms by running the following 
+<a href="http://cvs.sanger.ac.uk/cgi-bin/viewvc.cgi/ensembl-variation/scripts/misc/convert_ensembl_to_SO_consequences.pl?view=co&root=ensembl&pathrev=branch-ensembl-68">
+script</a> e.g. <br />
+ <code>perl convert_ensembl_to_SO_consequences.pl input.txt > converted.txt</code>.
 </p>
+
+
 
 <p>
 The terms in the table are shown in order of severity as estimated by
