@@ -57,10 +57,9 @@ Zip</a> (gzip, *.gz) compressed.
 The following types of data dumps are available on the FTP site. 
 </p>
 
-<dl>
-
-<dt>FASTA</dt>
-<dd>FASTA sequence databases of Ensembl gene, transcript and protein
+<dl class="twocol striped">
+<dt class="bg2">FASTA</dt>
+<dd class="bg2">FASTA sequence databases of Ensembl gene, transcript and protein
 model predictions. Since the 
 <a href="http://www.ebi.ac.uk/help/formats.html#fasta"
 rel="external">FASTA format</a> does not permit sequence annotation,
@@ -68,38 +67,37 @@ these database files are mainly intended for use with local sequence
 similarity search algorithms. Each directory has a README file with a
 detailed description of the header line format and the file naming
 conventions.
-
 <dl>
 
-<dt>DNA</dt>
-<dd><a href="http://www.repeatmasker.org/" rel="external">Masked</a>
-and unmasked genome sequences associated with the assembly (contigs,
-chromosomes etc.).</dd>
-<dd>The header line in an FASTA dump files containing DNA sequence
-consists of the following attributes :
-coord_system:version:name:start:end:strand
-This coordinate-system string is used in the Ensembl API to retrieve
-slices with the SliceAdaptor.</dd>
-
-<dt>cDNA</dt>
-<dd>cDNA sequences for Ensembl or <i>ab
-initio</i> <a href="/info/docs/genebuild/genome_annotation.html">predicted
-genes</a>.</dd>
-
-<dt>Peptides</dt>
-<dd>Protein sequences for Ensembl or <i>ab
-initio</i> <a href="/info/docs/genebuild/genome_annotation.html">predicted
-genes</a>.</dd>
-
-<dt>RNA</dt>
-<dd>Non-coding RNA gene preditions.</dd>
-
+  <dt>DNA</dt>
+  <dd><a href="http://www.repeatmasker.org/" rel="external">Masked</a>
+  and unmasked genome sequences associated with the assembly (contigs,
+  chromosomes etc.).</dd>
+  <dd>The header line in an FASTA dump files containing DNA sequence
+  consists of the following attributes :
+  coord_system:version:name:start:end:strand
+  This coordinate-system string is used in the Ensembl API to retrieve
+  slices with the SliceAdaptor.</dd>
+  
+  <dt>cDNA</dt>
+  <dd>cDNA sequences for Ensembl or <i>ab
+  initio</i> <a href="/info/docs/genebuild/genome_annotation.html">predicted
+  genes</a>.</dd>
+  
+  <dt>Peptides</dt>
+  <dd>Protein sequences for Ensembl or <i>ab
+  initio</i> <a href="/info/docs/genebuild/genome_annotation.html">predicted
+  genes</a>.</dd>
+  
+  <dt>RNA</dt>
+  <dd>Non-coding RNA gene preditions.</dd>
+  
 </dl>
 
 </dd>
 
-<dt>Annotated sequence</dt> 
-<dd>Flat files allow more extensive sequence annotation by means of
+<dt class="bg1">Annotated sequence</dt> 
+<dd class="bg1">Flat files allow more extensive sequence annotation by means of
 feature tables and contain thus the genome sequence as annotated by
 the automated Ensembl
 <a href="/info/docs/genebuild/genome_annotation.html">genome
@@ -107,27 +105,27 @@ annotation pipeline</a>. Each nucleotide sequence record in a flat
 file represents a 1Mb slice of the genome sequence. Flat files are
 broken into chunks of 1000 sequence records for easier downloading.
 
-<dl>
-
-<dt>EMBL</dt>
-<dd>Ensembl database dumps in <a href="http://www.ebi.ac.uk/embl/"
-rel="external">EMBL</a> nucleotide
-sequence <a href="http://www.ebi.ac.uk/embl/Documentation/User_manual/usrman.html"
-rel="external">database format</a></dd>
-
-<dt>GenBank</dt>
-<dd>Ensembl database dumps
-in <a href="http://www.ncbi.nlm.nih.gov/genbank/"
-rel="external">GenBank</a> nucleotide sequence
-<a href="http://www.ncbi.nlm.nih.gov/Sitemap/samplerecord.html"
-rel="external">database format</a></dd>
-
-</dl>
+  <dl>
+  
+  <dt>EMBL</dt>
+  <dd>Ensembl database dumps in <a href="http://www.ebi.ac.uk/embl/"
+  rel="external">EMBL</a> nucleotide
+  sequence <a href="http://www.ebi.ac.uk/embl/Documentation/User_manual/usrman.html"
+  rel="external">database format</a></dd>
+  
+  <dt>GenBank</dt>
+  <dd>Ensembl database dumps
+  in <a href="http://www.ncbi.nlm.nih.gov/genbank/"
+  rel="external">GenBank</a> nucleotide sequence
+  <a href="http://www.ncbi.nlm.nih.gov/Sitemap/samplerecord.html"
+  rel="external">database format</a></dd>
+  
+  </dl>
 
 </dd>
 
-<dt>MySQL</dt>
-<dd>All Ensembl <a href="http://www.mysql.com/"
+<dt class="bg2">MySQL</dt>
+<dd class="bg2">All Ensembl <a href="http://www.mysql.com/"
 rel="external">MySQL</a> databases are available in text format as are
 the SQL table definition files. These can be imported into to any SQL
 database for a local
@@ -137,13 +135,13 @@ database. For more information about these databases and their
 Application Programming Interfaces (or APIs) see the
 <a href="/info/docs/api/">API</a> section.</dd>
 
-<dt>GTF</dt>
-<dd>Gene sets for each species. These files include annotations of
+<dt class="bg1">GTF</dt>
+<dd class="bg1">Gene sets for each species. These files include annotations of
 both coding and non-coding genes. This file format is
 described <a href="http://mblab.wustl.edu/GTF2.html">here</a>.</dd>
 
-<dt>EMF flatfile dumps (variation and comparative data)</dt>
-<dd>
+<dt class="bg2">EMF flatfile dumps (variation and comparative data)</dt>
+<dd class="bg2">
 <p>
 Alignments of resequencing data are available for several species as
 Ensembl Multi Format (EMF) flatfile dumps. The accompanying README
@@ -160,15 +158,15 @@ directory</a>.
 </p>
 </dd>
 
-<dt>GVF (variation data)</dt>
-<dd>GVF (Genome Variation Format) is a simple tab-delimited format derived
+<dt class="bg1">GVF (variation data)</dt>
+<dd class="bg1">GVF (Genome Variation Format) is a simple tab-delimited format derived
 from GFF3 for variation positions across the genome.
 There are GVF files for different types of variation data (e.g.
 somatic variants, structural variants etc). For more information see
 the "README" files in the GVF directory.</dd>
 
-<dt>BED format files (comparative data)</dt>
-<dd>
+<dt class="bg2">BED format files (comparative data)</dt>
+<dd class="bg2">
 <p>
 Constrained elements calculated using GERP are available in BED
 format. For more information see the accompanying README file.
@@ -190,8 +188,8 @@ are:
 </p>
 </dd>
 
-<dt>Tarball</dt>
-<dd>
+<dt class="bg1">Tarball</dt>
+<dd class="bg1">
 <p>
 The entire Ensembl API is gzipped and concatenated into a single TAR file. This is updated daily.</p>
 </dd>

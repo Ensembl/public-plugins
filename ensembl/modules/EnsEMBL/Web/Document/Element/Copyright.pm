@@ -31,7 +31,7 @@ sub content {
   $html .= sprintf(
     q(
     <div class="column-two left">
-      <p class="no-top-margin">%s release %d - %s &copy;
+      <p>%s release %d - %s &copy;
         <span class="print_hide"><a href="http://www.sanger.ac.uk/" class="nowrap constant">WTSI</a> /
         <a href="http://www.ebi.ac.uk/" class="nowrap constant">EBI</a></span>
         <span class="screen_hide_inline">WTSI / EBI<br />http://%s</span>

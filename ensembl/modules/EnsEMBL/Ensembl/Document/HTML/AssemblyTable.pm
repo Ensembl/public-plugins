@@ -40,11 +40,7 @@ sub render {
     $release_to_species->{$_->{'species_id'}}{$_->{'id'}} = $_->{'assembly'};
   }
 
-  my $html = render_assembly_table($split_releases->[0], $species, $release_to_species);
-  $html .= "<br />";
-  $html .= render_assembly_table($split_releases->[1], $species, $release_to_species);
-  
-  return $html;
+  return render_assembly_table($split_releases->[0], $species, $release_to_species).render_assembly_table($split_releases->[1], $species, $release_to_species);
 }
 
 sub render_assembly_table {
@@ -101,7 +97,7 @@ sub render_assembly_table {
 
     foreach my $td (sort keys %$cells) {
       $class = $cells->{$td}->{'name'} ? $c->{$c->{'x'}*=-1} : "";
-      $row .= qq{<td colspan="$cells->{$td}->{'count'}" class="$class">$cells->{$td}->{'name'}</td>};
+      $row .= qq(<td colspan="$cells->{$td}->{'count'}" class="$class">$cells->{$td}->{'name'}</td>);
     }
  
     $row .= "</tr>\n";
@@ -123,7 +119,7 @@ sub render_assembly_table {
   $body = join ('', @rows); 
   $body .= $short_header if $species_total % $divisor;
 
-  return qq{\n<table style="margin:auto; width:95%" border="1" class="ss">\n$header\n$body\n</table>};
+  return qq{\n<table class="ss">\n$header\n$body\n</table>};
 }
 
 1;
