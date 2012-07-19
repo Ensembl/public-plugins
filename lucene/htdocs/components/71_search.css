@@ -101,6 +101,7 @@ div.paginate a.prev:hover{
 .hit .header {
   border-bottom: [[PANEL_BORDER]] solid 1px;
   margin-bottom: 8px;
+  padding-bottom: 2px;
 }
 
 .hit a  {
