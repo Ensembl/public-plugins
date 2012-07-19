@@ -69,8 +69,8 @@ sub render_summary {
       my $page_first_hit     = $pager->first;
       my $page_last_hit      = $pager->last;
       $summary_message .= (
-         qq{<p class="space-below">Showing results <strong>$page_first_hit-$page_last_hit</strong></p>}
-        ) . ( $page_last_hit >= 10000 ? qq{<p class="small space-below">Results beyond 10000 not shown.</p>} : '' );
+         qq{<p>Showing results <strong>$page_first_hit-$page_last_hit</strong></p>}
+        ) . ( $page_last_hit >= 10000 ? qq{<p class="small">Results beyond 10000 not shown.</p>} : '' );
 
     }
     return $summary_message;
@@ -196,7 +196,7 @@ sub _render_help_results {
     }
 
     $html .=
-      qq{<div style="width: 85%;border-bottom: 1px solid #CCCCCC; "><a class="notext" href="/$url">$hit_tagline</a></div>};
+      qq{<div class="header"><a class="notext" href="/$url">$hit_tagline</a></div>};
 
     my $species_no_underscore;
     ( $species_no_underscore = $species ) =~ s/_/ /;
@@ -229,17 +229,11 @@ sub _render_help_results {
 
     # $content = encode("utf8", $context_content);
     my $db_extra = $hit->{'db'} ? ';db=' . $hit->{'db'} : '';
-    $html .= qq{
-  <p style="margin-top:0.5em">$context_content</p>
-    };
+    $html .= qq{<p>$context_content</p>};
+
     ## DOES STATIC CONTENT EVER HAVE A LOCATION & FEATURE?
     if ($hit->{location} && $hit->{featuretype} eq 'Gene') {
-      $html .= qq{
-<dl class="summary">
-  <dt>Location</dt>
-  <dd><a href="/$hit->{species}/Location/View?r=$hit->{location};g=$hit->{id}$db_extra">$hit->{location}</a></dd>
-</dl>
-      };
+      $html .= $self->new_twocol(['Location', qq(<p><a href="/$hit->{species}/Location/View?r=$hit->{location};g=$hit->{id}$db_extra">$hit->{location}</a></p>), 1])->render;
     }
     $html .= "</div> <!-- end hit -->";
   }
@@ -257,6 +251,7 @@ sub _render_genome_hits {
   my $html;
   foreach my $hit (@$hits) {
     $html .= qq{<div class="hit">};
+    my $table = $self->new_twocol;
 
     my $id                 = $hit->{id};
     my $display_identifier = $hit->{featuretype} eq 'Phenotype' ? $hit->{description} : $hit->{id};
@@ -266,8 +261,7 @@ sub _render_genome_hits {
     my $hit_tagline = eval { $hit_tagline_lookup->{ uc $hit->{featuretype} }($hit) } || '';
     $hit_tagline =~ s/\[/ [/;
 
-    $html .=
-qq{<div style="width: 85%;border-bottom: 1px solid #CCCCCC; "><a class="notext" href="/$url">$hit_tagline</a></div>};
+    $html .= qq{<div class="header"><a class="notext" href="/$url">$hit_tagline</a></div>};
 
     my $species_no_underscore;
     ( $species_no_underscore = $species ) =~ s/_/ /;
@@ -275,33 +269,19 @@ qq{<div style="width: 85%;border-bottom: 1px solid #CCCCCC; "><a class="notext" 
     my $featuretype = $hit->{featuretype};
     my $description = $hit->{description};
     my $db_extra    = $hit->{'db'} ? ';db=' . $hit->{'db'} : '';
-    $html .= qq(
-<dl class="summary">
-  <dt>Description</dt>
-  <dd>$description</dd>
-</dl>
-);
+    $table->add_row('Description', $description);
 
     if ($hit->{featuretype} =~ /Gene|Transcript/) {
       my $label = $hit->{featuretype} eq 'Gene' ? 'Gene ID' : 'Transcript ID';
       my $url = $hit->{featuretype} eq 'Gene' ? "/$hit->{species}/Gene/Summary?g=$hit->{id}$db_extra"
                : "/$hit->{species}/Transcript/Summary?t=$hit->{id}$db_extra";
-      $html .= qq(
-<dl class="summary">
-  <dt>$label</dt>
-  <dd><a href="$url">$hit->{id}</a></dd>
-</dl>
-);
+      $table->add_row($label, qq(<p><a href="$url">$hit->{id}</a></p>), 1);
     }
 
     if ($hit->{featuretype} =~ /Variation/) {
       my $label = 'Variation ID';
-      $html .= qq(
-<dl class="summary">
-  <dt>$label</dt>
-  <dd><a href="/$url">$hit->{id}</a></dd>
-</dl>
-);
+      $table->add_row($label, qq(<p><a href="/$url">$hit->{id}</a></p>));
+
       #show some context for Variations
       if ($hit->{location}) {
         my ($chr,$loc,$strand) = split ':',$hit->{location};
@@ -317,40 +297,20 @@ qq{<div style="width: 85%;border-bottom: 1px solid #CCCCCC; "><a class="notext" 
           $end   += $context;
         }
         my $expanded_location = ($chr && $start && $end && $strand) ? "$chr:$start-$end:$strand" : $hit->{location};
-        $html .= qq(
-<dl class="summary">
-  <dt>Location</dt>
-  <dd>$hit_location_label (view in <a href="/$hit->{species}/Location/View?r=$expanded_location;v=$hit->{id}$db_extra">location tab</a>)</dd>
-</dl>
-);
+        $table->add_row('Location', qq|<p>$hit_location_label (view in <a href="/$hit->{species}/Location/View?r=$expanded_location;v=$hit->{id}$db_extra">location tab</a>)</p>|, 1);
       }
     }
     elsif ($hit->{location}) {
-      $html .= qq(
-<dl class="summary">
-  <dt>Location</dt>
-  <dd><a href="/$hit->{species}/Location/View?r=$hit->{location};g=$hit->{id}$db_extra">$hit->{location}</a></dd>
-</dl>
-);
+      $table->add_row('Location', qq(<p><a href="/$hit->{species}/Location/View?r=$hit->{location};g=$hit->{id}$db_extra">$hit->{location}</a></p>), 1);
     }
 
     if ($species_defs->databases->{'DATABASE_VARIATION'} && $hit->{featuretype} =~ /Gene/) {
-      $html .= qq(
-<dl class="summary">
-  <dt>Variations</dt>
-  <dd><a href="/$hit->{species}/Gene/Variation_Gene/Table?g=$hit->{id}">Variation Table</a></dd>
-</dl>
-);
+      $table->add_row('Variations', qq(<p><a href="/$hit->{species}/Gene/Variation_Gene/Table?g=$hit->{id}">Variation Table</a></p>), 1);
     }
 
-    $html .= qq(
-<dl class="summary">
-  <dt>Source</dt>
-  <dd>$ensembl_version</dd>
-</dl>
-);
+    $table->add_row('Source', $ensembl_version);
 
-    $html .= "</div> <!-- end hit -->";
+    $html .= $table->render."</div> <!-- end hit -->";
 
   }
   return $html;
