@@ -73,8 +73,8 @@ sub test_gene {
     $sel->ensembl_click_links(["link=Genomic alignments"],'20000') if($alignment_count);
     #"link=Gene Tree (image)", need to add back to array below
     $sel->ensembl_click_links([
-      "link=Gene Tree (text)",
-      "link=Gene Tree (alignment)"
+      "link=Gene tree (text)",
+      "link=Gene tree (alignment)"
     ],'20000') if(lc($self->species) ne 'saccharomyces_cerevisiae');
 
     my $counts = $self->count_homologues($gene_param);
@@ -100,7 +100,7 @@ sub test_gene {
       and $sel->go_back();
     }
 
-    $sel->ensembl_click_links(["link=Variation Table", "link=Variation Image", "link=Structural Variation"]) if($species_db->{'database:variation'} && $gene_text !~ /^ASMPATCH/);
+    $sel->ensembl_click_links(["link=Variation table", "link=Variation image", "link=Structural variation"]) if($species_db->{'database:variation'} && $gene_text !~ /^ASMPATCH/);
 
     print "  Test Configure page on External Data \n";
     $sel->ensembl_click("link=External Data",'20000')
