@@ -59,7 +59,7 @@ sub test_transcript {
     if(lc($self->species) eq 'homo_sapiens') {          
       print "  Test Configure page \n";
       $sel->ensembl_click("link=Configure this page")
-      and $sel->ensembl_wait_for_ajax_ok('10000')
+      and $sel->ensembl_wait_for_ajax_ok('30000','1000')
       and $sel->ensembl_click("link=Somatic mutations")
       and $sel->ensembl_wait_for_ajax_ok('10000')
       and $sel->ensembl_click("//form[\@id='transcript_translationimage_configuration']/div[4]/div/ul/li/img") #turning first track off     
@@ -70,8 +70,8 @@ sub test_transcript {
     $sel->ensembl_click_links(["link=Domains & features*"],'20000') if ($SD->table_info_other(ucfirst($self->species),'core', 'protein_feature')->{'analyses'} && lc($self->species) ne 'meleagris_gallopavo');
     $sel->ensembl_click_links(["link=Variations*"],'20000') if(lc($self->species) eq 'homo_sapiens' || lc($self->species) eq 'mus_musculus');
 
-    print "  Test Configure page on External Data \n";
-    $sel->ensembl_click("link=External Data")
+    print "  Test Configure page on External data \n";
+    $sel->ensembl_click("link=External data")
     and $sel->ensembl_wait_for_page_to_load
     and $sel->ensembl_click("link=Configure this page")
     and $sel->ensembl_wait_for_ajax_ok('30000','5000')
