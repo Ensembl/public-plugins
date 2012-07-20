@@ -51,6 +51,7 @@ sub test_transcript {
     $sel->ensembl_click_links(["link=Oligo probes*"]) if($oligos);
 
     $sel->ensembl_click_links(["link=Ontology graph*", "link=Ontology table*"],'20000') if(lc($self->species) eq 'homo_sapiens' or lc($self->species) eq 'mus_musculus');
+    $sel->ensembl_click_links(["link=Variation table", "link=Variation image"]) if($species_db->{'database:variation'});
     $sel->ensembl_click_links(["link=Population comparison", "link=Comparison image"],'50000') if($species_db->{'database:variation'} && $SD->databases(ucfirst($self->species))->{'DATABASE_VARIATION'}->{'#STRAINS'});
     $sel->ensembl_click_links(["link=Protein summary"],'20000');
 
