@@ -102,8 +102,8 @@ sub test_gene {
 
     $sel->ensembl_click_links(["link=Variation table", "link=Variation image", "link=Structural variation"]) if($species_db->{'database:variation'} && $gene_text !~ /^ASMPATCH/);
 
-    print "  Test Configure page on External Data \n";
-    $sel->ensembl_click("link=External Data",'20000')
+    print "  Test Configure page on External data \n";
+    $sel->ensembl_click("link=External data",'20000')
     and $sel->ensembl_wait_for_page_to_load
     and $sel->ensembl_click("link=Configure this page")
     and $sel->ensembl_wait_for_ajax_ok(10000,2000)
