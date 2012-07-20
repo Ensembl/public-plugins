@@ -280,7 +280,7 @@ sub _render_genome_hits {
 
     if ($hit->{featuretype} =~ /Variation/) {
       my $label = 'Variation ID';
-      $table->add_row($label, qq(<p><a href="/$url">$hit->{id}</a></p>));
+      $table->add_row($label, qq(<p><a href="/$url">$hit->{id}</a></p>),1);
 
       #show some context for Variations
       if ($hit->{location}) {
