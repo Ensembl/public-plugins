@@ -29,6 +29,8 @@ sub content {
     $html = qq(<h3>Your search of $display_species with '$q' returned the following results:</h3>
       <div class="column-wrapper">);
 
+    my @margin_fix_classes = (' no-left-margin', '', ' no-right-margin');
+
     foreach my $group_name ('Feature type', 'Species', 'Help') {
       my $group_total = delete $results_by_group->{$group_name}->{'total'};
       
@@ -36,10 +38,10 @@ sub content {
       
       next if $group_total < 1;
       
-      my $group = $results_by_group->{$group_name}->{'results'};
-      
+      my $group        = $results_by_group->{$group_name}->{'results'};
+      my $margin_class = shift @margin_fix_classes;
       $html .= qq{
-      <div class="column-three"><div class="column-padding">
+      <div class="column-three"><div class="column-padding$margin_class">
         <table class="search_results">
           <tr><th colspan="2">By $group_name</th></tr>
           <tr><td>Total</td><td>$group_total</td></tr>
