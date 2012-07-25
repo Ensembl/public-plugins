@@ -2,6 +2,7 @@ package Lucene::WebServiceWrapper;
 
 use strict;
 
+#use SOAP::Lite +trace => 'all'; # Warns all SOAP messages. Useful for debugging.
 use SOAP::Lite;
 
 use Carp qw(confess);
