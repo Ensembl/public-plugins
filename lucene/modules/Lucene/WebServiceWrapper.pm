@@ -2,6 +2,7 @@ package Lucene::WebServiceWrapper;
 
 use strict;
 
+#use SOAP::Lite +trace => 'all'; # Warns all SOAP messages. Useful for debugging.
 use SOAP::Lite;
 
 use Carp qw(confess);
@@ -52,7 +53,7 @@ sub getHeadlineNumberOfResultsByDomain {
     else {
       warn "[ No data returned from webservice : headlineNumberOfResultsByDomain ]";
     }
-    if (my $c = $data->{NumOfResults} < 0 ) {
+    if ((my $c = $data->{NumOfResults}) < 0 ) {
       warn "[ Invalid count value ($c) returned, check Webservices are configured correctly ] ";
     }
     return $hits;

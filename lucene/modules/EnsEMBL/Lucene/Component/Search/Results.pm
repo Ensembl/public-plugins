@@ -24,7 +24,9 @@ sub content {
   my $q                = uri_escape($hub->param('q'));
   my $results_by_group = $self->object->groups;
   my $html;
-  
+ 
+  my @group_errors;
+  my $any_ok = 0;
   if ($results_by_group->{'Species'}{'total'} && $results_by_group->{'Feature type'}{'total'} || $results_by_group->{'Help'}{'total'}) {
     $html = qq(<h3>Your search of $display_species with '$q' returned the following results:</h3>
       <div class="column-wrapper">);
@@ -34,18 +36,23 @@ sub content {
     foreach my $group_name ('Feature type', 'Species', 'Help') {
       my $group_total = delete $results_by_group->{$group_name}->{'total'};
       
-      return sprintf '<div><p class="space-below">Sorry, %s search is currently unavailable.</p></div>', ucfirst $sitetype if $group_total < 0;
+      #return sprintf '<div><p class="space-below">Sorry, %s search is currently unavailable.</p></div>', ucfirst $sitetype if $group_total < 0;
       
-      next if $group_total < 1;
+      next if $group_total == 0;
       
       my $group        = $results_by_group->{$group_name}->{'results'};
       my $margin_class = shift @margin_fix_classes;
-      $html .= qq{
+      my $total = qq(<tr><td>Total</td><td>$group_total</td></tr>);
+      if($group_total == -1) {
+        $total = '';
+        push @group_errors,$group_name;
+      }
+      $html .= qq(
       <div class="column-three"><div class="column-padding$margin_class">
         <table class="search_results">
           <tr><th colspan="2">By $group_name</th></tr>
-          <tr><td>Total</td><td>$group_total</td></tr>
-      };
+          $total
+      );
 
       foreach my $child_name (sort { $group->{$a}{'sort_field'} cmp $group->{$b}{'sort_field'} } keys %{$group}) {
         my $child      = $group->{$child_name};
@@ -66,6 +73,7 @@ sub content {
         my $g_clipped;
         
         foreach my $g_name (sort { $grandchild->{$a}{'sort_field'} cmp $grandchild->{$b}{'sort_field'} } keys %{$grandchild}) {
+          $any_ok = 1;
           my $gchild    = $grandchild->{$g_name};
           my $display_n = $gchild->{'sort_field'};
              $display_n =~ s/${sitetype}_(.*)$/ucfirst($1)/e;
@@ -111,6 +119,15 @@ sub content {
       
     }
     $html .= "\n</div>"; #close column-wrapper
+    if(@group_errors) {
+      if($any_ok) {
+        my $beware = "Some search indices are not responding, search results may be missing or incomplete";
+        $html = $self->_warning("Incomplete results","<p>$beware</p>").$html;
+      } else {
+        my $beware = "Sorry ".ucfirst($sitetype)." search is currently unavailable";
+        $html = $self->_error("Search unavailable","<p>$beware</p>").$html;
+      }
+    }
 
   } else {
     $html = $self->re_search($q);
