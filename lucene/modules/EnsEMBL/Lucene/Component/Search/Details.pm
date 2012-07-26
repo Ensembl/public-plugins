@@ -275,12 +275,12 @@ sub _render_genome_hits {
       my $label = $hit->{featuretype} eq 'Gene' ? 'Gene ID' : 'Transcript ID';
       my $url = $hit->{featuretype} eq 'Gene' ? "/$hit->{species}/Gene/Summary?g=$hit->{id}$db_extra"
                : "/$hit->{species}/Transcript/Summary?t=$hit->{id}$db_extra";
-      $table->add_row($label, qq(<p><a href="$url">$hit->{id}</a></p>), 1);
+      $table->add_row($label, qq(<p><a href="$url">$hit->{id}</a></p>));
     }
 
     if ($hit->{featuretype} =~ /Variation/) {
       my $label = 'Variation ID';
-      $table->add_row($label, qq(<p><a href="/$url">$hit->{id}</a></p>),1);
+      $table->add_row($label, qq(<p><a href="/$url">$hit->{id}</a></p>));
 
       #show some context for Variations
       if ($hit->{location}) {
@@ -297,15 +297,15 @@ sub _render_genome_hits {
           $end   += $context;
         }
         my $expanded_location = ($chr && $start && $end && $strand) ? "$chr:$start-$end:$strand" : $hit->{location};
-        $table->add_row('Location', qq|<p>$hit_location_label (view in <a href="/$hit->{species}/Location/View?r=$expanded_location;v=$hit->{id}$db_extra">location tab</a>)</p>|, 1);
+        $table->add_row('Location', qq|<p>$hit_location_label (view in <a href="/$hit->{species}/Location/View?r=$expanded_location;v=$hit->{id}$db_extra">location tab</a>)</p>|);
       }
     }
     elsif ($hit->{location}) {
-      $table->add_row('Location', qq(<p><a href="/$hit->{species}/Location/View?r=$hit->{location};g=$hit->{id}$db_extra">$hit->{location}</a></p>), 1);
+      $table->add_row('Location', qq(<p><a href="/$hit->{species}/Location/View?r=$hit->{location};g=$hit->{id}$db_extra">$hit->{location}</a></p>));
     }
 
     if ($species_defs->databases->{'DATABASE_VARIATION'} && $hit->{featuretype} =~ /Gene/) {
-      $table->add_row('Variations', qq(<p><a href="/$hit->{species}/Gene/Variation_Gene/Table?g=$hit->{id}">Variation Table</a></p>), 1);
+      $table->add_row('Variations', qq(<p><a href="/$hit->{species}/Gene/Variation_Gene/Table?g=$hit->{id}">Variation Table</a></p>));
     }
 
     $table->add_row('Source', $ensembl_version);
