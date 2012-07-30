@@ -15,12 +15,13 @@ sub test_homepage {
  my $SD           = $self->get_species_def;   
  my $this_release = $SD->ENSEMBL_VERSION;
  my $location     = $self->get_location();  
- 
+
  $sel->open_ok("/"); 
+
  $sel->ensembl_wait_for_page_to_load
  and $sel->ensembl_is_text_present("Ensembl release $this_release")
  and $sel->ensembl_is_text_present("What's New in Release $this_release")
- and $sel->ensembl_is_text_present('Did you know...?')
+ and $sel->ensembl_is_text_present('Did you know')
  and $sel->ensembl_click_links(["link=View full list of all Ensembl species"]);
  
  $sel->go_back();
