@@ -208,10 +208,9 @@ sub get_results_summary {
       $new_groups->{'Feature type'}{results}{ $new_res->{domainId} }{results}{ $subfield_results->{fieldValue} }{is_clipped_flag} = '>' if $subfield_results->{fieldNumberOfResults} == 10000;
     }
   }
-
-  $new_groups->{Species}{total} = $new_results->{total} - $new_groups->{Help}{results}{Docs}{total};
-  $new_groups->{'Feature type'}{total} = $new_results->{total} - $new_groups->{Help}{results}{Docs}{total};
-
+  
+  $new_groups->{Species}{total} = $new_groups->{'Feature type'}{total} = $new_results->{total} - ($new_groups->{Help}{results}{Docs}{total} > 0 ? $new_groups->{Help}{results}{Docs}{total} : 0);
+  
   # until help and docs gets a subdomain by itself....
   $new_groups->{Help}{total} = $new_groups->{Help}{results}{Docs}{total};
   $self->groups($new_groups);
