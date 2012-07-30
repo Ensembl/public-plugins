@@ -77,7 +77,7 @@ sub test_location {
       
       if(lc($self->species) eq 'homo_sapiens' || lc($self->species) eq 'mus_musculus') {
         $sel->select_ok("align", "label=12 eutherian mammals EPO")
-        and $sel->click_ok("//input[\@value='Go']")
+        and $sel->ensembl_click("link=Go")
         and $sel->ensembl_wait_for_page_to_load(60000);
       }
       
@@ -102,13 +102,13 @@ sub test_location {
       my $resequencing_counts = $SD->databases(ucfirst($self->species))->{'DATABASE_VARIATION'}{'#STRAINS'} if exists $SD->databases(ucfirst($self->species))->{'DATABASE_VARIATION'};
       $sel->ensembl_click_links(["link=Resequencing ($resequencing_counts)"], '8000');
       $sel->type_ok("loc_r", "6:27996744-27996844");
-      $sel->ensembl_click("//input[\@value='Go']");
+      $sel->ensembl_click("link=Go");
       $sel->pause(5000);
       $sel->ensembl_is_text_present("Basepairs in secondary strains");
 
       $sel->open_ok("Homo_sapiens/Location/LD?db=core;r=6:27996744-27996844;pop1=12131");
       $sel->pause(5000);
-      $sel->ensembl_is_text_present("Prediction method:");
+      $sel->ensembl_is_text_present("Prediction method");
       
       $sel->ensembl_click_links(["link=Region in detail"]);
       $self->export_data('CSV (Comma separated values)','seqname,source');
