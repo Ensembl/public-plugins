@@ -1,4 +1,4 @@
-<h4>Human (Homo sapiens)</h4>
+<h4>Human (Homo sapiens)</h4><p>
 <a href="mlss/mlss_560.html">Gorilla (Gorilla gorilla)</a><br/>
 <a href="mlss/mlss_559.html">Chimpanzee (Pan troglodytes)</a><br/>
 <a href="mlss/mlss_557.html">Orangutan (Pongo abelii)</a><br/>
@@ -39,32 +39,33 @@
 <a href="mlss/mlss_384.html">Platypus (Ornithorhynchus anatinus)</a><br/>
 <a href="mlss/mlss_603.html">Turtle (Pelodiscus sinensis)</a><br/>
 <a href="mlss/mlss_390.html">Chicken (Gallus gallus)</a><br/>
-<h4>Mouse (Mus musculus)</h4>
+</p><h4>Mouse (Mus musculus)</h4><p>
 <a href="mlss/mlss_585.html">Rat (Rattus norvegicus)</a><br/>
 <a href="mlss/mlss_592.html">Dog (Canis familiaris)</a><br/>
 <a href="mlss/mlss_584.html">Pig (Sus scrofa)</a><br/>
 <a href="mlss/mlss_586.html">Cow (Bos taurus)</a><br/>
 <a href="mlss/mlss_587.html">Platypus (Ornithorhynchus anatinus)</a><br/>
 <a href="mlss/mlss_588.html">Chicken (Gallus gallus)</a><br/>
-<h4>Dog (Canis familiaris)</h4>
+</p><h4>Dog (Canis familiaris)</h4><p>
 <a href="mlss/mlss_593.html">Horse (Equus caballus)</a><br/>
 <a href="mlss/mlss_594.html">Panda (Ailuropoda melanoleuca)</a><br/>
-<h4>Pig (Sus scrofa)</h4>
+</p><h4>Pig (Sus scrofa)</h4><p>
 <a href="mlss/mlss_579.html">Cow (Bos taurus)</a><br/>
-<h4>Opossum (Monodelphis domestica)</h4>
+</p><h4>Opossum (Monodelphis domestica)</h4><p>
 <a href="mlss/mlss_544.html">Tasmanian devil (Sarcophilus harrisii)</a><br/>
 <a href="mlss/mlss_443.html">Wallaby (Macropus eugenii)</a><br/>
-<h4>Chicken (Gallus gallus)</h4>
+</p><h4>Chicken (Gallus gallus)</h4><p>
 <a href="mlss/mlss_498.html">Turkey (Meleagris gallopavo)</a><br/>
 <a href="mlss/mlss_441.html">Zebra Finch (Taeniopygia guttata)</a><br/>
 <a href="mlss/mlss_499.html">Anole Lizard (Anolis carolinensis)</a><br/>
-<h4>Anole Lizard (Anolis carolinensis)</h4>
+</p><h4>Anole Lizard (Anolis carolinensis)</h4><p>
 <a href="mlss/mlss_596.html">Turtle (Pelodiscus sinensis)</a><br/>
-<h4>Zebrafish (Danio rerio)</h4>
+</p><h4>Zebrafish (Danio rerio)</h4><p>
 <a href="mlss/mlss_552.html">Cod (Gadus morhua)</a><br/>
-<h4>Medaka (Oryzias latipes)</h4>
+</p><h4>Medaka (Oryzias latipes)</h4><p>
 <a href="mlss/mlss_225.html">Stickleback (Gasterosteus aculeatus)</a><br/>
-<h4>Stickleback (Gasterosteus aculeatus)</h4>
+</p><h4>Stickleback (Gasterosteus aculeatus)</h4><p>
 <a href="mlss/mlss_555.html">Cod (Gadus morhua)</a><br/>
-<h4>C.intestinalis (Ciona intestinalis)</h4>
+</p><h4>C.intestinalis (Ciona intestinalis)</h4><p>
 <a href="mlss/mlss_569.html">C.savignyi (Ciona savignyi)</a><br/>
+</p>
