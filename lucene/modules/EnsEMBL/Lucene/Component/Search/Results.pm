@@ -43,7 +43,7 @@ sub content {
       my $group        = $results_by_group->{$group_name}->{'results'};
       my $margin_class = shift @margin_fix_classes;
       my $total = qq(<tr><td>Total</td><td>$group_total</td></tr>);
-      if($group_total == -1) {
+      if($group_total < 0) {
         $total = '';
         push @group_errors,$group_name;
       }
