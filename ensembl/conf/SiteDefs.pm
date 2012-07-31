@@ -25,7 +25,7 @@ sub update_conf {
   $SiteDefs::__species_aliases{ 'Gorilla_gorilla'                   } = [qw(gg ggo ggor kong gorilla)]; 
   $SiteDefs::__species_aliases{ 'Felis_catus'                       } = [qw(fc fcat cat)];
   $SiteDefs::__species_aliases{ 'Homo_sapiens'                      } = [qw(hs hsap human man default)]; 
-  $SiteDefs::__species_aliases{ 'Ictidomys_tridecemlineatus'        } = [qw(it itri squirrel ictidomys)];
+  $SiteDefs::__species_aliases{ 'Ictidomys_tridecemlineatus'        } = [qw(it itri squirrel ictidomys spermophilus_tridecemlineatus)];
   $SiteDefs::__species_aliases{ 'Latimeria_chalumnae'               } = [qw(lc ltch coelacanth living fossil)];
   $SiteDefs::__species_aliases{ 'Loxodonta_africana'                } = [qw(la lafr elephant africana loxodontai hathi nellie dumbo)];
   $SiteDefs::__species_aliases{ 'Oryctolagus_cuniculus'             } = [qw(oc ocun rabbit bugs bunny hutch harvey)];
