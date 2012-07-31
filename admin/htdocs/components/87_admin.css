@@ -1,6 +1,6 @@
 .admin-plain-box, .admin-left-box, .admin-right-box {
-  padding: 10px;
-  margin: 10px 0;
+  padding: 16px 16px 0;
+  margin: 0 0 16px 0;
 }
 
 .admin-left-box {
@@ -10,25 +10,19 @@
 }
 
 .admin-right-box {
-  margin-left: 432px;
+  margin-left: 448px;
 }
 
 .admin-species {
   overflow: hidden;
 }
 
-.admin-species-grid {
+.admin-species .species-box {
   float: left;
-  padding: 10px;
-  width: 250px;  
+  width: 300px;  
 }
 
-.admin-species-grid img {
-  float: left;
-  margin-right: 4px;
-}
-
-.admin-species-grid span {
+.admin-species .species-box span {
   font-weight: bold;  
 }
 
@@ -61,72 +55,3 @@
   background-color: [[NEUTRAL_BORDER]];
   color: white;
 }
-
-
-/* relco docs */
-.document_h {
-  padding: 12px 0 !important;
-  margin: 0 !important;
-}
-.document_h a {
-  display: none;
-  text-decoration: none;
-}
-.document_h:hover a {
-  display: inline;
-}
-p.document_p {
-  line-height: 18px;
-  margin: 3px 0;
-  text-align: justify;
-}
-.code {
-  font-family: Courier !important;
-}
-.code p.document_p {
-  margin: 0;
-  text-align: left;
-  width: 100%;
-  white-space: pre;
-}
-div.code {
-  margin-bottom: 12px;
-  overflow: auto;
-}
-span.code {
-  margin: 0;
-  padding: 0 2px;
-  border: 0;
-}
-
-div.list_bullet, div.list_alphabet, div.list_number {
-  padding: 3px 3px 3px 20px;
-}
-
-/*div.list_bullet */
-div.list_element > p.document_p, div.list_element > div.document_div {
-  display: list-item;
-  line-height: 20px;
-}
-
-div.document_toc div {
-  padding: 6px 0 2px 10px;
-}
-
-.admin-doc-preview {
-  text-align: center;
-}
-
-/*
-div.list_bullet div.list_element {
-  list-style-type: disc;
-}
-
-div.list_number div.list_element {
-  list-style-type: decimal;
-}
-
-div.list_alphabet div.list_element {
-  list-style-type: lower-alpha;
-}
-*/
