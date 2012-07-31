@@ -25,7 +25,7 @@ sub render {
   return q(
 <div class="plain-box admin-left-box">
   <h1>Declarations of Intentions</h1>
-  <ul class="spaced">
+  <ul>
     <li><a href="/Changelog/Summary">View all declarations</a></li>
     <li><a href="/Changelog/Add">Add a declaration</a></li>
     <li><a href="/Changelog/ListReleases?pull=1">Copy a declaration from a previous release</a></li>
@@ -33,7 +33,7 @@ sub render {
     <li><a href="/Changelog/List">Declarations - quick lookup table</a></li>
   </ul>
   <h1>Ensembl Production Database</h1>
-  <ul class="spaced">
+  <ul>
     <li><a href="/Production/AnalysisWebData">Analysis WebData</a></li>
     <li><a href="/AnalysisDesc/List">Analysis Description</a></li>
     <li><a href="/Species/List">Species</a></li>
@@ -45,19 +45,19 @@ sub render {
     <li><a href="/ExternalDb/Display">ExternalDb</a></li>
   </ul>
   <h1>Help Database</h1>
-  <ul class="spaced">
+  <ul>
     <li><a href="/HelpRecord/List/View">Page View</a></li>
     <li><a href="/HelpRecord/List/FAQ">FAQ</a></li>
     <li><a href="/HelpRecord/List/Glossary">Glossary</a></li>
     <li><a href="/HelpRecord/List/Movie">Movies</a></li>
   </ul>
   <h1>Documents</h1>
-  <ul class="spaced">
+  <ul>
     <li><a href="/Documents/View/Relcodoc">Release Coordination</a></li>
     <li><a href="/Documents/View/Testcases">Healthcheck Testcases</a></li>
   </ul>
   <h1>User Directory</h1>
-  <ul class="spaced">
+  <ul>
     <li><a href="/UserDirectory">User Directory</a></li>
   </ul>
 </div>);

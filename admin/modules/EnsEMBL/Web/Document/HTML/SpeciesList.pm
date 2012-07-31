@@ -38,8 +38,8 @@ sub render {
   for (@species) {
     (my $name = $_) =~ s/_/ /g;
 
-    $html .= qq(<div class="admin-species-grid">);
-    $html .= qq(<img height="40" width="40" src="/img/species/thumb_$_.png" alt="$name" /><div><span>$name</span>);
+    $html .= qq(<div class="species-box">);
+    $html .= qq(<img height="48" width="48" src="/i/species/48/$_.png" alt="$name" /><div><span>$name</span>);
     if ($healthchecks) {
       $html .= qq(<br /><a href="/$_/Healthcheck/Details/Species">Healthcheck</a> 
           | <a href="http://staging.ensembl.org/$_/">View on staging</a>);
