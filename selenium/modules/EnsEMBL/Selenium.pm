@@ -116,7 +116,6 @@ sub ensembl_click_all_links {
     
   my @links_array = split(',',$links_href);
   my $i = 0;
-
   foreach my $link (@links_array) {    
     # get the text for each link, use link_text to click link if there is no id to the links
     my $link_text = $self->get_eval(qq{
@@ -129,11 +128,22 @@ sub ensembl_click_all_links {
       \var \$ = selenium.browserbot.getCurrentWindow().jQuery; 
       \$('$div').find('a:eq($i)').attr('id');
     });    
-
+    
+    #see if link is external
+    my $rel = $self->get_eval(qq{
+      \var \$ = selenium.browserbot.getCurrentWindow().jQuery; 
+      \$('$div').find('a:eq($i)').attr('rel');
+    });
+    
     $i++;
     next if grep (/$link_text/, @$skip_link);
-
-    $link_id && $link_id ne 'null' ? $self->ensembl_click_links(["id=$link_id"]) : $self->ensembl_click_links(["link=$link_text"]);
+    
+    if($rel eq 'external') {
+      $self->open_ok($link);
+      print "LINK FAILED:: $link_text($link) at $location \n\n" unless ok($self->get_title !~ /Internal Server Error|404 error|ERROR/i, 'No Internal or 404 Server Error');
+    } else {
+      $link_id && $link_id ne 'null' ? $self->ensembl_click_links(["id=$link_id"]) : $self->ensembl_click_links(["link=$link_text"]);
+    }
     
     $self->ensembl_is_text_present($text) if($text);
     $self->go_back();
