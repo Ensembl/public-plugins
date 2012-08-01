@@ -275,7 +275,7 @@ sub textsection_to_htmlnode {
 sub toc_to_htmlnode {
   my ($heading, $dom, $parent) = @_;
   my $div = $parent->append_child('div', {'children' => [
-    $dom->create_element('p', {'inner_HTML' => sprintf('%s&nbsp;<a href="#%s">%s</a>', $heading->{'number'}, to_url_hash($heading->{'level'}, $heading->{'label'}), $heading->{'label'})})
+    $dom->create_element('p', {'inner_HTML' => sprintf('<span class="num">%s</span><a href="#%s">%s</a>', $heading->{'number'}, to_url_hash($heading->{'level'}, $heading->{'label'}), $heading->{'label'})})
   ] });
   toc_to_htmlnode($_, $dom, $div) for @{$heading->{'children'}};
   return $parent;
