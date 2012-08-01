@@ -39,7 +39,7 @@ sub render {
     (my $name = $_) =~ s/_/ /g;
 
     $html .= qq(<div class="species-box">);
-    $html .= qq(<img height="48" width="48" src="/i/species/48/$_.png" alt="$name" /><div><span>$name</span>);
+    $html .= qq(<span class="sp-img"><img height="48" width="48" src="/i/species/48/$_.png" alt="$name" /></span><div><span>$name</span>);
     if ($healthchecks) {
       $html .= qq(<br /><a href="/$_/Healthcheck/Details/Species">Healthcheck</a> 
           | <a href="http://staging.ensembl.org/$_/">View on staging</a>);
