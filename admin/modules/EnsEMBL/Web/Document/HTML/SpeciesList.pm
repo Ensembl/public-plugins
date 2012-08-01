@@ -13,7 +13,7 @@ sub render {
 
   return '' unless $user && $user->is_member_of($species_defs->ENSEMBL_WEBADMIN_ID);
 
-  my $html         = '<div class="plain-box admin-right-box">';
+  my $html         = '';
 
   if ($healthchecks) {
     $html .= qq(
@@ -47,8 +47,7 @@ sub render {
     $html .= qq(</div></div>);
   }
 
-  
-  return $html.'</div>';
+  return qq(<div class="admin-right-box"><div class="plain-box">$html</div>);
 }
 
 1;

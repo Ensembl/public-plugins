@@ -15,15 +15,15 @@ sub render {
   my $hub   = $self->{'hub'};
   my $user  = $hub->user;
 
-  return '<div class="plain-box admin-plain-box"><p>Note that for access to the database frontends, you will need
+  return '<div class="plain-box"><p>Note that for access to the database frontends, you will need
    to <a href="/Account/Login" class="modal_link">log in</a> (using the same account as www.ensembl.org) and be
    a member of the appropriate user group. Please contact the web team if you have any problems.</p></div>' unless $user;
 
-  return '<div class="plain-box admin-plain-box"><p>Your user account seems to have limited rights that excludes
+  return '<div class="plain-box"><p>Your user account seems to have limited rights that excludes
   access to the database frontends. Please contact the web team if you have any problems.</p></div>' unless $user->is_member_of($hub->species_defs->ENSEMBL_WEBADMIN_ID);
 
   return q(
-<div class="plain-box admin-left-box">
+<div class="admin-left-box"><div class="plain-box">
   <h1>Declarations of Intentions</h1>
   <ul>
     <li><a href="/Changelog/Summary">View all declarations</a></li>
@@ -60,7 +60,7 @@ sub render {
   <ul>
     <li><a href="/UserDirectory">User Directory</a></li>
   </ul>
-</div>);
+</div></div>);
 
 }
 
