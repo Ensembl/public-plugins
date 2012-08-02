@@ -23,7 +23,7 @@ div.dbf-record, div.dbf-inline-form {
   background-position: center center; /* if elements also has class 'spinner' */
 }
 
-.dbf-padded {
+.dbf-ss .dbf-padded, .dbf-inline-form .dbf-padded {
   padding: 16px 16px 0;
 }
 
