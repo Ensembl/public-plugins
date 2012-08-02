@@ -104,7 +104,7 @@ sub content_pagination_tree {
   
     next if $_ <= 0 || $_ > $page_count;
     for my $num ($_ - $previous_num > 4 ? ($_) : ($previous_num + 1 .. $_)) {
-      $num > $previous_num + 1 and $links->append_child($self->dom->create_element('span', {'inner_HTML' => '&#133;'}));
+      $num > $previous_num + 1 and $links->append_child($self->dom->create_element('span', {'inner_HTML' => '&#8230;'}));
       $links->append_child($self->dom->create_element('a', {
         'href'        => $hub->url({'page' => $num}, undef, 1),
         'inner_HTML'  => $num,
