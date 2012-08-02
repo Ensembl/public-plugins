@@ -27,11 +27,11 @@ sub content_tree {
 
   my $content = $self->dom->create_element('div', {
     'class'     => [$object->content_css, $self->_JS_CLASS_RESPONSE_ELEMENT],
-    'children'  => [$is_ajax ? {'node_name' => 'h3', 'class' => 'dbf-heading', 'inner_HTML' => sprintf('%s %s:', $object->action, $object->record_name->{'singular'})} : ()]
+    'children'  => [$is_ajax ? {'node_name' => 'h3', 'class' => 'dbf-padded no-bottom-margin', 'inner_HTML' => sprintf('%s %s:', $object->action, $object->record_name->{'singular'})} : ()]
   });
   my $form    = $content->append_child($self->new_form({
     'action' => $hub->url({'action' => $preview ? 'Preview' : 'Save', 'function' => $hub->function}),
-    'class'  => !$preview ? $serial ? $self->_JS_CLASS_SAVE_FORM : $self->_JS_CLASS_ADD_FORM : $self->_JS_CLASS_PREVIEW_FORM
+    'class'  => [ !$preview ? $serial ? $self->_JS_CLASS_SAVE_FORM : $self->_JS_CLASS_ADD_FORM : $self->_JS_CLASS_PREVIEW_FORM, 'dbf-padded' ]
   }));
   
   # include extra GET params to hidden inputs (ignore primary keys and ajax flags)
