@@ -64,15 +64,16 @@ sub record_tree {
   my $hub    = $self->hub;
 
   my $record_div  = $self->dom->create_element('div');
+  my $padded_div  = $record_div->append_child('div', {'class' => 'cl-padded'});
   my $primary_key = $record->get_primary_key_value;
 
   my $team = $record->team;
   $record_div->set_flag('team_name', $self->{'__previous_team'} = $team) unless exists $self->{'__previous_team'} && $self->{'__previous_team'} eq $team;
 
-  $record_div->append_children(
+  $padded_div->append_children(
     {'node_name' => 'input','class' => '_cl_team_name',   'value'      => $team, 'type' => 'hidden'},
-    {'node_name' => 'h3',   'class' => 'cl-title',        'inner_HTML' => $record->title},
-    {'node_name' => 'div',  'class' => 'cl-title',        'inner_HTML' => $record->content},
+    {'node_name' => 'h3',                                 'inner_HTML' => $record->title},
+    {'node_name' => 'div',                                'inner_HTML' => $record->content},
     {'node_name' => 'span', 'class' => 'cl-field-title',  'inner_HTML' => 'Team:'},
     {'node_name' => 'span', 'class' => 'cl-field-value',  'inner_HTML' => $team},
     {'node_name' => 'span', 'class' => 'cl-field-title',  'inner_HTML' => 'Species:'},
@@ -83,15 +84,17 @@ sub record_tree {
     {'node_name' => 'span', 'inner_HTML' => 'Declared by:', 'class' => 'cl-field-title'},
     {'node_name' => 'span', 'inner_HTML' => $self->display_field_value($record->created_by_user), 'class' => 'cl-field-value'},
     {'node_name' => 'span', 'inner_HTML' => 'Last updated:', 'class' => 'cl-field-title'},
-    {'node_name' => 'span', 'inner_HTML' => $self->display_field_value($record->modified_at ? $record->modified_at : $record->created_at), 'class' => 'cl-field-value'},
-    {'node_name' => 'div',  'class'      => 'dbf-row-buttons', 'inner_HTML' => sprintf(
-      '<a href="%s">View</a><a href="%s" class="%s">Edit</a>%s',
-      $hub->url({'action' => 'Display', 'id' => $primary_key}),
-      $hub->url({'action' => 'Edit', 'id' => $primary_key}),
-      $self->_JS_CLASS_EDIT_BUTTON,
-      $object->permit_delete ? sprintf('<a class="%s" href="%s">Delete</a>', $self->_JS_CLASS_EDIT_BUTTON, $hub->url({'action' => 'Confirm', 'id' => $primary_key})) : ''
-    )}) : ()
+    {'node_name' => 'span', 'inner_HTML' => $self->display_field_value($record->modified_at ? $record->modified_at : $record->created_at), 'class' => 'cl-field-value'}
+    ) : ()
   );
+
+  $record_div->append_child('div', {'class' => 'dbf-row-buttons', 'inner_HTML' => sprintf(
+    '<a href="%s">View</a><a href="%s" class="%s">Edit</a>%s',
+    $hub->url({'action' => 'Display', 'id' => $primary_key}),
+    $hub->url({'action' => 'Edit', 'id' => $primary_key}),
+    $self->_JS_CLASS_EDIT_BUTTON,
+    $object->permit_delete ? sprintf('<a class="%s" href="%s">Delete</a>', $self->_JS_CLASS_EDIT_BUTTON, $hub->url({'action' => 'Confirm', 'id' => $primary_key})) : ''
+  )}) if $hub->user;
 
   return $record_div;
 }
