@@ -15,15 +15,20 @@ table.dbf-ss tr.dbf-list-row:hover td.dbf-list-buttons a {
   display: inline;
 }
 
-.dbf-heading {
-  margin-left: 6px;
-}
-
 div.dbf-record, div.dbf-inline-form {
-  border: #ccc solid 1px;
-  margin: 5px 0;
+  border: [[PANEL_BORDER]] solid 1px;
+  margin: 0 0 16px 0;
   clear: both;
   overflow: hidden;
+  background-position: center center; /* if elements also has class 'spinner' */
+}
+
+.dbf-padded {
+  padding: 16px 16px 0;
+}
+
+div.dbf-inline-form form {
+  margin-bottom: 0;
 }
 
 div.dbf-row {
@@ -32,16 +37,18 @@ div.dbf-row {
 }
 
 div.dbf-row-left {
-  width: 25%;
   float: left;
-  font-weight: bold;
-  padding: 1px 5px;
   clear: left;
+  width: 25%;
+  font-weight: bold;
+  line-height: 16px;
+  padding: 4px;
 }
 
 div.dbf-row-right {
-  padding: 1px 5px 1px 25%;
-  margin-left: 10px;
+  padding: 4px 4px 4px 25%;
+  margin-left: 16px;
+  line-height: 16px;
 }
 
 div.dbf-pagination {
@@ -86,28 +93,35 @@ p.dbf-pagecount {
   margin: 5px 0;
 }
 
-p.dbf-dialogue {
-  padding: 5px;
-  overflow: hidden;
-  font-weight: bold;
-}
-
 div.dbf-row-buttons {
   overflow: hidden;
-  background-color: #ddd;
-  padding: 1px 0;
+  background-color: [[PANEL_BORDER]];
+  padding: 4px 0 3px 6px;
   clear: both;
 }
 
-div.dbf-row-buttons a, a.dbf-confirm-buttons, a.dbf-close-button {
-  border: #aaa solid 1px;
-  margin: 2px 5px 2px 3px;
-  text-decoration: none;
-  padding: 0px 4px;
-  display: block;
+div.dbf-confirm-buttons, div.dbf-close-button {
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+div.dbf-close-button {
+  padding-left: 16px;
+}
+
+div.dbf-row-buttons a, div.dbf-confirm-buttons a, div.dbf-close-button a {
   float: left;
-  background-color: #fff;
-  font-weight: normal;
+  display: block;
+  margin: 0 8px 0 0;
+  padding: 3px 4px 2px;
+  text-decoration: none;
+  font-size: 11px;
+  background-color: [[BUTTON_BG]];
+  color: [[BUTTON_TEXT]];
+}
+
+div.dbf-row-buttons a:hover, div.dbf-confirm-buttons a:hover, div.dbf-close-button a:hover {
+  background-color: [[BUTTON_BG_HOVER]];
 }
 
 td span.dbf-list-edit, td a.dbf-list-view {
@@ -115,12 +129,12 @@ td span.dbf-list-edit, td a.dbf-list-view {
   width: 18px;
   position: absolute;
   display: none;
-  background: transparent url(/i/orm_edit.png) no-repeat 2px 0;
+  background: transparent url(/i/16/pencil.png) no-repeat 2px 0;
   cursor: pointer;
   margin-top: -1px;
 }
 td a.dbf-list-view {
-  background-image: url(/i/orm_view.png);
+  background-image: url(/i/16/eye.png);
   margin-left: 18px;
   outline: none;
 }
@@ -130,8 +144,7 @@ td:hover span.dbf-list-edit, td:hover a.dbf-list-view {
 }
 
 div.dbf-list-view-response {
-  border: #ddd solid 1px;
-  margin: 10px;
+  border-bottom: [[PANEL_BORDER]] solid 1px;
 }
 
 td.dbf-list-buttons a {
@@ -140,18 +153,18 @@ td.dbf-list-buttons a {
   position: absolute;
   height: 16px;
   width: 18px;
-  background: transparent url(/i/orm_edit.png) no-repeat 2px 0;
+  background: transparent url(/i/16/pencil.png) no-repeat 2px 0;
   outline: none;
 }
 
 td.dbf-list-buttons a.dbf-list-delete {
   margin-left: 20px;
-  background: transparent url(/i/orm_delete.png) no-repeat 2px 0;
+  background: transparent url(/i/16/delete.png) no-repeat 2px 0;
 }
 
 td.dbf-list-buttons a.dbf-list-duplicate {
   margin-left: 40px;
-  background: transparent url(/i/orm_copy.png) no-repeat 2px 0;
+  background: transparent url(/i/16/copy.png) no-repeat 2px 0;
 }
 
 div.dbf-list-buttons input {
@@ -161,9 +174,19 @@ div.dbf-list-buttons input {
 tr.dbf-list-form td {
   border: #ddd solid 1px;
   border-width: 1px 0;
+  padding: 0;
+}
+
+tr:last-child.dbf-list-form td {
+  border-bottom: none;
+}
+
+td div.dbf-inline-form {
+  border: none;
+  margin: 0;
 }
 
 p.dbf-error {
   color: red;
-  padding: 10px;
+  padding: 16px 16px 0;
 }
