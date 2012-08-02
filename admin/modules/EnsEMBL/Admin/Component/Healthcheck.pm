@@ -76,7 +76,7 @@ sub get_healthcheck_link {
   my $param   = $params->{'param'};
   my $release = $params->{'release'};
   my $class   = $params->{'class'} ? qq( class="$params->{'class'}") : '';
-  exists $params->{'cut_long'} && $params->{'cut_long'} eq 'cut' && length $caption > 23 and $caption = substr($caption, 0, 20).'&#133;';
+  exists $params->{'cut_long'} && $params->{'cut_long'} eq 'cut' && length $caption > 23 and $caption = substr($caption, 0, 20).'&#8230;';
 
   if ($params->{'type'} eq 'species') {
     return $self->object->validate_species($param) 
