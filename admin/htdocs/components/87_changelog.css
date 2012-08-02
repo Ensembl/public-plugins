@@ -1,20 +1,24 @@
 .mceLayout td { width: auto !important }
 
-div.dbf-record .cl-title {
-  padding-left: 3px;
+div.dbf-record .cl-padded {
+  padding: 16px;
+  overflow: hidden;
+}
+
+span.cl-field-title, span.cl-field-value {
+  float: left;
+  padding: 4px 0;
+  line-height: 20px;
 }
 
 span.cl-field-title {
-  padding-left: 3px;
   font-weight: bold;
-  float: left;
   clear: left;
-  margin: 2px 5px 2px 1px;
+  width: 200px;
 }
+
 span.cl-field-value {
-  float: left;
   clear: right;
-  margin: 2px;
 }
 
 span.cl-fv-handed_over {
@@ -30,11 +34,11 @@ span.cl-fv-postponed, span.cl-fv-cancelled {
 }
 
 div.cl-toc {
-  margin-bottom: 10px;
+  margin-bottom: 16px;
 }
 
 div.cl-toc p {
-  margin: 2px 15px;
+  margin-bottom: 8px;
 }
 
 div.cl-toc a {
