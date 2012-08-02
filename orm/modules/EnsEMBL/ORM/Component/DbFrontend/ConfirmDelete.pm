@@ -25,7 +25,7 @@ sub content_tree {
 
   if ($object->permit_delete =~ /^(delete|retire)$/) {
     $content->inner_HTML(
-      sprintf('<p class="dbf-dialogue">%s</p><p class="dbf-dialogue">Are you sure you want to continue?</p><p class="dbf-dialogue"><a class="dbf-confirm-buttons %s" href="%s">Yes</a><a class="dbf-confirm-buttons %s" href="%s">No</a></p>',
+      sprintf('<div class="dbf-padded"><p>%s</p><p>Are you sure you want to continue?</p><div class="dbf-confirm-buttons"><a class="%s" href="%s">Yes</a><a class="%s" href="%s">No</a></div></div>',
       $1 && $1 eq 'delete'
         ? sprintf('This will permanently remove %s (%s) from the database.', $object->record_name->{'singular'}, $record->get_title)
         : sprintf('%s (%s) will still remain in the database but will no longer be accessible.', ucfirst $object->record_name->{'singular'}, $record->get_title),
@@ -36,7 +36,7 @@ sub content_tree {
     ));
   }
   else {
-    $content->inner_HTML(sprintf('<p class="dbf-dialogue">You do not have the permission to delete this %s</p>', $object->record_name->{'singular'}));
+    $content->inner_HTML(sprintf('<div class="dbf-padded"><p>You do not have the permission to delete this %s</p></div>', $object->record_name->{'singular'}));
   }
 
   return $content;
