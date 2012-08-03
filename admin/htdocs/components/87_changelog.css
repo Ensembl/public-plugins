@@ -1,13 +1,13 @@
 .mceLayout td { width: auto !important }
 
 div.dbf-record .cl-padded {
-  padding: 16px;
+  padding: 16px 16px 8px;
   overflow: hidden;
 }
 
 span.cl-field-title, span.cl-field-value {
   float: left;
-  padding: 4px 0;
+  padding: 0 0 4px;
   line-height: 20px;
 }
 
