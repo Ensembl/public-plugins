@@ -134,7 +134,8 @@ Ensembl.DbFrontendList = {
     // @override
     createForm: function() {
       var tr = this.el[0].parentNode;
-      return $('<div class="dbf-inline-form">').appendTo($('<td>').appendTo($('<tr>').insertAfter(tr).attr('class', 'dbf-list-form')).attr('colspan', tr.cells.length));
+      var bg = (' ' + tr.className + ' ').match(/\s{1}bg(1|2)\s{1}/)[0];
+      return $('<div class="dbf-inline-form">').appendTo($('<td>').appendTo($('<tr>').insertAfter(tr).attr('class', 'dbf-list-form ' + bg)).attr('colspan', tr.cells.length));
     },
 
     // @override
