@@ -1,14 +1,7 @@
 /* Styles for DbFrontend pages */
-/* TODO: Replace colours with colour constants from ini files */
 
 table.dbf-ss {
   table-layout: fixed;
-}
-
-table.dbf-ss tr.dbf-list-row:hover {
-  -moz-box-shadow:0 0 1px #666;
-  -webkit-box-shadow: 0 0 1px #666;
-  box-shadow: 0 0 1px #666;
 }
 
 table.dbf-ss tr.dbf-list-row:hover td.dbf-list-buttons a {
@@ -172,8 +165,7 @@ div.dbf-list-buttons input {
 }
 
 tr.dbf-list-form td {
-  border: #ddd solid 1px;
-  border-width: 1px 0;
+  border-bottom: [[PANEL_BORDER]] solid 1px;
   padding: 0;
 }
 
@@ -182,7 +174,13 @@ tr:last-child.dbf-list-form td {
 }
 
 td div.dbf-inline-form {
-  border: none;
+  border: [[PANEL_BORDER]] solid 1px;
+  background-color: [[PAGE_BG]];
+  margin: 0 8px 8px;
+}
+
+table.dbf-ss tr.dbf-list-row form {
+  padding: 0;
   margin: 0;
 }
 
