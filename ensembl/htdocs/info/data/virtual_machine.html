@@ -1,0 +1,117 @@
+<html>
+<head>
+<title>Virtual Machine</title>
+<meta name="order" content="10" />
+</head>
+
+<body>
+   <h1>Ensembl Virtual Machine</h1>
+<p>Ensembl has available for download a virtual machine pre-packaged and pre-configured the latest ensembl-api. It is a quick and simple way to get started with Ensembl.</p>
+<h3>Overview of the process</h3>
+<p> The process is described in detail in the remainder of this document, with the main steps summarised as follows.</p>
+<ol>
+	<li>Obtain VirtualBox</li>
+	<li>Download and import the virtual machine</li>
+	<li>Create shared folders</li>
+	<li>Start and verify the Ensembl installation</li>
+</ol>
+
+<h2>1. Obtaining VirtualBox</h2>
+
+<p>Virtualbox is a free and opensource virtualisation platform used to run the Ensembl Virtual Machine; it is necessary to download and install this package to run the VM (Virtual Machine). You can obtain it by visiting the VirtualBox downloads page <a href="https://www.virtualbox.org/wiki/Downloads" class="external-link" rel="nofollow">https://www.virtualbox.org/wiki/Downloads</a> and downloading and installing the appropriate standard virtual box platform package for your platform.&nbsp;</p>
+
+<h2>2. Download and import the Ensembl Virtual Machine</h2>
+
+<p>The Ensembl Virtual Machine can be downloaded from <a href="ftp://ftp.ensembl.org/pub/current_virtual_machine" class="external-link" rel="nofollow">ftp://ftp.ensembl.org/pub/current_virtual_machine</a></p>
+
+<p>Once the download is complete, double click on the file which will cause VirtualBox to launch with the dialog box below; click "import" as indicated by the red arrow in the image.</p>
+
+<p><div class="image-wrap" style=""><img src="/img/importing.png" style="border: 1px solid black" /></div></p>
+
+
+<p>This will prompt the appearance of the following dialog</p>
+
+<p><span class="image-wrap" style=""><img src="/img/import_wait.png" style="border: 1px solid black" /></span></p>
+
+<blockquote>
+<p>Once the process has completed you should see the following window, indicating that the import was successful and the VM is in a stopped state.</p></blockquote>
+<p><span class="image-wrap" style=""><img src="/img/completed.png" style="border: 1px solid black" /></span></p>
+
+
+<p>Do not start the VM at this point. The next step is to configure VirtualBox to allow read/write access to folders on your host machine.</p>
+
+
+<h2>3. Configuring Shared Folders</h2>
+
+
+<p>To allow read/write access from the VM to your laptop/desktop filesystems you must configure shared folders. Configuring of shared folders must be performed whilst the VM is in a <b>stopped state</b>. It is a simple process and is illustrated in the image below</p>
+
+<p><span class="image-wrap" style=""><img src="/img/shared_folders.png" style="border: 1px solid black" /></span></p>
+<ol>
+	<li>Bring up the shared folders dialog by clicking the "Shared Folders" option in the VirtualBox control panel indicated by the "1" in the image</li>
+	<li>Click the add folder icon illustrated by "2" in the image above&nbsp;</li>
+	<li>Toggle the "Auto-mount" option to on (shown by "3" in the image above)</li>
+	<li>Click the drop down at position "4",&nbsp;</li>
+	<li>Click "Other..." which will bring up the file browser for your platform. Navigate to a folder you wish to share and choose it.&nbsp;</li>
+</ol>
+
+
+<p>You should now have a view similar to the last panel, indicating success. Click OK to dispense with the window.</p>
+
+
+<h2>4. Starting the Virtual Machine and Verifying the installation</h2>
+
+<p>It is trivial to start the Virtual Machine. Simply click the start button indicated by the red arrow on the control panel in the image below.</p>
+
+<p><span class="image-wrap" style=""><img src="/img/start.png" style="border: 1px solid black" /></span></p>
+<p>The VM will now begin to boot and you will be presented with the following display</p>
+
+<p><span class="image-wrap" style=""><img src="/img/booting.png" style="border: 1px solid black" /></span></p>
+
+
+<p>Once completed, the Ensembl Desktop will appear with shortcuts to the ensembl-api-folder, VEP and your Shared Folders on the desktop</p>
+
+<p><span class="image-wrap" style=""><img src="/img/ensembl_desktop.png" style="border: 1px solid black" /></span></p>
+
+
+<h4>Verify installation</h4>
+
+<p>Now verify the installation, click on the terminal icon on the panel on the left, and run the following command</p>
+
+<pre class="code">
+
+ensembl@ensembl:~$ ./verify-installation 
+
+</pre>
+<p>You should receive the following output to indicate success.</p>
+
+<pre class="code">
+
+ensembl@ensembl:~$ ./verify-installation 
+
+Installation is good. Connection to Ensembl works and you can query the human core database
+
+</pre>
+<p>Try the region report tool</p>
+
+<pre class="code">
+
+$ cd ~/ensembl-api-folder/ensembl-tools/scripts/region_reporter/
+
+$ perl region_report.pl --species=Human --chromosome=x --start=133017695 --end=133161157
+
+</pre>
+<p>Optionally verify the Variant Effect Predictor (VEP)</p>
+
+<pre class="code">
+
+$ cd ~/ensembl-api-folder/VEP
+
+$ perl ./variant_effect_predictor.pl -i example.vcf -force
+
+</pre>
+        </div>
+
+
+</body>
+</html>
