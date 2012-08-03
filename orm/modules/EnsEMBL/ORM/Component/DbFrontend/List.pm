@@ -40,7 +40,7 @@ sub content_tree {
           'value'       => 'DbFrontendList'
         }, {
           'node_name'   => 'table',
-          'class'       => ['ss', 'dbf-ss', $object->is_ajax_request ? $self->_JS_CLASS_RESPONSE_ELEMENT : ($self->_JS_CLASS_LIST_TABLE, $object->list_is_datatable ? $self->_JS_CLASS_DATATABLE : ())],
+          'class'       => ['ss', 'tint', 'dbf-ss', $object->is_ajax_request ? $self->_JS_CLASS_RESPONSE_ELEMENT : ($self->_JS_CLASS_LIST_TABLE, $object->list_is_datatable ? $self->_JS_CLASS_DATATABLE : ())],
           'cellpadding' => 0,
           'cellspacing' => 0,
           'border'      => 0,
