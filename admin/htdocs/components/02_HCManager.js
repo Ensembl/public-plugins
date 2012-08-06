@@ -8,7 +8,7 @@ Ensembl.HCManager.extend({
     
     this.constant = {
       classes:            ['hc-comment-link'],
-      infoBoxClass:       'hc-infobox',
+      infoBoxClass:       '_hc_infobox',
       configDivClass:     'hc-config',
       localTools:         'tool_buttons',
       manualOkClass:      'hc-oked-link',
