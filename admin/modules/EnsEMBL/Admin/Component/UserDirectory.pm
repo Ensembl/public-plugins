@@ -11,9 +11,9 @@ sub content {
   
   my $admin_group = $self->object->rose_object;
 
-  return '<p class="hc_p">No User found.</p>'  unless $admin_group && scalar @{$admin_group->membership};
+  return '<p>No User found.</p>'  unless $admin_group && scalar @{$admin_group->membership};
 
-  my $table = $self->new_table;
+  my $table = $self->new_table([], [], {'class' => 'tint'});
   $table->add_columns(
     {'key' => 'name',   'title' => 'Name',    'width' => '30%'},
     {'key' => 'email',  'title' => 'Email',   'width' => '60%'},
