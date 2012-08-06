@@ -1,29 +1,28 @@
-div.hc-padding {
-  height: 30px;
+div.hc-formfield label.ff-label {
+  width: 240px;
+  line-height: 18px;
 }
-p.hc-comment-info, p.hc-comment-info a {
+div.hc-formfield div.ff-right {
+  padding: 0;
+}
+div.hc-tabs a.ts-button, div.hc-tabs a.ts-button:hover {
+  background-color: [[PAGE_BG]];
+  border: [[PANEL_BORDER]] solid 1px;
+  color: [[PANEL_BORDER]];
+  border-bottom: 0;
+}
+div.hc-tabs a.ts-button.selected {
+  background-color: [[PANEL_BORDER]];
+  color: [[PAGE_TEXT]];
+}
+div.hc-comment-info, div.hc-comment-info a {
   color: #aaa;
   font-style: italic;
 }
-div.hc-infobox {
-  margin: 3px 0;
-  padding: 0 10px;
-  border: #ddf solid 1px;
-  background-color: #eef;
-}
-div.hc-infobox p {
-  margin: 3px 0;
-}
-p.hc_p, p.hc-p-right {
-  margin: 1em 0;
-}
-p.hc-p-right {
+div.hc-comment-link {
   text-align: right;
 }
-p.hc-comment-link {
-  text-align: right;
-}
-p.hc-comment-link a {
+div.hc-comment-link a {
   margin: 0 3px 0 12px;
 }
 span.hc-oked {
@@ -55,6 +54,9 @@ span.hc-new {
   background-color: [[BUTTON_BG]];
   border: 3px double #fff;
   color: #fff;
+}
+.hc-config p {
+  margin: 2px 0 6px;
 }
 .hc-config label {
   display: block;
