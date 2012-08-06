@@ -532,6 +532,7 @@
 
     // event method if text is changed, or form is reset
     var reset = function() {
+      closeMenu();
       if (data && data.destroy) {
         data.destroy();
       }
