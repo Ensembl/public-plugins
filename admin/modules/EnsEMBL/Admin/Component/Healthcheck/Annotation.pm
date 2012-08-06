@@ -12,11 +12,12 @@ sub content {
   my $self = shift;
   
   my $object  = $self->object;
+  my $hub     = $self->hub;
   my $reports = $object->rose_objects;
-  my $referer = $self->hub->referer->{'uri'};
-  my $user    = $self->hub->user;
+  my $referer = $hub->referer->{'uri'};
+  my $user    = $hub->user;
 
-  return '<p class="hc_p">No report found to annotate. (Missing report id)</p>' unless $reports && @$reports;
+  return '<p>No report found to annotate. (Missing report id)</p>' unless $reports && @$reports;
 
   my $heading       = 'Add annotation';
   my $label_done_by = 'Added by';
@@ -46,7 +47,7 @@ sub content {
   }
   $html   .= '</ul>';
   
-  my $form = $self->new_form({'id' => 'annotation', 'action' => '/Healthcheck/AnnotationSave'});
+  my $form = $self->new_form({'id' => 'annotation', 'action' => $hub->url({'action' => 'AnnotationSave'})});
   
   $form->add_fieldset($heading);
   
@@ -63,7 +64,7 @@ sub content {
     'type'      => 'DropDown',
     'select'    => 'select',
     'values'    => $options
-  },{
+  }, {
     'label'     => 'Comment',
     'type'      => 'Text',
     'name'      => 'comment',
@@ -92,6 +93,7 @@ sub content {
 
   $form->add_hidden([
     {'name' => 'rid',       'value' => join (',', @$rid)},
+    {'name' => 'release',   'value' => $object->requested_release},
     {'name' => 'referrer',  'value' => $referer}
   ]);
 

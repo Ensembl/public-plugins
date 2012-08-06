@@ -15,6 +15,7 @@ sub content {
   my $self = shift;
 
   my $object  = $self->object;
+  my $hub     = $self->hub;
   my $reports = $object->rose_objects('reports');
   my $param   = $object->view_param;
   my $type    = $object->view_type;
@@ -24,7 +25,7 @@ sub content {
 
   # if no filter selected, display the failure summary table for the given view type
   if (!$param && !@$rids) {
-    return sprintf('<p class="hc_p">Click on a %s to view details</p>%s', $object->view_title, $self->failure_summary_table({
+    return sprintf('<p>Click on a %s to view details</p>%s', $object->view_title, $self->failure_summary_table({
       'count'         => $self->group_report_counts($reports, [$type])->{$type},
       'type'          => $type,
       'session_id'    => $object->last_session_id,
@@ -41,12 +42,14 @@ sub content {
   push @{$grouped_reports->{$_->database_name} ||= []}, $_ for @$reports;
 
   my $serial_number = 0;
-  
-  $html .= sprintf('<form action="" method="get"><p class="hc-p-right">View in release: %s&nbsp;<input type="submit" value="Go" /><input type="hidden" name="q" value="%s" /></p></form>',
-    $self->render_all_releases_selectbox,
-    $param
-  ) if $type ne 'database_name';
-  $html .= qq{<div class="hc-infobox">
+
+  if ($type ne 'database_name') {
+    my $form = $self->get_all_releases_dropdown_form('View in release', 'release');
+    $form->add_hidden({'name' => '1', 'value' => $param});
+    $html .= $form->render;
+  }
+
+  $html .= qq{<div class="_hc_infobox tinted-box">
     <p>For each database, reports are sorted on the basis of Date (initial failure date) with latest report appearing on the top.</p>
     <p>Reports that have not been annotated 'manual ok' are displayed in different colours for results <span class="hc-problem">problem</span>, <span class="hc-warning">warning</span> and <span class="hc-info">info</span>.</p>
     <p>Reports that appeared for the first time in the recent healthcheck session are in <span class="hc-new">bold</span> letters.</p>
@@ -56,7 +59,7 @@ sub content {
   foreach my $database_name (sort keys %$grouped_reports) {
   
     $js_ref++;
-    my $table = $self->new_table;
+    my $table = $self->new_table([], [], {'class' => 'tint'});
     
     $table->add_columns(#note - use the space properly, we have too much to display in annotation and text columns
       {'key' => 'db_sp_tc', 'title' => $self->_get_first_column($object->function), 'width' => qq(20%)},
@@ -89,19 +92,19 @@ sub content {
         my $modified_by = '';
         my $created_by  = '';
         if ($report->annotation->created_by) {
-          $created_by  .= '<p class="hc-comment-info">Added by: '.$self->_get_user_link($report->annotation->created_by_user);
+          $created_by  .= '<div class="hc-comment-info">Added by: '.$self->_get_user_link($report->annotation->created_by_user);
           $created_by  .= ' on '.$self->hc_format_date($report->annotation->created_at) if $report->annotation->created_at;
-          $created_by  .= '</p>';
+          $created_by  .= '</div>';
         }
         if ($report->annotation->modified_by) {
-          $modified_by .= '<p class="hc-comment-info">Modified by: '.$self->_get_user_link($report->annotation->modified_by_user);
+          $modified_by .= '<div class="hc-comment-info">Modified by: '.$self->_get_user_link($report->annotation->modified_by_user);
           $modified_by .= ' on '.$self->hc_format_date($report->annotation->modified_at) if $report->annotation->modified_at;
-          $modified_by .= '</p>';
+          $modified_by .= '</div>';
         }
         (my $temp       = $created_by) =~ s/Added/Modified/;
         $modified_by    = '' if $modified_by eq $temp;
         $annotation    .= $created_by.$modified_by;
-        $annotation    .= '<p class="hc-comment-info">Action: '.$self->annotation_action($report->annotation->action)->{'title'}.'</p>'
+        $annotation    .= '<div class="hc-comment-info">Action: '.$self->annotation_action($report->annotation->action)->{'title'}.'</div>'
           if $report->annotation->action && $self->annotation_action($report->annotation->action)->{'value'} ne '';
       }
       my $temp          = $report->annotation ? $report->annotation->action || '' : '';
@@ -110,9 +113,10 @@ sub content {
 
       my $link_class    = join ' ', keys %{{ map { $_."-link" => 1 } split (' ', $text_class)}};
 
-      $annotation      .= $annotation eq ''
-        ? qq(<p class="hc-comment-link"><a class="$link_class" href="/Healthcheck/Annotation?rid=$report_id" rel="$js_ref">Add&nbsp;Annotation</a></p>)
-        : qq(<p class="hc-comment-link"><a class="$link_class" href="/Healthcheck/Annotation?rid=$report_id" rel="$js_ref">Edit</a></p>);
+      $annotation      .= sprintf qq(<div class="hc-comment-link"><a class="$link_class" href="%s" rel="$js_ref">%s</a></div>),
+        $hub->url({'action' => 'Annotation', 'rid' => $report_id}),
+        $annotation eq '' ? 'Add&nbsp;Annotation' : 'Edit'
+      ;
 
       $table->add_row({
         'db_sp_tc'  => join ('<br />', @$db_sp_tc),

@@ -22,7 +22,7 @@ sub content {
   my $db_list = $object->get_database_list;
   
   my $text_class = ['hc-notdone', '', 'hc-releaseonly', 'hc-done'];
-  my $html = qq(<div class="hc-infobox"><p><b>Colour coding:</b></p><ul>
+  my $html = qq(<div class="_hc_infobox tinted-box"><p><b>Colour coding:</b></p><ul>
                 <li class="hc-done">Databases being healthchecked.</li>
                 <li class="hc-notdone">Databases not being healthchecked.</li>
                 <li class="hc-releaseonly">Databases healthchecked in currect release but not in last session.</li></ul>
