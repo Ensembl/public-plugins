@@ -33,27 +33,41 @@ sub no_healthcheck_found {
   my $session = $object->last_session_id;
 
   if ($flag) {
-    return sprintf q(<p class="hc_p">No 'PROBLEM' reports found%s.</p>), $type && $param ? sprintf(" for %s '%s'", $title, $param) : '';
+    return sprintf q(<p>No 'PROBLEM' reports found%s.</p>), $type && $param ? sprintf(" for %s '%s'", $title, $param) : '';
   }
   if (!$release || !$session) {
-    return q(<p class="hc_p">Healthchecks have not been performed for this release.</p>);
+    return q(<p>Healthchecks have not been performed for this release.</p>);
   }
   if ($type && $param) {
-    return sprintf q(<p class="hc_p">Healthcheck for %s '%s' was not run during the last healtcheck session of release %s.</p>), lc $title, $param, $release;
+    return sprintf q(<p>Healthcheck for %s '%s' was not run during the last healtcheck session of release %s.</p>), lc $title, $param, $release;
   }
-  return q(<p class="hc_p">No healthcheck reports found.</p>);
+  return q(<p>No healthcheck reports found.</p>);
 }
 
-sub render_all_releases_selectbox {
-  ## Returns an HTML selectbox with all possible releases for healthchecks as options
-  my $self = shift;
-  
-  my $object = $self->object;
-  my $first  = $object->first_release;
-  my $last   = $object->current_release;
-  my $skip   = $object->requested_release;
-  
-  return sprintf('<select name="release">%s</select>', join '', reverse map {$_ == $skip ? '' : qq(<option value="$_">Release $_</option>)} $first..$last);
+sub get_all_releases_dropdown_form {
+  ## Return Web:Form for all releases drodown
+  my ($self, $label, $name) = @_;
+
+  my $object  = $self->object;
+  my $first   = $object->first_release;
+  my $last    = $object->current_release;
+  my $skip    = $object->requested_release;
+
+  my $form    = $self->new_form({'method' => 'get', 'action' => ''});
+  $form->add_field({
+    'label'       => $label,
+    'inline'      => 1,
+    'field_class' => 'hc-formfield',
+    'elements'    => [{
+      'type'        => 'dropdown',
+      'name'        => $name,
+      'values'      => [ reverse map {$_ == $skip ? () : {'caption' => "Release $_", 'value' => $_}} $first..$last ]
+    }, {
+      'value'       => 'Go',
+      'type'        => 'submit'
+    }]
+  });
+  return $form;
 }
 
 sub get_healthcheck_link {
@@ -162,7 +176,7 @@ sub failure_summary_table {
   my ($self, $params) = @_;
 
   (my $title  = ucfirst($params->{'type'})) =~ s/_/ /g;
-  my $table   = $self->new_table();
+  my $table   = $self->new_table([], [], {'class' => 'tint'});
 
   $table->add_columns(
     { 'key' => 'group',         'title' => $title, 'width' => qq(40%) },
