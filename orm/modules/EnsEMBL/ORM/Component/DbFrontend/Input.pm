@@ -33,16 +33,9 @@ sub content_tree {
     'action' => $hub->url({'action' => $preview ? 'Preview' : 'Save', 'function' => $hub->function}),
     'class'  => [ !$preview ? $serial ? $self->_JS_CLASS_SAVE_FORM : $self->_JS_CLASS_ADD_FORM : $self->_JS_CLASS_PREVIEW_FORM, 'dbf-padded' ]
   }));
-  
-  # include extra GET params to hidden inputs (ignore primary keys and ajax flags)
-  if ($preview) {
-    $_ !~ /^_/ and $_ ne 'id' and $_ ne $record->primary_key and $form->add_hidden({'name' => $_, 'value' => $hub->param($_)}) for $hub->param;
-  }
 
-  my $fields  = $self->unpack_rose_object($record);
-
-  # primary key
-  $form->add_hidden({'name' => 'id', 'value' => $serial})->set_flag($record->primary_key) if $serial;
+  my $url_params  = { map { my @vals = $hub->param($_); @vals > 1 ? ($_ => \@vals) : ($_ => shift @vals) } $hub->param };
+  my $fields      = $self->unpack_rose_object($record, $url_params);
 
   # print fields  
   foreach my $field (@$fields) {
@@ -50,14 +43,15 @@ sub content_tree {
     my $field_extras = $field->extras;
     my $field_params = {'label' => $field->label, 'elements' => []};
     $field_params->{$_} = $field_extras->{$_} for keys %$field_extras;
-  
+
     my $name   = $field->name;
     my $lookup = {};
     my $value  = '';
     my $f_type = $field->field_type;
     my $select = $f_type =~ /^(dropdown|checklist|radiolist)$/ ? 1 : 0;
 
-    map {delete $field_params->{$_}} qw(notes shortnote) if $action eq 'Preview';
+    map {delete $field_params->{$_}} qw(notes shortnote) if $action eq 'Preview'; # don't show notes in form fields while previewing
+    exists $url_params->{$name} and delete $url_params->{$name}; # remove keys included in fields so they do not repeat as hidden inputs later
 
     my $form_field = $form->add_field($field_params);
     $form_field->set_flag($name);
@@ -132,6 +126,15 @@ sub content_tree {
     }
   }
 
+  # include extra GET params to hidden inputs (ignore primary keys, ajax flags and form fields)
+  if ($preview) {
+    $_ !~ /^_/ and $_ ne 'id' and $_ ne $record->primary_key and $form->add_hidden({'name' => $_, 'value' => $url_params->{$_}}) for keys %$url_params;
+  }
+
+  # primary key
+  $form->add_hidden({'name' => 'id', 'value' => $serial})->set_flag($record->primary_key) if $serial;
+
+  # form buttons
   $form->add_button({'buttons' => [
     { 'type'  => 'submit', 'value' => $preview ? 'Preview' : 'Save'},
     $action eq 'Preview' || $is_ajax eq 'list' ? () : { 'type'  => 'reset',  'value' => 'Reset' },
