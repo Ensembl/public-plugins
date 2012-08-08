@@ -64,7 +64,7 @@ sub record_tree {
   my $object      = $self->object;
   my $hub         = $self->hub;
   my $valid_user  = $hub->user;
-     $valid_user  = undef unless $valid_user->is_member_of($hub->species_defs->ENSEMBL_WEBADMIN_ID);
+     $valid_user  = undef unless $valid_user && $valid_user->is_member_of($hub->species_defs->ENSEMBL_WEBADMIN_ID);
 
   my $record_div  = $self->dom->create_element('div');
   my $padded_div  = $record_div->append_child('div', {'class' => 'cl-padded'});
