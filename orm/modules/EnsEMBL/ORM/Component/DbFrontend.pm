@@ -136,6 +136,7 @@ sub unpack_rose_object {
   my $object    = $self->object;
   my $manager   = $object->manager_class;
   $record     ||= $manager->create_empty_object;
+  my $meta      = $record->meta;
   my $fields    = $object->get_fields;
   my $relations = { map {$_->name => $_ } $meta->relationships                    };
   my $columns   = { map {$_->name => $_ } $meta->columns, $meta->virtual_columns  };
