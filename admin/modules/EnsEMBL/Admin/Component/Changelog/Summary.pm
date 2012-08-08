@@ -12,13 +12,14 @@ sub content_tree {
   my $self    = shift;
   my $content = $self->SUPER::content_tree;
   my $hub     = $self->hub;
+  my $user    = $hub->user;
   my $object  = $self->object;
   my $release = $object->requested_release;
   my $current = $object->current_release;
   my $toc     = $content->prepend_child('div', {'class' => 'cl-toc'});
 
   if (my $add_button = $content->get_nodes_by_flag('add_new_button')->[0]) {
-    if ($hub->user) {
+    if ($user && $user->is_member_of($hub->species_defs->ENSEMBL_WEBADMIN_ID)) {
       $add_button = $add_button->get_elements_by_tag_name('a')->[0];
       if ($release eq $current) {
         $add_button->after({ 'node_name' => 'a', 'inner_HTML' => 'Copy from a previous release', 'href' => $hub->url({'action' => 'ListReleases', 'pull' => 1})});
@@ -60,14 +61,16 @@ sub content_tree {
 sub record_tree {
   ## @overrides
   my ($self, $record) = @_;
-  my $object = $self->object;
-  my $hub    = $self->hub;
+  my $object      = $self->object;
+  my $hub         = $self->hub;
+  my $valid_user  = $hub->user;
+     $valid_user  = undef unless $valid_user->is_member_of($hub->species_defs->ENSEMBL_WEBADMIN_ID);
 
   my $record_div  = $self->dom->create_element('div');
   my $padded_div  = $record_div->append_child('div', {'class' => 'cl-padded'});
   my $primary_key = $record->get_primary_key_value;
 
-  my $team = $record->team;
+  my $team        = $record->team;
   $record_div->set_flag('team_name', $self->{'__previous_team'} = $team) unless exists $self->{'__previous_team'} && $self->{'__previous_team'} eq $team;
 
   $padded_div->append_children(
@@ -80,7 +83,7 @@ sub record_tree {
     {'node_name' => 'span', 'class' => 'cl-field-value',  'inner_HTML' => $self->display_field_value((my $a = $record->species), {'delimiter' => ', '}) || 'All Species'},
     {'node_name' => 'span', 'class' => 'cl-field-title',  'inner_HTML' => 'Status:'},
     {'node_name' => 'span', 'class' => 'cl-field-value cl-fv-'.$record->status, 'inner_HTML' => $self->display_field_value($record->status)},
-    $hub->user ? (
+    $valid_user ? (
     {'node_name' => 'span', 'inner_HTML' => 'Declared by:', 'class' => 'cl-field-title'},
     {'node_name' => 'span', 'inner_HTML' => $self->display_field_value($record->created_by_user), 'class' => 'cl-field-value'},
     {'node_name' => 'span', 'inner_HTML' => 'Last updated:', 'class' => 'cl-field-title'},
@@ -94,7 +97,7 @@ sub record_tree {
     $hub->url({'action' => 'Edit', 'id' => $primary_key}),
     $self->_JS_CLASS_EDIT_BUTTON,
     $object->permit_delete ? sprintf('<a class="%s" href="%s">Delete</a>', $self->_JS_CLASS_EDIT_BUTTON, $hub->url({'action' => 'Confirm', 'id' => $primary_key})) : ''
-  )}) if $hub->user;
+  )}) if $valid_user;
 
   return $record_div;
 }
