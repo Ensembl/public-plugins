@@ -129,13 +129,13 @@ sub content_pagination_tree {
 sub unpack_rose_object {
   ## Converts a rose object, it's columns and relationships into a data structure that can easily be used to display frontend
   ## @param Rose object to be unpacked
+  ## @param GET param values to override any value in the object field
   ## @return ArrayRef if E::ORM::Rose::Field objects
-  my ($self, $record) = @_;
+  my ($self, $record, $url_params) = @_;
 
   my $object    = $self->object;
   my $manager   = $object->manager_class;
   $record     ||= $manager->create_empty_object;
-  my $meta      = $record->meta;
   my $fields    = $object->get_fields;
   my $relations = { map {$_->name => $_ } $meta->relationships                    };
   my $columns   = { map {$_->name => $_ } $meta->columns, $meta->virtual_columns  };
@@ -144,12 +144,12 @@ sub unpack_rose_object {
   while (my $field_name = shift @$fields) {
 
     my $field           = shift @$fields; # already a hashref with keys that should not be modified (except 'value' if its undef) - keys as accepted by Form->add_field method
-    my $value           = $record->field_value($field_name);
+    my $value           = exists $url_params->{$field_name} ? $url_params->{$field_name} : $record->field_value($field_name);
     $value              = $field->{'value'} unless defined $value;
     $field->{'value'}   = $value;
     $field->{'name'}  ||= $field_name;
 
-    my $select = $field->{'type'} && $field->{'type'} =~ /^(dropdown|checklist|radiolist)$/i ? 1 : 0;
+    my $select          = $field->{'type'} && $field->{'type'} =~ /^(dropdown|checklist|radiolist)$/i ? 1 : 0;
 
     ## if this field is a relationship
     if (exists $relations->{$field_name}) {
@@ -163,15 +163,26 @@ sub unpack_rose_object {
 
       ## get lookup if type is either 'dropdown' or 'checklist' or 'radiolist'
       if ($select) {
-        $field->{'selected'} = { map {$_->get_primary_key_value => $_->get_title} (ref $value eq 'ARRAY' ? @$value : $value) } if $value;
-        $field->{'multiple'} = $relationship->is_singular ? 0 : 1;
-        $field->{'lookup'}   = $manager->get_lookup($related_object_meta->class);
+        $field->{'value'}     = [];
+        $field->{'multiple'}  = $relationship->is_singular ? 0 : 1;
+        $field->{'lookup'}    = $manager->get_lookup($related_object_meta->class);
+        $field->{'selected'}  = { map {
+          !ref $_
+            ? exists $field->{'lookup'}{$_}
+            ? ($_ => $field->{'lookup'}{$_})
+            : ()
+            : ($_->get_primary_key_value => $_->get_title)
+        } (ref $value eq 'ARRAY'
+          ? ( $field->{'multiple'}
+            ? @$value
+            : shift @$value
+          ) : $value
+        ) } if $value;
       }
     }
 
     ## if this field is a column
     elsif (exists $columns->{$field_name}) {
-
       my $column = $columns->{$field_name};
 
       $field->{'value_type'}        = 'noedit' if $column->type ne 'virtual' && $column->is_primary_key_member; #force readonly primary key
@@ -179,12 +190,13 @@ sub unpack_rose_object {
       $field->{'is_column'}         = 1;
 
       if (($field->{'value_type'} = $column->type) =~ /^(enum|set)$/ || $select) {
-      
-        $value = defined $value ? { map {$_ => 1} (ref $value ? @$value : $value) } : {};
 
+        $field->{'value'}    = [];
         $field->{'lookup'}   = {};
         $field->{'selected'} = {};
         $field->{'multiple'} = $1 eq 'set' ? 1 : 0;
+
+        $value = defined $value ? { map {$_ => 1} (ref $value ? ($field->{'multiple'} ? @$value : shift @$value) : $value) } : {};
 
         for (@{delete $field->{'values'} || ($column->can('values') ? $column->values : [])}) {
           my $label;
@@ -198,18 +210,19 @@ sub unpack_rose_object {
           $field->{'lookup'}{$_}   = $label;
           $field->{'selected'}{$_} = $label if exists $value->{$_};
         }
+      } else {
+        $field->{'value'} = shift @$value if ref $value eq 'ARRAY';
       }
     }
-    
+
     ## if any external relation
     else {
       $field->{'value_type'} = 'one to one';
       $field->{'selected'}   = {$value->get_primary_key_value => $value->get_title} if $value;
     }
-
     push @$unpacked, EnsEMBL::ORM::Rose::Field->new($field);
   }
-
+  
   return $unpacked;
 }
 
