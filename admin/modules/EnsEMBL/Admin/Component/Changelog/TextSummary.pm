@@ -39,13 +39,13 @@ sub content {
     my $title = sprintf("%s (%s)",
       $record->get_title || '(no title)',
       $sp && @$sp ? @$sp == 1 ? $sp->[0]->get_title : join ' and ', reverse((pop @$sp)->get_title, join(', ', @{[ map {$_->get_title} @$sp ]})) : 'All Species');
-    $html .= sprintf("%s\n%s\n", $title, '-' x length $title);
+    $html .= sprintf("%s\n%s\n", $title, '-' x 100);
 
     # Content
     $html .= sprintf("%s\n\n", $self->dom->create_element('div', {'inner_HTML' => [ $record->content, 1, 1 ]})->render_text); #parse HTML, ignore error and get text
   }
 
-  return qq(<pre>$html</pre>);
+  return qq(<pre class="wrap">$html</pre>);
 }
 
 1;
