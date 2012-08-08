@@ -33,7 +33,7 @@ sub record_tree {
     else {
       $first_cell->remove_attribute('class');
       $first_cell->inner_HTML(sprintf('<a href="%s">Copy&nbsp;to&nbsp;current&nbsp;release&nbsp;(%s)</a>',
-        $hub->url({'action' => 'Duplicate', 'release' => $_, 'id' => $record->get_primary_key_value}),
+        $hub->url({'action' => 'Duplicate', 'release' => $_, 'id' => $record->get_primary_key_value, 'status' => 'declared'}),
       $_)) for $object->current_release;
     }
   }
