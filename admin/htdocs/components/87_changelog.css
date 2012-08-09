@@ -6,19 +6,20 @@ div.dbf-record .cl-padded {
 }
 
 span.cl-field-title, span.cl-field-value {
-  float: left;
+  display: block;
   padding: 0 0 4px;
   line-height: 20px;
 }
 
 span.cl-field-title {
-  font-weight: bold;
+  float: left;
   clear: left;
+  font-weight: bold;
   width: 200px;
 }
 
 span.cl-field-value {
-  clear: right;
+  padding-left: 216px;
 }
 
 span.cl-fv-handed_over {
