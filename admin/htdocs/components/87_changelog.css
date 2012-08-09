@@ -49,3 +49,17 @@ div.cl-toc a {
 h2.cl-team-heading {
   padding-top: 30px;
 }
+
+div.change-width {
+  width: 240px;
+}
+div.change-width label {
+  width: 100px;
+  line-height: 22px;
+}
+div.change-width div {
+  padding: 0;
+}
+div.change-width input.change-width {
+  width: 32px;
+}
