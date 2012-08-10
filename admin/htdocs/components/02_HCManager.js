@@ -278,11 +278,10 @@ function HCSelector(manager, a) {
   this.row = this.a.parents('tr').first().addClass(this.a.attr('class'));
   this.manager.getTable(a.rel).add(this); //link it to it's table & vice versa
   this.defaultText = a.innerHTML;
-  this.defaultLink = a.href;
   this.selected = false;
-  this.link = a.href.split('=')[0];
-  this.rid = parseInt(a.href.split('=')[1]);
-  
+  this.link = a.href;
+  this.rid = a.href.match(/[^a-z0-9]+rid=([0-9]+)/)[1];
+
   this.a1 = $(document.createElement('a'))
     .html('Select')
     .attr({title: 'Select for multi-annotation', href: '#Select'})
@@ -312,7 +311,7 @@ function HCSelector(manager, a) {
   };
 
   this.changeLink = function(rid) {
-    this.a.html(this.selected ? 'Multi&nbsp;Annotate' : this.defaultText).attr('href', this.selected ? this.link + '=' + rid : this.defaultLink);
+    this.a.html(this.selected ? 'Multi&nbsp;Annotate' : this.defaultText).attr('href', this.selected ? this.link.replace(this.rid, rid) : this.link);
     this.highlight();
   };
 
