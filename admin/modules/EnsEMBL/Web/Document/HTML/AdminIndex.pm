@@ -17,10 +17,11 @@ sub render {
 
   return '<div class="plain-box"><p>Note that for access to the database frontends, you will need
    to <a href="/Account/Login" class="modal_link">log in</a> (using the same account as www.ensembl.org) and be
-   a member of the appropriate user group. Please contact the web team if you have any problems.</p></div>' unless $user;
+   a member of the appropriate user group.</p></div>' unless $user;
 
   return '<div class="plain-box"><p>Your user account seems to have limited rights that excludes
-  access to the database frontends. Please contact the web team if you have any problems.</p></div>' unless $user->is_member_of($hub->species_defs->ENSEMBL_WEBADMIN_ID);
+  access to the database frontends and healthcheck interface. If you need access to these pages,
+  please ask you team leader.</p></div>' unless $user->is_member_of($hub->species_defs->ENSEMBL_WEBADMIN_ID);
 
   return q(
 <div class="admin-left-box"><div class="plain-box">
