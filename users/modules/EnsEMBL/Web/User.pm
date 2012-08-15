@@ -8,7 +8,7 @@ use HTML::Entities qw(encode_entities);
 use EnsEMBL::Web::DASConfig;
 use EnsEMBL::Web::Exceptions;
 use EnsEMBL::ORM::Rose::Manager::User;
-use EnsEMBL::ORM::Rose::Manager::UserRecord;
+use EnsEMBL::ORM::Rose::Manager::Record;
 
 use base qw(EnsEMBL::Web::Root); ##  TODO ??
 
@@ -27,7 +27,7 @@ sub new {
   ## @constructor
   ## @param Hub
   ## @param Cookie object
-  my ($class, $hub, $cookie, $params) = @_;
+  my ($class, $hub, $cookie) = @_;
 
   my $self = bless {
     '_user'   => undef,
@@ -66,6 +66,12 @@ sub authorise {
   return 1;
 }
 
+sub groups {
+  ## Gets all the active groups, user is an active memeber of
+  my $self = shift;
+  return [ map $_->group, @{$self->rose_object->active_memberships} ];
+}
+
 sub is_member_of {
   1; # TODO - remove this or forward it to the rose objects' method
 }
@@ -93,29 +99,35 @@ sub _goto_rose_object {
   return $self->rose_object ? $self->rose_object->$method(@args) : undef;
 }
 
-sub id              { shift->user_id;                               }
-sub user_id         { shift->_goto_rose_object('user_id', @_);      }
-sub name            { shift->_goto_rose_object('name', @_);         }
-sub email           { shift->_goto_rose_object('email', @_);        }
-sub salt            { shift->_goto_rose_object('salt', @_);         }
-sub password        { shift->_goto_rose_object('password', @_);     }
-sub organisation    { shift->_goto_rose_object('organisation', @_); }
-sub country         { shift->_goto_rose_object('country', @_);      }
-sub status          { shift->_goto_rose_object('status', @_);       }
+sub id                { shift->user_id;                                 }
+sub user_id           { shift->_goto_rose_object('user_id', @_);        }
+sub name              { shift->_goto_rose_object('name', @_);           }
+sub email             { shift->_goto_rose_object('email', @_);          }
+sub salt              { shift->_goto_rose_object('salt', @_);           }
+sub password          { shift->_goto_rose_object('password', @_);       }
+sub organisation      { shift->_goto_rose_object('organisation', @_);   }
+sub country           { shift->_goto_rose_object('country', @_);        }
+sub status            { shift->_goto_rose_object('status', @_);         }
+sub create_record     { shift->_goto_rose_object('create_record', @_);  }
 
-sub logins          { shift->_goto_rose_object('logins');           }
-sub records         { shift->_goto_rose_object('records');          }
-sub bookmarks       { shift->_goto_rose_object('bookmarks');        }
-sub configurations  { shift->_goto_rose_object('configurations');   }
-sub annotations     { shift->_goto_rose_object('annotations');      }
-sub dases           { shift->_goto_rose_object('dases');            }
-sub newsfilters     { shift->_goto_rose_object('newsfilters');      }
-sub sortables       { shift->_goto_rose_object('sortables');        }
-sub currentconfigs  { shift->_goto_rose_object('currentconfigs');   }
-sub specieslists    { shift->_goto_rose_object('specieslists');     }
-sub uploads         { shift->_goto_rose_object('uploads');          }
-sub urls            { shift->_goto_rose_object('urls');             }
-sub histories       { shift->_goto_rose_object('histories');        }
+sub logins            { shift->_goto_rose_object('logins');             }
+sub records           { shift->_goto_rose_object('records');            }
+sub bookmarks         { shift->_goto_rose_object('bookmarks');          }
+sub configurations    { shift->_goto_rose_object('configurations');     }
+sub annotations       { shift->_goto_rose_object('annotations');        }
+sub dases             { shift->_goto_rose_object('dases');              }
+sub newsfilters       { shift->_goto_rose_object('newsfilters');        }
+sub sortables         { shift->_goto_rose_object('sortables');          }
+sub currentconfigs    { shift->_goto_rose_object('currentconfigs');     }
+sub specieslists      { shift->_goto_rose_object('specieslists');       }
+sub uploads           { shift->_goto_rose_object('uploads');            }
+sub urls              { shift->_goto_rose_object('urls');               }
+sub histories         { shift->_goto_rose_object('histories');          }
+sub favourite_tracks  { shift->_goto_rose_object('favourite_tracks');   }
+
+
+
+
 
 # Backward compatiablity #
 sub get_all_das {
@@ -141,7 +153,7 @@ sub get_all_das {
 sub add_das {
   ## Adds a DAS config to user records
   ## @param EnsEMBL::Web::DASConfig
-  ## @return UserRecord for saved das config, undef if invalid DASConfig or saving unsuccessful
+  ## @return Record for saved das config, undef if invalid DASConfig or saving unsuccessful
   my ($self, $das) = @_;
   my $das_record;
 
@@ -159,19 +171,20 @@ sub add_das {
 sub favourite_species {
   ## Gets all the species favourited by the user
   ## @return ArrayRef of species name
-  
-  return [];
-  
-  my $self          = shift;
-  
-  
-  
-  #### TODO
-  my $species_defs  = $self->hub->species_defs;
-  my %valid_species = map { $_ => 1 } $species_defs->valid_species;
-  my @species_lists = $self->specieslists;
-  my @favourites    = @species_lists ? map { $valid_species{$_} ? $_ : () } split /,/, $species_lists[0]->data->favourites : ();
+  my $self            = shift;
+  my $species_defs    = $self->hub->species_defs;
+  my %valid_species   = map { $_ => 1 } $species_defs->valid_species;
+  my ($species_list)  = @{$self->specieslists};
+  my @favourites      = $species_list ? grep($valid_species{$_}, split ',', $species_list->favourites) : ();
   return \@favourites;
+}
+
+sub get_favourite_tracks {
+  my $self   = shift;
+  my ($data) = map $_->{'tracks'}, $self->favourite_tracks;
+     $data   = eval($data) if $data;
+  
+  return $data || {};
 }
 
 1;
