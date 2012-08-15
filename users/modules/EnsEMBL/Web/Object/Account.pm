@@ -46,7 +46,7 @@ sub _messages {## TODO change message texts
   MESSAGE_GROUP_NOT_FOUND       => 713 => 'Sorry, we could not find the specified group. Either the group does not exist or is inactive or is inaccessible to you for the action selected.',
   MESSAGE_GROUP_INVITATION_SENT => 722 => sprintf(q{Invitation for the group sent successfully to the following email(s): %s}, $hub->param('emails')),
   MESSAGE_CANT_DEMOTE_ADMIN     => 754 => 'Sorry, you can not demote yourself as you seem to be the only administrator of this group.',
-  MESSAGE_BOOKMARK_NOT_FOUND    => 782 => '_message_BOOKMARK_NOT_FOUND',
+  MESSAGE_BOOKMARK_NOT_FOUND    => 782 => 'Sorry, we could not find the specified bookmark.',
   MESSAGE_UNKNOWN_ERROR         => 952 => 'An unknown error occurred. Please try again or contact the help desk.'
 }
 
@@ -131,6 +131,29 @@ sub fetch_active_membership_for_user {
   return $user->get_membership_object($group, {%$params, 'multi_many_ok' => 1});
 }
 
+sub fetch_bookmark_with_owner {
+  ## Fetches bookmark for the logged-in user with given bookmark id
+  ## @param Bookmark record id (if missing, a new record is created)
+  ## @param Group id (optional) if the bookmark is owned by a group
+  ## @return List: Bookmark object and owner of the bookmark (ie. either a group object, or the user object itself)
+  my ($self, $bookmark_id, $group_id) = @_;
+  my $owner = $self->hub->user->rose_object;
+
+  if ($bookmark_id) {
+    if ($group_id) {
+      my $membership = $self->fetch_accessible_membership_for_user($owner, $group_id, {'query' => ['group.status' => 'active']});
+      $owner = $membership ? $membership->group : undef;
+    }
+
+    if ($owner && (my $bookmark = shift @{$owner->find_bookmarks('query' => [ 'record_id' => $bookmark_id ])})) {
+      return ($bookmark, $owner);
+    }
+  } else {
+    return ($owner->create_record('bookmark'), $owner);
+  }
+  return ();
+}
+
 sub new_user_account {
   ## @return unsaved EnsEMBL::ORM::Rose::Object::User object
   my ($self, $params) = @_;
@@ -173,12 +196,13 @@ sub get_notification_types {
 
 sub get_message {
   ## Returns the message string for a given code
-  ## @param Numeric code for the message
+  ## @param Numeric code (or error constant) for the message
   ## @return HTML String message
-  my ($self, $code) = @_;
-  my $hub           = $self->hub;
-  my @messages      = $self->_messages;
-  $messages[1] eq $code and return ref $messages[2] eq 'CODE' ? $messages[2]->($self) : $messages[2] or splice @messages, 0, 3 while @messages;
+  my ($self, $code)   = @_;
+  my $hub             = $self->hub;
+  my @messages        = $self->_messages;
+  my $index_to_match  = $code =~ /^[0-9]+$/ ? 1 : 0;
+  $messages[$index_to_match] eq $code and return ref $messages[2] eq 'CODE' ? $messages[2]->($self) : $messages[2] or splice @messages, 0, 3 while @messages;
 }
 
 sub get_message_code {
