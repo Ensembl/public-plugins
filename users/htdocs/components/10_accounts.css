@@ -1,130 +1,47 @@
-div.section, div.section-padded {
-  padding: 0 0 10px 0;
-  margin: 0 0 10px 0;
-}
+div.section-ajax      { border: [[NEUTRAL_BG]] solid 1px; border-width: 1px 0; }
+div.section .spinner  { background-position: center center; }
+tr.inactive td        { color: [[NEUTRAL_BORDER]]; }
 
-div.section-padded {
-  padding: 10px;
-}
+/* open id icon buttons */
+div.login-openid p              { clear: both; }
+div.login-openid p.trademark    { font-size: 90%; }
+div.login-openid ul             { overflow: hidden; padding: 0; }
+div.login-openid li             { list-style: none; float: left; margin: 0 16px 0 0; }
+div.login-openid li img         { padding: 8px; }
+div.login-openid li a:hover img { background-color: [[NEUTRAL_BG]]; }
 
-div.section-ajax {
-  margin: 10px 0;
-  padding: 10px 0;
-  border: [[NEUTRAL_BG]] solid 1px;
-  border-width: 1px 0;
-}
 
-div.section .spinner {
-  background-position: center center;
-}
+/* buttons on the accounts pages */
+p.accounts-button a                     { display: inline-block; color: [[BUTTON_TEXT]]; text-decoration: none; padding: 4px 7px 4px 29px;
+                                          background: none no-repeat scroll 7px center [[BUTTON_BG]]; border: [[PANEL_BG]] double 3px; outline: none; }
+p.accounts-button a:hover               { background-color: [[BUTTON_BG_HOVER]]; color: [[BUTTON_TEXT]];  }
+p.accounts-button a.setting             { background-image: url('/i/beta/rev/setting.png');               }
+p.accounts-button a.add                 { background-image: url('/i/beta/rev/add.png');                   }
+p.accounts-button a.delete              { background-image: url('/i/beta/rev/delete.png');                }
+p.accounts-button a.share               { background-image: url('/i/beta/rev/share.png');                 }
+p.accounts-button a.check               { background-image: url('/i/beta/rev/check.png');                 }
+p.accounts-button a.arrow-left          { background-image: url('/i/beta/rev/arrow-left.png');            }
+p.accounts-button a.user-add            { background-image: url('/i/beta/rev/user-add.png');              }
+p.accounts-button a.bookmark-add        { background-image: url('/i/beta/rev/bookmark-add.png');          }
+p.accounts-button a.user-group-add      { background-image: url('/i/beta/rev/user-group-add.png');        }
+p.accounts-button a.user-group-join     { background-image: url('/i/beta/rev/user-group-join.png');       }
+p.accounts-button a.user-group-setting  { background-image: url('/i/beta/rev/user-group-setting.png');    }
+p.accounts-button a.user-group-unjoin   { background-image: url('/i/beta/rev/user-group-unjoin.png');     }
+p.accounts-button a.user-group-delete   { background-image: url('/i/beta/rev/user-group-delete.png');     }
 
-div.subsection p {
-  line-height: 24px;
-  clear: left;
-}
 
-div.notification {
-  background-color: [[CONTRAST_BG]];
-  border: 1px [[CONTRAST_BORDER]] solid;
-  margin-bottom: 10px;
-  padding: 4px;
-}
+/* icons used in table rows */
 
-div.notification p {
-  line-height: 16px;
-}
-
-div.login-openid p {
-  clear: both;
-}
-
-p.trademark {
-  font-size: 90%;
-}
-
-div.login-openid ul {
-  overflow: hidden;
-}
-
-div.login-openid li {
-  list-style: none;
-  float: left;
-  padding: 10px;
-}
-
-div.login-openid li img {
-  padding: 10px;
-}
-
-div.login-openid li a:hover img {
-  background-color: [[NEUTRAL_BG]];
-}
-
-p.accounts-error {
-  color: red;
-}
-
-p.accounts-button a {
-  background-color: [[BUTTON_BG]];
-  color: [[BUTTON_TEXT]];
-  text-decoration: none;
-  padding: 4px 6px 4px 28px;
-  background-repeat: no-repeat;
-  background-position: 6px center;
-  border-radius: 3px;
-  -moz-border-radius: 3px;
-  -webkit-border-radius: 3px;
-  outline: none;
-}
-
-p.accounts-button a:hover {
-  background-color: [[BUTTON_BG_HOVER]];
-  color: [[BUTTON_TEXT]];
-}
-
-p.accounts-button a.setting             { background-image: url('/i/beta/rev/setting.png');             }
-p.accounts-button a.add                 { background-image: url('/i/beta/rev/add.png');                 }
-p.accounts-button a.delete              { background-image: url('/i/beta/rev/delete.png');              }
-p.accounts-button a.share               { background-image: url('/i/beta/rev/share.png');               }
-p.accounts-button a.check               { background-image: url('/i/beta/rev/check.png');               }
-
-p.accounts-button a.user-add            { background-image: url('/i/beta/rev/user-add.png');            }
-
-p.accounts-button a.bookmark-add        { background-image: url('/i/beta/rev/bookmark-add.png');        }
-
-p.accounts-button a.user-group-add      { background-image: url('/i/beta/rev/user-group-add.png');      }
-p.accounts-button a.user-group-join     { background-image: url('/i/beta/rev/user-group-join.png');     }
-p.accounts-button a.user-group-setting  { background-image: url('/i/beta/rev/user-group-setting.png');  }
-p.accounts-button a.user-group-unjoin   { background-image: url('/i/beta/rev/user-group-unjoin.png');   }
-p.accounts-button a.user-group-delete   { background-image: url('/i/beta/rev/user-group-delete.png');   }
-
-a.icon {
-  display: block;
-  float: left;
-  width: 20px;
-  height: 16px;
-  margin: 0 3px;
-  background-repeat: no-repeat;
-  background-position: center center;
-}
-
-tr.bg1 a.icon:hover {
-  background-color: [[NEUTRAL_BG]];
-  outline: [[NEUTRAL_BG]] solid 1px;
-}
-
-tr.bg2 a.icon:hover {
-  background-color: [[PANEL_BG]];
-  outline: [[PANEL_BG]] solid 1px;
-}
-
-a.icon-setting  { background-image: url('/i/beta/setting.png');   }
-a.icon-pencil   { background-image: url('/i/beta/pencil.png');    }
-a.icon-add      { background-image: url('/i/beta/add.png');       }
-a.icon-delete   { background-image: url('/i/beta/delete.png');    }
-a.icon-share    { background-image: url('/i/beta/share.png');     }
-a.icon-check    { background-image: url('/i/beta/check.png');     }
-a.icon-download { background-image: url('/i/beta/download.png');  }
+a.icon              { display: block; float: left; width: 20px; height: 16px; margin: 0 3px; background-repeat: no-repeat; background-position: center center; }
+tr.bg1 a.icon:hover { background-color: [[NEUTRAL_BG]]; outline: [[NEUTRAL_BG]] solid 1px; }
+tr.bg2 a.icon:hover { background-color: [[PANEL_BG]];   outline: [[PANEL_BG]] solid 1px;   }
+a.icon-setting      { background-image: url('/i/beta/setting.png');   }
+a.icon-pencil       { background-image: url('/i/beta/pencil.png');    }
+a.icon-add          { background-image: url('/i/beta/add.png');       }
+a.icon-delete       { background-image: url('/i/beta/delete.png');    }
+a.icon-share        { background-image: url('/i/beta/share.png');     }
+a.icon-check        { background-image: url('/i/beta/check.png');     }
+a.icon-download     { background-image: url('/i/beta/download.png');  }
 
 
 
