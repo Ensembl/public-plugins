@@ -6,114 +6,31 @@ package EnsEMBL::ORM::Rose::Object::User;
 use strict;
 use warnings;
 
-use base qw(EnsEMBL::ORM::Rose::Object::Trackable);
+use base qw(EnsEMBL::ORM::Rose::Object::RecordOwner);
 
-use constant ROSE_DB_NAME => 'user';
+use constant RECORD_OWNER_TYPE => 'user';
 
 __PACKAGE__->meta->setup(
   table                 => 'user',
 
   columns               => [
-    user_id               => {
-      'type'                => 'serial',
-      'primary_key'         => 1,
-      'not_null'            => 1
-    },
-    name                  => {
-      'type'                => 'varchar',
-      'length'              => '255'
-    },
-    email                 => {
-      'type'                => 'varchar',
-      'length'              => '255'
-    },
-    data                  => {
-      'type'                => 'text'
-    },
-    organisation          => {
-      'type'                => 'varchar',
-      'length'              => '255'
-    },
-    country               => {
-      'type'                => 'varchar',
-      'length'              => '2'
-    },
-    status                => {
-      'type'                => 'enum',
-      'values'              => [qw(active suspended)],
-      'default'             => 'active'
-    }
+    user_id               => { 'type' => 'serial', 'primary_key' => 1, 'not_null' => 1 },
+    name                  => { 'type' => 'varchar', 'length' => '255' },
+    email                 => { 'type' => 'varchar', 'length' => '255' },
+    data                  => { 'type' => 'text' },
+    organisation          => { 'type' => 'varchar', 'length' => '255' },
+    country               => { 'type' => 'varchar', 'length' => '2'   },
+    status                => { 'type' => 'enum', 'values' => [qw(active suspended)], 'default' => 'active' }
   ],
 
   relationships         => [
-    logins                => {
-      'type'                => 'one to many',
-      'class'               => 'EnsEMBL::ORM::Rose::Object::Login',
-      'column_map'          => {'user_id' => 'user_id'},
-    },
-    records               => {
-      'type'                => 'one to many',
-      'class'               => 'EnsEMBL::ORM::Rose::Object::UserRecord',
-      'column_map'          => {'user_id' => 'user_id'},
-    },
-    memberships           => {
-      'type'                => 'one to many',
-      'class'               => 'EnsEMBL::ORM::Rose::Object::Membership',
-      'column_map'          => {'user_id' => 'user_id'},
-    },
-    admin_privilege       => {
-      'type'                => 'one to one',
-      'class'               => 'EnsEMBL::ORM::Rose::Object::AdminPrivilage',
-      'column_map'          => {'user_id' => 'user_id'}
-    }
+    logins                => { 'type' => 'one to many', 'class' => 'EnsEMBL::ORM::Rose::Object::Login',           'column_map' => {'user_id' => 'user_id'}  },
+    memberships           => { 'type' => 'one to many', 'class' => 'EnsEMBL::ORM::Rose::Object::Membership',      'column_map' => {'user_id' => 'user_id'}  },
+    admin_privilege       => { 'type' => 'one to one',  'class' => 'EnsEMBL::ORM::Rose::Object::AdminPrivilage',  'column_map' => {'user_id' => 'user_id'}  },
+    records               => __PACKAGE__->record_relationship_params('user_id')
   ],
 
-  virtual_relationships => [
-    bookmarks             => {
-      'relationship'        => 'records',
-      'condition'           => {'type' => 'bookmark'}
-    },
-    configurations        => {
-      'relationship'        => 'records',
-      'condition'           => {'type' => 'configuration'}
-    },
-    annotations           => {
-      'relationship'        => 'records',
-      'condition'           => {'type' => 'annotation'}
-    },
-    dases                 => {
-      'relationship'        => 'records',
-      'condition'           => {'type' => 'das'}
-    },
-    newsfilters           => {
-      'relationship'        => 'records',
-      'condition'           => {'type' => 'newsfilter'}
-    },
-    sortables             => {
-      'relationship'        => 'records',
-      'condition'           => {'type' => 'sortable'}
-    },
-    currentconfigs        => {
-      'relationship'        => 'records',
-      'condition'           => {'type' => 'current_config'}
-    },
-    specieslists          => {
-      'relationship'        => 'records',
-      'condition'           => {'type' => 'specieslist'}
-    },
-    uploads               => {
-      'relationship'        => 'records',
-      'condition'           => {'type' => 'upload'}
-    },
-    urls                  => {
-      'relationship'        => 'records',
-      'condition'           => {'type' => 'url'}
-    },
-    histories             => {
-      'relationship'        => 'records',
-      'condition'           => {'type' => 'history'}
-    }
-  ]
+  virtual_relationships => __PACKAGE__->record_relationship_types
 );
 
 #############################
@@ -179,7 +96,7 @@ sub create_membership_object {
 
   return ($self->add_memberships([{
     'level'         => 'administrator',
-    'user_id'       => $self->user_id,  # this prevents from calling save on the user object to actually link the objects
+    'user_id'       => $self->user_id,  # this saves an extra step of calling save on the user object to actually link the objects
     'status'        => 'active',
     'member_status' => 'active',
     'group'         => {
@@ -220,25 +137,6 @@ sub is_nonadminmember_of {
   my ($self, $group) = @_;
   my $membership = $self->get_membership_object($group, {'query' => ['status' => 'active', 'member_status' => 'active', 'level' => 'member']});
   return !!$membership;
-}
-
-#########################
-####                 ####
-#### RECORDS METHODS ####
-####                 ####
-#########################
-
-sub create_record {
-  ## Creates a user record of a given type (does not save it to the db)
-  ## @param Type of the record
-  ## @param Hashref of name value pair for columns of the new object (optional)
-  my ($self, $type, $params) = @_;
-
-  return ($self->add_records([{
-    'user_id'       => $self->user_id,
-    'type'          => $type,
-    %{$params || {}}
-  }]))[0];
 }
 
 1;
