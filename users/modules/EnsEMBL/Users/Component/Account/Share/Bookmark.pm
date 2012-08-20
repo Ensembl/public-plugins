@@ -27,7 +27,7 @@ sub content {
 
       my $form = $self->select_group_form({
         'memberships' => $memberships,
-        'action'      => $hub->url({qw(action Bookmarks function Save)}),
+        'action'      => $hub->url({qw(action Bookmark function Save)}),
         'name'        => 'group',
         'label'       => 'Group to share bookmark(s) with',
         'selected'    => $hub->param('group') || 0,
