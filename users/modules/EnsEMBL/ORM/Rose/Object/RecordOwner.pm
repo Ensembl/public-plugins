@@ -53,7 +53,7 @@ sub record_relationship_params {
     'type'        => 'one to many',
     'class'       => 'EnsEMBL::ORM::Rose::Object::Record',
     'column_map'  => {$foreign_key => 'owner_id'},
-    'query_args'  => [ 'owner_type' => $class->RECORD_OWNER_TYPE ]
+    'join_args'   => [ 'owner_type' => $class->RECORD_OWNER_TYPE ] # join_args key is not documented in Rose, so take care of this if something changes in future
   };
 }
 
