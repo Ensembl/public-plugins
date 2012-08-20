@@ -14,49 +14,78 @@ sub content {
   my $hub         = $self->hub;
   my $user        = $hub->user->rose_object;
 
-  my $table       = $self->new_table([
-    {'title' => 'Group Name',         'key' => 'name',    'width' => '20%'},
-    {'title' => 'Number of members',  'key' => 'number',  'width' => '10%', 'class' => 'sort_numeric' },
-    {'title' => 'Description',        'key' => 'desc',    'width' => '50%'},
-    {'title' => 'Type',               'key' => 'type',    'width' => '10%'},
-    {'title' => '',                   'key' => 'join',    'width' => '10%', 'class' => 'sort_html'    },
-  ], [], {'data_table' => 'no_col_toggle', 'exportable' => 0, 'data_table_config' => {'iDisplayLength' => 25}});
-
-  for (sort {$b->memberships_count('query' => ['status' => 'active', 'member_status' => 'active']) <=> $a->memberships_count('query' => ['status' => 'active', 'member_status' => 'active'])} @{$object->fetch_groups}) {
+  # create an 'easy to use' data structure
+  my @groups;
+  for (@{$object->fetch_groups({'query' => ['!type' => 'private'], 'debug' => 1})}) {
     my $membership = $user->get_membership_object($_);
-    next if $_->type eq 'private' || $membership && ($membership->is_active || $membership->is_user_blocked);
-
-    $table->add_row({
-      'name'    => $self->html_encode($_->name),
-      'number'  => $_->memberships_count('query' => ['status' => 'active', 'member_status' => 'active']),
-      'desc'    => $self->html_encode($_->blurb),
-      'type'    => ucfirst $_->type,
-      'join'    => $membership && $membership->is_pending_request
-      ? 'Request sent'
-      : $self->js_link($membership && $membership->is_pending_invitation ? {
-        'href'    => {'action' => 'Membership', 'function' => 'Accept', 'id' => $membership->group_member_id},
-        'caption' => 'Accept invitation',
-        'target'  => 'none',
-        'inline'  => 1,
-      } : {
-        'href'    => {'action' => 'Group', 'function' => 'Join', 'id' => $_->group_id},
-        'caption' => $_->type eq 'open' ? 'Join' : 'Send request',
-        'target'  => 'none',
-        'inline'  => 1,
-      })
-    });
+    unless ($membership && $membership->is_user_blocked) { # dont show the group that blocked this user
+      push @groups, {
+        'group'         => $_,
+        'membership'    => $membership,
+        'member_count'  => $_->memberships_count('query' => ['status' => 'active', 'member_status' => 'active'])
+      };
+    }
   }
 
-  return $self->js_section({'id' => 'list_all_groups', 'subsections' => [
-    $table->render,
-    $self->js_link({
-      'href'    => {'action' => 'Groups', 'function' => ''},
-      'caption' => 'Done',
-      'target'  => 'page',
-      'cancel'  => 'list_all_groups',
-      'class'   => 'check'
-    })
-  ]});
+  if (@groups) {
+
+    my $table = $self->new_table([
+      {'title' => 'Group Name',         'key' => 'name',    'width' => '20%'},
+      {'title' => 'Number of members',  'key' => 'number',  'width' => '10%', 'class' => 'sort_numeric' },
+      {'title' => 'Description',        'key' => 'desc',    'width' => '50%'},
+      {'title' => 'Type',               'key' => 'type',    'width' => '10%'},
+      {'title' => '',                   'key' => 'join',    'width' => '10%', 'class' => 'sort_html'    },
+    ], [], {'data_table' => 'no_col_toggle', 'exportable' => 0, 'data_table_config' => {'iDisplayLength' => 25}});
+
+    for (sort {$b->{'member_count'} <=> $a->{'member_count'}} @groups) {
+      my $group       = $_->{'group'};
+      my $membership  = $_->{'membership'};
+
+      $table->add_row({
+        'name'    => $self->html_encode($group->name),
+        'number'  => $_->{'member_count'},
+        'desc'    => $self->html_encode($group->blurb),
+        'type'    => ucfirst $group->type,
+        'join'    => $membership && $membership->is_active
+        ? 'Already a member'
+        : (
+          $membership && $membership->is_pending_request
+          ? 'Request sent'
+          : $self->js_link($membership && $membership->is_pending_invitation ? {
+            'href'    => {'action' => 'Membership', 'function' => 'Accept', 'id' => $membership->group_member_id},
+            'caption' => 'Accept invitation',
+            'target'  => 'none',
+            'inline'  => 1,
+          } : {
+            'href'    => {'action' => 'Group', 'function' => 'Join', 'id' => $group->group_id},
+            'caption' => $group->type eq 'open' ? 'Join' : 'Send request',
+            'target'  => 'none',
+            'inline'  => 1,
+          })
+        )
+      });
+    }
+
+    return $self->js_section({'id' => 'list_all_groups', 'subsections' => [
+      $table->render,
+      $self->js_link({
+        'href'    => {'action' => 'Groups', 'function' => ''},
+        'caption' => 'Done',
+        'target'  => 'page',
+        'cancel'  => 'list_all_groups',
+        'class'   => 'check'
+      })
+    ]});
+
+  } else {
+
+    return $self->js_section({
+      'heading'     => 'No group found to join ',
+      'subsections' => [
+      sprintf(q(<p>No public user group exists for %s.</p>), $self->site_name),
+      $self->link_create_new_group
+    ]});
+  }
 }
 
 1;
