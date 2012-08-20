@@ -29,7 +29,7 @@ sub send_verification_email {
 
   my $message   = {
     'openid'      =>  qq{If you recently tried to login to $sitename using your OpenID account with $provider ($identity), to verify your }
-                     .qq(email address '$email', please go to the following url:\n\n\n$url\n\n\n"."This will allow )
+                     .qq(email address '$email', please go to the following url:\n\n\n$url\n\n\nThis will allow )
                      .qq(you access to $sitename using your account with $provider.),
     'local'       =>  qq(If you recently registered with $sitename, to confirm your email address as '$email', please go to the )
                      .qq(following url:\n\n\n$url\n\n\nThis will allow you access to $sitename using the provided )
