@@ -18,7 +18,7 @@ sub content {
   my $html        = '';
 
   if ($group_id && !$adminship) {
-    $html .= $self->render_message($object->get_message_code('MESSAGE_GROUP_NOT_FOUND'), {'error' => 1});
+    $html .= $self->render_message('MESSAGE_GROUP_NOT_FOUND', {'error' => 1});
   }
 
   if ($adminship or @$adminships) {
