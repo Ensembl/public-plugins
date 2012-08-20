@@ -160,15 +160,24 @@ sub content {
 
   } else {
 
-    # display form to select a group if no group was specified
-    return $self->js_section({
-      'subsections' => [ $self->select_group_form({
-        'memberships' => (my $memberships = $user->active_memberships), # wantarray returns list otherwise
-        'action'      => $hub->url({'action' => 'Groups', 'function' => 'View'}),
-        'label'       => 'Select a group to view',
-        'submit'      => 'View'
-      })->render ]
-    });
+    my $memberships = $user->active_memberships;
+
+    if (@$memberships) {
+  
+      # display form to select a group if no group was specified
+      return $self->js_section({
+        'subsections' => [ $self->select_group_form({
+          'memberships' => $memberships,
+          'action'      => $hub->url({'action' => 'Groups', 'function' => 'View'}),
+          'label'       => 'Select a group to view',
+          'submit'      => 'View'
+        })->render ]
+      });
+
+    # if no group joined
+    } else {
+      return $self->no_membership_found_page;
+    }
   }
 }
 1;

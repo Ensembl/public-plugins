@@ -14,10 +14,10 @@ sub content {
   my $object      = $self->object;
   my $user        = $hub->user->rose_object;
   my $memberships = $user->find_memberships('with_objects' => 'group', 'query' => ['or' => ['level' => 'administrator', 'group.status' => 'active']]); # show inactive groups to admins only
-  my $subsections = [
-    $self->link_create_new_group,
-    $self->link_join_existing_group
-  ];
+  my %section     = (
+    'id'            => 'my_groups',
+    'refresh_url'   => {'action' => 'Groups', 'function' => ''}
+  );
 
   if (@$memberships) {
     my $table = $self->new_table([
@@ -51,18 +51,16 @@ sub content {
         $is_inactive_group ? ('options' => {'class' => 'inactive'}) : ()
       });
     }
-    unshift @$subsections, $table->render;
 
-  } else {
-    unshift @$subsections, q(<p>You are not a member of any group</p>);
+    return $self->js_section({%section, 'heading' => 'Groups', 'subsections' => [
+      $table->render,
+      $self->link_create_new_group,
+      $self->link_join_existing_group
+    ]});
   }
 
-  return $self->js_section({
-    'id'          => 'my_groups',
-    'refresh_url' => {'action' => 'Groups', 'function' => ''},
-    'heading'     => 'Groups',
-    'subsections' => $subsections
-  });
+  # if user is not a member of any group
+  return $self->no_membership_found_page(\%section);
 }
 
 1;
