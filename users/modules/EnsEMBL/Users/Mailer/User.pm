@@ -224,7 +224,7 @@ sub send_group_invitation_email_to_new_user {
     'species'           => '',
     'type'              => 'Account',
     'action'            => 'Membership',
-    'function'          => 'Copy',
+    'function'          => 'Create',
     'invitation'        => $invitation->get_invitation_code
   };
   my $url_1           = $self->url($invitation_url);
