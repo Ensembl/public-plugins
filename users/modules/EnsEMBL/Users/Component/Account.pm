@@ -49,11 +49,13 @@ sub render_message {
   my ($self, $code, $params) = @_;
 
   if (my $message = $self->object->get_message($code)) {
-    my $css_class   = $params->{'error'} ? 'error error-accounts' : 'info info-accounts';
-    my $heading     = $params->{'error'} ? 'Error' : 'Message';
-    my $back_button = ($params->{'back'} ||= $self->hub->param('back')) ? $self->link_back_button($params->{'back'}) : '';
 
-    return qq(<div class="$css_class"><h3>$heading</h3><div class="error-pad">$message</div></div>$back_button);
+    return sprintf '<div class="%s"><h3>%s</h3><div class="message-pad">%s</div></div>%s',
+      $params->{'error'} ? 'error' : 'info',
+      $params->{'error'} ? 'Error' : 'Message',
+      $self->wrap_in_p_tag($message),
+      ($params->{'back'} ||= $self->hub->param('back')) ? $self->link_back_button($params->{'back'}) : ''
+    ;
   } else {
     return '';
   }
@@ -141,8 +143,12 @@ sub select_bookmark_form {
     'type'    => $params->{'multiple'} ? 'checklist' : 'radiolist',
     'name'    => $params->{'name'} || 'id',
     'values'  => [ map {
-      'value'   => $_->user_record_id,
-      'caption' => {'inner_HTML' => sprintf('%s (<a href="%s" title="%2$s">View</a>)<br><i>%s</i>', map $self->html_encode($_), $_->name, $_->url, $_->description || '')}
+      'value'   => $_->record_id,
+      'caption' => {'inner_HTML' => sprintf(
+        '%s (<a href="%s" title="%s">View</a>)<br><i>%s</i>',
+          map $self->html_encode($_), $_->name, $self->hub->url({'type' => 'Account', 'action' => 'Bookmark', 'function' => 'Use', 'id' => $_->record_id}), $_->url, $_->shortname || ''
+        )
+      }
     }, @{$params->{'bookmarks'} || []} ],
     $params->{'selected'} ? ('value' => $params->{'selected'}) : ()
   });
@@ -162,33 +168,33 @@ sub bookmarks_table {
   my ($self, $params) = @_;
 
   my $table = $self->new_table([
-    {'key' => 'title',   'title' => 'Title',        'width' => '30%', 'sorting' => 'sort_html'},
-    {'key' => 'desc',    'title' => 'Description',  'width' => '70%'},
+    {'key' => 'title',   'title' => 'Title',              'width' => '30%', 'sorting' => 'sort_html'},
+    {'key' => 'desc',    'title' => 'Short Description',  'width' => '70%'},
   ], [], {'data_table' => 'no_col_toggle', 'exportable' => 0});
 
-  my @group_id_param = $params->{'group'} ? ('group', $params->{'group'}) : ();
+  my %group_id_param = $params->{'group'} ? ('group' => $params->{'group'}) : ();
 
   for (@{$params->{'bookmarks'}}) {
     my $bookmark_id = $_->get_primary_key_value;
     $table->add_row({
-      'desc'  => $self->html_encode($_->description),
+      'desc'  => $self->html_encode($_->shortname),
       'title' => sprintf('%s%s%s<a href="%s">%s</a>',
         $self->js_link({
-          'href'    => {'action' => 'Bookmarks', 'function' => 'Edit', 'id' => $bookmark_id, @group_id_param},
+          'href'    => {'action' => 'Bookmark', 'function' => 'Edit', 'id' => $bookmark_id, %group_id_param},
           'title'   => 'Edit',
           'class'   => 'icon icon-pencil',
           'inline'  => 1
         }),
         $self->js_link({
-          'href'    => {'action' => 'Bookmarks', 'function' => 'Remove', 'id' => $bookmark_id, @group_id_param},
+          'href'    => {'action' => 'Bookmark', 'function' => 'Remove', 'id' => $bookmark_id, %group_id_param},
           'title'   => 'Remove',
           'class'   => 'icon icon-delete',
-          'confirm' => sprintf('You are about to remove the bookmark%s. This action can not be undone.', @group_id_param ? ' from the group' : ''),
+          'confirm' => sprintf('You are about to remove the bookmark%s. This action can not be undone.', keys %group_id_param ? ' from the group' : ''),
           'inline'  => 1
         }),
-        @group_id_param
+        %group_id_param
         ? $self->js_link({
-          'href'    => {'action' => 'Bookmarks', 'function' => 'Copy', 'id' => $bookmark_id, @group_id_param},
+          'href'    => {'action' => 'Bookmark', 'function' => 'Copy', 'id' => $bookmark_id, %group_id_param},
           'title'   => 'Copy to my bookmarks',
           'class'   => 'icon icon-download',
           'inline'  => 1
@@ -199,12 +205,41 @@ sub bookmarks_table {
           'class'   => 'icon icon-share',
           'inline'  => 1
         }),
-        $self->hub->url({'action' => 'Bookmarks', 'function' => 'Visit', 'id' => $bookmark_id, @group_id_param}),
+        $self->hub->url({'action' => 'Bookmark', 'function' => 'Use', 'id' => $bookmark_id, %group_id_param}),
         $self->html_encode($_->name)
       )
     });
   }
   return $table->render;
+}
+
+sub no_membership_found_page {
+  ## Gets js section for a page to display if the user is not a member of any group
+  ## @param Optional hashref to be passed to js_section method
+  my ($self, $params) = @_;
+  return $self->js_section({
+    'heading'     => 'Groups',
+    %{$params || {}},
+    'subsections' => [
+      q(<p>You are not a member of any group.</p>),
+      $self->link_create_new_group,
+      $self->link_join_existing_group
+    ]
+  });
+}
+
+sub no_bookmark_found_page {
+  ## Gets js section for a page to display if the user does not have bookmark saved
+  ## @param Optional hashref to be passed to js_section method
+  my ($self, $params) = @_;
+  return $self->js_section({
+    'heading'     => 'Bookmarks',
+    %{$params || {}},
+    'subsections' => [
+      q(<p>You have not saved any bookmark.</p>),
+      $self->link_add_bookmark
+    ]
+  });
 }
 
 sub two_column {
@@ -307,7 +342,7 @@ sub link_join_existing_group {
 sub link_add_bookmark {
   ## Gets HTML for a button to add a bookmark
   ## @return HTML string
-  return shift->js_link({'href' => {qw(action Bookmarks function Add)}, 'caption' => 'Add a bookmark', 'class' => 'bookmark-add'});
+  return shift->js_link({'href' => {qw(action Bookmark function Add)}, 'caption' => 'Add a bookmark', 'class' => 'bookmark-add'});
 }
 
 sub link_back_button {
