@@ -88,21 +88,31 @@ sub active_memberships {
   return shift->find_memberships('with_objects' => 'group', 'query' => ['status' => 'active', 'member_status' => 'active', 'group.status' => 'active']);
 }
 
-sub create_membership_object {
+sub create_new_membership_with_group {
   ## Creates a membership and group with the given details
   ## @param Hashref with keys as column (and relationships) for the membership object
   ## @return Memberhsip object with a new group (not yet saved to the database)
   my ($self, $params) = @_;
 
-  return ($self->add_memberships([{
+  return $self->create_membership_object({
     'level'         => 'administrator',
+    'group'         => { 'status' => 'active' },
+    %{$params || {}}    
+  });
+}
+
+sub create_membership_object {
+  ## Creates a membership with the given details
+  ## @param Hashref with keys as column (and relationships) for the membership object
+  ## @return Memberhsip object (not yet saved to the database)
+  my ($self, $params) = @_;
+
+  return ($self->add_memberships([{
+    'level'         => 'member',
     'user_id'       => $self->user_id,  # this saves an extra step of calling save on the user object to actually link the objects
     'status'        => 'active',
     'member_status' => 'active',
-    'group'         => {
-      'status'        => 'active'
-    },
-    %{$params || {}}    
+    %{$params || {}}
   }]))[0];
 }
 
