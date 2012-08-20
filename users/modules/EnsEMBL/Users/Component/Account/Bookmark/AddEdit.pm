@@ -19,27 +19,33 @@ sub content {
 
     $form->add_hidden({'name' => 'id',       'value'  => $bookmark->record_id });
     $form->add_hidden({'name' => 'group',    'value'  => $owner->group_id     }) if $owner->RECORD_OWNER_TYPE eq 'group';
-    $form->add_field({'type'  => 'string',   'name'   => 'name',        'label' => 'Name',        'value' => $bookmark->name        || $hub->param('name')  || '',  'required' => 1 });
-    $form->add_field({'type'  => 'text',     'name'   => 'url',         'label' => 'Location',    'value' => $bookmark->url         || $hub->param('url')   || '',  'required' => 1 });
-    $form->add_field({'type'  => 'text',     'name'   => 'description', 'label' => 'Description', 'value' => $bookmark->description || '' });
+    $form->add_hidden({'name' => 'object',   'value'  => $_}) for $hub->referer->{'ENSEMBL_TYPE'};
+    $form->add_field({'type'  => 'string',   'name'   => 'name',        'label' => 'Bookmark name',     'value' => $bookmark->name        || $hub->param('name')      || '',  'required' => 1 });
+    $form->add_field({'type'  => 'string',   'name'   => 'shortname',   'label' => 'Short description', 'value' => $bookmark->shortname   || $hub->param('shortname') || ''});
+    $form->add_field({'type'  => 'text',     'name'   => 'url',         'label' => 'Bookmark URL',      'value' => $bookmark->url         || $hub->param('url')       || '',  'required' => 1 });
     $form->add_field({'type'  => 'submit',   'value'  => $is_add_new ? 'Add' : 'Save'});
 
     return $form->render;
 
   } else {
 
-    if (my @bookmarks = @{$hub->user->bookmarks}) {
-      # display form to select a bookmark if no group was specified
+    my $bookmarks = $hub->user->bookmarks;
+
+    # display form to select a bookmark if no group was specified
+    if (@$bookmarks) {
       return $self->js_section({
         'subsections' => [ $self->select_bookmark_form({
-          'bookmarks'   => \@bookmarks,
+          'bookmarks'   => $bookmarks,
           'action'      => $hub->url({'action' => 'Bookmark', 'function' => 'Edit'}),
           'label'       => 'Select a bookmark to edit',
           'submit'      => 'Edit'
         })->render ]
       });
+    
+    # if no bookmark added yet
     } else {
-      return $self->render_message('MESSAGE_BOOKMARK_NOT_FOUND', {'error' => 1});
+
+      return $self->no_bookmark_found_page;
     }
   }
 }
