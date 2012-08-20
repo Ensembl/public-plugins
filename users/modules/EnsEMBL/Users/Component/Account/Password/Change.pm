@@ -22,7 +22,7 @@ sub content {
   my $login     = $user ? $user->rose_object->get_local_login : $object->fetch_login_from_url_code;
 
   # If no login object found - user manually changed the url
-  return $self->render_message($object->get_message_code('MESSAGE_UNKNOWN_ERROR'), {'error' => 1}) unless $login;
+  return $self->render_message('MESSAGE_UNKNOWN_ERROR', {'error' => 1}) unless $login;
 
   $form->add_field({'type' => 'noedit', 'name' => 'email', 'label' => 'Login email', 'no_input' => 1, 'value' => $login->identity });
 
