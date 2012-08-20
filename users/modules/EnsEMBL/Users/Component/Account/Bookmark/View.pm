@@ -9,22 +9,20 @@ use warnings;
 use base qw(EnsEMBL::Users::Component::Account);
 
 sub content {
-  my $self              = shift;
-  my $hub               = $self->hub;
-  my $object            = $self->object;
-  my $user              = $hub->user->rose_object;
-  my $bookmarks         = $user->bookmarks;
-
-  return $self->js_section({
+  my $self      = shift;
+  my $hub       = $self->hub;
+  my $object    = $self->object;
+  my $user      = $hub->user->rose_object;
+  my $bookmarks = $user->bookmarks;
+  my %section   = (
     'id'          => 'view_bookmarks',
-    'heading'     => 'Bookmarks',
-    'refresh_url' => {'action' => 'Bookmark', 'function' => ''},
-    'subsections' => [ @$bookmarks
-      ? $self->bookmarks_table({'bookmarks' => $bookmarks})
-      : q(<p>You have no saved bookmark</p>),
-      $self->link_add_bookmark
-    ]
-  });
+    'refresh_url' => {'action' => 'Bookmark', 'function' => ''}
+  );
+
+  return @$bookmarks
+    ? $self->js_section({ %section, 'heading' => 'Bookmarks', 'subsections' => [ q(<p>You have no saved bookmark</p>), $self->link_add_bookmark ] })
+    : $self->no_bookmark_found_page(\%section)
+  ;
 }
 
 1;
