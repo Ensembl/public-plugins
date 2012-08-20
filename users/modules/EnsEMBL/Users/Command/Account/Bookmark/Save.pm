@@ -11,7 +11,7 @@ sub process {
   my $bookmark_id = $hub->param('id');
 
   if (my ($bookmark, $owner) = $object->fetch_bookmark_with_owner( $bookmark_id ? ($bookmark_id, $hub->param('group')) : 0 )) {
-    $bookmark->$_($hub->param($_)) for qw(name url description);
+    $bookmark->$_($hub->param($_)) for qw(name shortname url object);
     $bookmark->save('user' => $hub->user);
 
     return $self->ajax_redirect($hub->url($owner->RECORD_OWNER_TYPE eq 'group'
@@ -20,7 +20,7 @@ sub process {
     ));
 
   } else {
-    return $self->redirect_message('MESSAGE_BOOKMARK_NOT_FOUND');
+    return $self->redirect_message('MESSAGE_BOOKMARK_NOT_FOUND', {'error' => 1});
   }
 }
 
