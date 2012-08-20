@@ -13,9 +13,8 @@ use base qw(EnsEMBL::ORM::Rose::Object::Trackable);
 use constant ROSE_DB_NAME => 'user';
 
 my $VIRTUAL_COLUMNS = {
-  'histroy'     => [qw(object value url name species param)],
-  'extra'       => [qw(url name description click species object)],
-  'bookmark'    => [qw(shortname click)],
+  'history'     => [qw(object value url name species param)],
+  'bookmark'    => [qw(name shortname url object click)],
   'specieslist' => [qw(favourites list)],
   'urls'        => [qw(format)],
   'invitation'  => [qw(invitation_code email)]
@@ -33,10 +32,23 @@ __PACKAGE__->meta->setup(
   ],
 
   virtual_columns => [ map {$_ => {'column' => 'data'}} keys %{{ map { map {$_ => 1} @$_ } values %$VIRTUAL_COLUMNS }} ],
+  
+  relationships   => [ # dont forget to add 'owner_type' in the query while fetching record with either of these objects
+    user                  => {
+      'type'                => 'many to one',
+      'class'               => 'EnsEMBL::ORM::Rose::Object::User',
+      'column_map'          => {'owner_id' => 'user_id'},
+    },
+    group                 => {
+      'type'                => 'many to one',
+      'class'               => 'EnsEMBL::ORM::Rose::Object::Group',
+      'column_map'          => {'owner_id' => 'webgroup_id'},
+    }
+  ]
 );
 
 sub get_invitation_code {
-  ## For invitation record only for owner_type group)
+  ## For invitation record only for owner_type group
   ## Gets a url code for invitation type group record
   ## @return Code string
   return sprintf('%s-%s', $_->invitation_code, $_->record_id) for @_;
