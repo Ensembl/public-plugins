@@ -9,14 +9,15 @@ package EnsEMBL::Web::Object::Account;
 
 use strict;
 
-use EnsEMBL::ORM::Rose::Manager::User;
-use EnsEMBL::ORM::Rose::Manager::Login;
 use EnsEMBL::ORM::Rose::Manager::Group;
+use EnsEMBL::ORM::Rose::Manager::Login;
 use EnsEMBL::ORM::Rose::Manager::Membership;
+use EnsEMBL::ORM::Rose::Manager::Record;
+use EnsEMBL::ORM::Rose::Manager::User;
 
 use base qw(EnsEMBL::Web::Object);
 
-sub _messages {## TODO change message texts
+sub _messages { ## TODO change message texts ## TODO provide error or message heading along with the text
   my $self  = shift;
   my $hub   = $self->hub;
 
@@ -47,6 +48,7 @@ sub _messages {## TODO change message texts
   MESSAGE_GROUP_INVITATION_SENT => 722 => sprintf(q{Invitation for the group sent successfully to the following email(s): %s}, $hub->param('emails')),
   MESSAGE_CANT_DEMOTE_ADMIN     => 754 => 'Sorry, you can not demote yourself as you seem to be the only administrator of this group.',
   MESSAGE_BOOKMARK_NOT_FOUND    => 782 => 'Sorry, we could not find the specified bookmark.',
+  MESSAGE_CANT_DELETE_BOOKMARK  => 789 => 'You do not seem to have the right to delete this bookmark.',
   MESSAGE_UNKNOWN_ERROR         => 952 => 'An unknown error occurred. Please try again or contact the help desk.'
 }
 
@@ -107,14 +109,14 @@ sub fetch_login_from_url_code {
 
 sub fetch_accessible_membership_for_user {
   ## Fetches a membership object for the user for a given group
-  ## Membership object fetch is active and linked to an active group unless the user is admin - ie. it will only get an inactive group membership for an admin of the group
+  ## Membership object fetched is active and linked to an active group unless the user is admin - ie. it will only get an inactive group membership for an admin of the group
   ## @param User object
   ## @param Group object or group id
   ## @param Optional hashref to be passed to find_memberships method of user object
   ## @return Membership object if found
   my ($self, $user, $group, $params) = @_;
-  push @{$params->{'query'} ||= []}, ('or' => ['level' => 'administrator', 'group.status' => 'active'], 'status' => 'active', 'member_status' => 'active');
-  push @{$params->{'with_objects'} ||= []}, 'group';
+  push @{$params->{'query'}         ||= []}, ('or' => ['level' => 'administrator', 'group.status' => 'active'], 'status' => 'active', 'member_status' => 'active');
+  push @{$params->{'with_objects'}  ||= []}, 'group' unless grep {$_ eq 'group'} @{$params->{'with_objects'} || []};
   return $user->get_membership_object($group, {%$params, 'multi_many_ok' => 1});
 }
 
@@ -148,10 +150,27 @@ sub fetch_bookmark_with_owner {
     if ($owner && (my $bookmark = shift @{$owner->find_bookmarks('query' => [ 'record_id' => $bookmark_id ])})) {
       return ($bookmark, $owner);
     }
-  } else {
+  } elsif (defined $bookmark_id)  {
     return ($owner->create_record('bookmark'), $owner);
   }
   return ();
+}
+
+sub fetch_invitation_record_from_url_code {
+  ## Fetches and returns an invitation record by parsing the code parameter in the url
+  ## @return Record object (user record)
+  my $self = shift;
+
+  $self->hub->param('invitation') =~ /^([a-zA-Z0-9_]+)\-([0-9]+)$/;
+
+  my $invitations = EnsEMBL::ORM::Rose::Manager::Record->get_group_records(
+    'with_objects'  => [ 'group' ],
+    'query'         => [ 'record_id' => $2 ],
+    'limit'         => 1
+  );
+
+  $_->invitation_code eq $1 and return $_ for @$invitations;
+  return undef;
 }
 
 sub new_user_account {
