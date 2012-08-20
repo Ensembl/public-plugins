@@ -65,8 +65,7 @@ sub process {
         if ($invitation) {
           $invitation->save(user => $admin);
         } else {
-          ($invitation) = $group->add_invitations([{'email' => $email}]);
-          $group->save;
+          $invitation = $group->create_record('invitation', {'email' => $email});
           $invitation->reset_invitation_code_and_save(user => $admin);
         }
 
