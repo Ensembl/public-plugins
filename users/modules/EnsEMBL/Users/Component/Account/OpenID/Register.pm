@@ -1,7 +1,7 @@
 package EnsEMBL::Users::Component::Account::OpenID::Register;
 
 ### Page displayed to the user when he just logs in for the very first time using openid.
-### This page asks user to link any existing user account with the openid login account
+### This page asks user to confirm his details as provided by the openid provider before continuing
 
 ### @author hr5
 
@@ -15,31 +15,53 @@ sub caption {
 }
 
 sub content {
-  my $self      = shift;
-  my $hub       = $self->hub;
-  my $object    = $self->object;
-  my $login     = $object->fetch_login_from_url_code(1) or return $self->render_message('MESSAGE_LOGIN_MISSING', {'error' => 1});
-  my $provider  = $login->provider;
-  my $content   = $self->wrapper_div;
-  my $form      = $content->append_child($self->new_form({'action' => $hub->url({'action' => 'LinkAccount'})}));
+  my $self              = shift;
+  my $hub               = $self->hub;
+  my $object            = $self->object;
+  my $site_name         = $self->site_name;
+  my $login             = $object->fetch_login_from_url_code(1) or return $self->render_message('MESSAGE_LOGIN_MISSING', {'error' => 1});
+  my $login_code        = $login->get_url_code;
+  my $provider          = $login->provider;
+  my $trusted_provider  = $login->has_trusted_provider;
+  my $content           = $self->wrapper_div({'js_panel' => 'OpenIDRegisterForm'});
+  my $form              = $content->append_child($self->new_form({'action' => $hub->url({'action' => 'LinkAccount'})}));
 
-  $form->add_notes(sprintf ('Looks like you are logging in to %s via %s for the very first time. Please check the details and click on continue.', $self->site_name, $provider));
+  $form->add_notes({
+    'heading' => sprintf('Already have an %s account?', $site_name),
+    'text'    => sprintf('If you already have an account with %s and want to be able to login to that account using your %s login, please <a href="%s">click here</a>.',
+      $site_name,
+      $provider,
+      $hub->url({'action' => 'OpenID', 'function' => 'LinkExisting', 'code' => $login_code})
+    )
+  });
 
-  $form->add_hidden({'name' => 'code', 'value' => $login->get_url_code});
+  $form->add_notes(sprintf 'Looks like you are logging in to %s via %s for the very first time. Please check the details and click on continue.', $self->site_name, $provider);
+
+  $form->add_hidden({
+    'name'        => 'code',
+    'value'       => $login_code
+  });
+  $form->add_hidden({
+    'name'        => 'trusted_provider',
+    'class'       => '_trusted_provider',
+    'value'       => $trusted_provider ? '1' : '0'
+  });
 
   $form->add_field({
-    'label'     => 'Login via',
-    'type'      => 'noedit',
-    'value'     => $provider,
-    'no_input'  => 1
+    'label'       => 'Login via',
+    'type'        => 'noedit',
+    'value'       => $provider,
+    'no_input'    => 1
   });
 
   $self->add_user_details_fields($form, {
     'email'       => $login->email,
     'name'        => $login->name,
-    'email_notes' => sprintf('If you already have an account with %s and want to login to that account using your %s login, change this email address to the one already registered with %1$s.', $self->site_name, $provider),
+    'email_notes' => sprintf('<div class="_hide_if_trusted%s">You will recieve an email from %s on this email address for verification.</div>', $trusted_provider ? " hidden" : '', $self->site_name),
     'button'      => 'Continue'
   });
+
+  $form->get_elements_by_name('email')->[0]->add_attribute('class', '_openid_email');
 
   return $content->render;
 }
