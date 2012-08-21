@@ -142,6 +142,10 @@ sub re_search {
   my $sitetype        = $hub->species_defs->ENSEMBL_SEARCHTYPE ? ucfirst lc $hub->species_defs->ENSEMBL_SEARCHTYPE : ucfirst lc $hub->species_defs->ENSEMBL_SITETYPE;
   my $species         = $hub->param('species');
   my $display_species = $species eq 'all' ? 'all species' : $hub->species_defs->get_config($species,'SPECIES_COMMON_NAME');
+  my $html = qq(
+        <div style="font-size:1.2em">
+          <p class="space-below">Your search of <strong>$display_species</strong> with <strong>'$q'</strong> returned no results.</p>
+            );
   
   if ($q =~ /^(\S+?)(\d+)/) {
     my $ens = $1;
@@ -151,34 +155,29 @@ sub re_search {
       my $newq = $ens . sprintf "%011d", $dig;
       my $url  = '/' . $hub->species . "/Search/Results?species=$species;idx=" . $hub->param('idx') . ';q=' . $newq;
       
-      return qq{
-        <div style="font-size:1.2em">
-          <p class="space-below">Your search of <strong>$display_species</strong> with <strong>'$q'</strong> returned no results.</p>
-          <p class="space-below"><strong>Would you like to <a href="$url">search using $newq</a> (note number of digits)?</strong></p>
-        </div>
+      $html .= qq{
+          <p><strong>Would you like to <a href="$url">search using $newq</a> (note number of digits)?</strong></p>
       };
     }
   }
-  
-  if ($species ne 'all') {
+  elsif ($species ne 'all') {
     my $url = '/' . $hub->species . '/Search/Results?species=all;idx=' . $hub->param('idx') . ';q=' . $q;
     
-    return qq{
-      <div style="font-size:1.2em">
-        <p class="space-below">Your search of <strong>$display_species annotation</strong> for the term <strong>'$q'</strong> returned no results.</p>
-        <p class="space-below"><strong>Would you like to <a href="$url">search the rest of the website</a> with this term?</strong></p>
-      </div>
+    $html .= qq{
+        <p><strong>Would you like to <a href="$url">search the rest of the website</a> with this term?</strong></p>
+    };
+  }
+  else {
+    $html = qq{
+        <p><strong>If you are expecting to find features with this search term and think the failure to do so is an error, please <a href="/Help/Contact" class="popup">contact helpdesk</a> and let us know.</strong></p>
     };
   }
 
-  return qq{
-    <div style="font-size:1.2em">
-      <p class="space-below">Your search of the <strong>$sitetype website</strong> for the term <strong>'$q'</strong> returned no results.</p>
-      <p class="space-below">
-        <strong>If you are expecting to find features with this search term and think the failure to do so is an error, please <a href="/Help/Contact" class="popup">contact helpdesk</a> and let us know.</strong>
-      </p>
-    </div>
-  };
+  $html .= '</div>';
+  $html .= $self->no_results($hub->param('q'));
+
+  return $html;
+ 
 }
 
 1;
