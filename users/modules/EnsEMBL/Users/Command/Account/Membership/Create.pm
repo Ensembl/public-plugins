@@ -21,6 +21,7 @@ sub modify_membership {
       if ($group && $group->status eq 'active') {
         my $group_id = $group->group_id;
         $membership->group_id($group_id);
+        $invitation->delete;
         $self->redirect_url({'action' => 'Groups', 'function' => 'View', 'id' => $group_id});
         return 1;
       } else {
