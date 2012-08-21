@@ -31,13 +31,19 @@ sub _init {
 
 sub wrapper_div {
   ## Returns a wraper div for sections in accounts page
-  ## @param Hashref as accepted as second argument in dom->create_element, plus an extra key
-  ##  - padded If on, will return the padded div
+  ## @param Hashref as accepted as second argument in dom->create_element, plus some extra keys
+  ##  - padded    If on, will return the padded div
+  ##  - js_panel  Name of the js_panel (optional)
   ## @return Div object
-  my $self    = shift;
-  my $params  = shift || {};
+  my $self      = shift;
+  my $params    = shift || {};
+  my $js_panel  = delete $params->{'js_panel'};
 
-  return $self->dom->create_element('div', {'class' => sprintf('%s %s', delete $params->{'padded'} ? 'section-padded' : 'section', delete $params->{'class'}), %$params});
+  return $self->dom->create_element('div', {
+    'class'       => [ delete $params->{'padded'} ? 'section-padded' : 'section', delete $params->{'class'}, $js_panel ? 'js_panel' : () ],
+    'children'    => [ $js_panel ? {'node_name' => 'input', 'type' => 'hidden', 'value' => $js_panel, 'class' => 'panel_type'} : (), @{delete $params->{'children'} || []} ],
+    %$params
+  });
 }
 
 sub render_message {
