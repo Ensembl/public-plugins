@@ -19,8 +19,8 @@ sub process {
 
   if ($login) {
 
-    # can not delete the only login account attached to the user
-    return $self->redirect_message($object->get_message_code('MESSAGE_CANT_DELETE_LOGIN')) unless keys %$logins;
+    # can not delete the only login account attached to the user, or any login of type other than openid or local
+    return $self->redirect_message($object->get_message_code('MESSAGE_CANT_DELETE_LOGIN')) unless keys %$logins && $login->type =~ /^(openid|local)$/;
 
     $login->delete;
   }
