@@ -9,11 +9,49 @@ use warnings;
 use base qw(EnsEMBL::Users::Component::Account);
 
 sub content {
-  my $self              = shift;
-  my $hub               = $self->hub;
-  my $object            = $self->object;
-  my $web_user          = $hub->user;
-  my $rose_user         = $web_user->rose_object;
+  my $self          = shift;
+  my $hub           = $self->hub;
+  my $object        = $self->object;
+  my $user          = $hub->user;
+  my $r_user        = $user->rose_object;
+  my $logins        = $r_user->logins;
+  my $site_name     = $self->site_name;
+  
+  my @login_details;
+
+  for (@$logins) {
+    my $login_type      = $_->type;
+    my $login_provider  = $_->provider;
+    my $login_detail    = '<b>%s</b>: %s ';
+
+    if ($login_type eq 'local') {
+      $login_detail = sprintf "$login_detail %s ", $site_name, $_->identity, $self->js_link({
+        'class'   => 'small',
+        'href'    => {qw(action Password function Change)},
+        'caption' => 'Change password',
+        'inline'  => 1
+      });
+
+    } elsif ($login_type eq 'openid') {
+      $login_detail = sprintf $login_detail, $login_provider, $_->has_trusted_provider ? $_->email : $_->identity;
+
+    } elsif ($login_type eq 'ldap') { # not implimented yet
+      $login_detail = sprintf $login_detail, 'LDAP', $_->ldap_user;
+    }
+
+    # add a remove login link for local or openid logins
+    if (@$logins > 1 && $login_type =~ /^(local|openid)$/) {
+      $login_detail .= $self->js_link({
+        'class'   => 'small',
+        'href'    => {'action' => 'RemoveLogin', 'id' => $_->login_id},
+        'caption' => 'Remove login',
+        'inline'  => 1,
+        'confirm' => sprintf(q(You won't be able to login to %s site with your %s account.), $site_name, $login_type eq 'local' ? $site_name : $login_provider)
+      });
+    }
+
+    push @login_details, $login_detail;
+  }
 
   return $self->js_section({
     'id'            => 'view_details',
@@ -21,17 +59,11 @@ sub content {
     'heading'       => 'User Details',
     'subsections'   => [
       $self->two_column([
-        'Name'          => $web_user->display_name,
-        'Email'         => $web_user->display_email,
-        'Organisation'  => $web_user->display_organisation,
-        'Country'       => $web_user->display_country,
-        'Login via'     => join('<br />', map {
-          my $login_type = $_->type;
-          $login_type ne 'openid' ? $login_type ne 'local'
-          ? sprintf('%s (LDAP)', $_->ldap_user)
-          : sprintf('%s (%s)', $_->identity, $self->js_link({'href' => {qw(action Password function Change)}, 'caption' => 'Change password', 'inline' => 1}))
-          : sprintf(@{$rose_user->logins} > 1 ? '%s%s (%s)' : '%s (%s)', $_->provider, $_->has_trusted_provider ? $_->email : $_->identity, $self->js_link({'href' => {'action' => 'RemoveLogin', 'id' => $_->login_id}, 'caption' => 'Remove login', 'inline' => 1}))
-        } @{$rose_user->logins})
+        'Name'          => $user->display_name,
+        'Email'         => $user->display_email,
+        'Organisation'  => $user->display_organisation,
+        'Country'       => $user->display_country,
+        'Login via'     => @login_details > 1 ? sprintf('<div class="spaced">%s</div>', join('<br />', @login_details)) : $login_details[0]
       ]),
       $self->js_link({
         'class'   => 'setting',
