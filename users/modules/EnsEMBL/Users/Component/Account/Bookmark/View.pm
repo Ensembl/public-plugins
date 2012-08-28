@@ -20,7 +20,7 @@ sub content {
   );
 
   return @$bookmarks
-    ? $self->js_section({ %section, 'heading' => 'Bookmarks', 'subsections' => [ q(<p>You have no saved bookmark</p>), $self->link_add_bookmark ] })
+    ? $self->js_section({ %section, 'heading' => 'Bookmarks', 'subsections' => [ $self->bookmarks_table({'bookmarks' => $bookmarks}), $self->link_add_bookmark ] })
     : $self->no_bookmark_found_page(\%section)
   ;
 }
