@@ -9,7 +9,7 @@ use warnings;
 use base qw(EnsEMBL::Users::Component::Account);
 
 sub caption {
-  return sprintf 'Link existing account';
+  return 'Link existing account';
 }
 
 sub content {
@@ -19,19 +19,14 @@ sub content {
   my $login             = $object->fetch_login_from_url_code(1) or return $self->render_message('MESSAGE_LOGIN_MISSING', {'error' => 1});
   my $provider          = $login->provider;
   my $trusted_provider  = $login->has_trusted_provider;
-  my $content           = $self->wrapper_div({'js_panel' => 'OpenIDRegisterForm'});
-  my $form              = $content->append_child($self->new_form({'action' => $hub->url({'action' => 'LinkAccount'})}));
+  my $content           = $self->wrapper_div({'js_panel' => 'AccountForm'});
+  my $form              = $content->append_child($self->new_form({'action' => $hub->url({'action' => 'OpenID', 'function' => 'Link'})}));
 
   $form->add_notes(sprintf 'Please enter the email address below for your existing %s account.', $self->site_name);
 
   $form->add_hidden({
     'name'        => 'code',
     'value'       => $login->get_url_code
-  });
-
-  $form->add_hidden({
-    'name'        => 'linkexisting',
-    'value'       => 1
   });
 
   $form->add_hidden({
@@ -50,33 +45,11 @@ sub content {
   $form->add_field({
     'label'       => 'Email address of existing account',
     'type'        => 'email',
+    'name'        => 'email',
     'class'       => '_openid_email',
     'value'       => $login->email || '',
+    'notes'       => sprintf('<div class="%s">You will need to authenticate that this account belongs to you in the next step.</div>', $trusted_provider ? 'hidden _hide_if_trusted' : '_hide_if_trusted'),
     'required'    => 1
-  });
-
-  $form->add_field({
-    'field_class' => $trusted_provider ? 'hidden _hide_if_trusted' : '_hide_if_trusted',
-    'label'       => 'Authentication method',
-    'type'        => 'radiolist',
-    'name'        => 'authentication',
-    'values'      => [{
-      'value'       => 'email',
-      'caption'     => 'Send an email on this address for verification',
-      'checked'     => 1
-    }, {
-      'value'       => 'password',
-      'caption'     => 'Authenticate via password',
-      'class'       => '_password_auth'
-    }]
-  });
-
-  $form->add_field({
-    'field_class' => 'hidden _password_auth', # displayed by JavaScript only if user chooses for password authentication
-    'label'       => 'Password',
-    'type'        => 'password',
-    'name'        => 'password',
-    'notes'       => 'Please enter the password for the existing account.'
   });
 
   $form->add_button({'value' => 'Continue'});
