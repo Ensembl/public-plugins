@@ -1,5 +1,8 @@
 package EnsEMBL::Users::Command::Account::Bookmark::Remove;
 
+### Command module to remvoe a bookmark record (user bookmark or group bookmark)
+### @author hr5
+
 use strict;
 
 use base qw(EnsEMBL::Users::Command::Account);
