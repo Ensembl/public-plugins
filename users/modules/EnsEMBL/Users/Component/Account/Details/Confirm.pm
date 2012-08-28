@@ -16,7 +16,7 @@ sub content {
   my $object  = $self->object;
   my $login   = $object->fetch_login_from_url_code;
 
-  return $self->render_message('MESSAGE_CONFIRMATION_FAILED', {'error' => 1}) unless $login;
+  return $self->render_message('MESSAGE_URL_EXPIRED', {'error' => 1}) unless $login;
 
   my $user    = $login->user;
   my $content = $self->wrapper_div;
