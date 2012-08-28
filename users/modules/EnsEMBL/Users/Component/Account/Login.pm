@@ -12,17 +12,15 @@ sub caption {
 }
 
 sub content {
-  my $self      = shift;
-  my $object    = $self->object;
-  my $hub       = $self->hub;
-  my $content   = $self->wrapper_div;
-  my $referer   = $hub->param('then') || $hub->referer->{'absolute_url'};
-  $referer      = $hub->species_defs->ENSEMBL_BASE_URL.$hub->current_url if $hub->action ne 'Login'; # if ended up on this page from some 'available for logged-in user only' page for Account type
+  my $self        = shift;
+  my $object      = $self->object;
+  my $hub         = $self->hub;
+  my $content     = $self->wrapper_div;
+  my $then_param  = $self->get_then_param;
+  my $form        = $content->append_child($self->new_form({'id' => 'login', 'action' => $hub->url({qw(action User function Authenticate)})}));
+  my $ex_email    = $hub->param('email');
 
-  my $form      = $content->append_child($self->new_form({'id' => 'login', 'action' => $hub->url({qw(action User function Authenticate)})}));
-  my $ex_email  = $hub->param('email');
-
-  $form->add_hidden({'name'  => 'then', 'value' => $referer}) if $referer;
+  $form->add_hidden({'name'  => 'then', 'value' => $then_param}) if $then_param;
   $form->add_field([
     {'type'  => 'Email',    'name'  => 'email',     'label' => 'Email',     'required' => 'yes', $ex_email ? ('value' => $ex_email) : ()},
     {'type'  => 'Password', 'name'  => 'password',  'label' => 'Password',  'required' => 'yes'},
