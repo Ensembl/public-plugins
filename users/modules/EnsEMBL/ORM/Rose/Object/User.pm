@@ -17,10 +17,14 @@ __PACKAGE__->meta->setup(
     user_id               => { 'type' => 'serial', 'primary_key' => 1, 'not_null' => 1 },
     name                  => { 'type' => 'varchar', 'length' => '255' },
     email                 => { 'type' => 'varchar', 'length' => '255' },
-    data                  => { 'type' => 'text' },
+    data                  => { 'type' => 'datamap' },
     organisation          => { 'type' => 'varchar', 'length' => '255' },
     country               => { 'type' => 'varchar', 'length' => '2'   },
     status                => { 'type' => 'enum', 'values' => [qw(active suspended)], 'default' => 'active' }
+  ],
+
+  virtual_columns       => [
+    new_email             => { 'column' => 'data' }
   ],
 
   relationships         => [
@@ -38,17 +42,6 @@ __PACKAGE__->meta->setup(
 ####    LOGIN METHODS    ####
 ####                     ####
 #############################
-
-sub activate_login {
-  ## Activates the given login object after copying the information like name, organisation, country to the user and linking login object to the user object (does not save to the database afterwards)
-  ## @param Login object to be linked an activated
-  my ($self, $login) = @_;
-
-  $login->copy_details_to_user($self);
-  $login->activate;
-
-  $self->add_logins([$login]);
-}
 
 sub get_local_login {
   ## Gets the local login object related to the user
