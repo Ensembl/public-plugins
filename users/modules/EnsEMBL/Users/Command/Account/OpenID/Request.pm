@@ -12,29 +12,37 @@ sub process {
   my $self        = shift;
   my $hub         = $self->hub;
   my $object      = $self->object;
-  my $provider    = $hub->function;
+  my $then_param  = $hub->param('then');
+  my $provider    = $hub->param('provider');
   my $openid_url  = $self->get_openid_url($provider, $hub->param('user') || '');
-  my $claimed_id  = $self->get_openid_consumer->claimed_identity($openid_url);
+  my $consumer    = $self->get_openid_consumer;
+  my $claimed_id  = $consumer->claimed_identity($openid_url);
   my $root        = $object->get_root_url;
 
-  # For OpenID 2.0
-  $claimed_id->set_extension_args($self->OPENID_EXTENSION_URL_AX, {
-    'mode'            => 'fetch_request',
-    'required'        => 'email,firstname',
-    'type.email'      => 'http://axschema.org/contact/email',
-    'type.firstname'  => 'http://axschema.org/namePerson/first'
-  });
+  if ($claimed_id) {
 
-  # For older versions
-  $claimed_id->set_extension_args($self->OPENID_EXTENSION_URL_SREG, {
-    'required'        => 'email,firstname',
-  });
+    # For OpenID 2.0
+    $claimed_id->set_extension_args($self->OPENID_EXTENSION_URL_AX, {
+      'mode'            => 'fetch_request',
+      'required'        => 'email,firstname',
+      'type.email'      => 'http://axschema.org/contact/email',
+      'type.firstname'  => 'http://axschema.org/namePerson/first'
+    });
+  
+    # For older versions
+    $claimed_id->set_extension_args($self->OPENID_EXTENSION_URL_SREG, {
+      'required'        => 'email,firstname',
+    });
+  
+    return $self->ajax_redirect($claimed_id->check_url(
+      'delayed_return'  => 1,
+      'return_to'       => $root.$hub->url({'action' => 'OpenID', 'function' => 'Response', 'provider' => $provider, $then_param ? ('then' => $then_param) : ()}),
+      'trust_root'      => $root
+    ));
 
-  $self->ajax_redirect($claimed_id->check_url(
-    'delayed_return'  => 1,
-    'return_to'       => $root.$hub->url({'action' => 'OpenIDResponse', 'function' => $provider}),
-    'trust_root'      => $root
-  ));
+  }
+
+  return $self->redirect_login('MESSAGE_OPENID_ERROR', {'oerr' => $consumer->errtext});
 }
 
 sub get_openid_url {
