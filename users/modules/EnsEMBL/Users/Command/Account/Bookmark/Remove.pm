@@ -16,7 +16,7 @@ sub process {
     my $redirect_url = {'action' => 'Bookmark', 'function' => 'View'};
 
     if ($owner->RECORD_OWNER_TYPE eq 'group') {
-      if ($bookmark->created_by eq $user || $user->is_admin_of($owner)) {
+      if ($bookmark->created_by eq $user->user_id || $user->is_admin_of($owner)) {
         $redirect_url = {'action' => 'Groups', 'function' => 'View', 'id' => $owner->group_id};
       } else {
         return $self->redirect_message('MESSAGE_CANT_DELETE_BOOKMARK', {'error' => 1});
