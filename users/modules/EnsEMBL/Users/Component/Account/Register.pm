@@ -20,7 +20,11 @@ sub content {
   $form->add_field({qw(type honeypot name title   label Title)});      # honeypot fields for catching bots
   $form->add_field({qw(type honeypot name surname label Surname)});
 
-  $self->add_user_details_fields($form, {'email_notes' => sprintf("You'll use this to log in to %s.", $self->site_name)});
+  $self->add_user_details_fields($form, {
+    'email'       => $hub->param('email') || '',
+    'name'        => $hub->param('name')  || '',
+    'email_notes' => sprintf("You'll use this to log in to %s.", $self->site_name)
+  });
 
   return $content->render;
 }
