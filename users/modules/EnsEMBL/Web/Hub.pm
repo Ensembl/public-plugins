@@ -2,7 +2,7 @@ package EnsEMBL::Web::Hub;
 
 use strict;
 
-use EnsEMBL::Web::Tools::MethodMaker (copy => {'new' => '_new'});
+use EnsEMBL::Web::Tools::MethodMaker (copy => {'new' => '__new', 'url' => '__url'});
 use EnsEMBL::Web::User;
 
 sub new {
@@ -11,9 +11,18 @@ sub new {
   my ($class, $args) = @_;
 
   my $cookie  = delete $args->{'user_cookie'};
-  my $self    = $class->_new($args);
+  my $self    = $class->__new($args);
   $self->user = EnsEMBL::Web::User->new($self, $cookie) if $cookie;
   return $self;
+}
+
+sub url {
+  ## @overrides
+  ## Clears the core params in case url type is Account
+  my $self    = shift;
+  my $params  = shift;
+  $params->{'__clear'} = 1 if !$params->{'type'} || $params->{'type'} eq 'Account';
+  return $self->__url($params, @_);
 }
 
 sub get_favourite_species {
