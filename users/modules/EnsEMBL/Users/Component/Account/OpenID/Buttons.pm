@@ -11,6 +11,8 @@ sub content {
   my $self              = shift;
   my $object            = $self->object;
   my $hub               = $self->hub;
+  my $then_param        = $self->get_then_param;
+     $then_param        = $then_param ? { 'then' => $then_param } : {};
 
   my $openid_providers  = $object->openid_providers;
   my $trademarks        = [];
@@ -31,8 +33,10 @@ sub content {
         'href'      => $hub->url({
           'species'   => '',
           'type'      => 'Account',
-          'action'    => 'OpenIDRequest',
-          'function'  => $key
+          'action'    => 'OpenID',
+          'function'  => 'Request',
+          'provider'  => $key,
+          %$then_param
         }),
         'children'  => [{
           'node_name' => 'img',
@@ -53,10 +57,10 @@ sub content {
 
   if (my $count = @$trademarks) {
     $content->append_child('p', {'class' => 'trademark', 'inner_HTML' => sprintf('%s %s trademark%s of %s%s',
-      join(' and ', reverse (pop(@$trademarks), join(', ', @$trademarks) || ())),
+      $self->join_with_and(@$trademarks),
       $count == 1 ? 'is' : 'are',
       $count == 1 ? '' : 's',
-      join(' and ', reverse (pop(@$trademark_owners), join(', ', @$trademark_owners) || ())),
+      $self->join_with_and(@$trademark_owners),
       $count == 1 ? '.' : ' respectively.'
     )});
   }
