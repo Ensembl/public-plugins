@@ -67,6 +67,17 @@ sub render_message {
   }
 }
 
+sub get_then_param {
+  ## Gets the 'then' param for the url that needs to be followed after the login is done
+  ## Use for Login type pages only.
+  ## @return URL string, if any, undef otherwise
+  my $self  = shift;
+  my $hub   = $self->hub;
+  my $then  = $hub->param('then') || $hub->referer->{'absolute_url'};
+     $then  = $hub->species_defs->ENSEMBL_BASE_URL.$hub->current_url if $hub->action !~ /^(Login|Register)$/; # if ended up on this page from some 'available for logged-in user only' page for Account type
+  return $then;
+}
+
 sub add_user_details_fields {
   ## Adds fields to a given form for registration page
   ## @param Field object to add fields to
@@ -78,6 +89,7 @@ sub add_user_details_fields {
   ##  - email_notes   Notes to be added to email field
   ##  - button        Value attrib for the submit button, defaults to 'Register'
   ##  - no_list       Flag if on, will not add the field "Ensembl news list subscription"
+  ##  - no_email      Flag if on, will skip adding email inout
   my ($self, $form, $params) = @_;
 
   $params     ||= {};
@@ -85,7 +97,7 @@ sub add_user_details_fields {
   my $countries = $self->object->list_of_countries;
 
   $form->add_field({'label' => 'Name',          'name' => 'name',         'type' => 'string',   'value' => $params->{'name'}          || '',  'required' => 1 });
-  $form->add_field({'label' => 'Email Address', 'name' => 'email',        'type' => 'email',    'value' => $params->{'email'}         || '',  'required' => 1, $params->{'email_notes'} ? ('notes' => $params->{'email_notes'}) : () });
+  $form->add_field({'label' => 'Email Address', 'name' => 'email',        'type' => 'email',    'value' => $params->{'email'}         || '',  'required' => 1, $params->{'email_notes'} ? ('notes' => $params->{'email_notes'}) : () }) unless $params->{'no_email'};
   $form->add_field({'label' => 'Organisation',  'name' => 'organisation', 'type' => 'string' ,  'value' => $params->{'organisation'}  || '' });
   $form->add_field({'label' => 'Country',       'name' => 'country',      'type' => 'dropdown', 'value' => $params->{'country'}       || '', 'values' => [ {'value' => '', 'caption' => ''}, sort {$a->{'caption'} cmp $b->{'caption'}} map {'value' => $_, 'caption' => $countries->{$_}}, keys %$countries ] });
 
@@ -318,14 +330,17 @@ sub js_section {
   ##  - subsections : Arrayref of subsections (html string or child of DOM::Node)
   ##  - refresh_url : URL to refresh the page
   ##  - id          : Unique ID attrib of section - for JS to remember it while refreshing the section
+  ##  - js_panel    : js_panel name (optional)
   my ($self, $params) = @_;
   my $js_subsection = $self->_JS_SUBSECTION;
 
-  return sprintf q(<div id="_%s" class="section %s">%s%s<input type="hidden" name="%s" value="%s">%s%s</div>),
+  return sprintf q(<div id="_%s" class="section %s%s">%s%s%s<input type="hidden" name="%s" value="%s">%s%s</div>),
     $params->{'id'},
     $self->_JS_SECTION,
-    $params->{'heading'}    ? "<h2>$params->{'heading'}</h2>"     : '',
-    $params->{'subheading'} ? "<h3>$params->{'subheading'}</h3>"  : '',
+    $params->{'js_panel'}   ? ' js_panel'                                                                   : '',
+    $params->{'js_panel'}   ? qq(<input type="hidden" class="panel_type" value="$params->{'js_panel'}" />)  : '',
+    $params->{'heading'}    ? "<h2>$params->{'heading'}</h2>"                                               : '',
+    $params->{'subheading'} ? "<h3>$params->{'subheading'}</h3>"                                            : '',
     $self->_JS_REFRESH_URL,
     ref $params->{'refresh_url'} ? $self->hub->url($params->{'refresh_url'}) : $params->{'refresh_url'},
     join('', map {qq(<div class="subsection $js_subsection">$_</div>)} @{$params->{'subsections'} || []}),
