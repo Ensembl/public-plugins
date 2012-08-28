@@ -17,7 +17,7 @@ sub process {
     ? $object->fetch_membership($hub->param('id'), {'with_objects' => 'group', 'query' => ['group.status' => 'active']})
     : undef
     : $user->rose_object->create_membership_object
-  or return $self->redirect_message($object->get_message_code('MESSAGE_GROUP_NOT_FOUND'), {'error' => 1, 'back' => $self->internal_referer});
+  or return $self->redirect_message('MESSAGE_GROUP_NOT_FOUND', {'error' => 1, 'back' => $self->internal_referer});
 
   $membership->save('user' => $user) if $self->modify_membership($membership);
 
