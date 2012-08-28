@@ -24,7 +24,7 @@ sub process {
 
   # validate the emails, separate the invalid ones
   my $invalid_emails  = [];
-  my $valid_emails    = [ grep {$_ ne $admin->email} map { $self->validate_fields({'email' => $_})->{'email'} || push(@$invalid_emails, $_) && () } sort keys %{{ map {$_ =~ s/^\s*|\s*$//g; $_ ? ($_ => 1) : ()} split ',', $hub->param('emails') || '' }} ];
+  my $valid_emails    = [ grep {$_ ne $admin->email} map { $self->validate_fields({'email' => $_ || ''})->{'email'} || push(@$invalid_emails, $_) && () } sort keys %{{ map {$_ =~ s/^\s*|\s*$//g; $_ ? ($_ => 1) : ()} split ',', $hub->param('emails') || '' }} ];
 
   if (@$invalid_emails) {
     return $self->ajax_redirect($hub->url({
