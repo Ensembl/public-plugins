@@ -23,8 +23,8 @@ sub content {
   my $login_code        = $login->get_url_code;
   my $provider          = $login->provider;
   my $trusted_provider  = $login->has_trusted_provider;
-  my $content           = $self->wrapper_div({'js_panel' => 'OpenIDRegisterForm'});
-  my $form              = $content->append_child($self->new_form({'action' => $hub->url({'action' => 'LinkAccount'})}));
+  my $content           = $self->wrapper_div({'js_panel' => 'AccountForm'});
+  my $form              = $content->append_child($self->new_form({'action' => $hub->url({'action' => 'OpenID', 'function' => 'Add'})}));
 
   $form->add_notes({
     'heading' => sprintf('Already have an %s account?', $site_name),
@@ -41,6 +41,7 @@ sub content {
     'name'        => 'code',
     'value'       => $login_code
   });
+
   $form->add_hidden({
     'name'        => 'trusted_provider',
     'class'       => '_trusted_provider',
