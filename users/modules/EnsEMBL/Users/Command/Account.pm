@@ -12,44 +12,37 @@ use base qw(EnsEMBL::Web::Command);
 sub handle_registration {
   ## Handles a new login according to the email provided during registration
   ## @param Login object
-  ## @param User email address (should be validated before calling this method)
-  ## @param Flag if on will create a new user if email does not exist in user table
-  my ($self, $login, $email, $do_create_new) = @_;
+  ## @param Email to be registered (should be validated before calling this method)
+  ## @param Hashref with keys:
+  ##  - add_new           (for openid registration only) Flag if on will create a new user if email does not exist in user table
+  ##  - skip_verify_email (for openid registration only) Flag if on, will not send a verification email to the existing account if accounts being linked
+  my ($self, $login, $email, $flags) = @_;
 
-  my $object  = $self->object;
-  my $user    = $object->fetch_user_by_email($email);
+  my $login_type  = $login->type;
+  my $object      = $self->object;
+  my $user        = $object->fetch_user_by_email($email);
 
   if ($user) {
-    return $self->redirect_message($object->get_message_code('MESSAGE_ACCOUNT_BLOCKED')) if $user->status eq 'suspended'; # If blocked user
-    return $self->redirect_after_registration($login, $user); # Register new login account with the existing user
-  }
+    return $self->redirect_message('MESSAGE_ACCOUNT_BLOCKED') if $user->status eq 'suspended'; # If blocked user
 
-  if ($do_create_new) {
+  } elsif ($login_type eq 'openid' && !$flags->{'add_new'}) { # redirect to the page to register with openid if not explicitly told to create a new user
+    $login->reset_salt_and_save;
+    return $self->redirect_openid_register($login);
+
+  } else {
     warn "Creating new user";
-    return $self->redirect_after_registration($login, $object->new_user_account({'email' => $email})); # Register new login account with a new user
+    $user = $object->new_user_account({'email' => $email});
   }
 
-  $login->reset_salt_and_save;
-
-  return $self->redirect_link_existing_account($login);
-}
-
-sub redirect_after_registration {
-  ## Adds and saves a new login account to user account before redirecting the page
-  ## @param Rose Login object
-  ## @param Rose User object
-  my ($self, $login, $user) = @_;
-  my $object = $self->object;
-
-  # skip verification if openid provider is trusted and user uses same email in user account as provided by openid provider
-  if ($login->has_trusted_provider && $user->email eq $login->email) {
+  # skip verification if flag kept on, or if openid provider is trusted and user uses same email in user account as provided by openid provider
+  if ($login_type eq 'openid' && ($flags->{'skip_verify_email'} || $login->has_trusted_provider && $user->email eq $login->email)) {
     warn sprintf("\nSkipping verification for (%s, %s)", $login->provider, $login->email);
-    $user->activate_login($login);
+    $login->activate($user);
     $user->save;
     return $self->redirect_after_login($user);
   }
 
-  # Link accounts
+  # Link login object to user object
   $login->reset_salt;
   $user->add_logins([$login]);
   $user->save;
@@ -58,7 +51,7 @@ sub redirect_after_registration {
 
   # Send verification email
   $self->get_mailer->send_verification_email($login);
-  return $self->redirect_message($object->get_message_code('MESSAGE_VERIFICATION_SENT'), {'email' => $user->email});
+  return $self->redirect_message('MESSAGE_VERIFICATION_SENT', {'email' => $user->email});
 }
 
 sub redirect_after_login {
@@ -71,7 +64,7 @@ sub redirect_after_login {
   my $object        = $self->object;
 
   # return to login page if cookie not set
-  return $self->redirect_login($object->get_message_code('MESSAGE_UNKNOWN_ERROR')) unless $hub->user->authorise({'user' => $user});
+  return $self->redirect_login('MESSAGE_UNKNOWN_ERROR') unless $hub->user->authorise({'user' => $user});
 
   # redirect
   if ($hub->is_ajax_request) {
@@ -85,38 +78,46 @@ sub redirect_after_login {
 
 sub redirect_message {
   ## Redirects to page that displays required message to user
-  ## @param Function part if the URL that corresponds to the message
+  ## @param Message/Error constant
   ## @param Hashref of extra params that need to go as GET params
   ##  - error: if this key is provided, it will change the message as error instead of setting 'error' as a GET parameter
   my ($self, $message, $params) = @_;
   $params ||= {};
   my $param = delete $params->{'error'} ? 'err' : 'msg';
-  return $self->ajax_redirect($self->hub->url({%$params, 'action' => 'Message', $param => $message}));
+  return $self->ajax_redirect($self->hub->url({%$params, 'action' => 'Message', $param => $self->object->get_message_code($message)}));
 }
 
 sub redirect_login {
   ## Redirects to login page with an optionally displayed message
-  ## @param Message code if any error
+  ## @param Error constant in case of any error
   ## @param Hashref of extra GET params
-  my ($self, $message, $params) = @_;
-  return $self->ajax_redirect($self->hub->url({%{$params || {}}, 'action' => 'Login', $message ? ('err' => $message) : ()}));
+  my ($self, $error, $params) = @_;
+  return $self->ajax_redirect($self->hub->url({%{$params || {}}, 'action' => 'Login', $error ? ('err' => $self->object->get_message_code($error)) : ()}));
 }
 
 sub redirect_register {
   ## Redirects to registration page with an optionally displayed message
-  ## @param Message code
+  ## @param Error constant in case of any error
   ## @param Hashref of extra GET params
-  my ($self, $message, $params) = @_;
-  return $self->ajax_redirect($self->hub->url({%{$params || {}}, 'action' => 'Register', $message ? ('err' => $message) : ()}));
+  my ($self, $error, $params) = @_;
+  return $self->ajax_redirect($self->hub->url({%{$params || {}}, 'action' => 'Register', $error ? ('err' => $self->object->get_message_code($error)) : ()}));
 }
 
-sub redirect_link_existing_account {
-  ## Redirects to a page where user can input an email address to link existing user account with the given login account
-  ## @param Login account
-  ## @param Message code if any
-  my ($self, $login, $message) = @_;
+sub redirect_openid_register {
+  ## Redirects to a page where user can verify (or input) an email address to register with OpenID
+  ## @param Login object
+  ## @param Error constant if any
+  my ($self, $login, $error) = @_;
 
-  return $self->ajax_redirect($self->hub->url({'type' => 'Account', 'action' => 'OpenIDRegister', 'code' => $login->get_url_code, $message ? ('err' => $message) : ()}));
+  return $self->ajax_redirect($self->hub->url({
+    'type'      => 'Account',
+    'action'    => 'OpenID',
+    'function'  => 'Register',
+    'code'      => $login->get_url_code,
+    $error ? (
+    'err'       => $self->object->get_message_code($error)
+    ) : ()
+  }));
 }
 
 sub validate_fields {
