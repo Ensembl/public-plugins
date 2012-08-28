@@ -84,25 +84,23 @@ sub verify_password {
   ## @param Password string
   ## @return Boolean accordingly
   my ($self, $password) = @_;
-  warn "Password verification: ".encrypt_password($password)." <> ".$self->password;
+  warn "Password verification:\n".encrypt_password($password)."\n".$self->password."\n-";
   return encrypt_password($password) eq $self->password;
 }
 
 sub activate {
   ## Activates the login object after copying the information about user name, organisation, country it to the related user object (does not save to the database afterwards)
-  my $self = shift;
-  if (my $user = $self->user) {
-    $self->copy_details_to_user($user);
+  ## @param User object (if not already linked to the login)
+  my ($self, $user) = @_;
+  if ($user) {
+    $user->add_logins([ $self ]);
+  } else {
+    $user = $self->user;
   }
+  $self->$_ and !$user->$_ and $user->$_($self->$_) for qw(name organisation country);
+
   $self->reset_salt;
   $self->status('active');
-}
-
-sub copy_details_to_user {
-  ## Copies the information about user name, organisation, country it to the given user object (does not save to the database afterwards)
-  ## @param User object to copy the details to
-  my ($self, $user) = @_;
-  $self->$_ and $user->$_($self->$_) for qw(name organisation country);
 }
 
 1;
