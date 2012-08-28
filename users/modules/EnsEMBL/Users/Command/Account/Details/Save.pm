@@ -15,7 +15,7 @@ sub process {
   my $user    = $hub->user->rose_object;
 
   # validation
-  my $fields = $self->validate_fields({ map {$_ => $hub->param($_)} qw(email name) });
+  my $fields = $self->validate_fields({ map {$_ => $hub->param($_) || ''} qw(email name) });
   if ($fields->{'invalid'}) {
     return $self->ajax_redirect($hub->url({
       'action'    => 'Details',
@@ -33,8 +33,10 @@ sub process {
 
   # send verification email to the new email if email changed
   if ($fields->{'email'} ne $user->email) {
+    $user->new_email($fields->{'email'});
+    $user->save;
     $self->get_mailer->send_change_email_confirmation_email($user->get_local_login || shift(@{$user->find_logins('query' => ['status' => 'active'])}), $fields->{'email'});
-    return $self->redirect_message($object->get_message_code('MESSAGE_VERIFICATION_SENT'), {'email' => $fields->{'email'}});
+    return $self->redirect_message('MESSAGE_VERIFICATION_SENT', {'email' => $fields->{'email'}});
   }
 
   return $self->ajax_redirect($hub->url({'action' => 'Preferences'}));
