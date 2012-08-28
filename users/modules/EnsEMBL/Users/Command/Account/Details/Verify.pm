@@ -11,7 +11,7 @@ use base qw(EnsEMBL::Users::Command::Account);
 sub process {
   my $self    = shift;
   my $object  = $self->object;
-  my $login   = $object->fetch_login_from_url_code or return $self->redirect_message($object->get_message_code('MESSAGE_VERIFICATION_FAILED'), {'error' => 1});
+  my $login   = $object->fetch_login_from_url_code or return $self->redirect_message('MESSAGE_VERIFICATION_FAILED', {'error' => 1});
 
   $object->activate_user_login($login);
   return $self->redirect_after_login($login->user);
