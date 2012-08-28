@@ -15,11 +15,11 @@ sub process {
   my $openid_consumer = $self->get_openid_consumer;
 
   $openid_consumer->handle_server_response(
-    'verified'      => sub { $self->handle_verified_identity(@_);                                                                         },
-    'cancelled'     => sub { $self->redirect_login($object->get_message_code('MESSAGE_OPENID_CANCELLED'), {'provider' => $hub->function}) },
-    'not_openid'    => sub { $self->redirect_login($object->get_message_code('MESSAGE_OPENID_INVALID'));                                  },
-    'setup_needed'  => sub { $self->redirect_login($object->get_message_code('MESSAGE_OPENID_SETUP_NEEDED'));                             },
-    'error'         => sub { $self->redirect_login($object->get_message_code('MESSAGE_OPENID_ERROR'));                                    },
+    'verified'      => sub { $self->handle_verified_identity(@_);                                                       },
+    'cancelled'     => sub { $self->redirect_login('MESSAGE_OPENID_CANCELLED', {'provider' => $hub->param('provider')}) },
+    'not_openid'    => sub { $self->redirect_login('MESSAGE_OPENID_INVALID');                                           },
+    'setup_needed'  => sub { $self->redirect_login('MESSAGE_OPENID_SETUP_NEEDED');                                      },
+    'error'         => sub { $self->redirect_login('MESSAGE_OPENID_ERROR', {'oerr' => $_[1]});                          }
   );
 }
 
@@ -47,7 +47,7 @@ sub handle_verified_identity {
   my $object  = $self->object;
   my $openid  = $verified_identity->url;
   my $login   = $object->fetch_login_account($openid);
-  $email      = $self->validate_fields({'email' => $email})->{'email'} || ''; # just validate the email here, we may throw error later in the code if email is invalid.
+  $email      = $self->validate_fields({'email' => $email || ''})->{'email'} || ''; # just validate the email here, we may throw error later in the code if email is invalid.
 
   # if login account exists - not a first time login
   if ($login) {
@@ -58,11 +58,11 @@ sub handle_verified_identity {
 
       # reset the salt for security reasons
       $login->reset_salt_and_save;
-      return $self->redirect_link_existing_account($login);
+      return $self->redirect_openid_register($login);
     }
 
     # If blocked user
-    return $self->redirect_message($object->get_message_code('MESSAGE_ACCOUNT_BLOCKED')) if $linked_user->status eq 'suspended';
+    return $self->redirect_message('MESSAGE_ACCOUNT_BLOCKED') if $linked_user->status eq 'suspended';
 
     # For successful login
     return $self->redirect_after_login($linked_user) if $login->status eq 'active';
@@ -70,19 +70,19 @@ sub handle_verified_identity {
     # If email provided by openid provider is same as the saved one but user has not verified his email yet, send another verification email
     if ($linked_user->email eq $email) {
       $self->get_mailer->send_verification_email($login);
-      return $self->redirect_message($object->get_message_code('MESSAGE_VERIFICATION_SENT'), {'email' => $email});
+      return $self->redirect_message('MESSAGE_VERIFICATION_SENT', {'email' => $email});
     }
   }
 
   # to continue with registration, we need a valid email
-  return $self->redirect_login($object->get_message_code('MESSAGE_OPENID_EMAIL_MISSING')) unless $email;
+  return $self->redirect_login('MESSAGE_OPENID_EMAIL_MISSING') unless $email;
 
   # for new registration
   $login ||= $object->new_login_account({
     'type'          => 'openid',
     'identity'      => $openid,
     'status'        => 'pending',
-    'provider'      => $hub->function,
+    'provider'      => $hub->param('provider'),
   });
 
   $login->email($email);
