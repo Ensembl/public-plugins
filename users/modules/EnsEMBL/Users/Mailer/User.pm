@@ -80,8 +80,8 @@ sub send_change_email_confirmation_email {
   my $url         = $self->url({
     'species'       => '',
     'type'          => 'Account',
-    'action'        => 'Email',
-    'function'      => 'Change',
+    'action'        => 'Details',
+    'function'      => 'ChangeEmail',
     'code'          => $login->get_url_code,
     'email'         => $new_email
   });
