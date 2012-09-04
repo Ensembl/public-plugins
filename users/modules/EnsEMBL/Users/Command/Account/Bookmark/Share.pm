@@ -5,35 +5,43 @@ package EnsEMBL::Users::Command::Account::Bookmark::Share;
 
 use strict;
 
+use EnsEMBL::Users::Messages qw(MESSAGE_UNKNOWN_ERROR);
+
 use base qw(EnsEMBL::Users::Command::Account);
 
 sub process {
-  my $self          = shift;
-  my $object        = $self->object;
-  my $hub           = $self->hub;
-  my $r_user        = $hub->user->rose_object;
-  my $group_id      = $hub->param('group');
-  my @bookmark_ids  = $hub->param('id');
+  my $self            = shift;
+  my $object          = $self->object;
+  my $hub             = $self->hub;
+  my $r_user          = $hub->user->rose_object;
+  my $group_id        = $hub->param('group');
+  my @bookmark_ids    = $hub->param('id');
 
   if (@bookmark_ids && $group_id) {
 
-    my $bookmarks   = $r_user->find_bookmarks(['record_id' => \@bookmark_ids]);
-    my $membership  = $object->fetch_active_membership_for_user($r_user, $group_id);
-    my $group       = $membership ? $membership->group : undef;
+    my $bookmarks     = $r_user->find_bookmarks(['record_id' => \@bookmark_ids]);
+    my $membership    = $object->fetch_active_membership_for_user($r_user, $group_id);
+    my $group         = $membership ? $membership->group : undef;
+    my $new_bookmarks = [];
 
     if (@$bookmarks && $group) {
       for (@$bookmarks) {
         my $bookmark = $_->clone_and_reset;
-        $bookmark->owner_type($group->RECORD_OWNER_TYPE);
-        $bookmark->owner_id($group->group_id);
+        $bookmark->record_type($group->RECORD_TYPE);
+        $bookmark->record_type_id($group->group_id);
         $bookmark->click(0);
         $bookmark->save(user => $r_user);
+        push @$new_bookmarks, $bookmark;
       }
+
+      ## notify members if needed
+      $self->send_group_sharing_notification_email($group, $new_bookmarks);
+
       return $self->ajax_redirect($hub->url({'action' => 'Groups', 'function' => 'View', 'id' => $group->group_id}));
     }
   }
 
-  return $self->redirect_message('MESSAGE_UNKNOWN_ERROR', {'error' => 1});
+  return $self->redirect_message(MESSAGE_UNKNOWN_ERROR, {'error' => 1});
 }
 
 1;

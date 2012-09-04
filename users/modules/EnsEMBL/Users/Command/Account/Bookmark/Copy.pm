@@ -5,6 +5,8 @@ package EnsEMBL::Users::Command::Account::Bookmark::Copy;
 
 use strict;
 
+use EnsEMBL::Users::Messages qw(MESSAGE_UNKNOWN_ERROR);
+
 use base qw(EnsEMBL::Users::Command::Account);
 
 sub process {
@@ -19,14 +21,14 @@ sub process {
 
     if (my ($bookmark, $owner) = $object->fetch_bookmark_with_owner($bookmark_id, $group_id)) {
       $bookmark = $bookmark->clone_and_reset;
-      $bookmark->owner_type($r_user->RECORD_OWNER_TYPE);
-      $bookmark->owner_id($r_user->user_id);
+      $bookmark->record_type($r_user->RECORD_TYPE);
+      $bookmark->record_type_id($r_user->user_id);
       $bookmark->click(0);
       $bookmark->save('user' => $r_user);
       return $self->ajax_redirect($hub->url({'action' => 'Bookmark', 'function' => ''}));
     }
   }
-  return $self->redirect_message('MESSAGE_UNKNOWN_ERROR', {'error' => 1});
+  return $self->redirect_message(MESSAGE_UNKNOWN_ERROR, {'error' => 1});
 }
 
 1;

@@ -2,6 +2,8 @@ package EnsEMBL::Users::Command::Account::Bookmark::Save;
 
 use strict;
 
+use EnsEMBL::Users::Messages qw(MESSAGE_BOOKMARK_NOT_FOUND);
+
 use base qw(EnsEMBL::Users::Command::Account);
 
 sub process {
@@ -14,13 +16,13 @@ sub process {
     $bookmark->$_($hub->param($_)) for qw(name shortname url object);
     $bookmark->save('user' => $hub->user);
 
-    return $self->ajax_redirect($hub->url($owner->RECORD_OWNER_TYPE eq 'group'
+    return $self->ajax_redirect($hub->url($owner->RECORD_TYPE eq 'group'
       ? {'action' => 'Groups',    'function' => 'View', 'id' => $owner->group_id}
       : {'action' => 'Bookmark',  'function' => ''}
     ));
 
   } else {
-    return $self->redirect_message('MESSAGE_BOOKMARK_NOT_FOUND', {'error' => 1});
+    return $self->redirect_message(MESSAGE_BOOKMARK_NOT_FOUND, {'error' => 1});
   }
 }
 
