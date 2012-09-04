@@ -5,22 +5,31 @@ package EnsEMBL::ORM::Rose::MetaData;
 
 use strict;
 
-use EnsEMBL::ORM::Rose::ExternalRelationship;
 use EnsEMBL::ORM::Rose::VirtualColumn;
+use EnsEMBL::ORM::Rose::VirtualRelationship;
+use EnsEMBL::ORM::Rose::ExternalRelationship;
+
 use EnsEMBL::Web::Exceptions;
 
 use base qw(Rose::DB::Object::Metadata);
 
 use constant {
   EXTERNAL_RELATIONS_KEY_NAME => '__ens_external_relationships',
-  VIRTUAL_COLUMNS_KEY_NAME    => '__ens_virtual_columns'
+  VIRTUAL_COLUMNS_KEY_NAME    => '__ens_virtual_columns',
+  VIRTUAL_RELATIONS_KEY_NAME  => '__ens_virtual_relationships'
 };
 
 sub setup {
   ## @overrides
-  ## Calls modify_methods method on datastructure based columns after doing the setup
-  my $self = shift;
-  return unless $self->SUPER::setup(@_);
+  my ($self, %params) = @_;
+  my @args;
+
+  ## sort arguments to keep table name, columns and relationships before any other keys (to make sure virtual columns, virtual relationships are initiated after columns and relationships)
+  splice @args, ($_ =~ /^(table|columns|relationships)$/ ? 0 : @args), 0, $_, $params{$_} for keys %params;
+
+  return unless $self->SUPER::setup(@args);
+
+  ## Call modify_methods method on datastructure based columns
   $_->isa('EnsEMBL::ORM::Rose::DataStructure') and $_->modify_methods for $self->columns;
   return 1;
 }
@@ -50,8 +59,14 @@ sub virtual_columns {
       throw exception('ORMException::DataMapMissing', "No datamap column with name '$detail->{'column'}' found. Either this column name is invalid or columns need to be added before adding virtual columns") unless $datamap;
       throw exception('ORMException::InvalidDataMap', "Column '$detail->{'column'}' is required to be of type 'datamap' for adding virtual columns to it.") unless $datamap->type eq 'datamap';
 
-      my $column  = EnsEMBL::ORM::Rose::VirtualColumn->new({'name' => $col, 'column' => $datamap, 'alias' => $detail->{'alias'}, 'parent' => $self});
-      $column->make_methods('target_class' => $object_class);
+      my $column  = EnsEMBL::ORM::Rose::VirtualColumn->new({
+        'name'    => $col,
+        'column'  => $datamap,
+        'parent'  => $self,
+        'alias'   => $detail->{'alias'} || undef,
+        'default' => defined $detail->{'default'} ? $detail->{'default'} : undef
+      });
+      $column->make_methods;
 
       push @{$self->{$key_name}}, $column;
     }
@@ -117,7 +132,6 @@ sub external_relationship {
   my $key_name     = $self->EXTERNAL_RELATIONS_KEY_NAME;
   
   if ($params) {
-    no strict qw(refs);
     my $relationship = $self->{$key_name}{$relationship_name} = EnsEMBL::ORM::Rose::ExternalRelationship->new({'name', $relationship_name, %$params});
     $relationship->make_methods('target_class' => $object_class);
   }
@@ -137,6 +151,43 @@ sub external_relationships {
     $self->external_relationship($name, $settings);
   }
   return [values %{$self->{$self->EXTERNAL_RELATIONS_KEY_NAME} ||= {}}];
+}
+
+sub virtual_relationships {
+  ## Gets/sets virtual relationships - relationships that actually fall under a common relationship, but have a condition that is used to differentiate them
+  ## @param Relationship names and details (hashref containtng key 'relationship' and 'condition' - both required) as a hash in arrayref syntax
+  ## @return Array and Arrayref of the virtual relationship objects in list and scalar context respectively
+  my $self      = shift;
+  my $key_name  = $self->VIRTUAL_RELATIONS_KEY_NAME;
+
+  if (@_) {
+
+    my $object_class    = $self->class;
+    $self->{$key_name}  = [];
+
+    while (my ($relationship_name, $detail) = splice @_, 0, 2) {
+
+      # only a datamap column can have virtual columns
+      my $relationship = $self->relationship($detail->{'relationship'});
+      throw exception('ORMException::RelationshipMissing', "No relationship with name '$detail->{'relationship'}' found. Either this relationship name is invalid or relationships need to be added before adding virtual relationships") unless $relationship;
+      throw exception('ORMException::InvalidRelationshipType', "Relationship '$detail->{'relationship'}' is required to be of type '* to many' for categorising it into virtual relationships.") unless $relationship->type =~ /to many$/;
+
+      my $virtual_relationship = EnsEMBL::ORM::Rose::VirtualRelationship->new({'name' => $relationship_name, 'relationship' => $relationship, 'condition' => $detail->{'condition'}, 'parent' => $self});
+      $virtual_relationship->make_methods;
+
+      push @{$self->{$key_name}}, $virtual_relationship;
+    }
+  }
+  return wantarray ? @{$self->{$key_name} || []} : [ map {$_} @{$self->{$key_name} || []} ];
+}
+
+sub virtual_relationship {
+  ## Gets the virtual relationship object for the given name
+  ## @param   Virtual relationship name
+  ## @return  Virtual relationship object if found, undef otherwise
+  my ($self, $relation_name) = @_;
+  $_->name eq $relation_name and return $_ for @{$self->{$self->VIRTUAL_RELATIONS_KEY_NAME}};
+  return undef;
 }
 
 1;
