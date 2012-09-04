@@ -29,7 +29,16 @@ __PACKAGE__->meta->column_type_class(       ## Add extra column type(s)
   'datamap'       => 'EnsEMBL::ORM::Rose::DataMap',
 );
 
+sub new {
+  ## @overrides
+  ## Provides default values to virtual columns after creating a new object
+  my $self = shift->SUPER::new(@_);
+  $_->default_exists and $self->virtual_column_value($_, $_->default) for $self->meta->virtual_columns;
+  return $self;
+}
+
 sub save {
+  ## @overrides
   ## Tries to save the object, but does not exit perl
   ## If any error occours, object->error can return the string values of the error
   ## @return Object if saved successfully, undef otherwise
@@ -203,6 +212,50 @@ sub external_relationship_value {
   ) : [];
 
   return $self->{$key_name}{$r_name} = $r_is_singular ? shift @$value : $value;
+}
+
+sub virtual_relationship_value {
+  ## Get/set a virtual relationships value
+  ## @param VirtualRelationship object or name
+  ## @param Value to be set (optional) - Rose object or foreign key value (or arrayref of either for multiple values)
+  ## @return Arrayref related rose object
+  my $self          = shift;
+  my $relation_name = shift;
+
+  my $virtual_rel   = ref $relation_name ? $relation_name : $self->meta->virtual_relationship($relation_name) or throw exception('ORMException::UnknownRelationshipException', sprintf(q(No virtual relationship with name '%s' found for %s), $relation_name, ref $self));
+  my $actual_rel    = $virtual_rel->relationship;
+  my $condition     = $virtual_rel->condition;
+  my $all_values    = $self->relationship_value($actual_rel);
+
+  if (@_) {
+    my $values      = [];
+    
+    # filter aside all the values that do not categorise as this virtual column
+    VALUE:
+    foreach my $value (@$all_values) {
+      $value->column_value($_) ne $condition->{$_} and push @$values, $value and next VALUE for keys %$condition;
+    }
+
+    # for all new values, add the condition values if value is an unsaved hashref
+    foreach my $value (ref $_[0] eq 'ARRAY' ? @{$_[0]} : $_[0]) {
+      if (ref $value eq 'HASH') {
+        $value = { %$value, %$condition };
+      } else {
+        $value->column_value($_, $condition->{$_}) for keys %$condition;
+      }
+      push @$values, $value;
+    }
+    $all_values = $self->relationship_value($actual_rel, $values);
+  }
+
+  my $values = [];
+  VALUE:
+  foreach my $value (@$all_values) {
+    $value->column_value($_) ne $condition->{$_} and next VALUE for keys %$condition;
+    push @$values, $value;
+  }
+
+  return $values;
 }
 
 sub field_value {
