@@ -5,6 +5,8 @@ package EnsEMBL::Users::Component::Account::Groups::Invite;
 
 use strict;
 
+use EnsEMBL::Users::Messages qw(MESSAGE_GROUP_NOT_FOUND);
+
 use base qw(EnsEMBL::Users::Component::Account);
 
 sub content {
@@ -18,7 +20,7 @@ sub content {
   my $html        = '';
 
   if ($group_id && !$adminship) {
-    $html .= $self->render_message('MESSAGE_GROUP_NOT_FOUND', {'error' => 1});
+    $html .= $self->render_message(MESSAGE_GROUP_NOT_FOUND, {'error' => 1});
   }
 
   if ($adminship or @$adminships) {

@@ -6,6 +6,8 @@ package EnsEMBL::Users::Component::Account::OpenID::LinkExisting;
 use strict;
 use warnings;
 
+use EnsEMBL::Users::Messages qw(MESSAGE_URL_EXPIRED);
+
 use base qw(EnsEMBL::Users::Component::Account);
 
 sub caption {
@@ -16,8 +18,8 @@ sub content {
   my $self              = shift;
   my $hub               = $self->hub;
   my $object            = $self->object;
-  my $login             = $object->fetch_login_from_url_code(1) or return $self->render_message('MESSAGE_LOGIN_MISSING', {'error' => 1});
-  my $provider          = $login->provider;
+  my $login             = $object->fetch_login_from_url_code(1) or return $self->render_message(MESSAGE_URL_EXPIRED, {'error' => 1});
+  my $provider          = $login->provider                      or return $self->render_message(MESSAGE_URL_EXPIRED, {'error' => 1});
   my $trusted_provider  = $login->has_trusted_provider;
   my $content           = $self->wrapper_div({'js_panel' => 'AccountForm'});
   my $form              = $content->append_child($self->new_form({'action' => $hub->url({'action' => 'OpenID', 'function' => 'Link'})}));

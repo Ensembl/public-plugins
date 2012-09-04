@@ -6,6 +6,8 @@ package EnsEMBL::Users::Component::Account::OpenID::Authenticate;
 use strict;
 use warnings;
 
+use EnsEMBL::Users::Messages qw(MESSAGE_NO_EXISTING_ACCOUNT MESSAGE_URL_EXPIRED);
+
 use base qw(EnsEMBL::Users::Component::Account);
 
 sub caption {
@@ -16,10 +18,10 @@ sub content {
   my $self              = shift;
   my $hub               = $self->hub;
   my $object            = $self->object;
-  my $email             = $hub->param('email')                    or return $self->render_message('MESSAGE_UNKNOWN_ERROR',        {'error' => 1});
-  my $existing_user     = $object->fetch_user_by_email($email)    or return $self->render_message('MESSAGE_NO_EXISTING_ACCOUNT',  {'error' => 1});
-  my $login             = $object->fetch_login_from_url_code(1)   or return $self->render_message('MESSAGE_LOGIN_MISSING',        {'error' => 1});
-  my $provider          = $login->provider;
+  my $email             = $hub->param('email')                    or return $self->render_message(MESSAGE_URL_EXPIRED,          {'error' => 1});
+  my $existing_user     = $object->fetch_user_by_email($email)    or return $self->render_message(MESSAGE_NO_EXISTING_ACCOUNT,  {'error' => 1});
+  my $login             = $object->fetch_login_from_url_code(1)   or return $self->render_message(MESSAGE_URL_EXPIRED,          {'error' => 1});
+  my $provider          = $login->provider                        or return $self->render_message(MESSAGE_URL_EXPIRED,          {'error' => 1});
   my $site_name         = $self->site_name;
   my $content           = $self->wrapper_div({'js_panel' => 'AccountForm'});
   my $form              = $content->append_child($self->new_form({'action' => $hub->url({'action' => 'OpenID', 'function' => 'Link'})}));
