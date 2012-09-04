@@ -18,7 +18,7 @@ sub content {
     my $form = $self->new_form({'action' => $hub->url({qw(action Bookmark function Save)})});
 
     $form->add_hidden({'name' => 'id',       'value'  => $bookmark->record_id });
-    $form->add_hidden({'name' => 'group',    'value'  => $owner->group_id     }) if $owner->RECORD_OWNER_TYPE eq 'group';
+    $form->add_hidden({'name' => 'group',    'value'  => $owner->group_id     }) if $owner->RECORD_TYPE eq 'group';
     $form->add_hidden({'name' => 'object',   'value'  => $_}) for $hub->referer->{'ENSEMBL_TYPE'};
     $form->add_field({'type'  => 'string',   'name'   => 'name',        'label' => 'Bookmark name',     'value' => $bookmark->name        || $hub->param('name')      || '',  'required' => 1 });
     $form->add_field({'type'  => 'string',   'name'   => 'shortname',   'label' => 'Short description', 'value' => $bookmark->shortname   || $hub->param('shortname') || ''});
