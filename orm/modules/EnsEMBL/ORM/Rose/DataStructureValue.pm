@@ -116,8 +116,7 @@ sub _parse {
 
     ## If any unquoted string still remaining, throw exception
     if ($str_2 =~ /([a-z]+)/i) {
-      $$error_ref = "Unquoted string '$1' found in the datastructure: $str_copy";
-      return;
+      $1 eq 'undef' or $$error_ref = "Unquoted string '$1' found in the datastructure: $str_copy" and return;
     }
 
     ## all checks done, now substitute the strings back in
