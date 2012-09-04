@@ -8,6 +8,8 @@ package EnsEMBL::Users::Component::Account::OpenID::Register;
 use strict;
 use warnings;
 
+use EnsEMBL::Users::Messages qw(MESSAGE_URL_EXPIRED);
+
 use base qw(EnsEMBL::Users::Component::Account);
 
 sub caption {
@@ -19,9 +21,10 @@ sub content {
   my $hub               = $self->hub;
   my $object            = $self->object;
   my $site_name         = $self->site_name;
-  my $login             = $object->fetch_login_from_url_code(1) or return $self->render_message('MESSAGE_LOGIN_MISSING', {'error' => 1});
+  my $login             = $object->fetch_login_from_url_code(1) or return $self->render_message(MESSAGE_URL_EXPIRED, {'error' => 1});
+  my $provider          = $login->provider                      or return $self->render_message(MESSAGE_URL_EXPIRED, {'error' => 1});
   my $login_code        = $login->get_url_code;
-  my $provider          = $login->provider;
+  my $then_param        = $hub->param('then') || '';
   my $trusted_provider  = $login->has_trusted_provider;
   my $content           = $self->wrapper_div({'js_panel' => 'AccountForm'});
   my $form              = $content->append_child($self->new_form({'action' => $hub->url({'action' => 'OpenID', 'function' => 'Add'})}));
@@ -47,6 +50,11 @@ sub content {
     'class'       => '_trusted_provider',
     'value'       => $trusted_provider ? '1' : '0'
   });
+
+  $form->add_hidden({
+    'name'        => 'then',
+    'value'       => $then_param
+  }) if $then_param;
 
   $form->add_field({
     'label'       => 'Login via',
