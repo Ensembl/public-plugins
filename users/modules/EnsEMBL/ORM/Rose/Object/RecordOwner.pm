@@ -9,8 +9,8 @@ use warnings;
 use base qw(EnsEMBL::ORM::Rose::Object::Trackable);
 
 use constant {
-  ROSE_DB_NAME      => 'user',
-  RECORD_OWNER_TYPE => ''
+  ROSE_DB_NAME  => 'user',
+  RECORD_TYPE   => ''
 };
 
 sub create_record {
@@ -21,9 +21,9 @@ sub create_record {
 
   return ($self->add_records([{
     %{$params || {}},
-    'type'        => $type,
-    'owner_id'    => $self->get_primary_key_value,
-    'owner_type'  => $self->RECORD_OWNER_TYPE
+    'type'            => $type,
+    'record_type'     => $self->RECORD_TYPE,
+    'record_type_id'  => $self->get_primary_key_value
   }]))[0];
 }
 
@@ -52,8 +52,8 @@ sub record_relationship_params {
   return {
     'type'        => 'one to many',
     'class'       => 'EnsEMBL::ORM::Rose::Object::Record',
-    'column_map'  => {$foreign_key => 'owner_id'},
-    'join_args'   => [ 'owner_type' => $class->RECORD_OWNER_TYPE ] # join_args key is not documented in Rose, so take care of this if something changes in future
+    'column_map'  => {$foreign_key => 'record_type_id'},
+    'join_args'   => [ 'record_type' => $class->RECORD_TYPE ] # join_args key is not documented in Rose, so take care of this if something changes in future
   };
 }
 

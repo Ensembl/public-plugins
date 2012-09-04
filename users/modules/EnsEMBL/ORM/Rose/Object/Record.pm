@@ -25,37 +25,37 @@ __PACKAGE__->meta->setup(
   table           => 'record',
   columns         => [
     record_id       => {'type' => 'serial',  'primary_key'  => 1,                 'not_null' => 1                       },
-    owner_id        => {'type' => 'integer', 'length'       => 11,                'not_null' => 1                       },
+    record_type     => {'type' => 'enum',    'values'       => [qw(user group)],  'not_null' => 1, 'default' => 'user'  },
+    record_type_id  => {'type' => 'integer', 'length'       => 11,                'not_null' => 1                       },
     type            => {'type' => 'varchar', 'length'       => 255                                                      },
-    owner_type      => {'type' => 'enum',    'values'       => [qw(user group)],  'not_null' => 1, 'default' => 'user'  },
     data            => {'type' => 'datamap', 'trusted'      => 1                                                        }
   ],
 
   virtual_columns => [ map {$_ => {'column' => 'data'}} keys %{{ map { map {$_ => 1} @$_ } values %$VIRTUAL_COLUMNS }} ],
   
-  relationships   => [ # dont forget to add 'owner_type' in the query while fetching record with either of these objects
+  relationships   => [ # TODO - add 'record_type' in the query_args
     user                  => {
       'type'                => 'many to one',
       'class'               => 'EnsEMBL::ORM::Rose::Object::User',
-      'column_map'          => {'owner_id' => 'user_id'},
+      'column_map'          => {'record_type_id' => 'user_id'},
     },
     group                 => {
       'type'                => 'many to one',
       'class'               => 'EnsEMBL::ORM::Rose::Object::Group',
-      'column_map'          => {'owner_id' => 'webgroup_id'},
+      'column_map'          => {'record_type_id' => 'webgroup_id'},
     }
   ]
 );
 
 sub get_invitation_code {
-  ## For invitation record only for owner_type group
+  ## For invitation record only for record_type group
   ## Gets a url code for invitation type group record
   ## @return Code string
   return sprintf('%s-%s', $_->invitation_code, $_->record_id) for @_;
 }
 
 sub reset_invitation_code_and_save {
-  ## For invitation record only for owner_type group
+  ## For invitation record only for record_type group
   ## Resets the code and saves the object
   ## @params Same as save method
   my $self = shift;
