@@ -17,48 +17,11 @@ use EnsEMBL::ORM::Rose::Manager::User;
 
 use base qw(EnsEMBL::Web::Object);
 
-## TODO - move these messages to seperate module and use them as constants
-sub _messages { ## TODO change message texts ## TODO provide error or message heading along with the text
-  my $self  = shift;
-  my $hub   = $self->hub;
-
-  # Message error constants    => code => message string
-  MESSAGE_OPENID_CANCELLED      => 104 => sprintf('Your request to login via %s was cancelled. Please try again, or use one of the alternative login options below.', encode_entities($hub->param('provider') || 'OpenID')),
-  MESSAGE_OPENID_INVALID        => 128 => '_message__OPENID_INVALID',
-  MESSAGE_OPENID_SETUP_NEEDED   => 167 => '_message__OPENID_SETUP_NEEDED',
-  MESSAGE_OPENID_ERROR          => 178 => sprintf('<p>An error happenned while making OpenID request. Please use an alternative login option.</p><p>Error summary: %s</p>', encode_entities($hub->param('oerr') || '')),
-  MESSAGE_OPENID_EMAIL_MISSING  => 189 => '_message__OPENID_EMAIL_MISSING',
-  MESSAGE_EMAIL_NOT_FOUND       => 206 => 'The email address provided is not recognised. Please try again.',
-  MESSAGE_PASSWORD_WRONG        => 247 => 'The password provided is invalid. Please try again.',
-  MESSAGE_PASSWORD_INVALID      => 272 => 'Password needs to be atleast 6 characters long.',
-  MESSAGE_PASSWORD_MISMATCH     => 289 => 'The passwords do not match. Please try again.',
-  MESSAGE_ALREADY_REGISTERED    => 297 => sprintf('The email address provided seems to be already registered. Please try to login with the email, or request to <a href="%s">retrieve your password</a> if you have lost one.', $hub->url({'action' => 'Password', 'function' => 'Lost', 'email' => $hub->param('email')})),
-  MESSAGE_VERIFICATION_FAILED   => 337 => 'The email address could not be verified.',
-  MESSAGE_VERIFICATION_PENDING  => 351 => '_message__VERIFICATION_PENDING',
-  MESSAGE_LOGIN_MISSING         => 436 => '_message__LOGIN_MISSING',
-  MESSAGE_EMAIL_INVALID         => 492 => 'Please enter a valid email address',
-  MESSAGE_EMAILS_INVALID        => 510 => sprintf('Invalid email address: %s', encode_entities($hub->param('invalids') || '')),
-  MESSAGE_NAME_MISSING          => 543 => 'Please provide a name',
-  MESSAGE_ACCOUNT_BLOCKED       => 563 => 'Your account seems to be blocked. Please contact the helpdesk in case you need any help.',
-  MESSAGE_VERIFICATION_SENT     => 528 => sprintf(q(A verification email has been sent to the email address '%s'. Please go to your inbox and click on the link provided in the email.), encode_entities($hub->param('email'))),
-  MESSAGE_PASSWORD_EMAIL_SENT   => 602 => sprintf(q(An email has been sent to the email address '%s'. Please go to your inbox and follow the instructions to reset your password provided in the email.), encode_entities($hub->param('email'))),
-  MESSAGE_EMAIL_CHANGED         => 645 => sprintf(q(You email address on our records has been successfully changed. Please <a href="%s">%s</a> to continue.), $hub->url({'action' => 'Preferences'}), $hub->user ? 'click here' : 'login'),
-  MESSAGE_CANT_DELETE_LOGIN     => 691 => 'You can not delete the only login option you have to access your account.',
-  MESSAGE_GROUP_NOT_FOUND       => 713 => 'Sorry, we could not find the specified group. Either the group does not exist or is inactive or is inaccessible to you for the action selected.',
-  MESSAGE_GROUP_INVITATION_SENT => 722 => sprintf(q{Invitation for the group sent successfully to the following email(s): %s}, encode_entities($hub->param('emails'))),
-  MESSAGE_CANT_DEMOTE_ADMIN     => 754 => 'Sorry, you can not demote yourself as you seem to be the only administrator of this group.',
-  MESSAGE_BOOKMARK_NOT_FOUND    => 782 => 'Sorry, we could not find the specified bookmark.',
-  MESSAGE_CANT_DELETE_BOOKMARK  => 789 => 'You do not seem to have the right to delete this bookmark.',
-  MESSAGE_NO_EXISTING_ACCOUNT   => 802 => sprintf(q(No existing account was found for the email address provided. Please verify the email address again, or to create a new account, please <a href="%s">click here</a>), $hub->url({'action' => 'OpenID', 'function' => 'Register', 'code' => $hub->param('code')})),
-  MESSAGE_URL_EXPIRED           => 815 => 'The link you clicked to reach here has been expired.',
-  MESSAGE_UNKNOWN_ERROR         => 952 => 'An unknown error occurred. Please try again or contact the help desk.'
-}
-
 sub caption               { return 'Your Account';                                                        }
 sub short_caption         { return 'Your Account';                                                        }
-sub default_action        { return $_[0]->hub->user ? 'Preferences' : 'Login'                             }
+sub default_action        { return $_[0]->hub->user ? 'Preferences' : 'Login';                            }
 
-sub openid_providers      { return [ map {$_} @{shift->hub->species_defs->OPENID_PROVIDERS} ];            } ## TODO do I need to map?
+sub openid_providers      { return $_[0]->deepcopy($_[0]->hub->species_defs->OPENID_PROVIDERS);           }
 sub get_root_url          { return $_[0]->{'_root_url'} ||= $_[0]->hub->species_defs->ENSEMBL_BASE_URL;   }
 
 sub new_login_account     { return EnsEMBL::ORM::Rose::Manager::Login->create_empty_object($_[1]);        }
@@ -195,44 +158,6 @@ sub activate_user_login {
   $login->activate;
   $user->save;
   $login->save;
-}
-
-sub get_group_types {
-  ## Gets the type of groups with the display text
-  return {
-    'open'          => 'Open - any user can see and join this group.',
-    'restricted'    => 'Restricted - any user can see this group, but can join only if an administrator sends him an invitation or approves his request.',
-    'private'       => 'Private - a user can not see this group, and can only join it if an administrator sends him a request.'
-  };
-}
-
-sub get_notification_types {
-  ## Gets the type of notifications settings saved in the db for a group admin
-  return {
-    'notify_join'   => 'Email me when someone joins the group',
-    'notify_edit'   => 'Email me when someone edits the group information',
-    'notify_share'  => 'Email me when someone shares something with the group'
-  };
-}
-
-sub get_message {
-  ## Returns the message string for a given code
-  ## @param Numeric code (or error constant) for the message
-  ## @return HTML String message
-  my ($self, $code)   = @_;
-  my $hub             = $self->hub;
-  my @messages        = $self->_messages;
-  my $index_to_match  = $code =~ /^[0-9]+$/ ? 1 : 0;
-  $messages[$index_to_match] eq $code and return ref $messages[2] eq 'CODE' ? $messages[2]->($self) : $messages[2] or splice @messages, 0, 3 while @messages;
-}
-
-sub get_message_code {
-  ## Returns the code of the message
-  ## @param Message keyword as in &_messages
-  ## @return code for url
-  my ($self, $key)  = @_;
-  my @messages      = $self->_messages;
-  $messages[0] eq $key and return $messages[1] or splice @messages, 0, 3 while @messages;
 }
 
 sub is_inline_request {
