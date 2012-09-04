@@ -5,27 +5,41 @@ Ensembl.Panel.Masthead = Ensembl.Panel.Masthead.extend({
     var panel = this;
     this.base();
 
-    this.elLk.accountLink     = $('._accounts_link', this.el).bind({
+    var hideDropdown = function() {
+      panel.toggleAccountsDropdown(false);
+      $(document).off('click', hideDropdown);
+    }
+
+    this.elLk.accountLink = this.el.find('._accounts_link').on({
       'click': function(event) {
         event.preventDefault();
-        panel.toggleAccountsDropdown(!$(this).hasClass('selected'));
+        if (!$(this).hasClass('selected')) {
+          event.stopPropagation();
+          panel.toggleAccountsDropdown(true);
+          $(document).on('click', hideDropdown);
+        }
       }
     });
 
-    this.elLk.accountDropdown = $('._accounts_dropdown', this.el).find('a').bind({
-      'click': function() {
-        panel.toggleAccountsDropdown(false);
+    this.elLk.accountDropdown = this.el.find('._accounts_dropdown').on({
+      'click': function(event) {
+        if (event.target.nodeName !== 'A') {
+          event.stopPropagation();
+        }
       }
-    }).end();
+    }).find('a').on('click', hideDropdown).end();
   },
 
   toggleAccountsDropdown: function(flag) {
     this.elLk.accountLink.toggleClass('selected', flag);
     this.elLk.accountDropdown.toggle(flag);
     if (flag && !this.elLk.accountDropdown.data('initiated')) {
-      this.elLk.accountDropdown.data('initiated', true).children('p').each(function() {
-        if ($(this).height() < $(this).children().first().height()) {
-          this.className = 'acc-bookmark-overflow';
+      this.elLk.accountDropdown.data('initiated', true).find('p').each(function() {
+        var p = $(this);
+        var checkHeight = p.children('a').hide().end().append('<a>abc</a>').height();
+        p.children('a').last().remove().end().show();
+        if (p.height() > checkHeight) {
+          p.addClass('acc-bookmark-overflow');
         }
       });
     }
