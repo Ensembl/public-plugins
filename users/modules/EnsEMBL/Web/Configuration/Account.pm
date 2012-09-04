@@ -23,7 +23,7 @@ sub set_default_action {
 sub user_tree { return 1; }
 
 sub user_populate_tree {
-
+  ## TODO
   my $self = shift;
   my $hub = $self->hub;  
 
@@ -98,14 +98,6 @@ sub user_populate_tree {
 #       { 'no_menu_entry' => 1, 'command' => 'EnsEMBL::Web::Command::Account::Interface::Annotation',
 #         'filters' => [qw(Owner)]}
 #     );
-#     $self->create_node( 'Bookmark', '', [],
-#       { 'no_menu_entry' => 1, 'command' => 'EnsEMBL::Web::Command::Account::Interface::Bookmark',
-#         'filters' => [qw(Owner)]}
-#     );
-#     $self->create_node( 'UseBookmark', '', [],
-#       { 'no_menu_entry' => 1, 'command' => 'EnsEMBL::Web::Command::Account::UseBookmark',
-#         'filters' => [qw(Owner)]}
-#     );
 #     $self->create_node( 'Configuration', '', [],
 #       { 'no_menu_entry' => 1, 'command' => 'EnsEMBL::Web::Command::Account::Configuration',
 #         'filters' => [qw(Owner)]}
@@ -118,58 +110,12 @@ sub user_populate_tree {
 #       { 'no_menu_entry' => 1, 'command' => 'EnsEMBL::Web::Command::Account::SetConfig',
 #         'filters' => [qw(Owner)]}
 #     );
-#     $self->create_node( 'Newsfilter', '', [],
-#       { 'no_menu_entry' => 1, 'command' => 'EnsEMBL::Web::Command::Account::Interface::Newsfilter',
-#         'filters' => [qw(Owner)]}
-#     );
-#     $self->create_node( 'ClearHistory', '', [],
-#       { 'no_menu_entry' => 1, 'command' => 'EnsEMBL::Web::Command::Account::ClearHistory',
-#         'filters' => [qw(Owner)]}
-#     );
-#     ## 1b. Group membership
-#     $self->create_node( 'SelectGroup', '',
-#       [qw(select_group EnsEMBL::Web::Component::Account::SelectGroup)],
-#       { 'no_menu_entry' => 1 }
-#     );
-#     $self->create_node( 'ShareRecord', '',
-#       [], { 'command' => 'EnsEMBL::Web::Command::ShareRecord',
-#       'no_menu_entry' => 1 }
-#     );
-#     $self->create_node( 'Unsubscribe', '', [],
-#       { 'no_menu_entry' => 1, 'command' => 'EnsEMBL::Web::Command::Account::Unsubscribe',
-#         'filters' => [qw(Member)]}
-#     );
-#     ## 2. Group admin
-#     ## 2a. Group details
-#     $self->create_node( 'ManageGroup', '',
-#       [qw(manage_group EnsEMBL::Web::Component::Account::ManageGroup)],
-#       { 'no_menu_entry' => 1 }
-#     );
-#     $self->create_node( 'Group', '', [],
-#       { 'no_menu_entry' => 1, 'command' => 'EnsEMBL::Web::Command::Account::Interface::Group',
-#         'filters' => [qw(Admin)]}
-#     );
-#     ## 2b. Group members
-#     $self->create_node( 'Invite', '', [],
-#       { 'no_menu_entry' => 1, 'command' => 'EnsEMBL::Web::Command::Account::Invite',
-#         'filters' => [qw(Admin)]}
-#     );
-#     $self->create_node( 'RemoveInvitation', '', [],
-#       { 'no_menu_entry' => 1, 'command' => 'EnsEMBL::Web::Command::Account::RemoveInvitation',
-#         'filters' => [qw(Admin)]}
-#     );
-#     $self->create_node( 'RemoveMember', '', [],
-#       { 'no_menu_entry' => 1, 'command' => 'EnsEMBL::Web::Command::Account::RemoveMember',
-#         'filters' => [qw(Admin)]}
-#     );
-#     $self->create_node( 'ChangeLevel', '', [],
-#       { 'no_menu_entry' => 1, 'command' => 'EnsEMBL::Web::Command::Account::ChangeLevel',
-#         'filters' => [qw(Admin)]}
-#     );
-#     $self->create_node( 'ChangeStatus', '', [],
-#       { 'no_menu_entry' => 1, 'command' => 'EnsEMBL::Web::Command::Account::ChangeStatus',
-#         'filters' => [qw(Admin)]}
-#     );
+
+
+
+
+
+
 #   }  
 # }
 
@@ -180,6 +126,7 @@ sub populate_tree {
   my $action    = $hub->action;
   my $function  = $hub->function;
 
+  ## PAGES FOR LOGGED IN USER ONLY
   if ($user) {
 
     # main preferences page to view all settings with links to edit individual detail, group, bookmark etc
@@ -188,7 +135,6 @@ sub populate_tree {
       'view_details'      =>  'EnsEMBL::Users::Component::Account::Details::View',
       'view_groups'       =>  'EnsEMBL::Users::Component::Account::Groups::ViewAll',
       'view_bookmarks'    =>  'EnsEMBL::Users::Component::Account::Bookmark::View',
-#       'view_newsfilter'   =>  'EnsEMBL::Users::Component::Account::Newsfilter::View'
     ], { 'availability'   =>  1 });
 
     # page to view user details
@@ -238,7 +184,6 @@ sub populate_tree {
       'add_group'         =>  'EnsEMBL::Users::Component::Account::Groups::Invite'
     ], { 'availability'   =>  1 }));
 
-
     # page to view user bookmarks
     my $bookmarks_menu = $preference_menu->append($self->create_node('Bookmark', 'My Bookmarks', [
       'view_bookmarks'    =>  'EnsEMBL::Users::Component::Account::Bookmark::View'
@@ -259,65 +204,26 @@ sub populate_tree {
       'share_bookmark'    =>  'EnsEMBL::Users::Component::Account::Share::Bookmark'
     ], { 'availability'   =>  1 }));
 
-
-
-
-#     # page to view user newsfilter
-#     my $newsfilter_menu = $preference_menu->append($self->create_node('Newsfilter', 'My Newsfilter', [
-#       'view_newsfilter'   =>  'EnsEMBL::Users::Component::Account::Newsfilter::View'
-#     ], { 'availability'   =>  1 }));
-# 
-#     # page to edit a newsfilter
-#     $newsfilter_menu->append($self->create_node('Newsfilter/Edit', 'Edit newsfilter', [
-#       'edit_newsfilter'   =>  'EnsEMBL::Users::Component::Account::Newsfilter::AddEdit'
-#     ], { 'no_menu_entry'  =>  1 }));
-# 
-#     # page to add a newsfilter
-#     $newsfilter_menu->append($self->create_node('Newsfilter/Add', 'Create new newsfilter', [
-#       'add_newsfilter'    =>  'EnsEMBL::Users::Component::Account::Newsfilter::AddEdit'
-#     ], { 'availability'   =>  1 }));
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     # commands to save and reset favourites species
     $self->create_node("Favourites/$_",   '', [], { 'no_menu_entry' => 1, 'command' => "EnsEMBL::Users::Command::Account::Favourites::$_" }) for qw(Save Reset);
 
-    # command to save the edited user details
-    $self->create_node('Details/Save',    '', [], { 'no_menu_entry' => 1, 'command' => 'EnsEMBL::Users::Command::Account::Details::Save'  });
+    # command to clear user browsing history shown in tabs
+    $self->create_node('ClearHistory',    '', [], { 'no_menu_entry' => 1, 'command' => 'EnsEMBL::Users::Command::Account::ClearHistory'   });
 
-    # command to save a bookmark
-    $self->create_node('Bookmark/Save',   '', [], { 'no_menu_entry' => 1, 'command' => 'EnsEMBL::Users::Command::Account::Bookmark::Save' });
+    # commands to save the edited user details and to remove any linked login account from the user account
+    $self->create_node("Details/$_",      '', [], { 'no_menu_entry' => 1, 'command' => "EnsEMBL::Users::Command::Account::Details::$_"    }) for qw(Save RemoveLogin);
 
-    # command to removed any linked login account from the user accoubt
-    $self->create_node('RemoveLogin',     '', [], { 'no_menu_entry' => 1, 'command' => 'EnsEMBL::Users::Command::Account::RemoveLogin'    });
+    # commands to save, use and remove a bookmark
+    $self->create_node("Bookmark/$_",     '', [], { 'no_menu_entry' => 1, 'command' => "EnsEMBL::Users::Command::Account::Bookmark::$_"   }) for qw(Save Use Remove Share Copy);
 
     # commands to save, join, send invite for or delete a group
     $self->create_node("Group/$_",        '', [], { 'no_menu_entry' => 1, 'command' => "EnsEMBL::Users::Command::Account::Group::$_"      }) for qw(Save Join Invite Delete);
 
     # command to make changes to a membership object
-    $self->create_node("Membership/$_",   '', [], { 'no_menu_entry' => 1, 'command' => "EnsEMBL::Users::Command::Account::Membership::$_" }) for (qw(Accept Decline BlockGroup Allow Ignore BlockUser Remove Unjoin Change));
+    $self->create_node("Membership/$_",   '', [], { 'no_menu_entry' => 1, 'command' => "EnsEMBL::Users::Command::Account::Membership::$_" }) for (qw(Accept Decline BlockGroup Allow Ignore BlockUser Remove Unjoin Change Create));
 
+
+  ## PAGES AVAILABLE ONLY WHEN NO USER LOGGED IN
   } else {
 
     # page to display login form and openid login options 
@@ -341,22 +247,36 @@ sub populate_tree {
     ], { 'availability' => 1 });
 
     # page displayed when user logs in to the site for the first time via openid to ask him some extra registration info
-    $self->create_node('OpenIDRegister', '', [
+    $self->create_node('OpenID/Register', '', [
       'message'     =>  'EnsEMBL::Users::Component::Account::Message',
       'register'    =>  'EnsEMBL::Users::Component::Account::OpenID::Register'
     ], { 'no_menu_entry' => 1  });
 
-    $self->create_node( 'Confirmed',          '', [], { 'no_menu_entry' => 1, 'command' => 'EnsEMBL::Users::Command::Account::PasswordSave'     }); #intentionally kept same as Password/Save
+    # page displayed when user logs in to the site for the first time via openid to ask provide email address if he already has an account on ensembl
+    $self->create_node('OpenID/LinkExisting', '', [
+      'message'     =>  'EnsEMBL::Users::Component::Account::Message',
+      'register'    =>  'EnsEMBL::Users::Component::Account::OpenID::LinkExisting'
+    ], { 'no_menu_entry' => 1  });
+
+    # page displayed to ask the user to choose a way to authenticate his account when user logs in to the site for the first time via openid to asks email to link existing account
+    $self->create_node('OpenID/Authenticate', '', [
+      'message'     =>  'EnsEMBL::Users::Component::Account::Message',
+      'register'    =>  'EnsEMBL::Users::Component::Account::OpenID::Authenticate'
+    ], { 'no_menu_entry' => 1  });
 
 
-    $self->create_node( 'User/Add',           '', [], { 'no_menu_entry' => 1, 'command' => 'EnsEMBL::Users::Command::Account::UserAdd'          });
-    $self->create_node( 'Password/Retrieve',  '', [], { 'no_menu_entry' => 1, 'command' => 'EnsEMBL::Users::Command::Account::PasswordRetrieve' });
-    $self->create_node( 'User/Authenticate',  '', [], { 'no_menu_entry' => 1, 'command' => 'EnsEMBL::Users::Command::Account::UserAuthenticate' });
-    $self->create_node( 'OpenIDResponse',     '', [], { 'no_menu_entry' => 1, 'command' => 'EnsEMBL::Users::Command::Account::OpenID::Response' });
-    $self->create_node( 'OpenIDRequest',      '', [], { 'no_menu_entry' => 1, 'command' => 'EnsEMBL::Users::Command::Account::OpenID::Request'  });
-    $self->create_node( 'LinkAccount',        '', [], { 'no_menu_entry' => 1, 'command' => 'EnsEMBL::Users::Command::Account::LinkAccount'      });
-    $self->create_node( 'Verify',             '', [], { 'no_menu_entry' => 1, 'command' => 'EnsEMBL::Users::Command::Account::Details::Verify'  });
+    # Command to add (register) a new user, and to authenticate an existing user
+    $self->create_node( "User/$_",            '', [], { 'no_menu_entry' => 1, 'command' => "EnsEMBL::Users::Command::Account::User::$_"           }) for qw(Add Authenticate);
+
+    # Command to retrieve lost password
+    $self->create_node( 'Password/Retrieve',  '', [], { 'no_menu_entry' => 1, 'command' => 'EnsEMBL::Users::Command::Account::Password::Retrieve' });
+
+    # OpenID related commands - command to make request to openid provider, command to handle response from the provider, command to add a new openid user
+    $self->create_node( "OpenID/$_",          '', [], { 'no_menu_entry' => 1, 'command' => "EnsEMBL::Users::Command::Account::OpenID::$_"         }) for qw(Request Response);
+    $self->create_node( "OpenID/$_",          '', [], { 'no_menu_entry' => 1, 'command' => 'EnsEMBL::Users::Command::Account::OpenID::Add'        }) for qw(Add Link);
   }
+
+  ## PAGES AVAILABLE ALWAYS - INDEPENDENT OF WHETHER THE USER IS LOGGED IN OR NOT
 
   # page displayed for change password form
   $self->create_node('Password/Change', 'Change Password', [
@@ -364,23 +284,25 @@ sub populate_tree {
     'password'    =>  'EnsEMBL::Users::Component::Account::Password::Change'
   ], { 'no_menu_entry' => 1 });
 
-  $self->create_node( 'Password/Save',      '', [], { 'no_menu_entry' => 1, 'command' => 'EnsEMBL::Users::Command::Account::PasswordSave'     });
-
-  # command to change the email after the user clicks on the verification email sent to his new address
-  $self->create_node( 'Email/Change',       '', [], { 'no_menu_entry' => 1, 'command' => 'EnsEMBL::Users::Command::Account::Details::ChangeEmail' });
-
   # page displayed with a form to choose a password when user clicks on the link in his email to verify his email
-  $self->create_node('Confirm', '', [
+  $self->create_node('Details/Confirm', '', [
     'message'       =>  'EnsEMBL::Users::Component::Account::Message',
     'confirmemail'  =>  'EnsEMBL::Users::Component::Account::Details::Confirm'
-  ], { 'no_menu_entry' => 1  });
+  ], { 'no_menu_entry' => 1 });
 
+  # page to display generic messages
+  $self->create_node('Message', '', [
+    'message'       =>  'EnsEMBL::Users::Component::Account::Message'
+  ], { 'no_menu_entry' => 1 });
 
+  # Command reached through link in an email to verify email address, command to change the email after the user clicks on the verification email sent to his new address
+  $self->create_node("Details/$_",  '',       [], { 'no_menu_entry' => 1,       'command' => "EnsEMBL::Users::Command::Account::Details::$_"                  }) for qw(Verify ChangeEmail);
 
-  $self->create_node( 'Message',        '', [qw(message EnsEMBL::Users::Component::Account::Message)],        { 'no_menu_entry' => 1 });
+  # Command to confirm user account and save the newly choosen password (intentionally kept same as in Password/Save), command to save password after a password lost request or just a change password request
+  $self->create_node($_,            '',       [], { 'no_menu_entry' => 1,       'command' => 'EnsEMBL::Users::Command::Account::Password::Save'               }) for qw(Confirmed Password/Save);
 
-  $self->create_node( 'Logout', 'Logout', [], { 'command' => 'EnsEMBL::Users::Command::Account::Logout', 'availability' => 1, 'no_menu_entry' => !$user });
-
+  # Generic logout command
+  $self->create_node('Logout',      'Logout', [], { 'no_menu_entry' => !$user,  'command' => 'EnsEMBL::Users::Command::Account::Logout', 'availability' => 1  });
 }
 
 sub tree_cache_key {
