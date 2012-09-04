@@ -5,6 +5,8 @@ package EnsEMBL::Users::Component::Account;
 
 use strict;
 
+use EnsEMBL::Users::Messages qw(get_message);
+
 use base qw(EnsEMBL::Web::Component);
 
 use constant {
@@ -12,6 +14,9 @@ use constant {
   _JS_LINK_SECTION    => '_jinline _jseclink',
   _JS_LINK_SUBSECTION => '_jinline _jsseclink',
   _JS_LINK_FREE       => '_jinline _jfreelink',
+#   _JS_LINK_SECTION    => '_jinline _jseclink',
+#   _JS_LINK_SUBSECTION => '_jinline _jsseclink',
+#   _JS_LINK_FREE       => '_jinline _jfreelink',
   _JS_SECTION         => '_jsec',
   _JS_SUBSECTION      => '_jssec',
   _JS_NOTIFICATION    => '_jnotif',
@@ -54,11 +59,11 @@ sub render_message {
   ##  - back  URL to be provided to the back button, defaults to 'back' param in url (if missed, no back button is displayed)
   my ($self, $code, $params) = @_;
 
-  if (my $message = $self->object->get_message($code)) {
+  if (my ($message, $heading) = reverse get_message($code, $self->hub)) {
 
     return sprintf '<div class="%s"><h3>%s</h3><div class="message-pad">%s</div></div>%s',
       $params->{'error'} ? 'error' : 'info',
-      $params->{'error'} ? 'Error' : 'Message',
+      $heading || ($params->{'error'} ? 'Error' : 'Message'),
       $self->wrap_in_p_tag($message),
       ($params->{'back'} ||= $self->hub->param('back')) ? $self->link_back_button($params->{'back'}) : ''
     ;
@@ -71,11 +76,30 @@ sub get_then_param {
   ## Gets the 'then' param for the url that needs to be followed after the login is done
   ## Use for Login type pages only.
   ## @return URL string, if any, undef otherwise
-  my $self  = shift;
-  my $hub   = $self->hub;
-  my $then  = $hub->param('then') || $hub->referer->{'absolute_url'};
-     $then  = $hub->species_defs->ENSEMBL_BASE_URL.$hub->current_url if $hub->action !~ /^(Login|Register)$/; # if ended up on this page from some 'available for logged-in user only' page for Account type
+  my $self    = shift;
+  my $hub     = $self->hub;
+  my $referer = $hub->referer;
+  my $then    = $hub->param('then') || ($referer->{'external'} ? $referer->{'absolute_url'} : '') || '';
+     $then    = $hub->species_defs->ENSEMBL_BASE_URL.$hub->current_url if $hub->action !~ /^(Login|Register)$/; # if ended up on this page from some 'available for logged-in user only' page for Account type
   return $then;
+}
+
+sub get_group_types {
+  ## Gets the type of groups with the display text
+  return {
+    'open'          => 'Open - any user can see and join this group.',
+    'restricted'    => 'Restricted - any user can see this group, but can join only if an administrator sends him an invitation or approves his request.',
+    'private'       => 'Private - a user can not see this group, and can only join it if an administrator sends him a request.'
+  };
+}
+
+sub get_notification_types {
+  ## Gets the type of notifications settings saved in the db for a group admin
+  return {
+    'notify_join'   => 'Email me when someone joins the group',
+    'notify_edit'   => 'Email me when someone edits the group information',
+    'notify_share'  => 'Email me when someone shares something with the group'
+  };
 }
 
 sub add_user_details_fields {
