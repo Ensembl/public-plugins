@@ -6,6 +6,8 @@ package EnsEMBL::Users::Command::Account::OpenID::Response;
 use strict;
 use warnings;
 
+use EnsEMBL::Users::Messages; #TODO - add the message constants once openid messages are sorted
+
 use base qw(EnsEMBL::Users::Command::Account::OpenID);
 
 sub process {
@@ -16,10 +18,10 @@ sub process {
 
   $openid_consumer->handle_server_response(
     'verified'      => sub { $self->handle_verified_identity(@_);                                                       },
-    'cancelled'     => sub { $self->redirect_login('MESSAGE_OPENID_CANCELLED', {'provider' => $hub->param('provider')}) },
-    'not_openid'    => sub { $self->redirect_login('MESSAGE_OPENID_INVALID');                                           },
-    'setup_needed'  => sub { $self->redirect_login('MESSAGE_OPENID_SETUP_NEEDED');                                      },
-    'error'         => sub { $self->redirect_login('MESSAGE_OPENID_ERROR', {'oerr' => $_[1]});                          }
+    'cancelled'     => sub { $self->redirect_login(MESSAGE_OPENID_CANCELLED, {'provider' => $hub->param('provider')}) },
+    'not_openid'    => sub { $self->redirect_login(MESSAGE_OPENID_INVALID);                                           },
+    'setup_needed'  => sub { $self->redirect_login(MESSAGE_OPENID_SETUP_NEEDED);                                      },
+    'error'         => sub { $self->redirect_login(MESSAGE_OPENID_ERROR, {'oerr' => $_[1]});                          }
   );
 }
 
@@ -62,7 +64,7 @@ sub handle_verified_identity {
     }
 
     # If blocked user
-    return $self->redirect_message('MESSAGE_ACCOUNT_BLOCKED') if $linked_user->status eq 'suspended';
+    return $self->redirect_message(MESSAGE_ACCOUNT_BLOCKED) if $linked_user->status eq 'suspended';
 
     # For successful login
     return $self->redirect_after_login($linked_user) if $login->status eq 'active';
@@ -70,12 +72,13 @@ sub handle_verified_identity {
     # If email provided by openid provider is same as the saved one but user has not verified his email yet, send another verification email
     if ($linked_user->email eq $email) {
       $self->get_mailer->send_verification_email($login);
-      return $self->redirect_message('MESSAGE_VERIFICATION_SENT', {'email' => $email});
+      return $self->redirect_message(MESSAGE_VERIFICATION_SENT, {'email' => $email});
     }
   }
 
   # to continue with registration, we need a valid email
-  return $self->redirect_login('MESSAGE_OPENID_EMAIL_MISSING') unless $email;
+  # very unlikely to happen as the openid server *should not* reply without a valid email
+  return $self->redirect_login(MESSAGE_OPENID_EMAIL_MISSING) unless $email;
 
   # for new registration
   $login ||= $object->new_login_account({

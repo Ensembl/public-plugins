@@ -6,6 +6,8 @@ package EnsEMBL::Users::Command::Account::Group::Delete;
 use strict;
 use warnings;
 
+use EnsEMBL::Users::Messages qw(MESSAGE_UNKNOWN_ERROR MESSAGE_GROUP_NOT_FOUND);
+
 use base qw(EnsEMBL::Users::Command::Account);
 
 sub process {
@@ -36,12 +38,12 @@ sub process {
 
       } else {
 
-        $return_url = {'action' => 'Groups', 'function' => 'View', 'id' => $group_id, 'err' => $object->get_message_code('MESSAGE_UNKNOWN_ERROR')};
+        $return_url = {'action' => 'Groups', 'function' => 'View', 'id' => $group_id, 'err' => MESSAGE_UNKNOWN_ERROR};
       }
     }
   }
 
-  return $self->ajax_redirect($hub->url($return_url || {'action' => 'Groups', 'function' => '', 'err' => $object->get_message_code('MESSAGE_GROUP_NOT_FOUND')}));
+  return $self->ajax_redirect($hub->url($return_url || {'action' => 'Groups', 'function' => '', 'err' => MESSAGE_GROUP_NOT_FOUND}));
 }
 
 1;

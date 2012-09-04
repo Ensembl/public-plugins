@@ -5,6 +5,8 @@ package EnsEMBL::Users::Command::Account::Membership::Change;
 use strict;
 use warnings;
 
+use EnsEMBL::Users::Messages qw(MESSAGE_CANT_DEMOTE_ADMIN);
+
 use base qw(EnsEMBL::Users::Command::Account::Membership);
 
 sub modify_membership {
@@ -17,7 +19,7 @@ sub modify_membership {
     if ($membership->user_id eq $admin->user_id && scalar @{$group->admin_memberships} == 1) { # the only admin of the group can't demote himself
       $self->redirect_url({
         'action'  => 'Message',
-        'err'     => $self->object->get_message_code('MESSAGE_CANT_DEMOTE_ADMIN'),
+        'err'     => MESSAGE_CANT_DEMOTE_ADMIN,
         'back'    => $hub->url({'action' => 'Groups', 'function' => 'View', 'id' => $group->group_id})
       });
     } else {

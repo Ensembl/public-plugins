@@ -6,6 +6,8 @@ package EnsEMBL::Users::Command::Account::Group::Save;
 use strict;
 use warnings;
 
+use EnsEMBL::Users::Messages qw(MESSAGE_GROUP_NOT_FOUND);
+
 use base qw(EnsEMBL::Users::Command::Account);
 
 sub process {
@@ -18,7 +20,7 @@ sub process {
   my $membership  = $group_id
     ? $object->fetch_accessible_membership_for_user($user->rose_object, $group_id)
     : $user->rose_object->create_new_membership_with_group
-    or return $self->ajax_redirect($hub->url({'action' => 'Groups', 'function' => 'Edit', 'err' => $object->get_message_code('MESSAGE_GROUP_NOT_FOUND')}));
+    or return $self->ajax_redirect($hub->url({'action' => 'Groups', 'function' => 'Edit', 'err' => MESSAGE_GROUP_NOT_FOUND}));
 
   my $group       = $membership->group;
 

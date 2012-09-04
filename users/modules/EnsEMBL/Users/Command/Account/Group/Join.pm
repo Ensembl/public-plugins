@@ -6,6 +6,8 @@ package EnsEMBL::Users::Command::Account::Group::Join;
 use strict;
 use warnings;
 
+use EnsEMBL::Users::Messages qw(MESSAGE_GROUP_NOT_FOUND);
+
 use base qw(EnsEMBL::Users::Command::Account);
 
 sub process {
@@ -39,7 +41,7 @@ sub process {
     }
   }
 
-  return $self->ajax_redirect($hub->url({'action' => 'Groups', 'function' => 'List', 'err' => $object->get_message_code('MESSAGE_GROUP_NOT_FOUND')}));
+  return $self->ajax_redirect($hub->url({'action' => 'Groups', 'function' => 'List', 'err' => MESSAGE_GROUP_NOT_FOUND}));
 }
 
 1;

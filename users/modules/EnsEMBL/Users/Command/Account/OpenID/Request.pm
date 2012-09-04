@@ -6,6 +6,8 @@ package EnsEMBL::Users::Command::Account::OpenID::Request;
 use strict;
 use warnings;
 
+use EnsEMBL::Users::Messages qw(MESSAGE_OPENID_ERROR);
+
 use base qw(EnsEMBL::Users::Command::Account::OpenID);
 
 sub process {
@@ -14,7 +16,7 @@ sub process {
   my $object      = $self->object;
   my $then_param  = $hub->param('then');
   my $provider    = $hub->param('provider');
-  my $openid_url  = $self->get_openid_url($provider, $hub->param('user') || '');
+  my $openid_url  = $self->get_openid_url($provider, $hub->param('username') || '');
   my $consumer    = $self->get_openid_consumer;
   my $claimed_id  = $consumer->claimed_identity($openid_url);
   my $root        = $object->get_root_url;
@@ -42,7 +44,7 @@ sub process {
 
   }
 
-  return $self->redirect_login('MESSAGE_OPENID_ERROR', {'oerr' => $consumer->errtext});
+  return $self->redirect_login(MESSAGE_OPENID_ERROR, {'oerr' => $consumer->errtext});
 }
 
 sub get_openid_url {
@@ -56,8 +58,8 @@ sub get_openid_url {
 
   while (my ($key, $value) = splice @$openid_providers, 0, 2) {
     if ($key eq $provider) {
-      $value->{'url'} =~ s/\[USERNAME\]/$username/;
-      return $value->{'url'};
+      (my $url = $value->{'url'}) =~ s/\[USERNAME\]/$username/;
+      return $url;
     }
   }
 }

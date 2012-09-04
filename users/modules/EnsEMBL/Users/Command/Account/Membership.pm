@@ -5,6 +5,8 @@ package EnsEMBL::Users::Command::Account::Membership;
 use strict;
 use warnings;
 
+use EnsEMBL::Users::Messages qw(MESSAGE_GROUP_NOT_FOUND);
+
 use base qw(EnsEMBL::Users::Command::Account);
 
 sub process {
@@ -17,7 +19,7 @@ sub process {
     ? $object->fetch_membership($hub->param('id'), {'with_objects' => 'group', 'query' => ['group.status' => 'active']})
     : undef
     : $user->rose_object->create_membership_object
-  or return $self->redirect_message('MESSAGE_GROUP_NOT_FOUND', {'error' => 1, 'back' => $self->internal_referer});
+  or return $self->redirect_message(MESSAGE_GROUP_NOT_FOUND, {'error' => 1, 'back' => $self->internal_referer});
 
   $membership->save('user' => $user) if $self->modify_membership($membership);
 

@@ -6,6 +6,8 @@ package EnsEMBL::Users::Command::Account::User::Add;
 use strict;
 use warnings;
 
+use EnsEMBL::Users::Messages qw(MESSAGE_EMAIL_INVALID MESSAGE_NAME_MISSING MESSAGE_ALREADY_REGISTERED);
+
 use base qw(EnsEMBL::Users::Command::Account);
 
 sub process {
@@ -15,11 +17,11 @@ sub process {
 
   # validation
   my $fields  = $self->validate_fields({ map {$_ => $hub->param($_) || ''} qw(email name) });
-  return $self->redirect_register($fields->{'invalid'} eq 'email' ? 'MESSAGE_EMAIL_INVALID' : 'MESSAGE_NAME_MISSING', { map {$_ => $hub->param($_) || ''} qw(email name organisation country) }) if $fields->{'invalid'};
+  return $self->redirect_register($fields->{'invalid'} eq 'email' ? MESSAGE_EMAIL_INVALID : MESSAGE_NAME_MISSING, { map {$_ => $hub->param($_) || ''} qw(email name organisation country) }) if $fields->{'invalid'};
 
   my $email   = $fields->{'email'};
   my $login   = $object->fetch_login_account($email);
-  return $self->redirect_login('MESSAGE_ALREADY_REGISTERED', {'email' => $email}) if $login && $login->status eq 'active';
+  return $self->redirect_login(MESSAGE_ALREADY_REGISTERED, {'email' => $email}) if $login && $login->status eq 'active';
 
   $login    ||= $object->new_login_account({
     'type'          => 'local',
