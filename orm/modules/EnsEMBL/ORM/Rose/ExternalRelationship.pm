@@ -8,6 +8,7 @@ package EnsEMBL::ORM::Rose::ExternalRelationship;
 use strict;
 
 use EnsEMBL::Web::Exceptions;
+use EnsEMBL::Web::Tools::MethodMaker qw(add_method);
 
 use base qw(EnsEMBL::Web::Root);
 
@@ -37,13 +38,10 @@ sub make_methods {
   ## Creates the method to access/modify the value of the related rose object
   ## @param Hash with key target_class - rose object class name
   my ($self, %params) = @_;
-  my $object_class = $params{'target_class'};
-  my $method_name  = $self->name;
 
-  no strict qw(refs);
-  *{"${object_class}::${method_name}"} = sub {
+  add_method($params{'target_class'}, $self->name, sub {
     return shift->external_relationship_value($self, @_);
-  };
+  });
 }
 
 1;
