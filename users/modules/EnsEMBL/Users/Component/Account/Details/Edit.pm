@@ -23,7 +23,7 @@ sub content {
 
   $form->add_field({
     'label'         => 'Email Address',
-    'notes'         => qq($email_note<div class="hidden $js_change_email">An email will be sent to the new address for verification purposes if email address is changed.</div>),
+    'notes'         => qq(<div class="hidden $js_change_email">${email_note}An email will be sent to the new address for verification purposes if email address is changed.</div>),
     'elements'      => [{
       'type'          => 'noedit',
       'element_class' => $js_change_email,
