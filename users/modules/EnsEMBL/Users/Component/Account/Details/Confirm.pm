@@ -6,6 +6,8 @@ package EnsEMBL::Users::Component::Account::Details::Confirm;
 
 use strict;
 
+use EnsEMBL::Users::Messages qw(MESSAGE_URL_EXPIRED);
+
 use base qw(EnsEMBL::Users::Component::Account);
 
 sub caption { return sprintf 'Register with %s', shift->site_name; }
@@ -16,13 +18,14 @@ sub content {
   my $object  = $self->object;
   my $login   = $object->fetch_login_from_url_code;
 
-  return $self->render_message('MESSAGE_URL_EXPIRED', {'error' => 1}) unless $login;
+  return $self->render_message(MESSAGE_URL_EXPIRED, {'error' => 1}) unless $login;
 
   my $user    = $login->user;
   my $content = $self->wrapper_div;
   my $form    = $content->append_child($self->new_form({'action' => $hub->url({qw(action Confirmed)})}));
 
-  $form->add_hidden({'name' => 'code', 'value' => $login->get_url_code});
+  $form->add_hidden({'name' => 'code',    'value' => $login->get_url_code});
+  $form->add_hidden({'name' => 'referer', 'value' => join '/', $hub->action, $hub->function});
 
   $form->add_field([
     {'label'  => 'Name',              'type' => 'noedit',   'value' => $login->name || $user->name, 'no_input'  => 1                                    },
