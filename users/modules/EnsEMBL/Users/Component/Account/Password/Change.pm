@@ -5,6 +5,8 @@ package EnsEMBL::Users::Component::Account::Password::Change;
 
 use strict;
 
+use EnsEMBL::Users::Messages qw(MESSAGE_URL_EXPIRED);
+
 use base qw(EnsEMBL::Users::Component::Account);
 
 sub caption {
@@ -22,7 +24,7 @@ sub content {
   my $login     = $user ? $user->rose_object->get_local_login : $object->fetch_login_from_url_code;
 
   # If no login object found - user manually changed the url
-  return $self->render_message('MESSAGE_UNKNOWN_ERROR', {'error' => 1}) unless $login;
+  return $self->render_message(MESSAGE_URL_EXPIRED, {'error' => 1}) unless $login;
 
   $form->add_field({'type' => 'noedit', 'name' => 'email', 'label' => 'Login email', 'no_input' => 1, 'value' => $login->identity });
 
@@ -32,9 +34,10 @@ sub content {
     $form->add_hidden({'name' => 'code', 'value' => $login->get_url_code });
   }
 
-  $form->add_field({'type' => 'password', 'name' => 'new_password_1', 'label' => 'New password',          'required' => 1,  'notes' => 'at least 6 characters'});
-  $form->add_field({'type' => 'password', 'name' => 'new_password_2', 'label' => 'Confirm new password',  'required' => 1});
-  $form->add_button({'type' => 'Submit',  'name' => 'submit',   'value' => $user ? 'Change' : 'Reset', 'class'  => 'modal_link'});
+  $form->add_hidden({'name' => 'referer',   'value' => join '/', $hub->action, $hub->function});
+  $form->add_field({'type'  => 'password',  'name'  => 'new_password_1', 'label'  => 'New password',              'required' => 1,  'notes' => 'at least 6 characters'});
+  $form->add_field({'type'  => 'password',  'name'  => 'new_password_2', 'label'  => 'Confirm new password',      'required' => 1});
+  $form->add_button({'type' => 'Submit',    'name'  => 'submit',         'value'  => $user ? 'Change' : 'Reset',  'class'    => 'modal_link'});
 
   return $content->render;
 }
