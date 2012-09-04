@@ -8,7 +8,7 @@ use warnings;
 
 use base qw(EnsEMBL::ORM::Rose::Object::RecordOwner);
 
-use constant RECORD_OWNER_TYPE => 'user';
+use constant RECORD_TYPE => 'user';
 
 __PACKAGE__->meta->setup(
   table                 => 'user',

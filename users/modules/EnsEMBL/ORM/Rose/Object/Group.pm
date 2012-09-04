@@ -8,7 +8,7 @@ use warnings;
 
 use base qw(EnsEMBL::ORM::Rose::Object::RecordOwner);
 
-use constant RECORD_OWNER_TYPE => 'group';
+use constant RECORD_TYPE => 'group';
 
 __PACKAGE__->meta->setup(
   table                 => 'webgroup',
