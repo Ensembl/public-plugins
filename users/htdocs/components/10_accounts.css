@@ -10,6 +10,12 @@ div.login-openid li             { list-style: none; float: left; margin: 0 16px 
 div.login-openid li img         { padding: 8px; }
 div.login-openid li a:hover img { background-color: [[NEUTRAL_BG]]; }
 
+/* openid popup for username input */
+div.openid-username                               { position: absolute; display: none; z-index: 1002; padding: 16px 12px 14px 16px; margin: 0; }
+div.openid-username form                          { margin: 0; }
+div.openid-username div.form-field                { margin: 0; }
+div.openid-username div.form-field label.ff-label { width: auto; line-height: 16px; }
+div.openid-username div.form-field div.ff-right   { padding: 0; }
 
 /* buttons on the accounts pages */
 p.accounts-button a                     { display: inline-block; color: [[BUTTON_TEXT]]; text-decoration: none; padding: 4px 7px 4px 29px;
