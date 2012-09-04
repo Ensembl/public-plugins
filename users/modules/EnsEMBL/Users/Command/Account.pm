@@ -6,6 +6,7 @@ use warnings;
 use EnsEMBL::Web::Exceptions;
 use EnsEMBL::Web::DataType::EmailAddress;
 use EnsEMBL::Users::Mailer::User;
+use EnsEMBL::Users::Messages qw(MESSAGE_ACCOUNT_BLOCKED MESSAGE_VERIFICATION_SENT MESSAGE_UNKNOWN_ERROR);
 
 use base qw(EnsEMBL::Web::Command);
 
@@ -23,7 +24,7 @@ sub handle_registration {
   my $user        = $object->fetch_user_by_email($email);
 
   if ($user) {
-    return $self->redirect_message('MESSAGE_ACCOUNT_BLOCKED') if $user->status eq 'suspended'; # If blocked user
+    return $self->redirect_message(MESSAGE_ACCOUNT_BLOCKED) if $user->status eq 'suspended'; # If blocked user
 
   } elsif ($login_type eq 'openid' && !$flags->{'add_new'}) { # redirect to the page to register with openid if not explicitly told to create a new user
     $login->reset_salt_and_save;
@@ -51,7 +52,7 @@ sub handle_registration {
 
   # Send verification email
   $self->get_mailer->send_verification_email($login);
-  return $self->redirect_message('MESSAGE_VERIFICATION_SENT', {'email' => $user->email});
+  return $self->redirect_message(MESSAGE_VERIFICATION_SENT, {'email' => $user->email});
 }
 
 sub redirect_after_login {
@@ -64,7 +65,7 @@ sub redirect_after_login {
   my $object        = $self->object;
 
   # return to login page if cookie not set
-  return $self->redirect_login('MESSAGE_UNKNOWN_ERROR') unless $hub->user->authorise({'user' => $user});
+  return $self->redirect_login(MESSAGE_UNKNOWN_ERROR) unless $hub->user->authorise({'user' => $user});
 
   # redirect
   if ($hub->is_ajax_request) {
@@ -72,7 +73,7 @@ sub redirect_after_login {
   } else {
     my $site = $hub->species_defs->ENSEMBL_SITE_URL;
     my $then = $hub->param('then') || '';
-    return $hub->redirect($self->url($then =~ /^$site/ ? $then : $site)); #only redirect to an internal url
+    return $hub->redirect($self->url($then =~ /^(\/|$site)/ ? $then : $site)); #only redirect to an internal url or a relative url
   }
 }
 
@@ -84,7 +85,7 @@ sub redirect_message {
   my ($self, $message, $params) = @_;
   $params ||= {};
   my $param = delete $params->{'error'} ? 'err' : 'msg';
-  return $self->ajax_redirect($self->hub->url({%$params, 'action' => 'Message', $param => $self->object->get_message_code($message)}));
+  return $self->ajax_redirect($self->hub->url({%$params, 'action' => 'Message', $param => $message}));
 }
 
 sub redirect_login {
@@ -92,7 +93,7 @@ sub redirect_login {
   ## @param Error constant in case of any error
   ## @param Hashref of extra GET params
   my ($self, $error, $params) = @_;
-  return $self->ajax_redirect($self->hub->url({%{$params || {}}, 'action' => 'Login', $error ? ('err' => $self->object->get_message_code($error)) : ()}));
+  return $self->ajax_redirect($self->hub->url({%{$params || {}}, 'action' => 'Login', $error ? ('err' => $error) : ()}));
 }
 
 sub redirect_register {
@@ -100,7 +101,7 @@ sub redirect_register {
   ## @param Error constant in case of any error
   ## @param Hashref of extra GET params
   my ($self, $error, $params) = @_;
-  return $self->ajax_redirect($self->hub->url({%{$params || {}}, 'action' => 'Register', $error ? ('err' => $self->object->get_message_code($error)) : ()}));
+  return $self->ajax_redirect($self->hub->url({%{$params || {}}, 'action' => 'Register', $error ? ('err' => $error) : ()}));
 }
 
 sub redirect_openid_register {
@@ -108,6 +109,8 @@ sub redirect_openid_register {
   ## @param Login object
   ## @param Error constant if any
   my ($self, $login, $error) = @_;
+  my $hub   = $self->hub;
+  my $then  = $hub->param('then');
 
   return $self->ajax_redirect($self->hub->url({
     'type'      => 'Account',
@@ -115,7 +118,10 @@ sub redirect_openid_register {
     'function'  => 'Register',
     'code'      => $login->get_url_code,
     $error ? (
-    'err'       => $self->object->get_message_code($error)
+    'err'       => $error
+    ) : (),
+    $then ? (
+    'then'      => $then
     ) : ()
   }));
 }
