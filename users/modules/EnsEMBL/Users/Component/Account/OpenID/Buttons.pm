@@ -7,17 +7,18 @@ use strict;
 
 use base qw(EnsEMBL::Users::Component::Account);
 
+use constant JS_CLASS_OPENID_USERNAME => '_openid_username';
+
 sub content {
   my $self              = shift;
   my $object            = $self->object;
   my $hub               = $self->hub;
   my $then_param        = $self->get_then_param;
-     $then_param        = $then_param ? { 'then' => $then_param } : {};
-
   my $openid_providers  = $object->openid_providers;
   my $trademarks        = [];
   my $trademark_owners  = [];
   my $content           = $self->wrapper_div({
+    'js_panel'            => 'OpenIDButtons',
     'class'               => 'login-openid',
     'children'            => [{
       'node_name'           => 'p',
@@ -27,27 +28,45 @@ sub content {
   my $openids_ul        = $content->append_child('ul');
 
   while (my ($key, $value) = splice @$openid_providers, 0, 2) {
+    my (@link_class, $username_form);
+    my %request_url     = ( qw(type Account action OpenID function Request) );
+    my %request_params  = ( 'provider' => $key, $then_param ? ('then' => $then_param) : () );
+
+    if ($value->{'url'} =~ /\[USERNAME\]/) {
+      @link_class     = ('class' => $self->JS_CLASS_OPENID_USERNAME);
+      $username_form  = $self->new_form({'method' => 'get', 'action' => \%request_url, 'validate' => 0});
+      $username_form->add_hidden({'name' => $_, 'value' => $request_params{$_}}) for keys %request_params;
+      $username_form->add_field({
+        'label'       => "$key username",
+        'inline'      => 1,
+        'elements'    => [{
+          'type'        => 'string',
+          'name'        => 'username'
+        }, {
+          'type'        => 'submit',
+          'value'       => 'Go'
+        }]
+      });
+    }
+
     $openids_ul->append_child('li', {
-      'children'  => [{
-        'node_name' => 'a',
-        'href'      => $hub->url({
-          'species'   => '',
-          'type'      => 'Account',
-          'action'    => 'OpenID',
-          'function'  => 'Request',
-          'provider'  => $key,
-          %$then_param
-        }),
-        'children'  => [{
-          'node_name' => 'img',
-          'src'       => sprintf('%s/i/openid_%s.png', $self->static_server, lc $key),
-          'alt'       => $key,
-          'title'     => "Login with $key",
-          'width'     => '120',
-          'height'    => '45'
+      'children'      => [{
+        'node_name'     => 'a',
+        'href'          => $hub->url({%request_url, %request_params }),
+        'children'      => [{
+          'node_name'     => 'img',
+          'src'           => sprintf('%s/i/openid_%s.png', $self->static_server, lc $key),
+          'alt'           => $key,
+          'title'         => "Login with $key",
+          'width'         => '120',
+          'height'        => '45'
         }],
-        $value->{'url'} =~ /\[USERNAME\]/ ? ('class' => '_username') : (),
-      }]
+        @link_class,
+      }, $username_form ? {
+        'node_name'     => 'div',
+        'class'         => ['openid-username', 'tinted-box', $self->JS_CLASS_OPENID_USERNAME],
+        'children'      => [ $username_form ]
+      } : ()]
     });
     if ($value->{'trademark_owner'}) {
       push @$trademarks, $key;
