@@ -6,7 +6,7 @@ package EnsEMBL::Users::Command::Account::Group::Invite;
 use strict;
 use warnings;
 
-use HTML::Entities qw(encode_entities);
+use EnsEMBL::Users::Messages qw(MESSAGE_GROUP_NOT_FOUND MESSAGE_EMAILS_INVALID MESSAGE_GROUP_INVITATION_SENT);
 
 use base qw(EnsEMBL::Users::Command::Account);
 
@@ -18,7 +18,7 @@ sub process {
   my $group_id    = $hub->param('group_id');
 
   my $membership  = $group_id ? $object->fetch_active_membership_for_user($admin->rose_object, $group_id, {'query' => ['level' => 'administrator']}) : undef
-    or return $self->ajax_redirect($hub->url({'action' => 'Groups', 'function' => 'Invite', 'err' => $object->get_message_code('MESSAGE_GROUP_NOT_FOUND')}));
+    or return $self->ajax_redirect($hub->url({'action' => 'Groups', 'function' => 'Invite', 'err' => MESSAGE_GROUP_NOT_FOUND}));
 
   my $group       = $membership->group;
 
@@ -30,9 +30,9 @@ sub process {
     return $self->ajax_redirect($hub->url({
       'action'    => 'Groups',
       'function'  => 'Invite',
-      'err'       => $object->get_message_code('MESSAGE_EMAILS_INVALID'),
+      'err'       => MESSAGE_EMAILS_INVALID,
       'emails'    => join(', ', @$valid_emails),
-      'invalids'  => encode_entities(join(', ', @$invalid_emails)),
+      'invalids'  => join(', ', @$invalid_emails),
       'id'        => $group_id
     }));
 
@@ -78,8 +78,8 @@ sub process {
       'action'    => 'Groups',
       'function'  => 'View',
       'id'        => $group_id,
-      'msg'       => $object->get_message_code('MESSAGE_GROUP_INVITATION_SENT'),
-      'emails'    => encode_entities(join(', ', @$valid_emails))
+      'msg'       => MESSAGE_GROUP_INVITATION_SENT,
+      'emails'    => join(', ', @$valid_emails)
     }));
   }
 }
