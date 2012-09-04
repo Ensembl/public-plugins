@@ -7,39 +7,45 @@ package EnsEMBL::Users::Command::Account::Password::Save;
 ###  3. the user submits the "reset password" form after he clicks on the link in the 'retrieve passord' email
 ### @author hr5
 
-### TODO - any alternative to using referer?
-
 use strict;
 use warnings;
+
+use EnsEMBL::Users::Messages qw(
+  MESSAGE_PASSWORD_CHANGED
+  MESSAGE_PASSWORD_INVALID
+  MESSAGE_PASSWORD_MISMATCH
+  MESSAGE_PASSWORD_WRONG
+  MESSAGE_URL_EXPIRED
+);
 
 use base qw(EnsEMBL::Users::Command::Account);
 
 sub process {
-  my $self    = shift;
-  my $object  = $self->object;
-  my $hub     = $self->hub;
+  my $self        = shift;
+  my $object      = $self->object;
+  my $hub         = $self->hub;
+  my $user        = $hub->user;
+  my $login       = $user ? $user->rose_object->get_local_login : $object->fetch_login_from_url_code;
+  my $referer     = [ split '/', $hub->param('referer') || '' ];
+  my %back_url    = ('species' => '', 'type' => 'Account', 'action' => $referer->[0] || '', 'function' => $referer->[1] || '');
+  my %success_url = ('species' => '', 'type' => 'Account', 'action' => 'Preferences');
 
-  my $user    = $hub->user;
-  my $login   = $user ? $user->rose_object->get_local_login : $object->fetch_login_from_url_code;
-  my $referer = $hub->referer;
+  if ($user) {
+    # If logged-in user trying to change password, and typed in a wrong current password
+    return $self->ajax_redirect($hub->url({%back_url, 'err' => MESSAGE_PASSWORD_WRONG})) unless $login->verify_password($hub->param('password'));
 
-  # If no login object found - user manually changed the url
-  return $self->redirect_message('MESSAGE_UNKNOWN_ERROR', {'error' => 1}) unless $login && $referer->{'ENSEMBL_TYPE'} eq 'Account';
-
-  # If logged-in user trying to change password, and typed in a wrong current password
-  return $self->ajax_redirect($hub->url({'action' => $referer->{'ENSEMBL_ACTION'}, 'function' => $referer->{'ENSEMBL_FUNCTION'}, 'err' => $object->get_message_code('MESSAGE_PASSWORD_WRONG')})) if $user && !$login->verify_password($hub->param('password'));
+  } else {
+    # If no login object found - user manually changed the url
+    return $self->redirect_message(MESSAGE_URL_EXPIRED, {'error' => 1}) unless $login;
+    $back_url{'code'}       = $login->get_url_code;
+    $success_url{'action'}  = 'Login';
+    $success_url{'msg'}     = MESSAGE_PASSWORD_CHANGED;
+  }
 
   # Validation
   my $fields = $self->validate_fields({'password' => $hub->param('new_password_1') || '', 'confirm_password' => $hub->param('new_password_2') || ''});
 
-  return $self->ajax_redirect($hub->url({
-    'action'    => $referer->{'ENSEMBL_ACTION'},
-    'function'  => $referer->{'ENSEMBL_FUNCTION'},
-    'err'       => $object->get_message_code($fields->{'invalid'} eq 'password' ? 'MESSAGE_PASSWORD_INVALID' : 'MESSAGE_PASSWORD_MISMATCH'),
-    $user ? () : (
-      'code'    => $login->get_url_code
-    )
-  })) if $fields->{'invalid'};
+  return $self->ajax_redirect($hub->url({ %back_url, 'err' => $fields->{'invalid'} eq 'password' ? MESSAGE_PASSWORD_INVALID : MESSAGE_PASSWORD_MISMATCH })) if $fields->{'invalid'};
 
   # If all ok, change/set the password
   $login->set_password($fields->{'password'});
@@ -52,7 +58,7 @@ sub process {
   # For a password change/reset request
   } else {
     $login->reset_salt_and_save;
-    return $self->ajax_redirect($hub->url({'action' => 'Preferences'}));
+    return $self->ajax_redirect($hub->url(\%success_url));
   }
 }
 
