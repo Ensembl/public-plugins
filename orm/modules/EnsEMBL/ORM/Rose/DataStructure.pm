@@ -9,6 +9,7 @@ package EnsEMBL::ORM::Rose::DataStructure;
 use strict;
 
 use EnsEMBL::ORM::Rose::DataStructureValue;
+use EnsEMBL::Web::Tools::MethodMaker qw(copy_method add_method);
 
 use base qw(Rose::DB::Object::Metadata::Column::Text);
 
@@ -40,10 +41,9 @@ sub modify_methods {
   my $class = $self->parent->class;
 
   # copy the old methods first
-  no strict qw(refs);
   my $get_method = $self->accessor_method_name;
   my $set_method = $self->mutator_method_name;
-  *{"${class}::_ensorm_old_$_"} = \&{"${class}::${_}"} for $get_method, $set_method;
+  copy_method($class, $_, "_ensorm_old_$_") for $get_method, $set_method;
 
   # create new methods
   my $new_accessor_method = sub {
@@ -67,11 +67,11 @@ sub modify_methods {
 
   # replace the old methods with new ones
   if ($get_method eq $set_method) {
-    *{"${class}::${get_method}"} = $new_accessor_mutator_method;
+    add_method($class, $get_method, $new_accessor_mutator_method);
   }
   else {
-    *{"${class}::${get_method}"} = $new_accessor_method;
-    *{"${class}::${set_method}"} = $new_mutator_method;
+    add_method($class, $get_method, $new_accessor_method);
+    add_method($class, $set_method, $new_mutator_method);
   }
 
   return $self;
