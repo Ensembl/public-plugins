@@ -43,7 +43,7 @@ sub content {
     if (@$logins > 1 && $login_type =~ /^(local|openid)$/) {
       $login_detail .= $self->js_link({
         'class'   => 'small',
-        'href'    => {'action' => 'RemoveLogin', 'id' => $_->login_id},
+        'href'    => {'action' => 'Details', 'function' => 'RemoveLogin', 'id' => $_->login_id},
         'caption' => 'Remove login',
         'inline'  => 1,
         'confirm' => sprintf(q(You won't be able to login to %s site with your %s account.), $site_name, $login_type eq 'local' ? $site_name : $login_provider)
