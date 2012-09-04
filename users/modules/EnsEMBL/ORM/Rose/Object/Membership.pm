@@ -43,9 +43,9 @@ __PACKAGE__->meta->setup(
   ],
 
   virtual_columns       => [
-    notify_edit           => {column => 'data'},
-    notify_share          => {column => 'data'},
-    notify_join           => {column => 'data'},
+    notify_edit           => {column => 'data', default => 0},
+    notify_share          => {column => 'data', default => 0},
+    notify_join           => {column => 'data', default => 1},
   ],
 
   relationships         => [
