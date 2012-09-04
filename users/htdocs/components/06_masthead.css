@@ -12,10 +12,11 @@
 #masthead div.account_holder div.accounts-dropdown                        { display: none; background-color: [[TINT_BG]]; position: absolute; z-index: 200; padding: 8px 8px 0;
                                                                             right: 8px; width: 240px; text-align: right; border: [[TINT_BORDER]] solid 1px; }
 #masthead div.account_holder div.accounts-dropdown h4,
-#masthead div.account_holder div.accounts-dropdown p                      { margin: 0 0 8px 0; overflow: hidden; color: [[PAGE_TEXT]] }
+#masthead div.account_holder div.accounts-dropdown p                      { margin: 0 0 8px 0; overflow: hidden; color: [[PAGE_TEXT]]; line-height: 16px; }
 #masthead div.account_holder div.accounts-dropdown div                    { border-top: [[TINT_BORDER]] solid 1px; background-color: inherit; padding: 8px 0 0; }
 #masthead div.account_holder div.accounts-dropdown a                      { color: [[PAGE_LINK]]; }
 
-#masthead div.account_holder div.accounts-dropdown p a span.acc-bookmark-overflow                       { display: none; }
-#masthead div.account_holder div.accounts-dropdown p.acc-bookmark-overflow a span                       { float: left; }
-#masthead div.account_holder div.accounts-dropdown p.acc-bookmark-overflow a span.acc-bookmark-overflow { display: inline; position: absolute; right: 5px; background-color: [[TINT_BG]]; }
+#masthead div.account_holder div.accounts-dropdown p.acc-bookmark-overflow                              { height: 16px;   }
+#masthead div.account_holder div.accounts-dropdown p a span.acc-bookmark-overflow                       { display: none;  }
+#masthead div.account_holder div.accounts-dropdown p.acc-bookmark-overflow a span                       { float: left;    }
+#masthead div.account_holder div.accounts-dropdown p.acc-bookmark-overflow a span.acc-bookmark-overflow { display: inline; position: absolute; right: 8px; background-color: [[TINT_BG]]; }
