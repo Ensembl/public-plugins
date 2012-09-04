@@ -18,10 +18,13 @@ sub new {
 
 sub url {
   ## @overrides
-  ## Clears the core params in case url type is Account
+  ## Clears the core params and species in case url type is Account
   my $self    = shift;
   my $params  = shift;
-  $params->{'__clear'} = 1 if !$params->{'type'} || $params->{'type'} eq 'Account';
+  if (!$params->{'type'} && $self->referer->{'ENSEMBL_TYPE'} eq 'Account' || $params->{'type'} eq 'Account') {
+    $params->{'__clear'}    = 1;
+    $params->{'species'}  ||= '';
+  }
   return $self->__url($params, @_);
 }
 
