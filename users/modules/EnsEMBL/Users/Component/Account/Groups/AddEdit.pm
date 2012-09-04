@@ -19,8 +19,8 @@ sub content {
 
     my $group       = $membership->group;
     my $level       = $membership->level;
-    my $group_types = $object->get_group_types;
-    my $notif_types = $object->get_notification_types;
+    my $group_types = $self->get_group_types;
+    my $notif_types = $self->get_notification_types;
 
     my $form        = $self->new_form({'action' => $hub->url({qw(action Group function Save)})});
 

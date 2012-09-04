@@ -22,7 +22,7 @@ sub content {
     my $group_name  = $self->html_encode($group->name);
     my $is_admin    = $membership->level eq 'administrator';
     my $refresh_url = $hub->url({'action' => 'Groups', 'function' => 'View', 'id' => $group_id});
-    my $notif_types = $object->get_notification_types;
+    my $notif_types = $self->get_notification_types;
 
     my @sections;
 
@@ -35,7 +35,7 @@ sub content {
         $self->two_column([
           'Group name'  => $group_name,
           'Description' => $self->html_encode($group->blurb),
-          'Type'        => $object->get_group_types->{$group->type} || '',
+          'Type'        => $self->get_group_types->{$group->type} || '',
           'Status'      => ucfirst $group->status
         ]),
         '<h3>Notification settings</h3>'.
