@@ -6,6 +6,8 @@ package EnsEMBL::Users::Command::Account::Details::RemoveLogin;
 use strict;
 use warnings;
 
+use EnsEMBL::Users::Messages qw(MESSAGE_CANT_DELETE_LOGIN);
+
 use base qw(EnsEMBL::Users::Command::Account);
 
 sub process {
@@ -19,7 +21,7 @@ sub process {
   if ($login) {
 
     # can not delete the only login account attached to the user, or any login of type other than openid or local
-    return $self->redirect_message('MESSAGE_CANT_DELETE_LOGIN') unless keys %$logins && $login->type =~ /^(openid|local)$/;
+    return $self->redirect_message(MESSAGE_CANT_DELETE_LOGIN) unless keys %$logins && $login->type =~ /^(openid|local)$/;
 
     $login->delete;
   }

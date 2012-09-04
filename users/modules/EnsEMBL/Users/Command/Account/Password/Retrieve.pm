@@ -6,6 +6,8 @@ package EnsEMBL::Users::Command::Account::Password::Retrieve;
 use strict;
 use warnings;
 
+use EnsEMBL::Users::Messages qw(MESSAGE_EMAIL_INVALID MESSAGE_EMAIL_NOT_FOUND MESSAGE_PASSWORD_EMAIL_SENT);
+
 use base qw(EnsEMBL::Users::Command::Account);
 
 sub process {
@@ -15,12 +17,12 @@ sub process {
 
   # validation
   my $fields  = $self->validate_fields({'email' => $hub->param('email') || ''});
-  $self->ajax_redirect($hub->url({'action' => 'Password', 'function' => 'Lost', 'email' => $hub->param('email'), 'err' => $object->get_message_code('MESSAGE_EMAIL_INVALID')})) if $fields->{'invalid'};
+  $self->ajax_redirect($hub->url({'action' => 'Password', 'function' => 'Lost', 'email' => $hub->param('email'), 'err' => MESSAGE_EMAIL_INVALID})) if $fields->{'invalid'};
 
   # get the existing account
   my $email   = $fields->{'email'};
   my $login   = $object->fetch_login_account($email);
-  $self->ajax_redirect($hub->url({'action' => 'Password', 'function' => 'Lost', 'email' => $email, 'err' => $object->get_message_code('MESSAGE_EMAIL_NOT_FOUND')})) unless $login;
+  return $self->ajax_redirect($hub->url({'action' => 'Password', 'function' => 'Lost', 'email' => $email, 'err' => MESSAGE_EMAIL_NOT_FOUND})) unless $login;
 
   # if account exists, but registration is incomplete
   return $self->handle_registration($login, $email) unless $login->status eq 'active';
@@ -30,7 +32,7 @@ sub process {
 
   $self->get_mailer->send_password_retrieval_email($login);
 
-  return $self->redirect_message('MESSAGE_PASSWORD_EMAIL_SENT', {'email' => $email});
+  return $self->redirect_message(MESSAGE_PASSWORD_EMAIL_SENT, {'email' => $email});
 }
 
 1;

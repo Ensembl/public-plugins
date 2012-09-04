@@ -2,6 +2,8 @@ package EnsEMBL::Users::Command::Account::Bookmark::Use;
 
 use strict;
 
+use EnsEMBL::Users::Messages qw(MESSAGE_BOOKMARK_NOT_FOUND);
+
 use base qw(EnsEMBL::Users::Command::Account);
 
 sub process {
@@ -17,7 +19,7 @@ sub process {
     return $hub->redirect($url =~ /^(ht|f)tp/ ? $url : "http://$url");
 
   } else {
-    return $self->redirect_message('MESSAGE_BOOKMARK_NOT_FOUND');
+    return $self->redirect_message(MESSAGE_BOOKMARK_NOT_FOUND);
   }
 }
 

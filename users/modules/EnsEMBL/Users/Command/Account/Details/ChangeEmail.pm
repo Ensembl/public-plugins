@@ -6,6 +6,8 @@ package EnsEMBL::Users::Command::Account::Details::ChangeEmail;
 use strict;
 use warnings;
 
+use EnsEMBL::Users::Messages qw(MESSAGE_EMAIL_CHANGED MESSAGE_URL_EXPIRED);
+
 use base qw(EnsEMBL::Users::Command::Account);
 
 sub process {
@@ -31,11 +33,11 @@ sub process {
       $login->identity($email) if $login->type eq 'local';
       $login->reset_salt_and_save;
 
-      return $self->redirect_message('MESSAGE_EMAIL_CHANGED');
+      return $self->redirect_message(MESSAGE_EMAIL_CHANGED);
     }
   }
 
-  return $self->redirect_message('MESSAGE_URL_EXPIRED', {'error' => 1});
+  return $self->redirect_message(MESSAGE_URL_EXPIRED, {'error' => 1});
 }
 
 1;

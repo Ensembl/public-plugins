@@ -6,6 +6,8 @@ package EnsEMBL::Users::Command::Account::Details::Save;
 use strict;
 use warnings;
 
+use EnsEMBL::Users::Messages qw(MESSAGE_EMAIL_INVALID MESSAGE_NAME_MISSING MESSAGE_VERIFICATION_SENT);
+
 use base qw(EnsEMBL::Users::Command::Account);
 
 sub process {
@@ -20,7 +22,7 @@ sub process {
     return $self->ajax_redirect($hub->url({
       'action'    => 'Details',
       'function'  => 'Edit',
-      'err'       => $object->get_message_code($fields->{'invalid'} eq 'email' ? 'MESSAGE_EMAIL_INVALID' : 'MESSAGE_NAME_MISSING'),
+      'err'       => $fields->{'invalid'} eq 'email' ? MESSAGE_EMAIL_INVALID : MESSAGE_NAME_MISSING
       map {$_     => $hub->param($_)} qw(email name organisation country)
     }));
   }
@@ -36,7 +38,7 @@ sub process {
     $user->new_email($fields->{'email'});
     $user->save;
     $self->get_mailer->send_change_email_confirmation_email($user->get_local_login || shift(@{$user->find_logins('query' => ['status' => 'active'])}), $fields->{'email'});
-    return $self->redirect_message('MESSAGE_VERIFICATION_SENT', {'email' => $fields->{'email'}});
+    return $self->redirect_message(MESSAGE_VERIFICATION_SENT, {'email' => $fields->{'email'}});
   }
 
   return $self->ajax_redirect($hub->url({'action' => 'Preferences'}));
