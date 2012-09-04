@@ -52,11 +52,13 @@ sub content {
       });
     }
 
-    return $self->js_section({%section, 'heading' => 'Groups', 'subsections' => [
-      $table->render,
-      $self->link_create_new_group,
-      $self->link_join_existing_group
-    ]});
+    if ($table->has_rows) {
+      return $self->js_section({%section, 'heading' => 'Groups', 'subsections' => [
+        $table->render,
+        $self->link_create_new_group,
+        $self->link_join_existing_group
+      ]});
+    }
   }
 
   # if user is not a member of any group
