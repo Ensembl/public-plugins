@@ -4,9 +4,7 @@ package EnsEMBL::Lucene::Component::Search::Results;
 
 use strict;
 
-use URI::Escape qw(uri_unescape);
-
-use base qw(EnsEMBL::Web::Component);
+use base qw(EnsEMBL::Web::Component::Search);
 
 sub _init {
   my $self = shift;
@@ -21,7 +19,7 @@ sub content {
   my $sitetype         = $species_defs->ENSEMBL_SEARCHTYPE ? lc $species_defs->ENSEMBL_SEARCHTYPE : lc $species_defs->ENSEMBL_SITETYPE;
   my $species          = $hub->param('species');
   my $display_species  = $species eq 'all' ? sprintf('the %s website', ucfirst $sitetype) : $hub->species_defs->get_config($species,'SPECIES_COMMON_NAME');
-  my $q                = uri_unescape($hub->param('q'));
+  my $q                = $hub->param('q');
   my $results_by_group = $self->object->groups;
   my $html;
  
@@ -174,6 +172,7 @@ sub re_search {
   }
 
   $html .= '</div>';
+  $html .= $self->no_results($q);
 
   return $html;
  
