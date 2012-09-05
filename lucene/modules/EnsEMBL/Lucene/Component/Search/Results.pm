@@ -4,7 +4,7 @@ package EnsEMBL::Lucene::Component::Search::Results;
 
 use strict;
 
-use URI::Escape qw(uri_escape);
+use URI::Escape qw(uri_unescape);
 
 use base qw(EnsEMBL::Web::Component);
 
@@ -21,7 +21,7 @@ sub content {
   my $sitetype         = $species_defs->ENSEMBL_SEARCHTYPE ? lc $species_defs->ENSEMBL_SEARCHTYPE : lc $species_defs->ENSEMBL_SITETYPE;
   my $species          = $hub->param('species');
   my $display_species  = $species eq 'all' ? sprintf('the %s website', ucfirst $sitetype) : $hub->species_defs->get_config($species,'SPECIES_COMMON_NAME');
-  my $q                = uri_escape($hub->param('q'));
+  my $q                = uri_unescape($hub->param('q'));
   my $results_by_group = $self->object->groups;
   my $html;
  
@@ -86,12 +86,12 @@ sub content {
           my $g_url;
           
           if ($g_name =~ /faq|docs|glossary|help/i) {
-            $g_url = sprintf '/Search/Details?species=all;idx=%s;q=%s', ucfirst($g_name), $q;
+            $g_url = $hub->url({'type' => 'Search', 'action' => 'Details', 'idx' => ucfirst($g_name), 'q' => $q, '__species' => 'all'});
           } else {
             my ($idx, $sp) = $group_name =~ /species/i ? ($g_name, $child_name) : ($child_name, $g_name);
             $sp     =~ s/\s/_/;
             $g_name =~ s/_/ /g;
-            $g_url  = "/$sp/Search/Details?species=$sp;idx=$idx;end=$g_count;q=" . $q;
+            $g_url  = $hub->url({'species' => $sp, 'type' => 'Search', 'action' => 'Details', 'idx' => $idx, 'end' => $g_count, 'q' => $q, '__species' => $sp});
           }
           
           # yet more exceptions for Help and docs
@@ -153,7 +153,7 @@ sub re_search {
     
     if ($ens =~ /ENS|OTT/ && length $dig != 11 && $ens !~ /ENSFM|ENSSNP/) {
       my $newq = $ens . sprintf "%011d", $dig;
-      my $url  = '/' . $hub->species . "/Search/Results?species=$species;idx=" . $hub->param('idx') . ';q=' . $newq;
+      my $url  = $hub->url({'type' => 'Search', 'action' => 'Results', '__species' => $species, 'idx' => $hub->param('idx'), 'q' => $newq});
       
       $html .= qq{
           <p><strong>Would you like to <a href="$url">search using $newq</a> (note number of digits)?</strong></p>
@@ -161,7 +161,7 @@ sub re_search {
     }
   }
   elsif ($species ne 'all') {
-    my $url = '/' . $hub->species . '/Search/Results?species=all;idx=' . $hub->param('idx') . ';q=' . $q;
+    my $url = $hub->url({'type' => 'Search', 'action' => 'Results', '__species' => 'all', 'idx' => $hub->param('idx'), 'q' => $q});
     
     $html .= qq{
         <p><strong>Would you like to <a href="$url">search the rest of the website</a> with this term?</strong></p>
@@ -174,7 +174,6 @@ sub re_search {
   }
 
   $html .= '</div>';
-  $html .= $self->no_results($hub->param('q'));
 
   return $html;
  
