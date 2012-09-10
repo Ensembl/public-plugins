@@ -29,24 +29,16 @@ sub content {
 
   } else {
 
-    my $bookmarks = $hub->user->bookmarks;
-
     # display form to select a bookmark if no group was specified
-    if (@$bookmarks) {
-      return $self->js_section({
-        'subsections' => [ $self->select_bookmark_form({
-          'bookmarks'   => $bookmarks,
-          'action'      => $hub->url({'action' => 'Bookmark', 'function' => 'Edit'}),
-          'label'       => 'Select a bookmark to edit',
-          'submit'      => 'Edit'
-        })->render ]
-      });
-    
-    # if no bookmark added yet
-    } else {
-
-      return $self->no_bookmark_found_page;
-    }
+    return $self->js_section({
+      'heading'     => 'Edit bookmark',
+      'subsections' => [ $self->select_bookmark_form({
+        'bookmarks'   => $hub->user->bookmarks,
+        'action'      => $hub->url({'action' => 'Bookmark', 'function' => 'Edit'}),
+        'label'       => 'Select a bookmark to edit',
+        'submit'      => 'Edit'
+      })->render ]
+    });
   }
 }
 
