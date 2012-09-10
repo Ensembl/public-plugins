@@ -21,7 +21,7 @@ sub url {
   ## Clears the core params and species in case url type is Account
   my $self    = shift;
   my $params  = shift;
-  if (!$params->{'type'} && $self->referer->{'ENSEMBL_TYPE'} eq 'Account' || $params->{'type'} eq 'Account') {
+  if (($params->{'type'} || '') eq 'Account' || $self->type eq 'Account') {
     $params->{'__clear'}    = 1;
     $params->{'species'}  ||= '';
   }
