@@ -17,7 +17,7 @@ sub content {
   my $logins        = $r_user->logins;
   my $site_name     = $self->site_name;
   
-  my @login_details;
+  my (@existing_openid_logins, @login_details);
 
   for (@$logins) {
     my $login_type      = $_->type;
@@ -34,6 +34,7 @@ sub content {
 
     } elsif ($login_type eq 'openid') {
       $login_detail = sprintf $login_detail, $login_provider, $_->has_trusted_provider ? $_->email : $_->identity;
+      push @existing_openid_logins, $login_provider;
 
     } elsif ($login_type eq 'ldap') { # not implimented yet
       $login_detail = sprintf $login_detail, 'LDAP', $_->ldap_user;
@@ -53,10 +54,29 @@ sub content {
     push @login_details, $login_detail;
   }
 
+  my $openid_providers = $self->object->openid_providers;
+  if (scalar @$openid_providers > scalar @existing_openid_logins * 2) {
+    my $i = 0;
+    grep {$openid_providers->[$i] eq $_} @existing_openid_logins and splice(@$openid_providers, $i, 2) or $i += 2 while $openid_providers->[$i];
+
+    push @login_details, $self->js_link({
+      'inline'  => 1,
+      'caption' => 'Add login',
+      'helptip' => sprintf('Click to add another login option eg. via %s)', $self->join_with_or(grep {!ref $_} @$openid_providers)),
+      'href'    => {qw(action Details function AddLogin)}
+    });
+  }
+
   return $self->js_section({
     'id'            => 'view_details',
     'refresh_url'   => {'action' => 'Details', 'function' => ''},
     'heading'       => 'User Details',
+    'heading_links' => [{
+      'sprite'        => 'edit_icon',
+      'href'          => {qw(action Details function Edit)},
+      'title'         => 'Edit',
+      'target'        => 'section'
+    }],
     'subsections'   => [
       $self->two_column([
         'Name'          => $user->display_name,
@@ -64,12 +84,7 @@ sub content {
         'Organisation'  => $user->display_organisation,
         'Country'       => $user->display_country,
         'Login via'     => @login_details > 1 ? sprintf('<div class="spaced">%s</div>', join('<br />', @login_details)) : $login_details[0]
-      ]),
-      $self->js_link({
-        'class'   => 'setting',
-        'href'    => {qw(action Details function Edit)},
-        'caption' => 'Edit'
-      })
+      ])
     ]
   });
 }
