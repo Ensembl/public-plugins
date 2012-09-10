@@ -160,6 +160,37 @@ sub activate_user_login {
   $login->save;
 }
 
+sub count_groups {
+  ## Counts the number of groups user is a member of
+  ## @param hashref with keys:
+  ##  - active_only : If on, will return groups that are active only, other it will count inactive groups for the admin user
+  ##  - admin_only  : If on, will return groups that user is an admin of
+  ## @return number
+  my ($self, $params) = @_;
+
+  return $self->hub->user->rose_object->memberships_count('with_objects' => ['group'], 'query' => [
+    'status'          => 'active',
+    'member_status'   => 'active',
+    $params->{'active_only'} ? (
+      'group.status'    => 'active'
+    ) : (
+      'or'              => [
+        'level'           => 'administrator',
+        'group.status'    => 'active'
+      ]
+    ),
+    $params->{'admin_only'} ? (
+      'level'           => 'administrator'
+    ) : ()
+  ]);
+}
+
+sub count_bookmarks {
+  ## Counts the number of bookmarks for a user
+  ## @return number
+  return shift->hub->user->rose_object->bookmarks_count;
+}
+
 sub is_inline_request {
   return shift->hub->param('_inline') ? 1 : undef;
 }
