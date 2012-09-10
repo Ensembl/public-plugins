@@ -5,7 +5,12 @@ package EnsEMBL::Users::Command::Account::Bookmark::Share;
 
 use strict;
 
-use EnsEMBL::Users::Messages qw(MESSAGE_UNKNOWN_ERROR);
+use EnsEMBL::Users::Messages qw(
+  MESSAGE_NO_GROUP_SELECTED
+  MESSAGE_GROUP_NOT_FOUND
+  MESSAGE_NO_BOOKMARK_SELECTED
+  MESSAGE_BOOKMARK_NOT_FOUND
+);
 
 use base qw(EnsEMBL::Users::Command::Account);
 
@@ -17,31 +22,49 @@ sub process {
   my $group_id        = $hub->param('group');
   my @bookmark_ids    = $hub->param('id');
 
-  if (@bookmark_ids && $group_id) {
+  my $err;
 
-    my $bookmarks     = $r_user->find_bookmarks(['record_id' => \@bookmark_ids]);
-    my $membership    = $object->fetch_active_membership_for_user($r_user, $group_id);
-    my $group         = $membership ? $membership->group : undef;
-    my $new_bookmarks = [];
+  if (@bookmark_ids) {
 
-    if (@$bookmarks && $group) {
-      for (@$bookmarks) {
-        my $bookmark = $_->clone_and_reset;
-        $bookmark->record_type($group->RECORD_TYPE);
-        $bookmark->record_type_id($group->group_id);
-        $bookmark->click(0);
-        $bookmark->save(user => $r_user);
-        push @$new_bookmarks, $bookmark;
+    my $bookmarks = $r_user->find_bookmarks(['record_id' => \@bookmark_ids]);
+
+    if ($bookmarks && @$bookmarks) {
+
+      if ($group_id) {
+
+        my $membership    = $object->fetch_active_membership_for_user($r_user, $group_id);
+        my $group         = $membership ? $membership->group : undef;
+        my $new_bookmarks = [];
+    
+        if ($group) {
+          for (@$bookmarks) {
+            my $bookmark = $_->clone_and_reset;
+            $bookmark->record_type($group->RECORD_TYPE);
+            $bookmark->record_type_id($group->group_id);
+            $bookmark->click(0);
+            $bookmark->save(user => $r_user);
+            push @$new_bookmarks, $bookmark;
+          }
+    
+          ## notify members if needed
+          $self->send_group_sharing_notification_email($group, $new_bookmarks);
+    
+          return $self->ajax_redirect($hub->url({'action' => 'Groups', 'function' => 'View', 'id' => $group->group_id}));
+
+        } else {
+          $err = MESSAGE_GROUP_NOT_FOUND;
+        }
+      } else {
+        $err = MESSAGE_NO_GROUP_SELECTED;
       }
-
-      ## notify members if needed
-      $self->send_group_sharing_notification_email($group, $new_bookmarks);
-
-      return $self->ajax_redirect($hub->url({'action' => 'Groups', 'function' => 'View', 'id' => $group->group_id}));
+    } else {
+      $err = MESSAGE_BOOKMARK_NOT_FOUND;
     }
+  } else {
+    $err = MESSAGE_NO_BOOKMARK_SELECTED;
   }
 
-  return $self->redirect_message(MESSAGE_UNKNOWN_ERROR, {'error' => 1});
+  return $self->ajax_redirect($hub->url({'species' => '', 'type' => 'Account', 'action' => 'Share', 'function' => 'Bookmark', 'err' => $err}));
 }
 
 1;
