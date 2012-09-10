@@ -29,7 +29,7 @@ __PACKAGE__->meta->setup(
 
   relationships         => [
     logins                => { 'type' => 'one to many', 'class' => 'EnsEMBL::ORM::Rose::Object::Login',           'column_map' => {'user_id' => 'user_id'}  },
-    memberships           => { 'type' => 'one to many', 'class' => 'EnsEMBL::ORM::Rose::Object::Membership',      'column_map' => {'user_id' => 'user_id'}  },
+    memberships           => { 'type' => 'one to many', 'class' => 'EnsEMBL::ORM::Rose::Object::Membership',      'column_map' => {'user_id' => 'user_id'}, 'methods' => { map {$_, undef} qw(add_on_save count find get_set_on_save)} },
     admin_privilege       => { 'type' => 'one to one',  'class' => 'EnsEMBL::ORM::Rose::Object::AdminPrivilage',  'column_map' => {'user_id' => 'user_id'}  },
     records               => __PACKAGE__->record_relationship_params('user_id')
   ],
@@ -79,6 +79,11 @@ sub nonadmin_memberships {
 sub active_memberships {
   ## Gets all the active memberships (along with the related active groups) for the user
   return shift->find_memberships('with_objects' => 'group', 'query' => ['status' => 'active', 'member_status' => 'active', 'group.status' => 'active']);
+}
+
+sub accessible_memberships {
+  ## Gets all the active memberships (together with inactive groups for admin user) (along with the related active groups)
+  return shift->find_memberships('with_objects' => 'group', 'query' => ['or' => ['level' => 'administrator', 'group.status' => 'active'], 'status' => 'active', 'member_status' => 'active']);
 }
 
 sub create_new_membership_with_group {
