@@ -9,19 +9,33 @@ use warnings;
 use base qw(EnsEMBL::Users::Component::Account);
 
 sub content {
-  my $self      = shift;
-  my $hub       = $self->hub;
-  my $object    = $self->object;
-  my $user      = $hub->user->rose_object;
-  my $bookmarks = $user->bookmarks;
-  my %section   = (
-    'id'          => 'view_bookmarks',
-    'refresh_url' => {'action' => 'Bookmark', 'function' => ''}
-  );
+  my $self            = shift;
+  my $hub             = $self->hub;
+  my $object          = $self->object;
+  my $r_user          = $hub->user->rose_object;
+  my $bookmarks       = $r_user->bookmarks;
+  my $memberships     = $r_user->active_memberships;
+  my $group_bookmarks = [ map { @{$_->group ? $_->group->bookmarks : ()} } @$memberships ];
 
-  return @$bookmarks
-    ? $self->js_section({ %section, 'heading' => 'Bookmarks', 'subsections' => [ $self->bookmarks_table({'bookmarks' => $bookmarks}), $self->link_add_bookmark ] })
-    : $self->no_bookmark_found_page(\%section)
+  return join '',
+    $self->js_section({
+      'id'                => 'my_bookmarks',
+      'refresh_url'       => {'action' => 'Bookmark', 'function' => ''},
+      'heading'           => 'My bookmarks',
+      'heading_links'     => [{
+        'href'              => {qw(action Bookmark function Add)},
+        'title'             => 'Add a bookmark',
+        'sprite'            => 'bookmark-add-icon',
+        'target'            => 'section'
+      }],
+      'subsections'       => [ @$bookmarks ? $self->bookmarks_table({'bookmarks' => $bookmarks}) : q(<p>You have not saved any bookmark.</p>) ]
+    }), @$group_bookmarks ?
+    $self->js_section({
+      'id'                => 'group_bookmarks',
+      'refresh_url'       => {'action' => 'Bookmark', 'function' => ''},
+      'heading'           => 'Shared bookmarks',
+      'subsections'       => [ $self->bookmarks_table({'bookmarks' => $group_bookmarks, 'shared' => 1}) ]
+    }) : ()
   ;
 }
 
