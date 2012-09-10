@@ -53,6 +53,7 @@ sub record_relationship_params {
     'type'        => 'one to many',
     'class'       => 'EnsEMBL::ORM::Rose::Object::Record',
     'column_map'  => {$foreign_key => 'record_type_id'},
+    'methods'     => { map {$_, undef} qw(add_on_save count find get_set_on_save)},
     'join_args'   => [ 'record_type' => $class->RECORD_TYPE ] # join_args key is not documented in Rose, so take care of this if something changes in future
   };
 }
