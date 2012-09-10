@@ -30,15 +30,15 @@ sub content {
     $form->add_notes({
       'text'        => sprintf('To invite new members to join %s group, enter one email address per person. Users not already registered with %s will be asked to do so before accepting your invitation.', $adminship ? 'the' : 'a', $self->site_name)
     });
+
     if ($adminship) {
+      my $group = $adminship->group;
       $form->add_field({
         'label'     => 'Group',
         'type'      => 'noedit',
         'name'      => 'group_id',
-        map {(
-          'caption' => $_->name,
-          'value'   => $_->group_id
-        )} $adminship->group
+        'caption'   => $group->name,
+        'value'     => $group->group_id
       });
 
     } else {
@@ -49,6 +49,7 @@ sub content {
         'values'    => [ map {$_ = $_->group; {'caption' => $_->name, 'value' => $_->group_id}} @$adminships ]
       });
     }
+
     $form->add_field({
       'type'        => 'text',
       'name'        => 'emails',
@@ -57,6 +58,7 @@ sub content {
       'value'       => $hub->param('emails') || '',
       'notes'       => 'Multiple email addresses should be separated by commas.'
     });
+
     $form->add_field({
       'type'        => 'submit',
       'value'       => 'Send'
@@ -74,8 +76,8 @@ sub content {
       'id'          => 'invite_members',
       'heading'     => 'Invite new members',
       'subsections' => [
-        '<p>You do not have administration rights for any of the groups to invite any members. You can though create a new group and then invite members to it.</p>',
-        $self->link_create_new_group
+        sprintf '<p>You do not have administration rights for any of the groups to invite any members. You can though %s and then invite members to it.</p>',
+        $self->js_link({'url' => {'action' => 'Groups', 'function' => 'Add'}, 'target' => 'page', 'caption' => 'create a new group'})
       ]
     });
   }
