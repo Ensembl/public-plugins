@@ -5,6 +5,8 @@ package EnsEMBL::Users::Component::Account::Groups::AddEdit;
 
 use strict;
 
+use EnsEMBL::Users::Messages qw(MESSAGE_GROUP_INACTIVE);
+
 use base qw(EnsEMBL::Users::Component::Account);
 
 sub content {
@@ -18,18 +20,21 @@ sub content {
   if ($membership) {
 
     my $group       = $membership->group;
+
+    # dont allow editing an inactive group
+    return $self->render_message(MESSAGE_GROUP_INACTIVE, {'error' => 1}) if !$is_add_new && $group->status eq 'inactive';
+
     my $level       = $membership->level;
     my $group_types = $self->get_group_types;
     my $notif_types = $self->get_notification_types;
 
     my $form        = $self->new_form({'action' => $hub->url({qw(action Group function Save)})});
 
-    $form->add_hidden({'name' => 'group_id', 'value'  => $group->group_id});
+    $form->add_hidden({'name' => 'id', 'value'  => $group->group_id});
     if ($level eq 'administrator') {
       $form->add_field({'type'  => 'string',    'name'  => 'name',    'label' => 'Group name',    'value' => $group->name,    'required' => 1 });
       $form->add_field({'type'  => 'text',      'name'  => 'blurb',   'label' => 'Description',   'value' => $group->blurb                    });
       $form->add_field({'type'  => 'dropdown',  'name'  => 'type',    'label' => 'Group type',    'value' => $group->type,    'values' => [ map {'value' => $_, 'caption' => $group_types->{$_}}, sort keys %$group_types  ]});
-      $form->add_field({'type'  => 'dropdown',  'name'  => 'status',  'label' => 'Group status',  'value' => $group->status,  'values' => [ map {'value' => $_, 'caption' => ucfirst $_}, qw(active inactive) ]});
     }
     $form->add_field({'type'  => 'yesno',   'value' => $membership->$_ || 0, 'name' => $_, 'label' => $notif_types->{$_}, 'is_binary' => 1}) for $level eq 'administrator' ? qw(notify_join notify_edit notify_share) : qw(notify_share);
     $form->add_field({'type'  => 'submit',  'value' => $is_add_new ? 'Add' : 'Save'});
@@ -40,23 +45,16 @@ sub content {
 
     my $memberships = $user->active_memberships;
 
-    if (@$memberships) {
-
-      # display form to select a group if no group was specified
-      return $self->js_section({
-        'subsections' => [ $self->select_group_form({
-          'memberships' => $memberships,
-          'action'      => $hub->url({'action' => 'Groups', 'function' => 'Edit'}),
-          'label'       => 'Select a group to edit',
-          'submit'      => 'Edit'
-        })->render ]
-      });
-
-    # if no group joined
-    } else {
-
-      return $self->no_membership_found_page;
-    }
+    # display form to select a group if no group was specified
+    return $self->js_section({
+      'heading'     => 'Edit group',
+      'subsections' => [ $self->select_group_form({
+        'memberships' => $memberships,
+        'action'      => $hub->url({'action' => 'Groups', 'function' => 'Edit'}),
+        'label'       => 'Select a group to edit',
+        'submit'      => 'Edit'
+      })->render ]
+    });
   }
 }
 
