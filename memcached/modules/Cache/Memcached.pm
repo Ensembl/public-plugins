@@ -508,6 +508,10 @@ sub _set {
 
     my $len = length($val);
 
+    ## FIXME - we need to use Encode when passing strings in and out of memGzip
+    ## because the blog sometimes outputs wide characters, which are unsupported
+    ## (see http://www.perlmonks.org/?node_id=702320)
+
     if ($self->{'compress_threshold'} && $HAVE_ZLIB && $self->{'compress_enable'} &&
         $len >= $self->{'compress_threshold'} && !$app_or_prep) {
 
