@@ -45,40 +45,52 @@ sub handle_verified_identity {
     }
   }
 
-  my $hub     = $self->hub;
-  my $object  = $self->object;
-  my $openid  = $verified_identity->url;
-  my $login   = $object->fetch_login_account($openid);
-  $email      = $self->validate_fields({'email' => $email || ''})->{'email'} || ''; # just validate the email here, we may throw error later in the code if email is invalid.
+  my $hub         = $self->hub;
+  my $logged_user = $hub->user;
+  my $object      = $self->object;
+  my $openid      = $verified_identity->url;
+  my $login       = $object->fetch_login_account($openid);
+  $email          = $self->validate_fields({'email' => $email || ''})->{'email'} || ''; # just validate the email here, we may throw error later in the code if email is invalid.
 
-  # if login account exists - not a first time login
-  if ($login) {
+  # if request from a logged in user to add login
+  if ($logged_user) {
 
-    my $linked_user = $login->user;
+    # can't add a login account if this login is already linked to another user - TODO - add a 'then' param for Details/View or Preferences page
+    return $self->ajax_redirect($hub->url({'action' => 'Preferences', 'msg' => MESSAGE_LOGIN_ALREADY_LINKED})) if $login && $login->user && $login->status eq 'active';
 
-    unless ($linked_user) { # this means user tried to register previously, but left the process incomplete
+  # for a login/registration request
+  } else {
 
-      # reset the salt for security reasons
-      $login->reset_salt_and_save;
-      return $self->redirect_openid_register($login);
+    # if login account exists - not a first time login
+    if ($login) {
+
+      my $linked_user = $login->user;
+
+      unless ($linked_user) { # this means user tried to register previously, but left the process incomplete
+
+        # reset the salt for security reasons
+        $login->reset_salt_and_save;
+        return $self->redirect_openid_register($login);
+      }
+
+      # If blocked user
+      return $self->redirect_message(MESSAGE_ACCOUNT_BLOCKED) if $linked_user->status eq 'suspended';
+
+      # For successful login
+      return $self->redirect_after_login($linked_user) if $login->status eq 'active';
+
+      # If email provided by openid provider is same as the saved one but user has not verified his email yet, send another verification email
+      if ($linked_user->email eq $email) {
+        $self->get_mailer->send_verification_email($login);
+        return $self->redirect_message(MESSAGE_VERIFICATION_SENT, {'email' => $email});
+      }
     }
 
-    # If blocked user
-    return $self->redirect_message(MESSAGE_ACCOUNT_BLOCKED) if $linked_user->status eq 'suspended';
+    # to continue with registration, we need a valid email
+    # very unlikely to happen as the openid server *should not* reply without a valid email
+    return $self->redirect_login(MESSAGE_OPENID_EMAIL_MISSING) unless $email;
 
-    # For successful login
-    return $self->redirect_after_login($linked_user) if $login->status eq 'active';
-
-    # If email provided by openid provider is same as the saved one but user has not verified his email yet, send another verification email
-    if ($linked_user->email eq $email) {
-      $self->get_mailer->send_verification_email($login);
-      return $self->redirect_message(MESSAGE_VERIFICATION_SENT, {'email' => $email});
-    }
   }
-
-  # to continue with registration, we need a valid email
-  # very unlikely to happen as the openid server *should not* reply without a valid email
-  return $self->redirect_login(MESSAGE_OPENID_EMAIL_MISSING) unless $email;
 
   # for new registration
   $login ||= $object->new_login_account({
@@ -91,7 +103,15 @@ sub handle_verified_identity {
   $login->email($email);
   $login->name($name || '');
 
-  return $self->handle_registration($login, $email);
+  # if not an 'AddLogin' request
+  return $self->handle_registration($login, $email) unless $logged_user;
+
+  # add the new login
+  my $r_user = $logged_user->rose_object;
+  $login->activate($r_user);
+  $r_user->save;
+
+  return $self->ajax_redirect($hub->url({qw(action Preferences)})); ## TODO - add a 'then' param for Details/View or Preferences page
 }
 
 1;
