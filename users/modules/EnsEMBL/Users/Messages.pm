@@ -43,6 +43,8 @@ my %MESSAGES = (
   MESSAGE_BOOKMARK_NOT_FOUND    => sub { 'Bookmark not found', 'Sorry, we could not find the specified bookmark.' },
   MESSAGE_CANT_DELETE_BOOKMARK  => sub { 'Not allowed', 'You do not seem to have the right to delete this bookmark.' },
   MESSAGE_NO_EXISTING_ACCOUNT   => sub { sprintf(q(No existing account was found for the email address provided. Please verify the email address again, or to create a new account, please <a href="%s">click here</a>), $_[0]->url({'action' => 'OpenID', 'function' => 'Register', 'code' => $_[0]->param('code')})) },
+  MESSAGE_NO_LOGIN_AVAILABLE    => sub { 'No more login options available', 'You seem to have added all the available login options to your account.'},
+  MESSAGE_LOGIN_ALREADY_LINKED  => sub { 'Could not add login', 'Sorry, this login option already exists for another user account.'},
   MESSAGE_URL_EXPIRED           => sub { 'URL expired', 'The link you clicked to reach here has been expired.' },
   MESSAGE_UNKNOWN_ERROR         => sub { 'Unknown error', 'An unknown error occurred. Please try again or contact the help desk.' }
 );
