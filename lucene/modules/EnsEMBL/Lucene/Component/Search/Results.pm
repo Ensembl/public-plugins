@@ -120,10 +120,10 @@ sub content {
     if(@group_errors) {
       if($any_ok) {
         my $beware = "Some search indices are not responding, search results may be missing or incomplete";
-        $html = $self->_warning("Incomplete results","<p>$beware</p>").$html;
+        $html = $self->_warning("Incomplete results","<p>$beware</p>", '100%').$html;
       } else {
         my $beware = "Sorry ".ucfirst($sitetype)." search is currently unavailable";
-        $html = $self->_error("Search unavailable","<p>$beware</p>").$html;
+        $html = $self->_error("Search unavailable","<p>$beware</p>", '100%').$html;
       }
     }
 
