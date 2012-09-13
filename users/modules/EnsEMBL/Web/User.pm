@@ -49,8 +49,8 @@ sub urls                  { shift->_goto_rose_object('urls');               }
 sub histories             { shift->_goto_rose_object('histories');          }
 sub favourite_tracks      { shift->_goto_rose_object('favourite_tracks');   }
                           
-sub is_admin_of           { shift->_goto_rose_object('is_admin_of');        }
-sub is_member_of          { shift->_goto_rose_object('is_member_of');       }
+sub is_admin_of           { shift->_goto_rose_object('is_admin_of', @_);    }
+sub is_member_of          { shift->_goto_rose_object('is_member_of', @_);   }
 
 sub new {
   ## @constructor
