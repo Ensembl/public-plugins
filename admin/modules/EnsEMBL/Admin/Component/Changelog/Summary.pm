@@ -84,10 +84,12 @@ sub record_tree {
     {'node_name' => 'span', 'class' => 'cl-field-title',  'inner_HTML' => 'Status:'},
     {'node_name' => 'span', 'class' => 'cl-field-value cl-fv-'.$record->status, 'inner_HTML' => $self->display_field_value($record->status)},
     $valid_user ? (
-    {'node_name' => 'span', 'inner_HTML' => 'Declared by:', 'class' => 'cl-field-title'},
-    {'node_name' => 'span', 'inner_HTML' => $self->display_field_value($record->created_by_user), 'class' => 'cl-field-value'},
-    {'node_name' => 'span', 'inner_HTML' => 'Last updated:', 'class' => 'cl-field-title'},
-    {'node_name' => 'span', 'inner_HTML' => $self->display_field_value($record->modified_at ? $record->modified_at : $record->created_at), 'class' => 'cl-field-value'}
+    {'node_name' => 'span', 'class' => 'cl-field-title',  'inner_HTML' => 'Priority:'},
+    {'node_name' => 'span', 'class' => 'cl-field-value',  'inner_HTML' => $self->display_field_value($record->priority, {'lookup' => {@{$object->show_fields}}->{'priority'}->{'values'} })},
+    {'node_name' => 'span', 'class' => 'cl-field-title',  'inner_HTML' => 'Declared by:'},
+    {'node_name' => 'span', 'class' => 'cl-field-value',  'inner_HTML' => $self->display_field_value($record->created_by_user)},
+    {'node_name' => 'span', 'class' => 'cl-field-title',  'inner_HTML' => 'Last updated:'},
+    {'node_name' => 'span', 'class' => 'cl-field-value',  'inner_HTML' => $self->display_field_value($record->modified_at ? $record->modified_at : $record->created_at)}
     ) : ()
   );
 
