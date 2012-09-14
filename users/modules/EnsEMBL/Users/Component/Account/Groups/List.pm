@@ -16,7 +16,7 @@ sub content {
 
   # create an 'easy to use' data structure
   my @groups;
-  for (@{$object->fetch_groups({'query' => ['!type' => 'private'], 'debug' => 1})}) {
+  for (@{$object->fetch_groups({'query' => ['!type' => 'private']})}) {
     my $membership = $user->get_membership_object($_);
     unless ($membership && $membership->is_user_blocked) { # dont show the group that blocked this user
       push @groups, {
@@ -35,7 +35,7 @@ sub content {
       {'title' => 'Description',        'key' => 'desc',    'width' => '50%'},
       {'title' => 'Type',               'key' => 'type',    'width' => '10%'},
       {'title' => '',                   'key' => 'join',    'width' => '10%', 'class' => 'sort_html'    },
-    ], [], {'data_table' => 'no_col_toggle', 'exportable' => 0, 'data_table_config' => {'iDisplayLength' => 25}});
+    ], [], {'class' => 'tint', 'data_table' => 'no_col_toggle', 'exportable' => 0, 'data_table_config' => {'iDisplayLength' => 25}});
 
     for (sort {$b->{'member_count'} <=> $a->{'member_count'}} @groups) {
       my $group       = $_->{'group'};
@@ -81,10 +81,11 @@ sub content {
 
     return $self->js_section({
       'heading'     => 'No group found to join ',
-      'subsections' => [
-      sprintf(q(<p>No public user group exists for %s.</p>), $self->site_name),
-      $self->link_create_new_group
-    ]});
+      'subsections' => [ sprintf(q(<p>No public user group exists for %s that you can join. If you want to create a new group, please %s.</p>),
+        $self->site_name,
+        $self->js_link({'href' => {'action' => 'Groups', 'function' => 'Add'}, 'caption' => 'click here', 'inline' => 1, 'target' => 'page'})
+      )]
+    });
   }
 }
 
