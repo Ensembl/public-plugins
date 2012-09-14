@@ -28,7 +28,7 @@ sub content {
         'sprite'            => 'bookmark-add-icon',
         'target'            => 'section'
       }],
-      'subsections'       => [ @$bookmarks ? $self->bookmarks_table({'bookmarks' => $bookmarks}) : q(<p>You have not saved any bookmark.</p>) ]
+      'subsections'       => [ @$bookmarks ? $self->bookmarks_table({'bookmarks' => $bookmarks}) : $self->no_bookmark_message ]
     }), @$group_bookmarks ?
     $self->js_section({
       'id'                => 'group_bookmarks',
