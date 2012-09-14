@@ -22,15 +22,7 @@ sub set_default_action {
 
 sub user_tree { return 1; }
 
-sub user_populate_tree {
-  ## TODO
-  my $self = shift;
-  my $hub = $self->hub;  
-
-  if (my $user = $hub->user) {
-
-  }
-}
+sub popupate_tree {}
 
 
 
@@ -119,18 +111,24 @@ sub user_populate_tree {
 #   }  
 # }
 
-sub populate_tree {
-  my $self      = shift;
-  my $hub       = $self->hub;
-  my $user      = $hub->user;
-  my $action    = $hub->action;
-  my $function  = $hub->function;
+sub user_populate_tree {
+  my $self                = shift;
+  my $hub                 = $self->hub;
+  my $user                = $hub->user;
+  my $action              = $hub->action;
+  my $function            = $hub->function;
+  my $object              = $self->object;
 
   ## PAGES FOR LOGGED IN USER ONLY
   if ($user) {
 
+    # flags to decide whether to make a node clickable or not
+    my $has_groups            = $object && $object->count_groups                        ? 1 : 0;
+    my $has_accessible_groups = $object && $object->count_groups({'active_only' => 1})  ? 1 : 0;
+
     # main preferences page to view all settings with links to edit individual detail, group, bookmark etc
     my $preference_menu = $self->create_node('Preferences', 'Account Settings', [
+      'message'           =>  'EnsEMBL::Users::Component::Account::Message',
       'notifications'     =>  'EnsEMBL::Users::Component::Account::Groups::Notifications',
       'view_details'      =>  'EnsEMBL::Users::Component::Account::Details::View',
       'view_groups'       =>  'EnsEMBL::Users::Component::Account::Groups::ViewAll',
@@ -147,6 +145,11 @@ sub populate_tree {
       'edit_details'      =>  'EnsEMBL::Users::Component::Account::Details::Edit'
     ], { 'availability'   =>  1 }));
 
+    # page modified from openid buttons component to allow a logged in user to select another openid provider as an alternative login option
+    $details_menu->append($self->create_node('Details/AddLogin', 'Add Login', [
+      'edit_details'      =>  'EnsEMBL::Users::Component::Account::OpenID::Buttons'
+    ], { 'no_menu_entry'  =>  1 }));
+
     # page to view groups user is a member of
     my $group_menu = $preference_menu->append($self->create_node('Groups', 'My Groups', [
       'message'           =>  'EnsEMBL::Users::Component::Account::Message',
@@ -158,13 +161,13 @@ sub populate_tree {
     $group_menu->append($self->create_node('Groups/View', 'View a group', [
       'message'           =>  'EnsEMBL::Users::Component::Account::Message',
       'view_group'        =>  'EnsEMBL::Users::Component::Account::Groups::View'
-    ], { 'availability'   =>  1 }));
+    ], { 'availability'   =>  $has_groups }));
 
     # page to edit a group
     $group_menu->append($self->create_node('Groups/Edit', 'Edit a group', [
       'message'           =>  'EnsEMBL::Users::Component::Account::Message',
       'edit_group'        =>  'EnsEMBL::Users::Component::Account::Groups::AddEdit'
-    ], { 'availability'   =>  1 }));
+    ], { 'availability'   =>  $has_accessible_groups }));
 
     # page to create a new group
     $group_menu->append($self->create_node('Groups/Add', 'Create new group', [
@@ -184,6 +187,11 @@ sub populate_tree {
       'add_group'         =>  'EnsEMBL::Users::Component::Account::Groups::Invite'
     ], { 'availability'   =>  1 }));
 
+    # page to create a new group
+    $group_menu->append($self->create_node('Groups/ConfirmDelete', 'Delete group', [
+      'add_group'         =>  'EnsEMBL::Users::Component::Account::Groups::ConfirmDelete'
+    ], { 'no_menu_entry'  =>  1 }));
+
     # page to view user bookmarks
     my $bookmarks_menu = $preference_menu->append($self->create_node('Bookmark', 'My Bookmarks', [
       'view_bookmarks'    =>  'EnsEMBL::Users::Component::Account::Bookmark::View'
@@ -201,6 +209,7 @@ sub populate_tree {
 
     # page to share a bookmark with a group
     $bookmarks_menu->append($self->create_node('Share/Bookmark', 'Share bookmark', [
+      'message'           =>  'EnsEMBL::Users::Component::Account::Message',
       'share_bookmark'    =>  'EnsEMBL::Users::Component::Account::Share::Bookmark'
     ], { 'availability'   =>  1 }));
 
@@ -272,7 +281,6 @@ sub populate_tree {
     $self->create_node( 'Password/Retrieve',  '', [], { 'no_menu_entry' => 1, 'command' => 'EnsEMBL::Users::Command::Account::Password::Retrieve' });
 
     # OpenID related commands - command to make request to openid provider, command to handle response from the provider, command to add a new openid user
-    $self->create_node( "OpenID/$_",          '', [], { 'no_menu_entry' => 1, 'command' => "EnsEMBL::Users::Command::Account::OpenID::$_"         }) for qw(Request Response);
     $self->create_node( "OpenID/$_",          '', [], { 'no_menu_entry' => 1, 'command' => 'EnsEMBL::Users::Command::Account::OpenID::Add'        }) for qw(Add Link);
   }
 
@@ -300,6 +308,9 @@ sub populate_tree {
 
   # Command to confirm user account and save the newly choosen password (intentionally kept same as in Password/Save), command to save password after a password lost request or just a change password request
   $self->create_node($_,            '',       [], { 'no_menu_entry' => 1,       'command' => 'EnsEMBL::Users::Command::Account::Password::Save'               }) for qw(Confirmed Password/Save);
+
+  # Openid resuest and response commands work both ways - user logged in or not (if your is logged it, its a request to add login)
+  $self->create_node( "OpenID/$_",  '',       [], { 'no_menu_entry' => 1,       'command' => "EnsEMBL::Users::Command::Account::OpenID::$_"                   }) for qw(Request Response);
 
   # Generic logout command
   $self->create_node('Logout',      'Logout', [], { 'no_menu_entry' => !$user,  'command' => 'EnsEMBL::Users::Command::Account::Logout', 'availability' => 1  });
