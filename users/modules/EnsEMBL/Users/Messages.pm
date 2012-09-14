@@ -1,10 +1,10 @@
 package EnsEMBL::Users::Messages;
 
-### @usages
+### @usage
 ### use EnsEMBL::Users::Messages qw(ALL);                     # is same as use EnsEMBL::Users::Messages; # will include all the message constants, but not the get_message method
 ### use EnsEMBL::Users::Messages qw(get_message);             # will only include the get_message method, no message constants
 ### use EnsEMBL::Users::Messages qw(ALL get_message);         # will include all message constants and the get_message method
-### use EnsEMBL::Users::Messages qw(MESSAGE_PASSWORD_WRONG);  # will only include only the specified message constant
+### use EnsEMBL::Users::Messages qw(MESSAGE_PASSWORD_WRONG);  # will only include only the specified message constant - could be multiple
 
 use strict;
 use warnings;
@@ -43,8 +43,8 @@ my %MESSAGES = (
   MESSAGE_BOOKMARK_NOT_FOUND    => sub { 'Bookmark not found', 'Sorry, we could not find the specified bookmark.' },
   MESSAGE_CANT_DELETE_BOOKMARK  => sub { 'Not allowed', 'You do not seem to have the right to delete this bookmark.' },
   MESSAGE_NO_EXISTING_ACCOUNT   => sub { sprintf(q(No existing account was found for the email address provided. Please verify the email address again, or to create a new account, please <a href="%s">click here</a>), $_[0]->url({'action' => 'OpenID', 'function' => 'Register', 'code' => $_[0]->param('code')})) },
-  MESSAGE_NO_LOGIN_AVAILABLE    => sub { 'No more login options available', 'You seem to have added all the available login options to your account.'},
-  MESSAGE_LOGIN_ALREADY_LINKED  => sub { 'Could not add login', 'Sorry, this login option already exists for another user account.'},
+  MESSAGE_LOGIN_ALREADY_TAKEN   => sub { 'Could not add login', 'Sorry, this login option already exists for another user account.' },
+  MESSAGE_LOGIN_ALREADY_LINKED  => sub { 'Login option already added', 'You already seem to have linked this login option to your account.' },
   MESSAGE_URL_EXPIRED           => sub { 'URL expired', 'The link you clicked to reach here has been expired.' },
   MESSAGE_UNKNOWN_ERROR         => sub { 'Unknown error', 'An unknown error occurred. Please try again or contact the help desk.' }
 );
