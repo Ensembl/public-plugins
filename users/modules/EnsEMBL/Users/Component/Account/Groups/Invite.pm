@@ -77,7 +77,12 @@ sub content {
       'heading'     => 'Invite new members',
       'subsections' => [
         sprintf '<p>You do not have administration rights for any of the groups to invite any members. You can though %s and then invite members to it.</p>',
-        $self->js_link({'url' => {'action' => 'Groups', 'function' => 'Add'}, 'target' => 'page', 'caption' => 'create a new group'})
+        $self->js_link({
+          'href'    => {'action' => 'Groups', 'function' => 'Add'},
+          'target'  => 'page',
+          'caption' => 'create a new group',
+          'inline'  => 1
+        })
       ]
     });
   }
