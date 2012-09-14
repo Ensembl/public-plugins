@@ -3,11 +3,6 @@
 <meta name="order" content="1" />
 <title>Data Description</title>
 
-<style type="text/css">
-div.new_species {
-	
-}
-
 </head>
 
 <body>
@@ -19,21 +14,42 @@ Data Description |
 <a href="/info/docs/api/variation/index.html">Perl API</a> |
 <a href="vep/index.html">Variant Effect Predictor</a>
 </b>
-<br /><br />
 
-<h1>Ensembl Variation - Data description</h1>
+<div>
+	<div style="float:right;margin-left:8px;margin-top:2px;background-color:#F2F2F2;color:#333;border-radius:5px">
+    <div style="padding:5px;font-weight:bold;color:#FFF;background-color:navy;border-top-left-radius:5px;border-top-right-radius:5px">
+		  <img src="/i/16/rev/info.png" style="vertical-align:top" />
+		  Page content:
+		</div> 
+    <ul style="padding-left:25px;padding-right:5px">
+      <li><a href="#sources">Species & Sources</a></li> 
+      <li><a href="#displays">Displays</a></li> 
+      <li><a href="#datatypes">Data types</a></li> 
+      <li><a href="#classes">Variation classes</a></li>
+      <li><a href="#indel">Insertion & Deletion coordinates</a></li>
+      <li><a href="#populations">Populations</a></li>
+      <li><a href="#variation_sets">Variation sets</a></li>
+			<li><a href="#validation_status">Validation status</a></li>
+      <li><a href="#quality_control">Quality control</a></li>
+	  </ul>
+  </div>
 
-<p>
-Below is a description of the data we store in the databases for Ensembl Variation. For several different species in Ensembl, 
-we import variation data (SNPs, CNVs, allele frequencies, genotypes etc) from a variety of 
-<a href="sources_documentation.html">sources</a> (e.g. dbSNP). Imported variants and alleles are subjected to a <a href="#quality_control">quality control</a> process to flag suspect data .
-<br />We classify the variants into different
-<a href="#classes">classes</a> and calculate the <a href="predicted_data.html">predicted consequence(s)</a> of the variant. In human, we calculate the linkage disequilibrium for each variant, by population. 
-We have also created <a href="#variation_sets">sets</a> to help people retrieve a specific group of variants from a particular dataset.
-</p>
+  <br />
+  <h1>Ensembl Variation - Data description</h1>
+
+  <p>
+  Below is a description of the data we store in the databases for Ensembl Variation. For several different species in Ensembl, 
+  we import variation data (SNPs, CNVs, allele frequencies, genotypes etc) from a variety of 
+  <a href="sources_documentation.html">sources</a> (e.g. dbSNP). Imported variants and alleles are subjected to a <a href="#quality_control">quality control</a> process to flag suspect data .
+  <br />We classify the variants into different
+  <a href="#classes">classes</a> and calculate the <a href="predicted_data.html">predicted consequence(s)</a> of the variant. In human, we calculate the linkage disequilibrium for each variant, by population. 
+  We have also created <a href="#variation_sets">sets</a> to help people retrieve a specific group of variants from a particular dataset.
+  </p>
+	<br />
+</div>
+<div style="clear:both" />
 
 
-<br />
 <h2 id="sources"> Variation species and data sources </h2>
 <p>
 Ensembl stores variation data for the following species, but note that users can still use the 
@@ -418,7 +434,7 @@ somatic mutations from germline variations in the display term, prefixing the te
 			<td rowspan="2">The point at which one or more contiguous nucleotides were excised.</td>
 			<td rowspan="2"><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0000159">SO:0000159</a></td>
 			<td>deletion</td>
-			<td rowspan="2">Variation<br / >Structural variation</td>
+			<td rowspan="2">Variation<br />Structural variation</td>
 		</tr>
 		<tr>
 			<td>somatic_deletion</td>
@@ -430,7 +446,7 @@ somatic mutations from germline variations in the display term, prefixing the te
 			<td rowspan="2">The sequence of one or more nucleotides added between two adjacent nucleotides in the sequence.</td>
 			<td rowspan="2"><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0000667">SO:0000667</a></td>
 			<td>insertion</td>
-			<td rowspan="2">Variation<br / >Structural variation</td>
+			<td rowspan="2">Variation<br />Structural variation</td>
 		</tr>
 		<tr class="bg2">
 			<td>somatic_insertion</td>
@@ -442,7 +458,7 @@ somatic mutations from germline variations in the display term, prefixing the te
 			<td rowspan="2">A sequence_alteration is a sequence_feature whose extent is the deviation from another sequence.</td>
 			<td rowspan="2"><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001059">SO:0001059</a></td>
 			<td>sequence_alteration</td>
-			<td rowspan="2">Variation<br / >Structural variation</td>
+			<td rowspan="2">Variation<br />Structural variation</td>
 		</tr>
 		<tr>
 			<td>somatic_sequence_alteration</td>
@@ -475,6 +491,202 @@ example, a three base pair deletion of nucleotides 12600, 12601, and
    12600     12602    
 </pre>
 
+
+
+<br />
+
+<h2 id="populations">Populations</h2>
+<p>
+<p>For each variant we store population data (allele
+frequencies, genotypes) available from different projects (e.g. 1000
+Genomes, HapMap). You can see this on our variation pages, for
+example: <a href="/Homo_sapiens/Variation/Population?v=rs1333049">rs1333049</a>.<br />
+Below we list the population names associated with the 1000 Genomes Project and the HapMap Project:
+</p>
+
+<h3>Populations from the 1000 Genomes Project (Human)</h3>
+<table id="1000_genomes" class="ss">
+
+	<tr>
+		<th style="width:200px">Name</th>
+		<th>Size</th>
+		<th>Description</th>
+	</tr>
+	
+	<tr>
+		<td>1000GENOMES:phase_1_ALL</td>
+		<td>1092</td>
+		<td>All individuals from phase 1 of the 1000 Genomes Project</td>
+	</tr>
+	<tr class="bg2">
+		<td>1000GENOMES:phase_1_AFR</td>
+		<td>246</td>
+		<td>All African individuals from phase 1 of the 1000 Genomes Project (YRI, LWK, ASW)</td>
+	</tr>
+	<tr>
+		<td>1000GENOMES:phase_1_AMR</td>
+		<td>181</td>
+		<td>All American individuals from phase 1 of the 1000 Genomes Project</td>
+	</tr>
+	<tr class="bg2">
+		<td>1000GENOMES:phase_1_ASN</td>
+		<td>286</td>
+		<td>All East Asian individuals from phase 1 of the 1000 Genomes Project (CHB, JPT, CHS)</td>
+	</tr>
+	<tr>
+		<td>1000GENOMES:phase_1_ASW</td>
+		<td>61</td>
+		<td>Americans of African Ancestry in SW USA</td>
+	</tr>
+	<tr class="bg2">
+		<td>1000GENOMES:phase_1_CEU</td>
+		<td>85</td>
+		<td>Utah Residents (CEPH) with Northern and Western European ancestry</td>
+	</tr>
+	<tr>
+		<td>1000GENOMES:phase_1_CHB</td>
+		<td>97</td>
+		<td>Han Chinese in Bejing, China</td>
+	</tr>
+	<tr class="bg2">
+		<td>1000GENOMES:phase_1_CHS</td>
+		<td>100</td>
+		<td>Southern Han Chinese</td>
+	</tr>
+	<tr>
+		<td>1000GENOMES:phase_1_CLM</td>
+		<td>60</td>
+		<td>Colombian from Medellian, Colombia</td>
+	</tr>
+	<tr class="bg2">
+		<td>1000GENOMES:phase_1_EUR</td>
+		<td>379</td>
+		<td>All European individuals from phase 1 of the 1000 Genomes Project (CEU, TSI, FIN, GBR, IBS)</td>
+	</tr>
+	<tr>
+		<td>1000GENOMES:phase_1_FIN</td>
+		<td>93</td>
+		<td>Finnish in Finland</td>
+	</tr>
+	<tr class="bg2">
+		<td>1000GENOMES:phase_1_GBR</td>
+		<td>89</td>
+		<td>British in England and Scotland</td>
+	</tr>
+	<tr>
+		<td>1000GENOMES:phase_1_IBS</td>
+		<td>14</td>
+		<td>Iberian population in Spain</td>
+	</tr>
+	<tr class="bg2">
+		<td>1000GENOMES:phase_1_JPT</td>
+		<td>89</td>
+		<td>Japanese in Tokyo, Japan</td>
+	</tr>
+	<tr>
+		<td>1000GENOMES:phase_1_LWK</td>
+		<td>97</td>
+		<td>Luhya in Webuye, Kenya</td>
+	</tr>
+	<tr class="bg2">
+		<td>1000GENOMES:phase_1_MXL</td>
+		<td>66</td>
+		<td>Mexican Ancestry from Los Angeles USA</td>
+	</tr>
+	<tr>
+		<td>1000GENOMES:phase_1_PUR</td>
+		<td>55</td>
+		<td>Puerto Ricans from Puerto Rica</td>
+	</tr>
+	<tr class="bg2">
+		<td>1000GENOMES:phase_1_TSI</td>
+		<td>98</td>
+		<td>Toscani in Italy</td>
+	</tr>
+	<tr>
+		<td>1000GENOMES:phase_1_YRI</td>
+		<td>88</td>
+		<td>Yoruba in Ibadan, Nigera</td>
+	</tr>
+</table>
+
+<h3>Populations from the HapMap Project (Human)</h3>
+<table id="hapmap" class="ss">
+
+	<tr>
+		<th style="width:200px">Name</th>
+		<th>Size</th>
+		<th>Description</th>
+	</tr>
+
+	<tr>
+		<td>CSHL-HAPMAP:HAPMAP-ASW</td>
+		<td>-</td>
+		<td>African ancestry in Southwest USA. ASW is one of the 11 populations in HapMap phase 3.</td>
+	</tr>
+	<tr class="bg2">
+		<td>CSHL-HAPMAP:HapMap-CEU</td>
+		<td>-</td>
+		<td>Utah residents with Northern and Western European ancestry from the CEPH collection. CEU is one of the 11 populations in HapMap phase 3.</td>
+	</tr>
+	<tr>
+		<td>CSHL-HAPMAP:HAPMAP-CHB</td>
+		<td>-</td>
+		<td>Han Chinese in Beijing, China. CHB is one of the 11 populations in HapMap phase 3.</td>
+	</tr>
+	<tr class="bg2">
+		<td>CSHL-HAPMAP:HAPMAP-CHD</td>
+		<td>-</td>
+		<td>Chinese in Metropolitan Denver, Colorado. CHD is one of the 11 populations in HapMap phase 3.</td>
+	</tr>
+	<tr>
+		<td>CSHL-HAPMAP:HAPMAP-GIH</td>
+		<td>-</td>
+		<td>Gujarati Indians in Houston, Texas. GIH is one of the 11 populations in HapMap phase 3.</td>
+	</tr>
+	<tr class="bg2">
+		<td>CSHL-HAPMAP:HapMap-HCB</td>
+		<td>-</td>
+		<td>45 unrelated Han Chinese in Beijing, China, representing one of the populations studied in the International HapMap project (<a href="http://www.hapmap.org"> http://www.hapmap.org</a>). See <a href="http://www.hapmap.org/citinghapmap.html.en">http://www.hapmap.org/citinghapmap.html.en</a> for further information about,this population and others studied in the project. <a href="http://www.hapmap.org/hapmappopulations.html.en">http://www.hapmap.org/hapmappopulations.html.en</a>,also has relevant information.</td>
+	</tr>
+	<tr>
+		<td>CSHL-HAPMAP:HapMap-JPT</td>
+		<td>-</td>
+		<td>Japanese in Tokyo, Japan. JPT is one of the 11 populations in HapMap phase 3.</td>
+	</tr>
+	<tr class="bg2">
+		<td>CSHL-HAPMAP:HAPMAP-LWK</td>
+		<td>-</td>
+		<td>Luhya in Webuye, Kenya. LWK is one of the 11 populations in HapMap phase 3.</td>
+	</tr>
+	<tr>
+		<td>CSHL-HAPMAP:HAPMAP-MEX</td>
+		<td>-</td>
+		<td>Mexican ancestry in Los Angeles, California. MEX is one of the 11 populations in HapMap phase 3.</td>
+	</tr>
+	<tr class="bg2">
+		<td>CSHL-HAPMAP:HAPMAP-MKK</td>
+		<td>-</td>
+		<td>Maasai in Kinyawa, Kenya. MKK is one of the 11 populations in HapMap phase 3.</td>
+	</tr>
+	<tr>
+		<td>CSHL-HAPMAP:HAPMAP-TSI</td>
+		<td>-</td>
+		<td>Toscans in Italy. TSI is one of the 11 populations in HapMap phase 3.</td>
+	</tr>
+	<tr class="bg2">
+		<td>CSHL-HAPMAP:HapMap-YRI</td>
+		<td>-</td>
+		<td>Yoruba in Ibadan, Nigeria. YRI is one of the 11 populations in HapMap phase 3.</td>
+	</tr>
+</table>
+
+
+
+<p>This population data is stored in the sample table of the Variation database. You can see a description of the sample
+table <a href="variation_schema.html#sample">here</a>.
+</p>
+
 <br />
 
 <h2 id="variation_sets">Variation sets</h2>
@@ -482,9 +694,9 @@ example, a three base pair deletion of nucleotides 12600, 12601, and
 <p>
 We use the concept of variation sets to group variations that share some property together. For example, we have grouped the variations identified in the three different
 1000 Genomes pilot studies into separate variation sets. The sets can be further subdivided into supersets and subsets to reflect hierarchical relationships between them. In the case
-of the 1000 Genomes pilot sets, these are divided into subsets based on population. For example, the set representing variations identified in the first 1000 Genomes pilot study is named 
-'1000 Genomes - Low coverage' and has three subsets: '1000 Genomes - Low coverage - CEU', '1000 Genomes - Low coverage - CHB+JPT' and '1000 Genomes - Low coverage - YRI'. 
-The variation sets can be displayed as separate tracks on the location view. This behaviour is controlled from the 'Germline variations' section on the configuration panel which is accessed by 
+of the 1000 Genomes phase 1 sets, these are divided into subsets based on population. For example, the set representing variations identified in the 1000 Genomes phase 1 study is named 
+'1000 Genomes - All' and has several subsets like: '1000 Genomes - AFR', '1000 Genomes - AMR', '1000 Genomes - ASN' and '1000 Genomes - EUR'. 
+The variation sets can be displayed as separate tracks on the location view. This behaviour is controlled from the 'Variation' section on the configuration panel which is accessed by 
 clicking the 'Configure this page' link in the left hand side navigation.
 </p>
 
@@ -493,8 +705,7 @@ The sets are constructed during production and are stored in the database. The t
 variation sets in the Ensembl variation database (subsets are indicated by bullet points).
 </p>
 
-
-<h3>Variation sets common to all the species</h3>
+<h3>Variation sets common to all species</h3>
 <table id="variation_set_table" class="ss">
 
 	<tr>
@@ -510,7 +721,6 @@ variation sets in the Ensembl variation database (subsets are indicated by bulle
 	</tr>
 </table>
 <br />
-
 <h3>Variation sets specific to Human</h3>
 <table id="human_variation_set_table" class="ss">
 
@@ -580,7 +790,7 @@ variation sets in the Ensembl variation database (subsets are indicated by bulle
 		<td>Variations called by the 1000 Genomes project on low coverage sequence data from 179 unrelated individuals (Pilot 1)</td>
 	</tr>
 	<tr>
-		<td>Affy GeneChip 500K Array</td>
+		<td>Affy GeneChip 500K</td>
 		<td>Affy_500K</td>
 		<td>Variants from the Affymetrix GeneChip Human Mapping 500K Array Set</td>
 	</tr>
@@ -592,22 +802,52 @@ variation sets in the Ensembl variation database (subsets are indicated by bulle
 	<tr>
 		<td>Illumina_Cardio-Metabo_Chip</td>
 		<td>Cardio-Metabo_Chip</td>
-		<td>Illumina Human Cardio-Metabo_Chip</td>
+		<td>Variants from the Illumina Cardio-Metabo_Chip genotyping array designed to target variants of interest for metabolic and cardiovascular disease traits</td>
 	</tr>
 	<tr class="bg2">
-		<td>Illumina_HumanOmni1-Quad</td>
-		<td>HumanOmni1-Quad</td>
-		<td>Illumina Human_HumanOmni1-Quad</td>
+		<td>Illumina_Human610_Quad</td>
+		<td>Human610_Quad</td>
+		<td>Variants from the Illumina Human610_Quad v1_B whole genome genotyping array designed for association studies</td>
 	</tr>
 	<tr>
-		<td>Illumina_Human1M-duoV3</td>
+		<td>Illumina_HumanHap550</td>
+		<td>HumanHap550</td>
+		<td>Variants from the Illumina Human550 v3.0 whole genome genotyping array designed for association studies</td>
+	</tr>
+	<tr class="bg2">
+		<td>Illumina_HumanHap650Y</td>
+		<td>HumanHap650Y</td>
+		<td>Variants from the Illumina HumanHap650Y v3.0 whole genome genotyping array designed for association studies</td>
+	</tr>
+	<tr>
+		<td>Illumina_HumanOmni1-Quad</td>
+		<td>HumanOmni1-Quad</td>
+		<td>Variants from the Illumina HumanOmni1-Quad whole genome genotyping array designed for association studies</td>
+	</tr>
+	<tr class="bg2">
+		<td>Illumina_HumanOmni2.5</td>
+		<td>HumanOmni2.5</td>
+		<td>Variants from the Illumina HumanOmni2.5 4v1 whole genome genotyping array designed for association studies</td>
+	</tr>
+	<tr>
 		<td>Illumina_1M-duo</td>
-		<td>Variants from the Illumina Human 1M-DuoV3 whole genome SNP genotyping chip designed for association studies</td>
+		<td>Illumina_1M-duo</td>
+		<td>Variants from the Illumina Human1M-duo v3 whole genome genotyping array designed for association studies</td>
 	</tr>
 	<tr class="bg2">
 		<td>Illumina_Human660W-quad</td>
 		<td>Illumina_660Q</td>
-		<td>Variants from the Illumina Human 660W-Quad whole genome SNP genotyping chip designed for association studies</td>
+		<td>Variants from the Illumina Human660W-quad whole genome genotyping array designed for association studies</td>
+	</tr>
+	<tr>
+		<td>Illumina_CytoSNP12v1</td>
+		<td>Illumina_CytoSNP12v1</td>
+		<td>Variants from the Illumina Cyto SNP-12 v1 whole genome SNP genotyping chip designed for cytogenetic analysis</td>
+	</tr>
+	<tr class="bg2">
+		<td>ESP_6500</td>
+		<td>esp_6500</td>
+		<td>Variants from the NHLBI Exome Sequencing Project</td>
 	</tr>
 	<tr>
 		<td>All HapMap</td>
@@ -715,80 +955,83 @@ variation sets in the Ensembl variation database (subsets are indicated by bulle
 		<td>Phenotype annotations of somatic mutations found in human cancers from the COSMIC project</td>
 	</tr>
 	<tr class="bg2">
-		<td><ul style="margin:0px"><li style="margin:0px">HGMD-PUBLIC phenotype variants</li></ul></td>
-		<td>ph_hgmd_pub</td>
-		<td>Variants with phenotypes annotated by HGMD</td>
+		<td><ul style="margin:0px"><li style="margin:0px">Clinical variations from dbSNP</li></ul></td>
+		<td>precious</td>
+		<td>Variations that belong to a reserved or "precious" set of clinically associated SNPs from dbSNP [http://www.ncbi.nlm.nih.gov/projects/SNP/]</td>
 	</tr>
 	<tr>
+		<td><ul style="margin:0px"><li style="margin:0px">HGMD-PUBLIC variants</li></ul></td>
+		<td>ph_hgmd_pub</td>
+		<td>Variants annotated by HGMD</td>
+	</tr>
+	<tr class="bg2">
 		<td><ul style="margin:0px"><li style="margin:0px">Johnson & O'Donnell phenotype variants</li></ul></td>
 		<td>ph_johnson_et_al</td>
 		<td>Johnson & O'Donnell 'An Open Access Database of Genome-wide Association Results' PMID:19161620</td>
 	</tr>
-	<tr class="bg2">
+	<tr>
 		<td><ul style="margin:0px"><li style="margin:0px">NHGRI catalog phenotype variants</li></ul></td>
 		<td>ph_nhgri</td>
 		<td>Variants associated with phenotype data from the NHGRI GWAS catalog [http://www.genome.gov/gwastudies/]</td>
 	</tr>
-	<tr>
+	<tr class="bg2">
 		<td><ul style="margin:0px"><li style="margin:0px">OMIM phenotype variants</li></ul></td>
 		<td>ph_omim</td>
 		<td>Variations linked to entries in the Online Mendelian Inheritance in Man (OMIM) database</td>
 	</tr>
-	<tr class="bg2">
+	<tr>
 		<td><ul style="margin:0px"><li style="margin:0px">Uniprot phenotype variants</li></ul></td>
 		<td>ph_uniprot</td>
 		<td>Variations with phenotype annotations provided by Uniprot</td>
 	</tr>
-	<tr>
-		<td>Clinical/LSDB variations from dbSNP</td>
-		<td>precious</td>
-		<td>Variations that belong to a reserved or "precious" set of clinically associated SNPs from dbSNP [http://www.ncbi.nlm.nih.gov/projects/SNP/]</td>
-	</tr>
 </table>
+
+
 <br />
 <h2 id="validation_status">Validation status </h2>
 <p>
 Where possible dbSNP provides the types of evidence which were used to confirm a variation. We import that information and present it as validation status of a variation.
 </p>
-<table id="validation_status_table" class="ss">
+<table id="validation_status_table" class="ss" style="width:850px">
     <tr>
-        <th>Pictogram</th>
+        <th style="width:60px">Pictogram</th>
         <th>Short name</th>
         <th>Validation status description from dbSNP</th>
     </tr>
     <tr>
-        <td><img src="/img/validation_status/val_cluster.gif" height="26" width="26" alt="cluster" class="sp-thumb" style="float:none;margin-right:4px;vertical-align:middle" /></td>
+        <td><img src="/img/validation_status/val_cluster.gif" alt="cluster" class="sp-thumb" style="height:26px;width;26px;float:none;margin-right:4px;vertical-align:middle" /></td>
         <td >cluster</td>
         <td >Validated by multiple, independent submissions to the refSNP cluster.</td>
     </tr>
-    <tr>
-        <td><img src="/img/validation_status/val_freq.gif" height="26" width="26" alt="freq" class="sp-thumb" style="float:none;margin-right:4px;vertical-align:middle" /></td>
+    <tr class="bg2">
+        <td><img src="/img/validation_status/val_freq.gif" alt="freq" class="sp-thumb" style="height:26px;width;26px;float:none;margin-right:4px;vertical-align:middle" /></td>
         <td >freq</td>
         <td >Validated by frequency or genotype data: minor alleles observed in at least two chromosomes.</td>
     </tr>
     <tr>
-        <td><img src="/img/validation_status/val_submitter.gif" height="26" width="26" alt="submitter" class="sp-thumb" style="float:none;margin-right:4px;vertical-align:middle" /></td>
+        <td><img src="/img/validation_status/val_submitter.gif" height="26" width="26" alt="submitter" class="sp-thumb" style="height:26px;width;26px;float:none;margin-right:4px;vertical-align:middle" /></td>
         <td >submitter</td>
         <td >Validated by submitter confirmation.</td>
     </tr>
-    <tr>
-        <td><img src="/img/validation_status/val_2hit.gif" height="26" width="26" alt="doublehit" class="sp-thumb" style="float:none;margin-right:4px;vertical-align:middle" /></td>
+    <tr class="bg2">
+        <td><img src="/img/validation_status/val_2hit.gif" alt="doublehit" class="sp-thumb" style="height:26px;width;26px;float:none;margin-right:4px;vertical-align:middle" /></td>
         <td >doublehit</td>
         <td >All alleles have been observed in at least two chromosomes apiece.</td>
     </tr>
     <tr>
-        <td><img src="/img/validation_status/val_hapmap.gif" height="26" width="26" alt="hapmap" class="sp-thumb" style="float:none;margin-right:4px;vertical-align:middle" /></td>
+        <td><img src="/img/validation_status/val_hapmap.gif" alt="hapmap" class="sp-thumb" style="height:26px;width;26px;float:none;margin-right:4px;vertical-align:middle" /></td>
         <td >hapmap</td>
         <td >Genotyped by HapMap project.</td>
     </tr>
-    <tr>
-        <td><img src="/img/validation_status/val_1000G.gif" height="26" width="26" alt="1000Genomes" class="sp-thumb" style="float:none;margin-right:4px;vertical-align:middle" /></td>
+    <tr class="bg2">
+        <td><img src="/img/validation_status/val_1000G.gif" alt="1000Genomes" class="sp-thumb" style="height:26px;width;26px;float:none;margin-right:4px;vertical-align:middle" /></td>
         <td >1000Genome</td>
         <td >SNP has been sequenced in 1000Genome project.</td>
     </tr>
 </table>
 
 
+<br />
 <h2 id="quality_control">Quality control </h2>
 
 <p>
@@ -862,7 +1105,7 @@ For variations with flanking sequences which do not map to a reference sequence,
 <td class="bg2">Variations reported as being suspect by dbSNP are imported but flagged as failures.</td>
 </tr>
 </table>
-<br>
+<br />
 
 
 
