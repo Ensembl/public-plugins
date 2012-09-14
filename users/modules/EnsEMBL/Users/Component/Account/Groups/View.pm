@@ -21,6 +21,7 @@ sub content {
     my $group       = $membership->group;
     my $group_name  = $self->html_encode($group->name);
     my $is_admin    = $membership->level eq 'administrator';
+    my $is_active   = $group->status eq 'active';
     my $refresh_url = $hub->url({'action' => 'Groups', 'function' => 'View', 'id' => $group_id});
     my $notif_types = $self->get_notification_types;
 
@@ -28,156 +29,153 @@ sub content {
 
     # group details section
     push @sections, $self->js_section({
-      'id'          => "view_group_$group_id",
-      'refresh_url' => $refresh_url,
-      'heading'     => "Group: $group_name",
-      'subsections' => [
+      'id'            => "view_group_$group_id",
+      'refresh_url'   => $refresh_url,
+      'heading'       => "Group: $group_name",
+      'heading_links' => [$is_active ? {
+        'href'          => {'action' => 'Groups', 'function' => 'Edit', 'id' => $group_id},
+        'title'         => 'Edit settings',
+        'sprite'        => 'edit_icon',
+        'target'        => 'section'
+      } : (), $is_admin ? {
+        'href'          => {'action' => 'Groups', 'function' => 'ConfirmDelete', 'id' => $group_id},
+        'title'         => 'Delete group',
+        'target'        => 'section',
+        'sprite'        => 'delete_icon'
+      } : {
+        'href'          => {'action' => 'Membership', 'function' => 'Unjoin', 'id' => $membership->group_member_id},
+        'title'         => 'Unsubscribe',
+        'target'        => 'page',
+        'sprite'        => 'stop_icon',
+        'confirm'       => "You are about to remove yourself from the group &quot;$group_name&quot;. This action can not be undone."
+      }],
+      'subsections'   => [
+        $group->status eq 'active' ? () : sprintf(q(<p class="italic">This group has been set inactive, ie. it's not visible to any member. %s to make it active now.</p>), $self->js_link({
+          'href'        => {'action' => 'Group', 'function' => 'Save', 'status' => 'active', 'id' => $group_id},
+          'caption'     => 'Click here',
+          'target'      => 'page',
+          'inline'      => 1
+        })),
         $self->two_column([
           'Group name'  => $group_name,
           'Description' => $self->html_encode($group->blurb),
-          'Type'        => $self->get_group_types->{$group->type} || '',
-          'Status'      => ucfirst $group->status
-        ]),
-        '<h3>Notification settings</h3>'.
-        $self->two_column([ map { $notif_types->{$_} => $membership->$_ ? 'Yes' : 'No' } $is_admin ? qw(notify_join notify_edit notify_share) : qw(notify_share) ]),
-        $self->js_link({
-          'href'        => {'action' => 'Groups', 'function' => 'Edit', 'id' => $group_id},
-          'caption'     => 'Edit settings',
-          'class'       => 'setting'
-        }),
-        $is_admin
-        ? $self->js_link({
-          'href'        => {'action' => 'Group', 'function' => 'Delete', 'id' => $group_id},
-          'caption'     => 'Delete group',
-          'target'      => 'page',
-          'class'       => 'user-group-delete',
-          'confirm'     => "You are about to delete the group $group_name. This action can not be undone. Alternatively, click 'cancel' and you can set this group to 'inactive' by editing settings."
-        })
-        : $self->js_link({
-          'href'        => {'action' => 'Membership', 'function' => 'Unjoin', 'id' => $membership->group_member_id},
-          'caption'     => 'Unsubscribe',
-          'target'      => 'page',
-          'class'       => 'user-group-unjoin',
-          'confirm'     => "You are about to remove yourself from the group &quot;$group_name&quot;. This action can not be undone."
-        })
+          'Type'        => sprintf('%s - %s', ucfirst $group->type, {@{$self->get_group_types}}->{$group->type} || ''),
+          $is_active ? (
+          '<b>Notification settings</b>', '',
+          map { $notif_types->{$_} => $membership->$_ ? 'Yes' : 'No' } $is_admin ? qw(notify_join notify_edit notify_share) : qw(notify_share)
+          ) : ()
+        ])
       ]
     });
 
-    # bookmarks section
-    my $bookmarks = $group->bookmarks;
+    # only show this section if group is active
+    if ($is_active) {
 
-    push @sections, $self->js_section({
-      'id'          => "group_bookmarks_$group_id",
-      'refresh_url' => $refresh_url,
-      'subheading'  => 'Bookmarks',
-      'subsections' => [
-        @$bookmarks ? $self->bookmarks_table({'bookmarks' => $bookmarks, 'group' => $group_id}) : q(<p>There is no bookmark shared with the group.</p>),
-        $self->js_link({'href' => {'action' => 'Share', 'function' => 'Bookmark', 'group' => $group_id}, 'caption' => 'Share from my bookmarks', 'class' => 'share'})
-      ]
-    });
+      # bookmarks section
+      my $bookmarks = $group->bookmarks;
 
-    ## annotations
-    ## TODO
+      push @sections, $self->js_section({
+        'id'                => "group_bookmarks_$group_id",
+        'refresh_url'       => $refresh_url,
+        'subheading'        => 'Bookmarks',
+        'subheading_links'  => [ {'href' => {'action' => 'Share', 'function' => 'Bookmark', 'group' => $group_id}, 'title' => 'Share from my bookmarks', 'sprite' => 'bookmark-add-icon'} ],
+        'subsections'       => [ @$bookmarks ? $self->bookmarks_table({'bookmarks' => $bookmarks, 'group' => $group_id, 'is_admin' => $is_admin, 'user_id' => $user->user_id}) : q(<p>There is no bookmark shared with the group.</p>) ]
+      });
 
-    ## user data
-    ## TODO
+      ## annotations
+      ## TODO
 
-    # members
-    $group->load('with' => [ 'memberships', 'memberships.user' ]);
-    my @memberships = grep {$_->user} @{$group->memberships};
+      ## user data
+      ## TODO
 
-    my $table = $self->new_table([
-      {'key' => 'member',   'title' => 'Member',  'width' => '30%'                    },
-      {'key' => 'level',    'title' => 'Level',   'width' => $is_admin ? '20%' : '70%'},
-      $is_admin ?
-      {'key' => 'buttons',  'title' => '',        'width' => '50%'                    } : ()
-    ], [], {'data_table' => 'no_col_toggle', 'exportable' => 0, 'data_table_config' => {'iDisplayLength' => 25}});
+      # members
+      $group->load('with' => [ 'memberships', 'memberships.user' ]);
+      my @memberships = grep {$_->user} @{$group->memberships};
 
-    for (sort {$a->user->name cmp $b->user->name} @memberships) {
+      my $table = $self->new_table([
+        {'key' => 'member',   'title' => 'Member',  'width' => '30%'                    },
+        {'key' => 'level',    'title' => 'Level',   'width' => $is_admin ? '20%' : '70%'},
+        $is_admin ?
+        {'key' => 'buttons',  'title' => '',        'width' => '50%'                    } : ()
+      ], [], {'class' => 'tint', 'data_table' => 'no_col_toggle', 'exportable' => 0, 'data_table_config' => {'iDisplayLength' => 25}});
 
-      my $is_pending_request    = $_->is_pending_request;
-      my $is_pending_invitation = $_->is_pending_invitation;
-      my $is_active             = $_->is_active;
+      for (sort {$a->user->name cmp $b->user->name} @memberships) {
 
-      next unless $is_active || $is_pending_request || $is_pending_invitation;
+        my $is_pending_request    = $_->is_pending_request;
+        my $is_pending_invitation = $_->is_pending_invitation;
+        my $is_active             = $_->is_active;
 
-      my $member          = $_->user;
-      my $group_member_id = $_->group_member_id;
-      my $member_id       = $member->user_id;
-      my $member_name     = $self->html_encode($member->name);
-      my $member_email    = $member->email;
-      my $member_level    = $_->level;
-      my $row             = {
-        'member'            => sprintf('%s%s', $member_name, $is_admin ? " ($member_email)" : ''),
-        'level'             => !$is_active ? $is_pending_request ? 'Request recieved' : 'Invitation sent' : ucfirst $member_level
-      };
-      my @buttons;
-      if ($is_admin) {
-        if ($is_pending_request) {
-          push @buttons,
-            $self->js_link({'href' => {'action' => 'Membership', 'function' => 'Allow',      'id' => $group_member_id}, 'inline' => 1, 'target' => 'page', 'caption' => 'Allow'}),
-            $self->js_link({'href' => {'action' => 'Membership', 'function' => 'Ignore',     'id' => $group_member_id}, 'inline' => 1, 'target' => 'page', 'caption' => 'Ignore'}),
-            $self->js_link({'href' => {'action' => 'Membership', 'function' => 'BlockUser',  'id' => $group_member_id}, 'inline' => 1, 'target' => 'page', 'caption' => 'Block user from sending further requests'})
-          ;
-        } else {
-          if ($member_level ne 'administrator') { # can not remove an admin
+        next unless $is_active || $is_pending_request || $is_pending_invitation;
+
+        my $member          = $_->user;
+        my $group_member_id = $_->group_member_id;
+        my $member_id       = $member->user_id;
+        my $member_name     = $self->html_encode($member->name);
+        my $member_email    = $member->email;
+        my $member_level    = $_->level;
+        my $row             = {
+          'member'            => sprintf('%s%s', $member_name, $is_admin ? " ($member_email)" : ''),
+          'level'             => !$is_active ? $is_pending_request ? 'Request recieved' : 'Invitation sent' : ucfirst $member_level
+        };
+        my @buttons;
+        if ($is_admin) {
+          if ($is_pending_request) {
+            push @buttons,
+              $self->js_link({'href' => {'action' => 'Membership', 'function' => 'Allow',      'id' => $group_member_id}, 'inline' => 1, 'target' => 'page', 'caption' => 'Allow'}),
+              $self->js_link({'href' => {'action' => 'Membership', 'function' => 'Ignore',     'id' => $group_member_id}, 'inline' => 1, 'target' => 'page', 'caption' => 'Ignore'}),
+              $self->js_link({'href' => {'action' => 'Membership', 'function' => 'BlockUser',  'id' => $group_member_id}, 'inline' => 1, 'target' => 'page', 'caption' => 'Block user from sending further requests'})
+            ;
+          } else {
+            if ($member_level ne 'administrator') { # can not remove an admin
+              push @buttons, $self->js_link({
+                'href'    => {'action' => 'Membership', 'function' => 'Remove', 'id' => $group_member_id},
+                'caption' => $is_pending_invitation ? 'Remove invitation' : 'Remove',
+                'confirm' => $is_pending_invitation
+                  ? "Are you sure you want to deactivate the invitation sent to $member_name ($member_email) for the group $group_name?"
+                  : "Are you sure you want to remove $member_name ($member_email) from the group $group_name?",
+                'target'  => 'page',
+                'inline'  => 1,
+              });
+            }
             push @buttons, $self->js_link({
-              'href'    => {'action' => 'Membership', 'function' => 'Remove', 'id' => $group_member_id},
-              'caption' => $is_pending_invitation ? 'Remove invitation' : 'Remove',
-              'confirm' => $is_pending_invitation
-                ? "Are you sure you want to deactivate the invitation sent to $member_name ($member_email) for the group $group_name?"
-                : "Are you sure you want to remove $member_name ($member_email) from the group $group_name?",
-              'target'  => 'page',
+              'href'    => {'action' => 'Membership', 'function' => 'Change', 'id' => $group_member_id, 'level' => $member_level eq 'administrator' ? 'member' : 'administrator'},
+              'caption' => $member_level eq 'administrator' ? 'Demote to member' : 'Make administrator',
+              'confirm' => $member_id eq $user->user_id ? q(Are you sure you want to demote yourself to a member? You won't be able to undo this yourself.) : '',
+              'target'  => 'none',
               'inline'  => 1,
-            });
+            }) unless $is_pending_invitation;
           }
-          push @buttons, $self->js_link({
-            'href'    => {'action' => 'Membership', 'function' => 'Change', 'id' => $group_member_id, 'level' => $member_level eq 'administrator' ? 'member' : 'administrator'},
-            'caption' => $member_level eq 'administrator' ? 'Demote to member' : 'Make administrator',
-            'confirm' => $member_id eq $user->user_id ? q(Are you sure you want to demote yourself to a member? You won't be able to undo this yourself.) : '',
-            'target'  => 'none',
-            'inline'  => 1,
-          }) unless $is_pending_invitation;
         }
+        $row->{'buttons'} = join '&nbsp;&middot;&nbsp;', @buttons;
+        $table->add_row($row);
       }
-      $row->{'buttons'} = join '&nbsp;&middot;&nbsp;', @buttons;
-      $table->add_row($row);
-    }
 
-    push @sections, $self->js_section({
-      'id'          => "group_members_$group_id",
-      'subheading'  => 'Members',
-      'refresh_url' => $refresh_url,
-      'subsections' => [
-        $table->render,
-        $is_admin
-        ? $self->js_link({'href' => {'action' => 'Groups', 'function' => 'Invite', 'id' => $group_id}, 'caption' => 'Invite members', 'class' => 'user-add'})
-        : ()
-      ]
-    });
+      push @sections, $self->js_section({
+        'id'                => "group_members_$group_id",
+        'subheading'        => 'Members',
+        'subheading_links'  => [ $is_admin ? {'href' => {'action' => 'Groups', 'function' => 'Invite', 'id' => $group_id}, 'title' => 'Invite new members', 'sprite' => 'user-add-icon'} : () ],
+        'refresh_url'       => $refresh_url,
+        'subsections'       => [ $table->render ]
+      });
+    }
 
     return join '', @sections;
 
   } else {
 
-    my $memberships = $user->active_memberships;
+    my $memberships = $user->accessible_memberships; # accessible_memberships not active_membership as you can also view an inactive group if you are an admin of that group
 
-    if (@$memberships) {
-  
-      # display form to select a group if no group was specified
-      return $self->js_section({
-        'subsections' => [ $self->select_group_form({
-          'memberships' => $memberships,
-          'action'      => $hub->url({'action' => 'Groups', 'function' => 'View'}),
-          'label'       => 'Select a group to view',
-          'submit'      => 'View'
-        })->render ]
-      });
-
-    # if no group joined
-    } else {
-      return $self->no_membership_found_page;
-    }
+    # display form to select a group if no group was specified
+    return $self->js_section({
+      'heading'     => 'View group',
+      'subsections' => [ $self->select_group_form({
+        'memberships' => $memberships,
+        'action'      => $hub->url({'action' => 'Groups', 'function' => 'View'}),
+        'label'       => 'Select a group to view',
+        'submit'      => 'View'
+      })->render ]
+    });
   }
 }
+
 1;
