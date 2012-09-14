@@ -55,8 +55,10 @@ sub handle_verified_identity {
   # if request from a logged in user to add login
   if ($logged_user) {
 
-    # can't add a login account if this login is already linked to another user - TODO - add a 'then' param for Details/View or Preferences page
-    return $self->ajax_redirect($hub->url({'action' => 'Preferences', 'msg' => MESSAGE_LOGIN_ALREADY_LINKED})) if $login && $login->user && $login->status eq 'active';
+    # if this login object is already linked to a user object - TODO - add a 'then' param for Details/View or Preferences page
+    if ($login && $login->status eq 'active' && (my $login_user = $login->user)) {
+      return $self->ajax_redirect($hub->url({'action' => 'Preferences', 'msg' => $login_user->user_id eq $logged_user->user_id ? MESSAGE_LOGIN_ALREADY_LINKED : MESSAGE_LOGIN_ALREADY_TAKEN}));
+    }
 
   # for a login/registration request
   } else {
