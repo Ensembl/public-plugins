@@ -14,10 +14,23 @@ sub content {
   my $object      = $self->object;
   my $user        = $hub->user->rose_object;
   my $memberships = $user->find_memberships('with_objects' => 'group', 'query' => ['or' => ['level' => 'administrator', 'group.status' => 'active']]); # show inactive groups to admins only
-  my %section     = (
+  my $section     = {
     'id'            => 'my_groups',
-    'refresh_url'   => {'action' => 'Groups', 'function' => ''}
-  );
+    'refresh_url'   => {'action' => 'Groups', 'function' => ''},
+    'heading'       => 'Groups',
+    'heading_links' => [{
+      'href'          => {qw(action Groups function Add)},
+      'title'         => 'Create new group',
+      'sprite'        => 'user-group-add-icon',
+      'target'        => 'section'
+    }, {
+      'href'          => {qw(action Groups function List)},
+      'title'         => 'Join an existing group',
+      'sprite'        => 'user-group-join-icon',
+      'target'        => 'page'
+    }],
+    'subsections'   => [ '<p>You are not a member of any group.</p>' ] # will get overwritten if groups found
+  };
 
   if (@$memberships) {
     my $table = $self->new_table([
@@ -25,7 +38,7 @@ sub content {
       {'title' => 'Description',        'key' => 'desc',    'width' => '50%'},
       {'title' => 'Number of members',  'key' => 'number',  'width' => '10%', 'class' => 'sort_numeric' },
       {'title' => '',                   'key' => 'edit',    'width' => '10%', 'class' => 'sort_html'    },
-    ], [], {'data_table' => 'no_col_toggle', 'exportable' => 0});
+    ], [], {'class' => 'tint', 'data_table' => 'no_col_toggle', 'exportable' => 0});
 
     for (sort {uc $a->group->name cmp uc $b->group->name} @$memberships) {
       my $is_pending_request  = $_->is_pending_request;
@@ -52,17 +65,10 @@ sub content {
       });
     }
 
-    if ($table->has_rows) {
-      return $self->js_section({%section, 'heading' => 'Groups', 'subsections' => [
-        $table->render,
-        $self->link_create_new_group,
-        $self->link_join_existing_group
-      ]});
-    }
+    $section->{'subsections'} = [ $table->render ] if $table->has_rows;
   }
 
-  # if user is not a member of any group
-  return $self->no_membership_found_page(\%section);
+  return $self->js_section($section);
 }
 
 1;
