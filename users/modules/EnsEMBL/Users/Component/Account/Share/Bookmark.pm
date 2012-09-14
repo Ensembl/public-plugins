@@ -15,15 +15,15 @@ sub content {
   my $user      = $hub->user->rose_object;
   my @subsections;
 
-  # get all the active the groups with which bookmark can be shared
-  my $memberships = $user->active_memberships;
+  # get all the bookmarks
+  my $bookmarks = $user->bookmarks;
 
-  if (@$memberships) {
+  if (@$bookmarks) {
 
-    # get all the bookmarks
-    my $bookmarks = $user->bookmarks;
+    # get all the active the groups with which bookmark can be shared
+    my $memberships = $user->active_memberships;
 
-    if (@$bookmarks) {
+    if (@$memberships) {
 
       my $form = $self->select_group_form({
         'memberships' => $memberships,
@@ -46,19 +46,23 @@ sub content {
 
     } else {
 
-      # if no bookmarks saved by the user
-      push @subsections, '<p>You have not saved any bookmarks to your account.</p>', $self->link_add_bookmark;
+      # if no group joined by the user
+      push @subsections, sprintf '<p>You are not a member of any group to be able to share bookmarks to it. You can <a href="%s">join an existing group</a> or <a href="%s">create a new group</a> to share your bookmarks with others %s users.</p>',
+        $hub->url({'action' => 'Groups', 'function' => 'List'}),
+        $hub->url({'action' => 'Groups', 'function' => 'Add' }),
+        $self->site_name
+      ;
     }
 
   } else {
 
-    # if no group joined by the user
-    push @subsections, '<p>You are not a member of any group to be able to share bookmarks to it.</p>', $self->link_create_new_group, $self->link_join_existing_group;
+    # if no bookmarks saved by the user
+    push @subsections, $self->no_bookmark_message(1);
   }
 
   return $self->js_section({
     'id'          => 'share_bookmarks',
-    'heading'     => 'Share bookmarks',
+    'heading'     => 'Share bookmark',
     'subsections' => \@subsections
   });
 }
