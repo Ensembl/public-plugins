@@ -1,6 +1,7 @@
 package EnsEMBL::Users::Component::Account::OpenID::Buttons;
 
 ### Component for displaying a list of openid buttons for login/register page 
+### If the user is logged in, it displays a message to 'add login'
 ### @author hr5
 
 use strict;
@@ -22,7 +23,10 @@ sub content {
     'class'               => 'login-openid',
     'children'            => [{
       'node_name'           => 'p',
-      'inner_HTML'          => sprintf('If you already have an account with %s, click on the logo to login with it to %s.', @$openid_providers == 2 ? $openid_providers->[0] : 'one of the following sites', $self->site_name)
+      'inner_HTML'          => sprintf('If you already have an account with %s, click on the logo to '. ($hub->user ? 'add it as an option to login to your %s account.' : 'login with it to %s.'),
+        @$openid_providers == 2 ? $openid_providers->[0] : 'one of the following sites',
+        $self->site_name
+      )
     }]
   });
   my $openids_ul        = $content->append_child('ul');
@@ -57,10 +61,8 @@ sub content {
           'node_name'     => 'img',
           'src'           => sprintf('%s/i/openid_%s.png', $self->static_server, lc $key),
           'alt'           => $key,
-          'title'         => "Login with $key",
           'width'         => '120',
-          'height'        => '45',
-          'class'         => '_ht'
+          'height'        => '45'
         }],
         @link_class,
       }, $username_form ? {
