@@ -25,16 +25,19 @@ sub content {
     return $self->render_message(MESSAGE_GROUP_INACTIVE, {'error' => 1}) if !$is_add_new && $group->status eq 'inactive';
 
     my $level       = $membership->level;
-    my $group_types = $self->get_group_types;
     my $notif_types = $self->get_notification_types;
-
     my $form        = $self->new_form({'action' => $hub->url({qw(action Group function Save)})});
 
     $form->add_hidden({'name' => 'id', 'value'  => $group->group_id});
     if ($level eq 'administrator') {
-      $form->add_field({'type'  => 'string',    'name'  => 'name',    'label' => 'Group name',    'value' => $group->name,    'required' => 1 });
-      $form->add_field({'type'  => 'text',      'name'  => 'blurb',   'label' => 'Description',   'value' => $group->blurb                    });
-      $form->add_field({'type'  => 'dropdown',  'name'  => 'type',    'label' => 'Group type',    'value' => $group->type,    'values' => [ map {'value' => $_, 'caption' => $group_types->{$_}}, sort keys %$group_types  ]});
+      my $group_types       = $self->get_group_types;
+      my $group_type_values = [];
+      while (my ($v, $c) = splice @$group_types, 0, 2) {
+        push @$group_type_values, {'value' => $v, 'caption' => {'inner_HTML' => sprintf '%s %s', ucfirst $v, $self->helptip($c)}};
+      }
+      $form->add_field({'type'  => 'string',    'name'  => 'name',    'label' => 'Group name',    'value' => $group->name,    'required' => 1                 });
+      $form->add_field({'type'  => 'text',      'name'  => 'blurb',   'label' => 'Description',   'value' => $group->blurb                                    });
+      $form->add_field({'type'  => 'radiolist', 'name'  => 'type',    'label' => 'Group type',    'value' => $group->type,    'values' => $group_type_values  });
     }
     $form->add_field({'type'  => 'yesno',   'value' => $membership->$_ || 0, 'name' => $_, 'label' => $notif_types->{$_}, 'is_binary' => 1}) for $level eq 'administrator' ? qw(notify_join notify_edit notify_share) : qw(notify_share);
     $form->add_field({'type'  => 'submit',  'value' => $is_add_new ? 'Add' : 'Save'});
