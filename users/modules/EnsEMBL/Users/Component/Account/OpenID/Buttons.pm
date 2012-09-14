@@ -10,19 +10,14 @@ use base qw(EnsEMBL::Users::Component::Account);
 use constant JS_CLASS_OPENID_USERNAME => '_openid_username';
 
 sub content {
-  shift->buttons->render;
-}
-
-sub buttons {
   my $self              = shift;
   my $object            = $self->object;
   my $hub               = $self->hub;
-  my $openid_providers  = shift || $object->openid_providers;
+  my $openid_providers  = $object->openid_providers;
   my $then_param        = $self->get_then_param;
   my $trademarks        = [];
   my $trademark_owners  = [];
-  my $static_server     = $self->static_server;
-  my $wrapper_div       = $self->wrapper_div({
+  my $content           = $self->wrapper_div({
     'js_panel'            => 'OpenIDButtons',
     'class'               => 'login-openid',
     'children'            => [{
@@ -30,7 +25,7 @@ sub buttons {
       'inner_HTML'          => sprintf('If you already have an account with %s, click on the logo to login with it to %s.', @$openid_providers == 2 ? $openid_providers->[0] : 'one of the following sites', $self->site_name)
     }]
   });
-  my $openids_ul        = $wrapper_div->append_child('ul');
+  my $openids_ul        = $content->append_child('ul');
 
   while (my ($key, $value) = splice @$openid_providers, 0, 2) {
     my (@link_class, $username_form);
@@ -60,7 +55,7 @@ sub buttons {
         'href'          => $hub->url({%request_url, %request_params }),
         'children'      => [{
           'node_name'     => 'img',
-          'src'           => sprintf('%s/i/openid_%s.png', $static_server, lc $key),
+          'src'           => sprintf('%s/i/openid_%s.png', $self->static_server, lc $key),
           'alt'           => $key,
           'title'         => "Login with $key",
           'width'         => '120',
@@ -81,7 +76,7 @@ sub buttons {
   }
 
   if (my $count = @$trademarks) {
-    $wrapper_div->append_child('p', {'class' => 'trademark', 'inner_HTML' => sprintf('%s %s trademark%s of %s%s',
+    $content->append_child('p', {'class' => 'trademark', 'inner_HTML' => sprintf('%s %s trademark%s of %s%s',
       $self->join_with_and(@$trademarks),
       $count == 1 ? 'is' : 'are',
       $count == 1 ? '' : 's',
@@ -90,7 +85,7 @@ sub buttons {
     )});
   }
 
-  return $wrapper_div;
+  return $content->render;
 }
 
 1;
