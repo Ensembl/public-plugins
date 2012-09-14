@@ -54,18 +54,12 @@ sub content {
     push @login_details, $login_detail;
   }
 
-  my $openid_providers = $self->object->openid_providers;
-  if (scalar @$openid_providers > scalar @existing_openid_logins * 2) {
-    my $i = 0;
-    grep {$openid_providers->[$i] eq $_} @existing_openid_logins and splice(@$openid_providers, $i, 2) or $i += 2 while $openid_providers->[$i];
-
-    push @login_details, $self->js_link({
-      'inline'  => 1,
-      'caption' => 'Add login',
-      'helptip' => sprintf('Click to add another login option eg. via %s)', $self->join_with_or(grep {!ref $_} @$openid_providers)),
-      'href'    => {qw(action Details function AddLogin)}
-    });
-  }
+  push @login_details, $self->js_link({
+    'inline'  => 1,
+    'caption' => 'Add login',
+    'helptip' => sprintf('Click to add another login option via %s', $self->join_with_or(grep {!ref $_} @{$self->object->openid_providers})),
+    'href'    => {qw(action Details function AddLogin)}
+  });
 
   return $self->js_section({
     'id'            => 'view_details',
