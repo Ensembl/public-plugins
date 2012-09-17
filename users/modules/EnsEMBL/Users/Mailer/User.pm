@@ -3,6 +3,8 @@ package EnsEMBL::Users::Mailer::User;
 use strict;
 use warnings;
 
+## TODO - why do we need logged-in user in some arguments? use hub->user instead
+
 use base qw(EnsEMBL::Web::Mailer);
 
 sub email_footer { return sprintf "\n\nMany thanks,\n\nThe %s web team\n\n%1\$s Privacy Statement: %s/info/about/legal/privacy.html\n\n", $_->site_name, $_->{'base_url'} for @_; }
@@ -17,19 +19,19 @@ sub send_verification_email {
   my $provider  = $login->provider || '';
   my $identity  = $login->has_trusted_provider ? $login->email : $login->identity;
   my $type      = $login->type;
-  my $action    = $type eq 'openid' ? 'Verify' : 'Confirm';
+  my $function  = $type eq 'openid' ? 'Verify' : 'Confirm';
   my $email     = $user->email;
   my $url       = $self->url({
     'species'     => '',
     'type'        => 'Account',
-    'action'      => $action,
-    'function'    => '',
+    'action'      => 'Details',
+    'function'    => $function,
     'code'        => $login->get_url_code
   });
 
   my $message   = {
     'openid'      =>  qq{If you recently tried to login to $sitename using your OpenID account with $provider ($identity), to verify your }
-                     .qq(email address '$email', please go to the following url:\n\n\n$url\n\n\nThis will allow )
+                     .qq(email address '$email', please go to the following url:\n\n\n$url\n\n\n"."This will allow )
                      .qq(you access to $sitename using your account with $provider.),
     'local'       =>  qq(If you recently registered with $sitename, to confirm your email address as '$email', please go to the )
                      .qq(following url:\n\n\n$url\n\n\nThis will allow you access to $sitename using the provided )
@@ -37,7 +39,7 @@ sub send_verification_email {
   };
 
   $self->to      = $email;
-  $self->subject = qq($sitename: $action your email address);
+  $self->subject = qq($sitename: $function your email address);
   $self->message = $message->{$type}.$self->email_footer;
   $self->send;
 }
@@ -93,6 +95,11 @@ sub send_change_email_confirmation_email {
                    .qq(Please ignore this email if you have not put any such request.$footer);
 
   $self->send;
+}
+
+sub send_group_sharing_notification_email {
+  ## Sends email to a given member about records shared with a group
+  ##TODO
 }
 
 sub send_group_editing_notification_email {
@@ -239,10 +246,10 @@ sub send_group_invitation_email_to_new_user {
 
   $self->to           = $email;
   $self->subject      = qq($sitename: Invitation from $by_name to join group "$group_name" on $sitename);
-  $self->message      = qq(Hi,\n\n$by_name would like you to join the group "$group_name" on $sitename. If you already have an account with $sitename, to accept or )
-                       .qq(decline the invitation, or to block the group from sending you further invitations, please go the link below:\n\n$url_1\n\n)
-                       .qq(If you do not have an account with $sitename and would like to accept the invitation, please click on the link below to register )
-                       .qq(to the website:\n\n$url_2\n\n$footer);
+  $self->message      = qq(Hi,\n\n$by_name would like you to join the group "$group_name" on $sitename. To register with $sitename and join the group, )
+                       .qq(please click on the link below:\n\n$url_2\n\nIf you already have an account with $sitename, to accept or decline the invitation, )
+                       .qq(or to block the group from sending you further invitations, please go the link below:\n\n$url_1\n\n$footer)
+                       .qq(If you do not have an account with $sitename and would like to accept the invitation, please click on the link below to register);
 
   $self->send;
 }
