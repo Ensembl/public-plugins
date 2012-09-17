@@ -13,10 +13,10 @@ use HTML::Entities qw(encode_entities);
 use Digest::MD5 qw(md5_hex);
 
 my %MESSAGES = (
-  MESSAGE_OPENID_CANCELLED      => sub { sprintf('Your request to login via %s was cancelled. Please try again, or use one of the alternative login options below.', encode_entities($_[0]->param('provider') || 'OpenID')) },
+  MESSAGE_OPENID_CANCELLED      => sub { sprintf('Your request to login via %s was cancelled', encode_entities($_[0]->param('provider') || 'OpenID')) },
   MESSAGE_OPENID_INVALID        => sub { '_message__OPENID_INVALID' },
   MESSAGE_OPENID_SETUP_NEEDED   => sub { '_message__OPENID_SETUP_NEEDED' },
-  MESSAGE_OPENID_ERROR          => sub { 'OpenID error', sprintf('<p>An error happenned while making OpenID request. Please use an alternative login option.</p><p>Error summary: %s</p>', encode_entities($_[0]->param('oerr') || '')) },
+  MESSAGE_OPENID_ERROR          => sub { 'OpenID error', sprintf('<p>An error happenned while making OpenID request.</p><p>Error summary: %s</p>', encode_entities($_[0]->param('oerr') || '')) },
   MESSAGE_OPENID_EMAIL_MISSING  => sub { '_message__OPENID_EMAIL_MISSING' },
   MESSAGE_EMAIL_NOT_FOUND       => sub { 'Email not found', sprintf('The email address provided is not recognised. Please try again with a different email for <a href="%s">register</a> here if you are a new user.', encode_entities($_[0]->url({qw(type Account action Register)}))) },
   MESSAGE_PASSWORD_WRONG        => sub { 'Wrong password', 'The password provided is invalid. Please try again.' },
