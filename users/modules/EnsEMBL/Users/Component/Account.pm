@@ -144,6 +144,7 @@ sub select_group_form {
   ## Displays form to select one of the given groups
   ## @param Hashref with keys:
   ##  - memberships : membership objects for the groups to be displayed (arrayref)
+  ##  - type        : checklist or dropdown (dropdown by default)
   ##  - action      : action attrib for the form
   ##  - label       : label for the dropdown element
   ##  - name        : name attrib for the downdown element - default to 'id'
@@ -154,7 +155,7 @@ sub select_group_form {
   my $form = $self->new_form({'action' => $params->{'action'} || '', 'method' => 'get'});
   $form->add_field({
     'label'   => $params->{'label'} || 'Select a group',
-    'type'    => 'dropdown',
+    'type'    => $params->{'type'} eq 'checklist' ? 'checklist' : 'dropdown',
     'name'    => $params->{'name'} || 'id',
     'values'  => [ map {$_ = $_->group; {'value' => $_->group_id, 'caption' => $self->html_encode($_->name)}} @{$params->{'memberships'} || []} ],
     $params->{'selected'} ? ('value' => $params->{'selected'}) : ()
@@ -206,108 +207,99 @@ sub bookmarks_table {
   ## Prints table with bookmarks
   ## @param Hashref with keys
   ##  - bookmarks : Arrayref of bookmarks (user record or group record rose objects)
-  ##  - group     : Id of the group if the bookmarks belong to a group
-  ##  - is_admin  : Flag kept on if user is the admin of the group (only for displaying group bookmarks)
-  ##  - user_id   : User id of the logged in user (only considered for group bookmarks)
-  ##  - shared    : Flag if on, will skip the buttons and display an extra column with link to owner group of the bookmark
+  ##  - group     : Group object if all bookmarks belong to a group
+  ##  - shared    : Flag kept on if each bookmark is shared with a group, but not same in all cases
   my ($self, $params) = @_;
 
-  # common columns
-  my $columns = [{
-    'key'   => 'title',
-    'title' => 'Title',
-    'width' => '30%',
-    'sort'  => 'html'
+  my $user        = $self->hub->user;
+  my $group       = delete $params->{'group'};
+  my $group_param = $group ? {'group' => $group->group_id} : {}; # extra param to go with each URL if group is provided
+  my $is_admin    = $group && $user->is_admin_of($group);
+  my $table       = $self->new_table([{
+    'key'           => 'title',
+    'title'         => 'Title',
+    'width'         => '30%',
+    'sort'          => 'html'
   }, {
-    'key'   => 'desc',
-    'title' => 'Short Description'
-  }];
+    'key'           => 'desc',
+    'title'         => 'Short Description',
+    'width'         => $params->{'shared'} ? '30%' : '60%'
+  }, $params->{'shared'} ? { # additional column for shared bookmarks only to display link to the group
+    'key'           => 'group',
+    'title'         => 'Group',
+    'width'         => '30%',
+    'sort'          => 'html'
+  } : (), {
+    'key'           => 'buttons',
+    'title'         => '',
+    'width'         => '10%',
+    'sort'          => 'none'
+  }], [], {'class' => 'tint', 'data_table' => 'no_col_toggle', 'exportable' => 0});
 
-  # column for shared bookmarks only
-  if ($params->{'shared'}) {
-    $columns->[-1]->{'width'} => '40%';
-    push @$columns, {
-      'key'   => 'group',
-      'title' => 'Group',
-      'width' => '30%',
-      'sort'  => 'none'
-    };
-
-  # column for user bookmarks or group bookmarks
-  } else {
-    $columns->[-1]->{'width'} => '60%';
-    push @$columns, {
-      'key'   => 'buttons',
-      'title' => '',
-      'width' => '10%',
-      'sort' => 'none'
-    };
-  }
-
-  my %group_id_param  = $params->{'group'} ? ('group' => $params->{'group'}) : ();
-  my $bookmarks_table = $self->new_table($columns, [], {'class' => 'tint', 'data_table' => 'no_col_toggle', 'exportable' => 0});
-
+  # bookmark rows
   for (@{$params->{'bookmarks'}}) {
     my $bookmark_id   = $_->get_primary_key_value;
     my $bookmark_row  = { 'desc' => $self->html_encode($_->shortname) };
+    my $bookmark_name = $self->html_encode($_->name);
 
-    # column for shared bookmarks
+    # column for shared bookmarks table only
     if ($params->{'shared'}) {
-      my $group     = $_->group;
-      my $group_id  = $group_id_param{'group'} = $group->group_id;
+      $group          = $_->group;
+      $is_admin       = $user->is_admin_of($group);
+      my $group_id    = $group->group_id;
+      $group_param    = {'group' => $group_id};
+      my $group_name  = $self->html_encode($group->name);
+
       $bookmark_row->{'group'} = $self->js_link({
         'href'    => {'action' => 'Groups', 'function' => 'View', 'id' => $group_id},
-        'caption' => $self->html_encode($group->name),
-        'helptip' => 'View group',
+        'caption' => $group_name,
+        'helptip' => "Click to view group: $group_name",
         'inline'  => 1,
         'target'  => 'page'
       });
-
-    # column for user or group bookmarks
-    } else {
-      $bookmark_row->{'buttons'} = join('',
-        $self->js_link({
-          'href'    => {'action' => 'Bookmark', 'function' => 'Edit', 'id' => $bookmark_id, %group_id_param},
-          'helptip' => 'Edit',
-          'sprite'  => 'edit_icon',
-          'target'  => 'section'
-        }),        $params->{'group'}
-        ? $self->js_link({
-          'href'    => {'action' => 'Bookmark', 'function' => 'Copy', 'id' => $bookmark_id, %group_id_param},
-          'helptip' => 'Copy to my bookmarks',
-          'sprite'  => 'bookmark-add-icon',
-          'target'  => 'none'
-        })
-        : $self->js_link({
-          'href'    => {'action' => 'Share', 'function' => 'Bookmark', 'id' => $bookmark_id},
-          'helptip' => 'Share with a group',
-          'sprite'  => 'share_icon',
-          'target'  => 'section'
-        }),
-        !$params->{'group'} || $params->{'is_admin'} || $_->created_by eq ($params->{'user_id'} || '')
-        ? $self->js_link({
-          'href'    => {'action' => 'Bookmark', 'function' => 'Remove', 'id' => $bookmark_id, %group_id_param},
-          'helptip' => 'Remove',
-          'sprite'  => 'delete_icon',
-          'confirm' => sprintf('You are about to remove the bookmark%s. This action can not be undone.', keys %group_id_param ? ' from the group' : ''),
-          'target'  => 'none'
-        }) : ()
-      );
     }
 
-    my $bookmark_name = $self->html_encode($_->name);
     $bookmark_row->{'title'} = $self->js_link({
-      'href'    => {'action' => 'Bookmark', 'function' => 'Use', 'id' => $bookmark_id, %group_id_param},
+      'href'    => {'action' => 'Bookmark', 'function' => 'Use', 'id' => $bookmark_id, %$group_param},
       'caption' => $bookmark_name,
       'helptip' => "Visit page: $bookmark_name",
       'target'  => 'page',
       'inline'  => 1
     });
 
-    $bookmarks_table->add_row($bookmark_row);
+    $bookmark_row->{'buttons'} = join('',
+      $self->js_link({
+        'href'    => {'action' => 'Bookmark', 'function' => 'Edit', 'id' => $bookmark_id, %$group_param},
+        'helptip' => 'Edit',
+        'sprite'  => 'edit_icon',
+        'target'  => 'section'
+      }), $group
+      ? $self->js_link({
+        'href'    => {'action' => 'Bookmark', 'function' => 'Copy', 'id' => $bookmark_id, %$group_param},
+        'helptip' => 'Copy to my bookmarks',
+        'sprite'  => 'bookmark-add-icon',
+        'target'  => 'none'
+      })
+      : $self->js_link({
+        'href'    => {'action' => 'Share', 'function' => 'Bookmark', 'id' => $bookmark_id},
+        'helptip' => 'Share with a group',
+        'sprite'  => 'share_icon',
+        'target'  => 'section'
+      }),
+      !$group || $is_admin || $_->created_by eq $user->user_id
+      ? $self->js_link({
+        'href'    => {'action' => 'Bookmark', 'function' => 'Remove', 'id' => $bookmark_id, %$group_param},
+        'helptip' => 'Remove',
+        'sprite'  => 'delete_icon',
+        'confirm' => sprintf('You are about to remove the bookmark%s. This action can not be undone.', $group ? ' from the group' : ''),
+        'target'  => 'none'
+      }) : ()
+    );
+
+    $table->add_row($bookmark_row);
   }
 
-  return $bookmarks_table->render;
+  return $table->render;
 }
 
 sub no_bookmark_message {
