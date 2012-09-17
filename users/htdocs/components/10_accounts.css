@@ -18,29 +18,28 @@ div.openid-username div.form-field label.ff-label { width: auto; line-height: 16
 div.openid-username div.form-field div.ff-right   { padding: 0; }
 
 /* buttons on the accounts pages */
-p.accounts-button a                     { display: inline-block; color: [[BUTTON_TEXT]]; text-decoration: none; padding: 4px 7px 4px 29px;
-                                          background: none no-repeat scroll 7px center [[BUTTON_BG]]; border: [[PANEL_BG]] double 3px; outline: none; }
-p.accounts-button a:hover               { background-color: [[BUTTON_BG_HOVER]]; color: [[BUTTON_TEXT]];  }
-p.accounts-button a.setting             { background-image: url('/i/beta/rev/setting.png');               }
-p.accounts-button a.add                 { background-image: url('/i/beta/rev/add.png');                   }
-p.accounts-button a.delete              { background-image: url('/i/beta/rev/delete.png');                }
-p.accounts-button a.share               { background-image: url('/i/beta/rev/share.png');                 }
-p.accounts-button a.check               { background-image: url('/i/beta/rev/check.png');                 }
-p.accounts-button a.arrow-left          { background-image: url('/i/beta/rev/arrow-left.png');            }
-p.accounts-button a.user-add            { background-image: url('/i/beta/rev/user-add.png');              }
-p.accounts-button a.bookmark-add        { background-image: url('/i/beta/rev/bookmark-add.png');          }
-p.accounts-button a.user-group-add      { background-image: url('/i/beta/rev/user-group-add.png');        }
-p.accounts-button a.user-group-join     { background-image: url('/i/beta/rev/user-group-join.png');       }
-p.accounts-button a.user-group-setting  { background-image: url('/i/beta/rev/user-group-setting.png');    }
-p.accounts-button a.user-group-unjoin   { background-image: url('/i/beta/rev/user-group-unjoin.png');     }
-p.accounts-button a.user-group-delete   { background-image: url('/i/beta/rev/user-group-delete.png');     }
+div.buttons-inline p.accounts-button          { float: left; margin-right: 8px; }
+p.accounts-button a                           { display: inline-block; color: [[BUTTON_TEXT]]; text-decoration: none; padding: 4px 7px 4px 29px;
+                                                background: none no-repeat scroll 7px center [[BUTTON_BG]]; border: [[PANEL_BG]] double 3px; outline: none; }
+p.accounts-button a:hover                     { background-color: [[BUTTON_BG_HOVER]]; color: [[BUTTON_TEXT]];      }
+p.accounts-button a.setting                   { background-image: url('/i/beta/rev/setting.png');                   }
+p.accounts-button a.add                       { background-image: url('/i/beta/rev/add.png');                       }
+p.accounts-button a.delete                    { background-image: url('/i/beta/rev/delete.png');                    }
+p.accounts-button a.share                     { background-image: url('/i/beta/rev/share.png');                     }
+p.accounts-button a.check                     { background-image: url('/i/beta/rev/check.png');                     }
+p.accounts-button a.arrow-left                { background-image: url('/i/beta/rev/arrow-left.png');                }
+p.accounts-button a.user-add                  { background-image: url('/i/beta/rev/user-add.png');                  }
+p.accounts-button a.bookmark-add              { background-image: url('/i/beta/rev/bookmark-add.png');              }
+p.accounts-button a.user-group-add            { background-image: url('/i/beta/rev/user-group-add.png');            }
+p.accounts-button a.user-group-join           { background-image: url('/i/beta/rev/user-group-join.png');           }
+p.accounts-button a.user-group-setting        { background-image: url('/i/beta/rev/user-group-setting.png');        }
+p.accounts-button a.user-group-delete         { background-image: url('/i/beta/rev/user-group-delete.png');         }
+p.accounts-button a.user-group-inactivate     { background-image: url('/i/beta/rev/user-group-inactivate.png');     }
 
 
 /* icons used in table rows */
 
 a.icon              { display: block; float: left; width: 20px; height: 16px; margin: 0 3px; background-repeat: no-repeat; background-position: center center; }
-tr.bg1 a.icon:hover { background-color: [[NEUTRAL_BG]]; outline: [[NEUTRAL_BG]] solid 1px; }
-tr.bg2 a.icon:hover { background-color: [[PANEL_BG]];   outline: [[PANEL_BG]] solid 1px;   }
 a.icon-setting      { background-image: url('/i/beta/setting.png');   }
 a.icon-pencil       { background-image: url('/i/beta/pencil.png');    }
 a.icon-add          { background-image: url('/i/beta/add.png');       }
@@ -50,7 +49,15 @@ a.icon-check        { background-image: url('/i/beta/check.png');     }
 a.icon-download     { background-image: url('/i/beta/download.png');  }
 
 
+/* sprite */
+a.header-link                       { outline: none; margin-left: 4px; }
+a.header-link span.sprite           { float: none; background-position: 0 0; position: relative; top: 1px; }
+a.header-link:hover span.sprite     { background-position: 0 -18px; }
+body.ie67 a.header-link span.sprite { position: absolute;           }
+body.ie6  a.header-link span.sprite { width: 18px; font-size: 14px; }
 
-
-
+.user-group-add-icon  { background-image: url(/i/16/swp/user-group-add.png);    }
+.user-group-join-icon { background-image: url(/i/16/swp/user-group-join.png);   }
+.bookmark-add-icon    { background-image: url(/i/16/swp/bookmark-add.png);      }
+.user-add-icon        { background-image: url(/i/16/swp/user-add.png);          }
 
