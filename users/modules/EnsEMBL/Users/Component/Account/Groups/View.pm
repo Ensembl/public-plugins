@@ -79,7 +79,7 @@ sub content {
         'refresh_url'       => $refresh_url,
         'subheading'        => 'Bookmarks',
         'subheading_links'  => [ {'href' => {'action' => 'Share', 'function' => 'Bookmark', 'group' => $group_id}, 'title' => 'Share from my bookmarks', 'sprite' => 'bookmark-add-icon'} ],
-        'subsections'       => [ @$bookmarks ? $self->bookmarks_table({'bookmarks' => $bookmarks, 'group' => $group_id, 'is_admin' => $is_admin, 'user_id' => $user->user_id}) : q(<p>There is no bookmark shared with the group.</p>) ]
+        'subsections'       => [ @$bookmarks ? $self->bookmarks_table({'bookmarks' => $bookmarks, 'group' => $group}) : q(<p>There is no bookmark shared with the group.</p>) ]
       });
 
       ## annotations
