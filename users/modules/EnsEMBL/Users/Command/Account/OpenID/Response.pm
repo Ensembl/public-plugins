@@ -15,19 +15,20 @@ sub process {
   my $hub             = $self->hub;
   my $object          = $self->object;
   my $openid_consumer = $self->get_openid_consumer;
+  my %redirect_url    = $hub->user ? qw(type Account action Preferences) : qw(type Account action Login); # TODO - add a 'then' param for Details/View or Preferences page?
 
   $openid_consumer->handle_server_response(
-    'verified'      => sub { $self->handle_verified_identity(@_);                                                       },
-    'cancelled'     => sub { $self->redirect_login(MESSAGE_OPENID_CANCELLED, {'provider' => $hub->param('provider')}) },
-    'not_openid'    => sub { $self->redirect_login(MESSAGE_OPENID_INVALID);                                           },
-    'setup_needed'  => sub { $self->redirect_login(MESSAGE_OPENID_SETUP_NEEDED);                                      },
-    'error'         => sub { $self->redirect_login(MESSAGE_OPENID_ERROR, {'oerr' => $_[1]});                          }
+    'verified'      => sub { $self->handle_verified_identity(@_, \%redirect_url);                                                                         },
+    'cancelled'     => sub { $self->ajax_redirect($hub->url({%redirect_url, 'err' => MESSAGE_OPENID_CANCELLED, 'provider' => $hub->param('provider')}));  },
+    'not_openid'    => sub { $self->ajax_redirect($hub->url({%redirect_url, 'err' => MESSAGE_OPENID_INVALID }));                                          },
+    'setup_needed'  => sub { $self->ajax_redirect($hub->url({%redirect_url, 'err' => MESSAGE_OPENID_SETUP_NEEDED }));                                     },
+    'error'         => sub { $self->ajax_redirect($hub->url({%redirect_url, 'err' => MESSAGE_OPENID_ERROR, 'oerr' => $_[1]}));                            }
   );
 }
 
 sub handle_verified_identity {
   ## Handles  verified identity after a verification response is received from the openid provider
-  my ($self, $verified_identity) = @_;
+  my ($self, $verified_identity, $redirect_url) = @_;
   my ($email, $name);
 
   # Get extension variables
@@ -55,9 +56,9 @@ sub handle_verified_identity {
   # if request from a logged in user to add login
   if ($logged_user) {
 
-    # if this login object is already linked to a user object - TODO - add a 'then' param for Details/View or Preferences page
+    # if this login object is already linked to a user object
     if ($login && $login->status eq 'active' && (my $login_user = $login->user)) {
-      return $self->ajax_redirect($hub->url({'action' => 'Preferences', 'msg' => $login_user->user_id eq $logged_user->user_id ? MESSAGE_LOGIN_ALREADY_LINKED : MESSAGE_LOGIN_ALREADY_TAKEN}));
+      return $self->ajax_redirect($hub->url({%$redirect_url, 'msg' => $login_user->user_id eq $logged_user->user_id ? MESSAGE_LOGIN_ALREADY_LINKED : MESSAGE_LOGIN_ALREADY_TAKEN}));
     }
 
   # for a login/registration request
@@ -113,7 +114,7 @@ sub handle_verified_identity {
   $login->activate($r_user);
   $r_user->save;
 
-  return $self->ajax_redirect($hub->url({qw(action Preferences)})); ## TODO - add a 'then' param for Details/View or Preferences page
+  return $self->ajax_redirect($hub->url($redirect_url));
 }
 
 1;
