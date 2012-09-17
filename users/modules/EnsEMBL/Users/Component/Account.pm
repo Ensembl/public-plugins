@@ -253,7 +253,7 @@ sub bookmarks_table {
       $bookmark_row->{'group'} = $self->js_link({
         'href'    => {'action' => 'Groups', 'function' => 'View', 'id' => $group_id},
         'caption' => $group_name,
-        'helptip' => "Click to view group: $group_name",
+        'helptip' => "View group: $group_name",
         'inline'  => 1,
         'target'  => 'page'
       });
@@ -267,7 +267,7 @@ sub bookmarks_table {
       'inline'  => 1
     });
 
-    $bookmark_row->{'buttons'} = join('',
+    $bookmark_row->{'buttons'} = sprintf '<div class="sprites-nowrap">%s</div>', join('',
       $self->js_link({
         'href'    => {'action' => 'Bookmark', 'function' => 'Edit', 'id' => $bookmark_id, %$group_param},
         'helptip' => 'Edit',
