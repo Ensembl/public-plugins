@@ -143,7 +143,14 @@ sub render_end {
   
   print qq{
         </div>
-        <div id="wide-footer">$content->{'copyright'}$content->{'footerlinks'}</div>
+        <div id="wide-footer">
+          <div style="font-size:150%;font-weight:bold">
+            <p>Datasets -&gt; Filters (filtering and inputs) -&gt; Attributes (desired output) -&gt; Results</p>
+            <p>Biomart tutorial: <a href="http://youtu.be/DXPaBdPM2vs">YouTube</a> | <a href="http://v.youku.com/v_show/id_XMjQ2MjkwMTg0.html">YouKu</a></p>
+          </div>
+          $content->{'copyright'}
+          $content->{'footerlinks'}
+        </div>
       </div>
     </div>
   </div>
