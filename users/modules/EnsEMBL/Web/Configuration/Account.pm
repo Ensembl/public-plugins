@@ -1,20 +1,21 @@
 package EnsEMBL::Web::Configuration::Account;
 
+## TODO - make a combined configuration for Account and UserData
+
 use strict;
 
 use base qw(EnsEMBL::Web::Configuration);
 
 sub get_valid_action {
   my $self = shift;
-  return $_[0] if $_[0] eq 'SetCookie';
-  return $self->SUPER::get_valid_action( @_ );
+  return 'Preferences';
 }
 
 sub set_default_action {
   my $self = shift;
   my $user = $self->hub->user;
   if ($user && $user->id) {
-    $self->{'_data'}{'default'} = 'Links';
+    $self->{'_data'}{'default'} = 'Preferences';
   } else {
     $self->{'_data'}{'default'} = 'Login';
   }
@@ -22,96 +23,7 @@ sub set_default_action {
 
 sub user_tree { return 1; }
 
-sub popupate_tree {}
-
-
-
-#     my $settings_menu = $self->create_submenu( 'Settings', 'Manage Saved Settings' );
-# 
-#     $settings_menu->append(
-#       $self->create_node( 'Bookmark/List', "Bookmarks ([[counts::bookmarks]])", [],
-#         { 'command' => 'EnsEMBL::Web::Command::Account::Interface::Bookmark',
-#           'availability' => 1, 'concise' => 'Bookmarks' },
-#       )
-#     );
-# 
-#     ## Control panel fixes - custom data section is species-specific
-#     my $species = $hub->species;
-#     $species = '' if $species !~ /_/;
-#     $species = $hub->species_defs->ENSEMBL_PRIMARY_SPECIES unless $species;
-#     
-#     $settings_menu->append(
-#       $self->create_node( 'UserData', "Custom data ([[counts::userdata]])",
-#         [], { 'availability' => 1, 'url' => $hub->species_path($species).'/UserData/ManageData', 'raw' => 1 },
-#       )
-#     );
-# 
-#     $settings_menu->append($self->create_node( 'Annotation/List', "Annotations ([[counts::annotations]])",
-#     [], { 'command' => 'EnsEMBL::Web::Command::Account::Interface::Annotation',
-#         'availability' => 1, 'concise' => 'Annotations' }
-#     ));
-#     $settings_menu->append(
-#       $self->create_node( 'Newsfilter/List', "News Filters ([[counts::news_filters]])", [],
-#         { 'command' => 'EnsEMBL::Web::Command::Account::Interface::Newsfilter', 
-#           'availability' => 1, 'concise' => 'News Filters' },
-#       )
-#     );
-# 
-#     my $groups_menu = $self->create_submenu( 'Groups', 'Groups' );
-#     
-#     $groups_menu->append(
-#       $self->create_node( 'MemberGroups', "Subscriptions ([[counts::member]])",
-#         [qw(
-#           groups   EnsEMBL::Web::Component::Account::MemberGroups
-#           details  EnsEMBL::Web::Component::Account::MemberDetails
-#         )],
-#         { 'availability' => 1, 'concise' => 'Subscriptions' }
-#       )
-#     );
-#     
-#     $groups_menu->append(
-#       $self->create_node( 'Group/List', "Administrator ([[counts::admin]])", [],
-#         { 'availability' => 1, 'concise' => 'Administrator',
-#           'command' => 'EnsEMBL::Web::Command::Account::Interface::Group' },
-#       )
-#     );
-# 
-#     $groups_menu->append(
-#       $self->create_node( 'Group/Add', "Create a New Group",
-#         [],
-#         { 'availability' => 1, 'concise' => 'Create a Group', 
-#           'command' => 'EnsEMBL::Web::Command::Account::Interface::Group', }
-#       )
-#     );
-#     
-#     ## Add "invisible" nodes used by interface but not displayed in navigation
-#     ## 1. User records
-#     $self->create_node( 'Annotation', '', [],
-#       { 'no_menu_entry' => 1, 'command' => 'EnsEMBL::Web::Command::Account::Interface::Annotation',
-#         'filters' => [qw(Owner)]}
-#     );
-#     $self->create_node( 'Configuration', '', [],
-#       { 'no_menu_entry' => 1, 'command' => 'EnsEMBL::Web::Command::Account::Configuration',
-#         'filters' => [qw(Owner)]}
-#     );
-#     $self->create_node( 'LoadConfig', '', [],
-#       { 'no_menu_entry' => 1, 'command' => 'EnsEMBL::Web::Command::Account::LoadConfig',
-#         'filters' => [qw(Owner)]}
-#     );
-#     $self->create_node( 'SetConfig', '', [],
-#       { 'no_menu_entry' => 1, 'command' => 'EnsEMBL::Web::Command::Account::SetConfig',
-#         'filters' => [qw(Owner)]}
-#     );
-
-
-
-
-
-
-#   }  
-# }
-
-sub user_populate_tree {
+sub user_populate_tree { #TODO - split between user_populate_tree and populate_tree
   my $self                = shift;
   my $hub                 = $self->hub;
   my $user                = $hub->user;
@@ -122,7 +34,7 @@ sub user_populate_tree {
   ## PAGES FOR LOGGED IN USER ONLY
   if ($user) {
 
-    # flags to decide whether to make a node clickable or not
+    # flags to decide whether to make a node clickable or not (TODO - get rid of these, check this in components)
     my $has_groups            = $object && $object->count_groups                        ? 1 : 0;
     my $has_accessible_groups = $object && $object->count_groups({'active_only' => 1})  ? 1 : 0;
 
@@ -315,6 +227,8 @@ sub user_populate_tree {
   # Generic logout command
   $self->create_node('Logout',      'Logout', [], { 'no_menu_entry' => !$user,  'command' => 'EnsEMBL::Users::Command::Account::Logout', 'availability' => 1  });
 }
+
+sub populate_tree {}
 
 sub tree_cache_key {
   my ($self, $user, $session) = @_;
