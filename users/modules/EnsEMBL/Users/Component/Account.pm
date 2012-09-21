@@ -254,7 +254,6 @@ sub bookmarks_table {
         'href'    => {'action' => 'Groups', 'function' => 'View', 'id' => $group_id},
         'caption' => $group_name,
         'helptip' => "View group: $group_name",
-        'inline'  => 1,
         'target'  => 'page'
       });
     }
@@ -263,8 +262,7 @@ sub bookmarks_table {
       'href'    => {'action' => 'Bookmark', 'function' => 'Use', 'id' => $bookmark_id, %$group_param},
       'caption' => $bookmark_name,
       'helptip' => "Visit page: $bookmark_name",
-      'target'  => 'page',
-      'inline'  => 1
+      'target'  => 'page'
     });
 
     $bookmark_row->{'buttons'} = sprintf '<div class="sprites-nowrap">%s</div>', join('',
@@ -341,14 +339,16 @@ sub js_link {
   ##  - caption : inner html
   ##  - title   : title attrib value
   ##  - helptip : same as 'title' , but will display it as a js helptip
-  ##  - inline  : flag if on, will not wrap the link in <p>
+  ##  - button  : flag if on, will wrap the link in <p>
   ##  - target  : section, subsection, page, modal or none
   ##  - class   : String or arrayref of class for <a> tag
   ##  - confirm : confirmation message to be displayed when the link is clicked - make sure its HTML escaped before calling this method
   ##  - cancel  : section id if this link is a 'cancel' link - will remove the given section
-  ##  = sprite  : Class for the sprite icon (caption, cancel, inline args will be ignores if this is provided)
+  ##  = sprite  : Class for the sprite icon (caption, cancel, button args will be ignores if this is provided)
   ## @return HTML string
   my ($self, $params) = @_;
+
+  my $method = $params->{'sprite'} || !$params->{'button'} ? 'inner_HTML' : 'render';
 
   return $self->dom->create_element('p', {
     'class'       => 'accounts-button',
@@ -365,7 +365,7 @@ sub js_link {
       'class'       => [ $self->_JS_CONFIRM, 'hidden' ],
       'inner_HTML'  => $params->{'confirm'}
     } : ()
-  ]})->$_ for ($params->{'inline'} || $params->{'sprite'} ? 'inner_HTML' : 'render');  
+  ]})->$method;
 }
 
 sub js_section {
@@ -407,7 +407,7 @@ sub js_section {
     $self->_JS_REFRESH_URL,
     ref $params->{'refresh_url'} ? $self->hub->url($params->{'refresh_url'}) : $params->{'refresh_url'},
     join('', map {qq(<div class="subsection $js_subsection">$_</div>)} @{$params->{'subsections'} || []}),
-    $self->object->is_inline_request ? $self->js_link({'caption' => 'Cancel', 'class' => 'cancel', 'href' => '#Cancel', 'cancel' => $params->{'id'}}) : ''
+    $self->object->is_inline_request ? $self->js_link({'caption' => 'Cancel', 'class' => 'cancel', 'href' => '#Cancel', 'cancel' => $params->{'id'}, 'button' => 1}) : '' #TODO
   ;
 }
 
@@ -416,7 +416,7 @@ sub link_back_button {
   ## @param back button's href
   ## @return HTML string
   my ($self, $href) = @_;
-  return $self->js_link({'href' => $href, 'caption' => 'Go back', 'class' => 'arrow-left', 'target' => 'page'});
+  return $self->js_link({'href' => $href, 'caption' => 'Go back', 'class' => 'arrow-left', 'target' => 'page', 'button' => 1});
 }
 
 sub _get_js_class_for_link { #TODO classes for different target tyes
