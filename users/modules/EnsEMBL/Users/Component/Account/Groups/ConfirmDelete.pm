@@ -41,17 +41,20 @@ sub content {
             'href'        => {'action' => 'Groups', 'function' => 'View', 'id' => $group_id},
             'caption'     => 'Cancel',
             'class'       => 'arrow-left',
-            'cancel'      => 1 # TODO
+            'cancel'      => 1, # TODO
+            'button'      => 1
           }), $is_active ? (
           $self->js_link({
             'href'        => {'action' => 'Group', 'function' => 'Save', 'status' => 'inactive', 'id' => $group_id},
             'caption'     => 'Inactivate',
             'class'       => 'user-group-inactivate',
+            'button'      => 1
           })) : (),
           $self->js_link({
             'href'        => {'action' => 'Group', 'function' => 'Delete', 'id' => $group_id},
             'caption'     => 'Delete',
-            'class'       => 'user-group-delete'
+            'class'       => 'user-group-delete',
+            'button'      => 1
           })
         ]
       });
