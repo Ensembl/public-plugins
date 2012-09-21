@@ -16,8 +16,9 @@ my $VIRTUAL_COLUMNS = {
   'history'     => [qw(object value url name species param)],
   'bookmark'    => [qw(name shortname url object click)],
   'specieslist' => [qw(favourites list)],
-  'urls'        => [qw(format)],
-  'invitation'  => [qw(invitation_code email)]
+  'urls'        => [qw(format cloned_from)],
+  'invitation'  => [qw(invitation_code email)],
+  'upload'      => [qw(filename filesize name code md5 format species assembly share_id analyses browser_switches style display nearest timestamp cloned_from)]
 };
 
 ## Define schema
