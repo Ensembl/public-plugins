@@ -54,13 +54,11 @@ sub content {
           : $self->js_link($membership && $membership->is_pending_invitation ? {
             'href'    => {'action' => 'Membership', 'function' => 'Accept', 'id' => $membership->group_member_id},
             'caption' => 'Accept invitation',
-            'target'  => 'none',
-            'inline'  => 1,
+            'target'  => 'none'
           } : {
             'href'    => {'action' => 'Group', 'function' => 'Join', 'id' => $group->group_id},
             'caption' => $group->type eq 'open' ? 'Join' : 'Send request',
-            'target'  => 'none',
-            'inline'  => 1,
+            'target'  => 'none'
           })
         )
       });
@@ -73,7 +71,8 @@ sub content {
         'caption' => 'Done',
         'target'  => 'page',
         'cancel'  => 'list_all_groups',
-        'class'   => 'check'
+        'class'   => 'check',
+        'button'  => 1
       })
     ]});
 
@@ -83,7 +82,7 @@ sub content {
       'heading'     => 'No group found to join ',
       'subsections' => [ sprintf(q(<p>No public user group exists for %s that you can join. If you want to create a new group, please %s.</p>),
         $self->site_name,
-        $self->js_link({'href' => {'action' => 'Groups', 'function' => 'Add'}, 'caption' => 'click here', 'inline' => 1, 'target' => 'page'})
+        $self->js_link({'href' => {'action' => 'Groups', 'function' => 'Add'}, 'caption' => 'click here', 'target' => 'page'})
       )]
     });
   }
