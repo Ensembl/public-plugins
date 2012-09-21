@@ -152,7 +152,7 @@ td.dbf-list-buttons a {
 
 td.dbf-list-buttons a.dbf-list-delete {
   margin-left: 20px;
-  background: transparent url(/i/16/delete.png) no-repeat 2px 0;
+  background: transparent url(/i/16/cross.png) no-repeat 2px 0;
 }
 
 td.dbf-list-buttons a.dbf-list-duplicate {
