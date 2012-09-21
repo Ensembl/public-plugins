@@ -10,7 +10,9 @@ sub update_conf {
 
   $SiteDefs::ENSEMBL_USERS_ENABLED         = 1;
 
+  # TODO change once development done
   $SiteDefs::ENSEMBL_USERDB_NAME           = 'hr5_test_users_db';
+  $SiteDefs::ENSEMBL_USER_COOKIE           = 'ENS_USER';
 
   $SiteDefs::ROSE_DB_DATABASES->{'user'}   = {
     database  => $SiteDefs::ENSEMBL_USERDB_NAME,
