@@ -21,10 +21,12 @@ sub url {
   ## Clears the core params and species in case url type is Account
   my $self    = shift;
   my $params  = shift;
-  if (($params->{'type'} || '') eq 'Account' || $self->type eq 'Account') {
+
+  if (ref $params && (($params->{'type'} || '') eq 'Account' || $self->type eq 'Account')) { # ignore this if second argument is the 'extra' argument
     $params->{'__clear'}    = 1;
     $params->{'species'}  ||= '';
   }
+
   return $self->__url($params, @_);
 }
 
