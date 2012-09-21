@@ -11,9 +11,9 @@ use base qw(EnsEMBL::Web::Component);
 
 use constant {
   _JS_LINK            => '_jinline modal_link',
-  _JS_LINK_SECTION    => '_jinline _jseclink',
-  _JS_LINK_SUBSECTION => '_jinline _jsseclink',
-  _JS_LINK_FREE       => '_jinline _jfreelink',
+  _JS_LINK_SECTION    => '_jinline modal_link',
+  _JS_LINK_SUBSECTION => '_jinline modal_link',
+  _JS_LINK_FREE       => '_jinline modal_link',
 #   _JS_LINK_SECTION    => '_jinline _jseclink',
 #   _JS_LINK_SUBSECTION => '_jinline _jsseclink',
 #   _JS_LINK_FREE       => '_jinline _jfreelink',
