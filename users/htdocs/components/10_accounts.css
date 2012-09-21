@@ -49,15 +49,15 @@ a.icon-check        { background-image: url('/i/beta/check.png');     }
 a.icon-download     { background-image: url('/i/beta/download.png');  }
 
 
-/* sprite */
+/* sprites */
 a.header-link                       { outline: none; margin-left: 4px; }
 a.header-link span.sprite           { float: none; background-position: 0 0; position: relative; top: 1px; }
 a.header-link:hover span.sprite     { background-position: 0 -18px; }
 body.ie67 a.header-link span.sprite { position: absolute;           }
 body.ie6  a.header-link span.sprite { width: 18px; font-size: 14px; }
 
+/* some extra sprites that don't exist in core */
 .user-group-add-icon  { background-image: url(/i/16/swp/user-group-add.png);    }
 .user-group-join-icon { background-image: url(/i/16/swp/user-group-join.png);   }
-.bookmark-add-icon    { background-image: url(/i/16/swp/bookmark-add.png);      }
 .user-add-icon        { background-image: url(/i/16/swp/user-add.png);          }
 
