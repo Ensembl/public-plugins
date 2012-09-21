@@ -28,8 +28,7 @@ sub content {
       $login_detail = sprintf "$login_detail %s ", $site_name, $_->identity, $self->js_link({
         'class'   => 'small',
         'href'    => {qw(action Password function Change)},
-        'caption' => 'Change password',
-        'inline'  => 1
+        'caption' => 'Change password'
       });
 
     } elsif ($login_type eq 'openid') {
@@ -46,7 +45,6 @@ sub content {
         'class'   => 'small',
         'href'    => {'action' => 'Details', 'function' => 'RemoveLogin', 'id' => $_->login_id},
         'caption' => 'Remove login',
-        'inline'  => 1,
         'confirm' => sprintf(q(You won't be able to login to %s site with your %s account.), $site_name, $login_type eq 'local' ? $site_name : $login_provider)
       });
     }
@@ -55,7 +53,6 @@ sub content {
   }
 
   push @login_details, $self->js_link({
-    'inline'  => 1,
     'caption' => 'Add login',
     'helptip' => sprintf('Click to add another login option via %s', $self->join_with_or(grep {!ref $_} @{$self->object->openid_providers})),
     'href'    => {qw(action Details function AddLogin)}

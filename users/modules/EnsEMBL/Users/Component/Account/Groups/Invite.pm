@@ -80,8 +80,7 @@ sub content {
         $self->js_link({
           'href'    => {'action' => 'Groups', 'function' => 'Add'},
           'target'  => 'page',
-          'caption' => 'create a new group',
-          'inline'  => 1
+          'caption' => 'create a new group'
         })
       ]
     });

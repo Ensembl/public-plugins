@@ -58,8 +58,7 @@ sub content {
             'href'    => {'action' => 'Groups', 'function' => 'View', 'id' => $_->group_id},
             'caption' => $_->level eq 'member' ? 'View' : 'Moderate',
             'target'  => 'page',
-          ),
-          'inline'  => 1
+          )
         }),
         $is_inactive_group ? ('options' => {'class' => 'inactive'}) : ()
       });
