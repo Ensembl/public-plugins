@@ -4,11 +4,12 @@ use strict;
 use warnings;
 
 use EnsEMBL::Web::Exceptions;
-use EnsEMBL::Web::DataType::EmailAddress;
 use EnsEMBL::Users::Mailer::User;
 use EnsEMBL::Users::Messages qw(MESSAGE_ACCOUNT_BLOCKED MESSAGE_VERIFICATION_SENT MESSAGE_UNKNOWN_ERROR);
 
 use base qw(EnsEMBL::Web::Command);
+
+use constant EMAIL_REGEX => qr/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,6}$/;
 
 sub handle_registration {
   ## Handles a new login according to the email provided during registration
@@ -139,7 +140,9 @@ sub validate_fields {
 
   # email
   if (exists $params->{'email'}) {
-    $params->{'email'} = EnsEMBL::Web::DataType::EmailAddress->new($params->{'email'})->to_string or return {'invalid' => 'email'};
+    my $regex = $self->EMAIL_REGEX;
+    $params->{'email'} = lc $params->{'email'};
+    return {'invalid' => 'email'} unless $params->{'email'} =~ /$regex/;
   }
 
   # password
@@ -196,6 +199,15 @@ sub send_group_editing_notification_email {
       $mailer->send_group_editing_notification_email($user, $_, $group, join "\n", @changes) for @curious_admins;
     }
   }
+}
+
+sub send_group_sharing_notification_email {
+  ## TODO
+}
+
+sub get_curious_admins {
+  ## Gets all the admins of a group that opted to get notified on some event
+  ## TODO
 }
 
 sub internal_referer {
