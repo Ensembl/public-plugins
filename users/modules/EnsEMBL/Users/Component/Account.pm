@@ -275,7 +275,7 @@ sub bookmarks_table {
       ? $self->js_link({
         'href'    => {'action' => 'Bookmark', 'function' => 'Copy', 'id' => $bookmark_id, %$group_param},
         'helptip' => 'Copy to my bookmarks',
-        'sprite'  => 'bookmark-add-icon',
+        'sprite'  => 'bookmark_icon',
         'target'  => 'none'
       })
       : $self->js_link({

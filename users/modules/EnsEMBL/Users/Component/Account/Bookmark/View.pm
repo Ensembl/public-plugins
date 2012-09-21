@@ -25,7 +25,7 @@ sub content {
       'heading_links'     => [{
         'href'              => {qw(action Bookmark function Add)},
         'title'             => 'Add a bookmark',
-        'sprite'            => 'bookmark-add-icon',
+        'sprite'            => 'bookmark_icon',
         'target'            => 'section'
       }],
       'subsections'       => [ @$bookmarks ? $self->bookmarks_table({'bookmarks' => $bookmarks}) : $self->no_bookmark_message ]
