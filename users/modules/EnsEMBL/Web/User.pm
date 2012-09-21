@@ -5,6 +5,7 @@ use warnings;
 
 use HTML::Entities qw(encode_entities);
 
+use EnsEMBL::Web::Record;
 use EnsEMBL::Web::DASConfig;
 use EnsEMBL::Web::Exceptions;
 use EnsEMBL::ORM::Rose::Manager::User;
@@ -97,38 +98,88 @@ sub authorise {
 
 sub groups {
   ## Gets all the active groups user is an active memeber of
+  ## @return Arrayref of Rose Group objects
   my $self = shift;
   return [ map $_->group, @{$self->rose_object->active_memberships} ];
 }
 
 sub to_string {
+  ## Used to operator overloading
+  ## @return ID of the user if logged in, empty string otherwise
   return $_[0]->rose_object ? shift->user_id : '';
 }
 
 sub to_boolean {
+  ## Used to operator overloading
+  ## @return 1 if user logged in, 0 otherwise
   return shift->rose_object ? 1 : 0;
 }
 
 sub deauthorise {
   ## Clears the rose user saved inside the object, and the user cookie
+  ## @return No return value
   my $self = shift;
   $self->cookie->clear;
   $self->{'_user'} = undef;
 }
 
-#TODO - check if login logout works + other integration
-
 sub _goto_rose_object {
+  ## maps any methods in this class to Rose User Object class
   ## @private
   my ($self, $method, @args) = @_;
   return $self->rose_object ? $self->rose_object->$method(@args) : undef;
 }
 
 
+#################################################
+###########                        ##############
+########### Backward compatibility ##############
+###########                        ##############
+#################################################
 
+sub get_groups {
+  return @{shift->groups};
+}
 
+sub get_group {
+  my ($self, $group_id) = @_;
+  my $membership = $self->rose_object->get_membership_object($group_id);
+  return $membership ? $membership->group : undef;
+}
 
-# Backward compatiablity #
+sub get_records {
+  my ($self, $record_type) = @_;
+  return EnsEMBL::Web::Record->from_rose_objects($self->$record_type || []);
+}
+
+sub get_record {
+  my ($self, $record_id) = @_;
+  my $records   = $self->rose_object->find_records('query' => ['record_id' => $record_id], 'limit' => 1);
+  my ($record)  = $records && @$records ? EnsEMBL::Web::Record->from_rose_objects($records) : ();
+  return $record;
+}
+
+sub get_group_records {
+  my ($self, $group, $record_type) = @_;
+  $record_type ||= 'records';
+  return EnsEMBL::Web::Record->from_rose_objects($group->$record_type || []);
+}
+
+sub find_admin_groups {
+  return map $_->group, @{shift->rose_object->admin_memberships};
+}
+
+sub add_to_uploads {
+  my ($self, %data) = @_;
+
+  my $record = $self->create_record('upload', \%data);
+  $record->save('user' => $self);
+
+  ($record) = EnsEMBL::Web::Record->from_rose_objects([$record]);
+
+  return $record;
+}
+
 sub get_all_das {
   my $self    = shift;
   my $species = shift || $ENV{'ENSEMBL_SPECIES'};
@@ -137,7 +188,7 @@ sub get_all_das {
 
   my %by_name = ();
   my %by_url  = ();
-  for my $das_record ( @{$self->dases} ) {
+  for my $das_record ( $self->get_records('dases') ) {
     # Create new DAS source from value in database...
     my $das = EnsEMBL::Web::DASConfig->new_from_hashref( $das_record->data->raw );
     $das->matches_species( $species ) || next;
@@ -181,10 +232,35 @@ sub favourite_species {
 sub get_favourite_tracks {
   my $self   = shift;
   return {};
-  my ($data) = map $_->{'tracks'}, @{$self->favourite_tracks};
+  my ($data) = map $_->{'tracks'}, $self->get_records('favourite_tracks');
      $data   = eval($data) if $data;
   
   return $data || {};
+}
+
+sub set_favourite_tracks {
+  my ($self, $data) = @_;
+  my ($favourites)  = @{$self->favourite_tracks};
+      $favourites ||= $self->create_record('favourite_track');
+
+  if ($data) {
+    $favourites->tracks($data);
+    $favourites->save('user' => $self);
+  } else {
+    $favourites->delete;
+  }
+}
+
+sub find_administratable_groups {
+  warn "Method find_administratable_groups should not be called -";
+}
+
+sub find_nonadmin_groups {
+  warn "Method find_nonadmin_groups should not be called -";
+}
+
+sub update_invitations {
+  warn "Method update_invitations should not be called -";
 }
 
 1;
