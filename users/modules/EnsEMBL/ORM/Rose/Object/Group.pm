@@ -34,6 +34,11 @@ __PACKAGE__->meta->setup(
   virtual_relationships => __PACKAGE__->record_relationship_types
 );
 
+sub id {
+  ## Same as group_id
+  return shift->group_id;
+}
+
 sub membership {
   ## Returns the membership object for the given user, creates a new membership object if no existing found
   ## @param Member - Rose User object
