@@ -34,6 +34,7 @@ sub update_conf {
   $SiteDefs::__species_aliases{ 'Microcebus_murinus'                } = [qw(mmur lemur)];
   $SiteDefs::__species_aliases{ 'Monodelphis_domestica'             } = [qw(md mdom monodelphis opossum)];
   $SiteDefs::__species_aliases{ 'Mus_musculus'                      } = [qw(mm mmus mouse mus)];
+  $SiteDefs::__species_aliases{ 'Mustela_putorius_furo'             } = [qw(mp mput mustela ferret)];
   $SiteDefs::__species_aliases{ 'Myotis_lucifugus'                  } = [qw(ml mluc microbat myotis)];
   $SiteDefs::__species_aliases{ 'Nomascus_leucogenys'               } = [qw(nl nleu gibbon nomascus)];
   $SiteDefs::__species_aliases{ 'Ochotona_princeps'                 } = [qw(op pika pikachu)];
@@ -63,6 +64,7 @@ sub update_conf {
   $SiteDefs::__species_aliases{ 'Takifugu_rubripes'                 } = [qw(fr trub ffish fugu takifugu f_rubripes fugu_rubripes)];
   $SiteDefs::__species_aliases{ 'Tetraodon_nigroviridis'            } = [qw(tn tnig tetraodon)];
   $SiteDefs::__species_aliases{ 'Gadus_morhua'                      } = [qw(gm gmor gadus cod)];
+  $SiteDefs::__species_aliases{ 'Xiphophorus_maculatus'             } = [qw(xm xmac xipho platyfish)];
 #-------------------- amphibians
   $SiteDefs::__species_aliases{ 'Pelodiscus_sinensis'               } = [qw(ps chinese softshell turtle)];
   $SiteDefs::__species_aliases{ 'Xenopus_tropicalis'                } = [qw(xt xtro xenopus frog)];
