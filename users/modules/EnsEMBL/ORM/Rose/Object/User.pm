@@ -30,7 +30,7 @@ __PACKAGE__->meta->setup(
   relationships         => [
     logins                => { 'type' => 'one to many', 'class' => 'EnsEMBL::ORM::Rose::Object::Login',           'column_map' => {'user_id' => 'user_id'}  },
     memberships           => { 'type' => 'one to many', 'class' => 'EnsEMBL::ORM::Rose::Object::Membership',      'column_map' => {'user_id' => 'user_id'}, 'methods' => { map {$_, undef} qw(add_on_save count find get_set_on_save)} },
-    admin_privilege       => { 'type' => 'one to one',  'class' => 'EnsEMBL::ORM::Rose::Object::AdminPrivilage',  'column_map' => {'user_id' => 'user_id'}  },
+#    admin_privilege       => { 'type' => 'one to one',  'class' => 'EnsEMBL::ORM::Rose::Object::AdminPrivilage',  'column_map' => {'user_id' => 'user_id'}  },
     records               => __PACKAGE__->record_relationship_params('user_id')
   ],
 
