@@ -22,10 +22,10 @@ div.buttons-inline p.accounts-button              { float: left; margin-right: 8
 p.accounts-button a                               { display: inline-block; color: [[BUTTON_TEXT]]; text-decoration: none; padding: 4px 7px 4px 29px;
                                                     background: none no-repeat scroll 7px center [[BUTTON_BG]]; border: [[PANEL_BG]] double 3px; outline: none; }
 p.accounts-button a:hover                         { background-color: [[BUTTON_BG_HOVER]]; color: [[BUTTON_TEXT]];      }
-p.accounts-button a.check                         { background-image: url('/i/beta/rev/check.png');                     }
-p.accounts-button a.arrow-left                    { background-image: url('/i/beta/rev/arrow-left.png');                }
-p.accounts-button a.user-group-delete             { background-image: url('/i/beta/rev/user-group-delete.png');         }
-p.accounts-button a.user-group-inactivate         { background-image: url('/i/beta/rev/user-group-inactivate.png');     }
+p.accounts-button a.check                         { background-image: url('/i/16/rev/check.png');                     }
+p.accounts-button a.arrow-left                    { background-image: url('/i/16/rev/arrow-left.png');                }
+p.accounts-button a.user-group-delete             { background-image: url('/i/16/rev/user-group-delete.png');         }
+p.accounts-button a.user-group-inactivate         { background-image: url('/i/16/rev/user-group-inactivate.png');     }
 
 /* sprites */
 a.header-link                                     { outline: none; margin-left: 4px; }
