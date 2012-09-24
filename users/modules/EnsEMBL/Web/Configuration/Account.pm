@@ -6,10 +6,8 @@ use strict;
 
 use base qw(EnsEMBL::Web::Configuration);
 
-sub get_valid_action {
-  my $self = shift;
-  return 'Preferences';
-}
+# sub get_valid_action {
+# }
 
 sub set_default_action {
   my $self = shift;
@@ -23,7 +21,7 @@ sub set_default_action {
 
 sub user_tree { return 1; }
 
-sub user_populate_tree { #TODO - split between user_populate_tree and populate_tree
+sub populate_tree { #TODO - split between user_populate_tree and populate_tree
   my $self                = shift;
   my $hub                 = $self->hub;
   my $user                = $hub->user;
@@ -228,7 +226,7 @@ sub user_populate_tree { #TODO - split between user_populate_tree and populate_t
   $self->create_node('Logout',      'Logout', [], { 'no_menu_entry' => !$user,  'command' => 'EnsEMBL::Users::Command::Account::Logout', 'availability' => 1  });
 }
 
-sub populate_tree {}
+sub user_populate_tree {}
 
 sub tree_cache_key {
   my ($self, $user, $session) = @_;
