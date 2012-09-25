@@ -14,13 +14,14 @@ sub process {
   my $self    = shift;
   my $object  = $self->object;
   my $hub     = $self->hub;
+  my $email   = $hub->param('email') || '';
 
   # validation
-  my $fields  = $self->validate_fields({'email' => $hub->param('email') || ''});
-  $self->ajax_redirect($hub->url({'action' => 'Password', 'function' => 'Lost', 'email' => $hub->param('email'), 'err' => MESSAGE_EMAIL_INVALID})) if $fields->{'invalid'};
+  my $fields  = $self->validate_fields({'email' => $email});
+  return $self->ajax_redirect($hub->url({'action' => 'Password', 'function' => 'Lost', 'email' => $email, 'err' => MESSAGE_EMAIL_INVALID})) if $fields->{'invalid'};
 
   # get the existing account
-  my $email   = $fields->{'email'};
+  $email      = $fields->{'email'};
   my $login   = $object->fetch_login_account($email);
   return $self->ajax_redirect($hub->url({'action' => 'Password', 'function' => 'Lost', 'email' => $email, 'err' => MESSAGE_EMAIL_NOT_FOUND})) unless $login;
 
