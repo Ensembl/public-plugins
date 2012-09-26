@@ -64,9 +64,10 @@ sub test_blat {
   my $result_link = $sel->get_eval(qq{
     \var \$ = selenium.browserbot.getCurrentWindow().jQuery; 
     \$('a[target^=BLAST_RESULT]').attr('href');
-  });  
+  });
   
   $sel->open_ok($result_link);
-  $sel->ensembl_is_text_present("Sequences producing");  
+  $sel->pause(2000);
+  $sel->ensembl_is_text_present("Sequences producing");
 }
 1;
