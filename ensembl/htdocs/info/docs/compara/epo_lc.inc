@@ -1,7 +1,4 @@
-<h4>35 eutherian mammals EPO_LOW_COVERAGE</h4>
-<h5>(method_link_type="EPO_LOW_COVERAGE" : species_set_name="mammals")</h5>
-<p>
-Human (Homo sapiens)<br />
+<p><h4>36 eutherian mammals EPO_LOW_COVERAGE</h4><h5>(method_link_type="EPO_LOW_COVERAGE" : species_set_name="mammals")</h5>Human (Homo sapiens)<br />
 Gorilla (Gorilla gorilla)<br />
 Chimpanzee (Pan troglodytes)<br />
 Orangutan (Pongo abelii)<br />
@@ -32,8 +29,10 @@ Horse (Equus caballus)<br />
 Cat (Felis catus)<br />
 Dog (Canis familiaris)<br />
 Panda (Ailuropoda melanoleuca)<br />
+Ferret (Mustela putorius furo)<br />
 Dolphin (Tursiops truncatus)<br />
 Pig (Sus scrofa)<br />
 Cow (Bos taurus)<br />
 Alpaca (Vicugna pacos)<br />
+
 </p>

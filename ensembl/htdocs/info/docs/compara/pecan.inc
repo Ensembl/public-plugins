@@ -1,7 +1,4 @@
-<h4>19 amniota vertebrates Pecan</h4>
-<h5>(method_link_type="PECAN" : species_set_name="amniotes")</h5>
-<p>
-Human (Homo sapiens)<br />
+<p><h4>19 amniota vertebrates Pecan</h4><h5>(method_link_type="PECAN" : species_set_name="amniotes")</h5>Human (Homo sapiens)<br />
 Gorilla (Gorilla gorilla)<br />
 Chimpanzee (Pan troglodytes)<br />
 Orangutan (Pongo abelii)<br />
@@ -20,5 +17,5 @@ Chicken (Gallus gallus)<br />
 Turkey (Meleagris gallopavo)<br />
 Zebra Finch (Taeniopygia guttata)<br />
 Anole Lizard (Anolis carolinensis)<br />
-</p>
 
+</p>
