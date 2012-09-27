@@ -17,17 +17,22 @@ sub test_genome_statistics {
   my $release_version = $SD->ENSEMBL_VERSION;
 
   $self->open_species_homepage($self->species,undef, $sp_bio_name);
-  
-  $sel->ensembl_click_links(["//a[contains(\@href,'/Info/StatsTable')]"]); #Assembly and Genebuild page
-  $sel->ensembl_is_text_present("Assembly:");
-  
-  $sel->ensembl_click_links(["//a[contains(\@href,'Info/IPtop40')]"]); #Top 40 InterPro hits
-  $sel->ensembl_is_text_present("InterPro name");
-  
-  $sel->ensembl_click_links(["//a[contains(\@href,'Info/IPtop500')]"]); #Top 500 InterPro hits
-  $sel->ensembl_is_text_present("InterPro name");
 
-  $sel->ensembl_click_links(["//a[contains(\@href,'Info/WhatsNew')]"]);
-  $sel->ensembl_is_text_present("What's New in Release $release_version");
+  $sel->ensembl_click("link=More information and statistics"); #Link to genome statistics page on New species home page  
+# $sel->ensembl_click_links(["//a[contains(\@href,'/Info/StatsTable')]"]); #Assembly and Genebuild page
+  $sel->pause(1000);
+  $sel->ensembl_is_text_present("Assembly")
+  and $sel->ensembl_is_text_present("Gene annotation")
+  and $sel->ensembl_is_text_present("Assembly:");
+  
+#  $sel->ensembl_click_links(["//a[contains(\@href,'Info/IPtop40')]"]); #Top 40 InterPro hits
+#  $sel->ensembl_is_text_present("InterPro name");
+  
+#  $sel->ensembl_click_links(["//a[contains(\@href,'Info/IPtop500')]"]); #Top 500 InterPro hits
+#  $sel->ensembl_is_text_present("InterPro name");
+
+# This is now a box on the new species home page and test move to Generic.pm in species_list sub
+# $sel->ensembl_click_links(["//a[contains(\@href,'Info/WhatsNew')]"]);
+# $sel->ensembl_is_text_present("What's New in Release $release_version");
 }
 1;
