@@ -66,7 +66,7 @@ sub attach_remote_file {
   and $sel->ensembl_wait_for_ajax(5000,5000); #timeout=5s and pause=5s
   
   $sel->ensembl_is_text_present("Go to first region with data");
-  $sel->ensembl_click("modal_bg");
+  $sel->ensembl_click("css=div.modal_close");
   
   #Checking if karyotype image loaded fine
   $sel->ensembl_wait_for_ajax_ok
@@ -111,7 +111,7 @@ sub add_track {
   and $sel->ensembl_click("//form[\@id='location_genome_configuration']/div[1]/div/ul/li[6]/img")
   and $sel->ensembl_click("//img[\@alt='Arrows on both sides']"); 
     
-  $sel->ensembl_click("modal_bg")
+  $sel->ensembl_click("css=div.modal_close")
   and $sel->ensembl_wait_for_ajax_ok(undef,5000)   
   #and $sel->ensembl_is_text_present("Click on the image above to jump to a chromosome, or click and drag to select a region")
   and $sel->ensembl_is_text_present("BED")            #making sure karyotype displayed the track for the uploaded data(track name in the uploaded file)
@@ -420,7 +420,7 @@ sub upload_data {
   and $sel->ensembl_is_text_present("Your data");
 
   $sel->ensembl_click("link=Upload Data")
-  and $sel->ensembl_wait_for_ajax_ok
+  and $sel->ensembl_wait_for_ajax_ok(undef,2000)  
   and $sel->type_ok("name=name","$name")
   and $sel->select_ok("format", "$format")
   and $upload_file ? $sel->type_ok("name=url", "$upload_file") : $sel->type_ok("text", "$data")  
@@ -428,7 +428,7 @@ sub upload_data {
   and $sel->ensembl_wait_for_ajax_ok(50000,10000); #timeout=50s and pause=10s
   
   $sel->ensembl_is_text_present("Go to first region with data");
-  $sel->ensembl_click("modal_bg")
+  $sel->ensembl_click("css=div.modal_close")
   and $sel->ensembl_wait_for_ajax_ok;  
 }
 
