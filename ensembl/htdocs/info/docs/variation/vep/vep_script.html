@@ -44,10 +44,13 @@
 				<li><img alt="" src="/i/leaf.gif"><a href="#cache">Using the cache</a></li>
 				<li><img alt="" src="/i/leaf.gif"><a href="#pre">Pre-built caches</a></li>
 				<li><img alt="" src="/i/leaf.gif"><a href="#build">Building your own cache</a></li>
+				<li><img alt="" src="/i/leaf.gif"><a href="#gtf">Building a cache from a GTF file</a></li>
+				<li><img alt="" src="/i/leaf.gif"><a href="#fasta">Using FASTA files</a></li>
 				<li><img alt="" src="/i/leaf.gif"><a href="#limitations">Limitations of the cache</a></li>
 				<li><img alt="" src="/i/leaf.gif"><a href="#privacy">Data privacy</a></li>
 				<li><img alt="" src="/i/leaf.gif"><a href="#offline">Offline mode</a></li>
-				<li class="last"><img alt="" src="/i/leaf.gif"><a href="#local">Using a local database</a></li>
+				<li><img alt="" src="/i/leaf.gif"><a href="#local">Using a local database</a></li>
+				<li class="last"><img alt="" src="/i/leaf.gif"><a href="#technical">Technical information</a></li>
 			</ul>
 		</li>
 		<li><img alt="" src="/i/leaf.gif">
@@ -99,6 +102,14 @@
 	<hr/>
 	
 	<h2 id="new"> What's new </h2>
+	
+	<h3> New in version 2.7 <i>(October 2012)</i> </h3>
+	
+	<ul>
+		<li>build VEP cache files offline from GTF and FASTA files</li>
+		<li>support for using FASTA files for sequence lookup in HGVS notations
+		in offline/cache modes</li>
+	</ul>
 	
 	<h3> New in version 2.6 <i>(July 2012)</i> </h3>
 	
@@ -210,7 +221,7 @@
 	<h2 id="requirements"> Requirements </h2>
 	
 	<p>
-	Version 2.6 of the script requires at least version 68 of the Ensembl Core
+	Version 2.7 of the script requires at least version 69 of the Ensembl Core
 	and Variation APIs and their relevant dependencies to be installed to use
 	the script. A minimal subset of these can be installed using the supplied <a
 	href="#installer">installer script</a>. </p>
@@ -231,7 +242,7 @@
 	<p> The Variant Effect Predictor script can be downloaded as a tarball from
 	the Ensembl CVS server: </p>
 	
-	<p> <a href="http://cvs.sanger.ac.uk/cgi-bin/viewvc.cgi/ensembl-tools/scripts/variant_effect_predictor.tar.gz?view=tar&root=ensembl&pathrev=branch-ensembl-68">Download version 2.6 (latest)</a> </p>
+	<p> <a href="http://cvs.sanger.ac.uk/cgi-bin/viewvc.cgi/ensembl-tools/scripts/variant_effect_predictor.tar.gz?view=tar&root=ensembl&pathrev=branch-ensembl-69">Download version 2.7 (latest)</a> </p>
 	
 	<p>It is also included as part of the ensembl-tools module of the Ensembl
 	API - you can find it in the ensembl-tools/scripts/variant_effect_predictor/
@@ -240,6 +251,7 @@
 	<h3> Previous versions </h3>
 	
 	<ul>
+		<li><a href="http://cvs.sanger.ac.uk/cgi-bin/viewvc.cgi/ensembl-tools/scripts/variant_effect_predictor.tar.gz?view=tar&root=ensembl&pathrev=branch-ensembl-68">Download version 2.6</a> (Ensembl 68) </li>
 		<li><a href="http://cvs.sanger.ac.uk/cgi-bin/viewvc.cgi/ensembl-tools/scripts/variant_effect_predictor.tar.gz?view=tar&root=ensembl&pathrev=branch-ensembl-67">Download version 2.5</a> (Ensembl 67) </li>
 		<li><a href="http://cvs.sanger.ac.uk/cgi-bin/viewvc.cgi/ensembl-tools/scripts/variant_effect_predictor.tar.gz?view=tar&root=ensembl&pathrev=branch-ensembl-66">Download version 2.4</a> (Ensembl 66) </li>
 		<li><a href="http://cvs.sanger.ac.uk/cgi-bin/viewvc.cgi/ensembl-tools/scripts/variant_effect_predictor.tar.gz?view=tar&root=ensembl&pathrev=branch-ensembl-65">Download version 2.3</a> (Ensembl 65) </li>
@@ -316,7 +328,7 @@
 			<td><pre>--API_VERSION [version]</pre></td>
 			<td><pre>-v</pre></td>
 			<td>By default the script will install the latest version of the
-			Ensembl API (currently 68). Users can force the script to install a
+			Ensembl API (currently 69). Users can force the script to install a
 			different version at their own risk</td>
 		</tr>
 		<tr>
@@ -1405,6 +1417,21 @@ host          useastdb.ensembl.org</pre>
 				<i>Not used by default</i>
 			</td>
 		</tr>
+		<tr>
+			<td><pre>--fasta [file|dir]</pre></td>
+			<td>&nbsp;</td>
+			<td>
+				Specify a FASTA file or a directory containing FASTA files to
+				use to look up reference sequence. The first time you run the
+				script with this parameter an index will be built which can take
+				a few minutes. This is required if fetching HGVS annotations
+				(--hgvs) or checking reference sequences (--check_ref) in
+				offline mode (--offline), and optional with some performance
+				increase in cache mode (--cache). See <a
+				href="#fasta">documentation</a> for more details.
+				<i>Not used by default</i>
+			</td>
+		</tr>
 	</table>
 	  
 	
@@ -1543,16 +1570,16 @@ host          useastdb.ensembl.org</pre>
 	<ol>
 		<li>
 			Download the archive file for your species from our <a
-			href="ftp://ftp.ensembl.org/pub/release-68/variation/VEP/">FTP
+			href="ftp://ftp.ensembl.org/pub/release-69/variation/VEP/">FTP
 			site</a>
 		</li>
 		<li>
 			Extract the archive in your cache directory. By default the VEP uses
 			$HOME/.vep/ as the cache directory, where $HOME is your UNIX home
 			directory.
-			<pre class="code">mv homo_sapiens_vep_68.tar.gz ~/.vep/
+			<pre class="code">mv homo_sapiens_vep_69.tar.gz ~/.vep/
 cd ~/.vep/
-tar xfz homo_sapiens_vep_68.tar.gz</pre>
+tar xfz homo_sapiens_vep_69.tar.gz</pre>
 		</li>
 		<li>
 			Run the VEP with the --cache option
@@ -1567,6 +1594,9 @@ tar xfz homo_sapiens_vep_68.tar.gz</pre>
 	<p> If a pre-built cache does not exist for your species, please contact us
 	at <a href="mailto:dev@ensembl.org">dev@ensembl.org</a> and we will
 	endeavour to add your species to the list of downloads. </p>
+	
+	<p> It is also possible to build your own <a href="#gtf">cache from a GTF
+	file</a> and a FASTA file. </p>
 	
 	
 	<h3 id="build"> Building your own cache </h3>
@@ -1604,6 +1634,79 @@ tar xfz homo_sapiens_vep_68.tar.gz</pre>
 	
 	<pre class="code">perl variant_effect_predictor.pl -host dbhost -user username -pass password -port 3306 -build 21 -dir /my/cache/dir/</pre>
 	
+	
+	<h3 id="gtf">Building a cache from a GTF file</h3>
+	
+	<p> For species that don't have a publicly available cache, or even an
+	Ensembl core database, it is possible to build a VEP cache using the
+	gtf2vep.pl script included alongside the main script. This requires a GTF
+	file and a FASTA file containing the reference sequence for the same
+	species. The GTF file have its features sorted in chromosomal order, and
+	must contain the following entry types and data: </p>
+	
+	<ul>
+		<li>"exon" feature lines with have "transcript_id", "gene_id" and
+		"exon_number" in the description field</li>
+		<li>"CDS" feature lines must correspond to coding exons, with
+		"transcript_id" and "exon_number" populated in the description
+		field, and the "frame" column populated with the read frame of the
+		exon</li>
+		<li>the "source" column of the GTF should indicate the biotype of the
+		exon/CDS - this should be "protein_coding" for protein coding
+		transcripts</li>
+	</ul>
+	
+	<p> For examples of these, see the GTF files made available by Ensembl on
+	the <a href="/info/data/ftp/index.html">Downloads</a> page </p>
+	
+	<p> The FASTA file should contain sequence for all values of the seqname
+	column in the GTF file. The first time you run the script, the
+	Bio::DB::Fasta module will create an index for the file that allows rapid
+	random access to the sequences corresponding to the transcripts described in
+	the GTF file; this may take a few minutes to create. </p>
+	
+	<p> The script is run as follows: </p>
+	
+	<pre class="code">perl gtf2vep.pl -i my_species_genes.gtf -f my_species_seq.fa -d 69 -s my_species
+perl variant_effect_predictor.pl -offline -i my_species_variants.vcf -s my_species</pre>
+	
+	<p> By default the cache is created in $HOME/.vep/[species]/[version]/ - to
+	change this root directory, use --dir. </p>
+	
+	<p> This process takes around 15-20 minutes for human (including the time
+	taken to index the FASTA file). Note that caches created in this way can
+	only be used in <a href="#offline">offline mode</a>.
+	
+	
+	<h3 id="fasta">Using FASTA files</h3>
+	
+	<p> By pointing the VEP to a FASTA file (or directory containing several
+	files), it is possible to retrieve reference sequence locally when using
+	--cache or --offline. This enables the VEP to retrieve HGVS notations
+	(--hgvs) and check the reference sequence given in input data (--check_ref)
+	without accessing a database. </p>
+	
+	<p> To enable this the VEP uses the <a
+	href="http://search.cpan.org/~cjfields/BioPerl-1.6.901/Bio/DB/Fasta.pm"
+	target="_blank">Bio::DB::Fasta</a> module. The first time you run the script
+	with a specific FASTA file, an index will be built. This can take a few
+	minutes, depending on the size of the FASTA file and the speed of your
+	system. On subsequent runs the index does not need to be rebuilt (if the
+	FASTA file has been modified, the VEP will force a rebuild of the index).
+	</p>
+	
+	<p> Ensembl provides suitable reference FASTA files as downloads from its
+	FTP server. See the <a href="/info/data/ftp/index.html">Downloads</a> page
+	for details. In most cases it is best to download the single large
+	"toplevel" file for your species. Note that the VEP requires that the file
+	be unzipped to run; when unzipped these files can be very large (25GB for
+	human). An example set of commands for setting up the data for human
+	follows: </p>
+	
+	<pre class="code">wget ftp://ftp.ensembl.org/pub/release-69/fasta/homo_sapiens/dna/Homo_sapiens.GRCh37.69.dna_rm.toplevel.fa.gz
+gzip -d Homo_sapiens.GRCh37.69.dna_rm.toplevel.fa.gz
+perl variant_effect_predictor.pl -i input.vcf --offline --hgvs --fasta Homo_sapiens.GRCh37.69.dna_rm.toplevel.fa</pre>
+	
 	<h3 id="limitations">Limitations of the cache</h3>
 	
 	<p> The cache stores the following information: </p>
@@ -1622,8 +1725,9 @@ tar xfz homo_sapiens_vep_68.tar.gz</pre>
 	
 	<ul>
 		<li>Frequency filtering of input (--check_frequency)</li>
-		<li>HGVS names - due to a limitation in the API, it is currently not
-		possible to create HGVS identifiers without using the database (--hgvs)</li>
+		<li>HGVS names (--hgvs) - to retrieve these you must additionally point
+		to a FASTA file containing the reference sequence for your species
+		(--fasta)</li>
 		<li>Using HGVS notation as input (--format hgvs)</li>
 		<li>Using variant identifiers as input (--format id)</li>
 		<li>Finding overlapping structural variants (--check_sv)</li>
@@ -1633,7 +1737,6 @@ tar xfz homo_sapiens_vep_68.tar.gz</pre>
 	you in its status output with something like the following: </p>
 	
 	<pre class="code"> 2011-06-16 16:24:51 - INFO: Database will be accessed when using --hgvs </pre>
-	
 	<h3 id="privacy"> Data privacy </h3>
 	
 	<p> When using the public database servers, the VEP script requests
@@ -1680,10 +1783,10 @@ tar xfz homo_sapiens_vep_68.tar.gz</pre>
 	target="_blank">here</a>. You will need a MySQL server that you can connect
 	to from the machine where you will run the script (this can be the same
 	machine). For most of the functionality of the VEP, you will only need the
-	Core database (e.g. homo_sapiens_core_68_37) installed. In order to find
+	Core database (e.g. homo_sapiens_core_69_37) installed. In order to find
 	co-located variations or to use SIFT or PolyPhen, it is also necessary to
 	install the relevant
-	variation database (e.g. homo_sapiens_variation_68_37). </p>
+	variation database (e.g. homo_sapiens_variation_69_37). </p>
 	
 	<p> Note that unless you have custom data to insert in the database, in most
 	cases it will be much more efficient to use a <a href="#pre">pre-built
@@ -1706,7 +1809,7 @@ Bio::EnsEMBL::DBSQL::DBAdaptor->new(
   '-host'    => 'ensembldb.ensembl.org',
   '-user'    => 'anonymous',
   '-pass'    => '',
-  '-dbname'  => 'homo_sapiens_core_68_37'
+  '-dbname'  => 'homo_sapiens_core_69_37'
 );
 
 Bio::EnsEMBL::Variation::DBSQL::DBAdaptor->new(
@@ -1716,7 +1819,7 @@ Bio::EnsEMBL::Variation::DBSQL::DBAdaptor->new(
   '-host'    => 'ensembldb.ensembl.org',
   '-user'    => 'anonymous',
   '-pass'    => '',
-  '-dbname'  => 'homo_sapiens_variation_68_37'
+  '-dbname'  => 'homo_sapiens_variation_69_37'
 );
 
 Bio::EnsEMBL::Registry->add_alias("Homo_sapiens","human");
@@ -1724,6 +1827,84 @@ Bio::EnsEMBL::Registry->add_alias("Homo_sapiens","human");
 	
 	<p> For more information on the registry and registry files, see <a
 	href="/info/docs/api/registry.html" target="_blank">here</a>. </p>
+	
+	<h3 id="technical">Technical information</h3>
+	
+	<p> <span style="color:red;">ADVANCED</span> The cache consists of
+	compressed files containing listrefs of serialised objects. These objects
+	are initially created from the database as if using the Ensembl API
+	normally. In order to reduce the size of the cache and allow the
+	serialisation to occur, some changes are made to the objects before they are
+	dumped to disk. This means that they will not behave in exactly the same way
+	as an object retrieved from the database when writing, for example, a plugin
+	that uses the cache. </p>
+	
+	<p>The following hash keys are deleted from each transcript object: </p>
+	
+	<ul>
+		<li><b>analysis</b></li>
+		<li><b>created_date</b></li>
+		<li><b>dbentries</b> : this contains the external references retrieved
+		when calling $transcript->get_all_DBEntries(); hence this call
+		on a cached object will return no entries</li>
+		<li><b>description</b></li>
+		<li><b>display_xref</b></li>
+		<li><b>edits_enabled</b></li>
+		<li><b>external_db</b></li>
+		<li><b>external_display_name</b></li>
+		<li><b>external_name</b></li>
+		<li><b>external_status</b></li>
+		<li><b>is_current</b></li>
+		<li><b>modified_date</b></li>
+		<li><b>status</b></li>
+		<li><b>transcript_mapper</b> : used to convert between genomic, cdna,
+		cds and protein coordinates. A copy of this is cached separately
+		by the VEP as
+		<pre class="code">$transcript->{_variation_effect_feature_cache}->{mapper}</pre>
+		</li>
+	</ul>
+	
+	<p> As mentioned above, a special hash key "_variation_effect_feature_cache"
+	is created on the transcript object and used to cache things used by the VEP
+	in predicting consequences, things which might otherwise have to be fetched
+	from the database. Some of these are stored in place of equivalent keys that
+	are deleted as described above. The following keys and data are stored: </p>
+	
+	<ul>
+		<li><b>introns</b> : listref of intron objects for the transcript. The adaptor,
+		analysis, dbID, next, prev and seqname keys are stripped from each
+		intron object</li>
+		<li><b>translateable_seq</b> : as returned by
+		<pre class="code">$transcript->translateable_seq</pre></li>
+		<li><b>mapper</b> : transcript mapper as described above</li>
+		<li><b>peptide</b> : the translated sequence as a string, as returned by
+		<pre class="code">$transcript->translate->seq</pre></li>
+		<li><b>protein_features</b> : protein domains for the transcript's translation
+		as returned by
+		<pre class="code">$transcript->translation->get_all_ProteinFeatures</pre>
+		Each protein feature is stripped of all keys but: start, end, analysis,
+		hseqname</li>
+		<li><b>codon_table</b> : the codon table ID used to translate the transcript,
+		as returned by
+		<pre class="code">$transcript->slice->get_all_Attributes('codon_table')->[0]</pre></li>
+		<li><b>protein_function_predictions</b> : a hashref containing the keys "sift"
+		and "polyphen"; each one contains a protein function prediction matrix
+		as returned by e.g.
+		<pre class="code">$protein_function_prediction_matrix_adaptor->fetch_by_analysis_translation_md5('sift', md5_hex($transcript-{_variation_effect_feature_cache}->{peptide}))</pre></li>
+	</ul>
+	
+	<p> Similarly, some further data is cached directly on the transcript object
+	under the following keys: </p>
+	
+	<ul>
+		<li><b>_gene</b> : gene object. This object has all keys but the following
+		deleted: start, end, strand, stable_id</li>
+		<li><b>_gene_hgnc</b> : the HGNC identifier for the gene</li>
+		<li><b>_ccds</b> : the CCDS identifier for the transcript</li>
+		<li><b>_refseq</b> : the "NM" RefSeq mRNA identifier for the transcript</li>
+		<li><b>_protein</b> : the Ensembl stable identifier of the translation</li>
+	</ul>
+	
 	
 	
 	
@@ -2033,8 +2214,8 @@ perl variant_effect_predictor.pl -custom http://www.myserver.com/data/myPhenotyp
 	<p> The VEP script supports using HGVS notations as input. This feature is
 	currently under development, and not all HGVS notation types are supported.
 	Specifically, only notations relative to genomic (g) or coding (c) sequences
-	are currently supported; protein (p) notations are not currently supported
-	due to the complexity involved in determining the multiple possible
+	are currently supported; protein (p) notations are supported in limited
+	fashion due to the complexity involved in determining the multiple possible
 	underlying genomic sequence changes that could produce a single protein
 	change. The script will warn the user if it fails to parse a particular
 	notation. </p>
