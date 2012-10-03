@@ -38,17 +38,40 @@ Data Description |
   <h1>Ensembl Variation - Data description</h1>
 
   <p>
-  Below is a description of the data we store in the databases for Ensembl Variation. For several different species in Ensembl, 
-  we import variation data (SNPs, CNVs, allele frequencies, genotypes etc) from a variety of 
-  <a href="sources_documentation.html">sources</a> (e.g. dbSNP). Imported variants and alleles are subjected to a <a href="#quality_control">quality control</a> process to flag suspect data .
+  Below is a description of the data we store in the databases for Ensembl Variation.<br />For several different species in Ensembl, 
+  we import variation data (<span title="Single Nucleotide Polymorphisms">SNPs</span>, <span title="Copy Number Variations">CNVs</span>, allele frequencies, genotypes, etc) from a variety of 
+  <a href="sources_documentation.html">sources</a> (e.g. dbSNP). Imported variants and alleles are subjected to a <a href="#quality_control">quality control</a> process to flag suspect data.
   <br />We classify the variants into different
-  <a href="#classes">classes</a> and calculate the <a href="predicted_data.html">predicted consequence(s)</a> of the variant. In human, we calculate the linkage disequilibrium for each variant, by population. 
-  We have also created <a href="#variation_sets">sets</a> to help people retrieve a specific group of variants from a particular dataset.
+  <a href="#classes">classes</a> and calculate the <a href="predicted_data.html">predicted consequence(s)</a>
+	of the variant and we have also created variation <a href="#variation_sets">sets</a> to help people retrieve a specific
+	group of variants from a particular dataset.<br />
+	In human, we calculate the linkage disequilibrium for each variant, by <a href="#populations">population</a>.
   </p>
-	<br />
+	
+	<p>See some examples of imported data on the Ensembl website (Human):</p>
+	<ul style="padding-left:0px;display:inline;list-style:none">
+    <li style="display:inline">
+		  <a href="/Homo_sapiens/Variation/Context?v=rs1333049"><img src="/i/96/var_genomic_context.png" class="portal" alt="Location of a variation in the genome" title="Location of a variation in the genome"/></a>
+		</li>
+		<li style="display:inline">
+		  <a href="/Homo_sapiens/Variation/Population?v=rs699"><img src="/i/96/var_population_genetics.png" class="portal" alt="Population genotypes and frequencies of a variation" title="Population genotypes and frequencies of a variation"/></a>
+		</li>
+		<li style="display:inline">
+		  <a href="/Homo_sapiens/Variation/Individual?v=rs699"><img src="/i/96/var_individual_genotypes.png" class="portal" alt="Individual genotypes of a variation" title="Individual genotypes of a variation"/></a>
+	  </li>
+		<li style="display:inline">
+		  <a href="/Homo_sapiens/Variation/Populations?v=COSM29450"><img src="/i/96/var_sample_information.png" class="portal" alt="Sample information and frequencies of a somatic	variant" title="Sample information and frequencies of a somatic variant"/></a>
+	  </li>
+		<li style="display:inline">
+		  <a href="/Homo_sapiens/Variation/Phenotype?v=rs1333049"><img src="/i/96/var_phenotype_data.png" class="portal" alt="Phenotype(s) associated with a variation" title="Phenotype(s) associated with a variation"/></a>
+		</li>
+		<li style="display:inline">
+		  <a href="/Homo_sapiens/Variation/Sequence?v=rs699"><img src="/i/96/var_flanking_sequence.png" class="portal" alt="Genomic sequence flanking a variation" title="Genomic sequence flanking a variation"/></a>
+		</li>
+  </ul>
+	<br /><br />
 </div>
 <div style="clear:both" />
-
 
 <h2 id="sources"> Variation species and data sources </h2>
 <p>
@@ -56,6 +79,7 @@ Ensembl stores variation data for the following species, but note that users can
 <a href="vep/index.html">Variant Effect Predictor</a> on species for which we do not currently have 
 a variation database.
 </p>
+
 <table><tr><td>
 <div style="margin-bottom:5px;padding-right:4px;overflow:hidden">
 	<img src="/i/species/48/Bos_taurus.png" alt="Bos taurus" class="sp-thumb" style="float:none;margin-right:4px;vertical-align:middle" />
@@ -78,7 +102,7 @@ a variation database.
 	<span><i>Equus caballus</i> <a href="sources_documentation.html#equus_caballus">[sources]</a></span>
 </div>
 </td>
-<td style="width:10px"></td>
+<td style="width:8px"></td>
 <td>
 <div style="margin-bottom:5px;padding-right:4px;overflow:hidden">
 	<img src="/i/species/48/Felis_catus.png" alt="Felis catus" class="sp-thumb" style="float:none;margin-right:4px;vertical-align:middle" />
@@ -101,7 +125,7 @@ a variation database.
 	<span><i>Monodelphis domestica</i> <a href="sources_documentation.html#monodelphis_domestica">[sources]</a></span>
 </div>
 </td>
-<td style="width:10px"></td>
+<td style="width:8px"></td>
 <td>
 <div style="margin-bottom:5px;padding-right:4px;overflow:hidden">
 	<img src="/i/species/48/Mus_musculus.png" alt="Mus musculus" class="sp-thumb" style="float:none;margin-right:4px;vertical-align:middle" />
@@ -124,7 +148,7 @@ a variation database.
 	<span><i>Rattus norvegicus</i> <a href="sources_documentation.html#rattus_norvegicus">[sources]</a></span>
 </div>
 </td>
-<td style="width:10px"></td>
+<td style="width:8px"></td>
 <td>
 <div style="margin-bottom:5px;padding-right:4px;overflow:hidden">
 	<img src="/i/species/48/Saccharomyces_cerevisiae.png" alt="Saccharomyces cerevisiae" class="sp-thumb" style="float:none;margin-right:4px;vertical-align:middle" />
@@ -158,8 +182,7 @@ imported once it has been submitted to dbSNP.
 <p>
 Ensembl also includes data from other <a href="sources_documentation.html">sources</a>. To view data from these sources in the
 browser go to a species Location page (e.g. <a href="/Homo_sapiens/Location/View?r=6:133017695-133161157">for human</a>), and click on
-the <i>'Configure this page'</i> link on the left-hand side. The <i>'Germline
-variation'</i> and <i>'Somatic mutations'</i> sections contain a track list  of
+the <i>'Configure this page'</i> link on the left-hand side. The <i>'Variation'</i> and <i>'Somatic mutations'</i> sections contain a track list  of
 all sources of variation data for that species.
 </p>
 
