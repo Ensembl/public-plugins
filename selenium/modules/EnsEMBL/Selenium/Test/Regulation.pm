@@ -22,7 +22,7 @@ sub test_regulation {
     my $regulation_param = $SD->get_config(ucfirst($self->species), 'SAMPLE_DATA')->{'REGULATION_PARAM'};
     my $species_db = $self->species_databases($SD);
 
-    $sel->ensembl_click_links(["link=Example regulatory feature"],"10000");
+    $sel->ensembl_click_links(["link=Regulation ($regulation_text)"],"10000");
     $sel->ensembl_is_text_present("Regulatory Feature: $regulation_param");
     
     $sel->ensembl_click_links(["link=Summary"]);

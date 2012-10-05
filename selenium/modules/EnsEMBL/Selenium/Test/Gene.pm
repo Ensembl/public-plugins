@@ -29,7 +29,7 @@ sub test_gene {
     $sel->go_back()
     and $sel->ensembl_wait_for_page_to_load;
 
-    $sel->ensembl_click_links(["link=Example gene"],"50000")
+    $sel->ensembl_click_links(["link=Gene ($gene_text)"],"50000")
     and $sel->ensembl_is_text_present("Gene: $gene_text ($gene_param)");
 
     if(lc($self->species) eq 'homo_sapiens') {      
