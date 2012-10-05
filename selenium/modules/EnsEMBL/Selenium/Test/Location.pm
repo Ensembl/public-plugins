@@ -19,7 +19,7 @@ sub test_location {
   my $location_text = $SD->get_config(ucfirst($self->species), 'SAMPLE_DATA')->{LOCATION_TEXT};
 
   if($location_text) {
-    $sel->ensembl_click_links(["link=Example region"]);
+    $sel->ensembl_click_links(["link=Location ($location_text)"]);
     my @location_array = split(/\:/,$location_text);
     $sel->ensembl_is_text_present($SD->thousandify(@location_array[1]))
     and $sel->ensembl_is_text_present("Region in detail");

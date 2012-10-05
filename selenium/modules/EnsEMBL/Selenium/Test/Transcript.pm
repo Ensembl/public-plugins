@@ -22,7 +22,7 @@ sub test_transcript {
   my $url = $self->get_location();
   
   if($transcript_text) {
-    $sel->ensembl_click_links(["link=Example transcript"],'50000')
+    $sel->ensembl_click_links(["link=Transcript ($transcript_text)"],'50000')
     and $sel->ensembl_is_text_present("$transcript_param");
 
      #exit if it is not a valid transcript

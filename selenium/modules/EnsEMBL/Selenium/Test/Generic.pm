@@ -55,10 +55,10 @@ sub test_species_list {
      }
   });
     my $species_latin_name = $SD->get_config($species,'SPECIES_BIO_NAME');
-    $species_label =~ s/Ciona /C./g; #species label shorten for Ciona
+    #$species_label =~ s/Ciona /C./g; #species label shorten for Ciona -- uncomment when new species home page is back on
     $sel->ensembl_is_text_present("Species images present")
-    and $sel->ensembl_is_text_present($species_latin_name)
-    and $sel->ensembl_is_text_present("What's New in $species_label release $release_version")
+    and $sel->ensembl_is_text_present($species_latin_name);
+    #and $sel->ensembl_is_text_present("What's New in $species_label release $release_version") -- uncomment when new species home page is back on
     
     $sel->go_back();
  }

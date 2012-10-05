@@ -22,7 +22,7 @@ sub test_variation {
     my $variation_param = $SD->get_config(ucfirst($self->species), 'SAMPLE_DATA')->{'VARIATION_PARAM'};
     my $species_db = $self->species_databases($SD);
 
-    $sel->ensembl_click_links(["link=Example variant"],'20000');
+    $sel->ensembl_click_links(["link=Variation ($variation_text)"],'20000');
     $sel->ensembl_is_text_present("Variation: $variation_text");
     
     $sel->ensembl_click_links(["link=Genes and regulation*", "link=Population genetics*", "link=Individual genotypes*","link=Genomic context"],'20000');
