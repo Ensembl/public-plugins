@@ -76,7 +76,7 @@ sub test_location {
       $sel->ensembl_click_links(["link=Alignments (image) ($alignment_count)"],'20000');
       
       if(lc($self->species) eq 'homo_sapiens' || lc($self->species) eq 'mus_musculus') {
-        $sel->select_ok("align", "label=12 eutherian mammals EPO")
+        $sel->select_ok("align", "label=13 eutherian mammals EPO")
         and $sel->ensembl_click("link=Go")
         and $sel->ensembl_wait_for_page_to_load(60000);
       }
