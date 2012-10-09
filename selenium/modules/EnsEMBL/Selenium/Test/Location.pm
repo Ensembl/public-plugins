@@ -97,14 +97,15 @@ sub test_location {
       }
     }
 
+    my $resequencing_counts = $SD->databases(ucfirst($self->species))->{'DATABASE_VARIATION'}{'#STRAINS'} if exists $SD->databases(ucfirst($self->species))->{'DATABASE_VARIATION'};
+    $sel->ensembl_click_links(["link=Resequencing ($resequencing_counts)"], '8000') if($resequencing_counts);
+    
     #Testing genetic variations last for human only
-    if(lc($self->species) eq 'homo_sapiens') {
-      my $resequencing_counts = $SD->databases(ucfirst($self->species))->{'DATABASE_VARIATION'}{'#STRAINS'} if exists $SD->databases(ucfirst($self->species))->{'DATABASE_VARIATION'};
-      $sel->ensembl_click_links(["link=Resequencing ($resequencing_counts)"], '8000');
+    if(lc($self->species) eq 'homo_sapiens') {      
       $sel->type_ok("loc_r", "6:27996744-27996844");
       $sel->ensembl_click("link=Go");
       $sel->pause(5000);
-      $sel->ensembl_is_text_present("Basepairs in secondary strains");
+      $sel->ensembl_is_text_present("Basepairs in secondary ");
 
       $sel->open_ok("Homo_sapiens/Location/LD?db=core;r=6:27996744-27996844;pop1=12131");
       $sel->pause(5000);
