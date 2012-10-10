@@ -44,18 +44,23 @@ sub content {
 
     my $response = get_url_content($search);
     if ($response->{'error'}) {
-      warn ">>> ERROR ".$response->{'error'};
+      #warn ">>> ERROR ".$response->{'error'};
+      $html = '<p>Error fetching LOVD data</p>';
     }
     elsif ($response->{'content'}) {
       my ($columns, $rows) = $self->munge_content($response->{'content'});
       $column_set = $columns;
+      shift @$column_set;
       push @$all_rows, @$rows;
     }
   }
 
   if (scalar @$all_rows) {        
-    $html .= '<p>The following data is imported from LOVD (Leiden Open Variation Database):</p>';
-    my $table = new EnsEMBL::Web::Document::Table($column_set, $all_rows, { data_table => 1, exportable => 0 });
+    my $plural = scalar @$all_rows > 1 ? 'these positions' : 'this position';
+    $html .= "<p>The following data from LOVD (Leiden Open Variation Database) are also found at $plural:</p>";
+    my $params = { exportable => 0 };
+    $params->{'data_table'} = 1 if (scalar @$all_rows > 2);
+    my $table = new EnsEMBL::Web::Document::Table($column_set, $all_rows, $params);
     $html .= $table->render;    
   }
   else {
@@ -83,6 +88,9 @@ sub munge_content {
       foreach (@cols) {
         my $header = $_;
         $header =~ s/_/ /;
+        $header = 'Location' if $_ eq 'g_position';
+        $header = 'Gene ID' if $_ eq 'gene_id';
+        $header = 'LOVD variant ID' if $_ eq 'variant_id';
         $header = 'More information' if $_ eq 'url';
         push @$columns, {'key' => $_, 'title' => $header};
       }
@@ -94,8 +102,14 @@ sub munge_content {
         my $data = $cols[$j];
         my $display;
         if ($_ eq 'url') {
-          $display = sprintf '<a href="%s">Link</a>', $data; 
+          $display = sprintf '<a href="%s">External link to LOVD</a>', $data; 
         }  
+        elsif ($_ eq 'g_position') {
+          (my $coords = $data) =~ s/^chr//;
+          $coords =~ s/_/-/;
+          my $url = $self->hub->url({'type'=>'Location','action'=>'View','r'=>$coords});
+          $display = sprintf '<a href="%s">%s</a>', $url, $coords; 
+        }
         elsif ($_ eq 'gene_id') {
           my $url = $self->hub->url({'type'=>'Gene','action'=>'Summary','g'=>$data});
           $display = sprintf '<a href="%s">%s</a>', $url, $data; 
