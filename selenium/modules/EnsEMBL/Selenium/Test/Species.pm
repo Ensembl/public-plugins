@@ -226,12 +226,12 @@ sub export_data {
   
   print "  Test Export Data\n";
   $sel->ensembl_click("link=Export data")
-  and $sel->ensembl_wait_for_ajax_ok(20000,'2000');  
+  and $sel->ensembl_wait_for_ajax_ok(20000,'5000');  
   
   $sel->select_ok("output","$output")
   and $sel->ensembl_click("name=next");
   
-  $sel->ensembl_wait_for_ajax_ok(undef,3000);
+  $sel->ensembl_wait_for_ajax_ok(undef,5000);
   $sel->ensembl_is_text_present("Please choose the output format for your export");
   
 #  $sel->uncheck_ok("name=bed_variation") if($output eq 'BED Format');

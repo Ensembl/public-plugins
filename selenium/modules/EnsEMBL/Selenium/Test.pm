@@ -11,7 +11,7 @@ use Test::More "no_plan";
 use EnsEMBL::Web::Hub;
 use EnsEMBL::Web::DBSQL::WebsiteAdaptor;
 
-my $DEFAULTS = {timeout => 5000};
+my $DEFAULTS = {timeout => 50000};
 my $TESTMORE_OUTPUT;
 
 sub new {
