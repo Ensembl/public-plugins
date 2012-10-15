@@ -4,7 +4,7 @@ use strict;
 use base 'EnsEMBL::Selenium::Test::Species';
 use Test::More;
 
-__PACKAGE__->set_default('timeout', 5000);
+__PACKAGE__->set_default('timeout', 50000);
 #------------------------------------------------------------------------------
 # Ensembl Gene test
 # Can add more cases or extend the existing test cases
@@ -22,7 +22,7 @@ sub test_gene {
 
   if($gene_text) {
     #before going to the gene page test the default gene search on the species homepage.
-    $sel->ensembl_click("link=$gene_text")
+    $sel->ensembl_click("link=$gene_text",50000)
     and $sel->ensembl_wait_for_page_to_load
     and $sel->ensembl_is_text_present("returned the following results");
     
@@ -35,7 +35,7 @@ sub test_gene {
     if(lc($self->species) eq 'homo_sapiens') {      
       $sel->ensembl_open_zmenu('TranscriptsImage','class^="drag"');
       $sel->ensembl_click("link=Jump to location View")      
-      and $sel->ensembl_wait_for_ajax_ok('50000','2000')
+      and $sel->ensembl_wait_for_ajax_ok('50000','5000')
       and $sel->go_back();
 
       $sel->ensembl_wait_for_page_to_load;
@@ -43,13 +43,13 @@ sub test_gene {
       #Adding a track from the configuration panel
       print "  Test Configure page, adding a track \n";
       $sel->ensembl_click("link=Configure this page")
-      and $sel->ensembl_wait_for_ajax_ok('10000','3000')
+      and $sel->ensembl_wait_for_ajax_ok('10000','7000')
       and $sel->ensembl_click("link=Somatic mutations")
-      and $sel->ensembl_wait_for_ajax_ok('10000','3000')
+      and $sel->ensembl_wait_for_ajax_ok('10000','7000')
       and $sel->ensembl_click("//form[\@id='gene_transcriptsimage_configuration']/div[4]/div/ul/li[2]/img") #selecting the second track
       and $sel->ensembl_is_text_present("Somatic mutations(1/*")
       and $sel->ensembl_click("modal_bg")
-      and $sel->ensembl_wait_for_ajax_ok('15000','2000')
+      and $sel->ensembl_wait_for_ajax_ok('15000','5000')
       and $sel->ensembl_images_loaded;
     }
 
@@ -87,10 +87,10 @@ sub test_gene {
     and $sel->go_back() if(lc($self->species) eq 'homo_sapiens'); #testing for human only as this is opening too many java applet and making the server slow
 
     $sel->pause(1000);
-    $sel->ensembl_click_links(["link=all proteins in family"],'20000') if($counts->{'families'});    
-    $sel->ensembl_click_links(["link=Phenotype"]);
+    $sel->ensembl_click_links(["link=all proteins in family"],'20000') if($counts->{'families'});       
     
     if(lc($self->species) eq 'homo_sapiens') {      
+      $sel->ensembl_click_links(["link=Phenotype"]);
       $sel->ensembl_click("link=view all locations")
       and $sel->ensembl_wait_for_page_to_load
       and $sel->go_back();     
@@ -100,7 +100,7 @@ sub test_gene {
       and $sel->go_back();
     }
 
-    $sel->ensembl_click_links(["link=Variation table", "link=Variation image", "link=Structural variation"]) if($species_db->{'database:variation'} && $gene_text !~ /^ASMPATCH/);
+    $sel->ensembl_click_links(["link=Variation table", "link=Variation image", "link=Structural variation"],"40000") if($species_db->{'database:variation'} && $gene_text !~ /^ASMPATCH/);
 
     print "  Test Configure page on External data \n";
     $sel->ensembl_click("link=External data",'20000')
