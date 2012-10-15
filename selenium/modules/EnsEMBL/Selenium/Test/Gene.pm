@@ -106,10 +106,10 @@ sub test_gene {
     $sel->ensembl_click("link=External data",'20000')
     and $sel->ensembl_wait_for_page_to_load
     and $sel->ensembl_click("link=Configure this page")
-    and $sel->ensembl_wait_for_ajax_ok(10000,2000)
+    and $sel->ensembl_wait_for_ajax_ok(10000,5000)
     and $sel->ensembl_click("//div[\@class='ele-das']//input[\@type='checkbox'][1]") # tick first source
     and $sel->ensembl_click("modal_bg")
-    and $sel->ensembl_wait_for_ajax_ok(10000,5000);
+    and $sel->ensembl_wait_for_ajax_ok(10000,8000);
 
     my $url  = $self->get_location();
     print "DAS ERROR at $url (click on configure page and choose the first das source) \n"  if ($sel->ensembl_has_das_error);
