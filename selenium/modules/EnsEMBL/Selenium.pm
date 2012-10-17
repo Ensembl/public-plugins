@@ -61,7 +61,7 @@ sub ensembl_open_zmenu {
     var coords = \$('$tag', '#$panel').attr('coords').split(',');
     Ensembl.PanelManager.panels.$panel.makeZMenu({pageX:0, pageY:0}, {x:coords[0], y:coords[1]});
   /)
-  and $self->ensembl_wait_for_ajax;
+  and $self->ensembl_wait_for_ajax(undef,'7000');
 }
 
 # Open a ZMenu by position on the given imagemap panel
