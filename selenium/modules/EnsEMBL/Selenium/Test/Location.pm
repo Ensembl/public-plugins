@@ -19,7 +19,7 @@ sub test_location {
   my $location_text = $SD->get_config(ucfirst($self->species), 'SAMPLE_DATA')->{LOCATION_TEXT};
 
   if($location_text) {
-    $sel->ensembl_click_links(["link=Location ($location_text)"]);
+    $sel->ensembl_click_links(["link=Example region"]);
     my @location_array = split(/\:/,$location_text);
     $sel->ensembl_is_text_present($SD->thousandify(@location_array[1]))
     and $sel->ensembl_is_text_present("Region in detail");
@@ -44,11 +44,11 @@ sub test_location {
       
       #Test attach das
       $self->attach_das;
-      $sel->ensembl_wait_for_ajax_ok(15000);
+      $sel->ensembl_wait_for_ajax_ok(25000,7000);
       
       $sel->ensembl_open_zmenu('Summary',"class^=drag");
       $sel->ensembl_click("link=Centre here")
-      and $sel->ensembl_wait_for_ajax_ok(undef,'2000')      
+      and $sel->ensembl_wait_for_ajax_ok(undef,'4000')      
       and $sel->go_back();
 
       #TODO:: ZMenu on viewtop and ViewBottom panel
@@ -104,7 +104,7 @@ sub test_location {
     if(lc($self->species) eq 'homo_sapiens') {      
       $sel->type_ok("loc_r", "6:27996744-27996844");
       $sel->ensembl_click("link=Go");
-      $sel->pause(8000);
+      $sel->pause(15000);
       $sel->ensembl_is_text_present("Basepairs in secondary ");
 
       $sel->open_ok("Homo_sapiens/Location/LD?db=core;r=6:27996744-27996844;pop1=12131");

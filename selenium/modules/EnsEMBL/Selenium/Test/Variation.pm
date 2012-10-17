@@ -22,7 +22,7 @@ sub test_variation {
     my $variation_param = $SD->get_config(ucfirst($self->species), 'SAMPLE_DATA')->{'VARIATION_PARAM'};
     my $species_db = $self->species_databases($SD);
 
-    $sel->ensembl_click_links(["link=Variation ($variation_text)"],'20000');
+    $sel->ensembl_click_links(["link=Example variant"],'20000');
     $sel->ensembl_is_text_present("Variation: $variation_text");
     
     $sel->ensembl_click_links(["link=Genes and regulation*", "link=Population genetics*", "link=Individual genotypes*","link=Genomic context"],'20000');
@@ -37,12 +37,12 @@ sub test_variation {
     and $sel->ensembl_wait_for_ajax_ok('10000','9000')
     and $sel->ensembl_click("//form[\@id='variation_context_configuration']/div[3]/div[1]/ul[1]/li[2]/img") #choosing the second track    
     and $sel->ensembl_click("modal_bg")
-    and $sel->ensembl_wait_for_ajax_ok('15000', '9000')
+    and $sel->ensembl_wait_for_ajax_ok('50000', '50000')
     and $sel->ensembl_images_loaded;
     
     #Test ZMenu    
     $sel->ensembl_open_zmenu('Context','title^="Variation:"');
-    $sel->pause(6000);
+    $sel->pause(8000);
     $sel->ensembl_click("link=rs*properties")
     and $sel->ensembl_wait_for_ajax_ok('50000','5000')
     and $sel->go_back();    
@@ -57,7 +57,7 @@ sub test_variation {
 
     $sel->ensembl_click_links(["link=Phylogenetic Context*"],'30000');
     $sel->select_ok("align", "label=6 primates EPO");
-    $sel->ensembl_click("//input[\@value='Go']");
+    $sel->ensembl_click("link=Go");
     
     $sel->ensembl_wait_for_page_to_load;
     
