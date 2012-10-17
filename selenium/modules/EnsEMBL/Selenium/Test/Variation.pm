@@ -32,19 +32,19 @@ sub test_variation {
     #Adding a track from the configuration panel
     print "  Test Configure page, adding a track \n";
     $sel->ensembl_click("link=Configure this page")
-    and $sel->ensembl_wait_for_ajax_ok('10000')
-    and $sel->ensembl_click("css=a.variation")  #don't know why link= wasn't working and css= works    
     and $sel->ensembl_wait_for_ajax_ok('10000','5000')
+    and $sel->ensembl_click("css=a.variation")  #don't know why link= wasn't working and css= works    
+    and $sel->ensembl_wait_for_ajax_ok('10000','9000')
     and $sel->ensembl_click("//form[\@id='variation_context_configuration']/div[3]/div[1]/ul[1]/li[2]/img") #choosing the second track    
     and $sel->ensembl_click("modal_bg")
-    and $sel->ensembl_wait_for_ajax_ok('15000', '5000')
+    and $sel->ensembl_wait_for_ajax_ok('15000', '9000')
     and $sel->ensembl_images_loaded;
     
     #Test ZMenu    
     $sel->ensembl_open_zmenu('Context','title^="Variation:"');
-    $sel->pause(2000);
+    $sel->pause(6000);
     $sel->ensembl_click("link=rs*properties")
-    and $sel->ensembl_wait_for_ajax_ok('50000','2000')
+    and $sel->ensembl_wait_for_ajax_ok('50000','5000')
     and $sel->go_back();    
     
     $sel->ensembl_wait_for_page_to_load;
@@ -65,10 +65,10 @@ sub test_variation {
     $sel->ensembl_click("link=External Data")
     and $sel->ensembl_wait_for_page_to_load
     and $sel->ensembl_click("link=Configure this page")
-    and $sel->ensembl_wait_for_ajax_ok
+    and $sel->ensembl_wait_for_ajax_ok(undef,'5000')
     and $sel->ensembl_click("//div[\@class='ele-das']//input[\@type='checkbox'][1]") # tick first source
     and $sel->ensembl_click("modal_bg")
-    and $sel->ensembl_wait_for_ajax_ok(10000,5000);
+    and $sel->ensembl_wait_for_ajax_ok(10000,8000);
     
     my $url = $self->get_location();
     print "DAS ERROR at $url (click on configure page and choose the first das source) \n"  if $sel->ensembl_has_das_error;

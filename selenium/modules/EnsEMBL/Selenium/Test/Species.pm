@@ -57,7 +57,7 @@ sub attach_remote_file {
   and $sel->ensembl_is_text_present("Your data");
  
   $sel->ensembl_click("link=Attach Remote File")
-  and $sel->ensembl_wait_for_ajax_ok;
+  and $sel->ensembl_wait_for_ajax_ok(undef,5000);
   
   $sel->type_ok("name=url","$file_url")
   and $sel->select_ok("format", "$format")
@@ -85,7 +85,7 @@ sub add_track {
 
   print "  Test selecting track(uploaded data)\n";
   $sel->ensembl_click("link=Configure Page")
-  and $sel->ensembl_wait_for_ajax_ok;
+  and $sel->ensembl_wait_for_ajax_ok(undef,5000);
  
   $sel->ensembl_is_text_present("BED")
   and $sel->ensembl_click("//form[\@id='location_genome_configuration']/div[1]/div/ul/li[1]/img")
@@ -128,11 +128,11 @@ sub configure_page {
 
   print "  Test Configure Page\n";
   $sel->ensembl_click("link=Configure this page")
-  and $sel->ensembl_wait_for_ajax_ok
+  and $sel->ensembl_wait_for_ajax_ok(undef,5000)
   and $sel->ensembl_is_text_present("Configure Page");
 
   $sel->ensembl_click("link=Display options")
-  and $sel->ensembl_wait_for_ajax_ok;
+  and $sel->ensembl_wait_for_ajax_ok(undef,5000);
   $sel->select_ok("rows","2");
   $sel->type_ok("name=chr_length","400");
   $sel->ensembl_click("modal_bg")
@@ -207,14 +207,14 @@ sub display_empty_track {
   my $sel = $self->sel;
   print "  Turning display empty track on\n";
   $sel->ensembl_click("link=Configure this page")  
-  and $sel->ensembl_wait_for_ajax_ok;   
+  and $sel->ensembl_wait_for_ajax_ok(undef,5000);
   
   $sel->ensembl_click("link=Information and decorations")
-  and $sel->ensembl_wait_for_ajax_ok;
+  and $sel->ensembl_wait_for_ajax_ok(undef,5000);
   
   $sel->ensembl_click("//form[\@id='location_viewbottom_configuration']/div[7]/div/ul/li[5]/img")   #turn the track display empty tracks on 
   and $sel->ensembl_click("modal_bg")  
-  and $sel->ensembl_wait_for_ajax_ok; 
+  and $sel->ensembl_wait_for_ajax_ok(undef,5000);
 }
 
 #text_to_check is the text to verify when the output is displayed for example for csv you will want to check if seqname,source is present
@@ -262,11 +262,11 @@ sub features_karyotype {
   print "  Test Features on karyotype\n";
 
   $sel->ensembl_click("link=Manage your data")
-  and $sel->ensembl_wait_for_ajax_ok
+  and $sel->ensembl_wait_for_ajax_ok(undef,10000)
   and $sel->ensembl_is_text_present("Your data");
 
   $sel->ensembl_click("link=Features on Karyotype")
-  and $sel->ensembl_wait_for_ajax_ok;
+  and $sel->ensembl_wait_for_ajax_ok(undef,5000);
 
   $sel->type_ok("name=id","$feature_id")
   and $sel->ensembl_click("name=submit")
@@ -282,7 +282,7 @@ sub get_track_counts {
   my $sel = $self->sel;
 
   #$('.modal_nav li:not(.active) .on:first');   #TODO: get track count and track name for not active track (first one only) just to make sure they stay the same
-  
+
   # Getting the track count for the selected track, return a string containing _ to separate the child and parent track count.
   my $track = $sel->get_eval(qq{
         var \$ = selenium.browserbot.getCurrentWindow().jQuery;
@@ -346,7 +346,7 @@ sub turn_track {
   } else {
     print "  Test turning $track_name track ".uc($action)."\n";
     $sel->ensembl_click("link=$track_name")
-    and $sel->ensembl_wait_for_ajax_ok;
+    and $sel->ensembl_wait_for_ajax_ok(undef,10000);
   }
 
   #function to get the total count for track (parent_track is empty since there isn't any parent)
@@ -392,7 +392,7 @@ sub turn_track {
   
   SKIP:
   $sel->ensembl_click("modal_bg")
-  and $sel->ensembl_wait_for_ajax_ok(undef,2000)
+  and $sel->ensembl_wait_for_ajax_ok(undef,6000)
   and $sel->ensembl_images_loaded;
 }
 
@@ -420,7 +420,7 @@ sub upload_data {
   and $sel->ensembl_is_text_present("Your data");
 
   $sel->ensembl_click("link=Upload Data")
-  and $sel->ensembl_wait_for_ajax_ok(undef,2000)  
+  and $sel->ensembl_wait_for_ajax_ok(undef,7000)  
   and $sel->type_ok("name=name","$name")
   and $sel->select_ok("format", "$format")
   and $upload_file ? $sel->type_ok("name=url", "$upload_file") : $sel->type_ok("text", "$data")  
@@ -429,7 +429,7 @@ sub upload_data {
   
   $sel->ensembl_is_text_present("Go to first region with data");
   $sel->ensembl_click("css=div.modal_close")
-  and $sel->ensembl_wait_for_ajax_ok;  
+  and $sel->ensembl_wait_for_ajax_ok(undef,5000);  
 }
 
 1;
