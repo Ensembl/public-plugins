@@ -71,7 +71,7 @@ sub ensembl_open_zmenu_at {
   
   my ($x, $y) = split /,/, $pos;
   $self->run_script("Ensembl.PanelManager.panels['$panel'].makeZMenu({pageX:0, pageY:0}, {x:$x, y:$y});")
-  and $self->ensembl_wait_for_ajax;
+  and $self->ensembl_wait_for_ajax(undef,'7000');
 }
 
 # Overloading click_ok function so that it returns the current url when it fails, only used this function when ensembl_click_links below does not work like an ajax button
