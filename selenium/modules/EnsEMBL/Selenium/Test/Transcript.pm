@@ -37,7 +37,7 @@ sub test_transcript {
     if(lc($self->species) eq 'homo_sapiens') {
       $sel->ensembl_open_zmenu('TranscriptImage','title^="Transcript:"');
       $sel->ensembl_click("link=ENSG*")
-      and $sel->ensembl_wait_for_ajax_ok('50000','5000');
+      and $sel->ensembl_wait_for_ajax_ok('50000','8000');
       $sel->go_back();
     }
 
@@ -59,9 +59,9 @@ sub test_transcript {
     if(lc($self->species) eq 'homo_sapiens') {          
       print "  Test Configure page \n";
       $sel->ensembl_click("link=Configure this page")
-      and $sel->ensembl_wait_for_ajax_ok('30000','1000')
+      and $sel->ensembl_wait_for_ajax_ok('30000','5000')
       and $sel->ensembl_click("link=Somatic mutations")
-      and $sel->ensembl_wait_for_ajax_ok('10000')
+      and $sel->ensembl_wait_for_ajax_ok('10000','3000')
       and $sel->ensembl_click("//form[\@id='transcript_translationimage_configuration']/div[4]/div/ul/li/img") #turning first track off     
       and $sel->ensembl_click("modal_bg")
 #      and $sel->ensembl_wait_for_ajax_ok('15000')
@@ -74,10 +74,10 @@ sub test_transcript {
     $sel->ensembl_click("link=External data")
     and $sel->ensembl_wait_for_page_to_load
     and $sel->ensembl_click("link=Configure this page")
-    and $sel->ensembl_wait_for_ajax_ok('30000','5000')
+    and $sel->ensembl_wait_for_ajax_ok('30000','8000')
     and $sel->ensembl_click("//div[\@class='ele-das']//input[\@type='checkbox'][1]") # tick first source
     and $sel->ensembl_click("modal_bg")
-    and $sel->ensembl_wait_for_ajax_ok(10000,5000);
+    and $sel->ensembl_wait_for_ajax_ok(10000,8000);
     
     my $url = $self->get_location();
     print "DAS ERROR at $url (click on configure page and choose the first das source) \n"  if $sel->ensembl_has_das_error;    
