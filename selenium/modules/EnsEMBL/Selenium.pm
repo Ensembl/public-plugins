@@ -184,6 +184,13 @@ sub ensembl_has_das_error {
   return $self->is_element_present("//div[\@id='TextDAS']//div[\@class='error-pad']");
 }
 
+#overloading select to return URL where the action fails.
+sub ensembl_select {
+  my ($self, $select_locator, $option_locator) = @_;
+  my $url = $self->get_location();
+    
+  print "URL:: $url \n\n" unless $self->select_ok($select_locator,$option_locator);  
+}
 
 
 1;
