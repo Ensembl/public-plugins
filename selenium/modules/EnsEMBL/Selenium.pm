@@ -61,7 +61,7 @@ sub ensembl_open_zmenu {
     var coords = \$('$tag', '#$panel').attr('coords').split(',');
     Ensembl.PanelManager.panels.$panel.makeZMenu({pageX:0, pageY:0}, {x:coords[0], y:coords[1]});
   /)
-  and $self->ensembl_wait_for_ajax;
+  and $self->ensembl_wait_for_ajax(undef,'7000');
 }
 
 # Open a ZMenu by position on the given imagemap panel
@@ -184,6 +184,13 @@ sub ensembl_has_das_error {
   return $self->is_element_present("//div[\@id='TextDAS']//div[\@class='error-pad']");
 }
 
+#overloading select to return URL where the action fails.
+sub ensembl_select {
+  my ($self, $select_locator, $option_locator) = @_;
+  my $url = $self->get_location();
+    
+  print "URL:: $url \n\n" unless $self->select_ok($select_locator,$option_locator);  
+}
 
 
 1;

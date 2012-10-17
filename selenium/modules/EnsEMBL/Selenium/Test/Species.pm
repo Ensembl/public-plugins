@@ -30,9 +30,9 @@ sub attach_das {
   
   print "  Test Attach das\n";
   $sel->ensembl_click("link=Manage your data")
-  and $sel->ensembl_wait_for_ajax_ok
+  and $sel->ensembl_wait_for_ajax_ok(undef,5000)
   and $sel->ensembl_click("link=Attach DAS")
-  and $sel->ensembl_wait_for_ajax_ok
+  and $sel->ensembl_wait_for_ajax_ok(undef,5000)
   and $sel->type_ok("name=preconf_das", "http://das.sanger.ac.uk/das")
   and $sel->ensembl_click("wizard_submit")
   and $sel->ensembl_wait_for_ajax_ok(undef,5000)  
@@ -53,7 +53,7 @@ sub attach_remote_file {
   print "  Test Attach remote file\n";
  
   $sel->ensembl_click("link=Manage your data")
-  and $sel->ensembl_wait_for_ajax_ok
+  and $sel->ensembl_wait_for_ajax_ok(undef,5000)
   and $sel->ensembl_is_text_present("Your data");
  
   $sel->ensembl_click("link=Attach Remote File")
@@ -69,7 +69,7 @@ sub attach_remote_file {
   $sel->ensembl_click("css=div.modal_close");
   
   #Checking if karyotype image loaded fine
-  $sel->ensembl_wait_for_ajax_ok
+  $sel->ensembl_wait_for_ajax_ok(undef,5000)
   and $sel->ensembl_images_loaded_ok;
 }
 sub add_track {  
@@ -226,7 +226,7 @@ sub export_data {
   
   print "  Test Export Data\n";
   $sel->ensembl_click("link=Export data")
-  and $sel->ensembl_wait_for_ajax_ok(20000,'5000');  
+  and $sel->ensembl_wait_for_ajax_ok(50000,'25000');  
   
   $sel->select_ok("output","$output")
   and $sel->ensembl_click("name=next");
@@ -334,7 +334,7 @@ sub turn_track {
   my $parent_test;
   
   $sel->ensembl_click("link=Configure this page")  
-  and $sel->ensembl_wait_for_ajax_ok(undef,2000)
+  and $sel->ensembl_wait_for_ajax_ok(undef,4000)
   and $sel->ensembl_is_text_present("Active tracks");
   
   if($search) {
@@ -342,7 +342,7 @@ sub turn_track {
     
     $sel->ensembl_click("name=configuration_search_text")    
     and $sel->type_keys_ok("configuration_search_text", "$search") #searching for the track in the search textfield    
-    and $sel->ensembl_wait_for_ajax_ok(undef,'1000');
+    and $sel->ensembl_wait_for_ajax_ok(undef,'2000');
   } else {
     print "  Test turning $track_name track ".uc($action)."\n";
     $sel->ensembl_click("link=$track_name")

@@ -16,7 +16,7 @@ sub test_blat {
   my $sp_bio_name = $SD->get_config($self->species,'SPECIES_BIO_NAME'); 
 
   $self->open_species_homepage($self->species,undef,$sp_bio_name);
-  $sel->ensembl_click_links(["link=Transcript*"],"50000");
+  $sel->ensembl_click_links(["link=Example transcript"],"50000");
   $sel->ensembl_click_links(["link=cDNA","link=BLAST this sequence"],"20000");
   
   print "  Running BLAT(dna) for ".$self->species."\n";  
@@ -27,7 +27,7 @@ sub test_blat {
 
   print "TESTING BLASTP \n";  
   $self->open_species_homepage($self->species,undef, $sp_bio_name);
-  $sel->ensembl_click_links(["link=Transcript*"],"50000");
+  $sel->ensembl_click_links(["link=Example transcript"],"50000");
   $sel->ensembl_click_links(["link=Protein","link=BLAST this sequence"],"20000");  
   
   print "  Running BLASTP for ".$self->species."\n";  
