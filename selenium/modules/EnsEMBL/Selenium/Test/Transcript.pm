@@ -42,7 +42,7 @@ sub test_transcript {
     }
 
     $sel->ensembl_click_links(["link=Supporting evidence*"]) if(!(lc($self->species) eq 'caenorhabditis_elegans' || lc($self->species) eq 'drosophila_melanogaster' || lc($self->species) eq 'saccharomyces_cerevisiae')); #for now that will do
-    $sel->ensembl_click_links(["link=Exons*", "link=cDNA", "link=Protein"],'10000');
+    $sel->ensembl_click_links(["link=Exons*", "link=cDNA", "link=Protein"]);
 
     #unfortunately can't implement the check for this link as Obj is required so will test for a few species only
     $sel->ensembl_click_links(["link=General identifiers*"], '10000') if(lc($self->species) eq 'homo_sapiens' || lc($self->species) eq 'mus_musculus' || lc($self->species) eq 'gorilla_gorilla');
