@@ -25,12 +25,18 @@ sub test_location {
     and $sel->ensembl_is_text_present("Region in detail");
 #    and $sel->ensembl_images_loaded;
 
-    #turn ncRNA track on/off(excluding the two species since they dont have ncrna track) - need to add this one as well Caenorhabditis_elegans (maybe used regex)
-     if(lc($self->species) ne 'saccharomyces_cerevisiae' && lc($self->species) ne 'drosophila_melanogaster' && lc($self->species) ne 'caenorhabditis_elegans') {
+    $sel->ensembl_click("link=Configure this page") and $sel->ensembl_wait_for_ajax_ok(undef,4000);
+
+    #turn ncRNA track on/off(only for the species having ncrna tracks)
+     if($sel->is_text_present("ncRNA(")){
+      $sel->ensembl_click("modal_bg");
       $self->turn_track("ncRNA", "//form[\@id='location_viewbottom_configuration']/div[4]/div/ul/li[1]/img", "on");
       $self->turn_track("ncRNA", "//form[\@id='location_viewbottom_configuration']/div[4]/div/ul/li[1]/img", "off");      
       #next;
-    }    
+    } else {
+      print "  No ncRNA Tracks \n";
+      $sel->ensembl_click("modal_bg");
+    }
 
     #Test ZMENU (only for human)
     if(lc($self->species) eq 'homo_sapiens') {
