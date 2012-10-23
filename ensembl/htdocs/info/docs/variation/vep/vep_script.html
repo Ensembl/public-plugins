@@ -1698,14 +1698,15 @@ perl variant_effect_predictor.pl -offline -i my_species_variants.vcf -s my_speci
 	<p> Ensembl provides suitable reference FASTA files as downloads from its
 	FTP server. See the <a href="/info/data/ftp/index.html">Downloads</a> page
 	for details. In most cases it is best to download the single large
-	"toplevel" file for your species. Note that the VEP requires that the file
-	be unzipped to run; when unzipped these files can be very large (25GB for
+	"toplevel" file for your species. You should use the unmasked (without "_rm"
+	or "_sm" in the name) sequences. Note that the VEP requires that the file be
+	unzipped to run; when unzipped these files can be very large (25GB for
 	human). An example set of commands for setting up the data for human
 	follows: </p>
 	
-	<pre class="code">wget ftp://ftp.ensembl.org/pub/release-69/fasta/homo_sapiens/dna/Homo_sapiens.GRCh37.69.dna_rm.toplevel.fa.gz
-gzip -d Homo_sapiens.GRCh37.69.dna_rm.toplevel.fa.gz
-perl variant_effect_predictor.pl -i input.vcf --offline --hgvs --fasta Homo_sapiens.GRCh37.69.dna_rm.toplevel.fa</pre>
+	<pre class="code">wget ftp://ftp.ensembl.org/pub/release-69/fasta/homo_sapiens/dna/Homo_sapiens.GRCh37.69.dna.toplevel.fa.gz
+gzip -d Homo_sapiens.GRCh37.69.dna.toplevel.fa.gz
+perl variant_effect_predictor.pl -i input.vcf --offline --hgvs --fasta Homo_sapiens.GRCh37.69.dna.toplevel.fa</pre>
 	
 	<h3 id="limitations">Limitations of the cache</h3>
 	
