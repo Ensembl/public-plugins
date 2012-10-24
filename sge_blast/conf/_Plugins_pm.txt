@@ -1,1 +1,0 @@
-  'EnsEMBL::SGE_BLAST' => $SiteDefs::ENSEMBL_SERVERROOT.'/public-plugins/sge_blast',
