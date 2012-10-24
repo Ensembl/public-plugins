@@ -50,7 +50,11 @@ sub test_species_list {
  
    #CHECK FOR SPECIES IMAGES
    $sel->run_script(qq{
-     if (jQuery('img[src*=$species]')[0].complete) {
+     var x = jQuery.ajax({
+                    url: 'http://www.ensembl.org/i/species/64/$species.png',
+                    async: false,
+              }).state();
+     if (x == 'resolved') {
        jQuery('body').append("<p>Species images present</p>");
      }
   });
@@ -71,7 +75,7 @@ sub test_blog {
  $sel->open_ok("/"); 
  #$sel->ensembl_wait_for_page_to_load_ok;
  $sel->ensembl_click("link=More release news on our blog ?");
- $sel->wait_for_page_to_load_ok("5000")
+ $sel->ensembl_wait_for_page_to_load("50000")
  and $sel->ensembl_is_text_present('Category Archives'); 
 }
 
