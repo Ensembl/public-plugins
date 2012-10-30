@@ -60,7 +60,7 @@ Ensembl.DbFrontend = Base.extend({
   // method to show error
   showError: function(target, message, el) {
     if (target) {
-      target.html('<p class="dbf-error">' + (message || 'An error occoured at the server. Please try again.') + '</p>');
+      target.html('<p class="dbf-error">' + (message || 'An error occurred at the server. Please try again.') + '</p>');
     }
     if (el) {
       el.show();
