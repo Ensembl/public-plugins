@@ -38,7 +38,7 @@ sub content {
 
     if ($value->{'url'} =~ /\[USERNAME\]/) {
       @link_class     = ('class' => $self->JS_CLASS_OPENID_USERNAME);
-      $username_form  = $self->new_form({'method' => 'get', 'action' => \%request_url, 'validate' => 0});
+      $username_form  = $self->new_form({'method' => 'get', 'action' => \%request_url, 'skip_validation' => 1});
       $username_form->add_hidden({'name' => $_, 'value' => $request_params{$_}}) for keys %request_params;
       $username_form->add_field({
         'label'       => sprintf("$key username %s", $self->helptip("$key needs to know your username prior to us redirecting you to their login page.")),
