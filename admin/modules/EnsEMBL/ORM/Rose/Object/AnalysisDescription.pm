@@ -22,6 +22,7 @@ __PACKAGE__->meta->setup(
     description             => {type => 'text'},
     display_label           => {type => 'varchar', 'length' => 256 },
     db_version              => {type => 'integer', not_null => 1, default => 1 },
+    default_web_data_id     => {type => 'integer'}
   ],
 
   title_column  => 'logic_name',
@@ -30,11 +31,17 @@ __PACKAGE__->meta->setup(
 
   relationships => [
     analysis_web_data => {
-      'type'        => 'one to many',
-      'class'       => 'EnsEMBL::ORM::Rose::Object::AnalysisWebData',
-      'column_map'  => {'analysis_description_id' => 'analysis_description_id'}
+      'type'            => 'one to many',
+      'class'           => 'EnsEMBL::ORM::Rose::Object::AnalysisWebData',
+      'column_map'      => {'analysis_description_id' => 'analysis_description_id'}
     },
-  ],
+
+    default_web_data  => {
+      'type'            => 'many to one',
+      'class'           => 'EnsEMBL::ORM::Rose::Object::WebData',
+      'column_map'      => {'default_web_data_id' => 'web_data_id'}
+    }
+  ]
 );
 
 1;
