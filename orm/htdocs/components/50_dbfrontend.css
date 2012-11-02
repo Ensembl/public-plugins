@@ -184,6 +184,11 @@ table.dbf-ss tr.dbf-list-row form {
   margin: 0;
 }
 
+table.dbf-ss tr.dbf-list-row form select.fselect {
+  width: auto;
+  max-width: 200px;
+}
+
 p.dbf-error {
   color: red;
   padding: 16px 16px 0;
