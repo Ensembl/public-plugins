@@ -33,6 +33,11 @@ sub show_fields {
       'type'      => 'dropdown',
       'label'     => 'DB Version',
       'values'    => [{'value' => '1', 'caption' => 'Yes'}, {'value' => '0', 'caption' => 'No'}]
+    },
+    default_web_data  => {
+      'type'      => 'radiolist',
+      'label'     => 'Default Web data',
+      'is_null'   => 'None'
     }
   ];
 }
@@ -40,9 +45,10 @@ sub show_fields {
 sub show_columns {
   ## @overrides
   return [
-    logic_name    => 'Logic Name',
-    display_label => 'Display Label',
-    description   => 'Description'
+    logic_name        => 'Logic Name',
+    display_label     => 'Display Label',
+    description       => 'Description',
+    default_web_data  => 'Default Web data'
   ];
 }
 
