@@ -44,6 +44,11 @@ sub populate_tree {
     { 'availability' => 1 },
   );
 
+  $self->create_node( 'Display', 'View details',
+    [qw(list EnsEMBL::Admin::Component::Changelog::Display)],
+    { 'availability' => 1, 'filters' => ['WebAdmin']}
+  );
+
   $self->create_node( 'List', 'List all',
     [qw(list EnsEMBL::Admin::Component::Changelog::List)],
     { 'availability' => 1, 'filters' => ['WebAdmin']}
@@ -52,11 +57,6 @@ sub populate_tree {
   $self->create_node( 'ListReleases', 'List all releases',
     [qw(releaselist EnsEMBL::Admin::Component::Changelog::ListReleases)],
     { 'availability' => 1, 'filters' => ['WebAdmin']}
-  );
-
-  $self->create_node( 'Display', 'Display',
-    [qw(list EnsEMBL::Admin::Component::Changelog::Display)],
-    { 'availability' => 1, 'filters' => ['WebAdmin'], 'no_menu_entry' => 1 }
   );
 
   $self->create_node( 'Preview', 'Preview',
