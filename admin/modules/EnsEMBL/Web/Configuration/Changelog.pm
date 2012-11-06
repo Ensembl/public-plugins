@@ -59,7 +59,12 @@ sub populate_tree {
     { 'availability' => 1, 'filters' => ['WebAdmin'], 'no_menu_entry' => 1 }
   );
 
-  $self->create_dbfrontend_node({$_ => {'filters' => ['WebAdmin']}}) for qw(Select/Edit Select/Delete Add Edit Duplicate Preview Problem Confirm Save Delete);
+  $self->create_node( 'Preview', 'Preview',
+    [qw(list EnsEMBL::Admin::Component::Changelog::Preview)],
+    { 'availability' => 1, 'filters' => ['WebAdmin'], 'no_menu_entry' => 1 }
+  );
+
+  $self->create_dbfrontend_node({$_ => {'filters' => ['WebAdmin']}}) for qw(Select/Edit Select/Delete Add Edit Duplicate Problem Confirm Save Delete);
   
 }
 
