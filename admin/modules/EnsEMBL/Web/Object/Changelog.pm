@@ -164,6 +164,10 @@ sub show_fields {
       'type'      => 'dropdown',
       'label'     => 'Database changed'
     },
+    db_type_affected  => {
+      'type'      => 'dropdown',
+      'label'     => 'Database type (if changed)'
+    },
     priority          => {
       'type'      => 'dropdown',
       'label'     => 'Priority',
