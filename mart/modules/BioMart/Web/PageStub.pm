@@ -21,7 +21,7 @@ sub new {
   my $self = {};
   
   if (CGI::self_url !~ /__.+ByAjax/) {
-    my $controller = new EnsEMBL::Web::Controller(undef, { page_type => 'Static', renderer_type => 'Apache' });
+    my $controller = EnsEMBL::Web::Controller->new(undef, { page_type => 'Static', renderer_type => 'Apache' });
     my $page       = $controller->page;    
 
     $page->include_navigation(0);

@@ -8,7 +8,7 @@ use EnsEMBL::Web::DBSQL::WebsiteAdaptor;
 sub render {
   my ($class, $request) = @_;
 
-  my $hub = new EnsEMBL::Web::Hub;
+  my $hub = EnsEMBL::Web::Hub->new;
 
   my $SD = $hub->species_defs;
   my $this_release = $SD->ENSEMBL_VERSION;

@@ -83,7 +83,7 @@ sub testmore_output {
 sub database {
  my ($self, $db, $species) = @_;
  
- my $hub  = new EnsEMBL::Web::Hub; 
+ my $hub  = EnsEMBL::Web::Hub->new; 
  my $database = $hub->database($db, $species);
  
  return $database;
@@ -92,7 +92,7 @@ sub database {
 #getting species def from hub, can be used to check for species name, release version and other web related text
 sub get_species_def {
   my $self = shift;
-  my $hub = new EnsEMBL::Web::Hub;
+  my $hub = EnsEMBL::Web::Hub->new;
   my $SD = $hub->species_defs; 
  
   return $SD;

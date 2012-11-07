@@ -183,7 +183,7 @@ sub nextRow {
 	       my $sa = $db->get_SliceAdaptor();
 
                # create an analysis for the type of feature you wish to store
-                my $analysis = new Bio::EnsEMBL::Analysis(
+                my $analysis = Bio::EnsEMBL::Analysis->new(
                                                           -LOGIC_NAME => 'your_analysis'
                                                           );
                 my $slice_oldasm = $sa->fetch_by_region('chromosome', $chromosome, undef, undef,

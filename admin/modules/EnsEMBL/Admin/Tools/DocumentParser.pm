@@ -165,7 +165,7 @@ sub file_to_htmlnodes {
   ## @param Parsed file - output from EnsEMBL::Web::Tools::DocumentParser::parse_file
   ## @param DOM object (create a new one if missed)
   my $file    = shift;
-  my $dom     = shift || new EnsEMBL::Web::DOM;
+  my $dom     = shift || EnsEMBL::Web::DOM->new;
   my $content = $dom->create_element('div');
   my $toc_div = $dom->create_element('div', {'class' => 'document_toc', 'flags' => {'section', '_toc'}});
 

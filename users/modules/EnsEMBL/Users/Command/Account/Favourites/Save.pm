@@ -17,7 +17,7 @@ sub process {
   $species_list->favourites($hub->param('favourites'));
   $species_list->save('user' => $user);
 
-  print new EnsEMBL::Web::Document::HTML::FavouriteSpecies($hub)->render('fragment');
+  print EnsEMBL::Web::Document::HTML::FavouriteSpecies->new($hub)->render('fragment');
 
 }
 
