@@ -73,19 +73,31 @@ sub content_tree {
     $element_params->{$_} = $field_extras->{$_} for keys %$field_extras;
     $element_params->{'class'} .= ' '.$self->_JS_CLASS_DATASTRUCTURE if $action ne 'Preview' && $field->is_datastructure && $field->is_column;
 
-    my $is_null = $field->is_null;
-    my $is_datastructure;
-
     my $selected_values = {};
     if (scalar keys %$lookup) {
+
+      my $is_null     = $field->is_null;
+      my $null_value  = '0';
+
+      if ($field->is_column) {
+        my $column = $record->meta->column($name);
+        if ($column->type eq 'enum' && !grep $null_value, @{$column->values}) {
+          if ($column->not_null) {
+            $is_null = 0;
+          } else {
+            $null_value = '';
+          }
+        }
+      }
+
       if ($action eq 'Preview') {
         $selected_values = { map {$_ => $lookup->{$_}} @$value };
-        scalar keys %$selected_values or $is_null and $selected_values = {'0' => $is_null eq '1' ? 'None' : $is_null};
+        scalar keys %$selected_values or $is_null and $selected_values = {$null_value => $is_null eq '1' ? 'None' : $is_null};
       }
       else {
         if ($is_null) {
-          $element_params->{'value'}  = ['0'] unless scalar @{$element_params->{'value'}};
-          $element_params->{'values'} = [{'value' => '0', 'caption' => $is_null eq '1' ? 'None' : $is_null}];
+          $element_params->{'value'}  = [$null_value] unless scalar @{$element_params->{'value'}};
+          $element_params->{'values'} = [{'value' => $null_value, 'caption' => $is_null eq '1' ? 'None' : $is_null}];
         }
         push @{$element_params->{'values'}}, {'value' => $_, 'caption' => {'inner_HTML' => $lookup->{$_}, $field->is_datastructure ? ('class' => $self->_JS_CLASS_DATASTRUCTURE) : ()}} for sort { $lookup->{$a} cmp $lookup->{$b} } keys %$lookup;
       }
