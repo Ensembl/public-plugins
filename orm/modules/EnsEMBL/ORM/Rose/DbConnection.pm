@@ -24,7 +24,7 @@ my $species_defs = EnsEMBL::Web::SpeciesDefs->new;
 __PACKAGE__->use_private_registry;
 
 ## Something to do with rose's db cache
-__PACKAGE__->use_cache_during_apache_startup(1);
+__PACKAGE__->use_cache_during_apache_startup(0);
 
 ## Set the default domain
 __PACKAGE__->default_domain('ensembl');
