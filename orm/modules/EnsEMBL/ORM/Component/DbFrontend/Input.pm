@@ -77,18 +77,7 @@ sub content_tree {
     if (scalar keys %$lookup) {
 
       my $is_null     = $field->is_null;
-      my $null_value  = '0';
-
-      if ($field->is_column) {
-        my $column = $record->meta->column($name);
-        if ($column->type eq 'enum' && !grep $null_value, @{$column->values}) {
-          if ($column->not_null) {
-            $is_null = 0;
-          } else {
-            $null_value = '';
-          }
-        }
-      }
+      my $null_value  = $is_null && $field->is_column && !exists $lookup->{'0'} ? '' : '0';
 
       if ($action eq 'Preview') {
         $selected_values = { map {$_ => $lookup->{$_}} @$value };
