@@ -326,7 +326,10 @@ sub _populate_from_cgi {
 #     my $ext_rel   = $ext_rels->{$field_name};
 
     if ($column || $v_column) {
-      if ($v_column || $column->type ne 'set') {
+      if ($column && $column->type eq 'set') {
+        my %allowed_values = map { $_ => 1 } @{$column->values};
+        $value = [ grep $allowed_values{$_}, @$value ]; # validate the values
+      } else {
         $value = shift @$value;
         $value = undef if $column && !$column->not_null && $value eq ''; # if column value can be NULL, set NULL value instead of an empty string
       }
