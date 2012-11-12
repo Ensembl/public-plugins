@@ -32,7 +32,7 @@ __PACKAGE__->meta->setup(
     biomart_affected      => {type => 'enum', 'values' => [qw(N Y)]},
     variation_pos_changed => {type => 'enum', 'values' => [qw(N Y)]},
     db_status             => {type => 'enum', 'values' => [qw(N/A unchanged patched new)]},
-    db_type_affected      => {type => 'enum', 'values' => [qw(cdna core funcgen otherfeatures rnaseq variation vega)]},
+    db_type_affected      => {type => 'set',  'values' => [qw(cdna core funcgen otherfeatures rnaseq variation vega)]},
     priority              => {type => 'integer', 'not_null' => 1, 'default' => 2},
     is_current            => {type => 'integer', 'not_null' => 1, 'default' => 1}
   ],
