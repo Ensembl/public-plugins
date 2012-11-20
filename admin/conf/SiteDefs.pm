@@ -37,9 +37,6 @@ sub update_conf {
   $SiteDefs::ENSEMBL_MART_ENABLED   = 0;
   $SiteDefs::ENSEMBL_MEMCACHED      = {};
 
-  ## Folder that contains images used by help pages on the main site
-  $SiteDefs::HELP_IMAGES_DIRECTORY  = '';
-
   ## Databases used in Rose::Db::Object derived objects
   $SiteDefs::ROSE_DB_DATABASES->{'healthcheck'} = 'DATABASE_HEALTHCHECK';
   $SiteDefs::ROSE_DB_DATABASES->{'website'}     = 'DATABASE_WEBSITE';
