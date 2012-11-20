@@ -37,6 +37,9 @@ sub update_conf {
   $SiteDefs::ENSEMBL_MART_ENABLED   = 0;
   $SiteDefs::ENSEMBL_MEMCACHED      = {};
 
+  ## Folder that contains images used by help pages on the main site
+  $SiteDefs::HELP_IMAGES_DIRECTORY  = '';
+
   ## Databases used in Rose::Db::Object derived objects
   $SiteDefs::ROSE_DB_DATABASES->{'healthcheck'} = 'DATABASE_HEALTHCHECK';
   $SiteDefs::ROSE_DB_DATABASES->{'website'}     = 'DATABASE_WEBSITE';
@@ -44,10 +47,10 @@ sub update_conf {
 
   ## ID of the admin group (user group that can access the admin website)
   $SiteDefs::ENSEMBL_WEBADMIN_ID = 0;
-  
+
   ## First release from which healthcheck started
   $SiteDefs::ENSEMBL_WEBADMIN_HEALTHCHECK_FIRST_RELEASE = 0;
-  
+
   ## List of database servers hosting species tables (used in healthcheck pages to display list of all databases)
   $SiteDefs::ENSEMBL_WEBADMIN_DB_SERVERS = [{
     host => 'myserver',
@@ -55,7 +58,7 @@ sub update_conf {
     user => 'myuser',
     pass => 'mypassword'
   }];
-  
+
   ## List of Admin Documents
   $SiteDefs::ENSEMBL_WEBADMIN_DOCUMENTS = [
 #    'URLPart'    => {'title' => 'Document title',            'location' => 'path/to/xyzdocument.txt',  'readonly' => 0 }
