@@ -2,6 +2,8 @@ package EnsEMBL::Web::Object::HelpRecord;
 
 use strict;
 
+use EnsEMBL::Web::Exceptions;
+
 use base qw(EnsEMBL::Web::Object::DbFrontend);
 
 sub record_type {
@@ -28,6 +30,88 @@ sub fetch_for_display {
 
 sub fetch_for_list {
   return shift->fetch_for_display(@_);
+}
+
+sub get_help_images_dir {
+  ## Returns the absolute address of the directory that contains help images
+  return shift->hub->species_defs->HELP_IMAGES_DIRECTORY;
+}
+
+sub get_help_images_list {
+  ## Returns list of all the images in the help folder along with some extra info about each image
+  my $self      = shift;
+  my $dir       = $self->get_help_images_dir or throw exception('Images directory has not been configured. Please configure it in your plugins.');
+  my $hub       = $self->hub;
+  my $function  = $hub->function;
+  my $root      = `pwd`;
+
+  my %list;
+
+  chdir $dir or throw exception("Error getting to images directory: $!");
+
+  open ENTRIES, '<', 'CVS/Entries' or throw exception("Error reading CVS entries file: $!");
+  my %cvs_entries;
+  for (<ENTRIES>) {
+    chop;
+    my ($type, $name, $rev, $timestamp, $options, $tagdate) = split '/', $_;
+    next if $type eq 'D';
+    $cvs_entries{$name} = $tagdate && $tagdate =~ /^T(.+)/ ? $1 : undef;
+  }
+  close ENTRIES;
+
+  opendir IMAGES_DIR, '.';
+
+  for (readdir IMAGES_DIR) {
+    next if -d; # skip directories
+
+    $list{$_} = {
+      'name'      => $_,
+      'writable'  => -W || 0,
+      'size'      => -s,
+      'cvs'       => exists $cvs_entries{$_} ? _get_cvs_status($_) : 'New',
+      'tag'       => delete $cvs_entries{$_}
+    };
+
+    if ($list{$_}{'writable'} && $function eq 'View' && $hub->param('file') eq $_) {
+      open IMG, "<$_" or throw exception("Error reading image $_: $!");
+      my $ctx = Digest::MD5->new;
+      $ctx->addfile (*IMG);
+      $list{$_}{'md5'} = substr $ctx->hexdigest, 0, 8;
+      close IMG;
+    }
+  }
+
+  closedir IMAGES_DIR;
+
+  for (keys %cvs_entries) { # if any file doesn't exist on file system but is in cvs entries
+    $list{$_} = {
+      'name'      => $_,
+      'writable'  => 1,
+      'missing'   => 1,
+      'cvs'       => _get_cvs_status($_)
+    };
+  }
+
+  chop  $root;
+  chdir $root;
+
+  ## validate actions for each file
+  for my $file (values %list) {
+    if ($file->{'writable'}) {
+      $file->{'action'} = [ $file->{'missing'} ? () : 'View' ];
+      if ($file->{'cvs'} =~ /^(Needs (Patch|Checkout))$/ || $file->{'tag'}) {
+        push @{$file->{'action'}}, 'Update';
+      } elsif ($file->{'cvs'} =~ /^(Locally Modified|New)$/) {
+        push @{$file->{'action'}}, 'Commit', 'Delete', 'Upload';
+      } elsif ($file->{'cvs'} eq 'Up-to-date') {
+        push @{$file->{'action'}}, 'Upload';
+      } elsif ($file->{'cvs'} eq 'Needs Merge') {
+        push @{$file->{'action'}}, 'Delete';
+      }
+    }
+  }
+
+  return [ map $list{$_}, sort keys %list ];
 }
 
 sub get_count {
@@ -111,8 +195,8 @@ sub show_columns {
 
   if ($type eq 'glossary') {
     @datamap = (
-      'word'           => {'title' => 'Word'},
-      'expanded'       => {'title' => 'Expanded'},
+      'word'                => {'title' => 'Word'},
+      'expanded'            => {'title' => 'Expanded'},
     );
   }
   elsif ($type eq 'view') {
@@ -122,14 +206,14 @@ sub show_columns {
   }
   elsif ($type eq 'movie') {
     @datamap = (
-      'title'          => {'title' => 'Title'},
-      'youtube_id'     => {'title' => 'Youtube ID'},
+      'title'               => {'title' => 'Title'},
+      'youtube_id'          => {'title' => 'Youtube ID'},
     );
   }
   elsif ($type eq 'faq') {
     @datamap = (
-      'category'       => {'title' => 'Category'},
-      'question'       => {'title' => 'Question'},
+      'category'            => {'title' => 'Category'},
+      'question'            => {'title' => 'Question'},
     );
   }
 
@@ -163,6 +247,13 @@ sub get_fields {
   my $self = shift;
   delete $self->{'_dbf_show_fields'};
   return $self->SUPER::get_fields(@_);
+}
+
+sub _get_cvs_status {
+  ## @private
+  my $file        = shift;
+  my @cvs_status  = `cvs status $file`;
+  $_ =~ /Status: ([^\n]+)/ and return $1 for @cvs_status;
 }
 
 1;
