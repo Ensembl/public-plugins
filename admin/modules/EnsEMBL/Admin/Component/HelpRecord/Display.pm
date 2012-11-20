@@ -22,7 +22,7 @@ sub record_tree {
     }
   }
 
-  my $html_div    = $record_div->get_nodes_by_flag('data.answer');
+  my $html_div    = $record_div->get_nodes_by_flag(['data.answer', 'data.content']);
   if (@$html_div) {
     $html_div = $html_div->[0]->last_child;
     $html_div->inner_HTML($self->parse_help_html($html_div->inner_HTML, $self->object));
