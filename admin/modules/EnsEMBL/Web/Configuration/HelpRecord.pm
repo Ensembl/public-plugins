@@ -61,6 +61,22 @@ sub populate_tree {
   }
 
   $self->create_multidbfrontend_menu('HelpLink', 'Help Links');
+
+  my $images_menu = $self->create_submenu('Images', 'Images');
+  $images_menu->append($self->create_node("HelpRecord/Images/$_", $_ eq 'Upload' ? 'Add' : $_, [ "Images_$_" => 'EnsEMBL::Admin::Component::HelpRecord::Images' ], {
+    'availability'  => 1,
+    'filters'       => ['WebAdmin'],
+    'raw'           => 1,
+    'url'           => $hub->url({'type' => 'HelpRecord', 'action' => 'Images', 'function' => $_}),
+    'no_menu_entry' => $_ !~ /^(List|Upload)$/
+  })) for qw(List Upload Delete View Commit);
+
+  $images_menu->append($self->create_node("HelpRecord/Image/$_", '', [], {
+    'command'       => 'EnsEMBL::Admin::Command::HelpRecord::Image',
+    'availability'  => 1,
+    'filters'       => ['WebAdmin'],
+    'no_menu_entry' => 1
+  })) for qw(Upload Update Delete Commit);
 }
 
 1;
