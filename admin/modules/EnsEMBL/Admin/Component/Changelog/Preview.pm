@@ -1,6 +1,7 @@
 package EnsEMBL::Admin::Component::Changelog::Preview;
 
-## Preview page to add some validation on the content field before displaying the saving the declaration tomorrow.
+## Preview page to add some validation on the content field before displaying the saving the declaration.
+## TODO - add this validation and sanitisation to EnsEMBL::ORM::Component::DbFrontend::Input for html type elements and then remove this file
 
 use strict;
 use warnings;
