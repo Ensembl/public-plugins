@@ -51,6 +51,7 @@ sub render {
     <li><a href="/HelpRecord/List/FAQ">FAQ</a></li>
     <li><a href="/HelpRecord/List/Glossary">Glossary</a></li>
     <li><a href="/HelpRecord/List/Movie">Movies</a></li>
+    <li><a href="/HelpRecord/Images/List">Images</a></li>
   </ul>
   <h1>Documents</h1>
   <ul>
