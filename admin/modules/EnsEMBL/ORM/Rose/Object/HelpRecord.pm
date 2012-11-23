@@ -36,6 +36,7 @@ __PACKAGE__->meta->setup(
     list_position   => {'column' => 'data'},
     length          => {'column' => 'data'},
     youtube_id      => {'column' => 'data'},
+    youku_id        => {'column' => 'data'},
     title           => {'column' => 'data'},
     ensembl_object  => {'column' => 'data'},
     ensembl_action  => {'column' => 'data'},

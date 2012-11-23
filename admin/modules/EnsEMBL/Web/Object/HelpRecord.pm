@@ -156,6 +156,7 @@ sub show_fields {
       'title'          => {'label' => 'Title',           'type' => 'string'  },
       'help_record_id' => {'label' => 'Movie ID',        'type' => 'noedit', 'value' => '<i>to be assigned</i>', 'is_html' => 1 },
       'youtube_id'     => {'label' => 'Youtube ID',      'type' => 'string'  },
+      'youku_id'       => {'label' => 'Youku ID',        'type' => 'string'  },
       'list_position'  => {'label' => 'List position',   'type' => 'int'     },
       'length'         => {'label' => 'Length',          'type' => 'string'  }
     );
