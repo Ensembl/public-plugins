@@ -243,9 +243,10 @@ sub _render_help_results {
 
 sub _render_genome_hits {
   my ( $self, $hits, $hit_tagline_lookup ) = @_;
-  my $species_defs = EnsEMBL::Web::SpeciesDefs->new();
-  my $sitetype = $species_defs->ENSEMBL_SEARCHTYPE ? lc $species_defs->ENSEMBL_SEARCHTYPE : lc($species_defs->ENSEMBL_SITETYPE);
-  my $prefix = $sitetype eq 'vega' ? 'v' :  $sitetype eq 'pre' ? 'pre' : 'e';
+  my $hub             = $self->hub;
+  my $species_defs    = $hub->species_defs;
+  my $sitetype        = $species_defs->ENSEMBL_SEARCHTYPE ? lc $species_defs->ENSEMBL_SEARCHTYPE : lc($species_defs->ENSEMBL_SITETYPE);
+  my $prefix          = $sitetype eq 'vega' ? 'v' :  $sitetype eq 'pre' ? 'pre' : 'e';
   my $ensembl_version = $prefix . $species_defs->ENSEMBL_VERSION;
 
   my $html;
@@ -284,20 +285,31 @@ sub _render_genome_hits {
 
       #show some context for Variations
       if ($hit->{location}) {
-        my ($chr,$loc,$strand) = split ':',$hit->{location};
-        my ($start,$end)       = split '-',$loc;
-        my $hit_location_label = $start-$end ? "$chr:$start-$end" : "$chr:$start";
-        my $context = 50;
-        if ($end < $start) {
-          $start += $context;
-          $end   -= $context;
+        my @location_links;
+        for (split "\n", $hit->{location}) {
+
+          my ($chr,$loc,$strand) = split ':',$_;
+          my ($start,$end)       = split '-',$loc;
+          my $hit_location_label = $start-$end ? "$chr:$start-$end" : "$chr:$start";
+          my $context = 50;
+          if ($end < $start) {
+            $start += $context;
+            $end   -= $context;
+          }
+          else {
+            $start -= $context;
+            $end   += $context;
+          }
+
+          push @location_links, sprintf(qq(<a href="%s$db_extra">$hit_location_label</a>), $hub->url({
+            'species' => $hit->{'species'},
+            'type'    => 'Location',
+            'action'  => 'View',
+            'r'       => $chr && $start && $end && $strand ? "$chr:$start-$end:$strand" : $_,
+            'v'       => $hit->{'id'}
+          }));
         }
-        else {
-          $start -= $context;
-          $end   += $context;
-        }
-        my $expanded_location = ($chr && $start && $end && $strand) ? "$chr:$start-$end:$strand" : $hit->{location};
-        $table->add_row('Location', qq|<p>$hit_location_label (view in <a href="/$hit->{species}/Location/View?r=$expanded_location;v=$hit->{id}$db_extra">location tab</a>)</p>|);
+        $table->add_row($self->append_s_to_plural('Location', @location_links > 1), sprintf('<p>%s</p>', join(', ', @location_links)));
       }
     }
     elsif ($hit->{location}) {
