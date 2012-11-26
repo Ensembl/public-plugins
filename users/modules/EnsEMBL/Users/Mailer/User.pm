@@ -184,7 +184,7 @@ sub send_group_joining_notification_email {
   $self->to       = $admin->email;
   $self->subject  = qq($sitename: "$by_name" $action the group "$group_name");
   $self->message  = qq{Dear $to_name,\n\nThis email is to notify you that $by_name ($by_email) $action the group "$group_name".\n\n}
-                   .qq(You have received this email since you have opted to get notified when someone joines this group. To view the group, $action_2)
+                   .qq(You have received this email since you have opted to get notified when someone joins this group. To view the group, $action_2)
                    .qq(or to change your email preferences, please go to the link below:\n\n$url\n$footer);
 
   $self->send;
