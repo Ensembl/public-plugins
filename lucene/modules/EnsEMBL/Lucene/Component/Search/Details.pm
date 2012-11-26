@@ -37,6 +37,8 @@ sub _format_message {
   $idx = uc($idx) if $idx eq 'Faq';
   $idx = 'Somatic Mutation' if $idx eq 'Mutation';
   my $message = NUM( $count, 'true' ) . ' ' . PL($idx) . ' ' . PL('matches') . " your query ('$query')";
+  $message =~ s/Variationses/Variations/g; #hack for Structural Variations
+
   my $display_species = $species eq 'all' ? 'all species' : $self->hub->species_defs->get_config($species,'SPECIES_COMMON_NAME');
   #uncomment this to show latin name as well
 #  $species =~ s/_/ /g;
@@ -301,12 +303,14 @@ sub _render_genome_hits {
             $end   += $context;
           }
 
+          my $v_param = $hit->{featuretype} eq 'StructuralVariation' ? 'sv' : 'v';
+
           push @location_links, sprintf(qq(<a href="%s$db_extra">$hit_location_label</a>), $hub->url({
             'species' => $hit->{'species'},
             'type'    => 'Location',
             'action'  => 'View',
             'r'       => $chr && $start && $end && $strand ? "$chr:$start-$end:$strand" : $_,
-            'v'       => $hit->{'id'}
+            $v_param  => $hit->{'id'}
           }));
         }
         $table->add_row($self->append_s_to_plural('Location', @location_links > 1), sprintf('<p>%s</p>', join(', ', @location_links)));
