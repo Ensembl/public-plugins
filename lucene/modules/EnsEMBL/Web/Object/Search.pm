@@ -115,7 +115,7 @@ sub feature2url {
         ? "$_[0]->{species}/Regulation/Cell_line?rf=$_[0]->{id}"
         : "$_[0]->{species}/Location/Genome?ftype=RegulatoryFactor;id=$_[0]->{id};fset=$_[0]->{subtype}";
     },
-    'FAQ'      => sub { return "Help/Faq#faq$_[0]->{id}" },
+    'FAQ'      => sub { return "Help/Faq?id=$_[0]->{id}" },
     'GLOSSARY' => sub { return "Help/Glossary?id=$_[0]->{id}" },
     'VIEW'     => sub { return "Help/View?id=$_[0]->{id}" },
   );
