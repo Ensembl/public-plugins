@@ -197,8 +197,7 @@ sub _render_help_results {
       }
     }
 
-    $html .=
-      qq{<div class="header"><a class="notext" href="/$url">$hit_tagline</a></div>};
+    $html .= sprintf qq{<div class="header"><a class="notext%s" href="/$url">$hit_tagline</a></div>}, $hit->{'featuretype'} =~ /^(FAQ|Glossary|View)$/ ? ' popup' : '';
 
     my $species_no_underscore;
     ( $species_no_underscore = $species ) =~ s/_/ /;
