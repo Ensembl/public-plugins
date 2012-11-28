@@ -43,11 +43,11 @@
       <img src="Tree_reconciliation.png" width=500/>
       <li>Infer orthology and paralogy relationships by comparing each pair of genes in each tree. The possible homology types are:
 	<ul>
-	  <li><strong>Paralogs</strong> - Two genes are from different species, no ancestral duplication events are found and these genes are only copies of the ancestor for their species</li>
-	  <li><strong>One-to-one Orthologs</strong> - Two genes are from different species, no ancestral duplication events are found and these genes are only copies of the ancestor for their species</li>
-	  <li><strong>Apparent Orthologs one-to-one</strong> - The two genes are from different species but there is evidence for duplication events elsewhere in the history even though these two genes are the only remaining representatives of the ancestor</li>
+	  <li><strong>Paralogs</strong> - Two genes are from the same species and derived from a duplication event in their ancestor.</li>
+	  <li><strong>One-to-one Orthologs</strong> - Two genes are from different species, they are related by a speciation event and they are the only copies of the ancestral gene in their species</li>
+	  <li><strong>Apparent Orthologs one-to-one</strong> - Are one-to-one orthologs that are related by an ambiguous node (a duplication that is not supported by any duplication in the extant species)</li>
 	  <li><strong>One-to-many Orthologs</strong> - Two genes are from different species, there is evidence for duplication events in the history of the gene, one of the genes is the only remaining representative of the ancestor in its species but the other gene has multiple copies in its species</li>
-	  <li><strong>Possible orthologs</strong> - Two genes are from different species but there is evidence for duplication events in the history of the gene.</li>
+	  <li><strong>Possible orthologs</strong> - Are dubious cases of genes related by an ill-supported duplication node.</li>
 	</ul>
 	More information about these relationships can be found in the <a href="homology_method.html">Gene Trees</a><a href="#fn1" class="fn-link"><sup>1</sup></a> documentation.
     </ol>
