@@ -344,7 +344,7 @@ sub js_link {
   ##  - class   : String or arrayref of class for <a> tag
   ##  - confirm : confirmation message to be displayed when the link is clicked - make sure its HTML escaped before calling this method
   ##  - cancel  : section id if this link is a 'cancel' link - will remove the given section
-  ##  = sprite  : Class for the sprite icon (caption, cancel, button args will be ignores if this is provided)
+  ##  - sprite  : Class for the sprite icon (caption, cancel, button args will be ignored if this is provided)
   ## @return HTML string
   my ($self, $params) = @_;
 
@@ -391,7 +391,7 @@ sub js_section {
   for (qw(heading subheading)) {
     if ($params->{$_}) {
       $links->{$_} = join('', map {
-        sprintf '<a href="%s" class="header-link _ht %s" title="%s"><span class="sprite %s"></span></a>', $self->hub->url($_->{'href'}), $self->_get_js_class_for_link($_), $_->{'title'}, $_->{'sprite'}
+        sprintf '<a href="%s" class="header-link _ht _ht_static %s" title="%s"><span class="sprite %s"></span></a>', $self->hub->url($_->{'href'}), $self->_get_js_class_for_link($_), $_->{'title'}, $_->{'sprite'}
       } @{$params->{"${_}_links"} || []});
     }
   }
