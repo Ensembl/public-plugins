@@ -79,6 +79,11 @@ sub get_help_images_list {
       $ctx->addfile (*IMG);
       $list{$_}{'md5'} = substr $ctx->hexdigest, 0, 8;
       close IMG;
+
+      if ($list{$_}{'cvs'} eq 'Up-to-date' && !$list{$_}{'tag'}) {
+        `file $_` =~ /\s+([0-9]+)\s+x\s+([0-9]+)/;
+        $list{$_}{'dim'} = {'x' => $1, 'y' => $2} if $1 && $2;
+      }
     }
   }
 
