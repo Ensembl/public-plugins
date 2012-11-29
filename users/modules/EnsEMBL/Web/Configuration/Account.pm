@@ -45,80 +45,69 @@ sub populate_tree { #TODO - split between user_populate_tree and populate_tree
       'view_bookmarks'    =>  'EnsEMBL::Users::Component::Account::Bookmark::View',
     ], { 'availability'   =>  1 });
 
-    # page to view user details
-    my $details_menu = $preference_menu->append($self->create_node('Details', 'My Details', [
-      'view_details'      =>  'EnsEMBL::Users::Component::Account::Details::View'
-    ], { 'availability'   =>  1 }));
-
     # page to display a form to edit user details - name, email etc
-    $details_menu->append($self->create_node('Details/Edit', 'Edit Details', [
+    $preference_menu->append($self->create_node('Details/Edit', 'Edit Details', [
       'edit_details'      =>  'EnsEMBL::Users::Component::Account::Details::Edit'
     ], { 'availability'   =>  1 }));
 
     # page modified from openid buttons component to allow a logged in user to select another openid provider as an alternative login option
-    $details_menu->append($self->create_node('Details/AddLogin', 'Add Login', [
+    $preference_menu->append($self->create_node('Details/AddLogin', 'Add Login', [
       'edit_details'      =>  'EnsEMBL::Users::Component::Account::OpenID::Buttons'
     ], { 'no_menu_entry'  =>  1 }));
 
-    # page to view groups user is a member of
-    my $group_menu = $preference_menu->append($self->create_node('Groups', 'My Groups', [
-      'message'           =>  'EnsEMBL::Users::Component::Account::Message',
-      'notifications'     =>  'EnsEMBL::Users::Component::Account::Groups::Notifications',
-      'view_groups'       =>  'EnsEMBL::Users::Component::Account::Groups::ViewAll'
-    ], { 'availability'   =>  1 }));
-
     # page to view a single group
-    $group_menu->append($self->create_node('Groups/View', 'View a group', [
+    $preference_menu->append($self->create_node('Groups/View', 'View a group', [
       'message'           =>  'EnsEMBL::Users::Component::Account::Message',
       'view_group'        =>  'EnsEMBL::Users::Component::Account::Groups::View'
-    ], { 'availability'   =>  $has_groups }));
+    ], {
+      'availability'      =>  $has_groups,
+      'no_menu_entry'     =>  1
+    }));
 
     # page to edit a group
-    $group_menu->append($self->create_node('Groups/Edit', 'Edit a group', [
+    $preference_menu->append($self->create_node('Groups/Edit', 'Edit a group', [
       'message'           =>  'EnsEMBL::Users::Component::Account::Message',
       'edit_group'        =>  'EnsEMBL::Users::Component::Account::Groups::AddEdit'
-    ], { 'availability'   =>  $has_accessible_groups }));
+    ], {
+      'availability'      =>  $has_accessible_groups,
+      'no_menu_entry'     =>  1
+    }));
 
     # page to create a new group
-    $group_menu->append($self->create_node('Groups/Add', 'Create new group', [
+    $preference_menu->append($self->create_node('Groups/Add', 'Create new group', [
       'message'           =>  'EnsEMBL::Users::Component::Account::Message',
       'add_group'         =>  'EnsEMBL::Users::Component::Account::Groups::AddEdit'
     ], { 'availability'   =>  1 }));
 
     # page to list groups to be able to join an existing group
-    $group_menu->append($self->create_node('Groups/List', 'Join existing group', [
+    $preference_menu->append($self->create_node('Groups/List', 'Join existing group', [
       'message'           =>  'EnsEMBL::Users::Component::Account::Message',
       'list_groups'       =>  'EnsEMBL::Users::Component::Account::Groups::List'
     ], { 'availability'   =>  1 }));
 
     # page to create a new group
-    $group_menu->append($self->create_node('Groups/Invite', 'Invite new members', [
+    $preference_menu->append($self->create_node('Groups/Invite', 'Invite new members', [
       'message'           =>  'EnsEMBL::Users::Component::Account::Message',
       'add_group'         =>  'EnsEMBL::Users::Component::Account::Groups::Invite'
     ], { 'availability'   =>  1 }));
 
     # page to create a new group
-    $group_menu->append($self->create_node('Groups/ConfirmDelete', 'Delete group', [
+    $preference_menu->append($self->create_node('Groups/ConfirmDelete', 'Delete group', [
       'add_group'         =>  'EnsEMBL::Users::Component::Account::Groups::ConfirmDelete'
     ], { 'no_menu_entry'  =>  1 }));
 
-    # page to view user bookmarks
-    my $bookmarks_menu = $preference_menu->append($self->create_node('Bookmark', 'My Bookmarks', [
-      'view_bookmarks'    =>  'EnsEMBL::Users::Component::Account::Bookmark::View'
-    ], { 'availability'   =>  1 }));
-
     # page to edit a bookmark
-    $bookmarks_menu->append($self->create_node('Bookmark/Edit', 'Edit bookmark', [
+    $preference_menu->append($self->create_node('Bookmark/Edit', 'Edit bookmark', [
       'edit_bookmark'     =>  'EnsEMBL::Users::Component::Account::Bookmark::AddEdit'
     ], { 'availability'   =>  1 }));
 
     # page to add a bookmark
-    $bookmarks_menu->append($self->create_node('Bookmark/Add', 'Create new bookmark', [
+    $preference_menu->append($self->create_node('Bookmark/Add', 'Create new bookmark', [
       'add_bookmark'      =>  'EnsEMBL::Users::Component::Account::Bookmark::AddEdit'
     ], { 'availability'   =>  1 }));
 
     # page to share a bookmark with a group
-    $bookmarks_menu->append($self->create_node('Share/Bookmark', 'Share bookmark', [
+    $preference_menu->append($self->create_node('Share/Bookmark', 'Share bookmark', [
       'message'           =>  'EnsEMBL::Users::Component::Account::Message',
       'share_bookmark'    =>  'EnsEMBL::Users::Component::Account::Share::Bookmark'
     ], { 'availability'   =>  1 }));
