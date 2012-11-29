@@ -15,7 +15,7 @@ use CGI::Cookie;
     return EnsEMBL::Web::Session->new({
       'adaptor'      => $self,
       'cookie'       => $arg_ref->{'cookie'},
-      'session_id'   => $arg_ref->{'cookie'}->get_value,
+      'session_id'   => $arg_ref->{'cookie'}->value,
       'species_defs' => $self->get_species_defs,
       'species'      => $arg_ref->{'species'}
     });
@@ -54,7 +54,7 @@ warn "CREATING SESSION.... ";
 #warn "  ## Creating new user session $session_id";
     if( $r ) { # We have an apache request object yeah!
 #warn "  `-- storing cookie...";
-      $cookie->create( $r, $session_id );
+      $cookie->bake($session_id);
     }
     return $session_id;
   }
