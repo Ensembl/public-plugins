@@ -13,9 +13,15 @@ sub record_tree {
   ## Overrides the default one to print corresponding youtube video link for youtube_id field
   my $self        = shift;
   my $record_div  = $self->SUPER::record_tree(@_);
+  my $code_div    = $record_div->get_nodes_by_flag('help_record_id');
   my $youtube_div = $record_div->get_nodes_by_flag('data.youtube_id');
   my $youku_div   = $record_div->get_nodes_by_flag('data.youku_id');
   my $html_div    = $record_div->get_nodes_by_flag(['data.answer', 'data.content']);
+
+  if (@$code_div && $code_div->[0]->first_child->inner_HTML =~ /movie/i) {
+    $code_div = $code_div->[0]->last_child;
+    $code_div->inner_HTML(sprintf '%s (embed code: <span class="code">[[movie=%1$s]]</span>)', $code_div->inner_HTML);
+  }
 
   if (@$youtube_div) {
     $youtube_div = $youtube_div->[0]->last_child;
