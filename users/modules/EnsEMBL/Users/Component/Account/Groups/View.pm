@@ -1,6 +1,7 @@
 package EnsEMBL::Users::Component::Account::Groups::View;
 
 ### Page for a logged in user to view details of one of his joined/owned groups
+### This page does not check whether the user has any group membership or not, so that check is applied in Configuration::Account
 ### @author hr5
 
 use strict;
@@ -80,12 +81,6 @@ sub content {
         'subheading_links'  => [ {'href' => {'action' => 'Share', 'function' => 'Bookmark', 'group' => $group_id}, 'title' => 'Share from my bookmarks', 'sprite' => 'bookmark_icon'} ],
         'subsections'       => [ @$bookmarks ? $self->bookmarks_table({'bookmarks' => $bookmarks, 'group' => $group}) : q(<p>There is no bookmark shared with the group.</p>) ]
       });
-
-      ## annotations
-      ## TODO
-
-      ## user data
-      ## TODO
 
       # members
       $group->load('with' => [ 'memberships', 'memberships.user' ]);
