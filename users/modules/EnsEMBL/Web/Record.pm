@@ -2,7 +2,7 @@ package EnsEMBL::Web::Record;
 
 ### For backward compatibility
 ### This packages replaces EnsEMBL::Web::Data::Record temporarily for object type UserData, untill UserData is properly re-written to make methods calls to actual Rose Record object instead of using hash keys
-### Objects belonging to this call is only returned by EnsEMBL::Web::User::get_record method
+### Objects belonging to this class is only returned by EnsEMBL::Web::User::get_record or get_user_record(s) methods
 
 use strict;
 use warnings;
@@ -21,10 +21,13 @@ sub new {
 
 sub from_rose_objects {
   my ($class, $rose_objects) = @_;
+
+  my @keys = @$rose_objects ? map { $_->alias || $_->name } $rose_objects->[0]->meta->virtual_columns : ();
+
   return map {
     my $record = $_->as_tree;
     $record->{'__rose_object'} = $_;
-    $record->{$_} = $record->{'data'}->{$_} for keys %{$record->{'data'}};
+    $record->{$_} = $record->{'data'}->{$_} for @keys;
     delete $record->{'data'};
     $class->new($record);
   } @$rose_objects;
@@ -56,6 +59,10 @@ sub owner {
 
 sub save {
   shift->{'__rose_object'}->save(@_);
+}
+
+sub delete {
+  shift->{'__rose_object'}->delete(@_);
 }
 
 sub cloned_from {
