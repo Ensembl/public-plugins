@@ -2,10 +2,11 @@ package EnsEMBL::Web::Hub;
 
 use strict;
 
-use EnsEMBL::Web::Tools::MethodMaker (copy => {'new' => '__new', 'url' => '__url'});
+#use EnsEMBL::Web::Tools::MethodMaker (copy => {'new' => '__new', 'url' => '__url'}); ## TODO swap these two when 'new1' is renamed to 'new'
+use EnsEMBL::Web::Tools::MethodMaker (copy => {'url' => '__url'});
 use EnsEMBL::Web::User;
 
-sub new {
+sub new1 { # TODO - change this to 'new' once user plugin is stable
   ## @overrides
   ## Overrides the constructor to initiate user object by reading the user cookie
   my ($class, $args) = @_;
@@ -38,6 +39,11 @@ sub get_favourite_species {
      @favourites   = @{$species_defs->DEFAULT_FAVOURITES || []} unless scalar @favourites;
      @favourites   = ($species_defs->ENSEMBL_PRIMARY_SPECIES, $species_defs->ENSEMBL_SECONDARY_SPECIES) unless scalar @favourites;
   return \@favourites;
+}
+
+sub initialize_user { # TODO removed this once user plugin is stable
+  my ($self, $cookie) = @_;
+  $self->user = EnsEMBL::Web::User->new($self, $cookie);
 }
 
 1;
