@@ -209,7 +209,9 @@ sub show_columns {
   elsif ($type eq 'movie') {
     @datamap = (
       'title'               => {'title' => 'Title'},
+      'help_record_id'      => {'title' => 'Movie ID', 'width' => '100px'},
       'youtube_id'          => {'title' => 'Youtube ID'},
+      'youku_id'            => {'title' => 'Youku ID'},
     );
   }
   elsif ($type eq 'faq') {
