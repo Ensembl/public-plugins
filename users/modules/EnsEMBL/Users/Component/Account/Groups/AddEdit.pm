@@ -1,6 +1,7 @@
 package EnsEMBL::Users::Component::Account::Groups::AddEdit;
 
 ### Component to edit group name/details etc
+### This page does not check whether the user has any group membership or not, so that check is applied in Configuration::Account
 ### @author hr5
 
 use strict;
