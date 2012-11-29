@@ -165,6 +165,12 @@ sub get_group_records {
   return EnsEMBL::Web::Record->from_rose_objects($group->$record_type || []);
 }
 
+sub get_group_record {
+  my ($self, $group, $record_id) = @_;
+  my ($record) = EnsEMBL::Web::Record->from_rose_objects($group->find_records('query' => ['record_id' => $record_id], 'limit' => 1) || []);
+  return $record;
+}
+
 sub find_admin_groups {
   return map $_->group, @{shift->rose_object->admin_memberships};
 }
@@ -211,7 +217,7 @@ sub add_das {
     $das->category('user');
     $das->mark_altered();
 
-    $das_record = $self->{'_user'}->create_record('das');
+    $das_record = $self->create_record('das');
     $das_record->data($das);
     $das_record->save('user' => $self);
   }
@@ -231,23 +237,21 @@ sub favourite_species {
 
 sub get_favourite_tracks {
   my $self   = shift;
-  return {};
   my ($data) = map $_->{'tracks'}, $self->get_records('favourite_tracks');
-     $data   = eval($data) if $data;
-  
+
   return $data || {};
 }
 
 sub set_favourite_tracks {
   my ($self, $data) = @_;
   my ($favourites)  = @{$self->favourite_tracks};
-      $favourites ||= $self->create_record('favourite_track');
+      $favourites ||= $self->create_record('favourite_tracks');
 
   if ($data) {
     $favourites->tracks($data);
     $favourites->save('user' => $self);
   } else {
-    $favourites->delete;
+    $favourites->delete if $favourites->get_primary_key_value;
   }
 }
 
