@@ -78,6 +78,8 @@ sub content {
         'inner_HTML'  => _get_link_caption($file, $_)
       }} @{$file->{'action'}} ];
 
+      my $embed_code = $file->{'dim'} ? qq([[image=$file->{'name'} height="$file->{'dim'}{'y'}" width="$file->{'dim'}{'x'}"]]) : '';
+
       return $self->dom->create_element('div', {
         'children' => [
           {'node_name' => 'h3', 'inner_HTML' => "View $file->{'name'}"},
@@ -86,7 +88,8 @@ sub content {
               {'node_name' => 'img', 'src' => sprintf('%4$s%s?cache=%s', $file->{'name'}, $file->{'md5'}, split('/htdocs', $object->get_help_images_dir)), 'alt' => $file->{'name'}}
             ]}
           ]},
-          @$buttons ? {'node_name' => 'p', 'class' => 'button', 'children' => $buttons} : ()
+          $embed_code ? {'node_name' => 'p', 'inner_HTML' => qq(Embed code: <span class="code">$embed_code</span>)} : (),
+          @$buttons   ? {'node_name' => 'p', 'class' => 'button', 'children' => $buttons} : ()
         ]
       })->render;
     }
