@@ -1,8 +1,7 @@
 <html>
 <head>
-<meta name="order" content="1" />
-<title>Data Description</title>
-
+  <meta name="order" content="1" />
+  <title>Data Description</title>
 </head>
 
 <body>
@@ -29,6 +28,7 @@ Data Description |
       <li><a href="#indel">Insertion & Deletion coordinates</a></li>
       <li><a href="#populations">Populations</a></li>
       <li><a href="#variation_sets">Variation sets</a></li>
+			<li><a href="#clin_significance">Clinical significance</a></li>
 			<li><a href="#validation_status">Validation status</a></li>
       <li><a href="#quality_control">Quality control</a></li>
 	  </ul>
@@ -73,7 +73,9 @@ Data Description |
 </div>
 <div style="clear:both" />
 
+
 <h2 id="sources"> Variation species and data sources </h2>
+
 <p>
 Ensembl stores variation data for the following species, but note that users can still use the 
 <a href="vep/index.html">Variant Effect Predictor</a> on species for which we do not currently have 
@@ -189,6 +191,7 @@ all sources of variation data for that species.
 
 <br />
 <h2 id="displays">Variation displays</h2>
+
 <p>
 Variation data can be viewed in the browser through pages such as:
 </p>
@@ -230,7 +233,7 @@ the <a href="/info/docs/api/index.html" class="cp-external">Perl
 API</a> (<a href="/info/docs/api/variation/index.html"
 class="cp-external">variation API</a>).
 </p>
-
+</div>
 
 <br />
 <h2 id="datatypes">Data types</h2>
@@ -271,7 +274,6 @@ somatic mutations from germline variations in the display term, prefixing the te
 </p>
 
 <br />
-
 
 	<table id="variation_classes" class="ss">
 		<tr>
@@ -527,7 +529,7 @@ example: <a href="/Homo_sapiens/Variation/Population?v=rs1333049">rs1333049</a>.
 Below we list the population names associated with the 1000 Genomes Project and the HapMap Project:
 </p>
 
-<h3>Populations from the 1000 Genomes Project (Human)</h3>
+<h4>Populations from the 1000 Genomes Project (Human)</h4>
 <table id="1000_genomes" class="ss">
 
 	<tr>
@@ -535,7 +537,7 @@ Below we list the population names associated with the 1000 Genomes Project and 
 		<th>Size</th>
 		<th>Description</th>
 	</tr>
-	
+
 	<tr>
 		<td>1000GENOMES:phase_1_ALL</td>
 		<td>1092</td>
@@ -633,7 +635,7 @@ Below we list the population names associated with the 1000 Genomes Project and 
 	</tr>
 </table>
 
-<h3>Populations from the HapMap Project (Human)</h3>
+<h4>Populations from the HapMap Project (Human)</h4>
 <table id="hapmap" class="ss">
 
 	<tr>
@@ -644,74 +646,72 @@ Below we list the population names associated with the 1000 Genomes Project and 
 
 	<tr>
 		<td>CSHL-HAPMAP:HAPMAP-ASW</td>
-		<td>-</td>
+		<td>90</td>
 		<td>African ancestry in Southwest USA. ASW is one of the 11 populations in HapMap phase 3.</td>
 	</tr>
 	<tr class="bg2">
 		<td>CSHL-HAPMAP:HapMap-CEU</td>
-		<td>-</td>
+		<td>180</td>
 		<td>Utah residents with Northern and Western European ancestry from the CEPH collection. CEU is one of the 11 populations in HapMap phase 3.</td>
 	</tr>
 	<tr>
 		<td>CSHL-HAPMAP:HAPMAP-CHB</td>
-		<td>-</td>
+		<td>90</td>
 		<td>Han Chinese in Beijing, China. CHB is one of the 11 populations in HapMap phase 3.</td>
 	</tr>
 	<tr class="bg2">
 		<td>CSHL-HAPMAP:HAPMAP-CHD</td>
-		<td>-</td>
+		<td>100</td>
 		<td>Chinese in Metropolitan Denver, Colorado. CHD is one of the 11 populations in HapMap phase 3.</td>
 	</tr>
 	<tr>
 		<td>CSHL-HAPMAP:HAPMAP-GIH</td>
-		<td>-</td>
+		<td>100</td>
 		<td>Gujarati Indians in Houston, Texas. GIH is one of the 11 populations in HapMap phase 3.</td>
 	</tr>
 	<tr class="bg2">
 		<td>CSHL-HAPMAP:HapMap-HCB</td>
-		<td>-</td>
+		<td>45</td>
 		<td>45 unrelated Han Chinese in Beijing, China, representing one of the populations studied in the International HapMap project (<a href="http://www.hapmap.org"> http://www.hapmap.org</a>). See <a href="http://www.hapmap.org/citinghapmap.html.en">http://www.hapmap.org/citinghapmap.html.en</a> for further information about,this population and others studied in the project. <a href="http://www.hapmap.org/hapmappopulations.html.en">http://www.hapmap.org/hapmappopulations.html.en</a>,also has relevant information.</td>
 	</tr>
 	<tr>
 		<td>CSHL-HAPMAP:HapMap-JPT</td>
-		<td>-</td>
+		<td>91</td>
 		<td>Japanese in Tokyo, Japan. JPT is one of the 11 populations in HapMap phase 3.</td>
 	</tr>
 	<tr class="bg2">
 		<td>CSHL-HAPMAP:HAPMAP-LWK</td>
-		<td>-</td>
+		<td>100</td>
 		<td>Luhya in Webuye, Kenya. LWK is one of the 11 populations in HapMap phase 3.</td>
 	</tr>
 	<tr>
 		<td>CSHL-HAPMAP:HAPMAP-MEX</td>
-		<td>-</td>
+		<td>90</td>
 		<td>Mexican ancestry in Los Angeles, California. MEX is one of the 11 populations in HapMap phase 3.</td>
 	</tr>
 	<tr class="bg2">
 		<td>CSHL-HAPMAP:HAPMAP-MKK</td>
-		<td>-</td>
+		<td>180</td>
 		<td>Maasai in Kinyawa, Kenya. MKK is one of the 11 populations in HapMap phase 3.</td>
 	</tr>
 	<tr>
 		<td>CSHL-HAPMAP:HAPMAP-TSI</td>
-		<td>-</td>
+		<td>100</td>
 		<td>Toscans in Italy. TSI is one of the 11 populations in HapMap phase 3.</td>
 	</tr>
 	<tr class="bg2">
 		<td>CSHL-HAPMAP:HapMap-YRI</td>
-		<td>-</td>
+		<td>180</td>
 		<td>Yoruba in Ibadan, Nigeria. YRI is one of the 11 populations in HapMap phase 3.</td>
 	</tr>
 </table>
-
-
 
 <p>This population data is stored in the sample table of the Variation database. You can see a description of the sample
 table <a href="variation_schema.html#sample">here</a>.
 </p>
 
-<br />
 
+<br />
 <h2 id="variation_sets">Variation sets</h2>
     
 <p>
@@ -728,7 +728,7 @@ The sets are constructed during production and are stored in the database. The t
 variation sets in the Ensembl variation database (subsets are indicated by bullet points).
 </p>
 
-<h3>Variation sets common to all species</h3>
+<h4>Variation sets common to all species</h4>
 <table id="variation_set_table" class="ss">
 
 	<tr>
@@ -744,7 +744,7 @@ variation sets in the Ensembl variation database (subsets are indicated by bulle
 	</tr>
 </table>
 <br />
-<h3>Variation sets specific to Human</h3>
+<h4>Variation sets specific to Human</h4>
 <table id="human_variation_set_table" class="ss">
 
 	<tr>
@@ -1010,6 +1010,46 @@ variation sets in the Ensembl variation database (subsets are indicated by bulle
 </table>
 
 
+
+<br />
+<h2 id="clin_significance">Clinical significance</h2>
+
+<div id="dbsnp_clin_sig" style="float:left;margin-right:100px;">
+  <b><span style="color:#333">dbSNP</span> clinical significance</b><br />
+    <p>The clinical significance of a variant as reported by dbSNP.</p>
+
+	<table class="ss" style="width:auto">
+       <tr><th>Value</th><th>Example</th></tr>
+    <tr><td>drug-response</td><td><a href="/Homo_sapiens/Variation/Explore?v=rs1799853">rs1799853</a></td></tr>
+    <tr class="bg2"><td>histocompatibility</td><td></td></tr>
+    <tr><td>non-pathogenic</td><td><a href="/Homo_sapiens/Variation/Explore?v=rs5064">rs5064</a></td></tr>
+    <tr class="bg2"><td>other</td><td><a href="/Homo_sapiens/Variation/Explore?v=rs671">rs671</a></td></tr>
+    <tr><td>pathogenic</td><td><a href="/Homo_sapiens/Variation/Explore?v=rs268">rs268</a></td></tr>
+    <tr class="bg2"><td>probable-non-pathogenic</td><td><a href="/Homo_sapiens/Variation/Explore?v=rs140598">rs140598</a></td></tr>
+    <tr><td>probable-pathogenic</td><td><a href="/Homo_sapiens/Variation/Explore?v=rs2230234">rs2230234</a></td></tr>
+    <tr class="bg2"><td>unknown</td><td><a href="/Homo_sapiens/Variation/Explore?v=rs790897">rs790897</a></td></tr>
+    <tr><td>untested</td><td><a href="/Homo_sapiens/Variation/Explore?v=rs328">rs328</a></td></tr>
+
+  </table>
+</div>
+<div id="dgva_clin_sig" style="float:left;margin-right:100px;">
+  <b><span style="color:#333">DGVa</span> clinical significance</b><br />
+    <p>The clinical significance of a structural variant as reported by DGVa.</p>
+
+	<table class="ss" style="width:auto">
+       <tr><th>Value</th><th>Example</th></tr>
+    <tr class="bg2"><td>Benign</td><td><a href="/Homo_sapiens/StructuralVariation/Evidence?sv=nsv533192">nsv533192</a></td></tr>
+    <tr><td>Not tested</td><td></td></tr>
+    <tr class="bg2"><td>Pathogenic</td><td><a href="/Homo_sapiens/StructuralVariation/Evidence?sv=nsv531416">nsv531416</a></td></tr>
+    <tr><td>Uncertain Significance</td><td><a href="/Homo_sapiens/StructuralVariation/Evidence?sv=nsv529674">nsv529674</a></td></tr>
+    <tr class="bg2"><td>Uncertain Significance: likely benign</td><td><a href="/Homo_sapiens/StructuralVariation/Evidence?sv=nsv533380">nsv533380</a></td></tr>
+    <tr><td>Uncertain Significance: likely pathogenic</td><td><a href="/Homo_sapiens/StructuralVariation/Evidence?sv=nsv916597">nsv916597</a></td></tr>
+
+  </table>
+</div>
+<div style="clear:both" />
+
+
 <br />
 <h2 id="validation_status">Validation status </h2>
 <p>
@@ -1048,8 +1088,8 @@ Where possible dbSNP provides the types of evidence which were used to confirm a
     </tr>
     <tr class="bg2">
         <td><img src="/img/validation_status/val_1000G.gif" alt="1000Genomes" class="sp-thumb" style="height:26px;width;26px;float:none;margin-right:4px;vertical-align:middle" /></td>
-        <td >1000Genome</td>
-        <td >SNP has been sequenced in 1000Genome project.</td>
+        <td >1000 Genomes</td>
+        <td >SNP has been sequenced in 1000 Genomes project.</td>
     </tr>
 </table>
 
@@ -1064,7 +1104,7 @@ A quality control process is employed to check imported variation data. Suspect 
 
 </p>
 
-<h3>Failure reasons</h3>
+<h4>Failure reasons</h4>
 <table id="quality_control_table" class="ss">
 
 <tr class="bg2">
