@@ -23,7 +23,13 @@ Predicted Data |
 		</div>
     <ul style="padding-left:25px;padding-right:5px">
       <li><a href="#consequences">Variation Consequences</a></li>
-      <li><a href="#nsSNP">Protein function predictions<br />(SIFT, PolyPhen, Condel)</a></li>
+      <li><a href="#nsSNP">Protein function predictions</a>
+			  <ul style="padding-left:25px">
+				  <li><a href="#sift">SIFT</a></li>
+					<li><a href="#polyphen">PolyPhen</a></li>
+					<li><a href="#condel">Condel</a></li>
+			  </ul>
+			</li>
       <li><a href="#references">References</a></li>
 	  </ul>
   </div>
@@ -193,7 +199,7 @@ term relative to the transcript structure:
 </tr>
 <tr class="bg2">
 	<td style="padding:0px;margin:0px;background-color:#ffd700"></td>	<td>missense_variant</td>
-	<td>A sequence variant, where the change may be longer than 3 bases, and at least one base of a codon is changed resulting in a codon that encodes for a different amino acid</td>
+	<td>A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved</td>
 	<td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001583">SO:0001583</a></td>
 </tr>
 <tr>
@@ -298,7 +304,7 @@ term relative to the transcript structure:
 </tr>
 <tr class="bg2">
 <td></td>	<td>TF_binding_site_variant</td>
-	<td>In regulatory region annotated by Ensembl</td>
+	<td>A sequence variant located within a transcription factor binding site</td>
 	<td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001782">SO:0001782</a></td>
 	<td rowspan="2">Regulatory region</td>
 </tr>
@@ -363,6 +369,7 @@ relevant publications available on each tool's website. We hope to be able to pr
 protein function predictions for species other than human in future releases.
 </p>
 
+<div style="border:1px solid #CCC;padding:4px">
 <h3 id="sift">SIFT</h3>
 
 <p>
@@ -377,12 +384,15 @@ a score &lt; 0.05 are called 'deleterious' and all others are called 'tolerated'
 </p>
 
 <p>
-We ran SIFT version 4.0.5 following the instructions from the authors and used SIFT
+We ran <b>SIFT version 4.0.5</b> following the instructions from the authors and used SIFT
 to choose homologous proteins rather than supplying them ourselves. We used all 
 protein sequences available from UniProtKB (release 2012_01, both the SwissProt and TrEMBL sets) as 
 the protein database. 
 </p>
+</div>
+<br />
 
+<div style="border:1px solid #CCC;padding:4px">
 <h3 id="polyphen">PolyPhen</h3>
 
 <p>
@@ -399,7 +409,7 @@ Positive Rate of the classifier model used to make the predictions.
 </p>
 
 <p>
-We ran PolyPhen-2 version 2.2.2 (available 
+We ran <b>PolyPhen-2 version 2.2.2</b> (available 
 <a rel="external" href="http://genetics.bwh.harvard.edu/pph2/dokuwiki/downloads">here</a>)
 and again we followed all instructions from the authors, and used the UniProtKB
 UniRef100 (release 2011_12) non-redundant protein set as the protein database, which was downloaded,
@@ -409,7 +419,10 @@ and HumVar datasets. Both result sets are available through the variation API wh
  (Please refer to the PolyPhen  <a rel="external" href="http://genetics.bwh.harvard.edu/pph2/dokuwiki/overview">website</a> or publications for more details of the classification system).
 <!-- HumDiv aims to discriminate variants that alter protein function, whereas HumVar aims to discriminate functions that cause human disease.-->
 </p>
+</div>
+<br />
 
+<div style="border:1px solid #CCC;padding:4px">
 <h3 id="condel">Condel</h3>
 
 <p>
@@ -429,8 +442,10 @@ are available in the VEP plugin. The Condel score is the consensus probability
 that a substitution is deleterious, so values nearer 1 are predicted with greater 
 confidence to affect protein function.
 </p>
+</div>
+<br />
 
-<h3 id="nsSNP_data_format">Prediction data format</h3>
+<h4 id="nsSNP_data_format">Prediction data format</h4>
 
 <p>
 The SIFT and PolyPhen predictions are precomputed and stored in the variation
@@ -441,6 +456,7 @@ to access the complete set of predictions from the MySQL database or API, an exp
 the format used is provided here.
 </p>
 
+
 <p>
 The predictions and associated scores are stored as a matrix, with a column for 
 each possible alternate amino acid and a row for each position in the translation. Each prediction
@@ -450,9 +466,11 @@ below, though note we only show the decoded score rather than the actual binary 
 in the database.
 </p>
 
+<p>
 <a rel="external" href="/img/protein_function_prediction_matrix.png">
 <img src="/img/protein_function_prediction_matrix.png" style="width:500px;heigth:143px" alt="protein function encoding"/>
 </a>
+</p>
 
 <p>
 Prediction matrices can be fetched and manipulated in a user-friendly manner using the variation API, specifically
