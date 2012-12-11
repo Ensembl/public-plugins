@@ -24,12 +24,8 @@
 -->
 <!-- <H2 id="introduction">Introduction</H2> -->
 
-<P>The regulatory build provides a single 'best guess' set
-of regulatory features. These features are based on the information
-contained within the Ensembl <A HREF="/info/docs/api/funcgen/index.html">regulation</A> 
-database. This document details the methodology used in this process.
-The complete list of sources of data for the current release is described
-<a href="/info/docs/funcgen/regulation_sources.html">here</a>.
+<P>
+The Ensembl 'Regulatory Build' provides a genome wide set of regions and classifications, likely to be involved in gene regulation. Experimental data describing various aspects of chromatin state (DNase1, Histone modifications, Polymerase) and transcription factor binding sites (TFBS) are integrated in a two step analysis:  punctate genomic regions are identified (i.e. DNA protein binding or open chromatin) and annotated with relevant TF position weight matrix alignments;  combinations of epigenetic marks and TFBS are identified as 'Promoter associated', 'Gene associated', 'PolIII Associated' etc.  These classifications are then applied to provide a high level summary set of regulatory regions for each supported cell type.
 </P>
 <br>
 
