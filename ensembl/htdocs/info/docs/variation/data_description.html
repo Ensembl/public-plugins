@@ -1092,8 +1092,10 @@ Where possible dbSNP provides the types of evidence which were used to confirm a
         <td >SNP has been sequenced in 1000 Genomes project.</td>
     </tr>
 </table>
-Variants for which dbSNP  holds citations from PubMed are given an additional validation status of 'precious'.
 <p>
+Variants for which dbSNP holds citations from PubMed are given an additional validation status of 'precious'.
+</p>
+
 <br />
 <h2 id="quality_control">Quality control </h2>
 
@@ -1101,8 +1103,7 @@ Variants for which dbSNP  holds citations from PubMed are given an additional va
 A quality control process is employed to check imported variation data. Suspect variations and alleles are flagged, but are not withheld from downstream annotation. Data failing the checks is available through the browser where failure reasons are prominently listed. The API does not extract failed data by default, unless the database adaptor is specifically configured to do so using 
 <a href ="http://www.ensembl.org/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1DBAdaptor.html#add8230ebca14116047cf7d17499f9e3b">Bio::EnsEMBL::Variation::DBSQL::DBAdaptor::include_failed_variations()</a>;
 <p>
- Variations for which dbSNP holds citations from PubMed are not submitted to the QC process so are not flagged as failed. 
-
+ Variations for which dbSNP holds citations from PubMed are not submitted to the QC process so are not flagged as failed.
 </p>
 
 <h4>Failure reasons</h4>
