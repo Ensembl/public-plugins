@@ -103,6 +103,14 @@
 	
 	<h2 id="new"> What's new </h2>
 	
+	<h3> New in version 2.8 <i>(December 2012)</i> </h3>
+	
+	<ul>
+		<li>Easily filter out common human variants with --filter_common</li>
+		<li>1000 Genomes continental population frequencies now stored in cache
+		files</li>
+	</ul>
+	
 	<h3> New in version 2.7 <i>(October 2012)</i> </h3>
 	
 	<ul>
@@ -221,7 +229,7 @@
 	<h2 id="requirements"> Requirements </h2>
 	
 	<p>
-	Version 2.7 of the script requires at least version 69 of the Ensembl Core
+	Version 2.8 of the script requires at least version 70 of the Ensembl Core
 	and Variation APIs and their relevant dependencies to be installed to use
 	the script. A minimal subset of these can be installed using the supplied <a
 	href="#installer">installer script</a>. </p>
@@ -242,7 +250,7 @@
 	<p> The Variant Effect Predictor script can be downloaded as a tarball from
 	the Ensembl CVS server: </p>
 	
-	<p> <a href="http://cvs.sanger.ac.uk/cgi-bin/viewvc.cgi/ensembl-tools/scripts/variant_effect_predictor.tar.gz?view=tar&root=ensembl&pathrev=branch-ensembl-69">Download version 2.7 (latest)</a> </p>
+	<p> <a href="http://cvs.sanger.ac.uk/cgi-bin/viewvc.cgi/ensembl-tools/scripts/variant_effect_predictor.tar.gz?view=tar&root=ensembl&pathrev=branch-ensembl-70">Download version 2.8 (latest)</a> </p>
 	
 	<p>It is also included as part of the ensembl-tools module of the Ensembl
 	API - you can find it in the ensembl-tools/scripts/variant_effect_predictor/
@@ -251,6 +259,7 @@
 	<h3> Previous versions </h3>
 	
 	<ul>
+		<li><a href="http://cvs.sanger.ac.uk/cgi-bin/viewvc.cgi/ensembl-tools/scripts/variant_effect_predictor.tar.gz?view=tar&root=ensembl&pathrev=branch-ensembl-69">Download version 2.7</a> (Ensembl 69) </li>
 		<li><a href="http://cvs.sanger.ac.uk/cgi-bin/viewvc.cgi/ensembl-tools/scripts/variant_effect_predictor.tar.gz?view=tar&root=ensembl&pathrev=branch-ensembl-68">Download version 2.6</a> (Ensembl 68) </li>
 		<li><a href="http://cvs.sanger.ac.uk/cgi-bin/viewvc.cgi/ensembl-tools/scripts/variant_effect_predictor.tar.gz?view=tar&root=ensembl&pathrev=branch-ensembl-67">Download version 2.5</a> (Ensembl 67) </li>
 		<li><a href="http://cvs.sanger.ac.uk/cgi-bin/viewvc.cgi/ensembl-tools/scripts/variant_effect_predictor.tar.gz?view=tar&root=ensembl&pathrev=branch-ensembl-66">Download version 2.4</a> (Ensembl 66) </li>
@@ -328,7 +337,7 @@
 			<td><pre>--API_VERSION [version]</pre></td>
 			<td><pre>-v</pre></td>
 			<td>By default the script will install the latest version of the
-			Ensembl API (currently 69). Users can force the script to install a
+			Ensembl API (currently 70). Users can force the script to install a
 			different version at their own risk</td>
 		</tr>
 		<tr>
@@ -1167,6 +1176,18 @@ host          useastdb.ensembl.org</pre>
 			</td>
 		</tr>
 		<tr>
+			<td><pre>--filter_common</pre></td>
+			<td>&nbsp;</td>
+			<td>
+				Shortcut flag for the filters below - this will exclude variants
+				that have a co-located existing variant with global MAF &gt;
+				0.01 (1%). May be modified using any of the following freq_*
+				filters. For human, this can be used in offline mode for the
+				following populations: 1KG_ALL, 1KG_AFR, 1KG_AMR, 1KG_ASN,
+				1KG_EUR. <i>Not used by default</i>
+			</td>
+		</tr>
+		<tr class="bg2">
 			<td><pre>--check_frequency</pre></td>
 			<td>&nbsp;</td>
 			<td>
@@ -1180,7 +1201,7 @@ host          useastdb.ensembl.org</pre>
 				the Extra field. <i>Not used by default</i>
 			</td>
 		</tr>
-		<tr class="bg2">
+		<tr>
 			<td><pre>--freq_pop [pop]</pre></td>
 			<td>&nbsp;</td>
 			<td>
@@ -1195,13 +1216,19 @@ host          useastdb.ensembl.org</pre>
 							<th>Example value for --freq_pop</th><th>Description</th>
 						</tr>
 						<tr>
+							<td>1kg_all</td><td>1000 genomes combined population (global)</td>
+						</tr>
+						<tr>
+							<td>1kg_afr</td><td>1000 genomes combined African populations (also amr, asn, eur)</td>
+						</tr>
+						<tr>
 							<td>1kg_chb</td><td>1000 genomes CHB population</td>
 						</tr>
 						<tr>
 							<td>hapmap_yri</td><td>HapMap YRI population</td>
 						</tr>
 						<tr>
-							<td>1kg</td><td>Any 1000 genomes pilot 1 population</td>
+							<td>1kg</td><td>Any 1000 genomes phase 1 population</td>
 						</tr>
 						<tr>
 							<td>ceu</td><td>Any of HapMap or 1000 genomes CEU populations</td>
@@ -1213,7 +1240,7 @@ host          useastdb.ensembl.org</pre>
 				</p>
 			</td>
 		</tr>
-		<tr>
+		<tr class="bg2">
 			<td><pre>--freq_freq [freq]</pre></td>
 			<td>&nbsp;</td>
 			<td>
@@ -1221,7 +1248,7 @@ host          useastdb.ensembl.org</pre>
 				value between 0 and 0.5
 			</td>
 		</tr>
-		<tr class="bg2">
+		<tr>
 			<td><pre>--freq_gt_lt [gt<b>|</b>lt]</pre></td>
 			<td>&nbsp;</td>
 			<td>
@@ -1230,7 +1257,7 @@ host          useastdb.ensembl.org</pre>
 				specified with --freq_freq
 			</td>
 		</tr>
-		<tr>
+		<tr class="bg2">
 			<td><pre>--freq_filter [exclude<b>|</b>include]</pre></td>
 			<td>&nbsp;</td>
 			<td>
@@ -1238,7 +1265,7 @@ host          useastdb.ensembl.org</pre>
 				variants that pass the frequency filter
 			</td>
 		</tr>    
-		<tr class="bg2">
+		<tr>
 			<td><pre>--filter [filters]</pre></td>
 			<td>&nbsp;</td>
 			<td>
@@ -1279,7 +1306,7 @@ host          useastdb.ensembl.org</pre>
 				<i>Not used by default</i>
 			</td>
 		</tr>
-		<tr>
+		<tr class="bg2">
 			<td><pre>--failed</pre></td>
 			<td>&nbsp;</td>
 			<td>
@@ -1288,7 +1315,7 @@ host          useastdb.ensembl.org</pre>
 				flag to include such variants. <i>Exclude by default</i>
 			</td>
 		</tr>
-		<tr class="bg2">
+		<tr>
 			<td><pre>--allow_non_variant</pre></td>
 			<td>&nbsp;</td>
 			<td>
@@ -1455,6 +1482,10 @@ host          useastdb.ensembl.org</pre>
 	<pre class="code">perl variant_effect_predictor.pl -i variants.vcf.txt -format vcf -hgnc -t so</pre>
 		</li>
 		<li>
+			Filter out common variants based on 1000 genomes data
+	<pre class="code">perl variant_effect_predictor.pl -i variants.txt -filter_common</pre>
+		</li>
+		<li>
 			Force overwrite of output file variants_output.txt, check for existing
 			co-located variants, output only coding sequence consequences, output
 			HGVS names
@@ -1570,16 +1601,16 @@ host          useastdb.ensembl.org</pre>
 	<ol>
 		<li>
 			Download the archive file for your species from our <a
-			href="ftp://ftp.ensembl.org/pub/release-69/variation/VEP/">FTP
+			href="ftp://ftp.ensembl.org/pub/release-70/variation/VEP/">FTP
 			site</a>
 		</li>
 		<li>
 			Extract the archive in your cache directory. By default the VEP uses
 			$HOME/.vep/ as the cache directory, where $HOME is your UNIX home
 			directory.
-			<pre class="code">mv homo_sapiens_vep_69.tar.gz ~/.vep/
+			<pre class="code">mv homo_sapiens_vep_70.tar.gz ~/.vep/
 cd ~/.vep/
-tar xfz homo_sapiens_vep_69.tar.gz</pre>
+tar xfz homo_sapiens_vep_70.tar.gz</pre>
 		</li>
 		<li>
 			Run the VEP with the --cache option
@@ -1667,7 +1698,7 @@ tar xfz homo_sapiens_vep_69.tar.gz</pre>
 	
 	<p> The script is run as follows: </p>
 	
-	<pre class="code">perl gtf2vep.pl -i my_species_genes.gtf -f my_species_seq.fa -d 69 -s my_species
+	<pre class="code">perl gtf2vep.pl -i my_species_genes.gtf -f my_species_seq.fa -d 70 -s my_species
 perl variant_effect_predictor.pl -offline -i my_species_variants.vcf -s my_species</pre>
 	
 	<p> By default the cache is created in $HOME/.vep/[species]/[version]/ - to
@@ -1704,9 +1735,9 @@ perl variant_effect_predictor.pl -offline -i my_species_variants.vcf -s my_speci
 	large (25GB for human). An example set of commands for setting up the data
 	for human follows: </p>
 	
-	<pre class="code">wget ftp://ftp.ensembl.org/pub/release-69/fasta/homo_sapiens/dna/Homo_sapiens.GRCh37.69.dna.primary_assembly.fa.gz
-gzip -d Homo_sapiens.GRCh37.69.dna.primary_assembly.fa.gz
-perl variant_effect_predictor.pl -i input.vcf --offline --hgvs --fasta Homo_sapiens.GRCh37.69.dna.primary_assembly.fa</pre>
+	<pre class="code">wget ftp://ftp.ensembl.org/pub/release-70/fasta/homo_sapiens/dna/Homo_sapiens.GRCh37.70.dna.primary_assembly.fa.gz
+gzip -d Homo_sapiens.GRCh37.70.dna.primary_assembly.fa.gz
+perl variant_effect_predictor.pl -i input.vcf --offline --hgvs --fasta Homo_sapiens.GRCh37.70.dna.primary_assembly.fa</pre>
 	
 	<h3 id="limitations">Limitations of the cache</h3>
 	
@@ -1784,10 +1815,10 @@ perl variant_effect_predictor.pl -i input.vcf --offline --hgvs --fasta Homo_sapi
 	target="_blank">here</a>. You will need a MySQL server that you can connect
 	to from the machine where you will run the script (this can be the same
 	machine). For most of the functionality of the VEP, you will only need the
-	Core database (e.g. homo_sapiens_core_69_37) installed. In order to find
+	Core database (e.g. homo_sapiens_core_70_37) installed. In order to find
 	co-located variations or to use SIFT or PolyPhen, it is also necessary to
 	install the relevant
-	variation database (e.g. homo_sapiens_variation_69_37). </p>
+	variation database (e.g. homo_sapiens_variation_70_37). </p>
 	
 	<p> Note that unless you have custom data to insert in the database, in most
 	cases it will be much more efficient to use a <a href="#pre">pre-built
@@ -1810,7 +1841,7 @@ Bio::EnsEMBL::DBSQL::DBAdaptor->new(
   '-host'    => 'ensembldb.ensembl.org',
   '-user'    => 'anonymous',
   '-pass'    => '',
-  '-dbname'  => 'homo_sapiens_core_69_37'
+  '-dbname'  => 'homo_sapiens_core_70_37'
 );
 
 Bio::EnsEMBL::Variation::DBSQL::DBAdaptor->new(
@@ -1820,7 +1851,7 @@ Bio::EnsEMBL::Variation::DBSQL::DBAdaptor->new(
   '-host'    => 'ensembldb.ensembl.org',
   '-user'    => 'anonymous',
   '-pass'    => '',
-  '-dbname'  => 'homo_sapiens_variation_69_37'
+  '-dbname'  => 'homo_sapiens_variation_70_37'
 );
 
 Bio::EnsEMBL::Registry->add_alias("Homo_sapiens","human");
