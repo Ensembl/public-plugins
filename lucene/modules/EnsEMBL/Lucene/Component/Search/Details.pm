@@ -133,7 +133,6 @@ sub render_pagination {
 
 sub render_hits {
   my $self = shift;
-
   my $hits = $self->object->hits;
   my %hit_tagline_lookup = (
     'GENE' => sub {
@@ -245,13 +244,19 @@ sub _render_help_results {
 sub _render_genome_hits {
   my ( $self, $hits, $hit_tagline_lookup ) = @_;
   my $hub             = $self->hub;
+  my $search_term     = $hub->param('q');
   my $species_defs    = $hub->species_defs;
   my $sitetype        = $species_defs->ENSEMBL_SEARCHTYPE ? lc $species_defs->ENSEMBL_SEARCHTYPE : lc($species_defs->ENSEMBL_SITETYPE);
   my $prefix          = $sitetype eq 'vega' ? 'v' :  $sitetype eq 'pre' ? 'pre' : 'e';
   my $ensembl_version = $prefix . $species_defs->ENSEMBL_VERSION;
-
   my $html;
+
   foreach my $hit (@$hits) {
+    my $sv_evidence; #if the hit contains an evidence term then use it to add a link
+    if ($hit->{'featuretype'} eq 'StructuralVariation') {
+      ($sv_evidence) = grep {$_ eq $search_term } split '\n', $hit->{'evidence'};
+    }
+
     $html .= qq{<div class="hit">};
     my $table = $self->new_twocol;
 
@@ -313,6 +318,10 @@ sub _render_genome_hits {
           }));
         }
         $table->add_row($self->append_s_to_plural('Location', @location_links > 1), sprintf('<p>%s</p>', join(', ', @location_links)));
+      }
+
+      if ($sv_evidence) {
+        $table->add_row('Supporting Evidence', qq(<p><a href="/$hit->{species}/Location/View?r=$hit->{location};sv=$hit->{id}">$sv_evidence</a> is a supporting evidence for $hit->{id}</p>));
       }
     }
     elsif ($hit->{location}) {
