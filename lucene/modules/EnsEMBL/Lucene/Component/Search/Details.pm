@@ -321,7 +321,7 @@ sub _render_genome_hits {
       }
 
       if ($sv_evidence) {
-        $table->add_row('Supporting Evidence', qq(<p><a href="/$hit->{species}/Location/View?r=$hit->{location};sv=$hit->{id}">$sv_evidence</a> is a supporting evidence for $hit->{id}</p>));
+        $table->add_row('Supporting Evidence', qq(<p><a href="/$hit->{species}/StructuralVariation/Evidence?sv=$hit->{id}">$sv_evidence</a> is a supporting evidence for $hit->{id}</p>));
       }
     }
     elsif ($hit->{location}) {
