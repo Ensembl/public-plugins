@@ -323,10 +323,10 @@ sub get_hits_details {
   }
 
   my $start_hit = $pager ? $pager->first - 1 : 0;
-    my $fields = [
+  my $fields = [
       'id',          'name', 'description',      'species', 'featuretype', 'source',
       'location',    'db',   'contigviewbottom', 'content', 'title',       'url',
-      'displayname', 'keyword', 'subtype'
+      'displayname', 'keyword', 'subtype', 'evidence'
     ];
   my $domain_hits = $wrapper->getResultsAsHashArray( $domain, $self->query_string, $fields, $start_hit, 10 );
 
