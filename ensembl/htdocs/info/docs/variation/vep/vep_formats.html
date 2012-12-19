@@ -195,6 +195,14 @@ href="http://www.1000genomes.org/wiki/Analysis/Variant%20Call%20Format/VCF%20%28
 definition document</a> for more detail on how to describe
 structural variants in VCF format. </p>
 
+<p> Examples of structural variants encoded in VCF format: </p>
+
+<pre class="code">
+#CHROM  POS     ID   REF  ALT    QUAL  FILTER  INFO                    FORMAT
+1       160283  sv1  .    &lt;DUP&gt;  .     .       SVTYPE=DUP;END=471362   .
+1       1385015 sv2  .    &lt;DEL&gt;  .     .       SVTYPE=DEL;END=1387562  .
+</pre>
+
 <h3 id="pileup"> Pileup </h2>
 
 <p> The pileup format can also be used as input for the VEP. This is the output
