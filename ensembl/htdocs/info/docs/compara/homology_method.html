@@ -52,8 +52,8 @@ internal node of the tree.
 
 
 <ol>
-<li>Load the longest translation of each gene from all species used in
-Ensembl</li>
+<li>Load a representative translation of each gene from all species used in
+Ensembl. We currently choose the longest translation annotated by the <a href="/info/docs/genebuild/ccds.html">CCDS</a> project, if any, or the longest protein-coding translation otherwise.</li>
 
 
 <li>run WUBlastp+SmithWaterman of every gene against every other (both
