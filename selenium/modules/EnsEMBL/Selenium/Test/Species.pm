@@ -58,17 +58,17 @@ sub attach_remote_file {
   $sel->ensembl_click("link=Configure this page")
   and $sel->ensembl_wait_for_ajax_ok(undef,10000)
   and $sel->ensembl_click("link=Custom Data")
-  and $sel->ensembl_wait_for_ajax_ok(undef,5000)
+  and $sel->ensembl_wait_for_ajax_ok(undef,10000)
   and $sel->ensembl_is_text_present("Your data");
  
   $sel->ensembl_click("link=Attach Remote File")
-  and $sel->ensembl_wait_for_ajax_ok(undef,5000);
+  and $sel->ensembl_wait_for_ajax_ok(undef,10000);
   
   $sel->type_ok("name=url","$file_url")
   and $sel->select_ok("format", "$format")
   and $sel->type_ok("name", "$name")
   and $sel->ensembl_click("name=wizard_submit")
-  and $sel->ensembl_wait_for_ajax(5000,5000); #timeout=5s and pause=5s
+  and $sel->ensembl_wait_for_ajax(5000,10000); #timeout=5s and pause=5s
   
   $sel->ensembl_is_text_present("Go to first region with data");
   $sel->ensembl_click("css=div.modal_close");
