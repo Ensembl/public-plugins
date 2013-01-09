@@ -90,7 +90,7 @@ sub add_track {
 
   print "  Test selecting track(uploaded data)\n";
   $sel->ensembl_click("link=Configure Page")
-  and $sel->ensembl_wait_for_ajax_ok(undef,5000);
+  and $sel->ensembl_wait_for_ajax_ok(undef,10000);
  
   $sel->ensembl_is_text_present("BED")
   and $sel->ensembl_click("//form[\@id='location_genome_configuration']/div[1]/div/ul/li[1]/img")
@@ -117,7 +117,7 @@ sub add_track {
   and $sel->ensembl_click("//img[\@alt='Arrows on both sides']"); 
     
   $sel->ensembl_click("css=div.modal_close")
-  and $sel->ensembl_wait_for_ajax_ok(undef,5000)   
+  and $sel->ensembl_wait_for_ajax_ok(undef,10000)   
   #and $sel->ensembl_is_text_present("Click on the image above to jump to a chromosome, or click and drag to select a region")
   and $sel->ensembl_is_text_present("BED")            #making sure karyotype displayed the track for the uploaded data(track name in the uploaded file)
   and $sel->ensembl_is_text_present("BEDGRAPH")
