@@ -89,7 +89,7 @@ sub add_track {
   $self->upload_data('WIG', 'WIG', undef, 'http://www.ensembl.org/info/website/upload/sample_files/example.wig' ); #WIG format
 
   print "  Test selecting track(uploaded data)\n";
-  $sel->ensembl_click("link=Configure Page")
+  $sel->ensembl_click("link=Configure this page")
   and $sel->ensembl_wait_for_ajax_ok(undef,10000);
  
   $sel->ensembl_is_text_present("BED")
