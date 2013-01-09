@@ -141,7 +141,7 @@ sub configure_page {
   $sel->select_ok("rows","2");
   $sel->type_ok("name=chr_length","400");
   $sel->ensembl_click("modal_bg")
-  and $sel->ensembl_wait_for_ajax_ok(undef,'1200')
+  and $sel->ensembl_wait_for_ajax_ok(undef,'5000')
   and $sel->ensembl_is_text_present("Click on the image above to jump to a chromosome");
 }
 
