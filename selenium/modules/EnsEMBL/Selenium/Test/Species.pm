@@ -429,8 +429,8 @@ sub upload_data {
   and $sel->ensembl_is_text_present("Your data");
 
   $sel->ensembl_click("link=Add your data")
-  and $sel->ensembl_wait_for_ajax_ok(undef,7000)  
-  and $sel->type_ok("name=name","$name")
+  and $sel->ensembl_wait_for_ajax_ok(undef,10000)  
+  and $sel->type_ok("//div[\@id='SelectFile']/form/fieldset/div/div/input","$name")
   and $sel->select_ok("format", "$format")
   and $upload_file ? $sel->type_ok("name=url", "$upload_file") : $sel->type_ok("text", "$data")  
   and $sel->ensembl_click("name=submit")
