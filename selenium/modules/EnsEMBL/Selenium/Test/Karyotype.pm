@@ -37,7 +37,7 @@ sub test_karyotype {
 
     #Adding tack to the karyotype (human only)
     $self->add_track if(lc($self->species) eq 'homo_sapiens');
-    $self->attach_remote_file if(lc($self->species) eq 'homo_sapiens');
+    #$self->attach_remote_file if(lc($self->species) eq 'homo_sapiens'); #feature removed
 
     #Testing ZMenu on karyotype
     if($self->species eq 'homo_sapiens') {      
