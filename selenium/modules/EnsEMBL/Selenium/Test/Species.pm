@@ -423,9 +423,9 @@ sub upload_data {
 
   print "  Test Upload data $format \n";
   $sel->ensembl_click("link=Configure this page")
-  and $sel->ensembl_wait_for_ajax_ok
+  and $sel->ensembl_wait_for_ajax_ok(undef,10000)
   and $sel->ensembl_click("link=Custom Data")
-  and $sel->ensembl_wait_for_ajax_ok
+  and $sel->ensembl_wait_for_ajax_ok(undef,10000)
   and $sel->ensembl_is_text_present("Your data");
 
   $sel->ensembl_click("link=Add your data")
