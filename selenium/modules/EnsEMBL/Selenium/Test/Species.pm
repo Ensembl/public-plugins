@@ -29,7 +29,10 @@ sub attach_das {
   my $url = $sel->get_location();
   
   print "  Test Attach das\n";
-  $sel->ensembl_click("link=Manage your data")
+  
+  $sel->ensembl_click("link=Configure this page")
+  and $sel->ensembl_wait_for_ajax_ok
+  and $sel->ensembl_click("link=Custom Data")  
   and $sel->ensembl_wait_for_ajax_ok(undef,5000)
   and $sel->ensembl_click("link=Attach DAS")
   and $sel->ensembl_wait_for_ajax_ok(undef,5000)
@@ -52,7 +55,9 @@ sub attach_remote_file {
   
   print "  Test Attach remote file\n";
  
-  $sel->ensembl_click("link=Manage your data")
+  $sel->ensembl_click("link=Configure this page")
+  and $sel->ensembl_wait_for_ajax_ok(undef,10000)
+  and $sel->ensembl_click("link=Custom Data")
   and $sel->ensembl_wait_for_ajax_ok(undef,5000)
   and $sel->ensembl_is_text_present("Your data");
  
@@ -136,7 +141,7 @@ sub configure_page {
   $sel->select_ok("rows","2");
   $sel->type_ok("name=chr_length","400");
   $sel->ensembl_click("modal_bg")
-  and $sel->ensembl_wait_for_ajax_ok(undef,'1200')
+  and $sel->ensembl_wait_for_ajax_ok(undef,'5000')
   and $sel->ensembl_is_text_present("Click on the image above to jump to a chromosome");
 }
 
@@ -261,7 +266,9 @@ sub features_karyotype {
 
   print "  Test Features on karyotype\n";
 
-  $sel->ensembl_click("link=Manage your data")
+  $sel->ensembl_click("link=Configure this page")
+  and $sel->ensembl_wait_for_ajax_ok(undef,10000)
+  and $sel->ensembl_click("link=Custom Data")
   and $sel->ensembl_wait_for_ajax_ok(undef,10000)
   and $sel->ensembl_is_text_present("Your data");
 
@@ -415,11 +422,13 @@ sub upload_data {
 };
 
   print "  Test Upload data $format \n";
-  $sel->ensembl_click("link=Manage your data")
-  and $sel->ensembl_wait_for_ajax_ok
+  $sel->ensembl_click("link=Configure this page")
+  and $sel->ensembl_wait_for_ajax_ok(undef,10000)
+  and $sel->ensembl_click("link=Custom Data")
+  and $sel->ensembl_wait_for_ajax_ok(undef,10000)
   and $sel->ensembl_is_text_present("Your data");
 
-  $sel->ensembl_click("link=Upload Data")
+  $sel->ensembl_click("link=Add your data")
   and $sel->ensembl_wait_for_ajax_ok(undef,7000)  
   and $sel->type_ok("name=name","$name")
   and $sel->select_ok("format", "$format")
