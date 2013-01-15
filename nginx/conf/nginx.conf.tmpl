@@ -46,7 +46,7 @@ http {
     add_header X-NGINX-MACHINE [[$ENSEMBL_SERVER]];
 
     #enable for EC2
-    #proxy_set_header X-Forwarded-Host [[$ENSEMBL_SERVERNAME]];
+    [[ ($SiteDefs::ENSEMBL_NGINX_EC2TEST)?'#':'' ]] proxy_set_header X-Forwarded-Host [[$ENSEMBL_SERVERNAME]];
 
     gzip on;
     gzip_comp_level 4;
