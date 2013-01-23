@@ -150,7 +150,7 @@ sub get_database_list {
     my @db_list = $self->{'_hc_mysql_driver'}->func($server->{'host'}, $server->{'port'}, $server->{'user'}, $server->{'pass'}, '_ListDBs');
     for (@db_list) {
       my $species = '2others'; #'2' prefixed for sorting - '2' keeps 'others' at the end instead of considering it alphabetically
-      if ($_ =~ /_core|_otherfeatures|_cdna|_variation|_funcgen|_compara|_vega/) {
+      if ($_ =~ /_core|_otherfeatures|_cdna|_variation|_funcgen|_compara|_vega|_rnaseq/) {
         $_ =~ /^([a-z]+_[a-z]+)/; #get species
         $species = '1'.$1 if $self->validate_species(ucfirst $1); #'1' prefixed for sorting -  keeps it always above 'others'
       }
