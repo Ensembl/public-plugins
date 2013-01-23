@@ -144,17 +144,14 @@ sub get_database_list {
 
   $self->{'_hc_mysql_driver'} ||= DBI->install_driver('mysql');
   my $database_list = {};
-  
+
   for my $server (@$SiteDefs::ENSEMBL_WEBADMIN_DB_SERVERS) {
-    $database_list->{$server->{'host'}} = {};
     my @db_list = $self->{'_hc_mysql_driver'}->func($server->{'host'}, $server->{'port'}, $server->{'user'}, $server->{'pass'}, '_ListDBs');
     for (@db_list) {
-      my $species = '2others'; #'2' prefixed for sorting - '2' keeps 'others' at the end instead of considering it alphabetically
-      if ($_ =~ /_core|_otherfeatures|_cdna|_variation|_funcgen|_compara|_vega|_rnaseq/) {
-        $_ =~ /^([a-z]+_[a-z]+)/; #get species
-        $species = '1'.$1 if $self->validate_species(ucfirst $1); #'1' prefixed for sorting -  keeps it always above 'others'
-      }
-      push @{$database_list->{$server->{'host'}}{$species}}, $_;
+      my @db_name = split /_((core|otherfeatures|cdna|variation|funcgen|compara|vega|rnaseq)[a-z]*)_/, $_;
+      my $species = $db_name[3] && $self->validate_species(ucfirst $db_name[0]) ? ucfirst $db_name[0] : '';
+      my $type    = $species ? $db_name[1] : '';
+      $database_list->{$_} = {'species' => $species, 'type' => $type, 'server' => $server->{'host'}};
     }
   }
   return $database_list;
