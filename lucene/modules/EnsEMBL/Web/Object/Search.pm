@@ -46,13 +46,6 @@ sub __error   { my ($self, $e) = @_; $self->{'data'}{'__error'} = $e if $e;  ret
 sub specific_query_string { $_[0]->{'data'}{'specific_qs'} ||= $_[1]; }
 sub general_query_string { $_[0]->{'data'}{'general_qs'} ||= $_[1]; }
 
-sub results_summary { 
-  my ($self, $rs) = @_; 
-  $self->{'data'}{'results_summary'} = $rs if $rs; 
-  return $self->{'data'}{'results_summary'}; 
-}
-
-
 sub feature2url {
   my ( $self, $hit ) = @_;
 
@@ -166,7 +159,8 @@ sub get_results_summary {
   my $specific_query = $self->specific_query_string;
   if($general_query ne $specific_query) { 
     $self->get_results_summary_part($new_groups,$wrapper,
-                                    $general_query,&general_domain);
+                                    $general_query,
+                                    sub { general_domain(@_) });
     $self->get_results_summary_part($new_groups,$wrapper,
                                     $specific_query,
                                     sub { not general_domain(@_) });
