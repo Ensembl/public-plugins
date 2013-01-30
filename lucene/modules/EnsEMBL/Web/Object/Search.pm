@@ -17,6 +17,8 @@ use base qw(EnsEMBL::Web::Object);
 
 use Data::Page;
 
+use List::MoreUtils qw(any);
+
 sub default_action { return 'New'; }
 
 sub short_caption  {
@@ -41,11 +43,8 @@ sub pager   { my ($self, $p) = @_; $self->{'data'}{'pager'} = $p if $p;  return 
 sub __status  { my ($self, $s) = @_; $self->{'data'}{'__status'} = $s if $s; return $self->{'data'}{'__status'}; }
 sub __error   { my ($self, $e) = @_; $self->{'data'}{'__error'} = $e if $e;  return $self->{'data'}{'__error'}; }
 
-sub query_string { 
-  my ($self, $qs) = @_; 
-  $self->{'data'}{'query_string'} = $qs if $qs; 
-  return $self->{'data'}{'query_string'}; 
-}
+sub specific_query_string { $_[0]->{'data'}{'specific_qs'} ||= $_[1]; }
+sub general_query_string { $_[0]->{'data'}{'general_qs'} ||= $_[1]; }
 
 sub results_summary { 
   my ($self, $rs) = @_; 
@@ -124,99 +123,99 @@ sub feature2url {
   return eval { $lookup{ uc $hit->{featuretype} }($hit) } || '';
 }
 
+sub set_box {
+  my ($out,$type,$key,
+      $sort_field,$second_sort_field,$subtype,$num) = @_;
+
+  my $box = ( $out->{$type}{'results'}{$key} ||= {} );
+
+  $box->{'sort_field'} = $sort_field;
+  $box->{'results'}{$subtype}{'sort_field'} = $second_sort_field;
+  $box->{'results'}{$subtype}{'count'} = $num;
+  $box->{'total'} += $num;
+  $box->{'results'}{$subtype}{'is_clipped_flag'} = '>' if $num == 10000;
+}
+
+#add a sort_field to order the results by - species common name if it exists, domain type if it doesn't
+sub summary_sort_field {
+  my ($self,$domain) = @_;
+
+  my $species_defs = $self->hub->species_defs;
+  ( my $sort_field = $domain ) =~  s/ /_/g;
+  return $species_defs->get_config($sort_field,'SPECIES_COMMON_NAME') ||
+    $sort_field;
+}
+
+sub help_type_domain {
+  my ($self,$domain) = @_;
+
+  my $species_defs = $self->hub->species_defs;
+  my $sitetype    = $species_defs->ENSEMBL_SEARCHTYPE ? lc $species_defs->ENSEMBL_SEARCHTYPE : lc($species_defs->ENSEMBL_SITETYPE);
+  return ($domain =~ /${sitetype}_(faq|glossary|help|docs)/ );
+}
+
+sub general_domain {
+  return (any {$_ eq $_[0]} @SiteDefs::ENSEMBL_LUCENE_OMITSPECIESFILTER);
+}
 
 sub get_results_summary {
   my ( $self, $wrapper ) = @_;
-  my $groups;
-  my $query = $self->query_string;
-  my $species_defs = $self->hub->species_defs;
-  my $sitetype    = $species_defs->ENSEMBL_SEARCHTYPE ? lc $species_defs->ENSEMBL_SEARCHTYPE : lc($species_defs->ENSEMBL_SITETYPE);
-  my $domain_root  = $species_defs->LUCENE_DOMAINROOT || die "LUCENE_DOMAINROOT NOT SET";
-  my $new_results  = $wrapper->getHeadlineNumberOfResultsByDomain( $domain_root, $query, 'species' );
 
-  my $is_clipped;
-  my $new_groups;
-  foreach my $new_res ( @{ $new_results->{domain_hits} } ) {
-
-    # Remove ensemblLists hits
-    if ( $new_res->{domainId} eq 'ensemblLists' ) {
-      $new_results->{total} -= $new_res->{NumOfResults};
-      next;
-    }
-    next if $new_res->{NumOfResults} <= 0;
-
-    my $subfield_results = $new_res->{subFieldResults}{FieldResult};
-
-    if ( ref $subfield_results eq 'ARRAY' ) {
-      $DB::single = 1;
-      foreach my $field_result (@$subfield_results) {
-
-        # Handle Help and Docs totals like this until it gets a dedicated subdmain in the lucene hierarchy
-        if ( $new_res->{domainId} =~ /${sitetype}_faq|${sitetype}_glossary|${sitetype}_help|${sitetype}_docs/ ) {
-          $new_groups->{Help}{results}{Docs}{results}{ $new_res->{domainId} }{count} = $subfield_results->{fieldNumberOfResults};
-          $new_groups->{Help}{results}{Docs}{results}{ $new_res->{domainId} }{sort_field} = 'Documentation';
-          $new_groups->{Help}{results}{Docs}{total} += $subfield_results->{fieldNumberOfResults};
-          $new_groups->{Help}{results}{Docs}{sort_field} = $new_res->{domainId};
-          next;
-
-        }
-
-        #add a sort_field to order the results by - species common name if it exists, domain type if it doesn't
-        my $sort_field = $field_result->{fieldValue};
-        $sort_field =~  s/ /_/g;
-        $sort_field = $species_defs->get_config($sort_field,'SPECIES_COMMON_NAME') || $sort_field;
-
-        $new_groups->{Species}{results}{ $field_result->{fieldValue} }{sort_field} = $sort_field;
-        $new_groups->{Species}{results}{ $field_result->{fieldValue} }{results}{ $new_res->{domainId} }{sort_field} = $new_res->{domainId};
-        $new_groups->{Species}{results}{ $field_result->{fieldValue} }{results}{ $new_res->{domainId} }{count} = $field_result->{fieldNumberOfResults};
-        $new_groups->{Species}{results}{ $field_result->{fieldValue} }{total} +=  $field_result->{fieldNumberOfResults};
-        $new_groups->{Species}{results}{ $field_result->{fieldValue} }{results}{ $new_res->{domainId} }{is_clipped_flag} = '>' if $field_result->{fieldNumberOfResults} == 10000;
-
-        $new_groups->{'Feature type'}{results}{ $new_res->{domainId} }{sort_field} = $new_res->{domainId};
-        $new_groups->{'Feature type'}{results}{ $new_res->{domainId} }{results}{ $field_result->{fieldValue} }{sort_field} = $sort_field;
-        $new_groups->{'Feature type'}{results}{ $new_res->{domainId} }{results}{ $field_result->{fieldValue} }{count} = $field_result->{fieldNumberOfResults};
-        $new_groups->{'Feature type'}{results}{ $new_res->{domainId} }{total} += $field_result->{fieldNumberOfResults};
-        $new_groups->{'Feature type'}{results}{ $new_res->{domainId} }{results}{ $field_result->{fieldValue} }{is_clipped_flag} = '>' if $field_result->{fieldNumberOfResults} == 10000;
-      }
-    }
-    elsif ( ref $subfield_results eq 'HASH' ) {
-      $DB::single = 1;
-
-      # Handle Help and Docs totals like this until it gets a dedicated subdmain in the lucene hierarchy
-      if ( $new_res->{domainId} =~ /(faq|${sitetype}_glossary|${sitetype}_help|${sitetype}_docs)/ ) {
-        $new_groups->{Help}{results}{Docs}{results}{ $new_res->{domainId} }{count} = $subfield_results->{fieldNumberOfResults};
-        $new_groups->{Help}{results}{Docs}{total} += $subfield_results->{fieldNumberOfResults};
-        $new_groups->{Help}{results}{Docs}{sort_field} = 'Docs';
-        $new_groups->{Help}{results}{Docs}{results}{ $new_res->{domainId} }{sort_field} = $new_res->{domainId};
-        next;
-      }
-
-      my $sort_field = $subfield_results->{fieldValue};
-      $sort_field =~  s/ /_/g;
-      $sort_field = $species_defs->get_config($sort_field,'SPECIES_COMMON_NAME') || $sort_field;
-
-      $new_groups->{Species}{results}{ $subfield_results->{fieldValue} }{sort_field} = $sort_field; 
-      $new_groups->{Species}{results}{ $subfield_results->{fieldValue} }{results}{ $new_res->{domainId} }{sort_field} = $new_res->{domainId};
-      $new_groups->{Species}{results}{ $subfield_results->{fieldValue} }{total} += $subfield_results->{fieldNumberOfResults};
-      $new_groups->{Species}{results}{ $subfield_results->{fieldValue} }{results}{ $new_res->{domainId} }{count} = $subfield_results->{fieldNumberOfResults};
-      $new_groups->{Species}{results}{ $subfield_results->{fieldValue} }{results}{ $new_res->{domainId} }{is_clipped_flag} = '>' if $subfield_results->{fieldNumberOfResults} == 10000;
-
-      $new_groups->{'Feature type'}{results}{ $new_res->{domainId} }{sort_field} = $new_res->{domainId};
-      $new_groups->{'Feature type'}{results}{ $new_res->{domainId} }{results}{ $subfield_results->{fieldValue} }{sort_field} = $sort_field;
-      $new_groups->{'Feature type'}{results}{ $new_res->{domainId} }{total} += $subfield_results->{fieldNumberOfResults};
-      $new_groups->{'Feature type'}{results}{ $new_res->{domainId} }{results}{ $subfield_results->{fieldValue} }{count} = $subfield_results->{fieldNumberOfResults};
-      $new_groups->{'Feature type'}{results}{ $new_res->{domainId} }{results}{ $subfield_results->{fieldValue} }{is_clipped_flag} = '>' if $subfield_results->{fieldNumberOfResults} == 10000;
-    }
+  my $new_groups = {};
+  my $general_query = $self->general_query_string;
+  my $specific_query = $self->specific_query_string;
+  if($general_query ne $specific_query) { 
+    $self->get_results_summary_part($new_groups,$wrapper,
+                                    $general_query,&general_domain);
+    $self->get_results_summary_part($new_groups,$wrapper,
+                                    $specific_query,
+                                    sub { not general_domain(@_) });
+  } else {
+    $self->get_results_summary_part($new_groups,$wrapper,$specific_query);
   }
-  
-  $new_groups->{Species}{total} = $new_groups->{'Feature type'}{total} = $new_results->{total} - ($new_groups->{Help}{results}{Docs}{total} > 0 ? $new_groups->{Help}{results}{Docs}{total} : 0);
-  
-  # until help and docs gets a subdomain by itself....
-  $new_groups->{Help}{total} = $new_groups->{Help}{results}{Docs}{total};
   $self->groups($new_groups);
   $self->__status('search');
-  return;
+}
 
+sub get_results_summary_part {
+  my ( $self,$new_groups, $wrapper,$query,$filter ) = @_;
+  my $species_defs = $self->hub->species_defs;
+  my $domain_root  = $species_defs->LUCENE_DOMAINROOT || die "LUCENE_DOMAINROOT NOT SET";
+
+  my $new_results  = $wrapper->getHeadlineNumberOfResultsByDomain( $domain_root, $query, 'species' );
+ 
+  my ($main_total,$help_total) = (0,0);
+  foreach my $new_res ( @{ $new_results->{'domain_hits'} } ) {
+    my $domain = $new_res->{'domainId'};
+
+    next if $filter and !$filter->($domain);
+    next if $domain eq 'ensemblLists'; # Remove ensemblLists hits
+    next if $new_res->{'NumOfResults'} <= 0;
+
+    my $subfield_results = $new_res->{'subFieldResults'}{'FieldResult'};
+    $subfield_results = [ $subfield_results ] if ref($subfield_results) eq 'HASH';
+    next unless ref($subfield_results) eq 'ARRAY';
+
+    foreach my $field_result (@$subfield_results) {
+      my $count = $field_result->{'fieldNumberOfResults'};
+      my $subfield = $field_result->{'fieldValue'};
+
+      if($self->help_type_domain($domain)) {
+        set_box($new_groups,'Help','Docs','Docs',$domain,$domain,$count);
+        $help_total += $count;
+      } else {
+        my $sort_field = $self->summary_sort_field($subfield);
+        set_box($new_groups,'Species',$subfield,
+                $sort_field,$domain,$domain,$count);
+        set_box($new_groups,'Feature type',$domain,
+                $domain,$sort_field,$subfield,$count);
+        $main_total += $count;
+      }
+    }
+  }
+  $new_groups->{'Species'}{'total'} += $main_total;
+  $new_groups->{'Feature type'}{'total'} += $main_total;
+  $new_groups->{'Help'}{'total'} += $help_total;
 }
 
 sub set_query_string {
@@ -235,8 +234,8 @@ sub set_query_string {
   $query_term =~ s/GO:/GO\\:/;
 
   my $query_substring_species = ( $species eq 'all' || !$species ? undef : "species:$species" );
-  my $query_string = "$query_term $query_substring_species";
-  $self->query_string($query_string);
+  $self->general_query_string($query_term);
+  $self->specific_query_string("$query_term $query_substring_species");
   return;
 }
 
@@ -269,7 +268,7 @@ sub parse {
 sub get_hits_details {
   my ( $self, $wrapper, $q ) = @_;
 
-  #warn "QUERY STRING ". $self->query_string;
+  #warn "QUERY STRING ". $self->specific_query_string;
   my $domain = $q->param('idx');
   my $species_defs = $self->hub->species_defs;
   my $sitetype = $species_defs->ENSEMBL_SEARCHTYPE ? lc $species_defs->ENSEMBL_SEARCHTYPE : lc($species_defs->ENSEMBL_SITETYPE);
@@ -292,7 +291,7 @@ sub get_hits_details {
   unless ( $total_entries > 0 ) {
 
     #  warn "Getting Entry count from Webservice";
-    $total_entries = $wrapper->getNumberOfResults( $domain, $self->query_string );
+    $total_entries = $wrapper->getNumberOfResults( $domain, $self->specific_query_string );
 
     # Cache it
     $cache->set( $nhits_key, $total_entries, 3600, 'NHITS' ) if $cache;
@@ -328,7 +327,7 @@ sub get_hits_details {
       'location',    'db',   'contigviewbottom', 'content', 'title',       'url',
       'displayname', 'keyword', 'subtype', 'evidence'
     ];
-  my $domain_hits = $wrapper->getResultsAsHashArray( $domain, $self->query_string, $fields, $start_hit, 10 );
+  my $domain_hits = $wrapper->getResultsAsHashArray( $domain, $self->specific_query_string, $fields, $start_hit, 10 );
 
   map { $_->{feature_url} = $self->feature2url($_) } @$domain_hits;
   $self->hits($domain_hits);
