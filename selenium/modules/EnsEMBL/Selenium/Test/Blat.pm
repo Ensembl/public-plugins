@@ -14,16 +14,20 @@ sub test_blat {
   my $sel    = $self->sel;
   my $SD     = $self->get_species_def;    
   my $sp_bio_name = $SD->get_config($self->species,'SPECIES_BIO_NAME'); 
-
-  $self->open_species_homepage($self->species,undef,$sp_bio_name);
-  $sel->ensembl_click_links(["link=Example transcript"],"50000");
-  $sel->ensembl_click_links(["link=cDNA","link=BLAST this sequence"],"20000");
   
-  print "  Running BLAT(dna) for ".$self->species."\n";  
-  $sel->click_ok("name=stage_results_run")
-  and $sel->ensembl_wait_for_page_to_load  
-  and $sel->ensembl_is_text_present("Alignment Locations vs. Karyotype")
-  and $sel->ensembl_is_text_present("Start");  
+  if(lc($self->species) eq 'dasypus_novemcinctus' || lc($self->species) eq 'ochotona_princeps') {
+    print "  BLAT DISABLED FOR ".$self->species."\n";
+  } else { 
+    $self->open_species_homepage($self->species,undef,$sp_bio_name);
+    $sel->ensembl_click_links(["link=Example transcript"],"50000");
+    $sel->ensembl_click_links(["link=cDNA","link=BLAST this sequence"],"20000");
+   
+    print "  Running BLAT(dna) for ".$self->species."\n";  
+    $sel->click_ok("name=stage_results_run")
+    and $sel->ensembl_wait_for_page_to_load  
+    and $sel->ensembl_is_text_present("Alignment Locations vs. Karyotype")
+    and $sel->ensembl_is_text_present("Start");  
+  }
 
   print "TESTING BLASTP \n";  
   $self->open_species_homepage($self->species,undef, $sp_bio_name);
