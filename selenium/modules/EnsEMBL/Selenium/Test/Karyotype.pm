@@ -18,9 +18,9 @@ sub test_karyotype {
   $self->open_species_homepage($self->species, undef, $sp_bio_name);
 
 #karyotype link test
-  if($SD->ENSEMBL_CHROMOSOMES && !scalar @{$SD->ENSEMBL_CHROMOSOMES}) {
+  if($SD->get_config($self->species, 'ENSEMBL_CHROMOSOMES') && !scalar @{$SD->get_config($self->species, 'ENSEMBL_CHROMOSOMES')}) {
     print "  No Karyotype \n";
-    $sel->ensembl_is_text_present("Karyotype (not available)");
+    #$sel->ensembl_is_text_present("Karyotype (not available)");
   } else {
     $sel->ensembl_click_links(["link=View karyotype"]);
     $sel->ensembl_is_text_present("Click on the image above to jump to a chromosome");
