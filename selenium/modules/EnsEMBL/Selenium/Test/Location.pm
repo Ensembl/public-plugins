@@ -40,8 +40,23 @@ sub test_location {
 
     #Test ZMENU (only for human)
     if(lc($self->species) eq 'homo_sapiens') {
-      #Searching and adding decipher track      
-      $self->turn_track("Variation","//form[\@id='location_viewbottom_configuration']/div[6]/div[7]/ul[2]/li/img", "on", "decipher");
+      #Searching and adding decipher track
+      #$self->turn_track("Variation","//form[\@id='location_viewbottom_configuration']/div[6]/div[7]/div/ul[3]/li[1]/img", "on", "decipher"); #for some reason xpath not working anymore so using css instead to select track
+      
+      $sel->ensembl_click("link=Configure this page")
+      and $sel->ensembl_wait_for_ajax_ok(undef,4000)
+      and $sel->ensembl_is_text_present("Active tracks");
+      
+      print "  Test searching for Decipher track and turning the track ON \n" ;
+      $sel->ensembl_click("name=configuration_search_text")    
+      and $sel->type_keys_ok("configuration_search_text", "decipher") #searching for the track in the search textfield    
+      and $sel->ensembl_wait_for_ajax_ok(undef,'5000');
+      
+      $sel->click_ok("css=li.track.das_DS_1535 > img.menu_option")
+      and $sel->click_ok("css=li.track.das_DS_1535 > ul.popup_menu > li.nolabels > img.variation")
+      and $sel->ensembl_click("modal_bg")
+      and $sel->ensembl_wait_for_ajax_ok(undef,6000)
+      and $sel->ensembl_images_loaded;
       
       #simulate ZMenu for this track (decipher)
       $sel->pause(5000); #pausing a bit to make sure the location panel loads fine from adding the track
@@ -54,12 +69,17 @@ sub test_location {
       
       $sel->ensembl_open_zmenu('Summary',"class^=drag");
       $sel->ensembl_click("link=Centre here")
-      and $sel->ensembl_wait_for_ajax_ok(undef,'4000')      
-      and $sel->go_back();
-
+      and $sel->ensembl_wait_for_ajax_ok(undef,'5000');           
+      
+      #$sel->go_back(); #for some reason the page is not going back but just the bottom panel gets reloaded so we click through other links to get back to where we were
+      $sel->ensembl_click("link=Human*")
+      and $sel->ensembl_wait_for_ajax_ok(undef,'5000')
+      and $sel->ensembl_click("link=Example region")
+      and $sel->ensembl_wait_for_ajax_ok(undef,'5000');
+      
       #TODO:: ZMenu on viewtop and ViewBottom panel
     }
-    #Whole genome link
+    #Whole genome link    
     $sel->ensembl_click_links(["link=Whole genome"]);
     $sel->ensembl_is_text_present("This genome has yet to be assembled into chromosomes") if(!scalar @{$SD->get_config(ucfirst($self->species), 'ENSEMBL_CHROMOSOMES')});
 
@@ -87,7 +107,7 @@ sub test_location {
         and $sel->ensembl_wait_for_page_to_load(60000);
       }
       
-      $sel->ensembl_click_links(["link=Alignments (text) ($alignment_count)","link=Region Comparison ($multi_species_count)"],'20000');
+      $sel->ensembl_click_links(["link=Alignments (text) ($alignment_count)","link=Region Comparison*"],'20000');
     }
     $sel->ensembl_click_links(["link=Synteny ($synteny_count)"], '20000') if(grep(/@location_array[0]/,@{$SD->get_config(ucfirst($self->species), 'ENSEMBL_CHROMOSOMES')}) && $synteny_count);
 
