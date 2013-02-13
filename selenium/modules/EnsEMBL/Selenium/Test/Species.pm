@@ -349,7 +349,7 @@ sub turn_track {
     
     $sel->ensembl_click("name=configuration_search_text")    
     and $sel->type_keys_ok("configuration_search_text", "$search") #searching for the track in the search textfield    
-    and $sel->ensembl_wait_for_ajax_ok(undef,'2000');
+    and $sel->ensembl_wait_for_ajax_ok(undef,'10000');
   } else {
     print "  Test turning $track_name track ".uc($action)."\n";
     $sel->ensembl_click("link=$track_name")
