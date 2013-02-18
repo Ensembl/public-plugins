@@ -52,6 +52,7 @@ sub content {
   $html .= qq{<div class="_hc_infobox tinted-box">
     <p>For each database, reports are sorted on the basis of Date (initial failure date) with latest report appearing on the top.</p>
     <p>Reports that have not been annotated 'manual ok' are displayed in different colours for results <span class="hc-problem">problem</span>, <span class="hc-warning">warning</span> and <span class="hc-info">info</span>.</p>
+    <p>Reports that were fixed in previous healthcheck session buy have apeared again are marked in <span class="hc-notfixed">this colour</span>.</p>
     <p>Reports that appeared for the first time in the recent healthcheck session are in <span class="hc-new">bold</span> letters.</p>
   </div>};
 
@@ -86,41 +87,43 @@ sub content {
       }
 
       #annotation column
-      my $annotation    = '';
-      if ($report->annotation) {
-        $annotation    .= $report->annotation->comment if $report->annotation->comment;
+      my $comment    = '';
+      my $annotation = $report->annotation;
+      if ($annotation) {
+        $comment       .= $annotation->comment if $annotation->comment;
         my $modified_by = '';
         my $created_by  = '';
-        if ($report->annotation->created_by) {
-          $created_by  .= '<div class="hc-comment-info">Added by: '.$self->_get_user_link($report->annotation->created_by_user);
-          $created_by  .= ' on '.$self->hc_format_date($report->annotation->created_at) if $report->annotation->created_at;
+        if ($annotation->created_by) {
+          $created_by  .= '<div class="hc-comment-info">Added by: '.$self->_get_user_link($annotation->created_by_user);
+          $created_by  .= ' on '.$self->hc_format_date($annotation->created_at) if $annotation->created_at;
           $created_by  .= '</div>';
         }
-        if ($report->annotation->modified_by) {
-          $modified_by .= '<div class="hc-comment-info">Modified by: '.$self->_get_user_link($report->annotation->modified_by_user);
-          $modified_by .= ' on '.$self->hc_format_date($report->annotation->modified_at) if $report->annotation->modified_at;
+        if ($annotation->modified_by) {
+          $modified_by .= '<div class="hc-comment-info">Modified by: '.$self->_get_user_link($annotation->modified_by_user);
+          $modified_by .= ' on '.$self->hc_format_date($annotation->modified_at) if $annotation->modified_at;
           $modified_by .= '</div>';
         }
         (my $temp       = $created_by) =~ s/Added/Modified/;
         $modified_by    = '' if $modified_by eq $temp;
-        $annotation    .= $created_by.$modified_by;
-        $annotation    .= '<div class="hc-comment-info">Action: '.$self->annotation_action($report->annotation->action)->{'title'}.'</div>'
-          if $report->annotation->action && $self->annotation_action($report->annotation->action)->{'value'} ne '';
+        $comment       .= $created_by.$modified_by;
+        $comment       .= '<div class="hc-comment-info">Action: '.$self->annotation_action($annotation->action)->{'title'}.'</div>'
+          if $annotation->action && $self->annotation_action($annotation->action)->{'value'} ne '';
       }
-      my $temp          = $report->annotation ? $report->annotation->action || '' : '';
-      my $text_class    = $temp =~ /manual_ok|healthcheck_bug/ ? 'hc-oked' : sprintf('hc-%s', lc $result);
+      my $anno_action   = $annotation ? $annotation->action || '' : '';
+      my $text_class    = $anno_action =~ /manual_ok|healthcheck_bug/ ? 'hc-oked' : sprintf('hc-%s', lc $result);
+      $text_class       = $annotation->session_id eq $report->last_session_id ? 'hc-oked' : 'hc-notfixed' if $anno_action eq 'fixed';
       $text_class      .= $report->first_session_id == $report->last_session_id ? ' hc-new' : ' hc-notnew';
 
       my $link_class    = join ' ', keys %{{ map { $_."-link" => 1 } split (' ', $text_class)}};
 
-      $annotation      .= sprintf qq(<div class="hc-comment-link"><a class="$link_class" href="%s" rel="$js_ref">%s</a></div>),
+      $comment         .= sprintf qq(<div class="hc-comment-link"><a class="$link_class" href="%s" rel="$js_ref">%s</a></div>),
         $hub->url({'action' => 'Annotation', 'rid' => $report_id}),
-        $annotation eq '' ? 'Add&nbsp;Annotation' : 'Edit'
+        $comment eq '' ? 'Add&nbsp;Annotation' : 'Edit'
       ;
 
       $table->add_row({
         'db_sp_tc'  => join ('<br />', @$db_sp_tc),
-        'comment'   => $annotation,
+        'comment'   => $comment,
         'type'      => sprintf('<abbr title="%s">%s</abbr>', ucfirst lc $result, substr($result, 0, 1)),
         'text'      => qq(<span class="$text_class">).join (', ', split (/,\s?/, $report->text)).'</span>', #split-joining is done to wrap long strings
         'created'   => $report->created ? $self->hc_format_compressed_date($report->created) : '<i>unknown</i>',
