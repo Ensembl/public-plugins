@@ -18,6 +18,7 @@ sub process {
 
     $annotation->comment($hub->param('comment'));
     $annotation->action($hub->param('action'));
+    $annotation->session_id($_->last_session_id);
     $annotation->save('user' => $hub->user);
     
     $anchor ||= $_->database_name;
