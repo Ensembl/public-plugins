@@ -19,6 +19,7 @@ __PACKAGE__->meta->setup(
   columns     => [
     annotation_id => {type => 'serial', primary_key => 1, not_null => 1}, 
     report_id     => {type => 'integer'},
+    session_id    => {type => 'integer'},
     action        => {
       'type'          => 'enum', 
       'values'        => [ __PACKAGE__->annotation_actions('keys_only') ]
@@ -51,7 +52,8 @@ sub annotation_actions {
   );
   unless (exists $flags->{'manual_ok'}) {
     push @actions, (
-      'under_review'                  => 'Under review: Fixed or will be fixed/reviewed',
+      'under_review'                  => 'Under review: Will be fixed/reviewed',
+      'fixed'                         => 'Fixed',
       'note'                          => 'Note or comment',
     );
   }
