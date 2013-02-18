@@ -37,6 +37,9 @@ span.hc-warning {
 span.hc-info {
   color: #060;
 }
+span.hc-notfixed {
+  color: #f30;
+}
 span.hc-new {
   font-weight: bold;
 }
