@@ -53,7 +53,7 @@ sub content {
       'heading'     => 'Edit bookmark',
       'subsections' => [ @$bookmarks ? $self->select_bookmark_form({
         'bookmarks'   => $bookmarks,
-        'action'      => $hub->url({'action' => 'Bookmark', 'function' => 'Edit'}),
+        'action'      => {'action' => 'Bookmark', 'function' => 'Edit'},
         'label'       => 'Select a bookmark to edit',
         'submit'      => 'Edit'
       })->render : $self->no_bookmark_message(1) ]
