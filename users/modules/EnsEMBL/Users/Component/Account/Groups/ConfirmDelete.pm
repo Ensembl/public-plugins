@@ -32,7 +32,6 @@ sub content {
       );
 
       return $self->js_section({
-        'id'          => 'confirm_delete',
         'class'       => 'buttons-inline',
         'heading'     => "Delete group $group_name",
         'subsections' => [
@@ -41,7 +40,6 @@ sub content {
             'href'        => {'action' => 'Groups', 'function' => 'View', 'id' => $group_id},
             'caption'     => 'Cancel',
             'class'       => 'arrow-left',
-            'cancel'      => 1, # TODO
             'button'      => 1
           }), $is_active ? (
           $self->js_link({
