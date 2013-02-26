@@ -43,7 +43,7 @@ sub content {
     $form->add_field({'type'  => 'yesno',   'value' => $membership->$_ || 0, 'name' => $_, 'label' => $notif_types->{$_}, 'is_binary' => 1}) for $level eq 'administrator' ? qw(notify_join notify_edit notify_share) : qw(notify_share);
     $form->add_field({'type'  => 'submit',  'value' => $is_add_new ? 'Add' : 'Save'});
 
-    return $self->js_section({'id' => 'add_edit_group', 'subsections' => [ $form->render ]});
+    return $self->js_section({'subsections' => [ $form->render ]});
 
   } else {
 
