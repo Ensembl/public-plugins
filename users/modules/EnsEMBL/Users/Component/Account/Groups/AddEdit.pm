@@ -27,7 +27,7 @@ sub content {
 
     my $level       = $membership->level;
     my $notif_types = $self->get_notification_types;
-    my $form        = $self->new_form({'action' => $hub->url({qw(action Group function Save)})});
+    my $form        = $self->new_form({'action' => {qw(action Group function Save)}});
 
     $form->add_hidden({'name' => 'id', 'value'  => $group->group_id});
     if ($level eq 'administrator') {
