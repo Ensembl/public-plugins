@@ -15,19 +15,15 @@ sub content {
   my $user        = $hub->user->rose_object;
   my $memberships = $user->find_memberships('with_objects' => 'group', 'query' => ['or' => ['level' => 'administrator', 'group.status' => 'active']]); # show inactive groups to admins only
   my $section     = {
-    'id'            => 'my_groups',
-    'refresh_url'   => {'action' => 'Groups', 'function' => ''},
     'heading'       => 'Groups',
     'heading_links' => [{
       'href'          => {qw(action Groups function Add)},
       'title'         => 'Create new group',
       'sprite'        => 'user-group-add-icon',
-      'target'        => 'section'
     }, {
       'href'          => {qw(action Groups function List)},
       'title'         => 'Join an existing group',
       'sprite'        => 'user-group-join-icon',
-      'target'        => 'page'
     }],
     'subsections'   => [ '<p>You are not a member of any group.</p>' ] # will get overwritten if groups found
   };
@@ -52,12 +48,10 @@ sub content {
         'edit'    => $self->js_link({
           $is_pending_request ? (
             'href'    => {'action' => 'Membership', 'function' => 'Unjoin', 'id' => $_->group_member_id},
-            'caption' => 'Delete request',
-            'target'  => 'none',
+            'caption' => 'Delete request'
           ) : (
             'href'    => {'action' => 'Groups', 'function' => 'View', 'id' => $_->group_id},
-            'caption' => $_->level eq 'member' ? 'View' : 'Moderate',
-            'target'  => 'page',
+            'caption' => $_->level eq 'member' ? 'View' : 'Moderate'
           )
         }),
         $is_inactive_group ? ('options' => {'class' => 'inactive'}) : ()
