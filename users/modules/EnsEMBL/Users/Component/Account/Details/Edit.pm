@@ -49,7 +49,7 @@ sub content {
     'button'        => 'Save',
   });
 
-  return $self->js_section({'id' => 'edit_details', 'subsections' => [ $form->render ], 'js_panel' => 'AccountForm'});
+  return $self->js_section({'subsections' => [ $form->render ], 'js_panel' => 'AccountForm'});
 }
 
 1;
