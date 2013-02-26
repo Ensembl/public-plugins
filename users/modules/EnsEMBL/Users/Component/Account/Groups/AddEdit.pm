@@ -54,7 +54,7 @@ sub content {
       'heading'     => 'Edit group',
       'subsections' => [ $self->select_group_form({
         'memberships' => $memberships,
-        'action'      => $hub->url({'action' => 'Groups', 'function' => 'Edit'}),
+        'action'      => {'action' => 'Groups', 'function' => 'Edit'},
         'label'       => 'Select a group to edit',
         'submit'      => 'Edit'
       })->render ]

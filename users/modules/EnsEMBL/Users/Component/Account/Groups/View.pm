@@ -149,7 +149,7 @@ sub content {
       'heading'     => 'View group',
       'subsections' => [ $self->select_group_form({
         'memberships' => $memberships,
-        'action'      => $hub->url({'action' => 'Groups', 'function' => 'View'}),
+        'action'      => {'action' => 'Groups', 'function' => 'View'},
         'label'       => 'Select a group to view',
         'submit'      => 'View'
       })->render ]

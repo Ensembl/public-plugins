@@ -16,7 +16,7 @@ sub content {
 
   if (my ($bookmark, $record_owner) = $object->fetch_bookmark_with_owner( $is_add_new ? 0 : ($hub->param('id'), $hub->param('group')) )) {
 
-    my $form = $self->new_form({'action' => $hub->url({qw(action Bookmark function Save)})});
+    my $form = $self->new_form({'action' => {qw(action Bookmark function Save)}});
 
     $form->add_hidden({'name' => 'id',        'value' => $bookmark->record_id });
     $form->add_hidden({'name' => 'object',    'value' => $bookmark->name || $hub->referer->{'ENSEMBL_TYPE'} }) if $is_add_new;
@@ -33,12 +33,10 @@ sub content {
       $form->add_hidden({'name' => 'group', 'value' => $record_owner->group_id});
 
       if ($user->is_admin_of($record_owner) || $bookmark->created_by eq $user->user_id) {
-
         $buttons_field = {'inline' => 1, 'elements' => [{'type' => 'submit', 'name' => 'save', 'value' => 'Save'}, {'type' => 'submit', 'name' => 'save_new', 'value' => 'Save as new'}]};
 
       } else {
         $form->add_notes({'location' => 'head', 'heading' => 'Info', 'text' => q(You can't modify the existing bookmark, so this will be saved as a new bookmark.)});
-
       }
     }
 
