@@ -25,7 +25,7 @@ sub content {
 
   if ($adminship or @$adminships) {
 
-    my $form = $self->new_form({'action' => $hub->url({'action' => 'Group', 'function' => 'Invite'})});
+    my $form = $self->new_form({'action' => {'action' => 'Group', 'function' => 'Invite'}});
 
     $form->add_notes({
       'text'        => sprintf('To invite new members to join %s group, enter one email address per person. Users not already registered with %s will be asked to do so before accepting your invitation.', $adminship ? 'the' : 'a', $self->site_name)
@@ -65,7 +65,6 @@ sub content {
     });
   
     $html .= $self->js_section({
-      'id'          => 'invite_members',
       'heading'     => 'Invite new members',
       'subsections' => [ $form->render ]
     });
@@ -73,13 +72,11 @@ sub content {
   } else {
 
     $html .= $self->js_section({
-      'id'          => 'invite_members',
       'heading'     => 'Invite new members',
       'subsections' => [
         sprintf '<p>You do not have administration rights for any of the groups to invite any members. You can though %s and then invite members to it.</p>',
         $self->js_link({
           'href'    => {'action' => 'Groups', 'function' => 'Add'},
-          'target'  => 'page',
           'caption' => 'create a new group'
         })
       ]

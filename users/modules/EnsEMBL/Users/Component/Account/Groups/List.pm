@@ -53,24 +53,20 @@ sub content {
           ? 'Request sent'
           : $self->js_link($membership && $membership->is_pending_invitation ? {
             'href'    => {'action' => 'Membership', 'function' => 'Accept', 'id' => $membership->group_member_id},
-            'caption' => 'Accept invitation',
-            'target'  => 'none'
+            'caption' => 'Accept invitation'
           } : {
             'href'    => {'action' => 'Group', 'function' => 'Join', 'id' => $group->group_id},
-            'caption' => $group->type eq 'open' ? 'Join' : 'Send request',
-            'target'  => 'none'
+            'caption' => $group->type eq 'open' ? 'Join' : 'Send request'
           })
         )
       });
     }
 
-    return $self->js_section({'id' => 'list_all_groups', 'subsections' => [
+    return $self->js_section({'subsections' => [
       $table->render,
       $self->js_link({
         'href'    => {'action' => 'Groups', 'function' => ''},
         'caption' => 'Done',
-        'target'  => 'page',
-        'cancel'  => 'list_all_groups',
         'class'   => 'check',
         'button'  => 1
       })
@@ -82,7 +78,7 @@ sub content {
       'heading'     => 'No group found to join ',
       'subsections' => [ sprintf(q(<p>No public user group exists for %s that you can join. If you want to create a new group, please %s.</p>),
         $self->site_name,
-        $self->js_link({'href' => {'action' => 'Groups', 'function' => 'Add'}, 'caption' => 'click here', 'target' => 'page'})
+        $self->js_link({'href' => {'action' => 'Groups', 'function' => 'Add'}, 'caption' => 'click here'})
       )]
     });
   }
