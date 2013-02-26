@@ -15,9 +15,8 @@ sub content {
   my $self        = shift;
   my $object      = $self->object;
   my $hub         = $self->hub;
-  my $content     = $self->wrapper_div;
   my $then_param  = $self->get_then_param;
-  my $form        = $content->append_child($self->new_form({'id' => 'login', 'action' => $hub->url({qw(action User function Authenticate)})}));
+  my $form        = $self->new_form({'id' => 'login', 'action' => {qw(action User function Authenticate)}});
   my $ex_email    = $hub->param('email');
 
   $form->add_hidden({'name'  => 'then', 'value' => $then_param}) if $then_param;
@@ -30,7 +29,7 @@ sub content {
     )}
   ]);
 
-  return $content->render;
+  return $self->js_section({'subsections' => [ $form->render ]});
 }
 
 1;

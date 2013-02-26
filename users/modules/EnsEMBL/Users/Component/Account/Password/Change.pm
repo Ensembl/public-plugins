@@ -17,14 +17,14 @@ sub content {
   my $self      = shift;
   my $hub       = $self->hub;
   my $object    = $self->object;
-  my $content   = $self->wrapper_div;
-  my $form      = $content->append_child($self->new_form({'action' => $hub->url({qw(action Password function Save)})}));
 
   my $user      = $hub->user;
   my $login     = $user ? $user->rose_object->get_local_login : $object->fetch_login_from_url_code;
 
   # If no login object found - user manually changed the url
   return $self->render_message(MESSAGE_URL_EXPIRED, {'error' => 1}) unless $login;
+
+  my $form      = $self->new_form({'action' => {qw(action Password function Save)}});
 
   $form->add_field({'type' => 'noedit', 'name' => 'email', 'label' => 'Login email', 'no_input' => 1, 'value' => $login->identity });
 
@@ -39,7 +39,7 @@ sub content {
   $form->add_field({'type'  => 'password',  'name'  => 'new_password_2', 'label'  => 'Confirm new password',      'required' => 1});
   $form->add_button({'type' => 'Submit',    'name'  => 'submit',         'value'  => $user ? 'Change' : 'Reset',  'class'    => 'modal_link'});
 
-  return $content->render;
+  return $self->js_section({'subsections' => [ $form->render ]});
 }
 
 1;
