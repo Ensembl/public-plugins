@@ -21,8 +21,7 @@ sub content {
   return $self->render_message(MESSAGE_URL_EXPIRED, {'error' => 1}) unless $login;
 
   my $user    = $login->user;
-  my $content = $self->wrapper_div;
-  my $form    = $content->append_child($self->new_form({'action' => $hub->url({qw(action Confirmed)})}));
+  my $form    = $self->new_form({'action' => {qw(action Confirmed)}});
 
   $form->add_hidden({'name' => 'code',    'value' => $login->get_url_code});
   $form->add_hidden({'name' => 'referer', 'value' => join '/', $hub->action, $hub->function});
@@ -36,7 +35,7 @@ sub content {
 
   $form->add_button({'value' => 'Activate account'});
 
-  return $content->render;
+  return $self->js_section({'subsections' => [ $form->render ]});
 }
 
 1;
