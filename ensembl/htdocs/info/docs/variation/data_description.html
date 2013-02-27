@@ -29,7 +29,7 @@ Data Description |
       <li><a href="#populations">Populations</a></li>
       <li><a href="#variation_sets">Variation sets</a></li>
 			<li><a href="#clin_significance">Clinical significance</a></li>
-			<li><a href="#evidence_status">Evidence status</a></li>
+			<li><a href="#validation_status">Validation status</a></li>
       <li><a href="#quality_control">Quality control</a></li>
 	  </ul>
   </div>
@@ -1007,11 +1007,6 @@ variation sets in the Ensembl variation database (subsets are indicated by bulle
 		<td>ph_uniprot</td>
 		<td>Variations with phenotype annotations provided by Uniprot</td>
 	</tr>
-	<tr class="bg2">
-		<td><ul style="margin:0px"><li style="margin:0px">Clinically associated</li></ul></td>
-		<td>clin_assoc</td>
-		<td>Variants annotated by dbSNP/ClinVar as probable-pathogenic, pathogenic, drug-response or histocompatibility</td>
-	</tr>
 </table>
 
 
@@ -1056,44 +1051,58 @@ variation sets in the Ensembl variation database (subsets are indicated by bulle
 
 
 <br />
-<h2 id="evidence_status">Evidence status </h2>
+<h2 id="validation_status">Validation status </h2>
 <p>
-We provide a simple summary of the evidence supporting a variant as a guide to its potential reliability
+Where possible dbSNP provides the types of evidence which were used to confirm a variation. We import that information and present it as validation status of a variation.
 </p>
-<table id="evidence_status_table" class="ss" style="width:850px">
+<table id="validation_status_table" class="ss" style="width:850px">
     <tr>
         <th style="width:60px">Pictogram</th>
-        <th>Name</th>
-        <th>Description</th>
+        <th>Short name</th>
+        <th>Validation status description</th>
+				<th>Source</th>
     </tr>
     <tr>
-        <td></td>
-        <td>Multiple_observations</td>
-        <td>The variant has multiple independent dbSNP submissions, i.e. submissions with a different submitter handles or different discovery samples </td>
+        <td><img src="/i/96/val_cluster.gif" alt="cluster" class="sp-thumb" style="height:26px;width;26px;float:none;margin-right:4px;vertical-align:middle" /></td>
+        <td>cluster</td>
+        <td>Validated by multiple, independent submissions to the refSNP cluster.</td>
+				<td>dbSNP</td>
+    </tr>
+    <tr class="bg2">
+        <td><img src="/i/96/val_freq.gif" alt="freq" class="sp-thumb" style="height:26px;width;26px;float:none;margin-right:4px;vertical-align:middle" /></td>
+        <td>freq</td>
+        <td>Validated by frequency or genotype data: minor alleles observed in at least two chromosomes.</td>
+        <td>dbSNP</td>
 		</tr>
+    <tr>
+        <td><img src="/i/96/val_submitter.gif" height="26" width="26" alt="submitter" class="sp-thumb" style="height:26px;width;26px;float:none;margin-right:4px;vertical-align:middle" /></td>
+        <td>submitter</td>
+        <td>Validated by submitter confirmation.</td>
+				<td>dbSNP</td>
+    </tr>
     <tr class="bg2">
-        <td></td>
-        <td>Frequency </td>
-        <td>The variant is reported to be polymorphic in at least one sample </td>
-
+        <td><img src="/i/96/val_doublehit.gif" alt="doublehit" class="sp-thumb" style="height:26px;width;26px;float:none;margin-right:4px;vertical-align:middle" /></td>
+        <td>doublehit</td>
+        <td>All alleles have been observed in at least two chromosomes apiece.</td>
+				<td>dbSNP</td>
     </tr>
     <tr>
-        <td></td>
-        <td>HapMap</td>
-        <td>The variant is polymorphic in at least one HapMap panel (human only)
-</td>
-
+        <td><img src="/i/96/val_hapmap.gif" alt="hapmap" class="sp-thumb" style="height:26px;width;26px;float:none;margin-right:4px;vertical-align:middle" /></td>
+        <td>hapmap</td>
+        <td>Genotyped by HapMap project.</td>
+				<td>dbSNP</td>
     </tr>
     <tr class="bg2">
-        <td></td>
+        <td><img src="/i/96/val_1000Genome.gif" alt="1000Genomes" class="sp-thumb" style="height:26px;width;26px;float:none;margin-right:4px;vertical-align:middle" /></td>
         <td>1000 Genomes</td>
-        <td>The variant was discovered in the 1000 genomes project (human only)</td>
+        <td>SNP has been sequenced in 1000 Genomes project.</td>
+				<td>dbSNP</td>
     </tr>
 		<tr>
         <td><img src="/i/96/val_precious.gif" height="26" width="26" alt="precious" class="sp-thumb" style="height:26px;width;26px;float:none;margin-right:4px;vertical-align:middle" /></td>
-        <td>Cited </td>
-        <td>dbSNP holds a citation from PubMed for the variant.</td>
-
+        <td>precious</td>
+        <td>Variants for which dbSNP holds citations from PubMed.</td>
+				<td>EnsEMBL</td>
     </tr>
 </table>
 
@@ -1169,7 +1178,7 @@ For variations with flanking sequences which do not map to a reference sequence,
 <tr>
 <td  rowspan="1" class="bg2"><b>External failure classification</b></td>
 <td class="bg2"> Flagged as suspect by dbSNP </td>
-<td class="bg2">Variations reported as being suspect by dbSNP due to being in probable paralogous regions are imported but flagged as failed (human only).</td>
+<td class="bg2">Variations reported as being suspect by dbSNP are imported but flagged as failures.</td>
 </tr>
 </table>
 <br />
