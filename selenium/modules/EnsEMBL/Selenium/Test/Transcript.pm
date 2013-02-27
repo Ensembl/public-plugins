@@ -59,9 +59,9 @@ sub test_transcript {
     if(lc($self->species) eq 'homo_sapiens') {          
       print "  Test Configure page \n";
       $sel->ensembl_click("link=Configure this page")
-      and $sel->ensembl_wait_for_ajax_ok('30000','5000')
+      and $sel->ensembl_wait_for_ajax_ok('30000','10000')
       and $sel->ensembl_click("link=Somatic mutations")
-      and $sel->ensembl_wait_for_ajax_ok('10000','3000')
+      and $sel->ensembl_wait_for_ajax_ok('10000','10000')
       and $sel->ensembl_click("//form[\@id='transcript_translationimage_configuration']/div[4]/div/ul/li/img") #turning first track off     
       and $sel->ensembl_click("modal_bg")
 #      and $sel->ensembl_wait_for_ajax_ok('15000')

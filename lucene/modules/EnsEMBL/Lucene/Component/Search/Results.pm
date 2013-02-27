@@ -157,6 +157,13 @@ sub re_search {
           <p><strong>Would you like to <a href="$url">search using $newq</a> (note number of digits)?</strong></p>
       };
     }
+    else {
+      my $url = $hub->url({'type' => 'Search', 'action' => 'Results', '__species' => 'all', 'idx' => $hub->param('idx'), 'q' => $q});
+    
+      $html .= qq{
+        <p><strong>Would you like to <a href="$url">search the rest of the website</a> with this term?</strong></p>
+      };
+    }
   }
   elsif ($species ne 'all') {
     my $url = $hub->url({'type' => 'Search', 'action' => 'Results', '__species' => 'all', 'idx' => $hub->param('idx'), 'q' => $q});
@@ -166,13 +173,14 @@ sub re_search {
     };
   }
   else {
-    $html = qq{
+    $html .= qq{
         <p><strong>If you are expecting to find features with this search term and think the failure to do so is an error, please <a href="/Help/Contact" class="popup">contact helpdesk</a> and let us know.</strong></p>
     };
   }
 
   $html .= '</div>';
   $html .= $self->no_results($q);
+
 
   return $html;
  
