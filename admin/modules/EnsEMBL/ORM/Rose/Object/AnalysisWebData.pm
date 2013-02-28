@@ -21,7 +21,7 @@ __PACKAGE__->meta->setup(
     analysis_description_id => {type => 'integer' },
     web_data_id             => {type => 'integer' },
     species_id              => {type => 'integer' },
-    db_type                 => {type => 'set', 'values' => [qw(
+    db_type                 => {type => 'enum', 'values' => [qw(
                                   cdna
                                   core
                                   funcgen
