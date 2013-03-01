@@ -45,8 +45,6 @@ sub newsfilters           { shift->_goto_rose_object('newsfilters');        }
 sub sortables             { shift->_goto_rose_object('sortables');          }
 sub currentconfigs        { shift->_goto_rose_object('currentconfigs');     }
 sub specieslists          { shift->_goto_rose_object('specieslists');       }
-sub uploads               { shift->_goto_rose_object('uploads');            }
-sub urls                  { shift->_goto_rose_object('urls');               }
 sub histories             { shift->_goto_rose_object('histories');          }
 sub favourite_tracks      { shift->_goto_rose_object('favourite_tracks');   }
                           
@@ -175,16 +173,38 @@ sub find_admin_groups {
   return map $_->group, @{shift->rose_object->admin_memberships};
 }
 
-sub add_to_uploads {
-  my ($self, %data) = @_;
+sub _add_to_records {
+  my ($self, $record_type) = splice @_, 0, 2;
 
-  my $record = $self->create_record('upload', \%data);
+  my $data = ref $_[0] eq 'HASH' ? $_[0] : {@_};
+
+  my $record = $self->create_record($record_type, $data);
   $record->save('user' => $self);
 
   ($record) = EnsEMBL::Web::Record->from_rose_objects([$record]);
 
   return $record;
 }
+
+sub add_to_uploads {
+  return shift->_add_to_records('upload', @_);
+}
+
+sub add_to_urls {
+  return shift->_add_to_records('url', @_);
+}
+
+sub add_to_dases {
+  return shift->_add_to_records('das', @_);
+}
+
+sub _records {
+  my ($self, $type, $id) = @_;
+  return $self->rose_object ? $self->rose_object->find_records('query' => [ 'type' => $type, $id ? ('record_id' => $id) : () ]) : ();
+}
+
+sub uploads { return shift->_records('upload', @_); }
+sub urls    { return shift->_records('url', @_); }
 
 sub get_all_das {
   my $self    = shift;
