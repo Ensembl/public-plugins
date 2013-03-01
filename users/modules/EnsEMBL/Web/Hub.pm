@@ -5,6 +5,7 @@ use strict;
 #use EnsEMBL::Web::Tools::MethodMaker (copy => {'new' => '__new', 'url' => '__url'}); ## TODO swap these two when 'new1' is renamed to 'new'
 use EnsEMBL::Web::Tools::MethodMaker (copy => {'url' => '__url'});
 use EnsEMBL::Web::User;
+use EnsEMBL::Web::Configuration::Account;
 
 sub new1 { # TODO - change this to 'new' once user plugin is stable
   ## @overrides
@@ -22,13 +23,16 @@ sub url {
   ## Clears the core params and species in case url type is Account
   my $self    = shift;
   my $params  = shift;
+  my $url     = '';
 
   if (ref $params && (($params->{'type'} || '') eq 'Account' || $self->type eq 'Account')) { # ignore this if second argument is the 'extra' argument
     $params->{'__clear'}    = 1;
     $params->{'species'}  ||= '';
   }
 
-  return $self->__url($params, @_);
+#  ($url = $self->species_defs->ENSEMBL_LOGIN_URL) =~ s/\/$// if grep { $params->{'action'} eq $_ } EnsEMBL::Web::Configuration::Account->SECURE_PAGES;
+
+  return $url.$self->__url($params, @_);
 }
 
 sub get_favourite_species {
@@ -41,7 +45,7 @@ sub get_favourite_species {
   return \@favourites;
 }
 
-sub initialize_user { # TODO removed this once user plugin is stable
+sub initialize_user { # TODO remove this once user plugin is stable
   my ($self, $cookie) = @_;
   $self->user = EnsEMBL::Web::User->new($self, $cookie);
 }
