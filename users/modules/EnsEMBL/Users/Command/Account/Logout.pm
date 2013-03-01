@@ -14,7 +14,7 @@ sub process {
   # clears cookies & saved user object
   $hub->user->deauthorise;
 
-  return $self->ajax_redirect($hub->type eq 'Account' ? $hub->url({'action' => 'Login'}) : $hub->referer->{'absolute_url'});
+  return $self->ajax_redirect($hub->type eq 'Account' ? '/' : $hub->referer->{'absolute_url'}, {}, '', 'page');
 }
 
 1;
