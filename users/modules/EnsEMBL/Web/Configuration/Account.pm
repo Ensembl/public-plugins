@@ -6,6 +6,11 @@ use strict;
 
 use base qw(EnsEMBL::Web::Configuration);
 
+sub SECURE_PAGES {
+  ## @return List of url 'action' for all the pages that should be served over https
+  return qw(Login);
+}
+
 # sub get_valid_action {
 # }
 
@@ -49,11 +54,6 @@ sub populate_tree { #TODO - split between user_populate_tree and populate_tree
     $preference_menu->append($self->create_node('Details/Edit', 'Edit Details', [
       'edit_details'      =>  'EnsEMBL::Users::Component::Account::Details::Edit'
     ], { 'availability'   =>  1 }));
-
-    # page modified from openid buttons component to allow a logged in user to select another openid provider as an alternative login option
-    $preference_menu->append($self->create_node('Details/AddLogin', 'Add Login', [
-      'edit_details'      =>  'EnsEMBL::Users::Component::Account::OpenID::Buttons'
-    ], { 'no_menu_entry'  =>  1 }));
 
     # page to view a single group
     $preference_menu->append($self->create_node('Groups/View', 'View a group', [
@@ -138,14 +138,12 @@ sub populate_tree { #TODO - split between user_populate_tree and populate_tree
     $self->create_node('Login', 'Login', [
       'message'     =>  'EnsEMBL::Users::Component::Account::Message',
       'login'       =>  'EnsEMBL::Users::Component::Account::Login',
-      'openid'      =>  'EnsEMBL::Users::Component::Account::OpenID::Buttons'
     ], { 'availability' => 1 });
 
     # page to display registration form and openid login options
     $self->create_node('Register', 'Register', [
       'message'     =>  'EnsEMBL::Users::Component::Account::Message',
       'register'    =>  'EnsEMBL::Users::Component::Account::Register',
-      'openid'      =>  'EnsEMBL::Users::Component::Account::OpenID::Buttons'
     ], { 'availability' => 1 });
 
     # page displayed for lost password request
@@ -154,33 +152,12 @@ sub populate_tree { #TODO - split between user_populate_tree and populate_tree
       'password'    =>  'EnsEMBL::Users::Component::Account::Password::Lost'
     ], { 'availability' => 1 });
 
-    # page displayed when user logs in to the site for the first time via openid to ask him some extra registration info
-    $self->create_node('OpenID/Register', '', [
-      'message'     =>  'EnsEMBL::Users::Component::Account::Message',
-      'register'    =>  'EnsEMBL::Users::Component::Account::OpenID::Register'
-    ], { 'no_menu_entry' => 1  });
-
-    # page displayed when user logs in to the site for the first time via openid to ask provide email address if he already has an account on ensembl
-    $self->create_node('OpenID/LinkExisting', '', [
-      'message'     =>  'EnsEMBL::Users::Component::Account::Message',
-      'register'    =>  'EnsEMBL::Users::Component::Account::OpenID::LinkExisting'
-    ], { 'no_menu_entry' => 1  });
-
-    # page displayed to ask the user to choose a way to authenticate his account when user logs in to the site for the first time via openid to asks email to link existing account
-    $self->create_node('OpenID/Authenticate', '', [
-      'message'     =>  'EnsEMBL::Users::Component::Account::Message',
-      'register'    =>  'EnsEMBL::Users::Component::Account::OpenID::Authenticate'
-    ], { 'no_menu_entry' => 1  });
-
 
     # Command to add (register) a new user, and to authenticate an existing user
     $self->create_node( "User/$_",            '', [], { 'no_menu_entry' => 1, 'command' => "EnsEMBL::Users::Command::Account::User::$_"           }) for qw(Add Authenticate);
 
     # Command to retrieve lost password
     $self->create_node( 'Password/Retrieve',  '', [], { 'no_menu_entry' => 1, 'command' => 'EnsEMBL::Users::Command::Account::Password::Retrieve' });
-
-    # OpenID related commands - command to make request to openid provider, command to handle response from the provider, command to add a new openid user
-    $self->create_node( "OpenID/$_",          '', [], { 'no_menu_entry' => 1, 'command' => 'EnsEMBL::Users::Command::Account::OpenID::Add'        }) for qw(Add Link);
   }
 
   ## PAGES AVAILABLE ALWAYS - INDEPENDENT OF WHETHER THE USER IS LOGGED IN OR NOT
@@ -207,9 +184,6 @@ sub populate_tree { #TODO - split between user_populate_tree and populate_tree
 
   # Command to confirm user account and save the newly choosen password (intentionally kept same as in Password/Save), command to save password after a password lost request or just a change password request
   $self->create_node($_,            '',       [], { 'no_menu_entry' => 1,       'command' => 'EnsEMBL::Users::Command::Account::Password::Save'               }) for qw(Confirmed Password/Save);
-
-  # Openid resuest and response commands work both ways - user logged in or not (if your is logged it, its a request to add login)
-  $self->create_node( "OpenID/$_",  '',       [], { 'no_menu_entry' => 1,       'command' => "EnsEMBL::Users::Command::Account::OpenID::$_"                   }) for qw(Request Response);
 
   # Generic logout command
   $self->create_node('Logout',      'Logout', [], { 'no_menu_entry' => !$user,  'command' => 'EnsEMBL::Users::Command::Account::Logout', 'availability' => 1  });
