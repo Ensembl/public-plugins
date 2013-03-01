@@ -37,6 +37,10 @@ sub id {
   return shift->{'record_id'};
 }
 
+sub colour { # some calls are made to this method while it's key may not be added to the object
+  return shift->{'colour'};
+}
+
 sub clone {
   my $self        = shift;
   my $class       = ref $self;
