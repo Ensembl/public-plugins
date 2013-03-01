@@ -8,6 +8,8 @@ use warnings;
 
 use base qw(EnsEMBL::ORM::Rose::Object::RecordOwner);
 
+use EnsEMBL::Web::Tools::RandomString qw(random_string);
+
 use constant RECORD_TYPE => 'user';
 
 __PACKAGE__->meta->setup(
@@ -20,7 +22,8 @@ __PACKAGE__->meta->setup(
     data                  => { 'type' => 'datamap' },
     organisation          => { 'type' => 'varchar', 'length' => '255' },
     country               => { 'type' => 'varchar', 'length' => '2'   },
-    status                => { 'type' => 'enum', 'values' => [qw(active suspended)], 'default' => 'active' }
+    status                => { 'type' => 'enum', 'values' => [qw(active suspended)], 'default' => 'active' },
+    salt                  => { 'type' => 'varchar', 'length' => '8'   }
   ],
 
   virtual_columns       => [
@@ -36,6 +39,19 @@ __PACKAGE__->meta->setup(
 
   virtual_relationships => __PACKAGE__->record_relationship_types
 );
+
+sub reset_salt {
+  ## Resets the random key salt
+  shift->salt(random_string(8));
+}
+
+sub reset_salt_and_save {
+  ## Resets the salt before saving the object - use this instead of regular save method unless reseting the salt is not needed
+  ## @params As requried by save method
+  my $self = shift;
+  $self->reset_salt;
+  return $self->save(@_);
+}
 
 #############################
 ####                     ####
