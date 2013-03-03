@@ -1,0 +1,18 @@
+.zmenu_bottom         { height: 22px; padding: 4px 0px 0px 4px; border: 0px; background-color: [[BUTTON_BG]]; color: [[PANEL_BG]]; }
+.zmenu_bottom         { border-top: 0; }
+
+.zmenu_info           { line-height: 12px; height: 15px; }
+
+.zmenu_paginate                                      { padding: 0 0 2px; text-align: center; color: [[PAGE_TEXT]]; font-size: 10px; }
+
+.zmenu_paginate span.first                           { border-radius: 4px 0 0 4px; -moz-border-radius: 4px 0 0 4px; -webkit-border-radius: 4px 0 0 4px; }
+.zmenu_paginate span.last                            { border-radius: 0 4px 4px 0; -moz-border-radius: 0 4px 4px 0; -webkit-border-radius: 0 4px 4px 0; }
+.zmenu_paginate span.paginate_button_disabled        { color: [[NEUTRAL_BORDER]]; cursor: default; }
+.zmenu_paginate span.paginate_button_disabled:hover  { background-color: [[TINT_BG]] !important;   }
+
+.zmenu_paginate span.paginate_button,
+.zmenu_paginate span.paginate_active       { border: medium none; padding: 0px 8px; margin: 0 -2px 0 0; cursor: pointer; display: inline-block; line-height: 20px; font-size: 8px;}
+.zmenu_paginate span.paginate_button       { background-color: [[TINT_BG]]; }
+.zmenu_paginate span.paginate_button:hover { background-color: #BFD0FF; }
+.zmenu_paginate span.paginate_active       { background-color: #99B3FF; }
+

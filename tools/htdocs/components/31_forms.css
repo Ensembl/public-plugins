@@ -1,0 +1,9 @@
+form.blast { margin: 10px; padding:3px; background-color: #EAEEFF; border: 1px #BBCCFF solid; -moz-border-radius: 5px; -webkit-border-radius: 5px;}
+a.hidelink { visibility: hidden;}
+
+form.blast div.config { position: relative; top: 2px; z-index: 10; }
+form.blast a.toggle { margin: 2px; padding-left: 5px;  border: 2px #667AA6 solid; background-color: #FFFFFF; font-size: 1.2em }
+form.blast fieldset.config { position: relative; top: -18px; margin: 2px; padding: 5px; background-color: #FFFFFF; border: 2px #667AA6 solid;  }
+form.blast h2.config { border-bottom: 1px solid #CCCCCC; padding-bottom: 2px }
+
+form.blast input.inactive { font-style: italic; color: [[PAGE_TEXT]]; }
