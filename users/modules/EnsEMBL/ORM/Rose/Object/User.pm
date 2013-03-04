@@ -10,7 +10,10 @@ use base qw(EnsEMBL::ORM::Rose::Object::RecordOwner);
 
 use EnsEMBL::Web::Tools::RandomString qw(random_string);
 
-use constant RECORD_TYPE => 'user';
+use constant {
+  RECORD_TYPE   => 'user',
+  DEFAULT_SALT  => 'ensembl' # any random string
+};
 
 __PACKAGE__->meta->setup(
   table                 => 'user',
@@ -23,7 +26,7 @@ __PACKAGE__->meta->setup(
     organisation          => { 'type' => 'varchar', 'length' => '255' },
     country               => { 'type' => 'varchar', 'length' => '2'   },
     status                => { 'type' => 'enum', 'values' => [qw(active suspended)], 'default' => 'active' },
-    salt                  => { 'type' => 'varchar', 'length' => '8'   }
+    salt                  => { 'type' => 'varchar', 'length' => '8', 'default' => __PACKAGE__->DEFAULT_SALT }
   ],
 
   virtual_columns       => [
