@@ -5,6 +5,7 @@ use warnings;
 no warnings "uninitialized";
 
 use base qw(EnsEMBL::Web::RunnableDB);
+use EnsEMBL::Web::Parsers::NcbiBlast;
 
 sub fetch_input {
   my $self = shift;
@@ -51,10 +52,9 @@ warn $command;
 }
 
 sub write_output {
-  my $self = shift;
+=cut  my $self = shift;
 #sleep (40);
   # This will be the parsing step
-  my $results_xml;
   my $type = 'ncbi';
 
   if ($type eq 'ncbi'){
@@ -79,8 +79,11 @@ sub write_output {
     system $parse_blast_command;
 
   }
+=cut
 
-
+  my $self = shift;
+  my $parser = EnsEMBL::Web::Parsers::NcbiBlast->new($self);
+  $parser->parse;
   return;
 }
 
