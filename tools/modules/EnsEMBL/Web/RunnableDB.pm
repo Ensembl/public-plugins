@@ -6,6 +6,7 @@ no warnings "uninitialized";
 use base qw(Bio::EnsEMBL::Hive::Process);
 
 use File::Path;
+use Bio::Seq;
 use Bio::SeqIO;
 
 sub workdir {
@@ -114,8 +115,9 @@ sub write_seqfile{
                                -format => $format,
                               );
   foreach my $seq(@seqs){
+    my $bioperl_seq = Bio::Seq->new( -seq => $seq, -id => 'unnamed');
     eval{
-      $seqout->write_seq($seq);
+      $seqout->write_seq($bioperl_seq);
     };
     if($@){
       #throw("FAILED to write $seq to $filename SequenceUtils:write_seq_file $@");
