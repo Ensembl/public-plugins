@@ -42,7 +42,6 @@ sub populate_tree {
     ], { 'availability' => 1 });
 
     # page displayed when user logs in to the site for the first time via openid to ask him some extra registration info
-    $self->delete_node('OpenID/Register');
     $self->create_node('OpenID/Register', '', [
       'message'     =>  'EnsEMBL::Users::Component::Account::Message',
       'register'    =>  'EnsEMBL::OpenID::Component::Account::Register'
