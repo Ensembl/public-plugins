@@ -63,9 +63,6 @@ sub pipeline_analyses {
         },
       -hive_capacity => 2, # workers that run at a time per analysis 
    },
-    { -logic_name =>'BLAT', # one of these per analysis
-      -module     =>'', #.... 
-    },
   ];
     
 }
