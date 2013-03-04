@@ -42,7 +42,7 @@ sub content {
 
     $form->add_field($buttons_field);
 
-    return $form->render;
+    return $self->js_section({'subsections' => [ $form->render ]});
 
   } else {
 
