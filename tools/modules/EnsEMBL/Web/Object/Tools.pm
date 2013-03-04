@@ -1,7 +1,7 @@
 package EnsEMBL::Web::Object::Tools;
 
 use strict;
-#use warnings;
+use warnings;
 no warnings "uninitialized";
 
 use EnsEMBL::Web::SpeciesDefs;
@@ -13,8 +13,18 @@ use Data::Dumper;
 
 use base qw(EnsEMBL::Web::Object);
 
-sub caption { return "Tools"; }
+sub caption { return 'Tools'; }
 sub short_caption { return "Tools"; }
+
+sub long_caption {
+  my $self = shift;
+  return 'Tools' if $self->action ne 'BlastResults';
+
+  my $caption =  sprintf ('<h1>Results for %s: <span class="small"><a href ="%s">[Change ticket]</a></span></h1>',
+    $self->hub->param('tk'),
+    $self->hub->url({ action => 'Summary', tk => undef})
+  );
+}
 
 sub session_id    { my $self = shift; return $self->hub->session->session_id || undef; }
 sub user_id       { my $self = shift; return $self->hub->user ? $self->hub->user->user_id : undef; }
@@ -301,8 +311,6 @@ sub get_hit_db_entry {
 
 sub get_job_division_data {
   my ($self, $result_entry) = @_;
-  my $analysis_object = $self->retrieve_analysis_object;
-  my $database = $analysis_object->{'_database'};
   my $frozen_division = $result_entry->sub_job->job_division;
   my $job_division = $self->deserialise($frozen_division);
   return $job_division;
