@@ -21,8 +21,7 @@ sub content {
   my $login             = $object->fetch_login_from_url_code(1) or return $self->render_message(MESSAGE_URL_EXPIRED, {'error' => 1});
   my $provider          = $login->provider                      or return $self->render_message(MESSAGE_URL_EXPIRED, {'error' => 1});
   my $trusted_provider  = $login->has_trusted_provider;
-  my $content           = $self->wrapper_div({'js_panel' => 'AccountForm'});
-  my $form              = $content->append_child($self->new_form({'action' => $hub->url({'action' => 'OpenID', 'function' => 'Link'})}));
+  my $form              = $self->new_form({'action' => {'action' => 'OpenID', 'function' => 'Link'}});
 
   $form->add_notes(sprintf 'Please enter the email address below for your existing %s account.', $self->site_name);
 
@@ -56,7 +55,7 @@ sub content {
 
   $form->add_button({'value' => 'Continue'});
 
-  return $content->render;
+  return $self->js_section({'js_panel' => 'AccountForm', 'subsections' => [ $form->render ]});
 }
 
 1;

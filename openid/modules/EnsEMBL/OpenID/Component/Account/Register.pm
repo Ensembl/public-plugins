@@ -26,8 +26,7 @@ sub content {
   my $login_code        = $login->get_url_code;
   my $then_param        = $hub->param('then') || '';
   my $trusted_provider  = $login->has_trusted_provider;
-  my $content           = $self->wrapper_div({'js_panel' => 'AccountForm'});
-  my $form              = $content->append_child($self->new_form({'action' => $hub->url({'action' => 'OpenID', 'function' => 'Add'})}));
+  my $form              = $self->new_form({'action' => {'action' => 'OpenID', 'function' => 'Add'}});
 
   $form->add_notes({
     'heading' => sprintf('Already have an %s account?', $site_name),
@@ -72,7 +71,7 @@ sub content {
 
   $form->get_elements_by_name('email')->[0]->add_attribute('class', '_openid_email');
 
-  return $content->render;
+  return $self->js_section({'js_panel' => 'AccountForm', 'subsections' => [ $form->render ]});
 }
 
 1;

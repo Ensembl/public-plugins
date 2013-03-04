@@ -23,8 +23,7 @@ sub content {
   my $login             = $object->fetch_login_from_url_code(1)   or return $self->render_message(MESSAGE_URL_EXPIRED,          {'error' => 1});
   my $provider          = $login->provider                        or return $self->render_message(MESSAGE_URL_EXPIRED,          {'error' => 1});
   my $site_name         = $self->site_name;
-  my $content           = $self->wrapper_div({'js_panel' => 'AccountForm'});
-  my $form              = $content->append_child($self->new_form({'action' => $hub->url({'action' => 'OpenID', 'function' => 'Link'})}));
+  my $form              = $self->new_form({'action' => {'action' => 'OpenID', 'function' => 'Link'}});
 
   $form->add_notes("To enable us to link your $provider account to your existing $site_name account, we need to make sure that the existing account belongs to you.");
   $form->add_hidden({'name' => 'code',            'value' => $login->get_url_code });
@@ -61,7 +60,7 @@ sub content {
 
   $form->add_button({'value' => 'Continue'});
 
-  return $content->render;
+  return $self->js_section({'subsections' => [ $form->render ], 'js_panel' => 'AccountForm'});
 }
 
 1;
