@@ -63,5 +63,16 @@ sub pointer_default {
   return $hash{$feature_type};
 }
 
+sub gradient {
+  my $self = shift;
+
+  my %pointer_defaults = EnsEMBL::Web::ToolsConstants::KARYOTYPE_POINTER_DEFAULTS;
+  my $defaults    = $pointer_defaults{'Blast'};
+  my $colour    = $defaults->[1];
+  my $gradient  = $defaults->[2];
+
+  return $gradient;
+}
+
 1;
 
