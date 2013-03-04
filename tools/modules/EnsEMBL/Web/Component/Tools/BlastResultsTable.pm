@@ -50,6 +50,16 @@ sub content {
         $result->{'links'} = $links;
         $result->{'options'} = {'class' => 'hsp_' . $_->{'result_id'}};
         $result->{'tid'} = $self->subject_link($result->{'tid'}, $db_type, $result->{'species'});
+
+        my $region_link = $self->location_link($_, $result);
+        my $region = $result->{'gid'}  .':'. $result->{'gstart'} .'-'. $result->{'gend'};
+        $region_link =~s/\[R\]/$region/;
+        if ($db_type =~/latestgp/i){
+          $result->{'tid'} = $region_link;
+        } else { 
+          $result->{'gid'} = $region_link;  
+        }
+
         push (@rows, $result);
       }
     }
@@ -194,8 +204,6 @@ sub results_table {
       { 'key' => 'qend',    'title'=> 'Query end',      'align' => 'left', sort => 'none'   },
       { 'key' => 'qori',    'title'=> 'Query Ori',      'align' => 'left', sort => 'none'   },
       { 'key' => 'tid',     'title'=> 'Subject name',   'align' => 'left', sort => 'string' },
-      { 'key' => 'tstart',  'title'=> 'Subject start',  'align' => 'left', sort => 'none'   },
-      { 'key' => 'tend',    'title'=> 'Subject end',    'align' => 'left', sort => 'none'   },
       { 'key' => 'tori',    'title'=> 'Subject Ori',    'align' => 'left', sort => 'none'   },
       { 'key' => 'score',   'title'=> 'Score',          'align' => 'left', sort => 'numeric' },
       { 'key' => 'evalue',  'title'=> 'E-val',          'align' => 'left', sort => 'numeric' },
@@ -214,8 +222,6 @@ sub results_table {
       { 'key' => 'tend',    'title'=> 'Subject end',    'align' => 'left', sort => 'none'   },
       { 'key' => 'tori',    'title'=> 'Subject Ori',    'align' => 'left', sort => 'none'   },
       { 'key' => 'gid',     'title'=> 'Chr name',       'align' => 'left', sort => 'string' },
-      { 'key' => 'gstart',  'title'=> 'Chr start',      'align' => 'left', sort => 'none'   },
-      { 'key' => 'gend',    'title'=> 'Chr end',        'align' => 'left', sort => 'none'   },
       { 'key' => 'gori',    'title'=> 'Chr Ori',        'align' => 'left', sort => 'none'   },
       { 'key' => 'score',   'title'=> 'Score',          'align' => 'left', sort => 'numeric' },
       { 'key' => 'evalue',  'title'=> 'E-val',          'align' => 'left', sort => 'numeric' },
