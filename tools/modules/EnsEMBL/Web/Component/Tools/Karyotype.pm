@@ -42,66 +42,9 @@ sub content {
     $image->karyotype($hub, $object, $pointers, 'Vkaryoblast', $species);  
 
     $html .= $image->render;
-
-    # Add colour key information
-    my $gradient  = $self->gradient; 
-
-    my $columns = [
-      {'key' => 'ftype',  'title' => 'Feature type'},
-      {'key' => 'colour', 'title' => 'Colour'},
-    ];
-    my $rows;
-
-    my $swatch    = '';
-    my $legend    = '';
-
-    my @colour_scale = $hub->colourmap->build_linear_gradient(@$gradient);
-
-    my $i = 1;
-    foreach my $step (@colour_scale) {
-      my $label;
-      if ($i == 1) {
-        $label = "0"; 
-      }
-      elsif ($i == scalar @colour_scale) {
-          $label = '100';
-      }
-      else { 
-        $label = ($i ) % 2  == 0 ? '' : ($i -1) * 10 ;
-      }
-      $swatch .= qq{<div style="background:#$step">$label</div>};
-      $i++;
-    }
-      
-    $legend = sprintf '<div class="swatch-legend">Lower %%ID  &#9668;<span>%s</span>&#9658; Higher %%ID </div>', ' ' x 33;
-    push @$rows, {
-      'ftype'  => {'value' => 'BLAST/BLAT hit'},
-      'colour' => {'value' => qq(<div class="swatch-wrapper"><div class="swatch">$swatch</div>$legend</div>)},
-    };
-
-    my $hide    = $hub->get_cookie_value('toggle_blast_key_table') eq 'closed';
-
-    $html .= sprintf ('<h3><a rel="blast_key_table" class="toggle set_cookie %s" href="#" >Key</a></h3>',
-              $hide ? 'closed' : 'open'
-            );
-
-    my $table = $self->new_table($columns, $rows, {toggleable => 1, class => 'fixed_width' . ($hide ? ' hide ' : ''), id => 'blast_key_table' });    
- 
-    $html .= '<div class="blast_key_table">' . $table->render . '</div>';
   }
 
   return $html;
-}
-
-sub gradient {
-  my $self = shift;
-
-  my %pointer_defaults = EnsEMBL::Web::ToolsConstants::KARYOTYPE_POINTER_DEFAULTS;
-  my $defaults    = $pointer_defaults{'Blast'}; 
-  my $colour    = $defaults->[1];
-  my $gradient  = $defaults->[2];
-
-  return $gradient;
 }
 
 sub get_hits {
