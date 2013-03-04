@@ -14,17 +14,11 @@ sub local_tools    { return $_[0]->_local_tools;    }
 sub content_panel  { return $_[0]->_content_panel;  }
 sub context_panel  { return undef;  }
 
+sub modify_page_elements { $_[0]->page->remove_body_element('summary'); }
+
 sub set_default_action {
   my $self = shift;
   $self->{_data}{default} = 'Blast';
-}
-
-sub caption {
-  return 'Tools';
-}
-
-sub short_caption {
-  return 'Tools';
 }
 
 sub populate_tree {
@@ -46,13 +40,15 @@ sub populate_tree {
   );
 
   my $blast_node = $self->tree->get_node('Blast');
+  my $title = $self->object ? $self->object->long_caption : '';
   $blast_node->append($self->create_subnode('BlastResults', 'Results',
     [qw(
+      results     EnsEMBL::Web::Component::Tools::BlastResults
       karyotype   EnsEMBL::Web::Component::Tools::Karyotype
       hsps        EnsEMBL::Web::Component::Tools::HspQueryPlot
-      results     EnsEMBL::Web::Component::Tools::BlastResults
+      table     EnsEMBL::Web::Component::Tools::BlastResultsTable
     )],
-    { 'availability' => 1, 'concise' => 'BLAST/BLAT results' } 
+    { 'availability' => 1, 'concise' => $title } 
   ));
   $blast_node->append($self->create_subnode('BlastAlignment', 'Alignment',
     [qw(
