@@ -67,6 +67,7 @@ sub get_colour_scale {
 sub hsp {
   my ($self, $hsp, $opts, $colours) = @_;
   my ($hspstart, $hspend) = $self->region($hsp);
+  ($hspstart, $hspend)  = ($hspend, $hspstart) if $hspend < $hspstart;
   my $identity            = sprintf("%.1f", ($hsp->{'pident'} /100));
   my $colour              = $colours->{$identity};
 
@@ -101,7 +102,8 @@ sub hsp {
 sub region {
   my ($self, $hsp) = @_;
   my $start = $hsp->{'qstart'};
-  my $end   = $hsp->{'qend'};
+  my $end   = $hsp->{'qend'}; 
+  ($start, $end)  = ($end, $start) if $end < $start; 
   return ($start, $end);
 }
 
