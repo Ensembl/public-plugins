@@ -52,17 +52,46 @@ sub create_jobs {
   my $hive_analysis = $hive_adaptor->get_AnalysisAdaptor->fetch_by_logic_name_or_url($analysis_name);    
   my @hive_jobs = ();
 
+  my $sequences;
+  foreach (keys %{$self->{'_seqs'}}){
+    $sequences->{$_} = $self->{'_seqs'}->{$_}->seq;
+  }
+
   # one Hive job per species, for now allow multiple query sequences
   foreach my $species ( @{$self->{'_species'}} ){ 
+    my $dba = $self->hub->database($species, 'core');
+    my $dbc = $dba->dbc;
+
     my %input = (
-      ticket      => $ticket->ticket_id,
-      ticket_name => $ticket->ticket_name,
-      database    => $self->{'_database'}{$species}{'file'},
-      method      => $self->{'_methods'},
-      seqs        => $self->{'_seqs'},
-      query_type  => $self->{'_input_type'}, 
-      workdir     => $self->workdir,
-      config      => $self->{'_config'},
+      ticket        => $ticket->ticket_id,
+      ticket_name   => $ticket->ticket_name,
+      database      => $self->{'_database'}{$species}{'file'},
+      method        => $self->{'_methods'},
+      seqs          => $sequences,
+      query_type    => $self->{'_input_type'}, 
+      workdir       => $self->workdir,
+      config        => $self->{'_config'},
+      species       => $species,
+      database_type => $self->{'_database'}{$species}{'type'},
+      dba           => { 
+        -user             => $dbc->username,
+        -host             => $dbc->host,
+        -port             => $dbc->port,
+        -pass             => $dbc->password,
+        -dbname           => $dbc->dbname,
+        -driver           => $dbc->driver,
+        -species          => $dba->species,
+        -species_id       => $dba->species_id,
+        -multispecies_db  => $dba->is_multispecies,
+        -group            => $dba->group,
+      },
+      ticket_dbc    => {
+        -user             => $self->species_defs->DATABASE_WRITE_USER,
+        -pass             => $self->species_defs->DATABASE_WRITE_PASS,
+        -host             => $self->species_defs->multidb->{'DATABASE_WEB_TOOLS'}{'HOST'},
+        -port             => $self->species_defs->multidb->{'DATABASE_WEB_TOOLS'}{'PORT'},
+        -dbname           => $self->species_defs->multidb->{'DATABASE_WEB_TOOLS'}{'NAME'}
+      }
     );
     
     $input{mask} = 1 if $self->{'_repeat_mask'};
