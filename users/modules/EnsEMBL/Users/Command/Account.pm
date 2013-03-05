@@ -24,13 +24,8 @@ sub process {
   my $code    = $hub->param($hub->CSRF_SAFE_PARAM);
 
   if ($code && $r_user && $r_user->salt eq $code) {
-
-    my $return = $self->csrf_safe_process(@_);
-
-    $r_user->reset_salt;
-    $r_user->save('changes_only' => 1);
-
-    return $return;
+    $r_user->reset_salt_and_save('changes_only' => 1);
+    return $self->csrf_safe_process(@_);
   }
 
   return $self->redirect_message(MESSAGE_URL_EXPIRED);
