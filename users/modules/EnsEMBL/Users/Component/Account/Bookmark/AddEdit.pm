@@ -16,7 +16,7 @@ sub content {
 
   if (my ($bookmark, $record_owner) = $object->fetch_bookmark_with_owner( $is_add_new ? 0 : ($hub->param('id'), $hub->param('group')) )) {
 
-    my $form = $self->new_form({'action' => {qw(action Bookmark function Save)}});
+    my $form = $self->new_form({'action' => {qw(action Bookmark function Save)}, 'csrf_safe' => 1});
 
     $form->add_hidden({'name' => 'id',        'value' => $bookmark->record_id });
     $form->add_hidden({'name' => 'object',    'value' => $bookmark->name || $hub->referer->{'ENSEMBL_TYPE'} }) if $is_add_new;

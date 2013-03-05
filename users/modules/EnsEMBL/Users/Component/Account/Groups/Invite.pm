@@ -25,7 +25,7 @@ sub content {
 
   if ($adminship or @$adminships) {
 
-    my $form = $self->new_form({'action' => {'action' => 'Group', 'function' => 'Invite'}});
+    my $form = $self->new_form({'action' => {qw(action Group function Invite)}, 'csrf_safe' => 1});
 
     $form->add_notes({
       'text'        => sprintf('To invite new members to join %s group, enter one email address per person. Users not already registered with %s will be asked to do so before accepting your invitation.', $adminship ? 'the' : 'a', $self->site_name)

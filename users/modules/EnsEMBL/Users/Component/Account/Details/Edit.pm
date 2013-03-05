@@ -15,7 +15,7 @@ sub content {
   my $hub             = $self->hub;
   my $user            = $hub->user;
   my $email           = $user->email;
-  my $form            = $self->new_form({'action' => {qw(action Details function Save)}});
+  my $form            = $self->new_form({'action' => {qw(action Details function Save)}, 'csrf_safe' => 1});
   my $js_change_email = $self->JS_CLASS_CHANGE_EMAIL;
   my $email_note      = '';
 
