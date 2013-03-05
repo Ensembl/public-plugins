@@ -60,8 +60,15 @@ sub content {
       my $results_text = $status =~ /Failed/ ? 'Display reason for failure' : 'View Results';
       my $results_url = $self->hub->url({ type => 'Tools', action => $analysis.'Results', tk => $ticket->ticket_name });
       my $display_link = $ticket->status =~ /Completed|Failed/ ? undef : 'class=hidelink';
+      my $disable_link = $ticket->status =~ /Completed|Failed/ ? undef : 'class=disabled';
       my $save_icon = $self->hub->user =~/\d+/ ? 'save.png' : 'dis/save.png';
       my $save_text = $self->hub->user =~/\d+/ ? 'Save job to user account' : 'Log in to save Job';
+
+      my $ticket_link = sprintf ('<a %s href="%s">%s</a>',
+        $disable_link,
+        $results_url,
+        $ticket->ticket_name
+      );
 
       my $results = sprintf ('<a %s href="%s"><img src="%s%s" alt="%s" title="%s"/></a>',
         $display_link,
@@ -89,7 +96,7 @@ sub content {
 
       my $row = {
         analysis =>  $analysis,
-        ticket    => { value => $ticket->ticket_name, class => 'ticket_id' },
+        ticket    => { value => $ticket_link, class => 'ticket_id' },
         desc      => $desc,
         created   => $formatted_date,
         status    => { value => $status, class => 'status' },
