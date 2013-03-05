@@ -152,19 +152,26 @@ sub map_to_genome {
     my $adaptor = $dba->get_adaptor($feature_type);
 
     my $object = $adaptor->fetch_by_stable_id($hit->{'tid'});
-    if ($feature_type eq 'Translation'){ $object = $object->transcript; }
-    my @coords = ( sort { $a->start <=> $b->start }
+    if ($object) { 
+      if ($feature_type eq 'Translation'){ $object = $object->transcript; }
+      my @coords = ( sort { $a->start <=> $b->start }
                    grep { ! $_->isa('Bio::EnsEMBL::Mapper::Gap') }
                    $object->$mapper($hit->{'tstart'}, $hit->{'tend'}, $hit->{'tori'})
                  );
 
-    $g_id = $object->seq_region_name;
-    $g_start = $coords[0]->start;
-    $g_end = $coords[-1]->end;
-    $g_ori = $object->strand eq $hit->{'tori'} ? $object->strand :
+      $g_id = $object->seq_region_name;
+      $g_start = $coords[0]->start;
+      $g_end = $coords[-1]->end;
+      $g_ori = $object->strand eq $hit->{'tori'} ? $object->strand :
              $object->strand  eq '1' ? '1' : '-1';
 
-    $g_coords = \@coords;
+      $g_coords = \@coords;
+    } else {
+      $g_id = 'Unmapped';
+      $g_start  = 'N/A';
+      $g_end = 'N/A';
+      $g_ori = 'N/A'
+    }
   }
 
   $hit->{'gid'} = $g_id;
@@ -172,7 +179,6 @@ sub map_to_genome {
   $hit->{'gend'} = $g_end;
   $hit->{'gori'} = $g_ori;
   $hit->{'species'} = $species;
-  $hit->{'g_aln'} = $g_aln;
   $hit->{'db_type'} = $database_type;
   if ($g_coords){ $hit->{'g_coords'} = $g_coords; }
 
