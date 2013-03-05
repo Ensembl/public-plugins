@@ -6,6 +6,10 @@ use strict;
 use EnsEMBL::Web::Tools::MethodMaker (copy => {'url' => '__url'});
 use EnsEMBL::Web::User;
 use EnsEMBL::Web::Configuration::Account;
+use EnsEMBL::Web::Exceptions;
+use EnsEMBL::ORM::Rose::Object::User;
+
+use constant CSRF_SAFE_PARAM => 'rxt';
 
 sub new1 { # TODO - change this to 'new' once user plugin is stable
   ## @overrides
@@ -21,18 +25,27 @@ sub new1 { # TODO - change this to 'new' once user plugin is stable
 sub url {
   ## @overrides
   ## Clears the core params and species in case url type is Account
+  ## Accepts the following extra keys as arguments
+  ##  - csrf_safe : Required with value 1, if the url to be construted has to be safe from 'Cross site request forgery'
+  ##  - user      : Required for CSRF safe urls only if the url is to be used by a user different to the logged in user (provide value undef if user yet to be created)
   my $self    = shift;
-  my $params  = shift;
+  my $extra   = $_[0] && !ref $_[0] ? shift : undef;
+  my $params  = shift || {};
   my $url     = '';
 
-  if (ref $params && (($params->{'type'} || '') eq 'Account' || $self->type eq 'Account')) { # ignore this if second argument is the 'extra' argument
+  if (($params->{'type'} || '') eq 'Account' || $self->type eq 'Account') {
     $params->{'__clear'}    = 1;
     $params->{'species'}  ||= '';
   }
 
+  if (delete $params->{'csrf_safe'}) {
+    my $user = exists $params->{'user'} ? $params->{'user'} : $self->user;
+    $params->{$self->CSRF_SAFE_PARAM} = $user ? $user->rose_object->salt : EnsEMBL::ORM::Rose::Object::User->DEFAULT_SALT;
+  }
+
 #  ($url = $self->species_defs->ENSEMBL_LOGIN_URL) =~ s/\/$// if grep { $params->{'action'} eq $_ } EnsEMBL::Web::Configuration::Account->SECURE_PAGES;
 
-  return $url.$self->__url($params, @_);
+  return $url.$self->__url($extra || (), $params, @_);
 }
 
 sub get_favourite_species {
