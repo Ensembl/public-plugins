@@ -31,7 +31,7 @@ sub process {
   # account found, reset the salt, save the login object and send an email
   $login->reset_salt_and_save;
 
-  $self->get_mailer->send_password_retrieval_email($login);
+  $self->mailer->send_password_retrieval_email($login);
 
   return $self->redirect_message(MESSAGE_PASSWORD_EMAIL_SENT, {'email' => $email});
 }

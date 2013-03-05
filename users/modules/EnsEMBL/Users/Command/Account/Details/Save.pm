@@ -37,7 +37,7 @@ sub process {
   if ($fields->{'email'} ne $user->email) {
     $user->new_email($fields->{'email'});
     $user->save;
-    $self->get_mailer->send_change_email_confirmation_email($user->get_local_login || shift(@{$user->find_logins('query' => ['status' => 'active'])}), $fields->{'email'});
+    $self->mailer->send_change_email_confirmation_email($user->get_local_login || shift(@{$user->find_logins('query' => ['status' => 'active'])}), $fields->{'email'});
     return $self->redirect_message(MESSAGE_VERIFICATION_SENT, {'email' => $fields->{'email'}});
   }
 

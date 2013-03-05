@@ -84,7 +84,7 @@ sub handle_verified_identity {
 
       # If email provided by openid provider is same as the saved one but user has not verified his email yet, send another verification email
       if ($linked_user->email eq $email) {
-        $self->get_mailer->send_verification_email($login);
+        $self->mailer->send_verification_email($login);
         return $self->redirect_message(MESSAGE_VERIFICATION_SENT, {'email' => $email});
       }
     }
