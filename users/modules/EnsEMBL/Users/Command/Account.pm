@@ -1,15 +1,40 @@
 package EnsEMBL::Users::Command::Account;
 
+## Base class for all the command modules
+## This also contains support for openid login
+
 use strict;
 use warnings;
 
 use EnsEMBL::Web::Exceptions;
 use EnsEMBL::Users::Mailer::User;
-use EnsEMBL::Users::Messages qw(MESSAGE_ACCOUNT_BLOCKED MESSAGE_VERIFICATION_SENT MESSAGE_UNKNOWN_ERROR);
+use EnsEMBL::Users::Messages qw(MESSAGE_ACCOUNT_BLOCKED MESSAGE_VERIFICATION_SENT MESSAGE_URL_EXPIRED MESSAGE_UNKNOWN_ERROR);
 
 use base qw(EnsEMBL::Web::Command);
 
 use constant EMAIL_REGEX => qr/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,6}$/;
+
+sub csrf_safe_process { } # stub for child classes - override this method instead of 'process' for CSRF safe processes
+
+sub process {
+  ## Wrapper around the child command module's csrf_safe_process method
+  my $self    = shift;
+  my $hub     = $self->hub;
+  my $r_user  = $hub->user->rose_object;
+  my $code    = $hub->param($hub->CSRF_SAFE_PARAM);
+
+  if ($code && $r_user && $r_user->salt eq $code) {
+
+    my $return = $self->csrf_safe_process(@_);
+
+    $r_user->reset_salt;
+    $r_user->save('changes_only' => 1);
+
+    return $return;
+  }
+
+  return $self->redirect_message(MESSAGE_URL_EXPIRED);
+}
 
 sub handle_registration {
   ## Handles a new login according to the email provided during registration
@@ -32,13 +57,11 @@ sub handle_registration {
     return $self->redirect_openid_register($login);
 
   } else {
-    warn "Creating new user";
     $user = $object->new_user_account({'email' => $email});
   }
 
   # skip verification if flag kept on, or if openid provider is trusted and user uses same email in user account as provided by openid provider
   if ($login_type eq 'openid' && ($flags->{'skip_verify_email'} || $login->has_trusted_provider && $user->email eq $login->email)) {
-    warn sprintf("\nSkipping verification for (%s, %s)", $login->provider, $login->email);
     $login->activate($user);
     $user->save;
     return $self->redirect_after_login($user);
@@ -52,7 +75,7 @@ sub handle_registration {
   warn sprintf("\nSending verification for (%s, %s)", $login->type eq 'openid' ? $login->provider : $login->type, $login->email);
 
   # Send verification email
-  $self->get_mailer->send_verification_email($login);
+  $self->mailer->send_verification_email($login);
   return $self->redirect_message(MESSAGE_VERIFICATION_SENT, {'email' => $user->email});
 }
 
@@ -157,7 +180,7 @@ sub validate_fields {
   return $params;
 }
 
-sub get_mailer {
+sub mailer {
   ## Gets the mailer object for sending emails
   ## @return EnsEMBL::Users::Mailer::User object
   return EnsEMBL::Users::Mailer::User->new(shift->hub);
@@ -171,7 +194,7 @@ sub send_group_joining_notification_email {
   my ($self, $user, $group, $has_joined) = @_;
 
   if ( my @curious_admins = map {$_->notify_join && $_->user || ()} @{$group->admin_memberships} ) {
-    my $mailer = $self->get_mailer;
+    my $mailer = $self->mailer;
     $mailer->send_group_joining_notification_email($user, $_, $group, $has_joined) for @curious_admins;
   }
 }
@@ -195,7 +218,7 @@ sub send_group_editing_notification_email {
       ? ()
       : sprintf(q( - %s changed from '%s' to '%s'), $titles->{$_}, $original_values->{$_} || '', $modified_values->{$_} || '')
     } keys %$original_values ) {
-      my $mailer = $self->get_mailer;
+      my $mailer = $self->mailer;
       $mailer->send_group_editing_notification_email($user, $_, $group, join "\n", @changes) for @curious_admins;
     }
   }
