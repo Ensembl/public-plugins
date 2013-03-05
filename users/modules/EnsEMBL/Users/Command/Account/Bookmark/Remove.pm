@@ -9,7 +9,7 @@ use EnsEMBL::Users::Messages qw(MESSAGE_CANT_DELETE_BOOKMARK MESSAGE_BOOKMARK_NO
 
 use base qw(EnsEMBL::Users::Command::Account);
 
-sub process {
+sub csrf_safe_process {
   my $self        = shift;
   my $object      = $self->object;
   my $hub         = $self->hub;

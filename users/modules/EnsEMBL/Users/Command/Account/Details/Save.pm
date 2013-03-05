@@ -10,7 +10,7 @@ use EnsEMBL::Users::Messages qw(MESSAGE_EMAIL_INVALID MESSAGE_NAME_MISSING MESSA
 
 use base qw(EnsEMBL::Users::Command::Account);
 
-sub process {
+sub csrf_safe_process {
   my $self    = shift;
   my $object  = $self->object;
   my $hub     = $self->hub;
