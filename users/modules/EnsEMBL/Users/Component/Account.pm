@@ -23,6 +23,22 @@ sub _init {
   $self->ajaxable(  0 );
 }
 
+sub new_form {
+  ## @overrides
+  ## @param As accepted by parent method, plus one ke
+  ##  - csrf_safe : If key value is true, it adds a hidden input with a code in the form to make it safe from CSRF attacks
+  my ($self, $params) = @_;
+
+  my $form = $self->SUPER::new_form($params);
+
+  if ($params->{'csrf_safe'}) {
+    my $hub = $self->hub;
+    $form->add_hidden({'name' => $hub->CSRF_SAFE_PARAM, 'value' => $hub->user->rose_object->salt});
+  }
+  
+  return $form;
+}
+
 sub render_message {
   ## Prints a message on the page
   ## @param Code for the message
@@ -255,7 +271,7 @@ sub bookmarks_table {
       }),
       !$group || $is_admin || $_->created_by eq $user->user_id
       ? $self->js_link({
-        'href'    => {'action' => 'Bookmark', 'function' => 'Remove', 'id' => $bookmark_id, %$group_param},
+        'href'    => {'action' => 'Bookmark', 'function' => 'Remove', 'id' => $bookmark_id, 'csrf_safe' => 1, %$group_param},
         'helptip' => 'Remove',
         'sprite'  => 'delete_icon',
         'confirm' => sprintf('You are about to remove the bookmark%s. This action can not be undone.', $group ? ' from the group' : '')
@@ -272,7 +288,7 @@ sub no_bookmark_message {
   ## Returns html for displaying message in case no bookmark has been added by the user
   ## @param Flag if on, will add the link to create a new bookmark in the message
   sprintf '<p>You have not saved any bookmarks to your account.%s</p>', $_[1]
-    ? sprintf(' To add a new bookmark first, please <a href="%s">click here</a>.', $_[0]->hub->url({'action' => 'Bookmark', 'function' => 'Add'}))
+    ? sprintf(' To add a new bookmark first, please %s.', $_[0]->js_link({'caption' => 'click here', 'href' => {'action' => 'Bookmark', 'function' => 'Add'}}))
     : ''
   ;
 }
