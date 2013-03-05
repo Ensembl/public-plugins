@@ -49,7 +49,17 @@ sub content {
   $image->set_button('drag');
 
 
+  my $hide_plot = $hub->get_cookie_value('toggle_blast_queryplot') eq 'closed';
+  $html = sprintf ('<h3><a rel ="blast_queryplot" class="toggle set_cookie %s" href="#">HSP distribution on query sequence:</a></h3>',
+          $hide_plot ? 'closed' : 'open'
+          );
+
+  $html .= sprintf ('<div class="blast_queryplot"><div class="toggleable" style=%s>',
+          $hide_plot ? 'display:none' : '',
+         );
+
   $html .= $image->render; 
+  $html .= '</div></div>';
 
   # Add colour key information
   my $columns = [
