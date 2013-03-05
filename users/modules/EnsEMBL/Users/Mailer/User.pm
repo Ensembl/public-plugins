@@ -232,7 +232,9 @@ sub send_group_invitation_email_to_new_user {
     'type'              => 'Account',
     'action'            => 'Membership',
     'function'          => 'Create',
-    'invitation'        => $invitation->get_invitation_code
+    'invitation'        => $invitation->get_invitation_code,
+    'csrf_safe'         => 1,
+    'user'              => undef
   };
   my $url_1           = $self->url($invitation_url);
   my $url_2           = $self->url({
