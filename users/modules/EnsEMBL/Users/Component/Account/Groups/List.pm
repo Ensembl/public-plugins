@@ -52,10 +52,10 @@ sub content {
           $membership && $membership->is_pending_request
           ? 'Request sent'
           : $self->js_link($membership && $membership->is_pending_invitation ? {
-            'href'    => {'action' => 'Membership', 'function' => 'Accept', 'id' => $membership->group_member_id},
+            'href'    => {'action' => 'Membership', 'function' => 'Accept', 'id' => $membership->group_member_id, 'csrf_safe' => 1},
             'caption' => 'Accept invitation'
           } : {
-            'href'    => {'action' => 'Group', 'function' => 'Join', 'id' => $group->group_id},
+            'href'    => {'action' => 'Group', 'function' => 'Join', 'id' => $group->group_id, 'csrf_safe' => 1},
             'caption' => $group->type eq 'open' ? 'Join' : 'Send request'
           })
         )

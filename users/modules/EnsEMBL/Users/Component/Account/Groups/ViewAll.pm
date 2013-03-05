@@ -47,7 +47,7 @@ sub content {
         'desc'    => $self->html_encode($group->blurb),
         'edit'    => $self->js_link({
           $is_pending_request ? (
-            'href'    => {'action' => 'Membership', 'function' => 'Unjoin', 'id' => $_->group_member_id},
+            'href'    => {'action' => 'Membership', 'function' => 'Unjoin', 'id' => $_->group_member_id, 'csrf_safe' => 1},
             'caption' => 'Delete request'
           ) : (
             'href'    => {'action' => 'Groups', 'function' => 'View', 'id' => $_->group_id},

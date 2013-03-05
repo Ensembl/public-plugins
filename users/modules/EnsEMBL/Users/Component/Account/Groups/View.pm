@@ -46,7 +46,7 @@ sub content {
       }],
       'subsections'   => [
         $group->status eq 'active' ? () : sprintf(q(<p class="italic">This group has been set inactive, ie. it's not visible to any member. %s to make it active now.</p>), $self->js_link({
-          'href'        => {'action' => 'Group', 'function' => 'Save', 'status' => 'active', 'id' => $group_id},
+          'href'        => {'action' => 'Group', 'function' => 'Save', 'status' => 'active', 'id' => $group_id, 'csrf_safe' => 1},
           'caption'     => 'Click here',
         })),
         $self->two_column([
@@ -106,14 +106,14 @@ sub content {
         if ($is_admin) {
           if ($is_pending_request) {
             push @buttons,
-              $self->js_link({'href' => {'action' => 'Membership', 'function' => 'Allow',      'id' => $group_member_id}, 'caption' => 'Allow'}),
-              $self->js_link({'href' => {'action' => 'Membership', 'function' => 'Ignore',     'id' => $group_member_id}, 'caption' => 'Ignore'}),
-              $self->js_link({'href' => {'action' => 'Membership', 'function' => 'BlockUser',  'id' => $group_member_id}, 'caption' => 'Block user from sending further requests'})
+              $self->js_link({'href' => {'action' => 'Membership', 'function' => 'Allow',      'id' => $group_member_id, 'csrf_safe' => 1}, 'caption' => 'Allow'}),
+              $self->js_link({'href' => {'action' => 'Membership', 'function' => 'Ignore',     'id' => $group_member_id, 'csrf_safe' => 1}, 'caption' => 'Ignore'}),
+              $self->js_link({'href' => {'action' => 'Membership', 'function' => 'BlockUser',  'id' => $group_member_id, 'csrf_safe' => 1}, 'caption' => 'Block user from sending further requests'})
             ;
           } else {
             if ($member_level ne 'administrator') { # can not remove an admin
               push @buttons, $self->js_link({
-                'href'    => {'action' => 'Membership', 'function' => 'Remove', 'id' => $group_member_id},
+                'href'    => {'action' => 'Membership', 'function' => 'Remove', 'id' => $group_member_id, 'csrf_safe' => 1},
                 'caption' => $is_pending_invitation ? 'Remove invitation' : 'Remove',
                 'confirm' => $is_pending_invitation
                   ? "Are you sure you want to deactivate the invitation sent to $member_name ($member_email) for the group $group_name?"
@@ -121,7 +121,7 @@ sub content {
               });
             }
             push @buttons, $self->js_link({
-              'href'    => {'action' => 'Membership', 'function' => 'Change', 'id' => $group_member_id, 'level' => $member_level eq 'administrator' ? 'member' : 'administrator'},
+              'href'    => {'action' => 'Membership', 'function' => 'Change', 'id' => $group_member_id, 'csrf_safe' => 1, 'level' => $member_level eq 'administrator' ? 'member' : 'administrator'},
               'caption' => $member_level eq 'administrator' ? 'Demote to member' : 'Make administrator',
               'confirm' => $member_id eq $user->user_id ? q(Are you sure you want to demote yourself to a member? You won't be able to undo this yourself.) : ''
             }) unless $is_pending_invitation;

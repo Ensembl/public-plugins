@@ -43,13 +43,13 @@ sub content {
             'button'      => 1
           }), $is_active ? (
           $self->js_link({
-            'href'        => {'action' => 'Group', 'function' => 'Save', 'status' => 'inactive', 'id' => $group_id},
+            'href'        => {'action' => 'Group', 'function' => 'Save', 'status' => 'inactive', 'id' => $group_id, 'csrf_safe' => 1},
             'caption'     => 'Inactivate',
             'class'       => 'user-group-inactivate',
             'button'      => 1
           })) : (),
           $self->js_link({
-            'href'        => {'action' => 'Group', 'function' => 'Delete', 'id' => $group_id},
+            'href'        => {'action' => 'Group', 'function' => 'Delete', 'id' => $group_id, 'csrf_safe' => 1},
             'caption'     => 'Delete',
             'class'       => 'user-group-delete',
             'button'      => 1
