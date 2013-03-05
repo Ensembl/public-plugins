@@ -59,7 +59,7 @@ sub create_jobs {
 
   # one Hive job per species, for now allow multiple query sequences
   foreach my $species ( @{$self->{'_species'}} ){ 
-    my $dba = $self->hub->database($species, 'core');
+    my $dba = $self->hub->database('core', $species);
     my $dbc = $dba->dbc;
 
     my %input = (
