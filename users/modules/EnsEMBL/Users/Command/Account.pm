@@ -21,7 +21,7 @@ sub process {
   my $self    = shift;
   my $hub     = $self->hub;
   my $r_user  = $hub->user->rose_object;
-  my $code    = $hub->param($hub->CSRF_SAFE_PARAM);
+  my $code    = $hub->param($hub->CSRF_SAFE_PARAM) || '';
 
   if ($code && $r_user && $r_user->salt eq $code) {
     $r_user->reset_salt_and_save('changes_only' => 1);
@@ -226,16 +226,6 @@ sub send_group_sharing_notification_email {
 sub get_curious_admins {
   ## Gets all the admins of a group that opted to get notified on some event
   ## TODO
-}
-
-sub internal_referer {
-  ## Gets the internal referer without error or message code
-  ## @return url string
-  my $hub     = shift->hub;
-  my $referer = $hub->referer;
-  (my $url    = $referer->{'absolute_url'}) =~ s/[\?,\;]{1}(err|msg)\=[^\;]*//;
-
-  return $referer->{'external'} ? $hub->url({'action' => 'Preferences'}) : $url;
 }
 
 1;
