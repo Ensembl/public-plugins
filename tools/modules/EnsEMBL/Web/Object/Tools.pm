@@ -93,6 +93,7 @@ sub display_status {
   my ($self, $job_status) = @_;
   
   my %status_lookup = (
+    'SEMAPHORED'   => 'Pending',
     'READY'        => 'Pending', 
     'BLOCKED'      => 'Pending',
     'CLAIMED'      => 'Pending',
