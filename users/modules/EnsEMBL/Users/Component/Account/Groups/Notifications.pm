@@ -17,9 +17,9 @@ sub content {
     ? sprintf(q{<li><i>%s (%s)</i> is inviting you to join the group <i>%s</i><br />%s &middot; %s &middot; %s</li>},
         map({ $self->html_encode($_->name), $_->email } $_->modified_by_user || $_->created_by_user),
         $self->html_encode($_->group->name),
-        $self->js_link({'href' => {'action' => 'Membership', 'function' => 'Accept',     'id' => $_->group_member_id}, 'caption' => 'Accept'}),
-        $self->js_link({'href' => {'action' => 'Membership', 'function' => 'Decline',    'id' => $_->group_member_id}, 'caption' => 'Decline'}),
-        $self->js_link({'href' => {'action' => 'Membership', 'function' => 'BlockGroup', 'id' => $_->group_member_id}, 'caption' => 'Block group from sending further invitations'})
+        $self->js_link({'href' => {'action' => 'Membership', 'function' => 'Accept',     'id' => $_->group_member_id, 'csrf_safe' => 1}, 'caption' => 'Accept'}),
+        $self->js_link({'href' => {'action' => 'Membership', 'function' => 'Decline',    'id' => $_->group_member_id, 'csrf_safe' => 1}, 'caption' => 'Decline'}),
+        $self->js_link({'href' => {'action' => 'Membership', 'function' => 'BlockGroup', 'id' => $_->group_member_id, 'csrf_safe' => 1}, 'caption' => 'Block group from sending further invitations'})
       )
     : ()
     } @{$user->memberships}
@@ -29,10 +29,10 @@ sub content {
   my @requests = map({ $_->is_pending_request
     ? sprintf(q{<li><i>%s (%s)</i> would like to join your group <i>%s</i><br />%s &middot; %s &middot; %s</li>},
         map({ $self->html_encode($_->name), $_->email } $_->user),
-        $self->js_link({'href' => {'action' => 'Groups',     'function' => 'View',       'id' => $_->group->group_id}, 'caption' => $self->html_encode($_->group->name)}),
-        $self->js_link({'href' => {'action' => 'Membership', 'function' => 'Allow',      'id' => $_->group_member_id}, 'caption' => 'Allow'}),
-        $self->js_link({'href' => {'action' => 'Membership', 'function' => 'Ignore',     'id' => $_->group_member_id}, 'caption' => 'Ignore'}),
-        $self->js_link({'href' => {'action' => 'Membership', 'function' => 'BlockUser',  'id' => $_->group_member_id}, 'caption' => 'Block user from sending further requests'})
+        $self->js_link({'href' => {'action' => 'Groups',     'function' => 'View',       'id' => $_->group->group_id, 'csrf_safe' => 1}, 'caption' => $self->html_encode($_->group->name)}),
+        $self->js_link({'href' => {'action' => 'Membership', 'function' => 'Allow',      'id' => $_->group_member_id, 'csrf_safe' => 1}, 'caption' => 'Allow'}),
+        $self->js_link({'href' => {'action' => 'Membership', 'function' => 'Ignore',     'id' => $_->group_member_id, 'csrf_safe' => 1}, 'caption' => 'Ignore'}),
+        $self->js_link({'href' => {'action' => 'Membership', 'function' => 'BlockUser',  'id' => $_->group_member_id, 'csrf_safe' => 1}, 'caption' => 'Block user from sending further requests'})
       )
     : ()
     } map {@{$_->group->memberships}} @{$user->admin_memberships}

@@ -39,7 +39,7 @@ sub content {
         'title'         => 'Delete group',
         'sprite'        => 'delete_icon'
       } : {
-        'href'          => {'action' => 'Membership', 'function' => 'Unjoin', 'id' => $membership->group_member_id},
+        'href'          => {'action' => 'Membership', 'function' => 'Unjoin', 'id' => $membership->group_member_id, 'csrf_safe' => 1},
         'title'         => 'Unsubscribe',
         'sprite'        => 'stop_icon',
         'confirm'       => "You are about to remove yourself from the group &quot;$group_name&quot;. This action can not be undone."
