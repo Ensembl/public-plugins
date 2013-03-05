@@ -12,10 +12,11 @@ Ensembl.Panel.Jobs = Ensembl.Panel.Content.extend({
     this.elLk.jobsTable = $('table#job_status', this.el);
     this.elLk.tableWrapper = $('div.dataTables_wrapper');
 
-    $('tbody tr td.remove', this.elLk.jobsTable).bind('click', function () {
+    $('tbody tr td.remove', this.elLk.jobsTable).on('click', function () {
       panel.removeJob( $(this).closest("tr").attr("id") );
     });
     
+    $('a.disabled', this.elLk.JobsTable).on('click', function () { return false;});
 
     this.interval = 30000; // time in milliseconds
     this.polled   = 0;
@@ -110,6 +111,7 @@ Ensembl.Panel.Jobs = Ensembl.Panel.Content.extend({
               if (options === 'Completed') {  
                 $(this).css('font-weight', 'bold' );
                 $("a").removeClass('hidelink');
+                $("a").removeClass('disabled').off();
                 $(this).closest("tr").removeClass('incomplete');    
               } else if (options === 'Failed'){
                 $(this).closest("tr").removeClass('incomplete');
