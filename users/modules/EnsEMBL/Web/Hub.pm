@@ -6,7 +6,6 @@ use strict;
 use EnsEMBL::Web::Tools::MethodMaker (copy => {'url' => '__url'});
 use EnsEMBL::Web::User;
 use EnsEMBL::Web::Configuration::Account;
-use EnsEMBL::Web::Exceptions;
 use EnsEMBL::ORM::Rose::Object::User;
 
 use constant CSRF_SAFE_PARAM => 'rxt';
