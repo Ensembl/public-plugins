@@ -38,7 +38,7 @@ sub content {
     return "" unless $pointers;
 
     my $hide    = $hub->get_cookie_value('toggle_blast_karyotype') eq 'closed';
-    $html = sprintf ('<h3><a rel ="blast_karyotype" class="toggle set_cookie %s" href="#">HSP distribution:</a></h3>',
+    $html = sprintf ('<h3><a rel ="blast_karyotype" class="toggle set_cookie %s" href="#">HSP distribution on genome:</a></h3>',
             $hide ? 'closed' : 'open'
             );
 
