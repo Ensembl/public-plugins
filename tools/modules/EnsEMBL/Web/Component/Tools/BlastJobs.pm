@@ -22,7 +22,10 @@ sub content {
 
   if ($self->hub->action eq 'BlastResults'){
     $hide = $self->hub->get_cookie_value('toggle_job_status') eq 'closed';
-    $html = '<h3><a rel ="job_status" class="toggle set_cookie %s" href="#">Recent Jobs:</a></h3>';
+    $html = sprintf ('<h3><a rel ="job_status" class="toggle set_cookie %s" href="#">Recent Jobs:</a></h3>',
+            $hide ? 'closed' : 'open'
+            );
+
     $toggle = '1';
   } 
 
