@@ -44,6 +44,7 @@ sub populate_tree {
   $blast_node->append($self->create_subnode('BlastResults', 'Results',
     [qw(
       results     EnsEMBL::Web::Component::Tools::BlastResults
+      jobs         EnsEMBL::Web::Component::Tools::JobsList 
       karyotype   EnsEMBL::Web::Component::Tools::Karyotype
       hsps        EnsEMBL::Web::Component::Tools::HspQueryPlot
       table     EnsEMBL::Web::Component::Tools::BlastResultsTable
