@@ -17,12 +17,20 @@ sub content {
   my $self = shift;
   my $object = $self->object;
   my $html ='<h2>Recent Jobs:</h2>';
+  my $toggle = '0';
+  my $hide;
+
+  if ($self->hub->action eq 'BlastResults'){
+    $hide = $self->hub->get_cookie_value('toggle_job_status') eq 'closed';
+    $html = '<h3><a rel ="job_status" class="toggle set_cookie %s" href="#">Recent Jobs:</a></h3>';
+    $toggle = '1';
+  } 
+
   $html .= '<input type="hidden" class="panel_type" value="Jobs" />';
 
   my $tickets = $object->fetch_current_tickets;
-
-    
-  my $table =  $self->new_table([], [], { data_table => 'no_col_toggle', exportable => 0, sorting => [ 'created desc'], id => 'job_status'});
+   
+  my $table =  $self->new_table([], [], { toggleable => $toggle, class => ($hide ? ' hide' : ''), data_table => 'no_col_toggle', exportable => 0, sorting => [ 'created desc'], id => 'job_status'});
   $table->add_columns(
     { 'key' => 'analysis',  'title' => 'Analysis',    'align' => 'left',    sort => 'string' },
     { 'key' => 'ticket',    'title' => 'Ticket',      'align' => 'left',    sort => 'string' },
