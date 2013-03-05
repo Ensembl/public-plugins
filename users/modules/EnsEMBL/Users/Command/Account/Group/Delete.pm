@@ -10,7 +10,7 @@ use EnsEMBL::Users::Messages qw(MESSAGE_UNKNOWN_ERROR MESSAGE_GROUP_NOT_FOUND);
 
 use base qw(EnsEMBL::Users::Command::Account);
 
-sub process {
+sub csrf_safe_process {
   my $self        = shift;
   my $object      = $self->object;
   my $hub         = $self->hub;
@@ -32,7 +32,7 @@ sub process {
 
       if ($group->delete('cascade' => 1)) {
 
-        my $mailer = $self->get_mailer;
+        my $mailer = $self->mailer;
         $mailer->send_group_deletion_notification_email($user, $_, $group_name) for @curious_admins;
         $return_url = {'action' => 'Groups', 'function' => ''};
 

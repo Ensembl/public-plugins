@@ -10,7 +10,7 @@ use EnsEMBL::Users::Messages qw(MESSAGE_GROUP_NOT_FOUND MESSAGE_EMAILS_INVALID M
 
 use base qw(EnsEMBL::Users::Command::Account);
 
-sub process {
+sub csrf_safe_process {
   my $self        = shift;
   my $object      = $self->object;
   my $hub         = $self->hub;
@@ -38,7 +38,7 @@ sub process {
 
   } else {
 
-    my $mailer = $self->get_mailer;
+    my $mailer = $self->mailer;
     foreach my $email (@$valid_emails) {
 
       # for an existing ensembl user
