@@ -37,11 +37,20 @@ sub content {
     my $pointers = $self->get_hits($object, $ticket, $image);
     return "" unless $pointers;
 
+    my $hide    = $hub->get_cookie_value('toggle_blast_karyotype') eq 'closed';
+    $html = sprintf ('<h3><a rel ="blast_karyotype" class="toggle set_cookie %s" href="#">HSP distribution:</a></h3>',
+            $hide ? 'closed' : 'open'
+            );
+
     $image->set_button('drag', 'title' => 'Click on a chromosome');  
     $image->imagemap = 'yes';
     $image->karyotype($hub, $object, $pointers, 'Vkaryoblast', $species);  
 
+    $html .= sprintf ('<div class="blast_karyotype"><div class="toggleable" style=%s>',
+            $hide ? 'display:none' : '',
+          );
     $html .= $image->render;
+    $html .= '</div></div>';
   }
 
   return $html;
