@@ -111,7 +111,7 @@ sub content {
       }
       my $anno_action   = $annotation ? $annotation->action || '' : '';
       my $text_class    = $anno_action =~ /manual_ok|healthcheck_bug/ ? 'hc-oked' : sprintf('hc-%s', lc $result);
-      $text_class       = $annotation->session_id eq $report->last_session_id ? 'hc-oked' : 'hc-notfixed' if $anno_action eq 'fixed';
+      $text_class       = $annotation->session_id eq $report->last_session_id ? '' : 'hc-notfixed' if $anno_action eq 'fixed';
       $text_class      .= $report->first_session_id == $report->last_session_id ? ' hc-new' : ' hc-notnew';
 
       my $link_class    = join ' ', keys %{{ map { $_."-link" => 1 } split (' ', $text_class)}};
