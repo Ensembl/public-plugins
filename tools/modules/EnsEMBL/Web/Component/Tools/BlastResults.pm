@@ -31,8 +31,10 @@ sub content {
   my $name = $ticket->ticket_name;
 
   my $status = $ticket->status;
-    
+  
   my @hive_jobs = @{$ticket->sub_job};
+
+  return $self->failure_text($ticket) if $status eq 'Failed';
 
   unless ($ticket->result ) {
     my $text = "<p>If you believe that there should be a match to your query sequence(s) please adjust the configuration parameters you selected and resubmit the search.</p>";
@@ -85,6 +87,16 @@ sub summary {
   ); 
   
   return $job_summary;
+}
+
+sub failure_text {
+  my ($self, $ticket) = @_;
+  my $html;
+
+  my $text = "<p>This search failed to run sucessfully. The error reported was: </p>";
+  $html .= $self->_error('BLAST/BLAT Search Failed', $text, '100%' );
+
+  return $html;  
 }
 
 1;
