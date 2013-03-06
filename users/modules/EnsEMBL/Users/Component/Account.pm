@@ -400,6 +400,7 @@ sub _get_js_class_for_link {
   return join ' ', (
     $params->{'class'} ? ref $params->{'class'} ? @{$params->{'class'}} : $params->{'class'} : (),
     $params->{'helptip'} ? '_ht' : (),
+    $params->{'confirm'} ? $self->_JS_CONFIRM : (),
     $self->_JS_LINK
   );
 }
