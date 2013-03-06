@@ -14,10 +14,10 @@ sub content {
   my $object          = $self->object;
   my $user            = $hub->user;
   my $r_user          = $user->rose_object;
-  my $logins          = $r_user->logins;
-  my $site_name       = $self->site_name;
   my $openid_enabled  = $hub->species_defs->ENSEMBL_OPENID_ENABLED;
   my $ldap_enabled    = $hub->species_defs->ENSEMBL_LDAP_ENABLED;
+  my $logins          = $r_user->find_logins($openid_enabled && $ldap_enabled ? () : ('query' => ['type' => [ 'local', $openid_enabled ? 'openid' : (), $ldap_enabled ? 'ldap' : () ]]));
+  my $site_name       = $self->site_name;
 
   my (@existing_openid_logins, @login_details);
 
@@ -33,11 +33,11 @@ sub content {
         'caption' => 'Change password'
       });
 
-    } elsif ($openid_enabled && $login_type eq 'openid') {
+    } elsif ($login_type eq 'openid') {
       $login_detail = sprintf $login_detail, $login_provider, $_->has_trusted_provider ? $_->email : $_->identity;
       push @existing_openid_logins, $login_provider;
 
-    } elsif ($ldap_enabled && $login_type eq 'ldap') { # not implimented yet
+    } elsif ($login_type eq 'ldap') { # not implimented yet
       $login_detail = sprintf $login_detail, 'LDAP', $_->ldap_user;
     }
 
