@@ -37,10 +37,6 @@ sub populate_tree { #TODO - split between user_populate_tree and populate_tree
   ## PAGES FOR LOGGED IN USER ONLY
   if ($user) {
 
-    # flags to decide whether to make a node clickable or not (TODO - get rid of these, check this in components)
-    my $has_groups            = $object && $object->count_groups                        ? 1 : 0;
-    my $has_accessible_groups = $object && $object->count_groups({'active_only' => 1})  ? 1 : 0;
-
     # main preferences page to view all settings with links to edit individual detail, group, bookmark etc
     my $preference_menu = $self->create_node('Preferences', 'Account Settings', [
       'message'           =>  'EnsEMBL::Users::Component::Account::Message',
@@ -59,17 +55,14 @@ sub populate_tree { #TODO - split between user_populate_tree and populate_tree
     $preference_menu->append($self->create_node('Groups/View', 'View a group', [
       'message'           =>  'EnsEMBL::Users::Component::Account::Message',
       'view_group'        =>  'EnsEMBL::Users::Component::Account::Groups::View'
-    ], {
-      'availability'      =>  $has_groups,
-      'no_menu_entry'     =>  1
-    }));
+    ], { 'availability'   =>  1 }));
 
     # page to edit a group
     $preference_menu->append($self->create_node('Groups/Edit', 'Edit a group', [
       'message'           =>  'EnsEMBL::Users::Component::Account::Message',
       'edit_group'        =>  'EnsEMBL::Users::Component::Account::Groups::AddEdit'
     ], {
-      'availability'      =>  $has_accessible_groups,
+      'availability'      =>  1,
       'no_menu_entry'     =>  1
     }));
 
