@@ -40,18 +40,22 @@ sub content {
       my $ticket_id = $ticket->ticket_id;
       my $filename =  $ticket->ticket_id . $sub_job_id . '.seq.fa.raw';
       my $raw_output_link = $self->get_download_link($name, 'raw', $filename);
+      my $ticket_name = $self->hub->param('tk');
+
 
       my @results = @{$object->rose_manager('Result')->fetch_results_by_ticket_sub_job($ticket_id, $sub_job_id)};
 
       foreach (@results) {
         my $gzipped_serialsed_res = $_->{'result'};
         my $result = $object->deserialise($gzipped_serialsed_res);
-        my $links = $self->generate_links($_, $result);
+        my $res = $_->result_id;
+
+        my $links = $self->generate_links($_, $result, $ticket_name, $sub_job_id, $res);
         $result->{'links'} = $links;
         $result->{'options'} = {'class' => 'hsp_' . $_->{'result_id'}};
         $result->{'tid'} = $self->subject_link($result->{'tid'}, $db_type, $result->{'species'});
 
-        my $region_link = $self->location_link($_, $result);
+        my $region_link = $self->location_link($ticket_name, $sub_job_id, $res, $_, $result, $result->{'species'});
         my $region = $result->{'gid'}  .':'. $result->{'gstart'} .'-'. $result->{'gend'};
         $region_link =~s/\[R\]/$region/;
         if ($db_type =~/latestgp/i){
@@ -95,22 +99,20 @@ sub subject_link {
 }
 
 sub generate_links {
-  my ($self, $result_entry, $result) = @_;
-  my $links = $self->alignment_link($result_entry, $result);
-  $links .= ' ' . $self->query_sequence_link($result_entry, $result);
-  $links .= ' ' . $self->genomic_sequence_link($result_entry, $result);
-  $links .= ' ' .$self->location_link($result_entry, $result);
+  my ($self, $result_entry, $result, $ticket_name, $hit, $res) = @_;
+  my $species = $result->{'species'};
+  my $blast_method  = $self->object->get_blast_method;
+
+  my $links = $self->alignment_link($ticket_name, $hit, $res,  $species, $blast_method);
+  $links .= ' ' . $self->query_sequence_link($ticket_name, $hit, $res);
+  $links .= ' ' . $self->genomic_sequence_link($ticket_name, $hit, $res, $species);
+  $links .= ' ' .$self->location_link($ticket_name, $hit, $res, $result_entry, $result, $species);
   return $links;
 }
 
 sub alignment_link {
-  my ($self, $result_entry, $result) = @_;
-  my $ticket_name   = $self->hub->param('tk');
-  my $hit           = $result_entry->sub_job_id;
-  my $res           = $result_entry->result_id;
-  my $species       = $result->{'species'};
-  my $blast_method  = $self->object->get_blast_method;
-  my $action        = $blast_method =~/[blastx]|[blastp]/i ? 'BlastAlignmentProtein' : 'BlastAlignment';
+  my ($self, $ticket_name, $hit, $res, $species, $blast_method) = @_;
+  my $action        = $blast_method =~/^(blastn)|blat/ ? 'BlastAlignment' : 'BlastAlignmentProtein';
 
   my $url = $self->hub->url({
     species => $species,
@@ -118,7 +120,8 @@ sub alignment_link {
     action  => $action,
     tk      => $ticket_name,
     hit     => $hit,
-    res     => $res
+    res     => $res,
+    method  => $blast_method,
   });
 
   my $link = "<a href = $url title = 'Alignment' >[A]</a>";
@@ -126,12 +129,7 @@ sub alignment_link {
 }
 
 sub query_sequence_link {
-  my ($self, $result_entry, $result) = @_;
-  my $ticket_name = $self->hub->param('tk');
-  my $hit         = $result_entry->sub_job_id;
-  my $res         = $result_entry->result_id;
-  my $species     = $result->{'species'};
-
+  my ($self, $ticket_name, $hit, $res, $species) = @_;
 
   my $url = $self->hub->url({
     species => $species,
@@ -147,11 +145,7 @@ sub query_sequence_link {
 }
 
 sub genomic_sequence_link {
-  my ($self, $result_entry, $result) = @_;
-  my $ticket_name = $self->hub->param('tk');
-  my $hit         = $result_entry->sub_job_id;
-  my $res         = $result_entry->result_id;
-  my $species     = $result->{'species'};
+  my ($self, $ticket_name, $hit, $res, $species) = @_;
 
   my $url = $self->hub->url({
     species => $species,
@@ -167,15 +161,12 @@ sub genomic_sequence_link {
 }
 
 sub location_link {
-  my ($self, $result_entry, $result) = @_;
-  my $ticket_name = $self->hub->param('tk');
+  my ($self, $ticket_name, $hit, $res, $result_entry, $result, $species) = @_;
   my $ticket      = $result_entry->ticket_id;
-  my $hit         = $result_entry->sub_job_id;
   my $seq_region  = $result->{'gid'};
   my $start       = $result->{'gstart'};
   my $end         = $result->{'gend'};
   my $hsp         = $result_entry->result_id;
-  my $species     = $result->{'species'};
 
   my $url = $self->hub->url({
       species =>  $species,
