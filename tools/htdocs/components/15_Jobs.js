@@ -105,21 +105,19 @@ Ensembl.Panel.Jobs = Ensembl.Panel.Content.extend({
       dataType: 'json',
       success: function (json) {
         $.each(json, function(key, options) {
-          panel.elLk.jobsTable.find("tbody tr#" + key  + " td.status").each( function() {
+          panel.elLk.jobsTable.find("tbody tr#" + key  + " td.status").each( function() {         
+            this.tr =  $(this).closest("tr");
             if ( $(this).html() != options ) {
-              $(this).text(options); 
+              $(this).text(options);
               if (options === 'Completed') {  
                 $(this).css('font-weight', 'bold' );
-                $("a").removeClass('hidelink');
-                $("a").removeClass('disabled').off();
-                $(this).closest("tr").removeClass('incomplete');    
+                $('a', this.tr).removeClass('hidelink disabled').off();
+                $(this.tr).removeClass('incomplete');    
               } else if (options === 'Failed'){
-                $(this).closest("tr").removeClass('incomplete');
+                $(this.tr).removeClass('incomplete');
                 $(this).css('font-weight', 'bold' );
                 $(this).next().find('img').attr({ src: '/i/16/alert.png', title: 'Display reason for failure', alt:'Display reason for failure' });
-                $(this).next().find("a").removeClass('hidelink');
-                $("td.save").find("a").removeClass('hidelink');       
-                $("td.remove").find("a").removeClass('hidelink');
+                $('a', this.tr).removeClass('hidelink disabled').off();  
              }   
             }
           });
