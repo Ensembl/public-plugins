@@ -147,12 +147,12 @@ sub content {
     # display form to select a group if no group was specified
     return $self->js_section({
       'heading'     => 'View group',
-      'subsections' => [ $self->select_group_form({
+      'subsections' => [ @$memberships ? $self->select_group_form({
         'memberships' => $memberships,
         'action'      => {'action' => 'Groups', 'function' => 'View'},
         'label'       => 'Select a group to view',
         'submit'      => 'View'
-      })->render ]
+      })->render : $self->no_group_message ]
     });
   }
 }
