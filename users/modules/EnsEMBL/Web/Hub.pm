@@ -10,6 +10,8 @@ use EnsEMBL::ORM::Rose::Object::User;
 
 use constant CSRF_SAFE_PARAM => 'rxt';
 
+sub PREFERENCES_PAGE { return shift->url({'type' => 'Account', 'action' => 'Preferences', 'function' => ''}); }
+
 sub new1 { # TODO - change this to 'new' once user plugin is stable
   ## @overrides
   ## Overrides the constructor to initiate user object by reading the user cookie
