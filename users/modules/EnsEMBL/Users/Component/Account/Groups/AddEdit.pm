@@ -30,6 +30,8 @@ sub content {
     my $form        = $self->new_form({'action' => {qw(action Group function Save)}, 'csrf_safe' => 1});
 
     $form->add_hidden({'name' => 'id', 'value'  => $group->group_id});
+    $form->add_hidden({'name' => $self->_JS_CANCEL, 'value' => $is_add_new ? $hub->PREFERENCES_PAGE : $hub->url({'action' => 'Groups', 'function' => 'View', 'id' => $group->group_id})});
+
     if ($level eq 'administrator') {
       my $group_types       = $self->get_group_types;
       my $group_type_values = [];
@@ -40,8 +42,11 @@ sub content {
       $form->add_field({'type'  => 'text',      'name'  => 'blurb',   'label' => 'Description',   'value' => $group->blurb                                    });
       $form->add_field({'type'  => 'radiolist', 'name'  => 'type',    'label' => 'Group type',    'value' => $group->type,    'values' => $group_type_values  });
     }
-    $form->add_field({'type'  => 'yesno',   'value' => $membership->$_ || 0, 'name' => $_, 'label' => $notif_types->{$_}, 'is_binary' => 1}) for $level eq 'administrator' ? qw(notify_join notify_edit notify_share) : qw(notify_share);
-    $form->add_field({'type'  => 'submit',  'value' => $is_add_new ? 'Add' : 'Save'});
+    $form->add_field({'type'    => 'yesno', 'value' => $membership->$_ || 0, 'name' => $_, 'label' => $notif_types->{$_}, 'is_binary' => 1}) for $level eq 'administrator' ? qw(notify_join notify_edit notify_share) : qw(notify_share);
+    $form->add_field({'inline'  => 1, 'elements' => [
+      {'type' => 'submit', 'value' => $is_add_new ? 'Add' : 'Save'},
+      {'type' => 'reset',  'value' => 'Cancel', 'class' => $self->_JS_CANCEL}
+    ]});
 
     return $self->js_section({'subsections' => [ $form->render ]});
 
@@ -52,12 +57,12 @@ sub content {
     # display form to select a group if no group was specified
     return $self->js_section({
       'heading'     => 'Edit group',
-      'subsections' => [ $self->select_group_form({
+      'subsections' => [ @$memberships ? $self->select_group_form({
         'memberships' => $memberships,
         'action'      => {'action' => 'Groups', 'function' => 'Edit'},
         'label'       => 'Select a group to edit',
         'submit'      => 'Edit'
-      })->render ]
+      })->render : $self->no_group_message ]
     });
   }
 }
