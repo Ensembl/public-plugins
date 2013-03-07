@@ -61,10 +61,7 @@ sub populate_tree { #TODO - split between user_populate_tree and populate_tree
     $preference_menu->append($self->create_node('Groups/Edit', 'Edit a group', [
       'message'           =>  'EnsEMBL::Users::Component::Account::Message',
       'edit_group'        =>  'EnsEMBL::Users::Component::Account::Groups::AddEdit'
-    ], {
-      'availability'      =>  1,
-      'no_menu_entry'     =>  1
-    }));
+    ], { 'availability'   =>  1 }));
 
     # page to create a new group
     $preference_menu->append($self->create_node('Groups/Add', 'Create new group', [
