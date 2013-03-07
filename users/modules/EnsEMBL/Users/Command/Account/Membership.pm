@@ -30,7 +30,7 @@ sub redirect_url {
   my $self  = shift;
   my $hub   = $self->hub;
   $self->{'_redirect_url'} = shift if @_;
-  return $hub->url($self->{'_redirect_url'} || {'action' => 'Preferences', 'function' => ''});
+  return $self->{'_redirect_url'} ? $hub->url($self->{'_redirect_url'}) : $hub->PREFERENCES_PAGE;
 }
 
 sub modify_membership {} # implemented in child classes

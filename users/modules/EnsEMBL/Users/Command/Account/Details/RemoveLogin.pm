@@ -26,7 +26,7 @@ sub process {
     $login->delete;
   }
 
-  return $self->ajax_redirect($hub->url({'action' => 'Preferences'}));
+  return $self->ajax_redirect($hub->PREFERENCES_PAGE);
 }
 
 1;

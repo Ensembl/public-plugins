@@ -32,7 +32,7 @@ my %MESSAGES = (
   MESSAGE_ACCOUNT_BLOCKED       => sub { 'Your account seems to be blocked. Please contact the helpdesk in case you need any help.' },
   MESSAGE_VERIFICATION_SENT     => sub { sprintf(q(A verification email has been sent to the email address '%s'. Please go to your inbox and click on the link provided in the email.), encode_entities($_[0]->param('email'))) },
   MESSAGE_PASSWORD_EMAIL_SENT   => sub { sprintf(q(An email has been sent to the email address '%s'. Please go to your inbox and follow the instructions to reset your password provided in the email.), encode_entities($_[0]->param('email'))) },
-  MESSAGE_EMAIL_CHANGED         => sub { sprintf(q(You email address on our records has been successfully changed. Please <a href="%s">%s</a> to continue.), $_[0]->url({'action' => 'Preferences'}), $_[0]->user ? 'click here' : 'login') },
+  MESSAGE_EMAIL_CHANGED         => sub { sprintf(q(You email address on our records has been successfully changed. Please <a href="%s">%s</a> to continue.), $_[0]->PREFERENCES_PAGE, $_[0]->user ? 'click here' : 'login') },
   MESSAGE_CANT_DELETE_LOGIN     => sub { 'You can not delete the only login option you have to access your account.' },
   MESSAGE_GROUP_NOT_FOUND       => sub { 'Sorry, we could not find the specified group. Either the group does not exist or is inactive or is inaccessible to you for the action selected.' },
   MESSAGE_GROUP_INACTIVE        => sub { 'Group inactive', 'This group is inactive. To perform the action selected, please activate the group first.'},

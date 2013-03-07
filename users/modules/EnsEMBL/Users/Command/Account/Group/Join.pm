@@ -15,7 +15,6 @@ sub csrf_safe_process {
   my $object    = $self->object;
   my $hub       = $self->hub;
   my $user      = $hub->user->rose_object;
-  my $home_page = {'action' => 'Preferences', 'function' => ''};
 
   if (my $group = $object->fetch_group($hub->param('id'))) {
 
@@ -25,7 +24,7 @@ sub csrf_safe_process {
       my $action;
 
       if ($membership->is_user_blocked || $membership->is_active) { # if membership is active, or the user is blocked by the group admin, redirect user to the preferences page
-        return $self->ajax_redirect($hub->url($home_page));
+        return $self->ajax_redirect($hub->PREFERENCES_PAGE);
 
       } elsif ($membership->is_pending_invitation || $group_type eq 'open') {
         $membership->activate;
@@ -38,7 +37,7 @@ sub csrf_safe_process {
       $self->send_group_joining_notification_email($user, $group, $membership->is_active);
 
       $membership->save(user => $user);
-      return $self->ajax_redirect($hub->url($group_type eq 'open' ? {'action' => 'Groups', 'function' => 'View', 'id' => $group->group_id} : $home_page));
+      return $self->ajax_redirect($group_type eq 'open' ? $hub->url({'action' => 'Groups', 'function' => 'View', 'id' => $group->group_id}) : $hub->PREFERENCES_PAGE);
     }
   }
 

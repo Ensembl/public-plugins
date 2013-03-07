@@ -28,7 +28,7 @@ sub process {
   my $login       = $user ? $user->rose_object->get_local_login : $object->fetch_login_from_url_code;
   my $referer     = [ split '/', $hub->param('referer') || '' ];
   my %back_url    = ('species' => '', 'type' => 'Account', 'action' => $referer->[0] || '', 'function' => $referer->[1] || '');
-  my %success_url = ('species' => '', 'type' => 'Account', 'action' => 'Preferences');
+  my $success_url = '';
 
   if ($user) {
     # If logged-in user trying to change password, and typed in a wrong current password
@@ -37,9 +37,8 @@ sub process {
   } else {
     # If no login object found - user manually changed the url
     return $self->redirect_message(MESSAGE_URL_EXPIRED, {'error' => 1}) unless $login;
-    $back_url{'code'}       = $login->get_url_code;
-    $success_url{'action'}  = 'Login';
-    $success_url{'msg'}     = MESSAGE_PASSWORD_CHANGED;
+    $back_url{'code'} = $login->get_url_code;
+    $success_url      = {'type' => 'Account', 'action' => 'Login', 'msg' => MESSAGE_PASSWORD_CHANGED};
   }
 
   # Validation
@@ -58,7 +57,7 @@ sub process {
   # For a password change/reset request
   } else {
     $login->reset_salt_and_save;
-    return $self->ajax_redirect($hub->url(\%success_url));
+    return $self->ajax_redirect($success_url ? $hub->url($success_url) : $hub->PREFERENCES_PAGE);
   }
 }
 

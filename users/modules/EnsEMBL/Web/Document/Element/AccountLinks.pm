@@ -24,7 +24,7 @@ sub content {
             <p><strong><a href="%s">Logout</a></strong></p>
           </div>
         </div>',
-        $hub->url({qw(species common type Account action Preferences)}),
+        $hub->PREFERENCES_PAGE,
         $user->email,
         join('', map {
           sprintf '<p><a href="%s" title="%s: %s"><span>%2$s</span><span class="acc-bookmark-overflow">&#133;</span></a></p>',

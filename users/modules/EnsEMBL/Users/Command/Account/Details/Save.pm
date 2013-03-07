@@ -41,7 +41,7 @@ sub csrf_safe_process {
     return $self->redirect_message(MESSAGE_VERIFICATION_SENT, {'email' => $fields->{'email'}});
   }
 
-  return $self->ajax_redirect($hub->url({'action' => 'Preferences'}));
+  return $self->ajax_redirect($hub->PREFERENCES_PAGE);
 }
 
 1;
