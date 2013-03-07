@@ -11,7 +11,8 @@ use base qw(EnsEMBL::Web::Component);
 
 use constant {
   _JS_LINK            => 'modal_link',
-  _JS_CONFIRM         => '_jconfirm modal_link',
+  _JS_CONFIRM         => '_jconfirm',
+  _JS_CANCEL          => '_jcancel'
 };
 
 sub caption       {}
@@ -193,6 +194,14 @@ sub select_bookmark_form {
   return $form;
 }
 
+sub no_group_message {
+  ## Returns html for displaying message in case no group has been added by the user
+  sprintf '<p>You are not a member of any group. You can either %s or %s.</p>',
+    $_[0]->js_link({'caption' => 'create a new group', 'href' => {'action' => 'Groups', 'function' => 'Add'}}),
+    $_[0]->js_link({'caption' => 'join an existing group', 'href' => {'action' => 'Groups', 'function' => 'List'}})
+  ;
+}
+
 sub bookmarks_table {
   ## Prints table with bookmarks
   ## @param Hashref with keys
@@ -365,12 +374,17 @@ sub js_section {
   ##  - js_panel          : js_panel name (optional)
   my ($self, $params) = @_;
   my $links           = {'heading' => '', 'subheading' => ''};
+  my $hub             = $self->hub;
 
   for (qw(heading subheading)) {
     if ($params->{$_}) {
-      $links->{$_} = join('', map {
-        sprintf '<a href="%s" class="header-link _ht _ht_static %s" title="%s"><span class="sprite %s"></span></a>', $self->hub->url($_->{'href'}), $self->_get_js_class_for_link($_), $_->{'title'}, $_->{'sprite'}
-      } @{$params->{"${_}_links"} || []});
+      $links->{$_} = join '', map { sprintf '<a href="%s" class="header-link _ht _ht_static %s" title="%s"><span class="sprite %s"></span></a>%s',
+        $hub->url($_->{'href'}),
+        $self->_get_js_class_for_link($_),
+        $_->{'title'},
+        $_->{'sprite'},
+        $_->{'confirm'} ? sprintf('<span class="hidden %s">%s</span>', $self->_JS_CONFIRM, $_->{'confirm'}) : ''
+      } @{$params->{"${_}_links"} || []};
     }
   }
 
