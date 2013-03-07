@@ -34,10 +34,13 @@ sub content {
     $form->add_hidden({'name' => 'code', 'value' => $login->get_url_code });
   }
 
-  $form->add_hidden({'name' => 'referer',   'value' => join '/', $hub->action, $hub->function});
-  $form->add_field({'type'  => 'password',  'name'  => 'new_password_1', 'label'  => 'New password',              'required' => 1,  'notes' => 'at least 6 characters'});
-  $form->add_field({'type'  => 'password',  'name'  => 'new_password_2', 'label'  => 'Confirm new password',      'required' => 1});
-  $form->add_button({'type' => 'Submit',    'name'  => 'submit',         'value'  => $user ? 'Change' : 'Reset',  'class'    => 'modal_link'});
+  $form->add_hidden({'name'   => $self->_JS_CANCEL, 'value' => $hub->PREFERENCES_PAGE}) if $user;
+  $form->add_field({'type'    => 'password',  'name'  => 'new_password_1', 'label'  => 'New password',              'required' => 1,  'notes' => 'at least 6 characters'});
+  $form->add_field({'type'    => 'password',  'name'  => 'new_password_2', 'label'  => 'Confirm new password',      'required' => 1});
+  $form->add_field({'inline'  => 1, 'elements' => [
+    {'type' => 'Submit',    'name'  => 'submit',         'value'  => $user ? 'Change' : 'Reset',  'class'    => 'modal_link'      },
+    {'type' => 'Reset',     'name'  => 'reset',          'value'  => 'Cancel',                    'class'    => $self->_JS_CANCEL }
+  ]});
 
   return $self->js_section({'subsections' => [ $form->render ]});
 }

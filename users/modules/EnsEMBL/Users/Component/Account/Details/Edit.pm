@@ -49,6 +49,14 @@ sub content {
     'button'        => 'Save',
   });
 
+  $form->fieldset->fields->[-1]->add_element({
+    'type'      => 'reset',
+    'value'     => 'Cancel',
+    'class'     => $self->_JS_CANCEL
+  }, 1);
+  
+  $form->add_hidden({'name' => $self->_JS_CANCEL, 'value' => $hub->PREFERENCES_PAGE});
+
   return $self->js_section({'subsections' => [ $form->render ], 'js_panel' => 'AccountForm'});
 }
 
