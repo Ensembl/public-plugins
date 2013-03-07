@@ -164,7 +164,7 @@ sub set_codons {
     } 
   } else { # Normal Slice
     foreach my $t (grep { $_->coding_region_start < $slice_length && $_->coding_region_end > 0 } @transcripts) {
-      my ($start, $stop, $id, $strand) = ($t->coding_region_start, $t->coding_region_end, $t->stable_id, $t->strand);
+      my ($start, $stop, $id, $strand) = ($t->coding_region_start, $t->coding_region_end, $t->stable_id, $slice->strand);
 
       if ($config->{'mapper'}){
         my @mapped_coords = $config->{'mapper'}->map_coordinates($slice->seq_region_name, $t->seq_region_start, $t->seq_region_end, $strand, 'ref_slice');
@@ -402,10 +402,15 @@ sub markup_blast_line_numbers {
           }
           $index++;
         }
-        
-        my ($mapped_coords) =$config->{'mapper'}->map_coordinates('mapped_slice', $cs, $ce, 1, 'mapped_slice');
-        $start =  $mapped_coords->start;
-        $end =  $mapped_coords->end;            
+       
+        if ($config->{'mapper'}){ 
+          my ($mapped_coords) =$config->{'mapper'}->map_coordinates('mapped_slice', $cs, $ce, 1, 'mapped_slice');
+          $start =  $mapped_coords->start;
+          $end =  $mapped_coords->end;            
+        } else {
+          $start = $cs;
+          $end = $ce;
+        }
 
         $s = $e +1;
         $e  += $config->{'display_width'};
