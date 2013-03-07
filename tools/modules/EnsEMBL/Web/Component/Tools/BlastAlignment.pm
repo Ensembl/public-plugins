@@ -79,7 +79,7 @@ sub get_alignment_slices {
   my $result_id = $self->hub->param('res');
   my $homology_string;
   my $blast_method = $object->get_blast_method;
-  my $protein = $blast_method =~/[blastx]|[blastp]/i ? 1 : undef;
+  my $protein = $blast_method =~/(blastx)|(blastp)/i ? 1 : undef;
 
   my $query_seq = $self->query_sequence($hit, $blast_method);
   my $hit_seq   = $query_seq;
@@ -131,7 +131,7 @@ sub get_alignment_slices {
       { name => 'Subjct', slice => $hit_slice, },
     );
   } else {
-    my $mapped_slice_container = $self->get_mapped_slice($hit_slice, $hit_seq);
+    my $mapped_slice_container = $self->get_mapped_slice($hit_slice, $hit_seq, $ref_slice);
 
     my $ms =  shift @{$mapped_slice_container->get_all_MappedSlices};
     my $slice =  $ms->get_all_Slice_Mapper_pairs->[0][0];
@@ -153,14 +153,13 @@ sub get_alignment_slices {
 }
 
 sub get_mapped_slice {
-  my ($self, $hit_slice, $hit_seq) = @_;
+  my ($self, $hit_slice, $hit_seq, $reference_slice) = @_;
   my $object = $self->object; 
   my $hub = $self->hub;
   my $result_id = $hub->param('res'); 
   my $hit = $object->fetch_blast_hit_by_id($result_id);  
   my $species = $object->get_hit_species($result_id);
 
-  my $reference_slice = $object->get_hit_genomic_slice($hit, $species); 
   my $sr_name = $reference_slice->seq_region_name;
 
   my $msc = Bio::EnsEMBL::MappedSliceContainer->new( -SLICE => $reference_slice, -EXPANDED => 1);
@@ -171,7 +170,6 @@ sub get_mapped_slice {
   my $total_length_diff = 0;
 
   # Process genomic btop string to map coordiniates
-#  my $aln = $hit->{'g_aln'};
   my $aln = $hit->{'db_type'} =~/cdna/ ?  $object->map_btop_to_genomic_coords($hit) : $hit->{'aln'};
 
   $aln =~ s/(\d+)/:$1:/g;
@@ -294,7 +292,7 @@ sub get_mapped_slice {
     }
   }   
 
-  if ($ms_start < $seq_index){
+  if ( ($ref_strand eq 1 && $ms_start < $seq_index) || ($ref_strand ne 1 && $ms_start > 0)){
     my $ms_end = $ref_strand eq '1' ? ($end  - $ref_start ) + $ms_start : 1;
     ($ms_start, $ms_end) = ($ms_end, $ms_start) if $ms_start > $ms_end;
 
