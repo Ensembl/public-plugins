@@ -18,14 +18,15 @@ sub content {
 
     my $form = $self->new_form({'action' => {qw(action Bookmark function Save)}, 'csrf_safe' => 1});
 
-    $form->add_hidden({'name' => 'id',        'value' => $bookmark->record_id });
-    $form->add_hidden({'name' => 'object',    'value' => $bookmark->name || $hub->referer->{'ENSEMBL_TYPE'} }) if $is_add_new;
+    $form->add_hidden({'name' => 'id',              'value' => $bookmark->record_id });
+    $form->add_hidden({'name' => 'object',          'value' => $bookmark->name || $hub->referer->{'ENSEMBL_TYPE'} }) if $is_add_new;
+    $form->add_hidden({'name' => $self->_JS_CANCEL, 'value' => $hub->PREFERENCES_PAGE });
 
     $form->add_field({'type'  => 'string',    'name'  => 'name',        'label' => 'Bookmark name',       'value' => $bookmark->name        || $hub->param('name')      || '',  'required' => 1 });
     $form->add_field({'type'  => 'string',    'name'  => 'shortname',   'label' => 'Short description',   'value' => $bookmark->shortname   || $hub->param('shortname') || ''});
     $form->add_field({'type'  => 'text',      'name'  => 'url',         'label' => 'Bookmark URL',        'value' => $bookmark->url         || $hub->param('url')       || '',  'required' => 1 });
 
-    my $buttons_field = {'type' => 'submit', 'name' => 'button', 'value' => $is_add_new ? 'Add' : 'Save'};
+    my @buttons = ({'type' => 'submit', 'name' => 'button', 'value' => $is_add_new ? 'Add' : 'Save'});
 
     # add these extra fields for a shared bookmark (group record)
     if ($record_owner->RECORD_TYPE eq 'group') {
@@ -33,14 +34,16 @@ sub content {
       $form->add_hidden({'name' => 'group', 'value' => $record_owner->group_id});
 
       if ($user->is_admin_of($record_owner) || $bookmark->created_by eq $user->user_id) {
-        $buttons_field = {'inline' => 1, 'elements' => [{'type' => 'submit', 'name' => 'save', 'value' => 'Save'}, {'type' => 'submit', 'name' => 'save_new', 'value' => 'Save as new'}]};
+        @buttons = ({'type' => 'submit', 'name' => 'save', 'value' => 'Save'}, {'type' => 'submit', 'name' => 'save_new', 'value' => 'Save as new'});
 
       } else {
         $form->add_notes({'location' => 'head', 'heading' => 'Info', 'text' => q(You can't modify the existing bookmark, so this will be saved as a new bookmark.)});
       }
     }
 
-    $form->add_field($buttons_field);
+    push @buttons, {'type' => 'reset', 'value' => 'Cancel', 'class' => $self->_JS_CANCEL};
+
+    $form->add_field({'inline' => 1, 'elements' => \@buttons});
 
     return $self->js_section({'subsections' => [ $form->render ]});
 
