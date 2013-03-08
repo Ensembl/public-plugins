@@ -60,7 +60,7 @@ Data Description |
 		  <a href="/Homo_sapiens/Variation/Individual?v=rs699"><img src="/i/96/var_individual_genotypes.png" class="portal" alt="Individual genotypes of a variation" title="Individual genotypes of a variation"/></a>
 	  </li>
 		<li style="display:inline">
-		  <a href="/Homo_sapiens/Variation/Populations?v=COSM29450"><img src="/i/96/var_sample_information.png" class="portal" alt="Sample information and frequencies of a somatic	variant" title="Sample information and frequencies of a somatic variant"/></a>
+		  <a href="/Homo_sapiens/Variation/Populations?v=COSM191229"><img src="/i/96/var_sample_information.png" class="portal" alt="Sample information and frequencies of a somatic	variant" title="Sample information and frequencies of a somatic variant"/></a>
 	  </li>
 		<li style="display:inline">
 		  <a href="/Homo_sapiens/Variation/Phenotype?v=rs1333049"><img src="/i/96/var_phenotype_data.png" class="portal" alt="Phenotype(s) associated with a variation" title="Phenotype(s) associated with a variation"/></a>
@@ -275,7 +275,7 @@ somatic mutations from germline variations in the display term, prefixing the te
 
 <br />
 
-	<table id="variation_classes" class="ss">
+  <table id="variation_classes" class="ss">
 		<tr>
 			<th style="width:8px;padding-left:0px;padding-right:0px;text-align:center">*</th>
 			<th>SO term</th>
@@ -382,7 +382,7 @@ somatic mutations from germline variations in the display term, prefixing the te
 		</tr>
 	
 		<tr>
-			<td rowspan="2" style="padding:0px;margin:0px"></td>
+			<td rowspan="2" style="padding:0px;margin:0px;background-color:#732E00"></td>
 			<td rowspan="2">duplication</td>
 			<td rowspan="2">One or more nucleotides are added between two adjacent nucleotides in the sequence; the inserted sequence derives from, or is identical in sequence to, nucleotides adjacent to insertion point.</td>
 			<td rowspan="2"><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:1000035">SO:1000035</a></td>
@@ -454,7 +454,7 @@ somatic mutations from germline variations in the display term, prefixing the te
 		</tr>
 	
 		<tr>
-			<td rowspan="2" style="padding:0px;margin:0px"></td>
+			<td rowspan="2" style="padding:0px;margin:0px;background-color:#FF0000"></td>
 			<td rowspan="2">deletion</td>
 			<td rowspan="2">The point at which one or more contiguous nucleotides were excised.</td>
 			<td rowspan="2"><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0000159">SO:0000159</a></td>
@@ -489,6 +489,7 @@ somatic mutations from germline variations in the display term, prefixing the te
 			<td>somatic_sequence_alteration</td>
 		</tr>
 	 </table>
+
 <p>
 * Corresponding colours for the Ensembl web displays (only for Structural variations). 
 The colours are based on the <a rel="external" href="http://www.ncbi.nlm.nih.gov/dbvar/content/overview/">dbVar</a> displays.
@@ -1008,11 +1009,12 @@ variation sets in the Ensembl variation database (subsets are indicated by bulle
 		<td>Variations with phenotype annotations provided by Uniprot</td>
 	</tr>
 	<tr class="bg2">
-		<td><ul style="margin:0px"><li style="margin:0px">Clinically associated</li></ul></td>
+		<td><ul style="margin:0px"><li style="margin:0px">clinically associated</li></ul></td>
 		<td>clin_assoc</td>
-		<td>Variants annotated by dbSNP/ClinVar as probable-pathogenic, pathogenic, drug-response or histocompatibility</td>
+		<td>Variants described by ClinVar as being probable-pathogenic, pathogenic, drug-response or histocompatibility</td>
 	</tr>
 </table>
+
 
 
 
@@ -1025,15 +1027,15 @@ variation sets in the Ensembl variation database (subsets are indicated by bulle
 
 	<table class="ss" style="width:auto">
        <tr><th>Value</th><th>Example</th></tr>
-    <tr><td>drug-response</td><td><a href="/Homo_sapiens/Variation/Explore?v=rs1799853">rs1799853</a></td></tr>
-    <tr class="bg2"><td>histocompatibility</td><td></td></tr>
-    <tr><td>non-pathogenic</td><td><a href="/Homo_sapiens/Variation/Explore?v=rs5064">rs5064</a></td></tr>
-    <tr class="bg2"><td>other</td><td><a href="/Homo_sapiens/Variation/Explore?v=rs671">rs671</a></td></tr>
+    <tr><td>drug-response</td><td><a href="/Homo_sapiens/Variation/Explore?v=rs671">rs671</a></td></tr>
+    <tr class="bg2"><td>histocompatibility</td><td><a href="/Homo_sapiens/Variation/Explore?v=rs1093">rs1093</a></td></tr>
+    <tr><td>non-pathogenic</td><td><a href="/Homo_sapiens/Variation/Explore?v=rs328">rs328</a></td></tr>
+    <tr class="bg2"><td>other</td><td><a href="/Homo_sapiens/Variation/Explore?v=rs662">rs662</a></td></tr>
     <tr><td>pathogenic</td><td><a href="/Homo_sapiens/Variation/Explore?v=rs268">rs268</a></td></tr>
     <tr class="bg2"><td>probable-non-pathogenic</td><td><a href="/Homo_sapiens/Variation/Explore?v=rs140598">rs140598</a></td></tr>
-    <tr><td>probable-pathogenic</td><td><a href="/Homo_sapiens/Variation/Explore?v=rs2230234">rs2230234</a></td></tr>
-    <tr class="bg2"><td>unknown</td><td><a href="/Homo_sapiens/Variation/Explore?v=rs790897">rs790897</a></td></tr>
-    <tr><td>untested</td><td><a href="/Homo_sapiens/Variation/Explore?v=rs328">rs328</a></td></tr>
+    <tr><td>probable-pathogenic</td><td><a href="/Homo_sapiens/Variation/Explore?v=rs5935">rs5935</a></td></tr>
+    <tr class="bg2"><td>unknown</td><td><a href="/Homo_sapiens/Variation/Explore?v=rs721710">rs721710</a></td></tr>
+    <tr><td>untested</td><td><a href="/Homo_sapiens/Variation/Explore?v=rs4601">rs4601</a></td></tr>
 
   </table>
 </div>
@@ -1043,12 +1045,12 @@ variation sets in the Ensembl variation database (subsets are indicated by bulle
 
 	<table class="ss" style="width:auto">
        <tr><th>Value</th><th>Example</th></tr>
-    <tr class="bg2"><td>Benign</td><td><a href="/Homo_sapiens/StructuralVariation/Evidence?sv=nsv533192">nsv533192</a></td></tr>
+    <tr class="bg2"><td>Benign</td><td><a href="/Homo_sapiens/StructuralVariation/Evidence?sv=nsv491544">nsv491544</a></td></tr>
     <tr><td>Not tested</td><td></td></tr>
-    <tr class="bg2"><td>Pathogenic</td><td><a href="/Homo_sapiens/StructuralVariation/Evidence?sv=nsv531416">nsv531416</a></td></tr>
-    <tr><td>Uncertain Significance</td><td><a href="/Homo_sapiens/StructuralVariation/Evidence?sv=nsv529674">nsv529674</a></td></tr>
-    <tr class="bg2"><td>Uncertain Significance: likely benign</td><td><a href="/Homo_sapiens/StructuralVariation/Evidence?sv=nsv533380">nsv533380</a></td></tr>
-    <tr><td>Uncertain Significance: likely pathogenic</td><td><a href="/Homo_sapiens/StructuralVariation/Evidence?sv=nsv916597">nsv916597</a></td></tr>
+    <tr class="bg2"><td>Pathogenic</td><td><a href="/Homo_sapiens/StructuralVariation/Evidence?sv=nsv483167">nsv483167</a></td></tr>
+    <tr><td>Uncertain Significance</td><td><a href="/Homo_sapiens/StructuralVariation/Evidence?sv=nsv918063">nsv918063</a></td></tr>
+    <tr class="bg2"><td>Uncertain Significance: likely benign</td><td><a href="/Homo_sapiens/StructuralVariation/Evidence?sv=nsv917698">nsv917698</a></td></tr>
+    <tr><td>Uncertain Significance: likely pathogenic</td><td><a href="/Homo_sapiens/StructuralVariation/Evidence?sv=esv1791726">esv1791726</a></td></tr>
 
   </table>
 </div>
