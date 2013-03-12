@@ -21,7 +21,7 @@ sub content {
   return $self->render_message(MESSAGE_URL_EXPIRED, {'error' => 1}) unless $login;
 
   my $user    = $login->user;
-  my $form    = $self->new_form({'action' => {qw(action Confirmed)}});
+  my $form    = $self->new_form({'action' => {qw(action Confirmed)}, 'csrf_safe' => 1});
 
   $form->add_hidden({'name' => 'code',    'value' => $login->get_url_code});
   $form->add_hidden({'name' => 'referer', 'value' => join '/', $hub->action, $hub->function});

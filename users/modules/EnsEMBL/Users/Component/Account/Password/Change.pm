@@ -24,7 +24,7 @@ sub content {
   # If no login object found - user manually changed the url
   return $self->render_message(MESSAGE_URL_EXPIRED, {'error' => 1}) unless $login;
 
-  my $form      = $self->new_form({'action' => {qw(action Password function Save)}});
+  my $form      = $self->new_form({'action' => {qw(action Password function Save)}, 'csrf_safe' => 1});
 
   $form->add_field({'type' => 'noedit', 'name' => 'email', 'label' => 'Login email', 'no_input' => 1, 'value' => $login->identity });
 
@@ -38,8 +38,8 @@ sub content {
   $form->add_field({'type'    => 'password',  'name'  => 'new_password_1', 'label'  => 'New password',              'required' => 1,  'notes' => 'at least 6 characters'});
   $form->add_field({'type'    => 'password',  'name'  => 'new_password_2', 'label'  => 'Confirm new password',      'required' => 1});
   $form->add_field({'inline'  => 1, 'elements' => [
-    {'type' => 'Submit',    'name'  => 'submit',         'value'  => $user ? 'Change' : 'Reset',  'class'    => 'modal_link'      },
-    {'type' => 'Reset',     'name'  => 'reset',          'value'  => 'Cancel',                    'class'    => $self->_JS_CANCEL }
+    {'type' => 'Submit', 'name'  => 'submit', 'value'  => $user ? 'Change' : 'Reset' },
+    {'type' => 'Reset',  'name'  => 'reset',  'value'  => 'Cancel', 'class' => $self->_JS_CANCEL }
   ]});
 
   return $self->js_section({'subsections' => [ $form->render ]});
