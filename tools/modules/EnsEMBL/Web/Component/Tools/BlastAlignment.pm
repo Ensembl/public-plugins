@@ -149,7 +149,7 @@ sub get_alignment_slices {
     $config->{'ref_slice_name'}   = ' '; 
     $config->{'query_slice_start'} = $hit->{'qstart'};
     $config->{'query_slice_end'}  = $hit->{'qend'}; 
-    $config->{'query_slice_strand'} = $hit>{'qori'};
+    $config->{'query_slice_strand'} = $hit->{'qori'};
     $config->{'subj_slice_start'} = $hit->{'tstart'};
     $config->{'subj_slice_end'}  = $hit->{'tend'};
     $config->{'subj_slice_strand'}  = $hit->{'tori'};
@@ -168,7 +168,6 @@ sub get_mapped_slice {
   my $species = $object->get_hit_species($result_id);
 
   my $sr_name = $reference_slice->seq_region_name;
-
   my $msc = Bio::EnsEMBL::MappedSliceContainer->new( -SLICE => $reference_slice, -EXPANDED => 1);
   my $ms = Bio::EnsEMBL::MappedSlice->new( -adaptor => $reference_slice->adaptor, -name => 'test_map', -container => $msc);
   my $mapper = Bio::EnsEMBL::Mapper->new('mapped_slice', 'ref_slice');  
@@ -178,7 +177,7 @@ sub get_mapped_slice {
 
   # Process genomic btop string to map coordiniates
   my $aln = $hit->{'db_type'} =~/cdna/i ?  $object->map_btop_to_genomic_coords($hit) : $hit->{'aln'};
- 
+
   $aln =~ s/(\d+)/:$1:/g;
   $aln  =~ s/^:|:$//g;
   my @alignment_features = split (/:/, $aln);
@@ -218,6 +217,7 @@ sub get_mapped_slice {
     my $edit_len = length($edit_string)/2;
     my $type;
     my $diffs;
+
 
     if ($edit_len > 1){
       my @base_edits = split(//, $edit_string);
@@ -270,60 +270,67 @@ sub get_mapped_slice {
     }
   }
 
+  my $rev_flag = $hit->{'gori'} ne $hit->{'tori'} ? 1 : undef;
+  if ($hit->{'gori'} ne '1' && $hit->{'db_type'}=~/latest/i){
+    $rev_flag = 1;
+  }
 
-  my $ref_start = $reference_slice->start;
+  my $ref_start = $hit->{'gstart'};
   my $ref_strand = $hit->{'gori'};
-  my $ms_start = $ref_strand eq '1' ? 1 : $hit->{'len'};
+  my $ms_start = !$rev_flag ? 1 : $hit->{'len'};
   my $total_insert_size = 0;
+
   
   foreach my $edit_position (sort {$a <=> $b } keys %edits){
 
     my $num_matching_bp = $edits{$edit_position}->[0];     
     my $edit_type  =  $edits{$edit_position}->[1];
     my $edit_length =  $edits{$edit_position}->[2];
-    my $ms_end = $ref_strand eq '1' ? ($ms_start + $num_matching_bp) -1 : ($ms_start - $num_matching_bp) +1;
+    my $ms_end = !$rev_flag ? ($ms_start + $num_matching_bp) -1 : ($ms_start - $num_matching_bp) +1;
     my $ref_end = ($ref_start + $num_matching_bp) -1;
 
     if ($edit_type eq 'insert_hit'){ 
-      $ms_end = $ref_strand eq '1' ? $ms_end + $edit_length : $ms_end - $edit_length; 
+      $ms_end = !$rev_flag ? $ms_end + $edit_length : $ms_end - $edit_length; 
       $ref_end += $edit_length 
     };
 
     ($ms_start, $ms_end) = ($ms_end, $ms_start) if $ms_start > $ms_end;
+
+#warn "$ms_start $ms_end $ref_start $ref_end";
 
     # first add match block
     $mapper->add_map_coordinates(
       'mapped_slice',
       $ms_start,
       $ms_end,
-      $ref_strand,
+      1,
       $sr_name,
       $ref_start,
       $ref_end,
     );
 
     if ($edit_type eq 'insert_query'){
-      $ms_start = $ref_strand eq '1' ? $ms_end + 1 + $edit_length : $ms_start -1 - $edit_length;
+      $ms_start = !$rev_flag ? $ms_end + 1 + $edit_length : $ms_start -1 - $edit_length;
       $ref_start = $ref_end +1;
     } elsif ($edit_type eq 'insert_hit'){
-      $ms_start = $ref_strand eq '1' ? $ms_end +1 : $ms_start -1;
+      $ms_start = !$rev_flag ? $ms_end +1 : $ms_start -1;
       $ref_start = $ref_end + 1;
       $total_insert_size += $edit_length;  
     } else {
-      $ms_start = $ref_strand eq '1' ? $ms_end +1 : $ms_start -1;
+      $ms_start = !$rev_flag ? $ms_end +1 : $ms_start -1;
       $ref_start = $ref_end + $edit_length +1;
     }
   }   
 
   if ( ($ref_strand eq 1 && $ms_start < $seq_index) || ($ref_strand ne 1 && $ms_start > 0)){
-    my $ms_end = $ref_strand eq '1' ? ($end  - $ref_start ) + $ms_start : 1;
+    my $ms_end = !$rev_flag ? ($end  - $ref_start ) + $ms_start : 1;
     ($ms_start, $ms_end) = ($ms_end, $ms_start) if $ms_start > $ms_end;
-
+#warn "$ms_start $ms_end $ref_start $end";
     $mapper->add_map_coordinates(
      'mapped_slice',
       $ms_start,
       $ms_end,
-      $ref_strand,
+      1,
       $sr_name,
       $ref_start,
       $end,
