@@ -146,7 +146,14 @@ sub get_alignment_slices {
     $config->{'mapper'} = $mapper;
     $config->{'ref_slice_start'}  = $ref_slice->start;
     $config->{'ref_slice_end'}    = $ref_slice->end; #length ($ms->seq);
-    $config->{'ref_slice_name'}   = ' ';  
+    $config->{'ref_slice_name'}   = ' '; 
+    $config->{'query_slice_start'} = $hit->{'qstart'};
+    $config->{'query_slice_end'}  = $hit->{'qend'}; 
+    $config->{'query_slice_strand'} = $hit>{'qori'};
+    $config->{'subj_slice_start'} = $hit->{'tstart'};
+    $config->{'subj_slice_end'}  = $hit->{'tend'};
+    $config->{'subj_slice_strand'}  = $hit->{'tori'};
+    $config->{'transcript'} = 1 if $self->hub->action =~/transcript/i;
   } 
 
   return \@slices;
@@ -170,18 +177,35 @@ sub get_mapped_slice {
   my $total_length_diff = 0;
 
   # Process genomic btop string to map coordiniates
-  my $aln = $hit->{'db_type'} =~/cdna/ ?  $object->map_btop_to_genomic_coords($hit) : $hit->{'aln'};
-
+  my $aln = $hit->{'db_type'} =~/cdna/i ?  $object->map_btop_to_genomic_coords($hit) : $hit->{'aln'};
+ 
   $aln =~ s/(\d+)/:$1:/g;
   $aln  =~ s/^:|:$//g;
   my @alignment_features = split (/:/, $aln);
 
+  if ($hit->{'gori'} ne '1' && $hit->{'db_type'}=~/latest/i){
+    my @temp = reverse @alignment_features;
+    my @reversed_feature;
+    while ( my $n_matches = shift @temp){
+      my $temp_edit_string = shift @temp;
+      my @temp_edits = split(//, $temp_edit_string);
+      my $new_edit_string;
+      while (my $q_base = shift @temp_edits){
+        my $h_base = shift @temp_edits;
+        $new_edit_string = "$q_base$h_base" . $new_edit_string; 
+      }
+      push @reversed_feature, $n_matches; 
+      push @reversed_feature, $new_edit_string;
+    }
+    @alignment_features = @reversed_feature;
+  }
 
   # Try thinking about this another way, the only bits of the btop we need to consider are
   # where we have a gap inserted into the hit sequence relative to the reference sequence
   # we know where this is due to having the hit sequence already.
 
   my @aln_features = @alignment_features;
+
   my %edits;
   my $seq_index = 0;
   my $last_edit_pos = 0;
@@ -257,7 +281,6 @@ sub get_mapped_slice {
     my $num_matching_bp = $edits{$edit_position}->[0];     
     my $edit_type  =  $edits{$edit_position}->[1];
     my $edit_length =  $edits{$edit_position}->[2];
-
     my $ms_end = $ref_strand eq '1' ? ($ms_start + $num_matching_bp) -1 : ($ms_start - $num_matching_bp) +1;
     my $ref_end = ($ref_start + $num_matching_bp) -1;
 
