@@ -88,6 +88,7 @@ sub set_exons {
     my @exon_coords;
 
     if ($config->{'mapper'}){
+      $slice_length = $config->{'length'};
       my @temp =  $config->{'mapper'}->map_coordinates($slice->seq_region_name, $exon->seq_region_start, $exon->seq_region_end, $slice_strand, 'ref_slice');
       foreach my $mapped_coords ( @temp){
         my $start = $mapped_coords->start -1;
@@ -111,10 +112,8 @@ sub set_exons {
 
       next if $end < 0 || $start >= $slice_length;
 
-
       $start = 0 if $start < 0;
       $end   = $slice_length - 1 if $end >= $slice_length;
-
       for ($start..$end) {
         push @{$markup->{'exons'}{$_}{'type'}}, $type;
         $markup->{'exons'}{$_}{'id'} .= ($markup->{'exons'}{$_}{'id'} ? "\n" : '') . $id unless $markup->{'exons'}{$_}{'id'} =~ /$id/;
@@ -319,8 +318,9 @@ sub markup_blast_line_numbers {
     } elsif ($config->{'line_numbering'} eq 'slice') {
       # Get the data for the slice
       my $ostrand     = $slice->strand;
-      my $slice_start = $slice->start;
-      my $slice_end   = $slice->end;
+      if (!$sl->{'no_markup'} && $config->{'transcript'}) { $ostrand =  $ostrand eq $config->{'subj_slice_strand'} ? 1 : -1; }
+      my $slice_start = $sl->{'no_markup'} ? $config->{'query_slice_start'} : $config->{'ref_slice_start'};
+      my $slice_end   = $sl->{'no_markup'} ? $config->{'query_slice_end'} : $config->{'ref_slice_end'};
         
       @numbering = ({ 
         dir   => $ostrand,
@@ -330,95 +330,76 @@ sub markup_blast_line_numbers {
       });
       
     } else {
-      # Line numbers are relative to the sequence (start at 1)
+      # Line numbers are relative to the feature
+      my $ostrand     = $sl->{'no_markup'} ? $config->{'query_slice_strand'} : $config->{'subj_slice_strand'};
+      my $trans_start = $sl->{'no_markup'} ? $config->{'query_slice_start'} : $config->{'subj_slice_start'};
+      my $trans_end   = $sl->{'no_markup'} ? $config->{'query_slice_end'} : $config->{'subj_slice_end'};
+
       @numbering = ({
-        dir   => 1,
-        start => $config->{'sub_slice_start'} || 1,
-        end   => $config->{'sub_slice_end'}   || $config->{'length'},
+        dir   => $ostrand,
+        start => $ostrand > 0 ? $trans_start : $trans_end,
+        end   => $ostrand > 0 ? $trans_end : $trans_start,
         label => ''
       });
    } 
 
     my $data = shift @numbering;
-    my $s = 1;
-    my $e = $config->{'display_width'}; 
+    my $dir = $data->{'dir'};
     my $row_start = $data->{'start'};
-    my $loop_end = $config->{'length'} + $config->{'display_width'};
+    my $align_end = $data->{'end'};
+    my $align_length = $config->{'length'};
+    my $s = 0;
+    my $e = $config->{'display_width'} -1;  
+    my $loop_end = $align_length + $config->{'display_width'};
+    my $seq_string  = uc($sl->{'seq'} || $sl->{'slice'}->seq(1)); 
     my ($start, $end);
-    my $gap_count = 0;
 
-    my $sl_seq_region_name = $slice->name;              
-    my @seq_region_data = split (/:/, $sl_seq_region_name);
-    my $region = $seq_region_data[-4];
-
-    while ($e < $loop_end) {
-      my $shift = 0; # To check if we've got a new element from @numbering
+    while ($e < $loop_end){
       $start = '';
       $end = '';
 
-      my $sequence = $sl->{'seq'} || $slice->seq;
-      my $segment = substr $sequence, $s -1, $config->{'display_width'};
-      my $seg_length = length $segment;
-    
+      my $segment = substr $seq_string, $s, $config->{'display_width'};
+      (my $seq_length_seg = $segment) =~ s/\-//g;
+      my $seq_length      = length $seq_length_seg;
 
-      if ( $config->{'line_numbering'} eq 'sequence' || $sl->{'no_markup'}){
-        my $gaps = ($segment =~tr/-//);
-        $gap_count += $gaps; 
-        $start = $s;
-        if ( $config->{'line_numbering'} eq 'slice' && $start == 1 ){ 
-          $start = $slice->start; 
-          $s = $start; 
+      if ( !$sl->{'no_markup'} && $config->{'line_numbering'} eq 'slice' ){ # we have the mapped slice
+
+        my $first_bp_pos    = 0; # Position of first letter character
+        my $last_bp_pos     = 0; # Position of last letter character
+
+        if ($segment =~ /\w/) {
+          $segment      =~ /(^\W*).*\b(\W*$)/;
+          $first_bp_pos = 1 + length $1 unless length($1) == length $segment;
+          $last_bp_pos  = $2 ? length($segment) - length($2) : length $segment;
+        }
+        my $cs = $s + $first_bp_pos; 
+        my $ce = $s + $last_bp_pos;
+
+        my @mapped_coords = ( sort { $a->start <=> $b->start }
+                              grep { ! $_->isa('Bio::EnsEMBL::Mapper::Gap') }
+                              $config->{'mapper'}->map_coordinates('mapped_slice', $cs, $ce, $dir, 'mapped_slice')
+                            );
+
+        $start =  $mapped_coords[0]->start;
+        $end =  $mapped_coords[-1]->end;  
+        ($start, $end) = ($end, $start) if $dir ne '1';
+      } else {
+        if ($dir eq '1'){
+          $start = $row_start;
+          $end = $row_start + $seq_length -2 > $align_end ? $align_end : $row_start + $seq_length -1;  
+          $row_start = $end +1;  
+        }else {
+          $start = $row_start;
+          $end = $row_start - $seq_length + 1;
+          $row_start = $end -1; 
         } 
-        $end = $s + $config->{'display_width'} -1  - $gaps;
-        if ( $config->{'line_numbering'} eq 'slice' && $end > $slice->end){ $end = $slice->end - $gap_count; }
-        elsif ( $config->{'line_numbering'} eq 'sequence' && $end > $slice->length ){ $end = $slice->length; }
-        $s = $end + 1;
-        $e += $config->{'display_width'}; 
+      } 
 
-      } else { #  We have the hit sequence, map alignment coords back to genomic
+      push @{$config->{'line_numbers'}{$n}}, { start => $start, end => $end} unless $sl->{'no_numbers'};
+      $config->{'padding'}{'number'} = length $start if length $start > $config->{'padding'}{'number'};
 
-        my ($cs, $ce);
-        my $start_flag = 0;
-        my $end_flag = 0;
-        my $index = 0;
-        my @bases = split('', $segment);
-
-        while ($start_flag < 1){          
-          my $base = shift @bases; 
-          if ($base ne '-') { 
-            $cs = $s + $index;
-            $start_flag = 1; 
-          } 
-          $index++;
-        }
-
-        $index = 0;
-
-        while ($end_flag < 1){  
-          my $base = unshift @bases;
-          if ($base ne '-') { 
-            $ce = $e - $index;
-            $end_flag = 1;
-          }
-          $index++;
-        }
-       
-        if ($config->{'mapper'}){ 
-          my ($mapped_coords) =$config->{'mapper'}->map_coordinates('mapped_slice', $cs, $ce, 1, 'mapped_slice');
-          $start =  $mapped_coords->start;
-          $end =  $mapped_coords->end;            
-        } else {
-          $start = $cs;
-          $end = $ce;
-        }
-
-        $s = $e +1;
-        $e  += $config->{'display_width'};
-      }
-
-      my $label = '';
-
-      push @{$config->{'line_numbers'}{$n}}, { start => $start, end => $end || undef, label => $label } unless $sl->{'no_numbers'};
+      $s = $e + 1;
+      $e += $config->{'display_width'};
     }
     $n++;
   }
