@@ -73,8 +73,7 @@ sub render {
   my ($top_toolbar, $bottom_toolbar) = $self->render_toolbar(1e9);
   
   my $config = {
-    #tracks         => [ { type => 'Scaleline' }, { type => 'Scalebar' }, @{$self->get_tracks} ], 
-    tracks         => [ { type => 'Scalebar' }, @{$self->get_tracks} ], 
+    tracks         => [ { type => 'Scaleline' }, { type => 'Scalebar' }, @{$self->get_tracks} ],
     autoHeight     => $image_config->get_option('auto_height') ? JSON::true : JSON::false,
     wheelAction    => $image_config->get_parameter('zoom') eq 'no' ? JSON::false : 'zoom',
     minSize        => $image_config->get_parameter('min_size') + 0,
