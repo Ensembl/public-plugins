@@ -10,11 +10,6 @@ sub modify_tree {
   
   $view->set('genoverse', 1);
   
-  $view->after($self->create_node('Scrollable', 'Scrollable region (BETA)',
-    [qw(genoverse EnsEMBL::Web::Component::Location::Genoverse)],
-    { availability => 'slice', genoverse => 1 }
-  ));
-  
   $self->_modify_tree unless $self->can('modify_tree') eq $self->can('_modify_tree');
 }
 
