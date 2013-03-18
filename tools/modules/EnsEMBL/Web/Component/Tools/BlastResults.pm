@@ -70,23 +70,8 @@ sub summary {
 
   my $object = $self->object;
   my $blast_object = $object->deserialise($ticket->analysis->object);
-
-  my $job_division = $object->deserialise($sub_job->job_division);       
-  my $db_type = $job_division->{'type'};
-  my $search_type = $blast_object->{'_methods'};
-
-  my ($dbs, $methods, $default_db, $default_me) = $blast_object->get_blast_form_params;
-  my @db_name = map  { $_->{'name'} } grep { $_->{'value'} eq $db_type } @{$dbs}; 
-
-  my $species_name = $self->hub->species_defs->get_config($job_division->{'species'},'SPECIES_COMMON_NAME');
-
-  my $job_summary = sprintf ( '%s search against %s %s database.  ',
-                              uc($search_type), 
-                              $species_name,
-                              lc ($db_name[0]) 
-  ); 
-  
-  return $job_summary;
+  my $job_desc = $blast_object->{'_description'} ."   ";
+  return $job_desc;
 }
 
 sub failure_text {
