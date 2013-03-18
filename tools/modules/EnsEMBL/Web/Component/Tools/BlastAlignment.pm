@@ -118,6 +118,14 @@ sub get_alignment_slices {
 
  
   my $ref_slice = $object->get_hit_genomic_slice($hit, $species);
+  my $target_object = $object->get_target_object($hit);
+  my $mapping_orientation = $hit->{'gori'};
+  if ($target_object){
+    my $object_strand = $target_object->isa('Bio::EnsEMBL::Translation') ? $target_object->translation->start_Exon->strand :
+                        $target_object->strand;
+    $mapping_orientation = $hit->{'tori'} eq $object_strand ? 1 : -1; 
+  }
+ 
   my $spacer = " " x (length($homology_string));
 
   my $query_slice = $self->create_slice($hit->{'qid'}, $hit->{'qstart'}, $hit->{'qori'}, $query_seq, $ref_slice);
@@ -131,7 +139,7 @@ sub get_alignment_slices {
       { name => 'Subjct', slice => $hit_slice, },
     );
   } else {
-    my $mapped_slice_container = $self->get_mapped_slice($hit_slice, $hit_seq, $ref_slice);
+    my $mapped_slice_container = $self->get_mapped_slice($hit_slice, $hit_seq, $ref_slice, $mapping_orientation);
 
     my $ms =  shift @{$mapped_slice_container->get_all_MappedSlices};
     my $slice =  $ms->get_all_Slice_Mapper_pairs->[0][0];
@@ -160,7 +168,7 @@ sub get_alignment_slices {
 }
 
 sub get_mapped_slice {
-  my ($self, $hit_slice, $hit_seq, $reference_slice) = @_;
+  my ($self, $hit_slice, $hit_seq, $reference_slice, $mapping_orientation) = @_;
   my $object = $self->object; 
   my $hub = $self->hub;
   my $result_id = $hub->param('res'); 
@@ -181,6 +189,10 @@ sub get_mapped_slice {
   $aln =~ s/(\d+)/:$1:/g;
   $aln  =~ s/^:|:$//g;
   my @alignment_features = split (/:/, $aln);
+  my $rev_flag = $hit->{'gori'} ne $hit->{'tori'} ? 1 : undef;
+  if ($hit->{'gori'} ne '1' && $hit->{'db_type'}=~/latest/i){
+    $rev_flag = 1;
+  }
 
   if ($hit->{'gori'} ne '1' && $hit->{'db_type'}=~/latest/i){
     my @temp = reverse @alignment_features;
@@ -210,9 +222,9 @@ sub get_mapped_slice {
   my $last_edit_pos = 0;
   
   while (scalar @aln_features){
-    my $index = shift @aln_features;
+    my $matching_bp = shift @aln_features;
     my $edit_string = shift @aln_features;
-    $seq_index += $index; 
+    $seq_index += $matching_bp; 
     last unless $edit_string;
     my $edit_len = length($edit_string)/2;
     my $type;
@@ -223,8 +235,9 @@ sub get_mapped_slice {
       my @base_edits = split(//, $edit_string);
       my $previous_state;
       my $count = 0;
-      while (my $query_base = shift @base_edits){
-        my $target_base = shift @base_edits;
+      while (my $query_base = !$rev_flag ? shift @base_edits : pop @base_edits){
+        my $target_base = !$rev_flag ? shift @base_edits : pop @base_edits;
+        ($target_base, $query_base) = ($query_base, $target_base) if $rev_flag;    
         my $state = $target_base eq '-' ? 'insert_query' :
                     $query_base eq '-' && $target_base ne 'N' ?'insert_hit' :
                     ($query_base =~/[ACTG]/i && $target_base =~/[ACTG]/i) ? 'missmatch' : 'gap';
@@ -260,19 +273,13 @@ sub get_mapped_slice {
                   ($query_base =~/[ACTG]/i && $target_base =~/[ACTG]/i) ? 'missmatch' : 'gap';
 
       if ($type ne 'missmatch'){
-        my $pos = $seq_index - $last_edit_pos;
+        my $pos = $seq_index - $last_edit_pos; 
         $edits{$seq_index} = [$pos, $type, $length];
         $last_edit_pos = $seq_index;
         $last_edit_pos = $type ne 'gap' ? $last_edit_pos += $length : $last_edit_pos +1; 
       }
       $seq_index = $type eq 'gap' ? $seq_index +1 : $seq_index + $length;
-      $index += $length;
     }
-  }
-
-  my $rev_flag = $hit->{'gori'} ne $hit->{'tori'} ? 1 : undef;
-  if ($hit->{'gori'} ne '1' && $hit->{'db_type'}=~/latest/i){
-    $rev_flag = 1;
   }
 
   my $ref_start = $hit->{'gstart'};
@@ -291,8 +298,9 @@ sub get_mapped_slice {
 
     if ($edit_type eq 'insert_hit'){ 
       $ms_end = !$rev_flag ? $ms_end + $edit_length : $ms_end - $edit_length; 
-      $ref_end += $edit_length 
-    };
+      $ref_end += $edit_length; 
+
+    }
 
     ($ms_start, $ms_end) = ($ms_end, $ms_start) if $ms_start > $ms_end;
 
@@ -303,7 +311,7 @@ sub get_mapped_slice {
       'mapped_slice',
       $ms_start,
       $ms_end,
-      1,
+      $mapping_orientation,
       $sr_name,
       $ref_start,
       $ref_end,
@@ -322,7 +330,7 @@ sub get_mapped_slice {
     }
   }   
 
-  if ( ($ref_strand eq 1 && $ms_start < $seq_index) || ($ref_strand ne 1 && $ms_start > 0)){
+  if ( ($mapping_orientation == 1 && $ms_start < $seq_index) || ($mapping_orientation != 1 && $ms_start > 0)){
     my $ms_end = !$rev_flag ? ($end  - $ref_start ) + $ms_start : 1;
     ($ms_start, $ms_end) = ($ms_end, $ms_start) if $ms_start > $ms_end;
 #warn "$ms_start $ms_end $ref_start $end";
@@ -330,7 +338,7 @@ sub get_mapped_slice {
      'mapped_slice',
       $ms_start,
       $ms_end,
-      1,
+      $mapping_orientation,,
       $sr_name,
       $ref_start,
       $end,
