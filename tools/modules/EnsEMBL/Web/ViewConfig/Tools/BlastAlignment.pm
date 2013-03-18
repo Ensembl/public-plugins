@@ -32,7 +32,18 @@ sub form {
   my $dbs  = $self->species_defs->databases;
 
   $self->add_form_element($other_markup_options{'display_width'});
-  $self->add_form_element($general_markup_options{'line_numbering'});
+
+  $self->add_form_element({
+    type   => 'DropDown',
+    select => 'select',
+    name   => 'line_numbering',
+    label  => 'Line numbering',
+    values => [
+      { value => 'slice', name => 'Yes' },
+      { value => 'off',      name => 'No'  },
+    ]
+  });
+
   $self->add_form_element($gene_markup_options{'exon_display'}); 
   $self->add_form_element($general_markup_options{'exon_ori'});
   $self->add_form_element($other_markup_options{'codons_display'});
