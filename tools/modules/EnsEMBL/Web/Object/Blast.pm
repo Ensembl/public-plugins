@@ -141,6 +141,7 @@ sub get_blast_form_params {
 
   my $method_conf = $species_defs->multi_val('ENSEMBL_BLAST_METHODS');
   foreach my $method (sort keys %$method_conf ){
+    next if $method eq 'BLAT'; # disable until have working
     my $method_query_type = $method_conf->{$method}->[1];
     my $method_db_type = $method_conf->{$method}->[2];
     $method_query_type  =~ s/peptide/protein/;
