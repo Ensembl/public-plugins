@@ -162,8 +162,7 @@ sub map_to_genome {
       $g_id = $object->seq_region_name;
       $g_start = $coords[0]->start;
       $g_end = $coords[-1]->end;
-      $g_ori = $object->strand eq $hit->{'tori'} ? $object->strand :
-             $object->strand  eq '1' ? '1' : '-1';
+      $g_ori = $object->strand;
 
       $g_coords = \@coords;
     } else {
