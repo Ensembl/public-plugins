@@ -24,8 +24,8 @@ sub run {
   my $query_file = $self->query_file('seq','fa'); 
   my $results_file = $self->results_file;
   my $program = $self->program($self->param('method'));
-  my @seqs = values %{$self->param('seqs')};
-  my $filename = $self->write_seqfile(\@seqs, $query_file);
+  my $seqs = $self->param('seqs');
+  my $filename = $self->write_seqfile($seqs, $query_file);
   my $type = 'ncbi';
   my $masked = $self->repeat_mask($filename) if $self->param('mask'); 
   $query_file .= ".masked" if $masked;
