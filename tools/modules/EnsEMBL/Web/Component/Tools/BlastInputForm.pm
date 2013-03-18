@@ -106,6 +106,15 @@ sub content {
   );
 
   $form->add_element(
+    label   => 'Description (optional):',
+    type    => 'String',
+    name    => 'description',
+    class   => 'desc',
+    value   =>  undef,
+    size    => '160',
+  );
+
+  $form->add_element(
     type    => 'Submit',
     name    => 'submit_blast',
     value   => 'Run >',
