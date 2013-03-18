@@ -349,7 +349,27 @@ sub process_database {
 
 sub process_description {
   my $self = shift;
-  $self->{'_description'} = sprintf ('%s search against %s %s database', $self->param('blastmethod'), $self->param('species'), $self->param('db_name')) ;
+
+  my $desc = $self->param('description') || undef;
+
+  if (defined $desc){    
+    $self->{'_description'} = $desc;
+    return;
+  }
+
+  my $search_type = $self->param('blastmethod'); 
+  my $species_name = $self->hub->species_defs->get_config($self->param('species'),'SPECIES_COMMON_NAME');
+  my $db_type = $self->param('db_name');
+  my ($dbs, $methods, $default_db, $default_me) = $self->get_blast_form_params; 
+  my @db_name = map  { $_->{'name'} } grep { $_->{'value'} eq $db_type } @{$dbs};
+ 
+  my $ticket_summary = sprintf ( '%s search against %s %s database.  ',
+                              uc($search_type),
+                              $species_name,
+                              lc ($db_name[0])
+  );
+
+  $self->{'_description'} = $ticket_summary;
 }
 
 sub process_config_params {
