@@ -96,26 +96,18 @@ sub bindir {
 }
 
 sub write_seqfile{
-  my ($self, $seq, $filename, $format) = @_;
+  my ($self, $seqs, $filename, $format) = @_;
   $format = 'fasta' if(!$format);
-  my @seqs;
-  if(ref($seq) eq "ARRAY"){
-    @seqs = @$seq;
-    #throw("Seqs need to be Bio::Seq object not a ".$seqs[0])
-      #unless($seqs[0]->isa('Bio::Seq'));
-  }else{
-    #throw("Need a Bio::Seq object not a ".$seq)
-      #if(!$seq || !$seq->isa('Bio::Seq'));
-    @seqs = ($seq);
-  }
-  $filename = create_file_name('seq', 'fa', '/tmp')
-    if(!$filename);
+
+  $filename = create_file_name('seq', 'fa', '/tmp') if(!$filename);
   my $seqout = Bio::SeqIO->new(
                                -file => ">".$filename,
                                -format => $format,
                               );
-  foreach my $seq(@seqs){
-    my $bioperl_seq = Bio::Seq->new( -seq => $seq, -id => 'unnamed');
+
+  foreach my $id ( keys %{$seqs}){
+    my $seq = $seqs->{$id};
+    my $bioperl_seq = Bio::Seq->new( -seq => $seq, -id =>$id);
     eval{
       $seqout->write_seq($bioperl_seq);
     };
