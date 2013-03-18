@@ -433,7 +433,7 @@ sub map_btop_to_genomic_coords {
   my $genomic_start = $hit->{'gstart'};
   my $genomic_end   = $hit->{'gend'};
   my $genomic_offset = $genomic_start;
-  my $target_offset  = $object_strand eq '1' ? $hit->{'tstart'} : $hit->{'tend'}; 
+  my $target_offset  = $hit->{'tori'} == 1 ? $hit->{'tstart'} : $hit->{'tend'}; 
 
   while (scalar @btop_features > 0){
     my $num_matches = shift @btop_features;
@@ -449,16 +449,16 @@ sub map_btop_to_genomic_coords {
     my $gap_in_query = 0;
     my $require_mapping;
 
-    while (defined($a = shift @diffs)){
-      my $b = shift @diffs;
-      $insert_in_query++ if $b eq '-'; 
-      $gap_in_query++ if $a eq '-';
-      $require_mapping = 1 if $b ne '-';
+    while (defined( my $query_base = shift @diffs)){
+      my $target_base = shift @diffs;
+      $insert_in_query++ if $target_base eq '-'; 
+      $gap_in_query++ if $query_base eq '-';
+      $require_mapping = 1 if $target_base ne '-';
     }  
 
     my ($difference_start, $difference_end);
 
-    if ($object_strand eq '-1') {
+    if ($hit->{'tori'} eq '-1') {
       $difference_end = $target_offset - $num_matches;
       $difference_start = $difference_end - $diff_length + $insert_in_query + 1;
       $target_offset = $difference_start -1;
@@ -467,7 +467,7 @@ sub map_btop_to_genomic_coords {
       $difference_end  = $difference_start + $diff_length - $insert_in_query -1;
       $target_offset = $difference_end +1;
     }
-
+;
     my @mapped_coords = ( sort { $a->start <=> $b->start }
                           grep { ! $_->isa('Bio::EnsEMBL::Mapper::Gap') }
                           $target_object->$mapping_type($difference_start, $difference_end, $hit->{'tori'} )
@@ -475,7 +475,7 @@ sub map_btop_to_genomic_coords {
 
     my $mapped_start = $mapped_coords[0]->start;
     my $mapped_end   = $mapped_coords[-1]->end;  
-
+;
     # Check that mapping occurs before the next gap
     if ($mapped_start < $gap_start && $mapped_end <= $gap_start){ 
       $genomic_btop .= $num_matches;
