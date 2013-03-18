@@ -58,10 +58,17 @@ sub populate_tree {
     )],
     { 'availability' => 1, 'concise' => 'BLAST/BLAT Alignment', 'no_menu_entry' => 1 }
   ));
+  $blast_node->append($self->create_subnode('BlastAlignmentTranscript', 'Alignment',
+    [qw(
+      hit             EnsEMBL::Web::Component::Tools::BlastHitSummary
+      transalignment  EnsEMBL::Web::Component::Tools::BlastAlignmentTranscript
+    )],
+    { 'availability' => 1, 'concise' => 'BLAST/BLAT Alignment', 'no_menu_entry' => 1 }
+  ));
   $blast_node->append($self->create_subnode('BlastAlignmentProtein', 'Alignment',
     [qw(
-      hit       EnsEMBL::Web::Component::Tools::BlastHitSummary
-      alignment     EnsEMBL::Web::Component::Tools::BlastAlignmentProtein
+      hit             EnsEMBL::Web::Component::Tools::BlastHitSummary
+      protalignment   EnsEMBL::Web::Component::Tools::BlastAlignmentProtein
     )],
     { 'availability' => 1, 'concise' => 'BLAST/BLAT Alignment', 'no_menu_entry' => 1 }
   ));
@@ -88,6 +95,14 @@ sub populate_tree {
     [qw( download EnsEMBL::Web::Component::Tools::Download )],
     { 'availability' => 1, 'no_menu_entry' => 1 },
   );
+
+  $self->create_node('GeneTree', 'Gene Tree Mapping',
+    [qw(  
+      genetree EnsEMBL::Web::Component::Tools::GeneTreeInput
+    )],
+    {'availability' => 1, 'concise' => 'Gene Tree Mapping'}
+  );
+
 =cut
   my $custom_tracks_menu = $self->create_submenu('custom', 'Custom tracks');
   $custom_tracks_menu->append($self->create_node('Upload', 'Upload a file',
