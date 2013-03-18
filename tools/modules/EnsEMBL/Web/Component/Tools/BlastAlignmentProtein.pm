@@ -25,12 +25,17 @@ sub get_sequence_data {
   my $feature_type = $database_type =~ /abinitio/i ? 'PredictionTranscript' :'Translation';
 
   my $adaptor = $hub->get_adaptor('get_' . $feature_type .'Adaptor', 'core', $species);
-  my $translation = $adaptor->fetch_by_stable_id($hit->{'tid'});
-  my $temp_trans = $translation->transcript;
 
-  my $transcript = $self->new_object(
-    'Transcript', $temp_trans, $self->object->__data
-  );
+  my ($translation, $transcript);  
+
+  if ($database_type !~/latestgp/i){ # Can't markup based on protein sequence as we only have a translated DNA region 
+    $translation = $adaptor->fetch_by_stable_id($hit->{'tid'}); 
+    my $temp_trans = $translation->transcript;
+  
+    $transcript = $self->new_object(
+      'Transcript', $temp_trans, $self->object->__data
+    );
+  }
 
   my $sequence = [];
   my @markup;
@@ -39,7 +44,7 @@ sub get_sequence_data {
     my $seq = uc($sl->{'seq'} || $sl->{'slice'}->seq(1));
     my $mk = {};
     $self->set_sequence($config, $sequence, $mk, $seq, $sl->{'name'});
-    unless ($sl->{'no_markup'}){ 
+    unless ($sl->{'no_markup'} || $database_type =~/latestgp/i ){ 
       $self->set_exons($config, $sl, $mk, $transcript, $seq) if $config->{'exon_display'};
       $self->set_variations($config, $sl, $mk, $transcript, $seq) if $config->{'snp_display'};
     }  
@@ -157,7 +162,6 @@ sub markup_blast_line_numbers {
     my $s = $data->{'start'};
     my $e = $s -1;
     my $loop_end = $config->{'length'} + $config->{'display_width'}; 
-    my ($start, $end);
     my $seq_offset = 0;
 
     while ($e < $loop_end){
