@@ -102,8 +102,9 @@ sub generate_links {
   my ($self, $result_entry, $result, $ticket_name, $hit, $res) = @_;
   my $species = $result->{'species'};
   my $blast_method  = $self->object->get_blast_method;
+  my $db_type = $result->{'db_type'};
 
-  my $links = $self->alignment_link($ticket_name, $hit, $res,  $species, $blast_method);
+  my $links = $self->alignment_link($ticket_name, $hit, $res,  $species, $blast_method, $db_type);
   $links .= ' ' . $self->query_sequence_link($ticket_name, $hit, $res);
   $links .= ' ' . $self->genomic_sequence_link($ticket_name, $hit, $res, $species);
   $links .= ' ' .$self->location_link($ticket_name, $hit, $res, $result_entry, $result, $species);
@@ -111,8 +112,11 @@ sub generate_links {
 }
 
 sub alignment_link {
-  my ($self, $ticket_name, $hit, $res, $species, $blast_method) = @_;
-  my $action        = $blast_method =~/^(blastn)|blat/ ? 'BlastAlignment' : 'BlastAlignmentProtein';
+  my ($self, $ticket_name, $hit, $res, $species, $blast_method, $db_type) = @_;
+
+  my $action        = $blast_method =~/^(blastn)|blat/  && $db_type =~/latestgp/i ? 'BlastAlignment' : 
+                      $blast_method =~/^(blastn)|blat/ && $db_type =~/cdna/i ? 'BlastAlignmentTranscript' :
+                      'BlastAlignmentProtein';
 
   my $url = $self->hub->url({
     species => $species,
