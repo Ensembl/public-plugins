@@ -206,12 +206,45 @@ sub delete_ticket {
   my ($self, $ticket_id) = @_;
   my $ticket = shift @{$self->rose_manager('Ticket')->fetch_by_ticket_name($ticket_id)};
   return unless $ticket;
- 
+
+  # First clean up any results files 
+  my $work_dir =  $self->species_defs->ENSEMBL_TMP_DIR_BLAST;
+  my $file_directory = $work_dir ."/" . substr($ticket->ticket_name, 0, 6) ."/" . substr($ticket->ticket_name, 6);
+  my $parent_directory = $work_dir ."/" . substr($ticket->ticket_name, 0, 6);
+
+  if (-d $file_directory){
+    foreach my $sub_job (@{$ticket->sub_job}){
+      my $filename = $file_directory .'/'. $ticket->ticket_id . $sub_job->sub_job_id;
+      my @exts = ('seq.fa', 'seq.fa.masked', 'seq.fa.tab', 'seq.fa.out', 'seq.fa.raw');
+      foreach (@exts){
+        my $file = $filename .'.'. $_; 
+        if ( -s $file ){ 
+          my $command = 'rm ' . $file;
+          system $command;
+        }
+      }
+    }      
+  
+    unless (scalar <$file_directory/*>){ # remove directory if empty
+      my $command = 'rmdir ' . $file_directory;
+      system $command; 
+    }
+  }
+
+  if (-d $parent_directory){
+    unless (scalar <$parent_directory/*>){ # remove directory if empty
+      my $command = 'rmdir ' . $parent_directory;
+      system $command; 
+    }
+  }
+
+  # Then remove data from ticket database 
   if (ref $ticket->analysis){ $ticket->analysis->delete; }
   if (ref $ticket->sub_job){ $ticket->sub_job([]); }
+  if (ref $ticket->result){$ticket->result([]);} 
   $ticket->save;  
   $ticket->delete;
- 
+
   return;
 }
 
