@@ -23,8 +23,11 @@ use base qw(EnsEMBL::Web::Object::Tools);
 
 use IO::Scalar;
 use Bio::SeqIO;
+use Bio::EnsEMBL::Registry;
 use EnsEMBL::Web::SpeciesDefs;
 use EnsEMBL::Web::ToolsConstants;
+use EnsEMBL::Web::ExtIndex;
+
 our $VERBOSE = 1;
 
 sub new {
@@ -282,6 +285,48 @@ sub process_input_sequence {
       last if exists $self->{'_error'}{'query_sequence'};
     }    
   }
+  elsif (my $id = $self->param('retrieve_accession')){
+    my $seq;
+
+    if ($id =~/^ENS[GTP]\d{11}?/ || $id =~/^ENS\w\w\w[GTP]\d{11}?/){ # Have Ensembl sequence
+      my ($species, $object_type, $db_type) = Bio::EnsEMBL::Registry->get_species_and_object_type($id);      
+      my $adaptor = $self->hub->get_adaptor('get_' . $object_type .'Adaptor', $db_type, $species);
+      my $seq_object = $adaptor->fetch_by_stable_id($id);
+
+      if ($object_type eq 'Gene' || $object_type eq 'Transcript'){
+        $seq = '>'.$seq_object->feature_Slice->name ."\n".$seq_object->feature_Slice->seq;
+      } elsif ($object_type eq 'Translation'){
+        $seq = '>'.$id."\n".$seq_object->seq;
+      }
+
+      if(!$seq){
+        $self->{'_error'}{'retrieve_accession'} = 'Could not retrieve sequence' . $self->param('retrieve_accession');
+      }
+
+    } else { # try and fetch via pfetch
+      my $indexer = EnsEMBL::Web::ExtIndex->new( $self->species_defs );
+      $seq = join ("", @{$indexer->get_seq_by_id({ DB =>"PUBLIC",
+                                                     ID => $id})} );
+      if( ! $seq or $seq =~ /^no match/ ){
+      $seq = join( "", @{$indexer->get_seq_by_acc({DB=>"PUBLIC",
+                                                   ACC=>$id})} );
+        if( ! $seq or $seq =~ /^no match/ ){
+          $self->{'_error'}{'retrieve_accession'} = 'Could not retrieve sequence' . $self->param('retrieve_accession');
+        }
+      }
+    }
+
+    if ($seq =~/^\w+|^\>/){ 
+      my $fh = IO::Scalar->new(\$seq);
+      my $seq_io = Bio::SeqIO->new(-fh=>$fh );
+      while( my $bioseq = $seq_io->next_seq){
+        $length += $bioseq->length;
+        $i++;
+        $self->add_seq($bioseq, $i, $length, 'query_sequence');
+        last if exists $self->{'_error'}{'query_sequence'};
+      }
+    } 
+  }
   else {
     $self->{'_error'}{'file'} = 'No query sequences have been entered';
     return;
@@ -290,10 +335,10 @@ sub process_input_sequence {
 
 sub process_input_type {
   my $self = shift;
-  my $input_type =  $self->param('query'); 
+  my $input_type =  $self->param('query');
   # check that input type specified by form matches sequences provided 
   my @seqs = values %{$self->{'_seqs'}};
-  foreach my $seq (@seqs){
+  foreach my $seq (@seqs){ 
     if ($input_type ne $seq->alphabet){ 
       $self->{'_error'}{'query'} = "The query sequence " . $seq->id ." does not match the selected query sequence type";
       return '';
