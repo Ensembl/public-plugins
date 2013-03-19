@@ -31,8 +31,16 @@ sub content {
 
   my $type = 'NCBI';  
   $form->add_hidden({ name => 'blast_type', value => $type });
-  $form->add_element( type => 'Text', name => 'query_sequence', label => 'Paste file', class => 'query_sequence' );
-  $form->add_element( type => 'File', name => 'file', label => 'Upload file', class => 'file' );
+  $form->add_element( type => 'Text', name => 'query_sequence', label => 'Either paste sequence data', class => 'query_sequence' );
+  $form->add_element( type => 'File', name => 'file', label => 'Or upload sequence file', class => 'file' );
+
+  $form->add_element( 
+    type  => 'String', 
+    label => "Or enter a sequence ID or accession <br />(EnsEMBL, EMBL, UniProt, RefSeq)",
+    name  =>'retrieve_accession',
+    class => 'retrieve_accession',
+    size  => '40',  
+  );
 
 
   my $current_species = $hub->species;
