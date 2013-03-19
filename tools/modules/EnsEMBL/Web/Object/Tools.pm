@@ -219,8 +219,7 @@ sub delete_ticket {
       foreach (@exts){
         my $file = $filename .'.'. $_; 
         if ( -s $file ){ 
-          my $command = 'rm ' . $file;
-          system $command;
+          unlink($file);
         }
       }
     }      
