@@ -12,7 +12,6 @@ sub fetch_input {
   my $ticket_id = $self->param('ticket');
 
   return;    
- #$self->param  retrieves data the input_id hashref from job object, or from the params in the PipeConfig file for this analysis 
 }
 
 sub run {
@@ -40,7 +39,6 @@ sub run {
   # Run the blast process 
   if ($type eq 'ncbi'){
     my $command = "$program -db $db -query $query_file -out $results_file -outfmt 11 $option_str"; 
-warn $command;
     system $command;
   }
   else {
@@ -52,35 +50,6 @@ warn $command;
 }
 
 sub write_output {
-=cut  my $self = shift;
-#sleep (40);
-  # This will be the parsing step
-  my $type = 'ncbi';
-
-  if ($type eq 'ncbi'){
-    # First convert the 'archive' blast output format to files we can use
-
-    my $reformat_program = $self->program('blast_formatter');
-    my $results_file = $self->results_file;
-
-    my $results_raw = $results_file;
-    $results_raw =~s/out/raw/;
-    my $raw_format_command = "$reformat_program -archive $results_file -out $results_raw";
-    system $raw_format_command;
-
-    my $results_tab = $results_file;
-    $results_tab =~s/out/tab/; 
-    my $output_options = '"6 qseqid qstart qend sseqid sstart send bitscore evalue pident length btop qframe sframe"';
-    my $parse_format_command = "$reformat_program -archive $results_file -out $results_tab -outfmt $output_options";
-    system $parse_format_command; 
-
-    my $ticket = $self->param('ticket_name');    
-    my $parse_blast_command = $self->param('ensembl_cvs_root_dir') . "/sanger-plugins/tools/utils/parse_ncbi_blast_plus.pl $ticket $results_tab";
-    system $parse_blast_command;
-
-  }
-=cut
-
   my $self = shift;
   my $parser = EnsEMBL::Web::Parsers::NcbiBlast->new($self);
   $parser->parse;
