@@ -226,15 +226,13 @@ sub delete_ticket {
     }      
   
     unless (scalar <$file_directory/*>){ # remove directory if empty
-      my $command = 'rmdir ' . $file_directory;
-      system $command; 
+      rmdir($file_directory); 
     }
   }
 
   if (-d $parent_directory){
     unless (scalar <$parent_directory/*>){ # remove directory if empty
-      my $command = 'rmdir ' . $parent_directory;
-      system $command; 
+      rmdir($parent_directory);
     }
   }
 
