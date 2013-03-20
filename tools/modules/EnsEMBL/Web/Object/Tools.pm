@@ -163,6 +163,8 @@ sub check_submission_status {
   my $now = $self->get_time_now;
   $ticket->status($status);
   $ticket->modified_at($now);
+  $ticket->analysis->modified_at($now);
+  foreach (@{$ticket->sub_job}){ $_->modified_at($now); } 
   $ticket->save(cascade => 1);
 
   return $status;
