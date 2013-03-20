@@ -95,14 +95,14 @@ sub content {
   # List page - display default table for 'List', no or wrong function part of the url
   my $table   = $self->new_table([
     {'key'  => 'name',    'title' => 'Name', 'sort' => 'html'},
-    {'key'  => 'size',    'title' => 'Size', 'sort' => 'numeric'},
+    {'key'  => 'size',    'title' => 'Size', 'sort' => 'numeric_hidden'},
     {'key'  => 'cvs',     'title' => 'CVS status'},
     {'key'  => 'action',  'title' => 'Action', 'sort' => 'none'}
   ], [], {'data_table' => 1, 'class' => 'no_col_toggle', 'exportable' => 0});
 
   for my $file (@$list) {
     $file->{'cvs'}   .= " (Tag: $file->{'tag'})" if $file->{'tag'};
-    $file->{'size'}   = $file->{'size'} ? sprintf '%d KB', $file->{'size'} / 1024 : 'Unknown';
+    $file->{'size'}   = sprintf('<span class="hidden">%s</span>', $file->{'size'} || 0).($file->{'size'} ? $file->{'size'} >= 1024 ? sprintf('%d KB', ($file->{'size'} + 512) / 1024) : '< 1 KB' : 'Unknown');
     $file->{'action'} = $file->{'action'}
       ? join ' &middot; ', map
         {
