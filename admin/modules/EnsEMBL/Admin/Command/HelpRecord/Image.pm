@@ -80,6 +80,8 @@ sub upload_file {
      $name  =~ s/\s+/_/;
      $name  =~ s/[^a-zA-Z0-9_.-]+//;
 
+  throw exception('FileException', 'File could not be uploaded successfully') unless fileno $fh;
+
   open    (UPLOADFILE, '>', sprintf('%s/%s', $params->{'folder'} || '.', $name)) or throw exception('FileException', $!);
   binmode UPLOADFILE;
   print   UPLOADFILE while <$fh>;
