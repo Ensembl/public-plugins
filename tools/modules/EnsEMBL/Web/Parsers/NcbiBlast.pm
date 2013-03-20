@@ -120,7 +120,7 @@ sub parse_tab {
 
     push (@results, {ticket_id  => $ticket_id,
                     sub_job_id => $sub_job_id,
-                    result     => $serialised,
+                    result     => $serialised_gzip,
                     created_at => $now,
                     chr_name   => $chr_name,
                     chr_start  => $chr_start,
@@ -135,14 +135,13 @@ sub map_to_genome {
   my ($self, $hit) = @_;
   my $database_type = $self->database_type;
   my $species = $self->species;
-  my ($g_id, $g_start, $g_end, $g_ori, $g_coords, $g_aln);
+  my ($g_id, $g_start, $g_end, $g_ori, $g_coords);
 
   if ($database_type =~/LATESTGP/){
     $g_id = $hit->{'tid'};
     $g_start = $hit->{'tstart'};
     $g_end  = $hit->{'tend'};
     $g_ori  = $hit->{'tori'};
-    $g_aln  = $hit->{'aln'}
   } else {
     my $feature_type = $database_type =~ /abinitio/i ? 'PredictionTranscript' :
                        $database_type =~ /cdna/i ? 'Transcript' : 'Translation';
