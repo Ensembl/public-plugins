@@ -184,7 +184,7 @@ sub get_mapped_slice {
   my $total_length_diff = 0;
 
   # Process genomic btop string to map coordiniates
-  my $aln = $hit->{'db_type'} =~/cdna/i ?  $object->map_btop_to_genomic_coords($hit) : $hit->{'aln'};
+  my $aln = $hit->{'db_type'} =~/cdna/i ?  $object->map_btop_to_genomic_coords($hit, $result_id) : $hit->{'aln'};
 
   $aln =~ s/(\d+)/:$1:/g;
   $aln  =~ s/^:|:$//g;
