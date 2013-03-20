@@ -129,6 +129,8 @@ sub content {
     class   => 'submit_blast',
   );
 
+  $form->fieldset->set_attribute('class', 'blast_input');
+
 ### Advanced config options ###
 
   my $show    = $hub->get_cookie_value('toggle_blast') eq 'open';
