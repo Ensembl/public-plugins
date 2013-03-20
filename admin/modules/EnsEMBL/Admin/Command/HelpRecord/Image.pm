@@ -54,7 +54,8 @@ sub process {
       # Commit local modifications to cvs
       } elsif ($function eq 'Commit') {
         my $message = $hub->param('message');
-        system('cvs', 'commit', '-m', sprintf('%s (Committed by %s via Admin site)', $message ? "$message\n" : '', split('@', $hub->user->email)), $file->{'name'})
+        system('cvs', 'add', $file->{'name'}) if $file->{'cvs'} eq 'New';
+        system('cvs', 'commit', '-m', sprintf('%sCommitted by %s via Admin site', $message ? "$message - " : '', split('@', $hub->user->email)), $file->{'name'});
       }
 
       # reset folder location
