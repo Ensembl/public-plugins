@@ -101,6 +101,7 @@ sub content {
   ], [], {'data_table' => 1, 'class' => 'no_col_toggle', 'exportable' => 0});
 
   for my $file (@$list) {
+    $file->{'cvs'}   .= ' (Not committed)' if $file->{'cvs'} eq 'New';
     $file->{'cvs'}   .= " (Tag: $file->{'tag'})" if $file->{'tag'};
     $file->{'size'}   = sprintf('<span class="hidden">%s</span>', $file->{'size'} || 0).($file->{'size'} ? $file->{'size'} >= 1024 ? sprintf('%d KB', ($file->{'size'} + 512) / 1024) : '< 1 KB' : 'Unknown');
     $file->{'action'} = $file->{'action'}
