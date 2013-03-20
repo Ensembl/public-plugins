@@ -65,8 +65,6 @@ sub render_assembly_table {
 
   $header .= "</tr>\n";
   
-  (my $short_header = $header) =~ s/<br \/>.+?<\/th>/<\/th>/g; # Like the header, but without release numbers
- 
   my @rows = ();
  
   foreach my $s (sort { $a->{'name'} cmp $b->{'name'} } @$species) {
@@ -113,11 +111,11 @@ sub render_assembly_table {
   # Insert the short header every [$breakpoint] rows ($j keeps track of the added rows)
   for (my $i = $breakpoint; $i < scalar @rows; $i += $breakpoint) {
     next if $i+$j+1 > scalar @rows;
-    splice (@rows, $i+$j++, 0, $short_header);
+    splice (@rows, $i+$j++, 0, $header);
   }
 
   $body = join ('', @rows); 
-  $body .= $short_header if $species_total % $divisor;
+  $body .= $header if $species_total % $divisor;
 
   return qq{\n<table class="ss">\n$header\n$body\n</table>};
 }
