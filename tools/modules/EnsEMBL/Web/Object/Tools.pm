@@ -168,7 +168,7 @@ sub check_submission_status {
     # the same - that way all data will be in equivalent partitions and will be removed at same time
     $ticket->analysis->modified_at($now);
     foreach (@{$ticket->sub_job}){ $_->modified_at($now); } 
-    foreach (@{$ticket->result}){ $_->created_at($now); }
+    foreach (@{$ticket->result}){ $_->modified_at($now); }
   }
   $ticket->save(cascade => 1);
 
