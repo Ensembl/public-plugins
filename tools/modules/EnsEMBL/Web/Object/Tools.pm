@@ -163,8 +163,13 @@ sub check_submission_status {
   my $now = $self->get_time_now;
   $ticket->status($status);
   $ticket->modified_at($now);
-  $ticket->analysis->modified_at($now);
-  foreach (@{$ticket->sub_job}){ $_->modified_at($now); } 
+  if ($status eq 'Completed' || $status eq 'Failed'){
+    # If ticket is complete set all modified/created dates for data belonging to this ticket to be 
+    # the same - that way all data will be in equivalent partitions and will be removed at same time
+    $ticket->analysis->modified_at($now);
+    foreach (@{$ticket->sub_job}){ $_->modified_at($now); } 
+    foreach (@{$ticket->result}){ $_->created_at($now); }
+  }
   $ticket->save(cascade => 1);
 
   return $status;
