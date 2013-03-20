@@ -426,7 +426,11 @@ sub get_all_hits_from_ticket_in_region {
 
 
 sub map_btop_to_genomic_coords {
-  my ($self, $hit) = @_;
+  my ($self, $hit, $result_id) = @_;
+
+  return $hit->{'galn'} if $hit->{'galn'};
+
+  my $result = $self->get_hit_db_entry($result_id); 
 
   my $btop = $hit->{'aln'};
   chomp $btop;
@@ -588,6 +592,17 @@ sub map_btop_to_genomic_coords {
  
   my $btop_end =  $genomic_end - $genomic_offset +1;
   $genomic_btop .= $btop_end;
+
+  # Write back to database so we only have to do this once
+  $hit->{'galn'} = $genomic_btop;
+  delete $hit->{'data'};
+
+  my $serialised_hit = nfreeze($hit);
+  my $serialised_gzip;
+  gzip \$serialised_hit => \$serialised_gzip, -LEVEL => 9 or die "gzip failed: $GzipError";
+
+  $result->result($serialised_hit);
+  $result->save; 
 
   return $genomic_btop;
 }
