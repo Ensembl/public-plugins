@@ -30,16 +30,13 @@ sub content {
   if ($function eq 'Upload') {
 
     if (!$file || grep {$_ eq 'Upload'} @{$file->{'action'}}) {
-      my $form = $self->new_form({'action' => {'action' => 'Image', 'function' => 'Upload'}});
+      my $form = $self->new_form({'action' => {'action' => 'Image', 'function' => 'Upload'}, 'enctype' => 'multipart/form-data'});
       $form->add_field({'type' => 'noedit', 'label' => 'Replace image', 'name' => 'file', 'value' => $file->{'name'}}) if $file;
       $form->add_field({'type' => 'file', 'label' => 'New image', 'name' => 'upload', 'notes' => 'Upto 500KB', 'required' => 1});
       $form->add_button({'value' => 'Upload'});
       $form->force_reload_on_submit;
 
-#      return sprintf '<h3>Upload image</h3>%s', $form->render;
-      my $html = sprintf '<h3>Upload image</h3>%s', $form->render;
-      $html =~ s/\s+target="uploadframe"\s+/ /; # TODO remove this hack once these pages work on modal window
-      return $html;
+      return sprintf '<h3>Upload image</h3>%s', $form->render;
     }
 
   } elsif ($file && grep {$_ eq $function} @{$file->{'action'}}) { # perform these action only if allowed
