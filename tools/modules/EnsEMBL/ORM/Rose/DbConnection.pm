@@ -86,8 +86,8 @@ __PACKAGE__->register_db(
   database  => $species_defs->multidb->{'DATABASE_WEB_TOOLS'}{'NAME'},
   host      => $species_defs->multidb->{'DATABASE_WEB_TOOLS'}{'HOST'},
   port      => $species_defs->multidb->{'DATABASE_WEB_TOOLS'}{'PORT'},
-  username  => $db_user,
-  password  => $db_pass,
+  username  => $species_defs->ENSEMBL_USERDB_USER || $db_user,
+  password  => $species_defs->ENSEMBL_USERDB_PASS || $db_pass,
 );
 
 1;
