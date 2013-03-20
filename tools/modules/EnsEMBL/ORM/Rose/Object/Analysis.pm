@@ -20,6 +20,7 @@ __PACKAGE__->meta->setup(
 
   columns     => [
     ticket_id   => {type => 'int', length => 10, primary_key => 1, not_null => 1},
+    modified_at   => {type => 'timestamp', not_null => 1},
     object      => {type =>'blob', not_null =>1},
   ],
   

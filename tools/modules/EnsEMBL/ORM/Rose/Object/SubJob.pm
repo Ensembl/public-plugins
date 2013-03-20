@@ -19,7 +19,8 @@ __PACKAGE__->meta->setup(
 
   columns     => [
     ticket_id     => {type => 'int', length => 10, not_null => 1},
-    sub_job_id   => {type => 'int', length => 10, not_null => 1, primary_key => 1},
+    sub_job_id    => {type => 'int', length => 10, not_null => 1, primary_key => 1},
+    modified_at   => {type => 'timestamp', not_null => 1},
     job_division  => {type => 'blob', },
   ],
 

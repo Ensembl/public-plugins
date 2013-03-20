@@ -26,6 +26,7 @@ __PACKAGE__->meta->setup(
     chr_start   => {type => 'int', length => 10},
     chr_end     => {type => 'int', length => 10},
     created_at  => {type => 'timestamp', not_null => 1},
+    modified_at  => {type => 'timestamp', not_null => 1},
   ],
 
   relationships => [
