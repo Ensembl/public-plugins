@@ -22,6 +22,10 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.Content.extend({
     this.updateOptions(); 
 
     this.elLk.blastForm.on('submit', function () {
+
+      panel.elLk.blastForm.addClass('overlay_blast');
+      $('input.submit_blast', panel.elLk.blastForm).addClass('disabled').prop('value', 'Processing');
+      $('.blast_input', panel.elLk.blastForm).attr('disabled', 'disabled');
       $.ajax({
         url: this.action,
         data: $(this).serialize(),
@@ -35,6 +39,9 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.Content.extend({
             window.scrollTo(0, 0);
             panel.elLk.blastForm[0].reset();
           }
+          panel.elLk.blastForm.removeClass('overlay_blast');
+          $('input.submit_blast', panel.elLk.blastForm).prop('value', 'Processing');
+          $('.blast_input', panel.elLk.blastform).removeAttr('disabled');
         }
       });
 
@@ -208,5 +215,4 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.Content.extend({
     $.each(failed, function () { this.removeClass('failed required valid'); });
     failed = null;
   }
-
 });
