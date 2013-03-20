@@ -96,6 +96,7 @@ sub populate_tree {
     { 'availability' => 1, 'no_menu_entry' => 1 },
   );
 
+=cut
   $self->create_node('GeneTree', 'Gene Tree Mapping',
     [qw(  
       genetree EnsEMBL::Web::Component::Tools::GeneTreeInput
@@ -103,7 +104,6 @@ sub populate_tree {
     {'availability' => 1, 'concise' => 'Gene Tree Mapping'}
   );
 
-=cut
   my $custom_tracks_menu = $self->create_submenu('custom', 'Custom tracks');
   $custom_tracks_menu->append($self->create_node('Upload', 'Upload a file',
     [qw( upload         EnsEMBL::Web::Component::Tools::Blank )],
