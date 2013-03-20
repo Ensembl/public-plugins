@@ -1,4 +1,6 @@
 form.blast { margin: 10px; padding:3px; background-color: #EAEEFF; border: 1px #BBCCFF solid; -moz-border-radius: 5px; -webkit-border-radius: 5px;}
+form.blast.overlay_blast { border-color: #EAEEFF;  background-color: #F0F0F0; opacity: 0.7; }
+
 a.hidelink { visibility: hidden;}
 
 form.blast div.config { position: relative; top: 2px; z-index: 10; }
