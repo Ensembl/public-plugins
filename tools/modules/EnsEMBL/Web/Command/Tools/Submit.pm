@@ -30,7 +30,7 @@ sub process {
 
     my $data = {
       'functionName' => 'updateJobsList',
-      'functionData' => 'true'
+      'functionData' => $ticket->ticket_name
     };
 
     print $self->jsonify($data);
