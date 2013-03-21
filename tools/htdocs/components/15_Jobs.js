@@ -43,7 +43,7 @@ Ensembl.Panel.Jobs = Ensembl.Panel.Content.extend({
     clearInterval(this.countdown);
     
     if (ticket) {
-      this.getContent(Ensembl.replaceTimestamp(this.params.updateURL + ';hash_change=' + Ensembl.lastR));
+      this.getContent(Ensembl.replaceTimestamp(this.params.updateURL + ';hash_change=' + ticket));
       panel.interval = 30000;
       panel.count = 0;
       return;
@@ -101,7 +101,7 @@ Ensembl.Panel.Jobs = Ensembl.Panel.Content.extend({
     $.ajax({
       url: url,
       traditional: true,
-      data: { ticket: ticket_ids},
+      data: { ticket: ticket_ids, update_panel: 1 },
       dataType: 'json',
       success: function (json) {
         $.each(json, function(key, options) {
