@@ -42,9 +42,9 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.Content.extend({
           panel.elLk.blastForm.removeClass('overlay_blast');
           $('input.submit_blast', panel.elLk.blastForm).removeClass('disabled').prop('value', 'Run');
           $('.blast_input', panel.elLk.blastform).removeAttr('disabled');
+          Ensembl.replaceTimestamp(window.location.href);
         }
       });
-
       return false;
     });
 
