@@ -16,7 +16,7 @@ Ensembl.Panel.Jobs = Ensembl.Panel.Content.extend({
       panel.removeJob( $(this).closest("tr").attr("id") );
     });
     
-    $('a.disabled', this.elLk.JobsTable).on('click', function () { return false;});
+    $('a.disabled', this.elLk.jobsTable).on('click', function () { return false;});
 
     this.interval = 30000; // time in milliseconds
     this.polled   = 0;
@@ -36,14 +36,14 @@ Ensembl.Panel.Jobs = Ensembl.Panel.Content.extend({
 
   },
 
-  updateJobsList: function (force) {
+  updateJobsList: function (ticket) {
     var panel = this;
 
     clearInterval(this.poll);
     clearInterval(this.countdown);
     
-    if (force) {
-      this.getContent();
+    if (ticket) {
+      this.getContent(Ensembl.replaceTimestamp(this.params.updateURL + ';hash_change=' + Ensembl.lastR));
       panel.interval = 30000;
       panel.count = 0;
       return;
