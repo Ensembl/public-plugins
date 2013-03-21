@@ -45,6 +45,15 @@ sub default_options { #add in ticket db config here somewhere
   };
 }
 
+sub resource_classes {
+    my ($self) = @_;
+    return {
+        'default' => { 'LSF' => '' },
+        'urgent'  => { 'LSF' => '-q yesterday' },
+        'blasttest' => {'LSF' => '-q blasttest'},
+    }
+}
+
 sub pipeline_analyses {
   my ($self) = @_;
   return [
@@ -61,7 +70,8 @@ sub pipeline_analyses {
           'ensembl_cvs_root_dir'  => $self->o('ensembl_cvs_root_dir'),
           'repeatmask_bin_dir'    => $self->o('repeat_mask_bin_dir'),
         },
-      -hive_capacity => 2, # workers that run at a time per analysis 
+      -hive_capacity => 15, # workers that run at a time per analysis 
+      -rc_name  => 'blastest',
    },
   ];
     
