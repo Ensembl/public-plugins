@@ -185,30 +185,17 @@ sub get_mapped_slice {
 
   # Process genomic btop string to map coordiniates
   my $aln = $hit->{'db_type'} =~/cdna/i ?  $object->map_btop_to_genomic_coords($hit, $result_id) : $hit->{'aln'};
+  if ($hit->{'gori'} ne '1' && $hit->{'db_type'}=~/latest/i){
+    $aln = $object->reverse_btop($aln);
+  }
 
   $aln =~ s/(\d+)/:$1:/g;
   $aln  =~ s/^:|:$//g;
+
   my @alignment_features = split (/:/, $aln);
   my $rev_flag = $hit->{'gori'} ne $hit->{'tori'} ? 1 : undef;
   if ($hit->{'gori'} ne '1' && $hit->{'db_type'}=~/latest/i){
     $rev_flag = 1;
-  }
-
-  if ($hit->{'gori'} ne '1' && $hit->{'db_type'}=~/latest/i){
-    my @temp = reverse @alignment_features;
-    my @reversed_feature;
-    while ( my $n_matches = shift @temp){
-      my $temp_edit_string = shift @temp;
-      my @temp_edits = split(//, $temp_edit_string);
-      my $new_edit_string;
-      while (my $q_base = shift @temp_edits){
-        my $h_base = shift @temp_edits;
-        $new_edit_string = "$q_base$h_base" . $new_edit_string; 
-      }
-      push @reversed_feature, $n_matches; 
-      push @reversed_feature, $new_edit_string;
-    }
-    @alignment_features = @reversed_feature;
   }
 
   # Try thinking about this another way, the only bits of the btop we need to consider are
@@ -237,9 +224,9 @@ sub get_mapped_slice {
       my $count = 0;
       while (my $query_base = !$rev_flag ? shift @base_edits : pop @base_edits){
         my $target_base = !$rev_flag ? shift @base_edits : pop @base_edits;
-        ($target_base, $query_base) = ($query_base, $target_base) if $rev_flag;    
-        my $state = $target_base eq '-' ? 'insert_query' :
-                    $query_base eq '-' && $target_base ne 'N' ?'insert_hit' :
+        ($target_base, $query_base) = ($query_base, $target_base) if $rev_flag;
+        my $state = $target_base eq '-' && $query_base ne '-' ? 'insert_query' :
+                    $query_base eq '-' && $target_base ne '-' ?'insert_hit' :
                     ($query_base =~/[ACTG]/i && $target_base =~/[ACTG]/i) ? 'missmatch' : 'gap';
 
         my @bases = ($query_base, $target_base);
@@ -295,11 +282,10 @@ sub get_mapped_slice {
     my $edit_length =  $edits{$edit_position}->[2];
     my $ms_end = !$rev_flag ? ($ms_start + $num_matching_bp) -1 : ($ms_start - $num_matching_bp) +1;
     my $ref_end = ($ref_start + $num_matching_bp) -1;
-
+#warn "$num_matching_bp $edit_type";
     if ($edit_type eq 'insert_hit'){ 
       $ms_end = !$rev_flag ? $ms_end + $edit_length : $ms_end - $edit_length; 
       $ref_end += $edit_length; 
-
     }
 
     ($ms_start, $ms_end) = ($ms_end, $ms_start) if $ms_start > $ms_end;
