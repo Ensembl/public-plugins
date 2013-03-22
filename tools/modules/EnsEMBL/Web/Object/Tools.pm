@@ -460,7 +460,7 @@ sub map_btop_to_genomic_coords {
                       $target_object->strand;
 
   my $rev_flag = $object_strand ne $hit->{'tori'} ? 1 : undef;
-  $btop= scalar reverse ("$btop") if $rev_flag;
+  $btop = $self->reverse_btop($btop);
 
   # account for btop strings that do not start with a match;  
   $btop = '0'.$btop  if $btop !~/^\d+/ ;
@@ -469,7 +469,7 @@ sub map_btop_to_genomic_coords {
   $btop =~s/(\d+)/:$1:/g;
   $btop =~s/^:|:$//g;
   my @btop_features = split (/:/, $btop);
-  @btop_features = map { scalar reverse("$_")} @btop_features if $rev_flag; 
+#  @btop_features = map { scalar reverse("$_")} @btop_features if $rev_flag; 
  
   my $genomic_start = $hit->{'gstart'};
   my $genomic_end   = $hit->{'gend'};
@@ -487,14 +487,10 @@ sub map_btop_to_genomic_coords {
 
     # Account for bases inserted in query relative to target    
     my $insert_in_query = 0;
-    my $gap_in_query = 0;
-    my $require_mapping;
 
     while (defined( my $query_base = shift @diffs)){
       my $target_base = shift @diffs;
-      $insert_in_query++ if $target_base eq '-'; 
-      $gap_in_query++ if $query_base eq '-';
-      $require_mapping = 1 if $target_base ne '-';
+      $insert_in_query++ if $target_base eq '-' && $query_base ne '-'; 
     }  
 
     my ($difference_start, $difference_end);
@@ -529,7 +525,7 @@ sub map_btop_to_genomic_coords {
         my $matches_before_gap = $gap_start - $genomic_offset + 1;
         my $gap_end = $coords->[$processed_gaps + 1]->start -1;
         my $gap_length = ($gap_end - $gap_start);
-        my $gap_string = '-N'x $gap_length;
+        my $gap_string = '--'x $gap_length;
         $genomic_offset = $gap_end + 1;
         $genomic_btop .= $matches_before_gap;
         $genomic_btop .= $gap_string;
@@ -558,7 +554,7 @@ sub map_btop_to_genomic_coords {
       while ($mapped_end > $gap_start) {
         my $gap_end = $coords->[$processed_gaps + 1]->start -1;
         my $gap_length = ($gap_end - $gap_start);
-        my $gap_string = '-N'x $gap_length;
+        my $gap_string = '--'x $gap_length;
         $processed_gaps++;
         $gap_start = $coords->[$processed_gaps]->end || $genomic_end;
  
@@ -586,7 +582,7 @@ sub map_btop_to_genomic_coords {
     my $num_matches = $gap_start - $genomic_offset + 1;
     my $gap_end = $coords->[$processed_gaps + 1]->start -1;
     my $gap_length = ($gap_end - $gap_start);
-    my $gap_string = '-N'x $gap_length;
+    my $gap_string = '--'x $gap_length;
 
     $genomic_btop .= $num_matches;
     $genomic_btop .= $gap_string;
@@ -612,6 +608,27 @@ sub map_btop_to_genomic_coords {
   $result->save; 
 
   return $genomic_btop;
+}
+
+sub reverse_btop {
+  my ($self, $incoming_btop) = @_;
+  $incoming_btop = uc($incoming_btop);
+  my $reversed_btop = reverse $incoming_btop; #reverse btop orientation. We fix a few more things later
+  my @captures = $reversed_btop =~ /(\d+)([-ACTG]*)/xmsg;
+  my $new_btop = q{};
+  while(1) {
+    my $match_number = shift @captures;
+    my $btop_states = shift @captures;
+    if(length("$match_number") > 1) { #reversing the string means numbers like 15 become 51 so we fix it
+      $match_number = reverse $match_number;
+    }
+    my @doubles = $btop_states =~ /([-ACTG]{2})/xmsg; #pairs of chars are taken
+    my $new_btop_states = join(q{}, map { my $v = reverse $_; $v; } @doubles); #we reverse the pairs of chars. map is funny with these things
+    $new_btop .= $match_number if $match_number; #only add the match number if it was defined
+    $new_btop .= $new_btop_states; 
+    last if scalar(@captures) == 0;
+  }
+  return $new_btop;
 }
 
 sub get_target_object {
