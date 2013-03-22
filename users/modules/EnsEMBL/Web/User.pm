@@ -8,23 +8,22 @@ use HTML::Entities qw(encode_entities);
 use EnsEMBL::Web::Record;
 use EnsEMBL::Web::DASConfig;
 use EnsEMBL::Web::Exceptions;
+
 use EnsEMBL::ORM::Rose::Manager::User;
 use EnsEMBL::ORM::Rose::Manager::Record;
 
-use base qw(EnsEMBL::Web::Root); ##  TODO ??
-
 use overload qw("" to_string bool to_boolean);
 
-sub rose_object           { return shift->{'_user'};                                                                  } ## @return Rose User object
-sub hub                   { return shift->{'_hub'};                                                                   } ## @return Hub
-sub cookie                { return shift->{'_cookie'};                                                                } ## @return User cookie
+sub rose_object           { return shift->{'_user'};    } ## @return Rose User object
+sub hub                   { return shift->{'_hub'};     } ## @return Hub
+sub cookie                { return shift->{'_cookie'};  } ## @return User cookie
 
 sub display_name          { return encode_entities(shift->name);                                                      } ## @return HTML escaped name
 sub display_email         { return encode_entities(shift->email);                                                     } ## @return HTML escaled email address
 sub display_organisation  { return encode_entities(shift->organisation || '');                                        } ## @return HTML escaped organisation name
 sub display_country       { return encode_entities($_[0]->hub->species_defs->COUNTRY_CODES->{$_[0]->country || ''});  } ## @return displayable country name
 
-sub id                    { shift->user_id;                                 }
+sub id                    { shift->_goto_rose_object('user_id', @_);        } # TODO remove this extra method
 sub user_id               { shift->_goto_rose_object('user_id', @_);        }
 sub name                  { shift->_goto_rose_object('name', @_);           }
 sub email                 { shift->_goto_rose_object('email', @_);          }
@@ -50,6 +49,8 @@ sub favourite_tracks      { shift->_goto_rose_object('favourite_tracks');   }
                           
 sub is_admin_of           { shift->_goto_rose_object('is_admin_of', @_);    }
 sub is_member_of          { shift->_goto_rose_object('is_member_of', @_);   }
+
+sub default_salt          { EnsEMBL::ORM::Rose::Manager::User->DEFAULT_SALT;}
 
 sub new {
   ## @constructor
