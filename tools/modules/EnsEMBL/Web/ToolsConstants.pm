@@ -204,14 +204,14 @@ sub BLAST_CONFIGURATION_OPTIONS {
         type      => 'CheckBox',
         name      => 'dust',
         label     => 'Filter low complexity regions',
-        selected  => 0 
+        selected  => 1 
       },
 
       'seg' => {
         type      => 'CheckBox',
         name      => 'seg',
         label     => 'Filter low complexity regions',
-        selected  => 0
+        selected  => 1
       },
 
       'repeat_mask' => {
