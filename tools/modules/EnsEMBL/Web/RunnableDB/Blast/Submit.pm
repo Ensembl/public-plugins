@@ -79,7 +79,7 @@ sub database {
  if (-d $path_to_db){ 
   $self->param('valid_database', $dbname);
  } else { ## error needs passing to hive db
-  warning("Valid BLAST database could not be inferred from ". $self->param('database'));
+  throw("Valid BLAST database could not be inferred from ". $self->param('database'));
  } 
 
  return $self->param('valid_database');
