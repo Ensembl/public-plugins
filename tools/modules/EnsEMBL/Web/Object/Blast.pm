@@ -294,7 +294,7 @@ sub process_input_sequence {
       my $seq_object = $adaptor->fetch_by_stable_id($id);
 
       if ($object_type eq 'Gene' || $object_type eq 'Transcript'){
-        $seq = '>'.$seq_object->feature_Slice->name ."\n".$seq_object->feature_Slice->seq;
+        $seq = '>'.$id."\n".$seq_object->feature_Slice->seq;
       } elsif ($object_type eq 'Translation'){
         $seq = '>'.$id."\n".$seq_object->seq;
       }
@@ -320,6 +320,7 @@ sub process_input_sequence {
       my $fh = IO::Scalar->new(\$seq);
       my $seq_io = Bio::SeqIO->new(-fh=>$fh );
       while( my $bioseq = $seq_io->next_seq){
+        $bioseq->display_id($id);
         $length += $bioseq->length;
         $i++;
         $self->add_seq($bioseq, $i, $length, 'query_sequence');
