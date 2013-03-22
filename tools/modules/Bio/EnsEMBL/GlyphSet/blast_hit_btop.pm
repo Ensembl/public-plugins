@@ -55,7 +55,12 @@ sub features {
     my $colour              = $colours->{$identity};
 
     
-    my $btop =  $hit->{'db_type'} =~/cdna/ ?  $tools_object->map_btop_to_genomic_coords($hit) : $hit->{'aln'};
+    my $btop =  $hit->{'db_type'} =~/cdna/ ?  $tools_object->map_btop_to_genomic_coords($hit, $_->[0]) : $hit->{'aln'};
+
+
+    if ($hit->{'gori'} ne '1' && $hit->{'db_type'}=~/latest/i){
+      $btop = $tools_object->reverse_btop($btop);
+    }
 
     my $feature = new Bio::EnsEMBL::Feature (
       -dbID           => $id,
@@ -108,7 +113,7 @@ sub highlight {
   $self->unshift( $self->Rect({ 
     'x'         => $composite->x() - 2/$pix_per_bp,
     'y'         => $composite->y() + 6, ## + makes it go down
-    'width'     => $composite->width() + 4/$pix_per_bp,
+    'width'     => ($composite->width() -1) + 4/$pix_per_bp,
     'height'    => $h + 4,
     'colour'    => 'highlight2',
     'absolutey' => 1,
@@ -141,7 +146,7 @@ sub render_normal {
 
     my $start = $f->start;      
     my $end = $f->end; 
-    my $invert = $f->strand ne $aln_info->{$f->dbID}->{'target_strand'} ? 1 : undef;
+    my $invert = $f->strand == -1 ? 1 : undef;
 
     if ($start < $slice_start ){$start = $slice_start;}
     if ($end > $slice_end) {$end  = $slice_end;}    
