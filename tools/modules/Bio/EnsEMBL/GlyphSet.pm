@@ -11,7 +11,8 @@ sub draw_btop_feature {
   my $slice_start = $slice->start;
   my $slice_end = $slice->end;
 
-  my $seq   = $slice->seq;
+  my $seq   = $slice->seq; 
+
   my $match_colour = $params->{'feature_colour'};
   my $mismatch_colour  = $self->{'config'}->colourmap->mix($match_colour, 'white', 0.6);  
   my($font, $fontsize) = $self->get_font_details( $self->can('fixed') ? 'fixed' : 'innertext' );
@@ -47,8 +48,8 @@ sub draw_btop_feature {
       while (my $query_base = shift @diffs){
         my $target_base = shift @diffs;
 
-        my $state = $target_base eq '-' ? 'insert' : 
-                    $query_base eq '-' && $target_base ne 'N' ?'gap' :
+        my $state = $target_base eq '-' && $query_base ne '-' ? 'insert' : 
+                    $query_base eq '-' && $target_base ne '-' ?'gap' :
                     ($query_base =~/[ACTG]/i && $target_base =~/[ACTG]/i) ? 'mismatch' : 'intron';
 
         my @diff = ($query_base, $target_base);   
@@ -68,7 +69,7 @@ sub draw_btop_feature {
         $previous_state = $state;
       }
     } else {
-      $insert_count++ if $diffs[1] eq '-';
+      $insert_count++ if $diffs[1] eq '-' && $diffs[0] ne '-';
       $processed_diffs->[0] = \@diffs;
     }
 
@@ -78,7 +79,7 @@ sub draw_btop_feature {
     my $e2;
     my $end_of_block = $s1 + $seq_index + $diff_length - $insert_count; 
 
-    unless ( ($s1 < 0 && $end_of_block < 0) || ($s1 > $length  && $end_of_block > $length) ){ 
+    unless ( ($s1 < 0 && $end_of_block < 1) || ($s1 > $length  && $end_of_block > $length) ){ 
       my $start = $s1;
       $start = $start < 0 ? 0 : $start;
       $e1 = $e1 > $length ? $length : $e1;
