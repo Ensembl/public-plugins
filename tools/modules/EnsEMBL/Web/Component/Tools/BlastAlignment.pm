@@ -121,7 +121,7 @@ sub get_alignment_slices {
   my $target_object = $object->get_target_object($hit);
   my $mapping_orientation = $hit->{'gori'};
   if ($target_object){
-    my $object_strand = $target_object->isa('Bio::EnsEMBL::Translation') ? $target_object->translation->start_Exon->strand :
+    my $object_strand = $target_object->isa('Bio::EnsEMBL::Translation') ? $target_object->start_Exon->strand :
                         $target_object->strand;
     $mapping_orientation = $hit->{'tori'} eq $object_strand ? 1 : -1; 
   }
