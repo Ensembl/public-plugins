@@ -176,6 +176,7 @@ sub get_mapped_slice {
   my $species = $object->get_hit_species($result_id);
 
   my $sr_name = $reference_slice->seq_region_name;
+
   my $msc = Bio::EnsEMBL::MappedSliceContainer->new( -SLICE => $reference_slice, -EXPANDED => 1);
   my $ms = Bio::EnsEMBL::MappedSlice->new( -adaptor => $reference_slice->adaptor, -name => 'test_map', -container => $msc);
   my $mapper = Bio::EnsEMBL::Mapper->new('mapped_slice', 'ref_slice');  
@@ -255,8 +256,8 @@ sub get_mapped_slice {
       my $query_base = shift @differences; 
       my $target_base = shift @differences;
 
-      my $type = $target_base eq '-' ? 'insert_query' : 
-                  $query_base eq '-' && $target_base ne 'N' ?'insert_hit' :
+      my $type = $target_base eq '-' && $query_base ne '-' ? 'insert_query' : 
+                  $query_base eq '-' && $target_base ne '-' ?'insert_hit' :
                   ($query_base =~/[ACTG]/i && $target_base =~/[ACTG]/i) ? 'missmatch' : 'gap';
 
       if ($type ne 'missmatch'){
