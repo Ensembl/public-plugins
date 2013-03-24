@@ -435,7 +435,7 @@ sub get_all_hits_from_ticket_in_region {
 sub map_btop_to_genomic_coords {
   my ($self, $hit, $result_id) = @_;
 
-  return $hit->{'galn'} if $hit->{'galn'};
+#  return $hit->{'galn'} if $hit->{'galn'};
 
   my $result = $self->get_hit_db_entry($result_id); 
 
@@ -460,7 +460,8 @@ sub map_btop_to_genomic_coords {
                       $target_object->strand;
 
   my $rev_flag = $object_strand ne $hit->{'tori'} ? 1 : undef;
-  $btop = $self->reverse_btop($btop);
+
+  $btop = $self->reverse_btop($btop) if $rev_flag;
 
   # account for btop strings that do not start with a match;  
   $btop = '0'.$btop  if $btop !~/^\d+/ ;
@@ -469,12 +470,11 @@ sub map_btop_to_genomic_coords {
   $btop =~s/(\d+)/:$1:/g;
   $btop =~s/^:|:$//g;
   my @btop_features = split (/:/, $btop);
-#  @btop_features = map { scalar reverse("$_")} @btop_features if $rev_flag; 
  
   my $genomic_start = $hit->{'gstart'};
   my $genomic_end   = $hit->{'gend'};
   my $genomic_offset = $genomic_start;
-  my $target_offset  = $hit->{'tori'} == 1 ? $hit->{'tstart'} : $hit->{'tend'}; 
+  my $target_offset  = !$rev_flag ? $hit->{'tstart'} : $hit->{'tend'}; 
 
   while (scalar @btop_features > 0){
     my $num_matches = shift @btop_features;
@@ -495,7 +495,7 @@ sub map_btop_to_genomic_coords {
 
     my ($difference_start, $difference_end);
 
-    if ($hit->{'tori'} eq '-1') {
+    if ($rev_flag) {
       $difference_end = $target_offset - $num_matches;
       $difference_start = $difference_end - $diff_length + $insert_in_query + 1;
       $target_offset = $difference_start -1;
@@ -505,6 +505,7 @@ sub map_btop_to_genomic_coords {
       $target_offset = $difference_end +1;
     }
 ;
+
     my @mapped_coords = ( sort { $a->start <=> $b->start }
                           grep { ! $_->isa('Bio::EnsEMBL::Mapper::Gap') }
                           $target_object->$mapping_type($difference_start, $difference_end, $hit->{'tori'} )
@@ -513,6 +514,7 @@ sub map_btop_to_genomic_coords {
     my $mapped_start = $mapped_coords[0]->start;
     my $mapped_end   = $mapped_coords[-1]->end;  
 ;
+
     # Check that mapping occurs before the next gap
     if ($mapped_start < $gap_start && $mapped_end <= $gap_start){ 
       $genomic_btop .= $num_matches;
@@ -538,7 +540,7 @@ sub map_btop_to_genomic_coords {
       my $matches_after_gap = $mapped_start - $genomic_offset;
       $genomic_btop .= $matches_after_gap;     
       $genomic_btop .= $diff_string;
-      $genomic_offset = $mapped_end +1 unless $object_strand eq '-1';
+      $genomic_offset = $mapped_end +1;;
     } elsif( $mapped_start < $gap_start && $mapped_end > $gap_start) { 
       # Difference in btop string spans a gap in the genomic coords
   
