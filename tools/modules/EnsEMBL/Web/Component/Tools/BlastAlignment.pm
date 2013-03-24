@@ -209,10 +209,11 @@ sub get_mapped_slice {
   my $seq_index = 0;
   my $last_edit_pos = 0;
   
-  while (scalar @aln_features){
+  while (scalar @aln_features){ 
     my $matching_bp = shift @aln_features;
     my $edit_string = shift @aln_features;
     $seq_index += $matching_bp; 
+#warn "$matching_bp $edit_string";
     last unless $edit_string;
     my $edit_len = length($edit_string)/2;
     my $type;
