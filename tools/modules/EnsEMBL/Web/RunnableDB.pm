@@ -112,7 +112,7 @@ sub write_seqfile{
       $seqout->write_seq($bioperl_seq);
     };
     if($@){
-      #throw("FAILED to write $seq to $filename SequenceUtils:write_seq_file $@");
+      throw("FAILED to write $seq to $filename SequenceUtils:write_seq_file $@");
     }
   }
   return $filename;
