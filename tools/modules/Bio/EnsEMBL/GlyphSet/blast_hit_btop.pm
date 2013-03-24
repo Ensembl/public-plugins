@@ -145,7 +145,7 @@ sub render_normal {
 
     my $start = $f->start;      
     my $end = $f->end; 
-    my $invert = $f->strand == -1 ? 1 : undef;
+    my $invert = $f->strand == $aln_info->{$f->dbID}->{'target_strand'} ? undef : 1;
 
     if ($start < $slice_start ){$start = $slice_start;}
     if ($end > $slice_end) {$end  = $slice_end;}    
