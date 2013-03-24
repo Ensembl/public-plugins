@@ -163,7 +163,7 @@ sub draw_btop_feature {
         $s2 = $e2;
       }
     }
-
+    last if $s2 > $length;
     $s1 = $s1 + $seq_index + $diff_length;
     $s1 -= $insert_count;    
   }
