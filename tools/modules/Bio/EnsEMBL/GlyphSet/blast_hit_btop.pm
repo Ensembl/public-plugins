@@ -57,7 +57,7 @@ sub features {
     my $db_type = $hit->{'db_type'};
 
     my $btop;
-    if ($slice_length < 10000 || $db_type =~/pep/i ) { 
+    if ($slice_length < 10000 && $db_type !~/pep/i ) { 
       $btop  =  $db_type =~/cdna/i ?  $tools_object->map_btop_to_genomic_coords($hit, $_->[0]) : $hit->{'aln'};
     }
 
@@ -185,7 +185,7 @@ sub render_normal {
       href      => $self->href($ticket_name, $f->dbID),
     }); 
 
-    if ($length < 10000 || $db_type =~/pep/i){ 
+    if ($length < 10000 && $db_type !~/pep/i){ 
       $self->draw_btop_feature({
         composite       => $composite,
         feature         => $f,
