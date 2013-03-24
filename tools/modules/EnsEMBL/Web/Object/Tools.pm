@@ -435,7 +435,7 @@ sub get_all_hits_from_ticket_in_region {
 sub map_btop_to_genomic_coords {
   my ($self, $hit, $result_id) = @_;
 
-#  return $hit->{'galn'} if $hit->{'galn'};
+  return $hit->{'galn'} if $hit->{'galn'};
 
   my $result = $self->get_hit_db_entry($result_id); 
 
