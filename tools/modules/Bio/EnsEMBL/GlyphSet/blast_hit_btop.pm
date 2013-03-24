@@ -54,8 +54,12 @@ sub features {
     my $colours = $self->get_colour_scale;  
     my $colour              = $colours->{$identity};
 
-    my $btop =  $hit->{'db_type'} =~/cdna/i ?  $tools_object->map_btop_to_genomic_coords($hit, $_->[0]) : $hit->{'aln'};
+    my $slice_length = $slice->length; 
 
+    my $btop;
+    if ($slice_length < 10000) { 
+      $btop  =  $hit->{'db_type'} =~/cdna/i ?  $tools_object->map_btop_to_genomic_coords($hit, $_->[0]) : $hit->{'aln'};
+    }
 
     if ($hit->{'gori'} ne '1' && $hit->{'db_type'}=~/latest/i){
       $btop = $tools_object->reverse_btop($btop);
@@ -179,17 +183,31 @@ sub render_normal {
       href      => $self->href($ticket_name, $f->dbID),
     }); 
 
-    $self->draw_btop_feature({
-      composite       => $composite,
-      feature         => $f,
-      height          => $h,
-      feature_colour  => $colour,
-      scalex          => $pix_per_bp,
-      btop            => $btop,
-      coords          => $coords,
-      seq_invert      => $invert,
-      y_offset        => $y_pos,
-    });
+    if ($length < 10000){ 
+      $self->draw_btop_feature({
+        composite       => $composite,
+        feature         => $f,
+        height          => $h,
+        feature_colour  => $colour,
+        scalex          => $pix_per_bp,
+        btop            => $btop,
+        coords          => $coords,
+        seq_invert      => $invert,
+        y_offset        => $y_pos,
+      });
+    } else {
+      $self->draw_aln_coords({
+        composite       => $composite,
+        feature         => $f,
+        height          => $h,
+        feature_colour  => $colour,
+        scalex          => $pix_per_bp,
+        coords          => $coords,
+        seq_invert      => $invert,
+        y_offset        => $y_pos,
+
+      });
+    }
 
     $composite->border_colour($colour);
 
@@ -210,4 +228,55 @@ sub href {
   });
 }
 
+sub draw_aln_coords {
+  my ($self, $params) = @_;
+  my ($composite, $f, $h) = map $params->{$_}, qw(composite feature height);
+  my $pix_per_bp = $self->scalex;
+  my $slice = $self->{'container'};
+  my $length = $slice->length;
+  my $slice_start = $slice->start;
+  my $slice_end = $slice->end;
+  my $match_colour = $params->{'feature_colour'};
+
+  my $coords = $params->{'coords'};
+  my ($first_exon_start, $last_exon_end, $exon_drawn, $previous_end);
+
+  foreach my $block (@$coords) {
+    my $start = $block->start - $slice_start;
+    my $end   = $block->end - $slice_start;
+
+    next if $start < 0 && $end < 0;
+    next if $start > $slice_end;
+    
+    $start = 0 if $start < 0;
+    $first_exon_start = $start if !$exon_drawn;
+    $end = $slice_end if $end > $slice_end; 
+    $last_exon_end = $end;
+
+    my $block_length = $end - $start +1;    
+
+    if ( $exon_drawn ){
+      my $gap_start = $previous_end < 0 ? 0 : $previous_end;
+      my $gap_width = $start - $previous_end;
+
+      $composite->push($self->Rect({
+        x         => $gap_start,
+        y         => $params->{'y'} || 0,
+        width     => $gap_width,
+        height    => $h,
+        bordercolour    => $match_colour,
+      }));
+    }
+
+    $composite->push($self->Rect({
+      x         => $start,
+      y         => $params->{'y'} || 0,
+      width     => $block_length,
+      height    => $h,
+      colour    => $match_colour,
+    }));
+    $exon_drawn = 1;
+    $previous_end = $end;
+  }
+}
 1;
