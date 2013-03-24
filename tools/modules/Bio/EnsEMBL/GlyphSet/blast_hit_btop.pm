@@ -52,13 +52,13 @@ sub features {
     my $coords = $hit->{'g_coords'} || undef;
     my $identity            = sprintf("%.1f", ($hit->{'pident'} /100));
     my $colours = $self->get_colour_scale;  
-    my $colour              = $colours->{$identity};
-
+    my $colour  = $colours->{$identity};
     my $slice_length = $slice->length; 
+    my $db_type = $hit->{'db_type'};
 
     my $btop;
-    if ($slice_length < 10000) { 
-      $btop  =  $hit->{'db_type'} =~/cdna/i ?  $tools_object->map_btop_to_genomic_coords($hit, $_->[0]) : $hit->{'aln'};
+    if ($slice_length < 10000 || $db_type =~/pep/i ) { 
+      $btop  =  $db_type =~/cdna/i ?  $tools_object->map_btop_to_genomic_coords($hit, $_->[0]) : $hit->{'aln'};
     }
 
     if ($hit->{'gori'} ne '1' && $hit->{'db_type'}=~/latest/i){
@@ -80,6 +80,7 @@ sub features {
       target_strand  => $hit->{'tori'},
       ticket_name    => $ticket->ticket_name,
       colour         => $colour,
+      db_type        => $db_type,
     );
 
     $extra{$id} = \%feat_info;
@@ -173,6 +174,7 @@ sub render_normal {
     my $coords      = $aln_info->{$f->dbID}->{'coords'};
     my $ticket_name = $aln_info->{$f->dbID}->{'ticket_name'};
     my $colour      = $aln_info->{$f->dbID}->{'colour'};
+    my $db_type     = $aln_info->{$f->dbID}->{'db_type'};
 
     my $composite = $self->Composite({
       x         => $start - $slice_start,
@@ -183,7 +185,7 @@ sub render_normal {
       href      => $self->href($ticket_name, $f->dbID),
     }); 
 
-    if ($length < 10000){ 
+    if ($length < 10000 || $db_type =~/pep/i){ 
       $self->draw_btop_feature({
         composite       => $composite,
         feature         => $f,
