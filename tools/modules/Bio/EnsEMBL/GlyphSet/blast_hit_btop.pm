@@ -54,8 +54,7 @@ sub features {
     my $colours = $self->get_colour_scale;  
     my $colour              = $colours->{$identity};
 
-    
-    my $btop =  $hit->{'db_type'} =~/cdna/ ?  $tools_object->map_btop_to_genomic_coords($hit, $_->[0]) : $hit->{'aln'};
+    my $btop =  $hit->{'db_type'} =~/cdna/i ?  $tools_object->map_btop_to_genomic_coords($hit, $_->[0]) : $hit->{'aln'};
 
 
     if ($hit->{'gori'} ne '1' && $hit->{'db_type'}=~/latest/i){
