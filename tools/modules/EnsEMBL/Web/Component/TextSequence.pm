@@ -321,7 +321,6 @@ sub markup_blast_line_numbers {
       if (!$sl->{'no_markup'} && $config->{'transcript'}) { $ostrand =  $ostrand eq $config->{'subj_slice_strand'} ? 1 : -1; }
       my $slice_start = $sl->{'no_markup'} ? $config->{'query_slice_start'} : $config->{'ref_slice_start'};
       my $slice_end   = $sl->{'no_markup'} ? $config->{'query_slice_end'} : $config->{'ref_slice_end'};
-        
       @numbering = ({ 
         dir   => $ostrand,
         start => $ostrand > 0 ? $slice_start : $slice_end,
@@ -364,7 +363,7 @@ sub markup_blast_line_numbers {
 
       if ( !$sl->{'no_markup'} && $config->{'line_numbering'} eq 'slice' ){ # we have the mapped slice
 
-        my $first_bp_pos    = 0; # Position of first letter character
+        my $first_bp_pos    = 1; # Position of first letter character
         my $last_bp_pos     = 0; # Position of last letter character
 
         if ($segment =~ /\w/) {
@@ -383,6 +382,7 @@ sub markup_blast_line_numbers {
         $start =  $mapped_coords[0]->start;
         $end =  $mapped_coords[-1]->end;  
         ($start, $end) = ($end, $start) if $dir ne '1';
+
       } else {
         if ($dir eq '1'){
           $start = $row_start;
