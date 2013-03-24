@@ -7,7 +7,7 @@ use strict;
 use base qw(EnsEMBL::Web::ImageConfig);
 
 sub init_user           { return $_[0]->load_user_tracks; }
-sub get_sortable_tracks { return grep { $_->get('sortable') && ($_->get('menu') ne 'no' || $_->id eq 'blast' || $_->id eq 'blast_hit' || $_->id eq 'blast_hit_btop') } @{$_[0]->glyphset_configs}; } # Add blast to the sortable tracks
+sub get_sortable_tracks { return grep { $_->get('sortable') && ($_->get('menu') ne 'no' || $_->id eq 'blast_hit_btop') } @{$_[0]->glyphset_configs}; } # Add blast to the sortable tracks
 sub load_user_tracks    { return $_[0]->SUPER::load_user_tracks($_[1]) unless $_[0]->code eq 'set_evidence_types'; } # Stops unwanted cache tags being added for the main page (not the component)
 
 sub init {
@@ -68,8 +68,7 @@ sub init {
     [ 'seq',       'Sequence',            'sequence', { display => 'normal', strand => 'b', description => $desc{'seq'},       colourset => 'seq',      threshold => 1,   depth => 1      }],
     [ 'codon_seq', 'Translated sequence', 'codonseq', { display => 'off',    strand => 'b', description => $desc{'codon_seq'}, colourset => 'codonseq', threshold => 0.5, bump_width => 0 }],
     [ 'codons',    'Start/stop codons',   'codons',   { display => 'off',    strand => 'b', description => $desc{'codons'},    colourset => 'codons',   threshold => 50                   }],
-    [ 'blast',     'BLAT/BLAST hits',     'blast_hit',   { display => 'normal', strand => 'b', colourset => 'feature',  sub_type => 'blast', menu => 'no' }],
-    [ 'blast_btop',     'Blast test',     'blast_hit_btop',   { display => 'normal', strand => 'b', colourset => 'feature',  sub_type => 'blast', menu => 'yes' }]
+    [ 'blast_btop',     'Blast hits',     'blast_hit_btop',   { display => 'normal', strand => 'b', colourset => 'feature',  sub_type => 'blast', menu => 'yes' }]
 
   );
   
