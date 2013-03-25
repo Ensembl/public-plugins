@@ -67,8 +67,6 @@ sub handle_registration {
   $user->add_logins([$login]);
   $user->save;
 
-  warn sprintf("\nSending verification for (%s, %s)", $login->type eq 'openid' ? $login->provider : $login->type, $login->email);
-
   # Send verification email
   $self->mailer->send_verification_email($login);
   return $self->redirect_message(MESSAGE_VERIFICATION_SENT, {'email' => $user->email});
