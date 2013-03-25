@@ -103,6 +103,15 @@
 	
 	<h2 id="new"> What's new </h2>
 	
+	<h3> New in version 71 <i>(April 2013)</i> </h3>
+	
+	<ul>
+		<li>View summary statistics for VEP runs in [output]_summary.html</li>
+		<li>Generate HTML output using --html</li>
+		<li>Simple Ensembl-style format for input of structural variant data</li>
+		<li><p><span style="color:red;"><b>NOTE:</b> VEP version numbers have now (from release 71) changed to match Ensembl release numbers.</span></p></li>
+	</ul>
+	
 	<h3> New in version 2.8 <i>(December 2012)</i> </h3>
 	
 	<ul>
@@ -229,7 +238,7 @@
 	<h2 id="requirements"> Requirements </h2>
 	
 	<p>
-	Version 2.8 of the script requires at least version 70 of the Ensembl Core
+	Version 71 of the script requires at least version 71 of the Ensembl Core
 	and Variation APIs and their relevant dependencies to be installed to use
 	the script. A minimal subset of these can be installed using the supplied <a
 	href="#installer">installer script</a>. </p>
@@ -250,7 +259,9 @@
 	<p> The Variant Effect Predictor script can be downloaded as a tarball from
 	the Ensembl CVS server: </p>
 	
-	<p> <a href="http://cvs.sanger.ac.uk/cgi-bin/viewvc.cgi/ensembl-tools/scripts/variant_effect_predictor.tar.gz?view=tar&root=ensembl&pathrev=branch-ensembl-70">Download version 2.8 (latest)</a> </p>
+	<p> <a href="http://cvs.sanger.ac.uk/cgi-bin/viewvc.cgi/ensembl-tools/scripts/variant_effect_predictor.tar.gz?view=tar&root=ensembl&pathrev=branch-ensembl-71">Download version 71 (latest)</a> </p>
+	
+	<p><span style="color:red;"><b>NOTE:</b> VEP version numbers have from release 71 changed to match Ensembl release numbers.</span></p>
 	
 	<p>It is also included as part of the ensembl-tools module of the Ensembl
 	API - you can find it in the ensembl-tools/scripts/variant_effect_predictor/
@@ -259,6 +270,7 @@
 	<h3> Previous versions </h3>
 	
 	<ul>
+		<li><a href="http://cvs.sanger.ac.uk/cgi-bin/viewvc.cgi/ensembl-tools/scripts/variant_effect_predictor.tar.gz?view=tar&root=ensembl&pathrev=branch-ensembl-69">Download version 2.8</a> (Ensembl 70) </li>
 		<li><a href="http://cvs.sanger.ac.uk/cgi-bin/viewvc.cgi/ensembl-tools/scripts/variant_effect_predictor.tar.gz?view=tar&root=ensembl&pathrev=branch-ensembl-69">Download version 2.7</a> (Ensembl 69) </li>
 		<li><a href="http://cvs.sanger.ac.uk/cgi-bin/viewvc.cgi/ensembl-tools/scripts/variant_effect_predictor.tar.gz?view=tar&root=ensembl&pathrev=branch-ensembl-68">Download version 2.6</a> (Ensembl 68) </li>
 		<li><a href="http://cvs.sanger.ac.uk/cgi-bin/viewvc.cgi/ensembl-tools/scripts/variant_effect_predictor.tar.gz?view=tar&root=ensembl&pathrev=branch-ensembl-67">Download version 2.5</a> (Ensembl 67) </li>
@@ -337,7 +349,7 @@
 			<td><pre>--VERSION [version]</pre></td>
 			<td><pre>-v</pre></td>
 			<td>By default the script will install the latest version of the
-			Ensembl API (currently 70). Users can force the script to install a
+			Ensembl API (currently 71). Users can force the script to install a
 			different version at their own risk</td>
 		</tr>
 		<tr>
@@ -711,6 +723,32 @@ host          useastdb.ensembl.org</pre>
 				By default, the script will fail with an error if the output
 				file already exists. You can force the overwrite of the existing
 				file by using this flag. <i>Not used by default</i>
+			</td>
+		</tr>
+		<tr class="bg2">
+			<td><pre>--stats_file [filename]</pre></td>
+			<td>--sf [filename]</td>
+			<td>
+				Summary stats file name. This is an HTML file containing a
+				summary of the VEP run - the file name must end ".htm" or
+				".html". <i>Default =
+				"variant_effect_output.txt_summary.html"</i>
+			</td>
+		</tr>
+		<tr>
+			<td><pre>--no_stats</pre></td>
+			<td>&nbsp;</td>
+			<td>
+				Don't generate a stats file.
+			</td>
+		</tr>
+		<tr class="bg2">
+			<td><pre>--html</pre></td>
+			<td>&nbsp;</td>
+			<td>
+				Generate an additional HTML version of the output file
+				containing hyperlinks to Ensembl and other resources. File name
+				of this file is [output_file].html
 			</td>
 		</tr>
 	</table>
@@ -1601,16 +1639,16 @@ host          useastdb.ensembl.org</pre>
 	<ol>
 		<li>
 			Download the archive file for your species from our <a
-			href="ftp://ftp.ensembl.org/pub/release-70/variation/VEP/">FTP
+			href="ftp://ftp.ensembl.org/pub/release-71/variation/VEP/">FTP
 			site</a>
 		</li>
 		<li>
 			Extract the archive in your cache directory. By default the VEP uses
 			$HOME/.vep/ as the cache directory, where $HOME is your UNIX home
 			directory.
-			<pre class="code">mv homo_sapiens_vep_70.tar.gz ~/.vep/
+			<pre class="code">mv homo_sapiens_vep_71.tar.gz ~/.vep/
 cd ~/.vep/
-tar xfz homo_sapiens_vep_70.tar.gz</pre>
+tar xfz homo_sapiens_vep_71.tar.gz</pre>
 		</li>
 		<li>
 			Run the VEP with the --cache option
@@ -1698,7 +1736,7 @@ tar xfz homo_sapiens_vep_70.tar.gz</pre>
 	
 	<p> The script is run as follows: </p>
 	
-	<pre class="code">perl gtf2vep.pl -i my_species_genes.gtf -f my_species_seq.fa -d 70 -s my_species
+	<pre class="code">perl gtf2vep.pl -i my_species_genes.gtf -f my_species_seq.fa -d 71 -s my_species
 perl variant_effect_predictor.pl -offline -i my_species_variants.vcf -s my_species</pre>
 	
 	<p> By default the cache is created in $HOME/.vep/[species]/[version]/ - to
@@ -1735,9 +1773,9 @@ perl variant_effect_predictor.pl -offline -i my_species_variants.vcf -s my_speci
 	large (25GB for human). An example set of commands for setting up the data
 	for human follows: </p>
 	
-	<pre class="code">wget ftp://ftp.ensembl.org/pub/release-70/fasta/homo_sapiens/dna/Homo_sapiens.GRCh37.70.dna.primary_assembly.fa.gz
-gzip -d Homo_sapiens.GRCh37.70.dna.primary_assembly.fa.gz
-perl variant_effect_predictor.pl -i input.vcf --offline --hgvs --fasta Homo_sapiens.GRCh37.70.dna.primary_assembly.fa</pre>
+	<pre class="code">wget ftp://ftp.ensembl.org/pub/release-71/fasta/homo_sapiens/dna/Homo_sapiens.GRCh37.71.dna.primary_assembly.fa.gz
+gzip -d Homo_sapiens.GRCh37.71.dna.primary_assembly.fa.gz
+perl variant_effect_predictor.pl -i input.vcf --offline --hgvs --fasta Homo_sapiens.GRCh37.71.dna.primary_assembly.fa</pre>
 	
 	<h3 id="limitations">Limitations of the cache</h3>
 	
@@ -1815,10 +1853,10 @@ perl variant_effect_predictor.pl -i input.vcf --offline --hgvs --fasta Homo_sapi
 	target="_blank">here</a>. You will need a MySQL server that you can connect
 	to from the machine where you will run the script (this can be the same
 	machine). For most of the functionality of the VEP, you will only need the
-	Core database (e.g. homo_sapiens_core_70_37) installed. In order to find
+	Core database (e.g. homo_sapiens_core_71_37) installed. In order to find
 	co-located variations or to use SIFT or PolyPhen, it is also necessary to
 	install the relevant
-	variation database (e.g. homo_sapiens_variation_70_37). </p>
+	variation database (e.g. homo_sapiens_variation_71_37). </p>
 	
 	<p> Note that unless you have custom data to insert in the database, in most
 	cases it will be much more efficient to use a <a href="#pre">pre-built
@@ -1841,7 +1879,7 @@ Bio::EnsEMBL::DBSQL::DBAdaptor->new(
   '-host'    => 'ensembldb.ensembl.org',
   '-user'    => 'anonymous',
   '-pass'    => '',
-  '-dbname'  => 'homo_sapiens_core_70_37'
+  '-dbname'  => 'homo_sapiens_core_71_37'
 );
 
 Bio::EnsEMBL::Variation::DBSQL::DBAdaptor->new(
@@ -1851,7 +1889,7 @@ Bio::EnsEMBL::Variation::DBSQL::DBAdaptor->new(
   '-host'    => 'ensembldb.ensembl.org',
   '-user'    => 'anonymous',
   '-pass'    => '',
-  '-dbname'  => 'homo_sapiens_variation_70_37'
+  '-dbname'  => 'homo_sapiens_variation_71_37'
 );
 
 Bio::EnsEMBL::Registry->add_alias("Homo_sapiens","human");
