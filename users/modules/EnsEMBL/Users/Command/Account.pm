@@ -20,10 +20,12 @@ sub process {
   ## Wrapper around the child command module's csrf_safe_process method
   my $self    = shift;
   my $hub     = $self->hub;
-  my $r_user  = $hub->user->rose_object;
-  my $code    = $hub->param($hub->CSRF_SAFE_PARAM) || '';
+  my $user    = $hub->user;
+  my $r_user  = $user->rose_object;
+  my $code_1  = $r_user ? $r_user->salt : $user->default_salt;
+  my $code_2  = $hub->param($hub->CSRF_SAFE_PARAM) || '';
 
-  if ($code && $r_user && $r_user->salt eq $code) {
+  if ($code_1 && $code_2 && $code_1 eq $code_2) {
     $r_user->reset_salt_and_save('changes_only' => 1);
     return $self->csrf_safe_process(@_);
   }
