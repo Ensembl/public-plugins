@@ -2,17 +2,15 @@ package EnsEMBL::Web::Hub;
 
 use strict;
 
-#use EnsEMBL::Web::Tools::MethodMaker (copy => {'new' => '__new', 'url' => '__url'}); ## TODO swap these two when 'new1' is renamed to 'new'
-use EnsEMBL::Web::Tools::MethodMaker (copy => {'url' => '__url'});
+use EnsEMBL::Web::Tools::MethodMaker (copy => {map {$_ => "__$_"} qw(new url get_favourite_species)});
 use EnsEMBL::Web::User;
-use EnsEMBL::Web::Configuration::Account;
-use EnsEMBL::ORM::Rose::Object::User;
+# use EnsEMBL::Web::Configuration::Account;
 
 use constant CSRF_SAFE_PARAM => 'rxt';
 
 sub PREFERENCES_PAGE { return shift->url({'type' => 'Account', 'action' => 'Preferences', 'function' => ''}); }
 
-sub new1 { # TODO - change this to 'new' once user plugin is stable
+sub new {
   ## @overrides
   ## Overrides the constructor to initiate user object by reading the user cookie
   my ($class, $args) = @_;
@@ -25,7 +23,7 @@ sub new1 { # TODO - change this to 'new' once user plugin is stable
 
 sub url {
   ## @overrides
-  ## Clears the core params and species in case url type is Account
+  ## Clears the core params in case url type is Account
   ## Accepts the following extra keys as arguments
   ##  - csrf_safe : Required with value 1, if the url to be construted has to be safe from 'Cross site request forgery'
   ##  - user      : Required for CSRF safe urls only if the url is to be used by a user different to the logged in user (provide value undef if user yet to be created)
@@ -34,34 +32,25 @@ sub url {
   my $params  = shift || {};
   my $url     = '';
 
-  if (($params->{'type'} || '') eq 'Account' || $self->type eq 'Account') {
-    $params->{'__clear'}    = 1;
-    $params->{'species'}  ||= '';
-  }
+  $params->{'__clear'} = 1 if !$params->{'type'} && $self->type eq 'Account' || $params->{'type'} eq 'Account';
 
   if (delete $params->{'csrf_safe'}) {
     my $user = exists $params->{'user'} ? $params->{'user'} : $self->user;
-    $params->{$self->CSRF_SAFE_PARAM} = $user ? $user->rose_object->salt : EnsEMBL::ORM::Rose::Object::User->DEFAULT_SALT;
+    $params->{$self->CSRF_SAFE_PARAM} = $user ? $user->rose_object->salt : EnsEMBL::Web::User->default_salt;
   }
 
-#  ($url = $self->species_defs->ENSEMBL_LOGIN_URL) =~ s/\/$// if grep { $params->{'action'} eq $_ } EnsEMBL::Web::Configuration::Account->SECURE_PAGES;
+  # https url
+  # $params->{'action'} eq $_ and ($url = $self->species_defs->ENSEMBL_LOGIN_URL) =~ s/\/$// and last for EnsEMBL::Web::Configuration::Account->SECURE_PAGES;
 
   return $url.$self->__url($extra || (), $params, @_);
 }
 
 sub get_favourite_species {
-  my $self         = shift;
-  my $user         = $self->user;
-  my $species_defs = $self->species_defs;
-  my @favourites   = $user ? @{$user->favourite_species} : ();
-     @favourites   = @{$species_defs->DEFAULT_FAVOURITES || []} unless scalar @favourites;
-     @favourites   = ($species_defs->ENSEMBL_PRIMARY_SPECIES, $species_defs->ENSEMBL_SECONDARY_SPECIES) unless scalar @favourites;
-  return \@favourites;
-}
+  my $self        = shift;
+  my $user        = $self->user;
+  my @favourites  = $user ? @{$user->favourite_species} : ();
 
-sub initialize_user { # TODO remove this once user plugin is stable
-  my ($self, $cookie) = @_;
-  $self->user = EnsEMBL::Web::User->new($self, $cookie);
+  return @favourites ? \@favourites : $self->__get_favourite_species;
 }
 
 1;
