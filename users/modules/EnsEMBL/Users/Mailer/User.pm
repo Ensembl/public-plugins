@@ -7,8 +7,6 @@ use warnings;
 
 use base qw(EnsEMBL::Web::Mailer);
 
-sub email_footer { return sprintf "\n\nMany thanks,\n\nThe %s web team\n\n%1\$s Privacy Statement: %s/info/about/legal/privacy.html\n\n", $_->site_name, $_->{'base_url'} for @_; }
-
 sub send_verification_email {
   ## Sends an activation email to newly registered users
   ## @param Login object that needs to be verified
