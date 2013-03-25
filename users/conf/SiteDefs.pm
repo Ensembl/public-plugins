@@ -12,23 +12,17 @@ sub update_conf {
   $SiteDefs::ENSEMBL_OPENID_ENABLED        = 0; # this gets overridden in OpenID plugin
   $SiteDefs::ENSEMBL_LDAP_ENABLED          = 0; # this gets overridden in LDAP plugin
 
-  # TODO change once development done
-  $SiteDefs::ENSEMBL_USERDB_NAME           = 'test_users_hr5';
-  $SiteDefs::ENSEMBL_USER_COOKIE           = 'ENS_USER';
-  $SiteDefs::ENSEMBL_USERDB_HOST           = 'ensdb-web-11';
-  $SiteDefs::ENSEMBL_USERDB_PORT           = '5319';
-
   # URL for secure pages (any pages that ask user to enter password)
   $SiteDefs::ENSEMBL_LOGIN_URL           ||= $SiteDefs::ENSEMBL_SITE_URL; #'https://login.ensembl.org/';
 
+  # Provide these values in you plugin
   $SiteDefs::ROSE_DB_DATABASES->{'user'}   = {
-    database  => $SiteDefs::ENSEMBL_USERDB_NAME,
-    host      => $SiteDefs::ENSEMBL_USERDB_HOST,
-    port      => $SiteDefs::ENSEMBL_USERDB_PORT,
-    username  => $SiteDefs::ENSEMBL_USERDB_USER || $SiteDefs::DATABASE_WRITE_USER,
-    password  => $SiteDefs::ENSEMBL_USERDB_PASS || $SiteDefs::DATABASE_WRITE_PASS,
+    'database'  => 'database_name',
+    'host'      => 'mysql.example.com',
+    'port'      => 3306,
+    'username'  => 'user_name',
+    'password'  => 'user_password'
   };
-
 
   ## Arrayref of emails and display title that user can opt to subscribe at the time of registration eg. dev@ensembl.org
   ## 'announcement@example.com' => 'Mailing list for release related news'
