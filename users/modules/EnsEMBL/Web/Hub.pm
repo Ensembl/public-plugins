@@ -27,10 +27,10 @@ sub url {
   ## Accepts the following extra keys as arguments
   ##  - csrf_safe : Required with value 1, if the url to be construted has to be safe from 'Cross site request forgery'
   ##  - user      : Required for CSRF safe urls only if the url is to be used by a user different to the logged in user (provide value undef if user yet to be created)
-  my $self    = shift;
-  my $extra   = $_[0] && !ref $_[0] ? shift : undef;
-  my $params  = shift || {};
-  my $url     = '';
+  my $self      = shift;
+  my $extra     = $_[0] && !ref $_[0] ? shift : undef;
+  my $params    = shift || {};
+  my $base_url  = '';
 
   $params->{'__clear'} = 1 if !$params->{'type'} && $self->type eq 'Account' || $params->{'type'} eq 'Account';
 
@@ -40,9 +40,11 @@ sub url {
   }
 
   # https url
-  # $params->{'action'} eq $_ and ($url = $self->species_defs->ENSEMBL_LOGIN_URL) =~ s/\/$// and last for EnsEMBL::Web::Configuration::Account->SECURE_PAGES;
+  # $params->{'action'} eq $_ and ($base_url = $self->species_defs->ENSEMBL_LOGIN_URL) =~ s/\/$// and last for EnsEMBL::Web::Configuration::Account->SECURE_PAGES;
 
-  return $url.$self->__url($extra || (), $params, @_);
+  my $url = $self->__url($extra || (), $params, @_);
+
+  return $base_url ? "$base_url$url" : $url;
 }
 
 sub get_favourite_species {
