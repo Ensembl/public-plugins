@@ -66,7 +66,6 @@ sub features {
       }
     } else {
       if (lc($method) eq 'tblastn' || $db_type =~/latest/i ){
-        warn $hit->{'gstart'}; warn $hit->{'gend'};
         $coords->[0]->{'start'} = $hit->{'gstart'};
         $coords->[0]->{'end'}   = $hit->{'gend'};
       } 
