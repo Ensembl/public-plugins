@@ -50,7 +50,7 @@ sub favourite_tracks      { shift->_goto_rose_object('favourite_tracks');   }
 sub is_admin_of           { shift->_goto_rose_object('is_admin_of', @_);    }
 sub is_member_of          { shift->_goto_rose_object('is_member_of', @_);   }
 
-sub default_salt          { EnsEMBL::ORM::Rose::Manager::User->DEFAULT_SALT;}
+sub default_salt          { EnsEMBL::ORM::Rose::Manager::User->object_class->DEFAULT_SALT; }
 
 sub new {
   ## @constructor
