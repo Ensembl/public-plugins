@@ -55,14 +55,21 @@ sub features {
     my $colour  = $colours->{$identity};
     my $slice_length = $slice->length; 
     my $db_type = $hit->{'db_type'};
+    my $method = $self->{'config'}->hub->param('method');
+    my $draw_btop = $slice_length < 10000 && $method =~/^blastn/i  ? 1 :undef 
 
     my $btop;
-    if ($slice_length < 10000 && $db_type !~/pep/i ) { 
+    if ($draw_btop) { 
       $btop  =  $db_type =~/cdna/i ?  $tools_object->map_btop_to_genomic_coords($hit, $_->[0]) : $hit->{'aln'};
-    }
-
-    if ($hit->{'gori'} ne '1' && $hit->{'db_type'}=~/latest/i){
-      $btop = $tools_object->reverse_btop($btop);
+      if ($btop && $hit->{'gori'} ne '1' && $hit->{'db_type'}=~/latest/i){
+        $btop = $tools_object->reverse_btop($btop);
+      }
+    } else {
+      if (lc($method) eq 'tblastn' || $db_type =~/latest/i ){
+        warn $hit->{'gstart'}; warn $hit->{'gend'};
+        $coords->[0]->{'start'} = $hit->{'gstart'};
+        $coords->[0]->{'end'}   = $hit->{'gend'};
+      } 
     }
 
     my $feature = new Bio::EnsEMBL::Feature (
@@ -185,7 +192,7 @@ sub render_normal {
       href      => $self->href($ticket_name, $f->dbID),
     }); 
 
-    if ($length < 10000 && $db_type !~/pep/i){ 
+    if ($btop){ 
       $self->draw_btop_feature({
         composite       => $composite,
         feature         => $f,
@@ -239,13 +246,17 @@ sub draw_aln_coords {
   my $slice_start = $slice->start;
   my $slice_end = $slice->end;
   my $match_colour = $params->{'feature_colour'};
+  my $method = $self->{'config'}->hub->param('method');
 
   my $coords = $params->{'coords'};
+
   my ($first_exon_start, $last_exon_end, $exon_drawn, $previous_end);
 
   foreach my $block (@$coords) {
-    my $start = $block->start - $slice_start;
-    my $end   = $block->end - $slice_start;
+    my $s = lc $method =~/^tblastn/ ? $block->{'start'} : $block->start;
+    my $e = lc $method =~/^tblastn/ ? $block->{'end'} : $block->end;
+    my $start = $s - $slice_start;
+    my $end   = $e - $slice_start;
 
     next if $start < 0 && $end < 0;
     next if $start > $slice_end;
