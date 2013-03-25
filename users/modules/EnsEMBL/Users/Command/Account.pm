@@ -82,15 +82,17 @@ sub redirect_after_login {
   my ($self, $user) = @_;
   my $hub           = $self->hub;
   my $object        = $self->object;
+  my $site          = $hub->species_defs->ENSEMBL_SITE_URL;
 
   # return to login page if cookie not set
   return $self->redirect_login(MESSAGE_UNKNOWN_ERROR) unless $hub->user->authorise({'user' => $user});
 
   # redirect
   if ($hub->is_ajax_request) {
-    return $self->ajax_redirect($hub->url({'type' => 'Account', 'action' => 'Success'})); # this just closes the popup and refreshes the page
+    my $url = $hub->referer;
+       $url = $url->{'external'} ? $site : $url->{'absolute_url'};
+    return $self->ajax_redirect($url, {}, '', 'page'); # this just closes the popup and refreshes the page
   } else {
-    my $site = $hub->species_defs->ENSEMBL_SITE_URL;
     my $then = $hub->param('then') || '';
     return $hub->redirect($self->url($then =~ /^(\/|$site)/ ? $then : $site)); #only redirect to an internal url or a relative url
   }
