@@ -26,7 +26,7 @@ sub process {
   my $code_2  = $hub->param($hub->CSRF_SAFE_PARAM) || '';
 
   if ($code_1 && $code_2 && $code_1 eq $code_2) {
-    $r_user->reset_salt_and_save('changes_only' => 1);
+    $r_user->reset_salt_and_save('changes_only' => 1) if $r_user;
     return $self->csrf_safe_process(@_);
   }
 
