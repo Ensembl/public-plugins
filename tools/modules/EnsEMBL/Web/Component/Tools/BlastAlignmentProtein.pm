@@ -58,31 +58,44 @@ sub set_exons {
   my ($self, $config, $sl, $markup, $transcript, $seq)= @_;
 
   my $exons = $transcript->peptide_splice_sites;
+
+  foreach  (sort {$a <=> $b } keys %{$exons}) {
+    warn $_;
+    foreach my $k (keys %{$exons->{$_}}){
+      warn $k;
+    }
+  }
+
   my $flip = 1;  
   my $offset = $config->{'Subjct_start'} -1;
-  my @exon_len = sort {$a <=> $b} keys %$exons;
+  my @exon_feat_positions = sort {$a <=> $b} keys %$exons;
   my $index = 0;
   my @seq = split(//, $seq);
   my $count;
+  my $flip_seen;
 
-  while ( my $exon_length = shift @exon_len){    
-    if ( $index + $exon_length < $offset -1){      
-        $index += $exon_length;
+  while ( my $exon_position = shift @exon_feat_positions){    
+
+    if ( $index + $exon_position < $offset -1){      
+        $index += $exon_position;
         next;
     }  
-    $flip = 1 - $flip if $exons->{$exon_length}->{'exon'};  
-    $count = 0;
-    while ( $count < $exon_length ){ 
+
+    unless ( exists $flip_seen->{$exon_position} ){
+      $flip = 1 - $flip; 
+      $flip_seen->{$exon_position} = 1;
+    }
+
+    while ( $index < $exon_position ){ 
       if ($index >= $offset){
-        my $base = $seq[$index];
+        my $base = $seq[$index]; 
         if ( $base ne '-'){
-          my $style = "exon$flip";
+          my $style = "exon$flip"; 
           if ($exons->{$index}->{'overlap'}) {
             $style = 'exon2';
-            my $temp = shift @exon_len;
+            $flip = 1 - $flip;
           }   
           push @{$markup->{'exons'}->{$index}->{'type'}}, $style;
-          $count++;
         }
       } 
       $index++;
