@@ -156,7 +156,7 @@ sub activate_user_login {
   my ($self, $login) = @_;
   my $user = $login->user;
   $login->activate;
-  $user->save;
+  $user->reset_salt_and_save;
   $login->save;
 }
 
