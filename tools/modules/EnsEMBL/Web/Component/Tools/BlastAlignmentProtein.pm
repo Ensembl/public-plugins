@@ -59,13 +59,6 @@ sub set_exons {
 
   my $exons = $transcript->peptide_splice_sites;
 
-  foreach  (sort {$a <=> $b } keys %{$exons}) {
-    warn $_;
-    foreach my $k (keys %{$exons->{$_}}){
-      warn $k;
-    }
-  }
-
   my $flip = 1;  
   my $offset = $config->{'Subjct_start'} -1;
   my @exon_feat_positions = sort {$a <=> $b} keys %$exons;
