@@ -107,7 +107,7 @@ sub generate_links {
   my $links = $self->alignment_link($ticket_name, $hit, $res,  $species, $blast_method, $db_type);
   $links .= ' ' . $self->query_sequence_link($ticket_name, $hit, $res);
   $links .= ' ' . $self->genomic_sequence_link($ticket_name, $hit, $res, $species);
-  $links .= ' ' .$self->location_link($ticket_name, $hit, $res, $result_entry, $result, $species);
+  $links .= ' ' .$self->location_link($ticket_name, $hit, $res, $result_entry, $result, $species, $blast_method);
   return $links;
 }
 
@@ -165,7 +165,7 @@ sub genomic_sequence_link {
 }
 
 sub location_link {
-  my ($self, $ticket_name, $hit, $res, $result_entry, $result, $species) = @_;
+  my ($self, $ticket_name, $hit, $res, $result_entry, $result, $species, $blast_method) = @_;
   my $ticket      = $result_entry->ticket_id;
   my $seq_region  = $result->{'gid'};
   my $start       = $result->{'gstart'};
@@ -181,6 +181,7 @@ sub location_link {
       ticket  => $ticket,
       hit     => $hit,
       h       => $hsp,
+      method  => $blast_method,
       contigviewbottom => 'blast_hit=normal;contigviewbottom=blast_hit_btop=normal'
     });
 
