@@ -41,7 +41,7 @@ sub content {
     { 'key' => 'created',   'title' => 'Submitted',   'align' => 'left',    sort => 'string' },
     { 'key' => 'status',    'title' => 'Status',      'align' => 'left',    sort => 'string' },
     { 'key' => 'results',   'title' => '',            'align' => 'left',    sort => 'none'   },
-    { 'key' => 'save',      'title' => '',            'align' => 'left',    sort => 'none'   },
+   # { 'key' => 'save',      'title' => '',            'align' => 'left',    sort => 'none'   },
     { 'key' => 'remove',    'title' => '',            'align' => 'left',    sort => 'none'   },
   );
 
@@ -78,7 +78,9 @@ sub content {
         $results_text,
         $results_text
       );
-
+      
+      my $save = undef; #Hide until saving is possible
+=cut
       my $save = sprintf ('<a %s><img src="%s%s" alt="%s" title="%s"/></a>',
        $display_link,
        $img_url, 
@@ -86,7 +88,7 @@ sub content {
        $save_text,
        $save_text
       );
-
+=cut
       my $delete = sprintf ('<a %s><img src="%strash.png" alt="%s" title="%s"/></a>', 
         $display_link,
         $img_url, 
