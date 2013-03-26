@@ -89,7 +89,7 @@ sub set_exons {
     my $base = $sequence[$actual_index];
 
     if ($base ne '-'){
-      if ($seq_index == $next_markup_pos) { warn $seq_index;
+      if ($seq_index == $next_markup_pos) { 
         my $markup_type = $exon_feats_to_markup{$seq_index}; 
         $flip = 1 - $flip  if $markup_type eq 'exon';
         $style = $markup_type eq 'overlap' ? 'exon2' : "exon$flip";
