@@ -17,11 +17,18 @@ sub get_sequence_data {
   my $database_type = $hit->{'db_type'};
   my $translation_id = $hit->{'tid'};
   $config->{'length'} = $hit->{'len'}; 
-  $config->{'Subjct_start'} = $method eq 'tblastn' ? $hit->{'gstart'} : $hit->{'tstart'};
-  $config->{'Subjct_end'}   = $method eq 'tblastn' ? $hit->{'gend'} : $hit->{'tend'};
+  $config->{'Subjct_start'} = $hit->{'tstart'};
+  $config->{'Subjct_end'}   = $hit->{'tend'};
+  $config->{'Subjct_ori'}   = $hit->{'tori'};  
+
+  if ($method eq 'tblastn'){
+    $config->{'Subjct_start'} = $hit->{'gori'} == 1  ? $hit->{'gstart'} : $hit->{'gend'};
+    $config->{'Subjct_end'} = $hit->{'gori'} == 1  ? $hit->{'gend'} : $hit->{'gstart'};
+    $config->{'Subjct_ori'} = $hit->{'gori'};
+  } 
+
   $config->{'Query_start'} = $hit->{'qstart'};
   $config->{'Query_end'}   = $hit->{'qend'};
-
 
   my $feature_type = $database_type =~ /abinitio/i ? 'PredictionTranscript' :'Translation';
 
@@ -162,6 +169,11 @@ sub markup_blast_line_numbers {
     my $slice       = $sl->{'slice'};
     my $name        = $sl->{'name'};
     my $seq         = $sequence->[$n];
+    my $rev;
+    if($name eq 'Subjct') {
+      $rev = $config->{'Subjct_ori'} == 1 ? undef : 1;
+    }
+
     my @numbering;
 
     if (!$slice) {
@@ -176,16 +188,20 @@ sub markup_blast_line_numbers {
     }
   
     my $data = shift @numbering;
-    my $s = $data->{'start'};
+    my $s = !$rev ? $data->{'start'} : $data->{'end'};
     my $e = $s -1;
-    my $loop_end = $data->{'end'};
+    my $loop_end = !$rev ? $data->{'end'} : $data->{'start'};
+    my $start = $data->{'start'};
     my $seq_offset = 0;
 
-    while ($s < $loop_end){
-      if ($e + $config->{'display_width'} > $data->{'end'}){ $e = $data->{'end'}; }
-      else { $e += $config->{'display_width'}; }
+    my $multiplication = ($method eq 'tblastn' && $name eq 'Subjct') || ($method eq
+ 'blastx' && $name eq 'Query') ? 3 : 1;
 
-      my $length = $e >= $data->{'end'} ? ($e -$s) +1 : $config->{'display_width'};
+    while ($s < $loop_end){
+
+      if ($e + ($config->{'display_width'} * $multiplication )  > $loop_end){ $e = $loop_end; }
+      else { $e += ( $config->{'display_width'}  * $multiplication) ; }
+      my $length = $e >= $loop_end ? ($e -$s) +1 : $config->{'display_width'};
 
       my $sequence = $sl->{'seq'} || $slice->seq;
       my $segment = substr $sequence, $seq_offset, $length;
@@ -197,13 +213,21 @@ sub markup_blast_line_numbers {
       my $num_matches = $seg_length - $gap_count;
     
       $num_matches = $num_matches * 3 if ($method eq 'tblastn' && $name eq 'Subjct') || ($method eq 'blastx' && $name eq 'Query');
-      my $end =  $e >= $data->{'end'} ? $data->{'end'} : $s + $num_matches -1;
-      $end = $data->{'end'} if $end > $data->{'end'};
+      my $end;
+      if ($rev){
+        $end = $start - $num_matches + 1;
+        $end = $data->{'end'} if $end < $data->{'end'};
+      } else { 
+        $end  =  $e >= $data->{'end'} ? $data->{'end'} : $start + $num_matches -1;
+        $end = $data->{'end'} if $end > $data->{'end'};
+      }
 
-      push @{$config->{'line_numbers'}{$n}}, { start => $s, end => $end, label => $label };
+      push @{$config->{'line_numbers'}{$n}}, { start => $start, end => $end, label => $label };
       $config->{'padding'}{'number'} = length $s if length $s > $config->{'padding'}{'number'};
-      $s = $end +1;
-      $e = $end;
+ 
+      $e = !$rev ? $e - $gap_count : $e + $gap_count;
+      $s = $e +1;
+      $start = !$rev ? $end+1 : $end -1;  
       $seq_offset += $config->{'display_width'};
     }
 
