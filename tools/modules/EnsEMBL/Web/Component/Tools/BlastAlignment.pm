@@ -79,7 +79,7 @@ sub get_alignment_slices {
   my $result_id = $self->hub->param('res');
   my $homology_string;
   my $blast_method = $object->get_blast_method;
-  my $protein = $blast_method =~/(blastx)|(blastp)/i ? 1 : undef;
+  my $protein = $blast_method !~/^blastn/i ? 1 : undef;
 
   my $query_seq = $self->query_sequence($hit, $blast_method);
   my $hit_seq   = $query_seq;
