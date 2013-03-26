@@ -180,7 +180,6 @@ sub markup_blast_line_numbers {
     my $e = $s -1;
     my $loop_end = $data->{'end'};
     my $seq_offset = 0;
-warn "$s $loop_end";
 
     while ($s < $loop_end){
       if ($e + $config->{'display_width'} > $data->{'end'}){ $e = $data->{'end'}; }
@@ -198,8 +197,7 @@ warn "$s $loop_end";
       my $num_matches = $seg_length - $gap_count;
     
       $num_matches = $num_matches * 3 if ($method eq 'tblastn' && $name eq 'Subjct') || ($method eq 'blastx' && $name eq 'Query');
-      my $end = $s + $num_matches -1;
-
+      my $end =  $e >= $data->{'end'} ? $data->{'end'} : $s + $num_matches -1;
       $end = $data->{'end'} if $end > $data->{'end'};
 
       push @{$config->{'line_numbers'}{$n}}, { start => $s, end => $end, label => $label };
@@ -208,6 +206,7 @@ warn "$s $loop_end";
       $e = $end;
       $seq_offset += $config->{'display_width'};
     }
+
     $n++;
   }
 }
