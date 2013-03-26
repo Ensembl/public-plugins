@@ -59,42 +59,48 @@ sub set_exons {
   my ($self, $config, $sl, $markup, $transcript, $seq)= @_;
 
   my $exons = $transcript->peptide_splice_sites;
-
-  my $flip = 1;  
+  my @sequence = split //, $seq;
+  my $temp_flip = 1;  
+  my $flip = 0;
   my $offset = $config->{'Subjct_start'} -1;
-  my @exon_feat_positions = sort {$a <=> $b} keys %$exons;
-  my $index = 0;
-  my @seq = split(//, $seq);
-  my $count;
-  my $flip_seen;
+  my %exon_feats_to_markup;
+  my $seq_index = 0;
+  my $actual_index = 0;  
+  my $style;
 
-  while ( my $exon_position = shift @exon_feat_positions){    
+  foreach (sort {$a <=> $b} keys %$exons){
+    $temp_flip = 1 - $temp_flip;
+    my $offset_position = $_ - $offset;
+    
+    if ($offset_position < 0) {
+      $flip = 1 - $temp_flip;
+      next;
+    }
+    last if $offset_position > $config->{'Subjct_end'};
 
-    if ( $index + $exon_position < $offset -1){      
-        $index += $exon_position;
-        next;
+    $exon_feats_to_markup{$offset_position} = exists $exons->{$_}->{'overlap'} ? 'overlap' : 'exon';
+  }
+
+  my @markup_positions = sort {$a <=> $b} keys %exon_feats_to_markup;
+  my $next_markup_pos  = shift @markup_positions;
+
+
+  while ($actual_index < $config->{'length'}){
+    my $base = $sequence[$actual_index];
+
+    if ($base ne '-'){
+      if ($seq_index == $next_markup_pos) { warn $seq_index;
+        my $markup_type = $exon_feats_to_markup{$seq_index}; 
+        $flip = 1 - $flip  if $markup_type eq 'exon';
+        $style = $markup_type eq 'overlap' ? 'exon2' : "exon$flip";
+        $next_markup_pos = shift @markup_positions || undef;
+      } else {
+        $style = "exon$flip";
+      }
+      push @{$markup->{'exons'}->{$actual_index}->{'type'}}, $style;        
+      $seq_index++;
     }  
-
-    unless ( exists $flip_seen->{$exon_position} ){
-      $flip = 1 - $flip; 
-      $flip_seen->{$exon_position} = 1;
-    }
-
-    while ( $index < $exon_position ){ 
-      if ($index >= $offset){
-        my $base = $seq[$index]; 
-        if ( $base ne '-'){
-          my $style = "exon$flip"; 
-          if ($exons->{$index}->{'overlap'}) {
-            $style = 'exon2';
-            $flip = 1 - $flip;
-          }   
-          push @{$markup->{'exons'}->{$index}->{'type'}}, $style;
-        }
-      } 
-      $index++;
-      last if $index >= $config->{'length'};    
-    }
+    $actual_index++;
   }
 }
 
