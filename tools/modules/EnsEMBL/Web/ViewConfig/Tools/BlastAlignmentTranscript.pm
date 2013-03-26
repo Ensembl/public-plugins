@@ -35,7 +35,7 @@ sub form {
   $self->add_form_element($general_markup_options{'line_numbering'});
   $self->add_form_element($gene_markup_options{'exon_display'}); 
   $self->add_form_element($general_markup_options{'exon_ori'});
-  $self->add_form_element($other_markup_options{'codons_display'});
+#  $self->add_form_element($other_markup_options{'codons_display'});
 
 
   $self->add_form_element({
