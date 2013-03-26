@@ -113,12 +113,15 @@ sub set_variations {
   my $seq_pos = 0;
   my $position;
   my @seq = split (//, $seq);
-  
-  while ($seq_index <= $config->{'Subjct_end'}){
+  my $end = $config->{'Subjct_end'}; 
+ 
+  while ($seq_index <= $end){
     my $base = $seq[$seq_pos];
     if ($base ne '-') {
       $position->{$actual_pos} = $seq_pos;
       $actual_pos++;
+    } else {
+      $end++;
     }
     $seq_pos++;
     $seq_index++;
