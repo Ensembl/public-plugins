@@ -13,11 +13,12 @@ sub get_sequence_data {
   my $result_id = $self->hub->param('res');
   my $species = $object->get_hit_species($result_id);  
   my $hit = $object->fetch_blast_hit_by_id($result_id);
+  my $method = lc ($hub->param('method'));
   my $database_type = $hit->{'db_type'};
   my $translation_id = $hit->{'tid'};
   $config->{'length'} = $hit->{'len'}; 
-  $config->{'Subjct_start'} = $hit->{'tstart'};
-  $config->{'Subjct_end'}   = $hit->{'tend'};
+  $config->{'Subjct_start'} = $method eq 'tblastn' ? $hit->{'gstart'} : $hit->{'tstart'};
+  $config->{'Subjct_end'}   = $method eq 'tblastn' ? $hit->{'gend'} : $hit->{'tend'};
   $config->{'Query_start'} = $hit->{'qstart'};
   $config->{'Query_end'}   = $hit->{'qend'};
 
@@ -138,6 +139,7 @@ sub set_variations {
 
 sub markup_blast_line_numbers {
   my ($self, $sequence, $config) = @_;
+  my $method = $self->hub->param('method');
 
   # Keep track of which element of $sequence we are looking at
   my $n = 0;
@@ -167,24 +169,33 @@ sub markup_blast_line_numbers {
     my $data = shift @numbering;
     my $s = $data->{'start'};
     my $e = $s -1;
-    my $loop_end = $config->{'length'} + $config->{'display_width'}; 
+    my $loop_end = $data->{'end'};
     my $seq_offset = 0;
 
-    while ($e < $loop_end){
-      $e = $e + $config->{'display_width'} > $data->{'end'} ? $data->{'end'} : $e += $config->{'display_width'};       
-      my $shift = 0; # To check if we've got a new element from @numbering
-      my $length = $e == $data->{'end'} ? ($e -$s) +1: $config->{'display_width'};
+    while ($s < $loop_end){
+      if ($e + $config->{'display_width'} > $data->{'end'}){ $e = $data->{'end'}; }
+      else { $e += $config->{'display_width'}; }
+
+      my $length = $e >= $data->{'end'} ? ($e -$s) +1 : $config->{'display_width'};
 
       my $sequence = $sl->{'seq'} || $slice->seq;
       my $segment = substr $sequence, $seq_offset, $length;
+
       my $seg_length = length $segment;
       my @bases = split(//, $segment);
       my $gap_count = grep(/-/, @bases);
       my $label = '';
+      my $num_matches = $seg_length - $gap_count;
+    
+      $num_matches = $num_matches * 3 if $method eq 'tblastn' && $name eq 'Subjct';
+      my $end = $s + $num_matches -1;
 
-      $e -= $gap_count;     
-      push @{$config->{'line_numbers'}{$n}}, { start => $s, end => $e, label => $label };
-      $s = $e +1;
+      $end = $data->{'end'} if $end > $data->{'end'};
+
+      push @{$config->{'line_numbers'}{$n}}, { start => $s, end => $end, label => $label };
+      $config->{'padding'}{'number'} = length $s if length $s > $config->{'padding'}{'number'};
+      $s = $end +1;
+      $e = $end;
       $seq_offset += $config->{'display_width'};
     }
     $n++;
