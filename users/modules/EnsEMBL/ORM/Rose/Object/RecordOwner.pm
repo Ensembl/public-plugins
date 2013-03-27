@@ -33,7 +33,7 @@ sub record_relationship_types {
     annotations           => { 'relationship' => 'records', 'condition' => {'type' => 'annotation'}       },
     bookmarks             => { 'relationship' => 'records', 'condition' => {'type' => 'bookmark'}         },
     configurations        => { 'relationship' => 'records', 'condition' => {'type' => 'configuration'}    },
-    currentconfigs        => { 'relationship' => 'records', 'condition' => {'type' => 'current_config'}   },
+    currentconfigs        => { 'relationship' => 'records', 'condition' => {'type' => 'currentconfig'}    },
     dases                 => { 'relationship' => 'records', 'condition' => {'type' => 'das'}              },
     favourite_tracks      => { 'relationship' => 'records', 'condition' => {'type' => 'favourite_tracks'} },
     histories             => { 'relationship' => 'records', 'condition' => {'type' => 'history'}          },
