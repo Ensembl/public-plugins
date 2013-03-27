@@ -81,7 +81,7 @@ sub get_alignment_slices {
   my $blast_method = $object->get_blast_method;
   my $protein = $blast_method !~/^blastn/i ? 1 : undef;
 
-  my $query_seq = $self->query_sequence($hit, $blast_method);
+  my $query_seq = $self->query_sequence($hit, $blast_method, $species); 
   my $hit_seq   = $query_seq;
   my $aln_summary = $hit->{'aln'};
   $aln_summary =~s/\s+//g;
@@ -108,6 +108,10 @@ sub get_alignment_slices {
         my $hit_edit = shift @edits;
       
         my $length = $query_edit eq '-' ? 0 : 1;
+        if ($blast_method =~/blastx/  && $hit->{'qori'} == -1){
+          $length = $hit_edit eq '-' ? 0 : 1;
+        } 
+
         substr($query_seq, $index, $length) = $query_edit;
         substr($hit_seq, $index, $length) = $hit_edit;
         substr($homology_string, $index, 1) = ' ';
@@ -213,7 +217,6 @@ sub get_mapped_slice {
     my $matching_bp = shift @aln_features;
     my $edit_string = shift @aln_features;
     $seq_index += $matching_bp; 
-#warn "$matching_bp $edit_string";
     last unless $edit_string;
     my $edit_len = length($edit_string)/2;
     my $type;
@@ -284,7 +287,7 @@ sub get_mapped_slice {
     my $edit_length =  $edits{$edit_position}->[2];
     my $ms_end = !$rev_flag ? ($ms_start + $num_matching_bp) -1 : ($ms_start - $num_matching_bp) +1;
     my $ref_end = ($ref_start + $num_matching_bp) -1;
-#warn "$num_matching_bp $edit_type";
+
     if ($edit_type eq 'insert_hit'){ 
       $ms_end = !$rev_flag ? $ms_end + $edit_length : $ms_end - $edit_length; 
       $ref_end += $edit_length; 
@@ -366,24 +369,35 @@ sub create_slice {
 }
 
 sub query_sequence {
-  my ($self, $hit, $blast_method) = @_;
+  my ($self, $hit, $blast_method, $species) = @_;
   my $object = $self->object;
   my $query_sequence = $object->complete_query_sequence($hit);
   my $start = $hit->{'qstart'};
   my $end = $hit->{'qend'};
   my $length = $end - $start +1;
+  my $full_length;
 
  
   if ($blast_method =~/blastx/i){
     my $codon_table_id ||= 1;
-    my $frame  = $hit->{'qframe'};
+    my $frame  = $hit->{'qframe'}; 
     $length = $length /3;
-
     if ($frame =~/\-/){
-      $query_sequence = reverse($query_sequence);
-      $query_sequence =~tr/ACGTacgt/TGCAtgca/;
-      $frame =~s/\-//;
-    }
+      $frame = 0;
+ 
+      my $temp_seq;
+      my $strand = $hit->{'gori'};
+      my $slice_adaptor = $object->hub->get_adaptor('get_SliceAdaptor', 'core', $species);
+      foreach  (@{$hit->{'g_coords'}}){ 
+        my $start = $_->start;
+        my $end = $_->end;
+        my $coords = $hit->{'gid'}.':'.$start.'-'.$end.':'.$hit->{'gori'};
+        my $slice = $slice_adaptor->fetch_by_toplevel_location($coords);
+        $temp_seq .= $slice->seq;
+        $full_length = 1;
+      }
+      $query_sequence = $temp_seq;
+   }
   
     $frame = $frame > 0 ? $frame -=1 : $frame;
 
@@ -409,7 +423,7 @@ sub query_sequence {
   }
 
   my $offset = $start -1;
-  my $seq = substr($query_sequence, $offset, $length);
+  my $seq = !$full_length ? substr($query_sequence, $offset, $length) : $query_sequence;
 
   return $seq;
 }
