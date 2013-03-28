@@ -292,7 +292,7 @@ sub extra_contig {
     
     $self->{'caching'}{'colors'} = 'chr';
     
-    return { colors => { map { $_->to_Slice->seq_region_name => $colourmap->hex_by_name($colours{$i++ % 2}) } @{$slice->seq_region_Slice->project('seqlevel') || []} }};
+    return { colors => { map { join(':', $_->to_Slice->seq_region_name, $_->from_start) => $colourmap->hex_by_name($colours{$i++ % 2}) } @{$slice->seq_region_Slice->project('seqlevel') || []} }};
   }
 }
 
