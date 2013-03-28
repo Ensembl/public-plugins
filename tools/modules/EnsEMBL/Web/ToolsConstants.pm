@@ -25,6 +25,25 @@ sub BLAST_CONFIGURATION_OPTIONS {
         value => '100',
       }, 
 
+      'culling_limit' => {
+        type    => 'DropDown',
+        select  => 'select',
+        name    => 'culling_limit',
+        label   => 'Throw away hits that are enveloped by at least this many higher-scoring hits',
+        values  => [
+          { value => '1', name => '1' },
+          { value => '2', name => '2' },
+          { value => '3', name => '3' },
+          { value => '4', name => '4' },
+          { value => '5', name => '5' },
+          { value => '7', name => '7' },
+          { value => '10', name => '10' },
+          { value => '15', name => '15' },
+          { value => '20', name => '20' },
+          { value => '999', name => '999' },
+        ]
+      },
+
       'evalue' => {
         type    => 'DropDown',
         select  => 'select',
@@ -227,8 +246,9 @@ sub BLAST_CONFIGURATION_OPTIONS {
     'options_and_defaults' => {
 
       'general' => [
-        [ 'evalue', {'all' => '10'}],
+        [ 'evalue', {'all' => '1e-1'}],
         [ 'max_target_seqs', { 'all' => 100 }],
+        [ 'culling_limit', { 'all' => 5 }],
         [ 'word_size', { 
             'blastn'        => '11',
             'blastn-short'  => '7',
