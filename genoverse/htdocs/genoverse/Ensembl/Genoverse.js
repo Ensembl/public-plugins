@@ -267,7 +267,7 @@ Ensembl.Genoverse = Genoverse.extend({
       var end   = Math.round((left + this.selector.outerWidth(true)) / this.scale) + this.start - 1;
           end   = end <= start ? start : end;
       
-      this.makeZMenu({ event: event, feature: {}, drag: { chr: this.chr, start: start, end: end, browser: this }, imageId: this.panel.id }, id);
+      this.makeZMenu({ event: e, feature: {}, drag: { chr: this.chr, start: start, end: end, browser: this }, imageId: this.panel.id }, id);
     }
   },
   
