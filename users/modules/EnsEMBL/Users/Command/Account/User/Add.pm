@@ -33,6 +33,7 @@ sub process {
   # update the details provided in the registration form
   $login->name($fields->{'name'});
   $login->$_($hub->param($_) || '') for qw(organisation country);
+  $login->subscription([ $hub->param('subscription') ]);
 
   return $self->handle_registration($login, $email);
 }
