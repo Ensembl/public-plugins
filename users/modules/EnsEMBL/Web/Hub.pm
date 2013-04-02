@@ -32,7 +32,10 @@ sub url {
   my $params    = shift || {};
   my $base_url  = '';
 
-  $params->{'__clear'} = 1 if !$params->{'type'} && $self->type eq 'Account' || $params->{'type'} eq 'Account';
+  if (!$params->{'type'} && $self->type eq 'Account' || $params->{'type'} eq 'Account') {
+    $params->{'__clear'} = 1;
+    $params->{'species'} = 'Multi' if !$params->{'species'} || $params->{'species'} eq 'common';
+  }
 
   if (delete $params->{'csrf_safe'}) {
     my $user = exists $params->{'user'} ? $params->{'user'} : $self->user;
