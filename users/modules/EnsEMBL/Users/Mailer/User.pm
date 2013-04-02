@@ -263,4 +263,20 @@ sub send_group_invitation_email_to_new_user {
   $self->send;
 }
 
+sub send_mailinglists_subscription_emails {
+  ## Sends emails to the address provided to join the selected mailing lists
+  ## @param User object
+  ## @params Email addressed to which emails are to be sent to subscribe the user to the email list
+  my ($self, $user, @subscription_emails) = @_;
+
+  $self->subject  = "Subscription";
+  $self->message  = "Subscription";
+  $self->from     = $user->email;
+
+  for (@subscription_emails) {
+    $self->to = $_;
+    $self->send;
+  }
+}
+
 1;
