@@ -221,6 +221,15 @@ sub send_group_editing_notification_email {
   }
 }
 
+sub handle_mailinglist_subscriptions {
+  ## Handles the user's request to join selected mailing lists
+  my ($self, $login)  = @_;
+  my %subscriptions   = @{$self->hub->species_defs->SUBSCRIPTION_EMAIL_LISTS};
+  my @request_emails  = grep $subscriptions{$_}, @{$login->subscription || []};
+
+  $self->mailer->send_mailinglists_subscription_emails($login->user, @request_emails) if @request_emails;
+}
+
 sub send_group_sharing_notification_email {
   ## TODO
 }
