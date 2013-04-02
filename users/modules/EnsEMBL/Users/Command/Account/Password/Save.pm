@@ -52,6 +52,7 @@ sub csrf_safe_process {
   # If reached here after clicking a link in the email address verification email, we need to activate the login account
   if ($hub->action eq 'Confirmed') {
     $object->activate_user_login($login);
+    $self->handle_mailinglist_subscriptions($login);
     return $self->redirect_after_login($login->user);
 
   # For a password change/reset request
