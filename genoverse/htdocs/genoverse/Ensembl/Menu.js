@@ -7,7 +7,7 @@ Ensembl.Panel.GenoverseMenu = Ensembl.Panel.ZMenu.extend({
     this.initialised = false;
     this.href        = data.feature.menu;
     this.title       = data.feature.title;
-    this.position    = data.position;
+    this.event       = data.event;
     this.imageId     = data.imageId;
     this.drag        = data.drag;
     
@@ -56,13 +56,13 @@ Ensembl.Panel.GenoverseMenu = Ensembl.Panel.ZMenu.extend({
   show: function (loading) {
     this.base(loading);
     
-    var margin = parseInt(this.el.css('marginTop'), 10);
-    var height = this.el.outerHeight() + this.el.position().top + margin + 10;
-    
-    this.el.css({
-      top        : function (i, top) { return parseInt(top, 10) - margin; },
-      marginLeft : 0
-    }).parent().height(function (i, h) { return Math.max(h, height); });
+    if (!loading) {
+      this.el.position({ of: this.event, my: 'left top', collision: 'flipfit none' });
+      
+      var height = this.el.outerHeight() + this.el.position().top + 10;
+      
+      this.el.parent().height(function (i, h) { return Math.max(h, height); });
+    }
   },
   
   showExisting: function (data) {

@@ -163,7 +163,7 @@ Genoverse.Track = Base.extend({
     var f = this[e.target.className === 'labels' ? 'labelPositions' : 'featurePositions'].search({ x: x, y: y, w: 1, h: 1 }).sort(function (a, b) { return a.sort - b.sort; })[0];
     
     if (f) {
-      this.browser.makeMenu(this, f, { left: e.pageX, top: e.pageY });
+      this.browser.makeMenu(this, f, e);
     }
   },
   

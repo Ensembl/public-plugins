@@ -27,7 +27,6 @@ body.dragging *                                        { cursor: n-resize!import
 .canvas_container .label_container li.f .nohover:hover { background: #9ED4DC!important; }
 .canvas_container .label_container li.r .nohover:hover { background: #F1D7A4!important; }
 .canvas_container .menu_container                      { position: absolute; height: 100%; overflow: hidden; }
-.canvas_container .menu_container .menu                { margin-top: 8px; }
 .canvas_container .expander                            { position: absolute; height: 15px; bottom: 0; margin-left: -5px; padding-right: 10px; z-index: 1; cursor: pointer; box-shadow: 0 -5px 7px -3px #000 inset; }
 .canvas_container .expander:hover                      { box-shadow: 0 -5px 7px -3px #7D98B8 inset; }
 .canvas_container .resizer                             { position: absolute; height: 5px; bottom: 0; background-color: #F0F0F0; z-index: 2; cursor: n-resize; opacity: 0.8; }

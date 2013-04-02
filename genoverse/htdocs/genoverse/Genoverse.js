@@ -932,19 +932,8 @@ var Genoverse = Base.extend({
   '),
   
   // Creates a menu template only. Implement properly in a plugin
-  makeMenu: function (track, feature, position) {
-    var container = this.container;
-    var offset    = this.menuContainer.offset();
-    var menu      = this.menuTemplate.clone().appendTo(this.menuContainer);
-    
-    position.top  -= offset.top;
-    position.left -= offset.left;
-    position.left  = Math.min(position.left, this.width - menu.outerWidth());
-    
-    menu.css({
-      left : position.left,
-      top  : function () { return position.top - parseInt($(this).css('marginTop'), 10); }
-    });
+  makeMenu: function (track, feature, event) {
+    var menu = this.menuTemplate.clone().appendTo(this.menuContainer).position({ of: event, my: 'left top', collision: 'flipfit' });
     
     track.menus.push(menu[0]);
     

@@ -253,9 +253,9 @@ Ensembl.Genoverse = Genoverse.extend({
     </div>                                                                                          \
   '),
   
-  makeMenu: function (track, feature, position) {
+  makeMenu: function (track, feature, event) {
     if (feature.menu || feature.title) {
-      this.makeZMenu({ position: position, feature: feature, imageId: track.name }, [ 'zmenu', track.name, feature.id ].join('_').replace(/\W/g, '_'), track, this.base);
+      this.makeZMenu({ event: event, feature: feature, imageId: track.name }, [ 'zmenu', track.name, feature.id ].join('_').replace(/\W/g, '_'), track, this.base);
     }
   },
   
@@ -267,37 +267,23 @@ Ensembl.Genoverse = Genoverse.extend({
       var end   = Math.round((left + this.selector.outerWidth(true)) / this.scale) + this.start - 1;
           end   = end <= start ? start : end;
       
-      this.makeZMenu({ position: this.positionMenu({ left: e.pageX, top: e.pageY }, id), feature: {}, drag: { chr: this.chr, start: start, end: end, browser: this }, imageId: this.panel.id }, id);
+      this.makeZMenu({ event: event, feature: {}, drag: { chr: this.chr, start: start, end: end, browser: this }, imageId: this.panel.id }, id);
     }
   },
   
   makeZMenu: function (params, id, track, func) {
     var menu = $('#' + id);
     
-    if (menu.length) {
-      this.positionMenu(params.position);
-    } else {
-      menu = func ? func.call(this, track, params.feature, params.position).hide() : this.menuTemplate.clone().addClass('drag').appendTo(this.menuContainer);
+    if (!menu.length) {
+      menu = func ? func.call(this, track, params.feature, params.event).hide() : this.menuTemplate.clone().addClass('drag').appendTo(this.menuContainer);
       menu.attr('id', id).draggable({ handle: 'thead', containment: 'parent' });
     }
     
-    params.browser       = this;
-    params.position.left = Math.min(params.position.left, this.width - menu.outerWidth() + parseInt($('.close', menu).css('right'), 10)); // adjust for close button set outside menu
+    params.browser = this;
     
     Ensembl.EventManager.trigger('addPanel', id, 'GenoverseMenu', undefined, undefined, params, 'showExistingZMenu');
     
     menu = null;
-  },
-  
-  positionMenu: function (position, id) {
-    if (!id || !$('#' + id).length) {
-      var offset = this.menuContainer.offset();
-      
-      position.top  -= offset.top;
-      position.left -= offset.left;
-    }
-    
-    return position;
   },
   
   cancelSelect: function () {
