@@ -22,12 +22,8 @@ Data formats |
 		<a href="#input">Input</a>
 		<ul>
 			<li><a href="#default">Default</a></li>
-			<li>
-				<a href="#vcf">VCF</a>
-				<ul>
-					<li><a href="#sv">Structural variants</a></li>
-				</ul>
-			</li>
+			<li><a href="#vcf">VCF</a></li>
+			<li><a href="#sv">Structural variants</a></li>
 			<li><a href="#pileup">Pileup</a></li>
 			<li><a href="#hgvs">HGVS</a></li>
 			<li><a href="#id">Variant identifiers</a></li>
@@ -176,12 +172,12 @@ not be what is expected: </p>
 <p> The solution is to always add a unique identifer for each of your variants
 to the VCF file!!!</p>
 
-<h4 id="sv"> Structural variants </h4>
+<h3 id="sv"> Structural variants </h4>
 
-<p> The VEP can also call consequences on structural variants encoded in VCF
-format. To recognise a variant as a structural variant, the "SVTYPE" field in
-the info column must be set. Currently recognised values for the SVTYPE field
-are: </p>
+<p> The VEP can also call consequences on structural variants encoded in
+tab-delimited or VCF format. To recognise a variant as a structural variant, the
+allele string (or "SVTYPE" INFO field in VCF) must be set to one of the
+currently recognised values: </p>
 
 <ul>
 	<li><b>INS</b> - insertion</li>
@@ -190,10 +186,12 @@ are: </p>
 	<li><b>TDUP</b> - tandem duplication</li>
 </ul>
 
-<p> See the <a
-href="http://www.1000genomes.org/wiki/Analysis/Variant%20Call%20Format/VCF%20%28Variant%20Call%20Format%29%20version%204.0/encoding-structural-variants">VCF
-definition document</a> for more detail on how to describe
-structural variants in VCF format. </p>
+<p> Examples of structural variants encoded in tab-delimited format: </p>
+
+<pre class="code">
+1    160283    471362    DUP
+1    1385015   1387562   DEL
+</pre>
 
 <p> Examples of structural variants encoded in VCF format: </p>
 
@@ -202,6 +200,11 @@ structural variants in VCF format. </p>
 1       160283  sv1  .    &lt;DUP&gt;  .     .       SVTYPE=DUP;END=471362   .
 1       1385015 sv2  .    &lt;DEL&gt;  .     .       SVTYPE=DEL;END=1387562  .
 </pre>
+
+<p> See the <a
+href="http://www.1000genomes.org/wiki/Analysis/Variant%20Call%20Format/VCF%20%28Variant%20Call%20Format%29%20version%204.0/encoding-structural-variants">VCF
+definition document</a> for more detail on how to describe
+structural variants in VCF format. </p>
 
 <h3 id="pileup"> Pileup </h2>
 
