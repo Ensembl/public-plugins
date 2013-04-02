@@ -24,8 +24,8 @@ sub update_conf {
     'password'  => 'user_password'
   };
 
-  ## Arrayref of emails and display title that user can opt to subscribe at the time of registration eg. dev@ensembl.org
-  ## 'announcement@example.com' => 'Mailing list for release related news'
+  ## Arrayref of emails and display title that user can opt to subscribe at the time of registration eg. [ dev-join@ensembl.org => 'Ensembl Dev List' ] for dev@ensembl.org
+  ## $SiteDefs::SUBSCRIPTION_EMAIL_LISTS  ||= ['announcement-join@example.com' => 'Mailing list for release related news']
   $SiteDefs::SUBSCRIPTION_EMAIL_LISTS     ||= [];
 
   ## Address to send verification emails from
