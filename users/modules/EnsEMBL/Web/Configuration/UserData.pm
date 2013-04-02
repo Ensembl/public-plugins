@@ -64,6 +64,11 @@ sub populate_tree {
       'add_group'         =>  'EnsEMBL::Users::Component::Account::Groups::ConfirmDelete'
     ], { 'no_menu_entry'  =>  1 }));
 
+    # page to view all bookmarks
+    my $preference_menu = $self->create_account_node('Bookmark/View', '', [
+      'view_bookmarks'    =>  'EnsEMBL::Users::Component::Account::Bookmark::View',
+    ], { 'availability'   =>  1, 'no_menu_entry' => 1 });
+
     # page to edit a bookmark
     $preference_menu->append($self->create_account_node('Bookmark/Edit', 'Edit bookmark', [
       'edit_bookmark'     =>  'EnsEMBL::Users::Component::Account::Bookmark::AddEdit'
