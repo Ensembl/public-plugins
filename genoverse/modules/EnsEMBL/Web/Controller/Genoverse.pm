@@ -69,7 +69,7 @@ sub fetch_features {
       } else {
         # Reduce to only the features the region actually needs, to decrease transfer time and memory usage of the browser
         my ($s, $e) = ($slice->start, $slice->end);
-        push @features, grep { ($_->{'start'} > $s && $_->{'end'} < $e) || ($_->{'start'} < $s && $_->{'end'} > $s) || ($_->{'start'} > $e && $_->{'end'} < $e) } @$f;
+        push @features, grep !($_->{'end'} < $s || $_->{'start'} > $e), @$f;
       }
     } elsif ($self->{'set_cache'}) {
       $f = $self->$func($adaptor->fetch_by_region('toplevel', $chr, @$_), $image_config, $function, $node);
