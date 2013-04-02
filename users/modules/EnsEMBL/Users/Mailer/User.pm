@@ -7,6 +7,13 @@ use warnings;
 
 use base qw(EnsEMBL::Web::Mailer);
 
+sub set_noreply_sender {
+  ## Sets the 'from' field as ENSEMBL_NOREPLY_EMAIL
+  ## Call this for sending emails to unregistered emails (likely to be invalid) so that the ENSEMBL_HELPDESK_EMAIL doesn't get bombarded with bounced email.
+  my $self    = shift;
+  $self->from = $self->hub->species_defs->ENSEMBL_NOREPLY_EMAIL;
+}
+
 sub send_verification_email {
   ## Sends an activation email to newly registered users
   ## @param Login object that needs to be verified
@@ -39,6 +46,7 @@ sub send_verification_email {
   $self->to      = $email;
   $self->subject = qq($sitename: $function your email address);
   $self->message = $message->{$type}.$self->email_footer;
+  $self->set_noreply_sender;
   $self->send;
 }
 
@@ -64,6 +72,7 @@ sub send_password_retrieval_email {
                    .qq(to the following url:\n\n\n$url\n\n\nThis will allow you to reset your password and be able to login to the site again.\n\n)
                    .qq(Please ignore this email if you have not requested to retrieve you password.$footer);
 
+  $self->set_noreply_sender;
   $self->send;
 }
 
