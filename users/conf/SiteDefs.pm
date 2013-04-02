@@ -28,6 +28,9 @@ sub update_conf {
   ## 'announcement@example.com' => 'Mailing list for release related news'
   $SiteDefs::SUBSCRIPTION_EMAIL_LISTS     ||= [];
 
+  ## Address to send verification emails from
+  $SiteDefs::ENSEMBL_NOREPLY_EMAIL        ||= $SiteDefs::ENSEMBL_HELPDESK_EMAIL; #Set this to something like 'no-reply@example.com'
+
   ## Country codes for dropdowns on user account pages - you won't really need to change this
   $SiteDefs::COUNTRY_CODES                  = {
     'AF' => 'Afghanistan',
