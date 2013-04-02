@@ -31,6 +31,7 @@ __PACKAGE__->meta->setup(
     name            => {'column' => 'data'},
     organisation    => {'column' => 'data'},
     country         => {'column' => 'data'},
+    subscription    => {'column' => 'data'}
   ],
 
   relationships   => [
