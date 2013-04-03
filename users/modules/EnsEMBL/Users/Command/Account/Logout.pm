@@ -14,7 +14,10 @@ sub process {
   # clears cookies & saved user object
   $hub->user->deauthorise;
 
-  return $self->ajax_redirect($hub->type eq 'Account' ? '/' : $hub->referer->{'absolute_url'}, {}, '', 'page');
+  # redirect to the right page depending upon the referer
+  my $referer = $hub->referer;
+
+  return $self->ajax_redirect($referer->{'external'} || $referer->{'ENSEMBL_TYPE'} eq 'Account' ? '/' : $referer->{'absolute_url'}, {}, '', 'page');
 }
 
 1;
