@@ -52,7 +52,7 @@ sub content {
   $html .= qq{<div class="_hc_infobox tinted-box">
     <p>For each database, reports are sorted on the basis of Date (initial failure date) with latest report appearing on the top.</p>
     <p>Reports that have not been annotated 'manual ok' are displayed in different colours for results <span class="hc-problem">problem</span>, <span class="hc-warning">warning</span> and <span class="hc-info">info</span>.</p>
-    <p>Reports that were fixed in previous healthcheck session buy have apeared again are marked in <span class="hc-notfixed">this colour</span>.</p>
+    <p>Reports that were fixed in a previous healthcheck session but have appeared again are marked in <span class="hc-notfixed">this colour</span>.</p>
     <p>Reports that appeared for the first time in the recent healthcheck session are in <span class="hc-new">bold</span> letters.</p>
   </div>};
 
