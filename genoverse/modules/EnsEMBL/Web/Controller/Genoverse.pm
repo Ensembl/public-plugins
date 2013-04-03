@@ -225,13 +225,16 @@ sub highlight_transcript {
   
   return unless $core_params->{'g'};
   
-  my $colourmap  = $hub->colourmap;
-  my $t          = $core_params->{'t'};
-  my $gene       = $hub->get_adaptor('get_GeneAdaptor', $core_params->{'db'})->fetch_by_stable_id($core_params->{'g'});
-  my $highlight  = $node->get('display') =~ /gene/ ? 'highlight2' : 'highlight1';
-  my $highlights = { $gene->dbID => $colourmap->hex_by_name($highlight) };
+  my $colourmap   = $hub->colourmap;
+  my $gene        = $hub->get_adaptor('get_GeneAdaptor', $core_params->{'db'})->fetch_by_stable_id($core_params->{'g'});
+  my $transcripts = $node->get('display') =~ /transcript/;
+  my $highlight   = $transcripts ? 'highlight1' : 'highlight2';
+  my $highlights  = { $gene->dbID => $colourmap->hex_by_name($highlight) };
   
-  $highlights->{$_->dbID} = $colourmap->hex_by_name($_->stable_id eq $t ? 'highlight2' : $_->get_all_Attributes('ccds')->[0] ? 'lightblue1' : $highlight) for @{$gene->get_all_Transcripts};
+  if ($transcripts) {
+    my $t = $core_params->{'t'};
+    $highlights->{$_->dbID} = $colourmap->hex_by_name($_->stable_id eq $t ? 'highlight2' : $_->get_all_Attributes('ccds')->[0] ? 'lightblue1' : $highlight) for @{$gene->get_all_Transcripts};
+  }
   
   return $highlights;
 }
