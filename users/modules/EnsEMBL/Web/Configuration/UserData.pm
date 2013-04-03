@@ -165,15 +165,25 @@ sub populate_tree {
   $self->create_account_node('Logout',      'Logout', [], { 'no_menu_entry' => !$user,  'command' => 'EnsEMBL::Users::Command::Account::Logout', 'availability' => 1  });
 }
 
-sub create_node         { return shift->_create_node('UserData', @_); } # This methid is used to create nodes in core web code, so modify the url to be raw in case hub->type is not UserData
-sub create_account_node { return shift->_create_node('Account', @_);  } # This methid is used in this file, so modify the url to be raw in case hub->type is not Account
-
-sub _create_node {
+sub create_node {
+  ## This methid is used to create nodes in core web code, so modify the url to be raw in case hub->type is not UserData
   my $self  = shift;
-  my $type  = shift;
   my $hub   = $self->hub;
 
-  $_[3] = { %{$_[3] || {}}, 'raw' => 1, 'url' => sprintf('/%s/%s/%s', $hub->species, $type, $_[0]) } unless $hub->type eq $type;
+  ($self->{'_referer_species'}) = grep {$_ ne 'Multi'} $hub->species, $hub->referer->{'ENSEMBL_SPECIES'}, '' unless $self->{'_referer_species'};
+
+  return $self->_create_node($self->{'_referer_species'} || 'Multi', 'UserData', @_);
+}
+
+sub create_account_node {
+  ## This methid is used in this file, so modify the url to be raw in case hub->type is not Account
+  return shift->_create_node('Multi', 'Account', @_);
+}
+
+sub _create_node {
+  my ($self, $species, $type) = splice @_, 0, 3;
+
+  $_[3] = { %{$_[3] || {}}, 'raw' => 1, 'url' => sprintf('/%s/%s/%s', $species, $type, $_[0]) } unless $self->hub->type eq $type;
 
   return $self->SUPER::create_node(@_);
 }
