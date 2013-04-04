@@ -217,9 +217,11 @@ sub send_group_invitation_email_to_existing_user {
   my $group_name  = $group->name;
 
   $self->to       = $invitee->email;
+  $self->reply    = $sender->email;
   $self->subject  = qq($sitename: Invitation from $by_name to join group "$group_name");
   $self->message  = qq(Dear $to_name,\n\n$by_name would like you to join the group "$group_name". To accept or decline the invitation, )
                    .qq(or to block the group from sending you further invitations, please go to the link below:\n\n$url\n$footer);
+  $self->set_noreply_sender;
 
   $self->send;
 }
@@ -254,11 +256,13 @@ sub send_group_invitation_email_to_new_user {
   my $group_name      = $group->name;
 
   $self->to           = $email;
+  $self->reply        = $sender->email;
   $self->subject      = qq($sitename: Invitation from $by_name to join group "$group_name" on $sitename);
   $self->message      = qq(Hi,\n\n$by_name would like you to join the group "$group_name" on $sitename. To register with $sitename and join the group, )
                        .qq(please click on the link below:\n\n$url_2\n\nIf you already have an account with $sitename, to accept or decline the invitation, )
                        .qq(or to block the group from sending you further invitations, please go the link below:\n\n$url_1\n\n$footer)
                        .qq(If you do not have an account with $sitename and would like to accept the invitation, please click on the link below to register);
+  $self->set_noreply_sender;
 
   $self->send;
 }
