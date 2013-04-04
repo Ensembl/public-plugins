@@ -65,9 +65,9 @@ sub populate_tree {
     ], { 'no_menu_entry'  =>  1 }));
 
     # page to view all bookmarks
-    my $preference_menu = $self->create_account_node('Bookmark/View', '', [
+    $preference_menu->append($self->create_account_node('Bookmark/View', '', [
       'view_bookmarks'    =>  'EnsEMBL::Users::Component::Account::Bookmark::View',
-    ], { 'availability'   =>  1, 'no_menu_entry' => 1 });
+    ], { 'availability'   =>  1, 'no_menu_entry' => 1 }));
 
     # page to edit a bookmark
     $preference_menu->append($self->create_account_node('Bookmark/Edit', 'Edit bookmark', [
