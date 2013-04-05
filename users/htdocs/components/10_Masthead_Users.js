@@ -20,9 +20,11 @@ Ensembl.Panel.Masthead = Ensembl.Panel.Masthead.extend({
 
     this.elLk.accountHolder.empty();
 
-    var hideDropdown = function() {
-      panel.toggleAccountsDropdown(false);
-      $(document).off('click', hideDropdown);
+    var hideDropdown = function(e) {
+      if (!e.which || e.which === 1) {
+        panel.toggleAccountsDropdown(false);
+        $(document).off('click', hideDropdown);
+      }
     }
 
     $.ajax('/Ajax/accounts_dropdown', {
