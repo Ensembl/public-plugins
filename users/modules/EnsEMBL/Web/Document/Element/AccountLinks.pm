@@ -41,14 +41,14 @@ sub content_ajax {
             <!--p><a href="%s" class="modal_link constant">Bookmark this page</a></p-->
             <p><a href="%s" class="modal_link constant">View all bookmarks</a></p>
           </div>',
-#           $hub->url({
-#             'type'      => 'Account',
-#             'action'    => 'Bookmark',
-#             'function'  => 'Add'
-#             'name'      => ?,
-#             'shortname' => ?,
-#             'url'       => ?
-#           }),
+          $hub->url({
+            'type'      => 'Account',
+            'action'    => 'Bookmark',
+            'function'  => 'Add'
+            'name'      => '',
+            'shortname' => '',
+            'url'       => ''
+          }),
           $hub->url({qw(type Account action Bookmark function View)})
         ) : '',
         $hub->url({qw(type Account action Logout)})
