@@ -38,16 +38,16 @@ sub init_history {
       unshift @{$self->{'history'}{lc $t}}, [ $type eq $t ? $hub->url({ species => $_->species, $_->param => $_->value, %clear }) : $_->url, $_->name ];
     }
 
-    push @{$self->{'history'}{lc $t}}, [ "/Account/ClearHistory?object=$t", 'Clear history', ' clear_history bold' ] if scalar @{$history{$t}};
+    push @{$self->{'history'}{lc $t}}, [ $hub->url({'type' => 'Account', 'action' => 'ClearHistory', 'object' => $t }), 'Clear history', ' clear_history bold' ] if scalar @{$history{$t}};
   }
 
   foreach my $t (keys %bookmarks) {
     my $i;
     foreach (sort { $b->click <=> $a->click || $b->modified_at cmp $a->modified_at } @{$bookmarks{$t}}) {
-      push @{$self->{'bookmarks'}{lc $t}}, [ '/Account/Bookmark/Use?id=' . $_->record_id, $_->shortname && length $_->shortname < length $_->name ? $_->shortname : $_->name, $_->record_id ];
+      push @{$self->{'bookmarks'}{lc $t}}, [ $hub->url({'type' => 'Account', 'action' => 'Bookmark', 'function' => 'Use', 'id' => $_->record_id}), $_->shortname && length $_->shortname < length $_->name ? $_->shortname : $_->name, $_->record_id ];
       last if ++$i == 5;
     }
-    push @{$self->{'bookmarks'}{lc $t}}, [ '/Account/Bookmarks', 'More...',  ' modal_link bold' ] if scalar @{$bookmarks{$t}} > 5;
+    push @{$self->{'bookmarks'}{lc $t}}, [ $hub->url({qw(type Account action Bookmark function View)}), 'More...',  ' modal_link bold' ] if scalar @{$bookmarks{$t}} > 5;
   }
 }
 
