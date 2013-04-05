@@ -25,7 +25,7 @@ my %MESSAGES = (
   MESSAGE_PASSWORD_CHANGED      => sub { 'Password saved', 'New password has been saved successfully. Please login with the new password.' },
   MESSAGE_ALREADY_REGISTERED    => sub { sprintf('The email address provided seems to be already registered. Please try to login with the email, or request to <a href="%s">retrieve your password</a> if you have lost one.', $_[0]->url({'action' => 'Password', 'function' => 'Lost', 'email' => $_[0]->param('email') || ''})) },
   MESSAGE_VERIFICATION_FAILED   => sub { 'Verification failed', 'The email address could not be verified.' },
-  MESSAGE_VERIFICATION_PENDING  => sub { '_message__VERIFICATION_PENDING' },
+  MESSAGE_VERIFICATION_PENDING  => sub { 'Verification pending', 'The email address has yet not been verified.' },
   MESSAGE_EMAIL_INVALID         => sub { 'Invalid email', 'Please enter a valid email address' },
   MESSAGE_EMAILS_INVALID        => sub { 'Invalid email address', sprintf('Following email address(es) are not valid: %s', encode_entities($_[0]->param('invalids') || '')) },
   MESSAGE_NAME_MISSING          => sub { 'Please provide a name' },
