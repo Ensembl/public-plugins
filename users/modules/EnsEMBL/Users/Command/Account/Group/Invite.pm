@@ -54,7 +54,7 @@ sub csrf_safe_process {
           $membership->save(user => $admin)
         } else {
           $membership->make_invitation;
-          $mailer->send_group_invitation_email_to_existing_user($group, $invitee, $admin) if $membership->save(user => $admin);
+          $mailer->send_group_invitation_email_to_existing_user($group, $invitee) if $membership->save(user => $admin);
         }
 
       # for a new user (unregistered email)
@@ -70,7 +70,7 @@ sub csrf_safe_process {
         }
 
         ## send an email to the invitee
-        $mailer->send_group_invitation_email_to_new_user($group, $admin, $email, $invitation);
+        $mailer->send_group_invitation_email_to_new_user($group, $email, $invitation);
       }
     }
 
