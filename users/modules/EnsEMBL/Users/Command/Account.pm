@@ -185,26 +185,25 @@ sub mailer {
 
 sub send_group_joining_notification_email {
   ## Sends a notification email to all the admins (the ones who opted to revieve these emails) of the group about the new joinee
-  ## @param User who joined the group
   ## @param Group object
   ## @param Flag kept on or off if user joined the group or sent the request respectively
-  my ($self, $user, $group, $has_joined) = @_;
+  my ($self, $group, $has_joined) = @_;
 
-  if ( my @curious_admins = map {$_->notify_join && $_->user || ()} @{$group->admin_memberships} ) {
-    my $mailer = $self->mailer;
-    $mailer->send_group_joining_notification_email($user, $_, $group, $has_joined) for @curious_admins;
+  if ( my @curious_admins = map {$_->notify_join ? $_->user : ()} @{$group->admin_memberships} ) {
+    $self->mailer->send_group_joining_notification_email(\@curious_admins, $group, $has_joined);
   }
 }
 
 sub send_group_editing_notification_email {
   ## Sends a notification email to all the admins (the ones who opted to revieve these emails) about the group's info being edited
-  ## @param Admin user who edited the group
   ## @param Group object
   ## @param Original values in group (Hashref)
   ## @param Modified values in group (Hashref)
-  my ($self, $user, $group, $original_values, $modified_values) = @_;
+  my ($self, $group, $original_values, $modified_values) = @_;
 
-  if ( my @curious_admins = map {$_->user_id ne $user->user_id && $_->notify_edit && $_->user || ()} @{$group->admin_memberships} ) {
+  my $user_id = $self->hub->user->user_id;
+
+  if ( my @curious_admins = map {$_->user_id ne $user_id && $_->notify_edit ? $_->user : ()} @{$group->admin_memberships} ) {
     my $titles  = {
       'name'      => 'Group name',
       'blurb'     => 'Description',
@@ -215,28 +214,37 @@ sub send_group_editing_notification_email {
       ? ()
       : sprintf(q( - %s changed from '%s' to '%s'), $titles->{$_}, $original_values->{$_} || '', $modified_values->{$_} || '')
     } keys %$original_values ) {
-      my $mailer = $self->mailer;
-      $mailer->send_group_editing_notification_email($user, $_, $group, join "\n", @changes) for @curious_admins;
+      $self->mailer->send_group_editing_notification_email(\@curious_admins, $group, join "\n", @changes);
     }
+  }
+}
+
+sub send_group_sharing_notification_email {
+  ## Sends a notification email to all the members (the ones who opted to revieve these emails) about the records being shared to the group
+  ## @param Group object
+  ## @param Records being shared (Hashref)
+  my ($self, $group, $records) = @_;
+
+  my $user_id = $self->hub->user->user_id;
+
+  if ( my @curious_members = map {$_->user_id ne $user_id && $_->notify_share ? $_->user : ()} @{$group->memberships} ) {
+
+    my %types;
+    ($types{$_->type} ||= 0)++ for @$records;
+    my @shared = map {sprintf '%d %s', $types{$_}, uc $_} keys %types;
+
+    $self->mailer->send_group_sharing_notification_email(\@curious_members, $group, join "\n", @shared);
   }
 }
 
 sub handle_mailinglist_subscriptions {
   ## Handles the user's request to join selected mailing lists
+  ## @param Login object for the newly registered user
   my ($self, $login)  = @_;
   my %subscriptions   = @{$self->hub->species_defs->SUBSCRIPTION_EMAIL_LISTS};
   my @request_emails  = grep $subscriptions{$_}, @{$login->subscription || []};
 
-  $self->mailer->send_mailinglists_subscription_emails($login->user, @request_emails) if @request_emails;
-}
-
-sub send_group_sharing_notification_email {
-  ## TODO
-}
-
-sub get_curious_admins {
-  ## Gets all the admins of a group that opted to get notified on some event
-  ## TODO
+  $self->mailer->send_mailinglists_subscription_emails($login, @request_emails) if @request_emails;
 }
 
 1;
