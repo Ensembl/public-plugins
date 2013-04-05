@@ -343,7 +343,7 @@ sub js_link {
   my ($self, $params) = @_;
 
   my $method = $params->{'sprite'} || !$params->{'button'} ? 'inner_HTML' : 'render';
-  my $calss  =  $self->_get_js_class_for_link($params);
+  my $class  =  $self->_get_js_class_for_link($params);
 
   return $self->dom->create_element('p', {
     'class'       => 'accounts-button',
