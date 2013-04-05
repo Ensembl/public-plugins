@@ -32,8 +32,7 @@ sub csrf_safe_process {
 
       if ($group->delete('cascade' => 1)) {
 
-        my $mailer = $self->mailer;
-        $mailer->send_group_deletion_notification_email($user, $_, $group_name) for @curious_admins;
+        $self->mailer->send_group_deletion_notification_email(\@curious_admins, $group_name);
         $return_url = {'action' => 'Groups', 'function' => ''};
 
       } else {
