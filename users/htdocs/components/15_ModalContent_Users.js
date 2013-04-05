@@ -1,4 +1,4 @@
-// Extension to the core Content.js to add a confirm dialogue to the links with class '_jconfirm'
+// Extension to the core ModalContent.js to add a confirm dialogue to the links with class '_jconfirm'
 
 Ensembl.Panel.ModalContent = Ensembl.Panel.ModalContent.extend({
   initialize: function () {
