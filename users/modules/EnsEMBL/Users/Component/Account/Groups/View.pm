@@ -116,7 +116,7 @@ sub content {
                 'href'    => {'action' => 'Membership', 'function' => 'Remove', 'id' => $group_member_id, 'csrf_safe' => 1},
                 'caption' => $is_pending_invitation ? 'Remove invitation' : 'Remove',
                 'confirm' => $is_pending_invitation
-                  ? "Are you sure you want to deactivate the invitation sent to $member_name ($member_email) for the group $group_name?"
+                  ? "Are you sure you want to remove the invitation sent to $member_name ($member_email) for the group $group_name?"
                   : "Are you sure you want to remove $member_name ($member_email) from the group $group_name?"
               });
             }
