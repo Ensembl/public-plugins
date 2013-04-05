@@ -34,7 +34,7 @@ sub csrf_safe_process {
       }
 
       # notify admins
-      $self->send_group_joining_notification_email($user, $group, $membership->is_active);
+      $self->send_group_joining_notification_email($group, $membership->is_active);
 
       $membership->save(user => $user);
       return $self->ajax_redirect($group_type eq 'open' ? $hub->url({'action' => 'Groups', 'function' => 'View', 'id' => $group->group_id}) : $hub->PREFERENCES_PAGE);
