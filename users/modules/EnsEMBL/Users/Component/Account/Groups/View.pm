@@ -90,7 +90,7 @@ sub content {
         my $is_pending_invitation = $_->is_pending_invitation;
         my $is_active             = $_->is_active;
 
-        next unless $is_active || $is_pending_request || $is_pending_invitation;
+        next unless $is_active || ($is_admin && ($is_pending_request || $is_pending_invitation));
 
         my $member          = $_->user;
         my $group_member_id = $_->group_member_id;
