@@ -13,7 +13,7 @@ Ensembl.Panel.ModalContent = Ensembl.Panel.ModalContent.extend({
     this.el.find('input._jcancel').on('click', function(e) {
       var redirectURL = $(this.form).find('input[name=_jcancel]').val();
       if (redirectURL) {
-        Ensembl.EventManager.trigger('modalOpen', { href: redirectURL });
+        Ensembl.EventManager.trigger('modalOpen', { href: redirectURL, rel: '' });
       }
     });
   }
