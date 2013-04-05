@@ -231,7 +231,7 @@ sub send_group_sharing_notification_email {
 
     my %types;
     ($types{$_->type} ||= 0)++ for @$records;
-    my @shared = map {sprintf '%d %s', $types{$_}, uc $_} keys %types;
+    my @shared = map {sprintf '%d %s', $types{$_}, ucfirst $_} keys %types;
 
     $self->mailer->send_group_sharing_notification_email(\@curious_members, $group, join "\n", @shared);
   }
