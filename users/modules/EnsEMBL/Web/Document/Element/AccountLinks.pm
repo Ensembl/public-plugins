@@ -44,7 +44,7 @@ sub content_ajax {
           $hub->url({
             'type'      => 'Account',
             'action'    => 'Bookmark',
-            'function'  => 'Add'
+            'function'  => 'Add',
             'name'      => '',
             'shortname' => '',
             'url'       => ''
