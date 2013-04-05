@@ -258,9 +258,10 @@ sub bookmarks_table {
     }
 
     $bookmark_row->{'title'} = $self->js_link({
-      'href'    => {'action' => 'Bookmark', 'function' => 'Use', 'id' => $bookmark_id, %$group_param},
-      'caption' => $bookmark_name,
-      'helptip' => "Visit page: $bookmark_name"
+      'href'      => {'action' => 'Bookmark', 'function' => 'Use', 'id' => $bookmark_id, %$group_param},
+      'caption'   => $bookmark_name,
+      'helptip'   => "Visit page: $bookmark_name",
+      'no_modal'  => 1
     });
 
     $bookmark_row->{'buttons'} = sprintf '<div class="sprites-nowrap">%s</div>', join('',
@@ -329,26 +330,30 @@ sub two_column {
 sub js_link {
   ## Returns HTML for a link that is used by JavaScript for inline editing
   ## @param Hashref with keys:
-  ##  - href    : href attrib or hashref as accepted by hub->url
-  ##  - caption : inner html
-  ##  - title   : title attrib value
-  ##  - helptip : same as 'title' , but will display it as a js helptip
-  ##  - button  : flag if on, will wrap the link in <p>
-  ##  - class   : String or arrayref of class for <a> tag
-  ##  - confirm : confirmation message to be displayed when the link is clicked - make sure its HTML escaped before calling this method
-  ##  - sprite  : Class for the sprite icon (caption, cancel, button args will be ignored if this is provided)
+  ##  - href      : href attrib or hashref as accepted by hub->url
+  ##  - caption   : inner html
+  ##  - title     : title attrib value
+  ##  - helptip   : same as 'title' , but will display it as a js helptip
+  ##  - button    : flag if on, will wrap the link in <p>
+  ##  - class     : String or arrayref of class for <a> tag
+  ##  - confirm   : confirmation message to be displayed when the link is clicked - make sure its HTML escaped before calling this method
+  ##  - sprite    : Class for the sprite icon (caption, cancel, button args will be ignored if this is provided)
+  ##  - no_modal  : Flag if on, will not force the link to open in a modal window
   ## @return HTML string
   my ($self, $params) = @_;
 
   my $method = $params->{'sprite'} || !$params->{'button'} ? 'inner_HTML' : 'render';
+  my $calss  =  $self->_get_js_class_for_link($params);
 
   return $self->dom->create_element('p', {
     'class'       => 'accounts-button',
     'children'    => [{
       'node_name'   => 'a',
-      'class'       => $self->_get_js_class_for_link($params),
       'href'        => ref $params->{'href'} ? $self->hub->url($params->{'href'}) : $params->{'href'},
       'inner_HTML'  => $params->{'sprite'} ? qq(<span class="sprite $params->{'sprite'}"></span>) : $params->{'caption'} || '',
+      $class ? (
+        'class'     => $class
+      ) : (),
       $params->{'helptip'} || $params->{'title'} ? (
         'title'     => $params->{'helptip'} || $params->{'title'}
       ) : ()
@@ -413,10 +418,10 @@ sub _get_js_class_for_link {
   ## @param Hashref with keys: class and helptip
   my ($self, $params) = @_;
   return join ' ', (
-    $params->{'class'} ? ref $params->{'class'} ? @{$params->{'class'}} : $params->{'class'} : (),
-    $params->{'helptip'} ? '_ht' : (),
-    $params->{'confirm'} ? $self->_JS_CONFIRM : (),
-    $self->_JS_LINK
+    $params->{'class'}    ? ref $params->{'class'} ? @{$params->{'class'}} : $params->{'class'} : (),
+    $params->{'helptip'}  ? '_ht' : (),
+    $params->{'confirm'}  ? $self->_JS_CONFIRM : (),
+    $params->{'no_modal'} ? () : $self->_JS_LINK
   );
 }
 
