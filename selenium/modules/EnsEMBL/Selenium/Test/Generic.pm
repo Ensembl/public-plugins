@@ -155,15 +155,15 @@ sub test_register {
  $sel->open_ok("/");
  #$sel->ensembl_wait_for_page_to_load_ok;
  $sel->ensembl_click("link=Login/Register")
- and $sel->ensembl_wait_for_ajax_ok;
+ and $sel->ensembl_wait_for_ajax_ok(undef,5000);
  
  $sel->ensembl_click("link=Register")
- and $sel->ensembl_wait_for_ajax_ok;
+ and $sel->ensembl_wait_for_ajax_ok(undef,5000);
  
- $sel->ensembl_is_text_present("Your name");
+ $sel->ensembl_is_text_present("Name");
  
  $sel->ensembl_click("link=Lost Password")
- and $sel->ensembl_wait_for_ajax_ok
+ and $sel->ensembl_wait_for_ajax_ok(undef,5000)
  and $sel->ensembl_is_text_present("If you have lost your password");
 }
 
