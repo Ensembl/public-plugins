@@ -65,7 +65,7 @@ sub content {
     return $self->js_section({'subsections' => [
       $table->render,
       $self->js_link({
-        'href'    => {'action' => 'Groups', 'function' => ''},
+        'href'    => {'action' => 'Preferences', 'function' => ''},
         'caption' => 'Done',
         'class'   => 'check',
         'button'  => 1
