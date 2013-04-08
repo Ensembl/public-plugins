@@ -24,7 +24,7 @@ sub content_ajax {
           <div>%s</div>%s
           <h4>Account</h4>
           <div>
-            <p><a href="%1$s" class="modal_link constant" title="User Account">Edit Settings</a></p>
+            <p><a href="%1$s" class="modal_link constant" title="User Account" rel="modal_user_data">Edit Settings</a></p>
             <p><strong><a href="%s" class="constant">Logout</a></strong></p>
           </div>
         </div>',
@@ -39,7 +39,7 @@ sub content_ajax {
         @$bookmarks ? sprintf('
           <div>
             <!--p><a href="%s" class="modal_link constant">Bookmark this page</a></p-->
-            <p><a href="%s" class="modal_link constant">View all bookmarks</a></p>
+            <p><a href="%s" class="modal_link constant" rel="modal_user_data">View all bookmarks</a></p>
           </div>',
           $hub->url({
             'type'      => 'Account',
@@ -53,7 +53,7 @@ sub content_ajax {
         ) : '',
         $hub->url({qw(type Account action Logout)})
       )
-    : sprintf('<a class="constant modal_link account-link" href="%s" title="Login/Register">Login/Register</a>',  $hub->url({qw(type Account action Login)}))
+    : sprintf('<a class="constant modal_link account-link _accounts_no_user" href="%s" title="Login/Register">Login/Register</a>',  $hub->url({qw(type Account action Login)}))
   ;
 }
 
