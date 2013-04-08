@@ -36,6 +36,7 @@ sub test_species_list {
  my $SD = $self->get_species_def;
  my $release_version = $SD->ENSEMBL_VERSION;
  my @valid_species = $SD->valid_species;
+ my $static_server = $self->url =~ /test.ensembl/ ? "test" : "www";
  
  $sel->open_ok("/info/about/species.html");
 
@@ -44,14 +45,14 @@ sub test_species_list {
 
    $species_label =~ s/(\s\(.*?\))// if($species_label =~ /\(/);    
    $sel->ensembl_click_links(["link=$species_label"],'10000');
-   
+
    #my $species_image = qq{pic_$species};
    #$species_image = qq{pic_Pongo_pygmaeus} if($species eq 'Pongo_abelii'); #hack for Pongo as it is the only species which did not follow the species image naming rule. 
- 
+
    #CHECK FOR SPECIES IMAGES
    $sel->run_script(qq{
      var x = jQuery.ajax({
-                    url: 'http://www.ensembl.org/i/species/64/$species.png',
+                    url: 'http://$static_server.ensembl.org/i/species/64/$species.png',
                     async: false,
               }).state();
      if (x == 'resolved') {
@@ -136,7 +137,7 @@ sub test_login {
 
  $sel->open_ok("/");
  
- $sel->ensembl_click("link=Login")
+ $sel->ensembl_click("link=Login/Register")
  and $sel->ensembl_wait_for_ajax_ok
  and $sel->type_ok("name=email", "ma7\@sanger.ac.uk")
  and $sel->type_ok("name=password", "selenium")
@@ -153,13 +154,17 @@ sub test_register {
 
  $sel->open_ok("/");
  #$sel->ensembl_wait_for_page_to_load_ok;
- $sel->ensembl_click("link=Register");
- $sel->ensembl_wait_for_ajax_ok;
+ $sel->ensembl_click("link=Login/Register")
+ and $sel->ensembl_wait_for_ajax_ok;
+ 
+ $sel->ensembl_click("link=Register")
+ and $sel->ensembl_wait_for_ajax_ok;
+ 
  $sel->ensembl_is_text_present("Your name");
  
- $sel->ensembl_click("link=Lost Password");
- $sel->ensembl_wait_for_ajax_ok;
- $sel->ensembl_is_text_present("If you have lost your password");
+ $sel->ensembl_click("link=Lost Password")
+ and $sel->ensembl_wait_for_ajax_ok
+ and $sel->ensembl_is_text_present("If you have lost your password");
 }
 
 sub test_search {
