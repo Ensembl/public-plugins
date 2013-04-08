@@ -39,17 +39,19 @@ sub test_regulation {
     
     #Adding a track from the configuration panel
     print "  Test Configure page, adding a track \n";
+
+    # can't use the generic function to turn on track because there is only one track renderer on one click
     $sel->ensembl_click("link=Configure this page")
-    and $sel->ensembl_wait_for_ajax_ok('10000')
-    and $sel->ensembl_click("link=Repeat*")
+    and $sel->ensembl_wait_for_ajax_ok('50000','5000')
+    and $sel->ensembl_click("link=Repeat regions")
     and $sel->ensembl_wait_for_ajax_ok('20000')    
-    and $sel->ensembl_click("//html/body/div[3]/div[2]/div[2]/div/div/form/div[7]/div/ul/li/img")
+    and $sel->ensembl_click("//form[\@id='regulation_featuresbycellline_configuration']/div[7]/div/ul/li")
     and $sel->ensembl_is_text_present("Repeat regions(1/*")
     and $sel->ensembl_click("modal_bg")
-    and $sel->ensembl_wait_for_ajax_ok('15000')
+    and $sel->ensembl_wait_for_ajax_ok('50000')
     and $sel->ensembl_images_loaded;
     
     $sel->ensembl_click_links(["link=Feature Context", "link=Evidence"]);
-  }  
+  }
 }
 1;
