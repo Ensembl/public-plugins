@@ -138,7 +138,7 @@ sub test_login {
  $sel->open_ok("/");
  
  $sel->ensembl_click("link=Login/Register")
- and $sel->ensembl_wait_for_ajax_ok
+ and $sel->ensembl_wait_for_ajax_ok(undef,5000)
  and $sel->type_ok("name=email", "ma7\@sanger.ac.uk")
  and $sel->type_ok("name=password", "selenium")
  and $sel->ensembl_click("name=submit")
