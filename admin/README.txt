@@ -18,7 +18,7 @@ access the interface. You can call this group anything you like, but it
 should be kept separate from other groups.
 
 3) Once your group is set up, look up its group id in the
-ensembl_web_user_db database
+ensembl_accounts database
 
 4) Configure the group ID as the value of ENSEMBL_WEBADMIN_ID in
 SiteDefs.pm, in whichever plugin contains all your server settings
