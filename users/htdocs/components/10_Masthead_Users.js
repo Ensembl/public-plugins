@@ -18,40 +18,43 @@ Ensembl.Panel.Masthead = Ensembl.Panel.Masthead.extend({
   refreshAccountsDropdown: function() {
     var panel = this;
 
-    this.elLk.accountHolder.empty();
+    if (!this.elLk.accountHolder.find('._accounts_no_user').length) {
 
-    var hideDropdown = function(e) {
-      if (!e.which || e.which === 1) {
-        panel.toggleAccountsDropdown(false);
-        $(document).off('click', hideDropdown);
+      this.elLk.accountHolder.empty();
+
+      var hideDropdown = function(e) {
+        if (!e.which || e.which === 1) {
+          panel.toggleAccountsDropdown(false);
+          $(document).off('click', hideDropdown);
+        }
       }
-    }
 
-    $.ajax('/Ajax/accounts_dropdown', {
-      'context': this,
-      'success': function(html) {
-        this.elLk.accountHolder.html(html);
-        this.elLk.accountLink = this.el.find('._accounts_link').on({
-          'click': function(event) {
-            event.preventDefault();
-            if (!$(this).hasClass('selected')) {
-              event.stopPropagation();
-              panel.toggleAccountsDropdown(true);
-              $(document).on('click', hideDropdown);
+      $.ajax('/Ajax/accounts_dropdown', {
+        'context': this,
+        'success': function(html) {
+          this.elLk.accountHolder.html(html);
+          this.elLk.accountLink = this.el.find('._accounts_link').on({
+            'click': function(event) {
+              event.preventDefault();
+              if (!$(this).hasClass('selected')) {
+                event.stopPropagation();
+                panel.toggleAccountsDropdown(true);
+                $(document).on('click', hideDropdown);
+              }
             }
-          }
-        });
+          });
     
-        this.elLk.accountDropdown = this.el.find('._accounts_dropdown').on({
-          'click': function(event) {
-            if (event.target.nodeName !== 'A') {
-              event.stopPropagation();
+          this.elLk.accountDropdown = this.el.find('._accounts_dropdown').on({
+            'click': function(event) {
+              if (event.target.nodeName !== 'A') {
+                event.stopPropagation();
+              }
             }
-          }
-        }).find('a').on('click', hideDropdown).end();
-      },
-      'dataType': 'html'
-    });
+          }).find('a').on('click', hideDropdown).end();
+        },
+        'dataType': 'html'
+      });
+    }
   },
 
   toggleAccountsDropdown: function(flag) {
