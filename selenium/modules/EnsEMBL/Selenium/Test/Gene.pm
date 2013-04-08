@@ -35,23 +35,15 @@ sub test_gene {
 
     if(lc($self->species) eq 'homo_sapiens') {      
       $sel->ensembl_open_zmenu('TranscriptsImage','class^="drag"');
-      $sel->ensembl_click("link=Jump to location View")      
-      and $sel->ensembl_wait_for_ajax_ok('50000','5000')
+      $sel->ensembl_click("link=Jump to location view")      
+      and $sel->ensembl_wait_for_ajax_ok('80000','10000')
       and $sel->go_back();
 
       $sel->ensembl_wait_for_page_to_load;
 
       #Adding a track from the configuration panel
       print "  Test Configure page, adding a track \n";
-      $sel->ensembl_click("link=Configure this page")
-      and $sel->ensembl_wait_for_ajax_ok('10000','7000')
-      and $sel->ensembl_click("link=Somatic mutations")
-      and $sel->ensembl_wait_for_ajax_ok('10000','7000')
-      and $sel->ensembl_click("//form[\@id='gene_transcriptsimage_configuration']/div[4]/div/ul/li[2]/img") #selecting the second track
-      and $sel->ensembl_is_text_present("Somatic mutations(1/*")
-      and $sel->ensembl_click("modal_bg")
-      and $sel->ensembl_wait_for_ajax_ok('15000','5000')
-      and $sel->ensembl_images_loaded;
+      $self->turn_track("Somatic mutations", "//form[\@id='gene_transcriptsimage_configuration']/div[4]/div/ul/li", "on");
     }
 
     $sel->ensembl_click_links([
@@ -94,11 +86,11 @@ sub test_gene {
       $sel->ensembl_click_links(["link=Phenotype"]);
       $sel->ensembl_click("link=view all locations")
       and $sel->ensembl_wait_for_page_to_load
-      and $sel->go_back();     
-    
-      $sel->ensembl_click("link=[View on Karyotype]")
-      and $sel->ensembl_wait_for_page_to_load
       and $sel->go_back();
+      
+      $sel->ensembl_click("link=View on Karyotype")
+      and $sel->ensembl_wait_for_page_to_load
+      and $sel->go_back();      
     }
 
     $sel->ensembl_click_links(["link=Variation table", "link=Variation image", "link=Structural variation"],"40000") if($species_db->{'database:variation'} && $gene_text !~ /^ASMPATCH/);

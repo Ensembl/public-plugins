@@ -34,16 +34,15 @@ sub test_karyotype {
     #TODO:: Making the features_karyotype, add_track, attach_remote_file separate test that can be run
     #Test features on karyotype (human only)
     $self->features_karyotype if(lc($self->species) eq 'homo_sapiens');
-
+    
     #Adding tack to the karyotype (human only)
     $self->add_track if(lc($self->species) eq 'homo_sapiens');
-    #$self->attach_remote_file if(lc($self->species) eq 'homo_sapiens'); #feature removed
 
     #Testing ZMenu on karyotype
     if($self->species eq 'homo_sapiens') {      
       $sel->ensembl_open_zmenu('Genome')
-      and $sel->ensembl_is_text_present("Jump to location View")
-      and $sel->ensembl_click_links(["link=Jump to location View"]);
+      and $sel->ensembl_is_text_present("Jump to location view")
+      and $sel->ensembl_click_links(["link=Jump to location view"]);
     }
   }
 }
