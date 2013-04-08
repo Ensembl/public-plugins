@@ -349,6 +349,7 @@ sub js_link {
     'class'       => 'accounts-button',
     'children'    => [{
       'node_name'   => 'a',
+      'rel'         => 'modal_user_data',
       'href'        => ref $params->{'href'} ? $self->hub->url($params->{'href'}) : $params->{'href'},
       'inner_HTML'  => $params->{'sprite'} ? qq(<span class="sprite $params->{'sprite'}"></span>) : $params->{'caption'} || '',
       $class ? (
@@ -384,7 +385,7 @@ sub js_section {
 
   for (qw(heading subheading)) {
     if ($params->{$_}) {
-      $links->{$_} = join '', map { sprintf '<a href="%s" class="header-link _ht _ht_static %s" title="%s"><span class="sprite %s"></span></a>%s',
+      $links->{$_} = join '', map { sprintf '<a href="%s" class="header-link _ht _ht_static %s" title="%s" rel="modal_user_data"><span class="sprite %s"></span></a>%s',
         $hub->url($_->{'href'}),
         $self->_get_js_class_for_link($_),
         $_->{'title'},
