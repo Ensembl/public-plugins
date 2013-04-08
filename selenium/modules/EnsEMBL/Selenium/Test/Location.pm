@@ -30,8 +30,9 @@ sub test_location {
     #turn ncRNA track on/off(only for the species having ncrna tracks)
      if($sel->is_text_present("ncRNA(")){
       $sel->ensembl_click("modal_bg");
-      $self->turn_track("ncRNA", "//form[\@id='location_viewbottom_configuration']/div[4]/div/ul/li[1]/img", "on");
-      $self->turn_track("ncRNA", "//form[\@id='location_viewbottom_configuration']/div[4]/div/ul/li[1]/img", "off");      
+      
+      $self->turn_track("ncRNA", "//form[\@id='location_viewbottom_configuration']/div[4]/div/ul/li", "on");
+      $self->turn_track("ncRNA", "//form[\@id='location_viewbottom_configuration']/div[4]/div/ul/li", "off");      
       #next;
     } else {
       print "  No ncRNA Tracks \n";
@@ -41,22 +42,7 @@ sub test_location {
     #Test ZMENU (only for human)
     if(lc($self->species) eq 'homo_sapiens') {
       #Searching and adding decipher track
-      #$self->turn_track("Variation","//form[\@id='location_viewbottom_configuration']/div[6]/div[7]/div/ul[3]/li[1]/img", "on", "decipher"); #for some reason xpath not working anymore so using css instead to select track
-      
-      $sel->ensembl_click("link=Configure this page")
-      and $sel->ensembl_wait_for_ajax_ok(undef,4000)
-      and $sel->ensembl_is_text_present("Active tracks");
-      
-      print "  Test searching for Decipher track and turning the track ON \n" ;
-      $sel->ensembl_click("name=configuration_search_text")    
-      and $sel->type_keys_ok("configuration_search_text", "decipher") #searching for the track in the search textfield    
-      and $sel->ensembl_wait_for_ajax_ok(undef,'5000');
-      
-      $sel->click_ok("css=li.track.das_DS_1535 > img.menu_option")
-      and $sel->click_ok("css=li.track.das_DS_1535 > ul.popup_menu > li.nolabels > img.variation")
-      and $sel->ensembl_click("modal_bg")
-      and $sel->ensembl_wait_for_ajax_ok(undef,6000)
-      and $sel->ensembl_images_loaded;
+      $self->turn_track("Variation","//form[\@id='location_viewbottom_configuration']/div[5]/div[7]/div/ul[3]/li", "on", "decipher");
       
       #simulate ZMenu for this track (decipher)
       $sel->pause(5000); #pausing a bit to make sure the location panel loads fine from adding the track
