@@ -9,7 +9,6 @@ __PACKAGE__->set_default('timeout', 50000);
 # Ensembl base module for species
 # NOTE: THIS IS A BASE CLASS DON'T ADD ANY TEST CASES IN HERE. Generic functions can be added
 #------------------------------------------------------------------------------
-
 sub alignments_count {
   my ($self, $SD) = @_;
   my ($alignment_count, $multi_species_count);
@@ -32,7 +31,7 @@ sub attach_das {
   
   $sel->ensembl_click("link=Configure this page")
   and $sel->ensembl_wait_for_ajax_ok
-  and $sel->ensembl_click("link=Custom Data")  
+  and $sel->ensembl_click("link=Personal Data")  
   and $sel->ensembl_wait_for_ajax_ok(undef,5000)
   and $sel->ensembl_click("link=Attach DAS")
   and $sel->ensembl_wait_for_ajax_ok(undef,5000)
@@ -57,7 +56,7 @@ sub attach_remote_file {
  
   $sel->ensembl_click("link=Configure this page")
   and $sel->ensembl_wait_for_ajax_ok(undef,10000)
-  and $sel->ensembl_click("link=Custom Data")
+  and $sel->ensembl_click("link=Personal Data")
   and $sel->ensembl_wait_for_ajax_ok(undef,10000)
   and $sel->ensembl_is_text_present("Your data");
  
@@ -93,28 +92,28 @@ sub add_track {
   and $sel->ensembl_wait_for_ajax_ok(undef,10000);
  
   $sel->ensembl_is_text_present("BED")
-  and $sel->ensembl_click("//form[\@id='location_genome_configuration']/div[1]/div/ul/li[1]/img")
-  and $sel->ensembl_click("//img[\@alt='Arrows on both sides']");
+  and $sel->ensembl_click("//form[\@id='location_genome_configuration']/div[1]/div/ul/li[1]")
+  and $sel->ensembl_click("//li[\@class='highlight_bowtie']");
   
   $sel->ensembl_is_text_present("BEDGRAPH")
-  and $sel->ensembl_click("//form[\@id='location_genome_configuration']/div[1]/div/ul/li[2]/img")
-  and $sel->ensembl_click("//img[\@alt='Arrows on both sides']");
+  and $sel->ensembl_click("//form[\@id='location_genome_configuration']/div[1]/div/ul/li[2]")
+  and $sel->ensembl_click("//li[\@class='highlight_bowtie']");
   
   $sel->ensembl_is_text_present("GFF")
-  and $sel->ensembl_click("//form[\@id='location_genome_configuration']/div[1]/div/ul/li[3]/img")
-  and $sel->ensembl_click("//img[\@alt='Arrows on both sides']");
+  and $sel->ensembl_click("//form[\@id='location_genome_configuration']/div[1]/div/ul/li[3]")
+  and $sel->ensembl_click("//li[\@class='highlight_bowtie']");
       
   $sel->ensembl_is_text_present("GTF")
-  and $sel->ensembl_click("//form[\@id='location_genome_configuration']/div[1]/div/ul/li[4]/img")
-  and $sel->ensembl_click("//img[\@alt='Arrows on both sides']"); 
+  and $sel->ensembl_click("//form[\@id='location_genome_configuration']/div[1]/div/ul/li[4]")
+  and $sel->ensembl_click("//li[\@class='highlight_bowtie']"); 
   
   $sel->ensembl_is_text_present("PSL")
-  and $sel->ensembl_click("//form[\@id='location_genome_configuration']/div[1]/div/ul/li[5]/img")
-  and $sel->ensembl_click("//img[\@alt='Arrows on both sides']"); 
+  and $sel->ensembl_click("//form[\@id='location_genome_configuration']/div[1]/div/ul/li[5]")
+  and $sel->ensembl_click("//li[\@class='highlight_bowtie']"); 
   
   $sel->ensembl_is_text_present("WIG")
-  and $sel->ensembl_click("//form[\@id='location_genome_configuration']/div[1]/div/ul/li[6]/img")
-  and $sel->ensembl_click("//img[\@alt='Arrows on both sides']"); 
+  and $sel->ensembl_click("//form[\@id='location_genome_configuration']/div[1]/div/ul/li[6]")
+  and $sel->ensembl_click("//li[\@class='highlight_bowtie']"); 
     
   $sel->ensembl_click("css=div.modal_close")
   and $sel->ensembl_wait_for_ajax_ok(undef,10000)   
@@ -268,7 +267,7 @@ sub features_karyotype {
 
   $sel->ensembl_click("link=Configure this page")
   and $sel->ensembl_wait_for_ajax_ok(undef,10000)
-  and $sel->ensembl_click("link=Custom Data")
+  and $sel->ensembl_click("link=Personal Data")
   and $sel->ensembl_wait_for_ajax_ok(undef,10000)
   and $sel->ensembl_is_text_present("Your data");
 
@@ -276,8 +275,8 @@ sub features_karyotype {
   and $sel->ensembl_wait_for_ajax_ok(undef,5000);
 
   $sel->type_ok("name=id","$feature_id")
-  and $sel->ensembl_click("name=submit")
-  and $sel->ensembl_wait_for_ajax_ok(5000,5000) #timeout=5s and pause=5s
+  and $sel->ensembl_click("name=submit_button")
+  and $sel->ensembl_wait_for_ajax_ok(50000,5000) #timeout=50s and pause=5s
   and $sel->ensembl_is_text_present("$feature_id");
 }
 
@@ -382,17 +381,15 @@ sub turn_track {
     goto SKIP;
   }
 
-  (my $track_input = $track_image_xpath) =~ s/img/input/g; #the hidden input to check if the track is on/off  
-  
-  $sub_track += 1 if($sel->get_value($track_input) eq 'off' && lc($action) eq 'on');  # track is chosen, track count should increment by 1 only do this if track is off and action is turning track on.
-  $sub_track -= 1 if($sel->get_value($track_input) ne 'off' && lc($action) eq 'off'); # unselecting track, track count should decement by 1 only if it wasn't off before and action is turning track off.
+  $sub_track += 1 if($sel->get_attribute("$track_image_xpath\@class") =~ / off/ && lc($action) eq 'on');  # track is chosen, track count should increment by 1 only do this if track is off and action is turning track on.
+  $sub_track -= 1 if($sel->get_attribute("$track_image_xpath\@class") =~ / on/ && lc($action) eq 'off'); # unselecting track, track count should decement by 1 only if it wasn't off before and action is turning track off.
 
   my $track_select_image = $track_image_xpath;
-  $track_select_image =~ s/img/ul\/li[4]\/img/g if(lc($action) eq 'on'); #generating the xpath for the track select image (the normal one)
-  $track_select_image =~ s/img/ul\/li[2]\/img/g if(lc($action) eq 'off');#generating the xpath for the track select image (the blank one)
+  $track_select_image =~ s/li/li\/ul\/li[4]/g if(lc($action) eq 'on'); #generating the xpath for the track select image (the normal one)
+  $track_select_image =~ s/li/li\/ul\/li[2]/g if(lc($action) eq 'off');#generating the xpath for the track select image (the blank one)
 
-  $sel->ensembl_click($track_image_xpath)  
-  and $sel->ensembl_click($track_select_image)    
+  $sel->ensembl_click($track_image_xpath)
+  and $sel->ensembl_click($track_select_image)
   and $sel->ensembl_is_text_present("$track_name($sub_track/*");  #maybe add a different error if failure (use selenium is_text_present instead of ensembl one)  
   
   $sel->ensembl_is_text_present($parent_track) if($parent_test);
@@ -424,7 +421,7 @@ sub upload_data {
   print "  Test Upload data $format \n";
   $sel->ensembl_click("link=Configure this page")
   and $sel->ensembl_wait_for_ajax_ok(undef,10000)
-  and $sel->ensembl_click("link=Custom Data")
+  and $sel->ensembl_click("link=Personal Data")
   and $sel->ensembl_wait_for_ajax_ok(undef,10000)
   and $sel->ensembl_is_text_present("Your data");
 
@@ -433,7 +430,7 @@ sub upload_data {
   and $sel->type_ok("//div[\@id='SelectFile']/form/fieldset/div/div/input","$name")
   and $sel->select_ok("format", "$format")
   and $upload_file ? $sel->type_ok("name=url", "$upload_file") : $sel->type_ok("text", "$data")  
-  and $sel->ensembl_click("name=submit")
+  and $sel->ensembl_click("name=submit_button")
   and $sel->ensembl_wait_for_ajax_ok(50000,10000); #timeout=50s and pause=10s
   
   $sel->ensembl_is_text_present("Go to first region with data");
