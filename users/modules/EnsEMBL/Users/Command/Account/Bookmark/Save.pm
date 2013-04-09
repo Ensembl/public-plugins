@@ -21,7 +21,7 @@ sub csrf_safe_process {
       $bookmark->click(0);
     }
 
-    $bookmark->$_($hub->param($_)) for qw(name shortname url object);
+    $bookmark->$_($hub->param($_)) for qw(name description url object);
     $bookmark->save('user' => $user);
 
     return $self->ajax_redirect($hub->url($record_owner->RECORD_TYPE eq 'group'
