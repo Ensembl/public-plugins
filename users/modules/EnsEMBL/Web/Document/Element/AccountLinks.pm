@@ -33,7 +33,7 @@ sub content_ajax {
         join('', map {
           sprintf '<p><a href="%s" title="%s: %s" class="constant"><span>%2$s</span><span class="acc-bookmark-overflow">&#133;</span></a></p>',
             $hub->url({'type' => 'Account', 'action' => 'Bookmark', 'function' => 'Use', 'id' => $_->record_id, '__clear' => 1}),
-            $_->shortname || $_->name,
+            $_->name,
             $_->url
         } @$bookmarks) || '<p><i>No bookmark added</i></p>',
         @$bookmarks ? sprintf('
@@ -42,12 +42,12 @@ sub content_ajax {
             <p><a href="%s" class="modal_link constant" rel="modal_user_data">View all bookmarks</a></p>
           </div>',
           $hub->url({
-            'type'      => 'Account',
-            'action'    => 'Bookmark',
-            'function'  => 'Add',
-            'name'      => '',
-            'shortname' => '',
-            'url'       => ''
+            'type'        => 'Account',
+            'action'      => 'Bookmark',
+            'function'    => 'Add',
+            'name'        => '',
+            'description' => '',
+            'url'         => ''
           }),
           $hub->url({qw(type Account action Bookmark function View)})
         ) : '',

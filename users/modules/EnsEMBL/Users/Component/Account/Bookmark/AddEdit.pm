@@ -22,9 +22,9 @@ sub content {
     $form->add_hidden({'name' => 'object',          'value' => $bookmark->name || $hub->referer->{'ENSEMBL_TYPE'} }) if $is_add_new;
     $form->add_hidden({'name' => $self->_JS_CANCEL, 'value' => $hub->PREFERENCES_PAGE });
 
-    $form->add_field({'type'  => 'string',    'name'  => 'name',        'label' => 'Bookmark name',       'value' => $bookmark->name        || $hub->param('name')      || '',  'required' => 1 });
-    $form->add_field({'type'  => 'string',    'name'  => 'shortname',   'label' => 'Short description',   'value' => $bookmark->shortname   || $hub->param('shortname') || ''});
-    $form->add_field({'type'  => 'text',      'name'  => 'url',         'label' => 'Bookmark URL',        'value' => $bookmark->url         || $hub->param('url')       || '',  'required' => 1 });
+    $form->add_field({'type'  => 'string',    'name'  => 'name',        'label' => 'Bookmark name',       'value' => $bookmark->name        || $hub->param('name')        || '',  'required' => 1 });
+    $form->add_field({'type'  => 'string',    'name'  => 'description', 'label' => 'Short description',   'value' => $bookmark->description || $hub->param('description') || ''});
+    $form->add_field({'type'  => 'text',      'name'  => 'url',         'label' => 'Bookmark URL',        'value' => $bookmark->url         || $hub->param('url')         || '',  'required' => 1 });
 
     my @buttons = ({'type' => 'submit', 'name' => 'button', 'value' => $is_add_new ? 'Add' : 'Save'});
 
