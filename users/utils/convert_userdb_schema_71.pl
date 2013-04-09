@@ -479,11 +479,18 @@ for (sort sort_records values %$record_rows) {
           ) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?);"
   );
 
+  my $data = eval($_->{'data'});
+  if ($_->{'type'} eq 'favourite_tracks') {
+    for (keys %$data) {
+      $data->{$_} = defined $data->{$_} ? eval($data->{$_}) : undef;
+    }
+  }
+
   $sth->execute(
             $_->{'record_type'},
             $_->{'webgroup_id'} || $_->{'user_id'},
             $_->{'type'},
-            hash_to_string(eval($_->{'data'})),
+            hash_to_string($data),
             $_->{'created_by'}  || undef,
             $_->{'created_at'}  || undef,
             $_->{'modified_by'} || undef,
