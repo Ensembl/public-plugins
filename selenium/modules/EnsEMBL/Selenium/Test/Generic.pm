@@ -36,7 +36,7 @@ sub test_species_list {
  my $SD = $self->get_species_def;
  my $release_version = $SD->ENSEMBL_VERSION;
  my @valid_species = $SD->valid_species;
- my $static_server = $self->url =~ /test.ensembl/ ? "test" : "www";
+ my $url = $self->url;
  
  $sel->open_ok("/info/about/species.html");
 
@@ -52,7 +52,7 @@ sub test_species_list {
    #CHECK FOR SPECIES IMAGES
    $sel->run_script(qq{
      var x = jQuery.ajax({
-                    url: 'http://$static_server.ensembl.org/i/species/64/$species.png',
+                    url: '$url/i/species/64/$species.png',
                     async: false,
               }).state();
      if (x == 'resolved') {
