@@ -25,7 +25,6 @@ sub update_conf {
 #  $SiteDefs::ENSEMBL_USERDB_PORT            =  3306;
 #  $SiteDefs::ENSEMBL_USERDB_PASS            = 'my_mysql_write_pass';
 
-#  $SiteDefs::ENSEMBL_LOGINS                 = 0; ## Change to 1 to turn user logins on
 
 }
 
