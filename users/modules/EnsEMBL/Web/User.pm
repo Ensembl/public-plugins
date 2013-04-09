@@ -37,12 +37,9 @@ sub create_record         { shift->_goto_rose_object('create_record', @_);  }
 sub logins                { shift->_goto_rose_object('logins');             }
 sub records               { shift->_goto_rose_object('records');            }
 sub bookmarks             { shift->_goto_rose_object('bookmarks');          }
-sub configurations        { shift->_goto_rose_object('configurations');     }
 sub annotations           { shift->_goto_rose_object('annotations');        }
 sub dases                 { shift->_goto_rose_object('dases');              }
 sub newsfilters           { shift->_goto_rose_object('newsfilters');        }
-sub sortables             { shift->_goto_rose_object('sortables');          }
-sub currentconfigs        { shift->_goto_rose_object('currentconfigs');     }
 sub specieslists          { shift->_goto_rose_object('specieslists');       }
 sub histories             { shift->_goto_rose_object('histories');          }
 sub favourite_tracks      { shift->_goto_rose_object('favourite_tracks');   }
