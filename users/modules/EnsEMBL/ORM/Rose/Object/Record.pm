@@ -14,7 +14,7 @@ use constant ROSE_DB_NAME => 'user';
 
 my $VIRTUAL_COLUMNS = {
   'history'           => [qw(object value url name species param)],
-  'bookmark'          => [qw(name shortname url object click)],
+  'bookmark'          => [qw(name description url object click)],
   'specieslist'       => [qw(favourites list)],
   'urls'              => [qw(format cloned_from)],
   'invitation'        => [qw(invitation_code email)],
