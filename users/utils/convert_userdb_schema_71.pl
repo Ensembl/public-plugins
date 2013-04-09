@@ -436,7 +436,7 @@ print "\nExporting data from `${backup_table_prefix}group_record` and `${backup_
 
 my $ignore_record_types = "'".join("', '", qw(configuration current_config currentconfig drawer info infobox invite mixer opentab sortable))."'";
 
-print "\n\tTable `user_record` and `group_record`: Ignoing records of type: $ignore_record_types\n";
+print "\n\tTable `user_record` and `group_record`: Ignoring records of type: $ignore_record_types\n";
 
 $sth = $dbh->prepare("SELECT * FROM `${backup_table_prefix}user_record` where `type` not in ($ignore_record_types)");
 $sth->execute;
