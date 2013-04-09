@@ -14,11 +14,13 @@ sub ensembl_wait_for_ajax {
   my ($self, $timeout, $pause) = @_;
   my $url = $self->get_location();
   
-  $pause   ||= 500;   
+  $timeout ||= $self->_timeout;
+  $pause   ||= 500;
   #increase the pause and timeout if we are testing mirrors since the site is slower.
-  $pause += 3000 if($url =~ /uswest|useast|ec2/);  
+  $pause += 3000 if($url =~ /uswest|useast|ec2/);
   $timeout += 20000 if($url =~ /uswest|useast|ec2/);
-  $self->pause($pause); 
+
+  $self->pause($pause);
   
   #print "\nAJAX ERROR: $url !!! \n"  unless 
   $self->wait_for_condition(
