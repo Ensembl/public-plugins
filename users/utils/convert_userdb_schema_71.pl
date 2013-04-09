@@ -484,6 +484,15 @@ for (sort sort_records values %$record_rows) {
     for (keys %$data) {
       $data->{$_} = defined $data->{$_} ? eval($data->{$_}) : undef;
     }
+  } elsif ($_->{'type'} eq 'bookmark') {
+    if ($data->{'shortname'}) {
+      $data->{'description'} ||= $data->{'name'};
+      $data->{'name'} = delete $data->{'shortname'};
+    }
+    if (!$data->{'name'}) { 
+      print "\tTable `".$_->{'record_type'}."_record`: Ignoring row with primary key ".$_->{$_->{'record_type'}."_record_id"}." (Missing bookmark name)\n";
+      next;
+    }
   }
 
   $sth->execute(
