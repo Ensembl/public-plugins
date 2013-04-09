@@ -181,7 +181,7 @@ sub select_bookmark_form {
       'value'   => $_->record_id,
       'caption' => {'inner_HTML' => sprintf(
         '%s (<a href="%s" title="%s">View</a>)<br><i>%s</i>',
-          map $self->html_encode($_), $_->name, $self->hub->url({'type' => 'Account', 'action' => 'Bookmark', 'function' => 'Use', 'id' => $_->record_id}), $_->url, $_->shortname || ''
+          map $self->html_encode($_), $_->name, $self->hub->url({'type' => 'Account', 'action' => 'Bookmark', 'function' => 'Use', 'id' => $_->record_id}), $_->url, $_->description || ''
         )
       }
     }, @{$params->{'bookmarks'} || []} ],
@@ -222,7 +222,7 @@ sub bookmarks_table {
     'sort'          => 'html'
   }, {
     'key'           => 'desc',
-    'title'         => 'Short Description',
+    'title'         => 'Description',
     'width'         => $params->{'shared'} ? '30%' : '60%'
   }, $params->{'shared'} ? { # additional column for shared bookmarks only to display link to the group
     'key'           => 'group',
@@ -239,7 +239,7 @@ sub bookmarks_table {
   # bookmark rows
   for (@{$params->{'bookmarks'}}) {
     my $bookmark_id   = $_->get_primary_key_value;
-    my $bookmark_row  = { 'desc' => $self->html_encode($_->shortname) };
+    my $bookmark_row  = { 'desc' => $self->html_encode($_->description) };
     my $bookmark_name = $self->html_encode($_->name);
 
     # column for shared bookmarks table only
