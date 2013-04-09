@@ -8,7 +8,7 @@ sub update_conf {
 
   $SiteDefs::OBJECT_TO_SCRIPT->{'Account'} = 'Modal';
 
-  $SiteDefs::ENSEMBL_USERS_ENABLED         = 1;
+  $SiteDefs::ENSEMBL_LOGINS                = 1;
   $SiteDefs::ENSEMBL_OPENID_ENABLED        = 0; # this gets overridden in OpenID plugin
   $SiteDefs::ENSEMBL_LDAP_ENABLED          = 0; # this gets overridden in LDAP plugin
 
