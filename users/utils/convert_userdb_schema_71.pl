@@ -433,7 +433,12 @@ $webgroup_rows = undef;
 print "\nDONE: $counter rows added to `webgroup` table and $counter_1 to `group_member` table.\n";
 
 print "\nExporting data from `${backup_table_prefix}group_record` and `${backup_table_prefix}user_record` table to `record` table.\n";
-$sth = $dbh->prepare("SELECT * FROM `${backup_table_prefix}user_record`");
+
+my $ignore_record_types = "'".join("', '", qw(configuration current_config currentconfig drawer info infobox invite mixer opentab sortable))."'";
+
+print "\n\tTable `user_record` and `group_record`: Ignoing records of type: $ignore_record_types\n";
+
+$sth = $dbh->prepare("SELECT * FROM `${backup_table_prefix}user_record` where `type` not in ($ignore_record_types)");
 $sth->execute;
 my $user_record_rows = $sth->fetchall_hashref('user_record_id');
 my $record_rows = {};
@@ -448,7 +453,7 @@ for (keys %$user_record_rows) {
   $record_rows->{$_}->{'record_type'} = 'user';
 }
 
-$sth = $dbh->prepare("SELECT * FROM `${backup_table_prefix}group_record`");
+$sth = $dbh->prepare("SELECT * FROM `${backup_table_prefix}group_record` where `type` not in ($ignore_record_types)");
 $sth->execute;
 my $group_record_rows = $sth->fetchall_hashref('group_record_id');
 
@@ -480,6 +485,7 @@ for (sort sort_records values %$record_rows) {
   );
 
   my $data = eval($_->{'data'});
+  delete $data->{'cloned_from'};
   if ($_->{'type'} eq 'favourite_tracks') {
     for (keys %$data) {
       $data->{$_} = defined $data->{$_} ? eval($data->{$_}) : undef;
