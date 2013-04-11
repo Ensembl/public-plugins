@@ -19,7 +19,7 @@ sub content {
 
   $form->add_notes(sprintf q(<p>If you have lost your password, please enter your email address used while registering to %s and we will send you an email to retrieve your password.</p>), $self->site_name);
   $form->add_field({'type'  => 'Email',  'name'  => 'email',   'label' => 'Email', 'required'  => 'yes', $ex_email ? ('value' => $ex_email) : ()});
-  $form->add_button({'type' => 'Submit', 'name'  => 'submit',  'value' => 'Send',  'class'     => 'modal_link'});
+  $form->add_button({'type' => 'Submit', 'name'  => 'submit',  'value' => 'Send'});
 
   return $self->js_section({'subsections' => [ $form->render ]});
 }
