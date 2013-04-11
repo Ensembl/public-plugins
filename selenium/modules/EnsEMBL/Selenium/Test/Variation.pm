@@ -16,10 +16,17 @@ sub test_variation {
   my $sp_bio_name = $SD->get_config($self->species,'SPECIES_BIO_NAME');
 
   $self->open_species_homepage($self->species,undef, $sp_bio_name);
+  my $variation_db = $self->database('variation', $self->species);
   
-  if(lc($self->species) eq 'homo_sapiens') {
+  
+  if($variation_db) {
     my $variation_text  = $SD->get_config(ucfirst($self->species), 'SAMPLE_DATA')->{'VARIATION_TEXT'};
     my $variation_param = $SD->get_config(ucfirst($self->species), 'SAMPLE_DATA')->{'VARIATION_PARAM'};
+    
+    if(!$variation_text) {
+     print "   ERROR:: SAMPLE VARIATION PARAM MISSING IN INI FILES!!! \n"; 
+     next;
+    }
     my $species_db = $self->species_databases($SD);
 
     $sel->ensembl_click_links(["link=Example variant"],'20000');
@@ -30,15 +37,17 @@ sub test_variation {
     #TODO Test the Show table link
     
     #Adding a track from the configuration panel
-    print "  Test Configure page, adding a track \n";
-    $sel->ensembl_click("link=Configure this page")
-    and $sel->ensembl_wait_for_ajax_ok('10000','5000')
-    and $sel->ensembl_click("css=a.variation")  #don't know why link= wasn't working and css= works    
-    and $sel->ensembl_wait_for_ajax_ok('10000','9000')
-    and $sel->ensembl_click("//form[\@id='variation_context_configuration']/div[3]/div[1]/ul[1]/li[2]/img") #choosing the second track    
-    and $sel->ensembl_click("modal_bg")
-    and $sel->ensembl_wait_for_ajax_ok('50000', '50000')
-    and $sel->ensembl_images_loaded;
+    if(lc($self->species) eq 'homo_sapiens') {
+      print "  Test Configure page, adding a track \n";
+      $sel->ensembl_click("link=Configure this page")
+      and $sel->ensembl_wait_for_ajax_ok('10000','5000')
+      and $sel->ensembl_click("css=a.variation")  #don't know why link= wasn't working and css= works    
+      and $sel->ensembl_wait_for_ajax_ok('10000','9000')
+      and $sel->ensembl_click("//form[\@id='variation_context_configuration']/div[3]/div[1]/ul[1]/li[2]/img") #choosing the second track    
+      and $sel->ensembl_click("modal_bg")
+      and $sel->ensembl_wait_for_ajax_ok('50000', '50000')
+      and $sel->ensembl_images_loaded;
+    }
     
     #Test ZMenu    
     $sel->ensembl_open_zmenu('Context','title^="Variation:"');
@@ -49,15 +58,18 @@ sub test_variation {
     
     $sel->ensembl_wait_for_page_to_load;
     $sel->pause(3000);
-        
-    $sel->ensembl_click_links(["link=Linkage disequilibrium", "link=Phenotype Data*"],'10000');
     
-    $sel->ensembl_click_links(["link=[View on Karyotype]"],'50000');
-    $sel->go_back();
+    if(lc($self->species) eq 'homo_sapiens') {        
+      $sel->ensembl_click_links(["link=Linkage disequilibrium", "link=Phenotype Data*"],'10000');
+      
+      $sel->ensembl_click_links(["link=[View on Karyotype]"],'50000');
+      $sel->go_back();
+    }
 
     $sel->ensembl_click_links(["link=Phylogenetic Context*"],'30000');
-    $sel->select_ok("align", "label=6 primates EPO");
-    $sel->ensembl_click("link=Go");
+    
+    $sel->select_ok("align", "label=6 primates EPO")
+    and $sel->ensembl_click("link=Go") if(lc($self->species) eq 'homo_sapiens');
     
     $sel->ensembl_wait_for_page_to_load;
     
@@ -72,6 +84,8 @@ sub test_variation {
     
     my $url = $self->get_location();
     print "DAS ERROR at $url (click on configure page and choose the first das source) \n"  if $sel->ensembl_has_das_error;
+  } else {
+    print "   No variation for this species! \n"; 
   }
 }
 1;
