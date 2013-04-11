@@ -151,7 +151,8 @@ sub fetch_features_generic {
     $feature->{'color'}      ||= $colourmap->hex_by_name($glyphset->my_colour($colour_key, $flag))   if $colour_key;
     $feature->{'labelColor'} ||= $colourmap->hex_by_name($glyphset->my_colour($colour_key, 'label')) if $colour_key && $feature->{'label'};
     $feature->{'menu'}       ||= $glyphset->href($_);
-    
+    $feature->{'title'}      ||= $glyphset->title($_) unless $feature->{'menu'};
+
     push @features, $feature;
   }
   
