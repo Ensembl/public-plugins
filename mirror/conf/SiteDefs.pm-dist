@@ -1,0 +1,31 @@
+package EnsEMBL::Mirror::SiteDefs;
+use strict;
+
+sub update_conf {
+#  $SiteDefs::ENSEMBL_PORT                   = 80;
+#  $SiteDefs::ENSEMBL_USER                   = 'my_user';     
+#  $SiteDefs::ENSEMBL_GROUP                  = 'my_group';
+
+#  $SiteDefs::ENSEMBL_SERVERADMIN            = 'my_user@my_domain.org';
+#  $SiteDefs::ENSEMBL_SERVERNAME             = 'my_ensembl.my_domain.org';
+#  $SiteDefs::ENSEMBL_MAIL_SERVER            = 'smtp.my_domain.org';
+#  $SiteDefs::ENSEMBL_MAIL_COMMAND           = '/usr/bin/Mail -s';
+#  $SiteDefs::ENSEMBL_MAIL_ERRORS            = 1;
+#  $SiteDefs::ENSEMBL_ERRORS_TO              = 'my_user@my_domain.org';
+
+#  $SiteDefs::ENSEMBL_DEBUG_FLAGS            = 24;
+#  $SiteDefs::ENSEMBL_LONGPROCESS_MINTIME    = 10;
+
+#  $SiteDefs::ENSEMBL_TMP_DIR_BLAST          = $SiteDefs::ENSEMBL_SERVERROOT."/blastqueue";
+#  $SiteDefs::ENSEMBL_BLASTSCRIPT            = $SiteDefs::ENSEMBL_SERVERROOT."/utils/runblast.pl";
+
+#  $SiteDefs::ENSEMBL_USERDB_NAME            = 'ensembl_web_user_db';
+#  $SiteDefs::ENSEMBL_USERDB_USER            = 'my_mysql_write_user';
+#  $SiteDefs::ENSEMBL_USERDB_HOST            = 'my_mysql.my_domain.org'
+#  $SiteDefs::ENSEMBL_USERDB_PORT            =  3306;
+#  $SiteDefs::ENSEMBL_USERDB_PASS            = 'my_mysql_write_pass';
+
+
+}
+
+1;
