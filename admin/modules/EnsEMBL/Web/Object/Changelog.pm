@@ -169,6 +169,11 @@ sub show_fields {
       'label'     => 'Database type (if changed)',
       'is_null'   => 'N/A'
     },
+    mitochondrion     => {
+      'type'      => 'dropdown',
+      'label'     => 'Does it have a mitochondrion?',
+      'values'    => [{'value' => 'Y', 'caption' => 'Yes'}, {'value' => 'N', 'caption' => 'No'}, {'value' => 'changed', 'caption' => 'Changed'}]
+    },
     priority          => {
       'type'      => 'dropdown',
       'label'     => 'Priority',
