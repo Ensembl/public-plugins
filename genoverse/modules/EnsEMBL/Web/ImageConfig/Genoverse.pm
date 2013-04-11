@@ -8,7 +8,8 @@ use base qw(EnsEMBL::Web::ImageConfig);
 
 sub init_genoverse {
   my $self = shift;
-  
+
+  $self->_modify if $self->can('_modify');
   $self->set_parameter('component', $self->hub->viewconfig->component) if $self->hub->viewconfig;
   $self->create_menus('options');
   $self->add_option('auto_height', undef, undef, undef, 'off')->set('menu', 'no');
@@ -27,6 +28,7 @@ sub init_genoverse {
   $self->modify_configs([ 'codons'                                       ], { genoverse => { autoHeight => 'force',               bin_size       => 5e4,         featureHeight => 3,                                } });
   $self->modify_configs([ 'chr_band_core'                                ], { genoverse => { autoHeight => 'force',               cache          => 'chr',       labelOverlay  => JSON::true, allData => JSON::true } });
   $self->modify_configs([ 'marker'                                       ], { genoverse => { bumpLabels => JSON::true,            maxLabelRegion => 5e4                                                             } });
+  $self->modify_configs([ 'simple'                                       ], { genoverse => { bump       => JSON::true,                                                                                              } });
   $self->modify_configs([ 'scalebar', 'ruler', 'draggable', 'info'       ], { genoverse => { remove     => 1                                                                                                        } });
   
   my $node = $self->get_node('marker');
