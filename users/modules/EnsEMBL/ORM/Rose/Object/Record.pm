@@ -19,7 +19,8 @@ my $VIRTUAL_COLUMNS = {
   'urls'              => [qw(format cloned_from)],
   'invitation'        => [qw(invitation_code email)],
   'upload'            => [qw(filename filesize name code md5 format species assembly share_id analyses browser_switches style display nearest timestamp cloned_from)],
-  'favourite_tracks'  => [qw(tracks)]
+  'favourite_tracks'  => [qw(tracks)],
+  'das'               => [qw(label)] #some others too, but they are not directly queried on this object (TODO)
 };
 
 ## Define schema
