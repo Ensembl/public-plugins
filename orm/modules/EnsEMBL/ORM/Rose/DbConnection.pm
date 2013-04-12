@@ -15,11 +15,8 @@ use strict;
 use warnings;
 
 use EnsEMBL::Web::SpeciesDefs;
-use Data::Dumper;
 
 use base qw(Rose::DB);
-
-use constant DEBUG_CONNECTIONS => 0;
 
 my $species_defs = EnsEMBL::Web::SpeciesDefs->new;
 
@@ -50,15 +47,7 @@ while (my ($key, $details) = each %{$SiteDefs::ROSE_DB_DATABASES}) {
   $params->{'driver'} ||= 'mysql';
   $params->{'type'}     = $key;
 
-  __PACKAGE__->register_database($params);
-}
-
-sub register_database {
-  my ($class, $params) = @_;
-
-  warn Dumper $params if $class->DEBUG_CONNECTIONS;
-  
-  return $class->register_db(%$params);
+  __PACKAGE__->register_db(%$params);
 }
 
 1;
