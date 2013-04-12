@@ -33,6 +33,8 @@ __PACKAGE__->meta->setup(
     new_email             => { 'column' => 'data' }
   ],
 
+  title_column          => 'name',
+
   relationships         => [
     logins                => { 'type' => 'one to many', 'class' => 'EnsEMBL::ORM::Rose::Object::Login',           'column_map' => {'user_id' => 'user_id'}  },
     memberships           => { 'type' => 'one to many', 'class' => 'EnsEMBL::ORM::Rose::Object::Membership',      'column_map' => {'user_id' => 'user_id'}, 'methods' => { map {$_, undef} qw(add_on_save count find get_set_on_save)} },
