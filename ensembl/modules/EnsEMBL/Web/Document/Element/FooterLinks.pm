@@ -11,7 +11,7 @@ sub content {
   return qq(
     <div class="column-two right print_hide">
       <p>
-        <a href="http://www.ensembl.org/info/about/intro.html" class="constant">About&nbsp;Ensembl</a> | 
+        <a href="http://www.ensembl.org/info/about/" class="constant">About&nbsp;Ensembl</a> | 
         <a href="http://www.ensembl.org/info/about/legal/privacy.html" class="constant">Privacy&nbsp;Policy</a> | 
         <a href="http://www.ensembl.org/info/about/contact/" class="constant">Contact&nbsp;Us</a>
       </p>
