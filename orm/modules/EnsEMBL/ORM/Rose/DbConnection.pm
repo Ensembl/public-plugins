@@ -15,8 +15,11 @@ use strict;
 use warnings;
 
 use EnsEMBL::Web::SpeciesDefs;
+use Data::Dumper;
 
 use base qw(Rose::DB);
+
+use constant DEBUG_CONNECTIONS => 0;
 
 my $species_defs = EnsEMBL::Web::SpeciesDefs->new;
 
@@ -29,17 +32,6 @@ __PACKAGE__->use_cache_during_apache_startup(0);
 ## Set the default domain & type
 __PACKAGE__->default_domain('ensembl');
 __PACKAGE__->default_type('user');
-
-## Register data source for users
-__PACKAGE__->register_db(
-  type      => 'user',
-  driver    => 'mysql',
-  database  => $species_defs->ENSEMBL_USERDB_NAME,
-  host      => $species_defs->ENSEMBL_USERDB_HOST,
-  port      => $species_defs->ENSEMBL_USERDB_PORT,
-  username  => $species_defs->ENSEMBL_USERDB_USER || $species_defs->DATABASE_WRITE_USER,
-  password  => $species_defs->ENSEMBL_USERDB_PASS || $species_defs->DATABASE_WRITE_PASS,
-);
 
 ## Register other data sources from site defs
 while (my ($key, $details) = each %{$SiteDefs::ROSE_DB_DATABASES}) {
@@ -58,7 +50,15 @@ while (my ($key, $details) = each %{$SiteDefs::ROSE_DB_DATABASES}) {
   $params->{'driver'} ||= 'mysql';
   $params->{'type'}     = $key;
 
-  __PACKAGE__->register_db(%$params);
+  __PACKAGE__->register_database($params);
+}
+
+sub register_database {
+  my ($class, $params) = @_;
+
+  warn Dumper $params if $class->DEBUG_CONNECTIONS;
+  
+  return $class->register_db(%$params);
 }
 
 1;
