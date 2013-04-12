@@ -73,4 +73,8 @@ sub cloned_from {
   return shift->{'cloned_from'};
 }
 
+sub data {
+  shift->{'__rose_object'}->data(@_);
+}
+
 1;
