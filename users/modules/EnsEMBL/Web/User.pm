@@ -214,7 +214,7 @@ sub get_all_das {
   my %by_url  = ();
   for my $das_record ( $self->get_records('dases') ) {
     # Create new DAS source from value in database...
-    my $das = EnsEMBL::Web::DASConfig->new_from_hashref( $das_record->data->raw );
+    my $das = EnsEMBL::Web::DASConfig->new_from_hashref( $das_record->data );
     $das->matches_species( $species ) || next;
     $das->category( 'user' );
     $by_name{ $das->logic_name } = $das;
