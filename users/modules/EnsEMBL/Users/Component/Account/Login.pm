@@ -12,12 +12,17 @@ sub caption {
 }
 
 sub content {
-  my $self        = shift;
-  my $object      = $self->object;
-  my $hub         = $self->hub;
-  my $then_param  = $self->get_then_param;
-  my $form        = $self->new_form({'id' => 'login', 'action' => {qw(action User function Authenticate)}});
-  my $ex_email    = $hub->param('email');
+  my $self = shift;
+  return $self->js_section({'subsections' => [ $self->login_form->render ]});
+}
+
+sub login_form {
+  my ($self, $is_ajax)  = @_;
+  my $object            = $self->object;
+  my $hub               = $self->hub;
+  my $form              = $self->new_form({'id' => 'login', 'action' => {qw(action User function Authenticate)}});
+  my $then_param        = $is_ajax ? '' : $self->get_then_param;
+  my $ex_email          = $is_ajax ? '' : $hub->param('email');
 
   $form->add_hidden({'name'  => 'then', 'value' => $then_param}) if $then_param;
   $form->add_field([
@@ -29,7 +34,7 @@ sub content {
     )}
   ]);
 
-  return $self->js_section({'subsections' => [ $form->render ]});
+  return $form;
 }
 
 1;
