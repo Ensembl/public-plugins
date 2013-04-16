@@ -60,8 +60,10 @@ sub ensembl_open_zmenu {
 
   print "  Test ZMenu $track_name on the $panel panel \n";
   $self->run_script(qq/
-    var coords = \$('$tag', '#$panel').attr('coords').split(',');
-    Ensembl.PanelManager.panels.$panel.makeZMenu({pageX:0, pageY:0}, {x:coords[0], y:coords[1]});
+    Ensembl.PanelManager.panels.$panel.elLk.img.one('click', function (e) {
+      var coords = Ensembl.PanelManager.panels.$panel.elLk.map.find('$tag').attr('coords').split(','); 
+      Ensembl.PanelManager.panels.$panel.makeZMenu(\$.extend(e, { pageX: 0, pageY: 0 }), { x: parseInt(coords[0], 10), y: parseInt(coords[1], 10) });
+    }).trigger('click');
   /)
   and $self->ensembl_wait_for_ajax(undef,'7000');
 }
@@ -72,7 +74,11 @@ sub ensembl_open_zmenu_at {
   my ($self, $panel, $pos) = @_;
   
   my ($x, $y) = split /,/, $pos;
-  $self->run_script("Ensembl.PanelManager.panels['$panel'].makeZMenu({pageX:0, pageY:0}, {x:$x, y:$y});")
+  $self->run_script(qq/
+    Ensembl.PanelManager.panels.$panel.one('click', function (e) {
+      Ensembl.PanelManager.panels.$panel.makeZMenu(\$.extend(e, { pageX: 0, pageY: 0 }), { x: parseInt($x, 10), y: parseInt($y, 10) });
+    }).trigger('click');
+  /)
   and $self->ensembl_wait_for_ajax(undef,'7000');
 }
 
