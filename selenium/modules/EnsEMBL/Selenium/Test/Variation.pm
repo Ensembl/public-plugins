@@ -71,8 +71,6 @@ sub test_variation {
     $sel->select_ok("align", "label=6 primates EPO")
     and $sel->ensembl_click("link=Go") if(lc($self->species) eq 'homo_sapiens');
     
-    $sel->ensembl_wait_for_page_to_load;
-    
     print "  Test Configure page on External Data \n";
     $sel->ensembl_click("link=External Data")
     and $sel->ensembl_wait_for_page_to_load
