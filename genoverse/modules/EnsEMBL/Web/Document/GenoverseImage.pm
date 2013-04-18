@@ -37,14 +37,16 @@ sub get_tracks {
     
     # TODO: generate hover labels elsewhere
     $classname->new({ config => $image_config, my_config => $track, display => $display }); # needed to generate hover labels
-    
+   
+    my $label_overlay = $classname->label_overlay; 
     my $config = {
-      id        => $track->id,
-      name      => $track->get('name'),
-      order     => $track->get('order'),
-      depth     => $track->get('depth'),
-      url       => $hub->url({ type => 'Genoverse', action => 'fetch_features', function => $glyphset, config => $image_config->{'type'}, __clear => 1 }),
-      urlParams => { id => $track->id },
+      id           => $track->id,
+      name         => $track->get('name'),
+      order        => $track->get('order'),
+      depth        => $track->get('depth'),
+      url          => $hub->url({ type => 'Genoverse', action => 'fetch_features', function => $glyphset, config => $image_config->{'type'}, __clear => 1 }),
+      urlParams    => { id => $track->id },
+      $label_overlay ? ( labelOverlay => $label_overlay ) : (),
       %genoverse
     };
     
