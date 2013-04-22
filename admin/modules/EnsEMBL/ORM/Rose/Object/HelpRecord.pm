@@ -43,8 +43,6 @@ __PACKAGE__->meta->setup(
     content         => {'column' => 'data'},
   ],
 
-  title_column    => 'content', # for help pages only - ie. if help_record.type == 'view'
-
   relationships   => [
     help_links      => {  # this relation only exists if help_record.type == 'view'
       'type'          => 'one to many',
@@ -58,6 +56,11 @@ sub include_in_lookup {
   ## @overrides
   ## Only help_record with type == 'view' can can be used, as only relationship that 
   return (shift->column_value('type') || '') eq 'view';
+}
+
+sub get_title {
+  ## @overrodes
+  return $_[0]->column_value({qw(view content movie title faq question glossary word)}->{$_[0]->type});
 }
 
 1;
