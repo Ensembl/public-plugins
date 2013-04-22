@@ -16,10 +16,11 @@ sub content_tree {
   ## Generates a DOM tree for content HTML
   ## Override this one in the child class and do the DOM manipulation on the DOM tree if required
   ## Flags are set on required HTML elements for 'selection and manipulation' purposes in child classes (get_nodes_by_flag)
-  my $self    = shift;
-  my $hub     = $self->hub;
-  my $object  = $self->object;
-  my $record  = $object->rose_object;
+  my $self      = shift;
+  my $hub       = $self->hub;
+  my $object    = $self->object;
+  my $record    = $object->rose_object;
+  my $function  = $hub->function || '';
   
   my $content = $self->dom->create_element('div', {'class' => $self->_JS_CLASS_RESPONSE_ELEMENT});
 
@@ -30,9 +31,9 @@ sub content_tree {
         ? sprintf('This will permanently remove %s (%s) from the database.', $object->record_name->{'singular'}, $record->get_title)
         : sprintf('%s (%s) will still remain in the database but will no longer be accessible.', ucfirst $object->record_name->{'singular'}, $record->get_title),
       $self->_JS_CLASS_DELETE_BUTTON,
-      $hub->url({'action' => 'Delete', 'id' => $record->get_primary_key_value}),
+      $hub->url({'action' => 'Delete', 'function' => $function, 'id' => $record->get_primary_key_value}),
       $self->_JS_CLASS_CANCEL_BUTTON,
-      $hub->referer->{'uri'} || $hub->url({'action' => $object->default_action})
+      $hub->referer->{'uri'} || $hub->url({'action' => $object->default_action, 'function' => $function})
     ));
   }
   else {
