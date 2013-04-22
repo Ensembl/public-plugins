@@ -22,18 +22,18 @@ var Genoverse = Base.extend({
   
   constructor: function (config) {
     if (!this.supported()) {
-      return this.die('                                           \
-        <p>Your browser does not support this functionality.</p>  \
-        <p>Supported browsers are:                                \
-          <ul>                                                    \
-            <li>Chrome 21</li>                                    \
-            <li>Firefox 14</li>                                   \
-            <li>Internet Explorer 9</li>                          \
-            <li>Safari 5.1</li>                                   \
-          </ul>                                                   \
-          and later versions. Please update your browser.         \
-        </p>                                                      \
-      ', config.container);
+      return this.die(
+        '<p>Your browser does not support this functionality.</p>' +
+        '<p>Supported browsers are:'                               +
+        '  <ul>'                                                   +
+        '    <li>Chrome 21</li>'                                   +
+        '    <li>Firefox 14</li>'                                  +
+        '    <li>Internet Explorer 9</li>'                         +
+        '    <li>Safari 5.1</li>'                                  +
+        '  </ul>'                                                  +
+        '  and later versions. Please update your browser.'        +
+        '</p>'                                                     
+      , config.container);
     }
     
     $.extend(this, this.defaults, config);
@@ -92,27 +92,27 @@ var Genoverse = Base.extend({
 
     this.container.width(width);
     
-    this.selectorControls = $('                      \
-      <div class="selector_controls">                \
-        <button class="zoomHere">Zoom here</button>  \
-        <button class="center">Center</button>       \
-        <button class="summary">Summary</button>     \
-        <button class="cancel">Cancel</button>       \
-      </div>                                         \
-    ').appendTo(this.selector);
+    this.selectorControls = $(
+      '<div class="selector_controls">'               +
+      '  <button class="zoomHere">Zoom here</button>' +
+      '  <button class="center">Center</button>'      +
+      '  <button class="summary">Summary</button>'    +
+      '  <button class="cancel">Cancel</button>'      +
+      '</div>'
+    ).appendTo(this.selector);
     
-    this.zoomInHighlight = $('     \
-      <div class="canvas_zoom i">  \
-        <div class="t l h"></div>  \
-        <div class="t r h"></div>  \
-        <div class="t l v"></div>  \
-        <div class="t r v"></div>  \
-        <div class="b l h"></div>  \
-        <div class="b r h"></div>  \
-        <div class="b l v"></div>  \
-        <div class="b r v"></div>  \
-      </div>                       \
-    ').appendTo('body');
+    this.zoomInHighlight = $(
+      '<div class="canvas_zoom i">' +
+      '  <div class="t l h"></div>' +
+      '  <div class="t r h"></div>' +
+      '  <div class="t l v"></div>' +
+      '  <div class="t r v"></div>' +
+      '  <div class="b l h"></div>' +
+      '  <div class="b r h"></div>' +
+      '  <div class="b l v"></div>' +
+      '  <div class="b r v"></div>' +
+      '</div>'
+    ).appendTo('body');
     
     this.zoomOutHighlight = this.zoomInHighlight.clone().toggleClass('i o').appendTo('body');
     
@@ -924,12 +924,12 @@ var Genoverse = Base.extend({
     this.failed = true;
   },
   
-  menuTemplate: $('               \
-    <div class="menu">            \
-      <div class="close">x</div>  \
-      <table></table>             \
-    </div>                        \
-  '),
+  menuTemplate: $(
+    '<div class="menu">'           +
+    '  <div class="close">x</div>' +
+    '  <table></table>'            +
+    '</div>'
+  ),
   
   // Creates a menu template only. Implement properly in a plugin
   makeMenu: function (track, feature, event) {

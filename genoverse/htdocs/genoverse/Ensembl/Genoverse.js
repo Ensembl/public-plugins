@@ -237,21 +237,21 @@ Ensembl.Genoverse = Genoverse.extend({
     this.selector.add(this.highlightRegion).height(height);
   },
   
-  menuTemplate: $('                                                                                 \
-    <div class="info_popup floating_popup menu">                                                    \
-      <span class="top"></span>                                                                     \
-      <span class="close"></span>                                                                   \
-      <table class="zmenu" cellspacing="0">                                                         \
-        <thead>                                                                                     \
-          <tr class="header"><th class="caption" colspan="2"><span class="title"></span></th></tr>  \
-        </thead>                                                                                    \
-        <tbody class="loading">                                                                     \
-          <tr><td><p class="spinner"></p></td></tr>                                                 \
-        </tbody>                                                                                    \
-        <tbody></tbody>                                                                             \
-      </table>                                                                                      \
-    </div>                                                                                          \
-  '),
+  menuTemplate: $(
+    '<div class="info_popup floating_popup menu">'                                                   +
+    '  <span class="top"></span>'                                                                    +
+    '  <span class="close"></span>'                                                                  +
+    '  <table class="zmenu" cellspacing="0">'                                                        +
+    '    <thead>'                                                                                    +
+    '      <tr class="header"><th class="caption" colspan="2"><span class="title"></span></th></tr>' +
+    '    </thead>'                                                                                   +
+    '    <tbody class="loading">'                                                                    +
+    '      <tr><td><p class="spinner"></p></td></tr>'                                                +
+    '    </tbody>'                                                                                   +
+    '    <tbody></tbody>'                                                                            +
+    '  </table>'                                                                                     +
+    '</div>'                                                                                          
+  ),
   
   makeMenu: function (track, feature, event) {
     if (feature.menu || feature.title) {
