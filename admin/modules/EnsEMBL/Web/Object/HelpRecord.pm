@@ -258,6 +258,11 @@ sub get_fields {
   return $self->SUPER::get_fields(@_);
 }
 
+sub permit_delete {
+  ## @overrides
+  return 'delete';
+}
+
 sub _get_cvs_status {
   ## @private
   my $file        = shift;
