@@ -11,13 +11,14 @@ use warnings;
 use base qw(EnsEMBL::Web::Command);
 
 sub process {
-  my $self    = shift;
-  my $object  = $self->object;
-  my $hub     = $self->hub;
-  my $done    = $object->delete;
-  my $errors  = $object->rose_errors;
+  my $self      = shift;
+  my $object    = $self->object;
+  my $hub       = $self->hub;
+  my $done      = $object->delete;
+  my $errors    = $object->rose_errors;
+  my $function  = $hub->function || '';
 
-  $self->ajax_redirect($self->hub->url($done && @$done && !@$errors ? {'action' => 'Display'} : {'action' => 'Problem', 'error' => join('. ', @$errors)}));
+  $self->ajax_redirect($self->hub->url($done && @$done && !@$errors ? {'action' => 'Display', 'function' => $function} : {'action' => 'Problem', 'function' => $function, 'error' => join('. ', @$errors)}));
 }
 
 1;
