@@ -51,6 +51,7 @@ Ensembl.Panel.ImageMap = Ensembl.Panel.ImageMap.extend({
           panel.resetGenoverse = true;
           Ensembl.EventManager.trigger('genoverseMove', panel.highlightRegions[0][0].region.range, true, true);
           panel.elLk.overlay.add(panel.elLk.updateButtons).detach();
+          panel.elLk.resizeHandle.show();
         }
       });
     }
@@ -66,7 +67,8 @@ Ensembl.Panel.ImageMap = Ensembl.Panel.ImageMap.extend({
       
       if (range.start > Ensembl.location.start || range.end < Ensembl.location.end) {
         this.elLk.overlay.prependTo(this.el).css({ width: this.elLk.container.outerWidth(), height: this.elLk.container.outerHeight() });
-        this.elLk.updateButtons.appendTo(this.el);
+        this.elLk.container.append(this.elLk.updateButtons);
+        this.elLk.resizeHandle.hide();
       }
     } else {
       this.base.apply(this, arguments);
