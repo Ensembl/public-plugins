@@ -150,6 +150,7 @@ sub fetch_features_generic {
     $feature->{'strand'}     ||= int $_->strand if $strand;
     $feature->{'color'}      ||= $colourmap->hex_by_name($glyphset->my_colour($colour_key, $flag))   if $colour_key;
     $feature->{'labelColor'} ||= $colourmap->hex_by_name($glyphset->my_colour($colour_key, 'label')) if $colour_key && $feature->{'label'};
+    $feature->{'labelColor'}   = $feature->{'color'} eq '#000000' ? '#FFFFFF' : '#000000' if $feature->{'color'} eq $feature->{'labelColor'};
     $feature->{'menu'}       ||= $glyphset->href($_);
     $feature->{'title'}      ||= $glyphset->title($_) unless $feature->{'menu'};
 
