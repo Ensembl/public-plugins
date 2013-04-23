@@ -167,7 +167,7 @@ Genoverse.Track.TranslatedSequence = Genoverse.Track.Sequence.extend({
       codon = typeof this.codons[seq] === 'number' ? this.translate[this.codonTableId].charAt(this.codons[seq]) : this.lowerCase ? 'x' : 'X';
       
       if (codon.toLowerCase() !== 'x' || !i) {
-        this.browser.makeMenu(this, this.menuFeature(feature, x, codon), { left: e.pageX, top: e.pageY });
+        this.browser.makeMenu(this, this.menuFeature(feature, x, codon), e);
         break;
       }
     }
