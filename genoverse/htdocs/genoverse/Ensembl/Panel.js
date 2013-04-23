@@ -54,7 +54,7 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
       return;
     }
     
-    this.genoverse.labelContainer.data('updateURL', '/' + Ensembl.species + '/Ajax/track_order').sortable('option', 'handle', '.handle').bind('sortupdate', function (e, ui) {
+    this.genoverse.labelContainer.data('updateURL', '/' + Ensembl.species + '/Ajax/track_order').sortable('option', 'handle', '.handle').on('sortupdate', function (e, ui) {
       var order  = panel.sortUpdate(ui.item);
       var track  = ui.item[0].className.replace(' ', '.');
       
