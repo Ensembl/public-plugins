@@ -37,7 +37,7 @@ Ensembl.Panel.ImageMap = Ensembl.Panel.ImageMap.extend({
           url  : '/' + Ensembl.species + '/Genoverse/switch_image',
           data : { 'static' : isStatic ? 0 : 1, id : panel.id }
         });
-      }).helptip('Switch to ' + (isStatic ? 'scrollable' : 'static') + ' image');
+      }).helptip({ content: 'Switch to ' + (isStatic ? 'scrollable' : 'static') + ' image' });
     } else {
       this.elLk.container     = $('.image_container', this.el);
       this.elLk.overlay       = $('<div class="image_update_overlay">');
