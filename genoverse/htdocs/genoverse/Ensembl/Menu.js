@@ -10,6 +10,7 @@ Ensembl.Panel.GenoverseMenu = Ensembl.Panel.ZMenu.extend({
     this.event       = data.event;
     this.imageId     = data.imageId;
     this.drag        = data.drag;
+    this.coords      = data.coords;
     
     Ensembl.EventManager.register('showExistingZMenu', this, this.showExisting);
     Ensembl.EventManager.register('hideZMenu',         this, this.hide);
@@ -24,8 +25,7 @@ Ensembl.Panel.GenoverseMenu = Ensembl.Panel.ZMenu.extend({
     
     this.timeout = setTimeout(function () {
       if (panel.populated === false) {
-        panel.elLk.caption.html('Loading component');
-        panel.elLk.tbody.hide();
+        panel.elLk.container.hide();
         panel.elLk.loading.show();
         panel.show(true);
       }
@@ -57,7 +57,7 @@ Ensembl.Panel.GenoverseMenu = Ensembl.Panel.ZMenu.extend({
     this.base(loading);
     
     if (!loading) {
-      this.el.position({ of: this.event, my: 'left top', collision: 'flipfit none' });
+      this.el.draggable('option', 'containment', 'parent').position({ of: this.event, my: 'left top', collision: 'flipfit none' });
       
       var height = this.el.outerHeight() + this.el.position().top + 10;
       
