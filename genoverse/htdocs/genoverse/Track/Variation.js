@@ -200,19 +200,7 @@ Genoverse.Track.Variation = Genoverse.Track.extend({
           draw.highlight[feature.highlight] = [];
         }
         
-        if (bounds[1]) {
-          if (this.separateLabels) {
-            if (!draw.labelHighlight[feature.highlight]) {
-              draw.labelHighlight[feature.highlight] = [];
-            }
-            
-            draw.labelHighlight[feature.highlight].push([ 'fillRect', [ start, bounds[1].y, labelWidth, this.fontHeight ] ]);
-          } else {
-            draw.highlight[feature.highlight].push([ 'fillRect', [ start - 1, bounds[0].y - 1, Math.max(labelWidth, width + 1) + 1, bounds[0].h + bounds[1].h ] ]);
-          }
-        } else {
-          draw.highlight[feature.highlight].push([ 'fillRect', [ start - 1, bounds[0].y - 1, width + 2, bounds[0].h + 1] ]);
-        }
+        draw.highlight[feature.highlight].push([ 'fillRect', [ start - 1, bounds[0].y - 1, width + (bounds[1] ? bounds[1].w : 0) + 2, bounds[0].h + 1] ]);
       }
       
       height = Math.max(feature.bottom[scaleKey], height);
