@@ -370,6 +370,12 @@ sub extra_synteny {
   return $extra;
 }
 
+sub highlight_variation {
+  my $self = shift;
+  my $vf   = $self->hub->param('vf');
+  return { $vf => '#000000' } if $vf;
+}
+
 sub update {
   my $self    = shift;
   my $hub     = $self->hub;
