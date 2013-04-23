@@ -35,17 +35,16 @@ sub get_tracks {
     
     next unless $hub->dynamic_use($classname);
     
-    # TODO: generate hover labels elsewhere
-    $classname->new({ config => $image_config, my_config => $track, display => $display }); # needed to generate hover labels
+    my $glyphset_object = $classname->new({ config => $image_config, my_config => $track, display => $display });
     
     my $config = {
       id           => $track->id,
       name         => $track->get('name'),
       order        => $track->get('order'),
-      depth        => $track->get('depth'),
+      depth        => $glyphset_object->depth,
+      labelOverlay => $glyphset_object->label_overlay,
       url          => $hub->url({ type => 'Genoverse', action => 'fetch_features', function => $glyphset, config => $image_config->{'type'}, __clear => 1 }),
       urlParams    => { id => $track->id },
-      labelOverlay => $classname->label_overlay,
       %genoverse
     };
     
@@ -58,6 +57,8 @@ sub get_tracks {
     $config->{'renderer'}      = $display                       if scalar @{$track->get('renderers')} > 4;
     
     $reverse_order{$config->{'id'}} = $config->{'order'} + 0 and next if $track->get('strand') =~ /[bx]/ && $track->get('drawing_strand') eq 'r';
+    
+    delete $config->{$_} for grep !defined $config->{$_}, keys %$config;
     
     push @tracks, $config;
   }
