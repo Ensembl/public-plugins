@@ -3,7 +3,8 @@
 Genoverse.Track.Variation = Genoverse.Track.extend({
   config: {
     separateLabels : false,
-    bump           : true
+    bump           : true,
+    featureSpacing : 0
   },
   
   init: function () {
@@ -61,6 +62,7 @@ Genoverse.Track.Variation = Genoverse.Track.extend({
     var labelsHeight = 0;
     var scale        = this.scale > 1 ? this.scale : 1;
     var scaleKey     = this.scale;
+    var maxDepth     = this.depth || (this.browser.length > 1e4 ? 20 : 1e5);
     var seen         = {};
     var draw         = { fill: {}, border: {}, label: {}, highlight: {}, labelHighlight: {} };
     
@@ -82,7 +84,7 @@ Genoverse.Track.Variation = Genoverse.Track.extend({
       featureSpacing = feature.spacing || this.featureSpacing;
       
       if (bounds) {
-        width = bounds[0].w   - featureSpacing;
+        width = bounds[0].w - featureSpacing;
       } else {
         width = end - start + scale;
         
@@ -96,15 +98,15 @@ Genoverse.Track.Variation = Genoverse.Track.extend({
         y      = feature.y ? feature.y * (featureHeight + this.bumpSpacing) : 0;
         bounds = [{ x: x, y: y, w: width + featureSpacing, h: featureHeight + this.bumpSpacing }];
         
-        if (showLabels) {
-          bounds.push({ x: bounds[0].x + bounds[0].w - featureSpacing, y: bounds[0].y, w: feature.labelWidth + featureSpacing, h: bounds[0].h });
+        if (showLabels && feature.labelWidth) {
+          bounds.push({ x: bounds[0].x + width, y: bounds[0].y, w: feature.labelWidth + featureSpacing, h: bounds[0].h });
         }
         
         if (this.bump) {
           depth = 0;
           
           do {
-            if (this.depth && ++depth >= this.depth) {
+            if (maxDepth && ++depth >= maxDepth) {
               if ($.grep(this.featurePositions.search(bounds[0]), function (f) { return f.visible[scaleKey] !== false; }).length) {
                 feature.visible[scaleKey] = false;
               }
@@ -133,7 +135,7 @@ Genoverse.Track.Variation = Genoverse.Track.extend({
         
         this.featurePositions.insert(bounds[0], feature);
         
-        if (showLabels) {
+        if (bounds[1]) {
           this.featurePositions.insert(bounds[1], feature);
         }
 
