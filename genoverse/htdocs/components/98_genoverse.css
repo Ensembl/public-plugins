@@ -86,6 +86,7 @@ body.mac .canvas_container .label_container li .handle { cursor: ns-resize; }
 .hover_label div.height.auto_height .fixed             { display: inherit!important; }
 .hover_label div.height .fixed,
 .hover_label div.height.auto_height .auto              { display: none!important; }
+.hover_label div.config li.normal                      { font-weight: bold; }
 
 .canvas_zoom                                           { position: absolute; display: none; z-index: 20; }
 .canvas_zoom.i                                         { height: 40px; width: 40px; }
