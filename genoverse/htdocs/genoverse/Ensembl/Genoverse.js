@@ -237,25 +237,9 @@ Ensembl.Genoverse = Genoverse.extend({
     this.selector.add(this.highlightRegion).height(height);
   },
   
-  menuTemplate: $(
-    '<div class="info_popup floating_popup menu">'                                                   +
-    '  <span class="top"></span>'                                                                    +
-    '  <span class="close"></span>'                                                                  +
-    '  <table class="zmenu" cellspacing="0">'                                                        +
-    '    <thead>'                                                                                    +
-    '      <tr class="header"><th class="caption" colspan="2"><span class="title"></span></th></tr>' +
-    '    </thead>'                                                                                   +
-    '    <tbody class="loading">'                                                                    +
-    '      <tr><td><p class="spinner"></p></td></tr>'                                                +
-    '    </tbody>'                                                                                   +
-    '    <tbody></tbody>'                                                                            +
-    '  </table>'                                                                                     +
-    '</div>'                                                                                          
-  ),
-  
   makeMenu: function (track, feature, event) {
     if (feature.menu || feature.title) {
-      this.makeZMenu({ event: event, feature: feature, imageId: track.name }, [ 'zmenu', track.name, feature.id ].join('_').replace(/\W/g, '_'), track, this.base);
+      this.makeZMenu({ event: event, feature: feature, imageId: track.name }, [ 'zmenu', track.name, feature.id ].join('_').replace(/\W/g, '_'), track);
     }
   },
   
@@ -271,15 +255,15 @@ Ensembl.Genoverse = Genoverse.extend({
     }
   },
   
-  makeZMenu: function (params, id, track, func) {
+  makeZMenu: function (params, id, track) {
     var menu = $('#' + id);
     
     if (!menu.length) {
-      menu = func ? func.call(this, track, params.feature, params.event).hide() : this.menuTemplate.clone().addClass('drag').appendTo(this.menuContainer);
-      menu.attr('id', id).draggable({ handle: 'thead', containment: 'parent' });
+      menu = Ensembl.Panel.ZMenu.template.clone().attr('id', id).addClass('drag').appendTo(this.menuContainer);
     }
     
     params.browser = this;
+    params.coords  = {};
     
     Ensembl.EventManager.trigger('addPanel', id, 'GenoverseMenu', undefined, undefined, params, 'showExistingZMenu');
     
