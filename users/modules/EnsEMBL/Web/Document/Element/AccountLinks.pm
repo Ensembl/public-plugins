@@ -4,11 +4,28 @@ use strict;
 
 ### TODO add shared bookmarks from group
 ### TODO limit total number of bookmarks shown
+### TODO show bookmarks from current site only
 ### TODO order bookmarks by priority
 ### TODO Add 'Bookmark this page' link
 
+use URI::Escape qw(uri_escape);
+use HTML::Entities qw(encode_entities);
+
+sub init {
+  my ($self, $controller) = @_;
+  my $hub   = $self->hub;
+  my $title = $controller->page->title;
+  $self->{'_bookmark_data'} = {
+    name        => $title->get_short,
+    description => $title->get,
+    url         => $hub->species_defs->ENSEMBL_BASE_URL . $hub->url
+  };
+}
+
 sub content {
-  return '<div class="_account_holder"></div>';
+  my $self = shift;
+  return sprintf '<div class="_account_holder"><div class="account-loading">Loading&hellip;</div><form action="/Ajax/accounts_dropdown">%s%s%s</form></div>',
+    map sprintf('<input type="hidden" name="%s" value="%s" />', $_, encode_entities(uri_escape($self->{'_bookmark_data'}{$_}))), keys %{$self->{'_bookmark_data'}};
 }
 
 sub content_ajax {
@@ -38,16 +55,14 @@ sub content_ajax {
         } @$bookmarks) || '<p><i>No bookmark added</i></p>',
         @$bookmarks ? sprintf('
           <div>
-            <!--p><a href="%s" class="modal_link constant">Bookmark this page</a></p-->
+            <p><a href="%s" class="modal_link constant">Bookmark this page</a></p>
             <p><a href="%s" class="modal_link constant" rel="modal_user_data">View all bookmarks</a></p>
           </div>',
           $hub->url({
             'type'        => 'Account',
             'action'      => 'Bookmark',
             'function'    => 'Add',
-            'name'        => '',
-            'description' => '',
-            'url'         => ''
+            map {$_ => $hub->param($_) || ''} qw(name description url)
           }),
           $hub->url({qw(type Account action Bookmark function View)})
         ) : '',
