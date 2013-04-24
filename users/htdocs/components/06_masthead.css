@@ -1,5 +1,7 @@
 #masthead div.account_holder                                              { position: absolute; right: 0; top: 0; }
 
+#masthead div.account_holder div.account-loading                          { line-height: 20px; margin: 0 10px; padding: 0; }
+
 #masthead div.account_holder a.account-link                               { display: block; height: 24px; line-height: 24px; margin-right: 16px; }
 #masthead div.account_holder a.account-link span.acc-email                { display: block; float: left; margin: 0 24px 0 0; }
 #masthead div.account_holder a.account-link span.acc-arrow                { position: absolute; display: block; right: 8px; top: 0; z-index: 201; text-align: center; width: 24px; }
