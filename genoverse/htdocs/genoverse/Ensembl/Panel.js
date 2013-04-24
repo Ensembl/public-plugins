@@ -12,8 +12,7 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
     
     this.elLk.img         = this.genoverse.container;
     this.elLk.boundaries  = this.genoverse.labelContainer;
-    this.elLk.canvas      = $('.canvas',             this.el);
-    this.elLk.controls    = $('.genoverse_controls', this.el).each(function () { $(this).prev().append(this); });
+    this.elLk.controls    = $('.genoverse_controls', this.elLk.container).each(function () { $(this).prev().append(this); });
     this.elLk.autoHeight  = $('.auto_height',        this.elLk.controls);
     this.elLk.resetHeight = $('.reset_height',       this.elLk.controls)
     this.elLk.dragging    = $('.dragging',           this.elLk.controls);
@@ -437,7 +436,7 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
     this.elLk.exportMenu.add(this.elLk.resizeMenu).hide();
     this.elLk.imageResize.html(function (i) { var w = (i - 3) * 100 + width; $(this.parentNode.parentNode)[w < 500 ? 'hide' : 'show'](); return w + ' px'; });
     this.elLk.controls[width < 800 ? 'addClass' : 'removeClass']('narrow');
-    this.elLk.canvas.width(width);
+    this.elLk.container.css({ width: width, height: '' });
     this.genoverse.setWidth(width);
   }
 });
