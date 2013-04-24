@@ -3,34 +3,42 @@
 Ensembl.Panel.Masthead = Ensembl.Panel.Masthead.extend({
   constructor: function (id) {
     this.base(id);
-
+    
     Ensembl.EventManager.register('refreshAccountsDropdown', this, this.refreshAccountsDropdown);
   },
-
+  
   init: function () {
     this.base();
-
-    this.elLk.accountHolder = this.el.find('div._account_holder');
+    
+    this.elLk.accountHolder   = this.el.find('div._account_holder');
+    
+    this.accountsRefreshURL   = '';
+    this.accountsBookmarkData = '';
     
     this.refreshAccountsDropdown();
   },
   
   refreshAccountsDropdown: function() {
     var panel = this;
-
+    
     if (!this.elLk.accountHolder.find('._accounts_no_user').length) {
-
-      this.elLk.accountHolder.empty();
-
+    
       var hideDropdown = function(e) {
         if (!e.which || e.which === 1) {
           panel.toggleAccountsDropdown(false);
           $(document).off('click', hideDropdown);
         }
       }
-
-      $.ajax('/Ajax/accounts_dropdown', {
+      
+      if (!this.accountsRefreshURL) {
+        var form = this.elLk.accountHolder.find('form');
+        this.accountsRefreshURL   = form.attr('action');
+        this.accountsBookmarkData = form.serialize();
+      }
+      
+      $.ajax(this.accountsRefreshURL, {
         'context': this,
+        'data': this.accountsBookmarkData,
         'success': function(html) {
           this.elLk.accountHolder.html(html);
           this.elLk.accountLink = this.el.find('._accounts_link').on({
@@ -43,7 +51,7 @@ Ensembl.Panel.Masthead = Ensembl.Panel.Masthead.extend({
               }
             }
           });
-    
+          
           this.elLk.accountDropdown = this.el.find('._accounts_dropdown').on({
             'click': function(event) {
               if (event.target.nodeName !== 'A') {
@@ -56,7 +64,7 @@ Ensembl.Panel.Masthead = Ensembl.Panel.Masthead.extend({
       });
     }
   },
-
+  
   toggleAccountsDropdown: function(flag) {
     this.elLk.accountLink.toggleClass('selected', flag);
     this.elLk.accountDropdown.toggle(flag);
