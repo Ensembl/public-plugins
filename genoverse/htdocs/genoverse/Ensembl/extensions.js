@@ -39,7 +39,6 @@ Ensembl.Panel.ImageMap = Ensembl.Panel.ImageMap.extend({
         });
       }).helptip({ content: 'Switch to ' + (isStatic ? 'scrollable' : 'static') + ' image' });
     } else {
-      this.elLk.container     = $('.image_container', this.el);
       this.elLk.overlay       = $('<div class="image_update_overlay">');
       this.elLk.updateButtons = $('<div class="image_update_buttons">');
       
@@ -51,7 +50,7 @@ Ensembl.Panel.ImageMap = Ensembl.Panel.ImageMap.extend({
           panel.resetGenoverse = true;
           Ensembl.EventManager.trigger('genoverseMove', panel.highlightRegions[0][0].region.range, true, true);
           panel.elLk.overlay.add(panel.elLk.updateButtons).detach();
-          panel.elLk.resizeHandle.show();
+          panel.elLk.container.resizable('enable');
         }
       });
     }
@@ -68,7 +67,7 @@ Ensembl.Panel.ImageMap = Ensembl.Panel.ImageMap.extend({
       if (range.start > Ensembl.location.start || range.end < Ensembl.location.end) {
         this.elLk.overlay.prependTo(this.el).css({ width: this.elLk.container.outerWidth(), height: this.elLk.container.outerHeight() });
         this.elLk.container.append(this.elLk.updateButtons);
-        this.elLk.resizeHandle.hide();
+        this.elLk.container.resizable('disable');
       }
     } else {
       this.base.apply(this, arguments);
