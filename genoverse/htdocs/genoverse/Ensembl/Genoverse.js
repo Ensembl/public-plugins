@@ -240,11 +240,12 @@ Ensembl.Genoverse = Genoverse.extend({
   makeMenu: function (track, feature, event) {
     if (feature.menu || feature.title) {
       this.makeZMenu({ event: event, feature: feature, imageId: track.name }, [ 'zmenu', track.name, feature.id ].join('_').replace(/\W/g, '_'), track);
+      event.originalEvent.hasFeature = true;
     }
   },
   
   stopDragSelect: function (e) {
-    if (this.base(e) !== false) {
+    if (this.base(e) !== false && !e.originalEvent.hasFeature) {
       var id    = 'zmenu_region_select';
       var left  = this.selector.position().left;
       var start = Math.round(left / this.scale) + this.start;
@@ -256,24 +257,25 @@ Ensembl.Genoverse = Genoverse.extend({
   },
   
   makeZMenu: function (params, id, track) {
-    var menu = $('#' + id);
-    
-    if (!menu.length) {
-      menu = Ensembl.Panel.ZMenu.template.clone().attr('id', id).addClass('drag').appendTo(this.menuContainer);
-    }
-    
     params.browser = this;
     params.coords  = {};
     
-    Ensembl.EventManager.trigger('addPanel', id, 'GenoverseMenu', undefined, undefined, params, 'showExistingZMenu');
+    if (params.event.shiftKey && params.event.pageX) {
+      var x         = (params.event.pageX - this.wrapper.offset().left + this.scaledStart) / this.scale;
+      var fuzziness = this.scale > 1 ? 0 : this.scale * 2;
+      
+      params.coords.clickChr   = this.chr;
+      params.coords.clickStart = Math.max(Math.floor(x - fuzziness), this.start);
+      params.coords.clickEnd   = fuzziness ? Math.min(Math.ceil(x + fuzziness), this.end) : params.coords.clickStart;
+      
+      id += '_multi';
+    }
     
-    menu = null;
-  },
-  
-  cancelSelect: function () {
-    this.base();
-    $('.drag', this.menuContainer).hide();
-    return false;
+    if (!document.getElementById(id)) {
+      Ensembl.Panel.ZMenu.template.clone().attr('id', id).addClass('menu').appendTo(this.menuContainer);
+    }
+    
+    Ensembl.EventManager.trigger('addPanel', id, 'GenoverseMenu', undefined, undefined, params, 'showExistingZMenu');
   },
   
   toggleSelect: function (on) {
