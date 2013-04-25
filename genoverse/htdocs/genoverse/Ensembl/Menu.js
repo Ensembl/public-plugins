@@ -11,6 +11,7 @@ Ensembl.Panel.GenoverseMenu = Ensembl.Panel.ZMenu.extend({
     this.imageId     = data.imageId;
     this.drag        = data.drag;
     this.coords      = data.coords;
+    this.group       = data.group;
     
     Ensembl.EventManager.register('showExistingZMenu', this, this.showExisting);
     Ensembl.EventManager.register('hideZMenu',         this, this.hide);
