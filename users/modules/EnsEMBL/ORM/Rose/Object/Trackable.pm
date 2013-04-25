@@ -22,14 +22,14 @@ sub save {
   ## @params Hash with an extra key 'user' containing current user (Rose object) along with keys as accepted by Rose::DB::Object->save
   my ($self, %params) = @_;
 
-  if (my $user = delete $params{'user'}) {
-    my $key = $self->get_primary_key_value ? 'modified' : 'created';
-    my $by  = "${key}_by";
-    my $at  = "${key}_at";
+  my $user  = delete $params{'user'};
+  my $key   = $self->get_primary_key_value ? 'modified' : 'created';
+  my $by    = "${key}_by";
+  my $at    = "${key}_at";
 
-    $self->$by($user->user_id);
-    $self->$at(parse_date('now'));
-  }
+  $self->$by($user->user_id) if $user;
+  $self->$at(parse_date('now'));
+
   return $self->SUPER::save(%params);
 }
 
