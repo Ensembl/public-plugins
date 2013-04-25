@@ -3,7 +3,7 @@ package EnsEMBL::ORM::Rose::Object::Login;
 use strict;
 use warnings;
 
-use base qw(EnsEMBL::ORM::Rose::Object);
+use base qw(EnsEMBL::ORM::Rose::Object::Trackable);
 
 use EnsEMBL::Web::Tools::RandomString qw(random_string);
 use EnsEMBL::Web::Tools::Encryption qw(encrypt_password);
