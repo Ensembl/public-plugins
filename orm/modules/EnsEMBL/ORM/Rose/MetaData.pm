@@ -5,6 +5,7 @@ package EnsEMBL::ORM::Rose::MetaData;
 
 use strict;
 
+use EnsEMBL::ORM::Rose::DataMap;
 use EnsEMBL::ORM::Rose::VirtualColumn;
 use EnsEMBL::ORM::Rose::VirtualRelationship;
 use EnsEMBL::ORM::Rose::ExternalRelationship;
@@ -24,20 +25,30 @@ sub setup {
   my ($self, %params) = @_;
   my @args;
 
-  ## sort arguments to keep table name, columns and relationships before any other keys (to make sure virtual columns, virtual relationships are initiated after columns and relationships)
-  splice @args, ($_ =~ /^(table|columns|relationships)$/ ? 0 : @args), 0, $_, $params{$_} for keys %params;
+  ## sort arguments to keep auto, table name, columns and relationships before any other keys (to make sure virtual columns, virtual relationships are initiated after columns and relationships)
+  splice @args, ($_ =~ /^(table|columns|relationships|auto)$/ ? 0 : @args), 0, $_, $params{$_} for keys %params;
 
-  return unless $self->SUPER::setup(@args);
-
-  ## Call modify_methods method on datastructure based columns
-  $_->isa('EnsEMBL::ORM::Rose::DataStructure') and $_->modify_methods for $self->columns;
-  return 1;
+  return $self->SUPER::setup(@args);
 }
 
 sub is_trackable {
   ## Tells whether the object isa Trackable object
   ## Overridden in MetaData::Trackable
   return 0;
+}
+
+sub datamap_columns {
+  ## Returns the existing datamap columns or upgrades existing text columns to datamap columns
+  ## @params List of: Column objects or hashref with structure {name => column_name, trusted => 1} or just name string (optional)
+  ## @return Array or arrayref of the column objects
+  return shift->_hybrid_columns('datamap', @_);
+}
+
+sub datastructure_columns {
+  ## Returns the existing datastructure columns or upgrades existing text columns to datastructure columns
+  ## @params List of: Column objects or hashref with structure {name => column_name, trusted => 1} or just name string (optional)
+  ## @return Array or arrayref of the column objects
+  return shift->_hybrid_columns('datastructure', @_);
 }
 
 sub virtual_columns {
@@ -54,21 +65,24 @@ sub virtual_columns {
 
     while (my ($col, $detail) = splice @_, 0, 2) {
 
-      # only a datamap column can have virtual columns
-      my $datamap = $self->column($detail->{'column'});
-      throw exception('ORMException::DataMapMissing', "No datamap column with name '$detail->{'column'}' found. Either this column name is invalid or columns need to be added before adding virtual columns") unless $datamap;
-      throw exception('ORMException::InvalidDataMap', "Column '$detail->{'column'}' is required to be of type 'datamap' for adding virtual columns to it.") unless $datamap->type eq 'datamap';
+      # column that contains the virtual columns
+      if (my $datamap = $self->column($detail->{'column'})) {
 
-      my $column  = EnsEMBL::ORM::Rose::VirtualColumn->new({
-        'name'    => $col,
-        'column'  => $datamap,
-        'parent'  => $self,
-        'alias'   => $detail->{'alias'} || undef,
-        'default' => defined $detail->{'default'} ? $detail->{'default'} : undef
-      });
-      $column->make_methods;
+        $self->datamap_columns($datamap); # change column type to datamap (if not already) as only a datamap column can contain virtual columns
 
-      push @{$self->{$key_name}}, $column;
+        my $column  = EnsEMBL::ORM::Rose::VirtualColumn->new({
+          'name'    => $col,
+          'column'  => $datamap,
+          'parent'  => $self,
+          'alias'   => $detail->{'alias'} || undef,
+          'default' => defined $detail->{'default'} ? $detail->{'default'} : undef
+        });
+        $column->make_methods;
+
+        push @{$self->{$key_name}}, $column;
+      } else {
+        throw exception('ORMException::DataMapMissing', "No datamap column with name '$detail->{'column'}' found. Either this column name is invalid or columns need to be added before adding virtual columns");
+      }
     }
   }
   return wantarray ? @{$self->{$key_name} || []} : [ map {$_} @{$self->{$key_name} || []} ];
@@ -188,6 +202,33 @@ sub virtual_relationship {
   my ($self, $relation_name) = @_;
   $_->name eq $relation_name and return $_ for @{$self->{$self->VIRTUAL_RELATIONS_KEY_NAME}};
   return undef;
+}
+
+sub _hybrid_columns {
+  ## @private
+  my ($self, $type) = splice @_, 0, 2;
+  my $col_classes   = $self->column_type_classes;
+
+  for (@_) {
+    $_ = {'name' => $_} unless ref $_;
+  
+    my ($col, $params);
+    if (UNIVERSAL::isa($_, 'Rose::DB::Object::Metadata::Column')) {
+      $col    = $_;
+      $params = {};
+    } else {
+      $col    = $self->column(delete $_->{'name'});
+      $params = $_;
+    }
+    my $ctype = $col->type;
+    if ($ctype ne $type) {
+      $col_classes->{$type}->new($col, $params);
+    }
+  }
+
+  my @cols = grep { $_->type eq $type } $self->columns;
+
+  return wantarray ? @cols : \@cols;
 }
 
 1;
