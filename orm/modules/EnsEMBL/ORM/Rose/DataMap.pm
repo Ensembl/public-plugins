@@ -25,7 +25,6 @@ package EnsEMBL::ORM::Rose::DataMap;
 use strict;
 
 use EnsEMBL::ORM::Rose::DataMapValue;
-use EnsEMBL::Web::Exceptions;
 
 use base qw(EnsEMBL::ORM::Rose::DataStructure);
 
