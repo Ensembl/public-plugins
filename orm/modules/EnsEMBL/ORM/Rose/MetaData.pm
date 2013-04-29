@@ -5,7 +5,6 @@ package EnsEMBL::ORM::Rose::MetaData;
 
 use strict;
 
-use EnsEMBL::ORM::Rose::DataMap;
 use EnsEMBL::ORM::Rose::VirtualColumn;
 use EnsEMBL::ORM::Rose::VirtualRelationship;
 use EnsEMBL::ORM::Rose::ExternalRelationship;
