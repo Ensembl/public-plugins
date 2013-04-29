@@ -4,40 +4,29 @@ package EnsEMBL::ORM::Rose::DataStructure;
 ### Class for column type 'datastructure' for saving a Hash or Array
 
 ### An extra boolean key 'trusted' is required (defaults to value being false) to initiate the column during AnyRoseObject->meta->setup (see &trusted below)
-### In the Metadata class, method modify_methods is called on this column object soon after setup of the Object class to modify existing accessor and mutator method (see &modify_methods below)
 
 use strict;
 
-use EnsEMBL::ORM::Rose::DataStructureValue;
+use EnsEMBL::Web::Exceptions;
 use EnsEMBL::Web::Tools::MethodMaker qw(copy_method add_method);
+use EnsEMBL::ORM::Rose::DataStructureValue;
 
 use base qw(Rose::DB::Object::Metadata::Column::Text);
 
-sub value_class {
-  ## Returns the name of the class that will be instantiated to represent value of this column
-  return 'EnsEMBL::ORM::Rose::DataStructureValue';
-}
+sub new {
+  my $class = shift;
 
-sub type {
-  ## Returns the type of the column (polymorphic method)
-  return 'datastructure';
-}
+  my $self;
 
-sub trusted {
-  ## Sets/Gets trusted flag on the column
-  ## If the column value is trusted to be safely 'eval'able, keep this flag on
-  ## @param Flag value
-  ##  - If on, string value is 'eval'ed straight without any security validation before setting it as a value of this column (insure but faster)
-  ##  - If off, value is set to this column after validation checks (secure but slower)
-  my $self = shift;
-  $self->{'_ens_trusted'} = shift @_ ? 1 : 0 if @_;
-  return $self->{'_ens_trusted'} || 0;
-}
+  if (ref $_[0] && UNIVERSAL::isa($_[0], 'Rose::DB::Object::Metadata::Column')) {
+    throw exception('ORMException', 'Only text type columns can be converted to datastructure type columns') unless $_[0]->isa('Rose::DB::Object::Metadata::Column::Text');
+    $self = bless($_[0], $class);
+    $self->init(%{$_[1] || {}});
+  } else {
+    $self = $class->SUPER::new(@_);
+  }
 
-sub modify_methods {
-  ## @constructor
-  ## modifies the get/set methods for a datastructure column
-  my $self  = shift;
+  # now modify the methods to return an actual hash (datastructure value) instead of stringified hash (text)
   my $class = $self->parent->class;
 
   # copy the old methods first
@@ -75,6 +64,27 @@ sub modify_methods {
   }
 
   return $self;
+}
+
+sub value_class {
+  ## Returns the name of the class that will be instantiated to represent value of this column
+  return 'EnsEMBL::ORM::Rose::DataStructureValue';
+}
+
+sub type {
+  ## Returns the type of the column (polymorphic method)
+  return 'datastructure';
+}
+
+sub trusted {
+  ## Sets/Gets trusted flag on the column
+  ## If the column value is trusted to be safely 'eval'able, keep this flag on
+  ## @param Flag value
+  ##  - If on, string value is 'eval'ed straight without any security validation before setting it as a value of this column (insure but faster)
+  ##  - If off, value is set to this column after validation checks (secure but slower)
+  my $self = shift;
+  $self->{'_ens_trusted'} = shift @_ ? 1 : 0 if @_;
+  return $self->{'_ens_trusted'} || 0;
 }
 
 1;
