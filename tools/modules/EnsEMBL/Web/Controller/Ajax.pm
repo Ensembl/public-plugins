@@ -68,7 +68,7 @@ sub blastinput {
 
   foreach my $db_info (@$databases){
     my $db = $db_info->{'value'}; 
-    my $label = $db_info->{'name'};
+    my $label = $db_info->{'caption'};
     my $selected = $db eq $selected_db ? 'selected="selected"' : '';
     my $option = sprintf ('<option %s value="%s">%s</option>', $selected, $db, $label,);  
     push @database_options, $option;
