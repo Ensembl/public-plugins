@@ -15,173 +15,174 @@ sub _init {
 }
 
 sub content {
-  my $self = shift; 
-  my $hub = $self->hub; 
-  my $html = '<div style="width:932px"><h2>New BLAT or BLAST Search:</h2>';
-  $html .= '<input type="hidden" class="panel_type" value="BlastForm" />';
-  $html .= '<br />'; 
- 
-  my $form = EnsEMBL::Web::Form->new({
-    id     => 'blast_input',
-    action => '/Tools/Submit', 
-    method =>  'post', 
-    class  => 'blast', 
-    validate => 0
-  });  
+  my $self          = shift;
+  my $hub           = $self->hub;
+  my $dom           = $self->dom;
+  my $type          = 'NCBI';
+  my $sd            = $hub->species_defs;
+  my $blast_object  = $self->object->generate_analysis_object('Blast');
+  my @species       = sort { $a->{'caption'} cmp $b->{'caption'} } map { value => $_, caption => $sd->species_label($_, 1) }, $sd->valid_species;
+  push (@species, { value => 'Test', caption => 'test'});
 
-  my $type = 'NCBI';  
-  $form->add_hidden({ name => 'blast_type', value => $type });
-  $form->add_element( type => 'Text', name => 'query_sequence', label => 'Either paste sequence data', class => 'query_sequence' );
-  $form->add_element( type => 'File', name => 'file', label => 'Or upload sequence file', class => 'file' );
+  my ($dbs, $methods, $default_db, $default_me) = $blast_object->get_blast_form_params;
 
-  $form->add_element( 
-    type  => 'String', 
-    label => "Or enter a sequence ID or accession <br />(EnsEMBL, EMBL, UniProt, RefSeq)",
-    name  =>'retrieve_accession',
-    class => 'retrieve_accession',
-    size  => '40',  
-  );
+  my $form = $self->new_form({
+    id              => 'blast_input',
+    action          => {qw(type Tools action Submit)},
+    method          =>  'post',
+    class           => 'blast',
+    skip_validation => 1
+  });
+  my $fieldset = $form->add_fieldset;
 
+  $fieldset->set_attribute('class', 'blast_input');
 
-  my $current_species = $hub->species;
-  my @species;
-  foreach my $sp ($hub->species_defs->valid_species) {
-    push @species, { value => $sp, name => $hub->species_defs->species_label($sp, 1) };
-  }
-  @species = sort { $a->{'name'} cmp $b->{'name'} } @species;
+  $fieldset->add_hidden({
+    name            => 'blast_type',
+    value           => $type
+  });
 
-  push (@species, { value => 'Test', name => 'test'});
-  my $blast_object = $self->object->generate_analysis_object('Blast');
-  my ($dbs, $methods, $default_db, $default_me) =  $blast_object->get_blast_form_params(); 
+  $fieldset->add_field({
+    type            => 'text',
+    name            => 'query_sequence',
+    label           => 'Either paste sequence data',
+    class           => 'query_sequence'
+  });
 
-  $form->add_element( 
-    type    => 'RadioGroup',  
-    name    => 'query', 
-    class   => 'query',
-    label   => 'Query type',
-    value   => 'dna', 
-    values  => [
-      { value => 'dna',     name => 'DNA sequence' },
-      { value => 'protein', name =>'Protein sequence' },
-    ] 
-  ); 
+  $fieldset->add_field({
+    type            => 'file',
+    name            => 'file',
+    label           => 'Or upload sequence file',
+    class           => 'file'
+  });
 
-  $form->add_element(
-    type    => 'DropDown',
-    name    => 'species',
-    label   => "Search against",
-    class   => 'species',
-    values  => \@species,
-    value   => $current_species,
-    select  => 'select',
-  );
+  $fieldset->add_field({
+    type            => 'string',
+    label           => "Or enter a sequence ID or accession <br />(EnsEMBL, EMBL, UniProt, RefSeq)",
+    name            => 'retrieve_accession',
+    class           => 'retrieve_accession',
+    size            => '40'
+  });
 
-
-  $form->add_element(   
-    type  => 'RadioGroup',
-    class => 'db_type',
-    name  => 'db_type',
-    value =>  'dna',
-    values => [
-      { value => 'dna',     name => 'DNA database' },
-      { value => 'protein', name => 'Protein database' },  
+  $fieldset->add_field({
+    type            => 'radiolist',
+    name            => 'query',
+    class           => 'query',
+    label           => 'Query type',
+    value           => 'dna',
+    values          => [
+      { value => 'dna',     caption => 'DNA sequence' },
+      { value => 'protein', caption => 'Protein sequence' },
     ]
-  );
+  });
 
-  $form->add_element (
-    type    => 'DropDown',
-    name    => 'db_name',
-    class   => 'db_name',
-    value   =>  $default_db,
-    values  =>  $dbs,
-    select  => 'select',
-  );
+  $fieldset->add_field({
+    type            => 'dropdown',
+    name            => 'species',
+    label           => "Search against",
+    class           => 'species',
+    values          => \@species,
+    value           => $hub->species || ''
+  });
 
-  $form->add_element(
-    type    => 'Hidden',
-    name    => 'analysis',
-    value   => 'Blast',
-  );
+  $fieldset->add_field({
+    type            => 'radiolist',
+    class           => 'db_type',
+    name            => 'db_type',
+    value           =>  'dna',
+    values          => [
+      { value => 'dna',     caption => 'DNA database' },
+      { value => 'protein', caption => 'Protein database' },
+    ]
+  });
 
-  $form->add_element(
-    label   => 'Select search tool',
-    type    => 'DropDown',
-    name    => 'blastmethod',
-    class   => 'blastmethod',
-    values  => $methods,
-    select  => 'select',
-    value   => $default_me,
-  );
+  $fieldset->add_field({
+    type            => 'dropdown',
+    name            => 'db_name',
+    class           => 'db_name',
+    value           =>  $default_db,
+    values          =>  $dbs,
+  });
 
-  $form->add_element(
-    label   => 'Description (optional):',
-    type    => 'String',
-    name    => 'description',
-    class   => 'desc',
-    value   =>  undef,
-    size    => '160',
-  );
+  $fieldset->add_hidden({
+    name            => 'analysis',
+    value           => 'Blast',
+  });
 
-  $form->add_element(
-    type    => 'Submit',
-    name    => 'submit_blast',
-    value   => 'Run >',
-    class   => 'submit_blast',
-  );
+  $fieldset->add_field({
+    label           => 'Select search tool',
+    type            => 'dropdown',
+    name            => 'blastmethod',
+    class           => 'blastmethod',
+    values          => $methods,
+    value           => $default_me,
+  });
 
-  $form->fieldset->set_attribute('class', 'blast_input');
+  $fieldset->add_field({
+    label           => 'Description (optional):',
+    type            => 'string',
+    name            => 'description',
+    class           => 'desc',
+    size            => '160',
+  });
 
-### Advanced config options ###
+  ### Advanced config options ###
 
-  my $show    = $hub->get_cookie_value('toggle_blast') eq 'open';
-  my $style   = $show ? '' : 'display:none';
+  my $show          = $hub->get_cookie_value('toggle_blast') eq 'open';
+  my $configuration = $dom->create_element('div', {
+    class       => 'config',
+    children    => [{
+      node_name   => 'a',
+      rel         => 'blast',
+      class       => ['toggle', 'set_cookie', $show ? 'open' : 'closed'],
+      href        => '#Configuration',
+      title       => 'Click to see configuration options',
+      inner_HTML  => 'Configuration Options'
+    }]
+  });
 
-  my $configuration = sprintf('<a rel="blast" class="toggle set_cookie %s" style="border-bottom-width:%s" href="#" title="Click to see configuration options">Configuration Options</a>',
-                     $show ? 'open' : 'closed',
-                     $show ? '0px' : '2px'  
-                    );
-
-  $form->add_notes($configuration)->set_attribute('class', 'config');
+  $form->append_child($configuration);
 
   my %blast_constants = EnsEMBL::Web::ToolsConstants::BLAST_CONFIGURATION_OPTIONS;
   my $options_and_defaults = $blast_constants{'options_and_defaults'};
 
-  $form->add_element('type' => 'SubHeader')->set_attributes({ id => 'blast', 'class' =>'config toggleable', 'style' => $style});
+  $fieldset = $form->add_fieldset;
 
+  $fieldset->set_attributes({ id => 'blast', 'class' => ['config', 'toggleable', $show ? () : 'hidden']});
 
-  for ('general', 'scoring', 'filters_and_masking'){
-    my $type = $_;
-    my $label = ucfirst $_ ." options:";
-    $label =~s/_/ /g;
-    $form->add_notes({'text' => "<h2 class='config'>$label</h2>"});
+  foreach my $type ('general', 'scoring', 'filters_and_masking') {
+    my $label = ucfirst $type ." options:";
+       $label =~s/_/ /g;
 
+    $fieldset->append_child('h2', { class => 'config', inner_HTML => $label });
 
-    foreach ( @{$options_and_defaults->{$type}}){ 
-      my ($option, $methods) = @{$_};
+    foreach ( @{$options_and_defaults->{$type}} ) {
+      my ($option, $methods) = @$_;
       my ($show, $default);
-      if ($methods->{lc($default_me)}){
-        $show = 1;  
-        $default = $methods->{lc($default_me)};
-      } elsif ($methods->{'all'}){
-        $show = 1;
-        $default = $methods->{'all'};
+      if ($methods->{lc $default_me}) {
+        $show     = 1;
+        $default  = $methods->{lc $default_me};
+      } elsif ($methods->{'all'}) {
+        $show     = 1;
+        $default  = $methods->{'all'};
       }
 
-      my $element = $blast_constants{$type}->{$option}; 
-      $element->{'value'} = $default;
-      my $class = 'config_' . $option;
-      $class .= $element->{'type'} eq 'String' ? ' inactive' : '';
-      $element->{'class'} = $class;
-      $form->add_element(%$element)->set_attribute('class', $show ? 'blast_config_' . $option : 'hide blast_config_' . $option);
+      my $element = $blast_constants{$type}->{$option};
+      $element->{'value'}       = $default;
+      $element->{'class'}       = ['config_' . $option, $element->{'type'} eq 'String' ? ' inactive' : ()];
+      $element->{'field_class'} = $show ? 'blast_config_' . $option : 'hide blast_config_' . $option;
+      $fieldset->add_field($element);
     }
   }
 
-################################
+  $form->add_fieldset->add_field({
+    type            => 'Submit',
+    name            => 'submit_blast',
+    value           => 'Run &rsaquo;',
+    class           => 'submit_blast',
+  });
 
-  $html .= $form->render;
-  $html .= '</div>';
-
-  return $html;
+  return sprintf '<div><h2>New BLAT or BLAST Search:</h2><input type="hidden" class="panel_type" value="BlastForm" />%s</html>', $form->render;
 }
 
 1;
