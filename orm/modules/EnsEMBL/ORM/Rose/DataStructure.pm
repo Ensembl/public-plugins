@@ -8,7 +8,6 @@ package EnsEMBL::ORM::Rose::DataStructure;
 use strict;
 
 use EnsEMBL::Web::Exceptions;
-use EnsEMBL::Web::Tools::MethodMaker qw(copy_method add_method);
 use EnsEMBL::ORM::Rose::DataStructureValue;
 
 use base qw(Rose::DB::Object::Metadata::Column::Text);
@@ -18,50 +17,24 @@ sub new {
 
   my $self;
 
-  if (ref $_[0] && UNIVERSAL::isa($_[0], 'Rose::DB::Object::Metadata::Column')) {
+  if (ref $_[0] && UNIVERSAL::isa($_[0], 'Rose::DB::Object::Metadata::Column')) { # if trying to convert an existing column to a datastructure column
     throw exception('ORMException', 'Only text type columns can be converted to datastructure type columns') unless $_[0]->isa('Rose::DB::Object::Metadata::Column::Text');
-    $self = bless($_[0], $class);
+    $self = bless $_[0], $class;
     $self->init(%{$_[1] || {}});
   } else {
     $self = $class->SUPER::new(@_);
   }
 
-  # now modify the methods to return an actual hash (datastructure value) instead of stringified hash (text)
-  my $class = $self->parent->class;
-
-  # copy the old methods first
-  my $get_method = $self->accessor_method_name;
-  my $set_method = $self->mutator_method_name;
-  copy_method($class, $_, "_ensorm_old_$_") for $get_method, $set_method;
-
-  # create new methods
-  my $new_accessor_method = sub {
-    # modified accessor method calls the actual accessor method to get the stringfied hash/array, then converts into hashref/arrayref before returning it
-    my $object = shift;
-    return $self->value_class->new(map($object->$_, "_ensorm_old_$get_method"), $self->trusted);
-  };
-  my $new_mutator_method  = sub {
-    # modified mutator method stringifies the hashref/arrayref and then calls the actual mutator method to save the stringified form
+  $self->add_trigger('inflate' => sub {
     my ($object, $value) = @_;
-    $value = $self->value_class->new($value, $self->trusted) unless UNIVERSAL::isa($value, $self->value_class);
-    map($object->$_("$value"), "_ensorm_old_$set_method");
-    return &$new_accessor_method($object);
-  };
-  my $new_accessor_mutator_method = sub {
-    # method that sets the value in arrayref/hashref form, if provided before returning the new set value, using the existing methods
-    my $object = shift;
-    return &$new_mutator_method($object, shift) if @_;
-    return &$new_accessor_method($object);
-  };
+    return $self->value_class->new($value, $self);
+  });
 
-  # replace the old methods with new ones
-  if ($get_method eq $set_method) {
-    add_method($class, $get_method, $new_accessor_mutator_method);
-  }
-  else {
-    add_method($class, $get_method, $new_accessor_method);
-    add_method($class, $set_method, $new_mutator_method);
-  }
+  $self->add_trigger('deflate' => sub {
+    my ($object, $value) = @_;
+    $value = $self->value_class->new($value, $self) unless UNIVERSAL::isa($value, $self->value_class);
+    return "$value";
+  });
 
   return $self;
 }
