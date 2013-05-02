@@ -149,7 +149,7 @@ sub count_homologues {
   my ($self, $stable_id) = @_;
   
   my $compara_db = $self->database('compara');
-  my $compara_dbh = $compara_db->get_MemberAdaptor->dbc->db_handle;
+  my $compara_dbh = $compara_db->dbc->db_handle;
   my $counts = {};
 
   my $res = $compara_dbh->selectall_arrayref(
