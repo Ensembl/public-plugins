@@ -19,17 +19,17 @@ use overload (
 sub new {
   ## @constructor
   ## @param datastructure (possibly unparsed stringified)
-  ## @param Flag telling whether this column value is trusted to be valid datastructure or not
+  ## @param Column object
   ## @return Can return a blessed hash or a blessed array or a blessed scalar ref depending upon the argument provided
   ## @exception ORMException::DataStructureParsingException in case problem parsing the datastructure
-  my ($class, $data, $trusted) = @_;
+  my ($class, $data, $column) = @_;
 
   if (ref $data) {
     $data = clone($data);
   }
   else {
     my $error = '';
-    $data = _parse("$data", $trusted, \$error);
+    $data = _parse("$data", $column->trusted, \$error);
     throw exception('ORMException::DataStructureParsingException', $error) if $error; # if any error in parsing
   }
 
