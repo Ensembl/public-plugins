@@ -1,11 +1,14 @@
-form.blast { margin: 10px; padding:3px; background-color: #EAEEFF; border: 1px #BBCCFF solid; -moz-border-radius: 5px; -webkit-border-radius: 5px;}
+form.blast { padding:16px 16px 6px; background-color: [[TINT_BG]]; border: 1px [[TINT_BORDER]] solid; }
 form.blast.overlay_blast { border-color: #EAEEFF;  background-color: #F0F0F0; opacity: 0.7; }
+
+form.blast input.fbutton { border: [[TINT_BG]] double 3px; }
+
 
 a.hidelink { visibility: hidden;}
 
-form.blast div.config { position: relative; top: 2px; z-index: 10; }
-form.blast a.toggle { margin: 2px; padding-left: 5px;  border: 2px #667AA6 solid; background-color: #FFFFFF; font-size: 1.2em }
-form.blast fieldset.config { position: relative; top: -18px; margin: 2px; padding: 5px; background-color: #FFFFFF; border: 2px #667AA6 solid;  }
-form.blast h2.config { border-bottom: 1px solid #CCCCCC; padding-bottom: 2px }
+form.blast div.config a { display: inline-block; padding: 5px 16px 5px 5px; background-color: [[PAGE_BG]]; border: 1px solid [[PANEL_BORDER]]; background-position: right center; }
+form.blast div.config a.open { border-bottom: none; }
+form.blast fieldset.config { padding: 16px 16px 0; background-color: [[PAGE_BG]]; border: 1px solid [[PANEL_BORDER]]; margin: -1px 0 16px; }
+form.blast h2.config { border-bottom: 1px solid [[PANEL_BORDER]]; padding-bottom: 2px }
 
 form.blast input.inactive { font-style: italic; color: [[PAGE_TEXT]]; }
