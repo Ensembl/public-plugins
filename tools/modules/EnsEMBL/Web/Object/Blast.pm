@@ -3,8 +3,6 @@ package EnsEMBL::Web::Object::Blast;
 ### NAME: EnsEMBL::Web::Object::Blast
 ### Object for accessing Ensembl Blast back end 
 
-### PLUGGABLE: Yes, using Proxy::Object 
-
 ### STATUS: Under development
 
 ### DESCRIPTION
@@ -17,7 +15,6 @@ package EnsEMBL::Web::Object::Blast;
 use strict;
 use warnings;
 no warnings "uninitialized";
-
 
 use base qw(EnsEMBL::Web::Object::Tools);
 
@@ -167,7 +164,7 @@ sub get_blast_form_params {
   foreach my $db (sort keys %$conf ){
     next if $db =~/^DATASOURCE/; 
     my $label = $conf->{$db}->{'label'};
-    push @databases, { value => $db, name => $label };
+    push @databases, { value => $db, caption => $label };
     $valid_db = 1 if $db eq $db_name;
   }
 
@@ -407,12 +404,12 @@ sub process_description {
   my $species_name = $self->hub->species_defs->get_config($self->param('species'),'SPECIES_COMMON_NAME');
   my $db_type = $self->param('db_name');
   my ($dbs, $methods, $default_db, $default_me) = $self->get_blast_form_params; 
-  my @db_name = map  { $_->{'name'} } grep { $_->{'value'} eq $db_type } @{$dbs};
+  my ($db_name) = map  { $_->{'caption'} } grep { $_->{'value'} eq $db_type } @{$dbs};
  
   my $ticket_summary = sprintf ( '%s search against %s %s database.  ',
                               uc($search_type),
                               $species_name,
-                              lc ($db_name[0])
+                              lc ($db_name)
   );
 
   $self->{'_description'} = $ticket_summary;
