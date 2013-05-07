@@ -25,10 +25,13 @@ sub from_rose_objects {
   my @keys = @$rose_objects ? map { $_->alias || $_->name } $rose_objects->[0]->meta->virtual_columns : ();
 
   return map {
-    my $record = $_->as_tree;
+    my $rose_object = $_;
+    my $record      = $_->as_tree;
+    $record->{$_}   = $rose_object->$_ for @keys;
+
     $record->{'__rose_object'} = $_;
-    $record->{$_} = $record->{'data'}->{$_} for @keys;
     delete $record->{'data'};
+
     $class->new($record);
   } @$rose_objects;
 }
