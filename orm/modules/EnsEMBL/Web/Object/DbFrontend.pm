@@ -266,22 +266,22 @@ sub _get_with_objects_params {
   ## @param Existing params if any
   my ($self, $page, $params) = @_;
 
+  my $meta = $self->manager_class->object_class->meta;
+
   $params  ||= {};
   my $method = $page eq 'List' ? 'show_columns' : 'get_fields';
 
-  my $relations   = [ map {$_->name} @{$self->manager_class->get_relationships($self->rose_object)} ];
-  my $needed_cols = { map {$_ => 1} (keys %{{@{$self->$method}}}) };
+  my @relations   = map {$_->name} @{$meta->relationships};
+  my %needed_cols = map {$_ => 1} (keys %{{@{$self->$method}}});
 
-  if (@$relations) {
-    my $with_objects = [];
-    exists $needed_cols->{$_} and push @$with_objects, $_ for @$relations;
-    $params->{'with_objects'} = $with_objects if @$with_objects;
+  if (@relations) {
+    my @with_objects = grep $needed_cols{$_}, @relations;
+    $params->{'with_objects'} = \@with_objects if @with_objects;
   }
   
-  if ($self->manager_class->is_trackable) {
-    my $with_users = [];
-    exists $needed_cols->{$_} and push @$with_users, $_ for qw(created_by_user modified_by_user);
-    $params->{'with_external_objects'} = $with_users if @$with_users;
+  if ($meta->is_trackable) {
+    my @with_users = grep $needed_cols{$_}, qw(created_by_user modified_by_user);
+    $params->{'with_external_objects'} = \@with_users if @with_users;
   }
   
   return $params;
