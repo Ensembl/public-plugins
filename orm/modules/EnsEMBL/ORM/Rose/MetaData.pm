@@ -30,6 +30,9 @@ sub setup {
   return $self->SUPER::setup(@args);
 }
 
+sub column_is_trackable { return shift->is_trackable(@_); }
+sub trackable { return shift->is_trackable(@_) } 
+
 sub is_trackable {
   ## Tells whether the object isa Trackable object
   ## Overridden in MetaData::Trackable
