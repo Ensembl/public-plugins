@@ -85,7 +85,7 @@ sub record_tree {
     if ($header_only) {
 
       my $is_column = $record_meta->column($column_name) || $record_meta->virtual_column($column_name) ? 1 : 0;
-      my $readonly  = $record_meta->is_trackable($column_name);
+      my $readonly  = $record_meta->column_is_trackable($column_name);
       my $css       = '';
       my $width;
 

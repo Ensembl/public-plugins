@@ -215,7 +215,7 @@ sub get_fields {
 
     $self->{'_dbf_show_fields'} = $self->show_fields;
     
-    if ($self->manager_class->object_class->meta->is_trackable) {
+    if ($self->manager_class->object_class->meta->trackable) {
 
       my $t_fields    = $self->show_trackable_fields;
       my $field_names = [keys %{{@{$self->{'_dbf_show_fields'}}}}];
@@ -279,7 +279,7 @@ sub _get_with_objects_params {
     $params->{'with_objects'} = \@with_objects if @with_objects;
   }
   
-  if ($meta->is_trackable) {
+  if ($meta->trackable) {
     my @with_users = grep $needed_cols{$_}, qw(created_by_user modified_by_user);
     $params->{'with_external_objects'} = \@with_users if @with_users;
   }
@@ -317,7 +317,7 @@ sub _populate_from_cgi {
 
   foreach my $field_name (keys %field_names) {
     next unless exists $param_names{$field_name};   # ignore if $field_name not present among the post params
-    next if $rose_meta->is_trackable($field_name);  # dont get trackable info from CGI
+    next if $rose_meta->column_is_trackable($field_name);  # dont get trackable info from CGI
 
     my $value     = [ $hub->param($field_name) ]; #CGI value
     my $relation  = $relations->{$field_name};

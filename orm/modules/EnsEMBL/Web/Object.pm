@@ -102,7 +102,7 @@ sub save {
   my %user = ('user' => delete $params->{'user'} || $self->hub->user);
 
   for (@{$self->rose_objects($type || '0')}) {
-    if (my $obj = $_->save(%$params, $_->meta->is_trackable ? %user : ())) {
+    if (my $obj = $_->save(%$params, $_->meta->trackable ? %user : ())) {
       push @$objs, $_;
     }
     else {
@@ -165,7 +165,7 @@ sub retire {
     }
 
     $_->$column($value);
-    if (my $obj = $_->save('changes_only' => 1, $meta->is_trackable ? %user : ())) {
+    if (my $obj = $_->save('changes_only' => 1, $meta->trackable ? %user : ())) {
       push @$objs, $obj;
     }
     else {
