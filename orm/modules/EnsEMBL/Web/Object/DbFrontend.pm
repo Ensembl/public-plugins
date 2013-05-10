@@ -215,7 +215,7 @@ sub get_fields {
 
     $self->{'_dbf_show_fields'} = $self->show_fields;
     
-    if ($self->manager_class->is_trackable) {
+    if ($self->manager_class->object_class->meta->is_trackable) {
 
       my $t_fields    = $self->show_trackable_fields;
       my $field_names = [keys %{{@{$self->{'_dbf_show_fields'}}}}];
