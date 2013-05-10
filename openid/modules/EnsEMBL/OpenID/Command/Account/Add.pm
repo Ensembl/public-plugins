@@ -23,7 +23,7 @@ sub process {
   my $login             = $object->fetch_login_from_url_code(1) or return $self->redirect_message(MESSAGE_URL_EXPIRED, {'error' => 1});
   my $login_code        = $login->get_url_code;
   my $provider          = $login->provider;
-  my $trusted_provider  = $login->has_trusted_provider;
+  my $trusted_provider  = $object->login_has_trusted_provider($login);
   my $function          = $hub->function;
   my $email             = $self->validate_fields({'email' => $hub->param('email') || ''})->{'email'} || '';
   my $skip_verify_email = 0;

@@ -34,7 +34,7 @@ sub content {
       });
 
     } elsif ($login_type eq 'openid') {
-      $login_detail = sprintf $login_detail, $login_provider, $_->has_trusted_provider ? $_->email : $_->identity;
+      $login_detail = sprintf $login_detail, $login_provider, $object->login_has_trusted_provider($_) ? $_->email : $_->identity;
       push @existing_openid_logins, $login_provider;
 
     } elsif ($login_type eq 'ldap') { # not implimented yet

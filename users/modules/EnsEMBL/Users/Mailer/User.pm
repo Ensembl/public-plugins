@@ -3,8 +3,6 @@ package EnsEMBL::Users::Mailer::User;
 use strict;
 use warnings;
 
-## TODO - why do we need logged-in user in some arguments? use hub->user instead
-
 use base qw(EnsEMBL::Web::Mailer);
 
 sub set_noreply_sender {
@@ -22,7 +20,7 @@ sub send_verification_email {
   my $sitename  = $self->site_name;
   my $user      = $login->user;
   my $provider  = $login->provider || '';
-  my $identity  = $login->has_trusted_provider ? $login->email : $login->identity;
+  my $identity  = $self->hub->object->login_has_trusted_provider($login) ? $login->email : $login->identity;
   my $type      = $login->type;
   my $function  = $type eq 'openid' ? 'Verify' : 'Confirm';
   my $email     = $user->email;

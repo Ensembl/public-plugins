@@ -25,7 +25,7 @@ sub content {
   my $provider          = $login->provider                      or return $self->render_message(MESSAGE_URL_EXPIRED, {'error' => 1});
   my $login_code        = $login->get_url_code;
   my $then_param        = $hub->param('then') || '';
-  my $trusted_provider  = $login->has_trusted_provider;
+  my $trusted_provider  = $object->login_has_trusted_provider($login);
   my $form              = $self->new_form({'action' => {'action' => 'OpenID', 'function' => 'Add'}});
 
   $form->add_notes({

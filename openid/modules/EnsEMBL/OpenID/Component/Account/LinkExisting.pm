@@ -20,7 +20,7 @@ sub content {
   my $object            = $self->object;
   my $login             = $object->fetch_login_from_url_code(1) or return $self->render_message(MESSAGE_URL_EXPIRED, {'error' => 1});
   my $provider          = $login->provider                      or return $self->render_message(MESSAGE_URL_EXPIRED, {'error' => 1});
-  my $trusted_provider  = $login->has_trusted_provider;
+  my $trusted_provider  = $object->login_has_trusted_provider($login);
   my $form              = $self->new_form({'action' => {'action' => 'OpenID', 'function' => 'Link'}});
 
   $form->add_notes(sprintf 'Please enter the email address below for your existing %s account.', $self->site_name);
