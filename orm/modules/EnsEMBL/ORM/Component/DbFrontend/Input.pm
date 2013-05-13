@@ -22,6 +22,8 @@ sub content_tree {
   my $action      = $hub->action;
 
   my $record      = $object->rose_object or return $self->dom->create_element('p', {'inner_HTML' => sprintf('No %s selected to edit.', $object->record_name->{'singular'})});
+  my $record_meta = $record->meta;
+  my $primary_key = $record_meta->primary_key_column_names->[0];
   my $is_ajax     = $object->is_ajax_request;
   my $preview     = $object->show_preview && $action ne 'Preview' && $is_ajax ne 'list';
   my $serial      = $record->get_primary_key_value;
@@ -93,7 +95,7 @@ sub content_tree {
     }
 
     # trackable fields manipulation
-    if ($record->meta->column_is_trackable($name)) {
+    if ($record_meta->column_is_trackable($name)) {
       if ($name =~ /^(created|modified)_(at|by_user)$/) {
         $element_params->{'type'}     = 'noedit'; # force noedit field type for trackable fields
         $element_params->{'is_html'}  = 1 if $2 eq 'by_user';
@@ -125,11 +127,11 @@ sub content_tree {
 
   # include extra GET params to hidden inputs (ignore primary keys, ajax flags and form fields)
   if ($preview) {
-    $_ !~ /^_/ and $_ ne 'id' and $_ ne $record->primary_key and $form->add_hidden({'name' => $_, 'value' => $url_params->{$_}}) for keys %$url_params;
+    $_ !~ /^_/ and $_ ne 'id' and $_ ne $primary_key and $form->add_hidden({'name' => $_, 'value' => $url_params->{$_}}) for keys %$url_params;
   }
 
   # primary key
-  $form->add_hidden({'name' => 'id', 'value' => $serial})->set_flag($record->primary_key) if $serial;
+  $form->add_hidden({'name' => 'id', 'value' => $serial})->set_flag($primary_key) if $serial;
 
   # form buttons
   $form->add_button({'buttons' => [
