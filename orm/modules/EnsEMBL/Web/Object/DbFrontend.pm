@@ -289,12 +289,11 @@ sub _get_with_objects_params {
 
 sub _get_sort_by_column {
   ## Returns either title column name or primary column name depending upon the value of title column
-  my $self          = shift;
-  my $object_class  = $self->manager_class->object_class;
-  my $meta          = $object_class->meta;
-  my $column        = $meta->title_column;
+  my $self    = shift;
+  my $meta    = $self->manager_class->object_class->meta;
+  my $column  = $meta->title_column;
 
-  return $column && $meta->column($column) ? $column : $object_class->primary_key;
+  return $column && $meta->column($column) ? $column : $meta->primary_key_column_names->[0];
 }
 
 sub _populate_from_cgi {
@@ -313,7 +312,7 @@ sub _populate_from_cgi {
   my %field_names = map {$_ => 1} keys %{{@$fields}};
   my %param_names = map {$_ => 1} @params;
 
-  delete $field_names{$_} for ('id', $rose_object->primary_key);
+  delete $field_names{$_} for ('id', $rose_meta->primary_key_column_names->[0]);
 
   foreach my $field_name (keys %field_names) {
     next unless exists $param_names{$field_name};   # ignore if $field_name not present among the post params
