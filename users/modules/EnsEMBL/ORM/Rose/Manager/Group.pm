@@ -25,8 +25,8 @@ sub fetch_with_members {
   return unless $ids;
   
   my $method          = ref $ids eq 'ARRAY' ? 'fetch_by_primary_keys' : 'fetch_by_primary_key';
-  my $params          = {'with_objects' => ['membership', 'membership.user'], 'sort_by' => 'user.name'};
-  $params->{'query'}  = ['membership.member_status', 'active', 'membership.status', 'active'] if $active_only;
+  my $params          = {'with_objects' => ['memberships', 'memberships.user'], 'sort_by' => 'user.name'};
+  $params->{'query'}  = ['memberships.member_status', 'active', 'memberships.status', 'active'] if $active_only;
 
   return $self->$method($ids, $params);
 }
