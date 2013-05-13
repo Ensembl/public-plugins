@@ -31,21 +31,21 @@ sub fetch_for_textsummary {
   ## Populates rose_objects with the changelogs needed to display in the TextSummary page
   my $self = shift;
 
-  $self->rose_objects($self->manager_class->fetch($self->_get_with_objects_params('Display', {
+  $self->rose_objects($self->manager_class->get_objects(%{$self->_get_with_objects_params('Display', {
     'query'   => ['release_id', $self->requested_release],
     'sort_by' => 'team'
-  })));
+  })}));
 }
 
 sub fetch_for_listreleases {
   ## Gets a list of all the releases that do have some declaration 
   my $self = shift;
   
-  $self->rose_objects($self->manager_class->fetch({
+  $self->rose_objects($self->manager_class->get_objects(
     'select'    => 'release_id',
     'sort_by'   => 'release_id DESC',
     'group_by'  => 'release_id'
-  }));
+  ));
 }
 
 sub fetch_for_duplicate {
