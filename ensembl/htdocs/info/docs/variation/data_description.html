@@ -5,20 +5,13 @@
 </head>
 
 <body>
-<b>
-<a href="index.html">About Ensembl Variation</a> | 
-Data Description |  
-<a href="predicted_data.html">Predicted Data</a> |
-<a href="database.html">Database Description</a> |  
-<a href="/info/docs/api/variation/index.html">Perl API</a> |
-<a href="vep/index.html">Variant Effect Predictor</a>
-</b>
 
 <div>
+  <!-- Right hand side menu -->
 	<div style="float:right;margin-left:8px;margin-top:2px;background-color:#F2F2F2;color:#333;border-radius:5px">
     <div style="padding:5px;font-weight:bold;color:#FFF;background-color:#336;border-top-left-radius:5px;border-top-right-radius:5px">
 		  <img src="/i/16/rev/info.png" style="vertical-align:top" />
-		  Page content:
+		  Page content
 		</div> 
     <ul style="padding-left:25px;padding-right:5px">
       <li><a href="#sources">Species & Sources</a></li> 
@@ -34,8 +27,17 @@ Data Description |
 	  </ul>
   </div>
 
-  <br />
-  <h1>Ensembl Variation - Data description</h1>
+  <!-- Horizontal menu -->
+  <span style="font-weight:bold">
+    <a href="index.html">About Ensembl Variation</a> | 
+    Data Description | 
+    <a href="predicted_data.html">Predicted Data</a> |
+    <a href="database.html">Database Description</a> |  
+    <a href="/info/docs/api/variation/index.html">Perl API</a> |
+    <a href="vep/index.html">Variant Effect Predictor</a>
+  </span>
+	
+  <h1 style="margin-top:15px">Ensembl Variation - Data description</h1>
 
   <p>
   Below is a description of the data we store in the databases for Ensembl Variation.<br />For several different species in Ensembl, 
@@ -132,7 +134,16 @@ a variation database.
 <div style="margin-bottom:5px;padding-right:4px;overflow:hidden">
 	<img src="/i/species/48/Mus_musculus.png" alt="Mus musculus" class="sp-thumb" style="float:none;margin-right:4px;vertical-align:middle" />
 	<span><i>Mus musculus</i> <a href="sources_documentation.html#mus_musculus">[sources]</a></span>
-</div>	
+</div>
+<div style="margin-bottom:5px;padding-right:4px;overflow:hidden;background-color:#336;padding:1px;color:#FFF">
+	<div style="float:left">
+	  <img src="/i/species/48/Nomascus_leucogenys.png" alt="Nomascus leucogenys" class="sp-thumb" style="float:none;margin-right:4px;vertical-align:middle" />
+	</div>
+	<div style="float:left;margin-top:10px">
+	  <i>Nomascus leucogenys</i> <a href="sources_documentation.html#nomascus_leucogenys">[sources]</a><br />
+	  <span style="font-weight:bold;color:#F00">New</span>
+	</div>
+</div> 
 <div style="margin-bottom:5px;padding-right:4px;overflow:hidden">
 	<img src="/i/species/48/Ornithorhynchus_anatinus.png" alt="Ornithorhynchus anatinus" class="sp-thumb" style="float:none;margin-right:4px;vertical-align:middle" />
 	<span><i>Ornithorhynchus anatinus</i> <a href="sources_documentation.html#ornithorhynchus_anatinus">[sources]</a></span>
@@ -145,13 +156,13 @@ a variation database.
 	<img src="/i/species/48/Pongo_abelii.png" alt="Pongo abelii" class="sp-thumb" style="float:none;margin-right:4px;vertical-align:middle" />
 	<span><i>Pongo abelii</i> <a href="sources_documentation.html#pongo_abelii">[sources]</a></span>
 </div>
+</td>
+<td style="width:8px"></td>
+<td>
 <div style="margin-bottom:5px;padding-right:4px;overflow:hidden">
 	<img src="/i/species/48/Rattus_norvegicus.png" alt="Rattus norvegicus" class="sp-thumb" style="float:none;margin-right:4px;vertical-align:middle" />
 	<span><i>Rattus norvegicus</i> <a href="sources_documentation.html#rattus_norvegicus">[sources]</a></span>
 </div>
-</td>
-<td style="width:8px"></td>
-<td>
 <div style="margin-bottom:5px;padding-right:4px;overflow:hidden">
 	<img src="/i/species/48/Saccharomyces_cerevisiae.png" alt="Saccharomyces cerevisiae" class="sp-thumb" style="float:none;margin-right:4px;vertical-align:middle" />
 	<span><i>Saccharomyces cerevisiae</i> <a href="sources_documentation.html#saccharomyces_cerevisiae">[sources]</a></span>
@@ -197,18 +208,20 @@ Variation data can be viewed in the browser through pages such as:
 </p>
 
 <ul>
-<li><strong>Gene:</strong> Variation Table and Variation Image (for all variations in a gene) 
-e.g. for example <a href="/Homo_sapiens/Gene/Variation_Gene/Table?db=core;g=ENSG00000159197">for all variants in KCNE2</a>. 
+<li><b>Gene:</b> Variation Table and Variation Image (for all variations in a gene) 
+e.g. <a href="/Homo_sapiens/Gene/Variation_Gene/Table?db=core;g=ENSG00000159197">for all variants in KCNE2</a>. 
 Structural Variation to see all structural variants overlapping the gene.</li>
-<li><strong>Transcript:</strong> Population comparison, Comparison
+<li><b>Transcript:</b> Population comparison, Comparison
 image (for comparing variants in a transcript across different individual or strain
 sequences) e.g. <a href="/Mus_musculus/Transcript/Population/Image?g=ENSMUSG00000041143;r=4:138528820-138586500;t=ENSMUST00000084208"> compare Tmco4 in different mouse strains </a> </li>
-<li> <strong> Transcript: </strong> Sequence, protein: list of the coding variants in protein coordinates.</li>
-<li><strong>Location:</strong> Region in Detail (Variations can be
+<li><b>Transcript: </b> Sequence, protein: list of the coding variants in protein coordinates.</li>
+<li><b>Location:</b> Region in Detail (Variations can be
 drawn using &quot;Configure this page&quot; at the left. The menu allows
 display of information in Ensembl databases along with external
 sources in DAS format such as <a rel="external"
 href="http://projects.tcag.ca/variation/">DGV loci</a>.)</li>
+<li><b>Phenotype: </b>Phenotypes associated with variations e.g. <a
+href="/Homo_sapiens/Phenotype/All">List of phenotypes for human</a>.
 </ul>
 
 <p>
@@ -509,10 +522,10 @@ The colours are based on the <a rel="external" href="http://www.ncbi.nlm.nih.gov
 	<input class="graph_config" type="hidden" name="legendpos" value="'east'" />
 	<input class="graph_dimensions" type="hidden" value="[90,80,80]" />
 	
-	<input type="hidden" class="graph_data" value="[[48416035,'SNV'],[3248758,'insertion'],[2542201,'deletion'],[559790,'sequence_alteration'],[395149,'indel'],[84469,'substitution'],[4561,'tandem_repeat']]" />
-
+	<input type="hidden" class="graph_data" value="[[48480592,'SNV'],[3249477,'insertion'],[2544374,'deletion'],[559978,'sequence_alteration'],[394784,'indel'],[84935,'substitution'],[4561,'tandem_repeat']]" />
+  
 	<div class="pie_chart_classes" title="classes" style="width:400px;height:220px;border:1px solid #AAA;border-radius:10px;-moz-border-radius:10px;-webkit-border-radius:10px;-webkit-box-shadow:0 1px 3px #666;">
-   	<h3 style="padding:10px 10px 5px">Human Variation class distribution - Ensembl 71</h4>
+   	<h3 style="padding:10px 10px 5px">Human Variation class distribution - Ensembl 72</h4>
    	<div id="graphHolder0"></div>
 	</div>
 </div>
@@ -828,179 +841,179 @@ variation sets in the Ensembl variation database (subsets are indicated by bulle
 		<td>Variations called by the 1000 Genomes project on high coverage sequence data from two family trios (Pilot 2)</td>
 	</tr>
 	<tr class="bg2">
+		<td>1000 Genomes - High quality</td>
+		<td>1kg_hq</td>
+		<td>Structural variants labelled as "High quality site" by the 1000 Genomes project (phase 1)</td>
+	</tr>
+	<tr>
 		<td>1000 Genomes - Low coverage</td>
 		<td>1kg_lc</td>
 		<td>Variations called by the 1000 Genomes project on low coverage sequence data from 179 unrelated individuals (Pilot 1)</td>
 	</tr>
-	<tr>
+	<tr class="bg2">
 		<td>Affy GeneChip 500K</td>
 		<td>Affy_500K</td>
 		<td>Variants from the Affymetrix GeneChip Human Mapping 500K Array Set</td>
 	</tr>
-	<tr class="bg2">
+	<tr>
 		<td>Affy GenomeWideSNP_6.0</td>
 		<td>Affy_SNP6</td>
 		<td>Variants from the Affymetrix Genome-Wide Human SNP Array 6.0</td>
 	</tr>
-	<tr>
+	<tr class="bg2">
 		<td>Illumina_Cardio-Metabo_Chip</td>
 		<td>Cardio-Metabo_Chip</td>
 		<td>Variants from the Illumina Cardio-Metabo_Chip genotyping array designed to target variants of interest for metabolic and cardiovascular disease traits</td>
 	</tr>
-	<tr class="bg2">
+	<tr>
 		<td>Illumina_Human610_Quad</td>
 		<td>Human610_Quad</td>
 		<td>Variants from the Illumina Human610_Quad v1_B whole genome genotyping array designed for association studies</td>
 	</tr>
-	<tr>
+	<tr class="bg2">
 		<td>Illumina_HumanHap550</td>
 		<td>HumanHap550</td>
 		<td>Variants from the Illumina Human550 v3.0 whole genome genotyping array designed for association studies</td>
 	</tr>
-	<tr class="bg2">
+	<tr>
 		<td>Illumina_HumanHap650Y</td>
 		<td>HumanHap650Y</td>
 		<td>Variants from the Illumina HumanHap650Y v3.0 whole genome genotyping array designed for association studies</td>
 	</tr>
-	<tr>
+	<tr class="bg2">
 		<td>Illumina_HumanOmni1-Quad</td>
 		<td>HumanOmni1-Quad</td>
 		<td>Variants from the Illumina HumanOmni1-Quad whole genome genotyping array designed for association studies</td>
 	</tr>
-	<tr class="bg2">
+	<tr>
 		<td>Illumina_HumanOmni2.5</td>
 		<td>HumanOmni2.5</td>
 		<td>Variants from the Illumina HumanOmni2.5 4v1 whole genome genotyping array designed for association studies</td>
 	</tr>
-	<tr>
+	<tr class="bg2">
 		<td>Illumina_1M-duo</td>
 		<td>Illumina_1M-duo</td>
 		<td>Variants from the Illumina Human1M-duo v3 whole genome genotyping array designed for association studies</td>
 	</tr>
-	<tr class="bg2">
+	<tr>
 		<td>Illumina_Human660W-quad</td>
 		<td>Illumina_660Q</td>
 		<td>Variants from the Illumina Human660W-quad whole genome genotyping array designed for association studies</td>
 	</tr>
-	<tr>
+	<tr class="bg2">
 		<td>Illumina_CytoSNP12v1</td>
 		<td>Illumina_CytoSNP12v1</td>
 		<td>Variants from the Illumina Cyto SNP-12 v1 whole genome SNP genotyping chip designed for cytogenetic analysis</td>
 	</tr>
-	<tr class="bg2">
+	<tr>
 		<td>ESP_6500</td>
 		<td>esp_6500</td>
 		<td>Variants from the NHLBI Exome Sequencing Project</td>
 	</tr>
-	<tr>
+	<tr class="bg2">
 		<td>All HapMap</td>
 		<td>hapmap</td>
 		<td>Variations which have been assayed by The International HapMap Project [http://hapmap.ncbi.nlm.nih.gov/]</td>
 	</tr>
-	<tr class="bg2">
+	<tr>
 		<td><ul style="margin:0px"><li style="margin:0px">HapMap - CEU</li></ul></td>
 		<td>hapmap_ceu</td>
 		<td>Variations which have been assayed by The International HapMap Project from CEU individuals</td>
 	</tr>
-	<tr>
+	<tr class="bg2">
 		<td><ul style="margin:0px"><li style="margin:0px">HapMap - HCB</li></ul></td>
 		<td>hapmap_hcb</td>
 		<td>Variations which have been assayed by The International HapMap Project from HCB individuals</td>
 	</tr>
-	<tr class="bg2">
+	<tr>
 		<td><ul style="margin:0px"><li style="margin:0px">HapMap - JPT</li></ul></td>
 		<td>hapmap_jpt</td>
 		<td>Variations which have been assayed by The International HapMap Project from JPT individuals</td>
 	</tr>
-	<tr>
+	<tr class="bg2">
 		<td><ul style="margin:0px"><li style="margin:0px">HapMap - YRI</li></ul></td>
 		<td>hapmap_yri</td>
 		<td>Variations which have been assayed by The International HapMap Project from YRI individuals</td>
 	</tr>
-	<tr class="bg2">
+	<tr>
 		<td>Anonymous Korean</td>
 		<td>ind_ak1</td>
 		<td>Variants genotyped in an anonymous Korean individual</td>
 	</tr>
-	<tr>
+	<tr class="bg2">
 		<td>Misha Angrist</td>
 		<td>ind_angrist</td>
 		<td>Variants genotyped in Misha Angrist</td>
 	</tr>
-	<tr class="bg2">
+	<tr>
 		<td>Henry Louis Gates Jr</td>
 		<td>ind_gates_jr</td>
 		<td>Variants genotyped in Henry Louis Gates Jr</td>
 	</tr>
-	<tr>
+	<tr class="bg2">
 		<td>Henry Louis Gates Sr</td>
 		<td>ind_gates_sr</td>
 		<td>Variants genotyped in Henry Louis Gates Sr</td>
 	</tr>
-	<tr class="bg2">
+	<tr>
 		<td>Rosalynn Gill</td>
 		<td>ind_gill</td>
 		<td>Variants genotyped in Rosalynn Gill</td>
 	</tr>
-	<tr>
+	<tr class="bg2">
 		<td>Anonymous Irish Male</td>
 		<td>ind_irish</td>
 		<td>Variants genotyped in an anonymous Irish Male</td>
 	</tr>
-	<tr class="bg2">
+	<tr>
 		<td>Marjolein Kriek</td>
 		<td>ind_kriek</td>
 		<td>Variants genotyped in Marjolein Kriek</td>
 	</tr>
-	<tr>
+	<tr class="bg2">
 		<td>Stephen Quake</td>
 		<td>ind_quake</td>
 		<td>Variants genotyped in Stephen Quake</td>
 	</tr>
-	<tr class="bg2">
+	<tr>
 		<td>Saqqaq</td>
 		<td>ind_saqqaq</td>
 		<td>Variants genotyped in a Palaeo-Eskimo Saqqaq individual</td>
 	</tr>
-	<tr>
+	<tr class="bg2">
 		<td>Saqqaq HC</td>
 		<td>ind_saqqaq_hc</td>
 		<td>Variants genotyped in a Palaeo-Eskimo Saqqaq individual (high confidence SNPs)</td>
 	</tr>
-	<tr class="bg2">
+	<tr>
 		<td>Seong-Jin Kim</td>
 		<td>ind_sjk</td>
 		<td>Variants genotyped in Seong-Jin Kim</td>
 	</tr>
-	<tr>
+	<tr class="bg2">
 		<td>ENSEMBL:Venter</td>
 		<td>ind_venter</td>
 		<td>Variants genotyped in Craig Venter</td>
 	</tr>
-	<tr class="bg2">
+	<tr>
 		<td>ENSEMBL:Watson</td>
 		<td>ind_watson</td>
 		<td>Variants genotyped in James Watson</td>
 	</tr>
-	<tr>
+	<tr class="bg2">
 		<td>YanHang</td>
 		<td>ind_yh</td>
 		<td>Variants genotyped in a Han Chinese individual (YanHuang Project)</td>
 	</tr>
-	<tr class="bg2">
+	<tr>
 		<td>All phenotype-associated variants</td>
 		<td>ph_variants</td>
 		<td>Variants that have been associated with a phenotype</td>
 	</tr>
-	<tr>
+	<tr class="bg2">
 		<td><ul style="margin:0px"><li style="margin:0px">COSMIC phenotype variants</li></ul></td>
 		<td>ph_cosmic</td>
 		<td>Phenotype annotations of somatic mutations found in human cancers from the COSMIC project</td>
-	</tr>
-	<tr class="bg2">
-		<td><ul style="margin:0px"><li style="margin:0px">Clinical variations from dbSNP</li></ul></td>
-		<td>precious</td>
-		<td>Variations that belong to a reserved or "precious" set of clinically associated SNPs from dbSNP [http://www.ncbi.nlm.nih.gov/projects/SNP/]</td>
 	</tr>
 	<tr>
 		<td><ul style="margin:0px"><li style="margin:0px">HGMD-PUBLIC variants</li></ul></td>
@@ -1008,33 +1021,26 @@ variation sets in the Ensembl variation database (subsets are indicated by bulle
 		<td>Variants annotated by HGMD</td>
 	</tr>
 	<tr class="bg2">
-		<td><ul style="margin:0px"><li style="margin:0px">Johnson & O'Donnell phenotype variants</li></ul></td>
-		<td>ph_johnson_et_al</td>
-		<td>Johnson & O'Donnell 'An Open Access Database of Genome-wide Association Results' PMID:19161620</td>
-	</tr>
-	<tr>
 		<td><ul style="margin:0px"><li style="margin:0px">NHGRI catalog phenotype variants</li></ul></td>
 		<td>ph_nhgri</td>
 		<td>Variants associated with phenotype data from the NHGRI GWAS catalog [http://www.genome.gov/gwastudies/]</td>
 	</tr>
-	<tr class="bg2">
+	<tr>
 		<td><ul style="margin:0px"><li style="margin:0px">OMIM phenotype variants</li></ul></td>
 		<td>ph_omim</td>
 		<td>Variations linked to entries in the Online Mendelian Inheritance in Man (OMIM) database</td>
 	</tr>
-	<tr>
+	<tr class="bg2">
 		<td><ul style="margin:0px"><li style="margin:0px">Uniprot phenotype variants</li></ul></td>
 		<td>ph_uniprot</td>
 		<td>Variations with phenotype annotations provided by Uniprot</td>
 	</tr>
-	<tr class="bg2">
+	<tr>
 		<td><ul style="margin:0px"><li style="margin:0px">clinically associated</li></ul></td>
 		<td>clin_assoc</td>
 		<td>Variants described by ClinVar as being probable-pathogenic, pathogenic, drug-response or histocompatibility</td>
 	</tr>
 </table>
-
-
 
 
 <br />
@@ -1044,17 +1050,17 @@ variation sets in the Ensembl variation database (subsets are indicated by bulle
   <b><span style="color:#333">dbSNP</span> clinical significance</b><br />
     <p>The clinical significance of a variant as reported by dbSNP.</p>
 
-	<table class="ss" style="width:auto">
+  <table class="ss" style="width:auto">
        <tr><th>Value</th><th>Example</th></tr>
     <tr><td>drug-response</td><td><a href="/Homo_sapiens/Variation/Explore?v=rs671">rs671</a></td></tr>
     <tr class="bg2"><td>histocompatibility</td><td><a href="/Homo_sapiens/Variation/Explore?v=rs1093">rs1093</a></td></tr>
     <tr><td>non-pathogenic</td><td><a href="/Homo_sapiens/Variation/Explore?v=rs328">rs328</a></td></tr>
     <tr class="bg2"><td>other</td><td><a href="/Homo_sapiens/Variation/Explore?v=rs662">rs662</a></td></tr>
     <tr><td>pathogenic</td><td><a href="/Homo_sapiens/Variation/Explore?v=rs268">rs268</a></td></tr>
-    <tr class="bg2"><td>probable-non-pathogenic</td><td><a href="/Homo_sapiens/Variation/Explore?v=rs140598">rs140598</a></td></tr>
-    <tr><td>probable-pathogenic</td><td><a href="/Homo_sapiens/Variation/Explore?v=rs5935">rs5935</a></td></tr>
-    <tr class="bg2"><td>unknown</td><td><a href="/Homo_sapiens/Variation/Explore?v=rs721710">rs721710</a></td></tr>
-    <tr><td>untested</td><td><a href="/Homo_sapiens/Variation/Explore?v=rs4601">rs4601</a></td></tr>
+    <tr class="bg2"><td>probable-non-pathogenic</td><td><a href="/Homo_sapiens/Variation/Explore?v=rs6472">rs6472</a></td></tr>
+    <tr><td>probable-pathogenic</td><td></td></tr>
+    <tr class="bg2"><td>unknown</td><td></td></tr>
+    <tr><td>untested</td><td><a href="/Homo_sapiens/Variation/Explore?v=rs1093">rs1093</a></td></tr>
 
   </table>
 </div>
@@ -1062,14 +1068,14 @@ variation sets in the Ensembl variation database (subsets are indicated by bulle
   <b><span style="color:#333">DGVa</span> clinical significance</b><br />
     <p>The clinical significance of a structural variant as reported by DGVa.</p>
 
-	<table class="ss" style="width:auto">
+  <table class="ss" style="width:auto">
        <tr><th>Value</th><th>Example</th></tr>
-    <tr class="bg2"><td>Benign</td><td><a href="/Homo_sapiens/StructuralVariation/Evidence?sv=nsv491544">nsv491544</a></td></tr>
-    <tr><td>Not tested</td><td></td></tr>
-    <tr class="bg2"><td>Pathogenic</td><td><a href="/Homo_sapiens/StructuralVariation/Evidence?sv=nsv483167">nsv483167</a></td></tr>
-    <tr><td>Uncertain Significance</td><td><a href="/Homo_sapiens/StructuralVariation/Evidence?sv=nsv918063">nsv918063</a></td></tr>
-    <tr class="bg2"><td>Uncertain Significance: likely benign</td><td><a href="/Homo_sapiens/StructuralVariation/Evidence?sv=nsv917698">nsv917698</a></td></tr>
-    <tr><td>Uncertain Significance: likely pathogenic</td><td><a href="/Homo_sapiens/StructuralVariation/Evidence?sv=esv1791726">esv1791726</a></td></tr>
+    <tr class="bg2"><td>Benign</td><td><a href="/Homo_sapiens/StructuralVariation/Evidence?sv=nsv491567">nsv491567</a></td></tr>
+    <tr><td>Not tested</td><td><a href="/Homo_sapiens/StructuralVariation/Evidence?sv=nsv429663">nsv429663</a></td></tr>
+    <tr class="bg2"><td>Pathogenic</td><td><a href="/Homo_sapiens/StructuralVariation/Evidence?sv=nsv469506">nsv469506</a></td></tr>
+    <tr><td>Uncertain Significance</td><td><a href="/Homo_sapiens/StructuralVariation/Evidence?sv=nsv531468">nsv531468</a></td></tr>
+    <tr class="bg2"><td>Uncertain Significance: likely benign</td><td><a href="/Homo_sapiens/StructuralVariation/Evidence?sv=nsv916121">nsv916121</a></td></tr>
+    <tr><td>Uncertain Significance: likely pathogenic</td><td><a href="/Homo_sapiens/StructuralVariation/Evidence?sv=nsv513767">nsv513767</a></td></tr>
 
   </table>
 </div>
