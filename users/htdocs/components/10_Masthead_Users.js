@@ -21,7 +21,7 @@ Ensembl.Panel.Masthead = Ensembl.Panel.Masthead.extend({
   refreshAccountsDropdown: function() {
     var panel = this;
     
-    if (!this.elLk.accountHolder.find('._accounts_no_user').length) {
+    if (this.elLk.accountHolder.length && !this.elLk.accountHolder.find('._accounts_no_user').length) {
     
       var hideDropdown = function(e) {
         if (!e.which || e.which === 1) {
