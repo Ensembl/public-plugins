@@ -6,7 +6,6 @@ use strict;
 ### TODO limit total number of bookmarks shown
 ### TODO show bookmarks from current site only
 ### TODO order bookmarks by priority
-### TODO Add 'Bookmark this page' link
 
 use URI::Escape qw(uri_escape);
 use HTML::Entities qw(encode_entities);
@@ -24,8 +23,17 @@ sub init {
 
 sub content {
   my $self = shift;
-  return sprintf '<div class="_account_holder"><div class="account-loading">Loading&hellip;</div><form action="/Ajax/accounts_dropdown">%s%s%s</form></div>',
-    map sprintf('<input type="hidden" name="%s" value="%s" />', $_, encode_entities(uri_escape($self->{'_bookmark_data'}{$_}))), keys %{$self->{'_bookmark_data'}};
+
+  return $self->hub->user
+    ? sprintf('<div class="_account_holder"><div class="account-loading">Loading&hellip;</div><form action="/Ajax/accounts_dropdown">%s%s%s</form></div>',
+        map sprintf('<input type="hidden" name="%s" value="%s" />', $_, encode_entities(uri_escape($self->{'_bookmark_data'}{$_}))), keys %{$self->{'_bookmark_data'}})
+    : $self->content_no_user
+  ;
+}
+
+sub content_no_user {
+  my $self = shift;
+  return sprintf('<a class="constant modal_link account-link _accounts_no_user" href="%s" title="Login/Register">Login/Register</a>',  $self->hub->url({qw(type Account action Login)}));
 }
 
 sub content_ajax {
@@ -68,7 +76,7 @@ sub content_ajax {
         ) : '',
         $hub->url({qw(type Account action Logout)})
       )
-    : sprintf('<a class="constant modal_link account-link _accounts_no_user" href="%s" title="Login/Register">Login/Register</a>',  $hub->url({qw(type Account action Login)}))
+    : $self->content_no_user
   ;
 }
 
