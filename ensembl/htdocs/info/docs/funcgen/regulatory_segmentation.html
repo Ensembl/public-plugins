@@ -15,7 +15,7 @@
 <h1>Regulatory Segmentation</h1>
 
 <p>
-The <a href='http://encodeproject.org'>ENCODE</a> combined segmentation classifies the genome into regions of similar signal over 14 assays to obtain, for six ENCODE cell types, a single-track summary of the functional architecture of the human genome.
+The <a href='http://encodeproject.org'>ENCODE</a> combined segmentation (<a href="http://www.ncbi.nlm.nih.gov/pubmed/23221638">FAIRE</a>) classifies the genome into regions of similar signal over 14 assays to obtain, for six ENCODE cell types, a single-track summary of the functional architecture of the human genome.
 </p>
 <p>
 The assays were generated in the ENCODE project for GM12878, K562, H1-hESC, HepG2, HeLa-S3, and HUVEC, and were chosen to maximise distinct information about the state of the genome. These assays (including control input sequencing) were coordinated across all cell lines and constituted three classes of data:
@@ -33,10 +33,10 @@ Two unsupervised segmentation programs were used:
 
 <ul>	
 <table>
-<tr><td><li><b>ChromHMM (Ernst et al. 2011 <a href='http://www.ncbi.nlm.nih.gov/pubmed/21441907'>PMID 21441907</a>)</b></td></tr>
+<tr><td><li><b>ChromHMM (<a href='http://www.ncbi.nlm.nih.gov/pubmed/21441907'>(Ernst et al. 2011</a>)</b></td></tr>
 <tr><td>In brief, ChromHMM labels each assay as high or low in 200 base pair bins over the whole human genome and runs a 25-state Hidden Markov Model.</td></tr>
 <tr></tr>
-<tr><td><li><b>Segway (<a href='http://dx.doi.org/10.1038/nmeth.1937'>Hoffman et al.</a>)</b></td></tr>
+<tr><td><li><b>Segway (<a href='http://dx.doi.org/10.1038/nmeth.1937'>Hoffman et al. 2011</a>)</b></td></tr>
 <tr><td>A Dynamic Bayesian Network approach using base-pair resolution real valued signal data, trained over the ENCODE pilot regions (1% of the genome), and fitted over the whole genome.</td></tr>
 </table>
 </ul>
