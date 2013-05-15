@@ -6,10 +6,10 @@ Ensembl.DbFrontend = Base.extend({
 
   // constructor initialises the el by manipulating the events on the buttons inside it
   constructor: function(el, panel) {
-    var self   = this;
-    this.panel = panel;
-    this.el = $(el);
-    $('._dbf_button', this.el).die('click').live('click', function(event) {
+    var self    = this;
+    this.panel  = panel;
+    this.el     = $(el);
+    $(this.el).off('click').on('click', '._dbf_button', function(event) {
       event.preventDefault();
       self.buttonClick(this);
     });
@@ -30,8 +30,8 @@ Ensembl.DbFrontend = Base.extend({
       type      : isForm ? 'POST' : 'GET',
       dataType  : 'json',
       context   : this,
-      error     : function() { self.showError(responseTarget, '', this.el); },
-      complete  : function() { self.showLoading(responseTarget, false); }
+      error     : function() { this.showError(responseTarget, '', this.el); },
+      complete  : function() { this.showLoading(responseTarget, false); }
     }, options, { //any value provided in options overrides the default ones above
       data      : typeof(data) === 'string' ? data + '&_ajax=1' : $.extend(data, {_ajax: 1})
     }));
@@ -40,10 +40,9 @@ Ensembl.DbFrontend = Base.extend({
   //method to show/hide a 'Loading' message
   showLoading: function(target, flag) {
     if (flag === false) {
-      $(target).removeClass('spinner');
-    }
-    else {
-      $(target).empty().show().addClass('spinner');
+      target.removeClass('spinner');
+    } else {
+      target.empty().show().addClass('spinner');
     }
   },
 
@@ -52,11 +51,6 @@ Ensembl.DbFrontend = Base.extend({
     return $('._dbf_response', $('<div>').html(json.content));
   },
   
-  //method to force the newly loaded forms to be validated before being submitted
-  validateForms: function(formWrapper) {
-    Ensembl.EventManager.trigger('validateForms', formWrapper);
-  },
-
   // method to show error
   showError: function(target, message, el) {
     if (target) {
@@ -69,38 +63,49 @@ Ensembl.DbFrontend = Base.extend({
 
   // method to create form's wrapping element
   createForm: function() {
-    return $('<div>').insertAfter(this.el).hide();
+    if (!this.form) {
+      this.form = $('<div>').insertAfter(this.el).hide();
+      this.formInitialised = false;
+    }
   },
 
   // initialises the form and binds live events to the form and its buttons
   initForm: function() {
+
+    this.createForm();
+    
     var self = this;
-    if (this.form) {
-      return;
-    }
-    this.form = this.createForm();
     
     var eventMapper = [
       ['._dbf_cancel',                  'click',  'cancelButtonClick'],
       ['form._dbf_preview',             'submit', 'previewFormSubmit'],
-      ['form._dbf_save, form._dbf_add', 'submit', 'formSubmit'],
+      ['form._dbf_save, form._dbf_add', 'submit', 'formSubmit'       ],
       ['._dbf_delete',                  'click',  'deleteButtonClick']
     ];
     
     $.each(eventMapper, function() {
       var eventMap = this;
-      $(eventMap[0], self.form).live(eventMap[1], function (event) {
+      $(self.form).on(eventMap[1], eventMap[0], function (event) {
         event.preventDefault();
         self[eventMap[2]](this);
       });
     });
+
+    Ensembl.EventManager.trigger('validateForms', this.form);
+    this.initDataStructure(this.form);
+  },
+  
+  //initialises any Datastructure element inside the given element
+  initDataStructure: function(el) {
+    el.find('._datastructure').datastructure();
   },
 
-  buttonClick: function(button) {},         // Edit/Delete/Duplicate link's click event
-  cancelButtonClick: function(button) {},   // Cancel button's click event
-  previewFormSubmit: function(form) {},     // Submit event of the form for previewing changes
-  formSubmit: function(form) {},            // Submit event for the form
-  afterResponse: function(success) {}       // method to do some modification just after the ajax response processed
+  buttonClick:        function(button)  {},   // Edit/Delete/Duplicate link's click event
+  cancelButtonClick:  function(button)  {},   // Cancel button's click event
+  previewFormSubmit:  function(form)    {},   // Submit event of the form for previewing changes
+  formSubmit:         function(form)    {},   // Submit event for the form
+  deleteButtonClick:  function()        {},   // Event for delete button click
+  afterResponse:      function(success) {}    // method to do some modification just after the ajax response processed
 });
 
 
@@ -109,7 +114,8 @@ Ensembl.Panel.DbFrontend = Ensembl.Panel.extend({
   init: function() {
     this.base();
     var self = this;
-    $('._dbf_record', this.el).each(function() {
+    
+    this.el.find('._dbf_record').each(function() {
       self.initRow(this);
     })
   },

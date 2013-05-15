@@ -10,7 +10,9 @@ Ensembl.DbFrontendRow = Ensembl.DbFrontend.extend({
 
   // @override
   createForm: function() {
-    return $('<div>').attr('class', 'dbf-inline-form').hide().insertAfter(this.el);
+    if (!this.form) {
+      this.form = $('<div>').attr('class', 'dbf-inline-form').hide().insertAfter(this.el);
+    }
   },
   
   // @override
@@ -20,13 +22,13 @@ Ensembl.DbFrontendRow = Ensembl.DbFrontend.extend({
 
   // @override
   buttonClick: function(button) {
-    this.initForm();
+    this.createForm();
     this.makeRequest(button, this.form, {
       success: function(json) {
         var self = this;
         this.form.append(this.getResponseNode(json));
         $('input[type="text"], input[type="password"], input[type="file"], textarea, select', this.form).first().focus();
-        this.validateForms(this.form);
+        this.initForm();
         window.setTimeout(function() {
           self.scrollIn({margin: 5});
         }, 0);
@@ -47,11 +49,10 @@ Ensembl.DbFrontendRow = Ensembl.DbFrontend.extend({
     
   // @override
   cancelButtonClick: function(button) {
-    var previous = $(button).parents('._dbf_form_wrap').prev()[0];
-    if (previous) {
-      $(previous).show().next().remove();
-    }
-    else {
+    var previous = $(button).parents('._dbf_form_wrap').prev();
+    if (previous.length) {
+      previous.show().next().remove();
+    } else {
       this.form.slideUp(function() {
         $(this).empty();
       });
@@ -72,8 +73,7 @@ Ensembl.DbFrontendRow = Ensembl.DbFrontend.extend({
                 this.form.html(this.getResponseNode(json).html());
               }
             });
-          } 
-          else {
+          } else {
             this.form.slideUp('slow', function() {$(this).remove(); });
             this.el.slideUp('slow',   function() {$(this).remove(); });
             for (var i in this) {
@@ -96,8 +96,7 @@ Ensembl.DbFrontendRow = Ensembl.DbFrontend.extend({
           var problem = url.match(/Problem/);
           if (problem) {
             this.target = this.form.children().show().last();
-          }
-          else {
+          } else {
             this.form.empty().hide();
             if (this.action === 'add') {
               this.target = this.el.clone().empty().removeAttr('id').insertAfter(this.form);
@@ -117,11 +116,10 @@ Ensembl.DbFrontendRow = Ensembl.DbFrontend.extend({
                 if (!problem) {
                   this.target.children().effect('highlight', {'color': '#ddddff'}, 1000);
                 }
-              }
-              else {
+              } else {
                 this.panel.initRow(this.target.html(this.getResponseNode(json).html()));
               }
-              this.afterResponse(!problem);
+              this.afterResponse(!problem, this.target);
             }
           });
         }
@@ -132,6 +130,7 @@ Ensembl.DbFrontendRow = Ensembl.DbFrontend.extend({
   // @override
   afterResponse: function(success) {
     this.scrollIn({margin: 5});
+    this.initDataStructure(this.target);
   },
   
   //method to scroll page to the record
@@ -151,14 +150,12 @@ Ensembl.DbFrontendRow = Ensembl.DbFrontend.extend({
       position = elTop - options.margin;
 
     //if form hidden below scroll
-    }
-    else if (formTop + formHeight + options.margin > scrollTop + winHeight) {
+    } else if (formTop + formHeight + options.margin > scrollTop + winHeight) {
 
       //if el + form larger than window size
       if (elHeight + formHeight + options.margin * 2 > winHeight) {
         position = elTop - options.margin;
-      }
-      else {
+      } else {
         position = formTop + formHeight + options.margin -winHeight;
       }
     }

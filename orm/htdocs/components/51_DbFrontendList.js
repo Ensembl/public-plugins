@@ -16,8 +16,7 @@ Ensembl.DbFrontendList = {
       for (var i in this.panel.data) {
         if (this.panel.data[i]) {
           new Ensembl.DbFrontendList.Cell(row.cells[i], this.panel.data[i], this);
-        }
-        else if (row.cells[i].className.match(/_dbf_row_handle/)) {
+        } else if (row.cells[i].className.match(/_dbf_row_handle/)) {
           this.handleCell = new Ensembl.DbFrontendList.HandleCell(row.cells[i], this);
         }
       }
@@ -39,7 +38,7 @@ Ensembl.DbFrontendList = {
       $('._dbf_list_view', this.el).click(function(e) {
         e.preventDefault();
         var handle = self.row.handleCell;
-        handle.initForm();
+        handle.createForm();
         handle.makeRequest(this, handle.form, {
           url:      this.href,
           data:     {},
@@ -55,7 +54,7 @@ Ensembl.DbFrontendList = {
 
     // @override
     buttonClick: function(button) {
-      this.initForm();
+      this.createForm();
       this.makeRequest(button, this.form, {
         url:      this.url,
         data:     {id: this.row.id, _list: 1},
@@ -64,7 +63,7 @@ Ensembl.DbFrontendList = {
           var field  = $('[name=' + this.name.replace('.', '\\.') + ']', form).first().parents('div').first().removeAttr('class');
           var button = $('[type=submit]', form).first().parents('div').first().attr('class', 'dbf-list-buttons');
           $('input', this.form.empty().append(form.empty().append(field, $('<div>').append(button)))).first().focus();
-          this.validateForms(this.form);
+          this.initForm();
         }
       });
       this.el.hide();
@@ -106,15 +105,13 @@ Ensembl.DbFrontendList = {
                   if (resTr.length) {
                     this.row.panel.updateRow(resTr.children().map(function(i, cell) {return cell.innerHTML;}), this.el.parents('tr')[0]);
                   }
-                }
-                else {
+                } else {
                   this.showError(this.form, this.getResponseNode(json).children('p').first().html(), this.el);
                 }
                 this.afterResponse(this.success);
               }
             });
-          }
-          else {
+          } else {
             this.showError(this.form, '', this.el);
           }
         }
@@ -133,9 +130,11 @@ Ensembl.DbFrontendList = {
 
     // @override
     createForm: function() {
-      var tr = this.el[0].parentNode;
-      var bg = (' ' + tr.className + ' ').match(/\s{1}bg(1|2)\s{1}/)[0];
-      return $('<div class="dbf-inline-form">').appendTo($('<td>').appendTo($('<tr>').insertAfter(tr).attr('class', 'dbf-list-form ' + bg)).attr('colspan', tr.cells.length));
+      if (!this.form) {
+        var tr = this.el[0].parentNode;
+        var bg = (' ' + tr.className + ' ').match(/\s{1}bg(1|2)\s{1}/)[0];
+        this.form = $('<div class="dbf-inline-form">').appendTo($('<td>').appendTo($('<tr>').insertAfter(tr).attr('class', 'dbf-list-form ' + bg)).attr('colspan', tr.cells.length));
+      }
     },
 
     // @override
@@ -152,8 +151,7 @@ Ensembl.DbFrontendList = {
       var previous = $(button).parents('._dbf_form_wrap').prev()[0];
       if (previous) {
         $(previous).show().next().remove();
-      }
-      else {
+      } else {
         this.form.children().first().slideUp(function() {
           $(this).parents('tr').first().remove();
         });
@@ -174,8 +172,7 @@ Ensembl.DbFrontendList = {
                   this.form.html(this.getResponseNode(json).html());
                 }
               });
-            }
-            else {
+            } else {
               this.form.parents('tr').first().remove();
               this.row.panel.deleteRow(this.el.parents('tr')[0]);
               for (var i in this) {
@@ -213,8 +210,7 @@ Ensembl.DbFrontendList = {
                   }
                   this.afterResponse(this.success);
                   this.form.parents('tr').first().remove();
-                }
-                else {
+                } else {
                   this.showError(this.form, this.getResponseNode(json).children('p').first().html());
                 }
               }
@@ -222,7 +218,9 @@ Ensembl.DbFrontendList = {
           }
         }
       });
-    }
+    },
+    
+    initDataStructure: function() {} //ignore datastructure in list view
   })
 };
 
@@ -234,12 +232,13 @@ Ensembl.Panel.DbFrontendList = Ensembl.Panel.extend({
     this.base();
     this.data = [];
     
-    $('table._dbf_list', this.el).each(function() {
-      $('thead th', this).each(function() {
+    this.el.find('table._dbf_list').each(function() {
+      var list = $(this);
+      list.find('thead th').each(function() {
         var inps = $('input[type=hidden]', this);
         self.data.push(inps.length ? {url: inps[0].value, name: inps[0].name, title: $(this).text(), type: inps[0].className} : false);
       });
-      $('tbody tr', this).each(function () {
+      list.find('tbody tr').each(function () {
         self.initRow(this);
       });
       return false;
@@ -259,8 +258,7 @@ Ensembl.Panel.DbFrontendList = Ensembl.Panel.extend({
       table = table.dataTable();
       row = table.fnGetNodes(table.fnAddData(data));
       $(row).addClass(classes.replace(/bg(1|2)/, ''));
-    }
-    else {
+    } else {
       row = $('<tr>').attr('class', classes).append($.map(data, function(html) { return $('<td>').html(html)[0]; })).insertAfter(refRow)[0];
       this.setRowBGs();
     }
@@ -287,8 +285,7 @@ Ensembl.Panel.DbFrontendList = Ensembl.Panel.extend({
     var table = $(row).parents('table').first();
     if (table.hasClass('data_table')) {
       table.dataTable().fnDeleteRow(row);
-    }
-    else {
+    } else {
       $(row).remove();
       this.setRowBGs();
     }
@@ -297,7 +294,7 @@ Ensembl.Panel.DbFrontendList = Ensembl.Panel.extend({
   // Maintains the even-odd backgroundColor order of the TR elements
   setRowBGs: function() {
     var bg = ['bg1', 'bg2'];
-    $('table._dbf_list', this.el).each(function() {
+    this.el.find('table._dbf_list').each(function() {
       $('tbody tr', this).each(function() {
         if (this.className.match(/_dbf_row_/)) {
           $(this).removeClass('bg1 bg2').addClass(bg[0]);
