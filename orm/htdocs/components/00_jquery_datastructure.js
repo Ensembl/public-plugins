@@ -481,18 +481,16 @@
       if (typeof(data) !== 'object') {
         this.type  = 'string';
         this.value = data + '';
-      }
 
       //array value
-      else if (data.constructor.toString().match('Array')) {
+      } else if (data.constructor.toString().match('Array')) {
         this.type  = 'array';
         this.value = $.map(data, function(d) {
           return new DSElement(d, self);
         });
-      }
 
       //hash value
-      else {
+      } else {
         this.type = 'hash';
         this.keys = [];
         for (var i in data) {
