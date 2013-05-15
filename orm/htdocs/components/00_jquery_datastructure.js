@@ -10,6 +10,10 @@
   $.datastructure = function (el) {
 
     el = $(el);
+
+    if (el.data('datastructure')) {
+      return;
+    }
     
     var isReadonly = !el[0].nodeName.match(/^(TEXTAREA|INPUT)$/);
 
@@ -59,14 +63,14 @@
         if (this.el) {
           return;
         }
-        if (document.getElementById('_ds_menu')) {
-          this.el = $('#_ds_menu');
+        this.el = $('#_ds_menu');
+        if (this.el.length) {
           return;
         }
         this.el = $('<div>')
           .attr({id: '_ds_menu', 'class': '-ds-menu'})
           .append($('<p>').attr({'class': '-ds-menu-close'})
-            .append($('<a>').attr({href: '#close'}).html('Close').click(function(e) {
+            .append($('<a>').attr({href: '#close'}).html('Close').on('click', function(e) {
               e.preventDefault();
               closeMenu();
             }))
@@ -75,7 +79,8 @@
           .append($('<div id="_ds_menu_tab" class="-ds-tab">')
             .html('<a href="#hash"><span class="-ds-sel">Make </span>Hash</a><a href="#array"><span class="-ds-sel">Make </span>Array</a><a href="#string"><span class="-ds-sel">Make </span>String</a>')
           )
-          .appendTo(document.body);
+          .appendTo(document.body)
+        ;
 
         var labels = {
           hash: 'Add key',
@@ -87,13 +92,13 @@
           self.el.append($('<div>').attr({'class': '-ds-tab-div'})
             .append($('<form class="_ds_form _ds_form_' + type + '">')
               .append($('<label>').html(label + ': '))
-              .append($('<input>').attr({type: 'text'}).keypress(function(e) { if (e.keyCode === 27 || e.which === 27) { closeMenu(); } } ))
+              .append($('<input>').attr({type: 'text'}).on('keypress', function(e) { if (e.keyCode === 27 || e.which === 27) { closeMenu(); } } ))
               .append('<input type="submit" value="Save">')
             )
           );
         });
-        new DSTabs($('#_ds_menu_tab a', this.el), $('div.-ds-tab-div', this.el));
-        $('#_ds_menu_tab a', this.el).bind('click', function() {
+        new DSTabs(this.el.find('#_ds_menu_tab a'), this.el.find('div.-ds-tab-div'));
+        this.el.find('#_ds_menu_tab a').on('click', function() {
           var type = this.href.split('#').pop();
           setTimeout(function() {
             $('form._ds_form_' + type +' input[type=text]').focus().select();
@@ -108,8 +113,8 @@
         this.dsEl = dsEl;
         $('#_ds_error').hide();
         $('#_ds_menu_tab a').filter('[href=#' + this.dsEl.type + ']').trigger('click');
-        $('form._ds_form input[type=text]', this.el).val(this.dsEl.type === 'string' ? this.dsEl.value || '' : '');
-        $('form._ds_form', this.el).unbind('submit').submit(function(event) {
+        this.el.find('form._ds_form input[type=text]').val(this.dsEl.type === 'string' ? this.dsEl.value || '' : '');
+        this.el.find('form._ds_form').off('submit').on('submit', function(event) {
           event.preventDefault();
           try {
             self.dsEl.modify((this.className.match(/_ds_form_([a-z]+)/) || []).pop(), $('input[type=text]', this).val());
@@ -130,13 +135,13 @@
         if (this.el) {
           return;
         }
-        if (document.getElementById('_ds_key_menu')) {
-          this.el = $('#_ds_key_menu');
+        this.el = $('#_ds_key_menu');
+        if (this.el.length) {
           return;
         }
         this.el = $('<div>').attr({id: '_ds_key_menu', 'class': '-ds-menu'})
           .append('<p id="_ds_key_error" class="-ds-error">')
-          .append($('<form>').append($('<input>').attr({type: 'text'}).bind({
+          .append($('<form>').append($('<input>').attr({type: 'text'}).on({
             keypress: function(e) {
               if (e.keyCode === 27 || e.which === 27) {
                 closeMenu();
@@ -155,8 +160,8 @@
         this.dsEl = dsEl;
         this.span = eventTarget;
         $('#_ds_key_error').hide();
-        $('input', this.el.css({left: event.pageX + 'px', top: event.pageY + 'px'}).show()).val(this.span.innerHTML).focus().select();
-        $('form', this.el).bind({'submit': function(event) {
+        this.el.css({left: event.pageX + 'px', top: event.pageY + 'px'}).show().find('input').val(this.span.innerHTML).focus().select();
+        this.el.find('form').on('submit', function(event) {
           event.preventDefault();
           var newKey = $('input', this).val();
           if (newKey) {
@@ -169,7 +174,7 @@
             }
           }
           closeMenu();
-        }});
+        });
       }
     };
 
@@ -210,7 +215,7 @@
             }
           }
           if (nextKey) {
-            nextKey = $('>span._ds_key_' + encodeClassName(nextKey), this.el).first().prev();
+            nextKey = this.el.find('>span._ds_key_' + encodeClassName(nextKey)).first().prev();
           }
         }
         $.each([$('<span class="-ds-remove-button">').html(n + p + t), $('<span class="-ds-hil -ds-key _ds_key _ds_key_' + encodeClassName(key) + '">').html(key), $('<span>').html(' =&gt; '), val.display(this.indent + 1)], function() {
@@ -220,18 +225,16 @@
           }
         });
         if (!this.readOnly) {
-          $('>span._ds_key', this.el).bind({
-            click: function(event) {
-              self.getKeyMenu(event, this);
-            }
-          }).prev().bind({
+          this.el.find('>span._ds_key').on('click', function(event) {
+            self.getKeyMenu(event, this);
+          }).prev().on({
             mouseover: function(event) {
               event.stopImmediatePropagation();
               $.each([this, this.nextSibling, this.nextSibling.nextSibling, this.nextSibling.nextSibling.nextSibling], function() { $(this).addClass('-ds-remove'); } );
             },
             mouseout: function() {
               $.each([this, this.nextSibling, this.nextSibling.nextSibling, this.nextSibling.nextSibling.nextSibling], function() { $(this).removeClass('-ds-remove'); } );
-            }, 
+            },
             click: function(event) {
               event.stopImmediatePropagation();
               self.removeKey(this.nextSibling);
@@ -334,7 +337,7 @@
       this.string = function(val, doModify) {
         var newStr = $('<span class="-ds-hil _ds_string">').html(val || '<i>undef</i>')
         if (!this.readOnly) {
-          newStr.bind({ click: function(e) { self.getMenu(e); }});
+          newStr.on('click', function(e) { self.getMenu(e); });
         }
         if (doModify) {
           this.value = val;
@@ -528,7 +531,7 @@
       .html('<div class="-ds-tab"><a class="selected" href="#editor">Editor</a><a href="#source">Source</a></div><div class="-ds-tab-div"></div><div class="-ds-tab-div"></div>')
       .replaceAll(el).children().last().append(el).prev().append($('<pre>').append(data.display().addClass('_ds_toplevel'))).parent().before(error);
 
-    new DSTabs($('a', wrapper), $('.-ds-tab-div', wrapper));
+    new DSTabs(wrapper.find('a'), wrapper.find('.-ds-tab-div'));
 
     // event method if text is changed, or form is reset
     var reset = function() {
@@ -546,18 +549,18 @@
           }
           catch(e) {
             error.html(e).show();
-            $('._ds_toplevel', wrapper).empty();
+            wrapper.find('._ds_toplevel').empty();
             return;
           }
           error.hide();
           data = new DSElement(data, undefined, el, isReadonly);
           data.updateText();
-          $('._ds_toplevel', wrapper).replaceWith(data.display().addClass('_ds_toplevel'));
+          wrapper.find('._ds_toplevel').replaceWith(data.display().addClass('_ds_toplevel'));
         }, 100
       );
     };
 
-    el.bind({change: reset}).parents('form').bind({reset: reset});
+    el.on('change', reset).data('datastructure', true).parents('form').bind('reset', reset);
   };
 
   $.fn.datastructure = function () {
