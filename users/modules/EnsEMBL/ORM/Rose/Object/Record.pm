@@ -23,9 +23,11 @@ my $VIRTUAL_COLUMNS = {
   'das'               => [qw(label)] #some others too, but they are not directly queried on this object (TODO)
 };
 
+my $RECORD_TABLE = $SiteDefs::ENSEMBL_USER_RECORD_TABLE || 'record';
+
 ## Define schema
 __PACKAGE__->meta->setup(
-  table           => 'record',
+  table           => $RECORD_TABLE,
   columns         => [
     record_id       => {'type' => 'serial',  'primary_key'  => 1,                 'not_null' => 1                       },
     record_type     => {'type' => 'enum',    'values'       => [qw(user group)],  'not_null' => 1, 'default' => 'user'  },
