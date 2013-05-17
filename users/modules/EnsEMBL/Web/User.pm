@@ -71,8 +71,9 @@ sub new {
 sub authorise {
   ## Initialising the actual authenticated rose user object
   ## @param Hashref with one out of the following keys
-  ##  - id    : User id
-  ##  - user  : Rose user object
+  ##  - id          : User id
+  ##  - user        : Rose user object
+  ##  - set_cookie  : Flag if on, will set the user cookie
   ## @return 1 if successful, 0 otherwise
   ## @exception InvalidArgumentException - if neither of id or user is provided
   my ($self, $params) = @_;
@@ -87,7 +88,7 @@ sub authorise {
   return 0 unless $user;
 
   $self->{'_user'} = $user;
-  $self->cookie->bake($user->user_id);
+  $self->cookie->bake($user->user_id) if $params->{'set_cookie'};
 
   return 1;
 }
