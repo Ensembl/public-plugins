@@ -85,7 +85,7 @@ sub redirect_after_login {
   my $site          = $hub->species_defs->ENSEMBL_SITE_URL;
 
   # return to login page if cookie not set
-  return $self->redirect_login(MESSAGE_UNKNOWN_ERROR) unless $hub->user->authorise({'user' => $user});
+  return $self->redirect_login(MESSAGE_UNKNOWN_ERROR) unless $hub->user->authorise({'user' => $user, 'set_cookie' => 1});
 
   # redirect
   if ($hub->is_ajax_request) {
