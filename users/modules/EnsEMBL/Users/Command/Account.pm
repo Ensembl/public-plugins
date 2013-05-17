@@ -58,7 +58,7 @@ sub handle_registration {
   }
 
   # skip verification if flag kept on, or if openid provider is trusted and user uses same email in user account as provided by openid provider
-  if ($login_type eq 'openid' && ($flags->{'skip_verify_email'} || $login->has_trusted_provider && $user->email eq $login->email)) {
+  if ($login_type eq 'openid' && ($flags->{'skip_verify_email'} || $object->login_has_trusted_provider($login) && $user->email eq $login->email)) {
     $login->activate($user);
     $user->save;
     return $self->redirect_after_login($user);
