@@ -30,13 +30,13 @@ sub content_tree {
   my $content     = $self->content_div;
 
   my $form        = $content->append_child($self->new_form({
-    'action'        => $hub->url({'action' => $preview ? 'Preview' : 'Save', 'function' => $hub->function}),
+    'action'        => {'action' => $preview ? 'Preview' : 'Save', 'function' => $hub->function},
     'class'         => [ !$preview ? $serial ? $self->_JS_CLASS_SAVE_FORM : $self->_JS_CLASS_ADD_FORM : $self->_JS_CLASS_PREVIEW_FORM, 'dbf-padded' ]
   }));
 
   my $fields      = $self->unpack_rose_object($record, $url_params);
 
-  # print fields  
+  # print fields
   foreach my $field (@$fields) {
 
     my $field_extras    = $field->extras;
