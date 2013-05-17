@@ -70,12 +70,12 @@ sub new {
 
 sub authorise {
   ## Initialising the actual authenticated rose user object
-  ## @param Hashref with one out of the following keys
-  ##  - id          : User id
+  ## @param Hashref with the following keys
   ##  - user        : Rose user object
+  ##  - id          : User id (required only if 'user' key is missing)
   ##  - set_cookie  : Flag if on, will set the user cookie
   ## @return 1 if successful, 0 otherwise
-  ## @exception InvalidArgumentException - if neither of id or user is provided
+  ## @exception InvalidArgumentException - if neither user nor id is provided
   my ($self, $params) = @_;
   my $user = delete $params->{'user'};
 
