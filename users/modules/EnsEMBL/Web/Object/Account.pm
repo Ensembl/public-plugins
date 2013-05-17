@@ -17,8 +17,8 @@ use EnsEMBL::ORM::Rose::Manager::User;
 
 use base qw(EnsEMBL::Web::Object);
 
-sub caption               { return 'Your Account';                                                        }
-sub short_caption         { return 'Your Account';                                                        }
+sub caption               { return 'Personal Data';                                                       }
+sub short_caption         { return 'Personal Data';                                                       }
 sub default_action        { return $_[0]->hub->user ? 'Preferences' : 'Login';                            }
 
 sub openid_providers      { return $_[0]->deepcopy($_[0]->hub->species_defs->OPENID_PROVIDERS);           }
@@ -156,7 +156,7 @@ sub activate_user_login {
   my ($self, $login) = @_;
   my $user = $login->user;
   $login->activate;
-  $user->save;
+  $user->reset_salt_and_save;
   $login->save;
 }
 

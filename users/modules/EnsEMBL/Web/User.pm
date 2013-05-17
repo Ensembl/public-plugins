@@ -8,23 +8,22 @@ use HTML::Entities qw(encode_entities);
 use EnsEMBL::Web::Record;
 use EnsEMBL::Web::DASConfig;
 use EnsEMBL::Web::Exceptions;
+
 use EnsEMBL::ORM::Rose::Manager::User;
 use EnsEMBL::ORM::Rose::Manager::Record;
 
-use base qw(EnsEMBL::Web::Root); ##  TODO ??
-
 use overload qw("" to_string bool to_boolean);
 
-sub rose_object           { return shift->{'_user'};                                                                  } ## @return Rose User object
-sub hub                   { return shift->{'_hub'};                                                                   } ## @return Hub
-sub cookie                { return shift->{'_cookie'};                                                                } ## @return User cookie
+sub rose_object           { return shift->{'_user'};    } ## @return Rose User object
+sub hub                   { return shift->{'_hub'};     } ## @return Hub
+sub cookie                { return shift->{'_cookie'};  } ## @return User cookie
 
 sub display_name          { return encode_entities(shift->name);                                                      } ## @return HTML escaped name
 sub display_email         { return encode_entities(shift->email);                                                     } ## @return HTML escaled email address
 sub display_organisation  { return encode_entities(shift->organisation || '');                                        } ## @return HTML escaped organisation name
 sub display_country       { return encode_entities($_[0]->hub->species_defs->COUNTRY_CODES->{$_[0]->country || ''});  } ## @return displayable country name
 
-sub id                    { shift->user_id;                                 }
+sub id                    { shift->_goto_rose_object('user_id', @_);        } # TODO remove this extra method
 sub user_id               { shift->_goto_rose_object('user_id', @_);        }
 sub name                  { shift->_goto_rose_object('name', @_);           }
 sub email                 { shift->_goto_rose_object('email', @_);          }
@@ -38,20 +37,17 @@ sub create_record         { shift->_goto_rose_object('create_record', @_);  }
 sub logins                { shift->_goto_rose_object('logins');             }
 sub records               { shift->_goto_rose_object('records');            }
 sub bookmarks             { shift->_goto_rose_object('bookmarks');          }
-sub configurations        { shift->_goto_rose_object('configurations');     }
 sub annotations           { shift->_goto_rose_object('annotations');        }
 sub dases                 { shift->_goto_rose_object('dases');              }
 sub newsfilters           { shift->_goto_rose_object('newsfilters');        }
-sub sortables             { shift->_goto_rose_object('sortables');          }
-sub currentconfigs        { shift->_goto_rose_object('currentconfigs');     }
 sub specieslists          { shift->_goto_rose_object('specieslists');       }
-sub uploads               { shift->_goto_rose_object('uploads');            }
-sub urls                  { shift->_goto_rose_object('urls');               }
 sub histories             { shift->_goto_rose_object('histories');          }
 sub favourite_tracks      { shift->_goto_rose_object('favourite_tracks');   }
                           
 sub is_admin_of           { shift->_goto_rose_object('is_admin_of', @_);    }
 sub is_member_of          { shift->_goto_rose_object('is_member_of', @_);   }
+
+sub default_salt          { EnsEMBL::ORM::Rose::Manager::User->object_class->DEFAULT_SALT; }
 
 sub new {
   ## @constructor
@@ -75,8 +71,9 @@ sub new {
 sub authorise {
   ## Initialising the actual authenticated rose user object
   ## @param Hashref with one out of the following keys
-  ##  - id    : User id
-  ##  - user  : Rose user object
+  ##  - id          : User id
+  ##  - user        : Rose user object
+  ##  - set_cookie  : Flag if on, will set the user cookie
   ## @return 1 if successful, 0 otherwise
   ## @exception InvalidArgumentException - if neither of id or user is provided
   my ($self, $params) = @_;
@@ -91,7 +88,7 @@ sub authorise {
   return 0 unless $user;
 
   $self->{'_user'} = $user;
-  $self->cookie->bake($user->user_id);
+  $self->cookie->bake($user->user_id) if $params->{'set_cookie'};
 
   return 1;
 }
@@ -175,16 +172,38 @@ sub find_admin_groups {
   return map $_->group, @{shift->rose_object->admin_memberships};
 }
 
-sub add_to_uploads {
-  my ($self, %data) = @_;
+sub _add_to_records {
+  my ($self, $record_type) = splice @_, 0, 2;
 
-  my $record = $self->create_record('upload', \%data);
+  my $data = ref $_[0] eq 'HASH' ? $_[0] : {@_};
+
+  my $record = $self->create_record($record_type, $data);
   $record->save('user' => $self);
 
   ($record) = EnsEMBL::Web::Record->from_rose_objects([$record]);
 
   return $record;
 }
+
+sub add_to_uploads {
+  return shift->_add_to_records('upload', @_);
+}
+
+sub add_to_urls {
+  return shift->_add_to_records('url', @_);
+}
+
+sub add_to_dases {
+  return shift->_add_to_records('das', @_);
+}
+
+sub _records {
+  my ($self, $type, $id) = @_;
+  return $self->rose_object ? $self->rose_object->find_records('query' => [ 'type' => $type, $id ? ('record_id' => $id) : () ]) : ();
+}
+
+sub uploads { return shift->_records('upload', @_); }
+sub urls    { return shift->_records('url', @_); }
 
 sub get_all_das {
   my $self    = shift;
@@ -196,7 +215,7 @@ sub get_all_das {
   my %by_url  = ();
   for my $das_record ( $self->get_records('dases') ) {
     # Create new DAS source from value in database...
-    my $das = EnsEMBL::Web::DASConfig->new_from_hashref( $das_record->data->raw );
+    my $das = EnsEMBL::Web::DASConfig->new_from_hashref( $das_record->data );
     $das->matches_species( $species ) || next;
     $das->category( 'user' );
     $by_name{ $das->logic_name } = $das;

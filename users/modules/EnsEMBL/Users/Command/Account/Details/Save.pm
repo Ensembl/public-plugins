@@ -10,7 +10,7 @@ use EnsEMBL::Users::Messages qw(MESSAGE_EMAIL_INVALID MESSAGE_NAME_MISSING MESSA
 
 use base qw(EnsEMBL::Users::Command::Account);
 
-sub process {
+sub csrf_safe_process {
   my $self    = shift;
   my $object  = $self->object;
   my $hub     = $self->hub;
@@ -37,11 +37,11 @@ sub process {
   if ($fields->{'email'} ne $user->email) {
     $user->new_email($fields->{'email'});
     $user->save;
-    $self->get_mailer->send_change_email_confirmation_email($user->get_local_login || shift(@{$user->find_logins('query' => ['status' => 'active'])}), $fields->{'email'});
+    $self->mailer->send_change_email_confirmation_email($user->get_local_login || shift(@{$user->find_logins('query' => ['status' => 'active'])}), $fields->{'email'});
     return $self->redirect_message(MESSAGE_VERIFICATION_SENT, {'email' => $fields->{'email'}});
   }
 
-  return $self->ajax_redirect($hub->url({'action' => 'Preferences'}));
+  return $self->ajax_redirect($hub->PREFERENCES_PAGE);
 }
 
 1;

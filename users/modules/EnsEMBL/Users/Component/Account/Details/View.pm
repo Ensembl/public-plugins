@@ -9,14 +9,16 @@ use warnings;
 use base qw(EnsEMBL::Users::Component::Account);
 
 sub content {
-  my $self          = shift;
-  my $hub           = $self->hub;
-  my $object        = $self->object;
-  my $user          = $hub->user;
-  my $r_user        = $user->rose_object;
-  my $logins        = $r_user->logins;
-  my $site_name     = $self->site_name;
-  
+  my $self            = shift;
+  my $hub             = $self->hub;
+  my $object          = $self->object;
+  my $user            = $hub->user;
+  my $r_user          = $user->rose_object;
+  my $openid_enabled  = $hub->species_defs->ENSEMBL_OPENID_ENABLED;
+  my $ldap_enabled    = $hub->species_defs->ENSEMBL_LDAP_ENABLED;
+  my $logins          = $r_user->find_logins($openid_enabled && $ldap_enabled ? () : ('query' => ['type' => [ 'local', $openid_enabled ? 'openid' : (), $ldap_enabled ? 'ldap' : () ]]));
+  my $site_name       = $self->site_name;
+
   my (@existing_openid_logins, @login_details);
 
   for (@$logins) {
@@ -52,21 +54,20 @@ sub content {
     push @login_details, $login_detail;
   }
 
-  push @login_details, $self->js_link({
-    'caption' => 'Add login',
-    'helptip' => sprintf('Click to add another login option via %s', $self->join_with_or(grep {!ref $_} @{$self->object->openid_providers})),
-    'href'    => {qw(action Details function AddLogin)}
-  });
+  if ($openid_enabled || $ldap_enabled) {
+    push @login_details, $self->js_link({
+      'caption' => 'Add login',
+      'helptip' => sprintf('Click to add another login option via %s', $self->join_with_or(grep {!ref $_} @{$self->object->openid_providers})),
+      'href'    => {qw(action Details function AddLogin)}
+    });
+  }
 
   return $self->js_section({
-    'id'            => 'view_details',
-    'refresh_url'   => {'action' => 'Details', 'function' => ''},
     'heading'       => 'User Details',
     'heading_links' => [{
       'sprite'        => 'edit_icon',
       'href'          => {qw(action Details function Edit)},
-      'title'         => 'Edit',
-      'target'        => 'section'
+      'title'         => 'Edit'
     }],
     'subsections'   => [
       $self->two_column([

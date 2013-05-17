@@ -8,40 +8,28 @@ sub update_conf {
 
   $SiteDefs::OBJECT_TO_SCRIPT->{'Account'} = 'Modal';
 
-  $SiteDefs::ENSEMBL_USERS_ENABLED         = 1;
+  $SiteDefs::ENSEMBL_LOGINS                = 1;
+  $SiteDefs::ENSEMBL_OPENID_ENABLED        = 0; # this gets overridden in OpenID plugin
+  $SiteDefs::ENSEMBL_LDAP_ENABLED          = 0; # this gets overridden in LDAP plugin
 
-  # TODO change once development done
-  $SiteDefs::ENSEMBL_USERDB_NAME           = 'hr5_test_users_db';
-  $SiteDefs::ENSEMBL_USER_COOKIE           = 'ENS_USER';
+  # URL for secure pages (any pages that ask user to enter password)
+  $SiteDefs::ENSEMBL_LOGIN_URL           ||= $SiteDefs::ENSEMBL_SITE_URL; #'https://login.ensembl.org/';
 
+  # Provide these values in you plugin
   $SiteDefs::ROSE_DB_DATABASES->{'user'}   = {
-    database  => $SiteDefs::ENSEMBL_USERDB_NAME,
-    host      => $SiteDefs::ENSEMBL_USERDB_HOST,
-    port      => $SiteDefs::ENSEMBL_USERDB_PORT,
-    username  => $SiteDefs::ENSEMBL_USERDB_USER || $SiteDefs::DATABASE_WRITE_USER,
-    password  => $SiteDefs::ENSEMBL_USERDB_PASS || $SiteDefs::DATABASE_WRITE_PASS,
+    'database'  => 'database_name',
+    'host'      => 'mysql.example.com',
+    'port'      => 3306,
+    'username'  => 'user_name',
+    'password'  => 'user_password'
   };
 
-
-  ## Arrayref of emails and display title that user can opt to subscribe at the time of registration eg. dev@ensembl.org
-  ## 'announcement@example.com' => 'Mailing list for release related news'
+  ## Arrayref of emails and display title that user can opt to subscribe at the time of registration eg. [ dev-join@ensembl.org => 'Ensembl Dev List' ] for dev@ensembl.org
+  ## $SiteDefs::SUBSCRIPTION_EMAIL_LISTS  ||= ['announcement-join@example.com' => 'Mailing list for release related news']
   $SiteDefs::SUBSCRIPTION_EMAIL_LISTS     ||= [];
 
-  ## List of openid login providers
-  ## If endpoint url needs user name, leave "[USERNAME]" in as a placeholder
-  ## These gets listed as "login via" options on login page in the same order as here
-  ## Save corresponding icons (120px x 45px) in htdocs/i folder (eg. openid_google.png for Google, openid_myopenid.png for MyOpenID) - all in lower case
-  ## The providers with trusted key as 1 are trusted to provide genuine email address of the user. We skip the email verification process for the trusted ones.
-  $SiteDefs::OPENID_PROVIDERS             ||= [
-    'Google'    => {'url' => 'http://www.google.com/accounts/o8/id', 'trusted' => 1, 'trademark_owner' => 'Google Inc.'},
-    'Yahoo'     => {'url' => 'https://me.yahoo.com/',                'trusted' => 1, 'trademark_owner' => 'Yahoo Inc.'},
-    'MyOpenID'  => {'url' => 'https://myopenid.com/',                'trusted' => 0, 'trademark_owner' => 'MyOpenID'},
-    'AOL'       => {'url' => 'http://openid.aol.com/[USERNAME]',     'trusted' => 0, 'trademark_owner' => 'AOL Inc.'}
-  ];
-
-  ## Openid Consumer secret key provided while doing openid authentication
-  ## Change this in your plugins
-  $SiteDefs::OPENID_CONSUMER_SECRET       ||= 'abcdefghij';
+  ## Address to send verification emails from
+  $SiteDefs::ENSEMBL_NOREPLY_EMAIL        ||= $SiteDefs::ENSEMBL_HELPDESK_EMAIL; #Set this to something like 'no-reply@example.com'
 
   ## Country codes for dropdowns on user account pages - you won't really need to change this
   $SiteDefs::COUNTRY_CODES                  = {

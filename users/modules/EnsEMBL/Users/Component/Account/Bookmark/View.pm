@@ -19,20 +19,15 @@ sub content {
 
   return join '',
     $self->js_section({
-      'id'                => 'my_bookmarks',
-      'refresh_url'       => {'action' => 'Bookmark', 'function' => ''},
       'heading'           => 'My bookmarks',
       'heading_links'     => [{
         'href'              => {qw(action Bookmark function Add)},
         'title'             => 'Add a bookmark',
-        'sprite'            => 'bookmark_icon',
-        'target'            => 'section'
+        'sprite'            => 'bookmark_icon'
       }],
       'subsections'       => [ @$bookmarks ? $self->bookmarks_table({'bookmarks' => $bookmarks}) : $self->no_bookmark_message ]
     }), @$group_bookmarks ?
     $self->js_section({
-      'id'                => 'group_bookmarks',
-      'refresh_url'       => {'action' => 'Bookmark', 'function' => ''},
       'heading'           => 'Shared bookmarks',
       'subsections'       => [ $self->bookmarks_table({'bookmarks' => $group_bookmarks, 'shared' => 1}) ]
     }) : ()

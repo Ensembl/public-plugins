@@ -15,7 +15,7 @@ sub content {
   my $hub             = $self->hub;
   my $user            = $hub->user;
   my $email           = $user->email;
-  my $form            = $self->new_form({'action' => {qw(action Details function Save)}});
+  my $form            = $self->new_form({'action' => {qw(action Details function Save)}, 'csrf_safe' => 1});
   my $js_change_email = $self->JS_CLASS_CHANGE_EMAIL;
   my $email_note      = '';
 
@@ -49,7 +49,15 @@ sub content {
     'button'        => 'Save',
   });
 
-  return $self->js_section({'id' => 'edit_details', 'subsections' => [ $form->render ], 'js_panel' => 'AccountForm'});
+  $form->fieldset->fields->[-1]->add_element({
+    'type'      => 'reset',
+    'value'     => 'Cancel',
+    'class'     => $self->_JS_CANCEL
+  }, 1);
+  
+  $form->add_hidden({'name' => $self->_JS_CANCEL, 'value' => $hub->PREFERENCES_PAGE});
+
+  return $self->js_section({'subsections' => [ $form->render ], 'js_panel' => 'AccountForm'});
 }
 
 1;

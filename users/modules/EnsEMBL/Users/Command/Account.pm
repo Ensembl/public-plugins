@@ -1,15 +1,37 @@
 package EnsEMBL::Users::Command::Account;
 
+## Base class for all the command modules
+## This also contains support for openid login
+
 use strict;
 use warnings;
 
 use EnsEMBL::Web::Exceptions;
 use EnsEMBL::Users::Mailer::User;
-use EnsEMBL::Users::Messages qw(MESSAGE_ACCOUNT_BLOCKED MESSAGE_VERIFICATION_SENT MESSAGE_UNKNOWN_ERROR);
+use EnsEMBL::Users::Messages qw(MESSAGE_ACCOUNT_BLOCKED MESSAGE_VERIFICATION_SENT MESSAGE_URL_EXPIRED MESSAGE_UNKNOWN_ERROR);
 
 use base qw(EnsEMBL::Web::Command);
 
 use constant EMAIL_REGEX => qr/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,6}$/;
+
+sub csrf_safe_process { } # stub for child classes - override this method instead of 'process' for CSRF safe processes
+
+sub process {
+  ## Wrapper around the child command module's csrf_safe_process method
+  my $self    = shift;
+  my $hub     = $self->hub;
+  my $user    = $hub->user;
+  my $r_user  = $user->rose_object;
+  my $code_1  = $r_user ? $r_user->salt : $user->default_salt;
+  my $code_2  = $hub->param($hub->CSRF_SAFE_PARAM) || '';
+
+  if ($code_1 && $code_2 && $code_1 eq $code_2) {
+    $r_user->reset_salt_and_save('changes_only' => 1) if $r_user;
+    return $self->csrf_safe_process(@_);
+  }
+
+  return $self->redirect_message(MESSAGE_URL_EXPIRED);
+}
 
 sub handle_registration {
   ## Handles a new login according to the email provided during registration
@@ -32,13 +54,11 @@ sub handle_registration {
     return $self->redirect_openid_register($login);
 
   } else {
-    warn "Creating new user";
     $user = $object->new_user_account({'email' => $email});
   }
 
   # skip verification if flag kept on, or if openid provider is trusted and user uses same email in user account as provided by openid provider
   if ($login_type eq 'openid' && ($flags->{'skip_verify_email'} || $login->has_trusted_provider && $user->email eq $login->email)) {
-    warn sprintf("\nSkipping verification for (%s, %s)", $login->provider, $login->email);
     $login->activate($user);
     $user->save;
     return $self->redirect_after_login($user);
@@ -49,10 +69,8 @@ sub handle_registration {
   $user->add_logins([$login]);
   $user->save;
 
-  warn sprintf("\nSending verification for (%s, %s)", $login->type eq 'openid' ? $login->provider : $login->type, $login->email);
-
   # Send verification email
-  $self->get_mailer->send_verification_email($login);
+  $self->mailer->send_verification_email($login);
   return $self->redirect_message(MESSAGE_VERIFICATION_SENT, {'email' => $user->email});
 }
 
@@ -64,15 +82,17 @@ sub redirect_after_login {
   my ($self, $user) = @_;
   my $hub           = $self->hub;
   my $object        = $self->object;
+  my $site          = $hub->species_defs->ENSEMBL_SITE_URL;
 
   # return to login page if cookie not set
-  return $self->redirect_login(MESSAGE_UNKNOWN_ERROR) unless $hub->user->authorise({'user' => $user});
+  return $self->redirect_login(MESSAGE_UNKNOWN_ERROR) unless $hub->user->authorise({'user' => $user, 'set_cookie' => 1});
 
   # redirect
   if ($hub->is_ajax_request) {
-    return $self->ajax_redirect($hub->url({'type' => 'Account', 'action' => 'Success'})); # this just closes the popup and refreshes the page
+    my $url = $hub->referer;
+       $url = $url->{'external'} ? $site : $url->{'absolute_url'};
+    return $self->ajax_redirect($url, {}, '', 'page'); # this just closes the popup and refreshes the page
   } else {
-    my $site = $hub->species_defs->ENSEMBL_SITE_URL;
     my $then = $hub->param('then') || '';
     return $hub->redirect($self->url($then =~ /^(\/|$site)/ ? $then : $site)); #only redirect to an internal url or a relative url
   }
@@ -157,7 +177,7 @@ sub validate_fields {
   return $params;
 }
 
-sub get_mailer {
+sub mailer {
   ## Gets the mailer object for sending emails
   ## @return EnsEMBL::Users::Mailer::User object
   return EnsEMBL::Users::Mailer::User->new(shift->hub);
@@ -165,26 +185,25 @@ sub get_mailer {
 
 sub send_group_joining_notification_email {
   ## Sends a notification email to all the admins (the ones who opted to revieve these emails) of the group about the new joinee
-  ## @param User who joined the group
   ## @param Group object
   ## @param Flag kept on or off if user joined the group or sent the request respectively
-  my ($self, $user, $group, $has_joined) = @_;
+  my ($self, $group, $has_joined) = @_;
 
-  if ( my @curious_admins = map {$_->notify_join && $_->user || ()} @{$group->admin_memberships} ) {
-    my $mailer = $self->get_mailer;
-    $mailer->send_group_joining_notification_email($user, $_, $group, $has_joined) for @curious_admins;
+  if ( my @curious_admins = map {$_->notify_join ? $_->user : ()} @{$group->admin_memberships} ) {
+    $self->mailer->send_group_joining_notification_email(\@curious_admins, $group, $has_joined);
   }
 }
 
 sub send_group_editing_notification_email {
   ## Sends a notification email to all the admins (the ones who opted to revieve these emails) about the group's info being edited
-  ## @param Admin user who edited the group
   ## @param Group object
   ## @param Original values in group (Hashref)
   ## @param Modified values in group (Hashref)
-  my ($self, $user, $group, $original_values, $modified_values) = @_;
+  my ($self, $group, $original_values, $modified_values) = @_;
 
-  if ( my @curious_admins = map {$_->user_id ne $user->user_id && $_->notify_edit && $_->user || ()} @{$group->admin_memberships} ) {
+  my $user_id = $self->hub->user->user_id;
+
+  if ( my @curious_admins = map {$_->user_id ne $user_id && $_->notify_edit ? $_->user : ()} @{$group->admin_memberships} ) {
     my $titles  = {
       'name'      => 'Group name',
       'blurb'     => 'Description',
@@ -195,29 +214,37 @@ sub send_group_editing_notification_email {
       ? ()
       : sprintf(q( - %s changed from '%s' to '%s'), $titles->{$_}, $original_values->{$_} || '', $modified_values->{$_} || '')
     } keys %$original_values ) {
-      my $mailer = $self->get_mailer;
-      $mailer->send_group_editing_notification_email($user, $_, $group, join "\n", @changes) for @curious_admins;
+      $self->mailer->send_group_editing_notification_email(\@curious_admins, $group, join "\n", @changes);
     }
   }
 }
 
 sub send_group_sharing_notification_email {
-  ## TODO
+  ## Sends a notification email to all the members (the ones who opted to revieve these emails) about the records being shared to the group
+  ## @param Group object
+  ## @param Records being shared (Hashref)
+  my ($self, $group, $records) = @_;
+
+  my $user_id = $self->hub->user->user_id;
+
+  if ( my @curious_members = map {$_->user_id ne $user_id && $_->notify_share ? $_->user : ()} @{$group->memberships} ) {
+
+    my %types;
+    ($types{$_->type} ||= 0)++ for @$records;
+    my @shared = map {sprintf '%d %s', $types{$_}, ucfirst $_} keys %types;
+
+    $self->mailer->send_group_sharing_notification_email(\@curious_members, $group, join "\n", @shared);
+  }
 }
 
-sub get_curious_admins {
-  ## Gets all the admins of a group that opted to get notified on some event
-  ## TODO
-}
+sub handle_mailinglist_subscriptions {
+  ## Handles the user's request to join selected mailing lists
+  ## @param Login object for the newly registered user
+  my ($self, $login)  = @_;
+  my %subscriptions   = @{$self->hub->species_defs->SUBSCRIPTION_EMAIL_LISTS};
+  my @request_emails  = grep $subscriptions{$_}, @{$login->subscription || []};
 
-sub internal_referer {
-  ## Gets the internal referer without error or message code
-  ## @return url string
-  my $hub     = shift->hub;
-  my $referer = $hub->referer;
-  (my $url    = $referer->{'absolute_url'}) =~ s/[\?,\;]{1}(err|msg)\=[^\;]*//;
-
-  return $referer->{'external'} ? $hub->url({'action' => 'Preferences'}) : $url;
+  $self->mailer->send_mailinglists_subscription_emails($login, @request_emails) if @request_emails;
 }
 
 1;

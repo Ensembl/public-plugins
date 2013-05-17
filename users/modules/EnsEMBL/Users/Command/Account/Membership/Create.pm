@@ -14,7 +14,6 @@ sub modify_membership {
   my ($self, $membership) = @_;
 
   my %redirect_url  = qw(type Account action Groups);
-  my $return        = undef;
   my $invitation    = $self->object->fetch_invitation_record_from_url_code;
 
   if ($invitation) {
@@ -25,8 +24,8 @@ sub modify_membership {
       my $group_id = $group->group_id;
       $membership->group_id($group_id);
       $membership->make_invitation;
+      $membership->save('user' => $invitation->created_by_user);
       $invitation->delete;
-      $return = 1;
     } else {
       $redirect_url{'err'} = MESSAGE_GROUP_NOT_FOUND;
     }
@@ -34,7 +33,7 @@ sub modify_membership {
     $redirect_url{'err'} = MESSAGE_URL_EXPIRED;
   }
   $self->redirect_url(\%redirect_url);
-  return $return;
+  return undef; # return undef so the parent class doesn't save the membership object again
 }
 
 1;

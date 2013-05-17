@@ -37,6 +37,10 @@ sub id {
   return shift->{'record_id'};
 }
 
+sub colour { # some calls are made to this method while it's key may not be added to the object
+  return shift->{'colour'};
+}
+
 sub clone {
   my $self        = shift;
   my $class       = ref $self;
@@ -67,6 +71,10 @@ sub delete {
 
 sub cloned_from {
   return shift->{'cloned_from'};
+}
+
+sub data {
+  shift->{'__rose_object'}->data(@_);
 }
 
 1;

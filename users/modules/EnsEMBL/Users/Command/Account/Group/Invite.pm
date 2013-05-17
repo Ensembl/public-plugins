@@ -10,7 +10,7 @@ use EnsEMBL::Users::Messages qw(MESSAGE_GROUP_NOT_FOUND MESSAGE_EMAILS_INVALID M
 
 use base qw(EnsEMBL::Users::Command::Account);
 
-sub process {
+sub csrf_safe_process {
   my $self        = shift;
   my $object      = $self->object;
   my $hub         = $self->hub;
@@ -38,7 +38,7 @@ sub process {
 
   } else {
 
-    my $mailer = $self->get_mailer;
+    my $mailer = $self->mailer;
     foreach my $email (@$valid_emails) {
 
       # for an existing ensembl user
@@ -54,7 +54,7 @@ sub process {
           $membership->save(user => $admin)
         } else {
           $membership->make_invitation;
-          $mailer->send_group_invitation_email_to_existing_user($group, $invitee, $admin) if $membership->save(user => $admin);
+          $mailer->send_group_invitation_email_to_existing_user($group, $invitee) if $membership->save(user => $admin);
         }
 
       # for a new user (unregistered email)
@@ -70,7 +70,7 @@ sub process {
         }
 
         ## send an email to the invitee
-        $mailer->send_group_invitation_email_to_new_user($group, $admin, $email, $invitation);
+        $mailer->send_group_invitation_email_to_new_user($group, $email, $invitation);
       }
     }
 

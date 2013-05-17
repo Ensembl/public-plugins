@@ -27,7 +27,7 @@ sub content {
 
       my $form = $self->select_group_form({
         'memberships' => $memberships,
-        'action'      => $hub->url({qw(action Bookmark function Share)}),
+        'action'      => {qw(action Bookmark function Share)},
         'name'        => 'group',
         'label'       => 'Group to share bookmark(s) with',
         'selected'    => $hub->param('group') || 0,
@@ -61,7 +61,6 @@ sub content {
   }
 
   return $self->js_section({
-    'id'          => 'share_bookmarks',
     'heading'     => 'Share bookmark',
     'subsections' => \@subsections
   });

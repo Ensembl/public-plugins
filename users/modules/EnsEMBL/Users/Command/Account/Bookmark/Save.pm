@@ -6,7 +6,7 @@ use EnsEMBL::Users::Messages qw(MESSAGE_BOOKMARK_NOT_FOUND);
 
 use base qw(EnsEMBL::Users::Command::Account);
 
-sub process {
+sub csrf_safe_process {
   my $self        = shift;
   my $object      = $self->object;
   my $hub         = $self->hub;
@@ -21,7 +21,7 @@ sub process {
       $bookmark->click(0);
     }
 
-    $bookmark->$_($hub->param($_)) for qw(name shortname url object);
+    $bookmark->$_($hub->param($_)) for qw(name description url object);
     $bookmark->save('user' => $user);
 
     return $self->ajax_redirect($hub->url($record_owner->RECORD_TYPE eq 'group'

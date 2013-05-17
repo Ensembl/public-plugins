@@ -14,8 +14,7 @@ sub caption {
 sub content {
   my $self    = shift;
   my $hub     = $self->hub;
-  my $content = $self->wrapper_div;
-  my $form    = $content->append_child($self->new_form({'action' => $hub->url({qw(action User function Add)})}));
+  my $form    = $self->new_form({'action' => {qw(action User function Add)}});
 
   $form->add_field({qw(type honeypot name title   label Title)});      # honeypot fields for catching bots
   $form->add_field({qw(type honeypot name surname label Surname)});
@@ -26,7 +25,7 @@ sub content {
     'email_notes' => sprintf("You'll use this to log in to %s.", $self->site_name)
   });
 
-  return $content->render;
+  return $self->js_section({'subsections' => [ $form->render ]});
 }
 
 1;

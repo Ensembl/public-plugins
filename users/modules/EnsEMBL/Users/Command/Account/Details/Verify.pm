@@ -1,6 +1,6 @@
 package EnsEMBL::Users::Command::Account::Details::Verify;
 
-### Command to active a user login - user lands on this page after clicking on the link sent to him via email for the purpose of verifying his email
+### Command to active a user login - user lands on this page after clicking on the link sent to him via email for the purpose of verifying his email (when registered via openid)
 ### @author hr5
 
 use strict;

@@ -12,6 +12,7 @@ sub modify_membership {
 
   if ($self->hub->user->rose_object->is_admin_of($membership->group)) {
     $membership->inactivate;
+    $self->redirect_url({'action' => 'Groups', 'function' => 'View', 'id' => $membership->group_id});
     return 1;
   }
   return undef;

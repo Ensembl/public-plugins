@@ -32,14 +32,11 @@ sub record_relationship_types {
   return [
     annotations           => { 'relationship' => 'records', 'condition' => {'type' => 'annotation'}       },
     bookmarks             => { 'relationship' => 'records', 'condition' => {'type' => 'bookmark'}         },
-    configurations        => { 'relationship' => 'records', 'condition' => {'type' => 'configuration'}    },
-    currentconfigs        => { 'relationship' => 'records', 'condition' => {'type' => 'current_config'}   },
     dases                 => { 'relationship' => 'records', 'condition' => {'type' => 'das'}              },
     favourite_tracks      => { 'relationship' => 'records', 'condition' => {'type' => 'favourite_tracks'} },
     histories             => { 'relationship' => 'records', 'condition' => {'type' => 'history'}          },
     invitations           => { 'relationship' => 'records', 'condition' => {'type' => 'invitation'}       }, # this record only contains the invitations for the users who have not yet registered with ensembl, invitations for existing users are saved as Membership objects
     newsfilters           => { 'relationship' => 'records', 'condition' => {'type' => 'newsfilter'}       },
-    sortables             => { 'relationship' => 'records', 'condition' => {'type' => 'sortable'}         },
     specieslists          => { 'relationship' => 'records', 'condition' => {'type' => 'specieslist'}      },
     uploads               => { 'relationship' => 'records', 'condition' => {'type' => 'upload'}           },
     urls                  => { 'relationship' => 'records', 'condition' => {'type' => 'url'}              }

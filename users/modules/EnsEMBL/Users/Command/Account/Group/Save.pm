@@ -10,7 +10,7 @@ use EnsEMBL::Users::Messages qw(MESSAGE_GROUP_NOT_FOUND);
 
 use base qw(EnsEMBL::Users::Command::Account);
 
-sub process {
+sub csrf_safe_process {
   my $self        = shift;
   my $object      = $self->object;
   my $hub         = $self->hub;
@@ -50,7 +50,7 @@ sub process {
     $group->save('user' => $user);
 
     # do we need to notify anyone about the changes?
-    $self->send_group_editing_notification_email($user, $group, $original_values, { map { $_ => $group->$_ } @$group_columns }) if $group_id;
+    $self->send_group_editing_notification_email($group, $original_values, { map { $_ => $group->$_ } @$group_columns }) if $group_id;
 
     # Changes to membership object
     exists $new_values->{$_} and $membership->$_($new_values->{$_}) for qw(notify_join notify_edit notify_share);

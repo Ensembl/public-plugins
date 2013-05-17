@@ -25,14 +25,14 @@ my %MESSAGES = (
   MESSAGE_PASSWORD_CHANGED      => sub { 'Password saved', 'New password has been saved successfully. Please login with the new password.' },
   MESSAGE_ALREADY_REGISTERED    => sub { sprintf('The email address provided seems to be already registered. Please try to login with the email, or request to <a href="%s">retrieve your password</a> if you have lost one.', $_[0]->url({'action' => 'Password', 'function' => 'Lost', 'email' => $_[0]->param('email') || ''})) },
   MESSAGE_VERIFICATION_FAILED   => sub { 'Verification failed', 'The email address could not be verified.' },
-  MESSAGE_VERIFICATION_PENDING  => sub { '_message__VERIFICATION_PENDING' },
+  MESSAGE_VERIFICATION_PENDING  => sub { 'Verification pending', 'The email address has yet not been verified.' },
   MESSAGE_EMAIL_INVALID         => sub { 'Invalid email', 'Please enter a valid email address' },
   MESSAGE_EMAILS_INVALID        => sub { 'Invalid email address', sprintf('Following email address(es) are not valid: %s', encode_entities($_[0]->param('invalids') || '')) },
   MESSAGE_NAME_MISSING          => sub { 'Please provide a name' },
   MESSAGE_ACCOUNT_BLOCKED       => sub { 'Your account seems to be blocked. Please contact the helpdesk in case you need any help.' },
   MESSAGE_VERIFICATION_SENT     => sub { sprintf(q(A verification email has been sent to the email address '%s'. Please go to your inbox and click on the link provided in the email.), encode_entities($_[0]->param('email'))) },
   MESSAGE_PASSWORD_EMAIL_SENT   => sub { sprintf(q(An email has been sent to the email address '%s'. Please go to your inbox and follow the instructions to reset your password provided in the email.), encode_entities($_[0]->param('email'))) },
-  MESSAGE_EMAIL_CHANGED         => sub { sprintf(q(You email address on our records has been successfully changed. Please <a href="%s">%s</a> to continue.), $_[0]->url({'action' => 'Preferences'}), $_[0]->user ? 'click here' : 'login') },
+  MESSAGE_EMAIL_CHANGED         => sub { sprintf(q(You email address on our records has been successfully changed. Please <a href="%s">%s</a> to continue.), $_[0]->PREFERENCES_PAGE, $_[0]->user ? 'click here' : 'login') },
   MESSAGE_CANT_DELETE_LOGIN     => sub { 'You can not delete the only login option you have to access your account.' },
   MESSAGE_GROUP_NOT_FOUND       => sub { 'Sorry, we could not find the specified group. Either the group does not exist or is inactive or is inaccessible to you for the action selected.' },
   MESSAGE_GROUP_INACTIVE        => sub { 'Group inactive', 'This group is inactive. To perform the action selected, please activate the group first.'},
@@ -45,7 +45,7 @@ my %MESSAGES = (
   MESSAGE_NO_EXISTING_ACCOUNT   => sub { sprintf(q(No existing account was found for the email address provided. Please verify the email address again, or to create a new account, please <a href="%s">click here</a>), $_[0]->url({'action' => 'OpenID', 'function' => 'Register', 'code' => $_[0]->param('code') || ''})) },
   MESSAGE_LOGIN_ALREADY_TAKEN   => sub { 'Could not add login', 'Sorry, this login option already exists for another user account.' },
   MESSAGE_LOGIN_ALREADY_LINKED  => sub { 'Login option already added', 'You already seem to have linked this login option to your account.' },
-  MESSAGE_URL_EXPIRED           => sub { 'URL expired', 'The link you clicked to reach here has been expired.' },
+  MESSAGE_URL_EXPIRED           => sub { 'URL expired or invalid', 'The link you clicked to reach here has been expired or is invalid.' },
   MESSAGE_UNKNOWN_ERROR         => sub { 'Unknown error', 'An unknown error occurred. Please try again or contact the help desk.' }
 );
 

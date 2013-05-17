@@ -6,23 +6,14 @@ package EnsEMBL::Users::Component::Account;
 use strict;
 
 use EnsEMBL::Users::Messages qw(get_message);
+use EnsEMBL::ORM::Rose::Object::User;
 
 use base qw(EnsEMBL::Web::Component);
 
 use constant {
-  _JS_LINK            => '_jinline modal_link',
-  _JS_LINK_SECTION    => '_jinline modal_link',
-  _JS_LINK_SUBSECTION => '_jinline modal_link',
-  _JS_LINK_FREE       => '_jinline modal_link',
-#   _JS_LINK_SECTION    => '_jinline _jseclink',
-#   _JS_LINK_SUBSECTION => '_jinline _jsseclink',
-#   _JS_LINK_FREE       => '_jinline _jfreelink',
-  _JS_SECTION         => '_jsec',
-  _JS_SUBSECTION      => '_jssec',
-  _JS_NOTIFICATION    => '_jnotif',
+  _JS_LINK            => 'modal_link',
   _JS_CONFIRM         => '_jconfirm',
-  _JS_CANCEL          => '_jcancel',
-  _JS_REFRESH_URL     => '_js_refresh_url',
+  _JS_CANCEL          => '_jcancel'
 };
 
 sub caption       {}
@@ -34,21 +25,20 @@ sub _init {
   $self->ajaxable(  0 );
 }
 
-sub wrapper_div {
-  ## Returns a wraper div for sections in accounts page
-  ## @param Hashref as accepted as second argument in dom->create_element, plus some extra keys
-  ##  - padded    If on, will return the padded div
-  ##  - js_panel  Name of the js_panel (optional)
-  ## @return Div object
-  my $self      = shift;
-  my $params    = shift || {};
-  my $js_panel  = delete $params->{'js_panel'};
+sub new_form {
+  ## @overrides
+  ## @param As accepted by parent method, plus one ke
+  ##  - csrf_safe : If key value is true, it adds a hidden input with a code in the form to make it safe from CSRF attacks
+  my ($self, $params) = @_;
 
-  return $self->dom->create_element('div', {
-    'class'       => [ delete $params->{'padded'} ? 'section-padded' : 'section', delete $params->{'class'}, $js_panel ? 'js_panel' : () ],
-    'children'    => [ $js_panel ? {'node_name' => 'input', 'type' => 'hidden', 'value' => $js_panel, 'class' => 'panel_type'} : (), @{delete $params->{'children'} || []} ],
-    %$params
-  });
+  my $form = $self->SUPER::new_form($params);
+
+  if ($params->{'csrf_safe'}) {
+    my $hub = $self->hub;
+    $form->add_hidden({'name' => $hub->CSRF_SAFE_PARAM, 'value' => $hub->user ? $hub->user->rose_object->salt : EnsEMBL::ORM::Rose::Object::User->DEFAULT_SALT});
+  }
+  
+  return $form;
 }
 
 sub render_message {
@@ -59,13 +49,15 @@ sub render_message {
   ##  - back  URL to be provided to the back button, defaults to 'back' param in url (if missed, no back button is displayed)
   my ($self, $code, $params) = @_;
 
-  if (my ($message, $heading) = reverse get_message($code, $self->hub)) {
+  my $hub = $self->hub;
+
+  if (my ($message, $heading) = reverse get_message($code, $hub)) {
 
     return sprintf '<div class="%s"><h3>%s</h3><div class="message-pad">%s</div></div>%s',
       $params->{'error'} ? 'error' : 'info',
       $heading || ($params->{'error'} ? 'Error' : 'Message'),
       $self->wrap_in_p_tag($message),
-      ($params->{'back'} ||= $self->hub->param('back')) ? $self->link_back_button($params->{'back'}) : ''
+      ($params->{'back'} ||= $hub->param('back')) ? $self->js_link({'href' => $params->{'back'}, 'caption' => 'Go back', 'class' => 'arrow-left', 'button' => 1}) : ''
     ;
   } else {
     return '';
@@ -189,7 +181,7 @@ sub select_bookmark_form {
       'value'   => $_->record_id,
       'caption' => {'inner_HTML' => sprintf(
         '%s (<a href="%s" title="%s">View</a>)<br><i>%s</i>',
-          map $self->html_encode($_), $_->name, $self->hub->url({'type' => 'Account', 'action' => 'Bookmark', 'function' => 'Use', 'id' => $_->record_id}), $_->url, $_->shortname || ''
+          map $self->html_encode($_), $_->name, $self->hub->url({'type' => 'Account', 'action' => 'Bookmark', 'function' => 'Use', 'id' => $_->record_id}), $_->url, $_->description || ''
         )
       }
     }, @{$params->{'bookmarks'} || []} ],
@@ -201,6 +193,14 @@ sub select_bookmark_form {
   });
 
   return $form;
+}
+
+sub no_group_message {
+  ## Returns html for displaying message in case no group has been added by the user
+  sprintf '<p>You are not a member of any group. You can either %s or %s.</p>',
+    $_[0]->js_link({'caption' => 'create a new group', 'href' => {'action' => 'Groups', 'function' => 'Add'}}),
+    $_[0]->js_link({'caption' => 'join an existing group', 'href' => {'action' => 'Groups', 'function' => 'List'}})
+  ;
 }
 
 sub bookmarks_table {
@@ -222,7 +222,7 @@ sub bookmarks_table {
     'sort'          => 'html'
   }, {
     'key'           => 'desc',
-    'title'         => 'Short Description',
+    'title'         => 'Description',
     'width'         => $params->{'shared'} ? '30%' : '60%'
   }, $params->{'shared'} ? { # additional column for shared bookmarks only to display link to the group
     'key'           => 'group',
@@ -239,7 +239,7 @@ sub bookmarks_table {
   # bookmark rows
   for (@{$params->{'bookmarks'}}) {
     my $bookmark_id   = $_->get_primary_key_value;
-    my $bookmark_row  = { 'desc' => $self->html_encode($_->shortname) };
+    my $bookmark_row  = { 'desc' => $self->html_encode($_->description) };
     my $bookmark_name = $self->html_encode($_->name);
 
     # column for shared bookmarks table only
@@ -253,44 +253,39 @@ sub bookmarks_table {
       $bookmark_row->{'group'} = $self->js_link({
         'href'    => {'action' => 'Groups', 'function' => 'View', 'id' => $group_id},
         'caption' => $group_name,
-        'helptip' => "View group: $group_name",
-        'target'  => 'page'
+        'helptip' => "View group: $group_name"
       });
     }
 
     $bookmark_row->{'title'} = $self->js_link({
-      'href'    => {'action' => 'Bookmark', 'function' => 'Use', 'id' => $bookmark_id, %$group_param},
-      'caption' => $bookmark_name,
-      'helptip' => "Visit page: $bookmark_name",
-      'target'  => 'page'
+      'href'      => {'action' => 'Bookmark', 'function' => 'Use', 'id' => $bookmark_id, %$group_param},
+      'caption'   => $bookmark_name,
+      'helptip'   => "Visit page: $bookmark_name",
+      'no_modal'  => 1
     });
 
     $bookmark_row->{'buttons'} = sprintf '<div class="sprites-nowrap">%s</div>', join('',
       $self->js_link({
         'href'    => {'action' => 'Bookmark', 'function' => 'Edit', 'id' => $bookmark_id, %$group_param},
         'helptip' => 'Edit',
-        'sprite'  => 'edit_icon',
-        'target'  => 'section'
+        'sprite'  => 'edit_icon'
       }), $group
       ? $self->js_link({
         'href'    => {'action' => 'Bookmark', 'function' => 'Copy', 'id' => $bookmark_id, %$group_param},
         'helptip' => 'Copy to my bookmarks',
-        'sprite'  => 'bookmark_icon',
-        'target'  => 'none'
+        'sprite'  => 'bookmark_icon'
       })
       : $self->js_link({
         'href'    => {'action' => 'Share', 'function' => 'Bookmark', 'id' => $bookmark_id},
         'helptip' => 'Share with a group',
-        'sprite'  => 'share_icon',
-        'target'  => 'section'
+        'sprite'  => 'share_icon'
       }),
       !$group || $is_admin || $_->created_by eq $user->user_id
       ? $self->js_link({
-        'href'    => {'action' => 'Bookmark', 'function' => 'Remove', 'id' => $bookmark_id, %$group_param},
+        'href'    => {'action' => 'Bookmark', 'function' => 'Remove', 'id' => $bookmark_id, 'csrf_safe' => 1, %$group_param},
         'helptip' => 'Remove',
         'sprite'  => 'delete_icon',
-        'confirm' => sprintf('You are about to remove the bookmark%s. This action can not be undone.', $group ? ' from the group' : ''),
-        'target'  => 'none'
+        'confirm' => sprintf('You are about to remove the bookmark%s. This action can not be undone.', $group ? ' from the group' : '')
       }) : ()
     );
 
@@ -304,7 +299,7 @@ sub no_bookmark_message {
   ## Returns html for displaying message in case no bookmark has been added by the user
   ## @param Flag if on, will add the link to create a new bookmark in the message
   sprintf '<p>You have not saved any bookmarks to your account.%s</p>', $_[1]
-    ? sprintf(' To add a new bookmark first, please <a href="%s">click here</a>.', $_[0]->hub->url({'action' => 'Bookmark', 'function' => 'Add'}))
+    ? sprintf(' To add a new bookmark first, please %s.', $_[0]->js_link({'caption' => 'click here', 'href' => {'action' => 'Bookmark', 'function' => 'Add'}}))
     : ''
   ;
 }
@@ -335,28 +330,31 @@ sub two_column {
 sub js_link {
   ## Returns HTML for a link that is used by JavaScript for inline editing
   ## @param Hashref with keys:
-  ##  - href    : href attrib or hashref as accepted by hub->url
-  ##  - caption : inner html
-  ##  - title   : title attrib value
-  ##  - helptip : same as 'title' , but will display it as a js helptip
-  ##  - button  : flag if on, will wrap the link in <p>
-  ##  - target  : section, subsection, page, modal or none
-  ##  - class   : String or arrayref of class for <a> tag
-  ##  - confirm : confirmation message to be displayed when the link is clicked - make sure its HTML escaped before calling this method
-  ##  - cancel  : section id if this link is a 'cancel' link - will remove the given section
-  ##  - sprite  : Class for the sprite icon (caption, cancel, button args will be ignored if this is provided)
+  ##  - href      : href attrib or hashref as accepted by hub->url
+  ##  - caption   : inner html
+  ##  - title     : title attrib value
+  ##  - helptip   : same as 'title' , but will display it as a js helptip
+  ##  - button    : flag if on, will wrap the link in <p>
+  ##  - class     : String or arrayref of class for <a> tag
+  ##  - confirm   : confirmation message to be displayed when the link is clicked - make sure its HTML escaped before calling this method
+  ##  - sprite    : Class for the sprite icon (caption, cancel, button args will be ignored if this is provided)
+  ##  - no_modal  : Flag if on, will not force the link to open in a modal window
   ## @return HTML string
   my ($self, $params) = @_;
 
   my $method = $params->{'sprite'} || !$params->{'button'} ? 'inner_HTML' : 'render';
+  my $class  =  $self->_get_js_class_for_link($params);
 
   return $self->dom->create_element('p', {
     'class'       => 'accounts-button',
     'children'    => [{
       'node_name'   => 'a',
-      'class'       => $self->_get_js_class_for_link($params),
+      'rel'         => 'modal_user_data',
       'href'        => ref $params->{'href'} ? $self->hub->url($params->{'href'}) : $params->{'href'},
       'inner_HTML'  => $params->{'sprite'} ? qq(<span class="sprite $params->{'sprite'}"></span>) : $params->{'caption'} || '',
+      $class ? (
+        'class'     => $class
+      ) : (),
       $params->{'helptip'} || $params->{'title'} ? (
         'title'     => $params->{'helptip'} || $params->{'title'}
       ) : ()
@@ -375,39 +373,36 @@ sub js_section {
   ##  - class             : CSS class name (optional)
   ##  - subheading        : Heading with h3 tag
   ##  - subsections       : Arrayref of subsections (html string or child of DOM::Node)
-  ##  - refresh_url       : URL to refresh the page
   ##  - heading_links     : Links to be added just next to the heading - hashref can have following keys:
   ##    - href              : As accepted bu hub->url
   ##    - title             : Goes to title attrib of the icon
   ##    - sprite            : class for sprite icon
-  ##    - target            : target for the link, ie. page, section or subsection (as in js_link)
   ##  - subheading_links  : Links to be added just next to the subheading, accepts keys same as in heading_links
-  ##  - id                : Unique ID attrib of section - for JS to remember it while refreshing the section
   ##  - js_panel          : js_panel name (optional)
   my ($self, $params) = @_;
-  my $js_subsection   = $self->_JS_SUBSECTION;
   my $links           = {'heading' => '', 'subheading' => ''};
+  my $hub             = $self->hub;
 
   for (qw(heading subheading)) {
     if ($params->{$_}) {
-      $links->{$_} = join('', map {
-        sprintf '<a href="%s" class="header-link _ht _ht_static %s" title="%s"><span class="sprite %s"></span></a>', $self->hub->url($_->{'href'}), $self->_get_js_class_for_link($_), $_->{'title'}, $_->{'sprite'}
-      } @{$params->{"${_}_links"} || []});
+      $links->{$_} = join '', map { sprintf '<a href="%s" class="header-link _ht _ht_static %s" title="%s" rel="modal_user_data"><span class="sprite %s"></span></a>%s',
+        $hub->url($_->{'href'}),
+        $self->_get_js_class_for_link($_),
+        $_->{'title'},
+        $_->{'sprite'},
+        $_->{'confirm'} ? sprintf('<span class="hidden %s">%s</span>', $self->_JS_CONFIRM, $_->{'confirm'}) : ''
+      } @{$params->{"${_}_links"} || []};
     }
   }
 
-  return sprintf q(<div id="_%s" class="section %s%s%s">%s%s%s<input type="hidden" name="%s" value="%s">%s%s</div>),
-    $params->{'id'},
-    $self->_JS_SECTION,
-    $params->{'class'}      ? " $params->{'class'}"                                                         : '',
-    $params->{'js_panel'}   ? ' js_panel'                                                                   : '',
-    $params->{'js_panel'}   ? qq(<input type="hidden" class="panel_type" value="$params->{'js_panel'}" />)  : '',
-    $params->{'heading'}    ? "<h1>$params->{'heading'}$links->{'heading'}</h1>"                            : '',
-    $params->{'subheading'} ? "<h2>$params->{'subheading'}$links->{'subheading'}</h2>"                      : '',
-    $self->_JS_REFRESH_URL,
-    ref $params->{'refresh_url'} ? $self->hub->url($params->{'refresh_url'}) : $params->{'refresh_url'},
-    join('', map {qq(<div class="subsection $js_subsection">$_</div>)} @{$params->{'subsections'} || []}),
-    $self->object->is_inline_request ? $self->js_link({'caption' => 'Cancel', 'class' => 'cancel', 'href' => '#Cancel', 'cancel' => $params->{'id'}, 'button' => 1}) : '' #TODO
+  return sprintf q(<div%s>%s</div>),
+    $params->{'class'} ? qq( class="$params->{'class'}") : '',
+    join('',
+      $params->{'js_panel'}   ? qq(<input type="hidden" class="subpanel_type" value="$params->{'js_panel'}" />)   : '',
+      $params->{'heading'}    ? qq(<h1>$params->{'heading'}$links->{'heading'}</h1>)                              : '',
+      $params->{'subheading'} ? qq(<h2>$params->{'subheading'}$links->{'subheading'}</h2>)                        : '',
+      map {qq(<div>$_</div>)} @{$params->{'subsections'} || []}
+    )
   ;
 }
 
@@ -416,21 +411,19 @@ sub link_back_button {
   ## @param back button's href
   ## @return HTML string
   my ($self, $href) = @_;
-  return $self->js_link({'href' => $href, 'caption' => 'Go back', 'class' => 'arrow-left', 'target' => 'page', 'button' => 1});
+  return $self->js_link({'href' => $href, 'caption' => 'Go back', 'class' => 'arrow-left', 'button' => 1});
 }
 
-sub _get_js_class_for_link { #TODO classes for different target tyes
+sub _get_js_class_for_link {
   ## @private
-  ## @param Hashref with keys: class, target and cancel as in args for js_link
+  ## @param Hashref with keys: class and helptip
   my ($self, $params) = @_;
-  return join ' ', ( $params->{'cancel'} && !$params->{'sprite'} ? ($self->_JS_CANCEL, $self->_JS_CANCEL."_$params->{'cancel'}") : ({
-    'page'        => $self->_JS_LINK, # TODO
-    'subsection'  => $self->_JS_LINK_SUBSECTION,
-    'none'        => $self->_JS_LINK_FREE,
-    'modal'       => $self->_JS_LINK,
-  }->{$params->{'target'}} || $self->_JS_LINK_SECTION),
-  $params->{'class'} ? ref $params->{'class'} ? @{$params->{'class'}} : $params->{'class'} : (),
-  $params->{'helptip'} ? '_ht' : () );
+  return join ' ', (
+    $params->{'class'}    ? ref $params->{'class'} ? @{$params->{'class'}} : $params->{'class'} : (),
+    $params->{'helptip'}  ? '_ht' : (),
+    $params->{'confirm'}  ? $self->_JS_CONFIRM : (),
+    $params->{'no_modal'} ? () : $self->_JS_LINK
+  );
 }
 
 1;

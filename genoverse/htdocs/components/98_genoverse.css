@@ -1,0 +1,106 @@
+body.dragging *                                        { cursor: n-resize!important; }
+
+.canvas_container                                      { position: relative; }
+.canvas_container .wrapper                             { position: relative; border-left: 1px solid #999; overflow: hidden; background: #CCC; }
+.canvas_container .wrapper,                
+.canvas_container .label_container                     { -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
+.canvas_container .wrapper .overlay                    { position: absolute; height: 100%; z-index: 10; background: url(/i/loading_bg.png) repeat #CCC; }
+.canvas_container .wrapper .overlay.track              { background-position: center; background-repeat: repeat-x; }
+.canvas_container canvas                               { display: none; }
+.canvas_container .track_container,            
+.canvas_container .track_container_static              { position: relative; width: 0; overflow: visible; }
+.canvas_container .image_container                     { position: absolute; height: 100%; overflow: hidden; border: 0; background: #CCC; margin: 0; }
+.canvas_container .image_container img                 { position: absolute; display: none; }
+.canvas_container .image_container img.bg              { display: block; width: 100%; }
+.canvas_container .image_container img.static          { display: block; top: 50%; }
+.canvas_container .height_toggler                      { display: none; }
+.canvas_container .label_container                     { position: relative; float: left; margin: 0; padding: 0; list-style: none; }
+.canvas_container .label_container li                  { position: relative; margin: 0; color: #000; font-size: 11px; list-style-image: none; cursor: pointer; white-space: nowrap; }
+.canvas_container .label_container li .name            { position: relative; left: 5px; width: 90%; display: inline-block; overflow: hidden; vertical-align: top; text-overflow: ellipsis; }
+.canvas_container .label_container li.unsortable .name { left: 15px; }
+.canvas_container .label_container li .handle          { position: relative; height: 100%; width: 10px; display: inline-block; border: 1px solid [[BUTTON_BG]]; border-left: 0; background: [[TINT_BG]]; cursor: n-resize; }
+.canvas_container .label_container li .handle:hover,
+.canvas_container .label_container li.tmp .handle      { background: #B3EFBC!important; }
+.canvas_container .label_container li.f .handle        { background: #9ED4DC; }
+.canvas_container .label_container li.r .handle        { background: #F1D7A4; }
+.canvas_container .label_container li .nohover:hover   { background: [[TINT_BG]]!important; }
+.canvas_container .label_container li.f .nohover:hover { background: #9ED4DC!important; }
+.canvas_container .label_container li.r .nohover:hover { background: #F1D7A4!important; }
+.canvas_container .menu_container                      { position: absolute; height: 100%; overflow: hidden; }
+.canvas_container .expander                            { position: absolute; height: 15px; bottom: 0; margin-left: -5px; padding-right: 10px; z-index: 1; cursor: pointer; box-shadow: 0 -5px 7px -3px #000 inset; }
+.canvas_container .expander:hover                      { box-shadow: 0 -5px 7px -3px #7D98B8 inset; }
+.canvas_container .resizer                             { position: absolute; height: 5px; bottom: 0; background-color: #F0F0F0; z-index: 2; cursor: n-resize; opacity: 0.8; }
+.canvas_container .resizer.shadow                      { margin-left: -5px; padding-right: 10px; box-shadow: 0 -3px 5px 0 #000; }
+.canvas_container .resizer .handle                     { height: 1px; width: 4%; margin: 1px 48%; border: 1px solid #5A5A5A; border-width: 1px 0; background-color: #FFF; }
+.canvas_container .resizer.shadow .handle              { position: relative; left: 5px }
+.canvas_container .resizer:hover,
+.canvas_container .resizer.ui-draggable-dragging       { box-shadow: 0 -5px 7px -3px #000000 inset!important; }
+.canvas_container .selector                            { position: absolute; height: 100%; top: 0; display: none; margin-left: -1px; background-color: rgba(229, 121, 5, 0.1); z-index: 10; pointer-events: none; }
+.canvas_container .selector                            { border: 1px dashed red; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; }
+.canvas_container .selector.crosshair                  { border-width: 0 0 0 1px; }
+.canvas_container .selector.highlight                  { border-style: solid; background: 0; }
+.canvas_container .selector_controls                   { display: none!important; }
+
+body.mac .canvas_container .label_container li .handle { cursor: ns-resize; }
+
+.canvas .image_toolbar.bottom                          { width: 100%; }
+
+.canvas .genoverse_controls                            { display: none; float: right; padding-right: 6px; }
+.canvas .genoverse_controls div                        {
+  position: relative; top: -2px; height: 18px; width: 26px; display: inline-block; vertical-align: top; border: 1px solid #333333; border-radius: 6px;
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #EAEEFF), color-stop(1, #515F7C));
+  background: -moz-linear-gradient(center top, #EAEEFF 5%, #515F7C 100%);
+  background-color: #EAEEFF;
+}
+.canvas .genoverse_controls div:hover                  {
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #515F7C), color-stop(1, #EAEEFF));
+	background: -moz-linear-gradient(center top, #515F7C 5%, #EAEEFF 100%);
+	background-color: #9394C6;
+}
+.canvas .genoverse_controls div.left                   { border-radius: 5px 0 0 5px; border-right: none; }
+.canvas .genoverse_controls div.right                  { border-radius: 0 5px 5px 0; }
+.canvas .genoverse_controls button                     { position: absolute; top: 0; left: 50%; height: 100%; width: 16px; margin-left: -8px; border: 0; background: url(/i/controls.png) no-repeat; cursor: pointer; outline: 0; }
+.canvas .genoverse_controls button.scroll_left         { background-position:   0px   1px; }
+.canvas .genoverse_controls button.scroll_right        { background-position:   0px -17px; }
+.canvas .genoverse_controls button.zoom_in             { background-position: -17px   1px; }
+.canvas .genoverse_controls button.zoom_out            { background-position: -17px -17px; }
+.canvas .genoverse_controls button.auto_height         { background-position: -34px   1px; }
+.canvas .genoverse_controls button.auto_height.off     { background-position: -34px -17px; }
+.canvas .genoverse_controls button.reset_height        { background-position: -51px   1px; }
+.canvas .genoverse_controls button.dragging            { background-position: -68px   1px; }
+.canvas .genoverse_controls button.dragging.off        { background-position: -68px -17px; }
+.canvas .genoverse_controls button.wheel_zoom          { background-position: -85px   1px; }
+.canvas .genoverse_controls button.wheel_zoom.off      { background-position: -85px -17px; }
+
+.canvas .genoverse_controls .label                     { margin-left: 20px; padding-right: 6px; font-size: 15px; color: #FFF; }
+
+.canvas .genoverse_controls.narrow div                 { margin-left: 8px; }
+.canvas .genoverse_controls.narrow div.right           { margin-left: 0; }
+.canvas .genoverse_controls.narrow .label              { display: none; }
+
+.canvas .image_toolbar .genoverse_controls             { display: block; }
+
+.hover_label img.height                                { height: 16px; width: 16px; display: inline-block; background: url(/i/controls.png) no-repeat -34px 0; cursor: pointer; }
+.hover_label img.height.auto_height                    { background-position: -34px -18px; }
+.hover_label div.height .auto,
+.hover_label div.height.auto_height .fixed             { display: inherit!important; }
+.hover_label div.height .fixed,
+.hover_label div.height.auto_height .auto              { display: none!important; }
+
+.canvas_zoom                                           { position: absolute; display: none; z-index: 20; }
+.canvas_zoom.i                                         { height: 40px; width: 40px; }
+.canvas_zoom.o                                         { height: 80px; width: 80px; }
+.canvas_zoom .h                                        { position: absolute; height: 2px;  width: 10px; background: red; }
+.canvas_zoom .v                                        { position: absolute; height: 10px; width: 2px;  background: red; }
+.canvas_zoom .r                                        { right:  0;    }
+.canvas_zoom .b                                        { bottom: 0;    }
+.canvas_zoom.o .t.h                                    { top:    10px; }
+.canvas_zoom.o .b.h                                    { bottom: 10px; }
+.canvas_zoom.o .l.v                                    { left:   8px;  }
+.canvas_zoom.o .r.v                                    { right:  8px;  }
+
+.image_update_overlay                                  { position: absolute; background: #CCC; opacity: 0.9; z-index: 100; }
+.image_update_buttons                                  { position: absolute; top: 16px; left: 50%; z-index: 101; width: 450px; margin-left: -225px; text-align: center; }
+.image_update_buttons .fbutton                         { margin: 0 16px; padding: 16px; }
+
+.image_toolbar .genoverse_switch                       { background-image: url(/i/switch.png); float: left; height: 16px; width: 16px; margin: 0 4px 2px; cursor: pointer; }
