@@ -134,11 +134,11 @@ sub _display_column_value {
   return $self->print_datetime($value) if UNIVERSAL::isa($value, 'DateTime');
 
   ## if it's a rose object
-  if (UNIVERSAL::isa($value, 'EnsEMBL::ORM::Rose::Object')) {
+  if (UNIVERSAL::isa($value, 'ORM::EnsEMBL::Rose::Object')) {
     my $title = $value->get_title;
 
     ## if it's a user
-    if ($value->isa('EnsEMBL::ORM::Rose::Object::User') && $self->object->show_user_email && !$is_title) {
+    if ($value->isa('ORM::EnsEMBL::DB::Accounts::Object::User') && $self->object->show_user_email && !$is_title) {
       return sprintf('<a href="mailto:%s">%s</a>', $value->email, $title);
     }
     return sprintf('%s<a class="dbf-list-view _dbf_list_view" title="View related %s" href="%s"></a>', $title, $label, $self->hub->url({'type' => $relation, 'action' => 'Display', 'id' => $value->get_primary_key_value})) if $relation;

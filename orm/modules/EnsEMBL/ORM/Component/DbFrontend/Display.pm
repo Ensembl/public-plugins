@@ -149,11 +149,11 @@ sub display_field_value {
   }
 
   # if it's a rose object
-  if (UNIVERSAL::isa($value, 'EnsEMBL::ORM::Rose::Object')) {
+  if (UNIVERSAL::isa($value, 'ORM::EnsEMBL::Rose::Object')) {
     my $title = $value->get_title;
     
     # if it's a user
-    if ($value->isa('EnsEMBL::ORM::Rose::Object::User') && $self->object->show_user_email) {
+    if ($value->isa('ORM::EnsEMBL::DB::Accounts::Object::User') && $self->object->show_user_email) {
       return sprintf('<a href="mailto:%s">%s</a>', $value->email, $title);
     }
     return $title;
