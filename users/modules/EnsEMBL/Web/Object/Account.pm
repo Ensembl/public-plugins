@@ -9,11 +9,11 @@ package EnsEMBL::Web::Object::Account;
 
 use strict;
 
-use EnsEMBL::ORM::Rose::Manager::Group;
-use EnsEMBL::ORM::Rose::Manager::Login;
-use EnsEMBL::ORM::Rose::Manager::Membership;
-use EnsEMBL::ORM::Rose::Manager::Record;
-use EnsEMBL::ORM::Rose::Manager::User;
+use ORM::EnsEMBL::DB::Accounts::Manager::Group;
+use ORM::EnsEMBL::DB::Accounts::Manager::Login;
+use ORM::EnsEMBL::DB::Accounts::Manager::Membership;
+use ORM::EnsEMBL::DB::Accounts::Manager::Record;
+use ORM::EnsEMBL::DB::Accounts::Manager::User;
 
 use base qw(EnsEMBL::Web::Object);
 
@@ -24,29 +24,29 @@ sub default_action        { return $_[0]->hub->user ? 'Preferences' : 'Login';  
 sub openid_providers      { return $_[0]->deepcopy($_[0]->hub->species_defs->OPENID_PROVIDERS);           }
 sub get_root_url          { return $_[0]->{'_root_url'} ||= $_[0]->hub->species_defs->ENSEMBL_BASE_URL;   }
 
-sub new_login_account     { return EnsEMBL::ORM::Rose::Manager::Login->create_empty_object($_[1]);        }
-sub fetch_login_account   { return EnsEMBL::ORM::Rose::Manager::Login->get_with_user($_[1]);              }
-sub fetch_user_by_email   { return EnsEMBL::ORM::Rose::Manager::User->get_by_email($_[1]);                }
+sub new_login_account     { return ORM::EnsEMBL::DB::Accounts::Manager::Login->create_empty_object($_[1]);        }
+sub fetch_login_account   { return ORM::EnsEMBL::DB::Accounts::Manager::Login->get_with_user($_[1]);              }
+sub fetch_user_by_email   { return ORM::EnsEMBL::DB::Accounts::Manager::User->get_by_email($_[1]);                }
 
 sub fetch_membership {
   ## Fetches a membership object with the given id
   ## Wrapper around fetch_by_primary_key of the manager class
   ## @params As accepted by fetch_by_primary_key method
-  return EnsEMBL::ORM::Rose::Manager::Membership->fetch_by_primary_key(splice @_, 1);
+  return ORM::EnsEMBL::DB::Accounts::Manager::Membership->fetch_by_primary_key(splice @_, 1);
 }
 
 sub fetch_group {
   ## Fetches a group object with the given id
   ## Wrapper around fetch_by_primary_key of the manager class
   ## @params As accepted by fetch_by_primary_key method
-  return EnsEMBL::ORM::Rose::Manager::Group->fetch_by_primary_key(splice @_, 1);
+  return ORM::EnsEMBL::DB::Accounts::Manager::Group->fetch_by_primary_key(splice @_, 1);
 }
 
 sub fetch_groups {
   ## Fetches group objects
   ## Wrapper around get_objects of the manager class
   ## @param Reference of a hash as accepted by get_objects method
-  return EnsEMBL::ORM::Rose::Manager::Group->get_objects(%{$_[1] || {}});
+  return ORM::EnsEMBL::DB::Accounts::Manager::Group->get_objects(%{$_[1] || {}});
 }
 
 sub fetch_login_from_url_code {
@@ -57,7 +57,7 @@ sub fetch_login_from_url_code {
 
   $self->hub->param('code') =~ /^([0-9]+)\-([0-9]+)\-([a-zA-Z0-9_]+)$/;
 
-  my $login = EnsEMBL::ORM::Rose::Manager::Login->get_objects(
+  my $login = ORM::EnsEMBL::DB::Accounts::Manager::Login->get_objects(
     'with_objects'  => [ 'user' ],
     'query'         => [ 'login_id', $2, 'salt', $3 ],
     'limit'         => 1,
@@ -128,7 +128,7 @@ sub fetch_invitation_record_from_url_code {
 
   $self->hub->param('invitation') =~ /^([a-zA-Z0-9_]+)\-([0-9]+)$/;
 
-  my $invitations = EnsEMBL::ORM::Rose::Manager::Record->get_group_records(
+  my $invitations = ORM::EnsEMBL::DB::Accounts::Manager::Record->get_group_records(
     'with_objects'  => [ 'group' ],
     'query'         => [ 'record_id' => $2 ],
     'limit'         => 1
@@ -139,10 +139,10 @@ sub fetch_invitation_record_from_url_code {
 }
 
 sub new_user_account {
-  ## @return unsaved EnsEMBL::ORM::Rose::Object::User object
+  ## @return unsaved ORM::EnsEMBL::DB::Accounts::Object::User object
   my ($self, $params) = @_;
 
-  return EnsEMBL::ORM::Rose::Manager::User->create_empty_object({
+  return ORM::EnsEMBL::DB::Accounts::Manager::User->create_empty_object({
     'status'  => 'active',
     'email'   => delete $params->{'email'},
     'name'    => delete $params->{'name'} || '',

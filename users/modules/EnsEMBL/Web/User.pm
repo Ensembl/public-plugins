@@ -9,8 +9,8 @@ use EnsEMBL::Web::Record;
 use EnsEMBL::Web::DASConfig;
 use EnsEMBL::Web::Exceptions;
 
-use EnsEMBL::ORM::Rose::Manager::User;
-use EnsEMBL::ORM::Rose::Manager::Record;
+use ORM::EnsEMBL::DB::Accounts::Manager::User;
+use ORM::EnsEMBL::DB::Accounts::Manager::Record;
 
 use overload qw("" to_string bool to_boolean);
 
@@ -47,7 +47,7 @@ sub favourite_tracks      { shift->_goto_rose_object('favourite_tracks');   }
 sub is_admin_of           { shift->_goto_rose_object('is_admin_of', @_);    }
 sub is_member_of          { shift->_goto_rose_object('is_member_of', @_);   }
 
-sub default_salt          { EnsEMBL::ORM::Rose::Manager::User->object_class->DEFAULT_SALT; }
+sub default_salt          { ORM::EnsEMBL::DB::Accounts::Manager::User->object_class->DEFAULT_SALT; }
 
 sub new {
   ## @constructor
@@ -82,7 +82,7 @@ sub authorise {
   unless ($user) {
 
     throw exception('UserException::InvalidArgumentException', 'At least one out of user id and rose user object is required to initialise EnsEMBL::Web::User object') unless $params->{'id'};
-    $user = EnsEMBL::ORM::Rose::Manager::User->get_by_id($params->{'id'});
+    $user = ORM::EnsEMBL::DB::Accounts::Manager::User->get_by_id($params->{'id'});
   }
 
   return 0 unless $user;
