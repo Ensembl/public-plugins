@@ -5,7 +5,7 @@ use warnings;
 
 use base qw(EnsEMBL::Web::Component);
 
-use EnsEMBL::ORM::Rose::Object::Annotation;
+use ORM::EnsEMBL::DB::Healthcheck::Object::Annotation;
 
 use Rose::DateTime::Util qw(format_date parse_date);
 
@@ -133,7 +133,7 @@ sub annotation_action {
   ## Returns a label for the action enums for annotation.
   my ($self, $value) = @_;
 
-  my @actions = EnsEMBL::ORM::Rose::Object::Annotation->annotation_actions;
+  my @actions = ORM::EnsEMBL::DB::Healthcheck::Object::Annotation->annotation_actions;
 
   return @actions if $value eq 'all';
 
