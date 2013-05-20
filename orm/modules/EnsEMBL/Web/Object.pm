@@ -8,12 +8,15 @@ use warnings;
 
 sub rose_manager {
   ## Returns the ORM::Rose::Manager class for the given type
+  ## @param DB name
   ## @param Manager type
-  ## @return Manager Class (Static class reference) or undef if not found
-  my ($self, $type) = @_;
-  $type = $type ? "::$type" : '';
+  ## @return Manager Class (Static class reference) or defaults to ORM::EnsEMBL::Rose::Manager if no manager class found
+  my ($self, $db, $type) = @_;
 
-  return $self->{'_rose_managers'}{$type} ||= $self->dynamic_use_fallback("EnsEMBL::ORM::Rose::Manager$type");
+  $db   ||= '';
+  $type   = $type ? "::$type" : '';
+
+  return $self->{'_rose_managers'}{$db}{$type} ||= $self->dynamic_use_fallback($db ? "ORM::EnsEMBL::DB::${db}::Manager${type}" : (), 'ORM::EnsEMBL::Rose::Manager');
 }
 
 sub rose_objects {
@@ -99,7 +102,7 @@ sub save {
   $params ||= {};
   $params->{'changes_only'} = 1;
 
-  my %user = ('user' => delete $params->{'user'} || $self->hub->user);
+  my %user = ('user' => delete $params->{'user'} || $self->hub->user->rose_object);
 
   for (@{$self->rose_objects($type || '0')}) {
     if (my $obj = $_->save(%$params, $_->meta->trackable ? %user : ())) {
@@ -158,7 +161,7 @@ sub retire {
 
     unless ($column) {
       my $rose_object_type = ref $_;
-      warn sprintf('Could not retire object of type %s. Either specify an "inactive_column" in %1$s::meta_setup() or return '.
+      warn sprintf('Could not retire object of type %s. Either specify an "inactive_column" in %1$s->meta->setup() or return '.
         '"delete" from %s->permit_delete() so that it can be deleted from the database permanently.', $rose_object_type, ref $self);
       push @{$self->{'_rose_error'}}, sprintf('Could not inactivate %s (%s)', $rose_object_type =~ /([^\:]+)$/, $_->get_primary_key_value);
       next;
