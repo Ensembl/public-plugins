@@ -10,7 +10,7 @@ use base qw(EnsEMBL::Web::Object::DbFrontend);
 
 sub manager_class {
   ## @overrides
-  return shift->rose_manager('ExternalDb');
+  return shift->rose_manager(qw(Production ExternalDb));
 }
 
 sub show_fields {

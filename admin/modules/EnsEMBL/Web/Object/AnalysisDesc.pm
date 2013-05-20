@@ -10,7 +10,7 @@ use base qw(EnsEMBL::Web::Object::DbFrontend);
 
 sub manager_class {
   ## @overrides
-  return shift->rose_manager('AnalysisDescription');
+  return shift->rose_manager(qw(Production AnalysisDescription));
 }
 
 sub show_fields {

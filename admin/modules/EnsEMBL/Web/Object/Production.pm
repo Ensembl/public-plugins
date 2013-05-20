@@ -49,7 +49,7 @@ sub default_action {
 
 sub manager_class {
   ## @overrides
-  return shift->rose_manager('AnalysisWebData');
+  return shift->rose_manager(qw(Production AnalysisWebData));
 }
 
 sub show_fields {

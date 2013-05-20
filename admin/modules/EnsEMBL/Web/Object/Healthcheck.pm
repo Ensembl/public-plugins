@@ -48,19 +48,19 @@ sub fetch_for_summary {
   ## Healthcheck summary page
   my $self = shift;
 
-  my $session = $self->rose_manager('Session')->fetch_single($self->requested_release);
+  my $session = $self->rose_manager(qw(Healthcheck Session))->fetch_single($self->requested_release);
   my $groupby = [qw(database_type database_name species testcase team_responsible)];
 
   if ($session) {
     $self->rose_objects($session);
-    $self->rose_objects('reports', $self->rose_manager('Report')->count_failed_for_session({
+    $self->rose_objects('reports', $self->rose_manager(qw(Healthcheck Report))->count_failed_for_session({
       'session_id' => $session->session_id,
       'group_by'   => $groupby
     }));
 
     if (my $compared = $self->compared_release) {
-      if ($compared = $self->rose_manager('Session')->fetch_single($compared)) {
-        $self->rose_objects('compare_reports', $self->rose_manager('Report')->count_failed_for_session({
+      if ($compared = $self->rose_manager(qw(Healthcheck Session))->fetch_single($compared)) {
+        $self->rose_objects('compare_reports', $self->rose_manager(qw(Healthcheck Report))->count_failed_for_session({
           'session_id' => $compared->session_id,
           'group_by'   => $groupby
         }));
@@ -76,7 +76,7 @@ sub fetch_for_details {
   my $rids    = $self->requested_reports;
   my $type    = $self->view_type;
   my $param   = $self->view_param;
-  my $manager = $self->rose_manager('Report');
+  my $manager = $self->rose_manager(qw(Healthcheck Report));
 
   if (@$rids) {
     $self->rose_objects('reports', $manager->fetch_by_primary_keys($rids, {
@@ -114,7 +114,7 @@ sub fetch_for_annotation {
   $report_ids    = [ split ',', $report_ids ] if $report_ids;
   
   if ($report_ids && @$report_ids) {
-    $self->rose_objects($self->rose_manager('Report')->fetch_by_primary_keys($report_ids, {
+    $self->rose_objects($self->rose_manager(qw(Healthcheck Report))->fetch_by_primary_keys($report_ids, {
       'with_objects'          => 'annotation',
       'with_external_objects' => ['annotation.created_by_user', 'annotation.modified_by_user']
     }));
@@ -127,8 +127,8 @@ sub fetch_for_database {
 
   if (my $last_session_id = $self->last_session_id) {
     my $first_session_id = $self->first_session_id || 0;
-    $self->rose_objects('session_reports', $self->rose_manager('Report')->fetch_for_distinct_databases({'last_session_id' => $last_session_id}));
-    $self->rose_objects('release_reports', $self->rose_manager('Report')->fetch_for_distinct_databases({'last_session_id' => $last_session_id, 'first_session_id' => $first_session_id}));
+    $self->rose_objects('session_reports', $self->rose_manager(qw(Healthcheck Report))->fetch_for_distinct_databases({'last_session_id' => $last_session_id}));
+    $self->rose_objects('release_reports', $self->rose_manager(qw(Healthcheck Report))->fetch_for_distinct_databases({'last_session_id' => $last_session_id, 'first_session_id' => $first_session_id}));
   }
 }
 
@@ -172,7 +172,7 @@ sub get_default_list {
   if ($function =~ /^Database|Testcase$/) {
     return [] unless $self->first_session_id;
     my $method = lc "fetch_for_distinct_${function}s";
-    return [ keys %{{ map {$_->$type => 1} @{$self->rose_manager('Report')->$method({'last_session_id' => $self->last_session_id, 'first_session_id' => $self->first_session_id}) || []} }} ];
+    return [ keys %{{ map {$_->$type => 1} @{$self->rose_manager(qw(Healthcheck Report))->$method({'last_session_id' => $self->last_session_id, 'first_session_id' => $self->first_session_id}) || []} }} ];
   }
   elsif ($function eq 'Species') {
     return [ map {ucfirst $_} @{$self->hub->species_defs->ENSEMBL_DATASETS || []} ];
@@ -206,7 +206,7 @@ sub _get_session_id {
   ## gets first or last session id for requested release
   my ($self, $which) = @_;
   exists $self->{"_${which}_session"} and return $self->{"_${which}_session"};
-  my $s = $self->rose_manager('Session')->fetch_single($self->requested_release, $which);
+  my $s = $self->rose_manager(qw(Healthcheck Session))->fetch_single($self->requested_release, $which);
   return $s ? ($self->{"_${which}_session"} = $s->session_id) : undef;
 }
 

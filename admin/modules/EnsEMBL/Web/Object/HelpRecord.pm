@@ -134,7 +134,7 @@ sub get_count {
 
 sub manager_class {
   ## @overrides
-  return shift->rose_manager('HelpRecord');
+  return shift->rose_manager(qw(Website HelpRecord));
 }
 
 sub show_fields {

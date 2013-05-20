@@ -10,7 +10,7 @@ use base qw(EnsEMBL::Web::Object::DbFrontend);
 
 sub manager_class {
   ## @overrides
-  return shift->rose_manager('Biotype');
+  return shift->rose_manager(qw(Production Biotype));
 }
 
 sub show_fields {

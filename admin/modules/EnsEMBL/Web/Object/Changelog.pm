@@ -63,7 +63,7 @@ sub fetch_for_duplicate {
 
 sub manager_class {
   ## @overrides
-  return shift->rose_manager('Changelog');
+  return shift->rose_manager(qw(Production Changelog));
 }
 
 sub get_count {

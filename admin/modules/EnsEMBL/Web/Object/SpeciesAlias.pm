@@ -24,7 +24,7 @@ sub fetch_for_display {
 
 sub manager_class {
   ## @overrides
-  return shift->rose_manager('SpeciesAlias');
+  return shift->rose_manager(qw(Production SpeciesAlias));
 }
 
 sub show_fields {

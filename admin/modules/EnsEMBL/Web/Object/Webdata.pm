@@ -10,7 +10,7 @@ use base qw(EnsEMBL::Web::Object::DbFrontend);
 
 sub manager_class {
   ## @overrides
-  return shift->rose_manager('WebData');
+  return shift->rose_manager(qw(Production WebData));
 }
 
 sub show_fields {
@@ -44,7 +44,7 @@ sub record_select_style {
 sub permit_delete {
   ## @overrides
   ## Record can not be deleted, but can be set inactive
-  return 'retire';
+  return 'delete';
 }
 
 1;
