@@ -14,12 +14,12 @@ sub process {
 
   for (@$reports) {
 
-    my $annotation = $_->annotation || $_->annotation($object->rose_manager('Annotation')->create_empty_object);
+    my $annotation = $_->annotation || $_->annotation($object->rose_manager(qw(Production Annotation))->create_empty_object);
 
     $annotation->comment($hub->param('comment'));
     $annotation->action($hub->param('action'));
     $annotation->session_id($_->last_session_id);
-    $annotation->save('user' => $hub->user);
+    $annotation->save('user' => $hub->user->rose_object);
     
     $anchor ||= $_->database_name;
   }
