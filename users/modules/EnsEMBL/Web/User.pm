@@ -274,16 +274,4 @@ sub set_favourite_tracks {
   }
 }
 
-sub find_administratable_groups {
-  warn "Method find_administratable_groups should not be called -";
-}
-
-sub find_nonadmin_groups {
-  warn "Method find_nonadmin_groups should not be called -";
-}
-
-sub update_invitations {
-  warn "Method update_invitations should not be called -";
-}
-
 1;
