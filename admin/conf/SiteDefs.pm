@@ -38,9 +38,9 @@ sub update_conf {
   $SiteDefs::ENSEMBL_MEMCACHED      = {};
 
   ## Databases used in Rose::Db::Object derived objects
-  $SiteDefs::ROSE_DB_DATABASES->{'healthcheck'} = 'DATABASE_HEALTHCHECK';
-  $SiteDefs::ROSE_DB_DATABASES->{'website'}     = 'DATABASE_WEBSITE';
-  $SiteDefs::ROSE_DB_DATABASES->{'production'}  = 'DATABASE_PRODUCTION';
+  $SiteDefs::ENSEMBL_ORM_DATABASES->{'healthcheck'} = 'DATABASE_HEALTHCHECK';
+  $SiteDefs::ENSEMBL_ORM_DATABASES->{'website'}     = 'DATABASE_WEBSITE';
+  $SiteDefs::ENSEMBL_ORM_DATABASES->{'production'}  = 'DATABASE_PRODUCTION';
 
   ## ID of the admin group (user group that can access the admin website)
   $SiteDefs::ENSEMBL_WEBADMIN_ID = 0;
