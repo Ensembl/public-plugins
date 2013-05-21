@@ -8,21 +8,12 @@ sub update_conf {
 
   $SiteDefs::OBJECT_TO_SCRIPT->{'Account'} = 'Modal';
 
-  $SiteDefs::ENSEMBL_LOGINS                = 1;
-  $SiteDefs::ENSEMBL_OPENID_ENABLED        = 0; # this gets overridden in OpenID plugin
-  $SiteDefs::ENSEMBL_LDAP_ENABLED          = 0; # this gets overridden in LDAP plugin
+  $SiteDefs::ENSEMBL_LOGINS                 = 1;
+  $SiteDefs::ENSEMBL_OPENID_ENABLED         = 0; # this gets overridden in OpenID plugin
+  $SiteDefs::ENSEMBL_LDAP_ENABLED           = 0; # this gets overridden in LDAP plugin
 
   # URL for secure pages (any pages that ask user to enter password)
-  $SiteDefs::ENSEMBL_LOGIN_URL           ||= $SiteDefs::ENSEMBL_SITE_URL; #'https://login.ensembl.org/';
-
-  # Provide these values in you plugin
-  $SiteDefs::ROSE_DB_DATABASES->{'user'}   = {
-    'database'  => 'database_name',
-    'host'      => 'mysql.example.com',
-    'port'      => 3306,
-    'username'  => 'user_name',
-    'password'  => 'user_password'
-  };
+  $SiteDefs::ENSEMBL_LOGIN_URL            ||= $SiteDefs::ENSEMBL_SITE_URL; #'https://login.ensembl.org/';
 
   ## Arrayref of emails and display title that user can opt to subscribe at the time of registration eg. [ dev-join@ensembl.org => 'Ensembl Dev List' ] for dev@ensembl.org
   ## $SiteDefs::SUBSCRIPTION_EMAIL_LISTS  ||= ['announcement-join@example.com' => 'Mailing list for release related news']
