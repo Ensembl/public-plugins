@@ -20,7 +20,8 @@ sub show_fields {
     code        => {
       'type'      => 'string',
       'label'     => 'Code',
-      'required'  => 1
+      'required'  => 1,
+      'maxlength' => 15
     },
     name        => {
       'type'      => 'string',
