@@ -12,8 +12,8 @@ sub new {
   my $results = shift;
 
 
-  ( $ticket && $ticket->isa("EnsEMBL::ORM::Rose::Object::Ticket" ) ) or
-    die( "Need a EnsEMBL::ORM::Rose::Object::Ticket object" );
+  ( $ticket && $ticket->isa("ORM::EnsEMBL::DB::Tools::Object::Ticket" ) ) or
+    die( "Need a ORM::EnsEMBL::DB::Tools::Object::Ticket object" );
   my $self = {object => $object, ticket => $ticket };
     
   my @hsps;
