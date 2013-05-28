@@ -41,8 +41,9 @@ sub fetch_features {
   my $function     = $hub->function;
   my $image_config = $hub->get_imageconfig($hub->param('config'));
   my $referer      = $hub->referer;
+  my @loc          = split ':', $hub->param('r');
   my $adaptor      = $hub->get_adaptor('get_SliceAdaptor');
-  my $slice        = $adaptor->fetch_by_region('toplevel', split /[:-]/, $hub->param('r'));
+  my $slice        = $adaptor->fetch_by_region('toplevel', shift @loc, split('-', shift @loc), @loc);
   my $chr          = $slice->seq_region_name;
   my $node         = $image_config->get_node($hub->param('id'));
   my $genoverse    = $node->get('genoverse');
