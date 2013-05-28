@@ -17,14 +17,14 @@ sub show_fields {
   ## @overrides
   my $self = shift;
   return [
-    name        => {
-      'type'      => 'string',
-      'label'     => 'Name',
-      'required'  => 1
-    },
     code        => {
       'type'      => 'string',
       'label'     => 'Code',
+      'required'  => 1
+    },
+    name        => {
+      'type'      => 'string',
+      'label'     => 'Name',
       'required'  => 1
     },
     description => {
@@ -37,8 +37,8 @@ sub show_fields {
 sub show_columns {
   ## @overrides
   return [
-    name        => 'Name',
     code        => 'Code',
+    name        => 'Name',
     description => 'Description'
   ];
 }
