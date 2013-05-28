@@ -52,12 +52,12 @@ sub create_ticket {
   my $now = $self->get_time_now;
   my $owner_id = $self->user_id ? 'user_'. $self->user_id : 'session_' . $self->session_id;
   my $name = $self->get_unique_ticket_name; 
-  my $job_id = $self->rose_manager('Job')->get_job_id_by_name($self->{'_analysis'});
+  my $job_id = $self->rose_manager(qw(Tools Job))->get_job_id_by_name($self->{'_analysis'});
   my $description = $self->{'_description'};
   my $site_type = $self->species_defs->ENSEMBL_SITETYPE;
 
   # First create and save ticket
-  my $ticket = $self->rose_manager('Ticket')->create_empty_object;
+  my $ticket = $self->rose_manager(qw(Tools Ticket))->create_empty_object;
   $ticket->ticket_name($name);
   $ticket->owner_id($owner_id);
   $ticket->job_type_id($job_id);
@@ -81,7 +81,7 @@ sub create_ticket {
 sub submit_job {
   my ($self, $ticket)  = @_;
 
-  my $analysis_adaptor  = $self->rose_manager('Analysis');
+  my $analysis_adaptor  = $self->rose_manager(qw(Tools Analysis));
   my $serialised_object = $analysis_adaptor->retrieve_analysis_object($ticket->ticket_id); 
   my $analysis_object = $self->deserialise($serialised_object);
   $analysis_object->create_jobs($ticket);
@@ -115,10 +115,10 @@ sub fetch_current_tickets {
   my (@user_tickets, @session_tickets, $all_tickets);
 
   if ($self->user_id) {
-   @user_tickets = @{$self->rose_manager('Ticket')->fetch_all_tickets_by_user($self->user_id) || []};
+   @user_tickets = @{$self->rose_manager(qw(Tools Ticket))->fetch_all_tickets_by_user($self->user_id) || []};
   }
 
-  @session_tickets = @{$self->rose_manager('Ticket')->fetch_all_tickets_by_session($self->session_id) || []};
+  @session_tickets = @{$self->rose_manager(qw(Tools Ticket))->fetch_all_tickets_by_session($self->session_id) || []};
   $all_tickets = [@user_tickets, @session_tickets];
 
   return $all_tickets;
@@ -128,7 +128,7 @@ sub fetch_ticket_by_name {
   my ($self, $ticket_name) = @_;
   return unless $ticket_name;
 
-  my $ticket = shift @{$self->rose_manager('Ticket')->fetch_by_ticket_name($ticket_name)};
+  my $ticket = shift @{$self->rose_manager(qw(Tools Ticket))->fetch_by_ticket_name($ticket_name)};
 
   if(!$ticket){$ticket = 'The requested ticket "'.$ticket_name.'" could not be found.'
     .' Please be aware that all tickets are deleted after 7 days unless you save'
@@ -211,7 +211,7 @@ sub format_date {
 
 sub delete_ticket {
   my ($self, $ticket_id) = @_;
-  my $ticket = shift @{$self->rose_manager('Ticket')->fetch_by_ticket_name($ticket_id)};
+  my $ticket = shift @{$self->rose_manager(qw(Tools Ticket))->fetch_by_ticket_name($ticket_id)};
   return unless $ticket;
 
   # First clean up any results files 
@@ -291,7 +291,7 @@ sub retrieve_analysis_object {
   my $ticket = $self->ticket;
   return undef unless $ticket;
 
-  my $analysis_adaptor  = $self->rose_manager('Analysis');
+  my $analysis_adaptor  = $self->rose_manager(qw(Tools Analysis));
   my $serialised_object = $analysis_adaptor->retrieve_analysis_object($ticket->ticket_id);
   return undef unless $serialised_object;
 
@@ -323,7 +323,7 @@ sub get_unique_ticket_name {
   while (!$unique ){
    my $template = "BLA_XXXXXXXX";
    $template =~ s/X/['0'..'9','A'..'Z','a'..'z']->[int(rand 54)]/ge;  
-   unless (scalar @{$self->rose_manager('Ticket')->fetch_by_ticket_name($template)} > 0) {
+   unless (scalar @{$self->rose_manager(qw(Tools Ticket))->fetch_by_ticket_name($template)} > 0) {
     $unique = $template;
    }
   }
@@ -342,7 +342,7 @@ sub get_blast_method {
 
 sub get_hit_db_entry {
   my ($self, $result_id) = @_;
-  my $result_adaptor  = $self->rose_manager('Result');
+  my $result_adaptor  = $self->rose_manager(qw(Tools Result));
   my $result_entry = shift @{$result_adaptor->fetch_result_by_result_id($result_id)};
   return $result_entry;
 }
@@ -420,7 +420,7 @@ sub get_all_hits_from_ticket_in_region {
   my @aligned_hits; 
 
   
-  my $result_adaptor = $self->rose_manager('Result');
+  my $result_adaptor = $self->rose_manager(qw(Tools Result));
   my @result_objects = @{$result_adaptor->fetch_all_results_in_region($ticket_id, $slice)};
   foreach (@result_objects) { 
     my $frozen_gzipped_hit = $_->result; 

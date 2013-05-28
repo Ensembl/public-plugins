@@ -34,7 +34,7 @@ sub content {
       my $sub_job_id = $hive_job->sub_job_id;
       my $ticket_id = $ticket->ticket_id;
 
-      @results = @{$object->rose_manager('Result')->fetch_results_by_ticket_sub_job($ticket_id, $sub_job_id)};
+      @results = @{$object->rose_manager(qw(Tools Result))->fetch_results_by_ticket_sub_job($ticket_id, $sub_job_id)};
       return if scalar @results < 1;
     }
   }

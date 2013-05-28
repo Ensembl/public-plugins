@@ -162,7 +162,7 @@ sub get_job_division_data {
   my ($ticket, $sub_job_id) = @_;
   my $analysis_object = $ticket->analysis;  
   my $database = $analysis_object->{'_database'};
-  my $sub_job_adaptor = $tools_object->rose_manager('SubJob');  
+  my $sub_job_adaptor = $tools_object->rose_manager(qw(Tools SubJob));  
   my $sub_job = $sub_job_adaptor->fetch_by_id($sub_job_id); 
   my $frozen_division = $sub_job->job_division; 
   my $job_division = $tools_object->deserialise($frozen_division); 

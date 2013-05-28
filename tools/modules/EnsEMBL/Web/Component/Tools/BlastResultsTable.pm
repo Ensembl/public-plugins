@@ -43,7 +43,7 @@ sub content {
       my $ticket_name = $self->hub->param('tk');
 
 
-      my @results = @{$object->rose_manager('Result')->fetch_results_by_ticket_sub_job($ticket_id, $sub_job_id)};
+      my @results = @{$object->rose_manager(qw(Tools Result))->fetch_results_by_ticket_sub_job($ticket_id, $sub_job_id)};
 
       foreach (@results) {
         my $gzipped_serialsed_res = $_->{'result'};
