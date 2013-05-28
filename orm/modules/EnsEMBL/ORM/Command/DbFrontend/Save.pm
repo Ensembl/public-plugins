@@ -1,7 +1,7 @@
 package EnsEMBL::ORM::Command::DbFrontend::Save;
 
 ### NAME: EnsEMBL::ORM::Command::DbFrontend::Save
-### Module to save EnsEMBL::ORM::Rose::Object contents back to the database
+### Module to save ORM::EnsEMBL::Rose::Object contents back to the database
 
 ### STATUS: Under Development
 

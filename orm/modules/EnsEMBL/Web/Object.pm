@@ -1,7 +1,7 @@
 package EnsEMBL::Web::Object;
 
 ## Plugin to EnsEMBL::Web::Object for the ORM specific Web::Object
-## Handles multiple EnsEMBL::ORM::Rose::Object objects
+## Handles multiple ORM::EnsEMBL::Rose::Object objects
 
 use strict;
 use warnings;

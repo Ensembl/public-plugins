@@ -1,7 +1,7 @@
 package EnsEMBL::ORM::Command::DbFrontend::Delete;
 
 ### NAME: EnsEMBL::ORM::Command::DbFrontend::Delete
-### Module to delete/retire EnsEMBL::ORM::Rose::Object drived record(s)
+### Module to delete/retire ORM::EnsEMBL::Rose::Object drived record(s)
 
 ### STATUS: Under Development
 
