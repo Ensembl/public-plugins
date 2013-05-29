@@ -1,5 +1,7 @@
 package EnsEMBL::Web::Record;
 
+### Wrapper around ORM::EnsEMBL::DB::Accounts::Object::Record for use in the web code
+
 ### For backward compatibility
 ### This packages replaces EnsEMBL::Web::Data::Record temporarily for object type UserData, untill UserData is properly re-written to make methods calls to actual Rose Record object instead of using hash keys
 ### Objects belonging to this class is only returned by EnsEMBL::Web::User::get_record or get_user_record(s) methods
@@ -12,6 +14,8 @@ use EnsEMBL::Web::Tools::MethodMaker qw(add_method);
 use base qw(EnsEMBL::Web::Root);
 
 sub new {
+  ## @constructor
+  ## Creates new web record object and dynamically adds all the method to it as present rose record object
   my ($class, $object) = @_;
   foreach my $key (keys %$object) {
     add_method($class, $key, sub { return shift->{$key}; }) unless $class->can($key) && $key =~ /^_/;
@@ -20,6 +24,10 @@ sub new {
 }
 
 sub from_rose_objects {
+  ## @constructor
+  ## Wraps rose record objects in web record objects
+  ## @param ArrayRef of rose record objects
+  ## @return List of Web::Record objects (one object for each rose object in the argument arrayref)
   my ($class, $rose_objects) = @_;
 
   my @keys = @$rose_objects ? map { $_->alias || $_->name } $rose_objects->[0]->meta->virtual_columns : ();
@@ -65,10 +73,15 @@ sub owner {
 }
 
 sub save {
-  shift->{'__rose_object'}->save(@_);
+  ## Saves the record to db
+  ## @param As accepted by ORM::EnsEMBL::DB::Accounts::Object::Record->save method (except that user argument can be EnsEMBL::Web::User instead of ORM::EnsEMBL::DB::Accounts::Object::User)
+  my ($self, %params) = @_;
+  $params{'user'} = $params{'user'}->rose_object if $params{'user'} && $params{'user'}->isa('EnsEMBL::Web::User');
+  $self->{'__rose_object'}->save(%params);
 }
 
 sub delete {
+  ## Deletes the record from the db
   shift->{'__rose_object'}->delete(@_);
 }
 
