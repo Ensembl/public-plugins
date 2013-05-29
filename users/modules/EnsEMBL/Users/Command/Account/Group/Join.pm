@@ -14,13 +14,13 @@ sub csrf_safe_process {
   my $self      = shift;
   my $object    = $self->object;
   my $hub       = $self->hub;
-  my $user      = $hub->user->rose_object;
+  my $r_user    = $hub->user->rose_object;
 
   if (my $group = $object->fetch_group($hub->param('id'))) {
 
     my $group_type = $group->type;
     if ($group_type ne 'private') {
-      my $membership = $group->membership($user);
+      my $membership = $group->membership($r_user);
       my $action;
 
       if ($membership->is_user_blocked || $membership->is_active) { # if membership is active, or the user is blocked by the group admin, redirect user to the preferences page
@@ -36,7 +36,7 @@ sub csrf_safe_process {
       # notify admins
       $self->send_group_joining_notification_email($group, $membership->is_active);
 
-      $membership->save(user => $user);
+      $membership->save('user' => $r_user);
       return $self->ajax_redirect($group_type eq 'open' ? $hub->url({'action' => 'Groups', 'function' => 'View', 'id' => $group->group_id}) : $hub->PREFERENCES_PAGE);
     }
   }

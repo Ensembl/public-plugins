@@ -14,7 +14,7 @@ sub csrf_safe_process {
   my $self    = shift;
   my $object  = $self->object;
   my $hub     = $self->hub;
-  my $user    = $hub->user->rose_object;
+  my $r_user  = $hub->user->rose_object;
 
   # validation
   my $fields = $self->validate_fields({ map {$_ => $hub->param($_) || ''} qw(email name) });
@@ -28,16 +28,16 @@ sub csrf_safe_process {
   }
 
   # save details other than email - no html escaping is done while saving - it's done while displaying the text on browser
-  $user->name($fields->{'name'});
-  $user->country($hub->param('country'));
-  $user->organisation($hub->param('organisation'));
-  $user->save('user' => $user);
+  $r_user->name($fields->{'name'});
+  $r_user->country($hub->param('country'));
+  $r_user->organisation($hub->param('organisation'));
+  $r_user->save('user' => $r_user);
 
   # send verification email to the new email if email changed
-  if ($fields->{'email'} ne $user->email) {
-    $user->new_email($fields->{'email'});
-    $user->save;
-    $self->mailer->send_change_email_confirmation_email($user->get_local_login || shift(@{$user->find_logins('query' => ['status' => 'active'])}), $fields->{'email'});
+  if ($fields->{'email'} ne $r_user->email) {
+    $r_user->new_email($fields->{'email'});
+    $r_user->save;
+    $self->mailer->send_change_email_confirmation_email($r_user->get_local_login || shift(@{$r_user->find_logins('query' => ['status' => 'active'])}), $fields->{'email'});
     return $self->redirect_message(MESSAGE_VERIFICATION_SENT, {'email' => $fields->{'email'}});
   }
 
