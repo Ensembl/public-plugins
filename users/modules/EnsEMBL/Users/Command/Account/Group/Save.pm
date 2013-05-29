@@ -14,13 +14,13 @@ sub csrf_safe_process {
   my $self        = shift;
   my $object      = $self->object;
   my $hub         = $self->hub;
-  my $user        = $hub->user;
+  my $r_user      = $hub->user->rose_object;
   my $group_id    = $hub->param('id');
 
   # if no id given, it's a request to create a new group
   my $membership  = $group_id
-    ? $object->fetch_accessible_membership_for_user($user->rose_object, $group_id)
-    : $user->rose_object->create_new_membership_with_group
+    ? $object->fetch_accessible_membership_for_user($r_user, $group_id)
+    : $r_user->create_new_membership_with_group
     or return $self->ajax_redirect($hub->url({'action' => 'Groups', 'function' => '', 'err' => MESSAGE_GROUP_NOT_FOUND}));
 
   my $group       = $membership->group;
@@ -35,8 +35,8 @@ sub csrf_safe_process {
 
     # default values if creating a new group
     unless ($group_id) {
-      $new_values->{'name'}   ||= sprintf q(%s's group), $user->name;
-      $new_values->{'blurb'}  ||= sprintf q(%s's group), $user->name;
+      $new_values->{'name'}   ||= sprintf q(%s's group), $r_user->name;
+      $new_values->{'blurb'}  ||= sprintf q(%s's group), $r_user->name;
       $new_values->{'type'}   ||= 'restricted';
       $new_values->{'status'}   = 'active';
     }
@@ -47,7 +47,7 @@ sub csrf_safe_process {
 
     # only change the column values if new values exist (ie if a GET param is set for that column name)
     exists $new_values->{$_} and $group->$_($new_values->{$_}) for @$group_columns;
-    $group->save('user' => $user);
+    $group->save('user' => $r_user);
 
     # do we need to notify anyone about the changes?
     $self->send_group_editing_notification_email($group, $original_values, { map { $_ => $group->$_ } @$group_columns }) if $group_id;
@@ -61,7 +61,7 @@ sub csrf_safe_process {
   }
 
   $membership->group_id($group->group_id);
-  $membership->save('user' => $user);
+  $membership->save('user' => $r_user);
 
   return $self->ajax_redirect($hub->url({'action' => 'Groups', 'function' => 'View', 'id' => $group->group_id}));
 }

@@ -14,17 +14,17 @@ sub csrf_safe_process {
   my $self        = shift;
   my $object      = $self->object;
   my $hub         = $self->hub;
-  my $admin       = $hub->user;
+  my $r_user      = $hub->user->rose_object;
   my $group_id    = $hub->param('group_id');
 
-  my $membership  = $group_id ? $object->fetch_active_membership_for_user($admin->rose_object, $group_id, {'query' => ['level' => 'administrator']}) : undef
+  my $membership  = $group_id ? $object->fetch_active_membership_for_user($r_user, $group_id, {'query' => ['level' => 'administrator']}) : undef
     or return $self->ajax_redirect($hub->url({'action' => 'Groups', 'function' => 'Invite', 'err' => MESSAGE_GROUP_NOT_FOUND}));
 
   my $group       = $membership->group;
 
   # validate the emails, separate the invalid ones
   my $invalid_emails  = [];
-  my $valid_emails    = [ grep {$_ ne $admin->email} map { $self->validate_fields({'email' => $_ || ''})->{'email'} || push(@$invalid_emails, $_) && () } sort keys %{{ map {$_ =~ s/^\s*|\s*$//g; $_ ? ($_ => 1) : ()} split ',', $hub->param('emails') || '' }} ];
+  my $valid_emails    = [ grep {$_ ne $r_user->email} map { $self->validate_fields({'email' => $_ || ''})->{'email'} || push(@$invalid_emails, $_) && () } sort keys %{{ map {$_ =~ s/^\s*|\s*$//g; $_ ? ($_ => 1) : ()} split ',', $hub->param('emails') || '' }} ];
 
   if (@$invalid_emails) {
     return $self->ajax_redirect($hub->url({
@@ -51,10 +51,10 @@ sub csrf_safe_process {
 
         if ($membership->is_pending_request) { # just activate the membership and skip sending email
           $membership->activate;
-          $membership->save(user => $admin)
+          $membership->save('user' => $r_user)
         } else {
           $membership->make_invitation;
-          $mailer->send_group_invitation_email_to_existing_user($group, $invitee) if $membership->save(user => $admin);
+          $mailer->send_group_invitation_email_to_existing_user($group, $invitee) if $membership->save('user' => $r_user);
         }
 
       # for a new user (unregistered email)
@@ -63,10 +63,10 @@ sub csrf_safe_process {
         ## create a group record invitation
         my ($invitation) = grep {$_->email eq $email} @{$group->find_invitations};
         if ($invitation) {
-          $invitation->save(user => $admin);
+          $invitation->save('user' => $r_user);
         } else {
           $invitation = $group->create_record('invitation', {'email' => $email});
-          $invitation->reset_invitation_code_and_save(user => $admin);
+          $invitation->reset_invitation_code_and_save('user' => $r_user);
         }
 
         ## send an email to the invitee

@@ -3,16 +3,18 @@ package EnsEMBL::Web::Controller;
 use strict;
 
 sub update_user_history {
+  ## Updates user history (ie. adds a history record for the logged in user)
+  ## Call this method only if user is logged in
   my $self            = shift;
   my $hub             = $self->hub;
-  my $user            = $hub->user;
+  my $r_user          = $hub->user->rose_object;
   my $referer         = $hub->referer;
   my $referer_type    = $referer->{'ENSEMBL_TYPE'};
   my $referer_species = $referer->{'ENSEMBL_SPECIES'};
   my $param           = $hub->object_types->{$referer_type};
   
   if ($referer_type && $param) {
-    my @type_history = grep $_->object eq $referer_type, @{$user->histories};
+    my @type_history = grep $_->object eq $referer_type, @{$r_user->histories};
     my $value        = shift || $referer->{'params'}->{$param}->[0];
     my $name         = $self->species_defs->get_config($referer_species, 'SPECIES_COMMON_NAME');
     
@@ -36,14 +38,14 @@ sub update_user_history {
     my $name_check = grep { $_->name eq $name } @type_history;
     
     if ($value && !$name_check && !($referer_type eq $self->type && $hub->param($param) eq $value)) {
-      $user->create_record('history', {
+      $r_user->create_record('history', {
         'name'    =>  $name,
         'species' =>  $referer_species,
         'object'  =>  $referer_type,
         'param'   =>  $param,
         'value'   =>  $value,
         'url'     =>  $referer->{'absolute_url'}
-      })->save('user' => $user->rose_object);
+      })->save('user' => $r_user);
 
       ## Limit to 5 entries per object type
       shift(@type_history)->delete while scalar @type_history >= 5; 

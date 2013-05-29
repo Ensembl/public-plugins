@@ -13,15 +13,15 @@ sub csrf_safe_process {
   my $self        = shift;
   my $object      = $self->object;
   my $hub         = $self->hub;
-  my $user        = $hub->user;
+  my $r_user      = $hub->user->rose_object;
   my $membership  = $hub->function ne 'Create'
     ? $hub->param('id')
     ? $object->fetch_membership($hub->param('id'), {'with_objects' => 'group', 'query' => ['group.status' => 'active']})
     : undef
-    : $user->rose_object->create_membership_object
+    : $r_user->create_membership_object
   or return $self->redirect_message(MESSAGE_GROUP_NOT_FOUND, {'error' => 1, 'back' => $self->redirect_url});
 
-  $membership->save('user' => $user) if $self->modify_membership($membership);
+  $membership->save('user' => $r_user) if $self->modify_membership($membership);
 
   return $self->ajax_redirect($self->redirect_url);
 }

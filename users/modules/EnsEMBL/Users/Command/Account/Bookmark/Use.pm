@@ -14,7 +14,7 @@ sub process {
 
   if (my ($bookmark, $owner) = $object->fetch_bookmark_with_owner( $bookmark_id ? ($bookmark_id, $hub->param('group')) : 0 )) {
     $bookmark->click(($bookmark->click || 0) + 1);
-    $bookmark->save('user' => $hub->user);
+    $bookmark->save('user' => $hub->user->rose_object);
     my $url = $bookmark->url;
     return $hub->redirect($url =~ /^(ht|f)tp/ ? $url : "http://$url");
 
