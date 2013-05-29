@@ -181,7 +181,7 @@ sub _add_to_records {
   my $data = ref $_[0] eq 'HASH' ? $_[0] : {@_};
 
   my $record = $self->create_record($record_type, $data);
-  $record->save('user' => $self);
+  $record->save('user' => $self->rose_object);
 
   ($record) = EnsEMBL::Web::Record->from_rose_objects([$record]);
 
@@ -241,7 +241,7 @@ sub add_das {
 
     $das_record = $self->create_record('das');
     $das_record->data($das);
-    $das_record->save('user' => $self);
+    $das_record->save('user' => $self->rose_object);
   }
   return $das_record;
 }
@@ -271,7 +271,7 @@ sub set_favourite_tracks {
 
   if ($data) {
     $favourites->tracks($data);
-    $favourites->save('user' => $self);
+    $favourites->save('user' => $self->rose_object);
   } else {
     $favourites->delete if $favourites->get_primary_key_value;
   }
