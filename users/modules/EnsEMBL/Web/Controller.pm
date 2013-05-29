@@ -43,7 +43,7 @@ sub update_user_history {
         'param'   =>  $param,
         'value'   =>  $value,
         'url'     =>  $referer->{'absolute_url'}
-      })->save('user' => $user);
+      })->save('user' => $user->rose_object);
 
       ## Limit to 5 entries per object type
       shift(@type_history)->delete while scalar @type_history >= 5; 
