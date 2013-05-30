@@ -436,20 +436,20 @@ sub process_config_params {
         }
 
         #check have a valid value
-        if ( $type eq 'DropDown') {
+        if ( $type eq 'dropdown') {
           if (grep  {$_->{value} eq $value } @{$config_options{$category}{$opt}{'values'}}) {
             $options->{$opt} = $value;
           } else {
             $self->{'_error'}{$opt} = "The value specified is not valid";
             return;
           }
-        } elsif($type eq 'CheckBox'){
+        } elsif($type eq 'checkbox'){
           if ($opt eq 'ungapped'){
             $options->{$opt} = '' unless $value eq 'no';
           } else {           
           $options->{$opt} = $value ?  $value : 'no';          
           } 
-        } elsif( $type eq 'String') { 
+        } elsif( $type eq 'string') { 
           next if $value eq 'START-END';
           my $temp = $value;
           my ($start, $end ) = split(/-/, $temp);
