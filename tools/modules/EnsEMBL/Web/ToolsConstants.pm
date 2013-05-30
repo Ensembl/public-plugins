@@ -2,15 +2,13 @@ package EnsEMBL::Web::ToolsConstants;
 
 use strict;
 use warnings;
-no warnings 'uninitialized';
 
 sub BLAST_CONFIGURATION_OPTIONS {
   return (
     'general' => {
 
       'max_target_seqs' => {
-        type    => 'DropDown',
-        select  => 'select',
+        type    => 'dropdown',
         name    => 'max_target_seqs',
         label   => 'Maximum number of hits to report',
         values  => [    
@@ -26,8 +24,7 @@ sub BLAST_CONFIGURATION_OPTIONS {
       }, 
 
       'culling_limit' => {
-        type    => 'DropDown',
-        select  => 'select',
+        type    => 'dropdown',
         name    => 'culling_limit',
         label   => 'Throw away hits that are enveloped by at least this many higher-scoring hits',
         values  => [
@@ -45,8 +42,7 @@ sub BLAST_CONFIGURATION_OPTIONS {
       },
 
       'evalue' => {
-        type    => 'DropDown',
-        select  => 'select',
+        type    => 'dropdown',
         name    => 'evalue',
         label   => 'Maximum E-value for reported alignments',
         values  => [
@@ -68,8 +64,7 @@ sub BLAST_CONFIGURATION_OPTIONS {
       }, 
 
       'word_size' => {
-        type    => 'DropDown',
-        select  => 'select',
+        type    => 'dropdown',
         name    => 'word_size',
         label   => 'Word size for seeding alignments',
         values  => [
@@ -83,7 +78,7 @@ sub BLAST_CONFIGURATION_OPTIONS {
       },
 
       'query_loc' => {
-        type    => 'String',
+        type    => 'string',
         name    => 'query_loc',
         label   => 'Location on the query sequence',
         size    => '30',
@@ -94,8 +89,7 @@ sub BLAST_CONFIGURATION_OPTIONS {
     'scoring' => {
 
       'gapopen' => {
-        type    => 'DropDown',
-        select  => 'select',
+        type    => 'dropdown',
         name    => 'gapopen',
         label   => 'Penalty for opening a gap',
         values  => [
@@ -118,8 +112,7 @@ sub BLAST_CONFIGURATION_OPTIONS {
       },
 
       'gapextend' => {
-        type    => 'DropDown',
-        select  => 'select',
+        type    => 'dropdown',
         name    => 'gapextend',
         label   =>  'Penalty for extending a gap',
         values  => [
@@ -134,15 +127,14 @@ sub BLAST_CONFIGURATION_OPTIONS {
       },
 
       'ungapped'  => {
-        type      => 'CheckBox',
+        type      => 'checkbox',
         name      => 'ungapped',
         label     => 'Allow gaps in Alignment',
         selected  => 1
       },
 
       'reward'  => {
-        type    => 'DropDown',
-        select  => 'select',
+        type    => 'dropdown',
         name    => 'reward',
         label   => 'Match score',
         values  => [
@@ -155,8 +147,7 @@ sub BLAST_CONFIGURATION_OPTIONS {
       },
 
       'penalty' => {
-        type    => 'DropDown',
-        select  => 'select',
+        type    => 'dropdown',
         name    => 'penalty',
         label   => 'Mismatch score',
         values  => [
@@ -169,8 +160,7 @@ sub BLAST_CONFIGURATION_OPTIONS {
       },
   
       'matrix'  => {
-        type    => 'DropDown',
-        select  => 'select',
+        type    => 'dropdown',
         name    => 'matrix',
         label   => 'Scoring matrix to use',
         values  => [
@@ -186,8 +176,7 @@ sub BLAST_CONFIGURATION_OPTIONS {
       },
 
       'comp_based_stats' => {
-        type    => 'DropDown',
-        select  => 'select',
+        type    => 'dropdown',
         name    => 'comp_based_stats',
         label   => 'Compositional adjustments',
         values  => [
@@ -199,8 +188,7 @@ sub BLAST_CONFIGURATION_OPTIONS {
       },
       
       'threshold' => {
-        type    => 'DropDown',
-        select  => 'select',
+        type    => 'dropdown',
         name    => 'threshold',
         label   => 'Minimium score to add a word to the BLAST lookup table', 
         values  => [
@@ -220,21 +208,21 @@ sub BLAST_CONFIGURATION_OPTIONS {
     'filters_and_masking' => {
     
       'dust' => {
-        type      => 'CheckBox',
+        type      => 'checkbox',
         name      => 'dust',
         label     => 'Filter low complexity regions',
         selected  => 1 
       },
 
       'seg' => {
-        type      => 'CheckBox',
+        type      => 'checkbox',
         name      => 'seg',
         label     => 'Filter low complexity regions',
         selected  => 1
       },
 
       'repeat_mask' => {
-        type      => 'CheckBox',
+        type      => 'checkbox',
         name      => 'repeat_mask',
         label     => 'Filter query sequences using RepeatMasker',
         selected  => 0
