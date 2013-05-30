@@ -81,17 +81,16 @@ sub _build_input {
   @species = sort {$a->{'caption'} cmp $b->{'caption'}} @species;
 
   $input_fieldset->add_field({
-      'type'    => 'DropDown',
+      'type'    => 'dropdown',
       'name'    => 'species',
       'label'   => "Species",
       'values'  => \@species,
       'value'   => $current_species,
-      'select'  => 'select',
       'width'   => '300px',
   });
 
   $input_fieldset->add_field({
-      'type'    => 'DropDown',
+      'type'    => 'dropdown',
       'name'    => 'format',
       'label'   => "Input file format",
       'values'  => [
@@ -102,7 +101,6 @@ sub _build_input {
         { value => 'id',      caption => 'HGVS notations'      },
       ],
       'value'   => 'snp',
-      'select'  => 'select',
   });
 
   ## Show appropriate example for selected format
@@ -116,22 +114,21 @@ sub _build_input {
   );
   my $format = 'default';
 
-  $input_fieldset->add_field({ type => 'String', name => 'name', label => 'Name for this data (optional)' });
-  $input_fieldset->add_field({ type => 'Text', name => 'text', label => 'Paste data', value => $example{$format} });
-  $input_fieldset->add_field({ type => 'File', name => 'file', label => 'Upload file' });
-  $input_fieldset->add_field({ type => 'URL',  name => 'url',  label => 'Provide file URL', size => 30 });
+  $input_fieldset->add_field({ type => 'string',  name => 'name', label => 'Name for this data (optional)' });
+  $input_fieldset->add_field({ type => 'text',    name => 'text', label => 'Paste data', value => $example{$format} });
+  $input_fieldset->add_field({ type => 'file',    name => 'file', label => 'Upload file' });
+  $input_fieldset->add_field({ type => 'url',     name => 'url',  label => 'Provide file URL', size => 30 });
 
   my $userdata = [];
   $input_fieldset->add_field({
-      'type'    => 'DropDown',
+      'type'    => 'dropdown',
       'name'    => 'userdata',
       'label'   => "or previously select uploaded file",
       'values'  => $userdata,
-      'select'  => 'select',
   });
 
   $input_fieldset->add_field({
-      'type'    => 'Radiolist',
+      'type'    => 'radiolist',
       'name'    => 'core_type',
       'label'   => "Transcript database to use",
       'values'  => [
@@ -139,7 +136,6 @@ sub _build_input {
         { value => 'otherfeatures', caption => 'RefSeq and other transcripts' },
       ],
       'value'   => 'core',
-      'select'  => 'select',
   });
 
   $input_fieldset->add_field({
@@ -156,7 +152,7 @@ sub _build_filters {
   $filter_fieldset->legend('Filters');
 
   $filter_fieldset->add_field({
-    type  => 'CheckBox',
+    type  => 'checkbox',
     name  => "coding_only",
     label => "Return results for variants in coding regions only",
     value => 'yes',
@@ -166,7 +162,7 @@ sub _build_filters {
   ## TODO - get species from dropdown via JavaScript 
   if ($self->hub->species eq 'Homo_sapiens') {
     $filter_fieldset->add_field({
-      'type'    => 'Radiolist',
+      'type'    => 'radiolist',
       'name'    => 'frequency',
       'label'   => "By frequency",
       'values'  => [
@@ -174,13 +170,11 @@ sub _build_filters {
         { value => 'advanced',  caption => 'Advanced filtering' },
       ],
       'value'   => 'common',
-      'select'  => 'select',
       'notes'   => '<strong>NB:</strong> Enabling frequency filtering may be slow for large datasets. The default options will filter out common variants found by the 1000 Genomes project.',
   });
 
     $filter_fieldset->add_field({
-      type   => 'DropDown',
-      select =>, 'select',
+      type   => 'dropdown',
       label  => 'Filter',
       name   => 'freq_filter',
       values => [
@@ -188,12 +182,10 @@ sub _build_filters {
       {  value => 'include', caption => 'Include only' },
       ],
       value  => 'exclude',
-      select => 'select',
     });
 
     $filter_fieldset->add_field({
-      type   => 'DropDown',
-      select =>, 'select',
+      type   => 'dropdown',
       #label  => '',
       name   => 'freq_gt_lt',
       values => [
@@ -201,19 +193,17 @@ sub _build_filters {
         { value => 'lt', caption => 'variants with MAF less than'    },
       ],
       value  => 'gt',
-      select => 'select',
     });
   
     $filter_fieldset->add_field({
-      type  => 'String',
+      type  => 'string',
       name  => 'freq_freq',
       value => '0.01',
       max   => 1,
     });
 
     $filter_fieldset->add_field({
-      type   => 'DropDown',
-      select =>, 'select',
+      type   => 'dropdown',
       #label  => '',
       name   => 'freq_pop',
       values => [
@@ -254,7 +244,6 @@ sub _build_filters {
         { value => 'any',     caption => 'any 1KG phase 1 or HapMap population'      },
       ],
       value  => '1kg_all',
-      select => 'select',
     });
   }
 }
@@ -264,7 +253,7 @@ sub _build_identifiers {
   my ($self, $ident_fieldset) = @_;
 
   $ident_fieldset->add_field({
-    type  => 'CheckBox',
+    type  => 'checkbox',
     name  => "hgnc",
     label => 'Gene symbol (e.g.HGNC)',
     value => 'yes',
@@ -272,7 +261,7 @@ sub _build_identifiers {
   });
 
   $ident_fieldset->add_field({
-    type  => 'CheckBox',
+    type  => 'checkbox',
     name  => "protein",
     label => "Protein",
     value => 'yes',
@@ -280,8 +269,7 @@ sub _build_identifiers {
   });
 
   $ident_fieldset->add_field({
-    type   => 'DropDown',
-    select =>, 'select',
+    type   => 'dropdown',
     label  => 'HGVS',
     name   => 'hgvs',
     values => [
@@ -291,11 +279,10 @@ sub _build_identifiers {
       { value => 'coding_protein', caption => 'Coding and protein sequence'  },
     ],
     value  => 'no',
-    select => 'select',
   });
 
   $ident_fieldset->add_field({
-    type   => 'DropDown',
+    type   => 'dropdown',
     label  => 'Co-located variants',
     name   => 'check_existing',
     values => [
@@ -304,7 +291,6 @@ sub _build_identifiers {
       { value => 'allele', caption => 'Yes and compare alleles' },
     ],
     value  => 'yes',
-    select => 'select',
   });
 }
 
@@ -314,7 +300,7 @@ sub _build_extra {
 
   $extra_fieldset->legend('Extra output options');
   $extra_fieldset->add_field({
-    type  => 'CheckBox',
+    type  => 'checkbox',
     name  => "exon_intron",
     label => "Exon and intron numbers",
     value => 'yes',
@@ -322,7 +308,7 @@ sub _build_extra {
   });
 
   $extra_fieldset->add_field({
-    type  => 'CheckBox',
+    type  => 'checkbox',
     name  => "domains",
     label => "Protein domains",
     value => 'yes',
@@ -331,7 +317,7 @@ sub _build_extra {
 
   if ($hub->species_defs->REGULATORY_BUILD) {
     $extra_fieldset->add_field({
-      type  => 'CheckBox',
+      type  => 'checkbox',
       name  => "regulatory",
       label => "Get regulatory region consequences",
       value => 'yes',
@@ -341,8 +327,7 @@ sub _build_extra {
 
   if ($hub->species_defs->databases->{'DATABASE_VARIATION'}{'SIFT'}) {
     $extra_fieldset->add_field({
-      type   => 'DropDown',
-      select =>, 'select',
+      type   => 'dropdown',
       label  => 'SIFT predictions',
       name   => 'sift',
       values => [
@@ -352,14 +337,12 @@ sub _build_extra {
         { value => 'both',  caption => 'Prediction and score' },
       ],
       value  => 'no',
-      select => 'select',
     });
   }
 
   if ($hub->species_defs->databases->{'DATABASE_VARIATION'}{'SIFT'}) {
     $extra_fieldset->add_field({
-      type   => 'DropDown',
-      select =>, 'select',
+      type   => 'dropdown',
       label  => 'PolyPhen predictions',
       name   => 'polyphen',
       values => [
