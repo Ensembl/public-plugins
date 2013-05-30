@@ -169,7 +169,7 @@ sub content {
 
       my $element = $blast_constants{$type}->{$option};
       $element->{'value'}       = $default;
-      $element->{'class'}       = ['config_' . $option, $element->{'type'} eq 'String' ? ' inactive' : ()];
+      $element->{'class'}       = ['config_' . $option, $element->{'type'} eq 'string' ? ' inactive' : ()];
       $element->{'field_class'} = $show ? 'blast_config_' . $option : 'hide blast_config_' . $option;
       $fieldset->add_field($element);
     }
