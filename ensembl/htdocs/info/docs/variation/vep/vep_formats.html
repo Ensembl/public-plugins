@@ -282,11 +282,18 @@ columns are:</p>
 			<li><i>INTRON</i> - the intron number (out of total number)</li>
 			<li><i>EXON</i> - the exon number (out of total number)</li>
 			<li><i>DOMAINS</i> - the source and identifer of any overlapping protein domains</li>
+			<li><i>DISTANCE</i> - Shortest distance from variant to transcript</li>
 			<li><i>IND</i> - individual name</li>
-			<li><i>SV</i> - IDs of overlapping structural variants</li>
+            <li><i>ZYG</i> - zygosity of individual genotype at this locus</li>
+            <li><i>SV</i> - IDs of overlapping structural variants</li>
 			<li><i>FREQS</i> - Frequencies of overlapping variants used in filtering</li>
 			<li><i>GMAF</i> - Minor allele and frequency of existing variation in 1000 Genomes Phase 1</li>
-			<li><i>DISTANCE</i> - Shortest distance from variant to transcript</li>
+            <li><i>AFR_MAF</i> - Minor allele and frequency of existing variation in 1000 Genomes Phase 1 combined African population</li>
+            <li><i>AMR_MAF</i> - Minor allele and frequency of existing variation in 1000 Genomes Phase 1 combined American population</li>
+            <li><i>ASN_MAF</i> - Minor allele and frequency of existing variation in 1000 Genomes Phase 1 combined Asian population</li>
+            <li><i>EUR_MAF</i> - Minor allele and frequency of existing variation in 1000 Genomes Phase 1 combined European population</li>
+            <li><i>CLIN_SIG</i> - Clinical significance of variant from dbSNP</li>
+            <li><i>BIOTYPE</i> - Biotype of transcript</li>
 		</ul>
 	</li>
 </ol>
@@ -298,11 +305,11 @@ fields can be configured using the --fields flag when running the VEP script.
 </p>
 
 <pre class="code">
-11_224088_C/A    11:224088   A  ENSG00000142082  ENST00000525319  Transcript         NON_SYNONYMOUS_CODING   742  716  239  T/N  aCc/aAc  -  SIFT=deleterious(0);PolyPhen=unknown(0)
-11_224088_C/A    11:224088   A  ENSG00000142082  ENST00000534381  Transcript         5_PRIME_UTR             -    -    -    -    -        -  -
-11_224088_C/A    11:224088   A  ENSG00000142082  ENST00000529055  Transcript         DOWNSTREAM              -    -    -    -    -        -  -
-11_224585_G/A    11:224585   A  ENSG00000142082  ENST00000529937  Transcript         INTRONIC,NMD_TRANSCRIPT -    -    -    -    -        -  HGVSc=ENST00000529937.1:c.136-346G>A
-22_16084370_G/A  22:16084370 A  -                ENSR00000615113  RegulatoryFeature  REGULATORY_REGION       -    -    -    -    -        -  -
+11_224088_C/A    11:224088   A  ENSG00000142082  ENST00000525319  Transcript         missense_variant           742  716  239  T/N  aCc/aAc  -  SIFT=deleterious(0);PolyPhen=unknown(0)
+11_224088_C/A    11:224088   A  ENSG00000142082  ENST00000534381  Transcript         5_prime_UTR_variant        -    -    -    -    -        -  -
+11_224088_C/A    11:224088   A  ENSG00000142082  ENST00000529055  Transcript         downstream_variant         -    -    -    -    -        -  -
+11_224585_G/A    11:224585   A  ENSG00000142082  ENST00000529937  Transcript         intron_variant             -    -    -    -    -        -  HGVSc=ENST00000529937.1:c.136-346G>A
+22_16084370_G/A  22:16084370 A  -                ENSR00000615113  RegulatoryFeature  regulatory_region_variant  -    -    -    -    -        -  -
 </pre>
 
 <p> The VEP script will also add a header to the output file. This contains
@@ -310,10 +317,10 @@ information about the databases connected to, and also a key describing the
 key/value pairs used in the extra column. </p>
 
 <pre class="code">
-## ENSEMBL VARIANT EFFECT PREDICTOR v2.6
-## Output produced at 2012-06-16 16:09:38
-## Connected to homo_sapiens_core_68_37 on ensembldb.ensembl.org
-## Using API version 68, DB version 68
+## ENSEMBL VARIANT EFFECT PREDICTOR v72
+## Output produced at 2013-06-16 16:09:38
+## Connected to homo_sapiens_core_72_37 on ensembldb.ensembl.org
+## Using API version 72, DB version 72
 ## Extra column keys:
 ## DISTANCE : Shortest distance from variant to transcript
 </pre>
