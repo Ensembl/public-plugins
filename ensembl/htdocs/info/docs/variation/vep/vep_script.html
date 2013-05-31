@@ -65,7 +65,6 @@
 				<li class="last"><img alt="" src="/i/leaf.gif"><a href="#run_install">Running the installer</a></li>
 			</ul>
 		</li>
-		<li><img alt="" src="/i/leaf.gif"><a href="#windows">Using the VEP in Windows</a></li>
 		<li>
 			<a href="#running"><img alt="" src="/i/leaf.gif">Running the script</a>
 			<ul>
@@ -85,6 +84,7 @@
 				<li class="last"><img alt="" src="/i/leaf.gif"><a href="#examples">Examples</a></li>
 			</ul>
 		</li>
+		<li><img alt="" src="/i/leaf.gif"><a href="#windows">Using the VEP in Windows</a></li>
 		<li><img alt="" src="/i/leaf.gif">
 			<a href="#db">Databases and caching</a>
 			<ul>
@@ -99,6 +99,15 @@
 				<li><img alt="" src="/i/leaf.gif"><a href="#local">Using a local database</a></li>
 				<li><img alt="" src="/i/leaf.gif"><a href="#build">Building your own cache</a></li>
 				<li class="last"><img alt="" src="/i/leaf.gif"><a href="#technical">Technical information</a></li>
+			</ul>
+		</li>
+		<li><img alt="" src="/i/leaf.gif">
+			<a href="#filter">Filtering results</a>
+			<ul>
+				<li><img alt="" src="/i/leaf.gif"><a href="#filter_run">Running the script</a></li>
+				<li><img alt="" src="/i/leaf.gif"><a href="#filtre_opt">Options</a></li>
+				<li><img alt="" src="/i/leaf.gif"><a href="#filter_write">Writing filters</a></li>
+				<li><img alt="" src="/i/leaf.gif"><a href="#filter_op">Operators</a></li>
 			</ul>
 		</li>
 		<li><img alt="" src="/i/leaf.gif">
@@ -156,10 +165,8 @@
 	the Ensembl CVS server: </p>
 	
 	<div class="tinted-box" style="font-size: 16px; padding: 10px; margin: 10px;width: 300px; text-align:center;">
-		<a href="http://cvs.sanger.ac.uk/cgi-bin/viewvc.cgi/ensembl-tools/scripts/variant_effect_predictor.tar.gz?view=tar&root=ensembl&pathrev=branch-ensembl-71"><img src="/i/16/download.png"> Download latest version (71)</a>
+		<a href="http://cvs.sanger.ac.uk/cgi-bin/viewvc.cgi/ensembl-tools/scripts/variant_effect_predictor.tar.gz?view=tar&root=ensembl&pathrev=branch-ensembl-72"><img src="/i/16/download.png"> Download latest version (72)</a>
 	</div>
-	
-	<p><b>NOTE:</b> VEP version numbers have from release 71 changed to match Ensembl release numbers.</p>
 	
 	<p>It is also included as part of the ensembl-tools module of the Ensembl
 	API - you can find it in the ensembl-tools/scripts/variant_effect_predictor/
@@ -170,7 +177,8 @@
 	
 	<div id="div_versions" style="display:none;">
 	<ul>
-		<li><a href="http://cvs.sanger.ac.uk/cgi-bin/viewvc.cgi/ensembl-tools/scripts/variant_effect_predictor.tar.gz?view=tar&root=ensembl&pathrev=branch-ensembl-69">Download version 2.8</a> (Ensembl 70) </li>
+		<li><a href="http://cvs.sanger.ac.uk/cgi-bin/viewvc.cgi/ensembl-tools/scripts/variant_effect_predictor.tar.gz?view=tar&root=ensembl&pathrev=branch-ensembl-71">Download version 71</a> (Ensembl 71) </li>
+		<li><a href="http://cvs.sanger.ac.uk/cgi-bin/viewvc.cgi/ensembl-tools/scripts/variant_effect_predictor.tar.gz?view=tar&root=ensembl&pathrev=branch-ensembl-70">Download version 2.8</a> (Ensembl 70) </li>
 		<li><a href="http://cvs.sanger.ac.uk/cgi-bin/viewvc.cgi/ensembl-tools/scripts/variant_effect_predictor.tar.gz?view=tar&root=ensembl&pathrev=branch-ensembl-69">Download version 2.7</a> (Ensembl 69) </li>
 		<li><a href="http://cvs.sanger.ac.uk/cgi-bin/viewvc.cgi/ensembl-tools/scripts/variant_effect_predictor.tar.gz?view=tar&root=ensembl&pathrev=branch-ensembl-68">Download version 2.6</a> (Ensembl 68) </li>
 		<li><a href="http://cvs.sanger.ac.uk/cgi-bin/viewvc.cgi/ensembl-tools/scripts/variant_effect_predictor.tar.gz?view=tar&root=ensembl&pathrev=branch-ensembl-67">Download version 2.5</a> (Ensembl 67) </li>
@@ -185,7 +193,7 @@
 	<h2 id="requirements"> Requirements </h2>
 	
 	<p>
-	Version 71 of the script requires at least version 71 of the Ensembl Core
+	Version 72 of the script requires at least version 72 of the Ensembl Core
 	and Variation APIs and their relevant dependencies to be installed to use
 	the script. A minimal subset of these can be installed using the supplied <a
 	href="#installer">installer script</a>. </p>
@@ -210,6 +218,18 @@
 	
 	<h2 id="new"> What's new </h2>
 	
+	<h4> New in version 72 <i>(June 2013)</i> </h4>
+	
+	<ul>
+		<li>Speed and stability improvements when using forking</li>
+		<li>Filter VEP results using <a href="#filter">filter_vep.pl</a></li>
+	</ul>
+	
+	<h4> Previous version history: <a href="javascript:null(0);"
+	onclick="show_hide('history');"	id="a_history">Show</a> </h4>
+	
+	<div id="div_history" style="display: none;">
+	
 	<h4> New in version 71 <i>(April 2013)</i> </h4>
 	
 	<ul>
@@ -224,11 +244,6 @@
 		<li><p><b>NOTE:</b> VEP version numbers have now (from release 71)
 		changed to match Ensembl release numbers.</p></li>
 	</ul>
-	
-	<h4> Previous version history: <a href="javascript:null(0);"
-	onclick="show_hide('history');"	id="a_history">Show</a> </h4>
-	
-	<div id="div_history" style="display: none;">
 	
 	<h4> New in version 2.8 <i>(December 2012)</i> </h4>
 	
@@ -429,133 +444,7 @@
 	
 	<p><a href="#top">[Back to top]</a></p>
 	
-	<hr/>
-	
-	
-	<h2 id="windows"> Using the VEP in Windows </h3>
-	
-	<p> The VEP was developed as a command-line tool, and as a Perl script its
-	natural environment is a Linux system. However, there are several ways you can
-	use the VEP script on a Windows machine: </p>
-	
-	<h4 id="virtual"> Virtual machines </h4>
-	
-	<p> Using a virtual machine you can run a virtual Linux system in a window on
-	your machine. There are two ways to do this: </p>
-	
-	<ol>
-		<li> Download the Ensembl virtual machine image <a
-		href="/info/data/virtual_machine.html">[instructions]</a> </li>
-		<li> Use a virtual machine in the Amazon Elastic Cloud Service (ECS) <a
-		href="http://aws.amazon.com/">[Amazon]</a> </li>
-	</ol>
-	
-	<h4 id="cygwin"> Cygwin </h4>
-	
-	<p> Cygwin is a collection of tools which provide a Linux environment
-	embedded in Windows. It is very simple to install and set up, and requires
-	the fewest compute resources to create a suitable Linux environment for the
-	VEP. Instructions: </p>
-	
-	<ol>
-		<li> Download the <a href="http://cygwin.com/setup.exe">Cygwin setup program</a> </li>
-		<li> Run the setup program, and click through with the default options
-		until you come to select packages to install </li>
-		<li>
-			Select the following packages to install (all are under the "Perl" node):
-			<ul>
-				<li> perl </li>
-				<li> perl-DBD-mysql </li>
-				<li> perl-DBI </li>
-			</ul>
-		</li>
-		<li> Click through the rest of the install process </li>
-		<li> Open a Cygwin terminal </li>
-		<li> You will then need to install BioPerl and the Ensembl API as per
-		the <a
-		href="http://www.ensembl.org/info/docs/api/api_installation.html">instructions
-		here</a>. You can copy downloaded files from your Windows area to your
-		Cygwin area - by default the Cygwin home directory is
-		"C:/cygwin/home/[username]/". The default shell under Cygwin is bash, so
-		follow the instructions for adding the modules to your PERL5LIB for
-		bash. </li>
-		<li> Download the VEP package from <a href="#download">above</a> </li>
-		<li> Unpack the VEP package in Cygwin with <pre class="code">tar xvfz variant_effect_predictor.tar.gz</pre> </li>
-	</ol>
-	
-	<h4 id="activestate"> ActiveState Perl </h4>
-	
-	<p> ActiveState provide a version of Perl available for Windows. This can be
-	used to run the VEP on the Windows MS-DOS command line interface.
-	Instructions: </p>
-	
-	<ol>
-		<li> Download and install <a
-		href="http://www.activestate.com/activeperl/downloads">ActiveState
-		Perl</a>. 5.14.2 is the recommended version to use. </li>
-		<li> In your Windows Start menu, locate the entry created (it will look
-		something like "ActivePerl 5.14.2 Build 1402"), and click on "Perl
-		Package Manager" </li>
-		<li> In the package manager, click the grey "View all packages" icon in
-		the top-left </li>
-		<li> In the adjacent search box, type "DBI" </li>
-		<li> You should see a package named "DBI" in the list - click the
-		package icon to the left to highlight it and select it for installation
-		</li>
-		<li> You should also see a package named "DBD-mysql" - click the package
-		icon to select it for installation </li>
-		<li> Click the green arrow in the top right of the window to install the
-		packages </li>
-		<li> To install the Ensembl API you will need a program that can unpack
-		tar.gz archives - <a href="http://7-zip.org/">7-zip</a> is a freeware
-		program to do this. </li>
-		<li> Download and install the Ensembl API as per the <a
-		href="http://www.ensembl.org/info/docs/api/api_installation.html">instructions
-		here</a>. The best place to put them is alongside your other Perl
-		modules in C:\Perl\</li>
-		<li> In Windows you can add the path to your Ensembl API installation by
-		editing the PERL5LIB environment variable:
-			<ul>
-				<li>Right-click My Computer, click Properties</li>
-				<li>In the System Properties window, click on the Advanced
-				tab</li>
-				<li>Click the Environment Variables button</li>
-				<li>Click New, and enter "PERL5LIB" as the variable name</li>
-				<li>Then enter as the variable value the paths to your Bioperl,
-				Ensembl (core), Ensembl (variation) and Ensembl (functional
-				genomics if required), separated by semi-colons (";"). For
-				example, if you have installed all of your packages in C:\Perl\,
-				your variable value should look something like
-				<pre class="code">C:\Perl\bioperl-1.2.3\;C:\Perl\ensembl\modules\;C:\Perl\ensembl-variation\modules\;C:\Perl\ensembl-functgenomics\modules\</pre></li>
-				<li>Click OK to store the variable, and then OK in the
-				Environment Variables window to save the setting</li>
-			</ul>
-		</li>
-		<li> Download and unpack the VEP package from <a
-		href="#download">above</a> </li>
-		<li> Start an MS-DOS window by clicking on the Start Menu, then Run...,
-		type "cmd" in the box and press enter. Change directory to where you
-		unpacked the VEP package using the <b>cd</b> command:
-<pre class="code">cd C:\Perl\variant_effect_predictor\</pre></li>
-		<li> To use cache files, you will need to download the <a
-		href="http://www.gzip.org/">gzip utility</a> and put "gzip.exe" either
-		in your executable path or in the same directory as the
-		variant_effect_predictor.pl script. Add the command line flag
-		'--compress "gzip -dc"' when running the VEP </li>
-	</ol>
-	
-	<p><b>NB:</b> Under ActiveState Perl on Windows there is a known issue when
-	using the pre-built human cache file including SIFT and PolyPhen scores.
-	Users should use either the cache file without SIFT and PolyPhen (scores can
-	still be obtained by the script from the public database), or a virtual
-	machine or Cygwin as described above. </p>
-	
-	<p><a href="#top">[Back to top]</a></p>
-	
-	<hr/>
-	
-	
-	
+	<hr/>	
 	
 	<h2 id="running"> Running the script </h2>
 	
@@ -836,7 +725,23 @@ host          useastdb.ensembl.org</pre>
 			<td><pre>--dir [directory]</pre></td>
 			<td>&nbsp;</td>
 			<td>
-				Specify the base cache directory to use. <i>Default =
+				Specify the base cache/plugin directory to use. <i>Default =
+				"$HOME/.vep/"</i>
+			</td>
+		</tr>
+		<tr class="bg2">
+			<td><pre>--dir_cache [directory]</pre></td>
+			<td>&nbsp;</td>
+			<td>
+				Specify the cache directory to use. <i>Default =
+				"$HOME/.vep/"</i>
+			</td>
+		</tr>
+		<tr>
+			<td><pre>--dir_plugins [directory]</pre></td>
+			<td>&nbsp;</td>
+			<td>
+				Specify the plugin directory to use. <i>Default =
 				"$HOME/.vep/"</i>
 			</td>
 		</tr>
@@ -1151,9 +1056,9 @@ host          useastdb.ensembl.org</pre>
 			<td><pre>--check_existing</pre></td>
 			<td>&nbsp;</td>
 			<td>
-				Checks for the existence of variants that are co-located with
-				your input. By default the alleles are not compared - to do so,
-				use --check_alleles. <i>Not used by default</i>
+                Checks for the existence of known variants that are co-located
+                with your input. By default the alleles are not compared - to do
+                so, use --check_alleles. <i>Not used by default</i>
 			</td>
 		</tr>
 		<tr class="bg2">
@@ -1646,6 +1551,129 @@ host          useastdb.ensembl.org</pre>
 	<p><a href="#top">[Back to top]</a></p>
 	
 	<hr/>
+    
+    
+	<h2 id="windows"> Using the VEP in Windows </h3>
+	
+	<p> The VEP was developed as a command-line tool, and as a Perl script its
+	natural environment is a Linux system. However, there are several ways you can
+	use the VEP script on a Windows machine: </p>
+	
+	<h4 id="virtual"> Virtual machines </h4>
+	
+	<p> Using a virtual machine you can run a virtual Linux system in a window on
+	your machine. There are two ways to do this: </p>
+	
+	<ol>
+		<li> Download the Ensembl virtual machine image <a
+		href="/info/data/virtual_machine.html">[instructions]</a> </li>
+		<li> Use a virtual machine in the Amazon Elastic Cloud Service (ECS) <a
+		href="http://aws.amazon.com/">[Amazon]</a> </li>
+	</ol>
+	
+	<h4 id="cygwin"> Cygwin </h4>
+	
+	<p> Cygwin is a collection of tools which provide a Linux environment
+	embedded in Windows. It is very simple to install and set up, and requires
+	the fewest compute resources to create a suitable Linux environment for the
+	VEP. Instructions: </p>
+	
+	<ol>
+		<li> Download the <a href="http://cygwin.com/setup.exe">Cygwin setup program</a> </li>
+		<li> Run the setup program, and click through with the default options
+		until you come to select packages to install </li>
+		<li>
+			Select the following packages to install (all are under the "Perl" node):
+			<ul>
+				<li> perl </li>
+				<li> perl-DBD-mysql </li>
+				<li> perl-DBI </li>
+			</ul>
+		</li>
+		<li> Click through the rest of the install process </li>
+		<li> Open a Cygwin terminal </li>
+		<li> You will then need to install BioPerl and the Ensembl API as per
+		the <a
+		href="http://www.ensembl.org/info/docs/api/api_installation.html">instructions
+		here</a>. You can copy downloaded files from your Windows area to your
+		Cygwin area - by default the Cygwin home directory is
+		"C:/cygwin/home/[username]/". The default shell under Cygwin is bash, so
+		follow the instructions for adding the modules to your PERL5LIB for
+		bash. </li>
+		<li> Download the VEP package from <a href="#download">above</a> </li>
+		<li> Unpack the VEP package in Cygwin with <pre class="code">tar xvfz variant_effect_predictor.tar.gz</pre> </li>
+	</ol>
+	
+	<h4 id="activestate"> ActiveState Perl </h4>
+	
+	<p> ActiveState provide a version of Perl available for Windows. This can be
+	used to run the VEP on the Windows MS-DOS command line interface.
+	Instructions: </p>
+	
+	<ol>
+		<li> Download and install <a
+		href="http://www.activestate.com/activeperl/downloads">ActiveState
+		Perl</a>. 5.14.2 is the recommended version to use. </li>
+		<li> In your Windows Start menu, locate the entry created (it will look
+		something like "ActivePerl 5.14.2 Build 1402"), and click on "Perl
+		Package Manager" </li>
+		<li> In the package manager, click the grey "View all packages" icon in
+		the top-left </li>
+		<li> In the adjacent search box, type "DBI" </li>
+		<li> You should see a package named "DBI" in the list - click the
+		package icon to the left to highlight it and select it for installation
+		</li>
+		<li> You should also see a package named "DBD-mysql" - click the package
+		icon to select it for installation </li>
+		<li> Click the green arrow in the top right of the window to install the
+		packages </li>
+		<li> To install the Ensembl API you will need a program that can unpack
+		tar.gz archives - <a href="http://7-zip.org/">7-zip</a> is a freeware
+		program to do this. </li>
+		<li> Download and install the Ensembl API as per the <a
+		href="http://www.ensembl.org/info/docs/api/api_installation.html">instructions
+		here</a>. The best place to put them is alongside your other Perl
+		modules in C:\Perl\</li>
+		<li> In Windows you can add the path to your Ensembl API installation by
+		editing the PERL5LIB environment variable:
+			<ul>
+				<li>Right-click My Computer, click Properties</li>
+				<li>In the System Properties window, click on the Advanced
+				tab</li>
+				<li>Click the Environment Variables button</li>
+				<li>Click New, and enter "PERL5LIB" as the variable name</li>
+				<li>Then enter as the variable value the paths to your Bioperl,
+				Ensembl (core), Ensembl (variation) and Ensembl (functional
+				genomics if required), separated by semi-colons (";"). For
+				example, if you have installed all of your packages in C:\Perl\,
+				your variable value should look something like
+				<pre class="code">C:\Perl\bioperl-1.2.3\;C:\Perl\ensembl\modules\;C:\Perl\ensembl-variation\modules\;C:\Perl\ensembl-functgenomics\modules\</pre></li>
+				<li>Click OK to store the variable, and then OK in the
+				Environment Variables window to save the setting</li>
+			</ul>
+		</li>
+		<li> Download and unpack the VEP package from <a
+		href="#download">above</a> </li>
+		<li> Start an MS-DOS window by clicking on the Start Menu, then Run...,
+		type "cmd" in the box and press enter. Change directory to where you
+		unpacked the VEP package using the <b>cd</b> command:
+<pre class="code">cd C:\Perl\variant_effect_predictor\</pre></li>
+		<li> To use cache files, you will need to download the <a
+		href="http://www.gzip.org/">gzip utility</a> and put "gzip.exe" either
+		in your executable path or in the same directory as the
+		variant_effect_predictor.pl script. Add the command line flag
+		'--compress "gzip -dc"' when running the VEP </li>
+	</ol>
+	
+	<p><b>NB:</b> Under ActiveState Perl on Windows there is a known issue when
+	using the pre-built human cache file including SIFT and PolyPhen scores.
+	Users should use either the cache file without SIFT and PolyPhen (scores can
+	still be obtained by the script from the public database), or a virtual
+	machine or Cygwin as described above. </p>
+	
+	<p><a href="#top">[Back to top]</a></p>
+	
+	<hr/>
 	
 	
 	<h2 id="db"> Databases and caching </h2>
@@ -1682,16 +1710,16 @@ host          useastdb.ensembl.org</pre>
 	<ol>
 		<li>
 			Download the archive file for your species from our <a
-			href="ftp://ftp.ensembl.org/pub/release-71/variation/VEP/">FTP
+			href="ftp://ftp.ensembl.org/pub/release-72/variation/VEP/">FTP
 			site</a>
 		</li>
 		<li>
 			Extract the archive in your cache directory. By default the VEP uses
 			$HOME/.vep/ as the cache directory, where $HOME is your UNIX home
 			directory.
-			<pre class="code">mv homo_sapiens_vep_71.tar.gz ~/.vep/
+			<pre class="code">mv homo_sapiens_vep_72.tar.gz ~/.vep/
 cd ~/.vep/
-tar xfz homo_sapiens_vep_71.tar.gz</pre>
+tar xfz homo_sapiens_vep_72.tar.gz</pre>
 		</li>
 		<li>
 			Run the VEP with the --cache option
@@ -1747,7 +1775,7 @@ tar xfz homo_sapiens_vep_71.tar.gz</pre>
 	
 	<p> The script is run as follows: </p>
 	
-	<pre class="code">perl gtf2vep.pl -i my_species_genes.gtf -f my_species_seq.fa -d 71 -s my_species
+	<pre class="code">perl gtf2vep.pl -i my_species_genes.gtf -f my_species_seq.fa -d 72 -s my_species
 perl variant_effect_predictor.pl -offline -i my_species_variants.vcf -s my_species</pre>
 	
 	<p> By default the cache is created in $HOME/.vep/[species]/[version]/ - to
@@ -1784,9 +1812,9 @@ perl variant_effect_predictor.pl -offline -i my_species_variants.vcf -s my_speci
 	large (25GB for human). An example set of commands for setting up the data
 	for human follows: </p>
 	
-	<pre class="code">wget ftp://ftp.ensembl.org/pub/release-71/fasta/homo_sapiens/dna/Homo_sapiens.GRCh37.71.dna.primary_assembly.fa.gz
-gzip -d Homo_sapiens.GRCh37.71.dna.primary_assembly.fa.gz
-perl variant_effect_predictor.pl -i input.vcf --offline --hgvs --fasta Homo_sapiens.GRCh37.71.dna.primary_assembly.fa</pre>
+	<pre class="code">wget ftp://ftp.ensembl.org/pub/release-72/fasta/homo_sapiens/dna/Homo_sapiens.GRCh37.72.dna.primary_assembly.fa.gz
+gzip -d Homo_sapiens.GRCh37.72.dna.primary_assembly.fa.gz
+perl variant_effect_predictor.pl -i input.vcf --offline --hgvs --fasta Homo_sapiens.GRCh37.72.dna.primary_assembly.fa</pre>
 	
 	<h3 id="limitations">Limitations of the cache</h3>
 	
@@ -1883,10 +1911,10 @@ perl variant_effect_predictor.pl -i input.vcf --offline --hgvs --fasta Homo_sapi
 	target="_blank">here</a>. You will need a MySQL server that you can connect
 	to from the machine where you will run the script (this can be the same
 	machine). For most of the functionality of the VEP, you will only need the
-	Core database (e.g. homo_sapiens_core_71_37) installed. In order to find
+	Core database (e.g. homo_sapiens_core_72_37) installed. In order to find
 	co-located variations or to use SIFT or PolyPhen, it is also necessary to
 	install the relevant
-	variation database (e.g. homo_sapiens_variation_71_37). </p>
+	variation database (e.g. homo_sapiens_variation_72_37). </p>
 	
 	<p> Note that unless you have custom data to insert in the database, in most
 	cases it will be much more efficient to use a <a href="#pre">pre-built
@@ -1909,7 +1937,7 @@ Bio::EnsEMBL::DBSQL::DBAdaptor->new(
   '-host'    => 'ensembldb.ensembl.org',
   '-user'    => 'anonymous',
   '-pass'    => '',
-  '-dbname'  => 'homo_sapiens_core_71_37'
+  '-dbname'  => 'homo_sapiens_core_72_37'
 );
 
 Bio::EnsEMBL::Variation::DBSQL::DBAdaptor->new(
@@ -1919,7 +1947,7 @@ Bio::EnsEMBL::Variation::DBSQL::DBAdaptor->new(
   '-host'    => 'ensembldb.ensembl.org',
   '-user'    => 'anonymous',
   '-pass'    => '',
-  '-dbname'  => 'homo_sapiens_variation_71_37'
+  '-dbname'  => 'homo_sapiens_variation_72_37'
 );
 
 Bio::EnsEMBL::Registry->add_alias("Homo_sapiens","human");
@@ -2058,6 +2086,204 @@ Bio::EnsEMBL::Registry->add_alias("Homo_sapiens","human");
 	
 	
 	<a href="#top">[Back to top]</a>
+	
+	<hr/>
+	
+	<h2 id="filter"> Filtering results </h2>
+    
+    <p> The filter_vep.pl script is included along side the main VEP script. It
+    can be used to filter VEP output files down to find important or interesting
+    results. It operates on either standard or VCF formatted output (NB only VCF
+    output produced by the VEP or in the same format can be used). </p>
+    
+    <h3 id="filter_run"> Running the script </h3>
+    
+    <p> Run the script as follows: </p>
+    
+    <pre class="code">perl variant_effect_predictor.pl -i in.vcf -o out.txt -cache -everything
+perl filter_vep.pl -i out.txt -o out_filtered.txt -filter "[filter_text]"</pre>
+    
+    <p> The script can also read from STDIN and write to STDOUT, and so may be
+    used in a UNIX pipe: </p>
+    
+    <pre class="code">perl variant_effect_predictor.pl -i in.vcf -o stdout -cache -check_existing | perl filter_vep.pl -filter "not Existing_variation" -o out.txt</pre>
+    
+    <p> The above command removes known variants from your output </p>
+    
+    <h3 id="filter_opt"> Options </h3>
+    
+	<table class="ss" style="width:75%;">
+		<tr>
+			<th>Flag</th>
+			<th>Alternate</th>
+			<th>Description</th>
+		</tr>
+		<tr>
+			<td><pre>--help</pre></td>
+			<td><pre>-h</pre></td>
+			<td>Print usage message and exit</td>
+		</tr>
+		<tr class="bg2">
+			<td><pre>--input_file [file]</pre></td>
+			<td><pre>-i</pre></td>
+			<td>
+                Specify the input file (i.e. the VEP results file). If no input
+                file is specified, the script will attempt to read from STDIN.
+                Input may be gzipped - to force the script to read a file as
+                gzipped, use --gz
+			</td>
+		</tr>
+		<tr>
+			<td><pre>--format [format]</pre></td>
+			<td>&nbsp;</td>
+			<td>
+                Specify input file format (vep or vcf)
+			</td>
+		</tr>
+		<tr class="bg2">
+			<td><pre>--output_file [file]</pre></td>
+			<td><pre>-o</pre></td>
+			<td>
+                Specify the output file to write to. If no output file is
+                specified, the script will write to STDOUT
+			</td>
+		</tr>
+		<tr>
+			<td><pre>--force_overwrite</pre></td>
+			<td>&nbsp;</td>
+			<td>
+                Force the script to overwrite the output file if it already
+                exists
+			</td>
+		</tr>
+		<tr class="bg2">
+			<td><pre>--filter [filters]</pre></td>
+			<td><pre>-f</pre></td>
+			<td>
+                Add filter (see below). Multiple --filter flags may be used, and
+                are treated as logical ANDs, i.e. all filters must pass for a
+                line to be printed
+			</td>
+		</tr>
+		<tr>
+			<td><pre>--list</pre></td>
+			<td><pre>-l</pre></td>
+			<td>
+                List allowed fields from the input file
+			</td>
+		</tr>
+		<tr class="bg2">
+			<td><pre>--count</pre></td>
+			<td><pre>-c</pre></td>
+			<td>
+                Print only a count of matched lines
+			</td>
+		</tr>
+		<tr>
+			<td><pre>--only_matched</pre></td>
+			<td>&nbsp;</td>
+			<td>
+                In VCF files, the CSQ field that contains the consequence data
+                will often contain more than one "block" of consequence data,
+                where each block corresponds to a variant/feature overlap. Using
+                --only_matched will remove blocks that do not pass the filters.
+                By default, the script prints out the entire VCF line if any of
+                the blocks pass the filters.
+			</td>
+		</tr>
+    </table>
+    
+    <h3 id="filter_write"> Writing filters </h3>
+    
+    <p> Filter strings consist of three components: </p>
+    
+    <ol>
+        <li><b>Field</b> : A field name from the VEP results file. This can be
+        any field in the "main" columns of the output, or any in the "Extra"
+        final column. For VCF files, this is any field defined in the
+        "##INFO=&lt;ID=CSQ" header. You can list available fields using
+        --list</li>
+        <li><b>Operator</b> : The operator defines the comparison carried out.
+        </li>
+        <li><b>Value</b> : The value to which the content of the field is
+        compared.</li>
+    </ol>
+    
+    <p> Examples: </p>
+    
+    <pre class="code"># match entries where Feature (Transcript) is "ENST00000307301"
+--filter "Feature is ENST00000307301"
+
+# match entries where Protein_position is less than 10
+--filter "Protein_position < 10"
+
+# match entries where Consequence contains "stream" (this will match upstream and downstream)
+--filter "Consequence matches stream"</pre>
+        
+    <p> For certain fields you may only be interested in whether it is defined;
+    in this case the operator and value can be left out: </p>
+    
+    <pre class="code"># match entries where HGNC gene symbol is defined
+--filter "HGNC"</pre>
+    
+    <p> Filter strings can also be linked together by the logical operators "or"
+    and "and", and inverted by prefixing with "not": </p>
+    
+    <pre class="code"># filter for missense variants in CCDS transcripts where the variant falls in a protein domain
+--filter "Consequence is missense_variant and CCDS and DOMAINS"
+
+# find variants where the MAF is greater than 10% in either AFR or ASN populations
+--filter "AFR_MAF > 0.1 or ASN_MAF > 0.1"
+
+# filter out known variants
+--filter "not Existing_variation"</pre>
+    
+    <p> For fields that contain string and number components, the script will
+    try and match the relevant part based on the operator in use. For example,
+    using "--sift b" in the VEP gives strings that look like "tolerated(0.46)".
+    This will give a match to either of the following filters: </p>
+    
+    <pre class="code"># match string part
+--filter "SIFT is tolerated"
+
+# match number part
+--filter "SIFT < 0.5"</pre>
+    
+    <h3 id="filter_op"> Operators </h3>
+    
+    <ul>
+        <li><b>is</b> (synonyms: = , eq) : Match exactly
+        <pre class="code"># get only transcript consequences
+--filter "Feature_type is Transcript"</pre></li>
+        <li><b>!=</b> (synonym: ne) : Does not match exactly
+        <pre class="code"># filter out tolerated SIFT predictions
+--filter "SIFT != tolerated"</pre></li>
+        <li><b>match</b> (synonyms: matches , re , regex) : Match string using
+        regular expression. You may include any regular expression notation,
+        e.g. "\d" for any numerical character
+        <pre class="code"># match stop_gained, stop_lost and stop_retained
+--filter "Consequence match stop"</pre></li>
+        <li><b>&lt;</b> (synonym: lt) : Less than
+        <pre class="code"># find SIFT scores less than 0.1
+--filter "SIFT < 0.1"</pre></li>
+        <li><b>&gt;</b> (synonym: gt) : Greater than
+        <pre class="code"># find variants not in the first exon
+--filter "Exon > 1"</pre></li>
+        <li><b>&lt;=</b> (synonym: lte) : Less than or equal to</li>
+        <li><b>&gt;=</b> (synonym: gte) : Greater than or equal to</li>
+        <li><b>exists</b> (synonyms: ex , defined) : Field is defined - equivalent to using no operator and value</li>
+        <li><b>in</b> : Find in list or file. Value may be either a
+        comma-separated list or a file containing values on separate lines. Each
+        list item is compared using the "is" operator.
+        <pre class="code"># find variants in a list of gene names
+--filter "HGNC in BRCA1,BRCA2"
+
+# filter using a file of MotifFeatures
+--filter "Feature in /data/files/motifs_list.txt"</pre></li>
+    </ul>
+    
+    
+    <a href="#top">[Back to top]</a>
 	
 	<hr/>
 	
