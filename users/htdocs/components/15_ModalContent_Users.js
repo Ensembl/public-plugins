@@ -16,5 +16,12 @@ Ensembl.Panel.ModalContent = Ensembl.Panel.ModalContent.extend({
         Ensembl.EventManager.trigger('modalOpen', { href: redirectURL, rel: '' });
       }
     });
+  },
+  
+  getContent: function (link, url) {
+    if (url.match(/\/Bookmark/)) {
+      this.el.addClass('_needs_refresh_on_hide');
+    }
+    return this.base(link, url);
   }
 });

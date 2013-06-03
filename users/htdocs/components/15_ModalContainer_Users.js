@@ -4,6 +4,8 @@ Ensembl.Panel.ModalContainer = Ensembl.Panel.ModalContainer.extend({
   hide: function () {
     this.base();
 
-    Ensembl.EventManager.trigger('refreshAccountsDropdown');
+    if (this.el.find('._needs_refresh_on_hide').removeClass('_needs_refresh_on_hide').length) {
+      Ensembl.EventManager.trigger('refreshAccountsDropdown');
+    }
   }
 });
