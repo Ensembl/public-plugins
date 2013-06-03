@@ -1,28 +1,19 @@
 package EnsEMBL::Web::Factory::Tools;
 
-
 use strict;
 use warnings;
-no warnings 'uninitialized';
 
 use base qw(EnsEMBL::Web::Factory);
-use EnsEMBL::Web::Object::Tools;
+
 use ORM::EnsEMBL::DB::Tools::Manager::Ticket;
 
 sub createObjects {
-  my $self = shift;
-  my $tools = shift;
-  my $tk;
+  my $self        = shift;
+  my $data        = $self->__data;
+  my $ticket_name = $self->param('tk');
+  my $tools_data  = $ticket_name ? {'_ticket' => ORM::EnsEMBL::DB::Tools::Manager::Ticket->fetch_ticket_by_name($ticket_name)} : {};
 
-  my $tools_object = $self->DataObjects($self->new_object('Tools', {}, $self->__data));
-
-  $tk = $self->param('tk');
-  if ($tk) {
-    my $manager = $self->dynamic_use_fallback("ORM::EnsEMBL::DB::Tools::Manager::Ticket");
-
-    my $ticket_object = shift @{$manager->fetch_by_ticket_name($tk)};
-    $self->DataObjects($self->new_object('Tools', {'_ticket' => $ticket_object} , $self->__data));
-  } 
+  $self->DataObjects($self->new_object($self->hub->action || 'Tools', $tools_data, $data) || $self->new_object('Tools', $tools_data, $data));
 }
 
 1;
