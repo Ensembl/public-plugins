@@ -39,6 +39,7 @@ Ensembl.Panel.Masthead = Ensembl.Panel.Masthead.extend({
       $.ajax(this.accountsRefreshURL, {
         'context': this,
         'data': this.accountsBookmarkData,
+        'type': 'POST',
         'success': function(html) {
           this.elLk.accountHolder.html(html);
           this.elLk.accountLink = this.el.find('._accounts_link').on({
