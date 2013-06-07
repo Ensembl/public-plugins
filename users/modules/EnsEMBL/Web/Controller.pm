@@ -15,7 +15,7 @@ sub update_user_history {
   
   if ($referer_type && $param) {
     my @type_history = grep $_->object eq $referer_type, @{$r_user->histories};
-    my $value        = shift || $referer->{'params'}->{$param}->[0];
+    my $value        = shift || $referer->{'params'}->{$param}->[0] or return;
     my $name         = $self->species_defs->get_config($referer_species, 'SPECIES_COMMON_NAME');
     
     if ($referer_type =~ /^(Gene|Transcript)$/) {
