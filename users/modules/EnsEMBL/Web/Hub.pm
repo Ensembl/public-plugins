@@ -8,7 +8,8 @@ use EnsEMBL::Web::User;
 
 use constant CSRF_SAFE_PARAM => 'rxt';
 
-sub PREFERENCES_PAGE { return shift->url({'type' => 'Account', 'action' => 'Preferences', 'function' => ''}); }
+sub PREFERENCES_PAGE  { return shift->url({'type' => 'Account', 'action' => 'Preferences', 'function' => ''}); }
+sub users_available   { return 1; }
 
 sub new {
   ## @overrides
@@ -18,8 +19,8 @@ sub new {
   my $cookie  = delete $args->{'user_cookie'};
   my $self    = $class->__new($args);
 
-  $self->users_available(1);
-  $self->user = EnsEMBL::Web::User->new($self, $cookie) if $cookie;
+  $self->user = EnsEMBL::Web::User->new($self, $cookie) if $cookie && $cookie->value;
+
   return $self;
 }
 
@@ -58,13 +59,6 @@ sub get_favourite_species {
   my @favourites  = $user ? @{$user->favourite_species} : ();
 
   return @favourites ? \@favourites : $self->__get_favourite_species;
-}
-
-sub users_available {
-  ## Gets/sets a flag to tell whether users plugin & user db is present
-  my $self = shift;
-  $self->{'_users_available'} = shift if @_;
-  return $self->{'_users_available'} || 0;
 }
 
 1;
