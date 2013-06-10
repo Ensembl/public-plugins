@@ -21,7 +21,7 @@ use warnings;
 
 use EnsEMBL::Web::DOM;
 use EnsEMBL::Web::Exceptions;
-use EnsEMBL::Admin::Tools::FileHandler qw(file_get_contents);
+use EnsEMBL::Web::Tools::FileHandler qw(file_get_contents);
 
 use Exporter qw(import);
 our @EXPORT     = qw(parse_file file_to_htmlnodes);

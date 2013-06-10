@@ -3,8 +3,8 @@ package EnsEMBL::Web::Object::Documents;
 use strict;
 
 use EnsEMBL::Web::Exceptions;
+use EnsEMBL::Web::Tools::FileHandler qw(file_get_contents file_put_contents);
 use EnsEMBL::Admin::Tools::DocumentParser qw(parse_file);
-use EnsEMBL::Admin::Tools::FileHandler qw(file_get_contents file_put_contents);
 
 use base qw(EnsEMBL::Web::Object);
 
