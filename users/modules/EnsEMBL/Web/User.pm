@@ -33,7 +33,7 @@ sub organisation          { shift->_goto_rose_object('organisation', @_);   }
 sub country               { shift->_goto_rose_object('country', @_);        }
 sub status                { shift->_goto_rose_object('status', @_);         }
 sub create_record         { shift->_goto_rose_object('create_record', @_);  }
-                          
+
 sub logins                { shift->_goto_rose_object('logins');             }
 sub records               { shift->_goto_rose_object('records');            }
 sub bookmarks             { shift->_goto_rose_object('bookmarks');          }
@@ -43,7 +43,7 @@ sub newsfilters           { shift->_goto_rose_object('newsfilters');        }
 sub specieslists          { shift->_goto_rose_object('specieslists');       }
 sub histories             { shift->_goto_rose_object('histories');          }
 sub favourite_tracks      { shift->_goto_rose_object('favourite_tracks');   }
-                          
+
 sub is_admin_of           { shift->_goto_rose_object('is_admin_of', @_);    }
 sub is_member_of          { shift->_goto_rose_object('is_member_of', @_);   }
 
@@ -64,9 +64,7 @@ sub new {
     '_cookie' => $cookie
   }, $class;
 
-  if (my $user_id = $cookie->value) {
-    $self->authorise({'id' => $user_id});
-  }
+  $self->authorise({'id' => $cookie->value});
 
   return $self;
 }
@@ -224,7 +222,7 @@ sub get_all_das {
     $by_name{ $das->logic_name } = $das;
     $by_url { $das->full_url   } = $das;
   }
-  
+
   return wantarray ? ( \%by_name, \%by_url ) : \%by_name;
 }
 
