@@ -17,6 +17,8 @@ sub new {
 
   my $cookie  = delete $args->{'user_cookie'};
   my $self    = $class->__new($args);
+
+  $self->users_available(1);
   $self->user = EnsEMBL::Web::User->new($self, $cookie) if $cookie;
   return $self;
 }
@@ -56,6 +58,13 @@ sub get_favourite_species {
   my @favourites  = $user ? @{$user->favourite_species} : ();
 
   return @favourites ? \@favourites : $self->__get_favourite_species;
+}
+
+sub users_available {
+  ## Gets/sets a flag to tell whether users plugin & user db is present
+  my $self = shift;
+  $self->{'_users_available'} = shift if @_;
+  return $self->{'_users_available'} || 0;
 }
 
 1;
