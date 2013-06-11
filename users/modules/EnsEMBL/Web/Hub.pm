@@ -19,7 +19,7 @@ sub new {
   my $cookie  = delete $args->{'user_cookie'};
   my $self    = $class->__new($args);
 
-  $self->user = EnsEMBL::Web::User->new($self, $cookie) if $cookie && $cookie->value;
+  $self->user = EnsEMBL::Web::User->new($self, $cookie) if $cookie;
 
   return $self;
 }
