@@ -64,7 +64,9 @@ sub new {
     '_cookie' => $cookie
   }, $class;
 
-  $self->authorise({'id' => $cookie->value});
+  if (my $user_id = $cookie->value) {
+    $self->authorise({'id' => $user_id});
+  }
 
   return $self;
 }
