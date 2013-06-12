@@ -17,16 +17,16 @@ use ORM::EnsEMBL::DB::Accounts::Manager::User;
 
 use base qw(EnsEMBL::Web::Object);
 
-sub caption               { return 'Personal Data';                                                       }
-sub short_caption         { return 'Personal Data';                                                       }
-sub default_action        { return $_[0]->hub->user ? 'Preferences' : 'Login';                            }
+sub caption               { return 'Personal Data';                                                                   }
+sub short_caption         { return 'Personal Data';                                                                   }
+sub default_action        { return $_[0]->hub->users_available ? $_[0]->hub->user ? 'Preferences' : 'Login' : 'Down'; }
 
-sub openid_providers      { return $_[0]->deepcopy($_[0]->hub->species_defs->OPENID_PROVIDERS);           }
-sub get_root_url          { return $_[0]->{'_root_url'} ||= $_[0]->hub->species_defs->ENSEMBL_BASE_URL;   }
+sub openid_providers      { return $_[0]->deepcopy($_[0]->hub->species_defs->OPENID_PROVIDERS);                       }
+sub get_root_url          { return $_[0]->{'_root_url'} ||= $_[0]->hub->species_defs->ENSEMBL_BASE_URL;               }
 
-sub new_login_account     { return ORM::EnsEMBL::DB::Accounts::Manager::Login->create_empty_object($_[1]);        }
-sub fetch_login_account   { return ORM::EnsEMBL::DB::Accounts::Manager::Login->get_with_user($_[1]);              }
-sub fetch_user_by_email   { return ORM::EnsEMBL::DB::Accounts::Manager::User->get_by_email($_[1]);                }
+sub new_login_account     { return ORM::EnsEMBL::DB::Accounts::Manager::Login->create_empty_object($_[1]);            }
+sub fetch_login_account   { return ORM::EnsEMBL::DB::Accounts::Manager::Login->get_with_user($_[1]);                  }
+sub fetch_user_by_email   { return ORM::EnsEMBL::DB::Accounts::Manager::User->get_by_email($_[1]);                    }
 
 sub fetch_membership {
   ## Fetches a membership object with the given id
