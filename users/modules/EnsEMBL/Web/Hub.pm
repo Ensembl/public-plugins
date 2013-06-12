@@ -18,10 +18,10 @@ sub new {
   ## Overrides the constructor to initiate user object by reading the user cookie
   my ($class, $args) = @_;
 
-  my $cookie  = delete $args->{'user_cookie'};
-  my $self    = $class->__new($args);
+  my $cookie    = delete $args->{'user_cookie'};
+  my $self      = $class->__new($args);
 
-  if ($cookie && $self->users_available) {
+  if ($self->users_available && $cookie) { # always check users_available
     try {
       $self->user = EnsEMBL::Web::User->new($self, $cookie) if $cookie;
     } catch {
@@ -74,7 +74,7 @@ sub users_available {
   ## @param Flag value if setting
   ## @return 0 or 1 accordingly
   my $self = shift;
-
+  
   $self->{'_users_available'} = shift if @_;
 
   unless (exists $self->{'_users_available'}) {
