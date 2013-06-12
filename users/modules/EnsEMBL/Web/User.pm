@@ -56,6 +56,7 @@ sub new {
   ## @constructor
   ## @param Hub
   ## @param Cookie object
+  ## @exception ORMException if thrown by authorise method
   my ($class, $hub, $cookie) = @_;
 
   my $self = bless {
@@ -78,7 +79,7 @@ sub authorise {
   ##  - id          : User id (required only if 'user' key is missing)
   ##  - set_cookie  : Flag if on, will set the user cookie
   ## @return 1 if successful, 0 otherwise
-  ## @exception InvalidArgumentException - if neither user nor id is provided
+  ## @exception ORMException if db could not connect, InvalidArgumentException if neither user nor id is provided
   my ($self, $params) = @_;
   my $user = delete $params->{'user'};
 
