@@ -79,25 +79,16 @@ sub redirect_after_login {
   ## User if logged in through AJAX, the page is refreshed instead of dynamically changing the page contents (there are many things that can be different if you are logged in)
   ## @param Rose user object
   ## @note Only call this method once login verification is done
-  my ($self, $user)   = @_;
-  my $hub             = $self->hub;
-  my $object          = $self->object;
-  my $site            = $hub->species_defs->ENSEMBL_SITE_URL;
-  my $users_available = $hub->users_available;
+  my ($self, $user) = @_;
+  my $hub           = $self->hub;
+  my $object        = $self->object;
+  my $site          = $hub->species_defs->ENSEMBL_SITE_URL;
 
   # return to login page if cookie not set
-  if ($users_available) {
-    my $authorisation = 0;
-    try {
-      $authorisation = $hub->user->authorise({'user' => $user, 'set_cookie' => 1});
-    } catch {
-      $users_available = $hub->users_available(0);
-    };
-    return $self->redirect_login(MESSAGE_UNKNOWN_ERROR) if $users_available && !$authorisation;
-  }
+  return $self->redirect_login(MESSAGE_UNKNOWN_ERROR) unless $hub->user->authorise({'user' => $user, 'set_cookie' => 1});
 
   # redirect
-  if ($hub->is_ajax_request || !$users_available) {
+  if ($hub->is_ajax_request) {
     my $url = $hub->referer;
        $url = $url->{'external'} ? $site : $url->{'absolute_url'};
     return $self->ajax_redirect($url, {}, '', 'page'); # this just closes the popup and refreshes the page
