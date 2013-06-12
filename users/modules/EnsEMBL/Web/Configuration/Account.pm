@@ -11,8 +11,9 @@ sub SECURE_PAGES {
 }
 
 sub set_default_action {
-  my $self = shift;
-  $self->{'_data'}{'default'} = $self->hub->user ? 'Preferences' : 'Login';
+  my $self  = shift;
+  my $hub   = $self->hub;
+  $self->{'_data'}{'default'} = $hub->users_available ? $hub->user ? 'Preferences' : 'Login' : 'Down';
 }
 
 sub user_tree { return 1; }
