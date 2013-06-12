@@ -60,6 +60,13 @@ Ensembl.Panel.Masthead = Ensembl.Panel.Masthead.extend({
               }
             }
           }).find('a').on('click', hideDropdown).end();
+          
+          this.elLk.accountHolder.find('._accounts_no_userdb').helptip().on({
+            'click': function(event) {
+              event.preventDefault();
+            }
+          });
+          
         },
         'dataType': 'html'
       });
