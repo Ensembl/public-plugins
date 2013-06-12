@@ -27,9 +27,13 @@ sub tree_cache_key {
   ## for non logged-in are defferent
   ## but we cache both:
   my $class = ref $self;
-  my $key = ($self->hub->user)
-             ? "::${class}::TREE::USER"
-             : "::${class}::TREE";
+  my $hub   = $self->hub;
+  my $key   = $hub->users_available
+    ? $hub->user
+      ? "::${class}::TREE::USER"
+      : "::${class}::TREE"
+    : "::${class}::TREE::NOUSERDB"
+  ;
 
   ## If $user was passed this is for
   ## user_populate_tree (this user specific tree)
