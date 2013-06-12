@@ -22,25 +22,21 @@ sub init {
 }
 
 sub content {
-  my $self = shift;
+  my $self  = shift;
+  my $hub   = $self->hub;
 
-  return $self->hub->user
-    ? sprintf('<div class="_account_holder"><div class="account-loading">Loading&hellip;</div><form action="/Ajax/accounts_dropdown">%s%s%s</form></div>',
-        map sprintf('<input type="hidden" name="%s" value="%s" />', $_, encode_entities(uri_escape($self->{'_bookmark_data'}{$_}))), keys %{$self->{'_bookmark_data'}})
-    : $self->content_no_user
-  ;
-}
-
-sub content_no_user {
-  my $self = shift;
-  return sprintf('<a class="constant modal_link account-link _accounts_no_user" href="%s" title="Login/Register">Login/Register</a>',  $self->hub->url({qw(type Account action Login)}));
+  return sprintf('<div class="_account_holder"><div class="account-loading">Loading&hellip;</div><form action="/Ajax/accounts_dropdown">%s</form></div>', $hub->users_available && $hub->user
+    ? join('', map sprintf('<input type="hidden" name="%s" value="%s" />', $_, encode_entities(uri_escape($self->{'_bookmark_data'}{$_}))), keys %{$self->{'_bookmark_data'}})
+    : ''
+  );
 }
 
 sub content_ajax {
-  my $self      = shift;
-  my $hub       = $self->hub;
-  my $user      = $hub->user;
-  my $bookmarks = $user ? $user->bookmarks : [];
+  my $self            = shift;
+  my $hub             = $self->hub;
+  my $users_available = $hub->users_available;
+  my $user            = $users_available ? $hub->user : undef;
+  my $bookmarks       = $user ? $user->bookmarks : [];
 
   return $user
     ? sprintf('<a class="constant _accounts_link account-link" href="%s"><span class="acc-email">%s</span><span class="acc-arrow"><span>&#9660;</span><span class="selected">&#9650;</span></a>
@@ -76,7 +72,10 @@ sub content_ajax {
         ) : '',
         $hub->url({qw(type Account action Logout)})
       )
-    : $self->content_no_user
+    : sprintf('<a class="constant account-link _accounts_no_user%s" href="%s" title="%s">Login/Register</a>', $users_available
+      ? (' modal_link', $self->hub->url({qw(type Account action Login)}), 'Login/Register')
+      : (' _accounts_no_userdb', '#', 'User login functionality is temporarily not available.')
+    )
   ;
 }
 
