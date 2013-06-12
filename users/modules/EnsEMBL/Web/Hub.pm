@@ -2,14 +2,16 @@ package EnsEMBL::Web::Hub;
 
 use strict;
 
-use EnsEMBL::Web::Tools::MethodMaker (copy => {map {$_ => "__$_"} qw(new url get_favourite_species)});
+use ORM::EnsEMBL::DB::Accounts::Manager::User;
 use EnsEMBL::Web::User;
+use EnsEMBL::Web::Exceptions;
 # use EnsEMBL::Web::Configuration::Account;
+
+use EnsEMBL::Web::Tools::MethodMaker (copy => {map {$_ => "__$_"} qw(new url get_favourite_species)});
 
 use constant CSRF_SAFE_PARAM => 'rxt';
 
 sub PREFERENCES_PAGE  { return shift->url({'type' => 'Account', 'action' => 'Preferences', 'function' => ''}); }
-sub users_available   { return 1; }
 
 sub new {
   ## @overrides
@@ -19,7 +21,13 @@ sub new {
   my $cookie  = delete $args->{'user_cookie'};
   my $self    = $class->__new($args);
 
-  $self->user = EnsEMBL::Web::User->new($self, $cookie) if $cookie;
+  if ($cookie && $self->users_available) {
+    try {
+      $self->user = EnsEMBL::Web::User->new($self, $cookie) if $cookie;
+    } catch {
+      $self->users_available(0);
+    };
+  }
 
   return $self;
 }
@@ -59,6 +67,26 @@ sub get_favourite_species {
   my @favourites  = $user ? @{$user->favourite_species} : ();
 
   return @favourites ? \@favourites : $self->__get_favourite_species;
+}
+
+sub users_available {
+  ## Gets/Sets the flag to check whether users db is connected or not
+  ## @param Flag value if setting
+  ## @return 0 or 1 accordingly
+  my $self = shift;
+
+  $self->{'_users_available'} = shift if @_;
+
+  unless (exists $self->{'_users_available'}) {
+    $self->{'_users_available'} = 1;
+    try {
+      ORM::EnsEMBL::DB::Accounts::Manager::User->object_class->init_db->connect;
+    } catch {
+      $self->{'_users_available'} = 0;
+    }
+  }
+
+  return $self->{'_users_available'};
 }
 
 1;
