@@ -82,7 +82,7 @@ sub authorise {
   unless ($user) {
 
     throw exception('UserException::InvalidArgumentException', 'At least one out of user id and rose user object is required to initialise EnsEMBL::Web::User object') unless $params->{'id'};
-    $user = EnsEMBL::ORM::Rose::Manager::User->get_by_id($params->{'id'});
+    $user = EnsEMBL::ORM::Rose::Manager::User->get_by_id($params->{'id'}) if $self->hub->species_defs->has_userdb;
   }
 
   return 0 unless $user;

@@ -17,6 +17,8 @@ sub content_ajax {
   my $user      = $hub->user;
   my $bookmarks = $user ? $user->bookmarks : [];
 
+  return '' unless $hub->species_defs->has_userdb;
+
   return $user
     ? sprintf('<a class="constant _accounts_link account-link" href="%s"><span class="acc-email">%s</span><span class="acc-arrow"><span>&#9660;</span><span class="selected">&#9650;</span></a>
         <div class="_accounts_dropdown accounts-dropdown">
