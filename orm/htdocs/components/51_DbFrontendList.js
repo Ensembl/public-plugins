@@ -47,6 +47,7 @@ Ensembl.DbFrontendList = {
               .children().wrapAll('<div class="dbf-list-view-response">').end()
               .appendTo(handle.form.empty())).first().before('<a class="_dbf_cancel" href="#Close">Close</a>');
             ;
+            this.initForm();
           }
         });
       });
