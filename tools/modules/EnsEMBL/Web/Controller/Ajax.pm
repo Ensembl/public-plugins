@@ -4,11 +4,11 @@ package EnsEMBL::Web::Controller::Ajax;
 
 use strict;
 
-use EnsEMBL::Web::Object::Tools;
 use EnsEMBL::Web::ToolsConstants;
 
 sub get_tools_object {
-  return new EnsEMBL::Web::Object::Tools;
+  my ($self, $hub) = @_;
+  return $self->new_object('Tools', {}, {'_hub' => $hub});
 }
 
 sub blastconfig {
@@ -51,7 +51,7 @@ sub blastinput {
   my $db_name = $hub->param('db_name'); 
   my $method  = $hub->param('blastmethod'); 
 
-  my $object = $self->get_tools_object;
+  my $object = $self->get_tools_object($hub);
   my $blast_object = $object->generate_analysis_object('Blast');
 
   my ($databases, $methods, $selected_db, $selected_me ) = $blast_object->get_blast_form_params(
@@ -85,7 +85,7 @@ sub blastinput {
 sub jobstatus {
   my ($self, $hub) = @_;
   my @ticket_names = $hub->param('ticket');
-  my $object = $self->get_tools_object;
+  my $object = $self->get_tools_object($hub);
   my $options = {};
 
   foreach  my $ticket_name (@ticket_names){
@@ -101,7 +101,7 @@ sub jobstatus {
 sub deletejob {
   my ($self, $hub) = @_;
   my $ticket_id = $hub->param('ticket');
-  my $object = $self->get_tools_object;  
+  my $object = $self->get_tools_object($hub);  
   $object->delete_ticket($ticket_id);
 
   my $options = {};
