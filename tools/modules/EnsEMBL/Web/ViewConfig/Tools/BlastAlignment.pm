@@ -34,7 +34,7 @@ sub form {
   $self->add_form_element($other_markup_options{'display_width'});
 
   $self->add_form_element({
-    type   => 'DropDown',
+    type   => 'dropdown',
     select => 'select',
     name   => 'line_numbering',
     label  => 'Line numbering',
@@ -50,7 +50,7 @@ sub form {
 
 
   $self->add_form_element({
-    type    => 'DropDown',
+    type    => 'dropdown',
     select  => 'select',
     name    => 'align_display',
     label   => 'Alignments display',

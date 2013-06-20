@@ -26,7 +26,7 @@ sub form {
 
 
   $self->add_form_element({
-    type    => 'DropDown',
+    type    => 'dropdown',
     select  => 'select',
     name    => 'hsp_display',
     label   => 'Alignment Markup',
@@ -38,7 +38,7 @@ sub form {
   });
 
   $self->add_form_element({
-    type    => 'DropDown',
+    type    => 'dropdown',
     select  => 'select',
     name    => 'line_numbering',
     label   => 'Line numbering',

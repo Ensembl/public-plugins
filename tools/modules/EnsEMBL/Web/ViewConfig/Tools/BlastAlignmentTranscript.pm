@@ -39,7 +39,7 @@ sub form {
 
 
   $self->add_form_element({
-    type    => 'DropDown',
+    type    => 'dropdown',
     select  => 'select',
     name    => 'align_display',
     label   => 'Alignments display',

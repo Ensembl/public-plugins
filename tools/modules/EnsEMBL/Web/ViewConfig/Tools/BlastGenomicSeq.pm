@@ -45,7 +45,7 @@ sub form {
   $self->add_form_element($gene_markup_options{'flank3_display'});
 
   $self->add_form_element({
-    type    => 'DropDown',
+    type    => 'dropdown',
     select  => 'select',
     name    => 'orientation',
     label   => 'Orientation',
@@ -57,7 +57,7 @@ sub form {
   });
 
   $self->add_form_element({
-    type    => 'DropDown',
+    type    => 'dropdown',
     select  => 'select',
     name    => 'hsp_display',
     label   => 'Alignment Markup',
@@ -71,7 +71,7 @@ sub form {
   $self->add_form_element($general_markup_options{'exon_ori'});
 =cut
   $self->add_form_element({
-    type     => 'DropDown',
+    type     => 'dropdown',
     select   => 'select',
     name     => 'match_display',
     label    => 'Display Matches',

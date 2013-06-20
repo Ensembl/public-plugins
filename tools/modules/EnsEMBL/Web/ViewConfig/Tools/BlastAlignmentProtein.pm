@@ -25,7 +25,7 @@ sub form {
   my $self = shift;
 
   $self->add_form_element({
-    type   => 'DropDown',
+    type   => 'dropdown',
     select => 'select',
     name   => 'display_width',
     label  => 'Number of amino acids per row',
@@ -35,7 +35,7 @@ sub form {
   });
 
   $self->add_form_element({
-    type    => 'DropDown',
+    type    => 'dropdown',
     select  => 'select',
     name    => 'align_display',
     label   => 'Alignments display',
