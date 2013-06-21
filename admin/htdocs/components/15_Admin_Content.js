@@ -4,10 +4,12 @@
  */
 
 Ensembl.Panel.Content = Ensembl.Panel.Content.extend({
+
   init: function() {
     this.base();
     var fnEls = {
-      tabSelector: $('._tabselector', this.el)
+      tabSelector: this.el.find('._tabselector'),
+      enstinymce: this.el.find('textarea._tinymce')
     };
     
     $.extend(this.elLk, fnEls);
@@ -18,6 +20,7 @@ Ensembl.Panel.Content = Ensembl.Panel.Content.extend({
       }
     }
   },
+
   tabSelector: function() {
     var buttons = $('._ts_button', this.elLk.tabSelector);
     var tabs    = $('._ts_tab',    this.elLk.tabSelector);
@@ -31,5 +34,9 @@ Ensembl.Panel.Content = Ensembl.Panel.Content.extend({
     }).first().trigger('click');
   
     $('._ts_loading', this.elLk.tabSelector).removeClass('spinner ts-spinner');
+  },
+
+  enstinymce: function() {
+    this.elLk.enstinymce.enstinymce();
   }
 });
