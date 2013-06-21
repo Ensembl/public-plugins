@@ -155,6 +155,11 @@ sub show_fields {
       'label'     => 'Does it need affy mapping?',
       'values'    => [{'value' => 'Y', 'caption' => 'Yes'}, {'value' => 'N', 'caption' => 'No'}]
     },
+    biomart_affected  => {
+      'type'      => 'dropdown',
+      'label'     => 'Does it affect Biomart?',
+      'values'    => [{'value' => 'Y', 'caption' => 'Yes'}, {'value' => 'N', 'caption' => 'No'}]
+    },
     variation_pos_changed => {
       'type'      => 'dropdown',
       'label'     => 'Has any variation position changed? (density features implications)',
