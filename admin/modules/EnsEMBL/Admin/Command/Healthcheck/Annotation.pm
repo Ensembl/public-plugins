@@ -14,7 +14,7 @@ sub process {
 
   for (@$reports) {
 
-    my $annotation = $_->annotation || $_->annotation($object->rose_manager(qw(Production Annotation))->create_empty_object);
+    my $annotation = $_->annotation || $_->annotation($object->rose_manager(qw(Healthcheck Annotation))->create_empty_object);
 
     $annotation->comment($hub->param('comment'));
     $annotation->action($hub->param('action'));
