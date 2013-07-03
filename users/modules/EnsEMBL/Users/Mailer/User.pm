@@ -19,9 +19,9 @@ sub send_verification_email {
 
   my $sitename  = $self->site_name;
   my $user      = $login->user;
-  my $provider  = $login->provider || '';
-  my $identity  = $self->hub->object->login_has_trusted_provider($login) ? $login->email : $login->identity;
   my $type      = $login->type;
+  my $provider  = $login->provider || '';
+  my $identity  = $type eq 'openid' ? $self->hub->object->login_has_trusted_provider($login) ? $login->email : $login->identity : '';
   my $function  = $type eq 'openid' ? 'Verify' : 'Confirm';
   my $email     = $user->email;
   my $url       = $self->url({
