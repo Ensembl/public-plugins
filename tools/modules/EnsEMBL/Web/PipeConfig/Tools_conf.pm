@@ -12,6 +12,9 @@ our $species_defs = EnsEMBL::Web::SpeciesDefs->new;
 sub default_options { #add in ticket db config here somewhere
   my ($self) = @_;
   return {
+
+    %{ $self->SUPER::default_options },               # inherit other stuff from the base class
+
     'ensembl_cvs_root_dir' => $species_defs->ENSEMBL_SERVERROOT,  
 
     'pipeline_name' =>  'ensembl_blast',  
@@ -71,7 +74,7 @@ sub pipeline_analyses {
           'repeatmask_bin_dir'    => $self->o('repeat_mask_bin_dir'),
         },
       -hive_capacity => 15, # workers that run at a time per analysis 
-      -rc_name  => 'blastest',
+      -rc_name  => 'blasttest',
    },
   ];
     
