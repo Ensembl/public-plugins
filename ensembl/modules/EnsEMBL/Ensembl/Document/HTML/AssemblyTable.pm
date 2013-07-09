@@ -3,7 +3,7 @@ package EnsEMBL::Ensembl::Document::HTML::AssemblyTable;
 use strict;
 
 use EnsEMBL::Web::Hub;
-use EnsEMBL::Web::DBSQL::WebsiteAdaptor;
+use EnsEMBL::Web::DBSQL::ArchiveAdaptor;
 
 sub render {
   my ($class, $request) = @_;
@@ -16,7 +16,7 @@ sub render {
 
   my $first_archive = [sort keys %$archives]->[0];
 
-  my $adaptor = EnsEMBL::Web::DBSQL::WebsiteAdaptor->new($hub);
+  my $adaptor = EnsEMBL::Web::DBSQL::ArchiveAdaptor->new($hub);
 
   ## get assembly info for each species
   my $species = $adaptor->fetch_all_species;
