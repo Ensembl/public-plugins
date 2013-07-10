@@ -4,7 +4,6 @@ use strict;
 
 use base qw(EnsEMBL::Web::Component);
 
-
 sub select_ticket {
   my ($self, $type, $error) = @_;
   
@@ -44,7 +43,7 @@ sub get_download_link {
 
 sub failure_message {
   my ($self, $ticket) = @_;
-  my $analysis = $ticket->job->job_name;  
+  my $analysis = $ticket->job_type->caption;  
   my $error = $self->object->error_message($ticket); 
 
   return $self->_error(
