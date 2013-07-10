@@ -1,20 +1,13 @@
 package EnsEMBL::Web::Object::Blast;
 
-### NAME: EnsEMBL::Web::Object::Blast
-### Object for accessing Ensembl Blast back end 
-
-### STATUS: Under development
-
-### DESCRIPTION
 ## The aim is to create an object which can be updated to
 ## use a different queuing mechanism, without any need to
 ## change the user interface. Where possible, therefore,
-## public methods should accept the same arguments and 
+## public methods should accept the same arguments and
 ## return the same values
 
 use strict;
 use warnings;
-no warnings "uninitialized";
 
 use base qw(EnsEMBL::Web::Object::Tools);
 
@@ -29,13 +22,13 @@ our $VERBOSE = 1;
 
 sub new {
   my $class = shift;
-  my $self = $class->SUPER::new( @_ );
+  my $self  = $class->SUPER::new( @_ );
   $self->{'_analysis'}    = {};
   $self->{'_species'}     = ();
   $self->{'_seqs'}        = {};
   $self->{'_methods'}     = '';
   $self->{'_database'}    = {};
-  $self->{'_input_type'}  = ''; 
+  $self->{'_input_type'}  = '';
   $self->{'_error'}       = {};
   $self->{'_description'} = '';
   $self->{'_config'} = {};
@@ -46,19 +39,20 @@ sub new {
 sub create_jobs {
   my ($self, $ticket) = @_;
 
-  my $hive_adaptor = $self->hive_adaptor;
-  my $job_adaptor = $hive_adaptor->get_AnalysisJobAdaptor;
-  my $analysis_name = $ticket->job->job_type;
-  my $hive_analysis = $hive_adaptor->get_AnalysisAdaptor->fetch_by_logic_name_or_url($analysis_name);    
-  my @hive_jobs = ();
+  my $hive_adaptor  = $self->hive_adaptor;
+  my $job_adaptor   = $hive_adaptor->get_AnalysisJobAdaptor;
+  my $analysis_name = $ticket->job_type->name;
+  my $hive_analysis = $hive_adaptor->get_AnalysisAdaptor->fetch_by_logic_name_or_url($analysis_name);
 
+  my @hive_jobs;
   my $sequences;
-  foreach (keys %{$self->{'_seqs'}}){
+
+  foreach (keys %{$self->{'_seqs'}}) {
     $sequences->{$_} = $self->{'_seqs'}->{$_}->seq;
   }
 
   # one Hive job per species, for now allow multiple query sequences
-  foreach my $species ( @{$self->{'_species'}} ){ 
+  foreach my $species ( @{$self->{'_species'}} ) {
     my $dba = $self->hub->database('core', $species);
     my $dbc = $dba->dbc;
 
@@ -68,12 +62,12 @@ sub create_jobs {
       database      => $self->{'_database'}{$species}{'file'},
       method        => $self->{'_methods'},
       seqs          => $sequences,
-      query_type    => $self->{'_input_type'}, 
+      query_type    => $self->{'_input_type'},
       workdir       => $self->workdir,
       config        => $self->{'_config'},
       species       => $species,
       database_type => $self->{'_database'}{$species}{'type'},
-      dba           => { 
+      dba           => {
         -user             => $dbc->username,
         -host             => $dbc->host,
         -port             => $dbc->port,
@@ -93,21 +87,21 @@ sub create_jobs {
         -dbname           => $self->species_defs->multidb->{'DATABASE_WEB_TOOLS'}{'NAME'}
       }
     );
-    
+
     $input{mask} = 1 if $self->{'_repeat_mask'};
- 
-    # Pass job to ensembl-hive 
+
+    # Pass job to ensembl-hive
     my $job_id = $job_adaptor->CreateNewJob(
       -input_id => \%input,
       -analysis => $hive_analysis,
     );
-
+    
     my $job_division = {
       species => $species,
       type    => $self->{'_database'}{$species}{'type'},
     };
 
-    my $serialised_division = $self->serialise($job_division);  
+    my $serialised_division = $self->serialise($job_division);
     push (@hive_jobs, {ticket_id => $ticket->ticket_id, sub_job_id => $job_id, job_division => $$serialised_division }) if $job_id != 0;
   }
 
@@ -120,7 +114,6 @@ sub create_jobs {
 }
 
 ##----------------------------------------------------------- BLAST set up
-sub species_defs  { return new EnsEMBL::Web::SpeciesDefs; }
 
 sub get_blast_form_params {
   my $self    = shift;
@@ -140,7 +133,7 @@ sub get_blast_form_params {
   unless ($db_name =~/^\w+/ ){ $db_name = $default_db; }
 
   my $method_conf = $species_defs->multi_val('ENSEMBL_BLAST_METHODS');
-  foreach my $method (sort keys %$method_conf ){
+  foreach my $method (sort keys %$method_conf ) {
     next if $method eq 'BLAT'; # disable until have working
     my $method_query_type = $method_conf->{$method}->[1];
     my $method_db_type = $method_conf->{$method}->[2];
@@ -162,7 +155,7 @@ sub get_blast_form_params {
 
   my $conf = $species_defs->get_config($species , $me ."_DATASOURCES");
   foreach my $db (sort keys %$conf ){
-    next if $db =~/^DATASOURCE/; 
+    next if $db =~/^DATASOURCE/;
     my $label = $conf->{$db}->{'label'};
     push @databases, { value => $db, caption => $label };
     $valid_db = 1 if $db eq $db_name;
@@ -214,57 +207,55 @@ sub blast_datasources_by_species {
   return $datasources;
 }
 
-
-
-##----------------------------------------------------------- Form input validation
+#############################
+### Form input validation ###
+#############################
 sub validate_form_input {
   my $self = shift;
-  
+
   $self->process_species;
   $self->process_input_sequence;
-  $self->process_input_type;  
+  $self->process_input_type;
   $self->process_method;
   $self->process_database;
-  $self->process_description; 
+  $self->process_description;
   $self->process_config_params;
 
   return keys %{$self->{'_error'}} ? $self->{'_error'} : undef;
 }
 
 sub process_species {
-  my $self = shift;
-  my @spp;
-  my $species = $self->param('species'); # at the moment form allows selection of single species - this will change
-  if ($self->species_defs->valid_species($species) ){
-    push @spp, $species;
-  } else {
-    $self->{'_error'}{'species'} = 'Please enter a valid species'; 
-    return;    
-  }
+  my $self          = shift;
+  my @species       = $self->param('species');
+  my @valid_species = $self->hub->species_defs->valid_species(@species);
 
-  $self->{'_species'} = \@spp;  
-  return;
+  if (scalar @species != scalar @valid_species) {
+    $self->{'_error'}{'species'} = 'Please enter a valid species';
+    return;
+  } else {
+    $self->{'_species'} = \@valid_species;
+  }
 }
 
 sub process_input_sequence {
-  my $self = shift; 
-  my $i = 0; 
-  my $length = 0;
-  
-  if ( my $file = $self->param('file') ){ 
+  my $self    = shift;
+  my $i       = 0;
+  my $length  = 0;
+
+  if ( my $file = $self->param('file') ) {
     my $file_contents;
-    { 
+    {
       local $/ = undef;
       $file_contents = <$file>;
-    } 
+    }
     close $file;
 
     my $fh = IO::String->new($file_contents);
-    my $seq_io = Bio::SeqIO->new(-fh=>$fh );  
-    while( my $seq = $seq_io->next_seq ){ 
+    my $seq_io = Bio::SeqIO->new(-fh=>$fh );
+    while( my $seq = $seq_io->next_seq ){
       $length += $seq->length;
-      $i++; 
-      $self->add_seq($seq, $i, $length, 'file'); 
+      $i++;
+      $self->add_seq($seq, $i, $length, 'file');
       last if exists $self->{'_error'}{'file'};
     }
     $self->hub->delete_param('file');
@@ -277,16 +268,16 @@ sub process_input_sequence {
     my $seq_io = Bio::SeqIO->new(-fh=>$fh );
     while( my $bioseq = $seq_io->next_seq){
       $length += $bioseq->length;
-      $i++; 
-      $self->add_seq($bioseq, $i, $length, 'query_sequence'); 
+      $i++;
+      $self->add_seq($bioseq, $i, $length, 'query_sequence');
       last if exists $self->{'_error'}{'query_sequence'};
-    }    
+    }
   }
   elsif (my $id = $self->param('retrieve_accession')){
     my $seq;
 
     if ($id =~/^ENS[GTP]\d{11}?/ || $id =~/^ENS\w\w\w[GTP]\d{11}?/){ # Have Ensembl sequence
-      my ($species, $object_type, $db_type) = Bio::EnsEMBL::Registry->get_species_and_object_type($id);      
+      my ($species, $object_type, $db_type) = Bio::EnsEMBL::Registry->get_species_and_object_type($id);
       my $adaptor = $self->hub->get_adaptor('get_' . $object_type .'Adaptor', $db_type, $species);
       my $seq_object = $adaptor->fetch_by_stable_id($id);
 
@@ -313,7 +304,7 @@ sub process_input_sequence {
       }
     }
 
-    if ($seq =~/^\w+|^\>/){ 
+    if ($seq =~/^\w+|^\>/){
       my $fh = IO::Scalar->new(\$seq);
       my $seq_io = Bio::SeqIO->new(-fh=>$fh );
       while( my $bioseq = $seq_io->next_seq){
@@ -323,34 +314,34 @@ sub process_input_sequence {
         $self->add_seq($bioseq, $i, $length, 'query_sequence');
         last if exists $self->{'_error'}{'query_sequence'};
       }
-    } 
+    }
   }
   else {
     $self->{'_error'}{'file'} = 'No query sequences have been entered';
     return;
-  }  
+  }
 }
 
 sub process_input_type {
   my $self = shift;
   my $input_type =  $self->param('query');
-  # check that input type specified by form matches sequences provided 
+  # check that input type specified by form matches sequences provided
   my @seqs = values %{$self->{'_seqs'}};
-  foreach my $seq (@seqs){ 
-    if ($input_type ne $seq->alphabet){ 
+  foreach my $seq (@seqs){
+    if ($input_type ne $seq->alphabet){
       $self->{'_error'}{'query'} = "The query sequence " . $seq->id ." does not match the selected query sequence type";
       return '';
     }
   }
 
-  $self->{'_input_type'} = $input_type;    
-  
+  $self->{'_input_type'} = $input_type;
+
 }
 
 sub process_method {
   my $self = shift;
 
-  my $method = $self->param('blastmethod'); 
+  my $method = $self->param('blastmethod');
   if ( $method eq 'Blat'){
     $self->{'_analysis'} = $method;
     $self->{'_methods'} = $method;
@@ -375,8 +366,8 @@ sub process_method {
 
 sub process_database {
   my $self = shift;
-  my $db_key = $self->param('db_name'); 
-  my $sp = $self->param('species'); # Needs expanding to allow multiple species to be selected 
+  my $db_key = $self->param('db_name');
+  my $sp = $self->param('species'); # Needs expanding to allow multiple species to be selected
   my $me_key = $self->param('blastmethod')."_DATASOURCES";
   my $datasources = $self->species_defs->get_config( $sp, $me_key ) || warn "Nothing in config $sp: $me_key";
   ref( $datasources ) eq 'HASH' || warn "Nothing in config $sp: $me_key";
@@ -386,7 +377,7 @@ sub process_database {
   my %db = (
     $sp => $db_str,
   );
-   
+
   $self->{'_database'} = \%db;
 }
 
@@ -395,17 +386,17 @@ sub process_description {
 
   my $desc = $self->param('description') || undef;
 
-  if (defined $desc){    
+  if (defined $desc){
     $self->{'_description'} = $desc;
     return;
   }
 
-  my $search_type = $self->param('blastmethod'); 
+  my $search_type = $self->param('blastmethod');
   my $species_name = $self->hub->species_defs->get_config($self->param('species'),'SPECIES_COMMON_NAME');
   my $db_type = $self->param('db_name');
-  my ($dbs, $methods, $default_db, $default_me) = $self->get_blast_form_params; 
+  my ($dbs, $methods, $default_db, $default_me) = $self->get_blast_form_params;
   my ($db_name) = map  { $_->{'caption'} } grep { $_->{'value'} eq $db_type } @{$dbs};
- 
+
   my $ticket_summary = sprintf ( '%s search against %s %s database.  ',
                               uc($search_type),
                               $species_name,
@@ -417,10 +408,10 @@ sub process_description {
 
 sub process_config_params {
   my $self = shift;
-  my $options; 
+  my $options;
 
   my %config_options =  EnsEMBL::Web::ToolsConstants::BLAST_CONFIGURATION_OPTIONS;
-  
+
   my $options_and_defaults = $config_options{'options_and_defaults'};
 
   foreach my $category ( keys %$options_and_defaults ){
@@ -430,9 +421,9 @@ sub process_config_params {
         my $value = $self->param($opt);
         my $type = $config_options{$category}{$opt}{'type'};
 
-        if ($value eq 'yes' && $opt eq 'repeat_mask'){ 
+        if ($value eq 'yes' && $opt eq 'repeat_mask'){
           $self->{'_repeat_mask'} = '1';
-          next;  
+          next;
         }
 
         #check have a valid value
@@ -446,23 +437,23 @@ sub process_config_params {
         } elsif($type eq 'checkbox'){
           if ($opt eq 'ungapped'){
             $options->{$opt} = '' unless $value eq 'no';
-          } else {           
-          $options->{$opt} = $value ?  $value : 'no';          
-          } 
-        } elsif( $type eq 'string') { 
+          } else {
+          $options->{$opt} = $value ?  $value : 'no';
+          }
+        } elsif( $type eq 'string') {
           next if $value eq 'START-END';
           my $temp = $value;
           my ($start, $end ) = split(/-/, $temp);
           my @seqs = values %{$self->{'_seqs'}};
-          my $seq_count = scalar @seqs;  
+          my $seq_count = scalar @seqs;
           my $query_seq = shift @seqs;
           my $query_length = $query_seq->length;
-          
+
           # Check values are in correct format
-          if ($value !~/^\d+-\d+$/ ) { 
+          if ($value !~/^\d+-\d+$/ ) {
             $self->{'_error'}{'config_' .$opt} =  "Please specify location on the query sequence in the format 'START-END'";
             return;
-          } elsif ( $seq_count != 1 ){ 
+          } elsif ( $seq_count != 1 ){
             $self->{'_error'}{'config_'.$opt} =  "This option is only valid for a single query sequence";
             return;
           } elsif ($start > $end ){
@@ -472,19 +463,19 @@ sub process_config_params {
             $self->{'_error'}{'config_'. $opt} =  "The coordinates you have entered are not valid for your query sequence";
             return;
           }
-        }  
+        }
       }
-    }    
+    }
   }
 
-  $self->{'_config'} = $options;  
+  $self->{'_config'} = $options;
 }
 
 
 sub add_seq {
   my ($self, $seq, $seq_count, $seq_length, $error_type)  = @_;
-  my $max_queries = 10; 
-  my $method = $self->param('method');
+  my $max_queries = 10;
+  my $method = $self->param('blastmethod');
   my %max_lengths = (
           DEFAULT => 200000 );
   my $max_length = $max_lengths{$method} || $max_lengths{DEFAULT};
@@ -496,7 +487,7 @@ sub add_seq {
   }
 
   # Check not exceeded number of input sequences or query length:
-  if ($seq_count > $max_queries){ 
+  if ($seq_count > $max_queries){
     return $self->{'_error'}{$error_type} =  "No queries submitted: ".
       "The maximum number of query sequences ($max_number) has been exceeded.";
   } elsif ($seq_length > $max_length){
@@ -504,18 +495,18 @@ sub add_seq {
       "The maximum length for a single query sequence ".
       "($max_length bp for $method) ".
       "has been exceeded";
-  }     
+  }
 
   # Get a unique ID
-  my $id = $seq->display_id() || 'Unknown';  
-  my $id_new = $id; 
-  my $i = 0; 
+  my $id = $seq->display_id() || 'Unknown';
+  my $id_new = $id;
+  my $i = 0;
   if ( $self->{'_seqs'}->{$id} ){
-    $i++; 
-    $id_new = $id.'_copy'.$i; 
+    $i++;
+    $id_new = $id.'_copy'.$i;
   }
-  $id = $id_new; 
-  $seq->display_id( $id ); 
+  $id = $id_new;
+  $seq->display_id( $id );
   $self->{'_seqs'}->{$id} = $seq;
 
   return $id;

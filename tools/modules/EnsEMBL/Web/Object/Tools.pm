@@ -2,19 +2,18 @@ package EnsEMBL::Web::Object::Tools;
 
 use strict;
 use warnings;
-no warnings "uninitialized";
 
-use EnsEMBL::Web::SpeciesDefs;
 use Storable qw(nfreeze thaw);
 use IO::Compress::Gzip qw(gzip $GzipError);
 use IO::Uncompress::Gunzip qw(gunzip $GunzipError);
 use Bio::Root::IO;
-use Data::Dumper;
+
+use EnsEMBL::Web::SpeciesDefs;
 
 use base qw(EnsEMBL::Web::Object);
 
-sub caption { return 'Tools'; }
-sub short_caption { return "Tools"; }
+sub caption       { return 'Tools'; }
+sub short_caption { return 'Tools'; }
 
 sub long_caption {
   my $self = shift;
@@ -26,46 +25,50 @@ sub long_caption {
   );
 }
 
-sub session_id    { my $self = shift; return $self->hub->session->session_id || undef; }
-sub user_id       { my $self = shift; return $self->hub->user ? $self->hub->user->user_id : undef; }
-sub species_defs  { return new EnsEMBL::Web::SpeciesDefs; }
-
-sub ticket { my $self = shift; return $self->Obj->{'_ticket'} || undef;}
+sub session_id    { return $_[0]->hub->session->session_id || undef;              }
+sub user_id       { return $_[0]->hub->user ? $_[0]->hub->user->user_id : undef;  }
+sub species_defs  { return $_[0]->hub->species_defs;                              }
+sub ticket        { return $_[0]->Obj->{'_ticket'} || undef;                      }
 
 sub hive_adaptor {
+  ## Gets new or cached hive adaptor
+  ## @return Bio::EnsEMBL::Hive::DBSQL::DBAdaptor object
   my $self = shift;
-   
-  my $adaptor = Bio::EnsEMBL::Hive::DBSQL::DBAdaptor->new(
-    -user   => $self->species_defs->DATABASE_WRITE_USER,
-    -pass   => $self->species_defs->DATABASE_WRITE_PASS,
-    -host   => $self->species_defs->multidb->{'DATABASE_WEB_HIVE'}{'HOST'},
-    -port   => $self->species_defs->multidb->{'DATABASE_WEB_HIVE'}{'PORT'},
-    -dbname => $self->species_defs->multidb->{'DATABASE_WEB_HIVE'}{'NAME'},     
-  );
 
-  return $adaptor;
+  unless ($self->{'_hive_adaptor'}) {
+
+    my $sd      = $self->hub->species_defs;
+    my $hivedb  = $sd->multidb->{'DATABASE_WEB_HIVE'};
+
+    $self->{'_hive_adaptor'} = Bio::EnsEMBL::Hive::DBSQL::DBAdaptor->new(
+      -user   => $sd->DATABASE_WRITE_USER,
+      -pass   => $sd->DATABASE_WRITE_PASS,
+      -host   => $hivedb->{'HOST'},
+      -port   => $hivedb->{'PORT'},
+      -dbname => $hivedb->{'NAME'},
+    );
+  }
+
+  return $self->{'_hive_adaptor'};
 }
 
 sub create_ticket {
-  my $self = shift;
-
-  my $now = $self->get_time_now;
-  my $owner_id = $self->user_id ? 'user_'. $self->user_id : 'session_' . $self->session_id;
-  my $name = $self->get_unique_ticket_name; 
-  my $job_id = $self->rose_manager(qw(Tools Job))->get_job_id_by_name($self->{'_analysis'});
-  my $description = $self->{'_description'};
-  my $site_type = $self->species_defs->ENSEMBL_SITETYPE;
+  my $self        = shift;
+  my $hub         = $self->hub;
+  my $now         = $self->get_time_now;
+  my $user        = $hub->user;
 
   # First create and save ticket
-  my $ticket = $self->rose_manager(qw(Tools Ticket))->create_empty_object;
-  $ticket->ticket_name($name);
-  $ticket->owner_id($owner_id);
-  $ticket->job_type_id($job_id);
-  $ticket->created_at($now);
-  $ticket->modified_at($now);
-  $ticket->status('Queued');
-  $ticket->site_type($site_type);
-  $ticket->ticket_desc($description);
+  my $ticket = $self->rose_manager(qw(Tools Ticket))->create_empty_object({
+    'owner_id'    => $user ? $user->user_id : $hub->session->session_id,
+    'owner_type'  => $user ? 'user' : 'session',
+    'job_type_id' => $self->rose_manager(qw(Tools JobType))->get_job_type_id_by_name($self->{'_analysis'}),
+    'ticket_name' => $self->get_unique_ticket_name,
+    'ticket_desc' => $self->{'_description'},
+    'created_at'  => $now,
+    'modified_at' => $now,
+    'site_type'   => $self->species_defs->ENSEMBL_SITETYPE
+  });
 
   # Then create analysis object - this contains params needed to run job
   # create serialised and gzipped version of the analysis object to store in ticket DB.
@@ -128,7 +131,7 @@ sub fetch_ticket_by_name {
   my ($self, $ticket_name) = @_;
   return unless $ticket_name;
 
-  my $ticket = shift @{$self->rose_manager(qw(Tools Ticket))->fetch_by_ticket_name($ticket_name)};
+  my $ticket = $self->rose_manager(qw(Tools Ticket))->fetch_ticket_by_name($ticket_name);
 
   if(!$ticket){$ticket = 'The requested ticket "'.$ticket_name.'" could not be found.'
     .' Please be aware that all tickets are deleted after 7 days unless you save'
@@ -144,7 +147,7 @@ sub check_submission_status {
 
   # Set ticket status to be that of the sub job that has progressed the least    
   my %status_priority = (
-    'Queued'   => 0,
+    'Queued'    => 0,
     'Pending'   => 1,
     'Running'   => 2,
     'Parsing'   => 3,
@@ -156,14 +159,15 @@ sub check_submission_status {
   my $status;
   foreach my $job (@{$ticket->sub_job}){  
     my $display_status = $self->get_hive_job_status($job->sub_job_id);
-    $status = $status_priority{$display_status} << $status_priority{$status} ? $display_status : $status; 
+    $status = $status_priority{$display_status} << $status_priority{$status} ? $display_status : $status
+    ; 
   } 
 
   # update status in ticket db
   my $now = $self->get_time_now;
   $ticket->status($status);
   $ticket->modified_at($now);
-  if ($status eq 'Completed' || $status eq 'Failed'){
+  if ($status eq 'Completed' || $status eq 'Failed') {
     # If ticket is complete set all modified/created dates for data belonging to this ticket to be 
     # the same - that way all data will be in equivalent partitions and will be removed at same time
     $ticket->analysis->modified_at($now);
@@ -211,7 +215,7 @@ sub format_date {
 
 sub delete_ticket {
   my ($self, $ticket_id) = @_;
-  my $ticket = shift @{$self->rose_manager(qw(Tools Ticket))->fetch_by_ticket_name($ticket_id)};
+  my $ticket = $self->rose_manager(qw(Tools Ticket))->fetch_ticket_by_name($ticket_id);
   return unless $ticket;
 
   # First clean up any results files 
@@ -320,10 +324,10 @@ sub get_unique_ticket_name {
   my $self = shift;
   my $unique;
 
-  while (!$unique ){
+  while (!$unique ) {
    my $template = "BLA_XXXXXXXX";
    $template =~ s/X/['0'..'9','A'..'Z','a'..'z']->[int(rand 54)]/ge;  
-   unless (scalar @{$self->rose_manager(qw(Tools Ticket))->fetch_by_ticket_name($template)} > 0) {
+   unless ($self->rose_manager(qw(Tools Ticket))->fetch_ticket_by_name($template)) {
     $unique = $template;
    }
   }
@@ -652,4 +656,5 @@ sub get_target_object {
 
 sub valid_analysis { # check that the analysis param matches an analysis type we have
 }
+
 1;
