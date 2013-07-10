@@ -2,8 +2,6 @@ package EnsEMBL::Web::Component::Tools::JobsList;
 
 use strict;
 use warnings;
-no warnings 'uninitialized';
-
 
 use base qw(EnsEMBL::Web::Component::Tools);
 
@@ -14,25 +12,26 @@ sub _init {
 }
 
 sub content {
-  my $self = shift;
-  my $object = $self->object;
-  my $html ='<h2>Recent Jobs:</h2>';
-  my $toggle = '0';
+  my $self    = shift;
+  my $hub     = $self->hub;
+  my $object  = $self->object;
+  my $html    ='<h2>Recent Jobs:</h2>';
+  my $toggle  = '0';
   my $hide;
 
-  if ($self->hub->action eq 'BlastResults'){
-    $hide = $self->hub->get_cookie_value('toggle_job_status') eq 'closed';
+  if ($hub->action eq 'BlastResults') {
+    $hide = $hub->get_cookie_value('toggle_job_status') eq 'closed';
     $html = sprintf ('<h3><a rel ="job_status" class="toggle set_cookie %s" href="#">Recent Jobs:</a></h3>',
             $hide ? 'closed' : 'open'
             );
 
     $toggle = '1';
-  } 
+  }
 
   $html .= '<input type="hidden" class="panel_type" value="Jobs" />';
 
   my $tickets = $object->fetch_current_tickets;
-   
+
   my $table =  $self->new_table([], [], { toggleable => $toggle, class => ($hide ? ' hide' : ''), data_table => 'no_col_toggle', exportable => 0, sorting => [ 'created desc'], id => 'job_status'});
   $table->add_columns(
     { 'key' => 'analysis',  'title' => 'Analysis',    'align' => 'left',    sort => 'string' },
@@ -53,16 +52,16 @@ sub content {
       my $created = $ticket->created_at;
       my $formatted_date = $object->format_date($created);
       my $desc = $ticket->ticket_desc || '-';
-      my $analysis = $ticket->job->job_name;
+      my $analysis = $ticket->job_type->caption;
       my $status = $ticket->status =~ /Completed|Failed/ ? $ticket->status : $object->check_submission_status($ticket);
       my $class = $status =~ /Completed|Failed/ ? 'complete' : 'incomplete';  
       my $results_image = $status =~ /Failed/ ? 'alert.png' : 'eye.png';
       my $results_text = $status =~ /Failed/ ? 'Display reason for failure' : 'View Results';
-      my $results_url = $self->hub->url({ type => 'Tools', action => $analysis.'Results', tk => $ticket->ticket_name });
+      my $results_url = $hub->url({ type => 'Tools', action => $analysis.'Results', tk => $ticket->ticket_name });
       my $display_link = $ticket->status =~ /Completed|Failed/ ? undef : 'class=hidelink';
       my $disable_link = $ticket->status =~ /Completed|Failed/ ? undef : 'class=disabled';
-      my $save_icon = $self->hub->user =~/\d+/ ? 'save.png' : 'dis/save.png';
-      my $save_text = $self->hub->user =~/\d+/ ? 'Save job to user account' : 'Log in to save Job';
+      my $save_icon = $hub->user =~/\d+/ ? 'save.png' : 'dis/save.png';
+      my $save_text = $hub->user =~/\d+/ ? 'Save job to user account' : 'Log in to save Job';
 
       my $ticket_link = sprintf ('<a %s href="%s">%s</a>',
         $disable_link,
