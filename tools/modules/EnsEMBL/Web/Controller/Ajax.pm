@@ -16,9 +16,9 @@ sub blastconfig {
   my $method = $hub->param('blastmethod');
   my $config_options;
 
-  my %blast_constants = EnsEMBL::Web::ToolsConstants::BLAST_CONFIGURATION_OPTIONS; 
+  my %blast_constants = EnsEMBL::Web::ToolsConstants::BLAST_CONFIGURATION_OPTIONS;
   my $options_and_defaults = $blast_constants{'options_and_defaults'};
-    
+
   for my $type ('general', 'scoring', 'filters_and_masking'){
 
     foreach ( @{$options_and_defaults->{$type}}){
@@ -35,7 +35,7 @@ sub blastconfig {
       }
 
       my @settings = ($show, $default);
-      $config_options->{$option}  = \@settings;      
+      $config_options->{$option}  = \@settings;
     }
   }
 
@@ -43,34 +43,34 @@ sub blastconfig {
 }
 
 sub blastinput {
-  my ($self, $hub) = @_; 
+  my ($self, $hub) = @_;
 
-  my $species = $hub->param('species'); 
-  my $query   = $hub->param('query'); 
+  my $species = $hub->param('species');
+  my $query   = $hub->param('query');
   my $db_type = $hub->param('db_type');
-  my $db_name = $hub->param('db_name'); 
-  my $method  = $hub->param('blastmethod'); 
+  my $db_name = $hub->param('db_name');
+  my $method  = $hub->param('blastmethod');
 
   my $object = $self->get_tools_object($hub);
   my $blast_object = $object->generate_analysis_object('Blast');
 
   my ($databases, $methods, $selected_db, $selected_me ) = $blast_object->get_blast_form_params(
-    $species, $query, $db_type, $db_name, $method,     
+    $species, $query, $db_type, $db_name, $method,
   );
 
   my (@method_options, @database_options);
 
-  foreach my $me (@$methods){ 
+  foreach my $me (@$methods){
     my $selected = $me eq $selected_me ? 'selected="selected"' : '';
-    my $option = sprintf ('<option %s value="%s">%s</option>', $selected, $me, $me,);  
+    my $option = sprintf ('<option %s value="%s">%s</option>', $selected, $me, $me,);
     push @method_options, $option;
-  }   
+  }
 
   foreach my $db_info (@$databases){
-    my $db = $db_info->{'value'}; 
+    my $db = $db_info->{'value'};
     my $label = $db_info->{'caption'};
     my $selected = $db eq $selected_db ? 'selected="selected"' : '';
-    my $option = sprintf ('<option %s value="%s">%s</option>', $selected, $db, $label,);  
+    my $option = sprintf ('<option %s value="%s">%s</option>', $selected, $db, $label,);
     push @database_options, $option;
   }
 
@@ -88,20 +88,20 @@ sub jobstatus {
   my $object = $self->get_tools_object($hub);
   my $options = {};
 
-  foreach  my $ticket_name (@ticket_names){
-    my $ticket = $object->fetch_ticket_by_name($ticket_name);    
+  foreach  my $ticket_name (@ticket_names) { ## TODO - get tickets by user and session!!
+    my $ticket = $object->fetch_ticket_by_name($ticket_name);
     my $status = $object->check_submission_status($ticket);
 
     $options->{$ticket_name} = $status;
   }
 
-  print $self->jsonify($options);  
+  print $self->jsonify($options);
 }
 
 sub deletejob {
   my ($self, $hub) = @_;
   my $ticket_id = $hub->param('ticket');
-  my $object = $self->get_tools_object($hub);  
+  my $object = $self->get_tools_object($hub);
   $object->delete_ticket($ticket_id);
 
   my $options = {};
