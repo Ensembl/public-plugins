@@ -4,7 +4,7 @@ use strict;
 use warnings;
 no warnings 'uninitialized';
 
-use base qw(EnsEMBL::Web::Command);
+use base qw(EnsEMBL::Web::Command::UserData);
 
 
 sub process {
@@ -12,7 +12,7 @@ sub process {
   my $object          = $self->object;
   my $analysis_type   = $object->param('analysis');
   my $analysis_object = $object->generate_analysis_object($analysis_type);
-  my $input_error     = $analysis_object->validate_form_input;
+  my $input_error     = $analysis_object->validate_form_input($self);
 
   if ($input_error) {
 
