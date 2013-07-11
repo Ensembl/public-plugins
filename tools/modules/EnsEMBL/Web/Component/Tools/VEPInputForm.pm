@@ -173,15 +173,15 @@ ENST00000471631.1:c.28_33delTCGCGG),
       type => 'Text',
       name => 'text_'.$tmp_format,
       value => $example{$tmp_format},
-      label => 'Paste data'
+      label => 'Either paste data'
     }));
     
     $input_fieldset->append_child($div);
     $first = 0;
   }
   
-  $input_fieldset->add_field({ type => 'File', name => 'file', label => 'Upload file' });
-  $input_fieldset->add_field({ type => 'URL',  name => 'url',  label => 'Provide file URL', size => 30 });
+  $input_fieldset->add_field({ type => 'File', name => 'file', label => 'Or upload file' });
+  $input_fieldset->add_field({ type => 'URL',  name => 'url',  label => 'Or provide file URL', size => 30 });
 
   ## TODO - need to find out how to list a user's files
   #my $userdata = [];
