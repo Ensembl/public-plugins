@@ -127,11 +127,23 @@ sub populate_tree {
     [qw( idhistory         EnsEMBL::Web::Component::Tools::Blank )],
     { 'availability' => 1, 'concise' => 'ID History Converter' }
   ));
-  $data_conversion_menu->append($self->create_node('VEP', 'Variation Effect Predictor',
-    [qw( vepeffect         EnsEMBL::Web::Component::Tools::Blank )],
-    { 'availability' => 1, 'concise' => 'VEP' }
+  
+  
+  my $vep_node = $self->create_node('VEP', 'Variation Effect Predictor',
+    [qw( 
+      jobs         EnsEMBL::Web::Component::Tools::JobsList
+      vepeffect    EnsEMBL::Web::Component::Tools::VEPInputForm
+    )],
+    { 'availability' => 1, 'concise' => 'Variation Effect Predictor' }
+  );
+  
+  $vep_node->append($self->create_subnode('VEPResults', 'Results',
+    [qw(
+      summary     EnsEMBL::Web::Component::Tools::VEPResultsSummary
+      results     EnsEMBL::Web::Component::Tools::VEPResults
+    )],
+    { 'availability' => 1, 'concise' => 'VEP results' } 
   ));
-
 }
 
 sub user_populate_tree {
