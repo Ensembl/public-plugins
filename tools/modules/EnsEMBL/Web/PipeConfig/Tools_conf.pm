@@ -44,7 +44,11 @@ sub default_options { #add in ticket db config here somewhere
     'blast_matrix'            => $species_defs->ENSEMBL_BLAST_MATRIX,      
     'blast_index_files'       => $species_defs->ENSEMBL_BLAST_DATA_PATH,  
     'blast_dna_index_files'   => $species_defs->ENSEMBL_BLAST_DATA_PATH_DNA,
-    'repeat_mask_bin_dir'     => $species_defs->ENSEMBL_REPEATMASK_BIN_PATH  
+    'repeat_mask_bin_dir'     => $species_defs->ENSEMBL_REPEATMASK_BIN_PATH,
+    
+    'vep_cache_dir'           => $species_defs->ENSEMBL_VEP_CACHE,
+    'vep_script'              => $species_defs->ENSEMBL_VEP_SCRIPT,
+    'vep_perl_bin'            => $species_defs->ENSEMBL_VEP_PERL_BIN,
   };
 }
 
@@ -75,7 +79,19 @@ sub pipeline_analyses {
         },
       -hive_capacity => 15, # workers that run at a time per analysis 
       -rc_name  => 'blasttest',
-   },
+    },
+    {
+      -logic_name => 'VEP',
+      -module     => 'EnsEMBL::Web::RunnableDB::VEP::Submit',
+      -parameters => {
+        'ticket_db'     => $self->o('ticket_db'),
+        'vep_cache_dir' => $self->o('vep_cache_dir'),
+        'vep_script'    => $self->o('vep_script'),
+        'vep_perl_bin'  => $self->o('vep_perl_bin') || '/usr/bin/env perl',
+      },
+      -hive_capacity => 15,
+      -rc_name       => 'blasttest',
+    },
   ];
     
 }
