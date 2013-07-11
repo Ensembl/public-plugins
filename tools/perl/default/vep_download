@@ -1,0 +1,37 @@
+## Convert and download VEP output files 
+
+use CGI;
+
+use EnsEMBL::Web::TmpFile::Text;
+
+my $cgi    = new CGI;
+my %params;
+foreach my $p($cgi->param) {
+  foreach my $v($cgi->param($p)) {
+    $params{$p} = $v;
+  }
+}
+
+my $file   = $params{'file'};
+my $name   = $params{'name'} || $file;
+my $format = $params{'format'} || 'vcf';
+my $prefix = $params{'prefix'};
+## Strip any invalid characters from params to prevent downloading of arbitrary files!
+$prefix =~ s/\W//g;
+
+## Match only our tmp file path structure (NNN/N/N/NNNNNNN.nnn) !
+if ($file =~ m#^\w[\w/]*(?:\.\w{1,4})?$#) {
+  ## Get content
+  my $results_file = new EnsEMBL::Web::TmpFile::VcfTabix(filename => $file, prefix => $prefix);
+  
+  if ($results_file->exists) {
+    my $data = $results_file->content(%params);
+    
+    if ($data) {
+      $cgi->header(-type => 'text/plain', -attachment => $name);
+      print $data;
+    }
+  }
+}
+
+1;
