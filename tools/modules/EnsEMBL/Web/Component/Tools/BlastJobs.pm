@@ -17,9 +17,10 @@ sub content {
   my $object  = $self->object;
   my $html    ='<h2>Recent Jobs:</h2>';
   my $toggle  = '0';
+  my $action  = $self->hub->action;
   my $hide;
 
-  if ($hub->action eq 'BlastResults') {
+  if ($action eq 'BlastResults'){
     $hide = $hub->get_cookie_value('toggle_job_status') eq 'closed';
     $html = sprintf ('<h3><a rel ="job_status" class="toggle set_cookie %s" href="#">Recent Jobs:</a></h3>',
             $hide ? 'closed' : 'open'
@@ -53,15 +54,20 @@ sub content {
       my $formatted_date = $object->format_date($created);
       my $desc = $ticket->ticket_desc || '-';
       my $analysis = $ticket->job_type->caption;
+      
+      if($action ne 'Summary') {
+        next unless $analysis eq $action;
+      }
+      
       my $status = $ticket->status =~ /Completed|Failed/ ? $ticket->status : $object->check_submission_status($ticket);
       my $class = $status =~ /Completed|Failed/ ? 'complete' : 'incomplete';  
       my $results_image = $status =~ /Failed/ ? 'alert.png' : 'eye.png';
       my $results_text = $status =~ /Failed/ ? 'Display reason for failure' : 'View Results';
       my $results_url = $hub->url({ type => 'Tools', action => $analysis.'Results', tk => $ticket->ticket_name });
-      my $display_link = $ticket->status =~ /Completed|Failed/ ? undef : 'class=hidelink';
-      my $disable_link = $ticket->status =~ /Completed|Failed/ ? undef : 'class=disabled';
-      my $save_icon = $hub->user =~/\d+/ ? 'save.png' : 'dis/save.png';
-      my $save_text = $hub->user =~/\d+/ ? 'Save job to user account' : 'Log in to save Job';
+      my $display_link = $ticket->status =~ /Completed|Failed/ ? '' : 'class=hidelink';
+      my $disable_link = $ticket->status =~ /Completed|Failed/ ? '' : 'class=disabled';
+      my $save_icon = $hub->user && $hub->user =~/\d+/ ? 'save.png' : 'dis/save.png';
+      my $save_text = $hub->user && $hub->user =~/\d+/ ? 'Save job to user account' : 'Log in to save Job';
 
       my $ticket_link = sprintf ('<a %s href="%s">%s</a>',
         $disable_link,
