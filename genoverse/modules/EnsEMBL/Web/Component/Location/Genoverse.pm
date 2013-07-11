@@ -52,7 +52,7 @@ sub new_image {
   my $hub        = $self->hub;
   my $image_type = $hub->session->get_data(type => 'image_type', code => $self->id) || {};
   
-  return $image_type->{'static'} || $hub->param('static') || $hub->param('export') || !(grep $_->[2] eq 'genoverse', @{$hub->components}) ? $self->SUPER::new_image(@_) : EnsEMBL::Web::Document::GenoverseImage->new({
+  return $image_type->{'static'} || $hub->param('static') || $hub->param('export') || !(grep $_->[-1] eq 'genoverse', @{$hub->components}) ? $self->SUPER::new_image(@_) : EnsEMBL::Web::Document::GenoverseImage->new({
     hub          => $hub,
     slice        => $_[0],
     image_config => $_[1],

@@ -7,7 +7,7 @@ use EnsEMBL::Web::Tools::MethodMaker(copy => [ 'init', '_init' ]);
 sub init {
   my $self = shift;
   $self->_init;
-  $self->add_genoverse if grep $_->[2] eq 'genoverse', @{$self->hub->components};
+  $self->add_genoverse if grep $_->[-1] eq 'genoverse', @{$self->hub->components};
 }
 
 sub add_genoverse {
