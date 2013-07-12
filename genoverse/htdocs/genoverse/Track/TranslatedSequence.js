@@ -1,14 +1,15 @@
 // $Revision$
 
 Genoverse.Track.TranslatedSequence = Genoverse.Track.Sequence.extend({
+  chunkSize    : 600, // Must be divisible by 3 and 2
+  buffer       : 2,
+  codonTableId : 1,
+  codons       : {},
+  
   constructor: function (config) {
     this.base(config);
-    this.featuresHeight = (this.featureHeight + this.bumpSpacing) * 3 + this.spacing;
-    this.widestLabel    = this.lowerCase ? 'm' : 'M';
-    this.chunkSize      = 600; // Must be divisible by 3 and 2
-    this.buffer         = 2;
-    this.codonTableId   = 1;
-    this.codons         = {};
+    
+    this.widestLabel = this.lowerCase ? 'm' : 'M';
     
     var bases = this.lowerCase ? [ 't', 'c', 'a', 'g' ] : [ 'T', 'C', 'A', 'G' ];
     var x     = 0;
@@ -79,12 +80,18 @@ Genoverse.Track.TranslatedSequence = Genoverse.Track.Sequence.extend({
     23 : 'FF*LSSSSYY**CC*WLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG'   // Thraustochytrium Mitochondrial
   },
   
-  parseFeatures: function (data, bounds) {
+  parseData: function (data) {
     if (data.codonTableId) {
       this.codonTableId = data.codonTableId;
     }
     
-    return this.base(data, bounds);
+    this.base(data);
+  },
+  
+  positionFeature: function (feature, params) {
+    this.base(feature, params);
+    feature.position[params.scale].bottom = (feature.position[params.scale].H + this.spacing) * 3;
+    params.featureHeight = Math.max(params.featureHeight, feature.position[params.scale].bottom);
   },
   
   draw: function () {
@@ -92,19 +99,17 @@ Genoverse.Track.TranslatedSequence = Genoverse.Track.Sequence.extend({
     return this.base.apply(this, arguments);
   },
   
-  drawSequence: function (image, feature) {
-    var scaledStart = this.scale * feature.start - image.scaledStart;
-    var width       = this.scale * 3;
+  drawSequence: function (feature, context, scale) {
+    var width       = scale * 3;
     var drawLabels  = this.labelWidth[this.widestLabel] < width - 1;
-    var labelY      = (this.featureHeight + (this.lowerCase ? 0 : 1)) / 2;
     var phase       = 3;
     var start, id, codon, sequence, y, i;
     
     while (phase--) {
       for (i = phase - 2; i < feature.sequence.length; i += 3) {
-        start = scaledStart + i * this.scale;
+        start = feature.position[scale].X + i * scale;
         
-        if (start < -width || start > image.width) {
+        if (start < -width || start > context.canvas.width) {
           continue;
         }
         
@@ -123,16 +128,16 @@ Genoverse.Track.TranslatedSequence = Genoverse.Track.Sequence.extend({
         codon = typeof this.codons[sequence] === 'number' ? this.translate[this.codonTableId].charAt(this.codons[sequence]) : this.lowerCase ? 'x' : 'X';
         y     = phase * (this.featureHeight + this.bumpSpacing);
         
-        this.context.fillStyle = this.colors[codon] || this.colors['default'];
-        this.context.fillRect(start, y, width, this.featureHeight);
+        context.fillStyle = this.colors[codon] || this.colors['default'];
+        context.fillRect(start, y, width, this.featureHeight);
         
         if (!this.labelWidth[codon]) {
-          this.labelWidth[codon] = Math.ceil(this.context.measureText(codon).width) + 1;
+          this.labelWidth[codon] = Math.ceil(context.measureText(codon).width) + 1;
         }
         
         if (drawLabels) {
-          this.context.fillStyle = this.labelColors[codon] || this.labelColors['default'];
-          this.context.fillText(codon, start + (width - this.labelWidth[codon]) / 2, y + labelY);
+          context.fillStyle = this.labelColors[codon] || this.labelColors['default'];
+          context.fillText(codon, start + (width - this.labelWidth[codon]) / 2, y + this.labelYOffset);
         }
         
         this.drawn[id] = codon.toLowerCase() === 'x' ? 0 : 1;
@@ -167,7 +172,7 @@ Genoverse.Track.TranslatedSequence = Genoverse.Track.Sequence.extend({
       codon = typeof this.codons[seq] === 'number' ? this.translate[this.codonTableId].charAt(this.codons[seq]) : this.lowerCase ? 'x' : 'X';
       
       if (codon.toLowerCase() !== 'x' || !i) {
-        this.browser.makeMenu(this, this.menuFeature(feature, x, codon), e);
+        this.browser.makeMenu(this.menuFeature(feature, x, codon), e, this);
         break;
       }
     }

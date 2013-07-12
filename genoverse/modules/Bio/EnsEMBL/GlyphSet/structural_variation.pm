@@ -2,6 +2,18 @@ package Bio::EnsEMBL::GlyphSet::structural_variation;
 
 use strict;
 
-sub genoverse_attributes { return $_[1]->is_somatic && $_[1]->breakpoint_order ? ( breakpoint => 1, height => 12, spacing => 9, color => 'transparent' ) : (); }
+use Bio::EnsEMBL::Variation::Utils::Constants;
+
+use EnsEMBL::Web::Tools::MethodMaker(copy => [ 'depth', '_depth' ]);
+
+sub _labels { return $_[0]{'_labels'} ||= \%Bio::EnsEMBL::Variation::Utils::Constants::VARIATION_CLASSES; }
+sub depth   { return $_[0]->_depth if $_[0]{'container'}; }
+
+sub genoverse_attributes { 
+  my ($self, $f) = @_;
+  my %attrs = $f->is_somatic && $f->breakpoint_order ? ( breakpoint => 1, height => 12, spacing => 9 ) : ();
+  $attrs{'legend'} = $self->_labels->{$self->colour_key($f)}{'display_term'};
+  return %attrs;
+}
 
 1;

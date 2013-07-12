@@ -1,32 +1,26 @@
 // $Revision$
 
 Genoverse.Track.Static = {
+  'static'    : true,
+  bumpSpacing : 0,
+  fixedHeight : true,
+  unsortable  : true,
+  url         : false,
+  
   init: function () {
-    this['static']   = true;
-    this.unsortable  = true;
-    this.fixedHeight = true;
-    this.url         = false;
-    
     this.base();
     
-    this.image = new Genoverse.TrackImage({
-      track       : this,
-      container   : this.imgContainer.width(this.width),
-      width       : this.width,
-      background  : this.browser.colors.background,
-      start       : 0, 
-      scaledStart : 0
-    });
-    
+    this.image = $('<img>').appendTo(this.imgContainer);
     this.container.toggleClass('track_container track_container_static').html(this.imgContainer);
   },
   
-  reset: $.noop,
+  reset           : $.noop,
+  positionFeature : $.noop,
+  scaleFeatures   : function (features) { return features; },
   
   setWidth: function (width) {
     this.base(width);
     this.image.width = width;
-    this.imgContainer.width(width);
   },
   
   setScale: function () {
@@ -35,26 +29,30 @@ Genoverse.Track.Static = {
     this.imgContainer.show();
   },
   
-  makeImage: function (force) {
-    var features = this.getFeatures();
+  makeImage: function (params) {
+    var features = this.positionFeatures(this.findFeatures(params.start, params.end), params);
     
-    if (force || this.stringified !== features.toString()) {
-      this.image.makeImage().done(function (a) { $(a.target).prev().remove(); });
-      this.draw(this.image, features);
-      this.imgContainer.children(':last').show();
-      this.resize(this.featuresHeight);
+    if (features) {
+      var string = JSON.stringify(features);
+      
+      if (this.stringified !== string) {
+        params.width         = this.width;
+        params.featureHeight = this.height;
+        
+        this.render(features, this.image.data(params));
+        this.imgContainer.children(':last').show();
+        this.resize(this.height);
+        
+        this.stringified = string;
+      }
     }
     
-    this.stringified = features.toString();
-    
-    return true;
+    return $.Deferred().resolve();
   },
   
-  getFeatures: function () {
-    return this.base.apply(this, arguments) || []; // drops through to plugin
-  },
-  
-  scaleFeatures: function (features) {
-    return features;
+  draw: function (features, featureContext, labelContext, scale) {
+    for (var i = 0; i < features.length; i++) {
+      this.drawFeature(features[i], featureContext, labelContext, scale);
+    }
   }
 };

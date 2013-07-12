@@ -40,7 +40,7 @@ sub get_tracks {
     my $config = {
       id           => $track->id,
       name         => $track->get('name'),
-      order        => $track->get('order'),
+      order        => $track->get('order') + 0,
       depth        => $glyphset_object->depth,
       labelOverlay => $glyphset_object->label_overlay,
       url          => $hub->url({ type => 'Genoverse', action => 'fetch_features', function => $glyphset, config => $image_config->{'type'}, __clear => 1 }),

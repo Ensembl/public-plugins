@@ -4,8 +4,6 @@ package EnsEMBL::Web::ImageConfig::scrollable;
 
 use strict;
 
-use JSON;
-
 use base qw(EnsEMBL::Web::ImageConfig::Genoverse);
 
 sub init {
@@ -25,6 +23,7 @@ sub init {
     synteny
     variation
     somatic
+    functional
     decorations
     information
   ));
@@ -49,8 +48,8 @@ sub init {
   $_->set('display', 'gene_label') for grep $_->id =~ /transcript_[core|vega_update]/, $self->get_node('transcript')->nodes;
   
   $self->modify_configs([ 'transcript' ], { strand => 'r' });
-  $self->modify_configs([ 'variation', 'somatic' ], { display => 'off', menu => 'no' });
-  $self->modify_configs([ 'variation_feature_variation', 'variation_feature_structural', 'somatic_sv_feature', 'somatic_mutation_all' ], { menu => 'yes' });
+  $self->modify_configs([ 'variation', 'somatic', 'functional', 'fg_multi_wiggle_legend', 'fg_methylation_legend' ], { display => 'off', menu => 'no' });
+  $self->modify_configs([ map("variation_feature_$_", qw(variation structural_larger structural_smaller)), qw(somatic_sv_feature somatic_mutation_all regulatory_features) ], { menu => 'yes' });
   
   $self->init_genoverse;
 }

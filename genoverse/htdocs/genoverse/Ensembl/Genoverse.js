@@ -6,14 +6,14 @@
 
 Ensembl.Genoverse = Genoverse.extend({
   init: function () {
-    this.tracksById = {};
     this.base();
-    this.highlightRegion = $('<div class="selector highlight"></div>').appendTo(this.wrapper);
+    this.highlightRegion = $('<div class="selector highlight">').appendTo(this.wrapper);
     
     Ensembl.EventManager.register('genoverseMove', this, this.moveTo);
     
     // Ensure that the popState function from Genoverse fires before the one from Ensembl, so that nothing happens when hashChange is triggered from using browser forward/back buttons
     $(window).off('hashchange.ensembl popstate.ensembl').on('hashchange.ensembl popstate.ensembl', $.proxy(Ensembl.LayoutManager.popState, Ensembl.LayoutManager));
+    this.container.off('dblclick');
   },
   
   updateEnsembl: function () {
@@ -24,7 +24,7 @@ Ensembl.Genoverse = Genoverse.extend({
       var location = this.getLocation(this.start, this.end, Ensembl.location.length);
       var text     = Ensembl.thousandify(location.start) + '-' + Ensembl.thousandify(location.end); 
       
-      (this.updateEnsemblText = this.updateEnsemblText || $('h1.summary-heading, #masthead .Location.long_tab a')).html(function (i, html) {
+      (this.updateEnsemblText = this.updateEnsemblText || $('h1.summary-heading, #masthead .location.long_tab a')).html(function (i, html) {
         return html.replace(/^(.+:\s?).+/, '$1' + text);
       });
     }
@@ -36,7 +36,7 @@ Ensembl.Genoverse = Genoverse.extend({
     location = location || (this.prev.scale === this.scale ? this.getLocation(this.start, this.end, Ensembl.location.length) : this);
     
     if (Ensembl.location.start === location.start && Ensembl.location.end === location.end) {
-      return this.setHistory();
+      return;
     }
     
     this.updatingURL = true;
@@ -47,8 +47,6 @@ Ensembl.Genoverse = Genoverse.extend({
       .replace('__START__', location.start)
       .replace('__END__',   location.end)
     );
-    
-    this.setHistory();
   },
   
   popState: function () {
@@ -108,28 +106,20 @@ Ensembl.Genoverse = Genoverse.extend({
     Ensembl.genoverseScroll = false;
   },
   
-  moveTo: function (location, urlLocation, showHighlight) {
-    var browser = this;
-    var start   = Math.max(typeof start === 'number' ? location.start : parseInt(location.start, 10), 1);
-    var end     = Math.min(typeof end   === 'number' ? location.end   : parseInt(location.end,   10), this.chromosomeSize);
-    var left    = Math.round((start - this.start) * this.scale);
-    var width   = Math.round((end   - start + 1)  * this.scale);
-    
-    this.highlightRegion.css('visibility', 'hidden'); // scrolling causes the highlightRegion to be set to display: block, so hide it like this instead
+  moveTo: function (location, urlLocation) {
+    var start = Math.max(typeof location.start === 'number' ? location.start : parseInt(location.start, 10), 1);
+    var end   = Math.min(typeof location.end   === 'number' ? location.end   : parseInt(location.end,   10), this.chromosomeSize);
+    var left  = Math.round((start - this.start) * this.scale);
+    var width = Math.round((end   - start + 1)  * this.scale);
     
     this.startDragScroll();
-    this.dragging = false;
+    this.move((this.width - width) / 2 - left);
+    this.stopDragScroll(false);
+    this.checkTrackHeights();
     
-    this.move(null, (this.width - width) / 2 - left, 'fast', function () {
-      browser.stopDragScroll(null, false);
-      browser.checkTrackSize();
-      
-      browser.highlightRegion.css({ visibility: 'visible', display: showHighlight ? 'block' : 'none' });
-      
-      if (urlLocation) {
-        browser.updateURL(urlLocation === true ? browser.getLocation(start, end, Ensembl.location.length) : urlLocation);
-      }
-    });
+    if (urlLocation) {
+      this.updateURL(urlLocation === true ? this.getLocation(start, end, Ensembl.location.length) : urlLocation);
+    }
   },
   
   setLabels: function (tracks) {
@@ -148,24 +138,9 @@ Ensembl.Genoverse = Genoverse.extend({
     }
   },
   
-  setTracks: function (tracks, index) {
-    var browser = this;
-    
-    this.base(tracks, index);
-    
-    $.each(tracks || this.tracks, function () {
-      if (this.id) {
-        browser.tracksById[this.id] = this;
-      }
-      
-      if (this.ensembl !== true) {
-        this.extend(Genoverse.Track.Ensembl);
-        this.ensemblInit();
-      }
-    });
-    
-    this.setLabels(tracks || this.tracks);
-    
+  setTracks: function () {
+    var tracks = this.base.apply(this, arguments);
+    this.setLabels(tracks);
     return tracks;
   },
   
@@ -173,6 +148,32 @@ Ensembl.Genoverse = Genoverse.extend({
     var hover = $.map(tracks, function (track) { return (track.hoverLabel || [])[0]; });
     this.panel.elLk.hoverLabels = this.panel.elLk.hoverLabels.not($(hover).remove());
     this.base(tracks);
+  },
+  
+  updateTrackOrder: function (e, ui) {
+    this.base(e, ui);
+    
+    var track  = ui.item.data('track');
+    
+    $.ajax({
+      url  : '/' + Ensembl.species + '/Ajax/track_order',
+      type : 'post',
+      data : {
+        image_config : this.panel.imageConfig,
+        track        : track.id,
+        order        : track.order
+      }
+    });
+    
+    Ensembl.EventManager.triggerSpecific('changeTrackOrder', 'modal_config_' + this.panel.id.toLowerCase(), track.id, track.order);
+  },
+  
+  resetConfig: function () {
+    this.resetTrackHeights();
+    
+    for (var i = 0; i < this.tracks.length; i++) {
+      this.tracks[i].messageContainer.attr('class', 'message_container expanded');
+    }
   },
   
   resetTrackHeights: function () {
@@ -229,7 +230,7 @@ Ensembl.Genoverse = Genoverse.extend({
     var i      = this.tracks.length;
     
     while (i--) {
-      if (this.tracks[i].height && !(this.tracks[i] instanceof Genoverse.Track.Error || this.tracks[i] instanceof Genoverse.Track.Legend)) {
+      if (this.tracks[i].height && !(this.tracks[i] instanceof Genoverse.Track.Legend)) {
         height += this.tracks[i].height;
       }
     }
@@ -237,7 +238,7 @@ Ensembl.Genoverse = Genoverse.extend({
     this.selector.add(this.highlightRegion).height(height);
   },
   
-  makeMenu: function (track, feature, event) {
+  makeMenu: function (feature, event, track) {
     if (feature.menu || feature.title) {
       this.makeZMenu({ event: event, feature: feature, imageId: track.name }, [ 'zmenu', track.name, feature.id ].join('_').replace(/\W/g, '_'), track);
       event.originalEvent.hasFeature = true;
@@ -246,23 +247,23 @@ Ensembl.Genoverse = Genoverse.extend({
   
   stopDragSelect: function (e) {
     if (this.base(e) !== false && !e.originalEvent.hasFeature) {
-      var id    = 'zmenu_region_select';
       var left  = this.selector.position().left;
       var start = Math.round(left / this.scale) + this.start;
       var end   = Math.round((left + this.selector.outerWidth(true)) / this.scale) + this.start - 1;
           end   = end <= start ? start : end;
       
-      this.makeZMenu({ event: e, feature: {}, drag: { chr: this.chr, start: start, end: end, browser: this }, imageId: this.panel.id }, id);
+      this.makeZMenu({ event: e, feature: {}, drag: { chr: this.chr, start: start, end: end, browser: this }, imageId: this.panel.id }, 'zmenu_region_select');
     }
   },
   
   makeZMenu: function (params, id, track) {
     params.browser = this;
     params.coords  = {};
+    params.group   = params.feature.group || (track && track.depth === 1);
     
-    if (params.event.shiftKey && params.event.pageX) {
+    if ((params.event.shiftKey || params.group) && params.event.pageX && !params.drag) {
       var x         = (params.event.pageX - this.wrapper.offset().left + this.scaledStart) / this.scale;
-      var fuzziness = this.scale > 1 ? 0 : this.scale * 2;
+      var fuzziness = this.scale > 1 ? 0 : 2 / this.scale;
       
       params.coords.clickChr   = this.chr;
       params.coords.clickStart = Math.max(Math.floor(x - fuzziness), this.start);
@@ -271,17 +272,49 @@ Ensembl.Genoverse = Genoverse.extend({
       id += '_multi';
     }
     
-    if (!document.getElementById(id)) {
-      Ensembl.Panel.ZMenu.template.clone().attr('id', id).addClass('menu').appendTo(this.menuContainer);
+    var menu = $('#' + id);
+    
+    if (!menu.length) {
+      menu = Ensembl.Panel.ZMenu.template.clone().attr('id', id).addClass('menu').appendTo('body');
     }
     
     Ensembl.EventManager.trigger('addPanel', id, 'GenoverseMenu', undefined, undefined, params, 'showExistingZMenu');
+    
+    this.panel.zMenus[id] = 1;
+    this.menus = this.menus.add(menu);
+    
+    if (track) {
+      track.menus = track.menus.add(menu);
+    }
+    
+    menu = null;
   },
   
   toggleSelect: function (on) {
     this.base(on);
-    this.panel.elLk.dragging.removeClass('on off').addClass(this.dragAction === 'select' ? 'off' : 'on')
+    this.panel.elLk.dragging.removeClass('on off').addClass(this.dragAction === 'select' ? 'off' : 'on');
     this.panel.changeControlTitle('dragging');
+  },
+  
+  keydown: function (e) {
+    return e.which === 27 ? false : this.base(e); // Don't do anything on escape key press
+  },
+  
+  saveConfig: function () {
+    var track  = arguments[arguments.length - 1];
+    var config = {};
+    
+    if (typeof arguments[0] === 'string') {
+      config[arguments[0]] = arguments[1];
+    } else {
+      config = arguments[0];
+    }
+    
+    $.ajax({
+      url  : '/' + Ensembl.species + '/Genoverse/save_config',
+      type : 'post',
+      data : { config: JSON.stringify(config), image_config: this.panel.imageConfig, track: track instanceof Genoverse.Track ? track.id : '' }
+    });
   },
   
   die: function (error, el) {

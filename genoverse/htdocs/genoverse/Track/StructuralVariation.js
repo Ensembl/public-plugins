@@ -1,88 +1,157 @@
 // $Revision$
 
 Genoverse.Track.StructuralVariation = Genoverse.Track.extend({ 
-  config: {
-    height : 100,
-    bump   : true
+  height : 100,
+  
+  init: function () {
+    this.decorationHeight = this.featureHeight - 1;
+    this.breakpoints      = {};
+    this.base();
   },
   
-  positionFeatures: function (features, startOffset, imageWidth) {
-    var scale = this.browser.scale;
-    
-    if (scale < 1) {
-      var threshold = 1 / scale;
-          features  = $.grep(features, function (f) { return f.end - f.start > threshold || f.breakpoint; }).sort(function (a, b) { return a.start - b.start; });
+  setRenderer: function (renderer, permanent) {
+    if (renderer === 'compact') {
+      this.depth         = 1;
+      this.bump          = false;
+      this.featureHeight = 12;
+    } else {
+      this.depth         = false;
+      this.bump          = true;
+      this.featureHeight = 6;
     }
     
-    return this.base(features, startOffset, imageWidth);
+    if (this.urlParams.renderer !== renderer || permanent) {
+      this.base(renderer, permanent);
+    }
   },
   
-  decorateFeatures: function (image) {
-    var h           = this.featureHeight - 1;
-    var mid         = h / 2;
-    var breakpointH = h * 2;
-    var startOffset = image.scaledStart
-    var color, tag, feature, i, x, y, triangle, dir;
+  setScale: function () {
+    this.dataBuffer.start = this.dataBuffer.end = 9 / this.browser.scale;
+    this.base();
+  },
+  
+  insertFeature: function (feature) {
+    if (feature.breakpoint && !this.featuresById[feature.id]) {
+      this.breakpoints[feature.featureId] = this.breakpoints[feature.featureId] || [];
+      this.breakpoints[feature.featureId].push(feature);
+      feature.breakpoint = this.breakpoints[feature.featureId].length;
+    }
     
-    for (var color in this.decorations) {
-      this.context.fillStyle = color;
-      
-      if (this.context.strokeStyle !== this.decorations[color][0][1].border) {
-        this.context.strokeStyle = this.decorations[color][0][1].border;
-      }
-      
-      i = this.decorations[color].length;
-      
-      while (i--) {
-        feature    = this.decorations[color][i][0];
-        decoration = this.decorations[color][i][1];
-        triangle   = decoration.style.match(/^bound_triangle_(\w+)$/);
-        
-        if (triangle) {
-          dir = !!decoration.out === (triangle[1] === 'left');
-          x  = (dir ? feature.scaledEnd : feature.scaledStart) - startOffset + (dir ? 1 : -1) * (decoration.out ? mid : 0);
-          y  = feature.bounds[this.scale][0].y + 0.5;
-          
-          this.context.beginPath();
-          this.context.moveTo(x, y);
-          this.context.lineTo(x + ((triangle[1] === 'left' ? -1 : 1) * mid), y + mid);
-          this.context.lineTo(x, y + h);
-          this.context.closePath();
-          this.context.fill();
-          this.context.stroke();
-        } else if (decoration.style === 'somatic_breakpoint') {
-          x = decoration.start * this.scale - startOffset;
-          y = feature.bounds[this.scale][0].y + 0.5;
-          
-          this.context.beginPath();
-          this.context.moveTo(x - 0.5, y);
-          this.context.lineTo(x + 4.5, y);
-          this.context.lineTo(x + 2.5, y + breakpointH / 3);
-          this.context.lineTo(x + 5.5, y + breakpointH / 3);
-          this.context.lineTo(x,       y + breakpointH);
-          this.context.lineTo(x + 0.5, y + breakpointH * 2 / 3 - 1);
-          this.context.lineTo(x - 3.5, y + breakpointH * 2 / 3 - 1);
-          this.context.closePath();
-          this.context.fill();
-          this.context.stroke();
-          
-          feature.bottom[this.scale] = y + breakpointH + this.bumpSpacing;
-          
-          this.featurePositions.insert({ x: x + startOffset - 3.5, y: y, w: 9, h: breakpointH }, $.extend({}, feature, { breakpoint: true, sort: -feature.sort })); // make the whole thing clickable for a menu
-        } else if (decoration.style === 'rect') {
-          this.context.fillRect(decoration.start * this.scale - startOffset, feature.bounds[this.scale][0].y, Math.max((decoration.end - decoration.start + 1) * this.scale, 1), this.featureHeight);
+    this.base(feature);
+  },
+  
+  positionFeature: function (feature, params) {
+    var scale = params.scale;
+    var width = feature.position[scale].width;
+  
+    if (!feature.adjusted) {
+      for (var i = 0; i < feature.decorations.length; i++) {
+        if (feature.decorations[i].style.match(/^bound_triangle_(\w+)$/)) {
+          feature.position[scale].width += this.decorationHeight / 2;
         }
       }
+      
+      feature.adjusted = true;
     }
+    
+    this.base(feature, params);
+    
+    feature.position[scale].width = width;
   },
   
-  click: function (e) {
-    var x = e.pageX - this.container.parent().offset().left + this.browser.scaledStart;
-    var y = e.pageY - $(e.target).offset().top;
-    var f = this.featurePositions.search({ x: x, y: y, w: 1, h: 1 }).sort(function (a, b) { return a.sort - b.sort; })[0];
+  bumpFeature: function (bounds, feature, scale, tree) {
+    var i;
     
-    if (f && f.breakpoint !== 1) {
-      this.browser.makeMenu(this, f, e);
+    if (feature.breakpoint) {
+      if (bounds.y === 0 || feature.length > this.browser.length) {
+        this.base(bounds, feature, scale, tree);
+        
+        for (i = 0; i < this.breakpoints[feature.featureId].length; i++) {
+          this.breakpoints[feature.featureId][i].y = bounds.y / (bounds.h + this.bumpSpacing);
+        }
+      }
+      
+      return;
+    }
+    
+    for (i = 0; i < feature.decorations.length; i++) {
+      switch (feature.decorations[i].style) {
+        case 'bound_triangle_left'  : bounds.x -= this.decorationHeight / 2; break;
+        case 'bound_triangle_right' : bounds.w += this.decorationHeight / 2; break;
+        default                     : break;
+      }
+    }
+    
+    this.base(bounds, feature, scale, tree);
+  },
+  
+  drawFeature: function (feature, featureContext, labelContext, scale) {
+    if (!feature.breakpoint) {
+      return this.base(feature, featureContext, labelContext, scale);
+    }
+    
+    featureContext.fillStyle   = feature.color;
+    featureContext.strokeStyle = feature.border;
+    
+    var position    = feature.position[scale];
+    var breakpointH = this.decorationHeight * 2;
+    var x           = position.X;
+    var y           = position.Y + 0.5;
+    
+    featureContext.beginPath();
+    featureContext.moveTo(x - 0.5, y);
+    featureContext.lineTo(x + 4.5, y);
+    featureContext.lineTo(x + 2.5, y + breakpointH / 3);
+    featureContext.lineTo(x + 5.5, y + breakpointH / 3);
+    featureContext.lineTo(x,       y + breakpointH);
+    featureContext.lineTo(x + 0.5, y + breakpointH * 2 / 3 - 1);
+    featureContext.lineTo(x - 3.5, y + breakpointH * 2 / 3 - 1);
+    featureContext.closePath();
+    featureContext.fill();
+    featureContext.stroke();
+  },
+  
+  decorateFeature: function (feature, context, scale) {
+    var i           = feature.decorations.length;
+    var h           = this.decorationHeight;
+    var mid         = h / 2;
+    var position    = feature.position[scale];
+    var startOffset = position.start - position.X;
+    var spacing     = feature.spacing || this.featureSpacing;
+    var decoration, x, x2, y, triangle, dir;
+    
+    while (i--) {
+      decoration = feature.decorations[i];
+      triangle   = decoration.style.match(/^bound_triangle_(\w+)$/);
+      
+      context.fillStyle   = decoration.color;
+      context.strokeStyle = decoration.border;
+      
+      if (triangle) {
+        dir = !!decoration.out === (triangle[1] === 'left');
+        x   = Math.floor((dir ? position.X + position.width + spacing - Math.max(scale, 1) : position.X) + (dir ? 1 : -1) * (decoration.out ? mid : 0)) + 0.5;
+        x2  = x + ((triangle[1] === 'left' ? -1 : 1) * mid);
+        y   = position.Y + 0.5;
+        
+        if (Math.max(x, x2) > 0 && Math.min(x, x2) < this.width) {
+          context.beginPath();
+          context.moveTo(x, y);
+          context.lineTo(x2, y + mid);
+          context.lineTo(x, y + h);
+          context.closePath();
+          context.fill();
+          context.stroke();
+        }
+      } else if (decoration.style === 'rect') {
+        decoration.x     = decoration.start * scale - startOffset;
+        decoration.width = (decoration.end - decoration.start) * scale + Math.max(scale, 1);
+        
+        if (decoration.x < 0 || decoration.x + decoration.width > this.width) {
+          this.truncateForDrawing(decoration);
+        }
+        
+        context.fillRect(decoration.x, position.Y, decoration.width, this.featureHeight);
+      }
     }
   }
 });

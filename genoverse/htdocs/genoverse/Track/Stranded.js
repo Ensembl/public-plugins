@@ -9,7 +9,7 @@ Genoverse.Track.Stranded = {
     this.base(config);
     
     if (this.strand === -1) {
-      this.url        = false;
+      this.url        = 0; // falsy value but not actually false, so fails on === false checks (allows reset to work properly on renderer change)
       this._makeImage = this.makeReverseImage || this.makeImage;
       this.makeImage  = $.noop;
     } else {
@@ -31,28 +31,49 @@ Genoverse.Track.Stranded = {
     
     if (this.strand === 1) {
       this.reverseTrack.features = this.features;
+      
+      if (this.renderer) {
+        this.reverseTrack.featuresByRenderer   = this.featuresByRenderer;
+        this.reverseTrack.featuresByIdRenderer = this.featuresByIdRenderer;
+      }
     } else {
       this.features = this.forwardTrack.features;
+      
+      if (this.renderer) {
+        this.featuresByRenderer   = this.forwardTrack.featuresByRenderer;
+        this.featuresByIdRenderer = this.forwardTrack.featuresByIdRenderer;
+      }
     }
   },
   
-  positionFeatures: function (features, startOffset, imageWidth) {
-    var strand = this.featureStrand;
-    return this.base($.grep(features, function (feature) { return feature.strand === strand; }), startOffset, imageWidth);
+  setRenderer: function (renderer, permanent) {
+    if (this.urlParams.renderer !== renderer) {
+      var otherTrack = this.forwardTrack || this.reverseTrack;
+      
+      this.urlParams.renderer = otherTrack.urlParams.renderer = renderer;
+      this.dataRanges         = otherTrack.dataRanges         = {};
+      this.features           = otherTrack.features           = (this.featuresByRenderer[renderer]   = this.featuresByRenderer[renderer]   || new RTree());
+      this.featuresById       = otherTrack.featuresById       = (this.featuresByIdRenderer[renderer] = this.featuresByIdRenderer[renderer] || {});
+    }
+    
+    this.base(renderer, permanent);
   },
   
-  makeForwardImage: function () {
-    var args         = [].splice.call(arguments, 0);
-    var deferred     = $.Deferred();
-    var reverseTrack = this.reverseTrack;
+  findFeatures: function () {
+    var strand = this.featureStrand;
+    return $.grep(this.base.apply(this, arguments), function (feature) { return feature.strand === strand; });
+  },
+  
+  makeForwardImage: function (params) {
+    var rtn = this._makeImage(params);
     
-    $.when(this._makeImage.apply(this, args)).done(function (dfd) {
-      $.when(reverseTrack._makeImage.apply(reverseTrack, args.concat($.extend(true, {}, dfd.img)))).done(function (dfd2) {
-        deferred.resolve({ target: $.map([ dfd.target, dfd2.target ], function (t) { return t; }), img: [ dfd.img, dfd2.img ] }); // map flattens arrays if targets have labels and features
+    if (rtn && typeof rtn.done === 'function') {
+      rtn.done(function () {
+        this.reverseTrack._makeImage(params, rtn);
       });
-    });
-    
-    return deferred;
+    } else {
+      this.reverseTrack._makeImage(params, rtn);
+    }
   },
   
   remove: function () {
@@ -60,7 +81,7 @@ Genoverse.Track.Stranded = {
       var track = this.forwardTrack || this.reverseTrack;
       
       track.removing = true;
-      this.browser.removeTracks([ track ]);
+      this.browser.removeTrack(track);
     }
     
     this.base();

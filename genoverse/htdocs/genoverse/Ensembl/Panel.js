@@ -14,17 +14,17 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
     this.elLk.boundaries  = this.genoverse.labelContainer;
     this.elLk.controls    = $('.genoverse_controls', this.elLk.container).each(function () { $(this).prev().append(this); });
     this.elLk.autoHeight  = $('.auto_height',        this.elLk.controls);
-    this.elLk.resetHeight = $('.reset_height',       this.elLk.controls)
+    this.elLk.resetHeight = $('.reset_height',       this.elLk.controls);
     this.elLk.dragging    = $('.dragging',           this.elLk.controls);
     this.elLk.wheelZoom   = $('.wheel_zoom',         this.elLk.controls);
     
     this.initControls();
     
-    Ensembl.EventManager.register('changeTrackOrder',  this, this.sortUpdate);
-    Ensembl.EventManager.register('updatePanel',       this, this.update);
-    Ensembl.EventManager.register('imageResize',       this, this.resize);
-    Ensembl.EventManager.register('changeWidth',       this, this.resize);
-    Ensembl.EventManager.register('resetTrackHeights', this, function () { this.elLk.resetHeight.trigger('click'); });
+    Ensembl.EventManager.register('changeTrackOrder', this, this.sortUpdate);
+    Ensembl.EventManager.register('updatePanel',      this, this.update);
+    Ensembl.EventManager.register('imageResize',      this, this.resize);
+    Ensembl.EventManager.register('changeWidth',      this, this.resize);
+    Ensembl.EventManager.register('resetGenoverse',   this, function () { this.genoverse.resetConfig(); });
   },
   
   makeImageMap: function () {
@@ -53,22 +53,7 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
       return;
     }
     
-    this.genoverse.labelContainer.data('updateURL', '/' + Ensembl.species + '/Ajax/track_order').sortable('option', 'handle', '.handle').on('sortupdate', function (e, ui) {
-      var order  = panel.sortUpdate(ui.item);
-      var track  = ui.item[0].className.replace(' ', '.');
-      
-      $.ajax({
-        url  : $(this).data('updateURL'),
-        type : 'post',
-        data : {
-          image_config : panel.imageConfig,
-          track        : track,
-          order        : order
-        }
-      });
-      
-      Ensembl.EventManager.triggerSpecific('changeTrackOrder', 'modal_config_' + panel.id.toLowerCase(), track, order);
-    });
+    this.genoverse.labelContainer.sortable('option', 'handle', '.handle');
     
     if (this.genoverse.wheelAction === false) {
       this.genoverse.selectorControls.prepend('<button class="jumpHere">Jump here</button>');
@@ -85,17 +70,18 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
   initControls: function () {
     var panel     = this;
     var genoverse = this.genoverse;  
+    var buttons   = $('button', this.elLk.controls).on('mousedown', function () { genoverse.hideMessages(); });
     
-    $('button.scroll', this.elLk.controls).on({
+    buttons.filter('button.scroll').on({
       mousedown : function () { genoverse.startDragScroll(); },
       mouseup   : function () { genoverse.stopDragScroll();  }
     });
     
-    $('button.scroll_right', this.elLk.controls).mousehold(50, function () { genoverse.move(false, -100); });
-    $('button.scroll_left',  this.elLk.controls).mousehold(50, function () { genoverse.move(false,  100); });
+    buttons.filter('button.scroll_right').mousehold(50, function () { genoverse.move(-100); });
+    buttons.filter('button.scroll_left' ).mousehold(50, function () { genoverse.move(100);  });
     
-    $('button.zoom_in',  this.elLk.controls).on('click', function () { genoverse.zoomIn();  });
-    $('button.zoom_out', this.elLk.controls).on('click', function () { genoverse.zoomOut(); });
+    buttons.filter('button.zoom_in' ).on('click', function () { genoverse.zoomIn();  });
+    buttons.filter('button.zoom_out').on('click', function () { genoverse.zoomOut(); });
     
     this.elLk.dragging.on('click', function () {
       genoverse.setDragAction(panel.elLk.dragging.toggleClass('on off').hasClass('on') ? 'scroll' : 'select');
@@ -143,7 +129,9 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
       }
       
       return false;
-    }).not(':first').children(); 
+    }).not(':first').children();
+    
+    buttons = null;
   },
   
   changeControlTitle: function (el) {
@@ -163,25 +151,15 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
       return this.genoverse.updatingURL = false;
     }
     
-    var coords = this.genoverse.getCoords();
+    var coords = this.genoverse.getURLCoords();
     
     if (coords.chr !== this.genoverse.chr) {
       this.hashChangeReload = true;
       return this.base.apply(this, arguments); // TODO: do a complete reset without having to go get HTML again (currently, reset doesn't care about chr change)
     }
     
-    var start  = Math.max(this.genoverse.dataRegion.start, 1);
-    var end    = Math.min(this.genoverse.dataRegion.end,   this.genoverse.chromosomeSize);
-    var length = coords.end - coords.start + 1
-    
-    if (
-      (length === this.genoverse.length || length <= this.genoverse.minSize) &&
-      ((coords.start >= start && coords.end <= end) || (coords.start < start && coords.end >= start) || (coords.start <= end && coords.end > end))
-    ) {
-      this.genoverse.moveTo(coords);
-    } else {
-      this.genoverse.setRange(coords.start, coords.end, true, true);
-    }
+    this.genoverse.popState();
+    this.genoverse.updatingURL = false;
   },
   
   highlightImage: function (imageNumber, speciesNumber, start, end) {
@@ -209,48 +187,35 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
     this.genoverse.highlightRegion.css({ left: left, width: width, display: 'block' });
   },
   
-  sortUpdate: function (track, order) {
-    var tracks = this.genoverse.labelContainer.children(':not(.unsortable)');
-    var i, p, n, o;
+  sortUpdate: function (label, order) {
+    var labels = this.genoverse.labelContainer.children(':not(.unsortable)');
     
-    if (typeof track === 'string') {
-      i     = tracks.length;
-      track = tracks.filter('.' + track).detach();
-      
-      if (!track.length) {
-        return;
-      }
-      
-      while (i--) {
-        if ($(tracks[i]).data('order') < order && tracks[i] !== track[0]) {
-          track.insertAfter(tracks[i]);
-          break;
-        }
-      }
-      
-      if (i === -1) {
-        track.insertBefore(tracks[0]);
-      }
-      
-      this.genoverse.tracks[track.data('index')].container[track[0].previousSibling ? 'insertAfter' : 'insertBefore'](this.genoverse.tracks[$(track[0].previousSibling || track[0].nextSibling).data('index')].container);
-    } else {
-      p = track.prev().data('order') || 0;
-      n = track.next().data('order') || 0;
-      o = p || n;
-      
-      if (Math.floor(n) === Math.floor(p)) {
-        order = p + (n - p) / 2;
-      } else {
-        order = o + (p ? 1 : -1) * (Math.round(o) - o || 1) / 2;
+    label = labels.filter('.' + label).detach();
+    
+    if (!label.length) {
+      return;
+    }
+    
+    var track = label.data('track');
+    var i     = labels.length;
+    
+    while (i--) {
+      if ($(labels[i]).data('track').order < order && labels[i] !== label[0]) {
+        label.insertAfter(labels[i]);
+        break;
       }
     }
     
-    track.data('order', order);
-    this.genoverse.tracks[track.data('index')].order = order;
+    if (i === -1) {
+      label.insertBefore(labels[0]);
+    }
     
+    track.order = order;
+    
+    this.genoverse.sortTracks();
     this.removeShare();
     
-    tracks = track = null;
+    labels = label = null;
     
     return order;
   },
@@ -356,12 +321,17 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
   },
   
   updateTrackRenderer: function (trackName, renderer) {
-    var track = this.genoverse.tracksById[trackName];
+    var track      = this.genoverse.tracksById[trackName];
+    var otherTrack = track.reverseTrack || track.forwardTrack;
     
     if (renderer === 'off') {
-      this.genoverse.removeTracks([ track ]); // must call removeTracks rather than track.remove() to get the functionality of removing background colours
+      this.genoverse.removeTrack(track); // must call removeTrack rather than track.remove() to get the functionality of removing background colours
     } else {
       track.setRenderer(renderer, true);
+      
+      if (otherTrack) {
+        otherTrack.setRenderer(renderer, true);
+      }
     }
     
     this.removeShare();
@@ -385,7 +355,7 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
         
         if (json.add.length) {
           genoverse.addTracks(json.add);
-          this.elLk.hoverLabels = this.elLk.hoverLabels.add($(json.labels).appendTo('body'));
+          this.elLk.hoverLabels = this.elLk.hoverLabels.add($(json.labels.trim()).appendTo('body'));
           this.makeHoverLabels();
         }
         
@@ -436,7 +406,7 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
     this.elLk.exportMenu.add(this.elLk.resizeMenu).hide();
     this.elLk.imageResize.html(function (i) { var w = (i - 3) * 100 + width; $(this.parentNode.parentNode)[w < 500 ? 'hide' : 'show'](); return w + ' px'; });
     this.elLk.controls[width < 800 ? 'addClass' : 'removeClass']('narrow');
-    this.elLk.container.css({ width: width, height: '' });
+    this.elLk.container.css({ width: width, height: '' }).resizable('option', 'maxWidth', $(window).width() - this.el.offset().left);
     this.genoverse.setWidth(width);
   }
 });

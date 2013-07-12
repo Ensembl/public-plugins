@@ -58,10 +58,7 @@ Ensembl.Panel.GenoverseMenu = Ensembl.Panel.ZMenu.extend({
     this.base(loading);
     
     if (!loading) {
-      this.el.draggable('option', 'containment', 'parent').position({ of: this.event, my: 'left top', collision: 'flipfit none' });
-      
       var height = this.el.outerHeight() + this.el.position().top + 10;
-      
       this.el.parent().height(function (i, h) { return Math.max(h, height); });
     }
   },

@@ -1,40 +1,31 @@
 // $Revision$
 
 Genoverse.Track.Clone = Genoverse.Track.extend({
-  config: {
-    bump         : true,
-    labelOverlay : true
-  },
+  bump   : true,
+  labels : 'overlay',
   
-  decorateFeatures: function (image) {
-    var c           = this.colorOrder.length;
-    var startOffset = image.scaledStart;
-    var color, decoration, feature, i, x, y;
+  decorateFeature: function (feature, context, scale) {
+    var i = feature.decorations.length;
+    var decoration, x, y;
     
-    for (var color in this.decorations) {
-      this.context.fillStyle   = color;
-      this.context.strokeStyle = color;
+    while (i--) {
+      decoration = feature.decorations[i];
       
-      i = this.decorations[color].length;
+      context.fillStyle = context.strokeStyle = decoration.color;
       
-      while (i--) {
-        feature    = this.decorations[color][i][0];
-        decoration = this.decorations[color][i][1];
+      if (decoration.style === 'left-triangle') {
+        x = Math.round(feature.position[scale].X) + 0.5;
+        y = feature.position[scale].Y + 0.5;
         
-        if (decoration.style === 'left-triangle') {
-          x = Math.round(feature.scaledStart - startOffset) + 0.5;
-          y = feature.bounds[this.scale][0].y + 0.5;
-          
-          this.context.beginPath();
-          this.context.moveTo(x, y);
-          this.context.lineTo(x + Math.min(feature.scaledEnd - feature.scaledStart - 1, 3), y);
-          this.context.lineTo(x, y + 3);
-          this.context.closePath();
-          this.context.fill();
-          this.context.stroke();
-        } else if (decoration.style === 'rect') {
-          this.context.fillRect(decoration.start * this.scale - startOffset, feature.bounds[this.scale][0].y, Math.max((decoration.end - decoration.start + 1) * this.scale, 1), this.featureHeight);
-        }
+        context.beginPath();
+        context.moveTo(x, y);
+        context.lineTo(x + Math.min(feature.position[scale].W, 3), y);
+        context.lineTo(x, y + 3);
+        context.closePath();
+        context.fill();
+        context.stroke();
+      } else if (decoration.style === 'rect') {
+        context.fillRect(decoration.start * scale, feature.position[scale].Y, Math.max((decoration.end - decoration.start + 1) * scale, 1), this.featureHeight);
       }
     }
   }

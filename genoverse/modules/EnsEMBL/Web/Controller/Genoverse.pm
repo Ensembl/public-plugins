@@ -1,12 +1,10 @@
 # $Id$
 
-# TODO: highlighting for features other than transcripts
-
 package EnsEMBL::Web::Controller::Genoverse;
 
 use strict;
 
-use JSON qw(to_json);
+use JSON qw(to_json from_json);
 use List::Util qw(min);
 
 use EnsEMBL::Web::Hub;
@@ -104,7 +102,7 @@ sub fetch_features {
   ($func) = grep $self->can($_), "highlight_$function", "highlight$function";
   
   $extra{'highlights'} = $self->$func($node)     if $func;
-  $extra{'dataRegion'} = $self->{'cache_region'} if $genoverse->{'all_features'} && $self->{'cache_region'} && !$cache_url;
+  $extra{'dataRange'}  = $self->{'cache_region'} if $genoverse->{'all_features'} && $self->{'cache_region'} && !$cache_url;
   $extra{'cacheURL'}   = $cache_url              if $cache_url;
   
   print $self->{'json'}->encode({ features => \@features, %extra });
@@ -128,9 +126,8 @@ sub fetch_features_generic {
   my @features;
   
   foreach (@{$glyphset->features}) {
-    my ($colour_key, $flag) = $glyphset->colour_key($_);
-    my ($label) = $glyphset->feature_label($_);
-    my @tags    = grep ref $_ eq 'HASH' && $_->{'style'} ne 'join', $glyphset->tag($_);
+    my $colour_key = $glyphset->colour_key($_);
+    my @tags       = grep ref $_ eq 'HASH' && $_->{'style'} ne 'join', $glyphset->tag($_);
     my $feature;
     
     foreach (@tags) {
@@ -143,15 +140,15 @@ sub fetch_features_generic {
       id          => $_->dbID,
       start       => ($_->can('seq_region_start') ? $_->seq_region_start : $_->start) + 0,
       end         => ($_->can('seq_region_end')   ? $_->seq_region_end   : $_->end)   + 0,
-      label       => $label,
+      label       => $glyphset->feature_label($_),
       decorations => \@tags,
       $glyphset->genoverse_attributes($_),
     };
     
     $feature->{'strand'}     ||= int $_->strand if $strand;
-    $feature->{'color'}      ||= $colourmap->hex_by_name($glyphset->my_colour($colour_key, $flag))   if $colour_key;
+    $feature->{'color'}      ||= $colourmap->hex_by_name($glyphset->my_colour($colour_key))          if $colour_key;
     $feature->{'labelColor'} ||= $colourmap->hex_by_name($glyphset->my_colour($colour_key, 'label')) if $colour_key && $feature->{'label'};
-    $feature->{'labelColor'}   = $feature->{'color'} eq '#000000' ? '#FFFFFF' : '#000000' if $feature->{'color'} eq $feature->{'labelColor'};
+    $feature->{'labelColor'}   = $feature->{'color'} eq '#000000' ? '#FFFFFF' : '#000000' if $feature->{'color'} eq $feature->{'labelColor'} && $glyphset->label_overlay;
     $feature->{'menu'}       ||= $glyphset->href($_);
     $feature->{'title'}      ||= $glyphset->title($_) unless $feature->{'menu'};
 
@@ -188,32 +185,32 @@ sub fetch_transcript {
     foreach ($transcripts->{$gene_id} ? @{$transcripts->{$gene_id}} : $gene) {
       my $stable_id  = $_->stable_id;
       my $transcript = $_->isa('Bio::EnsEMBL::Transcript') ? $_ : undef;
-      my ($colour_key, $flag) = $glyphset->colour_key($gene, $transcript);
-      my ($label) = $no_label ? '' : $glyphset->feature_label($gene, $transcript);
-      my $feature = {
+      my $colour_key = $glyphset->colour_key($gene, $transcript);
+      my $feature    = {
         id         => $_->dbID,
         start      => $_->seq_region_start  + 0,
         end        => $_->seq_region_end    + 0,
         strand     => $_->seq_region_strand + 0,
-        label      => $label,
-        color      => $colourmap->hex_by_name($glyphset->my_colour($colour_key, $flag)),
+        label      => $no_label ? '' : $glyphset->feature_label($gene, $transcript),
+        color      => $colourmap->hex_by_name($glyphset->my_colour($colour_key)),
         labelColor => $colourmap->hex_by_name($glyphset->my_colour($colour_key, 'label')),
         legend     => ucfirst $glyphset->my_colour($colour_key, 'text'),
         menu       => $glyphset->href($gene, $transcript),
       };
       
       if ($exons->{$gene_id} && !($transcript && $stable_id eq $gene_id)) {
-        $feature->{'exons'} = [ map { id => $_->dbID, start => $_->seq_region_start + 0, end => $_->seq_region_end + 1 }, @{$exons->{$gene_id}} ];
+        $feature->{'exons'} = [ map { id => $_->dbID, start => $_->seq_region_start + 0, end => $_->seq_region_end + 0 }, @{$exons->{$gene_id}} ];
       } elsif ($transcript) {
         foreach (@{$exons->{$stable_id}}) {
-          push @{$feature->{'exons'}}, { id => $_->[0]->dbID, start => $_->[0]->seq_region_start + 0,       end => $_->[0]->seq_region_end + 1, style => 'strokeRect' } if $_->[1] eq 'border';
-          push @{$feature->{'exons'}}, { id => $_->[0]->dbID, start => $_->[0]->seq_region_start + $_->[2], end => $_->[0]->seq_region_end + 1 - $_->[3]              } if $_->[1] eq 'fill';
+          push @{$feature->{'exons'}}, { id => $_->[0]->dbID, start => $_->[0]->seq_region_start + 0,       end => $_->[0]->seq_region_end + 0, style => 'strokeRect' } if $_->[1] eq 'border';
+          push @{$feature->{'exons'}}, { id => $_->[0]->dbID, start => $_->[0]->seq_region_start + $_->[2], end => $_->[0]->seq_region_end + 0 - $_->[3]              } if $_->[1] eq 'fill';
         }
       }
       
       # save highlights which are not based on URL parameters (eg ccds transcripts in vega)
       $feature->{'highlight'} = $colourmap->hex_by_name($highlights->{$stable_id}) if $highlights->{$stable_id} && $stable_id ne $g && $stable_id ne $t;
-      
+      $feature->{'exons'}     = [ sort { $a->{'start'} <=> $b-> {'start'} || $a->{'end'} <=> $b-> {'end'} } @{$feature->{'exons'}} ] if $feature->{'exons'};
+       
       push @features, $feature;
     }
   }
@@ -221,25 +218,63 @@ sub fetch_transcript {
   return \@features;
 }
 
-sub highlight_transcript {
-  my ($self, $node) = @_;
-  my $hub           = $self->hub;
-  my $core_params   = $hub->core_params;
+sub fetch_structural_variation {
+  my ($self, $slice, $image_config, $function, $node) = @_;
+  my $hub        = $self->hub;
+  my ($glyphset) = $self->_use("Bio::EnsEMBL::GlyphSet::$function", {
+    container => $slice,
+    config    => $image_config,
+    my_config => $node,
+    display   => $node->get('display') || ($node->get('on') eq 'on' ? 'normal' : 'off'),
+  });
   
-  return unless $core_params->{'g'};
+  my $colourmap = $hub->colourmap;
+  my @features;
   
-  my $colourmap   = $hub->colourmap;
-  my $gene        = $hub->get_adaptor('get_GeneAdaptor', $core_params->{'db'})->fetch_by_stable_id($core_params->{'g'});
-  my $transcripts = $node->get('display') =~ /transcript/;
-  my $highlight   = $transcripts ? 'highlight1' : 'highlight2';
-  my $highlights  = { $gene->dbID => $colourmap->hex_by_name($highlight) };
-  
-  if ($transcripts) {
-    my $t = $core_params->{'t'};
-    $highlights->{$_->dbID} = $colourmap->hex_by_name($_->stable_id eq $t ? 'highlight2' : $_->get_all_Attributes('ccds')->[0] ? 'lightblue1' : $highlight) for @{$gene->get_all_Transcripts};
+  foreach my $f (@{$glyphset->features}) {
+    my $colour_key = $glyphset->colour_key($f);
+    my @tags       = grep ref $_ eq 'HASH' && $_->{'style'} ne 'join', $glyphset->tag($f);
+    my ($feature, $breakpoint);
+    
+    foreach (@tags) {
+      ($_->{'start'}, $_->{'end'}) = $glyphset->slice2sr($_->{'start'}, $_->{'end'});
+      $_->{'color'}  = $colourmap->hex_by_name($_->{'colour'});
+      $_->{'border'} = $colourmap->hex_by_name($_->{'border'}) if $_->{'border'};
+      
+      if ($_->{'style'} eq 'somatic_breakpoint') {
+        $breakpoint = 1;
+        
+        push @features, {
+          $glyphset->genoverse_attributes($f),
+          %$_,
+          id          => $f->dbID . "_$_->{'start'}",
+          featureId   => $f->dbID,
+          start       => $_->{'start'} + 0,
+          end         => $_->{'start'} + 0,
+          length      => $f->length,
+          menu        => $glyphset->href($f),
+          decorations => [],
+        };
+      }
+    }
+    
+    next if $breakpoint;
+    
+    my $feature = {
+      id          => $f->dbID,
+      start       => ($f->can('seq_region_start') ? $f->seq_region_start : $f->start) + 0,
+      end         => ($f->can('seq_region_end')   ? $f->seq_region_end   : $f->end)   + 0,
+      menu        => $glyphset->href($f),
+      decorations => \@tags,
+      $glyphset->genoverse_attributes($f),
+    };
+    
+    $feature->{'color'} ||= $colourmap->hex_by_name($glyphset->my_colour($colour_key)) if $colour_key;
+
+    push @features, $feature;
   }
   
-  return $highlights;
+  return \@features;
 }
 
 sub fetch_sequence {
@@ -270,9 +305,9 @@ sub fetch_codons {
   });
 
   for my $strand (1, -1) {
-    foreach (@{$glyphset->features($strand)}) {
+    foreach (@{$glyphset->features}) {
       push @features, {
-        id     => join(':', $_->{'start'}, $_->{'end'}, $_->{'strand'}),
+        id     => join(':', $_->{'start'}, $_->{'end'}, $strand),
         start  => $_->{'start'} + 0,
         end    => $_->{'end'}   + 0,
         strand => $strand       + 0,
@@ -285,7 +320,30 @@ sub fetch_codons {
   return \@features;
 }
 
-sub fetch_synteny { return []; } # Features for all possible tracks are returned by extra_synteny
+sub fetch_synteny {
+  my ($self, $slice, $image_config, $function, $node) = @_;
+  my @features;
+  
+  my ($glyphset) = $self->_use("Bio::EnsEMBL::GlyphSet::$function", {
+    container => $slice,
+    config    => $image_config,
+    my_config => $node,
+    display   => $node->get('display') || ($node->get('on') eq 'on' ? 'normal' : 'off')
+  });
+  
+  foreach (@{$glyphset->features}) {
+    push @features, {
+      id    => $_->dbID,
+      start => ($_->can('seq_region_start') ? $_->seq_region_start : $_->start) + 0,
+      end   => ($_->can('seq_region_end')   ? $_->seq_region_end   : $_->end)   + 0,
+      label => $glyphset->feature_label($_),
+      menu  => $glyphset->href($_),
+      $glyphset->genoverse_attributes($_),
+    };
+  }
+  
+  return \@features;
+}
 
 sub extra_contig {
   my ($self, $slice) = @_;
@@ -332,43 +390,49 @@ sub extra_codonseq {
 
 sub extra_synteny {
   my ($self, $slice, $image_config, $function) = @_;
-  my $colourmap = $self->hub->colourmap;
+  my $hub = $self->hub;
+  
+  return unless $hub->param('colors') || $self->{'set_cache'};
+  
+  my $colourmap = $hub->colourmap;
   my $classname = "Bio::EnsEMBL::GlyphSet::$function";
   my $extra     = {};
   
-  foreach (grep $_->get('glyphset') eq '_synteny' && ($self->{'set_cache'} || $_->get('display') ne 'off'), @{$image_config->glyphset_configs}) {
+  foreach (grep $_->get('glyphset') eq '_synteny', @{$image_config->glyphset_configs}) {
     my $id         = $_->id;
     my ($glyphset) = $self->_use($classname, {
       container => $slice,
       config    => $image_config,
       my_config => $_,
-      display   => $_->get('display') || ($_->get('on') eq 'on' ? 'normal' : 'off')
     });
     
-    foreach (@{$glyphset->features}) {
-      my ($colour_key, $flag) = $glyphset->colour_key($_);
-      my ($label) = $glyphset->feature_label($_);
-      my $feature = {
-        id    => $_->dbID,
-        start => ($_->can('seq_region_start') ? $_->seq_region_start : $_->start) + 0,
-        end   => ($_->can('seq_region_end')   ? $_->seq_region_end   : $_->end)   + 0,
-        label => $label,
-        $glyphset->genoverse_attributes($_),
-      };
-      
-      $feature->{'color'}      ||= $colourmap->hex_by_name($glyphset->my_colour($colour_key, $flag))   if $colour_key;
-      $feature->{'labelColor'} ||= $colourmap->hex_by_name($glyphset->my_colour($colour_key, 'label')) if $colour_key && $feature->{'label'};
-      $feature->{'menu'}       ||= $glyphset->href($_);
-      
-      $extra->{'colors'}{$_->{'hit_chr_name'}} ||= $colourmap->hex_by_name($glyphset->get_colours($_)->{'feature'});
-      
-      push @{$extra->{$id}}, $feature;
-    }
+    $extra->{'colors'}{$_->{'hit_chr_name'}} ||= $colourmap->hex_by_name($glyphset->get_colours($_)->{'feature'}) for @{$glyphset->features};
   }
   
-  $self->{'caching'}{$_} = 'chr' for keys %$extra;
+  $self->{'caching'}{'colors'} = 'chr';
   
   return $extra;
+}
+
+sub highlight_transcript {
+  my ($self, $node) = @_;
+  my $hub           = $self->hub;
+  my $core_params   = $hub->core_params;
+  
+  return unless $core_params->{'g'};
+  
+  my $colourmap   = $hub->colourmap;
+  my $gene        = $hub->get_adaptor('get_GeneAdaptor', $core_params->{'db'})->fetch_by_stable_id($core_params->{'g'});
+  my $transcripts = $node->get('display') =~ /transcript/;
+  my $highlight   = $transcripts ? 'highlight1' : 'highlight2';
+  my $highlights  = { $gene->dbID => $colourmap->hex_by_name($highlight) };
+  
+  if ($transcripts) {
+    my $t = $core_params->{'t'};
+    $highlights->{$_->dbID} = $colourmap->hex_by_name($_->stable_id eq $t ? 'highlight2' : $_->get_all_Attributes('ccds')->[0] ? 'lightblue1' : $highlight) for @{$gene->get_all_Transcripts};
+  }
+  
+  return $highlights;
 }
 
 sub highlight_variation {
@@ -420,15 +484,14 @@ sub update {
   });
 }
 
-sub track_height {
+sub save_config {
   my $self         = shift;
   my $hub          = $self->hub;
   my $image_config = $hub->get_imageconfig($hub->param('image_config'));
   my $track        = $image_config->get_node($hub->param('track'));
+  my $config       = from_json($hub->param('config'));
   
-  $track->set_user('user_height', $hub->param('height')) if $hub->param('height');
-  $track->set_user('auto_height', $hub->param('auto_height') || undef);
-  
+  $track->set_user($_, $config->{$_} eq 'undef' ? undef : $config->{$_}) for keys %$config;
   $image_config->altered = 1;
   $hub->session->store;
 }
@@ -509,7 +572,7 @@ sub set_cache_params {
     action   => 'set_cache',
     function => $hub->function,
     r        => sprintf('%s:%s-%s', $slice->seq_region_name, $start, $end),
-    id       => $genoverse->{'cache_id'} || $node->id,
+    id       => $node->id,
     config   => $hub->param('config'),
     renderer => $renderer,
     __clear  => 1
@@ -517,7 +580,7 @@ sub set_cache_params {
   
   $self->{'cache_key'}    = join '::', grep $_, 'Genoverse', $hub->species, $params->{'id'}, $params->{'renderer'};
   $self->{'set_cache'}    = $hub->action eq 'set_cache' || ($slice->start == 1 && $slice->end == $slice->seq_region_length); # The data will be cached if the url was /set_cache, or if the region is the entire chromosome
-  $self->{'cache_region'} = { bufferedStart => $start + 0, end => $end + 0 };                                                # The region containing the data in the cache
+  $self->{'cache_region'} = { start => $start + 0, end => $end + 0 };                                                        # The region containing the data in the cache
   $self->{'cache_url'}    = $self->{'set_cache'} ? undef : $hub->url($params);                                               # The url to access in order to set the cache
   
   # Make sure that the threshold is big enough that data will be retrieved

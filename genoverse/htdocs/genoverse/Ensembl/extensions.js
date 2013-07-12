@@ -29,7 +29,7 @@ Ensembl.Panel.ImageMap = Ensembl.Panel.ImageMap.extend({
     if (this.params.genoverseSwitch) {
       var isStatic = panel.params.updateURL.match('static');
       
-      $('<div class="genoverse_switch"></div>').appendTo($('.image_toolbar', this.el)).click(function () {
+      $('<div class="genoverse_switch"></div>').appendTo($('.image_toolbar', this.el)).on('click', function () {
         panel.params.updateURL = Ensembl.updateURL({ 'static': !isStatic }, panel.params.updateURL);
         panel.getContent();
         
@@ -48,14 +48,14 @@ Ensembl.Panel.ImageMap = Ensembl.Panel.ImageMap.extend({
           panel.getContent();
         } else {
           panel.resetGenoverse = true;
-          Ensembl.EventManager.trigger('genoverseMove', panel.highlightRegions[0][0].region.range, true, true);
+          Ensembl.EventManager.trigger('genoverseMove', panel.highlightRegions[0][0].region.range, true);
           panel.elLk.overlay.add(panel.elLk.updateButtons).detach();
           panel.elLk.container.resizable('enable');
         }
       });
     }
     
-    Ensembl.EventManager.register('resetImageOffset', this, function () { delete this.imgOffset; })
+    Ensembl.EventManager.register('resetImageOffset', this, function () { delete this.imgOffset; });
   },
   
   hashChange: function () {
@@ -78,7 +78,7 @@ Ensembl.Panel.ImageMap = Ensembl.Panel.ImageMap.extend({
 Ensembl.Panel.Configurator = Ensembl.Panel.Configurator.extend({
   updateConfiguration: function () {
     if (this.params.reset && this.params.reset !== 'track_order') {
-      Ensembl.EventManager.triggerSpecific('resetTrackHeights', this.component);
+      Ensembl.EventManager.triggerSpecific('resetGenoverse', this.component);
     }
     
     return this.base.apply(this, arguments);
