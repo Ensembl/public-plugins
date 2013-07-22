@@ -6,6 +6,7 @@ no warnings 'uninitialized';
 
 use base qw(EnsEMBL::Web::Component::Tools);
 use EnsEMBL::Web::Form;
+use Bio::EnsEMBL::Variation::Utils::VEP qw(@REG_FEAT_TYPES);
 
 sub _init {
   my $self = shift;
@@ -122,6 +123,23 @@ sub content {
   # extras
   my %table_sorts = (
     Location => 'hidden_position',
+    GMAF => 'hidden_position',
+    cDNA_position => 'numeric',
+    CDS_position => 'numeric',
+    Protein_position => 'numeric',
+    MOTIF_POS => 'numeric',
+    MOTIF_SCORE_CHANGE => 'numeric',
+    SIFT => 'hidden_position',
+    PolyPhen => 'hidden_position',
+    AFR_MAF => 'numeric',
+    AMR_MAF => 'numeric',
+    ASN_MAF => 'numeric',
+    EUR_MAF => 'numeric',
+    AA_MAF => 'numeric',
+    EA_MAF => 'numeric',
+    DISTANCE => 'numeric',
+    EXON => 'hidden_position',
+    INTRON => 'hidden_position'
   );
   
   my @table_headers = map {{ key => $_, title => $header_titles{$_} || $_, sort => $table_sorts{$_} || 'string'}} @$headers;
@@ -133,14 +151,43 @@ sub content {
   $html .= '<div><h3>Results preview</h3>';
   $html .= '<input type="hidden" class="panel_type" value="VEPResults" />';
   
+  # construct hash for autocomplete
+  my $vdbc = $hub->species_defs->get_config($vep_object->{_species}, 'databases')->{'DATABASE_VARIATION'};
+  
+  my %ac = (
+    Allele => [
+      'A', 'C', 'G', 'T'
+    ],
+    Feature_type => [
+      'Transcript', @REG_FEAT_TYPES
+    ],
+    Consequence => [
+      keys %Bio::EnsEMBL::Variation::Utils::Constants::OVERLAP_CONSEQUENCES
+    ],
+    SIFT => $vdbc->{'SIFT_VALUES'},
+    PolyPhen => $vdbc->{'POLYPHEN_VALUES'},
+    BIOTYPE => $hub->species_defs->get_config($vep_object->{_species}, 'databases')->{'DATABASE_CORE'}->{'tables'}{'transcript'}{'biotypes'},
+  );
+  
+  use Data::Dumper;
+  $Data::Dumper::Maxdepth = 3;
+  warn Dumper $hub->species_defs->get_config($vep_object->{_species}, 'databases')->{'DATABASE_CORE'};
+  
+  my $ac_json = $self->jsonify(\%ac);
+  $ac_json =~ s/\"/\'/g;
+  $html .= '<input class="js_param" type="hidden" name="auto_values" value="'.$ac_json.'" />';
+  
   
   ## NAVIGATION
   #############
   
-  $html .= '<div style="background-color:#F2F2F2;color:#333; margin-bottom:5px; margin-right: 5px; float: left;">';
-  $html .= '<div style="padding:5px;font-weight:bold;background-color:#cccccc;"><img src="/i/16/eye.png" style="vertical-align:top;"> Navigation<span style="float:right">'.$self->helptip("Navigate through the results of your VEP job. By default the results for 5 variants are displayed; note that variants may have more than one result if they overlap multiple transcripts").'</span></div>';
+  $html .= '<div class="toolbox">';
+  $html .= '<div class="toolbox-head">';
+  $html .= '<img src="/i/16/eye.png" style="vertical-align:top;"> Navigation<span style="float:right">';
+  $html .= $self->helptip("Navigate through the results of your VEP job. By default the results for 5 variants are displayed; note that variants may have more than one result if they overlap multiple transcripts");
+  $html .= '</span></div>';
   $html .= "<div style='padding:5px;'>Showing $row_count results";
-  $html .= $row_count ? " for variants $from\-$actual_to" : "";
+  $html .= $row_count ? " for variant".($from == $actual_to ? " $from" : "s $from\-$actual_to") : "";
   $html .= $filter_string ? "" : " of $output_lines";
   
   # number of entries
@@ -156,9 +203,10 @@ sub content {
       my $url = $self->ajax_url(undef, {
         tk   => $name,
         from => $from,
-        to   => $to + ($opt_size - $size)
+        to   => $to + ($opt_size - $size),
+        update_panel => undef,
       });
-      $html .= sprintf(' <a href="%s" class="update_panel" rel="'.$panel_id.'" >%s</a>', $url, $opt_size);
+      $html .= sprintf(' <a href="%s" class="update_panel" rel="%s">%s</a>', $url, $panel_id, $opt_size);
     }
   }
   
@@ -258,8 +306,8 @@ sub content {
   ## FILTER
   #########
   
-  $html .= '<div style="background-color:#F2F2F2;color:#333; margin-bottom:5px; margin-right: 5px; float: left;">';
-  $html .= '<div style="padding:5px;font-weight:bold;background-color:#cccccc;"><img src="/i/16/search.png" style="vertical-align:top;"> Filters<span style="float:right">'.$self->helptip("Filter your results to find interesting or significant data. You can apply several filters on any category of data in your results using a range of operators, add multiple filters, and edit active filters").'</span></div>';
+  $html .= '<div class="toolbox">';
+  $html .= '<div class="toolbox-head"><img src="/i/16/search.png" style="vertical-align:top;"> Filters<span style="float:right">'.$self->helptip("Filter your results to find interesting or significant data. You can apply several filters on any category of data in your results using a range of operators, add multiple filters, and edit active filters").'</span></div>';
   $html .= '<div style="padding:5px;">';
   
   my $form_url = $hub->url();
@@ -306,12 +354,8 @@ sub content {
         <div class="filter filter_edit_%s">
           %s %s %s
           <span style="float:right; vertical-align: top;">
-            <a href="#" class="filter_toggle" rel="filter_edit_%s">
-              <img class="_ht" src="/i/16/pencil.png" title="Edit filter">
-            </a>
-            <a class="update_panel" rel="%s" href="%s">
-              <img class="_ht" src="/i/close.png" title="Remove filter" style="height:16px; width:16px">
-            </a>
+            <a href="#" class="filter_toggle" rel="filter_edit_%s"><img class="_ht" src="/i/16/pencil-whitebg.png" title="Edit filter"></a>
+            <a class="update_panel" rel="%s" href="%s"><img class="_ht" src="/i/close.png" title="Remove filter" style="height:16px; width:16px"></a>
           </span>
         </div>},
         $i,
@@ -370,12 +414,12 @@ sub content {
   }
   
   foreach my $div(@location_divs) {
-    $html .= '<div style="background-color:#666666; border-radius: 3px; color: white; margin: 3px; padding: 3px;">'.$div.'</div>';
+    $html .= '<div class="location-filter-box filter-box">'.$div.'</div>';
   }
   $html .= '<hr>' if scalar @location_divs && scalar @filter_divs;
   
   foreach my $div(@filter_divs) {
-    $html .= '<div style="background-color:#667aa6; border-radius: 3px; color: white; margin: 3px; padding: 3px;">'.$div.'</div>';
+    $html .= '<div class="filter-box">'.$div.'</div>';
   }
   
   $html .= '</div>';
@@ -405,9 +449,7 @@ sub content {
   
   # start form
   #$html .= sprintf('<div style="display:inline-block;"><form action="%s" method="get">', $form_url);
-  $html .= qq{
-    <div style="display:inline-block;">
-  };
+  $html .= '<div style="clear: left;">';
   
   $html .= '<hr>' if $active_filters;
   $html .= $ajax_html;
@@ -456,16 +498,16 @@ sub content {
   ## DOWNLOAD
   ###########
   
-  $html .= '<div style="background-color:#F2F2F2;color:#333; margin-bottom:5px; margin-right: 5px; float: left;">';
-  $html .= '<div style="padding:5px;font-weight:bold;background-color:#cccccc;"><img src="/i/16/download.png" style="vertical-align:top;"> Download</div><div style="padding:5px;">';
+  $html .= '<div class="toolbox">';
+  $html .= '<div class="toolbox-head"><img src="/i/16/download.png" style="vertical-align:top;"> Download</div><div style="padding:5px;">';
   
   my $download_url = sprintf('/%s/vep_download?file=%s;name=%s;prefix=vep', $hub->species, $output_file_obj->filename, $name.'.txt');
   
   # all
   $html .= '<div><b>All</b><span style="float:right; margin-left:10px;">';
   $html .= sprintf(
-    ' <a class="_ht" title="Download all results in %s format" href="%s;format=%s">%s</a>',
-    $_, $download_url, lc($_), $_
+    ' <a class="_ht" title="Download all results in %s format%s" href="%s;format=%s">%s</a>',
+    $_, ($_ eq 'TXT' ? ' (best for Excel)' : ''), $download_url, lc($_), $_
   ) for qw(VCF VEP TXT);
   $html .= '</span></div>';
   
@@ -480,8 +522,8 @@ sub content {
     
     $html .= '<div><hr><b>Filtered</b><span style="float:right; margin-left:10px;">';
     $html .= sprintf(
-      ' <a class="_ht" title="Download filtered results in %s format" href="%s;format=%s">%s</a>',
-      $_, $filtered_url, lc($_), $_
+      ' <a class="_ht" title="Download filtered results in %s format%s" href="%s;format=%s">%s</a>',
+      $_, ($_ eq 'TXT' ? ' (best for Excel)' : ''), $filtered_url, lc($_), $_
     ) for qw(VCF VEP TXT);
     $html .= '</span></div>';
   }
@@ -568,15 +610,21 @@ sub linkify {
   # consequence type
   elsif($field eq 'Consequence' && $value =~ /\w+/) {
     my $cons = \%Bio::EnsEMBL::Variation::Utils::Constants::OVERLAP_CONSEQUENCES;
+    my $var_styles   = $hub->species_defs->colour('variation');
+    my $colourmap    = $hub->colourmap;
     
     foreach my $con(split /\,\s+/, $value) {
       $new_value .= $new_value ? ', ' : '';
       
       if(defined($cons->{$con})) {
+        my $colour = $colourmap->hex_by_name($var_styles->{$con}->{'default'}) if defined $var_styles->{$con};
+        $colour  ||= 'no_colour';
+        
         $new_value .=
           sprintf(
-            '<span style="border-bottom:1px dotted #999; cursor: help;" class="_ht" title="%s">%s</span>',
-            $cons->{$con}->description, $con
+            '<nobr><span class="colour" style="background-color:%s">&nbsp;</span> '.
+            '<span style="border-bottom:1px dotted #999; cursor: help;" class="_ht" title="%s">%s</span></nobr>',
+            $colour, $cons->{$con}->description, $con
           );
       }
       else {
