@@ -55,14 +55,28 @@ sub content {
     [map {{category => $_, count => $stats->{$section}->{$_}}} @{$stats->{sort}->{$section}}],
   );
   
+  # make a hash of consequence colours
+  my $cons = \%Bio::EnsEMBL::Variation::Utils::Constants::OVERLAP_CONSEQUENCES;
+  my $var_styles   = $hub->species_defs->colour('variation');
+  my $colourmap    = $hub->colourmap;
+  my %colours;
+  
+  foreach my $con(keys %Bio::EnsEMBL::Variation::Utils::Constants::OVERLAP_CONSEQUENCES) {
+    $colours{$con} = $colourmap->hex_by_name($var_styles->{$con}->{'default'}) || 'no_colour';
+  }
+  
+  # encode it in JSON to send to the JS
+  my $colour_json = $self->jsonify(\%colours);
+  $colour_json =~ s/\"/\'/g;
+  
   my @inputs = (
     '<input type="hidden" class="panel_type" value="PopulationGraph" />',
     q{<input class="graph_config" type="hidden" name="legendpos" value="'east'" />},
     q{<input class="graph_config" type="hidden" name="legendmark" value="'circle'" />},
     q{<input class="graph_config" type="hidden" name="maxSlices" value="100" />},
     q{<input class="graph_config" type="hidden" name="minPercent" value="0" />},
-    #q{<input class="graph_config" type="hidden" name="colors" value="[]" />},
     '<input class="graph_dimensions" type="hidden" value="[65,80,60]" />',
+    '<input class="js_param" type="hidden" name="cons_colours" value="'.$colour_json.'" />'
   );
   
   my @pie_charts = ('Consequences (all)', 'Coding consequences');
@@ -96,8 +110,14 @@ sub failure_text {
   my ($self, $ticket) = @_;
   my $html;
   my $ticket_name = $ticket->ticket_name;
+  my $vep_object  = $self->object->deserialise($ticket->analysis->object);
+  my $error_msg;
+  
+  foreach my $sub_job(@{$ticket->sub_job}) {
+    $error_msg .= $vep_object->get_hive_job_message($sub_job->sub_job_id);
+  }
 
-  my $text = "<p>The VEP job $ticket_name failed to run sucessfully. The error reported was: </p>";
+  my $text = "<p>The VEP job $ticket_name failed to run sucessfully. The error reported was: <pre>$error_msg</pre></p>";
   $html .= $self->_error('VEP job failed', $text, '100%' );
 
   return $html;  
