@@ -18,6 +18,7 @@ sub content {
   my $hub = $self->hub;
   my $html;
 
+  #my $form = $self->modal_form('select', '/Tools/Submit');
   my $form = $self->new_form({
     id     => 'vep_input',
     action => '/Tools/Submit',
@@ -45,7 +46,7 @@ sub content {
   my @sections = (
     {
       id => 'identifiers',
-      title => 'Identifiers to include',
+      title => 'Identifiers and frequency data',
       caption => 'Additional identifiers for genes, transcripts and variants; frequency data'
     },
     {
@@ -61,7 +62,7 @@ sub content {
   );
   
   foreach my $section(@sections) {
-    my $show    = $hub->get_cookie_value('toggle_vep'.$section->{id}) eq 'open' || 1;
+    my $show    = $hub->get_cookie_value('toggle_vep'.$section->{id}) eq 'open' || 0;
     my $style   = $show ? '' : 'display:none';
     
     my $configuration = $form->dom->create_element('div', {
@@ -99,7 +100,7 @@ sub content {
   }
   
   $html .= '<h2>New VEP job:</h2><input type="hidden" class="panel_type" value="VEPForm" />';
-  $html .= $form->render;
+  $html .= '<div style="width:800px">'.$form->render.'</div>';
   
   return $html;
 }
@@ -169,7 +170,7 @@ ENST00000471631.1:c.28_33delTCGCGG),
     my $div = $input_fieldset->dom->create_element('div', {class => '_stt_'.$tmp_format});
     
     $div->append_child($input_fieldset->add_field({
-      class => '_stt_'.$tmp_format,
+      class => 'select_on_focus _stt_'.$tmp_format,
       type => 'Text',
       name => 'text_'.$tmp_format,
       value => $example{$tmp_format},
@@ -180,8 +181,8 @@ ENST00000471631.1:c.28_33delTCGCGG),
     $first = 0;
   }
   
-  $input_fieldset->add_field({ type => 'File', name => 'file', label => 'Or upload file' });
-  $input_fieldset->add_field({ type => 'URL',  name => 'url',  label => 'Or provide file URL', size => 30 });
+  $input_fieldset->add_field({ type => 'File', name => 'file', label => 'Or upload file '.$self->helptip("File uploads are limited to 5MB in size. Files may be compressed using gzip or zip")});
+  $input_fieldset->add_field({ type => 'URL',  name => 'url',  label => 'Or provide file URL', size => 30, class => 'url' });
 
   ## TODO - need to find out how to list a user's files
   #my $userdata = [];
@@ -337,7 +338,6 @@ sub _build_filters {
     name  => "coding_only",
     label => 'Return results for variants in coding regions only '.$self->helptip("Exclude results in intronic and intergenic regions"),
     value => 'yes',
-    selected => 0
   });
   
   $filter_fieldset->add_field({
@@ -367,7 +367,7 @@ sub _build_identifiers {
     name  => "hgnc",
     label => 'Gene symbol '.$self->helptip("Report the gene symbol (e.g. HGNC)"),
     value => 'yes',
-    selected => 0
+    checked => 1
   });
 
   $ident_fieldset->add_field({
@@ -375,7 +375,7 @@ sub _build_identifiers {
     name  => "ccds",
     label => 'CCDS '.$self->helptip("Report the Consensus CDS identifier where applicable"),
     value => 'yes',
-    selected => 0
+    checked => 0
   });
 
   $ident_fieldset->add_field({
@@ -383,7 +383,7 @@ sub _build_identifiers {
     name  => "protein",
     label => 'Protein '.$self->helptip("Report the Ensembl protein identifier"),
     value => 'yes',
-    selected => 0
+    checked => 0
   });
 
   $ident_fieldset->add_field({
@@ -391,7 +391,7 @@ sub _build_identifiers {
     name  => "hgvs",
     label => 'HGVS '.$self->helptip("Report HGVSc (coding sequence) and HGVSp (protein) notations for your variants"),
     value => 'yes',
-    selected => 0
+    checked => 0
   });
   
   my $hub = $self->hub;
@@ -428,7 +428,7 @@ sub _build_identifiers {
             name  => "gmaf_".$_,
             label => '1000 Genomes global minor allele frequency '.$self->helptip("Report the minor allele frequency for the combined 1000 Genomes Project phase 1 population"),
             value => 'yes',
-            selected => 0
+            checked => 1
           }));
           
           $freq_div->append_child($ident_fieldset->add_field({
@@ -436,7 +436,7 @@ sub _build_identifiers {
             name  => "maf_1kg_".$_,
             label => '1000 Genomes continental minor allele frequencies '.$self->helptip("Report the minor allele frequencies for the combined 1000 Genomes Project phase 1 continental populations - AFR (African), AMR (American), ASN (Asian) and EUR (European)"),
             value => 'yes',
-            selected => 0
+            checked => 0
           }));
           
           $freq_div->append_child($ident_fieldset->add_field({
@@ -444,7 +444,7 @@ sub _build_identifiers {
             name  => "maf_esp_".$_,
             label => 'ESP minor allele frequencies '.$self->helptip("Report the minor allele frequencies for the NHLBI Exome Sequencing Project populations - AA (African American) and EA (European American)"),
             value => 'yes',
-            selected => 0
+            checked => 0
           }));
           
           $div->append_child($freq_div);
@@ -466,7 +466,7 @@ sub _build_extra {
     name  => "numbers",
     label => 'Exon and intron numbers '.$self->helptip("For variants that fall in the exon or intron, report the exon or intron number as NUMBER / TOTAL"),
     value => 'yes',
-    selected => 0
+    checked => 0
   });
 
   $extra_fieldset->add_field({
@@ -474,7 +474,7 @@ sub _build_extra {
     name  => "domains",
     label => 'Protein domains '.$self->helptip("Report overlapping protein domains from Pfam, Prosite and InterPro"),
     value => 'yes',
-    selected => 0
+    checked => 0
   });
 
   $extra_fieldset->add_field({
@@ -482,7 +482,7 @@ sub _build_extra {
     name  => "biotype",
     label => 'Transcript biotype '.$self->helptip("Report the biotype of overlapped transcripts, e.g. protein_coding, miRNA, psuedogene"),
     value => 'yes',
-    selected => 0
+    checked => 1
   });
   
   # species-specific stuff
@@ -497,7 +497,7 @@ sub _build_extra {
         name  => "regulatory_".$sp,
         label => 'Get regulatory region consequences '.$self->helptip("Get consequences for variants that overlap regulatory features and transcription factor binding motifs"),
         value => 'yes',
-        selected => 1
+        checked => 1
       }));
       
       $extra_fieldset->append_child($div);
@@ -507,7 +507,7 @@ sub _build_extra {
     }
     
     # sift?
-    if($hub->species_defs->get_config($sp, 'SIFT')) {
+    if($hub->species_defs->get_config($sp, 'databases')->{'DATABASE_VARIATION'}->{'SIFT'}) {
       my $div = $extra_fieldset->dom->create_element('div', {class => '_stt_'.$sp});
       
       $div->append_child($extra_fieldset->add_field({
@@ -521,7 +521,7 @@ sub _build_extra {
           { value => 'pred',  caption => 'Prediction only'      },
           { value => 'score', caption => 'Score only'           },
         ],
-        value  => 'no',
+        value  => 'both',
         select => 'select',
       }));
       
@@ -529,7 +529,7 @@ sub _build_extra {
     }
     
     # polyphen?
-    if($hub->species_defs->get_config($sp, 'POLYPHEN')) {
+    if($hub->species_defs->get_config($sp, 'databases')->{'DATABASE_VARIATION'}->{'POLYPHEN'}) {
       my $div = $extra_fieldset->dom->create_element('div', {class => '_stt_'.$sp});
       
       $div->append_child($extra_fieldset->add_field({
@@ -543,7 +543,7 @@ sub _build_extra {
           { value => 'pred',  caption => 'Prediction only'      },
           { value => 'score', caption => 'Score only'           },
         ],
-        value  => 'no',
+        value  => 'both',
         select => 'select',
       }));
       
