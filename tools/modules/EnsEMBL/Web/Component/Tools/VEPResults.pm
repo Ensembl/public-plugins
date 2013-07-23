@@ -146,7 +146,6 @@ sub content {
   
   
   my $panel_id  = $self->id;
-  #$html .= '<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />';
   $html .= '<link rel="stylesheet" href="/components/ac.css" />';
   $html .= '<div><h3>Results preview</h3>';
   $html .= '<input type="hidden" class="panel_type" value="VEPResults" />';
@@ -168,10 +167,6 @@ sub content {
     PolyPhen => $vdbc->{'POLYPHEN_VALUES'},
     BIOTYPE => $hub->species_defs->get_config($vep_object->{_species}, 'databases')->{'DATABASE_CORE'}->{'tables'}{'transcript'}{'biotypes'},
   );
-  
-  use Data::Dumper;
-  $Data::Dumper::Maxdepth = 3;
-  warn Dumper $hub->species_defs->get_config($vep_object->{_species}, 'databases')->{'DATABASE_CORE'};
   
   my $ac_json = $self->jsonify(\%ac);
   $ac_json =~ s/\"/\'/g;
@@ -436,7 +431,7 @@ sub content {
     $html .= '<input value="Clear filters" class="fbutton" type="submit">';
     $html .= '</form></div>';
     
-    if(scalar @filter_divs) {
+    if(scalar @filter_divs > 1) {
       $html .= '<div style="float:right;">'.$ajax_html;
       $html .= 'Match <select name="match"">';
       $html .= sprintf('<option value="%s" %s>%s</option>', $_, ($_ eq $match ? 'selected="selected"' : ''), $logic{$_}) for sort keys %logic;
@@ -491,6 +486,12 @@ sub content {
   # add hidden fields
   $html .= sprintf('<input type="hidden" name="%s" value="%s">', $_, $params{$_}) for keys %params;
   $html .= '</form></div>';
+  
+  
+  # presets
+  #$html .= '<div style="clear:left;"><a rel="filter_presets" class="toggle closed small" style="float:right">Common filter presets</a>';
+  #$html .= '<div class="filter_presets"><div class="toggleable hidden">Some presets</div></div>';
+  #$html .= '</div>';
   
   $html .= '</div></div>';
   
