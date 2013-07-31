@@ -1,5 +1,5 @@
 .panel p.error { font-weight: bold; }
-.failed { font-weight: bold; color: red; background: url('/i/16/alert.png') no-repeat right bottom; border: 1px red dashed;}
+.failed { background: #FF9999 url('/i/16/alert.png') no-repeat right; }
 a.disabled { text-decoration: none; color: #333333; }
 
 div.toolbox { background-color:#F2F2F2;color:#333; margin-bottom:5px; margin-right: 5px; float: left; }
