@@ -28,6 +28,7 @@ use EnsEMBL::Web::SpeciesDefs;
 use EnsEMBL::Web::ToolsConstants;
 use EnsEMBL::Web::ExtIndex;
 use EnsEMBL::Web::TmpFile::Text;
+use Bio::EnsEMBL::Variation::Utils::VEP qw(detect_format);
 
 our $VERBOSE = 1;
 
@@ -53,29 +54,21 @@ sub create_jobs {
   my @hive_jobs = ();
   
   my $species = $self->{'_species'};
-  
-  #$self->configure_script_output($ticket->ticket_name);
 
+  # add DB connection params
   my $dba = $self->hub->database('core', $species);
   my $dbc = $dba->dbc;
+  my $config = $self->{'_config'};
+  $config->{user} = $dbc->username;
+  $config->{host} = $dbc->host;
+  $config->{port} = $dbc->port;
+  $config->{pass} = $dbc->password if $dbc->password;
 
   my %input = (
     ticket        => $ticket->ticket_id,
     ticket_name   => $ticket->ticket_name,
     species       => lc($species),
     config        => $self->{'_config'},
-    dba           => { 
-      -user             => $dbc->username,
-      -host             => $dbc->host,
-      -port             => $dbc->port,
-      -pass             => $dbc->password,
-      -dbname           => $dbc->dbname,
-      -driver           => $dbc->driver,
-      -species          => $dba->species,
-      -species_id       => $dba->species_id,
-      -multispecies_db  => $dba->is_multispecies,
-      -group            => $dba->group,
-    },
     ticket_dbc    => {
       -user             => $self->species_defs->DATABASE_WRITE_USER,
       -pass             => $self->species_defs->DATABASE_WRITE_PASS,
@@ -190,6 +183,10 @@ sub validate_form_input {
   $self->process_description; 
   $self->process_config;
   $self->configure_script_output;
+  
+  use Data::Dumper;
+  $Data::Dumper::Maxdepth = 3;
+  warn Dumper $self->{'_error'};
 
   return keys %{$self->{'_error'}} ? $self->{'_error'} : undef;
 }
@@ -205,11 +202,15 @@ sub process_input_data {
   my $cmnd = shift;
   
   my $hub = $self->hub;
-  my $format = $hub->param('format');
-  $hub->param(text => $hub->param('text_'.$format));
+  my $format = $self->param('format');
+  $self->param(text => $self->param('text_'.$format));
   
-  my ($method) = grep $hub->param($_), qw(file url text);
+  my ($method) = grep $self->param($_), qw(file url text);
   
+  $self->{_file_description} = $self->param('name') || ($method eq 'text' ?
+    'pasted data' : ($method eq 'url' ?
+      'data from URL' : sprintf("%s", $self->param('file'))));
+    
   if ($method) {
     
     # use generic upload method from $cmnd
@@ -226,12 +227,28 @@ sub process_input_data {
       if($tempdata && $tempdata->{'filename'}) {
         my $file = EnsEMBL::Web::TmpFile::Text->new(filename => $tempdata->{'filename'});
         
+        # check file format
+        my $detected_format;
+        
+        open IN, $file->{'full_path'};
+        while(<IN>) {
+          next if /^\#/;
+          $detected_format = detect_format($_);
+          last if $detected_format;
+        }
+        close IN;
+        
+        $self->{'_error'}{'format'} = "Selected file format ($format) does not match detected format ($detected_format)" if $format ne $detected_format;
+        
         # store full path for script to use
         $self->{'_config'}->{'input_file'} = $file->{'full_path'};
       }
       else {
         $self->{'_error'}{'file'} = "Could not find file with code ".$code;
       }
+    }
+    elsif($response && $response->{'error'}) {
+      $self->{'_error'}{'url'} = $response->{error};
     }
     else {
       $self->{'_error'}{'file'} = 'Upload failed: '.$response->{filter_code};
@@ -245,7 +262,7 @@ sub process_input_data {
 sub process_description {
   my $self = shift;
 
-  my $desc = $self->param('description') || 'VEP analysis in '.$self->{_species};
+  my $desc = 'VEP analysis of '.$self->{_file_description}.' in '.$self->{_species};
 
   $self->{'_description'} = $desc;
 }
@@ -262,10 +279,13 @@ sub process_config {
   my $species = $self->{'_species'};
   $config->{species} = lc($species);
   
+  # refseq
+  $config->{refseq} = 'yes' if $self->param('core_type_'.$species) eq 'refseq';
+  
   # filters
   my $frequency_filtering = $self->param('frequency');
   
-  if($species eq 'homo_sapiens') {
+  if($species eq 'Homo_sapiens') {
     if($frequency_filtering eq 'common') {
       $config->{filter_common} = 'yes';
     }
@@ -299,7 +319,7 @@ sub process_config {
     }
     
     # MAFs in human
-    if($species eq 'homo_sapiens') {
+    if($species eq 'Homo_sapiens') {
       $config->{gmaf} = 'yes' if $self->param('gmaf_'.$check_ex) eq 'yes';
       $config->{maf_1kg} = 'yes' if $self->param('maf_1kg_'.$check_ex) eq 'yes';
       $config->{maf_esp} = 'yes' if $self->param('maf_esp_'.$check_ex) eq 'yes';
@@ -307,7 +327,7 @@ sub process_config {
   }
   
   # extra and identifiers
-  for(qw(numbers domains biotype hgnc ccds protein hgvs coding_only)) {
+  for(qw(numbers canonical domains biotype hgnc ccds protein hgvs coding_only)) {
     $config->{$_} = $self->param($_) if $self->param($_);
   }
 }
@@ -347,7 +367,8 @@ sub _tmp_file {
     my $file = $class_path->new(prefix => 'vep');
     
     # initialise path and file, VEP will overwrite
-    $file->save();
+    my $path = $file->full_path;
+    ($file->drivers)[0]->make_directory($path);
     
     $self->{$hash_key} = $file;
   }
