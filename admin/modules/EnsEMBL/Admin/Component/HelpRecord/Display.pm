@@ -20,7 +20,7 @@ sub record_tree {
 
   if (@$code_div && $code_div->[0]->first_child->inner_HTML =~ /movie/i) {
     $code_div = $code_div->[0]->last_child;
-    $code_div->inner_HTML(sprintf '%s<br />Embed code for FAQ and other Help pages: <span class="code">[[movie=%1$s]]</span><br />Embed code for static pages: <span class="code">[[MOVIE::%1$s]]</span>', $code_div->inner_HTML);
+    $code_div->inner_HTML(sprintf '%s (embed code: <span class="code">[[MOVIE::%1$s]]</span>)', $code_div->inner_HTML);
   }
 
   if (@$youtube_div) {

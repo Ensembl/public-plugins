@@ -75,7 +75,7 @@ sub content {
         'inner_HTML'  => _get_link_caption($file, $_)
       }} @{$file->{'action'}} ];
 
-      my $embed_code = $file->{'dim'} ? qq([[image=$file->{'name'} height="$file->{'dim'}{'y'}" width="$file->{'dim'}{'x'}"]]) : '';
+      my $embed_code = $file->{'dim'} ? qq([[IMAGE::$file->{'name'} height="$file->{'dim'}{'y'}" width="$file->{'dim'}{'x'}"]]) : '';
 
       return $self->dom->create_element('div', {
         'children' => [
