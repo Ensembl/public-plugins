@@ -31,6 +31,7 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.Content.extend({
 
           if (json.functionName === 'updateJobsList') {
             window.scrollTo(0, 0);
+            $('.failed').removeClass('failed');
             panel.elLk.vepForm[0].reset();
           }
           panel.elLk.vepForm.removeClass('overlay_blast');
@@ -50,6 +51,8 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.Content.extend({
     panel.elLk.vepForm.addClass('check');
 
     var display_errors = { rules: {}, message: {} };
+    
+    $('.failed').removeClass('failed valid');
 
     var failed = $.map(errors, function (message, error_class) {
       var tmp_errors = { rules: {}, messages: {} };
@@ -58,7 +61,7 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.Content.extend({
       };
       tmp_errors.messages[error_class] = message;
       $.extend(true, display_errors, tmp_errors);
-      $("." + error_class +":last", panel.elLk.vepForm).prop('title', message).addClass('_' + error_class + ' failed');
+      $("." + error_class +":last", panel.elLk.vepForm).parent().parent().prop('title', '<span style="color: red; font-weight: bold;">ERROR: </span>' + message).addClass('_' + error_class + ' failed _ht').helptip();
       return;
     });
 
