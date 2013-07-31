@@ -99,6 +99,15 @@ sub content {
     $form->append_child($form->dom->create_element('br'));
   }
   
+  my $final_fieldset = $form->add_fieldset();
+  $final_fieldset->append_child($final_fieldset->dom->create_element('hr'));
+  $final_fieldset->add_field({
+    type    => 'Submit',
+    name    => 'submit_vep',
+    value   => 'Run >',
+    class   => 'submit_vep',
+  });
+  
   $html .= '<h2>New VEP job:</h2><input type="hidden" class="panel_type" value="VEPForm" />';
   $html .= '<div style="width:800px">'.$form->render.'</div>';
   
@@ -162,7 +171,7 @@ ENST00000471631.1:c.28_33delTCGCGG),
       ],
       'value'   => 'ensembl',
       'select'  => 'select',
-      'class'   => '_stt'
+      'class'   => '_stt format'
   });
   
   my $first = 1;
@@ -465,6 +474,14 @@ sub _build_extra {
     type  => 'CheckBox',
     name  => "numbers",
     label => 'Exon and intron numbers '.$self->helptip("For variants that fall in the exon or intron, report the exon or intron number as NUMBER / TOTAL"),
+    value => 'yes',
+    checked => 0
+  });
+  
+  $extra_fieldset->add_field({
+    type  => 'CheckBox',
+    name  => "canonical",
+    label => 'Identify canonical transcripts '.$self->helptip("Indicate if an affected transcript is the canonical transcript for the gene"),
     value => 'yes',
     checked => 0
   });
