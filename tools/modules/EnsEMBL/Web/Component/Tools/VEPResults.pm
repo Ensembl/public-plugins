@@ -7,6 +7,7 @@ no warnings 'uninitialized';
 use base qw(EnsEMBL::Web::Component::Tools);
 use EnsEMBL::Web::Form;
 use Bio::EnsEMBL::Variation::Utils::VEP qw(@REG_FEAT_TYPES);
+use URI::Escape qw(uri_unescape);
 
 sub _init {
   my $self = shift;
@@ -66,7 +67,7 @@ sub content {
   }
   
   # define max filters
-  my $max_filters = 10;
+  my $max_filters = 50;
   my ($filter_string, $location);
   
   # construct filter string
@@ -80,7 +81,7 @@ sub content {
         $filter_string .= sprintf('%s%s %s %s',
           ($filter_string ? " $match " : ''),
           $params{"field$i"},
-          ($params{"value$i"} ne '' ? $params{"operator$i"} : ''),
+          $params{"operator$i"},
           $params{"value$i"}
         );
       }
@@ -108,11 +109,25 @@ sub content {
   # niceify for table
   my %header_titles = (
     'ID' => 'Uploaded variation',
+    'MOTIF_NAME' => 'Motif name',
+    'MOTIF_POS' => 'Motif position',
+    'MOTIF_SCORE_CHANGE' => 'Motif score change',
+    'DISTANCE' => 'Distance to transcript',
+    'EXON' => 'Exon',
+    'INTRON' => 'Intron',
+    'CLIN_SIG'     => 'Clinical significance',
+    'BIOTYPE'      => 'Biotype',
+    'PUBMED'       => 'Pubmed',
+    'HIGH_INF_POS' => 'High info position',
+    'CELL_TYPE' => 'Cell type',
+    'CANONICAL' => 'Canonical',
+    'SYMBOL' => 'Symbol',
+    'DOMAINS' => 'Domains'
   );
   foreach my $header(grep {/\_/} @$headers) {
     my $tmp = $header;
     $tmp =~ s/\_/ /g;
-    $header_titles{$header} = $tmp;
+    $header_titles{$header} ||= $tmp;
   }
   
   # linkify row content
@@ -489,8 +504,32 @@ sub content {
   
   
   # presets
-  #$html .= '<div style="clear:left;"><a rel="filter_presets" class="toggle closed small" style="float:right">Common filter presets</a>';
-  #$html .= '<div class="filter_presets"><div class="toggleable hidden">Some presets</div></div>';
+  #$html .= '<div style="clear:left;"><div><a rel="filter_presets" class="toggle closed small">Common filter presets</a></div>';
+  #$html .= '<div class="filter_presets"><div class="toggleable hidden">';
+  #
+  #my @presets = (
+  #  {
+  #    desc => 'Show only novel variants',
+  #    url  => 'field22=Existing_variation;operator22=ne;value22='
+  #  },
+  #  {
+  #    desc => 'Select only CCDS protein coding transcripts',
+  #    url  => 'field20=CCDS;operator20=is;value20=;field21=BIOTYPE;operator21=is;value21=protein_coding'
+  #  },
+  #);
+  #
+  #my $base_url = $self->ajax_url(undef);
+  #
+  #foreach my $preset(@presets) {
+  #  $html .= sprintf(
+  #    '<div class="filter-box" style="background-color:white;"><a class="update_panel" rel="%s" href="%s">%s</a></div>',
+  #    $panel_id,
+  #    $base_url.';'.$preset->{url},
+  #    $preset->{desc}
+  #  );
+  #}
+  #
+  #$html .= '</ul></div></div>';
   #$html .= '</div>';
   
   $html .= '</div></div>';
@@ -608,6 +647,17 @@ sub linkify {
     $new_value = sprintf('<a class="zmenu" href="%s">%s</a>', $url, $value);
   }
   
+  # Protein
+  elsif($field eq 'ENSP' && $value =~ /\w+/) {
+    my $url = $hub->url({
+      type => 'Transcript',
+      action => 'ProteinSummary',
+      p => $value
+    });
+    
+    $new_value = sprintf('<a href="%s">%s</a>', $url, $value);
+  }
+  
   # consequence type
   elsif($field eq 'Consequence' && $value =~ /\w+/) {
     my $cons = \%Bio::EnsEMBL::Variation::Utils::Constants::OVERLAP_CONSEQUENCES;
@@ -632,6 +682,38 @@ sub linkify {
         $new_value .= $con;
       }
     }
+  }
+  
+  # HGVS
+  elsif($field =~ /^hgvs/i && $value =~ /\w+/) {
+    $new_value = uri_unescape($value);
+  }
+  
+  # CCDS
+  elsif($field eq 'CCDS' && $value =~ /\w+/) {
+    $new_value = $hub->get_ExtURL_link($value, 'CCDS', $value)
+  }
+  
+  # SIFT/PolyPhen
+  elsif($field =~ /sift|polyphen/i && $value =~ /\w+/) {
+    my %colours = (
+      '-'                  => '',
+      'probably_damaging'  => 'red',
+      'possibly_damaging'  => 'orange',
+      'benign'             => 'green',
+      'unknown'            => 'blue',
+      'tolerated'          => 'green',
+      'deleterious'        => 'red',
+    );
+    
+    my ($pred, $score) = split /\(|\)/, $value;
+    my $rank_str = '';
+    
+    if(defined($score)) {
+      $rank_str = "($score)";
+    }
+    
+    $new_value = qq{<span style="color:$colours{$pred}">$pred$rank_str</span>};
   }
   
   else {
