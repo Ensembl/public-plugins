@@ -32,10 +32,11 @@ sub run {
   #print STDERR $command;
   
   open(PIPE, "$command 2>&1 1>/dev/null |") or die($?);
-  while(<PIPE>) {
-    die($_) if /^error/i;
-  }
+  my $output;
+  while(<PIPE>) { $output .= $_; }
   close PIPE;
+  
+  die($output) if $output;
   
   return;
 }
