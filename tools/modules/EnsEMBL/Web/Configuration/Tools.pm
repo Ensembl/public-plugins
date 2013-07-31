@@ -134,7 +134,7 @@ sub populate_tree {
       jobs         EnsEMBL::Web::Component::Tools::JobsList
       vepeffect    EnsEMBL::Web::Component::Tools::VEPInputForm
     )],
-    { 'availability' => 1, 'concise' => 'Variation Effect Predictor' }
+    { 'availability' => 1, 'concise' => 'Variation Effect Predictor<span style="float:right;"><img src="/img/vep_logo.png"></span>' }
   );
   
   $vep_node->append($self->create_subnode('VEPResults', 'Results',
@@ -142,7 +142,7 @@ sub populate_tree {
       summary     EnsEMBL::Web::Component::Tools::VEPResultsSummary
       results     EnsEMBL::Web::Component::Tools::VEPResults
     )],
-    { 'availability' => 1, 'concise' => 'VEP results' } 
+    { 'availability' => 1, 'concise' => 'Variant Effect Predictor results<span style="float:right"><img src="/img/vep_logo.png"></span>' } 
   ));
 }
 
