@@ -57,7 +57,7 @@ sub content {
 
   if (scalar @$all_rows) {        
     my $plural = scalar @$all_rows > 1 ? 'these positions' : 'this position';
-    $html .= "<p>The following data from LOVD (Leiden Open Variation Database) are also found at $plural:</p>";
+    $html .= "<p>The following data from LOVD (Leiden Open Variation Database) are found at $plural:</p>";
     my $params = { exportable => 0 };
     $params->{'data_table'} = 1 if (scalar @$all_rows > 2);
     my $table = new EnsEMBL::Web::Document::Table($column_set, $all_rows, $params);
