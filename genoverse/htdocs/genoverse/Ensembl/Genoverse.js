@@ -183,6 +183,9 @@ Ensembl.Genoverse = Genoverse.extend({
     
     this.base();
     
+    this.panel.elLk.autoHeight.removeClass('off');
+    this.panel.changeControlTitle('autoHeight');
+    
     for (var i = 0; i < this.tracks.length; i++) {
       track = this.tracks[i];
       
