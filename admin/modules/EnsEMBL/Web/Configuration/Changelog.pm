@@ -40,7 +40,7 @@ sub populate_tree {
     { 'availability' => 1, 'no_menu_entry' => 1 }
   );
   $self->create_node( 'Summary', 'View summary',
-    [qw(summary   EnsEMBL::Admin::Component::Changelog::Summary)],
+    [qw(change_log   EnsEMBL::Admin::Component::Changelog::Summary)],
     { 'availability' => 1 },
   );
 
