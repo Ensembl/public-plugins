@@ -106,5 +106,9 @@ Genoverse.Track.prototype.getData  = function () {
 
 Genoverse.Track.prototype._parseData = Genoverse.Track.prototype.parseData;
 Genoverse.Track.prototype.parseData  = function (data, start, end) {
-  return this._parseData(data.features, start, end);
+  if (data.error) {
+    this.showError(data.error);
+  } else {
+    return this._parseData(data.features, start, end);
+  }
 };
