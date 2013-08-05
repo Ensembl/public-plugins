@@ -26,7 +26,7 @@ Genoverse.Track.StructuralVariation = Genoverse.Track.extend({
   },
   
   setScale: function () {
-    this.dataBuffer.start = this.dataBuffer.end = 9 / this.browser.scale;
+    this.dataBuffer.start = this.dataBuffer.end = Math.ceil(9 / this.browser.scale);
     this.base();
   },
   
