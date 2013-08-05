@@ -33,13 +33,16 @@ sub new {
 }
 
 sub fetch_features {
-  my $self         = shift;
-  my $hub          = $self->hub;
+  my $self = shift;
+  my $hub  = $self->hub;
+  my @loc  = split ':', $hub->param('r');
+
+  return print to_json({ error => 'Invalid location: ' . $hub->param('r') }) unless $loc[1] =~ /^\d+-\d+$/;
+  
   my $action       = $hub->action;
   my $function     = $hub->function;
   my $image_config = $hub->get_imageconfig($hub->param('config'));
   my $referer      = $hub->referer;
-  my @loc          = split ':', $hub->param('r');
   my $adaptor      = $hub->get_adaptor('get_SliceAdaptor');
   my $slice        = $adaptor->fetch_by_region('toplevel', shift @loc, split('-', shift @loc), @loc);
   my $chr          = $slice->seq_region_name;
