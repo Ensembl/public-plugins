@@ -237,7 +237,14 @@ Genoverse.Track = Base.extend({
     
     this.messageContainer.on('click', '> *', function () {
       var collapsed = track.messageContainer.children('.messages').is(':visible') ? ' collapsed' : '';
+      var code      = track.messageContainer.find('.msg')[0].className.replace('msg', '').replace(' ', '');
+      
       track.messageContainer.attr('class', 'message_container' + collapsed);
+      
+      if (code !== 'error') {
+        document.cookie = [ 'gv_msg', code, track.id ].join('_') + '=1; expires=' + (collapsed ? 'Tue, 19 Jan 2038' : 'Thu, 01 Jan 1970') + ' 00:00:00 GMT; path=/';
+      }
+      
       track.checkHeight();
     });
   },
@@ -258,7 +265,7 @@ Genoverse.Track = Base.extend({
     
     if (!messages.children('.' + code).show().length) {
       messages.prepend('<div class="msg ' + code + '">' + this.messages[code] + (additionalText || '') + '</div>');
-      this.messageContainer.removeClass('collapsed');
+      this.messageContainer[document.cookie.match([ 'gv_msg', code, this.id ].join('_') + '=1') ? 'addClass' : 'removeClass']('collapsed');
     }
     
     var height = this.messageContainer.show().outerHeight(true);
