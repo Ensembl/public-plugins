@@ -105,6 +105,14 @@ Ensembl.Panel.LocationNav = Ensembl.Panel.LocationNav.extend({
     var r     = this.elLk.r.val();
     
     if (r) {
+      r = r.split(/[:-]/);
+      
+      if (!r[0]) {
+        return false;
+      }
+      
+      r = r[0] + ':' + (r[1] || 1) + '-' + (r[2] || 1);
+      
       $.ajax({
         url: Ensembl.updateURL({ r: r, update_panel: 1 }, this.elLk.updateURL.val()),
         dataType: 'json',
