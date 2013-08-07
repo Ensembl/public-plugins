@@ -335,6 +335,7 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
   },
   
   update: function () {
+    var panel     = this;
     var genoverse = this.genoverse;
     
     $.ajax({
@@ -357,7 +358,7 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
         }
         
         if (json.change.length) {
-          $.each(json.change, function () { genoverse.tracksById[this[0]].setRenderer(this[1], true); });
+          $.each(json.change, function () { panel.updateTrackRenderer(this[0], this[1]); });
         }
         
         $.each(json.order, function () {
