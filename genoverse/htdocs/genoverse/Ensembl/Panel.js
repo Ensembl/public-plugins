@@ -61,9 +61,6 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
     
     Ensembl.EventManager.trigger('highlightAllImages');
     
-    Ensembl._maxRegionLength = Ensembl.maxRegionLength;
-    Ensembl.maxRegionLength  = this.genoverse.chromosomeSize;
-    
     parent = null;
   },
   

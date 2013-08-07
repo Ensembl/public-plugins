@@ -10,7 +10,7 @@ Ensembl.Panel.Content = Ensembl.Panel.Content.extend({
   },
   
   hashChange: function () {
-    if (this.imagePanel && Ensembl.location.length > Ensembl._maxRegionLength) {
+    if (this.imagePanel && Ensembl.location.length > Ensembl.maxRegionLength) {
       return;
     }
     
