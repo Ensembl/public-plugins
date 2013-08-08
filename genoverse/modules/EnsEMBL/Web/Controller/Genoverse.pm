@@ -348,19 +348,16 @@ sub fetch_synteny {
   return \@features;
 }
 
-sub extra_contig {
-  my ($self, $slice) = @_;
-  my $hub = $self->hub;
+sub fetch_contig {
+  my $self      = shift;
+  my $features  = $self->fetch_features_generic(@_);
+  my $colourmap = $self->hub->colourmap;
+  my %colours   = ( 0 => 'contigblue1', 1 => 'contigblue2' );
+  my $i         = 0;
   
-  if ($hub->param('colors') || $self->{'set_cache'}) {
-    my $colourmap = $hub->colourmap;
-    my %colours   = ( 0 => 'contigblue1', 1 => 'contigblue2' );
-    my $i         = 0;
-    
-    $self->{'caching'}{'colors'} = 'chr';
-    
-    return { colors => { map { join(':', $_->to_Slice->seq_region_name, $_->from_start) => $colourmap->hex_by_name($colours{$i++ % 2}) } @{$slice->seq_region_Slice->project('seqlevel') || []} }};
-  }
+  $_->{'color'} = $colourmap->hex_by_name($colours{$i++ % 2}) for @$features;
+  
+  return $features;
 }
 
 sub extra_sequence {
