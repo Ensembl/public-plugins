@@ -53,6 +53,8 @@ sub update_conf {
   $SiteDefs::__species_aliases{ 'Tursiops_truncatus'                } = [qw(tt dolphin flipper)];
   $SiteDefs::__species_aliases{ 'Vicugna_pacos'                     } = [qw(lp alpaca)];
 #-------------------- birds
+  $SiteDefs::__species_aliases{ 'Anas_platyrhynchos'                } = [qw(ap apla duck mallard anas platyrhynchos)];
+  $SiteDefs::__species_aliases{ 'Ficedula_albicollis'               } = [qw(fa falb flycatcher ficalb falbicollis)];
   $SiteDefs::__species_aliases{ 'Gallus_gallus'                     } = [qw(ggal chicken)];
   $SiteDefs::__species_aliases{ 'Meleagris_gallopavo'               } = [qw(mg mgal turkey meleagris)];
   $SiteDefs::__species_aliases{ 'Taeniopygia_guttata'               } = [qw(tg taegut taeniopygia zebrafinch)];
