@@ -1,0 +1,76 @@
+<html>
+<head>
+<meta name="order" content="1" />
+<title>Genome Assemblies</title>
+</head>
+
+<body>
+
+<h1>Genome Assemblies</h1>
+
+<h2>Introduction</h2> 
+
+<p>This page describes which genome assemblies are annotated by Ensembl, where we get our genome assemblies from, how the sequence data for these genome assemblies are structured, and how we represent these data in Ensembl. Ensembl does not produce genome assemblies, instead we provide annotation on genome assemblies that have been deposited into the INSDC (GenBank, ENA, DDBJ) and are publicly available. We select species to annotate on a case-by-case basis according to a number of factors such as: phylogenetic position, assembly quality, model organism, availability of species-specific sequence data (eg. RNASeq), additional funding. For some species, more than one genome assembly has been produced. Ensembl, NCBI and UCSC make a joint decision on which assembly to annotate, in consultation with the species community where possible.</p> 
+
+<h2>Genome Browser agreement</h2> 
+
+<p>The <a href="/info/about/legal/browser_agreement.html">Genome Browser Agreement</a> has been in place for a number of years, and it establishes the minimum requirements for public display of genome data by the Ensembl, NCBI and UCSC browsers/annotation groups.</p> 
+
+<p>For species that have been annotated since the Genome Browser agreement, all genome assemblies have been assigned a unique Genome Collections Accession (GCA). This accession identifies the genome assembly version for a species and the version is incremented each time any change is made to the sequence data. To know whether the assembly that you're viewing in Ensembl is the same as the assembly in another genome browser, compare the Genome Collections Accession found on the species home page.</p> 
+
+<p>We provide links on our Location pages (eg. Region in detail) to the equivalent region in NCBI and UCSC. With the increasing use of big data file formats eg. BAM, it is important to have consistent genomic coordinates across the genome browsers. This allows users to attach and view their files in any genome browser. A number of genome assemblies in Ensembl were annotated prior to the Genome Browser Agreement. These genome assemblies may not be equivalent to assemblies for the same species in other genome browsers.</p> 
+
+<h2>Assembly model</h2>
+
+<p>Genome assemblies are hierarchical. The shortest assembly components are contigs. Contigs are assembled into longer scaffolds, and scaffolds are assembled into chromosomes if there is sufficient mapping information. Many genome assemblies have only been assembled to the scaffold level.</p> 
+
+<p>Scaffolds are classified in three ways:</p> 
+<ul>
+<li>Placed scaffolds: the scaffolds have been placed within a chromosome.</li>
+<li>Unlocalized scaffolds: although the chromosome within which the scaffold occurs is known, the scaffold's position or orientation is not known.</li> 
+<li>Unplaced scaffolds: it is not known which chromosome the scaffold belongs to.</li> 
+</ul>
+
+<p>The relationship between contigs, scaffolds and chromosomes is defined in AGP files. These files describe how assembled sequences (eg. chromosomes) are compiled from their components (eg. scaffolds). In Ensembl, we import contig-level DNA sequence into our core databases. We also import the AGP files for contig-to-scaffold, contig-to-chromosome, and scaffold-to-chromosome mappings. This allows us to generate scaffold and chromosome sequence on the fly by stitching the contigs sequences together as specified by the AGP files.</p> 
+
+<h2>Toplevel</h2> 
+
+<p>For each genome assembly, we define the set of toplevel sequences. These are sequence regions in the genome assembly that are not a component of another sequence region. For example, when a genome is assembled into chromosomes, toplevel sequences will be chromosomes and any unlocalized or unplaced scaffolds. If a genome has only been assembled into scaffolds, then toplevel sequences are the full set of unlocalized and unplaced scaffolds.</p> 
+
+<h2>Alternate sequences in human</h2> 
+
+<p>All genome assemblies in Ensembl are haploid, and for most species there is only a single path through the genome. Currently, human is the only genome assembly where there is more than one path thorugh the genome. The human genome assembly is maintained by the Genome Reference Consortium (GRC). The GRCh37 primary assembly comprises 24 chromosomes plus 39 unplaced scaffolds. In addition to the primary assembly, the GRCh37 major assembly release included 9 alternate loci including 6 haplotypes on the MHC region of chromosome 6. Subsequent minor releases on the GRCh37 assembly introduce additional alternate sequences known as patches.</p> 
+
+<p>There are two types of assembly patches:</p>
+
+<ul>
+<li>Novel patches: provide alternate alleles. These regions are coloured red in the Chromosome summary page and Region in detail page.</li>
+<li>Fix patches: provide improved sequence for known assembly errors. These patches will be incorporated into the primary assembly in the next major assembly release. They are coloured green in the Chromosome summary page and Region in detail page.</li> 
+</ul>
+
+<p>Minor assembly releases have the following naming convention: GRCh37.p7 for the seventh patch release of GRCh37.</p> 
+
+<p>In Ensembl, we display the primary assembly for all species as default. This means that our chromosome coordinates for human will match those on other genome browsers for the same major assembly release. For users who are interested in viewing an updated region of a chromosome, including the alternate sequence, this is also possible.</p> 
+
+<h3>Video: Patches and haplotypes in the human genome</h3>
+<iframe width="560" height="315" src="http://www.youtube.com/embed/sPE9j_Hw9HU" frameborder="0" allowfullscreen></iframe><br /><br />
+
+<h2>Pseudoautosomal region in human</h2>
+
+<p>The pseudoautosomal regions (PAR), where chromosome X and Y share homologous sequence, are defined for human. In Ensembl, the full-length Y chromosome is displayed on our browser. However, within our core human database, the Y chromosome is divided into four regions:</p> 
+
+<ul>
+<li>chromosome:GRCh37:Y:1 - 10000 is unique to Y but is a string of 10000 Ns</li> 
+<li>chromosome:GRCh37:Y:10001 - 2649520 is shared with X (PAR1)</li> 
+<li>chromosome:GRCh37:Y:2649521- 59034049 is unique to Y</li>
+<li>chromosome:GRCh37:Y:59034050 - 59373566 is shared with X (PAR2)</li> 
+</ul>
+
+<p>We store sequence for only the two unique regions of Y in our database. The DNA for PAR1 and PAR2 are loaded only for chromosome X. The full-length chromosome Y can be generated on-the-fly by our API, where we stitch in the shared sequence from X.</p> 
+
+<h2>Mitochondrion</h2> 
+
+<p>The mitochondrial (MT) sequence is imported post-genebuild, along with the gene annotation.</p>
+
+</body>
+</html>

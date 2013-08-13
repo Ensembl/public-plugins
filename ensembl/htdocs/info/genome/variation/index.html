@@ -1,0 +1,282 @@
+<html>
+<head>
+<meta name="order" content="1" />
+<title>Variation</title>
+</head>
+
+<body>
+
+<div>
+
+  <!-- Right hand side menu -->
+  <div style="float:right;margin-left:8px;margin-top:2px;background-color:#F2F2F2;color:#333;border-radius:5px">
+    <div style="padding:5px;margin-bottom:15px;font-weight:bold;color:#FFF;background-color:#336;border-top-left-radius:5px;border-top-right-radius:5px">
+      <img src="/i/16/rev/info.png" style="vertical-align:top" />
+      Documentation menu
+    </div> 
+    
+    <div style="padding:2px;padding-right:5px;background-color:#336;color:#FFF;margin-top:6px;font-weight:bold">
+      <img src="/i/16/rev/page-user.png" style="vertical-align:top;padding-right:2px" />
+      Data
+    </div>
+    <ul style="padding-left:25px;padding-right:5px">
+      <li style="margin-top:4px"><a href="data_description.html">Description</a></li> 
+      <li><a href="sources_documentation.html">Sources</a></li> 
+      <li><a href="predicted_data.html">Predictions</a></li> 
+    </ul>
+    
+    <div style="padding:2px;padding-right:5px;background-color:#336;color:#FFF;margin-top:6px;font-weight:bold">
+      <img src="/i/16/rev/database.png" style="vertical-align:top;padding-right:2px" />
+      Database
+    </div>
+    <ul style="padding-left:25px;padding-right:5px">
+      <li style="margin-top:4px"><a href="database.html">Description</a></li>
+      <li><a href="variation-database-schema.pdf">Schema diagram</a> [PDF]</li>
+      <li><a href="variation_schema.html">Schema documentation</a></li>
+      <li><a href="import_vcf.html">Import VCF script</a></li>
+    </ul>
+    
+    <div style="padding:2px;padding-right:5px;background-color:#336;color:#FFF;margin-top:6px;font-weight:bold">
+      <img src="/i/16/rev/setting.png" style="vertical-align:top;padding-right:2px" />
+      Perl API
+    </div>
+    <ul style="padding-left:25px;padding-right:5px">
+      <li style="margin-top:4px"><a href="/info/docs/api/variation/variation_tutorial.html">Tutorial</a></li>
+      <li><a href="/info/docs/api/variation/index.html">API overview</a> (diagrams)</li>
+       <li><a href="/info/docs/Doxygen/variation-api/index.html">Documentation</a></li>
+    </ul>
+      
+    <div style="padding:2px;padding-right:5px;background-color:#336;color:#FFF;margin-top:6px;font-weight:bold">
+      <img src="/i/16/rev/tool.png" style="vertical-align:top;padding-right:2px" />
+      Variant Effect Predictor (VEP)
+    </div>
+    <ul style="padding-left:25px;padding-right:5px">
+      <li style="margin-top:4px"><a href="vep/index.html#web">Web documentation</a></li> 
+       <li><a href="vep/vep_script.html">Perl script documentation</a></li>
+    </ul>  
+  </div>  
+  
+  <!-- Horizontal menu -->
+  <span style="font-weight:bold">
+    About Ensembl Variation | 
+    <a href="data_description.html">Data Description</a> | 
+    <a href="predicted_data.html">Predicted Data</a> | 
+    <a href="database.html">Database Description</a> | 
+    <a href="/info/docs/api/variation/index.html">Perl API</a> | 
+    <a href="vep/index.html">Variant Effect Predictor</a>
+  </span>
+  
+    
+  <h1 style="margin-top:15px">About Ensembl Variation</h1>
+
+
+  <p style="margin-bottom:0px">
+    The Ensembl Variation database stores areas of the genome that differ
+    between individual genomes ("variants") and, where available,
+    associated disease and phenotype information.<br />
+    There are different types of variants for several <a href="data_description.html#source">species</a>:
+  </p>
+  <ul style="margin-top:2px">
+    <li style="margin-top:4px">single nucleotide polymorphisms (SNPs)</li>
+    <li>short nucleotide insertions and/or deletions</li>
+    <li>longer variants classified as structural variants (including CNVs)</li>
+  </ul>
+
+  <p>
+    Below is a list of the most common types of variants stored in the Ensembl Variation databases:
+  </p>  
+
+  <!-- Sequence variants -->
+  <h3>Sequence variants</h3>
+  <table id="var_desc" class="ss" style="width:750px;border-radius:5px">
+    <tr>
+      <th style="background-color:#8b9bc1;color:#FFF;border-top-left-radius:4px">Type</th>
+      <th style="background-color:#8b9bc1;color:#FFF">Description</th>
+      <th colspan="2" style="background-color:#8b9bc1;color:#FFF;width:50%;border-top-right-radius:4px">Example (Reference / Alternative)</th>
+    </tr>
+    <tr>
+      <td style="font-weight:bold">SNP</td>
+      <td>Single Nucleotide Polymorphism</td>
+      <td>Ref: <pre style="display:inline;font-size:1.2em">...TTG<span style="color:#00C;font-weight:bold">A</span>CGTA...</pre></td>
+      <td>Alt: <pre style="display:inline;font-size:1.2em">...TTG<span style="color:#C00;font-weight:bold">G</span>CGTA...</pre></td>
+    </tr>
+    <tr>
+      <td class="bg2" style="font-weight:bold">Insertion</td>
+      <td class="bg2">Insertion of one or several nucleotides</td>
+      <td class="bg2">Ref: <pre style="display:inline;font-size:1.2em">...TTGACGTA...</pre></td>
+      <td class="bg2">Alt: <pre style="display:inline;font-size:1.2em">...TTGA<span style="color:#C00;font-weight:bold">TG</span>CGTA...</pre></td>
+    </tr>  
+    <tr>
+      <td style="font-weight:bold">Deletion</td>
+      <td>Deletion of one or several nucleotides</td>
+      <td>Ref: <pre style="display:inline;font-size:1.2em">...TTG<span style="color:#00C;font-weight:bold">AC</span>GTA...</pre></td>
+      <td>Alt: <pre style="display:inline;font-size:1.2em">...TTGGTA...</pre></td>
+    </tr>  
+    <tr>
+      <td class="bg2" style="font-weight:bold">Indel</td>
+      <td class="bg2">An insertion and a deletion, affecting 2 or more nucleotides</td>
+      <td class="bg2">Ref: <pre style="display:inline;font-size:1.2em">...TTG<span style="color:#00C;font-weight:bold">A</span>CGTA...</pre></td>
+      <td class="bg2">Alt: <pre style="display:inline;font-size:1.2em">...TTG<span style="color:#C00;font-weight:bold">GCT</span>CGTA...</pre></td>
+    </tr>
+    <tr>
+        <td style="font-weight:bold">Substitution</td>
+      <td>A sequence alteration where the length of the change in the variant is the same as that of the reference.</td>
+      <td>Ref: <pre style="display:inline;font-size:1.2em">...TTG<span style="color:#00C;font-weight:bold">AC</span>GTA...</pre></td>
+      <td>Alt: <pre style="display:inline;font-size:1.2em">...TTG<span style="color:#C00;font-weight:bold">TA</span>GTA...</pre></td>
+    </tr>
+  </table>
+
+  <!-- Structural variants -->
+  <h3>Structural variants</h3>
+  <table id="var_desc" class="ss" style="width:750px;border-radius:5px">
+      <tr>
+      <th style="background-color:#8b9bc1;color:#FFF;border-top-left-radius:4px">Type</th>
+      <th style="background-color:#8b9bc1;color:#FFF">Description</th>
+      <th colspan="2" style=" background-color:#8b9bc1;color:#FFF;width:50%;border-top-right-radius:4px">Example (Reference / Alternative)</th>
+    </tr>
+    <tr>
+      <td style="font-weight:bold">CNV</td>
+      <td>Copy Number Variation: increases or decreases the copy number of a given region</td>
+      <td>Reference:<br />
+        <div style="margin-top:2px">
+          <div style="float:left;width:43px;height:10px;background-color:#000"></div>
+          <div style="float:left;width:15px;height:10px;background-color:#00C;border-left:1px solid #888"></div> 
+          <div style="float:left;width:15px;height:10px;background-color:#00C;border-left:1px solid #888"></div> 
+          <div style="float:left;width:15px;height:10px;background-color:#00C;border-left:1px solid #888"></div>  
+          <div style="float:left;width:30px;height:10px;background-color:#000;border-left:1px solid #888"></div>  
+        </div>
+      </td>
+      <td>"Gain" of one copy:<br />
+        <div style="margin-top:2px">
+          <div style="float:left;width:43px;height:10px;background-color:#000"></div>
+          <div style="float:left;width:15px;height:10px;background-color:#00C;border-left:1px solid #888"></div> 
+          <div style="float:left;width:15px;height:10px;background-color:#00C;border-left:1px solid #888"></div> 
+          <div style="float:left;width:15px;height:10px;background-color:#00C;border-left:1px solid #888"></div>  
+          <div style="float:left;width:15px;height:10px;background-color:#C00;border-left:1px solid #888"></div>
+          <div style="float:left;width:30px;height:10px;background-color:#000;border-left:1px solid #888"></div>  
+        </div>
+        <br />
+        "Loss" of one copy:
+        <div style="margin-top:2px">
+          <div style="float:left;width:43px;height:10px;background-color:#000"></div>
+          <div style="float:left;width:15px;height:10px;background-color:#00C;border-left:1px solid #888"></div> 
+          <div style="float:left;width:15px;height:10px;background-color:#00C;border-left:1px solid #888"></div> 
+          <div style="float:left;width:30px;height:10px;background-color:#000;border-left:1px solid #888"></div>  
+        </div>
+      </td>
+    </tr>
+    <tr class="bg2">
+      <td class="bg2" style="font-weight:bold">Inversion</td>
+      <td class="bg2">A continuous nucleotide sequence is inverted in the same position</td>
+      <td class="bg2">Reference:<br />
+        <div style="margin-top:2px">
+          <div style="float:left;width:50px;height:10px;background-color:#000;border-right:2px solid #0C0"></div>
+          <div style="float:left;width:50px;height:10px;background-color:#00C">
+            <div style="float:left;margin-left:5px;border-top:5px solid transparent;border-bottom:5px solid transparent;border-left:10px solid #DDD"></div>
+            <div style="float:left;margin-left:5px;border-top:5px solid transparent;border-bottom:5px solid transparent;border-left:10px solid #DDD"></div>
+            <div style="float:left;margin-left:5px;border-top:5px solid transparent;border-bottom:5px solid transparent;border-left:10px solid #DDD"></div>
+          </div> 
+          <div style="float:left;width:18px;height:10px;background-color:#000;border-left:2px solid #FFFF00"></div>  
+        </div>
+      </td>
+      <td class="bg2">Alternative:<br />
+         <div style="margin-top:2px">
+          <div style="float:left;width:50px;height:10px;background-color:#000;border-right:2px solid #FFFF00"></div>
+          <div style="float:left;width:50px;height:10px;background-color:#C00">
+            <div style="float:left;margin-left:5px;border-top:5px solid transparent;border-bottom:5px solid transparent;border-right:10px solid #DDD"></div>
+            <div style="float:left;margin-left:5px;border-top:5px solid transparent;border-bottom:5px solid transparent;border-right:10px solid #DDD"></div>
+            <div style="float:left;margin-left:5px;border-top:5px solid transparent;border-bottom:5px solid transparent;border-right:10px solid #DDD"></div>
+          </div> 
+          <div style="float:left;width:18px;height:10px;background-color:#000;border-left:2px solid #0C0"></div>  
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td style="font-weight:bold">Translocation</td>
+      <td>A region of nucleotide sequence that has translocated to a new position</td>
+      <td>Reference:<br />
+        <div style="margin-top:2px">
+          <div style="float:left;width:20px;height:10px;background-color:#000;border-right:1px solid #888"></div>
+          <div style="float:left;width:40px;height:10px;background-color:#00C"></div> 
+          <div style="float:left;width:60px;height:10px;background-color:#000;border-left:1px solid #888"></div>  
+        </div>
+      </td>
+      <td>Alternative:<br />
+        <div style="margin-top:2px">
+          <div style="float:left;width:70px;height:10px;background-color:#000;border-right:1px solid #888"></div>
+          <div style="float:left;width:40px;height:10px;background-color:#C00"></div> 
+          <div style="float:left;width:10px;height:10px;background-color:#000;border-left:1px solid #888"></div>  
+        </div>
+      </td>
+    </tr>
+  </table>
+
+  <p>These are only some example of variation types you can find in Ensembl. The full list is available <a href="/info/docs/variation/data_description.html#classes">here</a>.</p>
+  <br />
+
+  <p>
+    We predict the effects of variants on the Ensembl transcripts and
+    regulatory features for each species. You can run the same analysis on
+    your own data using the <a href="vep/index.html">Variant Effect
+    Predictor</a>.
+    <br />
+    These data are integrated with other data sources in Ensembl, and can
+    be accessed using the API (see links on the right handside menu) or website.
+  </p>
+
+  <!-- Webpage examples -->
+  <h4>Here are some webpage examples:</h4>
+  <ul style="border:1px solid #555;border-radius:5px;width:800px">
+    <li><a href="/Homo_sapiens/Variation/Explore?v=rs1333049">SNP</a> - example of a SNP variation home page.</li>
+    <li><a href="/Homo_sapiens/Variation/Explore?v=rs72508136">InDel</a> - example of an Indel variation home page.</li>
+    <li><a href="/Homo_sapiens/StructuralVariation/Explore?sv=esv234231">Structural variant (CNV)</a> - example of a structural variation home page.</li>
+    <li><a href="/Homo_sapiens/Variation/Explore?v=COSM191229">Somatic variant</a> - home page of an somatic variation.</li>
+    <li><a href="/Homo_sapiens/Gene/Variation_Gene/Table?g=ENSG00000139618">All the variations in the gene 'BRCA2'</a> - page listing the variations within the gene 'BRCA2', by consequence type.</li>
+    <li><a href="/Homo_sapiens/Phenotype/Locations?ph=5815">Phenotype karyotype page</a> - page displaying on a karyotype all the variations associated with the phenotype 'Glaucoma'.</li>
+  </ul>
+
+</div>
+<div style="clear:both" />
+
+<br />
+<h2 id="references">References</h2>
+
+<ul>
+  <li>
+    <p>Flicek P, Ahmed I, Amode MR, Barrell D, Beal K, Brent S, Carvalho-Silva D, Clapham P, Coates G, Fairley S, Fitzgerald S, Gil L, Garc&iacute;a-Gir&oacute;n C, Gordon L,<br />
+    Hourlier T, Hunt S, Juettemann T, K&auml;h&auml;ri AK, Keenan S, Komorowska M, Kulesha E, Longden I, Maurel T, McLaren WM, Muffato M, Nag R, Overduin B, Pignatelli M,<br />
+    Pritchard B, Pritchard E, Riat HS, Ritchie GR, Ruffier M, Schuster M, Sheppard D, Sobral D, Taylor K, Thormann A, Trevanion S, White S, Wilder SP, Aken BL,<br />
+    Birney E, Cunningham F, Dunham I, Harrow J, Herrero J, Hubbard TJ, Johnson N, Kinsella R, Parker A, Spudich G, Yates A, Zadissa A, Searle SM.<br />
+    <strong>Ensembl 2013</strong><br />
+    <em>Nucleic Acids Research</em> 41(D1):D48-55 (2013)<br />
+    <a href="http://dx.doi.org/10.1093/nar/gks1236" rel="external">doi:10.1093/nar/gks1236</a></p>
+  </li>
+
+  <li>
+    <p>McLaren W, Pritchard B, Rios D, Chen Y, Flicek P, Cunningham F.<br />
+    <strong>Deriving the consequences of genomic variants with the Ensembl API and SNP Effect Predictor.</strong><br />
+    <em>BMC Bioinformatics</em> 26(16):2069-70(2010)<br />
+    <a href="http://dx.doi.org/10.1093/bioinformatics/btq330"
+    rel="external">doi:10.1093/bioinformatics/btq330 </a></p> 
+  </li>
+
+  <li>
+    <p>
+    Rios D, McLaren WM, Chen Y, Birney E, Stabenau A, Flicek P, Cunningham F.<br />
+    <strong>A Database and API for variation, dense genotyping and resequencing data</strong><br />
+    <em>BMC Bioinformatics</em> 11:238 (2010)<br />
+    <a href="http://dx.doi.org/10.1186/1471-2105-11-238"
+    rel="external">doi:10.1186/1471-2105-11-238</a></p>
+  </li>
+
+  <li>
+    <p>Chen Y, Cunningham F, Rios D, McLaren WM, Smith J, Pritchard B, Spudich GM, Brent S, Kulesha E, Marin-Garcia P, Smedley D, Birney E, Flicek P.<br />
+    <strong>Ensembl Variation Resources</strong><br />
+    <em>BMC Genomics</em> 11(1):293 (2010)<br />
+    <a href="http://dx.doi.org/10.1186/1471-2164-11-293"
+    rel="external">doi:10.1186/1471-2164-11-293</a></p>
+  </li>
+</ul>
+
+</body>
+</html>

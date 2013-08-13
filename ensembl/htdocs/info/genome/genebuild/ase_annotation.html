@@ -1,0 +1,173 @@
+<html>
+<head>
+<title>Identifying Alternative Splicing Events</title>
+</head>
+<body>
+
+<h1>Alternative Splicing Event Set</h1>
+
+<h2 id="Introduction">Introduction</h2>
+
+<p>Alternative splicing is a widespread mechanism for generating protein 
+diversity and regulating protein expression. 
+The term alternative splicing is used in biology to describe any case in which 
+a primary transcript can be spliced in more than one pattern to generate 
+multiple, distinct mRNAs.</p>
+
+<p>The set of alternative splicing events (AS events) is derived from
+Ensembl <a href="./genome_annotation.html">gene annotation</a>. The
+Ensembl gene set includes both automatic and manual annotation, with
+all transcripts based on experimental evidence.</p>
+<p>Alternatively spliced transcripts from any given Ensembl gene are 
+compared to provide a comprehensive list of elementary alternative splicing events. 
+These data can be found on the website in the gene
+and/or transcript tab, and can be accessed by BioMart, or
+programmatically from the core database using the Perl API.</p>
+
+<p>AS events are available for the following model organisms:</p>
+
+<ul>
+<li><i>Caenorhabditis elegans</i></li>
+<li><i>Danio rerio</i></li>
+<li><i>Drosophila melanogaster</i></li>
+<li><i>Homo sapiens</i></li>
+<li><i>Mus musculus</i></li>
+<li><i>Rattus norvegicus</i></li>
+</ul>
+
+
+<h2 id="Definition">Alternative Spliced Patterns</h2>
+
+<p>Seven common patterns of alternatively spliced exonic regions are automatically annotated 
+in Ensembl for the species mentioned. </p>
+
+<table>
+
+<tr>
+<th>AS Pattern Type</th>
+<th>Acronym</th>
+<th>Definition</th>
+</tr>
+
+<tr>
+<td>Cassette exon (skipped exon)</td>
+<td>CE</td>
+<td>One exon is spliced out of the primary transcript together with
+its flanking introns.</td>
+</tr>
+
+<tr>
+<td>Intron retention</td>
+<td>IR</td>
+<td>A sequence is spliced out as an intron or remains in the mature
+mRNA transcript.</td>
+</tr>
+
+<tr>
+<td>Mutually exclusive exons</td>
+<td>MXE</td>
+<td>Refer to a case in which multiple cassette exons are used in a mutually exclusive manner. 
+In the simplest case: two consecutive exons that are never both included in the mature mRNA transcript.</td>
+</tr>
+
+<tr>
+<td>Alternative 3' sites</td>
+<td>A3SS</td>
+<td>Also called alternatively acceptor sites. Two or more splice sites
+are recognized at the 5' end of an exon. An alternative 3' splice
+junction (acceptor site) is used, changing the 5' boundary of the
+downstream exon.</td>
+</tr>
+
+<tr>
+<td>Alternative 5' sites</td>
+<td>A5SS</td>
+<td>Also called alternative donor sites. Two or more splice sites are
+recognized at the 3' end of an exon. An alternative 5' splice junction
+(donor site) is used, changing the 3' boundary of the upstream
+exon.</td>
+</tr>
+
+<tr>
+<td>Alternative first exon</td>
+<td>AFE</td>
+<td>Second exons of each variant have identical boundaries, but
+first exons are mutually exclusive. This is to annotate possible
+alternative promoter usage*.</td>
+</tr>
+
+<tr>
+<td>Alternative last exon</td>
+<td>ALE</td>
+<td>Penultimate exons of each splice variant have identical
+boundaries, but last exons are mutually exclusive. This is to
+allow annotation of possible alternative polyadenylation
+usage*.</td>
+</tr>
+
+</table>
+
+
+<p>* AFE and ALE event types are difficult to interpret and additional
+biological evidence is needed to support alternative promoter or
+polyadenylation usage, respectively.</p>
+
+<p>Ensembl adds two types of AS events defined by the ASTD project
+[1].</p>
+
+<table>
+
+<tr>
+<th>AS Pattern Type</th>
+<th>Acronym</th>
+<th>Definition</th>
+</tr> 
+
+<tr>
+<td>Intron isoform</td>
+<td>II</td>
+<td>Alternative donor or acceptor splice sites lead to truncation or
+extension of introns, respectively. This is for introns with
+truncation and/or extension on <strong>both</strong> splice
+sites.</td>
+</tr>
+
+<tr>
+<td>Exon isoform</td>
+<td>EI</td>
+<td>Alternative donor or acceptor splice sites leads to truncation or
+extension of exons, respectively. This is for exons with truncation
+and/or extension on <strong>both</strong> splice sites. First and last
+exons are not considered in this computation. Flanking exons accross
+splice variants must overlap.</td>
+</tr>
+
+</table>
+
+<p>Different acronyms for the same type of AS event can be found in
+the scientific literature and in several online related
+resources. Ensembl uses CE, IR, MXE, A3SS, A5SS, AFE, ALE, II, EI as
+standard acronyms. Similar acronyms can be found in [1] and [2].</p>
+
+<p><strong>References</strong></p>
+
+<p>1. <span class="ref-auth">Koscielny G, Le Texier V, Gopalakrishnan
+C, Kumanduri V, Riethoven JJ, Nardone F, Stanley E, Fallsehr C,
+Hofmann O, Kull M, Harrington E, Bou&eacute; S, Eyras E, Plass M,
+Lopez F, Ritchie W, Moucadel V, Ara T, Pospisil H, Herrmann A, G Reich
+J, Guig&oacute; R, Bork P, Doeberitz MK, Vilo J, Hide W, Apweiler R,
+Thanaraj TA, Gautheret D.</span><br />
+<span class="ref-title">ASTD: The Alternative Splicing and Transcript
+Diversity database.</span><br />
+<span class="ref-pub">Genomics.</span> 2009 Mar;93(3):213-20.<br />
+<a href="http://dx.doi.org/10.1016/j.ygeno.2008.11.003">10.1016/j.ygeno.2008.11.003</a></p>
+
+<p>2. <span class="ref-auth">Wang ET, Sandberg R, Luo S, Khrebtukova I,
+Zhang L, Mayr C, Kingsmore SF, Schroth GP, Burge CB.</span><br />
+<span class="ref-title">Alternative Isoform Regulation in Human Tissue
+Transcriptomes.</span><br />
+<span class="ref-pub">Nature</span> 456, 470-476.<br />
+<a href="http://dx.doi.org/10.1038/nature07509">doi:10.1038/nature07509</a></p>
+
+</body>
+</html>
