@@ -1,0 +1,64 @@
+<html>
+<head>
+<meta name="order" content="2" />
+  <meta name="navigation" content="Comparative Genomics">
+  <title>Comparative Genomics</title>
+
+
+</head>
+
+<body>
+
+<h1>Comparative Genomics</h1>
+
+<h2>Data available</h2>
+
+<ul>
+<li><strong>Gene trees</strong> are constructed using a representative protein for every gene in Ensembl: proteins are clustered using <a href="http://treesoft.svn.sourceforge.net/viewvc/treesoft/branches/lh3/hcluster/">hcluster_sg</a> based on <a href="http://blast.wustl.edu/">WU-BLAST</a> scores, and each cluster of proteins is aligned using <a href="http://www.tcoffee.org/Projects_home_page/m_coffee_home_page.html">M-Coffee</a>. Finally, <a href="http://treesoft.sourceforge.net/treebest.shtml">TreeBeST</a> is used to produce a gene tree from each multiple alignment, reconciling it with the species tree to call duplication events. <strong>Homologues</strong> are deduced from these trees. We also determine gene gain and loss events using the <a href="http://sites.bio.indiana.edu/~hahnlab/Software.html">CAFE</a> software.
+<a href="homology_method.html">More information&rarr;</a> <a href="prot_tree_stats.html">Tree statistics&rarr;</a></li> 
+
+<li><strong>ncRNA trees</strong> are constructed using gene families represented in <a href="http://rfam.janelia.org/">RFAM</a>, for which a specific covariance model is provided. For each gene family, we build several trees using secondary structure alignments with <a href="http://infernal.janelia.org/">INFERNAL</a> and genomic alignments with <a href="">PRANK</a>. All the trees are merged into a final tree using <a href="http://treesoft.sourceforge.net/treebest.shtml">TreeBeST</a>. Using this final tree we infer orthology and paralogy. We also determine gene gain and loss events using the <a href="http://sites.bio.indiana.edu/~hahnlab/Software.html">CAFE</a> software.
+<a href="ncRNA_methods.html">More information&rarr;</a>. <a href="nc_tree_stats.html">Tree statistics&rarr;</a></li>
+
+<li><strong>Families</strong> are constructed by MCL clustering of all Ensembl proteins (potentially several per gene).  
+Metazoan proteins from <a href="http://www.ebi.ac.uk/uniprot/">UniProtKB SwissProt and SPTREMBL</a> 
+are added to extend the protein set. <a href="family.html">More information&rarr;</a></li>
+
+<li><strong>Whole genome alignments</strong> are performed either pairwise between two species using BlastZ-net or translated Blat analysis, or using multiple species. <a href="analyses.html">More information &rarr;</a></li>
+
+<li><strong>Ancestral sequences</strong> are calculated from multi-species whole genome 
+alignments.  <a href="analyses.html#ancestral">More information&rarr;</a></li>
+
+<li><strong>Conservation scores and constrained elements</strong> are 
+calculated from the whole genome multiple alignments.  
+<a href="analyses.html#conservation">More information&rarr;</a></li>
+
+<li><strong>Syntenies</strong> are calculated from the pairwise alignments.
+<a href="analyses.html#synteny">More information&rarr;</a></li>
+
+<li><strong>Stable IDs</strong> are provided for Families and Gene Trees and relate exclusively to the content of the Family or the Gene Tree.
+<a href="stable_ids.html">More information&rarr;</a></li>
+
+</ul>
+
+<h2>Access</h2>
+<p>
+<strong>Data</strong> can be accessed using the <a href="/info/docs/api/compara/index.html">Compara Perl API</a>, 
+<a href="/info/data/biomart.html">BioMart</a>, or comparative genomics pages on the browser.
+Gene trees can be viewed from any 'Gene' page on the browser, and exported via the control panel and the Jalview plug-in
+in the pop-ups that appear when clicking on any part of the tree.
+</p>
+
+<p>The external Java-based tool PhyloWidget can also be used to visualise phylogenetic trees of compara species. An example which includes all the current species for the main Ensembl website, plus a few additional mammalian species of interest, has been created by the Compara team:</p>
+
+<ul><li><a href="http://www.phylowidget.org/full/index.html?tree=http://tinyurl.com/ensembltree&amp;useBranchLengths=true&amp;minTextSize=7">Ensembl species tree</a> (requires Java)
+<br/>
+At UCSC and Ensembl, we have agreed to use the same species tree for the alignments. However, we do not work exactly with the same set of species (you can find more information <a href="http://genomewiki.ucsc.edu/index.php/Human/hg19/GRCh37_46-way_multiple_alignment#4D_sites_branch_length_calculations">here</a>).
+The branch lengths used in Ensembl are based on a mixture of an estimation based on 4D sites and an estimation based on million years since the divergence of two species (the data being taken from <a href="http://www.timetree.org">the TimeTree database</a>).
+
+
+</li></ul>
+
+
+</body>
+</html>

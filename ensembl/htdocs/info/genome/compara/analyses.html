@@ -1,0 +1,119 @@
+<html>
+<head>
+
+  <meta name="navigation" content="Comparative Genomics">
+  <title>Pairwise alignments</title>
+
+
+</head>
+
+<body>
+
+<h1>Genomic alignments</h1>
+
+<h2 id="blastz_net">BlastZ-net/Lastz-net Pairwise Alignment Analysis</h2>
+
+<p>BlastZ-net (<a href="http://www.genome.org/cgi/content/abstract/13/1/103">Schwartz
+S et al., Genome Res.;13(1):103-7</a>, <a href="http://www.pnas.org/cgi/content/full/100/20/11484">Kent
+WJ et al., Proc Natl Acad Sci U S A., 2003;100(20):11484-9</a>) or the newer version <a href="http://www.bx.psu.edu/~rsharris/lastz/">LastZ-net</a>
+alignments are provided for closely related pairs of species. The
+alignments are the results of post-processing the raw BlastZ or LastZ results.
+In the first step, original blocks are chained according to their
+location in both genomes. The netting process chooses for the reference
+species the best sub-chain in each region. The reference species in the
+BlastZ-net or LastZ-net alignments is in bold:</p>
+
+[[SCRIPT::EnsEMBL::Web::Document::HTML::Compara::BlastZ]]
+
+<h2 id="tblat">Translated Blat Pairwise Alignment Analysis</h2>
+
+<p>Translated blat (<a href="http://www.genome.org/cgi/content/abstract/12/4/656">Kent
+W, Genome Res., 2002;12(4):656-64</a>) is used to look for
+homologous regions between more distantly related pairs of species. We
+expect to find homologies mainly in coding regions. There are 2 sets of
+translated blat analyses: a new set where the raw results were passed through 
+a chain and netting procedure similar to that used for the BlastZ-net analyses 
+to produce the best sub-chain for the reference species (Translated Blat Net).</p>
+
+<h3>Translated Blat Net</h3>
+
+[[SCRIPT::EnsEMBL::Web::Document::HTML::Compara::TBlat]]
+
+<h2 id="pecan">PECAN Multiple Alignment Analysis</h2>
+
+
+<p>Pecan is used to provide global multiple genomic alignments. First,
+Mercator is used to build a synteny map between the genomes and then
+Pecan builds alignments in these syntenic regions.</p>
+
+<p>Pecan is a global multiple sequence alignment program that makes
+practical the probabilistic consistency methodology for significant
+numbers of sequences of practically arbitrary length. As input it
+takes a set of sequences and a phylogenetic tree. The parameters and
+heuristics it employs are highly user configurable, it is written
+entirely in Java and also requires the installation of Exonerate.
+<a href="http://github.com/benedictpaten/pecan">Pecan source code</a>.</p>
+
+[[SCRIPT::EnsEMBL::Web::Document::HTML::Compara::Pecan]]
+
+<h2 id="epo">EPO Multiple Alignment Analysis</h2>
+
+
+<p>The EPO 
+(Enredo, Pecan, Ortheus) <a href="/info/docs/compara/epo_anchors_info.html" class="bold">pipeline</a> is a three step pipeline for whole-genome
+multiple alignments. Enredo produces colinear segments from 
+extant genomes handling both rearrangements, deletions and duplications. 
+Pecan, as described above, is used to align these segments. Finally, Ortheus 
+is used to create genome-wide ancestral sequence reconstructions.
+Further details on these methods can be found at:</p>
+<ul>
+<li><a href="http://dx.doi.org/10.1101/gr.076554.108">Enredo and Pecan: Genome-wide mammalian consistency-based multiple alignment with paralogs</a></li>
+<li><a href="http://dx.doi.org/10.1101/gr.076521.108">Genome-wide nucleotide-level mammalian ancestor reconstruction</a></li>
+</ul>
+
+<p>The high coverage eutherian mammal alignments were generated using the recent EPO (Enredo Pecan Ortheus) pipeline.  </p>
+
+<p>Each alignment set can be accessed using the <a href="/info/docs/Doxygen/compara-api/index.html"> Compara API</a> via the Bio::EnsEMBL::DBSQL::MethodLinkSpeciesSetAdaptor using the method_link_type and either the list of the species or the species_set_name. </p>
+
+
+[[SCRIPT::EnsEMBL::Web::Document::HTML::Compara::EPO]]
+
+<p>The full set of eutherian mammmal alignments were not generated using the EPO pipeline due to difficulties with running Ortheus on the low coverage genomes. Instead the low coverage genomes were projected on to the high coverage EPO eutherian mammal alignments using (B)lastZ-net alignments. </p>
+
+[[SCRIPT::EnsEMBL::Web::Document::HTML::Compara::EPOlc]]
+
+
+<p id="ancestral"><strong>Ancestral sequences</strong> are inferred from the EPO multiple alignments 
+using Ortheus. Ortheus is a probabilistic method for the inference of ancestor, a.k.a tree, 
+alignments. The main contribution of Ortheus is the use of a phylogenetic model incorporating 
+gaps to infer insertion and deletion events. Ancestral sequences are predicted for each node 
+of the phylogenetic tree that relates the sequences. Each ancestral sequence is named 
+according to the derived extant species. For example, a sequence named Hsap, Ptro, Mmul 
+corresponds to the ancestor of the <i>Homo sapiens</i>, <i>Pan troglodytes</i>, and 
+<i>Macaca mulatta</i> genomes.  </p>
+
+<h2 id="conservation">Conservation Analysis</h2>
+
+<p>Additionally we use Gerp
+(<a href="http://www.genome.org/cgi/content/abstract/15/7/901">Cooper
+GM et al., Genome Res., 2005; 15:901-913</a>) to calculate conservation
+scores and call constrained elements on the PECAN and EPO_LOW_COVERAGE multiple alignments.
+Conservation scores are estimated on a column-by-column basis.
+Constrained elements are stretches of the multiple alignment where the
+sequences are highly conserved according to the previous score.</p>
+
+
+
+<h2 id="synteny">Synteny Analysis</h2>
+
+<p>We calculate syntenic regions using blastz-net alignments. We look for
+stretches where the alignment blocks are in synteny. The search is run in
+two phases. In the first one, syntenic alignments that are closer than 200
+kbp are grouped. In the second phase, the groups that are in synteny are
+linked provided that no more than 2 non-syntenic groups are found between
+them and they are less than 3Mbp apart.</p>
+
+[[SCRIPT::EnsEMBL::Web::Document::HTML::Compara::Synteny]]
+
+</body>
+</html>

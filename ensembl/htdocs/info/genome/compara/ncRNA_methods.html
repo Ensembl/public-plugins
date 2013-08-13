@@ -1,0 +1,66 @@
+<html>
+  <head>
+    <title>ncRNA orthologies</title>
+    <meta name="author" content="web" />
+    <meta name="navitagion" content="Comparative Genomics" />
+  </head>
+  <body>
+    <h1>ncRNA orthology determination</h1>
+    <h2>ncRNA trees</h2>
+
+    <p>
+      Evolutionary models used for protein-coding genes assume the positions in the protein evolve independently. NcRNA genes are well known to form secondary structures where pairs of residues are matched to form loops and other structures. Substitution models that consider pairs of sites have been proposed and implemented in several packages like PHASE or RAxML.
+    </p>
+
+    <p>
+      The detection of orthologies and paralogies for short ncRNA genes are generated
+      by a pipeline that uses a strategy similar to the one explained for
+      <a href="homology_method.html">Gene Trees</a><a href="#fn1" class="fn-link"><sup>1</sup></a> but adapted to the specific
+      characteristics of ncRNAs like their secondary structure.
+    </p>
+
+    <p>
+      <pre>
+      Reference:
+      ncRNA orthologies in the vertebrate linage.
+      Pignatelli M, Vilella AJ, Gordon L, Flicek P and Herrero J.
+      Manuscript in preparation
+      </pre>
+    </p>
+
+    <p>The ncRNA tree pipeline consists of the following steps:</p>
+    <img src="ncRNAtree.png" width=300/>
+    <ol>
+      <li>Get and store ncRNA Family Models from <a href="http://rfam.sanger.ac.uk/">RFAM<a><a href="#fn2" class="fn-link"><sup>2</sup></a></li>
+      <li>Load and identify all the ncRNA members annotated in all the Ensembl genomes</li>
+      <li>Filter out extra copies in low-coverage assemblies usin our <a href="analyses.html">EPO multiple alignments</a><a href="#fn3" class="fn-link"><sup>3</sup></a></li>
+      <li>Build secondary structure alignments using <a href="http://infernal.janelia.org/">INFERNAL</a><a href="#fn4" class="fn-link"><sup>4</sup></a> and refinement of the covariance model</li>
+      <li>Build ncRNA trees with <a href="http://sco.h-its.org/exelixis/software.html">RAxML</a><a href="#fn5" class="fn-link"><sup>5</sup></a> using 16 different secondary structure models</li>
+      <li>In parallel with the secondary structure alignments and trees, build multiple alignments with <a href="http://www.ebi.ac.uk/goldman-srv/prank/prank/">PRANK</a><a href="#fn6" class="fn-link"><sup>6</sup></a> with the genomic sequences of the ncRNAs. For these alignments we include the flanking region of the genes (2 times the length of the gene at each side).</li>
+      <li>With the genomic alignments, build a neighbour-joining (NJ) and a maximum-likelihood (ML) tree using <a href="http://treesoft.sourceforge.net/treebest.shtml">TreeBeST</a><a href="#fn7" class="fn-link"><sup>7</sup></a>.</li>
+      <li>For very big families, build fast and efficient trees using <a href="http://www.microbesonline.org/fasttree/">FastTree</a><a href="#fn8" class="fn-link"><sup>8</sup></a> and <a href="http://sco.h-its.org/exelixis/software.html">RAxML-Light</a></li>
+      <li>For each family, add the species tree to the set of trees already obtained and reconcile them all using <a href="http://treesoft.sourceforge.net/treebest.shtml">TreeBeST</a><a href="#fn7" class="fn-link"><sup>7</sup></a> obtaining one final tree for each family.</li>
+      <img src="Tree_reconciliation.png" width=500/>
+      <li>Infer orthology and paralogy relationships by comparing each pair of genes in each tree. The possible homology types are:
+	<ul>
+	  <li><strong>Paralogs</strong> - Two genes are from the same species and derived from a duplication event in their ancestor.</li>
+	  <li><strong>One-to-one Orthologs</strong> - Two genes are from different species, they are related by a speciation event and they are the only copies of the ancestral gene in their species</li>
+	  <li><strong>Apparent Orthologs one-to-one</strong> - Are one-to-one orthologs that are related by an ambiguous node (a duplication that is not supported by any duplication in the extant species)</li>
+	  <li><strong>One-to-many Orthologs</strong> - Two genes are from different species, there is evidence for duplication events in the history of the gene, one of the genes is the only remaining representative of the ancestor in its species but the other gene has multiple copies in its species</li>
+	  <li><strong>Possible orthologs</strong> - Are dubious cases of genes related by an ill-supported duplication node.</li>
+	</ul>
+	More information about these relationships can be found in the <a href="homology_method.html">Gene Trees</a><a href="#fn1" class="fn-link"><sup>1</sup></a> documentation.
+    </ol>
+    <h2>References</h2>
+    <ol>
+      <li id="fn1">Vilella AJ, Severin J, Ureta-Vidal A, Heng L, Durbin R, Birney E. <strong>EnsemblCompara GeneTrees: Complete, duplication aware phylogenetic trees in vertebrates</strong>. <i>Genome Res</i> 2009 19:327 </li>
+      <li id="fn2">Gardner PP, Daub J, Tate J, Moore BL, Osuch IH, Griffiths-Jones S, Finn RD, Nawrocki EP, Kolbe DL, Eddy SR, Bateman A. <strong>Rfam: Wikipedia, clans and the "decimal" release</strong>. <i>Nucleic Acid Res</i> 2011, DatabaseIssue:D141</li>
+      <li id="fn3">Paten B, Herrero J, Beal K, Fitzgerald S, Birney E. <strong>Enredo and Pecan: genome-wide mammalian consistency-based multiple alignment with paralogs</strong>. <i>Genome Res</i> 2008 18:1814</li>
+      <li id="fn4">Nawrocki EP, Kolbe DL, Eddy SR. <strong>Infernal 1.0: inference of RNA alignments</strong>. <i>Bioinformatics</i> 2009 25:1335</li>
+      <li id="fn5">Stamatakis A. <strong>RAxML-VI-HPC: maximum likelihood-based phylogenetic analyses with thousands of taxa and mixed models</strong>. <i>Bioinformatics</i> 2006 22:2688</li>
+      <li id="fn6">Loytynoja A, Goldman N. <strong>webPRANK: a phylogeny-aware multiple sequence aligner with interactive alignment browser</strong>. <i>BMC Bioinformatics</i> 2010 11:579</li>
+      <li id="fn7">Li H et al. <strong>TreeBeST</strong>.  <a href="http://treesoft.sourceforge.net/treebest.shtml">http://treesoft.sourceforge.net/treebest.shtml</a>
+      <li id="fn8">Price MN, Dehal PS, Arkin AP. <strong>FastTree 2--aproximately maximum-likelihood trees for large alignments</strong>. <i>PLoS One</i> 2010 5:e9490</li>
+    </ol>
+</body>
+</html>
