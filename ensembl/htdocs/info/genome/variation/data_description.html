@@ -6,37 +6,6 @@
 
 <body>
 
-<div>
-  <!-- Right hand side menu -->
-  <div style="float:right;margin-left:8px;margin-top:2px;background-color:#F2F2F2;color:#333;border-radius:5px">
-    <div style="padding:5px;font-weight:bold;color:#FFF;background-color:#336;border-top-left-radius:5px;border-top-right-radius:5px">
-      <img src="/i/16/rev/info.png" style="vertical-align:top" />
-      Page content
-    </div> 
-    <ul style="padding-left:25px;padding-right:5px">
-      <li><a href="#sources">Species & Sources</a></li> 
-      <li><a href="#displays">Displays</a></li> 
-      <li><a href="#datatypes">Data types</a></li> 
-      <li><a href="#classes">Variation classes</a></li>
-      <li><a href="#indel">Insertion & Deletion coordinates</a></li>
-      <li><a href="#populations">Populations</a></li>
-      <li><a href="#variation_sets">Variation sets</a></li>
-      <li><a href="#clin_significance">Clinical significance</a></li>
-      <li><a href="#evidence_status">Evidence status</a></li>
-      <li><a href="#quality_control">Quality control</a></li>
-    </ul>
-  </div>
-
-  <!-- Horizontal menu -->
-  <span style="font-weight:bold">
-    <a href="index.html">About Ensembl Variation</a> | 
-    Data Description | 
-    <a href="predicted_data.html">Predicted Data</a> |
-    <a href="database.html">Database Description</a> |  
-    <a href="/info/docs/api/variation/index.html">Perl API</a> |
-    <a href="vep/index.html">Variant Effect Predictor</a>
-  </span>
-  
   <h1 style="margin-top:15px">Ensembl Variation - Data description</h1>
 
   <p>
@@ -72,9 +41,6 @@
       <a href="/Homo_sapiens/Variation/Sequence?v=rs699"><img src="/i/96/var_flanking_sequence.png" class="portal" alt="Genomic sequence flanking a variation" title="Genomic sequence flanking a variation"/></a>
     </li>
   </ul>
-  <br /><br />
-</div>
-<div style="clear:both" />
 
 
 <h2 id="sources"> Variation species and data sources </h2>
@@ -240,7 +206,7 @@ href="http://www.genome.gov/">NHGRI</a> and Ensembl genes and
 transcripts that include the variation can be found at the left of
 this tab. You may also view multiple genome alignments of various
 species, highlighting the
-variation. <a href="/info/docs/compara/analyses.html#ancestral"
+variation. <a href="/info/genome/compara/analyses.html#ancestral"
 class="cp-external">Ancestral sequences</a> are included in this
 display. 
 </p>
@@ -253,9 +219,7 @@ the <a href="/info/docs/api/index.html" class="cp-external">Perl
 API</a> (<a href="/info/docs/api/variation/index.html"
 class="cp-external">variation API</a>).
 </p>
-</div>
 
-<br />
 <h2 id="datatypes">Data types</h2>
 <p>
 The Ensembl Variation database stores data imported from external sources and also data calculated on site.
@@ -749,7 +713,7 @@ Below we list the population names associated with the 1000 Genomes Project and 
 </table>
 
 <p>This population data is stored in the sample table of the Variation database. You can see a description of the sample
-table <a href="variation_schema.html#sample">here</a>.
+table <a href="/info/docs/api/variation/variation_schema.html#sample">here</a>.
 </p>
 
 
