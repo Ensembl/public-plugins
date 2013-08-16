@@ -52,6 +52,10 @@ sub colour { # some calls are made to this method while it's key may not be adde
   return shift->{'colour'};
 }
 
+sub label { # if this record is a das record, the webcode expects it to have this method
+  return shift->data->{'label'};
+}
+
 sub clone {
   my $self        = shift;
   my $class       = ref $self;
