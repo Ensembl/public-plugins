@@ -15,7 +15,9 @@
       theme_advanced_buttons3: "",
       theme_advanced_toolbar_location: "top",
       height: height ? height[1] : 300,
-      width: width ? width[1] : 500
+      width: width ? width[1] : 500,
+      relative_urls: false,
+      convert_urls: false
     });
   };
   
