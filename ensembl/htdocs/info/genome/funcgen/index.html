@@ -1,7 +1,7 @@
 <html>
 
 <head>
-<meta name="order" content="5" />
+<meta name="order" content="2" />
   <meta name="navigation" content="Regulation">
   <title>Regulation</title>
 </head>
@@ -29,9 +29,9 @@ Ensembl Regulation provides resources describing the mechanisms of gene regulati
 <p>
 Ensembl maintains a database of regions in the human and mouse genomes that could be involved in gene transcription regulation. These regions, called regulatory features, are inferred from <a href='regulation_sources.html'>publicly available experimental data sets, e.g.</a>:
 <ul>
-	<li>Open chromatin assays (<a href='http://en.wikipedia.org/wiki/dnase-seq'>DNase1-Seq</a> and <a href='http://en.wikipedia.org/wiki/faire-seq'>FAIRE-Seq)</a></li>
-	<li>Histone modification assays (<a href='http://en.wikipedia.org/wiki/Chip-Seq'>ChIP-Seq</a>)</li>
-	<li>Transcription factor binding assays (<a href='http://en.wikipedia.org/wiki/Chip-Seq'>ChIP-Seq</a>)</li>
+	<li>Open chromatin assays (<a href='http://en.wikipedia.org/wiki/dnase-seq' rel='external'>DNase1-Seq</a> and <a href='http://en.wikipedia.org/wiki/faire-seq' rel='external'>FAIRE-Seq)</a></li>
+	<li>Histone modification assays (<a href='http://en.wikipedia.org/wiki/Chip-Seq' rel='external'>ChIP-Seq</a>)</li>
+	<li>Transcription factor binding assays (<a href='http://en.wikipedia.org/wiki/Chip-Seq' rel='external'>ChIP-Seq</a>)</li>
 	<li><a href='regulatory_build.html#tfbs'>Transcription factor binding motifs</a>.</li>
 </ul>
 </p>
@@ -48,7 +48,7 @@ From this data, a process called the <a href='regulatory_build.html'>Regulatory 
 
 <p>
 <h2 id="segmentation">Regulatory Segmentation</h2>
-Ensembl also provides genome <a href="regulatory_segmentation.html">segmentation analyses</a> for six human cells lines from the <a href='http://encodeproject.org'>ENCODE</a> project, an analogous summary of a region's regulatory function.
+Ensembl also provides genome <a href="regulatory_segmentation.html">segmentation analyses</a> for six human cells lines from the <a rel='external' href='http://encodeproject.org'>ENCODE</a> project, an analogous summary of a region's regulatory function.
 </p>
 
 <h2 id="microarray">Microarray Probe Mappings</h2>
@@ -80,7 +80,7 @@ Ensembl Regulation databases also store data directly imported from external sou
 Regulation data can be accessed in the browser from various angles:
 </p>
 
-<h3><a href='http://www.ensembl.org/Homo_sapiens/Location/View?r=6:133017695-133161157'>Location Tab</a></h3>
+<h3><a href='/Homo_sapiens/Location/View?r=6:133017695-133161157'>Location Tab</a></h3>
 
 <p>
 You can configure the Region in detail panel to display tracks linked to regulation. Watch our Region in detail video to find out how to add tracks. The Regulation tracks are grouped into subdivisions:
@@ -96,12 +96,12 @@ You can configure the Region in detail panel to display tracks linked to regulat
 Species-specific microarray probe mappings can be visualised by turning on tracks from the separate <i>Oligo probes</i> section at the bottom of the configuration panel. 
 </p>
 
-<h3><a href='http://www.ensembl.org/Homo_sapiens/Gene/Summary?g=ENSG00000139618;r=13:32889611-32973805'>Gene tab</a></h3>
+<h3><a href='/Homo_sapiens/Gene/Summary?g=ENSG00000139618;r=13:32889611-32973805'>Gene tab</a></h3>
 <p>
-Click on the Regulation link in the left hand side menu to view the <a href='http://www.ensembl.org/Homo_sapiens/Gene/Regulation?g=ENSG00000139618;r=13:32889611-32973805'>regulatory features in the vicinity of your gene</a>. Note that even if a regulatory region is near or within a gene, it does not necessarily affect that gene. Conversely, distal enhancers can affect a gene.
+Click on the Regulation link in the left hand side menu to view the <a href='/Homo_sapiens/Gene/Regulation?g=ENSG00000139618;r=13:32889611-32973805'>regulatory features in the vicinity of your gene</a>. Note that even if a regulatory region is near or within a gene, it does not necessarily affect that gene. Conversely, distal enhancers can affect a gene.
 </p>
 
-<h3><a href='http://www.ensembl.org/Homo_sapiens/Regulation/Cell_line?db=funcgen;fdb=funcgen;r=17:46617590-46621119;rf=ENSR00001348194'>Regulation tab</a></h3>
+<h3><a href='/Homo_sapiens/Regulation/Cell_line?db=funcgen;fdb=funcgen;r=17:46617590-46621119;rf=ENSR00001348194'>Regulation tab</a></h3>
 <p>
 Clicking on a regulatory feature will open a Regulation tab with information about the evidence supporting that regulatory feature as well as cell-specific annotations. Different views can be selected:
 <ul>
@@ -118,9 +118,9 @@ Clicking on a regulatory feature will open a Regulation tab with information abo
 <p>
 In addition to the browser, the regulation data in Ensembl can also be accessed through :
 <ul>
-	<li><a href='file://localhost/info/data/biomart.html'>BioMart (Ensembl Regulation database)</a>.</li>
-	<li><a href='file://localhost/info/docs/api/index.html'>Perl APIs</a>, including the <a href='file://localhost/info/docs/api/funcgen/index.html'>Regulation API</a>. See the <a href='file://localhost/info/docs/api/funcgen/regulation_tutorial.html'>Regulation API tutorial</a> for more information.</li>
-	<li><a href='file://localhost/info/docs/api/funcgen/funcgen_schema.html'>MySQL Ensembl funcgen database.</a></li>
+	<li><a href='/info/data/biomart.html'>BioMart (Ensembl Regulation database)</a>.</li>
+	<li><a href='/info/docs/api/index.html'>Perl APIs</a>, including the <a href='/info/docs/api/funcgen/index.html'>Regulation API</a>. See the <a href='/info/docs/api/funcgen/regulation_tutorial.html'>Regulation API tutorial</a> for more information.</li>
+	<li><a href='/info/docs/api/funcgen/funcgen_schema.html'>MySQL Ensembl funcgen database.</a></li>
 </ul>
 </p>
 
