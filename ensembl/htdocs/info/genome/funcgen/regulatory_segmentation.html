@@ -12,7 +12,7 @@
 <h1>Regulatory Segmentation</h1>
 
 <p>
-The <a href='http://encodeproject.org'>ENCODE</a> combined segmentation classifies the genome into regions such as predicted promoters, enhancers, and repressed (see table below). These are genomic regions of similar signal over 14 assays to obtain. Each defines a single-track summary of the functional architecture of the human genome in one of six cell types.
+The <a href="http://encodeproject.org" rel="external">ENCODE</a> combined segmentation classifies the genome into regions such as predicted promoters, enhancers, and repressed (see table below). These are genomic regions of similar signal over 14 assays to obtain. Each defines a single-track summary of the functional architecture of the human genome in one of six cell types.
 </p>
 <p>
 The assays were generated in the ENCODE project for GM12878, K562, H1-hESC, HepG2, HeLa-S3, and HUVEC, and were chosen to maximise information content about the state of the genome. These assays (including control input sequencing) were coordinated across all cell lines and constituted from three classes of data:
@@ -30,12 +30,12 @@ The assays were generated in the ENCODE project for GM12878, K562, H1-hESC, HepG
 Two unsupervised segmentation programs were used:
 
 <ul>	
-	<li><b>ChromHMM</b> (<a href='http://www.ncbi.nlm.nih.gov/pubmed/21441907'>Ernst <i>et al.</i>, 2011</a>)
+	<li><b>ChromHMM</b> (<a href="http://www.ncbi.nlm.nih.gov/pubmed/21441907" rel="external">Ernst <i>et al.</i>, 2011</a>)
 	<p>
 ChromHMM labels each assay as high or low in 200 base pair bins over the whole human genome and runs a 25-state Hidden Markov Model.
 </p>
 </li>
-<li><b>Segway</b> (<a href='http://dx.doi.org/10.1038/nmeth.1937'>Hoffman <i>et al.</i>, 2011</a>)
+<li><b>Segway</b> (<a href="http://dx.doi.org/10.1038/nmeth.1937" rel="external">Hoffman <i>et al.</i>, 2011</a>)
 <p>
 A Dynamic Bayesian Network approach using base-pair resolution real valued signal data, trained over the ENCODE pilot regions (1% of the genome), and fitted over the whole genome.
 </p>
@@ -79,9 +79,9 @@ In the repressed state ‘R’, H4K20me1 is absent and H3K27me3 is less present 
 </p>
 <h4>Regulatory Segmentation in the Browser</h4>
 
-<p>There is one segmentation track available for each of the six ENCODE cell lines. These tracks are on by default in most regulation views, but not in the Location tab. Once in the <a href='http://www.ensembl.org/Homo_sapiens/Location/View?r=6:133017695-133161157'>Location tab</a>, you need to configure the page to turn on the Segmentation tracks as show below.</p>
+<p>There is one segmentation track available for each of the six ENCODE cell lines. These tracks are on by default in most regulation views, but not in the Location tab. Once in the <a href="/Homo_sapiens/Location/View?r=6:133017695-133161157">Location tab</a>, you need to configure the page to turn on the Segmentation tracks as show below.</p>
 
-<img width=600 src='segmentation_tracks.jpg' alt='Selecting segmentation tracks'>
+<img width=600 src="segmentation_tracks.jpg" alt="Selecting segmentation tracks">
 
 <p>
 The colours used for each of the segmentation classes follows the agreed ENCODE standard (a legend is displayed at the bottom of any window displaying regulatory features).
