@@ -26,8 +26,9 @@ window.page_templates =
       '.hub_spinner': (el,data) -> el.hide()
       '.hub_fail': (el,data) ->
         # Force preload before hiding
-        url = el.css('background-image').replace('url("','').replace('")','')
-        $('<img/>').attr('src',url).appendTo($('<body></body>')).css('display','none')
+        m = /url\("?(.*?)"?\)/.exec(el.css('background-image'))
+        if m?
+          $('<img/>').attr('src',m[1]).appendTo($('<body></body>')).css('display','none')
       '.new_current_faceter': (el,data) ->
         $(document).on 'first_result', (e,query,data) ->
           templates = $(document).data('templates')

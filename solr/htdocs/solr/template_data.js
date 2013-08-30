@@ -537,9 +537,11 @@
           return el.hide();
         },
         '.hub_fail': function(el, data) {
-          var url;
-          url = el.css('background-image').replace('url("', '').replace('")', '');
-          return $('<img/>').attr('src', url).appendTo($('<body></body>')).css('display', 'none');
+          var m;
+          m = /url\("?(.*?)"?\)/.exec(el.css('background-image'));
+          if (m) {
+            return $('<img/>').attr('src', m[1]).appendTo($('<body></body>')).css('display', 'none');
+          }
         },
         '.new_current_faceter': function(el, data) {
           return $(document).on('first_result', function(e, query, data) {
