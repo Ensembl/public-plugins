@@ -25,7 +25,8 @@ sub test_gene {
     my $gene_search = $sel->is_text_present_ok($gene_text);    
     $sel->ensembl_click("link=$gene_text",50000)
     and $sel->ensembl_wait_for_page_to_load
-    and $sel->ensembl_is_text_present("returned the following results");
+    and $sel->ensembl_wait_for_ajax_ok
+    and $sel->ensembl_is_text_present("results match");
         
     $sel->go_back()
     and $sel->ensembl_wait_for_page_to_load if($gene_search);
@@ -66,8 +67,10 @@ sub test_gene {
     $sel->ensembl_click_links(["link=Genomic alignments"],'20000') if($alignment_count);
     #"link=Gene Tree (image)", need to add back to array below
     $sel->ensembl_click_links([
+      "link=Gene tree (image)",
       "link=Gene tree (text)",
-      "link=Gene tree (alignment)"
+      "link=Gene tree (alignment)",
+      "link=Gene gain/loss tree"
     ],'20000') if(lc($self->species) ne 'saccharomyces_cerevisiae');
 
     my $counts = $self->count_homologues($gene_param);
@@ -87,7 +90,8 @@ sub test_gene {
       $sel->ensembl_click("link=view all locations")
       and $sel->ensembl_wait_for_page_to_load
       and $sel->go_back();
-      
+
+      $sel->ensembl_wait_for_page_to_load;
       $sel->ensembl_click("link=View on Karyotype")
       and $sel->ensembl_wait_for_page_to_load
       and $sel->go_back();      
@@ -110,7 +114,6 @@ sub test_gene {
     $sel->ensembl_click_links(["link=Gene history"]) if($SD->table_info_other(ucfirst($self->species),'core', 'stable_id_event')->{'rows'});
 
     $self->export_data('FASTA sequence','cdna:') if(lc($self->species) eq 'homo_sapiens');
-    
   } else {
     print "  No Gene \n";
   }

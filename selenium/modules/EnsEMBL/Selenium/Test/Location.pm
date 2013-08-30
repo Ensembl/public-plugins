@@ -42,7 +42,7 @@ sub test_location {
     #Test ZMENU (only for human)
     if(lc($self->species) eq 'homo_sapiens') {
       #Searching and adding decipher track
-      $self->turn_track("Variation","//form[\@id='location_viewbottom_configuration']/div[5]/div[7]/div/ul[3]/li", "on", "decipher");
+      $self->turn_track("Variation","//form[\@id='location_viewbottom_configuration']/div[5]/div[7]/div/ul[2]/li", "on", "decipher");
       
       #simulate ZMenu for this track (decipher)
       $sel->pause(5000); #pausing a bit to make sure the location panel loads fine from adding the track
