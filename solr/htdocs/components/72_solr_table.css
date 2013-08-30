@@ -1,0 +1,122 @@
+.search_table table {
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+.search_table .stripe td {
+  background: #eeeeee;
+}
+
+.search_table th {
+  background: #cccccc;
+  padding: 6px;
+}
+
+.search_table td {
+  padding: 6px;
+}
+
+.search_table_filter {
+  float: left;
+}
+
+.search_table_filter input {
+  margin: 0;
+}
+
+.search_table_sorter {
+  float: right;
+  width: 16px;
+  height: 16px;
+  /* no selection */
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+}
+
+.search_table_sorter_off {
+  background: url(/i/sort_both_light.png) no-repeat 50% 50%;
+}
+
+.search_table_sorter_asc {
+  background: url(/i/sort_asc.png) no-repeat 50% 50%;
+}
+
+.search_table_sorter_desc {
+  background: url(/i/sort_desc.png) no-repeat 50% 50%;
+}
+
+.search_table_prehead {
+  background: #8B9BC1;
+  height: 32px;
+  width: 100%;
+}
+
+.search_table_posttail {
+  background: #8B9BC1;
+  height: 32px;
+  width: 100%;
+}
+
+.search_table_prehead_colctl {
+  height: 32px;
+  padding: 5px;
+}
+
+.search_table_showhide {
+    margin: auto;
+    width: 140px;
+    position: relative;
+}
+
+.search_table_showhide_toggle {
+  background-color: #EAEEFF;
+  border: 2px outset #EAEEFF;
+  cursor: pointer;
+  padding: 1px 5px;
+  text-align: center;
+  white-space: nowrap;
+  /* no selection */
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+}
+
+.search_table_posttail_pager {
+  float: left;
+  padding: 4px 8px;
+}
+
+.search_table_prehead_pagectl {
+    float: left;
+    padding: 3px 8px;
+}
+
+.search_table_sizer {
+    color: white;
+}
+
+.search_table_showhide_list {
+  background: none repeat scroll 0 0 white;
+  border: 1px solid #CCCCCC;
+  display: block;
+  left: 0px;
+  margin: 0;
+  padding: 8px;
+  position: absolute;
+  top: 20px;
+}
+
+.search_table_showhide_list li {
+  list-style: none;
+}
+
+.search_table_prehead_filterctl {
+    float: right;
+    padding: 4px 8px;
+}
+
+.search_table_prehead_filterctl input {
+  font-size: 12px;
+  outline: none;
+}

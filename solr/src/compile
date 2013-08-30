@@ -1,0 +1,47 @@
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+cd $DIR
+rm -rf obj
+mkdir obj
+
+coffee -c utils.coffee
+coffee -c template.coffee
+coffee -c search.coffee
+coffee -c table.coffee
+coffee -c autocomplete.coffee
+coffee -c textproc2.coffee
+coffee -c selbox.coffee
+coffee -c centered.coffee
+coffee -c config.coffee
+
+cd templates
+for tmpl in `ls *_templates.coffee` ; do
+  cat <$tmpl >>../obj/template_data.coffee
+done
+for tmpl in `ls fix_*.coffee` ; do
+  cat <$tmpl >>../obj/template_data.coffee
+done
+cd ..
+coffee -c obj/template_data.coffee
+
+mv textproc2.js ../htdocs/solr/textproc2.js
+mv utils.js ../htdocs/components/68_utils.js
+mv search.js ../htdocs/solr/solr_search.js
+mv table.js ../htdocs/solr/solr_table.js
+mv template.js ../htdocs/solr/template.js
+mv obj/template_data.js ../htdocs/solr/template_data.js
+mv autocomplete.js ../htdocs/components/65_autocomplete.js
+mv selbox.js ../htdocs/components/11_selbox.js
+mv centered.js ../htdocs/components/11_centered.js
+mv config.js ../htdocs/components/11_solr_config.js
+
+# CSS from templates
+
+cd templates
+for tmpl in `ls *.css`; do
+  cat <$tmpl >>../obj/search_templates.css
+done
+cd ..
+
+mv obj/search_templates.css ../htdocs/solr/search_templates.css
+
