@@ -378,7 +378,7 @@ window.rhs_templates =
                     entries += 1
                     total += e
                 if entries > 0
-                  name = $.solr_config('static.ui.facets.key=.text.singular',f)
+                  name = $.solr_config('static.ui.facets.key=.text.plural',f)
                   othervalues.push({ entries, total, name, facet: f })
             yoursearch = (k[1] for k in cur_values).join(" ")
             wholesite = (cur_values.length == 0)

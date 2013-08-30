@@ -1727,7 +1727,7 @@
                   }
                 }
                 if (entries > 0) {
-                  name = $.solr_config('static.ui.facets.key=.text.singular', f);
+                  name = $.solr_config('static.ui.facets.key=.text.plural', f);
                   othervalues.push({
                     entries: entries,
                     total: total,
