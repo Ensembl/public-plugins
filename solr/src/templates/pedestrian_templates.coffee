@@ -221,6 +221,9 @@ window.pedestrian_templates =
           # untrim
           links.css('display','block')
           $('.solr_beak_p_less',el).css('display','block')
+        $('#main_holder').css('min-height',
+                              $('.solr_sidebar').outerHeight(true) +
+                              $('.solr_sidebar').offset().top)
 
       data.set_fn = (v) =>
         $('.solr_feet_p_current',el).removeClass('solr_feet_p_current')

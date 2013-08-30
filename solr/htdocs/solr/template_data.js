@@ -539,7 +539,7 @@
         '.hub_fail': function(el, data) {
           var m;
           m = /url\("?(.*?)"?\)/.exec(el.css('background-image'));
-          if (m) {
+          if (m != null) {
             return $('<img/>').attr('src', m[1]).appendTo($('<body></body>')).css('display', 'none');
           }
         },
@@ -1152,12 +1152,13 @@
               }
             });
             if (links.length > num) {
-              return $('.solr_beak_p_more', el).css('display', 'block');
+              $('.solr_beak_p_more', el).css('display', 'block');
             }
           } else if (links.length > -num) {
             links.css('display', 'block');
-            return $('.solr_beak_p_less', el).css('display', 'block');
+            $('.solr_beak_p_less', el).css('display', 'block');
           }
+          return $('#main_holder').css('min-height', $('.solr_sidebar').outerHeight(true) + $('.solr_sidebar').offset().top);
         });
         data.set_fn = function(v) {
           $('.solr_feet_p_current', el).removeClass('solr_feet_p_current');
