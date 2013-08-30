@@ -62,7 +62,7 @@ sub test_transcript {
       and $sel->ensembl_wait_for_ajax_ok('30000','10000')
       and $sel->ensembl_click("link=Somatic mutations")
       and $sel->ensembl_wait_for_ajax_ok('10000','10000')
-      and $sel->ensembl_click("//form[\@id='transcript_translationimage_configuration']/div[4]/div/ul/li/img") #turning first track off     
+      and $sel->ensembl_click("//form[\@id='transcript_translationimage_configuration']/div[4]/div/ul/li") #turning first track off     
       and $sel->ensembl_click("modal_bg")
 #      and $sel->ensembl_wait_for_ajax_ok('15000')
       and $sel->ensembl_images_loaded;

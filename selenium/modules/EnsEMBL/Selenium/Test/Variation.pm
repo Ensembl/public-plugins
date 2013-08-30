@@ -43,7 +43,7 @@ sub test_variation {
       and $sel->ensembl_wait_for_ajax_ok('10000','5000')
       and $sel->ensembl_click("css=a.variation")  #don't know why link= wasn't working and css= works    
       and $sel->ensembl_wait_for_ajax_ok('10000','9000')
-      and $sel->ensembl_click("//form[\@id='variation_context_configuration']/div[3]/div[1]/ul[1]/li[2]/img") #choosing the second track    
+      and $sel->ensembl_click("//form[\@id='variation_context_configuration']/div[3]/div[1]/ul[1]/li[2]") #choosing the second track    
       and $sel->ensembl_click("modal_bg")
       and $sel->ensembl_wait_for_ajax_ok('50000', '50000')
       and $sel->ensembl_images_loaded;
