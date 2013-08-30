@@ -211,13 +211,13 @@ window.pedestrian_templates =
         links = $('.solr_beak_p_contents a',el)
         $('.solr_beak_p_less',el).hide()
         $('.solr_beak_p_more',el).hide()
-        if num != 0
+        if num > 0
           # trim
           links.css('display','block').each (i) ->
             if i >= num then $(@).hide()
           if links.length > num
             $('.solr_beak_p_more',el).css('display','block')
-        else
+        else if links.length > -num
           # untrim
           links.css('display','block')
           $('.solr_beak_p_less',el).css('display','block')
@@ -230,7 +230,7 @@ window.pedestrian_templates =
       $(document).on 'state_change', (e,params) ->
         short_num = $.solr_config('static.ui.facets.key=.trunc',data.key)
         sense = params["fall_"+data.key]
-        el.trigger('trim',[if sense then 0 else short_num])
+        el.trigger('trim',[if sense then -short_num else short_num])
       $(document).trigger('force_state_change')
 
   feet:

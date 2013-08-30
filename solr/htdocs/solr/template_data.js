@@ -1143,7 +1143,7 @@
           links = $('.solr_beak_p_contents a', el);
           $('.solr_beak_p_less', el).hide();
           $('.solr_beak_p_more', el).hide();
-          if (num !== 0) {
+          if (num > 0) {
             links.css('display', 'block').each(function(i) {
               if (i >= num) {
                 return $(this).hide();
@@ -1152,7 +1152,7 @@
             if (links.length > num) {
               return $('.solr_beak_p_more', el).css('display', 'block');
             }
-          } else {
+          } else if (links.length > -num) {
             links.css('display', 'block');
             return $('.solr_beak_p_less', el).css('display', 'block');
           }
@@ -1167,7 +1167,7 @@
           var sense, short_num;
           short_num = $.solr_config('static.ui.facets.key=.trunc', data.key);
           sense = params["fall_" + data.key];
-          return el.trigger('trim', [sense ? 0 : short_num]);
+          return el.trigger('trim', [sense ? -short_num : short_num]);
         });
         return $(document).trigger('force_state_change');
       }
