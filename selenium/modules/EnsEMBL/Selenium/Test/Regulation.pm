@@ -29,13 +29,10 @@ sub test_regulation {
         
     #Test ZMenu
     print "  Test ZMenu on Regulation Details by cell line \n";
-    $sel->ensembl_open_zmenu('FeatureDetails','title^="Regulatory Feature:"');
+    $sel->ensembl_open_zmenu('FeatureDetails', 'title^="Regulatory Feature:"', 'Reg Feats');
     $sel->pause(2000);
     $sel->ensembl_click("link=ENSMUSR*")
-    and $sel->ensembl_wait_for_ajax_ok('50000','2000')
-    and $sel->go_back();
-    
-    $sel->ensembl_wait_for_page_to_load;
+    and $sel->ensembl_wait_for_ajax_ok('50000','2000');
     
     #Adding a track from the configuration panel
     print "  Test Configure page, adding a track \n";
@@ -48,7 +45,7 @@ sub test_regulation {
     and $sel->ensembl_click("//form[\@id='regulation_featuresbycellline_configuration']/div[7]/div/ul/li")
     and $sel->ensembl_is_text_present("Repeat regions(1/*")
     and $sel->ensembl_click("modal_bg")
-    and $sel->ensembl_wait_for_ajax_ok('50000')
+    and $sel->ensembl_wait_for_ajax_ok('50000', 5000)
     and $sel->ensembl_images_loaded;
     
     $sel->ensembl_click_links(["link=Feature Context", "link=Evidence"]);

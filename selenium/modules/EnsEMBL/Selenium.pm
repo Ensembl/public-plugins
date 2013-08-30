@@ -115,6 +115,7 @@ sub ensembl_click_links {
 sub ensembl_click_all_links {
   my ($self, $div, $skip_link, $text) = @_;  
   my $location = $self->get_location();
+  my $url     = $self->{'browser_url'};
 
   # get all the links on the page
   my $links_href = $self->get_eval(qq{
@@ -124,7 +125,10 @@ sub ensembl_click_all_links {
     
   my @links_array = split(',',$links_href);
   my $i = 0;
-  foreach my $link (@links_array) {    
+
+  foreach my $link (@links_array) {
+    $self->pause(500);
+    
     # get the text for each link, use link_text to click link if there is no id to the links
     my $link_text = $self->get_eval(qq{
       \var \$ = selenium.browserbot.getCurrentWindow().jQuery; 
@@ -145,12 +149,17 @@ sub ensembl_click_all_links {
     
     $i++;
     next if grep (/$link_text/, @$skip_link);
-    
-    if($rel eq 'external') {
+  
+    if ($rel eq 'external' || $link !~ /^$url/) {
       $self->open_ok($link);
       print "LINK FAILED:: $link_text($link) at $location \n\n" unless ok($self->get_title !~ /Internal Server Error|404 error|ERROR/i, 'No Internal or 404 Server Error');
+    } elsif ($link_id && $link_id ne 'null') {
+      $self->ensembl_click_links(["id=$link_id"]);
+    } elsif ($link_text) {
+      $self->ensembl_click_links(["link=$link_text"]);
     } else {
-      $link_id && $link_id ne 'null' ? $self->ensembl_click_links(["id=$link_id"]) : $self->ensembl_click_links(["link=$link_text"]);
+      print "LINK UNTESTED:: $link has no id or text at $location \n\n";
+      next;
     }
     
     $self->ensembl_is_text_present($text) if($text);

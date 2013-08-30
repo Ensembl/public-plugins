@@ -116,7 +116,7 @@ sub test_doc {
  my ($self, $links) = @_;
  my $sel      = $self->sel;
  my $location = $self->get_location();
- my @skip_link = ("Home");
+ my @skip_link = ('Home', 'Frequently Asked Questions');
  
  $sel->open_ok("/info/index.html");
  print "URL:: $location \n\n" unless $sel->ensembl_wait_for_page_to_load; 
@@ -128,12 +128,12 @@ sub test_faq {
   my $sel      = $self->sel;
   my $location = $self->get_location(); 
   
-  $sel->open_ok("/");
+  $sel->open_ok("/info/index.html");
   print "URL:: $location \n\n" unless $sel->ensembl_wait_for_page_to_load; 
   
   my @skip_link = ("Home", "contact our HelpDesk", "developers' mailing list");
   
-  $sel->ensembl_click_ok("link=FAQs",'50000')
+  $sel->ensembl_click_ok("link=Frequently Asked Questions",'50000')
   and $sel->wait_for_pop_up_ok("", "5000")
   and $sel->select_window_ok("name=popup_selenium_main_app_window")  #thats only handling one popup with no window name cannot be used for multiple popups
   and $sel->ensembl_click_all_links(".content", \@skip_link, 'More FAQs');
@@ -187,13 +187,18 @@ sub test_search {
  $sel->type_ok("name=q", "BRCA2");
  $sel->ensembl_click_links(["//input[\@type='image']"]);
  #$sel->ensembl_wait_for_page_to_load_ok;
- $sel->ensembl_is_text_present("returned the following results:");
- $sel->ensembl_click("link=Gene");
- $sel->ensembl_is_text_present("Human (");
- 
- next unless $sel->open_ok("/Homo_sapiens/Search/Details?species=Homo_sapiens;idx=Gene;q=brca2");  
+ $sel->ensembl_is_text_present("results match");
+# $sel->ensembl_click("link=Gene");
+ $sel->ensembl_click("//div[\@id='solr_content']//div[\@class='solr_sidebar']//div[\@class='solr_beak_p_contents']/a[1]")
+ and $sel->ensembl_wait_for_ajax_ok(undef,5000);
+ $sel->ensembl_is_text_present("when restricted to");
+ $sel->ensembl_is_text_present("category: Gene");
+ $sel->ensembl_is_text_present("(Human Gene)");
+
+ next unless $sel->ensembl_click("//div[\@id='solr_content']//div[\@class='search_table']//a[\@class='table_toplink'][1]");
+
+# next unless $sel->open_ok("/Homo_sapiens/Search/Details?species=Homo_sapiens;idx=Gene;q=brca2");  
  print "URL:: $location \n\n" unless $sel->ensembl_wait_for_page_to_load;
- $sel->ensembl_is_text_present("Genes match your query");  
 }
 
 sub test_contact_us {
@@ -201,10 +206,7 @@ sub test_contact_us {
  my $sel = $self->sel;
  my $sd = $self->get_species_def;
 
- $sel->open_ok("/");
- #$sel->ensembl_wait_for_page_to_load_ok;
- 
- $sel->ensembl_click_links(["link=Contact Us"]);
+ $sel->open_ok("/info/about/contact");
  $sel->ensembl_is_text_present("Contact Ensembl");
  $sel->ensembl_click("link=email Helpdesk"); 
  $sel->wait_for_pop_up_ok("", "5000");
