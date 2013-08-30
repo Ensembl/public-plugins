@@ -607,7 +607,6 @@
             });
             data.tp2_row.register(100, function() {
               var desc;
-              console.log("name", data.tp2_row.best('name'));
               if (data.tp2_row.best('name')) {
                 data.tp2_row.candidate('main-title', data.tp2_row.best('name'), 200);
               }
@@ -779,7 +778,6 @@
                 order.push(k.key);
               }
             }
-            console.log("ORDER", members, order);
             model = {
               values: data.faceter[key],
               order: order
@@ -1125,7 +1123,6 @@
         data.entries = data.entries.sort(function(a, b) {
           return b.order - a.order;
         });
-        console.log("ORDER :", data.entries);
         short_num = $.solr_config('static.ui.facets.key=.trunc', data.key);
         title = $.solr_config('static.ui.facets.key=.heading', data.key);
         data.title = (data.entries.length ? [title] : []);
@@ -1684,7 +1681,7 @@
       }
     },
     narrowresults: {
-      template: "<div>Narrow</div>",
+      template: "<div></div>",
       postproc: function(el, data) {
         return $(document).on('first_result', function(e, query, rdata, state) {
           var all_facets, f,
@@ -2281,7 +2278,6 @@
           }
           data.table_thead = [];
         }
-        console.log("table preproc", data);
         return [spec, data];
       },
       more_fixes: ['page', 'fix_g_variation', 'fix_regulation', 'fix_terse', 'fix_minor_types'],
@@ -2486,7 +2482,6 @@
             ft = data.tp2_row.best('feature_type');
             if (ft === 'RegulatoryFeature') {
               desc = data.tp2_row.best('description');
-              console.log("desc", desc);
               m = desc.match(/^(\S+) is a (.*?) from (.*?) (which hits .*)$/);
               if (m != null) {
                 _ref2 = m.slice(1, 5), reg_id = _ref2[0], reg_what = _ref2[1], reg_from = _ref2[2], reg_tail = _ref2[3];

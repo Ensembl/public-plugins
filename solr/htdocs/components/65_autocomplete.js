@@ -131,7 +131,6 @@
   };
 
   ajax_json = function(url, data, success) {
-    console.log("call");
     return $.ajax({
       url: url,
       data: data,
@@ -386,7 +385,6 @@
     url = "/" + url + "/Ajax/search";
     q = data.q;
     return favourite_species(data.element, function(favs) {
-      console.log("fs", favs);
       return $.when(ac_string_q(url, q), ac_name_q(direct_searches, url, q, favs)).done(function(string_d, id_d) {
         var direct, out, searches;
         searches = [];
@@ -445,7 +443,6 @@
       tr_gif = "url(data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)";
       eh = this.element.height();
       ew = this.element.width();
-      console.log("eh/ew", eh, ew, this.element.css('width'));
       box = $('<div></div>').css({
         position: 'relative',
         display: 'inline-block',

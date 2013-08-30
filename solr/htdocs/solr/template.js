@@ -458,7 +458,6 @@
       root_part = root_comp.make_part(this, [], [], [], void 0);
       template = root_part.emit_template();
       template = template.wrap("<div></div>").parent();
-      console.log(template.html(), root_part.emit_directives());
       out = template.render(this.data, root_part.emit_directives());
       if (attach != null) {
         attach(out);

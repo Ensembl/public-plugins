@@ -580,7 +580,6 @@
       idx = buffer.data('idx');
       first = buffer.data('first');
       last = buffer.data('last');
-      console.log("Reinstating " + start + " " + num + " " + idx + " " + first + " " + last);
       return this.get_data(start, num, function(data) {
         if (idx !== _this.idx) {
           return;
@@ -600,7 +599,6 @@
     };
 
     Table.prototype.hide_chunk = function(table, height, start, num, idx, first, last) {
-      console.log("hiding", table, height);
       return table.replaceWith(this.fake_chunk(height, start, num, idx, first, last));
     };
 
@@ -685,7 +683,6 @@
           column: key,
           order: (dir > 0 ? -1 : 1)
         });
-        console.log(order);
         table.holder.state.order(order);
         table.holder.state.set();
         return false;
