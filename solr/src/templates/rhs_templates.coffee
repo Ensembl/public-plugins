@@ -352,7 +352,7 @@ window.rhs_templates =
 
   narrowresults:
     template: """
-      <div>Narrow</div>
+      <div></div>
     """
     postproc: (el,data) ->
       $(document).on 'first_result', (e,query,rdata,state) ->
