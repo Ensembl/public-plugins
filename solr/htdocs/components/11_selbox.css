@@ -1,0 +1,73 @@
+.selbox {
+  float: left;
+  cursor: pointer;
+  -webkit-user-select: none; /* Chrome/Safari */        
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+ */
+  -o-user-select: none;
+  user-select: none;
+  background: #336699;
+  background: -moz-linear-gradient(center top , #336699, #336699, #115599) repeat scroll 0 0 #336699;
+  color: white;
+  font-weight: bold;
+  font-family: "Luxi Sans",Helvetica,Arial,Geneva,sans-serif;
+}
+
+.selbox {
+  border-radius: 4px 0 0 4px;
+  border-color: #666699 #335566 #336666;
+  font-size: 12px;
+  width: 200px;
+}
+
+#SpeciesSearch .selbox {
+  width: 150px;
+}
+
+.selboxnew {
+  overflow: hidden;
+}
+
+.selboxarrow {
+  background: url("/i/32/down_rev.png") no-repeat scroll 99% 50% / 12px auto transparent;
+  text-align: center;
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+}
+
+.selboxtext {
+  padding-right: 16px;
+  padding-left: 4px;
+}
+
+.selboxouter {
+  display: inline-block;
+}
+
+ul.selboxlist {
+  margin: 0;
+  border: 1px solid black;
+  padding: 0;
+  position: absolute;
+  background: white;
+  z-index: 10;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+ul.selboxlist li {
+  list-style: none;
+  cursor: pointer;
+  padding: 6px 22px 6px 6px;
+  margin: 0;
+}
+
+ul.selboxlist a {
+  text-decoration: none;
+  color: #555555;
+}
+
+ul.selboxlist li.selboxselected {
+  background: no-repeat scroll 95% 50% url("/i/16/add.png") #DDFFDD;
+}
