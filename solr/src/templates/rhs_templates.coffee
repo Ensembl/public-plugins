@@ -125,6 +125,7 @@ window.rhs_templates =
       '.scth_desc': 'description'
     decorate:
       '.scth_canvas canvas': (el,data) ->
+        if el.length == 0 or not el[0]? or not el[0].getContext? then return
         ctx = el[0].getContext('2d')
         line = (ctx,x,y,w,h) ->
           ctx.beginPath()
