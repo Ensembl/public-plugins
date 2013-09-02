@@ -257,16 +257,22 @@ window.pedestrian_templates =
     template: """
       <div class="solr_faceter solr_beak_p solr_feet_p">
         <div class="solr_beak_p_title">Per page:</div>
-        <div class='solr_beak_p_contents'>
+        <div class='solr_beak_p_contents solr_perpage_list'>
           <a>
             <span class='solr_beak_p_left'>42</span>
+            <span class='solr_beak_p_right'></span>
+          </a>
+        </div>
+        <div class='solr_beak_p_contents solr_perpage_all'>
+          <a href="#0">
+            <span class='solr_beak_p_left'>Show all results in one page</span>
             <span class='solr_beak_p_right'></span>
           </a>
         </div>
       </div>
     """
     directives:
-      'a':
+      '.solr_perpage_list a':
         'entry<-entries':
           'span.solr_beak_p_left': 'entry.label'
           '@href': (e) -> '#'+e.item.key
@@ -280,6 +286,7 @@ window.pedestrian_templates =
     preproc: (spec,data) ->
       data.entries = []
       for x in $.solr_config("static.ui.pagesizes")
+        if x == 0 then continue
         data.entries.push({ label: (if x then x else "all"), key: x})
       [spec,data]
     postproc: (el,data) ->

@@ -11,6 +11,10 @@
   background: url("/i/16/add.png") no-repeat scroll 95% 50% #ddffdd;
 }
 
+div.solr_beak_p_contents a:hover {
+  background: url("/i/16/add.png") no-repeat scroll 99% 50% #ddffdd;
+}
+
 /* Hovering over "current" faceter list item */
 
 .solr_curfac_left {

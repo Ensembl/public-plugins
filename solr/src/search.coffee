@@ -397,7 +397,6 @@ class Hub
     else
       @actions(request,changed)
 
-
   actions: (request,changed) ->
     if changed['results'] then @renderer.render_results()
     if changed['style']

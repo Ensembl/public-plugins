@@ -1198,9 +1198,9 @@
       }
     },
     sidesizer: {
-      template: "<div class=\"solr_faceter solr_beak_p solr_feet_p\">\n  <div class=\"solr_beak_p_title\">Per page:</div>\n  <div class='solr_beak_p_contents'>\n    <a>\n      <span class='solr_beak_p_left'>42</span>\n      <span class='solr_beak_p_right'></span>\n    </a>\n  </div>\n</div>",
+      template: "<div class=\"solr_faceter solr_beak_p solr_feet_p\">\n  <div class=\"solr_beak_p_title\">Per page:</div>\n  <div class='solr_beak_p_contents solr_perpage_list'>\n    <a>\n      <span class='solr_beak_p_left'>42</span>\n      <span class='solr_beak_p_right'></span>\n    </a>\n  </div>\n  <div class='solr_beak_p_contents solr_perpage_all'>\n    <a href=\"#0\">\n      <span class='solr_beak_p_left'>Show all results in one page</span>\n      <span class='solr_beak_p_right'></span>\n    </a>\n  </div>\n</div>",
       directives: {
-        'a': {
+        '.solr_perpage_list a': {
           'entry<-entries': {
             'span.solr_beak_p_left': 'entry.label',
             '@href': function(e) {
@@ -1229,6 +1229,9 @@
         _ref = $.solr_config("static.ui.pagesizes");
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           x = _ref[_i];
+          if (x === 0) {
+            continue;
+          }
           data.entries.push({
             label: (x ? x : "all"),
             key: x
