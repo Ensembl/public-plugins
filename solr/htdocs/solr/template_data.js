@@ -2585,9 +2585,20 @@
   };
 
   _make_string = function(r, template) {
-    return template.replace(/\{(.*?)\}/g, (function(g0, g1) {
-      return r.best(g1);
-    }));
+    var failed, out;
+    failed = false;
+    out = template.replace(/\{(.*?)\}/g, function(g0, g1) {
+      var v;
+      v = r.best(g1);
+      if (v == null) {
+        failed = true;
+      }
+      return v;
+    });
+    if (failed) {
+      return void 0;
+    }
+    return out;
   };
 
   if ((_ref2 = window.fixes) == null) {
@@ -2608,12 +2619,13 @@
             }
           });
           data.tp2_row.register(300, function() {
-            var ft, id, t, v;
+            var ft, id, t, title, v;
             ft = data.tp2_row.best('feature_type');
             v = verbose[ft];
             if ((v != null ? v.title : void 0) != null) {
               t = data.tp2_row.best('main-title');
-              data.tp2_row.candidate('main-title', _make_string(data.tp2_row, v.title), 300);
+              title = _make_string(data.tp2_row, v.title);
+              data.tp2_row.candidate('main-title', title, 300);
             }
             if ((v != null ? v.id : void 0) != null) {
               id = data.tp2_row.best('id');
