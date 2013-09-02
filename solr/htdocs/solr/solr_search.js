@@ -206,7 +206,7 @@
   };
 
   Hub = (function() {
-    var _params_used, _section_keys, _style_map, _upgrade_first_used;
+    var _params_used, _section_keys, _style_map;
 
     Hub.prototype._pair = /([^;&=]+)=?([^;&]*)/g;
 
@@ -228,8 +228,6 @@
       columns: ['results'],
       style: ['style']
     };
-
-    _upgrade_first_used = {};
 
     _section_keys = {
       facet: /^facet_(.*)/,
@@ -582,6 +580,9 @@
         service = 1;
       }
       qps = _kv_copy(this.params);
+      if ((qps.perpage != null) && parseInt(qps.perpage) === 0) {
+        qps.perpage = 10;
+      }
       for (k in changes) {
         v = changes[k];
         if (v != null) {
@@ -729,7 +730,7 @@
     };
 
     Hub.prototype.service = function() {
-      var changed, k, request, x, _i, _len, _ref, _ref1,
+      var changed, request,
         _this = this;
       if (this.first_service) {
         if (document.documentMode && document.documentMode < 8) {
@@ -743,12 +744,11 @@
       request = this.request();
       request.set_rigid_order([['species', [$.solr_config('user.favs.species')], 100]]);
       if (this.first_service) {
-        for (k in changed) {
-          _ref1 = (_ref = _upgrade_first_used[k]) != null ? _ref : [];
-          for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-            x = _ref1[_i];
-            changed[x] = 1;
-          }
+        if (parseInt(this.params.perpage) === 0) {
+          this.replace_url({
+            perpage: 10
+          });
+          this.params.perpage = 10;
         }
         this.render_stage(function() {
           return _this.actions(request, changed);
