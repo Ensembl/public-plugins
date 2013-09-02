@@ -209,6 +209,7 @@ window.google_templates =
               </div>
               <div class='se_search_table_posttail'>
                 <div class='search_table_posttail_pager table_acc_sw'>
+                  <div class="pager"></div>
                 </div>
               </div>
             </div>
@@ -229,6 +230,7 @@ window.google_templates =
       '.topgene': 'topgene'
       '.noresults': 'noresults'
       '.narrowresults': 'narrowresults'
+      '.pager': { template: 'pager', data: '' }
       '.search_table_prehead_filterctl': {template: 'replacement-filter', data: '' }
     decorate:
       '.preview_holder': (els,data) ->

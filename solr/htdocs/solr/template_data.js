@@ -252,12 +252,16 @@
       }
     },
     outer: {
-      template: "<div class=\"solr_g_layout\">\n  <div class=\"sidecar_holder table_acc_sidecars\">\n    <div class=\"tophit\"></div>\n    <div class=\"noresults noresults_side\"></div>\n    <div class=\"topgene\"></div>\n  </div>\n  <div class=\"preview_holder\"></div>\n  <div class=\"se_search\">\n    <div class=\"se_query\">\n      <div class='hub_spinner g_spinner'></div>\n      <div class='hub_fail g_fail'></div>\n      <div class=\"solr_query_box\">\n        <div class=\"search_table_prehead_filterctl table_acc_ne\">\n        </div>\n        <div class=\"solr_result_summary\"></div>\n      </div>\n    </div>\n    <div class='search_table_holder page_some_query'>\n      <div class='page_some_results'>\n        <div class='main_topcars'>\n          <div class='noresults noresults_main'></div>\n          <div class='narrowresults'></div>\n          <div class='sidecars'></div>\n        </div>\n        <div class='search_table_proper'>\n        </div>\n        <div class='se_search_table_posttail'>\n          <div class='search_table_posttail_pager table_acc_sw'>\n          </div>\n        </div>\n      </div>\n      <div class='page_no_results'>\n        <div class=\"table_acc_noresults\"></div>\n        <div class='noresults_maincars'>\n          <div class='sidecars'></div>\n        </div>\n      </div>\n    </div>\n    <div class='page_no_query g_page_no_results'>\n    </div>\n  </div>\n</div>",
+      template: "<div class=\"solr_g_layout\">\n  <div class=\"sidecar_holder table_acc_sidecars\">\n    <div class=\"tophit\"></div>\n    <div class=\"noresults noresults_side\"></div>\n    <div class=\"topgene\"></div>\n  </div>\n  <div class=\"preview_holder\"></div>\n  <div class=\"se_search\">\n    <div class=\"se_query\">\n      <div class='hub_spinner g_spinner'></div>\n      <div class='hub_fail g_fail'></div>\n      <div class=\"solr_query_box\">\n        <div class=\"search_table_prehead_filterctl table_acc_ne\">\n        </div>\n        <div class=\"solr_result_summary\"></div>\n      </div>\n    </div>\n    <div class='search_table_holder page_some_query'>\n      <div class='page_some_results'>\n        <div class='main_topcars'>\n          <div class='noresults noresults_main'></div>\n          <div class='narrowresults'></div>\n          <div class='sidecars'></div>\n        </div>\n        <div class='search_table_proper'>\n        </div>\n        <div class='se_search_table_posttail'>\n          <div class='search_table_posttail_pager table_acc_sw'>\n            <div class=\"pager\"></div>\n          </div>\n        </div>\n      </div>\n      <div class='page_no_results'>\n        <div class=\"table_acc_noresults\"></div>\n        <div class='noresults_maincars'>\n          <div class='sidecars'></div>\n        </div>\n      </div>\n    </div>\n    <div class='page_no_query g_page_no_results'>\n    </div>\n  </div>\n</div>",
       subtemplates: {
         '.tophit': 'tophit',
         '.topgene': 'topgene',
         '.noresults': 'noresults',
         '.narrowresults': 'narrowresults',
+        '.pager': {
+          template: 'pager',
+          data: ''
+        },
         '.search_table_prehead_filterctl': {
           template: 'replacement-filter',
           data: ''
