@@ -160,7 +160,7 @@
       fixes: {
         global: [
           function(data) {
-            data.tp2_row.register(50, function() {
+            data.tp2_row.register(5000, function() {
               var ft, rename;
               ft = data.tp2_row.best('feature_type');
               rename = $.solr_config('static.ui.facets.key=.members.key=.text.singular', 'feature_type', ft);
