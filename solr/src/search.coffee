@@ -300,7 +300,8 @@ class Hub
 
   update_url: (changes,service = 1) ->
     qps = _kv_copy(@params)
-    if qps.perpage? and parseInt(qps.perpage) == 0 then qps.perpage = 10
+    if qps.perpage? and parseInt(qps.perpage) == 0
+      qps.perpage = $.solr_config('static.ui.pagesizes')[0]
     qps[k] = v for k,v of changes when v?
     delete qps[k] for k,v of changes when not v
     url = @make_url(qps)
@@ -388,7 +389,7 @@ class Hub
     if @first_service
       if parseInt(@params.perpage) == 0 # Override "all" on first load
         @replace_url({ perpage: 10 })
-        @params.perpage = 10
+        @params.perpage = $.solr_config('static.ui.pagesizes')[0]
       @render_stage( =>
         @actions(request,changed)
       )

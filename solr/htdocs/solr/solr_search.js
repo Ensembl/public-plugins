@@ -581,7 +581,7 @@
       }
       qps = _kv_copy(this.params);
       if ((qps.perpage != null) && parseInt(qps.perpage) === 0) {
-        qps.perpage = 10;
+        qps.perpage = $.solr_config('static.ui.pagesizes')[0];
       }
       for (k in changes) {
         v = changes[k];
@@ -748,7 +748,7 @@
           this.replace_url({
             perpage: 10
           });
-          this.params.perpage = 10;
+          this.params.perpage = $.solr_config('static.ui.pagesizes')[0];
         }
         this.render_stage(function() {
           return _this.actions(request, changed);
