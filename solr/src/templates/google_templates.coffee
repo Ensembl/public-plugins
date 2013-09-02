@@ -65,9 +65,10 @@ window.google_templates =
 
       '.preview_float_click': (els,data) ->
         els.on 'resized', =>
-          if $(window).width() < 1400 or $('html').hasClass('solr_useless_browser')
+          if $(window).width() < 1400 or $('#solr_content').hasClass('solr_useless_browser')
             els.css('display','none')
             $('.preview_holder').css('display','none')
+            $('.sidecar_holder').css('display','none')
           else
             els.css('display','')
             $('.preview_holder').css('display','')
@@ -101,7 +102,7 @@ window.google_templates =
       # position sidecar holder
       tr = $('.table_result',el)
       $('html').on 'resized', () ->
-        if $(window).width() < 1400
+        if $(window).width() < 1400 or $('#solr_content').hasClass('solr_useless_browser')
           $('.sidecar_holder').hide()
         else
           $('.sidecar_holder').show()

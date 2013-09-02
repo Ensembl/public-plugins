@@ -327,6 +327,9 @@
 
     Hub.prototype.render_stage = function(more) {
       this.set_templates(this.layout());
+      if (this.useless_browser()) {
+        $('#solr_content').addClass('solr_useless_browser');
+      }
       return this.renderer.render_stage(more);
     };
 

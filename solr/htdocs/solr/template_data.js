@@ -86,9 +86,10 @@
         '.preview_float_click': function(els, data) {
           var _this = this;
           els.on('resized', function() {
-            if ($(window).width() < 1400 || $('html').hasClass('solr_useless_browser')) {
+            if ($(window).width() < 1400 || $('#solr_content').hasClass('solr_useless_browser')) {
               els.css('display', 'none');
-              return $('.preview_holder').css('display', 'none');
+              $('.preview_holder').css('display', 'none');
+              return $('.sidecar_holder').css('display', 'none');
             } else {
               els.css('display', '');
               return $('.preview_holder').css('display', '');
@@ -130,7 +131,7 @@
           _this = this;
         tr = $('.table_result', el);
         $('html').on('resized', function() {
-          if ($(window).width() < 1400) {
+          if ($(window).width() < 1400 || $('#solr_content').hasClass('solr_useless_browser')) {
             return $('.sidecar_holder').hide();
           } else {
             return $('.sidecar_holder').show();
@@ -1388,6 +1389,9 @@
       decorate: {
         '.scth_canvas canvas': function(el, data) {
           var arrow, bp_per_px, chr, ctx, end, h, i, img_start, len, line, offset, size, sstr, start, step, step_start, strand, text, _i, _ref;
+          if (el.length === 0 || (el[0] == null) || (el[0].getContext == null)) {
+            return;
+          }
           ctx = el[0].getContext('2d');
           line = function(ctx, x, y, w, h) {
             ctx.beginPath();

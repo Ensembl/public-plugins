@@ -184,6 +184,7 @@ class Hub
 
   render_stage: (more) ->
     @set_templates(@layout())
+    if @useless_browser() then $('#solr_content').addClass('solr_useless_browser')
     @renderer.render_stage(more)
 
   _add_changed: (changed,k) ->
