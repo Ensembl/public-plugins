@@ -2052,9 +2052,11 @@
         'a': function(els, data) {
           var _this = this;
           return els.click(function(e) {
-            var el, p;
+            var el, href, p;
             el = $(e.currentTarget);
-            p = el.attr('href').substring(1);
+            href = el.attr('href');
+            href = href.substring(href.indexOf('#'));
+            p = href.substring(1);
             if ((p != null) && p) {
               data.click(p);
             }
