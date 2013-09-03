@@ -187,7 +187,8 @@ sub test_search {
  $sel->type_ok("name=q", "BRCA2");
  $sel->ensembl_click_links(["//input[\@type='image']"]);
  #$sel->ensembl_wait_for_page_to_load_ok;
- $sel->ensembl_is_text_present("results match");
+ $sel->ensembl_wait_for_ajax_ok(undef,5000)
+ and $sel->ensembl_is_text_present("results match");
 # $sel->ensembl_click("link=Gene");
  $sel->ensembl_click("//div[\@id='solr_content']//div[\@class='solr_sidebar']//div[\@class='solr_beak_p_contents']/a[1]")
  and $sel->ensembl_wait_for_ajax_ok(undef,5000);

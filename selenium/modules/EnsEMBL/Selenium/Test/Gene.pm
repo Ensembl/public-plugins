@@ -25,7 +25,7 @@ sub test_gene {
     my $gene_search = $sel->is_text_present_ok($gene_text);    
     $sel->ensembl_click("link=$gene_text",50000)
     and $sel->ensembl_wait_for_page_to_load
-    and $sel->ensembl_wait_for_ajax_ok
+    and $sel->ensembl_wait_for_ajax_ok(undef,5000)
     and $sel->ensembl_is_text_present("results match");
         
     $sel->go_back()
