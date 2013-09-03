@@ -185,7 +185,7 @@ window.pedestrian_templates =
           false
     preproc: (spec,data) ->
       data.entries = []
-      data.order.reverse()
+      order = data.order[..].reverse()
       for i in[0..data.values.length/2-1] by 1
         name = data.values[i*2]
         rename = $.solr_config("static.ui.facets.key=.members.key=.text.singular",data.key,name)
@@ -194,9 +194,12 @@ window.pedestrian_templates =
           key: data.values[i*2]
           name
           num: data.values[i*2+1]
-          order: $.inArray(data.values[i*2],data.order)
+          order: $.inArray(data.values[i*2],order)
         }
-      data.entries = data.entries.sort((a,b) -> b.order - a.order)
+      data.entries = data.entries.sort (a,b) ->
+        if a.order != -1 or b.order != -1
+          return b.order - a.order
+        return a.name.localeCompare(b.name)
       short_num = $.solr_config('static.ui.facets.key=.trunc',data.key)
       title = $.solr_config('static.ui.facets.key=.heading',data.key)
       data.title = ( if data.entries.length then [title] else [] )

@@ -1111,9 +1111,9 @@
         }
       },
       preproc: function(spec, data) {
-        var e, i, name, rename, short_num, title, _i, _j, _len, _ref, _ref1;
+        var e, i, name, order, rename, short_num, title, _i, _j, _len, _ref, _ref1;
         data.entries = [];
-        data.order.reverse();
+        order = data.order.slice(0).reverse();
         for (i = _i = 0, _ref = data.values.length / 2 - 1; _i <= _ref; i = _i += 1) {
           name = data.values[i * 2];
           rename = $.solr_config("static.ui.facets.key=.members.key=.text.singular", data.key, name);
@@ -1124,11 +1124,14 @@
             key: data.values[i * 2],
             name: name,
             num: data.values[i * 2 + 1],
-            order: $.inArray(data.values[i * 2], data.order)
+            order: $.inArray(data.values[i * 2], order)
           });
         }
         data.entries = data.entries.sort(function(a, b) {
-          return b.order - a.order;
+          if (a.order !== -1 || b.order !== -1) {
+            return b.order - a.order;
+          }
+          return a.name.localeCompare(b.name);
         });
         short_num = $.solr_config('static.ui.facets.key=.trunc', data.key);
         title = $.solr_config('static.ui.facets.key=.heading', data.key);
