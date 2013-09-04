@@ -112,8 +112,12 @@
       for (i = _k = 0, _len2 = texts.length; _k < _len2; i = ++_k) {
         t = texts[i];
         li = $('<a/>').attr('href', '#' + ids[i]).html(t).wrap('<li/>').parent();
-        li.css('padding-left', parseInt(li.css('padding-left')) + extrapad + "px").appendTo(ul).on('click', function(e) {
+        li.css('padding-left', parseInt(li.css('padding-left')) + extrapad + "px").appendTo(ul);
+        li.on('click', function(e) {
           return selected(el, $('a', this), opts);
+        });
+        $('a', li).on('click', function(e) {
+          return selected(el, $(this), opts);
         });
         li.mouseleave(function() {
           return $(this).removeClass('selboxselected');
@@ -129,12 +133,13 @@
           return lel.addClass('selboxselected');
         });
       }
-      $('html').focusin(function(e) {
-        t = $(e.target);
-        if (t.parents('.selboxouter').length && t.prop("tagName") === 'A') {
+      $('html').on('focusin', function(e) {
+        var tg;
+        tg = $(e.target);
+        if (tg.parents('.selboxlist').length) {
           return true;
         }
-        $('ul', outer).hide();
+        el.data("selboxul").hide();
         return true;
       });
       return $('html').keydown(function(e) {
@@ -198,6 +203,7 @@
       }
       el.width(outer.width() - (el.outerWidth() - el.width()));
       el.insertAfter(outer);
+      el.data("selboxul").hide();
       return outer.remove();
     };
     return $.fn.selbox.defaults = {
