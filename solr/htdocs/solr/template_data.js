@@ -377,7 +377,8 @@
             var q;
             q = els.parents('.se_search').find('.replacement_filter input:not(.solr_ghost)').val();
             return $(document).trigger('update_state', {
-              q: q
+              q: q,
+              page: 1
             });
           });
         },
@@ -390,7 +391,8 @@
               $(this).trigger("blur");
               $(this).searchac('close');
               return $(document).trigger('update_state', {
-                q: $(this).val()
+                q: $(this).val(),
+                page: 1
               });
             }
           });
