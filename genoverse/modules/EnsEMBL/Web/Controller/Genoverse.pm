@@ -418,11 +418,11 @@ sub highlight_transcript {
   my ($self, $node) = @_;
   my $hub           = $self->hub;
   my $core_params   = $hub->core_params;
+  my $gene          = $core_params->{'g'} ? $hub->get_adaptor('get_GeneAdaptor', $core_params->{'db'})->fetch_by_stable_id($core_params->{'g'}) : undef;
   
-  return unless $core_params->{'g'};
+  return unless $gene;
   
   my $colourmap   = $hub->colourmap;
-  my $gene        = $hub->get_adaptor('get_GeneAdaptor', $core_params->{'db'})->fetch_by_stable_id($core_params->{'g'});
   my $transcripts = $node->get('display') =~ /transcript/;
   my $highlight   = $transcripts ? 'highlight1' : 'highlight2';
   my $highlights  = { $gene->dbID => $colourmap->hex_by_name($highlight) };
