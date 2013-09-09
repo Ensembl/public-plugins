@@ -52,7 +52,7 @@ sub test_variation {
     #Test ZMenu    
     $sel->ensembl_open_zmenu('Context','title^="Variation:"');
     $sel->pause(8000);
-    $sel->ensembl_click("link=rs*properties")
+    $sel->ensembl_click("link=$variation_text properties")
     and $sel->ensembl_wait_for_ajax_ok('50000','5000')
     and $sel->go_back();    
     
