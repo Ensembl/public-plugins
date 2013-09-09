@@ -347,7 +347,8 @@ sub turn_track {
     print "  Test searching for $search track and turning the track ".uc($action)."\n" ;
     
     $sel->ensembl_click("name=configuration_search_text")    
-    and $sel->type_keys_ok("configuration_search_text", "$search") #searching for the track in the search textfield    
+    and $sel->type_ok("configuration_search_text", $search)      # type_ok changes the value of the input box, but doesn't simulate key presses which are needed for search to work
+    and $sel->type_keys_ok("configuration_search_text", $search) # type_keys_ok simulates key presses, but doesn't necessarily put the value into the input. Both together do what we need.
     and $sel->ensembl_wait_for_ajax_ok(undef,'10000');
   } else {
     print "  Test turning $track_name track ".uc($action)."\n";
