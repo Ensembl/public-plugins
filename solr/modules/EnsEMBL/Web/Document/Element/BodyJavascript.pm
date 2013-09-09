@@ -8,7 +8,7 @@ use EnsEMBL::Web::Tools::MethodMaker(copy => ['init','_init2']);
 sub init {
   my ($self) = @_;
   $self->_init2;
-  $self->add_solr; # XXX not always
+  $self->add_solr if $self->hub->type eq 'Search';
 }
 
 sub add_solr {
