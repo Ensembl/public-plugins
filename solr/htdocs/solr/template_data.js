@@ -3,40 +3,6 @@
   var expand_for_desc, expand_for_title, feature_type, format, sequence_type, title_reword, title_type, ucfirst, verbose, _a, _ajax_json, _clone_object, _lc, _list_string, _make_string, _ref, _ref1, _ref2, _ref3, _valueevent,
     _this = this;
 
-  _list_string = function(singular, plural, data, tail, flip, wrap) {
-    var d, end, head, _ref;
-    head = (data.length > 1 ? plural : singular);
-    if (tail == null) {
-      tail = '';
-    }
-    if (wrap == null) {
-      wrap = '';
-    }
-    if (!$.isArray(wrap)) {
-      wrap = [wrap, wrap];
-    }
-    if (flip) {
-      _ref = [tail, head], head = _ref[0], tail = _ref[1];
-    }
-    data = (function() {
-      var _i, _len, _results;
-      _results = [];
-      for (_i = 0, _len = data.length; _i < _len; _i++) {
-        d = data[_i];
-        _results.push(wrap[0] + d + wrap[1]);
-      }
-      return _results;
-    })();
-    if (data.length === 0) {
-      return '';
-    }
-    if (data.length === 1) {
-      return $.trim([head, data[0], tail].join(' '));
-    }
-    end = data.pop();
-    return $.trim([head, data.join(', '), 'and', end, tail].join(' '));
-  };
-
   window.google_templates = {
     chunk: {
       template: "<div>\n  <div style=\"width: 100%\" class='table_row'>\n    <div class='table_result'>\n      <div class='preview_float_click'>\n        <div class='preview_float'></div>\n      </div>\n      <a class='table_toplink'></a>\n      <div class='green_data'>\n        <span class='id'></span>\n        <a href='#' class='location'></a>\n      </div>\n      <div class='description'></div>\n      <div class='quick_links'>\n        <ul>\n          <li><a href=''>link</a></li>\n        </ul>\n      </div>\n    </div>\n  </div>\n</div>",

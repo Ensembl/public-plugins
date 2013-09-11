@@ -105,6 +105,7 @@ sort_docs = (url,docs,favs,callback) ->
   callback(out)
 
 ac_string_q = (url,q) ->
+  q = q.toLowerCase()
   data = {
     q, spellcheck: true
   }
@@ -165,6 +166,7 @@ jump_searches = [
 boost = (i,n) -> if n>1 then Math.pow(10,(2*(n-i-1))/(n-1)) else 1
 
 ac_name_q = (config,url,query,favs) ->
+  query = query.toLowerCase()
   fav = "( "+("species:\"#{s}\"" for s in favs).join(" OR ")+" )"
   # XXX configurable AC feature types
   q = []

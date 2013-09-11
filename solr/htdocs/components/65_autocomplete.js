@@ -195,6 +195,7 @@
 
   ac_string_q = function(url, q) {
     var data;
+    q = q.toLowerCase();
     data = {
       q: q,
       spellcheck: true
@@ -274,6 +275,7 @@
 
   ac_name_q = function(config, url, query, favs) {
     var data, f, fav, favqs, fk, ft_part, i, q, q_part, q_parts, s, t, wild, _i, _j, _k, _len, _len1, _len2, _ref;
+    query = query.toLowerCase();
     fav = "( " + ((function() {
       var _i, _len, _results;
       _results = [];
