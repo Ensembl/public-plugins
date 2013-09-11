@@ -15,9 +15,9 @@ window.fixes.fix_minor_types =
             inner_desc = undefined
             main_desc = data.tp2_row.best('description')
             main_desc = main_desc.replace /\[(.*?)\]/g, (g0,g1) ->
-              inner_desc = g1.trim()
+              inner_desc = $.trim(g1)
               ''
-            main_desc = main_desc.replace(/has$/,'').trim()
+            main_desc = $.trim(main_desc.replace(/has$/,''))
             data.tp2_row.candidate('domfam_inner_desc',inner_desc,1000)
             data.tp2_row.candidate('domfam_rem_desc',main_desc,1000)
           if ft == 'Family'

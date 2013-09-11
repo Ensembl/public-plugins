@@ -83,7 +83,7 @@
       this.registry = registry;
       this.spec = spec;
       this.name = name;
-      this.template = $(((_ref = spec.template) != null ? _ref : "<div></div>").trim());
+      this.template = $($.trim((_ref = spec.template) != null ? _ref : "<div></div>"));
       this.directives = (_ref1 = this._directives_from_spec(this.spec)) != null ? _ref1 : {};
       this.submap = (_ref2 = this.spec.subtemplates) != null ? _ref2 : {};
       this.sockets = {};

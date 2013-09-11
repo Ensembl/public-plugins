@@ -63,7 +63,7 @@ window.rhs_templates =
         if tophit.feature_type == 'Gene'
           extra = {}
           desc = tophit.description.replace /\[(.*?)\:(.*?)\]/g, (g0,g1,g2) ->
-            extra[g1.trim().toLowerCase()] = g2.trim()
+            extra[$.trim(g1).toLowerCase()] = $.trim(g2)
             ''
           if extra.source
             extra.source = extra.source.replace(/;/g,'; ')

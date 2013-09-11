@@ -1,16 +1,4 @@
 #
-_list_string = (singular,plural,data,tail,flip,wrap) ->
-  head = (if data.length > 1 then plural else singular)
-  tail ?= ''
-  wrap ?= ''
-  if not $.isArray(wrap) then wrap = [wrap,wrap]
-  if flip then [head,tail] = [tail,head]
-  data = ( wrap[0]+d+wrap[1] for d in data )
-  if data.length == 0 then return ''
-  if data.length == 1 then return [head,data[0],tail].join(' ').trim()
-  end = data.pop()
-  return [head,(data.join(', ')),'and',end,tail].join(' ').trim()
-
 window.google_templates = 
   chunk:
     template: """

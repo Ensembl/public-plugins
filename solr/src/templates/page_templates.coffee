@@ -73,7 +73,7 @@ window.page_templates =
             desc = data.tp2_row.best('description')
             if desc?
               desc = desc.replace /\[(.*?)\:(.*?)\]/g, (g0,g1,g2) ->
-                data.tp2_row.candidate(g1.trim().toLowerCase(),g2.trim(),50)
+                data.tp2_row.candidate($.trim(g1).toLowerCase(),$.trim(g2),50)
                 ''
               data.tp2_row.candidate('description',desc)
 
@@ -122,7 +122,7 @@ window.page_templates =
             desc = []
             for c in vals
               if not c then continue
-              c = c.trim().replace(new RegExp("\\.$"),'')
+              c = $.trim(c).replace(new RegExp("\\.$"),'')
               if c == c.toUpperCase()
                 c = c.toLowerCase()
               c = c.charAt(0).toUpperCase() + c.substring(1)

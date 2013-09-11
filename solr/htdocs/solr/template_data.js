@@ -31,10 +31,10 @@
       return '';
     }
     if (data.length === 1) {
-      return [head, data[0], tail].join(' ').trim();
+      return $.trim([head, data[0], tail].join(' '));
     }
     end = data.pop();
-    return [head, data.join(', '), 'and', end, tail].join(' ').trim();
+    return $.trim([head, data.join(', '), 'and', end, tail].join(' '));
   };
 
   window.google_templates = {
@@ -628,7 +628,7 @@
               desc = data.tp2_row.best('description');
               if (desc != null) {
                 desc = desc.replace(/\[(.*?)\:(.*?)\]/g, function(g0, g1, g2) {
-                  data.tp2_row.candidate(g1.trim().toLowerCase(), g2.trim(), 50);
+                  data.tp2_row.candidate($.trim(g1).toLowerCase(), $.trim(g2), 50);
                   return '';
                 });
                 return data.tp2_row.candidate('description', desc);
@@ -735,7 +735,7 @@
                 if (!c) {
                   continue;
                 }
-                c = c.trim().replace(new RegExp("\\.$"), '');
+                c = $.trim(c).replace(new RegExp("\\.$"), '');
                 if (c === c.toUpperCase()) {
                   c = c.toLowerCase();
                 }
@@ -1336,7 +1336,7 @@
           if (tophit.feature_type === 'Gene') {
             extra = {};
             desc = tophit.description.replace(/\[(.*?)\:(.*?)\]/g, function(g0, g1, g2) {
-              extra[g1.trim().toLowerCase()] = g2.trim();
+              extra[$.trim(g1).toLowerCase()] = $.trim(g2);
               return '';
             });
             if (extra.source) {
@@ -2368,10 +2368,10 @@
               inner_desc = void 0;
               main_desc = data.tp2_row.best('description');
               main_desc = main_desc.replace(/\[(.*?)\]/g, function(g0, g1) {
-                inner_desc = g1.trim();
+                inner_desc = $.trim(g1);
                 return '';
               });
-              main_desc = main_desc.replace(/has$/, '').trim();
+              main_desc = $.trim(main_desc.replace(/has$/, ''));
               data.tp2_row.candidate('domfam_inner_desc', inner_desc, 1000);
               data.tp2_row.candidate('domfam_rem_desc', main_desc, 1000);
             }
@@ -2678,10 +2678,10 @@
       return '';
     }
     if (data.length === 1) {
-      return [head, data[0], tail].join(' ').trim();
+      return $.trim([head, data[0], tail].join(' '));
     }
     end = data.pop();
-    return [head, data.join(', '), 'and', end, tail].join(' ').trim();
+    return $.trim([head, data.join(', '), 'and', end, tail].join(' '));
   };
 
   title_type = {
@@ -2804,7 +2804,7 @@
                   _results = [];
                   for (_j = 0, _len1 = _ref5.length; _j < _len1; _j++) {
                     x = _ref5[_j];
-                    _results.push(x.trim());
+                    _results.push($.trim(x));
                   }
                   return _results;
                 })();
