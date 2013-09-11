@@ -122,8 +122,6 @@ class Hub
     style:   ['style']
   }
 
-  _upgrade_first_used = {}
-
   _section_keys = {
     facet: /^facet_(.*)/
     fall: /^fall_(.*)/
@@ -186,6 +184,7 @@ class Hub
 
   render_stage: (more) ->
     @set_templates(@layout())
+    if @useless_browser() then $('#solr_content').addClass('solr_useless_browser')
     @renderer.render_stage(more)
 
   _add_changed: (changed,k) ->
@@ -302,6 +301,8 @@ class Hub
 
   update_url: (changes,service = 1) ->
     qps = _kv_copy(@params)
+    if qps.perpage? and parseInt(qps.perpage) == 0
+      qps.perpage = $.solr_config('static.ui.pagesizes')[0]
     qps[k] = v for k,v of changes when v?
     delete qps[k] for k,v of changes when not v
     url = @make_url(qps)
@@ -387,15 +388,15 @@ class Hub
 #      ['feature_type',[['Gene']],10]
     ]
     if @first_service
-      for k of changed
-        changed[x] = 1 for x in (_upgrade_first_used[k] ? [])       
+      if parseInt(@params.perpage) == 0 # Override "all" on first load
+        @replace_url({ perpage: 10 })
+        @params.perpage = $.solr_config('static.ui.pagesizes')[0]
       @render_stage( =>
         @actions(request,changed)
       )
       @first_service = 0
     else
       @actions(request,changed)
-
 
   actions: (request,changed) ->
     if changed['results'] then @renderer.render_results()

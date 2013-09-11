@@ -3,40 +3,6 @@
   var expand_for_desc, expand_for_title, feature_type, format, sequence_type, title_reword, title_type, ucfirst, verbose, _a, _ajax_json, _clone_object, _lc, _list_string, _make_string, _ref, _ref1, _ref2, _ref3, _valueevent,
     _this = this;
 
-  _list_string = function(singular, plural, data, tail, flip, wrap) {
-    var d, end, head, _ref;
-    head = (data.length > 1 ? plural : singular);
-    if (tail == null) {
-      tail = '';
-    }
-    if (wrap == null) {
-      wrap = '';
-    }
-    if (!$.isArray(wrap)) {
-      wrap = [wrap, wrap];
-    }
-    if (flip) {
-      _ref = [tail, head], head = _ref[0], tail = _ref[1];
-    }
-    data = (function() {
-      var _i, _len, _results;
-      _results = [];
-      for (_i = 0, _len = data.length; _i < _len; _i++) {
-        d = data[_i];
-        _results.push(wrap[0] + d + wrap[1]);
-      }
-      return _results;
-    })();
-    if (data.length === 0) {
-      return '';
-    }
-    if (data.length === 1) {
-      return [head, data[0], tail].join(' ').trim();
-    }
-    end = data.pop();
-    return [head, data.join(', '), 'and', end, tail].join(' ').trim();
-  };
-
   window.google_templates = {
     chunk: {
       template: "<div>\n  <div style=\"width: 100%\" class='table_row'>\n    <div class='table_result'>\n      <div class='preview_float_click'>\n        <div class='preview_float'></div>\n      </div>\n      <a class='table_toplink'></a>\n      <div class='green_data'>\n        <span class='id'></span>\n        <a href='#' class='location'></a>\n      </div>\n      <div class='description'></div>\n      <div class='quick_links'>\n        <ul>\n          <li><a href=''>link</a></li>\n        </ul>\n      </div>\n    </div>\n  </div>\n</div>",
@@ -86,9 +52,10 @@
         '.preview_float_click': function(els, data) {
           var _this = this;
           els.on('resized', function() {
-            if ($(window).width() < 1400 || $('html').hasClass('solr_useless_browser')) {
+            if ($(window).width() < 1400 || $('#solr_content').hasClass('solr_useless_browser')) {
               els.css('display', 'none');
-              return $('.preview_holder').css('display', 'none');
+              $('.preview_holder').css('display', 'none');
+              return $('.sidecar_holder').css('display', 'none');
             } else {
               els.css('display', '');
               return $('.preview_holder').css('display', '');
@@ -130,7 +97,7 @@
           _this = this;
         tr = $('.table_result', el);
         $('html').on('resized', function() {
-          if ($(window).width() < 1400) {
+          if ($(window).width() < 1400 || $('#solr_content').hasClass('solr_useless_browser')) {
             return $('.sidecar_holder').hide();
           } else {
             return $('.sidecar_holder').show();
@@ -160,7 +127,7 @@
       fixes: {
         global: [
           function(data) {
-            data.tp2_row.register(50, function() {
+            data.tp2_row.register(5000, function() {
               var ft, rename;
               ft = data.tp2_row.best('feature_type');
               rename = $.solr_config('static.ui.facets.key=.members.key=.text.singular', 'feature_type', ft);
@@ -252,12 +219,16 @@
       }
     },
     outer: {
-      template: "<div class=\"solr_g_layout\">\n  <div class=\"sidecar_holder table_acc_sidecars\">\n    <div class=\"tophit\"></div>\n    <div class=\"noresults noresults_side\"></div>\n    <div class=\"topgene\"></div>\n  </div>\n  <div class=\"preview_holder\"></div>\n  <div class=\"se_search\">\n    <div class=\"se_query\">\n      <div class='hub_spinner g_spinner'></div>\n      <div class='hub_fail g_fail'></div>\n      <div class=\"solr_query_box\">\n        <div class=\"search_table_prehead_filterctl table_acc_ne\">\n        </div>\n        <div class=\"solr_result_summary\"></div>\n      </div>\n    </div>\n    <div class='search_table_holder page_some_query'>\n      <div class='page_some_results'>\n        <div class='main_topcars'>\n          <div class='noresults noresults_main'></div>\n          <div class='narrowresults'></div>\n          <div class='sidecars'></div>\n        </div>\n        <div class='search_table_proper'>\n        </div>\n        <div class='se_search_table_posttail'>\n          <div class='search_table_posttail_pager table_acc_sw'>\n          </div>\n        </div>\n      </div>\n      <div class='page_no_results'>\n        <div class=\"table_acc_noresults\"></div>\n        <div class='noresults_maincars'>\n          <div class='sidecars'></div>\n        </div>\n      </div>\n    </div>\n    <div class='page_no_query g_page_no_results'>\n    </div>\n  </div>\n</div>",
+      template: "<div class=\"solr_g_layout\">\n  <div class=\"sidecar_holder table_acc_sidecars\">\n    <div class=\"tophit\"></div>\n    <div class=\"noresults noresults_side\"></div>\n    <div class=\"topgene\"></div>\n  </div>\n  <div class=\"preview_holder\"></div>\n  <div class=\"se_search\">\n    <div class=\"se_query\">\n      <div class='hub_spinner g_spinner'></div>\n      <div class='hub_fail g_fail'></div>\n      <div class=\"solr_query_box\">\n        <div class=\"search_table_prehead_filterctl table_acc_ne\">\n        </div>\n        <div class=\"solr_result_summary\"></div>\n      </div>\n    </div>\n    <div class='search_table_holder page_some_query'>\n      <div class='page_some_results'>\n        <div class='main_topcars'>\n          <div class='noresults noresults_main'></div>\n          <div class='narrowresults'></div>\n          <div class='sidecars'></div>\n        </div>\n        <div class='search_table_proper'>\n        </div>\n        <div class='se_search_table_posttail'>\n          <div class='search_table_posttail_pager table_acc_sw'>\n            <div class=\"pager\"></div>\n          </div>\n        </div>\n      </div>\n      <div class='page_no_results'>\n        <div class=\"table_acc_noresults\"></div>\n        <div class='noresults_maincars'>\n          <div class='sidecars'></div>\n        </div>\n      </div>\n    </div>\n    <div class='page_no_query g_page_no_results'>\n    </div>\n  </div>\n</div>",
       subtemplates: {
         '.tophit': 'tophit',
         '.topgene': 'topgene',
         '.noresults': 'noresults',
         '.narrowresults': 'narrowresults',
+        '.pager': {
+          template: 'pager',
+          data: ''
+        },
         '.search_table_prehead_filterctl': {
           template: 'replacement-filter',
           data: ''
@@ -372,7 +343,8 @@
             var q;
             q = els.parents('.se_search').find('.replacement_filter input:not(.solr_ghost)').val();
             return $(document).trigger('update_state', {
-              q: q
+              q: q,
+              page: 1
             });
           });
         },
@@ -385,7 +357,8 @@
               $(this).trigger("blur");
               $(this).searchac('close');
               return $(document).trigger('update_state', {
-                q: $(this).val()
+                q: $(this).val(),
+                page: 1
               });
             }
           });
@@ -537,9 +510,11 @@
           return el.hide();
         },
         '.hub_fail': function(el, data) {
-          var url;
-          url = el.css('background-image').replace('url("', '').replace('")', '');
-          return $('<img/>').attr('src', url).appendTo($('<body></body>')).css('display', 'none');
+          var m;
+          m = /url\("?(.*?)"?\)/.exec(el.css('background-image'));
+          if (m != null) {
+            return $('<img/>').attr('src', m[1]).appendTo($('<body></body>')).css('display', 'none');
+          }
         },
         '.new_current_faceter': function(el, data) {
           return $(document).on('first_result', function(e, query, data) {
@@ -607,7 +582,6 @@
             });
             data.tp2_row.register(100, function() {
               var desc;
-              console.log("name", data.tp2_row.best('name'));
               if (data.tp2_row.best('name')) {
                 data.tp2_row.candidate('main-title', data.tp2_row.best('name'), 200);
               }
@@ -620,7 +594,7 @@
               desc = data.tp2_row.best('description');
               if (desc != null) {
                 desc = desc.replace(/\[(.*?)\:(.*?)\]/g, function(g0, g1, g2) {
-                  data.tp2_row.candidate(g1.trim().toLowerCase(), g2.trim(), 50);
+                  data.tp2_row.candidate($.trim(g1).toLowerCase(), $.trim(g2), 50);
                   return '';
                 });
                 return data.tp2_row.candidate('description', desc);
@@ -727,7 +701,7 @@
                 if (!c) {
                   continue;
                 }
-                c = c.trim().replace(new RegExp("\\.$"), '');
+                c = $.trim(c).replace(new RegExp("\\.$"), '');
                 if (c === c.toUpperCase()) {
                   c = c.toLowerCase();
                 }
@@ -779,7 +753,6 @@
                 order.push(k.key);
               }
             }
-            console.log("ORDER", members, order);
             model = {
               values: data.faceter[key],
               order: order
@@ -1106,9 +1079,9 @@
         }
       },
       preproc: function(spec, data) {
-        var e, i, name, rename, short_num, title, _i, _j, _len, _ref, _ref1;
+        var e, i, name, order, rename, short_num, title, _i, _j, _len, _ref, _ref1;
         data.entries = [];
-        data.order.reverse();
+        order = data.order.slice(0).reverse();
         for (i = _i = 0, _ref = data.values.length / 2 - 1; _i <= _ref; i = _i += 1) {
           name = data.values[i * 2];
           rename = $.solr_config("static.ui.facets.key=.members.key=.text.singular", data.key, name);
@@ -1119,13 +1092,15 @@
             key: data.values[i * 2],
             name: name,
             num: data.values[i * 2 + 1],
-            order: $.inArray(data.values[i * 2], data.order)
+            order: $.inArray(data.values[i * 2], order)
           });
         }
         data.entries = data.entries.sort(function(a, b) {
-          return b.order - a.order;
+          if (a.order !== -1 || b.order !== -1) {
+            return b.order - a.order;
+          }
+          return a.name.localeCompare(b.name);
         });
-        console.log("ORDER :", data.entries);
         short_num = $.solr_config('static.ui.facets.key=.trunc', data.key);
         title = $.solr_config('static.ui.facets.key=.heading', data.key);
         data.title = (data.entries.length ? [title] : []);
@@ -1146,19 +1121,20 @@
           links = $('.solr_beak_p_contents a', el);
           $('.solr_beak_p_less', el).hide();
           $('.solr_beak_p_more', el).hide();
-          if (num !== 0) {
+          if (num > 0) {
             links.css('display', 'block').each(function(i) {
               if (i >= num) {
                 return $(this).hide();
               }
             });
             if (links.length > num) {
-              return $('.solr_beak_p_more', el).css('display', 'block');
+              $('.solr_beak_p_more', el).css('display', 'block');
             }
-          } else {
+          } else if (links.length > -num) {
             links.css('display', 'block');
-            return $('.solr_beak_p_less', el).css('display', 'block');
+            $('.solr_beak_p_less', el).css('display', 'block');
           }
+          return $('#main_holder').css('min-height', $('.solr_sidebar').outerHeight(true) + $('.solr_sidebar').offset().top);
         });
         data.set_fn = function(v) {
           $('.solr_feet_p_current', el).removeClass('solr_feet_p_current');
@@ -1170,7 +1146,7 @@
           var sense, short_num;
           short_num = $.solr_config('static.ui.facets.key=.trunc', data.key);
           sense = params["fall_" + data.key];
-          return el.trigger('trim', [sense ? 0 : short_num]);
+          return el.trigger('trim', [sense ? -short_num : short_num]);
         });
         return $(document).trigger('force_state_change');
       }
@@ -1194,9 +1170,9 @@
       }
     },
     sidesizer: {
-      template: "<div class=\"solr_faceter solr_beak_p solr_feet_p\">\n  <div class=\"solr_beak_p_title\">Per page:</div>\n  <div class='solr_beak_p_contents'>\n    <a>\n      <span class='solr_beak_p_left'>42</span>\n      <span class='solr_beak_p_right'></span>\n    </a>\n  </div>\n</div>",
+      template: "<div class=\"solr_faceter solr_beak_p solr_feet_p\">\n  <div class=\"solr_beak_p_title\">Per page:</div>\n  <div class='solr_beak_p_contents solr_perpage_list'>\n    <a>\n      <span class='solr_beak_p_left'>42</span>\n      <span class='solr_beak_p_right'></span>\n    </a>\n  </div>\n  <div class='solr_beak_p_contents solr_perpage_all'>\n    <a href=\"#0\">\n      <span class='solr_beak_p_left'>Show all results in one page</span>\n      <span class='solr_beak_p_right'></span>\n    </a>\n  </div>\n</div>",
       directives: {
-        'a': {
+        '.solr_perpage_list a': {
           'entry<-entries': {
             'span.solr_beak_p_left': 'entry.label',
             '@href': function(e) {
@@ -1225,6 +1201,9 @@
         _ref = $.solr_config("static.ui.pagesizes");
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           x = _ref[_i];
+          if (x === 0) {
+            continue;
+          }
           data.entries.push({
             label: (x ? x : "all"),
             key: x
@@ -1323,7 +1302,7 @@
           if (tophit.feature_type === 'Gene') {
             extra = {};
             desc = tophit.description.replace(/\[(.*?)\:(.*?)\]/g, function(g0, g1, g2) {
-              extra[g1.trim().toLowerCase()] = g2.trim();
+              extra[$.trim(g1).toLowerCase()] = $.trim(g2);
               return '';
             });
             if (extra.source) {
@@ -1381,6 +1360,9 @@
       decorate: {
         '.scth_canvas canvas': function(el, data) {
           var arrow, bp_per_px, chr, ctx, end, h, i, img_start, len, line, offset, size, sstr, start, step, step_start, strand, text, _i, _ref;
+          if (el.length === 0 || (el[0] == null) || (el[0].getContext == null)) {
+            return;
+          }
           ctx = el[0].getContext('2d');
           line = function(ctx, x, y, w, h) {
             ctx.beginPath();
@@ -1684,7 +1666,7 @@
       }
     },
     narrowresults: {
-      template: "<div>Narrow</div>",
+      template: "<div></div>",
       postproc: function(el, data) {
         return $(document).on('first_result', function(e, query, rdata, state) {
           var all_facets, f,
@@ -1730,7 +1712,7 @@
                   }
                 }
                 if (entries > 0) {
-                  name = $.solr_config('static.ui.facets.key=.text.singular', f);
+                  name = $.solr_config('static.ui.facets.key=.text.plural', f);
                   othervalues.push({
                     entries: entries,
                     total: total,
@@ -2038,9 +2020,11 @@
         'a': function(els, data) {
           var _this = this;
           return els.click(function(e) {
-            var el, p;
+            var el, href, p;
             el = $(e.currentTarget);
-            p = el.attr('href').substring(1);
+            href = el.attr('href');
+            href = href.substring(href.indexOf('#'));
+            p = href.substring(1);
             if ((p != null) && p) {
               data.click(p);
             }
@@ -2281,7 +2265,6 @@
           }
           data.table_thead = [];
         }
-        console.log("table preproc", data);
         return [spec, data];
       },
       more_fixes: ['page', 'fix_g_variation', 'fix_regulation', 'fix_terse', 'fix_minor_types'],
@@ -2351,10 +2334,10 @@
               inner_desc = void 0;
               main_desc = data.tp2_row.best('description');
               main_desc = main_desc.replace(/\[(.*?)\]/g, function(g0, g1) {
-                inner_desc = g1.trim();
+                inner_desc = $.trim(g1);
                 return '';
               });
-              main_desc = main_desc.replace(/has$/, '').trim();
+              main_desc = $.trim(main_desc.replace(/has$/, ''));
               data.tp2_row.candidate('domfam_inner_desc', inner_desc, 1000);
               data.tp2_row.candidate('domfam_rem_desc', main_desc, 1000);
             }
@@ -2486,7 +2469,6 @@
             ft = data.tp2_row.best('feature_type');
             if (ft === 'RegulatoryFeature') {
               desc = data.tp2_row.best('description');
-              console.log("desc", desc);
               m = desc.match(/^(\S+) is a (.*?) from (.*?) (which hits .*)$/);
               if (m != null) {
                 _ref2 = m.slice(1, 5), reg_id = _ref2[0], reg_what = _ref2[1], reg_from = _ref2[2], reg_tail = _ref2[3];
@@ -2580,9 +2562,20 @@
   };
 
   _make_string = function(r, template) {
-    return template.replace(/\{(.*?)\}/g, (function(g0, g1) {
-      return r.best(g1);
-    }));
+    var failed, out;
+    failed = false;
+    out = template.replace(/\{(.*?)\}/g, function(g0, g1) {
+      var v;
+      v = r.best(g1);
+      if (v == null) {
+        failed = true;
+      }
+      return v;
+    });
+    if (failed) {
+      return void 0;
+    }
+    return out;
   };
 
   if ((_ref2 = window.fixes) == null) {
@@ -2603,12 +2596,13 @@
             }
           });
           data.tp2_row.register(300, function() {
-            var ft, id, t, v;
+            var ft, id, t, title, v;
             ft = data.tp2_row.best('feature_type');
             v = verbose[ft];
             if ((v != null ? v.title : void 0) != null) {
               t = data.tp2_row.best('main-title');
-              data.tp2_row.candidate('main-title', _make_string(data.tp2_row, v.title), 300);
+              title = _make_string(data.tp2_row, v.title);
+              data.tp2_row.candidate('main-title', title, 300);
             }
             if ((v != null ? v.id : void 0) != null) {
               id = data.tp2_row.best('id');
@@ -2650,10 +2644,10 @@
       return '';
     }
     if (data.length === 1) {
-      return [head, data[0], tail].join(' ').trim();
+      return $.trim([head, data[0], tail].join(' '));
     }
     end = data.pop();
-    return [head, data.join(', '), 'and', end, tail].join(' ').trim();
+    return $.trim([head, data.join(', '), 'and', end, tail].join(' '));
   };
 
   title_type = {
@@ -2776,7 +2770,7 @@
                   _results = [];
                   for (_j = 0, _len1 = _ref5.length; _j < _len1; _j++) {
                     x = _ref5[_j];
-                    _results.push(x.trim());
+                    _results.push($.trim(x));
                   }
                   return _results;
                 })();

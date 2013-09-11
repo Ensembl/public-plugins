@@ -134,6 +134,7 @@ sub update_conf {
       ###############
       # MISC LAYOUT #
       ###############
+      enable_direct => 0,
       per_page => 10, # default results per page
       tips => [
         "

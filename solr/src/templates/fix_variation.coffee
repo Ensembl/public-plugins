@@ -6,9 +6,9 @@ _list_string = (singular,plural,data,tail,flip,wrap) ->
   if flip then [head,tail] = [tail,head]
   data = ( wrap[0]+d+wrap[1] for d in data )
   if data.length == 0 then return ''
-  if data.length == 1 then return [head,data[0],tail].join(' ').trim()
+  if data.length == 1 then return $.trim([head,data[0],tail].join(' '))
   end = data.pop()
-  return [head,(data.join(', ')),'and',end,tail].join(' ').trim()
+  return $.trim([head,(data.join(', ')),'and',end,tail].join(' '))
 
 title_type = {
   CNV: 'CNV Probe'
@@ -80,7 +80,7 @@ window.fixes.fix_g_variation =
               data.tp2_row.add_value('new-contents', "<i>Annotated by HGMD but no phenotype description is publicly available (HGMD_MUTATION)</i>",5000)
             else
               # Neither COSMIC nor HGMD_MUTATION
-              parts = (x.trim() for x in p.toLowerCase().split(','))
+              parts = ($.trim(x) for x in p.toLowerCase().split(','))
               std = parts.sort((a,b) -> a.localeCompare(b)).join(' ')
                 .replace(/\s+/g,' ')
               if (not forms[std]?) or forms[std][1] > parts.length

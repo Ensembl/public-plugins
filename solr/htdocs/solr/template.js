@@ -83,7 +83,7 @@
       this.registry = registry;
       this.spec = spec;
       this.name = name;
-      this.template = $(((_ref = spec.template) != null ? _ref : "<div></div>").trim());
+      this.template = $($.trim((_ref = spec.template) != null ? _ref : "<div></div>"));
       this.directives = (_ref1 = this._directives_from_spec(this.spec)) != null ? _ref1 : {};
       this.submap = (_ref2 = this.spec.subtemplates) != null ? _ref2 : {};
       this.sockets = {};
@@ -458,7 +458,6 @@
       root_part = root_comp.make_part(this, [], [], [], void 0);
       template = root_part.emit_template();
       template = template.wrap("<div></div>").parent();
-      console.log(template.html(), root_part.emit_directives());
       out = template.render(this.data, root_part.emit_directives());
       if (attach != null) {
         attach(out);

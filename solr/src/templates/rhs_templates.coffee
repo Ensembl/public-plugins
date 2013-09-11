@@ -63,7 +63,7 @@ window.rhs_templates =
         if tophit.feature_type == 'Gene'
           extra = {}
           desc = tophit.description.replace /\[(.*?)\:(.*?)\]/g, (g0,g1,g2) ->
-            extra[g1.trim().toLowerCase()] = g2.trim()
+            extra[$.trim(g1).toLowerCase()] = $.trim(g2)
             ''
           if extra.source
             extra.source = extra.source.replace(/;/g,'; ')
@@ -125,6 +125,7 @@ window.rhs_templates =
       '.scth_desc': 'description'
     decorate:
       '.scth_canvas canvas': (el,data) ->
+        if el.length == 0 or not el[0]? or not el[0].getContext? then return
         ctx = el[0].getContext('2d')
         line = (ctx,x,y,w,h) ->
           ctx.beginPath()
@@ -352,7 +353,7 @@ window.rhs_templates =
 
   narrowresults:
     template: """
-      <div>Narrow</div>
+      <div></div>
     """
     postproc: (el,data) ->
       $(document).on 'first_result', (e,query,rdata,state) ->
@@ -378,7 +379,7 @@ window.rhs_templates =
                     entries += 1
                     total += e
                 if entries > 0
-                  name = $.solr_config('static.ui.facets.key=.text.singular',f)
+                  name = $.solr_config('static.ui.facets.key=.text.plural',f)
                   othervalues.push({ entries, total, name, facet: f })
             yoursearch = (k[1] for k in cur_values).join(" ")
             wholesite = (cur_values.length == 0)

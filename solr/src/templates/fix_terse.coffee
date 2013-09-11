@@ -6,7 +6,13 @@ verbose =
     id: '{species} Phenotype #'
 
 _make_string = (r,template) ->
-  return template.replace(/\{(.*?)\}/g,((g0,g1) -> r.best(g1)))
+  failed = false 
+  out = template.replace /\{(.*?)\}/g,(g0,g1) ->
+    v = r.best(g1)
+    if not v? then failed = true
+    return v
+  if failed then return undefined
+  return out
 
 window.fixes ?= {}
 window.fixes.fix_terse =
@@ -25,7 +31,8 @@ window.fixes.fix_terse =
           v = verbose[ft]
           if v?.title?
             t = data.tp2_row.best('main-title')
-            data.tp2_row.candidate('main-title',_make_string(data.tp2_row,v.title),300)
+            title = _make_string(data.tp2_row,v.title)
+            data.tp2_row.candidate('main-title',title,300)
           if v?.id?
             id = data.tp2_row.best('id')
             id = _make_string(data.tp2_row,v.id) + id

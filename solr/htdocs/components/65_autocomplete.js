@@ -131,7 +131,6 @@
   };
 
   ajax_json = function(url, data, success) {
-    console.log("call");
     return $.ajax({
       url: url,
       data: data,
@@ -196,6 +195,7 @@
 
   ac_string_q = function(url, q) {
     var data;
+    q = q.toLowerCase();
     data = {
       q: q,
       spellcheck: true
@@ -275,6 +275,10 @@
 
   ac_name_q = function(config, url, query, favs) {
     var data, f, fav, favqs, fk, ft_part, i, q, q_part, q_parts, s, t, wild, _i, _j, _k, _len, _len1, _len2, _ref;
+    if (!$.solr_config('static.ui.enable_direct')) {
+      return new $.Deferred().resolve();
+    }
+    query = query.toLowerCase();
     fav = "( " + ((function() {
       var _i, _len, _results;
       _results = [];
@@ -386,14 +390,15 @@
     url = "/" + url + "/Ajax/search";
     q = data.q;
     return favourite_species(data.element, function(favs) {
-      console.log("fs", favs);
       return $.when(ac_string_q(url, q), ac_name_q(direct_searches, url, q, favs)).done(function(string_d, id_d) {
         var direct, out, searches;
         searches = [];
         direct = [];
         out = [];
         ac_string_a(string_d[0], searches);
-        ac_name_a(id_d[0], direct);
+        if (id_d != null ? id_d[0] : void 0) {
+          ac_name_a(id_d[0], direct);
+        }
         return sort_docs(url, direct, favs, function(sorted) {
           var d, s, _i, _j, _len, _len1;
           direct = sorted;
@@ -445,7 +450,6 @@
       tr_gif = "url(data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)";
       eh = this.element.height();
       ew = this.element.width();
-      console.log("eh/ew", eh, ew, this.element.css('width'));
       box = $('<div></div>').css({
         position: 'relative',
         display: 'inline-block',

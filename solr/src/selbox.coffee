@@ -79,7 +79,8 @@
       li = $('<a/>').attr('href','#'+ids[i]).html(t).wrap('<li/>').parent()
       li.css('padding-left',parseInt(li.css('padding-left'))+extrapad+"px")
         .appendTo(ul)
-        .on('click',(e) -> selected(el,$('a',@),opts))
+      li.on('click',(e) -> selected(el,$('a',@),opts))
+      $('a',li).on('click',(e) -> selected(el,$(@),opts))
       li.mouseleave () ->
         $(@).removeClass('selboxselected')
       li.mouseenter () ->
@@ -88,11 +89,11 @@
         lel = ul.find('.selboxforce').removeClass('selboxforce')
         if not lel.length then lel = $(@)
         lel.addClass('selboxselected') 
-    $('html').focusin (e) ->
-      t = $(e.target)
-      if t.parents('.selboxouter').length and t.prop("tagName") == 'A'
+    $('html').on 'focusin', (e) ->
+      tg = $(e.target)
+      if tg.parents('.selboxlist').length
         return true
-      $('ul',outer).hide()
+      el.data("selboxul").hide()
       true
     # keyboard handling
     $('html').keydown (e) ->
@@ -145,6 +146,7 @@
     if not outer.length then return
     el.width(outer.width()-(el.outerWidth()-el.width()))
     el.insertAfter(outer)
+    el.data("selboxul").hide()
     outer.remove()
 
   $.fn.selbox.defaults = {

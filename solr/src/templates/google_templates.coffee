@@ -1,16 +1,4 @@
 #
-_list_string = (singular,plural,data,tail,flip,wrap) ->
-  head = (if data.length > 1 then plural else singular)
-  tail ?= ''
-  wrap ?= ''
-  if not $.isArray(wrap) then wrap = [wrap,wrap]
-  if flip then [head,tail] = [tail,head]
-  data = ( wrap[0]+d+wrap[1] for d in data )
-  if data.length == 0 then return ''
-  if data.length == 1 then return [head,data[0],tail].join(' ').trim()
-  end = data.pop()
-  return [head,(data.join(', ')),'and',end,tail].join(' ').trim()
-
 window.google_templates = 
   chunk:
     template: """
@@ -65,9 +53,10 @@ window.google_templates =
 
       '.preview_float_click': (els,data) ->
         els.on 'resized', =>
-          if $(window).width() < 1400 or $('html').hasClass('solr_useless_browser')
+          if $(window).width() < 1400 or $('#solr_content').hasClass('solr_useless_browser')
             els.css('display','none')
             $('.preview_holder').css('display','none')
+            $('.sidecar_holder').css('display','none')
           else
             els.css('display','')
             $('.preview_holder').css('display','')
@@ -101,7 +90,7 @@ window.google_templates =
       # position sidecar holder
       tr = $('.table_result',el)
       $('html').on 'resized', () ->
-        if $(window).width() < 1400
+        if $(window).width() < 1400 or $('#solr_content').hasClass('solr_useless_browser')
           $('.sidecar_holder').hide()
         else
           $('.sidecar_holder').show()
@@ -123,7 +112,7 @@ window.google_templates =
       global: [
         (data) ->
 
-          data.tp2_row.register 50, () ->
+          data.tp2_row.register 5000, () ->
             ft = data.tp2_row.best('feature_type')
             rename = $.solr_config('static.ui.facets.key=.members.key=.text.singular','feature_type',ft)
             if rename
@@ -209,6 +198,7 @@ window.google_templates =
               </div>
               <div class='se_search_table_posttail'>
                 <div class='search_table_posttail_pager table_acc_sw'>
+                  <div class="pager"></div>
                 </div>
               </div>
             </div>
@@ -229,6 +219,7 @@ window.google_templates =
       '.topgene': 'topgene'
       '.noresults': 'noresults'
       '.narrowresults': 'narrowresults'
+      '.pager': { template: 'pager', data: '' }
       '.search_table_prehead_filterctl': {template: 'replacement-filter', data: '' }
     decorate:
       '.preview_holder': (els,data) ->
@@ -329,7 +320,7 @@ window.google_templates =
       '.search_button': (els,data) ->
         els.click =>
           q = els.parents('.se_search').find('.replacement_filter input:not(.solr_ghost)').val()
-          $(document).trigger('update_state',{ q })
+          $(document).trigger('update_state',{ q, page: 1 })
       'input': (els,data) ->
         $(document).on 'first_result', (e,query,data) ->
           els.val(query.q)
@@ -337,7 +328,7 @@ window.google_templates =
           if e.keyCode == 13
             $(this).trigger("blur")
             $(this).searchac('close')
-            $(document).trigger('update_state',{ q: $(this).val() })
+            $(document).trigger('update_state',{ q: $(this).val(), page: 1 })
     postproc: (el,data) ->
       $(document).on 'first_result', (e,query,data) ->
         filter = $('.replacement_filter',el)

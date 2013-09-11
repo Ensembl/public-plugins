@@ -54,7 +54,7 @@ sub search {
       $url =~ s#\/[^/]*$#/suggest#g; ##
     }
     $url = "$url?".join("&",@param_str);
-    warn "$url\n";
+    #warn "$url\n";
     my $response = $ua->get($url);
 
     if($response->is_success) {
@@ -77,7 +77,6 @@ sub species {
   my $names = $hub->param('name');
   my $sd = $hub->species_defs;
   foreach my $name_in (split(/,/,$names)) {
-    warn "name = $name_in\n";
     my $name = $name_in;
     $name =~ s/ /_/g;
     $name = lc($name);
@@ -159,8 +158,6 @@ sub config {
   my @favs = map { $self->common($hub,$_) } @{$hub->get_favourite_species};
   my $species_info = $hub->get_species_info;
 
-  use Data::Dumper;
-  warn Dumper("species_info",$species_info);
   my $spnames = {};
   $spnames->{$species_info->{$_}{'common'}} = $species_info->{$_}{'key'} for keys %$species_info;
   print to_json({

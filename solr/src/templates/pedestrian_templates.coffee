@@ -185,7 +185,7 @@ window.pedestrian_templates =
           false
     preproc: (spec,data) ->
       data.entries = []
-      data.order.reverse()
+      order = data.order[..].reverse()
       for i in[0..data.values.length/2-1] by 1
         name = data.values[i*2]
         rename = $.solr_config("static.ui.facets.key=.members.key=.text.singular",data.key,name)
@@ -194,9 +194,12 @@ window.pedestrian_templates =
           key: data.values[i*2]
           name
           num: data.values[i*2+1]
-          order: $.inArray(data.values[i*2],data.order)
+          order: $.inArray(data.values[i*2],order)
         }
-      data.entries = data.entries.sort((a,b) -> b.order - a.order)
+      data.entries = data.entries.sort (a,b) ->
+        if a.order != -1 or b.order != -1
+          return b.order - a.order
+        return a.name.localeCompare(b.name)
       short_num = $.solr_config('static.ui.facets.key=.trunc',data.key)
       title = $.solr_config('static.ui.facets.key=.heading',data.key)
       data.title = ( if data.entries.length then [title] else [] )
@@ -211,16 +214,19 @@ window.pedestrian_templates =
         links = $('.solr_beak_p_contents a',el)
         $('.solr_beak_p_less',el).hide()
         $('.solr_beak_p_more',el).hide()
-        if num != 0
+        if num > 0
           # trim
           links.css('display','block').each (i) ->
             if i >= num then $(@).hide()
           if links.length > num
             $('.solr_beak_p_more',el).css('display','block')
-        else
+        else if links.length > -num
           # untrim
           links.css('display','block')
           $('.solr_beak_p_less',el).css('display','block')
+        $('#main_holder').css('min-height',
+                              $('.solr_sidebar').outerHeight(true) +
+                              $('.solr_sidebar').offset().top)
 
       data.set_fn = (v) =>
         $('.solr_feet_p_current',el).removeClass('solr_feet_p_current')
@@ -230,7 +236,7 @@ window.pedestrian_templates =
       $(document).on 'state_change', (e,params) ->
         short_num = $.solr_config('static.ui.facets.key=.trunc',data.key)
         sense = params["fall_"+data.key]
-        el.trigger('trim',[if sense then 0 else short_num])
+        el.trigger('trim',[if sense then -short_num else short_num])
       $(document).trigger('force_state_change')
 
   feet:
@@ -254,16 +260,22 @@ window.pedestrian_templates =
     template: """
       <div class="solr_faceter solr_beak_p solr_feet_p">
         <div class="solr_beak_p_title">Per page:</div>
-        <div class='solr_beak_p_contents'>
+        <div class='solr_beak_p_contents solr_perpage_list'>
           <a>
             <span class='solr_beak_p_left'>42</span>
+            <span class='solr_beak_p_right'></span>
+          </a>
+        </div>
+        <div class='solr_beak_p_contents solr_perpage_all'>
+          <a href="#0">
+            <span class='solr_beak_p_left'>Show all results in one page</span>
             <span class='solr_beak_p_right'></span>
           </a>
         </div>
       </div>
     """
     directives:
-      'a':
+      '.solr_perpage_list a':
         'entry<-entries':
           'span.solr_beak_p_left': 'entry.label'
           '@href': (e) -> '#'+e.item.key
@@ -277,6 +289,7 @@ window.pedestrian_templates =
     preproc: (spec,data) ->
       data.entries = []
       for x in $.solr_config("static.ui.pagesizes")
+        if x == 0 then continue
         data.entries.push({ label: (if x then x else "all"), key: x})
       [spec,data]
     postproc: (el,data) ->

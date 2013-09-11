@@ -4,7 +4,6 @@ cd $DIR
 rm -rf obj
 mkdir obj
 
-coffee -c utils.coffee
 coffee -c template.coffee
 coffee -c search.coffee
 coffee -c table.coffee
@@ -25,9 +24,8 @@ cd ..
 coffee -c obj/template_data.coffee
 
 mv textproc2.js ../htdocs/solr/textproc2.js
-mv utils.js ../htdocs/components/68_utils.js
-mv search.js ../htdocs/solr/solr_search.js
-mv table.js ../htdocs/solr/solr_table.js
+mv search.js ../htdocs/solr/1_solr_search.js
+mv table.js ../htdocs/solr/0_solr_table.js
 mv template.js ../htdocs/solr/template.js
 mv obj/template_data.js ../htdocs/solr/template_data.js
 mv autocomplete.js ../htdocs/components/65_autocomplete.js

@@ -688,8 +688,8 @@ a.location:hover {
 }
 
 .solr_result_restricted li {
-  background: url("/i/red-cross-pale.png") no-repeat scroll 95% 85% #FFDDDD;
-  border: 1px solid #FF9999;
+  background: url("/i/green-cross-pale.png") no-repeat scroll 95% 85% #DDFFDD;
+  border: 1px solid #00CC00;
   font-size: 90%;
   list-style: none;
   padding: 1px 24px 1px 6px;
@@ -704,11 +704,17 @@ a.location:hover {
 
 
 .solr_result_restricted li:hover {
-  background-image: url("/i/red-cross.png");
+  background-image: url("/i/green-cross.png");
 }
 
 .solr_result_restricted a {
-  color: #990000;
+  color: #006600;
+  text-decoration: none;
+  width: 100%;
+}
+
+.solr_result_restricted a:hover {
+  color: #005500;
   text-decoration: none;
   width: 100%;
 }
@@ -804,6 +810,10 @@ a.location:hover {
 /* Hovering over list item */
 .solr_beak_p_contents a:hover , .solr_curfac_contents a:hover {
   background: url("/i/16/add.png") no-repeat scroll 95% 50% #ddffdd;
+}
+
+div.solr_beak_p_contents a:hover {
+  background: url("/i/16/add.png") no-repeat scroll 99% 50% #ddffdd;
 }
 
 /* Hovering over "current" faceter list item */

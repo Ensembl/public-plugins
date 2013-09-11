@@ -143,7 +143,9 @@ window.table_templates =
       'a': (els,data) ->
         els.click (e) =>
           el = $(e.currentTarget)
-          p = el.attr('href').substring(1)
+          href = el.attr('href')
+          href = href.substring(href.indexOf('#')) # IE7, :-(
+          p = href.substring(1)
           if p? and p then data.click(p)
           false
 
