@@ -275,6 +275,9 @@
 
   ac_name_q = function(config, url, query, favs) {
     var data, f, fav, favqs, fk, ft_part, i, q, q_part, q_parts, s, t, wild, _i, _j, _k, _len, _len1, _len2, _ref;
+    if (!$.solr_config('static.ui.enable_direct')) {
+      return new $.Deferred().resolve();
+    }
     query = query.toLowerCase();
     fav = "( " + ((function() {
       var _i, _len, _results;
@@ -393,7 +396,9 @@
         direct = [];
         out = [];
         ac_string_a(string_d[0], searches);
-        ac_name_a(id_d[0], direct);
+        if (id_d != null ? id_d[0] : void 0) {
+          ac_name_a(id_d[0], direct);
+        }
         return sort_docs(url, direct, favs, function(sorted) {
           var d, s, _i, _j, _len, _len1;
           direct = sorted;

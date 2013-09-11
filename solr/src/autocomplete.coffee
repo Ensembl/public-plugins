@@ -163,9 +163,12 @@ jump_searches = [
   }
 ]
 
+# exponentially-scaled numbers between 1 and 100, of various lengths 
 boost = (i,n) -> if n>1 then Math.pow(10,(2*(n-i-1))/(n-1)) else 1
 
 ac_name_q = (config,url,query,favs) ->
+  if not $.solr_config('static.ui.enable_direct')
+    return new $.Deferred().resolve()
   query = query.toLowerCase()
   fav = "( "+("species:\"#{s}\"" for s in favs).join(" OR ")+" )"
   # XXX configurable AC feature types
@@ -232,7 +235,7 @@ sensible = new ACSensible 500,1000, (data) ->
         direct = []
         out = []
         ac_string_a(string_d[0],searches)
-        ac_name_a(id_d[0],direct)
+        if id_d?[0] then ac_name_a(id_d[0],direct)
         sort_docs(url,direct,favs, (sorted) ->
           direct = sorted
           s.type = 'search' for s in searches
