@@ -28,16 +28,9 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
   },
   
   makeImageMap: function () {
-    var panel  = this;
     var tracks = $.extend(true, [], Ensembl.genoverseConfig.tracks);
-    var parent = this.el.parents('.image_panel')[0];
     
-    $('.image_panel').each(function (i) {
-      if (this === parent) {
-        panel.imageNumber = i + 1;
-        Ensembl.images[panel.imageNumber] = { 0: [ panel.imageNumber, 0, Ensembl.genoverseConfig.start, Ensembl.genoverseConfig.end ] };
-      }
-    });
+    this.setImageNumber();
     
     delete Ensembl.genoverseConfig.tracks;
     
@@ -58,6 +51,18 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
     if (this.genoverse.wheelAction === false) {
       this.genoverse.selectorControls.prepend('<button class="jumpHere">Jump here</button>');
     }
+  },
+  
+  setImageNumber: function () {
+    var panel  = this;
+    var parent = this.el.parents('.image_panel')[0];
+    
+    $('.image_panel').each(function (i) {
+      if (this === parent) {
+        panel.imageNumber = i + 1;
+        Ensembl.images[panel.imageNumber] = { 0: [ panel.imageNumber, 0, Ensembl.genoverseConfig.start, Ensembl.genoverseConfig.end ] };
+      }
+    });
     
     Ensembl.EventManager.trigger('highlightAllImages');
     
@@ -395,6 +400,13 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
         this.el[json.viewConfig.show_panel === 'no' ? 'hide' : 'show']();
         this.removeShare();
         Ensembl.EventManager.trigger('ajaxLoaded');
+        
+        if (json.viewConfig.show_panel === 'no') {
+          delete Ensembl.images[this.imageNumber];
+          Ensembl.EventManager.trigger('highlightAllImages');
+        } else {
+          this.setImageNumber();
+        }
       }
     });
   },
