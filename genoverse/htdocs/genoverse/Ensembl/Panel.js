@@ -394,6 +394,7 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
         
         this.el[json.viewConfig.show_panel === 'no' ? 'hide' : 'show']();
         this.removeShare();
+        Ensembl.EventManager.trigger('ajaxLoaded');
       }
     });
   },
