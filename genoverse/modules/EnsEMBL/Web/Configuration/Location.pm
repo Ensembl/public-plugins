@@ -9,8 +9,8 @@ sub modify_tree {
   my $view = $self->get_node('View');
   
   $view->set('genoverse', 1);
-  
-  $self->_modify_tree unless $self->can('modify_tree') eq $self->can('_modify_tree');
+
+  $self->_modify_tree;
 }
 
 sub get_configurable_components {
