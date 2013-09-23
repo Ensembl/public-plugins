@@ -177,7 +177,6 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
     }
     
     if (this.prevHighlight.start !== start || this.prevHighlight.end !== end) {
-      this.genoverse.selector.hide();
       this.prevHighlight = { start: start, end: end };
     }
     
