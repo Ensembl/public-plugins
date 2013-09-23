@@ -497,7 +497,7 @@ var Genoverse = Base.extend({
     
     if (start !== this.dragStart) {
       this.closeMenus();
-      this.selector.hide();
+      this.cancelSelect();
     }
     
     for (var i = 0; i < this.tracks.length; i++) {
