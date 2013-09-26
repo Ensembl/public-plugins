@@ -86,6 +86,8 @@ sub record_tree {
     $valid_user ? (
     {'node_name' => 'span', 'class' => 'cl-field-title',  'inner_HTML' => 'Priority:'},
     {'node_name' => 'span', 'class' => 'cl-field-value',  'inner_HTML' => $self->display_field_value($record->priority, {'lookup' => {@{$object->show_fields}}->{'priority'}->{'values'} })},
+    {'node_name' => 'span', 'class' => 'cl-field-title',  'inner_HTML' => 'Category:'},
+    {'node_name' => 'span', 'class' => 'cl-field-value',  'inner_HTML' => $self->display_field_value($record->category, {'lookup' => {@{$object->show_fields}}->{'category'}->{'values'} })},
     {'node_name' => 'span', 'class' => 'cl-field-title',  'inner_HTML' => 'Declared by:'},
     {'node_name' => 'span', 'class' => 'cl-field-value',  'inner_HTML' => $self->display_field_value($record->created_by_user)},
     {'node_name' => 'span', 'class' => 'cl-field-title',  'inner_HTML' => 'Last updated:'},

@@ -184,6 +184,20 @@ sub show_fields {
       'label'     => 'Priority',
       'values'    => [{'value' => '1', 'caption' => 'Low'}, {'value' => '2', 'caption' => 'Normal'}, {'value' => '3', 'caption' => 'High'}, {'value' => '4', 'caption' => 'Very high'}]
     },
+    category          => {
+      'type'      => 'dropdown',
+      'label'     => 'Category',
+      'values'    => [
+        {'value'    => 'genebuild',  'caption' => 'New assemblies &amp; genebuild'},
+        {'value'    => 'variation',  'caption' => 'New variation data'},
+        {'value'    => 'regulation', 'caption' => 'New regulation data'}, 
+        {'value'    => 'alignment',  'caption' => 'New alignments'},
+        {'value'    => 'web',        'caption' => 'New web displays &amp; tools'},
+        {'value'    => 'schema',     'caption' => 'API schema changes'},
+        {'value'    => 'other',      'caption' => 'Others'}
+      ]
+    },
+
     notes             => {
       'type'      => 'text',
       'label'     => 'Notes'
