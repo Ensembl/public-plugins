@@ -56,6 +56,10 @@ sub label { # if this record is a das record, the webcode expects it to have thi
   return shift->data->{'label'};
 }
 
+sub logic_name {  # if this record is a das record, the webcode expects it to have this method
+  return shift->data->{'logic_name'};
+}
+
 sub clone {
   my $self        = shift;
   my $class       = ref $self;
