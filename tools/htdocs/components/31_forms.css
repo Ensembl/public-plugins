@@ -1,14 +1,152 @@
-form.blast { padding:16px 16px 6px; background-color: [[TINT_BG]]; border: 1px [[TINT_BORDER]] solid; }
-form.blast.overlay_blast { border-color: #EAEEFF;  background-color: #F0F0F0; opacity: 0.7; }
+/* TODO - split this file into multiple files */
 
-form.blast input.fbutton { border: [[TINT_BG]] double 3px; }
+/* form.blast_form { padding:16px 16px 6px; background-color: [[TINT_BG]]; border: 1px [[TINT_BORDER]] solid; } */
+form.blast_form.overlay_blast { border-color: #EAEEFF;  background-color: #F0F0F0; opacity: 0.7; }
+
+form.blast_form input.fbutton { border: [[TINT_BG]] double 3px; }
 
 
 a.hidelink { visibility: hidden;}
 
-form.blast div.config a { display: inline-block; padding: 5px 16px 5px 5px; background-color: [[PAGE_BG]]; border: 1px solid [[PANEL_BORDER]]; background-position: right center; }
-form.blast div.config a.open { border-bottom: none; }
-form.blast fieldset.config { padding: 16px 16px 0; background-color: [[PAGE_BG]]; border: 1px solid [[PANEL_BORDER]]; margin: -1px 0 16px; }
-form.blast h2.config { border-bottom: 1px solid [[PANEL_BORDER]]; padding-bottom: 2px }
+div.extra_configs_wrapper       { margin-bottom: 8px; }
+div.extra_configs_button a      { display: inline-block; padding: 5px 16px 5px 5px; background-color: [[PAGE_BG]]; border: 1px solid [[PANEL_BORDER]]; background-position: right center; font-weight: bold;}
+div.extra_configs_button a.open { border-bottom: none; }
+div.extra_configs               { padding: 16px 16px 8px; background-color: [[PAGE_BG]]; border: 1px solid [[PANEL_BORDER]]; margin: -1px 0 0; }
+div.extra_configs fieldset h2   { border-bottom: 1px solid [[PANEL_BORDER]]; padding-bottom: 2px }
 
-form.blast input.inactive { font-style: italic; color: [[PAGE_TEXT]]; }
+form.blast_form input.inactive { font-style: italic; color: [[PAGE_TEXT]]; }
+
+form.blast_form textarea.query_sequence {
+  width: 500px;
+}
+
+form.blast_form textarea.query_sequence.inactive {
+  color: [[PAGE_TEXT]];
+  font-size: 12px;
+  font-style: italic;
+}
+
+div.form-overlay {
+  position: absolute;
+  background-color: [[PANEL_BG]];
+  opacity: 0.6;
+}
+
+div.form-spinner {
+  position: absolute;
+  background-position: center center;
+  border: 0 none;
+  margin: 0;
+  padding: 0;
+}
+
+div.species-tag {
+  padding-left: 23px;
+  width: 189px;
+  background-repeat: no-repeat;
+  background-position: 2px 2px;
+}
+
+div.species-tag.disabled {
+  background-color: [[NEUTRAL_BG]];
+  border: 1px solid [[NEUTRAL_BORDER]];
+  color: [[NEUTRAL_BORDER]];
+}
+
+div.species-tag img {
+  display: block;
+  float: left;
+  margin: 2px 5px 2px 2px;
+}
+
+div.seq-wrapper {
+  background-color: [[PAGE_BG]];
+  border: 1px solid [[NEUTRAL_BORDER]];
+  margin-bottom: 8px;
+  padding: 4px;
+  overflow: hidden;
+  width: 550px;
+}
+
+div.seq-wrapper.inactive {
+  color: [[NEUTRAL_BORDER]];
+}
+
+div.seq-wrapper div {
+  float: left;
+  margin-right: 8px;
+}
+
+div.file-upload-label {
+  padding-top: 9px !important;
+  float: left;
+}
+
+div.fasta-input {
+  overflow-y: hidden;
+  font: 12px courier;
+  white-space: pre;
+  width: 450px;
+  outline: none;
+  border: transparent solid 1px;
+  cursor: pointer;
+}
+
+div.fasta-input.editable {
+  background-color: #ffd;
+  border-color: [[PANEL_BORDER]];
+  cursor: text;
+}
+
+div.fasta-buttons {
+  position: absolute;
+  margin-top: -1px;
+}
+
+div.fasta-buttons span {
+  background: none repeat scroll 0 0 [[PAGE_BG]];
+  border: 1px solid [[PANEL_BORDER]];
+  border-top: none;
+  border-radius: 0 0 6px 6px;
+  color: [[BUTTON_BG]];
+  font-weight: bold;
+  margin: 0 3px;
+  padding: 3px;
+  cursor: pointer;
+}
+
+div.seq-wrapper div.seq-type {
+  float: right;
+  background-color: [[BUTTON_BG]];
+  border-radius: 7px;
+  color: [[BUTTON_TEXT]];
+  float: right;
+  font-size: 80%;
+  line-height: 12px;
+  margin: 0;
+  padding: 4px;
+  cursor: default;
+}
+
+div.seq-wrapper.inactive div.seq-type {
+  background-color: [[BUTTON_DISABLED]];
+}
+
+div.seq-wrapper div.seq-type span {
+  text-decoration: line-through;
+  padding-right: 3px;
+}
+
+div.job_error_message {
+  background-color: [[PANEL_BG]];
+  white-space: pre;
+  border: [[PANEL_BORDER]] solid 1px;
+  padding: 8px;
+  font-family: Courier;
+  overflow-x: auto;
+  margin-bottom: 8px;
+}
+
+p.job-links {
+  overflow: hidden;
+}
