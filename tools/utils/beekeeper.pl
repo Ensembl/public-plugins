@@ -17,7 +17,8 @@ BEGIN {
     exit;
   }
   unshift @INC, $_ for @SiteDefs::ENSEMBL_LIB_DIRS;
-  unshift @INC, "$code_path/public-plugins/tools/modules/";
+  unshift @INC, "$code_path/sanger-plugins/tools/modules/"; # TEMP
+#  unshift @INC, "$code_path/public-plugins/tools/modules/";
   $ENV{'PERL5LIB'} .= join ':', @INC;
   
   require EnsEMBL::Web::SpeciesDefs;
