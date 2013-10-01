@@ -1,71 +1,30 @@
-#########
-# helper class for compatibilising Bioperl
-# Bio::Search:::Result::ResultI objects with DrawableContainers
-
 package EnsEMBL::Web::Container::HSPContainer;
+
+### Wrapper around ORM::EnsEMBL::DB::Tools::Object::Result and provides method for compatibility with drawing code
+
 use strict;
+use warnings;
 
 sub new {
-  my $class = shift;
-  my $object = shift;
-  my $ticket = shift;
-  my $results = shift;
+  ## @constructor
+  ## @param Job object
+  ## @param Colours map for the pointers
+  my ($class, $job, $colours) = @_;
 
+  my $job_data  = $job->job_data;
+  my $results   = $job->result;
 
-  ( $ticket && $ticket->isa("ORM::EnsEMBL::DB::Tools::Object::Ticket" ) ) or
-    die( "Need a ORM::EnsEMBL::DB::Tools::Object::Ticket object" );
-  my $self = {object => $object, ticket => $ticket };
-    
-  my @hsps;
-  foreach my $result (@$results){
-    my $gzipped_serialsed_res = $result->{'result'};
-    my $hit = $object->deserialise($gzipped_serialsed_res);
-    $hit->{'id'} = $result->{'result_id'};
-    push @hsps, $hit;
-  }
- 
-  $self->{hsps} = [@hsps];
-
-  return bless($self, $class);
+  return bless {
+    'name'    => $job_data->{'sequence'}{'display_id'},
+    'length'  => CORE::length($job_data->{'sequence'}{'seq'}),
+    'hsps'    => [ map { my $hsp = $_->result_data; $hsp->{'id'} = $_->result_id; $hsp; } @$results ],
+    'colours' => $colours
+  }, $class;
 }
 
-sub start {
-  my ($self) = @_;
-  return 0;
-}
-
-sub end {
-  my ($self) = @_;
-  return $self->length;
-}
-
-sub length {
-  my ($self) = @_;
-
-  my $query_id = $self->name;  
-  return  $self->{object}->retrieve_analysis_object->{'_seqs'}{$query_id}->length;
-}
-
-sub name {
-  my ($self) = shift;
-## This needs fixing!
-  my @keys = keys %{$self->{object}->retrieve_analysis_object->{'_seqs'}};
-  return $keys[0];
-}
-
-sub database{
-  my ($self) = @_;
-  return $self->{result}->database_name();
-}
-
-sub hits {
-  my ($self) = @_;
-  return $self->{result}->hits();
-}
-
-sub hsps{
-  my ($self) = @_;
-  return @{$self->{hsps}};
-}
-
-1;
+sub start   { return 0;                   }
+sub end     { return shift->{'length'};   }
+sub length  { return shift->{'length'};   }
+sub hsps    { return shift->{'hsps'};     }
+sub colours { return shift->{'colours'};  }
+sub name    { return shift->{'name'};     }
