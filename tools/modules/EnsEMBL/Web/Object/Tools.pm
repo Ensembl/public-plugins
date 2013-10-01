@@ -1,34 +1,81 @@
 package EnsEMBL::Web::Object::Tools;
 
+### Base class for all the Tools based objects
+
 use strict;
 use warnings;
 
-use Storable qw(nfreeze thaw);
-use IO::Compress::Gzip qw(gzip $GzipError);
-use IO::Uncompress::Gunzip qw(gunzip $GunzipError);
-use Bio::Root::IO;
+use JSON qw(from_json);
+use Bio::EnsEMBL::Hive::DBSQL::DBAdaptor;
 
 use EnsEMBL::Web::SpeciesDefs;
+use EnsEMBL::Web::Exceptions;
+use EnsEMBL::Web::Tools::RandomString qw(random_string);
+
+use Bio::Root::IO;
 
 use base qw(EnsEMBL::Web::Object);
 
-sub caption       { return 'Tools'; }
-sub short_caption { return 'Tools'; }
+sub caption               { return 'Tools'; } # override in child obects
+sub short_caption         { return 'Tools'; } # override in child obects
+sub long_caption          { return 'Tools'; } # override in child obects
+sub default_error_message { return 'Some error occurred while running the job.'; }
 
-sub long_caption {
+sub get_sub_object {
+  ## Gets the actual web object according to the 'action' part of the url
   my $self = shift;
-  return 'Tools' if $self->action ne 'BlastResults';
-
-  my $caption =  sprintf ('<h1>Results for %s: <span class="small"><a href ="%s">[Change ticket]</a></span></h1>',
-    $self->hub->param('tk'),
-    $self->hub->url({ action => 'Summary', tk => undef})
-  );
+  return $self->{'_sub_object'} ||= $self->new_object($self->hub->action, {}, $self->__data);
 }
 
-sub session_id    { return $_[0]->hub->session->session_id || undef;              }
-sub user_id       { return $_[0]->hub->user ? $_[0]->hub->user->user_id : undef;  }
-sub species_defs  { return $_[0]->hub->species_defs;                              }
-sub ticket        { return $_[0]->Obj->{'_ticket'} || undef;                      }
+sub form_inputs_to_jobs_data {
+  ## @abstract method
+  ## @return Arrayref of jobs hashref, or undef of validation fails
+  ## This method should read the raw form parameters, validate them and convert them into an array of hashes of jobs, each to be saved in the job_data column of ticket table in tools db
+  ## undef is returned if validation failes as validation is already done on the frontend, if it still fails, someone's just messing around
+  throw exception('AbstractMethodNotImplemented');
+}
+
+sub ticket_prefix {
+  ## @abstract method
+  ## Should return the ticket name prefix for the tool type, eg 'BLA_' for blast etc.
+  throw exception('AbstractMethodNotImplemented');
+}
+
+sub create_url_param {
+  ## Creates a URL param from the given ticket or job
+  ## The purpose of keeping these three params in one URL param is to prevent losing this info when clicking around the tabs on ensembl page
+  ## @param Hashref with keys ticket_name, job_id and result_id
+  my ($self, $params) = @_;
+  throw exception('ParamRequired', 'Ticket name is needed to create URL param') unless $params->{'ticket_name'};
+  return join '-', grep $_, $params->{'ticket_name'}, $params->{'job_id'}, $params->{'result_id'};
+}
+
+sub parse_url_param {
+  ## Reserve of create_url_param
+  ## @return Hashref with keys: ticket_name OR job_id OR job_id and result_id
+  my $self = shift;
+
+  unless (exists $self->{'_url_param'}) {
+
+    my @param = split '-', $self->hub->param('tl') || '';
+
+    $self->{'_url_param'} = {
+      'ticket_name' => $param[0],
+      'job_id'      => $param[1],
+      'result_id'   => $param[2]
+    };
+  }
+
+  return $self->{'_url_param'};
+}
+
+sub process_job_for_hive_submission {
+  ## @abstract method
+  ## Should generate hive friendy parameters for a job depending upon the related ticket object
+  ## @param Rose job object
+  ## @return Hashref with required job params, or undef if job should not be submitted to hive
+  throw exception('AbstractMethodNotImplemented');
+}
 
 sub hive_adaptor {
   ## Gets new or cached hive adaptor
@@ -36,7 +83,6 @@ sub hive_adaptor {
   my $self = shift;
 
   unless ($self->{'_hive_adaptor'}) {
-
     my $sd      = $self->hub->species_defs;
     my $hivedb  = $sd->multidb->{'DATABASE_WEB_HIVE'};
 
@@ -48,613 +94,278 @@ sub hive_adaptor {
       -dbname => $hivedb->{'NAME'},
     );
   }
-
   return $self->{'_hive_adaptor'};
 }
 
-sub create_ticket {
-  my $self        = shift;
-  my $hub         = $self->hub;
-  my $now         = $self->get_time_now;
-  my $user        = $hub->user;
+sub generate_ticket_name {
+  ## Generates a unique ticket name
+  ## @return String of length same as the column's allowed length for ticket name
+  my $self    = shift;
+  my $prefix  = $self->ticket_prefix;
+  my $manager = $self->rose_manager(qw(Tools Ticket));
+  my $length  = $manager->object_class->meta->column('ticket_name')->length - length $prefix;
+  my $name    = '';
 
-  # First create and save ticket
-  my $ticket = $self->rose_manager(qw(Tools Ticket))->create_empty_object({
+  while (!$name || !$manager->is_ticket_name_unique($name)) {
+    $name = $prefix . random_string($length);
+  }
+
+  return $name;
+}
+
+sub get_ticket_type_object {
+  ## Gets the ticket type rose object from the database according to the given type
+  ## @param Ticket type string
+  ## @return TicketType rose object
+  my ($self, $ticket_type) = @_;
+  return $ticket_type ? $self->rose_manager(qw(Tools TicketType))->get_objects('query' => [ 'ticket_type_name' => $ticket_type ])->[0] : undef;
+}
+
+sub create_ticket {
+  ## creates a ticket for the jobs given by the user in the tools database and calls a method to submit them to hive database
+  ## @param TicketType object
+  ## @param Arrayref of jobs data (as returned by form_inputs_to_jobs_data)
+  my ($self, $ticket_type, $jobs) = @_;
+
+  my $hub       = $self->hub;
+  my $user      = $hub->user;
+  my $now       = $self->get_time_now;
+
+  my ($ticket)  = $ticket_type->add_ticket({
     'owner_id'    => $user ? $user->user_id : $hub->session->session_id,
     'owner_type'  => $user ? 'user' : 'session',
-    'job_type_id' => $self->rose_manager(qw(Tools JobType))->get_job_type_id_by_name($self->{'_analysis'}),
-    'ticket_name' => $self->get_unique_ticket_name,
-    'ticket_desc' => $self->{'_description'},
     'created_at'  => $now,
     'modified_at' => $now,
-    'site_type'   => $self->species_defs->ENSEMBL_SITETYPE
+    'site_type'   => $hub->species_defs->ENSEMBL_SITETYPE,
+    'ticket_name' => $self->generate_ticket_name,
+    'job'         => [ map {
+      'job_desc'    => delete $_->{'job_desc'} // '',
+      'job_data'    => $_,
+      'modified_at' => $now
+    }, @$jobs ]
   });
 
-  # Then create analysis object - this contains params needed to run job
-  # create serialised and gzipped version of the analysis object to store in ticket DB.
-  my $serialised_analysis = $self->serialise;
-  $ticket->analysis(object => $$serialised_analysis);
- 
-  # Finally save objects
-  $ticket->save(cascade => 1);
+  $ticket_type->save('changes_only' => 1);
 
-  return $ticket; 
+  $self->submit_jobs_to_hive($ticket);
 }
 
-sub submit_job {
-  my ($self, $ticket)  = @_;
-
-  my $analysis_adaptor  = $self->rose_manager(qw(Tools Analysis));
-  my $serialised_object = $analysis_adaptor->retrieve_analysis_object($ticket->ticket_id); 
-  my $analysis_object = $self->deserialise($serialised_object);
-  $analysis_object->create_jobs($ticket);
-  
-  return;
-}
-
-sub display_status {
-  my ($self, $job_status) = @_;
-  
-  my %status_lookup = (
-    'SEMAPHORED'   => 'Pending',
-    'READY'        => 'Pending', 
-    'BLOCKED'      => 'Pending',
-    'CLAIMED'      => 'Pending',
-    'COMPILATION'  => 'Pending',
-    'PRE_CLEANUP'  => 'Pending',
-    'FETCH_INPUT'  => 'Pending',
-    'RUN'          => 'Running',  
-    'WRITE_OUTPUT' => 'Parsing',
-    'POST_CLEANUP' => 'Parsing',
-    'DONE'         => 'Completed',  
-    'FAILED'       => 'Failed',
-    'PASSED_ON'    => 'Failed',
-  );
-  return $status_lookup{$job_status};
-}
-
-sub fetch_current_tickets {
-  my $self = shift;
-  my (@user_tickets, @session_tickets, $all_tickets);
-
-  if ($self->user_id) {
-   @user_tickets = @{$self->rose_manager(qw(Tools Ticket))->fetch_all_tickets_by_user($self->user_id) || []};
-  }
-
-  @session_tickets = @{$self->rose_manager(qw(Tools Ticket))->fetch_all_tickets_by_session($self->session_id) || []};
-  $all_tickets = [@user_tickets, @session_tickets];
-
-  return $all_tickets;
-}
-
-sub fetch_ticket_by_name {
-  my ($self, $ticket_name) = @_;
-  return unless $ticket_name;
-
-  my $ticket = $self->rose_manager(qw(Tools Ticket))->fetch_ticket_by_name($ticket_name);
-
-  if(!$ticket){$ticket = 'The requested ticket "'.$ticket_name.'" could not be found.'
-    .' Please be aware that all tickets are deleted after 7 days unless you save'
-    .' them to a user account.';
-  }
-
-  return $ticket;
-}
-
-sub check_submission_status {
+sub submit_jobs_to_hive {
+  ## Submits the jobs linked to a ticket to hive
+  ## @param Ticket object
   my ($self, $ticket) = @_;
-  return $ticket->status unless ref $ticket->sub_job;
 
-  # Set ticket status to be that of the sub job that has progressed the least    
-  my %status_priority = (
-    'Queued'    => 0,
-    'Pending'   => 1,
-    'Running'   => 2,
-    'Parsing'   => 3,
-    'Completed' => 4,
-    'Failed'    => 5,
-    'Deleted'   => 6,    
-  );
- 
-  my $status;
-  foreach my $job (@{$ticket->sub_job}){  
-    my $display_status = $self->get_hive_job_status($job->sub_job_id);
-    $status = $status_priority{$display_status} << $status_priority{$status} ? $display_status : $status
-    ; 
-  } 
+  my $hive_adaptor  = $self->hive_adaptor;
+  my $job_adaptor   = $hive_adaptor->get_AnalysisJobAdaptor;
+  my $hive_analysis = $hive_adaptor->get_AnalysisAdaptor->fetch_by_logic_name_or_url($ticket->ticket_type_name);
 
-  # update status in ticket db
-  my $now = $self->get_time_now;
-  $ticket->status($status);
-  $ticket->modified_at($now);
-  if ($status eq 'Completed' || $status eq 'Failed') {
-    # If ticket is complete set all modified/created dates for data belonging to this ticket to be 
-    # the same - that way all data will be in equivalent partitions and will be removed at same time
-    $ticket->analysis->modified_at($now);
-    foreach (@{$ticket->sub_job}){ $_->modified_at($now); } 
-    foreach (@{$ticket->result}){ $_->modified_at($now); }
-  }
-  $ticket->save(cascade => 1);
+  foreach my $job ($ticket->job) {
+    if (my $hive_job_data = $self->process_job_for_hive_submission($job)) {
 
-  return $status;
-}
+      # add some generic params to job data to be submitted
+      $hive_job_data->{'ticket_id'}   = $ticket->ticket_id;
+      $hive_job_data->{'ticket_name'} = $ticket->ticket_name;
+      $hive_job_data->{'job_id'}      = $job->job_id;
 
+      # Submit job to hive
+      my $hive_job_id = $job_adaptor->CreateNewJob(
+        -input_id => $hive_job_data,
+        -analysis => $hive_analysis,
+      );
 
-sub get_hive_job_status {
-  my ($self, $hive_job_id) = @_;
-  my $job_adaptor = $self->hive_adaptor->get_AnalysisJobAdaptor;
-  my $job_status = $job_adaptor->fetch_by_dbID($hive_job_id)->status;
-
-  return  $self->display_status($job_status);      
-}
-
-sub get_hive_job_message {
-  my ($self, $hive_job_id) = @_;
-  my $adaptor = $self->hive_adaptor->get_NakedTableAdaptor();
-  $adaptor->table_name('job_message');
-  my $job_message_record = $adaptor->fetch_by_job_id($hive_job_id);
-  my ($job_message, $line) = $job_message_record->{'msg'} =~/(.*)at(.*)$/;
-
-  return $job_message;
-}
-
-sub format_date {
-  my ($self, $datetime) = @_;
-  return unless $datetime;
-
-  my @date = split(/-|T|:/, $datetime);
-  $datetime = sprintf('%s/%s/%s, %s:%s', 
-    $date[2],
-    $date[1],
-    $date[0],
-    $date[3],
-    $date[4]
-  );
-  return $datetime;
-}
-
-sub delete_ticket {
-  my ($self, $ticket_id) = @_;
-  my $ticket = $self->rose_manager(qw(Tools Ticket))->fetch_ticket_by_name($ticket_id);
-  return unless $ticket;
-
-  # First clean up any results files 
-  my $work_dir =  $self->species_defs->ENSEMBL_TMP_DIR_BLAST;
-  my $file_directory = $work_dir ."/" . substr($ticket->ticket_name, 0, 6) ."/" . substr($ticket->ticket_name, 6);
-  my $parent_directory = $work_dir ."/" . substr($ticket->ticket_name, 0, 6);
-
-  if (-d $file_directory){
-    foreach my $sub_job (@{$ticket->sub_job}){
-      my $filename = $file_directory .'/'. $ticket->ticket_id . $sub_job->sub_job_id;
-      my @exts = ('seq.fa', 'seq.fa.masked', 'seq.fa.tab', 'seq.fa.out', 'seq.fa.raw');
-      foreach (@exts){
-        my $file = $filename .'.'. $_; 
-        if ( -s $file ){ 
-          unlink($file);
-        }
+      if ($hive_job_id) {
+        $job->hive_job_id($hive_job_id);
+        $job->hive_job_data($hive_job_data); # TODO - Do we really need this?
+        $job->status('awaiting_hive_response');
+        $job->hive_status('queued');
       }
-    }      
-  
-    unless (scalar <$file_directory/*>){ # remove directory if empty
-      rmdir($file_directory); 
     }
+    $job->save('changes_only' => 1); # only update if anything changed (process_job_for_hive_submission method may also have changed the job, so keep this outside the if statement)
   }
-
-  if (-d $parent_directory){
-    unless (scalar <$parent_directory/*>){ # remove directory if empty
-      rmdir($parent_directory);
-    }
-  }
-
-  # Then remove data from ticket database 
-  if (ref $ticket->analysis){ $ticket->analysis->delete; }
-  if (ref $ticket->sub_job){ $ticket->sub_job([]); }
-  if (ref $ticket->result){$ticket->result([]);} 
-  $ticket->save;  
-  $ticket->delete;
-
-  return;
 }
 
-sub error_message {
+sub get_current_tickets {
+  ## Gets (and caches) all the current tickets either for the logged in user or the session
+  ## @return Arrayref of ticket objects
+  my $self = shift;
+
+  unless (exists $self->{'_current_tickets'}) {
+    my $hub     = $self->hub;
+    my $user    = $hub->user;
+    my $action  = $hub->action;
+
+    my $ticket_types  = $self->rose_manager(qw(Tools TicketType))->fetch_with_current_tickets({
+      'site_type'       => $hub->species_defs->ENSEMBL_SITETYPE,
+      'session_id'      => $hub->session->session_id, $user ? (
+      'user_id'         => $user->user_id ) : (), $action && $action ne 'Summary' ? (
+      'type'            => $action) : ()
+    });
+
+    my @tickets = map $_->ticket, @$ticket_types;
+    $self->update_jobs_from_hive($_) for @tickets;
+    $self->{'_current_tickets'} = \@tickets;
+  }
+
+  return $self->{'_current_tickets'};
+}
+
+sub get_requested_ticket {
+  ## Gets a ticket object from the database with param from the URL and caches it for subsequent requests
+  ## @return Ticket rose object, or undef if not found or if ticket does not belong to logged-in user or session
+  my $self = shift;
+
+  unless (exists $self->{'_requested_ticket'}) {
+    my $hub         = $self->hub;
+    my $user        = $hub->user;
+    my $ticket_name = $self->parse_url_param->{'ticket_name'};
+    my $ticket;
+
+    if ($ticket_name) {
+      my $ticket_type = $self->rose_manager(qw(Tools TicketType))->fetch_with_current_tickets({
+        'site_type'     => $hub->species_defs->ENSEMBL_SITETYPE,
+        'ticket_name'   => $ticket_name,
+        'session_id'    => $hub->session->session_id, $user ? (
+        'user_id'       => $user->user_id ) : ()
+      });
+
+      if (@$ticket_type) {
+        $ticket = $ticket_type->[0]->ticket->[0];
+        $self->update_jobs_from_hive($ticket);
+      }
+    }
+
+    $self->{'_requested_ticket'} = $ticket;
+  }
+
+  return $self->{'_requested_ticket'};
+}
+
+sub update_jobs_from_hive {
+  ## Updates jobs linked to the given ticket from the corresponding ones in the hive db
+  ## @param Ticket object to which jobs are linked
+  ## @return No return value
   my ($self, $ticket) = @_;
-  my $job_adaptor = $self->hive_adaptor->get_AnalysisJobAdaptor;
-  #my $job_message_adaptor = $self->hive_adaptor->getJobMessageAdaptor;
 
-  foreach my $job (@{$ticket->sub_job}){
-  }
-}
+  foreach my $job ($ticket->job) {
 
-#--------------------------------------------------
-sub serialise {
-  my ($self, $object) = @_; 
-  
-  $object = $self unless $object;  
+    my $status = $job->status;
 
-  delete $object->{data};
-  my $serialised = nfreeze($object);
-  my $serialised_gzip;
-  gzip \$serialised => \$serialised_gzip, -LEVEL => 9 or die "gzip failed: $GzipError";
+    if ($status eq 'awaiting_hive_response') {
 
-  return \$serialised_gzip;
-}
+      my $hive_job_id   = $job->hive_job_id;
+      my $hive_adaptor  = $self->hive_adaptor;
+      my $hive_job      = $hive_adaptor->get_AnalysisJobAdaptor->fetch_by_dbID($hive_job_id);
 
-sub deserialise {
-  my ($self, $object) = @_; 
-  my $gunzipped_and_frozen;
+      if ($hive_job) {
+        my $hive_job_status = $hive_job->status;
 
-  gunzip \$object => \$gunzipped_and_frozen or die "gunzip failed: $GunzipError";
-  my $analysis_object = thaw($gunzipped_and_frozen);
-  $analysis_object->{data} = $self->__data();
+        if ($hive_job_status eq 'DONE') {
 
-  return $analysis_object;
-}
+          # job is done, no more actions required
+          $job->status('done');
+          $job->hive_status('done');
 
-sub retrieve_analysis_object {
-  my $self = shift;
-  my $ticket = $self->ticket;
-  return undef unless $ticket;
+        } elsif ($hive_job_status =~ /^(FAILED|PASSED_ON)$/) {
 
-  my $analysis_adaptor  = $self->rose_manager(qw(Tools Analysis));
-  my $serialised_object = $analysis_adaptor->retrieve_analysis_object($ticket->ticket_id);
-  return undef unless $serialised_object;
+          # job failed due to some reason, need user to look into it
+          $job->status('awaiting_user_response');
+          $job->hive_status('failed');
 
-  my $analysis_object = $self->deserialise($serialised_object);
-  return $analysis_object
-}
+          # Get the log message and save it in the message column
+          my ($message) = map {$_->{'is_error'} && $_->{'msg'} || ()} @{$hive_adaptor->get_LogMessageAdaptor->fetch_all_by_job_id($hive_job_id)}; # ignore if msg is an empty string
+          if ($message && $message =~ /^{.*}$/) { # possibly json
+            try {
+              $message = from_json($message);
+            } catch {};
+          }
 
-sub generate_analysis_object {
-  my ($self, $type) = @_;
+          $job->job_message([ref $message
+            ? {
+              'display_message'   => delete $message->{'data'}{'display_message'} // $self->default_error_message,
+              'fatal'             => delete $message->{'data'}{'not_fatal'} ? 0 : 1,
+              'data'              => delete $message->{'data'},
+              'exception'         => $message,
+            }
+            : {
+              'display_message'   => $self->default_error_message,
+              'exception'         => {'exception' => $message || 'Unknown error'},
+              'fatal'             => 1
+            }
+          ]);
 
-  return $self->new_object($type, 
-    {},
-    $self->__data
-  );
-}
+        } elsif ($hive_job_status =~ /^(SEMAPHORED|CLAIMED|COMPILATION)$/) {
 
-sub get_time_now {
-  my $self = shift;
-  my ($sec, $min, $hour, $day, $mon, $year) = localtime();
-  my $now = (1900+$year).'-'.sprintf('%02d', $mon+1).'-'.sprintf('%02d', $day).' '
-              .sprintf('%02d', $hour).':'.sprintf('%02d', $min).':'.sprintf('%02d', $sec);
-  return $now;
-}
+          # job is just submitted to a queue
+          $job->hive_status('submitted') if $job->hive_status ne 'submitted';
 
-sub get_unique_ticket_name {
-  my $self = shift;
-  my $unique;
+        } elsif ($hive_job_status =~ /^(PRE_CLEANUP|FETCH_INPUT|RUN|WRITE_OUTPUT|POST_CLEANUP)$/) {
 
-  while (!$unique ) {
-   my $template = "BLA_XXXXXXXX";
-   $template =~ s/X/['0'..'9','A'..'Z','a'..'z']->[int(rand 54)]/ge;  
-   unless ($self->rose_manager(qw(Tools Ticket))->fetch_ticket_by_name($template)) {
-    $unique = $template;
-   }
-  }
-    
-  return $unique;
-}
+          # job is still running, but keep an eye in it, so no need to change 'status', only set the 'hive_status' ('if' condition prevents an extra SQL query)
+          $job->hive_status('running') if $job->hive_status ne 'running';
 
-#--------------------- Blast result calls ? may not belong here!
+        } # for READY status, no need to change status or hive_status
 
-sub get_blast_method {
-  my $self  = shift;
-  my $analysis_object = $self->retrieve_analysis_object;
-  my $method = $analysis_object->{'_methods'};
-  return $method;
-}
+      } else {
 
-sub get_hit_db_entry {
-  my ($self, $result_id) = @_;
-  my $result_adaptor  = $self->rose_manager(qw(Tools Result));
-  my $result_entry = shift @{$result_adaptor->fetch_result_by_result_id($result_id)};
-  return $result_entry;
-}
-
-sub get_job_division_data {
-  my ($self, $result_entry) = @_;
-  my $frozen_division = $result_entry->sub_job->job_division;
-  my $job_division = $self->deserialise($frozen_division);
-  return $job_division;
-}
-
-sub fetch_blast_hit_by_id {
-  my ($self, $result_id) = @_;
-
-  # retrieve hit
-  my $result_entry = $self->get_hit_db_entry($result_id);
-  my $frozen_hit = $result_entry->result;
-  my $hit = $self->deserialise($frozen_hit);
-  return $hit;
-}
-
-sub complete_query_sequence {
-  my ($self, $hit) = @_;
-  my $query_id = $hit->{'qid'};
-  my $analysis_object = $self->retrieve_analysis_object;
-  my $seq_object = $analysis_object->{'_seqs'}{$query_id};
-  my $seq = $seq_object->seq();
-  return $seq;
-}
-
-sub query_hit_sequence {
-  my ($self, $hit)  = @_;
-  my $seq = $self->complete_query_sequence($hit);
-  my $offset = $hit->{'qstart'} -1;
-  $seq = substr($seq, $offset, $hit->{'len'});
-  return $seq;
-}
-
-sub get_hit_genomic_slice {
-  my ($self, $hit, $species, $flank5, $flank3) = @_; 
-  my $start = $hit->{'gstart'} < $hit->{'gend'} ? $hit->{'gstart'} : $hit->{'gend'};
-  my $end = $hit->{'gstart'} > $hit->{'gend'} ? $hit->{'gstart'} : $hit->{'gend'};
-  my $coords = $hit->{'gid'}.':'.$start.'-'.$end.':'.$hit->{'gori'}; 
-  my $slice_adaptor = $self->hub->get_adaptor('get_SliceAdaptor', 'core', $species);
-  my $slice = $slice_adaptor->fetch_by_toplevel_location($coords); 
-  return $flank5 || $flank3 ? $slice->expand($flank5, $flank3) : $slice;
-}
-
-sub get_hit_species {
-  my ($self, $result_id)  = @_;
-
-  # retrieve hit
-  my $result_entry = $self->get_hit_db_entry($result_id);
-  my $frozen_hit = $result_entry->result;
-  my $hit = $self->deserialise($frozen_hit);
-
-  my $job_division = $self->get_job_division_data($result_entry);
-  my $species = $job_division->{'species'};
-
-  return $species;
-}
-
-sub get_ticket_hits_by_coords{
-  my ($self, $coords, $ticket_id, $species) = @_;
- 
-  my $slice_adaptor = $self->database('core', $species)->get_SliceAdaptor;  
-  my $slice = $slice_adaptor->fetch_by_toplevel_location($coords);
-
-  return $self->get_all_hits_from_ticket_in_region($slice, $ticket_id);
-}
-
-sub get_all_hits_from_ticket_in_region {
-  my ($self, $slice, $id) = @_;
-  my $ticket_id = $id || $self->ticket->ticket_id;
-  my @aligned_hits; 
-
-  
-  my $result_adaptor = $self->rose_manager(qw(Tools Result));
-  my @result_objects = @{$result_adaptor->fetch_all_results_in_region($ticket_id, $slice)};
-  foreach (@result_objects) { 
-    my $frozen_gzipped_hit = $_->result; 
-    my $hit = $self->deserialise($frozen_gzipped_hit);
-    push @aligned_hits, [$_->result_id, $hit];
-  }
-  
-  return \@aligned_hits;
-}
-
-
-sub map_btop_to_genomic_coords {
-  my ($self, $hit, $result_id) = @_;
-
-  return $hit->{'galn'} if $hit->{'galn'};
-
-  my $result = $self->get_hit_db_entry($result_id); 
-
-  my $btop = $hit->{'aln'};
-  chomp $btop;
-  my $genomic_btop;
-  my $coords = $hit->{'g_coords'} || undef;
-
-  #### temp for testing! ####
-  $hit->{'db_type'} = 'cdna';
-
-  my $target_object = $self->get_target_object($hit);
-  my $mapping_type = $hit->{'db_type'} =~/pep/i ? 'pep2genomic' : 'cdna2genomic';
-
-
-  my $gap_start = $coords->[0]->end;
-  my $gap_count = scalar @$coords;
-  my $processed_gaps = 0;
-
-  # reverse btop string if necessary so always dealing with + strand genomic coords
-  my $object_strand = $target_object->isa('Bio::EnsEMBL::Translation') ? $target_object->translation->start_Exon->strand :
-                      $target_object->strand;
-
-  my $rev_flag = $object_strand ne $hit->{'tori'} ? 1 : undef;
-
-  $btop = $self->reverse_btop($btop) if $rev_flag;
-
-  # account for btop strings that do not start with a match;  
-  $btop = '0'.$btop  if $btop !~/^\d+/ ;
- 
-
-  $btop =~s/(\d+)/:$1:/g;
-  $btop =~s/^:|:$//g;
-  my @btop_features = split (/:/, $btop);
- 
-  my $genomic_start = $hit->{'gstart'};
-  my $genomic_end   = $hit->{'gend'};
-  my $genomic_offset = $genomic_start;
-  my $target_offset  = !$rev_flag ? $hit->{'tstart'} : $hit->{'tend'}; 
-
-  while (scalar @btop_features > 0){
-    my $num_matches = shift @btop_features;
-    my $diff_string = shift @btop_features;
-    next unless $diff_string;
-
-    my $diff_length = (length $diff_string) / 2;
-    my $temp = $diff_string;
-    my @diffs = (split //, $temp);
-
-    # Account for bases inserted in query relative to target    
-    my $insert_in_query = 0;
-
-    while (defined( my $query_base = shift @diffs)){
-      my $target_base = shift @diffs;
-      $insert_in_query++ if $target_base eq '-' && $query_base ne '-'; 
-    }  
-
-    my ($difference_start, $difference_end);
-
-    if ($rev_flag) {
-      $difference_end = $target_offset - $num_matches;
-      $difference_start = $difference_end - $diff_length + $insert_in_query + 1;
-      $target_offset = $difference_start -1;
-    } else {
-      $difference_start = $target_offset + $num_matches;
-      $difference_end  = $difference_start + $diff_length - $insert_in_query -1;
-      $target_offset = $difference_end +1;
-    }
-;
-
-    my @mapped_coords = ( sort { $a->start <=> $b->start }
-                          grep { ! $_->isa('Bio::EnsEMBL::Mapper::Gap') }
-                          $target_object->$mapping_type($difference_start, $difference_end, $hit->{'tori'} )
-                        );
-
-    my $mapped_start = $mapped_coords[0]->start;
-    my $mapped_end   = $mapped_coords[-1]->end;  
-;
-
-    # Check that mapping occurs before the next gap
-    if ($mapped_start < $gap_start && $mapped_end <= $gap_start){ 
-      $genomic_btop .= $num_matches;
-      $genomic_btop .= $diff_string;
-      $genomic_offset = $mapped_end +1;
-    } elsif ($mapped_start > $gap_start){
-
-      # process any gaps in mapped genomic coords first
-      while ($mapped_start > $gap_start){
-        my $matches_before_gap = $gap_start - $genomic_offset + 1;
-        my $gap_end = $coords->[$processed_gaps + 1]->start -1;
-        my $gap_length = ($gap_end - $gap_start);
-        my $gap_string = '--'x $gap_length;
-        $genomic_offset = $gap_end + 1;
-        $genomic_btop .= $matches_before_gap;
-        $genomic_btop .= $gap_string;
-
-        $processed_gaps++;
-        $gap_start = $coords->[$processed_gaps]->end || $genomic_end;
+        # this will only get executed if the job got removed from the hive db's job table somehow (very unlikely though)
+        $job->status('awaiting_user_response');
+        $job->hive_status('deleted');
+        $job->job_message([{'display_message' => 'Submitted job has got deleted from the queue.'}]);
       }
 
-      # Add difference info
-      my $matches_after_gap = $mapped_start - $genomic_offset;
-      $genomic_btop .= $matches_after_gap;     
-      $genomic_btop .= $diff_string;
-      $genomic_offset = $mapped_end +1;;
-    } elsif( $mapped_start < $gap_start && $mapped_end > $gap_start) { 
-      # Difference in btop string spans a gap in the genomic coords
-  
-      my $diff_matches_before_gap = $gap_start - $mapped_start;
-      my $diff_index = ( $diff_matches_before_gap * 2 ) -1;
-      my $diff_before_gap = join('', @diffs[0..$diff_index]);
-      $diff_index++;      
-
-      $genomic_btop .= $num_matches;
-      $genomic_btop .= $diff_before_gap;
- 
-
-      while ($mapped_end > $gap_start) {
-        my $gap_end = $coords->[$processed_gaps + 1]->start -1;
-        my $gap_length = ($gap_end - $gap_start);
-        my $gap_string = '--'x $gap_length;
-        $processed_gaps++;
-        $gap_start = $coords->[$processed_gaps]->end || $genomic_end;
- 
-        my $match_number = $gap_start - $gap_end;              
-        my $diff_end = $diff_index + ( $match_number * 2 ) -1;
-
-        my $diff_after_gap = join('', @diffs[$diff_index..$diff_end]);
-        $genomic_btop .= $gap_string;
-        $genomic_btop .= $diff_after_gap;    
-        $diff_index = $diff_end +1;
-      } 
-
-      my $diff_after_gap = join('', @diffs[$diff_index..-1]);
-      $genomic_btop .= $diff_after_gap;
-
-      $genomic_offset = $mapped_end +1;
-    } else {
-      warn ">> mapping case not caught!  $mapped_start $mapped_end $gap_start";
+      # update if anything is changed
+      $job->save('changes_only' => 1);
     }
   }
-
-
-  # Add in any gaps from mapping to genomic coords that occur after last btop feature    
-  while ($gap_count > $processed_gaps +1){
-    my $num_matches = $gap_start - $genomic_offset + 1;
-    my $gap_end = $coords->[$processed_gaps + 1]->start -1;
-    my $gap_length = ($gap_end - $gap_start);
-    my $gap_string = '--'x $gap_length;
-
-    $genomic_btop .= $num_matches;
-    $genomic_btop .= $gap_string;
-
-    $genomic_offset = $gap_end +1;
-    $gap_start = $coords->[$processed_gaps + 1]->end;
-    $processed_gaps++;
-  }
-
- 
-  my $btop_end =  $genomic_end - $genomic_offset +1;
-  $genomic_btop .= $btop_end;
-
-  # Write back to database so we only have to do this once
-  $hit->{'galn'} = $genomic_btop;
-  delete $hit->{'data'};
-
-  my $serialised_hit = nfreeze($hit);
-  my $serialised_gzip;
-  gzip \$serialised_hit => \$serialised_gzip, -LEVEL => 9 or die "gzip failed: $GzipError";
-
-  $result->result($serialised_hit);
-  $result->save; 
-
-  return $genomic_btop;
 }
 
-sub reverse_btop {
-  my ($self, $incoming_btop) = @_;
-  $incoming_btop = uc($incoming_btop);
-  my $reversed_btop = reverse $incoming_btop; #reverse btop orientation. We fix a few more things later
-  my @captures = $reversed_btop =~ /(\d+)([-ACTG]*)/xmsg;
-  my $new_btop = q{};
-  while(1) {
-    my $match_number = shift @captures;
-    my $btop_states = shift @captures;
-    if(length("$match_number") > 1) { #reversing the string means numbers like 15 become 51 so we fix it
-      $match_number = reverse $match_number;
+sub get_requested_job {
+  ## Gets the job object according to the URL param
+  ## @param Hashref with one of the following keys
+  ##  - 'with_all_results'      Flag if on, will get all results linked to the job object
+  ##  - 'with_requsted_result'  Flag if on, will only get the result object with ID in the URL 'tl' param
+  ## @return Job object, or undef if no job found for the given id, or job doesn't belong to the logged in user or current session, or requested result doesn't belong to the job
+  my ($self, $params) = @_;
+
+  my $key = [ map { $params->{$_} ? "_requested_job_$_" : () } qw(with_all_results with_requsted_result) ]->[0] || '_requested_job';
+
+  unless (exists $self->{$key}) {
+    my $hub         = $self->hub;
+    my $user        = $hub->user;
+    my $action      = $hub->action;
+    my $url_params  = $self->parse_url_param;
+    my $job;
+
+    if (my $job_id = $url_params->{'job_id'}) {
+
+      my %results_key = $params->{'with_all_results'}
+        ? ('result_id' => 'all')
+        : ($params->{'with_requested_result'}
+          ? ('result_id' => $url_params->{'result_id'})
+          : ()
+        );
+
+      my $ticket_type = $self->rose_manager(qw(Tools TicketType))->fetch_with_given_job({
+        'site_type'     => $hub->species_defs->ENSEMBL_SITETYPE,
+        'ticket_name'   => $url_params->{'ticket_name'},
+        'job_id'        => $job_id,
+        'session_id'    => $hub->session->session_id, $user ? (
+        'user_id'       => $user->user_id ) : (),
+        'type'          => $action,
+        %results_key
+      });
+
+      if ($ticket_type) {
+        my $ticket = $ticket_type->ticket->[0];
+        $self->update_jobs_from_hive($ticket); # this will only update the required job but not all jobs linked to the ticket since only one job was actually fetched by providing job_id
+        $job = $ticket->job->[0];
+      }
     }
-    my @doubles = $btop_states =~ /([-ACTG]{2})/xmsg; #pairs of chars are taken
-    my $new_btop_states = join(q{}, map { my $v = reverse $_; $v; } @doubles); #we reverse the pairs of chars. map is funny with these things
-    $new_btop .= $match_number if $match_number; #only add the match number if it was defined
-    $new_btop .= $new_btop_states; 
-    last if scalar(@captures) == 0;
+
+    $self->{$key} = $job;
   }
-  return $new_btop;
-}
 
-sub get_target_object {
-  my ($self, $hit ) = @_;
-  my $id = $hit->{'tid'};
-  my $species = $hit->{'species'};
-  my $database_type = $hit->{'db_type'};
-
-  my $feature_type = $database_type =~ /abinitio/i ? 'PredictionTranscript' :
-                    $database_type =~ /cdna/i ? 'Transcript' : 'Translation';
- 
-  my $adaptor = $self->hub->get_adaptor('get_' . $feature_type .'Adaptor', 'core', $species); 
-  my $target = $adaptor->fetch_by_stable_id($id);
-  
-  return $target;
-}
-
-#------------------------------------------------
-
-sub valid_analysis { # check that the analysis param matches an analysis type we have
+  return $self->{$key};
 }
 
 1;
