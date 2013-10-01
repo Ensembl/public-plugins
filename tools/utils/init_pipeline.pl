@@ -16,7 +16,8 @@ BEGIN {
     exit;
   }
   unshift @INC, $_ for @SiteDefs::ENSEMBL_LIB_DIRS;
-  unshift @INC, "$code_path/public-plugins/tools/modules/";
+  unshift @INC, "$code_path/sanger-plugins/tools/modules/"; # TEMP - while tools code in in sanger-plugins
+#  unshift @INC, "$code_path/public-plugins/tools/modules/";
   $ENV{'PERL5LIB'} .= join ':', @INC;
 }
 
@@ -27,6 +28,7 @@ die "Pipeline configuration package is missing. Please specify ENSEMBL_TOOLS_PIP
 die "ENV variable EHIVE_ROOT_DIR is not set. Please set it to the location containg HIVE code.\n"                   unless $ENV{'EHIVE_ROOT_DIR'};
 die "Could not find location of the $script_name script.\n"                                                         unless chdir "$ENV{'EHIVE_ROOT_DIR'}/scripts/";
 
-system('perl', $script_name, $conf_package);
+system('perl', $script_name, $conf_package, '-hive_force_init', 1);
+#system('perl', $script_name, $conf_package);
 
 1;
