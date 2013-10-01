@@ -1,98 +1,117 @@
 package EnsEMBL::Web::PipeConfig::Tools_conf;
 
-use strict;
+use strict; 
 use warnings;
 
+use DBI;
 use EnsEMBL::Web::SpeciesDefs;
 
-use base ('Bio::EnsEMBL::Hive::PipeConfig::HiveGeneric_conf');
+use EnsEMBL::Web::ToolsPipeConfig::Blast;
+use EnsEMBL::Web::ToolsPipeConfig::VEP;
 
-our $species_defs = EnsEMBL::Web::SpeciesDefs->new;
+use base qw(Bio::EnsEMBL::Hive::PipeConfig::HiveGeneric_conf);
 
-sub default_options { #add in ticket db config here somewhere
-  my ($self) = @_;
+sub new {
+  ## @override
+  ## @constructor
+  ## Adds some extra info to the object
+  my $self  = shift->SUPER::new(@_);
+  my $sd    = $self->{'_species_defs'} = EnsEMBL::Web::SpeciesDefs->new;
+
+  $self->{'_available_tools'} = [
+    $sd->ENSEMBL_BLAST_ENABLED ? 'EnsEMBL::Web::ToolsPipeConfig::Blast' : (),
+    $sd->ENSEMBL_VEP_ENABLED   ? 'EnsEMBL::Web::ToolsPipeConfig::VEP'   : ()
+  ];
+
+  return $self;
+}
+
+sub species_defs {
+  ## @return Species defs object
+  return shift->{'_species_defs'};
+}
+
+sub available_tools {
+  ## Gets a list of all the tools conf constant packages
+  ## @return Arrayref of class names
+  return @{shift->{'_available_tools'}};
+}
+
+sub run {
+  ## @override
+  ## Adds an extra bit of validation before the hive database is actually created
+  my $self = shift;
+
+  if (my @errors = $self->pipeline_validate) {
+    die sprintf "Pipeline initialisation failed due to following error%s:%s\n", @errors > 1 ? 's' : '', join '', map "\n  $_", @errors;
+  }
+
+  return $self->SUPER::run(@_);
+}
+
+sub default_options {
+  ## @override
+  my $self  = shift;
+  my $sd    = $self->species_defs;
+  
   return {
 
-    %{ $self->SUPER::default_options },               # inherit other stuff from the base class
+    %{ $self->SUPER::default_options },
 
-    'ensembl_cvs_root_dir' => $species_defs->ENSEMBL_SERVERROOT,  
-
-    'pipeline_name' =>  'ensembl_blast',  
+    'ensembl_cvs_root_dir'  => $sd->ENSEMBL_SERVERROOT,  
+    'pipeline_name'         => 'ensembl_web_tools',
     'hive_use_triggers'     => 0,
-
-    'pipeline_db'   => {  
-      -host   =>  $species_defs->multidb->{'DATABASE_WEB_HIVE'}{'HOST'},
-      -port   =>  $species_defs->multidb->{'DATABASE_WEB_HIVE'}{'PORT'}, 
-      -user   =>  $species_defs->DATABASE_WRITE_USER,
-      -pass   =>  $species_defs->DATABASE_WRITE_PASS,
-      -dbname =>  $species_defs->multidb->{'DATABASE_WEB_HIVE'}{'NAME'},
-    },     
-
-    'ticket_db' =>{
-      -host   =>  $species_defs->multidb->{'DATABASE_WEB_TOOLS'}{'HOST'},
-      -port   =>  $species_defs->multidb->{'DATABASE_WEB_TOOLS'}{'PORT'},
-      -user   =>  $species_defs->DATABASE_WRITE_USER,
-      -pass   =>  $species_defs->DATABASE_WRITE_PASS,
-      -dbname =>  $species_defs->multidb->{'DATABASE_WEB_TOOLS'}{'NAME'},
-    },  
-
-    'blast_options' => {
+    'pipeline_db'           => {
+      '-host'                 =>  $sd->multidb->{'DATABASE_WEB_HIVE'}{'HOST'},
+      '-port'                 =>  $sd->multidb->{'DATABASE_WEB_HIVE'}{'PORT'}, 
+      '-user'                 =>  $sd->DATABASE_WRITE_USER,
+      '-pass'                 =>  $sd->DATABASE_WRITE_PASS,
+      '-dbname'               =>  $sd->multidb->{'DATABASE_WEB_HIVE'}{'NAME'},
+    },
+    'ticket_db'             => {
+      '-host'                 =>  $sd->multidb->{'DATABASE_WEB_TOOLS'}{'HOST'},
+      '-port'                 =>  $sd->multidb->{'DATABASE_WEB_TOOLS'}{'PORT'},
+      '-user'                 =>  $sd->DATABASE_WRITE_USER,
+      '-pass'                 =>  $sd->DATABASE_WRITE_PASS,
+      '-dbname'               =>  $sd->multidb->{'DATABASE_WEB_TOOLS'}{'NAME'},
     },
 
-    'work_dir'                => $species_defs->ENSEMBL_TMP_DIR_BLAST,
-    'blast_bin_dir'           => $species_defs->ENSEMBL_BLAST_BIN_PATH,
-    'blast_matrix'            => $species_defs->ENSEMBL_BLAST_MATRIX,      
-    'blast_index_files'       => $species_defs->ENSEMBL_BLAST_DATA_PATH,  
-    'blast_dna_index_files'   => $species_defs->ENSEMBL_BLAST_DATA_PATH_DNA,
-    'repeat_mask_bin_dir'     => $species_defs->ENSEMBL_REPEATMASK_BIN_PATH,
-    
-    'vep_cache_dir'           => $species_defs->ENSEMBL_VEP_CACHE,
-    'vep_script'              => $species_defs->ENSEMBL_VEP_SCRIPT,
-    'vep_perl_bin'            => $species_defs->ENSEMBL_VEP_PERL_BIN,
+    map %{$_->default_options($self)}, $self->available_tools
   };
 }
 
 sub resource_classes {
-    my ($self) = @_;
-    return {
-        'default' => { 'LSF' => '' },
-        'urgent'  => { 'LSF' => '-q yesterday' },
-        'blasttest' => {'LSF' => '-q blasttest'},
-    }
+  ## @override
+  my $self = shift;
+  return {
+    'default' => { 'LSF' => '' },
+    'urgent'  => { 'LSF' => '-q yesterday' },
+    map %{$_->resource_classes($self)}, $self->available_tools
+  };
 }
 
 sub pipeline_analyses {
-  my ($self) = @_;
-  return [
-    { -logic_name => 'Blast', #one for each blast?
-      -module     =>  'EnsEMBL::Web::RunnableDB::Blast::Submit', #RunnableDB name,
-      -parameters => { #global params for a runnable
-          'ticket_db'             => $self->o('ticket_db'),
-          'blast_options'         => $self->o('blast_options'),
-          'work_dir'              => $self->o('work_dir'),
-          'blast_bin_dir'         => $self->o('blast_bin_dir'),          
-          'blast_matrix'          => $self->o('blast_matrix'),
-          'blast_index_files'     => $self->o('blast_index_files'),
-          'blast_dna_index_files' => $self->o('blast_dna_index_files'),
-          'ensembl_cvs_root_dir'  => $self->o('ensembl_cvs_root_dir'),
-          'repeatmask_bin_dir'    => $self->o('repeat_mask_bin_dir'),
-        },
-      -hive_capacity => 15, # workers that run at a time per analysis 
-      -rc_name  => 'blasttest',
-    },
-    {
-      -logic_name => 'VEP',
-      -module     => 'EnsEMBL::Web::RunnableDB::VEP::Submit',
-      -parameters => {
-        'ticket_db'     => $self->o('ticket_db'),
-        'vep_cache_dir' => $self->o('vep_cache_dir'),
-        'vep_script'    => $self->o('vep_script'),
-        'vep_perl_bin'  => $self->o('vep_perl_bin') || '/usr/bin/env perl',
-      },
-      -hive_capacity => 15,
-      -rc_name       => 'blasttest',
-    },
-  ];
-    
+  ## @override
+  my $self = shift;
+  return [ map { @{$_->pipeline_analyses($self)} } $self->available_tools ];
 }
+
+sub pipeline_validate {
+  ## Validates the parameters provided for pipeline initialisation
+  ## @return List of error strings if not validated successfully
+  my $self = shift;
+
+  my @errors;
+  
+  # Check connection to the ticket database
+  my $ticket_db = $self->o('ticket_db');
+  my $dbh       = DBI->connect(sprintf('dbi:mysql:%s:%s:%s', $ticket_db->{'-dbname'}, $ticket_db->{'-host'}, $ticket_db->{'-port'}), $ticket_db->{'-user'}, $ticket_db->{'-pass'}, { 'PrintError' => 0 });
+  push @errors, "Ticket database: Connection could not be created ($DBI::errstr)" unless $dbh;
+
+  # Run tool specific validation
+  push @errors, map($_->pipeline_validate($self) || (), $self->available_tools);
+
+  return @errors;
+}
+
 1;
