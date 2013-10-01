@@ -1,0 +1,47 @@
+#!/usr/local/bin/perl
+
+=head1 NAME
+
+rsync_code_to_shared
+
+=head1 SYNOPSIS
+
+    require('.../path/to/..rsync_code_to_shared');
+
+=head1 DESCRIPTION
+
+Rsync folders of the required code to a shared location to make it
+accessible to the LSF or other machines that allow job queueing.
+
+=head1 LICENCE
+
+This code is distributed under an Apache style licence:
+Please see http://www.ensembl.org/code_licence.html for details
+
+=head1 AUTHOR
+
+Harpreet Riat <hr5@sanger.ac.uk>
+
+=head1 CONTACT
+
+Post questions to the EnsEMBL webteam list ensembl-webteam@sanger.ac.uk
+
+=cut
+
+use strict;
+use warnings;
+
+use SiteDefs;
+
+if (grep($_ eq 'synchive', @ARGV) && (my $destination = $SiteDefs::ENSEMBL_TOOLS_SHARED_LOCATION)) {
+
+  print "Copying code to $destination\n";
+
+  my $source  = $SiteDefs::ENSEMBL_SERVERROOT;
+  my @folders = qw(conf ensembl ensembl-hive ensembl-external modules public-plugins sanger-plugins);
+  my $args    = grep($_ eq 'synchiveverbose', @ARGV) ? '-aWv' : '-aWvq';
+
+  system(sprintf 'rsync %s --exclude="CVS/" --exclude="opensearch/" --delete %s %s', $args, join(' ', map("$source/$_", @folders)), $destination);
+}
+
+1;
