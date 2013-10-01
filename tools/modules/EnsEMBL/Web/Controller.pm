@@ -2,10 +2,10 @@ package EnsEMBL::Web::Controller;
 
 use strict;
 
-use EnsEMBL::Web::Tools::MethodMaker (copy => {qw(OBJECT_PARAMS __OBJECT_PARAMS)});
+use EnsEMBL::Web::Tools::MethodMaker (copy => {qw(OBJECT_PARAMS _TOOLS_OBJECT_PARAMS)});
 
 sub OBJECT_PARAMS {
-  return [ @{shift->__OBJECT_PARAMS}, [ 'Tools' => 'tk' ] ];
+  return [ @{shift->_TOOLS_OBJECT_PARAMS}, [ 'Tools' => 'tl' ] ];
 }
 
 1;
