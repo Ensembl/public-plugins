@@ -25,13 +25,13 @@ Ensembl.Panel.Jobs = Ensembl.Panel.Content.extend({
     //if there are rows: this.updateJobsList();
     if ($('td.dataTables_empty').length ){       
       this.elLk.tableWrapper.hide();
-      $('p.no_jobs').show();  
+      $('p._no_jobs').show();  
     } else {
       if (panel.incompleteTickets()){
         this.updateJobsList();
       }
       this.elLk.tableWrapper.show();
-      $('p.no_jobs').hide();
+      $('p._no_jobs').hide();
     }
 
   },
@@ -51,11 +51,11 @@ Ensembl.Panel.Jobs = Ensembl.Panel.Content.extend({
 
     this.poll = setInterval(function () {
       if (panel.polled === 10) {
-        panel.updateJobsList();
+       // panel.updateJobsList();
         panel.interval *= 2;
         panel.polled = 0;
       } else {
-        panel.getUpdatedContent();
+       // panel.getUpdatedContent();
         panel.polled++;
       }
       panel.count = 0;
