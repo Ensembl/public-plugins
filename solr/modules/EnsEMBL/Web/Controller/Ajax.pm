@@ -20,7 +20,7 @@ sub common {
 }
 
 sub search_connect {
-  my ($self,$hub,$endpoint,$tryhard) = @_; 
+  my ($self,$hub,$endpoint,$timeout,$tryhard) = @_; 
 
   my ($result,$error) = ("","");
   undef $@; 
@@ -28,7 +28,7 @@ sub search_connect {
     my $ua = LWP::UserAgent->new;
     my $proxy = $hub->species_defs->ENSEMBL_WWW_PROXY;
     $ua->proxy('http',$proxy) if $proxy;
-    $ua->timeout($self->{'endpoints'}{$endpoint}{'timeout'}) unless $tryhard;
+    $ua->timeout($timeout) unless $tryhard;
     my $page = ($hub->param('page') || 1);
     my $start = $hub->param('start') || 0; 
     if($hub->param('page')) {

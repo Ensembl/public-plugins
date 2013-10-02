@@ -56,8 +56,9 @@ sub endpoints { return $_[0]->{'endpoint_order'}; }
 sub attempt {
   my ($self,$endpoint,$payload,$tryhard) = @_;
 
+  my $timeout = $self->{'endpoints'}{$endpoint}{'timeout'};
   return $payload->{'self'}->search_connect($payload->{'hub'},
-                                            $endpoint,$tryhard);
+                                            $endpoint,$timeout,$tryhard);
 }
 
 sub successful {
