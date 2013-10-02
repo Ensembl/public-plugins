@@ -8,9 +8,10 @@ use URI::Escape qw(uri_escape);
 use JSON qw(from_json to_json);
 use LWP::UserAgent;
 use List::MoreUtils qw(natatime);
-
 use Bio::EnsEMBL::DBSQL::GeneAdaptor;
 use EnsEMBL::Web::Hub;
+
+use EnsEMBL::Web::Tools::FailOver::Solr;
 
 sub common {
   my ($self,$hub,$scientific) = @_;
@@ -18,56 +19,67 @@ sub common {
   return $hub->species_defs->get_config($scientific,'SPECIES_COMMON_NAME');
 }
 
-# XXX errors
-sub search {
-  my ($self,$hub) = @_;
+sub search_connect {
+  my ($self,$hub,$endpoint,$tryhard) = @_; 
 
   my ($result,$error) = ("","");
-  undef $@;
+  undef $@; 
   eval {
-    my $endpoint = $hub->species_defs->ENSEMBL_SOLR_ENDPOINT;
     my $ua = LWP::UserAgent->new;
     my $proxy = $hub->species_defs->ENSEMBL_WWW_PROXY;
     $ua->proxy('http',$proxy) if $proxy;
+    $ua->timeout($self->{'endpoints'}{$endpoint}{'timeout'}) unless $tryhard;
     my $page = ($hub->param('page') || 1);
-    my $start = $hub->param('start') || 0;
+    my $start = $hub->param('start') || 0; 
     if($hub->param('page')) {
       $start = ($page-1)*($hub->param('rows'));
-    }
+    }     
     my @params = (
       wt => 'json',
       start => $start
-    );
+    );    
     foreach my $k (qw(q fq rows facet facet.field facet.mincount start sort hl hl.fl facet.prefix indent hl.fragsize spellcheck spellcheck.count spellcheck.onlyMorePopular spellcheck.q)) {
       my @v = $hub->param($k);
-      push @params,$k,$_ for @v; 
-    }
+      push @params,$k,$_ for @v;
+    }     
     my @param_str;
     my $ps = natatime(2,@params);
     while(my @kv = $ps->()) {
       push @param_str,$kv[0]."=".uri_escape($kv[1]);
-    }
+    }     
     my $url = $endpoint;
     if($hub->param('spellcheck.q')) {
       $url =~ s#\/[^/]*$#/spell#g; ##
     } elsif($hub->param('spellcheck')) {
       $url =~ s#\/[^/]*$#/suggest#g; ##
-    }
+    }     
     $url = "$url?".join("&",@param_str);
-    #warn "$url\n";
     my $response = $ua->get($url);
 
     if($response->is_success) {
       $result = from_json($response->decoded_content);
     } else {
       $error = "Server returned status ".$response->code." ".$response->message;
-    }
+    }     
   };
   if($@) {
     $error = "Error contacting server: $@";
   }
+  warn "SOLR: $error\n" if $error;
+  return { result => $result, error => $error };
+}
 
-  print $self->jsonify({ result => $result, error => $error });
+
+sub search {
+  my ($self,$hub) = @_;
+
+  my $failover = EnsEMBL::Web::Tools::FailOver::Solr->new($hub);
+
+  my $out = $failover->go({ self => $self, hub => $hub });
+  unless(defined $out) {
+    $out = { result => {}, error => "Cannot connect to any servers" };
+  }
+  print $self->jsonify($out);
 }
 
 sub species {
