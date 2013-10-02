@@ -260,6 +260,11 @@ sub get_fields {
   return $self->deepcopy($self->{'_dbf_show_fields'});
 }
 
+sub is_trackable_field {
+  my ($self, $rose_meta, $field_name) = @_;
+  return $rose_meta->trackable && $field_name =~ /^(created|modified)_(at|by_user)$/ ? 1 : 0;
+}
+
 sub _get_with_objects_params {
   ## Constructs the extra query params that are to be passed to manager's get_objects to get the required objects for Display, List and Input pages
   ## @param page type - Display/Input/List
@@ -315,8 +320,8 @@ sub _populate_from_cgi {
   delete $field_names{$_} for ('id', $rose_meta->primary_key_column_names->[0]);
 
   foreach my $field_name (keys %field_names) {
-    next unless exists $param_names{$field_name};   # ignore if $field_name not present among the post params
-    next if $rose_meta->column_is_trackable($field_name);  # dont get trackable info from CGI
+    next unless exists $param_names{$field_name};               # ignore if $field_name not present among the post params
+    next if $self->is_trackable_field($rose_meta, $field_name); # dont get trackable info from CGI
 
     my $value     = [ $hub->param($field_name) ]; #CGI value
     my $relation  = $relations->{$field_name};
