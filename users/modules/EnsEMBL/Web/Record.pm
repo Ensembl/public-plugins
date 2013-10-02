@@ -68,7 +68,7 @@ sub clone {
   $clone->{'__rose_object'} = $rose_object->clone_and_reset;
   $clone->{'__rose_object'}->cloned_from($self->id);
   $clone->{'cloned_from'} = $self->id;
-  return $class->new($clone);
+  return $class->_new($clone);
 }
 
 sub owner {
