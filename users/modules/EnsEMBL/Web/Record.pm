@@ -19,7 +19,7 @@ sub new {
   ## @constructor
   ## @param Record id
   my ($class, $record_id) = @_;
-  return $class->from_rose_objects([ ORM::EnsEMBL::DB::Accounts::Manager::Record->fetch_by_primary_key($record_id) || () ])[0];
+  return [ $class->from_rose_objects([ ORM::EnsEMBL::DB::Accounts::Manager::Record->fetch_by_primary_key($record_id) || () ]) ]->[0];
 }
 
 sub from_rose_objects {
