@@ -95,7 +95,7 @@ sub content_tree {
     }
 
     # trackable fields manipulation
-    if ($record_meta->column_is_trackable($name)) {
+    if ($object->is_trackable_field($record_meta, $name)) {
       if ($name =~ /^(created|modified)_(at|by_user)$/) {
         $element_params->{'type'}     = 'noedit'; # force noedit field type for trackable fields
         $element_params->{'is_html'}  = 1 if $2 eq 'by_user';
