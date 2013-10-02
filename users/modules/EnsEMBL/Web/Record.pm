@@ -11,16 +11,15 @@ use warnings;
 
 use EnsEMBL::Web::Tools::MethodMaker qw(add_method);
 
+use ORM::EnsEMBL::DB::Accounts::Manager::Record;
+
 use base qw(EnsEMBL::Web::Root);
 
 sub new {
   ## @constructor
-  ## Creates new web record object and dynamically adds all the method to it as present rose record object
-  my ($class, $object) = @_;
-  foreach my $key (keys %$object) {
-    add_method($class, $key, sub { return shift->{$key}; }) unless $class->can($key) && $key =~ /^_/;
-  }
-  return bless $object, $class;
+  ## @param Record id
+  my ($class, $record_id) = @_;
+  return $class->from_rose_objects([ ORM::EnsEMBL::DB::Accounts::Manager::Record->fetch_by_primary_key($record_id) || () ])[0];
 }
 
 sub from_rose_objects {
@@ -40,7 +39,7 @@ sub from_rose_objects {
     $record->{'__rose_object'} = $_;
     delete $record->{'data'};
 
-    $class->new($record);
+    $class->_new($record);
   } @$rose_objects;
 }
 
@@ -101,4 +100,12 @@ sub data {
   shift->{'__rose_object'}->data(@_);
 }
 
+sub _new {
+  ## @private
+  my ($class, $object) = @_;
+  foreach my $key (keys %$object) {
+    add_method($class, $key, sub { return shift->{$key}; }) unless $class->can($key) && $key =~ /^_/;
+  }
+  return bless $object, $class;
+}
 1;
