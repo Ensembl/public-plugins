@@ -97,11 +97,26 @@ sub authorise {
   return 1;
 }
 
+sub deauthorise {
+  ## Clears the rose user saved inside the object, and the user cookie
+  ## @return No return value
+  my $self = shift;
+  $self->cookie->clear;
+  $self->{'_user'} = undef;
+}
+
 sub groups {
   ## Gets all the active groups user is an active memeber of
   ## @return Arrayref of Rose Group objects
   my $self = shift;
   return [ map $_->group, @{$self->rose_object->active_memberships} ];
+}
+
+sub get_record {
+  ## Gets a record from its record id
+  ## @return Rose Record object
+  my ($self, $record_id) = @_;
+  return $self->rose_object->find_records('query' => ['record_id' => $record_id], 'limit' => 1)->[0];
 }
 
 sub to_string {
@@ -114,14 +129,6 @@ sub to_boolean {
   ## Used to operator overloading
   ## @return 1 if user logged in, 0 otherwise
   return shift->rose_object ? 1 : 0;
-}
-
-sub deauthorise {
-  ## Clears the rose user saved inside the object, and the user cookie
-  ## @return No return value
-  my $self = shift;
-  $self->cookie->clear;
-  $self->{'_user'} = undef;
 }
 
 sub _goto_rose_object {
@@ -151,13 +158,6 @@ sub get_group {
 sub get_records {
   my ($self, $record_type) = @_;
   return EnsEMBL::Web::Record->from_rose_objects($self->$record_type || []);
-}
-
-sub get_record {
-  my ($self, $record_id) = @_;
-  my $records   = $self->rose_object->find_records('query' => ['record_id' => $record_id], 'limit' => 1);
-  my ($record)  = $records && @$records ? EnsEMBL::Web::Record->from_rose_objects($records) : ();
-  return $record;
 }
 
 sub get_group_records {
