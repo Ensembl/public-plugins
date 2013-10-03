@@ -48,7 +48,7 @@ sub id {
 }
 
 sub colour { # some calls are made to this method while it's key may not be added to the object
-  return shift->{'colour'};
+  return shift->data->{'colour'};
 }
 
 sub label { # if this record is a das record, the webcode expects it to have this method
