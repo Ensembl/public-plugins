@@ -5,8 +5,6 @@ use warnings;
 
 use base qw(EnsEMBL::Web::Component);
 
-use ORM::EnsEMBL::DB::Healthcheck::Object::Annotation;
-
 use Rose::DateTime::Util qw(format_date parse_date);
 
 sub _init {
@@ -133,7 +131,17 @@ sub annotation_action {
   ## Returns a label for the action enums for annotation.
   my ($self, $value) = @_;
 
-  my @actions = ORM::EnsEMBL::DB::Healthcheck::Object::Annotation->annotation_actions;
+  my @actions = (
+    'manual_ok'                       => 'Manual ok: not a problem for this release',
+    'manual_ok_all_releases'          => 'Manual ok all release: not a problem for this species',
+    'manual_ok_this_assembly'         => 'Manual ok this assembly',
+    'manual_ok_this_genebuild'        => 'Manual ok this genebuild',
+    'manual_ok_this_regulatory_build' => 'Manual ok this regulatory build',
+    'healthcheck_bug'                 => 'Healthcheck bug: error should not appear, requires changes to healthcheck',
+    'under_review'                    => 'Under review: Will be fixed/reviewed',
+    'fixed'                           => 'Fixed',
+    'note'                            => 'Note or comment'
+  );
 
   return @actions if $value eq 'all';
 
@@ -154,7 +162,7 @@ sub group_report_counts {
   foreach my $report (@$reports) {
     my $count = $report->failed_count;
     for (keys %$counter) {
-      my $val = $report->$_;
+      my $val = $report->$_ || '';
       $val    = ucfirst $val if $_ eq 'species'; # always keep first character of species name capital
       $counter->{$_}{$val || 'unknown'}{'all'} += $count;
       $counter->{$_}{$val || 'unknown'}{'new'} += $count if $report->first_session_id == $report->last_session_id;
