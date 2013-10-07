@@ -5,8 +5,8 @@ package EnsEMBL::Users::Component::Account;
 
 use strict;
 
+use EnsEMBL::Web::User;
 use EnsEMBL::Users::Messages qw(get_message);
-use ORM::EnsEMBL::DB::Accounts::Object::User;
 
 use base qw(EnsEMBL::Web::Component);
 
@@ -35,7 +35,7 @@ sub new_form {
 
   if ($params->{'csrf_safe'}) {
     my $hub = $self->hub;
-    $form->add_hidden({'name' => $hub->CSRF_SAFE_PARAM, 'value' => $hub->user ? $hub->user->rose_object->salt : ORM::EnsEMBL::DB::Accounts::Object::User->DEFAULT_SALT});
+    $form->add_hidden({'name' => $hub->CSRF_SAFE_PARAM, 'value' => $hub->user ? $hub->user->rose_object->salt : EnsEMBL::Web::User->default_salt});
   }
   
   return $form;
