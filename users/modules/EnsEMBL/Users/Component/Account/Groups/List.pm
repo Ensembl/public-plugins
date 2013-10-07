@@ -16,7 +16,7 @@ sub content {
 
   # create an 'easy to use' data structure
   my @groups;
-  for (@{$object->fetch_groups({'query' => ['!type' => 'private']})}) {
+  for (@{$object->fetch_groups({'query' => ['type' => [ 'open', 'restricted' ]]})}) {
     my $membership = $user->get_membership_object($_);
     unless ($membership && $membership->is_user_blocked) { # dont show the group that blocked this user
       push @groups, {

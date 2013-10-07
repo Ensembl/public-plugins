@@ -13,7 +13,7 @@ sub content {
   my $hub         = $self->hub;
   my $object      = $self->object;
   my $user        = $hub->user->rose_object;
-  my $memberships = $user->find_memberships('with_objects' => 'group', 'query' => ['or' => ['level' => 'administrator', 'group.status' => 'active']]); # show inactive groups to admins only
+  my $memberships = $user->find_memberships('with_objects' => 'group', 'query' => ['or' => ['level' => 'administrator', 'and' => ['group.status' => 'active', '!group.type' => 'hidden']]]); # show inactive groups to admins only
   my $section     = {
     'heading'       => 'Groups',
     'heading_links' => [{

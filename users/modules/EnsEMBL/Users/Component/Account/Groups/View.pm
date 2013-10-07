@@ -15,7 +15,7 @@ sub content {
   my $object      = $self->object;
   my $user        = $hub->user->rose_object;
   my $group_id    = $hub->param('id');
-  my $membership  = $object->fetch_accessible_membership_for_user($user, $group_id, {'with_objects' => ['group', 'group.records', 'group.memberships', 'group.memberships.user']});
+  my $membership  = $object->fetch_accessible_membership_for_user($user, $group_id, {'with_objects' => ['group', 'group.records']});
 
   if ($membership) {
 
@@ -74,9 +74,10 @@ sub content {
       });
 
       # members
-      $group->load('with' => [ 'memberships', 'memberships.user' ]);
-      my @memberships = grep {$_->user} @{$group->memberships};
-
+      my %default_groups = map { $_ => 1 } @{$hub->species_defs->ENSEMBL_DEFAULT_USER_GROUPS};
+      my %query          = $default_groups{$group->group_id} ? ( 'query' => [ 'level' => 'administrator' ] ) : ();
+      my $memberships    = $group->find_memberships(%query, 'with_objects' => [ 'user' ]);
+      
       my $table = $self->new_table([
         {'key' => 'member',   'title' => 'Member',  'width' => '30%'                    },
         {'key' => 'level',    'title' => 'Level',   'width' => $is_admin ? '20%' : '70%'},
@@ -84,7 +85,7 @@ sub content {
         {'key' => 'buttons',  'title' => '',        'width' => '50%'                    } : ()
       ], [], {'class' => 'tint', 'data_table' => 'no_col_toggle', 'exportable' => 0, 'data_table_config' => {'iDisplayLength' => 25}});
 
-      for (sort {$a->user->name cmp $b->user->name} @memberships) {
+      for (sort {$a->user->name cmp $b->user->name} @$memberships) {
 
         my $is_pending_request    = $_->is_pending_request;
         my $is_pending_invitation = $_->is_pending_invitation;

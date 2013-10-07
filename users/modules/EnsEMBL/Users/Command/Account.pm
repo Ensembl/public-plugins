@@ -67,6 +67,7 @@ sub handle_registration {
   # Link login object to user object
   $login->reset_salt;
   $user->add_logins([$login]);
+  $user->add_memberships([ map { group_id => $_, status => 'active', member_status => 'active' }, @{$self->hub->species_defs->ENSEMBL_DEFAULT_USER_GROUPS} ]);
   $user->save;
 
   # Send verification email
