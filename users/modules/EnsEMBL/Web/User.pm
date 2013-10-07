@@ -47,7 +47,8 @@ sub favourite_tracks      { shift->_goto_rose_object('favourite_tracks');   }
 sub is_admin_of           { shift->_goto_rose_object('is_admin_of', @_);    }
 sub is_member_of          { shift->_goto_rose_object('is_member_of', @_);   }
 
-sub default_salt          { ORM::EnsEMBL::DB::Accounts::Manager::User->object_class->DEFAULT_SALT; }
+sub manager_class         { 'ORM::EnsEMBL::DB::Accounts::Manager::User';    }
+sub default_salt          { manager_class->object_class->DEFAULT_SALT;      }
 
 ## Temporary method added to get rid of the use of hub->user instead of the actual rose object user
 sub get_primary_key_value { use Carp; carp q(User plugin error: 'user' argument needs to be $hub->user->rose_object instead of $hub->user); return shift->user_id; }
