@@ -2,7 +2,6 @@ package EnsEMBL::Web::Hub;
 
 use strict;
 
-use ORM::EnsEMBL::DB::Accounts::Manager::User;
 use EnsEMBL::Web::User;
 use EnsEMBL::Web::Exceptions;
 # use EnsEMBL::Web::Configuration::Account;
@@ -80,7 +79,7 @@ sub users_available {
   unless (exists $self->{'_users_available'}) {
     $self->{'_users_available'} = 1;
     try {
-      ORM::EnsEMBL::DB::Accounts::Manager::User->object_class->init_db->connect;
+      EnsEMBL::Web::User->manager_class->object_class->init_db->connect;
     } catch {
       $self->{'_users_available'} = 0;
     }
