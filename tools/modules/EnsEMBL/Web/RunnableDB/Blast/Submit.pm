@@ -200,40 +200,8 @@ sub write_output {
   my $self        = shift;
   my $job_id      = $self->param('job_id');
   my $results     = EnsEMBL::Web::Parsers::NCBIBlast->new($self)->parse;
-  
-  if (@$results) {
 
-    # Serialise and compress results to save them to db
-    my @serialised_results = map {
-      my $serialised = nfreeze($_);
-      my $serialised_gzip;
-      gzip(\$serialised => \$serialised_gzip, -LEVEL => 9) or throw exception('HiveException', "GZIP failed: $GzipError");
-      $serialised_gzip;
-    } @$results;
-
-    my $ticket_db   = $self->param('ticket_db');
-    my $ticket_dbh  = DBI->connect(sprintf('dbi:mysql:%s:%s:%s', $ticket_db->{'-dbname'}, $ticket_db->{'-host'}, $ticket_db->{'-port'}), $ticket_db->{'-user'}, $ticket_db->{'-pass'}, { 'PrintError' => 0 });
-
-    if ($ticket_dbh) {
-      my $now = $self->_get_time_now;
-      my $sth = $ticket_dbh->prepare('INSERT INTO `result` (`job_id`, `result_data`, `created_at`) values ' . join(',', map {'(?,?,?)'} @serialised_results));
-
-      $sth->execute(map {($job_id, $_ || '', $now)} @serialised_results);
-
-    } else {
-
-      ## TODO -- what if ticket connection comes back later?
-      $self->warning("Ticket database: Connection could not be created ($DBI::errstr)");
-    }
-
-    $ticket_dbh->disconnect;
-  }
-}
-
-sub _get_time_now {
-  # @private
-  my ($sec, $min, $hour, $day, $month, $year) = localtime;
-  return sprintf '%d-%02d-%02d %02d:%02d:%02d', $year + 1900, $month + 1, $day, $hour, $min, $sec;
+  $self->save_results($job_id, $results);
 }
 
 1;
