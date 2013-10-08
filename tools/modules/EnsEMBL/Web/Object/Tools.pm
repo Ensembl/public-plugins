@@ -368,4 +368,10 @@ sub get_requested_job {
   return $self->{$key};
 }
 
+sub get_time_now {
+  # Gets the current time in a format that can be saved in the db
+  my ($sec, $min, $hour, $day, $month, $year) = localtime;
+  return sprintf '%d-%02d-%02d %02d:%02d:%02d', $year + 1900, $month + 1, $day, $hour, $min, $sec;
+}
+
 1;
