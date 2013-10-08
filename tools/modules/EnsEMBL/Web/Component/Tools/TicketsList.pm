@@ -60,7 +60,7 @@ sub content {
         'analysis'  => $ticket->ticket_type->ticket_type_caption,
         'ticket'    => sprintf('<a href="%s">%s</a>', $hub->url({'action' => $ticket->ticket_type->ticket_type_name, 'function' => 'Summary', 'tl' => $object->create_url_param({'ticket_name' => $ticket_name})}), $ticket_name),
         'jobs'      => join('', sort values %$jobs_summary),
-        'created'   => $object->format_date($ticket->created_at),
+        'created'   => $self->format_date($ticket->created_at),
         'extras'    => $ticket_extras
       });
     }
