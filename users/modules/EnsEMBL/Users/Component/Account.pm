@@ -27,7 +27,7 @@ sub _init {
 
 sub new_form {
   ## @overrides
-  ## @param As accepted by parent method, plus one ke
+  ## @param As accepted by parent method, plus one extra key
   ##  - csrf_safe : If key value is true, it adds a hidden input with a code in the form to make it safe from CSRF attacks
   my ($self, $params) = @_;
 
