@@ -28,3 +28,5 @@ sub length  { return shift->{'length'};   }
 sub hsps    { return shift->{'hsps'};     }
 sub colours { return shift->{'colours'};  }
 sub name    { return shift->{'name'};     }
+
+1;
