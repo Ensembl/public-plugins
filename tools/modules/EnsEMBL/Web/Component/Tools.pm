@@ -103,6 +103,18 @@ sub expand_job_status {
   return $job_status_div;
 }
 
+sub format_date {
+  ## Formats datetime from db into a printable form
+  ## @param Datetime value
+  ## @return String
+  my ($self, $datetime) = @_;
+
+  my @date = split /-|T|:/, $datetime;
+
+  return sprintf '%s/%s/%s, %s:%s', $date[2], $date[1], $date[0], $date[3], $date[4];
+}
+
+
 
 #####
  ## TODO 
