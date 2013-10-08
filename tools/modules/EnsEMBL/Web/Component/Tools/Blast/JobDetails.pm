@@ -26,7 +26,7 @@ sub content {
     return $twocol->render if $status ne 'done';
 
     if ($job->result) {
-      $twocol->set_attribute('class', ['toggleable', '_job_input_details']);
+      $twocol->set_attribute('class', ['toggleable', '_job_input_details', 'hidden']);
       return $self->dom->create_element('div', {
         'children'    => [{
           'node_name'   => 'h3',
@@ -36,7 +36,7 @@ sub content {
               'node_name'   => 'a',
               'href'        => '#',
               'inner_HTML'  => 'Input details',
-              'class'       => ['toggle', 'set_cookie', 'open'],
+              'class'       => ['toggle', 'set_cookie', 'close'],
               'rel'         => '_job_input_details'
             }]
           }]
