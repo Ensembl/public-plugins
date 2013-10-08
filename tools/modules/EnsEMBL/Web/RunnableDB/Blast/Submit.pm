@@ -10,9 +10,6 @@ use base qw(EnsEMBL::Web::RunnableDB);
 use File::Path;
 use DBI;
 
-use Storable qw(nfreeze);
-use IO::Compress::Gzip qw(gzip $GzipError);
-
 use Bio::Seq;
 use Bio::SeqIO;
 
