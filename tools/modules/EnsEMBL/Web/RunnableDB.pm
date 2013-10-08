@@ -9,6 +9,9 @@ use warnings;
 
 use base qw(Bio::EnsEMBL::Hive::Process);
 
+use Storable qw(nfreeze);
+use IO::Compress::Gzip qw(gzip $GzipError);
+
 use EnsEMBL::Web::Exceptions;
 
 sub param_required {
