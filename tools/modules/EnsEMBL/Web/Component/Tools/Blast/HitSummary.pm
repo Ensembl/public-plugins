@@ -11,7 +11,7 @@ sub content {
   my $hub     = $self->hub;
 
   my $job     = $object->get_requested_job({'with_requested_result' => 1});
-  my $result  = [ $job && $job->status eq 'done' ? $job->result : () ]->[0];
+  my $result  = $job && $job->status eq 'done' ? $job->result->[0] : undef;
 
   if ($result) {
 
