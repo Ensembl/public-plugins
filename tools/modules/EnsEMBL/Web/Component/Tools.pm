@@ -69,12 +69,12 @@ sub expand_job_status {
     $job_status_div->first_child->inner_HTML(sprintf '%s: %s%s',
       $job_hive_status,
       $display_message,
-      $job_message->fatal ? sprintf(' <a class="toggle closed" href="#more" rel="%s">more</a>', $job_message_class) : ''
+      $job_message->fatal ? sprintf(' <a class="toggle closed" href="#more" rel="%s"></a>', $job_message_class) : ''
     );
 
     if ($exception_is_fatal) {
       my $exception = $job_message->exception;
-      my $details   = $exception->{'message'} ? "Uncaught exception with message: $exception->{'message'}\n" : "Uncaught exception:\n";
+      my $details   = $exception->{'message'} ? "Error with message: $exception->{'message'}\n" : "Error:\n";
          $details  .= $exception->{'stack'}
         ? join("\n", map(sprintf("Thrown by %s at %s (%s)", $_->[3], $_->[0], $_->[2]), @{$exception->{'stack'}}))
         : $exception->{'exception'} || 'Not details'
