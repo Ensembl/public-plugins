@@ -39,7 +39,7 @@ sub get_tracks {
     
     my $config = {
       id           => $track->id,
-      name         => $track->get('name'),
+      name         => $track->get('caption'),
       order        => $track->get('order') + 0,
       depth        => $glyphset_object->depth,
       labelOverlay => $glyphset_object->label_overlay,
