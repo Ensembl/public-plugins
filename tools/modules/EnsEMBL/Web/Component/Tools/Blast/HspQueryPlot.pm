@@ -22,7 +22,7 @@ sub content {
 
     # Draw the HSP image
     my $image                   = EnsEMBL::Web::Document::Image->new($hub);
-    $image->drawable_container  = Bio::EnsEMBL::DrawableContainer->new(EnsEMBL::Web::Container::HSPContainer->new($job, \@pointer_cols), $hub->get_imageconfig('hsp_query_plot')); 
+    $image->drawable_container  = Bio::EnsEMBL::DrawableContainer->new(EnsEMBL::Web::Container::HSPContainer->new($object, $job, \@pointer_cols), $hub->get_imageconfig('hsp_query_plot')); 
     $image->imagemap            = 'yes';
     $image->set_button('drag');
 
