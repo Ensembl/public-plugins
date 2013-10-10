@@ -32,7 +32,7 @@ sub expand_job_status {
   my $job_hive_status = ucfirst $job->hive_status =~ s/_/ /gr;
   my $job_message     = $job->job_message->[0];
   my $job_status      = $job->status;
-  my $url_param       = $self->object->create_url_param({'ticket_name' => $job->ticket->ticket_name, 'job_id' => $job_id});
+  my $url_param       = $self->object->create_url_param({'job_id' => $job_id});
   my $job_status_div  = $self->dom->create_element('div', {
     'children' => [{
       'node_name'   => 'p',
@@ -153,17 +153,6 @@ sub get_download_link {
   });
 
   return $url;  
-}
-
-sub failure_message {
-  my ($self, $ticket) = @_;
-  my $analysis = $ticket->job_type->caption;  
-  my $error = $self->object->error_message($ticket); 
-
-  return $self->_error(
-    $analysis . ' Failed',
-    '<p>Unknown error</p>'
-  );
 }
 
 sub pointer_default {
