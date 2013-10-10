@@ -17,8 +17,6 @@ sub content {
   if ($job && $job->status eq 'done' && @{$job->result}) {
 
     my $results     = $job->result;
-    my $ticket_name = $job->ticket->ticket_name;
-    my $job_id      = $job->job_id;
     my $job_data    = $job->job_data;
     my $source      = $job_data->{'source'};
     my $table       = $self->new_table($source =~/latestgp/i
@@ -59,7 +57,7 @@ sub content {
     for (@$results) {
       my $result_id     = $_->result_id;
       my $result_data   = $_->result_data;
-      my $url_param     = $object->create_url_param({'ticket_name' => $ticket_name, 'job_id' => $job_id, 'result_id' => $result_id});
+      my $url_param     = $object->create_url_param({'result_id' => $result_id});
       my $location_link = $self->location_link($url_param, $job_data, $result_data);
 
       $result_data->{'links'}     = $self->all_links($url_param, $job_data, $result_data);
