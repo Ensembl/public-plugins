@@ -1,15 +1,17 @@
 package EnsEMBL::Web::Container::HSPContainer;
 
 ### Wrapper around ORM::EnsEMBL::DB::Tools::Object::Result and provides method for compatibility with drawing code
+### TODO - removed non-container stuff from this!
 
 use strict;
 use warnings;
 
 sub new {
   ## @constructor
+  ## @param Blast web object
   ## @param Job object
   ## @param Colours map for the pointers
-  my ($class, $job, $colours) = @_;
+  my ($class, $object, $job, $colours) = @_;
 
   my $job_data  = $job->job_data;
   my $results   = $job->result;
@@ -17,7 +19,12 @@ sub new {
   return bless {
     'name'    => $job_data->{'sequence'}{'display_id'},
     'length'  => CORE::length($job_data->{'sequence'}{'seq'}),
-    'hsps'    => [ map { my $hsp = $_->result_data; $hsp->{'id'} = $_->result_id; $hsp; } @$results ],
+    'hsps'    => [ map {
+      my $hsp       = $_->result_data;
+      $hsp->{'id'}  = $_->result_id;
+      $hsp->{'tl'}  = $object->create_url_param({'result_id' => $hsp->{'id'}});
+      $hsp;
+    } @$results ],
     'colours' => $colours
   }, $class;
 }
