@@ -1,6 +1,7 @@
 package EnsEMBL::Web::Object::Tools;
 
-### Base class for all the Tools based objects
+### Base abstract class for all the Tools based objects
+### Avoid using an instance of this class, use child classes instances by calling get_sub_object() method
 
 use strict;
 use warnings;
@@ -23,8 +24,9 @@ sub default_error_message { return 'Some error occurred while running the job.';
 
 sub get_sub_object {
   ## Gets the actual web object according to the 'action' part of the url
+  ## @return Blast/VEP web object if available for the hub->action, Tools object otherwise
   my $self = shift;
-  return $self->{'_sub_object'} ||= $self->new_object($self->hub->action, {}, $self->__data);
+  return $self->{'_sub_object'} ||= ref $self eq __PACKAGE__ && $self->new_object($self->hub->action, {}, $self->__data) || $self;
 }
 
 sub form_inputs_to_jobs_data {
@@ -41,17 +43,38 @@ sub ticket_prefix {
   throw exception('AbstractMethodNotImplemented');
 }
 
+sub ticket_type {
+  ## @abstract method
+  ## Should return the ticket type as saved in ticket_type table
+  throw exception('AbstractMethodNotImplemented');
+}
+
 sub create_url_param {
   ## Creates a URL param from the given ticket or job
   ## The purpose of keeping these three params in one URL param is to prevent losing this info when clicking around the tabs on ensembl page
   ## @param Hashref with keys ticket_name, job_id and result_id
+  ## If no key is provided, it returns current valid 'tl' param
+  ## If only 'result_id' is provided, it uses ticket_name and job_id from current URL
+  ## If only 'job_id' is provided, it uses ticket_name from the current URL
   my ($self, $params) = @_;
+
+  if (!$params->{'ticket_name'}) {
+    my $ex_params = $self->parse_url_param;
+    if (!$params->{'job_id'}) {
+      if (!$params->{'result_id'}) {
+        $params->{'result_id'} = $ex_params->{'result_id'};
+      }
+      $params->{'job_id'} = $ex_params->{'job_id'};
+    }
+    $params->{'ticket_name'} = $ex_params->{'ticket_name'};
+  }
+
   throw exception('ParamRequired', 'Ticket name is needed to create URL param') unless $params->{'ticket_name'};
   return join '-', grep $_, $params->{'ticket_name'}, $params->{'job_id'}, $params->{'result_id'};
 }
 
 sub parse_url_param {
-  ## Reserve of create_url_param
+  ## Reverse of create_url_param
   ## @return Hashref with keys: ticket_name OR job_id OR job_id and result_id
   my $self = shift;
 
@@ -113,23 +136,15 @@ sub generate_ticket_name {
   return $name;
 }
 
-sub get_ticket_type_object {
-  ## Gets the ticket type rose object from the database according to the given type
-  ## @param Ticket type string
-  ## @return TicketType rose object
-  my ($self, $ticket_type) = @_;
-  return $ticket_type ? $self->rose_manager(qw(Tools TicketType))->get_objects('query' => [ 'ticket_type_name' => $ticket_type ])->[0] : undef;
-}
-
 sub create_ticket {
   ## creates a ticket for the jobs given by the user in the tools database and calls a method to submit them to hive database
-  ## @param TicketType object
   ## @param Arrayref of jobs data (as returned by form_inputs_to_jobs_data)
-  my ($self, $ticket_type, $jobs) = @_;
+  my ($self, $jobs) = @_;
 
-  my $hub       = $self->hub;
-  my $user      = $hub->user;
-  my $now       = $self->get_time_now;
+  my $hub         = $self->hub;
+  my $user        = $hub->user;
+  my $now         = $self->get_time_now;
+  my $ticket_type = $self->rose_manager(qw(Tools TicketType))->get_objects('query' => [ 'ticket_type_name' => $self->ticket_type ])->[0];
 
   my ($ticket)  = $ticket_type->add_ticket({
     'owner_id'    => $user ? $user->user_id : $hub->session->session_id,
@@ -148,6 +163,49 @@ sub create_ticket {
   $ticket_type->save('changes_only' => 1);
 
   $self->submit_jobs_to_hive($ticket);
+}
+
+sub delete_ticket { ## TODO - rewrite
+  my ($self, $ticket_id) = @_;
+  my $ticket = $self->rose_manager(qw(Tools Ticket))->fetch_ticket_by_name($ticket_id);
+  return unless $ticket;
+
+  # First clean up any results files
+  my $work_dir =  $self->species_defs->ENSEMBL_TMP_DIR_BLAST;
+  my $file_directory = $work_dir ."/" . substr($ticket->ticket_name, 0, 6) ."/" . substr($ticket->ticket_name, 6);
+  my $parent_directory = $work_dir ."/" . substr($ticket->ticket_name, 0, 6);
+
+  if (-d $file_directory){
+    foreach my $sub_job (@{$ticket->sub_job}){
+      my $filename = $file_directory .'/'. $ticket->ticket_id . $sub_job->sub_job_id;
+      my @exts = ('seq.fa', 'seq.fa.masked', 'seq.fa.tab', 'seq.fa.out', 'seq.fa.raw');
+      foreach (@exts){
+        my $file = $filename .'.'. $_;
+        if ( -s $file ){
+          unlink($file);
+        }
+      }
+    }
+
+    unless (scalar <$file_directory/*>){ # remove directory if empty
+      rmdir($file_directory);
+    }
+  }
+
+  if (-d $parent_directory){
+    unless (scalar <$parent_directory/*>){ # remove directory if empty
+      rmdir($parent_directory);
+    }
+  }
+
+  # Then remove data from ticket database
+  if (ref $ticket->analysis){ $ticket->analysis->delete; }
+  if (ref $ticket->sub_job){ $ticket->sub_job([]); }
+  if (ref $ticket->result){$ticket->result([]);}
+  $ticket->save;
+  $ticket->delete;
+
+  return;
 }
 
 sub submit_jobs_to_hive {
@@ -197,8 +255,8 @@ sub get_current_tickets {
     my $ticket_types  = $self->rose_manager(qw(Tools TicketType))->fetch_with_current_tickets({
       'site_type'       => $hub->species_defs->ENSEMBL_SITETYPE,
       'session_id'      => $hub->session->session_id, $user ? (
-      'user_id'         => $user->user_id ) : (), $action && $action ne 'Summary' ? (
-      'type'            => $action) : ()
+      'user_id'         => $user->user_id ) : (), $action && $action ne 'Summary' ? ( # 'Summary' page request is the only case where ticket_type() is not implemented
+      'type'            => $self->ticket_type) : ()
     });
 
     my @tickets = map $_->ticket, @$ticket_types;
@@ -332,7 +390,6 @@ sub get_requested_job {
   unless (exists $self->{$key}) {
     my $hub         = $self->hub;
     my $user        = $hub->user;
-    my $action      = $hub->action;
     my $url_params  = $self->parse_url_param;
     my $job;
 
@@ -351,7 +408,7 @@ sub get_requested_job {
         'job_id'        => $job_id,
         'session_id'    => $hub->session->session_id, $user ? (
         'user_id'       => $user->user_id ) : (),
-        'type'          => $action,
+        'type'          => $self->ticket_type,
         %results_key
       });
 
