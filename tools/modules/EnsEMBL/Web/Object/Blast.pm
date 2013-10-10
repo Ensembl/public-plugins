@@ -18,33 +18,14 @@ use EnsEMBL::Web::SpeciesDefs;
 use EnsEMBL::Web::BlastConstants;
 use EnsEMBL::Web::ExtIndex;
 
-our $VERBOSE = 1;
-
-sub new {
-  my $class = shift;
-  my $self  = $class->SUPER::new( @_ );
-
-  $self->{'_input'}       = {};
-  $self->{'_error'}       = {};
-  $self->{'_job_inputs'}  = [];
-
-
-
-  $self->{'_analysis'}    = {};
-  $self->{'_species'}     = ();
-  $self->{'_seqs'}        = {};
-  $self->{'_methods'}     = '';
-  $self->{'_database'}    = {};
-  $self->{'_input_type'}  = '';
-  $self->{'_description'} = '';
-  $self->{'_config'} = {};
-
-  return $self;
-}
-
 sub ticket_prefix {
   ## Abstract method implementation
   return 'BLA_';
+}
+
+sub ticket_type {
+  ## Abstract method implementation
+  return 'Blast';
 }
 
 sub process_job_for_hive_submission {
@@ -339,33 +320,81 @@ sub parse_search_type {
 sub get_target_object {
   ## Gets the target genomic object according to the target Id of the blast result's hit
   ## @param Blast result hit
+  ## @param DB Source type
   ## @return PredictionTranscript/Transcript/Translation object
-  my ($self, $hit)  = @_;
+  my ($self, $hit, $source_type)  = @_;
   my $target_id     = $hit->{'tid'};
   my $species       = $hit->{'species'};
-  my $source        = $hit->{'source'};
-  my $feature_type  = $source =~ /abinitio/i ? 'PredictionTranscript' : $source =~ /cdna/i ? 'Transcript' : 'Translation';
+  my $feature_type  = $source_type =~ /abinitio/i ? 'PredictionTranscript' : $source_type =~ /cdna/i ? 'Transcript' : 'Translation';
   my $adaptor       = $self->hub->get_adaptor("get_${feature_type}Adaptor", 'core', $species);
   
   return $adaptor->fetch_by_stable_id($target_id);
 }
 
+sub get_all_hits {
+  ## Gets all the result hits for the given job
+  ## @param Job object
+  ## @return Hashref { result_id => result_data }
+  my ($self, $job) = @_;
 
+  $job->load('with' => 'result');
 
+  return { map { $_->result_id => $_->result_data } @{$job->result} };
+}
 
-##/*********************************************/
+sub get_all_hits_in_slice_region {
+  ## Gets all the result hits for the given job in the given slice region
+  ## @param Job object
+  ## @param Slice object
+  ## @return Hashref { result_id => result_data }
+  my ($self, $job, $slice) = @_;
 
+  my $hits      = $self->get_all_hits($job);
+  my $s_name    = $slice->seq_region_name;
+  my $s_start   = $slice->start;
+  my $s_end     = $slice->end;
 
-sub blast_methods {
-  my $self = shift;
-  my $method_conf = $self->species_defs->multi_val('ENSEMBL_BLAST_METHODS');
-  if( ref( $method_conf ) ne 'HASH' or ! scalar( %$method_conf ) ){
-    warn( "ENSEMBL_BLAST_METHODS config unavailable" );
-    return;
+  my ($gid, $gstart, $gend);
+
+  while (my ($hit_id, $hit) = each %$hits) {
+
+    $gid    = $hit->{'gid'};
+    $gstart = $hit->{'gstart'};
+    $gend   = $hit->{'gend'};
+
+    if ($s_name eq $gid) {
+
+      if (
+        $gstart >= $s_start && $gend <= $s_end ||
+        $gstart < $s_start && $gend <= $s_end && $gend > $s_start ||
+        $gstart >= $s_start && $gstart <= $s_end && $gend > $s_end ||
+        $gstart < $s_start && $gend > $s_end && $gstart < $s_end
+      ) {
+        next;
+      }
+    }
+
+    delete $hits->{$hit_id};
   }
 
-  return $method_conf;
+  return $hits;
 }
+
+sub get_all_hits_by_coords {
+  ## Gets all the result hits for the given job for given coords
+  ## @param Job object
+  ## @param Coords
+  ## @return Hashref { result_id => result_data }
+  my ($self, $job, $coords) = @_;
+
+  my $slice = $self->database('core', $job->job_data->{'species'})->get_SliceAdaptor->fetch_by_toplevel_location($coords);
+
+  return $self->get_all_hits_in_slice_region($job, $slice);
+}
+
+## TODO
+##/*********************************************/
+
 
 sub process_input_sequence { ## DONT DELETE THIS YET! THIS CONTAINS THE ACCESSION ID RETRIEVAL CODE
   my $self    = shift;
@@ -452,73 +481,6 @@ sub process_input_sequence { ## DONT DELETE THIS YET! THIS CONTAINS THE ACCESSIO
   }
 }
 
-
-sub process_config_params {
-  my $self = shift;
-  my $options;
-
-  my %config_options =  CONFIGURATION_FIELDS;
-
-  my $options_and_defaults = $config_options{'options_and_defaults'};
-
-  foreach my $category ( keys %$options_and_defaults ){
-    foreach my $option ( @{$options_and_defaults->{$category}}){
-      my ($opt, $methods) = @$option;
-      if ($methods->{$self->{'_methods'}} || $methods->{'all'}){
-        my $value = $self->param($opt);
-        my $type = $config_options{$category}{$opt}{'type'};
-
-        if ($value eq 'yes' && $opt eq 'repeat_mask') {
-          $self->{'_repeat_mask'} = '1';
-          next;
-        }
-
-        #check have a valid value
-        if ( $type eq 'dropdown') {
-          if (grep  {$_->{value} eq $value } @{$config_options{$category}{$opt}{'values'}}) {
-            $options->{$opt} = $value;
-          } else {
-            $self->{'_error'}{$opt} = "The value specified is not valid";
-            return;
-          }
-        } elsif($type eq 'checkbox'){
-          if ($opt eq 'ungapped'){
-            $options->{$opt} = '' unless $value eq 'no';
-          } else {
-          $options->{$opt} = $value ?  $value : 'no';
-          }
-        } elsif( $type eq 'string') {
-          next if $value eq 'START-END';
-          my $temp = $value;
-          my ($start, $end ) = split(/-/, $temp);
-          my @seqs = values %{$self->{'_seqs'}};
-          my $seq_count = scalar @seqs;
-          my $query_seq = shift @seqs;
-          my $query_length = $query_seq->length;
-
-          # Check values are in correct format
-          if ($value !~/^\d+-\d+$/ ) {
-            $self->{'_error'}{'config_' .$opt} =  "Please specify location on the query sequence in the format 'START-END'";
-            return;
-          } elsif ( $seq_count != 1 ){
-            $self->{'_error'}{'config_'.$opt} =  "This option is only valid for a single query sequence";
-            return;
-          } elsif ($start > $end ){
-            $self->{'_error'}{'config_'. $opt} =  "Query start is higher than query end, please check the values you have entered";
-            return;
-          } elsif($start < 0 || $end > $query_length){
-            $self->{'_error'}{'config_'. $opt} =  "The coordinates you have entered are not valid for your query sequence";
-            return;
-          }
-        }
-      }
-    }
-  }
-
-  $self->{'_config'} = $options;
-}
-
-
 sub add_seq {
   my ($self, $seq, $seq_count, $seq_length, $error_type)  = @_;
   my $max_queries = 10;
@@ -560,390 +522,30 @@ sub add_seq {
 
 }
 
-sub workdir {
-  my $self = shift;
-  return  $self->species_defs->ENSEMBL_TMP_DIR_BLAST;
-}
-
-
-
-
-
-
-
-
-
-
-#----
-## ------------------------------------------------------------------------
-
-
-
-
-
-
-# sub long_caption {
-#   my $self = shift;
-#   return 'Tools' if $self->action ne 'BlastResults';
-# 
-#   my $caption =  sprintf ('<h1>Results for %s: <span class="small"><a href ="%s">[Change ticket]</a></span></h1>',
-#     $self->hub->param('tk'),
-#     $self->hub->url({ action => 'Summary', tk => undef})
-#   );
-# }
-
-#sub session_id    { return $_[0]->hub->session->session_id || undef;              }
-#sub user_id       { return $_[0]->hub->user ? $_[0]->hub->user->user_id : undef;  }
-#sub species_defs  { return $_[0]->hub->species_defs;                              }
-#sub ticket        { return $_[0]->Obj->{'_ticket'} || undef;                      }
-
-# sub create_ticket {
-#   ## Creates a ticket by adding an entry in the ticket db
-#   my $self        = shift;
-#   my $hub         = $self->hub;
-#   my $now         = $self->get_time_now;
-#   my $user        = $hub->user;
-#
-#   # First create and save ticket
-#   my $ticket = $self->rose_manager(qw(Tools Ticket))->create_empty_object({
-#     'owner_id'    => $user ? $user->user_id : $hub->session->session_id,
-#     'owner_type'  => $user ? 'user' : 'session',
-#     'job_type_id' => $self->rose_manager(qw(Tools JobType))->get_job_type_id_by_name($self->{'_analysis'}),
-#     'ticket_name' => $self->get_unique_ticket_name,
-#     'ticket_desc' => $self->{'_description'},
-#     'created_at'  => $now,
-#     'modified_at' => $now,
-#     'site_type'   => $self->species_defs->ENSEMBL_SITETYPE
-#   });
-#
-#   # Then create analysis object - this contains params needed to run job
-#   # create serialised and gzipped version of the analysis object to store in ticket DB.
-#   my $serialised_analysis = $self->serialise;
-#   $ticket->analysis(object => $$serialised_analysis);
-#
-#   # Finally save objects
-#   $ticket->save(cascade => 1);
-#
-#   return $ticket;
-# }
-
-# sub submit_job {
-#   my ($self, $ticket)  = @_;
-#
-#   my $analysis_adaptor  = $self->rose_manager(qw(Tools Analysis));
-#   my $serialised_object = $analysis_adaptor->retrieve_analysis_object($ticket->ticket_id);
-#   my $analysis_object = $self->deserialise($serialised_object);
-#   $analysis_object->create_jobs($ticket);
-#
-#   return;
-# }
-
-sub display_status {
-  my ($self, $job_status) = @_;
-
-  my %status_lookup = (
-    'SEMAPHORED'   => 'Pending',
-    'READY'        => 'Pending',
-    'BLOCKED'      => 'Pending',
-    'CLAIMED'      => 'Pending',
-    'COMPILATION'  => 'Pending',
-    'PRE_CLEANUP'  => 'Pending',
-    'FETCH_INPUT'  => 'Pending',
-    'RUN'          => 'Running',
-    'WRITE_OUTPUT' => 'Parsing',
-    'POST_CLEANUP' => 'Parsing',
-    'DONE'         => 'Completed',
-    'FAILED'       => 'Failed',
-    'PASSED_ON'    => 'Failed',
-  );
-  return $status_lookup{$job_status};
-}
-
-sub check_submission_status {
-  my ($self, $ticket) = @_;
-  return $ticket->status unless ref $ticket->sub_job;
-
-  # Set ticket status to be that of the sub job that has progressed the least
-  my %status_priority = (
-    'Queued'    => 0,
-    'Pending'   => 1,
-    'Running'   => 2,
-    'Parsing'   => 3,
-    'Completed' => 4,
-    'Failed'    => 5,
-    'Deleted'   => 6,
-  );
-
-  my $status;
-  foreach my $job (@{$ticket->sub_job}){
-    my $display_status = $self->get_hive_job_status($job->sub_job_id);
-    $status = $status_priority{$display_status} << $status_priority{$status} ? $display_status : $status
-    ;
-  }
-
-  # update status in ticket db
-  my $now = $self->get_time_now;
-  $ticket->status($status);
-  $ticket->modified_at($now);
-  if ($status eq 'Completed' || $status eq 'Failed') {
-    # If ticket is complete set all modified/created dates for data belonging to this ticket to be
-    # the same - that way all data will be in equivalent partitions and will be removed at same time
-    $ticket->analysis->modified_at($now);
-    foreach (@{$ticket->sub_job}){ $_->modified_at($now); }
-    foreach (@{$ticket->result}){ $_->modified_at($now); }
-  }
-  $ticket->save(cascade => 1);
-
-  return $status;
-}
-
-
-sub get_hive_job_status { ## TODO remove
-  my ($self, $hive_job_id) = @_;
-  my $job_adaptor = $self->hive_adaptor->get_AnalysisJobAdaptor;
-  my $job_status = $job_adaptor->fetch_by_dbID($hive_job_id)->status;
-
-  return  $self->display_status($job_status);
-}
-
-sub get_hive_job_message {
-  my ($self, $hive_job_id) = @_;
-  my $adaptor = $self->hive_adaptor->get_NakedTableAdaptor();
-  $adaptor->table_name('job_message');
-  my $job_message_record = $adaptor->fetch_by_job_id($hive_job_id);
-  my ($job_message, $line) = $job_message_record->{'msg'} =~/(.*)at(.*)$/;
-
-  return $job_message;
-}
-
-sub format_date { ## TODO ??? move to root?
-  my ($self, $datetime) = @_;
-  return unless $datetime;
-
-  my @date = split(/-|T|:/, $datetime);
-  $datetime = sprintf('%s/%s/%s, %s:%s',
-    $date[2],
-    $date[1],
-    $date[0],
-    $date[3],
-    $date[4]
-  );
-  return $datetime;
-}
-
-sub delete_ticket {
-  my ($self, $ticket_id) = @_;
-  my $ticket = $self->rose_manager(qw(Tools Ticket))->fetch_ticket_by_name($ticket_id);
-  return unless $ticket;
-
-  # First clean up any results files
-  my $work_dir =  $self->species_defs->ENSEMBL_TMP_DIR_BLAST;
-  my $file_directory = $work_dir ."/" . substr($ticket->ticket_name, 0, 6) ."/" . substr($ticket->ticket_name, 6);
-  my $parent_directory = $work_dir ."/" . substr($ticket->ticket_name, 0, 6);
-
-  if (-d $file_directory){
-    foreach my $sub_job (@{$ticket->sub_job}){
-      my $filename = $file_directory .'/'. $ticket->ticket_id . $sub_job->sub_job_id;
-      my @exts = ('seq.fa', 'seq.fa.masked', 'seq.fa.tab', 'seq.fa.out', 'seq.fa.raw');
-      foreach (@exts){
-        my $file = $filename .'.'. $_;
-        if ( -s $file ){
-          unlink($file);
-        }
-      }
-    }
-
-    unless (scalar <$file_directory/*>){ # remove directory if empty
-      rmdir($file_directory);
-    }
-  }
-
-  if (-d $parent_directory){
-    unless (scalar <$parent_directory/*>){ # remove directory if empty
-      rmdir($parent_directory);
-    }
-  }
-
-  # Then remove data from ticket database
-  if (ref $ticket->analysis){ $ticket->analysis->delete; }
-  if (ref $ticket->sub_job){ $ticket->sub_job([]); }
-  if (ref $ticket->result){$ticket->result([]);}
-  $ticket->save;
-  $ticket->delete;
-
-  return;
-}
-
-sub error_message {
-  my ($self, $ticket) = @_;
-  my $job_adaptor = $self->hive_adaptor->get_AnalysisJobAdaptor;
-  #my $job_message_adaptor = $self->hive_adaptor->getJobMessageAdaptor;
-
-  foreach my $job (@{$ticket->sub_job}){
-  }
-}
-
-#--------------------------------------------------
-sub serialise {
-#   my ($self, $object) = @_;
-# 
-#   $object = $self unless $object;
-# 
-#   delete $object->{data};
-#   my $serialised = nfreeze($object);
-#   my $serialised_gzip;
-#   gzip \$serialised => \$serialised_gzip, -LEVEL => 9 or die "gzip failed: $GzipError";
-# 
-#   return \$serialised_gzip;
-}
-
-sub deserialise {
-#   my ($self, $object) = @_;
-#   my $gunzipped_and_frozen;
-# 
-#   gunzip \$object => \$gunzipped_and_frozen or die "gunzip failed: $GunzipError";
-#   my $analysis_object = thaw($gunzipped_and_frozen);
-#   $analysis_object->{data} = $self->__data();
-# 
-#   return $analysis_object;
-}
-
-sub retrieve_analysis_object {
-  my $self = shift;
-  my $ticket = $self->ticket;
-  return undef unless $ticket;
-
-  my $analysis_adaptor  = $self->rose_manager(qw(Tools Analysis));
-  my $serialised_object = $analysis_adaptor->retrieve_analysis_object($ticket->ticket_id);
-  return undef unless $serialised_object;
-
-  my $analysis_object = $self->deserialise($serialised_object);
-  return $analysis_object
-}
-
-sub get_time_now {
-  my $self = shift;
-  my ($sec, $min, $hour, $day, $mon, $year) = localtime();
-  my $now = (1900+$year).'-'.sprintf('%02d', $mon+1).'-'.sprintf('%02d', $day).' '
-              .sprintf('%02d', $hour).':'.sprintf('%02d', $min).':'.sprintf('%02d', $sec);
-  return $now;
-}
-
-sub get_unique_ticket_name {
-  my $self = shift;
-  my $unique;
-
-  while (!$unique ) {
-   my $template = "BLA_XXXXXXXX";
-   $template =~ s/X/['0'..'9','A'..'Z','a'..'z']->[int(rand 54)]/ge;
-   unless ($self->rose_manager(qw(Tools Ticket))->fetch_ticket_by_name($template)) {
-    $unique = $template;
-   }
-  }
-
-  return $unique;
-}
-
-#--------------------- Blast result calls ? may not belong here!
-
-sub get_blast_method {
-  my $self  = shift;
-  my $analysis_object = $self->retrieve_analysis_object;
-  my $method = $analysis_object->{'_methods'};
-  return $method;
-}
-
-sub get_hit_db_entry {
-  my ($self, $result_id) = @_;
-  my $result_adaptor  = $self->rose_manager(qw(Tools Result));
-  my $result_entry = shift @{$result_adaptor->fetch_result_by_result_id($result_id)};
-  return $result_entry;
-}
-
-sub get_job_division_data {
-  my ($self, $result_entry) = @_;
-  my $frozen_division = $result_entry->sub_job->job_division;
-  my $job_division = $self->deserialise($frozen_division);
-  return $job_division;
-}
-
-sub fetch_blast_hit_by_id {
-  my ($self, $result_id) = @_;
-
-  # retrieve hit
-  my $result_entry = $self->get_hit_db_entry($result_id);
-  my $frozen_hit = $result_entry->result;
-  my $hit = $self->deserialise($frozen_hit);
-  return $hit;
-}
-
-sub get_hit_species {
-  my ($self, $result_id)  = @_;
-
-  # retrieve hit
-  my $result_entry = $self->get_hit_db_entry($result_id);
-  my $frozen_hit = $result_entry->result;
-  my $hit = $self->deserialise($frozen_hit);
-
-  my $job_division = $self->get_job_division_data($result_entry);
-  my $species = $job_division->{'species'};
-
-  return $species;
-}
-
-sub get_ticket_hits_by_coords{
-  my ($self, $coords, $ticket_id, $species) = @_;
-
-  my $slice_adaptor = $self->database('core', $species)->get_SliceAdaptor;
-  my $slice = $slice_adaptor->fetch_by_toplevel_location($coords);
-
-  return $self->get_all_hits_from_ticket_in_region($slice, $ticket_id);
-}
-
-sub get_all_hits_from_ticket_in_region {
-  my ($self, $slice, $id) = @_;
-  my $ticket_id = $id || $self->ticket->ticket_id;
-  my @aligned_hits;
-
-
-  my $result_adaptor = $self->rose_manager(qw(Tools Result));
-  my @result_objects = @{$result_adaptor->fetch_all_results_in_region($ticket_id, $slice)};
-  foreach (@result_objects) {
-    my $frozen_gzipped_hit = $_->result;
-    my $hit = $self->deserialise($frozen_gzipped_hit);
-    push @aligned_hits, [$_->result_id, $hit];
-  }
-
-  return \@aligned_hits;
-}
-
-
 sub map_btop_to_genomic_coords {
   my ($self, $hit, $result_id) = @_;
 
-  return $hit->{'galn'} if $hit->{'galn'};
+#   my $result = $self->job->result->[0];
+# 
+#   $result->result_da
 
-  my $result = $self->get_hit_db_entry($result_id);
+  return $hit->{'galn'} if $hit->{'galn'}; ## TODO - cache in db for later use
 
-  my $btop = $hit->{'aln'};
+  my $btop      = $hit->{'aln'};
   chomp $btop;
   my $genomic_btop;
-  my $coords = $hit->{'g_coords'} || undef;
+  my $coords    = $hit->{'g_coords'} || undef;
+  my $source_type = $hit->{'db_type'}; # TODO - change 'db_type' to 'source' when writing the results to make it consistant
 
-  #### temp for testing! ####
-  $hit->{'db_type'} = 'cdna';
-
-  my $target_object = $self->get_target_object($hit);
-  my $mapping_type = $hit->{'db_type'} =~/pep/i ? 'pep2genomic' : 'cdna2genomic';
-
+  my $target_object = $self->get_target_object($hit, $source_type);
+  my $mapping_type = $source_type =~/pep/i ? 'pep2genomic' : 'cdna2genomic';
 
   my $gap_start = $coords->[0]->end;
   my $gap_count = scalar @$coords;
   my $processed_gaps = 0;
 
   # reverse btop string if necessary so always dealing with + strand genomic coords
-  my $object_strand = $target_object->isa('Bio::EnsEMBL::Translation') ? $target_object->translation->start_Exon->strand :
-                      $target_object->strand;
+  my $object_strand = $target_object->isa('Bio::EnsEMBL::Translation') ? $target_object->translation->start_Exon->strand : $target_object->strand;
 
   my $rev_flag = $object_strand ne $hit->{'tori'} ? 1 : undef;
 
@@ -1085,15 +687,15 @@ sub map_btop_to_genomic_coords {
   $genomic_btop .= $btop_end;
 
   # Write back to database so we only have to do this once
-  $hit->{'galn'} = $genomic_btop;
-  delete $hit->{'data'};
+#   $hit->{'galn'} = $genomic_btop;
+#   delete $hit->{'data'};
 
 #   my $serialised_hit = nfreeze($hit);
 #   my $serialised_gzip;
 #   gzip \$serialised_hit => \$serialised_gzip, -LEVEL => 9 or die "gzip failed: $GzipError";
 
 #  $result->result($serialised_hit);
-  $result->save;
+#  $result->save;
 
   return $genomic_btop;
 }
@@ -1119,9 +721,14 @@ sub reverse_btop {
   return $new_btop;
 }
 
-#------------------------------------------------
-
-sub valid_analysis { # check that the analysis param matches an analysis type we have
+sub get_hit_genomic_slice {
+  my ($self, $hit, $species, $flank5, $flank3) = @_; 
+  my $start = $hit->{'gstart'} < $hit->{'gend'} ? $hit->{'gstart'} : $hit->{'gend'};
+  my $end = $hit->{'gstart'} > $hit->{'gend'} ? $hit->{'gstart'} : $hit->{'gend'};
+  my $coords = $hit->{'gid'}.':'.$start.'-'.$end.':'.$hit->{'gori'}; 
+  my $slice_adaptor = $self->hub->get_adaptor('get_SliceAdaptor', 'core', $species);
+  my $slice = $slice_adaptor->fetch_by_toplevel_location($coords); 
+  return $flank5 || $flank3 ? $slice->expand($flank5, $flank3) : $slice;
 }
 
 
