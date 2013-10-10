@@ -35,11 +35,6 @@ sub content {
   });
 
   $fieldset->add_hidden({
-    'name'            => 'ensembl_tool',
-    'value'           => 'Blast',
-  });
-
-  $fieldset->add_hidden({
     'name'            => 'max_sequence_length',
     'value'           => MAX_SEQUENCE_LENGTH,
   });
