@@ -51,16 +51,23 @@ sub get_hit_pointers {
   my $pointer_style = $self->blast_pointer_style;
 
   my @features      = map {
-    my $hit = $_->result_data;
+    my $hit_id        = $_->result_id;
+    my $hit           = $_->result_data;
     {
-      'region'        => $hit->{'gid'},
-      'start'         => $hit->{'gstart'},
-      'end'           => $hit->{'gend'},
-      'p_value'       => 1 + $hit->{'pident'} / 100,
-      'strand'        => $hit->{'gori'},
-      'label'         => 'Test', #TODO
-      'href'          => $hub->url({ type => 'ZMenu', action => 'Blast', 'tl' => 'TODO', 'sp' => $species}), #TODO
-      'html_id'       => 'hsp_' . $_->{'result_id'}
+      'region'          => $hit->{'gid'},
+      'start'           => $hit->{'gstart'},
+      'end'             => $hit->{'gend'},
+      'p_value'         => 1 + $hit->{'pident'} / 100,
+      'strand'          => $hit->{'gori'},
+      'label'           => 'Test', #TODO
+      'href'            => $hub->url({
+        'species'         => $species,
+        'type'            => 'ZMenu',
+        'action'          => 'Blast',
+        'function'        => '',
+        'tl'              => $object->create_url_param({'result_id' => $hit_id}),
+      }),
+      'html_id'         => "hsp_$hit_id"
     }
   } @$results;
 
