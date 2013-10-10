@@ -50,6 +50,10 @@ sub content {
       ## Omit archive links from static content, which tends to change a lot
       $html .= ' - <a class="modal_link" id="a_link" href="/Help/ArchiveList">View in archive site</a>';
     }
+    ## Hack to avoid replicating this entire module in our archive plugin just for one link!
+    if ($sd->ENSEMBL_SERVERNAME =~ /archive/) {
+      $html .= qq( - <a href="http://www.ensembl.org$you_are_here">View in current Ensembl</a>);
+    }
   }
   $html .= '</p></div>';
   return $html;
