@@ -1,3 +1,4 @@
+#
 _list_string = (singular,plural,data,tail,flip,wrap) ->
   head = (if data.length > 1 then plural else singular)
   tail ?= ''
@@ -63,6 +64,24 @@ window.fixes.fix_g_variation =
                 if m[1].indexOf(pattern) != -1
                   type = t
               if type then data.tp2_row.add_value('bracketed-title',type,290)
+
+        # Distinguish probe and probeset urls
+        data.tp2_row.register 300, () ->
+          if data.tp2_row.best('feature_type') != 'ProbeFeature' then return
+          desc = data.tp2_row.best('description')
+          data.tp2_row.candidate('probeset',desc.match(/probeset/)?,100)
+          data.tp2_row.candidate('probeorset',1,100)
+        
+        # Restructure probeset and probe urls
+        data.tp2_row.register 400, () ->
+          if not data.tp2_row.best('probeorset') then return
+          url = data.tp2_row.best('url')
+          if not url? then return
+          m = url.match(/^(.*)\?.*id=([^;,]+)/)
+          if not m? then return
+          new_url = m[1]+"?fdb=funcgen;ftype=ProbeFeature;id="+m[2]
+          if data.tp2_row.best('probeset') then new_url += ";ptype=pset"
+          data.tp2_row.candidate('url',new_url,500)
 
         # Standardise phenotypes
         data.tp2_row.register 500, () ->

@@ -2744,6 +2744,34 @@
               }
             }
           });
+          data.tp2_row.register(300, function() {
+            var desc;
+            if (data.tp2_row.best('feature_type') !== 'ProbeFeature') {
+              return;
+            }
+            desc = data.tp2_row.best('description');
+            data.tp2_row.candidate('probeset', desc.match(/probeset/) != null, 100);
+            return data.tp2_row.candidate('probeorset', 1, 100);
+          });
+          data.tp2_row.register(400, function() {
+            var m, new_url, url;
+            if (!data.tp2_row.best('probeorset')) {
+              return;
+            }
+            url = data.tp2_row.best('url');
+            if (url == null) {
+              return;
+            }
+            m = url.match(/^(.*)\?.*id=([^;,]+)/);
+            if (m == null) {
+              return;
+            }
+            new_url = m[1] + "?fdb=funcgen;ftype=ProbeFeature;id=" + m[2];
+            if (data.tp2_row.best('probeset')) {
+              new_url += ";ptype=pset";
+            }
+            return data.tp2_row.candidate('url', new_url, 500);
+          });
           data.tp2_row.register(500, function() {
             var cosmic, csites, ctype, forms, i, k, m, p, parts, std, str, type, v, vp, vpr, x, _i, _j, _k, _len, _len1, _len2, _name, _ref4, _results;
             vpr = data.tp2_row.all_values('v-phenotypes-raw');
