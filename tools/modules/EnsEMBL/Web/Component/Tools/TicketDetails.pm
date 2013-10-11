@@ -21,7 +21,7 @@ sub content {
 
   return $ticket
     ? sprintf(q(<h3>Job%s for %s ticket %s</h3>%s), @{$ticket->job} > 1 ? 's' : '', $ticket->ticket_type->ticket_type_caption, $ticket->ticket_name, $self->content_ticket($ticket))
-    : sprintf(q(<p>Ticket with name '%s' could not be found.</p>), $hub->param('tk'))
+    : sprintf(q(<p>Requested ticket could not be found.</p>))
   ;
 }
 
