@@ -165,47 +165,31 @@ sub create_ticket {
   $self->submit_jobs_to_hive($ticket);
 }
 
-sub delete_ticket { ## TODO - rewrite
-  my ($self, $ticket_id) = @_;
-  my $ticket = $self->rose_manager(qw(Tools Ticket))->fetch_ticket_by_name($ticket_id);
-  return unless $ticket;
+sub delete_ticket_or_job {
+  ## Deletes a ticket (or just a job linked to a ticket) according to the URL params
+  ## @return 1 if deleted successfully, undef if there was a problem
+  my $self    = shift;
+  my $params  = $self->parse_url_param;
 
-  # First clean up any results files
-  my $work_dir =  $self->species_defs->ENSEMBL_TMP_DIR_BLAST;
-  my $file_directory = $work_dir ."/" . substr($ticket->ticket_name, 0, 6) ."/" . substr($ticket->ticket_name, 6);
-  my $parent_directory = $work_dir ."/" . substr($ticket->ticket_name, 0, 6);
+  my ($ticket, $job);
 
-  if (-d $file_directory){
-    foreach my $sub_job (@{$ticket->sub_job}){
-      my $filename = $file_directory .'/'. $ticket->ticket_id . $sub_job->sub_job_id;
-      my @exts = ('seq.fa', 'seq.fa.masked', 'seq.fa.tab', 'seq.fa.out', 'seq.fa.raw');
-      foreach (@exts){
-        my $file = $filename .'.'. $_;
-        if ( -s $file ){
-          unlink($file);
-        }
-      }
+  if ($params->{'job_id'}) {
+
+    $job = $self->get_requested_job;
+
+    if ($job) {
+      $ticket = $job->ticket;
+      $ticket = undef if $ticket->job_count > 1; # don't delete it if there are more jobs linked to it
     }
 
-    unless (scalar <$file_directory/*>){ # remove directory if empty
-      rmdir($file_directory);
-    }
+  } elsif ($params->{'ticket_name'}) {
+    $ticket = $self->get_requested_ticket;
   }
 
-  if (-d $parent_directory){
-    unless (scalar <$parent_directory/*>){ # remove directory if empty
-      rmdir($parent_directory);
-    }
-  }
+  ## TODO - delete related hive job and work dir
 
-  # Then remove data from ticket database
-  if (ref $ticket->analysis){ $ticket->analysis->delete; }
-  if (ref $ticket->sub_job){ $ticket->sub_job([]); }
-  if (ref $ticket->result){$ticket->result([]);}
-  $ticket->save;
-  $ticket->delete;
-
-  return;
+  return 1 if $ticket && $ticket->delete;
+  return 1 if $job && $job->delete;
 }
 
 sub submit_jobs_to_hive {
