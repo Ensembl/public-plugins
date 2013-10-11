@@ -11,9 +11,9 @@
     }
 
     TextProc2.prototype.candidate = function(key, value, priority) {
-      var _ref;
+      var _ref, _ref1;
       if (priority == null) {
-        priority = (_ref = this.candidates[key].priority) != null ? _ref : 0;
+        priority = (_ref = (_ref1 = this.candidates[key]) != null ? _ref1.priority : void 0) != null ? _ref : 0;
       }
       if (value == null) {
         return;

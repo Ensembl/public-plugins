@@ -6,7 +6,7 @@ class TextProc2
 
   ## CANDIDATES ##
   candidate: (key,value,priority) ->
-    if not priority? then priority = @candidates[key].priority ? 0
+    if not priority? then priority = @candidates[key]?.priority ? 0
     if not value? then return
     if (not @candidates[key]?) or @candidates[key].priority < priority
       @candidates[key] = { value, priority }
