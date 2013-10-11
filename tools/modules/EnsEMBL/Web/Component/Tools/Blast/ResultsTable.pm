@@ -116,7 +116,7 @@ sub all_links {
       'species'   => $species,
       'type'      => 'Tools',
       'action'    => 'Blast',
-      'function'  => 'Alignment',
+      'function'  => $job_data->{'db_type'} eq 'peptide' || $job_data->{'query_type'} eq 'peptide' ? 'ProteinAlignment' : 'Alignment',
       'tl'        => $url_param
     })),
 
