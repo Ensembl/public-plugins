@@ -342,7 +342,7 @@
           return els.click(function() {
             var q;
             q = els.parents('.se_search').find('.replacement_filter input:not(.solr_ghost)').val();
-            return $(document).trigger('update_state', {
+            return $(document).trigger('maybe_update_state', {
               q: q,
               page: 1
             });
@@ -356,7 +356,7 @@
             if (e.keyCode === 13) {
               $(this).trigger("blur");
               $(this).searchac('close');
-              return $(document).trigger('update_state', {
+              return $(document).trigger('maybe_update_state', {
                 q: $(this).val(),
                 page: 1
               });
@@ -365,6 +365,17 @@
         }
       },
       postproc: function(el, data) {
+        $(document).on('maybe_update_state', function(e, change) {
+          var _ref;
+          $.getJSON("/Multi/Ajax/psychic", {
+            q: (_ref = change.q) != null ? _ref : ''
+          }, function(data) {
+            if (data != null ? data.redirect : void 0) {
+              return window.location.href = data.url;
+            }
+          });
+          return $(document).trigger('update_state', change);
+        });
         return $(document).on('first_result', function(e, query, data) {
           var f, filter, ids, left, right, texts, title, _i, _len, _ref, _ref1,
             _this = this;

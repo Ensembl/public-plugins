@@ -2,7 +2,7 @@ use strict;
 
 package EnsEMBL::Solr::SiteDefs;
 sub update_conf {
-  $SiteDefs::ENSEMBL_SOLR_ENDPOINT = "http://solr-slave-ensembl-odd.sanger.ac.uk/solr-sanger/ensembl_core/ensemblshards";
+#  $SiteDefs::ENSEMBL_SOLR_ENDPOINT = "http://solr-slave-ensembl-odd.sanger.ac.uk/solr-sanger/ensembl_core/ensemblshards";
 #  $SiteDefs::ENSEMBL_SOLR_ENDPOINT = "http://ec2-50-19-198-203.compute-1.amazonaws.com:8000/solr-sanger/ensembl_core/ensemblshards";
   $SiteDefs::OBJECT_TO_SCRIPT->{'Search'} = "AltPage";
 

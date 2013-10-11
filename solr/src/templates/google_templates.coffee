@@ -320,7 +320,7 @@ window.google_templates =
       '.search_button': (els,data) ->
         els.click =>
           q = els.parents('.se_search').find('.replacement_filter input:not(.solr_ghost)').val()
-          $(document).trigger('update_state',{ q, page: 1 })
+          $(document).trigger('maybe_update_state',{ q, page: 1 })
       'input': (els,data) ->
         $(document).on 'first_result', (e,query,data) ->
           els.val(query.q)
@@ -328,8 +328,13 @@ window.google_templates =
           if e.keyCode == 13
             $(this).trigger("blur")
             $(this).searchac('close')
-            $(document).trigger('update_state',{ q: $(this).val(), page: 1 })
+            $(document).trigger('maybe_update_state',{ q: $(this).val(), page: 1 })
     postproc: (el,data) ->
+      $(document).on 'maybe_update_state', (e,change) ->
+        $.getJSON "/Multi/Ajax/psychic",{ q: change.q ? '' }, (data) ->
+          if data?.redirect
+            window.location.href = data.url
+        $(document).trigger('update_state',change)
       $(document).on 'first_result', (e,query,data) ->
         filter = $('.replacement_filter',el)
         texts = []
