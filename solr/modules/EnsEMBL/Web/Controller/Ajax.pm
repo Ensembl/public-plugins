@@ -190,6 +190,35 @@ sub echo { # XXX For table downloads, shouldn't be in search plugin
   print $hub->param('data'); 
 }
 
+sub psychic { # Invoke psychic via AJAX, to see if we need to redirect.
+  my ($self,$hub) = @_;
+
+  # XXX this is a horrible way to do it: we should somehow create a
+  #   fake call to psychic or else make psychic more flexible to allow
+  #   internal calls to its own algorithm.
+  my $ua = LWP::UserAgent->new;
+  my $proxy = $hub->species_defs->ENSEMBL_WWW_PROXY;
+  $ua->proxy('http',$proxy) if $proxy;
+  $ua->requests_redirectable([]);
+  my $psychic = $hub->species_defs->ENSEMBL_BASE_URL.
+             "/Multi/psychic?q=".uri_escape($hub->param('q'));
+  my $response = $ua->get($psychic);
+  my $location;
+  if($response->is_redirect) {
+    $location = $response->header("Location");
+    if($location and
+         ($location =~ m!^/[^/]+/psychic! or
+          $location =~ m!/Search/Results?!  )) {
+      $location = undef;
+    }
+  }
+  if($location) {
+    print to_json({ redirect => 1, url => $location });
+  } else {
+    print to_json({ redirect => 0 });
+  }     
+}
+
 # XXX configurable disable
 sub report_error {
   my ($self,$hub) = @_;
