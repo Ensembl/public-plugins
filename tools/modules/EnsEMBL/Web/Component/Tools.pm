@@ -42,15 +42,15 @@ sub expand_job_status {
 
   my $icons_bar;
   my $icons = { $job_status eq 'done' ? (
-    'results' => {'icon' => 'view_icon',    'title' => 'View results',        'url' => {'function' => 'Results',  'tl' => $url_param}} ) : (),
-    'edit'    => {'icon' => 'edit_icon',    'title' => 'Edit &amp; resubmit', 'url' => {'function' => 'Edit',     'tl' => $url_param}},
-    'delete'  => {'icon' => 'delete_icon',  'title' => 'Delete',              'url' => {'function' => 'Delete',   'tl' => $url_param}}
+    'results' => {'icon' => 'view_icon',    'title' => 'View results',        'url' => [        {'function' => 'Results',   'tl' => $url_param}]  } ) : (),
+    'edit'    => {'icon' => 'edit_icon',    'title' => 'Edit &amp; resubmit', 'url' => [        {'function' => 'Edit',      'tl' => $url_param}]  },
+    'delete'  => {'icon' => 'delete_icon',  'title' => 'Delete',              'url' => ['Json', {'function' => 'delete',    'tl' => $url_param}]  }
   };
   foreach my $link (@{($params || {})->{'links'} || []}) {
     if ($icons->{$link}) {
       $icons_bar ||= $job_status_div->append_child('p', {'class' => 'job-links'});
       $icons_bar->append_child('a', {
-        'href'      => $hub->url($icons->{$link}{'url'}),
+        'href'      => $hub->url(@{$icons->{$link}{'url'}}),
         'children'  => [{
           'node_name' => 'span',
           'class'     => ['sprite', $icons->{$link}{'icon'}, '_ht'],
