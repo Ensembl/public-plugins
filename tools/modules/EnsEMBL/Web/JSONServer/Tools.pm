@@ -25,4 +25,13 @@ sub json_read_file {
 
 }
 
+sub json_delete {
+  my $self    = shift;
+  my $object  = $self->object;
+  
+  $object->delete_ticket_or_job;
+
+  return {'panelMethod' => ['refreshJobsList']};
+}
+
 1;
