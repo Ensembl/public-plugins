@@ -7,12 +7,6 @@ use base qw(EnsEMBL::Web::Component::Tools);
 
 use EnsEMBL::Web::Exceptions;
 
-sub _init {
-  my $self = shift;
-  $self->cacheable(0);
-  $self->ajaxable(1);
-}
-
 sub content {
   my $self    = shift;
   my $object  = $self->object;
