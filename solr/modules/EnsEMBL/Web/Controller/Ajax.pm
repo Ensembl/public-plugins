@@ -130,8 +130,10 @@ sub extra_bt_colour {
   my $key;
   $key = 'merged' if $obj->analysis->logic_name =~ /ensembl_havana/;
   $key = $obj->biotype unless $key;
+  my $largekey = $obj->analysis->logic_name.'_'.$key;
   my $sets = $hub->species_defs->get_config('MULTI','COLOURSETS');
-  my $name = $sets->{'gene'}{$key}{'default'};
+  my $name = $sets->{'gene'}{$largekey}{'default'} ||
+             $sets->{'gene'}{$key}{'default'};
   return $hub->colourmap->hex_by_name($name);
 }
 
