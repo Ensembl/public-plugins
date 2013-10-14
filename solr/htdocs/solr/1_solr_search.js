@@ -733,7 +733,7 @@
     };
 
     Hub.prototype.service = function() {
-      var changed, request,
+      var changed, favs, request, rigid,
         _this = this;
       if (this.first_service) {
         if (document.documentMode && document.documentMode < 8) {
@@ -745,7 +745,12 @@
       this.ddg_style_search();
       this.remove_unused_params();
       request = this.request();
-      request.set_rigid_order([['species', [$.solr_config('user.favs.species')], 100]]);
+      rigid = [];
+      favs = $.solr_config('user.favs.species');
+      if (favs.length) {
+        rigid.push(['species', [favs], 100]);
+      }
+      request.set_rigid_order(rigid);
       if (this.first_service) {
         if (parseInt(this.params.perpage) === 0) {
           this.replace_url({

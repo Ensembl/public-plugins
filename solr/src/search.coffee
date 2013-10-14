@@ -382,11 +382,11 @@ class Hub
     @ddg_style_search()
     @remove_unused_params()
     request = @request() 
-    request.set_rigid_order [
-      ['species',[$.solr_config('user.favs.species')],100]
-# re-enable if genes should always be top
-#      ['feature_type',[['Gene']],10]
-    ]
+    rigid = []
+    favs = $.solr_config('user.favs.species')
+    if favs.length
+      rigid.push ['species',[favs],100]
+    request.set_rigid_order(rigid)
     if @first_service
       if parseInt(@params.perpage) == 0 # Override "all" on first load
         @replace_url({ perpage: 10 })
