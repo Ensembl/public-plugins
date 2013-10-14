@@ -7,7 +7,8 @@ use EnsEMBL::Web::Tools::MethodMaker(copy => ['init','_init2']);
 
 sub init {
   my ($self,@rest) = @_;
-  $self->add_solr if $self->hub->type eq 'Search';
+  my $type = $self->hub->type;
+  $self->add_solr if $type and $type eq 'Search';
   $self->_init2(@rest);
 }
 
