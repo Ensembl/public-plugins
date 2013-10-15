@@ -18,7 +18,6 @@ use strict;
 use warnings;
 no warnings "uninitialized";
 
-
 use base qw(EnsEMBL::Web::Object::Tools);
 
 use IO::Scalar;
@@ -28,77 +27,31 @@ use EnsEMBL::Web::SpeciesDefs;
 use EnsEMBL::Web::ExtIndex;
 use EnsEMBL::Web::TmpFile::Text;
 use Bio::EnsEMBL::Variation::Utils::VEP qw(detect_format);
+use EnsEMBL::Web::Command::UserData;
 
 our $VERBOSE = 1;
 
 sub new {
   my $class = shift;
-  my $self = $class->SUPER::new( @_ );
-  $self->{'_analysis'}    = 'VEP';
-  $self->{'_species'}     = '';
+  my $self  = $class->SUPER::new( @_ );
+
   $self->{'_error'}       = {};
+  $self->{'_analysis'}    = {};
+  $self->{'_species'}     = ();
   $self->{'_description'} = '';
-  $self->{'_config'}      = {};
+  $self->{'_config'} = {};
 
   return $self;
 }
 
-sub create_jobs {
-  my ($self, $ticket) = @_;
+sub ticket_prefix {
+  ## Abstract method implementation
+  return 'VEP_';
+}
 
-  my $hive_adaptor = $self->hive_adaptor;
-  my $job_adaptor = $hive_adaptor->get_AnalysisJobAdaptor;
-  my $analysis_name = $ticket->job_type->name;
-  my $hive_analysis = $hive_adaptor->get_AnalysisAdaptor->fetch_by_logic_name_or_url($analysis_name);    
-  my @hive_jobs = ();
-  
-  my $species = $self->{'_species'};
-
-  # add DB connection params
-  my $dba = $self->hub->database('core', $species);
-  my $dbc = $dba->dbc;
-  my $config = $self->{'_config'};
-  $config->{user} = $dbc->username;
-  $config->{host} = $dbc->host;
-  $config->{port} = $dbc->port;
-  $config->{pass} = $dbc->password if $dbc->password;
-
-  my %input = (
-    ticket        => $ticket->ticket_id,
-    ticket_name   => $ticket->ticket_name,
-    species       => lc($species),
-    config        => $self->{'_config'},
-    ticket_dbc    => {
-      -user             => $self->species_defs->DATABASE_WRITE_USER,
-      -pass             => $self->species_defs->DATABASE_WRITE_PASS,
-      -host             => $self->species_defs->multidb->{'DATABASE_WEB_TOOLS'}{'HOST'},
-      -port             => $self->species_defs->multidb->{'DATABASE_WEB_TOOLS'}{'PORT'},
-      -dbname           => $self->species_defs->multidb->{'DATABASE_WEB_TOOLS'}{'NAME'}
-    }
-  );
-
-  # Pass job to ensembl-hive 
-  my $job_id = $job_adaptor->CreateNewJob(
-    -input_id => \%input,
-    -analysis => $hive_analysis,
-  );
-
-  my $job_division = {
-    species => $species,
-  };
-
-  my $serialised_division = $self->serialise($job_division);  
-  push (@hive_jobs, {
-    ticket_id => $ticket->ticket_id,
-    sub_job_id => $job_id,
-    job_division => $$serialised_division
-  }) if $job_id != 0;
-  
-  $ticket->sub_job(\@hive_jobs);
-  $ticket->save(cascade => 1);
-  $self->check_submission_status($ticket);
-
-  return;
+sub ticket_type {
+  ## Abstract method implementation
+  return 'VEP';
 }
 
 sub get_unique_ticket_name {
@@ -116,91 +69,64 @@ sub get_unique_ticket_name {
   return $unique;
 }
 
-##----------------------------------------------------------- BLAST set up
-sub species_defs  { return new EnsEMBL::Web::SpeciesDefs; }
+sub process_job_for_hive_submission {
+  ## Abstract method implementation
+  my ($self, $job) = @_;
 
-sub get_blast_form_params {
-  my $self    = shift;
-  my $species = shift || $self->species;
-  my $query   = shift || 'dna';
-  my $db_type = shift || 'dna';
-  my $db_name = shift || '';
-  my $me      = shift || '';
+  my $job_data = $job->job_data->raw;
 
-  my ( @methods, @databases, $default_me, $default_db, $valid_method, $valid_db );
-  my $species_defs = $self->species_defs;
+  my $hub   = $self->hub;
+  my $dba   = $hub->database('core', $job_data->{'species'});
+  my $dbc   = $dba->dbc;
+  my $sd    = $hub->species_defs;
 
-  if ( $query eq 'dna'){ $default_me = $db_type eq 'dna' ? 'BLASTN'   : 'BLASTX'; }
-  else { $default_me = $db_type eq 'dna' ? 'TBLASTN' : 'BLASTP'; }
+  $job_data->{'dba'}  = {
+    -user               => $dbc->username,
+    -host               => $dbc->host,
+    -port               => $dbc->port,
+    -pass               => $dbc->password,
+    -dbname             => $dbc->dbname,
+    -driver             => $dbc->driver,
+    -species            => $dba->species,
+    -species_id         => $dba->species_id,
+    -multispecies_db    => $dba->is_multispecies,
+    -group              => $dba->group
+  };
 
-  $default_db = $db_type eq 'dna' ? 'LATESTGP' : 'PEP_ALL';
-  unless ($db_name =~/^\w+/ ){ $db_name = $default_db; }
-
-  my $method_conf = $species_defs->multi_val('ENSEMBL_BLAST_METHODS');
-  foreach my $method (sort keys %$method_conf ){
-    next if $method eq 'BLAT'; # disable until have working
-    my $method_query_type = $method_conf->{$method}->[1];
-    my $method_db_type = $method_conf->{$method}->[2];
-    $method_query_type  =~ s/peptide/protein/;
-    $method_db_type =~ s/peptide/protein/;
-    if ( $query eq $method_query_type && $db_type eq $method_db_type){
-      next if $species eq 'Dasypus_novemcinctus' && $method eq 'BLAT';
-      next if $db_name ne 'LATESTGP' && $method eq 'BLAT';
-      $valid_method = 1 if $me eq $method;
-      push @methods, $method;
-    }
-  }
-
-
-
-  if ( $me && $valid_method){ $default_me = $me;}
-  else  { $me = $default_me; }
-
-
-  my $conf = $species_defs->get_config($species , $me ."_DATASOURCES");
-  foreach my $db (sort keys %$conf ){
-    next if $db =~/^DATASOURCE/; 
-    my $label = $conf->{$db}->{'label'};
-    push @databases, { value => $db, name => $label };
-    $valid_db = 1 if $db eq $db_name;
-  }
-
-  if ( $db_name && $valid_db){ $default_db = $db_name; }
-
-  return (\@databases, \@methods, $default_db, $default_me);
+  return $job_data;
 }
 
 
 
 ##----------------------------------------------------------- Form input validation
-sub validate_form_input {
+sub form_inputs_to_jobs_data {
   my $self = shift;
-  my $cmnd = shift;
   
   $self->process_species;
-  $self->process_input_data($cmnd);
+  $self->process_input_data;
   $self->process_description; 
   $self->process_config;
   $self->configure_script_output;
+  #return keys %{$self->{'_error'}} ? $self->{'_error'} : undef;
   
-  use Data::Dumper;
-  $Data::Dumper::Maxdepth = 3;
-  warn Dumper $self->{'_error'};
-
-  return keys %{$self->{'_error'}} ? $self->{'_error'} : undef;
+  return [{
+    'job_desc'    => $self->{description},
+    'species'     => $self->{species},
+    'config'      => $self->{_config}
+  }];
 }
 
 sub process_species {
   my $self = shift;
-  $self->{'_species'} = $self->param('species');
+  $self->{'species'} = $self->param('species');
   return;
 }
 
 sub process_input_data {
   my $self = shift;
-  my $cmnd = shift;
   
   my $hub = $self->hub;
+  my $cmnd = EnsEMBL::Web::Command::UserData->new({object => $self, hub => $hub});
   my $format = $self->param('format');
   $self->param(text => $self->param('text_'.$format));
   
@@ -224,6 +150,8 @@ sub process_input_data {
       my $tempdata = $hub->session->get_data(type => 'upload', code => $response->{code});
       
       if($tempdata && $tempdata->{'filename'}) {
+        print STDERR "FILENAME ".$tempdata->{filename}."\n";
+        
         my $file = EnsEMBL::Web::TmpFile::Text->new(filename => $tempdata->{'filename'});
         
         # check file format
@@ -261,9 +189,9 @@ sub process_input_data {
 sub process_description {
   my $self = shift;
 
-  my $desc = 'VEP analysis of '.$self->{_file_description}.' in '.$self->{_species};
+  my $desc = 'VEP analysis of '.$self->{_file_description}.' in '.$self->{species};
 
-  $self->{'_description'} = $desc;
+  $self->{'description'} = $desc;
 }
 
 sub process_config {
@@ -275,7 +203,7 @@ sub process_config {
   $config->{format} = $self->param('format');
   
   # species
-  my $species = $self->{'_species'};
+  my $species = $self->{'species'};
   $config->{species} = lc($species);
   
   # refseq
@@ -326,7 +254,7 @@ sub process_config {
   }
   
   # extra and identifiers
-  for(qw(numbers canonical domains biotype hgnc ccds protein hgvs coding_only)) {
+  for(qw(numbers canonical domains biotype symbol ccds protein hgvs coding_only)) {
     $config->{$_} = $self->param($_) if $self->param($_);
   }
 }
@@ -378,8 +306,39 @@ sub _tmp_file {
 
 # post-run methods
 
+sub get_tmp_file_objs {
+  my $self = shift;
+  my $job    = $self->get_requested_job({'with_all_results' => 1});
+  
+  return unless defined $job;
+  
+  my $job_data = $job->job_data;
+  return unless $job_data && $job_data->{config};
+  
+  my $tmp_dir = $self->hub->species_defs->ENSEMBL_TMP_DIR;
+  
+  foreach my $key(grep {!defined($self->{'_'.$_})} grep {/file/} keys %{$job_data->{config}}) {
+    my $class = $key =~ /output/ ? 'VcfTabix' : 'Text';
+    my $class_path = 'EnsEMBL::Web::TmpFile::'.$class;
+    
+    my $file_path = $job_data->{config}->{$key};
+    
+    # remove tmp dir
+    $file_path =~ s!^$tmp_dir!!;
+    
+    # get prefix
+    $file_path =~ s/^(.+?\/)//;
+    my $prefix = $1;
+    
+    my $file_obj = $class_path->new(filename => $file_path, prefix => $prefix);
+    
+    $self->{'_'.$key} = $file_obj;
+  }
+}
+
 sub job_statistics {
   my $self = shift;
+  
   my $stats_file_obj = $self->stats_file;
   
   my $stats = {};
