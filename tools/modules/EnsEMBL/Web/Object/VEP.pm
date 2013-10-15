@@ -150,8 +150,6 @@ sub process_input_data {
       my $tempdata = $hub->session->get_data(type => 'upload', code => $response->{code});
       
       if($tempdata && $tempdata->{'filename'}) {
-        print STDERR "FILENAME ".$tempdata->{filename}."\n";
-        
         my $file = EnsEMBL::Web::TmpFile::Text->new(filename => $tempdata->{'filename'});
         
         # check file format
