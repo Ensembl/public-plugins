@@ -6,20 +6,16 @@ no warnings "uninitialized";
 
 use base qw(EnsEMBL::Web::RunnableDB);
 
-sub fetch_input {
-  my $self = shift;
-  my $ticket_id = $self->param('ticket');
-
-  return;    
-}
-
 sub run {
   my $self = shift;
   
-  my $cache_dir  = $self->param('vep_cache_dir');
-  my $vep_script = $self->param('vep_script');
-  my $perl_bin   = $self->param('vep_perl_bin');
-
+  # get global analysis params
+  my $analysis_params = eval $self->analysis->parameters;
+  my $cache_dir  = $analysis_params->{options}->{cache_dir};
+  my $vep_script = $analysis_params->{options}->{script};
+  my $perl_bin   = $analysis_params->{options}->{perl_bin};
+  
+  # get VEP options set on input form
   my $config = $self->param('config');
   my $option_str = '';
   while ( (my $option, my $value) =  each %$config ){
