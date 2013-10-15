@@ -58,7 +58,7 @@ sub content {
 
       $table->add_row({
         'analysis'  => $ticket->ticket_type->ticket_type_caption,
-        'ticket'    => sprintf('<a href="%s">%s</a>', $hub->url({'action' => $ticket->ticket_type->ticket_type_name, 'function' => 'Summary', 'tl' => $object->create_url_param({'ticket_name' => $ticket_name})}), $ticket_name),
+        'ticket'    => $self->ticket_link($ticket),
         'jobs'      => join('', sort values %$jobs_summary),
         'created'   => $self->format_date($ticket->created_at),
         'extras'    => $ticket_extras
@@ -75,5 +75,16 @@ sub content {
     $table->render
   ;
 };
+
+sub ticket_link {
+  my $self = shift;
+  my $ticket = shift;
+  
+  my $ticket_name = $ticket->ticket_name;
+  my $object = $self->object;
+  my $hub = $self->hub;
+  
+  return sprintf('<a href="%s">%s</a>', $hub->url({'action' => $ticket->ticket_type->ticket_type_name, 'function' => 'Summary', 'tl' => $object->create_url_param({'ticket_name' => $ticket_name})}), $ticket_name)
+}
 
 1;
