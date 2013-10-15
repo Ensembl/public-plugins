@@ -120,21 +120,21 @@ sub populate_tree {
 #   ));
 #   
 #   
-#   my $vep_node = $self->create_node('VEP', 'Variation Effect Predictor',
-#     [qw( 
-#       jobs         EnsEMBL::Web::Component::Tools::JobsList
-#       vepeffect    EnsEMBL::Web::Component::Tools::VEPInputForm
-#     )],
-#     { 'availability' => 1, 'concise' => 'Variation Effect Predictor<span style="float:right;"><img src="/img/vep_logo.png"></span>' }
-#   );
-#   
-#   $vep_node->append($self->create_subnode('VEPResults', 'Results',
-#     [qw(
-#       summary     EnsEMBL::Web::Component::Tools::VEPResultsSummary
-#       results     EnsEMBL::Web::Component::Tools::VEPResults
-#     )],
-#     { 'availability' => 1, 'concise' => 'Variant Effect Predictor results<span style="float:right"><img src="/img/vep_logo.png"></span>' } 
-#   ));
+   my $vep_node = $self->create_node('VEP', 'Variation Effect Predictor',
+     [qw( 
+       jobs         EnsEMBL::Web::Component::Tools::VEP::TicketsList
+       vepeffect    EnsEMBL::Web::Component::Tools::VEP::InputForm
+     )],
+     { 'availability' => 1, 'concise' => 'Variation Effect Predictor<span style="float:right;"><img src="/img/vep_logo.png"></span>' }
+   );
+   
+   $vep_node->append($self->create_subnode('VEP/Summary', 'Results',
+     [qw(
+       ressummary  EnsEMBL::Web::Component::Tools::VEP::ResultsSummary
+       results     EnsEMBL::Web::Component::Tools::VEP::Results
+     )],
+     { 'availability' => 1, 'concise' => 'Variant Effect Predictor results<span style="float:right"><img src="/img/vep_logo.png"></span>' } 
+   ));
 }
 
 sub user_populate_tree {
