@@ -7,40 +7,29 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.Content.extend({
   init: function () {
     this.base();
     var panel = this;
-    this.elLk.vepForm = this.el.find('form.blast');
+    this.elLk.vepForm = this.el.find('form.blast_form');
     
-    this.elLk.vepForm.on('submit', function () {
-      panel.elLk.vepForm.addClass('overlay_blast');
-      $('input.submit_vep', panel.elLk.vepForm).addClass('disabled').prop('value', 'Processing');
-      $('.vep_input', panel.elLk.vepForm).attr('disabled', 'disabled');
-      
-      // make FormData to allow file upload to go through AJAX
+    this.elLk.vepForm.on('submit', function (e) {
+      e.preventDefault();
       var formData = new FormData(this);
       
+      panel.showBusy(true);
+      
       $.ajax({
-        url: this.action,
-        data: formData,
-        dataType: 'json',
-        type: this.method,
-        cache: false,
-        processData: false,
-        contentType: false,
-        success: function (json) {
-
-          Ensembl.EventManager.trigger(json.functionName, json.functionData);
-
-          if (json.functionName === 'updateJobsList') {
-            window.scrollTo(0, 0);
-            $('.failed').removeClass('failed');
-            panel.elLk.vepForm[0].reset();
-          }
-          panel.elLk.vepForm.removeClass('overlay_blast');
-          $('input.submit_vep', panel.elLk.vepForm).removeClass('disabled').prop('value', 'Run');
-          $('.vep_input', panel.elLk.blastform).removeAttr('disabled');
-          Ensembl.replaceTimestamp(window.location.href);
+        'url'       : this.action,
+        'method'    : 'post',
+        'data'      : formData,
+        'dataType'  : 'json',
+        'type': this.method,
+        'cache': false,
+        'processData': false,
+        'contentType': false,
+        'context'   : panel,
+        'success'   : function(json) {
+          console.log(json);
+          this.showBusy(false);
         }
       });
-      return false;
     });
     
     $('.select_on_focus').on('click', function() { $(this).select(); });
@@ -68,5 +57,15 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.Content.extend({
     panel.elLk.vepForm.validate( display_errors, 'showError');
     $.each(failed, function () { this.removeClass('failed valid'); });
     failed = null;
+  },
+
+  showBusy: function(flag) {
+    if (!this.elLk.busyDiv) {
+      var offset = this.elLk.vepForm.offset();
+      this.elLk.busyDiv = $('<div class="form-overlay">').css({'left': offset.left, 'top': offset.top, 'height': this.elLk.vepForm.height(), 'width': this.elLk.vepForm.width()}).appendTo(document.body);
+      this.elLk.spinnerDiv = this.elLk.busyDiv.clone().prop('className', 'form-spinner spinner').appendTo(document.body);
+    }
+    this.elLk.busyDiv.toggle(flag);
+    this.elLk.spinnerDiv.toggle(flag);
   }
 });
