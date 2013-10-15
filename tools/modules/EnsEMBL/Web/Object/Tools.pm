@@ -369,7 +369,7 @@ sub get_requested_job {
   ## @return Job object, or undef if no job found for the given id, or job doesn't belong to the logged in user or current session, or requested result doesn't belong to the job
   my ($self, $params) = @_;
 
-  my $key = [ map { $params->{$_} ? "_requested_job_$_" : () } qw(with_all_results with_requsted_result) ]->[0] || '_requested_job';
+  my $key = [ map { $params->{$_} ? "_requested_job_$_" : () } qw(with_all_results with_requested_result) ]->[0] || '_requested_job';
 
   unless (exists $self->{$key}) {
     my $hub         = $self->hub;
@@ -415,4 +415,18 @@ sub get_time_now {
   return sprintf '%d-%02d-%02d %02d:%02d:%02d', $year + 1900, $month + 1, $day, $hour, $min, $sec;
 }
 
+sub format_date { ## TODO ??? move to root?
+  my ($self, $datetime) = @_;
+  return unless $datetime;
+
+  my @date = split(/-|T|:/, $datetime);
+  $datetime = sprintf('%s/%s/%s, %s:%s',
+    $date[2],
+    $date[1],
+    $date[0],
+    $date[3],
+    $date[4]
+  );
+  return $datetime;
+}
 1;
