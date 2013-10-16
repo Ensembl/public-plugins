@@ -27,6 +27,7 @@ sub search_connect {
   eval {
     my $ua = LWP::UserAgent->new;
     my $proxy = $hub->species_defs->ENSEMBL_WWW_PROXY;
+    $proxy = undef if($SiteDefs::SOLR_NO_PROXY);
     $ua->proxy('http',$proxy) if $proxy;
     $ua->timeout($timeout) unless $tryhard;
     my $page = ($hub->param('page') || 1);
@@ -200,6 +201,7 @@ sub psychic { # Invoke psychic via AJAX, to see if we need to redirect.
   #   internal calls to its own algorithm.
   my $ua = LWP::UserAgent->new;
   my $proxy = $hub->species_defs->ENSEMBL_WWW_PROXY;
+  $proxy = undef if($SiteDefs::SOLR_NO_PROXY);
   $ua->proxy('http',$proxy) if $proxy;
   $ua->requests_redirectable([]);
   my $psychic = $hub->species_defs->ENSEMBL_BASE_URL.
