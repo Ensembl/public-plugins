@@ -18,16 +18,16 @@ sub content {
   my $combinations  = delete $form_params->{'combinations'};
   my $selected      = delete $form_params->{'selected'};
   my $all_species   = delete $form_params->{'species'};
+  my $edit_job      = $hub->param('edit') && $object->get_requested_job;
 
   my $form          = $self->new_form({
-    'id'              => 'blast_input',
     'action'          => $hub->url('Json', {qw(type Tools action Blast function form_submit)}),
     'method'          =>  'post',
-    'class'           => 'blast_form bgcolour',
+    'class'           => 'tools_form bgcolour blast-form',
     'skip_validation' => 1
   });
 
-  my $fieldset      = $form->add_fieldset({'class' => 'blast_input'});
+  my $fieldset      = $form->add_fieldset;
 
   $fieldset->add_hidden({
     'name'            => 'valid_combinations',
@@ -48,6 +48,11 @@ sub content {
     'name'            => 'max_number_sequences',
     'value'           => MAX_NUM_SEQUENCES,
   });
+
+  $fieldset->add_hidden({
+    'name'            => 'edit_jobs',
+    'value'           => $self->jsonify([$edit_job->job_data->raw]),
+  }) if $edit_job;
 
   my $sequence_field = $fieldset->add_field({
     'label'           => 'Sequence data',
@@ -253,7 +258,7 @@ sub content {
     'value'           => 'Run &rsaquo;',
   });
 
-  return sprintf '<div><h2>New BLAT or BLAST Search:</h2><input type="hidden" class="panel_type" value="BlastForm" />%s</html>', $form->render;
+  return sprintf '<div><input type="hidden" class="panel_type" value="BlastForm" />%s</html>', $form->render;
 }
 
 1;
