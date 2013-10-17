@@ -243,7 +243,7 @@ sub get_current_tickets {
       'type'            => $self->ticket_type) : ()
     });
 
-    my @tickets = map $_->ticket, @$ticket_types;
+    my @tickets = sort { $b->created_at <=> $a->created_at } map $_->ticket, @$ticket_types;
     $self->update_jobs_from_hive($_) for @tickets;
     $self->{'_current_tickets'} = \@tickets;
   }
