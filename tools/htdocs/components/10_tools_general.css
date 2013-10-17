@@ -1,0 +1,53 @@
+
+a.hidelink { visibility: hidden;}
+
+
+div.job_error_message {
+  background-color: [[PANEL_BG]];
+  white-space: pre;
+  border: [[PANEL_BORDER]] solid 1px;
+  padding: 8px;
+  font-family: Courier;
+  overflow-x: auto;
+  margin-bottom: 8px;
+}
+
+p.job-links {
+  overflow: hidden;
+}
+
+a.tickets-refresh span.tickets-refresh-now {
+  display: none;
+}
+
+a.tickets-refresh:hover span {
+  display: none;
+}
+
+a.tickets-refresh:hover span.tickets-refresh-now {
+  display: inline;
+}
+
+div.error-overlay {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  background-color: #000000;
+  opacity: 0.3;
+  z-index: 100000;
+}
+
+div.error-popup {
+  position: fixed;
+  left: 50%;
+  top: 40%;
+  width: 400px;
+  margin-left: -200px;
+  z-index: 100001;
+}
+
+div.error-popup .error-pad {
+  background-color: [[PANEL_BG]];
+}
