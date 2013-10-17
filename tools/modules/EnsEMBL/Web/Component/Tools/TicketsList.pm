@@ -8,19 +8,21 @@ use warnings;
 use base qw(EnsEMBL::Web::Component::Tools);
 
 sub content {
-  my $self    = shift;
-  my $hub     = $self->hub;
-  my $user    = $hub->user;
-  my $object  = $self->object;
-  my $tickets = $object->get_current_tickets;
-  my $toggle  = $hub->action ne 'Summary'; # Summary page's table of tickets can not toggled
+  my $self          = shift;
+  my $hub           = $self->hub;
+  my $user          = $hub->user;
+  my $object        = $self->object;
+  my $tickets       = $object->get_current_tickets;
+  my $toggle        = $hub->action ne 'Summary'; # Summary page's table of tickets can not toggled
 
-  my $table   =  $self->new_table([
-    { 'key' => 'analysis',  'title' => 'Analysis',      'sort' => 'string'  },
-    { 'key' => 'ticket',    'title' => 'Ticket',        'sort' => 'string'  },
-    { 'key' => 'jobs',      'title' => 'Jobs',          'sort' => 'none'    },
-    { 'key' => 'created',   'title' => 'Submitted at',  'sort' => 'string'  },
-    { 'key' => 'extras',    'title' => '',              'sort' => 'none'    }
+  my $tickets_data  = {};
+
+  my $table         =  $self->new_table([
+    { 'key' => 'analysis',  'title' => 'Analysis',      'sort' => 'string'          },
+    { 'key' => 'ticket',    'title' => 'Ticket',        'sort' => 'string'          },
+    { 'key' => 'jobs',      'title' => 'Jobs',          'sort' => 'none'            },
+    { 'key' => 'created',   'title' => 'Submitted at',  'sort' => 'numeric_hidden'  },
+    { 'key' => 'extras',    'title' => '',              'sort' => 'none'            }
   ], [], {
     'toggleable'  => $toggle,
     'data_table'  => 'no_col_toggle',
@@ -48,9 +50,12 @@ sub content {
           ucfirst $hive_status =~ s/_/ /gr,
           $job_id
         ;
+
+        $tickets_data->{$ticket_name}{$job_id} = $hive_status;
       }
 
       my $owner_is_user = $ticket->owner_type eq 'user';
+      my $created_at    = $ticket->created_at;
       my $ticket_extras = sprintf '<span class="_ht sprite save_icon%s _ticket_save" title="%s"></span><span class="_ht sprite delete_icon _ticket_delete" title="Delete ticket">',
         !$user || $owner_is_user ? ' sprite_disabled' : '',
         !$owner_is_user ? $user ? 'Save to account' : 'Login to save to account' : 'Saved to account'
@@ -60,31 +65,52 @@ sub content {
         'analysis'  => $ticket->ticket_type->ticket_type_caption,
         'ticket'    => $self->ticket_link($ticket),
         'jobs'      => join('', sort values %$jobs_summary),
-        'created'   => $self->format_date($ticket->created_at),
+        'created'   => sprintf('<span class="hidden">%d</span>%s', $created_at =~ s/[^\d]//gr, $self->format_date($created_at)),
         'extras'    => $ticket_extras
       });
     }
   }
 
-  return sprintf '
-    <div><input type="hidden" class="panel_type" value="Jobs" />%s
-      <div class="countdown"></div>
-      <div><p class="_no_jobs hidden">You have no jobs currently running or recently completed.</p></div>
-    </div>%s',
-    $toggle ? sprintf('<h2><a rel="_ticket_table" class="toggle set_cookie open" href="#">Recent Tickets:</a></h2>') : '<h2>Recent Tickets:</h2>',
-    $table->render
-  ;
-};
+  return $self->dom->create_element('div', {'children' => [{
+    'node_name'   => 'input',
+    'type'        => 'hidden',
+    'class'       => 'panel_type',
+    'value'       => 'ActivitySummary'
+  }, {
+    'node_name'   => 'input',
+    'type'        => 'hidden',
+    'name'        => '_refresh_url',
+    'value'       => $hub->url('Json', {'function' => 'refresh_tickets'})
+  }, {
+    'node_name'   => 'input',
+    'type'        => 'hidden',
+    'name'        => '_tickets_data',
+    'value'       => [ $self->jsonify($tickets_data), 1 ]
+  }, {
+    'node_name'   => 'h2',
+    'inner_HTML'  => $toggle ? '<a rel="_ticket_table" class="toggle set_cookie open" href="#">Recent Tickets:</a>' : 'Recent Tickets:'
+  }, {
+    'node_name'   => 'div',
+    'class'       => '_countdown'
+  }, {
+    'node_name'   => 'div',
+    'inner_HTML'  => '<p class="_no_jobs hidden">You have no jobs currently running or recently completed.</p>'
+  }]})->render.$table->render;
+
+}
 
 sub ticket_link {
-  my $self = shift;
-  my $ticket = shift;
-  
+  my ($self, $ticket) = @_;
   my $ticket_name = $ticket->ticket_name;
-  my $object = $self->object;
-  my $hub = $self->hub;
-  
-  return sprintf('<a href="%s">%s</a>', $hub->url({'action' => $ticket->ticket_type->ticket_type_name, 'function' => 'Summary', 'tl' => $object->create_url_param({'ticket_name' => $ticket_name})}), $ticket_name)
+
+  return sprintf('<a href="%s">%s</a>',
+    $self->hub->url({
+      'action'    => $ticket->ticket_type->ticket_type_name,
+      'function'  => 'Summary',
+      'tl'        => $self->object->create_url_param({'ticket_name' => $ticket_name})
+    }),
+    $ticket_name
+  );
 }
 
 1;
