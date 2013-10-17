@@ -15,10 +15,10 @@ sub json_form_submit {
 
   if ($jobs_data && @$jobs_data) {
     $object->create_ticket($jobs_data);
-    return {'panelMethod' => ['refreshJobsList']};
+    return $self->call_js_panel_method('ticketSubmitted');
   }
 
-  return {'invalid' => 1};
+  return $self->call_js_panel_method('showError', ['Input provided is invalid', 'Invalid input']);
 }
 
 sub json_read_file {
@@ -31,7 +31,24 @@ sub json_delete {
   
   $object->delete_ticket_or_job;
 
-  return {'panelMethod' => ['refreshJobsList']};
+  return $self->call_js_panel_method('refresh');
+}
+
+sub json_refresh_tickets {
+  my $self          = shift;
+  my $tickets       = $self->object->get_current_tickets;
+  my $tickets_data  = {};
+
+  if ($tickets && @$tickets > 0) {
+
+    foreach my $ticket (@$tickets) {
+
+      my $ticket_name = $ticket->ticket_name;
+      $tickets_data->{$ticket_name}{$_->job_id} = $_->hive_status for $ticket->job;
+    }
+  }
+
+  return $self->call_js_panel_method('updateTicketList', [ $self->jsonify($tickets_data) ]);
 }
 
 1;
