@@ -107,10 +107,8 @@ Ensembl.Panel.ActivitySummary = Ensembl.Panel.ContentTools.extend({
    * Updates the Activity Summary table according to the request recieved from the backend
    */
     if (ticketsData !== this.ticketsData) {
-      console.log('Updating tickets');
+      this.ticketsData = ticketsData;
       this.getContent();
-    } else {
-      console.log('Tickets still the same');
     }
   },
 
