@@ -27,7 +27,6 @@ sub content {
     'toggleable'  => $toggle,
     'data_table'  => 'no_col_toggle',
     'exportable'  => 0,
-    'sorting'     => ['created desc'],
     'id'          => '_ticket_table'
   });
 
@@ -66,7 +65,8 @@ sub content {
         'ticket'    => $self->ticket_link($ticket),
         'jobs'      => join('', sort values %$jobs_summary),
         'created'   => sprintf('<span class="hidden">%d</span>%s', $created_at =~ s/[^\d]//gr, $self->format_date($created_at)),
-        'extras'    => $ticket_extras
+        'extras'    => $ticket_extras,
+        'options'   => {'class' => "_ticket_$ticket_name"}
       });
     }
   }
@@ -76,6 +76,11 @@ sub content {
     'type'        => 'hidden',
     'class'       => 'panel_type',
     'value'       => 'ActivitySummary'
+  }, {
+    'node_name'   => 'input',
+    'type'        => 'hidden',
+    'name'        => '_delete_url',
+    'value'       => $hub->url('Json', {'function' => 'delete', 'tl' => 'TICKET_NAME'})
   }, {
     'node_name'   => 'input',
     'type'        => 'hidden',
