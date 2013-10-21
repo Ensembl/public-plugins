@@ -409,6 +409,30 @@ sub get_requested_job {
   return $self->{$key};
 }
 
+sub get_tickets_data_for_sync {
+  ## Gets the data for all the current tickets as required by the ticket list page to refresh the page
+  ## @return Tickets data hashref and auto refresh flag
+  my $self          = shift;
+  my $tickets       = $self->get_current_tickets;
+  my $tickets_data  = {}; 
+  my $auto_refresh  = undef; # this is set true if any of the jobs has status 'awaiting_hive_response'
+
+  if ($tickets && @$tickets) {
+
+    for (@$tickets) {
+
+      my $ticket_name = $_->ticket_name;
+
+      for ($_->job) {
+        $auto_refresh = 1 if $_->status eq 'awaiting_hive_response';
+        $tickets_data->{$ticket_name}{$_->job_id} = $_->hive_status;
+      }
+    }
+  }
+
+  return ($self->jsonify($tickets_data), $auto_refresh);
+}
+
 sub get_time_now {
   # Gets the current time in a format that can be saved in the db
   my ($sec, $min, $hour, $day, $month, $year) = localtime;
