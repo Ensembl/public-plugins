@@ -40,7 +40,7 @@ Ensembl.Panel.ActivitySummary = Ensembl.Panel.ContentTools.extend({
    */
     var panel = this;
 
-    this.updateCountdown('refreshing');
+    this.updateCountdown('refreshing_in', 0);
     this.ajax({
       'url'     :  this.refreshURL,
       'data'    : {'tickets': this.ticketsData },
@@ -73,7 +73,7 @@ Ensembl.Panel.ActivitySummary = Ensembl.Panel.ContentTools.extend({
       });
     }
 
-    if (type == 'refreshing') {
+    if (type == 'refreshing_in' && !time) {
       this.elLk.countdownDiv.html('<p>Refreshing now&#8230;</p>');
     } else {
       var message;
@@ -83,7 +83,7 @@ Ensembl.Panel.ActivitySummary = Ensembl.Panel.ContentTools.extend({
         var unit  = time > 60 ? time > 3600 ? time > 86400 ? 'day' : 'hour' : 'minute' : 'second';
         time      = parseInt(time > 60 ? time > 3600 ? time > 86400 ? time / 86400 : time / 3600 : time / 60 : time);
         time      = time === 1 ? unit === 'hour' ? 'an' : 'a' : time;
-        message   = 'Refreshed ' + unit === 'second' ? 'few seconds ago' : ('more than ' + time + ' ' + unit + (typeof time === 'number' ? 's' : '') + ' ago');
+        message   = 'Refreshed ' + (unit === 'second' ? 'few seconds ago' : ('more than ' + time + ' ' + unit + (typeof time === 'number' ? 's' : '') + ' ago'));
       } else {
         message   = 'Refresh now';
       }
