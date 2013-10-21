@@ -9,7 +9,7 @@ Ensembl.Panel.ContentTools = Ensembl.Panel.Content.extend({
    * Wrapper arounf jQuery's ajax method
    * Forces the generic response handling for any resposne recieved
    */
-    var panel = this;
+    var panel   = this;
 
     $.ajax($.extend({
       'type'        : 'get'
@@ -17,10 +17,16 @@ Ensembl.Panel.ContentTools = Ensembl.Panel.Content.extend({
       'dataType'    : 'json',
       'context'     : panel,
       'success'     : function(json) {
-        this.ajaxSuccess(json);
+        var result = this.ajaxSuccess(json);
+        if (configs.success && typeof(configs.success) == 'function') {
+          configs.success.call(this, json, result);
+        }
       },
       'error'       : function(jqXHR, textStatus, errorThrown) {
         this.ajaxError(jqXHR, textStatus, errorThrown);
+        if (configs.error && typeof(configs.error) == 'function') {
+          configs.error.call(this, jqXHR, textStatus, errorThrown);
+        }
       }
     }));
   },
@@ -39,6 +45,7 @@ Ensembl.Panel.ContentTools = Ensembl.Panel.Content.extend({
 
       if (methodName in this) {
         this[methodName].apply(this, json.panelMethod);
+        json.panelMethod.unshift(methodName);
         return 'method_applied';
       }
 
