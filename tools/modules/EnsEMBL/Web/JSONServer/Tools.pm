@@ -36,19 +36,11 @@ sub json_delete {
 
 sub json_refresh_tickets {
   my $self          = shift;
-  my $tickets       = $self->object->get_current_tickets;
-  my $tickets_data  = {};
+  my $tickets_old   = $self->hub->param('tickets');
 
-  if ($tickets && @$tickets > 0) {
+  my ($tickets_new, $auto_refresh) = $self->object->get_tickets_data_for_sync;
 
-    foreach my $ticket (@$tickets) {
-
-      my $ticket_name = $ticket->ticket_name;
-      $tickets_data->{$ticket_name}{$_->job_id} = $_->hive_status for $ticket->job;
-    }
-  }
-
-  return $self->call_js_panel_method('updateTicketList', [ $self->jsonify($tickets_data) ]);
+  return $self->call_js_panel_method('updateTicketList', [ $tickets_old eq $tickets_new ? undef : $tickets_new, $auto_refresh ]);
 }
 
 1;
