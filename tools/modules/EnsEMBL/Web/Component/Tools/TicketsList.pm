@@ -15,8 +15,6 @@ sub content {
   my $tickets       = $object->get_current_tickets;
   my $toggle        = $hub->action ne 'Summary'; # Summary page's table of tickets can not toggled
 
-  my $tickets_data  = {};
-
   my $table         =  $self->new_table([
     { 'key' => 'analysis',  'title' => 'Analysis',      'sort' => 'string'          },
     { 'key' => 'ticket',    'title' => 'Ticket',        'sort' => 'string'          },
@@ -49,8 +47,6 @@ sub content {
           ucfirst $hive_status =~ s/_/ /gr,
           $job_id
         ;
-
-        $tickets_data->{$ticket_name}{$job_id} = $hive_status;
       }
 
       my $owner_is_user = $ticket->owner_type eq 'user';
@@ -71,6 +67,8 @@ sub content {
     }
   }
 
+  my ($tickets_data, $auto_refresh) = $object->get_tickets_data_for_sync;
+
   return $self->dom->create_element('div', {'children' => [{
     'node_name'   => 'input',
     'type'        => 'hidden',
@@ -90,7 +88,12 @@ sub content {
     'node_name'   => 'input',
     'type'        => 'hidden',
     'name'        => '_tickets_data',
-    'value'       => [ $self->jsonify($tickets_data), 1 ]
+    'value'       => [ $tickets_data, 1 ]
+  }, {
+    'node_name'   => 'input',
+    'type'        => 'hidden',
+    'name'        => '_auto_refresh',
+    'value'       => $auto_refresh
   }, {
     'node_name'   => 'h2',
     'inner_HTML'  => $toggle ? '<a rel="_ticket_table" class="toggle set_cookie open" href="#">Recent Tickets:</a>' : 'Recent Tickets:'
