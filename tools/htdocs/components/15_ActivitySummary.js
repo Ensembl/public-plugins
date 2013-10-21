@@ -30,56 +30,31 @@ Ensembl.Panel.ActivitySummary = Ensembl.Panel.ContentTools.extend({
       }
     });
 
-    this.refresh(true);
-
+    this.toggleEmptyTable();
+    this.updateTicketList(false, !!this.el.find('input[name=_auto_refresh]').remove().val());
   },
 
-  refresh: function (delayed) {
+  refresh: function () {
   /*
    * Does a query to the backend to refresh the Activity Summary table
    */
     var panel = this;
 
-    if (!delayed) {
-      this.updateCountdown('refreshing');
-      this.ajax({ 'url': this.refreshURL });
-    }
-
-    this.clearTimers();
-
-    if (this.pollCounter < this.MAXIMUM_POLLS) {
-      this.poll = setTimeout(function () {
-        panel.pollCounter++;
-        panel.refresh();
-      }, this.POLL_INTERVAL * 1000);
-
-      this.countdown  = setInterval(function () {
-        panel.updateCountdown('refreshing_in', panel.POLL_INTERVAL - ++panel.timePassed);
-      }, 1000);
-    } else {
-      this.countdown  = setInterval(function () {
-        panel.updateCountdown('refreshed', ++panel.timePassed);
-      }, 1000);
-    }
-  },
-
-  ajaxSuccess: function(json) {
-  /*
-   * If invalid JSON response is received, clear the timers
-   */
-    if (this.base(json) != 'method_applied') {
-      this.updateCountdown('refresh_now');
-      this.clearTimers();
-    }
-  },
-
-  ajaxError: function() {
-  /*
-   * Clear the timers for any error while ajax request
-   */
-    this.base.apply(this, arguments);
-    this.updateCountdown('refresh_now');
-    this.clearTimers();
+    this.updateCountdown('refreshing');
+    this.ajax({
+      'url'     :  this.refreshURL,
+      'data'    : {'tickets': this.ticketsData },
+      'success' : function(json, previous) {
+        if (previous != 'method_applied') {
+          this.updateCountdown('refresh_now');
+         this.clearTimers();
+        }
+      },
+      'error'   : function() {
+        this.updateCountdown('refresh_now');
+        this.clearTimers();
+      }
+    });
   },
 
   updateCountdown: function(type, time) {
@@ -92,6 +67,7 @@ Ensembl.Panel.ActivitySummary = Ensembl.Panel.ContentTools.extend({
       this.elLk.countdownDiv.on({
         'click': function (event) {
           event.preventDefault();
+          panel.clearTimers();
           panel.refresh();
         }
       });
@@ -107,7 +83,7 @@ Ensembl.Panel.ActivitySummary = Ensembl.Panel.ContentTools.extend({
         var unit  = time > 60 ? time > 3600 ? time > 86400 ? 'day' : 'hour' : 'minute' : 'second';
         time      = parseInt(time > 60 ? time > 3600 ? time > 86400 ? time / 86400 : time / 3600 : time / 60 : time);
         time      = time === 1 ? unit === 'hour' ? 'an' : 'a' : time;
-        message   = 'Refreshed ' + (unit === 'second' ? '' : 'more than ') + time + ' ' + unit + (typeof time === 'number' ? 's' : '') + ' ago';
+        message   = 'Refreshed ' + unit === 'second' ? 'few seconds ago' : ('more than ' + time + ' ' + unit + (typeof time === 'number' ? 's' : '') + ' ago');
       } else {
         message   = 'Refresh now';
       }
@@ -115,14 +91,49 @@ Ensembl.Panel.ActivitySummary = Ensembl.Panel.ContentTools.extend({
     }
   },
 
-  updateTicketList: function(ticketsData) {
+  updateTicketList: function(ticketsData, autoRefresh) {
   /*
    * Updates the Activity Summary table according to the request recieved from the backend
+   * ticketsData: only provided if changed
    */
-    if (ticketsData !== this.ticketsData) {
+    var panel = this;
+
+    this.clearTimers();
+
+    if (!!ticketsData) {
       this.ticketsData = ticketsData;
       this.getContent();
     }
+    this.autoRefresh = !!autoRefresh;
+
+    if (this.autoRefresh && this.pollCounter < this.MAXIMUM_POLLS) {
+      this.poll = setTimeout(function () {
+        panel.pollCounter++;
+        panel.refresh();
+      }, this.POLL_INTERVAL * 1000);
+
+      this.countdown  = setInterval(function () {
+        panel.updateCountdown('refreshing_in', panel.POLL_INTERVAL - ++panel.timePassed);
+      }, 1000);
+    } else if (this.autoRefresh) {
+      this.countdown  = setInterval(function () {
+        panel.updateCountdown('refreshed', ++panel.timePassed);
+      }, 1000);
+    } else {
+      this.pollCounter = 0;
+      this.updateCountdown('refresh_now');
+    }
+  },
+
+  toggleEmptyTable: function() {
+  /*
+   * Toggles the table according to whether it has any records in it or not
+   */
+    var tableWrapper  = this.el.find('div._ticket_table');
+    var showTable     = !tableWrapper.find('.dataTables_empty').length;
+    
+    tableWrapper.toggle(showTable);
+    this.el.find('p._no_jobs').toggle(!showTable);
   },
 
   clearTimers: function() {
