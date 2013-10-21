@@ -10,12 +10,25 @@ Ensembl.Panel.ActivitySummary = Ensembl.Panel.ContentTools.extend({
   },
 
   init: function () {
+
+    var panel = this;
+
     this.base();
 
-    this.elLk.countdownDiv  = this.el.find('div._countdown');
     this.refreshURL         = this.el.find('input[name=_refresh_url]').remove().val();
+    this.deleteURL          = this.el.find('input[name=_delete_url]').remove().val();
     this.ticketsData        = this.el.find('input[name=_tickets_data]').remove().val();
     this.pollCounter        = 0;
+
+    this.elLk.countdownDiv  = this.el.find('div._countdown');
+    this.elLk.deleteLinks   = this.el.find('._ticket_delete').on('click', function() {
+      var ticketName = ($(this).parents('tr').first().prop('className').match(/_ticket_([^\s]+)/) || []).pop();
+      if (ticketName) {
+        if (window.confirm("This will delete ticket '" + ticketName + "' permanently.")) {
+          panel.ajax({ 'url': panel.deleteURL.replace('TICKET_NAME', ticketName) });
+        }
+      }
+    });
 
     this.refresh(true);
 
