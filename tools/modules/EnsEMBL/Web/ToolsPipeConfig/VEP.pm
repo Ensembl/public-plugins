@@ -18,7 +18,9 @@ sub default_options {
 }
 
 sub resource_classes {
-  return { 'vep' => { 'LSF' => '-q vep' } };
+  my ($class, $conf) = @_;
+  my $lsf_queue = $conf->species_defs->ENSEMBL_VEP_LSF_QUEUE;
+  return {$lsf_queue => { 'LSF' => "-q $lsf_queue" }};
 }
 
 sub pipeline_analyses {
@@ -31,7 +33,7 @@ sub pipeline_analyses {
       'options'         => $conf->o('vep_options')
     },
     '-hive_capacity'  => 15,
-    '-rc_name'        => 'vep'
+    '-rc_name'        => $conf->species_defs->ENSEMBL_VEP_LSF_QUEUE
   }];
 }
 
