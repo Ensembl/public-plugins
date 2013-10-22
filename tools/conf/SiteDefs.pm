@@ -11,6 +11,7 @@ sub update_conf {
   $SiteDefs::ENSEMBL_TOOLS_PIPELINE_PACKAGE     = 'EnsEMBL::Web::PipeConfig::Tools_conf';
 
   $SiteDefs::ENSEMBL_BLAST_LSF_QUEUE            = 'blasttest';
+  $SiteDefs::ENSEMBL_VEP_LSF_QUEUE              = 'vep';
 
   $ENV{'EHIVE_ROOT_DIR'}                        = $SiteDefs::ENSEMBL_SERVERROOT.'/ensembl-hive/';
 }
