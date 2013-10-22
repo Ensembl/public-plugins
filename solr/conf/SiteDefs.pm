@@ -151,6 +151,7 @@ sub update_conf {
             search by updating your favourite species.
         "
       ],
+      mirrors => $SiteDefs::SOLR_MIRRORS || [],
       noresults_help => <<EOF,
         <div>
           <p><b>
