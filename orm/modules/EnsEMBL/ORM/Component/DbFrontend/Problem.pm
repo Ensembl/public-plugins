@@ -1,7 +1,5 @@
 package EnsEMBL::ORM::Component::DbFrontend::Problem;
 
-### Module to create generic data display for Interface and its associated modules
-
 use strict;
 use warnings;
 
