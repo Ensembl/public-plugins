@@ -64,12 +64,10 @@ Ensembl.Panel.ActivitySummary = Ensembl.Panel.ContentTools.extend({
     var panel =  this;
 
     if (this.elLk.countdownDiv.is(':empty')) {
-      this.elLk.countdownDiv.on({
-        'click': function (event) {
-          event.preventDefault();
-          panel.clearTimers();
-          panel.refresh();
-        }
+      this.elLk.countdownDiv.on('click', 'a', function (event) {
+        event.preventDefault();
+        panel.clearTimers();
+        panel.refresh();
       });
     }
 
