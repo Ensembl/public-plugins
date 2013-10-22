@@ -409,6 +409,7 @@ class Hub
     $(window).scrollTop(0)
 
   fix_species_search: ->
+    if not $.solr_config('static.ui.topright_fix') then return
     if @params.facet_species
       unless $('.site_menu .ensembl').length
         $menu = $('.site_menu')
