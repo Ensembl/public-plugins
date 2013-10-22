@@ -394,6 +394,35 @@ window.rhs_templates =
                 false
             }))
 
+  searchdown:
+    template: """
+      <div class="scnarrow searchdown-box" style="display: none">
+        <h1>Search server failed to respond</h1>
+        <ul>
+          <li><div><a href="#" onclick="location.reload(true); return false;">Retry this search in a few moments</a></div></li>
+          <li class="mirrors"><div>Use one of our mirror sites: <span class="mirror_list"><a href="#">mirror</a> </span></li>
+          <li><div><a href="/Help/Contact/">Contact us</a> if the problem persists</div></li>
+        </ul>
+      </div>
+    """
+    directives:
+      '.mirrors':
+        'mirrors<-mirror_list':
+          '.mirror_list':
+            'mirror<-mirrors':
+              'a@href': 'mirror.href',
+              'a': 'mirror.text'
+    preproc: (spec,data) ->
+      href = window.location.href
+      mirrors = $.solr_config('static.ui.mirrors')
+      if mirrors.length
+        data.mirror_list = [
+          for mirror in mirrors
+            href = window.location.href.replace(/\/\/.*?\//,
+                                                "//#{mirror.host}/")
+            { href, text: mirror.name }
+        ]
+      [spec,data]
 
   noresultsnarrow:
     template: """

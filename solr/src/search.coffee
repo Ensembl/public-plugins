@@ -686,6 +686,7 @@ class Request
       if !@req_outstanding() then @hub.spin_down()
       if data.error
         @hub.fail()
+        $('.searchdown-box').css('display','block')
       else
         @hub.unfail()
         more.call(@,data) 

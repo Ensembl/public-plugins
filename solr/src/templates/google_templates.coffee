@@ -190,6 +190,7 @@ window.google_templates =
           <div class='search_table_holder page_some_query'>
             <div class='page_some_results'>
               <div class='main_topcars'>
+                <div class='searchdown'></div>
                 <div class='noresults noresults_main'></div>
                 <div class='narrowresults'></div>
                 <div class='sidecars'></div>
@@ -218,6 +219,7 @@ window.google_templates =
       '.tophit': 'tophit'
       '.topgene': 'topgene'
       '.noresults': 'noresults'
+      '.searchdown': { template: 'searchdown', data: '' }
       '.narrowresults': 'narrowresults'
       '.pager': { template: 'pager', data: '' }
       '.search_table_prehead_filterctl': {template: 'replacement-filter', data: '' }

@@ -26,6 +26,8 @@ window.table_templates =
             </div>
           </div>
         </div>
+        <div class="searchdown">
+        </div>
         <div class='search_table_prehead'>
           <div class="search_table_prehead_pagectl table_acc_nw">
             <div class="sizer"></div>
@@ -57,6 +59,7 @@ window.table_templates =
       '.t_download': { template: 'download', data: '' }
       '.pager': { template: 'pager', data: '' }
       '.search_table_filter': { template: 'filter', data: '' }
+      '.searchdown': { template: 'searchdown', data: '' }
     decorate:
       '.t_page_no_query': (el,data) -> el.hide()
     postproc: (el,data) ->

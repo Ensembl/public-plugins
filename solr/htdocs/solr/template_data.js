@@ -219,11 +219,15 @@
       }
     },
     outer: {
-      template: "<div class=\"solr_g_layout\">\n  <div class=\"sidecar_holder table_acc_sidecars\">\n    <div class=\"tophit\"></div>\n    <div class=\"noresults noresults_side\"></div>\n    <div class=\"topgene\"></div>\n  </div>\n  <div class=\"preview_holder\"></div>\n  <div class=\"se_search\">\n    <div class=\"se_query\">\n      <div class='hub_spinner g_spinner'></div>\n      <div class='hub_fail g_fail'></div>\n      <div class=\"solr_query_box\">\n        <div class=\"search_table_prehead_filterctl table_acc_ne\">\n        </div>\n        <div class=\"solr_result_summary\"></div>\n      </div>\n    </div>\n    <div class='search_table_holder page_some_query'>\n      <div class='page_some_results'>\n        <div class='main_topcars'>\n          <div class='noresults noresults_main'></div>\n          <div class='narrowresults'></div>\n          <div class='sidecars'></div>\n        </div>\n        <div class='search_table_proper'>\n        </div>\n        <div class='se_search_table_posttail'>\n          <div class='search_table_posttail_pager table_acc_sw'>\n            <div class=\"pager\"></div>\n          </div>\n        </div>\n      </div>\n      <div class='page_no_results'>\n        <div class=\"table_acc_noresults\"></div>\n        <div class='noresults_maincars'>\n          <div class='sidecars'></div>\n        </div>\n      </div>\n    </div>\n    <div class='page_no_query g_page_no_results'>\n    </div>\n  </div>\n</div>",
+      template: "<div class=\"solr_g_layout\">\n  <div class=\"sidecar_holder table_acc_sidecars\">\n    <div class=\"tophit\"></div>\n    <div class=\"noresults noresults_side\"></div>\n    <div class=\"topgene\"></div>\n  </div>\n  <div class=\"preview_holder\"></div>\n  <div class=\"se_search\">\n    <div class=\"se_query\">\n      <div class='hub_spinner g_spinner'></div>\n      <div class='hub_fail g_fail'></div>\n      <div class=\"solr_query_box\">\n        <div class=\"search_table_prehead_filterctl table_acc_ne\">\n        </div>\n        <div class=\"solr_result_summary\"></div>\n      </div>\n    </div>\n    <div class='search_table_holder page_some_query'>\n      <div class='page_some_results'>\n        <div class='main_topcars'>\n          <div class='searchdown'></div>\n          <div class='noresults noresults_main'></div>\n          <div class='narrowresults'></div>\n          <div class='sidecars'></div>\n        </div>\n        <div class='search_table_proper'>\n        </div>\n        <div class='se_search_table_posttail'>\n          <div class='search_table_posttail_pager table_acc_sw'>\n            <div class=\"pager\"></div>\n          </div>\n        </div>\n      </div>\n      <div class='page_no_results'>\n        <div class=\"table_acc_noresults\"></div>\n        <div class='noresults_maincars'>\n          <div class='sidecars'></div>\n        </div>\n      </div>\n    </div>\n    <div class='page_no_query g_page_no_results'>\n    </div>\n  </div>\n</div>",
       subtemplates: {
         '.tophit': 'tophit',
         '.topgene': 'topgene',
         '.noresults': 'noresults',
+        '.searchdown': {
+          template: 'searchdown',
+          data: ''
+        },
         '.narrowresults': 'narrowresults',
         '.pager': {
           template: 'pager',
@@ -1766,6 +1770,44 @@
         });
       }
     },
+    searchdown: {
+      template: "<div class=\"scnarrow searchdown-box\" style=\"display: none\">\n  <h1>Search server failed to respond</h1>\n  <ul>\n    <li><div><a href=\"#\" onclick=\"location.reload(true); return false;\">Retry this search in a few moments</a></div></li>\n    <li class=\"mirrors\"><div>Use one of our mirror sites: <span class=\"mirror_list\"><a href=\"#\">mirror</a> </span></li>\n    <li><div><a href=\"/Help/Contact/\">Contact us</a> if the problem persists</div></li>\n  </ul>\n</div>",
+      directives: {
+        '.mirrors': {
+          'mirrors<-mirror_list': {
+            '.mirror_list': {
+              'mirror<-mirrors': {
+                'a@href': 'mirror.href',
+                'a': 'mirror.text'
+              }
+            }
+          }
+        }
+      },
+      preproc: function(spec, data) {
+        var href, mirror, mirrors;
+        href = window.location.href;
+        mirrors = $.solr_config('static.ui.mirrors');
+        if (mirrors.length) {
+          data.mirror_list = [
+            (function() {
+              var _i, _len, _results;
+              _results = [];
+              for (_i = 0, _len = mirrors.length; _i < _len; _i++) {
+                mirror = mirrors[_i];
+                href = window.location.href.replace(/\/\/.*?\//, "//" + mirror.host + "/");
+                _results.push({
+                  href: href,
+                  text: mirror.name
+                });
+              }
+              return _results;
+            })()
+          ];
+        }
+        return [spec, data];
+      }
+    },
     noresultsnarrow: {
       template: "<div class=\"scnarrow\">\n  <h1>No results for <em>thing</em> '<i class='search'>search</i>'</h1>\n  <ul>\n    <li class=\"wide\"><div>\n      You were searching the whole site, but still nothing was found.\n    </div></li>\n    <li class=\"narrow\"><div>\n      You were only searching <em>thing</em>.\n    </div></li>\n    <li class=\"narrow_any\"><div>\n      And there are <i class=\"count\">42</i> results in\n      <i class=\"all\">all</i> on the whole site.\n      <a href=\"#\">Search full site</a>.\n    </div></li>\n    <li class='narrow_none'><div>\n      But there are no results in\n      any category on the whole site, anyway.\n    </div></li>\n    <li><div class=\"roll_hidden\">\n      <a href=\"#\">More help on searching ...</a>\n      <div class=\"roll_hidden_text\">\n      </div>\n    </div></li>\n  </ul>\n</div>",
       directives: {
@@ -1850,7 +1892,7 @@
 
   window.table_templates = {
     outer: {
-      template: "<div class='search_table_holder'>\n  <div class='t_spinner_outer hub_spinner'>\n    <div class='t_spinner'>\n      <div class='t_spinner_inner'>\n        <div class='t_spinner_img'></div>\n      </div>\n    </div>\n  </div>\n  <div class='t_fail_outer hub_fail'>\n    <div class='t_fail'>\n      <div class='t_fail_inner'>\n        <div class='t_fail_img'></div>\n      </div>\n    </div>\n  </div>\n  <div class='search_table_prehead'>\n    <div class=\"search_table_prehead_pagectl table_acc_nw\">\n      <div class=\"sizer\"></div>\n    </div>\n    <div class=\"search_table_prehead_filterctl table_acc_ne\">\n      <div class=\"search_table_filter\"></div>\n      <div class=\"t_download\"></div>\n    </div>\n    <div class=\"search_table_prehead_colctl table_acc_n\">\n      <div class=\"showhide\"></div>\n    </div>\n  </div>\n  <div class='page_some_query'>\n    <div class='search_table_proper page_some_results'>\n    </div>\n  </div>\n  <div class='page_no_query t_page_no_results'>Enter query &#x2197;</div>\n  <div class='search_table_posttail'>\n    <div class='search_table_posttail_pager table_acc_sw'>\n      <div class=\"pager\"></div>\n    </div>\n  </div>\n  <div class='main_topcars t_main_topcars'><div class='sidecars'></div></div>\n</div>",
+      template: "<div class='search_table_holder'>\n  <div class='t_spinner_outer hub_spinner'>\n    <div class='t_spinner'>\n      <div class='t_spinner_inner'>\n        <div class='t_spinner_img'></div>\n      </div>\n    </div>\n  </div>\n  <div class='t_fail_outer hub_fail'>\n    <div class='t_fail'>\n      <div class='t_fail_inner'>\n        <div class='t_fail_img'></div>\n      </div>\n    </div>\n  </div>\n  <div class=\"searchdown\">\n  </div>\n  <div class='search_table_prehead'>\n    <div class=\"search_table_prehead_pagectl table_acc_nw\">\n      <div class=\"sizer\"></div>\n    </div>\n    <div class=\"search_table_prehead_filterctl table_acc_ne\">\n      <div class=\"search_table_filter\"></div>\n      <div class=\"t_download\"></div>\n    </div>\n    <div class=\"search_table_prehead_colctl table_acc_n\">\n      <div class=\"showhide\"></div>\n    </div>\n  </div>\n  <div class='page_some_query'>\n    <div class='search_table_proper page_some_results'>\n    </div>\n  </div>\n  <div class='page_no_query t_page_no_results'>Enter query &#x2197;</div>\n  <div class='search_table_posttail'>\n    <div class='search_table_posttail_pager table_acc_sw'>\n      <div class=\"pager\"></div>\n    </div>\n  </div>\n  <div class='main_topcars t_main_topcars'><div class='sidecars'></div></div>\n</div>",
       subtemplates: {
         '.sizer': {
           template: 'sizer',
@@ -1870,6 +1912,10 @@
         },
         '.search_table_filter': {
           template: 'filter',
+          data: ''
+        },
+        '.searchdown': {
+          template: 'searchdown',
           data: ''
         }
       },

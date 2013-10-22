@@ -903,6 +903,14 @@ a.solr_beak_p_fall_off:hover {
   margin-right: 12px;
 }
 
+.searchdown .scnarrow {
+  color: black;
+  background-color: #ffdddd;
+}
+
+.searchdown h1 {
+  color: #444;
+}
 .t_spinner_outer {
   left: 241px;
   position: fixed;

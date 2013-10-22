@@ -1252,7 +1252,8 @@
           _this.hub.spin_down();
         }
         if (data.error) {
-          return _this.hub.fail();
+          _this.hub.fail();
+          return $('.searchdown-box').css('display', 'block');
         } else {
           _this.hub.unfail();
           return more.call(_this, data);
