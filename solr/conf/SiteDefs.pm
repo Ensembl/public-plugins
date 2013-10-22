@@ -136,6 +136,7 @@ sub update_conf {
       ###############
       enable_direct => 0,
       per_page => 10, # default results per page
+      topright_fix => 1, # specific to ensembl
       tips => [
         "
         You can use wildcards in your searches.

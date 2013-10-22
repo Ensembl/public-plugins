@@ -789,6 +789,9 @@
     Hub.prototype.fix_species_search = function() {
       var $menu, $spec,
         _this = this;
+      if (!$.solr_config('static.ui.topright_fix')) {
+        return;
+      }
       if (this.params.facet_species) {
         if (!$('.site_menu .ensembl').length) {
           $menu = $('.site_menu');
