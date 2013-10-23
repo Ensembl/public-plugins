@@ -421,7 +421,7 @@
     var site;
     site = el.parents('form').find("input[name='site']").val();
     if (site) {
-      return site === 'ensembl' || site === 'ensembl_all';
+      return site === 'ensembl' || site === 'ensembl_all' || site === 'vega';
     } else {
       return true;
     }
