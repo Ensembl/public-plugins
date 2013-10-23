@@ -246,7 +246,7 @@ sensible = new ACSensible 500,1000, (data) ->
 internal_site = (el) ->
   site = el.parents('form').find("input[name='site']").val()
   if site
-    return (site == 'ensembl' or site == 'ensembl_all')
+    return (site == 'ensembl' or site == 'ensembl_all' or site == 'vega')
   else
     return true
 
