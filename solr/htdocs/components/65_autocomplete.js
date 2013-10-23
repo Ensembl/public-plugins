@@ -102,7 +102,7 @@
     skip = false;
     if (element != null) {
       site = element.parents('form').find("input[name='site']");
-      if (site.length !== 0 && site.val() !== 'ensembl' && site.val() !== 'ensembl_all') {
+      if (site.length !== 0 && site.val() !== 'ensembl' && site.val() !== 'ensembl_all' && site.val() !== 'vega') {
         skip = true;
       }
     }

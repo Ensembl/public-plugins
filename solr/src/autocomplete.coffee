@@ -58,7 +58,7 @@ favourite_species = (element,callback) ->
   skip = false
   if element?
     site = element.parents('form').find("input[name='site']")
-    if site.length != 0 and site.val() != 'ensembl' and site.val() != 'ensembl_all'
+    if site.length != 0 and site.val() != 'ensembl' and site.val() != 'ensembl_all' and site.val() != 'vega'
       skip = true
   unless skip
     url_name = decodeURIComponent(window.location.pathname.split('/')[1])
