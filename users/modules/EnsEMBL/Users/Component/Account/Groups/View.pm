@@ -74,9 +74,7 @@ sub content {
       });
 
       # members
-      my %default_groups = map { $_ => 1 } @{$hub->species_defs->ENSEMBL_DEFAULT_USER_GROUPS};
-      my %query          = $default_groups{$group->group_id} ? ( 'query' => [ 'level' => 'administrator' ] ) : ();
-      my $memberships    = $group->find_memberships(%query, 'with_objects' => [ 'user' ]);
+      my $memberships = $group->find_memberships( 'with_objects' => [ 'user' ]);
       
       my $table = $self->new_table([
         {'key' => 'member',   'title' => 'Member',  'width' => '30%'                    },
