@@ -1,20 +1,18 @@
 package EnsEMBL::Web::Configuration::Account;
 
 use strict;
+use warnings;
 
-use EnsEMBL::Web::Tools::MethodMaker ('copy' => {
-  'SECURE_PAGES'  => '_SECURE_PAGES',
-  'populate_tree' => '_populate_tree'
-});
+use previous qw(SECURE_PAGES populate_tree);
 
 sub SECURE_PAGES {
-  return __PACKAGE__->_SECURE_PAGES, qw(OpenID);
+  return __PACKAGE__->PREV::SECURE_PAGES, qw(OpenID);
 }
 
 sub populate_tree {
   my $self = shift;
 
-  $self->_populate_tree(@_);
+  $self->PREV::populate_tree(@_);
 
   if ($self->hub->user) {
 
