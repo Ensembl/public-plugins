@@ -3,15 +3,16 @@ package EnsEMBL::Web::Document::Element::Tabs;
 # Adds Tools tab to the existing tabs
 
 use strict;
+use warnings;
 
-use EnsEMBL::Web::Tools::MethodMaker (copy => {qw(init __init)});
+use previous qw(init);
 
 sub init {
   my $self        = shift;
   my $controller  = $_[0];
   my $hub         = $controller->hub;
 
-  $self->__init(@_);
+  $self->PREV::init(@_);
 
   unless ($controller->builder->object('Tools')) {
     $self->add_entry({
