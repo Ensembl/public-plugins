@@ -6,11 +6,11 @@ use EnsEMBL::Web::User;
 use EnsEMBL::Web::Exceptions;
 # use EnsEMBL::Web::Configuration::Account;
 
-use EnsEMBL::Web::Tools::MethodMaker (copy => {map {$_ => "__$_"} qw(new url get_favourite_species)});
+use previous qw(new url get_favourite_species);
 
 use constant CSRF_SAFE_PARAM => 'rxt';
 
-sub PREFERENCES_PAGE  { return shift->url({'type' => 'Account', 'action' => 'Preferences', 'function' => ''}); }
+sub PREFERENCES_PAGE { return shift->url({'type' => 'Account', 'action' => 'Preferences', 'function' => ''}); }
 
 sub new {
   ## @overrides
@@ -18,12 +18,13 @@ sub new {
   my ($class, $args) = @_;
 
   my $cookie    = delete $args->{'user_cookie'};
-  my $self      = $class->__new($args);
+  my $self      = $class->PREV::new($args);
 
   if ($self->users_available && $cookie) { # always check users_available
     try {
       $self->user = EnsEMBL::Web::User->new($self, $cookie) if $cookie;
     } catch {
+      throw $_ unless $_->type eq 'ORMException';
       $self->users_available(0);
     };
   }
@@ -55,7 +56,7 @@ sub url {
   # https url
   # $params->{'action'} eq $_ and ($base_url = $self->species_defs->ENSEMBL_LOGIN_URL) =~ s/\/$// and last for EnsEMBL::Web::Configuration::Account->SECURE_PAGES;
 
-  my $url = $self->__url($extra || (), $params, @_);
+  my $url = $self->PREV::url($extra || (), $params, @_);
 
   return $base_url ? "$base_url$url" : $url;
 }
@@ -65,7 +66,7 @@ sub get_favourite_species {
   my $user        = $self->user;
   my @favourites  = $user ? @{$user->favourite_species} : ();
 
-  return @favourites ? \@favourites : $self->__get_favourite_species;
+  return @favourites ? \@favourites : $self->PREV::get_favourite_species;
 }
 
 sub users_available {

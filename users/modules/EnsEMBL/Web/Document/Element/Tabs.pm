@@ -3,11 +3,12 @@ package EnsEMBL::Web::Document::Element::Tabs;
 ### Plugin file to add history dropdown to tabs for the logged-in user
 
 use strict;
+use warnings;
 
-use EnsEMBL::Web::Tools::MethodMaker ('copy' => {'new' => '_new'});
+use previous qw(new);
 
 sub new {
-  my $self = shift->_new(@_);
+  my $self = shift->PREV::new(@_);
   $self->{'history'}    = {};
   $self->{'bookmarks'}  = {};
   return $self;

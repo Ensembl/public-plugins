@@ -1,8 +1,9 @@
 package EnsEMBL::Web::Configuration::UserData;
 
 use strict;
+use warnings;
 
-use EnsEMBL::Web::Tools::MethodMaker (copy => {qw(populate_tree userdata_populate_tree)});
+use previous qw(populate_tree);
 
 sub populate_tree {
   my $self                = shift;
@@ -161,7 +162,7 @@ sub populate_tree {
     $self->create_account_node($_,            '',       [], { 'no_menu_entry' => 1,       'command' => 'EnsEMBL::Users::Command::Account::Password::Save'               }) for qw(Confirmed Password/Save);
 
     # Append the UserData tree from core web code
-    $self->userdata_populate_tree;
+    $self->PREV::populate_tree;
 
     # Generic logout command
     $self->create_account_node('Logout',      'Logout', [], { 'no_menu_entry' => !$user,  'command' => 'EnsEMBL::Users::Command::Account::Logout', 'availability' => 1  });
@@ -170,7 +171,7 @@ sub populate_tree {
   } else {
 
     # UserData tree
-    $self->userdata_populate_tree;
+    $self->PREV::populate_tree;
 
     $self->create_account_node('Down', 'Down', [
       'down' => 'EnsEMBL::Users::Component::Account::Down'
@@ -183,7 +184,7 @@ sub create_node {
   my $self  = shift;
   my $hub   = $self->hub;
 
-  ($self->{'_referer_species'}) = grep {$_ ne 'Multi'} $hub->species, $hub->referer->{'ENSEMBL_SPECIES'}, '' unless $self->{'_referer_species'};
+  ($self->{'_referer_species'}) = grep {$_ && $_ ne 'Multi'} $hub->species, $hub->referer->{'ENSEMBL_SPECIES'}, '' unless $self->{'_referer_species'};
 
   return $self->_create_node($self->{'_referer_species'} || 'Multi', 'UserData', @_);
 }
