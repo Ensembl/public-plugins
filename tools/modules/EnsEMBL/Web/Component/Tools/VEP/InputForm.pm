@@ -17,7 +17,7 @@ sub content {
     id     => 'vep_input',
     action => $hub->url('Json', {qw(type Tools action VEP function form_submit)}),#'/Tools/Submit',
     method =>  'post',
-    class  => 'blast_form bgcolour',
+    class  => 'vep_form bgcolour',
     validate => 0,
     enctype => 'multipart/form-data'
   });
@@ -199,25 +199,25 @@ ENST00000471631.1:c.28_33delTCGCGG),
   
   
   # have otherfeatures?
-  foreach my $sp ($hub->species_defs->valid_species) {
-    if($hub->species_defs->get_config($sp, 'databases')->{'DATABASE_OTHERFEATURES'}) {
-      my $div = $input_fieldset->dom->create_element('div', {class => '_stt_'.$sp});
-
-      $div->append_child($input_fieldset->add_field({
-          'type'    => 'Radiolist',
-          'name'    => 'core_type_'.$sp,
-          'label'   => "Transcript database to use ".$self->helptip("Select RefSeq to use the otherfeatures transcript database, which contains basic aligned RefSeq transcript sequences in place of complete Ensembl transcript models"),
-          'values'  => [
-            { value => 'core',          caption => 'Ensembl transcripts'          },
-            { value => 'refseq', caption => 'RefSeq and other transcripts' },
-          ],
-          'value'   => 'core',
-          'select'  => 'select'
-      }));
-      
-      $input_fieldset->append_child($div);
-    }
-  }
+  #foreach my $sp ($hub->species_defs->valid_species) {
+  #  if($hub->species_defs->get_config($sp, 'databases')->{'DATABASE_OTHERFEATURES'}) {
+  #    my $div = $input_fieldset->dom->create_element('div', {class => '_stt_'.$sp});
+  #
+  #    $div->append_child($input_fieldset->add_field({
+  #        'type'    => 'Radiolist',
+  #        'name'    => 'core_type_'.$sp,
+  #        'label'   => "Transcript database to use ".$self->helptip("Select RefSeq to use the otherfeatures transcript database, which contains basic aligned RefSeq transcript sequences in place of complete Ensembl transcript models"),
+  #        'values'  => [
+  #          { value => 'core',          caption => 'Ensembl transcripts'          },
+  #          { value => 'refseq', caption => 'RefSeq and other transcripts' },
+  #        ],
+  #        'value'   => 'core',
+  #        'select'  => 'select'
+  #    }));
+  #    
+  #    $input_fieldset->append_child($div);
+  #  }
+  #}
 
   $input_fieldset->add_field({
     type    => 'Submit',
