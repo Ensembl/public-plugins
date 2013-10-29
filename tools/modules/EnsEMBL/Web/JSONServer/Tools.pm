@@ -14,6 +14,10 @@ sub json_form_submit {
   my $jobs_data     = $object->form_inputs_to_jobs_data;
 
   if ($jobs_data && @$jobs_data) {
+    
+    # error?
+    return $self->call_js_panel_method('showError', [$jobs_data->[0]->{error}, 'Invalid input']) if defined($jobs_data->[0]->{error});
+    
     $object->create_ticket($jobs_data);
     return $self->call_js_panel_method('ticketSubmitted');
   }
