@@ -35,9 +35,7 @@ sub new {
   my $class = shift;
   my $self  = $class->SUPER::new( @_ );
 
-  $self->{'_error'}       = {};
-  $self->{'_analysis'}    = {};
-  $self->{'_species'}     = ();
+  $self->{'_error'}       = undef;
   $self->{'_description'} = '';
   $self->{'_config'} = {};
 
@@ -72,28 +70,28 @@ sub get_unique_ticket_name {
 sub process_job_for_hive_submission {
   ## Abstract method implementation
   my ($self, $job) = @_;
-
-  my $job_data = $job->job_data->raw;
-
-  my $hub   = $self->hub;
-  my $dba   = $hub->database('core', $job_data->{'species'});
-  my $dbc   = $dba->dbc;
-  my $sd    = $hub->species_defs;
-
-  $job_data->{'dba'}  = {
-    -user               => $dbc->username,
-    -host               => $dbc->host,
-    -port               => $dbc->port,
-    -pass               => $dbc->password,
-    -dbname             => $dbc->dbname,
-    -driver             => $dbc->driver,
-    -species            => $dba->species,
-    -species_id         => $dba->species_id,
-    -multispecies_db    => $dba->is_multispecies,
-    -group              => $dba->group
-  };
-
-  return $job_data;
+  return $job->job_data->raw;
+  #my $job_data = $job->job_data->raw;
+  #
+  #my $hub   = $self->hub;
+  #my $dba   = $hub->database('core', $job_data->{'species'});
+  #my $dbc   = $dba->dbc;
+  #my $sd    = $hub->species_defs;
+  #
+  #$job_data->{'dba'}  = {
+  #  -user               => $dbc->username,
+  #  -host               => $dbc->host,
+  #  -port               => $dbc->port,
+  #  -pass               => $dbc->password,
+  #  -dbname             => $dbc->dbname,
+  #  -driver             => $dbc->driver,
+  #  -species            => $dba->species,
+  #  -species_id         => $dba->species_id,
+  #  -multispecies_db    => $dba->is_multispecies,
+  #  -group              => $dba->group
+  #};
+  #
+  #return $job_data;
 }
 
 
@@ -107,12 +105,12 @@ sub form_inputs_to_jobs_data {
   $self->process_description; 
   $self->process_config;
   $self->configure_script_output;
-  #return keys %{$self->{'_error'}} ? $self->{'_error'} : undef;
   
   return [{
     'job_desc'    => $self->{description},
     'species'     => $self->{species},
-    'config'      => $self->{_config}
+    'config'      => $self->{_config},
+    'error'       => $self->{_error},
   }];
 }
 
@@ -163,24 +161,24 @@ sub process_input_data {
         }
         close IN;
         
-        $self->{'_error'}{'format'} = "Selected file format ($format) does not match detected format ($detected_format)" if $format ne $detected_format;
+        $self->{'_error'} = "Selected file format ($format) does not match detected format ($detected_format)" if $format ne $detected_format;
         
         # store full path for script to use
         $self->{'_config'}->{'input_file'} = $file->{'full_path'};
       }
       else {
-        $self->{'_error'}{'file'} = "Could not find file with code ".$code;
+        $self->{'_error'} = "Could not find file with code ".$code;
       }
     }
     elsif($response && $response->{'error'}) {
-      $self->{'_error'}{'url'} = $response->{error};
+      $self->{'_error'} = $response->{error};
     }
     else {
-      $self->{'_error'}{'file'} = 'Upload failed: '.$response->{filter_code};
+      $self->{'_error'} = 'Upload failed: '.$response->{filter_code};
     }
   }
   else {
-    $self->{'_error'}{'file'} = 'No input data has been entered';
+    $self->{'_error'} = 'No input data has been entered';
   }
 }
 
