@@ -13,7 +13,7 @@ sub content {
   my $object = $self->object;
   my $job    = $object->get_requested_job({'with_all_results' => 1});
   
-  return '<div>No job selected</div>' unless defined $job;
+  return '<div><h3>No job selected</h3></div>' unless defined $job;
   
   return $self->job_status($job) if $job->status ne 'done';
   
