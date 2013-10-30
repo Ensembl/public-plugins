@@ -38,7 +38,7 @@ First we define <i>focus</i> experimental marks, which narrow the analysis on  f
 </p>
 
 <p>
-Next, we define the <i>core regions</i> where focus marks overlap. These are likely to be positioned on or around any potential regulatory motif. To maintain resolution and to avoid chaining of regulatory features across regions of dense regulatory elements, a 2kb length threshold is used. If a feature exceeds this cut-off, it is treated as an attribute feature (see below) rather than a core region.
+Next, we define the <i>core regions</i> where focus marks overlap. These are likely to be positioned on or around any potential regulatory motif. To maintain resolution and to avoid chaining of regulatory features across regions of dense regulatory elements, a 2kb length threshold is used. If a feature exceeds this cut-off, it is treated as an attribute feature (see below) rather than a focus feature, and does not contribute to the core region structure.
 </p>
 
 <p>
@@ -54,7 +54,7 @@ For a cell line where there is no core data available, but there is substantial 
 <p>
 We first define a set of Genomic Features, which broadly characterise the function of a genomic region into:
 <ul>
-<li><b>Genes</b>: gene bodies,</li>
+<li><b>Genes</b>: gene bodies</li>
 <li><b>Promoters</b>: within 2.5kb of a transcription start site, but not in the downstream gene body,</li>
 <li><b>Non-gene</b>: any region outside of the gene bodies,</li>
 <li><b>Polymerase III sites</b>: regions 2.5kb upstream of PolIII transcribed regions, e.g. tRNAs.</li>
