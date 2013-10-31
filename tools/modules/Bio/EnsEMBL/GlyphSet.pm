@@ -1,6 +1,7 @@
 package Bio::EnsEMBL::GlyphSet;
 
 use strict;
+use warnings;
 
 sub draw_btop_feature { 
   my ($self, $params) = @_;
@@ -24,7 +25,6 @@ sub draw_btop_feature {
   $btop =~s/^:|:$//g;
   my @btop_features = split (/:/, $btop);
 
-  my $slice_start= $self->{'container'}->start;
   my $end = $f->end > $slice_end ? $slice_end : $f->end;
   $end = $end - $slice_start + 1; 
 
