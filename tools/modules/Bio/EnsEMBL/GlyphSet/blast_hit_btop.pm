@@ -12,7 +12,7 @@ use Bio::EnsEMBL::Feature;
 sub colour_key {return 'blast';}
 sub title {}
 
-sub features {
+sub features {warn "NOT IMPLEMENTED";
   my $self = shift;
   my $slice = $self->{'container'};
   my @features; 
@@ -22,7 +22,7 @@ sub features {
 
   my $ticket = $tools_object->ticket;
 
-  my @result_lines = @{$tools_object->get_all_hits_from_ticket_in_region($slice, $ticket->ticket_id)};
+  my @result_lines = @{$tools_object->get_all_hits_from_ticket_in_region($slice, $ticket->ticket_id)}; # TODO - get_all_hits_in_slice_region
   my %extra;
 
   my $analysis = new Bio::EnsEMBL::Analysis (
@@ -97,8 +97,8 @@ sub features {
 }
 
 sub get_colour_scale {
-  my $self = shift;
-  my %pointer_defaults    = EnsEMBL::Web::ToolsConstants::KARYOTYPE_POINTER_DEFAULTS;
+  my $self = shift;use Carp qw(croak); croak 'TODO';
+  my %pointer_defaults    = ();#EnsEMBL::Web::BlastConstants::KARYOTYPE_POINTER_DEFAULTS; #use blast_pointer_style
   my $defaults            = $pointer_defaults{'Blast'};
   my $gradient            = $defaults->[2];
   my @colour_scale        = $self->{'config'}->colourmap->build_linear_gradient(@$gradient);
