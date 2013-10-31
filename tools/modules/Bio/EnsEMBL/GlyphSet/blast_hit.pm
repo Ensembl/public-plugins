@@ -2,7 +2,6 @@ package Bio::EnsEMBL::GlyphSet::blast_hit;
 
 use strict;
 use warnings;
-no warnings 'uninitialized';
 
 use base qw(Bio::EnsEMBL::GlyphSet::_simple);
 
