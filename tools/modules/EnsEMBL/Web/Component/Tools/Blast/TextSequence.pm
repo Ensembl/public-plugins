@@ -11,8 +11,8 @@ use base qw(
 sub job           { return shift->{'_job'};                       } # @return The cached requested job object
 sub hit_id        { return shift->{'_hit_id'};                    } # @return ID of the result object containing the hit
 sub hit           { return shift->{'_hit'};                       } # @return Result hit (hashref)
-sub blast_method  { return shift->{'blast_method'};               } # @return Blast method chosen for the given job
-sub is_protein    { return shift->{'is_protein'};                 } # @return Flag whether the sequence is protein or not
+sub blast_method  { return shift->{'_blast_method'};              } # @return Blast method chosen for the given job
+sub is_protein    { return shift->{'_is_protein'};                } # @return Flag whether the sequence is protein or not
 sub object        { return shift->SUPER::object->get_sub_object;  } ## Gets the actual blast object instead of the Tools object
 
 sub new {
@@ -25,7 +25,7 @@ sub new {
   $self->{'_hit_id'}        = $self->{'_job'}->result->[0]->result_id;
   $self->{'_hit'}           = $self->{'_job'}->result->[0]->result_data;
   $self->{'_blast_method'}  = $object->parse_search_type($self->{'_job'}->job_data->{'search_type'}, 'search_method');
-  $self->{'_is_protein'}    = $self->{'blast_method'} =~/^(blastx|blastp)$/i ? 1 : 0;
+  $self->{'_is_protein'}    = $self->{'_blast_method'} =~/^(blastx|blastp)$/i ? 1 : 0;
 
   push @{$self->{'key_params'}}, 'hsp_display';
 
@@ -254,7 +254,7 @@ sub set_hsps {
   while (my ($hit_id, $hit) = splice @$hits, 0, 2) {
 
     my $is_selected_hit = $hit_id == $self->hit_id;
-    my $ori             = $hub->param('orientation');
+    my $ori             = $hub->param('orientation'); # TODO provide a default value to this somewhere!
     my $g_ori           = $hit->{'gori'};
     my $invert_flag     = $ori eq 'fa' && $g_ori eq '-1' ? 1
                           : $ori eq 'fc' && $slice->strand eq '-1' ? 1
