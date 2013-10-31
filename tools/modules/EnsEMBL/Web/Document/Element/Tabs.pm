@@ -11,16 +11,17 @@ sub init {
   my $self        = shift;
   my $controller  = $_[0];
   my $hub         = $controller->hub;
+  my $tl_param    = $hub->param('tl');
+     $tl_param    = $tl_param ? {'tl' => $tl_param} : {};
 
   $self->PREV::init(@_);
 
   unless ($controller->builder->object('Tools')) {
     $self->add_entry({
       type    => 'Tools',
-      action  => 'Blast',
       caption => 'Tools',
-      url     => $hub->url({qw(type Tools action Blast)}),
-      class   => 'tools '.($hub->type eq 'Blast' ? ' active' : '')
+      url     => $hub->url({qw(type Tools action Summary), %$tl_param}),
+      class   => 'tools '.($hub->type eq 'Tools' ? ' active' : '')
     });
   }
 }
