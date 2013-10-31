@@ -25,7 +25,7 @@ use Bio::SeqIO;
 use Bio::EnsEMBL::Registry;
 use EnsEMBL::Web::SpeciesDefs;
 use EnsEMBL::Web::ExtIndex;
-use EnsEMBL::Web::TmpFile::Text;
+use EnsEMBL::Web::TmpFile::VcfTabix;
 use Bio::EnsEMBL::Variation::Utils::VEP qw(detect_format);
 use EnsEMBL::Web::Command::UserData;
 
