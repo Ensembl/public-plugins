@@ -2,66 +2,53 @@ package EnsEMBL::Web::Component::Tools::VEP::InputForm;
 
 use strict;
 use warnings;
-no warnings 'uninitialized';
-
 
 use base qw(EnsEMBL::Web::Component::Tools::VEP);
 
 sub content {
-  my $self = shift;
-  my $hub = $self->hub;
+  my $self  = shift;
+  my $hub   = $self->hub;
   my $html;
 
-  #my $form = $self->modal_form('select', '/Tools/Submit');
-  my $form = $self->new_form({
-    id     => 'vep_input',
-    action => $hub->url('Json', {qw(type Tools action VEP function form_submit)}),#'/Tools/Submit',
-    method =>  'post',
-    class  => 'vep_form bgcolour',
-    validate => 0,
-    enctype => 'multipart/form-data'
+  my $form  = $self->new_form({
+    id        => 'vep_input',
+    action    => $hub->url('Json', {qw(type Tools action VEP function form_submit)}),
+    method    =>  'post',
+    class     => 'tools_form bgcolour',
+    validate  => 0
   });
   
-  # analysis type
-  $form->add_element(
-    type    => 'Hidden',
-    name    => 'ensembl_tool',
-    value   => 'VEP',
-  );
-
   ## Species now set automatically for the page you are on
   my $input_fieldset = $form->add_fieldset({'class' => '_stt_input', 'no_required_notes' => 1});
   $self->_build_input($input_fieldset);
   
-  my $output_fieldset = $form->add_fieldset();
-  $output_fieldset->legend('Output options');
+  my $output_fieldset = $form->add_fieldset('Output options');
 
   ### Advanced config options ###
   my @sections = (
     {
-      id => 'identifiers',
-      title => 'Identifiers and frequency data',
-      caption => 'Additional identifiers for genes, transcripts and variants; frequency data'
+      id        => 'identifiers',
+      title     => 'Identifiers and frequency data',
+      caption   => 'Additional identifiers for genes, transcripts and variants; frequency data'
     },
     {
-      id => 'extra',
-      title => 'Extra options',
-      caption => 'e.g. SIFT, PolyPhen and regulatory data'
+      id        => 'extra',
+      title     => 'Extra options',
+      caption   => 'e.g. SIFT, PolyPhen and regulatory data'
     },
     {
-      id => 'filters',
-      title => 'Filtering options',
-      caption => 'Pre-filter results by frequency or consequence type'
+      id        => 'filters',
+      title     => 'Filtering options',
+      caption   => 'Pre-filter results by frequency or consequence type'
     }
   );
-  
+
   foreach my $section(@sections) {
     my $show    = $hub->get_cookie_value('toggle_vep'.$section->{id}) eq 'open' || 0;
     my $style   = $show ? '' : 'display:none';
-    
+
     my $configuration = $form->dom->create_element('div', {
       class       => 'config',
-      #style       => 'display: inline;',
       children    => [{
         node_name   => 'a',
         rel         => 'vep'.$section->{id},
@@ -72,8 +59,8 @@ sub content {
       },
       {
         node_name   => 'span',
-        style => 'float:right; color: grey; font-style: italic',
-        inner_HTML => $section->{caption}
+        style       => 'float:right; color: grey; font-style: italic',
+        inner_HTML  => $section->{caption}
       }]
     });
   
@@ -102,7 +89,7 @@ sub content {
     class   => 'submit_vep',
   });
   
-  $html .= '<h2>New VEP job:</h2><input type="hidden" class="panel_type" value="VEPForm" />';
+  $html .= '<h2>New VEP job:</h2><input type="hidden" class="panel_type" value="ToolsForm" />';
   $html .= '<div style="width:800px">'.$form->render.'</div>';
   
   return $html;
