@@ -13,14 +13,22 @@ Ensembl.Panel.ToolsForm = Ensembl.Panel.ContentTools.extend({
     this.elLk.form = this.el.find('form.tools_form').on('submit', function(event) {
       event.preventDefault();
       panel.toggleSpinner(true);
-      panel.ajax({
+
+      panel.ajax($.extend({
         'url'       : this.action,
         'method'    : 'post',
-        'data'      : $(this).serializeArray(),
         'complete'  : function() {
           this.toggleSpinner(false);
         }
-      });
+      }, window.FormData === undefined ? {
+        'iframe'      : true,
+        'form'        : $(this)
+      } : {
+        'data'        : new FormData(this),
+        'cache'       : false,
+        'contentType' : false,
+        'processData' : false
+      }));
     });
   },
 
