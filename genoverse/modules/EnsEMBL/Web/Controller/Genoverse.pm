@@ -176,7 +176,8 @@ sub fetch_transcript {
   my ($glyphset) = $self->_use("Bio::EnsEMBL::GlyphSet::$function", {
     container => $slice,
     config    => $image_config,
-    my_config => $node
+    my_config => $node,
+    display   => $display
   });
   
   my @features;
@@ -404,6 +405,7 @@ sub extra_synteny {
       container => $slice,
       config    => $image_config,
       my_config => $_,
+      display   => $_->get('display') || ($_->get('on') eq 'on' ? 'normal' : 'off'),
     });
     
     $extra->{'colors'}{$_->{'hit_chr_name'}} ||= $colourmap->hex_by_name($glyphset->get_colours($_)->{'feature'}) for @{$glyphset->features};
