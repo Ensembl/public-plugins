@@ -26,7 +26,7 @@ sub content {
   
   # get job stats
   my $stats = $object->job_statistics;
-  my $output_lines = $stats->{'General statistics'}->{'Lines of output written'};
+  my $output_lines = $stats->{'General statistics'}->{'Lines of output written'} || 0;
   
   # get all params
   my %params;
