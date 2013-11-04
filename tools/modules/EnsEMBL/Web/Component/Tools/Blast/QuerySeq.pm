@@ -1,7 +1,6 @@
 package EnsEMBL::Web::Component::Tools::Blast::QuerySeq;
 
 use strict;
-use warnings;
 
 use Bio::EnsEMBL::Slice;
 
@@ -9,107 +8,58 @@ use base qw(EnsEMBL::Web::Component::Tools::Blast::TextSequence);
 
 sub initialize {
   my ($self, $slice, $start, $end) = @_;
-  my $hub     = $self->hub;
-  my $object  = $self->object;
-  my $species = $self->job->job_data->{'species'};
-
-  my $config  = {
+  my $hub    = $self->hub;
+  my $config = {
     display_width   => $hub->param('display_width') || 60,
-    site_type       => ucfirst(lc $hub->species_defs->ENSEMBL_SITETYPE) || 'Ensembl',
-    species         => $species,
+    species         => $self->job->job_data->{'species'},
     sub_slice_start => $start,
     sub_slice_end   => $end
   };
-
+  
   for (qw(line_numbering hsp_display)) {
     $config->{$_} = $hub->param($_) unless $hub->param($_) eq 'off';
   }
-
-  $config->{'slices'} = [{ slice => $slice, name => $config->{'species'} }];
-
-  if ($config->{'line_numbering'}) {
-    $config->{'end_number'} = 1;
-    $config->{'number'}     = 1;
-  }
-
+  
+  $config->{'slices'}     = [{ slice => $slice, name => $config->{'species'} }];
+  $config->{'end_number'} = $config->{'number'} = 1 if $config->{'line_numbering'};
+  
   my ($sequence, $markup) = $self->get_sequence_data($config->{'slices'}, $config);
-
-  $self->markup_hsp($sequence, $markup, $config)  if $config->{'hsp_display'};
-  $self->markup_line_numbers($sequence, $config)  if $config->{'line_numbering'};
-
+  
+  $self->markup_hsp($sequence, $markup, $config) if $config->{'hsp_display'};
+  $self->markup_line_numbers($sequence, $config) if $config->{'line_numbering'};
+  
   return ($sequence, $config);
 }
 
-sub content {
-  my $self = shift;
+sub get_slice {
+  my $self      = shift;
+  my $job_data  = $self->job->job_data;
+  my $hit       = $self->hit;
+  my $query_seq = $job_data->{'sequence'}{'seq'};
   
-  my $query_slice = $self->query_slice; 
-  my $species     = $self->job->job_data->{'species'};
-  my $length      = $query_slice->length;
-  my $html        = '';#$self->tool_buttons(uc $query_slice->seq(1), $species);
-  # FIXME tool_buttons needs object to have ->Obj->stable_id
-
-  if ($length >= $self->{'subslice_length'}) {
-    my $base_url = $self->ajax_url('sub_slice', { 'length' => $length, 'name' => $query_slice->name });
-    $html .= '<div class="sequence_key"></div>' . $self->chunked_content($length, $self->{'subslice_length'}, $base_url);
-  } else {
-    $html .= $self->content_sub_slice($query_slice); # Direct call if the sequence length is short enough
-  }
-
-  return $html;
-}
-
-sub query_slice {
-  my $self          = shift;
-  my $object        = $self->object;
-  my $hub           = $self->hub;
-  my $job           = $self->job;
-  my $job_data      = $job->job_data;
-  my $hit           = $self->hit;
-  my $query_seq     = $job_data->{'sequence'}->{'seq'};
-  my $length        = length $query_seq;
-  my $genomic_slice = $self->object->get_hit_genomic_slice($hit, $job_data->{'species'});
-
   return Bio::EnsEMBL::Slice->new(
-    -coord_system     => $genomic_slice->coord_system,
-    -seq_region_name  => $hit->{'qid'},
-    -start            => 1,
-    -end              => $length,
-    -strand           => $hit->{'qori'},
-    -seq              => $query_seq
+    -coord_system    => $self->object->get_hit_genomic_slice($hit, $job_data->{'species'})->coord_system,
+    -seq_region_name => $hit->{'qid'},
+    -start           => 1,
+    -end             => length($query_seq),
+    -strand          => $hit->{'qori'},
+    -seq             => $query_seq
   );
 }
 
-sub query_slice_name {
-  my ($self, $slice) = @_;
-  return join ':', $slice->seq_region_name, $slice->start, $slice->end, $slice->strand;
-}
+sub get_slice_name { return join ':', $_[1]->seq_region_name, $_[1]->start, $_[1]->end, $_[1]->strand; }
 
-sub content_sub_slice {
-  my ($self, $slice) = @_;
-  my $hub       = $self->hub;
-  my $start     = $hub->param('subslice_start');
-  my $end       = $hub->param('subslice_end');
-  my $length    = $hub->param('length');
-  $slice      ||= $self->query_slice;
-  my $sub_slice = $start && $end ? $slice->sub_Slice($start, $end) : $slice;
-
-  my ($sequence, $config) = $self->initialize($sub_slice, $start, $end);
-
-  if ($start == 1) {
-    $config->{'html_template'} = qq{<pre class="text_sequence" style="margin-bottom:0">&gt;} . $self->query_slice_name($slice) . "\n%s</pre>";
-  } elsif ($end && $end == $length) {
-    $config->{'html_template'} = '<pre class="text_sequence">%s</pre>';
-  } elsif ($start && $end) {
-    $config->{'html_template'} = '<pre class="text_sequence" style="margin:0 0 0 1em">%s</pre>';
-  } else {
-    $config->{'html_template'} = sprintf('<div class="sequence_key">%s</div>', $self->get_key($config)) . '<pre class="text_sequence">&gt;' . $self->query_slice_name($slice) . "\n%s</pre>";
-  }
-
-  $config->{'html_template'} .= '<p class="invisible">.</p>';
-
-  return $self->build_sequence($sequence, $config);
+sub get_key {
+  ## @override
+  ## Adds the HSP key before calling the base class's method
+  my ($self, $config) = @_;
+  
+  return $self->SUPER::get_key($config, {
+    hsp => {
+      sel   => { class => 'hsp_sel',   order => 1, text => 'Matching bases for selected HSP' },
+      other => { class => 'hsp_other', order => 2, text => 'Matching bases for other HSPs in selected hit' }
+    }
+  });
 }
 
 1;
-
