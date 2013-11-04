@@ -20,7 +20,7 @@ sub initialize {
     $config->{$_} = $hub->param($_) unless $hub->param($_) eq 'off';
   }
   
-  $config->{'slices'} = [{ slice => $slice, name => $species }];
+  $config->{'slices'} = [{ slice => $slice || $self->get_slice, name => $species }];
   
   if ($config->{'line_numbering'}) {
     $config->{'end_number'} = 1;

@@ -17,7 +17,6 @@ sub initialize {
   my $config = {
     display_width   => $hub->param('display_width') || 60,
     species         => $self->hit->{'species'},
-    slices          => $slices,
     maintain_colour => 1,
     comparison      => 1,
     query_seq       => 'on',
@@ -27,6 +26,7 @@ sub initialize {
     $config->{$_} = $hub->param($_) unless $hub->param($_) =~ /^(off|no)$/;
   }
   
+  $config->{'slices'}     = $slices || $self->get_slice($config);
   $config->{'end_number'} = $config->{'number'} = 1 if $config->{'line_numbering'};
   
   if (!$config->{'align_display'}) {
@@ -50,13 +50,13 @@ sub content {
   
   return '' unless $self->job;
   
-  my ($sequence, $config) = $self->initialize($self->get_slice);
+  my ($sequence, $config) = $self->initialize;
   
   return sprintf '%s<div class="sequence_key">%s</div>%s', $self->tool_buttons, $self->get_key($config), $self->build_sequence($sequence, $config);
 }
 
 sub get_slice {
-  my $self            = shift;
+  my ($self, $config) = @_;
   my $object          = $self->object;
   my $job_data        = $self->job->job_data;
   my $hit             = $self->hit;
@@ -127,8 +127,12 @@ sub get_slice {
     @slices = (
       { name => 'Query',   slice => $query_slice,     no_markup => 1 },    
       { name => '',        seq   => $homology_string, no_markup => 1 },
-      { name => 'Subject', slice => $slice, seq => $hit_slice->seq, mapper => $mapper, ref_slice_start => $ref_slice->start, ref_slice_end => $ref_slice->end },
+      { name => 'Subject', slice => $slice, seq => $hit_slice->seq   },
     );
+    
+    $config->{'mapper'}          = $mapper;
+    $config->{'ref_slice_start'} = $ref_slice->start;
+    $config->{'ref_slice_end'}   = $ref_slice->end;
   } 
   
   return \@slices;

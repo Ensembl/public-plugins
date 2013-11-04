@@ -201,7 +201,7 @@ sub content_sub_slice {
 
 sub content_rtf {
   my $self = shift;
-  return $self->export_sequence($self->initialize($self->get_slice));
+  return $self->export_sequence($self->initialize);
 }
 
 1;
