@@ -1,16 +1,15 @@
 package EnsEMBL::Web::Hub;
 
 use strict;
-
-use EnsEMBL::Web::User;
-use EnsEMBL::Web::Exceptions;
-# use EnsEMBL::Web::Configuration::Account;
+use warnings;
 
 use previous qw(new url get_favourite_species);
 
-use constant CSRF_SAFE_PARAM => 'rxt';
+use EnsEMBL::Web::User;
+use EnsEMBL::Web::Exceptions;
 
-sub PREFERENCES_PAGE { return shift->url({'type' => 'Account', 'action' => 'Preferences', 'function' => ''}); }
+sub CSRF_SAFE_PARAM   { 'rxt'; }
+sub PREFERENCES_PAGE  { $_[0]->url({'type' => 'Account', 'action' => 'Preferences', 'function' => ''}); }
 
 sub new {
   ## @overrides
@@ -25,6 +24,7 @@ sub new {
       $self->user = EnsEMBL::Web::User->new($self, $cookie) if $cookie;
     } catch {
       throw $_ unless $_->type eq 'ORMException';
+      $self->log_userdb_error($_);
       $self->users_available(0);
     };
   }
@@ -82,11 +82,19 @@ sub users_available {
     try {
       EnsEMBL::Web::User->manager_class->object_class->init_db->connect;
     } catch {
+      $self->log_userdb_error($_);
       $self->{'_users_available'} = 0;
     }
   }
 
   return $self->{'_users_available'};
+}
+
+sub log_userdb_error {
+  ## Logs the error thrown by userdb in case the connection could not be created
+  ## @param Exception object
+  my ($self, $exception) = @_;
+  warn $exception;
 }
 
 1;
