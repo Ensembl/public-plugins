@@ -16,7 +16,7 @@ use Bio::SeqIO;
 use EnsEMBL::Web::Parsers::NCBIBlast;
 use EnsEMBL::Web::Exceptions;
 use EnsEMBL::Web::SystemCommand;
-use EnsEMBL::Web::Tools::FileHandler;
+use EnsEMBL::Web::Tools::FileHandler qw(file_get_contents);
 
 ## STEP 1
 ## Setup : Set up all the required parameters, directories, file names etc and do requreid validations
