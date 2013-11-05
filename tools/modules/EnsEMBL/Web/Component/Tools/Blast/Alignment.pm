@@ -65,7 +65,7 @@ sub get_slice {
   my $query_seq       = $self->query_sequence($job_data, $hit, $blast_method, $species); 
   my $hit_seq         = $query_seq;
   my $aln_summary     = $hit->{'aln'} =~ s/\s+//rg;
-  my $homology_string = '|' x $hit->{'len'}; # FIXME: align_display
+  my $homology_string = '|' x $hit->{'len'};
   
   # take into account alignments that do not start with a match
   $aln_summary = $aln_summary =~ /^\d+/ ? $aln_summary : "0$aln_summary";
