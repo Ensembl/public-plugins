@@ -77,7 +77,7 @@ sub expand_job_status {
       my $details   = $exception->{'message'} ? "Error with message: $exception->{'message'}\n" : "Error:\n";
          $details  .= $exception->{'stack'}
         ? join("\n", map(sprintf("Thrown by %s at %s (%s)", $_->[3], $_->[0], $_->[2]), @{$exception->{'stack'}}))
-        : $exception->{'exception'} || 'Not details'
+        : $exception->{'exception'} || 'No details'
       ;
 
       my $helpdesk_details = sprintf 'This seems to be a problem with %s website code. Please contact our <a href="%s" class="modal_link">helpdesk</a> to report this problem.',
