@@ -4,10 +4,10 @@ use strict;
 
 use Bio::EnsEMBL::Variation::Utils::Constants;
 
-use EnsEMBL::Web::Tools::MethodMaker(copy => [ 'depth', '_depth' ]);
+use previous qw(depth);
 
 sub _labels { return $_[0]{'_labels'} ||= \%Bio::EnsEMBL::Variation::Utils::Constants::VARIATION_CLASSES; }
-sub depth   { return $_[0]->_depth if $_[0]{'container'}; }
+sub depth   { return $_[0]->PREV::depth if $_[0]{'container'}; }
 
 sub genoverse_attributes { 
   my ($self, $f) = @_;

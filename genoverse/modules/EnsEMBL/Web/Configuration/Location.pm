@@ -1,8 +1,8 @@
 package EnsEMBL::Web::Configuration::Location;
 
-use EnsEMBL::Web::Tools::MethodMaker(copy => [ 'modify_tree', '_modify_tree' ]);
-
 use strict;
+
+use previous qw(modify_tree);
 
 sub modify_tree {
   my $self = shift;
@@ -10,7 +10,7 @@ sub modify_tree {
   
   $view->set('genoverse', 1);
 
-  $self->_modify_tree;
+  $self->PREV::modify_tree;
 }
 
 sub get_configurable_components {

@@ -4,7 +4,7 @@ package EnsEMBL::Web::Component::Location::ViewTop;
 
 use strict;
 
-use EnsEMBL::Web::Tools::MethodMaker(copy => [ 'content', 'content_main' ]);
+use previous qw(content);
 
 use base qw(EnsEMBL::Web::Component::Location::Genoverse);
 
@@ -13,7 +13,7 @@ sub new_image {
   return EnsEMBL::Web::Component::Location::Genoverse::new_image(@_);
 }
 
-sub content { return $_[0]->content_test; }
+sub content      { return $_[0]->content_test;  }
+sub content_main { return $_[0]->PREV::content; }
 
 1;
-
