@@ -35,7 +35,7 @@ sub process_job_for_hive_submission {
   my $job_data = $job->job_data->raw;
 
   if ($job_data->{'sequence'}{'is_invalid'}) {
-    $job->job_message([{'display_message' => $job_data->{'sequence'}{'is_invalid'}}]);
+    $job->job_message([{'display_message' => $job_data->{'sequence'}{'is_invalid'}, 'fatal' => 0}]);
     return;
   }
 
