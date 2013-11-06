@@ -166,8 +166,8 @@
                 data.tp2_row.add_value('bracketed-title', 'Havana', 250);
               }
               if (((ref == null) || ref === 0) && ft === 'Gene') {
-                data.tp2_row.add_value('bracketed-title', 'Non-Reference', 275);
-                return data.tp2_row.add_value('new-contents', '<i>Not a Reference Gene</i>', 200);
+                data.tp2_row.add_value('bracketed-title', 'Alternate Sequence', 275);
+                return data.tp2_row.add_value('new-contents', '<i>Not a Primary Assembly Gene</i>', 200);
               }
             });
             data.tp2_row.register(10000, function() {
