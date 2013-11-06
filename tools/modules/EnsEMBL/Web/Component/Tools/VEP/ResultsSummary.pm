@@ -49,7 +49,7 @@ sub content {
   my %colours;
   
   foreach my $con(keys %Bio::EnsEMBL::Variation::Utils::Constants::OVERLAP_CONSEQUENCES) {
-    $colours{$con} = $colourmap->hex_by_name($var_styles->{$con}->{'default'}) || 'no_colour';
+    $colours{$con} = $colourmap->hex_by_name($var_styles->{lc $con}->{'default'}) || 'no_colour';
   }
   
   # encode it in JSON to send to the JS
