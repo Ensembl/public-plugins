@@ -324,7 +324,7 @@ sub update_jobs_from_hive {
           $job->job_message([ref $message
             ? {
               'display_message'   => delete $message->{'data'}{'display_message'} // $self->default_error_message,
-              'fatal'             => delete $message->{'data'}{'not_fatal'} ? 0 : 1,
+              'fatal'             => delete $message->{'data'}{'fatal'} // 1,
               'data'              => delete $message->{'data'},
               'exception'         => $message,
             }

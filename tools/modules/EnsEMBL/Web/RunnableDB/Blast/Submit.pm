@@ -155,8 +155,8 @@ sub run {
     my $error_message = $blast_command->error_message;
     my ($error_details) = file_get_contents($blast_log);
     throw exception('HiveException', $error_code == 1
-      ? ($error_message, {'display_message' => $error_details, 'not_fatal' => 1}) # input error -  user needs to change input sequence or configs
-      : ($error_details)                                                          # system error - user can't do anything
+      ? ($error_message, {'display_message' => $error_details, 'fatal' => 0}) # input error -  user needs to change input sequence or configs
+      : ($error_details)                                                      # system error - user can't do anything
     );
   }
 
