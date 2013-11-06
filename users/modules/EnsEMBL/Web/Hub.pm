@@ -43,7 +43,7 @@ sub url {
   my $params    = shift || {};
   my $base_url  = '';
 
-  if (!$params->{'type'} && $self->type eq 'Account' || $params->{'type'} eq 'Account') {
+  if (($params->{'type'} || $self->type) eq 'Account') {
     $params->{'__clear'} = 1;
     $params->{'species'} = 'Multi' if !$params->{'species'} || $params->{'species'} eq 'common';
   }
