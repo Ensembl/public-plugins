@@ -45,7 +45,7 @@ sub content_ajax {
           <div>%s</div>%s
           <h4>Account</h4>
           <div>
-            <p><a href="%1$s" class="modal_link constant" title="User Account" rel="modal_user_data">Edit Settings</a></p>
+            <p><a href="%1$s" class="modal_link constant" title="User Account" rel="modal_user_data">My Account</a></p>
             <p><strong><a href="%s" class="constant">Logout</a></strong></p>
           </div>
         </div>',
