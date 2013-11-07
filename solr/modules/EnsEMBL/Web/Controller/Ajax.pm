@@ -2,7 +2,7 @@ package EnsEMBL::Web::Controller::Ajax;
 
 use strict;
 
-use SiteDefs qw(:APACHE);
+use SiteDefs;
 
 use URI::Escape qw(uri_escape);
 use JSON qw(from_json to_json);
@@ -94,7 +94,7 @@ sub species {
     $name =~ s/ /_/g;
     $name = lc($name);
     $name = "fly" if $name eq "fruitfly"; # XXX why is this not an alias?
-    $name = $ENSEMBL_SPECIES_ALIASES->{$name} || $name;    
+    $name = $SiteDefs::ENSEMBL_SPECIES_ALIASES->{$name} || $name;    
     my $common = $sd->get_config($name,'SPECIES_COMMON_NAME');
     next unless $common;
     push @$out,{
