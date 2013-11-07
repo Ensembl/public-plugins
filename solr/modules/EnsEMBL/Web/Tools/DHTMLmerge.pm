@@ -2,7 +2,11 @@ package EnsEMBL::Web::Tools::DHTMLmerge;
 
 use strict;
 
-sub merge_plugin_solr {
+use previous qw(merge_all);
+
+sub merge_all {
+  PREV::merge_all(@_);
+  
   my $species_defs = shift;
   my $dir          = [split 'modules', __FILE__]->[0] . 'htdocs';
   

@@ -1,9 +1,11 @@
 package EnsEMBL::Web::Document::Element::BodyJavascript;
 
-use strict;
+use previous qw(init);
 
-sub add_sources_genoverse {
+sub init {
   my $self = shift;
+  
+  $self->PREV::init;
   $self->add_sources('genoverse', 'GENOVERSE_JS_NAME') if grep $_->[-1] eq 'genoverse', @{$self->hub->components};
 }
 
