@@ -123,7 +123,7 @@ sub content {
   
   # extras
   my %table_sorts = (
-    Location => 'hidden_position',
+    Location => 'position_html',
     GMAF => 'hidden_position',
     cDNA_position => 'numeric',
     CDS_position => 'numeric',
@@ -557,7 +557,7 @@ sub content {
   $html .= '</div></div>';
   
   # render table
-  my $table = $self->new_table(\@table_headers, $rows, { data_table => 1, data_table_config => {bLengthChange => 'false', bFilter => 'false'}, });
+  my $table = $self->new_table(\@table_headers, $rows, { data_table => 1, sorting => [ 'Location asc' ], data_table_config => {bLengthChange => 'false', bFilter => 'false'}, });
   $html .= '<div>'.$table->render.'</div>';
   
   $html .= '</div>';
@@ -682,24 +682,16 @@ sub linkify {
   
   # SIFT/PolyPhen
   elsif($field =~ /sift|polyphen/i && $value =~ /\w+/) {
-    my %colours = (
-      '-'                  => '',
-      'probably_damaging'  => 'red',
-      'possibly_damaging'  => 'orange',
-      'benign'             => 'green',
-      'unknown'            => 'blue',
-      'tolerated'          => 'green',
-      'deleterious'        => 'red',
-    );
-    
     my ($pred, $score) = split /\(|\)/, $value;
-    my $rank_str = '';
-    
-    if(defined($score)) {
-      $rank_str = "($score)";
-    }
-    
-    $new_value = qq{<span style="color:$colours{$pred}">$pred$rank_str</span>};
+    $pred =~ s/\_/ /g if $pred;
+    $new_value = $self->render_sift_polyphen($pred, $score);
+  }
+  
+  # codons
+  elsif($field eq 'Codons' && $value =~ /\w+/) {
+    $new_value = $value;
+    $new_value =~ s/([A-Z]+)/<b>$1<\/b>/g;
+    $new_value = uc($new_value);
   }
   
   else {
