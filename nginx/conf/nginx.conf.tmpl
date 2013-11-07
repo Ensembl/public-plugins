@@ -1,6 +1,6 @@
 
 #the "user" directive makes sense only if the master process runs with super-user privileges
-#user       [[ $ENSEMBL_USER ]] [[ $ENSEMBL_GROUP ]];
+#user       [[ $SiteDefs::ENSEMBL_USER ]] [[ $SiteDefs::ENSEMBL_GROUP ]];
 
 worker_processes  10;
 error_log  [[$SiteDefs::ENSEMBL_LOGDIR]]/nginx.error.log;
@@ -43,10 +43,10 @@ http {
     proxy_pass_header Expires;
     proxy_pass_header X-MEMCACHED;
     proxy_pass_header X-MACHINE;
-    add_header X-NGINX-MACHINE [[$ENSEMBL_SERVER]];
+    add_header X-NGINX-MACHINE [[$SiteDefs::ENSEMBL_SERVER]];
 
     #enable for EC2
-    [[ ($SiteDefs::ENSEMBL_NGINX_EC2 and not $SiteDefs::ENSEMBL_NGINX_EC2TEST)?'':'#' ]] proxy_set_header X-Forwarded-Host [[$ENSEMBL_SERVERNAME]];
+    [[ ($SiteDefs::ENSEMBL_NGINX_EC2 and not $SiteDefs::ENSEMBL_NGINX_EC2TEST)?'':'#' ]] proxy_set_header X-Forwarded-Host [[$SiteDefs::ENSEMBL_SERVERNAME]];
 
     gzip on;
     gzip_comp_level 4;
@@ -70,12 +70,12 @@ http {
     location /fetch {
         internal;
         access_log   off;
-        proxy_pass [["$ENSEMBL_PROTOCOL://$ENSEMBL_SERVER:$ENSEMBL_PORT"]];
+        proxy_pass [["$SiteDefs::ENSEMBL_PROTOCOL://$SiteDefs::ENSEMBL_SERVER:$SiteDefs::ENSEMBL_PORT"]];
         break;
     }
  
     location / {
-      proxy_pass      [["$ENSEMBL_PROTOCOL://$ENSEMBL_SERVER:$ENSEMBL_PORT"]];
+      proxy_pass      [["$SiteDefs::ENSEMBL_PROTOCOL://$SiteDefs::ENSEMBL_SERVER:$SiteDefs::ENSEMBL_PORT"]];
     }
     
     location /errors {
