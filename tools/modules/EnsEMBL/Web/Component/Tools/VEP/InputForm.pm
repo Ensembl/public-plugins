@@ -101,18 +101,22 @@ sub _build_input {
 
   $input_fieldset->legend('Input');
   my @species;
-
+  
+  my %favourites      = map {$_ => 1} @{$hub->get_favourite_species};
   my $current_species = $hub->species;
+  
   foreach my $sp ($hub->species_defs->valid_species) {
     push @species, {'value' => $sp, 'caption' => $hub->species_defs->species_label($sp, 1).': '.$hub->species_defs->get_config($sp, 'ASSEMBLY_NAME')};
   }
-  @species = sort {$a->{'caption'} cmp $b->{'caption'}} @species;
+  
+  my @sp2 = sort {$a->{'caption'} cmp $b->{'caption'}} grep {$favourites{$_->{'value'}}} @species;
+  push @sp2, sort {$a->{'caption'} cmp $b->{'caption'}} grep {!$favourites{$_->{'value'}}} @species;
 
   $input_fieldset->add_field({
       'type'    => 'DropDown',
       'name'    => 'species',
       'label'   => "Species",
-      'values'  => \@species,
+      'values'  => \@sp2,
       'value'   => $current_species,
       'select'  => 'select',
       'width'   => '300px',
@@ -155,6 +159,9 @@ ENST00000471631.1:c.28_33delTCGCGG),
       'class'   => '_stt format'
   });
   
+  
+  my $cont_div = $input_fieldset->dom->create_element('div');#, {style => 'border: 1px dotted grey;'});
+  
   my $first = 1;
   for my $tmp_format(qw(ensembl vcf pileup id hgvs)) {
     my $div = $input_fieldset->dom->create_element('div', {class => '_stt_'.$tmp_format});
@@ -167,12 +174,12 @@ ENST00000471631.1:c.28_33delTCGCGG),
       label => 'Either paste data'
     }));
     
-    $input_fieldset->append_child($div);
+    $cont_div->append_child($div);
     $first = 0;
   }
   
-  $input_fieldset->add_field({ type => 'File', name => 'file', label => 'Or upload file '.$self->helptip("File uploads are limited to 5MB in size. Files may be compressed using gzip or zip")});
-  $input_fieldset->add_field({ type => 'URL',  name => 'url',  label => 'Or provide file URL', size => 30, class => 'url' });
+  $cont_div->append_child($input_fieldset->add_field({ type => 'File', name => 'file', label => 'Or upload file '.$self->helptip("File uploads are limited to 5MB in size. Files may be compressed using gzip or zip")}));
+  $cont_div->append_child($input_fieldset->add_field({ type => 'URL',  name => 'url',  label => 'Or provide file URL', size => 30, class => 'url' }));
 
   ## TODO - need to find out how to list a user's files
   #my $userdata = [];
@@ -183,6 +190,8 @@ ENST00000471631.1:c.28_33delTCGCGG),
   #    'values'  => $userdata,
   #    'select'  => 'select',
   #});
+  
+  $input_fieldset->append_child($cont_div);
   
   
   # have otherfeatures?
