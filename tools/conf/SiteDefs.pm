@@ -17,6 +17,8 @@ sub update_conf {
   $SiteDefs::ENSEMBL_VEP_LSF_QUEUE              = 'VEP';
 
   $ENV{'EHIVE_ROOT_DIR'}                        = $SiteDefs::ENSEMBL_SERVERROOT.'/ensembl-hive/';
+  
+  push @SiteDefs::ENSEMBL_LIB_DIRS, "$SiteDefs::ENSEMBL_SERVERROOT/ensembl-hive/modules",
 }
 
 1;
