@@ -16,25 +16,37 @@ Ensembl.Panel.ActivitySummary = Ensembl.Panel.ContentTools.extend({
     this.base();
 
     this.refreshURL         = this.el.find('input[name=_refresh_url]').remove().val();
-    this.deleteURL          = this.el.find('input[name=_delete_url]').remove().val();
     this.ticketsData        = this.el.find('input[name=_tickets_data]').remove().val();
     this.pollCounter        = 0;
 
     this.elLk.countdownDiv  = this.el.find('div._countdown');
-    this.elLk.deleteLinks   = this.el.find('._ticket_delete').on('click', function() {
-      var ticketName = ($(this).parents('tr').first().prop('className').match(/_ticket_([^\s]+)/) || []).pop();
-      if (ticketName) {
-        if (window.confirm("This will delete ticket '" + ticketName + "' permanently.")) {
-          panel.ajax({ 'url': panel.deleteURL.replace('TICKET_NAME', ticketName) });
-        }
+
+    // Save icons
+    this.el.find('._ticket_save').on('click', function(e) {
+      e.preventDefault();
+      panel.ajax({ 'url': this.href });
+    });
+
+    // Delete icons
+    this.el.find('._ticket_delete').on('click', function(e) {
+      e.preventDefault();
+      var ticketName = (this.href.match(/tl=([a-z0-9_]+)/i) || []).pop();
+      if (ticketName && window.confirm("This will delete ticket '" + ticketName + "' permanently.")) {
+        panel.ajax({ 'url': this.href });
       }
+    });
+
+    // Edit icons
+    this.el.find('._ticket_edit').on('click', function() {
+      var ticketName = (this.href.match(/tl=([a-z0-9_]+)/i) || []).pop();
+      return !!ticketName && !Ensembl.EventManager.trigger('editToolsTicket', ticketName);
     });
 
     this.toggleEmptyTable();
     this.updateTicketList(false, !!this.el.find('input[name=_auto_refresh]').remove().val());
   },
 
-  refresh: function () {
+  refresh: function (forceRefresh) {
   /*
    * Does a query to the backend to refresh the Activity Summary table
    */
@@ -43,7 +55,7 @@ Ensembl.Panel.ActivitySummary = Ensembl.Panel.ContentTools.extend({
     this.updateCountdown('refreshing_in', 0);
     this.ajax({
       'url'     :  this.refreshURL,
-      'data'    : {'tickets': this.ticketsData },
+      'data'    : { 'tickets': forceRefresh ? '' : this.ticketsData }, // if forceRefresh flag is on, don't send the ticket data to the backend. This forces the backend to respond with current ticket data again.
       'success' : function(json, previous) {
         if (previous != 'method_applied') {
           this.updateCountdown('refresh_now');
