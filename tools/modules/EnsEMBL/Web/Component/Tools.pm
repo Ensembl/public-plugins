@@ -42,9 +42,9 @@ sub expand_job_status {
 
   my $icons_bar;
   my $icons = { $job_status eq 'done' ? (
-    'results' => {'icon' => 'view_icon',    'title' => 'View results',        'url' => [        {'function' => 'Results',   'tl' => $url_param}]  } ) : (),
-    'edit'    => {'icon' => 'edit_icon',    'title' => 'Edit &amp; resubmit', 'url' => [        {'function' => 'Edit',      'tl' => $url_param}]  },
-    'delete'  => {'icon' => 'delete_icon',  'title' => 'Delete',              'url' => ['Json', {'function' => 'delete',    'tl' => $url_param}]  }
+    'results' => {'icon' => 'view_icon',    'title' => 'View results',        'url' => [        {'function' => 'Results',       'tl' => $url_param  }]} ) : (),
+    'edit'    => {'icon' => 'edit_icon',    'title' => 'Edit &amp; resubmit', 'url' => [        {'function' => '', 'edit' => 1, 'tl' => $url_param  }]},
+    'delete'  => {'icon' => 'delete_icon',  'title' => 'Delete',              'url' => ['Json', {'function' => 'delete',        'tl' => $url_param  }]}
   };
   foreach my $link (@{($params || {})->{'links'} || []}) {
     if ($icons->{$link}) {
@@ -69,7 +69,7 @@ sub expand_job_status {
     $job_status_div->first_child->inner_HTML(sprintf '%s: %s%s',
       $job_hive_status,
       $display_message,
-      $job_message->fatal ? sprintf(' <a class="toggle closed" href="#more" rel="%s">Show details</a>', $job_message_class) : ''
+      $exception_is_fatal ? sprintf(' <a class="toggle closed" href="#more" rel="%s">Show details</a>', $job_message_class) : ''
     );
 
     if ($exception_is_fatal) {
