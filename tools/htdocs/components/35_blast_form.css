@@ -1,5 +1,5 @@
 form.blast-form input.inactive                    { font-style: italic; color: [[PAGE_TEXT]]; }
-form.blast-form textarea.query_sequence           { width: 500px; }
+form.blast-form textarea.query_sequence           { width: 500px; margin-bottom: 0; }
 form.blast-form textarea.query_sequence.inactive  { color: [[PAGE_TEXT]]; font-size: 12px; font-style: italic; }
 
 div.seq-wrapper                                   { background-color: [[PAGE_BG]]; border: 1px solid [[NEUTRAL_BORDER]]; margin-bottom: 8px; padding: 4px; overflow: hidden; width: 550px; }
