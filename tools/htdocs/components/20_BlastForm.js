@@ -239,7 +239,13 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
   },
 
   loadTicket: function(ticketName) {
-    this.ajax({'url':  this.loadTicketURL.replace('TICKET_NAME', ticketName)});
+    this.toggleSpinner(true)
+    this.ajax({
+      'url'       : this.loadTicketURL.replace('TICKET_NAME', ticketName),
+      'complete'  : function() {
+        this.toggleSpinner(false);
+      }
+    });
     return true;
   },
 
