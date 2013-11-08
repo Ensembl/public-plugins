@@ -18,11 +18,12 @@ sub content {
   my $combinations  = delete $form_params->{'combinations'};
   my $selected      = delete $form_params->{'selected'};
   my $all_species   = delete $form_params->{'species'};
-  my $edit_job      = $hub->param('edit') && $object->get_requested_job;
+  my $edit_jobs     = $hub->param('edit') && ($object->get_requested_job || $object->get_requested_ticket);
+     $edit_jobs     = $edit_jobs ? ref($edit_jobs) =~ /Ticket/ ? $edit_jobs->job : [ $edit_jobs ] : [];
 
   my $form          = $self->new_form({
     'action'          => $hub->url('Json', {qw(type Tools action Blast function form_submit)}),
-    'method'          =>  'post',
+    'method'          => 'post',
     'class'           => 'tools_form bgcolour blast-form',
     'skip_validation' => 1
   });
@@ -51,10 +52,20 @@ sub content {
 
   $fieldset->add_hidden({
     'name'            => 'edit_jobs',
-    'value'           => $self->jsonify([$edit_job->job_data->raw]),
-  }) if $edit_job;
+    'value'           => $self->jsonify([ map $_->job_data->raw, @$edit_jobs ]),
+  });
 
-  my $sequence_field = $fieldset->add_field({
+  $fieldset->add_hidden({
+    'name'            => 'load_ticket_url',
+    'value'           => $hub->url('Json', {'function' => 'load_ticket', 'tl' => 'TICKET_NAME'})
+  });
+
+  $fieldset->add_hidden({
+    'name'            => 'read_file_url',
+    'value'           => $hub->url('Json', {'function' => 'read_file'})
+  });
+
+  $fieldset->add_field({
     'label'           => 'Sequence data',
     'field_class'     => '_adjustable_height',
     'elements'        => [{
@@ -255,7 +266,11 @@ sub content {
   $form->add_fieldset->add_field({
     'type'            => 'Submit',
     'name'            => 'submit_blast',
-    'value'           => 'Run &rsaquo;',
+    'value'           => 'Run &rsaquo;'
+  })->elements->[-1]->append_child('a', {
+    'href'            => '#Reset',
+    'class'           => '_tools_form_reset left-margin',
+    'inner_HTML'      => 'Reset'
   });
 
   return sprintf '<div><input type="hidden" class="panel_type" value="BlastForm" />%s</html>', $form->render;
