@@ -26,12 +26,6 @@ sub populate_tree {
     )],
     { 'availability' => 1, 'concise' => 'BLAST/BLAT search' }
   );
-  $self->create_node('Blast/Edit', 'Edit',
-    [qw(
-      sequence        EnsEMBL::Web::Component::Tools::Blast::InputForm
-    )],
-    { 'availability' => 1, 'concise' => 'BLAST/BLAT search', 'no_menu_entry' => 1 }
-  );
   $self->create_node('Blast/Summary', 'Activity Summary',
     [qw(
       tickets         EnsEMBL::Web::Component::Tools::Blast::TicketsList
