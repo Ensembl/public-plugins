@@ -7,6 +7,12 @@ use EnsEMBL::Web::BlastConstants;
 
 use base qw(EnsEMBL::Web::Component::Tools::Blast);
 
+sub _init {
+  my $self = shift;
+  $self->SUPER::_init;
+  $self->ajaxable('post') if $self->hub->param('query_sequence');
+}
+
 sub content {
   my $self          = shift;
   my $hub           = $self->hub;
@@ -18,8 +24,11 @@ sub content {
   my $combinations  = delete $form_params->{'combinations'};
   my $selected      = delete $form_params->{'selected'};
   my $all_species   = delete $form_params->{'species'};
+  my $existing_seq  = $hub->param('query_sequence');
   my $edit_jobs     = $hub->param('edit') && ($object->get_requested_job || $object->get_requested_ticket);
      $edit_jobs     = $edit_jobs ? ref($edit_jobs) =~ /Ticket/ ? $edit_jobs->job : [ $edit_jobs ] : [];
+     $edit_jobs     = [ map $_->job_data->raw, @$edit_jobs ];
+     $edit_jobs     = [ {'sequence' => {'seq' => $existing_seq}} ] if !@$edit_jobs && $existing_seq;
 
   my $form          = $self->new_form({
     'action'          => $hub->url('Json', {qw(type Tools action Blast function form_submit)}),
@@ -52,7 +61,7 @@ sub content {
 
   $fieldset->add_hidden({
     'name'            => 'edit_jobs',
-    'value'           => $self->jsonify([ map $_->job_data->raw, @$edit_jobs ]),
+    'value'           => $self->jsonify($edit_jobs)
   });
 
   $fieldset->add_hidden({
