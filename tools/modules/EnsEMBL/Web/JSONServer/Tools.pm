@@ -25,15 +25,18 @@ sub json_form_submit {
   return $self->call_js_panel_method('showError', ['Input provided is invalid', 'Invalid input']);
 }
 
-sub json_read_file {
+sub json_save {
+  my $self = shift;
 
+  $self->object->save_ticket_to_account;
+
+  return $self->call_js_panel_method('refresh', [ 1 ]);
 }
 
 sub json_delete {
-  my $self    = shift;
-  my $object  = $self->object;
-  
-  $object->delete_ticket_or_job;
+  my $self = shift;
+
+  $self->object->delete_ticket_or_job;
 
   return $self->call_js_panel_method('refresh');
 }
@@ -45,6 +48,12 @@ sub json_refresh_tickets {
   my ($tickets_new, $auto_refresh) = $self->object->get_tickets_data_for_sync;
 
   return $self->call_js_panel_method('updateTicketList', [ $tickets_old eq $tickets_new ? undef : $tickets_new, $auto_refresh ]);
+}
+
+sub json_load_ticket {
+  my $self = shift;
+
+  return $self->call_js_panel_method('populateForm', [ [ map $_->job_data->raw, $self->object->get_requested_ticket->job ] ]);
 }
 
 1;
