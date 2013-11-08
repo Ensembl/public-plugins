@@ -138,7 +138,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
 
     // if any file is added to the file field, read it and display the sequence
     this.elLk.queryFile = this.elLk.form.find('input[name=query_file]').on('change', function() {
-      if (false && window.FileList && window.File && window.FileReader) {
+      if (window.FileList && window.File && window.FileReader) {
         if (!panel.fileReader) { // to avoid multiple instances
           panel.fileReader = new FileReader();
         }
