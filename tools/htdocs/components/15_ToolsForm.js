@@ -10,6 +10,7 @@ Ensembl.Panel.ToolsForm = Ensembl.Panel.ContentTools.extend({
 
     this.base();
 
+    // Form submit event
     this.elLk.form = this.el.find('form.tools_form').on('submit', function(event) {
       event.preventDefault();
       panel.toggleSpinner(true);
@@ -29,6 +30,16 @@ Ensembl.Panel.ToolsForm = Ensembl.Panel.ContentTools.extend({
         'contentType' : false,
         'processData' : false
       }));
+    });
+
+    // Reset form button
+    this.elLk.form.find('a._tools_form_reset').on('click', function(e) {
+      e.preventDefault();
+      panel.toggleSpinner(true);
+      window.setTimeout(function() {
+        panel.reset();
+        panel.toggleSpinner(false);
+      }, 100); // :(
     });
   },
 
