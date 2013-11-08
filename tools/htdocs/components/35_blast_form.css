@@ -1,5 +1,5 @@
 form.blast-form input.inactive                    { font-style: italic; color: [[PAGE_TEXT]]; }
-form.blast-form textarea.query_sequence           { width: 500px; margin-bottom: 0; outline: none; }
+form.blast-form textarea.query_sequence           { width: 500px; margin-bottom: 0; outline: none; display: inherit; }
 form.blast-form textarea.query_sequence.inactive  { color: [[PAGE_TEXT]]; font-size: 12px; font-style: italic; }
 
 div.seq-wrapper                                   { background-color: [[PAGE_BG]]; border: 1px solid [[NEUTRAL_BORDER]]; margin-bottom: 8px; padding: 4px; overflow: hidden; width: 550px; }
@@ -13,4 +13,4 @@ div.fasta-input                                   { overflow-y: hidden; font: 12
 div.fasta-input.editable                          { background-color: #ffd; border-color: [[PANEL_BORDER]]; cursor: text; }
 
 div.fasta-buttons                                 { position: absolute; margin-top: -1px; }
-div.fasta-buttons span                            { background: none repeat scroll 0 0 [[PAGE_BG]]; border: 1px solid [[PANEL_BORDER]]; border-top: none; border-radius: 0 0 6px 6px; color: [[BUTTON_BG]]; font-weight: bold; margin: 0 3px; padding: 3px; cursor: pointer; }
+div.fasta-buttons span                            { display: inline-block; height: 20px; line-height: 20px; background: none repeat scroll 0 0 [[PAGE_BG]]; border: 1px solid [[PANEL_BORDER]]; border-top: none; border-radius: 0 0 6px 6px; color: [[BUTTON_BG]]; font-weight: bold; margin: 0 6px; padding: 2px 10px; cursor: pointer; }
