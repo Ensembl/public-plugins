@@ -282,7 +282,7 @@ sub content {
     'inner_HTML'      => 'Reset'
   });
 
-  return sprintf '<div><input type="hidden" class="panel_type" value="BlastForm" />%s</html>', $form->render;
+  return sprintf '<div><h2>%sBLAST/BLAT Search</h2><input type="hidden" class="panel_type" value="BlastForm" />%s</html>', @$edit_jobs ? '' : 'New ', $form->render;
 }
 
 1;
