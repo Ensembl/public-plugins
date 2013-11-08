@@ -69,7 +69,7 @@ sub content {
     'button'      => 'Continue'
   });
 
-  $form->get_elements_by_name('email')->[0]->add_attribute('class', '_openid_email');
+  $form->get_elements_by_name('email')->[0]->set_attribute('class', '_openid_email');
 
   return $self->js_section({'js_panel' => 'AccountForm', 'subsections' => [ $form->render ]});
 }
