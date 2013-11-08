@@ -108,7 +108,6 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
           $(this).addClass('inactive').val(this.defaultValue).trigger('showButtons', false);
         }
       },
-
       'input cut.noinput paste.noinput keyup.noinput': function(e) {
         if (e.type == 'input') {
           $(this).off('.noinput'); // we only need these extra events if input event is not supported
@@ -116,7 +115,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
         $(this).trigger('showButtons', e.type != 'input' || !!this.value);
       },
       'showButtons': function(e, flag) {
-        var textarea = $(this).toggleClass('shadow', flag);
+        var textarea = $(this);
         var buttons = textarea.data('buttons');
         if (!buttons) {
           buttons = $('<div class="fasta-buttons"><span>Done</span><span>Clear</span></div>').appendTo($(this).parent()).on('click', 'span', function() {
@@ -133,6 +132,8 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
           textarea.data('buttons', buttons);
         }
         buttons.toggle(flag);
+        panel.submitDisabled = flag;
+        $(this.form).find('[name=submit_blast]').toggleClass('disabled', flag);
       }
     });
 
@@ -741,8 +742,25 @@ Ensembl.Panel.BlastForm.Sequence = Ensembl.Panel.ToolsForm.SubElement.extend({
             self.parent.modifySequence(self, seqBox.text());
           }
         }
+      },
+      'keypress': function(e) {
+        if (e.which == 13) {
+          if (window.getSelection) {
+            var selection = window.getSelection();
+            var range     = selection.getRangeAt(0);
+            var br        = document.createElement('br');
+            range.deleteContents();
+            range.insertNode(br);
+            range.setStartAfter(br);
+            range.setEndAfter(br);
+            range.collapse(false);
+            selection.removeAllRanges();
+            selection.addRange(range);
+            return false;
+          }
+        }
       }
-    });
+     });
 
     // wrapping div
     this.elLk.div = $('<div>', {'class': 'seq-wrapper'}).append($('<div>').append(this.elLk.checkbox), this.elLk.seqBox, this.elLk.queryTypeTag).insertBefore(previous && previous.elLk.div.next() || parent.elLk.addSeqLink.parent());
