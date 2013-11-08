@@ -1,19 +1,20 @@
 Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
   constructor: function () {
     this.base.apply(this, arguments);
-    Ensembl.EventManager.register('indicateInputError', this, this.indicateInputError);
+
+    Ensembl.EventManager.register('editToolsTicket', this, this.loadTicket);
 
     this.sequences            = [];
     this.combinations         = [];
-    this.editingJobs          = [];
     this.fieldsOrder          = {};
-    this.fieldTags            = [];
+    this.fieldTags            = {};
     this.speciesTags          = {};
     this.dropdowns            = {};
     this.selectedValues       = {};
     this.maxSequenceLength    = 0;
     this.maxNumSequences      = 0;
     this.dnaThresholdPercent  = 0;
+    this.loadTicketURL        = '';
   },
 
   init: function () {
@@ -24,6 +25,8 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     this.maxSequenceLength    = this.elLk.form.find('input[name=max_sequence_length]').remove().val();
     this.maxNumSequences      = this.elLk.form.find('input[name=max_number_sequences]').remove().val();
     this.dnaThresholdPercent  = this.elLk.form.find('input[name=dna_threshold_percent]').remove().val();
+    this.loadTicketURL        = this.elLk.form.find('input[name=load_ticket_url]').remove().val();
+    this.readFileURL          = this.elLk.form.find('input[name=read_file_url]').remove().val();
 
     try {
       // parse the combination JSON from the HTML - if this doesn't work, there is nothing we can do!
@@ -45,13 +48,6 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
       this.combinations       = false;
     }
 
-    // if editing existing job(s)
-    try {
-      this.editingJobs        = $.parseJSON(this.elLk.form.find('input[name=edit_jobs]').remove().val());
-    } catch (ex) {
-      this.editingJobs        = [];
-    }
-
     // nothing can be done if any of these is missing!
     if (!this.combinations || !this.maxSequenceLength || !this.dnaThresholdPercent || !this.maxNumSequences) {
       this.showError('JavaScript error occurred while initiating the Blast form.', 'Blast form error');
@@ -63,10 +59,14 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     this.elLk.speciesDropdown = this.elLk.form.find('div._species_dropdown');
     this.elLk.adjustableDivs  = this.elLk.form.find('div._adjustable_height').css('minHeight', function() { return $(this).height(); });
     this.elLk.configFields    = this.elLk.form.find('div._config_field');
+
+    // 'Add more sequences' link
     this.elLk.addSeqLink      = this.elLk.sequences.find('._add_sequence').on('click', function(e) {
       e.preventDefault();
       panel.toggleSequenceFields(true);
     });
+
+    // Query type radio button
     this.elLk.queryType       = this.elLk.form.find('input[name=query_type]').on('change', function() {
       panel.setQueryTypeValue(this.value);
     });
@@ -91,13 +91,13 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
 
     // for all the fields that affect the selectable options in other fields, provide the event handlers; and initialise the Dropdown instances
     this.elLk.form.find('._validate_onchange').on('change', function() {
-      panel.updateSelections($(this), true);
+      panel.fieldTags[this.name].select(this.nodeName == 'INPUT' ? $(this) : $(this).find('option:selected'));
     }).filter('select').each(function() {
       panel.dropdowns[this.name] = new Ensembl.Panel.ToolsForm.Dropdown($(this), panel);
     });
 
     // provide event handlers to the textarea where sequence text is typed
-    this.elLk.form.find('textarea[name=query_sequence]').on({
+    this.elLk.sequenceInput   =  this.elLk.form.find('textarea[name=query_sequence]').on({
       'focus': function(e) {
         if (!this.value || this.value == this.defaultValue) {
           $(this).val('').removeClass('inactive');
@@ -108,13 +108,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
           $(this).addClass('inactive').val(this.defaultValue).trigger('showButtons', false);
         }
       },
-/*
-      'change': function() {
-        if (this.value && this.value != this.defaultValue) {
-          panel.addSequences(this.value);
-        }
-      },
-*/
+
       'input cut.noinput paste.noinput keyup.noinput': function(e) {
         if (e.type == 'input') {
           $(this).off('.noinput'); // we only need these extra events if input event is not supported
@@ -143,23 +137,41 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     });
 
     // if any file is added to the file field, read it and display the sequence
-    this.elLk.form.find('input[name=query_file]').on('change', function() {
-      if (window.FileList && window.File && window.FileReader) {
+    this.elLk.queryFile = this.elLk.form.find('input[name=query_file]').on('change', function() {
+      if (false && window.FileList && window.File && window.FileReader) {
         if (!panel.fileReader) { // to avoid multiple instances
           panel.fileReader = new FileReader();
         }
         panel.fileReader.onload = function(readerEvent) {
           var seqText = readerEvent.target.result;
-          // TODO - validate
           panel.addSequences(seqText);
+          panel.toggleSpinner(false);
+          panel.elLk.queryFile.val('');
         };
         panel.fileReader.onerror = function(readerEvent) {
-          console.log("Error", readerEvent.target.error.code);
+          pabel.showError(readerEvent.target.error.code, "Error reading file");
+          panel.toggleSpinner(false);
         };
+        panel.toggleSpinner(true);
         panel.fileReader.readAsText(this.files[0]);
       } else {
-        console.log('File API not supported');
-        // TODO - upload the file via AJAX and get the text
+        panel.toggleSpinner(true);
+        panel.ajax({
+          'url'     : panel.readFileURL,
+          'iframe'  : true,
+          'form'    : panel.elLk.form,
+          'success' : function(json) {
+            if ('file_error' in json) {
+              this.showError(json['file_error']);
+            } else if ('file' in json) {
+              this.addSequences(json['file']);
+            }
+          },
+          'complete': function() {
+            panel.toggleSpinner(false);
+            panel.elLk.queryFile.val('');
+          }
+        });
       }
     });
 
@@ -172,11 +184,10 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     this.elLk.form.find('select, input').each(function() {
       var tagDiv = panel.elLk.form.find('._tag_' + this.name);
       if (tagDiv.length) {
-        if (panel.fieldTags[this.name]) {
-          panel.fieldTags[this.name].addField($(this));
-        } else {
-          panel.fieldTags[this.name] = new Ensembl.Panel.BlastForm.FieldTag(panel, $(this), tagDiv);
+        if (!panel.fieldTags[this.name]) {
+          panel.fieldTags[this.name] = new Ensembl.Panel.BlastForm.FieldTag(tagDiv, panel);
         }
+        panel.fieldTags[this.name].addField($(this));
       }
     });
 
@@ -185,11 +196,84 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
       this.fieldTags[fieldName].setChildTags(this.fieldTags);
     }
     fieldName = null;
+
+    // Fill in the form if editing an existing job
+    var editingJobsData       = [];
+    try {
+      editingJobsData         = $.parseJSON(this.elLk.form.find('input[name=edit_jobs]').remove().val());
+    } catch (ex) {}
+    if (editingJobsData.length) {
+      this.populateForm(editingJobsData);
+    }
+
+    this.refreshSpecies();
   },
 
   reset: function() {
+  /*
+   * Resets the form, ready to accept next job input
+   */
+   
     this.base();
-    // TODO
+
+    // Reset sequences
+    for (var i in this.sequences) {
+      this.sequences[i].destructor();
+    }
+    this.sequences = [];
+    this.updateSeqInfo(false);
+    this.toggleSequenceFields(true, false);
+
+    // Reset species
+    this.refreshSpecies([]);
+
+    // Reset query_type, db_type, source and search_type
+    for (var i in this.fieldTags) {
+      this.fieldTags[i].select(false, true); // second argument prevents calling updateSelections, which is a slow method and is done once all tags are deselected.
+    }
+    this.updateSelections('');
+
+    // Set focus on the sequence textarea
+    this.elLk.sequenceInput.trigger('focus');    
+  },
+
+  loadTicket: function(ticketName) {
+    this.ajax({'url':  this.loadTicketURL.replace('TICKET_NAME', ticketName)});
+    return true;
+  },
+
+  populateForm: function(jobsData) {
+
+    this.reset();
+    
+    var formInput = {};
+    if (jobsData.length) {
+      for (var i in jobsData) {
+        for (var paramName in jobsData[i]) {
+          if (paramName == 'sequence' || paramName == 'species') {
+            if (!(paramName in formInput)) {
+              formInput[paramName] = [];
+            }
+            formInput[paramName].push(jobsData[i][paramName]);
+          } else {
+            formInput[paramName] = jobsData[i][paramName];
+          }
+        }
+      }
+    }
+
+    if (!$.isEmptyObject(formInput)) {
+      this.addEditingJobSequences(formInput['sequence'], formInput['query_type']);
+      this.refreshSpecies(formInput.species);
+      for (var i in this.fieldTags) {
+        this.fieldTags[i].select(formInput[i]);
+      }
+      for (var name in formInput['configs']) {
+        this.elLk.form.find('[name=' + formInput['search_type'] + '__' + name + ']')
+          .filter('input[type=checkbox]').prop('checked', true).end()
+          .filter('select').find('option[value=' + formInput['configs'][name] + ']').prop('selected', true);
+      }
+    }
   },
 
   sortCombinations: function() {
@@ -238,7 +322,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
 
     // update the other selections accordingly, but only when new query_type selection is made
     if (!selectedQueryType) {
-      this.updateSelections(this.elLk.queryType.filter('[value=' + queryType + ']').prop('checked', true), true);
+      this.fieldTags[this.elLk.queryType.attr('name')].select(queryType);
     }
 
     // select only those sequences which fall under the current selected queryType
@@ -256,32 +340,42 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     var parsedSeqs        = this.parseRawSequences(rawText);
     var duplicates        = 0;
     var modifyingExisting = !!existingSequence;
+    var numParsedSeqs     = parsedSeqs.sequences.length;
+    var numSeqs           = this.sequences.length;
+    var indexParsedSeq    = 0;
+    var indexSeq;
 
     seqLoop:
-    for (var i in parsedSeqs.sequences) {
-      for (var j in this.sequences) {
-        if (parsedSeqs.sequences[i].string == this.sequences[j].string && !(existingSequence && this.sequences[j] == existingSequence)) {
+    for (indexParsedSeq = 0; indexParsedSeq < numParsedSeqs; indexParsedSeq++) {
+      for (indexSeq = 0; indexSeq < numSeqs; indexSeq++) {
+        if (parsedSeqs.sequences[indexParsedSeq].string == this.sequences[indexSeq].string && !(existingSequence && this.sequences[indexSeq] == existingSequence)) {
           duplicates++;
           continue seqLoop;
         }
       }
       if (modifyingExisting) {
-        existingSequence.init(parsedSeqs.sequences[i]);
+        existingSequence.init(parsedSeqs.sequences[indexParsedSeq]);
         modifyingExisting = false; // now since the existing one is replaced, the new ones do not need to replace the exisitng one again, but need to be inserted next to the existing one
       } else {
-        this.sequences.splice(existingSequence && this.sequences.indexOf(existingSequence) + 1 || this.sequences.length, 0, new Ensembl.Panel.BlastForm.Sequence(parsedSeqs.sequences[i], this, existingSequence || false));
+        if (numSeqs >= this.maxNumSequences) {
+          break;
+        }
+        this.sequences.splice(existingSequence && this.sequences.indexOf(existingSequence) + 1 || numSeqs, 0, new Ensembl.Panel.BlastForm.Sequence(parsedSeqs.sequences[indexParsedSeq], this, existingSequence || false));
       }
+      numSeqs = this.sequences.length;
     }
 
-    if (this.sequences.length) {
+    if (numSeqs) {
       this.setQueryTypeValue(); // let it decide the query type itself
       this.toggleSequenceFields(false, true);
       this.adjustDivsHeight();
     }
 
-    this.updateSeqInfo({'added': parsedSeqs.sequences.length - duplicates, 'invalids': parsedSeqs.invalids + duplicates});
+    this.updateSeqInfo({'added': indexParsedSeq - duplicates, 'invalids': parsedSeqs.invalids + duplicates});
 
-    return parsedSeqs.sequences.length - duplicates;
+    parsedSeqs = duplicates = modifyingExisting = numParsedSeqs = numSeqs = indexSeq = null;
+
+    return indexParsedSeq;
   },
 
   parseRawSequences: function(rawText) {
@@ -334,22 +428,57 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
       }
 
       sequence.type   = 100 * seqDNACharCount / sequence.string.length < this.dnaThresholdPercent ? 'peptide' : 'dna';
-      sequence.string = sequence.string.match(/(.{1,60})/g).join('\n'); // split strings into 60 char each (fast format)
 
-      // skip if it's a duplicate
+      // skip if it's a duplicate, or invalid sequence
       for (j in sequences) {
         if (sequences[j].string == sequence.string) {
           continue rawSeqLoop;
         }
       }
 
+      // invalid sequence
+      if (!sequence.string.match(/^[A-Z\*]+$/)) {
+        continue rawSeqLoop;
+      }
+
       sequences.push(sequence);
 
-      if (sequences.length >= this.maxSequenceLength) { // already added sequences are not considered in this count as there might be some duplicates that get removed later on.
+      if (sequences.length >= this.maxNumSequences) { // already added sequences are not considered in this count as there might be some duplicates that get removed later on.
         break rawSeqLoop;
       }
     }
     return {'sequences': sequences, 'invalids': 1 + parseInt(i) - sequences.length};
+  },
+
+  addEditingJobSequences: function(editingJobSequences, type) {
+  /* Adds the sequences from the data received from the backend for a job that needs to be edited
+   */
+    seqLoop:
+    for (var i in editingJobSequences) {
+      for (var j in this.sequences) {
+        if (editingJobSequences[i].seq == this.sequences[j].string) {
+          continue seqLoop;
+        }
+      }
+      if (this.sequences.length >= this.maxNumSequences) {
+        break;
+      }
+      this.sequences.push(new Ensembl.Panel.BlastForm.Sequence({
+        'string'      : editingJobSequences[i].seq,
+        'description' : '>' + (editingJobSequences[i]['display_id'] || ''),
+        'type'        : type
+      }, this, false));
+    }
+
+    if (this.sequences.length) {
+      this.setQueryTypeValue(type);
+      this.toggleSequenceFields(false, true);
+      this.adjustDivsHeight();
+    }
+
+    this.updateSeqInfo({'added': this.sequences.length});
+
+    return this.sequences.length;
   },
 
   modifySequence: function(sequenceObject, rawText) {
@@ -373,25 +502,30 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     if ($.type(flag2) === 'boolean') {
       this.elLk.sequences.toggle(flag2);
     }
-    this.elLk.addSeqLink.toggle(!flag1);
+    this.elLk.addSeqLink.toggle(!flag1 && this.sequences.length < this.maxNumSequences);
     this.elLk.sequenceFields.toggle(flag1).find('input, textarea').val('').first().focus();
   },
 
   updateSeqInfo: function(info) {
     if (!this.elLk.seuqenceInfo) {
-      this.elLk.seuqenceInfo = $('<p class="italic"></p>').insertBefore(this.elLk.addSeqLink);
+      this.elLk.seuqenceInfo = this.elLk.sequences.clone().empty().insertAfter(this.elLk.sequences).addClass('italic').show();
     }
-    this.elLk.seuqenceInfo.toggle(!!info).html(
-      ((this.maxNumSequences - this.sequences.length) || 'No') + (this.sequences.length ? ' more' : '') + ' sequence' + (this.maxNumSequences - this.sequences.length > 1 ? 's' : '') + ' allowed' +
-      ($.type(info) == 'object'
-        ? ' (' + (parseInt(info.added) || 'No') +
-          (this.sequences.length - info.added ? ' more' : '') +
-          ' sequence' +
-          (info.added > 1 ? 's' : '') +
-          ' added)' +
-          (info.invalids ? ' (' + info.invalids + ' invalid or duplicate sequence' + (info.invalids > 1 ? 's' : '') + ' ignored)' : '')
-        : ''
-      )
+    var message = ($.type(info) == 'object'
+      ? (parseInt(info.added) || 'No')
+        + (this.sequences.length - info.added ? ' more' : '')
+        + ' sequence'
+        + (info.added > 1 ? 's' : '')
+        + ' added'
+        + (info.invalids ? ' (' + info.invalids + ' invalid or duplicate sequence' + (info.invalids > 1 ? 's' : '') + ' ignored)' : '')
+        + ', '
+      : ''
+    );
+    this.elLk.seuqenceInfo.toggle(!!info).html( message
+      + ((this.maxNumSequences - this.sequences.length) || (message ? 'no' : 'No'))
+      + (this.sequences.length ? ' more' : '')
+      + ' sequence'
+      + (this.maxNumSequences - this.sequences.length > 1 ? 's' : '')
+      + ' allowed'
     );
   },
 
@@ -405,9 +539,17 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     }
   },
 
-  refreshSpecies: function() {
+  refreshSpecies: function(species) {
 
     var speciesCheckboxes, existingTag, speciesName, selectedSpecies = {};
+
+    if (species) {
+      this.elLk.speciesDropdown.find('input').each(function() {
+        if (species.indexOf(this.value) > -1) {
+          this.checked = true;
+        }
+      });
+    }
 
     speciesCheckboxes = this.elLk.speciesDropdown.find('input').filter(':checked').each(function() {
       return selectedSpecies[this.value] = $(this).parent().find('label').html();
@@ -447,130 +589,115 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     }
   },
 
-  updateSelections: function(
-    field,          // the field that triggered update
-    flag,           // flag to tell whether the field is selected or unselected
-    skipFiltering   // flag if on, will only change the selectedValues object, but not make any changes to the page HTML
-  ) {
-    if (flag) {
-      this.selectedValues[field.attr('name')] = field.val();
-    } else {
-      delete this.selectedValues[field.attr('name')];
+  updateSelections: function(targetFieldName) {
+
+    var i,
+        elements,
+        fieldName,
+        fieldValue,
+        fieldTag,
+        speciesNames,
+        availableValues         = {},
+        availableDefaultValues  = [],
+        defaultFieldValues      = [],
+        defaultValuesSelector   = []
+    ;
+
+    // filter out the mismatching ones
+    FilteringLoop:
+    for (i in this.combinations) {
+
+      // skip if any of the fields is misatching
+      for (fieldName in this.selectedValues) {
+        if (this.combinations[i][fieldName] !== this.selectedValues[fieldName]) {
+          continue FilteringLoop;
+        }
+      }
+
+      // create a better accessible data structure for available values
+      for (fieldName in this.combinations[i]) {
+        if (!availableValues[fieldName]) {
+          availableValues[fieldName] = [];
+        }
+        availableValues[fieldName][String(this.combinations[i][fieldName])] = 1;
+      }
+
+      // save the valid combinations for finding out the possible default options for the fields that have not been selected by the user yet
+      availableDefaultValues.push(this.combinations[i]);
     }
 
-    if (!skipFiltering) {
+    // select/deselect fields accordingly, and show/hide the FieldTags as required
+    for (fieldName in availableValues) {
+      if (fieldName == 'species') {
+        for (speciesNames in availableValues[fieldName]) {
+          // TODO - update the species list - disable the species that don't have this db
+          // console.log(speciesNames);
+        }
+      } else {
+        fieldTag  = this.fieldTags[fieldName];
+        dropdown  = this.dropdowns[fieldName];
 
-      var field2,
-          fieldName,
-          fieldValue,
-          fieldTag,
-          speciesNames,
-          availableValues         = {},
-          availableDefaultValues  = [],
-          defaultFieldValues      = [],
-          defaultValuesSelector   = []
-      ;
-
-      // filter out the mismatching ones
-      FilteringLoop:
-      for (var i in this.combinations) {
-
-        // skip if any of the fields is misatching
-        for (fieldName in this.selectedValues) {
-          if (this.combinations[i][fieldName] !== this.selectedValues[fieldName]) {
-            continue FilteringLoop;
-          }
+        // unhide all the hidden options first
+        if (dropdown) {
+          dropdown.reset();
         }
 
-        // create a better accessible data structure for available values
-        for (fieldName in this.combinations[i]) {
-          if (!availableValues[fieldName]) {
-            availableValues[fieldName] = [];
+        // enabled/disable options according to their availability
+        elements = this.elLk.form.find('select[name=' + fieldName + '] option, input[name=' + fieldName + ']').prop('disabled', function() {
+          return !(this.value in availableValues[fieldName]);
+        });
+
+        // change all the fields other than the targeted field
+        if (targetFieldName != fieldName) {
+
+          // TODO - get the actual default values from the backend (eg. if db_type = DNA, source should default to 'Genomic sequence')
+          // all the values that this field can default to if not selected by the user, and create a selector to select fields that those values only
+          defaultFieldValues    = $.map(availableDefaultValues, function(defaultValues) { return defaultValues[fieldName]; });
+          defaultValuesSelector = $.map(defaultFieldValues, function(defaultValue) { return '[value="' + defaultValue + '"]'; }).toString();
+
+          if (elements.prop('nodeName') == 'OPTION') {
+
+            // if selected option is not enabled and not found in list of available default values, select the first enabled option from the available default options list
+            if (defaultFieldValues.indexOf(elements.parents('select').find('option:selected:enabled').val()) < 0) {
+              elements.filter(defaultValuesSelector).first().prop('selected', true);
+            }
+
+            // if the value isn't selected, show readonly tag if only one option is available
+            if (!(fieldName in this.selectedValues)) {
+              fieldTag.setReadonly(elements.filter(':enabled').length == 1);
+            }
+
+          // for input tag, select the first available option if none selected
+          } else {
+            if (defaultFieldValues.indexOf(elements.filter(':checked:enabled').val()) < 0) {
+              elements.filter(defaultValuesSelector).first().prop('checked', true);
+            }
           }
-          availableValues[fieldName][String(this.combinations[i][fieldName])] = 1;
-        }
 
-        // save the valid combinations for finding out the possible default options for the fields that have not been selected by the user yet
-        availableDefaultValues.push(this.combinations[i]);
-      }
-      i = null;
+          fieldValue = elements.filter(':selected, :checked').val();
 
-      // select/deselect fields accordingly, and show/hide the FieldTags as required
-      for (fieldName in availableValues) {
-        if (fieldName == 'species') {
-          for (speciesNames in availableValues[fieldName]) {
-            // TODO - update the species list - disable the species that don't have this db
-            //console.log(speciesNames);
-            //$.each(this.speciesTags, function(key, val) {
-            //  console.log(key, val);
-            //});
-          }
-        } else {
-          fieldTag  = this.fieldTags[fieldName];
-          dropdown  = this.dropdowns[fieldName];
-
-          // unhide all the hidden options first
-          if (dropdown) {
-            dropdown.reset();
-          }
-
-          // enabled/disable options according to their availability
-          field2 = this.elLk.form.find('select[name=' + fieldName + '] option, input[name=' + fieldName + ']').prop('disabled', function() {
-            return !(this.value in availableValues[fieldName]);
+          // filter the availableDefaultValues according to the selected values
+          availableDefaultValues = $.grep(availableDefaultValues, function(combination) {
+            return combination[fieldName] === fieldValue;
           });
 
-          // show the tag if a value is selected by the user
-          if (flag && field.attr('name') == fieldName) {
-            fieldTag.toggle(true, false);
-
-          } else {
-
-            // TODO - get the actual default values from the backend (eg. for db_type = DNA, source should default to 'Genomic sequence')
-
-            // all the values that this field can default to if not selected by the user, and create a selector to select fields that those values only
-            defaultFieldValues    = $.map(availableDefaultValues, function(defaultValues) { return defaultValues[fieldName]; });
-            defaultValuesSelector = $.map(defaultFieldValues, function(defaultValue) { return '[value="' + defaultValue + '"]'; }).toString();
-
-            if (field2.prop('nodeName') == 'OPTION') {
-
-              // if selected option is not enabled and not found in list of available default values, select the first enabled option from the available default options list
-              if (defaultFieldValues.indexOf(field2.parents('select').find('option:selected:enabled').val()) < 0) {
-                field2.filter(defaultValuesSelector).first().prop('selected', true);
-              }
-
-              // if only one option is available, show readonly tag
-              fieldTag.toggle(field2.filter(':enabled').length == 1, true);
-
-            // for input tag, select the first available option if none selected
-            } else {
-              if (defaultFieldValues.indexOf(field2.filter(':checked:enabled').val()) < 0) {
-                field2.filter(defaultValuesSelector).first().prop('checked', true);
-              }
-            }
-
-            fieldValue = field2.filter(':selected, :checked').val();
-
-            // filter the availableDefaultValues according to the selected values
-            availableDefaultValues = $.grep(availableDefaultValues, function(combination) {
-              return combination[fieldName] === fieldValue;
-            });
-
-            // now if the current selection changed the queryType (triggered by some other field change), we need to update the selected sequences
-            if (field2.attr('name') == this.elLk.queryType.attr('name')) {
-              this.selectSequences(field2.filter(':checked').val());
-            }
+          // now if the current selection changed the queryType (triggered by some other field change), we need to update the selected sequences
+/*
+          if (fieldName == this.elLk.queryType.attr('name')) {
+            this.selectSequences(fieldValue);
           }
+*/
+        }
 
-          // hide the disabled options, and trigger selecttotoggle event
-          if (dropdown) {
-            dropdown.removeDisabledOptions();
-            dropdown.triggerSelectToToggle();
-          }
+        // hide the disabled options, and trigger selecttotoggle event
+        if (dropdown) {
+          dropdown.removeDisabledOptions();
+          dropdown.triggerSelectToToggle();
         }
       }
-
-      field2 = fieldName = fieldValue = fieldTag = speciesNames = availableValues = availableDefaultValues = defaultFieldValues = defaultValuesSelector = null;
     }
+
+    i = elements = fieldName = fieldValue = fieldTag = speciesNames = availableValues = availableDefaultValues = defaultFieldValues = defaultValuesSelector = null;
   }
 });
 
@@ -631,7 +758,7 @@ Ensembl.Panel.BlastForm.Sequence = Ensembl.Panel.ToolsForm.SubElement.extend({
     this.description  = seq.description;
     this.guessedType  = seq.type;
 
-    var seqString     = this.description + '\n' + this.string;
+    var seqString     = this.description + '\n' + this.string.match(/(.{1,60})/g).join('\n'); // split strings into 60 char each (fast format)
 
     this.elLk.checkbox.val(seqString);
     this.elLk.seqBox.text(seqString);
@@ -684,28 +811,47 @@ Ensembl.Panel.BlastForm.FieldTag = Ensembl.Panel.ToolsForm.SubElement.extend({
  *  When an input field is selected by a user, this tag is disaplayed (and field is hidden), forcing other field's options to be adjusted according to this field's selection
  *  When this tag is removed, it's field still shows the same selected option, but other fields now can be changed by the user without considering this field's selected value
  */
-//TODO  - use elLk for disposable elements
-  constructor: function(panel, field, div) {
+  constructor: function(div, panel) {
     var self        = this;
     this.panel      = panel;
-    this.field      = field;
-    this.childTags  = [];
-    this.div        = div.on('click', function() {
-      if (!self.readOnly) {
-        for (var i in self.childTags) {
-          self.childTags[i].toggle(false);
-          self.panel.updateSelections(self.childTags[i].field, false, true);
-        }
-        self.toggle(false);
-        self.panel.updateSelections(self.field, false);
-      }
-    });
+    this.div        = div.on('click', function() { self.readOnly || self.select(false); });
     this.parentDivs = this.div.parents('div:not(:visible)');
     this.selected   = false; // flag telling whether selected by user or not
+    this.field      = $();
+    this.childTags  = [];
+    this.type       = '';
+    this.name       = '';
+    this.readOnly   = false;
   },
 
   addField: function(field) {
-    $.merge(this.field, field)
+    this.field  = this.field.add(field);
+    this.type   = this.field.prop('nodeName');
+    this.name   = this.field.attr('name');
+  },
+
+  select: function(target, noUpdate) {
+    if (target === false) {
+      if (!this.selected) { // already not selected
+        return;
+      }
+      for (var i in this.childTags) {
+        this.childTags[i].select(false, true);
+      }
+      delete this.panel.selectedValues[this.name];
+      if (!noUpdate) {
+        this.panel.updateSelections(this.name);
+      }
+    } else {
+      if (!(target instanceof $)) {
+        target = this.type == 'INPUT' ? this.field.filter('[value=' + target + ']').prop('checked', true) : this.field.find('option[value=' + target + ']').prop('selected', true);
+      }
+      this.panel.selectedValues[this.name] = target.val();
+      if (!noUpdate) {
+        this.panel.updateSelections(this.name);
+      }
+    }
+    this.toggle(this.selected = !!target);
   },
 
   setChildTags: function(allTags) {
@@ -717,15 +863,18 @@ Ensembl.Panel.BlastForm.FieldTag = Ensembl.Panel.ToolsForm.SubElement.extend({
     }
   },
 
-  toggle: function(flag, readOnly) {
-    this.readOnly = this.selected && !this.readOnly ? false : !!readOnly; // if fieldtag is already selected, don't make it readonly unless it's already readonly
+  setReadonly: function(readOnly) {
+    this.toggle(readOnly);
+    this.div.toggleClass('readonly', readOnly);
+    this.readOnly = readOnly;
+  },
+
+  toggle: function(flag) {
     this.parentDivs.toggle(flag);
     this.field.parents('div').first().toggle(!flag);
     if (flag) {
-      this.div.children(':first-child').html(this.field.prop('nodeName') == 'INPUT' ? this.field.filter(':checked').parent().find('label').html() : this.field.find('option:selected').html());
+      this.div.children(':first-child').html(this.type == 'INPUT' ? this.field.filter(':checked').parent().find('label').html() : this.field.find('option:selected').html());
     }
-    this.div.toggleClass('readonly', this.readOnly);
-    this.selected = flag;
     this.panel.adjustDivsHeight();
   }
 });
