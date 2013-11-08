@@ -1,7 +1,5 @@
 package EnsEMBL::Tools::SiteDefs;
 
-### Adds the ORM db details for tickets db
-
 use strict;
 
 sub update_conf {
