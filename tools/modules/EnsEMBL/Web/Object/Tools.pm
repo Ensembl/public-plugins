@@ -192,6 +192,18 @@ sub delete_ticket_or_job {
   return 1 if $job && $job->delete;
 }
 
+sub save_ticket_to_account {
+  ## Saves a ticket to the logged-in user account
+  ## @return 1 if saved successfully, undef if there was a problem
+  my $self    = shift;
+
+  if (my $ticket = $self->get_requested_ticket) {
+    $ticket->owner_id($self->hub->user->user_id);
+    $ticket->owner_type('user');
+    return 1 if $ticket->save;
+  }
+}
+
 sub submit_jobs_to_hive {
   ## Submits the jobs linked to a ticket to hive
   ## @param Ticket object
