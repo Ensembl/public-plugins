@@ -235,7 +235,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     this.updateSelections('');
 
     // Set focus on the sequence textarea
-    this.elLk.sequenceInput.trigger('focus');    
+    this.elLk.sequenceInput.trigger('focus').trigger('showButtons', false);
   },
 
   loadTicket: function(ticketName) {
