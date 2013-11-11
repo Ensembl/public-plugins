@@ -228,7 +228,7 @@ sub form_inputs_to_jobs_data {
     my $i = 0;
     for my $seq_object (@$seq_objects) {
       push @$jobs, {
-        'job_desc'    => sprintf('%s%s', $desc || sprintf('%s search against %s %s database.', $prog, $sd->get_config($species, 'SPECIES_COMMON_NAME'), $db_types->{$params->{'db_type'}}), @$seq_objects > 1 ? sprintf(' (%d)', ++$i) : ''),
+        'job_desc'    => sprintf('%s%s', $desc || sprintf('%s search against %s %s.', $prog, $sd->get_config($species, 'SPECIES_COMMON_NAME'), $db_types->{$params->{'db_type'}}), @$seq_objects > 1 ? sprintf(' (%d)', ++$i) : ''),
         'species'     => $species,
         'sequence'    => $seq_object,
         'source_file' => $sd->get_config($species, 'ENSEMBL_BLAST_CONFIGS')->{$params->{'query_type'}}{$params->{'db_type'}}{$params->{'search_type'}}{$params->{'source'}},
