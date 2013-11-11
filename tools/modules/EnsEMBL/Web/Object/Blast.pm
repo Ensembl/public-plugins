@@ -220,14 +220,15 @@ sub form_inputs_to_jobs_data {
   $file_handle->close;
 
   # Create parameter sets for individual jobs to be submitted (submit one job per sequence per species)
-  my $jobs    = [];
-  my $desc    = $self->param('description');
-  my $prog    = $self->parse_search_type($params->{'search_type'}, 'search_method');
+  my $jobs      = [];
+  my $desc      = $self->param('description');
+  my $prog      = $self->parse_search_type($params->{'search_type'}, 'search_method');
+  my $db_types  = $sd->multi_val('ENSEMBL_BLAST_DB_TYPES');
   for my $species (@species) {
     my $i = 0;
     for my $seq_object (@$seq_objects) {
       push @$jobs, {
-        'job_desc'    => sprintf('%s%s', $desc || sprintf('%s search against %s %s database.', $prog, $sd->get_config($species, 'SPECIES_COMMON_NAME'), $params->{'db_type'}), @$seq_objects > 1 ? sprintf(' (%d)', ++$i) : ''),
+        'job_desc'    => sprintf('%s%s', $desc || sprintf('%s search against %s %s database.', $prog, $sd->get_config($species, 'SPECIES_COMMON_NAME'), $db_types->{$params->{'db_type'}}), @$seq_objects > 1 ? sprintf(' (%d)', ++$i) : ''),
         'species'     => $species,
         'sequence'    => $seq_object,
         'source_file' => $sd->get_config($species, 'ENSEMBL_BLAST_CONFIGS')->{$params->{'query_type'}}{$params->{'db_type'}}{$params->{'search_type'}}{$params->{'source'}},
