@@ -56,6 +56,7 @@ Ensembl.Panel.ActivitySummary = Ensembl.Panel.ContentTools.extend({
     this.ajax({
       'url'     :  this.refreshURL,
       'data'    : { 'tickets': forceRefresh ? '' : this.ticketsData }, // if forceRefresh flag is on, don't send the ticket data to the backend. This forces the backend to respond with current ticket data again.
+      'type'    : 'post',
       'success' : function(json, previous) {
         if (previous != 'method_applied') {
           this.updateCountdown('refresh_now');
