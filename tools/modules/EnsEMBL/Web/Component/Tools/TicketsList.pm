@@ -32,20 +32,20 @@ sub content {
     foreach my $ticket (@$tickets) {
 
       my $ticket_name   = $ticket->ticket_name;
-      my $jobs_summary  = {};
       my $job_number    = 1;
+      my @jobs_summary;
 
       for ($ticket->job) {
         my $job_id      = $_->job_id;
         my $job_desc    = $_->job_desc;
         my $hive_status = $_->hive_status;
-        $jobs_summary->{$job_id} = sprintf '<p class="job-status">Job %d <span class="job-desc">%s</span>: <span class="job-status-%s _status_%3$s">%s<input type="hidden" value="%s"></span>',
+        push @jobs_summary, sprintf('<p class="job-status">Job %d <span class="job-desc">%s</span>: <span class="job-status-%s _status_%3$s">%s<input type="hidden" value="%s"></span>',
           $job_number++,
           $job_desc ? "($job_desc)" : '',
           $hive_status,
           ucfirst $hive_status =~ s/_/ /gr,
           $job_id
-        ;
+        );
       }
 
       my $created_at = $ticket->created_at;
@@ -53,7 +53,7 @@ sub content {
       $table->add_row({
         'analysis'  => $ticket->ticket_type->ticket_type_caption,
         'ticket'    => $self->ticket_link($ticket),
-        'jobs'      => join('', sort values %$jobs_summary),
+        'jobs'      => join('', @jobs_summary),
         'created'   => sprintf('<span class="hidden">%d</span>%s', $created_at =~ s/[^\d]//gr, $self->format_date($created_at)),
         'extras'    => $self->ticket_buttons($ticket)->render,
         'options'   => {'class' => "_ticket_$ticket_name"}
