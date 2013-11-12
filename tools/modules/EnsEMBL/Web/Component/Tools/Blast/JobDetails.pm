@@ -36,7 +36,7 @@ sub content {
               'node_name'   => 'a',
               'href'        => '#',
               'inner_HTML'  => 'Input details',
-              'class'       => ['toggle', 'set_cookie', 'close'],
+              'class'       => ['toggle', 'set_cookie', 'closed'],
               'rel'         => '_job_input_details'
             }]
           }]
@@ -47,7 +47,7 @@ sub content {
       return sprintf '%s%s', $twocol->render, $self->_error('No results found', 'If you believe that there should be a match to your query sequence(s) please adjust the configuration parameters you selected and resubmit the search.');
     }
   } else {
-      return $self->_error('Job not found', 'TODO.. message');
+      return $self->_error('Job not found', 'The job you requested was not found. It has either been expired, or you clicked on an invalid link.');
   }
 }
 
