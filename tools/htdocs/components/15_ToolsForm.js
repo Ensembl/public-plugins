@@ -56,12 +56,10 @@ Ensembl.Panel.ToolsForm = Ensembl.Panel.ContentTools.extend({
   /*
    * Shows/hides the ensembl spinner on top of the form according to the flag
    */
-    if (!this.elLk.overlayDiv) {
-      var offset = this.elLk.form.offset();
-      this.elLk.overlayDiv = $('<div class="form-overlay">').css({'left': offset.left, 'top': offset.top}).appendTo(document.body);
-      this.elLk.spinnerDiv = this.elLk.overlayDiv.clone().prop('className', 'form-spinner spinner').appendTo(document.body);
+    if (!this.elLk.spinnerDivs) {
+      this.elLk.spinnerDivs = $('<div class="form-overlay"></div><div class="form-spinner spinner"></div>').appendTo(document.body);
     }
-    this.elLk.overlayDiv.add(this.elLk.spinnerDiv).css(flag ? { 'height': this.elLk.form.height(), 'width': this.elLk.form.width() } : {}).toggle(flag);
+    this.elLk.spinnerDivs.css(flag ? $.extend({ 'height': this.elLk.form.height(), 'width': this.elLk.form.width() }, this.elLk.form.offset()) : {}).toggle(flag);
   },
 
   reset: function() {
