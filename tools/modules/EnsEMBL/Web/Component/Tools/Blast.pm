@@ -23,7 +23,7 @@ sub job_details_table {
   my $two_col   = $self->new_twocol;
 
   $two_col->add_row('Search type',    $object->get_param_value_caption('search_type', $job_data->{'search_type'}));
-  $two_col->add_row('Sequence',       sprintf('<pre>&gt;%s</pre>', join("\n", $job_data->{'sequence'}{'display_id'} || '', ($job_data->{'sequence'}{'seq'} =~ /.{1,60}/g))));
+  $two_col->add_row('Sequence',       sprintf('<div class="input-seq">&gt;%s</div>', join("\n", $job_data->{'sequence'}{'display_id'} || '', ($job_data->{'sequence'}{'seq'} =~ /.{1,60}/g))));
   $two_col->add_row('Query type',     $object->get_param_value_caption('query_type', $job_data->{'query_type'}));
   $two_col->add_row('DB type',        $object->get_param_value_caption('db_type', $job_data->{'db_type'}));
   $two_col->add_row('Source',         $object->get_param_value_caption('source', $job_data->{'source'}));
