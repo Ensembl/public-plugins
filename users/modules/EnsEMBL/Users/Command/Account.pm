@@ -81,21 +81,26 @@ sub redirect_after_login {
   ## @param Rose user object
   ## @note Only call this method once login verification is done
   my ($self, $user) = @_;
-  my $hub           = $self->hub;
-  my $object        = $self->object;
-  my $site          = $hub->species_defs->ENSEMBL_SITE_URL;
-
+  my $hub = $self->hub;
+  
   # return to login page if cookie not set
   return $self->redirect_login(MESSAGE_UNKNOWN_ERROR) unless $hub->user->authorise({'user' => $user, 'set_cookie' => 1});
-
+  
+  my $site = $hub->species_defs->ENSEMBL_SITE_URL;
+  my $then = $hub->param('then') || '';
+  my $url  = $then =~ /^(\/|$site)/ ? $then : $site; # only redirect to an internal url or a relative url
+  
   # redirect
   if ($hub->is_ajax_request) {
-    my $url = $hub->referer;
-       $url = $url->{'external'} ? $site : $url->{'absolute_url'};
-    return $self->ajax_redirect($url, {}, '', 'page'); # this just closes the popup and refreshes the page
+    my $referer = $hub->referer;
+    
+    if ($url eq $then && $url ne $referer->{'absolute_url'}) {
+      $self->ajax_redirect($url, undef, undef, undef, $hub->param('modal_tab'));
+    } else {
+      return $self->ajax_redirect($referer->{'external'} ? $site : $referer->{'absolute_url'}, undef, undef, 'page');
+    }
   } else {
-    my $then = $hub->param('then') || '';
-    return $hub->redirect($self->url($then =~ /^(\/|$site)/ ? $then : $site)); #only redirect to an internal url or a relative url
+    return $hub->redirect($self->url($url));
   }
 }
 
