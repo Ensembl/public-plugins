@@ -24,7 +24,8 @@ sub login_form {
   my $then_param        = $is_ajax ? '' : $self->get_then_param;
   my $ex_email          = $is_ajax ? '' : $hub->param('email');
 
-  $form->add_hidden({'name'  => 'then', 'value' => $then_param}) if $then_param;
+  $form->add_hidden({ 'name' => 'then',      'value' => $then_param       }) if $then_param;
+  $form->add_hidden({ 'name' => 'modal_tab', 'value' => 'modal_user_data' });
   $form->add_field([
     {'type'  => 'Email',    'name'  => 'email',     'label' => 'Email',     'required' => 'yes', $ex_email ? ('value' => $ex_email) : ()},
     {'type'  => 'Password', 'name'  => 'password',  'label' => 'Password',  'required' => 'yes'},
