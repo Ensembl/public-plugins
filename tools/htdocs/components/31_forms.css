@@ -1,8 +1,5 @@
 /* Generic tools form CSS */
 
-div.form-overlay                  { position: absolute; background-color: [[PANEL_BG]]; opacity: 0.6; }
-div.form-spinner                  { position: absolute; background-position: center center; border: 0 none; margin: 0; padding: 0; }
-
 div.extra_configs_wrapper         { margin-bottom: 8px; }
 div.extra_configs_button a        { display: inline-block; padding: 5px 16px 5px 5px; background-color: [[PAGE_BG]]; border: 1px solid [[PANEL_BORDER]]; background-position: right center; font-weight: bold;}
 div.extra_configs_button a.open   { border-bottom: none; }
