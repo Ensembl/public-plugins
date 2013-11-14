@@ -16,3 +16,5 @@ div.fasta-buttons                                 { position: absolute; margin-t
 div.fasta-buttons span                            { display: inline-block; height: 20px; line-height: 20px; background: none repeat scroll 0 0 [[PAGE_BG]]; border: 1px solid [[PANEL_BORDER]]; border-top: none; border-radius: 0 0 6px 6px; color: [[BUTTON_BG]]; font-weight: bold; margin: 0 6px; padding: 2px 10px; cursor: pointer; }
 
 div.blast-configs div.row div.lhs                 { font-weight: normal; height: 20px; width: 464px; }
+
+div.input-seq                                     { white-space: pre; max-height: 300px; overflow: auto; font-family: Courier; }
