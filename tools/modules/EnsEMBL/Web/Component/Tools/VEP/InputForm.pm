@@ -613,7 +613,11 @@ sub _build_extra {
       }));
       
       my $cta = $hub->database('funcgen')->get_CellTypeAdaptor();
-      my @cls = map {{'value' => $_->name, 'caption' => $_->name, 'selected' => $prev_params->{cell_type} && $prev_params->{cell_type}->{$_->name} ? 'selected' : ''}} @{$cta->fetch_all};
+      my @cls = map {{
+        'value' => $_->name,
+        'caption' => $_->name,
+        'selected' => $prev_params->{cell_type} && $prev_params->{cell_type}->{$_->name} ? 'selected' : ''
+      }} @{$cta->fetch_all};
       unshift @cls, {'value' => '', 'caption' => 'None'};
       
       my $cell_div = $extra_fieldset->dom->create_element('div', {class => '_stt_cell'});
