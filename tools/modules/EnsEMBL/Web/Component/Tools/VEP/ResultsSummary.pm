@@ -11,7 +11,11 @@ sub content {
   my $self   = shift;
   my $hub    = $self->hub;
   my $object = $self->object;
-  my $job    = $object->get_requested_job({'with_all_results' => 1});
+  my $ticket = $object->get_requested_ticket;
+  
+  return '<div><h3>No ticket selected</h3></div>' unless defined $ticket;
+  
+  my $job    = ($ticket->job)[0];
   
   return '<div><h3>No job selected</h3></div>' unless defined $job;
   
@@ -23,7 +27,7 @@ sub content {
 
   ## We have a ticket!
   my $hide = $self->hub->get_cookie_value('toggle_stats_status') eq 'closed';
-  my $html = sprintf ('<h3><a rel ="job_stats" class="toggle set_cookie %s" href="#">Job statistics for ticket %s:</a></h3>',
+  my $html = sprintf ('<h3><a rel ="job_stats" class="toggle set_cookie %s" href="#">Summary statistics for ticket %s:</a></h3>',
     $hide ? 'closed' : 'open',
     $name
   );
@@ -86,9 +90,16 @@ sub content {
       </div>', $section, $section, $i);
   }
   $html .= '<div>'.join('', @inputs).'</div>';
+  $html .= '</div>';
   
+  #$html .= '<img src="/i/16/pencil.png"> <a href="'.$hub->url({
+  #  type             => 'Tools/VEP',
+  #  action           => '',
+  #  tl               => $ticket->ticket_name,
+  #  edit             => 1
+  #}).'">Edit and resubmit</a>';  
   
-  $html .= '</div><hr/></div></div>';
+  $html .= '<hr/></div></div>';
   
   return $html;
 }
