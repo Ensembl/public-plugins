@@ -612,7 +612,7 @@ sub _build_extra {
         class => '_stt',
       }));
       
-      my $cta = $hub->database('funcgen')->get_CellTypeAdaptor();
+      my $cta = $hub->get_adaptor('get_CellTypeAdaptor', 'funcgen', $sp);
       my @cls = map {{
         'value' => $_->name,
         'caption' => $_->name,
