@@ -128,13 +128,27 @@ sub process_input_data {
   my $format = $self->param('format');
   $self->param(text => $self->param('text_'.$format));
   
-  my ($method) = grep $self->param($_), qw(file url text);
+  my ($method) = grep $self->param($_), qw(file url userdata text);
   
-  $self->{_file_description} = $self->param('name') || ($method eq 'text' ?
-    'pasted data' : ($method eq 'url' ?
-      'data from URL' : sprintf("%s", $self->param('file'))));
-    
-  if ($method) {
+  my $filename;
+  
+  # no data entered
+  if(!$method) {
+    $self->{'_error'} = 'No input data has been entered';
+  }
+  
+  # existing file
+  elsif($method eq 'userdata') {  
+    $filename = $self->param($method);
+    $self->{_file_description} = 'user data'
+  }
+  
+  # paste, upload or URL
+  else {
+  
+    $self->{_file_description} = $self->param('name') || ($method eq 'text' ?
+      'pasted data' : ($method eq 'url' ?
+        'data from URL' : sprintf("%s", $self->param('file'))));
     
     # use generic upload method from $cmnd
     # $cmnd is a EnsEMBL::Web::Command::UserData
@@ -148,23 +162,7 @@ sub process_input_data {
       my $tempdata = $hub->session->get_data(type => 'upload', code => $response->{code});
       
       if($tempdata && $tempdata->{'filename'}) {
-        my $file = EnsEMBL::Web::TmpFile::Text->new(filename => $tempdata->{'filename'});
-        
-        # check file format
-        my $detected_format;
-        
-        open IN, $file->{'full_path'};
-        while(<IN>) {
-          next if /^\#/;
-          $detected_format = detect_format($_);
-          last if $detected_format;
-        }
-        close IN;
-        
-        $self->{'_error'} = "Selected file format ($format) does not match detected format ($detected_format)" if $format ne $detected_format;
-        
-        # store full path for script to use
-        $self->{'_config'}->{'input_file'} = $file->{'full_path'};
+        $filename = $tempdata->{'filename'};
       }
       else {
         $self->{'_error'} = "Could not find file with code ".$code;
@@ -177,9 +175,24 @@ sub process_input_data {
       $self->{'_error'} = 'Upload failed: '.$response->{filter_code};
     }
   }
-  else {
-    $self->{'_error'} = 'No input data has been entered';
+  
+  my $file = EnsEMBL::Web::TmpFile::Text->new(filename => $filename);
+  
+  # check file format
+  my $detected_format;
+  
+  open IN, $file->{'full_path'};
+  while(<IN>) {
+    next if /^\#/;
+    $detected_format = detect_format($_);
+    last if $detected_format;
   }
+  close IN;
+  
+  $self->{'_error'} = "Selected file format ($format) does not match detected format ($detected_format)" if $format ne $detected_format;
+  
+  # store full path for script to use
+  $self->{'_config'}->{'input_file'} = $file->{'full_path'};
 }
 
 sub process_description {
@@ -229,11 +242,23 @@ sub process_config {
     $config->{$p} = $value if $value && $value ne 'no';
   }
   
+  # regulatory
+  if($config->{regulatory}) {
+    
+    # cell types
+    if($config->{regulatory} eq 'cell') {
+      my @cell_types = grep {length($_)} $self->param('cell_type');
+      $config->{cell_type} = join ",", @cell_types if scalar @cell_types;
+    }
+    
+    $config->{regulatory} = 'yes';
+  }
+  
   # check existing
   my $check_ex = $self->param('check_existing_'.$species);
   
   if($check_ex) {
-    if($check_ex eq 'yes') {
+    if($check_ex eq 'check') {
       $config->{check_existing} = 'yes';
     }
     elsif($check_ex eq 'allele') {
@@ -304,7 +329,11 @@ sub _tmp_file {
 
 sub get_tmp_file_objs {
   my $self = shift;
-  my $job    = $self->get_requested_job({'with_all_results' => 1});
+  my $ticket = $self->get_requested_ticket;
+  
+  return unless defined $ticket;
+  
+  my $job    = ($ticket->job)[0];
   
   return unless defined $job;
   
