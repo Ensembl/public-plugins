@@ -6,14 +6,20 @@ no warnings 'uninitialized';
 
 use base qw(EnsEMBL::Web::Component::Tools::VEP);
 use EnsEMBL::Web::Form;
-use Bio::EnsEMBL::Variation::Utils::VEP qw(@REG_FEAT_TYPES);
+use Bio::EnsEMBL::Variation::Utils::VEP qw(@REG_FEAT_TYPES %COL_DESCS);
 use URI::Escape qw(uri_unescape);
 
 sub content {
   my $self   = shift;
   my $hub    = $self->hub;
   my $object = $self->object;
-  my $job    = $object->get_requested_job({'with_all_results' => 1});
+  my $ticket = $object->get_requested_ticket;
+  
+  return '<div><h3>No ticket selected</h3></div>' unless defined $ticket;
+  
+  my $job    = ($ticket->job)[0];
+  
+  return '<div><h3>No job selected</h3></div>' unless defined $job;
   
   return unless defined $job && $job->status eq 'done';
   
@@ -143,7 +149,7 @@ sub content {
     INTRON => 'hidden_position'
   );
   
-  my @table_headers = map {{ key => $_, title => $header_titles{$_} || $_, sort => $table_sorts{$_} || 'string'}} @$headers;
+  my @table_headers = map {{ key => $_, title => $header_titles{$_} || $_, sort => $table_sorts{$_} || 'string', help => $COL_DESCS{$_}}} @$headers;
   
   
   my $panel_id  = $self->id;
