@@ -6,8 +6,8 @@ use warnings;
 use base qw(EnsEMBL::Web::Component::Tools::VEP);
 
 sub content {
-  my $self  = shift;
-  my $hub   = $self->hub;
+  my $self   = shift;
+  my $hub    = $self->hub;
   my $html;
 
   my $form  = $self->new_form({
@@ -87,6 +87,10 @@ sub content {
     name    => 'submit_vep',
     value   => 'Run >',
     class   => 'submit_vep',
+  })->elements->[-1]->append_child('a', {
+    'href'            => 'VEP',
+    'class'           => 'left-margin',
+    'inner_HTML'      => 'Reset'
   });
   
   $html .= '<h2>New VEP job:</h2><input type="hidden" class="panel_type" value="ToolsForm" />';
@@ -98,6 +102,9 @@ sub content {
 sub _build_input {
   my ($self, $input_fieldset) = @_;
   my $hub = $self->hub;
+  
+  # if editing, get previous params from job
+  my $prev_params = $hub->param('edit') ? $self->get_previous_job_params() : {};
 
   $input_fieldset->legend('Input');
   my @species;
@@ -117,7 +124,7 @@ sub _build_input {
       'name'    => 'species',
       'label'   => "Species",
       'values'  => \@sp2,
-      'value'   => $current_species,
+      'value'   => $prev_params->{species} || $current_species,
       'select'  => 'select',
       'width'   => '300px',
       'class'   => '_stt'
@@ -142,19 +149,27 @@ ENST00000471631.1:c.28_33delTCGCGG),
   my $format = 'ensembl';
 
   $input_fieldset->add_field({ type => 'String', name => 'name', label => 'Name for this data (optional)' });
+  
+  my %formats = (
+    ensembl => 'Ensembl default',
+    vcf     => 'VCF',
+    pileup  => 'Pileup',
+    id      => 'Variant identifiers',
+    hgvs    => 'HGVS notations'
+  );
 
   $input_fieldset->add_field({
       'type'    => 'DropDown',
       'name'    => 'format',
-      'label'   => 'Input file format (<a href="/info/docs/variation/vep/vep_formats.html#input" target="_blank">details</a>)',
+      'label'   => 'Input file format (<a href="/info/docs/tools/vep/vep_formats.html#input" target="_blank">details</a>)',
       'values'  => [
-        { value => 'ensembl', caption => 'Ensembl default'     },
-        { value => 'vcf',     caption => 'VCF'                 },
-        { value => 'pileup',  caption => 'Pileup'              },
-        { value => 'id',      caption => 'Variant identifiers' },
-        { value => 'hgvs',    caption => 'HGVS notations'      },
+        { value => 'ensembl', caption => $formats{'ensembl'}   },
+        { value => 'vcf',     caption => $formats{'vcf'}       },
+        { value => 'pileup',  caption => $formats{'pileup'}    },
+        { value => 'id',      caption => $formats{'id'}        },
+        { value => 'hgvs',    caption => $formats{'hgvs'}      },
       ],
-      'value'   => 'ensembl',
+      'value'   => $prev_params->{format} || 'ensembl',
       'select'  => 'select',
       'class'   => '_stt format'
   });
@@ -180,16 +195,43 @@ ENST00000471631.1:c.28_33delTCGCGG),
   
   $cont_div->append_child($input_fieldset->add_field({ type => 'File', name => 'file', label => 'Or upload file '.$self->helptip("File uploads are limited to 5MB in size. Files may be compressed using gzip or zip")}));
   $cont_div->append_child($input_fieldset->add_field({ type => 'URL',  name => 'url',  label => 'Or provide file URL', size => 30, class => 'url' }));
-
-  ## TODO - need to find out how to list a user's files
-  #my $userdata = [];
-  #$input_fieldset->add_field({
-  #    'type'    => 'DropDown',
-  #    'name'    => 'userdata',
-  #    'label'   => "or previously select uploaded file",
-  #    'values'  => $userdata,
-  #    'select'  => 'select',
-  #});
+  
+  my @user_files = $hub->session->get_data(type => 'upload');
+  
+  if(scalar @user_files) {
+    my @to_form = { value => '', caption => '-- Select file --'};
+    my $value;
+    
+    foreach my $file(sort {$b->{timestamp} <=> $a->{timestamp}} @user_files) {
+      next unless $formats{$file->{format}};
+      
+      my $file_obj = EnsEMBL::Web::TmpFile::Text->new(filename => $file->{'filename'});
+      open IN, $file_obj->full_path;
+      my $first_line;
+      while($first_line = <IN>) { last if $first_line !~ /^\#/; }
+      chomp $first_line;
+      close IN;
+      
+      $first_line = substr($first_line, 0, 30).'...' if $first_line && length($first_line) > 30;
+      
+      # set to existing file if loading prev job
+      $value = $file->{'filename'} if $prev_params->{input_file} && $prev_params->{input_file} eq $file_obj->full_path;
+      
+      push @to_form, {
+        value => $file->{'filename'},
+        caption => $file->{name}.' | '.$formats{$file->{format}}.' | '.$hub->species_defs->species_label($file->{species}, 1).' | '.$first_line
+      };
+    }
+    
+    $cont_div->append_child($input_fieldset->add_field({
+        'type'    => 'DropDown',
+        'name'    => 'userdata',
+        'label'   => "Or select previously uploaded file",
+        'values'  => \@to_form,
+        'value'   => $value,
+        'select'  => 'select',
+    }));
+  }
   
   $input_fieldset->append_child($cont_div);
   
@@ -220,6 +262,10 @@ ENST00000471631.1:c.28_33delTCGCGG),
     name    => 'submit_vep',
     value   => 'Run >',
     class   => 'submit_vep',
+  })->elements->[-1]->append_child('a', {
+    'href'            => 'VEP',
+    'class'           => 'left-margin',
+    'inner_HTML'      => 'Reset'
   });
   
   $input_fieldset->append_child($input_fieldset->dom->create_element('hr'));
@@ -227,6 +273,9 @@ ENST00000471631.1:c.28_33delTCGCGG),
 
 sub _build_filters {
   my ($self, $filter_fieldset) = @_;
+  
+  # if editing, get previous params from job
+  my $prev_params = $self->hub->param('edit') ? $self->get_previous_job_params() : {};
 
   #$filter_fieldset->legend('Filters');
   
@@ -242,7 +291,7 @@ sub _build_filters {
       { value => 'common',    caption => 'Exclude common variants' },
       { value => 'advanced',  caption => 'Advanced filtering' },
     ],
-    'value'   => 'no',
+    'value'   => $prev_params->{frequency} || 'no',
     'select'  => 'select',
     'class'   => '_stt',
   }));
@@ -259,7 +308,7 @@ sub _build_filters {
       { value => 'exclude', caption => 'Exclude' },
     {  value => 'include', caption => 'Include only' },
     ],
-    value  => 'exclude',
+    value  => $prev_params->{freq_filter} || 'exclude',
     select => 'select',
   }));
 
@@ -272,14 +321,14 @@ sub _build_filters {
       { value => 'gt', caption => 'variants with MAF greater than' },
       { value => 'lt', caption => 'variants with MAF less than'    },
     ],
-    value  => 'gt',
+    value  => $prev_params->{freq_gt_lt} || 'gt',
     select => 'select',
   }));
 
   $freq_filt_div->append_child($filter_fieldset->add_field({
     type  => 'String',
     name  => 'freq_freq',
-    value => '0.01',
+    value => $prev_params->{freq_freq} || '0.01',
     max   => 1,
   }));
 
@@ -327,16 +376,17 @@ sub _build_filters {
       #{ value => '-',       caption => '-----'                                     },
       #{ value => 'any',     caption => 'any 1KG phase 1 or HapMap population'      },
     ],
-    value  => '1kg_all',
+    value  => $prev_params->{freq_pop} || '1kg_all',
     select => 'select',
     #notes   => '<strong>NB:</strong> Enabling advanced frequency filtering may be slow for large datasets',
   }));
   
   $filter_fieldset->add_field({
-    type  => 'CheckBox',
-    name  => "coding_only",
-    label => 'Return results for variants in coding regions only '.$self->helptip("Exclude results in intronic and intergenic regions"),
-    value => 'yes',
+    type    => 'CheckBox',
+    name    => "coding_only",
+    label   => 'Return results for variants in coding regions only '.$self->helptip("Exclude results in intronic and intergenic regions"),
+    value   => 'yes',
+    checked => keys %$prev_params ? defined($prev_params->{coding_only}) : 0
   });
   
   $filter_fieldset->add_field({
@@ -349,7 +399,7 @@ sub _build_filters {
         { value => 'summary',     caption => 'Show only list of consequences per variant' },
         { value => 'most_severe', caption => 'Show most severe per variant' },
       ],
-      'value'   => 'no',
+      'value'   => $prev_params->{summary} || 'no',
       'select'  => 'select',
       'notes'   => '<strong>NB:</strong> Restricting results may exclude biologically important data!',
     });
@@ -358,6 +408,9 @@ sub _build_filters {
 
 sub _build_identifiers {
   my ($self, $ident_fieldset) = @_;
+  
+  # if editing, get previous params from job
+  my $prev_params = $self->hub->param('edit') ? $self->get_previous_job_params() : {};
 
   #$ident_fieldset->legend('Identifiers');
 
@@ -366,7 +419,7 @@ sub _build_identifiers {
     name  => "symbol",
     label => 'Gene symbol '.$self->helptip("Report the gene symbol (e.g. HGNC)"),
     value => 'yes',
-    checked => 1
+    checked => keys %$prev_params ? defined($prev_params->{symbol}) : 1
   });
 
   $ident_fieldset->add_field({
@@ -374,7 +427,7 @@ sub _build_identifiers {
     name  => "ccds",
     label => 'CCDS '.$self->helptip("Report the Consensus CDS identifier where applicable"),
     value => 'yes',
-    checked => 0
+    checked => keys %$prev_params ? defined($prev_params->{ccds}) : 0
   });
 
   $ident_fieldset->add_field({
@@ -382,7 +435,7 @@ sub _build_identifiers {
     name  => "protein",
     label => 'Protein '.$self->helptip("Report the Ensembl protein identifier"),
     value => 'yes',
-    checked => 0
+    checked => keys %$prev_params ? defined($prev_params->{protein}) : 0
   });
 
   $ident_fieldset->add_field({
@@ -390,7 +443,7 @@ sub _build_identifiers {
     name  => "hgvs",
     label => 'HGVS '.$self->helptip("Report HGVSc (coding sequence) and HGVSp (protein) notations for your variants"),
     value => 'yes',
-    checked => 0
+    checked => keys %$prev_params ? defined($prev_params->{hgvs}) : 0
   });
   
   my $hub = $self->hub;
@@ -409,7 +462,7 @@ sub _build_identifiers {
           { value => 'yes',    caption => 'Yes'                     },
           { value => 'allele', caption => 'Yes and compare alleles' },
         ],
-        value  => 'yes',
+        value  => $prev_params->{check_existing} || 'yes',
         select => 'select',
         class  => '_stt'
       }));
@@ -427,7 +480,7 @@ sub _build_identifiers {
             name  => "gmaf_".$_,
             label => '1000 Genomes global minor allele frequency '.$self->helptip("Report the minor allele frequency for the combined 1000 Genomes Project phase 1 population"),
             value => 'yes',
-            checked => 1
+            checked => keys %$prev_params ? defined($prev_params->{gmaf}) : 1
           }));
           
           $freq_div->append_child($ident_fieldset->add_field({
@@ -435,7 +488,7 @@ sub _build_identifiers {
             name  => "maf_1kg_".$_,
             label => '1000 Genomes continental minor allele frequencies '.$self->helptip("Report the minor allele frequencies for the combined 1000 Genomes Project phase 1 continental populations - AFR (African), AMR (American), ASN (Asian) and EUR (European)"),
             value => 'yes',
-            checked => 0
+            checked => keys %$prev_params ? defined($prev_params->{maf_1kg}) : 0
           }));
           
           $freq_div->append_child($ident_fieldset->add_field({
@@ -443,7 +496,7 @@ sub _build_identifiers {
             name  => "maf_esp_".$_,
             label => 'ESP minor allele frequencies '.$self->helptip("Report the minor allele frequencies for the NHLBI Exome Sequencing Project populations - AA (African American) and EA (European American)"),
             value => 'yes',
-            checked => 0
+            checked => keys %$prev_params ? defined($prev_params->{maf_esp}) : 0
           }));
           
           $div->append_child($freq_div);
@@ -458,6 +511,9 @@ sub _build_identifiers {
 sub _build_extra {
   my ($self, $extra_fieldset) = @_;
   my $hub = $self->hub;
+  
+  # if editing, get previous params from job
+  my $prev_params = $hub->param('edit') ? $self->get_previous_job_params() : {};
 
   #$extra_fieldset->legend('Extra output options');
 
@@ -466,7 +522,7 @@ sub _build_extra {
     name  => "biotype",
     label => 'Transcript biotype '.$self->helptip("Report the biotype of overlapped transcripts, e.g. protein_coding, miRNA, psuedogene"),
     value => 'yes',
-    checked => 1
+    checked => keys %$prev_params ? defined($prev_params->{biotype}) : 1
   });
 
   $extra_fieldset->add_field({
@@ -474,7 +530,7 @@ sub _build_extra {
     name  => "domains",
     label => 'Protein domains '.$self->helptip("Report overlapping protein domains from Pfam, Prosite and InterPro"),
     value => 'yes',
-    checked => 0
+    checked => keys %$prev_params ? defined($prev_params->{domains}) : 0
   });
   
   $extra_fieldset->add_field({
@@ -482,7 +538,7 @@ sub _build_extra {
     name  => "numbers",
     label => 'Exon and intron numbers '.$self->helptip("For variants that fall in the exon or intron, report the exon or intron number as NUMBER / TOTAL"),
     value => 'yes',
-    checked => 0
+    checked => keys %$prev_params ? defined($prev_params->{numbers}) : 0
   });
   
   $extra_fieldset->add_field({
@@ -490,7 +546,7 @@ sub _build_extra {
     name  => "canonical",
     label => 'Identify canonical transcripts '.$self->helptip("Indicate if an affected transcript is the canonical transcript for the gene"),
     value => 'yes',
-    checked => 0
+    checked => keys %$prev_params ? defined($prev_params->{canonical}) : 0
   });
   
   # species-specific stuff
@@ -511,8 +567,7 @@ sub _build_extra {
           { value => 'pred',  caption => 'Prediction only'      },
           { value => 'score', caption => 'Score only'           },
         ],
-        value  => 'both',
-        select => 'select',
+        value  => $prev_params->{sift} || 'both',
       }));
       
       $extra_fieldset->append_child($div);
@@ -533,8 +588,7 @@ sub _build_extra {
           { value => 'pred',  caption => 'Prediction only'      },
           { value => 'score', caption => 'Score only'           },
         ],
-        value  => 'both',
-        select => 'select',
+        value  => $prev_params->{polyphen} || 'both',
       }));
       
       $extra_fieldset->append_child($div);
@@ -545,19 +599,89 @@ sub _build_extra {
       my $div = $extra_fieldset->dom->create_element('div', {class => '_stt_'.$sp});
       
       $div->append_child($extra_fieldset->add_field({
-        type  => 'CheckBox',
+        type  => 'DropDown',
         name  => "regulatory_".$sp,
         label => 'Get regulatory region consequences '.$self->helptip("Get consequences for variants that overlap regulatory features and transcription factor binding motifs"),
-        value => 'yes',
-        checked => 1
+        values => [
+          { value => 'no', caption => 'No' },
+          { value => 'reg', caption => 'Yes' },
+          { value => 'cell', caption => 'Yes and limit by cell type' },
+        ],
+        value => $prev_params->{regulatory} || 'reg',
+        #checked => keys %$prev_params ? defined($prev_params->{regulatory}) : 1,
+        class => '_stt',
       }));
       
-      $extra_fieldset->append_child($div);
+      my $cta = $hub->database('funcgen')->get_CellTypeAdaptor();
+      my @cls = map {{'value' => $_->name, 'caption' => $_->name, 'selected' => $prev_params->{cell_type} && $prev_params->{cell_type}->{$_->name} ? 'selected' : ''}} @{$cta->fetch_all};
+      unshift @cls, {'value' => '', 'caption' => 'None'};
       
-      #my $cta = $config->{RegulatoryFeature_adaptor}->db->get_CellTypeAdaptor();
-      #$cls = join ",", map {$_->name} @{$cta->fetch_all};
+      my $cell_div = $extra_fieldset->dom->create_element('div', {class => '_stt_cell'});
+      
+      $cell_div->append_child($extra_fieldset->add_field({
+        type => 'DropDown',
+        multiple => 1,
+        select => 'select',
+        label => 'Limit to cell type(s) '.$self->helptip("Select one or more cell types to limit regulatory feature results to. Hold Ctrl (Windows) or Cmd (Mac) to select multiple entries"),
+        name => 'cell_type',
+        values => \@cls,
+        value => $prev_params->{cell_type} ? 'x' : '',
+      }));
+      
+      $div->append_child($cell_div);
+      $extra_fieldset->append_child($div);
     }
   }
+}
+
+sub get_previous_job_params {
+  my $self = shift;
+  
+  if(!defined($self->{_prev_job_params})) {
+    
+    $self->{_prev_job_params} = {};
+    
+    my $object = $self->object;
+    
+    my $ticket = $object->get_requested_ticket();
+    return unless defined $ticket;
+    
+    my $job = ($ticket->job)[0];
+    return unless defined $job;
+    
+    my $job_data = $job->job_data;
+    my $config = $job_data->{'config'};
+    
+    # $job_data has the proper species name for the form
+    $config->{'species'} = $job_data->{'species'};
+    
+    # reverse engineer some stuff
+    
+    # frequency
+    if(grep {$config->{$_}} qw(freq_pop freq_freq freq_gt_lt freq_filter)) {
+      $config->{frequency} = 'advanced';
+    }
+    elsif($config->{filter_common}) {
+      $config->{frequency} = 'common';
+    }
+    
+    # summary
+    ($config->{summary}) = grep {defined($_)} map {defined($config->{$_}) ? $_ : undef} qw(summary per_gene most_severe);
+    
+    # check existing
+    $config->{check_existing} = $config->{check_alleles} ? 'allele' : $config->{check_existing};
+    
+    # regulatory
+    $config->{regulatory} = $config->{cell_type} ? 'cell' : $config->{regulatory} ? 'reg' : 'no';
+    my $ct = $config->{cell_type};
+    $config->{cell_type} = {};
+    %{$config->{cell_type}} = map {$_ => 1} split(/\,/, $ct);
+    
+    # cache on self
+    $self->{_prev_job_params} = $config;
+  }
+  
+  return $self->{_prev_job_params};
 }
 
 1; 
