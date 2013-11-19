@@ -98,6 +98,7 @@ sub get_blast_form_params {
   my $db_types                = $sd->multi_val('ENSEMBL_BLAST_DB_TYPES');
   my $blast_methods           = $sd->multi_val('ENSEMBL_BLAST_CONFIGS');
   my $sources                 = $sd->multi_val('ENSEMBL_BLAST_DATASOURCES');
+  my $sources_order           = $sd->multi_val('ENSEMBL_BLAST_DATASOURCES_ORDER');
   my $search_types            = [ map { $_->{'search_type'} } @$blast_methods ]; # NCBIBLAST|BLASTN, NCBIBLAST|BLASTP, BLAT|BLAT etc
 
   # Fields to return
@@ -134,10 +135,10 @@ sub get_blast_form_params {
   }
 
   # Return fields
-  $fields->{'species'}        = [ map { 'value' => $_, 'caption' => $sd->species_label($_, 1) }, @species                         ];
-  $fields->{'query_type'}     = [ map { 'value' => $_, 'caption' => $query_types->{$_}        }, keys %$query_types               ];
-  $fields->{'db_type'}        = [ map { 'value' => $_, 'caption' => $db_types->{$_}           }, keys %$db_types                  ];
-  $fields->{'source'}         = [ map { 'value' => $_, 'caption' => $sources->{$_}            }, sort {$a cmp $b} keys %$sources  ];
+  $fields->{'species'}        = [ map { 'value' => $_, 'caption' => $sd->species_label($_, 1) }, @species           ];
+  $fields->{'query_type'}     = [ map { 'value' => $_, 'caption' => $query_types->{$_}        }, keys %$query_types ];
+  $fields->{'db_type'}        = [ map { 'value' => $_, 'caption' => $db_types->{$_}           }, keys %$db_types    ];
+  $fields->{'source'}         = [ map { 'value' => $_, 'caption' => $sources->{$_}            }, @$sources_order    ];
   $fields->{'search_type'}    = [];
   foreach my $search_type (@$search_types) {
     my ($blast_type, $search_method) = $self->parse_search_type($search_type);
