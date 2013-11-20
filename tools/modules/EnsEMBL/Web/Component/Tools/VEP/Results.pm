@@ -124,7 +124,7 @@ sub content {
   
   # linkify row content
   foreach my $row(@$rows) {
-    $row->{$headers->[$_]} = $self->linkify($headers->[$_], $row->{$headers->[$_]}) for (0..$#{$headers});
+    $row->{$headers->[$_]} = $self->linkify($headers->[$_], $row->{$headers->[$_]}, $job_data->{species}) for (0..$#{$headers});
   }
   
   # extras
@@ -575,6 +575,7 @@ sub linkify {
   my $self = shift;
   my $field = shift;
   my $value = shift;
+  my $species = shift;
   my $new_value;
   my $hub = $self->hub;
   
@@ -587,6 +588,7 @@ sub linkify {
       action           => 'View',
       r                => $value,
       contigviewbottom => "variation_feature_variation=normal",
+      species          => $species
     });
     
     $new_value = sprintf('<a class="_ht" title="View in location tab" href="%s">%s</a>', $url, $value);
@@ -597,9 +599,10 @@ sub linkify {
     
     foreach my $var(split /\,\s*/, $value) {
       my $url = $hub->url({
-        type => 'ZMenu',
-        action => 'Variation',
-        v => $var,
+        type    => 'ZMenu',
+        action  => 'Variation',
+        v       => $var,
+        species => $species
       });
       
       $new_value .= ($new_value ? ', ' : '').sprintf('<a class="zmenu" href="%s">%s</a>', $url, $var);
@@ -609,9 +612,10 @@ sub linkify {
   # transcript
   elsif($field eq 'Feature' && $value =~ /^ENS.{0,3}T\d+$/) {
     my $url = $hub->url({
-      type => 'ZMenu',
-      action => 'Transcript',
-      t => $value
+      type    => 'ZMenu',
+      action  => 'Transcript',
+      t       => $value,
+      species => $species
     });
     
     $new_value = sprintf('<a class="zmenu" href="%s">%s</a>', $url, $value);
@@ -620,9 +624,10 @@ sub linkify {
   # reg feat
   elsif($field eq 'Feature' && $value =~ /^ENS.{0,3}R\d+$/) {
     my $url = $hub->url({
-      type => 'ZMenu',
-      action => 'Regulation',
-      rf => $value
+      type    => 'ZMenu',
+      action  => 'Regulation',
+      rf      => $value,
+      species => $species
     });
     
     $new_value = sprintf('<a class="zmenu" href="%s">%s</a>', $url, $value);
@@ -631,9 +636,10 @@ sub linkify {
   # gene
   elsif($field eq 'Gene' && $value =~ /\w+/) {
     my $url = $hub->url({
-      type => 'ZMenu',
+      type   => 'ZMenu',
       action => 'Gene',
-      g => $value
+      g      => $value,
+      species => $species
     });
     
     $new_value = sprintf('<a class="zmenu" href="%s">%s</a>', $url, $value);
@@ -642,9 +648,10 @@ sub linkify {
   # Protein
   elsif($field eq 'ENSP' && $value =~ /\w+/) {
     my $url = $hub->url({
-      type => 'Transcript',
-      action => 'ProteinSummary',
-      p => $value
+      type    => 'Transcript',
+      action  => 'ProteinSummary',
+      p       => $value,
+      species => $species
     });
     
     $new_value = sprintf('<a href="%s">%s</a>', $url, $value);
