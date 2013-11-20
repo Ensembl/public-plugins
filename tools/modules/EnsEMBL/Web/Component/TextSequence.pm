@@ -7,8 +7,11 @@ sub tool_buttons {
   
   return unless $self->html_format;
   
-  my $hub  = $self->hub;
-  my $html = sprintf('
+  my $hub   = $self->hub;
+  my $input = $hub->input;
+  my %pars  = map { $_ => $input->url_param($_) // '' } $input->url_param;
+  
+  my $html  = sprintf('
     <div class="other_tool">
       <p><a class="seq_export export" href="%s">Download view as RTF</a></p>
     </div>', 
@@ -22,13 +25,15 @@ sub tool_buttons {
         <form class="external hidden seq_blast" action="%s" method="post">
           <fieldset>
             <input type="hidden" name="query_sequence" value="%s" />
+            <input type="hidden" name="query_type" value="%s" />
             %s
           </fieldset>
         </form>
       </div>',
       $hub->url({ type => 'Tools', action => 'Blast' }),
       $blast_seq,
-      $peptide ? '<input type="hidden" name="source" value="peptide" /><input type="hidden" name="db_type" value="peptide" />' : ''
+      $peptide ? 'peptide' : 'dna',
+      join '', map { $pars{$_} ne '' ? sprintf '<input type="hidden" name="%s" value="%s">', $_, $pars{$_} : () } keys %pars
     );
   }
   
