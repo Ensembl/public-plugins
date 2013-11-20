@@ -163,9 +163,12 @@ sub populate_tree {
 
     # Append the UserData tree from core web code
     $self->PREV::populate_tree;
-
+    
+    # Help page to do with accounts
+    $self->create_account_node('Help',   'Help', [ 'help' => 'EnsEMBL::Users::Component::Account::Help' ]);
+    
     # Generic logout command
-    $self->create_account_node('Logout',      'Logout', [], { 'no_menu_entry' => !$user,  'command' => 'EnsEMBL::Users::Command::Account::Logout', 'availability' => 1  });
+    $self->create_account_node('Logout', 'Logout', [], { 'no_menu_entry' => !$user,  'command' => 'EnsEMBL::Users::Command::Account::Logout', 'availability' => 1  });
 
   # IF USERDB IS DOWN
   } else {
