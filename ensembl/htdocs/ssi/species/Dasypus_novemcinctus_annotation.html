@@ -1,16 +1,52 @@
-<p>Owing to the fragmentary nature of this preliminary assembly, it was
-necessary to arrange some scaffolds into "gene-scaffold"
-super-structures, in order to present complete genes. There
-are 8116 such gene-scaffolds, with identifiers of the form
-"GeneScaffold_1".</p>
-
-<ul><li><a href="/info/docs/genebuild/2x_genomes.html">Details of the gene-scaffold construction and subsequent gene-build</a></li></ul>
-
-
-<h3 style="clear:both">Mammalian Genome Project</h3>
 <p>
-<i>Dasypus novemcinctus</i> is one of 24 mammals that will be sequenced as part of the <a href="http://www.broad.mit.edu/mammals/">Mammalian Genome Project</a>, funded by the National Institutes of Health (<a href="http://www.nih.gov/">NIH</a>).
-The species were chosen to maximise the branch length of the evolutionary tree while representing the diversity of mammalian species.</p>
-                                                                                
-<p>Low-coverage 2X assemblies will be produced for these mammals and used in alignments for cross-species comparison.  The aim is to increase our understanding of functional elements, especially in the human genome. <i>Dasypus novemcinctus</i> is of particular interest to developmental biologists owing to its habit of producing litters of four genetically-identical young, and it is also the animal model for leprosy.</p>
+Dasnov3.0 was annotated using the standard Ensembl gene annotation system, incorporating RNAseq data provided by BROAD Institute. Gene models are based on:
+</p>
 
+<ul>
+  <li>Models build from armadillo RNASeq data using our in-house RNASeq pipeline</li>
+  <li>Genewise alignments of UniProt protein sequences from mammal species</li>
+  <li>Exonerate alignments of Ensembl human proteins from Ensembl release 71</li>
+</ul>
+
+<p>
+Protein-coding models were extended into their untranslated regions using RNASeq models. In addition to the coding transcript models, non-coding RNAs and pseudogenes were annotated. 
+</p>
+
+
+<h3>RNASeq data set</h3>
+
+<p>
+In addition to the Ensembl gene set, we produced RNAseq-based gene models and an indexed BAM file for each sample used by the RNAseq pipeline and also for the merged data from all tissues. 
+Each RNAseq-based gene model represents only the best supported transcript model. 
+We did a BLASTp of these transcript models against UniProt proteins in order to annotate the open reading frame. 
+The best BLAST hit is displayed as a transcript supporting evidence.
+</p>
+
+<p>
+The tissue-specific sets of transcript models built using our RNAseq pipeline are as follows:
+</p>
+
+<table class="ss tint">
+  <tr><th>Tissue</th><th colspan="2">Number of gene models</th></tr>
+  <tr class="bg1"><th></th><th>Set 1</th><th>Set 2</th></tr>
+  <tr class="bg2"><td>Ascending Colon</td><td>17046</td><td>16937</td></tr>
+  <tr class="bg1"><td>Cerebellum with brainstem</td><td>17289</td><td>17405</td></tr>
+  <tr class="bg2"><td>Heart</td><td>14723</td><td>14786</td></tr>
+  <tr class="bg1"><td>Kidney</td><td>16047</td><td>16041</td></tr>
+  <tr class="bg2"><td>Liver</td><td>15643</td><td>15856</td></tr>
+  <tr class="bg1"><td>Lung</td><td>17891</td><td>18020</td></tr>
+  <tr class="bg2"><td>rt Quadricep</td><td>14450</td><td>14569</td></tr>
+  <tr class="bg1"><td>Spleen</td><td>16988</td><td>17093</td></tr>
+  <tr class="bg2"><td>Merged</td><td colspan="2">21177</td></tr>
+</table>
+
+<p>
+The RNAseq data were used to add UTR to protein coding models. 
+Additional splice junctions (introns) may have been identified by our pipeline and not included in the best supported transcript model. 
+We therefore provide users with the full set of introns identified by our RNAseq pipeline to enable further analysis. 
+These introns were identified by searching for reads that splice when mapped to the genome.
+</p>
+
+<ul>
+  <li><a href="/info/genome/genebuild/2013_10_armadillo_5_genebuild_ba1.pdf">Detailed information on genebuild</a> (PDF)</li>
+</ul>
