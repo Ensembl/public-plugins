@@ -1,0 +1,123 @@
+<p>
+The gene set was built using a mixed approach. The similarity pipeline was used to generate 66,797 models from orthologous vertebrate proteins from UniProtKB. 
+The RNASeq pipeline used 8.2 billion paired-end reads provided by the ISGC. 
+The RNASeq data contains samples from a trio (ram, ewe and lamb), 7 tissue types from the reference sheep and samples from different breeds.
+</p>
+
+<p>
+We pooled the tissues to avoid creating too many fragmented models. Using the RNASeq pipeline, we created 19,604 models from the pooled set. 
+When a pooled model was missing but we had a consensus within the tissues models, the consensus model was added to the pooled set, which brought the number of RNASeq models up to 25,832. 
+By combining the orthologous set, the RNASeq set and our ncRNA pipeline we built the final gene set: 20,921 protein coding gene models, 291 pseudogenes and 3,985 short non-coding RNA.
+</p>
+
+<h3>RNASeq data set</h3>
+
+<p>
+In addition to the main set, we have predicted gene models for each tissue type using the RNASeq pipeline. 
+We did a BLASTp of these models against UniProt proteins of protein existence level 1 and 2 in order to confirm the open reading frame (ORF). 
+The best BLAST hit is displayed as a transcript supporting evidence.
+</p>
+
+<p>
+The tissue-specific sets of transcript models built using our RNAseq pipeline are as follows:
+</p>
+
+<table class="ss tint">
+  <tr><th>Tissue</th><th>Number of gene models</th></tr>
+  <tr class="bg1"><td>Ewe kidney medulla</td><td>8350</td></tr>
+  <tr class="bg2"><td>Ewe abomasum</td><td>8694</td></tr>
+  <tr class="bg1"><td>Ewe adrenal gland</td><td>8447</td></tr>
+  <tr class="bg2"><td>Ewe alveolar macrophages</td><td>7747</td></tr>
+  <tr class="bg1"><td>Ewe cerebellum</td><td>7714</td></tr>
+  <tr class="bg2"><td>Ewe cervix</td><td>6305</td></tr>
+  <tr class="bg1"><td>Ewe colon</td><td>9576</td></tr>
+  <tr class="bg2"><td>Ewe corpus luteum</td><td>8096</td></tr>
+  <tr class="bg1"><td>Ewe heart ventricle</td><td>7256</td></tr>
+  <tr class="bg2"><td>Ewe liver</td><td>8301</td></tr>
+  <tr class="bg1"><td>Ewe lung</td><td>9402</td></tr>
+  <tr class="bg2"><td>Ewe lymph node mesenteric</td><td>8340</td></tr>
+  <tr class="bg1"><td>Ewe mammary gland</td><td>9466</td></tr>
+  <tr class="bg2"><td>Ewe muscle biceps</td><td>7650</td></tr>
+  <tr class="bg1"><td>Ewe muscle long dorsal</td><td>7185</td></tr>
+  <tr class="bg2"><td>Ewe omentum</td><td>8081</td></tr>
+  <tr class="bg1"><td>Ewe ovary</td><td>8077</td></tr>
+  <tr class="bg2"><td>Ewe peyers patch</td><td>9227</td></tr>
+  <tr class="bg1"><td>Ewe pituitary</td><td>7957</td></tr>
+  <tr class="bg2"><td>Ewe placenta membranes</td><td>7703</td></tr>
+  <tr class="bg1"><td>Ewe rectum</td><td>8980</td></tr>
+  <tr class="bg2"><td>Ewe rumen</td><td>8856</td></tr>
+  <tr class="bg1"><td>Ewe skin side</td><td>8795</td></tr>
+  <tr class="bg2"><td>Ewe thyroid gland</td><td>8167</td></tr>
+  <tr class="bg1"><td>Ewe uterus</td><td>9071</td></tr>
+  <tr class="bg2"><td>Lamb abomasum</td><td>8606</td></tr>
+  <tr class="bg1"><td>Lamb adrenal gland</td><td>7813</td></tr>
+  <tr class="bg2"><td>Lamb caecum</td><td>7770</td></tr>
+  <tr class="bg1"><td>Lamb cerebellum</td><td>8405</td></tr>
+  <tr class="bg2"><td>Lamb cerebrum</td><td>8977</td></tr>
+  <tr class="bg1"><td>Lamb cervix</td><td>8924</td></tr>
+  <tr class="bg2"><td>Lamb colon</td><td>8310</td></tr>
+  <tr class="bg1"><td>Lamb hypothalamus</td><td>9009</td></tr>
+  <tr class="bg2"><td>Lamb kidney cortex</td><td>8416</td></tr>
+  <tr class="bg1"><td>Lamb kidney medulla</td><td>9115</td></tr>
+  <tr class="bg2"><td>Lamb lung</td><td>9029</td></tr>
+  <tr class="bg1"><td>Lamb lymph node mesenteric</td><td>8315</td></tr>
+  <tr class="bg2"><td>Lamb lymph node prescapular</td><td>8913</td></tr>
+  <tr class="bg1"><td>Lamb mammary gland</td><td>9924</td></tr>
+  <tr class="bg2"><td>Lamb muscle biceps</td><td>7633</td></tr>
+  <tr class="bg1"><td>Lamb muscle long dorsal</td><td>7155</td></tr>
+  <tr class="bg2"><td>Lamb omentum</td><td>8085</td></tr>
+  <tr class="bg1"><td>Lamb ovarian follicles</td><td>8026</td></tr>
+  <tr class="bg2"><td>Lamb ovary</td><td>8729</td></tr>
+  <tr class="bg1"><td>Lamb peyers patch</td><td>9758</td></tr>
+  <tr class="bg2"><td>Lamb pituitary gland</td><td>8702</td></tr>
+  <tr class="bg1"><td>Lamb rectum</td><td>8546</td></tr>
+  <tr class="bg2"><td>Lamb rumen</td><td>8655</td></tr>
+  <tr class="bg1"><td>Lamb skin back</td><td>8629</td></tr>
+  <tr class="bg2"><td>Lamb spleen</td><td>8444</td></tr>
+  <tr class="bg1"><td>Lamb thyroid gland</td><td>8307</td></tr>
+  <tr class="bg2"><td>Lamb uterus</td><td>9259</td></tr>
+  <tr class="bg1"><td>Lamb ventricle</td><td>8175</td></tr>
+  <tr class="bg2"><td>Ram kidney cortex</td><td>8398</td></tr>
+  <tr class="bg1"><td>Ram kidney medulla</td><td>8754</td></tr>
+  <tr class="bg2"><td>Ram abomasum mucosa</td><td>9003</td></tr>
+  <tr class="bg1"><td>Ram adrenal gland</td><td>8116</td></tr>
+  <tr class="bg2"><td>Ram alveolar macrophages</td><td>7676</td></tr>
+  <tr class="bg1"><td>Ram brain stem</td><td>9277</td></tr>
+  <tr class="bg2"><td>Ram caecum</td><td>9616</td></tr>
+  <tr class="bg1"><td>Ram cerebellum</td><td>8662</td></tr>
+  <tr class="bg2"><td>Ram cerebrum</td><td>9034</td></tr>
+  <tr class="bg1"><td>Ram colon</td><td>8839</td></tr>
+  <tr class="bg2"><td>Ram duodenum</td><td>9068</td></tr>
+  <tr class="bg1"><td>Ram hypothalamus</td><td>9153</td></tr>
+  <tr class="bg2"><td>Ram liver</td><td>7674</td></tr>
+  <tr class="bg1"><td>Ram lung</td><td>9041</td></tr>
+  <tr class="bg2"><td>Ram lymph node mesenteric</td><td>7857</td></tr>
+  <tr class="bg1"><td>Ram lymph node prescapular</td><td>7018</td></tr>
+  <tr class="bg2"><td>Ram muscle biceps</td><td>6392</td></tr>
+  <tr class="bg1"><td>Ram muscle long dorsal</td><td>6073</td></tr>
+  <tr class="bg2"><td>Ram omentum</td><td>8640</td></tr>
+  <tr class="bg1"><td>Ram pituitary gland</td><td>8627</td></tr>
+  <tr class="bg2"><td>Ram rectum</td><td>8925</td></tr>
+  <tr class="bg1"><td>Ram rumen</td><td>8519</td></tr>
+  <tr class="bg2"><td>Ram skin back</td><td>8631</td></tr>
+  <tr class="bg1"><td>Ram spleen</td><td>8619</td></tr>
+  <tr class="bg2"><td>Ram testes epididymis</td><td>8805</td></tr>
+  <tr class="bg1"><td>Ram testes</td><td>10891</td></tr>
+  <tr class="bg2"><td>Ram thyroid gland</td><td>7817</td></tr>
+  <tr class="bg1"><td>Ram tonsil</td><td>8477</td></tr>
+  <tr class="bg2"><td>Ram ventricle</td><td>8058</td></tr>
+  <tr class="bg1"><td>Whole embryo</td><td>10965</td></tr>
+  <tr class="bg2"><td>Reference kidney</td><td>6422</td></tr>
+  <tr class="bg1"><td>Reference brain</td><td>5737</td></tr>
+  <tr class="bg2"><td>Reference heart</td><td>5379</td></tr>
+  <tr class="bg1"><td>Reference liver</td><td>5396</td></tr>
+  <tr class="bg2"><td>Reference lung</td><td>7487</td></tr>
+  <tr class="bg1"><td>Reference ovarian</td><td>7112</td></tr>
+  <tr class="bg2"><td>Reference white adipose</td><td>6755</td></tr>
+  <tr class="bg1"><td>Merino skin</td><td>5418</td></tr>
+  <tr class="bg2"><td>Merged</td><td>19604
+</table>
+  
+<ul>
+  <li><a href="/info/genome/genebuild/2013_12_sheep_genebuild.pdf">Detailed information on genebuild</a> (PDF)</li>
+</ul>
