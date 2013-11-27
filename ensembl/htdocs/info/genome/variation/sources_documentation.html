@@ -177,13 +177,13 @@
         <td style="padding-top:6px">The source contains both<br />germline and somatic data</td>
       </tr>
     </table>
-
+  
     <!-- Javascript used to fix the legend on the right handside when you scroll down -->
     <script language="Javascript" type="text/javascript">
       var legend_element = document.getElementById("legend");
       var legend_element_pos = legend_element.offsetTop;
       window.onscroll = function() {
-        if (document.body.scrollTop > legend_element_pos)  {
+        if (window.pageYOffset-80 > legend_element_pos)  {
           legend_element.style.position = "fixed";
           legend_element.style.top = "10px";
         }
