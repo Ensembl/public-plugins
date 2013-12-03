@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>ncRNA orthologies</title>
+    <title>ncRNA trees and homologies</title>
     <meta name="author" content="web" />
     <meta name="navitagion" content="Comparative Genomics" />
   </head>
@@ -15,7 +15,7 @@
     <p>
       The detection of orthologies and paralogies for short ncRNA genes are generated
       by a pipeline that uses a strategy similar to the one explained for
-      <a href="homology_method.html">Gene Trees</a><a href="#fn1" class="fn-link"><sup>1</sup></a> but adapted to the specific
+      <a href="homology_method.html">Gene Trees</a><a href="#fn1" class="fn-link">1</a> but adapted to the specific
       characteristics of ncRNAs like their secondary structure.
     </p>
 
@@ -23,7 +23,7 @@
       <pre>
       Reference:
       ncRNA orthologies in the vertebrate linage.
-      Pignatelli M, Vilella AJ, Gordon L, Flicek P and Herrero J.
+      Pignatelli M, Vilella AJ, Muffato M, Gordon L, White S, Flicek P and Herrero J.
       Manuscript in preparation
       </pre>
     </p>
@@ -31,25 +31,24 @@
     <p>The ncRNA tree pipeline consists of the following steps:</p>
     <img src="ncRNAtree.png" width=300/>
     <ol>
-      <li>Get and store ncRNA Family Models from <a href="http://rfam.sanger.ac.uk/">RFAM<a><a href="#fn2" class="fn-link"><sup>2</sup></a></li>
+      <li>Get and store ncRNA Family Models from <a href="http://rfam.sanger.ac.uk/">RFAM<a><a href="#fn2" class="fn-link">2</a></li>
       <li>Load and identify all the ncRNA members annotated in all the Ensembl genomes</li>
-      <li>Filter out extra copies in low-coverage assemblies usin our <a href="analyses.html">EPO multiple alignments</a><a href="#fn3" class="fn-link"><sup>3</sup></a></li>
-      <li>Build secondary structure alignments using <a href="http://infernal.janelia.org/">INFERNAL</a><a href="#fn4" class="fn-link"><sup>4</sup></a> and refinement of the covariance model</li>
-      <li>Build ncRNA trees with <a href="http://sco.h-its.org/exelixis/software.html">RAxML</a><a href="#fn5" class="fn-link"><sup>5</sup></a> using 16 different secondary structure models</li>
-      <li>In parallel with the secondary structure alignments and trees, build multiple alignments with <a href="http://www.ebi.ac.uk/goldman-srv/prank/prank/">PRANK</a><a href="#fn6" class="fn-link"><sup>6</sup></a> with the genomic sequences of the ncRNAs. For these alignments we include the flanking region of the genes (2 times the length of the gene at each side).</li>
-      <li>With the genomic alignments, build a neighbour-joining (NJ) and a maximum-likelihood (ML) tree using <a href="http://treesoft.sourceforge.net/treebest.shtml">TreeBeST</a><a href="#fn7" class="fn-link"><sup>7</sup></a>.</li>
-      <li>For very big families, build fast and efficient trees using <a href="http://www.microbesonline.org/fasttree/">FastTree</a><a href="#fn8" class="fn-link"><sup>8</sup></a> and <a href="http://sco.h-its.org/exelixis/software.html">RAxML-Light</a></li>
-      <li>For each family, add the species tree to the set of trees already obtained and reconcile them all using <a href="http://treesoft.sourceforge.net/treebest.shtml">TreeBeST</a><a href="#fn7" class="fn-link"><sup>7</sup></a> obtaining one final tree for each family.</li>
+      <li>Filter out extra copies in low-coverage assemblies usin our <a href="analyses.html">EPO multiple alignments</a><a href="#fn3" class="fn-link">3</a></li>
+      <li>Build secondary structure alignments using <a href="http://infernal.janelia.org/">INFERNAL</a><a href="#fn4" class="fn-link">4</a> and refinement of the covariance model</li>
+      <li>Build ncRNA trees with <a href="http://sco.h-its.org/exelixis/software.html">RAxML</a><a href="#fn5" class="fn-link">5</a> using 16 different secondary structure models</li>
+      <li>In parallel with the secondary structure alignments and trees, build multiple alignments with <a href="http://www.ebi.ac.uk/goldman-srv/prank/prank/">PRANK</a><a href="#fn6" class="fn-link">6</a> with the genomic sequences of the ncRNAs. For these alignments we include the flanking region of the genes (2 times the length of the gene at each side).</li>
+      <li>With the genomic alignments, build a neighbour-joining (NJ) and a maximum-likelihood (ML) tree using <a href="http://treesoft.sourceforge.net/treebest.shtml">TreeBeST</a><a href="#fn7" class="fn-link">7</a>.</li>
+      <li>For very big families, build fast and efficient trees using <a href="http://www.microbesonline.org/fasttree/">FastTree</a><a href="#fn8" class="fn-link">8</a> and <a href="http://sco.h-its.org/exelixis/software.html">RAxML-Light</a></li>
+      <li>For each family, add the species tree to the set of trees already obtained and reconcile them all using <a href="http://treesoft.sourceforge.net/treebest.shtml">TreeBeST</a><a href="#fn7" class="fn-link">7</a> obtaining one final tree for each family.</li>
       <img src="Tree_reconciliation.png" width=500/>
       <li>Infer orthology and paralogy relationships by comparing each pair of genes in each tree. The possible homology types are:
 	<ul>
 	  <li><strong>Paralogs</strong> - Two genes are from the same species and derived from a duplication event in their ancestor.</li>
 	  <li><strong>One-to-one Orthologs</strong> - Two genes are from different species, they are related by a speciation event and they are the only copies of the ancestral gene in their species</li>
-	  <li><strong>Apparent Orthologs one-to-one</strong> - Are one-to-one orthologs that are related by an ambiguous node (a duplication that is not supported by any duplication in the extant species)</li>
 	  <li><strong>One-to-many Orthologs</strong> - Two genes are from different species, there is evidence for duplication events in the history of the gene, one of the genes is the only remaining representative of the ancestor in its species but the other gene has multiple copies in its species</li>
-	  <li><strong>Possible orthologs</strong> - Are dubious cases of genes related by an ill-supported duplication node.</li>
+	  <li><strong>Many-to-many Orthologs</strong> - Two genes are from different species, there is evidence for duplication events in the history of both genes</li>
 	</ul>
-	More information about these relationships can be found in the <a href="homology_method.html">Gene Trees</a><a href="#fn1" class="fn-link"><sup>1</sup></a> documentation.
+	More information about these relationships can be found in the <a href="homology_method.html#homology_types">Gene Trees</a><a href="#fn1" class="fn-link">1</a> documentation, especially regarding the inference of low-confidence orthologues.
     </ol>
     <h2>References</h2>
     <ol>
