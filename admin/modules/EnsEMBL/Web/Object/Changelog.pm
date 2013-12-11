@@ -212,6 +212,7 @@ sub show_fields {
         {'value'    => 'alignment',  'caption' => 'New alignments'},
         {'value'    => 'web',        'caption' => 'New web displays &amp; tools'},
         {'value'    => 'schema',     'caption' => 'API schema changes'},
+        {'value'    => 'retired',    'caption' => 'Retired data'},
         {'value'    => 'other',      'caption' => 'Others'}
       ]
     },
