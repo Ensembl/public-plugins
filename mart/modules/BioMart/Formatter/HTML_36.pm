@@ -1,4 +1,3 @@
-# $Id$
 #
 # BioMart module for BioMart::Formatter::HTML_36
 

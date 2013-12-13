@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-// $Revision$
-
 Genoverse.Track.on('beforeSetURL', function () {
   this.urlTemplate = { r: '__CHR__:__START__-__END__' };
   $.extend(this.urlParams, Ensembl.coreParams);

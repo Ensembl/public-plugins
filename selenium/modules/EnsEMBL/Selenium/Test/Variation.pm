@@ -16,7 +16,6 @@ limitations under the License.
 
 =cut
 
-# $Id$
 package EnsEMBL::Selenium::Test::Variation;
 use strict;
 use base 'EnsEMBL::Selenium::Test::Species';

@@ -1,5 +1,3 @@
-// $Revision$
-
 Genoverse.on('afterInit afterAddTracks afterRemoveTracks', function () {
   for (var i in this.legends) {
     this.legends[i].setTracks();

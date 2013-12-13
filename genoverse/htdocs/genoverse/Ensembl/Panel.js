@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-// $Revision$
-
 Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
   init: function () {
     this.prevHighlight = {};

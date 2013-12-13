@@ -16,8 +16,6 @@ limitations under the License.
 
 =cut
 
-# $Id$
-
 package EnsEMBL::Lucene::Component::Search::Results;
 
 use strict;

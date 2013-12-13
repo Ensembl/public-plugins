@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-// $Revision$
-
 Genoverse.Track.Contig = Genoverse.Track.extend({
   borderColor : '#000000',
   labels      : 'overlay',

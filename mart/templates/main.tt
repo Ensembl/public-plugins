@@ -14,8 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 %]
 
-[% # $Id$ %]
-
 [% #--------------------------------------------------------------------
    # MAIN template where header.tt could be any site specific header.
    # biomart.tt renders complete martView in its own container div

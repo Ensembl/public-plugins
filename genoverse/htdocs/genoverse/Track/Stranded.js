@@ -1,5 +1,3 @@
-// $Revision$
-
 Genoverse.Track.Stranded = {
   inheritedConstructor: function (config) {
     if (typeof this._makeImage === 'function') {

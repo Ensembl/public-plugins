@@ -1,4 +1,3 @@
-# $Id$
 #
 # Copyright (c) 2003, 2004  Brad Fitzpatrick <brad@danga.com>
 #

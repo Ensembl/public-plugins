@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-// $Revision$
-
 Genoverse.Track.StructuralVariation = Genoverse.Track.extend({ 
   height : 100,
   

@@ -1,5 +1,3 @@
-// $Revision$
-
 Genoverse.Track.Static = {
   'static'    : true,
   bumpSpacing : 0,

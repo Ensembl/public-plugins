@@ -1,5 +1,3 @@
-// $Revision$
-
 var $         = jQuery; // Make sure we have local $ (this is for combined script in a function)
 var Genoverse = Base.extend({
   // Defaults

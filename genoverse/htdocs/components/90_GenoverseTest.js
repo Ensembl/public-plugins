@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-// $Revision$
-
 Ensembl.Panel.GenoverseTest = Ensembl.Panel.Content.extend({
   init: function () {
     var id  = this.id.replace('Test', '');

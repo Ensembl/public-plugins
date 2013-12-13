@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-// $Revision$
-
 Ensembl.Panel.GenoverseMenu = Ensembl.Panel.ZMenu.extend({
   constructor: function (id, data) {
     this.id          = id;

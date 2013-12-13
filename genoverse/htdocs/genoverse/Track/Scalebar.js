@@ -1,5 +1,3 @@
-// $Revision$
-
 Genoverse.Track.Scalebar = Genoverse.Track.extend({
   height        : 20,
   featureHeight : 3,

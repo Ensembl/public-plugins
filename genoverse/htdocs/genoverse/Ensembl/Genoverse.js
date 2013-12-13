@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-// $Revision$
-
 // FIXME: history isn't working properly when zooming in/out with slider - genoverse.length changes and everything is reset
 // FIXME: occasional off-by-one error due to Math.round in getLocation - breaks history (and anything else that requires an x.start === y.start type comparison)
 // TODO:  hide highlightRegion when new images are being made, and in other scenarios where it looks bad

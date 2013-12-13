@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-// $Revision$
-
 Genoverse.Track.Patch = Genoverse.Track.extend({
   featureHeight : 2,
   bumpSpacing   : 0,

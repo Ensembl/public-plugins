@@ -1,5 +1,3 @@
-// $Revision$
-
 Genoverse.Track.Scaleline = Genoverse.Track.extend({
   strand  : 1,
   color   : '#000000',

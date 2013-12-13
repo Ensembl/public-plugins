@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-// $Revision$
-
 Genoverse.Track.Synteny = Genoverse.Track.extend({
   featureHeight : 5,
   bump          : true,

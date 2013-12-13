@@ -1,5 +1,3 @@
-// $Revision$
-
 Genoverse.Track.Gene = Genoverse.Track.extend({
   height : 50,
   bump   : true,

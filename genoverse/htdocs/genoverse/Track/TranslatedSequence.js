@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-// $Revision$
-
 Genoverse.Track.TranslatedSequence = Genoverse.Track.Sequence.extend({
   chunkSize    : 600, // Must be divisible by 3 and 2
   buffer       : 2,

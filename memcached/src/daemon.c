@@ -1,4 +1,3 @@
-/*    $Header: /nfs/ensembl/cvsroot/sanger-plugins/memcached/src/daemon.c,v 1.1 2008/10/02 13:30:43 eb4 Exp $    */
 /*    $NetBSD: daemon.c,v 1.9 2003/08/07 16:42:46 agc Exp $    */
 /*-
  * Copyright (c) 1990, 1993
@@ -30,7 +29,6 @@
  */
 
 #if defined __SUNPRO_C || defined __DECC || defined __HP_cc
-# pragma ident "@(#)$Header: /nfs/ensembl/cvsroot/sanger-plugins/memcached/src/daemon.c,v 1.1 2008/10/02 13:30:43 eb4 Exp $"
 # pragma ident "$NetBSD: daemon.c,v 1.9 2003/08/07 16:42:46 agc Exp $"
 #endif
 

@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-// $Revision$
-
 Genoverse.Track.RegulatoryFeature = Genoverse.Track.extend({
   bump: true,
   

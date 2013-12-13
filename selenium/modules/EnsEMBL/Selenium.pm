@@ -16,7 +16,6 @@ limitations under the License.
 
 =cut
 
-# $Id$
 package EnsEMBL::Selenium;
 use strict;
 use Test::More;

@@ -1,5 +1,3 @@
-// $Revision$
-
 Genoverse.Track = Base.extend({
   height         : 12,
   bumpSpacing    : 2,

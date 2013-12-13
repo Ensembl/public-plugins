@@ -16,8 +16,6 @@ limitations under the License.
 
 =cut
 
-# $Id$
-
 package EnsEMBL::Solr::Component::Search::Results;
 
 use strict;

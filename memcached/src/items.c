@@ -1,5 +1,4 @@
 /* -*- Mode: C; tab-width: 4; c-basic-offset: 4; indent-tabs-mode: nil -*- */
-/* $Id: items.c,v 1.1 2008/10/02 13:30:43 eb4 Exp $ */
 #include "memcached.h"
 #include <sys/stat.h>
 #include <sys/socket.h>

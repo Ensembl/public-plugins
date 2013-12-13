@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-// $Revision$
-
 Genoverse.Track.Variation = Genoverse.Track.extend({
   bump           : true,
   labels         : 'overlay',
