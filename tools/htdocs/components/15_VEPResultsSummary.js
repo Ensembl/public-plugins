@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-// $Revision$
-
 Ensembl.Panel.VEPResultsSummary = Ensembl.Panel.Piechart.extend({
   init: function () {
     this.base();

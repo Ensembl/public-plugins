@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-// $Revision$
-
 Ensembl.Panel.ZMenu = Ensembl.Panel.ZMenu.extend({
   buildMenuAjax: function (json) {
     this.base.apply(this, arguments)
