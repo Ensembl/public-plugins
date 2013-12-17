@@ -31,7 +31,7 @@ sub update_conf {
 #  $SiteDefs::ENSEMBL_LONGPROCESS_MINTIME    = 10;
 
 #  $SiteDefs::ENSEMBL_TMP_DIR_BLAST          = $SiteDefs::ENSEMBL_SERVERROOT."/blastqueue";
-#  $SiteDefs::ENSEMBL_BLASTSCRIPT            = $SiteDefs::ENSEMBL_SERVERROOT."/utils/runblast.pl";
+#  $SiteDefs::ENSEMBL_BLASTSCRIPT            = $SiteDefs::ENSEMBL_WEBROOT."/utils/runblast.pl";
 
 #  $SiteDefs::ENSEMBL_USERDB_NAME            = 'ensembl_web_user_db';
 #  $SiteDefs::ENSEMBL_USERDB_USER            = 'my_mysql_write_user';

@@ -53,7 +53,7 @@ sub fetch_for_list {
 sub get_help_images_dir {
   ## Returns the absolute address of the directory that contains help images
   my $sd = shift->hub->species_defs;
-  return $sd->ENSEMBL_SERVERROOT.'/htdocs'.$sd->ENSEMBL_HELP_IMAGE_ROOT;
+  return $sd->ENSEMBL_WEBROOT.'/htdocs'.$sd->ENSEMBL_HELP_IMAGE_ROOT;
 }
 
 sub get_help_images_list {
