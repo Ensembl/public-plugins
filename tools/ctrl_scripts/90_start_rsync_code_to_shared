@@ -49,7 +49,7 @@ if (grep($_ eq 'synchive', @ARGV) && (my $destination = $SiteDefs::ENSEMBL_TOOLS
   print "Copying code to $destination\n";
 
   my $source  = $SiteDefs::ENSEMBL_SERVERROOT;
-  my @folders = qw(conf ensembl ensembl-hive ensembl-external modules public-plugins sanger-plugins);
+  my @folders = qw(ensembl-webcode/conf ensembl ensembl-hive ensembl-webcode/modules public-plugins sanger-plugins);
   my $args    = grep($_ eq 'synchiveverbose', @ARGV) ? '-aWv' : '-aWvq';
 
   system(sprintf 'rsync %s --exclude="CVS/" --exclude="opensearch/" --delete %s %s', $args, join(' ', map("$source/$_", @folders)), $destination);
