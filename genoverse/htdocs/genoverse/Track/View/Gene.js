@@ -1,65 +1,42 @@
-Genoverse.Track.Gene = Genoverse.Track.extend({
-  height : 50,
-  bump   : true,
-  
-  setRenderer: function (renderer, permanent) {
-    this.labels = !/nolabel/.test(renderer);
-    
-    if (/transcript/.test(renderer)) {
-      this.expanded       = true;
-      this.collapsed      = this.blocks = false;
-      this.maxLabelRegion = 1e6;
-      this.featureHeight  = 8;
-      this.bumpSpacing    = 2;
-    } else if (/collapsed/.test(renderer)) {
-      this.collapsed      = true;
-      this.expanded       = this.blocks = false;
-      this.maxLabelRegion = 2e6;
-      this.featureHeight  = 8;
-      this.bumpSpacing    = 2;
-    } else {
-      this.blocks         = true;
-      this.expanded       = this.collapsed = false;
-      this.maxLabelRegion = 1e7;
-      this.featureHeight  = 6;
-      this.bumpSpacing    = 1;
-      
-      if (this.labels) {
-        this.labels = 'separate';
-      }
-    }
-    
-    if (this.urlParams.renderer !== renderer || permanent) {
-      this.base(renderer, permanent);
-    }
-  },
-  
-  getRenderer: function () {
-    var renderer = this.renderer.split('_');
-    
-    if (this.browser.length > 1e7) {
-      renderer[0] = 'gene';
-    } else if (this.browser.length > 1e6 && /transcript/.test(this.renderer)) {
-      renderer[0] = 'collapsed';
-    }
-    
-    return renderer.join('_');
-  },
+/*
+ * Copyright [1999-2013] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+Genoverse.Track.View.Gene = Genoverse.Track.View.extend({
+  featureHeight : 6,
+  featureMargin : { top: 0, right: 1, bottom: 1, left: 0 },
+  bump          : true,
+  labels        : 'separate'
+});
+
+Genoverse.Track.View.Gene.Collapsed = Genoverse.Track.View.Gene.extend({
+  featureHeight : 8,
+  featureMargin : { top: 3, right: 1, bottom: 1, left: 0 },
+  labels        : true,
   
   drawFeature: function (feature, featureContext, labelContext, scale) {
-    if (this.blocks) {
-      return this.base(feature, featureContext, labelContext, scale);
-    }
-    
     var add      = Math.max(scale, 1);
     var exons    = {};
     var exonsIds = [];
     
     for (var i = 0; i < feature.exons.length; i++) {
       this.base($.extend({}, feature, {
-        x     : feature.x + (feature.exons[i].start - feature.start) * scale, 
-        width : (feature.exons[i].end - feature.exons[i].start) * scale + add,
-        label : i ? false : feature.label
+        x         : feature.x + (feature.exons[i].start - feature.start) * scale, 
+        width     : (feature.exons[i].end - feature.exons[i].start) * scale + add,
+        label     : false,
+        highlight : i ? false : feature.highlight
       }, feature.exons[i].style === 'strokeRect' ? {
         y           : feature.y + 1,
         height      : feature.height - 3,
@@ -90,8 +67,12 @@ Genoverse.Track.Gene = Genoverse.Track.extend({
           color : feature.color
         }, featureContext);
       }
-    } else if (this.collapsed && feature.exons.length > 1) {
+    } else if (feature.exons.length > 1) {
       featureContext.fillRect(feature.position[scale].X, feature.position[scale].Y + this.featureHeight / 2, feature.position[scale].width, 1);
+    }
+    
+    if (this.labels && feature.label) {
+      this.drawLabel(feature, labelContext, scale);
     }
   },
   
@@ -137,4 +118,9 @@ Genoverse.Track.Gene = Genoverse.Track.extend({
     context.lineTo(x3, y3);
     context.stroke();
   }
+});
+
+Genoverse.Track.View.Gene.Transcript = Genoverse.Track.View.Gene.Collapsed.extend({
+  featureMargin : { top: 3, right: 1, bottom: 3, left: 0 },
+  expanded      : true
 });

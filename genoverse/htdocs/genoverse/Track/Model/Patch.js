@@ -14,17 +14,11 @@
  * limitations under the License.
  */
 
-Genoverse.Track.Contig = Genoverse.Track.extend({
-  borderColor : '#000000',
-  labels      : 'overlay',
-  fixedHeight : true,
-  allData     : true,
-  
-  draw: function (features, featureContext, labelContext, scale) {
-    featureContext.fillStyle = this.borderColor;
-    featureContext.fillRect(0, 0,                      this.width, 1);
-    featureContext.fillRect(0, this.defaultHeight - 1, this.width, 1);
-    
-    this.base(features, featureContext, labelContext, scale);
+Genoverse.Track.Model.Patch = Genoverse.Track.Model.Stranded.extend({
+  allData : true,
+
+  // Return all features - there won't be many, and this ensures order and height is always correct
+  findFeatures: function () {
+    return this.features.search({ x: 1, y: 0, w: 9e99, h: 1 }).sort(function (a, b) { return a.sort - b.sort; });
   }
 });

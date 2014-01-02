@@ -14,115 +14,96 @@
  * limitations under the License.
  */
 
-Genoverse.Track.on('beforeSetURL', function () {
-  this.urlTemplate = { r: '__CHR__:__START__-__END__' };
-  $.extend(this.urlParams, Ensembl.coreParams);
-  delete this.urlParams.r;
-});
-
-Genoverse.Track.on('beforeSetRenderer', function (renderer, permanent) {
-  if (permanent && this.hoverLabel) {
-    var li = $('div.config li.' + renderer, this.hoverLabel);
+Genoverse.Track = Genoverse.Track.extend({
+  constructor: function (config) {
+    var mvc = [ 'Controller', 'Model', 'View', 'controller', 'model', 'view' ];
     
-    if (!li.hasClass('current')) {
-      $('div.config li.current', this.hoverLabel).removeClass('current').find('img.tick').insertAfter(li.addClass('current').find('img'));
-    }
-    
-    li = null;
-  }
-});
-
-Genoverse.Track.on('beforeRemove', function () {
-  this.menus.each(function () { Ensembl.EventManager.trigger('destroyPanel', this.id); });
-  
-  if (this.id) {
-    delete this.browser.tracksById[this.id];
-  }
-});
-
-Genoverse.Track.on('afterResize', function () {
-  if (arguments[1] === true) {
-    var config = { auto_height: this.autoHeight ? 1 : 'undef' };
-    
-    if (!this.autoHeight) {
-      config.user_height = Math.max(this.height - this.spacing, 1);
-    }
-    
-    this.browser.saveConfig(config, this);
-  }
-  
-  Ensembl.EventManager.trigger('resetImageOffset');
-  this.browser.updateSelectorHeight();
-});
-
-Genoverse.Track.on('beforeParseData', function (data) {
-  if (data.highlights) {
-    var i = data.features.length;
-    
-    while (i--) {
-      if (data.highlights[data.features[i].id]) {
-        data.features[i].highlight = data.highlights[data.features[i].id];
+    for (var i = 0; i < 3; i++) {
+      if (Genoverse.Track[mvc[i]][this.type] && !this[mvc[i + 3]]) {
+        this[mvc[i + 3]] = Genoverse.Track[mvc[i]][this.type];
       }
     }
-  }
-});
-
-Genoverse.Track.on('beforeDrawFeature', function (feature, featureContext, labelContext, scale) {
-  if (feature.highlight) {
-    var position = feature.position[scale];
     
-    featureContext.fillStyle = feature.highlight;
-    featureContext.fillRect(position.X, position.Y, position.W, position.H);
-    
-    if (feature.labelPosition) {
-      labelContext.fillStyle = feature.highlight;
-      labelContext.fillRect(feature.x, feature.labelPosition.y, feature.labelPosition.w, feature.labelPosition.h);
-    }
-  }
-});
-
-Genoverse.Track.prototype._click = Genoverse.Track.prototype.click;
-Genoverse.Track.prototype.click = function () {
-  if (this.browser.panel.elLk.container.hasClass('ui-resizable-resizing')) {
-    return false;
-  }
+    this.base(config);
+  },
   
-  this._click.apply(this, arguments);
-};
-
-Genoverse.Track.prototype.populateMenu = function () {
-  return false;
-};
-
-Genoverse.Track.prototype.updateHeightToggler = function () {
-  this.hoverLabel.children('.height')[this.autoHeight ? 'addClass' : 'removeClass']('auto_height');
-};
-
-Genoverse.Track.prototype._getQueryString = Genoverse.Track.prototype.getQueryString;
-Genoverse.Track.prototype.getQueryString  = function () {
-  return decodeURIComponent($.param(this._getQueryString.apply(this, arguments)));
-};
-
-Genoverse.Track.prototype._getData = Genoverse.Track.prototype.getData;
-Genoverse.Track.prototype.getData  = function () {
-  return this._getData.apply(this, arguments).done(function (data) {
-    if (data) {
-      if (data.dataRange) {
-        this.setDataRange(data.dataRange.start, data.dataRange.end);
+  setLengthMap: function () {
+    this.base();
+    
+    var mv  = [ 'Model', 'View', 'model', 'view' ];
+    var obj = {};
+    
+    for (var i = 0; i < 2; i++) {
+      if (Genoverse.Track[mv[i]][this.type]) {
+        obj[mv[i + 2]] = Genoverse.Track[mv[i]][this.type];
+      }
+    }
+    
+    if (obj.model || obj.view) {
+      this.lengthMap.push([ 0, $.extend(true, {}, this, obj) ]);
+    }
+  },
+  
+  setRenderer: function (renderer) {
+    if (this.renderer === renderer) {
+      return;
+    }
+    
+    this.renderer = this.constructor.prototype.renderer = renderer;
+    
+    delete this.model;
+    delete this.view;
+    
+    this.setLengthMap();
+    
+    this.controller.resetImages();
+    this.controller.setScale();
+    this.controller.makeFirstImage();
+    
+    var hoverLabel = this.prop('hoverLabel');
+    
+    if (hoverLabel) {
+      var li = $('div.config li.' + renderer, hoverLabel);
+      
+      if (!li.hasClass('current')) {
+        $('div.config li.current', hoverLabel).removeClass('current').find('img.tick').insertAfter(li.addClass('current').find('img'));
       }
       
-      if (data.cacheURL) {
-        $.ajax({ url: data.cacheURL });
+      li = null;
+    }
+    
+    hoverLabel = null;
+  },
+  
+  setDefaults: function () {
+    this.base.apply(this, arguments);
+    
+    if (this.user) {
+      if (this.user.height) {
+        this.initialHeight = this.user.height + this.margin;
+        
+        if (!this.hidden) {
+          this.height = this.initialHeight;
+        }
+      }
+      
+      for (var i in this.user) {
+        if (i !== 'height') {
+          this[i] = this.user[i];
+        }
       }
     }
-  });
-};
-
-Genoverse.Track.prototype._parseData = Genoverse.Track.prototype.parseData;
-Genoverse.Track.prototype.parseData  = function (data, start, end) {
-  if (data.error) {
-    this.showError(data.error);
-  } else {
-    return this._parseData(data.features, start, end);
+  },
+  
+  updateHeightToggler: function () {
+    var hoverLabel = this.prop('hoverLabel');
+    
+    if (hoverLabel) {
+      hoverLabel.children('.height')[this.prop('autoHeight') ? 'addClass' : 'removeClass']('auto_height');
+    }
+    
+    hoverLabel = null;
   }
-};
+}, {
+  on: Genoverse.Track.on
+});

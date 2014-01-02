@@ -18,13 +18,26 @@ limitations under the License.
 
 package EnsEMBL::Web::Document::Element::BodyJavascript;
 
+use strict;
+
 use previous qw(init);
+
+use EnsEMBL::Web::Tools::JavascriptOrder;
 
 sub init {
   my $self = shift;
   
   $self->PREV::init;
-  $self->add_sources('genoverse', 'GENOVERSE_JS_NAME') if grep $_->[-1] eq 'genoverse', @{$self->hub->components};
+  
+  return unless grep $_->[-1] eq 'genoverse', @{$self->hub->components};
+  
+  my $species_defs = $self->species_defs;
+  
+  if ($self->debug) {
+    $self->add_source($_) for EnsEMBL::Web::Tools::JavascriptOrder->new({ species_defs => $species_defs })->order;
+  } else {
+    $self->add_source(sprintf '/%s/%s.js', $species_defs->ENSEMBL_JSCSS_TYPE, $species_defs->GENOVERSE_JS_NAME);
+  }
 }
 
 1;

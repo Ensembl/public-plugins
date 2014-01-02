@@ -61,8 +61,10 @@ Ensembl.Panel.ImageMap = Ensembl.Panel.ImageMap.extend({
           panel.params.updateURL = Ensembl.urlFromHash(panel.params.updateURL);
           panel.getContent();
         } else {
+          var location = panel.highlightRegions[0][0].region.range;
           panel.resetGenoverse = true;
-          Ensembl.EventManager.trigger('genoverseMove', panel.highlightRegions[0][0].region.range, true);
+          
+          Ensembl.EventManager.trigger('genoverseMove', location.start, location.end, true, true);
           panel.elLk.overlay.add(panel.elLk.updateButtons).detach();
           panel.elLk.container.resizable('enable');
         }

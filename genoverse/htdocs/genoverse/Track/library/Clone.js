@@ -15,8 +15,9 @@
  */
 
 Genoverse.Track.Clone = Genoverse.Track.extend({
-  bump   : true,
-  labels : 'overlay',
+  bump         : true,
+  labels       : 'overlay',
+  repeatLabels : true,
   
   decorateFeature: function (feature, context, scale) {
     var i = feature.decorations.length;

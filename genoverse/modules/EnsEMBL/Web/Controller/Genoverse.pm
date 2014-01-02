@@ -52,7 +52,7 @@ sub fetch_features {
   my $self = shift;
   my $hub  = $self->hub;
   my @loc  = split ':', $hub->param('r');
-
+  
   return print to_json({ error => 'Invalid location: ' . $hub->param('r') }) unless $loc[1] =~ /^\d+-\d+$/;
   
   my $action       = $hub->action;
@@ -181,19 +181,16 @@ sub fetch_transcript {
   my ($self, $slice, $image_config, $function, $node) = @_;
   my $hub       = $self->hub;
   my $colourmap = $hub->colourmap;
-  my $renderer  = $hub->param('renderer');
-  my $display   = $node->get('display');
-  my $no_label  = ($renderer || $display) =~ /nolabel/;
+  my $display   = $hub->param('renderer') || $node->get('display');
+  my $no_label  = $display =~ /nolabel/;
   my $g         = $hub->core_params->{'g'};
   my $t         = $hub->core_params->{'t'};
-  
-  $node->set_user('display', $renderer) if $renderer && $display ne $renderer;
   
   my ($glyphset) = $self->_use("Bio::EnsEMBL::GlyphSet::$function", {
     container => $slice,
     config    => $image_config,
     my_config => $node,
-    display   => $display
+    display   => $display,
   });
   
   my @features;
@@ -216,6 +213,7 @@ sub fetch_transcript {
         labelColor => $colourmap->hex_by_name($glyphset->my_colour($colour_key, 'label')),
         legend     => ucfirst $glyphset->my_colour($colour_key, 'text'),
         menu       => $glyphset->href($gene, $transcript),
+        group      => scalar keys %$transcripts ? 1 : 0
       };
       
       if ($exons->{$gene_id} && !($transcript && $stable_id eq $gene_id)) {
@@ -249,6 +247,7 @@ sub fetch_structural_variation {
   });
   
   my $colourmap = $hub->colourmap;
+  my $compact   = $glyphset->{'display'} eq 'compact';
   my @features;
   
   foreach my $f (@{$glyphset->features}) {
@@ -261,7 +260,7 @@ sub fetch_structural_variation {
       $_->{'color'}  = $colourmap->hex_by_name($_->{'colour'});
       $_->{'border'} = $colourmap->hex_by_name($_->{'border'}) if $_->{'border'};
       
-      if ($_->{'style'} eq 'somatic_breakpoint') {
+      if (!$compact && $_->{'style'} eq 'somatic_breakpoint') {
         $breakpoint = 1;
         
         push @features, {
@@ -421,7 +420,7 @@ sub extra_synteny {
       container => $slice,
       config    => $image_config,
       my_config => $_,
-      display   => $_->get('display') || ($_->get('on') eq 'on' ? 'normal' : 'off'),
+      display   => $_->get('display') || ($_->get('on') eq 'on' ? 'normal' : 'off')
     });
     
     $extra->{'colors'}{$_->{'hit_chr_name'}} ||= $colourmap->hex_by_name($glyphset->get_colours($_)->{'feature'}) for @{$glyphset->features};
@@ -503,12 +502,19 @@ sub update {
 }
 
 sub save_config {
-  my $self         = shift;
-  my $hub          = $self->hub;
-  my $image_config = $hub->get_imageconfig($hub->param('image_config'));
-  my $track        = $image_config->get_node($hub->param('track'));
-  my $config       = from_json($hub->param('config'));
+  my $self  = shift;
+  my $hub   = $self->hub;
+  my $track = $hub->param('track');
   
+  return unless $track;
+  
+  my $image_config = $hub->get_imageconfig($hub->param('image_config'));
+     $track        = $image_config->get_node($track);
+  
+  return unless $track;
+  
+  my $config = from_json($hub->param('config'));
+   
   $track->set_user($_, $config->{$_} eq 'undef' ? undef : $config->{$_}) for keys %$config;
   $image_config->altered = 1;
   $hub->session->store;

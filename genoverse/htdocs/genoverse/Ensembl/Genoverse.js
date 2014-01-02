@@ -69,9 +69,9 @@ Ensembl.Genoverse = Genoverse.extend({
     this.base();
   },
   
-  setRange: function (start, end, update, force) {
+  setRange: function (start, end, update, keepLength) {
     var location = this.getLocation(start, end); // Ensures that minSize is observed
-    this.base(location.start, location.end, update, force);
+    this.base(location.start, location.end, update, keepLength);
   },
   
   getLocation: function (s, e, l) {
@@ -119,47 +119,49 @@ Ensembl.Genoverse = Genoverse.extend({
     this.base.apply(this, arguments);
     Ensembl.genoverseScroll = false;
   },
-  
-  moveTo: function (location, urlLocation) {
-    var start = Math.max(typeof location.start === 'number' ? location.start : parseInt(location.start, 10), 1);
-    var end   = Math.min(typeof location.end   === 'number' ? location.end   : parseInt(location.end,   10), this.chromosomeSize);
-    var left  = Math.round((start - this.start) * this.scale);
-    var width = Math.round((end   - start + 1)  * this.scale);
     
-    this.startDragScroll();
-    this.move((this.width - width) / 2 - left);
-    this.stopDragScroll(false);
-    this.checkTrackHeights();
-    
-    if (urlLocation) {
-      this.updateURL(urlLocation === true ? this.getLocation(start, end, Ensembl.location.length) : urlLocation);
-    }
-  },
-  
   setLabels: function (tracks) {
+    var label, id, strand;
+    
     for (var i = 0; i < tracks.length; i++) {
-      if (tracks[i].label.hasClass(tracks[i].urlParams.id)) {
+      if (tracks[i] instanceof Genoverse.Track === false) {
         continue;
       }
       
-      tracks[i].label.data({ order: tracks[i].order || 0 }).addClass(tracks[i].urlParams.id);
+      label = tracks[i].prop('label');
+      id    = tracks[i].prop('urlParams').id;
       
-      if (tracks[i].unsortable !== true) {
-        if (tracks[i].strand) {
-          tracks[i].label.addClass(tracks[i].strand === 1 ? 'f' : 'r');
+      if (label.hasClass(id)) {
+        continue;
+      }
+      
+      label.data({ order: tracks[i].prop('order') || 0 }).addClass(id);
+      
+      if (tracks[i].prop('unsortable') !== true) {
+        strand = tracks[i].prop('strand');
+        
+        if (strand) {
+          label.addClass(strand === 1 ? 'f' : 'r');
         }
       }
     }
   },
-  
-  setTracks: function () {
-    var tracks = this.base.apply(this, arguments);
+    
+  addTracks: function (tracks, index) {
+    tracks = tracks || this.tracks;
+    
+    for (var i = 0; i < tracks.length; i++) {
+      tracks[i] = typeof tracks[i] === 'function' ? tracks[i] : tracks[i].type ? Genoverse.Track[tracks[i].type].extend(tracks[i]) : Genoverse.Track.extend(tracks[i]);
+    }
+    
+    tracks = this.base.apply(this, arguments);
+    
     this.setLabels(tracks);
     return tracks;
   },
   
   removeTracks: function (tracks) {
-    var hover = $.map(tracks, function (track) { return (track.hoverLabel || [])[0]; });
+    var hover = $.map(tracks, function (track) { return (track.prop('hoverLabel') || [])[0]; });
     this.panel.elLk.hoverLabels = this.panel.elLk.hoverLabels.not($(hover).remove());
     this.base(tracks);
   },
@@ -167,33 +169,34 @@ Ensembl.Genoverse = Genoverse.extend({
   updateTrackOrder: function (e, ui) {
     this.base(e, ui);
     
-    var track  = ui.item.data('track');
+    var id    = ui.item.data('id');
+    var order = ui.item.data('order');
     
     $.ajax({
       url  : '/' + Ensembl.species + '/Ajax/track_order',
       type : 'post',
       data : {
         image_config : this.panel.imageConfig,
-        track        : track.id,
-        order        : track.order
+        track        : id,
+        order        : order
       }
     });
     
-    Ensembl.EventManager.triggerSpecific('changeTrackOrder', 'modal_config_' + this.panel.id.toLowerCase(), track.id, track.order);
+    Ensembl.EventManager.triggerSpecific('changeTrackOrder', 'modal_config_' + this.panel.id.toLowerCase(), id, order);
   },
   
   resetConfig: function () {
     this.resetTrackHeights();
     
     for (var i = 0; i < this.tracks.length; i++) {
-      this.tracks[i].messageContainer.attr('class', 'message_container expanded');
+      this.tracks[i].prop('messageContainer').attr('class', 'message_container expanded');
     }
   },
   
   resetTrackHeights: function () {
     var track;
     
-    this.autoHeight = false;
+    this.trackAutoHeight = false;
     
     this.base();
     
@@ -203,7 +206,7 @@ Ensembl.Genoverse = Genoverse.extend({
     for (var i = 0; i < this.tracks.length; i++) {
       track = this.tracks[i];
       
-      if (track.resizable) {
+      if (track.resizable === true) {
         track.updateHeightToggler();
       }
     }
@@ -211,28 +214,29 @@ Ensembl.Genoverse = Genoverse.extend({
   
   toggleAutoHeight: function (json) {
     var i = this.tracks.length;
-    var track, height;
+    var track, config, height;
     
-    this.autoHeight = !this.autoHeight;
+    this.trackAutoHeight = !this.trackAutoHeight;
     
     while (i--) {
-      track = this.tracks[i];
+      track  = this.tracks[i];
+      config = json[track.id] || {};
       
-      if (track.resizable) {
-        track.autoHeight = !!json[track.id].autoHeight || this.autoHeight;
+      if (track.resizable === true) {
+        track.autoHeight = !!config.autoHeight || this.trackAutoHeight;
         
         if (track.autoHeight) {
-          track.heightBeforeToggle = track.height;
-          height = track.fullVisibleHeight;
+          track.heightBeforeToggle = track.prop('height');
+          height = track.prop('fullVisibleHeight');
         } else {
-          height = json[track.id].height || track.initialHeight;
+          height = config.height || track.heightBeforeToggle || track.initialHeight;
         }
         
-        if (json[track.id].height) {
-          track.heightBeforeToggle = json[track.id].height;
+        if (config.height) {
+          track.heightBeforeToggle = config.height;
         }
         
-        track.resize(height);
+        track.controller.resize(height);
         track.updateHeightToggler();
       }
     }
@@ -247,17 +251,17 @@ Ensembl.Genoverse = Genoverse.extend({
     var i      = this.tracks.length;
     
     while (i--) {
-      if (this.tracks[i].height && !(this.tracks[i] instanceof Genoverse.Track.Legend)) {
-        height += this.tracks[i].height;
+      if (this.tracks[i] instanceof Genoverse.Track && !(this.tracks[i] instanceof Genoverse.Track.Legend)) {
+        height += this.tracks[i].prop('height') || 0;
       }
     }
     
-    this.selector.add(this.highlightRegion).height(height);
+    this.selector.add(this.highlightRegion).css('height', height); // Do not use .height(height), because the box-sizing: border-box style causes height(height) to sets the height to be 2px too large 
   },
   
   makeMenu: function (feature, event, track) {
     if (feature.menu || feature.title) {
-      this.makeZMenu({ event: event, feature: feature, imageId: track.name }, [ 'zmenu', track.name, feature.id ].join('_').replace(/\W/g, '_'), track);
+      this.makeZMenu({ event: event, feature: feature, imageId: track.name }, [ 'zmenu', track.name, feature.id ].join('_').replace(/\W/g, '_'), track); // TODO: check track/name is ok
       event.originalEvent.hasFeature = true;
     }
   },
@@ -276,7 +280,7 @@ Ensembl.Genoverse = Genoverse.extend({
   makeZMenu: function (params, id, track) {
     params.browser = this;
     params.coords  = {};
-    params.group   = params.feature.group || (track && track.depth === 1);
+    params.group   = params.feature.group || (track && track.prop('depth') === 1);
     
     if ((params.event.shiftKey || params.group) && params.event.pageX && !params.drag) {
       var x         = (params.event.pageX - this.wrapper.offset().left + this.scaledStart) / this.scale;
@@ -301,7 +305,7 @@ Ensembl.Genoverse = Genoverse.extend({
     this.menus = this.menus.add(menu);
     
     if (track) {
-      track.menus = track.menus.add(menu);
+      track.prop('menus', track.prop('menus').add(menu));
     }
     
     menu = null;
@@ -318,7 +322,12 @@ Ensembl.Genoverse = Genoverse.extend({
   },
   
   saveConfig: function () {
-    var track  = arguments[arguments.length - 1];
+    var track = arguments[arguments.length - 1];
+    
+    if (track instanceof Genoverse.Track === false || !track.id) {
+      return;
+    }
+    
     var config = {};
     
     if (typeof arguments[0] === 'string') {
@@ -330,7 +339,7 @@ Ensembl.Genoverse = Genoverse.extend({
     $.ajax({
       url  : '/' + Ensembl.species + '/Genoverse/save_config',
       type : 'post',
-      data : { config: JSON.stringify(config), image_config: this.panel.imageConfig, track: track instanceof Genoverse.Track ? track.id : '' }
+      data : { config: JSON.stringify(config), image_config: this.panel.imageConfig, track: track.id }
     });
   },
   

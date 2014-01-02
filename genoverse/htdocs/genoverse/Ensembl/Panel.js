@@ -93,8 +93,8 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
       mouseup   : function () { genoverse.stopDragScroll();  }
     });
     
-    buttons.filter('button.scroll_right').mousehold(50, function () { genoverse.move(-100); });
-    buttons.filter('button.scroll_left' ).mousehold(50, function () { genoverse.move(100);  });
+    buttons.filter('button.scroll_right').mousehold(50, function () { genoverse.move(-genoverse.scrollDelta); });
+    buttons.filter('button.scroll_left' ).mousehold(50, function () { genoverse.move(genoverse.scrollDelta);  });
     
     buttons.filter('button.zoom_in' ).on('click', function () { genoverse.zoomIn();  });
     buttons.filter('button.zoom_out').on('click', function () { genoverse.zoomOut(); });
@@ -127,14 +127,14 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
       if (!panel.toggleAutoHeight) {
         panel.toggleAutoHeight = $.ajax({
           url      : this.value,
-          data     : { auto_height: panel.genoverse.autoHeight ? 0 : 1 },
+          data     : { auto_height: panel.genoverse.trackAutoHeight ? 0 : 1 },
           dataType : 'json',
           context  : panel.genoverse,
           success  : panel.genoverse.toggleAutoHeight,
           complete : function () { panel.toggleAutoHeight = false; }
         });
         
-        panel.elLk.autoHeight[panel.genoverse.autoHeight ? 'removeClass' : 'addClass']('off');
+        panel.elLk.autoHeight[panel.genoverse.trackAutoHeight ? 'removeClass' : 'addClass']('off');
         panel.changeControlTitle('autoHeight');
       }
     });
@@ -248,13 +248,25 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
     
     $.each(this.genoverse.tracks, function () {
       var track = this;
+      var label = this.prop('label');
       
-      if (this.label.find('.name').length) {
+      if (label.find('.name').length) {
         this.hoverLabel = panel.elLk.hoverLabels.filter('.' + Ensembl.species + '_' + this.id);
         
-        if (this.heightToggler) {
+        if (this.resizable === true) {
           this.hoverLabel.find('img.height').on('click', function () {
-            track.heightToggler.trigger('click');
+            var height;
+            
+            if ((track.autoHeight = !track.autoHeight)) {
+              track.heightBeforeToggle = track.height;
+              height = track.prop('fullVisibleHeight');
+            } else {
+              height = track.heightBeforeToggle || track.initialHeight;
+            }
+            
+            $(this).toggleClass('auto_height').children(':visible').hide().siblings().show();
+            
+            track.controller.resize(height, true);
             track.updateHeightToggler();
           });
           
@@ -265,7 +277,7 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
           this.hoverLabel.find('img.height').hide();
         }
         
-        this.label.find('.name').on({
+        label.find('.name').on({
           mouseover: function () {
             var offset   = panel.genoverse.container.offset();
             var position = $(this.parentNode).position();
@@ -337,15 +349,15 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
   
   updateTrackRenderer: function (trackName, renderer) {
     var track      = this.genoverse.tracksById[trackName];
-    var otherTrack = track.reverseTrack || track.forwardTrack;
+    var otherTrack = track.prop('reverseTrack') || track.prop('forwardTrack');
     
     if (renderer === 'off') {
       this.genoverse.removeTrack(track); // must call removeTrack rather than track.remove() to get the functionality of removing background colours
     } else {
-      track.setRenderer(renderer, true);
+      track.setRenderer(renderer);
       
       if (otherTrack) {
-        otherTrack.setRenderer(renderer, true);
+        otherTrack.track.setRenderer(renderer);
       }
     }
     
@@ -358,7 +370,7 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
     
     $.ajax({
       url      : '/' + Ensembl.species + '/Genoverse/update',
-      data     : { existing: $.map(genoverse.tracksById, function (track, id) { return id + '=' + (track.renderer || 1); }).join(','), config: this.id },
+      data     : { existing: $.map(genoverse.tracksById, function (track, id) { return id + '=' + (track.prop('renderer') || 1); }).join(','), config: this.id },
       dataType : 'json',
       context  : this,
       success  : function (json) {
@@ -384,17 +396,17 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
           var order        = this[1];
           var orderReverse = this[2];
           
-          if (track && track.unsortable !== true) {
-            if (track.strand === -1 && orderReverse) {
-              track.order = orderReverse;
-              track.label.data('order', orderReverse);
+          if (track && track.prop('unsortable') !== true) {
+            if (track.prop('strand') === -1 && orderReverse) {
+              track.prop('order') = orderReverse;
+              track.prop('label').data('order', orderReverse);
               
-              track = track.forwardTrack;
+              track = track.prop('forwardTrack');
             }
             
-            if (track.order !== order) {
-              track.order = order;
-              track.label.data('order', order);
+            if (track.prop('order') !== order) {
+              track.prop('order', order);
+              track.prop('label').data('order', order);
               
               reorder = true;
             }

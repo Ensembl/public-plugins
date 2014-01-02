@@ -66,11 +66,11 @@ sub get_tracks {
     
     my $height = $track->get('user_height');
     
-    $config->{'height'}        = int $height                    if defined $height;
-    $config->{'featureHeight'} = $track->get('height')          if $track->get('height');
-    $config->{'autoHeight'}    = JSON::true                     if $track->get('auto_height');
-    $config->{'threshold'}     = $track->get('threshold') * 1e3 if $track->get('threshold');
-    $config->{'renderer'}      = $display                       if scalar @{$track->get('renderers')} > 4;
+    $config->{'user'}{'height'}     = int $height                    if defined $height;
+    $config->{'user'}{'autoHeight'} = JSON::true                     if $track->get('auto_height');
+    $config->{'featureHeight'}      = $track->get('height')          if $track->get('height');
+    $config->{'threshold'}          = $track->get('threshold') * 1e3 if $track->get('threshold');
+    $config->{'renderer'}           = $display                       if scalar @{$track->get('renderers')} > 4;
     
     $reverse_order{$config->{'id'}} = $config->{'order'} + 0 and next if $track->get('strand') =~ /[bx]/ && $track->get('drawing_strand') eq 'r';
     
@@ -91,15 +91,15 @@ sub render {
   my ($top_toolbar, $bottom_toolbar) = $self->render_toolbar(1e9);
   
   my $config = {
-    tracks         => [ { type => 'Scaleline' }, { type => 'Scalebar' }, @{$self->get_tracks} ],
-    autoHeight     => $image_config->get_option('auto_height') ? JSON::true : JSON::false,
-    wheelAction    => $image_config->get_parameter('zoom') eq 'no' ? JSON::false : 'zoom',
-    minSize        => $image_config->get_parameter('min_size') + 0,
-    flanking       => $self->hub->param('flanking') + 0,
-    chr            => $slice->seq_region_name,
-    start          => $slice->start + 0,
-    end            => $slice->end   + 0,
-    chromosomeSize => $slice->seq_region_length + 0,
+    tracks          => [ { type => 'Scaleline' }, { type => 'Scalebar', stranded => 1 }, @{$self->get_tracks} ],
+    trackAutoHeight => $image_config->get_option('auto_height') ? JSON::true : JSON::false,
+    wheelAction     => $image_config->get_parameter('zoom') eq 'no' ? JSON::false : 'zoom',
+    minSize         => $image_config->get_parameter('min_size') + 0,
+    flanking        => $self->hub->param('flanking') + 0,
+    chr             => $slice->seq_region_name,
+    start           => $slice->start + 0,
+    end             => $slice->end   + 0,
+    chromosomeSize  => $slice->seq_region_length + 0,
   };
   
   my $html = sprintf('

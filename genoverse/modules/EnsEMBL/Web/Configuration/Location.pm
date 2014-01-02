@@ -27,7 +27,15 @@ sub modify_tree {
   my $view = $self->get_node('View');
   
   $view->set('genoverse', 1);
-
+  
+#  $view->after($self->create_node('Scrollable', 'Scrollable region (BETA)',
+#    [qw(
+#      summary   EnsEMBL::Web::Component::Location::Summary
+#      genoverse EnsEMBL::Web::Component::Location::Genoverse
+#    )],
+#    { availability => 'slice', genoverse => 1 }
+#  ));
+  
   $self->PREV::modify_tree;
 }
 

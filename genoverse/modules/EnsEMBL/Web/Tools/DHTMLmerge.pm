@@ -1,3 +1,4 @@
+#!/usr/local/bin/perl
 =head1 LICENSE
 
 Copyright [1999-2013] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
@@ -16,15 +17,38 @@ limitations under the License.
 
 =cut
 
+###############################################################################
+#   
+#   Name:        EnsEMBL::Web::Tools::DHTMLmerge
+#    
+#   Description: Populates templates for static content.
+#                Run at server startup
+#
+###############################################################################
+
 package EnsEMBL::Web::Tools::DHTMLmerge;
 
 use strict;
 
 use previous qw(merge_all);
 
+use EnsEMBL::Web::Tools::JavascriptOrder;
+
 sub merge_all {
   my $species_defs = $_[0];
-  $species_defs->{'_storage'}{'GENOVERSE_JS_NAME'} = merge($species_defs, 'js', [split 'modules', __FILE__]->[0] . 'htdocs', 'genoverse');
+  my $contents;
+  
+  {
+    local $/ = undef;
+  
+    foreach (EnsEMBL::Web::Tools::JavascriptOrder->new({ species_defs => $species_defs, absolute_path => 1 })->order) {
+      open I, $_;
+      $contents .= <I>;
+      close I;
+    }
+  }
+  
+  $species_defs->{'_storage'}{'GENOVERSE_JS_NAME'} = compress($species_defs, 'js', $contents);
   
   PREV::merge_all(@_);
 }
