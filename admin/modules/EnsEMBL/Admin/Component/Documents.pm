@@ -32,7 +32,7 @@ sub get_display_html {
   my $object  = $self->object;
   my $dom     = $self->dom;
   my $file    = $object->get_parsed_file;
-  my $message = $object->header_message;
+  my $message = $object->message;
   my $html    = '';
 
   $html .= $dom->create_element('div', {'class' => 'embedded-box tinted-box', 'inner_HTML' => $message})->render if $message;
