@@ -25,8 +25,9 @@ use base qw(EnsEMBL::Web::Command);
 sub process {
   my $self    = shift;
   my $object  = $self->object;
+  my $error   = $object->message_code;
 
-  $self->ajax_redirect($self->hub->url({'action' => 'View', 'function' => $object->function}));
+  $self->ajax_redirect($self->hub->url({'action' => $error ? 'Error' : 'View', 'function' => $object->function, $error ? ('msg' => $error) : ()}));
 }
 
 1;

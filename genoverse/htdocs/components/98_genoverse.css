@@ -49,13 +49,12 @@ body.dragging *                                          { cursor: n-resize!impo
 .canvas_container .label_container li.r .nohover:hover   { background: #F1D7A4!important; }
 .canvas_container .menu_container                        { position: absolute; height: 100%; overflow: hidden; }
 .canvas_container .expander                              { position: absolute; height: 15px; bottom: 0; margin-left: -5px; padding-right: 10px; z-index: 1; cursor: pointer; box-shadow: 0 -5px 7px -3px #000 inset; }
-.canvas_container .expander:hover                        { box-shadow: 0 -5px 7px -3px #7D98B8 inset; }
-.canvas_container .resizer                               { position: absolute; height: 5px; bottom: 0; background-color: #F0F0F0; z-index: 2; cursor: n-resize; opacity: 0.8; }
+.canvas_container .resizer                               { position: absolute; height: 5px; bottom: 0; z-index: 2; cursor: n-resize; opacity: 0.8; }
 .canvas_container .resizer.shadow                        { margin-left: -5px; padding-right: 10px; box-shadow: 0 -3px 5px 0 #000; }
-.canvas_container .resizer .handle                       { height: 1px; width: 4%; margin: 1px 48%; border: 1px solid #5A5A5A; border-width: 1px 0; background-color: #FFF; }
+.canvas_container .resizer .handle                       { height: 1px; width: 4%; margin: 1px 48%; border: 1px solid #FFF; border-width: 1px 0; background-color: #5A5A5A; }
 .canvas_container .resizer.shadow .handle                { position: relative; left: 5px }
 .canvas_container .resizer:hover,
-.canvas_container .resizer.ui-draggable-dragging         { box-shadow: 0 -5px 7px -3px #000 inset!important; }
+.canvas_container .resizer.ui-draggable-dragging         { box-shadow: -1px -3px 6px -3px #000000 inset!important; }
 .canvas_container .selector                              { position: absolute; height: 100%; top: 0; display: none; margin-left: -1px; background-color: rgba(229, 121, 5, 0.1); z-index: 10; pointer-events: none; }
 .canvas_container .selector                              { border: 1px dashed red; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; }
 .canvas_container .selector.crosshair                    { border-width: 0 0 0 1px; }
@@ -139,3 +138,6 @@ body.mac .canvas_container .label_container li .handle   { cursor: ns-resize; }
 .image_update_buttons .fbutton                           { margin: 0 16px; padding: 16px; }
 
 .image_toolbar .genoverse_switch                         { background-image: url(/i/switch.png); float: left; height: 16px; width: 16px; margin: 0 4px 2px; cursor: pointer; }
+
+.gv_file_drop                                            { position: absolute; background: #FFF; opacity: 0.7; border: 10px dashed #6F6F6F; border-radius: 11px; z-index: 20; right: 0; bottom: 0; top: 0; left: 0; }
+.gv_file_drop_total_overlay                              { position: absolute; top: 0; left: 0; height: 100%; width: 100%; z-index: 1000000; }

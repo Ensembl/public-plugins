@@ -52,16 +52,22 @@ Ensembl.Panel.GenoverseMenu = Ensembl.Panel.ZMenu.extend({
       $('a', this.el).on('click', function () {
         var cls = this.className.replace(' constant', '');
         
-        if (cls === 'jumpHere' || cls === 'center') {
+        if (cls === 'jumpHere') {
           var browser  = panel.params.browser;
           var position = browser.getSelectorPosition();
           
-          panel.el.hide();
+          browser.moveTo(position.start, position.end);
           
-          browser.moveTo(position, cls === 'jumpHere' ? position : true);
+          if (browser.prev.start !== browser.start || browser.prev.end !== browser.end) {
+            browser.updateURL(position);
+          }
+          
+          browser.cancelSelect();
         } else {
-          $('.' + cls, '.selector_controls').trigger('click');
+          $('.selector_controls .' + cls, '#' + panel.imageId).trigger('click');
         }
+        
+        panel.el.hide();
         
         return false;
       });

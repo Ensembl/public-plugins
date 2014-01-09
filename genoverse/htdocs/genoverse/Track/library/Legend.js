@@ -1,17 +1,17 @@
 Genoverse.on('afterInit afterAddTracks afterRemoveTracks', function () {
   for (var i in this.legends) {
-    this.legends[i].setTracks();
+    this.legends[i].track.setTracks();
   }
 });
 
-Genoverse.on('afterCheckTrackHeights afterRemoveTracks', function () {
+Genoverse.on('afterRemoveTracks', function () {
   for (var i in this.legends) {
     this.legends[i].makeImage({});
   }
 });
 
 Genoverse.Track.on('afterPositionFeatures', function (features, params) {
-  var legend = this.legend;
+  var legend = this.prop('legend');
   
   if (legend) {
     setTimeout(function () { legend.makeImage(params); }, 1);
@@ -19,43 +19,56 @@ Genoverse.Track.on('afterPositionFeatures', function (features, params) {
 });
 
 Genoverse.Track.on('afterResize', function (height, userResize) {
-  if (this.legend && userResize === true) {
-    this.legend.makeImage({});
+  var legend = this.prop('legend');
+  
+  if (legend && userResize === true) {
+    legend.makeImage({});
   }
 });
 
-Genoverse.Track.Legend = Genoverse.Track.extend({
-  textColor : '#000000',
-  labels    : 'overlay',
-  inherit   : [ 'Static' ],
+Genoverse.Track.on('afterCheckHeight', function () {
+  var legend = this.prop('legend');
   
-  init: function () {
-    this.tracks = [];
-    
-    this.base();
-    
-    if (!this.browser.legends) {
-      this.browser.legends = {};
+  if (legend) {
+    legend.makeImage({});
+  }
+});
+
+Genoverse.Track.Legend = Genoverse.Track.Static.extend({
+  textColor     : '#000000',
+  labels        : 'overlay',
+  unsortable    : true,
+  featureHeight : 12,
+  
+  controller: Genoverse.Track.Controller.Static.extend({
+    init: function () {
+      this.base();
+      
+      this.tracks = [];
+      
+      if (!this.browser.legends) {
+        this.browser.legends = {};
+      }
+      
+      this.browser.legends[this.track.id] = this;
+      this.track.setTracks();
     }
-    
-    this.browser.legends[this.id] = this;
-    this.setTracks();
-  },
+  }),
   
   setTracks: function () {
     var legend = this;
     var type   = this.featureType;
     
-    this.tracks = $.grep(this.browser.tracks, function (t) { if (t.type === type) { t.legend = legend; return true; } });
+    this.tracks = $.grep(this.browser.tracks, function (t) { if (t.type === type) { t.controller.legend = legend.controller; return true; } });
   },
   
   findFeatures: function () {
     var bounds   = { x: this.browser.scaledStart, y: 0, w: this.width };
     var features = {};
     
-    $.each($.map(this.tracks, function (track) {
-      bounds.h = track.height;
-      return track.featurePositions.search(bounds).concat(track.labelPositions.search(bounds));
+    $.each($.map(this.track.tracks, function (track) {
+      bounds.h = track.prop('height');
+      return track.prop('featurePositions').search(bounds).concat(track.prop('labelPositions').search(bounds));
     }), function () {
       if (this.legend) {
         features[this.legend] = this.color;
@@ -101,14 +114,14 @@ Genoverse.Track.Legend = Genoverse.Track.extend({
       }
     }
     
-    this.height = ((y + (x ? 1 : 0)) * yScale) + pad;
-    
+    params.height     = this.prop('height', ((y + (x ? 1 : 0)) * yScale) + pad);
+    params.width      = this.width;
     params.positioned = true;
     
     return this.base(features, params);
   },
   
-  remove: function () {
+  destroy: function () {
     delete this.browser.legends[this.id];
     this.base();
   }

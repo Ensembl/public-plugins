@@ -20,6 +20,8 @@ package EnsEMBL::Web::Object::Documents;
 
 use strict;
 
+use File::Copy;
+
 use EnsEMBL::Web::Exceptions;
 use EnsEMBL::Web::Tools::FileHandler qw(file_get_contents file_put_contents);
 use EnsEMBL::Admin::Tools::DocumentParser qw(parse_file);
@@ -30,98 +32,109 @@ sub caption             { return 'Administration Documents'                     
 sub short_caption       { shift->caption;                                                               }
 sub get_raw_file        { return shift->{'_raw_file'};                                                  }
 sub get_parsed_file     { return shift->{'_parsed_file'};                                               }
-sub header_message      { return shift->{'_header_message'} || '';                                      }
+sub message             { return shift->{'_message'} || '';                                             }
+sub message_code        { return shift->{'_message_code'};                                              }
 sub available_documents { return [ map {$_} @{$SiteDefs::ENSEMBL_WEBADMIN_DOCUMENTS} ];                 }
 sub document_title      { return ({@{$_[0]->available_documents}}->{$_[0]->function} || {})->{'title'}; }
 sub saved_successfully  { return shift->{'_save_success'};                                              }
 
 sub new {
-  my $self  = shift->SUPER::new(@_);
-  my $hub   = $self->hub;
-  my $func  = $self->function;
-  
-  my $file  = {@{$self->available_documents}}->{$func};
+  my $self      = shift->SUPER::new(@_);
+  my $hub       = $self->hub;
+  my $action    = $self->action;
+  my $func      = $self->function;
+  my $file      = {@{$self->available_documents}}->{$func} || {};
 
-  if ($file) {
-    if (-e $file->{'location'}) {
-      my $action          = $self->action;
-      $file->{'location'} =~ /(.+\/)([^\/]+)$/;
-      my $dir             = `pwd`;
-      chdir($1);
-      my $filename        = $2;
-      my $cvsstatus       = $self->_get_cvs_status($filename);
+  my $dir       = ($file->{'location'} || '') =~ s/[^\/]+$//r;
+  my $root      = `pwd` =~ s/\n//r;
 
-      if ($action eq 'Update') {
-        system('cvs', 'update', $filename) if $cvsstatus eq 'Needs Patch';
+  my $messages  = {
+    'DIRECTORY_MISSING'     => "Error: The directory containing the document corresponding to $func is either missing or inaccessible.",
+    'PROBLEM_ACCESSING_GIT' => 'Error: There was a problem accessing the GIT checkout directory for updating the document.',
+    'GIT_DIRECTORY_MISSING' => "Error: The GIT checkout directory for syncing the documents could not be located.",
+    'NO_GIT'                => 'Error: The server code base does not seem to be from a GIT repo.',
+    'GIT_BRANCH_PROBLEM'    => 'Error: Git branch is not configured properly.',
+    'ERROR_SYNCING'         => 'Error: unknown error occoured while syncing document file.',
+    'DOCUMENT_MISSING'      => "Error: The document file corresponding to $func does not exist.",
+    'NOT_IMPLEMENTED'       => 'Feature to edit a file is yet not implemented.'
+  };
 
-      } elsif ($action eq 'Save') {
-        if ($cvsstatus eq 'Up-to-date') {
-          try {
-            file_put_contents($filename, $hub->param('post_document'));
-            system('cvs', 'commit', '-m', sprintf("%s\nby %s via Admin Site", $hub->param('post_cvs'), $hub->user->email), $filename);
-            $self->{'_save_success'} = 1;
-          } catch {
-            warn $_;
-          };
-        }
+  # if any valid message code is already there in the URL, ignore further processing.
+  my $msg_code  = $hub->param('msg');
+  unless ($msg_code && exists $messages->{$msg_code}) {
 
-      } elsif ($action eq 'Preview') {
-        if ($cvsstatus eq 'Up-to-date') {
-          $self->{'_raw_file'} = $hub->param('post_document');
-          try {
-            $self->{'_parsed_file'} = parse_file([ split "\n", $self->{'_raw_file'} ]);
-          } catch {
-            $self->{'_header_message'} = 'There was an error parsing the modified file. Please try editing again.';
-          };
-        } else {
-          $self->{'_header_message'} = 'The file needs to be synced with CVS repository before it can be edited.';
-        }
-
-      } elsif ($action eq 'Edit') {
-        if ($cvsstatus eq 'Up-to-date') {
-          $self->{'_raw_file'} = join '', file_get_contents($filename);
-        } else {
-          $self->{'_header_message'} = "The file needs to be synced with CVS repository before it can be edited.";
-        }
-
-      } else {
-        if ($cvsstatus eq 'Needs Patch') {
-          $self->{'_header_message'} = sprintf('A newer version of the file is available in the CVS repository. Click <a href="%s">here</a> to update.', $hub->url({'action' => 'Update', 'function' => $func}));
-        } else {
-          $self->{'_header_message'} = "CVS status: $cvsstatus";
-        }
-        try {
-          $self->{'_parsed_file'} = parse_file($filename);
-        } catch {
-          $self->{'_header_message'} = "There was an error parsing the file:<br /><pre>$_</pre>";
-        };
-      }
-      chop  $dir;
-      chdir $dir;
+    if (!($dir && -d $dir && chdir $dir)) {
+      $self->{'_message_code'} = 'DIRECTORY_MISSING';
 
     } else {
-      $self->{'_header_message'} = "There was no document found corresponding to $func";    
-      warn "File does not exist: $file->{'location'}";
+
+      # get current branch name
+      my $branch = `git rev-parse --abbrev-ref HEAD` =~ s/\n$//r;
+
+      # If it's not a GIT repo
+      if ($? >> 8) {
+        $self->{'_message_code'} = 'NO_GIT';
+
+      } elsif (!$branch || $branch ne $SiteDefs::WEBSITE_GIT_BRANCH) {
+        $self->{'_message_code'} = 'GIT_BRANCH_PROBLEM';
+
+      } else {
+        my $git_root = `git rev-parse --show-toplevel` =~ s/\n|\/$//rg;
+        my $git_copy = $git_root.($hub->species_defs->WEBSITE_GIT_FOLDER_SUFFIX || '-readonly');
+        my $new_file = $file->{'location'} =~ s/^$git_root/$git_copy/r;
+
+        if (!-d $git_copy) {
+          $self->{'_message_code'} = 'GIT_DIRECTORY_MISSING';
+
+        } else {
+          if ($action eq 'Update') {
+
+            if (!chdir $git_copy) {
+              $self->{'_message_code'} = 'PROBLEM_ACCESSING_GIT';
+
+            } else {
+              `git checkout --force $branch; git fetch --all; git reset --hard origin/$branch`;
+
+              if ($new_file eq $file->{'location'}) {
+                $self->{'_message_code'} = 'ERROR_SYNCING';
+
+              } elsif (!-e $new_file) {
+                $self->{'_message_code'} = 'DOCUMENT_MISSING';
+
+              } else {
+                if (!copy($new_file, $file->{'location'})) {
+                  $self->{'_message_code'} = 'DOCUMENT_MISSING';
+                }
+              }
+            }
+          } elsif ($action =~ /^(Save|Preview|Edit)$/) {
+            ## TODO - Not implemented yet!
+
+          } elsif ($action eq 'View') {
+            if (!-e $new_file) {
+              $self->{'_message_code'} = 'DOCUMENT_MISSING';
+
+            } else {
+              my @stat = stat $file->{'location'};
+              $self->{'_message'} = sprintf('Document last updated at %s. Click <a href="%s">here</a> to update now.', $self->pretty_date($stat[9], 'simple_datetime'), $hub->url({'action' => 'Update', 'function' => $func}));
+              try {
+                $self->{'_parsed_file'} = parse_file($file->{'location'});
+              } catch {
+                $self->{'_message'} = "Error: There was an error parsing the file:<br /><pre>$_</pre>";
+              };
+            }
+          }
+        }
+      }
     }
-  } else {
-    $self->{'_header_message'} = "There was no document found corresponding to $func";    
   }
 
-  return $self;
-}
+  $self->{'_message'} ||= $messages->{$msg_code} || 'Unknown error';
 
-sub _get_cvs_status {
-  my ($self, $file) = @_;
-  my $cvs_status    = {};
-  my @cvs_status    = `cvs status $file`;
-  for (@cvs_status) {
-    if ($_ =~ /(Status|Sticky\s(Tag|Date))\:\s+([^\n]+)/) {
-      $cvs_status->{$1} = $3;
-    }
-  };
-  return 'Unknown' if $cvs_status->{'Status'} eq 'Unknown';
-  $cvs_status->{"Sticky $_"} ne '(none)' and return "Sticky $_" for qw(Tag Date);
-  return $cvs_status->{'Status'};
+  # cd back to the original dir
+  chdir $root;
+
+  return $self;
 }
 
 1;
