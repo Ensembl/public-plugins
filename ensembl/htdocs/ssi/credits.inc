@@ -2,5 +2,5 @@
       <a href="http://www.ebi.ac.uk"><img src="/img/ebi_logo.png" alt="EMBL-EBI" title="European BioInformatics Institute" style="width:100px;height:31px" class="float-right ebi-logo" /></a>
       Ensembl is a joint project between <a href="http://www.ebi.ac.uk/">EMBL&nbsp;-&nbsp;EBI</a> and the <a href="http://www.sanger.ac.uk/">Wellcome&nbsp;Trust&nbsp;Sanger&nbsp;Institute</a>  to develop a software system which produces and maintains automatic annotation on selected eukaryotic genomes.</p>
 <p>Ensembl receives major funding from the Wellcome Trust.
-Our <a href="/info/about/credits.html">acknowledgements page</a> includes a list of additional current and previous funding bodies.</p>
+Our <a href="/info/about/credits.html">acknowledgements page</a> includes a list of additional current and previous funding bodies. <a href="/info/about/publications.html">How to cite Ensembl</a> in your own publications.</p>
 
