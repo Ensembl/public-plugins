@@ -64,7 +64,7 @@ sub populate_tree {
 #       ));
 #     }
 
-    $menu->append($self->create_node("Update/$func", 'CVS Update', [],
+    $menu->append($self->create_node("Update/$func", 'Update', [],
       { 'command' => 'EnsEMBL::Admin::Command::Documents::Update', 'availability' => 1, 'filters' => ['WebAdmin'] }
     ));
 
