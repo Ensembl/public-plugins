@@ -289,6 +289,7 @@ $.widget('custom.searchac',$.ui.autocomplete,{
       .css({ position: 'absolute', 'z-index': 1 })
       .css({ background: 'none' }).val('')
       .addClass('solr_ghost').attr('placeholder','').attr('id','')
+      .attr('tabindex','5000')
       .insertBefore(@element).attr('name','')
     $.ui.autocomplete.prototype._create.call(@)
     oldval = @element.val()

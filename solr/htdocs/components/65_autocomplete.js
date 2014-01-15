@@ -489,7 +489,7 @@
         'z-index': 1
       }).css({
         background: 'none'
-      }).val('').addClass('solr_ghost').attr('placeholder', '').attr('id', '').insertBefore(this.element).attr('name', '');
+      }).val('').addClass('solr_ghost').attr('placeholder', '').attr('id', '').attr('tabindex', '5000').insertBefore(this.element).attr('name', '');
       $.ui.autocomplete.prototype._create.call(this);
       oldval = this.element.val();
       this.element.on('change keypress paste focus textInput input', function(e) {
