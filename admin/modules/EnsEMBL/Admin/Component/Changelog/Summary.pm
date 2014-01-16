@@ -113,12 +113,12 @@ sub record_tree {
     ) : ()
   );
 
-  $record_div->append_child('div', {'class' => 'dbf-row-buttons', 'inner_HTML' => sprintf(
+  $record_div->append_child('div', {'class' => 'dbf-row-buttons _dbf_row_buttons', 'inner_HTML' => sprintf(
     '<a href="%s">View</a><a href="%s" class="%s">Edit</a>%s',
     $hub->url({'action' => 'Display', 'id' => $primary_key}),
     $hub->url({'action' => 'Edit', 'id' => $primary_key}),
     $self->_JS_CLASS_EDIT_BUTTON,
-    $object->permit_delete ? sprintf('<a class="%s" href="%s">Delete</a>', $self->_JS_CLASS_EDIT_BUTTON, $hub->url({'action' => 'Confirm', 'id' => $primary_key})) : ''
+    $object->permit_delete ? sprintf('<a class="%s" href="%s">Delete</a>', $self->_JS_CLASS_BUTTON, $hub->url({'action' => 'Confirm', 'id' => $primary_key})) : ''
   )}) if $valid_user;
 
   return $record_div;

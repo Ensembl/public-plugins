@@ -25,7 +25,7 @@ Ensembl.DbFrontend = Base.extend({
     var self    = this;
     this.panel  = panel;
     this.el     = $(el);
-    $(this.el).off('click').on('click', '._dbf_button', function(event) {
+    $(this.el).off('click').on('click', '._dbf_button, ._dbf_edit', function(event) {
       event.preventDefault();
       self.buttonClick(this);
     });

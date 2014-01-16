@@ -60,6 +60,16 @@ div.dbf-row-right {
   line-height: 16px;
 }
 
+div.dbf-row-layer {
+  position: absolute;
+  width: 100%;
+  background-color: #fff;
+  opacity: 0.5;
+  text-align: center;
+  font-size: 20px;
+  line-height: 80px;
+}
+
 div.dbf-pagination {
   overflow: hidden;
 }
@@ -107,6 +117,10 @@ div.dbf-row-buttons {
   background-color: [[PANEL_BORDER]];
   padding: 4px 0 3px 6px;
   clear: both;
+}
+
+div.dbf-row-buttons-editing {
+  position: relative;
 }
 
 div.dbf-confirm-buttons, div.dbf-close-button {

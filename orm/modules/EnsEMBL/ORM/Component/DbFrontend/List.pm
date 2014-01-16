@@ -89,9 +89,9 @@ sub record_tree {
   my $record_row  = $self->dom->create_element('tr', $header_only
     ? {'children'   => [{'node_name' => 'th', 'class' => 'sort_none', 'style' => 'width: 60px'}]}
     : {'children'   => [{'node_name' => 'td', 'class' => ['dbf-list-buttons', $self->_JS_CLASS_LIST_ROW_HANDLE], 'children' => [
-        {'node_name'  => 'a', 'href' => $hub->url({'action' => 'Edit',      'function' => $hub->function, 'id' => $primary_key}), 'title' => sprintf('Edit %s',      $record_name), 'class' => [$self->_JS_CLASS_EDIT_BUTTON, 'dbf-list-edit']},
-        {'node_name'  => 'a', 'href' => $hub->url({'action' => 'Confirm',   'function' => $hub->function, 'id' => $primary_key}), 'title' => sprintf('Delete %s',    $record_name), 'class' => [$self->_JS_CLASS_EDIT_BUTTON, 'dbf-list-delete']},
-        {'node_name'  => 'a', 'href' => $hub->url({'action' => 'Duplicate', 'function' => $hub->function, 'id' => $primary_key}), 'title' => sprintf('Duplicate %s', $record_name), 'class' => [$self->_JS_CLASS_ADD_BUTTON,  'dbf-list-duplicate']}
+        {'node_name'  => 'a', 'href' => $hub->url({'action' => 'Edit',      'function' => $hub->function, 'id' => $primary_key}), 'title' => sprintf('Edit %s',      $record_name), 'class' => [$self->_JS_CLASS_BUTTON, 'dbf-list-edit']},
+        {'node_name'  => 'a', 'href' => $hub->url({'action' => 'Confirm',   'function' => $hub->function, 'id' => $primary_key}), 'title' => sprintf('Delete %s',    $record_name), 'class' => [$self->_JS_CLASS_BUTTON, 'dbf-list-delete']},
+        {'node_name'  => 'a', 'href' => $hub->url({'action' => 'Duplicate', 'function' => $hub->function, 'id' => $primary_key}), 'title' => sprintf('Duplicate %s', $record_name), 'class' => [$self->_JS_CLASS_BUTTON, 'dbf-list-duplicate']}
       ]}], 'class' => "dbf-list-row _dbf_row_$primary_key $css_class", 'flags' => {'primary_key' => $primary_key}});
 
   my $columns = $object->show_columns;
