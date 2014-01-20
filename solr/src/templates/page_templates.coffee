@@ -4,7 +4,7 @@ window.page_templates =
     template: """
       <div>
         <div class='solr_page_p_side'>
-          <div class='solr_sidebar'>
+          <div class='solr_sidebar  ui-panel ui-panel-position-left ui-panel-display-reveal ui-body-c ui-panel-animate ui-panel-closed' data-role='panel'>
             <div class='new_current_faceter'></div>
             <div class='faceters'></div>
             <div class='table_extras'></div>

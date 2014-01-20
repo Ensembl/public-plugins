@@ -516,7 +516,7 @@
 
   window.page_templates = {
     page: {
-      template: "<div>\n  <div class='solr_page_p_side'>\n    <div class='solr_sidebar'>\n      <div class='new_current_faceter'></div>\n      <div class='faceters'></div>\n      <div class='table_extras'></div>\n      <div class='sizer'></div>\n      <div class='layout_select'></div>\n      <div class='leftcars'><div class='sidecars'></div></div>\n      <div class='tips'></div>\n    </div>\n  </div>\n  <div class='solr_page_p_main'>\n    <div class='table'>\n    </div>\n  </div>\n</div>",
+      template: "<div>\n  <div class='solr_page_p_side'>\n    <div class='solr_sidebar ui-panel ui-panel-position-left ui-panel-display-reveal ui-body-c ui-panel-animate ui-panel-closed' data-role='panel' id='search_nav'>\n      <div class='new_current_faceter'></div>\n      <div class='faceters'></div>\n      <div class='table_extras'></div>\n      <div class='sizer'></div>\n      <div class='layout_select'></div>\n      <div class='leftcars'><div class='sidecars'></div></div>\n      <div class='tips'></div>\n    </div>\n  </div>\n  <div class='solr_page_p_main'>\n    <div class='table'>\n    </div>\n  </div>\n</div>",
       sockets: {
         '.table_extras': 'sidebar_table_extra'
       },
