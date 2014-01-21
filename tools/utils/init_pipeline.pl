@@ -21,7 +21,7 @@ use FindBin qw($Bin);
 
 BEGIN {
   my $code_path = "$Bin/../../..";
-  unshift @INC, "$code_path/conf";
+  unshift @INC, "$code_path/ensembl-webcode/conf";
   eval {
     require SiteDefs;
   };
