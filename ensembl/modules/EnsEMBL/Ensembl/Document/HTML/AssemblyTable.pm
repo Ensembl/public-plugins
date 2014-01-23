@@ -74,16 +74,17 @@ sub render_assembly_table {
   my ($releases, $species, $release_species, $table_count) = @_;
   return unless @$releases;
 
-  my $header = '<tr>
-    <th style="width:20%">&nbsp;</th>
-  ';
+  my $border = 'border-style:solid;border-color:#fff;border-width:0 0 1px 0';
+  my $header = qq(<tr>
+    <th style="width:20%;$border">&nbsp;</th>
+  );
   my $body = "";
 
   my ($date, $version, $order, $species_name, $common, $row, $rs, $cells, $assembly_name, $current_name, $online, $class);
 
   my $c = { -1 => 'bg4', 1 => 'bg2', x => 1 }; # CSS class flip-flop for tds
 
-  my $style = sprintf( ' style="width:%0.3f%%"', 80 / @$releases );
+  my $style = sprintf( ' style="width:%0.3f%%;%s"', 80 / @$releases, $border );
   foreach my $rel (@$releases) {
     my $short_date = $rel->{'archive'};
     $short_date =~ s/20/ 20/;
@@ -96,8 +97,6 @@ sub render_assembly_table {
   
   my @rows = ();
  
-  my $top_border = 'style="border-style:solid;border-color:#ccc;border-width:1px 0 0 0"';
-  my $two_borders = 'style="border-style:solid;border-color:#ccc;border-width:1px 0 0 1px"';
   foreach my $s (sort { $a->{'name'} cmp $b->{'name'} } @$species) {
     ($species_name = $s->{'name'}) =~ s/_/ /g;
     $common = $s->{'common_name'};
@@ -110,7 +109,7 @@ sub render_assembly_table {
 
     my $name_string = "<i>$species_name</i>";
     $name_string .= " ($common)" unless $common =~ /\./;
-    $row = sprintf('<tr><th><a href="/%s/"><i>%s</i></a>', $s->{'name'}, $species_name);
+    $row = sprintf('<tr><th style="%s"><a href="/%s/"><i>%s</i></a>', $border, $s->{'name'}, $species_name);
     $row .= " ($common)" unless $common =~ /\./;
     $row .= '</th>';
 
@@ -129,8 +128,10 @@ sub render_assembly_table {
     next if !$cells->{$order}->{'name'} && $cells->{$order}->{'count'} == scalar @$releases;
 
     my $i = 0;
+    my $one_border = 'style="border-style:solid;border-color:#ccc;border-width:0 0 1px 0"';
+    my $two_borders = 'style="border-style:solid;border-color:#ccc;border-width:0 0 1px 1px"';
     foreach my $td (sort keys %$cells) {
-      my $border = $i > 0 ? $two_borders : $top_border;
+      my $border = $i > 0 ? $two_borders : $one_border;
       if ($table_count == 1
             && $i == 0 
             && !$cells->{$td+1}->{'name'} 
