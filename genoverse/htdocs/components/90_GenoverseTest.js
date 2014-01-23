@@ -24,13 +24,7 @@ Ensembl.Panel.GenoverseTest = Ensembl.Panel.Content.extend({
     
     this.base();
     
-    Ensembl.EventManager.register('ajaxComplete', this, function () {
-      if (typeof Ensembl.PanelManager.panels[id].panelType === 'undefined') {
-        Ensembl.EventManager.trigger('destroyPanel', id);
-      }
-      
-      Ensembl.EventManager.remove(this.id);
-    });
+    Ensembl.EventManager.register('ajaxComplete', this, function () { Ensembl.EventManager.remove(this.id); });
   },
   
   getContent: function (url, el, params, newContent) {
