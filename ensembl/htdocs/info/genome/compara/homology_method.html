@@ -170,6 +170,7 @@ speciation event. We predict several descriptions of orthologues:</p>
 <li>1-to-1 orthologues (<em>ortholog_one2one</em>)</li>
 <li>1-to-many orthologues (<em>ortholog_one2many</em>)</li>
 <li>many-to-many orthologues (<em>ortholog_many2many</em>)</li>
+<li>different-species paralogies &mdash;only as exceptions, see below &mdash; (reusing the three orthology types above)</li>
 </ul>
 </dd>
 
@@ -178,7 +179,6 @@ speciation event. We predict several descriptions of orthologues:</p>
 
 <ul>
 <li>same-species paralogies (<em>within_species_paralog</em>)</li>
-<li>different-species paralogies &mdash;only as exceptions, see below &mdash; (<em>between_species_paralog</em>)</li>
 <li>across-tree paralogies (<em>other_paralog</em>)</li>
 <li>fragments of the same &dash;predicted&dash; gene (<em>gene_split</em>)</li>
 </ul>
@@ -195,16 +195,16 @@ figure where there are examples of the three kinds.
 </p>
 
 <p>
-A <em>within_species_paralog</em> corresponds to a relation between 2
-genes of the same species where the ancestor node
-has been labelled as a duplication node. In the previous figure,
+Genes of the same species and related by a duplication event are defined as
+<b>paralogs</b>.
+In the previous figure,
 Hsap2 and Hsap2', and Mmus2 and Mmus2' are two examples of within-species-paralogs.
 The duplication event relating the paralogues does not need to affect this species only.
 For example, Mmus2' and Mmus3' are
 also within_species_paralog but the duplication event has occurred
 in the common ancestor between species Hsap (human) and species Mmus (mouse).
 The taxonomy level "times" the duplication
-event to the ancestor of "Euarchontoglires".
+event to the ancestor of <em>Euarchontoglires</em>.
 </p>
 
 <p>
@@ -214,14 +214,22 @@ This happens if they were part of the same cluster from hcluster_sg, but has bee
 </p>
 
 <p>
+We compute a <b>duplication confidence score</b> for each duplication node as the <a href="http://en.wikipedia.org/wiki/Jaccard_index">Jaccard index</a> of the sets of species under the two sub-trees.
+The score is sometimes refered as "species intersection score".
+<br/>
+<img style="width: 613px; height: 451px;" alt="duplication_confidence_score.merged.41.png" src="duplication_confidence_score.merged.41.png" />
+</p>
+
+
+<p>
 A <em>between_species_paralog</em> corresponds to a relation between genes of different species where the ancestor node
 has been labelled as a duplication node e.g. Mmus1:Hsap2 or Mmus1:Hsap3.
 Currently, we do not annotate between_species_paralog, except in the following cases:
 </p>
 <ul>
-<li>When the node in the gene-tree is labelled as <em>dubious</em></li>
-<li>When there is no better match for any of the genes</li>
-<li>When at least one gene does not have a better match, and the duplication is weakly-supported (species-intersection-score &le; 0.25)
+<li>When the node in the gene-tree is labelled as <b>dubious</b> (i.e has a duplication confidence score of 0)</li>
+<li>When there is no better match for any of the genes (regardless of the duplication confidence score)</li>
+<li>When at least one gene does not have a better match, and the duplication is weakly-supported (duplication confidence score &le; 0.25)
 </li>
 </ul>
 
@@ -233,28 +241,30 @@ are behind these problems.
 
 It is not clear whether these genes are real orthologs or not, but they are the best available candidates (given the data),
 and we bend the definition of orthology to tag them as orthologues.
-They however represent a lower confidence set of orthologues, and are marked as such in BioMart.
+They however represent a <b>lower confidence</b> set of orthologues, and are marked as such in BioMart.
 At the API / database level, there are marked as "non-compliant with the gene tree".
 
+<br/><img style="width: 618px; height: 470px;" alt="tree_example2" src="tree_example2.png" />
+</p>
 
-<p><img style="width: 618px; height: 470px;" alt="tree_example2" src="tree_example2.png" /></p>
 
 <p>A paralog labelled as a <b>gene_split</b> is an artefactual type of paralogy. It is commonly
 related to fragmented genome assemblies or a gene prediction that is
 poor in supporting evidences (cDNA, ESTs, proteins, etc.).
 
 Right after building the multiple alignment, we detect pairs pairs of genes that lie close to each other (&lt;1MB) in the same sequence region and the same strand (see GeneA1/GeneA2 below).
-They are forced to be paired in the gene trees under <em>gene split</em> events, and represent our most confident set.
+They are forced to be paired in the gene trees under <em>gene_split</em> events, and represent our most confident set.
 
 When there is no (or little) overlap between the
 gene fragments in the same species and they lie in different sequence
 regions in the assembly (see GeneB1/GeneB2 in the image below),
 we let TreeBeST<a href="#fn5" class="fn-link">5</a> decide their best position in the tree.
-They are linked by <em>duplication</em> nodes, and have a lower confidence index.
+They are linked by duplication nodes, and have a lower confidence index.
+
+<br/>
+
+<img style="width: 768px; height: 249px;" alt="gene split" src="gene_split.png" />
 </p>
-
-<p><img style="width: 768px; height: 249px;" alt="gene split" src="gene_split.png" /></p>
-
 
 
 

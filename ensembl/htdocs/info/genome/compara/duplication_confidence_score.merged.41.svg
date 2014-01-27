@@ -1,24 +1,26 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
+
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:cc="http://creativecommons.org/ns#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="svg2211"
    sodipodi:version="0.32"
-   inkscape:version="0.45"
+   inkscape:version="0.48.4 r9939"
    width="1000"
    height="800"
    version="1.0"
-   sodipodi:docbase="/home/avilella/0_t/activities/conferences"
    sodipodi:docname="duplication_confidence_score.merged.41.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape"
-   sodipodi:modified="true">
+   sodipodi:modified="true"
+   inkscape:export-filename="/home/matthieu/workspace/src/web/public-plugins/ensembl/htdocs/info/genome/compara/duplication_confidence_score.merged.41.png"
+   inkscape:export-xdpi="89.986023"
+   inkscape:export-ydpi="89.986023">
   <metadata
      id="metadata2216">
     <rdf:RDF>
@@ -27,16 +29,17 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
   <defs
      id="defs2214" />
   <sodipodi:namedview
-     inkscape:window-height="999"
-     inkscape:window-width="1280"
+     inkscape:window-height="1060"
+     inkscape:window-width="1920"
      inkscape:pageshadow="2"
-     inkscape:pageopacity="0.0"
+     inkscape:pageopacity="1"
      guidetolerance="10.0"
      gridtolerance="10.0"
      objecttolerance="10.0"
@@ -47,60 +50,11 @@
      inkscape:zoom="1.0175"
      inkscape:cx="468.2279"
      inkscape:cy="383.9663"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
-     inkscape:current-layer="svg2211" />
-  <image
-     xlink:href="duplication_confidence_score.template.41.png"
-     sodipodi:absref="/home/avilella/0_t/activities/conferences/duplication_confidence_score.template.41.png"
-     width="1000"
-     height="800"
-     id="image2218"
-     x="0"
-     y="0" />
-  <rect
-     style="fill:#ff0000;fill-opacity:1;fill-rule:evenodd;stroke:#828282;stroke-width:1;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     id="rect3194"
-     width="19.656019"
-     height="16.707617"
-     x="148.91158"
-     y="87.469292" />
-  <rect
-     style="fill:#ffff00;fill-opacity:1;fill-rule:evenodd;stroke:#828282;stroke-width:1;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     id="rect4165"
-     width="19.656019"
-     height="16.707617"
-     x="148.91158"
-     y="115.78869" />
-  <text
-     xml:space="preserve"
-     style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
-     x="175.71358"
-     y="99.26284"
-     id="text5136"
-     sodipodi:linespacing="125%"><tspan
-       sodipodi:role="line"
-       id="tspan5138"
-       x="175.71358"
-       y="99.26284">PhyML+RAP</tspan></text>
-  <text
-     xml:space="preserve"
-     style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
-     x="175.71358"
-     y="129.00586"
-     id="text5140"
-     sodipodi:linespacing="125%"><tspan
-       sodipodi:role="line"
-       id="tspan5142"
-       x="175.71358"
-       y="129.00586">NJTREE</tspan></text>
-  <rect
-     style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     id="rect5144"
-     width="106.14251"
-     height="86.486488"
-     x="864.86487"
-     y="57.002457" />
+     inkscape:window-x="1598"
+     inkscape:window-y="-3"
+     inkscape:current-layer="svg2211"
+     showgrid="false"
+     inkscape:window-maximized="1" />
   <g
      transform="matrix(3.1712225e-2,0,0,3.1712225e-2,133.63328,84.02146)"
      id="g7047">
@@ -757,8 +711,9 @@
        inkscape:export-filename="/home/avilella/0_t/activities/conferences/duplication_confidence_score.png"
        inkscape:connector-type="polyline"
        id="path10350"
-       d="M 3723.1917,9044.1059 L 3309.4713,9043.8302"
-       style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:51.20317459;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;display:inline" />
+       d="m 3723.1917,9044.1059 -413.7204,-0.2757"
+       style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:51.20317459;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline"
+       inkscape:connector-curvature="0" />
     <text
        inkscape:export-ydpi="90"
        inkscape:export-xdpi="90"
