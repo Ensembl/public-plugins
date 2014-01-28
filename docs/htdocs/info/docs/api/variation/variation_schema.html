@@ -1,7 +1,7 @@
 
 <html>
 <head>
-<title> Schema Documentation</title>
+<title>Schema Documentation</title>
 <meta name="order" content="2" />
 
 <script language="Javascript" type="text/javascript">
@@ -83,7 +83,7 @@ tables that they've not used before.
 <div>
   <div style="float:left">
     <p>
-      This document refers to version <span style="font-weight:bold;font-size:11pt;color:#000">74</span> of the Ensembl
+      This document refers to version <span style="font-weight:bold;font-size:11pt;color:#000">75</span> of the Ensembl
       variation schema. 
     </p>
     <p>
@@ -140,7 +140,6 @@ tables that they've not used before.
         <li><a href="#compressed_genotype_var"><b>compressed_genotype_var</b></a></li>
         <li><a href="#individual_genotype_multiple_bp"><b>individual_genotype_multiple_bp</b></a></li>
         <li><a href="#population_genotype"><b>population_genotype</b></a></li>
-        <li><a href="#read_coverage"><b>read_coverage</b></a></li>
         <li><a href="#tmp_individual_genotype_single_bp"><b>tmp_individual_genotype_single_bp</b></a></li>
 
       </ul>
@@ -304,7 +303,7 @@ tables that they've not used before.
   
 <br /><br />
 <div style="background-color:#F2F2F2;padding:5px;margin:5px 0px;border-top:2px solid #FF0000">
-  <h2 style="display:inline;color:#000">Attributes tables</h2>
+  <h2 id="1" style="display:inline;color:#000">Attributes tables</h2>
 </div>
 <p style="width:800px">These tables define the variation attributes data.</p>
   <div id="attrib" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
@@ -403,7 +402,7 @@ tables that they've not used before.
 
 <br /><br />
 <div style="background-color:#F2F2F2;padding:5px;margin:5px 0px;border-top:2px solid #3CB371">
-  <h2 style="display:inline;color:#000">Failed tables</h2>
+  <h2 id="2" style="display:inline;color:#000">Failed tables</h2>
 </div>
 <p style="width:800px">These tables define the list of variants/alleles flagged as "failed" in the Variation pipeline.<br /> The list of reasons for a variation being flagged as failed is available in the <a href="/info/genome/variation/data_description.html#quality_control">Quality Control documentation</a>.</p>
   <div id="failed_allele" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
@@ -525,7 +524,7 @@ tables that they've not used before.
 
 <br /><br />
 <div style="background-color:#F2F2F2;padding:5px;margin:5px 0px;border-top:2px solid #FF8500">
-  <h2 style="display:inline;color:#000">Genotype tables</h2>
+  <h2 id="3" style="display:inline;color:#000">Genotype tables</h2>
 </div>
 <p style="width:800px">These tables define the genotype data at the individual and population levels.</p>
   <div id="compressed_genotype_region" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
@@ -656,36 +655,6 @@ tables that they've not used before.
   </ul>
 
 
-  <div id="read_coverage" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#FF8500;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">read_coverage</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_read_coverage" style="cursor:pointer;text-decoration:none" onclick="show_hide('read_coverage')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
-    </div>
-  </div>
-  <p style="padding:5px 0px;margin-bottom:0px;width:800px">This table stores the read coverage in the resequencing of individuals. Each row contains an individual ID, chromosomal coordinates and a read coverage level.</p>
-
-  <div id="div_read_coverage" style="display:none">
-    <table style="border:1px solid #667aa6;padding:0px;min-width:1000px;max-width:1200px">
-      <tr class="center" style="color:#FFFFFF;background-color:#667aa6"><th style="color:#FFF;padding:2px">Column</th><th style="color:#FFF;padding:2px">Type</th><th style="color:#FFF;padding:2px;min-width:80px">Default value</th><th style="color:#FFF;padding:2px;min-width:500px">Description</th><th style="color:#FFF;padding:2px;min-width:100px">Index</th></tr>
-      <tr class="bg1"><td><b>seq_region_id</b></td><td>int(10)</td><td></td><td>Foreign key references <a href="#seq_region">seq_region</a> in core db. ers to the seq_region which this variant is on, which may be a chromosome, a clone, etc...</td><td>key: seq_region_idx</td></tr>
-      <tr class="bg2"><td><b>seq_region_start</b></td><td>int</td><td></td><td>The start position of the variation on the <a href="#seq_region">seq_region</a>.</td><td>key: seq_region_idx</td></tr>
-      <tr class="bg1"><td><b>seq_region_end</b></td><td>int</td><td></td><td>The end position of the variation on the <a href="#seq_region">seq_region</a>.</td><td></td></tr>
-      <tr class="bg2"><td><b>level</b></td><td>tinyint</td><td></td><td>Minimum number of reads.</td><td></td></tr>
-      <tr class="bg1"><td><b>individual_id</b></td><td>int(10)</td><td></td><td>Foreign key references to the <a href="#individual">individual</a> table.</td><td></td></tr>
-    </table>
-  </div>
-  <p style="margin-top:10px"><b>See also:</b></p>
-  <ul>
-    <li><a href="#individual">individual</a></li>
-    <li><a href="#seq_region">seq_region</a></li>
-  </ul>
-
-
   <div id="tmp_individual_genotype_single_bp" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
         <div style="float:left;padding:0px;height:20px;width:10px;background-color:#FF8500;margin-right:10px"></div>
     <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">tmp_individual_genotype_single_bp</div>
@@ -719,7 +688,7 @@ tables that they've not used before.
 
 <br /><br />
 <div style="background-color:#F2F2F2;padding:5px;margin:5px 0px;border-top:2px solid #BC5CEC">
-  <h2 style="display:inline;color:#000">Metadata tables</h2>
+  <h2 id="4" style="display:inline;color:#000">Metadata tables</h2>
 </div>
 <p style="width:800px">These tables define some metadata information.</p>
   <div id="meta" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
@@ -769,7 +738,7 @@ tables that they've not used before.
 
 <br /><br />
 <div style="background-color:#F2F2F2;padding:5px;margin:5px 0px;border-top:2px solid #000">
-  <h2 style="display:inline;color:#000">Other tables</h2>
+  <h2 id="5" style="display:inline;color:#000">Other tables</h2>
 </div>
 <p style="width:800px">These tables define the other data associated with a variation.</p>
   <div id="allele_code" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
@@ -918,7 +887,6 @@ tables that they've not used before.
   <ul>
     <li><a href="#variation_feature">variation_feature</a></li>
     <li><a href="#compressed_genotype_region">compressed_genotype_region</a></li>
-    <li><a href="#read_coverage">read_coverage</a></li>
     <li><a href="#coord_system">coord_system</a></li>
   </ul>
 
@@ -1009,7 +977,7 @@ tables that they've not used before.
 
 <br /><br />
 <div style="background-color:#F2F2F2;padding:5px;margin:5px 0px;border-top:2px solid #22949b">
-  <h2 style="display:inline;color:#000">Phenotype tables</h2>
+  <h2 id="6" style="display:inline;color:#000">Phenotype tables</h2>
 </div>
 <p style="width:800px">These tables store information linking entities (variants, genes, QTLs) with phenotypes and other annotations.</p>
   <div id="phenotype_feature" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
@@ -1081,7 +1049,7 @@ tables that they've not used before.
 
 <br /><br />
 <div style="background-color:#F2F2F2;padding:5px;margin:5px 0px;border-top:2px solid #1E90FF">
-  <h2 style="display:inline;color:#000">Protein tables</h2>
+  <h2 id="7" style="display:inline;color:#000">Protein tables</h2>
 </div>
 <p style="width:800px">These tables define the protein prediction data.</p>
   <div id="protein_function_predictions" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
@@ -1140,7 +1108,7 @@ tables that they've not used before.
 
 <br /><br />
 <div style="background-color:#F2F2F2;padding:5px;margin:5px 0px;border-top:2px solid #FF8500">
-  <h2 style="display:inline;color:#000">Sample tables</h2>
+  <h2 id="8" style="display:inline;color:#000">Sample tables</h2>
 </div>
 <p style="width:800px">These tables define the individual and population information.</p>
   <div id="individual" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
@@ -1359,7 +1327,7 @@ tables that they've not used before.
 
 <br /><br />
 <div style="background-color:#F2F2F2;padding:5px;margin:5px 0px;border-top:2px solid #7CFC00">
-  <h2 style="display:inline;color:#000">Source/study tables</h2>
+  <h2 id="9" style="display:inline;color:#000">Source/study tables</h2>
 </div>
 <p style="width:800px">These tables define the variation source and study information.</p>
   <div id="associate_study" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
@@ -1450,7 +1418,7 @@ tables that they've not used before.
 
   <div id="ex_source" style="display:none;">
     <table class="ss" style="width:50%;margin-top:20px;margin-left:10px;border-spacing:2px">
-      <tr><th>source_id</th><th>name</th><th>version</th><th>description</th><th>url</th><th>type</th><th>somatic_status</th><th>data_types</th></tr>      <tr><td>1</td><td>dbSNP</td><td>138</td><td>Variants (including SNPs and indels) imported from dbSNP</td><td>http://www.ncbi.nlm.nih.gov/projects/SNP/</td><td></td><td>mixed</td><td>variation</td></tr>      <tr class="bg2"><td>2</td><td>Archive dbSNP</td><td>138</td><td>Former variants names imported from dbSNP</td><td>http://www.ncbi.nlm.nih.gov/projects/SNP/</td><td></td><td>mixed</td><td>variation_synonym</td></tr>      <tr><td>3</td><td>LSDB</td><td></td><td>Variants dbSNP annotates as being from LSDBs</td><td>http://www.ncbi.nlm.nih.gov/projects/SNP/</td><td></td><td>germline</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>4</td><td>PubMed</td><td></td><td>Variants with pubmed citations</td><td>http://www.ncbi.nlm.nih.gov/pubmed/</td><td></td><td>germline</td><td></td></tr>      <tr><td>6</td><td>PhenCode</td><td></td><td>PhenCode is a collaborative project to better understand the relationship between genotype and phenotype in humans</td><td>http://phencode.bx.psu.edu/</td><td></td><td></td><td>variation,variation_synonym,structural_variation</td></tr>      <tr class="bg2"><td>7</td><td>ESP</td><td>6500</td><td>NHLBI Exome Sequencing Project</td><td>http://evs.gs.washington.edu/EVS/</td><td></td><td>germline</td><td>variation,variation_synonym</td></tr>      <tr><td>8</td><td>HGMD-PUBLIC</td><td>20132</td><td>Variants from HGMD-PUBLIC dataset June 2013</td><td>NULL</td><td></td><td>germline</td><td>variation,phenotype_feature,study</td></tr>      <tr class="bg2"><td>9</td><td>dbPEX</td><td></td><td>dbPEX, PEX Gene Database</td><td>http://www.dbpex.org/home.php?select_db=PEX1</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr><td>10</td><td>KAT6BDB</td><td></td><td>K(lysine) acetyltransferase 6B database, BCM</td><td>https://grenada.lumc.nl/LOVD2/BCM/home.php?select_db=KAT6B</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>11</td><td>DGVa</td><td>201310</td><td>Database of Genomic Variants Archive</td><td>http://www.ebi.ac.uk/dgva/</td><td></td><td>mixed</td><td>structural_variation,phenotype_feature,study</td></tr>      <tr><td>13</td><td>NHGRI_GWAS_catalog</td><td>20130927</td><td>Variants associated with phenotype data from the NHGRI GWAS catalog</td><td>http://www.genome.gov/gwastudies/</td><td></td><td>germline</td><td>phenotype_feature,study</td></tr>      <tr class="bg2"><td>15</td><td>EGA</td><td>201310</td><td>Variants imported from the European Genome-phenome Archive with phenotype association</td><td>http://www.ebi.ac.uk/ega/</td><td></td><td>germline</td><td>study</td></tr>      <tr><td>16</td><td>Uniprot</td><td>20130918</td><td>Variants with protein annotation imported from Uniprot</td><td>http://www.uniprot.org/</td><td></td><td>mixed</td><td>variation_synonym,phenotype_feature,study</td></tr>      <tr class="bg2"><td>18</td><td>OMIM</td><td>20131022</td><td>Variations linked to entries in the Online Mendelian Inheritance in Man (OMIM) database</td><td>http://www.omim.org/</td><td></td><td>germline</td><td>phenotype_feature,study</td></tr>      <tr><td>19</td><td>Open Access GWAS DB</td><td></td><td>Johnson & O'Donnell 'An Open Access Database of Genome-wide Association Results' PMID:19161620</td><td>http://www.biomedcentral.com/1471-2350/10/6</td><td></td><td>germline</td><td>phenotype_feature,study</td></tr>      <tr class="bg2"><td>20</td><td>Illumina_CytoSNP12v1</td><td></td><td>Variants from the Illumina Cyto SNP-12 v1 whole genome SNP genotyping chip designed for cytogenetic analysis</td><td>http://www.illumina.com/</td><td>chip</td><td>germline</td><td>structural_variation</td></tr>      <tr><td>21</td><td>Illumina_Human660W-quad</td><td></td><td>Variants from the Illumina Human 660W-Quad whole genome SNP genotyping chip designed for association studies</td><td>chip</td><td>chip</td><td></td><td>structural_variation</td></tr>      <tr class="bg2"><td>22</td><td>Illumina_Human1M-duoV3</td><td></td><td>Variants from the Illumina Human 1M-DuoV3 whole genome SNP genotyping chip designed for association studies</td><td>http://www.illumina.com/</td><td>chip</td><td>germline</td><td>structural_variation</td></tr>      <tr><td>23</td><td>Affy GenomeWideSNP_6 CNV</td><td></td><td>Copy Number Variation (CNV) probes from the Affymetrix Genome-Wide Human SNP Array 6.0</td><td>http://www.affymetrix.com/</td><td>chip</td><td>germline</td><td>structural_variation</td></tr>      <tr class="bg2"><td>26</td><td>COSMIC</td><td>67</td><td>Somatic mutations found in human cancers from the COSMIC project</td><td>http://cancer.sanger.ac.uk/cancergenome/projects/cosmic/</td><td></td><td>somatic</td><td>variation,phenotype_feature,study</td></tr>      <tr><td>27</td><td>LSDB_PPIB</td><td>110217</td><td>PPIB homepage - Osteogenesis Imperfecta Variant Database - Leiden Open Variation Database</td><td>https://oi.gene.le.ac.uk/home.php?select_db=PPIB</td><td>lsdb</td><td>mixed</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>28</td><td>LSDB_CRTAP</td><td>110408</td><td>CRTAP homepage - Osteogenesis Imperfecta Variant Database - Leiden Open Variation Database</td><td>https://oi.gene.le.ac.uk/home.php?select_db=CRTAP</td><td>lsdb</td><td>mixed</td><td>variation_synonym</td></tr>      <tr><td>29</td><td>LSDB_LEPRE1</td><td>110408</td><td>LEPRE1 homepage - Osteogenesis Imperfecta Variant Database - Leiden Open Variation Database</td><td>https://oi.gene.le.ac.uk/home.php?select_db=LEPRE1</td><td>lsdb</td><td>mixed</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>30</td><td>LSDB_FKBP10</td><td>110516</td><td>FKBP10 homepage - Osteogenesis Imperfecta Variant Database - Leiden Open Variation Database</td><td>https://oi.gene.le.ac.uk/home.php?select_db=FKBP10</td><td>lsdb</td><td>mixed</td><td>variation_synonym</td></tr>      <tr><td>32</td><td>dbSNP_ClinVar</td><td></td><td>Variants of clinical significance imported from dbSNP/ClinVar</td><td>http://www.ncbi.nlm.nih.gov/projects/SNP/</td><td></td><td>germline</td><td>variation,phenotype_feature</td></tr>      <tr class="bg2"><td>33</td><td>DDG2P</td><td>20131022</td><td>Developmental Disorders Genotype-to-Phenotype Database</td><td> http://decipher.sanger.ac.uk/</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr><td>34</td><td>GIANT</td><td>2010</td><td>The Genetic Investigation of ANthropometric Traits (GIANT) consortium is an international collaboration that seeks to identify genetic loci that modulate human body size and shape, including height and measures of obesity</td><td>http://www.broadinstitute.org/collaboration/giant/index.php/Main_Page</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr class="bg2"><td>35</td><td>OMIMGENE</td><td></td><td>Online Mendelian Inheritance in Man (OMIM) database</td><td>http://www.omim.org/</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr><td>36</td><td>Orphanet</td><td>20131022</td><td>The portal for rare diseases and drugs</td><td>http://www.orpha.net/</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr class="bg2"><td>37</td><td>MAGIC</td><td>2010</td><td>MAGIC (the Meta-Analyses of Glucose and Insulin-related traits Consortium) represents a collaborative effort to combine data from multiple GWAS to identify additional loci that impact on glycemic and metabolic traits</td><td>http://www.magicinvestigators.org/</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr><td>39</td><td>HbVar</td><td></td><td>A Database of Human Hemoglobin Variants and Thalassemias</td><td>http://globin.bx.psu.edu/hbvar/menu.html</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>40</td><td>LMDD</td><td></td><td>Leiden Muscular Dystrophy Database</td><td>http://www.dmd.nl/</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr><td>41</td><td>OIVD</td><td></td><td>Osteogenesis Imperfecta Variant Database</td><td>https://oi.gene.le.ac.uk/home.php</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>42</td><td>PAHdb</td><td></td><td>Phenylalanine hydroxylas database</td><td>http://www.pahdb.mcgill.ca/</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr><td>43</td><td>Infevers</td><td></td><td>The registry of Hereditary Auto-inflammatory Disorders Mutations</td><td>http://fmf.igh.cnrs.fr/ISSAID/infevers/index.php</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>46</td><td>dbGaP</td><td></td><td>The database of Genotypes and Phenotypes.</td><td>http://www.ncbi.nlm.nih.gov/gap</td><td></td><td>germline</td><td>phenotype_feature,study</td></tr>      <tr><td>47</td><td>AMDGC</td><td>1</td><td>The AMD Gene consortium is an international collaboration that seeks to identify genetic loci associated with age-related macular degeneration .</td><td>http://www.sph.umich.edu/csg/abecasis/public/amdgene2012/</td><td></td><td>germline</td><td>phenotype_feature,study</td></tr>      <tr class="bg2"><td>48</td><td>GEFOS</td><td>1</td><td>The GEnetic Factors for OSteoporosis Consortium international collaboration that seeks to identify common risk gene variants for osteoporosis</td><td>http://www.gefos.org</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr><td>49</td><td>IIBDGC</td><td>1</td><td>International Inflammatory Bowel Disease Genetics Consortium</td><td>http://www.ibdgenetics.org/</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr class="bg2"><td>50</td><td>Teslovich</td><td>1</td><td>Biological, clinical and population relevance of 95 loci for blood lipids</td><td>http://www.sph.umich.edu/csg/abecasis/public/lipids2010/</td><td></td><td>germline</td><td>phenotype_feature</td></tr>    </table>
+      <tr><th>source_id</th><th>name</th><th>version</th><th>description</th><th>url</th><th>type</th><th>somatic_status</th><th>data_types</th></tr>      <tr><td>1</td><td>dbSNP</td><td>138</td><td>Variants (including SNPs and indels) imported from dbSNP</td><td>http://www.ncbi.nlm.nih.gov/projects/SNP/</td><td></td><td>mixed</td><td>variation</td></tr>      <tr class="bg2"><td>2</td><td>Archive dbSNP</td><td>138</td><td>Former variants names imported from dbSNP</td><td>http://www.ncbi.nlm.nih.gov/projects/SNP/</td><td></td><td>mixed</td><td>variation_synonym</td></tr>      <tr><td>3</td><td>LSDB</td><td></td><td>Variants dbSNP annotates as being from LSDBs</td><td>http://www.ncbi.nlm.nih.gov/projects/SNP/</td><td></td><td>germline</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>4</td><td>PubMed</td><td></td><td>Variants with pubmed citations</td><td>http://www.ncbi.nlm.nih.gov/pubmed/</td><td></td><td>germline</td><td></td></tr>      <tr><td>6</td><td>PhenCode</td><td></td><td>PhenCode is a collaborative project to better understand the relationship between genotype and phenotype in humans</td><td>http://phencode.bx.psu.edu/</td><td></td><td></td><td>variation,variation_synonym,structural_variation</td></tr>      <tr class="bg2"><td>7</td><td>ESP</td><td>6500</td><td>The goal of the NHLBI GO Exome Sequencing Project is to discover novel genes and mechanisms contributing to heart, lung and blood disorders by sequencing the protein coding regions of the human genome across diverse, richly-phenotyped populations</td><td>http://evs.gs.washington.edu/EVS/</td><td></td><td>germline</td><td>variation,variation_synonym</td></tr>      <tr><td>8</td><td>HGMD-PUBLIC</td><td>20133</td><td>Variants from HGMD-PUBLIC dataset September 2013</td><td>http://www.hgmd.cf.ac.uk/ac/index.php</td><td></td><td>germline</td><td>variation,phenotype_feature</td></tr>      <tr class="bg2"><td>9</td><td>dbPEX</td><td></td><td>dbPEX, PEX Gene Database</td><td>http://www.dbpex.org/home.php?select_db=PEX1</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr><td>10</td><td>KAT6BDB</td><td></td><td>K(lysine) acetyltransferase 6B database, BCM</td><td>https://grenada.lumc.nl/LOVD2/BCM/home.php?select_db=KAT6B</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>11</td><td>DGVa</td><td>201401</td><td>Database of Genomic Variants Archive</td><td>http://www.ebi.ac.uk/dgva/</td><td></td><td>mixed</td><td>structural_variation,phenotype_feature,study</td></tr>      <tr><td>13</td><td>NHGRI_GWAS_catalog</td><td>20131210</td><td>Variants associated with phenotype data from the NHGRI GWAS catalog</td><td>http://www.genome.gov/gwastudies/</td><td></td><td>germline</td><td>phenotype_feature,study</td></tr>      <tr class="bg2"><td>15</td><td>EGA</td><td>201312</td><td>Variants imported from the European Genome-phenome Archive with phenotype association</td><td>http://www.ebi.ac.uk/ega/</td><td></td><td>germline</td><td>study</td></tr>      <tr><td>16</td><td>Uniprot</td><td>20131211</td><td>Variants with protein annotation imported from Uniprot</td><td>http://www.uniprot.org/</td><td></td><td>mixed</td><td>variation_synonym,phenotype_feature,study</td></tr>      <tr class="bg2"><td>18</td><td>OMIM</td><td>20131217</td><td>Variations linked to entries in the Online Mendelian Inheritance in Man (OMIM) database</td><td>http://www.omim.org/</td><td></td><td>germline</td><td>phenotype_feature,study</td></tr>      <tr><td>19</td><td>Open Access GWAS DB</td><td></td><td>Johnson & O'Donnell 'An Open Access Database of Genome-wide Association Results' PMID:19161620</td><td>http://www.biomedcentral.com/1471-2350/10/6</td><td></td><td>germline</td><td>phenotype_feature,study</td></tr>      <tr class="bg2"><td>20</td><td>Illumina_CytoSNP12v1</td><td></td><td>Variants from the Illumina Cyto SNP-12 v1 whole genome SNP genotyping chip designed for cytogenetic analysis</td><td>http://www.illumina.com/</td><td>chip</td><td>germline</td><td>structural_variation</td></tr>      <tr><td>21</td><td>Illumina_Human660W-quad</td><td></td><td>Variants from the Illumina Human 660W-Quad whole genome SNP genotyping chip designed for association studies</td><td>http://www.illumina.com/</td><td>chip</td><td>germline</td><td>structural_variation</td></tr>      <tr class="bg2"><td>22</td><td>Illumina_Human1M-duoV3</td><td></td><td>Variants from the Illumina Human 1M-DuoV3 whole genome SNP genotyping chip designed for association studies</td><td>http://www.illumina.com/</td><td>chip</td><td>germline</td><td>structural_variation</td></tr>      <tr><td>23</td><td>Affy GenomeWideSNP_6 CNV</td><td></td><td>Copy Number Variation (CNV) probes from the Affymetrix Genome-Wide Human SNP Array 6.0</td><td>http://www.affymetrix.com/</td><td>chip</td><td>germline</td><td>structural_variation</td></tr>      <tr class="bg2"><td>26</td><td>COSMIC</td><td>67</td><td>Somatic mutations found in human cancers from the COSMIC project</td><td>http://cancer.sanger.ac.uk/cancergenome/projects/cosmic/</td><td></td><td>somatic</td><td>variation,phenotype_feature</td></tr>      <tr><td>27</td><td>LSDB_PPIB</td><td>110217</td><td>PPIB homepage - Osteogenesis Imperfecta Variant Database - Leiden Open Variation Database</td><td>https://oi.gene.le.ac.uk/home.php?select_db=PPIB</td><td>lsdb</td><td>mixed</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>28</td><td>LSDB_CRTAP</td><td>110408</td><td>CRTAP homepage - Osteogenesis Imperfecta Variant Database - Leiden Open Variation Database</td><td>https://oi.gene.le.ac.uk/home.php?select_db=CRTAP</td><td>lsdb</td><td>mixed</td><td>variation_synonym</td></tr>      <tr><td>29</td><td>LSDB_LEPRE1</td><td>110408</td><td>LEPRE1 homepage - Osteogenesis Imperfecta Variant Database - Leiden Open Variation Database</td><td>https://oi.gene.le.ac.uk/home.php?select_db=LEPRE1</td><td>lsdb</td><td>mixed</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>30</td><td>LSDB_FKBP10</td><td>110516</td><td>FKBP10 homepage - Osteogenesis Imperfecta Variant Database - Leiden Open Variation Database</td><td>https://oi.gene.le.ac.uk/home.php?select_db=FKBP10</td><td>lsdb</td><td>mixed</td><td>variation_synonym</td></tr>      <tr><td>32</td><td>dbSNP_ClinVar</td><td>20131230</td><td>Variants of clinical significance imported from dbSNP/ClinVar</td><td>http://www.ncbi.nlm.nih.gov/projects/SNP/</td><td></td><td>germline</td><td>variation,phenotype_feature</td></tr>      <tr class="bg2"><td>33</td><td>DDG2P</td><td>20131107</td><td>Developmental Disorders Genotype-to-Phenotype Database</td><td>http://decipher.sanger.ac.uk/</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr><td>34</td><td>GIANT</td><td>2010</td><td>The Genetic Investigation of ANthropometric Traits (GIANT) consortium is an international collaboration that seeks to identify genetic loci that modulate human body size and shape, including height and measures of obesity</td><td>http://www.broadinstitute.org/collaboration/giant/index.php/Main_Page</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr class="bg2"><td>35</td><td>OMIMGENE</td><td></td><td>Online Mendelian Inheritance in Man (OMIM) database</td><td>http://www.omim.org/</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr><td>36</td><td>Orphanet</td><td>20131022</td><td>The portal for rare diseases and drugs</td><td>http://www.orpha.net/</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr class="bg2"><td>37</td><td>MAGIC</td><td>2010</td><td>MAGIC (the Meta-Analyses of Glucose and Insulin-related traits Consortium) represents a collaborative effort to combine data from multiple GWAS to identify additional loci that impact on glycemic and metabolic traits</td><td>http://www.magicinvestigators.org/</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr><td>39</td><td>HbVar</td><td></td><td>A Database of Human Hemoglobin Variants and Thalassemias</td><td>http://globin.bx.psu.edu/hbvar/menu.html</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>40</td><td>LMDD</td><td></td><td>Leiden Muscular Dystrophy Database</td><td>http://www.dmd.nl/</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr><td>41</td><td>OIVD</td><td></td><td>Osteogenesis Imperfecta Variant Database</td><td>https://oi.gene.le.ac.uk/home.php</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>42</td><td>PAHdb</td><td></td><td>Phenylalanine hydroxylas database</td><td>http://www.pahdb.mcgill.ca/</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr><td>43</td><td>Infevers</td><td></td><td>The registry of Hereditary Auto-inflammatory Disorders Mutations</td><td>http://fmf.igh.cnrs.fr/ISSAID/infevers/index.php</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>46</td><td>dbGaP</td><td></td><td>The database of Genotypes and Phenotypes.</td><td>http://www.ncbi.nlm.nih.gov/gap</td><td></td><td>germline</td><td>phenotype_feature,study</td></tr>      <tr><td>47</td><td>AMDGC</td><td>1</td><td>The AMD Gene consortium is an international collaboration that seeks to identify genetic loci associated with age-related macular degeneration .</td><td>http://www.sph.umich.edu/csg/abecasis/public/amdgene2012/</td><td></td><td>germline</td><td>phenotype_feature,study</td></tr>      <tr class="bg2"><td>48</td><td>GEFOS</td><td>1</td><td>The GEnetic Factors for OSteoporosis Consortium international collaboration that seeks to identify common risk gene variants for osteoporosis</td><td>http://www.gefos.org</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr><td>49</td><td>IIBDGC</td><td>1</td><td>International Inflammatory Bowel Disease Genetics Consortium</td><td>http://www.ibdgenetics.org/</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr class="bg2"><td>50</td><td>Teslovich</td><td>1</td><td>Biological, clinical and population relevance of 95 loci for blood lipids</td><td>http://www.sph.umich.edu/csg/abecasis/public/lipids2010/</td><td></td><td>germline</td><td>phenotype_feature</td></tr>    </table>
   </div></div>  <p style="margin-top:10px"><b>See also:</b></p>
   <ul>
     <li><a href="#variation">variation</a></li>
@@ -1551,7 +1519,7 @@ tables that they've not used before.
 
 <br /><br />
 <div style="background-color:#F2F2F2;padding:5px;margin:5px 0px;border-top:2px solid #01D4F7">
-  <h2 style="display:inline;color:#000">Structural variation tables</h2>
+  <h2 id="10" style="display:inline;color:#000">Structural variation tables</h2>
 </div>
 <p style="width:800px">These tables define the structural variation data.</p>
   <div id="structural_variation" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
@@ -1696,7 +1664,7 @@ tables that they've not used before.
 
 <br /><br />
 <div style="background-color:#F2F2F2;padding:5px;margin:5px 0px;border-top:2px solid #FF4DC8">
-  <h2 style="display:inline;color:#000">Variation effect tables</h2>
+  <h2 id="11" style="display:inline;color:#000">Variation effect tables</h2>
 </div>
 <p style="width:800px">These tables define the variation effect prediction data in different Ensembl features.</p>
   <div id="motif_feature_variation" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
@@ -1814,7 +1782,7 @@ tables that they've not used before.
 
 <br /><br />
 <div style="background-color:#F2F2F2;padding:5px;margin:5px 0px;border-top:2px solid #FFD700">
-  <h2 style="display:inline;color:#000">Variation set tables</h2>
+  <h2 id="12" style="display:inline;color:#000">Variation set tables</h2>
 </div>
 <p style="width:800px">These tables define the variation and structural variation set data. The complete list of variation sets with their descriptions is available <a href="/info/genome/variation/data_description.html#variation_sets">here</a>.</p>
   <div id="variation_set" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
@@ -1929,7 +1897,7 @@ tables that they've not used before.
 
 <br /><br />
 <div style="background-color:#F2F2F2;padding:5px;margin:5px 0px;border-top:2px solid #000">
-  <h2 style="display:inline;color:#000">Variation tables</h2>
+  <h2 id="13" style="display:inline;color:#000">Variation tables</h2>
 </div>
 <p style="width:800px">These tables define the central variation data.</p>
   <div id="allele" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
