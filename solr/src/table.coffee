@@ -1,4 +1,30 @@
+# The table code exports three classes.
 #
+# TableHolder -- the main class, one per table implemented here.
+#
+# TableState  -- you subclass this and override methods and then supply it.
+#                  Contains callbacks whereby this code can record state
+#                  changes, eg column ordering, filtering, etc. and methods
+#                  to retrieve that info. Usually your implementation will
+#                  put these things in URLs, etc.
+#
+#                  There is a getter/setter method in the superclass for
+#                  each piece of state, which you should leave alone.
+#                  Subclasses just override set() which should pull info
+#                  from these getters and then call their persistence layer.
+#
+# TableSource -- you subclass this and override methods and then supply it.
+#                  Contains callbacks which the table code uses to retrieve
+#                  table contents. Typically this will trigger AJAX calls
+#                  or suchlike. When the data is returned, methods in this
+#                  class are called by you to populate the table.
+#
+#                  You only need implement two methods, columns, which
+#                  contains a list of columns and get to get the data.
+#                  A default implementation of columns is provided which is
+#                  usually fine and is initialised by a call to init in
+#                  your constructor.
+
 _clone_array = (a) -> $.extend(true,[],a)
 
 # XXX clear footer
@@ -235,6 +261,6 @@ class Table
 # XXX periodic headers
 
 window.TableSource = Source
-window.TableState = TableState 
+window.TableState = TableState
 window.search_table = TableHolder
 
