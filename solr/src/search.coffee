@@ -33,31 +33,6 @@ ucfirst = (str) ->
 _is_prefix_of = (small,big) ->
   big.substr(0,small.length) == small
 
-class Sensible
-  constructor: (@nochange_ms,@lastreq_ms,@operation) ->
-    @timeout = undefined
-    @last_request = undefined
-    @last_data = undefined
-    @equal = (a,b) -> a == b
-    @trigger()
-
-  set_equal_fn: (@equal) ->
-
-  submit: (@data) ->
-    if @timeout then clearTimeout(@timeout)
-    @timeout = setTimeout(((v) => @trigger(v)),@nochange_ms)
-    now = new Date().getTime()
-    if (not @last_request?) or now - @last_request > @lastreq_ms
-      @trigger()
-    
-  trigger: ->
-    if not @equal(@last_data,@data)
-      @last_data = @data
-      @last_request = new Date().getTime()
-      @operation(@data)
-
-  current: -> @data
-
 # XXX to perl
 ddg_codes = {
   facet_feature_type:
@@ -587,17 +562,17 @@ class RequestDispatch
 xhr_idx = 1
 class Request
   constructor: (@hub,@source,@renderer) ->
-    @sensible = new Sensible(1000,2000, (v) =>
-      {filter,cols,order,start,rows,next} = v
-      @real_get(filter,cols,order,start,rows, (data) =>
-        if @relevant_data(filter,cols,order,start,rows) then next(data)
-      )
+    @rate_limiter = new window.EphemoralRequestRateLimiter(1000,2000,
+      ((v) =>
+        {filter,cols,order,start,rows,next} = v
+        @real_get(filter,cols,order,start,rows, (data) =>
+          if @relevant_data(filter,cols,order,start,rows) then next(data)
+        )),
+      (a,b) =>
+        a_s = obj_to_str(a,true)
+        b_s = obj_to_str(b,true)
+        a_s == b_s
     )
-    @sensible.set_equal_fn (a,b) =>
-      a_s = obj_to_str(a,true)
-      b_s = obj_to_str(b,true)
-      a_s == b_s
-
     @xhrs = {}
 
     @fc = @fc_key = undefined
@@ -621,7 +596,7 @@ class Request
 
   relevant_data: (filter,cols,order,start,rows) ->
     a = {filter,cols,order,start,rows,next: true}
-    b = _clone_object(@sensible.current())
+    b = _clone_object(@rate_limiter.get())
     [a.filter,aq] = @_remove_q(a.filter)
     [b.filter,bq] = @_remove_q(b.filter)
     # if any of the metadata is different it's not relevant
@@ -636,12 +611,12 @@ class Request
 
   set_rigid_order: (@rigid) ->
 
-  # XXX get rid of force by pushing sensible elsewhere in stack
+  # XXX get rid of force by pushing rate limiter elsewhere in stack
   get: (filter,cols,order,start,rows,next,force) -> # XXX
     if force
       @real_get(filter,cols,order,start,rows,next)
     else
-      @sensible.submit({filter,cols,order,start,rows,next})
+      @rate_limiter.set({filter,cols,order,start,rows,next})
 
   real_get: (filter,cols,order,start,rows,next) -> # XXX
     disp = new RequestDispatch(@,@hub,@source,start,rows,@renderer,cols,next)
