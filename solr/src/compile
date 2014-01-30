@@ -12,6 +12,7 @@ coffee -c textproc2.coffee
 coffee -c selbox.coffee
 coffee -c centered.coffee
 coffee -c config.coffee
+coffee -c deferred_hash.coffee
 
 cd templates
 for tmpl in `ls *_templates.coffee` ; do
@@ -24,8 +25,9 @@ cd ..
 coffee -c obj/template_data.coffee
 
 mv textproc2.js ../htdocs/solr/textproc2.js
-mv search.js ../htdocs/solr/1_solr_search.js
-mv table.js ../htdocs/solr/0_solr_table.js
+mv search.js ../htdocs/solr/02_solr_search.js
+mv table.js ../htdocs/solr/01_solr_table.js
+mv deferred_hash.js ../htdocs/solr/00_solr_deferred_hash.js
 mv template.js ../htdocs/solr/template.js
 mv obj/template_data.js ../htdocs/solr/template_data.js
 mv autocomplete.js ../htdocs/components/65_autocomplete.js

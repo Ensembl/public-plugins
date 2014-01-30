@@ -58,29 +58,6 @@ class Sensible
 
   current: -> @data
 
-class AllDone
-  constructor: (@that,@complete) ->
-    @data = {}
-    @outstanding = {}
-    @num = 0
-    @_go = 0
-
-  add_task: (key) ->
-    @outstanding[key] = 1
-    @num++
-
-  done: (key,data) ->
-    @data[key] = data
-    delete @outstanding[key]
-    @num--
-    if @num == 0 and @_go
-      @complete.call(@that,@data)
-
-  go: ->
-    @_go = 1
-    if @num == 0
-      @complete.call(@that,@data)
-
 # XXX to perl
 ddg_codes = {
   facet_feature_type:
@@ -479,7 +456,7 @@ class RequestDispatch
     more = false
     offset = @start
     num = @rows
-    @completion = new AllDone(@,@completion_fn)
+    @completion = new window.DeferredHash(@,@completion_fn)
     for i in [0..@lens.length-1]
       if offset < @lens[i] and num > 0
         numhere = Math.min(@lens[i] - offset,num)
@@ -531,7 +508,7 @@ class RequestDispatch
     @docs = []
     @results = []
     @lens = []
-    @completion = new AllDone(@,@completion_fn)
+    @completion = new window.DeferredHash(@,@completion_fn)
     @dispatch_facet_request()
     # Need to know the number of results in each category
     # If we don't, fire off requests starting at zero
@@ -578,7 +555,7 @@ class RequestDispatch
     params = _clone_object(@input)
     params.start = start
     params.rows = rows
-    @completion.add_task(idx)
+    @completion.add(idx)
     c = @completion
     @request.do_ajax(params,@cols,( (data) =>
       @lens[idx] = data.num
@@ -589,7 +566,7 @@ class RequestDispatch
 
   dispatch_facet_request: ->
     fq = @input.fq.join(' AND ')
-    @completion.add_task('facet')
+    @completion.add('facet')
     cached = @request.cached_facet(obj_to_str({ q: @input.q, fq }))
     if cached?
       @completion.done('facet',cached)
