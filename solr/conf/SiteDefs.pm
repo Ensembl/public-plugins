@@ -129,6 +129,36 @@ sub update_conf {
       #######################
       highlights => ['description'], # fields to highlight
 
+      #######################
+      # !xxx type shortcuts #
+      #######################
+
+      ddg_codes => {
+        facet_feature_type => {
+          g => 'Gene',
+          t => 'Transcript',
+          rf => 'RegulatoryFeature',
+          doc => 'Documentation',
+          ph => 'Phenotype',
+          sm => 'SomaticMutation',
+          sv => 'StructuralVariation',
+          v => 'Variation',
+          dom => 'Domain',
+          fam => 'Family',
+          pf => 'ProteinFamily',
+          m => 'Marker',
+          s => 'Sequence',
+          ga => 'GenomicAlignment',
+          pf => 'ProbeFeature',
+        },
+        facet_species => {
+          hs => 'Human',
+          mm => 'Mouse',
+          dr => 'Zebrafish',
+          rn => 'Rat',
+        }
+      },
+
       # ZZZ how is this used in standard view?
       # ZZZ rename all_columns and columns
       ######################
