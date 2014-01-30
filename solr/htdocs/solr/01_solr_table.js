@@ -301,70 +301,10 @@
     };
 
     function Table(holder) {
-      var _ref,
-        _this = this;
+      var _ref;
       this.holder = holder;
       this.multisort = (_ref = this.holder.options.multisort) != null ? _ref : true;
-      this.last_scroll_fire = 0;
-      this.artificial_seq = 1;
-      $(window).scroll(function() {
-        return _this.scroll_event(0);
-      });
     }
-
-    Table.prototype.scroll_event = function(artificial) {
-      var now,
-        _this = this;
-      now = new Date().getTime();
-      if (artificial !== 0 && this.artificial_seq !== artificial) {
-        return;
-      }
-      if (now > this.last_scroll_fire + 500) {
-        this.last_scroll_fire = now;
-        return this.did_scroll();
-      } else {
-        if (artificial === 0) {
-          if (this.timer) {
-            clearTimeout(this.timer);
-          }
-          return this.timer = setTimeout((function() {
-            return _this.scroll_event(++_this.artificial_seq);
-          }), 500);
-        }
-      }
-    };
-
-    Table.prototype.did_scroll = function() {
-      return this.reinstate_chunks();
-    };
-
-    Table.prototype.reinstate_chunks = function() {
-      var count, end, height, start, table, targets, top,
-        _this = this;
-      top = $(window).scrollTop();
-      height = $(window).height();
-      start = top - height;
-      end = top + 2 * height;
-      table = this;
-      count = 0;
-      targets = [];
-      $('.search_table_buffer').each(function() {
-        var buffer, buffer_end, buffer_start;
-        buffer = $(this);
-        buffer_start = buffer.offset().top;
-        buffer_end = buffer_start + buffer.height();
-        if (!(buffer_start > end || buffer_end < start)) {
-          return targets.push(buffer);
-        }
-      });
-      if (targets.length) {
-        return table.reinstate_chunk(targets, 0, function() {
-          if (targets.length) {
-            return _this.reinstate_chunks();
-          }
-        });
-      }
-    };
 
     Table.prototype.render_head = function(t_data, data, first) {
       var c, dir, state, _i, _len, _ref;
@@ -398,71 +338,6 @@
         cols: data,
         stripe: this.stripe
       };
-    };
-
-    Table.prototype.reinstate_chunk = function(targets, i, rest) {
-      var buffer, first, idx, last, num, start,
-        _this = this;
-      buffer = targets[i];
-      start = buffer.data('start');
-      num = buffer.data('num');
-      idx = buffer.data('idx');
-      first = buffer.data('first');
-      last = buffer.data('last');
-      return this.get_data(start, num, function(data) {
-        if (idx !== _this.idx) {
-          return;
-        }
-        return _this.render_chunk(data, first, last, false, buffer, function(table) {
-          if (i < targets.length - 1) {
-            return _this.reinstate_chunk(targets, i + 1, rest);
-          } else {
-            return rest();
-          }
-        });
-      });
-    };
-
-    Table.prototype.fake_chunk = function(height, start, num, idx, first, last) {
-      return $('<div/>').addClass('search_table_buffer').height(height).data('start', start).data('num', num).data('idx', idx).data('first', first).data('last', last);
-    };
-
-    Table.prototype.hide_chunk = function(table, height, start, num, idx, first, last) {
-      return table.replaceWith(this.fake_chunk(height, start, num, idx, first, last));
-    };
-
-    Table.prototype.hide_distant_chunks = function() {
-      var distant, end, height, start, t, top, _i, _len, _results;
-      top = $(window).scrollTop();
-      height = $(window).height();
-      start = top - height;
-      end = top + 2 * height;
-      distant = [];
-      this.container.find('.chunk').each(function() {
-        var first, idx, last, num, table, table_end, table_start;
-        table = $(this);
-        table_start = table.offset().top;
-        table_end = table_start + table.height();
-        if (table_start > end || table_end < start) {
-          height = table.outerHeight(true);
-          start = table.data('start');
-          num = table.data('num');
-          idx = table.data('idx');
-          first = table.data('first');
-          last = table.data('last');
-          return distant.push([table, height, start, num, idx, first, last]);
-        }
-      });
-      _results = [];
-      for (_i = 0, _len = distant.length; _i < _len; _i++) {
-        t = distant[_i];
-        _results.push(this.hide_chunk(t[0], t[1], t[2], t[3], t[4], t[5], t[6]));
-      }
-      return _results;
-    };
-
-    Table.prototype.markup_chunk = function(table, start, num, idx, first, last) {
-      return table.data('start', start).data('num', num).data('idx', idx).data('first', first).data('last', last);
     };
 
     Table.prototype.render_data = function(data, first, last) {
@@ -536,20 +411,6 @@
       return next.call(this, outer);
     };
 
-    Table.prototype.average_chunk_height = function() {
-      var height, num;
-      height = 0;
-      num = 0;
-      this.container.find('.chunk').each(function() {
-        height += $(this).outerHeight(true);
-        return num++;
-      });
-      if (num === 0) {
-        num = 1;
-      }
-      return height / num;
-    };
-
     Table.prototype.get_page = function(page, start, got, chunk, idx, getter, iter) {
       var toget,
         _this = this;
@@ -561,36 +422,18 @@
         toget = chunk;
       }
       return getter.call(this, start + got, toget, function(data) {
-        var fake, got_here, more;
+        var more;
         if (idx !== _this.idx) {
           return;
         }
-        if (data.fake != null) {
-          more = !!data.fake_length;
-          fake = _this.fake_chunk(data.fake_height, start + got, toget, idx, got === 0, !more);
-          got_here = data.fake_length;
-          fake.appendTo(_this.container);
+        more = !!((got + data.rows.length < page || page === 0) && data.rows.length);
+        return _this.render_chunk(data, got === 0, !more, true, void 0, function(table) {
+          var got_here;
+          got_here = data.rows.length;
           if (more) {
             return _this.get_page(page, start, got + got_here, chunk, idx, getter, iter + 1);
           }
-        } else {
-          more = !!((got + data.rows.length < page || page === 0) && data.rows.length);
-          return _this.render_chunk(data, got === 0, !more, true, void 0, function(table) {
-            var avg;
-            _this.markup_chunk(table, start + got, toget, idx, got === 0, !more);
-            got_here = data.rows.length;
-            setTimeout((function() {
-              return _this.hide_distant_chunks();
-            }), 0);
-            if (iter === 10) {
-              avg = _this.average_chunk_height();
-              getter = _this.fake_data(data.num, avg);
-            }
-            if (more) {
-              return _this.get_page(page, start, got + got_here, chunk, idx, getter, iter + 1);
-            }
-          });
-        }
+        });
       });
     };
 
@@ -606,27 +449,6 @@
 
     Table.prototype.get_data = function(start, num, more) {
       return this.holder.source.get(this.holder.state.filter(), this.holder.state.columns(), this.holder.state.order(), start, num, more);
-    };
-
-    Table.prototype.fake_data = function(total, height) {
-      var _this = this;
-      return function(start, num, more) {
-        return setTimeout(function() {
-          if (start + num > total) {
-            num = total - start;
-          }
-          if (num < 0) {
-            num = 0;
-          }
-          return more({
-            docs: [],
-            num: total,
-            fake: true,
-            fake_length: num,
-            fake_height: height
-          });
-        }, 0);
-      };
     };
 
     Table.prototype.render = function() {

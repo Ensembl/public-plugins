@@ -146,43 +146,6 @@ class Table
 
   constructor: (@holder) ->
     @multisort = (@holder.options.multisort ? true)
-    @last_scroll_fire = 0
-    @artificial_seq = 1
-    $(window).scroll( => @scroll_event(0) )
-
-  scroll_event: (artificial) ->
-    now = new Date().getTime()
-    if artificial != 0 and @artificial_seq != artificial then return
-    if now > @last_scroll_fire + 500
-      @last_scroll_fire = now
-      @did_scroll()
-    else
-      if artificial == 0
-        if @timer then clearTimeout(@timer)
-        @timer = setTimeout(( => @scroll_event(++@artificial_seq)),500)
-
-  did_scroll: ->
-    @reinstate_chunks()
-
-  reinstate_chunks: ->
-    top = $(window).scrollTop()
-    height = $(window).height()
-    start = top - height
-    end = top + 2 * height
-    table = @
-    count = 0
-    targets = []
-    $('.search_table_buffer').each( ->
-      buffer = $(@)
-      buffer_start = buffer.offset().top
-      buffer_end = buffer_start + buffer.height()
-      unless buffer_start > end or buffer_end < start
-        targets.push(buffer)
-    )
-    if targets.length
-      table.reinstate_chunk targets,0, =>
-        if targets.length
-          @reinstate_chunks()
 
   render_head: (t_data,data,first) ->
     t_data.headings = {}
@@ -202,59 +165,6 @@ class Table
 
 # XXX lru table
 # XXX if top not moved then body not moved
-
-  reinstate_chunk: (targets,i,rest) ->
-    buffer = targets[i]
-    start = buffer.data('start')
-    num = buffer.data('num')
-    idx = buffer.data('idx')
-    first = buffer.data('first')
-    last = buffer.data('last')
-    @get_data start,num, (data) =>
-      if idx != @idx then return
-      @render_chunk(data,first,last,false,buffer, (table) =>
-        if i < targets.length-1
-          @reinstate_chunk(targets,i+1,rest)
-        else
-          rest()
-      )
-
-  fake_chunk: (height,start,num,idx,first,last) ->
-    $('<div/>')
-      .addClass('search_table_buffer')
-      .height(height)
-      .data('start',start)
-      .data('num',num)
-      .data('idx',idx)
-      .data('first',first)
-      .data('last',last)
-
-  hide_chunk: (table,height,start,num,idx,first,last) ->
-    table.replaceWith(@fake_chunk(height,start,num,idx,first,last))
-
-  hide_distant_chunks: ->
-    top = $(window).scrollTop()
-    height = $(window).height()
-    start = top - height
-    end = top + 2 * height
-    distant = []
-    @container.find('.chunk').each( ->
-      table = $(@)
-      table_start = table.offset().top
-      table_end = table_start + table.height()
-      if table_start > end or table_end < start
-        height = table.outerHeight(true)
-        start = table.data('start')
-        num = table.data('num')
-        idx = table.data('idx')
-        first = table.data('first')
-        last = table.data('last')
-        distant.push([table,height,start,num,idx,first,last])
-    )
-    @hide_chunk(t[0],t[1],t[2],t[3],t[4],t[5],t[6]) for t in distant
-
-  markup_chunk: (table,start,num,idx,first,last) ->
-    table.data('start',start).data('num',num).data('idx',idx).data('first',first).data('last',last)
 
   render_data: (data,first,last) ->
     t_data = { table_row: [], rows: [], cols: data.cols }
@@ -289,41 +199,16 @@ class Table
     if first and fire then @holder.table_ready(@container)
     next.call(@,outer)
 
-  average_chunk_height: ->
-    height = 0
-    num = 0
-    @container.find('.chunk').each ->
-      height += $(@).outerHeight(true)
-      num++
-    if num == 0 then num = 1
-    height / num
-
-# XXX calculate actual effective size not 1000000 in case smaller
-# XXX giant clear sidebar
-
   get_page: (page,start,got,chunk,idx,getter,iter = 0) ->
     toget = (if page then page - got else chunk)
     if toget > chunk then toget = chunk
     getter.call @, start+got, toget, (data) =>
       if idx != @idx then return # usurped!
-      if data.fake?
-        more = !!(data.fake_length)
-        fake = @fake_chunk(data.fake_height,start+got,toget,idx,got==0,!more)
-        got_here = data.fake_length
-        fake.appendTo(@container)
+      more = !!((got+data.rows.length < page or page == 0) and data.rows.length )
+      @render_chunk data,got==0,!more,true,undefined, (table) =>
+        got_here = data.rows.length
         if more
           @get_page(page,start,got+got_here,chunk,idx,getter,iter+1)
-      else
-        more = !!((got+data.rows.length < page or page == 0) and data.rows.length )
-        @render_chunk data,got==0,!more,true,undefined, (table) =>
-          @markup_chunk(table,start+got,toget,idx,got==0,!more)
-          got_here = data.rows.length
-          setTimeout(( => @hide_distant_chunks()),0)
-          if iter == 10 # XXX sensible criterion
-            avg = @average_chunk_height()
-            getter = @fake_data(data.num,avg)
-          if more
-            @get_page(page,start,got+got_here,chunk,idx,getter,iter+1)
 
   render_main: (idx) ->
     @stripe = 1
@@ -340,14 +225,6 @@ class Table
 
   get_data: (start,num,more) ->
     @holder.source.get(@holder.state.filter(),@holder.state.columns(),@holder.state.order(),start,num,more)
-
-  fake_data: (total,height) ->
-    (start,num,more) =>
-      setTimeout( =>
-        if start+num > total then num = total-start
-        if num < 0 then num = 0
-        more({ docs: [], num: total, fake: true, fake_length: num, fake_height: height })
-      ,0) # Avoid crowding out user interaction
 
   render: ->
     if @container? then @container.remove()
