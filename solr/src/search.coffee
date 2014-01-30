@@ -1,10 +1,6 @@
 #
 code_select = -> $('#solr_config').length > 0
 
-_div = (klass) -> $("<div class='#{klass}'></div>")
-_span = (klass) -> $("<span class='#{klass}'></span>")
-_a = (url) -> a = $("<a href='#{url}'></a>")
-
 _kv_copy = (old) -> out = {}; out[k] = v for k,v of old; out
 
 _clone_array = (a) -> $.extend(true,[],a)
@@ -696,12 +692,6 @@ class Request
 
 class Renderer
   constructor: (@hub,@source) ->
-
-  render_doc: (results,doc) ->
-    html = _div('solr_result')
-    html.append(_a(results.url(doc)).text(results.id(doc)))
-    html.append(" #{ results.name(doc) } #{ results.type(doc) } #{ results.species(doc) } #{ results.description(doc) }")
-    html
 
   page: (results) ->
     page = parseInt(@hub.page())
