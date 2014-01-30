@@ -23,9 +23,6 @@ obj_to_str = (y,sort) ->
   else
     "-"
 
-ucfirst = (str) ->
-  str.charAt(0).toUpperCase() + str.substring(1)
-
 _is_prefix_of = (small,big) ->
   big.substr(0,small.length) == small
 

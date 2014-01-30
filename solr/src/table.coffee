@@ -1,8 +1,5 @@
 #
-_div = (klass) -> $("<div class='#{klass}'></div>")
-
 _clone_array = (a) -> $.extend(true,[],a)
-_clone_object = (a) -> $.extend(true,{},a)
 
 # XXX clear footer
 
@@ -14,78 +11,8 @@ class Source
 
   columns: -> @cols
 
-  _numcol_filter: (filter) ->
-    out = _clone_array(filter)
-    r.columns = (@colidx[k] for k in r.columns) for r in out
-    out
-
-  _numcol_order: (order) ->
-    out = _clone_array(order) 
-    r.column = @colidx[r.column] for r in out
-    out
-
-  _numcol_cols: (cols) ->
-    out = _clone_array(cols)
-    @colidx[x] for x in out
-
-  _post_sort: (data,order) ->
-    data.sort (a,b) ->
-      for s in order
-        x = (""+a[s.column]).localeCompare(b[s.column])
-        if x then return x*s.order
-      0
-
 # XXX lowercase filter
 # XXX non-string comparison
-class TestSource extends Source
-  _x: (s,i) -> s.substr(i%s.length,1)
-  _m: (s,i) ->
-    out = ''
-    out = out.concat(s) for x in [0..i]
-    out
-
-  constructor: ->
-    @data = []
-    for i in [0..1000]
-      @data.push([i,@_x("ABCDEFGHIJKLMNOPQRSTUVWXYZ",i),@_m("x",i%7),@_x("ZYX",i),@_x("ABCDE",i)])
-    @init([
-      { key: 'first', name: 'First', width: 10 }
-      { key: 'second', name: 'Second', width: 40 }
-      { key: 'third', name: 'Third', width: 20 }
-      { key: 'fourth', name: 'Fourth', width: 10 }
-      { key: 'fifth', name: 'Fifth', width: 20, nosort: 1 }
-    ])
-
-  chunk_size: -> 10 # XXX
-
-  get: (filter,cols,order,start,len,more) ->
-    # replace col names with indices
-    filter = @_numcol_filter(filter)
-    order = @_numcol_order(order) 
-    cols = @_numcol_cols(cols)
-    # filter
-    rows = []
-    for d in @data
-      ok = 1
-      for f in filter
-        pass = 0
-        for c in f.columns
-          if (""+d[c]).indexOf(f.value) != -1 then pass = 1
-        unless pass then ok = 0
-      if ok then rows.push(d)
-    # order
-    rows = @_post_sort(rows,order)
-    # paginate
-    if len
-      rows = rows.splice(start,len)
-    else
-      rows = rows.splice(start,rows.length-start-1)
-    # filter columns
-    out = []
-    for r in rows
-      out.push(r[k] for k in cols)
-    more.call(@,out)
-
 # XXX internal sort, filter etc
 # XXX delay search
 # XXX general ephemora
@@ -293,7 +220,14 @@ class Table
       )
 
   fake_chunk: (height,start,num,idx,first,last) ->
-    _div('search_table_buffer').height(height).data('start',start).data('num',num).data('idx',idx).data('first',first).data('last',last)
+    $('<div/>')
+      .addClass('search_table_buffer')
+      .height(height)
+      .data('start',start)
+      .data('num',num)
+      .data('idx',idx)
+      .data('first',first)
+      .data('last',last)
 
   hide_chunk: (table,height,start,num,idx,first,last) ->
     table.replaceWith(@fake_chunk(height,start,num,idx,first,last))
@@ -418,13 +352,12 @@ class Table
   render: ->
     if @container? then @container.remove()
     @new_idx()
-    @container = _div('search_table')
+    @container = $('<div/>').addClass('search_table')
     @render_main(@idx)
 
 # XXX periodic headers
 
 window.TableSource = Source
-window.test_source = TestSource # XXX
 window.TableState = TableState 
 window.search_table = TableHolder
 
