@@ -381,7 +381,7 @@ class Hub
     changed = @refresh_params()
     @ddg_style_search()
     @remove_unused_params()
-    request = @request() 
+    request = @request()
     rigid = []
     favs = $.solr_config('user.favs.species')
     if favs.length
@@ -454,7 +454,7 @@ class Source extends window.TableSource
   request: -> @req
 
   get: (filter,cols,order,start,rows,result,force) ->
-    @req.get(filter,cols,order,start,rows,result,force) 
+    @req.get(filter,cols,order,start,rows,result,force)
 
   docsize: (params,extra,num) ->
     p = _clone_object(params)
@@ -490,7 +490,7 @@ class RequestDispatch
           more = true
           @dispatch_request(i,offset,numhere)
         num -= numhere
-        offset = 0       
+        offset = 0
       else
         offset -= @lens[i]
     if more
@@ -571,7 +571,7 @@ class RequestDispatch
       delta = ex_start - got_start
       if delta < 0 then return undefined
       docs = got_rdocs.slice(delta,delta+ex_rows)
-      if docs.length < ex_rows then return undefined      
+      if docs.length < ex_rows then return undefined
       docs
 
   dispatch_request: (idx,start,rows) ->
@@ -603,7 +603,7 @@ class RequestDispatch
         facet: true
       }
       @request.raw_ajax params, (data) =>
-        @completion.done('facet',data)  
+        @completion.done('facet',data)
 
 # XXX Faceter orders
 # XXX out of date responses / abort
@@ -638,7 +638,7 @@ class Request
     out = []
     for f in filter
       q = undefined
-      qout = f.value for c in f.columns when c == 'q' 
+      qout = f.value for c in f.columns when c == 'q'
       if not q? then out.push(f)
     [out,qout]
 
@@ -667,7 +667,7 @@ class Request
       @sensible.submit({filter,cols,order,start,rows,next})
 
   real_get: (filter,cols,order,start,rows,next) -> # XXX
-    disp = new RequestDispatch(@,@hub,@source,start,rows,@renderer,cols,next)  
+    disp = new RequestDispatch(@,@hub,@source,start,rows,@renderer,cols,next)
     disp.get(@rigid,filter,order)
 
 # XXX shortcircuit get on satisfied
@@ -690,7 +690,7 @@ class Request
         $('.searchdown-box').css('display','block')
       else
         @hub.unfail()
-        more.call(@,data) 
+        more.call(@,data)
     if !@req_outstanding() then @hub.spin_up()
     @xhrs[idx] = xhr
 
@@ -753,7 +753,7 @@ class Renderer
 
   page: (results) ->
     page = parseInt(@hub.page())
-    if page < 1 or page > results.num_pages() then 1 else page 
+    if page < 1 or page > results.num_pages() then 1 else page
 
   render_stage: (more) ->
     $('.nav-heading').hide()
@@ -849,9 +849,9 @@ class SearchTableState extends window.TableState
     columns = @columns()
     if @_is_default_cols(columns)
       state.columns = ''
-    else 
+    else
       state.columns = columns.join("*")
-    state.q = @_extract_filter('q') 
+    state.q = @_extract_filter('q')
     @hub.update_url(state)
 
 # Go!
