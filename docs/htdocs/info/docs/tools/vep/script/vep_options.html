@@ -798,13 +798,28 @@ host          useastdb.ensembl.org</pre>
         used by default</i>
       </td>
     </tr>
+    <tr id="opt_pick">
+      <td><pre>--pick</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        Pick once line of consequence data per variant, including
+        transcript-specific columns. Consequences are chosen by the canonical,
+        biotype status and length of the transcript, along with the ranking of
+        the consequence type according to <a
+        href="/info/genome/variation/predicted_data.html#consequences">this
+        table</a>. This is the best method to use if you are interested only in
+        one consequence per variant. <i>Not used by default</i>
+      </td>
+    </tr>
     <tr id="opt_most_severe">
       <td><pre>--most_severe</pre></td>
       <td>&nbsp;</td>
       <td>
         Output only the most severe consequence per variation.
-        Transcript-specific columns will be left blank. <i>Not used by
-        default</i>
+        Transcript-specific columns will be left blank. Consequence ranks are
+        given in <a
+        href="/info/genome/variation/predicted_data.html#consequences">this
+        table</a>. <i>Not used by default</i>
       </td>
     </tr>
     <tr id="opt_summary">
@@ -822,7 +837,9 @@ host          useastdb.ensembl.org</pre>
       <td>
         Output only the most severe consequence per gene. The transcript
         selected is arbitrary if more than one has the same predicted
-        consequence. <i>Not used by default</i>
+        consequence. Consequence ranks are given in <a
+        href="/info/genome/variation/predicted_data.html#consequences">this
+        table</a>. <i>Not used by default</i>
       </td>
     </tr>
     <tr id="opt_filter_common">
