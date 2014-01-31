@@ -1,5 +1,5 @@
 /*
- * Copyright [1999-2013] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+ * Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ Ensembl.DbFrontend = Base.extend({
     var self    = this;
     this.panel  = panel;
     this.el     = $(el);
-    $(this.el).off('click').on('click', '._dbf_button', function(event) {
+    $(this.el).off('click').on('click', '._dbf_button, ._dbf_edit', function(event) {
       event.preventDefault();
       self.buttonClick(this);
     });
@@ -81,31 +81,35 @@ Ensembl.DbFrontend = Base.extend({
   createForm: function() {
     if (!this.form) {
       this.form = $('<div>').insertAfter(this.el).hide();
-      this.formInitialised = false;
     }
   },
 
   // initialises the form and binds live events to the form and its buttons
   initForm: function() {
 
-    this.createForm();
-    
-    var self = this;
-    
-    var eventMapper = [
-      ['._dbf_cancel',                  'click',  'cancelButtonClick'],
-      ['form._dbf_preview',             'submit', 'previewFormSubmit'],
-      ['form._dbf_save, form._dbf_add', 'submit', 'formSubmit'       ],
-      ['._dbf_delete',                  'click',  'deleteButtonClick']
-    ];
-    
-    $.each(eventMapper, function() {
-      var eventMap = this;
-      $(self.form).on(eventMap[1], eventMap[0], function (event) {
-        event.preventDefault();
-        self[eventMap[2]](this);
+    if (!this.formInitialised) {
+
+      this.createForm();
+      this.formInitialised = true;
+      
+      var self = this;
+      
+      var eventMapper = [
+        ['._dbf_cancel',                  'click',  'cancelButtonClick'],
+        ['form._dbf_preview',             'submit', 'previewFormSubmit'],
+        ['form._dbf_save, form._dbf_add', 'submit', 'formSubmit'       ],
+        ['._dbf_delete',                  'click',  'deleteButtonClick']
+      ];
+      
+      $.each(eventMapper, function() {
+        var eventMap = this;
+        $(self.form).on(eventMap[1], eventMap[0], function (event) {
+          event.preventDefault();
+          self[eventMap[2]](this);
+        });
       });
-    });
+    
+    }
 
     Ensembl.EventManager.trigger('validateForms', this.form);
     this.initDataStructure(this.form);

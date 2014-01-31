@@ -1,5 +1,5 @@
 /*
- * Copyright [1999-2013] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+ * Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,13 +24,7 @@ Ensembl.Panel.GenoverseTest = Ensembl.Panel.Content.extend({
     
     this.base();
     
-    Ensembl.EventManager.register('ajaxComplete', this, function () {
-      if (typeof Ensembl.PanelManager.panels[id].panelType === 'undefined') {
-        Ensembl.EventManager.trigger('destroyPanel', id);
-      }
-      
-      Ensembl.EventManager.remove(this.id);
-    });
+    Ensembl.EventManager.register('ajaxComplete', this, function () { Ensembl.EventManager.remove(this.id); });
   },
   
   getContent: function (url, el, params, newContent) {

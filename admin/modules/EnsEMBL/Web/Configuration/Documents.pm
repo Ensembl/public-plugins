@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2013] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -46,25 +46,31 @@ sub populate_tree {
       { 'availability' => 1, 'filters' => ['WebAdmin'] }
     ));
 
-    unless ($doc->{'readonly'}) {
-      $menu->append($self->create_node("Edit/$func", 'Edit',
-        [ 'view' => 'EnsEMBL::Admin::Component::Documents::Edit' ],
-        { 'availability' => 1, 'filters' => ['WebAdmin'] }
-      ));
+    $menu->append($self->create_node("Error/$func", 'Error',
+      [ 'error' => 'EnsEMBL::Admin::Component::Documents::View' ], # Intentionally kept same as View Component
+      { 'availability' => 1, 'filters' => ['WebAdmin'], 'no_menu_entry' => 1 }
+    ));
 
-      $menu->append($self->create_node("Preview/$func", 'Preview',
-        [ 'view' => 'EnsEMBL::Admin::Component::Documents::Preview' ],
-        { 'availability' => 1, 'filters' => ['WebAdmin'], 'no_menu_entry' => 1 }
-      ));
-    }
+# TODO - Not yet implemented using git
+#     unless ($doc->{'readonly'}) {
+#       $menu->append($self->create_node("Edit/$func", 'Edit',
+#         [ 'view' => 'EnsEMBL::Admin::Component::Documents::Edit' ],
+#         { 'availability' => 1, 'filters' => ['WebAdmin'] }
+#       ));
+# 
+#       $menu->append($self->create_node("Preview/$func", 'Preview',
+#         [ 'view' => 'EnsEMBL::Admin::Component::Documents::Preview' ],
+#         { 'availability' => 1, 'filters' => ['WebAdmin'], 'no_menu_entry' => 1 }
+#       ));
+#     }
 
-    $menu->append($self->create_node("Update/$func", 'CVS Update', [],
+    $menu->append($self->create_node("Update/$func", 'Update', [],
       { 'command' => 'EnsEMBL::Admin::Command::Documents::Update', 'availability' => 1, 'filters' => ['WebAdmin'] }
     ));
 
-    $self->create_node("Save/$func", 'Save', [],
-      { 'command' => 'EnsEMBL::Admin::Command::Documents::Save',   'availability' => 1, 'filters' => ['WebAdmin'], 'no_menu_entry' => 1 }
-    );
+#     $self->create_node("Save/$func", 'Save', [],
+#       { 'command' => 'EnsEMBL::Admin::Command::Documents::Save',   'availability' => 1, 'filters' => ['WebAdmin'], 'no_menu_entry' => 1 }
+#     );
   }
 }
 

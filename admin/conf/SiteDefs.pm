@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2013] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -65,6 +65,13 @@ sub update_conf {
 
   ## First release from which healthcheck started
   $SiteDefs::ENSEMBL_WEBADMIN_HEALTHCHECK_FIRST_RELEASE = 0;
+
+  ## Git branch on which the website code is updated to on the servers
+  ## Help Images and documents will use this branch for git push and pull
+  $SiteDefs::WEBSITE_GIT_BRANCH = 'master';
+
+  ## Folders being used by the website are not same as the one to be used by git web interface (Help images and relco docs)
+  $SiteDefs::WEBSITE_GIT_FOLDER_SUFFIX = '-readonly';
 
   ## List of database servers hosting species tables (used in healthcheck pages to display list of all databases)
   $SiteDefs::ENSEMBL_WEBADMIN_DB_SERVERS = [{

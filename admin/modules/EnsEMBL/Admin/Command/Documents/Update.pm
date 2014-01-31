@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2013] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -25,8 +25,9 @@ use base qw(EnsEMBL::Web::Command);
 sub process {
   my $self    = shift;
   my $object  = $self->object;
+  my $error   = $object->message_code;
 
-  $self->ajax_redirect($self->hub->url({'action' => 'View', 'function' => $object->function}));
+  $self->ajax_redirect($self->hub->url({'action' => $error ? 'Error' : 'View', 'function' => $object->function, $error ? ('msg' => $error) : ()}));
 }
 
 1;

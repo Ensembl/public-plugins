@@ -1,5 +1,5 @@
 /*
- * Copyright [1999-2013] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+ * Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,8 @@
 
 Ensembl.DbFrontendRow = Ensembl.DbFrontend.extend({
 
+  ROW_HEIGHT_WHEN_EDITING : 100,
+
   // @override
   createForm: function() {
     if (!this.form) {
@@ -39,6 +41,7 @@ Ensembl.DbFrontendRow = Ensembl.DbFrontend.extend({
   // @override
   buttonClick: function(button) {
     this.createForm();
+    this.markAsEditing(!!button.className.match(/_dbf_edit/));
     this.makeRequest(button, this.form, {
       success: function(json) {
         var self = this;
@@ -72,6 +75,7 @@ Ensembl.DbFrontendRow = Ensembl.DbFrontend.extend({
       this.form.slideUp(function() {
         $(this).empty();
       });
+      this.markAsEditing(false);
     }
     this.scrollIn({margin: 5});
   },
@@ -113,6 +117,7 @@ Ensembl.DbFrontendRow = Ensembl.DbFrontend.extend({
           if (problem) {
             this.target = this.form.children().show().last();
           } else {
+            this.markAsEditing(false);
             this.form.empty().hide();
             if (this.action === 'add') {
               this.target = this.el.clone().empty().removeAttr('id').insertAfter(this.form);
@@ -178,6 +183,29 @@ Ensembl.DbFrontendRow = Ensembl.DbFrontend.extend({
     
     if (position) {
       $('html,body').animate({ scrollTop: position}, options.speed);
+    }
+  },
+
+  markAsEditing: function(flag) {
+    var buttonsRow = this.el.find('._dbf_row_buttons');
+    if (flag) {
+      if (!this.editLayer) {
+        var buttonsRowHeight = buttonsRow.outerHeight();
+        var recordHeight = this.el.height();
+        this.editLayer = $('<div class="dbf-row-layer">').appendTo(document.body).css($.extend({
+          height: recordHeight - buttonsRowHeight,
+          width:  this.el.width()
+        }, this.el.offset())).html('Editing&#8230;').animate({height: this.ROW_HEIGHT_WHEN_EDITING - buttonsRowHeight});
+        buttonsRow.addClass('dbf-row-buttons-editing').animate({top: this.ROW_HEIGHT_WHEN_EDITING - recordHeight});
+        this.el.animate({height: this.ROW_HEIGHT_WHEN_EDITING});
+      }
+    } else {
+      if (this.editLayer) {
+        this.editLayer.remove();
+        this.editLayer = null;
+      }
+      buttonsRow.removeClass('dbf-row-buttons-editing').css({top: 'auto'});
+      this.el.css({height: 'auto'});
     }
   }
 });
