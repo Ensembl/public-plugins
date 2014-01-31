@@ -1,0 +1,353 @@
+<html>
+<head>
+<title>Input form</title>
+<meta name="order" content="1" />
+</head>
+
+<body>
+
+	
+	<div style="float:right"><img src="/img/vep_logo.png"/></div>
+	
+  <h1 id="top"><span style="color:#006">Variant Effect Predictor</span> <img
+  src="/i/16/globe.png"> <span style="color:#666">Input form</span></h1>
+	<hr/>
+
+<p> When you reach the VEP web interface, you will be presented with a form to
+enter your data and alter various options. For a quick guide to each of the
+options, hover over the "i" icon next to the option title.</p>
+
+<h2 id="input"> Data input </h2>
+
+<div class="column-wrapper">
+    <div class="column-two">
+      <div class="column-left">
+          <ol>
+              <li> First select the correct species for your data. Ensembl hosts
+              many vertebrate genomes; genomes for plants, protists and fungi
+              can be found at <a href="http://www.ensemblgenomes.org/">Ensembl
+              Genomes</a>. </li>
+              
+              <li> You can optionally choose a name for the data you upload -
+              this can make it easier for you to identify jobs and files that
+              you have uploaded to the VEP at a later point. </li>
+              
+              <li> Select the <a href="../vep_formats.html#input">input
+              format</a> for your data. Ensure you select the correct format for
+              your data - the VEP will check the format of the first line of
+              data that you input and report an error if you select the wrong
+              format, or if your data is incorrectly formatted. </li>
+              
+              <li> You have three options for uploading your data:
+                  
+                  <ul>
+                      <li><b>File upload</b> - click the "Choose file" button
+                      and locate the file on your system</li>
+                      <li><b>Paste file</b> - simply copy and paste the contents
+                      of your file into the large text box</li>
+                      <li><b>File URL</b> - point the VEP to a file hosted on a
+                      publically accessible address. This can be either a
+                      <b>http://</b> or <b>ftp://</b> address.</li>
+                  </ul>
+                  
+                  Once you have uploaded some data, you can select it as the
+                  input for future jobs by choosing the data from the drop down
+                  menu.
+              </li>
+          </ol>
+      </div>
+    </div>
+      
+    <div class="column-two">
+      <div class="column-right" style="padding-left:2em;">
+          <div class="plain-box">
+              <img src="/img/vep_web_input.png">
+          </div>
+      </div>
+    </div>
+</div>
+
+<hr/>
+<h2 id="ident"> Identifiers and co-located variants</h2>
+
+<div class="column-wrapper">
+    <div class="column-two">
+        <div class="column-left">
+            The VEP can provide additional identifiers for genes, transcripts,
+            proteins and variants. It can also search the Ensembl database for
+            known variants that are co-located with variants from your input
+            data.
+            
+            <ul>
+                <li> <b>Gene symbol</b> - add the gene symbol for the gene to
+                the output. This will typically be, for example, the <a
+                href="http://www.genenames.org/" rel="external">HGNC</a>
+                identifier for genes in human. Equivalent to <a
+                href="/info/docs/tools/vep/script/vep_options.html#opt_symbol">--symbol</a>
+                in the VEP script.</li>
+                
+                <li> <b>CCDS</b> - add the <a
+                href="/info/genome/genebuild/ccds.html">Consensus CDS</a>
+                transcript identifier where available. Equivalent to <a
+                href="/info/docs/tools/vep/script/vep_options.html#opt_ccds">--ccds</a></li>
+                
+                <li> <b>Protein</b> - add the Ensembl protein identifer (ENSP).
+                Equivalent to <a
+                href="/info/docs/tools/vep/script/vep_options.html#opt_protein">--protein</a></li>
+                
+                <li> <b>HGVS</b> - generate HGVS identifiers for your input
+                variants relative to the transcript coding sequence (HGVSc) and
+                the protein sequence (HGVSp). Equivalent to <a
+                href="/info/docs/tools/vep/script/vep_options.html#opt_hgvs">--hgvs</a></li>
+            
+                <li>
+                    <p><b>Find co-located known variants</b> - report known
+                    variants from the Ensembl Variation database that overlap
+                    with your input. A list of variant sources imported can be
+                    viewed <a
+                    href="/info/genome/variation/data_description.html#sources">here</a>.
+                    Note that this feature is only available for species with an
+                    Ensembl Variation database. Equivalent to <a
+                    href="/info/docs/tools/vep/script/vep_options.html#opt_check_existing">--check_existing</a>.
+                    </p>
+                    <p> The VEP will also allow you to compare the alleles of
+                    your input variant to that of the existing variant by
+                    selecting "Yes and compare alleles" from the drop-down menu.
+                    By selecting this, the VEP will only report the existing
+                    variant ID if none of the alleles in your input variant are
+                    novel. For example, if your input variant has alleles A/G,
+                    and the existing variant has alleles A/T, then the existing
+                    variant will not be reported. If instead your input variant
+                    has alleles A/T, then the existing variant will be reported.
+                    This is equivalent to using <a
+                    href="/info/docs/tools/vep/script/vep_options.html#opt_check_alleles">--check_alleles</a>
+                    in the VEP script. </p>
+                    <p> The VEP can also report minor allele frequency (MAF)
+                    data for existing variants from two major genotyping
+                    projects, the <a href="http://www.1000genomes.org/"
+                    rel="external">1000 Genomes Project</a> and the <a
+                    href="http://evs.gs.washington.edu/EVS/"
+                    rel="external">NHLBI-ESP</a>; this only applies when you
+                    have selected human as your species.
+                        <ul>
+                            <li><b>1000 Genomes global</b> - the combined phase
+                            1 population (i.e. all individuals from all
+                            populations). Equivalent to <a
+                            href="/info/docs/tools/vep/script/vep_options.html#opt_gmaf">--gmaf</a>
+                            </li>
+                            <li><b>1000 Genomes continental</b> - the four
+                            continent-level populations - AFR (African), AMR
+                            (American), ASN (Asian) and EUR (European). Equivalent to <a
+                            href="/info/docs/tools/vep/script/vep_options.html#opt_maf_1kg">--maf_1kg</a>
+                            </li>
+                            <li><b>ESP</b> - AA (African American) and EA
+                            (European American) populations. Equivalent to <a
+                            href="/info/docs/tools/vep/script/vep_options.html#opt_maf_esp">--maf_esp</a>
+                            </li>
+                        </ul>
+                    </p>
+                </li>
+            </ul>
+        </div>
+    </div>
+      
+    <div class="column-two">
+      <div class="column-right" style="padding-left:2em">
+          <div class="plain-box">
+              <img src="/img/vep_web_ident.png">
+          </div>
+      </div>
+    </div>
+</div>
+
+<hr/>
+
+<h2 id="extra"> Extra options </h2>
+
+<div class="column-wrapper">
+    <div class="column-two">
+        <div class="column-left">
+            <ul>
+                <li> <b>Transcript biotype</b> - add the <a
+                href="/Help/Faq?id=468">transcript biotype</a> to the output.
+                Equivalent to <a
+                href="/info/docs/tools/vep/script/vep_options.html#opt_biotype">--biotype</a> in
+                the VEP script.</li>
+                
+                <li> <b>Protein domains</b> - report <a
+                href="/Help/Glossary?id=18">protein domains</a> from <a
+                href="http://pfam.sanger.ac.uk/" rel="external">Pfam</a>, <a
+                href="http://prosite.expasy.org/" rel="external">Prosite</a> and
+                <a href="http://www.ebi.ac.uk/interpro/"
+                rel="external">InterPro</a> that overlap input variants.
+                Equivalent to <a
+                href="/info/docs/tools/vep/script/vep_options.html#opt_domains">--domains</a></li>
+                
+                <li> <b>Exon and intron numbers</b> - report the exon or intron
+                number that a variant falls in as NUMBER / TOTAL, i.e. exon 2/5
+                means the variant falls in the 2nd of 5 exons in the transcript.
+                Equivalent to <a
+                href="/info/docs/tools/vep/script/vep_options.html#opt_numbers">--numbers</a></li>
+                
+                <li> <b>Identify canonical transcripts</b> - adds a flag to the
+                output indicating if the reported transcript is the <a
+                href="/Help/Glossary?id=346">canonical transcript</a> for the
+                gene. Equivalent to <a
+                href="/info/docs/tools/vep/script/vep_options.html#opt_canonical">--canonical</a></li>
+                
+                <li><b>SIFT predictions</b> - <a rel="external"
+                href="http://sift.jcvi.org/">SIFT</a> predicts whether an amino
+                acid substitution affects protein function based on sequence
+                homology and the physical properties of amino acids. Only
+                available in popular species. For both SIFT and PolyPhen the VEP
+                can report either a score between 0 and 1, a prediction in
+                words, or both. Equivalent to <a
+                href="/info/docs/tools/vep/script/vep_options.html#opt_sift">--sift</a></li>
+                
+                <li><b>PolyPhen predictions</b> - <a rel="external"
+                href="http://genetics.bwh.harvard.edu/pph2/">PolyPhen</a> is a
+                tool which predicts possible impact of an amino acid
+                substitution on the structure and function of a human protein
+                using straightforward physical and comparative considerations.
+                Equivalent to <a
+                href="/info/docs/tools/vep/script/vep_options.html#opt_polyphen">--polyphen</a></li>
+                
+                <li><p><b>Get regulatory region consequences</b> - in addition to
+                predicting consequences with overlapping transcripts, the VEP
+                can find overlaps with known regulatory regions as determined in
+                the <a href="/info/genome/funcgen/index.html">Ensembl Regulatory
+                build</a>.</p>
+                <p>Using this option, the VEP will also report if a
+                variant falls in a transcription factor binding motif, and give
+                a score that reflects whether the altered motif sequence is more
+                or less similar to the consensus.</p>
+                <p>Get regulatory consequences is equivalent to <a
+                href="/info/docs/tools/vep/script/vep_options.html#opt_regulatory">--regulatory</a>
+                </p></li>
+            </ul>
+        </div>
+    </div>
+      
+    <div class="column-two">
+      <div class="column-right" style="padding-left:2em">
+          <div class="plain-box">
+              <img src="/img/vep_web_extra.png">
+          </div>
+      </div>
+    </div>
+</div>
+
+<hr/>
+
+<h2 id="filter"> Filtering options </h2>
+
+<div class="column-wrapper">
+    <div class="column-two">
+        <div class="column-left">
+            The VEP allows you to pre-filter your results e.g. by MAF or
+            consequence type. Note that it is also possible to perform
+            equivalent operations on the results page for the VEP, so if you
+            aren't sure, don't use any of these options! 
+            <ul>
+                <li> <b>By frequency</b> - filter variants by minor allele
+                frequency (MAF). Two options are provided:
+                    <ul>
+                        <li><b>Exclude common variants</b> - filter out variants
+                        that are co-located with an existing variant that has a
+                        frequency greater than 0.01 (1%) in the 1000 Genomes
+                        global population. Equivalent to <a
+                        href="/info/docs/tools/vep/script/vep_options.html#opt_filter_common">--filter_common</a>
+                        in the VEP script.</li>
+                        <li><b>Advanced filtering</b> - enabling this option
+                        allows you to specify a population and frequency to
+                        compare to, as well whether matching variants should be
+                        included or excluded from the results.</li>
+                    </ul>
+                </li>
+                
+                <li> <b>Return results for variants in coding regions only</b> -
+                exclude variants that don't fall in a coding region of a
+                transcript. Equivalent to <a
+                href="/info/docs/tools/vep/script/vep_options.html#opt_coding_only">--coding_only</a></li>
+                
+                <li> <b>Restrict results</b> - for many variants the VEP will
+                report multiple consequence types - typically this is because
+                the variant overlaps more than one transcript. For each of these
+                options the VEP uses consequence ranks that are subjectively
+                determined by Ensembl. <a
+                href="/info/genome/variation/predicted_data.html#consequence_type_table">This
+                table</a> gives all of the consquence types predicted by
+                Ensembl, ordered by rank. Note that enabling one of these
+                options not only loses potentially relevant data, but in some
+                cases may be scientifically misleading. Options:
+                    <ul>
+                        <li><b>Show most severe per gene</b> - pick the
+                        transcript that produces the most severely ranked
+                        consequence on a per-gene basis. Note that if a variant
+                        overlaps more than one gene, output for both genes will
+                        be reported. Equivalent to <a
+                        href="/info/docs/tools/vep/script/vep_options.html#opt_per_gene">--per_gene</a></li>
+                        <li><b>Show only list of consequences per variant</b> -
+                        give a comma-separated list of all observed consequence
+                        types for each variant. No transcript-specific or
+                        gene-specific output will be given. Equivalent to <a
+                        href="/info/docs/tools/vep/script/vep_options.html#opt_summary">--summary</a></li>
+                        <li><b>Show most severe per variant</b> - only the most
+                        severe of all observed consequence types is reported for
+                        each variant. No transcript-specific or gene-specific
+                        output will be given. Equivalent to <a
+                        href="/info/docs/tools/vep/script/vep_options.html#opt_most_severe">--most_severe</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+      
+    <div class="column-two">
+      <div class="column-right" style="padding-left:2em">
+          <div class="plain-box">
+              <img src="/img/vep_web_filter.png">
+          </div>
+      </div>
+    </div>
+</div>
+
+<hr/>
+<h2 id="jobs"> Jobs </h2>
+
+<div class="column-wrapper">
+    <div class="column-two">
+      <div class="column-left">
+          <p>Once you have clicked &quot;Run&quot;, your input will be checked
+          and submitted to the VEP as a job. All jobs associated with your
+          session or account are shown in the &quot;Recent Tickets&quot; table.
+          You may submit multiple jobs simultaneously.</p> <p>The
+          &quot;Jobs&quot; column of the table shows the current status of the
+          job.</p> <ul>
+            <li><b>Queued</b> - your job is waiting to be submitted to the
+            system</li> <li><b>Running</b> - your job is currently running</li>
+            <li><b>Done</b> - your job is finished - click the ticket name to be
+            taken to the results page</li> <li><b>Failed</b> - there is a
+            problem with your job - click the ticket name to see more
+            details</li>
+          </ul> <p>You may delete a job by clicking the trash can icon <img
+          src="/i/16/trash.png">. If you are logged in to Ensembl, you can save
+          the job by clicking the save icon <img src="/i/16/save.png"></p>
+          
+          <p> You may also resubmit a job (for example, to re-run with the same
+          data but change some parameters) by clicking the edit icon <img
+          src="/i/16/pencil.png"></p>
+      </div>
+    </div>
+      
+    <div class="column-two">
+      <div class="column-right" style="padding-left:2em;">
+          <!--<div class="plain-box">-->
+              <img src="/img/vep_web_jobs.png">
+          <!--</div>-->
+      </div>
+    </div>
+</div>
+
+</body>
+</html>
