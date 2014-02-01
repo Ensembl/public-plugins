@@ -352,12 +352,6 @@ class Hub
 # XXX clear and spin during rerequest
 # XXX no results
 
-# We need traditional to be true to send multiple params so can't use $.getJSON
-_ajax_json = (url,data,success) ->
-  $.ajax({
-    url, data, traditional: true, success, dataType: 'json',
-  })
-
 # XXX local sort
 # Send queries
 # XXX more generic cache
@@ -384,41 +378,65 @@ class Source extends window.TableSource
     if num? then @docsizes[str] = num
     @docsizes[str]
 
+# XXX when failure
+each_block = (num,fn) ->
+  requests = []
+  for i in [0...num]
+    requests.push(fn(i))
+  return $.when.apply($,requests).then (args...) ->
+    Array.prototype.slice.call(args)
+
+# XXX low-level cache
+
+dispatch_main_requests = (request,cols,extras,query,start,rows) ->
+  # Calculate block sizes
+  ret = each_block extras.length,(i) =>
+    return request.request_results(query,cols,extras[i], 0, 10)
+      .then (data) ->
+        return data.num
+
+  return ret.then (sizes) =>
+    # ... calculate the requests we will make
+    requests = []
+    offset = 0
+    rows_left = rows
+    for i in [0...extras.length]
+      if start < offset+sizes[i] and start+rows > offset
+        local_offset = start - offset
+        if local_offset < 0 then local_offset = 0
+        requests.push [local_offset,offset,rows_left]
+        rows_left -= sizes[i] - local_offset
+      else
+        requests.push [-1,-1,-1]
+      offset += sizes[i]
+    # ... make the requests
+    results = each_block extras.length, (i) =>
+      if requests[i][0] != -1
+        request.request_results(query,cols,extras[i],requests[i][0],requests[i][2])
+    # ... weld together
+    return results.then (docs_frags) =>
+      docs = []
+      for i in [0...docs_frags.length]
+        if requests[i][0] != -1
+          docs[requests[i][1]..requests[i][1]+docs_frags[i].num] =
+            docs_frags[i].rows
+      return docs
+
+dispatch_facet_request = (hub,request,query) ->
+  fq = query.fq.join(' AND ')
+  params = {
+    q: query.q
+    fq
+    rows: 1
+    'facet.field': hub.all_facets()
+    'facet.mincount': 1
+    facet: true
+  }
+  return request.raw_ajax(params).then (data) =>
+    return data.result?.facet_counts?.facet_fields
+
 class RequestDispatch
   constructor: (@request,@hub,@source,@start,@rows,@renderer,@cols,@next) ->
-
-  completion_fn: (values) ->
-    if values.facet?
-      if values.facet.result? # real response
-        @fdata = values.facet.result?.facet_counts?.facet_fields
-        params = values.facet.result?.responseHeader?.params
-        fkey = { q: params.q, fq: params.fq }
-        @request.cached_facet(obj_to_str(fkey),@fdata)
-      else # cached response
-        @fdata = values.facet
-    more = false
-    offset = @start
-    num = @rows
-    @completion = new window.DeferredHash(@,@completion_fn)
-    for i in [0..@lens.length-1]
-      if offset < @lens[i] and num > 0
-        numhere = Math.min(@lens[i] - offset,num)
-        extract = @extract_results(@results[i],offset,numhere)
-        if extract?
-          @docs = @docs.concat(extract)
-        else
-          more = true
-          @dispatch_request(i,offset,numhere)
-        num -= numhere
-        offset = 0
-      else
-        offset -= @lens[i]
-    if more
-      @completion.go()
-    else
-      num = 0
-      num += x for x in @lens
-      @next.call(@,{ num, faceter: @fdata, rows: @docs, @cols })
 
   get: (rigid,filter,order) -> # XXX
     @request.abort_ajax()
@@ -448,21 +466,11 @@ class RequestDispatch
       'hl.fragsize': 500
     }
     @extra = @expand_criteria(rigid,@remainder_criteria(rigid))
-    @docs = []
-    @results = []
-    @lens = []
-    @completion = new window.DeferredHash(@,@completion_fn)
-    @dispatch_facet_request()
-    # Need to know the number of results in each category
-    # If we don't, fire off requests starting at zero
-    # When that's done completion_fn will do the requests proper.
-    for x in [0..@extra.length-1]
-      num = @source.docsize(@input,@extra[x])
-      if not num?
-        @dispatch_request(x,0,@input.rows)
-      else
-        @lens[x] = num
-    @completion.go()
+    
+    $.when(dispatch_main_requests(@request,@cols,@extra,@input,@start,@rows),
+           dispatch_facet_request(@hub,@request,@input))
+      .done (main,facet) =>
+        @next.call(@,{ num: @rows, faceter: facet, rows: main, @cols })
 
   expand_criteria: (criteria,remainder) ->
     if criteria.length == 0 then return [[]]
@@ -484,46 +492,6 @@ class RequestDispatch
       out[type] = []
       out[type] = out[type].concat(s) for s in sets
     out
-
-  extract_results: (results,ex_start,ex_rows) ->
-    if results?
-      [got_start,got_rows,got_docs,got_rdocs] = results
-      delta = ex_start - got_start
-      if delta < 0 then return undefined
-      docs = got_rdocs.slice(delta,delta+ex_rows)
-      if docs.length < ex_rows then return undefined
-      docs
-
-  dispatch_request: (idx,start,rows) ->
-    params = _clone_object(@input)
-    params.start = start
-    params.rows = rows
-    @completion.add(idx)
-    c = @completion
-    @request.do_ajax(params,@cols,( (data) =>
-      @lens[idx] = data.num
-      @results[idx] = [start,rows,data.docs,data.rows]
-      @source.docsize(@input,@extra[idx],data.num)
-      c.done(idx,data)
-    ),@extra[idx])
-
-  dispatch_facet_request: ->
-    fq = @input.fq.join(' AND ')
-    @completion.add('facet')
-    cached = @request.cached_facet(obj_to_str({ q: @input.q, fq }))
-    if cached?
-      @completion.done('facet',cached)
-    else
-      params = {
-        q: @input.q
-        fq
-        rows: 1
-        'facet.field': @hub.all_facets()
-        'facet.mincount': 1
-        facet: true
-      }
-      @request.raw_ajax params, (data) =>
-        @completion.done('facet',data)
 
 # XXX Faceter orders
 # XXX out of date responses / abort
@@ -599,20 +567,25 @@ class Request
     if @req_outstanding() then @hub.spin_down()
     @xhrs = {}
 
-  # XXX AJAX to plugin
-  raw_ajax: (params,more) ->
+  raw_ajax: (params) ->
     idx = (xhr_idx += 1)
-    xhr = _ajax_json @hub.ajax_url(), params, (data) =>
+    xhr = $.ajax({
+      url: @hub.ajax_url(), data: params,
+      traditional: true, dataType: 'json'
+    })
+    @xhrs[idx] = xhr
+    if !@req_outstanding() then @hub.spin_up()
+    xhr.then (data) =>
       delete @xhrs[idx]
       if !@req_outstanding() then @hub.spin_down()
       if data.error
         @hub.fail()
         $('.searchdown-box').css('display','block')
+        return $.Deferred().reject().promise()
       else
         @hub.unfail()
-        more.call(@,data)
-    if !@req_outstanding() then @hub.spin_up()
-    @xhrs[idx] = xhr
+        return data
+    return xhr
 
   substitute_highlighted: (input,output) ->
     for doc in output.rows
@@ -621,9 +594,11 @@ class Request
         for h in $.solr_config('static.ui.highlights')
           if doc[h] and snippet[h]
             doc[h] = snippet[h].join(' ... ')
-
-  do_ajax: (input,cols,result,extra) ->
-    input = _clone_object(input)
+  
+  request_results: (params,cols,extra,start,rows) ->
+    input = _clone_object(params)
+    input.start = start
+    input.rows = rows
     q = [input.q]
     for [field,invert,values,boost] in extra
       str = (field+':"'+s+'"' for s in values).join(" OR ")
@@ -637,7 +612,7 @@ class Request
         q.push("( "+bq.join(" OR ")+" )")
     if q.length > 1
       input.q = ( "( "+x+" )" for x in q).join(" AND ")
-    @raw_ajax input, (data) =>
+    return @raw_ajax(input).then (data) =>
       num = data.result?.response?.numFound
       docs = data.result?.response?.docs
       table = { rows: docs, hub: @hub }
@@ -647,7 +622,7 @@ class Request
         obj = []
         obj.push(d[c]) for c in cols
         out.push(obj)
-      result.call(@,{ docs: out, num, rows: table.rows, cols })
+      return { docs: out, num, rows: table.rows, cols }
 
   some_query: ->
     $('.page_some_query').show()
