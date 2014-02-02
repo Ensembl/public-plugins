@@ -435,63 +435,68 @@ dispatch_facet_request = (hub,request,query) ->
   return request.raw_ajax(params).then (data) =>
     return data.result?.facet_counts?.facet_fields
 
-class RequestDispatch
-  constructor: (@request,@hub,@source,@start,@rows,@renderer,@cols,@next) ->
+# Generate the criteria for the various blocks by converting
+# configured list to ordered power-set thereof.
 
-  get: (rigid,filter,order) -> # XXX
-    @request.abort_ajax()
-    # Extract filter (from pseudo-column "q") and facets
-    all_facets = @hub.all_facets()
-    facets = {}
-    for fr in filter
-      for c in fr.columns
-        if c == 'q'
-          q = fr.value
-        for fc in all_facets
-          if fc == c
-            facets[c] = fr.value
-    if q?
-      @request.some_query()
-    else
-      @request.no_query()
-      return []
-    if order.length
-      sort = order[0].column+" "+(if order[0].order>0 then 'asc' else 'desc')
-    #
-    @input = {
-      q, @rows, @start, sort
-      fq: ("#{k}:\"#{v}\"" for k,v of facets)
-      hl: 'true'
-      'hl.fl': $.solr_config('static.ui.highlights').join(' ')
-      'hl.fragsize': 500
-    }
-    @extra = @expand_criteria(rigid,@remainder_criteria(rigid))
-    
-    $.when(dispatch_main_requests(@request,@cols,@extra,@input,@start,@rows),
-           dispatch_facet_request(@hub,@request,@input))
-      .done (main,facet) =>
-        @next.call(@,{ num: @rows, faceter: facet, rows: main, @cols })
-
-  expand_criteria: (criteria,remainder) ->
+generate_block_list = (rigid) ->
+  expand_criteria = (criteria,remainder) ->
     if criteria.length == 0 then return [[]]
     [ type,sets,boost ] = criteria[0]
     head = ( [type,false,s,boost] for s in sets )
     head.push([type,true,remainder[type]])
-    rec = @expand_criteria(criteria.slice(1),remainder)
+    rec = expand_criteria(criteria.slice(1),remainder)
     all = []
     for r in rec
       for h in head
         out = _clone_array(r)
         out.push(h)
         all.push(out)
-    all
+    return all
 
-  remainder_criteria: (criteria) ->
+  remainder_criteria = (criteria) ->
     out = {}
     for [type,sets] in criteria
       out[type] = []
       out[type] = out[type].concat(s) for s in sets
-    out
+    return out
+
+  return expand_criteria(rigid,remainder_criteria(rigid))
+
+dispatch_all_requests = (request,hub,start,rows,cols,rigid,filter,order) ->
+  request.abort_ajax()
+  # Extract filter (from pseudo-column "q") and facets
+  all_facets = @hub.all_facets()
+  facets = {}
+  for fr in filter
+    for c in fr.columns
+      if c == 'q'
+        q = fr.value
+      for fc in all_facets
+        if fc == c
+          facets[c] = fr.value
+  if q?
+    request.some_query()
+  else
+    request.no_query()
+    return []
+  if order.length
+    sort = order[0].column+" "+(if order[0].order>0 then 'asc' else 'desc')
+  #
+  input = {
+    q, rows, start, sort
+    fq: ("#{k}:\"#{v}\"" for k,v of facets)
+    hl: 'true'
+    'hl.fl': $.solr_config('static.ui.highlights').join(' ')
+    'hl.fragsize': 500
+  }
+  extra = generate_block_list(rigid)
+  
+  return $.when(
+      dispatch_main_requests(request,cols,extra,input,start,rows),
+      dispatch_facet_request(hub,request,input))
+    .then (main,facet) =>
+      return { num: rows, faceter: facet, rows: main, cols }
+
 
 # XXX Faceter orders
 # XXX out of date responses / abort
@@ -555,8 +560,8 @@ class Request
       @rate_limiter.set({filter,cols,order,start,rows,next})
 
   real_get: (filter,cols,order,start,rows,next) -> # XXX
-    disp = new RequestDispatch(@,@hub,@source,start,rows,@renderer,cols,next)
-    disp.get(@rigid,filter,order)
+    dispatch_all_requests(@,@hub,start,rows,cols,@rigid,filter,order)
+      .done((data) => next(data))
 
 # XXX shortcircuit get on satisfied
 # XXX first page optimise
