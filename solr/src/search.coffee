@@ -270,8 +270,6 @@ class Hub
       @configs[key] = $.parseJSON($("#solr_config span.#{key}").text() ? '{}')
     @configs[key]
 
-  all_facets: -> k.key for k in $.solr_config('static.ui.facets')
-
   request: -> @request_
 
   current_facets: ->
@@ -422,13 +420,13 @@ dispatch_main_requests = (request,cols,extras,query,start,rows) ->
             docs_frags[i].rows
       return { docs, num: offset }
 
-dispatch_facet_request = (hub,request,query) ->
+dispatch_facet_request = (request,query) ->
   fq = query.fq.join(' AND ')
   params = {
     q: query.q
     fq
     rows: 1
-    'facet.field': hub.all_facets()
+    'facet.field': (k.key for k in $.solr_config('static.ui.facets'))
     'facet.mincount': 1
     facet: true
   }
@@ -462,10 +460,10 @@ generate_block_list = (rigid) ->
 
   return expand_criteria(rigid,remainder_criteria(rigid))
 
-dispatch_all_requests = (request,hub,start,rows,cols,rigid,filter,order) ->
+dispatch_all_requests = (request,start,rows,cols,rigid,filter,order) ->
   request.abort_ajax()
   # Extract filter (from pseudo-column "q") and facets
-  all_facets = @hub.all_facets()
+  all_facets = (k.key for k in $.solr_config('static.ui.facets'))
   facets = {}
   for fr in filter
     for c in fr.columns
@@ -493,7 +491,7 @@ dispatch_all_requests = (request,hub,start,rows,cols,rigid,filter,order) ->
   
   return $.when(
       dispatch_main_requests(request,cols,extra,input,start,rows),
-      dispatch_facet_request(hub,request,input))
+      dispatch_facet_request(request,input))
     .then (main,facet) =>
       return { num: main.num, faceter: facet, rows: main.docs, cols }
 
@@ -560,7 +558,7 @@ class Request
       @rate_limiter.set({filter,cols,order,start,rows,next})
 
   real_get: (filter,cols,order,start,rows,next) -> # XXX
-    dispatch_all_requests(@,@hub,start,rows,cols,@rigid,filter,order)
+    dispatch_all_requests(@,start,rows,cols,@rigid,filter,order)
       .done((data) => next(data))
 
 # XXX shortcircuit get on satisfied
@@ -660,12 +658,13 @@ class Renderer
       multisort: 0
       filter_col: 'q'
       update : (data) =>
+        all_facets= (k.key for k in $.solr_config('static.ui.facets'))
         facets = {} 
         for fr in @state.filter()
           for c in fr.columns
             if c == 'q'
               q = fr.value
-            for fc in @hub.all_facets()
+            for fc in all_facets
               if fc == c
                 facets[c] = fr.value
         query = { q, facets }

@@ -545,17 +545,6 @@
       return this.configs[key];
     };
 
-    Hub.prototype.all_facets = function() {
-      var k, _i, _len, _ref, _results;
-      _ref = $.solr_config('static.ui.facets');
-      _results = [];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        k = _ref[_i];
-        _results.push(k.key);
-      }
-      return _results;
-    };
-
     Hub.prototype.request = function() {
       return this.request_;
     };
@@ -791,15 +780,24 @@
     });
   };
 
-  dispatch_facet_request = function(hub, request, query) {
-    var fq, params,
+  dispatch_facet_request = function(request, query) {
+    var fq, k, params,
       _this = this;
     fq = query.fq.join(' AND ');
     params = {
       q: query.q,
       fq: fq,
       rows: 1,
-      'facet.field': hub.all_facets(),
+      'facet.field': (function() {
+        var _i, _len, _ref, _results;
+        _ref = $.solr_config('static.ui.facets');
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          k = _ref[_i];
+          _results.push(k.key);
+        }
+        return _results;
+      })(),
       'facet.mincount': 1,
       facet: true
     };
@@ -856,11 +854,20 @@
     return expand_criteria(rigid, remainder_criteria(rigid));
   };
 
-  dispatch_all_requests = function(request, hub, start, rows, cols, rigid, filter, order) {
+  dispatch_all_requests = function(request, start, rows, cols, rigid, filter, order) {
     var all_facets, c, extra, facets, fc, fr, input, k, q, sort, v, _i, _j, _k, _len, _len1, _len2, _ref,
       _this = this;
     request.abort_ajax();
-    all_facets = this.hub.all_facets();
+    all_facets = (function() {
+      var _i, _len, _ref, _results;
+      _ref = $.solr_config('static.ui.facets');
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        k = _ref[_i];
+        _results.push(k.key);
+      }
+      return _results;
+    })();
     facets = {};
     for (_i = 0, _len = filter.length; _i < _len; _i++) {
       fr = filter[_i];
@@ -906,7 +913,7 @@
       'hl.fragsize': 500
     };
     extra = generate_block_list(rigid);
-    return $.when(dispatch_main_requests(request, cols, extra, input, start, rows), dispatch_facet_request(hub, request, input)).then(function(main, facet) {
+    return $.when(dispatch_main_requests(request, cols, extra, input, start, rows), dispatch_facet_request(request, input)).then(function(main, facet) {
       return {
         num: main.num,
         faceter: facet,
@@ -1037,7 +1044,7 @@
 
     Request.prototype.real_get = function(filter, cols, order, start, rows, next) {
       var _this = this;
-      return dispatch_all_requests(this, this.hub, start, rows, cols, this.rigid, filter, order).done(function(data) {
+      return dispatch_all_requests(this, start, rows, cols, this.rigid, filter, order).done(function(data) {
         return next(data);
       });
     };
@@ -1227,7 +1234,17 @@
         multisort: 0,
         filter_col: 'q',
         update: function(data) {
-          var c, facets, fc, fr, q, query, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2;
+          var all_facets, c, facets, fc, fr, k, q, query, _i, _j, _k, _len, _len1, _len2, _ref, _ref1;
+          all_facets = (function() {
+            var _i, _len, _ref, _results;
+            _ref = $.solr_config('static.ui.facets');
+            _results = [];
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+              k = _ref[_i];
+              _results.push(k.key);
+            }
+            return _results;
+          })();
           facets = {};
           _ref = _this.state.filter();
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -1238,9 +1255,8 @@
               if (c === 'q') {
                 q = fr.value;
               }
-              _ref2 = _this.hub.all_facets();
-              for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
-                fc = _ref2[_k];
+              for (_k = 0, _len2 = all_facets.length; _k < _len2; _k++) {
+                fc = all_facets[_k];
                 if (fc === c) {
                   facets[c] = fr.value;
                 }
