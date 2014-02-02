@@ -14,31 +14,6 @@ $.fn.getCursorPosition = () ->
     sel.moveStart('character', -input.value.length)
     return sel.text.length - selLen
 
-class ACSensible # Move into util class to dedup this from Sensible
-  constructor: (@nochange_ms,@lastreq_ms,@operation) ->
-    @timeout = undefined
-    @last_request = undefined
-    @last_data = undefined
-    @equal = (a,b) -> a == b
-    @trigger()
-
-  set_equal_fn: (@equal) ->
-
-  submit: (@data) ->
-    if @timeout then clearTimeout(@timeout)
-    @timeout = setTimeout(((v) => @trigger(v)),@nochange_ms)
-    now = new Date().getTime()
-    if (not @last_request?) or now - @last_request > @lastreq_ms
-      @trigger()
-        
-  trigger: ->
-    if not @equal(@last_data,@data)
-      @last_data = @data
-      @last_request = new Date().getTime()
-      @operation(@data)
-
-  current: -> @data
-
 favs = undefined
 
 sp_map = {}
@@ -221,27 +196,7 @@ jump_to = (q) ->
         window.location.href = '/'+direct[0].doc.domain_url
     )
 
-sensible = new ACSensible 500,1000, (data) ->
-  url = $('#se_q').parents("form").attr('action')
-  url = url.split('/')[1]
-  if url == 'common' then url = 'Multi'
-  url = "/#{url}/Ajax/search"
-  q = data.q
-  favourite_species data.element, (favs) ->
-    $.when(ac_string_q(url,q),
-            ac_name_q(direct_searches,url,q,favs))
-      .done((string_d,id_d) ->
-        searches = []
-        direct = []
-        out = []
-        ac_string_a(string_d[0],searches)
-        if id_d?[0] then ac_name_a(id_d[0],direct)
-        sort_docs(url,direct,favs, (sorted) ->
-          direct = sorted
-          s.type = 'search' for s in searches
-          d.type = 'direct' for d in direct
-          out = searches.concat(direct)
-          data.response(out)))
+rate_limit = window.rate_limiter(500,1000)
 
 internal_site = (el) ->
   site = el.parents('form').find("input[name='site']").val()
@@ -322,7 +277,28 @@ $.widget('custom.searchac',$.ui.autocomplete,{
   options:
     source: (request,response) ->
       if internal_site(@element)
-        sensible.submit({ q: request.term, response, @element })
+        rate_limit({q: request.term, response, @element }).done (data) =>
+          console.log("callback")
+          url = $('#se_q').parents("form").attr('action')
+          url = url.split('/')[1]
+          if url == 'common' then url = 'Multi'
+          url = "/#{url}/Ajax/search"
+          q = data.q
+          favourite_species data.element, (favs) ->
+            $.when(ac_string_q(url,q),
+                    ac_name_q(direct_searches,url,q,favs))
+              .done((string_d,id_d) ->
+                searches = []
+                direct = []
+                out = []
+                ac_string_a(string_d[0],searches)
+                if id_d?[0] then ac_name_a(id_d[0],direct)
+                sort_docs(url,direct,favs, (sorted) ->
+                  direct = sorted
+                  s.type = 'search' for s in searches
+                  d.type = 'direct' for d in direct
+                  out = searches.concat(direct)
+                  data.response(out)))
       else
         response([])
     select: (e,ui) ->

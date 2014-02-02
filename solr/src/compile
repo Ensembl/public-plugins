@@ -28,7 +28,7 @@ coffee -c obj/template_data.coffee
 mv textproc2.js ../htdocs/solr/textproc2.js
 mv search.js ../htdocs/solr/02_solr_search.js
 mv table.js ../htdocs/solr/01_solr_table.js
-mv utils.js ../htdocs/solr/00_solr_utils.js
+mv utils.js ../htdocs/components/64_solr_utils.js
 mv template.js ../htdocs/solr/template.js
 mv obj/template_data.js ../htdocs/solr/template_data.js
 mv autocomplete.js ../htdocs/components/65_autocomplete.js

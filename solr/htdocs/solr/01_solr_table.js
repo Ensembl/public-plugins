@@ -201,7 +201,7 @@
     };
 
     TableHolder.prototype.get_data = function(start, num, callback) {
-      return this.source.get(this.state.filter(), this.state.columns(), this.state.order(), start, num, callback, true);
+      return this.source.get(this.state.filter(), this.state.columns(), this.state.order(), start, num, callback, false);
     };
 
     TableHolder.prototype.transmit_data = function(el, fn, data) {

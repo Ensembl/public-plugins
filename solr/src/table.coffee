@@ -114,7 +114,7 @@ class TableHolder
 
   get_data: (start,num,callback) ->
     @source.get(@state.filter(),@state.columns(),@state.order(),
-                start,num,callback,true)
+                start,num,callback,false)
 
   # XXX abstract better
   transmit_data: (el,fn,data) ->

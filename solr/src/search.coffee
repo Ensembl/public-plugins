@@ -476,7 +476,7 @@ dispatch_all_requests = (request,start,rows,cols,rigid,filter,order) ->
     request.some_query()
   else
     request.no_query()
-    return []
+    return $.Deferred().reject()
   if order.length
     sort = order[0].column+" "+(if order[0].order>0 then 'asc' else 'desc')
   #
@@ -495,23 +495,14 @@ dispatch_all_requests = (request,start,rows,cols,rigid,filter,order) ->
     .then (main,facet) =>
       return { num: main.num, faceter: facet, rows: main.docs, cols }
 
+rate_limiter = window.rate_limiter(1000,2000)
+main_currency = window.ensure_currency()
 
 # XXX Faceter orders
 # XXX out of date responses / abort
 xhr_idx = 1
 class Request
   constructor: (@hub,@source,@renderer) ->
-    @rate_limiter = new window.EphemoralRequestRateLimiter(1000,2000,
-      ((v) =>
-        {filter,cols,order,start,rows,next} = v
-        @real_get(filter,cols,order,start,rows, (data) =>
-          if @relevant_data(filter,cols,order,start,rows) then next(data)
-        )),
-      (a,b) =>
-        a_s = obj_to_str(a,true)
-        b_s = obj_to_str(b,true)
-        a_s == b_s
-    )
     @xhrs = {}
 
     @fc = @fc_key = undefined
@@ -533,33 +524,23 @@ class Request
       if not q? then out.push(f)
     [out,qout]
 
-  relevant_data: (filter,cols,order,start,rows) ->
-    a = {filter,cols,order,start,rows,next: true}
-    b = _clone_object(@rate_limiter.get())
-    [a.filter,aq] = @_remove_q(a.filter)
-    [b.filter,bq] = @_remove_q(b.filter)
-    # if any of the metadata is different it's not relevant
-    if obj_to_str(a,true) != obj_to_str(b,true) then return false
-    # if a isn't a prefix of b it's not relevant
-    if not _is_prefix_of(aq,bq) then return false
-    # if what's already there is a longer prefix, then it's irrelevant
-    if @current_q? and @current_q.length > aq.length and _is_prefix_of(@current_q,bq)
-      return false
-    @current_q = aq
-    true
-
   set_rigid_order: (@rigid) ->
 
   # XXX get rid of force by pushing rate limiter elsewhere in stack
   get: (filter,cols,order,start,rows,next,force) -> # XXX
     if force
-      @real_get(filter,cols,order,start,rows,next)
+      @real_get(filter,cols,order,start,rows).done((data) => next(data))
     else
-      @rate_limiter.set({filter,cols,order,start,rows,next})
+      current_filter = main_currency()
+      rate_limiter({filter,cols,order,start,rows})
+        .done (data) =>
+          {filter,cols,order,start,rows} = data
+          @real_get(filter,cols,order,start,rows)
+            .then(current_filter)
+            .done((data) => next(data))
 
   real_get: (filter,cols,order,start,rows,next) -> # XXX
     dispatch_all_requests(@,start,rows,cols,@rigid,filter,order)
-      .done((data) => next(data))
 
 # XXX shortcircuit get on satisfied
 # XXX first page optimise
