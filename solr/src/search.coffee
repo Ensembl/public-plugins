@@ -6,26 +6,6 @@ _kv_copy = (old) -> out = {}; out[k] = v for k,v of old; out
 _clone_array = (a) -> $.extend(true,[],a)
 _clone_object = (a) -> $.extend(true,{},a)
 
-obj_to_str = (y,sort) ->
-  if typeof y == 'string' or typeof y == 'number'
-    (y.length + "-" + y)
-  else if y instanceof Array
-    if sort
-      y = _clone_array(y)
-      y.sort()
-    "["+y.length+"-"+(obj_to_str(x) for x in y).join("")
-  else if typeof y == 'object'
-    keys = (k for k,v of y)
-    keys.sort()
-    "{"+obj_to_str([k,y[k]] for k in keys)
-  else if y
-    "+"
-  else
-    "-"
-
-_is_prefix_of = (small,big) ->
-  big.substr(0,small.length) == small
-
 class Hub
   _pair: /([^;&=]+)=?([^;&]*)/g
   _decode: (s) -> decodeURIComponent s.replace(/\+/g," ")
@@ -356,25 +336,14 @@ class Hub
 class Source extends window.TableSource
   constructor: (@hub) ->
     @init($.solr_config('static.ui.all_columns'))
-    @docsizes = {}
 
   make_request: (renderer) ->
     @req = new Request(@hub,@,renderer)
 
-  chunk_size: -> 100 # XXX
+  chunk_size: () -> 100
 
-  request: -> @req
-
-  get: (filter,cols,order,start,rows,result,force) ->
-    @req.get(filter,cols,order,start,rows,result,force)
-
-  docsize: (params,extra,num) ->
-    p = _clone_object(params)
-    delete p.rows
-    delete p.start
-    str = obj_to_str([p,extra])
-    if num? then @docsizes[str] = num
-    @docsizes[str]
+  get: (filter,cols,order,start,rows,force) ->
+    return @req.get(filter,cols,order,start,rows,force)
 
 # XXX when failure
 each_block = (num,fn) ->
@@ -505,41 +474,23 @@ class Request
   constructor: (@hub,@source,@renderer) ->
     @xhrs = {}
 
-    @fc = @fc_key = undefined
-    @current_q = undefined
-
   req_outstanding: -> (k for k,v of @xhrs).length
-
-  cached_facet: (key,data) ->
-    if data?
-      @fc = data
-      @fc_key = key
-    if key == @fc_key then @fc else undefined
-
-  _remove_q: (filter) ->
-    out = []
-    for f in filter
-      q = undefined
-      qout = f.value for c in f.columns when c == 'q'
-      if not q? then out.push(f)
-    [out,qout]
 
   set_rigid_order: (@rigid) ->
 
   # XXX get rid of force by pushing rate limiter elsewhere in stack
-  get: (filter,cols,order,start,rows,next,force) -> # XXX
+  get: (filter,cols,order,start,rows,force) -> # XXX
     if force
-      @real_get(filter,cols,order,start,rows).done((data) => next(data))
+      return @dispatch(filter,cols,order,start,rows)
     else
       current_filter = main_currency()
-      rate_limiter({filter,cols,order,start,rows})
-        .done (data) =>
+      return rate_limiter({filter,cols,order,start,rows})
+        .then (data) =>
           {filter,cols,order,start,rows} = data
-          @real_get(filter,cols,order,start,rows)
+          return @dispatch(filter,cols,order,start,rows)
             .then(current_filter)
-            .done((data) => next(data))
 
-  real_get: (filter,cols,order,start,rows,next) -> # XXX
+  dispatch: (filter,cols,order,start,rows) -> # XXX
     dispatch_all_requests(@,start,rows,cols,@rigid,filter,order)
 
 # XXX shortcircuit get on satisfied

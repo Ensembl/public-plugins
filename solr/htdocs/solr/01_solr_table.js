@@ -201,7 +201,10 @@
     };
 
     TableHolder.prototype.get_data = function(start, num, callback) {
-      return this.source.get(this.state.filter(), this.state.columns(), this.state.order(), start, num, callback, false);
+      var _this = this;
+      return this.source.get(this.state.filter(), this.state.columns(), this.state.order(), start, num, true).done(function(data) {
+        return callback(data);
+      });
     };
 
     TableHolder.prototype.transmit_data = function(el, fn, data) {
@@ -448,7 +451,10 @@
     };
 
     Table.prototype.get_data = function(start, num, more) {
-      return this.holder.source.get(this.holder.state.filter(), this.holder.state.columns(), this.holder.state.order(), start, num, more);
+      var _this = this;
+      return this.holder.source.get(this.holder.state.filter(), this.holder.state.columns(), this.holder.state.order(), start, num).done(function(data) {
+        return more(data);
+      });
     };
 
     Table.prototype.render = function() {

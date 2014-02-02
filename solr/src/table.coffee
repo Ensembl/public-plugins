@@ -114,7 +114,7 @@ class TableHolder
 
   get_data: (start,num,callback) ->
     @source.get(@state.filter(),@state.columns(),@state.order(),
-                start,num,callback,false)
+                start,num,true).done((data) => callback(data))
 
   # XXX abstract better
   transmit_data: (el,fn,data) ->
@@ -250,7 +250,7 @@ class Table
 # XXX odd page sizes
 
   get_data: (start,num,more) ->
-    @holder.source.get(@holder.state.filter(),@holder.state.columns(),@holder.state.order(),start,num,more)
+    @holder.source.get(@holder.state.filter(),@holder.state.columns(),@holder.state.order(),start,num).done((data) => more(data))
 
   render: ->
     if @container? then @container.remove()
