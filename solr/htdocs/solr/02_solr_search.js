@@ -783,7 +783,10 @@
             [].splice.apply(docs, [(_ref2 = requests[i][1]), (requests[i][1] + docs_frags[i].num) - _ref2 + 1].concat(_ref3 = docs_frags[i].rows)), _ref3;
           }
         }
-        return docs;
+        return {
+          docs: docs,
+          num: offset
+        };
       });
     });
   };
@@ -905,9 +908,9 @@
     extra = generate_block_list(rigid);
     return $.when(dispatch_main_requests(request, cols, extra, input, start, rows), dispatch_facet_request(hub, request, input)).then(function(main, facet) {
       return {
-        num: rows,
+        num: main.num,
         faceter: facet,
-        rows: main,
+        rows: main.docs,
         cols: cols
       };
     });

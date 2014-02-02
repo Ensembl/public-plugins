@@ -420,7 +420,7 @@ dispatch_main_requests = (request,cols,extras,query,start,rows) ->
         if requests[i][0] != -1
           docs[requests[i][1]..requests[i][1]+docs_frags[i].num] =
             docs_frags[i].rows
-      return docs
+      return { docs, num: offset }
 
 dispatch_facet_request = (hub,request,query) ->
   fq = query.fq.join(' AND ')
@@ -495,7 +495,7 @@ dispatch_all_requests = (request,hub,start,rows,cols,rigid,filter,order) ->
       dispatch_main_requests(request,cols,extra,input,start,rows),
       dispatch_facet_request(hub,request,input))
     .then (main,facet) =>
-      return { num: rows, faceter: facet, rows: main, cols }
+      return { num: main.num, faceter: facet, rows: main.docs, cols }
 
 
 # XXX Faceter orders
