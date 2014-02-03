@@ -264,7 +264,8 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--cache</pre></td>
       <td>&nbsp;</td>
       <td>
-        Enables use of the <a href="vep_cache.html#cache">cache</a>.
+        Enables use of the <a href="vep_cache.html#cache">cache</a>. Add <a
+        href="#opt_refseq">--refseq</a> to use the refseq cache (if installed).
       </td>
     </tr>
     <tr id="opt_dir">
@@ -295,11 +296,11 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--offline</pre></td>
       <td>&nbsp;</td>
       <td>
-        Enable <a href="vep_cache.html#offline">offline mode</a>. No
-        database connections will be made, and only a complete cache
-        (either downloaded or built using <a
-        href="#opt_build">--build</a>) can be used for this mode. <i>Not
-        used by default</i>
+        Enable <a href="vep_cache.html#offline">offline mode</a>. No database
+        connections will be made, and only a complete cache (either downloaded
+        or built using <a href="#opt_build">--build</a>) can be used for this
+        mode. Add <a href="#opt_refseq">--refseq</a> to use the refseq cache (if
+        installed). <i>Not used by default</i>
       </td>
     </tr>
     <tr id="opt_fasta">
@@ -1043,7 +1044,7 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--refseq</pre></td>
       <td>&nbsp;</td>
       <td>
-        Instead of using the core database, use the otherfeatures
+        <p> Instead of using the core database, use the otherfeatures
         database to retrieve transcripts. This database contains
         transcript objects corresponding to RefSeq transcripts, along
         with CCDS and Ensembl ESTs. Consequence output will be given
@@ -1052,7 +1053,11 @@ host          useastdb.ensembl.org</pre>
         href="/info/docs/api/core/index.html#est">here</a> for more
         details on the contents of the otherfeatures database. The
         otherfeatures database currently only exists for human and
-        mouse. <i>Not used by default</i>
+        mouse. <p>
+        
+        <p> You should also specify this option if you have installed the RefSeq
+        cache in order for the VEP to pick up the alternate cache directory.
+        </p>
       </td>
     </tr>
     <tr id="opt_db_version">
