@@ -279,11 +279,6 @@ class Hub
     @ddg_style_search()
     @remove_unused_params()
     request = @request()
-    rigid = []
-    favs = $.solr_config('user.favs.species')
-    if favs.length
-      rigid.push ['species',[favs],100]
-    request.set_rigid_order(rigid)
     if @first_service
       if parseInt(@params.perpage) == 0 # Override "all" on first load
         @replace_url({ perpage: 10 })
@@ -343,7 +338,13 @@ each_block = (num,fn) ->
 
 # XXX low-level cache
 
-dispatch_main_requests = (request,cols,extras,query,start,rows) ->
+dispatch_main_requests = (request,cols,query,start,rows) ->
+  # Determine what the blocks are to be: XXX cache this
+  rigid = []
+  favs = $.solr_config('user.favs.species')
+  if favs.length
+    rigid.push ['species',[favs],100]
+  extras = generate_block_list(rigid)
   # Calculate block sizes
   ret = each_block extras.length,(i) =>
     return request.request_results(query,cols,extras[i], 0, 10)
@@ -375,9 +376,9 @@ dispatch_main_requests = (request,cols,extras,query,start,rows) ->
         if requests[i][0] != -1
           docs[requests[i][1]..requests[i][1]+docs_frags[i].num] =
             docs_frags[i].rows
-      return { docs, num: offset }
+      return { rows: docs, num: offset, cols }
 
-dispatch_facet_request = (request,query) ->
+dispatch_facet_request = (request,cols,query,start,rows) ->
   fq = query.fq.join(' AND ')
   params = {
     q: query.q
@@ -416,8 +417,13 @@ generate_block_list = (rigid) ->
     return out
 
   return expand_criteria(rigid,remainder_criteria(rigid))
+  
+all_requests = {
+  main: dispatch_main_requests
+  faceter: dispatch_facet_request
+}
 
-dispatch_all_requests = (request,start,rows,cols,rigid,filter,order) ->
+dispatch_all_requests = (request,start,rows,cols,filter,order) ->
   request.abort_ajax()
   # Extract filter (from pseudo-column "q") and facets
   all_facets = (k.key for k in $.solr_config('static.ui.facets'))
@@ -444,13 +450,20 @@ dispatch_all_requests = (request,start,rows,cols,rigid,filter,order) ->
     'hl.fl': $.solr_config('static.ui.highlights').join(' ')
     'hl.fragsize': 500
   }
-  extra = generate_block_list(rigid)
-  
-  return $.when(
-      dispatch_main_requests(request,cols,extra,input,start,rows),
-      dispatch_facet_request(request,input))
-    .then (main,facet) =>
-      return { num: main.num, faceter: facet, rows: main.docs, cols }
+
+  # run all plugins
+  plugin_list = []
+  plugin_actions = []
+  $.each all_requests, (k,v) =>
+    plugin_list.push k
+    plugin_actions.push v(request,cols,input,start,rows)
+  return $.when.apply(@,plugin_actions)
+    .then (results...) =>
+      out = {}
+      for i in [0...results.length]
+        out[plugin_list[i]] = results[i]
+      out.main.faceter = out.faceter # XXX tmp till moved
+      return out
 
 rate_limiter = window.rate_limiter(1000,2000)
 main_currency = window.ensure_currency()
@@ -464,22 +477,20 @@ class Request extends window.TableSource
   
   req_outstanding: -> (k for k,v of @xhrs).length
 
-  set_rigid_order: (@rigid) ->
-
   # XXX get rid of force by pushing rate limiter elsewhere in stack
   get: (filter,cols,order,start,rows,force) ->
     if force
-      return @dispatch(filter,cols,order,start,rows)
+      return @dispatch(filter,cols,order,start,rows).then (data) -> data.main
     else
       current_filter = main_currency()
       return rate_limiter({filter,cols,order,start,rows})
         .then (data) =>
           {filter,cols,order,start,rows} = data
           return @dispatch(filter,cols,order,start,rows)
-            .then(current_filter)
+            .then(current_filter).then (data) -> data.main
 
   dispatch: (filter,cols,order,start,rows) -> # XXX
-    dispatch_all_requests(@,start,rows,cols,@rigid,filter,order)
+    dispatch_all_requests(@,start,rows,cols,filter,order)
 
 # XXX shortcircuit get on satisfied
 # XXX first page optimise
@@ -578,7 +589,7 @@ class Renderer
       multisort: 0
       filter_col: 'q'
       chunk_size: 100
-      update : (table,data) =>
+      update: (table,data) =>
         all_facets= (k.key for k in $.solr_config('static.ui.facets'))
         facets = {} 
         for fr in @state.filter()

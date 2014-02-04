@@ -544,7 +544,7 @@
     };
 
     Hub.prototype.service = function() {
-      var changed, favs, request, rigid,
+      var changed, request,
         _this = this;
       if (this.first_service) {
         if (document.documentMode && document.documentMode < 8) {
@@ -556,12 +556,6 @@
       this.ddg_style_search();
       this.remove_unused_params();
       request = this.request();
-      rigid = [];
-      favs = $.solr_config('user.favs.species');
-      if (favs.length) {
-        rigid.push(['species', [favs], 100]);
-      }
-      request.set_rigid_order(rigid);
       if (this.first_service) {
         if (parseInt(this.params.perpage) === 0) {
           this.replace_url({
@@ -641,9 +635,15 @@
     });
   };
 
-  dispatch_main_requests = function(request, cols, extras, query, start, rows) {
-    var ret,
+  dispatch_main_requests = function(request, cols, query, start, rows) {
+    var extras, favs, ret, rigid,
       _this = this;
+    rigid = [];
+    favs = $.solr_config('user.favs.species');
+    if (favs.length) {
+      rigid.push(['species', [favs], 100]);
+    }
+    extras = generate_block_list(rigid);
     ret = each_block(extras.length, function(i) {
       return request.request_results(query, cols, extras[i], 0, 10).then(function(data) {
         return data.num;
@@ -681,14 +681,15 @@
           }
         }
         return {
-          docs: docs,
-          num: offset
+          rows: docs,
+          num: offset,
+          cols: cols
         };
       });
     });
   };
 
-  dispatch_facet_request = function(request, query) {
+  dispatch_facet_request = function(request, cols, query, start, rows) {
     var fq, k, params,
       _this = this;
     fq = query.fq.join(' AND ');
@@ -762,8 +763,8 @@
     return expand_criteria(rigid, remainder_criteria(rigid));
   };
 
-  dispatch_all_requests = function(request, start, rows, cols, rigid, filter, order) {
-    var all_facets, c, extra, facets, fc, fr, input, k, q, sort, v, _i, _j, _k, _len, _len1, _len2, _ref,
+  dispatch_all_requests = function(request, start, rows, cols, filter, order) {
+    var all_facets, all_requests, c, facets, fc, fr, input, k, plugin_actions, plugin_list, q, sort, v, _i, _j, _k, _len, _len1, _len2, _ref,
       _this = this;
     request.abort_ajax();
     all_facets = (function() {
@@ -820,14 +821,25 @@
       'hl.fl': $.solr_config('static.ui.highlights').join(' '),
       'hl.fragsize': 500
     };
-    extra = generate_block_list(rigid);
-    return $.when(dispatch_main_requests(request, cols, extra, input, start, rows), dispatch_facet_request(request, input)).then(function(main, facet) {
-      return {
-        num: main.num,
-        faceter: facet,
-        rows: main.docs,
-        cols: cols
-      };
+    all_requests = {
+      main: dispatch_main_requests,
+      faceter: dispatch_facet_request
+    };
+    plugin_list = [];
+    plugin_actions = [];
+    $.each(all_requests, function(k, v) {
+      plugin_list.push(k);
+      return plugin_actions.push(v(request, cols, input, start, rows));
+    });
+    return $.when.apply(this, plugin_actions).then(function() {
+      var i, out, results, _l, _ref1;
+      results = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      out = {};
+      for (i = _l = 0, _ref1 = results.length; 0 <= _ref1 ? _l < _ref1 : _l > _ref1; i = 0 <= _ref1 ? ++_l : --_l) {
+        out[plugin_list[i]] = results[i];
+      }
+      out.main.faceter = out.faceter;
+      return out;
     });
   };
 
@@ -860,15 +872,13 @@
       }).call(this)).length;
     };
 
-    Request.prototype.set_rigid_order = function(rigid) {
-      this.rigid = rigid;
-    };
-
     Request.prototype.get = function(filter, cols, order, start, rows, force) {
       var current_filter,
         _this = this;
       if (force) {
-        return this.dispatch(filter, cols, order, start, rows);
+        return this.dispatch(filter, cols, order, start, rows).then(function(data) {
+          return data.main;
+        });
       } else {
         current_filter = main_currency();
         return rate_limiter({
@@ -879,13 +889,15 @@
           rows: rows
         }).then(function(data) {
           filter = data.filter, cols = data.cols, order = data.order, start = data.start, rows = data.rows;
-          return _this.dispatch(filter, cols, order, start, rows).then(current_filter);
+          return _this.dispatch(filter, cols, order, start, rows).then(current_filter).then(function(data) {
+            return data.main;
+          });
         });
       }
     };
 
     Request.prototype.dispatch = function(filter, cols, order, start, rows) {
-      return dispatch_all_requests(this, start, rows, cols, this.rigid, filter, order);
+      return dispatch_all_requests(this, start, rows, cols, filter, order);
     };
 
     Request.prototype.abort_ajax = function() {
