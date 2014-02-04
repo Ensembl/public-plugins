@@ -215,7 +215,9 @@ class Table
       false
     t_main
 
-  render_chunk: (data,first,last,fire,replace,next) ->
+  render_chunk: (data,first,last,fire,replace) ->
+    # Not async right now, but probably will be one day, so use deferred
+    d = $.Deferred()
     if first and fire then @holder.data_actions(data)
     outer = @render_data(data,first,last)
     if replace?
@@ -223,18 +225,24 @@ class Table
     else
       outer.appendTo(@container)
     if first and fire then @holder.table_ready(@container)
-    next.call(@,outer)
+    return d.resolve(data)
 
-  get_page: (page,start,got,chunk,idx,getter,iter = 0) ->
-    toget = (if page then page - got else chunk)
-    if toget > chunk then toget = chunk
-    getter.call @, start+got, toget, (data) =>
-      if idx != @idx then return # usurped!
-      more = !!((got+data.rows.length < page or page == 0) and data.rows.length )
-      @render_chunk data,got==0,!more,true,undefined, (table) =>
-        got_here = data.rows.length
-        if more
-          @get_page(page,start,got+got_here,chunk,idx,getter,iter+1)
+  get_page: (total,start,maxchunksize) ->
+    first = true
+    chunk_loop = (window.then_loop (got) =>
+      if total - got <= 0 then return null
+      chunksize = total - got
+      if chunksize > maxchunksize then chunksize = maxchunksize
+      return @get_data(start+got,chunksize)
+        .then (data) =>
+          finished = (data.rows.length < chunksize or !data.rows.length)
+          got += data.rows.length
+          return @render_chunk(data,first,finished,true,undefined)
+        .then (data) =>
+          first = false
+          return got
+    )
+    return $.Deferred().resolve(0).then(chunk_loop)
 
   render_main: (idx) ->
     @stripe = 1
@@ -242,7 +250,8 @@ class Table
     start = @holder.state.start()
     page = @holder.state.pagesize()
     chunk = @holder.source.chunk_size()
-    @get_page(@holder.state.pagesize(),@holder.state.start(),0,@holder.source.chunk_size(),idx,@get_data)
+    @get_page(@holder.state.pagesize(),@holder.state.start(),@holder.source.chunk_size())
+#    @old_get_page(@holder.state.pagesize(),@holder.state.start(),0,@holder.source.chunk_size(),idx,@get_data)
 
 # XXX only deform on giant tables
 # XXX reorderable cols
@@ -250,7 +259,7 @@ class Table
 # XXX odd page sizes
 
   get_data: (start,num,more) ->
-    @holder.source.get(@holder.state.filter(),@holder.state.columns(),@holder.state.order(),start,num).done((data) => more(data))
+    @holder.source.get(@holder.state.filter(),@holder.state.columns(),@holder.state.order(),start,num)
 
   render: ->
     if @container? then @container.remove()

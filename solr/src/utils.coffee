@@ -23,7 +23,6 @@ window.rate_limiter = (nochange_ms,lastreq_ms) ->
 
 window.ensure_currency = () ->
   idx = 0
-
   return () ->
     idx += 1
     return ((cidx) ->
@@ -34,4 +33,13 @@ window.ensure_currency = () ->
           return $.Deferred().reject()
         )
     )(idx)
-   
+
+window.then_loop = (fn) ->
+  step = (v) ->
+    d = fn(v)
+    if d and $.isFunction(d.promise)
+      return d.then(step)
+    else
+      return d
+  return step
+

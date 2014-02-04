@@ -46,4 +46,18 @@
     };
   };
 
+  window.then_loop = function(fn) {
+    var step;
+    step = function(v) {
+      var d;
+      d = fn(v);
+      if (d && $.isFunction(d.promise)) {
+        return d.then(step);
+      } else {
+        return d;
+      }
+    };
+    return step;
+  };
+
 }).call(this);

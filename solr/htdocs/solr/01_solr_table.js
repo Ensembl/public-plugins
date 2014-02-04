@@ -397,8 +397,9 @@
       return t_main;
     };
 
-    Table.prototype.render_chunk = function(data, first, last, fire, replace, next) {
-      var outer;
+    Table.prototype.render_chunk = function(data, first, last, fire, replace) {
+      var d, outer;
+      d = $.Deferred();
       if (first && fire) {
         this.holder.data_actions(data);
       }
@@ -411,33 +412,33 @@
       if (first && fire) {
         this.holder.table_ready(this.container);
       }
-      return next.call(this, outer);
+      return d.resolve(data);
     };
 
-    Table.prototype.get_page = function(page, start, got, chunk, idx, getter, iter) {
-      var toget,
+    Table.prototype.get_page = function(total, start, maxchunksize) {
+      var chunk_loop, first,
         _this = this;
-      if (iter == null) {
-        iter = 0;
-      }
-      toget = (page ? page - got : chunk);
-      if (toget > chunk) {
-        toget = chunk;
-      }
-      return getter.call(this, start + got, toget, function(data) {
-        var more;
-        if (idx !== _this.idx) {
-          return;
+      first = true;
+      chunk_loop = window.then_loop(function(got) {
+        var chunksize;
+        if (total - got <= 0) {
+          return null;
         }
-        more = !!((got + data.rows.length < page || page === 0) && data.rows.length);
-        return _this.render_chunk(data, got === 0, !more, true, void 0, function(table) {
-          var got_here;
-          got_here = data.rows.length;
-          if (more) {
-            return _this.get_page(page, start, got + got_here, chunk, idx, getter, iter + 1);
-          }
+        chunksize = total - got;
+        if (chunksize > maxchunksize) {
+          chunksize = maxchunksize;
+        }
+        return _this.get_data(start + got, chunksize).then(function(data) {
+          var finished;
+          finished = data.rows.length < chunksize || !data.rows.length;
+          got += data.rows.length;
+          return _this.render_chunk(data, first, finished, true, void 0);
+        }).then(function(data) {
+          first = false;
+          return got;
         });
       });
+      return $.Deferred().resolve(0).then(chunk_loop);
     };
 
     Table.prototype.render_main = function(idx) {
@@ -447,14 +448,11 @@
       start = this.holder.state.start();
       page = this.holder.state.pagesize();
       chunk = this.holder.source.chunk_size();
-      return this.get_page(this.holder.state.pagesize(), this.holder.state.start(), 0, this.holder.source.chunk_size(), idx, this.get_data);
+      return this.get_page(this.holder.state.pagesize(), this.holder.state.start(), this.holder.source.chunk_size());
     };
 
     Table.prototype.get_data = function(start, num, more) {
-      var _this = this;
-      return this.holder.source.get(this.holder.state.filter(), this.holder.state.columns(), this.holder.state.order(), start, num).done(function(data) {
-        return more(data);
-      });
+      return this.holder.source.get(this.holder.state.filter(), this.holder.state.columns(), this.holder.state.order(), start, num);
     };
 
     Table.prototype.render = function() {
