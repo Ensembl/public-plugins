@@ -30,12 +30,6 @@ _clone_array = (a) -> $.extend(true,[],a)
 # XXX clear footer
 
 class Source
-  init: (cols) ->
-    @cols = $.extend(true,[],cols)
-    @colidx = []
-    @colidx[@cols[i].key] = i for i in [0..@cols.length-1]
-
-  columns: -> @cols
 
 # XXX lowercase filter
 # XXX non-string comparison
@@ -44,8 +38,7 @@ class Source
 # XXX general ephemora
 
 class TableState
-  constructor: (@source,el) ->
-    scols = @source.columns()
+  constructor: (el,scols) ->
     @_filter = []
     @_order = []
     @_colkey = {}
@@ -91,30 +84,31 @@ class TableState
   coldata: -> (@_colkey[k] for k in @el.data('columns'))
   sortkey: (k) -> @_sortkey[k]
   associate: (@table) ->
-  set: -> @table.render()
-
 
 class TableHolder
   constructor: (@templates,@source,@state,@options = {}) ->
     @state.associate(@)
+    if not @options.chunk_size? then @options.chunk_size = 1000
 
   # Used for download links
-  get_all_data: (callback) ->
-    out = { rows: [] }
-    @get_some_data(0,100,out,callback)
-
-  get_some_data: (start,num,acc,callback) ->
-    @get_data start,num, (data) =>
-      if data.rows.length == 0 or (@max? and start+data.rows.length > @max)
-        callback(acc)
+  get_all_data: () ->
+    num = 100
+    chunk_loop = (window.then_loop ([acc,start,halt]) =>
+      console.log(acc,start,halt)
+      if halt then return acc
       else
-        if data.cols? and not acc.cols? then acc.cols = data.cols
-        acc.rows = acc.rows.concat(data.rows)
-        @get_some_data(start+data.rows.length,num,acc,callback)
+        return @get_data(start,num).then (data) =>
+          if data.cols? and not acc.cols? then acc.cols = data.cols
+          if data.rows.length == 0 or (@max? and start+data.rows.length > @max)
+            halt = 1
+          acc.rows = acc.rows.concat(data.rows)
+          return [acc,start+data.rows.length,halt]
+    )
+    return $.Deferred().resolve([{ rows: [] },0,0]).then(chunk_loop)
 
-  get_data: (start,num,callback) ->
-    @source.get(@state.filter(),@state.columns(),@state.order(),
-                start,num,true).done((data) => callback(data))
+  get_data: (start,num) ->
+    return @source.get(@state.filter(),@state.columns(),@state.order(),
+                       start,num,true)
 
   # XXX abstract better
   transmit_data: (el,fn,data) ->
@@ -135,17 +129,16 @@ class TableHolder
   # END used for download links
 
   generate_model: (extra) ->
-    model = {
+    return {
       table_ready: (el,data) => @collect_view_model(el,data)
       state: @state
       download_curpage: (el,fn) =>
-        @get_data(@state.start(),@state.pagesize(), (data) =>
+        @get_data(@state.start(),@state.pagesize()).done((data) =>
           @transmit_data(el,fn,data)
         )
       download_all: (el,fn) =>
-        @get_all_data((data) => @transmit_data(el,fn,data))
+        @get_all_data().done((data) => @transmit_data(el,fn,data))
     }
-    model
 
   collect_view_model: (el,data) ->
     @outer = el
@@ -163,7 +156,7 @@ class TableHolder
 
   data_actions: (data) ->
     if @options.update?
-      @options.update.call(@,data)
+      @options.update(@,data)
 
 class Table
   _idx = 0
@@ -188,7 +181,6 @@ class Table
     @stripe = !@stripe
     { cols: data, stripe: @stripe }
 
-# XXX lru table
 # XXX if top not moved then body not moved
 
   render_data: (data,first) ->
@@ -213,7 +205,7 @@ class Table
       false
     t_main
 
-  render_chunk: (e,data,first) ->
+  render_chunk: (data,first) ->
     # Not async right now, but probably will be one day, so use deferred
     d = $.Deferred()
     if first then @holder.data_actions(data)
@@ -231,7 +223,7 @@ class Table
       return @get_data(start+got,chunksize)
         .then (data) =>
           got += data.rows.length
-          return @render_chunk(e,data,first)
+          return @render_chunk(data,first)
         .then (data) =>
           first = false
           return got
@@ -242,7 +234,7 @@ class Table
     @stripe = 1
     start = @holder.state.start()
     page = @holder.state.pagesize()
-    chunk = @holder.source.chunk_size()
+    chunk = @holder.options.chunk_size
     return @get_page(page,start,chunk)
 
 # XXX only deform on giant tables
@@ -250,7 +242,7 @@ class Table
 # XXX stripes and hidden chunks
 # XXX odd page sizes
 
-  get_data: (start,num,more) ->
+  get_data: (start,num) ->
     @holder.source.get(@holder.state.filter(),@holder.state.columns(),@holder.state.order(),start,num)
 
   render: ->

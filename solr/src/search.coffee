@@ -42,9 +42,8 @@ class Hub
       @sections = {}
       @interest = {}
       @first_service = 1
-      @source = new Source(@)
+      @source = new Request(@)
       @renderer = new Renderer(@,@source)
-      @request_ = @source.make_request(@renderer)
       $(window).bind('popstate',((e) => @service()))
       $(document).ajaxError => @fail()
       @spin = 0
@@ -250,7 +249,7 @@ class Hub
       @configs[key] = $.parseJSON($("#solr_config span.#{key}").text() ? '{}')
     @configs[key]
 
-  request: -> @request_
+  request: -> @source
 
   current_facets: ->
     out = {}
@@ -333,17 +332,6 @@ class Hub
 # XXX local sort
 # Send queries
 # XXX more generic cache
-class Source extends window.TableSource
-  constructor: (@hub) ->
-    @init($.solr_config('static.ui.all_columns'))
-
-  make_request: (renderer) ->
-    @req = new Request(@hub,@,renderer)
-
-  chunk_size: () -> 100
-
-  get: (filter,cols,order,start,rows,force) ->
-    return @req.get(filter,cols,order,start,rows,force)
 
 # XXX when failure
 each_block = (num,fn) ->
@@ -470,16 +458,16 @@ main_currency = window.ensure_currency()
 # XXX Faceter orders
 # XXX out of date responses / abort
 xhr_idx = 1
-class Request
-  constructor: (@hub,@source,@renderer) ->
+class Request extends window.TableSource
+  constructor: (@hub) ->
     @xhrs = {}
-
+  
   req_outstanding: -> (k for k,v of @xhrs).length
 
   set_rigid_order: (@rigid) ->
 
   # XXX get rid of force by pushing rate limiter elsewhere in stack
-  get: (filter,cols,order,start,rows,force) -> # XXX
+  get: (filter,cols,order,start,rows,force) ->
     if force
       return @dispatch(filter,cols,order,start,rows)
     else
@@ -583,13 +571,14 @@ class Renderer
     $('.nav-heading').hide()
     main = $('#solr_content').empty()
     # Move from solr_content to table
-    @state = new SearchTableState(@hub,@source,$('#solr_content'))
+    @state = new SearchTableState(@hub,$('#solr_content'),$.solr_config('static.ui.all_columns'))
 
     $(document).data('templates',@hub.templates())
     @table = new window.search_table(@hub.templates(),@source,@state,{
       multisort: 0
       filter_col: 'q'
-      update : (data) =>
+      chunk_size: 100
+      update : (table,data) =>
         all_facets= (k.key for k in $.solr_config('static.ui.facets'))
         facets = {} 
         for fr in @state.filter()
@@ -631,8 +620,8 @@ class Renderer
     if page.layouts.set_fn? then page.layouts.set_fn(clayout)
 
 class SearchTableState extends window.TableState
-  constructor: (@hub,source,element) ->
-    super(source,element)
+  constructor: (@hub,source,element,columns) ->
+    super(source,element,columns)
 
   update: ->
     if @hub.sort()
