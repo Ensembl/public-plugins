@@ -3,6 +3,16 @@
 <title>Variant Effect Predictor</title>
 </head>
 <body>
+<style>
+img.opaque-hover:hover {
+    opacity:0.6;
+    filter:alpha(opacity=60);
+}
+img.opaque-hover {
+    opacity:1.0;
+    filter:alpha(opacity=100);
+}
+</style>
 
 	<div style="float:right"><img src="/img/vep_logo.png"/></div>
 	
@@ -26,8 +36,8 @@ coordinates of your variants and the nucleotide changes to find out the:</p>
 <li>... And <a href="/info/docs/tools/vep/online/input.html#ident">more!</a></li>
 </ul>
       <p class="center"><a
-href="/[[SPECIESDEFS::ENSEMBL_PRIMARY_SPECIES]]/Tools/VEP"
-class="modal_link"><img src="/img/vep_launch.png"></a></p>
+      href="/[[SPECIESDEFS::ENSEMBL_PRIMARY_SPECIES]]/Tools/VEP" class="_ht"
+      title="Launch the web interface"><img src="/img/vep_launch.png" class="opaque-hover"></a></p>
 <!--      <div class="plain-box">-->
 <!--<h2>Sample output</h2>-->
 <!--<p><img src="/img/vep_output.jpg" title="Sample VEP results table" alt="screenshot" /></p>-->
@@ -69,7 +79,7 @@ class="modal_link"><img src="/img/vep_launch.png"></a></p>
       </ul>
     </div>
     <div><img src="/i/16/documentation.png"> <a href="/info/docs/tools/vep/script/index.html">Documentation</a></div>
-    <div><img src="/i/16/download.png"> <a href="http://cvs.sanger.ac.uk/cgi-bin/viewvc.cgi/ensembl-tools/scripts/variant_effect_predictor.tar.gz?view=tar&root=ensembl&pathrev=branch-ensembl-[[SPECIESDEFS::ENSEMBL_VERSION]]">Download latest version</a></div>
+    <div><img src="/i/16/download.png"> <a href="https://github.com/Ensembl/ensembl-tools/archive/release/[[SPECIESDEFS::ENSEMBL_VERSION]].zip">Download latest version</a></div>
   </div>
 </div>
 
