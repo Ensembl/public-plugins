@@ -183,7 +183,6 @@ class Table
       t_data.headings[c.key] = { text: c?.name, state, key: c.key, dir}
     t_data.first = first
 
-  render_tail: (table,data) ->
 
   render_row: (data) ->
     @stripe = !@stripe
@@ -192,14 +191,13 @@ class Table
 # XXX lru table
 # XXX if top not moved then body not moved
 
-  render_data: (data,first,last) ->
+  render_data: (data,first) ->
     t_data = { table_row: [], rows: [], cols: data.cols }
     widths = (c.percent for c in @holder.state.coldata())
     t_data.widths = widths
     @render_head(t_data,data,first)
     for r in data.rows
       t_data.rows.push(@render_row(r))
-    if last then @render_tail(t_data,data)
     t_main = @holder.templates.generate('chunk',t_data)
     # Bind events
     table = @
@@ -215,16 +213,13 @@ class Table
       false
     t_main
 
-  render_chunk: (data,first,last,fire,replace) ->
+  render_chunk: (e,data,first) ->
     # Not async right now, but probably will be one day, so use deferred
     d = $.Deferred()
-    if first and fire then @holder.data_actions(data)
-    outer = @render_data(data,first,last)
-    if replace?
-      replace.replaceWith(outer)
-    else
-      outer.appendTo(@container)
-    if first and fire then @holder.table_ready(@container)
+    if first then @holder.data_actions(data)
+    outer = @render_data(data,first)
+    outer.appendTo(@container)
+    if first then @holder.table_ready(@container)
     return d.resolve(data)
 
   get_page: (total,start,maxchunksize) ->
@@ -235,9 +230,8 @@ class Table
       if chunksize > maxchunksize then chunksize = maxchunksize
       return @get_data(start+got,chunksize)
         .then (data) =>
-          finished = (data.rows.length < chunksize or !data.rows.length)
           got += data.rows.length
-          return @render_chunk(data,first,finished,true,undefined)
+          return @render_chunk(e,data,first)
         .then (data) =>
           first = false
           return got
@@ -246,12 +240,10 @@ class Table
 
   render_main: (idx) ->
     @stripe = 1
-    got = 0
     start = @holder.state.start()
     page = @holder.state.pagesize()
     chunk = @holder.source.chunk_size()
-    @get_page(@holder.state.pagesize(),@holder.state.start(),@holder.source.chunk_size())
-#    @old_get_page(@holder.state.pagesize(),@holder.state.start(),0,@holder.source.chunk_size(),idx,@get_data)
+    return @get_page(page,start,chunk)
 
 # XXX only deform on giant tables
 # XXX reorderable cols
@@ -265,7 +257,7 @@ class Table
     if @container? then @container.remove()
     @new_idx()
     @container = $('<div/>').addClass('search_table')
-    @render_main(@idx)
+    return @render_main(@idx)
 
 # XXX periodic headers
 

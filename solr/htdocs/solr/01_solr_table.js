@@ -333,8 +333,6 @@
       return t_data.first = first;
     };
 
-    Table.prototype.render_tail = function(table, data) {};
-
     Table.prototype.render_row = function(data) {
       this.stripe = !this.stripe;
       return {
@@ -343,7 +341,7 @@
       };
     };
 
-    Table.prototype.render_data = function(data, first, last) {
+    Table.prototype.render_data = function(data, first) {
       var c, r, t_data, t_main, table, widths, _i, _len, _ref;
       t_data = {
         table_row: [],
@@ -366,9 +364,6 @@
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         r = _ref[_i];
         t_data.rows.push(this.render_row(r));
-      }
-      if (last) {
-        this.render_tail(t_data, data);
       }
       t_main = this.holder.templates.generate('chunk', t_data);
       table = this;
@@ -397,28 +392,31 @@
       return t_main;
     };
 
-    Table.prototype.render_chunk = function(data, first, last, fire, replace) {
+    Table.prototype.render_chunk = function(e, data, first) {
       var d, outer;
       d = $.Deferred();
-      if (first && fire) {
+      if (first) {
         this.holder.data_actions(data);
       }
-      outer = this.render_data(data, first, last);
-      if (replace != null) {
-        replace.replaceWith(outer);
-      } else {
-        outer.appendTo(this.container);
+      if (first) {
+        e.notify(0);
       }
-      if (first && fire) {
+      outer = this.render_data(data, first);
+      outer.appendTo(this.container);
+      if (first) {
         this.holder.table_ready(this.container);
+      }
+      if (first) {
+        e.notify(1);
       }
       return d.resolve(data);
     };
 
     Table.prototype.get_page = function(total, start, maxchunksize) {
-      var chunk_loop, first,
+      var chunk_loop, e, first,
         _this = this;
       first = true;
+      e = $.Deferred();
       chunk_loop = window.then_loop(function(got) {
         var chunksize;
         if (total - got <= 0) {
@@ -429,26 +427,27 @@
           chunksize = maxchunksize;
         }
         return _this.get_data(start + got, chunksize).then(function(data) {
-          var finished;
-          finished = data.rows.length < chunksize || !data.rows.length;
           got += data.rows.length;
-          return _this.render_chunk(data, first, finished, true, void 0);
+          return _this.render_chunk(e, data, first);
         }).then(function(data) {
+          e.notify(2);
           first = false;
           return got;
         });
       });
-      return $.Deferred().resolve(0).then(chunk_loop);
+      $.Deferred().resolve(0).then(chunk_loop).done(function(data) {
+        return e.resolve(data);
+      });
+      return e;
     };
 
     Table.prototype.render_main = function(idx) {
-      var chunk, got, page, start;
+      var chunk, page, start;
       this.stripe = 1;
-      got = 0;
       start = this.holder.state.start();
       page = this.holder.state.pagesize();
       chunk = this.holder.source.chunk_size();
-      return this.get_page(this.holder.state.pagesize(), this.holder.state.start(), this.holder.source.chunk_size());
+      return this.get_page(page, start, chunk);
     };
 
     Table.prototype.get_data = function(start, num, more) {
@@ -456,12 +455,15 @@
     };
 
     Table.prototype.render = function() {
+      var _this = this;
       if (this.container != null) {
         this.container.remove();
       }
       this.new_idx();
       this.container = $('<div/>').addClass('search_table');
-      return this.render_main(this.idx);
+      return this.render_main(this.idx).progress(function(data) {
+        return console.log("progress", data);
+      });
     };
 
     return Table;
