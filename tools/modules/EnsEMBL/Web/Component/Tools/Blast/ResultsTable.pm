@@ -36,6 +36,7 @@ sub content {
 
     my $results     = $job->result;
     my $job_data    = $job->job_data;
+    my $species     = $job->species;
     my $source      = $job_data->{'source'};
     my $table       = $self->new_table($source =~/latestgp/i
       ? [
@@ -76,16 +77,16 @@ sub content {
       my $result_id     = $_->result_id;
       my $result_data   = $_->result_data;
       my $url_param     = $object->create_url_param({'result_id' => $result_id});
-      my $location_link = $self->location_link($url_param, $job_data, $result_data);
+      my $location_link = $self->location_link($species, $url_param, $job_data, $result_data);
 
-      $result_data->{'links'}     = $self->all_links($url_param, $job_data, $result_data);
+      $result_data->{'links'}     = $self->all_links($species, $url_param, $job_data, $result_data);
       $result_data->{'options'}   = {'class' => "hsp_$result_id"};
 
       if ($source =~ /latestgp/i) {
         $result_data->{'tid'} = $location_link;
       } else {
         $result_data->{'gid'} = $location_link;
-        $result_data->{'tid'} = $self->subject_link($url_param, $job_data, $result_data);
+        $result_data->{'tid'} = $self->subject_link($species, $url_param, $job_data, $result_data);
       }
       $table->add_row($result_data);
     }
@@ -99,16 +100,13 @@ sub content {
 
 sub subject_link {
   ## Gets the link for the subject column
-  ## @param URL param value for 'tl'
-  ## @param Job object's job_data column value
-  ## @param Result object's result_data column value
-  my ($self, $url_param, $job_data, $result_data) = @_;
+  my ($self, $species, $url_param, $job_data, $result_data) = @_;
 
   my $source  = $job_data->{'source'};
   my $param   = $source =~/abinitio/i ? 'pt' : $source eq 'PEP_ALL' ? 'p' : 't';
 
   return sprintf '<a href="%s">%s</a>', $self->hub->url({
-    'species' => $job_data->{'species'},
+    'species' => $species,
     'type'    => 'Transcript',
     'action'  => $source =~/cdna|ncrna/i ? 'Summary' : 'ProteinSummary',
     $param    => $result_data->{'tid'},
@@ -118,13 +116,9 @@ sub subject_link {
 
 sub all_links {
   ## Gets the links to be displayed in the links column
-  ## @param URL param value for 'tl'
-  ## @param Job object's job_data column value
-  ## @param Result object's result_data column value
-  my ($self, $url_param, $job_data, $result_data) = @_;
+  my ($self, $species, $url_param, $job_data, $result_data) = @_;
 
   my $hub         = $self->hub;
-  my $species     = $job_data->{'species'};
   my $blast_prog  = $job_data->{'program'};
 
   return join(' ',
@@ -160,14 +154,11 @@ sub all_links {
 
 sub location_link {
   ## Gets a link to the location view page for the given result
-  ## @param URL param value for 'tl'
-  ## @param Job object's job_data column value
-  ## @param Result object's result_data column value
-  my ($self, $url_param, $job_data, $result_data) = @_;
+  my ($self, $species, $url_param, $job_data, $result_data) = @_;
 
   my $region  = sprintf('%s:%s-%s', $result_data->{'gid'}, $result_data->{'gstart'}, $result_data->{'gend'});
   my $url     = $self->hub->url({
-    'species'           => $job_data->{'species'},
+    'species'           => $species,
     'type'              => 'Location',
     'action'            => 'View',
     'r'                 => $region,

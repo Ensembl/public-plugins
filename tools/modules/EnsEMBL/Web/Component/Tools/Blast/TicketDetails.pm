@@ -27,11 +27,11 @@ use base qw(
 );
 
 sub content_ticket {
-  my ($self, $ticket) = @_;
+  my ($self, $ticket, $jobs) = @_;
   my $hub     = $self->hub;
   my $div     = $self->dom->create_element('div');
 
-  $div->append_child($self->job_details_table($_, {'links' => [qw(results edit delete)]}))->set_attribute('class', 'plain-box') for $ticket->job;
+  $div->append_child($self->job_details_table($_, {'links' => [qw(results edit delete)]}))->set_attribute('class', 'plain-box') for @$jobs;
 
   return $div->render;
 }

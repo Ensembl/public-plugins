@@ -56,7 +56,7 @@ sub content {
   
   # get script path and perl binary
   my $script = $species_defs->ENSEMBL_VEP_FILTER_SCRIPT or die "ERROR: No filter_vep.pl script defined (ENSEMBL_VEP_FILTER_SCRIPT)\n";
-  my $perl   = $species_defs->ENSEMBL_VEP_PERL_BIN || 'perl';
+  my $perl   = 'perl';
   
   if($args{filter}) {
     $fh_string .= sprintf("%s %s -filter '%s' -only_matched 2>&1 | ", $perl, $script, $args{filter});
@@ -179,7 +179,7 @@ sub parse_content {
   for(split /\n/, $content) {
     
     # header
-    if(/^##/ && /INFO\=\<ID\=CSQ/) {
+    if(m/^##/ && /INFO\=\<ID\=CSQ/) {
       m/Format\: (.+?)\"/;
       @csq_headers = split '\|', $1;
     }

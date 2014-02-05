@@ -161,7 +161,7 @@ sub get_mapped_slice {
   my $object            = $self->object; 
   my $hub               = $self->hub;
   my $hit               = $self->hit;
-  my $species           = $self->job->job_data->{'species'};
+  my $species           = $self->job->species;
   my $sr_name           = $reference_slice->seq_region_name;
   my $msc               = Bio::EnsEMBL::MappedSliceContainer->new(-SLICE => $reference_slice, -EXPANDED => 1);
   my $ms                = Bio::EnsEMBL::MappedSlice->new(-adaptor => $reference_slice->adaptor, -name => 'test_map', -container => $msc);

@@ -4,10 +4,6 @@
 
 rsync_code_to_shared
 
-=head1 SYNOPSIS
-
-    require('.../path/to/..rsync_code_to_shared');
-
 =head1 DESCRIPTION
 
 Rsync folders of the required code to a shared location to make it
@@ -35,7 +31,7 @@ Harpreet Riat <hr5@sanger.ac.uk>
 
 =head1 CONTACT
 
-Post questions to the EnsEMBL webteam list ensembl-webteam@sanger.ac.uk
+Post questions to the EnsEMBL webteam list helpdesk@ensembl.org
 
 =cut
 
@@ -44,15 +40,17 @@ use warnings;
 
 use SiteDefs;
 
-if (grep($_ eq 'synchive', @ARGV) && (my $destination = $SiteDefs::ENSEMBL_TOOLS_SHARED_LOCATION)) {
-
-  print "Copying code to $destination\n";
+if (grep(m/^synchive/, @ARGV) && (my @lsf_hosts = @{ $SiteDefs::ENSEMBL_LSF_HOSTS || [] })) {
 
   my $source  = $SiteDefs::ENSEMBL_SERVERROOT;
-  my @folders = qw(ensembl-webcode/conf ensembl ensembl-hive ensembl-webcode/modules public-plugins sanger-plugins);
+  my $dest    = $SiteDefs::ENSEMBL_LSF_CODE_LOCATION;
+  my @folders = map { [ split(/\//, $_) ]->[0] } @SiteDefs::ENSEMBL_TOOLS_LIB_DIRS;
   my $args    = grep($_ eq 'synchiveverbose', @ARGV) ? '-aWv' : '-aWvq';
 
-  system(sprintf 'rsync %s --exclude="CVS/" --exclude="opensearch/" --delete %s %s', $args, join(' ', map("$source/$_", @folders)), $destination);
+  for (@lsf_hosts) {
+    print "Copying code to from $source to $_:$dest\n";
+    system(sprintf 'rsync %s --exclude=".git*"  --exclude="opensearch/" --delete %s %s:%s', $args, join(' ', map("$source/$_", @folders)), $_, $dest);
+  }
 }
 
 1;

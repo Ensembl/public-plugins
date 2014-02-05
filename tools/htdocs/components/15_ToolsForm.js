@@ -20,62 +20,143 @@
 
 Ensembl.Panel.ToolsForm = Ensembl.Panel.ContentTools.extend({
 
+  constructor: function() {
+    this.base.apply(this, arguments);
+
+    Ensembl.EventManager.register('toolsToggleForm', this, this.toggleForm);
+    Ensembl.EventManager.register('toolsEditTicket', this, this.loadTicket);
+
+    this.loadTicketURL  = '';
+    this.submitDisabled = false;
+  },
+
   init: function() {
 
     var panel = this;
 
     this.base();
 
+    // 'Add new' button (make link visible by default)
+    this.elLk.buttonDiv = this.el.find('._tool_new').show().on('click', 'a', function(e) {
+      e.preventDefault();
+      panel.toggleForm(true, true);
+    });
+
+    // Actual form div
+    this.elLk.formDiv = this.el.find('._tool_form_div');
+
     // Form submit event
-    this.elLk.form = this.el.find('form.tools_form').on('submit', function(event) {
-      event.preventDefault();
-      if (!panel.submitDisabled) {
-        panel.toggleSpinner(true);
-        panel.ajax($.extend({
-          'url'       : this.action,
-          'method'    : 'post',
-          'complete'  : function() {
-            this.toggleSpinner(false);
-          }
-        }, window.FormData === undefined ? {
-          'iframe'      : true,
-          'form'        : $(this)
-        } : {
-          'data'        : new FormData(this),
-          'cache'       : false,
-          'contentType' : false,
-          'processData' : false
-        }));
+    this.elLk.form = this.elLk.formDiv.find('form._tool_form').on({
+      'submit': function(e) {
+        e.preventDefault();
+        var form = $(this).data('valid', true).trigger('validate'); // add a 'validate' event handler in the form and set 'valid' data as false if it fails validation
+        if (form.data('valid')) {
+          panel.ajax($.extend({
+            'url'       : this.action,
+            'method'    : 'post',
+            'spinner'   : true
+          }, window.FormData === undefined ? {
+            'iframe'      : true,
+            'form'        : $(this)
+          } : {
+            'data'        : new FormData(this),
+            'cache'       : false,
+            'contentType' : false,
+            'processData' : false
+          }));
+        }
       }
     });
 
-    // Reset form button
-    this.elLk.form.find('a._tools_form_reset').on('click', function(e) {
+    // URL to load a ticket
+    this.loadTicketURL = this.elLk.form.find('input[name=load_ticket_url]').remove().val();
+
+    // Reset & Cancel form buttons
+    this.elLk.cancelButton = this.elLk.form.find('a._tools_form_reset, a._tools_form_cancel').on('click', function(e) {
+      var isCancel = !!this.className.match(/cancel/);
       e.preventDefault();
       panel.toggleSpinner(true);
       window.setTimeout(function() {
-        panel.reset();
+        if (!isCancel) {
+          panel.reset();
+        } else {
+          panel.toggleForm(false, true);
+        }
         panel.toggleSpinner(false);
       }, 100); // :(
-    });
+    }).filter('._tools_form_cancel');
+
+    // if there is no job in the ticket list, then show the form
+    Ensembl.EventManager.trigger('toolsToggleEmptyTable');
+  },
+
+  editExisting: function() {
+  /*
+   * Checks and populates the form with existing job if job data present as a hidden input
+   * @return true if existing job present, false otherwise
+   */
+    var editingJobsData       = [];
+    try {
+      editingJobsData         = $.parseJSON(this.elLk.form.find('input[name=edit_jobs]').remove().val());
+    } catch (ex) {}
+    if (editingJobsData.length) {
+      this.populateForm(editingJobsData);
+      return true;
+    }
+    return false;
+  },
+
+  populateForm: function(jobsData) {
+  /*
+   * Populate the input form from the given map of param name to value
+   */
+    if (jobsData) {
+      this.reset();
+      for (var paramName in jobsData) {
+        var vals  = $.isArray(jobsData[paramName]) ? jobsData[paramName] : [ jobsData[paramName] ];
+        var flag  = function() { return $.inArray(this.value, vals) >= 0; }
+
+        this.elLk.form.find('[name=' + paramName + ']').filter('[type=checkbox], [type=radio]').prop('checked', flag).end().filter('select').find('option').prop('selected', flag);
+        this.toggleForm(true, true);
+      }
+      this.resetSelectToToggle();
+    }
   },
 
   ticketSubmitted: function() {
   /*
    * Method called once ticket is successfully submitted via AJAX
    */
-    Ensembl.EventManager.trigger('refreshActivitySummary');
-    this.reset();
+    Ensembl.EventManager.trigger('toolsRefreshActivitySummary', true, true, false);
+    this.toggleForm(false, true);
   },
 
-  toggleSpinner: function(flag) {
+  toggleForm: function(flag, showCancel) {
   /*
-   * Shows/hides the ensembl spinner on top of the form according to the flag
+   * Shows/hides the form, and does the opposite to the 'add new' link
    */
-    if (!this.elLk.spinnerDivs) {
-      this.elLk.spinnerDivs = $('<div class="form-overlay"></div><div class="form-spinner spinner"></div>').appendTo(document.body);
+    if (!flag) {
+      this.reset();
     }
-    this.elLk.spinnerDivs.css(flag ? $.extend({ 'height': this.elLk.form.height(), 'width': this.elLk.form.width() }, this.elLk.form.offset()) : {}).toggle(flag);
+    this.elLk.buttonDiv.toggle(!flag);
+    this.elLk.formDiv.clearQueue()[flag ? 'slideDown' : 'slideUp'](200);
+    if (typeof showCancel === 'boolean') {
+      this.elLk.cancelButton.toggle(showCancel);
+    }
+  },
+
+  loadTicket: function(ticketName) {
+  /*
+   * Load a ticket by doing an AJAX request
+   */
+    this.ajax({
+      'url'       : this.loadTicketURL.replace('TICKET_NAME', ticketName),
+      'spinner'   : true
+    });
+
+    this.scrollIn();
+
+    return true;
   },
 
   reset: function() {
@@ -83,6 +164,14 @@ Ensembl.Panel.ToolsForm = Ensembl.Panel.ContentTools.extend({
    * Reset the form
    */
     this.elLk.form[0].reset();
+    this.resetSelectToToggle();
+  },
+
+  resetSelectToToggle: function() {
+  /*
+   * Shows/hides the html blocks according to the selectToToggle elements (only needed if values changed via JS)
+   */
+    this.elLk.form.find('._stt').selectToToggle('trigger');
   },
 
   adjustDivsHeight: function() {

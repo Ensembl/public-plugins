@@ -39,8 +39,6 @@ sub content {
   
   return $self->job_status($job) if $job->status ne 'done';
   
-  # this method reconstitutes the Tmpfile objects from the filenames
-  $object->get_tmp_file_objs();
   my $name = $self->object->parse_url_param->{ticket_name};
 
   ## We have a ticket!
@@ -53,7 +51,7 @@ sub content {
   $html .= '<input type="hidden" class="panel_type" value="VEPResultsSummary" />';
   $html .= '<div class="job_stats"><div class="toggleable">';
 
-  my $stats = $object->job_statistics;
+  my $stats = $self->job_statistics;
   
   my $section = 'General statistics';  
   my $general_stats_table = $self->new_table(

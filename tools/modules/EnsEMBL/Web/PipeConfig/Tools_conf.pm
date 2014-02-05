@@ -76,7 +76,7 @@ sub default_options {
 
     %{ $self->SUPER::default_options },
 
-    'ensembl_cvs_root_dir'  => $sd->ENSEMBL_SERVERROOT,  
+    'ensembl_codebase'      => $sd->ENSEMBL_LSF_CODE_LOCATION,  
     'pipeline_name'         => 'ensembl_web_tools',
     'hive_use_triggers'     => 0,
     'pipeline_db'           => {

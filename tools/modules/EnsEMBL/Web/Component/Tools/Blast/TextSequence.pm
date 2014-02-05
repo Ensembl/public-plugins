@@ -176,7 +176,7 @@ sub tool_buttons {
     <div class="other_tool">
       <p><a class="seq_export export" href="%s">Download view as RTF</a></p>
     </div>',
-    $self->ajax_url('rtf', { filename => join('_', $hub->type, $hub->action, $self->job->job_data->{'species'}, $self->object->create_url_param), _format => 'RTF' })
+    $self->ajax_url('rtf', { filename => join('_', $hub->type, $hub->action, $self->job->species, $self->object->create_url_param), _format => 'RTF' })
   );
 }
 

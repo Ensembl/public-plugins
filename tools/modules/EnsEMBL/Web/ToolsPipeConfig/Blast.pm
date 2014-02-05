@@ -63,7 +63,14 @@ sub pipeline_analyses {
     },
     '-hive_capacity'    => 15,
     '-max_retry_count'  => 0,
-    '-rc_name'          => $conf->species_defs->ENSEMBL_BLAST_LSF_QUEUE
+    
+#     '-rc_name'          => $conf->species_defs->ENSEMBL_BLAST_LSF_QUEUE
+
+
+    '-meadow_type'      => 'LOCAL',
+    '-rc_name'          => 'default'
+
+
   }];
 }
 

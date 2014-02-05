@@ -24,15 +24,7 @@ use strict;
 use warnings;
 
 sub default_options {
-  my ($class, $conf) = @_;
-  my $sd = $conf->species_defs;
-  return {
-    'vep_options' => {
-      'cache_dir'   => $sd->ENSEMBL_VEP_CACHE,
-      'script'      => $sd->ENSEMBL_VEP_SCRIPT,
-      'perl_bin'    => $sd->ENSEMBL_VEP_PERL_BIN || '/usr/bin/env perl'
-    }
-  };
+  return {};
 }
 
 sub resource_classes {
@@ -43,15 +35,20 @@ sub resource_classes {
 
 sub pipeline_analyses {
   my ($class, $conf) = @_;
+  my $sd = $conf->species_defs;
+
   return [{
     '-logic_name'     => 'VEP',
     '-module'         => 'EnsEMBL::Web::RunnableDB::VEP::Submit',
     '-parameters'     => {
       'ticket_db'       => $conf->o('ticket_db'),
-      'options'         => $conf->o('vep_options')
+      'cache_dir'       => $sd->ENSEMBL_VEP_CACHE,
+      'script'          => $conf->o('ensembl_codebase').'/'.$sd->ENSEMBL_VEP_SCRIPT,
+      'perl_bin'        => $sd->ENSEMBL_TOOLS_PERL_BIN
     },
     '-hive_capacity'  => 15,
-    '-rc_name'        => $conf->species_defs->ENSEMBL_VEP_LSF_QUEUE
+    '-meadow_type'      => 'LSF',
+    '-rc_name'          => $conf->species_defs->ENSEMBL_VEP_LSF_QUEUE
   }];
 }
 

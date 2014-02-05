@@ -29,7 +29,7 @@ sub initialize {
   my $hub    = $self->hub;
   my $config = {
     display_width   => $hub->param('display_width') || 60,
-    species         => $self->job->job_data->{'species'},
+    species         => $self->job->species,
     sub_slice_start => $start,
     sub_slice_end   => $end
   };
@@ -51,12 +51,12 @@ sub initialize {
 
 sub get_slice {
   my $self      = shift;
-  my $job_data  = $self->job->job_data;
+  my $job       = $self->job;
   my $hit       = $self->hit;
-  my $query_seq = $job_data->{'sequence'}{'seq'};
+  my $query_seq = $job->job_data->{'sequence'}{'seq'};
   
   return Bio::EnsEMBL::Slice->new(
-    -coord_system    => $self->object->get_hit_genomic_slice($hit, $job_data->{'species'})->coord_system,
+    -coord_system    => $self->object->get_hit_genomic_slice($hit, $job->species)->coord_system,
     -seq_region_name => $hit->{'qid'},
     -start           => 1,
     -end             => length($query_seq),

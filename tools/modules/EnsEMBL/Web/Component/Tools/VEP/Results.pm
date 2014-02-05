@@ -44,12 +44,10 @@ sub content {
   my $job_data = $job->job_data;
   
   # this method reconstitutes the Tmpfile objects from the filenames
-  $object->get_tmp_file_objs();
-
-  my $output_file_obj = $object->output_file;
+  my $output_file_obj = $object->result_files->{'output_file'};
   
   # get job stats
-  my $stats = $object->job_statistics;
+  my $stats = $self->job_statistics;
   my $output_lines = $stats->{'General statistics'}->{'Lines of output written'} || 0;
   
   # get all params
@@ -142,7 +140,7 @@ sub content {
   
   # linkify row content
   foreach my $row(@$rows) {
-    $row->{$headers->[$_]} = $self->linkify($headers->[$_], $row->{$headers->[$_]}, $job_data->{species}) for (0..$#{$headers});
+    $row->{$headers->[$_]} = $self->linkify($headers->[$_], $row->{$headers->[$_]}, $job->species) for (0..$#{$headers});
   }
   
   # extras
@@ -176,7 +174,7 @@ sub content {
   $html .= '<input type="hidden" class="panel_type" value="VEPResults" />';
   
   # construct hash for autocomplete
-  my $vdbc = $hub->species_defs->get_config($job_data->{species}, 'databases')->{'DATABASE_VARIATION'};
+  my $vdbc = $hub->species_defs->get_config($job->species, 'databases')->{'DATABASE_VARIATION'};
   
   my %ac = (
     Allele => [
@@ -190,7 +188,7 @@ sub content {
     ],
     SIFT => $vdbc->{'SIFT_VALUES'},
     PolyPhen => $vdbc->{'POLYPHEN_VALUES'},
-    BIOTYPE => $hub->species_defs->get_config($job_data->{species}, 'databases')->{'DATABASE_CORE'}->{'tables'}{'transcript'}{'biotypes'},
+    BIOTYPE => $hub->species_defs->get_config($job->species, 'databases')->{'DATABASE_CORE'}->{'tables'}{'transcript'}{'biotypes'},
   );
   
   my $ac_json = $self->jsonify(\%ac);

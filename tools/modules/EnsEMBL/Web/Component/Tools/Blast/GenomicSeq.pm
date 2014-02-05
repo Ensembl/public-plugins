@@ -25,7 +25,7 @@ use base qw(EnsEMBL::Web::Component::Tools::Blast::TextSequence);
 sub initialize {
   my ($self, $slice, $start, $end) = @_;
   my $hub     = $self->hub;
-  my $species = $self->job->job_data->{'species'};
+  my $species = $self->job->species;
   my $config  = {
     display_width   => $hub->param('display_width') || 60,
     species         => $species,
@@ -59,7 +59,7 @@ sub get_slice {
   my $self  = shift;
   my $hub   = $self->hub;
   my $hit   = $self->hit;
-  my $slice = $self->object->get_hit_genomic_slice($hit, $self->job->job_data->{'species'}, $hub->param('flank5_display'), $hub->param('flank3_display'));
+  my $slice = $self->object->get_hit_genomic_slice($hit, $self->job->species, $hub->param('flank5_display'), $hub->param('flank3_display'));
   my $ori   = $hub->param('orientation');
   my $g_ori = $hit->{'gori'};
   my $q_ori = $hit->{'qori'};

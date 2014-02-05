@@ -29,12 +29,20 @@ sub content {
   my $self    = shift;
   my $object  = $self->object;
   my $hub     = $self->hub;
-  my $ticket  = $object->get_requested_ticket;
+  my $ticket  = ($hub->function || '') eq 'View' ? $object->get_requested_ticket : undef;
+  my $jobs    = $ticket ? [ $object->get_requested_job || () ] : [];
+     $jobs    = $ticket->job if $ticket && !@$jobs;
 
-  return $ticket
-    ? sprintf(q(<h3>Job%s for %s ticket %s</h3>%s), @{$ticket->job} > 1 ? 's' : '', $ticket->ticket_type->ticket_type_caption, $ticket->ticket_name, $self->content_ticket($ticket))
-    : ($hub->param('tl') ? sprintf(q(<p>Requested ticket could not be found.</p>)) : '')
-  ;
+  return sprintf '<input type="hidden" class="panel_type" value="TicketDetails" />%s', ($ticket
+    ? sprintf(q(<h3>Job%s for %s ticket %s<a href="%s" class="left-margin _ticket_hide small _change_location">[Hide]</a></h3>%s),
+      @$jobs > 1 ? 's' : '',
+      $ticket->ticket_type->ticket_type_caption,
+      $ticket->ticket_name,
+      $hub->url({'tl' => undef, 'function' => ''}),
+      $self->content_ticket($ticket, $jobs)
+    )
+    : ''
+  );
 }
 
 sub content_ticket {

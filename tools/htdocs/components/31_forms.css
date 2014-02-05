@@ -21,6 +21,7 @@ div.extra_configs_button a        { display: inline-block; padding: 5px 16px 5px
 div.extra_configs_button a.open   { border-bottom: none; }
 div.extra_configs                 { padding: 16px 16px 8px; background-color: [[PAGE_BG]]; border: 1px solid [[PANEL_BORDER]]; margin: -1px 0 0; }
 div.extra_configs fieldset h2     { border-bottom: 1px solid [[PANEL_BORDER]]; padding-bottom: 2px }
+span.extra_configs_info           { color: #999; font-style: italic; margin-left: 8px; }
 
 div.species-tag                   { padding-left: 23px; width: 189px; background-repeat: no-repeat; background-position: 2px 2px; }
 div.species-tag.disabled          { background-color: [[NEUTRAL_BG]]; border: 1px solid [[NEUTRAL_BORDER]]; color: [[NEUTRAL_BORDER]]; }

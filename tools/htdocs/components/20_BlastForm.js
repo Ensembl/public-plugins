@@ -18,8 +18,6 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
   constructor: function () {
     this.base.apply(this, arguments);
 
-    Ensembl.EventManager.register('editToolsTicket', this, this.loadTicket);
-
     this.sequences            = [];
     this.combinations         = [];
     this.fieldsOrder          = {};
@@ -30,7 +28,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     this.maxSequenceLength    = 0;
     this.maxNumSequences      = 0;
     this.dnaThresholdPercent  = 0;
-    this.loadTicketURL        = '';
+    this.defaultSpecies       = '';
   },
 
   init: function () {
@@ -41,7 +39,6 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     this.maxSequenceLength    = this.elLk.form.find('input[name=max_sequence_length]').remove().val();
     this.maxNumSequences      = this.elLk.form.find('input[name=max_number_sequences]').remove().val();
     this.dnaThresholdPercent  = this.elLk.form.find('input[name=dna_threshold_percent]').remove().val();
-    this.loadTicketURL        = this.elLk.form.find('input[name=load_ticket_url]').remove().val();
     this.readFileURL          = this.elLk.form.find('input[name=read_file_url]').remove().val();
 
     try {
@@ -75,6 +72,9 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     this.elLk.speciesDropdown = this.elLk.form.find('div._species_dropdown');
     this.elLk.adjustableDivs  = this.elLk.form.find('div._adjustable_height').css('minHeight', function() { return $(this).height(); });
     this.elLk.configFields    = this.elLk.form.find('div._config_field');
+
+    // Save the default species for later use
+    this.defaultSpecies       = this.elLk.speciesDropdown.find('input:checked').val();
 
     // 'Add more sequences' link
     this.elLk.addSeqLink      = this.elLk.sequences.find('._add_sequence').on('click', function(e) {
@@ -136,11 +136,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
         if (!buttons) {
           buttons = $('<div class="fasta-buttons"><span>Done</span><span>Clear</span></div>').appendTo($(this).parent()).on('click', 'span', function() {
             if (this.innerHTML == 'Done') {
-              textarea.each(function() {
-                if (this.value && this.value != this.defaultValue) {
-                  panel.addSequences(this.value);
-                }
-              }).trigger('showButtons', false);
+              textarea.trigger('addSequences').trigger('showButtons', false);
             } else {
               textarea.val('').trigger('focus').trigger('showButtons', false);
             }
@@ -148,8 +144,12 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
           textarea.data('buttons', buttons);
         }
         buttons.toggle(flag);
-        panel.submitDisabled = flag;
-        $(this.form).find('[name=submit_blast]').toggleClass('disabled', flag);
+        panel.sequencePending = flag;
+      },
+      'addSequences': function() {
+        if (this.value && this.value != this.defaultValue) {
+          panel.addSequences(this.value);
+        }
       }
     });
 
@@ -172,11 +172,11 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
         panel.toggleSpinner(true);
         panel.fileReader.readAsText(this.files[0]);
       } else {
-        panel.toggleSpinner(true);
         panel.ajax({
           'url'     : panel.readFileURL,
           'iframe'  : true,
           'form'    : panel.elLk.form,
+          'spinner' : true,
           'success' : function(json) {
             if ('file_error' in json) {
               this.showError(json['file_error']);
@@ -185,8 +185,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
             }
           },
           'complete': function() {
-            panel.toggleSpinner(false);
-            panel.elLk.queryFile.val('');
+            this.elLk.queryFile.val('');
           }
         });
       }
@@ -208,6 +207,17 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
       }
     });
 
+    // finally add a validate event to the form which gets triggered before submitting it
+    this.elLk.form.on('validate', function(e) {
+      if (panel.sequencePending) { // this mean the 'Done' button has not been clicked
+        panel.elLk.sequenceInput.trigger('addSequences').trigger('showButtons', false);
+      }
+      if (!$.grep(panel.sequences, function(seq) { return seq.isSelected(); }).length) {
+        panel.showError('Please provide a sequence to run BLAST/BLAT.', 'No sequence found');
+        $(this).data('valid', false);
+      }
+    });
+
     // add child tags to the FieldTags (eg. source is child tag of db_type - if db_type tag is removed, source gets removed too)
     for (var fieldName in this.fieldTags) {
       this.fieldTags[fieldName].setChildTags(this.fieldTags);
@@ -215,15 +225,9 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     fieldName = null;
 
     // Fill in the form if editing an existing job
-    var editingJobsData       = [];
-    try {
-      editingJobsData         = $.parseJSON(this.elLk.form.find('input[name=edit_jobs]').remove().val());
-    } catch (ex) {}
-    if (editingJobsData.length) {
-      this.populateForm(editingJobsData);
+    if (!this.editExisting()) {
+      this.refreshSpecies();
     }
-
-    this.refreshSpecies();
   },
 
   reset: function() {
@@ -242,7 +246,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     this.toggleSequenceFields(true, false);
 
     // Reset species
-    this.refreshSpecies([]);
+    this.refreshSpecies([ this.defaultSpecies ]);
 
     // Reset query_type, db_type, source and search_type
     for (var i in this.fieldTags) {
@@ -254,19 +258,10 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     this.elLk.sequenceInput.trigger('focus').trigger('showButtons', false);
   },
 
-  loadTicket: function(ticketName) {
-    this.toggleSpinner(true)
-    this.ajax({
-      'url'       : this.loadTicketURL.replace('TICKET_NAME', ticketName),
-      'complete'  : function() {
-        this.toggleSpinner(false);
-      }
-    });
-    return true;
-  },
-
   populateForm: function(jobsData) {
-
+  /*
+   * Populates the form according to the provided ticket data
+   */
     this.reset();
     
     var formInput = {};
@@ -286,20 +281,28 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     }
 
     if (!$.isEmptyObject(formInput)) {
+      this.toggleForm(true, true);
       this.addEditingJobSequences(formInput['sequence'], formInput['query_type']);
       this.refreshSpecies(formInput.species);
       for (var i in this.fieldTags) {
-        this.fieldTags[i].select(formInput[i]);
+        if (i in formInput) {
+          this.fieldTags[i].select(formInput[i]);
+        }
       }
-      for (var name in formInput['configs']) {
-        this.elLk.form.find('[name=' + formInput['search_type'] + '__' + name + ']')
-          .filter('input[type=checkbox]').prop('checked', true).end()
-          .filter('select').find('option[value=' + formInput['configs'][name] + ']').prop('selected', true);
+      if (formInput['configs']) {
+        for (var name in formInput['configs']) {
+          this.elLk.form.find('[name=' + formInput['search_type'] + '__' + name + ']')
+            .filter('input[type=checkbox]').prop('checked', true).end()
+            .filter('select').find('option[value=' + formInput['configs'][name] + ']').prop('selected', true);
+        }
       }
     }
   },
 
   sortCombinations: function() {
+  /*
+   * Sorts the combinations according to the order of their respective fields as they are displayed on the form
+   */
     var panel = this;
     this.combinations = $.map(this.combinations, function(combination) {
       var sortedCombination = {};
@@ -311,10 +314,17 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
   },
 
   getQueryTypeValue: function() {
+  /*
+   * Gets the currently selected query type value
+   */
     return this.elLk.queryType.filter(':checked').val();
   },
 
   setQueryTypeValue: function(queryType) {
+  /*
+   * Sets the query type value according to the one privided, and selects the sequences falling under the same query type
+   * If no query type is provided, it tries to find out the best suitable, eg. if already selected by user, or which type are sequences have a majority
+   */
     var selectedQueryType;
 
     if (!queryType) {
@@ -353,12 +363,19 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
   },
 
   selectSequences: function(queryType) {
+  /*
+   * Selects the sequences of the given query type, and unselect others
+   */
     $.each(this.sequences, function() {
       this.resetCheckbox(queryType);
     });
   },
 
   addSequences: function(rawText, existingSequence) {
+  /*
+   * Adds new sequences to the page from the raw text entered by the user
+   * If editing an eisting job, it replaces the existing one, and adds new ones if required
+   */
 
     var parsedSeqs        = this.parseRawSequences(rawText);
     var duplicates        = 0;
@@ -474,7 +491,8 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
   },
 
   addEditingJobSequences: function(editingJobSequences, type) {
-  /* Adds the sequences from the data received from the backend for a job that needs to be edited
+  /*
+   * Adds the sequences from the data received from the backend for a job that needs to be edited
    */
     seqLoop:
     for (var i in editingJobSequences) {
@@ -505,6 +523,9 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
   },
 
   modifySequence: function(sequenceObject, rawText) {
+  /*
+   * Modifies an existing sequence when edited by the user
+   */
     if (rawText && !!this.addSequences(rawText, sequenceObject)) { // if sequence was valid and is successfully modified
       this.updateSeqInfo(true);
       return;
@@ -562,12 +583,14 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     }
   },
 
-  refreshSpecies: function(species) {
+  refreshSpecies: function(
+    species // array of species, if provided, will remove other species and add the specified ones only.
+  ) {
 
     var speciesCheckboxes, existingTag, speciesName, selectedSpecies = {};
 
     if (species) {
-      this.elLk.speciesDropdown.find('input').each(function() {
+      this.elLk.speciesDropdown.find('input').prop('checked', false).each(function() {
         if (species.indexOf(this.value) > -1) {
           this.checked = true;
         }
@@ -768,6 +791,7 @@ Ensembl.Panel.BlastForm.Sequence = Ensembl.Panel.ToolsForm.SubElement.extend({
       'keypress': function(e) {
         if (e.which == 13) {
           if (window.getSelection) {
+            e.preventDefault();
             var selection = window.getSelection();
             var range     = selection.getRangeAt(0);
             var br        = document.createElement('br');
@@ -778,7 +802,6 @@ Ensembl.Panel.BlastForm.Sequence = Ensembl.Panel.ToolsForm.SubElement.extend({
             range.collapse(false);
             selection.removeAllRanges();
             selection.addRange(range);
-            return false;
           }
         }
       }
@@ -841,6 +864,10 @@ Ensembl.Panel.BlastForm.Sequence = Ensembl.Panel.ToolsForm.SubElement.extend({
     } else {
       this.elLk.queryTypeTag.helptip({'content' : 'This seems to be a ' + this.guessedType + ' sequence, but will be considered as a ' + this.type + ' sequence'});
     }
+  },
+
+  isSelected: function() {
+    return this.elLk.checkbox.prop('checked');
   }
 });
 
@@ -855,7 +882,7 @@ Ensembl.Panel.BlastForm.FieldTag = Ensembl.Panel.ToolsForm.SubElement.extend({
     var self        = this;
     this.panel      = panel;
     this.div        = div.on('click', function() { self.readOnly || self.select(false); });
-    this.parentDivs = this.div.parents('div:not(:visible)');
+    this.parentDivs = this.div.parents('div:not(:visible)').first();
     this.selected   = false; // flag telling whether selected by user or not
     this.field      = $();
     this.childTags  = [];

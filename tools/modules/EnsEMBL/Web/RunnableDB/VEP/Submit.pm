@@ -18,41 +18,46 @@ limitations under the License.
 
 package EnsEMBL::Web::RunnableDB::VEP::Submit;
 
+### Hive Process RunnableDB for VEP
+
 use strict;
 use warnings;
-no warnings "uninitialized";
 
 use base qw(EnsEMBL::Web::RunnableDB);
 
+use EnsEMBL::Web::Exceptions;
+use EnsEMBL::Web::SystemCommand;
+use EnsEMBL::Web::Tools::FileHandler qw(file_get_contents);
+
 sub run {
   my $self = shift;
-  
-  # get global analysis params
-  my $analysis_params = eval $self->analysis->parameters;
-  my $cache_dir  = $analysis_params->{options}->{cache_dir};
-  my $vep_script = $analysis_params->{options}->{script};
-  my $perl_bin   = $analysis_params->{options}->{perl_bin};
-  
-  # get VEP options set on input form
-  my $config = $self->param('config');
-  my $option_str = '';
-  while ( (my $option, my $value) =  each %$config ){
-    next if !$option || !defined($value) || $value eq 'no';
-    $option_str .= " --".$option;
-    $option_str .= " ".$value unless $value eq 'yes';
-  }
-  
-  my $command = "$perl_bin $vep_script --force --quiet --vcf --tabix --fork 4 --stats_text --dir $cache_dir --cache $option_str";
-  #print STDERR $command;
-  
-  open(PIPE, "$command 2>&1 1>/dev/null |") or die($?);
-  my $output;
-  while(<PIPE>) { $output .= $_; }
-  close PIPE;
-  
-  die($output) if $output;
-  
-  return;
+
+  my $perl_bin  = $self->param('perl_bin');
+  my $script    = $self->param('script');
+  my $cache_dir = $self->param('cache_dir');
+  my $work_dir  = $self->param('work_dir');
+  my $config    = $self->param('config');
+  my $log_file  = "$work_dir/lsf_log.txt";
+
+  my $options   = {
+    '--force'       => '',
+    '--quiet'       => '',
+    '--vcf'         => '',
+    '--tabix'       => '',
+    '--fork'        => 4,
+    '--stats_text'  => '',
+    '--dir'         => $cache_dir,
+    '--cache'       => ''
+  };
+
+  $options->{"--$_"} = sprintf '%s/%s', $work_dir, delete $config->{$_} for qw(input_file output_file stats_file);
+  $options->{"--$_"} = $config->{$_} eq 'yes' ? '' : $config->{$_} if defined $config->{$_} && $config->{$_} ne 'no';
+
+  my $command = EnsEMBL::Web::SystemCommand->new($self, "$perl_bin $script", $options)->execute({'log_file' => $log_file});
+
+  return unless $command->error_code;
+
+  throw exception('HiveException', join('', file_get_contents($log_file)));
 }
 
 1;
