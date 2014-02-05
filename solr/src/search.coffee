@@ -475,10 +475,41 @@ class Request
   constructor: (@hub) ->
     @xhrs = {}
   
-  req_outstanding: -> (k for k,v of @xhrs).length
+  req_outstanding: -> (k for k,v of @xhrs).length 
+  first_result: (state,data) =>
+    all_facets= (k.key for k in $.solr_config('static.ui.facets'))
+    facets = {}
+    for fr in state.filter()
+      for c in fr.columns
+        if c == 'q'
+          q = fr.value
+        for fc in all_facets
+          if fc == c
+            facets[c] = fr.value
+    query = { q, facets }
+    $(document).trigger('first_result',[query,data,state])
+    $(document).on 'update_state', (e,qps) =>
+      @hub.update_url(qps)
 
+  render_table: (table,state) ->
+    @t = table.xxx_table()
+    @t.reset()
+    start = state.start()
+    page = state.pagesize()
+    chunksize = table.options.chunk_size
+    return window.in_chunks page, chunksize, (got,len) =>
+      return @get_data(state,start+got,len)
+        .then (data) =>
+          if !got then @first_result(state,data)
+          return @t.draw_rows(data,!got).then (d) => data.rows.length
+  
   # XXX get rid of force by pushing rate limiter elsewhere in stack
-  get: (filter,cols,order,start,rows,force) ->
+  get_data: (state,start,rows) ->
+    # XXX configurable incr except for download
+    filter = state.filter()
+    cols = state.columns()
+    order = state.order()
+    force = true # XXX
     if force
       return @dispatch(filter,cols,order,start,rows).then (data) -> data.main
     else
@@ -593,37 +624,10 @@ class Renderer
     @render_style(main,@table)
     more()
 
-  first_result: (data) =>
-    all_facets= (k.key for k in $.solr_config('static.ui.facets'))
-    facets = {}
-    for fr in @state.filter()
-      for c in fr.columns
-        if c == 'q'
-          q = fr.value
-        for fc in all_facets
-          if fc == c
-            facets[c] = fr.value
-    query = { q, facets }
-    $(document).trigger('first_result',[query,data,@state])
-    $(document).on 'update_state', (e,qps) =>
-      @hub.update_url(qps)
-
   render_results: ->
     @state.update()
     $('.preview_holder').trigger('preview_close')
-    @t = @table.xxx_table()
-    @t.reset()
-    start = @state.start()
-    page = @state.pagesize()
-    chunk = @table.options.chunk_size
-    @get_page(page,start,chunk)
-  
-  get_page: (total,start,maxchunksize) ->
-    return window.in_chunks total, maxchunksize, (got,chunksize) =>
-      return @get_data(start+got,chunksize)
-        .then (data) =>
-          if !got then @first_result(data)
-          return @t.draw_rows(data,!got).then (d) => data.rows.length
+    @hub.request().render_table(@table,@state)
   
   get_data: (start,num) ->
     # XXX configurable incr except for download

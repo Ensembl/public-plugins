@@ -855,6 +855,7 @@
 
     function Request(hub) {
       this.hub = hub;
+      this.first_result = __bind(this.first_result, this);
       this.xhrs = {};
     }
 
@@ -872,9 +873,74 @@
       }).call(this)).length;
     };
 
-    Request.prototype.get = function(filter, cols, order, start, rows, force) {
-      var current_filter,
+    Request.prototype.first_result = function(state, data) {
+      var all_facets, c, facets, fc, fr, k, q, query, _i, _j, _k, _len, _len1, _len2, _ref, _ref1,
         _this = this;
+      all_facets = (function() {
+        var _i, _len, _ref, _results;
+        _ref = $.solr_config('static.ui.facets');
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          k = _ref[_i];
+          _results.push(k.key);
+        }
+        return _results;
+      })();
+      facets = {};
+      _ref = state.filter();
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        fr = _ref[_i];
+        _ref1 = fr.columns;
+        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+          c = _ref1[_j];
+          if (c === 'q') {
+            q = fr.value;
+          }
+          for (_k = 0, _len2 = all_facets.length; _k < _len2; _k++) {
+            fc = all_facets[_k];
+            if (fc === c) {
+              facets[c] = fr.value;
+            }
+          }
+        }
+      }
+      query = {
+        q: q,
+        facets: facets
+      };
+      $(document).trigger('first_result', [query, data, state]);
+      return $(document).on('update_state', function(e, qps) {
+        return _this.hub.update_url(qps);
+      });
+    };
+
+    Request.prototype.render_table = function(table, state) {
+      var chunksize, page, start,
+        _this = this;
+      this.t = table.xxx_table();
+      this.t.reset();
+      start = state.start();
+      page = state.pagesize();
+      chunksize = table.options.chunk_size;
+      return window.in_chunks(page, chunksize, function(got, len) {
+        return _this.get_data(state, start + got, len).then(function(data) {
+          if (!got) {
+            _this.first_result(state, data);
+          }
+          return _this.t.draw_rows(data, !got).then(function(d) {
+            return data.rows.length;
+          });
+        });
+      });
+    };
+
+    Request.prototype.get_data = function(state, start, rows) {
+      var cols, current_filter, filter, force, order,
+        _this = this;
+      filter = state.filter();
+      cols = state.columns();
+      order = state.order();
+      force = true;
       if (force) {
         return this.dispatch(filter, cols, order, start, rows).then(function(data) {
           return data.main;
@@ -1062,7 +1128,6 @@
     function Renderer(hub, source) {
       this.hub = hub;
       this.source = source;
-      this.first_result = __bind(this.first_result, this);
     }
 
     Renderer.prototype.page = function(results) {
@@ -1090,71 +1155,10 @@
       return more();
     };
 
-    Renderer.prototype.first_result = function(data) {
-      var all_facets, c, facets, fc, fr, k, q, query, _i, _j, _k, _len, _len1, _len2, _ref, _ref1,
-        _this = this;
-      all_facets = (function() {
-        var _i, _len, _ref, _results;
-        _ref = $.solr_config('static.ui.facets');
-        _results = [];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          k = _ref[_i];
-          _results.push(k.key);
-        }
-        return _results;
-      })();
-      facets = {};
-      _ref = this.state.filter();
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        fr = _ref[_i];
-        _ref1 = fr.columns;
-        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-          c = _ref1[_j];
-          if (c === 'q') {
-            q = fr.value;
-          }
-          for (_k = 0, _len2 = all_facets.length; _k < _len2; _k++) {
-            fc = all_facets[_k];
-            if (fc === c) {
-              facets[c] = fr.value;
-            }
-          }
-        }
-      }
-      query = {
-        q: q,
-        facets: facets
-      };
-      $(document).trigger('first_result', [query, data, this.state]);
-      return $(document).on('update_state', function(e, qps) {
-        return _this.hub.update_url(qps);
-      });
-    };
-
     Renderer.prototype.render_results = function() {
-      var chunk, page, start;
       this.state.update();
       $('.preview_holder').trigger('preview_close');
-      this.t = this.table.xxx_table();
-      this.t.reset();
-      start = this.state.start();
-      page = this.state.pagesize();
-      chunk = this.table.options.chunk_size;
-      return this.get_page(page, start, chunk);
-    };
-
-    Renderer.prototype.get_page = function(total, start, maxchunksize) {
-      var _this = this;
-      return window.in_chunks(total, maxchunksize, function(got, chunksize) {
-        return _this.get_data(start + got, chunksize).then(function(data) {
-          if (!got) {
-            _this.first_result(data);
-          }
-          return _this.t.draw_rows(data, !got).then(function(d) {
-            return data.rows.length;
-          });
-        });
-      });
+      return this.hub.request().render_table(this.table, this.state);
     };
 
     Renderer.prototype.get_data = function(start, num) {
