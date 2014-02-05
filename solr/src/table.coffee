@@ -148,11 +148,14 @@ class TableHolder
   draw_table: ->
     table = new Table(@)
     table.render() 
+  xxx_table: -> return new Table(@)
 
   table_ready: (html) ->
+    d = new $.Deferred() # XXX one day
     table = $('.search_table_proper',@outer)
     table.empty()
     table.append(html)
+    return d.resolve(0)
 
   data_actions: (data) ->
     if @options.update?
@@ -160,8 +163,6 @@ class TableHolder
 
 class Table
   _idx = 0
-
-  new_idx: -> @idx = _idx++
 
   constructor: (@holder) ->
     @multisort = (@holder.options.multisort ? true)
@@ -211,45 +212,36 @@ class Table
     if first then @holder.data_actions(data)
     outer = @render_data(data,first)
     outer.appendTo(@container)
-    if first then @holder.table_ready(@container)
+    #if first then @holder.table_ready(@container)
     return d.resolve(data)
 
-  get_page: (total,start,maxchunksize) ->
-    first = true
-    chunk_loop = (window.then_loop (got) =>
-      if total - got <= 0 then return null
-      chunksize = total - got
-      if chunksize > maxchunksize then chunksize = maxchunksize
-      return @get_data(start+got,chunksize)
-        .then (data) =>
-          got += data.rows.length
-          return @render_chunk(data,first)
-        .then (data) =>
-          first = false
-          return got
-    )
-    return $.Deferred().resolve(0).then(chunk_loop)
+  # XXX new
+  reset: () ->
+    if @container? then @container.remove()
+    @container = $('<div/>').addClass('search_table')
+    @stripe = 1
+    @empty = 1
 
-  render_main: (idx) ->
+  draw_top: () ->
+
+  draw_rows: (rows) ->
+    d = @render_chunk(rows,true) # XXX not false
+    if @empty then d = d.then(@holder.table_ready(@container))
+    @empty = 0
+    return d
+
+  draw_bottom: () ->
+
+  # XXX done new
+
+  render: ->
+    if @container? then @container.remove()
+    @container = $('<div/>').addClass('search_table')
     @stripe = 1
     start = @holder.state.start()
     page = @holder.state.pagesize()
     chunk = @holder.options.chunk_size
     return @get_page(page,start,chunk)
-
-# XXX only deform on giant tables
-# XXX reorderable cols
-# XXX stripes and hidden chunks
-# XXX odd page sizes
-
-  get_data: (start,num) ->
-    @holder.source.get(@holder.state.filter(),@holder.state.columns(),@holder.state.order(),start,num)
-
-  render: ->
-    if @container? then @container.remove()
-    @new_idx()
-    @container = $('<div/>').addClass('search_table')
-    return @render_main(@idx)
 
 # XXX periodic headers
 

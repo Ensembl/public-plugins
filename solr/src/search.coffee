@@ -589,28 +589,56 @@ class Renderer
       multisort: 0
       filter_col: 'q'
       chunk_size: 100
-      update: (table,data) =>
-        all_facets= (k.key for k in $.solr_config('static.ui.facets'))
-        facets = {} 
-        for fr in @state.filter()
-          for c in fr.columns
-            if c == 'q'
-              q = fr.value
-            for fc in all_facets
-              if fc == c
-                facets[c] = fr.value
-        query = { q, facets }
-        $(document).trigger('first_result',[query,data,@state])
-        $(document).on 'update_state', (e,qps) =>
-          @hub.update_url(qps)
     })
     @render_style(main,@table)
     more()
 
+  first_result: (data) =>
+    all_facets= (k.key for k in $.solr_config('static.ui.facets'))
+    facets = {}
+    for fr in @state.filter()
+      for c in fr.columns
+        if c == 'q'
+          q = fr.value
+        for fc in all_facets
+          if fc == c
+            facets[c] = fr.value
+    query = { q, facets }
+    $(document).trigger('first_result',[query,data,@state])
+    $(document).on 'update_state', (e,qps) =>
+      @hub.update_url(qps)
+
   render_results: ->
     @state.update()
     $('.preview_holder').trigger('preview_close')
-    @table.draw_table()
+    @t = @table.xxx_table()
+    @t.reset()
+    start = @state.start()
+    page = @state.pagesize()
+    chunk = @table.options.chunk_size
+    @get_page(page,start,chunk)
+  
+  get_page: (total,start,maxchunksize) ->
+    first = true
+    chunk_loop = (window.then_loop (got) =>
+      if total - got <= 0 then return null
+      chunksize = total - got
+      if chunksize > maxchunksize then chunksize = maxchunksize
+      return @get_data(start+got,chunksize)
+        .then (data) =>
+          if first
+            @first_result(data)
+        .then (data) =>
+          got += data.rows.length
+          return @t.draw_rows(data,first)
+        .then (data) =>
+          first = false
+          return got
+    )
+    return $.Deferred().resolve(0).then(chunk_loop)
+
+  get_data: (start,num) ->
+    @source.get(@state.filter(),@state.columns(),@state.order(),start,num)
 
   render_style: (root,table) ->
     clayout = @hub.layout()
