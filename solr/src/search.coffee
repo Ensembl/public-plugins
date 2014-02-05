@@ -338,7 +338,7 @@ each_block = (num,fn) ->
 
 # XXX low-level cache
 
-dispatch_main_requests = (request,cols,query,start,rows) ->
+dispatch_main_requests = (request,cols,query,start,rows,currency) ->
   # Determine what the blocks are to be: XXX cache this
   rigid = []
   favs = $.solr_config('user.favs.species')
@@ -370,7 +370,7 @@ dispatch_main_requests = (request,cols,query,start,rows) ->
       if requests[i][0] != -1
         request.request_results(query,cols,extras[i],requests[i][0],requests[i][2])
     # ... weld together
-    return results.then (docs_frags) =>
+    return results.then(currency).then (docs_frags) =>
       docs = []
       for i in [0...docs_frags.length]
         if requests[i][0] != -1
@@ -378,7 +378,7 @@ dispatch_main_requests = (request,cols,query,start,rows) ->
             docs_frags[i].rows
       return { rows: docs, num: offset, cols }
 
-dispatch_facet_request = (request,cols,query,start,rows) ->
+dispatch_facet_request = (request,cols,query,start,rows,currency) ->
   fq = query.fq.join(' AND ')
   params = {
     q: query.q
@@ -388,7 +388,7 @@ dispatch_facet_request = (request,cols,query,start,rows) ->
     'facet.mincount': 1
     facet: true
   }
-  return request.raw_ajax(params).then (data) =>
+  return request.raw_ajax(params).then(currency).then (data) =>
     return data.result?.facet_counts?.facet_fields
 
 # Generate the criteria for the various blocks by converting
@@ -423,8 +423,8 @@ all_requests = {
   faceter: dispatch_facet_request
 }
 
-dispatch_all_requests = (request,start,rows,cols,filter,order) ->
-  request.abort_ajax()
+dispatch_all_requests = (request,start,rows,cols,filter,order,currency) ->
+  #request.abort_ajax()
   # Extract filter (from pseudo-column "q") and facets
   all_facets = (k.key for k in $.solr_config('static.ui.facets'))
   facets = {}
@@ -456,7 +456,7 @@ dispatch_all_requests = (request,start,rows,cols,filter,order) ->
   plugin_actions = []
   $.each all_requests, (k,v) =>
     plugin_list.push k
-    plugin_actions.push v(request,cols,input,start,rows)
+    plugin_actions.push v(request,cols,input,start,rows,currency)
   return $.when.apply(@,plugin_actions)
     .then (results...) =>
       out = {}
@@ -465,7 +465,7 @@ dispatch_all_requests = (request,start,rows,cols,filter,order) ->
       out.main.faceter = out.faceter # XXX tmp till moved
       return out
 
-rate_limiter = window.rate_limiter(1000,2000)
+rate_limiter = window.rate_limiter(1,2)
 main_currency = window.ensure_currency()
 
 # XXX Faceter orders
@@ -490,6 +490,8 @@ class Request
     $(document).trigger('first_result',[query,data,state])
     $(document).on 'update_state', (e,qps) =>
       @hub.update_url(qps)
+    $(document).on 'update_state_incr', (e,qps) =>
+      rate_limiter(qps).then((data) => @hub.update_url(data))
 
   render_table: (table,state) ->
     @t = table.xxx_table()
@@ -497,31 +499,21 @@ class Request
     start = state.start()
     page = state.pagesize()
     chunksize = table.options.chunk_size
+    currency = main_currency()
     return window.in_chunks page, chunksize, (got,len) =>
-      return @get_data(state,start+got,len)
+      return @get_data(state,start+got,len,currency)
         .then (data) =>
           if !got then @first_result(state,data)
           return @t.draw_rows(data,!got).then (d) => data.rows.length
   
   # XXX get rid of force by pushing rate limiter elsewhere in stack
-  get_data: (state,start,rows) ->
+  get_data: (state,start,rows,currency) ->
     # XXX configurable incr except for download
     filter = state.filter()
     cols = state.columns()
     order = state.order()
-    force = true # XXX
-    if force
-      return @dispatch(filter,cols,order,start,rows).then (data) -> data.main
-    else
-      current_filter = main_currency()
-      return rate_limiter({filter,cols,order,start,rows})
-        .then (data) =>
-          {filter,cols,order,start,rows} = data
-          return @dispatch(filter,cols,order,start,rows)
-            .then(current_filter).then (data) -> data.main
-
-  dispatch: (filter,cols,order,start,rows) -> # XXX
-    dispatch_all_requests(@,start,rows,cols,filter,order)
+    return dispatch_all_requests(@,start,rows,cols,filter,order,currency)
+      .then((data) -> data.main)
 
 # XXX shortcircuit get on satisfied
 # XXX first page optimise

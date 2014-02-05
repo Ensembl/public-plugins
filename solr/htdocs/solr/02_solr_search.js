@@ -636,7 +636,7 @@
     });
   };
 
-  dispatch_main_requests = function(request, cols, query, start, rows) {
+  dispatch_main_requests = function(request, cols, query, start, rows, currency) {
     var extras, favs, ret, rigid,
       _this = this;
     rigid = [];
@@ -673,7 +673,7 @@
           return request.request_results(query, cols, extras[i], requests[i][0], requests[i][2]);
         }
       });
-      return results.then(function(docs_frags) {
+      return results.then(currency).then(function(docs_frags) {
         var docs, _j, _ref1, _ref2, _ref3;
         docs = [];
         for (i = _j = 0, _ref1 = docs_frags.length; 0 <= _ref1 ? _j < _ref1 : _j > _ref1; i = 0 <= _ref1 ? ++_j : --_j) {
@@ -690,7 +690,7 @@
     });
   };
 
-  dispatch_facet_request = function(request, cols, query, start, rows) {
+  dispatch_facet_request = function(request, cols, query, start, rows, currency) {
     var fq, k, params,
       _this = this;
     fq = query.fq.join(' AND ');
@@ -711,7 +711,7 @@
       'facet.mincount': 1,
       facet: true
     };
-    return request.raw_ajax(params).then(function(data) {
+    return request.raw_ajax(params).then(currency).then(function(data) {
       var _ref, _ref1;
       return (_ref = data.result) != null ? (_ref1 = _ref.facet_counts) != null ? _ref1.facet_fields : void 0 : void 0;
     });
@@ -769,10 +769,9 @@
     faceter: dispatch_facet_request
   };
 
-  dispatch_all_requests = function(request, start, rows, cols, filter, order) {
+  dispatch_all_requests = function(request, start, rows, cols, filter, order, currency) {
     var all_facets, c, facets, fc, fr, input, k, plugin_actions, plugin_list, q, sort, v, _i, _j, _k, _len, _len1, _len2, _ref,
       _this = this;
-    request.abort_ajax();
     all_facets = (function() {
       var _i, _len, _ref, _results;
       _ref = $.solr_config('static.ui.facets');
@@ -831,7 +830,7 @@
     plugin_actions = [];
     $.each(all_requests, function(k, v) {
       plugin_list.push(k);
-      return plugin_actions.push(v(request, cols, input, start, rows));
+      return plugin_actions.push(v(request, cols, input, start, rows, currency));
     });
     return $.when.apply(this, plugin_actions).then(function() {
       var i, out, results, _l, _ref1;
@@ -845,7 +844,7 @@
     });
   };
 
-  rate_limiter = window.rate_limiter(1000, 2000);
+  rate_limiter = window.rate_limiter(1, 2);
 
   main_currency = window.ensure_currency();
 
@@ -909,21 +908,27 @@
         facets: facets
       };
       $(document).trigger('first_result', [query, data, state]);
-      return $(document).on('update_state', function(e, qps) {
+      $(document).on('update_state', function(e, qps) {
         return _this.hub.update_url(qps);
+      });
+      return $(document).on('update_state_incr', function(e, qps) {
+        return rate_limiter(qps).then(function(data) {
+          return _this.hub.update_url(data);
+        });
       });
     };
 
     Request.prototype.render_table = function(table, state) {
-      var chunksize, page, start,
+      var chunksize, currency, page, start,
         _this = this;
       this.t = table.xxx_table();
       this.t.reset();
       start = state.start();
       page = state.pagesize();
       chunksize = table.options.chunk_size;
+      currency = main_currency();
       return window.in_chunks(page, chunksize, function(got, len) {
-        return _this.get_data(state, start + got, len).then(function(data) {
+        return _this.get_data(state, start + got, len, currency).then(function(data) {
           if (!got) {
             _this.first_result(state, data);
           }
@@ -934,36 +939,14 @@
       });
     };
 
-    Request.prototype.get_data = function(state, start, rows) {
-      var cols, current_filter, filter, force, order,
-        _this = this;
+    Request.prototype.get_data = function(state, start, rows, currency) {
+      var cols, filter, order;
       filter = state.filter();
       cols = state.columns();
       order = state.order();
-      force = true;
-      if (force) {
-        return this.dispatch(filter, cols, order, start, rows).then(function(data) {
-          return data.main;
-        });
-      } else {
-        current_filter = main_currency();
-        return rate_limiter({
-          filter: filter,
-          cols: cols,
-          order: order,
-          start: start,
-          rows: rows
-        }).then(function(data) {
-          filter = data.filter, cols = data.cols, order = data.order, start = data.start, rows = data.rows;
-          return _this.dispatch(filter, cols, order, start, rows).then(current_filter).then(function(data) {
-            return data.main;
-          });
-        });
-      }
-    };
-
-    Request.prototype.dispatch = function(filter, cols, order, start, rows) {
-      return dispatch_all_requests(this, start, rows, cols, filter, order);
+      return dispatch_all_requests(this, start, rows, cols, filter, order, currency).then(function(data) {
+        return data.main;
+      });
     };
 
     Request.prototype.abort_ajax = function() {
