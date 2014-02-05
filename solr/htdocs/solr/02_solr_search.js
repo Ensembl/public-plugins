@@ -2,6 +2,7 @@
 (function() {
   var Hub, Renderer, Request, SearchTableState, all_requests, code_select, dispatch_all_requests, dispatch_facet_request, dispatch_main_requests, double_trap, each_block, generate_block_list, main_currency, rate_limiter, remote_log, xhr_idx, _clone_array, _clone_object, _kv_copy,
     __slice = [].slice,
+    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -850,9 +851,7 @@
 
   xhr_idx = 1;
 
-  Request = (function(_super) {
-
-    __extends(Request, _super);
+  Request = (function() {
 
     function Request(hub) {
       this.hub = hub;
@@ -1056,13 +1055,14 @@
 
     return Request;
 
-  })(window.TableSource);
+  })();
 
   Renderer = (function() {
 
     function Renderer(hub, source) {
       this.hub = hub;
       this.source = source;
+      this.first_result = __bind(this.first_result, this);
     }
 
     Renderer.prototype.page = function(results) {
@@ -1076,58 +1076,59 @@
     };
 
     Renderer.prototype.render_stage = function(more) {
-      var main,
-        _this = this;
+      var main;
       $('.nav-heading').hide();
       main = $('#solr_content').empty();
       this.state = new SearchTableState(this.hub, $('#solr_content'), $.solr_config('static.ui.all_columns'));
       $(document).data('templates', this.hub.templates());
-      this.table = new window.search_table(this.hub.templates(), this.source, this.state, {
+      this.table = new window.search_table(this.hub.templates(), this.state, {
         multisort: 0,
         filter_col: 'q',
-        chunk_size: 100,
-        update: function(table, data) {
-          var all_facets, c, facets, fc, fr, k, q, query, _i, _j, _k, _len, _len1, _len2, _ref, _ref1;
-          all_facets = (function() {
-            var _i, _len, _ref, _results;
-            _ref = $.solr_config('static.ui.facets');
-            _results = [];
-            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-              k = _ref[_i];
-              _results.push(k.key);
-            }
-            return _results;
-          })();
-          facets = {};
-          _ref = _this.state.filter();
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            fr = _ref[_i];
-            _ref1 = fr.columns;
-            for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-              c = _ref1[_j];
-              if (c === 'q') {
-                q = fr.value;
-              }
-              for (_k = 0, _len2 = all_facets.length; _k < _len2; _k++) {
-                fc = all_facets[_k];
-                if (fc === c) {
-                  facets[c] = fr.value;
-                }
-              }
-            }
-          }
-          query = {
-            q: q,
-            facets: facets
-          };
-          $(document).trigger('first_result', [query, data, _this.state]);
-          return $(document).on('update_state', function(e, qps) {
-            return _this.hub.update_url(qps);
-          });
-        }
+        chunk_size: 100
       });
       this.render_style(main, this.table);
       return more();
+    };
+
+    Renderer.prototype.first_result = function(data) {
+      var all_facets, c, facets, fc, fr, k, q, query, _i, _j, _k, _len, _len1, _len2, _ref, _ref1,
+        _this = this;
+      all_facets = (function() {
+        var _i, _len, _ref, _results;
+        _ref = $.solr_config('static.ui.facets');
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          k = _ref[_i];
+          _results.push(k.key);
+        }
+        return _results;
+      })();
+      facets = {};
+      _ref = this.state.filter();
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        fr = _ref[_i];
+        _ref1 = fr.columns;
+        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+          c = _ref1[_j];
+          if (c === 'q') {
+            q = fr.value;
+          }
+          for (_k = 0, _len2 = all_facets.length; _k < _len2; _k++) {
+            fc = all_facets[_k];
+            if (fc === c) {
+              facets[c] = fr.value;
+            }
+          }
+        }
+      }
+      query = {
+        q: q,
+        facets: facets
+      };
+      $(document).trigger('first_result', [query, data, this.state]);
+      return $(document).on('update_state', function(e, qps) {
+        return _this.hub.update_url(qps);
+      });
     };
 
     Renderer.prototype.render_results = function() {
@@ -1136,38 +1137,50 @@
       $('.preview_holder').trigger('preview_close');
       this.t = this.table.xxx_table();
       this.t.reset();
-      start = this.table.state.start();
-      page = this.table.state.pagesize();
+      start = this.state.start();
+      page = this.state.pagesize();
       chunk = this.table.options.chunk_size;
       return this.get_page(page, start, chunk);
     };
 
     Renderer.prototype.get_page = function(total, start, maxchunksize) {
-      var chunk_loop, first,
-        _this = this;
-      first = true;
-      chunk_loop = window.then_loop(function(got) {
-        var chunksize;
-        if (total - got <= 0) {
-          return null;
-        }
-        chunksize = total - got;
-        if (chunksize > maxchunksize) {
-          chunksize = maxchunksize;
-        }
+      var _this = this;
+      return window.in_chunks(total, maxchunksize, function(got, chunksize) {
         return _this.get_data(start + got, chunksize).then(function(data) {
-          got += data.rows.length;
-          return _this.t.draw_rows(data, first);
-        }).then(function(data) {
-          first = false;
-          return got;
+          if (!got) {
+            _this.first_result(data);
+          }
+          return _this.t.draw_rows(data, !got).then(function(d) {
+            return data.rows.length;
+          });
         });
       });
-      return $.Deferred().resolve(0).then(chunk_loop);
     };
 
     Renderer.prototype.get_data = function(start, num) {
-      return this.table.source.get(this.table.state.filter(), this.table.state.columns(), this.table.state.order(), start, num);
+      return this.source.get(this.state.filter(), this.state.columns(), this.state.order(), start, num, true);
+    };
+
+    Renderer.prototype.get_all_data = function() {
+      var acc,
+        _this = this;
+      acc = {
+        rows: []
+      };
+      return window.in_chunks(-1, 100, function(got, chunksize) {
+        return _this.get_data(got, chunksize).then(function(data) {
+          if ((data.cols != null) && (acc.cols == null)) {
+            acc.cols = data.cols;
+          }
+          if (data.rows.length === 0 || ((_this.max != null) && got + data.rows.length > _this.max)) {
+            return -1;
+          }
+          acc.rows = acc.rows.concat(data.rows);
+          return data.rows.length;
+        });
+      }).then(function(d) {
+        return acc;
+      });
     };
 
     Renderer.prototype.render_style = function(root, table) {
@@ -1192,7 +1205,22 @@
             });
           })
         },
-        table: table.generate_model()
+        table: {
+          table_ready: function(el, data) {
+            return _this.table.collect_view_model(el, data);
+          },
+          state: this.state,
+          download_curpage: function(el, fn) {
+            return _this.get_data(_this.state.start(), _this.state.pagesize()).done(function(data) {
+              return _this.table.transmit_data(el, fn, data);
+            });
+          },
+          download_all: function(el, fn) {
+            return _this.get_all_data().done(function(data) {
+              return _this.table.transmit_data(el, fn, data);
+            });
+          }
+        }
       };
       this.hub.templates().generate('page', page, function(out) {
         return root.append(out);

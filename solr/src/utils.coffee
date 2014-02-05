@@ -43,3 +43,20 @@ window.then_loop = (fn) ->
       return d
   return step
 
+in_endless_chunks = (chunksize,fn) ->
+  chunk_loop = then_loop ([got,halt]) =>
+    if halt then return got
+    return fn(got,chunksize).then (len) =>
+      if len == -1 then return [got,1] else return [got+len,0]
+  return $.Deferred().resolve([0,0]).then(chunk_loop)
+
+window.in_chunks = (total,maxchunksize,fn) ->
+  if total == -1 then return in_endless_chunks(maxchunksize,fn)
+  chunk_loop = then_loop (got) =>
+    if total - got <= 0 then return got
+    chunksize = total - got
+    if chunksize > maxchunksize then chunksize = maxchunksize
+    return fn(got,chunksize).then (len) =>
+      return got + len
+  return $.Deferred().resolve(0).then(chunk_loop)
+

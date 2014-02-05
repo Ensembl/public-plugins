@@ -471,7 +471,7 @@ main_currency = window.ensure_currency()
 # XXX Faceter orders
 # XXX out of date responses / abort
 xhr_idx = 1
-class Request extends window.TableSource
+class Request
   constructor: (@hub) ->
     @xhrs = {}
   
@@ -585,7 +585,7 @@ class Renderer
     @state = new SearchTableState(@hub,$('#solr_content'),$.solr_config('static.ui.all_columns'))
 
     $(document).data('templates',@hub.templates())
-    @table = new window.search_table(@hub.templates(),@source,@state,{
+    @table = new window.search_table(@hub.templates(),@state,{
       multisort: 0
       filter_col: 'q'
       chunk_size: 100
@@ -619,26 +619,26 @@ class Renderer
     @get_page(page,start,chunk)
   
   get_page: (total,start,maxchunksize) ->
-    first = true
-    chunk_loop = (window.then_loop (got) =>
-      if total - got <= 0 then return null
-      chunksize = total - got
-      if chunksize > maxchunksize then chunksize = maxchunksize
+    return window.in_chunks total, maxchunksize, (got,chunksize) =>
       return @get_data(start+got,chunksize)
         .then (data) =>
-          if first
-            @first_result(data)
-        .then (data) =>
-          got += data.rows.length
-          return @t.draw_rows(data,first)
-        .then (data) =>
-          first = false
-          return got
-    )
-    return $.Deferred().resolve(0).then(chunk_loop)
-
+          if !got then @first_result(data)
+          return @t.draw_rows(data,!got).then (d) => data.rows.length
+  
   get_data: (start,num) ->
-    @source.get(@state.filter(),@state.columns(),@state.order(),start,num)
+    # XXX configurable incr except for download
+    @source.get(@state.filter(),@state.columns(),@state.order(),start,num,true)
+  
+  get_all_data: () ->
+    acc = { rows: [] }
+    return window.in_chunks -1, 100, (got,chunksize) =>
+        return @get_data(got,chunksize).then (data) =>
+          if data.cols? and not acc.cols? then acc.cols = data.cols
+          if data.rows.length == 0 or (@max? and got+data.rows.length > @max)
+            return -1
+          acc.rows = acc.rows.concat(data.rows)
+          return data.rows.length
+      .then((d) => return acc)
 
   render_style: (root,table) ->
     clayout = @hub.layout()
@@ -651,7 +651,14 @@ class Renderer
         title: 'Layout:'
         select: ((k) => @hub.update_url { style: k })
       table:
-        table.generate_model()
+        table_ready: (el,data) => @table.collect_view_model(el,data)
+        state: @state
+        download_curpage: (el,fn) =>
+          @get_data(@state.start(),@state.pagesize()).done((data) =>
+            @table.transmit_data(el,fn,data)
+          )
+        download_all: (el,fn) =>
+          @get_all_data().done((data) => @table.transmit_data(el,fn,data))
     }
     @hub.templates().generate 'page',page, (out) ->
       root.append(out)

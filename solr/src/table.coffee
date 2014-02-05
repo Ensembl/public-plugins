@@ -1,4 +1,4 @@
-# The table code exports three classes.
+# The table code exports two classes.
 #
 # TableHolder -- the main class, one per table implemented here.
 #
@@ -13,23 +13,9 @@
 #                  Subclasses just override set() which should pull info
 #                  from these getters and then call their persistence layer.
 #
-# TableSource -- you subclass this and override methods and then supply it.
-#                  Contains callbacks which the table code uses to retrieve
-#                  table contents. Typically this will trigger AJAX calls
-#                  or suchlike. When the data is returned, methods in this
-#                  class are called by you to populate the table.
-#
-#                  You only need implement two methods, columns, which
-#                  contains a list of columns and get to get the data.
-#                  A default implementation of columns is provided which is
-#                  usually fine and is initialised by a call to init in
-#                  your constructor.
-
 _clone_array = (a) -> $.extend(true,[],a)
 
 # XXX clear footer
-
-class Source
 
 # XXX lowercase filter
 # XXX non-string comparison
@@ -86,29 +72,9 @@ class TableState
   associate: (@table) ->
 
 class TableHolder
-  constructor: (@templates,@source,@state,@options = {}) ->
+  constructor: (@templates,@state,@options = {}) ->
     @state.associate(@)
     if not @options.chunk_size? then @options.chunk_size = 1000
-
-  # Used for download links
-  get_all_data: () ->
-    num = 100
-    chunk_loop = (window.then_loop ([acc,start,halt]) =>
-      console.log(acc,start,halt)
-      if halt then return acc
-      else
-        return @get_data(start,num).then (data) =>
-          if data.cols? and not acc.cols? then acc.cols = data.cols
-          if data.rows.length == 0 or (@max? and start+data.rows.length > @max)
-            halt = 1
-          acc.rows = acc.rows.concat(data.rows)
-          return [acc,start+data.rows.length,halt]
-    )
-    return $.Deferred().resolve([{ rows: [] },0,0]).then(chunk_loop)
-
-  get_data: (start,num) ->
-    return @source.get(@state.filter(),@state.columns(),@state.order(),
-                       start,num,true)
 
   # XXX abstract better
   transmit_data: (el,fn,data) ->
@@ -127,18 +93,6 @@ class TableHolder
       $('.expopts',$form).val(JSON.stringify({} for c in data.cols))
       $form.trigger('submit')
   # END used for download links
-
-  generate_model: (extra) ->
-    return {
-      table_ready: (el,data) => @collect_view_model(el,data)
-      state: @state
-      download_curpage: (el,fn) =>
-        @get_data(@state.start(),@state.pagesize()).done((data) =>
-          @transmit_data(el,fn,data)
-        )
-      download_all: (el,fn) =>
-        @get_all_data().done((data) => @transmit_data(el,fn,data))
-    }
 
   collect_view_model: (el,data) ->
     @outer = el
@@ -245,7 +199,6 @@ class Table
 
 # XXX periodic headers
 
-window.TableSource = Source
 window.TableState = TableState
 window.search_table = TableHolder
 
