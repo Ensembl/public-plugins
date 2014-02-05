@@ -1,0 +1,98 @@
+/*
+ * Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+.pietimer, .pietimer * {
+  display: block;
+}
+
+.pietimer, .pietimer-inactive {
+  float: left;
+  position: relative;
+  margin-right: 4px;
+  width: 16px;
+  height: 16px;
+  background: [[PANEL_BORDER]];
+  border-radius: 50% 50%;
+}
+
+.pietimer .pietimer-border-container {
+  position: absolute;
+  z-index: 40;
+  overflow: hidden;
+  height: 16px;
+}
+
+.pietimer .pietimer-border {
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  margin: -5px;
+  border: 5px solid [[BUTTON_BG]];
+}
+
+.pietimer .pietimer-pie {
+  width: 50%;
+  height: 100%;
+  transform-origin: 100% 50%;
+  position: absolute;
+  background-color: [[PANEL_BG]];
+}
+
+.pietimer .pietimer-spinner {
+  border-radius: 100% 0 0 100% / 50% 0 0 50%;
+  z-index: 20;
+  animation: rota 30s linear infinite;
+}
+
+.pietimer:hover .pietimer-spinner,
+.pietimer:hover .pietimer-filler,
+.pietimer:hover .pietimer-mask {
+  animation-play-state: running;
+}
+
+.pietimer-paused .pietimer-spinner,
+.pietimer-paused .pietimer-filler,
+.pietimer-paused .pietimer-mask {
+  animation-play-state: paused;
+}
+
+.pietimer .pietimer-filler {
+  border-radius: 0 100% 100% 0 / 0 50% 50% 0;
+  left: 50%;
+  opacity: 0;
+  z-index: 10;
+  animation: opa 30s steps(1, end) infinite reverse;
+}
+
+.pietimer .pietimer-mask {
+  width: 50%;
+  height: 100%;
+  position: absolute;
+  background: inherit;
+  opacity: 1;
+  z-index: 30;
+  animation: opa 30s steps(1, end) infinite;
+}
+
+@keyframes rota {
+  0%    { transform: rotate(0deg); }
+  100%  { transform: rotate(360deg); }
+}
+
+@keyframes opa {
+  0%        { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
