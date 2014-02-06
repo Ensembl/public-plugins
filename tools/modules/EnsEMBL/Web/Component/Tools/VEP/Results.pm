@@ -545,11 +545,14 @@ sub content {
   
   ## DOWNLOAD
   ###########
-  
+
+  my $dir_loc  = $hub->species_defs->ENSEMBL_TOOLS_TMP_DIR;
+  my $file_loc = $output_file_obj->filename =~ s/^$dir_loc\/(temporary|persistent)\/VEP\///r;
+
   $html .= '<div class="toolbox">';
   $html .= '<div class="toolbox-head"><img src="/i/16/download.png" style="vertical-align:top;"> Download</div><div style="padding:5px;">';
   
-  my $download_url = sprintf('/%s/vep_download?file=%s;name=%s;prefix=vep', $hub->species, $output_file_obj->filename, $tk_name.'.txt');
+  my $download_url = sprintf('/%s/vep_download?file=%s;name=%s;persistent=%s;prefix=vep', $hub->species, $file_loc, $tk_name.'.txt', $hub->user ? 1 : 0);
   
   # all
   $html .= '<div><b>All</b><span style="float:right; margin-left:10px;">';
@@ -565,7 +568,7 @@ sub content {
     $filtered_name =~ s/^\s+//g;
     $filtered_name =~ s/\s+/\_/g;
     
-    my $filtered_url = sprintf('/%s/vep_download?file=%s;name=%s;prefix=vep', $hub->species, $output_file_obj->filename, $filtered_name.'.txt');
+    my $filtered_url = sprintf('/%s/vep_download?file=%s;name=%s;persistent=%s;prefix=vep', $hub->species, $file_loc, $filtered_name.'.txt', $hub->user ? 1 : 0);
     $filtered_url .= ';'.join(";", map {"$_=$content_args{$_}"} grep {!/to|from/} keys %content_args);
     
     $html .= '<div><hr><b>Filtered</b><span style="float:right; margin-left:10px;">';
