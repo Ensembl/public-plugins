@@ -178,7 +178,7 @@ Ensembl.Panel.ActivitySummary = Ensembl.Panel.ContentTools.extend({
    * Clears the timers before destroying the object
    */
     this.clearTimer();
-    this.base();
+    this.base.apply(this, arguments);
   }
 });
 
