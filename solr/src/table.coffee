@@ -105,11 +105,9 @@ class TableHolder
   xxx_table: -> return new Table(@)
 
   table_ready: (html) ->
-    d = new $.Deferred() # XXX one day
     table = $('.search_table_proper',@outer)
     table.empty()
     table.append(html)
-    return d.resolve(0)
 
   data_actions: (data) ->
     if @options.update?
@@ -166,7 +164,6 @@ class Table
     if first then @holder.data_actions(data)
     outer = @render_data(data,first)
     outer.appendTo(@container)
-    #if first then @holder.table_ready(@container)
     return d.resolve(data)
 
   # XXX new
@@ -175,12 +172,13 @@ class Table
     @container = $('<div/>').addClass('search_table')
     @stripe = 1
     @empty = 1
+    @holder.table_ready(@container)
 
   draw_top: () ->
 
   draw_rows: (rows) ->
     d = @render_chunk(rows,true) # XXX not false
-    if @empty then d = d.then(@holder.table_ready(@container))
+#    if @empty then d = d.then(@holder.table_ready(@container))
     @empty = 0
     return d
 

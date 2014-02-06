@@ -148,10 +148,19 @@
     };
 
     Hub.prototype.render_stage = function(more) {
+      var _this = this;
       this.set_templates(this.layout());
       if (this.useless_browser()) {
         $('#solr_content').addClass('solr_useless_browser');
       }
+      $(document).on('update_state', function(e, qps) {
+        return _this.update_url(qps);
+      });
+      $(document).on('update_state_incr', function(e, qps) {
+        return rate_limiter(qps).then(function(data) {
+          return _this.update_url(data);
+        });
+      });
       return this.renderer.render_stage(more);
     };
 
@@ -636,22 +645,27 @@
     });
   };
 
-  dispatch_main_requests = function(request, cols, query, start, rows, currency) {
-    var extras, favs, ret, rigid,
+  dispatch_main_requests = function(request, state, table, cols, query, start, rows, currency) {
+    var extras, favs, ret, rigid, t, total,
       _this = this;
+    t = table.xxx_table();
+    t.reset();
     rigid = [];
     favs = $.solr_config('user.favs.species');
     if (favs.length) {
       rigid.push(['species', [favs], 100]);
     }
     extras = generate_block_list(rigid);
+    total = 0;
     ret = each_block(extras.length, function(i) {
       return request.request_results(query, cols, extras[i], 0, 10).then(function(data) {
+        total += data.num;
         return data.num;
       });
     });
     return ret.then(function(sizes) {
-      var i, local_offset, offset, requests, results, rows_left, _i, _ref;
+      var i, local_offset, offset, requests, results, rows_left, tops, _i, _ref;
+      $(document).trigger('num_known', [total, state]);
       requests = [];
       offset = 0;
       rows_left = rows;
@@ -673,24 +687,39 @@
           return request.request_results(query, cols, extras[i], requests[i][0], requests[i][2]);
         }
       });
-      return results.then(currency).then(function(docs_frags) {
-        var docs, _j, _ref1, _ref2, _ref3;
-        docs = [];
-        for (i = _j = 0, _ref1 = docs_frags.length; 0 <= _ref1 ? _j < _ref1 : _j > _ref1; i = 0 <= _ref1 ? ++_j : --_j) {
-          if (requests[i][0] !== -1) {
-            [].splice.apply(docs, [(_ref2 = requests[i][1]), (requests[i][1] + docs_frags[i].num) - _ref2 + 1].concat(_ref3 = docs_frags[i].rows)), _ref3;
+      tops = [];
+      results = results.then(function(docs_frags) {
+        var _j, _ref1;
+        if (start === 0) {
+          for (i = _j = 0, _ref1 = requests.length; 0 <= _ref1 ? _j < _ref1 : _j > _ref1; i = 0 <= _ref1 ? ++_j : --_j) {
+            if (requests[i][0] !== -1 && tops.length < rows) {
+              tops = tops.concat(docs_frags[i].rows);
+            }
           }
+          tops = tops.slice(0, rows);
         }
-        return {
-          rows: docs,
-          num: offset,
-          cols: cols
-        };
+        $(document).trigger('main_front_page', [tops, state]);
+        return docs_frags;
+      });
+      return results.then(currency).then(function(docs_frags) {
+        var _this = this;
+        return each_block(requests.length, function(i) {
+          if (requests[i][0] !== -1) {
+            return t.draw_rows({
+              rows: docs_frags[i].rows,
+              cols: cols
+            });
+          } else {
+            return $.Deferred().resolve(null);
+          }
+        });
+      }).then(function(x) {
+        return console.log("donedone");
       });
     });
   };
 
-  dispatch_facet_request = function(request, cols, query, start, rows, currency) {
+  dispatch_facet_request = function(request, state, table, cols, query, start, rows, currency, meta) {
     var fq, k, params,
       _this = this;
     fq = query.fq.join(' AND ');
@@ -712,6 +741,20 @@
       facet: true
     };
     return request.raw_ajax(params).then(currency).then(function(data) {
+      var all_facets, facets, _ref, _ref1, _ref2, _ref3;
+      all_facets = (function() {
+        var _i, _len, _ref, _results;
+        _ref = $.solr_config('static.ui.facets');
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          k = _ref[_i];
+          _results.push(k.key);
+        }
+        return _results;
+      })();
+      facets = state.q_facets();
+      return $(document).trigger('faceting_known', [(_ref = data.result) != null ? (_ref1 = _ref.facet_counts) != null ? _ref1.facet_fields : void 0 : void 0, facets, (_ref2 = data.result) != null ? (_ref3 = _ref2.response) != null ? _ref3.numFound : void 0 : void 0, state]);
+    }).then(function(data) {
       var _ref, _ref1;
       return (_ref = data.result) != null ? (_ref1 = _ref.facet_counts) != null ? _ref1.facet_fields : void 0 : void 0;
     });
@@ -769,8 +812,8 @@
     faceter: dispatch_facet_request
   };
 
-  dispatch_all_requests = function(request, start, rows, cols, filter, order, currency) {
-    var all_facets, c, facets, fc, fr, input, k, plugin_actions, plugin_list, q, sort, v, _i, _j, _k, _len, _len1, _len2, _ref,
+  dispatch_all_requests = function(request, state, table, start, rows, cols, filter, order, currency) {
+    var all_facets, facets, input, k, plugin_actions, plugin_list, q, sort, v,
       _this = this;
     all_facets = (function() {
       var _i, _len, _ref, _results;
@@ -782,23 +825,8 @@
       }
       return _results;
     })();
-    facets = {};
-    for (_i = 0, _len = filter.length; _i < _len; _i++) {
-      fr = filter[_i];
-      _ref = fr.columns;
-      for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
-        c = _ref[_j];
-        if (c === 'q') {
-          q = fr.value;
-        }
-        for (_k = 0, _len2 = all_facets.length; _k < _len2; _k++) {
-          fc = all_facets[_k];
-          if (fc === c) {
-            facets[c] = fr.value;
-          }
-        }
-      }
-    }
+    q = state.q_query();
+    facets = state.q_facets();
     if (q != null) {
       request.some_query();
     } else {
@@ -830,13 +858,13 @@
     plugin_actions = [];
     $.each(all_requests, function(k, v) {
       plugin_list.push(k);
-      return plugin_actions.push(v(request, cols, input, start, rows, currency));
+      return plugin_actions.push(v(request, state, table, cols, input, start, rows, currency));
     });
     return $.when.apply(this, plugin_actions).then(function() {
-      var i, out, results, _l, _ref1;
+      var i, out, results, _i, _ref;
       results = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
       out = {};
-      for (i = _l = 0, _ref1 = results.length; 0 <= _ref1 ? _l < _ref1 : _l > _ref1; i = 0 <= _ref1 ? ++_l : --_l) {
+      for (i = _i = 0, _ref = results.length; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
         out[plugin_list[i]] = results[i];
       }
       out.main.faceter = out.faceter;
@@ -844,7 +872,7 @@
     });
   };
 
-  rate_limiter = window.rate_limiter(1, 2);
+  rate_limiter = window.rate_limiter(1000, 2000);
 
   main_currency = window.ensure_currency();
 
@@ -919,24 +947,15 @@
     };
 
     Request.prototype.render_table = function(table, state) {
-      var chunksize, currency, page, start,
-        _this = this;
+      var chunksize, currency, page, start;
       this.t = table.xxx_table();
       this.t.reset();
       start = state.start();
       page = state.pagesize();
       chunksize = table.options.chunk_size;
       currency = main_currency();
-      return window.in_chunks(page, chunksize, function(got, len) {
-        return _this.get_data(state, start + got, len, currency).then(function(data) {
-          if (!got) {
-            _this.first_result(state, data);
-          }
-          return _this.t.draw_rows(data, !got).then(function(d) {
-            return data.rows.length;
-          });
-        });
-      });
+      $(document).trigger('state_known', state);
+      return dispatch_all_requests(this, state, table, start, page, state.columns(), state.filter(), state.order(), currency);
     };
 
     Request.prototype.get_data = function(state, start, rows, currency) {
@@ -1022,7 +1041,7 @@
       return _results;
     };
 
-    Request.prototype.request_results = function(params, cols, extra, start, rows) {
+    Request.prototype.request_results = function(params, cols, extra, start, rows, every) {
       var boost, bq, field, i, input, invert, q, s, str, v, values, x, _i, _j, _len, _len1, _ref,
         _this = this;
       input = _clone_object(params);
@@ -1326,6 +1345,39 @@
       }
       state.q = this._extract_filter('q');
       return this.hub.update_url(state);
+    };
+
+    SearchTableState.prototype.q_query = function() {
+      var c, fr, _i, _j, _len, _len1, _ref, _ref1;
+      _ref = this.filter();
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        fr = _ref[_i];
+        _ref1 = fr.columns;
+        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+          c = _ref1[_j];
+          if (c === 'q') {
+            return fr.value;
+          }
+        }
+      }
+      return '';
+    };
+
+    SearchTableState.prototype.q_facets = function() {
+      var c, facets, fr, _i, _j, _len, _len1, _ref, _ref1;
+      facets = [];
+      _ref = this.filter();
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        fr = _ref[_i];
+        _ref1 = fr.columns;
+        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+          c = _ref1[_j];
+          if (c !== 'q') {
+            facets[c] = fr.value;
+          }
+        }
+      }
+      return facets;
     };
 
     return SearchTableState;

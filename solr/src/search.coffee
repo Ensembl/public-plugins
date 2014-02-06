@@ -84,6 +84,10 @@ class Hub
   render_stage: (more) ->
     @set_templates(@layout())
     if @useless_browser() then $('#solr_content').addClass('solr_useless_browser')
+    $(document).on 'update_state', (e,qps) =>
+      @update_url(qps)
+    $(document).on 'update_state_incr', (e,qps) =>
+      rate_limiter(qps).then((data) => @update_url(data))
     @renderer.render_stage(more)
 
   _add_changed: (changed,k) ->
@@ -338,7 +342,10 @@ each_block = (num,fn) ->
 
 # XXX low-level cache
 
-dispatch_main_requests = (request,cols,query,start,rows,currency) ->
+dispatch_main_requests = (request,state,table,cols,query,start,rows,currency) ->
+  t = table.xxx_table()
+  t.reset()
+    
   # Determine what the blocks are to be: XXX cache this
   rigid = []
   favs = $.solr_config('user.favs.species')
@@ -346,13 +353,15 @@ dispatch_main_requests = (request,cols,query,start,rows,currency) ->
     rigid.push ['species',[favs],100]
   extras = generate_block_list(rigid)
   # Calculate block sizes
+  total = 0
   ret = each_block extras.length,(i) =>
     return request.request_results(query,cols,extras[i], 0, 10)
       .then (data) ->
+        total += data.num
         return data.num
-
   return ret.then (sizes) =>
-    # ... calculate the requests we will make
+    $(document).trigger('num_known',[total,state])
+    # Calculate the requests we will make
     requests = []
     offset = 0
     rows_left = rows
@@ -365,20 +374,32 @@ dispatch_main_requests = (request,cols,query,start,rows,currency) ->
       else
         requests.push [-1,-1,-1]
       offset += sizes[i]
-    # ... make the requests
+    # Make the requests
     results = each_block extras.length, (i) =>
       if requests[i][0] != -1
         request.request_results(query,cols,extras[i],requests[i][0],requests[i][2])
-    # ... weld together
-    return results.then(currency).then (docs_frags) =>
-      docs = []
-      for i in [0...docs_frags.length]
+    # Save the "top results page", if it comes through
+    tops = []
+    results = results.then((docs_frags) ->
+      if start == 0
+        for i in [0...requests.length]
+          if requests[i][0] != -1 and tops.length < rows
+            tops = tops.concat(docs_frags[i].rows)
+        tops = tops.slice(0,rows)
+      $(document).trigger('main_front_page',[tops,state])
+      return docs_frags
+    )
+    # Draw the table
+    return results.then(currency).then((docs_frags) ->
+      each_block requests.length,(i) =>
         if requests[i][0] != -1
-          docs[requests[i][1]..requests[i][1]+docs_frags[i].num] =
-            docs_frags[i].rows
-      return { rows: docs, num: offset, cols }
+          return t.draw_rows({ rows: docs_frags[i].rows, cols })
+        else
+          return $.Deferred().resolve(null)
+    ).then (x) =>
+      console.log("donedone")
 
-dispatch_facet_request = (request,cols,query,start,rows,currency) ->
+dispatch_facet_request = (request,state,table,cols,query,start,rows,currency,meta) ->
   fq = query.fq.join(' AND ')
   params = {
     q: query.q
@@ -388,8 +409,13 @@ dispatch_facet_request = (request,cols,query,start,rows,currency) ->
     'facet.mincount': 1
     facet: true
   }
-  return request.raw_ajax(params).then(currency).then (data) =>
-    return data.result?.facet_counts?.facet_fields
+  return request.raw_ajax(params).then(currency)
+    .then (data) =>
+      all_facets = (k.key for k in $.solr_config('static.ui.facets'))
+      facets = state.q_facets()
+      $(document).trigger('faceting_known',[data.result?.facet_counts?.facet_fields,facets,data.result?.response?.numFound,state])
+    .then (data) =>
+      return data.result?.facet_counts?.facet_fields
 
 # Generate the criteria for the various blocks by converting
 # configured list to ordered power-set thereof.
@@ -417,24 +443,20 @@ generate_block_list = (rigid) ->
     return out
 
   return expand_criteria(rigid,remainder_criteria(rigid))
-  
+ 
+# Note that _facet_ provides meta for _main_. If you remove _facet_, you
+#   will need another source to fire the meta 
 all_requests = {
   main: dispatch_main_requests
   faceter: dispatch_facet_request
 }
 
-dispatch_all_requests = (request,start,rows,cols,filter,order,currency) ->
+dispatch_all_requests = (request,state,table,start,rows,cols,filter,order,currency) ->
   #request.abort_ajax()
   # Extract filter (from pseudo-column "q") and facets
   all_facets = (k.key for k in $.solr_config('static.ui.facets'))
-  facets = {}
-  for fr in filter
-    for c in fr.columns
-      if c == 'q'
-        q = fr.value
-      for fc in all_facets
-        if fc == c
-          facets[c] = fr.value
+  q = state.q_query()
+  facets = state.q_facets()
   if q?
     request.some_query()
   else
@@ -456,7 +478,7 @@ dispatch_all_requests = (request,start,rows,cols,filter,order,currency) ->
   plugin_actions = []
   $.each all_requests, (k,v) =>
     plugin_list.push k
-    plugin_actions.push v(request,cols,input,start,rows,currency)
+    plugin_actions.push v(request,state,table,cols,input,start,rows,currency)
   return $.when.apply(@,plugin_actions)
     .then (results...) =>
       out = {}
@@ -465,7 +487,7 @@ dispatch_all_requests = (request,start,rows,cols,filter,order,currency) ->
       out.main.faceter = out.faceter # XXX tmp till moved
       return out
 
-rate_limiter = window.rate_limiter(1,2)
+rate_limiter = window.rate_limiter(1000,2000)
 main_currency = window.ensure_currency()
 
 # XXX Faceter orders
@@ -500,15 +522,11 @@ class Request
     page = state.pagesize()
     chunksize = table.options.chunk_size
     currency = main_currency()
-    return window.in_chunks page, chunksize, (got,len) =>
-      return @get_data(state,start+got,len,currency)
-        .then (data) =>
-          if !got then @first_result(state,data)
-          return @t.draw_rows(data,!got).then (d) => data.rows.length
-  
+    $(document).trigger('state_known',state)
+    return dispatch_all_requests(@,state,table,start,page,state.columns(),state.filter(),state.order(),currency)
+
   # XXX get rid of force by pushing rate limiter elsewhere in stack
   get_data: (state,start,rows,currency) ->
-    # XXX configurable incr except for download
     filter = state.filter()
     cols = state.columns()
     order = state.order()
@@ -552,7 +570,7 @@ class Request
           if doc[h] and snippet[h]
             doc[h] = snippet[h].join(' ... ')
   
-  request_results: (params,cols,extra,start,rows) ->
+  request_results: (params,cols,extra,start,rows,every) ->
     input = _clone_object(params)
     input.start = start
     input.rows = rows
@@ -710,6 +728,20 @@ class SearchTableState extends window.TableState
     state.q = @_extract_filter('q')
     @hub.update_url(state)
 
+  q_query: () ->
+    for fr in @filter()
+      for c in fr.columns
+        if c == 'q'
+          return fr.value
+    return ''
+
+  q_facets: () ->
+    facets = []
+    for fr in @filter()
+      for c in fr.columns
+        if c != 'q'
+          facets[c] = fr.value
+    return facets
 # Go!
 
 $ ->

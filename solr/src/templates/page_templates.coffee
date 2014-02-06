@@ -30,10 +30,9 @@ window.page_templates =
         if m?
           $('<img/>').attr('src',m[1]).appendTo($('<body></body>')).css('display','none')
       '.new_current_faceter': (el,data) ->
-        $(document).on 'first_result', (e,query,data) ->
+        $(document).on 'faceting_known', (e,faceting,values) ->
           templates = $(document).data('templates')
           el.empty()
-          values = query.facets
           el.append(templates.generate('current_facets_sidebar',{values}))
       '.solr_page_p_side': (el,data) ->
         # scrollnig overflowing sidebars despite being "fixed".
@@ -150,10 +149,10 @@ window.page_templates =
         'f<-faceters':
           '@data-key': 'f'
     preproc: (spec,data) ->
-      data.faceters = $.solr_config('static.ui.facets_sidebar_order')      
+      data.faceters = $.solr_config('static.ui.facets_sidebar_order')
       [spec,data]
     postproc: (el,odata) =>
-      $(document).on 'first_result', (e,query,data,state) =>
+      $(document).on 'faceting_known', (e,faceter,query) =>
         $('.table_faceter',el).each () ->
           key = $(@).data('key')
           order = []
@@ -163,9 +162,9 @@ window.page_templates =
           if members?
             for k in members
               order.push(k.key)
-          model = { values: data.faceter[key], order }
-          short_num = $.solr_config('static.ui.facets.key=.trunc',key)  
-          if query.facets[key] then model.values = []
+          model = { values: faceter[key], order }
+          short_num = $.solr_config('static.ui.facets.key=.trunc',key)
+          if query[key] then model.values = []
           model.key = key
           templates = $(document).data('templates')
           $(@).empty().append(templates.generate('faceter_inner',model))

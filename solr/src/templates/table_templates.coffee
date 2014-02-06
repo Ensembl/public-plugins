@@ -116,11 +116,11 @@ window.table_templates =
             @state.set()
           @templates.generate('real_pager',{ @items, click })
 
-      $(document).on 'first_result', (e,query,result,state) ->
+      $(document).on 'num_known', (e,num,state) ->
         els.empty()
         if state.pagesize()
           pagesize = state.pagesize()
-          pages = Math.floor((result.num + pagesize - 1) / pagesize)
+          pages = Math.floor((num + pagesize - 1) / pagesize)
           start = Math.floor((state.start() + pagesize) / pagesize)
           templates = $(document).data('templates')
           rpager = new Pager(templates,state,start,pages)
@@ -165,8 +165,8 @@ window.table_templates =
           el = $(e)
           _valueevent el,( => el.val()), (value) =>
             $(document).trigger('update_state',{ q: value })
-          $(document).on 'first_result', (e,query,result,state) ->
-            el.val(query.q)
+          $(document).on 'state_known', (e,state) ->
+            el.val(state.q_query())
 
   # Sizer, ie results per page selector 
   sizer:
@@ -189,7 +189,7 @@ window.table_templates =
         els.change (e) ->
           el = $(e.currentTarget).parents().andSelf().find('select')
           $(document).trigger('update_state',{ perpage: el.val(), page: 1 })
-        $(document).on 'first_result', (e,query,result,state) ->
+        $(document).on 'state_known', (e,state) ->
           els.val(state.e().data('pagesize'))
     preproc: (spec,data) ->
       data.sizes = $.solr_config('static.ui.pagesizes')
@@ -215,7 +215,7 @@ window.table_templates =
           '@data-key': 'col.key'
     decorate:
       'ul': (els,data) ->
-        $(document).on 'first_result', (e,query,result,state) ->
+        $(document).on 'state_known', (e,state) ->
           onoff = {}
           (onoff[k] = 1) for k in state.e().data('columns')
           $('li',@).each ->

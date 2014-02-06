@@ -246,13 +246,15 @@
           });
         },
         '.solr_result_summary': function(els, data) {
-          return $(document).on('first_result', function(e, query, data) {
+          var _this = this;
+          return $(document).on('faceting_known', function(e, faceter, used_facets, num, state) {
             var templates;
             templates = $(document).data('templates');
             els.empty();
             return els.append(templates.generate('result_summary', {
-              query: query,
-              result: data
+              query: state.q_query(),
+              num: num,
+              used_facets: used_facets
             }));
           });
         }
@@ -274,8 +276,8 @@
     'result_summary': {
       template: "<div class=\"solr_result_stmt\">\n  <span class=\"solr_result_count\">0</span> results\n  match <span class=\"solr_result_query\">X</span>\n  <span class=\"solr_result_restricted\">\n    when restricted to\n    <ul>\n      <li>\n        <a href=\"#\">\n          <span class=\"solr_result_fname\">A</span>: \n          <span class=\"solr_result_fval\">AA</span>\n        </a>\n      </li>\n    </ul>\n  </span>\n</div>",
       directives: {
-        '.solr_result_count': 'result.num',
-        '.solr_result_query': 'query.q',
+        '.solr_result_count': 'num',
+        '.solr_result_query': 'query',
         '.solr_result_restricted': {
           'fs<-facets': {
             'li': {
@@ -316,7 +318,7 @@
       preproc: function(spec, data) {
         var facets, k, v, value, _ref;
         facets = [];
-        _ref = data.query.facets;
+        _ref = data.used_facets;
         for (k in _ref) {
           v = _ref[k];
           value = $.solr_config('static.ui.facets.key=.members.key=.text.plural', k, v);
@@ -353,8 +355,8 @@
           });
         },
         'input': function(els, data) {
-          $(document).on('first_result', function(e, query, data) {
-            return els.val(query.q);
+          $(document).on('state_known', function(e, state) {
+            return els.val(state.q_query());
           });
           return els.searchac().keydown(function(e) {
             if (e.keyCode === 13) {
@@ -369,7 +371,7 @@
         }
       },
       postproc: function(el, data) {
-        $(document).on('maybe_update_state', function(e, change) {
+        $(document).on('maybe_update_state', function(e, change, incr) {
           var _ref;
           $.getJSON("/Multi/Ajax/psychic", {
             q: (_ref = change.q) != null ? _ref : ''
@@ -380,20 +382,20 @@
           });
           return $(document).trigger('update_state', change);
         });
-        return $(document).on('first_result', function(e, query, data) {
-          var f, filter, ids, left, right, texts, title, _i, _len, _ref, _ref1,
+        return $(document).on('state_known', function(e, state) {
+          var f, facets, filter, ids, left, right, texts, title, _i, _len, _ref, _ref1,
             _this = this;
+          facets = state.q_facets();
           filter = $('.replacement_filter', el);
           texts = [];
           ids = [];
           filter.selbox({
             action: function(id, text, opts) {
-              var state;
               state = {
                 page: 1
               };
               state['facet_' + id] = '';
-              return $(document).trigger('update_state', [state]);
+              return $(document).trigger('update_state', state);
             },
             selchange: function() {
               return this.centered({
@@ -407,11 +409,11 @@
           _ref = $.solr_config("static.ui.facets");
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             f = _ref[_i];
-            if (!query.facets[f.key]) {
+            if (!facets[f.key]) {
               continue;
             }
             left = ucfirst($.solr_config("static.ui.facets.key=.text.plural", f.key));
-            right = (_ref1 = $.solr_config("static.ui.facets.key=.members.key=.text.plural", f.key, query.facets[f.key])) != null ? _ref1 : query.facets[f.key];
+            right = (_ref1 = $.solr_config("static.ui.facets.key=.members.key=.text.plural", f.key, facets[f.key])) != null ? _ref1 : facets[f.key];
             texts.push("Search other <i>" + left + "</i>,\nnot just <b>" + right + "</b>.");
             ids.push(f.key);
             title.push(right);
@@ -532,11 +534,10 @@
           }
         },
         '.new_current_faceter': function(el, data) {
-          return $(document).on('first_result', function(e, query, data) {
-            var templates, values;
+          return $(document).on('faceting_known', function(e, faceting, values) {
+            var templates;
             templates = $(document).data('templates');
             el.empty();
-            values = query.facets;
             return el.append(templates.generate('current_facets_sidebar', {
               values: values
             }));
@@ -752,7 +753,7 @@
         return [spec, data];
       },
       postproc: function(el, odata) {
-        return $(document).on('first_result', function(e, query, data, state) {
+        return $(document).on('faceting_known', function(e, faceter, query) {
           $('.table_faceter', el).each(function() {
             var fav_order, k, key, members, model, order, short_num, templates, _i, _len;
             key = $(this).data('key');
@@ -769,11 +770,11 @@
               }
             }
             model = {
-              values: data.faceter[key],
+              values: faceter[key],
               order: order
             };
             short_num = $.solr_config('static.ui.facets.key=.trunc', key);
-            if (query.facets[key]) {
+            if (query[key]) {
               model.values = [];
             }
             model.key = key;
@@ -1227,7 +1228,7 @@
         return [spec, data];
       },
       postproc: function(el, data) {
-        return $(document).on('first_result', function(e, query, data, state) {
+        return $(document).on('state_known', function(e, state) {
           var pp;
           $('.solr_feet_p_current', el).removeClass('solr_feet_p_current');
           pp = state.pagesize();
@@ -1303,17 +1304,17 @@
           arrow(ctx, step_start + step * 12, 10, 4, -1);
           return ctx.fillText(sstr, step_start + step * 6, 15);
         };
-        return $(document).on('first_result', function(e, query, data, state) {
-          var desc, extra, latin, tophit, _ref,
+        return $(document).on('main_front_page', function(e, results, state) {
+          var desc, extra, latin, tophit,
             _this = this;
-          if (state.page() !== 1) {
+          if (state.page() !== 1 || !results.length) {
             return;
           }
-          tophit = (_ref = data.rows) != null ? _ref[0] : void 0;
+          tophit = results[0];
+          el.empty();
           if (tophit == null) {
             return;
           }
-          el.empty();
           if (tophit.feature_type === 'Gene') {
             extra = {};
             desc = tophit.description.replace(/\[(.*?)\:(.*?)\]/g, function(g0, g1, g2) {
@@ -1337,11 +1338,11 @@
                 ]
               })
             }, function(data) {
-              var biotype, bt_colour, templates, _ref1;
-              _ref1 = data.result, biotype = _ref1[0], bt_colour = _ref1[1];
+              var biotype, bt_colour, templates, _ref;
+              _ref = data.result, biotype = _ref[0], bt_colour = _ref[1];
               templates = $(document).data("templates");
               el.append(templates.generate('sctophit', {
-                q: query.q,
+                q: state.q_query(),
                 url: tophit.url,
                 name: tophit.name,
                 ft: "Gene",
@@ -1446,15 +1447,15 @@
     'topgene': {
       template: "<div class='solr_topgene'>\n</div>",
       postproc: function(el, data) {
-        return $(document).on('first_result', function(e, query, data, state) {
+        return $(document).on('main_front_page', function(e, results, state) {
           var params,
             _this = this;
-          if (state.page() !== 1) {
+          if (state.page() !== 1 || !results.length) {
             return;
           }
           el.empty();
           params = {
-            q: 'name:"' + query.q + '"',
+            q: 'name:"' + state.q_query() + '"',
             rows: 200,
             fq: "feature_type:Gene AND database_type:core",
             'facet.field': "species",
@@ -1514,7 +1515,7 @@
               return el.append(templates.generate('sctopgene', {
                 urls: sp_glinks,
                 rows: rows,
-                q: query.q
+                q: state.q_query()
               }));
             }
           });
@@ -1635,10 +1636,13 @@
     noresults: {
       template: "<div></div>",
       postproc: function(el, data) {
-        return $(document).on('first_result', function(e, query, rdata, state) {
+        return $(document).on('num_known', function(e, num, state) {
           var _this = this;
+          if (!state.q_query()) {
+            return;
+          }
           return _ajax_json("/Multi/Ajax/search", {
-            'spellcheck.q': query.q.toLowerCase(),
+            'spellcheck.q': state.q_query().toLowerCase(),
             spellcheck: true,
             'spellcheck.count': 50,
             'spellcheck.onlyMorePopular': false
@@ -1652,7 +1656,7 @@
             for (i = _i = 0, _len = words.length; _i < _len; i = ++_i) {
               word = words[i];
               w = Math.sqrt((words.length - i) / words.length);
-              if (rdata.num) {
+              if (num) {
                 w = w / 2;
               }
               suggestions.push({
@@ -1660,7 +1664,7 @@
                 weight: w * w
               });
             }
-            mainflow = rdata.num === 0 || !$('.sidecar_holder').is(':visible') || !$('.sidecar_holder').length;
+            mainflow = num === 0 || !$('.sidecar_holder').is(':visible') || !$('.sidecar_holder').length;
             dest = null;
             el.empty();
             el.each(function() {
@@ -1673,7 +1677,7 @@
             templates = $(document).data("templates");
             return dest.append(templates.generate('noresultssuggest', {
               suggestions: suggestions,
-              someresults: rdata.num !== 0,
+              someresults: num !== 0,
               mainflow: mainflow
             }));
           });
@@ -1683,11 +1687,13 @@
     narrowresults: {
       template: "<div></div>",
       postproc: function(el, data) {
-        return $(document).on('first_result', function(e, query, rdata, state) {
-          var all_facets, f,
+        return $(document).on('num_known', function(e, num, state) {
+          var all_facets, f, facets, query,
             _this = this;
           el.empty();
-          if (rdata.num !== 0) {
+          query = state.q_query();
+          facets = state.q_facets();
+          if (!query || num) {
             return;
           }
           all_facets = (function() {
@@ -1701,7 +1707,7 @@
             return _results;
           })();
           return _ajax_json("/Multi/Ajax/search", {
-            q: query.q,
+            q: query,
             rows: 1,
             'facet.field': all_facets,
             'facet.mincount': 1,
@@ -1712,8 +1718,8 @@
             othervalues = [];
             for (_i = 0, _len = all_facets.length; _i < _len; _i++) {
               f = all_facets[_i];
-              if (query.facets[f]) {
-                cur_values.push([f, query.facets[f]]);
+              if (facets[f]) {
+                cur_values.push([f, facets[f]]);
               }
               if (((_ref = data.result) != null ? (_ref1 = _ref.facet_counts) != null ? (_ref2 = _ref1.facet_fields) != null ? _ref2[f] : void 0 : void 0 : void 0) != null) {
                 entries = 0;
@@ -1749,7 +1755,7 @@
             wholesite = cur_values.length === 0;
             templates = $(document).data('templates');
             return el.append(templates.generate('noresultsnarrow', {
-              q: query.q,
+              q: query,
               yoursearch: yoursearch,
               othervalues: othervalues,
               wholesite: wholesite,
@@ -2035,12 +2041,12 @@
           return Pager;
 
         })();
-        return $(document).on('first_result', function(e, query, result, state) {
+        return $(document).on('num_known', function(e, num, state) {
           var pages, pagesize, rpager, start, templates;
           els.empty();
           if (state.pagesize()) {
             pagesize = state.pagesize();
-            pages = Math.floor((result.num + pagesize - 1) / pagesize);
+            pages = Math.floor((num + pagesize - 1) / pagesize);
             start = Math.floor((state.start() + pagesize) / pagesize);
             templates = $(document).data('templates');
             rpager = new Pager(templates, state, start, pages);
@@ -2105,8 +2111,8 @@
                 q: value
               });
             });
-            return $(document).on('first_result', function(e, query, result, state) {
-              return el.val(query.q);
+            return $(document).on('state_known', function(e, state) {
+              return el.val(state.q_query());
             });
           });
         }
@@ -2138,7 +2144,7 @@
               page: 1
             });
           });
-          return $(document).on('first_result', function(e, query, result, state) {
+          return $(document).on('state_known', function(e, state) {
             return els.val(state.e().data('pagesize'));
           });
         }
@@ -2160,7 +2166,7 @@
       },
       decorate: {
         'ul': function(els, data) {
-          return $(document).on('first_result', function(e, query, result, state) {
+          return $(document).on('state_known', function(e, state) {
             var k, onoff, _i, _len, _ref;
             onoff = {};
             _ref = state.e().data('columns');

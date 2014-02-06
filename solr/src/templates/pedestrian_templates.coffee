@@ -293,7 +293,7 @@ window.pedestrian_templates =
         data.entries.push({ label: (if x then x else "all"), key: x})
       [spec,data]
     postproc: (el,data) ->
-      $(document).on 'first_result', (e,query,data,state) ->
+      $(document).on 'state_known', (e,state) ->
         $('.solr_feet_p_current',el).removeClass('solr_feet_p_current')
         pp = state.pagesize()
         $("a[href='##{pp}']",el).addClass('solr_feet_p_current')

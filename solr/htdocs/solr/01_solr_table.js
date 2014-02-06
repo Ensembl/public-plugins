@@ -203,12 +203,10 @@
     };
 
     TableHolder.prototype.table_ready = function(html) {
-      var d, table;
-      d = new $.Deferred();
+      var table;
       table = $('.search_table_proper', this.outer);
       table.empty();
-      table.append(html);
-      return d.resolve(0);
+      return table.append(html);
     };
 
     TableHolder.prototype.data_actions = function(data) {
@@ -332,7 +330,8 @@
       }
       this.container = $('<div/>').addClass('search_table');
       this.stripe = 1;
-      return this.empty = 1;
+      this.empty = 1;
+      return this.holder.table_ready(this.container);
     };
 
     Table.prototype.draw_top = function() {};
@@ -340,9 +339,6 @@
     Table.prototype.draw_rows = function(rows) {
       var d;
       d = this.render_chunk(rows, true);
-      if (this.empty) {
-        d = d.then(this.holder.table_ready(this.container));
-      }
       this.empty = 0;
       return d;
     };

@@ -55,11 +55,11 @@ window.rhs_templates =
         arrow(ctx,step_start+step*12,10,4,-1)
         ctx.fillText(sstr,step_start+step*6,15)
       
-      $(document).on 'first_result', (e,query,data,state) ->
-        if state.page() != 1 then return
-        tophit = data.rows?[0]
-        if not tophit? then return
+      $(document).on 'main_front_page', (e,results,state) ->
+        if state.page() != 1 or !results.length then return
+        tophit = results[0]
         el.empty()
+        if not tophit? then return
         if tophit.feature_type == 'Gene'
           extra = {}
           desc = tophit.description.replace /\[(.*?)\:(.*?)\]/g, (g0,g1,g2) ->
@@ -77,7 +77,8 @@ window.rhs_templates =
             [biotype,bt_colour] = data.result
             templates = $(document).data("templates")
             el.append(templates.generate('sctophit',{
-              q: query.q, url: tophit.url, name: tophit.name, ft: "Gene"
+              q: state.q_query(), url: tophit.url, name: tophit.name,
+              ft: "Gene"
               species: tophit.species
               source: extra.source, latin: latin
               location: tophit.location
@@ -187,22 +188,23 @@ window.rhs_templates =
       </div>
     """
     postproc: (el,data) ->
-      $(document).on 'first_result', (e,query,data,state) ->
-        if state.page() != 1 then return
+      $(document).on 'main_front_page', (e,results,state) ->
+        if state.page() != 1 or !results.length then return
         el.empty()
         params = {
-          q: 'name:"'+query.q+'"'
+          q: 'name:"'+state.q_query()+'"'
           rows: 200
           fq: "feature_type:Gene AND database_type:core"
           'facet.field': "species"
           'facet.mincount': 1
-          facet: true 
-        }    
+          facet: true
+        }
+        # XXX currency
         _ajax_json "/Multi/Ajax/search", params, (data) =>
-          sp_glinks = {} 
+          sp_glinks = {}
           docs = data.result?.response?.docs
           if docs?
-            for d in docs 
+            for d in docs
               if d.ref_boost >= 10 and d.species
                 url = d.domain_url
                 if url?.charAt(0) != '/' then url = "/" + url
@@ -212,13 +214,13 @@ window.rhs_templates =
             favord = []
             for s,i in $.solr_config('user.favs.species')
               favord[s] = i
-            rows = rows.sort (a,b) -> 
+            rows = rows.sort (a,b) ->
               if favord[a]? and ((not favord[b]?) or favord[a] < favord[b])
                 return -1
               if favord[b]? then return 1
               return a.localeCompare(b)
             templates = $(document).data("templates")
-            el.append(templates.generate('sctopgene',{ urls: sp_glinks, rows, q: query.q }))
+            el.append(templates.generate('sctopgene',{ urls: sp_glinks, rows, q: state.q_query() }))
 
   sctopgene:
     template: """
@@ -317,9 +319,10 @@ window.rhs_templates =
       <div></div>
     """
     postproc: (el,data) ->
-      $(document).on 'first_result', (e,query,rdata,state) ->
+      $(document).on 'num_known', (e,num,state) ->
+        if !state.q_query() then return
         _ajax_json "/Multi/Ajax/search", {
-          'spellcheck.q': query.q.toLowerCase()
+          'spellcheck.q': state.q_query().toLowerCase()
           spellcheck: true
           'spellcheck.count': 50
           'spellcheck.onlyMorePopular': false
@@ -329,12 +332,12 @@ window.rhs_templates =
           unless words?.length then return
           for word,i in words
             w = Math.sqrt(((words.length-i)/words.length))
-            if rdata.num then w = w/2
+            if num then w = w/2
             suggestions.push {
               word
               weight: w*w
             }
-          mainflow = ( rdata.num == 0 or
+          mainflow = ( num == 0 or
               not $('.sidecar_holder').is(':visible') or
               not $('.sidecar_holder').length )
           dest = null
@@ -347,7 +350,7 @@ window.rhs_templates =
           templates = $(document).data("templates")
           dest.append(templates.generate('noresultssuggest',{
             suggestions,
-            someresults: ( rdata.num != 0 )
+            someresults: ( num != 0 )
             mainflow
           }))
 
@@ -356,21 +359,23 @@ window.rhs_templates =
       <div></div>
     """
     postproc: (el,data) ->
-      $(document).on 'first_result', (e,query,rdata,state) ->
+      $(document).on 'num_known', (e,num,state) ->
         el.empty()
-        if rdata.num != 0 then return
+        query = state.q_query()
+        facets = state.q_facets()
+        if !query or num then return
         all_facets = (f.key for f in $.solr_config('static.ui.facets'))
         _ajax_json "/Multi/Ajax/search", {
-            q: query.q
+            q: query
             rows: 1
             'facet.field': all_facets
             'facet.mincount': 1
             facet: true
           }, (data) =>
             cur_values = []
-            othervalues = [] 
+            othervalues = []
             for f in all_facets
-              if query.facets[f] then cur_values.push([f,query.facets[f]])
+              if facets[f] then cur_values.push([f,facets[f]])
               if data.result?.facet_counts?.facet_fields?[f]?
                 entries = 0
                 total = 0
@@ -385,7 +390,7 @@ window.rhs_templates =
             wholesite = (cur_values.length == 0)
             templates = $(document).data('templates')
             el.append(templates.generate('noresultsnarrow',{
-              q: query.q, yoursearch, othervalues, wholesite
+              q: query, yoursearch, othervalues, wholesite
               unrestrict_facets: () =>
                 state = { page: 1 }
                 for f in all_facets

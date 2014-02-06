@@ -229,11 +229,12 @@ window.google_templates =
           els.empty().css('left','100%')
           $('.table_result_fake_hover').removeClass('table_result_fake_hover')
       '.solr_result_summary': (els,data) ->
-        $(document).on('first_result', (e,query,data) ->
+        $(document).on 'faceting_known', (e,faceter,used_facets,num,state) =>
           templates = $(document).data('templates')
           els.empty()
-          els.append(templates.generate('result_summary',{ query, result: data }))
-        )
+          els.append(templates.generate('result_summary',{
+            query: state.q_query(), num, used_facets
+          }))
     postproc: (el,data) ->
       $('html').on 'wrap', (e) ->
         $('.maybe_wrap').each () ->
@@ -262,9 +263,9 @@ window.google_templates =
         </span>
       </div>
     """
-    directives:  
-      '.solr_result_count': 'result.num'
-      '.solr_result_query': 'query.q'
+    directives:
+      '.solr_result_count': 'num'
+      '.solr_result_query': 'query'
       '.solr_result_restricted':
         'fs<-facets':
           'li':
@@ -290,7 +291,7 @@ window.google_templates =
 
     preproc: (spec,data) ->
       facets = []
-      for k,v of data.query.facets
+      for k,v of data.used_facets
         value = $.solr_config('static.ui.facets.key=.members.key=.text.plural',k,v)
         if not value? then value = $.solr_config('static.ui.facets.key=.members.key=.key',k,v)
         if not value? then value = v
@@ -324,20 +325,23 @@ window.google_templates =
           q = els.parents('.se_search').find('.replacement_filter input:not(.solr_ghost)').val()
           $(document).trigger('maybe_update_state',{ q, page: 1 })
       'input': (els,data) ->
-        $(document).on 'first_result', (e,query,data) ->
-          els.val(query.q)
+        $(document).on 'state_known', (e,state) ->
+          els.val(state.q_query())
+#        els.searchac().keyup (e) ->
+#          $(document).trigger('update_state_incr',{ q: $(this).val(), page: 1 })
         els.searchac().keydown (e) ->
           if e.keyCode == 13
             $(this).trigger("blur")
             $(this).searchac('close')
             $(document).trigger('maybe_update_state',{ q: $(this).val(), page: 1 })
     postproc: (el,data) ->
-      $(document).on 'maybe_update_state', (e,change) ->
+      $(document).on 'maybe_update_state', (e,change,incr) ->
         $.getJSON "/Multi/Ajax/psychic",{ q: change.q ? '' }, (data) ->
           if data?.redirect
             window.location.href = data.url
         $(document).trigger('update_state',change)
-      $(document).on 'first_result', (e,query,data) ->
+      $(document).on 'state_known', (e,state) ->
+        facets = state.q_facets()
         filter = $('.replacement_filter',el)
         texts = []
         ids = []
@@ -345,23 +349,23 @@ window.google_templates =
           action: (id,text,opts) =>
             state = { page: 1 }
             state['facet_'+id] = ''
-            $(document).trigger('update_state',[state])
+            $(document).trigger('update_state',state)
           selchange: () ->
             @centered({ max: 14, inc: 2 })
         }
         filter.selbox("deactivate")
         title = []
         for f in $.solr_config("static.ui.facets")
-          if not query.facets[f.key] then continue
+          if not facets[f.key] then continue
           left = ucfirst($.solr_config("static.ui.facets.key=.text.plural",f.key))
-          right = $.solr_config("static.ui.facets.key=.members.key=.text.plural",f.key,query.facets[f.key]) ? query.facets[f.key]
+          right = $.solr_config("static.ui.facets.key=.members.key=.text.plural",f.key,facets[f.key]) ? facets[f.key]
           texts.push """
             Search other <i>#{left}</i>,
             not just <b>#{right}</b>.
           """
           ids.push(f.key)
           title.push(right)
-        data.title = "Only searching "+title.join(" ")  
+        data.title = "Only searching "+title.join(" ")
         if ids.length
           filter.selbox("activate",data.title,texts,ids)
 
