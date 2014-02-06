@@ -358,7 +358,7 @@ body_species_homepage_request = () ->
           rows: [{
             name: english
             description: english+" species home page for full details of "+english+" resources in Ensembl"
-            domain_url: 'http://'
+            domain_url: '/'+latin
             db: 'none'
             id: latin
             species: english
@@ -450,8 +450,10 @@ dispatch_main_requests = (request,state,table,query,update_seq) ->
 
 dispatch_facet_request = (request,state,table,query,update_seq) ->
   fq = query.fq.join(' AND ')
+  # This is a hack to get around a SOLR BUG
+  q = "( NOT species:xxx ) AND ( #{query.q} ) AND ( NOT species:yyy )"
   params = {
-    q: query.q
+    q
     fq
     rows: 1
     'facet.field': (k.key for k in $.solr_config('static.ui.facets'))

@@ -471,7 +471,6 @@
             element: this.element
           }).done(function(data) {
             var q, url;
-            console.log("callback");
             url = $('#se_q').parents("form").attr('action');
             url = url.split('/')[1];
             if (url === 'common') {

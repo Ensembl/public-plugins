@@ -278,7 +278,6 @@ $.widget('custom.searchac',$.ui.autocomplete,{
     source: (request,response) ->
       if internal_site(@element)
         rate_limit({q: request.term, response, @element }).done (data) =>
-          console.log("callback")
           url = $('#se_q').parents("form").attr('action')
           url = url.split('/')[1]
           if url == 'common' then url = 'Multi'

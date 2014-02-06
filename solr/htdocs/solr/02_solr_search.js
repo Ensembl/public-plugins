@@ -649,7 +649,6 @@
     return [
       (function(request, q, start, len) {
         var english, k, latin, v, _ref;
-        console.log("species homepage", q);
         latin = null;
         _ref = $.solr_config('spnames');
         for (k in _ref) {
@@ -659,7 +658,6 @@
             english = $.solr_config('revspnames.%', latin);
           }
         }
-        console.log("english", english);
         if (start === -1) {
           return $.Deferred().resolve(english ? 1 : 0);
         } else {
@@ -670,7 +668,7 @@
                 {
                   name: english,
                   description: english + " species home page for full details of " + english + " resources in Ensembl",
-                  domain_url: 'http://',
+                  domain_url: '/' + latin,
                   db: 'none',
                   id: latin,
                   species: english,
@@ -800,11 +798,12 @@
   };
 
   dispatch_facet_request = function(request, state, table, query, update_seq) {
-    var fq, k, params,
+    var fq, k, params, q,
       _this = this;
     fq = query.fq.join(' AND ');
+    q = "( NOT species:xxx ) AND ( " + query.q + " ) AND ( NOT species:yyy )";
     params = {
-      q: query.q,
+      q: q,
       fq: fq,
       rows: 1,
       'facet.field': (function() {
