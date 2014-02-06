@@ -798,6 +798,13 @@ a.location:hover {
   right: 0;
 }
 
+.result-type-species-homepage {
+  background: none repeat scroll 0 0 #FFE8E0;
+  margin: 0 0 0 -8px;
+  padding: 12px 16px 0;
+  width: 562px;
+}
+
 /* XXX scroll top top on style change */
 /* All list items */
 .solr_beak_p a, .solr_beak_p_title {

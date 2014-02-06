@@ -342,33 +342,80 @@ each_block = (num,fn) ->
 
 # XXX low-level cache
 
-dispatch_main_requests = (request,state,table,cols,query,start,rows,update_seq) ->
-  t = table.xxx_table()
-  t.reset()
-    
-  # Determine what the blocks are to be: XXX cache this
+body_species_homepage_request = () ->
+  return [((request,q,start,len) =>
+    latin = null
+    for k,v of $.solr_config('spnames')
+      if q.q.match(new RegExp("\\b#{k}\\b","gi"))
+        latin = v
+        english = $.solr_config('revspnames.%',latin)
+    if start == -1 # size request
+      return $.Deferred().resolve(if english then 1 else 0)
+    else
+      if english
+        return $.Deferred().resolve({
+          num: 1,
+          rows: [{
+            name: english
+            description: english+" species home page for full details of "+english+" resources in Ensembl"
+            domain_url: 'http://'
+            db: 'none'
+            id: latin
+            species: english
+            feature_type: 'Species Home Page'
+            result_style: 'result-type-species-homepage'
+          }]
+        })
+      else
+        return $.Deferred.resolve({ num:1, rows: [] })
+  )]
+
+body_main_requests = () ->
   rigid = []
   favs = $.solr_config('user.favs.species')
   if favs.length
     rigid.push ['species',[favs],100]
   extras = generate_block_list(rigid)
+  blocks = []
+  for x in extras
+    blocks.push ((xx) => (request,q,start,len) =>
+      if start == -1 # size request
+        request.request_results(q,xx,0,10).then((data) => data.num)
+      else # regular request
+        request.request_results(q,xx,start,len)
+    )(x)
+  return blocks
+
+body_requests = [
+  body_species_homepage_request
+  body_main_requests
+]
+
+dispatch_main_requests = (request,state,table,query,update_seq) ->
+  t = table.xxx_table()
+  t.reset()
+    
+  # Determine what the blocks are to be: XXX cache this
+  blocks = []
+  for b in body_requests
+    blocks = blocks.concat(b())
   # Calculate block sizes
   total = 0
-  ret = each_block extras.length,(i) =>
-    return request.request_results(query,cols,extras[i], 0, 10)
+  ret = each_block blocks.length,(i) =>
+    return blocks[i](request,query,-1)
       .then (data) ->
-        total += data.num
-        return data.num
+        total += data
+        return data
   return ret.then (sizes) =>
     if update_seq != current_update_seq then return $.Deferred().reject()
     $(document).trigger('num_known',[total,state,update_seq])
     # Calculate the requests we will make
     requests = []
     offset = 0
-    rows_left = rows
-    for i in [0...extras.length]
-      if start < offset+sizes[i] and start+rows > offset
-        local_offset = start - offset
+    rows_left = state.pagesize()
+    for i in [0...blocks.length]
+      if state.start() < offset+sizes[i] and state.start()+state.pagesize() > offset
+        local_offset = state.start() - offset
         if local_offset < 0 then local_offset = 0
         requests.push [local_offset,offset,rows_left]
         rows_left -= sizes[i] - local_offset
@@ -376,17 +423,17 @@ dispatch_main_requests = (request,state,table,cols,query,start,rows,update_seq) 
         requests.push [-1,-1,-1]
       offset += sizes[i]
     # Make the requests
-    results = each_block extras.length, (i) =>
+    results = each_block blocks.length, (i) =>
       if requests[i][0] != -1
-        request.request_results(query,cols,extras[i],requests[i][0],requests[i][2])
+        blocks[i](request,query,requests[i][0],requests[i][2])
     # Save the "top results page", if it comes through
     tops = []
     results = results.then((docs_frags) ->
-      if start == 0
+      if state.start() == 0
         for i in [0...requests.length]
-          if requests[i][0] != -1 and tops.length < rows
+          if requests[i][0] != -1 and tops.length < state.pagesize()
             tops = tops.concat(docs_frags[i].rows)
-        tops = tops.slice(0,rows)
+        tops = tops.slice(0,state.pagesize())
       if update_seq != current_update_seq then return $.Deferred().reject()
       $(document).trigger('main_front_page',[tops,state,update_seq])
       return docs_frags
@@ -396,12 +443,12 @@ dispatch_main_requests = (request,state,table,cols,query,start,rows,update_seq) 
       if update_seq != current_update_seq then return $.Deferred().reject()
       each_block requests.length,(i) =>
         if requests[i][0] != -1
-          return t.draw_rows({ rows: docs_frags[i].rows, cols })
+          return t.draw_rows({ rows: docs_frags[i].rows, cols: state.columns() })
         else
           return $.Deferred().resolve(null)
     )
 
-dispatch_facet_request = (request,state,table,cols,query,start,rows,update_seq) ->
+dispatch_facet_request = (request,state,table,query,update_seq) ->
   fq = query.fq.join(' AND ')
   params = {
     q: query.q
@@ -417,8 +464,6 @@ dispatch_facet_request = (request,state,table,cols,query,start,rows,update_seq) 
       all_facets = (k.key for k in $.solr_config('static.ui.facets'))
       facets = state.q_facets()
       $(document).trigger('faceting_known',[data.result?.facet_counts?.facet_fields,facets,data.result?.response?.numFound,state,update_seq])
-    .then (data) =>
-      return data.result?.facet_counts?.facet_fields
 
 # Generate the criteria for the various blocks by converting
 # configured list to ordered power-set thereof.
@@ -447,14 +492,12 @@ generate_block_list = (rigid) ->
 
   return expand_criteria(rigid,remainder_criteria(rigid))
  
-# Note that _facet_ provides meta for _main_. If you remove _facet_, you
-#   will need another source to fire the meta 
 all_requests = {
   main: dispatch_main_requests
   faceter: dispatch_facet_request
 }
 
-dispatch_all_requests = (request,state,table,start,rows,cols,filter,order,update_seq) ->
+dispatch_all_requests = (request,state,table,update_seq) ->
   #request.abort_ajax()
   # Extract filter (from pseudo-column "q") and facets
   all_facets = (k.key for k in $.solr_config('static.ui.facets'))
@@ -465,11 +508,14 @@ dispatch_all_requests = (request,state,table,start,rows,cols,filter,order,update
   else
     request.no_query()
     return $.Deferred().reject()
+  order = state.order()
   if order.length
     sort = order[0].column+" "+(if order[0].order>0 then 'asc' else 'desc')
   #
   input = {
-    q, rows, start, sort
+    q, sort
+    rows: state.pagesize()
+    start: state.start
     fq: ("#{k}:\"#{v}\"" for k,v of facets)
     hl: 'true'
     'hl.fl': $.solr_config('static.ui.highlights').join(' ')
@@ -481,14 +527,8 @@ dispatch_all_requests = (request,state,table,start,rows,cols,filter,order,update
   plugin_actions = []
   $.each all_requests, (k,v) =>
     plugin_list.push k
-    plugin_actions.push v(request,state,table,cols,input,start,rows,update_seq)
+    plugin_actions.push v(request,state,table,input,update_seq)
   return $.when.apply(@,plugin_actions)
-    .then (results...) =>
-      out = {}
-      for i in [0...results.length]
-        out[plugin_list[i]] = results[i]
-      out.main.faceter = out.faceter # XXX tmp till moved
-      return out
 
 rate_limiter = window.rate_limiter(1000,2000)
 
@@ -503,15 +543,10 @@ class Request
   req_outstanding: -> (k for k,v of @xhrs).length 
 
   render_table: (table,state) ->
-    @t = table.xxx_table()
-    @t.reset()
-    start = state.start()
-    page = state.pagesize()
-    chunksize = table.options.chunk_size
     current_update_seq += 1
     $(document).data('update_seq',current_update_seq)
     $(document).trigger('state_known',[state,current_update_seq])
-    return dispatch_all_requests(@,state,table,start,page,state.columns(),state.filter(),state.order(),current_update_seq)
+    return dispatch_all_requests(@,state,table,current_update_seq)
 
 # XXX shortcircuit get on satisfied
 # XXX first page optimise
@@ -550,7 +585,7 @@ class Request
           if doc[h] and snippet[h]
             doc[h] = snippet[h].join(' ... ')
   
-  request_results: (params,cols,extra,start,rows,every) ->
+  request_results: (params,extra,start,rows,every) ->
     input = _clone_object(params)
     input.start = start
     input.rows = rows
@@ -572,12 +607,7 @@ class Request
       docs = data.result?.response?.docs
       table = { rows: docs, hub: @hub }
       @substitute_highlighted(data,table)
-      out = []
-      for d in table.rows
-        obj = []
-        obj.push(d[c]) for c in cols
-        out.push(obj)
-      return { docs: out, num, rows: table.rows, cols }
+      return { num, rows: table.rows }
 
   some_query: ->
     $('.page_some_query').show()
@@ -610,6 +640,7 @@ class Renderer
       multisort: 0
       filter_col: 'q'
       chunk_size: 100
+      style_col: 'result_style'
     })
     @render_style(main,@table)
     more()

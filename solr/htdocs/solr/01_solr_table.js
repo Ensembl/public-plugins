@@ -209,12 +209,6 @@
       return table.append(html);
     };
 
-    TableHolder.prototype.data_actions = function(data) {
-      if (this.options.update != null) {
-        return this.options.update(this, data);
-      }
-    };
-
     return TableHolder;
 
   })();
@@ -255,10 +249,19 @@
     };
 
     Table.prototype.render_row = function(data) {
+      var klass;
       this.stripe = !this.stripe;
+      klass = '';
+      if (this.stripe) {
+        klass = ' stripe';
+      }
+      if ((this.holder.options.style_col != null) && (data[this.holder.options.style_col] != null)) {
+        klass += ' ' + data[this.holder.options.style_col];
+      }
       return {
         cols: data,
-        stripe: this.stripe
+        stripe: this.stripe,
+        klass: klass
       };
     };
 
@@ -280,7 +283,9 @@
         return _results;
       }).call(this);
       t_data.widths = widths;
-      this.render_head(t_data, data, first);
+      if (first) {
+        this.render_head(t_data, data, first);
+      }
       _ref = data.rows;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         r = _ref[_i];
@@ -316,9 +321,6 @@
     Table.prototype.render_chunk = function(data, first) {
       var d, outer;
       d = $.Deferred();
-      if (first) {
-        this.holder.data_actions(data);
-      }
       outer = this.render_data(data, first);
       outer.appendTo(this.container);
       return d.resolve(data);
@@ -338,7 +340,7 @@
 
     Table.prototype.draw_rows = function(rows) {
       var d;
-      d = this.render_chunk(rows, true);
+      d = this.render_chunk(rows, this.empty);
       this.empty = 0;
       return d;
     };

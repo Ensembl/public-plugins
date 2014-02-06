@@ -316,7 +316,7 @@ window.table_templates =
               'div@data-dir': 'col.dir'
       'tbody tr':
         'row<-table_row':
-          '@class': (e) -> (if e.item.stripe then "stripe" else "")
+          '@class': 'row.klass'
           'td':
             'col<-row.table_col':
               '.': 'col.data'
@@ -330,7 +330,7 @@ window.table_templates =
         c.width = "width: #{data.widths[i]}%" for c,i in head
         data.table_thead = [ head ]
       else
-        c.width = "width: #{data.widths[i]}%" for c,i in data.cols
+        data.widths[i] = "width: #{data.widths[i]}%" for c,i in data.cols
         data.table_thead = []
       [spec,data]
     # XXX makes non-portable
@@ -352,10 +352,12 @@ window.table_templates =
             row_data = []
             table_row = data.tp2.best('table_row')
             cols = data.tp2.best('cols')
-            for r in table_row
-              row = { stripe: r.stripe, table_col: [] }
-              for c in cols
-                row.table_col.push({ data: r.cols[c] ? '' })
+            for r,i in table_row
+              row = { klass: r.klass, table_col: [] }
+              for c,j in cols
+                cv = { data: r.cols[c] ? '' }
+                if !i then cv.width = data.widths[j]
+                row.table_col.push cv
               row_data.push(row)
             data.tp2.candidate('table_row',row_data,1000)
 

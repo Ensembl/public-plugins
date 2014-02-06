@@ -109,10 +109,6 @@ class TableHolder
     table.empty()
     table.append(html)
 
-  data_actions: (data) ->
-    if @options.update?
-      @options.update(@,data)
-
 class Table
   _idx = 0
 
@@ -129,10 +125,13 @@ class Table
       t_data.headings[c.key] = { text: c?.name, state, key: c.key, dir}
     t_data.first = first
 
-
   render_row: (data) ->
     @stripe = !@stripe
-    { cols: data, stripe: @stripe }
+    klass = ''
+    if @stripe then klass = ' stripe'
+    if @holder.options.style_col? and data[@holder.options.style_col]?
+      klass += ' ' + data[@holder.options.style_col]
+    { cols: data, stripe: @stripe, klass }
 
 # XXX if top not moved then body not moved
 
@@ -140,7 +139,7 @@ class Table
     t_data = { table_row: [], rows: [], cols: data.cols }
     widths = (c.percent for c in @holder.state.coldata())
     t_data.widths = widths
-    @render_head(t_data,data,first)
+    if first then @render_head(t_data,data,first)
     for r in data.rows
       t_data.rows.push(@render_row(r))
     t_main = @holder.templates.generate('chunk',t_data)
@@ -161,7 +160,6 @@ class Table
   render_chunk: (data,first) ->
     # Not async right now, but probably will be one day, so use deferred
     d = $.Deferred()
-    if first then @holder.data_actions(data)
     outer = @render_data(data,first)
     outer.appendTo(@container)
     return d.resolve(data)
@@ -177,8 +175,7 @@ class Table
   draw_top: () ->
 
   draw_rows: (rows) ->
-    d = @render_chunk(rows,true) # XXX not false
-#    if @empty then d = d.then(@holder.table_ready(@container))
+    d = @render_chunk(rows,@empty) # XXX not false
     @empty = 0
     return d
 

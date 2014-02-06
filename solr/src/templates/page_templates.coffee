@@ -30,7 +30,7 @@ window.page_templates =
         if m?
           $('<img/>').attr('src',m[1]).appendTo($('<body></body>')).css('display','none')
       '.new_current_faceter': (el,data) ->
-        $(document).on 'faceting_known', (e,faceting,values,update_seq) ->
+        $(document).on 'faceting_known', (e,faceting,values,num,state,update_seq) ->
           if $(document).data('update_seq') != update_seq then return
           templates = $(document).data('templates')
           el.empty()
@@ -153,7 +153,7 @@ window.page_templates =
       data.faceters = $.solr_config('static.ui.facets_sidebar_order')
       [spec,data]
     postproc: (el,odata) =>
-      $(document).on 'faceting_known', (e,faceter,query,update_seq) =>
+      $(document).on 'faceting_known', (e,faceter,query,num,state,update_seq) =>
         $('.table_faceter',el).each () ->
           if $(document).data('update_seq') != update_seq then return
           key = $(@).data('key')

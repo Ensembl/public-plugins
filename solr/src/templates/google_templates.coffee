@@ -37,6 +37,7 @@ window.google_templates =
               'a@href': 'link.url'
               'a': 'link.title'
           '@class+': 'row.cols.facets'
+          '.table_result@class+': 'row.klass'
     decorate:
       '.table_result': (els,data) ->
          els.hover (e) =>

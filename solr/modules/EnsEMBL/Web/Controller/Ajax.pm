@@ -66,6 +66,7 @@ sub search_connect {
     while(my @kv = $ps->()) {
       push @param_str,$kv[0]."=".uri_escape($kv[1]);
     }     
+    warn Dumper("param_str",\@param_str);
     my $url = $endpoint;
     if($hub->param('spellcheck.q')) {
       $url =~ s#\/[^/]*$#/spell#g; ##
@@ -73,6 +74,8 @@ sub search_connect {
       $url =~ s#\/[^/]*$#/suggest#g; ##
     }     
     $url = "$url?".join("&",@param_str);
+    warn Dumper("url",$url);
+    use Data::Dumper;
     my $response = $ua->get($url);
 
     if($response->is_success) {
@@ -192,10 +195,22 @@ sub config {
   my $species_info = $hub->get_species_info;
 
   my $spnames = {};
-  $spnames->{$species_info->{$_}{'common'}} = $species_info->{$_}{'key'} for keys %$species_info;
+  my $revspnames = {};
+  foreach my $sp (keys %$species_info) {
+    my @names;
+    my $name = $species_info->{$sp}{'common'};
+    push @names,$name,lc($name);
+    my $latin = $species_info->{$sp}{'key'};
+    $revspnames->{$latin} = $name;
+    foreach my $name (@names) {
+      $spnames->{$name} = $latin;
+    }
+  }
+
   print to_json({
     static => $SiteDefs::ENSEMBL_SOLR_CONFIG,
     spnames => $spnames,
+    revspnames => $revspnames,
     user => {
       favs => {
         species => \@favs,

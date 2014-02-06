@@ -21,7 +21,8 @@
                 'a': 'link.title'
               }
             },
-            '@class+': 'row.cols.facets'
+            '@class+': 'row.cols.facets',
+            '.table_result@class+': 'row.klass'
           }
         }
       },
@@ -543,7 +544,7 @@
           }
         },
         '.new_current_faceter': function(el, data) {
-          return $(document).on('faceting_known', function(e, faceting, values, update_seq) {
+          return $(document).on('faceting_known', function(e, faceting, values, num, state, update_seq) {
             var templates;
             if ($(document).data('update_seq') !== update_seq) {
               return;
@@ -765,7 +766,7 @@
         return [spec, data];
       },
       postproc: function(el, odata) {
-        return $(document).on('faceting_known', function(e, faceter, query, update_seq) {
+        return $(document).on('faceting_known', function(e, faceter, query, num, state, update_seq) {
           $('.table_faceter', el).each(function() {
             var fav_order, k, key, members, model, order, short_num, templates, _i, _len;
             if ($(document).data('update_seq') !== update_seq) {
@@ -2330,13 +2331,7 @@
         },
         'tbody tr': {
           'row<-table_row': {
-            '@class': function(e) {
-              if (e.item.stripe) {
-                return "stripe";
-              } else {
-                return "";
-              }
-            },
+            '@class': 'row.klass',
             'td': {
               'col<-row.table_col': {
                 '.': 'col.data',
@@ -2366,7 +2361,7 @@
           _ref1 = data.cols;
           for (i = _k = 0, _len2 = _ref1.length; _k < _len2; i = ++_k) {
             c = _ref1[i];
-            c.width = "width: " + data.widths[i] + "%";
+            data.widths[i] = "width: " + data.widths[i] + "%";
           }
           data.table_thead = [];
         }
@@ -2387,21 +2382,25 @@
               return data.tp2_row.send('id_with_url', data.tp2_row.best('id_with_url'));
             });
             data.tp2.register(10000, function() {
-              var c, cols, r, row, row_data, table_row, _i, _j, _len, _len1, _ref;
+              var c, cols, cv, i, j, r, row, row_data, table_row, _i, _j, _len, _len1, _ref;
               row_data = [];
               table_row = data.tp2.best('table_row');
               cols = data.tp2.best('cols');
-              for (_i = 0, _len = table_row.length; _i < _len; _i++) {
-                r = table_row[_i];
+              for (i = _i = 0, _len = table_row.length; _i < _len; i = ++_i) {
+                r = table_row[i];
                 row = {
-                  stripe: r.stripe,
+                  klass: r.klass,
                   table_col: []
                 };
-                for (_j = 0, _len1 = cols.length; _j < _len1; _j++) {
-                  c = cols[_j];
-                  row.table_col.push({
+                for (j = _j = 0, _len1 = cols.length; _j < _len1; j = ++_j) {
+                  c = cols[j];
+                  cv = {
                     data: (_ref = r.cols[c]) != null ? _ref : ''
-                  });
+                  };
+                  if (!i) {
+                    cv.width = data.widths[j];
+                  }
+                  row.table_col.push(cv);
                 }
                 row_data.push(row);
               }
