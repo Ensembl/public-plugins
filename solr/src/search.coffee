@@ -342,7 +342,7 @@ each_block = (num,fn) ->
 
 # XXX low-level cache
 
-dispatch_main_requests = (request,state,table,cols,query,start,rows,currency) ->
+dispatch_main_requests = (request,state,table,cols,query,start,rows,update_seq) ->
   t = table.xxx_table()
   t.reset()
     
@@ -360,7 +360,8 @@ dispatch_main_requests = (request,state,table,cols,query,start,rows,currency) ->
         total += data.num
         return data.num
   return ret.then (sizes) =>
-    $(document).trigger('num_known',[total,state])
+    if update_seq != current_update_seq then return $.Deferred().reject()
+    $(document).trigger('num_known',[total,state,update_seq])
     # Calculate the requests we will make
     requests = []
     offset = 0
@@ -386,20 +387,21 @@ dispatch_main_requests = (request,state,table,cols,query,start,rows,currency) ->
           if requests[i][0] != -1 and tops.length < rows
             tops = tops.concat(docs_frags[i].rows)
         tops = tops.slice(0,rows)
-      $(document).trigger('main_front_page',[tops,state])
+      if update_seq != current_update_seq then return $.Deferred().reject()
+      $(document).trigger('main_front_page',[tops,state,update_seq])
       return docs_frags
     )
     # Draw the table
-    return results.then(currency).then((docs_frags) ->
+    return results.then((docs_frags) ->
+      if update_seq != current_update_seq then return $.Deferred().reject()
       each_block requests.length,(i) =>
         if requests[i][0] != -1
           return t.draw_rows({ rows: docs_frags[i].rows, cols })
         else
           return $.Deferred().resolve(null)
-    ).then (x) =>
-      console.log("donedone")
+    )
 
-dispatch_facet_request = (request,state,table,cols,query,start,rows,currency,meta) ->
+dispatch_facet_request = (request,state,table,cols,query,start,rows,update_seq) ->
   fq = query.fq.join(' AND ')
   params = {
     q: query.q
@@ -409,11 +411,12 @@ dispatch_facet_request = (request,state,table,cols,query,start,rows,currency,met
     'facet.mincount': 1
     facet: true
   }
-  return request.raw_ajax(params).then(currency)
+  return request.raw_ajax(params)
     .then (data) =>
+      if update_seq != current_update_seq then return $.Deferred().reject()
       all_facets = (k.key for k in $.solr_config('static.ui.facets'))
       facets = state.q_facets()
-      $(document).trigger('faceting_known',[data.result?.facet_counts?.facet_fields,facets,data.result?.response?.numFound,state])
+      $(document).trigger('faceting_known',[data.result?.facet_counts?.facet_fields,facets,data.result?.response?.numFound,state,update_seq])
     .then (data) =>
       return data.result?.facet_counts?.facet_fields
 
@@ -451,7 +454,7 @@ all_requests = {
   faceter: dispatch_facet_request
 }
 
-dispatch_all_requests = (request,state,table,start,rows,cols,filter,order,currency) ->
+dispatch_all_requests = (request,state,table,start,rows,cols,filter,order,update_seq) ->
   #request.abort_ajax()
   # Extract filter (from pseudo-column "q") and facets
   all_facets = (k.key for k in $.solr_config('static.ui.facets'))
@@ -478,7 +481,7 @@ dispatch_all_requests = (request,state,table,start,rows,cols,filter,order,curren
   plugin_actions = []
   $.each all_requests, (k,v) =>
     plugin_list.push k
-    plugin_actions.push v(request,state,table,cols,input,start,rows,currency)
+    plugin_actions.push v(request,state,table,cols,input,start,rows,update_seq)
   return $.when.apply(@,plugin_actions)
     .then (results...) =>
       out = {}
@@ -488,32 +491,16 @@ dispatch_all_requests = (request,state,table,start,rows,cols,filter,order,curren
       return out
 
 rate_limiter = window.rate_limiter(1000,2000)
-main_currency = window.ensure_currency()
 
 # XXX Faceter orders
 # XXX out of date responses / abort
+current_update_seq = 0
 xhr_idx = 1
 class Request
   constructor: (@hub) ->
     @xhrs = {}
   
   req_outstanding: -> (k for k,v of @xhrs).length 
-  first_result: (state,data) =>
-    all_facets= (k.key for k in $.solr_config('static.ui.facets'))
-    facets = {}
-    for fr in state.filter()
-      for c in fr.columns
-        if c == 'q'
-          q = fr.value
-        for fc in all_facets
-          if fc == c
-            facets[c] = fr.value
-    query = { q, facets }
-    $(document).trigger('first_result',[query,data,state])
-    $(document).on 'update_state', (e,qps) =>
-      @hub.update_url(qps)
-    $(document).on 'update_state_incr', (e,qps) =>
-      rate_limiter(qps).then((data) => @hub.update_url(data))
 
   render_table: (table,state) ->
     @t = table.xxx_table()
@@ -521,17 +508,10 @@ class Request
     start = state.start()
     page = state.pagesize()
     chunksize = table.options.chunk_size
-    currency = main_currency()
-    $(document).trigger('state_known',state)
-    return dispatch_all_requests(@,state,table,start,page,state.columns(),state.filter(),state.order(),currency)
-
-  # XXX get rid of force by pushing rate limiter elsewhere in stack
-  get_data: (state,start,rows,currency) ->
-    filter = state.filter()
-    cols = state.columns()
-    order = state.order()
-    return dispatch_all_requests(@,start,rows,cols,filter,order,currency)
-      .then((data) -> data.main)
+    current_update_seq += 1
+    $(document).data('update_seq',current_update_seq)
+    $(document).trigger('state_known',[state,current_update_seq])
+    return dispatch_all_requests(@,state,table,start,page,state.columns(),state.filter(),state.order(),current_update_seq)
 
 # XXX shortcircuit get on satisfied
 # XXX first page optimise
@@ -736,7 +716,7 @@ class SearchTableState extends window.TableState
     return ''
 
   q_facets: () ->
-    facets = []
+    facets = {}
     for fr in @filter()
       for c in fr.columns
         if c != 'q'

@@ -30,23 +30,6 @@
     };
   };
 
-  window.ensure_currency = function() {
-    var idx;
-    idx = 0;
-    return function() {
-      idx += 1;
-      return (function(cidx) {
-        return (function(data) {
-          if (cidx === idx) {
-            return data;
-          } else {
-            return $.Deferred().reject();
-          }
-        });
-      })(idx);
-    };
-  };
-
   window.then_loop = function(fn) {
     var step;
     step = function(v) {

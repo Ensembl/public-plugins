@@ -55,7 +55,7 @@ window.rhs_templates =
         arrow(ctx,step_start+step*12,10,4,-1)
         ctx.fillText(sstr,step_start+step*6,15)
       
-      $(document).on 'main_front_page', (e,results,state) ->
+      $(document).on 'main_front_page', (e,results,state,update_seq) ->
         if state.page() != 1 or !results.length then return
         tophit = results[0]
         el.empty()
@@ -74,6 +74,7 @@ window.rhs_templates =
                 { ft: 'Gene', id: tophit.id, species: latin, req: ['biotype','bt_colour'], db: tophit.database_type }
               ]})
           }, (data) =>
+            if $(document).data('update_seq') != update_seq then return
             [biotype,bt_colour] = data.result
             templates = $(document).data("templates")
             el.append(templates.generate('sctophit',{
@@ -188,9 +189,9 @@ window.rhs_templates =
       </div>
     """
     postproc: (el,data) ->
-      $(document).on 'main_front_page', (e,results,state) ->
-        if state.page() != 1 or !results.length then return
+      $(document).on 'main_front_page', (e,results,state,update_seq) ->
         el.empty()
+        if state.page() != 1 or !results.length then return
         params = {
           q: 'name:"'+state.q_query()+'"'
           rows: 200
@@ -201,6 +202,7 @@ window.rhs_templates =
         }
         # XXX currency
         _ajax_json "/Multi/Ajax/search", params, (data) =>
+          if $(document).data('update_seq') != update_seq then return
           sp_glinks = {}
           docs = data.result?.response?.docs
           if docs?
@@ -319,7 +321,7 @@ window.rhs_templates =
       <div></div>
     """
     postproc: (el,data) ->
-      $(document).on 'num_known', (e,num,state) ->
+      $(document).on 'num_known', (e,num,state,update_seq) ->
         if !state.q_query() then return
         _ajax_json "/Multi/Ajax/search", {
           'spellcheck.q': state.q_query().toLowerCase()
@@ -327,6 +329,7 @@ window.rhs_templates =
           'spellcheck.count': 50
           'spellcheck.onlyMorePopular': false
         }, (data) =>
+          if $(document).data('update_seq') != update_seq then return
           suggestions = []
           words = data.result?.spellcheck?.suggestions?[1]?.suggestion
           unless words?.length then return
@@ -359,7 +362,7 @@ window.rhs_templates =
       <div></div>
     """
     postproc: (el,data) ->
-      $(document).on 'num_known', (e,num,state) ->
+      $(document).on 'num_known', (e,num,state,update_seq) ->
         el.empty()
         query = state.q_query()
         facets = state.q_facets()
@@ -372,6 +375,7 @@ window.rhs_templates =
             'facet.mincount': 1
             facet: true
           }, (data) =>
+            if $(document).data('update_seq') != update_seq then return
             cur_values = []
             othervalues = []
             for f in all_facets

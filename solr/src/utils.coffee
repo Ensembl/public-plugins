@@ -21,19 +21,6 @@ window.rate_limiter = (nochange_ms,lastreq_ms) ->
       timer = setTimeout((() -> d.resolve(data)),nochange_ms)
     return d
 
-window.ensure_currency = () ->
-  idx = 0
-  return () ->
-    idx += 1
-    return ((cidx) ->
-      return ((data) ->
-        if cidx == idx
-          return data
-        else
-          return $.Deferred().reject()
-        )
-    )(idx)
-
 window.then_loop = (fn) ->
   step = (v) ->
     d = fn(v)

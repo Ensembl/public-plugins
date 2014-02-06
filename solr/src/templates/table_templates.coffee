@@ -116,7 +116,8 @@ window.table_templates =
             @state.set()
           @templates.generate('real_pager',{ @items, click })
 
-      $(document).on 'num_known', (e,num,state) ->
+      $(document).on 'num_known', (e,num,state,update_seq) ->
+        if $(document).data('update_seq') != update_seq then return
         els.empty()
         if state.pagesize()
           pagesize = state.pagesize()
@@ -165,7 +166,8 @@ window.table_templates =
           el = $(e)
           _valueevent el,( => el.val()), (value) =>
             $(document).trigger('update_state',{ q: value })
-          $(document).on 'state_known', (e,state) ->
+          $(document).on 'state_known', (e,state,update_seq) ->
+            if $(document).data('update_seq') != update_seq then return
             el.val(state.q_query())
 
   # Sizer, ie results per page selector 
@@ -189,7 +191,8 @@ window.table_templates =
         els.change (e) ->
           el = $(e.currentTarget).parents().andSelf().find('select')
           $(document).trigger('update_state',{ perpage: el.val(), page: 1 })
-        $(document).on 'state_known', (e,state) ->
+        $(document).on 'state_known', (e,state,update_seq) ->
+          if $(document).data('update_seq') != update_seq then return
           els.val(state.e().data('pagesize'))
     preproc: (spec,data) ->
       data.sizes = $.solr_config('static.ui.pagesizes')
@@ -215,7 +218,8 @@ window.table_templates =
           '@data-key': 'col.key'
     decorate:
       'ul': (els,data) ->
-        $(document).on 'state_known', (e,state) ->
+        $(document).on 'state_known', (e,state,update_seq) ->
+          if $(document).data('update_seq') != update_seq then return
           onoff = {}
           (onoff[k] = 1) for k in state.e().data('columns')
           $('li',@).each ->

@@ -247,10 +247,13 @@
         },
         '.solr_result_summary': function(els, data) {
           var _this = this;
-          return $(document).on('faceting_known', function(e, faceter, used_facets, num, state) {
+          return $(document).on('faceting_known', function(e, faceter, used_facets, num, state, update_seq) {
             var templates;
             templates = $(document).data('templates');
             els.empty();
+            if ($(document).data('update_seq') !== update_seq) {
+              return;
+            }
             return els.append(templates.generate('result_summary', {
               query: state.q_query(),
               num: num,
@@ -355,7 +358,10 @@
           });
         },
         'input': function(els, data) {
-          $(document).on('state_known', function(e, state) {
+          $(document).on('state_known', function(e, state, update_seq) {
+            if ($(document).data('update_seq') !== update_seq) {
+              return;
+            }
             return els.val(state.q_query());
           });
           return els.searchac().keydown(function(e) {
@@ -382,9 +388,12 @@
           });
           return $(document).trigger('update_state', change);
         });
-        return $(document).on('state_known', function(e, state) {
+        return $(document).on('state_known', function(e, state, update_seq) {
           var f, facets, filter, ids, left, right, texts, title, _i, _len, _ref, _ref1,
             _this = this;
+          if ($(document).data('update_seq') !== update_seq) {
+            return;
+          }
           facets = state.q_facets();
           filter = $('.replacement_filter', el);
           texts = [];
@@ -534,8 +543,11 @@
           }
         },
         '.new_current_faceter': function(el, data) {
-          return $(document).on('faceting_known', function(e, faceting, values) {
+          return $(document).on('faceting_known', function(e, faceting, values, update_seq) {
             var templates;
+            if ($(document).data('update_seq') !== update_seq) {
+              return;
+            }
             templates = $(document).data('templates');
             el.empty();
             return el.append(templates.generate('current_facets_sidebar', {
@@ -753,9 +765,12 @@
         return [spec, data];
       },
       postproc: function(el, odata) {
-        return $(document).on('faceting_known', function(e, faceter, query) {
+        return $(document).on('faceting_known', function(e, faceter, query, update_seq) {
           $('.table_faceter', el).each(function() {
             var fav_order, k, key, members, model, order, short_num, templates, _i, _len;
+            if ($(document).data('update_seq') !== update_seq) {
+              return;
+            }
             key = $(this).data('key');
             order = [];
             fav_order = $.solr_config('static.ui.facets.key=.fav_order', key);
@@ -1228,8 +1243,11 @@
         return [spec, data];
       },
       postproc: function(el, data) {
-        return $(document).on('state_known', function(e, state) {
+        return $(document).on('state_known', function(e, state, update_seq) {
           var pp;
+          if ($(document).data('update_seq') !== update_seq) {
+            return;
+          }
           $('.solr_feet_p_current', el).removeClass('solr_feet_p_current');
           pp = state.pagesize();
           return $("a[href='#" + pp + "']", el).addClass('solr_feet_p_current');
@@ -1304,7 +1322,7 @@
           arrow(ctx, step_start + step * 12, 10, 4, -1);
           return ctx.fillText(sstr, step_start + step * 6, 15);
         };
-        return $(document).on('main_front_page', function(e, results, state) {
+        return $(document).on('main_front_page', function(e, results, state, update_seq) {
           var desc, extra, latin, tophit,
             _this = this;
           if (state.page() !== 1 || !results.length) {
@@ -1339,6 +1357,9 @@
               })
             }, function(data) {
               var biotype, bt_colour, templates, _ref;
+              if ($(document).data('update_seq') !== update_seq) {
+                return;
+              }
               _ref = data.result, biotype = _ref[0], bt_colour = _ref[1];
               templates = $(document).data("templates");
               el.append(templates.generate('sctophit', {
@@ -1447,13 +1468,13 @@
     'topgene': {
       template: "<div class='solr_topgene'>\n</div>",
       postproc: function(el, data) {
-        return $(document).on('main_front_page', function(e, results, state) {
+        return $(document).on('main_front_page', function(e, results, state, update_seq) {
           var params,
             _this = this;
+          el.empty();
           if (state.page() !== 1 || !results.length) {
             return;
           }
-          el.empty();
           params = {
             q: 'name:"' + state.q_query() + '"',
             rows: 200,
@@ -1464,6 +1485,9 @@
           };
           return _ajax_json("/Multi/Ajax/search", params, function(data) {
             var d, docs, favord, i, k, rows, s, sp_glinks, templates, url, v, _i, _j, _len, _len1, _ref, _ref1, _ref2;
+            if ($(document).data('update_seq') !== update_seq) {
+              return;
+            }
             sp_glinks = {};
             docs = (_ref = data.result) != null ? (_ref1 = _ref.response) != null ? _ref1.docs : void 0 : void 0;
             if (docs != null) {
@@ -1636,7 +1660,7 @@
     noresults: {
       template: "<div></div>",
       postproc: function(el, data) {
-        return $(document).on('num_known', function(e, num, state) {
+        return $(document).on('num_known', function(e, num, state, update_seq) {
           var _this = this;
           if (!state.q_query()) {
             return;
@@ -1648,6 +1672,9 @@
             'spellcheck.onlyMorePopular': false
           }, function(data) {
             var dest, i, mainflow, suggestions, templates, w, word, words, _i, _len, _ref, _ref1, _ref2, _ref3;
+            if ($(document).data('update_seq') !== update_seq) {
+              return;
+            }
             suggestions = [];
             words = (_ref = data.result) != null ? (_ref1 = _ref.spellcheck) != null ? (_ref2 = _ref1.suggestions) != null ? (_ref3 = _ref2[1]) != null ? _ref3.suggestion : void 0 : void 0 : void 0 : void 0;
             if (!(words != null ? words.length : void 0)) {
@@ -1687,7 +1714,7 @@
     narrowresults: {
       template: "<div></div>",
       postproc: function(el, data) {
-        return $(document).on('num_known', function(e, num, state) {
+        return $(document).on('num_known', function(e, num, state, update_seq) {
           var all_facets, f, facets, query,
             _this = this;
           el.empty();
@@ -1714,6 +1741,9 @@
             facet: true
           }, function(data) {
             var cur_values, entries, i, k, name, othervalues, templates, total, wholesite, yoursearch, _i, _j, _len, _len1, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6;
+            if ($(document).data('update_seq') !== update_seq) {
+              return;
+            }
             cur_values = [];
             othervalues = [];
             for (_i = 0, _len = all_facets.length; _i < _len; _i++) {
@@ -2041,8 +2071,11 @@
           return Pager;
 
         })();
-        return $(document).on('num_known', function(e, num, state) {
+        return $(document).on('num_known', function(e, num, state, update_seq) {
           var pages, pagesize, rpager, start, templates;
+          if ($(document).data('update_seq') !== update_seq) {
+            return;
+          }
           els.empty();
           if (state.pagesize()) {
             pagesize = state.pagesize();
@@ -2111,7 +2144,10 @@
                 q: value
               });
             });
-            return $(document).on('state_known', function(e, state) {
+            return $(document).on('state_known', function(e, state, update_seq) {
+              if ($(document).data('update_seq') !== update_seq) {
+                return;
+              }
               return el.val(state.q_query());
             });
           });
@@ -2144,7 +2180,10 @@
               page: 1
             });
           });
-          return $(document).on('state_known', function(e, state) {
+          return $(document).on('state_known', function(e, state, update_seq) {
+            if ($(document).data('update_seq') !== update_seq) {
+              return;
+            }
             return els.val(state.e().data('pagesize'));
           });
         }
@@ -2166,8 +2205,11 @@
       },
       decorate: {
         'ul': function(els, data) {
-          return $(document).on('state_known', function(e, state) {
+          return $(document).on('state_known', function(e, state, update_seq) {
             var k, onoff, _i, _len, _ref;
+            if ($(document).data('update_seq') !== update_seq) {
+              return;
+            }
             onoff = {};
             _ref = state.e().data('columns');
             for (_i = 0, _len = _ref.length; _i < _len; _i++) {

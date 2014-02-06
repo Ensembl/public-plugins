@@ -229,9 +229,10 @@ window.google_templates =
           els.empty().css('left','100%')
           $('.table_result_fake_hover').removeClass('table_result_fake_hover')
       '.solr_result_summary': (els,data) ->
-        $(document).on 'faceting_known', (e,faceter,used_facets,num,state) =>
+        $(document).on 'faceting_known', (e,faceter,used_facets,num,state,update_seq) =>
           templates = $(document).data('templates')
           els.empty()
+          if $(document).data('update_seq') != update_seq then return
           els.append(templates.generate('result_summary',{
             query: state.q_query(), num, used_facets
           }))
@@ -325,7 +326,8 @@ window.google_templates =
           q = els.parents('.se_search').find('.replacement_filter input:not(.solr_ghost)').val()
           $(document).trigger('maybe_update_state',{ q, page: 1 })
       'input': (els,data) ->
-        $(document).on 'state_known', (e,state) ->
+        $(document).on 'state_known', (e,state,update_seq) ->
+          if $(document).data('update_seq') != update_seq then return
           els.val(state.q_query())
 #        els.searchac().keyup (e) ->
 #          $(document).trigger('update_state_incr',{ q: $(this).val(), page: 1 })
@@ -340,7 +342,8 @@ window.google_templates =
           if data?.redirect
             window.location.href = data.url
         $(document).trigger('update_state',change)
-      $(document).on 'state_known', (e,state) ->
+      $(document).on 'state_known', (e,state,update_seq) ->
+        if $(document).data('update_seq') != update_seq then return
         facets = state.q_facets()
         filter = $('.replacement_filter',el)
         texts = []
