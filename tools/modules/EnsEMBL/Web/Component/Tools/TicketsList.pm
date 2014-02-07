@@ -111,20 +111,24 @@ sub content {
       'node_name'   => 'div',
       'class'       => ['toggleable', '_activity_summary'],
       'children'    => [{
-        'node_name'   => 'p',
+        'node_name'   => 'div',
+        'class'       => '_ticket_table',
         'children'    => [{
-          'node_name'   => 'a',
-          'href'        => '',
-          'class'       => 'button _tickets_refresh',
-          'inner_HTML'  => '<span class="tickets-refresh"></span><span class="hidden"><span class="pietimer-pie pietimer-spinner"></span><span class="pietimer-pie pietimer-filler"></span><span class="pietimer-mask"></span><span class="pietimer-border-container"><span class="pietimer-border"></span></span></span><span>Refresh</span>'
+          'node_name'   => 'p',
+          'children'    => [{
+            'node_name'   => 'a',
+            'href'        => '',
+            'class'       => 'button _tickets_refresh',
+            'inner_HTML'  => '<span class="tickets-refresh"></span><span class="hidden"><span class="pietimer-pie pietimer-spinner"></span><span class="pietimer-pie pietimer-filler"></span><span class="pietimer-mask"></span><span class="pietimer-border-container"><span class="pietimer-border"></span></span></span><span>Refresh</span>'
+          }]
+        }, {
+          'node_name'   => 'div',
+          'inner_HTML'  => $table->render
         }]
       }, {
         'node_name'   => 'div',
-        'class'       => '_ticket_table',
-        'inner_HTML'  => $table->render
-      }, {
-        'node_name'   => 'div',
-        'inner_HTML'  => '<p class="_no_jobs hidden">You have no jobs currently running or recently completed.</p>',
+        'class'       => [qw(_no_jobs hidden)],
+        'inner_HTML'  => '<p>You have no jobs currently running or recently completed. (<a href="" class="_tickets_refresh">Refresh</a>)</p>',
       }]
     }]
   })->render;

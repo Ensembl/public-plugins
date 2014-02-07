@@ -160,7 +160,7 @@ Ensembl.Panel.ActivitySummary = Ensembl.Panel.ContentTools.extend({
     var showTable     = !tableWrapper.find('.dataTables_empty').length;
     
     tableWrapper.toggle(showTable);
-    this.el.find('p._no_jobs').toggle(!showTable);
+    this.el.find('div._no_jobs').toggle(!showTable);
     if (!showTable) {
       Ensembl.EventManager.trigger('toolsToggleForm', true, false);
     }
