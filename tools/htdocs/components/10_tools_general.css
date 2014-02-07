@@ -41,7 +41,7 @@ span.job-status-running           { background-color: #999999; }
 span.job-status-done              { background-color: #55AA55; }
 
 /* Sprites for individual jobs on Activity Summary table */
-p span.job-sprites                { position: absolute; display: none; background-color: [[PAGE_BG]] }
+p span.job-sprites                { position: absolute; display: none; }
 p span.job-sprites span.sprite    { float: none; }
 p:hover span.job-sprites          { display: inline-block; }
 
