@@ -51,7 +51,9 @@ sub run {
   };
 
   $options->{"--$_"} = sprintf '%s/%s', $work_dir, delete $config->{$_} for qw(input_file output_file stats_file);
-  $options->{"--$_"} = $config->{$_} eq 'yes' ? '' : $config->{$_} if defined $config->{$_} && $config->{$_} ne 'no';
+  for (keys %$config) {
+    $options->{"--$_"} = $config->{$_} eq 'yes' ? '' : $config->{$_} if defined $config->{$_} && $config->{$_} ne 'no';
+  }
 
   my $command = EnsEMBL::Web::SystemCommand->new($self, "$perl_bin $script", $options)->execute({'log_file' => $log_file});
 
