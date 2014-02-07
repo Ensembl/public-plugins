@@ -83,7 +83,8 @@ sub show_fields {
     species_prefix    => {
       'type'      => 'string',
       'label'     => 'Prefix',
-      'maxlength' => '20'
+      'maxlength' => '20',
+      'required'  => 1
     }
   ];
 }

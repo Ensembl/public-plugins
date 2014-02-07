@@ -47,6 +47,10 @@
 	Cache files can either be downloaded and unpacked as described here, or
 	automatically downloaded and configured using the <a
 	href="vep_download.html#installer">installer script</a>. <p>
+  
+  <p> Users interested in RefSeq transcripts may download an alternate cache
+  file; remember to specify <a href="vep_options.html#opt_refseq">--refseq</a>
+  when using this cache. </p>
     
     <p> Cache files for popular species: </p>
     
@@ -66,6 +70,11 @@
         <li><a href="ftp://ftp.ensemblgenomes.org/pub/plants/current/vep/">Plants</a></li>
         <li><a href="ftp://ftp.ensemblgenomes.org/pub/protists/current/vep/">Protists</a></li>
     </ul>
+    
+    <p> <b>NB:</b> When using Ensembl Genomes caches, you should use the <a
+    href="vep_options.html#opt_cache_version">--cache_version</a> option to
+    specify the relevant Ensembl Genomes version number as these differ from the
+    concurrent Ensembl/VEP version numbers. </p>
     
     <h4>Instructions for use</h4>
     
@@ -114,7 +123,7 @@ tar xfz homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]].tar.gz</pre>
 	must contain the following entry types and data: </p>
 	
 	<ul>
-		<li>"exon" feature lines with have "transcript_id", "gene_id" and
+		<li>"exon" feature lines must have "transcript_id", "gene_id" and
 		"exon_number" in the description field</li>
 		<li>"CDS" feature lines must correspond to coding exons, with
 		"transcript_id" and "exon_number" populated in the description

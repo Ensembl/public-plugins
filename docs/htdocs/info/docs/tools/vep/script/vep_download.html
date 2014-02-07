@@ -75,6 +75,10 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     <li><a href="vep_options.html#opt_symbol">gene symbol</a> available in
     RefSeq cache and when using <a
     href="vep_options.html#opt_refseq">--refseq</a></li>
+    <li>Installation and use of RefSeq cache improved - remember to use <a
+    href="vep_options.html#opt_refseq">--refseq</a> with your RefSeq cache!</li>
+    <li>Added <a href="vep_options.html#opt_cache_version">--cache_version</a>
+    option, primarily to aid Ensembl Genomes users.</li>
 	</ul>
 	
 	<h4 id="history"> Previous version history: <a href="#history"
@@ -313,40 +317,78 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
 		</tr>
 		
 		<tr>
+		<tr>
+			<td><pre>--AUTO</pre></td>
+			<td><pre>-a</pre></td>
+            <td>Run installer without user prompts. Use a (API), c (cache),
+            f (FASTA) to specify parts to install e.g. "-a ac" for API and
+            cache. You will also need to specify at least one species (see
+            below).
+			</td>
+		</tr>
+		<tr>
+			<td><pre>--SPECIES</pre></td>
+			<td><pre>-s</pre></td>
+      <td>
+        Comma-separated list of species to install when using --AUTO. To
+        install the RefSeq cache, add "_refseq" to the species name, e.g.
+        "homo_sapiens_refseq". Remember to use <a
+        href="vep_options.html#opt_refseq">--refseq</a> when running the VEP
+        with this cache!
+			</td>
+		</tr>
 			<td><pre>--DESTDIR [dir]</pre></td>
 			<td><pre>-d</pre></td>
-			<td>By default the script will install the API modules in a
-			subdirectory of the current directory named "Bio". Using this option
-			users may configure where the Bio directory is created. If something
-			other than the default is used, this directory must either be added
-			to your PERL5LIB environment variable when running the VEP, or
-			included using perl's -I flag: <pre class="code">perl -I [dir] variant_effect_predictor.pl</pre> </td>
+			<td>
+        By default the script will install the API modules in a
+        subdirectory of the current directory named "Bio". Using this option
+        users may configure where the Bio directory is created. If something
+        other than the default is used, this directory must either be added
+        to your PERL5LIB environment variable when running the VEP, or
+        included using perl's -I flag:
+        <pre class="code">perl -I [dir] variant_effect_predictor.pl</pre>
+      </td>
 		</tr>
 		<tr>
 			<td><pre>--VERSION [version]</pre></td>
 			<td><pre>-v</pre></td>
-			<td>By default the script will install the latest version of the
-			Ensembl API (currently 71). Users can force the script to install a
-			different version at their own risk</td>
+			<td>
+        By default the script will install the latest version of the
+        Ensembl API (currently 71). Users can force the script to install a
+        different version at their own risk
+      </td>
 		</tr>
 		<tr>
 			<td><pre>--CACHEDIR [dir]</pre></td>
 			<td><pre>-c</pre></td>
-            <td>By default the script will install the cache files in the ".vep"
-            subdirectory of the user's home area. Using this option users can
-            configure where cache files are installed. The <a href="vep_options.html#opt_dir">--dir</a> flag
-            must be passed when running the VEP if a non-default directory is
-            given: <pre>perl variant_effect_predictor.pl --dir [dir]</pre>
+      <td>
+        By default the script will install the cache files in the ".vep"
+        subdirectory of the user's home area. Using this option users can
+        configure where cache files are installed. The <a
+        href="vep_options.html#opt_dir">--dir</a> flag must be passed when
+        running the VEP if a non-default directory is given: <pre>perl
+        variant_effect_predictor.pl --dir [dir]</pre>
 			</td>
 		</tr>
 		<tr>
 			<td><pre>--UPDATE</pre></td>
 			<td><pre>-n</pre></td>
-            <td>Run the installer with this flag to check for and download new
-            versions of the VEP. Any existing files are backed up. You will need
-            to rerun the installer after update to retrieve update API, cache
-            and FASTA files.
+      <td>
+        Run the installer with this flag to check for and download new
+        versions of the VEP. Any existing files are backed up. You will need
+        to rerun the installer after update to retrieve update API, cache
+        and FASTA files.
 			</td>
+		</tr>
+		<tr>
+			<td><pre>--QUIET</pre></td>
+			<td><pre>-q</pre></td>
+      <td>Don't write any status output when using --AUTO.</td>
+		</tr>
+		<tr>
+			<td><pre>--PREFER_BIN</pre></td>
+			<td><pre>-p</pre></td>
+      <td>Use this if the installer fails with out of memory errors.</td>
 		</tr>
 	</table>
 	
