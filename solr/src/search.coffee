@@ -371,42 +371,83 @@ body_species_homepage_request = () ->
   }
 
 body_elevate_quoted = () ->
+  hidedup = (rows) ->
+    return rows
   return {
     context: (state,update_seq) -> return { state, update_seq }
-    prepare: () ->
+    prepare: (context,input,tags_in,depart,arrive_in) ->
+      if !tags_in.main then return null
+      tags_quoted = _clone_object(tags_in)
+      tags_quoted.quoted = 1
+      arrive = arrive_in
+      #arrive.then(hidedup)
+      input_quoted = _clone_object(input)
+      input_quoted.q = '"'+input.q+'"'
+      return [[input_quoted,tags_quoted,depart,arrive_in]
+              [input,       tags_in,    depart,arrive]]
+    hidedup
   }
 
-body_main_requests = () ->
+add_extra_constraints = (q_in,fq_in,extra) ->
+  q = [q_in]
+  fq = fq_in[..]
+  for [field,invert,values,boost] in extra
+    str = (field+':"'+s+'"' for s in values).join(" OR ")
+    str = (if invert then "(NOT ( #{str} ))" else "( #{str} )")
+    fq.push(str)
+    bq = []
+    if boost?
+      for s,i in values
+        v = Math.floor(boost*(values.length-i-1)/(values.length-1))
+        bq.push(field+':"'+s+'"'+(if v then "^"+v else ""))
+      q.push("( "+bq.join(" OR ")+" )")
+  if q.length > 1
+    q = ( "( "+x+" )" for x in q).join(" AND ")
+  [q,fq]
+
+body_raw_request = () ->
+  raw_request = (input,request,context,start,len) ->
+    params = _clone_object(input)
+    if start == -1 # size request
+      params.start = 0
+      params.rows = 10
+      return request.request_results(params).then((data) => data.num)
+    else # regular request
+      params.rows = len
+      params.start = start
+      return request.request_results(params).then((data) => data.rows)
+
+  return {
+    prepare: (context,input,tags,depart,arrive) ->
+      return [[input,tags,raw_request,arrive]]
+  }
+
+body_split_favs = () ->
   rigid = []
   favs = $.solr_config('user.favs.species')
   if favs.length
     rigid.push ['species',[favs],100]
   extras = generate_block_list(rigid)
-  blocks = []
-  for x in extras
-    blocks.push ((xx) => (request,context,start,len) =>
-      state = context.state
-      order = state.order()
+     
+  prepare = (context,input_in,tags_in,depart,arrive) ->
+    tags = _clone_object(tags_in)
+    if !tags.main then return null
+    tags.blocks = 1
+    out = []
+    for x in extras
+      input = _clone_object(input_in)
+      [q,fq] = add_extra_constraints(input.q,("#{k}:\"#{v}\"" for k,v of input.fq),x)
+      input.q = q
+      input.fq = fq
+      order = context.state.order()
       if order.length
-        sort = order[0].column+" "+(if order[0].order>0 then 'asc' else 'desc')
-      input = {
-        q: state.q_query()
-        sort
-        rows: state.pagesize()
-        start: state.start
-        fq: ("#{k}:\"#{v}\"" for k,v of state.q_facets())
-        hl: 'true'
-        'hl.fl': $.solr_config('static.ui.highlights').join(' ')
-        'hl.fragsize': 500
-      }
-      if start == -1 # size request
-        request.request_results(input,xx,0,10).then((data) => data.num)
-      else # regular request
-        request.request_results(input,xx,start,len).then((data) => data.rows)
-    )(x)
+        input.sort = order[0].column+" "+(if order[0].order>0 then 'asc' else 'desc')
+      out.push [input,tags,depart,arrive]
+    return out
+
   return {
     context: (state,update_seq) -> return { state, update_seq }
-    blocks
+    prepare
   }
 
 body_frontpage_specials = () ->
@@ -425,12 +466,46 @@ body_frontpage_specials = () ->
       return $.Deferred().resolve()
   }
 
+body_highlights = () ->
+  return {
+    prepare: (context,input,tags,depart,arrive) ->
+      input.hl = 'true'
+      input['hl.fl'] = $.solr_config('static.ui.highlights').join(' ')
+      input['hl.fragsize'] = 500
+      tags.highlighted = 1
+      return [[input,tags,depart,arrive]]
+  }
+
 body_requests = [
+  body_raw_request
   body_species_homepage_request
-  body_elevate_quoted
   body_frontpage_specials
-  body_main_requests
+  body_highlights
+  body_elevate_quoted
+  body_split_favs
 ]
+
+run_all_prepares = (contexts,plugins,input) ->
+  tags_in = { main: 1 }
+  input = [[input,tags_in,null,null]]
+  for p,i in plugins
+    if p.prepare?
+      output = []
+      for query in input
+        v = p.prepare(contexts[i],query[0],query[1],query[2],query[3])
+        if !v then v = [query]
+        output = output.concat(v)
+      input = output
+  return output
+  
+build_blocks = (inputs) =>
+  out = []
+  for input in inputs
+    ((ii) ->
+      out.push (request,context,start,len) =>
+        return ii[2](ii[0],request,context,start,len)
+    )(input)
+  return out
 
 dispatch_main_requests = (request,state,table,update_seq) ->
   t = table.xxx_table()
@@ -439,23 +514,26 @@ dispatch_main_requests = (request,state,table,update_seq) ->
   plugins = (b() for b in body_requests)
   # Determine what the blocks are to be: XXX cache this
   blocks = []
-  inspects = []
   contexts = []
+  prepares = []
   for p,i in plugins
     contexts.push(if p.context? then p.context(state,update_seq) else null)
-    inspects.push(if p.inspect? then p.inspect else null)
     if p.blocks?
       for b in p.blocks
         blocks.push(((bb,ii) -> return (r,start,len) ->
           bb(r,contexts[ii],start,len)
         )(b,i))
+    if p.prepare? then prepares.push(p.prepare)
+  prepares =
+    run_all_prepares(contexts,plugins,{ q: state.q_query(), fq: state.q_facets() })
+  bs = build_blocks(prepares)
+  if bs?
+    for b in bs
+      blocks.push(((bb,ii) -> return (r,start,len) ->
+        bb(r,contexts[ii],start,len)
+      )(b,i))
   # Calculate block sizes
   total = 0
-  ret = each_block plugins.length,(i) =>
-    if plugins[i].prepare?
-      return plugins[i].prepare()
-    else
-      return $.Deferred().resolve()
   ret = $.Deferred().resolve()
   ret = ret.then () =>
     each_block blocks.length,(i) =>
@@ -485,9 +563,9 @@ dispatch_main_requests = (request,state,table,update_seq) ->
         blocks[i](request,requests[i][0],requests[i][1])
     # Run inspects from plugins
     results = results.then (docs_frags) =>
-      each_block inspects.length, (i) =>
-          if inspects[i]?
-            inspects[i](contexts[i],requests,docs_frags)
+      each_block plugins.length, (i) =>
+          if plugins[i].inspect?
+            plugins[i].inspect(contexts[i],requests,docs_frags)
         .then(() => return docs_frags)
     # XXX order
     # Draw the table
@@ -615,37 +693,19 @@ class Request
         return data
     return xhr
 
-  substitute_highlighted: (input,output) ->
-    for doc in output.rows
-      snippet = input.result?.highlighting?[doc.uid]
-      if snippet?
-        for h in $.solr_config('static.ui.highlights')
-          if doc[h] and snippet[h]
-            doc[h] = snippet[h].join(' ... ')
-  
-  request_results: (params,extra,start,rows,every) ->
-    input = _clone_object(params)
-    input.start = start
-    input.rows = rows
-    q = [input.q]
-    for [field,invert,values,boost] in extra
-      str = (field+':"'+s+'"' for s in values).join(" OR ")
-      str = (if invert then "(NOT ( #{str} ))" else "( #{str} )")
-      input.fq.push(str)
-      bq = []
-      if boost?
-        for s,i in values
-          v = Math.floor(boost*(values.length-i-1)/(values.length-1))
-          bq.push(field+':"'+s+'"'+(if v then "^"+v else ""))
-        q.push("( "+bq.join(" OR ")+" )")
-    if q.length > 1
-      input.q = ( "( "+x+" )" for x in q).join(" AND ")
-    return @raw_ajax(input).then (data) =>
+  request_results: (params) ->
+    return @raw_ajax(params).then (data) =>
       num = data.result?.response?.numFound
       docs = data.result?.response?.docs
-      table = { rows: docs, hub: @hub }
-      @substitute_highlighted(data,table)
-      return { num, rows: table.rows }
+      # substitue highlights 
+      for doc in docs
+        snippet = data.result?.highlighting?[doc.uid]
+        if snippet?
+          for h in $.solr_config('static.ui.highlights')
+            if doc[h] and snippet[h]
+              doc[h] = snippet[h].join(' ... ')
+      #
+      return { num, rows: docs }
 
   some_query: ->
     $('.page_some_query').show()
