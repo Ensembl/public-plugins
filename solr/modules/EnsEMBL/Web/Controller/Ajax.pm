@@ -66,7 +66,6 @@ sub search_connect {
     while(my @kv = $ps->()) {
       push @param_str,$kv[0]."=".uri_escape($kv[1]);
     }     
-    warn Dumper("param_str",\@param_str);
     my $url = $endpoint;
     if($hub->param('spellcheck.q')) {
       $url =~ s#\/[^/]*$#/spell#g; ##
@@ -74,8 +73,6 @@ sub search_connect {
       $url =~ s#\/[^/]*$#/suggest#g; ##
     }     
     $url = "$url?".join("&",@param_str);
-    warn Dumper("url",$url);
-    use Data::Dumper;
     my $response = $ua->get($url);
 
     if($response->is_success) {
