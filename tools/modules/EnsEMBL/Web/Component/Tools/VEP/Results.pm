@@ -277,8 +277,8 @@ sub content {
         to   => $to - $size,
       }, undef, 1);
       $html .= sprintf(
-        '<a class="update_panel _ht" rel="%s" href="%s"><img src="/i/nav-l1.gif" %s title="Previous %s variants"/></a>',
-        $panel_id, $url, $style, $size
+        '<a class="update_panel _ht" rel="%s" href="%s"><img src="/i/nav-l1.gif" %s title="Previous %s variant%s"/></a>',
+        $panel_id, $url, $style, $size == 1 ? ('', '') : ($size, 's')
       );
     }
     else {
@@ -293,8 +293,8 @@ sub content {
         to   => $to + $size,
       }, undef, 1);
       $html .= sprintf(
-        '<a class="update_panel _ht" rel="%s" href="%s"><img src="/i/nav-r1.gif" %s title="Next %s variants"/></a>',
-        $panel_id, $url, $style, $size
+        '<a class="update_panel _ht" rel="%s" href="%s"><img src="/i/nav-r1.gif" %s title="Next %s variant%s"/></a>',
+        $panel_id, $url, $style, $size == 1 ? ('', '') : ($size, 's')
       );
     }
     else {
