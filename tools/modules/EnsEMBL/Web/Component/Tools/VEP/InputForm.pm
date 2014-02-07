@@ -168,13 +168,13 @@ sub content {
     'title'     => 'Identifiers and frequency data',
     'caption'   => 'Additional identifiers for genes, transcripts and variants; frequency data'
   }, {
-    'id'        => 'filters',
-    'title'     => 'Filtering options',
-    'caption'   => 'Pre-filter results by frequency or consequence type'
-  }, {
     'id'        => 'extra',
     'title'     => 'Extra options',
     'caption'   => 'e.g. SIFT, PolyPhen and regulatory data'
+  }, {
+    'id'        => 'filters',
+    'title'     => 'Filtering options',
+    'caption'   => 'Pre-filter results by frequency or consequence type'
   });
 
   foreach my $section (@sections) {
