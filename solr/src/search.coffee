@@ -344,10 +344,11 @@ each_block = (num,fn) ->
 
 body_species_homepage_request = () ->
   return {
-    blocks: [((request,q,start,len) =>
+    context: (state,update_seq) -> return { state, update_seq }
+    blocks: [((request,context,start,len) =>
       latin = null
       for k,v of $.solr_config('spnames')
-        if q.q.match(new RegExp("\\b#{k}\\b","gi"))
+        if context.state.q_query().match(new RegExp("\\b#{k}\\b","gi"))
           latin = v
           english = $.solr_config('revspnames.%',latin)
       if start == -1 # size request
@@ -372,7 +373,7 @@ body_species_homepage_request = () ->
 body_elevate_quoted = () ->
   return {
     context: (state,update_seq) -> return { state, update_seq }
-    prepare: (query) ->
+    prepare: () ->
   }
 
 body_main_requests = () ->
@@ -383,11 +384,25 @@ body_main_requests = () ->
   extras = generate_block_list(rigid)
   blocks = []
   for x in extras
-    blocks.push ((xx) => (request,q,start,len) =>
+    blocks.push ((xx) => (request,context,start,len) =>
+      state = context.state
+      order = state.order()
+      if order.length
+        sort = order[0].column+" "+(if order[0].order>0 then 'asc' else 'desc')
+      input = {
+        q: state.q_query()
+        sort
+        rows: state.pagesize()
+        start: state.start
+        fq: ("#{k}:\"#{v}\"" for k,v of state.q_facets())
+        hl: 'true'
+        'hl.fl': $.solr_config('static.ui.highlights').join(' ')
+        'hl.fragsize': 500
+      }
       if start == -1 # size request
-        request.request_results(q,xx,0,10).then((data) => data.num)
+        request.request_results(input,xx,0,10).then((data) => data.num)
       else # regular request
-        request.request_results(q,xx,start,len).then((data) => data.rows)
+        request.request_results(input,xx,start,len).then((data) => data.rows)
     )(x)
   return {
     context: (state,update_seq) -> return { state, update_seq }
@@ -397,7 +412,6 @@ body_main_requests = () ->
 body_frontpage_specials = () ->
   return {
     context: (state,update_seq) -> return { state, update_seq }
-    blocks: []
     inspect: (context,requests,docs_frags) ->
       tops = []
       if context.state.start() == 0
@@ -418,7 +432,7 @@ body_requests = [
   body_main_requests
 ]
 
-dispatch_main_requests = (request,state,table,query,update_seq) ->
+dispatch_main_requests = (request,state,table,update_seq) ->
   t = table.xxx_table()
   t.reset()
   
@@ -427,21 +441,25 @@ dispatch_main_requests = (request,state,table,query,update_seq) ->
   blocks = []
   inspects = []
   contexts = []
-  for p in plugins
+  for p,i in plugins
     contexts.push(if p.context? then p.context(state,update_seq) else null)
-    if p.blocks? then blocks = blocks.concat(p.blocks)
     inspects.push(if p.inspect? then p.inspect else null)
+    if p.blocks?
+      for b in p.blocks
+        blocks.push(((bb,ii) -> return (r,start,len) ->
+          bb(r,contexts[ii],start,len)
+        )(b,i))
   # Calculate block sizes
   total = 0
   ret = each_block plugins.length,(i) =>
     if plugins[i].prepare?
-      return plugins[i].prepare(query)
+      return plugins[i].prepare()
     else
       return $.Deferred().resolve()
   ret = $.Deferred().resolve()
   ret = ret.then () =>
     each_block blocks.length,(i) =>
-      return blocks[i](request,query,-1)
+      return blocks[i](request,-1)
         .then (data) ->
           total += data
           return data
@@ -464,7 +482,7 @@ dispatch_main_requests = (request,state,table,query,update_seq) ->
     # Make the requests
     results = each_block blocks.length, (i) =>
       if requests[i][0] != -1
-        blocks[i](request,query,requests[i][0],requests[i][1])
+        blocks[i](request,requests[i][0],requests[i][1])
     # Run inspects from plugins
     results = results.then (docs_frags) =>
       each_block inspects.length, (i) =>
@@ -482,10 +500,10 @@ dispatch_main_requests = (request,state,table,query,update_seq) ->
           return $.Deferred().resolve(null)
     )
 
-dispatch_facet_request = (request,state,table,query,update_seq) ->
-  fq = query.fq.join(' AND ')
+dispatch_facet_request = (request,state,table,update_seq) ->
+  fq = ("#{k}:\"#{v}\"" for k,v of state.q_facets()).join(' AND ')
   # This is a hack to get around a SOLR BUG
-  q = "( NOT species:xxx ) AND ( #{query.q} ) AND ( NOT species:yyy )"
+  q = "( NOT species:xxx ) AND ( #{state.q_query()} ) AND ( NOT species:yyy )"
   params = {
     q
     fq
@@ -535,35 +553,19 @@ all_requests = {
 
 dispatch_all_requests = (request,state,table,update_seq) ->
   #request.abort_ajax()
-  # Extract filter (from pseudo-column "q") and facets
-  all_facets = (k.key for k in $.solr_config('static.ui.facets'))
   q = state.q_query()
-  facets = state.q_facets()
   if q?
     request.some_query()
   else
     request.no_query()
     return $.Deferred().reject()
-  order = state.order()
-  if order.length
-    sort = order[0].column+" "+(if order[0].order>0 then 'asc' else 'desc')
-  #
-  input = {
-    q, sort
-    rows: state.pagesize()
-    start: state.start
-    fq: ("#{k}:\"#{v}\"" for k,v of facets)
-    hl: 'true'
-    'hl.fl': $.solr_config('static.ui.highlights').join(' ')
-    'hl.fragsize': 500
-  }
 
   # run all plugins
   plugin_list = []
   plugin_actions = []
   $.each all_requests, (k,v) =>
     plugin_list.push k
-    plugin_actions.push v(request,state,table,input,update_seq)
+    plugin_actions.push v(request,state,table,update_seq)
   return $.when.apply(@,plugin_actions)
 
 rate_limiter = window.rate_limiter(1000,2000)

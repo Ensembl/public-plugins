@@ -647,14 +647,20 @@
   body_species_homepage_request = function() {
     var _this = this;
     return {
+      context: function(state, update_seq) {
+        return {
+          state: state,
+          update_seq: update_seq
+        };
+      },
       blocks: [
-        (function(request, q, start, len) {
+        (function(request, context, start, len) {
           var english, k, latin, v, _ref;
           latin = null;
           _ref = $.solr_config('spnames');
           for (k in _ref) {
             v = _ref[k];
-            if (q.q.match(new RegExp("\\b" + k + "\\b", "gi"))) {
+            if (context.state.q_query().match(new RegExp("\\b" + k + "\\b", "gi"))) {
               latin = v;
               english = $.solr_config('revspnames.%', latin);
             }
@@ -692,7 +698,7 @@
           update_seq: update_seq
         };
       },
-      prepare: function(query) {}
+      prepare: function() {}
     };
   };
 
@@ -709,13 +715,38 @@
     for (_i = 0, _len = extras.length; _i < _len; _i++) {
       x = extras[_i];
       blocks.push((function(xx) {
-        return function(request, q, start, len) {
+        return function(request, context, start, len) {
+          var input, k, order, sort, state, v;
+          state = context.state;
+          order = state.order();
+          if (order.length) {
+            sort = order[0].column + " " + (order[0].order > 0 ? 'asc' : 'desc');
+          }
+          input = {
+            q: state.q_query(),
+            sort: sort,
+            rows: state.pagesize(),
+            start: state.start,
+            fq: (function() {
+              var _ref, _results;
+              _ref = state.q_facets();
+              _results = [];
+              for (k in _ref) {
+                v = _ref[k];
+                _results.push("" + k + ":\"" + v + "\"");
+              }
+              return _results;
+            })(),
+            hl: 'true',
+            'hl.fl': $.solr_config('static.ui.highlights').join(' '),
+            'hl.fragsize': 500
+          };
           if (start === -1) {
-            return request.request_results(q, xx, 0, 10).then(function(data) {
+            return request.request_results(input, xx, 0, 10).then(function(data) {
               return data.num;
             });
           } else {
-            return request.request_results(q, xx, start, len).then(function(data) {
+            return request.request_results(input, xx, start, len).then(function(data) {
               return data.rows;
             });
           }
@@ -741,7 +772,6 @@
           update_seq: update_seq
         };
       },
-      blocks: [],
       inspect: function(context, requests, docs_frags) {
         var i, tops, _i, _ref;
         tops = [];
@@ -764,8 +794,8 @@
 
   body_requests = [body_species_homepage_request, body_elevate_quoted, body_frontpage_specials, body_main_requests];
 
-  dispatch_main_requests = function(request, state, table, query, update_seq) {
-    var b, blocks, contexts, inspects, p, plugins, ret, t, total, _i, _len,
+  dispatch_main_requests = function(request, state, table, update_seq) {
+    var b, blocks, contexts, i, inspects, p, plugins, ret, t, total, _i, _j, _len, _len1, _ref,
       _this = this;
     t = table.xxx_table();
     t.reset();
@@ -781,18 +811,26 @@
     blocks = [];
     inspects = [];
     contexts = [];
-    for (_i = 0, _len = plugins.length; _i < _len; _i++) {
-      p = plugins[_i];
+    for (i = _i = 0, _len = plugins.length; _i < _len; i = ++_i) {
+      p = plugins[i];
       contexts.push(p.context != null ? p.context(state, update_seq) : null);
-      if (p.blocks != null) {
-        blocks = blocks.concat(p.blocks);
-      }
       inspects.push(p.inspect != null ? p.inspect : null);
+      if (p.blocks != null) {
+        _ref = p.blocks;
+        for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
+          b = _ref[_j];
+          blocks.push((function(bb, ii) {
+            return function(r, start, len) {
+              return bb(r, contexts[ii], start, len);
+            };
+          })(b, i));
+        }
+      }
     }
     total = 0;
     ret = each_block(plugins.length, function(i) {
       if (plugins[i].prepare != null) {
-        return plugins[i].prepare(query);
+        return plugins[i].prepare();
       } else {
         return $.Deferred().resolve();
       }
@@ -800,14 +838,14 @@
     ret = $.Deferred().resolve();
     ret = ret.then(function() {
       return each_block(blocks.length, function(i) {
-        return blocks[i](request, query, -1).then(function(data) {
+        return blocks[i](request, -1).then(function(data) {
           total += data;
           return data;
         });
       });
     });
     return ret.then(function(sizes) {
-      var i, local_offset, offset, requests, results, rows_left, _j, _ref;
+      var local_offset, offset, requests, results, rows_left, _k, _ref1;
       if (update_seq !== current_update_seq) {
         return $.Deferred().reject();
       }
@@ -815,7 +853,7 @@
       requests = [];
       offset = 0;
       rows_left = state.pagesize();
-      for (i = _j = 0, _ref = blocks.length; 0 <= _ref ? _j < _ref : _j > _ref; i = 0 <= _ref ? ++_j : --_j) {
+      for (i = _k = 0, _ref1 = blocks.length; 0 <= _ref1 ? _k < _ref1 : _k > _ref1; i = 0 <= _ref1 ? ++_k : --_k) {
         if (state.start() < offset + sizes[i] && state.start() + state.pagesize() > offset) {
           local_offset = state.start() - offset;
           if (local_offset < 0) {
@@ -830,7 +868,7 @@
       }
       results = each_block(blocks.length, function(i) {
         if (requests[i][0] !== -1) {
-          return blocks[i](request, query, requests[i][0], requests[i][1]);
+          return blocks[i](request, requests[i][0], requests[i][1]);
         }
       });
       results = results.then(function(docs_frags) {
@@ -861,11 +899,20 @@
     });
   };
 
-  dispatch_facet_request = function(request, state, table, query, update_seq) {
-    var fq, k, params, q,
+  dispatch_facet_request = function(request, state, table, update_seq) {
+    var fq, k, params, q, v,
       _this = this;
-    fq = query.fq.join(' AND ');
-    q = "( NOT species:xxx ) AND ( " + query.q + " ) AND ( NOT species:yyy )";
+    fq = ((function() {
+      var _ref, _results;
+      _ref = state.q_facets();
+      _results = [];
+      for (k in _ref) {
+        v = _ref[k];
+        _results.push("" + k + ":\"" + v + "\"");
+      }
+      return _results;
+    })()).join(' AND ');
+    q = "( NOT species:xxx ) AND ( " + (state.q_query()) + " ) AND ( NOT species:yyy )";
     params = {
       q: q,
       fq: fq,
@@ -956,7 +1003,7 @@
   };
 
   dispatch_all_requests = function(request, state, table, update_seq) {
-    var all_facets, facets, input, k, order, plugin_actions, plugin_list, q, sort, v,
+    var all_facets, input, k, order, plugin_actions, plugin_list, q, sort, v,
       _this = this;
     all_facets = (function() {
       var _i, _len, _ref, _results;
@@ -969,7 +1016,6 @@
       return _results;
     })();
     q = state.q_query();
-    facets = state.q_facets();
     if (q != null) {
       request.some_query();
     } else {
@@ -981,15 +1027,16 @@
       sort = order[0].column + " " + (order[0].order > 0 ? 'asc' : 'desc');
     }
     input = {
-      q: q,
+      q: state.q_query(),
       sort: sort,
       rows: state.pagesize(),
       start: state.start,
       fq: (function() {
-        var _results;
+        var _ref, _results;
+        _ref = state.q_facets();
         _results = [];
-        for (k in facets) {
-          v = facets[k];
+        for (k in _ref) {
+          v = _ref[k];
           _results.push("" + k + ":\"" + v + "\"");
         }
         return _results;
@@ -1002,7 +1049,7 @@
     plugin_actions = [];
     $.each(all_requests, function(k, v) {
       plugin_list.push(k);
-      return plugin_actions.push(v(request, state, table, input, update_seq));
+      return plugin_actions.push(v(request, state, table, update_seq));
     });
     return $.when.apply(this, plugin_actions);
   };
