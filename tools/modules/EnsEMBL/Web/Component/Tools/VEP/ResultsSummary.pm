@@ -59,7 +59,7 @@ sub content {
       {key => 'category', title => 'Category'},
       {key => 'count',    title => 'Count'    },
     ],
-    [map {{category => $_, count => $stats->{$section}->{$_}}} @{$stats->{sort}->{$section}}],
+    [map {{category => $_, count => $stats->{$section}->{$_}}} grep {$_ !~ /Lines/} @{$stats->{sort}->{$section}}]
   );
   
   # make a hash of consequence colours
