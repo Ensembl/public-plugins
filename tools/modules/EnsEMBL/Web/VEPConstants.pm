@@ -26,7 +26,7 @@ our @EXPORT_OK = qw(INPUT_FORMATS CONFIG_SECTIONS);
 
 sub INPUT_FORMATS {
   return [
-    { 'value' => 'ensembl', 'caption' => 'Ensembl default',     'example' => qq(1  160283  471362   DUP\n1  881907  881906  -/C  +\n5  140532  140532  T/C  +) },
+    { 'value' => 'ensembl', 'caption' => 'Ensembl default',     'example' => qq(1  881907  881906  -/C  +\n5  140532  140532  T/C  +\n1  160283  471362   DUP) },
     { 'value' => 'vcf',     'caption' => 'VCF',                 'example' => qq(1  881906  var1  A  AC  .  .  .\n5  140532  var2  T  C  .  .  .\n1  1385015 sv2   .  <DEL>  .  .  SVTYPE=DEL;END=1387562  .) },
     { 'value' => 'pileup',  'caption' => 'Pileup',              'example' => qq(chr5  881906  T  C) },
     { 'value' => 'id',      'caption' => 'Variant identifiers', 'example' => qq(rs699\nrs144678492\nCOSM354157) },
