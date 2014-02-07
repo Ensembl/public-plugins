@@ -44,6 +44,8 @@ span.job-status-done              { background-color: #55AA55; }
 p span.job-sprites                { position: absolute; display: none; }
 p span.job-sprites span.sprite    { float: none; }
 p:hover span.job-sprites          { display: inline-block; }
+table.ss tr.bg1 span.job-sprites  { background-color: [[PANEL_BG]];   }
+table.ss tr.bg2 span.job-sprites  { background-color: [[NEUTRAL_BG]]; }
 
 /* Species icon for a job */
 img.job-species                   { border-radius: 2px; float: left; margin: 0 6px 0 0; }
