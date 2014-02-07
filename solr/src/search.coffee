@@ -343,32 +343,37 @@ each_block = (num,fn) ->
 # XXX low-level cache
 
 body_species_homepage_request = () ->
-  return [((request,q,start,len) =>
-    latin = null
-    for k,v of $.solr_config('spnames')
-      if q.q.match(new RegExp("\\b#{k}\\b","gi"))
-        latin = v
-        english = $.solr_config('revspnames.%',latin)
-    if start == -1 # size request
-      return $.Deferred().resolve(if english then 1 else 0)
-    else
-      if english
-        return $.Deferred().resolve({
-          num: 1,
-          rows: [{
-            name: english
-            description: english+" species home page for full details of "+english+" resources in Ensembl"
-            domain_url: '/'+latin
-            db: 'none'
-            id: latin
-            species: english
-            feature_type: 'Species Home Page'
-            result_style: 'result-type-species-homepage'
-          }]
-        })
+  return {
+    blocks: [((request,q,start,len) =>
+      latin = null
+      for k,v of $.solr_config('spnames')
+        if q.q.match(new RegExp("\\b#{k}\\b","gi"))
+          latin = v
+          english = $.solr_config('revspnames.%',latin)
+      if start == -1 # size request
+        return $.Deferred().resolve(if english then 1 else 0)
       else
-        return $.Deferred.resolve({ num:1, rows: [] })
-  )]
+        if english
+          return $.Deferred().resolve([{
+              name: english
+              description: english+" species home page for full details of "+english+" resources in Ensembl"
+              domain_url: '/'+latin
+              db: 'none'
+              id: latin
+              species: english
+              feature_type: 'Species Home Page'
+              result_style: 'result-type-species-homepage'
+          }])
+        else
+          return $.Deferred.resolve([])
+    )]
+  }
+
+body_elevate_quoted = () ->
+  return {
+    context: (state,update_seq) -> return { state, update_seq }
+    prepare: (query) ->
+  }
 
 body_main_requests = () ->
   rigid = []
@@ -382,30 +387,64 @@ body_main_requests = () ->
       if start == -1 # size request
         request.request_results(q,xx,0,10).then((data) => data.num)
       else # regular request
-        request.request_results(q,xx,start,len)
+        request.request_results(q,xx,start,len).then((data) => data.rows)
     )(x)
-  return blocks
+  return {
+    context: (state,update_seq) -> return { state, update_seq }
+    blocks
+  }
+
+body_frontpage_specials = () ->
+  return {
+    context: (state,update_seq) -> return { state, update_seq }
+    blocks: []
+    inspect: (context,requests,docs_frags) ->
+      tops = []
+      if context.state.start() == 0
+        for i in [0...requests.length]
+          if requests[i][0] != -1 and tops.length < context.state.pagesize()
+            tops = tops.concat(docs_frags[i])
+        tops = tops.slice(0,context.state.pagesize())
+      if context.update_seq != current_update_seq
+        return $.Deferred().reject()
+      $(document).trigger('main_front_page',[tops,context.state,context.update_seq])
+      return $.Deferred().resolve()
+  }
 
 body_requests = [
   body_species_homepage_request
+  body_elevate_quoted
+  body_frontpage_specials
   body_main_requests
 ]
 
 dispatch_main_requests = (request,state,table,query,update_seq) ->
   t = table.xxx_table()
   t.reset()
-    
+  
+  plugins = (b() for b in body_requests)
   # Determine what the blocks are to be: XXX cache this
   blocks = []
-  for b in body_requests
-    blocks = blocks.concat(b())
+  inspects = []
+  contexts = []
+  for p in plugins
+    contexts.push(if p.context? then p.context(state,update_seq) else null)
+    if p.blocks? then blocks = blocks.concat(p.blocks)
+    inspects.push(if p.inspect? then p.inspect else null)
   # Calculate block sizes
   total = 0
-  ret = each_block blocks.length,(i) =>
-    return blocks[i](request,query,-1)
-      .then (data) ->
-        total += data
-        return data
+  ret = each_block plugins.length,(i) =>
+    if plugins[i].prepare?
+      return plugins[i].prepare(query)
+    else
+      return $.Deferred().resolve()
+  ret = $.Deferred().resolve()
+  ret = ret.then () =>
+    each_block blocks.length,(i) =>
+      return blocks[i](request,query,-1)
+        .then (data) ->
+          total += data
+          return data
   return ret.then (sizes) =>
     if update_seq != current_update_seq then return $.Deferred().reject()
     $(document).trigger('num_known',[total,state,update_seq])
@@ -417,33 +456,28 @@ dispatch_main_requests = (request,state,table,query,update_seq) ->
       if state.start() < offset+sizes[i] and state.start()+state.pagesize() > offset
         local_offset = state.start() - offset
         if local_offset < 0 then local_offset = 0
-        requests.push [local_offset,offset,rows_left]
+        requests.push [local_offset,rows_left]
         rows_left -= sizes[i] - local_offset
       else
-        requests.push [-1,-1,-1]
+        requests.push [-1,-1]
       offset += sizes[i]
     # Make the requests
     results = each_block blocks.length, (i) =>
       if requests[i][0] != -1
-        blocks[i](request,query,requests[i][0],requests[i][2])
-    # Save the "top results page", if it comes through
-    tops = []
-    results = results.then((docs_frags) ->
-      if state.start() == 0
-        for i in [0...requests.length]
-          if requests[i][0] != -1 and tops.length < state.pagesize()
-            tops = tops.concat(docs_frags[i].rows)
-        tops = tops.slice(0,state.pagesize())
-      if update_seq != current_update_seq then return $.Deferred().reject()
-      $(document).trigger('main_front_page',[tops,state,update_seq])
-      return docs_frags
-    )
+        blocks[i](request,query,requests[i][0],requests[i][1])
+    # Run inspects from plugins
+    results = results.then (docs_frags) =>
+      each_block inspects.length, (i) =>
+          if inspects[i]?
+            inspects[i](contexts[i],requests,docs_frags)
+        .then(() => return docs_frags)
+    # XXX order
     # Draw the table
     return results.then((docs_frags) ->
       if update_seq != current_update_seq then return $.Deferred().reject()
       each_block requests.length,(i) =>
         if requests[i][0] != -1
-          return t.draw_rows({ rows: docs_frags[i].rows, cols: state.columns() })
+          return t.draw_rows({ rows: docs_frags[i], cols: state.columns() })
         else
           return $.Deferred().resolve(null)
     )
