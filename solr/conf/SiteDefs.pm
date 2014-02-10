@@ -127,7 +127,7 @@ sub update_conf {
       #######################
       # RESULT HIGHLIGHTING #
       #######################
-      highlights => ['description'], # fields to highlight
+      highlights => ['description','_hr'], # fields to highlight
 
       #######################
       # !xxx type shortcuts #

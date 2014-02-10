@@ -345,10 +345,10 @@ each_block = (num,fn) ->
 body_species_homepage_request = () ->
   sp_home = (input,request,start,len) ->
     if start == -1 # size request
-      return $.Deferred().resolve(if input.english then 1 else 0)
+      return $.Deferred().resolve([input,if input.english then 1 else 0])
     else
       if input.english
-        return $.Deferred().resolve([{
+        return $.Deferred().resolve([input,[{
             name: input.english
             description: input.english+" species home page for full details of "+input.english+" resources in Ensembl"
             domain_url: '/'+input.latin
@@ -357,9 +357,9 @@ body_species_homepage_request = () ->
             species: input.english
             feature_type: 'Species Home Page'
             result_style: 'result-type-species-homepage'
-        }])
+        }]])
       else
-        return $.Deferred.resolve([])
+        return $.Deferred.resolve([{},{}])
           
   return {
     context: (state,update_seq) ->
@@ -380,16 +380,15 @@ body_species_homepage_request = () ->
 body_elevate_quoted = () ->
   return {
     context: (state,update_seq) -> return { state, update_seq }
-    prepare: (context,input,tags_in,depart,arrive_in) ->
+    prepare: (context,input,tags_in,depart,arrive) ->
       if !tags_in.main then return null
       tags_quoted = _clone_object(tags_in)
       tags_quoted.quoted = 1
-      arrive = arrive_in
       input_quoted   = _clone_object(input)
       input_quoted.q = '"'+input.q+'"'
       input_unquoted   = _clone_object(input)
       input_unquoted.q = input.q+' AND ( NOT "'+input.q+'" )'
-      return [[input_quoted,  tags_quoted,depart,arrive_in]
+      return [[input_quoted,  tags_quoted,depart,arrive]
               [input_unquoted,tags_in,    depart,arrive]]
   }
 
@@ -409,18 +408,29 @@ add_extra_constraints = (q_in,fq_in,extra) ->
   if q.length > 1
     q = ( "( "+x+" )" for x in q).join(" AND ")
   [q,fq]
-
+      
 body_raw_request = () ->
   raw_request = (input,request,start,len) ->
     params = _clone_object(input)
     if start == -1 # size request
       params.start = 0
       params.rows = 10
-      return request.request_results(params).then((data) => data.num)
+      return request.raw_ajax(params).then (data) =>
+        return [data,data.result?.response?.numFound]
     else # regular request
       params.rows = len
       params.start = start
-      return request.request_results(params).then((data) => data.rows)
+      return request.raw_ajax(params).then (data) =>
+        docs = data.result?.response?.docs
+        # substitue highlights XXX not here!
+        for doc in docs
+          snippet = data.result?.highlighting?[doc.uid]
+          if snippet?
+            for h in $.solr_config('static.ui.highlights')
+              if doc[h] and snippet[h]
+                doc[h] = snippet[h].join(' ... ')
+        #
+        return [data,docs]
 
   return {
     prepare: (context,input,tags,depart,arrive) ->
@@ -441,7 +451,7 @@ body_split_favs = () ->
     out = []
     for x in extras
       input = _clone_object(input_in)
-      [q,fq] = add_extra_constraints(input.q,("#{k}:\"#{v}\"" for k,v of input.fq),x)
+      [q,fq] = add_extra_constraints(input.q,(k+':"'+v+'"' for k,v of input.fq),x)
       input.q = q
       input.fq = fq
       order = context.state.order()
@@ -472,6 +482,27 @@ body_frontpage_specials = () ->
   }
 
 body_highlights = () ->
+  add_highlight_fields = (orig) ->
+    return (input,request,start,len) ->
+      v = orig(input,request,start,len)
+      if start != -1
+        return v.then ([data,docs]) =>
+          # Add _hr highlighting to description
+          if data.result?.highlighting?
+            for doc in docs
+              if doc.uid?
+                if data.result.highlighting[doc.uid]
+                  if data.result.highlighting[doc.uid]._hr
+                    doc.description += " " +
+                      data.result.highlighting[doc.uid]._hr.join(" ")
+                  for k,v in data.result.highlighting[doc.uid]
+                    if k == '_hr' then continue
+                    for h in $.solr_config('static.ui.highlights')
+                      if doc[h] and snippet[h]
+                        doc[h] = snippet[h].join(' ... ')
+          return [data,docs]
+      return v
+
   return {
     prepare: (context,input,tags,depart,arrive) ->
       if !tags.main then return null
@@ -479,7 +510,7 @@ body_highlights = () ->
       input['hl.fl'] = $.solr_config('static.ui.highlights')
       input['hl.fragsize'] = 500
       tags.highlighted = 1
-      return [[input,tags,depart,arrive]]
+      return [[input,tags,add_highlight_fields(depart),arrive]]
   }
 
 body_requests = [
@@ -493,7 +524,8 @@ body_requests = [
 
 run_all_prepares = (contexts,plugins,input) ->
   tags_in = { main: 1 }
-  input = [[input,tags_in,null,null]]
+  run = $.Callbacks("once")
+  input = [[input,tags_in,run,null]]
   for p,i in plugins
     if p.prepare?
       output = []
@@ -503,7 +535,7 @@ run_all_prepares = (contexts,plugins,input) ->
         output = output.concat(v)
       input = output
   return output
-  
+ 
 dispatch_main_requests = (request,state,table,update_seq) ->
   t = table.xxx_table()
   t.reset()
@@ -517,9 +549,11 @@ dispatch_main_requests = (request,state,table,update_seq) ->
   prepares =
     run_all_prepares(contexts,plugins,{ q: state.q_query(), fq: state.q_facets() })
   blocks = []
+  console.log("prepares",prepares)
   for pr in prepares
     ((pp) ->
-      blocks.push((request,start,len) -> pp[2](pp[0],request,start,len))
+      blocks.push (request,start,len) ->
+        pp[2](pp[0],request,start,len).then((data) -> data[1])
     )(pr)
   # Calculate block sizes
   total = 0
@@ -681,20 +715,6 @@ class Request
         @hub.unfail()
         return data
     return xhr
-
-  request_results: (params) ->
-    return @raw_ajax(params).then (data) =>
-      num = data.result?.response?.numFound
-      docs = data.result?.response?.docs
-      # substitue highlights 
-      for doc in docs
-        snippet = data.result?.highlighting?[doc.uid]
-        if snippet?
-          for h in $.solr_config('static.ui.highlights')
-            if doc[h] and snippet[h]
-              doc[h] = snippet[h].join(' ... ')
-      #
-      return { num, rows: docs }
 
   some_query: ->
     $('.page_some_query').show()
