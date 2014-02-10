@@ -692,11 +692,6 @@
   };
 
   body_elevate_quoted = function() {
-    var hidedup;
-    hidedup = function(rows) {
-      console.log("hidedup");
-      return rows;
-    };
     return {
       context: function(state, update_seq) {
         return {
@@ -705,7 +700,7 @@
         };
       },
       prepare: function(context, input, tags_in, depart, arrive_in) {
-        var arrive, input_quoted, tags_quoted;
+        var arrive, input_quoted, input_unquoted, tags_quoted;
         if (!tags_in.main) {
           return null;
         }
@@ -714,9 +709,10 @@
         arrive = arrive_in;
         input_quoted = _clone_object(input);
         input_quoted.q = '"' + input.q + '"';
-        return [[input_quoted, tags_quoted, depart, arrive_in], [input, tags_in, depart, depart, arrive]];
-      },
-      hidedup: hidedup
+        input_unquoted = _clone_object(input);
+        input_unquoted.q = input.q + ' AND ( NOT "' + input.q + '" )';
+        return [[input_quoted, tags_quoted, depart, arrive_in], [input_unquoted, tags_in, depart, arrive]];
+      }
     };
   };
 
@@ -901,9 +897,6 @@
         input = output;
       }
     }
-    console.log("output", {
-      output: output
-    });
     return output;
   };
 

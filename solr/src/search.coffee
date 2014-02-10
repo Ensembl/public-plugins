@@ -371,8 +371,6 @@ body_species_homepage_request = () ->
   }
 
 body_elevate_quoted = () ->
-  hidedup = (rows) ->
-    return rows
   return {
     context: (state,update_seq) -> return { state, update_seq }
     prepare: (context,input,tags_in,depart,arrive_in) ->
@@ -380,12 +378,12 @@ body_elevate_quoted = () ->
       tags_quoted = _clone_object(tags_in)
       tags_quoted.quoted = 1
       arrive = arrive_in
-      #arrive.then(hidedup)
-      input_quoted = _clone_object(input)
+      input_quoted   = _clone_object(input)
       input_quoted.q = '"'+input.q+'"'
-      return [[input_quoted,tags_quoted,depart,arrive_in]
-              [input,       tags_in,    depart,arrive]]
-    hidedup
+      input_unquoted   = _clone_object(input)
+      input_unquoted.q = input.q+' AND ( NOT "'+input.q+'" )'
+      return [[input_quoted,  tags_quoted,depart,arrive_in]
+              [input_unquoted,tags_in,    depart,arrive]]
   }
 
 add_extra_constraints = (q_in,fq_in,extra) ->
