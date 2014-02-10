@@ -122,6 +122,21 @@ perl filter_vep.pl -i out.txt -o out_filtered.txt -filter "[filter_text]"</pre>
                 the blocks pass the filters.
 			</td>
 		</tr>
+		<tr>
+			<td><pre>--ontology</pre></td>
+			<td><pre>-y</pre></td>
+			<td>
+        Use <a rel="external"
+href="http://www.sequenceontology.org/">Sequence Ontology</a> to match
+consequence terms. Use with
+        operator "is" to match against all child terms of your value. e.g.
+        "Consequence is coding_sequence_variant" will match missense_variant,
+        synonymous_variant etc. Requires database connection; defaults to
+        connecting to ensembldb.ensembl.org. Use --host, --port, --user,
+        --password, --version as per variant_effect_predictor.pl to change
+        connection parameters.
+			</td>
+		</tr>
     </table>
     
     <hr/>
@@ -182,6 +197,12 @@ perl filter_vep.pl -i out.txt -o out_filtered.txt -filter "[filter_text]"</pre>
 # match number part
 --filter "SIFT < 0.5"</pre>
     
+    <p> For the Consequence field it is possible to use the <a rel="external"
+    href="http://www.sequenceontology.org/">Sequence Ontology</a> to match terms
+    ontologically; for example, to match all coding consequences (e.g.
+    missense_variant, synonymous_variant):</p>
+    
+    <pre class="code">--ontology --filter "Consequence is coding_sequence_variant"</pre>
     
     <hr/>
     <h2 id="filter_op">Operators</h2>
