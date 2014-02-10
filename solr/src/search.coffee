@@ -342,7 +342,7 @@ each_block = (num,fn) ->
 
 # XXX low-level cache
 
-body_species_homepage_request = () ->
+body_embeded_species = () ->
   sp_home = (input,request,start,len) ->
     if start == -1 # size request
       return $.Deferred().resolve([input,if input.english then 1 else 0])
@@ -370,17 +370,20 @@ body_species_homepage_request = () ->
           english = $.solr_config('revspnames.%',latin)
       return { state, update_seq, latin, english }
 
-    prepare: (context,input,tags_in,depart,arrive) ->
-      queries = [[input,tags_in,depart,arrive]]
+    prepare: (context,input,tags_in,depart) ->
+      if context.english?
+        if not tags_in.embeded_species? then tags_in.embeded_species = []
+        tags_in.embeded_species.push(context.english)
+      queries = [[input,tags_in,depart]]
       if context.english
-        queries.unshift [{ english: context.english, latin: context.latin },{ sphome: 1 },sp_home,arrive]
+        queries.unshift [{ english: context.english, latin: context.latin },{ sphome: 1 },sp_home]
       return queries
   }
 
 body_elevate_quoted = () ->
   return {
     context: (state,update_seq) -> return { state, update_seq }
-    prepare: (context,input,tags_in,depart,arrive) ->
+    prepare: (context,input,tags_in,depart) ->
       if !tags_in.main then return null
       tags_quoted = _clone_object(tags_in)
       tags_quoted.quoted = 1
@@ -388,8 +391,8 @@ body_elevate_quoted = () ->
       input_quoted.q = '"'+input.q+'"'
       input_unquoted   = _clone_object(input)
       input_unquoted.q = input.q+' AND ( NOT "'+input.q+'" )'
-      return [[input_quoted,  tags_quoted,depart,arrive]
-              [input_unquoted,tags_in,    depart,arrive]]
+      return [[input_quoted,  tags_quoted,depart]
+              [input_unquoted,tags_in,    depart]]
   }
 
 add_extra_constraints = (q_in,fq_in,extra) ->
@@ -433,22 +436,30 @@ body_raw_request = () ->
         return [data,docs]
 
   return {
-    prepare: (context,input,tags,depart,arrive) ->
-      return [[input,tags,raw_request,arrive]]
+    prepare: (context,input,tags,depart) ->
+      return [[input,tags,raw_request]]
   }
 
 body_split_favs = () ->
-  rigid = []
-  favs = $.solr_config('user.favs.species')
-  if favs.length
-    rigid.push ['species',[favs],100]
-  extras = generate_block_list(rigid)
-     
-  prepare = (context,input_in,tags_in,depart,arrive) ->
+  make_extras = (embeded) ->
+    rigid = []
+    favs = _clone_array($.solr_config('user.favs.species'))
+    if embeded? then favs = favs.concat(embeded)
+    if favs.length
+      rigid.push ['species',[favs],100]
+    return generate_block_list(rigid)
+  
+  normal_extras = make_extras(null)
+
+  prepare = (context,input_in,tags_in,depart) ->
     tags = _clone_object(tags_in)
     if !tags.main then return null
     tags.blocks = 1
     out = []
+    if tags_in.embeded_species?
+      extras = make_extras(tags_in.embeded_species)
+    else
+      extras = normal_extras
     for x in extras
       input = _clone_object(input_in)
       [q,fq] = add_extra_constraints(input.q,(k+':"'+v+'"' for k,v of input.fq),x)
@@ -457,7 +468,7 @@ body_split_favs = () ->
       order = context.state.order()
       if order.length
         input.sort = order[0].column+" "+(if order[0].order>0 then 'asc' else 'desc')
-      out.push [input,tags,depart,arrive]
+      out.push [input,tags,depart]
     return out
 
   return {
@@ -504,18 +515,18 @@ body_highlights = () ->
       return v
 
   return {
-    prepare: (context,input,tags,depart,arrive) ->
+    prepare: (context,input,tags,depart) ->
       if !tags.main then return null
       input.hl = 'true'
       input['hl.fl'] = $.solr_config('static.ui.highlights')
       input['hl.fragsize'] = 500
       tags.highlighted = 1
-      return [[input,tags,add_highlight_fields(depart),arrive]]
+      return [[input,tags,add_highlight_fields(depart)]]
   }
 
 body_requests = [
   body_raw_request
-  body_species_homepage_request
+  body_embeded_species
   body_frontpage_specials
   body_highlights
   body_elevate_quoted
@@ -530,7 +541,7 @@ run_all_prepares = (contexts,plugins,input) ->
     if p.prepare?
       output = []
       for query in input
-        v = p.prepare(contexts[i],query[0],query[1],query[2],query[3])
+        v = p.prepare(contexts[i],query[0],query[1],query[2])
         if !v then v = [query]
         output = output.concat(v)
       input = output
@@ -549,7 +560,6 @@ dispatch_main_requests = (request,state,table,update_seq) ->
   prepares =
     run_all_prepares(contexts,plugins,{ q: state.q_query(), fq: state.q_facets() })
   blocks = []
-  console.log("prepares",prepares)
   for pr in prepares
     ((pp) ->
       blocks.push (request,start,len) ->
