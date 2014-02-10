@@ -343,31 +343,38 @@ each_block = (num,fn) ->
 # XXX low-level cache
 
 body_species_homepage_request = () ->
+  sp_home = (input,request,start,len) ->
+    if start == -1 # size request
+      return $.Deferred().resolve(if input.english then 1 else 0)
+    else
+      if input.english
+        return $.Deferred().resolve([{
+            name: input.english
+            description: input.english+" species home page for full details of "+input.english+" resources in Ensembl"
+            domain_url: '/'+input.latin
+            db: 'none'
+            id: input.latin
+            species: input.english
+            feature_type: 'Species Home Page'
+            result_style: 'result-type-species-homepage'
+        }])
+      else
+        return $.Deferred.resolve([])
+          
   return {
-    context: (state,update_seq) -> return { state, update_seq }
-    blocks: [((request,context,start,len) =>
+    context: (state,update_seq) ->
       latin = null
       for k,v of $.solr_config('spnames')
-        if context.state.q_query().match(new RegExp("\\b#{k}\\b","gi"))
+        if state.q_query().match(new RegExp("\\b#{k}\\b","gi"))
           latin = v
           english = $.solr_config('revspnames.%',latin)
-      if start == -1 # size request
-        return $.Deferred().resolve(if english then 1 else 0)
-      else
-        if english
-          return $.Deferred().resolve([{
-              name: english
-              description: english+" species home page for full details of "+english+" resources in Ensembl"
-              domain_url: '/'+latin
-              db: 'none'
-              id: latin
-              species: english
-              feature_type: 'Species Home Page'
-              result_style: 'result-type-species-homepage'
-          }])
-        else
-          return $.Deferred.resolve([])
-    )]
+      return { state, update_seq, latin, english }
+
+    prepare: (context,input,tags_in,depart,arrive) ->
+      queries = [[input,tags_in,depart,arrive]]
+      if context.english
+        queries.unshift [{ english: context.english, latin: context.latin },{ sphome: 1 },sp_home,arrive]
+      return queries
   }
 
 body_elevate_quoted = () ->
@@ -404,7 +411,7 @@ add_extra_constraints = (q_in,fq_in,extra) ->
   [q,fq]
 
 body_raw_request = () ->
-  raw_request = (input,request,context,start,len) ->
+  raw_request = (input,request,start,len) ->
     params = _clone_object(input)
     if start == -1 # size request
       params.start = 0
@@ -467,8 +474,9 @@ body_frontpage_specials = () ->
 body_highlights = () ->
   return {
     prepare: (context,input,tags,depart,arrive) ->
+      if !tags.main then return null
       input.hl = 'true'
-      input['hl.fl'] = $.solr_config('static.ui.highlights').join(' ')
+      input['hl.fl'] = $.solr_config('static.ui.highlights')
       input['hl.fragsize'] = 500
       tags.highlighted = 1
       return [[input,tags,depart,arrive]]
@@ -496,40 +504,23 @@ run_all_prepares = (contexts,plugins,input) ->
       input = output
   return output
   
-build_blocks = (inputs) =>
-  out = []
-  for input in inputs
-    ((ii) ->
-      out.push (request,context,start,len) =>
-        return ii[2](ii[0],request,context,start,len)
-    )(input)
-  return out
-
 dispatch_main_requests = (request,state,table,update_seq) ->
   t = table.xxx_table()
   t.reset()
   
   plugins = (b() for b in body_requests)
   # Determine what the blocks are to be: XXX cache this
-  blocks = []
   contexts = []
   prepares = []
   for p,i in plugins
     contexts.push(if p.context? then p.context(state,update_seq) else null)
-    if p.blocks?
-      for b in p.blocks
-        blocks.push(((bb,ii) -> return (r,start,len) ->
-          bb(r,contexts[ii],start,len)
-        )(b,i))
-    if p.prepare? then prepares.push(p.prepare)
   prepares =
     run_all_prepares(contexts,plugins,{ q: state.q_query(), fq: state.q_facets() })
-  bs = build_blocks(prepares)
-  if bs?
-    for b in bs
-      blocks.push(((bb,ii) -> return (r,start,len) ->
-        bb(r,contexts[ii],start,len)
-      )(b,i))
+  blocks = []
+  for pr in prepares
+    ((pp) ->
+      blocks.push((request,start,len) -> pp[2](pp[0],request,start,len))
+    )(pr)
   # Calculate block sizes
   total = 0
   ret = $.Deferred().resolve()
