@@ -352,7 +352,8 @@ EOF
         },
         { title => "Protein seq.",
           url => "/{species}/Transcript/Variation_Transcript/Table?t={id}&db={database_type}",
-          conditions => { "{feature_type}" => "^Transcript\$" }
+          conditions => { "{feature_type}" => "^Transcript\$" },
+          result_condition => 'protein:1',
         },
         { title => "Population",
           url => "/{species}/Transcript/Population?t={id}&db={database_type}",
@@ -360,7 +361,8 @@ EOF
         },
         { title => "Protein",
           url => "/{species}/Transcript/ProteinSummary?t={id}&db={database_type}",
-          conditions => { "{feature_type}" => "^Transcript\$" }
+          conditions => { "{feature_type}" => "^Transcript\$" },
+          result_condition => 'protein:1',
         },
         { title => "Sequence",
           url => "/{species}/LRG/Sequences?lrg={id}",

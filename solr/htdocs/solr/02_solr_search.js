@@ -978,7 +978,7 @@
           return v;
         }
         return v.then(function(_arg) {
-          var data, doc, docs, i, lhs, link, ok, quicklinks, regex, url, value, _i, _j, _len, _len1, _ref, _ref1, _ref2;
+          var data, doc, docs, found, i, lhs, link, ok, quicklinks, regex, res, url, value, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2, _ref3;
           data = _arg[0], docs = _arg[1];
           for (_i = 0, _len = docs.length; _i < _len; _i++) {
             doc = docs[_i];
@@ -1002,9 +1002,23 @@
               if (!ok) {
                 continue;
               }
+              if (link.result_condition != null) {
+                found = false;
+                _ref3 = doc.quick_links;
+                for (_k = 0, _len2 = _ref3.length; _k < _len2; _k++) {
+                  res = _ref3[_k];
+                  if (link.result_condition === res) {
+                    found = true;
+                    break;
+                  }
+                }
+                if (!found) {
+                  continue;
+                }
+              }
               url = link.url.replace(/\{(.*?)\}/g, function(g0, g1) {
-                var _ref3;
-                return (_ref3 = doc[g1]) != null ? _ref3 : '';
+                var _ref4;
+                return (_ref4 = doc[g1]) != null ? _ref4 : '';
               });
               quicklinks.push({
                 url: url,

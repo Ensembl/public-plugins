@@ -542,6 +542,14 @@ body_quicklinks = () ->
                 ok = false
                 break
             if not ok then continue
+            # Check result condition (if any)
+            if link.result_condition?
+              found = false
+              for res in doc.quick_links
+                if link.result_condition == res
+                  found = true
+                  break
+              if not found then continue
             # Build URL
             url = link.url.replace /\{(.*?)\}/g, (g0,g1) ->
               return doc[g1] ? ''
