@@ -717,7 +717,7 @@ all_requests = {
 }
 
 dispatch_all_requests = (request,state,table,update_seq) ->
-  #request.abort_ajax()
+  request.abort_ajax()
   q = state.q_query()
   if q?
     request.some_query()
@@ -766,8 +766,8 @@ class Request
       url: @hub.ajax_url(), data: params,
       traditional: true, dataType: 'json'
     })
-    @xhrs[idx] = xhr
     if !@req_outstanding() then @hub.spin_up()
+    @xhrs[idx] = xhr
     xhr.then (data) =>
       delete @xhrs[idx]
       if !@req_outstanding() then @hub.spin_down()

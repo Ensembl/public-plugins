@@ -1296,6 +1296,7 @@
   dispatch_all_requests = function(request, state, table, update_seq) {
     var plugin_actions, plugin_list, q,
       _this = this;
+    request.abort_ajax();
     q = state.q_query();
     if (q != null) {
       request.some_query();
@@ -1369,10 +1370,10 @@
         traditional: true,
         dataType: 'json'
       });
-      this.xhrs[idx] = xhr;
       if (!this.req_outstanding()) {
         this.hub.spin_up();
       }
+      this.xhrs[idx] = xhr;
       xhr.then(function(data) {
         delete _this.xhrs[idx];
         if (!_this.req_outstanding()) {
