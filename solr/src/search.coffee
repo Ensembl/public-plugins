@@ -180,7 +180,10 @@ class Hub
     url = window.location.href.replace(/\?.*$/,"")+"?"
     url += ("#{@_encode(a)}=#{@_encode(b)}" for a,b of qps).join(';')
     # Species fix XXX make more generic
-    url = @fix_species_url(url,{0: qps['facet_species'] ? 'Multi' })
+    species = 'Multi'
+    if qps['facet_species']? and qps['facet_species'] != 'CrossSpecies'
+      species = qps['facet_species']
+    url = @fix_species_url(url,{0: species })
     url
 
   fake_history: () -> !(window.history && window.history.pushState)
@@ -313,6 +316,7 @@ class Hub
           .clone(true).addClass('ensembl').removeClass('ensembl_all'))
       $spec = $('.site_menu .ensembl')
       window.sp_names @params.facet_species, (names) =>
+        if !names then return
         $img = $('img',$spec).attr("src","/i/species/16/#{names.url}.png")
         $input = $('input',$spec).val("Search #{@params.facet_species}…")
         $spec.empty().append($img).append("Search #{@params.facet_species}")
@@ -372,8 +376,8 @@ body_embeded_species = () ->
 
     prepare: (context,input,tags_in,depart) ->
       if context.english?
-        if not tags_in.embeded_species? then tags_in.embeded_species = []
-        tags_in.embeded_species.push(context.english)
+        if not tags_in.target_species? then tags_in.target_species = []
+        tags_in.target_species.push(context.english)
       queries = [[input,tags_in,depart]]
       if context.english
         queries.unshift [{ english: context.english, latin: context.latin },{ sphome: 1 },sp_home]
@@ -441,10 +445,10 @@ body_raw_request = () ->
   }
 
 body_split_favs = () ->
-  make_extras = (embeded) ->
+  make_extras = (target) ->
     rigid = []
     favs = _clone_array($.solr_config('user.favs.species'))
-    if embeded? then favs = favs.concat(embeded)
+    if target? then favs = target.concat(favs)
     if favs.length
       rigid.push ['species',[favs],100]
     return generate_block_list(rigid)
@@ -456,8 +460,8 @@ body_split_favs = () ->
     if !tags.main then return null
     tags.blocks = 1
     out = []
-    if tags_in.embeded_species?
-      extras = make_extras(tags_in.embeded_species)
+    if tags_in.target_species?
+      extras = make_extras(tags_in.target_species)
     else
       extras = normal_extras
     for x in extras
@@ -563,9 +567,19 @@ body_quicklinks = () ->
       return [[input,tags,add_quicklinks(depart)]]
   }
 
+body_elevate_crossspecies = () ->
+  return {
+    prepare: (context,input,tags,depart) ->
+      if tags.main
+        if not tags.target_species? then tags.target_species = []
+        tags.target_species.unshift("CrossSpecies")
+      return [[input,tags,depart]]
+  }
+
 body_requests = [
   body_raw_request
   body_embeded_species
+  body_elevate_crossspecies
   body_frontpage_specials
   body_highlights
   body_elevate_quoted
