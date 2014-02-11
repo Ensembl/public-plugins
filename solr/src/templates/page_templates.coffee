@@ -86,15 +86,10 @@ window.page_templates =
 
           # Add quick links
           data.tp2_row.register 1000, () ->
-            ql = $.solr_config('static.ui.links')
-            for link,idx in ql
-              ok = true
-              for a,b of ( link.conditions ? {} )
-                left = a.replace /\{(.*?)\}/g, (g0,g1) -> data.tp2_row.best(g1) ? ''
-                if not left.match(new RegExp(b)) then ok = false ; break
-              if ok
-                url = link.url.replace /\{(.*?)\}/g, (g0,g1) -> data.tp2_row.best(g1) ? ''
-                data.tp2_row.add_value("quick_link",{ title: link.title, url },100*idx+500)
+            links = data.tp2_row.best('quicklinks')
+            for link in ( links ? [] )
+              data.tp2_row.add_value("quick_link",link)
+
           data.tp2_row.register 30000, () ->
             data.tp2_row.send("quick_links",(k.value for k in @all_values("quick_link") ? []))
           true

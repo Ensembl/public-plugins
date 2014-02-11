@@ -640,36 +640,13 @@
             });
             true;
             data.tp2_row.register(1000, function() {
-              var a, b, idx, left, link, ok, ql, url, _i, _len, _ref, _ref1, _results;
-              ql = $.solr_config('static.ui.links');
+              var link, links, _i, _len, _ref, _results;
+              links = data.tp2_row.best('quicklinks');
+              _ref = links != null ? links : [];
               _results = [];
-              for (idx = _i = 0, _len = ql.length; _i < _len; idx = ++_i) {
-                link = ql[idx];
-                ok = true;
-                _ref1 = (_ref = link.conditions) != null ? _ref : {};
-                for (a in _ref1) {
-                  b = _ref1[a];
-                  left = a.replace(/\{(.*?)\}/g, function(g0, g1) {
-                    var _ref2;
-                    return (_ref2 = data.tp2_row.best(g1)) != null ? _ref2 : '';
-                  });
-                  if (!left.match(new RegExp(b))) {
-                    ok = false;
-                    break;
-                  }
-                }
-                if (ok) {
-                  url = link.url.replace(/\{(.*?)\}/g, function(g0, g1) {
-                    var _ref2;
-                    return (_ref2 = data.tp2_row.best(g1)) != null ? _ref2 : '';
-                  });
-                  _results.push(data.tp2_row.add_value("quick_link", {
-                    title: link.title,
-                    url: url
-                  }, 100 * idx + 500));
-                } else {
-                  _results.push(void 0);
-                }
+              for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                link = _ref[_i];
+                _results.push(data.tp2_row.add_value("quick_link", link));
               }
               return _results;
             });

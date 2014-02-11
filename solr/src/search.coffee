@@ -524,12 +524,44 @@ body_highlights = () ->
       return [[input,tags,add_highlight_fields(depart)]]
   }
 
+body_quicklinks = () ->
+  add_quicklinks = (orig) ->
+    return (input,request,start,len) ->
+      v = orig(input,request,start,len)
+      if start == -1 then return v
+      return v.then ([data,docs]) ->
+        for doc in docs
+          quicklinks = []
+          for link,i in $.solr_config('static.ui.links')
+            ok = true
+            # Check if conditions from config are met
+            for value,regex of ( link.conditions ? {} )
+              lhs = value.replace /\{(.*?)\}/g, (g0,g1) ->
+                return doc[g1] ? ''
+              if not lhs.match(new RegExp(regex))
+                ok = false
+                break
+            if not ok then continue
+            # Build URL
+            url = link.url.replace /\{(.*?)\}/g, (g0,g1) ->
+              return doc[g1] ? ''
+            quicklinks.push({ url, title: link.title })
+          doc.quicklinks = quicklinks
+        return [data,docs]
+
+  return {
+    prepare: (context,input,tags,depart) ->
+      if !tags.main then return null
+      return [[input,tags,add_quicklinks(depart)]]
+  }
+
 body_requests = [
   body_raw_request
   body_embeded_species
   body_frontpage_specials
   body_highlights
   body_elevate_quoted
+  body_quicklinks
   body_split_favs
 ]
 
