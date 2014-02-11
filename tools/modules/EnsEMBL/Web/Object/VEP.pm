@@ -23,12 +23,40 @@ use warnings;
 
 use EnsEMBL::Web::TmpFile::Text;
 use EnsEMBL::Web::TmpFile::VcfTabix;
+use EnsEMBL::Web::Tools::FileHandler qw(file_get_contents);
 
 use base qw(EnsEMBL::Web::Object::Tools);
 
 sub ticket_type {
   ## Abstract method implementation
   return 'VEP';
+}
+
+sub get_edit_jobs_data {
+  ## @override
+  my $self        = shift;
+  my $hub         = $self->hub;
+  my $ticket      = $self->get_requested_ticket   or return [];
+  my $job         = shift @{ $ticket->job || [] } or return [];
+  my $job_data    = $job->job_data->raw;
+  my $input_file  = sprintf '%s/%s', $job->job_dir, $job_data->{'input_file'};
+
+  if (-T $input_file) {
+    if (-s $input_file <= 1024) {
+      $job_data->{"text_$job_data->{'format'}"} = join('', file_get_contents($input_file));
+    } else {
+      my $dir_loc   = $hub->species_defs->ENSEMBL_TOOLS_TMP_DIR;
+      my $file_loc  = $input_file =~ s/^$dir_loc\/(temporary|persistent)\/VEP\///r;
+
+      $job_data->{'input_file_type'}  = 'text';
+      $job_data->{'input_file_url'}   = sprintf('/%s/vep_download?file=%s;name=%s;persistent=%s;download=1', $hub->species, $file_loc, $file_loc =~ s/.*\///r, $ticket->owner_type eq 'user' ? 1 : 0);
+    }
+  } else {
+    $job_data->{'input_file_type'} = 'binary';
+  }
+  $job_data->{'species'} = $job->species;
+
+  return [ $job_data ];
 }
 
 sub result_files {

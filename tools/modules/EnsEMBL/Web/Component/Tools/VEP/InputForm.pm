@@ -37,7 +37,7 @@ sub content {
   my $sd        = $hub->species_defs;
   my $dom       = $self->dom;
   my $form      = $self->new_tool_form('VEP');
-  my $edit_job  = $self->object->get_edit_jobs_data;
+  my $edit_job  = ($hub->function || '') eq 'Edit' ? $self->object->get_edit_jobs_data : [];
 
   ## Add the previous job params for JavaScript
   $form->add_hidden({ 'name'  => 'edit_jobs', 'value' => $self->jsonify($edit_job) }) if @$edit_job;

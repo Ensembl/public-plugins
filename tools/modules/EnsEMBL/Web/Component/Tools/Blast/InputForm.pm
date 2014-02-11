@@ -35,7 +35,7 @@ sub content {
   my $combinations  = delete $form_params->{'combinations'};
   my $selected      = delete $form_params->{'selected'};
   my $all_species   = delete $form_params->{'species'};
-  my $edit_jobs     = $object->get_edit_jobs_data;
+  my $edit_jobs     = ($hub->function || '') eq 'Edit' ? $object->get_edit_jobs_data : [];
 
   if (!@$edit_jobs && (my $existing_seq = $hub->param('query_sequence'))) { # If coming from "BLAST this sequence" link
     my $existing_type = $hub->param('query_type') || 'dna';

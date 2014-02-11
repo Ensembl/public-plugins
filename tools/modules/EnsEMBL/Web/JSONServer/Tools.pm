@@ -63,13 +63,9 @@ sub json_refresh_tickets {
 }
 
 sub json_load_ticket {
-  my $self      = shift;
-  my $object    = $self->object;
-  my $jobs      = $object->get_requested_job;
-     $jobs      = $jobs ? [ $jobs ] : $object->get_requested_ticket;
-     $jobs      = $jobs->job unless ref $jobs eq 'ARRAY';
+  my $self = shift;
 
-  return $self->call_js_panel_method('populateForm', [ [ map { 'species' => $_->species, %{$_->job_data->raw} }, @$jobs ] ]);
+  return $self->call_js_panel_method('populateForm', [ $self->object->get_edit_jobs_data ]);
 }
 
 1;
