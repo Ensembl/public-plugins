@@ -81,7 +81,7 @@ sub init_from_user_input {
   first { m/^[^\#]/ && ($detected_format = detect_format($_)) } file_get_contents($file_name);
   throw exception('InputError', "Selected file format ($format) does not match detected format ($detected_format)") unless $format eq $detected_format;
 
-  my $configs = { map { my @val = $hub->param($_); $_ => @val > 1 ? \@val : $val[0] } $hub->param };
+  my $configs = { map { my @val = $hub->param($_); $_ eq 'text' ? () : ($_ => @val > 1 ? \@val : $val[0]) } $hub->param };
 
   $configs->{'species'} = $species;
 
