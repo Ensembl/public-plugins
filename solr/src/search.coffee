@@ -417,6 +417,38 @@ add_extra_constraints = (q_in,fq_in,extra) ->
     q = ( "( "+x+" )" for x in q).join(" AND ")
   [q,fq]
 
+body_raw_request = () ->
+  raw_request = (input,request,start,len) ->
+    params = _clone_object(input)
+    if start == -1 # size request
+      params.start = 0
+      params.rows = 10
+#      key = stringify_params(params)
+#      if size_cache[key]? then return $.Deferred().resolve(size_cache[key])
+      return request.raw_ajax(params).then (data) =>
+        num = data.result?.response?.numFound
+#        size_cache[key] = [data,num]
+        return [data,num]
+    else # regular request
+      params.rows = len
+      params.start = start
+      return request.raw_ajax(params).then (data) =>
+        docs = data.result?.response?.docs
+        # substitue highlights XXX not here!
+        for doc in docs
+          snippet = data.result?.highlighting?[doc.uid]
+          if snippet?
+            for h in $.solr_config('static.ui.highlights')
+              if doc[h] and snippet[h]
+                doc[h] = snippet[h].join(' ... ')
+        #
+        return [data,docs]
+
+  return {
+    prepare: (context,input,tags,depart) ->
+      return [[input,tags,raw_request]]
+  }
+
 # XXX expire cache
 size_cache = {}
 stringify_params = (params) ->
@@ -437,36 +469,23 @@ stringify_params = (params) ->
     out.push(v.length+"-"+v)
   return out.join('')
 
-body_raw_request = () ->
-  raw_request = (input,request,start,len) ->
-    params = _clone_object(input)
-    if start == -1 # size request
-      params.start = 0
-      params.rows = 10
-      key = stringify_params(params)
-      if size_cache[key]? then return $.Deferred().resolve(size_cache[key])
-      return request.raw_ajax(params).then (data) =>
-        num = data.result?.response?.numFound
-        size_cache[key] = [data,num]
-        return [data,num]
-    else # regular request
-      params.rows = len
-      params.start = start
-      return request.raw_ajax(params).then (data) =>
-        docs = data.result?.response?.docs
-        # substitue highlights XXX not here!
-        for doc in docs
-          snippet = data.result?.highlighting?[doc.uid]
-          if snippet?
-            for h in $.solr_config('static.ui.highlights')
-              if doc[h] and snippet[h]
-                doc[h] = snippet[h].join(' ... ')
-        #
-        return [data,docs]
+body_cache = () ->
+  try_cache = (orig) ->
+    return (input,request,start,len) ->
+      if start == -1
+        key = stringify_params(input)
+        if size_cache[key]?
+          return $.Deferred().resolve(size_cache[key])
+        else
+          return orig(input,request,start,len).then (v) ->
+            size_cache[key] = v
+            return v
+      else
+        return orig(input,request,start,len)
 
   return {
     prepare: (context,input,tags,depart) ->
-      return [[input,tags,raw_request]]
+      return [[input,tags,try_cache(depart)]]
   }
 
 body_split_favs = () ->
@@ -603,6 +622,7 @@ body_elevate_crossspecies = () ->
 
 body_requests = [
   body_raw_request
+  body_cache
   body_embeded_species
   body_elevate_crossspecies
   body_frontpage_specials
