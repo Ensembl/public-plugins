@@ -108,12 +108,15 @@ sub content {
   $html .= '<div>'.join('', @inputs).'</div>';
   $html .= '</div>';
   
-  #$html .= '<img src="/i/16/pencil.png"> <a href="'.$hub->url({
-  #  type             => 'Tools/VEP',
-  #  action           => '',
-  #  tl               => $ticket->ticket_name,
-  #  edit             => 1
-  #}).'">Edit and resubmit</a>';  
+  $html .= sprintf('<a class="button edit-button" href="%s">Edit &amp; resubmit</a>',
+    $hub->url({
+      'type'      => 'Tools',
+      'action'    => 'VEP',
+      'function'  => 'Edit',
+      'tl'        => $ticket->ticket_name
+    }),
+    $self->img_url
+  );
   
   $html .= '<hr/></div></div>';
   
