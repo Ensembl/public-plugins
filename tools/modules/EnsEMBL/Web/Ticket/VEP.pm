@@ -46,7 +46,7 @@ sub init_from_user_input {
   # if no data entered
   throw exception('InputError', 'No input data has been entered') unless $method;
 
-  my ($file_name, $description);
+  my ($file_name, $file_path, $description);
 
   # if input is one of the existing files
   if ($method eq 'userdata') {
@@ -72,25 +72,28 @@ sub init_from_user_input {
     $file_name = $tempdata->{'filename'};
   }
 
-  # finalise input file name and description
-  $file_name    = EnsEMBL::Web::TmpFile::Text->new('filename' => $file_name)->{'full_path'}; # absolute path of the temporary input file
+  # finalise input file path and description
+  $file_path    = EnsEMBL::Web::TmpFile::Text->new('filename' => $file_name)->{'full_path'}; # absolute path of the temporary input file
   $description  = "VEP analysis of $description in $species";
+  $file_name    = "$file_name.txt" if $file_name !~ /\./ && -T $file_path;
+  $file_name    = $file_name =~ s/.*\///r;
 
   # check file format is matching
   my $detected_format;
-  first { m/^[^\#]/ && ($detected_format = detect_format($_)) } file_get_contents($file_name);
+  first { m/^[^\#]/ && ($detected_format = detect_format($_)) } file_get_contents($file_path);
   throw exception('InputError', "Selected file format ($format) does not match detected format ($detected_format)") unless $format eq $detected_format;
 
-  my $configs = { map { my @val = $hub->param($_); $_ eq 'text' ? () : ($_ => @val > 1 ? \@val : $val[0]) } $hub->param };
+  my $job_data = { map { my @val = $hub->param($_); $_ => @val > 1 ? \@val : $val[0] } grep { $_ !~ /^text/ } $hub->param };
 
-  $configs->{'species'} = $species;
+  $job_data->{'species'}    = $species;
+  $job_data->{'input_file'} = $file_name;
 
   $self->add_job(EnsEMBL::Web::Job::VEP->new($self, {
     'job_desc'    => $description,
     'species'     => $species,
-    'job_data'    => $configs
+    'job_data'    => $job_data
   }, {
-    'input.txt'   => $file_name
+    $file_name    => $file_path
   }));
 }
 

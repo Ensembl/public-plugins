@@ -93,7 +93,7 @@ sub process_for_hive_submission {
   }
 
   # i/o files
-  $vep_configs->{'input_file'}  = 'input.txt';
+  $vep_configs->{'input_file'}  = $job_data->{'input_file'};
   $vep_configs->{'output_file'} = 'output.vcf';
   $vep_configs->{'stats_file'}  = 'stats.txt';
 
