@@ -389,6 +389,7 @@ body_elevate_quoted = () ->
     context: (state,update_seq) -> return { state, update_seq }
     prepare: (context,input,tags_in,depart) ->
       if !tags_in.main then return null
+      if !input.q.match(/[^\w\s]/) then return null
       tags_quoted = _clone_object(tags_in)
       tags_quoted.quoted = 1
       input_quoted   = _clone_object(input)
@@ -415,15 +416,39 @@ add_extra_constraints = (q_in,fq_in,extra) ->
   if q.length > 1
     q = ( "( "+x+" )" for x in q).join(" AND ")
   [q,fq]
-      
+
+# XXX expire cache
+size_cache = {}
+stringify_params = (params) ->
+  vals = []
+  keys = []
+  for k,v of params
+    keys.push(k)
+  keys.sort()
+  for k in keys
+    vals.push("0",k)
+    vs = params[k]
+    if not $.isArray(params[k]) then vs = [""+vs]
+    vs.sort()
+    for v in vs
+      vals.push("1",v)
+  out = []
+  for v in vals
+    out.push(v.length+"-"+v)
+  return out.join('')
+
 body_raw_request = () ->
   raw_request = (input,request,start,len) ->
     params = _clone_object(input)
     if start == -1 # size request
       params.start = 0
       params.rows = 10
+      key = stringify_params(params)
+      if size_cache[key]? then return $.Deferred().resolve(size_cache[key])
       return request.raw_ajax(params).then (data) =>
-        return [data,data.result?.response?.numFound]
+        num = data.result?.response?.numFound
+        size_cache[key] = [data,num]
+        return [data,num]
     else # regular request
       params.rows = len
       params.start = start
