@@ -20,8 +20,9 @@ use warnings;
 use CGI;
 
 use SiteDefs;
-use EnsEMBL::Web::TmpFile::Text;
-use EnsEMBL::Web::Tools:FileHandler qw(file_get_contents);
+
+use EnsEMBL::Web::TmpFile::VcfTabix;
+use EnsEMBL::Web::Tools::FileHandler qw(file_get_contents);
 
 my $cgi = CGI->new;
 my %params;
@@ -39,6 +40,7 @@ my $prefix = $params{'prefix'};
 $prefix =~ s/\W//g; ## Strip any invalid characters from params to prevent downloading of arbitrary files!
 
 if (-e $file) {
+
   ## Get content
   if ($params{'download'}) {
     if (-T $file) {
@@ -46,11 +48,10 @@ if (-e $file) {
       $cgi->header(-type => 'text/plain', -attachment => $name);
       print file_get_contents($file);
     }
-
   } else {
 
-    my $results_file = new EnsEMBL::Web::TmpFile::VcfTabix(filename => $file, prefix => $prefix);
-  
+    my $results_file = EnsEMBL::Web::TmpFile::VcfTabix->new('filename' => $file, 'prefix' => $prefix);
+
     if ($results_file->exists) {
       my $data = $results_file->content(%params);
     
