@@ -22,10 +22,11 @@ use strict;
 use warnings;
 no warnings 'uninitialized';
 
-use base qw(EnsEMBL::Web::Component::Tools::VEP);
-use EnsEMBL::Web::Form;
-use Bio::EnsEMBL::Variation::Utils::VEP qw(@REG_FEAT_TYPES %COL_DESCS);
 use URI::Escape qw(uri_unescape);
+use Bio::EnsEMBL::Variation::Utils::Constants qw(%OVERLAP_CONSEQUENCES);
+use Bio::EnsEMBL::Variation::Utils::VEP qw(@REG_FEAT_TYPES %COL_DESCS);
+
+use base qw(EnsEMBL::Web::Component::Tools::VEP);
 
 sub content {
   my $self   = shift;
@@ -184,7 +185,7 @@ sub content {
       'Transcript', @REG_FEAT_TYPES
     ],
     Consequence => [
-      keys %Bio::EnsEMBL::Variation::Utils::Constants::OVERLAP_CONSEQUENCES
+      keys %OVERLAP_CONSEQUENCES
     ],
     SIFT => $vdbc->{'SIFT_VALUES'},
     PolyPhen => $vdbc->{'POLYPHEN_VALUES'},
@@ -678,7 +679,7 @@ sub linkify {
   
   # consequence type
   elsif($field eq 'Consequence' && $value =~ /\w+/) {
-    my $cons = \%Bio::EnsEMBL::Variation::Utils::Constants::OVERLAP_CONSEQUENCES;
+    my $cons = \%OVERLAP_CONSEQUENCES;
     my $var_styles   = $hub->species_defs->colour('variation');
     my $colourmap    = $hub->colourmap;
     
