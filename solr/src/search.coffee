@@ -450,6 +450,7 @@ body_raw_request = () ->
   }
 
 # XXX expire cache
+size_cache_q = ""
 size_cache = {}
 stringify_params = (params) ->
   vals = []
@@ -484,6 +485,11 @@ body_cache = () ->
         return orig(input,request,start,len)
 
   return {
+    context: (state,update_seq) ->
+      q = state.q_query()
+      if size_cache_q != q then size_cache = {}
+      size_cache_q = q
+      return { state, update_seq }
     prepare: (context,input,tags,depart) ->
       return [[input,tags,try_cache(depart)]]
   }
