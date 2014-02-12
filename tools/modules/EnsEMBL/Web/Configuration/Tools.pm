@@ -87,13 +87,13 @@ sub populate_tree {
     ),
 
     ## VEP specific nodes
-    $self->create_subnode('VEP', 'Variation Effect Predictor',
+    $self->create_subnode('VEP', 'Variant Effect Predictor',
       [qw(
         vepeffect       EnsEMBL::Web::Component::Tools::VEP::InputForm
         details         EnsEMBL::Web::Component::Tools::VEP::TicketDetails
         tickets         EnsEMBL::Web::Component::Tools::VEP::TicketsList
       )],
-      { 'availability' => 1, 'concise' => 'Variation Effect Predictor' }
+      { 'availability' => 1, 'concise' => 'Variant Effect Predictor' }
     ),
     $self->create_subnode('VEP/Results', 'Results',
       [qw(
