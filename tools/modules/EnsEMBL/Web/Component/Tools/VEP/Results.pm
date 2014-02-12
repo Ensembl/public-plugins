@@ -170,7 +170,6 @@ sub content {
   
   
   my $panel_id  = $self->id;
-  $html .= '<link rel="stylesheet" href="/components/ac.css" />';
   $html .= '<div><h3>Results preview</h3>';
   $html .= '<input type="hidden" class="panel_type" value="VEPResults" />';
   
