@@ -729,19 +729,20 @@
         };
       },
       prepare: function(context, input, tags_in, depart) {
-        var input_quoted, input_unquoted, tags_quoted;
+        var input_quoted, input_unquoted, qq, tags_quoted;
         if (!tags_in.main) {
           return null;
         }
         if (!input.q.match(/[^\w\s]/)) {
           return null;
         }
+        qq = '"' + input.q.replace(/\s+/, '" "', 'g') + '"';
         tags_quoted = _clone_object(tags_in);
         tags_quoted.quoted = 1;
         input_quoted = _clone_object(input);
-        input_quoted.q = '"' + input.q + '"';
+        input_quoted.q = qq;
         input_unquoted = _clone_object(input);
-        input_unquoted.q = input.q + ' AND ( NOT "' + input.q + '" )';
+        input_unquoted.q = input.q + ' AND ( NOT ( ' + qq + ' ) )';
         return [[input_quoted, tags_quoted, depart], [input_unquoted, tags_in, depart]];
       }
     };
