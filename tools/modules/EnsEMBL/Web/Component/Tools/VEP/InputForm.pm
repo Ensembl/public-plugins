@@ -86,7 +86,7 @@ sub content {
     'type'    => 'file',
     'name'    => 'file',
     'label'   => 'Or upload file',
-    'helptip' => 'File uploads are limited to 5MB in size. Files may be compressed using gzip or zip'
+    'helptip' => sprintf('File uploads are limited to %sMB in size. Files may be compressed using gzip or zip', $sd->VEP_CGI_POST_MAX / 1048576)
   });
 
   $input_fieldset->add_field({
