@@ -187,6 +187,11 @@ sub parse_content {
     elsif(s/^#//) {
       @headers = split "\t";
       
+      # we don't want anything after the INFO field (index pos 8)
+      for my $i(8..$#headers) {
+        $exclude_fields{$headers[$i]} = 1;
+      }
+      
       @combined_headers = grep {!defined($exclude_fields{$_})} (@headers, @csq_headers);
       splice(@combined_headers, 1, 0, 'Location');
     }
