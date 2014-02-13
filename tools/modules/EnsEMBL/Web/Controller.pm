@@ -21,10 +21,15 @@ package EnsEMBL::Web::Controller;
 use strict;
 use warnings;
 
-use previous qw(OBJECT_PARAMS);
+use previous qw(OBJECT_PARAMS upload_size_limit);
 
 sub OBJECT_PARAMS {
   return [ @{shift->PREV::OBJECT_PARAMS}, [ 'Tools' => 'tl' ] ];
+}
+
+sub upload_size_limit {
+  my $self = shift;
+  return $self->type eq 'Tools' && $self->action eq 'VEP' ? $self->species_defs->VEP_CGI_POST_MAX : $self->PREV::upload_size_limit;
 }
 
 1;

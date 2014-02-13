@@ -22,8 +22,9 @@ use strict;
 use warnings;
 no warnings 'uninitialized';
 
+use Bio::EnsEMBL::Variation::Utils::Constants qw(%OVERLAP_CONSEQUENCES);
+
 use base qw(EnsEMBL::Web::Component::Tools::VEP);
-use EnsEMBL::Web::Form;
 
 sub content {
   my $self   = shift;
@@ -63,12 +64,13 @@ sub content {
   );
   
   # make a hash of consequence colours
-  my $cons = \%Bio::EnsEMBL::Variation::Utils::Constants::OVERLAP_CONSEQUENCES;
+  my $cons =  \%OVERLAP_CONSEQUENCES;
+
   my $var_styles   = $hub->species_defs->colour('variation');
   my $colourmap    = $hub->colourmap;
   my %colours;
   
-  foreach my $con(keys %Bio::EnsEMBL::Variation::Utils::Constants::OVERLAP_CONSEQUENCES) {
+  foreach my $con (keys %OVERLAP_CONSEQUENCES) {
     $colours{$con} = $colourmap->hex_by_name($var_styles->{lc $con}->{'default'}) || 'no_colour';
   }
   
@@ -108,12 +110,15 @@ sub content {
   $html .= '<div>'.join('', @inputs).'</div>';
   $html .= '</div>';
   
-  #$html .= '<img src="/i/16/pencil.png"> <a href="'.$hub->url({
-  #  type             => 'Tools/VEP',
-  #  action           => '',
-  #  tl               => $ticket->ticket_name,
-  #  edit             => 1
-  #}).'">Edit and resubmit</a>';  
+  $html .= sprintf('<a class="button edit-button" href="%s">Edit &amp; resubmit</a>',
+    $hub->url({
+      'type'      => 'Tools',
+      'action'    => 'VEP',
+      'function'  => 'Edit',
+      'tl'        => $ticket->ticket_name
+    }),
+    $self->img_url
+  );
   
   $html .= '<hr/></div></div>';
   

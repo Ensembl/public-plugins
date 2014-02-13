@@ -162,8 +162,7 @@ sub draw_btop_feature {
             }));
 
             my $j = $e2 - $s2; 
-            my $i = $s2;
-            for ( $i;  $i < $j;  $i++){
+            for ( my $i = $s2;  $i < $j;  $i++){
               my @temp = (undef, undef);
               $seq_diffs{$i} = \@temp;          
             }

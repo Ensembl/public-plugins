@@ -22,10 +22,11 @@ use strict;
 use warnings;
 no warnings 'uninitialized';
 
-use base qw(EnsEMBL::Web::Component::Tools::VEP);
-use EnsEMBL::Web::Form;
-use Bio::EnsEMBL::Variation::Utils::VEP qw(@REG_FEAT_TYPES %COL_DESCS);
 use URI::Escape qw(uri_unescape);
+use Bio::EnsEMBL::Variation::Utils::Constants qw(%OVERLAP_CONSEQUENCES);
+use Bio::EnsEMBL::Variation::Utils::VEP qw(@REG_FEAT_TYPES %COL_DESCS);
+
+use base qw(EnsEMBL::Web::Component::Tools::VEP);
 
 sub content {
   my $self   = shift;
@@ -169,7 +170,6 @@ sub content {
   
   
   my $panel_id  = $self->id;
-  $html .= '<link rel="stylesheet" href="/components/ac.css" />';
   $html .= '<div><h3>Results preview</h3>';
   $html .= '<input type="hidden" class="panel_type" value="VEPResults" />';
   
@@ -184,7 +184,7 @@ sub content {
       'Transcript', @REG_FEAT_TYPES
     ],
     Consequence => [
-      keys %Bio::EnsEMBL::Variation::Utils::Constants::OVERLAP_CONSEQUENCES
+      keys %OVERLAP_CONSEQUENCES
     ],
     SIFT => $vdbc->{'SIFT_VALUES'},
     PolyPhen => $vdbc->{'POLYPHEN_VALUES'},
@@ -552,7 +552,7 @@ sub content {
   $html .= '<div class="toolbox">';
   $html .= '<div class="toolbox-head"><img src="/i/16/download.png" style="vertical-align:top;"> Download</div><div style="padding:5px;">';
   
-  my $download_url = sprintf('/%s/vep_download?file=%s;name=%s;persistent=%s;prefix=vep', $hub->species, $file_loc, $tk_name.'.txt', $hub->user ? 1 : 0);
+  my $download_url = sprintf('/%s/vep_download?file=%s;name=%s;persistent=%s;prefix=vep', $hub->species, $file_loc, $tk_name.'.txt', $ticket->owner_type eq 'user' ? 1 : 0);
   
   # all
   $html .= '<div><b>All</b><span style="float:right; margin-left:10px;">';
@@ -568,7 +568,7 @@ sub content {
     $filtered_name =~ s/^\s+//g;
     $filtered_name =~ s/\s+/\_/g;
     
-    my $filtered_url = sprintf('/%s/vep_download?file=%s;name=%s;persistent=%s;prefix=vep', $hub->species, $file_loc, $filtered_name.'.txt', $hub->user ? 1 : 0);
+    my $filtered_url = sprintf('/%s/vep_download?file=%s;name=%s;persistent=%s;prefix=vep', $hub->species, $file_loc, $filtered_name.'.txt', $ticket->owner_type eq 'user' ? 1 : 0);
     $filtered_url .= ';'.join(";", map {"$_=$content_args{$_}"} grep {!/to|from/} keys %content_args);
     
     $html .= '<div><hr><b>Filtered</b><span style="float:right; margin-left:10px;">';
@@ -678,7 +678,7 @@ sub linkify {
   
   # consequence type
   elsif($field eq 'Consequence' && $value =~ /\w+/) {
-    my $cons = \%Bio::EnsEMBL::Variation::Utils::Constants::OVERLAP_CONSEQUENCES;
+    my $cons = \%OVERLAP_CONSEQUENCES;
     my $var_styles   = $hub->species_defs->colour('variation');
     my $colourmap    = $hub->colourmap;
     

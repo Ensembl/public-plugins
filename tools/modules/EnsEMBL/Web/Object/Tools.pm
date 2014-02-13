@@ -427,7 +427,7 @@ sub get_edit_jobs_data {
   ## @return Arrayref of hashes, each corresponding to one of the multiple jobs being edited
   my $self  = shift;
   my $hub   = $self->hub;
-  my $jobs  = ($hub->function || '') eq 'Edit' && ($self->get_requested_job || $self->get_requested_ticket);
+  my $jobs  = $self->get_requested_job || $self->get_requested_ticket;
      $jobs  = $jobs ? ref($jobs) =~ /Ticket/ ? $jobs->job : [ $jobs ] : [];
      $jobs  = [ map { 'species' => $_->species, %{$_->job_data->raw} }, @$jobs ];
 

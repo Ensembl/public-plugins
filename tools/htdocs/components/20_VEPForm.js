@@ -26,7 +26,17 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
    * Populates the form according to the provided ticket data
    */
     if (jobsData && jobsData.length) {
-      this.base($.extend({}, jobsData[0].config, jobsData[0]));
+      jobsData = $.extend({}, jobsData[0].config, jobsData[0]);
+      this.base(jobsData);
+
+      if (jobsData['input_file_type'] && jobsData['input_file_type'] === 'text') {
+        this.elLk.form.find('input[name=file]').parent().append('<p class="_download_link">Click <a href="' + jobsData['input_file_url'] + '">here</a> to download the previously uploaded file.</p>');
+      }
     }
+  },
+
+  reset: function() {
+    this.base.apply(this, arguments);
+    this.elLk.form.find('._download_link').remove();
   }
 });

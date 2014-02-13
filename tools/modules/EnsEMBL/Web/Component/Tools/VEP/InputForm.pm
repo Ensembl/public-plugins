@@ -37,7 +37,7 @@ sub content {
   my $sd        = $hub->species_defs;
   my $dom       = $self->dom;
   my $form      = $self->new_tool_form('VEP');
-  my $edit_job  = $self->object->get_edit_jobs_data;
+  my $edit_job  = ($hub->function || '') eq 'Edit' ? $self->object->get_edit_jobs_data : [];
 
   ## Add the previous job params for JavaScript
   $form->add_hidden({ 'name'  => 'edit_jobs', 'value' => $self->jsonify($edit_job) }) if @$edit_job;
@@ -86,7 +86,7 @@ sub content {
     'type'    => 'file',
     'name'    => 'file',
     'label'   => 'Or upload file',
-    'helptip' => 'File uploads are limited to 5MB in size. Files may be compressed using gzip or zip'
+    'helptip' => sprintf('File uploads are limited to %sMB in size. Files may be compressed using gzip or zip', $sd->VEP_CGI_POST_MAX / 1048576)
   });
 
   $input_fieldset->add_field({

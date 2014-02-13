@@ -87,20 +87,20 @@ sub populate_tree {
     ),
 
     ## VEP specific nodes
-    $self->create_subnode('VEP', 'Variation Effect Predictor',
+    $self->create_subnode('VEP', 'Variant Effect Predictor',
       [qw(
         vepeffect       EnsEMBL::Web::Component::Tools::VEP::InputForm
         details         EnsEMBL::Web::Component::Tools::VEP::TicketDetails
         tickets         EnsEMBL::Web::Component::Tools::VEP::TicketsList
       )],
-      { 'availability' => 1, 'concise' => 'Variation Effect Predictor<span style="float:right;"><img src="/img/vep_logo.png"></span>' }
+      { 'availability' => 1, 'concise' => 'Variant Effect Predictor' }
     ),
     $self->create_subnode('VEP/Results', 'Results',
       [qw(
         ressummary  EnsEMBL::Web::Component::Tools::VEP::ResultsSummary
         results     EnsEMBL::Web::Component::Tools::VEP::Results
       )],
-      { 'availability' => 1, 'concise' => 'Variant Effect Predictor results<span style="float:right"><img src="/img/vep_logo.png"></span>', 'no_menu_entry' => 1 } 
+      { 'availability' => 1, 'concise' => 'Variant Effect Predictor results', 'no_menu_entry' => 1 } 
     )
   );
 }

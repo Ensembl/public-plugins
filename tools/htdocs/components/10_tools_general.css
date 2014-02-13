@@ -55,3 +55,6 @@ p.job-error-msg                   { background-color: #FFDDDD; padding: 4px; mar
 p.job-status-links                { overflow: hidden; }
 p.job-status-links .job-status,
 p.job-status-links .results-link  { float: left; }
+
+
+a.edit-button                     { background-image: url("/i/16/rev/pencil.png"); background-position: 6px center; background-repeat: no-repeat; padding: 4px 4px 4px 29px !important; line-height: 16px; }

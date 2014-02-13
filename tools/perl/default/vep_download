@@ -14,15 +14,20 @@
 
 ## Convert and download VEP output files 
 
+use strict;
+use warnings;
+
 use CGI;
 
 use SiteDefs;
-use EnsEMBL::Web::TmpFile::Text;
 
-my $cgi    = new CGI;
+use EnsEMBL::Web::TmpFile::VcfTabix;
+use EnsEMBL::Web::Tools::FileHandler qw(file_get_contents);
+
+my $cgi = CGI->new;
 my %params;
-foreach my $p($cgi->param) {
-  foreach my $v($cgi->param($p)) {
+foreach my $p ($cgi->param) {
+  foreach my $v ($cgi->param($p)) {
     $params{$p} = $v;
   }
 }
@@ -31,19 +36,29 @@ my $file   = join '/', $SiteDefs::ENSEMBL_TOOLS_TMP_DIR, $params{'persistent'} ?
 my $name   = $params{'name'} || $file;
 my $format = $params{'format'} || 'vcf';
 my $prefix = $params{'prefix'};
-## Strip any invalid characters from params to prevent downloading of arbitrary files!
-$prefix =~ s/\W//g;
+
+$prefix =~ s/\W//g; ## Strip any invalid characters from params to prevent downloading of arbitrary files!
 
 if (-e $file) {
+
   ## Get content
-  my $results_file = new EnsEMBL::Web::TmpFile::VcfTabix(filename => $file, prefix => $prefix);
-  
-  if ($results_file->exists) {
-    my $data = $results_file->content(%params);
-    
-    if ($data) {
+  if ($params{'download'}) {
+    if (-T $file) {
+
       $cgi->header(-type => 'text/plain', -attachment => $name);
-      print $data;
+      print file_get_contents($file);
+    }
+  } else {
+
+    my $results_file = EnsEMBL::Web::TmpFile::VcfTabix->new('filename' => $file, 'prefix' => $prefix);
+
+    if ($results_file->exists) {
+      my $data = $results_file->content(%params);
+    
+      if ($data) {
+        $cgi->header(-type => 'text/plain', -attachment => $name);
+        print $data;
+      }
     }
   }
 }

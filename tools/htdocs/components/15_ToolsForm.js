@@ -116,7 +116,11 @@ Ensembl.Panel.ToolsForm = Ensembl.Panel.ContentTools.extend({
         var vals  = $.isArray(jobsData[paramName]) ? jobsData[paramName] : [ jobsData[paramName] ];
         var flag  = function() { return $.inArray(this.value, vals) >= 0; }
 
-        this.elLk.form.find('[name=' + paramName + ']').filter('[type=checkbox], [type=radio]').prop('checked', flag).end().filter('select').find('option').prop('selected', flag);
+        this.elLk.form.find('[name=' + paramName + ']')
+          .filter('input[type=text], textarea').val(vals[0]).end()
+          .filter('[type=checkbox], [type=radio]').prop('checked', flag).end()
+          .filter('select').find('option').prop('selected', flag);
+
         this.toggleForm(true, true);
       }
       this.resetSelectToToggle();

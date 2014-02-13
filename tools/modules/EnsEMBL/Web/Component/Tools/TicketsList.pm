@@ -128,7 +128,7 @@ sub content {
       }, {
         'node_name'   => 'div',
         'class'       => [qw(_no_jobs hidden)],
-        'inner_HTML'  => '<p>You have no jobs currently running or recently completed. (<a href="" class="_tickets_refresh">Refresh</a>)</p>',
+        'inner_HTML'  => '<p>You have no jobs currently running or recently completed.</p>',
       }]
     }]
   })->render;
