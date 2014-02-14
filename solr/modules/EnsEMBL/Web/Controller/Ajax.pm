@@ -199,6 +199,7 @@ sub config {
     push @names,$name,lc($name);
     my $latin = $species_info->{$sp}{'key'};
     $revspnames->{$latin} = $name;
+    $revspnames->{lc $latin} = $name;
     foreach my $name (@names) {
       $spnames->{$name} = $latin;
     }
