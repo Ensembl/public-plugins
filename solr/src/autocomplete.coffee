@@ -8,7 +8,7 @@ $.fn.getCursorPosition = () ->
     return input.selectionStart
   else if document.selection
     # IE
-    input.focus();
+    input.focus()
     sel = document.selection.createRange()
     selLen = document.selection.createRange().text.length
     sel.moveStart('character', -input.value.length)
@@ -81,6 +81,9 @@ sort_docs = (url,docs,favs,callback) ->
 
 ac_string_q = (url,q) ->
   q = q.toLowerCase()
+  species = current_species()
+  if !species then species = 'all'
+  q = species+'__'+q
   data = {
     q, spellcheck: true
   }
@@ -91,6 +94,7 @@ ac_string_a = (input,output) ->
   unless docs? then return
   while docs.length
     q = docs.shift()
+    q = q.replace(/^.*?__/,'')
     output.push {
       left: "Search for '#{q}'"
       link: "/Multi/Search/Results?q="+q
@@ -137,6 +141,18 @@ jump_searches = [
     fields: ['name']
   }
 ]
+
+# extract current species from URL
+current_species = () ->
+  url = window.location.href
+  parts = url.split('/')
+  # 0 = http: ; 1 = '' ; 2 = hostpart ; 3... first url part
+  path = parts[3].toLowerCase()
+  latin = $.solr_config('spnames.%',path)
+  if !latin then latin = path
+  species = latin.toLowerCase()
+  if !$.solr_config('revspnames.%',species) then return null
+  return species
 
 # exponentially-scaled numbers between 1 and 100, of various lengths 
 boost = (i,n) -> if n>1 then Math.pow(10,(2*(n-i-1))/(n-1)) else 1
