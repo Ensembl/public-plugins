@@ -3,16 +3,24 @@
 <title>Variant Effect Predictor</title>
 </head>
 <body>
+<style>
+img.opaque-hover:hover {
+    opacity:0.6;
+    filter:alpha(opacity=60);
+}
+img.opaque-hover {
+    opacity:1.0;
+    filter:alpha(opacity=100);
+}
+</style>
 
-<div class="column-wrapper">
-<h1>Variant Effect Predictor</h1>
-</div>
+	<div style="float:right"><img src="/img/vep_logo.png"/></div>
+	
+	<h1 id="top"><span style="color:#006">Variant Effect Predictor</span></h1>
+	<hr/>
 <div class="column-wrapper">
   <div class="column-two">
     <div class="column-left">
-      <div class="plain-box">
-      <a href="/[[SPECIESDEFS::ENSEMBL_PRIMARY_SPECIES]]/UserData/UploadVariations" class="modal_link">
-      <img src="/i/vep_logo_sm.png" title="Launch the online VEP!" alt="Variant Effect Predictor" /></a>
 
 <p>
 The VEP determines the effect of your variants (SNPs, insertions,
@@ -20,49 +28,72 @@ deletions, CNVs or structural variants) on genes, transcripts, and
 protein sequence, as well as regulatory regions. Simply input the
 coordinates of your variants and the nucleotide changes to find out the:</p>
 <ul>
-<li>genes affected by the variants</li>
-<li>location of the variants (e.g. upstream of a transcript, in coding sequence, in non-coding RNA, in regulatory regions)</li>
-<li>consequence your variants on the protein sequence (e.g. stop gained, missense, stop lost, frameshift)</li>
-<li>known variants that match yours, and the associated minor allele frequencies</li>
-<li>SIFT and PolyPhen scores for changes protein sequence</li>
-<li>... And more!</li>
+<li><b>genes</b> and <b>transcripts</b> affected by the variants</li>
+<li><b>location</b> of the variants (e.g. upstream of a transcript, in coding sequence, in non-coding RNA, in regulatory regions)</li>
+<li><b>consequence</b> of your variants on the protein sequence (e.g. stop gained, missense, stop lost, frameshift)</li>
+<li><b>known variants</b> that match yours, and associated minor allele frequencies from the <b>1000 Genomes Project</b></li>
+<li><b>SIFT</b> and <b>PolyPhen</b> scores for changes to protein sequence</li>
+<li>... And <a href="/info/docs/tools/vep/online/input.html#ident">more!</a></li>
 </ul>
       <p class="center"><a
-href="/[[SPECIESDEFS::ENSEMBL_PRIMARY_SPECIES]]/UserData/UploadVariations"
-class="modal_link"><strong><i>Launch the online VEP tool!</i></strong></a></p>
-<h2>Sample output</h2>
-<p><img src="/i/help/vep_output.jpg" title="Sample VEP results table" alt="screenshot" /></p>
-
-      </div>
+      href="/[[SPECIESDEFS::ENSEMBL_PRIMARY_SPECIES]]/Tools/VEP" class="_ht"
+      title="Launch the web interface"><img src="/img/vep_launch.png" class="opaque-hover"></a></p>
+<!--      <div class="plain-box">-->
+<!--<h2>Sample output</h2>-->
+<!--<p><img src="/img/vep_output.jpg" title="Sample VEP results table" alt="screenshot" /></p>-->
+<!---->
+<!--      </div>-->
     </div>
   </div>
   <div class="column-two">
     <div class="column-right" style="padding-left:2em">
-<h2>How to access the Variant Effect Predictor</h2>
-<p>
-There are two ways to use the Variant Effect Predictor (VEP) for
-predicting functional consequences of known and unknown variants:
-</p>
+<!--<h2>How to access the Variant Effect Predictor</h2>-->
 
-<ul>
-  <li>web interface | <a href="/info/docs/tools/vep/vep_online.html">Documentation</a> | <a
-href="/[[SPECIESDEFS::ENSEMBL_PRIMARY_SPECIES]]/UserData/UploadVariations"
-class="modal_link">Launch web interface</a></li>
-  <li>standalone perl script | <a href="/info/docs/tools/vep/script/index.html">Documentation</a> | <a href="https://github.com/Ensembl/ensembl-tools/archive/release/[[SPECIESDEFS::ENSEMBL_VERSION]].zip">Download latest version</a> <!--</li>
-  <li> using Ensembl's perl API | <a href="/info/docs/api/variation/index.html">Documentation</a></li>-->
-</ul>
+<div class="tinted-box" style="padding-bottom:16px;">
+  <div style="float:left">
+    <a href="/[[SPECIESDEFS::ENSEMBL_PRIMARY_SPECIES]]/Tools/VEP" class="_ht" title="Launch the web interface"><img src="/img/vep_globe.png" style="padding:5px; border: 1px solid lightgrey; border-radius: 5px; background: white;"></a>
+  </div>
+  <div style="float: left; margin-left:30px;">
+    <div><h1>Web interface</h1></div>
+    <div>
+      <ul>
+        <li>Point-and-click interface</li>
+        <li>Suits smaller volumes of data</li>
+      </ul>
+    </div>
+    <div><img src="/i/16/documentation.png"> <a href="/info/docs/tools/vep/online/index.html">Documentation</a></div>
+    <div><img src="/i/16/globe.png"> <a href="/[[SPECIESDEFS::ENSEMBL_PRIMARY_SPECIES]]/Tools/VEP">Launch the web interface</a></div>
+  </div>
+</div>
 
-<p>
-Use the web version if you have relatively small volumes of data or
-prefer to avoid command-line scripts. The script version is more
-flexible and allows processing of large volumes of data (it is written
-using the Ensembl perl API, and can be incorporated into your own code
-and extended).
-</p>
+<div class="tinted-box" style="padding-bottom:16px;">
+  <div style="float:left">
+    <a href="/info/docs/tools/vep/script/index.html" class="_ht" title="View VEP documentation"><img src="/img/vep_cmd.png" style="padding:5px; border: 1px solid lightgrey; border-radius: 5px; background: white;"></a>
+  </div>
+  <div style="float: left; margin-left:30px;">
+    <div><h1>Standalone perl script</h1></div>
+    <div>
+      <ul>
+        <li>More options, more flexibility</li>
+        <li>For large volumes of data</li>
+      </ul>
+    </div>
+    <div><img src="/i/16/documentation.png"> <a href="/info/docs/tools/vep/script/index.html">Documentation</a></div>
+    <div><img src="/i/16/download.png"> <a href="https://github.com/Ensembl/ensembl-tools/archive/release/[[SPECIESDEFS::ENSEMBL_VERSION]].zip">Download latest version</a></div>
+  </div>
+</div>
 
-<h2>Ensembl Variation</h2>
-<p>For a comprehensive list of the consequence types used in Ensembl and the VEP, look at our <a href="/info/genome/variation/predicted_data.html#consequences">documentation</a>.  
-It also provides descriptions of the <a href="/info/genome/variation/data_description.html">data and analyses in Ensembl Variation</a>.</p>
+<!--<p>-->
+<!--Use the web version if you have relatively small volumes of data or-->
+<!--prefer to avoid command-line scripts. The script version is more-->
+<!--flexible and allows processing of large volumes of data (it is written-->
+<!--using the Ensembl perl API, and can be incorporated into your own code-->
+<!--and extended).-->
+<!--</p>-->
+<!---->
+<!--<h2>Ensembl Variation</h2>-->
+<!--<p>For a comprehensive list of the consequence types used in Ensembl and the VEP, look at our <a href="/info/genome/variation/predicted_data.html#consequences">documentation</a>.  -->
+<!--It also provides descriptions of the <a href="/info/genome/variation/data_description.html">data and analyses in Ensembl Variation</a>.</p>-->
 
 <p>
 The VEP was formerly known as the SNP Effect Predictor, and was published under
@@ -71,7 +102,7 @@ this name. Please reference the following publication:
 
 <p>McLaren W, Pritchard B, Rios D, Chen Y, Flicek P, Cunningham F.<br />
 <strong>Deriving the consequences of genomic variants with the Ensembl API and SNP Effect Predictor.</strong><br />
-<em>BMC Bioinformatics</em>26(16):2069-70(2010)<br />
+<em>Bioinformatics</em> 26(16):2069-70(2010)<br />
 <a rel="external" href="http://dx.doi.org/10.1093/bioinformatics/btq330"
 rel="external">doi:10.1093/bioinformatics/btq330 </a>
 </p>
