@@ -47,3 +47,14 @@ window.in_chunks = (total,maxchunksize,fn) ->
       return got + len
   return $.Deferred().resolve(0).then(chunk_loop)
 
+window.solr_current_species = () ->
+  url = window.location.href
+  parts = url.split('/')
+  # 0 = http: ; 1 = '' ; 2 = hostpart ; 3... first url part
+  path = parts[3].toLowerCase()
+  latin = $.solr_config('spnames.%',path)
+  if !latin then latin = path
+  species = latin.toLowerCase()
+  if !$.solr_config('revspnames.%',species) then return null
+  return species
+
