@@ -1,0 +1,234 @@
+<html> <head> <title>Results</title> <meta name="order" content="1" /> </head>
+
+<body>
+    
+    
+    <div style="float:right"><img src="/img/vep_logo.png"/></div>
+    
+    <h1 id="top"><span style="color:#006">Variant Effect Predictor</span> <img
+    src="/i/16/globe.png"> <span style="color:#666">Results</span></h1> <hr/>
+    
+<p> The VEP presents a <a href="#summary">summary</a> and a detailed <a
+href="#table">results preview</a> on its results page. </p>
+
+<h2 id="summary">Summary</h2>
+
+<p> The summary panel on the VEP results page gives a brief overview of the VEP
+job, along with some basic statistics about the results. </p>
+
+<h3>Statistics</h3>
+
+<div class="column-wrapper">
+    <div class="column-two">
+        <div class="column-left">
+            <p> Various statistics are listed in a table, including:
+                <ul>
+                    <li>Variants processed - any variants
+                    not parsed by the VEP are not included in this count</li>
+                    <li>Variants remaining after <a
+                    href="input.html#filter">filtering</a></li> <li>Novel /
+                    known variants - the number and percentage of novel variants
+                    vs existing variants in the input (see <a
+                    href="input.html#ident">input page documentation</a>)</li>
+                    <li>Number of overlapped genes, transcripts and regulatory
+                    features</li>
+                </ul>
+            </p>
+        </div>
+    </div>
+      
+    <div class="column-two">
+      <div class="column-right" style="padding-left:2em">
+          <img src="/img/vep_web_stats.png">
+      </div>
+    </div>
+</div>
+
+<h3>Pie charts</h3>
+
+<div class="column-wrapper">
+    <div class="column-two">
+        <div class="column-left">
+            <p> Pie charts are shown detailing the proportion of consequence
+            types called across all variants in the results. The colour scheme
+            of the pie chart matches the colours used to draw variants on the
+            Ensembl region in detail view. </p>
+        </div>
+    </div>
+      
+    <div class="column-two">
+      <div class="column-right" style="padding-left:2em">
+          <img src="/img/vep_web_pie1.png">
+      </div>
+    </div>
+</div>
+
+<hr/>
+
+<h2 id="table">Results preview table</h2>
+
+<div class="column-wrapper">
+    <div class="column-two">
+        <div class="column-left">
+            <p> The results table shows one row per transcript and variant. By
+            default all of the columns are shown; to temporarily hide columns,
+            click the blue "Show/hide columns" button and select or deselect the
+            columns you wish to view. The columns you select will be recalled
+            when viewing other jobs.</p>
+            <p> Hover over a column title to see a description. See the <a
+            href="/info/docs/tools/vep/vep_formats.html#output">VEP output
+            format documentation</a> for more details on each of the results
+            columns. </p>
+            <p> The table can be sorted by any column - click the column header
+            to toggle sorting behaviour.</p>
+            <p> To download what you see in the table, hover over the
+            spreadsheet icon in the top right corner of the table.</p> <p>
+            Several columns have special features for the data they contain:
+                <ul>
+                    <li><b>Location</b> - click the link to navigate to the
+                    region in detail view for the region surrounding this
+                    variant</li> <li><b>Gene, Feature and Existing Variation</b>
+                    - click the link to bring up a summary view of the gene,
+                    transcript, regulatory feature or variation, from which you
+                    can navigate to the main Ensembl page for it</li>
+                    <li><b>Consequence</b> - hover over the consequence name to
+                    see the <a href="http://www.sequenceontology.org/"
+                    rel="external">Sequence Ontology</a> definition. See the <a
+                    href="/info/genome/variation/predicted_data.html#consequences">Ensembl
+                    Variation documentation</a> for a full list of consequence
+                    types used by the VEP and their definitions</li>
+                    <li><b>SIFT and PolyPhen</b> - predictions and scores are
+                    coloured according to the nature of the prediction, with red
+                    indicating deleterious or damaging</li>
+                </ul>
+            </p>
+        </div>
+    </div>
+      
+    <div class="column-two">
+      <div class="column-right" style="padding-left:2em">
+          <img src="/img/vep_web_table.png">
+      </div>
+    </div>
+</div>
+
+<hr/>
+
+<h2 id="nav">Navigating results</h2>
+
+<div class="column-wrapper">
+    <div class="column-two">
+        <div class="column-left">
+            <p> The navigation panel can be used to scroll through pages of
+            results.</p> <p> By default, the results for five variants are
+            shown. Note that since a variant can overlap multiple transcripts,
+            the table will often show <b>more than</b> five rows. To change the
+            number shown, click the appropriate link. Be warned that if your
+            input file is large, it is inadvisable to show all results unless
+            you are sure you have applied sufficient filters - your browser may
+            become unresponsive if it tries to display many thousands of rows in
+            the table.</p> <p> To navigate between pages of results, use the
+            four arrow icons. Note that when any filters are enabled, it is not
+            possible to navigate to the last page of results.</p> </p>
+        </div>
+    </div>
+      
+    <div class="column-two">
+      <div class="column-right" style="padding-left:2em">
+          <img src="/img/vep_web_nav.png">
+      </div>
+    </div>
+</div>
+
+<hr/>
+
+<h2 id="filter">Filtering results</h2>
+
+<div class="column-wrapper">
+    <div class="column-two">
+        <div class="column-left">
+            <p> You can apply any combination of filters to your results in
+            order to hunt down interesting data. This is equivalent to using the
+            <a href="/info/docs/tools/vep/script/vep_filter.html">VEP filtering
+            script</a> on the command line.</p> <p> To add a filter, simply
+            select the column you wish to filter on, select an
+            &quot;operator&quot;, and input a value for the filter to compare
+            to. </p> <p> To edit a filter, click the pencil icon <img
+            src="/i/16/pencil-whitebg.png">. To remove a filter, click the cross
+            icon <img src="/i/close.png">.</p> <p> When you have added more than
+            one filter, you are given the option to match any or all of the
+            rules shown; click the &quot;Update&quot; button once you have made
+            your selection. </p> <p>Certain columns when selected have special
+            features:
+                <ul>
+                    <li><p><b>Location</b> - for this column you may enter
+                    genomic coordinates in the format
+                    &quot;chromosome:start-end&quot;. It is also possible to
+                    enter just a chromosome, e.g. enter &quot;12&quot; to show
+                    only variants on chromosome 12.</p><p>Adding multiple
+                    location filters allows you to select multiple regions -
+                    location filters are not affected by whether you select
+                    &quot;Match all&quot; or &quot;Match any&quot; (see
+                    above).</p><p>Users should note that enabling at least one
+                    location filter will greatly speed up the return of results
+                    (this is because <a
+                    href="http://samtools.sourceforge.net/tabix.shtml"
+                    rel="external">tabix</a> is used behind the
+                    scenes).</p></li> <li><b>Allele, Consequence, SIFT, PolyPhen
+                    and Biotype</b> - for these columns, autocomplete will help
+                    you fill in the value when you start typing</li>
+                    <li><p><b>SIFT, PolyPhen and GMAF</b> - these columns can
+                    contain both text (e.g. a SIFT prediction) and a number
+                    (e.g. a frequency value). The VEP allows you to filter on
+                    either part of this.</p><p>For example, you may enter
+                    &quot;is&quot; and &quot;deleterious&quot; for SIFT to
+                    return deleterious predictions, or &quot;<&quot; and
+                    &quot;0.1&quot; to find results with a SIFT score less than
+                    0.1.</p></li>
+                </ul>
+            </p>
+        </div>
+    </div>
+      
+    <div class="column-two">
+      <div class="column-right" style="padding-left:2em">
+          <img src="/img/vep_web_filterres.png">
+      </div>
+    </div>
+</div>
+
+<hr/>
+
+<h2 id="download">Downloading results</h2>
+
+<div class="column-wrapper">
+    <div class="column-two">
+        <div class="column-left">
+            <p> The VEP allows you to download either your full or filtered
+            results set in a choice of data formats. </p>
+            <ul>
+                <li><b>VCF</b> - <a href="../vep_formats.html#vcfout">VCF</a> is
+                a portable format for variant data. Consequence data is encoded
+                as a series of delimited strings under the &quot;CSQ&quot; key
+                in the VCF INFO field.</li>
+                <li><b>VEP</b> - The default <a
+                href="../vep_formats.html#output">VEP output format</a> gives
+                one row per variant and transcript overlap.</li>
+                <li><b>TXT</b> - Text format is a tab-delimited format,
+                equivalent to what can be seen in the results table. Note that
+                the columns you select to be visible in the table do not affect
+                the downloaded file - all columns are outputted. This format is
+                best if you intend to import the results into a spreadsheet
+                program such as Microsoft Excel.</li>
+            </ul>
+        </div>
+    </div>
+      
+    <div class="column-two">
+      <div class="column-right" style="padding-left:2em">
+          <img src="/img/vep_web_download.png">
+      </div>
+    </div>
+</div>
+
+</body> </html>

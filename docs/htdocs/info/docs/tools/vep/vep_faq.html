@@ -45,10 +45,15 @@ See <a href="vep_formats.html#vcf">here</a> for a full discussion.</p>
 question "What is the consequence of this variant?", in reality biology does not
 make it this simple! Many genes have more than one transcript, so the VEP
 provides a prediction for each transcript that a variant overlaps. The VEP
-script can help here; the --canonical and --ccds options indicate which
-transcripts are canonical and belong to the CCDS set respectively, while
---per_gene, --summary and --most_severe allow you to give a more summary level
-assessment per variant.</p>
+script can help here; the <a
+href="script/vep_options.html#opt_canonical">--canonical</a> and <a
+href="script/vep_options.html#opt_ccds">--ccds</a> options indicate which
+transcripts are canonical and belong to the CCDS set respectively, while <a
+href="script/vep_options.html#opt_pick">--pick</a>, <a
+href="script/vep_options.html#opt_per_gene">--per_gene</a>, <a
+href="script/vep_options.html#opt_summary">--summary</a> and <a
+href="script/vep_options.html#opt_most_severe">--most_severe</a> allow you to
+give a more summary level assessment per variant.</p>
 
 <p> Furthermore, several "compound" consequences are also possible - if, for
 example, a variant falls in the final few bases of an exon, it may be considered
@@ -82,17 +87,6 @@ rel="external" href="http://www.1000genomes.org/wiki/Analysis/Variant%20Call%20F
 target="_blank">correctly</a>.</p>
 
 <p>&nbsp;</p>
-
-
-<p style="font-weight:bold;"> Q: I uploaded a file with 1000 variants, but some
-of them seem to be missing from the output? </p>
-
-<p> A: Due to a limitation in the servers underlying Ensembl, only 750 variants
-in one file can be processed at once. Consider splitting your file into smaller
-chunks, or using the <a href="script/index.html">standalone perl script</a>.</p>
-
-<p>&nbsp;</p>
-
 
 
 <p style="font-weight:bold;"> Q: Why is the output I get for my input file
