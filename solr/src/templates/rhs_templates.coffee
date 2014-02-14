@@ -57,10 +57,10 @@ window.rhs_templates =
       
       $(document).on 'main_front_page', (e,results,state,update_seq) ->
         if state.page() != 1 or !results.length then return
-        tophit = results[0]
-        el.empty()
-        if not tophit? then return
-        if tophit.feature_type == 'Gene'
+        for tophit in results
+          el.empty()
+          if not tophit? then continue
+          if tophit.feature_type != 'Gene' then continue
           extra = {}
           desc = tophit.description.replace /\[(.*?)\:(.*?)\]/g, (g0,g1,g2) ->
             extra[$.trim(g1).toLowerCase()] = $.trim(g2)
@@ -87,12 +87,13 @@ window.rhs_templates =
               biotype, bt_colour, description: desc
             }))
             $('html').trigger('wrap')
+          return
   
   sctophit:
     template: """ 
       <div class="sctophit scside">
         <div class="scth_play">&#x21AA;</div>
-        <h1>Best match</h1>
+        <h1>Best gene match</h1>
         <div class="scth_left">
           <div class="scth_type"></div>
           <div class="scth_name maybe_wrap"></div>
