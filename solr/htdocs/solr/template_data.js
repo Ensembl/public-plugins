@@ -1608,6 +1608,9 @@
             _ref = $.solr_config('static.ui.facets');
             for (_i = 0, _len = _ref.length; _i < _len; _i++) {
               f = _ref[_i];
+              if (f.key === 'species') {
+                continue;
+              }
               state["facet_" + f.key] = '';
             }
             state.q = href.substring(1);
@@ -1639,12 +1642,18 @@
       template: "<div></div>",
       postproc: function(el, data) {
         return $(document).on('num_known', function(e, num, state, update_seq) {
-          var _this = this;
+          var sp_q, species,
+            _this = this;
           if (!state.q_query()) {
             return;
           }
+          species = window.solr_current_species();
+          if (!species) {
+            species = 'all';
+          }
+          sp_q = species + '__' + state.q_query().toLowerCase();
           return _ajax_json("/Multi/Ajax/search", {
-            'spellcheck.q': state.q_query().toLowerCase(),
+            'spellcheck.q': sp_q,
             spellcheck: true,
             'spellcheck.count': 50,
             'spellcheck.onlyMorePopular': false
@@ -1660,6 +1669,7 @@
             }
             for (i = _i = 0, _len = words.length; _i < _len; i = ++_i) {
               word = words[i];
+              word = word.replace(/^.*?__/, '');
               w = Math.sqrt((words.length - i) / words.length);
               if (num) {
                 w = w / 2;

@@ -300,6 +300,7 @@ window.rhs_templates =
           href = href.substring(href.indexOf('#')) # IE7, :-(
           state = { page: 1 }
           for f in $.solr_config('static.ui.facets')
+            if f.key == 'species' then continue
             state["facet_"+f.key] = ''
           state.q = href.substring(1)
           $(document).trigger('update_state',[state])
@@ -323,8 +324,11 @@ window.rhs_templates =
     postproc: (el,data) ->
       $(document).on 'num_known', (e,num,state,update_seq) ->
         if !state.q_query() then return
+        species = window.solr_current_species()
+        if !species then species = 'all'
+        sp_q = species+'__'+state.q_query().toLowerCase()
         _ajax_json "/Multi/Ajax/search", {
-          'spellcheck.q': state.q_query().toLowerCase()
+          'spellcheck.q': sp_q
           spellcheck: true
           'spellcheck.count': 50
           'spellcheck.onlyMorePopular': false
@@ -334,6 +338,7 @@ window.rhs_templates =
           words = data.result?.spellcheck?.suggestions?[1]?.suggestion
           unless words?.length then return
           for word,i in words
+            word = word.replace(/^.*?__/,'')
             w = Math.sqrt(((words.length-i)/words.length))
             if num then w = w/2
             suggestions.push {
