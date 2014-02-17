@@ -79,7 +79,6 @@ score_of = (doc,favs) ->
   score
 
 sort_docs = (url,docs,favs,callback) ->
-  docs = ( d.doc for d in docs )
   docs.sort (a,b) -> score_of(b,favs) - score_of(a,favs)
   out = []
   for d in docs
@@ -89,7 +88,7 @@ sort_docs = (url,docs,favs,callback) ->
     for key,str of fmts
       entry[key] = str.replace(/\{(.*?)\}/g,((m0,m1) -> d[m1] ? d.id ? 'unnamed'))
     # XXX pull server root from config
-    entry.link = "/" + d.domain_url
+    entry.link = "/" + d.url
     out.push(entry)
   callback(out)
 
@@ -162,43 +161,19 @@ boost = (i,n) -> if n>1 then Math.pow(10,(2*(n-i-1))/(n-1)) else 1
 ac_name_q = (config,url,query,favs) ->
   if not $.solr_config('static.ui.enable_direct')
     return new $.Deferred().resolve()
-  query = query.toLowerCase()
-  fav = "( "+("species:\"#{s}\"" for s in favs).join(" OR ")+" )"
-  # XXX configurable AC feature types
-  q = []
-  for s in config
-    if s.minlen? and query.length < s.minlen
-      continue
-    if s.ft?
-      ft_part = ( "feature_type:"+t for t in s.ft ).join(' OR ')
-    q_parts = []
-    for f in s.fields
-      wild = false
-      f = f.replace(/\*$/,(() -> wild = true ; ''))
-      fk = ( if f == '' then '' else f+':' )
-      q_parts.push(fk+query)
-      if wild
-        q_parts.push(fk+query+'*')
-    q_part = q_parts.join(' OR ')
-    if q_parts.length > 1 then q_part = "( "+q_part+" )"
-    if s.ft?
-      q.push("( ( #{ft_part} ) AND #{q_part} )")
-    else
-      q.push(q_part)
-  # Add fav-sp to q as well as fq so that we can boost to get spp in
-  # right order
-  favqs = []
-  for s,i in favs
-    favqs.push("species:\""+s+"\"^"+boost(i,favs.length))
-  q = "( "+q.join(' OR ')+" ) AND ( "+favqs.join(" OR ")+" )" 
-  data = { q, fq: fav }
+  q = window.solr_current_species().toLowerCase()+'__'+query.toLowerCase()
+  data = {
+    q, directlink: true, spellcheck: true
+  }
   return ajax_json(url,data)
 
 ac_name_a = (input,output) ->
-  docs = input.result?.response?.docs
+  docs = input.result?.spellcheck?.suggestions?[1]?.suggestion
   unless docs? then return
   for d in docs
-    output.push({ doc: d })
+    parts = d.split('__')
+    species = $.solr_config('revspnames.%',parts[0].toLowerCase())
+    output.push({ name: parts[4], id: parts[3], url: parts[5], species, feature_type: parts[2] })
 
 # XXX not really ac functionality, but methods are here: refactor
 jump_to = (q) ->
@@ -211,7 +186,7 @@ jump_to = (q) ->
       direct = []
       ac_name_a(id_d,direct)
       if direct.length != 0
-        window.location.href = '/'+direct[0].doc.domain_url
+        window.location.href = '/'+direct[0].url
     )
 
 rate_limit = window.rate_limiter(500,1000)

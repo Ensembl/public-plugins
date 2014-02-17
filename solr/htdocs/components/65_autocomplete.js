@@ -109,15 +109,6 @@
 
   sort_docs = function(url, docs, favs, callback) {
     var d, entry, fmts, key, out, str, _i, _len;
-    docs = (function() {
-      var _i, _len, _results;
-      _results = [];
-      for (_i = 0, _len = docs.length; _i < _len; _i++) {
-        d = docs[_i];
-        _results.push(d.doc);
-      }
-      return _results;
-    })();
     docs.sort(function(a, b) {
       return score_of(b, favs) - score_of(a, favs);
     });
@@ -136,7 +127,7 @@
           return (_ref = (_ref1 = d[m1]) != null ? _ref1 : d.id) != null ? _ref : 'unnamed';
         }));
       }
-      entry.link = "/" + d.domain_url;
+      entry.link = "/" + d.url;
       out.push(entry);
     }
     return callback(out);
@@ -229,87 +220,36 @@
   };
 
   ac_name_q = function(config, url, query, favs) {
-    var data, f, fav, favqs, fk, ft_part, i, q, q_part, q_parts, s, t, wild, _i, _j, _k, _len, _len1, _len2, _ref;
+    var data, q;
     if (!$.solr_config('static.ui.enable_direct')) {
       return new $.Deferred().resolve();
     }
-    query = query.toLowerCase();
-    fav = "( " + ((function() {
-      var _i, _len, _results;
-      _results = [];
-      for (_i = 0, _len = favs.length; _i < _len; _i++) {
-        s = favs[_i];
-        _results.push("species:\"" + s + "\"");
-      }
-      return _results;
-    })()).join(" OR ") + " )";
-    q = [];
-    for (_i = 0, _len = config.length; _i < _len; _i++) {
-      s = config[_i];
-      if ((s.minlen != null) && query.length < s.minlen) {
-        continue;
-      }
-      if (s.ft != null) {
-        ft_part = ((function() {
-          var _j, _len1, _ref, _results;
-          _ref = s.ft;
-          _results = [];
-          for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
-            t = _ref[_j];
-            _results.push("feature_type:" + t);
-          }
-          return _results;
-        })()).join(' OR ');
-      }
-      q_parts = [];
-      _ref = s.fields;
-      for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
-        f = _ref[_j];
-        wild = false;
-        f = f.replace(/\*$/, (function() {
-          wild = true;
-          return '';
-        }));
-        fk = (f === '' ? '' : f + ':');
-        q_parts.push(fk + query);
-        if (wild) {
-          q_parts.push(fk + query + '*');
-        }
-      }
-      q_part = q_parts.join(' OR ');
-      if (q_parts.length > 1) {
-        q_part = "( " + q_part + " )";
-      }
-      if (s.ft != null) {
-        q.push("( ( " + ft_part + " ) AND " + q_part + " )");
-      } else {
-        q.push(q_part);
-      }
-    }
-    favqs = [];
-    for (i = _k = 0, _len2 = favs.length; _k < _len2; i = ++_k) {
-      s = favs[i];
-      favqs.push("species:\"" + s + "\"^" + boost(i, favs.length));
-    }
-    q = "( " + q.join(' OR ') + " ) AND ( " + favqs.join(" OR ") + " )";
+    q = window.solr_current_species().toLowerCase() + '__' + query.toLowerCase();
     data = {
       q: q,
-      fq: fav
+      directlink: true,
+      spellcheck: true
     };
     return ajax_json(url, data);
   };
 
   ac_name_a = function(input, output) {
-    var d, docs, _i, _len, _ref, _ref1, _results;
-    docs = (_ref = input.result) != null ? (_ref1 = _ref.response) != null ? _ref1.docs : void 0 : void 0;
+    var d, docs, parts, species, _i, _len, _ref, _ref1, _ref2, _ref3, _results;
+    docs = (_ref = input.result) != null ? (_ref1 = _ref.spellcheck) != null ? (_ref2 = _ref1.suggestions) != null ? (_ref3 = _ref2[1]) != null ? _ref3.suggestion : void 0 : void 0 : void 0 : void 0;
     if (docs == null) {
       return;
     }
     _results = [];
     for (_i = 0, _len = docs.length; _i < _len; _i++) {
       d = docs[_i];
+      parts = d.split('__');
+      species = $.solr_config('revspnames.%', parts[0].toLowerCase());
       _results.push(output.push({
-        doc: d
+        name: parts[4],
+        id: parts[3],
+        url: parts[5],
+        species: species,
+        feature_type: parts[2]
       }));
     }
     return _results;
@@ -329,7 +269,7 @@
         direct = [];
         ac_name_a(id_d, direct);
         if (direct.length !== 0) {
-          return window.location.href = '/' + direct[0].doc.domain_url;
+          return window.location.href = '/' + direct[0].url;
         }
       });
     });
