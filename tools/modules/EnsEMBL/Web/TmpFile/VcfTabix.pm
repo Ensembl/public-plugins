@@ -185,7 +185,7 @@ sub parse_content {
       @csq_headers = split '\|', $1;
     }
     elsif(s/^#//) {
-      @headers = split "\t";
+      @headers = split /\s+/;
       
       # we don't want anything after the INFO field (index pos 8)
       for my $i(8..$#headers) {
@@ -200,7 +200,7 @@ sub parse_content {
     elsif(!/^#/) {
       $line_count++;
       
-      my @split = split /\t/;
+      my @split = split /\s+/;
       my %raw_data = map {$headers[$_] => $split[$_]} 0..$#split;
       
       $raw_data{CHROM} =~ s/^chr(om)?(osome)?//i;
