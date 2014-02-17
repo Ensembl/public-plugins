@@ -404,6 +404,7 @@ body_elevate_quoted = () ->
     prepare: (context,input,tags_in,depart) ->
       if !tags_in.main then return null
       if !input.q.match(/[^\w\s]/) then return null
+      if input.q.match(/"/) then return null # already quoted, don't mess
       qq = '"'+input.q.replace(/\s+/,'" "','g')+'"'
       tags_quoted = _clone_object(tags_in)
       tags_quoted.quoted = 1
