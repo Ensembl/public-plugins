@@ -139,24 +139,29 @@ sub content {
 
   # have otherfeatures?
   #foreach my $sp ($sd->valid_species) {
-  #  if ($sd->get_config($sp, 'databases')->{'DATABASE_OTHERFEATURES'}) {
-  #    my $div = $self->dom->create_element('div', {class => '_stt_'.$sp});
-  #
-  #    $div->append_child($input_fieldset->add_field({
-  #        'type'    => 'radiolist',
-  #        'name'    => 'core_type_'.$sp,
-  #        'label'   => 'Transcript database to use',
-  #        'helptip' => 'Select RefSeq to use the otherfeatures transcript database, which contains basic aligned RefSeq transcript sequences in place of complete Ensembl transcript models'
-  #        'values'  => [
-  #          { value => 'core',   caption => 'Ensembl transcripts'          },
-  #          { value => 'refseq', caption => 'RefSeq and other transcripts' },
-  #        ],
-  #        'value'   => 'core',
-  #    }));
-  #
-  #    $input_fieldset->append_child($div);
-  #  }
-  #}
+  
+  # at the moment only human, chicken and mouse have RefSeqs in their otherfeatures DB
+  # there's no config for this currently so species are listed manually
+  foreach my $sp (qw(Gallus_gallus Homo_sapiens Mus_musculus)) {
+    if ($sd->get_config($sp, 'databases')->{'DATABASE_OTHERFEATURES'}) {
+      my $div = $self->dom->create_element('div', {class => '_stt_'.$sp});
+  
+      $div->append_child($input_fieldset->add_field({
+          'type'    => 'radiolist',
+          'name'    => 'core_type_'.$sp,
+          'label'   => 'Transcript database to use',
+          'helptip' => 'Select RefSeq to use the otherfeatures transcript database, which contains basic aligned RefSeq transcript sequences in place of complete Ensembl transcript models',
+          'values'  => [
+            { value => 'core',   caption => 'Ensembl transcripts'          },
+            { value => 'refseq', caption => 'RefSeq and other transcripts' },
+          ],
+          'value'   => 'core',
+          'class'   => '_stt',
+      }));
+  
+      $input_fieldset->append_child($div);
+    }
+  }
 
 
   ## Output options header
@@ -334,9 +339,10 @@ sub _build_filters {
     'notes'   => '<strong>NB:</strong> Restricting results may exclude biologically important data!',
     'values'  => [
       { 'value' => 'no',          'caption' => 'Show all results' },
-      { 'value' => 'per_gene',    'caption' => 'Show most severe per gene' },
+      { 'value' => 'pick',        'caption' => 'Show one selected consequence per variant'},
+      { 'value' => 'per_gene',    'caption' => 'Show one selected consequence per gene' },
       { 'value' => 'summary',     'caption' => 'Show only list of consequences per variant' },
-      { 'value' => 'most_severe', 'caption' => 'Show most severe per variant' },
+      { 'value' => 'most_severe', 'caption' => 'Show most severe consequence per variant' },
     ]
   });
 }
@@ -358,12 +364,17 @@ sub _build_identifiers {
     'checked' => 1
   });
 
-  $fieldset->add_field({
-    'type'    => 'checkbox',
-    'name'    => 'ccds',
-    'label'   => 'CCDS',
-    'helptip' => 'Report the Consensus CDS identifier where applicable',
-    'value'   => 'yes'
+  $fieldset->append_child('div', {
+    'class'    => '_stt_core',
+    'children' => [
+      $fieldset->add_field({
+        'type'    => 'checkbox',
+        'name'    => 'ccds',
+        'label'   => 'CCDS',
+        'helptip' => 'Report the Consensus CDS identifier where applicable',
+        'value'   => 'yes',
+      })
+    ]
   });
 
   $fieldset->add_field({
@@ -459,13 +470,18 @@ sub _build_extra {
     'checked' => 1
   });
 
-  $fieldset->add_field({
-    'type'    => 'checkbox',
-    'name'    => 'domains',
-    'label'   => 'Protein domains',
-    'helptip' => 'Report overlapping protein domains from Pfam, Prosite and InterPro',
-    'value'   => 'yes',
-    'checked' => 0
+  $fieldset->append_child('div', {
+    'class'    => '_stt_core',
+    'children' => [
+      $fieldset->add_field({
+        'type'    => 'checkbox',
+        'name'    => 'domains',
+        'label'   => 'Protein domains',
+        'helptip' => 'Report overlapping protein domains from Pfam, Prosite and InterPro',
+        'value'   => 'yes',
+        'checked' => 0,
+      })
+    ]
   });
 
   $fieldset->add_field({
@@ -477,13 +493,18 @@ sub _build_extra {
     'checked' => 0
   });
 
-  $fieldset->add_field({
-    'type'    => 'checkbox',
-    'name'    => 'canonical',
-    'label'   => 'Identify canonical transcripts',
-    'helptip' => 'Indicate if an affected transcript is the canonical transcript for the gene',
-    'value'   => 'yes',
-    'checked' => 0
+  $fieldset->append_child('div', {
+    'class'    => '_stt_core',
+    'children' => [
+      $fieldset->add_field({
+        'type'    => 'checkbox',
+        'name'    => 'canonical',
+        'label'   => 'Identify canonical transcripts',
+        'helptip' => 'Indicate if an affected transcript is the canonical transcript for the gene',
+        'value'   => 'yes',
+        'checked' => 0,
+      })
+    ]
   });
 
   # species-specific stuff
@@ -529,32 +550,36 @@ sub _build_extra {
 
     # regulatory
     if($sd->get_config($sp, 'REGULATORY_BUILD')) {
-
-      $fieldset->add_field({
-        'field_class' => "_stt_$sp",
-        'type'        => 'dropdown',
-        'name'        => "regulatory_$sp",
-        'class'       => '_stt',
-        'label'       => 'Get regulatory region consequences',
-        'helptip'     => 'Get consequences for variants that overlap regulatory features and transcription factor binding motifs',
-        'value'       => 'reg',
-        'values'      => [
-          { 'value' => 'no',   'caption' => 'No'                          },
-          { 'value' => 'reg',  'caption' => 'Yes'                         },
-          { 'value' => 'cell', 'caption' => 'Yes and limit by cell type'  },
-        ],
-      });
-
+      
       my $cell_type_adaptor = $hub->get_adaptor('get_CellTypeAdaptor', 'funcgen', $sp);
-
-      $fieldset->add_field({
-        'field_class' => "_stt_cell _stt_$sp",
-        'type'        => 'dropdown',
-        'multiple'    => 1,
-        'label'       => 'Limit to cell type(s)',
-        'helptip'     => 'Select one or more cell types to limit regulatory feature results to. Hold Ctrl (Windows) or Cmd (Mac) to select multiple entries',
-        'name'        => 'cell_type',
-        'values'      => [ {'value' => '', 'caption' => 'None'}, map { 'value' => $_->name, 'caption' => $_->name }, @{$cell_type_adaptor->fetch_all} ]
+      
+      $fieldset->append_child('div', {
+        'class'    => "_stt_$sp",
+        'children' => [
+          $fieldset->add_field({
+            'type'        => 'dropdown',
+            'name'        => "regulatory_$sp",
+            'class'       => '_stt',
+            'label'       => 'Get regulatory region consequences',
+            'helptip'     => 'Get consequences for variants that overlap regulatory features and transcription factor binding motifs',
+            'value'       => 'reg',
+            'values'      => [
+              { 'value' => 'no',   'caption' => 'No'                          },
+              { 'value' => 'reg',  'caption' => 'Yes'                         },
+              { 'value' => 'cell', 'caption' => 'Yes and limit by cell type'  },
+            ],
+          }),
+          
+          $fieldset->add_field({
+            'field_class' => "_stt_cell",# _stt_$sp",
+            'type'        => 'dropdown',
+            'multiple'    => 1,
+            'label'       => 'Limit to cell type(s)',
+            'helptip'     => 'Select one or more cell types to limit regulatory feature results to. Hold Ctrl (Windows) or Cmd (Mac) to select multiple entries',
+            'name'        => 'cell_type',
+            'values'      => [ {'value' => '', 'caption' => 'None'}, map { 'value' => $_->name, 'caption' => $_->name }, @{$cell_type_adaptor->fetch_all} ]
+          }),
+        ]
       });
     }
   }
