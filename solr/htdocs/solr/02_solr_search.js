@@ -736,6 +736,9 @@
         if (!input.q.match(/[^\w\s]/)) {
           return null;
         }
+        if (input.q.match(/"/)) {
+          return null;
+        }
         qq = '"' + input.q.replace(/\s+/, '" "', 'g') + '"';
         tags_quoted = _clone_object(tags_in);
         tags_quoted.quoted = 1;
