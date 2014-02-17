@@ -69,10 +69,13 @@ sub search_connect {
     my $url = $endpoint;
     if($hub->param('spellcheck.q')) {
       $url =~ s#\/[^/]*$#/spell#g; ##
+    } elsif($hub->param('directlink')) {
+      $url =~ s#\/[^/]*$#/directlink#g; ##
     } elsif($hub->param('spellcheck')) {
       $url =~ s#\/[^/]*$#/suggest#g; ##
     }     
     $url = "$url?".join("&",@param_str);
+    #warn "URL = $url\n";
     my $response = $ua->get($url);
 
     if($response->is_success) {
