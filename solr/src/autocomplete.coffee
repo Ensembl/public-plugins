@@ -172,7 +172,9 @@ ac_name_q = (config,url,query,favs) ->
     spp.push(cursp.toLowerCase())
   qs = []
   for sp in spp
-    qs.push(sp+"__"+query.toLowerCase())
+    sp = sp.replace(/_/g,'_-').replace(/\s+/g,'_+')
+    q = query.toLowerCase().replace(/_/g,'_-').replace(/\s+/g,'_+')
+    qs.push(sp+"__"+q)
   q = qs.join(' ')
   data = {
     q, directlink: true, spellcheck: true
@@ -185,7 +187,9 @@ ac_name_a = (input,output) ->
     docs = s.suggestion
     unless docs? then continue
     for d in docs
-      parts = d.split('__')
+      parts = []
+      for p in d.split('__')
+        parts.push(p.replace(/_\+/g,' ').replace(/_\-?/g,'_'))
       species = $.solr_config('revspnames.%',parts[0].toLowerCase())
       output.push({ name: parts[4], id: parts[3], url: parts[5], species, feature_type: parts[2] })
 
