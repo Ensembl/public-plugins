@@ -128,6 +128,10 @@ direct_format =
     left: "{name}"
     right: "{id} {feature_type}"
 
+direct_link =
+  Phenotype: "{ucspecies}/Phenotype/Locations?ph={id}"
+  Gene: "{ucspecies}/Gene/Summary?g={id};{rest}"
+
 direct_searches = [
   {
     ft: ['Phenotype']
@@ -191,7 +195,14 @@ ac_name_a = (input,output) ->
       for p in d.split('__')
         parts.push(p.replace(/_\+/g,' ').replace(/_\-?/g,'_'))
       species = $.solr_config('revspnames.%',parts[0].toLowerCase())
-      output.push({ name: parts[4], id: parts[3], url: parts[5], species, feature_type: parts[2] })
+      ucspecies = parts[0].charAt(0).toUpperCase() + parts[0].slice(1)
+      doc = {
+        name: parts[4], id: parts[3], species, ucspecies, rest: parts[5],
+        feature_type: parts[2]
+      }
+      doc.url = direct_link[parts[2]]
+      doc.url = doc.url.replace(/\{(.*?)\}/g,((m0,m1) -> doc[m1] ? ''))
+      output.push(doc)
 
 # XXX not really ac functionality, but methods are here: refactor
 jump_to = (q) ->
