@@ -239,7 +239,9 @@
     qs = [];
     for (_j = 0, _len1 = spp.length; _j < _len1; _j++) {
       sp = spp[_j];
-      qs.push(sp + "__" + query.toLowerCase());
+      sp = sp.replace(/_/g, '_-').replace(/\s+/g, '_+');
+      q = query.toLowerCase().replace(/_/g, '_-').replace(/\s+/g, '_+');
+      qs.push(sp + "__" + q);
     }
     q = qs.join(' ');
     data = {
@@ -251,7 +253,7 @@
   };
 
   ac_name_a = function(input, output) {
-    var d, docs, i, parts, s, species, _i, _len, _ref, _ref1, _ref2, _results;
+    var d, docs, i, p, parts, s, species, _i, _len, _ref, _ref1, _ref2, _results;
     _ref2 = (_ref = input.result) != null ? (_ref1 = _ref.spellcheck) != null ? _ref1.suggestions : void 0 : void 0;
     _results = [];
     for (i = _i = 0, _len = _ref2.length; _i < _len; i = ++_i) {
@@ -264,11 +266,16 @@
         continue;
       }
       _results.push((function() {
-        var _j, _len1, _results1;
+        var _j, _k, _len1, _len2, _ref3, _results1;
         _results1 = [];
         for (_j = 0, _len1 = docs.length; _j < _len1; _j++) {
           d = docs[_j];
-          parts = d.split('__');
+          parts = [];
+          _ref3 = d.split('__');
+          for (_k = 0, _len2 = _ref3.length; _k < _len2; _k++) {
+            p = _ref3[_k];
+            parts.push(p.replace(/_\+/g, ' ').replace(/_\-?/g, '_'));
+          }
           species = $.solr_config('revspnames.%', parts[0].toLowerCase());
           _results1.push(output.push({
             name: parts[4],
