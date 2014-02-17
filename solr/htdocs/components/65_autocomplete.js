@@ -220,11 +220,28 @@
   };
 
   ac_name_q = function(config, url, query, favs) {
-    var data, q;
+    var cursp, data, q, qs, s, sp, spp, spp_h, _i, _j, _len, _len1;
     if (!$.solr_config('static.ui.enable_direct')) {
       return new $.Deferred().resolve();
     }
-    q = window.solr_current_species().toLowerCase() + '__' + query.toLowerCase();
+    spp = [];
+    spp_h = {};
+    for (_i = 0, _len = favs.length; _i < _len; _i++) {
+      s = favs[_i];
+      s = $.solr_config('spnames.%', s.toLowerCase());
+      spp.push(s.toLowerCase());
+      spp_h[s.toLowerCase()] = 1;
+    }
+    cursp = window.solr_current_species();
+    if (cursp && (spp_h[cursp.toLowerCase()] == null)) {
+      spp.push(cursp.toLowerCase());
+    }
+    qs = [];
+    for (_j = 0, _len1 = spp.length; _j < _len1; _j++) {
+      sp = spp[_j];
+      qs.push(sp + "__" + query.toLowerCase());
+    }
+    q = qs.join(' ');
     data = {
       q: q,
       directlink: true,
@@ -234,23 +251,35 @@
   };
 
   ac_name_a = function(input, output) {
-    var d, docs, parts, species, _i, _len, _ref, _ref1, _ref2, _ref3, _results;
-    docs = (_ref = input.result) != null ? (_ref1 = _ref.spellcheck) != null ? (_ref2 = _ref1.suggestions) != null ? (_ref3 = _ref2[1]) != null ? _ref3.suggestion : void 0 : void 0 : void 0 : void 0;
-    if (docs == null) {
-      return;
-    }
+    var d, docs, i, parts, s, species, _i, _len, _ref, _ref1, _ref2, _results;
+    _ref2 = (_ref = input.result) != null ? (_ref1 = _ref.spellcheck) != null ? _ref1.suggestions : void 0 : void 0;
     _results = [];
-    for (_i = 0, _len = docs.length; _i < _len; _i++) {
-      d = docs[_i];
-      parts = d.split('__');
-      species = $.solr_config('revspnames.%', parts[0].toLowerCase());
-      _results.push(output.push({
-        name: parts[4],
-        id: parts[3],
-        url: parts[5],
-        species: species,
-        feature_type: parts[2]
-      }));
+    for (i = _i = 0, _len = _ref2.length; _i < _len; i = ++_i) {
+      s = _ref2[i];
+      if (!i % 2) {
+        continue;
+      }
+      docs = s.suggestion;
+      if (docs == null) {
+        continue;
+      }
+      _results.push((function() {
+        var _j, _len1, _results1;
+        _results1 = [];
+        for (_j = 0, _len1 = docs.length; _j < _len1; _j++) {
+          d = docs[_j];
+          parts = d.split('__');
+          species = $.solr_config('revspnames.%', parts[0].toLowerCase());
+          _results1.push(output.push({
+            name: parts[4],
+            id: parts[3],
+            url: parts[5],
+            species: species,
+            feature_type: parts[2]
+          }));
+        }
+        return _results1;
+      })());
     }
     return _results;
   };
