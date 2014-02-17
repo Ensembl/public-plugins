@@ -161,19 +161,33 @@ boost = (i,n) -> if n>1 then Math.pow(10,(2*(n-i-1))/(n-1)) else 1
 ac_name_q = (config,url,query,favs) ->
   if not $.solr_config('static.ui.enable_direct')
     return new $.Deferred().resolve()
-  q = window.solr_current_species().toLowerCase()+'__'+query.toLowerCase()
+  spp = []
+  spp_h = {}
+  for s in favs
+    s = $.solr_config('spnames.%',s.toLowerCase())
+    spp.push(s.toLowerCase())
+    spp_h[s.toLowerCase()] = 1
+  cursp = window.solr_current_species()
+  if cursp and (not spp_h[cursp.toLowerCase()]?)
+    spp.push(cursp.toLowerCase())
+  qs = []
+  for sp in spp
+    qs.push(sp+"__"+query.toLowerCase())
+  q = qs.join(' ')
   data = {
     q, directlink: true, spellcheck: true
   }
   return ajax_json(url,data)
 
 ac_name_a = (input,output) ->
-  docs = input.result?.spellcheck?.suggestions?[1]?.suggestion
-  unless docs? then return
-  for d in docs
-    parts = d.split('__')
-    species = $.solr_config('revspnames.%',parts[0].toLowerCase())
-    output.push({ name: parts[4], id: parts[3], url: parts[5], species, feature_type: parts[2] })
+  for s,i in input.result?.spellcheck?.suggestions
+    if not i%2 then continue
+    docs = s.suggestion
+    unless docs? then continue
+    for d in docs
+      parts = d.split('__')
+      species = $.solr_config('revspnames.%',parts[0].toLowerCase())
+      output.push({ name: parts[4], id: parts[3], url: parts[5], species, feature_type: parts[2] })
 
 # XXX not really ac functionality, but methods are here: refactor
 jump_to = (q) ->
