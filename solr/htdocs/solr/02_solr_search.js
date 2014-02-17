@@ -810,16 +810,21 @@
         params.rows = len;
         params.start = start;
         return request.raw_ajax(params).then(function(data) {
-          var doc, docs, h, snippet, _i, _j, _len, _len1, _ref, _ref1, _ref2, _ref3, _ref4;
+          var doc, docs, from, h, snippet, to, _i, _j, _len, _len1, _ref, _ref1, _ref2, _ref3, _ref4, _ref5;
           docs = (_ref = data.result) != null ? (_ref1 = _ref.response) != null ? _ref1.docs : void 0 : void 0;
           for (_i = 0, _len = docs.length; _i < _len; _i++) {
             doc = docs[_i];
             snippet = (_ref2 = data.result) != null ? (_ref3 = _ref2.highlighting) != null ? _ref3[doc.uid] : void 0 : void 0;
             if (snippet != null) {
-              _ref4 = $.solr_config('static.ui.highlights');
-              for (_j = 0, _len1 = _ref4.length; _j < _len1; _j++) {
-                h = _ref4[_j];
-                if (doc[h] && snippet[h]) {
+              _ref4 = $.solr_config('static.ui.hl_transfers');
+              for (from in _ref4) {
+                to = _ref4[from];
+                snippet[to] = snippet[from];
+              }
+              _ref5 = $.solr_config('static.ui.highlights');
+              for (_j = 0, _len1 = _ref5.length; _j < _len1; _j++) {
+                h = _ref5[_j];
+                if (snippet[h]) {
                   doc[h] = snippet[h].join(' ... ');
                 }
               }

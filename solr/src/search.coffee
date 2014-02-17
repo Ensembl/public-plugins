@@ -439,11 +439,8 @@ body_raw_request = () ->
     if start == -1 # size request
       params.start = 0
       params.rows = 10
-#      key = stringify_params(params)
-#      if size_cache[key]? then return $.Deferred().resolve(size_cache[key])
       return request.raw_ajax(params).then (data) =>
         num = data.result?.response?.numFound
-#        size_cache[key] = [data,num]
         return [data,num]
     else # regular request
       params.rows = len
@@ -454,8 +451,10 @@ body_raw_request = () ->
         for doc in docs
           snippet = data.result?.highlighting?[doc.uid]
           if snippet?
+            for from,to of $.solr_config('static.ui.hl_transfers')
+              snippet[to] = snippet[from]
             for h in $.solr_config('static.ui.highlights')
-              if doc[h] and snippet[h]
+              if snippet[h]
                 doc[h] = snippet[h].join(' ... ')
         #
         return [data,docs]
