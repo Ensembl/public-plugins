@@ -101,6 +101,7 @@ sub convert_to_txt {
   
   my $return = '#'.join("\t", map {s/^ID$/Uploaded_variation/; $_} @$headers)."\n";
   foreach my $row(@$rows) {
+    $row->{Uploaded_variation} ||= $row->{ID} if $row->{ID};
     $return .= join("\t", map {(defined($row->{$_}) && $row->{$_} ne '') ? $row->{$_} : '-'} @$headers);
     $return .= "\n";
   }
@@ -128,6 +129,7 @@ sub convert_to_vep {
   
   foreach my $row(@$rows) {
     my $first = 1;
+    $row->{Uploaded_variation} ||= $row->{ID} if $row->{ID};
     
     for my $j(0..$#{$headers}) {
       
