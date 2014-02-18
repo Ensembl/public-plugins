@@ -181,7 +181,8 @@ sub update_conf {
       ###############
       # MISC LAYOUT #
       ###############
-      enable_direct => 0,
+      enable_direct => 1,
+      direct_pause => [700,2000], # since [stopped-typing,last-request] ms
       per_page => 10, # default results per page
       topright_fix => 1, # specific to ensembl
       tips => [
