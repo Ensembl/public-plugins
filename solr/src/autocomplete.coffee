@@ -28,6 +28,10 @@ $.fn.getCursorPosition = () ->
     sel.moveStart('character', -input.value.length)
     return sel.text.length - selLen
 
+load_config = () ->
+  config_url = "#{ $('#species_path').val() }/Ajax/config"
+  return $.solr_config({ url: config_url })
+
 favs = undefined
 
 sp_map = {}
@@ -163,27 +167,28 @@ jump_searches = [
 boost = (i,n) -> if n>1 then Math.pow(10,(2*(n-i-1))/(n-1)) else 1
 
 ac_name_q = (config,url,query,favs) ->
-  if not $.solr_config('static.ui.enable_direct')
-    return new $.Deferred().resolve()
-  spp = []
-  spp_h = {}
-  for s in favs
-    s = $.solr_config('spnames.%',s.toLowerCase())
-    spp.push(s.toLowerCase())
-    spp_h[s.toLowerCase()] = 1
-  cursp = window.solr_current_species()
-  if cursp and (not spp_h[cursp.toLowerCase()]?)
-    spp.push(cursp.toLowerCase())
-  qs = []
-  for sp in spp
-    sp = sp.replace(/_/g,'_-').replace(/\s+/g,'_+')
-    q = query.toLowerCase().replace(/_/g,'_-').replace(/\s+/g,'_+')
-    qs.push(sp+"__"+q)
-  q = qs.join(' ')
-  data = {
-    q, directlink: true, spellcheck: true
-  }
-  return ajax_json(url,data)
+  return load_config().then (x) =>
+    if not $.solr_config('static.ui.enable_direct')
+      return new $.Deferred().resolve()
+    spp = []
+    spp_h = {}
+    for s in favs
+      s = $.solr_config('spnames.%',s.toLowerCase())
+      spp.push(s.toLowerCase())
+      spp_h[s.toLowerCase()] = 1
+    cursp = window.solr_current_species()
+    if cursp and (not spp_h[cursp.toLowerCase()]?)
+      spp.push(cursp.toLowerCase())
+    qs = []
+    for sp in spp
+      sp = sp.replace(/_/g,'_-').replace(/\s+/g,'_+')
+      q = query.toLowerCase().replace(/_/g,'_-').replace(/\s+/g,'_+')
+      qs.push(sp+"__"+q)
+    q = qs.join(' ')
+    data = {
+      q, directlink: true, spellcheck: true
+    }
+    return ajax_json(url,data)
 
 direct_limit = 6
 ac_name_a = (input,output) ->
