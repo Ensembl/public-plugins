@@ -1,3 +1,17 @@
+# Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 #
 _ajax_json = (url,data,success) ->
   $.ajax({
@@ -57,10 +71,10 @@ window.rhs_templates =
       
       $(document).on 'main_front_page', (e,results,state,update_seq) ->
         if state.page() != 1 or !results.length then return
-        tophit = results[0]
-        el.empty()
-        if not tophit? then return
-        if tophit.feature_type == 'Gene'
+        for tophit in results
+          el.empty()
+          if not tophit? then continue
+          if tophit.feature_type != 'Gene' then continue
           extra = {}
           desc = tophit.description.replace /\[(.*?)\:(.*?)\]/g, (g0,g1,g2) ->
             extra[$.trim(g1).toLowerCase()] = $.trim(g2)
@@ -87,12 +101,13 @@ window.rhs_templates =
               biotype, bt_colour, description: desc
             }))
             $('html').trigger('wrap')
+          return
   
   sctophit:
     template: """ 
       <div class="sctophit scside">
         <div class="scth_play">&#x21AA;</div>
-        <h1>Best match</h1>
+        <h1>Best gene match</h1>
         <div class="scth_left">
           <div class="scth_type"></div>
           <div class="scth_name maybe_wrap"></div>
@@ -300,6 +315,7 @@ window.rhs_templates =
           href = href.substring(href.indexOf('#')) # IE7, :-(
           state = { page: 1 }
           for f in $.solr_config('static.ui.facets')
+            if f.key == 'species' then continue
             state["facet_"+f.key] = ''
           state.q = href.substring(1)
           $(document).trigger('update_state',[state])
@@ -323,8 +339,11 @@ window.rhs_templates =
     postproc: (el,data) ->
       $(document).on 'num_known', (e,num,state,update_seq) ->
         if !state.q_query() then return
+        species = window.solr_current_species()
+        if !species then species = 'all'
+        sp_q = species+'__'+state.q_query().toLowerCase()
         _ajax_json "/Multi/Ajax/search", {
-          'spellcheck.q': state.q_query().toLowerCase()
+          'spellcheck.q': sp_q
           spellcheck: true
           'spellcheck.count': 50
           'spellcheck.onlyMorePopular': false
@@ -334,6 +353,7 @@ window.rhs_templates =
           words = data.result?.spellcheck?.suggestions?[1]?.suggestion
           unless words?.length then return
           for word,i in words
+            word = word.replace(/^.*?__/,'')
             w = Math.sqrt(((words.length-i)/words.length))
             if num then w = w/2
             suggestions.push {

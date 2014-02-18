@@ -69,10 +69,13 @@ sub search_connect {
     my $url = $endpoint;
     if($hub->param('spellcheck.q')) {
       $url =~ s#\/[^/]*$#/spell#g; ##
+    } elsif($hub->param('directlink')) {
+      $url =~ s#\/[^/]*$#/directlink#g; ##
     } elsif($hub->param('spellcheck')) {
       $url =~ s#\/[^/]*$#/suggest#g; ##
     }     
     $url = "$url?".join("&",@param_str);
+    #warn "URL = $url\n";
     my $response = $ua->get($url);
 
     if($response->is_success) {
@@ -199,6 +202,7 @@ sub config {
     push @names,$name,lc($name);
     my $latin = $species_info->{$sp}{'key'};
     $revspnames->{$latin} = $name;
+    $revspnames->{lc $latin} = $name;
     foreach my $name (@names) {
       $spnames->{$name} = $latin;
     }
