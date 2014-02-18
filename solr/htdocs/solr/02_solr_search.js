@@ -1071,7 +1071,7 @@
           return v;
         }
         return v.then(function(_arg) {
-          var data, doc, docs, found, i, lhs, link, ok, quicklinks, regex, res, url, value, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2, _ref3;
+          var data, doc, docs, found, i, lhs, link, ok, quicklinks, regex, res, url, value, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6;
           data = _arg[0], docs = _arg[1];
           for (_i = 0, _len = docs.length; _i < _len; _i++) {
             doc = docs[_i];
@@ -1097,9 +1097,9 @@
               }
               if (link.result_condition != null) {
                 found = false;
-                _ref3 = doc.quick_links;
-                for (_k = 0, _len2 = _ref3.length; _k < _len2; _k++) {
-                  res = _ref3[_k];
+                _ref4 = (_ref3 = doc.quick_links) != null ? _ref3 : [];
+                for (_k = 0, _len2 = _ref4.length; _k < _len2; _k++) {
+                  res = _ref4[_k];
                   if (link.result_condition === res) {
                     found = true;
                     break;
@@ -1109,9 +1109,21 @@
                   continue;
                 }
               }
+              if (link.result_condition_not != null) {
+                _ref6 = (_ref5 = doc.quick_links) != null ? _ref5 : [];
+                for (_l = 0, _len3 = _ref6.length; _l < _len3; _l++) {
+                  res = _ref6[_l];
+                  if (link.result_condition_not === res) {
+                    ok = false;
+                  }
+                }
+              }
+              if (!ok) {
+                continue;
+              }
               url = link.url.replace(/\{(.*?)\}/g, function(g0, g1) {
-                var _ref4;
-                return (_ref4 = doc[g1]) != null ? _ref4 : '';
+                var _ref7;
+                return (_ref7 = doc[g1]) != null ? _ref7 : '';
               });
               quicklinks.push({
                 url: url,
