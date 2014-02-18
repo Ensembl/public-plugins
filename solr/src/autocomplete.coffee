@@ -228,7 +228,14 @@ jump_to = (q) ->
         window.location.href = '/'+direct[0].url
     )
 
-rate_limit = window.rate_limiter(500,1000)
+rate_limit = null
+
+make_rate_limiter = (params) ->
+  if rate_limit then return rate_limit(params)
+  return load_config().then (x) =>
+    limits = $.solr_config('static.ui.direct_pause')
+    rate_limit = window.rate_limiter(limits[0],limits[1])
+    return rate_limit(params)
 
 internal_site = (el) ->
   site = el.parents('form').find("input[name='site']").val()
@@ -309,7 +316,7 @@ $.widget('custom.searchac',$.ui.autocomplete,{
   options:
     source: (request,response) ->
       if internal_site(@element)
-        rate_limit({q: request.term, response, @element }).done (data) =>
+        make_rate_limiter({q: request.term, response, @element }).done (data) =>
           url = $('#se_q').parents("form").attr('action')
           url = url.split('/')[1]
           if url == 'common' then url = 'Multi'
