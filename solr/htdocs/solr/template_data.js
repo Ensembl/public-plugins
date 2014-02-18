@@ -1301,17 +1301,20 @@
           return ctx.fillText(sstr, step_start + step * 6, 15);
         };
         return $(document).on('main_front_page', function(e, results, state, update_seq) {
-          var desc, extra, latin, tophit,
+          var desc, extra, latin, tophit, _i, _len,
             _this = this;
           if (state.page() !== 1 || !results.length) {
             return;
           }
-          tophit = results[0];
-          el.empty();
-          if (tophit == null) {
-            return;
-          }
-          if (tophit.feature_type === 'Gene') {
+          for (_i = 0, _len = results.length; _i < _len; _i++) {
+            tophit = results[_i];
+            el.empty();
+            if (tophit == null) {
+              continue;
+            }
+            if (tophit.feature_type !== 'Gene') {
+              continue;
+            }
             extra = {};
             desc = tophit.description.replace(/\[(.*?)\:(.*?)\]/g, function(g0, g1, g2) {
               extra[$.trim(g1).toLowerCase()] = $.trim(g2);
@@ -1321,7 +1324,7 @@
               extra.source = extra.source.replace(/;/g, '; ');
             }
             latin = $.solr_config('spnames.%', tophit.species);
-            return _ajax_json("/Multi/Ajax/extra", {
+            _ajax_json("/Multi/Ajax/extra", {
               queries: JSON.stringify({
                 queries: [
                   {
@@ -1356,12 +1359,13 @@
               }));
               return $('html').trigger('wrap');
             });
+            return;
           }
         });
       }
     },
     sctophit: {
-      template: " \n<div class=\"sctophit scside\">\n  <div class=\"scth_play\">&#x21AA;</div>\n  <h1>Best match</h1>\n  <div class=\"scth_left\">\n    <div class=\"scth_type\"></div>\n    <div class=\"scth_name maybe_wrap\"></div>\n    <div class=\"scth_source\"></div>\n  </div>\n  <div class=\"scth_right\">\n    <div class=\"scth_top\">\n      <div class=\"scth_species\">\n        <img alt=\"\" title=\"\"/>\n      </div>\n      <div class=\"scth_canvas\">\n        <div class=\"scth_canvas_holder\">\n          <canvas width=\"221\" height=\"58\">\n            Click for full details\n          </canvas>\n        </div>\n      </div>\n    </div>\n    <div class=\"scth_biotype\"></div>\n    <div class=\"scth_desc\"></div>\n  </div>\n</div>",
+      template: " \n<div class=\"sctophit scside\">\n  <div class=\"scth_play\">&#x21AA;</div>\n  <h1>Best gene match</h1>\n  <div class=\"scth_left\">\n    <div class=\"scth_type\"></div>\n    <div class=\"scth_name maybe_wrap\"></div>\n    <div class=\"scth_source\"></div>\n  </div>\n  <div class=\"scth_right\">\n    <div class=\"scth_top\">\n      <div class=\"scth_species\">\n        <img alt=\"\" title=\"\"/>\n      </div>\n      <div class=\"scth_canvas\">\n        <div class=\"scth_canvas_holder\">\n          <canvas width=\"221\" height=\"58\">\n            Click for full details\n          </canvas>\n        </div>\n      </div>\n    </div>\n    <div class=\"scth_biotype\"></div>\n    <div class=\"scth_desc\"></div>\n  </div>\n</div>",
       directives: {
         '.scth_name': 'name',
         '.scth_type': 'title',
@@ -1608,6 +1612,9 @@
             _ref = $.solr_config('static.ui.facets');
             for (_i = 0, _len = _ref.length; _i < _len; _i++) {
               f = _ref[_i];
+              if (f.key === 'species') {
+                continue;
+              }
               state["facet_" + f.key] = '';
             }
             state.q = href.substring(1);
@@ -1639,12 +1646,18 @@
       template: "<div></div>",
       postproc: function(el, data) {
         return $(document).on('num_known', function(e, num, state, update_seq) {
-          var _this = this;
+          var sp_q, species,
+            _this = this;
           if (!state.q_query()) {
             return;
           }
+          species = window.solr_current_species();
+          if (!species) {
+            species = 'all';
+          }
+          sp_q = species + '__' + state.q_query().toLowerCase();
           return _ajax_json("/Multi/Ajax/search", {
-            'spellcheck.q': state.q_query().toLowerCase(),
+            'spellcheck.q': sp_q,
             spellcheck: true,
             'spellcheck.count': 50,
             'spellcheck.onlyMorePopular': false
@@ -1660,6 +1673,7 @@
             }
             for (i = _i = 0, _len = words.length; _i < _len; i = ++_i) {
               word = words[i];
+              word = word.replace(/^.*?__/, '');
               w = Math.sqrt((words.length - i) / words.length);
               if (num) {
                 w = w / 2;

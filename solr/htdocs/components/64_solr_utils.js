@@ -86,4 +86,20 @@
     return $.Deferred().resolve(0).then(chunk_loop);
   };
 
+  window.solr_current_species = function() {
+    var latin, parts, path, species, url;
+    url = window.location.href;
+    parts = url.split('/');
+    path = parts[3].toLowerCase();
+    latin = $.solr_config('spnames.%', path);
+    if (!latin) {
+      latin = path;
+    }
+    species = latin.toLowerCase();
+    if (!$.solr_config('revspnames.%', species)) {
+      return null;
+    }
+    return species;
+  };
+
 }).call(this);

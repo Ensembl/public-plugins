@@ -1,3 +1,17 @@
+# Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 #
 code_select = -> $('#solr_config').length > 0
 
@@ -390,6 +404,7 @@ body_elevate_quoted = () ->
     prepare: (context,input,tags_in,depart) ->
       if !tags_in.main then return null
       if !input.q.match(/[^\w\s]/) then return null
+      if input.q.match(/"/) then return null # already quoted, don't mess
       qq = '"'+input.q.replace(/\s+/,'" "','g')+'"'
       tags_quoted = _clone_object(tags_in)
       tags_quoted.quoted = 1
@@ -424,11 +439,8 @@ body_raw_request = () ->
     if start == -1 # size request
       params.start = 0
       params.rows = 10
-#      key = stringify_params(params)
-#      if size_cache[key]? then return $.Deferred().resolve(size_cache[key])
       return request.raw_ajax(params).then (data) =>
         num = data.result?.response?.numFound
-#        size_cache[key] = [data,num]
         return [data,num]
     else # regular request
       params.rows = len
@@ -439,8 +451,10 @@ body_raw_request = () ->
         for doc in docs
           snippet = data.result?.highlighting?[doc.uid]
           if snippet?
+            for from,to of $.solr_config('static.ui.hl_transfers')
+              snippet[to] = snippet[from]
             for h in $.solr_config('static.ui.highlights')
-              if doc[h] and snippet[h]
+              if snippet[h]
                 doc[h] = snippet[h].join(' ... ')
         #
         return [data,docs]
