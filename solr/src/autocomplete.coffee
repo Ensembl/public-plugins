@@ -185,9 +185,12 @@ ac_name_q = (config,url,query,favs) ->
   }
   return ajax_json(url,data)
 
+direct_limit = 6
 ac_name_a = (input,output) ->
+  j = 0
   for s,i in input.result?.spellcheck?.suggestions
     if not i%2 then continue
+    if j >= direct_limit then break
     docs = s.suggestion
     unless docs? then continue
     for d in docs
@@ -203,6 +206,8 @@ ac_name_a = (input,output) ->
       doc.url = direct_link[parts[2]]
       doc.url = doc.url.replace(/\{(.*?)\}/g,((m0,m1) -> doc[m1] ? ''))
       output.push(doc)
+      j += 1
+      if j >= direct_limit then break
 
 # XXX not really ac functionality, but methods are here: refactor
 jump_to = (q) ->
