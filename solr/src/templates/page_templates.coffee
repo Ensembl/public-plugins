@@ -140,7 +140,7 @@ window.page_templates =
               data.tp2_row.candidate('description',desc.join(". ")+".",10000)
             true
 
-          data.tp2_row.register 50000, () ->
+          data.tp2_row.register 51000, () ->
             data.tp2_row.send('description',data.tp2_row.best('description'))
             data.tp2_row.send('id',data.tp2_row.best('id'))
             data.tp2_row.send('url',data.tp2_row.best('url'))
