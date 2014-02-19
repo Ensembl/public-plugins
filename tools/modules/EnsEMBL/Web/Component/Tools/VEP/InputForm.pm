@@ -62,15 +62,28 @@ sub content {
     'name'    => 'name',
     'label'   => 'Name for this data (optional)'
   });
-
-  $input_fieldset->add_field({
-    'type'    => 'dropdown',
-    'name'    => 'format',
-    'label'   => 'Input file format (<a href="/info/docs/tools/vep/vep_formats.html#input" class="popup">details</a>)',
-    'values'  => $input_formats,
-    'value'   => 'ensembl',
-    'class'   => '_stt format'
-  });
+  
+  # species without variation DBs can't use ID or HGVS (currently)
+  foreach my $sp ($sd->valid_species) {
+    my $tmp_formats =
+      $sd->get_config($sp, 'databases')->{'DATABASE_VARIATION'} ?
+      $input_formats :
+      [grep {$_->{value} !~ /id|hgvs/} @$input_formats];
+    
+    $input_fieldset->append_child('div', {
+      'class'    => '_stt_'.$sp,
+      'children' => [
+        $input_fieldset->add_field({
+          'type'    => 'dropdown',
+          'name'    => 'format_'.$sp,
+          'label'   => 'Input file format (<a href="/info/docs/tools/vep/vep_formats.html#input" class="popup">details</a>)',
+          'values'  => $tmp_formats,
+          'value'   => 'ensembl',
+          'class'   => '_stt format'
+        })
+      ]
+    });
+  }
 
   for (@$input_formats) {
     $input_fieldset->add_field({
