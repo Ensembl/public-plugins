@@ -124,7 +124,7 @@ direct_order = ['Phenotype','Gene']
 direct_format =
   Phenotype:
     left: "{name}"
-    right: '{species} Phenotype #{id}'
+    right: '{species} Phenotype'
   Gene:
     left: "{name}"
     right: "<i>{species}</i> Gene {id}"
