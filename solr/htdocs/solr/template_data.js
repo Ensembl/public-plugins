@@ -2422,6 +2422,14 @@
     fixes: {
       global: [
         function(data) {
+          data.tp2_row.register(1000, function() {
+            var ft, sp;
+            ft = data.tp2_row.best('feature_type');
+            sp = data.tp2_row.best('species');
+            if (ft === 'Phenotype') {
+              return data.tp2_row.candidate('id', sp + ' Phenotype', 1000);
+            }
+          });
           data.tp2_row.register(300, function() {
             var desc, ft, id, inner_desc, k, m, main_desc, type, v;
             ft = data.tp2_row.best('feature_type');
@@ -2650,9 +2658,6 @@
     Documentation: {
       id: '{subtype} #',
       title: '{article_title}'
-    },
-    Phenotype: {
-      id: '{species} Phenotype #'
     }
   };
 

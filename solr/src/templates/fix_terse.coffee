@@ -16,8 +16,6 @@ verbose =
   Documentation:
     id: '{subtype} #'
     title: '{article_title}'
-  Phenotype:
-    id: '{species} Phenotype #'
 
 _make_string = (r,template) ->
   failed = false 
