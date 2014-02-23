@@ -29,7 +29,7 @@ sub OBJECT_PARAMS {
 
 sub upload_size_limit {
   my $self = shift;
-  return $self->type eq 'Tools' && $self->action eq 'VEP' ? $self->species_defs->VEP_CGI_POST_MAX : $self->PREV::upload_size_limit;
+  return ($self->type || '') eq 'Tools' && $self->action eq 'VEP' ? $self->species_defs->ENSEMBL_VEP_CGI_POST_MAX : $self->PREV::upload_size_limit;
 }
 
 1;
