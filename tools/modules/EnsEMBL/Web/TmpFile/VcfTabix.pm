@@ -60,7 +60,7 @@ sub content {
   my $perl   = 'perl';
 
   if($args{filter}) {
-    $fh_string .= sprintf("%s %s -filter '%s' -only_matched 2>&1 | ", $perl, $script, $args{filter});
+    $fh_string .= sprintf("%s %s -filter '%s' -ontology -only_matched 2>&1 | ", $perl, $script, $args{filter});
   }
   
   #print STDERR "$fh_string\n";
