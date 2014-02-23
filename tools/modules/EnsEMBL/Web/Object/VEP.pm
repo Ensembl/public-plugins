@@ -41,7 +41,7 @@ sub get_edit_jobs_data {
   my $job_data    = $job->job_data->raw;
   my $input_file  = sprintf '%s/%s', $job->job_dir, $job_data->{'input_file'};
 
-  if (-T $input_file) {
+  if (-T $input_file && $input_file !~ /\.gz$/ && $input_file !~ /\.zip$/) { # TODO - check if the file is binary!
     if (-s $input_file <= 1024) {
       $job_data->{"text_$job_data->{'format'}"} = join('', file_get_contents($input_file));
     } else {
