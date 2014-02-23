@@ -36,15 +36,24 @@ use EnsEMBL::Web::Tools::FileSystem qw(create_path remove_empty_path copy_dir_co
 use base qw(EnsEMBL::Web::Object);
 
 sub caption               { return 'Tools'; } # override in child class
-sub short_caption         { return 'Tools'; } # override in child class
+sub short_caption         { return $_[1] && $_[1] eq 'global' ? 'Jobs' : 'Tools'; } # TODO - change it for 76
 sub long_caption          { return 'Tools'; } # override in child class
 sub default_error_message { return 'Some error occurred while running the job.'; }
 
+sub default_action { # TODO - modify for 76
+  my $self  = shift;
+  my $hub   = $self->hub;
+  my $job   = $self->get_sub_object('VEP')->get_requested_job;
+  return join '/', 'VEP', $hub->type eq 'Tools' ? $hub->function || () : $job && $job->status eq 'done' && 'Results' || ();
+}
+
 sub get_sub_object {
   ## Gets the actual web object according to the 'action' part of the url
-  ## @return Blast or VEP web object if available for the hub->action, Tools object otherwise
+  ## @param Object type if action part is missing or invalid
+  ## @return Blast or VEP web object if available for the hub->action (or the param provided), Tools object otherwise
   my $self = shift;
-  return $self->{'_sub_object'} ||= ref $self eq __PACKAGE__ && $self->new_object($self->hub->action, {}, $self->__data) || $self;
+  my $type = shift || $self->hub->action || '';
+  return $self->{"_sub_object_$type"} ||= $type && ref $self eq __PACKAGE__ && $self->new_object($type, {}, $self->__data) || $self;
 }
 
 sub ticket_type {
