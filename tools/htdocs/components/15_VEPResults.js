@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-Ensembl.Panel.VEPResults = Ensembl.Panel.Content.extend({
+Ensembl.Panel.VEPResults = Ensembl.Panel.ContentTools.extend({
   init: function () {
     var panel = this;
     
@@ -25,6 +25,22 @@ Ensembl.Panel.VEPResults = Ensembl.Panel.Content.extend({
     this.el.find('a.filter_toggle').on('click', this.filter_toggle);
     
     this.el.find('input.autocomplete').on('focus', {panel: this}, this.filter_autocomplete);
+    
+    this.el.find('form._apply_filter').on('submit', function(e) {
+      e.preventDefault();
+
+      var ajaxUrl   = $(this).find('input[name=ajax_url]').remove().val();
+      var urlParams = $.map($(this).serializeArray(), function(field) {
+        return field.name + '=' + field.value;
+      }).sort().join(';');
+
+      panel.reload(window.location.href.split('?')[0] + '?' + urlParams, ajaxUrl + '?' + urlParams);
+    });
+
+    this.el.find('a._reload').on('click', function(e) {
+      e.preventDefault();
+      panel.reload(this.href, $(this).find('input').val());
+    });
   },
   
   zmenu: function(e){
@@ -34,6 +50,7 @@ Ensembl.Panel.VEPResults = Ensembl.Panel.Content.extend({
   },
   
   filter_toggle: function(e){
+    e.preventDefault();
     $("." + this.rel).each(function() {
       this.style.display = (this.style.display == 'none' ? '' : 'none');
     });
@@ -69,5 +86,16 @@ Ensembl.Panel.VEPResults = Ensembl.Panel.Content.extend({
       }
       
       return false;
+  },
+
+  reload: function(url, ajaxUrl) {
+    this.toggleSpinner(true);
+    this.updateLocation(url);
+    this.getContent(ajaxUrl + ';update_panel=1', this.el.addClass('no-spinner'), null, true); // since we have our own spinner, we add this class to hide the Content panel's spinner
+  },
+
+  destructor: function() {
+    this.toggleSpinner(false);
+    this.base.apply(this, arguments);
   }
 });

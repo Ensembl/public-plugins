@@ -24,3 +24,5 @@ div.toolbox-body { padding:5px; }
 
 div.filter-box { background-color:#667aa6; border-radius: 3px; color: white; margin: 3px; padding: 3px; }
 div.location-filter-box { background-color:#666666; }
+
+.no-spinner .spinner { display:  none; }
