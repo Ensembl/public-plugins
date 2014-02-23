@@ -44,17 +44,24 @@ sub content {
 
   my $input_fieldset  = $form->add_fieldset({'legend' => 'Input', 'class' => '_stt_input', 'no_required_notes' => 1});
   my %favourites      = map { $_ => 1 } @{$hub->get_favourite_species};
-  my @species         = sort { ($a->{'fav'} xor $b->{'fav'}) ? $b->{'fav'} || -1 : $a->{'caption'} cmp $b->{'caption'} } map {'value' => $_, 'caption' => $sd->species_label($_, 1).': '.$sd->get_config($_, 'ASSEMBLY_NAME'), 'fav' => $favourites{$_} || 0}, $sd->valid_species;
+  my @species         = sort { ($a->{'fav'} xor $b->{'fav'}) ? $b->{'fav'} || -1 : $a->{'caption'} cmp $b->{'caption'} } map {'value' => $_, 'caption' => $sd->species_label($_, 1), 'asm' => $sd->get_config($_, 'ASSEMBLY_NAME'), 'fav' => $favourites{$_} || 0}, $sd->valid_species;
   my $current_species = $hub->species;
   my $input_formats   = INPUT_FORMATS;
 
   $input_fieldset->add_field({
-    'type'    => 'dropdown',
-    'name'    => 'species',
-    'label'   => 'Species',
-    'values'  => \@species,
-    'value'   => $current_species,
-    'class'   => '_stt'
+    'label'     => 'Species',
+    'elements'  => [{
+      'type'      => 'dropdown',
+      'name'      => 'species',
+      'values'    => \@species,
+      'value'     => $current_species,
+      'class'     => '_stt'
+    }, {
+      'type'      => 'noedit',
+      'no_input'  => 1,
+      'value'     => 'Assembly: '. join('', map { sprintf '<span class="_stt_%s">%s</span>', $_->{'value'}, $_->{'asm'} } @species),
+      'is_html'   => 1
+    }]
   });
 
   $input_fieldset->add_field({
@@ -66,7 +73,12 @@ sub content {
   $input_fieldset->add_field({
     'type'    => 'dropdown',
     'name'    => 'format',
-    'label'   => 'Input file format (<a href="/info/docs/tools/vep/vep_formats.html#input" class="popup">details</a>)',
+    'label'   => sprintf('Input file format (<a href="%s#input" class="popup">details</a>)', $hub->url({
+      'type'    => 'Help',
+      'action'  => 'View',
+      'id'      => { $sd->multiX('ENSEMBL_HELP') }->{'Tools/VEP/VEP_formats'},
+      '__clear' => 1
+    })),
     'values'  => $input_formats,
     'value'   => 'ensembl',
     'class'   => '_stt format'
@@ -188,7 +200,7 @@ sub content {
         'children'    => [{
           'node_name'   => 'a',
           'rel'         => '_vep'.$section->{'id'},
-          'class'       => ['toggle', 'set_cookie', $show ? 'open' : 'closed'],
+          'class'       => ['toggle', '_slide_toggle', 'set_cookie', $show ? 'open' : 'closed'],
           'href'        => '#vep'.$section->{'id'},
           'title'       => $section->{'caption'},
           'inner_HTML'  => $section->{'title'}
