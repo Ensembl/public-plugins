@@ -119,7 +119,7 @@ sub content {
             'node_name'   => 'a',
             'href'        => '',
             'class'       => 'button _tickets_refresh',
-            'inner_HTML'  => '<span class="tickets-refresh"></span><span class="hidden"><span class="pietimer-pie pietimer-spinner"></span><span class="pietimer-pie pietimer-filler"></span><span class="pietimer-mask"></span><span class="pietimer-border-container"><span class="pietimer-border"></span></span></span><span>Refresh</span>'
+            'inner_HTML'  => '<span class="tickets-refresh"></span><span class="hidden tickets-timer"></span><span>Refresh</span>'
           }]
         }, {
           'node_name'   => 'div',

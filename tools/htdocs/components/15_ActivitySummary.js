@@ -45,9 +45,9 @@ Ensembl.Panel.ActivitySummary = Ensembl.Panel.ContentTools.extend({
       panel.refresh(false, false, true);
     });
 
-    this.elLk.refreshButtonReload   = this.elLk.refreshButton.children().eq(0);
-    this.elLk.refreshButtonPieTimer = this.elLk.refreshButton.children().eq(1);
-    this.elLk.refreshButtonText     = this.elLk.refreshButton.children().eq(2);
+    this.elLk.refreshButtonReload = this.elLk.refreshButton.children().eq(0);
+    this.elLk.refreshButtonTimer  = this.elLk.refreshButton.children().eq(1);
+    this.elLk.refreshButtonText   = this.elLk.refreshButton.children().eq(2);
 
     // Edit icons
     this.el.find('._ticket_edit').on('click', function() {
@@ -109,16 +109,16 @@ Ensembl.Panel.ActivitySummary = Ensembl.Panel.ContentTools.extend({
 
     this.elLk.refreshButtonReload.toggle(status === 'cleartimer');
     this.elLk.refreshButtonText.html(status === 'refreshing' ? 'Refreshing now&#8230;' : 'Refresh');
-    this.elLk.refreshButtonPieTimer.toggleClass('pietimer-paused', status === 'refreshing');
 
     if (status === 'refreshing') {
-//      this.elLk.refreshButtonPieTimer.removeClass('pietimer');
+      this.elLk.refreshButtonTimer.hide();
     } else {
-      this.elLk.refreshButtonPieTimer.removeClass('pietimer').addClass('pietimer-inactive').toggle(status !== 'cleartimer');
+      this.elLk.refreshButtonTimer.toggle(status !== 'cleartimer');
       if (status === 'inittimer') {
-        setTimeout(function() {
-          panel.elLk.refreshButtonPieTimer.addClass('pietimer').removeClass('pietimer-inactive');
-        }, 0);
+        panel.elLk.refreshButtonTimer.text(this.POLL_INTERVAL);
+        Ensembl.Panel.ActivitySummary.counter = setInterval(function() {
+          panel.elLk.refreshButtonTimer.text(parseInt(panel.elLk.refreshButtonTimer.text()) - 1);
+        }, 1000);
       }
     }
   },
@@ -171,6 +171,7 @@ Ensembl.Panel.ActivitySummary = Ensembl.Panel.ContentTools.extend({
    * Clears the timers for polling ticket update and showing timer
    */
     clearTimeout(Ensembl.Panel.ActivitySummary.poll);
+    clearInterval(Ensembl.Panel.ActivitySummary.counter);
   },
 
   destructor: function() {

@@ -25,6 +25,7 @@ div.error-popup .error-pad        { background-color: [[PANEL_BG]]; }
 a.hidelink                        { visibility: hidden; }
 div.job_error_message             { background-color: [[PANEL_BG]]; white-space: pre; border: [[PANEL_BORDER]] solid 1px; padding: 8px; font-family: Courier; overflow-x: auto; margin-bottom: 8px; }
 span.tickets-refresh              { background: url('/i/16/rev/reload.png') no-repeat left center; float: left; height: 16px; width: 20px; }
+span.tickets-timer                { border-radius: 8px; color: [[BUTTON_BG]]; cursor: default; font-size: 80%; font-weight: bold; padding: 2px 3px 1px; background-color: [[PAGE_BG]]; float: left; height: 12px; line-height: 12px; margin-right: 6px; text-align: center; width: 12px; }
 
 /* Menu for 'Blast this sequence' on other sequence views */
 div.blast-popup                   { position: absolute; }
