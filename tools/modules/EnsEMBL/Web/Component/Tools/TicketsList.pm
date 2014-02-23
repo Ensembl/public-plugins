@@ -44,6 +44,16 @@ sub content {
     'exportable'  => 0
   });
 
+  my $status_tips   = {
+    'not_submitted'   => q(This job could not be submitted due to some problems. Please click on the 'View details' icon for more information),
+    'queued'          => q(Your job has been submitted and will be processed soon.),
+    'submitted'       => q(Your job has been submitted and will be processed soon.),
+    'running'         => q(Your job is currently being processed. The page will refresh once it's finished running.),
+    'done'            => q(This job is finished. Please click on 'View Results' link to see the results),
+    'failed'          => q(This job has failed. Please click on the 'View details' icon for more information),
+    'deleted'         => q(Your ticket has been deleted. This usually happens if the ticket is too old.)
+  };
+
   if ($tickets && @$tickets > 0) {
 
     foreach my $ticket (@$tickets) {
@@ -54,13 +64,14 @@ sub content {
       for ($ticket->job) {
         my $job_number  = $_->job_number;
         my $hive_status = $_->hive_status;
-        push @jobs_summary, sprintf('<p><img class="job-species _ht" title="%s" src="%sspecies/16/%s.png" alt="" height="16" width="16"><span class="job-desc">%s%s</span><span class="job-status job-status-%s left-margin">%s</span>%s%s',
+        push @jobs_summary, sprintf('<p><img class="job-species _ht" title="%s" src="%sspecies/16/%s.png" alt="" height="16" width="16"><span class="job-desc">%s%s</span><span class="_ht job-status job-status-%s left-margin" title="%s">%s</span>%s%s',
           $sd->species_label($_->species, 1),
           $self->img_url,
           $_->species,
           $job_number ? "Job $job_number: " : '',
           $_->job_desc || '',
           $hive_status,
+          $status_tips->{$hive_status},
           ucfirst $hive_status =~ s/_/ /gr,
           $self->job_results_link($ticket, $_),
           $self->job_buttons($ticket, $_)
