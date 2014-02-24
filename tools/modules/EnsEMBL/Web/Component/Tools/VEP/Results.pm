@@ -143,8 +143,17 @@ sub content {
     $header_titles{$header} ||= $tmp;
   }
   
+  # hash for storing seen IDs, used to link to BioMart
+  my %seen_ids;
+  
   # linkify row content
   foreach my $row(@$rows) {
+    
+    # store IDs
+    push @{$seen_ids{vars}}, $row->{Existing_variation} if defined($row->{Existing_variation}) && $row->{Existing_variation} =~ /\w+/;
+    push @{$seen_ids{genes}}, $row->{Gene} if defined($row->{Gene}) && $row->{Gene} =~ /\w+/;
+    
+    # linkify content
     $row->{$headers->[$_]} = $self->linkify($headers->[$_], $row->{$headers->[$_]}, $species) for (0..$#{$headers});
   }
   
@@ -552,6 +561,65 @@ sub content {
       $_, ($_ eq 'TXT' ? ' (best for Excel)' : ''), $filtered_url, lc($_), $_
     ) for qw(VCF VEP TXT);
     $html .= '</span></div>';
+  }
+  
+  
+  
+  ## BIOMART
+  ##########
+  
+  if($hub->species_defs->ENSEMBL_MART_ENABLED) {
+    
+    # uniquify lists, retain order
+    foreach my $key(keys %seen_ids) {
+      my %tmp_seen;
+      my @tmp_list;
+      
+      foreach my $item(@{$seen_ids{$key}}) {
+        push @tmp_list, $item unless $tmp_seen{$item};
+        $tmp_seen{$item} = 1;
+      }
+      
+      $seen_ids{$key} = \@tmp_list;
+    }
+    
+    # generate mart species name
+    my @split = split /\_/, $species;
+    my $m_species = lc(substr($split[0], 0, 1)).$split[1];
+    
+    my $var_mart_url =
+      '/biomart/martview?VIRTUALSCHEMANAME=default'.
+      '&ATTRIBUTES='.
+      $m_species.'_snp.default.snp.refsnp_id|'.
+      $m_species.'_snp.default.snp.refsnp_source|'.
+      $m_species.'_snp.default.snp.chr_name|'.
+      $m_species.'_snp.default.snp.chrom_start'.
+      '&FILTERS='.
+      $m_species.'_snp.default.filters.snp_filter.%22'.join(",", @{$seen_ids{vars} || []}).'%22'.
+      '&VISIBLEPANEL=filterpanel';
+    
+    my $gene_mart_url =
+      '/biomart/martview?VIRTUALSCHEMANAME=default'.
+      '&ATTRIBUTES='.
+      $m_species.'_gene_ensembl.default.feature_page.ensembl_gene_id|'.
+      $m_species.'_gene_ensembl.default.feature_page.chromosome_name|'.
+      $m_species.'_gene_ensembl.default.feature_page.start_position|'.
+      $m_species.'_gene_ensembl.default.feature_page.end_position'.
+      '&FILTERS='.
+      $m_species.'_gene_ensembl.default.filters.ensembl_gene_id.%22'.join(",", @{$seen_ids{genes} || []}).'%22'.
+      '&VISIBLEPANEL=filterpanel';
+    
+    $html .= '<div><hr><b>BioMart</b><span style="float:right; margin-left:10px;">';
+    
+    $html .= $seen_ids{vars} ? sprintf(
+      '<a class="_ht" title="Query BioMart with co-located variants in this view" rel="external" href="%s">Variants</a> ',
+      $var_mart_url) : 'Variants ';
+    
+    $html .= $seen_ids{genes} ? sprintf(
+      '<a class="_ht" title="Query BioMart with genes in this view" rel="external" href="%s">Genes</a>',
+      $gene_mart_url) : 'Genes ';
+    
+    $html .= '</div>';
   }
   
   $html .= '</div></div>';
