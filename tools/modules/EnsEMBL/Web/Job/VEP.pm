@@ -31,7 +31,7 @@ sub process_for_hive_submission {
   my $species     = $job_data->{'species'};
   my $vep_configs = {};
 
-  $vep_configs->{'format'}  = $job_data->{'format'};
+  $vep_configs->{'format'}  = $job_data->{'format_'.$job_data->{'species'}};
   $vep_configs->{'species'} = lc $species;
 
   # refseq
@@ -99,6 +99,13 @@ sub process_for_hive_submission {
 
   # extra and identifiers
   $job_data->{$_} and $vep_configs->{$_} = $job_data->{$_} for qw(numbers canonical domains biotype symbol ccds protein hgvs coding_only);
+  
+  # check for incompatibilities
+  if($job_data->{most_severe} || $job_data->{summary}) {
+    for(qw(protein symbol sift polyphen ccds canonical numbers domains)) {
+      $self->{'_error'} = "Option \"$_\" is not compatible with selected method of restricting results" if $job_data->{$_} && $job_data->{$_} ne 'no';
+    }
+  }
 
   return { 'species' => $vep_configs->{'species'}, 'work_dir' => $rose_object->job_dir, 'config' => $vep_configs };
 }

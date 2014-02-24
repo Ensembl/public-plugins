@@ -37,7 +37,7 @@ sub init_from_user_input {
   my $self      = shift;
   my $hub       = $self->hub;
   my $species   = $hub->param('species');
-  my $format    = $hub->param('format');
+  my $format    = $hub->param('format_'.$species);
 
   $hub->param('text', $hub->param("text_$format"));
   

@@ -101,6 +101,7 @@ sub convert_to_txt {
   
   my $return = '#'.join("\t", map {s/^ID$/Uploaded_variation/; $_} @$headers)."\n";
   foreach my $row(@$rows) {
+    $row->{Uploaded_variation} ||= $row->{ID} if $row->{ID};
     $return .= join("\t", map {(defined($row->{$_}) && $row->{$_} ne '') ? $row->{$_} : '-'} @$headers);
     $return .= "\n";
   }
@@ -128,6 +129,7 @@ sub convert_to_vep {
   
   foreach my $row(@$rows) {
     my $first = 1;
+    $row->{Uploaded_variation} ||= $row->{ID} if $row->{ID};
     
     for my $j(0..$#{$headers}) {
       
@@ -185,7 +187,7 @@ sub parse_content {
       @csq_headers = split '\|', $1;
     }
     elsif(s/^#//) {
-      @headers = split "\t";
+      @headers = split /\s+/;
       
       # we don't want anything after the INFO field (index pos 8)
       for my $i(8..$#headers) {
@@ -200,7 +202,7 @@ sub parse_content {
     elsif(!/^#/) {
       $line_count++;
       
-      my @split = split /\t/;
+      my @split = split /\s+/;
       my %raw_data = map {$headers[$_] => $split[$_]} 0..$#split;
       
       $raw_data{CHROM} =~ s/^chr(om)?(osome)?//i;

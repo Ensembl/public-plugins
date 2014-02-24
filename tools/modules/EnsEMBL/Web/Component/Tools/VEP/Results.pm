@@ -43,6 +43,7 @@ sub content {
   return unless defined $job && $job->status eq 'done';
   
   my $job_data = $job->job_data;
+  my $species  = $job->species;
   
   # this method reconstitutes the Tmpfile objects from the filenames
   my $output_file_obj = $object->result_files->{'output_file'};
@@ -142,7 +143,7 @@ sub content {
   
   # linkify row content
   foreach my $row(@$rows) {
-    $row->{$headers->[$_]} = $self->linkify($headers->[$_], $row->{$headers->[$_]}, $job->species) for (0..$#{$headers});
+    $row->{$headers->[$_]} = $self->linkify($headers->[$_], $row->{$headers->[$_]}, $species) for (0..$#{$headers});
   }
   
   # extras
@@ -173,7 +174,7 @@ sub content {
   $html .= '<input type="hidden" class="panel_type" value="VEPResults" />';
   
   # construct hash for autocomplete
-  my $vdbc = $hub->species_defs->get_config($job->species, 'databases')->{'DATABASE_VARIATION'};
+  my $vdbc = $hub->species_defs->get_config($species, 'databases')->{'DATABASE_VARIATION'};
   
   my %ac = (
     Allele => [
@@ -187,7 +188,7 @@ sub content {
     ],
     SIFT => $vdbc->{'SIFT_VALUES'},
     PolyPhen => $vdbc->{'POLYPHEN_VALUES'},
-    BIOTYPE => $hub->species_defs->get_config($job->species, 'databases')->{'DATABASE_CORE'}->{'tables'}{'transcript'}{'biotypes'},
+    BIOTYPE => $hub->species_defs->get_config($species, 'databases')->{'DATABASE_CORE'}->{'tables'}{'transcript'}{'biotypes'},
   );
   
   my $ac_json = $self->jsonify(\%ac);
@@ -523,9 +524,9 @@ sub content {
 
   $html .= '<div class="toolbox">';
   $html .= '<div class="toolbox-head"><img src="/i/16/download.png" style="vertical-align:top;"> Download</div><div style="padding:5px;">';
-  
-  my $download_url = sprintf('/%s/vep_download?file=%s;name=%s;persistent=%s;prefix=vep', $hub->species, $file_loc, $ticket_name.'.txt', $ticket->owner_type eq 'user' ? 1 : 0);
-  
+
+  my $download_url = sprintf('/%s/vep_download?file=%s;name=%s;persistent=%s;prefix=vep', $species, $file_loc, $ticket_name.'.txt', $ticket->owner_type eq 'user' ? 1 : 0);
+
   # all
   $html .= '<div><b>All</b><span style="float:right; margin-left:10px;">';
   $html .= sprintf(
@@ -540,7 +541,7 @@ sub content {
     $filtered_name =~ s/^\s+//g;
     $filtered_name =~ s/\s+/\_/g;
     
-    my $filtered_url = sprintf('/%s/vep_download?file=%s;name=%s;persistent=%s;prefix=vep', $hub->species, $file_loc, $filtered_name.'.txt', $ticket->owner_type eq 'user' ? 1 : 0);
+    my $filtered_url = sprintf('/%s/vep_download?file=%s;name=%s;persistent=%s;prefix=vep', $species, $file_loc, $filtered_name.'.txt', $ticket->owner_type eq 'user' ? 1 : 0);
     $filtered_url .= ';'.join(";", map {"$_=$content_args{$_}"} grep {!/to|from/} keys %content_args);
     
     $html .= '<div><hr><b>Filtered</b><span style="float:right; margin-left:10px;">';
