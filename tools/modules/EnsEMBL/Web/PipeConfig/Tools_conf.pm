@@ -82,16 +82,16 @@ sub default_options {
     'pipeline_db'           => {
       '-host'                 =>  $sd->multidb->{'DATABASE_WEB_HIVE'}{'HOST'},
       '-port'                 =>  $sd->multidb->{'DATABASE_WEB_HIVE'}{'PORT'}, 
-      '-user'                 =>  $sd->DATABASE_WRITE_USER,
-      '-pass'                 =>  $sd->DATABASE_WRITE_PASS,
+      '-user'                 =>  $sd->multidb->{'DATABASE_WEB_HIVE'}{'USER'} || $sd->DATABASE_WRITE_USER,
+      '-pass'                 =>  $sd->multidb->{'DATABASE_WEB_HIVE'}{'PASS'} || $sd->DATABASE_WRITE_PASS,
       '-dbname'               =>  $sd->multidb->{'DATABASE_WEB_HIVE'}{'NAME'},
       '-driver'               =>  'mysql',
     },
     'ticket_db'             => {
       '-host'                 =>  $sd->multidb->{'DATABASE_WEB_TOOLS'}{'HOST'},
       '-port'                 =>  $sd->multidb->{'DATABASE_WEB_TOOLS'}{'PORT'},
-      '-user'                 =>  $sd->DATABASE_WRITE_USER,
-      '-pass'                 =>  $sd->DATABASE_WRITE_PASS,
+      '-user'                 =>  $sd->multidb->{'DATABASE_WEB_TOOLS'}{'USER'} || $sd->DATABASE_WRITE_USER,
+      '-pass'                 =>  $sd->multidb->{'DATABASE_WEB_TOOLS'}{'PASS'} || $sd->DATABASE_WRITE_PASS,
       '-dbname'               =>  $sd->multidb->{'DATABASE_WEB_TOOLS'}{'NAME'},
     },
 

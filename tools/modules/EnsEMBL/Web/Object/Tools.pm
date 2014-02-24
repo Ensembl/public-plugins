@@ -122,8 +122,8 @@ sub hive_adaptor {
     my $hivedb  = $sd->multidb->{'DATABASE_WEB_HIVE'};
 
     $self->{'_hive_adaptor'} = Bio::EnsEMBL::Hive::DBSQL::DBAdaptor->new(
-      -user   => $sd->DATABASE_WRITE_USER,
-      -pass   => $sd->DATABASE_WRITE_PASS,
+      -user   => $hivedb->{'USER'} || $sd->DATABASE_WRITE_USER,
+      -pass   => $hivedb->{'PASS'} || $sd->DATABASE_WRITE_PASS,
       -host   => $hivedb->{'HOST'},
       -port   => $hivedb->{'PORT'},
       -dbname => $hivedb->{'NAME'},
