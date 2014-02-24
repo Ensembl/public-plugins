@@ -840,13 +840,13 @@ class Request
     })
     if !@req_outstanding() then @hub.spin_up()
     @xhrs[idx] = xhr
-    xhr.then (data) =>
+    xhr = xhr.then (data) =>
       delete @xhrs[idx]
       if !@req_outstanding() then @hub.spin_down()
       if data.error
         @hub.fail()
         $('.searchdown-box').css('display','block')
-        return $.Deferred().reject().promise()
+        return $.Deferred().reject()
       else
         @hub.unfail()
         return data
