@@ -65,7 +65,7 @@ sub update_conf {
     '--password'    => undef,                                                                       # Not used by default
     '--port'        => undef,                                                                       # Defaults to 5306
     '--fork'        => 4,                                                                           # Enable forking, using 4 forks
-    '--dir'         => '/data_ensembl/vep',                                                         # path to vep cache files
+    '--dir'         => '/data_ensembl/vep/'.$SiteDefs::ENSEMBL_VERSION                              # path to vep cache files
   };
   $SiteDefs::ENSEMBL_VEP_SCRIPT                 = 'ensembl-tools/scripts/variant_effect_predictor/variant_effect_predictor.pl';
                                                                                                     # location of the VEP script accessible to the local machine or LSF host running the job
