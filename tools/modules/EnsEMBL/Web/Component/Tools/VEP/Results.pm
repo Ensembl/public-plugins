@@ -133,7 +133,9 @@ sub content {
     'CELL_TYPE' => 'Cell type',
     'CANONICAL' => 'Canonical',
     'SYMBOL' => 'Symbol',
-    'DOMAINS' => 'Domains'
+    'SYMBOL_SOURCE' => 'Symbol source',
+    'DOMAINS' => 'Domains',
+    'STRAND' => 'Feature strand',
   );
   foreach my $header(grep {/\_/} @$headers) {
     my $tmp = $header;
