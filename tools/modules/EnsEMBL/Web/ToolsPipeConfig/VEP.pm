@@ -38,7 +38,7 @@ sub pipeline_analyses {
 
   my $species_defs    = $conf->species_defs;
   my $script_options  = $species_defs->ENSEMBL_VEP_SCRIPT_DEFAULT_OPTIONS;
-  my $perl_bin        = join ' ', $species_defs->ENSEMBL_TOOLS_PERL_BIN, '-I', $species_defs->ENSEMBL_TOOLS_BIOPERL_DIR, map(sprintf('-I %s/%s', $species_defs->ENSEMBL_LSF_CODE_LOCATION, $_), $species_defs->ENSEMBL_TOOLS_LIB_DIRS);
+  my $perl_bin        = join ' ', $species_defs->ENSEMBL_TOOLS_PERL_BIN, '-I', $species_defs->ENSEMBL_TOOLS_BIOPERL_DIR, map(sprintf('-I %s/%s', $species_defs->ENSEMBL_LSF_CODE_LOCATION, $_), @{$species_defs->ENSEMBL_TOOLS_LIB_DIRS});
 
   return [{
     '-logic_name'     => 'VEP',
