@@ -1319,6 +1319,7 @@
       'facet.mincount': 1,
       facet: true
     };
+    $(document).trigger('faceting_unknown', [update_seq]);
     return request.raw_ajax(params).then(function(data) {
       var all_facets, facets, _ref, _ref1, _ref2, _ref3;
       if (update_seq !== current_update_seq) {

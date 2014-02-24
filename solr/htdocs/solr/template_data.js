@@ -743,6 +743,17 @@
         return [spec, data];
       },
       postproc: function(el, odata) {
+        $(document).on('faceting_unknown', function(e, update_seq) {
+          return $('.table_faceter', el).each(function() {
+            if ($(document).data('update_seq') !== update_seq) {
+              return;
+            }
+            if ($(this).data('update_seq') === update_seq) {
+              return;
+            }
+            return $(this).empty();
+          });
+        });
         return $(document).on('faceting_known', function(e, faceter, query, num, state, update_seq) {
           $('.table_faceter', el).each(function() {
             var fav_order, k, key, members, model, order, short_num, templates, _i, _len;
@@ -772,6 +783,7 @@
             }
             model.key = key;
             templates = $(document).data('templates');
+            $(this).data('update_seq', update_seq);
             return $(this).empty().append(templates.generate('faceter_inner', model));
           });
           return $('#main_holder').css('min-height', $('.solr_sidebar').outerHeight(true) + $('.solr_sidebar').offset().top);
