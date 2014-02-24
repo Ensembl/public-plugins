@@ -74,7 +74,7 @@ sub render_assembly_table {
   my ($releases, $species, $release_species, $table_count) = @_;
   return unless @$releases;
 
-  my $border = 'border-style:solid;border-color:#fff;border-width:0 0 1px 0';
+  my $border = 'border-style:solid;border-color:#fff;border-width:0 1px 1px 0';
   my $header = qq(<tr>
     <th style="width:20%;$border">&nbsp;</th>
   );
