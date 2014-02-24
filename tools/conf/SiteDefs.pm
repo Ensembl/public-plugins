@@ -56,9 +56,16 @@ sub update_conf {
 
   # VEP configs
   $SiteDefs::ENSEMBL_VEP_ENABLED                = 1;                                                # Flag to enable/disable VEP
-  $SiteDefs::VEP_CGI_POST_MAX                   = 52428800;                                         # 50MB limit for VEP input files
+  $SiteDefs::ENSEMBL_VEP_CGI_POST_MAX           = 52428800;                                         # 50MB limit for VEP input files
   $SiteDefs::ENSEMBL_VEP_LSF_QUEUE              = 'VEP';                                            # LSF queue for VEP jobs, if running on farm
-  $SiteDefs::ENSEMBL_VEP_CACHE                  = '/data_ensembl/vep';                              # path to vep cache files
+  $SiteDefs::ENSEMBL_VEP_SCRIPT_DEFAULT_OPTIONS = {                                                 # Default options for command line vep script (keys with value undef get ignored)
+    '--host'        => undef,                                                                       # Database host (defaults to ensembldb.ensembl.org)
+    '--user'        => undef,                                                                       # Defaults to 'anonymous'
+    '--password'    => undef,                                                                       # Not used by default
+    '--port'        => undef,                                                                       # Defaults to 5306
+    '--fork'        => 4,                                                                           # Enable forking, using 4 forks
+    '--dir'         => '/data_ensembl/vep',                                                         # path to vep cache files
+  };
   $SiteDefs::ENSEMBL_VEP_SCRIPT                 = 'ensembl-tools/scripts/variant_effect_predictor/variant_effect_predictor.pl';
                                                                                                     # location of the VEP script accessible to the local machine or LSF host running the job
   $SiteDefs::ENSEMBL_VEP_FILTER_SCRIPT          = 'ensembl-tools/scripts/variant_effect_predictor/filter_vep.pl';

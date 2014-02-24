@@ -35,27 +35,29 @@ sub resource_classes {
 
 sub pipeline_analyses {
   my ($class, $conf) = @_;
-  my $sd = $conf->species_defs;
+
+  my $species_defs    = $conf->species_defs;
+  my $script_options  = $species_defs->ENSEMBL_VEP_SCRIPT_DEFAULT_OPTIONS;
 
   return [{
     '-logic_name'     => 'VEP',
     '-module'         => 'EnsEMBL::Web::RunnableDB::VEP::Submit',
     '-parameters'     => {
       'ticket_db'       => $conf->o('ticket_db'),
-      'cache_dir'       => $sd->ENSEMBL_VEP_CACHE,
-      'script'          => $conf->o('ensembl_codebase').'/'.$sd->ENSEMBL_VEP_SCRIPT,
-      'perl_bin'        => $sd->ENSEMBL_TOOLS_PERL_BIN
+      'script'          => $conf->o('ensembl_codebase').'/'.$species_defs->ENSEMBL_VEP_SCRIPT,
+      'script_options'  => { map { defined $script_options->{$_} ? ( $_ => $script_options->{$_} ) : () } keys %$script_options }, # filter out the undef values
+      'perl_bin'        => $species_defs->ENSEMBL_TOOLS_PERL_BIN
     },
     '-hive_capacity'  => 15,
-    '-meadow_type'      => 'LSF',
-    '-rc_name'          => $conf->species_defs->ENSEMBL_VEP_LSF_QUEUE
+    '-meadow_type'    => 'LSF',
+    '-rc_name'        => $conf->species_defs->ENSEMBL_VEP_LSF_QUEUE
   }];
 }
 
 sub pipeline_validate {
   my ($class, $conf) = @_;
 
-  my $sd = $conf->species_defs;
+  my $species_defs = $conf->species_defs;
   my @errors;
 
   # TODO

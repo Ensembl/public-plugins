@@ -32,30 +32,18 @@ use EnsEMBL::Web::Tools::FileHandler qw(file_get_contents);
 sub run {
   my $self = shift;
 
-  my $perl_bin  = $self->param('perl_bin');
-  my $script    = $self->param('script');
-  my $cache_dir = $self->param('cache_dir');
-  my $work_dir  = $self->param('work_dir');
-  my $config    = $self->param('config');
-  my $log_file  = "$work_dir/lsf_log.txt";
+  my $perl_bin        = $self->param('perl_bin');
+  my $script          = $self->param('script');
+  my $work_dir        = $self->param('work_dir');
+  my $config          = $self->param('config');
+  my $options         = $self->param('script_options') || {};
+  my $log_file        = "$work_dir/lsf_log.txt";
 
-  my $options   = {
-    '--force'       => '',
-    '--quiet'       => '',
-    '--vcf'         => '',
-    '--tabix'       => '',
-    '--fork'        => 4,
-    '--stats_text'  => '',
-    '--dir'         => $cache_dir,
-    '--cache'       => ''
-  };
+  $options->{"--$_"}  = '' for qw(force quiet vcf tabix stats_text cache); # we need these options set on always!
+  $options->{"--$_"}  = sprintf '%s/%s', $work_dir, delete $config->{$_} for qw(input_file output_file stats_file);
+  $options->{"--$_"}  = $config->{$_} eq 'yes' ? '' : $config->{$_} for grep { defined $config->{$_} && $config->{$_} ne 'no' } keys %$config;
 
-  $options->{"--$_"} = sprintf '%s/%s', $work_dir, delete $config->{$_} for qw(input_file output_file stats_file);
-  for (keys %$config) {
-    $options->{"--$_"} = $config->{$_} eq 'yes' ? '' : $config->{$_} if defined $config->{$_} && $config->{$_} ne 'no';
-  }
-
-  my $command = EnsEMBL::Web::SystemCommand->new($self, "$perl_bin $script", $options)->execute({'log_file' => $log_file});
+  my $command         = EnsEMBL::Web::SystemCommand->new($self, "$perl_bin $script", $options)->execute({'log_file' => $log_file});
 
   return unless $command->error_code;
 
