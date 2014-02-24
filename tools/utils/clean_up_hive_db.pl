@@ -35,11 +35,11 @@ my $sd = new EnsEMBL::Web::SpeciesDefs;
 my $serverroot = "$Bin/../../../";
 
 my $hive_db = $sd->multidb->{'DATABASE_WEB_HIVE'};
-my $db = $hive_db->{'NAME'};
+my $db   = $hive_db->{'NAME'};
 my $host = $hive_db->{'HOST'};
 my $port = $hive_db->{'PORT'};
-my $user = $sd->DATABASE_WRITE_USER;
-my $pass = $sd->DATABASE_WRITE_PASS;
+my $user = $hive_db->{'USER'} || $sd->DATABASE_WRITE_USER;
+my $pass = $hive_db->{'PASS'} || $sd->DATABASE_WRITE_PASS;
 
 my $url = "mysql://$user:$pass".'@'."$host:$port/$db"; 
 my $days = 8; # delete jobs older than 8 days
