@@ -280,12 +280,14 @@ window.pedestrian_templates =
             <span class='solr_beak_p_right'></span>
           </a>
         </div>
+        <!-- not for now: need to re-engineer
         <div class='solr_beak_p_contents solr_perpage_all'>
           <a href="#0">
             <span class='solr_beak_p_left'>Show all results in one page</span>
             <span class='solr_beak_p_right'></span>
           </a>
         </div>
+        -->
       </div>
     """
     directives:
