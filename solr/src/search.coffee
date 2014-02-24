@@ -748,6 +748,7 @@ dispatch_facet_request = (request,state,table,update_seq) ->
     'facet.mincount': 1
     facet: true
   }
+  $(document).trigger('faceting_unknown',[update_seq])
   return request.raw_ajax(params)
     .then (data) =>
       if update_seq != current_update_seq then return $.Deferred().reject()

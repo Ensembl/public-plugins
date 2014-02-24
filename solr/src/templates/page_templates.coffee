@@ -162,6 +162,11 @@ window.page_templates =
       data.faceters = $.solr_config('static.ui.facets_sidebar_order')
       [spec,data]
     postproc: (el,odata) =>
+      $(document).on 'faceting_unknown', (e,update_seq) =>
+        $('.table_faceter',el).each () ->
+          if $(document).data('update_seq') != update_seq then return
+          if $(@).data('update_seq') == update_seq then return
+          $(@).empty()
       $(document).on 'faceting_known', (e,faceter,query,num,state,update_seq) =>
         $('.table_faceter',el).each () ->
           if $(document).data('update_seq') != update_seq then return
@@ -178,6 +183,8 @@ window.page_templates =
           if query[key] then model.values = []
           model.key = key
           templates = $(document).data('templates')
+          # in case we get triggered before faceting_unknown
+          $(@).data('update_seq',update_seq)
           $(@).empty().append(templates.generate('faceter_inner',model))
         $('#main_holder').css('min-height',
                               $('.solr_sidebar').outerHeight(true) +
