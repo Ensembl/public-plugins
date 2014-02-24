@@ -38,6 +38,7 @@ sub pipeline_analyses {
 
   my $species_defs    = $conf->species_defs;
   my $script_options  = $species_defs->ENSEMBL_VEP_SCRIPT_DEFAULT_OPTIONS;
+  my $perl_bin        = join ' ', $species_defs->ENSEMBL_TOOLS_PERL_BIN, '-I', $species_defs->ENSEMBL_TOOLS_BIOPERL_DIR, map(sprintf('-I %s/%s', $species_defs->ENSEMBL_LSF_CODE_LOCATION, $_), $species_defs->ENSEMBL_TOOLS_LIB_DIRS);
 
   return [{
     '-logic_name'     => 'VEP',
@@ -46,7 +47,7 @@ sub pipeline_analyses {
       'ticket_db'       => $conf->o('ticket_db'),
       'script'          => $conf->o('ensembl_codebase').'/'.$species_defs->ENSEMBL_VEP_SCRIPT,
       'script_options'  => { map { defined $script_options->{$_} ? ( $_ => $script_options->{$_} ) : () } keys %$script_options }, # filter out the undef values
-      'perl_bin'        => $species_defs->ENSEMBL_TOOLS_PERL_BIN
+      'perl_bin'        => $perl_bin
     },
     '-hive_capacity'  => 15,
     '-meadow_type'    => 'LSF',

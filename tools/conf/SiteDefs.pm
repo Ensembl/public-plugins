@@ -29,7 +29,7 @@ sub update_conf {
   $SiteDefs::ENSEMBL_TOOLS_PIPELINE_PACKAGE     = 'EnsEMBL::Web::PipeConfig::Tools_conf';           # package read by init_pipeline.pl script from hive to create the hive database
   $ENV{'EHIVE_ROOT_DIR'}                        = $SiteDefs::ENSEMBL_SERVERROOT.'/ensembl-hive/';   # location from there hive scripts on the web server (not the LSF host) can access the hive API
 
-  push @SiteDefs::ENSEMBL_LIB_DIRS, "$SiteDefs::ENSEMBL_SERVERROOT/ensembl-hive/modules",
+  push @SiteDefs::ENSEMBL_LIB_DIRS, "$SiteDefs::ENSEMBL_SERVERROOT/ensembl-hive/modules";
 
   @SiteDefs::ENSEMBL_TOOLS_LIB_DIRS = qw(
     ensembl/modules
@@ -43,7 +43,8 @@ sub update_conf {
     public-plugins
   );
 
-  $SiteDefs::ENSEMBL_TOOLS_PERL_BIN             = join(' ', qw(/usr/local/bin/perl -I /localsw/cvs/bioperl-live), map(sprintf('-I %s/%s', $SiteDefs::ENSEMBL_LSF_CODE_LOCATION, $_), @SiteDefs::ENSEMBL_TOOLS_LIB_DIRS));
+  $SiteDefs::ENSEMBL_TOOLS_PERL_BIN             = '/usr/local/bin/perl';                            # Path to perl bin for machine running the job
+  $SiteDefs::ENSEMBL_TOOLS_BIOPERL_DIR          = $SiteDefs::BIOPERL_DIR;                           # Location of bioperl on the LSF host machine (will be same as BIOPERL_DIR for jobs running locally)
 
   # BLAST configs
   $SiteDefs::ENSEMBL_BLAST_ENABLED              = 1;                                                # Flag to enable/disable BLAST
