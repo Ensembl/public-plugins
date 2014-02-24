@@ -1,5 +1,6 @@
 opensearch
 /sanger/geocity
+/nginx/conf/nginx.conf
 blib/
 .build/
 _build/
