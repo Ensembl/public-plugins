@@ -24,7 +24,7 @@ package EnsEMBL::Web::TmpFile::VcfTabix;
 use strict;
 use Compress::Zlib qw(gzopen $gzerrno);
 
-use base 'EnsEMBL::Web::TmpFile::Text';
+use base 'EnsEMBL::Web::TmpFile::ToolsOutput';
 
 our $species_defs = EnsEMBL::Web::SpeciesDefs->new;
 
