@@ -21,7 +21,7 @@ package EnsEMBL::Web::Object::VEP;
 use strict;
 use warnings;
 
-use EnsEMBL::Web::TmpFile::Text;
+use EnsEMBL::Web::TmpFile::ToolsOutput;
 use EnsEMBL::Web::TmpFile::VcfTabix;
 use EnsEMBL::Web::Tools::FileHandler qw(file_get_contents);
 
@@ -71,7 +71,7 @@ sub result_files {
 
     $self->{'_results_files'} = {
       'output_file' => EnsEMBL::Web::TmpFile::VcfTabix->new('filename' => "$job_dir/$job_config->{'output_file'}"),
-      'stats_file'  => EnsEMBL::Web::TmpFile::Text->new('filename' => "$job_dir/$job_config->{'stats_file'}")
+      'stats_file'  => EnsEMBL::Web::TmpFile::ToolsOutput->new('filename' => "$job_dir/$job_config->{'stats_file'}")
     };
   }
 
