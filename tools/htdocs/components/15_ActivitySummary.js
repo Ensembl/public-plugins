@@ -134,7 +134,11 @@ Ensembl.Panel.ActivitySummary = Ensembl.Panel.ContentTools.extend({
 
     if (!!ticketsDataHash) {
 
-      this.getContent();
+      var memcacheProofURL  = this.params.updateURL;
+          memcacheProofURL  = memcacheProofURL.replace(/\;?mcache\=[0-9]+/, '');
+          memcacheProofURL += ';mcache=' + (new Date()).getTime();
+
+      this.getContent(memcacheProofURL);
 
       Ensembl.EventManager.trigger('toolsRefreshTicket', false); // getContent for the displayed ticket details if any
     }
