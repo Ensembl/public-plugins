@@ -123,7 +123,7 @@ sub content {
   });
 
   my %allowed_formats = map { $_->{'value'} => $_->{'caption'} } @$input_formats;
-  my @user_files      = sort { $b->{'timestamp'} <=> $a->{'timestamp'} } grep { $allowed_formats{$_->{'format'}} } $hub->session->get_data('type' => 'upload'), $hub->user ? $hub->user->uploads : ();
+  my @user_files      = sort { $b->{'timestamp'} <=> $a->{'timestamp'} } grep { $_->{'format'} && $allowed_formats{$_->{'format'}} } $hub->session->get_data('type' => 'upload'), $hub->user ? $hub->user->uploads : ();
 
   if (scalar @user_files) {
     my @to_form = { 'value' => '', 'caption' => '-- Select file --'};
