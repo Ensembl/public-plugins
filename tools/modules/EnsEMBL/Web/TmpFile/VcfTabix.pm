@@ -57,10 +57,12 @@ sub content {
   # get script path and perl binary
   my $script = $species_defs->ENSEMBL_VEP_FILTER_SCRIPT or die "ERROR: No filter_vep.pl script defined (ENSEMBL_VEP_FILTER_SCRIPT)\n";
      $script = join '/', $species_defs->ENSEMBL_SERVERROOT, $script;
-  my $perl   = 'perl';
-
+  my $perl   = join ' ', 'perl', map { $_ =~ /^\// && -e $_ ? ('-I', $_) : () } reverse @INC;
+  my $opts   = $species_defs->ENSEMBL_VEP_FILTER_SCRIPT_OPTIONS || {};
+     $opts   = join ' ', map { defined $opts->{$_} ? "$_ $opts->{$_}" : () } keys %$opts;
+   
   if($args{filter}) {
-    $fh_string .= sprintf("%s %s -filter '%s' -ontology -only_matched 2>&1 | ", $perl, $script, $args{filter});
+    $fh_string .= sprintf("%s %s %s -filter '%s' -ontology -only_matched 2>&1 | ", $perl, $script, $opts, $args{filter});
   }
   
   #print STDERR "$fh_string\n";
