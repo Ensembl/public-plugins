@@ -71,6 +71,12 @@ sub update_conf {
                                                                                                     # location of the VEP script accessible to the local machine or LSF host running the job
   $SiteDefs::ENSEMBL_VEP_FILTER_SCRIPT          = 'ensembl-tools/scripts/variant_effect_predictor/filter_vep.pl';
                                                                                                     # location of the VEP filter script accessible to the web machine for filtering Results pages output
+  $SiteDefs::ENSEMBL_VEP_FILTER_SCRIPT_OPTIONS  = {                                                 # Command line options for VEP filter script
+    '-host'         => undef,
+    '-user'         => undef,
+    '-port'         => undef,
+    '-pass'         => undef
+  };
 }
 
 1;
