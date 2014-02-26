@@ -79,7 +79,6 @@ sub content {
   $colour_json =~ s/\"/\'/g;
   
   my @inputs = (
-    '<input type="hidden" class="panel_type" value="PopulationGraph" />',
     q{<input class="graph_config" type="hidden" name="legendpos" value="'east'" />},
     q{<input class="graph_config" type="hidden" name="legendmark" value="'circle'" />},
     q{<input class="graph_config" type="hidden" name="maxSlices" value="100" />},
