@@ -292,11 +292,23 @@ enter your data and alter various options.</p>
                 options not only loses potentially relevant data, but in some
                 cases may be scientifically misleading. Options:
                     <ul>
-                        <li><b>Show most severe per gene</b> - pick the
-                        transcript that produces the most severely ranked
-                        consequence on a per-gene basis. Note that if a variant
-                        overlaps more than one gene, output for both genes will
-                        be reported. Equivalent to <a
+                        <li><b>Show one selected consequence</b> - pick one
+                        consequence type across all those predicted for the
+                        variant; the output will include transcript- or
+                        feature-specific information. Consequences are chosen by
+                        the canonical, biotype status and length of the
+                        transcript, along with the ranking of the consequence
+                        type according to <a
+                        href="/info/genome/variation/predicted_data.html#consequence_type_table">this
+                        table</a>. This is the best method to use if you are
+                        interested only in one consequence per variant.
+                        Equivalent to <a
+                        href="/info/docs/tools/vep/script/vep_options.html#opt_per_gene">--pick</a></li>
+                        <li><b>Show one selected consequence per gene</b> - pick
+                        one consequence type for each gene using the same
+                        criteria as above. Note that if a variant overlaps more
+                        than one gene, output for each gene will be reported.
+                        Equivalent to <a
                         href="/info/docs/tools/vep/script/vep_options.html#opt_per_gene">--per_gene</a></li>
                         <li><b>Show only list of consequences per variant</b> -
                         give a comma-separated list of all observed consequence
