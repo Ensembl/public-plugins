@@ -7,8 +7,18 @@
 
 <h1>Ensembl Tools</h1>
 
-<p>We provide a number of ready-made tools for processing your data. At the moment, small datasets can be uploaded to our servers and processed online; for larger datasets, we provide an API script that can be downloaded (you will also need to <a href="/info/docs/api/">install our Perl API</a> to use these).</p>
-<p>In the near future we aim to offer an intermediate service, whereby medium-to-large data sets can be submitted to a queue, similar to BLAST.</p>
+<p>We provide a number of ready-made tools for processing both our data (Biomart
+        and the Virtual machine) and yours. For the latter:
+ <ul>
+        <li>The VEP processes jobs via a ticketing system and can handle
+          medium to large files (up to 50Mb).</li>
+        <li>For other jobs, only small datasets of up to 5Mb can be uploaded and
+          processed online. We aim to extend the ticketing system used for VEP to these tools.</li>
+        <li>For larger datasets we provide an API script that can be downloaded
+          (you will also need to <a href="/info/docs/api/">install our Perl
+            API</a> to use these).</li>
+      </ul>
+
 
 [[SCRIPT::EnsEMBL::Web::Document::HTML::ToolsTable]]
 
