@@ -39,6 +39,7 @@ sub init_from_user_input {
   my $species   = $hub->param('species');
   my $format    = $hub->param('format_'.$species);
 
+  $hub->param('format', $format);
   $hub->param('text', $hub->param("text_$format"));
   
   my $method    = first { $hub->param($_) } qw(file url userdata text);
