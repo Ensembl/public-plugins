@@ -165,7 +165,7 @@
   -webkit-box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.15);
   -webkit-border-top-right-radius: 8px;
   -webkit-border-top-left-radius: 8px;
-  background-image: url(/info/docs/Doxygen/external-api/nav_f.png);
+  background-image: url(/info/docs/Doxygen/compara-api/nav_f.png);
   background-repeat: repeat-x;
   background-color: #E2E8F2;
 }
@@ -237,11 +237,11 @@
 #doxygen table.doxtable td,
 #doxygen table.doxtable th { border: 1px solid #2D4068; padding: 3px 7px 2px; }
 #doxygen table.doxtable th { background-color: #374F7F; color: #FFFFFF; font-size: 110%; padding-bottom: 4px; padding-top: 5px; text-align: left; }
-#doxygen .tabsearch { top: 0px; left: 10px; height: 36px; background-image: url(/info/docs/Doxygen/external-api/tab_b.png); z-index: 101; overflow: hidden; font-size: 13px; }
+#doxygen .tabsearch { top: 0px; left: 10px; height: 36px; background-image: url(/info/docs/Doxygen/compara-api/tab_b.png); z-index: 101; overflow: hidden; font-size: 13px; }
 
 #doxygen .navpath ul {
   font-size: 11px;
-  background-image: url(/info/docs/Doxygen/external-api/tab_b.png);
+  background-image: url(/info/docs/Doxygen/compara-api/tab_b.png);
   background-repeat: repeat-x;
   height: 30px;
   line-height: 30px;
@@ -258,7 +258,7 @@
   float: left;
   padding-left: 10px;
   padding-right: 15px;
-  background-image: url(/info/docs/Doxygen/external-api/bc_s.png);
+  background-image: url(/info/docs/Doxygen/compara-api/bc_s.png);
   background-repeat: no-repeat;
   background-position: right;
   color: #364D7C;
@@ -271,7 +271,7 @@
 #doxygen div.summary a { white-space: nowrap; }
 #doxygen div.ingroups { font-size: 8pt; padding-left: 5px; width: 50%; text-align: left; }
 #doxygen div.ingroups a { white-space: nowrap; }
-#doxygen div.header { background-image: url(/info/docs/Doxygen/external-api/nav_h.png); background-repeat: repeat-x; background-color: #F9FAFC; margin: 0px; border-bottom: 1px solid #C4CFE5; }
+#doxygen div.header { background-image: url(/info/docs/Doxygen/compara-api/nav_h.png); background-repeat: repeat-x; background-color: #F9FAFC; margin: 0px; border-bottom: 1px solid #C4CFE5; }
 #doxygen div.headertitle { padding: 5px 5px 5px 10px; }
 #doxygen dl { padding: 0 0 0 10px; }
 #doxygen dl.note,
@@ -313,16 +313,16 @@
 
 #doxygen .tabs,
 #doxygen .tabs2,
-#doxygen .tabs3 { background-image: url(/info/docs/Doxygen/external-api/tab_b.png); width: 100%; z-index: 101; font-size: 13px; height: 36px; }
+#doxygen .tabs3 { background-image: url(/info/docs/Doxygen/compara-api/tab_b.png); width: 100%; z-index: 101; font-size: 13px; height: 36px; }
 #doxygen .tabs2 { font-size: 10px; }
 #doxygen .tabs3 { font-size: 9px; }
 #doxygen .tablist { margin: 0; padding: 0; display: table; }
-#doxygen .tablist li { float: left; display: table-cell; margin-top: 0 !important; background-image: url(/info/docs/Doxygen/external-api/tab_b.png); line-height: 36px !important; list-style: none; }
+#doxygen .tablist li { float: left; display: table-cell; margin-top: 0 !important; background-image: url(/info/docs/Doxygen/compara-api/tab_b.png); line-height: 36px !important; list-style: none; }
 #doxygen .tablist a {
   display: block;
   padding: 0 20px;
   font-weight: bold;
-  background-image: url(/info/docs/Doxygen/external-api/tab_s.png);
+  background-image: url(/info/docs/Doxygen/compara-api/tab_s.png);
   background-repeat: no-repeat;
   background-position: right;
   color: #283A5D;
@@ -332,8 +332,8 @@
 }
 
 #doxygen .tabs3 .tablist a { padding: 0 10px; }
-#doxygen .tablist a:hover { background-image: url(/info/docs/Doxygen/external-api/tab_h.png); background-repeat: repeat-x; color: #fff; text-shadow: 0px 1px 1px rgba(0, 0, 0, 1.0); text-decoration: none; }
-#doxygen .tablist li.current a { background-image: url(/info/docs/Doxygen/external-api/tab_a.png); background-repeat: repeat-x; color: #fff; text-shadow: 0px 1px 1px rgba(0, 0, 0, 1.0); }
+#doxygen .tablist a:hover { background-image: url(/info/docs/Doxygen/compara-api/tab_h.png); background-repeat: repeat-x; color: #fff; text-shadow: 0px 1px 1px rgba(0, 0, 0, 1.0); text-decoration: none; }
+#doxygen .tablist li.current a { background-image: url(/info/docs/Doxygen/compara-api/tab_a.png); background-repeat: repeat-x; color: #fff; text-shadow: 0px 1px 1px rgba(0, 0, 0, 1.0); }
 
 /* IMPORT FROM navtree.css */
 
@@ -341,7 +341,7 @@
 #doxygen #nav-tree ul { list-style: none outside none; margin: 0px; padding: 0px; }
 #doxygen #nav-tree li { list-style-image: none; white-space: nowrap; margin: 0px; padding: 0px; }
 #doxygen #nav-tree .plus { margin: 0px; }
-#doxygen #nav-tree .selected { background-image: url(/info/docs/Doxygen/external-api/tab_a.png); background-repeat: repeat-x; color: #fff; text-shadow: 0px 1px 1px rgba(0, 0, 0, 1.0); }
+#doxygen #nav-tree .selected { background-image: url(/info/docs/Doxygen/compara-api/tab_a.png); background-repeat: repeat-x; color: #fff; text-shadow: 0px 1px 1px rgba(0, 0, 0, 1.0); }
 #doxygen #nav-tree img { margin: 0px; padding: 0px; border: 0px; vertical-align: middle; }
 #doxygen #nav-tree a { text-decoration: none; padding: 0px; margin: 0px; outline: none; }
 #doxygen #nav-tree .label { margin: 0px; padding: 0px; }
@@ -353,17 +353,17 @@
 #doxygen #doc-content { overflow: auto; display: block; padding: 0px; margin: 0px; }
 #doxygen #side-nav { padding: 0 6px 0 0; margin: 0px; display: block; position: absolute; left: 0px; width: 300px; }
 #doxygen .ui-resizable .ui-resizable-handle { display: block; }
-#doxygen .ui-resizable-e { background: url(/info/docs/Doxygen/external-api/ftv2splitbar.png) repeat scroll right center transparent; cursor: e-resize; height: 100%; right: 0; top: 0; width: 6px; }
+#doxygen .ui-resizable-e { background: url(/info/docs/Doxygen/compara-api/ftv2splitbar.png) repeat scroll right center transparent; cursor: e-resize; height: 100%; right: 0; top: 0; width: 6px; }
 #doxygen .ui-resizable-handle { display: none; font-size: 0.1px; position: absolute; z-index: 1; }
 #doxygen #nav-tree-contents { margin: 6px 0px 0px 0px; }
-#doxygen #nav-tree { background-image:url(/info/docs/Doxygen/external-api/nav_h.png); background-repeat: repeat-x; background-color: #F9FAFC; }
+#doxygen #nav-tree { background-image:url(/info/docs/Doxygen/compara-api/nav_h.png); background-repeat: repeat-x; background-color: #F9FAFC; }
 
 /* IMPORT FROM search/search.css */
 
 #doxygen #FSearchBox { float: left; }
 #doxygen #searchli { float: right; display: block; width: 170px; height: 36px; }
 #doxygen #MSearchBox { white-space : nowrap; position: absolute; float: none; display: inline; margin-top: 8px; right: 0px; width: 170px; z-index: 102; }
-#doxygen #MSearchBox .left { display: block; position: absolute; left: 10px; width: 20px; height: 19px; background: url(/info/docs/Doxygen/external-api/search/search_l.png) no-repeat; background-position: right; }
+#doxygen #MSearchBox .left { display: block; position: absolute; left: 10px; width: 20px; height: 19px; background: url(/info/docs/Doxygen/compara-api/search/search_l.png) no-repeat; background-position: right; }
 #doxygen #MSearchSelect { display: block; position: absolute; width: 20px; height: 19px; }
 #doxygen .left #MSearchSelect { left: 4px; }
 #doxygen .right #MSearchSelect { right: 5px; }
@@ -372,7 +372,7 @@
   display: block;
   position: absolute;
   height: 19px;
-  background: url(/info/docs/Doxygen/external-api/search/search_m.png) repeat-x;
+  background: url(/info/docs/Doxygen/compara-api/search/search_m.png) repeat-x;
   border: none;
   width: 116px;
   margin-left: 20px;
@@ -383,7 +383,7 @@
 }
 
 #doxygen #FSearchBox #MSearchField { margin-left: 15px; }
-#doxygen #MSearchBox .right { display: block; position: absolute; right: 10px; top: 0px; width: 20px; height: 19px; background: url(/info/docs/Doxygen/external-api/search/search_r.png) no-repeat; background-position: left; }
+#doxygen #MSearchBox .right { display: block; position: absolute; right: 10px; top: 0px; width: 20px; height: 19px; background: url(/info/docs/Doxygen/compara-api/search/search_r.png) no-repeat; background-position: left; }
 #doxygen #MSearchClose { display: none; position: absolute; top: 4px; background: none; border: none; margin: 0px 4px 0px 0px; padding: 0px 0px; outline: none; }
 #doxygen .left #MSearchClose { left: 6px; }
 #doxygen .right #MSearchClose { right: 2px; }
