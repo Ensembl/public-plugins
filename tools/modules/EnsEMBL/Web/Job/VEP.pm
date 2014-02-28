@@ -101,10 +101,8 @@ sub process_for_hive_submission {
   $job_data->{$_} and $vep_configs->{$_} = $job_data->{$_} for qw(numbers canonical domains biotype symbol ccds protein hgvs coding_only);
   
   # check for incompatibilities
-  if($job_data->{most_severe} || $job_data->{summary}) {
-    for(qw(protein symbol sift polyphen ccds canonical numbers domains)) {
-      $self->{'_error'} = "Option \"$_\" is not compatible with selected method of restricting results" if $job_data->{$_} && $job_data->{$_} ne 'no';
-    }
+  if($vep_configs->{most_severe} || $vep_configs->{summary}) {
+    delete $vep_configs->{$_} for(qw(protein symbol sift polyphen ccds canonical numbers domains biotype));
   }
 
   return { 'species' => $vep_configs->{'species'}, 'work_dir' => $rose_object->job_dir, 'config' => $vep_configs };
