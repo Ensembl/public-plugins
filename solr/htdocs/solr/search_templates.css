@@ -293,6 +293,11 @@
   margin-bottom: 0;
 }
 
+body.mobile-page .scnarrow {
+  width: auto;
+  margin-left: 0px;
+}
+
 .scnarrow {
   width: 595px;
   margin-left: -8px;
@@ -743,6 +748,15 @@ a.location:hover {
   z-index: 50;
 }
 
+body.mobile-page #masthead {
+  position: relative;
+  z-index: 10000;
+}
+
+body.mobile-page #search_nav_toggle {
+  display: block;  
+}
+  
 .solr_page_p_page #masthead {
   position: fixed;
   width: 100%;

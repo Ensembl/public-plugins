@@ -339,7 +339,7 @@
       }
     },
     'replacement-filter': {
-      template: "<div>\n  <span>\n    <div>\n      <span class=\"replacement_filter\">\n        <div>\n          <input type=\"text\" placeholder=\"Enter search term...\"/>\n        </div>\n      </span>\n    </div>\n    <span class=\"search_button\"><span class=\"icon\"></span></span>\n  </span>\n</div>",
+      template: "<div>\n  <span>\n    <div>\n      <span class=\"replacement_filter\">\n        <div>\n          <input type=\"text\" placeholder=\"Enter search term...\"/ data-role=\"none\">\n        </div>\n      </span>\n    </div>\n    <span class=\"search_button\"><span class=\"icon\"></span></span>\n  </span>\n</div>",
       decorate: {
         '.search_button': function(els, data) {
           var _this = this;

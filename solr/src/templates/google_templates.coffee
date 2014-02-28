@@ -310,7 +310,7 @@ window.google_templates =
           <div>
             <span class="replacement_filter">
               <div>
-                <input type="text" placeholder="Enter search term..."/>
+                <input type="text" placeholder="Enter search term..." data-role="none"/>
               </div>
             </span>
           </div>
