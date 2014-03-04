@@ -83,7 +83,7 @@ sub content {
     q{<input class="graph_config" type="hidden" name="legendmark" value="'circle'" />},
     q{<input class="graph_config" type="hidden" name="maxSlices" value="100" />},
     q{<input class="graph_config" type="hidden" name="minPercent" value="0" />},
-    '<input class="graph_dimensions" type="hidden" value="[65,80,60]" />',
+    '<input class="graph_dimensions" type="hidden" value="[65,85,60]" />',
     '<input class="js_param" type="hidden" name="cons_colours" value="'.$colour_json.'" />'
   );
   
