@@ -62,7 +62,7 @@ sub content {
      $opts   = join ' ', map { defined $opts->{$_} ? "$_ $opts->{$_}" : () } keys %$opts;
    
   if($args{filter}) {
-    $fh_string .= sprintf("%s %s %s -filter '%s' -ontology -only_matched 2>&1 | ", $perl, $script, $opts, $args{filter});
+    $fh_string .= sprintf("%s %s %s -filter '%s' -ontology -only_matched -start %i -limit %i 2>&1 | ", $perl, $script, $opts, $args{filter}, $from, ($to - $from) + 1);
   }
   
   #print STDERR "$fh_string\n";
@@ -77,9 +77,17 @@ sub content {
       $first_line = 0;
     }
     
-    $line_number++ unless /^\#/;
-    $content .= $_ if /^\#/ || ($line_number >= $from && $line_number <= $to);
-    last if $line_number > $to;
+    # filter_vep.pl takes care of limiting
+    if($args{filter}) {
+      $content .= $_;
+    }
+    
+    # no filters, we have to do the limiting here
+    else {
+      $line_number++ unless /^\#/;
+      $content .= $_ if /^\#/ || ($line_number >= $from && $line_number <= $to);
+      last if $line_number > $to;
+    }
   }
   close IN;
   
