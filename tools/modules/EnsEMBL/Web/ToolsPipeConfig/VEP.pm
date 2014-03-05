@@ -49,7 +49,7 @@ sub pipeline_analyses {
       'script_options'  => { map { defined $script_options->{$_} ? ( $_ => $script_options->{$_} ) : () } keys %$script_options }, # filter out the undef values
       'perl_bin'        => $perl_bin
     },
-    '-hive_capacity'  => 15,
+    '-analysis_capacity'  => 12,
     '-meadow_type'    => 'LSF',
     '-rc_name'        => $conf->species_defs->ENSEMBL_VEP_LSF_QUEUE
   }];
