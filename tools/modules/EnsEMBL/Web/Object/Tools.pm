@@ -121,6 +121,11 @@ sub hive_adaptor {
     my $sd      = $self->hub->species_defs;
     my $hivedb  = $sd->multidb->{'DATABASE_WEB_HIVE'};
 
+    if (!$ENV{'EHIVE_ROOT_DIR'}) {
+      warn "EHIVE_ROOT_DIR was not set.";
+      $ENV{'EHIVE_ROOT_DIR'} = $sd->ENSEMBL_SERVERROOT.'/ensembl-hive/';
+    }
+
     $self->{'_hive_adaptor'} = Bio::EnsEMBL::Hive::DBSQL::DBAdaptor->new(
       -user   => $hivedb->{'USER'} || $sd->DATABASE_WRITE_USER,
       -pass   => $hivedb->{'PASS'} || $sd->DATABASE_WRITE_PASS,
