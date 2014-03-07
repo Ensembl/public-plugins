@@ -26,6 +26,7 @@
 
 body.mobile-page.solr_page_p_page #wide-footer {
   padding-left: 0px;
+  width: auto;
 }
 
 /* making the masthead not fixed */
