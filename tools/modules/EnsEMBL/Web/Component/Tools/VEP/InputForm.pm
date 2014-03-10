@@ -168,6 +168,7 @@ sub content {
   # at the moment only human, chicken and mouse have RefSeqs in their otherfeatures DB
   # there's no config for this currently so species are listed manually
   foreach my $sp (qw(Gallus_gallus Homo_sapiens Mus_musculus)) {
+    next unless $sd->valid_species($sp);
     if ($sd->get_config($sp, 'databases')->{'DATABASE_OTHERFEATURES'}) {
       my $div = $self->dom->create_element('div', {class => '_stt_'.$sp});
   
