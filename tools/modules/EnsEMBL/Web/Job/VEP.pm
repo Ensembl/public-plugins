@@ -102,7 +102,7 @@ sub process_for_hive_submission {
   
   # check for incompatibilities
   if($vep_configs->{most_severe} || $vep_configs->{summary}) {
-    delete $vep_configs->{$_} for(qw(protein symbol sift polyphen ccds canonical numbers domains biotype));
+    delete $vep_configs->{$_} for(qw(coding_only protein symbol sift polyphen ccds canonical numbers domains biotype));
   }
 
   return { 'species' => $vep_configs->{'species'}, 'work_dir' => $rose_object->job_dir, 'config' => $vep_configs };
