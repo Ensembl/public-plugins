@@ -47,7 +47,7 @@ sub get_tracks {
     next if $genoverse{'remove'};
     
     my $glyphset  = $track->get('glyphset');
-    my $classname = "Bio::EnsEMBL::GlyphSet::$glyphset";
+    my $classname = "EnsEMBL::Draw::GlyphSet::$glyphset";
     
     next unless $hub->dynamic_use($classname);
     

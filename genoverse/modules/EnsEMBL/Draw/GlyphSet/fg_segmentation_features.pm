@@ -16,10 +16,11 @@ limitations under the License.
 
 =cut
 
-package Bio::EnsEMBL::GlyphSet;
+package EnsEMBL::Draw::GlyphSet::fg_segmentation_features;
 
 use strict;
 
-sub genoverse_attributes  { return (); }
+sub _labels              { return $_[0]{'_labels'} ||= $_[0]->my_config('colours'); }
+sub genoverse_attributes { return ( legend => $_[0]->_labels->{$_[0]->colour_key($_[1])}{'text'} ); }
 
 1;

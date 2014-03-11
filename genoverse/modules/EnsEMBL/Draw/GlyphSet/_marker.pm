@@ -16,17 +16,10 @@ limitations under the License.
 
 =cut
 
-package Bio::EnsEMBL::GlyphSet::_qtl;
+package EnsEMBL::Draw::GlyphSet::_marker;
 
 use strict;
 
-sub genoverse_attributes {
-  my ($self, $f) = @_;
-  
-  return (
-    id    => $f->qtl->dbID,
-    title => $self->title($f)
-  );
-}
+sub genoverse_attributes { return ( id => $_[1]->{'drawing_id'} ); }
 
 1;

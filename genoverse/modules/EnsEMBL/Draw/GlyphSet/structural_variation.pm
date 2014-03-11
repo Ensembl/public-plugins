@@ -16,17 +16,22 @@ limitations under the License.
 
 =cut
 
-package Bio::EnsEMBL::GlyphSet::_variation;
+package EnsEMBL::Draw::GlyphSet::structural_variation;
 
 use strict;
 
-use Bio::EnsEMBL::Variation::Utils::Constants;
-
 use previous qw(depth);
 
-sub _labels              { return $_[0]{'_labels'} ||= { map { $_->SO_term => $_->label } values %Bio::EnsEMBL::Variation::Utils::Constants::OVERLAP_CONSEQUENCES }; }
-sub genoverse_attributes { return ( legend => $_[0]->_labels->{$_[1]->display_consequence} ); }
-sub depth                { return $_[0]->PREV::depth if $_[0]{'container'}; }
-sub scalex               { return $_[0]{'config'}{'transform'} ? $_[0]->SUPER::scalex : 1; }
+use Bio::EnsEMBL::Variation::Utils::Constants;
+
+sub _labels { return $_[0]{'_labels'} ||= \%Bio::EnsEMBL::Variation::Utils::Constants::VARIATION_CLASSES; }
+sub depth   { return $_[0]->PREV::depth if $_[0]{'container'}; }
+
+sub genoverse_attributes { 
+  my ($self, $f) = @_;
+  my %attrs = $self->{'display'} ne 'compact' && $f->is_somatic && $f->breakpoint_order ? ( breakpoint => 1, height => 12, marginRight => 9 ) : ();
+  $attrs{'legend'} = $self->_labels->{$self->colour_key($f)}{'display_term'};
+  return %attrs;
+}
 
 1;
