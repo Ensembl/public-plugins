@@ -15,24 +15,24 @@
 	<hr/>
     
     <div style="padding-top: 10px; padding-bottom: 10px;">
-        <div style="background-color:#F2F2F2;color:#333; border-radius:5px; font-size:16px; float: right; width: 650px; margin-left: 20px;">
+        <div style="background-color:#F2F2F2;color:#333; border-radius:5px; font-size:16px; float: right; width: 620px; margin-left: 20px;">
             <div style="background-color:#336; color:white; padding: 10px; border-top-left-radius:5px;border-top-right-radius:5px"><img src="/i/star-on.png"> <b>Quick start</b></div>
             <div style="padding: 10px">
                 <ol style="padding-left: 20px;">
-                    <li> Download
-                        <div style="background: white; border: 1px dotted grey; margin-top:5px; padding: 5px;"><a href="https://github.com/Ensembl/ensembl-tools/archive/release/[[SPECIESDEFS::ENSEMBL_VERSION]].zip">Download latest version ([[SPECIESDEFS::ENSEMBL_VERSION]])</a></div>
+                    <li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/[[SPECIESDEFS::ENSEMBL_VERSION]].zip">Download latest version ([[SPECIESDEFS::ENSEMBL_VERSION]])</a>
                     </li>
                     <li>
                         Unpack
-                        <pre style="background: white; border: 1px dotted grey; margin-top:5px; padding: 5px;">tar xfz variant_effect_predictor.tar.gz</pre>
+                        <pre style="background: white; border: 1px dotted grey; margin-top:5px; padding: 5px; font-size: 15px;">unzip ensembl-tools-release-[[SPECIESDEFS::ENSEMBL_VERSION]].zip</pre>
                     </li>
                     <li>
                         Install
-                        <pre style="background: white; border: 1px dotted grey; margin-top:5px; padding: 5px;">perl INSTALL.pl</pre>
+                        <pre style="background: white; border: 1px dotted grey; margin-top:5px; padding: 5px; font-size: 15px;">cd ensembl-tools-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/scripts/variant_effect_predictor/
+perl INSTALL.pl</pre>
                     </li>
                     <li>
                         Test
-                        <pre style="background: white; border: 1px dotted grey; margin-top:5px; padding: 5px;">perl variant_effect_predictor.pl -i example.vcf --cache</pre>
+                        <pre style="background: white; border: 1px dotted grey; margin-top:5px; padding: 5px; font-size: 15px;">perl variant_effect_predictor.pl -i example.vcf --cache</pre>
                     </li>
                 </ol>
             </div>
