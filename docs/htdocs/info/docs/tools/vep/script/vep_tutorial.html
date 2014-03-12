@@ -42,16 +42,20 @@
     
     <p> Have you downloaded the VEP yet? Click this link to <img src="/i/16/download.png" height="12px"> <a
     href="https://github.com/Ensembl/ensembl-tools/archive/release/[[SPECIESDEFS::ENSEMBL_VERSION]].zip">download</a> if you haven't already. If you prefer to do things on
-    the terminal, you can use curl to grab and unpack the VEP archive: </p>
+    the terminal, you can use wget to grab the VEP archive: </p>
     
-    <pre class="code"><b>&gt; wget "https://github.com/Ensembl/ensembl-tools/archive/release/[[SPECIESDEFS::ENSEMBL_VERSION]].zip"; unzip -j [[SPECIESDEFS::ENSEMBL_VERSION]].zip ensembl-tools-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/scripts/variant_effect_predictor/* -d variant_effect_predictor; rm [[SPECIESDEFS::ENSEMBL_VERSION]].zip
-&gt; cd variant_effect_predictor</b></pre>
+    <pre class="code"><b>&gt; wget "https://github.com/Ensembl/ensembl-tools/archive/release/[[SPECIESDEFS::ENSEMBL_VERSION]].zip"</b></pre>
     
     <p> If you clicked the download link, let's find the file and unpack it ourselves. Typically the file will be in your <b>Downloads</b> folder: </p>
     
-    <pre class="code"><b>&gt; cd ~/Downloads
-&gt; tar xfz variant_effect_predictor.tar.gz
-&gt; cd variant_effect_predictor</b></pre>
+    <pre class="code"><b>&gt; cd ~/Downloads</b></pre>
+    
+    <p> Now let's unpack it and navigate to the VEP's sub-directory: </p>
+
+    <pre class="code"><b>&gt; unzip ensembl-tools-release-[[SPECIESDEFS::ENSEMBL_VERSION]].zip
+&gt; cd ensembl-tools-release-[[SPECIESDEFS::ENSEMBL_VERSION]]/scripts/variant_effect_predictor/</b></pre>
+    
+    <p> <b>NOTE:</b> depending on your setup the archive file may instead be named <b>[[SPECIESDEFS::ENSEMBL_VERSION]].zip</b></p>
     
     <p> The VEP uses "cache files" or a remote database to read genomic data.
     Using cache files gives the best performance - let's set one up using the
