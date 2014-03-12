@@ -16,13 +16,10 @@ limitations under the License.
 
 =cut
 
-package Bio::EnsEMBL::GlyphSet::annotation_status;
+package EnsEMBL::Draw::GlyphSet::chr_band;
 
 use strict;
 
-sub genoverse_attributes {
-  my ($self, $f) = @_;
-  return ( strand => 1, background => $self->{'config'}->colourmap->hex_by_name($self->my_colour($self->colour_key($f), 'join')) );
-}
+sub genoverse_attributes { return ( borderColor => '#000000' ); }
 
 1;

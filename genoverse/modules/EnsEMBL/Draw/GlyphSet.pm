@@ -16,10 +16,10 @@ limitations under the License.
 
 =cut
 
-package Bio::EnsEMBL::GlyphSet::chr_band;
+package EnsEMBL::Draw::GlyphSet;
 
 use strict;
 
-sub genoverse_attributes { return ( borderColor => '#000000' ); }
+sub genoverse_attributes  { return (); }
 
 1;

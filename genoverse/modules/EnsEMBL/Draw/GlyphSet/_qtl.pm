@@ -16,22 +16,17 @@ limitations under the License.
 
 =cut
 
-package Bio::EnsEMBL::GlyphSet::structural_variation;
+package EnsEMBL::Draw::GlyphSet::_qtl;
 
 use strict;
 
-use previous qw(depth);
-
-use Bio::EnsEMBL::Variation::Utils::Constants;
-
-sub _labels { return $_[0]{'_labels'} ||= \%Bio::EnsEMBL::Variation::Utils::Constants::VARIATION_CLASSES; }
-sub depth   { return $_[0]->PREV::depth if $_[0]{'container'}; }
-
-sub genoverse_attributes { 
+sub genoverse_attributes {
   my ($self, $f) = @_;
-  my %attrs = $self->{'display'} ne 'compact' && $f->is_somatic && $f->breakpoint_order ? ( breakpoint => 1, height => 12, marginRight => 9 ) : ();
-  $attrs{'legend'} = $self->_labels->{$self->colour_key($f)}{'display_term'};
-  return %attrs;
+  
+  return (
+    id    => $f->qtl->dbID,
+    title => $self->title($f)
+  );
 }
 
 1;
