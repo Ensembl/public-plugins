@@ -748,6 +748,7 @@ dispatch_facet_request = (request,state,table,update_seq) ->
     'facet.mincount': 1
     facet: true
   }
+  $(document).trigger('faceting_unknown',[update_seq])
   return request.raw_ajax(params)
     .then (data) =>
       if update_seq != current_update_seq then return $.Deferred().reject()
@@ -839,13 +840,13 @@ class Request
     })
     if !@req_outstanding() then @hub.spin_up()
     @xhrs[idx] = xhr
-    xhr.then (data) =>
+    xhr = xhr.then (data) =>
       delete @xhrs[idx]
       if !@req_outstanding() then @hub.spin_down()
       if data.error
         @hub.fail()
         $('.searchdown-box').css('display','block')
-        return $.Deferred().reject().promise()
+        return $.Deferred().reject()
       else
         @hub.unfail()
         return data

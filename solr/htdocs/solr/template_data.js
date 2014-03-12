@@ -743,6 +743,17 @@
         return [spec, data];
       },
       postproc: function(el, odata) {
+        $(document).on('faceting_unknown', function(e, update_seq) {
+          return $('.table_faceter', el).each(function() {
+            if ($(document).data('update_seq') !== update_seq) {
+              return;
+            }
+            if ($(this).data('update_seq') === update_seq) {
+              return;
+            }
+            return $(this).empty();
+          });
+        });
         return $(document).on('faceting_known', function(e, faceter, query, num, state, update_seq) {
           $('.table_faceter', el).each(function() {
             var fav_order, k, key, members, model, order, short_num, templates, _i, _len;
@@ -772,6 +783,7 @@
             }
             model.key = key;
             templates = $(document).data('templates');
+            $(this).data('update_seq', update_seq);
             return $(this).empty().append(templates.generate('faceter_inner', model));
           });
           return $('#main_holder').css('min-height', $('.solr_sidebar').outerHeight(true) + $('.solr_sidebar').offset().top);
@@ -1179,7 +1191,7 @@
       }
     },
     sidesizer: {
-      template: "<div class=\"solr_faceter solr_beak_p solr_feet_p\">\n  <div class=\"solr_beak_p_title\">Per page:</div>\n  <div class='solr_beak_p_contents solr_perpage_list'>\n    <a>\n      <span class='solr_beak_p_left'>42</span>\n      <span class='solr_beak_p_right'></span>\n    </a>\n  </div>\n  <div class='solr_beak_p_contents solr_perpage_all'>\n    <a href=\"#0\">\n      <span class='solr_beak_p_left'>Show all results in one page</span>\n      <span class='solr_beak_p_right'></span>\n    </a>\n  </div>\n</div>",
+      template: "<div class=\"solr_faceter solr_beak_p solr_feet_p\">\n  <div class=\"solr_beak_p_title\">Per page:</div>\n  <div class='solr_beak_p_contents solr_perpage_list'>\n    <a>\n      <span class='solr_beak_p_left'>42</span>\n      <span class='solr_beak_p_right'></span>\n    </a>\n  </div>\n  <!-- not for now: need to re-engineer\n  <div class='solr_beak_p_contents solr_perpage_all'>\n    <a href=\"#0\">\n      <span class='solr_beak_p_left'>Show all results in one page</span>\n      <span class='solr_beak_p_right'></span>\n    </a>\n  </div>\n  -->\n</div>",
       directives: {
         '.solr_perpage_list a': {
           'entry<-entries': {
@@ -2422,6 +2434,14 @@
     fixes: {
       global: [
         function(data) {
+          data.tp2_row.register(1000, function() {
+            var ft, sp;
+            ft = data.tp2_row.best('feature_type');
+            sp = data.tp2_row.best('species');
+            if (ft === 'Phenotype') {
+              return data.tp2_row.candidate('id', sp + ' Phenotype', 1000);
+            }
+          });
           data.tp2_row.register(300, function() {
             var desc, ft, id, inner_desc, k, m, main_desc, type, v;
             ft = data.tp2_row.best('feature_type');
@@ -2650,9 +2670,6 @@
     Documentation: {
       id: '{subtype} #',
       title: '{article_title}'
-    },
-    Phenotype: {
-      id: '{species} Phenotype #'
     }
   };
 

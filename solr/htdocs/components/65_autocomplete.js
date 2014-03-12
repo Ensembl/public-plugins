@@ -180,7 +180,7 @@
   direct_format = {
     Phenotype: {
       left: "{name}",
-      right: '{species} Phenotype #{id}'
+      right: '{species} Phenotype'
     },
     Gene: {
       left: "{name}",

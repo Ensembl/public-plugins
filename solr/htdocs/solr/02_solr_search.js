@@ -1319,6 +1319,7 @@
       'facet.mincount': 1,
       facet: true
     };
+    $(document).trigger('faceting_unknown', [update_seq]);
     return request.raw_ajax(params).then(function(data) {
       var all_facets, facets, _ref, _ref1, _ref2, _ref3;
       if (update_seq !== current_update_seq) {
@@ -1472,7 +1473,7 @@
         this.hub.spin_up();
       }
       this.xhrs[idx] = xhr;
-      xhr.then(function(data) {
+      xhr = xhr.then(function(data) {
         delete _this.xhrs[idx];
         if (!_this.req_outstanding()) {
           _this.hub.spin_down();
@@ -1480,7 +1481,7 @@
         if (data.error) {
           _this.hub.fail();
           $('.searchdown-box').css('display', 'block');
-          return $.Deferred().reject().promise();
+          return $.Deferred().reject();
         } else {
           _this.hub.unfail();
           return data;

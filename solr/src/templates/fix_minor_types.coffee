@@ -23,6 +23,12 @@ window.fixes.fix_minor_types =
   fixes:
     global: [
       (data) -> # Extract good info from description
+        data.tp2_row.register 1000, () ->
+          ft = data.tp2_row.best('feature_type')
+          sp = data.tp2_row.best('species')
+          if ft == 'Phenotype'
+            data.tp2_row.candidate('id',sp+' Phenotype',1000)
+
         data.tp2_row.register 300, () ->
           ft = data.tp2_row.best('feature_type')
           if ft == 'Domain' or ft == 'Family'
