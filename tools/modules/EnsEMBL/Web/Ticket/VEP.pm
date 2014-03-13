@@ -37,11 +37,10 @@ sub init_from_user_input {
   my $self      = shift;
   my $hub       = $self->hub;
   my $species   = $hub->param('species');
-  my $format    = $hub->param('format_'.$species);
+  my $format    = $hub->param('format');
 
-  $hub->param('format', $format);
   $hub->param('text', $hub->param("text_$format"));
-  
+
   my $method    = first { $hub->param($_) } qw(file url userdata text);
 
   # if no data entered

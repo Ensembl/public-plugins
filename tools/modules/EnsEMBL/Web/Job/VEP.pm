@@ -31,11 +31,11 @@ sub process_for_hive_submission {
   my $species     = $job_data->{'species'};
   my $vep_configs = {};
 
-  $vep_configs->{'format'}  = $job_data->{'format_'.$job_data->{'species'}};
+  $vep_configs->{'format'}  = $job_data->{'format'};
   $vep_configs->{'species'} = lc $species;
 
   # refseq
-  $vep_configs->{'refseq'}  = 'yes' if ($job_data->{"core_type_$species"} // '') eq 'refseq';
+  $vep_configs->{'refseq'}  = 'yes' if ($job_data->{'core_type'} // '') eq 'refseq';
 
   # filters
   my $frequency_filtering = $job_data->{'frequency'};
@@ -55,9 +55,8 @@ sub process_for_hive_submission {
     $vep_configs->{$summary} = 'yes';
   }
 
-  # species-dependent
   for (qw(regulatory sift polyphen)) {
-    my $value = $job_data->{"${_}_$species"};
+    my $value = $job_data->{$_ . ($_ eq 'regulatory' ? "_$species" : '')};
     $vep_configs->{$_} = $value if $value && $value ne 'no';
   }
 
@@ -66,7 +65,7 @@ sub process_for_hive_submission {
     
     # cell types
     if($vep_configs->{'regulatory'} eq 'cell') {
-      my @cell_types = grep { length $_ } ref $job_data->{'cell_type'} ? @{$job_data->{'cell_type'}} : $job_data->{'cell_type'};
+      my @cell_types = grep { length $_ } ref $job_data->{"cell_type_$species"} ? @{$job_data->{"cell_type_$species"}} : $job_data->{"cell_type_$species"};
       $vep_configs->{'cell_type'} = join ",", @cell_types if scalar @cell_types;
     }
 
@@ -74,7 +73,7 @@ sub process_for_hive_submission {
   }
 
   # check existing
-  my $check_ex = $job_data->{"check_existing_$species"};
+  my $check_ex = $job_data->{'check_existing'};
 
   if ($check_ex) {
     if($check_ex eq 'check') {
@@ -86,9 +85,7 @@ sub process_for_hive_submission {
     
     # MAFs in human
     if ($species eq 'Homo_sapiens') {
-      $vep_configs->{'gmaf'}    = 'yes' if ($job_data->{'gmaf_'.$check_ex}    // '') eq 'yes';
-      $vep_configs->{'maf_1kg'} = 'yes' if ($job_data->{'maf_1kg_'.$check_ex} // '') eq 'yes';
-      $vep_configs->{'maf_esp'} = 'yes' if ($job_data->{'maf_esp_'.$check_ex} // '') eq 'yes';
+      ($job_data->{'gmaf'} // '') eq 'yes' and $vep_configs->{$_} = 'yes' for qw(gmaf maf_1kg maf_esp);
     }
   }
 
@@ -99,9 +96,9 @@ sub process_for_hive_submission {
 
   # extra and identifiers
   $job_data->{$_} and $vep_configs->{$_} = $job_data->{$_} for qw(numbers canonical domains biotype symbol ccds protein hgvs coding_only);
-  
+
   # check for incompatibilities
-  if($vep_configs->{most_severe} || $vep_configs->{summary}) {
+  if ($vep_configs->{'most_severe'} || $vep_configs->{'summary'}) {
     delete $vep_configs->{$_} for(qw(coding_only protein symbol sift polyphen ccds canonical numbers domains biotype));
   }
 
