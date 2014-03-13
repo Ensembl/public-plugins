@@ -106,9 +106,11 @@ enter your data and alter various options.</p>
                 Equivalent to <a
                 href="/info/docs/tools/vep/script/vep_options.html#opt_protein">--protein</a></li>
                 
-                <li> <b>HGVS</b> - generate HGVS identifiers for your input
-                variants relative to the transcript coding sequence (HGVSc) and
-                the protein sequence (HGVSp). Equivalent to <a
+                <li> <b>HGVS</b> - generate <a
+                href="http://www.hgvs.org/mutnomen/" rel="external">HGVS</a>
+                identifiers for your input variants relative to the transcript
+                coding sequence (HGVSc) and the protein sequence (HGVSp).
+                Equivalent to <a
                 href="/info/docs/tools/vep/script/vep_options.html#opt_hgvs">--hgvs</a></li>
             
                 <li>
@@ -126,13 +128,16 @@ enter your data and alter various options.</p>
                     selecting "Yes and compare alleles" from the drop-down menu.
                     By selecting this, the VEP will only report the existing
                     variant ID if none of the alleles in your input variant are
-                    novel. For example, if your input variant has alleles A/G,
+                    novel. </p>
+                    <p> For example, if your input variant has alleles A/G,
                     and the existing variant has alleles A/T, then the existing
                     variant will not be reported. If instead your input variant
                     has alleles A/T, then the existing variant will be reported.
                     This is equivalent to using <a
                     href="/info/docs/tools/vep/script/vep_options.html#opt_check_alleles">--check_alleles</a>
                     in the VEP script. </p>
+                </li>
+                <li>
                     <p> The VEP can also report minor allele frequency (MAF)
                     data for existing variants from two major genotyping
                     projects, the <a href="http://www.1000genomes.org/"
