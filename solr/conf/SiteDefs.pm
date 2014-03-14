@@ -362,8 +362,12 @@ EOF
           url => "/{species}/Transcript/Sequence_cDNA?t={id}&db={database_type}",
           conditions => { "{feature_type}" => "^Transcript\$" }
         },
-        { title => "Protein seq.",
+        { title => "Variation table",
           url => "/{species}/Transcript/Variation_Transcript/Table?t={id}&db={database_type}",
+          conditions => { "{feature_type}" => "^Transcript\$" }
+        },
+        { title => "Protein seq.",
+          url => "/{species}/Transcript/Sequence_Protein?t={id}&db={database_type}",
           conditions => { "{feature_type}" => "^Transcript\$" },
           result_condition => 'protein:1',
         },
