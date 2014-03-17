@@ -645,10 +645,15 @@ sub linkify {
   
   # location
   if($field eq 'Location') {
+    my ($c, $s, $e) = split /\:|\-/, $value;
+    $e ||= $s;
+    $s -= 50;
+    $e += 50;
+
     my $url = $hub->url({
       type             => 'Location',
       action           => 'View',
-      r                => $value,
+      r                => "$c:$s-$e",
       contigviewbottom => "variation_feature_variation=normal",
       species          => $species
     });
