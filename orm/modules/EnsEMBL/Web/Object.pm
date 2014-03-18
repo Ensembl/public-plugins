@@ -24,19 +24,6 @@ package EnsEMBL::Web::Object;
 use strict;
 use warnings;
 
-sub rose_manager {
-  ## Returns the ORM::Rose::Manager class for the given type
-  ## @param DB name
-  ## @param Manager type
-  ## @return Manager Class (Static class reference) or defaults to ORM::EnsEMBL::Rose::Manager if no manager class found
-  my ($self, $db, $type) = @_;
-
-  $db   ||= '';
-  $type   = $type ? "::$type" : '';
-
-  return $self->{'_rose_managers'}{$db}{$type} ||= $self->dynamic_use_fallback($db ? "ORM::EnsEMBL::DB::${db}::Manager${type}" : (), 'ORM::EnsEMBL::Rose::Manager');
-}
-
 sub rose_objects {
   ## Getter/Setter for the rose objects
   ## Basically this method takes the data across from Web::Object to the Web::Component, to keep 'business logic' away from Components
