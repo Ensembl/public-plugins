@@ -9,7 +9,7 @@
 
 <p>Ensembl is built on the following applications:</p>
 <ul>
-  <li><a href="#git">Git</a> - versioning system to allow you to download the Ensembl code</li>
+  <li><a href="#git">Git (or CVS)</a> - versioning system to allow you to download the Ensembl code</li>
   <li><a href="#perl">Perl</a> - Open source scripting language</li>
   <li><a href="#apache">Apache and mod_perl</a> - Open source web server</li>
   <li><a href="#mysql">MySQL</a> - Open source database server</li>
@@ -18,6 +18,7 @@
   <li><a href="#dotter">Dotter</a> - Graphical alignment package</li>
   -->
 </ul> 
+
 <p>These applications are not version-specific for Ensembl; that is, if you upgrade your Ensembl installation
 to a newer version when one becomes available, you probably won't need to install new versions of
 these applications.</p>
@@ -34,6 +35,15 @@ running with pre-installed software (in particular Apache with mod_perl installe
 recommend simply installing the latest version using the following instructions.</p>
 
 <h2 id="git">Git</h2>
+
+<div class="tinted-box">
+<p><b>Important notice</b>: As of Release 75 we have moved development into git.
+For the next several releases, the new branch will still be made available via CVS
+at release time, but there will be no further work on the CVS HEAD. Please see our 
+<a href="http://www.ensembl.info/blog/2013/12/18/ensembl-has-migrated-to-git/">blog</a> 
+for more information.</p>
+</div>
+
 <p>Git is a software version control system that we use for storing the source code to Ensembl. You will
 need Git installed if you want to download the Ensembl source code. It will also help you keep up to
 date with any bug fixes. Our repositories are stored on <a href="https://github.com" rel="external">GitHub</a>.
