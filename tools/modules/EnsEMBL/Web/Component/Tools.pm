@@ -29,6 +29,10 @@ sub object {
   return shift->SUPER::object->get_sub_object;
 }
 
+sub mcacheable {
+  return 0;
+}
+
 sub _init {
   ## Makes all the components in tools ajaxable but not cacheable
   ## Override this in a child class to modify the default behaviour
