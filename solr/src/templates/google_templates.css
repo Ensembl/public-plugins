@@ -730,3 +730,28 @@ a.location:hover {
   font-weight: bold;
 }
 
+.table_row .description a {
+  color: #3366BB;
+  text-decoration: none;
+}
+
+.table_row .description a:hover {
+  color: #CC0000;
+}
+
+.description ul {
+  margin: 1.25em 0;
+  padding: 0 0 0 1em;
+}
+
+.description ul li {
+  list-style: none;
+}
+
+.result-type-species-homepage .quick_links {
+  display: none;
+}
+
+div.result-type-species-homepage div.preview_float {
+  display: none;
+}

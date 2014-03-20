@@ -63,7 +63,7 @@ window.google_templates =
                 present["solr_menu_class_"+m[1]] = 1
             $('.remote_hover').removeClass('remote_hover')
             for p,v of present
-              $('.'+p).addClass('remote_hover') 
+              $('.'+p).addClass('remote_hover')
           , =>
 
       '.preview_float_click': (els,data) ->
@@ -169,7 +169,7 @@ window.google_templates =
               data.tp2_row.add_value('facet','result_facet_species_'+sp)
             if ft?
               data.tp2_row.add_value('facet','result_facet_feature_type_'+ft)
-            values = ( k.value for k in data.tp2_row.all_values('facet'))
+            values = ( k.value for k in data.tp2_row.all_values('facet') ? [])
             data.tp2_row.send('facets',' '+values.join(' '))
 
           data.tp2_row.register 50000, () ->

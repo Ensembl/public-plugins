@@ -47,6 +47,12 @@
   margin: 8px 0;
 }
 
+.table_toplink:not([href]) {
+  color: #555;
+  font-weight: bold;
+  cursor: default;
+}
+
 .green_data {
   font-size: 12px;
 }

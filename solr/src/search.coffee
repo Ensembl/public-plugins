@@ -250,7 +250,6 @@ class Hub
         window.history.replaceState({},'',url)
     url
 
-  ajax_url: -> "#{ $('#species_path').val() }/Ajax/search"
   sidebar_div: -> $('#solr_sidebar')
 
   useless_browser: () -> # IE8--, too daft for fancy bits (preview, etc)
@@ -389,12 +388,44 @@ body_embeded_species = () ->
       return { state, update_seq, latin, english }
 
     prepare: (context,input,tags_in,depart) ->
+      if !tags_in.main then return null
       if context.english?
         if not tags_in.target_species? then tags_in.target_species = []
         tags_in.target_species.push(context.english)
       queries = [[input,tags_in,depart]]
       if context.english
         queries.unshift [{ english: context.english, latin: context.latin },{ sphome: 1 },sp_home]
+      return queries
+  }
+
+body_hgvs_names = () ->
+  hgvs_name = (input,request,start,len) ->
+    if start == -1
+      return $.Deferred().resolve([input,1])
+    else
+      id = input.id
+      return request.raw_ajax({ id },'hgvs').then (data) =>
+        list = "<ul>"
+        for m in data.links ? []
+          list += '<li><a href="'+m.url+'">'+m.text+'</a>'+(m.tail ? '')+'</li>'
+        list += "</ul>"
+        return [input,[{
+          name: "HGVS Identifier?"
+          description: "'#{data.id}' seems to be an HGVS identifier."+list
+          result_style: 'result-type-species-homepage no-preview'
+          id: data.id
+        }]]
+
+  return {
+    context: (state,update_seq) ->
+      return { state, update_seq }
+
+    prepare: (context,input,tags_in,depart) ->
+      if !tags_in.main then return null
+      queries = [[input,tags_in,depart]]
+      id = input.q
+      if id.match(/^ENS[GTP]\d{11}\S*[cgp]\./)
+        queries.unshift [{ id: input.q },{},hgvs_name]
       return queries
   }
 
@@ -650,6 +681,7 @@ body_requests = [
   body_raw_request
   body_cache
   body_embeded_species
+  body_hgvs_names
   body_elevate_crossspecies
   body_frontpage_specials
   body_highlights
@@ -832,10 +864,12 @@ class Request
     if @req_outstanding() then @hub.spin_down()
     @xhrs = {}
 
-  raw_ajax: (params) ->
+  raw_ajax: (params,url) ->
+    if not url? then url = 'search'
+    url = $('#species_path').val()+"/Ajax/"+url
     idx = (xhr_idx += 1)
     xhr = $.ajax({
-      url: @hub.ajax_url(), data: params,
+      url, data: params,
       traditional: true, dataType: 'json'
     })
     if !@req_outstanding() then @hub.spin_up()

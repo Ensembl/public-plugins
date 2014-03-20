@@ -730,6 +730,31 @@ a.location:hover {
   font-weight: bold;
 }
 
+.table_row .description a {
+  color: #3366BB;
+  text-decoration: none;
+}
+
+.table_row .description a:hover {
+  color: #CC0000;
+}
+
+.description ul {
+  margin: 1.25em 0;
+  padding: 0 0 0 1em;
+}
+
+.description ul li {
+  list-style: none;
+}
+
+.result-type-species-homepage .quick_links {
+  display: none;
+}
+
+div.result-type-species-homepage div.preview_float {
+  display: none;
+}
 .solr_page_p_side {
   position: fixed;
   left: 0px;
@@ -800,7 +825,7 @@ a.location:hover {
 
 .result-type-species-homepage {
   background: none repeat scroll 0 0 #FFE8E0;
-  margin: 0 0 0 -8px;
+  margin: 0 0 8px -8px;
   padding: 12px 16px;
   width: 562px;
 }
