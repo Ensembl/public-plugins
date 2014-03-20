@@ -222,7 +222,7 @@ window.rhs_templates =
           docs = data.result?.response?.docs
           if docs?
             for d in docs
-              if d.ref_boost >= 10 and d.species
+              if d.ref_boost >= 10 and d.species and d.domain_url
                 url = d.domain_url
                 if url?.charAt(0) != '/' then url = "/" + url
                 sp_glinks[d.species] = "/"+d.domain_url
