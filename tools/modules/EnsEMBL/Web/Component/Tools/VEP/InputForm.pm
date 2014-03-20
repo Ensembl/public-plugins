@@ -26,29 +26,149 @@ use List::Util qw(first);
 use EnsEMBL::Web::TmpFile::Text;
 use EnsEMBL::Web::Tools::FileHandler qw(file_get_contents);
 use EnsEMBL::Web::Exceptions;
-
 use EnsEMBL::Web::VEPConstants qw(INPUT_FORMATS CONFIG_SECTIONS);
 
 use base qw(EnsEMBL::Web::Component::Tools::VEP);
 
 sub content {
-  my $self      = shift;
-  my $hub       = $self->hub;
-  my $sd        = $hub->species_defs;
-  my $dom       = $self->dom;
-  my $form      = $self->new_tool_form('VEP');
-  my $edit_job  = ($hub->function || '') eq 'Edit' ? $self->object->get_edit_jobs_data : [];
-
-  # Add the previous job params for JavaScript
-  $form->add_hidden({ 'name'  => 'edit_jobs', 'value' => $self->jsonify($edit_job) }) if @$edit_job;
-
-  my $input_fieldset  = $form->add_fieldset({'legend' => 'Input', 'class' => '_stt_input', 'no_required_notes' => 1});
+  my $self            = shift;
+  my $hub             = $self->hub;
+  my $sd              = $hub->species_defs;
   my $species         = $self->_species;
+  my $cache           = $hub->cache;
+  my $form            = $cache ? $cache->get('VEPFORM') : undef;
   my $current_species = $hub->species;
   my $input_formats   = INPUT_FORMATS;
 
+  if (!$form) {
+    $form = $self->new_tool_form('VEP');
+
+    # Placeholder for previous job json hidden input
+    $form->append_child('text', 'EDIT_JOB');
+
+    my $input_fieldset = $form->add_fieldset({'legend' => 'Input', 'class' => '_stt_input', 'no_required_notes' => 1});
+
+    # Placeholder for species dropdown
+    $input_fieldset->append_child('text', 'SPECIES_DROPDOWN');
+
+    $input_fieldset->add_field({
+      'type'          => 'string',
+      'name'          => 'name',
+      'label'         => 'Name for this data (optional)'
+    });
+
+    $input_fieldset->add_field({
+      'type'          => 'dropdown',
+      'name'          => 'format',
+      'label'         => sprintf('Input file format (<a href="%s#input" class="popup">details</a>)', $hub->url({
+        'type'          => 'Help',
+        'action'        => 'View',
+        'id'            => { $sd->multiX('ENSEMBL_HELP') }->{'Tools/VEP/VEP_formats'},
+        '__clear'       => 1
+      })),
+      'values'        => [ map { { %$_, 'class' => ['_stt_var', $_->{'value'} =~ /id|hgvs/ ? () : '_stt_novar'] } } @$input_formats ],  # species without variation DBs can't use ID or HGVS (currently)
+      'value'         => 'ensembl',
+      'class'         => '_stt format'
+    });
+
+    $input_fieldset->add_field({
+      'label'         => 'Either paste data',
+      'elements'      => [ map {
+        'type'          => 'text',
+        'name'          => 'text_'.$_->{'value'},
+        'element_class' => '_stt_'.$_->{'value'},
+        'value'         => $_->{'example'},
+      }, @$input_formats ]
+    });
+
+    $input_fieldset->add_field({
+      'type'          => 'file',
+      'name'          => 'file',
+      'label'         => 'Or upload file',
+      'helptip'       => sprintf('File uploads are limited to %sMB in size. Files may be compressed using gzip or zip', $sd->ENSEMBL_VEP_CGI_POST_MAX / 1048576)
+    });
+
+    $input_fieldset->add_field({
+      'type'          => 'url',
+      'name'          => 'url',
+      'label'         => 'Or provide file URL',
+      'size'          => 30,
+      'class'         => 'url'
+    });
+
+    # Placeholder for previuos files select box
+    $input_fieldset->append_child('text', 'FILES_DROPDOWN');
+
+    # This field is shown only for the species having refseq data
+    if (first { $_->{'refseq'} } @$species) {
+      $input_fieldset->add_field({
+        'field_class'   => '_stt_rfq',
+        'type'          => 'radiolist',
+        'name'          => 'core_type',
+        'label'         => 'Transcript database to use',
+        'helptip'       => 'Select RefSeq to use the otherfeatures transcript database, which contains basic aligned RefSeq transcript sequences in place of complete Ensembl transcript models',
+        'value'         => 'core',
+        'class'         => '_stt',
+        'values'        => [{
+          'value'         => 'core',
+          'caption'       => 'Ensembl transcripts'
+        }, {
+          'value'         => 'refseq',
+          'caption'       => 'RefSeq and other transcripts'
+        }]
+      });
+    }
+
+    ## Output options header
+    $form->add_fieldset('Output options');
+
+    ### Advanced config options
+    my $sections = CONFIG_SECTIONS;
+    foreach my $section (@$sections) {
+      my $method      = '_build_'.$section->{'id'};
+      my $config_div  = $form->append_child('div', {
+        'class'       => 'extra_configs_wrapper vep-configs',
+        'children'    => [{
+          'node_name'   => 'div',
+          'class'       => 'extra_configs_button',
+          'children'    => [{
+            'node_name'   => 'a',
+            'rel'         => '_vep'.$section->{'id'},
+            'class'       => [qw(toggle _slide_toggle set_cookie closed)],
+            'href'        => '#vep'.$section->{'id'},
+            'title'       => $section->{'caption'},
+            'inner_HTML'  => $section->{'title'}
+          }, {
+            'node_name'   => 'span',
+            'class'       => 'extra_configs_info',
+            'inner_HTML'  => $section->{'caption'}
+          }]
+        }, {
+          'node_name'   => 'div',
+          'class'       => ['extra_configs', 'toggleable', 'hidden', '_vep'.$section->{'id'}],
+        }]
+      });
+
+      $self->$method($form, $config_div->last_child); # add required fieldsets
+    }
+
+    $self->add_buttons_fieldset($form, {'reset' => 'Reset', 'cancel' => 'Cancel'});
+
+    $form = $form->render;
+
+    # Save in cache to skip the form generation process next time
+    $cache->set('VEPFORM', $form) if $cache;
+  }
+
+  # Add the non-cacheable fields to this dummy form and replace the placeholders from the actual form HTML
+  my $form2 = $self->new_form;
+
+  # Previous job params for JavaScript
+  my $edit_job = ($hub->function || '') eq 'Edit' ? $self->object->get_edit_jobs_data : [];
+     $edit_job = @$edit_job ? $form2->add_hidden({ 'name'  => 'edit_jobs', 'value' => $self->jsonify($edit_job) })->render : '';
+
   # Species dropdown list with stt classes to dynamically toggle other fields
-  $input_fieldset->add_field({
+  my $species_dropdown = $form2->add_field({
     'label'         => 'Species',
     'elements'      => [{
       'type'          => 'dropdown',
@@ -72,53 +192,10 @@ sub content {
       'no_input'      => 1,
       'is_html'       => 1
     }]
-  });
+  })->render;
 
-  $input_fieldset->add_field({
-    'type'          => 'string',
-    'name'          => 'name',
-    'label'         => 'Name for this data (optional)'
-  });
-
-  $input_fieldset->add_field({
-    'type'          => 'dropdown',
-    'name'          => 'format',
-    'label'         => sprintf('Input file format (<a href="%s#input" class="popup">details</a>)', $hub->url({
-      'type'          => 'Help',
-      'action'        => 'View',
-      'id'            => { $sd->multiX('ENSEMBL_HELP') }->{'Tools/VEP/VEP_formats'},
-      '__clear'       => 1
-    })),
-    'values'        => [ map { { %$_, 'class' => ['_stt_var', $_->{'value'} =~ /id|hgvs/ ? () : '_stt_novar'] } } @$input_formats ],  # species without variation DBs can't use ID or HGVS (currently)
-    'value'         => 'ensembl',
-    'class'         => '_stt format'
-  });
-
-  $input_fieldset->add_field({
-    'label'         => 'Either paste data',
-    'elements'      => [ map {
-      'type'          => 'text',
-      'name'          => 'text_'.$_->{'value'},
-      'element_class' => '_stt_'.$_->{'value'},
-      'value'         => $_->{'example'},
-    }, @$input_formats ]
-  });
-
-  $input_fieldset->add_field({
-    'type'          => 'file',
-    'name'          => 'file',
-    'label'         => 'Or upload file',
-    'helptip'       => sprintf('File uploads are limited to %sMB in size. Files may be compressed using gzip or zip', $sd->ENSEMBL_VEP_CGI_POST_MAX / 1048576)
-  });
-
-  $input_fieldset->add_field({
-    'type'          => 'url',
-    'name'          => 'url',
-    'label'         => 'Or provide file URL',
-    'size'          => 30,
-    'class'         => 'url'
-  });
-
+  # Previously uploaded files
+  my $file_dropdown   = '';
   my %allowed_formats = map { $_->{'value'} => $_->{'caption'} } @$input_formats;
   my @user_files      = sort { $b->{'timestamp'} <=> $a->{'timestamp'} } grep { $_->{'format'} && $allowed_formats{$_->{'format'}} } $hub->session->get_data('type' => 'upload'), $hub->user ? $hub->user->uploads : ();
 
@@ -128,14 +205,14 @@ sub content {
     foreach my $file (@user_files) {
 
       my $file_obj    = EnsEMBL::Web::TmpFile::Text->new('filename' => $file->{'filename'});
-      my $file_data   = '';
+      my @file_data;
       try {
-        $file_data    = file_get_contents($file_obj->full_path);
+        @file_data    = file_get_contents($file_obj->full_path);
       } catch {};
 
-      next unless $file_data;
+      next unless @file_data;
 
-      my $first_line  = first { $_ !~ /^\#/ } $file_data;
+      my $first_line  = first { $_ !~ /^\#/ } @file_data;
          $first_line  = substr($first_line, 0, 30).'&#8230;' if $first_line && length $first_line > 31;
 
       push @to_form, {
@@ -150,83 +227,19 @@ sub content {
     }
 
     if (@to_form > 1) {
-      $input_fieldset->add_field({
+      $file_dropdown = $form2->add_field({
         'type'    => 'dropdown',
         'name'    => 'userdata',
         'label'   => 'Or select previously uploaded file',
         'values'  => \@to_form,
-      });
+      })->render;
     }
   }
 
-  # This field is shown only for the species having refseq data
-  if (first { $_->{'refseq'} } @$species) {
-    $input_fieldset->add_field({
-      'field_class'   => '_stt_rfq',
-      'type'          => 'radiolist',
-      'name'          => 'core_type',
-      'label'         => 'Transcript database to use',
-      'helptip'       => 'Select RefSeq to use the otherfeatures transcript database, which contains basic aligned RefSeq transcript sequences in place of complete Ensembl transcript models',
-      'value'         => 'core',
-      'class'         => '_stt',
-      'values'        => [{
-        'value'         => 'core',
-        'caption'       => 'Ensembl transcripts'
-      }, {
-        'value'         => 'refseq',
-        'caption'       => 'RefSeq and other transcripts'
-      }]
-    });
-  }
-
-  ## Output options header
-  $form->add_fieldset('Output options');
-
-  ### Advanced config options
-  my @sections = ({
-    'id'        => 'identifiers',
-    'title'     => 'Identifiers and frequency data',
-    'caption'   => 'Additional identifiers for genes, transcripts and variants; frequency data'
-  }, {
-    'id'        => 'extra',
-    'title'     => 'Extra options',
-    'caption'   => 'e.g. SIFT, PolyPhen and regulatory data'
-  }, {
-    'id'        => 'filters',
-    'title'     => 'Filtering options',
-    'caption'   => 'Pre-filter results by frequency or consequence type'
-  });
-
-  foreach my $section (@sections) {
-    my $show        = $hub->get_cookie_value('toggle_vep'.$section->{'id'}) eq 'open' || 0;
-    my $method      = '_build_'.$section->{'id'};
-    my $config_div  = $form->append_child('div', {
-      'class'       => 'extra_configs_wrapper vep-configs',
-      'children'    => [{
-        'node_name'   => 'div',
-        'class'       => 'extra_configs_button',
-        'children'    => [{
-          'node_name'   => 'a',
-          'rel'         => '_vep'.$section->{'id'},
-          'class'       => ['toggle', '_slide_toggle', 'set_cookie', $show ? 'open' : 'closed'],
-          'href'        => '#vep'.$section->{'id'},
-          'title'       => $section->{'caption'},
-          'inner_HTML'  => $section->{'title'}
-        }, {
-          'node_name'   => 'span',
-          'class'       => 'extra_configs_info',
-          'inner_HTML'  => $section->{'caption'}
-        }]
-      }, {
-        'node_name'   => 'div',
-        'class'       => ['extra_configs', 'toggleable', $show ? () : 'hidden', '_vep'.$section->{'id'}],
-      }]
-    });
-
-    $self->$method($form, $config_div->last_child); # add required fieldsets
-  }
-
-  $self->add_buttons_fieldset($form, {'reset' => 'Reset', 'cancel' => 'Cancel'});
+  # Regexp to replace all placeholders from cached form
+  $form =~ s/EDIT_JOB/$edit_job/;
+  $form =~ s/SPECIES_DROPDOWN/$species_dropdown/;
+  $form =~ s/FILES_DROPDOWN/$file_dropdown/;
 
   return sprintf('
     <div class="hidden _tool_new">
@@ -236,13 +249,12 @@ sub content {
       <h2>New VEP job:</h2><input type="hidden" class="panel_type" value="VEPForm" />%s
     </div>',
     $hub->url({'function' => ''}),
-    $form->render
+    $form
   );
 }
 
 sub _build_filters {
   my ($self, $form, $filter_div) = @_;
-  my $dom       = $self->dom;
   my $fieldset  = $filter_div->append_child($form->add_fieldset('Filters'));
 
   if (first { $_->{'value'} eq 'Homo_sapiens' } @{$self->_species}) {
@@ -332,7 +344,6 @@ sub _build_filters {
 
 sub _build_identifiers {
   my ($self, $form, $identifiers_div) = @_;
-  my $dom       = $self->dom;
   my $hub       = $self->hub;
   my $species   = $self->_species;
 
