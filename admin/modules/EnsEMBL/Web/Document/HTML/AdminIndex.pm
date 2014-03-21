@@ -80,6 +80,10 @@ sub render {
   <ul>
     <li><a href="/UserDirectory">User Directory</a></li>
   </ul>
+  <h1>Performance</h1>
+  <ul>
+    <li><a href="/perf">Nightly local full page-load times</a></li>
+  </ul>
 </div></div>);
 
 }
