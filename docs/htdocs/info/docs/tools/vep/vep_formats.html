@@ -78,8 +78,14 @@
     and adjusting the coordinates accordingly. This means that if an identifier is
     not supplied for a variant (in the 3rd column of the VCF), then the identifier
     constructed and the position reported in the VEP's output file will differ from
-    the input. This problem can be overcome by ensuring each variant has a unique
-    identifier specified in the 3rd column of the VCF. </p>
+    the input. </p>
+    
+    <p> This problem can be overcome by either: </p>
+    <ol>
+      <li> ensuring each variant has a unique
+    identifier specified in the 3rd column of the VCF </li>
+      <li> using VCF format as output (<a href="script/vep_options.html#opt_vcf">--vcf</a>) - this preserves the formatting of your input coordinates and alleles </li>
+    </ol>
     
     <p> The following examples illustrate how VCF describes a variant and how it is
     handled internally by the VEP. Consider the following aligned sequences (for the
@@ -145,7 +151,7 @@
     <pre class="code">20_3_-/A</pre>
     
     <p> The solution is to always add a unique identifer for each of your variants
-    to the VCF file!!!</p>
+    to the VCF file, or use VCF as your output format.</p>
     
     <h2 id="sv">Structural variants</h2>
     
