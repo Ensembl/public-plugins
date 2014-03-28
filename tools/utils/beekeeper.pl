@@ -17,7 +17,7 @@
 # param from SiteDefs instead of having to provide it in command line.
 
 # This accepts an extra arguments '--no_cache_config' to ignore the cached
-# db name saved in the beekeeper.cmd file.
+# configurations saved in the beekeeper.config file.
 
 use strict;
 
