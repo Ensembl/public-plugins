@@ -1,3 +1,4 @@
+tools/utils/beekeeper.config
 opensearch
 /sanger/geocity
 /nginx/conf/nginx.conf
