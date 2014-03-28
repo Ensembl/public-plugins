@@ -13,14 +13,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# This script wraps the actual hive beekeeper script to get the url
-# param from SiteDefs instead of having to provide it in command line.
+### This script wraps the actual hive beekeeper script to get the url
+### param from SiteDefs instead of having to provide it in command line.
 
-# This accepts two extra arguments:
-# --no_cache_config: to ignore the cached configurations saved in
-#   the beekeeper.config file.
-# --redirect_output: flag provided if this script is being run by cron.
-#   The output is then redirected to log files.
+### This script can be run as a cron job but will not start a new beekeeper
+### instance if there's one already running
+
+### This accepts three extra arguments:
+### --no_cache_config: to ignore the cached configurations saved in
+###   the beekeeper.config file.
+### --redirect_output: flag provided if this script is being run by cron.
+###   The output is then redirected to log files.
+### --kill: flag if on will only kill any existing beekeeper process
 
 use strict;
 
@@ -33,9 +37,10 @@ my $config_file   = "$Bin/beekeeper.config";
 my $log_file      = "$Bin/beekeeper.log";
 my $cron_log_file = "$Bin/beekeeper.cronlog";
 my $script_name   = 'beekeeper.pl';
-my $no_cache      = grep { $_ eq '--no_cache_config' } @ARGV;
-my $redirect_out  = grep { $_ eq '--redirect_output' } @ARGV;
-my $sleep_time    = grep({ $_ =~ /^\-\-sleep/ } @ARGV) ? undef : "0.5";
+my $no_cache      = grep { $_ eq '--no_cache_config' }  @ARGV;
+my $redirect_out  = grep { $_ eq '--redirect_output' }  @ARGV;
+my $kill          = grep { $_ eq '--kill'            }  @ARGV;
+my $sleep_time    = grep({ $_ =~ /^\-\-sleep/        }  @ARGV) ? undef : "0.5";
 my $config;
 
 if ($redirect_out) {
@@ -94,10 +99,26 @@ if (!$config) {
 
 my $command = "perl $script_name -url mysql://$config->{'db'}{'user'}:$config->{'db'}{'pass'}\@$config->{'db'}{'host'}:$config->{'db'}{'port'}/$config->{'db'}{'name'}";
 
-if (my $pid = `ps -eo pid,cmd | sed -r 's/^\\s+//' | grep "$command" | grep -v grep | cut -d ' ' -f 1 | head -1`) {
-  warn "Beekeeper already running with PID $pid\n";
+if (my $pids = `pgrep -d ',' -f "$command"`) {
+  if ($kill) {
+    my $tries = 10;
+    my $wait  = 4;
+    while ($tries--) {
+      if (system(qq(pkill -f "$command"))) {
+        warn "Beekeeper killed.\n";
+        exit;
+      }
+      warn "Killing beekeeper processes: $pids";
+      warn "Waiting for ${wait}s...\n";
+      sleep $wait;
+    }
+    die "Could not kill processes: $pids";
+  }
+  warn "Beekeeper already running with PID $pids";
   exit;
 }
+
+exit if $kill;
 
 my $dbh = DBI->connect(sprintf('dbi:mysql:%s:%s:%s', $config->{'db'}{'name'}, $config->{'db'}{'host'}, $config->{'db'}{'port'}), $config->{'db'}{'user'}, $config->{'db'}{'pass'}, { 'PrintError' => 0 });
 
@@ -106,6 +127,6 @@ die "ENV variable EHIVE_ROOT_DIR is not set. Please set it to the location conta
 die "Could not find location of the hive $script_name script.\n"                                                                  unless chdir "$config->{'EHIVE_ROOT_DIR'}/scripts/";
 
 warn "Running beekeeper\n";
-system(join ' ', $command, $sleep_time ? ("--sleep=$sleep_time") : (), grep($_ !~ /^\-\-(redirect_output|no_cache_config)$/, @ARGV), $redirect_out ? ('>&', $log_file) : ());
+system(join ' ', $command, $sleep_time ? ("--sleep=$sleep_time") : (), grep($_ !~ /^\-\-(redirect_output|no_cache_config|kill)$/, @ARGV), $redirect_out ? ('>&', $log_file) : ());
 
 1;
