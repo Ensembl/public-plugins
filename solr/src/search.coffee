@@ -1,110 +1,24 @@
+# Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 #
 code_select = -> $('#solr_config').length > 0
-
-_div = (klass) -> $("<div class='#{klass}'></div>")
-_span = (klass) -> $("<span class='#{klass}'></span>")
-_a = (url) -> a = $("<a href='#{url}'></a>")
 
 _kv_copy = (old) -> out = {}; out[k] = v for k,v of old; out
 
 _clone_array = (a) -> $.extend(true,[],a)
 _clone_object = (a) -> $.extend(true,{},a)
-
-obj_to_str = (y,sort) ->
-  if typeof y == 'string' or typeof y == 'number'
-    (y.length + "-" + y)
-  else if y instanceof Array
-    if sort
-      y = _clone_array(y)
-      y.sort()
-    "["+y.length+"-"+(obj_to_str(x) for x in y).join("")
-  else if typeof y == 'object'
-    keys = (k for k,v of y)
-    keys.sort()
-    "{"+obj_to_str([k,y[k]] for k in keys)
-  else if y
-    "+"
-  else
-    "-"
-
-ucfirst = (str) ->
-  str.charAt(0).toUpperCase() + str.substring(1)
-
-_is_prefix_of = (small,big) ->
-  big.substr(0,small.length) == small
-
-class Sensible
-  constructor: (@nochange_ms,@lastreq_ms,@operation) ->
-    @timeout = undefined
-    @last_request = undefined
-    @last_data = undefined
-    @equal = (a,b) -> a == b
-    @trigger()
-
-  set_equal_fn: (@equal) ->
-
-  submit: (@data) ->
-    if @timeout then clearTimeout(@timeout)
-    @timeout = setTimeout(((v) => @trigger(v)),@nochange_ms)
-    now = new Date().getTime()
-    if (not @last_request?) or now - @last_request > @lastreq_ms
-      @trigger()
-    
-  trigger: ->
-    if not @equal(@last_data,@data)
-      @last_data = @data
-      @last_request = new Date().getTime()
-      @operation(@data)
-
-  current: -> @data
-
-class AllDone
-  constructor: (@that,@complete) ->
-    @data = {}
-    @outstanding = {}
-    @num = 0
-    @_go = 0
-
-  add_task: (key) ->
-    @outstanding[key] = 1
-    @num++
-
-  done: (key,data) ->
-    @data[key] = data
-    delete @outstanding[key]
-    @num--
-    if @num == 0 and @_go
-      @complete.call(@that,@data)
-
-  go: ->
-    @_go = 1
-    if @num == 0
-      @complete.call(@that,@data)
-
-# XXX to perl
-ddg_codes = {
-  facet_feature_type:
-    g: 'Gene'
-    t: 'Transcript'
-    rf: 'RegulatoryFeature'
-    doc: 'Documentation'
-    ph: 'Phenotype'
-    sm: 'SomaticMutation'
-    sv: 'StructuralVariation'
-    v: 'Variation'
-    dom: 'Domain'
-    fam: 'Family'
-    pf: 'ProteinFamily'
-    m: 'Marker'
-    s: 'Sequence'
-    ga: 'GenomicAlignment'
-    pf: 'ProbeFeature'
-  facet_species:
-    hs: 'Human'
-    mm: 'Mouse'
-    dr: 'Zebrafish'
-    rn: 'Rat'
-}
 
 class Hub
   _pair: /([^;&=]+)=?([^;&]*)/g
@@ -142,9 +56,8 @@ class Hub
       @sections = {}
       @interest = {}
       @first_service = 1
-      @source = new Source(@)
+      @source = new Request(@)
       @renderer = new Renderer(@,@source)
-      @request_ = @source.make_request(@renderer)
       $(window).bind('popstate',((e) => @service()))
       $(document).ajaxError => @fail()
       @spin = 0
@@ -185,6 +98,10 @@ class Hub
   render_stage: (more) ->
     @set_templates(@layout())
     if @useless_browser() then $('#solr_content').addClass('solr_useless_browser')
+    $(document).on 'update_state', (e,qps) =>
+      @update_url(qps)
+    $(document).on 'update_state_incr', (e,qps) =>
+      rate_limiter(qps).then((data) => @update_url(data))
     @renderer.render_stage(more)
 
   _add_changed: (changed,k) ->
@@ -277,7 +194,10 @@ class Hub
     url = window.location.href.replace(/\?.*$/,"")+"?"
     url += ("#{@_encode(a)}=#{@_encode(b)}" for a,b of qps).join(';')
     # Species fix XXX make more generic
-    url = @fix_species_url(url,{0: qps['facet_species'] ? 'Multi' })
+    species = 'Multi'
+    if qps['facet_species']? and qps['facet_species'] != 'CrossSpecies'
+      species = qps['facet_species']
+    url = @fix_species_url(url,{0: species })
     url
 
   fake_history: () -> !(window.history && window.history.pushState)
@@ -350,9 +270,7 @@ class Hub
       @configs[key] = $.parseJSON($("#solr_config span.#{key}").text() ? '{}')
     @configs[key]
 
-  all_facets: -> k.key for k in $.solr_config('static.ui.facets')
-
-  request: -> @request_
+  request: -> @source
 
   current_facets: ->
     out = {}
@@ -368,7 +286,7 @@ class Hub
         ddg.push(g1)
         ''
       )
-      for key,map of ddg_codes
+      for key,map of $.solr_config('static.ui.ddg_codes')
         for code in ddg
           if map[code]?
             @params[key] = map[code]
@@ -381,12 +299,7 @@ class Hub
     changed = @refresh_params()
     @ddg_style_search()
     @remove_unused_params()
-    request = @request() 
-    rigid = []
-    favs = $.solr_config('user.favs.species')
-    if favs.length
-      rigid.push ['species',[favs],100]
-    request.set_rigid_order(rigid)
+    request = @request()
     if @first_service
       if parseInt(@params.perpage) == 0 # Override "all" on first load
         @replace_url({ perpage: 10 })
@@ -417,6 +330,7 @@ class Hub
           .clone(true).addClass('ensembl').removeClass('ensembl_all'))
       $spec = $('.site_menu .ensembl')
       window.sp_names @params.facet_species, (names) =>
+        if !names then return
         $img = $('img',$spec).attr("src","/i/species/16/#{names.url}.png")
         $input = $('input',$spec).val("Search #{@params.facet_species}…")
         $spec.empty().append($img).append("Search #{@params.facet_species}")
@@ -432,243 +346,482 @@ class Hub
 # XXX clear and spin during rerequest
 # XXX no results
 
-# We need traditional to be true to send multiple params so can't use $.getJSON
-_ajax_json = (url,data,success) ->
-  $.ajax({
-    url, data, traditional: true, success, dataType: 'json',
-  })
-
 # XXX local sort
 # Send queries
 # XXX more generic cache
-class Source extends window.TableSource
-  constructor: (@hub) ->
-    @init($.solr_config('static.ui.all_columns'))
-    @docsizes = {}
 
-  make_request: (renderer) ->
-    @req = new Request(@hub,@,renderer)
+# XXX when failure
+each_block = (num,fn) ->
+  requests = []
+  for i in [0...num]
+    requests.push(fn(i))
+  return $.when.apply($,requests).then (args...) ->
+    Array.prototype.slice.call(args)
 
-  chunk_size: -> 100 # XXX
+# XXX low-level cache
 
-  request: -> @req
+body_embeded_species = () ->
+  sp_home = (input,request,start,len) ->
+    if start == -1 # size request
+      return $.Deferred().resolve([input,if input.english then 1 else 0])
+    else
+      if input.english
+        return $.Deferred().resolve([input,[{
+            name: input.english
+            description: input.english+" species home page for full details of "+input.english+" resources in Ensembl"
+            domain_url: '/'+input.latin
+            db: 'none'
+            id: input.latin
+            species: input.english
+            feature_type: 'Species Home Page'
+            result_style: 'result-type-species-homepage'
+        }]])
+      else
+        return $.Deferred.resolve([{},{}])
+          
+  return {
+    context: (state,update_seq) ->
+      latin = null
+      for k,v of $.solr_config('spnames')
+        if state.q_query().match(new RegExp("\\b#{k}\\b","gi"))
+          latin = v
+          english = $.solr_config('revspnames.%',latin)
+      return { state, update_seq, latin, english }
 
-  get: (filter,cols,order,start,rows,result,force) ->
-    @req.get(filter,cols,order,start,rows,result,force) 
+    prepare: (context,input,tags_in,depart) ->
+      if context.english?
+        if not tags_in.target_species? then tags_in.target_species = []
+        tags_in.target_species.push(context.english)
+      queries = [[input,tags_in,depart]]
+      if context.english
+        queries.unshift [{ english: context.english, latin: context.latin },{ sphome: 1 },sp_home]
+      return queries
+  }
 
-  docsize: (params,extra,num) ->
-    p = _clone_object(params)
-    delete p.rows
-    delete p.start
-    str = obj_to_str([p,extra])
-    if num? then @docsizes[str] = num
-    @docsizes[str]
+body_elevate_quoted = () ->
+  return {
+    context: (state,update_seq) -> return { state, update_seq }
+    prepare: (context,input,tags_in,depart) ->
+      if !tags_in.main then return null
+      if !input.q.match(/[^\w\s]/) then return null
+      if input.q.match(/"/) then return null # already quoted, don't mess
+      qq = '"'+input.q.replace(/\s+/,'" "','g')+'"'
+      tags_quoted = _clone_object(tags_in)
+      tags_quoted.quoted = 1
+      input_quoted   = _clone_object(input)
+      input_quoted.q = qq
+      input_unquoted   = _clone_object(input)
+      input_unquoted.q = input.q+' AND ( NOT ( '+qq+' ) )'
+      return [[input_quoted,  tags_quoted,depart]
+              [input_unquoted,tags_in,    depart]]
+  }
 
-class RequestDispatch
-  constructor: (@request,@hub,@source,@start,@rows,@renderer,@cols,@next) ->
+add_extra_constraints = (q_in,fq_in,extra) ->
+  q = [q_in]
+  fq = fq_in[..]
+  for [field,invert,values,boost] in extra
+    str = (field+':"'+s+'"' for s in values).join(" OR ")
+    str = (if invert then "(NOT ( #{str} ))" else "( #{str} )")
+    fq.push(str)
+    bq = []
+    if boost?
+      for s,i in values
+        v = Math.floor(boost*(values.length-i-1)/(values.length-1))
+        bq.push(field+':"'+s+'"'+(if v then "^"+v else ""))
+      q.push("( "+bq.join(" OR ")+" )")
+  if q.length > 1
+    q = ( "( "+x+" )" for x in q).join(" AND ")
+  [q,fq]
 
-  completion_fn: (values) ->
-    if values.facet?
-      if values.facet.result? # real response
-        @fdata = values.facet.result?.facet_counts?.facet_fields
-        params = values.facet.result?.responseHeader?.params
-        fkey = { q: params.q, fq: params.fq }
-        @request.cached_facet(obj_to_str(fkey),@fdata)
-      else # cached response
-        @fdata = values.facet
-    more = false
-    offset = @start
-    num = @rows
-    @completion = new AllDone(@,@completion_fn)
-    for i in [0..@lens.length-1]
-      if offset < @lens[i] and num > 0
-        numhere = Math.min(@lens[i] - offset,num)
-        extract = @extract_results(@results[i],offset,numhere)
-        if extract?
-          @docs = @docs.concat(extract)
+body_raw_request = () ->
+  raw_request = (input,request,start,len) ->
+    params = _clone_object(input)
+    if start == -1 # size request
+      params.start = 0
+      params.rows = 10
+      return request.raw_ajax(params).then (data) =>
+        num = data.result?.response?.numFound
+        return [data,num]
+    else # regular request
+      params.rows = len
+      params.start = start
+      return request.raw_ajax(params).then (data) =>
+        docs = data.result?.response?.docs
+        # substitue highlights XXX not here!
+        for doc in docs
+          snippet = data.result?.highlighting?[doc.uid]
+          if snippet?
+            for from,to of $.solr_config('static.ui.hl_transfers')
+              snippet[to] = snippet[from]
+            for h in $.solr_config('static.ui.highlights')
+              if snippet[h]
+                doc[h] = snippet[h].join(' ... ')
+        #
+        return [data,docs]
+
+  return {
+    prepare: (context,input,tags,depart) ->
+      return [[input,tags,raw_request]]
+  }
+
+# XXX expire cache
+size_cache_q = ""
+size_cache = {}
+stringify_params = (params) ->
+  vals = []
+  keys = []
+  for k,v of params
+    keys.push(k)
+  keys.sort()
+  for k in keys
+    vals.push("0",k)
+    vs = params[k]
+    if not $.isArray(params[k]) then vs = [""+vs]
+    vs.sort()
+    for v in vs
+      vals.push("1",v)
+  out = []
+  for v in vals
+    out.push(v.length+"-"+v)
+  return out.join('')
+
+body_cache = () ->
+  try_cache = (orig) ->
+    return (input,request,start,len) ->
+      if start == -1
+        key = stringify_params(input)
+        if size_cache[key]?
+          return $.Deferred().resolve(size_cache[key])
         else
-          more = true
-          @dispatch_request(i,offset,numhere)
-        num -= numhere
-        offset = 0       
+          return orig(input,request,start,len).then (v) ->
+            size_cache[key] = v
+            return v
       else
-        offset -= @lens[i]
-    if more
-      @completion.go()
-    else
-      num = 0
-      num += x for x in @lens
-      @next.call(@,{ num, faceter: @fdata, rows: @docs, @cols })
+        return orig(input,request,start,len)
 
-  get: (rigid,filter,order) -> # XXX
-    @request.abort_ajax()
-    # Extract filter (from pseudo-column "q") and facets
-    all_facets = @hub.all_facets()
-    facets = {}
-    for fr in filter
-      for c in fr.columns
-        if c == 'q'
-          q = fr.value
-        for fc in all_facets
-          if fc == c
-            facets[c] = fr.value
-    if q?
-      @request.some_query()
+  return {
+    context: (state,update_seq) ->
+      q = state.q_query()
+      if size_cache_q != q then size_cache = {}
+      size_cache_q = q
+      return { state, update_seq }
+    prepare: (context,input,tags,depart) ->
+      return [[input,tags,try_cache(depart)]]
+  }
+
+body_split_favs = () ->
+  make_extras = (target) ->
+    rigid = []
+    favs = _clone_array($.solr_config('user.favs.species'))
+    if target? then favs = target.concat(favs)
+    if favs.length
+      rigid.push ['species',[favs],100]
+    return generate_block_list(rigid)
+  
+  normal_extras = make_extras(null)
+
+  prepare = (context,input_in,tags_in,depart) ->
+    tags = _clone_object(tags_in)
+    if !tags.main then return null
+    tags.blocks = 1
+    out = []
+    if tags_in.target_species?
+      extras = make_extras(tags_in.target_species)
     else
-      @request.no_query()
-      return []
-    if order.length
-      sort = order[0].column+" "+(if order[0].order>0 then 'asc' else 'desc')
-    #
-    @input = {
-      q, @rows, @start, sort
-      fq: ("#{k}:\"#{v}\"" for k,v of facets)
-      hl: 'true'
-      'hl.fl': $.solr_config('static.ui.highlights').join(' ')
-      'hl.fragsize': 500
-    }
-    @extra = @expand_criteria(rigid,@remainder_criteria(rigid))
-    @docs = []
-    @results = []
-    @lens = []
-    @completion = new AllDone(@,@completion_fn)
-    @dispatch_facet_request()
-    # Need to know the number of results in each category
-    # If we don't, fire off requests starting at zero
-    # When that's done completion_fn will do the requests proper.
-    for x in [0..@extra.length-1]
-      num = @source.docsize(@input,@extra[x])
-      if not num?
-        @dispatch_request(x,0,@input.rows)
+      extras = normal_extras
+    for x in extras
+      input = _clone_object(input_in)
+      [q,fq] = add_extra_constraints(input.q,(k+':"'+v+'"' for k,v of input.fq),x)
+      input.q = q
+      input.fq = fq
+      order = context.state.order()
+      if order.length
+        input.sort = order[0].column+" "+(if order[0].order>0 then 'asc' else 'desc')
+      out.push [input,tags,depart]
+    return out
+
+  return {
+    context: (state,update_seq) -> return { state, update_seq }
+    prepare
+  }
+
+body_frontpage_specials = () ->
+  return {
+    context: (state,update_seq) -> return { state, update_seq }
+    inspect: (context,requests,docs_frags) ->
+      tops = []
+      if context.state.start() == 0
+        for i in [0...requests.length]
+          if requests[i][0] != -1 and tops.length < context.state.pagesize()
+            tops = tops.concat(docs_frags[i])
+        tops = tops.slice(0,context.state.pagesize())
+      if context.update_seq != current_update_seq
+        return $.Deferred().reject()
+      $(document).trigger('main_front_page',[tops,context.state,context.update_seq])
+      return $.Deferred().resolve()
+  }
+
+body_highlights = () ->
+  add_highlight_fields = (orig) ->
+    return (input,request,start,len) ->
+      v = orig(input,request,start,len)
+      if start != -1
+        return v.then ([data,docs]) =>
+          # Add _hr highlighting to description
+          if data.result?.highlighting?
+            for doc in docs
+              if doc.uid?
+                if data.result.highlighting[doc.uid]
+                  if data.result.highlighting[doc.uid]._hr
+                    doc.description += " " +
+                      data.result.highlighting[doc.uid]._hr.join(" ")
+                  for k,v in data.result.highlighting[doc.uid]
+                    if k == '_hr' then continue
+                    for h in $.solr_config('static.ui.highlights')
+                      if doc[h] and snippet[h]
+                        doc[h] = snippet[h].join(' ... ')
+          return [data,docs]
+      return v
+
+  return {
+    prepare: (context,input,tags,depart) ->
+      if !tags.main then return null
+      input.hl = 'true'
+      input['hl.fl'] = $.solr_config('static.ui.highlights')
+      input['hl.fragsize'] = 500
+      tags.highlighted = 1
+      return [[input,tags,add_highlight_fields(depart)]]
+  }
+
+body_quicklinks = () ->
+  add_quicklinks = (orig) ->
+    return (input,request,start,len) ->
+      v = orig(input,request,start,len)
+      if start == -1 then return v
+      return v.then ([data,docs]) ->
+        for doc in docs
+          quicklinks = []
+          for link,i in $.solr_config('static.ui.links')
+            ok = true
+            # Check if conditions from config are met
+            for value,regex of ( link.conditions ? {} )
+              lhs = value.replace /\{(.*?)\}/g, (g0,g1) ->
+                return doc[g1] ? ''
+              if not lhs.match(new RegExp(regex))
+                ok = false
+                break
+            if not ok then continue
+            # Check result condition (if any)
+            if link.result_condition?
+              found = false
+              for res in doc.quick_links ? []
+                if link.result_condition == res
+                  found = true
+                  break
+              if not found then continue
+            if link.result_condition_not?
+              for res in doc.quick_links ? []
+                if link.result_condition_not == res
+                  ok = false
+            if not ok then continue
+            # Build URL
+            url = link.url.replace /\{(.*?)\}/g, (g0,g1) ->
+              return doc[g1] ? ''
+            quicklinks.push({ url, title: link.title })
+          doc.quicklinks = quicklinks
+        return [data,docs]
+
+  return {
+    prepare: (context,input,tags,depart) ->
+      if !tags.main then return null
+      return [[input,tags,add_quicklinks(depart)]]
+  }
+
+body_elevate_crossspecies = () ->
+  return {
+    prepare: (context,input,tags,depart) ->
+      if tags.main
+        if not tags.target_species? then tags.target_species = []
+        tags.target_species.unshift("CrossSpecies")
+      return [[input,tags,depart]]
+  }
+
+body_requests = [
+  body_raw_request
+  body_cache
+  body_embeded_species
+  body_elevate_crossspecies
+  body_frontpage_specials
+  body_highlights
+  body_elevate_quoted
+  body_quicklinks
+  body_split_favs
+]
+
+run_all_prepares = (contexts,plugins,input) ->
+  tags_in = { main: 1 }
+  run = $.Callbacks("once")
+  input = [[input,tags_in,run,null]]
+  for p,i in plugins
+    if p.prepare?
+      output = []
+      for query in input
+        v = p.prepare(contexts[i],query[0],query[1],query[2])
+        if !v then v = [query]
+        output = output.concat(v)
+      input = output
+  return output
+ 
+dispatch_main_requests = (request,state,table,update_seq) ->
+  t = table.xxx_table()
+  t.reset()
+  
+  plugins = (b() for b in body_requests)
+  # Determine what the blocks are to be: XXX cache this
+  contexts = []
+  prepares = []
+  for p,i in plugins
+    contexts.push(if p.context? then p.context(state,update_seq) else null)
+  prepares =
+    run_all_prepares(contexts,plugins,{ q: state.q_query(), fq: state.q_facets() })
+  blocks = []
+  for pr in prepares
+    ((pp) ->
+      blocks.push (request,start,len) ->
+        pp[2](pp[0],request,start,len).then((data) -> data[1])
+    )(pr)
+  # Calculate block sizes
+  total = 0
+  ret = $.Deferred().resolve()
+  ret = ret.then () =>
+    each_block blocks.length,(i) =>
+      return blocks[i](request,-1)
+        .then (data) ->
+          total += data
+          return data
+  return ret.then (sizes) =>
+    if update_seq != current_update_seq then return $.Deferred().reject()
+    $(document).trigger('num_known',[total,state,update_seq])
+    # Calculate the requests we will make
+    requests = []
+    offset = 0
+    rows_left = state.pagesize()
+    for i in [0...blocks.length]
+      if state.start() < offset+sizes[i] and state.start()+state.pagesize() > offset
+        local_offset = state.start() - offset
+        if local_offset < 0 then local_offset = 0
+        requests.push [local_offset,rows_left]
+        rows_left -= sizes[i] - local_offset
       else
-        @lens[x] = num
-    @completion.go()
+        requests.push [-1,-1]
+      offset += sizes[i]
+    # Make the requests
+    results = each_block blocks.length, (i) =>
+      if requests[i][0] != -1
+        blocks[i](request,requests[i][0],requests[i][1])
+    # Run inspects from plugins
+    results = results.then (docs_frags) =>
+      each_block plugins.length, (i) =>
+          if plugins[i].inspect?
+            plugins[i].inspect(contexts[i],requests,docs_frags)
+        .then(() => return docs_frags)
+    # XXX order
+    # Draw the table
+    return results.then((docs_frags) ->
+      if update_seq != current_update_seq then return $.Deferred().reject()
+      each_block requests.length,(i) =>
+        if requests[i][0] != -1
+          return t.draw_rows({ rows: docs_frags[i], cols: state.columns() })
+        else
+          return $.Deferred().resolve(null)
+    )
 
-  expand_criteria: (criteria,remainder) ->
+dispatch_facet_request = (request,state,table,update_seq) ->
+  fq = ("#{k}:\"#{v}\"" for k,v of state.q_facets()).join(' AND ')
+  # This is a hack to get around a SOLR BUG
+  q = "( NOT species:xxx ) AND ( #{state.q_query()} ) AND ( NOT species:yyy )"
+  params = {
+    q
+    fq
+    rows: 1
+    'facet.field': (k.key for k in $.solr_config('static.ui.facets'))
+    'facet.mincount': 1
+    facet: true
+  }
+  $(document).trigger('faceting_unknown',[update_seq])
+  return request.raw_ajax(params)
+    .then (data) =>
+      if update_seq != current_update_seq then return $.Deferred().reject()
+      all_facets = (k.key for k in $.solr_config('static.ui.facets'))
+      facets = state.q_facets()
+      $(document).trigger('faceting_known',[data.result?.facet_counts?.facet_fields,facets,data.result?.response?.numFound,state,update_seq])
+
+# Generate the criteria for the various blocks by converting
+# configured list to ordered power-set thereof.
+
+generate_block_list = (rigid) ->
+  expand_criteria = (criteria,remainder) ->
     if criteria.length == 0 then return [[]]
     [ type,sets,boost ] = criteria[0]
     head = ( [type,false,s,boost] for s in sets )
     head.push([type,true,remainder[type]])
-    rec = @expand_criteria(criteria.slice(1),remainder)
+    rec = expand_criteria(criteria.slice(1),remainder)
     all = []
     for r in rec
       for h in head
         out = _clone_array(r)
         out.push(h)
         all.push(out)
-    all
+    return all
 
-  remainder_criteria: (criteria) ->
+  remainder_criteria = (criteria) ->
     out = {}
     for [type,sets] in criteria
       out[type] = []
       out[type] = out[type].concat(s) for s in sets
-    out
+    return out
 
-  extract_results: (results,ex_start,ex_rows) ->
-    if results?
-      [got_start,got_rows,got_docs,got_rdocs] = results
-      delta = ex_start - got_start
-      if delta < 0 then return undefined
-      docs = got_rdocs.slice(delta,delta+ex_rows)
-      if docs.length < ex_rows then return undefined      
-      docs
+  return expand_criteria(rigid,remainder_criteria(rigid))
+ 
+all_requests = {
+  main: dispatch_main_requests
+  faceter: dispatch_facet_request
+}
 
-  dispatch_request: (idx,start,rows) ->
-    params = _clone_object(@input)
-    params.start = start
-    params.rows = rows
-    @completion.add_task(idx)
-    c = @completion
-    @request.do_ajax(params,@cols,( (data) =>
-      @lens[idx] = data.num
-      @results[idx] = [start,rows,data.docs,data.rows]
-      @source.docsize(@input,@extra[idx],data.num)
-      c.done(idx,data)
-    ),@extra[idx])
+dispatch_all_requests = (request,state,table,update_seq) ->
+  request.abort_ajax()
+  q = state.q_query()
+  if q?
+    request.some_query()
+  else
+    request.no_query()
+    return $.Deferred().reject()
 
-  dispatch_facet_request: ->
-    fq = @input.fq.join(' AND ')
-    @completion.add_task('facet')
-    cached = @request.cached_facet(obj_to_str({ q: @input.q, fq }))
-    if cached?
-      @completion.done('facet',cached)
-    else
-      params = {
-        q: @input.q
-        fq
-        rows: 1
-        'facet.field': @hub.all_facets()
-        'facet.mincount': 1
-        facet: true
-      }
-      @request.raw_ajax params, (data) =>
-        @completion.done('facet',data)  
+  # run all plugins
+  plugin_list = []
+  plugin_actions = []
+  $.each all_requests, (k,v) =>
+    plugin_list.push k
+    plugin_actions.push v(request,state,table,update_seq)
+  return $.when.apply(@,plugin_actions)
+
+rate_limiter = window.rate_limiter(1000,2000)
 
 # XXX Faceter orders
 # XXX out of date responses / abort
+current_update_seq = 0
 xhr_idx = 1
 class Request
-  constructor: (@hub,@source,@renderer) ->
-    @sensible = new Sensible(1000,2000, (v) =>
-      {filter,cols,order,start,rows,next} = v
-      @real_get(filter,cols,order,start,rows, (data) =>
-        if @relevant_data(filter,cols,order,start,rows) then next(data)
-      )
-    )
-    @sensible.set_equal_fn (a,b) =>
-      a_s = obj_to_str(a,true)
-      b_s = obj_to_str(b,true)
-      a_s == b_s
-
+  constructor: (@hub) ->
     @xhrs = {}
+  
+  req_outstanding: -> (k for k,v of @xhrs).length 
 
-    @fc = @fc_key = undefined
-    @current_q = undefined
-
-  req_outstanding: -> (k for k,v of @xhrs).length
-
-  cached_facet: (key,data) ->
-    if data?
-      @fc = data
-      @fc_key = key
-    if key == @fc_key then @fc else undefined
-
-  _remove_q: (filter) ->
-    out = []
-    for f in filter
-      q = undefined
-      qout = f.value for c in f.columns when c == 'q' 
-      if not q? then out.push(f)
-    [out,qout]
-
-  relevant_data: (filter,cols,order,start,rows) ->
-    a = {filter,cols,order,start,rows,next: true}
-    b = _clone_object(@sensible.current())
-    [a.filter,aq] = @_remove_q(a.filter)
-    [b.filter,bq] = @_remove_q(b.filter)
-    # if any of the metadata is different it's not relevant
-    if obj_to_str(a,true) != obj_to_str(b,true) then return false
-    # if a isn't a prefix of b it's not relevant
-    if not _is_prefix_of(aq,bq) then return false
-    # if what's already there is a longer prefix, then it's irrelevant
-    if @current_q? and @current_q.length > aq.length and _is_prefix_of(@current_q,bq)
-      return false
-    @current_q = aq
-    true
-
-  set_rigid_order: (@rigid) ->
-
-  # XXX get rid of force by pushing sensible elsewhere in stack
-  get: (filter,cols,order,start,rows,next,force) -> # XXX
-    if force
-      @real_get(filter,cols,order,start,rows,next)
-    else
-      @sensible.submit({filter,cols,order,start,rows,next})
-
-  real_get: (filter,cols,order,start,rows,next) -> # XXX
-    disp = new RequestDispatch(@,@hub,@source,start,rows,@renderer,cols,next)  
-    disp.get(@rigid,filter,order)
+  render_table: (table,state) ->
+    current_update_seq += 1
+    $(document).data('update_seq',current_update_seq)
+    $(document).trigger('state_known',[state,current_update_seq])
+    return dispatch_all_requests(@,state,table,current_update_seq)
 
 # XXX shortcircuit get on satisfied
 # XXX first page optimise
@@ -679,55 +832,25 @@ class Request
     if @req_outstanding() then @hub.spin_down()
     @xhrs = {}
 
-  # XXX AJAX to plugin
-  raw_ajax: (params,more) ->
+  raw_ajax: (params) ->
     idx = (xhr_idx += 1)
-    xhr = _ajax_json @hub.ajax_url(), params, (data) =>
+    xhr = $.ajax({
+      url: @hub.ajax_url(), data: params,
+      traditional: true, dataType: 'json'
+    })
+    if !@req_outstanding() then @hub.spin_up()
+    @xhrs[idx] = xhr
+    xhr = xhr.then (data) =>
       delete @xhrs[idx]
       if !@req_outstanding() then @hub.spin_down()
       if data.error
         @hub.fail()
         $('.searchdown-box').css('display','block')
+        return $.Deferred().reject()
       else
         @hub.unfail()
-        more.call(@,data) 
-    if !@req_outstanding() then @hub.spin_up()
-    @xhrs[idx] = xhr
-
-  substitute_highlighted: (input,output) ->
-    for doc in output.rows
-      snippet = input.result?.highlighting?[doc.uid]
-      if snippet?
-        for h in $.solr_config('static.ui.highlights')
-          if doc[h] and snippet[h]
-            doc[h] = snippet[h].join(' ... ')
-
-  do_ajax: (input,cols,result,extra) ->
-    input = _clone_object(input)
-    q = [input.q]
-    for [field,invert,values,boost] in extra
-      str = (field+':"'+s+'"' for s in values).join(" OR ")
-      str = (if invert then "(NOT ( #{str} ))" else "( #{str} )")
-      input.fq.push(str)
-      bq = []
-      if boost?
-        for s,i in values
-          v = Math.floor(boost*(values.length-i-1)/(values.length-1))
-          bq.push(field+':"'+s+'"'+(if v then "^"+v else ""))
-        q.push("( "+bq.join(" OR ")+" )")
-    if q.length > 1
-      input.q = ( "( "+x+" )" for x in q).join(" AND ")
-    @raw_ajax input, (data) =>
-      num = data.result?.response?.numFound
-      docs = data.result?.response?.docs
-      table = { rows: docs, hub: @hub }
-      @substitute_highlighted(data,table)
-      out = []
-      for d in table.rows
-        obj = []
-        obj.push(d[c]) for c in cols
-        out.push(obj)
-      result.call(@,{ docs: out, num, rows: table.rows, cols })
+        return data
+    return xhr
 
   some_query: ->
     $('.page_some_query').show()
@@ -745,39 +868,22 @@ class Request
 class Renderer
   constructor: (@hub,@source) ->
 
-  render_doc: (results,doc) ->
-    html = _div('solr_result')
-    html.append(_a(results.url(doc)).text(results.id(doc)))
-    html.append(" #{ results.name(doc) } #{ results.type(doc) } #{ results.species(doc) } #{ results.description(doc) }")
-    html
-
   page: (results) ->
     page = parseInt(@hub.page())
-    if page < 1 or page > results.num_pages() then 1 else page 
+    if page < 1 or page > results.num_pages() then 1 else page
 
   render_stage: (more) ->
     $('.nav-heading').hide()
     main = $('#solr_content').empty()
     # Move from solr_content to table
-    @state = new SearchTableState(@hub,@source,$('#solr_content'))
+    @state = new SearchTableState(@hub,$('#solr_content'),$.solr_config('static.ui.all_columns'))
 
     $(document).data('templates',@hub.templates())
-    @table = new window.search_table(@hub.templates(),@source,@state,{
+    @table = new window.search_table(@hub.templates(),@state,{
       multisort: 0
       filter_col: 'q'
-      update : (data) =>
-        facets = {} 
-        for fr in @state.filter()
-          for c in fr.columns
-            if c == 'q'
-              q = fr.value
-            for fc in @hub.all_facets()
-              if fc == c
-                facets[c] = fr.value
-        query = { q, facets }
-        $(document).trigger('first_result',[query,data,@state])
-        $(document).on 'update_state', (e,qps) =>
-          @hub.update_url(qps)
+      chunk_size: 100
+      style_col: 'result_style'
     })
     @render_style(main,@table)
     more()
@@ -785,7 +891,22 @@ class Renderer
   render_results: ->
     @state.update()
     $('.preview_holder').trigger('preview_close')
-    @table.draw_table()
+    @hub.request().render_table(@table,@state)
+  
+  get_data: (start,num) ->
+    # XXX configurable incr except for download
+    @source.get(@state.filter(),@state.columns(),@state.order(),start,num,true)
+  
+  get_all_data: () ->
+    acc = { rows: [] }
+    return window.in_chunks -1, 100, (got,chunksize) =>
+        return @get_data(got,chunksize).then (data) =>
+          if data.cols? and not acc.cols? then acc.cols = data.cols
+          if data.rows.length == 0 or (@max? and got+data.rows.length > @max)
+            return -1
+          acc.rows = acc.rows.concat(data.rows)
+          return data.rows.length
+      .then((d) => return acc)
 
   render_style: (root,table) ->
     clayout = @hub.layout()
@@ -798,7 +919,14 @@ class Renderer
         title: 'Layout:'
         select: ((k) => @hub.update_url { style: k })
       table:
-        table.generate_model()
+        table_ready: (el,data) => @table.collect_view_model(el,data)
+        state: @state
+        download_curpage: (el,fn) =>
+          @get_data(@state.start(),@state.pagesize()).done((data) =>
+            @table.transmit_data(el,fn,data)
+          )
+        download_all: (el,fn) =>
+          @get_all_data().done((data) => @table.transmit_data(el,fn,data))
     }
     @hub.templates().generate 'page',page, (out) ->
       root.append(out)
@@ -806,8 +934,8 @@ class Renderer
     if page.layouts.set_fn? then page.layouts.set_fn(clayout)
 
 class SearchTableState extends window.TableState
-  constructor: (@hub,source,element) ->
-    super(source,element)
+  constructor: (@hub,source,element,columns) ->
+    super(source,element,columns)
 
   update: ->
     if @hub.sort()
@@ -849,11 +977,25 @@ class SearchTableState extends window.TableState
     columns = @columns()
     if @_is_default_cols(columns)
       state.columns = ''
-    else 
+    else
       state.columns = columns.join("*")
-    state.q = @_extract_filter('q') 
+    state.q = @_extract_filter('q')
     @hub.update_url(state)
 
+  q_query: () ->
+    for fr in @filter()
+      for c in fr.columns
+        if c == 'q'
+          return fr.value
+    return ''
+
+  q_facets: () ->
+    facets = {}
+    for fr in @filter()
+      for c in fr.columns
+        if c != 'q'
+          facets[c] = fr.value
+    return facets
 # Go!
 
 $ ->

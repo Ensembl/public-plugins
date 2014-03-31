@@ -1,3 +1,17 @@
+# Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 #
 
 $.fn.getCursorPosition = () ->
@@ -8,36 +22,15 @@ $.fn.getCursorPosition = () ->
     return input.selectionStart
   else if document.selection
     # IE
-    input.focus();
+    input.focus()
     sel = document.selection.createRange()
     selLen = document.selection.createRange().text.length
     sel.moveStart('character', -input.value.length)
     return sel.text.length - selLen
 
-class ACSensible # Move into util class to dedup this from Sensible
-  constructor: (@nochange_ms,@lastreq_ms,@operation) ->
-    @timeout = undefined
-    @last_request = undefined
-    @last_data = undefined
-    @equal = (a,b) -> a == b
-    @trigger()
-
-  set_equal_fn: (@equal) ->
-
-  submit: (@data) ->
-    if @timeout then clearTimeout(@timeout)
-    @timeout = setTimeout(((v) => @trigger(v)),@nochange_ms)
-    now = new Date().getTime()
-    if (not @last_request?) or now - @last_request > @lastreq_ms
-      @trigger()
-        
-  trigger: ->
-    if not @equal(@last_data,@data)
-      @last_data = @data
-      @last_request = new Date().getTime()
-      @operation(@data)
-
-  current: -> @data
+load_config = () ->
+  config_url = "#{ $('#species_path').val() }/Ajax/config"
+  return $.solr_config({ url: config_url })
 
 favs = undefined
 
@@ -90,7 +83,6 @@ score_of = (doc,favs) ->
   score
 
 sort_docs = (url,docs,favs,callback) ->
-  docs = ( d.doc for d in docs )
   docs.sort (a,b) -> score_of(b,favs) - score_of(a,favs)
   out = []
   for d in docs
@@ -100,12 +92,15 @@ sort_docs = (url,docs,favs,callback) ->
     for key,str of fmts
       entry[key] = str.replace(/\{(.*?)\}/g,((m0,m1) -> d[m1] ? d.id ? 'unnamed'))
     # XXX pull server root from config
-    entry.link = "/" + d.domain_url
+    entry.link = "/" + d.url
     out.push(entry)
   callback(out)
 
 ac_string_q = (url,q) ->
   q = q.toLowerCase()
+  species = window.solr_current_species()
+  if !species then species = 'all'
+  q = species+'__'+q
   data = {
     q, spellcheck: true
   }
@@ -116,6 +111,7 @@ ac_string_a = (input,output) ->
   unless docs? then return
   while docs.length
     q = docs.shift()
+    q = q.replace(/^.*?__/,'')
     output.push {
       left: "Search for '#{q}'"
       link: "/Multi/Search/Results?q="+q
@@ -128,13 +124,17 @@ direct_order = ['Phenotype','Gene']
 direct_format =
   Phenotype:
     left: "{name}"
-    right: '{species} Phenotype #{id}'
+    right: '{species} Phenotype'
   Gene:
     left: "{name}"
     right: "<i>{species}</i> Gene {id}"
   '':
     left: "{name}"
     right: "{id} {feature_type}"
+
+direct_link =
+  Phenotype: "{ucspecies}/Phenotype/Locations?ph={id}"
+  Gene: "{ucspecies}/Gene/Summary?g={id};{rest}"
 
 direct_searches = [
   {
@@ -167,45 +167,52 @@ jump_searches = [
 boost = (i,n) -> if n>1 then Math.pow(10,(2*(n-i-1))/(n-1)) else 1
 
 ac_name_q = (config,url,query,favs) ->
-  if not $.solr_config('static.ui.enable_direct')
-    return new $.Deferred().resolve()
-  query = query.toLowerCase()
-  fav = "( "+("species:\"#{s}\"" for s in favs).join(" OR ")+" )"
-  # XXX configurable AC feature types
-  q = []
-  for s in config
-    if s.minlen? and query.length < s.minlen
-      continue
-    if s.ft?
-      ft_part = ( "feature_type:"+t for t in s.ft ).join(' OR ')
-    q_parts = []
-    for f in s.fields
-      wild = false
-      f = f.replace(/\*$/,(() -> wild = true ; ''))
-      fk = ( if f == '' then '' else f+':' )
-      q_parts.push(fk+query)
-      if wild
-        q_parts.push(fk+query+'*')
-    q_part = q_parts.join(' OR ')
-    if q_parts.length > 1 then q_part = "( "+q_part+" )"
-    if s.ft?
-      q.push("( ( #{ft_part} ) AND #{q_part} )")
-    else
-      q.push(q_part)
-  # Add fav-sp to q as well as fq so that we can boost to get spp in
-  # right order
-  favqs = []
-  for s,i in favs
-    favqs.push("species:\""+s+"\"^"+boost(i,favs.length))
-  q = "( "+q.join(' OR ')+" ) AND ( "+favqs.join(" OR ")+" )" 
-  data = { q, fq: fav }
-  return ajax_json(url,data)
+  return load_config().then (x) =>
+    if not $.solr_config('static.ui.enable_direct')
+      return new $.Deferred().resolve()
+    spp = []
+    spp_h = {}
+    for s in favs
+      s = $.solr_config('spnames.%',s.toLowerCase())
+      spp.push(s.toLowerCase())
+      spp_h[s.toLowerCase()] = 1
+    cursp = window.solr_current_species()
+    if cursp and (not spp_h[cursp.toLowerCase()]?)
+      spp.push(cursp.toLowerCase())
+    qs = []
+    for sp in spp
+      sp = sp.replace(/_/g,'_-').replace(/\s+/g,'_+')
+      q = query.toLowerCase().replace(/_/g,'_-').replace(/\s+/g,'_+')
+      qs.push(sp+"__"+q)
+    q = qs.join(' ')
+    data = {
+      q, directlink: true, spellcheck: true
+    }
+    return ajax_json(url,data)
 
+direct_limit = 6
 ac_name_a = (input,output) ->
-  docs = input.result?.response?.docs
-  unless docs? then return
-  for d in docs
-    output.push({ doc: d })
+  j = 0
+  for s,i in input.result?.spellcheck?.suggestions
+    if not i%2 then continue
+    if j >= direct_limit then break
+    docs = s.suggestion
+    unless docs? then continue
+    for d in docs
+      parts = []
+      for p in d.split('__')
+        parts.push(p.replace(/_\+/g,' ').replace(/_\-?/g,'_'))
+      species = $.solr_config('revspnames.%',parts[0].toLowerCase())
+      ucspecies = parts[0].charAt(0).toUpperCase() + parts[0].slice(1)
+      doc = {
+        name: parts[4], id: parts[3], species, ucspecies, rest: parts[5],
+        feature_type: parts[2]
+      }
+      doc.url = direct_link[parts[2]]
+      doc.url = doc.url.replace(/\{(.*?)\}/g,((m0,m1) -> doc[m1] ? ''))
+      output.push(doc)
+      j += 1
+      if j >= direct_limit then break
 
 # XXX not really ac functionality, but methods are here: refactor
 jump_to = (q) ->
@@ -218,30 +225,17 @@ jump_to = (q) ->
       direct = []
       ac_name_a(id_d,direct)
       if direct.length != 0
-        window.location.href = '/'+direct[0].doc.domain_url
+        window.location.href = '/'+direct[0].url
     )
 
-sensible = new ACSensible 500,1000, (data) ->
-  url = $('#se_q').parents("form").attr('action')
-  url = url.split('/')[1]
-  if url == 'common' then url = 'Multi'
-  url = "/#{url}/Ajax/search"
-  q = data.q
-  favourite_species data.element, (favs) ->
-    $.when(ac_string_q(url,q),
-            ac_name_q(direct_searches,url,q,favs))
-      .done((string_d,id_d) ->
-        searches = []
-        direct = []
-        out = []
-        ac_string_a(string_d[0],searches)
-        if id_d?[0] then ac_name_a(id_d[0],direct)
-        sort_docs(url,direct,favs, (sorted) ->
-          direct = sorted
-          s.type = 'search' for s in searches
-          d.type = 'direct' for d in direct
-          out = searches.concat(direct)
-          data.response(out)))
+rate_limit = null
+
+make_rate_limiter = (params) ->
+  if rate_limit then return rate_limit(params)
+  return load_config().then (x) =>
+    limits = $.solr_config('static.ui.direct_pause')
+    rate_limit = window.rate_limiter(limits[0],limits[1])
+    return rate_limit(params)
 
 internal_site = (el) ->
   site = el.parents('form').find("input[name='site']").val()
@@ -289,6 +283,7 @@ $.widget('custom.searchac',$.ui.autocomplete,{
       .css({ position: 'absolute', 'z-index': 1 })
       .css({ background: 'none' }).val('')
       .addClass('solr_ghost').attr('placeholder','').attr('id','')
+      .attr('tabindex','5000')
       .insertBefore(@element).attr('name','')
     $.ui.autocomplete.prototype._create.call(@)
     oldval = @element.val()
@@ -321,7 +316,27 @@ $.widget('custom.searchac',$.ui.autocomplete,{
   options:
     source: (request,response) ->
       if internal_site(@element)
-        sensible.submit({ q: request.term, response, @element })
+        make_rate_limiter({q: request.term, response, @element }).done (data) =>
+          url = $('#se_q').parents("form").attr('action')
+          url = url.split('/')[1]
+          if url == 'common' then url = 'Multi'
+          url = "/#{url}/Ajax/search"
+          q = data.q
+          favourite_species data.element, (favs) ->
+            $.when(ac_string_q(url,q),
+                    ac_name_q(direct_searches,url,q,favs))
+              .done((string_d,id_d) ->
+                searches = []
+                direct = []
+                out = []
+                ac_string_a(string_d[0],searches)
+                if id_d?[0] then ac_name_a(id_d[0],direct)
+                sort_docs(url,direct,favs, (sorted) ->
+                  direct = sorted
+                  s.type = 'search' for s in searches
+                  d.type = 'direct' for d in direct
+                  out = searches.concat(direct)
+                  data.response(out)))
       else
         response([])
     select: (e,ui) ->

@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2013] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,19 +23,6 @@ package EnsEMBL::Web::Object;
 
 use strict;
 use warnings;
-
-sub rose_manager {
-  ## Returns the ORM::Rose::Manager class for the given type
-  ## @param DB name
-  ## @param Manager type
-  ## @return Manager Class (Static class reference) or defaults to ORM::EnsEMBL::Rose::Manager if no manager class found
-  my ($self, $db, $type) = @_;
-
-  $db   ||= '';
-  $type   = $type ? "::$type" : '';
-
-  return $self->{'_rose_managers'}{$db}{$type} ||= $self->dynamic_use_fallback($db ? "ORM::EnsEMBL::DB::${db}::Manager${type}" : (), 'ORM::EnsEMBL::Rose::Manager');
-}
 
 sub rose_objects {
   ## Getter/Setter for the rose objects

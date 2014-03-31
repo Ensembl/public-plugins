@@ -21,7 +21,8 @@
                 'a': 'link.title'
               }
             },
-            '@class+': 'row.cols.facets'
+            '@class+': 'row.cols.facets',
+            '.table_result@class+': 'row.klass'
           }
         }
       },
@@ -246,13 +247,18 @@
           });
         },
         '.solr_result_summary': function(els, data) {
-          return $(document).on('first_result', function(e, query, data) {
+          var _this = this;
+          return $(document).on('faceting_known', function(e, faceter, used_facets, num, state, update_seq) {
             var templates;
             templates = $(document).data('templates');
             els.empty();
+            if ($(document).data('update_seq') !== update_seq) {
+              return;
+            }
             return els.append(templates.generate('result_summary', {
-              query: query,
-              result: data
+              query: state.q_query(),
+              num: num,
+              used_facets: used_facets
             }));
           });
         }
@@ -274,8 +280,8 @@
     'result_summary': {
       template: "<div class=\"solr_result_stmt\">\n  <span class=\"solr_result_count\">0</span> results\n  match <span class=\"solr_result_query\">X</span>\n  <span class=\"solr_result_restricted\">\n    when restricted to\n    <ul>\n      <li>\n        <a href=\"#\">\n          <span class=\"solr_result_fname\">A</span>: \n          <span class=\"solr_result_fval\">AA</span>\n        </a>\n      </li>\n    </ul>\n  </span>\n</div>",
       directives: {
-        '.solr_result_count': 'result.num',
-        '.solr_result_query': 'query.q',
+        '.solr_result_count': 'num',
+        '.solr_result_query': 'query',
         '.solr_result_restricted': {
           'fs<-facets': {
             'li': {
@@ -316,7 +322,7 @@
       preproc: function(spec, data) {
         var facets, k, v, value, _ref;
         facets = [];
-        _ref = data.query.facets;
+        _ref = data.used_facets;
         for (k in _ref) {
           v = _ref[k];
           value = $.solr_config('static.ui.facets.key=.members.key=.text.plural', k, v);
@@ -353,8 +359,11 @@
           });
         },
         'input': function(els, data) {
-          $(document).on('first_result', function(e, query, data) {
-            return els.val(query.q);
+          $(document).on('state_known', function(e, state, update_seq) {
+            if ($(document).data('update_seq') !== update_seq) {
+              return;
+            }
+            return els.val(state.q_query());
           });
           return els.searchac().keydown(function(e) {
             if (e.keyCode === 13) {
@@ -369,7 +378,7 @@
         }
       },
       postproc: function(el, data) {
-        $(document).on('maybe_update_state', function(e, change) {
+        $(document).on('maybe_update_state', function(e, change, incr) {
           var _ref;
           $.getJSON("/Multi/Ajax/psychic", {
             q: (_ref = change.q) != null ? _ref : ''
@@ -380,20 +389,23 @@
           });
           return $(document).trigger('update_state', change);
         });
-        return $(document).on('first_result', function(e, query, data) {
-          var f, filter, ids, left, right, texts, title, _i, _len, _ref, _ref1,
+        return $(document).on('state_known', function(e, state, update_seq) {
+          var f, facets, filter, ids, left, right, texts, title, _i, _len, _ref, _ref1,
             _this = this;
+          if ($(document).data('update_seq') !== update_seq) {
+            return;
+          }
+          facets = state.q_facets();
           filter = $('.replacement_filter', el);
           texts = [];
           ids = [];
           filter.selbox({
             action: function(id, text, opts) {
-              var state;
               state = {
                 page: 1
               };
               state['facet_' + id] = '';
-              return $(document).trigger('update_state', [state]);
+              return $(document).trigger('update_state', state);
             },
             selchange: function() {
               return this.centered({
@@ -407,11 +419,11 @@
           _ref = $.solr_config("static.ui.facets");
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             f = _ref[_i];
-            if (!query.facets[f.key]) {
+            if (!facets[f.key]) {
               continue;
             }
             left = ucfirst($.solr_config("static.ui.facets.key=.text.plural", f.key));
-            right = (_ref1 = $.solr_config("static.ui.facets.key=.members.key=.text.plural", f.key, query.facets[f.key])) != null ? _ref1 : query.facets[f.key];
+            right = (_ref1 = $.solr_config("static.ui.facets.key=.members.key=.text.plural", f.key, facets[f.key])) != null ? _ref1 : facets[f.key];
             texts.push("Search other <i>" + left + "</i>,\nnot just <b>" + right + "</b>.");
             ids.push(f.key);
             title.push(right);
@@ -532,11 +544,13 @@
           }
         },
         '.new_current_faceter': function(el, data) {
-          return $(document).on('first_result', function(e, query, data) {
-            var templates, values;
+          return $(document).on('faceting_known', function(e, faceting, values, num, state, update_seq) {
+            var templates;
+            if ($(document).data('update_seq') !== update_seq) {
+              return;
+            }
             templates = $(document).data('templates');
             el.empty();
-            values = query.facets;
             return el.append(templates.generate('current_facets_sidebar', {
               values: values
             }));
@@ -626,36 +640,13 @@
             });
             true;
             data.tp2_row.register(1000, function() {
-              var a, b, idx, left, link, ok, ql, url, _i, _len, _ref, _ref1, _results;
-              ql = $.solr_config('static.ui.links');
+              var link, links, _i, _len, _ref, _results;
+              links = data.tp2_row.best('quicklinks');
+              _ref = links != null ? links : [];
               _results = [];
-              for (idx = _i = 0, _len = ql.length; _i < _len; idx = ++_i) {
-                link = ql[idx];
-                ok = true;
-                _ref1 = (_ref = link.conditions) != null ? _ref : {};
-                for (a in _ref1) {
-                  b = _ref1[a];
-                  left = a.replace(/\{(.*?)\}/g, function(g0, g1) {
-                    var _ref2;
-                    return (_ref2 = data.tp2_row.best(g1)) != null ? _ref2 : '';
-                  });
-                  if (!left.match(new RegExp(b))) {
-                    ok = false;
-                    break;
-                  }
-                }
-                if (ok) {
-                  url = link.url.replace(/\{(.*?)\}/g, function(g0, g1) {
-                    var _ref2;
-                    return (_ref2 = data.tp2_row.best(g1)) != null ? _ref2 : '';
-                  });
-                  _results.push(data.tp2_row.add_value("quick_link", {
-                    title: link.title,
-                    url: url
-                  }, 100 * idx + 500));
-                } else {
-                  _results.push(void 0);
-                }
+              for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                link = _ref[_i];
+                _results.push(data.tp2_row.add_value("quick_link", link));
               }
               return _results;
             });
@@ -728,7 +719,7 @@
               }
               return true;
             });
-            return data.tp2_row.register(50000, function() {
+            return data.tp2_row.register(51000, function() {
               data.tp2_row.send('description', data.tp2_row.best('description'));
               data.tp2_row.send('id', data.tp2_row.best('id'));
               data.tp2_row.send('url', data.tp2_row.best('url'));
@@ -752,9 +743,23 @@
         return [spec, data];
       },
       postproc: function(el, odata) {
-        return $(document).on('first_result', function(e, query, data, state) {
+        $(document).on('faceting_unknown', function(e, update_seq) {
+          return $('.table_faceter', el).each(function() {
+            if ($(document).data('update_seq') !== update_seq) {
+              return;
+            }
+            if ($(this).data('update_seq') === update_seq) {
+              return;
+            }
+            return $(this).empty();
+          });
+        });
+        return $(document).on('faceting_known', function(e, faceter, query, num, state, update_seq) {
           $('.table_faceter', el).each(function() {
             var fav_order, k, key, members, model, order, short_num, templates, _i, _len;
+            if ($(document).data('update_seq') !== update_seq) {
+              return;
+            }
             key = $(this).data('key');
             order = [];
             fav_order = $.solr_config('static.ui.facets.key=.fav_order', key);
@@ -769,15 +774,16 @@
               }
             }
             model = {
-              values: data.faceter[key],
+              values: faceter[key],
               order: order
             };
             short_num = $.solr_config('static.ui.facets.key=.trunc', key);
-            if (query.facets[key]) {
+            if (query[key]) {
               model.values = [];
             }
             model.key = key;
             templates = $(document).data('templates');
+            $(this).data('update_seq', update_seq);
             return $(this).empty().append(templates.generate('faceter_inner', model));
           });
           return $('#main_holder').css('min-height', $('.solr_sidebar').outerHeight(true) + $('.solr_sidebar').offset().top);
@@ -1185,7 +1191,7 @@
       }
     },
     sidesizer: {
-      template: "<div class=\"solr_faceter solr_beak_p solr_feet_p\">\n  <div class=\"solr_beak_p_title\">Per page:</div>\n  <div class='solr_beak_p_contents solr_perpage_list'>\n    <a>\n      <span class='solr_beak_p_left'>42</span>\n      <span class='solr_beak_p_right'></span>\n    </a>\n  </div>\n  <div class='solr_beak_p_contents solr_perpage_all'>\n    <a href=\"#0\">\n      <span class='solr_beak_p_left'>Show all results in one page</span>\n      <span class='solr_beak_p_right'></span>\n    </a>\n  </div>\n</div>",
+      template: "<div class=\"solr_faceter solr_beak_p solr_feet_p\">\n  <div class=\"solr_beak_p_title\">Per page:</div>\n  <div class='solr_beak_p_contents solr_perpage_list'>\n    <a>\n      <span class='solr_beak_p_left'>42</span>\n      <span class='solr_beak_p_right'></span>\n    </a>\n  </div>\n  <!-- not for now: need to re-engineer\n  <div class='solr_beak_p_contents solr_perpage_all'>\n    <a href=\"#0\">\n      <span class='solr_beak_p_left'>Show all results in one page</span>\n      <span class='solr_beak_p_right'></span>\n    </a>\n  </div>\n  -->\n</div>",
       directives: {
         '.solr_perpage_list a': {
           'entry<-entries': {
@@ -1227,8 +1233,11 @@
         return [spec, data];
       },
       postproc: function(el, data) {
-        return $(document).on('first_result', function(e, query, data, state) {
+        return $(document).on('state_known', function(e, state, update_seq) {
           var pp;
+          if ($(document).data('update_seq') !== update_seq) {
+            return;
+          }
           $('.solr_feet_p_current', el).removeClass('solr_feet_p_current');
           pp = state.pagesize();
           return $("a[href='#" + pp + "']", el).addClass('solr_feet_p_current');
@@ -1303,18 +1312,21 @@
           arrow(ctx, step_start + step * 12, 10, 4, -1);
           return ctx.fillText(sstr, step_start + step * 6, 15);
         };
-        return $(document).on('first_result', function(e, query, data, state) {
-          var desc, extra, latin, tophit, _ref,
+        return $(document).on('main_front_page', function(e, results, state, update_seq) {
+          var desc, extra, latin, tophit, _i, _len,
             _this = this;
-          if (state.page() !== 1) {
+          if (state.page() !== 1 || !results.length) {
             return;
           }
-          tophit = (_ref = data.rows) != null ? _ref[0] : void 0;
-          if (tophit == null) {
-            return;
-          }
-          el.empty();
-          if (tophit.feature_type === 'Gene') {
+          for (_i = 0, _len = results.length; _i < _len; _i++) {
+            tophit = results[_i];
+            el.empty();
+            if (tophit == null) {
+              continue;
+            }
+            if (tophit.feature_type !== 'Gene') {
+              continue;
+            }
             extra = {};
             desc = tophit.description.replace(/\[(.*?)\:(.*?)\]/g, function(g0, g1, g2) {
               extra[$.trim(g1).toLowerCase()] = $.trim(g2);
@@ -1324,7 +1336,7 @@
               extra.source = extra.source.replace(/;/g, '; ');
             }
             latin = $.solr_config('spnames.%', tophit.species);
-            return _ajax_json("/Multi/Ajax/extra", {
+            _ajax_json("/Multi/Ajax/extra", {
               queries: JSON.stringify({
                 queries: [
                   {
@@ -1337,11 +1349,14 @@
                 ]
               })
             }, function(data) {
-              var biotype, bt_colour, templates, _ref1;
-              _ref1 = data.result, biotype = _ref1[0], bt_colour = _ref1[1];
+              var biotype, bt_colour, templates, _ref;
+              if ($(document).data('update_seq') !== update_seq) {
+                return;
+              }
+              _ref = data.result, biotype = _ref[0], bt_colour = _ref[1];
               templates = $(document).data("templates");
               el.append(templates.generate('sctophit', {
-                q: query.q,
+                q: state.q_query(),
                 url: tophit.url,
                 name: tophit.name,
                 ft: "Gene",
@@ -1356,12 +1371,13 @@
               }));
               return $('html').trigger('wrap');
             });
+            return;
           }
         });
       }
     },
     sctophit: {
-      template: " \n<div class=\"sctophit scside\">\n  <div class=\"scth_play\">&#x21AA;</div>\n  <h1>Best match</h1>\n  <div class=\"scth_left\">\n    <div class=\"scth_type\"></div>\n    <div class=\"scth_name maybe_wrap\"></div>\n    <div class=\"scth_source\"></div>\n  </div>\n  <div class=\"scth_right\">\n    <div class=\"scth_top\">\n      <div class=\"scth_species\">\n        <img alt=\"\" title=\"\"/>\n      </div>\n      <div class=\"scth_canvas\">\n        <div class=\"scth_canvas_holder\">\n          <canvas width=\"221\" height=\"58\">\n            Click for full details\n          </canvas>\n        </div>\n      </div>\n    </div>\n    <div class=\"scth_biotype\"></div>\n    <div class=\"scth_desc\"></div>\n  </div>\n</div>",
+      template: " \n<div class=\"sctophit scside\">\n  <div class=\"scth_play\">&#x21AA;</div>\n  <h1>Best gene match</h1>\n  <div class=\"scth_left\">\n    <div class=\"scth_type\"></div>\n    <div class=\"scth_name maybe_wrap\"></div>\n    <div class=\"scth_source\"></div>\n  </div>\n  <div class=\"scth_right\">\n    <div class=\"scth_top\">\n      <div class=\"scth_species\">\n        <img alt=\"\" title=\"\"/>\n      </div>\n      <div class=\"scth_canvas\">\n        <div class=\"scth_canvas_holder\">\n          <canvas width=\"221\" height=\"58\">\n            Click for full details\n          </canvas>\n        </div>\n      </div>\n    </div>\n    <div class=\"scth_biotype\"></div>\n    <div class=\"scth_desc\"></div>\n  </div>\n</div>",
       directives: {
         '.scth_name': 'name',
         '.scth_type': 'title',
@@ -1446,15 +1462,15 @@
     'topgene': {
       template: "<div class='solr_topgene'>\n</div>",
       postproc: function(el, data) {
-        return $(document).on('first_result', function(e, query, data, state) {
+        return $(document).on('main_front_page', function(e, results, state, update_seq) {
           var params,
             _this = this;
-          if (state.page() !== 1) {
+          el.empty();
+          if (state.page() !== 1 || !results.length) {
             return;
           }
-          el.empty();
           params = {
-            q: 'name:"' + query.q + '"',
+            q: 'name:"' + state.q_query() + '"',
             rows: 200,
             fq: "feature_type:Gene AND database_type:core",
             'facet.field': "species",
@@ -1463,6 +1479,9 @@
           };
           return _ajax_json("/Multi/Ajax/search", params, function(data) {
             var d, docs, favord, i, k, rows, s, sp_glinks, templates, url, v, _i, _j, _len, _len1, _ref, _ref1, _ref2;
+            if ($(document).data('update_seq') !== update_seq) {
+              return;
+            }
             sp_glinks = {};
             docs = (_ref = data.result) != null ? (_ref1 = _ref.response) != null ? _ref1.docs : void 0 : void 0;
             if (docs != null) {
@@ -1514,7 +1533,7 @@
               return el.append(templates.generate('sctopgene', {
                 urls: sp_glinks,
                 rows: rows,
-                q: query.q
+                q: state.q_query()
               }));
             }
           });
@@ -1605,6 +1624,9 @@
             _ref = $.solr_config('static.ui.facets');
             for (_i = 0, _len = _ref.length; _i < _len; _i++) {
               f = _ref[_i];
+              if (f.key === 'species') {
+                continue;
+              }
               state["facet_" + f.key] = '';
             }
             state.q = href.substring(1);
@@ -1635,15 +1657,27 @@
     noresults: {
       template: "<div></div>",
       postproc: function(el, data) {
-        return $(document).on('first_result', function(e, query, rdata, state) {
-          var _this = this;
+        return $(document).on('num_known', function(e, num, state, update_seq) {
+          var sp_q, species,
+            _this = this;
+          if (!state.q_query()) {
+            return;
+          }
+          species = window.solr_current_species();
+          if (!species) {
+            species = 'all';
+          }
+          sp_q = species + '__' + state.q_query().toLowerCase();
           return _ajax_json("/Multi/Ajax/search", {
-            'spellcheck.q': query.q.toLowerCase(),
+            'spellcheck.q': sp_q,
             spellcheck: true,
             'spellcheck.count': 50,
             'spellcheck.onlyMorePopular': false
           }, function(data) {
             var dest, i, mainflow, suggestions, templates, w, word, words, _i, _len, _ref, _ref1, _ref2, _ref3;
+            if ($(document).data('update_seq') !== update_seq) {
+              return;
+            }
             suggestions = [];
             words = (_ref = data.result) != null ? (_ref1 = _ref.spellcheck) != null ? (_ref2 = _ref1.suggestions) != null ? (_ref3 = _ref2[1]) != null ? _ref3.suggestion : void 0 : void 0 : void 0 : void 0;
             if (!(words != null ? words.length : void 0)) {
@@ -1651,8 +1685,9 @@
             }
             for (i = _i = 0, _len = words.length; _i < _len; i = ++_i) {
               word = words[i];
+              word = word.replace(/^.*?__/, '');
               w = Math.sqrt((words.length - i) / words.length);
-              if (rdata.num) {
+              if (num) {
                 w = w / 2;
               }
               suggestions.push({
@@ -1660,7 +1695,7 @@
                 weight: w * w
               });
             }
-            mainflow = rdata.num === 0 || !$('.sidecar_holder').is(':visible') || !$('.sidecar_holder').length;
+            mainflow = num === 0 || !$('.sidecar_holder').is(':visible') || !$('.sidecar_holder').length;
             dest = null;
             el.empty();
             el.each(function() {
@@ -1673,7 +1708,7 @@
             templates = $(document).data("templates");
             return dest.append(templates.generate('noresultssuggest', {
               suggestions: suggestions,
-              someresults: rdata.num !== 0,
+              someresults: num !== 0,
               mainflow: mainflow
             }));
           });
@@ -1683,11 +1718,13 @@
     narrowresults: {
       template: "<div></div>",
       postproc: function(el, data) {
-        return $(document).on('first_result', function(e, query, rdata, state) {
-          var all_facets, f,
+        return $(document).on('num_known', function(e, num, state, update_seq) {
+          var all_facets, f, facets, query,
             _this = this;
           el.empty();
-          if (rdata.num !== 0) {
+          query = state.q_query();
+          facets = state.q_facets();
+          if (!query || num) {
             return;
           }
           all_facets = (function() {
@@ -1701,19 +1738,22 @@
             return _results;
           })();
           return _ajax_json("/Multi/Ajax/search", {
-            q: query.q,
+            q: query,
             rows: 1,
             'facet.field': all_facets,
             'facet.mincount': 1,
             facet: true
           }, function(data) {
             var cur_values, entries, i, k, name, othervalues, templates, total, wholesite, yoursearch, _i, _j, _len, _len1, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6;
+            if ($(document).data('update_seq') !== update_seq) {
+              return;
+            }
             cur_values = [];
             othervalues = [];
             for (_i = 0, _len = all_facets.length; _i < _len; _i++) {
               f = all_facets[_i];
-              if (query.facets[f]) {
-                cur_values.push([f, query.facets[f]]);
+              if (facets[f]) {
+                cur_values.push([f, facets[f]]);
               }
               if (((_ref = data.result) != null ? (_ref1 = _ref.facet_counts) != null ? (_ref2 = _ref1.facet_fields) != null ? _ref2[f] : void 0 : void 0 : void 0) != null) {
                 entries = 0;
@@ -1749,7 +1789,7 @@
             wholesite = cur_values.length === 0;
             templates = $(document).data('templates');
             return el.append(templates.generate('noresultsnarrow', {
-              q: query.q,
+              q: query,
               yoursearch: yoursearch,
               othervalues: othervalues,
               wholesite: wholesite,
@@ -2035,12 +2075,15 @@
           return Pager;
 
         })();
-        return $(document).on('first_result', function(e, query, result, state) {
+        return $(document).on('num_known', function(e, num, state, update_seq) {
           var pages, pagesize, rpager, start, templates;
+          if ($(document).data('update_seq') !== update_seq) {
+            return;
+          }
           els.empty();
           if (state.pagesize()) {
             pagesize = state.pagesize();
-            pages = Math.floor((result.num + pagesize - 1) / pagesize);
+            pages = Math.floor((num + pagesize - 1) / pagesize);
             start = Math.floor((state.start() + pagesize) / pagesize);
             templates = $(document).data('templates');
             rpager = new Pager(templates, state, start, pages);
@@ -2105,8 +2148,11 @@
                 q: value
               });
             });
-            return $(document).on('first_result', function(e, query, result, state) {
-              return el.val(query.q);
+            return $(document).on('state_known', function(e, state, update_seq) {
+              if ($(document).data('update_seq') !== update_seq) {
+                return;
+              }
+              return el.val(state.q_query());
             });
           });
         }
@@ -2138,7 +2184,10 @@
               page: 1
             });
           });
-          return $(document).on('first_result', function(e, query, result, state) {
+          return $(document).on('state_known', function(e, state, update_seq) {
+            if ($(document).data('update_seq') !== update_seq) {
+              return;
+            }
             return els.val(state.e().data('pagesize'));
           });
         }
@@ -2160,8 +2209,11 @@
       },
       decorate: {
         'ul': function(els, data) {
-          return $(document).on('first_result', function(e, query, result, state) {
+          return $(document).on('state_known', function(e, state, update_seq) {
             var k, onoff, _i, _len, _ref;
+            if ($(document).data('update_seq') !== update_seq) {
+              return;
+            }
             onoff = {};
             _ref = state.e().data('columns');
             for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -2282,13 +2334,7 @@
         },
         'tbody tr': {
           'row<-table_row': {
-            '@class': function(e) {
-              if (e.item.stripe) {
-                return "stripe";
-              } else {
-                return "";
-              }
-            },
+            '@class': 'row.klass',
             'td': {
               'col<-row.table_col': {
                 '.': 'col.data',
@@ -2318,7 +2364,7 @@
           _ref1 = data.cols;
           for (i = _k = 0, _len2 = _ref1.length; _k < _len2; i = ++_k) {
             c = _ref1[i];
-            c.width = "width: " + data.widths[i] + "%";
+            data.widths[i] = "width: " + data.widths[i] + "%";
           }
           data.table_thead = [];
         }
@@ -2339,21 +2385,25 @@
               return data.tp2_row.send('id_with_url', data.tp2_row.best('id_with_url'));
             });
             data.tp2.register(10000, function() {
-              var c, cols, r, row, row_data, table_row, _i, _j, _len, _len1, _ref;
+              var c, cols, cv, i, j, r, row, row_data, table_row, _i, _j, _len, _len1, _ref;
               row_data = [];
               table_row = data.tp2.best('table_row');
               cols = data.tp2.best('cols');
-              for (_i = 0, _len = table_row.length; _i < _len; _i++) {
-                r = table_row[_i];
+              for (i = _i = 0, _len = table_row.length; _i < _len; i = ++_i) {
+                r = table_row[i];
                 row = {
-                  stripe: r.stripe,
+                  klass: r.klass,
                   table_col: []
                 };
-                for (_j = 0, _len1 = cols.length; _j < _len1; _j++) {
-                  c = cols[_j];
-                  row.table_col.push({
+                for (j = _j = 0, _len1 = cols.length; _j < _len1; j = ++_j) {
+                  c = cols[j];
+                  cv = {
                     data: (_ref = r.cols[c]) != null ? _ref : ''
-                  });
+                  };
+                  if (!i) {
+                    cv.width = data.widths[j];
+                  }
+                  row.table_col.push(cv);
                 }
                 row_data.push(row);
               }
@@ -2384,6 +2434,14 @@
     fixes: {
       global: [
         function(data) {
+          data.tp2_row.register(1000, function() {
+            var ft, sp;
+            ft = data.tp2_row.best('feature_type');
+            sp = data.tp2_row.best('species');
+            if (ft === 'Phenotype') {
+              return data.tp2_row.candidate('id', sp + ' Phenotype', 1000);
+            }
+          });
           data.tp2_row.register(300, function() {
             var desc, ft, id, inner_desc, k, m, main_desc, type, v;
             ft = data.tp2_row.best('feature_type');
@@ -2612,9 +2670,6 @@
     Documentation: {
       id: '{subtype} #',
       title: '{article_title}'
-    },
-    Phenotype: {
-      id: '{species} Phenotype #'
     }
   };
 

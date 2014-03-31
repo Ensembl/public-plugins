@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2013] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -55,8 +55,8 @@ sub content_tree {
     'class' => ['dbf-record', $object->use_ajax ? $self->_JS_CLASS_DBF_RECORD : ()],
     'flags' => 'add_new_button',
     'children' => [
-      {'node_name' => 'div', 'class' => 'dbf-row-buttons', 'children' => [
-        {'node_name' => 'a', 'inner_HTML' => 'Add new', 'class' => $self->_JS_CLASS_ADD_BUTTON, 'href' => $hub->url({'action' => 'Add', 'function' => $hub->function})}
+      {'node_name' => 'div', 'class' => 'dbf-row-buttons _dbf_row_buttons', 'children' => [
+        {'node_name' => 'a', 'inner_HTML' => 'Add new', 'class' => $self->_JS_CLASS_BUTTON, 'href' => $hub->url({'action' => 'Add', 'function' => $hub->function})}
       ]}
     ]
   });
@@ -72,7 +72,7 @@ sub record_tree {
   ## Generates a DOM tree for each database record
   ## Override this one in the child class and do the DOM manipulation on the DOM tree if required
   ## Flags are set on required HTML elements for 'selection and manipulation' purposes in child classes (get_nodes_by_flag)
-  ## If overriding, make sure _JS_CLASS_DELETE_BUTTON & _JS_CLASS_EDIT_BUTTON classes are on the buttons if JavaScript functionality is required
+  ## If overriding, make sure _JS_CLASS_BUTTON, _JS_CLASS_DELETE_BUTTON & _JS_CLASS_EDIT_BUTTON classes are on the buttons if JavaScript functionality is required
   my ($self, $record) = @_;
   my $object      = $self->object;
   my $hub         = $self->hub;
@@ -117,7 +117,7 @@ sub record_tree {
   }
 
   $record_div->append_child('div', {
-    'class'       => "dbf-row-buttons",
+    'class'       => "dbf-row-buttons _dbf_row_buttons",
     'flags'       => $self->_FLAG_RECORD_BUTTONS,
     'inner_HTML'  => sprintf(
       '<a class="%s" href="%s">Edit</a>%s%s',
@@ -125,12 +125,12 @@ sub record_tree {
       $hub->url({'action' => 'Edit', 'function' => $hub->function, 'id' => $primary_key}),
       $object->permit_delete ? sprintf(
         '<a class="%s" href="%s">Delete</a>',
-        $self->_JS_CLASS_EDIT_BUTTON,
+        $self->_JS_CLASS_BUTTON,
         $hub->url({'action' => 'Confirm', 'function' => $hub->function, 'id' => $primary_key})
       ) : '',
       $object->permit_duplicate ? sprintf(
         '<a class="%s" href="%s">Duplicate</a>',
-        $self->_JS_CLASS_EDIT_BUTTON,
+        $self->_JS_CLASS_BUTTON,
         $hub->url({'action' => 'Duplicate', 'function' => $hub->function, 'id' => $primary_key})
       ) : ''
     )

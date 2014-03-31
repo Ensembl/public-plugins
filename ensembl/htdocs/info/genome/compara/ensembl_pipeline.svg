@@ -1,0 +1,565 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg2"
+   sodipodi:version="0.32"
+   inkscape:version="0.45.1"
+   sodipodi:docname="ensembl_pipeline.svg"
+   sodipodi:docbase="/home/avilella/0_t/activities/conferences"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape">
+  <defs
+     id="defs4">
+    <marker
+       inkscape:stockid="TriangleOutM"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="TriangleOutM"
+       style="overflow:visible">
+      <path
+         id="path10176"
+         d="M 5.77,0.0 L -2.88,5.0 L -2.88,-5.0 L 5.77,0.0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none"
+         transform="scale(0.4)" />
+    </marker>
+    <marker
+       inkscape:stockid="StopL"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="StopL"
+       style="overflow:visible">
+      <path
+         id="path10170"
+         d="M 0.0,5.65 L 0.0,-5.65"
+         style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt"
+         transform="scale(0.8)" />
+    </marker>
+    <marker
+       inkscape:stockid="TriangleOutS"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="TriangleOutS"
+       style="overflow:visible">
+      <path
+         id="path10173"
+         d="M 5.77,0.0 L -2.88,5.0 L -2.88,-5.0 L 5.77,0.0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none"
+         transform="scale(0.2)" />
+    </marker>
+    <marker
+       inkscape:stockid="Club"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="Club"
+       style="overflow:visible">
+      <path
+         id="path10110"
+         d="M -1.5971367,-7.0977635 C -3.4863874,-7.0977635 -5.0235187,-5.5606321 -5.0235187,-3.6713813 C -5.0235187,-3.0147015 -4.7851656,-2.4444556 -4.4641095,-1.9232271 C -4.5028609,-1.8911157 -4.5437814,-1.8647646 -4.5806531,-1.8299921 C -5.2030765,-2.6849849 -6.1700514,-3.2751330 -7.3077730,-3.2751330 C -9.1970245,-3.2751331 -10.734155,-1.7380016 -10.734155,0.15124914 C -10.734155,2.0404999 -9.1970245,3.5776313 -7.3077730,3.5776313 C -6.3143268,3.5776313 -5.4391540,3.1355702 -4.8137404,2.4588126 C -4.9384274,2.8137041 -5.0235187,3.1803000 -5.0235187,3.5776313 C -5.0235187,5.4668819 -3.4863874,7.0040135 -1.5971367,7.0040135 C 0.29211394,7.0040135 1.8292454,5.4668819 1.8292454,3.5776313 C 1.8292454,2.7842354 1.5136868,2.0838028 1.0600576,1.5031550 C 2.4152718,1.7663868 3.7718375,2.2973711 4.7661444,3.8340272 C 4.0279463,3.0958289 3.5540908,1.7534117 3.5540908,-0.058529361 L 2.9247554,-0.10514681 L 3.5074733,-0.12845553 C 3.5074733,-1.9403966 3.9580199,-3.2828138 4.6962183,-4.0210121 C 3.7371277,-2.5387813 2.4390549,-1.9946496 1.1299838,-1.7134486 C 1.5341802,-2.2753578 1.8292454,-2.9268556 1.8292454,-3.6713813 C 1.8292454,-5.5606319 0.29211394,-7.0977635 -1.5971367,-7.0977635 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:0.74587913pt;marker-start:none"
+         transform="scale(0.6)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Send"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="Arrow1Send"
+       style="overflow:visible;">
+      <path
+         id="path10262"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
+         transform="scale(0.2) rotate(180) translate(6,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Mend"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="Arrow1Mend"
+       style="overflow:visible;">
+      <path
+         id="path10268"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
+         transform="scale(0.4) rotate(180) translate(10,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Sstart"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="Arrow1Sstart"
+       style="overflow:visible">
+      <path
+         id="path10265"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none"
+         transform="scale(0.2) translate(6,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Tail"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="Tail"
+       style="overflow:visible">
+      <g
+         id="g10229"
+         transform="scale(-1.2)">
+        <path
+           id="path10231"
+           d="M -3.8048674,-3.9585227 L 0.54352094,0"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.8;marker-start:none;marker-end:none;stroke-linecap:round" />
+        <path
+           id="path10233"
+           d="M -1.2866832,-3.9585227 L 3.0617053,0"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.8;marker-start:none;marker-end:none;stroke-linecap:round" />
+        <path
+           id="path10235"
+           d="M 1.3053582,-3.9585227 L 5.6537466,0"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.8;marker-start:none;marker-end:none;stroke-linecap:round" />
+        <path
+           id="path10237"
+           d="M -3.8048674,4.1775838 L 0.54352094,0.21974226"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.8;marker-start:none;marker-end:none;stroke-linecap:round" />
+        <path
+           id="path10239"
+           d="M -1.2866832,4.1775838 L 3.0617053,0.21974226"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.8;marker-start:none;marker-end:none;stroke-linecap:round" />
+        <path
+           id="path10241"
+           d="M 1.3053582,4.1775838 L 5.6537466,0.21974226"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.8;marker-start:none;marker-end:none;stroke-linecap:round" />
+      </g>
+    </marker>
+    <marker
+       inkscape:stockid="Dot_s"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="Dot_s"
+       style="overflow:visible">
+      <path
+         id="path10209"
+         d="M -2.5,-1.0 C -2.5,1.7600000 -4.7400000,4.0 -7.5,4.0 C -10.260000,4.0 -12.5,1.7600000 -12.5,-1.0 C -12.5,-3.7600000 -10.260000,-6.0 -7.5,-6.0 C -4.7400000,-6.0 -2.5,-3.7600000 -2.5,-1.0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;marker-end:none"
+         transform="scale(0.2) translate(7.4, 1)" />
+    </marker>
+    <marker
+       inkscape:stockid="TriangleInS"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="TriangleInS"
+       style="overflow:visible">
+      <path
+         id="path10182"
+         d="M 5.77,0.0 L -2.88,5.0 L -2.88,-5.0 L 5.77,0.0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none"
+         transform="scale(-0.2)" />
+    </marker>
+    <marker
+       inkscape:stockid="StopS"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="StopS"
+       style="overflow:visible">
+      <path
+         id="path10164"
+         d="M 0.0,5.65 L 0.0,-5.65"
+         style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt"
+         transform="scale(0.2)" />
+    </marker>
+    <marker
+       inkscape:stockid="CurveOut"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="CurveOut"
+       style="overflow:visible">
+      <path
+         id="path10152"
+         d="M -5.4129913,-5.0456926 C -2.6529913,-5.0456926 -0.41299131,-2.8056926 -0.41299131,-0.045692580 C -0.41299131,2.7143074 -2.6529913,4.9543074 -5.4129913,4.9543074"
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;marker-end:none"
+         transform="scale(0.6)" />
+    </marker>
+    <marker
+       inkscape:stockid="Legs"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="Legs"
+       style="overflow:visible">
+      <g
+         id="g10130"
+         transform="scale(-0.7)">
+        <g
+           id="g10132"
+           transform="matrix(0,-1.000000,-1.000000,0,20.70862,21.31391)">
+          <path
+             id="path10134"
+             d="M 21.221250,20.675360 C 14.311099,25.396517 18.766725,27.282204 15.380179,34.118595"
+             style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:none;marker-end:none" />
+          <path
+             id="path10136"
+             d="M 21.398110,20.548120 C 20.037601,28.895644 24.934182,29.318060 25.903151,34.373078"
+             style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:none;marker-end:none" />
+        </g>
+        <path
+           id="path10138"
+           d="M -14.090070,-6.7318716 L -15.012238,-2.6884886 L -11.049487,-3.9115586 L -14.090070,-6.7318716 z "
+           style="fill:#030300;fill-rule:evenodd;stroke-width:1.0000000pt;marker-end:none" />
+        <path
+           id="path10140"
+           d="M -15.215679,4.5567534 L -13.341552,8.2563664 L -11.074678,4.7835114 L -15.215679,4.5567534 z "
+           style="fill:#030300;fill-rule:evenodd;stroke-width:1.0000000pt;marker-end:none" />
+      </g>
+    </marker>
+    <marker
+       inkscape:stockid="TriangleOutL"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="TriangleOutL"
+       style="overflow:visible">
+      <path
+         id="path10179"
+         d="M 5.77,0.0 L -2.88,5.0 L -2.88,-5.0 L 5.77,0.0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none"
+         transform="scale(0.8)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow2Lend"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="Arrow2Lend"
+       style="overflow:visible;">
+      <path
+         id="path10256"
+         style="font-size:12.0;fill-rule:evenodd;stroke-width:0.62500000;stroke-linejoin:round;"
+         d="M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z "
+         transform="scale(1.1) rotate(180) translate(1,0)" />
+    </marker>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     gridtolerance="10000"
+     guidetolerance="10"
+     objecttolerance="10"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.98994949"
+     inkscape:cx="349.74619"
+     inkscape:cy="757.19783"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     inkscape:window-width="1280"
+     inkscape:window-height="999"
+     inkscape:window-x="0"
+     inkscape:window-y="0" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#993333;stroke-width:0;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:0,0;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect15526"
+       width="721.2489"
+       height="480.83261"
+       x="11.111678"
+       y="7.8644509"
+       inkscape:export-filename="/home/avilella/0_t/activities/conferences/ensembl_pipeline.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#993333;stroke-width:6.26522732;stroke-linecap:butt;stroke-linejoin:miter;marker-start:url(#StopL);marker-mid:url(#TriangleOutM);marker-end:url(#StopL);stroke-miterlimit:4;stroke-dasharray:3.13261369, 3.13261369;stroke-dashoffset:0;stroke-opacity:1"
+       d="M 318.40872,64.491917 C 324.46964,64.491917 387.92686,66.503187 387.89014,93.872007 C 387.89014,129.30493 322.44933,134.31043 322.44933,171.75395 C 321.43918,204.79596 387.68891,183.92265 387.68891,228.44047 C 388.44226,271.97829 323.25725,267.86389 324.06518,306.32565 C 322.75072,343.77763 391.72853,319.46895 391.72853,361.99394 C 391.72853,444.92599 331.94218,434.84129 320.63125,434.84129"
+       id="path12527"
+       sodipodi:nodetypes="ccccccc"
+       inkscape:export-filename="/home/avilella/0_t/activities/conferences/ensembl_pipeline.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <rect
+       style="fill:#ffdf33;fill-opacity:0.33333333;fill-rule:evenodd;stroke:#3366bb;stroke-width:5;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect14471"
+       width="277.69812"
+       height="88.659904"
+       x="36.231476"
+       y="20.765574"
+       inkscape:export-filename="/home/avilella/0_t/activities/conferences/ensembl_pipeline.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <text
+       xml:space="preserve"
+       style="font-size:9.62376308px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="174.96593"
+       y="47.451973"
+       id="text14473"
+       inkscape:export-filename="/home/avilella/0_t/activities/conferences/ensembl_pipeline.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         sodipodi:role="line"
+         id="tspan14475"
+         x="174.96593"
+         y="47.451973"
+         style="font-size:19.24752617px;text-align:center;text-anchor:middle;fill:#3366bb;fill-opacity:1">Load Genes and Longest</tspan><tspan
+         sodipodi:role="line"
+         x="174.96592"
+         y="71.511381"
+         id="tspan14477"
+         style="font-size:19.24752617px;text-align:center;text-anchor:middle;fill:#3366bb;fill-opacity:1">Translation from all species</tspan><tspan
+         sodipodi:role="line"
+         x="174.96592"
+         y="95.570788"
+         id="tspan14479"
+         style="font-size:19.24752617px;text-align:center;text-anchor:middle;fill:#3366bb;fill-opacity:1">in Ensembl</tspan></text>
+    <rect
+       style="fill:#ffdf33;fill-opacity:0.33333333;fill-rule:evenodd;stroke:#3366bb;stroke-width:5;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect14481"
+       width="324.05038"
+       height="109.7948"
+       x="397.25049"
+       y="50.160896"
+       inkscape:export-filename="/home/avilella/0_t/activities/conferences/ensembl_pipeline.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <text
+       xml:space="preserve"
+       style="font-size:9.62376308px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="559.92139"
+       y="75.211678"
+       id="text14483"
+       inkscape:export-filename="/home/avilella/0_t/activities/conferences/ensembl_pipeline.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         sodipodi:role="line"
+         x="559.92138"
+         y="75.211678"
+         id="tspan14485"
+         style="font-size:19.24752617px;text-align:center;text-anchor:middle;fill:#3366bb;fill-opacity:1">WU Blastp + SmithWaterman</tspan><tspan
+         sodipodi:role="line"
+         x="559.92138"
+         y="99.271085"
+         style="font-size:19.24752617px;text-align:center;text-anchor:middle;fill:#3366bb;fill-opacity:1"
+         id="tspan14487">longest translation of every</tspan><tspan
+         sodipodi:role="line"
+         x="559.92138"
+         y="123.33049"
+         style="font-size:19.24752617px;text-align:center;text-anchor:middle;fill:#3366bb;fill-opacity:1"
+         id="tspan14489">Gene against every other in a</tspan><tspan
+         sodipodi:role="line"
+         x="559.92138"
+         y="147.3899"
+         style="font-size:19.24752617px;text-align:center;text-anchor:middle;fill:#3366bb;fill-opacity:1"
+         id="tspan14491">genome-wise manner</tspan></text>
+    <rect
+       style="fill:#ffdf33;fill-opacity:0.33333333;fill-rule:evenodd;stroke:#3366bb;stroke-width:5;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect14493"
+       width="250.74593"
+       height="88.850571"
+       x="61.739559"
+       y="139.21194"
+       inkscape:export-filename="/home/avilella/0_t/activities/conferences/ensembl_pipeline.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <rect
+       style="fill:#ffdf33;fill-opacity:0.33333333;fill-rule:evenodd;stroke:#3366bb;stroke-width:6.06777239;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect14495"
+       width="257.19238"
+       height="81.92865"
+       x="398.92422"
+       y="199.40605"
+       inkscape:export-filename="/home/avilella/0_t/activities/conferences/ensembl_pipeline.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <rect
+       style="fill:#ffdf33;fill-opacity:0.33333333;fill-rule:evenodd;stroke:#3366bb;stroke-width:5;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect14497"
+       width="296.43274"
+       height="108.1088"
+       x="18.130739"
+       y="266.61252"
+       inkscape:export-filename="/home/avilella/0_t/activities/conferences/ensembl_pipeline.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <rect
+       style="fill:#ffdf33;fill-opacity:0.33333333;fill-rule:evenodd;stroke:#3366bb;stroke-width:5.21131945;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect14499"
+       width="314.87173"
+       height="132.35492"
+       x="398.73206"
+       y="299.07101"
+       inkscape:export-filename="/home/avilella/0_t/activities/conferences/ensembl_pipeline.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <rect
+       style="fill:#ffdf33;fill-opacity:0.33333333;fill-rule:evenodd;stroke:#3366bb;stroke-width:4.33444548;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect14501"
+       width="278.36368"
+       height="66.468315"
+       x="36.379547"
+       y="400.28992"
+       inkscape:export-filename="/home/avilella/0_t/activities/conferences/ensembl_pipeline.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <text
+       xml:space="preserve"
+       style="font-size:9.62376308px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="186.75818"
+       y="166.75333"
+       id="text14503"
+       inkscape:export-filename="/home/avilella/0_t/activities/conferences/ensembl_pipeline.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         sodipodi:role="line"
+         id="tspan14505"
+         x="186.75818"
+         y="166.75333"
+         style="font-size:19.24752617px;text-align:center;text-anchor:middle;fill:#3366bb;fill-opacity:1">Build a graph of gene</tspan><tspan
+         sodipodi:role="line"
+         x="189.82199"
+         y="190.81273"
+         id="tspan14507"
+         style="font-size:19.24752617px;text-align:center;text-anchor:middle;fill:#3366bb;fill-opacity:1">relations based on </tspan><tspan
+         sodipodi:role="line"
+         x="186.75818"
+         y="214.87214"
+         id="tspan14509"
+         style="font-size:19.24752617px;text-align:center;text-anchor:middle;fill:#3366bb;fill-opacity:1">BRH and BSR</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:9.62376308px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="527.66608"
+       y="221.78311"
+       id="text14511"
+       inkscape:export-filename="/home/avilella/0_t/activities/conferences/ensembl_pipeline.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         sodipodi:role="line"
+         x="527.66607"
+         y="221.78311"
+         id="tspan14513"
+         style="font-size:19.24752617px;text-align:center;text-anchor:middle;fill:#3366bb;fill-opacity:1">Extract the connected</tspan><tspan
+         sodipodi:role="line"
+         x="530.72989"
+         y="245.84252"
+         style="font-size:19.24752617px;text-align:center;text-anchor:middle;fill:#3366bb;fill-opacity:1"
+         id="tspan14515">components </tspan><tspan
+         sodipodi:role="line"
+         x="527.66607"
+         y="269.90193"
+         style="font-size:19.24752617px;text-align:center;text-anchor:middle;fill:#3366bb;fill-opacity:1"
+         id="tspan2241">(single linkage clustering)</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:9.62376308px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="556.63568"
+       y="321.49734"
+       id="text14517"
+       inkscape:export-filename="/home/avilella/0_t/activities/conferences/ensembl_pipeline.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         sodipodi:role="line"
+         x="559.69949"
+         y="321.49734"
+         id="tspan14519"
+         style="font-size:19.24752617px;text-align:center;text-anchor:middle;fill:#3366bb;fill-opacity:1">From each CDS-backtranslated </tspan><tspan
+         sodipodi:role="line"
+         x="556.63568"
+         y="345.55675"
+         style="font-size:19.24752617px;text-align:center;text-anchor:middle;fill:#3366bb;fill-opacity:1"
+         id="tspan14521">aligment, build a reconciled</tspan><tspan
+         sodipodi:role="line"
+         x="556.63568"
+         y="369.61616"
+         style="font-size:19.24752617px;text-align:center;text-anchor:middle;fill:#3366bb;fill-opacity:1"
+         id="tspan14523">gene tree with internal</tspan><tspan
+         sodipodi:role="line"
+         x="556.63568"
+         y="393.67557"
+         style="font-size:19.24752617px;text-align:center;text-anchor:middle;fill:#3366bb;fill-opacity:1"
+         id="tspan14525">duplication nodes with respect</tspan><tspan
+         sodipodi:role="line"
+         x="556.63569"
+         y="417.73498"
+         style="font-size:19.24752617px;text-align:center;text-anchor:middle;fill:#3366bb;fill-opacity:1"
+         id="tspan14527">to a species tree (TreeBeST)</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:9.62376308px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="166.77849"
+       y="292.49734"
+       id="text14529"
+       inkscape:export-filename="/home/avilella/0_t/activities/conferences/ensembl_pipeline.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         sodipodi:role="line"
+         x="166.77849"
+         y="292.49734"
+         id="tspan14531"
+         style="font-size:19.24752617px;text-align:center;text-anchor:middle;fill:#3366bb;fill-opacity:1">For each cluster, build a</tspan><tspan
+         sodipodi:role="line"
+         x="166.77848"
+         y="316.55675"
+         style="font-size:19.24752617px;text-align:center;text-anchor:middle;fill:#3366bb;fill-opacity:1"
+         id="tspan14533">multiple alignment (MUSCLE)</tspan><tspan
+         sodipodi:role="line"
+         x="166.77848"
+         y="340.61616"
+         style="font-size:19.24752617px;text-align:center;text-anchor:middle;fill:#3366bb;fill-opacity:1"
+         id="tspan14535">based on the protein</tspan><tspan
+         sodipodi:role="line"
+         x="166.77849"
+         y="364.67557"
+         style="font-size:19.24752617px;text-align:center;text-anchor:middle;fill:#3366bb;fill-opacity:1"
+         id="tspan14537">sequences</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:9.62376308px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="179.63567"
+       y="425.9259"
+       id="text14539"
+       inkscape:export-filename="/home/avilella/0_t/activities/conferences/ensembl_pipeline.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         sodipodi:role="line"
+         x="182.69948"
+         y="425.9259"
+         id="tspan14541"
+         style="font-size:19.24752617px;text-align:center;text-anchor:middle;fill:#3366bb;fill-opacity:1">Interence of ortholog and </tspan><tspan
+         sodipodi:role="line"
+         x="179.63566"
+         y="449.98531"
+         style="font-size:19.24752617px;text-align:center;text-anchor:middle;fill:#3366bb;fill-opacity:1"
+         id="tspan14543">paralogs (OrthoTree)</tspan></text>
+  </g>
+</svg>

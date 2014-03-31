@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2013] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,8 +20,6 @@ use strict;
 
 package EnsEMBL::Solr::SiteDefs;
 sub update_conf {
-#  $SiteDefs::ENSEMBL_SOLR_ENDPOINT = "http://solr-slave-ensembl-odd.sanger.ac.uk/solr-sanger/ensembl_core/ensemblshards";
-#  $SiteDefs::ENSEMBL_SOLR_ENDPOINT = "http://ec2-50-19-198-203.compute-1.amazonaws.com:8000/solr-sanger/ensembl_core/ensemblshards";
   $SiteDefs::OBJECT_TO_SCRIPT->{'Search'} = "AltPage";
 
   $SiteDefs::ENSEMBL_SOLR_CONFIG = {
@@ -127,7 +125,38 @@ sub update_conf {
       #######################
       # RESULT HIGHLIGHTING #
       #######################
-      highlights => ['description'], # fields to highlight
+      hl_transfers => { content => 'description' },
+      highlights => ['description','_hr','content'], # fields to highlight
+
+      #######################
+      # !xxx type shortcuts #
+      #######################
+
+      ddg_codes => {
+        facet_feature_type => {
+          g => 'Gene',
+          t => 'Transcript',
+          rf => 'RegulatoryFeature',
+          doc => 'Documentation',
+          ph => 'Phenotype',
+          sm => 'SomaticMutation',
+          sv => 'StructuralVariation',
+          v => 'Variation',
+          dom => 'Domain',
+          fam => 'Family',
+          pf => 'ProteinFamily',
+          m => 'Marker',
+          s => 'Sequence',
+          ga => 'GenomicAlignment',
+          pf => 'ProbeFeature',
+        },
+        facet_species => {
+          hs => 'Human',
+          mm => 'Mouse',
+          dr => 'Zebrafish',
+          rn => 'Rat',
+        }
+      },
 
       # ZZZ how is this used in standard view?
       # ZZZ rename all_columns and columns
@@ -152,7 +181,8 @@ sub update_conf {
       ###############
       # MISC LAYOUT #
       ###############
-      enable_direct => 0,
+      enable_direct => 1,
+      direct_pause => [700,2000], # since [stopped-typing,last-request] ms
       per_page => 10, # default results per page
       topright_fix => 1, # specific to ensembl
       tips => [
@@ -270,59 +300,76 @@ EOF
         },
         { title => "Genomic Context",
           url => "/{species}/Variation/Context?v={id}",
-          conditions => { "{feature_type}" => "^(Variation|Somatic Mutation)\$" }
+          conditions => { "{feature_type}" => "^(Variation|Somatic Mutation)\$" },
+          result_condition_not => 'all:0',
         },
         { title => "Genomic Context",
           url => "/{species}/StructuralVariation/Context?sv={id};db={database_type}",
-          conditions => { "{feature_type}" => "^StructuralVariation\$" }
+          conditions => { "{feature_type}" => "^StructuralVariation\$" },
+          result_condition_not => 'all:0',
         },
         { title => "Genes",
           url => "/{species}/Variation/Mappings?v={id}",
-          conditions => { "{feature_type}" => "^(Variation|Somatic Mutation)\$" }
+          conditions => { "{feature_type}" => "^(Variation|Somatic Mutation)\$" },
+          result_condition_not => 'all:0',
         },
         { title => "Genes",
           url => "/{species}/StructuralVariation/Mappings?sv={id};db={database_type}",
-          conditions => { "{feature_type}" => "^StructuralVariation\$" }
+          conditions => { "{feature_type}" => "^StructuralVariation\$" },
+          result_condition_not => 'all:0',
         },
         { title => "Evidence",
           url => "/{species}/StructuralVariation/Evidence?sv={id};db={database_type}",
-          conditions => { "{feature_type}" => "^StructuralVariation\$" }
+          conditions => { "{feature_type}" => "^StructuralVariation\$" },
+          result_condition_not => 'all:0',
         },
         { title => "Population",
           url => "/{species}/Variation/Population?v={id}",
-          conditions => { "{feature_type}" => "^(Variation|Somatic Mutation)\$" }
+          conditions => { "{feature_type}" => "^(Variation|Somatic Mutation)\$" },
+          result_condition_not => 'all:0',
         },
         { title => "Individuals",
           url => "/{species}/Variation/Individual?v={id}",
-          conditions => { "{feature_type}" => "^(Variation|Somatic Mutation)\$" }
+          conditions => { "{feature_type}" => "^(Variation|Somatic Mutation)\$" },
+          result_condition_not => 'all:0',
         },
         { title => "LD",
           url => "/{species}/Variation/HighLD?v={id}",
-          conditions => { "{feature_type}" => "^(Variation|Somatic Mutation)\$" }
+          conditions => { "{feature_type}" => "^(Variation|Somatic Mutation)\$" },
+          result_condition_not => 'all:0',
         },
         { title => "Phenotype",
           url => "/{species}/Variation/Phenotype?v={id}",
-          conditions => { "{feature_type}" => "^(Variation|Somatic Mutation)\$" }
+          conditions => { "{feature_type}" => "^(Variation|Somatic Mutation)\$" },
+          result_condition_not => 'all:0',
         },
         { title => "Phenotype",
           url => "/{species}/StructuralVariation/Phenotype?sv={id};db={database_type}",
-          conditions => { "{feature_type}" => "^StructuralVariation\$" }
+          conditions => { "{feature_type}" => "^StructuralVariation\$" },
+          result_condition_not => 'all:0',
         },
         { title => "Phylogenetics",
           url => "/{species}/Variation/Compara_Alignments?v={id}",
-          conditions => { "{feature_type}" => "^(Variation|Somatic Mutation)\$" }
+          conditions => { "{feature_type}" => "^(Variation|Somatic Mutation)\$" },
+          result_condition_not => 'all:0',
         },
         { title => "Sequence",
           url => "/{species}/Variation/Sequence?v={id}",
-          conditions => { "{feature_type}" => "^(Variation|Somatic Mutation)\$" }
+          conditions => { "{feature_type}" => "^(Variation|Somatic Mutation)\$" },
+          result_condition_not => 'all:0',
         },
         { title => "cDNA seq.",
           url => "/{species}/Transcript/Sequence_cDNA?t={id}&db={database_type}",
           conditions => { "{feature_type}" => "^Transcript\$" }
         },
-        { title => "Protein seq.",
+        { title => "Variation table",
           url => "/{species}/Transcript/Variation_Transcript/Table?t={id}&db={database_type}",
           conditions => { "{feature_type}" => "^Transcript\$" }
+        },
+        { title => "Protein seq.",
+          url => "/{species}/Transcript/Sequence_Protein?t={id}&db={database_type}",
+          conditions => { "{feature_type}" => "^Transcript\$" },
+          result_condition => 'protein:1',
         },
         { title => "Population",
           url => "/{species}/Transcript/Population?t={id}&db={database_type}",
@@ -330,7 +377,8 @@ EOF
         },
         { title => "Protein",
           url => "/{species}/Transcript/ProteinSummary?t={id}&db={database_type}",
-          conditions => { "{feature_type}" => "^Transcript\$" }
+          conditions => { "{feature_type}" => "^Transcript\$" },
+          result_condition => 'protein:1',
         },
         { title => "Sequence",
           url => "/{species}/LRG/Sequences?lrg={id}",

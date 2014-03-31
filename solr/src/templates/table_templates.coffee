@@ -1,3 +1,17 @@
+# Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 #
 _valueevent = (obj,ev,fn) ->
   obj.on('change keydown keypress paste cut input',{}, (e) =>
@@ -116,11 +130,12 @@ window.table_templates =
             @state.set()
           @templates.generate('real_pager',{ @items, click })
 
-      $(document).on 'first_result', (e,query,result,state) ->
+      $(document).on 'num_known', (e,num,state,update_seq) ->
+        if $(document).data('update_seq') != update_seq then return
         els.empty()
         if state.pagesize()
           pagesize = state.pagesize()
-          pages = Math.floor((result.num + pagesize - 1) / pagesize)
+          pages = Math.floor((num + pagesize - 1) / pagesize)
           start = Math.floor((state.start() + pagesize) / pagesize)
           templates = $(document).data('templates')
           rpager = new Pager(templates,state,start,pages)
@@ -165,8 +180,9 @@ window.table_templates =
           el = $(e)
           _valueevent el,( => el.val()), (value) =>
             $(document).trigger('update_state',{ q: value })
-          $(document).on 'first_result', (e,query,result,state) ->
-            el.val(query.q)
+          $(document).on 'state_known', (e,state,update_seq) ->
+            if $(document).data('update_seq') != update_seq then return
+            el.val(state.q_query())
 
   # Sizer, ie results per page selector 
   sizer:
@@ -189,7 +205,8 @@ window.table_templates =
         els.change (e) ->
           el = $(e.currentTarget).parents().andSelf().find('select')
           $(document).trigger('update_state',{ perpage: el.val(), page: 1 })
-        $(document).on 'first_result', (e,query,result,state) ->
+        $(document).on 'state_known', (e,state,update_seq) ->
+          if $(document).data('update_seq') != update_seq then return
           els.val(state.e().data('pagesize'))
     preproc: (spec,data) ->
       data.sizes = $.solr_config('static.ui.pagesizes')
@@ -215,7 +232,8 @@ window.table_templates =
           '@data-key': 'col.key'
     decorate:
       'ul': (els,data) ->
-        $(document).on 'first_result', (e,query,result,state) ->
+        $(document).on 'state_known', (e,state,update_seq) ->
+          if $(document).data('update_seq') != update_seq then return
           onoff = {}
           (onoff[k] = 1) for k in state.e().data('columns')
           $('li',@).each ->
@@ -312,7 +330,7 @@ window.table_templates =
               'div@data-dir': 'col.dir'
       'tbody tr':
         'row<-table_row':
-          '@class': (e) -> (if e.item.stripe then "stripe" else "")
+          '@class': 'row.klass'
           'td':
             'col<-row.table_col':
               '.': 'col.data'
@@ -326,7 +344,7 @@ window.table_templates =
         c.width = "width: #{data.widths[i]}%" for c,i in head
         data.table_thead = [ head ]
       else
-        c.width = "width: #{data.widths[i]}%" for c,i in data.cols
+        data.widths[i] = "width: #{data.widths[i]}%" for c,i in data.cols
         data.table_thead = []
       [spec,data]
     # XXX makes non-portable
@@ -348,10 +366,12 @@ window.table_templates =
             row_data = []
             table_row = data.tp2.best('table_row')
             cols = data.tp2.best('cols')
-            for r in table_row
-              row = { stripe: r.stripe, table_col: [] }
-              for c in cols
-                row.table_col.push({ data: r.cols[c] ? '' })
+            for r,i in table_row
+              row = { klass: r.klass, table_col: [] }
+              for c,j in cols
+                cv = { data: r.cols[c] ? '' }
+                if !i then cv.width = data.widths[j]
+                row.table_col.push cv
               row_data.push(row)
             data.tp2.candidate('table_row',row_data,1000)
 

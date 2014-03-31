@@ -1,3 +1,17 @@
+# Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 #
 _ajax_json = (url,data,success) ->
   $.ajax({
@@ -55,12 +69,12 @@ window.rhs_templates =
         arrow(ctx,step_start+step*12,10,4,-1)
         ctx.fillText(sstr,step_start+step*6,15)
       
-      $(document).on 'first_result', (e,query,data,state) ->
-        if state.page() != 1 then return
-        tophit = data.rows?[0]
-        if not tophit? then return
-        el.empty()
-        if tophit.feature_type == 'Gene'
+      $(document).on 'main_front_page', (e,results,state,update_seq) ->
+        if state.page() != 1 or !results.length then return
+        for tophit in results
+          el.empty()
+          if not tophit? then continue
+          if tophit.feature_type != 'Gene' then continue
           extra = {}
           desc = tophit.description.replace /\[(.*?)\:(.*?)\]/g, (g0,g1,g2) ->
             extra[$.trim(g1).toLowerCase()] = $.trim(g2)
@@ -74,10 +88,12 @@ window.rhs_templates =
                 { ft: 'Gene', id: tophit.id, species: latin, req: ['biotype','bt_colour'], db: tophit.database_type }
               ]})
           }, (data) =>
+            if $(document).data('update_seq') != update_seq then return
             [biotype,bt_colour] = data.result
             templates = $(document).data("templates")
             el.append(templates.generate('sctophit',{
-              q: query.q, url: tophit.url, name: tophit.name, ft: "Gene"
+              q: state.q_query(), url: tophit.url, name: tophit.name,
+              ft: "Gene"
               species: tophit.species
               source: extra.source, latin: latin
               location: tophit.location
@@ -85,12 +101,13 @@ window.rhs_templates =
               biotype, bt_colour, description: desc
             }))
             $('html').trigger('wrap')
+          return
   
   sctophit:
     template: """ 
       <div class="sctophit scside">
         <div class="scth_play">&#x21AA;</div>
-        <h1>Best match</h1>
+        <h1>Best gene match</h1>
         <div class="scth_left">
           <div class="scth_type"></div>
           <div class="scth_name maybe_wrap"></div>
@@ -187,22 +204,24 @@ window.rhs_templates =
       </div>
     """
     postproc: (el,data) ->
-      $(document).on 'first_result', (e,query,data,state) ->
-        if state.page() != 1 then return
+      $(document).on 'main_front_page', (e,results,state,update_seq) ->
         el.empty()
+        if state.page() != 1 or !results.length then return
         params = {
-          q: 'name:"'+query.q+'"'
+          q: 'name:"'+state.q_query()+'"'
           rows: 200
           fq: "feature_type:Gene AND database_type:core"
           'facet.field': "species"
           'facet.mincount': 1
-          facet: true 
-        }    
+          facet: true
+        }
+        # XXX currency
         _ajax_json "/Multi/Ajax/search", params, (data) =>
-          sp_glinks = {} 
+          if $(document).data('update_seq') != update_seq then return
+          sp_glinks = {}
           docs = data.result?.response?.docs
           if docs?
-            for d in docs 
+            for d in docs
               if d.ref_boost >= 10 and d.species
                 url = d.domain_url
                 if url?.charAt(0) != '/' then url = "/" + url
@@ -212,13 +231,13 @@ window.rhs_templates =
             favord = []
             for s,i in $.solr_config('user.favs.species')
               favord[s] = i
-            rows = rows.sort (a,b) -> 
+            rows = rows.sort (a,b) ->
               if favord[a]? and ((not favord[b]?) or favord[a] < favord[b])
                 return -1
               if favord[b]? then return 1
               return a.localeCompare(b)
             templates = $(document).data("templates")
-            el.append(templates.generate('sctopgene',{ urls: sp_glinks, rows, q: query.q }))
+            el.append(templates.generate('sctopgene',{ urls: sp_glinks, rows, q: state.q_query() }))
 
   sctopgene:
     template: """
@@ -296,6 +315,7 @@ window.rhs_templates =
           href = href.substring(href.indexOf('#')) # IE7, :-(
           state = { page: 1 }
           for f in $.solr_config('static.ui.facets')
+            if f.key == 'species' then continue
             state["facet_"+f.key] = ''
           state.q = href.substring(1)
           $(document).trigger('update_state',[state])
@@ -317,24 +337,30 @@ window.rhs_templates =
       <div></div>
     """
     postproc: (el,data) ->
-      $(document).on 'first_result', (e,query,rdata,state) ->
+      $(document).on 'num_known', (e,num,state,update_seq) ->
+        if !state.q_query() then return
+        species = window.solr_current_species()
+        if !species then species = 'all'
+        sp_q = species+'__'+state.q_query().toLowerCase()
         _ajax_json "/Multi/Ajax/search", {
-          'spellcheck.q': query.q.toLowerCase()
+          'spellcheck.q': sp_q
           spellcheck: true
           'spellcheck.count': 50
           'spellcheck.onlyMorePopular': false
         }, (data) =>
+          if $(document).data('update_seq') != update_seq then return
           suggestions = []
           words = data.result?.spellcheck?.suggestions?[1]?.suggestion
           unless words?.length then return
           for word,i in words
+            word = word.replace(/^.*?__/,'')
             w = Math.sqrt(((words.length-i)/words.length))
-            if rdata.num then w = w/2
+            if num then w = w/2
             suggestions.push {
               word
               weight: w*w
             }
-          mainflow = ( rdata.num == 0 or
+          mainflow = ( num == 0 or
               not $('.sidecar_holder').is(':visible') or
               not $('.sidecar_holder').length )
           dest = null
@@ -347,7 +373,7 @@ window.rhs_templates =
           templates = $(document).data("templates")
           dest.append(templates.generate('noresultssuggest',{
             suggestions,
-            someresults: ( rdata.num != 0 )
+            someresults: ( num != 0 )
             mainflow
           }))
 
@@ -356,21 +382,24 @@ window.rhs_templates =
       <div></div>
     """
     postproc: (el,data) ->
-      $(document).on 'first_result', (e,query,rdata,state) ->
+      $(document).on 'num_known', (e,num,state,update_seq) ->
         el.empty()
-        if rdata.num != 0 then return
+        query = state.q_query()
+        facets = state.q_facets()
+        if !query or num then return
         all_facets = (f.key for f in $.solr_config('static.ui.facets'))
         _ajax_json "/Multi/Ajax/search", {
-            q: query.q
+            q: query
             rows: 1
             'facet.field': all_facets
             'facet.mincount': 1
             facet: true
           }, (data) =>
+            if $(document).data('update_seq') != update_seq then return
             cur_values = []
-            othervalues = [] 
+            othervalues = []
             for f in all_facets
-              if query.facets[f] then cur_values.push([f,query.facets[f]])
+              if facets[f] then cur_values.push([f,facets[f]])
               if data.result?.facet_counts?.facet_fields?[f]?
                 entries = 0
                 total = 0
@@ -385,7 +414,7 @@ window.rhs_templates =
             wholesite = (cur_values.length == 0)
             templates = $(document).data('templates')
             el.append(templates.generate('noresultsnarrow',{
-              q: query.q, yoursearch, othervalues, wholesite
+              q: query, yoursearch, othervalues, wholesite
               unrestrict_facets: () =>
                 state = { page: 1 }
                 for f in all_facets

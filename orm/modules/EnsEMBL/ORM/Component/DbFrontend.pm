@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2013] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -37,8 +37,8 @@ use base qw(EnsEMBL::Web::Component);
 use constant {
   _JS_CLASS_DBF_RECORD        => '_dbf_record',
   _JS_CLASS_RESPONSE_ELEMENT  => '_dbf_response',
-  _JS_CLASS_EDIT_BUTTON       => '_dbf_button',
-  _JS_CLASS_ADD_BUTTON        => '_dbf_button',
+  _JS_CLASS_BUTTON            => '_dbf_button',
+  _JS_CLASS_EDIT_BUTTON       => '_dbf_edit',
   _JS_CLASS_DELETE_BUTTON     => '_dbf_delete',
   _JS_CLASS_CANCEL_BUTTON     => '_dbf_cancel',
   _JS_CLASS_PREVIEW_FORM      => '_dbf_preview',

@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2013] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -131,7 +131,7 @@ sub fetch_features_generic {
   my ($self, $slice, $image_config, $function, $node) = @_;
   my $hub        = $self->hub;
   my $strand     = $hub->param('strand');
-  my ($glyphset) = $self->_use("Bio::EnsEMBL::GlyphSet::$function", {
+  my ($glyphset) = $self->_use("EnsEMBL::Draw::GlyphSet::$function", {
     container => $slice,
     config    => $image_config,
     my_config => $node,
@@ -186,7 +186,7 @@ sub fetch_transcript {
   my $g         = $hub->core_params->{'g'};
   my $t         = $hub->core_params->{'t'};
   
-  my ($glyphset) = $self->_use("Bio::EnsEMBL::GlyphSet::$function", {
+  my ($glyphset) = $self->_use("EnsEMBL::Draw::GlyphSet::$function", {
     container => $slice,
     config    => $image_config,
     my_config => $node,
@@ -239,7 +239,7 @@ sub fetch_transcript {
 sub fetch_structural_variation {
   my ($self, $slice, $image_config, $function, $node) = @_;
   my $hub        = $self->hub;
-  my ($glyphset) = $self->_use("Bio::EnsEMBL::GlyphSet::$function", {
+  my ($glyphset) = $self->_use("EnsEMBL::Draw::GlyphSet::$function", {
     container => $slice,
     config    => $image_config,
     my_config => $node,
@@ -316,7 +316,7 @@ sub fetch_codons {
   my $colourmap = $hub->colourmap;
   my @features;
   
-  my ($glyphset) = $self->_use("Bio::EnsEMBL::GlyphSet::$function", {
+  my ($glyphset) = $self->_use("EnsEMBL::Draw::GlyphSet::$function", {
     container => $slice,
     config    => $image_config,
     my_config => $node,
@@ -343,7 +343,7 @@ sub fetch_synteny {
   my ($self, $slice, $image_config, $function, $node) = @_;
   my @features;
   
-  my ($glyphset) = $self->_use("Bio::EnsEMBL::GlyphSet::$function", {
+  my ($glyphset) = $self->_use("EnsEMBL::Draw::GlyphSet::$function", {
     container => $slice,
     config    => $image_config,
     my_config => $node,
@@ -411,7 +411,7 @@ sub extra_synteny {
   return unless $hub->param('colors') || $self->{'set_cache'};
   
   my $colourmap = $hub->colourmap;
-  my $classname = "Bio::EnsEMBL::GlyphSet::$function";
+  my $classname = "EnsEMBL::Draw::GlyphSet::$function";
   my $extra     = {};
   
   foreach (grep $_->get('glyphset') eq '_synteny', @{$image_config->glyphset_configs}) {

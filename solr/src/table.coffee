@@ -1,98 +1,44 @@
+# Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 #
-_div = (klass) -> $("<div class='#{klass}'></div>")
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
+# The table code exports two classes.
+#
+# TableHolder -- the main class, one per table implemented here.
+#
+# TableState  -- you subclass this and override methods and then supply it.
+#                  Contains callbacks whereby this code can record state
+#                  changes, eg column ordering, filtering, etc. and methods
+#                  to retrieve that info. Usually your implementation will
+#                  put these things in URLs, etc.
+#
+#                  There is a getter/setter method in the superclass for
+#                  each piece of state, which you should leave alone.
+#                  Subclasses just override set() which should pull info
+#                  from these getters and then call their persistence layer.
+#
 _clone_array = (a) -> $.extend(true,[],a)
-_clone_object = (a) -> $.extend(true,{},a)
 
 # XXX clear footer
 
-class Source
-  init: (cols) ->
-    @cols = $.extend(true,[],cols)
-    @colidx = []
-    @colidx[@cols[i].key] = i for i in [0..@cols.length-1]
-
-  columns: -> @cols
-
-  _numcol_filter: (filter) ->
-    out = _clone_array(filter)
-    r.columns = (@colidx[k] for k in r.columns) for r in out
-    out
-
-  _numcol_order: (order) ->
-    out = _clone_array(order) 
-    r.column = @colidx[r.column] for r in out
-    out
-
-  _numcol_cols: (cols) ->
-    out = _clone_array(cols)
-    @colidx[x] for x in out
-
-  _post_sort: (data,order) ->
-    data.sort (a,b) ->
-      for s in order
-        x = (""+a[s.column]).localeCompare(b[s.column])
-        if x then return x*s.order
-      0
-
 # XXX lowercase filter
 # XXX non-string comparison
-class TestSource extends Source
-  _x: (s,i) -> s.substr(i%s.length,1)
-  _m: (s,i) ->
-    out = ''
-    out = out.concat(s) for x in [0..i]
-    out
-
-  constructor: ->
-    @data = []
-    for i in [0..1000]
-      @data.push([i,@_x("ABCDEFGHIJKLMNOPQRSTUVWXYZ",i),@_m("x",i%7),@_x("ZYX",i),@_x("ABCDE",i)])
-    @init([
-      { key: 'first', name: 'First', width: 10 }
-      { key: 'second', name: 'Second', width: 40 }
-      { key: 'third', name: 'Third', width: 20 }
-      { key: 'fourth', name: 'Fourth', width: 10 }
-      { key: 'fifth', name: 'Fifth', width: 20, nosort: 1 }
-    ])
-
-  chunk_size: -> 10 # XXX
-
-  get: (filter,cols,order,start,len,more) ->
-    # replace col names with indices
-    filter = @_numcol_filter(filter)
-    order = @_numcol_order(order) 
-    cols = @_numcol_cols(cols)
-    # filter
-    rows = []
-    for d in @data
-      ok = 1
-      for f in filter
-        pass = 0
-        for c in f.columns
-          if (""+d[c]).indexOf(f.value) != -1 then pass = 1
-        unless pass then ok = 0
-      if ok then rows.push(d)
-    # order
-    rows = @_post_sort(rows,order)
-    # paginate
-    if len
-      rows = rows.splice(start,len)
-    else
-      rows = rows.splice(start,rows.length-start-1)
-    # filter columns
-    out = []
-    for r in rows
-      out.push(r[k] for k in cols)
-    more.call(@,out)
-
 # XXX internal sort, filter etc
 # XXX delay search
 # XXX general ephemora
 
 class TableState
-  constructor: (@source,el) ->
-    scols = @source.columns()
+  constructor: (el,scols) ->
     @_filter = []
     @_order = []
     @_colkey = {}
@@ -138,30 +84,11 @@ class TableState
   coldata: -> (@_colkey[k] for k in @el.data('columns'))
   sortkey: (k) -> @_sortkey[k]
   associate: (@table) ->
-  set: -> @table.render()
-
 
 class TableHolder
-  constructor: (@templates,@source,@state,@options = {}) ->
+  constructor: (@templates,@state,@options = {}) ->
     @state.associate(@)
-
-  # Used for download links
-  get_all_data: (callback) ->
-    out = { rows: [] }
-    @get_some_data(0,100,out,callback)
-
-  get_some_data: (start,num,acc,callback) ->
-    @get_data start,num, (data) =>
-      if data.rows.length == 0 or (@max? and start+data.rows.length > @max)
-        callback(acc)
-      else
-        if data.cols? and not acc.cols? then acc.cols = data.cols
-        acc.rows = acc.rows.concat(data.rows)
-        @get_some_data(start+data.rows.length,num,acc,callback)
-
-  get_data: (start,num,callback) ->
-    @source.get(@state.filter(),@state.columns(),@state.order(),
-                start,num,callback,true)
+    if not @options.chunk_size? then @options.chunk_size = 1000
 
   # XXX abstract better
   transmit_data: (el,fn,data) ->
@@ -181,19 +108,6 @@ class TableHolder
       $form.trigger('submit')
   # END used for download links
 
-  generate_model: (extra) ->
-    model = {
-      table_ready: (el,data) => @collect_view_model(el,data)
-      state: @state
-      download_curpage: (el,fn) =>
-        @get_data(@state.start(),@state.pagesize(), (data) =>
-          @transmit_data(el,fn,data)
-        )
-      download_all: (el,fn) =>
-        @get_all_data((data) => @transmit_data(el,fn,data))
-    }
-    model
-
   collect_view_model: (el,data) ->
     @outer = el
 
@@ -202,60 +116,18 @@ class TableHolder
   draw_table: ->
     table = new Table(@)
     table.render() 
+  xxx_table: -> return new Table(@)
 
   table_ready: (html) ->
     table = $('.search_table_proper',@outer)
     table.empty()
     table.append(html)
 
-  data_actions: (data) ->
-    if @options.update?
-      @options.update.call(@,data)
-
 class Table
   _idx = 0
 
-  new_idx: -> @idx = _idx++
-
   constructor: (@holder) ->
     @multisort = (@holder.options.multisort ? true)
-    @last_scroll_fire = 0
-    @artificial_seq = 1
-    $(window).scroll( => @scroll_event(0) )
-
-  scroll_event: (artificial) ->
-    now = new Date().getTime()
-    if artificial != 0 and @artificial_seq != artificial then return
-    if now > @last_scroll_fire + 500
-      @last_scroll_fire = now
-      @did_scroll()
-    else
-      if artificial == 0
-        if @timer then clearTimeout(@timer)
-        @timer = setTimeout(( => @scroll_event(++@artificial_seq)),500)
-
-  did_scroll: ->
-    @reinstate_chunks()
-
-  reinstate_chunks: ->
-    top = $(window).scrollTop()
-    height = $(window).height()
-    start = top - height
-    end = top + 2 * height
-    table = @
-    count = 0
-    targets = []
-    $('.search_table_buffer').each( ->
-      buffer = $(@)
-      buffer_start = buffer.offset().top
-      buffer_end = buffer_start + buffer.height()
-      unless buffer_start > end or buffer_end < start
-        targets.push(buffer)
-    )
-    if targets.length
-      table.reinstate_chunk targets,0, =>
-        if targets.length
-          @reinstate_chunks()
 
   render_head: (t_data,data,first) ->
     t_data.headings = {}
@@ -267,69 +139,23 @@ class Table
       t_data.headings[c.key] = { text: c?.name, state, key: c.key, dir}
     t_data.first = first
 
-  render_tail: (table,data) ->
-
   render_row: (data) ->
     @stripe = !@stripe
-    { cols: data, stripe: @stripe }
+    klass = ''
+    if @stripe then klass = ' stripe'
+    if @holder.options.style_col? and data[@holder.options.style_col]?
+      klass += ' ' + data[@holder.options.style_col]
+    { cols: data, stripe: @stripe, klass }
 
-# XXX lru table
 # XXX if top not moved then body not moved
 
-  reinstate_chunk: (targets,i,rest) ->
-    buffer = targets[i]
-    start = buffer.data('start')
-    num = buffer.data('num')
-    idx = buffer.data('idx')
-    first = buffer.data('first')
-    last = buffer.data('last')
-    @get_data start,num, (data) =>
-      if idx != @idx then return
-      @render_chunk(data,first,last,false,buffer, (table) =>
-        if i < targets.length-1
-          @reinstate_chunk(targets,i+1,rest)
-        else
-          rest()
-      )
-
-  fake_chunk: (height,start,num,idx,first,last) ->
-    _div('search_table_buffer').height(height).data('start',start).data('num',num).data('idx',idx).data('first',first).data('last',last)
-
-  hide_chunk: (table,height,start,num,idx,first,last) ->
-    table.replaceWith(@fake_chunk(height,start,num,idx,first,last))
-
-  hide_distant_chunks: ->
-    top = $(window).scrollTop()
-    height = $(window).height()
-    start = top - height
-    end = top + 2 * height
-    distant = []
-    @container.find('.chunk').each( ->
-      table = $(@)
-      table_start = table.offset().top
-      table_end = table_start + table.height()
-      if table_start > end or table_end < start
-        height = table.outerHeight(true)
-        start = table.data('start')
-        num = table.data('num')
-        idx = table.data('idx')
-        first = table.data('first')
-        last = table.data('last')
-        distant.push([table,height,start,num,idx,first,last])
-    )
-    @hide_chunk(t[0],t[1],t[2],t[3],t[4],t[5],t[6]) for t in distant
-
-  markup_chunk: (table,start,num,idx,first,last) ->
-    table.data('start',start).data('num',num).data('idx',idx).data('first',first).data('last',last)
-
-  render_data: (data,first,last) ->
+  render_data: (data,first) ->
     t_data = { table_row: [], rows: [], cols: data.cols }
     widths = (c.percent for c in @holder.state.coldata())
     t_data.widths = widths
-    @render_head(t_data,data,first)
+    if first then @render_head(t_data,data,first)
     for r in data.rows
       t_data.rows.push(@render_row(r))
-    if last then @render_tail(t_data,data)
     t_main = @holder.templates.generate('chunk',t_data)
     # Bind events
     table = @
@@ -345,86 +171,43 @@ class Table
       false
     t_main
 
-  render_chunk: (data,first,last,fire,replace,next) ->
-    if first and fire then @holder.data_actions(data)
-    outer = @render_data(data,first,last)
-    if replace?
-      replace.replaceWith(outer)
-    else
-      outer.appendTo(@container)
-    if first and fire then @holder.table_ready(@container)
-    next.call(@,outer)
+  render_chunk: (data,first) ->
+    # Not async right now, but probably will be one day, so use deferred
+    d = $.Deferred()
+    outer = @render_data(data,first)
+    outer.appendTo(@container)
+    return d.resolve(data)
 
-  average_chunk_height: ->
-    height = 0
-    num = 0
-    @container.find('.chunk').each ->
-      height += $(@).outerHeight(true)
-      num++
-    if num == 0 then num = 1
-    height / num
-
-# XXX calculate actual effective size not 1000000 in case smaller
-# XXX giant clear sidebar
-
-  get_page: (page,start,got,chunk,idx,getter,iter = 0) ->
-    toget = (if page then page - got else chunk)
-    if toget > chunk then toget = chunk
-    getter.call @, start+got, toget, (data) =>
-      if idx != @idx then return # usurped!
-      if data.fake?
-        more = !!(data.fake_length)
-        fake = @fake_chunk(data.fake_height,start+got,toget,idx,got==0,!more)
-        got_here = data.fake_length
-        fake.appendTo(@container)
-        if more
-          @get_page(page,start,got+got_here,chunk,idx,getter,iter+1)
-      else
-        more = !!((got+data.rows.length < page or page == 0) and data.rows.length )
-        @render_chunk data,got==0,!more,true,undefined, (table) =>
-          @markup_chunk(table,start+got,toget,idx,got==0,!more)
-          got_here = data.rows.length
-          setTimeout(( => @hide_distant_chunks()),0)
-          if iter == 10 # XXX sensible criterion
-            avg = @average_chunk_height()
-            getter = @fake_data(data.num,avg)
-          if more
-            @get_page(page,start,got+got_here,chunk,idx,getter,iter+1)
-
-  render_main: (idx) ->
+  # XXX new
+  reset: () ->
+    if @container? then @container.remove()
+    @container = $('<div/>').addClass('search_table')
     @stripe = 1
-    got = 0
-    start = @holder.state.start()
-    page = @holder.state.pagesize()
-    chunk = @holder.source.chunk_size()
-    @get_page(@holder.state.pagesize(),@holder.state.start(),0,@holder.source.chunk_size(),idx,@get_data)
+    @empty = 1
+    @holder.table_ready(@container)
 
-# XXX only deform on giant tables
-# XXX reorderable cols
-# XXX stripes and hidden chunks
-# XXX odd page sizes
+  draw_top: () ->
 
-  get_data: (start,num,more) ->
-    @holder.source.get(@holder.state.filter(),@holder.state.columns(),@holder.state.order(),start,num,more)
+  draw_rows: (rows) ->
+    d = @render_chunk(rows,@empty) # XXX not false
+    @empty = 0
+    return d
 
-  fake_data: (total,height) ->
-    (start,num,more) =>
-      setTimeout( =>
-        if start+num > total then num = total-start
-        if num < 0 then num = 0
-        more({ docs: [], num: total, fake: true, fake_length: num, fake_height: height })
-      ,0) # Avoid crowding out user interaction
+  draw_bottom: () ->
+
+  # XXX done new
 
   render: ->
     if @container? then @container.remove()
-    @new_idx()
-    @container = _div('search_table')
-    @render_main(@idx)
+    @container = $('<div/>').addClass('search_table')
+    @stripe = 1
+    start = @holder.state.start()
+    page = @holder.state.pagesize()
+    chunk = @holder.options.chunk_size
+    return @get_page(page,start,chunk)
 
 # XXX periodic headers
 
-window.TableSource = Source
-window.test_source = TestSource # XXX
-window.TableState = TableState 
+window.TableState = TableState
 window.search_table = TableHolder
 

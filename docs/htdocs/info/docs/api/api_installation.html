@@ -1,0 +1,157 @@
+<html>
+<head>
+<title>API Installation</title>
+<meta name="order" content="1" />
+</head>
+
+<body>
+
+<h1>Perl API Installation</h1>
+
+
+<h2>Introduction</h2>
+
+<p>
+All data sets in the Ensembl system are stored in relational databases
+(MySQL). For each of the <a href="./index.html">Ensembl databases</a>
+the project provides a specific Perl API. As Ensembl takes also
+advantage of code provided by the <a href="http://www.bioperl.org/wiki/Main_Page" rel="external">BioPerl</a> project; 
+installation of the BioPerl package is included in these instructions.
+</p>
+
+<h2>Video Tutorial</h2>
+
+<p>
+Ensembl has produced a video tutorial about how to install the API. 
+Its content is based on this document so you can follow both resources when performing an installation. 
+All commands in this video can be found from the following 
+<a href="ftp://ftp.ebi.ac.uk/pub/databases/ensembl/Helpdesk/API_video_script.txt" rel="external">document on our FTP site</a>.
+</p>
+
+<p>[[MOVIE::481]]</p>
+
+<h2>Installation Procedure</h2>
+
+<p>
+There are two ways of installing the Perl API. You can <a href="/info/docs/api/api_git.html">clone it from GitHub using Git</a> 
+if you have that available, or you can download the files in gzipped TAR format from our 
+<a href="ftp://ftp.ensembl.org/pub/ensembl-api.tar.gz" rel="external">FTP site</a>. You will also need <a href='http://bioperl.org/DIST/old_releases/bioperl-1.2.3.tar.gz' rel="external">BioPerl 1.2.3</a>.
+</p>
+<p>
+<strong>N.B.</strong> We recommend waiting until a few days after a
+release before downloading the new API (or re-downloading after a few
+days), as there may be post-release bug fixes added to the code.
+</p>
+
+<ol>
+<li>
+<p>
+Create an installation directory and download the distributions:
+</p>
+<pre>
+$ cd
+$ mkdir src
+$ cd src
+$ wget ftp://ftp.ensembl.org/pub/ensembl-api.tar.gz
+$ wget http://bioperl.org/DIST/old_releases/bioperl-1.2.3.tar.gz
+</pre>
+</li>
+
+<li>
+<p>
+Unpack the downloaded files. In the Unix command line, type:
+</p>
+<pre>
+$ tar zxvf ensembl-api.tar.gz
+$ tar zxvf bioperl-1.2.3.tar.gz
+</pre>
+
+<p>
+In Windows, you will need an unzipping utility such as <a rel="external" href="http://www.7-zip.org/">7-Zip</a>.
+</p>
+</li>
+
+<li>
+<p>
+Set up your environment
+</p>
+
+<p>
+You have to tell Perl where to find the modules you just installed.
+You can do this by using the <kbd>use lib</kbd> clause in your script
+but if you want to make these modules available for all your scripts,
+the best way is to add them into the <var>PERL5LIB</var> environment
+variable.
+</p>
+
+<ul>
+<li>
+<p>
+Under <kbd>bash</kbd>, <kbd>ksh</kbd>, or any <kbd>sh</kbd>-derived shell:
+</p>
+
+<pre>
+PERL5LIB=${PERL5LIB}:${HOME}/src/bioperl-1.2.3
+PERL5LIB=${PERL5LIB}:${HOME}/src/ensembl/modules
+PERL5LIB=${PERL5LIB}:${HOME}/src/ensembl-compara/modules
+PERL5LIB=${PERL5LIB}:${HOME}/src/ensembl-variation/modules
+PERL5LIB=${PERL5LIB}:${HOME}/src/ensembl-funcgen/modules
+export PERL5LIB
+</pre>
+</li>
+
+<li>
+<p>
+Under <kbd>csh</kbd> or <kbd>tcsh</kbd>:
+</p>
+
+<pre>
+setenv PERL5LIB ${PERL5LIB}:${HOME}/src/bioperl-1.2.3
+setenv PERL5LIB ${PERL5LIB}:${HOME}/src/ensembl/modules
+setenv PERL5LIB ${PERL5LIB}:${HOME}/src/ensembl-compara/modules
+setenv PERL5LIB ${PERL5LIB}:${HOME}/src/ensembl-variation/modules
+setenv PERL5LIB ${PERL5LIB}:${HOME}/src/ensembl-funcgen/modules
+</pre>
+</li>
+
+<li>
+<p>
+Under Windows (assuming you installed the APIs in C:\src\):
+</p>
+
+<pre>
+set PERL5LIB=C:\src\bioperl-1.2.3;C:\src\ensembl\modules;C:\src\ensembl-compara\modules;C:\src\ensembl-variation\modules;C:\src\ensembl-funcgen\modules
+</pre>
+</li>
+
+<li>
+	<p>In Perl (we do not recommend creating hard-coded dependencies in Perl scripts):</p>
+	<pre>
+use lib "$ENV{HOME}/src/bioperl-1.2.3";
+use lib "$ENV{HOME}/src/ensembl/modules";
+use lib "$ENV{HOME}/src/ensembl-compara/modules";
+use lib "$ENV{HOME}/src/ensembl-variation/modules";
+use lib "$ENV{HOME}/src/ensembl-funcgen/modules";
+	</pre>
+</li>
+
+</ul>
+
+</li>
+
+</ol>
+
+<h2>Debugging an Installation</h2>
+
+<p>
+Sometimes installations can go wrong. You should follow our <a href='/info/docs/api/debug_installation_guide.html'>debugging installation guide</a> to help diagnose and resolve installation issues.
+</p>
+
+<h2>Tips for Windows and Mac Users</h2>
+
+<p>
+	Ensembl can be installed on both Windows and Mac machines however installation is not as straightforward as installing on Linux. We recommend you consult our two blog posts detailing how you can install Ensembl on <a href='http://www.ensembl.info/blog/2014/02/10/ensembl-api-on-windows/' rel="external">Windows</a> and on <a href='http://www.ensembl.info/blog/2013/09/09/installing-perl-dbdmysql-and-ensembl-on-osx/' rel="external">OSX</a>. The fastest way to get up and running with Ensembl on these operating systems is to use our <a href='/info/data/virtual_machine.html'>virtual machine</a>.
+</p>
+
+</body>
+</html>

@@ -1,3 +1,17 @@
+# Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # table_extras can be filled by subtemplates if they wish
 window.page_templates = 
   page:
@@ -30,10 +44,10 @@ window.page_templates =
         if m?
           $('<img/>').attr('src',m[1]).appendTo($('<body></body>')).css('display','none')
       '.new_current_faceter': (el,data) ->
-        $(document).on 'first_result', (e,query,data) ->
+        $(document).on 'faceting_known', (e,faceting,values,num,state,update_seq) ->
+          if $(document).data('update_seq') != update_seq then return
           templates = $(document).data('templates')
           el.empty()
-          values = query.facets
           el.append(templates.generate('current_facets_sidebar',{values}))
       '.solr_page_p_side': (el,data) ->
         # scrollnig overflowing sidebars despite being "fixed".
@@ -86,15 +100,10 @@ window.page_templates =
 
           # Add quick links
           data.tp2_row.register 1000, () ->
-            ql = $.solr_config('static.ui.links')
-            for link,idx in ql
-              ok = true
-              for a,b of ( link.conditions ? {} )
-                left = a.replace /\{(.*?)\}/g, (g0,g1) -> data.tp2_row.best(g1) ? ''
-                if not left.match(new RegExp(b)) then ok = false ; break
-              if ok
-                url = link.url.replace /\{(.*?)\}/g, (g0,g1) -> data.tp2_row.best(g1) ? ''
-                data.tp2_row.add_value("quick_link",{ title: link.title, url },100*idx+500)
+            links = data.tp2_row.best('quicklinks')
+            for link in ( links ? [] )
+              data.tp2_row.add_value("quick_link",link)
+
           data.tp2_row.register 30000, () ->
             data.tp2_row.send("quick_links",(k.value for k in @all_values("quick_link") ? []))
           true
@@ -131,7 +140,7 @@ window.page_templates =
               data.tp2_row.candidate('description',desc.join(". ")+".",10000)
             true
 
-          data.tp2_row.register 50000, () ->
+          data.tp2_row.register 51000, () ->
             data.tp2_row.send('description',data.tp2_row.best('description'))
             data.tp2_row.send('id',data.tp2_row.best('id'))
             data.tp2_row.send('url',data.tp2_row.best('url'))
@@ -150,11 +159,17 @@ window.page_templates =
         'f<-faceters':
           '@data-key': 'f'
     preproc: (spec,data) ->
-      data.faceters = $.solr_config('static.ui.facets_sidebar_order')      
+      data.faceters = $.solr_config('static.ui.facets_sidebar_order')
       [spec,data]
     postproc: (el,odata) =>
-      $(document).on 'first_result', (e,query,data,state) =>
+      $(document).on 'faceting_unknown', (e,update_seq) =>
         $('.table_faceter',el).each () ->
+          if $(document).data('update_seq') != update_seq then return
+          if $(@).data('update_seq') == update_seq then return
+          $(@).empty()
+      $(document).on 'faceting_known', (e,faceter,query,num,state,update_seq) =>
+        $('.table_faceter',el).each () ->
+          if $(document).data('update_seq') != update_seq then return
           key = $(@).data('key')
           order = []
           fav_order = $.solr_config('static.ui.facets.key=.fav_order',key)
@@ -163,11 +178,13 @@ window.page_templates =
           if members?
             for k in members
               order.push(k.key)
-          model = { values: data.faceter[key], order }
-          short_num = $.solr_config('static.ui.facets.key=.trunc',key)  
-          if query.facets[key] then model.values = []
+          model = { values: faceter[key], order }
+          short_num = $.solr_config('static.ui.facets.key=.trunc',key)
+          if query[key] then model.values = []
           model.key = key
           templates = $(document).data('templates')
+          # in case we get triggered before faceting_unknown
+          $(@).data('update_seq',update_seq)
           $(@).empty().append(templates.generate('faceter_inner',model))
         $('#main_holder').css('min-height',
                               $('.solr_sidebar').outerHeight(true) +

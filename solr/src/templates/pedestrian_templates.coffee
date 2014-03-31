@@ -1,3 +1,17 @@
+# Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 #
 
 ucfirst = (str) ->
@@ -266,12 +280,14 @@ window.pedestrian_templates =
             <span class='solr_beak_p_right'></span>
           </a>
         </div>
+        <!-- not for now: need to re-engineer
         <div class='solr_beak_p_contents solr_perpage_all'>
           <a href="#0">
             <span class='solr_beak_p_left'>Show all results in one page</span>
             <span class='solr_beak_p_right'></span>
           </a>
         </div>
+        -->
       </div>
     """
     directives:
@@ -293,7 +309,8 @@ window.pedestrian_templates =
         data.entries.push({ label: (if x then x else "all"), key: x})
       [spec,data]
     postproc: (el,data) ->
-      $(document).on 'first_result', (e,query,data,state) ->
+      $(document).on 'state_known', (e,state,update_seq) ->
+        if $(document).data('update_seq') != update_seq then return
         $('.solr_feet_p_current',el).removeClass('solr_feet_p_current')
         pp = state.pagesize()
         $("a[href='##{pp}']",el).addClass('solr_feet_p_current')
