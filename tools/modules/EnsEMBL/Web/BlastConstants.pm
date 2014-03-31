@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2013] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -22,7 +22,8 @@ use strict;
 use warnings;
 
 use Exporter qw(import);
-our @EXPORT = qw(MAX_SEQUENCE_LENGTH MAX_NUM_SEQUENCES DNA_THRESHOLD_PERCENT CONFIGURATION_FIELDS CONFIGURATION_DEFAULTS);
+our @EXPORT_OK    = qw(MAX_SEQUENCE_LENGTH MAX_NUM_SEQUENCES DNA_THRESHOLD_PERCENT CONFIGURATION_FIELDS CONFIGURATION_DEFAULTS);
+our %EXPORT_TAGS  = ('all' => [ @EXPORT_OK ]);
 
 sub MAX_SEQUENCE_LENGTH   { 200000  }
 sub MAX_NUM_SEQUENCES     { 30      }
@@ -93,16 +94,8 @@ sub CONFIGURATION_FIELDS {
                                   { 'value' => '6',   'caption' => '8' },
                                   { 'value' => '11',  'caption' => '11' },
                                   { 'value' => '15',  'caption' => '15' },
-        ],
-      },
-
-## This has been disabled (temporarily?). Since you can always edit your query on the frontend, why would you need to specify it's start and end location?
-#       'query_loc'           => {
-#         'type'                => 'string',
-#         'label'               => 'Location on the query sequence',
-#         'size'                => '30',
-#       },
-
+        ]
+      }
     ],
 
     'scoring'             => [

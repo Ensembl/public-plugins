@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2013] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,30 +18,48 @@ limitations under the License.
 
 package EnsEMBL::Web::Component::Tools::VEP;
 
-### Base class for all Blast components
-
 use strict;
 use warnings;
-
-use EnsEMBL::Web::Exceptions;
 
 use base qw(EnsEMBL::Web::Component::Tools);
 
 sub job_details_table {
   ## A two column layout displaying a job's details
   ## @param Job object
-  ## @param Extra param hashref as required by expand_job_status method
+  ## @param Extra param hashref as required by get_job_summary method
   ## @return DIV node (as returned by new_twocol method)
   my ($self, $job, $params) = @_;
 
   my $object    = $self->object;
   my $job_data  = $job->job_data;
+  my $species   = $job->species;
+  my $sd        = $self->hub->species_defs;
   my $two_col   = $self->new_twocol;
 
-  $two_col->add_row('Description',    $job->job_desc // '-');
-  $two_col->add_row('Status',         $self->expand_job_status($job, $params)->render);
+  $two_col->add_row('Job summary',  $self->get_job_summary($job, $params)->render =~ s/Job 0\: //r);
+  $two_col->add_row('Species',      sprintf('<img class="job-species" src="%sspecies/16/%s.png" alt="" height="16" width="16">%s', $self->img_url, $species, $sd->species_label($species, 1)));
 
   return $two_col;
+}
+
+sub job_statistics {
+  ## Gets the job result stats for display on results pages
+  my $self    = shift;
+  my $file    = $self->object->result_files->{'stats_file'};
+  my $stats   = {};
+  my $section;
+
+  for (split /\n/, $file->content) {
+    if (m/^\[(.+?)\]$/) {
+      $section = $1;
+    } elsif (m/\w+/) {
+      my ($key, $value) = split "\t";
+      $stats->{$section}->{$key} = $value;
+      push @{$stats->{'sort'}->{$section}}, $key;
+    }
+  }
+
+  return $stats;
 }
 
 1;

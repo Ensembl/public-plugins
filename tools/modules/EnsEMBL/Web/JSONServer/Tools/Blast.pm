@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2013] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ package EnsEMBL::Web::JSONServer::Tools::Blast;
 use strict;
 use warnings;
 
-use EnsEMBL::Web::BlastConstants;
+use EnsEMBL::Web::BlastConstants qw(MAX_SEQUENCE_LENGTH MAX_NUM_SEQUENCES);
 
 use base qw(EnsEMBL::Web::JSONServer::Tools);
 

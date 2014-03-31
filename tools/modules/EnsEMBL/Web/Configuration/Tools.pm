@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2013] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -34,78 +34,74 @@ sub populate_tree {
       icons           EnsEMBL::Web::Component::Tools::Icons
       tickets         EnsEMBL::Web::Component::Tools::TicketsList
     )],
-    { 'availability' => 1, 'concise' => 'Web Tools' }
+#     { 'availability' => 1, 'concise' => 'Web Tools' }
+    { 'availability' => 0, 'concise' => 'Web Tools' }
   );
 
   $tools_node->append($_) for (
 
     ## BLAST specific nodes
-    $self->create_subnode('Blast', 'BLAST/BLAT',
-      [qw(
-        tickets         EnsEMBL::Web::Component::Tools::Blast::TicketsList
-        sequence        EnsEMBL::Web::Component::Tools::Blast::InputForm
-      )],
-      { 'availability' => 1, 'concise' => 'BLAST/BLAT search' }
-    ),
-    $self->create_subnode('Blast/Summary', 'Activity Summary',
-      [qw(
-        tickets         EnsEMBL::Web::Component::Tools::Blast::TicketsList
-        details         EnsEMBL::Web::Component::Tools::Blast::TicketDetails
-      )],
-      { 'availability' => 1, 'concise' => 'BLAST/BLAT Activity Summary', 'no_menu_entry' => 1 }
-    ),
-    $self->create_subnode('Blast/Results', 'Results',
-      [qw(
-        results         EnsEMBL::Web::Component::Tools::Blast::JobDetails
-        karyotype       EnsEMBL::Web::Component::Tools::Blast::Karyotype
-        hsps            EnsEMBL::Web::Component::Tools::Blast::HspQueryPlot
-        table           EnsEMBL::Web::Component::Tools::Blast::ResultsTable
-      )],
-      { 'availability' => 1, 'concise' => $self->object ? $self->object->long_caption : '', 'no_menu_entry' => 1 }
-    ),
-    $self->create_subnode('Blast/Alignment', 'Alignment',
-      [qw(
-        hit             EnsEMBL::Web::Component::Tools::Blast::HitSummary
-        alignment       EnsEMBL::Web::Component::Tools::Blast::Alignment
-      )],
-      { 'availability' => 1, 'concise' => 'BLAST/BLAT Alignment', 'no_menu_entry' => 1 }
-    ),
-    $self->create_subnode('Blast/AlignmentProtein', 'AlignmentProtein',
-      [qw(
-        hit             EnsEMBL::Web::Component::Tools::Blast::HitSummary
-        alignment       EnsEMBL::Web::Component::Tools::Blast::AlignmentProtein
-      )],
-      { 'availability' => 1, 'concise' => 'BLAST/BLAT Alignment', 'no_menu_entry' => 1 }
-    ),
-    $self->create_subnode('Blast/QuerySeq', 'Query Sequence',
-      [qw(
-        hit             EnsEMBL::Web::Component::Tools::Blast::HitSummary
-        query           EnsEMBL::Web::Component::Tools::Blast::QuerySeq
-      )],
-      { 'availability' => 1, 'concise' => 'BLAST/BLAT Query Sequence', 'no_menu_entry' => 1 }
-    ),
-    $self->create_subnode('Blast/GenomicSeq', 'Genomic Sequence',
-      [qw(
-        hit             EnsEMBL::Web::Component::Tools::Blast::HitSummary
-        genomic         EnsEMBL::Web::Component::Tools::Blast::GenomicSeq
-      )],
-      { 'availability' => 1, 'concise' => 'BLAST/BLAT Genomic Sequence', 'no_menu_entry' => 1 }
-    ),
+#     $self->create_subnode('Blast', 'BLAST/BLAT',
+#       [qw(
+#         sequence        EnsEMBL::Web::Component::Tools::Blast::InputForm
+#         details         EnsEMBL::Web::Component::Tools::Blast::TicketDetails
+#         tickets         EnsEMBL::Web::Component::Tools::Blast::TicketsList
+#       )],
+#       { 'availability' => 1, 'concise' => 'BLAST/BLAT search' }
+#     ),
+#     $self->create_subnode('Blast/Results', 'Results',
+#       [qw(
+#         results         EnsEMBL::Web::Component::Tools::Blast::JobDetails
+#         karyotype       EnsEMBL::Web::Component::Tools::Blast::Karyotype
+#         hsps            EnsEMBL::Web::Component::Tools::Blast::HspQueryPlot
+#         table           EnsEMBL::Web::Component::Tools::Blast::ResultsTable
+#       )],
+#       { 'availability' => 1, 'concise' => $self->object ? $self->object->long_caption : '', 'no_menu_entry' => 1 }
+#     ),
+#     $self->create_subnode('Blast/Alignment', 'Alignment',
+#       [qw(
+#         hit             EnsEMBL::Web::Component::Tools::Blast::HitSummary
+#         alignment       EnsEMBL::Web::Component::Tools::Blast::Alignment
+#       )],
+#       { 'availability' => 1, 'concise' => 'BLAST/BLAT Alignment', 'no_menu_entry' => 1 }
+#     ),
+#     $self->create_subnode('Blast/AlignmentProtein', 'AlignmentProtein',
+#       [qw(
+#         hit             EnsEMBL::Web::Component::Tools::Blast::HitSummary
+#         alignment       EnsEMBL::Web::Component::Tools::Blast::AlignmentProtein
+#       )],
+#       { 'availability' => 1, 'concise' => 'BLAST/BLAT Alignment', 'no_menu_entry' => 1 }
+#     ),
+#     $self->create_subnode('Blast/QuerySeq', 'Query Sequence',
+#       [qw(
+#         hit             EnsEMBL::Web::Component::Tools::Blast::HitSummary
+#         query           EnsEMBL::Web::Component::Tools::Blast::QuerySeq
+#       )],
+#       { 'availability' => 1, 'concise' => 'BLAST/BLAT Query Sequence', 'no_menu_entry' => 1 }
+#     ),
+#     $self->create_subnode('Blast/GenomicSeq', 'Genomic Sequence',
+#       [qw(
+#         hit             EnsEMBL::Web::Component::Tools::Blast::HitSummary
+#         genomic         EnsEMBL::Web::Component::Tools::Blast::GenomicSeq
+#       )],
+#       { 'availability' => 1, 'concise' => 'BLAST/BLAT Genomic Sequence', 'no_menu_entry' => 1 }
+#     ),
 
     ## VEP specific nodes
-    $self->create_subnode('VEP', 'Variation Effect Predictor',
+    $self->create_subnode('VEP', 'Variant Effect Predictor',
       [qw(
-        jobs         EnsEMBL::Web::Component::Tools::TicketsList
-        vepeffect    EnsEMBL::Web::Component::Tools::VEP::InputForm
+        vepeffect       EnsEMBL::Web::Component::Tools::VEP::InputForm
+        details         EnsEMBL::Web::Component::Tools::VEP::TicketDetails
+        tickets         EnsEMBL::Web::Component::Tools::VEP::TicketsList
       )],
-      { 'availability' => 1, 'concise' => 'Variation Effect Predictor<span style="float:right;"><img src="/img/vep_logo.png"></span>' }
+      { 'availability' => 1, 'concise' => 'Variant Effect Predictor' }
     ),
-    $self->create_subnode('VEP/Summary', 'Results',
+    $self->create_subnode('VEP/Results', 'Results',
       [qw(
         ressummary  EnsEMBL::Web::Component::Tools::VEP::ResultsSummary
         results     EnsEMBL::Web::Component::Tools::VEP::Results
       )],
-      { 'availability' => 1, 'concise' => 'Variant Effect Predictor results<span style="float:right"><img src="/img/vep_logo.png"></span>', 'no_menu_entry' => 1 } 
+      { 'availability' => 1, 'concise' => 'Variant Effect Predictor results', 'no_menu_entry' => 1 } 
     )
   );
 }

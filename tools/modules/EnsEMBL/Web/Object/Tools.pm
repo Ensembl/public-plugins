@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2013] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -24,47 +24,49 @@ package EnsEMBL::Web::Object::Tools;
 use strict;
 use warnings;
 
+use Digest::MD5 qw(md5_hex);
 use JSON qw(from_json);
+
 use Bio::EnsEMBL::Hive::DBSQL::DBAdaptor;
 
-use EnsEMBL::Web::SpeciesDefs;
 use EnsEMBL::Web::Exceptions;
 use EnsEMBL::Web::Tools::RandomString qw(random_string);
-
-use Bio::Root::IO;
+use EnsEMBL::Web::Tools::FileSystem qw(create_path remove_empty_path copy_dir_contents);
 
 use base qw(EnsEMBL::Web::Object);
 
-sub caption               { return 'Tools'; } # override in child obects
-sub short_caption         { return 'Tools'; } # override in child obects
-sub long_caption          { return 'Tools'; } # override in child obects
+sub caption               { return 'Tools'; } # override in child class
+sub short_caption         { return $_[1] && $_[1] eq 'global' ? 'Jobs' : 'Tools'; } # TODO - change it for 76
+sub long_caption          { return 'Tools'; } # override in child class
 sub default_error_message { return 'Some error occurred while running the job.'; }
+
+sub default_action { # TODO - modify for 76
+  my $self  = shift;
+  my $hub   = $self->hub;
+  my $job   = $self->get_sub_object('VEP')->get_requested_job;
+  return join '/', 'VEP', $hub->type eq 'Tools' ? $hub->function || () : $job && $job->status eq 'done' && 'Results' || ();
+}
 
 sub get_sub_object {
   ## Gets the actual web object according to the 'action' part of the url
-  ## @return Blast/VEP web object if available for the hub->action, Tools object otherwise
+  ## @param Object type if action part is missing or invalid
+  ## @return Blast or VEP web object if available for the hub->action (or the param provided), Tools object otherwise
   my $self = shift;
-  return $self->{'_sub_object'} ||= ref $self eq __PACKAGE__ && $self->new_object($self->hub->action, {}, $self->__data) || $self;
-}
-
-sub form_inputs_to_jobs_data {
-  ## @abstract method
-  ## @return Arrayref of jobs hashref, or undef of validation fails
-  ## This method should read the raw form parameters, validate them and convert them into an array of hashes of jobs, each to be saved in the job_data column of ticket table in tools db
-  ## undef is returned if validation failes as validation is already done on the frontend, if it still fails, someone's just messing around
-  throw exception('AbstractMethodNotImplemented');
-}
-
-sub ticket_prefix {
-  ## @abstract method
-  ## Should return the ticket name prefix for the tool type, eg 'BLA_' for blast etc.
-  throw exception('AbstractMethodNotImplemented');
+  my $type = shift || $self->hub->action || '';
+  return $self->{"_sub_object_$type"} ||= $type && ref $self eq __PACKAGE__ && $self->new_object($type, {}, $self->__data) || $self;
 }
 
 sub ticket_type {
   ## @abstract method
   ## Should return the ticket type as saved in ticket_type table
   throw exception('AbstractMethodNotImplemented');
+}
+
+sub ticket_class {
+  ## Class name for the ticket object
+  ## @return package name
+  my $self = shift;
+  return $self->dynamic_use_fallback('EnsEMBL::Web::Ticket::'.$self->ticket_type, 'EnsEMBL::Web::Ticket');
 }
 
 sub create_url_param {
@@ -110,14 +112,6 @@ sub parse_url_param {
   return $self->{'_url_param'};
 }
 
-sub process_job_for_hive_submission {
-  ## @abstract method
-  ## Should generate hive friendy parameters for a job depending upon the related ticket object
-  ## @param Rose job object
-  ## @return Hashref with required job params, or undef if job should not be submitted to hive
-  throw exception('AbstractMethodNotImplemented');
-}
-
 sub hive_adaptor {
   ## Gets new or cached hive adaptor
   ## @return Bio::EnsEMBL::Hive::DBSQL::DBAdaptor object
@@ -127,9 +121,11 @@ sub hive_adaptor {
     my $sd      = $self->hub->species_defs;
     my $hivedb  = $sd->multidb->{'DATABASE_WEB_HIVE'};
 
+    $ENV{'EHIVE_ROOT_DIR'} ||= $sd->ENSEMBL_SERVERROOT.'/ensembl-hive/';
+
     $self->{'_hive_adaptor'} = Bio::EnsEMBL::Hive::DBSQL::DBAdaptor->new(
-      -user   => $sd->DATABASE_WRITE_USER,
-      -pass   => $sd->DATABASE_WRITE_PASS,
+      -user   => $hivedb->{'USER'} || $sd->DATABASE_WRITE_USER,
+      -pass   => $hivedb->{'PASS'} || $sd->DATABASE_WRITE_PASS,
       -host   => $hivedb->{'HOST'},
       -port   => $hivedb->{'PORT'},
       -dbname => $hivedb->{'NAME'},
@@ -142,45 +138,15 @@ sub generate_ticket_name {
   ## Generates a unique ticket name
   ## @return String of length same as the column's allowed length for ticket name
   my $self    = shift;
-  my $prefix  = $self->ticket_prefix;
   my $manager = $self->rose_manager(qw(Tools Ticket));
-  my $length  = $manager->object_class->meta->column('ticket_name')->length - length $prefix;
+  my $length  = $manager->object_class->meta->column('ticket_name')->length;
   my $name    = '';
 
   while (!$name || !$manager->is_ticket_name_unique($name)) {
-    $name = $prefix . random_string($length);
+    $name = random_string($length);
   }
 
   return $name;
-}
-
-sub create_ticket {
-  ## creates a ticket for the jobs given by the user in the tools database and calls a method to submit them to hive database
-  ## @param Arrayref of jobs data (as returned by form_inputs_to_jobs_data)
-  my ($self, $jobs) = @_;
-
-  my $hub         = $self->hub;
-  my $user        = $hub->user;
-  my $now         = $self->get_time_now;
-  my $ticket_type = $self->rose_manager(qw(Tools TicketType))->get_objects('query' => [ 'ticket_type_name' => $self->ticket_type ])->[0];
-
-  my ($ticket)  = $ticket_type->add_ticket({
-    'owner_id'    => $user ? $user->user_id : $hub->session->session_id,
-    'owner_type'  => $user ? 'user' : 'session',
-    'created_at'  => $now,
-    'modified_at' => $now,
-    'site_type'   => $hub->species_defs->ENSEMBL_SITETYPE,
-    'ticket_name' => $self->generate_ticket_name,
-    'job'         => [ map {
-      'job_desc'    => delete $_->{'job_desc'} // '',
-      'job_data'    => $_,
-      'modified_at' => $now
-    }, @$jobs ]
-  });
-
-  $ticket_type->save('changes_only' => 1);
-
-  $self->submit_jobs_to_hive($ticket);
 }
 
 sub delete_ticket_or_job {
@@ -189,71 +155,99 @@ sub delete_ticket_or_job {
   my $self    = shift;
   my $params  = $self->parse_url_param;
 
-  my ($ticket, $job);
+  my ($ticket_type, $ticket, $job);
 
+  # if job_id is provided, it's a request to delete the job (not the parent ticket)
   if ($params->{'job_id'}) {
 
     $job = $self->get_requested_job;
 
     if ($job) {
-      $ticket = $job->ticket;
-      $ticket = undef if $ticket->job_count > 1; # don't delete it if there are more jobs linked to it
+
+      # if there's only one job linked to a ticket, mark the ticket for removal
+      $ticket       = $job->ticket;
+      $ticket_type  = $ticket->ticket_type_name;
+      $ticket       = undef if $ticket->job_count > 1;
     }
 
+  # if job_id is missing, but ticket_name is provided, it's a request to the ticket
   } elsif ($params->{'ticket_name'}) {
-    $ticket = $self->get_requested_ticket;
+    $ticket       = $self->get_requested_ticket;
+    $ticket_type  = $ticket->ticket_type_name if $ticket;
   }
 
-  ## TODO - delete related hive job and work dir
+  return unless $ticket || $job;
 
-  return 1 if $ticket && $ticket->delete;
-  return 1 if $job && $job->delete;
+  # get the path of the related directory that needs to be removed
+  ($job) = $ticket->job if !$job && $ticket;
+  my @dir_path = $job ? split /\//, $job->job_dir : ();
+  pop @dir_path if !$dir_path[-1];       # trailing slash
+  pop @dir_path if $ticket && @dir_path; # this is to get the parent directory for all jobs (required if removing a ticket)
+
+  # get the hive job ids of the jobs that need to be removed
+  my @hive_job_ids = map { $_ && $_->hive_job_id || () } $ticket ? $ticket->job : $job;
+
+  # after deleting the ticket or the job successfully, remove the directories, and the hive jobs
+  if ($ticket ? $ticket->delete : $job && $job->delete) {
+
+    # remove hive jobs
+    if (@hive_job_ids) {
+      my $hive_adaptor = $self->hive_adaptor;
+      $hive_adaptor->get_AnalysisJobAdaptor->remove_all(sprintf '`job_id` in (%s)', join(',', @hive_job_ids));
+      $hive_adaptor->get_Queen->safe_synchronize_AnalysisStats($hive_adaptor->get_AnalysisAdaptor->fetch_by_logic_name_or_url($ticket_type)->stats);
+    }
+
+    # remove dirs
+    remove_empty_path(join('/', @dir_path), { 'remove_contents' => 1, 'exclude' => [ $ticket_type ], 'no_exception' => 1 }) if @dir_path; # ignore any error - files left orphaned will eventually get removed.
+
+    return 1;
+  }
 }
 
 sub save_ticket_to_account {
   ## Saves a ticket to the logged-in user account
   ## @return 1 if saved successfully, undef if there was a problem
-  my $self    = shift;
+  my $self = shift;
+  my $result;
 
   if (my $ticket = $self->get_requested_ticket) {
+
+    my $ticket_type = $ticket->ticket_type_name;
+    my %dirs;
+
+    for ($ticket->job) {
+      my $old_job_dir = $_->job_dir or next;
+      my $new_job_dir = $old_job_dir =~ s/temporary/persistent/r;
+
+      next if $new_job_dir eq $old_job_dir; # very unlikely, but you never know!
+
+      # make the new directory path to copy the files across
+      try {
+        create_path($new_job_dir); #mkdir $new_job_dir
+        copy_dir_contents($old_job_dir, $new_job_dir); #cp job_dir/* new_job_dir/
+        $dirs{$old_job_dir} = $new_job_dir;
+      } catch {
+
+        # rollback if it failed somewhere i.e. remove all the new dirs
+        remove_empty_path($_, { 'remove_contents' => 1, 'exclude' => [ $ticket_type ], 'no_exception' => 1 }) for values %dirs; # ignore any error
+
+        throw $_;
+      };
+
+      # change the job_dir column value for the job object
+      $_->job_dir($new_job_dir);
+    }
+
     $ticket->owner_id($self->hub->user->user_id);
     $ticket->owner_type('user');
-    return 1 if $ticket->save;
+
+    $result = $ticket->save('cascade' => 1);
+
+    # now we have two copies of the ticket dir, remove the one not required
+    remove_empty_path($_, { 'remove_contents' => 1, 'exclude' => [ $ticket_type ], 'no_exception' => 1 }) for $result ? keys %dirs : values %dirs;
   }
-}
 
-sub submit_jobs_to_hive {
-  ## Submits the jobs linked to a ticket to hive
-  ## @param Ticket object
-  my ($self, $ticket) = @_;
-
-  my $hive_adaptor  = $self->hive_adaptor;
-  my $job_adaptor   = $hive_adaptor->get_AnalysisJobAdaptor;
-  my $hive_analysis = $hive_adaptor->get_AnalysisAdaptor->fetch_by_logic_name_or_url($ticket->ticket_type_name);
-
-  foreach my $job ($ticket->job) {
-    if (my $hive_job_data = $self->process_job_for_hive_submission($job)) {
-
-      # add some generic params to job data to be submitted
-      $hive_job_data->{'ticket_id'}   = $ticket->ticket_id;
-      $hive_job_data->{'ticket_name'} = $ticket->ticket_name;
-      $hive_job_data->{'job_id'}      = $job->job_id;
-
-      # Submit job to hive
-      my $hive_job_id = $job_adaptor->CreateNewJob(
-        -input_id => $hive_job_data,
-        -analysis => $hive_analysis,
-      );
-
-      if ($hive_job_id) {
-        $job->hive_job_id($hive_job_id);
-        $job->hive_job_data($hive_job_data); # TODO - Do we really need this?
-        $job->status('awaiting_hive_response');
-        $job->hive_status('queued');
-      }
-    }
-    $job->save('changes_only' => 1); # only update if anything changed (process_job_for_hive_submission method may also have changed the job, so keep this outside the if statement)
-  }
+  return $result;
 }
 
 sub get_current_tickets {
@@ -269,7 +263,7 @@ sub get_current_tickets {
     my $ticket_types  = $self->rose_manager(qw(Tools TicketType))->fetch_with_current_tickets({
       'site_type'       => $hub->species_defs->ENSEMBL_SITETYPE,
       'session_id'      => $hub->session->session_id, $user ? (
-      'user_id'         => $user->user_id ) : (), $action && $action ne 'Summary' ? ( # 'Summary' page request is the only case where ticket_type() is not implemented
+      'user_id'         => $user->user_id ) : (), ref $self ne __PACKAGE__ ? ( # If object is Tools, show all tickets
       'type'            => $self->ticket_type) : ()
     });
 
@@ -382,7 +376,7 @@ sub update_jobs_from_hive {
         # this will only get executed if the job got removed from the hive db's job table somehow (very unlikely though)
         $job->status('awaiting_user_response');
         $job->hive_status('deleted');
-        $job->job_message([{'display_message' => 'Submitted job has got deleted from the queue.'}]);
+        $job->job_message([{'display_message' => 'Submitted job has been deleted from the queue.'}]);
       }
 
       # update if anything is changed
@@ -439,6 +433,18 @@ sub get_requested_job {
   return $self->{$key};
 }
 
+sub get_edit_jobs_data {
+  ## Gets the data needed by JS for populating the input form while editing a ticket
+  ## @return Arrayref of hashes, each corresponding to one of the multiple jobs being edited
+  my $self  = shift;
+  my $hub   = $self->hub;
+  my $jobs  = $self->get_requested_job || $self->get_requested_ticket;
+     $jobs  = $jobs ? ref($jobs) =~ /Ticket/ ? $jobs->job : [ $jobs ] : [];
+     $jobs  = [ map { 'species' => $_->species, %{$_->job_data->raw} }, @$jobs ];
+
+  return $jobs;
+}
+
 sub get_tickets_data_for_sync {
   ## Gets the data for all the current tickets as required by the ticket list page to refresh the page
   ## @return Tickets data hashref and auto refresh flag
@@ -460,7 +466,7 @@ sub get_tickets_data_for_sync {
     }
   }
 
-  return ($self->jsonify($tickets_data), $auto_refresh);
+  return (md5_hex($self->jsonify($tickets_data)), $auto_refresh);
 }
 
 sub get_time_now {
@@ -483,4 +489,5 @@ sub format_date { ## TODO ??? move to root?
   );
   return $datetime;
 }
+
 1;

@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2013] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -29,15 +29,20 @@ sub object {
   return shift->SUPER::object->get_sub_object;
 }
 
+sub mcacheable {
+  return 0;
+}
+
 sub _init {
   ## Makes all the components in tools ajaxable but not cacheable
   ## Override this in a child class to modify the default behaviour
+  ## Make the Ajax request for loading components is sent via POST in case long query_sequence is there.
   my $self = shift;
   $self->cacheable(0);
-  $self->ajaxable(1);
+  $self->ajaxable(['query_sequence']);
 }
 
-sub expand_job_status {
+sub get_job_summary {
   ## Reads the job hive_status field, and display status accordingly
   ## @param Job object
   ## @param Extra params hashref with keys:
@@ -47,34 +52,62 @@ sub expand_job_status {
 
   my $hub             = $self->hub;
   my $job_id          = $job->job_id;
-  my $job_hive_status = ucfirst $job->hive_status =~ s/_/ /gr;
+  my $job_hive_status = $job->hive_status;
   my $job_message     = $job->job_message->[0];
   my $job_status      = $job->status;
   my $url_param       = $self->object->create_url_param({'job_id' => $job_id});
   my $job_status_div  = $self->dom->create_element('div', {
-    'children' => [{
+    'children'    => [{
       'node_name'   => 'p',
-      'inner_HTML'  => $job_hive_status
+      'inner_HTML'  => sprintf('Job %s: %s', $job->job_number, $job->job_desc // '-')
+    }, {
+      'node_name'   => 'p',
+      'class'       => 'job-status-links',
+      'children'    => [{
+        'node_name'   => 'span',
+        'class'       => ['job-status', "job-status-$job_hive_status"],
+        'inner_HTML'  => ucfirst $job_hive_status =~ s/_/ /gr
+      }]
     }]
   });
 
-  my $icons_bar;
-  my $icons = { $job_status eq 'done' ? (
-    'results' => {'icon' => 'view_icon',    'title' => 'View results',        'url' => [        {'function' => 'Results',       'tl' => $url_param  }]} ) : (),
-    'edit'    => {'icon' => 'edit_icon',    'title' => 'Edit &amp; resubmit', 'url' => [        {'function' => '', 'edit' => 1, 'tl' => $url_param  }]},
-    'delete'  => {'icon' => 'delete_icon',  'title' => 'Delete',              'url' => ['Json', {'function' => 'delete',        'tl' => $url_param  }]}
+  if ($job_status eq 'done') {
+    $job_status_div->last_child->append_child('a', {
+      'class'       => [qw(small left-margin results-link)],
+      'inner_HTML'  => '[View Results]',
+      'href'        => $hub->url({
+        'species'     => $job->species,
+        'type'        => 'Tools',
+        'action'      => $job->ticket->ticket_type_name,
+        'function'    => 'Results',
+        'tl'          => $url_param
+      })
+    });
+  }
+
+  my $icons = {
+    'edit'    => {'icon' => 'edit_icon',    'title' => 'Edit &amp; resubmit', 'url' => [        {'function' => 'Edit',    'tl' => $url_param  }], 'class' => '_ticket_edit _change_location'},
+    'delete'  => {'icon' => 'delete_icon',  'title' => 'Delete',              'url' => ['Json', {'function' => 'delete',  'tl' => $url_param  }], 'class' => '_json_link', 'confirm' => "This will delete this job permanently."}
   };
+
+  my $margin_left_class = 'left-margin';
+
   foreach my $link (@{($params || {})->{'links'} || []}) {
     if ($icons->{$link}) {
-      $icons_bar ||= $job_status_div->append_child('p', {'class' => 'job-links'});
-      $icons_bar->append_child('a', {
-        'href'      => $hub->url(@{$icons->{$link}{'url'}}),
-        'children'  => [{
-          'node_name' => 'span',
-          'class'     => ['sprite', $icons->{$link}{'icon'}, '_ht'],
-          'title'     => $icons->{$link}{'title'}
-        }]
+      $job_status_div->last_child->append_child('a', {
+        'href'        => $hub->url(@{$icons->{$link}{'url'}}),
+        'class'       => $icons->{$link}{'class'},
+        'children'    => [{
+          'node_name'   => 'span',
+          'class'       => ['sprite', $icons->{$link}{'icon'}, '_ht', $margin_left_class || ()],
+          'title'       => $icons->{$link}{'title'}
+        }, $icons->{$link}{'confirm'} ? {
+          'node_name'   => 'span',
+          'class'       => ['hidden', '_confirm'],
+          'inner_HTML'  => $icons->{$link}{'confirm'}
+        } : () ]
       });
+      $margin_left_class = '';
     }
   }
 
@@ -84,11 +117,10 @@ sub expand_job_status {
     my $exception_is_fatal      = $job_message->fatal;
     my $job_message_class       = "_job_message_$job_id";
 
-    $job_status_div->first_child->inner_HTML(sprintf '%s: %s%s',
-      $job_hive_status,
-      $display_message,
-      $exception_is_fatal ? sprintf(' <a class="toggle closed" href="#more" rel="%s">Show details</a>', $job_message_class) : ''
-    );
+    $job_status_div->append_child('p', {
+      'class'       => 'job-error-msg',
+      'inner_HTML'  => join('', $display_message, $exception_is_fatal ? sprintf(' <a class="toggle closed" href="#more" rel="%s">Show details</a>', $job_message_class) : '')
+    });
 
     if ($exception_is_fatal) {
       my $exception = $job_message->exception;
@@ -103,22 +135,68 @@ sub expand_job_status {
         $hub->url({'type' => 'Help', 'action' => 'Contact', 'subject' => 'Exception in Web Tools', 'message' => sprintf("\n\n\n%s with message (%s) (for job %s): %s", $job_message->exception->{'class'} || 'Exception', $display_message, $job_id, $details)})
       ;
 
-      $job_status_div->insert_after({
+      $job_status_div->append_children({
         'node_name'   => 'div',
-        'children'    => [{
-          'node_name'   => 'div',
-          'class'       => [ $job_message_class, 'toggleable', 'hidden', 'job_error_message' ],
-          'inner_HTML'  => $details
-        }, {
-          'node_name'   => 'p',
-          'inner_HTML'  => $helpdesk_details
-        }],
-      }, $job_status_div->first_child);
+        'class'       => [ $job_message_class, 'toggleable', 'hidden', 'job_error_message' ],
+        'inner_HTML'  => $details
+      }, {
+        'node_name'   => 'p',
+        'inner_HTML'  => $helpdesk_details
+      });
     }
-
   }
 
   return $job_status_div;
+}
+
+sub new_tool_form {
+  ## Creates a new Form object with the information required by all Tools based form pages
+  ## @param Tool type ('action' for the form submit URL)
+  ## @param Hashref as provided to Form constructor (optional)
+  my ($self, $action, $params) = @_;
+
+  $params ||= {};
+  $params->{'class'} = '_tool_form bgcolour '.($params->{'class'} || '');
+
+  my $form = $self->new_form({
+    'action'          => $self->hub->url('Json', {'type' => 'Tools', 'action' => $action, 'function' => 'form_submit'}),
+    'method'          => 'post',
+    'skip_validation' => 1,
+    %$params
+  });
+
+  $form->add_hidden({
+    'name'            => 'load_ticket_url',
+    'value'           => $self->hub->url('Json', {'function' => 'load_ticket', 'tl' => 'TICKET_NAME'})
+  });
+
+  return $form;
+}
+
+sub add_buttons_fieldset {
+  ## Adds the genetic buttons fieldset to the tools form
+  ## @param Form object
+  ## @param Hashref of keys as the name of the extra links needed ('reset' and 'cancel') and value their caption
+  my ($self, $form, $params) = @_;
+
+  my $url     = $self->hub->url({'function' => ''});
+  my $field   = $form->add_fieldset->add_field({
+    'type'            => 'submit',
+    'value'           => 'Run &rsaquo;'
+  });
+  my @extras  = (exists $params->{'reset'} ? {
+    'node_name'       => 'a',
+    'href'            => $url,
+    'class'           => [qw(_tools_form_reset left-margin _change_location)],
+    'inner_HTML'      => $params->{'reset'}
+  } : (), exists $params->{'cancel'} ? {
+    'node_name'       => 'a',
+    'href'            => $url,
+    'class'           => [qw(_tools_form_cancel left-margin _change_location)],
+    'inner_HTML'      => $params->{'cancel'}
+  } : ());
+
+  $field->elements->[-1]->append_children(@extras) if @extras;
 }
 
 sub format_date {

@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2013] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ package EnsEMBL::Web::TmpFile::VcfTabix;
 use strict;
 use Compress::Zlib qw(gzopen $gzerrno);
 
-use base 'EnsEMBL::Web::TmpFile::Text';
+use base 'EnsEMBL::Web::TmpFile::ToolsOutput';
 
 our $species_defs = EnsEMBL::Web::SpeciesDefs->new;
 
@@ -56,10 +56,13 @@ sub content {
   
   # get script path and perl binary
   my $script = $species_defs->ENSEMBL_VEP_FILTER_SCRIPT or die "ERROR: No filter_vep.pl script defined (ENSEMBL_VEP_FILTER_SCRIPT)\n";
-  my $perl   = $species_defs->ENSEMBL_VEP_PERL_BIN || 'perl';
-  
+     $script = join '/', $species_defs->ENSEMBL_SERVERROOT, $script;
+  my $perl   = join ' ', 'perl', map { $_ =~ /^\// && -e $_ ? ('-I', $_) : () } reverse @INC;
+  my $opts   = $species_defs->ENSEMBL_VEP_FILTER_SCRIPT_OPTIONS || {};
+     $opts   = join ' ', map { defined $opts->{$_} ? "$_ $opts->{$_}" : () } keys %$opts;
+   
   if($args{filter}) {
-    $fh_string .= sprintf("%s %s -filter '%s' -only_matched 2>&1 | ", $perl, $script, $args{filter});
+    $fh_string .= sprintf("%s %s %s -filter '%s' -ontology -only_matched -start %i -limit %i 2>&1 | ", $perl, $script, $opts, $args{filter}, $from, ($to - $from) + 1);
   }
   
   #print STDERR "$fh_string\n";
@@ -74,9 +77,17 @@ sub content {
       $first_line = 0;
     }
     
-    $line_number++ unless /^\#/;
-    $content .= $_ if /^\#/ || ($line_number >= $from && $line_number <= $to);
-    last if $line_number > $to;
+    # filter_vep.pl takes care of limiting
+    if($args{filter}) {
+      $content .= $_;
+    }
+    
+    # no filters, we have to do the limiting here
+    else {
+      $line_number++ unless /^\#/;
+      $content .= $_ if /^\#/ || ($line_number >= $from && $line_number <= $to);
+      last if $line_number > $to;
+    }
   }
   close IN;
   
@@ -100,6 +111,7 @@ sub convert_to_txt {
   
   my $return = '#'.join("\t", map {s/^ID$/Uploaded_variation/; $_} @$headers)."\n";
   foreach my $row(@$rows) {
+    $row->{Uploaded_variation} ||= $row->{ID} if $row->{ID};
     $return .= join("\t", map {(defined($row->{$_}) && $row->{$_} ne '') ? $row->{$_} : '-'} @$headers);
     $return .= "\n";
   }
@@ -127,6 +139,7 @@ sub convert_to_vep {
   
   foreach my $row(@$rows) {
     my $first = 1;
+    $row->{Uploaded_variation} ||= $row->{ID} if $row->{ID};
     
     for my $j(0..$#{$headers}) {
       
@@ -179,12 +192,17 @@ sub parse_content {
   for(split /\n/, $content) {
     
     # header
-    if(/^##/ && /INFO\=\<ID\=CSQ/) {
+    if(m/^##/ && /INFO\=\<ID\=CSQ/) {
       m/Format\: (.+?)\"/;
       @csq_headers = split '\|', $1;
     }
     elsif(s/^#//) {
-      @headers = split "\t";
+      @headers = split /\s+/;
+      
+      # we don't want anything after the INFO field (index pos 8)
+      for my $i(8..$#headers) {
+        $exclude_fields{$headers[$i]} = 1;
+      }
       
       @combined_headers = grep {!defined($exclude_fields{$_})} (@headers, @csq_headers);
       splice(@combined_headers, 1, 0, 'Location');
@@ -194,7 +212,7 @@ sub parse_content {
     elsif(!/^#/) {
       $line_count++;
       
-      my @split = split /\t/;
+      my @split = split /\s+/;
       my %raw_data = map {$headers[$_] => $split[$_]} 0..$#split;
       
       $raw_data{CHROM} =~ s/^chr(om)?(osome)?//i;

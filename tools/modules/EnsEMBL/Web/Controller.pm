@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2013] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -21,10 +21,15 @@ package EnsEMBL::Web::Controller;
 use strict;
 use warnings;
 
-use previous qw(OBJECT_PARAMS);
+use previous qw(OBJECT_PARAMS upload_size_limit);
 
 sub OBJECT_PARAMS {
   return [ @{shift->PREV::OBJECT_PARAMS}, [ 'Tools' => 'tl' ] ];
+}
+
+sub upload_size_limit {
+  my $self = shift;
+  return ($self->type || '') eq 'Tools' && $self->action eq 'VEP' ? $self->species_defs->ENSEMBL_VEP_CGI_POST_MAX : $self->PREV::upload_size_limit;
 }
 
 1;

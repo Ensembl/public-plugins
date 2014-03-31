@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2013] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -21,20 +21,13 @@ package EnsEMBL::Web::Component::Tools::Blast::InputForm;
 use strict;
 use warnings;
 
-use EnsEMBL::Web::BlastConstants;
+use EnsEMBL::Web::BlastConstants qw(:all);
 
 use base qw(EnsEMBL::Web::Component::Tools::Blast);
-
-sub _init {
-  my $self = shift;
-  $self->SUPER::_init;
-  $self->ajaxable('post') if $self->hub->param('query_sequence');
-}
 
 sub content {
   my $self          = shift;
   my $hub           = $self->hub;
-  my $dom           = $self->dom;
   my $sd            = $hub->species_defs;
   my $object        = $self->object;
   my $form_params   = $object->get_blast_form_params;
@@ -42,19 +35,15 @@ sub content {
   my $combinations  = delete $form_params->{'combinations'};
   my $selected      = delete $form_params->{'selected'};
   my $all_species   = delete $form_params->{'species'};
-  my $existing_seq  = $hub->param('query_sequence');
-  my $edit_jobs     = $hub->param('edit') && ($object->get_requested_job || $object->get_requested_ticket);
-     $edit_jobs     = $edit_jobs ? ref($edit_jobs) =~ /Ticket/ ? $edit_jobs->job : [ $edit_jobs ] : [];
-     $edit_jobs     = [ map $_->job_data->raw, @$edit_jobs ];
-     $edit_jobs     = [ {'sequence' => {'seq' => $existing_seq}} ] if !@$edit_jobs && $existing_seq;
+  my $edit_jobs     = ($hub->function || '') eq 'Edit' ? $object->get_edit_jobs_data : [];
 
-  my $form          = $self->new_form({
-    'action'          => $hub->url('Json', {qw(type Tools action Blast function form_submit)}),
-    'method'          => 'post',
-    'class'           => 'tools_form bgcolour blast-form',
-    'skip_validation' => 1
-  });
+  if (!@$edit_jobs && (my $existing_seq = $hub->param('query_sequence'))) { # If coming from "BLAST this sequence" link
+    my $existing_type = $hub->param('query_type') || 'dna';
+    $existing_seq     = uc($existing_seq) =~ s/[^A-Z]+//rg;
+    $edit_jobs        = [ {'query_type' => $existing_type, 'sequence' => {'seq' => $existing_seq}} ];
+  }
 
+  my $form          = $self->new_tool_form('Blast', {'class' => 'blast-form'});
   my $fieldset      = $form->add_fieldset;
 
   $fieldset->add_hidden({
@@ -80,11 +69,6 @@ sub content {
   $fieldset->add_hidden({
     'name'            => 'edit_jobs',
     'value'           => $self->jsonify($edit_jobs)
-  });
-
-  $fieldset->add_hidden({
-    'name'            => 'load_ticket_url',
-    'value'           => $hub->url('Json', {'function' => 'load_ticket', 'tl' => 'TICKET_NAME'})
   });
 
   $fieldset->add_hidden({
@@ -268,7 +252,7 @@ sub content {
           if (exists $config_defaults->{$_}{$element_name}) {
             my $element_class = $stt_classes{$search_type_value};
             push @elements, {
-              %$element_params,
+              %{$self->deepcopy($element_params)},
               'name'          => "${search_type_value}__${element_name}",
               'value'         => $config_defaults->{$_}{$element_name},
               'element_class' => $element_class
@@ -290,17 +274,12 @@ sub content {
   }
 
   # add the 'Run' button in a new fieldset
-  $form->add_fieldset->add_field({
-    'type'            => 'Submit',
-    'name'            => 'submit_blast',
-    'value'           => 'Run &rsaquo;'
-  })->elements->[-1]->append_child('a', {
-    'href'            => '#Reset',
-    'class'           => '_tools_form_reset left-margin',
-    'inner_HTML'      => 'Reset'
-  });
+  $self->add_buttons_fieldset($form, {'reset' => 'Clear', 'cancel' => 'Cancel'});
 
-  return sprintf '<div><h2>%sBLAST/BLAT Search</h2><input type="hidden" class="panel_type" value="BlastForm" />%s</html>', @$edit_jobs ? '' : 'New ', $form->render;
+  return sprintf('<div class="hidden _tool_new"><p><a class="button _change_location" href="%s">New Search</a></p></div><div class="hidden _tool_form_div"><h2>Create new ticket:</h2><input type="hidden" class="panel_type" value="BlastForm" />%s</div>',
+    $hub->url({'function' => ''}),
+    $form->render
+  );
 }
 
 1;

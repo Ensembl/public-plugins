@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2013] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -24,9 +24,9 @@ use base qw(EnsEMBL::Web::Component::Tools::Blast::Alignment);
 
 sub get_sequence_data {
   my ($self, $slices, $config) = @_;
-  my $job_data    = $self->job->job_data;
+  my $job         = $self->job;
   my $hit         = $self->hit;
-  my $source_type = $job_data->{'source'};
+  my $source_type = $job->job_data->{'source'};
   my $sequence    = [];
   my (@markup, $object);
   
@@ -44,7 +44,7 @@ sub get_sequence_data {
   }
   
   if ($source_type !~ /latestgp/i) { # Can't markup based on protein sequence as we only have a translated DNA region
-    my $adaptor    = $self->hub->get_adaptor(sprintf('get_%sAdaptor', $source_type =~ /abinitio/i ? 'PredictionTranscript' : 'Translation'), 'core', $job_data->{'species'});
+    my $adaptor    = $self->hub->get_adaptor(sprintf('get_%sAdaptor', $source_type =~ /abinitio/i ? 'PredictionTranscript' : 'Translation'), 'core', $job->species);
     my $transcript = $adaptor->fetch_by_stable_id($hit->{'tid'});
        $transcript = $transcript->transcript unless $transcript->isa('Bio::EnsEMBL::Transcript');
        $object     = $self->new_object('Transcript', $transcript, $self->object->__data);

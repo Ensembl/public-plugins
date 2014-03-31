@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2013] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -161,7 +161,7 @@ sub get_mapped_slice {
   my $object            = $self->object; 
   my $hub               = $self->hub;
   my $hit               = $self->hit;
-  my $species           = $self->job->job_data->{'species'};
+  my $species           = $self->job->species;
   my $sr_name           = $reference_slice->seq_region_name;
   my $msc               = Bio::EnsEMBL::MappedSliceContainer->new(-SLICE => $reference_slice, -EXPANDED => 1);
   my $ms                = Bio::EnsEMBL::MappedSlice->new(-adaptor => $reference_slice->adaptor, -name => 'test_map', -container => $msc);

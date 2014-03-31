@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2013] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -162,8 +162,7 @@ sub draw_btop_feature {
             }));
 
             my $j = $e2 - $s2; 
-            my $i = $s2;
-            for ( $i;  $i < $j;  $i++){
+            for ( my $i = $s2;  $i < $j;  $i++){
               my @temp = (undef, undef);
               $seq_diffs{$i} = \@temp;          
             }

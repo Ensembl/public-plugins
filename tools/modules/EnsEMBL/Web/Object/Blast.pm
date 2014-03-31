@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2013] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -33,12 +33,13 @@ use FileHandle;
 use Bio::SeqIO;
 use Bio::EnsEMBL::Registry;
 use EnsEMBL::Web::SpeciesDefs;
-use EnsEMBL::Web::BlastConstants;
 use EnsEMBL::Web::ExtIndex;
+
+use EnsEMBL::Web::BlastConstants qw(MAX_SEQUENCE_LENGTH CONFIGURATION_FIELDS CONFIGURATION_DEFAULTS);
 
 sub ticket_prefix {
   ## Abstract method implementation
-  return 'BLA_';
+  return 'BLA';
 }
 
 sub ticket_type {
@@ -58,7 +59,7 @@ sub process_job_for_hive_submission {
   }
 
   my $hub   = $self->hub;
-  my $dba   = $hub->database('core', $job_data->{'species'});
+  my $dba   = $hub->database('core', $job->species);
   my $dbc   = $dba->dbc;
   my $sd    = $hub->species_defs;
 
@@ -116,7 +117,7 @@ sub get_blast_form_params {
   my $db_types                = $sd->multi_val('ENSEMBL_BLAST_DB_TYPES');
   my $blast_methods           = $sd->multi_val('ENSEMBL_BLAST_CONFIGS');
   my $sources                 = $sd->multi_val('ENSEMBL_BLAST_DATASOURCES');
-  my $sources_order           = $sd->multi_val('ENSEMBL_BLAST_DATASOURCES_ORDER');
+  my $sources_ordered         = $sd->multi_val('ENSEMBL_BLAST_DATASOURCES_ORDER');
   my $search_types            = [ map { $_->{'search_type'} } @$blast_methods ]; # NCBIBLAST|BLASTN, NCBIBLAST|BLASTP, BLAT|BLAT etc
 
   # Fields to return
@@ -156,7 +157,7 @@ sub get_blast_form_params {
   $fields->{'species'}        = [ map { 'value' => $_, 'caption' => $sd->species_label($_, 1) }, @species           ];
   $fields->{'query_type'}     = [ map { 'value' => $_, 'caption' => $query_types->{$_}        }, keys %$query_types ];
   $fields->{'db_type'}        = [ map { 'value' => $_, 'caption' => $db_types->{$_}           }, keys %$db_types    ];
-  $fields->{'source'}         = [ map { 'value' => $_, 'caption' => $sources->{$_}            }, @$sources_order    ];
+  $fields->{'source'}         = [ map { 'value' => $_, 'caption' => $sources->{$_}            }, @$sources_ordered  ];
   $fields->{'search_type'}    = [];
   foreach my $search_type (@$search_types) {
     my ($blast_type, $search_method) = $self->parse_search_type($search_type);
@@ -243,11 +244,13 @@ sub form_inputs_to_jobs_data {
   my $desc      = $self->param('description');
   my $prog      = $self->parse_search_type($params->{'search_type'}, 'search_method');
   my $db_types  = $sd->multi_val('ENSEMBL_BLAST_DB_TYPES');
+  my $job_num   = 0;
   for my $species (@species) {
     my $i = 0;
     for my $seq_object (@$seq_objects) {
       push @$jobs, {
-        'job_desc'    => sprintf('%s%s', $desc || sprintf('%s search against %s %s.', $prog, $sd->get_config($species, 'SPECIES_COMMON_NAME'), $db_types->{$params->{'db_type'}}), @$seq_objects > 1 ? sprintf(' (%d)', ++$i) : ''),
+        'job_number'  => ++$job_num,
+        'job_desc'    => $desc || sprintf('%s search against %s %s.', $prog, $sd->get_config($species, 'SPECIES_COMMON_NAME'), $db_types->{$params->{'db_type'}}),
         'species'     => $species,
         'sequence'    => $seq_object,
         'source_file' => $sd->get_config($species, 'ENSEMBL_BLAST_CONFIGS')->{$params->{'query_type'}}{$params->{'db_type'}}{$params->{'search_type'}}{$params->{'source'}},
@@ -407,7 +410,7 @@ sub get_all_hits_by_coords {
   ## @return Hashref { result_id => result_data }
   my ($self, $job, $coords) = @_;
 
-  my $slice = $self->database('core', $job->job_data->{'species'})->get_SliceAdaptor->fetch_by_toplevel_location($coords);
+  my $slice = $self->database('core', $job->species)->get_SliceAdaptor->fetch_by_toplevel_location($coords);
 
   return $self->get_all_hits_in_slice_region($job, $slice);
 }

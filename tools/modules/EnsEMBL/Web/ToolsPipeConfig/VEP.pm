@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2013] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -24,15 +24,7 @@ use strict;
 use warnings;
 
 sub default_options {
-  my ($class, $conf) = @_;
-  my $sd = $conf->species_defs;
-  return {
-    'vep_options' => {
-      'cache_dir'   => $sd->ENSEMBL_VEP_CACHE,
-      'script'      => $sd->ENSEMBL_VEP_SCRIPT,
-      'perl_bin'    => $sd->ENSEMBL_VEP_PERL_BIN || '/usr/bin/env perl'
-    }
-  };
+  return {};
 }
 
 sub resource_classes {
@@ -43,14 +35,22 @@ sub resource_classes {
 
 sub pipeline_analyses {
   my ($class, $conf) = @_;
+
+  my $species_defs    = $conf->species_defs;
+  my $script_options  = $species_defs->ENSEMBL_VEP_SCRIPT_DEFAULT_OPTIONS;
+  my $perl_bin        = join ' ', $species_defs->ENSEMBL_TOOLS_PERL_BIN, '-I', $species_defs->ENSEMBL_TOOLS_BIOPERL_DIR, map(sprintf('-I %s/%s', $species_defs->ENSEMBL_LSF_CODE_LOCATION, $_), @{$species_defs->ENSEMBL_TOOLS_LIB_DIRS});
+
   return [{
     '-logic_name'     => 'VEP',
     '-module'         => 'EnsEMBL::Web::RunnableDB::VEP::Submit',
     '-parameters'     => {
       'ticket_db'       => $conf->o('ticket_db'),
-      'options'         => $conf->o('vep_options')
+      'script'          => $conf->o('ensembl_codebase').'/'.$species_defs->ENSEMBL_VEP_SCRIPT,
+      'script_options'  => { map { defined $script_options->{$_} ? ( $_ => $script_options->{$_} ) : () } keys %$script_options }, # filter out the undef values
+      'perl_bin'        => $perl_bin
     },
-    '-hive_capacity'  => 15,
+    '-analysis_capacity'  => 12,
+    '-meadow_type'    => 'LSF',
     '-rc_name'        => $conf->species_defs->ENSEMBL_VEP_LSF_QUEUE
   }];
 }
@@ -58,7 +58,7 @@ sub pipeline_analyses {
 sub pipeline_validate {
   my ($class, $conf) = @_;
 
-  my $sd = $conf->species_defs;
+  my $species_defs = $conf->species_defs;
   my @errors;
 
   # TODO

@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2013] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -27,11 +27,11 @@ use base qw(
 );
 
 sub content_ticket {
-  my ($self, $ticket) = @_;
+  my ($self, $ticket, $jobs) = @_;
   my $hub     = $self->hub;
   my $div     = $self->dom->create_element('div');
 
-  $div->append_child($self->job_details_table($_, {'links' => [qw(results edit delete)]}))->set_attribute('class', 'plain-box') for $ticket->job;
+  $div->append_child($self->job_details_table($_, {'links' => [qw(results edit delete)]}))->set_attribute('class', 'plain-box') for @$jobs;
 
   return $div->render;
 }

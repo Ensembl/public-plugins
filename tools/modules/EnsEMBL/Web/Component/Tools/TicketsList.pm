@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2013] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -28,10 +28,11 @@ use base qw(EnsEMBL::Web::Component::Tools);
 sub content {
   my $self          = shift;
   my $hub           = $self->hub;
+  my $sd            = $hub->species_defs;
   my $object        = $self->object;
   my $tickets       = $object->get_current_tickets;
-  my $toggle        = $hub->action ne 'Summary'; # Summary page's table of tickets can not toggled
-
+  my $toggle        = ref $self ne __PACKAGE__; # The main landing page's table of tickets can not toggled
+  
   my $table         =  $self->new_table([
     { 'key' => 'analysis',  'title' => 'Analysis',      'sort' => 'string'          },
     { 'key' => 'ticket',    'title' => 'Ticket',        'sort' => 'string'          },
@@ -39,30 +40,41 @@ sub content {
     { 'key' => 'created',   'title' => 'Submitted at',  'sort' => 'numeric_hidden'  },
     { 'key' => 'extras',    'title' => '',              'sort' => 'none'            }
   ], [], {
-    'toggleable'  => $toggle,
     'data_table'  => 'no_col_toggle',
-    'exportable'  => 0,
-    'id'          => '_ticket_table'
+    'exportable'  => 0
   });
+
+  my $status_tips   = {
+    'not_submitted'   => q(This job could not be submitted due to some problems. Please click on the 'View details' icon for more information),
+    'queued'          => q(Your job has been submitted and will be processed soon.),
+    'submitted'       => q(Your job has been submitted and will be processed soon.),
+    'running'         => q(Your job is currently being processed. The page will refresh once it's finished running.),
+    'done'            => q(This job is finished. Please click on 'View Results' link to see the results),
+    'failed'          => q(This job has failed. Please click on the 'View details' icon for more information),
+    'deleted'         => q(Your ticket has been deleted. This usually happens if the ticket is too old.)
+  };
 
   if ($tickets && @$tickets > 0) {
 
     foreach my $ticket (@$tickets) {
 
       my $ticket_name   = $ticket->ticket_name;
-      my $job_number    = 1;
       my @jobs_summary;
 
       for ($ticket->job) {
-        my $job_id      = $_->job_id;
-        my $job_desc    = $_->job_desc;
+        my $job_number  = $_->job_number;
         my $hive_status = $_->hive_status;
-        push @jobs_summary, sprintf('<p class="job-status">Job %d <span class="job-desc">%s</span>: <span class="job-status-%s _status_%3$s">%s<input type="hidden" value="%s"></span>',
-          $job_number++,
-          $job_desc ? "($job_desc)" : '',
+        push @jobs_summary, sprintf('<p><img class="job-species _ht" title="%s" src="%sspecies/16/%s.png" alt="" height="16" width="16"><span class="job-desc">%s%s</span><span class="_ht job-status job-status-%s left-margin" title="%s">%s</span>%s%s',
+          $sd->species_label($_->species, 1),
+          $self->img_url,
+          $_->species,
+          $job_number ? "Job $job_number: " : '',
+          $_->job_desc || '',
           $hive_status,
+          $status_tips->{$hive_status},
           ucfirst $hive_status =~ s/_/ /gr,
-          $job_id
+          $self->job_results_link($ticket, $_),
+          $self->job_buttons($ticket, $_)
         );
       }
 
@@ -79,49 +91,68 @@ sub content {
     }
   }
 
-  my ($tickets_data, $auto_refresh) = $object->get_tickets_data_for_sync;
+  my ($tickets_data_hash, $auto_refresh) = $object->get_tickets_data_for_sync;
 
-  return $self->dom->create_element('div', {'children' => [{
-    'node_name'   => 'input',
-    'type'        => 'hidden',
-    'class'       => 'panel_type',
-    'value'       => 'ActivitySummary'
-  }, {
-    'node_name'   => 'input',
-    'type'        => 'hidden',
-    'name'        => '_refresh_url',
-    'value'       => $hub->url('Json', {'function' => 'refresh_tickets'})
-  }, {
-    'node_name'   => 'input',
-    'type'        => 'hidden',
-    'name'        => '_tickets_data',
-    'value'       => [ $tickets_data, 1 ]
-  }, {
-    'node_name'   => 'input',
-    'type'        => 'hidden',
-    'name'        => '_auto_refresh',
-    'value'       => $auto_refresh
-  }, {
-    'node_name'   => 'h2',
-    'inner_HTML'  => $toggle ? '<a rel="_ticket_table" class="toggle set_cookie open" href="#">Recent Tickets:</a>' : 'Recent Tickets:'
-  }, {
+  return $self->dom->create_element({
     'node_name'   => 'div',
-    'class'       => '_countdown'
-  }, {
-    'node_name'   => 'div',
-    'inner_HTML'  => '<p class="_no_jobs hidden">You have no jobs currently running or recently completed.</p>'
-  }]})->render.$table->render;
-
+    'children'    => [{
+      'node_name'   => 'input',
+      'type'        => 'hidden',
+      'class'       => 'panel_type',
+      'value'       => 'ActivitySummary'
+    }, {
+      'node_name'   => 'input',
+      'type'        => 'hidden',
+      'name'        => '_refresh_url',
+      'value'       => $hub->url('Json', {'function' => 'refresh_tickets'})
+    }, {
+      'node_name'   => 'input',
+      'type'        => 'hidden',
+      'name'        => '_tickets_data_hash',
+      'value'       => $tickets_data_hash
+    }, {
+      'node_name'   => 'input',
+      'type'        => 'hidden',
+      'name'        => '_auto_refresh',
+      'value'       => $auto_refresh
+    }, {
+      'node_name'   => 'h2',
+      'inner_HTML'  => $toggle ? '<a rel="_activity_summary" class="toggle set_cookie open" href="#">Recent Tickets:</a>' : 'Recent Tickets:'
+    }, {
+      'node_name'   => 'div',
+      'class'       => ['toggleable', '_activity_summary'],
+      'children'    => [{
+        'node_name'   => 'div',
+        'class'       => '_ticket_table',
+        'children'    => [{
+          'node_name'   => 'p',
+          'children'    => [{
+            'node_name'   => 'a',
+            'href'        => '',
+            'class'       => 'button _tickets_refresh',
+            'inner_HTML'  => '<span class="tickets-refresh"></span><span class="hidden tickets-timer"></span><span>Refresh</span>'
+          }]
+        }, {
+          'node_name'   => 'div',
+          'inner_HTML'  => $table->render
+        }]
+      }, {
+        'node_name'   => 'div',
+        'class'       => [qw(_no_jobs hidden)],
+        'inner_HTML'  => '<p>You have no jobs currently running or recently completed.</p>',
+      }]
+    }]
+  })->render;
 }
 
 sub ticket_link {
   my ($self, $ticket) = @_;
   my $ticket_name = $ticket->ticket_name;
 
-  return sprintf('<a href="%s">%s</a>',
+  return sprintf('<a class="_ticket_view _change_location" href="%s">%s</a>',
     $self->hub->url({
       'action'    => $ticket->ticket_type->ticket_type_name,
-      'function'  => 'Summary',
+      'function'  => 'View',
       'tl'        => $self->object->create_url_param({'ticket_name' => $ticket_name})
     }),
     $ticket_name
@@ -145,32 +176,91 @@ sub ticket_buttons {
 
   $save_button      = {
     'node_name'       => 'a',
-    'class'           => [ $user ? '_ticket_save' : 'modal_link' ],
+    'class'           => [ $user ? '_json_link' : 'modal_link' ],
     'href'            => $user ? $hub->url('Json', {'type' => 'Tools', 'action' => $action, 'function' => 'save', 'tl' => $url_param}) : $hub->url({'type' => 'Account', 'action' => 'Login'}),
     'children'        => [ $save_button ]
   } unless $owner_is_user;
 
   my $buttons       = $self->dom->create_element('div', { 'children' => [ $save_button, {
     'node_name'       => 'a',
-    'class'           => '_ticket_delete',
+    'class'           => [qw(_ticket_edit _change_location)],
+    'href'            => $hub->url({'action' => $action, 'function' => 'Edit', 'tl' => $url_param}),
+    'children'        => [{
+      'node_name'       => 'span',
+      'class'           => [qw(_ht sprite edit_icon)],
+      'title'           => 'Edit &amp; resubmit ticket'
+    }]
+  }, {
+    'node_name'       => 'a',
+    'class'           => '_json_link',
     'href'            => $hub->url('Json', {'action' => $action, 'function' => 'delete', 'tl' => $url_param}),
     'children'        => [{
       'node_name'       => 'span',
       'class'           => [ '_ht', 'sprite', 'delete_icon' ],
       'title'           => 'Delete ticket'
-    }]
-  }, {
-    'node_name'       => 'a',
-    'class'           => '_ticket_edit',
-    'href'            => $hub->url({'action' => $action, 'function' => '', 'tl' => $url_param, 'edit' => 1}),
-    'children'        => [{
+    }, {
       'node_name'       => 'span',
-      'class'           => [ '_ht', 'sprite', 'edit_icon' ],
-      'title'           => 'Edit &amp; resubmit ticket'
+      'class'           => 'hidden _confirm',
+      'inner_HTML'      => "This will delete ticket '$ticket_name' permanently."
     }]
   }]});
 
   return $buttons;
+}
+
+sub job_results_link {
+  my ($self, $ticket, $job) = @_;
+  return $job->hive_status eq 'done'
+    ? sprintf('<a class="small left-margin" href="%s">[View Results]</a>', $self->hub->url({
+      'species'   => $job->species,
+      'type'      => 'Tools',
+      'action'    => $ticket->ticket_type_name,
+      'function'  => 'Results',
+      'tl'        => $self->object->create_url_param({'ticket_name' => $ticket->ticket_name, 'job_id' => $job->job_id})
+    }))
+    : '';
+}
+
+sub job_buttons {
+  my ($self, $ticket, $job) = @_;
+
+  my $hub           = $self->hub;
+  my $ticket_name   = $ticket->ticket_name;
+  my $url_param     = $self->object->create_url_param({'ticket_name' => $ticket_name, 'job_id' => $job->job_id});
+  my $action        = $ticket->ticket_type->ticket_type_name;
+
+  return $self->dom->create_element('span', { 'class' => 'job-sprites', 'children' => [ {
+    'node_name'       => 'a',
+    'class'           => [qw(_ticket_view _change_location job-sprite)],
+    'href'            => $hub->url({'action' => $action, 'function' => 'View', 'tl' => $url_param}),
+    'children'        => [ {
+      'node_name'       => 'span',
+      'class'           => [qw(_ht sprite view_icon)],
+      'title'           => 'View details'
+    }]
+  }, {
+    'node_name'       => 'a',
+    'class'           => [qw(_ticket_edit _change_location job-sprite)],
+    'href'            => $hub->url({'action' => $action, 'function' => 'Edit', 'tl' => $url_param}),
+    'children'        => [{
+      'node_name'       => 'span',
+      'class'           => [qw(_ht sprite edit_icon)],
+      'title'           => 'Edit &amp; resubmit job'
+    }]
+  }, {
+    'node_name'       => 'a',
+    'class'           => [qw(_json_link job-sprite)],
+    'href'            => $hub->url('Json', {'action' => $action, 'function' => 'delete', 'tl' => $url_param}),
+    'children'        => [{
+      'node_name'       => 'span',
+      'class'           => [ '_ht', 'sprite', 'delete_icon' ],
+      'title'           => 'Delete job'
+    }, {
+      'node_name'       => 'span',
+      'class'           => 'hidden _confirm',
+      'inner_HTML'      => @{$ticket->job} > 1 ? sprintf(q(This will delete job number %s from ticket '%s' permanently.), $job->job_number, $ticket_name) : sprintf(q(This will delete ticket '%s' permanently.), $ticket_name)
+    }]
+  }]})->render;
 }
 
 1;

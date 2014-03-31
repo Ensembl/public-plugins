@@ -1,5 +1,5 @@
 #!/usr/local/bin/perl
-# Copyright [1999-2013] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+# Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 # 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ use FindBin qw($Bin);
 
 BEGIN {
   my $code_path = "$Bin/../../..";
-  unshift @INC, "$code_path/conf";
+  unshift @INC, "$code_path/ensembl-webcode/conf";
   eval {
     require SiteDefs;
   };
@@ -29,10 +29,10 @@ BEGIN {
     print "Can't use SiteDefs - $@\n";
     exit;
   }
-  unshift @INC, $_ for @SiteDefs::ENSEMBL_LIB_DIRS;
   unshift @INC, "$code_path/sanger-plugins/tools/modules/"; # TEMP - while tools code in in sanger-plugins
 #  unshift @INC, "$code_path/public-plugins/tools/modules/";
-  $ENV{'PERL5LIB'} .= join ':', @INC;
+  unshift @INC, $_ for @SiteDefs::ENSEMBL_LIB_DIRS;
+  $ENV{'PERL5LIB'} = join ':', $ENV{'PERL5LIB'}, @INC;
 }
 
 my $conf_package  = $SiteDefs::ENSEMBL_TOOLS_PIPELINE_PACKAGE;

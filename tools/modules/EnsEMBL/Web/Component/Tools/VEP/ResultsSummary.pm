@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2013] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -22,8 +22,9 @@ use strict;
 use warnings;
 no warnings 'uninitialized';
 
+use Bio::EnsEMBL::Variation::Utils::Constants qw(%OVERLAP_CONSEQUENCES);
+
 use base qw(EnsEMBL::Web::Component::Tools::VEP);
-use EnsEMBL::Web::Form;
 
 sub content {
   my $self   = shift;
@@ -39,8 +40,6 @@ sub content {
   
   return $self->job_status($job) if $job->status ne 'done';
   
-  # this method reconstitutes the Tmpfile objects from the filenames
-  $object->get_tmp_file_objs();
   my $name = $self->object->parse_url_param->{ticket_name};
 
   ## We have a ticket!
@@ -53,7 +52,7 @@ sub content {
   $html .= '<input type="hidden" class="panel_type" value="VEPResultsSummary" />';
   $html .= '<div class="job_stats"><div class="toggleable">';
 
-  my $stats = $object->job_statistics;
+  my $stats = $self->job_statistics;
   
   my $section = 'General statistics';  
   my $general_stats_table = $self->new_table(
@@ -61,16 +60,17 @@ sub content {
       {key => 'category', title => 'Category'},
       {key => 'count',    title => 'Count'    },
     ],
-    [map {{category => $_, count => $stats->{$section}->{$_}}} @{$stats->{sort}->{$section}}],
+    [map {{category => $_, count => $stats->{$section}->{$_}}} grep {$_ !~ /Lines/} @{$stats->{sort}->{$section}}]
   );
   
   # make a hash of consequence colours
-  my $cons = \%Bio::EnsEMBL::Variation::Utils::Constants::OVERLAP_CONSEQUENCES;
+  my $cons =  \%OVERLAP_CONSEQUENCES;
+
   my $var_styles   = $hub->species_defs->colour('variation');
   my $colourmap    = $hub->colourmap;
   my %colours;
   
-  foreach my $con(keys %Bio::EnsEMBL::Variation::Utils::Constants::OVERLAP_CONSEQUENCES) {
+  foreach my $con (keys %OVERLAP_CONSEQUENCES) {
     $colours{$con} = $colourmap->hex_by_name($var_styles->{lc $con}->{'default'}) || 'no_colour';
   }
   
@@ -79,12 +79,11 @@ sub content {
   $colour_json =~ s/\"/\'/g;
   
   my @inputs = (
-    '<input type="hidden" class="panel_type" value="PopulationGraph" />',
     q{<input class="graph_config" type="hidden" name="legendpos" value="'east'" />},
     q{<input class="graph_config" type="hidden" name="legendmark" value="'circle'" />},
     q{<input class="graph_config" type="hidden" name="maxSlices" value="100" />},
     q{<input class="graph_config" type="hidden" name="minPercent" value="0" />},
-    '<input class="graph_dimensions" type="hidden" value="[65,80,60]" />',
+    '<input class="graph_dimensions" type="hidden" value="[65,85,60]" />',
     '<input class="js_param" type="hidden" name="cons_colours" value="'.$colour_json.'" />'
   );
   
@@ -110,12 +109,15 @@ sub content {
   $html .= '<div>'.join('', @inputs).'</div>';
   $html .= '</div>';
   
-  #$html .= '<img src="/i/16/pencil.png"> <a href="'.$hub->url({
-  #  type             => 'Tools/VEP',
-  #  action           => '',
-  #  tl               => $ticket->ticket_name,
-  #  edit             => 1
-  #}).'">Edit and resubmit</a>';  
+  $html .= sprintf('<a class="button edit-button" href="%s">Edit &amp; resubmit</a>',
+    $hub->url({
+      'type'      => 'Tools',
+      'action'    => 'VEP',
+      'function'  => 'Edit',
+      'tl'        => $ticket->ticket_name
+    }),
+    $self->img_url
+  );
   
   $html .= '<hr/></div></div>';
   

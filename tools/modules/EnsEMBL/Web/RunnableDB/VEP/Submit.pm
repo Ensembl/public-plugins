@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2013] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,41 +18,36 @@ limitations under the License.
 
 package EnsEMBL::Web::RunnableDB::VEP::Submit;
 
+### Hive Process RunnableDB for VEP
+
 use strict;
 use warnings;
-no warnings "uninitialized";
 
 use base qw(EnsEMBL::Web::RunnableDB);
 
+use EnsEMBL::Web::Exceptions;
+use EnsEMBL::Web::SystemCommand;
+use EnsEMBL::Web::Tools::FileHandler qw(file_get_contents);
+
 sub run {
   my $self = shift;
-  
-  # get global analysis params
-  my $analysis_params = eval $self->analysis->parameters;
-  my $cache_dir  = $analysis_params->{options}->{cache_dir};
-  my $vep_script = $analysis_params->{options}->{script};
-  my $perl_bin   = $analysis_params->{options}->{perl_bin};
-  
-  # get VEP options set on input form
-  my $config = $self->param('config');
-  my $option_str = '';
-  while ( (my $option, my $value) =  each %$config ){
-    next if !$option || !defined($value) || $value eq 'no';
-    $option_str .= " --".$option;
-    $option_str .= " ".$value unless $value eq 'yes';
-  }
-  
-  my $command = "$perl_bin $vep_script --force --quiet --vcf --tabix --fork 4 --stats_text --dir $cache_dir --cache $option_str";
-  #print STDERR $command;
-  
-  open(PIPE, "$command 2>&1 1>/dev/null |") or die($?);
-  my $output;
-  while(<PIPE>) { $output .= $_; }
-  close PIPE;
-  
-  die($output) if $output;
-  
-  return;
+
+  my $perl_bin        = $self->param('perl_bin');
+  my $script          = $self->param('script');
+  my $work_dir        = $self->param('work_dir');
+  my $config          = $self->param('config');
+  my $options         = $self->param('script_options') || {};
+  my $log_file        = "$work_dir/lsf_log.txt";
+
+  $options->{"--$_"}  = '' for qw(force quiet vcf tabix stats_text cache); # we need these options set on always!
+  $options->{"--$_"}  = sprintf '"%s/%s"', $work_dir, delete $config->{$_} for qw(input_file output_file stats_file);
+  $options->{"--$_"}  = $config->{$_} eq 'yes' ? '' : $config->{$_} for grep { defined $config->{$_} && $config->{$_} ne 'no' } keys %$config;
+
+  my $command         = EnsEMBL::Web::SystemCommand->new($self, "$perl_bin $script", $options)->execute({'log_file' => $log_file});
+
+  return unless $command->error_code;
+
+  throw exception('HiveException', join('', file_get_contents($log_file)));
 }
 
 1;

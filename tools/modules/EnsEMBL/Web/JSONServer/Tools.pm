@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2013] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -26,21 +26,15 @@ use base qw(EnsEMBL::Web::JSONServer);
 sub object_type { 'Tools' }
 
 sub json_form_submit {
-  my $self          = shift;
-  my $hub           = $self->hub;
-  my $object        = $self->object;
-  my $jobs_data     = $object->form_inputs_to_jobs_data;
+  my $self      = shift;
+  my $hub       = $self->hub;
+  my $object    = $self->object;
+  my $ticket    = $object->ticket_class->new($object);
 
-  if ($jobs_data && @$jobs_data) {
-    
-    # error?
-    return $self->call_js_panel_method('showError', [$jobs_data->[0]->{error}, 'Invalid input']) if defined($jobs_data->[0]->{error});
-    
-    $object->create_ticket($jobs_data);
-    return $self->call_js_panel_method('ticketSubmitted');
-  }
+  $ticket->process;
 
-  return $self->call_js_panel_method('showError', ['Input provided is invalid', 'Invalid input']);
+  return $self->call_js_panel_method('showError', [ $ticket->error, 'Invalid input' ]) if $ticket->error;
+  return $self->call_js_panel_method('ticketSubmitted');
 }
 
 sub json_save {
@@ -56,7 +50,7 @@ sub json_delete {
 
   $self->object->delete_ticket_or_job;
 
-  return $self->call_js_panel_method('refresh');
+  return $self->call_js_panel_method('refresh', [ 1 ]);
 }
 
 sub json_refresh_tickets {
@@ -71,7 +65,7 @@ sub json_refresh_tickets {
 sub json_load_ticket {
   my $self = shift;
 
-  return $self->call_js_panel_method('populateForm', [ [ map $_->job_data->raw, $self->object->get_requested_ticket->job ] ]);
+  return $self->call_js_panel_method('populateForm', [ $self->object->get_edit_jobs_data ]);
 }
 
 1;

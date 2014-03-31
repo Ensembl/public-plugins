@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2013] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -22,10 +22,11 @@ use strict;
 use warnings;
 no warnings 'uninitialized';
 
-use base qw(EnsEMBL::Web::Component::Tools::VEP);
-use EnsEMBL::Web::Form;
-use Bio::EnsEMBL::Variation::Utils::VEP qw(@REG_FEAT_TYPES %COL_DESCS);
 use URI::Escape qw(uri_unescape);
+use Bio::EnsEMBL::Variation::Utils::Constants qw(%OVERLAP_CONSEQUENCES);
+use Bio::EnsEMBL::Variation::Utils::VEP qw(@REG_FEAT_TYPES %COL_DESCS);
+
+use base qw(EnsEMBL::Web::Component::Tools::VEP);
 
 sub content {
   my $self   = shift;
@@ -42,26 +43,26 @@ sub content {
   return unless defined $job && $job->status eq 'done';
   
   my $job_data = $job->job_data;
+  my $species  = $job->species;
   
   # this method reconstitutes the Tmpfile objects from the filenames
-  $object->get_tmp_file_objs();
-
-  my $output_file_obj = $object->output_file;
+  my $output_file_obj = $object->result_files->{'output_file'};
   
   # get job stats
-  my $stats = $object->job_statistics;
+  my $stats = $self->job_statistics;
   my $output_lines = $stats->{'General statistics'}->{'Lines of output written'} || 0;
   
   # get all params
   my %params;
   foreach my $p($hub->param) {
+    next if $p eq 'update_panel';
     foreach my $v($hub->param($p)) {
       $params{$p} = $v;
     }
   }
   
   my $html;
-  my $tk_name = $self->object->parse_url_param->{ticket_name};
+  my $ticket_name = $self->object->parse_url_param->{'ticket_name'};
   
   # get params
   my $size  = $params{size} || 5;
@@ -132,7 +133,9 @@ sub content {
     'CELL_TYPE' => 'Cell type',
     'CANONICAL' => 'Canonical',
     'SYMBOL' => 'Symbol',
-    'DOMAINS' => 'Domains'
+    'SYMBOL_SOURCE' => 'Symbol source',
+    'DOMAINS' => 'Domains',
+    'STRAND' => 'Feature strand',
   );
   foreach my $header(grep {/\_/} @$headers) {
     my $tmp = $header;
@@ -140,9 +143,18 @@ sub content {
     $header_titles{$header} ||= $tmp;
   }
   
+  # hash for storing seen IDs, used to link to BioMart
+  my %seen_ids;
+  
   # linkify row content
   foreach my $row(@$rows) {
-    $row->{$headers->[$_]} = $self->linkify($headers->[$_], $row->{$headers->[$_]}, $job_data->{species}) for (0..$#{$headers});
+    
+    # store IDs
+    push @{$seen_ids{vars}}, $row->{Existing_variation} if defined($row->{Existing_variation}) && $row->{Existing_variation} =~ /\w+/;
+    push @{$seen_ids{genes}}, $row->{Gene} if defined($row->{Gene}) && $row->{Gene} =~ /\w+/;
+    
+    # linkify content
+    $row->{$headers->[$_]} = $self->linkify($headers->[$_], $row->{$headers->[$_]}, $species) for (0..$#{$headers});
   }
   
   # extras
@@ -168,15 +180,12 @@ sub content {
   );
   
   my @table_headers = map {{ key => $_, title => $header_titles{$_} || $_, sort => $table_sorts{$_} || 'string', help => $COL_DESCS{$_}}} @$headers;
-  
-  
-  my $panel_id  = $self->id;
-  $html .= '<link rel="stylesheet" href="/components/ac.css" />';
+
   $html .= '<div><h3>Results preview</h3>';
   $html .= '<input type="hidden" class="panel_type" value="VEPResults" />';
   
   # construct hash for autocomplete
-  my $vdbc = $hub->species_defs->get_config($job_data->{species}, 'databases')->{'DATABASE_VARIATION'};
+  my $vdbc = $hub->species_defs->get_config($species, 'databases')->{'DATABASE_VARIATION'};
   
   my %ac = (
     Allele => [
@@ -186,11 +195,11 @@ sub content {
       'Transcript', @REG_FEAT_TYPES
     ],
     Consequence => [
-      keys %Bio::EnsEMBL::Variation::Utils::Constants::OVERLAP_CONSEQUENCES
+      keys %OVERLAP_CONSEQUENCES
     ],
     SIFT => $vdbc->{'SIFT_VALUES'},
     PolyPhen => $vdbc->{'POLYPHEN_VALUES'},
-    BIOTYPE => $hub->species_defs->get_config($job_data->{species}, 'databases')->{'DATABASE_CORE'}->{'tables'}{'transcript'}{'biotypes'},
+    BIOTYPE => $hub->species_defs->get_config($species, 'databases')->{'DATABASE_CORE'}->{'tables'}{'transcript'}{'biotypes'},
   );
   
   my $ac_json = $self->jsonify(\%ac);
@@ -220,13 +229,10 @@ sub content {
       $html .= " $opt_size";
     }
     else {
-      my $url = $self->ajax_url(undef, {
-        tk   => $tk_name,
+      $html .= ' '. $self->reload_link($opt_size, {
         from => $from,
-        to   => $to + ($opt_size - $size),
-        update_panel => undef,
+        to   => $to + ($opt_size - $size)
       });
-      $html .= sprintf(' <a href="%s" class="update_panel" rel="%s">%s</a>', $url, $panel_id, $opt_size);
     }
   }
   
@@ -235,19 +241,15 @@ sub content {
     $html .= ' All';
   }
   else {
-    my $url = $self->ajax_url(undef, {
-      tk   => $tk_name,
-      from => 1,
-      to   => $output_lines
-    }, undef, 1);
-    
-    
     my $warning = '';
     if($output_lines > 500) {
       $warning  = '<img class="_ht" src="/i/16/alert.png" style="vertical-align: top;" title="<span style=\'color: yellow; font-weight: bold;\'>WARNING</span>: table with all data may not load in your browser - use Download links instead">';
     }
     
-    $html .=  sprintf(' <a class="update_panel" rel="%s" href="%s">All%s</a>', $panel_id, $url, $warning);
+    $html .=  ' ' . $self->reload_link("All$warning", {
+      from => 1,
+      to   => $output_lines
+    });
     
     # navigation
     $html .= ' | ';#<b>Navigation</b> ';
@@ -257,15 +259,10 @@ sub content {
     
     # first
     if($from > 1) {
-      my $url = $self->ajax_url(undef, {
-        tk   => $tk_name,
+      $html .= $self->reload_link(qq(<img src="/i/nav-l2.gif" $style title="First page"/>), {
         from => 1,
         to   => $size,
-      }, undef, 1);
-      $html .= sprintf(
-        '<a class="update_panel _ht" rel="%s" href="%s"><img src="/i/nav-l2.gif" %s title="First page"/></a>',
-        $panel_id, $url, $style
-      );
+      });
     }
     else {
       $html .= '<img src="/i/nav-l2.gif" '.$disabled_style.'/>';
@@ -273,15 +270,10 @@ sub content {
     
     # prev page
     if($from > 1) {
-      my $url = $self->ajax_url(undef, {
-        tk   => $tk_name,
+      $html .= $self->reload_link(sprintf('<img src="/i/nav-l1.gif" %s title="Previous %s variant%s"/></a>', $style, $size == 1 ? ('', '') : ($size, 's')), {
         from => $from - $size,
         to   => $to - $size,
-      }, undef, 1);
-      $html .= sprintf(
-        '<a class="update_panel _ht" rel="%s" href="%s"><img src="/i/nav-l1.gif" %s title="Previous %s variants"/></a>',
-        $panel_id, $url, $style, $size
-      );
+      });
     }
     else {
       $html .= '<img src="/i/nav-l1.gif" '.$disabled_style.'/>';
@@ -289,15 +281,10 @@ sub content {
     
     # next page
     if($to <= $actual_to && $to < $output_lines) {
-      my $url = $self->ajax_url(undef, {
-        tk   => $tk_name,
+      $html .= $self->reload_link(sprintf('<img src="/i/nav-r1.gif" %s title="Next %s variant%s"/></a>', $style, $size == 1 ? ('', '') : ($size, 's')), {
         from => $from + $size,
         to   => $to + $size,
-      }, undef, 1);
-      $html .= sprintf(
-        '<a class="update_panel _ht" rel="%s" href="%s"><img src="/i/nav-r1.gif" %s title="Next %s variants"/></a>',
-        $panel_id, $url, $style, $size
-      );
+      });
     }
     else {
       $html .= '<img src="/i/nav-r1.gif" '.$disabled_style.'/>';
@@ -305,15 +292,10 @@ sub content {
     
     # last
     if($to < $output_lines && !$filter_string && !$location) {
-      my $url = $self->ajax_url(undef, {
-        tk   => $tk_name,
+      $html .= $self->reload_link(qq(<img src="/i/nav-r2.gif" $style title="Last page"/></a>), {
         from => $size * int($output_lines / $size),
         to   => $output_lines,
-      }, undef, 1);
-      $html .= sprintf(
-        '<a class="update_panel _ht" rel="%s" href="%s"><img src="/i/nav-r2.gif" %s title="Last page"/></a>',
-        $panel_id, $url, $style
-      );
+      });
     }
     else {
       $html .= '<img src="/i/nav-r2.gif" '.$disabled_style.'/>';
@@ -334,9 +316,8 @@ sub content {
   my $ajax_url = $self->ajax_url(undef, {'__clear' => 1});
   
   my $ajax_html .= qq{
-    <form action="#" class="update_panel" style="margin: 0 0 0 0;">
-      <input type="hidden" name="panel_id" value="$panel_id" />
-      <input type="hidden" name="url" value="$ajax_url" />
+    <form action="#" class="_apply_filter" style="margin: 0 0 0 0;">
+      <input type="hidden" name="ajax_url" value="$ajax_url" />
   };
   
   # define operators
@@ -365,28 +346,29 @@ sub content {
       my $tmp_html;
       
       $active_filters++;
-      
-      my $remove_url = $self->ajax_url(undef, {"field$i" => undef, "operator$i" => undef, "value$i" => undef});
-      #$remove_url .= sprintf('&%s=%s', $_, $params{$_}) for grep {!/(field|operator|value)$i/} keys %params;
-      
+
       # filter display
-      $tmp_html .= sprintf(qq{
+      $tmp_html .= sprintf('
         <div class="filter filter_edit_%s">
           %s %s %s
           <span style="float:right; vertical-align: top;">
             <a href="#" class="filter_toggle" rel="filter_edit_%s"><img class="_ht" src="/i/16/pencil-whitebg.png" title="Edit filter"></a>
-            <a class="update_panel" rel="%s" href="%s"><img class="_ht" src="/i/close.png" title="Remove filter" style="height:16px; width:16px"></a>
+            %s
           </span>
-        </div>},
+        </div>',
         $i,
         $header_titles{$params{"field$i"}} || $params{"field$i"},
         $operators{$params{"operator$i"}},
         $params{"value$i"} || 'defined',
         $i,
-        $panel_id,
-        $remove_url,
+        $self->reload_link('<img class="_ht" src="/i/close.png" title="Remove filter" style="height:16px; width:16px">', {
+          "field$i"       => undef,
+          "operator$i"    => undef,
+          "value$i"       => undef,
+          'update_panel'  => undef
+        })
       );
-      
+
       # edit filter
       $tmp_html .= '<div class="filter_edit_'.$i.'" style="display:none;">';
       $tmp_html .= $ajax_html;
@@ -547,12 +529,15 @@ sub content {
   
   ## DOWNLOAD
   ###########
-  
+
+  my $dir_loc  = $hub->species_defs->ENSEMBL_TOOLS_TMP_DIR;
+  my $file_loc = $output_file_obj->filename =~ s/^$dir_loc\/(temporary|persistent)\/VEP\///r;
+
   $html .= '<div class="toolbox">';
   $html .= '<div class="toolbox-head"><img src="/i/16/download.png" style="vertical-align:top;"> Download</div><div style="padding:5px;">';
-  
-  my $download_url = sprintf('/%s/vep_download?file=%s;name=%s;prefix=vep', $hub->species, $output_file_obj->filename, $tk_name.'.txt');
-  
+
+  my $download_url = sprintf('/%s/vep_download?file=%s;name=%s;persistent=%s;prefix=vep', $species, $file_loc, $ticket_name.'.txt', $ticket->owner_type eq 'user' ? 1 : 0);
+
   # all
   $html .= '<div><b>All</b><span style="float:right; margin-left:10px;">';
   $html .= sprintf(
@@ -563,11 +548,11 @@ sub content {
   
   # filtered
   if($active_filters) {
-    my $filtered_name = $tk_name.($location ? ' '.$location : '').($filter_string ? ' '.$filter_string : '');
+    my $filtered_name = $ticket_name.($location ? ' '.$location : '').($filter_string ? ' '.$filter_string : '');
     $filtered_name =~ s/^\s+//g;
     $filtered_name =~ s/\s+/\_/g;
     
-    my $filtered_url = sprintf('/%s/vep_download?file=%s;name=%s;prefix=vep', $hub->species, $output_file_obj->filename, $filtered_name.'.txt');
+    my $filtered_url = sprintf('/%s/vep_download?file=%s;name=%s;persistent=%s;prefix=vep', $species, $file_loc, $filtered_name.'.txt', $ticket->owner_type eq 'user' ? 1 : 0);
     $filtered_url .= ';'.join(";", map {"$_=$content_args{$_}"} grep {!/to|from/} keys %content_args);
     
     $html .= '<div><hr><b>Filtered</b><span style="float:right; margin-left:10px;">';
@@ -576,6 +561,65 @@ sub content {
       $_, ($_ eq 'TXT' ? ' (best for Excel)' : ''), $filtered_url, lc($_), $_
     ) for qw(VCF VEP TXT);
     $html .= '</span></div>';
+  }
+  
+  
+  
+  ## BIOMART
+  ##########
+  
+  if($hub->species_defs->ENSEMBL_MART_ENABLED) {
+    
+    # uniquify lists, retain order
+    foreach my $key(keys %seen_ids) {
+      my %tmp_seen;
+      my @tmp_list;
+      
+      foreach my $item(@{$seen_ids{$key}}) {
+        push @tmp_list, $item unless $tmp_seen{$item};
+        $tmp_seen{$item} = 1;
+      }
+      
+      $seen_ids{$key} = \@tmp_list;
+    }
+    
+    # generate mart species name
+    my @split = split /\_/, $species;
+    my $m_species = lc(substr($split[0], 0, 1)).$split[1];
+    
+    my $var_mart_url =
+      '/biomart/martview?VIRTUALSCHEMANAME=default'.
+      '&ATTRIBUTES='.
+      $m_species.'_snp.default.snp.refsnp_id|'.
+      $m_species.'_snp.default.snp.refsnp_source|'.
+      $m_species.'_snp.default.snp.chr_name|'.
+      $m_species.'_snp.default.snp.chrom_start'.
+      '&FILTERS='.
+      $m_species.'_snp.default.filters.snp_filter.%22'.join(",", @{$seen_ids{vars} || []}).'%22'.
+      '&VISIBLEPANEL=filterpanel';
+    
+    my $gene_mart_url =
+      '/biomart/martview?VIRTUALSCHEMANAME=default'.
+      '&ATTRIBUTES='.
+      $m_species.'_gene_ensembl.default.feature_page.ensembl_gene_id|'.
+      $m_species.'_gene_ensembl.default.feature_page.chromosome_name|'.
+      $m_species.'_gene_ensembl.default.feature_page.start_position|'.
+      $m_species.'_gene_ensembl.default.feature_page.end_position'.
+      '&FILTERS='.
+      $m_species.'_gene_ensembl.default.filters.ensembl_gene_id.%22'.join(",", @{$seen_ids{genes} || []}).'%22'.
+      '&VISIBLEPANEL=filterpanel';
+    
+    $html .= '<div><hr><b>BioMart</b><span style="float:right; margin-left:10px;">';
+    
+    $html .= $seen_ids{vars} ? sprintf(
+      '<a class="_ht" title="Query BioMart with co-located variants in this view" rel="external" href="%s">Variants</a> ',
+      $var_mart_url) : 'Variants ';
+    
+    $html .= $seen_ids{genes} ? sprintf(
+      '<a class="_ht" title="Query BioMart with genes in this view" rel="external" href="%s">Genes</a>',
+      $gene_mart_url) : 'Genes ';
+    
+    $html .= '</div>';
   }
   
   $html .= '</div></div>';
@@ -601,10 +645,15 @@ sub linkify {
   
   # location
   if($field eq 'Location') {
+    my ($c, $s, $e) = split /\:|\-/, $value;
+    $e ||= $s;
+    $s -= 50;
+    $e += 50;
+
     my $url = $hub->url({
       type             => 'Location',
       action           => 'View',
-      r                => $value,
+      r                => "$c:$s-$e",
       contigviewbottom => "variation_feature_variation=normal",
       species          => $species
     });
@@ -677,7 +726,7 @@ sub linkify {
   
   # consequence type
   elsif($field eq 'Consequence' && $value =~ /\w+/) {
-    my $cons = \%Bio::EnsEMBL::Variation::Utils::Constants::OVERLAP_CONSEQUENCES;
+    my $cons = \%OVERLAP_CONSEQUENCES;
     my $var_styles   = $hub->species_defs->colour('variation');
     my $colourmap    = $hub->colourmap;
     
@@ -691,7 +740,7 @@ sub linkify {
         $new_value .=
           sprintf(
             '<nobr><span class="colour" style="background-color:%s">&nbsp;</span> '.
-            '<span style="border-bottom:1px dotted #999; cursor: help;" class="_ht" title="%s">%s</span></nobr>',
+            '<span class="_ht ht" title="%s">%s</span></nobr>',
             $colour, $cons->{$con}->description, $con
           );
       }
@@ -730,6 +779,16 @@ sub linkify {
   }
   
   return $new_value;
+}
+
+sub reload_link {
+  my ($self, $html, $url_params) = @_;
+
+  return sprintf('<a href="%s" class="_reload"><input type="hidden" value="%s" />%s</a>',
+    $self->hub->url($url_params, undef, 1),
+    $self->ajax_url(undef, $url_params, undef, 1),
+    $html
+  );
 }
 
 1;

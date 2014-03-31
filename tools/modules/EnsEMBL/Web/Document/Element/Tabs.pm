@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2013] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -25,21 +25,30 @@ use warnings;
 
 use previous qw(init);
 
+use ORM::EnsEMBL::DB::Tools::Manager::Ticket;
+
 sub init {
   my $self        = shift;
   my $controller  = $_[0];
   my $hub         = $controller->hub;
-  my $tl_param    = $hub->param('tl');
-     $tl_param    = $tl_param ? {'tl' => $tl_param} : {};
+  my $user        = $hub->user;
 
   $self->PREV::init(@_);
 
-  unless ($controller->builder->object('Tools')) {
+  if (!$controller->builder->object('Tools') && ORM::EnsEMBL::DB::Tools::Manager::Ticket->count_current_tickets({
+    'site_type'   => $hub->species_defs->ENSEMBL_SITETYPE,
+    'session_id'  => $hub->session->session_id, $user ? (
+    'user_id'     => $user->user_id ) : ()
+  })) {
+
+    my $tl_param  = $hub->param('tl');
+       $tl_param  = $tl_param ? {'tl' => $tl_param} : {};
+
     $self->add_entry({
-      type    => 'Tools',
-      caption => 'Tools',
-      url     => $hub->url({qw(type Tools action Summary), %$tl_param}),
-      class   => 'tools '.($hub->type eq 'Tools' ? ' active' : '')
+      'type'    => 'Tools',
+      'caption' => 'Jobs', # TODO - change for 76
+      'url'     => $hub->url({qw(type Tools action VEP), %$tl_param}), # TODO - change VEP to Summary for 76
+      'class'   => 'tools '.($hub->type eq 'Tools' ? ' active' : '')
     });
   }
 }

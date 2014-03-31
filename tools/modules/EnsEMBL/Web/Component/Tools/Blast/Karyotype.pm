@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2013] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -34,17 +34,17 @@ sub content {
 
   if (@$results) {
 
-    my $job_data    = $job->job_data;
-    my $species     = $job_data->{'species'};
+    my $species     = $job->species;
     my $chromosomes = $sd->get_config($species, 'ENSEMBL_CHROMOSOMES') || [];
 
     if (@$chromosomes && $sd->MAX_CHR_LENGTH) {
       my $image_config  = $hub->get_imageconfig('Vkaryoblast');
       my $image         = $self->new_karyotype_image($image_config);
-      my $pointers      = $self->get_hit_pointers($job_data, $results, $image);
+      my $pointers      = $self->get_hit_pointers($species, $results, $image);
 
-      $image->set_button('drag', 'title' => 'Click on a chromosome');
+      $image->caption   = 'Click on the image above to jump to a chromosome, or click and drag to select a region';
       $image->imagemap  = 'yes';
+      $image->set_button('drag', 'title' => 'Click on a chromosome');
       $image->karyotype($hub, $object, $pointers, 'Vkaryoblast');
 
       $html             = sprintf('
@@ -61,11 +61,10 @@ sub content {
 }
 
 sub get_hit_pointers {
-  my ($self, $job_data, $results, $image) = @_;
+  my ($self, $species, $results, $image) = @_;
 
   my $object        = $self->object;
   my $hub           = $self->hub;
-  my $species       = $job_data->{'species'};
   my $pointer_style = $self->blast_pointer_style;
 
   my @features      = map {

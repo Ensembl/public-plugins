@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2013] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -76,22 +76,22 @@ sub default_options {
 
     %{ $self->SUPER::default_options },
 
-    'ensembl_cvs_root_dir'  => $sd->ENSEMBL_SERVERROOT,  
+    'ensembl_codebase'      => $sd->ENSEMBL_LSF_CODE_LOCATION,  
     'pipeline_name'         => 'ensembl_web_tools',
     'hive_use_triggers'     => 0,
     'pipeline_db'           => {
       '-host'                 =>  $sd->multidb->{'DATABASE_WEB_HIVE'}{'HOST'},
       '-port'                 =>  $sd->multidb->{'DATABASE_WEB_HIVE'}{'PORT'}, 
-      '-user'                 =>  $sd->DATABASE_WRITE_USER,
-      '-pass'                 =>  $sd->DATABASE_WRITE_PASS,
+      '-user'                 =>  $sd->multidb->{'DATABASE_WEB_HIVE'}{'USER'} || $sd->DATABASE_WRITE_USER,
+      '-pass'                 =>  $sd->multidb->{'DATABASE_WEB_HIVE'}{'PASS'} || $sd->DATABASE_WRITE_PASS,
       '-dbname'               =>  $sd->multidb->{'DATABASE_WEB_HIVE'}{'NAME'},
       '-driver'               =>  'mysql',
     },
     'ticket_db'             => {
       '-host'                 =>  $sd->multidb->{'DATABASE_WEB_TOOLS'}{'HOST'},
       '-port'                 =>  $sd->multidb->{'DATABASE_WEB_TOOLS'}{'PORT'},
-      '-user'                 =>  $sd->DATABASE_WRITE_USER,
-      '-pass'                 =>  $sd->DATABASE_WRITE_PASS,
+      '-user'                 =>  $sd->multidb->{'DATABASE_WEB_TOOLS'}{'USER'} || $sd->DATABASE_WRITE_USER,
+      '-pass'                 =>  $sd->multidb->{'DATABASE_WEB_TOOLS'}{'PASS'} || $sd->DATABASE_WRITE_PASS,
       '-dbname'               =>  $sd->multidb->{'DATABASE_WEB_TOOLS'}{'NAME'},
     },
 

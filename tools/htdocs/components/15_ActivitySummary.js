@@ -1,5 +1,5 @@
 /*
- * Copyright [1999-2013] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+ * Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,10 +19,14 @@ Ensembl.Panel.ActivitySummary = Ensembl.Panel.ContentTools.extend({
   constructor: function () {
     this.base.apply(this, arguments);
 
-    Ensembl.EventManager.register('refreshActivitySummary', this, this.refresh);
+    Ensembl.EventManager.register('toolsRefreshActivitySummary', this, this.refresh);
+    Ensembl.EventManager.register('toolsToggleEmptyTable', this, this.toggleEmptyTable);
 
-    this.MAXIMUM_POLLS  = 10;
     this.POLL_INTERVAL  = 30; //seconds
+    this.MAX_POLLS      = 10;
+
+    this.currentTicket  = (window.location.href.match(/tl=([a-z0-9_]+)/i) || []).pop();
+    this.pollCounter    = 0;
   },
 
   init: function () {
@@ -32,123 +36,123 @@ Ensembl.Panel.ActivitySummary = Ensembl.Panel.ContentTools.extend({
     this.base();
 
     this.refreshURL         = this.el.find('input[name=_refresh_url]').remove().val();
-    this.ticketsData        = this.el.find('input[name=_tickets_data]').remove().val();
-    this.pollCounter        = 0;
+    this.ticketsDataHash    = this.el.find('input[name=_tickets_data_hash]').remove().val();
 
-    this.elLk.countdownDiv  = this.el.find('div._countdown');
-
-    // Save icons
-    this.el.find('._ticket_save').on('click', function(e) {
+    // Refresh button
+    this.elLk.refreshButton = this.el.find('a._tickets_refresh').on('click', function(e) {
       e.preventDefault();
-      panel.ajax({ 'url': this.href });
+      panel.clearTimer();
+      panel.refresh(false, false, true);
     });
 
-    // Delete icons
-    this.el.find('._ticket_delete').on('click', function(e) {
-      e.preventDefault();
-      var ticketName = (this.href.match(/tl=([a-z0-9_]+)/i) || []).pop();
-      if (ticketName && window.confirm("This will delete ticket '" + ticketName + "' permanently.")) {
-        panel.ajax({ 'url': this.href });
-      }
-    });
+    this.elLk.refreshButtonReload = this.elLk.refreshButton.children().eq(0);
+    this.elLk.refreshButtonTimer  = this.elLk.refreshButton.children().eq(1);
+    this.elLk.refreshButtonText   = this.elLk.refreshButton.children().eq(2);
 
     // Edit icons
     this.el.find('._ticket_edit').on('click', function() {
-      var ticketName = (this.href.match(/tl=([a-z0-9_]+)/i) || []).pop();
-      return !!ticketName && !Ensembl.EventManager.trigger('editToolsTicket', ticketName);
+      var ticketName = (this.href.match(/tl=([a-z0-9_-]+)/i) || []).pop();
+      if (ticketName !== panel.currentTicket) {
+        Ensembl.EventManager.trigger('toolsHideTicket');
+        panel.currentTicket = ticketName;
+      }
+      return !!ticketName && !Ensembl.EventManager.trigger('toolsEditTicket', ticketName);
+    });
+
+    // View ticket link
+    this.el.find('._ticket_view').on('click', function() {
+      var ticketName = (this.href.match(/tl=([a-z0-9_-]+)/i) || []).pop();
+      if (ticketName !== panel.currentTicket) {
+        Ensembl.EventManager.trigger('toolsToggleForm', false);
+        panel.currentTicket = ticketName;
+      }
+      return !!ticketName && !Ensembl.EventManager.trigger('toolsViewTicket', ticketName);
     });
 
     this.toggleEmptyTable();
     this.updateTicketList(false, !!this.el.find('input[name=_auto_refresh]').remove().val());
   },
 
-  refresh: function (forceRefresh) {
+  refresh: function (forceRefresh, resetPollCount, ignorePollCounter) {
   /*
    * Does a query to the backend to refresh the Activity Summary table
+   * This get called by frontend and backend
    */
     var panel = this;
 
-    this.updateCountdown('refreshing_in', 0);
+    this.pollCounter = !resetPollCount ? ignorePollCounter ? this.pollCounter : this.pollCounter + 1 : 0;
+
+    this.updateRefreshButton('refreshing');
     this.ajax({
       'url'     :  this.refreshURL,
-      'data'    : { 'tickets': forceRefresh ? '' : this.ticketsData }, // if forceRefresh flag is on, don't send the ticket data to the backend. This forces the backend to respond with current ticket data again.
-      'type'    : 'post',
+      'data'    : { 'tickets': forceRefresh ? '' : this.ticketsDataHash }, // if forceRefresh flag is on, don't send the ticket data to the backend. This forces the backend to respond with current ticket data again.
+      'cache'   : false,
+      'spinner' : true,
       'success' : function(json, previous) {
         if (previous != 'method_applied') {
-          this.updateCountdown('refresh_now');
-         this.clearTimers();
+          this.updateRefreshButton('cleartimer');
+          this.clearTimer();
         }
       },
       'error'   : function() {
-        this.updateCountdown('refresh_now');
-        this.clearTimers();
+        this.updateRefreshButton('cleartimer');
+        this.clearTimer();
       }
     });
   },
 
-  updateCountdown: function(type, time) {
+  updateRefreshButton: function(status) {
   /*
    * Updates the 'Refresh' link
    */
-    var panel =  this;
+    var panel = this;
 
-    if (this.elLk.countdownDiv.is(':empty')) {
-      this.elLk.countdownDiv.on('click', 'a', function (event) {
-        event.preventDefault();
-        panel.clearTimers();
-        panel.refresh();
-      });
-    }
+    this.elLk.refreshButtonReload.toggle(status === 'cleartimer');
+    this.elLk.refreshButtonText.html(status === 'refreshing' ? 'Refreshing now&#8230;' : 'Refresh');
 
-    if (type == 'refreshing_in' && !time) {
-      this.elLk.countdownDiv.html('<p>Refreshing now&#8230;</p>');
+    if (status === 'refreshing') {
+      this.elLk.refreshButtonTimer.hide();
     } else {
-      var message;
-      if (type == 'refreshing_in') {
-        message   = 'Refreshing in ' + time + ' second' + (time === 1 ? '' : 's');
-      } else if (type == 'refreshed') {
-        var unit  = time > 60 ? time > 3600 ? time > 86400 ? 'day' : 'hour' : 'minute' : 'second';
-        time      = parseInt(time > 60 ? time > 3600 ? time > 86400 ? time / 86400 : time / 3600 : time / 60 : time);
-        time      = time === 1 ? unit === 'hour' ? 'an' : 'a' : time;
-        message   = 'Refreshed ' + (unit === 'second' ? 'few seconds ago' : ('more than ' + time + ' ' + unit + (typeof time === 'number' ? 's' : '') + ' ago'));
-      } else {
-        message   = 'Refresh now';
+      this.elLk.refreshButtonTimer.toggle(status !== 'cleartimer');
+      if (status === 'inittimer') {
+        panel.elLk.refreshButtonTimer.text(this.POLL_INTERVAL);
+        Ensembl.Panel.ActivitySummary.counter = setInterval(function() {
+          panel.elLk.refreshButtonTimer.text(parseInt(panel.elLk.refreshButtonTimer.text()) - 1);
+        }, 1000);
       }
-      this.elLk.countdownDiv.html('<p><a class="tickets-refresh" href="#"><span class="tickets-refresh-now">Refresh now</span></a></p>').find('a').prepend($('<span>').html(message));
     }
   },
 
-  updateTicketList: function(ticketsData, autoRefresh) {
+  updateTicketList: function(ticketsDataHash, autoRefresh) {
   /*
    * Updates the Activity Summary table according to the request recieved from the backend
-   * ticketsData: only provided if changed
+   * ticketsDataHash: only provided if changed
    */
     var panel = this;
 
-    this.clearTimers();
+    this.clearTimer();
 
-    if (!!ticketsData) {
-      this.ticketsData = ticketsData;
-      this.getContent();
+    if (!!ticketsDataHash) {
+
+      var memcacheProofURL  = this.params.updateURL;
+          memcacheProofURL  = memcacheProofURL.replace(/\;?mcache\=[0-9]+/, '');
+          memcacheProofURL += ';mcache=' + (new Date()).getTime();
+
+      this.getContent(memcacheProofURL);
+
+      Ensembl.EventManager.trigger('toolsRefreshTicket', false); // getContent for the displayed ticket details if any
     }
     this.autoRefresh = !!autoRefresh;
 
-    if (this.autoRefresh && this.pollCounter < this.MAXIMUM_POLLS) {
-      this.poll = setTimeout(function () {
-        panel.pollCounter++;
-        panel.refresh();
+    if (this.autoRefresh && this.pollCounter < this.MAX_POLLS) {
+      Ensembl.Panel.ActivitySummary.poll = setTimeout(function () {
+        panel.refresh(false, false, false);
       }, this.POLL_INTERVAL * 1000);
 
-      this.countdown  = setInterval(function () {
-        panel.updateCountdown('refreshing_in', panel.POLL_INTERVAL - ++panel.timePassed);
-      }, 1000);
-    } else if (this.autoRefresh) {
-      this.countdown  = setInterval(function () {
-        panel.updateCountdown('refreshed', ++panel.timePassed);
-      }, 1000);
+      this.updateRefreshButton('inittimer');
+
     } else {
-      this.pollCounter = 0;
-      this.updateCountdown('refresh_now');
+      this.updateRefreshButton('cleartimer');
     }
   },
 
@@ -160,24 +164,26 @@ Ensembl.Panel.ActivitySummary = Ensembl.Panel.ContentTools.extend({
     var showTable     = !tableWrapper.find('.dataTables_empty').length;
     
     tableWrapper.toggle(showTable);
-    this.el.find('p._no_jobs').toggle(!showTable);
+    this.el.find('div._no_jobs').toggle(!showTable);
+    if (!showTable) {
+      Ensembl.EventManager.trigger('toolsToggleForm', true, false);
+    }
   },
 
-  clearTimers: function() {
+  clearTimer: function() {
   /*
-   * Clears the timers for polling ticket update and showing countdown
+   * Clears the timers for polling ticket update and showing timer
    */
-    this.timePassed = 0;
-    clearTimeout(this.poll);
-    clearInterval(this.countdown);
+    clearTimeout(Ensembl.Panel.ActivitySummary.poll);
+    clearInterval(Ensembl.Panel.ActivitySummary.counter);
   },
 
   destructor: function() {
   /*
    * Clears the timers before destroying the object
    */
-    this.clearTimers();
-    this.base();
+    this.clearTimer();
+    this.base.apply(this, arguments);
   }
 });
 
