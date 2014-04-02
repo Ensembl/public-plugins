@@ -59,6 +59,7 @@ sub update_conf {
   $SiteDefs::ENSEMBL_VEP_ENABLED                = 1;                                                # Flag to enable/disable VEP
   $SiteDefs::ENSEMBL_VEP_CGI_POST_MAX           = 52428800;                                         # 50MB limit for VEP input files
   $SiteDefs::ENSEMBL_VEP_LSF_QUEUE              = 'VEP';                                            # LSF queue for VEP jobs, if running on farm
+  $SiteDefs::ENSEMBL_VEP_ANALYSIS_CAPACITY      = 12;                                               # Number of jobs that can be run parallel in LSF in the queue
   $SiteDefs::ENSEMBL_VEP_SCRIPT_DEFAULT_OPTIONS = {                                                 # Default options for command line vep script (keys with value undef get ignored)
     '--host'        => undef,                                                                       # Database host (defaults to ensembldb.ensembl.org)
     '--user'        => undef,                                                                       # Defaults to 'anonymous'

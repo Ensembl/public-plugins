@@ -41,17 +41,17 @@ sub pipeline_analyses {
   my $perl_bin        = join ' ', $species_defs->ENSEMBL_TOOLS_PERL_BIN, '-I', $species_defs->ENSEMBL_TOOLS_BIOPERL_DIR, map(sprintf('-I %s/%s', $species_defs->ENSEMBL_LSF_CODE_LOCATION, $_), @{$species_defs->ENSEMBL_TOOLS_LIB_DIRS});
 
   return [{
-    '-logic_name'     => 'VEP',
-    '-module'         => 'EnsEMBL::Web::RunnableDB::VEP::Submit',
-    '-parameters'     => {
-      'ticket_db'       => $conf->o('ticket_db'),
-      'script'          => $conf->o('ensembl_codebase').'/'.$species_defs->ENSEMBL_VEP_SCRIPT,
-      'script_options'  => { map { defined $script_options->{$_} ? ( $_ => $script_options->{$_} ) : () } keys %$script_options }, # filter out the undef values
-      'perl_bin'        => $perl_bin
+    '-logic_name'         => 'VEP',
+    '-module'             => 'EnsEMBL::Web::RunnableDB::VEP::Submit',
+    '-parameters'         => {
+      'ticket_db'           => $conf->o('ticket_db'),
+      'script'              => $conf->o('ensembl_codebase').'/'.$species_defs->ENSEMBL_VEP_SCRIPT,
+      'script_options'      => { map { defined $script_options->{$_} ? ( $_ => $script_options->{$_} ) : () } keys %$script_options }, # filter out the undef values
+      'perl_bin'            => $perl_bin
     },
-    '-analysis_capacity'  => 12,
-    '-meadow_type'    => 'LSF',
-    '-rc_name'        => $conf->species_defs->ENSEMBL_VEP_LSF_QUEUE
+    '-analysis_capacity'  => $species_defs->ENSEMBL_VEP_ANALYSIS_CAPACITY,
+    '-meadow_type'        => 'LSF',
+    '-rc_name'            => $conf->species_defs->ENSEMBL_VEP_LSF_QUEUE
   }];
 }
 
