@@ -49,7 +49,7 @@ if (grep(m/^synchive/, @ARGV) && (my @lsf_hosts = @{ $SiteDefs::ENSEMBL_LSF_HOST
 
   for (@lsf_hosts) {
     print "Copying code to from $source to $_:$dest\n";
-    system(sprintf 'rsync %s --exclude=".git*"  --exclude="opensearch/" --delete %s %s:%s', $args, join(' ', map("$source/$_", @folders)), $_, $dest);
+    system(sprintf 'rsync %s --exclude=".git*"  --exclude="opensearch/" --exclude="beekeeper.*log" --delete %s %s:%s', $args, join(' ', map("$source/$_", @folders)), $_, $dest);
   }
 }
 
