@@ -33,7 +33,7 @@ use ORM::EnsEMBL::DB::Accounts::Manager::Membership;
 use ORM::EnsEMBL::DB::Accounts::Manager::Record;
 use ORM::EnsEMBL::DB::Accounts::Manager::User;
 
-use base qw(EnsEMBL::Web::Object);
+use parent qw(EnsEMBL::Web::Object);
 
 sub caption               { return 'Personal Data';                                                                   }
 sub short_caption         { return 'Personal Data';                                                                   }

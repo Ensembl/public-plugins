@@ -21,7 +21,7 @@ package EnsEMBL::Web::Configuration::Production;
 use strict;
 use warnings;
 
-use base qw(EnsEMBL::Web::Configuration::MultiDbFrontend);
+use parent qw(EnsEMBL::Web::Configuration::MultiDbFrontend);
 
 use constant DEFAULT_ACTION => 'Search';
 

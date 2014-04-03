@@ -25,7 +25,7 @@ use strict;
 
 use EnsEMBL::Users::Messages qw(MESSAGE_UNKNOWN_ERROR);
 
-use base qw(EnsEMBL::Users::Command::Account);
+use parent qw(EnsEMBL::Users::Command::Account);
 
 sub process {
   my $self        = shift;

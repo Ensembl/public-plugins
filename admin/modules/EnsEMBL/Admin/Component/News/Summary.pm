@@ -26,7 +26,7 @@ no warnings "uninitialized";
 
 use EnsEMBL::Web::Data::User;
 
-use base qw(EnsEMBL::Web::Component);
+use parent qw(EnsEMBL::Web::Component);
 
 sub _init {
   my $self = shift;

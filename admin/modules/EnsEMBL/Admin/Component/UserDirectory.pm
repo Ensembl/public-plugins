@@ -20,7 +20,7 @@ package EnsEMBL::Admin::Component::UserDirectory;
 
 use strict;
 
-use base qw(EnsEMBL::Web::Component);
+use parent qw(EnsEMBL::Web::Component);
 
 use Encode;
 

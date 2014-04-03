@@ -21,7 +21,7 @@ package EnsEMBL::Admin::Component::HelpRecord::List;
 use strict;
 use warnings;
 
-use base qw(EnsEMBL::ORM::Component::DbFrontend::List);
+use parent qw(EnsEMBL::ORM::Component::DbFrontend::List);
 
 sub record_tree {
   ## @overrides

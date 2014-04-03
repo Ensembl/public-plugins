@@ -23,7 +23,7 @@ package EnsEMBL::Admin::Component::Changelog::TextSummary;
 use strict;
 use warnings;
 
-use base qw(EnsEMBL::Web::Component);
+use parent qw(EnsEMBL::Web::Component);
 
 use constant {
   COLUMN_WIDTH      => 70,

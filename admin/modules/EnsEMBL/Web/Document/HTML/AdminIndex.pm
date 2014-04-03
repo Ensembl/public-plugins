@@ -20,7 +20,7 @@ package EnsEMBL::Web::Document::HTML::AdminIndex;
 
 use strict;
 
-use base qw(EnsEMBL::Web::Document::HTML);
+use parent qw(EnsEMBL::Web::Document::HTML);
 
 sub new {
   my $self = shift->SUPER::new;

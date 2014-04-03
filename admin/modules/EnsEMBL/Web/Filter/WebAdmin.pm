@@ -20,7 +20,7 @@ package EnsEMBL::Web::Filter::WebAdmin;
 
 use strict;
 
-use base qw(EnsEMBL::Web::Filter);
+use parent qw(EnsEMBL::Web::Filter);
 
 sub init {
   my $self = shift;

@@ -20,7 +20,7 @@ package EnsEMBL::Web::Configuration::HelpRecord;
 
 use strict;
 
-use base qw(EnsEMBL::Web::Configuration::MultiDbFrontend);
+use parent qw(EnsEMBL::Web::Configuration::MultiDbFrontend);
 
 sub set_default_action {
   my $self = shift;

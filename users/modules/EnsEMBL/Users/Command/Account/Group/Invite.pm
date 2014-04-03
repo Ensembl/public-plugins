@@ -26,7 +26,7 @@ use warnings;
 
 use EnsEMBL::Users::Messages qw(MESSAGE_GROUP_NOT_FOUND MESSAGE_EMAILS_INVALID MESSAGE_GROUP_INVITATION_SENT);
 
-use base qw(EnsEMBL::Users::Command::Account);
+use parent qw(EnsEMBL::Users::Command::Account);
 
 sub csrf_safe_process {
   my $self        = shift;

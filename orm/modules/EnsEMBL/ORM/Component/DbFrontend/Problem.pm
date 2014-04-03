@@ -21,7 +21,7 @@ package EnsEMBL::ORM::Component::DbFrontend::Problem;
 use strict;
 use warnings;
 
-use base qw(EnsEMBL::ORM::Component::DbFrontend);
+use parent qw(EnsEMBL::ORM::Component::DbFrontend);
 
 sub content_tree {
   my $self  = shift;

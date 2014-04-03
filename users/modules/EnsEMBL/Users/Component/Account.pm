@@ -26,7 +26,7 @@ use strict;
 use EnsEMBL::Web::User;
 use EnsEMBL::Users::Messages qw(get_message);
 
-use base qw(EnsEMBL::Web::Component);
+use parent qw(EnsEMBL::Web::Component);
 
 use constant {
   _JS_LINK            => 'modal_link',

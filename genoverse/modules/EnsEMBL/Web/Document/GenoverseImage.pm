@@ -22,7 +22,7 @@ use strict;
 
 use JSON qw(to_json);
 
-use base qw(EnsEMBL::Web::Document::Image);
+use parent qw(EnsEMBL::Web::Document::Image);
 
 sub new {
   my ($class, $args) = @_;

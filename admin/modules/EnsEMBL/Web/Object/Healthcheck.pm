@@ -22,7 +22,7 @@ use strict;
 
 use DBI;
 
-use base qw(EnsEMBL::Web::Object);
+use parent qw(EnsEMBL::Web::Object);
 
 sub view_type         { return shift->{'_view_type'}; }
 sub view_param        { return shift->{'_view_param'}; }

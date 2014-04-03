@@ -28,7 +28,7 @@ use EnsEMBL::Web::Exceptions;
 use EnsEMBL::Users::Mailer::User;
 use EnsEMBL::Users::Messages qw(MESSAGE_ACCOUNT_BLOCKED MESSAGE_VERIFICATION_SENT MESSAGE_URL_EXPIRED MESSAGE_UNKNOWN_ERROR);
 
-use base qw(EnsEMBL::Web::Command);
+use parent qw(EnsEMBL::Web::Command);
 
 use constant EMAIL_REGEX => qr/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,6}$/;
 

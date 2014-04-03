@@ -20,7 +20,7 @@ package EnsEMBL::Admin::Command::Healthcheck::Annotation;
 
 use strict;
 
-use base qw(EnsEMBL::Web::Command);
+use parent qw(EnsEMBL::Web::Command);
 
 sub process {
   my $self = shift;

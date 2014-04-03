@@ -23,7 +23,7 @@ use warnings;
 
 use EnsEMBL::Web::Exceptions;
 
-use base qw(EnsEMBL::Web::Component);
+use parent qw(EnsEMBL::Web::Component);
 
 sub content {
   my $self    = shift;

@@ -23,7 +23,7 @@ package EnsEMBL::Admin::Component::Changelog::Summary;
 use strict;
 use warnings;
 
-use base qw(EnsEMBL::ORM::Component::DbFrontend::Display);
+use parent qw(EnsEMBL::ORM::Component::DbFrontend::Display);
 
 sub content_tree {
   ## @overrides

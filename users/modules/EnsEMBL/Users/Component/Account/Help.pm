@@ -20,7 +20,7 @@ package EnsEMBL::Users::Component::Account::Help;
 
 use strict;
 
-use base qw(EnsEMBL::Web::Component::Help::View);
+use parent qw(EnsEMBL::Web::Component::Help::View);
 
 sub content {
   my $self = shift;

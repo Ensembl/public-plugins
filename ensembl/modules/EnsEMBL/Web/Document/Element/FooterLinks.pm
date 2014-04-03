@@ -22,7 +22,7 @@ package EnsEMBL::Web::Document::Element::FooterLinks;
 
 use strict;
 
-use base qw(EnsEMBL::Web::Document::Element);
+use parent qw(EnsEMBL::Web::Document::Element);
 
 sub content {
   return qq(

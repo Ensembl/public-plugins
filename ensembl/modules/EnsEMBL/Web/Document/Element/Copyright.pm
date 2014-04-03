@@ -24,7 +24,7 @@ use strict;
 
 use URI::Escape qw(uri_escape);
 
-use base qw(EnsEMBL::Web::Document::Element);
+use parent qw(EnsEMBL::Web::Document::Element);
 
 sub new {
   return shift->SUPER::new({

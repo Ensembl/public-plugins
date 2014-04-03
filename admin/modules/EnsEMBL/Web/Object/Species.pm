@@ -20,7 +20,7 @@ package EnsEMBL::Web::Object::Species;
 
 use strict;
 
-use base qw(EnsEMBL::Web::Object::DbFrontend);
+use parent qw(EnsEMBL::Web::Object::DbFrontend);
 
 ### ### ### ### ### ### ### ### ###
 ### Inherited method overriding ###

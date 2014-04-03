@@ -20,7 +20,7 @@ package EnsEMBL::Admin::Component::Documents::Preview;
 
 use strict;
 
-use base qw(EnsEMBL::Admin::Component::Documents);
+use parent qw(EnsEMBL::Admin::Component::Documents);
 
 sub caption       { my $title = shift->object->document_title; return $title ? "Preview $title" : ''; }
 sub short_caption { return shift->caption;                                                            }

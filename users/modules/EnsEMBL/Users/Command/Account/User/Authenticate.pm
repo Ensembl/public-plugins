@@ -31,7 +31,7 @@ use EnsEMBL::Users::Messages qw(
   MESSAGE_VERIFICATION_PENDING
 );
 
-use base qw(EnsEMBL::Users::Command::Account);
+use parent qw(EnsEMBL::Users::Command::Account);
 
 sub process {
   my $self    = shift;

@@ -23,7 +23,7 @@ use warnings;
 
 use EnsEMBL::Web::Exceptions;
 
-use base qw(EnsEMBL::Web::Command);
+use parent qw(EnsEMBL::Web::Command);
 
 sub process {
   my $self      = shift;

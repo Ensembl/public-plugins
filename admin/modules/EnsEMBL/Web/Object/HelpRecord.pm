@@ -22,7 +22,7 @@ use strict;
 
 use EnsEMBL::Web::Exceptions;
 
-use base qw(EnsEMBL::Web::Object::DbFrontend);
+use parent qw(EnsEMBL::Web::Object::DbFrontend);
 
 sub record_type {
   ## Gets the type of the record(s) requested for i.e. - glossary, view, movie, faq

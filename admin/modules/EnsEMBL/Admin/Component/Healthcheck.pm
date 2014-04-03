@@ -21,7 +21,7 @@ package EnsEMBL::Admin::Component::Healthcheck;
 use strict;
 use warnings;
 
-use base qw(EnsEMBL::Web::Component);
+use parent qw(EnsEMBL::Web::Component);
 
 use Rose::DateTime::Util qw(format_date parse_date);
 

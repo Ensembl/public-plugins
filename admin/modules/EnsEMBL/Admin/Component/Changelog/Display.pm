@@ -21,7 +21,7 @@ package EnsEMBL::Admin::Component::Changelog::Display;
 use strict;
 use warnings;
 
-use base qw(EnsEMBL::ORM::Component::DbFrontend::Display);
+use parent qw(EnsEMBL::ORM::Component::DbFrontend::Display);
 
 sub record_tree {
   ## @overrides

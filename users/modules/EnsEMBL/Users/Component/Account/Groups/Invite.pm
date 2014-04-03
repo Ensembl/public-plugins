@@ -25,7 +25,7 @@ use strict;
 
 use EnsEMBL::Users::Messages qw(MESSAGE_GROUP_NOT_FOUND);
 
-use base qw(EnsEMBL::Users::Component::Account);
+use parent qw(EnsEMBL::Users::Component::Account);
 
 sub content {
   my $self        = shift;

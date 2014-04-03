@@ -26,7 +26,7 @@ use strict;
 
 use EnsEMBL::Users::Messages qw(MESSAGE_URL_EXPIRED);
 
-use base qw(EnsEMBL::Users::Component::Account);
+use parent qw(EnsEMBL::Users::Component::Account);
 
 sub caption { return sprintf 'Register with %s', shift->site_name; }
 

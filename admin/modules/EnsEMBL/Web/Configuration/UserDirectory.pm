@@ -21,7 +21,7 @@ package EnsEMBL::Web::Configuration::UserDirectory;
 use strict;
 use warnings;
 
-use base qw(EnsEMBL::Web::Configuration);
+use parent qw(EnsEMBL::Web::Configuration);
 
 sub caption       { 'User Directory'; }
 sub short_caption { 'User Directory'; }

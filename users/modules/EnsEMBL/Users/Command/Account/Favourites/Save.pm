@@ -20,7 +20,7 @@ package EnsEMBL::Users::Command::Account::Favourites::Save;
 
 use strict;
 
-use base qw(EnsEMBL::Users::Command::Account);
+use parent qw(EnsEMBL::Users::Command::Account);
 
 use EnsEMBL::Web::Document::HTML::FavouriteSpecies;
 

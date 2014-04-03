@@ -26,7 +26,7 @@ use List::Util qw(min);
 use EnsEMBL::Web::Hub;
 use EnsEMBL::Web::Document::GenoverseImage;
 
-use base qw(EnsEMBL::Web::Controller);
+use parent qw(EnsEMBL::Web::Controller);
 
 sub new {
   my ($class, $r, $args) = @_;

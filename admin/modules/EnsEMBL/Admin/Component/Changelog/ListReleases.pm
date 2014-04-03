@@ -23,7 +23,7 @@ package EnsEMBL::Admin::Component::Changelog::ListReleases;
 use strict;
 use warnings;
 
-use base qw(EnsEMBL::Web::Component);
+use parent qw(EnsEMBL::Web::Component);
 
 sub content {
   my $self    = shift;

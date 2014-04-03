@@ -20,7 +20,7 @@ package EnsEMBL::Web::ImageConfig::contigviewtop;
 
 use strict;
 
-use base qw(EnsEMBL::Web::ImageConfig::Genoverse);
+use parent qw(EnsEMBL::Web::ImageConfig::Genoverse);
 
 sub modify {
   my $self = shift;

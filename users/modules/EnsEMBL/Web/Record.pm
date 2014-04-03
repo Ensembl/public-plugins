@@ -31,7 +31,7 @@ use EnsEMBL::Web::Tools::MethodMaker qw(add_method);
 
 use ORM::EnsEMBL::DB::Accounts::Manager::Record;
 
-use base qw(EnsEMBL::Web::Root);
+use parent qw(EnsEMBL::Web::Root);
 
 sub new {
   ## @constructor

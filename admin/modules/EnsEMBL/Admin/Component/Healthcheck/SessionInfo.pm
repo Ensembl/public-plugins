@@ -20,7 +20,7 @@ package EnsEMBL::Admin::Component::Healthcheck::SessionInfo;
 
 use strict;
 
-use base qw(EnsEMBL::Admin::Component::Healthcheck);
+use parent qw(EnsEMBL::Admin::Component::Healthcheck);
 
 sub caption {
   return 'Healthcheck session summary';

@@ -20,7 +20,7 @@ package EnsEMBL::Web::Object::UserDirectory;
 
 use strict;
 
-use base qw(EnsEMBL::Web::Object);
+use parent qw(EnsEMBL::Web::Object);
 
 sub new {
   my $class = shift;

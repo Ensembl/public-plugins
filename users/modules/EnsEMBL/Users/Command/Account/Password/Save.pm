@@ -36,7 +36,7 @@ use EnsEMBL::Users::Messages qw(
   MESSAGE_URL_EXPIRED
 );
 
-use base qw(EnsEMBL::Users::Command::Account);
+use parent qw(EnsEMBL::Users::Command::Account);
 
 sub csrf_safe_process {
   my $self        = shift;

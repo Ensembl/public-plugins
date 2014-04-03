@@ -22,7 +22,7 @@ use strict;
 
 use EnsEMBL::Users::Messages qw(MESSAGE_BOOKMARK_NOT_FOUND);
 
-use base qw(EnsEMBL::Users::Command::Account);
+use parent qw(EnsEMBL::Users::Command::Account);
 
 sub process {
   my $self        = shift;

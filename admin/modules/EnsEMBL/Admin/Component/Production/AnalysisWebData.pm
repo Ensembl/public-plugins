@@ -20,7 +20,7 @@ package EnsEMBL::Admin::Component::Production::AnalysisWebData;
 
 use strict;
 
-use base qw(EnsEMBL::Admin::Component::Production);
+use parent qw(EnsEMBL::Admin::Component::Production);
 
 sub caption {
   return '';

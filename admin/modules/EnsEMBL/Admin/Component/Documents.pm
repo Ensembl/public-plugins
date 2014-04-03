@@ -20,7 +20,7 @@ package EnsEMBL::Admin::Component::Documents;
 
 use strict;
 
-use base qw(EnsEMBL::Web::Component);
+use parent qw(EnsEMBL::Web::Component);
 
 use EnsEMBL::Admin::Tools::DocumentParser qw(file_to_htmlnodes);
 

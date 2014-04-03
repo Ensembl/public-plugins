@@ -23,7 +23,7 @@ package EnsEMBL::Users::Command::Account::Membership::Unjoin;
 use strict;
 use warnings;
 
-use base qw(EnsEMBL::Users::Command::Account::Membership);
+use parent qw(EnsEMBL::Users::Command::Account::Membership);
 
 sub modify_membership {
   my ($self, $membership) = @_;

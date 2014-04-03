@@ -21,7 +21,7 @@ package EnsEMBL::Users::Mailer::User;
 use strict;
 use warnings;
 
-use base qw(EnsEMBL::Web::Mailer);
+use parent qw(EnsEMBL::Web::Mailer);
 
 sub set_noreply_sender {
   ## Sets the 'from' field as ENSEMBL_NOREPLY_EMAIL

@@ -20,7 +20,7 @@ package EnsEMBL::Web::ImageConfig::scrollable;
 
 use strict;
 
-use base qw(EnsEMBL::Web::ImageConfig::Genoverse);
+use parent qw(EnsEMBL::Web::ImageConfig::Genoverse);
 
 sub init {
   my $self = shift;

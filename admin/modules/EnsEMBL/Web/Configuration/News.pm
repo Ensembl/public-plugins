@@ -32,7 +32,7 @@ package EnsEMBL::Web::Configuration::News;
 
 use strict;
 
-use base qw(EnsEMBL::Web::Configuration);
+use parent qw(EnsEMBL::Web::Configuration);
 
 sub set_default_action {
   my $self = shift;
