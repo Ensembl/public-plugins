@@ -29,3 +29,5 @@ sub login_has_trusted_provider {
 
   return $login->type eq 'openid' ? {@{$self->hub->species_defs->OPENID_PROVIDERS}}->{$login->provider}->{'trusted'} : 0;
 }
+
+1;
