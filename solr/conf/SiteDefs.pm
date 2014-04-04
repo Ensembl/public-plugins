@@ -27,7 +27,7 @@ sub update_conf {
       #######################
       # PAGES, COLUMNS, etc #
       #######################
-      pagesizes => [10,25,50,100,0],
+      pagesizes => [10,25,50,100],
       downloadmaxrows => 1000,
       downloadfilename => "output",
 
