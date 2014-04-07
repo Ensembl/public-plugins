@@ -732,23 +732,27 @@
           id: id
         }, 'hgvs').then(function(data) {
           var list, m, _i, _len, _ref, _ref1, _ref2;
-          list = "<ul>";
-          _ref1 = (_ref = data.links) != null ? _ref : [];
-          for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-            m = _ref1[_i];
-            list += '<li><a href="' + m.url + '">' + m.text + '</a>' + ((_ref2 = m.tail) != null ? _ref2 : '') + '</li>';
+          if (data.links.length) {
+            list = "<ul>";
+            _ref1 = (_ref = data.links) != null ? _ref : [];
+            for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+              m = _ref1[_i];
+              list += '<li><a href="' + m.url + '">' + m.text + '</a>' + ((_ref2 = m.tail) != null ? _ref2 : '') + '</li>';
+            }
+            list += "</ul>";
+            return [
+              input, [
+                {
+                  name: "HGVS Identifier",
+                  description: ("'" + data.id + "' is an HGVS identifier.") + list,
+                  result_style: 'result-type-species-homepage no-preview',
+                  id: data.id
+                }
+              ]
+            ];
+          } else {
+            return [input, []];
           }
-          list += "</ul>";
-          return [
-            input, [
-              {
-                name: "HGVS Identifier?",
-                description: ("'" + data.id + "' seems to be an HGVS identifier.") + list,
-                result_style: 'result-type-species-homepage no-preview',
-                id: data.id
-              }
-            ]
-          ];
         });
       }
     };
@@ -766,7 +770,7 @@
         }
         queries = [[input, tags_in, depart]];
         id = input.q;
-        if (id.match(/^ENS[GTP]\d{11}\S*[cgp]\./)) {
+        if (id.match(/^ENS[GTP]\d{11}\S*[cgp]\./) || id.match(/^(\d{1,2}|[A-Z])\:g\./) || id.match(/^[A-Z]{2}\_\d{5,}\S*\:[cgp]\./)) {
           queries.unshift([
             {
               id: input.q

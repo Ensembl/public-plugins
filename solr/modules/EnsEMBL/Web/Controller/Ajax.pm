@@ -247,6 +247,16 @@ sub _pid_to_trans {
   return $t;
 }
 
+sub _refseq_to_trans {
+  my ($self,$hub,$species,$rid) = @_;
+
+  my $t_a = $hub->get_adaptor('get_TranscriptAdaptor','core',$species);
+  return undef unless $t_a;
+  my $trans = $t_a->fetch_all_by_external_name($rid); # XXX do it properly
+  return undef unless @$trans;
+  return $trans->[0];
+}
+
 sub _hgvs_to_vid {
   my ($self,$hub,$species,$hgvs,$ref) = @_;
 
@@ -254,10 +264,10 @@ sub _hgvs_to_vid {
   eval {
     my $vf_a = $hub->get_adaptor('get_VariationFeatureAdaptor','variation',$species);
     my $vf = $vf_a->fetch_by_hgvs_notation($hgvs);
-    return undef unless $vf; $Data::Dumper::Maxdepth = 2;
-    my $found = 0;
+    return undef unless $vf;
     my $slice = $vf->slice->sub_Slice($vf->start,$vf->end);
     foreach my $vf (@{$vf_a->fetch_all_by_Slice($slice)}) {
+      my $found = 0;
       my @ids;
       foreach my $type (qw(g c p)) {
         foreach my $notation (values %{$vf->get_all_hgvs_notations($ref,$type)}) {
@@ -284,14 +294,27 @@ sub hgvs { # XXX extend beyond HGVS to other semi-psychic things
   my (@links,$trans,$prot,$vs);
   $trans = $self->_tid_to_trans($hub,'Homo_sapiens',$1) if $id =~ /^(ENST\d{11})\W/;
   $trans = $self->_pid_to_trans($hub,'Homo_sapiens',$1) if $id =~ /^(ENSP\d{11})\W/;
+  $trans = $self->_refseq_to_trans($hub,'Homo_sapiens',$1) if $id =~ /^([A-Z]{2}\_[\d\.]{5,})\W/;
+  my $new_id = $id;
+  if($trans) {
+    $new_id =~ s/^.*?\://;
+    my $v = '';
+    $v = ".".$trans->translation->version if $trans->translation;
+    $new_id = $trans->stable_id.$v.":$new_id";
+  }
   if($id) {
-    $vs = $self->_hgvs_to_vid($hub,'Homo_sapiens',$id,$trans); 
+    $vs = $self->_hgvs_to_vid($hub,'Homo_sapiens',$new_id,$trans);
   }
   foreach my $v (@$vs) {
     my $vid = $v->{'vf'}->variation()->stable_id();
+    my $tail = ", which matches.";
+    if(@{$v->{'hgvs'}}) {
+      $tail =
+        ", which includes HGVS identifiers ".join(', ',@{$v->{'hgvs'}});
+    }
     push @links,{
       text => "View variation '$vid'",
-      tail => ", which includes HGVS identifiers ".join(', ',@{$v->{'hgvs'}}),
+      tail => $tail,
       url => "/Homo_sapiens/Variation/Explore?v=$vid",
     };
   }

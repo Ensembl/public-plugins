@@ -405,16 +405,19 @@ body_hgvs_names = () ->
     else
       id = input.id
       return request.raw_ajax({ id },'hgvs').then (data) =>
-        list = "<ul>"
-        for m in data.links ? []
-          list += '<li><a href="'+m.url+'">'+m.text+'</a>'+(m.tail ? '')+'</li>'
-        list += "</ul>"
-        return [input,[{
-          name: "HGVS Identifier?"
-          description: "'#{data.id}' seems to be an HGVS identifier."+list
-          result_style: 'result-type-species-homepage no-preview'
-          id: data.id
-        }]]
+        if data.links.length
+          list = "<ul>"
+          for m in data.links ? []
+            list += '<li><a href="'+m.url+'">'+m.text+'</a>'+(m.tail ? '')+'</li>'
+          list += "</ul>"
+          return [input,[{
+            name: "HGVS Identifier"
+            description: "'#{data.id}' is an HGVS identifier."+list
+            result_style: 'result-type-species-homepage no-preview'
+            id: data.id
+          }]]
+        else
+          return [input,[]]
 
   return {
     context: (state,update_seq) ->
@@ -424,7 +427,9 @@ body_hgvs_names = () ->
       if !tags_in.main then return null
       queries = [[input,tags_in,depart]]
       id = input.q
-      if id.match(/^ENS[GTP]\d{11}\S*[cgp]\./)
+      if id.match(/^ENS[GTP]\d{11}\S*[cgp]\./) or
+         id.match(/^(\d{1,2}|[A-Z])\:g\./) or
+         id.match(/^[A-Z]{2}\_\d{5,}\S*\:[cgp]\./)
         queries.unshift [{ id: input.q },{},hgvs_name]
       return queries
   }
