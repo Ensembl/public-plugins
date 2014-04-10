@@ -20,7 +20,7 @@ package EnsEMBL::Web::Component::Tools::Blast::TextSequence;
 
 use strict;
 
-use base qw(EnsEMBL::Web::Component::TextSequence EnsEMBL::Web::Component::Tools::Blast);
+use parent qw(EnsEMBL::Web::Component::TextSequence EnsEMBL::Web::Component::Tools::Blast);
 
 sub job            { return $_[0]{'_job'};                        } # @return The cached requested job object
 sub hit_id         { return $_[0]{'_hit_id'};                     } # @return ID of the result object containing the hit

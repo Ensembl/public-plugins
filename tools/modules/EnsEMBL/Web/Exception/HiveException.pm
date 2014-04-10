@@ -26,7 +26,7 @@ use warnings;
 
 use JSON qw(to_json from_json);
 
-use base qw(EnsEMBL::Web::Exception);
+use parent qw(EnsEMBL::Web::Exception);
 
 sub to_string {
   ## @overrides

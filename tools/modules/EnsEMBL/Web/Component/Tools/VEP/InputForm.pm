@@ -28,7 +28,7 @@ use EnsEMBL::Web::Tools::FileHandler qw(file_get_contents);
 use EnsEMBL::Web::Exceptions;
 use EnsEMBL::Web::VEPConstants qw(INPUT_FORMATS CONFIG_SECTIONS);
 
-use base qw(EnsEMBL::Web::Component::Tools::VEP);
+use parent qw(EnsEMBL::Web::Component::Tools::VEP);
 
 sub content {
   my $self            = shift;

@@ -20,7 +20,7 @@ package EnsEMBL::Web::Component::Tools::Blast::GenomicSeq;
 
 use strict;
 
-use base qw(EnsEMBL::Web::Component::Tools::Blast::TextSequence);
+use parent qw(EnsEMBL::Web::Component::Tools::Blast::TextSequence);
 
 sub initialize {
   my ($self, $slice, $start, $end) = @_;

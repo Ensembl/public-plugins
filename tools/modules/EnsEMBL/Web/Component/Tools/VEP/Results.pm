@@ -26,7 +26,7 @@ use URI::Escape qw(uri_unescape);
 use Bio::EnsEMBL::Variation::Utils::Constants qw(%OVERLAP_CONSEQUENCES);
 use Bio::EnsEMBL::Variation::Utils::VEP qw(@REG_FEAT_TYPES %COL_DESCS);
 
-use base qw(EnsEMBL::Web::Component::Tools::VEP);
+use parent qw(EnsEMBL::Web::Component::Tools::VEP);
 
 sub content {
   my $self   = shift;

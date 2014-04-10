@@ -23,7 +23,7 @@ use warnings;
 no warnings 'uninitialized';
 
 
-use base qw(EnsEMBL::Web::Component::Tools);
+use parent qw(EnsEMBL::Web::Component::Tools);
 
 sub _init {
   my $self = shift;

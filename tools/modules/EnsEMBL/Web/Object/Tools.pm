@@ -33,7 +33,7 @@ use EnsEMBL::Web::Exceptions;
 use EnsEMBL::Web::Tools::RandomString qw(random_string);
 use EnsEMBL::Web::Tools::FileSystem qw(create_path remove_empty_path copy_dir_contents);
 
-use base qw(EnsEMBL::Web::Object);
+use parent qw(EnsEMBL::Web::Object);
 
 sub caption               { return 'Tools'; } # override in child class
 sub short_caption         { return $_[1] && $_[1] eq 'global' ? 'Jobs' : 'Tools'; } # TODO - change it for 76

@@ -20,7 +20,7 @@ package EnsEMBL::Web::TmpFile::ToolsOutput;
 
 use strict;
 
-use base 'EnsEMBL::Web::TmpFile';
+use parent 'EnsEMBL::Web::TmpFile';
 
 sub fix_filename {
   ## @override

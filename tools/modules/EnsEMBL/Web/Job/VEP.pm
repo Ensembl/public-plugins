@@ -21,7 +21,7 @@ package EnsEMBL::Web::Job::VEP;
 use strict;
 use warnings;
 
-use base qw(EnsEMBL::Web::Job);
+use parent qw(EnsEMBL::Web::Job);
 
 sub process_for_hive_submission {
   ## @override

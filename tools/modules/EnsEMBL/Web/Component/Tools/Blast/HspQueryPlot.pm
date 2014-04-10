@@ -25,7 +25,7 @@ use Bio::EnsEMBL::DrawableContainer;
 use EnsEMBL::Web::Document::Image;
 use EnsEMBL::Web::Container::HSPContainer;
 
-use base qw(EnsEMBL::Web::Component::Tools::Blast);
+use parent qw(EnsEMBL::Web::Component::Tools::Blast);
 
 sub content {
   my $self          = shift;

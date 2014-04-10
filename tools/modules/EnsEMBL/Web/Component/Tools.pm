@@ -21,7 +21,7 @@ package EnsEMBL::Web::Component::Tools;
 use strict;
 use warnings;
 
-use base qw(EnsEMBL::Web::Component);
+use parent qw(EnsEMBL::Web::Component);
 
 sub object {
   ## @override

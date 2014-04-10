@@ -26,7 +26,7 @@ use warnings;
 use EnsEMBL::Web::Exceptions;
 use EnsEMBL::Web::BlastConstants qw(CONFIGURATION_FIELDS);
 
-use base qw(EnsEMBL::Web::Component::Tools);
+use parent qw(EnsEMBL::Web::Component::Tools);
 
 sub job_details_table {
   ## A two column layout displaying a job's details

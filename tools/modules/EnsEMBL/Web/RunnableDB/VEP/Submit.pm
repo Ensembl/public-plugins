@@ -23,7 +23,7 @@ package EnsEMBL::Web::RunnableDB::VEP::Submit;
 use strict;
 use warnings;
 
-use base qw(EnsEMBL::Web::RunnableDB);
+use parent qw(EnsEMBL::Web::RunnableDB);
 
 use EnsEMBL::Web::Exceptions;
 use EnsEMBL::Web::SystemCommand;

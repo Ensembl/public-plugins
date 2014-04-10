@@ -21,7 +21,7 @@ package EnsEMBL::Web::Component::Tools::VEP::TicketsList;
 use strict;
 use warnings;
 
-use base qw(
+use parent qw(
   EnsEMBL::Web::Component::Tools::TicketsList
   EnsEMBL::Web::Component::Tools::VEP
 );

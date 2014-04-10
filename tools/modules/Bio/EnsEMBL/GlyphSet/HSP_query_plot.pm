@@ -20,7 +20,7 @@ package Bio::EnsEMBL::GlyphSet::HSP_query_plot;
 
 use strict;
 
-use base qw(Bio::EnsEMBL::GlyphSet::HSP_plot);
+use parent qw(Bio::EnsEMBL::GlyphSet::HSP_plot);
 
 sub region {
   my ($self, $hsp) = @_;

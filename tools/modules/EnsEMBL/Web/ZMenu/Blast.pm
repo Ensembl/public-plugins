@@ -21,7 +21,7 @@ package EnsEMBL::Web::ZMenu::Blast;
 use strict;
 use warnings;
 
-use base qw(EnsEMBL::Web::ZMenu);
+use parent qw(EnsEMBL::Web::ZMenu);
 
 sub content {
   my $self        = shift;

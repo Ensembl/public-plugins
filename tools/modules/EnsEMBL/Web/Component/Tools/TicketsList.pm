@@ -23,7 +23,7 @@ package EnsEMBL::Web::Component::Tools::TicketsList;
 use strict;
 use warnings;
 
-use base qw(EnsEMBL::Web::Component::Tools);
+use parent qw(EnsEMBL::Web::Component::Tools);
 
 sub content {
   my $self          = shift;

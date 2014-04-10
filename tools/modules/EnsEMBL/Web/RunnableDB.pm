@@ -25,7 +25,7 @@ package EnsEMBL::Web::RunnableDB;
 use strict;
 use warnings;
 
-use base qw(Bio::EnsEMBL::Hive::Process);
+use parent qw(Bio::EnsEMBL::Hive::Process);
 
 use Storable qw(nfreeze);
 use IO::Compress::Gzip qw(gzip $GzipError);

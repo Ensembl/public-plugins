@@ -22,7 +22,7 @@ use strict;
 use warnings;
 no warnings 'uninitialized';
 
-use base qw(Bio::EnsEMBL::GlyphSet);
+use parent qw(Bio::EnsEMBL::GlyphSet);
 
 use Bio::EnsEMBL::Analysis;
 use Bio::EnsEMBL::Feature;

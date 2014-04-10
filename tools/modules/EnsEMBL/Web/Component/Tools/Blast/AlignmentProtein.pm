@@ -20,7 +20,7 @@ package EnsEMBL::Web::Component::Tools::Blast::AlignmentProtein;
 
 use strict;
 
-use base qw(EnsEMBL::Web::Component::Tools::Blast::Alignment);
+use parent qw(EnsEMBL::Web::Component::Tools::Blast::Alignment);
 
 sub get_sequence_data {
   my ($self, $slices, $config) = @_;

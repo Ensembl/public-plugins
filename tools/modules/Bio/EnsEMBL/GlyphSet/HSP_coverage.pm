@@ -22,7 +22,7 @@ use strict;
 
 use Sanger::Graphics::Bump;
 
-use base qw(Bio::EnsEMBL::GlyphSet);
+use parent qw(Bio::EnsEMBL::GlyphSet);
 
 sub _init {
   my ($self)       = @_;

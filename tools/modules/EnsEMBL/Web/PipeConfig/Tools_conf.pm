@@ -27,7 +27,7 @@ use EnsEMBL::Web::SpeciesDefs;
 use EnsEMBL::Web::ToolsPipeConfig::Blast;
 use EnsEMBL::Web::ToolsPipeConfig::VEP;
 
-use base qw(Bio::EnsEMBL::Hive::PipeConfig::HiveGeneric_conf);
+use parent qw(Bio::EnsEMBL::Hive::PipeConfig::HiveGeneric_conf);
 
 sub new {
   ## @override

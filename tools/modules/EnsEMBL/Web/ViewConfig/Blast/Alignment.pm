@@ -22,7 +22,7 @@ use strict;
 
 use EnsEMBL::Web::Constants;
 
-use base qw(EnsEMBL::Web::ViewConfig::TextSequence);
+use parent qw(EnsEMBL::Web::ViewConfig::TextSequence);
 
 sub init {
   my $self = shift;

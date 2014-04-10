@@ -20,7 +20,7 @@ package EnsEMBL::Web::Component::Tools::Blast::Alignment;
 
 use strict;
 
-use base qw(EnsEMBL::Web::Component::Tools::Blast::TextSequence);
+use parent qw(EnsEMBL::Web::Component::Tools::Blast::TextSequence);
 
 use Bio::EnsEMBL::CoordSystem;
 use Bio::EnsEMBL::MappedSlice;

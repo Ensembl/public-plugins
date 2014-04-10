@@ -25,7 +25,7 @@ use EnsEMBL::Web::TmpFile::ToolsOutput;
 use EnsEMBL::Web::TmpFile::VcfTabix;
 use EnsEMBL::Web::Tools::FileHandler qw(file_get_contents);
 
-use base qw(EnsEMBL::Web::Object::Tools);
+use parent qw(EnsEMBL::Web::Object::Tools);
 
 sub ticket_type {
   ## Abstract method implementation

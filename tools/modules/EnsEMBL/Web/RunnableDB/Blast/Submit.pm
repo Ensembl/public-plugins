@@ -23,7 +23,7 @@ package EnsEMBL::Web::RunnableDB::Blast::Submit;
 use strict;
 use warnings;
 
-use base qw(EnsEMBL::Web::RunnableDB);
+use parent qw(EnsEMBL::Web::RunnableDB);
 
 use File::Path;
 use DBI;

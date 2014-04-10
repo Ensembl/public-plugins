@@ -20,7 +20,7 @@ package EnsEMBL::Web::ViewConfig::Blast::Karyotype;
 
 use strict;
 
-use base qw(EnsEMBL::Web::ViewConfig::Karyotype);
+use parent qw(EnsEMBL::Web::ViewConfig::Karyotype);
 
 sub init {
   my $self = shift;

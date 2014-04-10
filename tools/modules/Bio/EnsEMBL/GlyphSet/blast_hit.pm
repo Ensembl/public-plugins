@@ -21,7 +21,7 @@ package Bio::EnsEMBL::GlyphSet::blast_hit;
 use strict;
 use warnings;
 
-use base qw(Bio::EnsEMBL::GlyphSet::_simple);
+use parent qw(Bio::EnsEMBL::GlyphSet::_simple);
 
 use Bio::EnsEMBL::Analysis;
 use Bio::EnsEMBL::Feature;

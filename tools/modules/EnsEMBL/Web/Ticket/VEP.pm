@@ -30,7 +30,7 @@ use EnsEMBL::Web::TmpFile::Text;
 use EnsEMBL::Web::Tools::FileHandler qw(file_get_contents);
 use EnsEMBL::Web::Job::VEP;
 
-use base qw(EnsEMBL::Web::Ticket);
+use parent qw(EnsEMBL::Web::Ticket);
 
 sub init_from_user_input {
   ## Abstract method implementation

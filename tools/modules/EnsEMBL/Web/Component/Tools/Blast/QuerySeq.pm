@@ -22,7 +22,7 @@ use strict;
 
 use Bio::EnsEMBL::Slice;
 
-use base qw(EnsEMBL::Web::Component::Tools::Blast::TextSequence);
+use parent qw(EnsEMBL::Web::Component::Tools::Blast::TextSequence);
 
 sub initialize {
   my ($self, $slice, $start, $end) = @_;

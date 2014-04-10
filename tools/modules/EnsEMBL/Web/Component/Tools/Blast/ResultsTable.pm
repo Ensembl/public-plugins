@@ -23,7 +23,7 @@ package EnsEMBL::Web::Component::Tools::Blast::ResultsTable;
 use strict;
 use warnings;
 
-use base qw(EnsEMBL::Web::Component::Tools::Blast);
+use parent qw(EnsEMBL::Web::Component::Tools::Blast);
 
 sub content {
   my $self      = shift;
