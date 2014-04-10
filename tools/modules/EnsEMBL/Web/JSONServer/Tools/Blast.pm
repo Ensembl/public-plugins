@@ -22,13 +22,28 @@ use strict;
 use warnings;
 
 use EnsEMBL::Web::BlastConstants qw(MAX_SEQUENCE_LENGTH MAX_NUM_SEQUENCES);
+use Bio::EnsEMBL::Registry;
+use EnsEMBL::Web::ExtIndex;
 
-use base qw(EnsEMBL::Web::JSONServer::Tools);
+use parent qw(EnsEMBL::Web::JSONServer::Tools);
 
 sub object_type { 'Blast' }
 
-sub retrieve_accession {
+sub json_fetch_sequence {
+  my $self      = shift;
+  my $hub       = $self->hub;
+  my $id        = $hub->param('id') or return;
+  my @seqs;
 
+  for ($self->_possible_dbs($id)) {
+    @seqs = $hub->get_ext_seq($_, {'id' => $id});
+    last if @seqs && $seqs[0]{'sequence'};
+  }
+
+  return $self->call_js_panel_method($seqs[0]{'sequence'}
+    ? ('addSequences', [ join "\n\n", map $_->{'sequence'}, @seqs ])
+    : ('showError', [ $seqs[0]{'error'} || "Could not find any sequence for $id." ])
+  );
 }
 
 sub json_read_file {
@@ -43,7 +58,7 @@ sub json_read_file {
     my $filehandle  = $cgi->upload('query_file');
     my $filecontent = '';
 
-    while (<$filehandle>) {
+    for ($filehandle->getlines) {
       $filecontent .= $_;
       if (length($filecontent) > $max_size) { # FIXME - find an alternative!
         my $limit = $max_size / 1024;
@@ -60,6 +75,18 @@ sub json_read_file {
   }
 
   return {'file_error' => sprintf 'Uploaded file should be of type plain text or FASTA.'};
+}
+
+sub _possible_dbs {
+  ## @private
+  my ($self, $id) = @_;
+  my $hub       = $self->hub;
+  my $ext_dbs   = $hub->species_defs->ENSEMBL_EXTERNAL_DATABASES;
+
+  return qw(ENSEMBL)  if $id =~ /^ENS/;
+  return qw(CCDS)     if $id =~ /^CCDS/ && exists $ext_dbs->{'CCDS'};
+
+  return qw(ENSEMBL PUBLIC);
 }
 
 1;
