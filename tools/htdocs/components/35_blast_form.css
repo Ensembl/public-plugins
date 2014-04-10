@@ -25,7 +25,7 @@ div.seq-wrapper div.seq-type                      { float: right; background-col
 div.seq-wrapper.inactive div.seq-type             { background-color: [[BUTTON_DISABLED]]; }
 div.seq-wrapper div.seq-type span                 { text-decoration: line-through; padding-right: 3px; }
 
-div.fasta-input                                   { overflow-y: hidden; font: 12px courier; white-space: pre; width: 450px; outline: none; border: transparent solid 1px; cursor: pointer; }
+div.fasta-input                                   { overflow: auto; font: 12px courier; white-space: pre; width: 480px; max-height: 400px; outline: none; border: transparent solid 1px; cursor: pointer; }
 div.fasta-input.editable                          { background-color: #ffd; border-color: [[PANEL_BORDER]]; cursor: text; }
 
 div.fasta-buttons                                 { position: absolute; margin-top: -1px; }
