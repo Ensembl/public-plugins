@@ -40,6 +40,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     this.maxNumSequences      = this.elLk.form.find('input[name=max_number_sequences]').remove().val();
     this.dnaThresholdPercent  = this.elLk.form.find('input[name=dna_threshold_percent]').remove().val();
     this.readFileURL          = this.elLk.form.find('input[name=read_file_url]').remove().val();
+    this.fetchSequenceURL     = this.elLk.form.find('input[name=fetch_sequence_url]').remove().val();
 
     try {
       // parse the combination JSON from the HTML - if this doesn't work, there is nothing we can do!
@@ -191,9 +192,14 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
       }
     });
 
-    // Retrieve the sequence if accession id etc is provided
-    this.elLk.form.find('input[name=retrieve_accession]').on('change', function() {
-        // TODO - accession ID
+    // Retrieve the sequence if external id etc is provided
+    this.elLk.form.find('._fetch_sequence').on('click', function(e) {
+      e.preventDefault();
+      panel.ajax({
+        'url'     : panel.fetchSequenceURL,
+        'data'    : { id: $('[name=fetch_sequence]').val() },
+        'spinner' : true
+      });
     });
 
     // initialise the FieldTag instances
@@ -547,7 +553,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
       this.elLk.sequences.toggle(flag2);
     }
     this.elLk.addSeqLink.toggle(!flag1 && this.sequences.length < this.maxNumSequences);
-    this.elLk.sequenceFields.toggle(flag1).find('input, textarea').val('').first().focus();
+    this.elLk.sequenceFields.toggle(flag1).find('input[type=text], textarea').val('').first().focus();
   },
 
   updateSeqInfo: function(info) {

@@ -23,7 +23,7 @@ use warnings;
 
 use EnsEMBL::Web::BlastConstants qw(:all);
 
-use base qw(EnsEMBL::Web::Component::Tools::Blast);
+use parent qw(EnsEMBL::Web::Component::Tools::Blast);
 
 sub content {
   my $self          = shift;
@@ -76,6 +76,11 @@ sub content {
     'value'           => $hub->url('Json', {'function' => 'read_file'})
   });
 
+  $fieldset->add_hidden({
+    'name'            => 'fetch_sequence_url',
+    'value'           => $hub->url('Json', {'function' => 'fetch_sequence'})
+  });
+
   $fieldset->add_field({
     'label'           => 'Sequence data',
     'field_class'     => '_adjustable_height',
@@ -100,22 +105,24 @@ sub content {
       'type'            => 'file',
       'name'            => 'query_file',
       'element_class'   => '_sequence'
-
-# TODO - integrate retrieving stuff with exiting textarea box
-
-#     }, {
-#       'type'            => 'noedit',
-#       'value'           => 'Or enter a sequence ID or accession',
-#       'no_input'        => 1,
-#       'element_class'   => '_sequence'
-#     }, {
-#       'type'            => 'string',
-#       'name'            => 'retrieve_accession',
-#       'size'            => '40',
-#       'value'           => 'not enabled yet',
-#       'disabled'        => 1,
-#       'element_helptip' => 'EnsEMBL, EMBL, UniProt or RefSeq',
-#       'element_class'   => '_sequence'
+    }, {
+      'type'            => 'noedit',
+      'value'           => '<span class="ht _ht" title="EnsEMBL, EMBL, UniProt or RefSeq">Or enter a sequence ID or accession</span>',
+      'is_html'         => 1,
+      'no_input'        => 1,
+      'element_class'   => '_sequence'
+    }, {
+      'type'            => 'string',
+      'name'            => 'fetch_sequence',
+      'size'            => '40',
+      'element_class'   => '_sequence',
+      'inline'          => 1
+    }, {
+      'type'            => 'button',
+      'element_class'   => '_sequence',
+      'value'           => 'Get sequence',
+      'class'           => '_fetch_sequence',
+      'inline'          => 1
     }, {
       'type'            => 'radiolist',
       'name'            => 'query_type',
