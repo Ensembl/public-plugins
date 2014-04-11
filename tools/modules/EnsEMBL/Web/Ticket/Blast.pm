@@ -32,11 +32,11 @@ use parent qw(EnsEMBL::Web::Ticket);
 sub init_from_user_input {
   ## Abstract method implementation
   my $self  = shift;
-  my @jobs  = $self->_process_user_input;
+  my $jobs  = $self->_process_user_input;
 
-  throw exception('InputError', 'Form validation failed.') unless @jobs; # this is just a backup generic message, since actual validation before reaching this point has already been done on the frontend.
+  throw exception('InputError', 'Form validation failed.') unless $jobs; # this is just a backup generic message, since actual validation before reaching this point has already been done on the frontend.
 
-  $self->add_job(EnsEMBL::Web::Job::Blast->new($self, $_)) for @jobs;
+  $self->add_job(EnsEMBL::Web::Job::Blast->new($self, $_)) for @$jobs;
 }
 
 sub _process_user_input {
@@ -64,7 +64,7 @@ sub _process_user_input {
   return unless $params->{'configs'};
 
   # Process input sequences
-  my $input_seqs  = join "\n\n", $self->param('sequence');
+  my $input_seqs  = join "\n\n", $hub->param('sequence');
   my $file_handle = FileHandle->new(\$input_seqs, 'r');
   my $seq_io      = Bio::SeqIO->new('-fh' => $file_handle, '-alphabet' => $params->{'query_type'} eq 'peptide' ? 'protein' : 'dna', '-format' => 'fasta');
   my $seq_objects = [];
@@ -83,8 +83,8 @@ sub _process_user_input {
 
   # Create parameter sets for individual jobs to be submitted (submit one job per sequence per species)
   my $jobs      = [];
-  my $desc      = $self->param('description');
-  my $prog      = $self->parse_search_type($params->{'search_type'}, 'search_method');
+  my $desc      = $hub->param('description');
+  my $prog      = $object->parse_search_type($params->{'search_type'}, 'search_method');
   my $db_types  = $sd->multi_val('ENSEMBL_BLAST_DB_TYPES');
   my $job_num   = 0;
   for my $species (@species) {
@@ -94,9 +94,11 @@ sub _process_user_input {
         'job_number'  => ++$job_num,
         'job_desc'    => $desc || sprintf('%s search against %s %s.', $prog, $sd->get_config($species, 'SPECIES_COMMON_NAME'), $db_types->{$params->{'db_type'}}),
         'species'     => $species,
-        'sequence'    => $seq_object,
-        'source_file' => $sd->get_config($species, 'ENSEMBL_BLAST_CONFIGS')->{$params->{'query_type'}}{$params->{'db_type'}}{$params->{'search_type'}}{$params->{'source'}},
-        %$params
+        'job_data'    => {
+          'sequence'    => $seq_object,
+          'source_file' => $sd->get_config($species, 'ENSEMBL_BLAST_CONFIGS')->{$params->{'query_type'}}{$params->{'db_type'}}{$params->{'search_type'}}{$params->{'source'}},
+          %$params
+        }
       };
     }
   }
@@ -111,6 +113,8 @@ sub _process_extra_configs {
   ## @return Hashref of config params, or undef in case of validation error
   my ($self, $search_type_value) = @_;
 
+  my $hub = $self->hub;
+
   my $config_fields   = CONFIGURATION_FIELDS;
   my $config_defaults = CONFIGURATION_DEFAULTS;
   my $config_values   = {};
@@ -122,7 +126,7 @@ sub _process_extra_configs {
       for ($search_type_value, 'all') {
         if (exists $config_defaults->{$_}{$element_name}) {
 
-          my $element_value = $self->param("${search_type_value}__${element_name}") // '';
+          my $element_value = $hub->param("${search_type_value}__${element_name}") // '';
 
           return unless grep {$_ eq $element_value} map($_->{'value'}, @{$element_params->{'values'}}), $element_params->{'type'} eq 'checklist' ? '' : (); # checklist is also allowed to have null value
 
