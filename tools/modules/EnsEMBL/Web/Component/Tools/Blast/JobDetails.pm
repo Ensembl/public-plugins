@@ -38,8 +38,7 @@ sub content {
 
   if ($job) {
 
-    my $status      = $job->status;
-    my $hive_status = $job->hive_status;
+    my $status = $job->status;
 
     return sprintf('<h2>Results for ticket %s (Job %s: %s)</h2>%s',
       $job->ticket->ticket_name,
