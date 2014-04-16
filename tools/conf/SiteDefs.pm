@@ -23,6 +23,12 @@ use strict;
 sub update_conf {
 
   $SiteDefs::ENSEMBL_ORM_DATABASES->{'ticket'}  = 'DATABASE_WEB_TOOLS';                             # Database key name for tools db as defined in MULTI.ini
+
+  $SiteDefs::ENSEMBL_TOOLS_LIST                 = [
+    'Blast'                                       => 'Blast/Blat',
+    'VEP'                                         => 'Variant Effect Predictor'
+  ];
+
   $SiteDefs::ENSEMBL_TOOLS_TMP_DIR              = $SiteDefs::ENSEMBL_TMP_DIR.'/tools';              # tmp directory for jobs i/o files
   $SiteDefs::ENSEMBL_BLAST_ENABLED              = 1;                                                # Flag to enable/disable BLAST
   $SiteDefs::ENSEMBL_VEP_ENABLED                = 1;                                                # Flag to enable/disable VEP
@@ -36,5 +42,6 @@ sub update_conf {
     '-pass'         => undef
   };
 }
+
 
 1;
