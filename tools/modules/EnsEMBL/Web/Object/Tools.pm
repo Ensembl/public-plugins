@@ -18,16 +18,13 @@ limitations under the License.
 
 package EnsEMBL::Web::Object::Tools;
 
-### Base abstract class for all the Tools based objects
+### Base class for all the Tools based objects
 ### Avoid using an instance of this class, use child classes instances by calling get_sub_object() method
 
 use strict;
 use warnings;
 
 use Digest::MD5 qw(md5_hex);
-use JSON qw(from_json);
-
-use Bio::EnsEMBL::Hive::DBSQL::DBAdaptor;
 
 use EnsEMBL::Web::Exceptions;
 use EnsEMBL::Web::Tools::RandomString qw(random_string);
@@ -112,26 +109,25 @@ sub parse_url_param {
   return $self->{'_url_param'};
 }
 
-sub hive_adaptor {
-  ## Gets new or cached hive adaptor
-  ## @return Bio::EnsEMBL::Hive::DBSQL::DBAdaptor object
+sub get_job_dispatcher {
+  ## Gets new or cached job dispatcher
+  ## @return EnsEMBL::Web::JobDispatcher subclass
   my $self = shift;
 
-  unless ($self->{'_hive_adaptor'}) {
-    my $sd      = $self->hub->species_defs;
-    my $hivedb  = $sd->multidb->{'DATABASE_WEB_HIVE'};
+  unless ($self->{'_job_dispatcher'}) {
 
-    $ENV{'EHIVE_ROOT_DIR'} ||= $sd->ENSEMBL_SERVERROOT.'/ensembl-hive/';
+    my $ticket_type = $self->ticket_type;
+    my $dispatcher  = ($self->hub->species_defs->ENSEMBL_TOOLS_JOB_DISPATCHER || {})->{$ticket_type};
 
-    $self->{'_hive_adaptor'} = Bio::EnsEMBL::Hive::DBSQL::DBAdaptor->new(
-      -user   => $hivedb->{'USER'} || $sd->DATABASE_WRITE_USER,
-      -pass   => $hivedb->{'PASS'} || $sd->DATABASE_WRITE_PASS,
-      -host   => $hivedb->{'HOST'},
-      -port   => $hivedb->{'PORT'},
-      -dbname => $hivedb->{'NAME'},
-    );
+    throw exception('WebToolsException', "Job dispatcher for ticket type $ticket_type not configured.") unless $dispatcher;
+
+    $dispatcher = $self->dynamic_use_fallback("EnsEMBL::Web::JobDispatcher::$dispatcher");
+    $dispatcher = $dispatcher->new($self->hub);
+
+    $self->{'_job_dispatcher'} = $dispatcher;
   }
-  return $self->{'_hive_adaptor'};
+
+  return $self->{'_job_dispatcher'};
 }
 
 sub generate_ticket_name {
@@ -184,18 +180,14 @@ sub delete_ticket_or_job {
   pop @dir_path if !$dir_path[-1];       # trailing slash
   pop @dir_path if $ticket && @dir_path; # this is to get the parent directory for all jobs (required if removing a ticket)
 
-  # get the hive job ids of the jobs that need to be removed
-  my @hive_job_ids = map { $_ && $_->hive_job_id || () } $ticket ? $ticket->job : $job;
+  # get the dispatcher job ids of the jobs that need to be removed
+  my @dispatcher_references = map { $_ && $_->dispatcher_reference || () } $ticket ? $ticket->job : $job;
 
-  # after deleting the ticket or the job successfully, remove the directories, and the hive jobs
+  # after deleting the ticket or the job successfully, remove the directories, and the dispatched jobs
   if ($ticket ? $ticket->delete : $job && $job->delete) {
 
-    # remove hive jobs
-    if (@hive_job_ids) {
-      my $hive_adaptor = $self->hive_adaptor;
-      $hive_adaptor->get_AnalysisJobAdaptor->remove_all(sprintf '`job_id` in (%s)', join(',', @hive_job_ids));
-      $hive_adaptor->get_Queen->safe_synchronize_AnalysisStats($hive_adaptor->get_AnalysisAdaptor->fetch_by_logic_name_or_url($ticket_type)->stats);
-    }
+    # remove dispatched jobs
+    $self->get_job_dispatcher->delete_jobs(@dispatcher_references) if @dispatcher_references;
 
     # remove dirs
     remove_empty_path(join('/', @dir_path), { 'remove_contents' => 1, 'exclude' => [ $ticket_type ], 'no_exception' => 1 }) if @dir_path; # ignore any error - files left orphaned will eventually get removed.
@@ -268,7 +260,7 @@ sub get_current_tickets {
     });
 
     my @tickets = sort { $b->created_at <=> $a->created_at } map $_->ticket, @$ticket_types;
-    $self->update_jobs_from_hive($_) for @tickets;
+    $self->update_jobs_from_dispatcher(\@tickets);
     $self->{'_current_tickets'} = \@tickets;
   }
 
@@ -296,7 +288,7 @@ sub get_requested_ticket {
 
       if (@$ticket_type) {
         $ticket = $ticket_type->[0]->ticket->[0];
-        $self->update_jobs_from_hive($ticket);
+        $self->update_jobs_from_dispatcher([ $ticket ]);
       }
     }
 
@@ -306,83 +298,13 @@ sub get_requested_ticket {
   return $self->{'_requested_ticket'};
 }
 
-sub update_jobs_from_hive {
-  ## Updates jobs linked to the given ticket from the corresponding ones in the hive db
-  ## @param Ticket object to which jobs are linked
+sub update_jobs_from_dispatcher {
+  ## Updates jobs linked to the given tickets from the corresponding ones in the dispatcher
+  ## @param Arrayref of Ticket objects to which jobs are linked
   ## @return No return value
-  my ($self, $ticket) = @_;
+  my ($self, $tickets) = @_;
 
-  foreach my $job ($ticket->job) {
-
-    my $status = $job->status;
-
-    if ($status eq 'awaiting_hive_response') {
-
-      my $hive_job_id   = $job->hive_job_id;
-      my $hive_adaptor  = $self->hive_adaptor;
-      my $hive_job      = $hive_adaptor->get_AnalysisJobAdaptor->fetch_by_dbID($hive_job_id);
-
-      if ($hive_job) {
-        my $hive_job_status = $hive_job->status;
-
-        if ($hive_job_status eq 'DONE') {
-
-          # job is done, no more actions required
-          $job->status('done');
-          $job->hive_status('done');
-
-        } elsif ($hive_job_status =~ /^(FAILED|PASSED_ON)$/) {
-
-          # job failed due to some reason, need user to look into it
-          $job->status('awaiting_user_response');
-          $job->hive_status('failed');
-
-          # Get the log message and save it in the message column
-          my ($message) = map {$_->{'is_error'} && $_->{'msg'} || ()} @{$hive_adaptor->get_LogMessageAdaptor->fetch_all_by_job_id($hive_job_id)}; # ignore if msg is an empty string
-          if ($message && $message =~ /^{.*}$/) { # possibly json
-            try {
-              $message = from_json($message);
-            } catch {};
-          }
-
-          $job->job_message([ref $message
-            ? {
-              'display_message'   => delete $message->{'data'}{'display_message'} // $self->default_error_message,
-              'fatal'             => delete $message->{'data'}{'fatal'} // 1,
-              'data'              => delete $message->{'data'},
-              'exception'         => $message,
-            }
-            : {
-              'display_message'   => $self->default_error_message,
-              'exception'         => {'exception' => $message || 'Unknown error'},
-              'fatal'             => 1
-            }
-          ]);
-
-        } elsif ($hive_job_status =~ /^(SEMAPHORED|CLAIMED|COMPILATION)$/) {
-
-          # job is just submitted to a queue
-          $job->hive_status('submitted') if $job->hive_status ne 'submitted';
-
-        } elsif ($hive_job_status =~ /^(PRE_CLEANUP|FETCH_INPUT|RUN|WRITE_OUTPUT|POST_CLEANUP)$/) {
-
-          # job is still running, but keep an eye in it, so no need to change 'status', only set the 'hive_status' ('if' condition prevents an extra SQL query)
-          $job->hive_status('running') if $job->hive_status ne 'running';
-
-        } # for READY status, no need to change status or hive_status
-
-      } else {
-
-        # this will only get executed if the job got removed from the hive db's job table somehow (very unlikely though)
-        $job->status('awaiting_user_response');
-        $job->hive_status('deleted');
-        $job->job_message([{'display_message' => 'Submitted job has been deleted from the queue.'}]);
-      }
-
-      # update if anything is changed
-      $job->save('changes_only' => 1);
-    }
-  }
+  $self->get_job_dispatcher->update_jobs( [ map { grep {$_->status eq 'awaiting_dispatcher_response'} $_->job } @$tickets ] );
 }
 
 sub get_requested_job {
@@ -422,7 +344,7 @@ sub get_requested_job {
 
       if ($ticket_type) {
         my $ticket = $ticket_type->ticket->[0];
-        $self->update_jobs_from_hive($ticket); # this will only update the required job but not all jobs linked to the ticket since only one job was actually fetched by providing job_id
+        $self->update_jobs_from_dispatcher([ $ticket ]); # this will only update the required job but not all jobs linked to the ticket since only one job was actually fetched by providing job_id
         $job = $ticket->job->[0];
       }
     }
@@ -451,7 +373,7 @@ sub get_tickets_data_for_sync {
   my $self          = shift;
   my $tickets       = $self->get_current_tickets;
   my $tickets_data  = {}; 
-  my $auto_refresh  = undef; # this is set true if any of the jobs has status 'awaiting_hive_response'
+  my $auto_refresh  = undef; # this is set true if any of the jobs has status 'awaiting_dispatcher_response'
 
   if ($tickets && @$tickets) {
 
@@ -460,8 +382,8 @@ sub get_tickets_data_for_sync {
       my $ticket_name = $_->ticket_name;
 
       for ($_->job) {
-        $auto_refresh = 1 if $_->status eq 'awaiting_hive_response';
-        $tickets_data->{$ticket_name}{$_->job_id} = $_->hive_status;
+        $auto_refresh = 1 if $_->status eq 'awaiting_dispatcher_response';
+        $tickets_data->{$ticket_name}{$_->job_id} = $_->dispatcher_status;
       }
     }
   }

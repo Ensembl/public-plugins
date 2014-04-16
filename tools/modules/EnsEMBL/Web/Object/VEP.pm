@@ -66,7 +66,7 @@ sub result_files {
   if (!$self->{'_results_files'}) {
     my $ticket      = $self->get_requested_ticket or return;
     my $job         = $ticket->job->[0] or return;
-    my $job_config  = $job->hive_job_data->{'config'};
+    my $job_config  = $job->dispatcher_data->{'config'};
     my $job_dir     = $job->job_dir;
 
     $self->{'_results_files'} = {

@@ -18,8 +18,6 @@ limitations under the License.
 
 package EnsEMBL::Web::Job;
 
-### Wrapper around ORM::EnsEMBL::DB::Tools::Job
-
 use strict;
 use warnings;
 
@@ -78,11 +76,11 @@ sub params {
   return $self->{'_params'};
 }
 
-sub process_for_hive_submission {
-  ## Processes the job data to make it ready to be submitted to hive db
+sub prepare_to_dispatch {
+  ## Processes the job data to make it ready to be submitted to job dispatcher
   ## Override to make some manipulation to job data before submitting it
-  ## The manipulated data then gets saved as hive_job_data in the same job object, along with being saved to hive job table as input_id
-  ## @return Hashref as to be passed to hive job as input id
+  ## The manipulated data then gets saved as dispatcher_data in the same job object
+  ## @return Hashref as to be passed to job dispatcher
   return shift->rose_object->job_data->raw;
 }
 

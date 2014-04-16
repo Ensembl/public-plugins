@@ -62,17 +62,17 @@ sub content {
       my @jobs_summary;
 
       for ($ticket->job) {
-        my $job_number  = $_->job_number;
-        my $hive_status = $_->hive_status;
+        my $job_number        = $_->job_number;
+        my $dispatcher_status = $_->dispatcher_status;
         push @jobs_summary, sprintf('<p><img class="job-species _ht" title="%s" src="%sspecies/16/%s.png" alt="" height="16" width="16"><span class="job-desc">%s%s</span><span class="_ht job-status job-status-%s left-margin" title="%s">%s</span>%s%s',
           $sd->species_label($_->species, 1),
           $self->img_url,
           $_->species,
           $job_number ? "Job $job_number: " : '',
           $_->job_desc || '',
-          $hive_status,
-          $status_tips->{$hive_status},
-          ucfirst $hive_status =~ s/_/ /gr,
+          $dispatcher_status,
+          $status_tips->{$dispatcher_status},
+          ucfirst $dispatcher_status =~ s/_/ /gr,
           $self->job_results_link($ticket, $_),
           $self->job_buttons($ticket, $_)
         );
@@ -210,7 +210,7 @@ sub ticket_buttons {
 
 sub job_results_link {
   my ($self, $ticket, $job) = @_;
-  return $job->hive_status eq 'done'
+  return $job->dispatcher_status eq 'done'
     ? sprintf('<a class="small left-margin" href="%s">[View Results]</a>', $self->hub->url({
       'species'   => $job->species,
       'type'      => 'Tools',
