@@ -23,7 +23,7 @@ use warnings;
 
 use parent qw(EnsEMBL::Web::Job);
 
-sub process_for_hive_submission {
+sub prepare_to_dispatch {
   ## @override
   my $self        = shift;
   my $rose_object = $self->rose_object;

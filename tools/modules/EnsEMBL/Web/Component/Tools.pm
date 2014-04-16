@@ -43,30 +43,30 @@ sub _init {
 }
 
 sub get_job_summary {
-  ## Reads the job hive_status field, and display status accordingly
+  ## Reads the job dispatcher_status field, and display status accordingly
   ## @param Job object
   ## @param Extra params hashref with keys:
   ##  - links: Arrayref with name of the links that need to be displayed (results, edit, delete)
   ## @return DIV node
   my ($self, $job, $params) = @_;
 
-  my $hub             = $self->hub;
-  my $job_id          = $job->job_id;
-  my $job_hive_status = $job->hive_status;
-  my $job_message     = $job->job_message->[0];
-  my $job_status      = $job->status;
-  my $url_param       = $self->object->create_url_param({'job_id' => $job_id});
-  my $job_status_div  = $self->dom->create_element('div', {
-    'children'    => [{
-      'node_name'   => 'p',
-      'inner_HTML'  => sprintf('Job %s: %s', $job->job_number, $job->job_desc // '-')
+  my $hub               = $self->hub;
+  my $job_id            = $job->job_id;
+  my $job_message       = $job->job_message->[0];
+  my $job_status        = $job->status;
+  my $dispatcher_status = $job->dispatcher_status;
+  my $url_param         = $self->object->create_url_param({'job_id' => $job_id});
+  my $job_status_div    = $self->dom->create_element('div', {
+    'children'            => [{
+      'node_name'           => 'p',
+      'inner_HTML'          => sprintf('Job %s: %s', $job->job_number, $job->job_desc // '-')
     }, {
-      'node_name'   => 'p',
-      'class'       => 'job-status-links',
-      'children'    => [{
-        'node_name'   => 'span',
-        'class'       => ['job-status', "job-status-$job_hive_status"],
-        'inner_HTML'  => ucfirst $job_hive_status =~ s/_/ /gr
+      'node_name'           => 'p',
+      'class'               => 'job-status-links',
+      'children'            => [{
+        'node_name'           => 'span',
+        'class'               => ['job-status', "job-status-$dispatcher_status"],
+        'inner_HTML'          => ucfirst $dispatcher_status =~ s/_/ /gr
       }]
     }]
   });
