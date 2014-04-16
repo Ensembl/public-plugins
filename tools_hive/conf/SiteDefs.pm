@@ -22,7 +22,8 @@ use strict;
 
 sub update_conf {
 
-  $SiteDefs::ENSEMBL_LSF_HOSTS                  = [];
+  $SiteDefs::ENSEMBL_TOOLS_JOB_DISPATCHER       = { 'Blast' => 'Hive', 'VEP' => 'Hive' };           # Overriding tools plugin variable
+  $SiteDefs::ENSEMBL_LSF_HOSTS                  = [];                                               # List of hosts where LSF jobs will be run
   $SiteDefs::ENSEMBL_LSF_CODE_LOCATION          = $SiteDefs::ENSEMBL_SERVERROOT;                    # path from where LSF hosts can access ensembl code (same as web root for jobs running on local machine)
   $SiteDefs::ENSEMBL_TOOLS_PIPELINE_PACKAGE     = 'EnsEMBL::Web::PipeConfig::Tools_conf';           # package read by init_pipeline.pl script from hive to create the hive database
   $ENV{'EHIVE_ROOT_DIR'}                        = $SiteDefs::ENSEMBL_SERVERROOT.'/ensembl-hive/';   # location from there hive scripts on the web server (not the LSF host) can access the hive API
