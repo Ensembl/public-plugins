@@ -187,7 +187,7 @@ sub delete_ticket_or_job {
   if ($ticket ? $ticket->delete : $job && $job->delete) {
 
     # remove dispatched jobs
-    $self->get_job_dispatcher->delete_jobs(@dispatcher_references) if @dispatcher_references;
+    $self->get_job_dispatcher->delete_jobs($ticket_type, @dispatcher_references) if @dispatcher_references;
 
     # remove dirs
     remove_empty_path(join('/', @dir_path), { 'remove_contents' => 1, 'exclude' => [ $ticket_type ], 'no_exception' => 1 }) if @dir_path; # ignore any error - files left orphaned will eventually get removed.
