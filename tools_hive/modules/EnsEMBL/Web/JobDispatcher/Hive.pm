@@ -39,8 +39,8 @@ sub dispatch_job {
 
   # Submit job to hive db
   my $hive_job = Bio::EnsEMBL::Hive::AnalysisJob->new(
-		-analysis_id  => $self->{'_analysis_id'}{$ticket_type},
-		-input_id	    => $job_data,
+		'analysis_id' => $self->{'_analysis_id'}{$ticket_type},
+		'input_id'    => $job_data
   );
 
   my ($hive_job_id) = @{ $job_adaptor->store_jobs_and_adjust_counters( [ $hive_job ] ) };
@@ -140,15 +140,15 @@ sub hive_dba {
     my $sd      = $self->hub->species_defs;
     my $hivedb  = $sd->multidb->{'DATABASE_WEB_HIVE'};
 
-    $ENV{'EHIVE_ROOT_DIR'} ||= $sd->ENSEMBL_SERVERROOT.'/ensembl-hive/'; # use in hive API
+    $ENV{'EHIVE_ROOT_DIR'} ||= $sd->ENSEMBL_SERVERROOT.'/ensembl-hive/'; # used in hive API
 
-    $self->{'_hive_dba'} = Bio::EnsEMBL::Hive::DBSQL::DBAdaptor->new(
-      -user   => $hivedb->{'USER'} || $sd->DATABASE_WRITE_USER,
-      -pass   => $hivedb->{'PASS'} || $sd->DATABASE_WRITE_PASS,
-      -host   => $hivedb->{'HOST'},
-      -port   => $hivedb->{'PORT'},
-      -dbname => $hivedb->{'NAME'},
-    );
+    $self->{'_hive_dba'} = Bio::EnsEMBL::Hive::DBSQL::DBAdaptor->new('-url' => sprintf('mysql://%s:%s@%s:%s/%s',
+      $hivedb->{'USER'} || $sd->DATABASE_WRITE_USER,
+      $hivedb->{'PASS'} || $sd->DATABASE_WRITE_PASS,
+      $hivedb->{'HOST'},
+      $hivedb->{'PORT'},
+      $hivedb->{'NAME'},
+    ));
   }
   return $self->{'_hive_dba'};
 }
