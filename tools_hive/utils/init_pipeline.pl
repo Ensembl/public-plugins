@@ -29,8 +29,8 @@ BEGIN {
     print "Can't use SiteDefs - $@\n";
     exit;
   }
-  unshift @INC, "$code_path/sanger-plugins/tools/modules/"; # TEMP - while tools code in in sanger-plugins
-#  unshift @INC, "$code_path/public-plugins/tools/modules/";
+  unshift @INC, "$code_path/sanger-plugins/$_/modules/" for qw(tools tools_hive); # TEMP - while tools code in in sanger-plugins
+#  unshift @INC, "$code_path/public-plugins/tools/modules/" for qw(tools tools_hive);
   unshift @INC, $_ for @SiteDefs::ENSEMBL_LIB_DIRS;
   $ENV{'PERL5LIB'} = join ':', $ENV{'PERL5LIB'}, @INC;
 }
