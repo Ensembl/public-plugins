@@ -25,18 +25,18 @@ use parent qw(EnsEMBL::Web::Job);
 
 sub prepare_to_dispatch {
   ## @override
-  my ($self, $job) = @_;
-
-  my $job_data = $job->job_data->raw;
+  my $self        = shift;
+  my $rose_object = $self->rose_object;
+  my $job_data    = $rose_object->job_data->raw; # get raw hash to make sure we do not modify the job_data column
 
   if ($job_data->{'sequence'}{'is_invalid'}) {
-    $job->job_message([{'display_message' => $job_data->{'sequence'}{'is_invalid'}, 'fatal' => 0}]);
+    $rose_object->job_message([{'display_message' => $job_data->{'sequence'}{'is_invalid'}, 'fatal' => 0}]);
     return;
   }
 
   my $object  = $self->object;
   my $hub     = $self->hub;
-  my $dba     = $hub->database('core', $job->species);
+  my $dba     = $hub->database('core', $rose_object->species);
   my $dbc     = $dba->dbc;
   my $sd      = $hub->species_defs;
 
