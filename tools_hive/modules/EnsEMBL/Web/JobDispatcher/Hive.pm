@@ -26,6 +26,8 @@ use JSON qw(from_json);
 use Bio::EnsEMBL::Hive::DBSQL::DBAdaptor;
 use Bio::EnsEMBL::Hive::AnalysisJob;
 
+use EnsEMBL::Web::Exceptions;
+
 use parent qw(EnsEMBL::Web::JobDispatcher);
 
 sub dispatch_job {
