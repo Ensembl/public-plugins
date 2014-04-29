@@ -57,4 +57,11 @@ sub update_jobs {
   throw exception('AbstractMethodNotImplemented');
 }
 
+sub default_error_message {
+  ## Default message to be displayed if the job has failed
+  return 'Some error occurred while running the job.';
+}
+
+
+
 1;

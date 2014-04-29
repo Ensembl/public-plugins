@@ -35,7 +35,6 @@ use parent qw(EnsEMBL::Web::Object);
 sub caption               { return 'Tools'; } # override in child class
 sub short_caption         { return $_[1] && $_[1] eq 'global' ? 'Jobs' : 'Tools'; } # TODO - change it for 76
 sub long_caption          { return 'Tools'; } # override in child class
-sub default_error_message { return 'Some error occurred while running the job.'; }
 
 sub default_action { # TODO - modify for 76
   my $self  = shift;
