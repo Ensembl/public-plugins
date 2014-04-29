@@ -21,7 +21,7 @@ package EnsEMBL::Web::Component::Tools;
 use strict;
 use warnings;
 
-use parent qw(EnsEMBL::Web::Component);
+use parent qw(EnsEMBL::Web::Component::Shared);
 
 sub object {
   ## @override
@@ -116,10 +116,12 @@ sub get_job_summary {
     my $display_message         = $job_message->display_message;
     my $exception_is_fatal      = $job_message->fatal;
     my $job_message_class       = "_job_message_$job_id";
-
-    $job_status_div->append_child('p', {
+    my $error_div               = $job_status_div->append_child('div', {
       'class'       => 'job-error-msg',
-      'inner_HTML'  => join('', $display_message, $exception_is_fatal ? sprintf(' <a class="toggle closed" href="#more" rel="%s">Show details</a>', $job_message_class) : '')
+      'children'    => [{
+        'node_name'   => 'p',
+        'inner_HTML'  => join('', $display_message, $exception_is_fatal ? sprintf(' <a class="toggle closed" href="#more" rel="%s">Show details</a>', $job_message_class) : '')
+      }]
     });
 
     if ($exception_is_fatal) {
@@ -135,7 +137,7 @@ sub get_job_summary {
         $hub->url({'type' => 'Help', 'action' => 'Contact', 'subject' => 'Exception in Web Tools', 'message' => sprintf("\n\n\n%s with message (%s) (for job %s): %s", $job_message->exception->{'class'} || 'Exception', $display_message, $job_id, $details)})
       ;
 
-      $job_status_div->append_children({
+      $error_div->append_children({
         'node_name'   => 'div',
         'class'       => [ $job_message_class, 'toggleable', 'hidden', 'job_error_message' ],
         'inner_HTML'  => $details
