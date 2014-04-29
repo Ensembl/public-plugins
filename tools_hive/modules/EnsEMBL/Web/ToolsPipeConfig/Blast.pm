@@ -29,16 +29,16 @@ sub default_options {
   my $sd = $conf->species_defs;
   return {
     'NCBIBLAST_work_dir'          => $sd->ENSEMBL_TMP_DIR_BLAST,
-    'NCBIBLAST_bin_dir'           => $sd->ENSEMBL_BLAST_BIN_PATH,
-    'NCBIBLAST_matrix'            => $sd->ENSEMBL_BLAST_MATRIX,
-    'NCBIBLAST_index_files'       => $sd->ENSEMBL_BLAST_DATA_PATH,
-    'NCBIBLAST_dna_index_files'   => $sd->ENSEMBL_BLAST_DATA_PATH_DNA,
+    'NCBIBLAST_bin_dir'           => $sd->ENSEMBL_NCBIBLAST_BIN_PATH,
+    'NCBIBLAST_matrix'            => $sd->ENSEMBL_NCBIBLAST_MATRIX,
+    'NCBIBLAST_index_files'       => $sd->ENSEMBL_NCBIBLAST_DATA_PATH,
+    'NCBIBLAST_dna_index_files'   => $sd->ENSEMBL_NCBIBLAST_DATA_PATH_DNA,
     'NCBIBLAST_repeat_mask_bin'   => $sd->ENSEMBL_REPEATMASK_BIN_PATH,
 #     'WUBLAST_work_dir'            => $sd->ENSEMBL_TMP_DIR_BLAST,
-#     'WUBLAST_bin_dir'             => $sd->ENSEMBL_BLAST_BIN_PATH,
-#     'WUBLAST_matrix'              => $sd->ENSEMBL_BLAST_MATRIX,
-#     'WUBLAST_index_files'         => $sd->ENSEMBL_BLAST_DATA_PATH,
-#     'WUBLAST_dna_index_files'     => $sd->ENSEMBL_BLAST_DATA_PATH_DNA,
+#     'WUBLAST_bin_dir'             => $sd->ENSEMBL_WUBLAST_BIN_PATH,
+#     'WUBLAST_matrix'              => $sd->ENSEMBL_WUBLAST_MATRIX,
+#     'WUBLAST_index_files'         => $sd->ENSEMBL_WUBLAST_DATA_PATH,
+#     'WUBLAST_dna_index_files'     => $sd->ENSEMBL_WUBLAST_DATA_PATH_DNA,
 #     'WUBLAST_repeat_mask_bin'     => $sd->ENSEMBL_REPEATMASK_BIN_PATH
   };
 }
@@ -63,14 +63,7 @@ sub pipeline_analyses {
     },
     '-hive_capacity'    => 15,
     '-max_retry_count'  => 0,
-    
-#     '-rc_name'          => $conf->species_defs->ENSEMBL_BLAST_LSF_QUEUE
-
-
-    '-meadow_type'      => 'LOCAL',
-    '-rc_name'          => 'default'
-
-
+    '-rc_name'          => $conf->species_defs->ENSEMBL_BLAST_LSF_QUEUE
   }];
 }
 
