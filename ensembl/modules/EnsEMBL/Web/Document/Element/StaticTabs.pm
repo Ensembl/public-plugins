@@ -38,6 +38,9 @@ sub _tabs {
       website   => {
                     title => 'Using this website',
                     },
+      genome   => {
+                    title => 'Annotation and prediction',
+                    },
     },
   };
 }
