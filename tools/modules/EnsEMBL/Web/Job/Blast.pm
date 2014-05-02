@@ -57,6 +57,7 @@ sub prepare_to_dispatch {
 
   $job_data->{'blast_type'} = $search_type[0];
   $job_data->{'program'}    = lc $search_type[1];
+  $job_data->{'work_dir'}   = $rose_object->job_dir;
 
   return $job_data;
 }

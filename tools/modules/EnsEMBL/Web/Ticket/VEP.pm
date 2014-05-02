@@ -93,7 +93,7 @@ sub init_from_user_input {
     'species'     => $species,
     'job_data'    => $job_data
   }, {
-    $file_name    => $file_path
+    $file_name    => {'location' => $file_path}
   }));
 }
 

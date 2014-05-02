@@ -23,6 +23,7 @@ use warnings;
 
 use EnsEMBL::Web::Exceptions;
 use EnsEMBL::Web::Tools::FileSystem qw(create_path copy_files);
+use EnsEMBL::Web::Tools::FileHandler qw(file_put_contents);
 
 sub object  { return shift->{'_object'};  }
 sub hub     { return shift->{'_hub'};     }
@@ -31,14 +32,14 @@ sub new {
   ## @constructor
   ## @param Web Ticket object
   ## @param Hashref of key-value pairs for columns of the job table row
-  ## @param Hashref of input files (destined file name => file temp location)
+  ## @param Hashref of input files ($file_name_1 => {'location' => $temp_file_location_1'}, $file_name_2 = {'content' => \@file_content_2})
   my ($class, $web_ticket, $params, $files) = @_;
 
   return bless {
     '_params'       => $params || {},
     '_object'       => $web_ticket->object,
     '_hub'          => $web_ticket->hub,
-    '_io_files'     => $files || {},
+    '_input_files'  => $files || {},
     '_rose_object'  => undef
   }, $class;
 }
@@ -102,12 +103,17 @@ sub create_work_dir {
   ## @return Absolute path to the work dir
   my ($self, $params) = @_;
 
-  my $files = $self->{'_io_files'};
+  my $files = $self->{'_input_files'};
+  my $dir   = join '/', $self->hub->species_defs->ENSEMBL_TOOLS_TMP_DIR, ($params->{'persistent'} ? 'persistent' : 'temporary'), $params->{'ticket_type'}, ($params->{'ticket_name'} =~ /.{1,3}/g), $params->{'job_number'};
 
-  my $dir = join '/', $self->hub->species_defs->ENSEMBL_TOOLS_TMP_DIR, ($params->{'persistent'} ? 'persistent' : 'temporary'), $params->{'ticket_type'}, ($params->{'ticket_name'} =~ /.{1,3}/g), $params->{'job_number'};
-
+  # Create the work directory
   create_path($dir);
-  copy_files({ map {$files->{$_} => "$dir/$_"} keys %$files }) if keys %$files;
+
+  # Create input file if file content was provided in 'content' key
+  file_put_contents("$dir/$_", (delete $files->{$_})->{'content'}) for grep { exists $files->{$_}{'content'} } keys %$files;
+
+  # Copy files if temporary file location was provided
+  copy_files({ map { $files->{$_}{'location'} ? ($files->{$_}{'location'} => "$dir/$_") : () } keys %$files }) if keys %$files;
 
   return $dir;
 }
