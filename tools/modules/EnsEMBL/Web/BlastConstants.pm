@@ -22,12 +22,13 @@ use strict;
 use warnings;
 
 use Exporter qw(import);
-our @EXPORT_OK    = qw(MAX_SEQUENCE_LENGTH MAX_NUM_SEQUENCES DNA_THRESHOLD_PERCENT CONFIGURATION_FIELDS CONFIGURATION_DEFAULTS);
+our @EXPORT_OK    = qw(MAX_SEQUENCE_LENGTH MAX_NUM_SEQUENCES DNA_THRESHOLD_PERCENT CONFIGURATION_FIELDS CONFIGURATION_DEFAULTS SEQUENCE_VALID_CHARS);
 our %EXPORT_TAGS  = ('all' => [ @EXPORT_OK ]);
 
-sub MAX_SEQUENCE_LENGTH   { 200000  }
-sub MAX_NUM_SEQUENCES     { 30      }
-sub DNA_THRESHOLD_PERCENT { 85      }
+sub MAX_SEQUENCE_LENGTH   { 200000              }
+sub MAX_NUM_SEQUENCES     { 30                  }
+sub DNA_THRESHOLD_PERCENT { 85                  }
+sub SEQUENCE_VALID_CHARS  { 'A-Za-z\-\.\*\?=~'  }
 
 sub CONFIGURATION_FIELDS {
   return [
@@ -244,7 +245,6 @@ sub CONFIGURATION_DEFAULTS {
       'evalue'                  => '1e-1',
       'max_target_seqs'         => '100',
       'culling_limit'           => '5',
-#       'query_loc'               => 'START-END'
     },
 
     'NCBIBLAST_BLASTN'        => {

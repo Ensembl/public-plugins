@@ -21,11 +21,9 @@ package EnsEMBL::Web::Ticket::Blast;
 use strict;
 use warnings;
 
-use Bio::SeqIO;
-
 use EnsEMBL::Web::Exceptions;
 use EnsEMBL::Web::Job::Blast;
-use EnsEMBL::Web::BlastConstants qw(MAX_SEQUENCE_LENGTH CONFIGURATION_FIELDS CONFIGURATION_DEFAULTS);
+use EnsEMBL::Web::BlastConstants qw(MAX_SEQUENCE_LENGTH CONFIGURATION_FIELDS CONFIGURATION_DEFAULTS SEQUENCE_VALID_CHARS);
 
 use parent qw(EnsEMBL::Web::Ticket);
 
@@ -34,20 +32,21 @@ sub init_from_user_input {
   my $self  = shift;
   my $jobs  = $self->_process_user_input;
 
-  throw exception('InputError', 'Form validation failed.') unless $jobs; # this is just a backup generic message, since actual validation before reaching this point has already been done on the frontend.
+  throw exception('InputError', 'Form validation failed.') unless $jobs; # this is just a generic message, since actual validation before reaching this point has already been done on the frontend.
 
-  $self->add_job(EnsEMBL::Web::Job::Blast->new($self, $_)) for @$jobs;
+  $self->add_job(EnsEMBL::Web::Job::Blast->new($self, @$_)) for @$jobs;
 }
 
 sub _process_user_input {
   ## @private
   ## Validates the inputs, then create set of parameters for each job, ready to be submitted
   ## Returns undefined if any of the parameters (other than sequences/species) are invalid (no specific message is returned since all validations were done at the frontend first - if input is still invalid, someone's just messing around)
-  my $self      = shift;
-  my $object    = $self->object;
-  my $hub       = $self->hub;
-  my $sd        = $hub->species_defs;
-  my $params    = {};
+  my $self        = shift;
+  my $object      = $self->object;
+  my $hub         = $self->hub;
+  my $sd          = $hub->species_defs;
+  my $params      = {};
+  my $valid_chars = SEQUENCE_VALID_CHARS;
 
   # Validate Species
   my @species = $sd->valid_species($hub->param('species'));
@@ -59,27 +58,30 @@ sub _process_user_input {
     return unless $param_value && $object->get_param_value_caption($_, $param_value); #get_param_value_caption returns undef if value is invalid
   }
 
-  # process the extra configurations
+  # Process the extra configurations
   $params->{'configs'} = $self->_process_extra_configs($params->{'search_type'});
   return unless $params->{'configs'};
 
-  # Process input sequences
-  my $input_seqs  = join "\n\n", $hub->param('sequence');
-  my $file_handle = FileHandle->new(\$input_seqs, 'r');
-  my $seq_io      = Bio::SeqIO->new('-fh' => $file_handle, '-alphabet' => $params->{'query_type'} eq 'peptide' ? 'protein' : 'dna', '-format' => 'fasta');
-  my $seq_objects = [];
+  # Process and validate input sequences
+  my $sequences = [];
+  for ($hub->param('sequence')) {
 
-  while (my $seq_object = $seq_io->next_seq) {
-    my $is_invalid  = $seq_object->validate_seq ? 0 : 1;
-    my $seq_string  = $seq_object->seq;
-    $is_invalid     = sprintf 'Sequence contains more than %s characters', MAX_SEQUENCE_LENGTH if !$is_invalid && length $seq_string > MAX_SEQUENCE_LENGTH;
-    push @$seq_objects, {
-      'display_id'  => $seq_object->display_id,
-      'seq'         => $seq_string,
-      'is_invalid'  => $is_invalid
+    my @seq_lines = split /[\n\r]/, $_;
+    my $fasta     = $seq_lines[0] =~ /^>/ ? [ shift @seq_lines ] : [ '>' ];
+    my $sequence  = join '', @seq_lines;
+
+    # Rebuild fasta with 60 chars column length
+    push @$fasta, $1 while $sequence =~ m/(.{1,60})/g;
+
+    push @$sequences, {
+      'fasta'       => join("\n", @$fasta),
+      'is_invalid'  => $sequence =~ m/^[$valid_chars]*$/
+        ? (length $sequence <= MAX_SEQUENCE_LENGTH)
+        ? 0
+        : sprintf('Sequence contains more than %s characters', MAX_SEQUENCE_LENGTH)
+        : sprintf('Sequence contains invalid characters (%s)', join('', ($sequence =~ m/[^$valid_chars]/g)))
     };
   }
-  $file_handle->close;
 
   # Create parameter sets for individual jobs to be submitted (submit one job per sequence per species)
   my $jobs      = [];
@@ -89,17 +91,24 @@ sub _process_user_input {
   my $job_num   = 0;
   for my $species (@species) {
     my $i = 0;
-    for my $seq_object (@$seq_objects) {
-      push @$jobs, {
+    for my $sequence (@$sequences) {
+      push @$jobs, [ {
         'job_number'  => ++$job_num,
         'job_desc'    => $desc || sprintf('%s search against %s %s.', $prog, $sd->get_config($species, 'SPECIES_COMMON_NAME'), $db_types->{$params->{'db_type'}}),
         'species'     => $species,
         'job_data'    => {
-          'sequence'    => $seq_object,
+          'sequence'    => {
+            'input_file'  => 'input.fa',
+            'is_invalid'  => delete $sequence->{'is_invalid'}
+          },
           'source_file' => $sd->get_config($species, 'ENSEMBL_BLAST_CONFIGS')->{$params->{'query_type'}}{$params->{'db_type'}}{$params->{'search_type'}}{$params->{'source'}},
           %$params
         }
-      };
+      }, {
+        'input.fa'    => {
+          'content'     => delete $sequence->{'fasta'}
+        }
+      } ];
     }
   }
 
