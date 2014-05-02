@@ -25,49 +25,39 @@ use warnings;
 
 use parent qw(EnsEMBL::Web::RunnableDB);
 
-use File::Path;
-use DBI;
-
-use Bio::Seq;
-use Bio::SeqIO;
-
-use EnsEMBL::Web::Parsers::NCBIBlast;
 use EnsEMBL::Web::Exceptions;
 use EnsEMBL::Web::SystemCommand;
 use EnsEMBL::Web::Tools::FileHandler qw(file_get_contents);
+use EnsEMBL::Web::Utils::DynamicLoader qw(dynamic_require);
 
 ## STEP 1
-## Setup : Set up all the required parameters, directories, file names etc and do requreid validations
-sub setup {
+## Fetch input : Set up all the required parameters, directories, file names etc and do requreid validations
+sub fetch_input {
   my $self = shift;
 
-  my $job_id      = $self->param_required('job_id');
-  my $ticket_name = $self->param_required('ticket_name');
   my $species     = $self->param_required('species');
   my $blast_type  = $self->param_required('blast_type');
-  my $work_dir    = $self->param_required("${blast_type}_work_dir");
   my $bin_dir     = $self->param_required("${blast_type}_bin_dir");
   my $program     = $self->param_required('program');
   my $source_type = $self->param_required('source');
   my $query_type  = $self->param_required('query_type');
-  my $dba         = $self->param_required('dba');
-  my $ticket_dbc  = $self->param_required('ticket_db');
   my $sequence    = $self->param_required('sequence');
   my $source_dir  = $self->param_required(sprintf '%s%s_index_files', $blast_type, $source_type =~ /LATESTGP/ ? '_dna' : '');
   my $source_file = $self->param_required('source_file');
+  my $work_dir    = $self->work_dir;
+  my $input_file  = "$work_dir/$sequence->{'input_file'}";
 
-  # Setup the work directory
-  throw exception('HiveException', 'Work directory could not be found.') unless -d $work_dir;
-  $work_dir = join('/', $work_dir, ($ticket_name =~ /.{1,6}/g)) =~ s/\/+/\//gr;
-  mkpath($work_dir) unless -d $work_dir;
-  $self->param('__work_dir', $work_dir);
+  # Other required params
+  $self->param_required($_) for qw(job_id ticket_db);
+
+  # Input file
+  throw exception('HiveException', 'Input file could not be found.') unless -f $input_file && -r $input_file;
 
   # Setup the files names
-  my $file_name = sprintf '%s/%s.%s', $work_dir, $job_id, $self->input_job->dbID;
-  $self->param('__query_file',    "$file_name.query");
-  $self->param('__results_file',  "$file_name.out");
-  $self->param('__results_raw',   "$file_name.out.raw");
-  $self->param('__results_tab',   "$file_name.out.tab");
+  $self->param('__query_file',    "$input_file");
+  $self->param('__results_file',  "$work_dir/blast.out");
+  $self->param('__results_raw',   "$work_dir/blast.out.raw");
+  $self->param('__results_tab',   "$work_dir/blast.out.tab");
 
   # Setup the actual command line executable file
   throw exception('HiveException', 'Directory containing the executable file could not be found.')                  unless -d $bin_dir;
@@ -77,8 +67,8 @@ sub setup {
   $self->param('__reformat_program',  "$bin_dir/blast_formatter");
 
   # Setup the data files name
-  throw exception('HiveException', "Directory containing the '$source_type' source files could not be found. $source_dir")      unless opendir SOURCE_DIR, $source_dir;
-  throw exception('HiveException', "Required source file $source_file is missing for $species")                     unless grep { !-d && m/^$source_file/ } readdir SOURCE_DIR;
+  throw exception('HiveException', "Directory containing the '$source_type' source files could not be found. $source_dir")  unless opendir SOURCE_DIR, $source_dir;
+  throw exception('HiveException', "Required source file $source_file is missing for $species")                             unless grep { !-d && m/^$source_file/ } readdir SOURCE_DIR;
   $self->param('__source_file', "$source_dir/$source_file");
   closedir SOURCE_DIR;
 
@@ -89,42 +79,16 @@ sub setup {
     throw exception('HiveException', 'RepeatMasking executable file is either missing or not accessible.') unless -x $rm_binary;
     $self->param('__repeat_mask_bin', $rm_binary);
   }
-}
-
-## STEP 2
-## Fetch input : Get the actual input and save into the required files for processing
-sub fetch_input {
-  my $self = shift;
-
-  # Do the initial setup (Setup is not included in hive lifecycle, so will have to call it here)
-  $self->setup;
-
-  # Write the input sequence to the query file
-  my $sequence    = $self->param('sequence');
-  my $query_type  = $self->param('query_type');
-  my $query_file  = $self->param('__query_file');
-  my $seq_out     = Bio::SeqIO->new(
-    '-file'         => ">$query_file",
-    '-format'       => 'fasta'
-  );
-  my $bio_seq     = Bio::Seq->new(
-    '-id'           => $sequence->{'display_id'},
-    '-seq'          => $sequence->{'seq'},
-    '-alphabet'     => $query_type eq 'dna' ? 'dna' : 'protein'
-  );
-  my $error;
-  try {
-    $seq_out->write_seq($bio_seq);
-  } catch {
-    $error = $_;
-  };
-  throw exception('HiveException', "Bio::Seq could not write_seq: $sequence->{'seq'}, failed with error: $error") if $error;
 
   return 1;
 }
 
-## STEP 3
+## STEP 2
 ## Run: Run the actual blast program to get the results saved in the results file
+
+## TODO - add a step by step check to make sure same step in not repeated in the next attempt if it fails anywhere!
+## TODO - give an increment to log files, and intermediate files if they already exist - to make sure we don't overwrite any log file left from previous attempt
+
 sub run {
   my $self = shift;
 
@@ -143,7 +107,7 @@ sub run {
   if (delete $configs->{'repeat_mask'}) {
 
     $query_file =~ /(^.+\/)([^\/]+$)/;
-    my $repeatmasker_command = EnsEMBL::Web::SystemCommand->new($self, $rm_binary, [ '-dir', $1, $2 ])->execute({'log_file' => "$query_file.masked.log"});
+    my $repeatmasker_command = EnsEMBL::Web::SystemCommand->new($self, $rm_binary, [ '-dir', $1, $2 ])->execute({'log_file' => "$results_file.repeatmask.log"});
 
     # remove the unwanted RepeatMasker's output file
     unlink "$query_file.$_" for qw(tbl cat);
@@ -209,14 +173,26 @@ sub run {
   return 1;
 }
 
-## STEP 4
+## STEP 3
 ## Now since all output files have been generated by the blast programs, save the results in the tickets database
 sub write_output {
   my $self        = shift;
   my $job_id      = $self->param('job_id');
-  my $results     = EnsEMBL::Web::Parsers::NCBIBlast->new($self)->parse;
+  my $blast_type  = $self->param('blast_type');
+  my $module      = dynamic_require("EnsEMBL::Web::Parsers::$blast_type", 1) or throw exception('HiveException', "Blast output parser for $blast_type could not be loaded.");
 
-  $self->save_results($job_id, $results);
+  my $i = 1;
+  my (%files, @data);
+
+  for (@{ $module->new($self)->parse }) {
+    push @data, {'result_file' => "blast.$i.out.parsed"};
+    $files{"blast.$i.out.parsed"} = {'content' => $_, 'gzip' => 1};
+    $i++;
+  }
+
+  $self->save_results($job_id, \%files, @data);
+
+  return 1;
 }
 
 1;
