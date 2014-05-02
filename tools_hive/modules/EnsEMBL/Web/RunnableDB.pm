@@ -20,17 +20,20 @@ package EnsEMBL::Web::RunnableDB;
 
 ### Parent class for all the runnabledb classes for different tools
 ### The child modules of this class are not used by the webserver directly, but are used by hive to actually run the bsubed jobs.
-### Error handling: In any child classes, "throw exception('HiveException', 'message ..')" to passes them back to the web server
+### Error handling: In any child classes, "throw exception('HiveException', 'message ..')" to pass them back to the web server
 
 use strict;
 use warnings;
 
 use parent qw(Bio::EnsEMBL::Hive::Process);
 
-use Storable qw(nfreeze);
+use DBI;
 use IO::Compress::Gzip qw(gzip $GzipError);
+use Storable qw(nfreeze);
 
 use EnsEMBL::Web::Exceptions;
+use EnsEMBL::Web::Tools::FileSystem qw(copy_files);
+use EnsEMBL::Web::Tools::FileHandler qw(file_put_contents);
 
 sub param_required {
   ## @overrides
@@ -42,36 +45,83 @@ sub param_required {
   return $self->param($param_name);
 }
 
+sub work_dir {
+  ## Gets/sets the work directory
+  ## @return Directory path
+  my $self = shift;
+
+  $self->param('work_dir', shift) if @_;
+
+  my $work_dir = $self->param_required('work_dir');
+
+  throw exception('HiveException', 'Work directory could not be found.')  unless -d $work_dir;
+
+  return $work_dir;
+}
+
 sub save_results {
-  ## Writes the results to the result table of ticket db
+  ## Writes the results to the result table of ticket db (and work directory if needed)
   ## Use this in 'write_output' to save results
   ## @param Job id to write results against
-  ## @param Arrayref of hashrefs (each hashref goes in result_data column)
-  my ($self, $job_id, $results) = @_;
+  ## @param Hashref with keys as file names and value as a hashref with following keys (provide empty hashref if no files are required)
+  ##  - content   : File content (string or arrayref of strings)
+  ##  - location  : Temporary file location from where the file needs to be moved to work dir (only works if 'content' key is missing)
+  ##  - delete    : Flag to tell whether to delete the temporary file after copying the file to the new location (only if 'location' key is provided)
+  ##  - gzip      : Flag if on, will gzip the file (only works if 'content' key is provided)
+  ## @params List of hashrefs, each goes in result_data column of the individual result table row
+  my ($self, $job_id, $files, @result_data) = @_;
 
-  if (@$results) {
+  my $work_dir    = $self->work_dir;
+  my $result_file = $self->_result_file($job_id);
+  my $error;
 
-    # Serialise and compress results to save them to db
-    my @serialised_results = map {
-      my $serialised = nfreeze($_);
-      my $serialised_gzip;
-      gzip(\$serialised => \$serialised_gzip, -LEVEL => 9) or throw exception('HiveException', "GZIP failed: $GzipError");
-      $serialised_gzip;
-    } @$results;
+  if (keys %$files) {
 
-    my $ticket_db   = $self->param('ticket_db');
+    try {
+
+      # Create result files if file content was provided in 'content' key
+      for (grep { exists $files->{$_}{'content'} } keys %$files) {
+        my $content = $files->{$_}{'content'};
+        if ($files->{$_}{'gzip'}) {
+          my $serialised = nfreeze($content);
+          gzip(\$serialised => \($content = ""), -LEVEL => 9) or throw exception('HiveException', "GZIP failed: $GzipError");
+        }
+        file_put_contents("$work_dir/$_", $content);
+        delete $files->{$_};
+      }
+
+      # Copy files if temporary file location was provided
+      if (my @copy_files = grep { $files->{$_}{'location'} } keys %$files) {
+
+        copy_files({ map { $files->{$_}{'location'} => "$work_dir/$_" } @copy_files });
+        unlink map { $files->{$_}{'delete'} ? $files->{$_}{'location'} : () } @copy_files;
+      }
+
+    } catch {
+      $error = $_;
+    };
+  }
+
+  # Rollback and throw exception if it failed anywhere
+  if ($error) {
+    unlink $result_file, map { -e "$work_dir/$_" ? "$work_dir/$_" : () } keys %$files;
+    throw exception('HiveException', $error); # change the exception type since hive can only handle HiveException properly
+  }
+
+  # Now save the result_data to result table
+  if (@result_data) {
+
+    my $ticket_db   = $self->param_required('ticket_db');
     my $ticket_dbh  = DBI->connect(sprintf('dbi:mysql:%s:%s:%s', $ticket_db->{'-dbname'}, $ticket_db->{'-host'}, $ticket_db->{'-port'}), $ticket_db->{'-user'}, $ticket_db->{'-pass'}, { 'PrintError' => 0 });
 
     if ($ticket_dbh) {
       my $now = $self->_get_time_now;
-      my $sth = $ticket_dbh->prepare('INSERT INTO `result` (`job_id`, `result_data`, `created_at`) values ' . join(',', map {'(?,?,?)'} @serialised_results));
+      my $sth = $ticket_dbh->prepare('INSERT INTO `result` (`job_id`, `result_data`, `created_at`) values ' . join(',', map {'(?,?,?)'} @_));
 
-      $sth->execute(map {($job_id, $_ || '', $now)} @serialised_results);
-
+      $sth->execute(map {($job_id, $_ || '', $now)} @_);
     } else {
 
-      ## TODO -- what if ticket connection comes back later?
-      $self->warning("Ticket database: Connection could not be created ($DBI::errstr)");
+      throw exception ('HiveException', "Ticket database: Connection could not be created ($DBI::errstr)");
     }
 
     $ticket_dbh->disconnect;
@@ -83,4 +133,11 @@ sub _get_time_now {
   my ($sec, $min, $hour, $day, $month, $year) = localtime;
   return sprintf '%d-%02d-%02d %02d:%02d:%02d', $year + 1900, $month + 1, $day, $hour, $min, $sec;
 }
+
+sub _result_file {
+  ## @private
+  ## @param Job id
+  return sprintf '%s.results_data.json', $_[1];
+}
+
 1;
