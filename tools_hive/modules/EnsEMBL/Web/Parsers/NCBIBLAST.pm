@@ -16,7 +16,7 @@ limitations under the License.
 
 =cut
 
-package EnsEMBL::Web::Parsers::NCBIBlast;
+package EnsEMBL::Web::Parsers::NCBIBLAST;
 
 use strict;
 use warnings;
@@ -34,7 +34,7 @@ sub runnable {
 }
 
 sub parse {
-  my $self      = shift; 
+  my $self      = shift;
   my $runnable  = $self->runnable;
   my $tab_file  = $runnable->param('__results_tab');
   my $dba       = Bio::EnsEMBL::DBSQL::DBAdaptor->new(%{$runnable->param('dba')});
