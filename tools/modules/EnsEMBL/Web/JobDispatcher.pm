@@ -44,7 +44,7 @@ sub dispatch_job {
 
 sub delete_jobs {
   ## @abstract
-  ## Deletes the submitted jobs via from hive or web services
+  ## Deletes the submitted jobs
   ## @param Ticket type name (string)
   ## @params List of Id/References for the submitted jobs to be removed
   throw exception('AbstractMethodNotImplemented');

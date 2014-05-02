@@ -165,7 +165,7 @@ sub add_job {
 }
 
 sub is_dir_needed {
-  ## Flag to tell whether a work dir in the shared location is needed by eHive to run the jobs
+  ## Flag to tell whether a work dir in the shared location is needed to save the input files (or run the jobs)
   ## Override if required
   return 1;
 }
