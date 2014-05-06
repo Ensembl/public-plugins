@@ -51,8 +51,8 @@ CREATE TABLE `ticket` (
 CREATE TABLE `job` (
   `job_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `ticket_id` int(10) unsigned NOT NULL,
-  `species` varchar(255) DEFAULT NULL,
-  `assembly` varchar(255) DEFAULT NULL,
+  `species` varchar(255) NOT NULL,
+  `assembly` varchar(255) NOT NULL,
   `job_number` int(10) DEFAULT NULL,
   `job_data` text NOT NULL,
   `job_desc` varchar(160) DEFAULT NULL,
