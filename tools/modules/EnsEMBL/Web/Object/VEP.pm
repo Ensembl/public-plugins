@@ -33,7 +33,7 @@ sub ticket_type {
 }
 
 sub get_edit_jobs_data {
-  ## @override
+  ## Abstract method implementation
   my $self        = shift;
   my $hub         = $self->hub;
   my $ticket      = $self->get_requested_ticket   or return [];

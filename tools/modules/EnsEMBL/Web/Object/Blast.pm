@@ -27,6 +27,8 @@ package EnsEMBL::Web::Object::Blast;
 use strict;
 use warnings;
 
+use EnsEMBL::Web::Tools::FileHandler qw(file_get_contents);
+
 use parent qw(EnsEMBL::Web::Object::Tools);
 
 sub ticket_type {
@@ -146,6 +148,28 @@ sub get_blast_form_params {
     'selected'      => $selected,
     'combinations'  => $self->jsonify($options_map)
   };
+}
+
+sub get_edit_jobs_data {
+  ## Abstract method implementation
+  my $self  = shift;
+  my $hub   = $self->hub;
+  my $jobs  = $self->get_requested_job || $self->get_requested_ticket;
+     $jobs  = $jobs ? ref($jobs) =~ /Ticket/ ? $jobs->job : [ $jobs ] : [];
+
+  my @jobs_data;
+
+  for (@$jobs) {
+    my $job_data    = $_->job_data->raw;
+    my @fasta_lines = file_get_contents(sprintf "%s/%s", $_->job_dir, delete $job_data->{'sequence'}{'input_file'});
+    $job_data->{'species'} = $_->species;
+    $job_data->{'sequence'}{'display_id'} = $fasta_lines[0] =~ s/^>// ? shift @fasta_lines : '';
+    $job_data->{'sequence'}{'sequence'}   = join("", @fasta_lines);
+
+    push @jobs_data, $job_data;
+  }
+
+  return \@jobs_data;
 }
 
 sub get_param_value_caption {

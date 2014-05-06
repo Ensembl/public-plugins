@@ -511,7 +511,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
         break;
       }
       this.sequences.push(new Ensembl.Panel.BlastForm.Sequence({
-        'string'      : editingJobSequences[i].seq,
+        'string'      : editingJobSequences[i]['sequence'],
         'description' : '>' + (editingJobSequences[i]['display_id'] || ''),
         'type'        : type
       }, this, false));
@@ -827,7 +827,7 @@ Ensembl.Panel.BlastForm.Sequence = Ensembl.Panel.ToolsForm.SubElement.extend({
     this.description  = seq.description;
     this.guessedType  = seq.type;
 
-    var seqString     = this.description + '\n' + this.string.match(/(.{1,60})/g).join('\n'); // split strings into 60 char each (fast format)
+    var seqString     = this.description + '\n' + this.string.match(/(.{1,60})/g).join('\n'); // split strings into 60 char each (fasta format)
 
     this.elLk.checkbox.val(seqString);
     this.elLk.seqBox.text(seqString);
