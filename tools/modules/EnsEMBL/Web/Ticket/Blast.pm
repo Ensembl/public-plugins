@@ -96,6 +96,7 @@ sub _process_user_input {
         'job_number'  => ++$job_num,
         'job_desc'    => $desc || sprintf('%s search against %s %s.', $prog, $sd->get_config($species, 'SPECIES_COMMON_NAME'), $db_types->{$params->{'db_type'}}),
         'species'     => $species,
+        'assembly'    => $sd->get_config($species, 'ASSEMBLY_NAME'),
         'job_data'    => {
           'sequence'    => {
             'input_file'  => 'input.fa',
