@@ -55,7 +55,7 @@ sub content {
         {'key' => 'ftype',  'title' => 'Feature type'},
         {'key' => 'colour', 'title' => 'Colour'},
       ], [{
-        'ftype'  => {'value' => 'BLAST/BLAT hit'},
+        'ftype'  => {'value' => ($job->job_data->{'search_type'} || '') =~ /BLAST/ ?  'BLAST hit' : 'BLAT hit'},
         'colour' => {'value' => qq(<div class="swatch-wrapper"><div class="swatch">$swatch</div>$legend</div>)},
       }], {}
     );
