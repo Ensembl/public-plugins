@@ -49,7 +49,7 @@ sub content {
     'queued'          => q(Your job has been submitted and will be processed soon.),
     'submitted'       => q(Your job has been submitted and will be processed soon.),
     'running'         => q(Your job is currently being processed. The page will refresh once it's finished running.),
-    'done'            => q(This job is finished. Please click on 'View Results' link to see the results),
+    'done'            => q(This job is finished. Please click on 'View results' link to see the results),
     'failed'          => q(This job has failed. Please click on the 'View details' icon for more information),
     'deleted'         => q(Your ticket has been deleted. This usually happens if the ticket is too old.)
   };
@@ -211,7 +211,7 @@ sub ticket_buttons {
 sub job_results_link {
   my ($self, $ticket, $job) = @_;
   return $job->dispatcher_status eq 'done'
-    ? sprintf('<a class="small left-margin" href="%s">[View Results]</a>', $self->hub->url({
+    ? sprintf('<a class="small left-margin" href="%s">[View results]</a>', $self->hub->url({
       'species'   => $job->species,
       'type'      => 'Tools',
       'action'    => $ticket->ticket_type_name,

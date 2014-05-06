@@ -74,7 +74,8 @@ sub get_job_summary {
   if ($job_status eq 'done') {
     $job_status_div->last_child->append_child('a', {
       'class'       => [qw(small left-margin results-link)],
-      'inner_HTML'  => '[View Results]',
+      'flags'       => ['view_results_link'],
+      'inner_HTML'  => '[View results]',
       'href'        => $hub->url({
         'species'     => $job->species,
         'type'        => 'Tools',

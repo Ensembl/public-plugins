@@ -46,7 +46,7 @@ sub content {
       $job->job_desc // '<i>no description</i>',
       $status eq 'done'
         ? @{$job->result}
-          ? (sprintf('<a class="small left-margin" href="%s">[Download results file]</a>', $hub->url('Download', {'type' => 'Tools', 'action' => 'Blast', 'tl' => $url_param})), '')
+          ? (sprintf('<a class="small left-margin" href="%s">[Download results file]</a>', $hub->url('Download', {'function' => '', 'tl' => $url_param})), '')
           : ('', $self->_error('No results found', sprintf('If you believe that there should be a match to your query sequence please adjust the configuration parameters you selected and <a href="%s">resubmit the search</a>.', $hub->url({'function' => 'Edit', 'tl' => $url_param}))))
         : ('', $self->_error('No results found', sprintf('The job is either not done yet, or has failed. Click <a href="%s">here</a> to view', $hub->url({'function' => 'View', 'tl' => $url_param}))))
     );
