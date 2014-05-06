@@ -16,13 +16,13 @@ limitations under the License.
 
 =cut
 
-package Bio::EnsEMBL::GlyphSet::HSP_coverage;
+package EnsEMBL::Draw::GlyphSet::HSP_coverage;
 
 use strict;
 
 use Sanger::Graphics::Bump;
 
-use parent qw(Bio::EnsEMBL::GlyphSet);
+use parent qw(EnsEMBL::Draw::GlyphSet);
 
 sub _init {
   my ($self)       = @_;

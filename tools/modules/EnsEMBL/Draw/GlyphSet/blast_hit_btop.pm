@@ -16,13 +16,13 @@ limitations under the License.
 
 =cut
 
-package Bio::EnsEMBL::GlyphSet::blast_hit_btop;
+package EnsEMBL::Draw::GlyphSet::blast_hit_btop;
 
 use strict;
 use warnings;
 no warnings 'uninitialized';
 
-use parent qw(Bio::EnsEMBL::GlyphSet);
+use parent qw(EnsEMBL::Draw::GlyphSet);
 
 use Bio::EnsEMBL::Analysis;
 use Bio::EnsEMBL::Feature;

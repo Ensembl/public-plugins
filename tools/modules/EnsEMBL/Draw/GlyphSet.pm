@@ -16,7 +16,7 @@ limitations under the License.
 
 =cut
 
-package Bio::EnsEMBL::GlyphSet;
+package EnsEMBL::Draw::GlyphSet;
 
 use strict;
 use warnings;

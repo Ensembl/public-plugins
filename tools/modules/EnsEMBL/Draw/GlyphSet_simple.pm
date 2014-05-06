@@ -16,18 +16,10 @@ limitations under the License.
 
 =cut
 
-package Bio::EnsEMBL::GlyphSet::HSP_query_plot;
+package EnsEMBL::Draw::GlyphSet_simple;
 
 use strict;
 
-use parent qw(Bio::EnsEMBL::GlyphSet::HSP_plot);
-
-sub region {
-  my ($self, $hsp) = @_;
-
-  my $start = $hsp->{'qstart'};
-  my $end   = $hsp->{'qend'};
-  return ($start, $end);
-}
+sub draw_btop_feature {}
 
 1;

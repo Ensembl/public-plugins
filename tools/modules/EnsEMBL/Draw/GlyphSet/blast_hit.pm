@@ -16,12 +16,12 @@ limitations under the License.
 
 =cut
 
-package Bio::EnsEMBL::GlyphSet::blast_hit;
+package EnsEMBL::Draw::GlyphSet::blast_hit;
 
 use strict;
 use warnings;
 
-use parent qw(Bio::EnsEMBL::GlyphSet::_simple);
+use parent qw(EnsEMBL::Draw::GlyphSet::_simple);
 
 use Bio::EnsEMBL::Analysis;
 use Bio::EnsEMBL::Feature;
