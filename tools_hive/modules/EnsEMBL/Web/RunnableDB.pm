@@ -25,8 +25,7 @@ package EnsEMBL::Web::RunnableDB;
 use strict;
 use warnings;
 
-use parent qw(Bio::EnsEMBL::Hive::Process);
-
+use Data::Dumper;
 use DBI;
 use IO::Compress::Gzip qw(gzip $GzipError);
 use Storable qw(nfreeze);
@@ -34,6 +33,8 @@ use Storable qw(nfreeze);
 use EnsEMBL::Web::Exceptions;
 use EnsEMBL::Web::Tools::FileSystem qw(copy_files);
 use EnsEMBL::Web::Tools::FileHandler qw(file_put_contents);
+
+use parent qw(Bio::EnsEMBL::Hive::Process);
 
 sub param_required {
   ## @overrides
@@ -116,9 +117,9 @@ sub save_results {
 
     if ($ticket_dbh) {
       my $now = $self->_get_time_now;
-      my $sth = $ticket_dbh->prepare('INSERT INTO `result` (`job_id`, `result_data`, `created_at`) values ' . join(',', map {'(?,?,?)'} @_));
+      my $sth = $ticket_dbh->prepare('INSERT INTO `result` (`job_id`, `result_data`, `created_at`) values ' . join(',', map {'(?,?,?)'} @result_data));
 
-      $sth->execute(map {($job_id, $_ || '', $now)} @_);
+      $sth->execute(map {($job_id, Data::Dumper->new([$_ || {}])->Sortkeys(1)->Useqq(1)->Terse(1)->Indent(0)->Dump, $now)} @result_data);
     } else {
 
       throw exception ('HiveException', "Ticket database: Connection could not be created ($DBI::errstr)");
