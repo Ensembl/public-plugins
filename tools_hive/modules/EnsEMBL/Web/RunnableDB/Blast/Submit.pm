@@ -181,16 +181,7 @@ sub write_output {
   my $blast_type  = $self->param('blast_type');
   my $module      = dynamic_require("EnsEMBL::Web::Parsers::$blast_type", 1) or throw exception('HiveException', "Blast output parser for $blast_type could not be loaded.");
 
-  my $i = 1;
-  my (%files, @data);
-
-  for (@{ $module->new($self)->parse }) {
-    push @data, {'result_file' => "blast.$i.out.parsed"};
-    $files{"blast.$i.out.parsed"} = {'content' => $_, 'gzip' => 1};
-    $i++;
-  }
-
-  $self->save_results($job_id, \%files, @data);
+  $self->save_results($job_id, {}, @{ $module->new($self)->parse });
 
   return 1;
 }
