@@ -45,7 +45,8 @@ sub fetch_input {
   my $source_dir  = $self->param_required(sprintf '%s%s_index_files', $blast_type, $source_type =~ /LATESTGP/ ? '_dna' : '');
   my $source_file = $self->param_required('source_file');
   my $work_dir    = $self->work_dir;
-  my $input_file  = "$work_dir/$sequence->{'input_file'}";
+  my $input_file  = sprintf '%s/%s', $work_dir, $sequence->{'input_file'};
+  my $output_file = sprintf '%s/%s', $work_dir, $self->param_required('output_file');
 
   # Other required params
   $self->param_required($_) for qw(job_id ticket_db);
@@ -54,10 +55,10 @@ sub fetch_input {
   throw exception('HiveException', 'Input file could not be found.') unless -f $input_file && -r $input_file;
 
   # Setup the files names
-  $self->param('__query_file',    "$input_file");
-  $self->param('__results_file',  "$work_dir/blast.out");
-  $self->param('__results_raw',   "$work_dir/blast.out.raw");
-  $self->param('__results_tab',   "$work_dir/blast.out.tab");
+  $self->param('__query_file',        "$input_file");
+  $self->param('__results_raw',       "$output_file");
+  $self->param('__results_file',      "$output_file.unformatted");
+  $self->param('__results_tab',       "$output_file.tab");
 
   # Setup the actual command line executable file
   throw exception('HiveException', 'Directory containing the executable file could not be found.')                  unless -d $bin_dir;

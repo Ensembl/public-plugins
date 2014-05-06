@@ -98,6 +98,7 @@ sub _process_user_input {
         'species'     => $species,
         'assembly'    => $sd->get_config($species, 'ASSEMBLY_NAME'),
         'job_data'    => {
+          'output_file' => 'blast.out',
           'sequence'    => {
             'input_file'  => 'input.fa',
             'is_invalid'  => delete $sequence->{'is_invalid'}
