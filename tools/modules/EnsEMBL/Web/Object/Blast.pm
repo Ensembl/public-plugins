@@ -155,21 +155,28 @@ sub get_edit_jobs_data {
   my $self  = shift;
   my $hub   = $self->hub;
   my $jobs  = $self->get_requested_job || $self->get_requested_ticket;
-     $jobs  = $jobs ? ref($jobs) =~ /Ticket/ ? $jobs->job : [ $jobs ] : [];
 
-  my @jobs_data;
+  return [ map {
+    my $job_data = $_->job_data->raw;
+    $job_data->{'species'}  = $_->species;
+    $job_data->{'sequence'} = $self->get_input_sequence_for_job($_);
+    $job_data;
+  } @{ $jobs ? ref($jobs) =~ /Ticket/ ? $jobs->job : [ $jobs ] : [] } ];
+}
 
-  for (@$jobs) {
-    my $job_data    = $_->job_data->raw;
-    my @fasta_lines = file_get_contents(sprintf "%s/%s", $_->job_dir, delete $job_data->{'sequence'}{'input_file'});
-    $job_data->{'species'} = $_->species;
-    $job_data->{'sequence'}{'display_id'} = $fasta_lines[0] =~ s/^>// ? shift @fasta_lines : '';
-    $job_data->{'sequence'}{'sequence'}   = join("", @fasta_lines);
+sub get_input_sequence_for_job {
+  ## Gets input sequence of a job from input file
+  ## @param Job rose object
+  ## @return Copy of hashref saved at $job->job_data->{'seuqnece'}, but with two extra keys 'display_id', 'sequence', but one removed key 'input_file'
+  my ($self, $job) = @_;
 
-    push @jobs_data, $job_data;
-  }
+  my $sequence    = $job->job_data->raw->{'sequence'};
+  my @fasta_lines = map { chomp; $_ } file_get_contents(sprintf "%s/%s", $job->job_dir, delete $sequence->{'input_file'});
 
-  return \@jobs_data;
+  $sequence->{'display_id'} = $fasta_lines[0] =~ s/^>// ? shift @fasta_lines : '';
+  $sequence->{'sequence'}   = join("", @fasta_lines);
+
+  return $sequence;
 }
 
 sub get_param_value_caption {

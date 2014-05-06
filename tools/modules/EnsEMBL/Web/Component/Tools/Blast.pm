@@ -42,11 +42,12 @@ sub job_details_table {
   my $species   = $job->species;
   my $configs   = $self->_display_config($job_data->{'configs'});
   my $two_col   = $self->new_twocol;
+  my $sequence  = $object->get_input_sequence_for_job($job);
 
   $two_col->add_row('Job summary',    $self->get_job_summary($job, $params)->render);
   $two_col->add_row('Species',        sprintf('<img class="job-species" src="%sspecies/16/%s.png" alt="" height="16" width="16">%s', $self->img_url, $species, $sd->species_label($species, 1)));
   $two_col->add_row('Search type',    $object->get_param_value_caption('search_type', $job_data->{'search_type'}));
-  $two_col->add_row('Sequence',       sprintf('<div class="input-seq">&gt;%s</div>', join("\n", $job_data->{'sequence'}{'display_id'} || '', ($job_data->{'sequence'}{'seq'} =~ /.{1,60}/g))));
+  $two_col->add_row('Sequence',       sprintf('<div class="input-seq">&gt;%s</div>', join("\n", $sequence->{'display_id'} || '', ($sequence->{'sequence'} =~ /.{1,60}/g))));
   $two_col->add_row('Query type',     $object->get_param_value_caption('query_type', $job_data->{'query_type'}));
   $two_col->add_row('DB type',        $object->get_param_value_caption('db_type', $job_data->{'db_type'}));
   $two_col->add_row('Source',         $object->get_param_value_caption('source', $job_data->{'source'}));

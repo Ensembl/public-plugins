@@ -31,14 +31,14 @@ sub new {
   ## @param Colours map for the pointers
   my ($class, $object, $job, $colours) = @_;
 
-  my $job_data  = $job->job_data;
+  my $sequence  = $object->get_input_sequence_for_job($job);
   my $results   = $job->result;
 
   return bless {
-    'name'    => $job_data->{'sequence'}{'display_id'},
-    'length'  => CORE::length($job_data->{'sequence'}{'seq'}),
+    'name'    => $sequence->{'display_id'},
+    'length'  => CORE::length($sequence->{'sequence'}),
     'hsps'    => [ map {
-      my $hsp       = $_->result_data;
+      my $hsp       = $_->result_data->raw;
       $hsp->{'id'}  = $_->result_id;
       $hsp->{'tl'}  = $object->create_url_param({'result_id' => $hsp->{'id'}});
       $hsp;
