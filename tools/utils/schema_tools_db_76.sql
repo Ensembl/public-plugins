@@ -74,7 +74,7 @@ CREATE TABLE `job` (
 CREATE TABLE `result` (
   `result_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `job_id` int(10) unsigned NOT NULL,
-  `result_data` longblob,
+  `result_data` text,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`result_id`),
   KEY `job_id` (`job_id`),
