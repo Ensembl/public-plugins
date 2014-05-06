@@ -385,6 +385,13 @@ sub get_tickets_data_for_sync {
   return (md5_hex($self->jsonify($tickets_data)), $auto_refresh);
 }
 
+sub handle_download {
+  ## @override
+  ## Handles the download request, and calls the handle_download method of the required sub object
+  my $self = shift;
+  return $self->get_sub_object->handle_download(@_);
+}
+
 sub get_time_now {
   # Gets the current time in a format that can be saved in the db
   my ($sec, $min, $hour, $day, $month, $year) = localtime;

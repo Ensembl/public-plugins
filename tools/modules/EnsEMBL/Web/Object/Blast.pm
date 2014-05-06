@@ -296,6 +296,26 @@ sub get_all_hits_by_coords {
   return $self->get_all_hits_in_slice_region($job, $slice);
 }
 
+sub handle_download {
+  ## Method reached by url ensembl.org/Download/Blast/
+  my ($self, $r) = @_;
+  my $job = $self->get_requested_job;
+
+  # TODO redirect to job not found page if !$job
+
+  my $result_file = sprintf '%s/%s', $job->job_dir, $job->job_data->{'output_file'};
+
+  # TODO - result file is missing, or temporarily not available if !-e $result_file
+
+  my $content = join '', file_get_contents($result_file);
+
+  $r->headers_out->add('Content-Type'         => 'text/plain');
+  $r->headers_out->add('Content-Length'       => length $content);
+  $r->headers_out->add('Content-Disposition'  => sprintf 'attachment; filename=%s.blast.txt', $self->create_url_param);
+
+  print $content;
+}
+
 ## TODO
 ##/*********************************************/
 
