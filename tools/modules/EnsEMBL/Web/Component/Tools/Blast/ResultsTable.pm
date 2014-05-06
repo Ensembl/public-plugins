@@ -75,7 +75,7 @@ sub content {
     # Data for table rows
     for (@$results) {
       my $result_id     = $_->result_id;
-      my $result_data   = $_->result_data;
+      my $result_data   = $_->result_data->raw;
       my $url_param     = $object->create_url_param({'result_id' => $result_id});
       my $location_link = $self->location_link($species, $url_param, $job_data, $result_data);
 
