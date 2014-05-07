@@ -34,7 +34,7 @@ sub init {
   # can not share any tools pages via urls
   $_->{'class'} = sprintf 'disabled %s', $_->{'class'} || '' for grep {$_->{'caption'} eq 'Share this page'} @{$self->entries};
 
-  if ($hub->action eq 'Blast' && $hub->function eq 'Results') {
+  if (($hub->action || '') eq 'Blast' && ($hub->function || '') eq 'Results') {
 
     my $job = $object->get_sub_object->get_requested_job({'with_all_results' => 1});
 
