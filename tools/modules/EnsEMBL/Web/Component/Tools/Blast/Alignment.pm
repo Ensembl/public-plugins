@@ -76,11 +76,11 @@ sub content {
 sub get_slice {
   my ($self, $config) = @_;
   my $object          = $self->object;
-  my $job_data        = $self->job->job_data;
+  my $job             = $self->job;
   my $hit             = $self->hit;
   my $species         = $hit->{'species'};
   my $blast_method    = $self->blast_method;
-  my $query_seq       = $self->query_sequence($job_data, $hit, $blast_method, $species); 
+  my $query_seq       = $self->query_sequence($job, $hit, $blast_method, $species); 
   my $hit_seq         = $query_seq;
   my $aln_summary     = $hit->{'aln'} =~ s/\s+//rg;
   my $homology_string = '|' x $hit->{'len'};
@@ -130,7 +130,7 @@ sub get_slice {
     );
   } else {
     my $ref_slice     = $object->get_hit_genomic_slice($hit, $species);
-    my $target_object = $object->get_target_object($hit, $job_data->{'source'});
+    my $target_object = $object->get_target_object($hit, $job->job_data->{'source'});
     my $orientation   = $hit->{'gori'};
     
     if ($target_object) {
@@ -335,8 +335,8 @@ sub create_slice {
 }
 
 sub query_sequence {
-  my ($self, $job_data, $hit, $blast_method, $species) = @_;
-  my $query_sequence = $job_data->{'sequence'}{'seq'};
+  my ($self, $job, $hit, $blast_method, $species) = @_;
+  my $query_sequence = $self->object->get_input_sequence_for_job($job)->{'sequence'};
   my $start          = $hit->{'qstart'};
   my $end            = $hit->{'qend'};
   my $length         = $end - $start + 1;
