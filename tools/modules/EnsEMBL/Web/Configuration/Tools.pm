@@ -51,7 +51,7 @@ sub populate_tree {
     ),
     $self->create_subnode('Blast/Results', 'Results',
       [qw(
-        results         EnsEMBL::Web::Component::Tools::Blast::JobDetails
+        results         EnsEMBL::Web::Component::Tools::Blast::ResultsSummary
         karyotype       EnsEMBL::Web::Component::Tools::Blast::Karyotype
         hsps            EnsEMBL::Web::Component::Tools::Blast::HspQueryPlot
         table           EnsEMBL::Web::Component::Tools::Blast::ResultsTable
