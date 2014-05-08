@@ -296,6 +296,77 @@ sub get_all_hits_by_coords {
   return $self->get_all_hits_in_slice_region($job, $slice);
 }
 
+sub get_result_url {
+  ## Gets required url links for the result hit
+  ## @param Link type (either one of these: target, location, alignment, query_sequence, genomic_sequence)
+  ## @param Job object
+  ## @param Result object
+  ## @return Hashref as accepted by hub->url
+  my ($self, $link_type, $job, $result) = @_;
+
+  my $species     = $job->species;
+  my $job_data    = $job->job_data;
+  my $result_data = $result->result_data;
+  my $url_param   = $self->create_url_param({'job_id' => $job->job_id, 'result_id' => $result->result_id});
+
+  if ($link_type eq 'target') {
+
+    my $source  = $job_data->{'source'};
+    my $param   = $source =~/abinitio/i ? 'pt' : $source eq 'PEP_ALL' ? 'p' : 't';
+
+    return {
+      'species' => $species,
+      'type'    => 'Transcript',
+      'action'  => $source =~/cdna|ncrna/i ? 'Summary' : 'ProteinSummary',
+      $param    => $result_data->{'tid'},
+      'tl'      => $url_param
+    };
+
+  } elsif ($link_type eq 'location') {
+
+    my $region = sprintf('%s:%s-%s', $result_data->{'gid'}, $result_data->{'gstart'}, $result_data->{'gend'});
+
+    return {
+      'species'           => $species,
+      'type'              => 'Location',
+      'action'            => 'View',
+      'r'                 => $region,
+      'contigviewbottom'  => [qw(blast_hit=normal blast_hit_btop=normal)],
+      'tl'                => $url_param
+    };
+
+  } elsif ($link_type eq 'alignment') {
+
+    return {
+      'species'   => $species,
+      'type'      => 'Tools',
+      'action'    => 'Blast',
+      'function'  => $job_data->{'db_type'} eq 'peptide' || $job_data->{'query_type'} eq 'peptide' ? 'AlignmentProtein' : 'Alignment',
+      'tl'        => $url_param
+    };
+
+  } elsif ($link_type eq 'query_sequence') {
+
+    return {
+      'species'   => $species,
+      'type'      => 'Tools',
+      'action'    => 'Blast',
+      'function'  => 'QuerySeq',
+      'tl'        => $url_param
+    };
+
+  } elsif ($link_type eq 'genomic_sequence') {
+
+    return {
+      'species'   => $species,
+      'type'      => 'Tools',
+      'action'    => 'Blast',
+      'function'  => 'GenomicSeq',
+      'tl'        => $url_param
+    };
+  }
+}
+
 sub handle_download {
   ## Method reached by url ensembl.org/Download/Blast/
   my ($self, $r) = @_;
