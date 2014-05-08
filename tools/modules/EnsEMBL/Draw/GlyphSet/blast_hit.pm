@@ -34,7 +34,7 @@ sub features {
   my $slice = $self->{'container'};
   my @features; 
 
-  my $tools_object = $self->{'config'}->{'hub'}->{'_core_objects'}->{'tools'};
+  my $tools_object = $self->{'config'}->{'hub'}->core_object('tools');
   return unless $tools_object;
 
   my $ticket = $tools_object->ticket;
