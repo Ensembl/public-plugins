@@ -33,6 +33,16 @@ sub mcacheable {
   return 0;
 }
 
+sub new {
+  ## @constructor
+  ## @override To set the correct view config
+  my $self = shift->SUPER::new(@_);
+  if (my $hub = $self->hub) {
+    $self->{'view_config'} = $hub->get_viewconfig($self->id, $hub->action, 'cache');
+  }
+  return $self;
+}
+
 sub _init {
   ## Makes all the components in tools ajaxable but not cacheable
   ## Override this in a child class to modify the default behaviour
