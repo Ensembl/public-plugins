@@ -235,6 +235,66 @@ sub get_target_object {
   return $adaptor->fetch_by_stable_id($target_id);
 }
 
+sub map_result_hits_to_karyotype {
+  ## Maps all the hit as a feature on the karyotype view
+  ## In case some hits are a patch, it gets the actual chromosome name to actually draw that hit on the karyotype
+  ## @param Job object
+  my ($self, $job) = @_;
+
+  my $hub     = $self->hub;
+  my $species = $job->species;
+  my $results = $job->result;
+
+  my %all_chr = map { $_ => 1 } @{$hub->species_defs->get_config($species, 'ENSEMBL_CHROMOSOMES') || []};
+  my %alt_chr;
+
+  my @features;
+
+  for (@$results) {
+    my $hit_id  = $_->result_id;
+    my $hit     = $_->result_data;
+    my $feature = {
+      'region'    => $hit->{'gid'},
+      'start'     => $hit->{'gstart'},
+      'end'       => $hit->{'gend'},
+      'p_value'   => 1 + $hit->{'pident'} / 100,
+      'strand'    => $hit->{'gori'},
+      'href'      => $hub->url('ZMenu', {
+        'species'   => $species,
+        'type'      => 'Tools',
+        'action'    => 'Blast',
+        'function'  => '',
+        'tl'        => $self->create_url_param,
+        'hit'       => $hit_id
+      }),
+      'html_id'   => "hsp_$hit_id"
+    };
+
+    if (!$all_chr{$hit->{'gid'}}) { # if it's a patch region, get the actual chromosome name
+      if (!exists $alt_chr{$hit->{'gid'}}) {
+        my $slice = $hub->get_adaptor('get_SliceAdaptor')->fetch_by_region('toplevel', $hit->{'gid'}, $hit->{'gstart'}, $hit->{'gend'});
+        my ($alt) = @{$hub->get_adaptor('get_AssemblyExceptionFeatureAdaptor')->fetch_all_by_Slice($slice)};
+        my $alt_slice;
+
+        if ($alt) {
+          $alt_slice = $alt->alternate_slice;
+        }
+
+        $alt_chr{$hit->{'gid'}} = $alt_slice ? $alt_slice->seq_region_name : undef;
+      }
+
+      next unless $alt_chr{$hit->{'gid'}};
+
+      $feature->{'actual_region'} = $hit->{'gid'};
+      $feature->{'region'}        = $alt_chr{$hit->{'gid'}};
+    }
+
+    push @features, $feature;
+  }
+
+  return \@features;
+}
+
 sub get_all_hits {
   ## Gets all the result hits for the given job
   ## @param Job object
