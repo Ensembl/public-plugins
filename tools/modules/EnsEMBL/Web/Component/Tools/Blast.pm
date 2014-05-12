@@ -66,15 +66,6 @@ sub job_details_table {
   return $two_col;
 }
 
-sub blast_pointer_style {
-  ## Pointer style for blast result page images
-  return {
-    'style'     => 'rharrow',
-    'colour'    => 'gradient',
-    'gradient'  => [qw(10 gold orange chocolate firebrick darkred)]
-  };
-}
-
 sub no_result_hit_found {
   ## Default HTML to be displayed if no hit was found according to the URL params
   return 'No result hit was found according to your request.';# TODO - display button to go back to summary page

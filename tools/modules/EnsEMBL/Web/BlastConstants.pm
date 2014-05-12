@@ -22,13 +22,22 @@ use strict;
 use warnings;
 
 use Exporter qw(import);
-our @EXPORT_OK    = qw(MAX_SEQUENCE_LENGTH MAX_NUM_SEQUENCES DNA_THRESHOLD_PERCENT CONFIGURATION_FIELDS CONFIGURATION_DEFAULTS SEQUENCE_VALID_CHARS);
+our @EXPORT_OK    = qw(MAX_SEQUENCE_LENGTH MAX_NUM_SEQUENCES DNA_THRESHOLD_PERCENT BLAST_KARYOTYPE_POINTER CONFIGURATION_FIELDS CONFIGURATION_DEFAULTS SEQUENCE_VALID_CHARS);
 our %EXPORT_TAGS  = ('all' => [ @EXPORT_OK ]);
 
 sub MAX_SEQUENCE_LENGTH   { 200000              }
 sub MAX_NUM_SEQUENCES     { 30                  }
 sub DNA_THRESHOLD_PERCENT { 85                  }
 sub SEQUENCE_VALID_CHARS  { 'A-Za-z\-\.\*\?=~'  }
+
+sub BLAST_KARYOTYPE_POINTER {
+  return {
+    'style'             => 'rharrow',
+    'colour'            => 'gradient',
+    'high_score_style'  => 'outbox',
+    'gradient'          => [qw(10 gold orange chocolate firebrick darkred)]
+  };
+}
 
 sub CONFIGURATION_FIELDS {
   return [
