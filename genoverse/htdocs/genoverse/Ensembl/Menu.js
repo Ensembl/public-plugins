@@ -57,11 +57,7 @@ Ensembl.Panel.GenoverseMenu = Ensembl.Panel.ZMenu.extend({
           var position = browser.getSelectorPosition();
           
           browser.moveTo(position.start, position.end);
-          
-          if (browser.prev.start !== browser.start || browser.prev.end !== browser.end) {
-            browser.updateURL(position);
-          }
-          
+          browser.updateURL(position);
           browser.cancelSelect();
         } else {
           $('.selector_controls .' + cls, '#' + panel.imageId).trigger('click');
