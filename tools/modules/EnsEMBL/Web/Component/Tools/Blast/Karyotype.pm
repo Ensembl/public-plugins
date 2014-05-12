@@ -21,6 +21,8 @@ package EnsEMBL::Web::Component::Tools::Blast::Karyotype;
 use strict;
 use warnings;
 
+use EnsEMBL::Web::BlastConstants qw(BLAST_KARYOTYPE_POINTER);
+
 use parent qw(EnsEMBL::Web::Component::Tools::Blast);
 
 sub content {
@@ -29,73 +31,63 @@ sub content {
   my $object    = $self->object;
   my $sd        = $hub->species_defs;
   my $job       = $object->get_requested_job({'with_all_results' => 1});
-  my $results   = $job && $job->status eq 'done' ? $job->result : [];
-  my $html      = '';
 
-  if (@$results) {
+  return '' if $job->status ne 'done' || !$job->result_count;
 
-    my $species     = $job->species;
-    my $chromosomes = $sd->get_config($species, 'ENSEMBL_CHROMOSOMES') || [];
+  my $species     = $job->species;
+  my $chromosomes = $sd->get_config($species, 'ENSEMBL_CHROMOSOMES') || [];
 
-    if (@$chromosomes && $sd->MAX_CHR_LENGTH) {
-      my $image_config  = $hub->get_imageconfig('Vkaryoblast');
-      my $image         = $self->new_karyotype_image($image_config);
-      my $pointers      = $self->get_hit_pointers($species, $results, $image);
+  return '' unless @$chromosomes && $sd->MAX_CHR_LENGTH;
 
-      $image->caption   = 'Click on the image above to jump to a chromosome, or click and drag to select a region';
-      $image->imagemap  = 'yes';
-      $image->set_button('drag', 'title' => 'Click on a chromosome');
-      $image->karyotype($hub, $object, $pointers, 'Vkaryoblast');
+  my $image_config  = $hub->get_imageconfig('Vkaryoblast');
+  my $image         = $self->new_karyotype_image($image_config);
+  my $pointers      = $self->get_hit_pointers($job, $image);
 
-      $html             = sprintf('
-        <h3><a rel ="_blast_karyotype" class="toggle set_cookie open" href="#">HSP distribution on genome:</a></h3>
-        <div class="_blast_karyotype">
-          <div class="toggleable">%s</div>
-        </div>',
-        $image->render
-      );
-    }
-  }
+  $image->caption   = 'Click on the image above to jump to a chromosome, or click and drag to select a region';
+  $image->imagemap  = 'yes';
+  $image->set_button('drag', 'title' => 'Click on a chromosome');
+  $image->karyotype($hub, $object, $pointers, 'Vkaryoblast');
 
-  return $html;
+  return sprintf('
+    <h3><a rel ="_blast_karyotype" class="toggle set_cookie open" href="#">HSP distribution on genome:</a></h3>
+    <div class="_blast_karyotype">
+      <div class="toggleable">%s</div>
+    </div>',
+    $image->render
+  );
 }
 
 sub get_hit_pointers {
-  my ($self, $species, $results, $image) = @_;
+  my ($self, $job, $image) = @_;
 
   my $object        = $self->object;
   my $hub           = $self->hub;
-  my $pointer_style = $self->blast_pointer_style;
+  my $pointer_spec  = BLAST_KARYOTYPE_POINTER;
+  my $features      = $object->map_result_hits_to_karyotype($job);
 
-  my @features      = map {
-    my $hit_id        = $_->result_id;
-    my $hit           = $_->result_data;
-    {
-      'region'          => $hit->{'gid'},
-      'start'           => $hit->{'gstart'},
-      'end'             => $hit->{'gend'},
-      'p_value'         => 1 + $hit->{'pident'} / 100,
-      'strand'          => $hit->{'gori'},
-      'label'           => 'Test', #TODO
-      'href'            => $hub->url({
-        'species'         => $species,
-        'type'            => 'ZMenu',
-        'action'          => 'Blast',
-        'function'        => '',
-        'tl'              => $object->create_url_param({'result_id' => $hit_id}),
-      }),
-      'html_id'         => "hsp_$hit_id"
-    }
-  } @$results;
-
-  return [ $image->add_pointers($hub, {
-    config_name   => 'Vkaryoblast',
-    features      => \@features,
-    feature_type  => 'Xref',
-    style         => $pointer_style->{'style'},
-    color         => $pointer_style->{'colour'},
-    gradient      => $pointer_style->{'gradient'},
+  my $pointers      = [ $image->add_pointers($hub, {
+    'config_name'     => 'Vkaryoblast',
+    'features'        => $features,
+    'feature_type'    => 'Xref',
+    'style'           => $pointer_spec->{'style'},
+    'color'           => $pointer_spec->{'colour'},
+    'gradient'        => $pointer_spec->{'gradient'},
   }) ];
+
+  if ($pointer_spec->{'style'} ne $pointer_spec->{'high_score_style'}) {
+    my ($top_feature) = sort { $b->{'p_value'} <=> $a->{'p_value'} } @$features;
+    delete $top_feature->{'href'}; # no duplicate zmenu for highest score hit
+    push @$pointers, $image->add_pointers($hub, {
+      'config_name'   => 'Vkaryoblast',
+      'features'      => [ $top_feature ],
+      'feature_type'  => 'Xref',
+      'style'         => $pointer_spec->{'high_score_style'},
+      'color'         => $pointer_spec->{'colour'},
+      'gradient'      => $pointer_spec->{'gradient'},
+    });
+  }
+
+  return $pointers;
 }
 
 1;
