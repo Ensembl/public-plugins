@@ -60,9 +60,7 @@ Ensembl.Panel.GenoverseMenu = Ensembl.Panel.ZMenu.extend({
           
           Ensembl.EventManager.trigger('highlightImage', browser.panel.imageNumber + 1, 0, position.start, position.end);
           
-          if (browser.prev.start !== browser.start || browser.prev.end !== browser.end) {
-            browser.updateURL(position);
-          }
+          browser.updateURL(position);
           
           browser.cancelSelect();
           browser.moveSelector(e);
