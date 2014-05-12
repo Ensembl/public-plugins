@@ -18,8 +18,8 @@ limitations under the License.
 
 package EnsEMBL::Web::Container::HSPContainer;
 
+### Proxy object passed to drawing code instead of Bio::EnsEMBL::Slice in case of blast results
 ### Wrapper around ORM::EnsEMBL::DB::Tools::Object::Result and provides method for compatibility with drawing code
-### TODO - removed non-container stuff from this!
 
 use strict;
 use warnings;
@@ -38,19 +38,20 @@ sub new {
     'name'    => $sequence->{'display_id'},
     'length'  => CORE::length($sequence->{'sequence'}),
     'hsps'    => [ map {
-      my $hsp       = $_->result_data->raw;
-      $hsp->{'id'}  = $_->result_id;
-      $hsp->{'tl'}  = $object->create_url_param({'result_id' => $hsp->{'id'}});
-      $hsp;
-    } @$results ],
+      'id'      => $_->result_id,
+      'tl'      => $object->create_url_param({'result_id' => $_->result_id}),
+      %{$_->result_data->raw}
+    }, @$results ],
     'colours' => $colours
   }, $class;
 }
 
+sub hsps    { return shift->{'hsps'};     }
+
+# Methods as needed by drawing code
 sub start   { return 0;                   }
 sub end     { return shift->{'length'};   }
 sub length  { return shift->{'length'};   }
-sub hsps    { return shift->{'hsps'};     }
 sub colours { return shift->{'colours'};  }
 sub name    { return shift->{'name'};     }
 

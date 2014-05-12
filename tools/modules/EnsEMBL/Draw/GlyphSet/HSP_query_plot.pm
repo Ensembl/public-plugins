@@ -31,11 +31,10 @@ sub _init {
   my $config        = $self->{'config'};
   my $mode          = $self->my_config('mode') || "byhit";
   my $colours       = $container->colours;
-  my $opts          = {
+  my $options       = {
     'pix_per_bp'      => $config->transform->{'scalex'},
     'bitmap_length'   => int($container->length() * $config->transform->{'scalex'}),
     'id'              => $container->name,
-    'db'              => $container->{'database'},
     'dep'             => $self->my_config('dep') || 10,
     'bitmap'          => [],
     'tally'           => {},
@@ -43,6 +42,7 @@ sub _init {
 
   my @all_hsps      = ();
   my $ori           = $self->strand;
+
   foreach my $hsp (@{$container->hsps}) {
     my $qori = $hsp->{'q_ori'} || 1;
     my $hori = $hsp->{'g_ori'} || 1;
@@ -50,11 +50,11 @@ sub _init {
     push @all_hsps, $hsp;
   }
 
-  $self->hsp($_, $opts, $colours) for sort { $b->{'pident'} <=> $a->{'pident'} } @all_hsps;
+  $self->hsp($_, $options, $colours) for sort { $b->{'pident'} <=> $a->{'pident'} } @all_hsps;
 }
 
 sub hsp {
-  my ($self, $hsp, $opts, $colours) = @_;
+  my ($self, $hsp, $options, $colours) = @_;
 
   my ($hspstart, $hspend) = $self->region($hsp);
   my $colour              = $colours->[int(((@$colours - 1) * $hsp->{'pident'} / 100) + 0.5)]; # round
@@ -67,19 +67,22 @@ sub hsp {
     'colour'                => $colour,
     'bordercolour'          => 'black',
     'href'                  => $self->_url({
-      'species' => $self->species,
-      'action'  => 'Blast',
-      'tl'      => $hsp->{'tl'}
+      'species'               => $self->species,
+      'type'                  => 'Tools',
+      'action'                => 'Blast',
+      'function'              => '',
+      'tl'                    => $hsp->{'tl'},
+      'hit'                   => $hsp->{'id'},
     })
   });
 
-  my $bump_start          = int($glyph->x() * $opts->{'pix_per_bp'});
+  my $bump_start          = int($glyph->x() * $options->{'pix_per_bp'});
      $bump_start          = 0 if $bump_start < 0;
-  my $bump_end            = $bump_start + int($glyph->width() * $opts->{'pix_per_bp'}) + 1;
-     $bump_end            = $opts->{'bitmap_length'} if $bump_end > $opts->{'bitmap_length'};
-  my $row                 = &Sanger::Graphics::Bump::bump_row($bump_start, $bump_end, $opts->{'bitmap_length'}, $opts->{'bitmap'});
+  my $bump_end            = $bump_start + int($glyph->width() * $options->{'pix_per_bp'}) + 1;
+     $bump_end            = $options->{'bitmap_length'} if $bump_end > $options->{'bitmap_length'};
+  my $row                 = &Sanger::Graphics::Bump::bump_row($bump_start, $bump_end, $options->{'bitmap_length'}, $options->{'bitmap'});
 
-  return if $opts->{'dep'} != 0 && $row >= $opts->{'dep'};
+  return if $options->{'dep'} != 0 && $row >= $options->{'dep'};
   $glyph->y($glyph->y() - (1.6 * $row * $height * $self->strand()));
   $self->push($glyph);
 }
