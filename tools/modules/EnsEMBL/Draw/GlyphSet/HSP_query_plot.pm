@@ -72,7 +72,7 @@ sub hsp {
       'action'                => 'Blast',
       'function'              => '',
       'tl'                    => $hsp->{'tl'},
-      'hit'                   => $hsp->{'id'},
+      'hit'                   => $hsp->{'result_id'},
     })
   });
 

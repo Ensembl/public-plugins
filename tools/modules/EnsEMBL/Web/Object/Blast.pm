@@ -296,64 +296,55 @@ sub map_result_hits_to_karyotype {
 }
 
 sub get_all_hits {
-  ## Gets all the result hits for the given job
+  ## Gets all the result hits (hashrefs) for the given job, and adds result_id and tl (url param) to the individual hit
   ## @param Job object
-  ## @return Hashref { result_id => result_data }
-  my ($self, $job) = @_;
+  ## @param Optional sort subroutine to sort the hits (defaults to sorting by result id)
+  ## @return Arrayref of hits hashref
+  my ($self, $job, $sort) = @_;
+
+  $sort ||= sub { $a->{'result_id'} <=> $b->{'result_id'} };
 
   $job->load('with' => 'result');
 
-  return { map { $_->result_id => $_->result_data } @{$job->result} };
+  return [ sort $sort map {
+
+    my $result_id   = $_->result_id;
+    my $result_data = $_->result_data->raw;
+
+    $result_data->{'result_id'} = $result_id;
+    $result_data->{'tl'}        = $self->create_url_param({'result_id' => $result_id});
+
+    $result_data
+
+  } @{$job->result} ];
 }
 
 sub get_all_hits_in_slice_region {
   ## Gets all the result hits for the given job in the given slice region
   ## @param Job object
   ## @param Slice object
-  ## @return Hashref { result_id => result_data }
-  my ($self, $job, $slice) = @_;
+  ## @param Sort subroutine as accepted by get_all_hits
+  ## @return Array of hits hashrefs
+  my ($self, $job, $slice, $sort) = @_;
 
-  my $hits      = $self->get_all_hits($job);
   my $s_name    = $slice->seq_region_name;
   my $s_start   = $slice->start;
   my $s_end     = $slice->end;
 
-  my ($gid, $gstart, $gend);
+  return [ grep {
 
-  while (my ($hit_id, $hit) = each %$hits) {
+    my $gid    = $_->{'gid'};
+    my $gstart = $_->{'gstart'};
+    my $gend   = $_->{'gend'};
 
-    $gid    = $hit->{'gid'};
-    $gstart = $hit->{'gstart'};
-    $gend   = $hit->{'gend'};
+    $s_name eq $gid && (
+      $gstart >= $s_start && $gend <= $s_end ||
+      $gstart < $s_start && $gend <= $s_end && $gend > $s_start ||
+      $gstart >= $s_start && $gstart <= $s_end && $gend > $s_end ||
+      $gstart < $s_start && $gend > $s_end && $gstart < $s_end
+    )
 
-    if ($s_name eq $gid) {
-
-      if (
-        $gstart >= $s_start && $gend <= $s_end ||
-        $gstart < $s_start && $gend <= $s_end && $gend > $s_start ||
-        $gstart >= $s_start && $gstart <= $s_end && $gend > $s_end ||
-        $gstart < $s_start && $gend > $s_end && $gstart < $s_end
-      ) {
-        next;
-      }
-    }
-
-    delete $hits->{$hit_id};
-  }
-
-  return $hits;
-}
-
-sub get_all_hits_by_coords {
-  ## Gets all the result hits for the given job for given coords
-  ## @param Job object
-  ## @param Coords
-  ## @return Hashref { result_id => result_data }
-  my ($self, $job, $coords) = @_;
-
-  my $slice = $self->database('core', $job->species)->get_SliceAdaptor->fetch_by_toplevel_location($coords);
-
-  return $self->get_all_hits_in_slice_region($job, $slice);
+  } @{$self->get_all_hits($job, $sort)} ];
 }
 
 sub get_result_url {
