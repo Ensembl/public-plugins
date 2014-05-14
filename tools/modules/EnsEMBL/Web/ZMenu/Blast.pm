@@ -21,8 +21,6 @@ package EnsEMBL::Web::ZMenu::Blast;
 use strict;
 use warnings;
 
-use EnsEMBL::Web::Component::Tools::Blast;
-
 use parent qw(EnsEMBL::Web::ZMenu);
 
 sub content {
