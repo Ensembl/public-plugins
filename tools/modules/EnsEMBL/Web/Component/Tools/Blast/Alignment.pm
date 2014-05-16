@@ -129,7 +129,7 @@ sub get_slice {
       { name => 'Subject', slice => $hit_slice },
     );
   } else {
-    my $ref_slice     = $object->get_hit_genomic_slice($hit, $species);
+    my $ref_slice     = $object->get_hit_genomic_slice($hit);
     my $target_object = $object->get_target_object($hit, $job->job_data->{'source'});
     my $orientation   = $hit->{'gori'};
 
@@ -161,7 +161,8 @@ sub get_mapped_slice {
   my $object            = $self->object;
   my $hub               = $self->hub;
   my $hit               = $self->hit;
-  my $species           = $self->job->species;
+  my $job               = $self->job;
+  my $species           = $job->species;
   my $sr_name           = $reference_slice->seq_region_name;
   my $msc               = Bio::EnsEMBL::MappedSliceContainer->new(-SLICE => $reference_slice, -EXPANDED => 1);
   my $ms                = Bio::EnsEMBL::MappedSlice->new(-adaptor => $reference_slice->adaptor, -name => 'test_map', -container => $msc);
@@ -171,14 +172,13 @@ sub get_mapped_slice {
   my $total_length_diff = 0;
 
   # Process genomic btop string to map coordiniates
-  my $aln = $hit->{'db_type'} =~ /cdna/i ?  $object->map_btop_to_genomic_coords($hit, $hit->{'result_id'}) : $hit->{'aln'};
-     $aln = $object->reverse_btop($aln) if $hit->{'gori'} ne '1' && $hit->{'db_type'}=~ /latest/i;
+  my $aln = $object->map_btop_to_genomic_coords($hit, $job);
      $aln =~ s/(\d+)/:$1:/g;
-     $aln  =~ s/^:|:$//g;
+     $aln =~ s/^:|:$//g;
 
   my @alignment_features = split /:/, $aln;
   my $rev_flag           = $hit->{'gori'} ne $hit->{'tori'} ? 1 : undef;
-     $rev_flag           = 1 if $hit->{'gori'} ne '1' && $hit->{'db_type'} =~ /latest/i;
+     $rev_flag           = 1 if $hit->{'gori'} ne '1' && $hit->{'source'} =~ /latest/i;
 
   # Try thinking about this another way, the only bits of the btop we need to consider are
   # where we have a gap inserted into the hit sequence relative to the reference sequence

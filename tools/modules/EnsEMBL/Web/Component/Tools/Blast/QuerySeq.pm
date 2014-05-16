@@ -56,7 +56,7 @@ sub get_slice {
   my $query_seq = $self->object->get_input_sequence_for_job($job)->{'sequence'};
   
   return Bio::EnsEMBL::Slice->new(
-    -coord_system    => $self->object->get_hit_genomic_slice($hit, $job->species)->coord_system,
+    -coord_system    => $self->object->get_hit_genomic_slice($hit)->coord_system,
     -seq_region_name => $hit->{'qid'},
     -start           => 1,
     -end             => length($query_seq),
