@@ -355,7 +355,7 @@ sub query_sequence {
       $frame = 0;
 
       foreach (@{$hit->{'g_coords'}}) {
-        my $slice       = $slice_adaptor->fetch_by_toplevel_location(sprintf '%s:%s-%s:%s', $hit->{'gid'}, $start, $end, $$hit->{'gori'});
+        my $slice       = $slice_adaptor->fetch_by_toplevel_location(sprintf '%s:%s-%s:%s', $hit->{'gid'}, $start, $end, $hit->{'gori'});
            $temp_seq   .= $slice->seq;
            $full_length = 1;
       }
