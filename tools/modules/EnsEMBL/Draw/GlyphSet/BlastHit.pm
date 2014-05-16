@@ -16,7 +16,7 @@ limitations under the License.
 
 =cut
 
-package EnsEMBL::Draw::GlyphSet::blast_hit_btop;
+package EnsEMBL::Draw::GlyphSet::BlastHit;
 
 use strict;
 use warnings;
