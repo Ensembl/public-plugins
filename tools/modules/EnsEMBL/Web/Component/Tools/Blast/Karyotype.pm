@@ -32,7 +32,7 @@ sub content {
   my $sd        = $hub->species_defs;
   my $job       = $object->get_requested_job({'with_all_results' => 1});
 
-  return '' if $job->status ne 'done' || !$job->result_count;
+  return '' if !$job || $job->status ne 'done' || !$job->result_count;
 
   my $species     = $job->species;
   my $chromosomes = $sd->get_config($species, 'ENSEMBL_CHROMOSOMES') || [];
