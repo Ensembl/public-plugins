@@ -392,7 +392,7 @@ sub get_result_url {
       'species'   => $species,
       'type'      => 'Tools',
       'action'    => 'Blast',
-      'function'  => $job_data->{'db_type'} eq 'peptide' || $job_data->{'query_type'} eq 'peptide' ? 'AlignmentProtein' : 'Alignment',
+      'function'  => $self->get_alignment_component_name_for_job($job),
       'tl'        => $url_param
     };
 
@@ -416,6 +416,12 @@ sub get_result_url {
       'tl'        => $url_param
     };
   }
+}
+
+sub get_alignment_component_name_for_job {
+  ## Returns 'Alignment' or 'AlignmentProtein' () depending upon job object
+  my ($self, $job) = @_;
+  return $job->job_data->{'db_type'} eq 'peptide' || $job->job_data->{'query_type'} eq 'peptide' ? 'AlignmentProtein' : 'Alignment';
 }
 
 sub handle_download {
