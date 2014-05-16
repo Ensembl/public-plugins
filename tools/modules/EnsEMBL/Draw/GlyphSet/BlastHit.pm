@@ -90,7 +90,7 @@ sub features {
           $coords->[0]->start($hit->{'gstart'});
           $coords->[0]->end($hit->{'gend'});
         } else {
-          push @$coords, Bio::EnsEMBL::Mapper::Coordinate->new($hit->{'git'}, $hit->{'gstart'}, $hit->{'gend'});
+          push @$coords, Bio::EnsEMBL::Mapper::Coordinate->new($hit->{'gid'}, $hit->{'gstart'}, $hit->{'gend'});
         }
       }
     }
