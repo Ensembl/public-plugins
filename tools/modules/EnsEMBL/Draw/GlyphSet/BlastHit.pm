@@ -25,6 +25,7 @@ use warnings;
 
 use Bio::EnsEMBL::Analysis;
 use Bio::EnsEMBL::Feature;
+use Bio::EnsEMBL::Mapper::Coordinate;
 
 use EnsEMBL::Web::BlastConstants qw(BLAST_KARYOTYPE_POINTER);
 
@@ -85,10 +86,13 @@ sub features {
     } else {
 
       if ($method =~ /tblastn/i || $source =~/latest/i) {
-        $coords->[0]->{'start'} = $hit->{'gstart'};
-        $coords->[0]->{'end'}   = $hit->{'gend'};
+        if (@$coords) {
+          $coords->[0]->start($hit->{'gstart'});
+          $coords->[0]->end($hit->{'gend'});
+        } else {
+          push @$coords, Bio::EnsEMBL::Mapper::Coordinate->new($hit->{'git'}, $hit->{'gstart'}, $hit->{'gend'});
+        }
       }
-
     }
 
     push @features, Bio::EnsEMBL::Feature->new(
