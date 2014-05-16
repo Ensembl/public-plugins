@@ -27,9 +27,15 @@ sub modify_page_elements  { $_[0]->page->remove_body_element('summary');  }
 sub set_default_action    { $_[0]->{'_data'}{'default'} = 'Summary';      }
 
 sub populate_tree {
-  my $self = shift;
+  my $self        = shift;
+  my $hub         = $self->hub;
+  my $action      = $hub->action || '';
+  my $function    = $hub->function || '';
+  my $object      = $self->object->get_sub_object;
+  my $url_param   = $object->parse_url_param;
+  my $job         = $object->get_requested_job;
 
-  my $tools_node = $self->create_node('Summary', 'Web Tools',
+  my $tools_node  = $self->create_node('Summary', 'Web Tools',
     [qw(
       icons           EnsEMBL::Web::Component::Tools::Icons
       tickets         EnsEMBL::Web::Component::Tools::TicketsList
@@ -38,72 +44,80 @@ sub populate_tree {
     { 'availability' => 0, 'concise' => 'Web Tools' }
   );
 
-  $tools_node->append($_) for (
+  my $blast_node = $tools_node->append($self->create_subnode('Blast', 'BLAST/BLAT',
+    [qw(
+      sequence        EnsEMBL::Web::Component::Tools::Blast::InputForm
+      details         EnsEMBL::Web::Component::Tools::Blast::TicketDetails
+      tickets         EnsEMBL::Web::Component::Tools::Blast::TicketsList
+    )],
+    { 'availability' => 1, 'concise' => 'BLAST/BLAT search' }
+  ));
+
+  my $blast_results_node = $blast_node->append($self->create_subnode('Blast/Results', "Results ($url_param->{'ticket_name'}/$url_param->{'job_id'})",
+    [qw(
+      results         EnsEMBL::Web::Component::Tools::Blast::ResultsSummary
+      karyotype       EnsEMBL::Web::Component::Tools::Blast::Karyotype
+      hsps            EnsEMBL::Web::Component::Tools::Blast::HspQueryPlot
+      table           EnsEMBL::Web::Component::Tools::Blast::ResultsTable
+    )],
+    { 'availability' => 1, 'concise' => $self->object ? $self->object->long_caption : '', 'no_menu_entry' => "$action/$function" !~ /^Blast\/(Results|Alignment(Protein)?|(Genomic|Query)Seq)$/ }
+  ));
+
+  # Flags to display blast result sub-nodes
+  my $hide_sub_result_nodes = "$action/$function" eq 'Blast/Results';
+  my $alignment_type        = $job && $object->can('get_alignment_component_name_for_job') ? $object->get_alignment_component_name_for_job($job) : '';
+
+  $blast_results_node->append($_) for (
 
     ## BLAST specific nodes
-    $self->create_subnode('Blast', 'BLAST/BLAT',
-      [qw(
-        sequence        EnsEMBL::Web::Component::Tools::Blast::InputForm
-        details         EnsEMBL::Web::Component::Tools::Blast::TicketDetails
-        tickets         EnsEMBL::Web::Component::Tools::Blast::TicketsList
-      )],
-      { 'availability' => 1, 'concise' => 'BLAST/BLAT search' }
-    ),
-    $self->create_subnode('Blast/Results', 'Results',
-      [qw(
-        results         EnsEMBL::Web::Component::Tools::Blast::ResultsSummary
-        karyotype       EnsEMBL::Web::Component::Tools::Blast::Karyotype
-        hsps            EnsEMBL::Web::Component::Tools::Blast::HspQueryPlot
-        table           EnsEMBL::Web::Component::Tools::Blast::ResultsTable
-      )],
-      { 'availability' => 1, 'concise' => $self->object ? $self->object->long_caption : '', 'no_menu_entry' => 1 }
-    ),
     $self->create_subnode('Blast/Alignment', 'Alignment',
       [qw(
         hit             EnsEMBL::Web::Component::Tools::Blast::HitSummary
         alignment       EnsEMBL::Web::Component::Tools::Blast::Alignment
       )],
-      { 'availability' => 1, 'concise' => 'BLAST/BLAT Alignment', 'no_menu_entry' => 1 }
+      { 'availability' => 1, 'concise' => 'BLAST/BLAT Alignment', 'no_menu_entry' => $hide_sub_result_nodes || $alignment_type ne 'Alignment'}
     ),
-    $self->create_subnode('Blast/AlignmentProtein', 'AlignmentProtein',
+    $self->create_subnode('Blast/AlignmentProtein', 'Alignment',
       [qw(
         hit             EnsEMBL::Web::Component::Tools::Blast::HitSummary
         alignment       EnsEMBL::Web::Component::Tools::Blast::AlignmentProtein
       )],
-      { 'availability' => 1, 'concise' => 'BLAST/BLAT Alignment', 'no_menu_entry' => 1 }
+      { 'availability' => 1, 'concise' => 'BLAST/BLAT Alignment', 'no_menu_entry' => $hide_sub_result_nodes || $alignment_type ne 'AlignmentProtein'}
     ),
     $self->create_subnode('Blast/QuerySeq', 'Query Sequence',
       [qw(
         hit             EnsEMBL::Web::Component::Tools::Blast::HitSummary
         query           EnsEMBL::Web::Component::Tools::Blast::QuerySeq
       )],
-      { 'availability' => 1, 'concise' => 'BLAST/BLAT Query Sequence', 'no_menu_entry' => 1 }
+      { 'availability' => 1, 'concise' => 'BLAST/BLAT Query Sequence', 'no_menu_entry' => $hide_sub_result_nodes }
     ),
     $self->create_subnode('Blast/GenomicSeq', 'Genomic Sequence',
       [qw(
         hit             EnsEMBL::Web::Component::Tools::Blast::HitSummary
         genomic         EnsEMBL::Web::Component::Tools::Blast::GenomicSeq
       )],
-      { 'availability' => 1, 'concise' => 'BLAST/BLAT Genomic Sequence', 'no_menu_entry' => 1 }
-    ),
-
-    ## VEP specific nodes
-    $self->create_subnode('VEP', 'Variant Effect Predictor',
-      [qw(
-        vepeffect       EnsEMBL::Web::Component::Tools::VEP::InputForm
-        details         EnsEMBL::Web::Component::Tools::VEP::TicketDetails
-        tickets         EnsEMBL::Web::Component::Tools::VEP::TicketsList
-      )],
-      { 'availability' => 1, 'concise' => 'Variant Effect Predictor' }
-    ),
-    $self->create_subnode('VEP/Results', 'Results',
-      [qw(
-        ressummary  EnsEMBL::Web::Component::Tools::VEP::ResultsSummary
-        results     EnsEMBL::Web::Component::Tools::VEP::Results
-      )],
-      { 'availability' => 1, 'concise' => 'Variant Effect Predictor results', 'no_menu_entry' => 1 } 
+      { 'availability' => 1, 'concise' => 'BLAST/BLAT Genomic Sequence', 'no_menu_entry' => $hide_sub_result_nodes }
     )
   );
+
+  ## VEP specific nodes
+  my $vep_node = $tools_node->append($self->create_subnode('VEP', 'Variant Effect Predictor',
+    [qw(
+      vepeffect       EnsEMBL::Web::Component::Tools::VEP::InputForm
+      details         EnsEMBL::Web::Component::Tools::VEP::TicketDetails
+      tickets         EnsEMBL::Web::Component::Tools::VEP::TicketsList
+    )],
+    { 'availability' => 1, 'concise' => 'Variant Effect Predictor' }
+  ));
+
+  $vep_node->append($self->create_subnode('VEP/Results', "Results ($url_param->{'ticket_name'}/$url_param->{'job_id'})",
+    [qw(
+      ressummary  EnsEMBL::Web::Component::Tools::VEP::ResultsSummary
+      results     EnsEMBL::Web::Component::Tools::VEP::Results
+    )],
+    { 'availability' => 1, 'concise' => 'Variant Effect Predictor results', 'no_menu_entry' => "$action/$function" ne 'VEP/Results' }
+  ));
+
 }
 
 1;
