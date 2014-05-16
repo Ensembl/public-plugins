@@ -123,7 +123,7 @@ sub map_to_genome {
   $hit->{'gend'}      = $g_end;
   $hit->{'gori'}      = $g_ori;
   $hit->{'species'}   = $species;
-  $hit->{'db_type'}   = $source_type;
+  $hit->{'source'}    = $source_type;
   $hit->{'g_coords'}  = $g_coords if $g_coords;
 
   return $hit;
