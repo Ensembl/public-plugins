@@ -18,202 +18,173 @@ limitations under the License.
 
 package EnsEMBL::Draw::GlyphSet::BlastHit;
 
+## Blast track for contigviewbottom
+
 use strict;
 use warnings;
-no warnings 'uninitialized';
-
-use parent qw(EnsEMBL::Draw::GlyphSet);
 
 use Bio::EnsEMBL::Analysis;
 use Bio::EnsEMBL::Feature;
 
-sub colour_key {return 'blast';}
-sub title {}
+use EnsEMBL::Web::BlastConstants qw(BLAST_KARYOTYPE_POINTER);
 
-sub features {warn "NOT IMPLEMENTED";
-  my $self = shift;
-  my $slice = $self->{'container'};
-  my @features; 
+use parent qw(EnsEMBL::Draw::GlyphSet);
 
-  my $tools_object = $self->{'config'}->{'hub'}->core_object('tools');
-  return unless $tools_object;
+sub label_overlay { return 1; }
+sub fixed         { return 0; }
+sub colour_key    { return 'blast'; }
+sub title         { }
 
-  my $ticket = $tools_object->ticket;
+sub features {
+  my $self    = shift;
+  my $hub     = $self->{'config'}->hub;
+  my $slice   = $self->{'container'};
+  my $object  = $hub->core_object('Tools') or return;
+     $object  = $object->get_sub_object('Blast');
+  my $job     = $object->get_requested_job({'with_all_results' => 1}) or return;
+  my $method  = $object->parse_search_type($job->job_data->{'search_type'}, 'search_method');
+  my $hits    = $object->get_all_hits_in_slice_region($job, $slice, sub { ($a->{'score'} || 0) <=> ($b->{'score'} || 0) });
 
-  my @result_lines = @{$tools_object->get_all_hits_from_ticket_in_region($slice, $ticket->ticket_id)}; # TODO - get_all_hits_in_slice_region
-  my %extra;
+  return unless @$hits;
 
-  my $analysis = new Bio::EnsEMBL::Analysis (
+  my $analysis = Bio::EnsEMBL::Analysis->new(
     -id               => 1,
-    -logic_name       => 'blast_search', 
+    -logic_name       => 'blast_search',
     -db               => undef,
     -db_version       => undef,
-    -db_file          => undef, 
+    -db_file          => undef,
     -program          => 'blast',
     -program_version  => undef,
     -program_file     => undef,
-    -gff_source       => undef, 
+    -gff_source       => undef,
     -gff_feature      => undef,
     -module           => undef,
     -module_version   => undef,
-    -parameters       => undef, 
+    -parameters       => undef,
     -created          => undef,
     -display_label    => 'test',
   );
 
-  
-  foreach (sort {$a->[1]->{'score'} <=> $b->[1]->{'score'}} @result_lines){
+  my (@features, %features_info);
 
-    my $hit = $_->[1];
+  foreach my $hit (@$hits) {
+
     next if $hit->{'gori'} ne $self->strand;
-    my $id = $_->[0];
-    my $coords = $hit->{'g_coords'} || undef;
-    my $identity            = sprintf("%.1f", ($hit->{'pident'} /100));
-    my $colours = $self->get_colour_scale;  
-    my $colour  = $colours->{$identity};
-    my $slice_length = $slice->length; 
-    my $db_type = $hit->{'db_type'};
-    my $method = $self->{'config'}->hub->param('method');
-    my $draw_btop = $slice_length < 10000 && $method =~/^blastn/i  ? 1 :undef 
+    my $result_id     = $hit->{'result_id'};
+    my $coords        = $hit->{'g_coords'} || [];
+    my $colour        = $self->get_colour($hit->{'pident'});
+    my $slice_length  = $slice->length;
+    my $source        = $hit->{'source'};
 
     my $btop;
-    if ($draw_btop) { 
-      $btop  =  $db_type =~/cdna/i ?  $tools_object->map_btop_to_genomic_coords($hit, $_->[0]) : $hit->{'aln'};
-      if ($btop && $hit->{'gori'} ne '1' && $hit->{'db_type'}=~/latest/i){
-        $btop = $tools_object->reverse_btop($btop);
-      }
+
+    if ($slice_length < 10000 && $method =~ /^blastn/i) { # draw btop in this case
+
+      $btop = $object->map_btop_to_genomic_coords($hit, $job);
+
     } else {
-      if (lc($method) eq 'tblastn' || $db_type =~/latest/i ){
+
+      if ($method =~ /tblastn/i || $source =~/latest/i) {
         $coords->[0]->{'start'} = $hit->{'gstart'};
         $coords->[0]->{'end'}   = $hit->{'gend'};
-      } 
+      }
+
     }
 
-    my $feature = new Bio::EnsEMBL::Feature (
-      -dbID           => $id,
-      -slice          => $slice,
-      -start          => $hit->{'gstart'},
-      -end            => $hit->{'gend'},
-      -strand         => $hit->{'gori'},
-      -analysis       => $analysis,
+    push @features, Bio::EnsEMBL::Feature->new(
+      -dbID     => $result_id,
+      -slice    => $slice,
+      -start    => $hit->{'gstart'},
+      -end      => $hit->{'gend'},
+      -strand   => $hit->{'gori'},
+      -analysis => $analysis,
     );
 
-     my %feat_info = (    
-      btop_string    => $btop,
-      coords         => $coords,
-      target_strand  => $hit->{'tori'},
-      ticket_name    => $ticket->ticket_name,
-      colour         => $colour,
-      db_type        => $db_type,
-    );
-
-    $extra{$id} = \%feat_info;
-    push @features, $feature;
+    $features_info{$result_id} = {
+      btop_string   => $btop,
+      coords        => $coords,
+      target_strand => $hit->{'tori'},
+      tl            => $hit->{'tl'},
+      colour        => $colour,
+      blast_type    => $method
+    };
   }
 
-  return (\@features,  \%extra);  
-}
-
-sub get_colour_scale {
-  my $self = shift;use Carp qw(croak); croak 'TODO';
-  my %pointer_defaults    = ();#EnsEMBL::Web::BlastConstants::KARYOTYPE_POINTER_DEFAULTS; #use blast_pointer_style
-  my $defaults            = $pointer_defaults{'Blast'};
-  my $gradient            = $defaults->[2];
-  my @colour_scale        = $self->{'config'}->colourmap->build_linear_gradient(@$gradient);
-  my $colours;
-
-
-  my $i = 0;
-  foreach my $colour (@colour_scale) {
-    $colours->{$i} = $colour;
-    $i = sprintf("%.1f", $i + 0.1);
-  }
- 
-  return $colours;
-}
-
-sub highlight {
-  my ($self, $f, $composite,$pix_per_bp, $h) = @_;
-  my $highlight = $self->{'config'}->hub->param('h');
- 
-  return unless $highlight eq $f->dbID;
-
-  $self->unshift( $self->Rect({ 
-    'x'         => $composite->x() - 2/$pix_per_bp,
-    'y'         => $composite->y() + 6, ## + makes it go down
-    'width'     => ($composite->width() -1) + 4/$pix_per_bp,
-    'height'    => $h + 4,
-    'colour'    => 'highlight2',
-    'absolutey' => 1,
-  }));
+  return (\@features, \%features_info);
 }
 
 sub render_normal {
-  my $self = shift;
-
-  my $dep             = @_ ? shift : ($self->my_config('dep') || 100);
-     $dep = 0 if $self->my_config('nobump') or $self->my_config('strandbump');
-  my $strand            = $self->strand;
-  my $strand_flag       = $self->my_config('strand');
-  my $length            = $self->{'container'}->length;
-  my $pix_per_bp        = $self->scalex;
-  my $slice_start       = $self->{'container'}->start -1;
-  my $slice_end         = $self->{'container'}->end;    
-  my ($font, $fontsize) = $self->get_font_details($self->my_config('font') || 'innertext');
-  my $h                 = $self->my_config('height') || 8;
-  my $gap               = $h < 2 ? 1 : 2;
-
-  my ($features, $aln_info) = $self->features; 
-
-  my $y_offset        = 0;
-  my $features_bumped = 0;
+  my $self                  = shift;
+  my $dep                   = @_ ? shift : ($self->my_config('dep') || 100);
+     $dep                   = 0 if $self->my_config('nobump') || $self->my_config('strandbump');
+  my $strand                = $self->strand;
+  my $strand_flag           = $self->my_config('strand');
+  my $slice                 = $self->{'container'};
+  my $length                = $slice->length;
+  my $pix_per_bp            = $self->scalex;
+  my $slice_start           = $slice->start - 1;
+  my $slice_end             = $slice->end;
+  my ($font, $fontsize)     = $self->get_font_details($self->my_config('font') || 'innertext');
+  my $height                = $self->my_config('height') || 11;
+  my $gap                   = $height < 2 ? 1 : 2;
+  my @feats                 = $self->features;
+  my $features              = $feats[0] || [];
+  my $features_info         = $feats[1] || {};
+  my $y_offset              = 0;
+  my $features_bumped       = 0;
 
   $self->_init_bump(undef, $dep);
 
-  foreach my $f (@$features){
+  foreach my $feature (@$features) {
 
-    my $start = $f->start;      
-    my $end = $f->end; 
-    my $invert = $f->strand == $aln_info->{$f->dbID}->{'target_strand'} ? undef : 1;
-
-    if ($start < $slice_start ){$start = $slice_start;}
-    if ($end > $slice_end) {$end  = $slice_end;}    
-
-    my $bump_start = int($pix_per_bp * ($start - $slice_start < 1 ? 1 : $start - $slice_start)) -1;
-    my $bump_end = int($pix_per_bp * ($end - $slice_start > $length ? $length : $end - $slice_start));
+    my $db_id       = $feature->dbID;
+    my $feat_info   = $features_info->{$db_id};
+    my $method      = $feat_info->{'blast_type'};
+    my $start       = $feature->start;
+       $start       = $slice_start if $start < $slice_start;
+    my $end         = $feature->end;
+       $end         = $slice_end if $end > $slice_end;
+    my $invert      = $feature->strand != $feat_info->{'target_strand'};
+    my $bump_start  = int($pix_per_bp * ($start - $slice_start < 1 ? 1 : $start - $slice_start)) -1;
+    my $bump_end    = int($pix_per_bp * ($end - $slice_start > $length ? $length : $end - $slice_start));
 
     my $row = 0;
-    if ($dep > 0 ){
+    if ($dep > 0) {
       $row = $self->bump_row($bump_start, $bump_end);
-      
-      if ($row > $dep){
+
+      if ($row > $dep) {
         $features_bumped++;
         next;
       }
     }
 
-    my $y_pos = $y_offset - $row * int($h + 5 + $gap) * $strand;
+    my $y_pos       = $y_offset - $row * int($height + 5 + $gap) * $strand;
+    my $btop        = $feat_info->{'btop_string'};
+    my $coords      = $feat_info->{'coords'};
+    my $ticket_name = $feat_info->{'ticket_name'};
+    my $colour      = $feat_info->{'colour'};
 
-    my $btop        = $aln_info->{$f->dbID}->{'btop_string'};
-    my $coords      = $aln_info->{$f->dbID}->{'coords'};
-    my $ticket_name = $aln_info->{$f->dbID}->{'ticket_name'};
-    my $colour      = $aln_info->{$f->dbID}->{'colour'};
-    my $db_type     = $aln_info->{$f->dbID}->{'db_type'};
+    my $composite   = $self->Composite({
+      x               => $start - $slice_start,
+      y               => -8,
+      width           => $end - $start,
+      height          => $height + 9,
+      title           => undef,
+      href            => $self->_url({
+        species         => $self->species,
+        type            => 'Tools',
+        action          => 'BlastTrack',
+        function        => '',
+        tl              => $feat_info->{'tl'}
+      })
+    });
 
-    my $composite = $self->Composite({
-      x         => $start - $slice_start,
-      y         => -8,
-      width     => $end - $start,
-      height    => $h + 9,
-      title     => undef,
-      href      => $self->href($ticket_name, $f->dbID),
-    }); 
-
-    if ($btop){ 
+    if ($btop) {
       $self->draw_btop_feature({
+        blast_method    => $method,
         composite       => $composite,
-        feature         => $f,
-        height          => $h,
+        feature         => $feature,
+        height          => $height,
         feature_colour  => $colour,
         scalex          => $pix_per_bp,
         btop            => $btop,
@@ -223,78 +194,88 @@ sub render_normal {
       });
     } else {
       $self->draw_aln_coords({
+        blast_method    => $method,
         composite       => $composite,
-        feature         => $f,
-        height          => $h,
+        feature         => $feature,
+        height          => $height,
         feature_colour  => $colour,
         scalex          => $pix_per_bp,
         coords          => $coords,
         seq_invert      => $invert,
         y_offset        => $y_pos,
-
       });
     }
 
     $composite->border_colour($colour);
-
     $composite->y($composite->y + $y_pos);
     $self->push($composite);
-    $self->highlight($f, $composite, $pix_per_bp, $h);
-
+    $self->highlight($feature, $composite, $pix_per_bp, $height);
   }
 }
 
-sub href {
-  my ($self, $ticket_name, $hit_id) = @_;
-  return $self->_url({
-    species => $self->species,
-    action  => 'Blast',
-    hid     => $hit_id,
-    tk      => $ticket_name,
-  });
+sub get_colour {
+  my ($self, $percent) = @_;
+
+  my $scale = $self->{'_colour_scale'} ||= [ $self->{'config'}->colourmap->build_linear_gradient(@{BLAST_KARYOTYPE_POINTER->{'gradient'}}) ];
+
+  return $scale->[ sprintf '%.f', $percent * (scalar @$scale - 1) / 100 ];
+}
+
+sub highlight {
+  my ($self, $feature, $composite, $pix_per_bp, $height) = @_;
+  my $highlight = $self->{'config'}->hub->param('h');
+
+  return unless ($highlight || '') eq $feature->dbID;
+
+  $self->unshift( $self->Rect({
+    'x'         => $composite->x() - 2/$pix_per_bp,
+    'y'         => $composite->y() + 6, ## + makes it go down
+    'width'     => ($composite->width() -1) + 4/$pix_per_bp,
+    'height'    => $height + 4,
+    'colour'    => 'highlight2',
+    'absolutey' => 1,
+  }));
 }
 
 sub draw_aln_coords {
   my ($self, $params) = @_;
-  my ($composite, $f, $h) = map $params->{$_}, qw(composite feature height);
+  my ($composite, $f, $height) = map $params->{$_}, qw(composite feature height);
   my $pix_per_bp = $self->scalex;
   my $slice = $self->{'container'};
   my $length = $slice->length;
   my $slice_start = $slice->start;
   my $slice_end = $slice->end;
   my $match_colour = $params->{'feature_colour'};
-  my $method = $self->{'config'}->hub->param('method');
+  my $method = $params->{'blast_method'};
 
   my $coords = $params->{'coords'};
 
   my ($first_exon_start, $last_exon_end, $exon_drawn, $previous_end);
 
   foreach my $block (@$coords) {
-    my $s = lc $method =~/^tblastn/ ? $block->{'start'} : $block->start;
-    my $e = lc $method =~/^tblastn/ ? $block->{'end'} : $block->end;
-    my $start = $s - $slice_start;
-    my $end   = $e - $slice_start;
+    my $start = $block->start - $slice_start;
+    my $end   = $block->end   - $slice_start;
 
     next if $start < 0 && $end < 0;
     next if $start > $slice_end;
-    
+
     $start = 0 if $start < 0;
     $first_exon_start = $start if !$exon_drawn;
-    $end = $slice_end if $end > $slice_end; 
+    $end = $slice_end if $end > $slice_end;
     $last_exon_end = $end;
 
-    my $block_length = $end - $start +1;    
+    my $block_length = $end - $start + 1;
 
     if ( $exon_drawn ){
       my $gap_start = $previous_end < 0 ? 0 : $previous_end;
       my $gap_width = $start - $previous_end;
 
       $composite->push($self->Rect({
-        x         => $gap_start,
-        y         => $params->{'y'} || 0,
-        width     => $gap_width,
-        height    => $h,
-        bordercolour    => $match_colour,
+        x             => $gap_start,
+        y             => $params->{'y'} || 0,
+        width         => $gap_width,
+        height        => $height,
+        bordercolour  => $match_colour,
       }));
     }
 
@@ -302,11 +283,224 @@ sub draw_aln_coords {
       x         => $start,
       y         => $params->{'y'} || 0,
       width     => $block_length,
-      height    => $h,
+      height    => $height,
       colour    => $match_colour,
     }));
     $exon_drawn = 1;
     $previous_end = $end;
   }
 }
+
+sub draw_btop_feature {
+  my ($self, $params) = @_;
+  my ($composite, $feature, $height) = map $params->{$_}, qw(composite feature height);
+  my $pix_per_bp = $self->scalex;
+  my $slice = $self->{'container'};
+  my $length = $slice->length;
+  my $slice_start = $slice->start;
+  my $slice_end = $slice->end;
+
+  my $seq   = $slice->seq;
+
+  my $match_colour = $params->{'feature_colour'};
+  my $mismatch_colour  = $self->{'config'}->colourmap->mix($match_colour, 'white', 0.9);
+  my($font, $fontsize) = $self->get_font_details( $self->fixed ? 'fixed' : 'innertext' );
+  my($tmp1, $tmp2, $font_w, $font_h) = $self->get_text_width(0, 'X', '', 'font' => $font, 'ptsize' => $fontsize);
+  my $text_fits =  $font_w * $slice->length <= int($slice->length * $pix_per_bp);
+
+  my $btop = $params->{'btop'};
+  $btop =~s/(\d+)/:$1:/g;
+  $btop =~s/^:|:$//g;
+  my @btop_features = split (/:/, $btop);
+
+  my $end = $feature->end > $slice_end ? $slice_end : $feature->end;
+  $end = $end - $slice_start + 1;
+
+  my $seq_start = $feature->start > $slice_start ? $feature->start - $slice_start : 0;
+  my $s1 = $feature->start - $slice_start;
+  my $width = $end - $seq_start +1;
+
+  $seq = substr($seq, $seq_start, $width);
+  my (%seq_diffs, @inserts);
+
+  while (scalar @btop_features > 0 ){
+    my $seq_index  = shift @btop_features;
+    my $diff_string = shift @btop_features || '';
+    my $diff_length = (length $diff_string) /2;
+    my @diffs = split (//, $diff_string);
+
+    my ($processed_diffs, $previous_state);
+    my $count = 0;
+    my $insert_count = 0;
+    my $gap_count = 0;
+
+    if (scalar @diffs > 2) {
+      while (my $query_base = shift @diffs){
+        my $target_base = shift @diffs;
+
+        my $state = $target_base eq '-' && $query_base ne '-' ? 'insert' :
+                    $query_base eq '-' && $target_base ne '-' ?'gap' :
+                    ($query_base =~/[ACTG]/i && $target_base =~/[ACTG]/i) ? 'mismatch' : 'intron';
+
+        my @diff = ($query_base, $target_base);
+        $insert_count++ if $state eq 'insert';
+        $gap_count++ if $state eq 'gap';
+
+        if (!$previous_state){
+          $processed_diffs->[0] = \@diff;
+        } elsif ( $state eq $previous_state){
+          my @temp = @{$processed_diffs->[$count]};
+          push @temp,  @diff;
+          $processed_diffs->[$count] = \@temp;
+        } else {
+          $count++;
+          $processed_diffs->[$count] = \@diff;
+        };
+        $previous_state = $state;
+      }
+    } else {
+      $insert_count++ if @diffs > 1 && $diffs[1] eq '-' && $diffs[0] ne '-';
+      $processed_diffs->[0] = \@diffs;
+    }
+
+
+    my $e1 = $s1 + $seq_index;
+    my $s2 = $e1;
+    my $e2;
+    my $end_of_block = $s1 + $seq_index + $diff_length - $insert_count;
+
+    unless ( ($s1 < 0 && $end_of_block < 1) || ($s1 > $length  && $end_of_block > $length) ){
+      my $start = $s1;
+      $start = $start < 0 ? 0 : $start;
+      $e1 = $e1 > $length ? $length : $e1;
+      $e1 = $e1 > $end ? $end : $e1;
+
+      unless ($diff_string){
+        $composite->push($self->Rect({
+          x         => $start,
+          y         => $params->{'y'} || 0,
+          width     => $e1 - $start,
+          height    => $height,
+          colour    => $match_colour,
+        }));
+        next;
+      }
+
+      unless ( $e1 < 0) {
+      $composite->push($self->Rect({
+          x         => $start,
+          y         => $params->{'y'} || 0,
+          width     => $e1 - $start,
+          height    => $height,
+          colour    => $match_colour,
+        }));
+      }
+
+      foreach my $d (@{$processed_diffs}){
+        my @differences = @{$d};
+        my $diff_length = scalar @differences;
+        $diff_length = $diff_length /2;
+        my $e2 = $s2 + $diff_length;
+
+        unless (($s2 < 0 && $e2 < 0) || ($s2 > $length  && $e2 > $length)) {
+          $s2 = $s2 < 0 ? 0 : $s2;
+          $e2 = $e2 > $length ? $length : $e2;
+
+        # If mismatch
+          if ($differences[0] =~/[ACTG]/ && $differences[1] =~/[ACTG]/){
+            $composite->push($self->Rect({
+              x         => $s2,
+              y         => $params->{'y'} || 0,
+              width     => $e2 - $s2,
+              height    => $height,
+              colour    => $mismatch_colour,
+            }));
+
+            my $i = $s2;
+            while (@differences){
+              my $q = shift @differences;
+              my $h = shift @differences;
+              my @temp = ($q, 'black');
+              $seq_diffs{$slice_start + $i} = \@temp;
+              $i++;
+            }
+          } elsif ($differences[0] eq '-') { # Gap in hsp
+            $composite->push($self->Rect({
+              x             => $s2,
+              y             => $params->{'y'} || 0,
+              width         => $e2 - $s2,
+              height        => $height,
+              bordercolour  => $match_colour,
+            }));
+
+            my $j = $e2 - $s2;
+            for ( my $i = $s2;  $i < $j;  $i++){
+              my @temp = (undef, undef);
+              $seq_diffs{$i} = \@temp;
+            }
+          } else { #Insert in hit
+            my @evens = @differences[grep !($_ % 2), 0..$#differences];
+            my $i_count = scalar @evens;
+            my $insert_string = join '',  @evens;
+            push @inserts, {
+              'pos'   => $s2,
+              'title' => "Insert: " .$insert_string
+            };
+            $e2 = $e2 - $i_count;
+          }
+        }
+        $s2 = $e2;
+      }
+    }
+    last if $s2 > $length;
+    $s1 = $s1 + $seq_index + $diff_length;
+    $s1 -= $insert_count;
+  }
+
+  # Add alignment seq if zoomed in
+  if ($text_fits){
+    my $i = 0;
+    foreach my $base ( split //, $seq) {
+      my $x = $seq_start + $i;
+      my $pos = $slice_start + $seq_start + $i;
+      my $colour = 'white';
+
+      $base =~ tr/ACGTacgt/TGCAtgca/ if $params->{'seq_invert'};
+
+      if ($seq_diffs{$pos}){
+        $base = $seq_diffs{$pos}->[0];
+        $colour = $seq_diffs{$pos}->[1];
+      }
+
+      $composite->push($self->Text({
+        x         => $x,
+        y         => ($params->{'y'} || 0) - 1,
+        width     => 1,
+        textwidth => $font_w,
+        halign    => 'center',
+        height    => $height,
+        colour    => $colour,
+        text      => $base,
+        font      => $font,
+        ptsize    => $fontsize,
+      }));
+      $i++;
+    }
+  }
+
+  # Add insert markers
+  foreach my $ins (@inserts){
+    my $y = $params->{'y_offset'} || 0;
+    $self->push($self->Triangle({
+      mid_point     => [$ins->{'pos'}, $height + $y -8],
+      width         => 10 / $pix_per_bp,
+      height        => 4,
+      colour        => 'black',
+      direction     => 'down',
+      title         => $ins->{'title'}
+    }));
+  }
+
+}
+
 1;
