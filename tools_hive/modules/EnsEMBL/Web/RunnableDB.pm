@@ -28,6 +28,7 @@ use warnings;
 use Data::Dumper;
 use DBI;
 use IO::Compress::Gzip qw(gzip $GzipError);
+use Scalar::Util qw(blessed);
 use Storable qw(nfreeze);
 
 use EnsEMBL::Web::Exceptions;
@@ -119,7 +120,7 @@ sub save_results {
       my $now = $self->_get_time_now;
       my $sth = $ticket_dbh->prepare('INSERT INTO `result` (`job_id`, `result_data`, `created_at`) values ' . join(',', map {'(?,?,?)'} @result_data));
 
-      $sth->execute(map {($job_id, Data::Dumper->new([$_ || {}])->Sortkeys(1)->Useqq(1)->Terse(1)->Indent(0)->Dump, $now)} @result_data);
+      $sth->execute(map {($job_id, _to_ensorm_datastructure_string($_ || {}), $now)} @result_data);
     } else {
 
       throw exception ('HiveException', "Ticket database: Connection could not be created ($DBI::errstr)");
@@ -139,6 +140,36 @@ sub _result_file {
   ## @private
   ## @param Job id
   return sprintf '%s.results_data.json', $_[1];
+}
+
+sub _to_ensorm_datastructure_string {
+  ## @private
+  ## @function
+  ## Returns a string representation of an object as it should go in the db
+  ## Follows the ORM::EnsEMBL's way to save objects in DataStructure column types (see ORM::EnsEMBL::Rose::CustomColumnValue::DataStructure::_recursive_unbless)
+  my ($obj, $_flag) = @_;
+
+  my $datastructure;
+
+  if (ref $obj) {
+
+    $datastructure = blessed $obj ? [ '_ensorm_blessed_object', ref $obj ] : [];
+
+    if (UNIVERSAL::isa($obj, 'HASH')) {
+      push @$datastructure, { map _to_ensorm_datastructure_string($_, 1), %$obj };
+    } elsif (UNIVERSAL::isa($obj, 'ARRAY')) {
+      push @$datastructure, [ map _to_ensorm_datastructure_string($_, 1), @$obj ];
+    } else { # scalar ref
+      push @$datastructure, $$obj;
+    }
+
+    $datastructure = $datastructure->[0] if @$datastructure == 1;
+
+  } else {
+    $datastructure = $obj;
+  }
+
+  return $_flag ? $datastructure : Data::Dumper->new([ $datastructure ])->Sortkeys(1)->Useqq(1)->Terse(1)->Indent(0)->Dump;
 }
 
 1;
