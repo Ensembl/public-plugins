@@ -226,18 +226,18 @@ sub get_target_object {
   ## @param Blast result hit
   ## @param DB Source type
   ## @return PredictionTranscript/Transcript/Translation object
-  my ($self, $hit, $source_type)  = @_;
+  my ($self, $hit, $source)  = @_;
   my $target_id     = $hit->{'tid'};
   my $species       = $hit->{'species'};
-  my $feature_type  = $source_type =~ /abinitio/i ? 'PredictionTranscript' : $source_type =~ /cdna/i ? 'Transcript' : 'Translation';
+  my $feature_type  = $source =~ /abinitio/i ? 'PredictionTranscript' : $source =~ /cdna/i ? 'Transcript' : 'Translation';
   my $adaptor       = $self->hub->get_adaptor("get_${feature_type}Adaptor", 'core', $species);
-  
+
   return $adaptor->fetch_by_stable_id($target_id);
 }
 
 sub map_result_hits_to_karyotype {
   ## Maps all the hit as a feature on the karyotype view
-  ## In case some hits are a patch, it gets the actual chromosome name to actually draw that hit on the karyotype
+  ## In case some hits are on a patch, it gets the actual chromosome name to draw that hit on the karyotype
   ## @param Job object
   my ($self, $job) = @_;
 
@@ -382,7 +382,7 @@ sub get_result_url {
       'type'              => 'Location',
       'action'            => 'View',
       'r'                 => $region,
-      'contigviewbottom'  => [qw(blast_hit=normal blast_hit_btop=normal)],
+      'contigviewbottom'  => 'blast=normal',
       'tl'                => $url_param
     };
 
@@ -438,217 +438,198 @@ sub handle_download {
   print $content;
 }
 
-## TODO
-##/*********************************************/
-
-sub map_btop_to_genomic_coords {
-  my ($self, $hit, $result_id) = @_;
-
-#   my $result = $self->job->result->[0];
-# 
-#   $result->result_da
-
-  return $hit->{'galn'} if $hit->{'galn'}; ## TODO - cache in db for later use
-
-  my $btop      = $hit->{'aln'};
-  chomp $btop;
-  my $genomic_btop;
-  my $coords    = $hit->{'g_coords'} || undef;
-  my $source_type = $hit->{'db_type'}; # TODO - change 'db_type' to 'source' when writing the results to make it consistant
-
-  my $target_object = $self->get_target_object($hit, $source_type);
-  my $mapping_type = $source_type =~/pep/i ? 'pep2genomic' : 'cdna2genomic';
-
-  my $gap_start = $coords->[0]->end;
-  my $gap_count = scalar @$coords;
-  my $processed_gaps = 0;
-
-  # reverse btop string if necessary so always dealing with + strand genomic coords
-  my $object_strand = $target_object->isa('Bio::EnsEMBL::Translation') ? $target_object->translation->start_Exon->strand : $target_object->strand;
-
-  my $rev_flag = $object_strand ne $hit->{'tori'} ? 1 : undef;
-
-  $btop = $self->reverse_btop($btop) if $rev_flag;
-
-  # account for btop strings that do not start with a match;
-  $btop = '0'.$btop  if $btop !~/^\d+/ ;
-
-
-  $btop =~s/(\d+)/:$1:/g;
-  $btop =~s/^:|:$//g;
-  my @btop_features = split (/:/, $btop);
-
-  my $genomic_start = $hit->{'gstart'};
-  my $genomic_end   = $hit->{'gend'};
-  my $genomic_offset = $genomic_start;
-  my $target_offset  = !$rev_flag ? $hit->{'tstart'} : $hit->{'tend'};
-
-  while (scalar @btop_features > 0){
-    my $num_matches = shift @btop_features;
-    my $diff_string = shift @btop_features;
-    next unless $diff_string;
-
-    my $diff_length = (length $diff_string) / 2;
-    my $temp = $diff_string;
-    my @diffs = (split //, $temp);
-
-    # Account for bases inserted in query relative to target
-    my $insert_in_query = 0;
-
-    while (defined( my $query_base = shift @diffs)){
-      my $target_base = shift @diffs;
-      $insert_in_query++ if $target_base eq '-' && $query_base ne '-';
-    }
-
-    my ($difference_start, $difference_end);
-
-    if ($rev_flag) {
-      $difference_end = $target_offset - $num_matches;
-      $difference_start = $difference_end - $diff_length + $insert_in_query + 1;
-      $target_offset = $difference_start -1;
-    } else {
-      $difference_start = $target_offset + $num_matches;
-      $difference_end  = $difference_start + $diff_length - $insert_in_query -1;
-      $target_offset = $difference_end +1;
-    }
-;
-
-    my @mapped_coords = ( sort { $a->start <=> $b->start }
-                          grep { ! $_->isa('Bio::EnsEMBL::Mapper::Gap') }
-                          $target_object->$mapping_type($difference_start, $difference_end, $hit->{'tori'} )
-                        );
-
-    my $mapped_start = $mapped_coords[0]->start;
-    my $mapped_end   = $mapped_coords[-1]->end;
-;
-
-    # Check that mapping occurs before the next gap
-    if ($mapped_start < $gap_start && $mapped_end <= $gap_start){
-      $genomic_btop .= $num_matches;
-      $genomic_btop .= $diff_string;
-      $genomic_offset = $mapped_end +1;
-    } elsif ($mapped_start > $gap_start){
-
-      # process any gaps in mapped genomic coords first
-      while ($mapped_start > $gap_start){
-        my $matches_before_gap = $gap_start - $genomic_offset + 1;
-        my $gap_end = $coords->[$processed_gaps + 1]->start -1;
-        my $gap_length = ($gap_end - $gap_start);
-        my $gap_string = '--'x $gap_length;
-        $genomic_offset = $gap_end + 1;
-        $genomic_btop .= $matches_before_gap;
-        $genomic_btop .= $gap_string;
-
-        $processed_gaps++;
-        $gap_start = $coords->[$processed_gaps]->end || $genomic_end;
-      }
-
-      # Add difference info
-      my $matches_after_gap = $mapped_start - $genomic_offset;
-      $genomic_btop .= $matches_after_gap;
-      $genomic_btop .= $diff_string;
-      $genomic_offset = $mapped_end +1;;
-    } elsif( $mapped_start < $gap_start && $mapped_end > $gap_start) {
-      # Difference in btop string spans a gap in the genomic coords
-
-      my $diff_matches_before_gap = $gap_start - $mapped_start;
-      my $diff_index = ( $diff_matches_before_gap * 2 ) -1;
-      my $diff_before_gap = join('', @diffs[0..$diff_index]);
-      $diff_index++;
-
-      $genomic_btop .= $num_matches;
-      $genomic_btop .= $diff_before_gap;
-
-
-      while ($mapped_end > $gap_start) {
-        my $gap_end = $coords->[$processed_gaps + 1]->start -1;
-        my $gap_length = ($gap_end - $gap_start);
-        my $gap_string = '--'x $gap_length;
-        $processed_gaps++;
-        $gap_start = $coords->[$processed_gaps]->end || $genomic_end;
-
-        my $match_number = $gap_start - $gap_end;
-        my $diff_end = $diff_index + ( $match_number * 2 ) -1;
-
-        my $diff_after_gap = join('', @diffs[$diff_index..$diff_end]);
-        $genomic_btop .= $gap_string;
-        $genomic_btop .= $diff_after_gap;
-        $diff_index = $diff_end +1;
-      }
-
-      my $diff_after_gap = join('', @diffs[$diff_index..-1]);
-      $genomic_btop .= $diff_after_gap;
-
-      $genomic_offset = $mapped_end +1;
-    } else {
-      warn ">> mapping case not caught!  $mapped_start $mapped_end $gap_start";
-    }
-  }
-
-
-  # Add in any gaps from mapping to genomic coords that occur after last btop feature
-  while ($gap_count > $processed_gaps +1){
-    my $num_matches = $gap_start - $genomic_offset + 1;
-    my $gap_end = $coords->[$processed_gaps + 1]->start -1;
-    my $gap_length = ($gap_end - $gap_start);
-    my $gap_string = '--'x $gap_length;
-
-    $genomic_btop .= $num_matches;
-    $genomic_btop .= $gap_string;
-
-    $genomic_offset = $gap_end +1;
-    $gap_start = $coords->[$processed_gaps + 1]->end;
-    $processed_gaps++;
-  }
-
-
-  my $btop_end =  $genomic_end - $genomic_offset +1;
-  $genomic_btop .= $btop_end;
-
-  # Write back to database so we only have to do this once
-#   $hit->{'galn'} = $genomic_btop;
-#   delete $hit->{'data'};
-
-#   my $serialised_hit = nfreeze($hit);
-#   my $serialised_gzip;
-#   gzip \$serialised_hit => \$serialised_gzip, -LEVEL => 9 or die "gzip failed: $GzipError";
-
-#  $result->result($serialised_hit);
-#  $result->save;
-
-  return $genomic_btop;
-}
-
-sub reverse_btop {
-  my ($self, $incoming_btop) = @_;
-  $incoming_btop = uc($incoming_btop);
-  my $reversed_btop = reverse $incoming_btop; #reverse btop orientation. We fix a few more things later
-  my @captures = $reversed_btop =~ /(\d+)([-ACTG]*)/xmsg;
-  my $new_btop = q{};
-  while(1) {
-    my $match_number = shift @captures;
-    my $btop_states = shift @captures;
-    if(length("$match_number") > 1) { #reversing the string means numbers like 15 become 51 so we fix it
-      $match_number = reverse $match_number;
-    }
-    my @doubles = $btop_states =~ /([-ACTG]{2})/xmsg; #pairs of chars are taken
-    my $new_btop_states = join(q{}, map { my $v = reverse $_; $v; } @doubles); #we reverse the pairs of chars. map is funny with these things
-    $new_btop .= $match_number if $match_number; #only add the match number if it was defined
-    $new_btop .= $new_btop_states;
-    last if scalar(@captures) == 0;
-  }
-  return $new_btop;
-}
-
 sub get_hit_genomic_slice {
-  my ($self, $hit, $species, $flank5, $flank3) = @_; 
-  my $start = $hit->{'gstart'} < $hit->{'gend'} ? $hit->{'gstart'} : $hit->{'gend'};
-  my $end = $hit->{'gstart'} > $hit->{'gend'} ? $hit->{'gstart'} : $hit->{'gend'};
-  my $coords = $hit->{'gid'}.':'.$start.'-'.$end.':'.$hit->{'gori'}; 
-  my $slice_adaptor = $self->hub->get_adaptor('get_SliceAdaptor', 'core', $species);
-  my $slice = $slice_adaptor->fetch_by_toplevel_location($coords); 
+  ## Gets the genomic slice according to the coordinates returned in the blast results
+  ## @param Result hit
+  my ($self, $hit, $flank5, $flank3) = @_;
+  my $start   = $hit->{'gstart'} < $hit->{'gend'} ? $hit->{'gstart'} : $hit->{'gend'};
+  my $end     = $hit->{'gstart'} > $hit->{'gend'} ? $hit->{'gstart'} : $hit->{'gend'};
+  my $coords  = $hit->{'gid'}.':'.$start.'-'.$end.':'.$hit->{'gori'};
+  my $slice   = $self->hub->get_adaptor('get_SliceAdaptor', 'core', $hit->{'species'})->fetch_by_toplevel_location($coords);
   return $flank5 || $flank3 ? $slice->expand($flank5, $flank3) : $slice;
 }
 
+sub map_btop_to_genomic_coords {
+  ## Maps the btop format returned by NCBI BLAST to genomic alignment
+  ## @param Hit object
+  ## @param Job object (needed to cache the mapped genomic aligment for future use)
+  my ($self, $hit, $job) = @_;
+
+  my $source  = $hit->{'source'};
+  my $galn    = '';
+
+  # don't need to map for dbs other than cdna
+  return $hit->{'aln'} unless $source =~/cdna/i;
+
+  # find the alignment and cache it in the db in case not already saved
+  unless ($galn = $hit->{'galn'}) {
+
+    my $btop            = $hit->{'aln'} =~ s/^\s|\s$//gr;
+    my $coords          = $hit->{'g_coords'};
+    my $target_object   = $self->get_target_object($hit, $source);
+    my $mapping_type    = $source =~/pep/i ? 'pep2genomic' : 'cdna2genomic';
+    my $gap_start       = $coords->[0]->end;
+    my $gap_count       = scalar @$coords;
+    my $processed_gaps  = 0;
+
+    # reverse btop string if necessary so always dealing with + strand genomic coords
+    my $object_strand   = $target_object->isa('Bio::EnsEMBL::Translation') ? $target_object->translation->start_Exon->strand : $target_object->strand;
+    my $rev_flag        = $object_strand ne $hit->{'tori'};
+    $btop               = $self->_reverse_btop($btop) if $rev_flag;
+
+    # account for btop strings that do not start with a match;
+    $btop = "0$btop" if $btop !~/^\d+/ ;
+    $btop =~s/(\d+)/:$1:/g;
+    $btop =~s/^:|:$//g;
+
+    my @btop_features   = split (/:/, $btop);
+    my $genomic_start   = $hit->{'gstart'};
+    my $genomic_end     = $hit->{'gend'};
+    my $genomic_offset  = $genomic_start;
+    my $target_offset   = !$rev_flag ? $hit->{'tstart'} : $hit->{'tend'};
+
+    while (my ($num_matches, $diff_string) = splice @btop_features, 0, 2) {
+
+      next unless $diff_string;
+
+      my $diff_length = (length $diff_string) / 2;
+      my $temp        = $diff_string;
+      my @diffs       = split //, $temp;
+
+      # Account for bases inserted in query relative to target
+      my $insert_in_query = 0;
+
+      while (my ($query_base, $target_base) = splice @diffs, 0, 2) {
+        $insert_in_query++ if $target_base eq '-' && $query_base ne '-';
+      }
+
+      my ($difference_start, $difference_end);
+
+      if ($rev_flag) {
+        $difference_end   = $target_offset - $num_matches;
+        $difference_start = $difference_end - $diff_length + $insert_in_query + 1;
+        $target_offset    = $difference_start - 1;
+      } else {
+        $difference_start = $target_offset + $num_matches;
+        $difference_end   = $difference_start + $diff_length - $insert_in_query - 1;
+        $target_offset    = $difference_end + 1;
+      }
+
+      my @mapped_coords = sort { $a->start <=> $b->start } grep { ! $_->isa('Bio::EnsEMBL::Mapper::Gap') } $target_object->$mapping_type($difference_start, $difference_end, $hit->{'tori'});
+      my $mapped_start  = $mapped_coords[0]->start;
+      my $mapped_end    = $mapped_coords[-1]->end;
+
+      # Check that mapping occurs before the next gap
+      if ($mapped_start < $gap_start && $mapped_end <= $gap_start) {
+
+        $galn          .= $num_matches;
+        $galn          .= $diff_string;
+        $genomic_offset = $mapped_end + 1;
+
+      } elsif ($mapped_start > $gap_start) {
+
+        # process any gaps in mapped genomic coords first
+        while ($mapped_start > $gap_start) {
+          my $matches_before_gap  = $gap_start - $genomic_offset + 1;
+          my $gap_end             = $coords->[$processed_gaps + 1]->start -1;
+          my $gap_length          = ($gap_end - $gap_start);
+          my $gap_string          = '--' x $gap_length;
+          $genomic_offset         = $gap_end + 1;
+
+          $galn .= $matches_before_gap;
+          $galn .= $gap_string;
+
+          $processed_gaps++;
+          $gap_start = $coords->[$processed_gaps]->end || $genomic_end;
+        }
+
+        # Add difference info
+        my $matches_after_gap = $mapped_start - $genomic_offset;
+        $galn .= $matches_after_gap;
+        $galn .= $diff_string;
+        $genomic_offset = $mapped_end + 1;
+
+      } elsif ($mapped_start < $gap_start && $mapped_end > $gap_start) { # Difference in btop string spans a gap in the genomic coords
+
+        my $diff_matches_before_gap = $gap_start - $mapped_start;
+        my $diff_index              = $diff_matches_before_gap * 2 - 1;
+        my $diff_before_gap         = join '', @diffs[0..$diff_index];
+        $diff_index++;
+
+        $galn .= $num_matches;
+        $galn .= $diff_before_gap;
+
+        while ($mapped_end > $gap_start) {
+          my $gap_end     = $coords->[$processed_gaps + 1]->start - 1;
+          my $gap_length  = ($gap_end - $gap_start);
+          my $gap_string  = '--' x $gap_length;
+          $processed_gaps++;
+          $gap_start = $coords->[$processed_gaps]->end || $genomic_end;
+
+          my $match_number    = $gap_start - $gap_end;
+          my $diff_end        = $diff_index + ( $match_number * 2 ) - 1;
+          my $diff_after_gap  = join '', @diffs[$diff_index..$diff_end];
+
+          $galn .= $gap_string;
+          $galn .= $diff_after_gap;
+
+          $diff_index = $diff_end + 1;
+        }
+
+        my $diff_after_gap = join '', @diffs[$diff_index..-1];
+        $galn .= $diff_after_gap;
+
+        $genomic_offset = $mapped_end + 1;
+
+      } else {
+        warn "Object::Blast::map_btop_to_genomic_coords: mapping case not caught!  $mapped_start $mapped_end $gap_start";
+      }
+    }
+
+    # Add in any gaps from mapping to genomic coords that occur after last btop feature
+    while ($gap_count > $processed_gaps + 1) {
+      my $num_matches = $gap_start - $genomic_offset + 1;
+      my $gap_end     = $coords->[$processed_gaps + 1]->start - 1;
+      my $gap_length  = ($gap_end - $gap_start);
+      my $gap_string  = '--' x $gap_length;
+
+      $galn .= $num_matches;
+      $galn .= $gap_string;
+
+      $genomic_offset = $gap_end + 1;
+      $gap_start      = $coords->[$processed_gaps + 1]->end;
+      $processed_gaps++;
+    }
+
+    my $btop_end = $genomic_end - $genomic_offset + 1;
+    $galn .= $btop_end;
+
+    # Write back to database so we only have to do this once
+    if ($job && (my $result_id = $hit->{'result_id'})) {
+      my ($result) = grep { $result_id eq $_->result_id} @{$job->result};
+      $result->result_data->{'galn'} = $galn;
+      $result->save;
+    }
+  }
+
+  return $galn && $source =~ /latest/i && $hit->{'gori'} ne '1' ? $self->_reverse_btop($galn) : $galn;
+}
+
+sub _reverse_btop {
+  ## @private
+  my ($self, $incoming_btop) = @_;
+  $incoming_btop      = uc $incoming_btop;
+  my $reversed_btop   = reverse $incoming_btop;
+  my @captures        = $reversed_btop =~ /(\d+)([-ACTG]*)/xmsg;
+  my $new_btop        = '';
+  while (my ($match_number, $btop_states) = splice @captures, 0, 1) {
+    $match_number       = reverse $match_number if length "$match_number" > 1;  # reversing the string means numbers like 15 become 51 so we fix it
+    my @doubles         = $btop_states =~ /([-ACTG]{2})/xmsg;                   # pairs of chars are taken
+    my $new_btop_states = join('', map { my $v = reverse $_; $v; } @doubles);   # we reverse the pairs of chars
+    $new_btop          .= $match_number if $match_number;                       # only add the match number if it was defined
+    $new_btop          .= $new_btop_states;
+  }
+  return $new_btop;
+}
 
 1;
