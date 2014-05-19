@@ -39,6 +39,8 @@ sub content {
   $form->add_field({'type'  => 'Email',  'name'  => 'email',   'label' => 'Email', 'required'  => 'yes', $ex_email ? ('value' => $ex_email) : ()});
   $form->add_button({'type' => 'Submit', 'name'  => 'submit',  'value' => 'Send'});
 
+  $_->set_attribute('data-role', 'none') for @{$form->get_elements_by_tag_name('input')};
+
   return $self->js_section({'subsections' => [ $form->render ]});
 }
 
