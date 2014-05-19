@@ -330,21 +330,23 @@
   jump_to = function(q) {
     var url;
     url = $('#se_q').parents("form").attr('action');
-    url = url.split('/')[1];
-    if (url === 'common') {
-      url = 'Multi';
-    }
-    url = "/" + url + "/Ajax/search";
-    return favourite_species(void 0, function(favs) {
-      return $.when(ac_name_q(jump_searches, url, q, favs)).done(function(id_d) {
-        var direct;
-        direct = [];
-        ac_name_a(id_d, direct);
-        if (direct.length !== 0) {
-          return window.location.href = '/' + direct[0].url;
-        }
+    if(url) { 
+      url = url.split('/')[1]; 
+      if (url === 'common') {
+        url = 'Multi';
+      }
+      url = "/" + url + "/Ajax/search";
+      return favourite_species(void 0, function(favs) {
+        return $.when(ac_name_q(jump_searches, url, q, favs)).done(function(id_d) {
+          var direct;
+          direct = [];
+          ac_name_a(id_d, direct);
+          if (direct.length !== 0) {
+            return window.location.href = '/' + direct[0].url;
+          }
+        });
       });
-    });
+    }
   };
 
   rate_limit = null;
@@ -503,38 +505,40 @@
           }).done(function(data) {
             var q, url;
             url = $('#se_q').parents("form").attr('action');
-            url = url.split('/')[1];
-            if (url === 'common') {
-              url = 'Multi';
-            }
-            url = "/" + url + "/Ajax/search";
-            q = data.q;
-            return favourite_species(data.element, function(favs) {
-              return $.when(ac_string_q(url, q), ac_name_q(direct_searches, url, q, favs)).done(function(string_d, id_d) {
-                var direct, out, searches;
-                searches = [];
-                direct = [];
-                out = [];
-                ac_string_a(string_d[0], searches);
-                if (id_d != null ? id_d[0] : void 0) {
-                  ac_name_a(id_d[0], direct);
-                }
-                return sort_docs(url, direct, favs, function(sorted) {
-                  var d, s, _i, _j, _len, _len1;
-                  direct = sorted;
-                  for (_i = 0, _len = searches.length; _i < _len; _i++) {
-                    s = searches[_i];
-                    s.type = 'search';
+            if(url) { 
+              url = url.split('/')[1];
+              if (url === 'common') {
+                url = 'Multi';
+              }
+              url = "/" + url + "/Ajax/search";
+              q = data.q;
+              return favourite_species(data.element, function(favs) {
+                return $.when(ac_string_q(url, q), ac_name_q(direct_searches, url, q, favs)).done(function(string_d, id_d) {
+                  var direct, out, searches;
+                  searches = [];
+                  direct = [];
+                  out = [];
+                  ac_string_a(string_d[0], searches);
+                  if (id_d != null ? id_d[0] : void 0) {
+                    ac_name_a(id_d[0], direct);
                   }
-                  for (_j = 0, _len1 = direct.length; _j < _len1; _j++) {
-                    d = direct[_j];
-                    d.type = 'direct';
-                  }
-                  out = searches.concat(direct);
-                  return data.response(out);
+                  return sort_docs(url, direct, favs, function(sorted) {
+                    var d, s, _i, _j, _len, _len1;
+                    direct = sorted;
+                    for (_i = 0, _len = searches.length; _i < _len; _i++) {
+                      s = searches[_i];
+                      s.type = 'search';
+                    }
+                    for (_j = 0, _len1 = direct.length; _j < _len1; _j++) {
+                      d = direct[_j];
+                      d.type = 'direct';
+                    }
+                    out = searches.concat(direct);
+                    return data.response(out);
+                  });
                 });
               });
-            });
+            }
           });
         } else {
           return response([]);
