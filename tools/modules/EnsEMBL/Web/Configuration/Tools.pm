@@ -60,7 +60,7 @@ sub populate_tree {
       hsps            EnsEMBL::Web::Component::Tools::Blast::HspQueryPlot
       table           EnsEMBL::Web::Component::Tools::Blast::ResultsTable
     )],
-    { 'availability' => 1, 'concise' => $self->object ? $self->object->long_caption : '', 'no_menu_entry' => "$action/$function" !~ /^Blast\/(Results|Alignment(Protein)?|(Genomic|Query)Seq)$/ }
+    { 'availability' => 1, 'concise' => $object ? $object->long_caption : '', 'no_menu_entry' => "$action/$function" !~ /^Blast\/(Results|Alignment(Protein)?|(Genomic|Query)Seq)$/ }
   ));
 
   # Flags to display blast result sub-nodes
