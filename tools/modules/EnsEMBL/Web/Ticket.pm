@@ -127,7 +127,7 @@ sub dispatch_jobs {
   my $ticket_id     = $tools_ticket->ticket_id;
   my $ticket_name   = $tools_ticket->ticket_name;
   my $ticket_type   = $tools_ticket->ticket_type_name;
-  my $dispatcher    = $object->get_job_dispatcher;
+  my $dispatcher    = $object->get_job_dispatcher($ticket_type);
 
   foreach my $job (@{$self->jobs}) {
 

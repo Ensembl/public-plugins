@@ -33,14 +33,37 @@ use EnsEMBL::Web::Tools::FileSystem qw(create_path remove_empty_path copy_dir_co
 use parent qw(EnsEMBL::Web::Object);
 
 sub caption               { return 'Tools'; } # override in child class
-sub short_caption         { return $_[1] && $_[1] eq 'global' ? 'Jobs' : 'Tools'; } # TODO - change it for 76
 sub long_caption          { return 'Tools'; } # override in child class
 
-sub default_action { # TODO - modify for 76
+sub short_caption {
+  ## Caption for the tab
+  ## @return 'Tools' for landing page, or 'Blast' or 'VEP' for tools specific pages and 'Blast result' etc if current page is not tools related
+  my ($self, $global) = @_;
+  my $hub = $self->hub;
+
+  # If page is not Tools related
+  if ($hub->type ne 'Tools' && $global && $global eq 'global') {
+    my $job       = $self->get_requested_job;
+    my $ticket    = $job && $job->ticket;
+    my $job_count = $ticket && $ticket->job_count;
+    return $job && $job->status eq 'done' ? sprintf('%s results: %s'.($job_count > 1 ? ' (%s)' : ''), $ticket->ticket_type_name, $ticket->ticket_name, $job->job_number) : 'Jobs';
+  }
+
+  my $sub_object = $self->get_sub_object;
+  return $self eq $sub_object ? 'Tools' : $sub_object->ticket_type; # generic /Tools page or Blast/VEP pages
+}
+
+sub default_action {
+  ## URL action part of the tools tab
+  ## @return Current action for all tools page, link to the Results page for external pages if the url contains a valid job id
   my $self  = shift;
   my $hub   = $self->hub;
-  my $job   = $self->get_sub_object('VEP')->get_requested_job;
-  return join '/', 'VEP', $hub->type eq 'Tools' ? $hub->function || () : $job && $job->status eq 'done' && 'Results' || ();
+
+  return join '/', $hub->action || (), $hub->function || () if $hub->type eq 'Tools';
+
+  my $job   = $self->get_requested_job;
+
+  return $job && $job->status eq 'done' ? sprintf '%s/%s', $job->ticket->ticket_type_name, 'Results' : '';
 }
 
 sub get_sub_object {
@@ -111,11 +134,12 @@ sub parse_url_param {
 sub get_job_dispatcher {
   ## Gets new or cached job dispatcher
   ## @return EnsEMBL::Web::JobDispatcher subclass
-  my $self = shift;
+  my ($self, $ticket_type) = @_;
+
+  $ticket_type ||= $self->ticket_type;
 
   unless ($self->{'_job_dispatcher'}) {
 
-    my $ticket_type = $self->ticket_type;
     my $dispatcher  = ($self->hub->species_defs->ENSEMBL_TOOLS_JOB_DISPATCHER || {})->{$ticket_type};
 
     throw exception('WebToolsException', "Job dispatcher for ticket type $ticket_type not configured.") unless $dispatcher;
@@ -186,7 +210,7 @@ sub delete_ticket_or_job {
   if ($ticket ? $ticket->delete : $job && $job->delete) {
 
     # remove dispatched jobs
-    $self->get_job_dispatcher->delete_jobs($ticket_type, @dispatcher_references) if @dispatcher_references;
+    $self->get_job_dispatcher($ticket_type)->delete_jobs($ticket_type, @dispatcher_references) if @dispatcher_references;
 
     # remove dirs
     remove_empty_path(join('/', @dir_path), { 'remove_contents' => 1, 'exclude' => [ $ticket_type ], 'no_exception' => 1 }) if @dir_path; # ignore any error - files left orphaned will eventually get removed.
@@ -303,7 +327,7 @@ sub update_jobs_from_dispatcher {
   ## @return No return value
   my ($self, $tickets) = @_;
 
-  $self->get_job_dispatcher->update_jobs( [ map { grep {$_->status eq 'awaiting_dispatcher_response'} $_->job } @$tickets ] );
+  $self->get_job_dispatcher($tickets->[0]->ticket_type_name)->update_jobs( [ map { grep {$_->status eq 'awaiting_dispatcher_response'} $_->job } @$tickets ] );
 }
 
 sub get_requested_job {
@@ -336,8 +360,8 @@ sub get_requested_job {
         'ticket_name'   => $url_params->{'ticket_name'},
         'job_id'        => $job_id,
         'session_id'    => $hub->session->session_id, $user ? (
-        'user_id'       => $user->user_id ) : (),
-        'type'          => $self->ticket_type,
+        'user_id'       => $user->user_id ) : (), ref $self ne __PACKAGE__ ? ( # If object is Tools, it could be any ticket being requested
+        'type'          => $self->ticket_type) : (),
         %results_key
       });
 
