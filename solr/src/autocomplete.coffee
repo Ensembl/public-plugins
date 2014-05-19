@@ -217,16 +217,17 @@ ac_name_a = (input,output) ->
 # XXX not really ac functionality, but methods are here: refactor
 jump_to = (q) ->
   url = $('#se_q').parents("form").attr('action')
-  url = url.split('/')[1]
-  if url == 'common' then url = 'Multi'
-  url = "/#{url}/Ajax/search"
-  favourite_species undefined,(favs) ->
-    $.when(ac_name_q(jump_searches,url,q,favs)).done( (id_d) ->
-      direct = []
-      ac_name_a(id_d,direct)
-      if direct.length != 0
-        window.location.href = '/'+direct[0].url
-    )
+  if url
+    url = url.split('/')[1]
+    if url == 'common' then url = 'Multi'
+    url = "/#{url}/Ajax/search"
+    favourite_species undefined,(favs) ->
+      $.when(ac_name_q(jump_searches,url,q,favs)).done( (id_d) ->
+        direct = []
+        ac_name_a(id_d,direct)
+        if direct.length != 0
+          window.location.href = '/'+direct[0].url
+      )
 
 rate_limit = null
 
@@ -318,25 +319,26 @@ $.widget('custom.searchac',$.ui.autocomplete,{
       if internal_site(@element)
         make_rate_limiter({q: request.term, response, @element }).done (data) =>
           url = $('#se_q').parents("form").attr('action')
-          url = url.split('/')[1]
-          if url == 'common' then url = 'Multi'
-          url = "/#{url}/Ajax/search"
-          q = data.q
-          favourite_species data.element, (favs) ->
-            $.when(ac_string_q(url,q),
-                    ac_name_q(direct_searches,url,q,favs))
-              .done((string_d,id_d) ->
-                searches = []
-                direct = []
-                out = []
-                ac_string_a(string_d[0],searches)
-                if id_d?[0] then ac_name_a(id_d[0],direct)
-                sort_docs(url,direct,favs, (sorted) ->
-                  direct = sorted
-                  s.type = 'search' for s in searches
-                  d.type = 'direct' for d in direct
-                  out = searches.concat(direct)
-                  data.response(out)))
+          if url
+            url = url.split('/')[1]
+            if url == 'common' then url = 'Multi'
+            url = "/#{url}/Ajax/search"
+            q = data.q
+            favourite_species data.element, (favs) ->
+              $.when(ac_string_q(url,q),
+                      ac_name_q(direct_searches,url,q,favs))
+                .done((string_d,id_d) ->
+                  searches = []
+                  direct = []
+                  out = []
+                  ac_string_a(string_d[0],searches)
+                  if id_d?[0] then ac_name_a(id_d[0],direct)
+                  sort_docs(url,direct,favs, (sorted) ->
+                    direct = sorted
+                    s.type = 'search' for s in searches
+                    d.type = 'direct' for d in direct
+                    out = searches.concat(direct)
+                    data.response(out)))
       else
         response([])
     select: (e,ui) ->
