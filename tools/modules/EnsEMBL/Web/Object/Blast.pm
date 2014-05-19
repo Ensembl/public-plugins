@@ -36,6 +36,24 @@ sub ticket_type {
   return 'Blast';
 }
 
+sub long_caption {
+  ## For customised heading of the page
+  my $self  = shift;
+  my $hub   = $self->hub;
+  if ($hub->function eq 'Results') {
+    if (my $job = $self->get_requested_job({'with_all_results' => 1})) {
+      my $job_desc = $job->job_desc;
+      return sprintf('Results for ticket %s (Job %s%s)',
+        $job->ticket->ticket_name,
+        $job->job_number,
+        $job_desc ? ": $job_desc" : ''
+      );
+    }
+    return 'Blast/Blat Results';
+  }
+  return '';
+}
+
 sub get_blast_form_params {
   ## Gets the field params for the blast input form
   ## @param Hashref with keys:
