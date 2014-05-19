@@ -581,6 +581,17 @@ body_split_favs = () ->
     prepare
   }
 
+body_restrict_categories = () -> # Used for mobile site, etc
+  return {
+    context: (state,update_seq) -> return { state, update_seq }
+    prepare: (context,input,tags,depart) ->
+      types = $.solr_config("static.ui.restrict_facets")
+      if types and types.length
+        filter = ("feature_type:"+x for x in types).join(" OR ")
+        input.q = "#{input.q} AND ( #{filter} )"
+      return [[input,tags,depart]]
+  }
+
 body_frontpage_specials = () ->
   return {
     context: (state,update_seq) -> return { state, update_seq }
@@ -691,6 +702,7 @@ body_requests = [
   body_frontpage_specials
   body_highlights
   body_elevate_quoted
+  body_restrict_categories
   body_quicklinks
   body_split_favs
 ]
@@ -777,6 +789,11 @@ dispatch_facet_request = (request,state,table,update_seq) ->
   fq = ("#{k}:\"#{v}\"" for k,v of state.q_facets()).join(' AND ')
   # This is a hack to get around a SOLR BUG
   q = "( NOT species:xxx ) AND ( #{state.q_query()} ) AND ( NOT species:yyy )"
+  
+  types = $.solr_config("static.ui.restrict_facets")
+  if types and types.length
+    filter = ("feature_type:"+x for x in types).join(" OR ")
+    q = "#{q} AND ( #{filter} )"
   params = {
     q
     fq
