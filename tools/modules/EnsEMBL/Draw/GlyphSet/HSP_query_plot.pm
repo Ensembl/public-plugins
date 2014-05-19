@@ -50,29 +50,28 @@ sub _init {
     push @all_hsps, $hsp;
   }
 
-  $self->hsp($_, $options, $colours) for sort { $b->{'pident'} <=> $a->{'pident'} } @all_hsps;
+  $self->hsp($_, $options, $colours) for sort { $a->{'pident'} <=> $b->{'pident'} } @all_hsps;
 }
 
 sub hsp {
   my ($self, $hsp, $options, $colours) = @_;
 
-  my ($hspstart, $hspend) = $self->region($hsp);
-  my $colour              = $colours->[int(((@$colours - 1) * $hsp->{'pident'} / 100) + 0.5)]; # round
-  my $height              = 5;
-  my $glyph               = Sanger::Graphics::Glyph::Rect->new({
-    'x'                     => $hspstart,
-    'y'                     => 0,
-    'width'                 => $hspend - $hspstart,
-    'height'                => $height,
-    'colour'                => $colour,
-    'bordercolour'          => 'black',
-    'href'                  => $self->_url({
-      'species'               => $self->species,
-      'type'                  => 'Tools',
-      'action'                => 'Blast',
-      'function'              => '',
-      'tl'                    => $hsp->{'tl'},
-      'hit'                   => $hsp->{'result_id'},
+  my ($start, $end) = $self->region($hsp);
+  my $colour        = $colours->[int(((@$colours - 1) * $hsp->{'pident'} / 100) + 0.5)]; # round
+  my $height        = 7;
+  my $glyph         = Sanger::Graphics::Glyph::Rect->new({
+    'x'               => $start - 1,
+    'y'               => 0,
+    'width'           => $end - $start + 1,
+    'height'          => $height,
+    'colour'          => $colour,
+    'href'            => $self->_url({
+      'species'         => $self->species,
+      'type'            => 'Tools',
+      'action'          => 'Blast',
+      'function'        => '',
+      'tl'              => $hsp->{'tl'},
+      'hit'             => $hsp->{'result_id'},
     })
   });
 
