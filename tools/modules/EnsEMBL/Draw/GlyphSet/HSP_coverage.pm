@@ -21,56 +21,65 @@ package EnsEMBL::Draw::GlyphSet::HSP_coverage;
 use strict;
 use warnings;
 
+use POSIX;
+
 use parent qw(EnsEMBL::Draw::GlyphSet);
 
 sub _init {
   my $self          = shift;
   my $container     = $self->{'container'};
   my $config        = $self->{'config'};
-  my $sample_size   = int($container->length() / 1000) || 1;
-  my @all_hsps      = sort {$a->{'qstart'} <=> $b->{'qstart'} || $a->{'qend'} <=> $b->{'qend'} } @{$container->hsps};
+  my $sample_size   = int($container->length / 1000) || 1;
+  my $all_hsps      = $container->hsps;
+  my $track_height  = 2 * scalar @$all_hsps;
+     $track_height  = 20 if $track_height > 20;
   my $distribution  = {};
+  my @coords;
 
-  return if scalar @all_hsps < 2;
+  return if scalar @$all_hsps < 2;
 
-  foreach my $hsp (@all_hsps) {
-    my $sample_sskip = $hsp->{'qstart'} % $sample_size;
-    my $sample_start = $hsp->{'qstart'} - $sample_sskip;
-    my $sample_eskip = $hsp->{'qend'}   % $sample_size;
-    my $sample_end   = $hsp->{'qend'};
-    $sample_end     += $sample_size if $sample_eskip != 0;
+  foreach my $hsp (@$all_hsps) {
 
-    for (my $i = $sample_start; $i <= $sample_end; $i += $sample_size) {
-      for (my $j = $i; $j < $i + $sample_size; $j++) {
-        $distribution->{$i}++;
-      }
-    }
+    my ($start, $end) = $self->region($hsp);
+
+    $start = floor($start / $sample_size) || 1;
+    $end   = ceil($end / $sample_size);
+
+    $distribution->{$_}++ for $start .. $end;
   }
-  my ($max) = sort {$b <=> $a} values %$distribution;
+
+  my ($max)     = sort {$b <=> $a} values %$distribution;
+  my ($max_key) = sort {$b <=> $a} keys %$distribution;
+  my ($min_key) = sort {$a <=> $b} keys %$distribution;
 
   return if $max == 0;
 
-  my $smax = 50;
-
-  while(my ($pos, $val) = each %$distribution) {
-    my $sval   = $smax * $val / $max;
-
-    $self->push($self->Rect({
-      'x'      => $pos,
-      'y'      => $smax/3 - $sval/3,
-      'width'  => $sample_size,
-      'height' => $sval/3,
-      'colour' => $val == $max ? 'grey20' : 'grey'.int(100 - $sval)
-    }));
+  # convert the distribution to drawing coords
+  for ($min_key .. $max_key) {
+    if (@coords && $coords[-1]{'h'} == ($distribution->{$_} || 0)) {
+      $coords[-1]{'w'} += 1;
+    } else {
+      push @coords, { 'h' => $distribution->{$_} || 0, 'w' => 1, 'x' => @coords ? $coords[-1]{'w'} + $coords[-1]{'x'} : $min_key - 1};
+    }
   }
 
-  $self->push($self->Rect({
-    'x'      => 0,
-    'y'      => $smax/3,
-    'width'  => $container->length,
-    'height' => 0,
-    'colour' => 'white',
-  }));
+  for (sort { $a->{'h'} <=> $b->{'h'} } @coords) { # draw the tallest ones in the end to fix the pixel-overlap issue
+    my $height = $track_height * $_->{'h'} / $max;
+    $self->push($self->Rect({
+      'x'      => $_->{'x'} * $sample_size,
+      'y'      => $track_height - $height,
+      'width'  => $_->{'w'} * $sample_size,
+      'height' => $height,
+      'colour' => sprintf 'grey%s', $_->{'h'} == $max ? 20 : int(100 - 50 * $_->{'h'} / $max)
+    }));
+  }
+}
+
+sub region {
+  my ($self, $hsp) = @_;
+  my $start = $hsp->{'qstart'};
+  my $end   = $hsp->{'qend'};
+  return $end < $start ? ($end, $start) : ($start, $end);
 }
 
 1;
