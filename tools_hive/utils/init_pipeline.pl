@@ -32,7 +32,7 @@ BEGIN {
   unshift @INC, "$code_path/sanger-plugins/$_/modules/" for qw(tools tools_hive); # TEMP - while tools code in in sanger-plugins
 #  unshift @INC, "$code_path/public-plugins/tools/modules/" for qw(tools tools_hive);
   unshift @INC, $_ for @SiteDefs::ENSEMBL_LIB_DIRS;
-  $ENV{'PERL5LIB'} = join ':', $ENV{'PERL5LIB'}, @INC;
+  $ENV{'PERL5LIB'} = join ':', $ENV{'PERL5LIB'} || (), @INC;
 }
 
 my $conf_package  = $SiteDefs::ENSEMBL_TOOLS_PIPELINE_PACKAGE;
