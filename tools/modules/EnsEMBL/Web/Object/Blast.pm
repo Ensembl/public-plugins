@@ -391,6 +391,7 @@ sub get_result_url {
     my $region = sprintf('%s:%s-%s', $result_data->{'gid'}, $result_data->{'gstart'}, $result_data->{'gend'});
 
     return {
+      '__clear'           => 1,
       'species'           => $species,
       'type'              => 'Location',
       'action'            => 'View',
