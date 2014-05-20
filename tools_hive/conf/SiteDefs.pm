@@ -47,6 +47,7 @@ sub update_conf {
 
   # BLAST configs
   $SiteDefs::ENSEMBL_BLAST_LSF_QUEUE            = 'blast';                                          # LSF queue for blast jobs (not needed for local jobs)
+  $SiteDefs::ENSEMBL_BLAST_ANALYSIS_CAPACITY    = 24;                                               # Number of jobs that can be run parallel in LSF in the blast queue
   $SiteDefs::ENSEMBL_NCBIBLAST_BIN_PATH         = '/localsw/bin/ncbi-blast/bin';                    # path to blast executables on the LSF host (or local machine if job running locally)
   $SiteDefs::ENSEMBL_NCBIBLAST_MATRIX           = '/localsw/bin/ncbi-blast/bin/data';               # path to blast matrix files on the LSF host (or local machine if job running locally)
   $SiteDefs::ENSEMBL_NCBIBLAST_DATA_PATH        = '/data_ensembl/blastdb';                          # path for the blast index files (other than DNA) on the LSF host (or local machine if job running locally)
