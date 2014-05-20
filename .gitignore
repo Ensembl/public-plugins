@@ -37,3 +37,4 @@ a.out
 *.o
 *.obj
 *.class
+ap5/conf/SiteDefs.pm
