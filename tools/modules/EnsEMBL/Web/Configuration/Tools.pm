@@ -31,10 +31,10 @@ sub populate_tree {
   my $hub         = $self->hub;
   my $action      = $hub->action || '';
   my $function    = $hub->function || '';
-  my $object      = $self->object->get_sub_object;
-  my $url_param   = $object->parse_url_param;
-  my $job         = $object->get_requested_job;
-  my $result_cap  = $url_param->{'ticket_name'} && $url_param->{'job_id'} ? "Results ($url_param->{'ticket_name'}/$url_param->{'job_id'})" : 'Results';
+  my $object      = $self->object && $self->object->get_sub_object;
+  my $url_param   = $object && $object->parse_url_param;
+  my $job         = $object && $object->get_requested_job;
+  my $result_cap  = $url_param && $url_param->{'ticket_name'} && $url_param->{'job_id'} ? "Results ($url_param->{'ticket_name'}/$url_param->{'job_id'})" : 'Results';
 
   my $tools_node  = $self->create_node('Summary', 'Web Tools',
     [qw(
