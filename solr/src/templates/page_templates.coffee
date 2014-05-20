@@ -72,10 +72,11 @@ window.page_templates =
         (data) ->
           data.tp2_row.register 50, () ->
             url = data.tp2_row.best('domain_url')
-            if not url?.match(/^http:\/\//)
-              base = $.parseJSON($('#solr_config .base').text()).url
-              url = base + "/" + url
-            data.tp2_row.candidate('url',url,50)
+            if url
+              if not url?.match(/^http:\/\//)
+                base = $.parseJSON($('#solr_config .base').text()).url
+                url = base + "/" + url
+              data.tp2_row.candidate('url',url,50)
 
           data.tp2_row.register 100, () ->
             # setup title 
@@ -136,8 +137,9 @@ window.page_templates =
                 c = c.toLowerCase()
               c = c.charAt(0).toUpperCase() + c.substring(1)
               desc.push(c)
+              if not c.match(/\</) then desc.push('.')
             if desc.length
-              data.tp2_row.candidate('description',desc.join(". ")+".",10000)
+              data.tp2_row.candidate('description',desc.join(' '),10000)
             true
 
           data.tp2_row.register 51000, () ->

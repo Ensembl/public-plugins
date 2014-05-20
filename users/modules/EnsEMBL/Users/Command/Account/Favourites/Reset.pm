@@ -20,7 +20,7 @@ package EnsEMBL::Users::Command::Account::Favourites::Reset;
 
 use strict;
 
-use base qw(EnsEMBL::Users::Command::Account);
+use parent qw(EnsEMBL::Users::Command::Account);
 
 sub process {
   my $self = shift;

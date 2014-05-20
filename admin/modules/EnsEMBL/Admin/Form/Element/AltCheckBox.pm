@@ -21,7 +21,7 @@ package EnsEMBL::Admin::Form::Element::AltCheckBox;
 ### Alternative checkbox rendering, for healthcheck config form
 
 use strict;
-use base qw( EnsEMBL::Web::Form::Element );
+use parent qw( EnsEMBL::Web::Form::Element );
 
 use CGI qw(escapeHTML);
 

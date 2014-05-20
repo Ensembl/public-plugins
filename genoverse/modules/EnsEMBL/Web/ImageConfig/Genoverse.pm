@@ -20,7 +20,7 @@ package EnsEMBL::Web::ImageConfig::Genoverse;
 
 use strict;
 
-use base qw(EnsEMBL::Web::ImageConfig);
+use parent qw(EnsEMBL::Web::ImageConfig);
 
 sub init_genoverse {
   my $self = shift;

@@ -24,7 +24,7 @@ package EnsEMBL::Users::Component::Account::Down;
 use strict;
 use warnings;
 
-use base qw(EnsEMBL::Users::Component::Account);
+use parent qw(EnsEMBL::Users::Component::Account);
 
 sub content {
   my $self = shift;

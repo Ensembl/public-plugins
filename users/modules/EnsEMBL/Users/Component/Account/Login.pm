@@ -23,7 +23,7 @@ package EnsEMBL::Users::Component::Account::Login;
 
 use strict;
 
-use base qw(EnsEMBL::Users::Component::Account);
+use parent qw(EnsEMBL::Users::Component::Account);
 
 sub caption {
   return sprintf 'Login to %s', shift->site_name;

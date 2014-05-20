@@ -20,7 +20,7 @@ package EnsEMBL::Web::Configuration::Account;
 
 use strict;
 
-use base qw(EnsEMBL::Web::Configuration::UserData);
+use parent qw(EnsEMBL::Web::Configuration::UserData);
 
 sub SECURE_PAGES {
   ## TODO

@@ -26,7 +26,7 @@ use warnings;
 
 use EnsEMBL::Users::Messages qw(MESSAGE_EMAIL_INVALID MESSAGE_NAME_MISSING MESSAGE_ALREADY_REGISTERED);
 
-use base qw(EnsEMBL::Users::Command::Account);
+use parent qw(EnsEMBL::Users::Command::Account);
 
 sub process {
   my $self    = shift;

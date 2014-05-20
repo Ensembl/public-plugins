@@ -9,7 +9,8 @@
 
 <p>Ensembl is built on the following applications:</p>
 <ul>
-  <li><a href="#git">Git (or CVS)</a> - versioning system to allow you to download the Ensembl code</li>
+  <li><a href="#cvs">CVS</a> - legacy versioning system for downloading Ensembl code (deprecated)</li>
+  <li><a href="#git">Git</a> - versioning system for downloading Ensembl code (recommended)</li>
   <li><a href="#perl">Perl</a> - Open source scripting language</li>
   <li><a href="#apache">Apache and mod_perl</a> - Open source web server</li>
   <li><a href="#mysql">MySQL</a> - Open source database server</li>
@@ -34,25 +35,49 @@ your systems administrator to install this software for you.</p>
 running with pre-installed software (in particular Apache with mod_perl installed from RPMs), we
 recommend simply installing the latest version using the following instructions.</p>
 
-<h2 id="git">Git</h2>
+<h2 id="cvs">CVS</h2>
+
+<p>CVS is a software version control system formerly used for storing the source code to both Ensembl and BioPerl. You can still use CVS to obtain this software, but in the case of Ensembl this is being phase out.</p>
+
+<h3>To install CVS:</h3>
+<ol>
+<li>Download the latest source from <a href="http://ftp.gnu.org/non-gnu/cvs/source/stable/1.11.23/" rel="external">http://ftp.gnu.org/non-gnu/cvs/source/stable/1.11.23/</a> (you may be
+able to download binaries from here instead if you prefer). At the time of writing this is version
+1.11.23 and the file to download is cvs-1.11.23.tar.gz
+</li>
+<li>Unpack the source in a working directory with:
+  <pre class="code">
+  gunzip &lt; cvs-1.11.23.tar.gz | tar xvf -
+  cd cvs-1.11.23
+  ./configure
+  make
+  make install</pre>
+</li>
+</ol>
+
+<p>We formerly developed the Ensembl code itself in CVS, and older releases of our code
+can still be downloaded from the Sanger CVS repository, which includes a
+<a href="http://cvs.sanger.ac.uk/cgi-bin/viewvc.cgi/?root=ensembl">web interface</a>.
 
 <div class="tinted-box">
-<p><b>Important notice</b>: As of Release 75 we have moved development into git.
-For the next several releases, the new branch will still be made available via CVS
+<p><b>Important notice</b>: As of Release 75 we have moved Ensembl development into git (see
+below). For the rest of 2014, the new branch will still be made available via CVS
 at release time, but there will be no further work on the CVS HEAD. Please see our 
 <a href="http://www.ensembl.info/blog/2013/12/18/ensembl-has-migrated-to-git/">blog</a> 
 for more information.</p>
 </div>
 
+<h2 id="git">Git</h2>
+
 <p>Git is a software version control system that we use for storing the source code to Ensembl. You will
-need Git installed if you want to download the Ensembl source code. It will also help you keep up to
+need Git installed if you want to download the latest Ensembl source code. It will also help you keep up to
 date with any bug fixes. Our repositories are stored on <a href="https://github.com" rel="external">GitHub</a>.
 </p>
 
 <p>Git installation instructions can be found on the <a href="http://git-scm.com/book/en/Getting-Started-Installing-Git" rel="external">Git website</a>.</p>
 
 <h2 id="perl">Perl</h2>
-<p>If you are on a Unix-based OS such as Mac OS X or Linux, you will already have Perl installed. You need Perl5, version 5.8.0 or higher, to run the website - we recommend avoiding 5.10.0 as it contains major bugs.</p>
+<p>If you are on a Unix-based OS such as Mac OS X or Linux, you will already have Perl installed. You need Perl5, version 5.14.2 or higher, to run the website.</p>
 <p>To see if you have Perl installed, and/or to check its version number,
 type:</p>
 <pre class="code">perl -v</pre>

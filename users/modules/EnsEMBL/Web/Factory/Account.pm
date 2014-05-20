@@ -20,7 +20,7 @@ package EnsEMBL::Web::Factory::Account;
 
 use strict;
 
-use base qw(EnsEMBL::Web::Factory);
+use parent qw(EnsEMBL::Web::Factory);
 
 sub createObjects { 
   my $self          = shift;

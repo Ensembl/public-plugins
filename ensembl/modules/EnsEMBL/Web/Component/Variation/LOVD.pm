@@ -25,7 +25,7 @@ no warnings "uninitialized";
 use EnsEMBL::Web::Document::Table;
 use EnsEMBL::Web::Tools::Misc;
 
-use base qw(EnsEMBL::Web::Component::Variation);
+use parent qw(EnsEMBL::Web::Component::Variation);
 
 sub _init {
     my $self = shift;

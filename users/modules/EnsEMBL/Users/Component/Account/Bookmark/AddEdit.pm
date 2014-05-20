@@ -23,7 +23,7 @@ package EnsEMBL::Users::Component::Account::Bookmark::AddEdit;
 
 use strict;
 
-use base qw(EnsEMBL::Users::Component::Account);
+use parent qw(EnsEMBL::Users::Component::Account);
 
 sub content {
   my $self          = shift;

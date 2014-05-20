@@ -20,7 +20,7 @@ package EnsEMBL::Web::ViewConfig::Location::Genoverse;
 
 use strict;
 
-use base qw(EnsEMBL::Web::ViewConfig);
+use parent qw(EnsEMBL::Web::ViewConfig);
 
 sub init {
   my $self = shift;

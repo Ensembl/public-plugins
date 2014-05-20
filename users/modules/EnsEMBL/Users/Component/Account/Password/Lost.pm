@@ -23,7 +23,7 @@ package EnsEMBL::Users::Component::Account::Password::Lost;
 
 use strict;
 
-use base qw(EnsEMBL::Users::Component::Account);
+use parent qw(EnsEMBL::Users::Component::Account);
 
 sub caption {
   return 'Lost Password';

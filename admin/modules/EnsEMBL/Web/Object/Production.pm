@@ -20,7 +20,7 @@ package EnsEMBL::Web::Object::Production;
 
 use strict;
 
-use base qw(EnsEMBL::Web::Object::DbFrontend);
+use parent qw(EnsEMBL::Web::Object::DbFrontend);
 
 sub fetch_for_search {
   my $self = shift;

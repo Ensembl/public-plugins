@@ -22,7 +22,7 @@ use strict;
 
 use previous qw(content);
 
-use base qw(EnsEMBL::Web::Component::Location::Genoverse);
+use parent qw(EnsEMBL::Web::Component::Location::Genoverse);
 
 sub new_image {
   # The plugin system causes confusion as to what is inherited. Make sure the right function is called

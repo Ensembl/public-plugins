@@ -21,7 +21,7 @@ package EnsEMBL::Admin::Component::HelpRecord::Display;
 use strict;
 use warnings;
 
-use base qw(
+use parent qw(
   EnsEMBL::ORM::Component::DbFrontend::Display
   EnsEMBL::Web::Component::Help
 );

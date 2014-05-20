@@ -21,7 +21,7 @@ package EnsEMBL::Admin::Component::Changelog::List;
 use strict;
 use warnings;
 
-use base qw(EnsEMBL::ORM::Component::DbFrontend::List);
+use parent qw(EnsEMBL::ORM::Component::DbFrontend::List);
 
 sub content_tree {
   ## @overrides

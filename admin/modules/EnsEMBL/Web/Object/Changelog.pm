@@ -20,7 +20,7 @@ package EnsEMBL::Web::Object::Changelog;
 
 use strict;
 
-use base qw(EnsEMBL::Web::Object::DbFrontend);
+use parent qw(EnsEMBL::Web::Object::DbFrontend);
 
 sub default_action {
   return 'Summary';

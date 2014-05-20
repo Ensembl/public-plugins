@@ -29,7 +29,7 @@ package EnsEMBL::ORM::Component::DbFrontend::Display;
 use strict;
 use warnings;
 
-use base qw(EnsEMBL::ORM::Component::DbFrontend);
+use parent qw(EnsEMBL::ORM::Component::DbFrontend);
 
 sub content_tree {
   ## Generates a DOM tree for content HTML

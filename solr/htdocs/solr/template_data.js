@@ -182,11 +182,11 @@
                 data.tp2_row.add_value('facet', 'result_facet_feature_type_' + ft);
               }
               values = (function() {
-                var _i, _len, _ref, _results;
-                _ref = data.tp2_row.all_values('facet');
+                var _i, _len, _ref, _ref1, _results;
+                _ref1 = (_ref = data.tp2_row.all_values('facet')) != null ? _ref : [];
                 _results = [];
-                for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-                  k = _ref[_i];
+                for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+                  k = _ref1[_i];
                   _results.push(k.value);
                 }
                 return _results;
@@ -603,11 +603,13 @@
             data.tp2_row.register(50, function() {
               var base, url;
               url = data.tp2_row.best('domain_url');
-              if (!(url != null ? url.match(/^http:\/\//) : void 0)) {
-                base = $.parseJSON($('#solr_config .base').text()).url;
-                url = base + "/" + url;
+              if (url) {
+                if (!(url != null ? url.match(/^http:\/\//) : void 0)) {
+                  base = $.parseJSON($('#solr_config .base').text()).url;
+                  url = base + "/" + url;
+                }
+                return data.tp2_row.candidate('url', url, 50);
               }
-              return data.tp2_row.candidate('url', url, 50);
             });
             data.tp2_row.register(100, function() {
               var desc;
@@ -713,9 +715,12 @@
                 }
                 c = c.charAt(0).toUpperCase() + c.substring(1);
                 desc.push(c);
+                if (!c.match(/\</)) {
+                  desc.push('.');
+                }
               }
               if (desc.length) {
-                data.tp2_row.candidate('description', desc.join(". ") + ".", 10000);
+                data.tp2_row.candidate('description', desc.join(' '), 10000);
               }
               return true;
             });
@@ -1487,7 +1492,7 @@
             if (docs != null) {
               for (_i = 0, _len = docs.length; _i < _len; _i++) {
                 d = docs[_i];
-                if (d.ref_boost >= 10 && d.species) {
+                if (d.ref_boost >= 10 && d.species && d.domain_url) {
                   url = d.domain_url;
                   if ((url != null ? url.charAt(0) : void 0) !== '/') {
                     url = "/" + url;
@@ -2701,10 +2706,12 @@
           data.tp2_row.register(100, function() {
             var m, url;
             url = data.tp2_row.best('domain_url');
-            data.tp2_row.candidate('subtype', 'ID', 10);
-            m = url.match(/Help\/([a-zA-z]+)/);
-            if (m != null) {
-              return data.tp2_row.candidate('subtype', m[1], 100);
+            if (url) {
+              data.tp2_row.candidate('subtype', 'ID', 10);
+              m = url.match(/Help\/([a-zA-z]+)/);
+              if (m != null) {
+                return data.tp2_row.candidate('subtype', m[1], 100);
+              }
             }
           });
           data.tp2_row.register(300, function() {

@@ -32,7 +32,7 @@ use warnings;
 use Rose::DateTime::Util qw(parse_date format_date);
 use EnsEMBL::ORM::Rose::Field;
 
-use base qw(EnsEMBL::Web::Component);
+use parent qw(EnsEMBL::Web::Component);
 
 use constant {
   _JS_CLASS_DBF_RECORD        => '_dbf_record',

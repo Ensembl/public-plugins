@@ -20,7 +20,7 @@ package EnsEMBL::Web::Configuration::Healthcheck;
 
 use strict;
 use warnings;
-use base qw(EnsEMBL::Web::Configuration);
+use parent qw(EnsEMBL::Web::Configuration);
 
 sub caption       { 'Healthcheck'; }
 sub short_caption { 'Healthcheck'; }

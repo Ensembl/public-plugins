@@ -18,7 +18,7 @@ limitations under the License.
 
 package EnsEMBL::Admin::Component::Production::Search;
 
-use base qw(EnsEMBL::Admin::Component::Production);
+use parent qw(EnsEMBL::Admin::Component::Production);
 
 sub content {
   my $self    = shift;

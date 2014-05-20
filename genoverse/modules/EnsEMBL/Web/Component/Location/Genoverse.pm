@@ -22,7 +22,7 @@ use strict;
 
 use EnsEMBL::Web::Document::GenoverseImage;
 
-use base qw(EnsEMBL::Web::Component::Location);
+use parent qw(EnsEMBL::Web::Component::Location);
 
 sub _init {
   my $self = shift;

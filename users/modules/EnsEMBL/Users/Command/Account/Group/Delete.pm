@@ -26,7 +26,7 @@ use warnings;
 
 use EnsEMBL::Users::Messages qw(MESSAGE_UNKNOWN_ERROR MESSAGE_GROUP_NOT_FOUND);
 
-use base qw(EnsEMBL::Users::Command::Account);
+use parent qw(EnsEMBL::Users::Command::Account);
 
 sub csrf_safe_process {
   my $self        = shift;

@@ -26,7 +26,7 @@ use warnings;
 
 use EnsEMBL::Web::Exceptions;
 
-use base qw(EnsEMBL::ORM::Component::DbFrontend::Input);
+use parent qw(EnsEMBL::ORM::Component::DbFrontend::Input);
 
 sub content_tree {
   my $self          = shift;

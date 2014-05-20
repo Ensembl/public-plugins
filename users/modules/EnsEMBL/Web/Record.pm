@@ -31,7 +31,7 @@ use EnsEMBL::Web::Tools::MethodMaker qw(add_method);
 
 use ORM::EnsEMBL::DB::Accounts::Manager::Record;
 
-use base qw(EnsEMBL::Web::Root);
+use parent qw(EnsEMBL::Web::Root);
 
 sub new {
   ## @constructor
@@ -71,6 +71,10 @@ sub colour { # some calls are made to this method while it's key may not be adde
 
 sub label { # if this record is a das record, the webcode expects it to have this method
   return shift->data->{'label'};
+}
+
+sub assembly { # We store assembly ID in an arbitrary field
+  return shift->data->{'module_version'};
 }
 
 sub logic_name {  # if this record is a das record, the webcode expects it to have this method

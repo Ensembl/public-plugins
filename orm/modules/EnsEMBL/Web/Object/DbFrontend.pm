@@ -25,7 +25,7 @@ package EnsEMBL::Web::Object::DbFrontend;
 use strict;
 use warnings;
 
-use base qw(EnsEMBL::Web::Object);
+use parent qw(EnsEMBL::Web::Object);
 
 sub manager_class {
   ## IMPORTANT: Necessary to override

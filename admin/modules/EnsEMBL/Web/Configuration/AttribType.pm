@@ -20,6 +20,6 @@ package EnsEMBL::Web::Configuration::AttribType;
 
 use strict;
 
-use base qw(EnsEMBL::Web::Configuration::Production);
+use parent qw(EnsEMBL::Web::Configuration::Production);
 
 1;

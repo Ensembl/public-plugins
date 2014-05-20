@@ -21,7 +21,7 @@ package EnsEMBL::Web::Configuration::MultiDbFrontend;
 ### Description:
 ### This class inherited from EnsEMBL::Web::Configuration helps to accommodate multiple domain based DbFrontend interfaces in one navigation tree
 
-use base qw(EnsEMBL::Web::Configuration);
+use parent qw(EnsEMBL::Web::Configuration);
 
 sub get_valid_action {
   my ($self, $action, $function) = @_;

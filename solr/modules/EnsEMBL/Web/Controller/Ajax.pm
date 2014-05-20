@@ -227,6 +227,115 @@ sub echo { # XXX For table downloads, shouldn't be in search plugin
   print $hub->param('data'); 
 }
 
+sub _tid_to_trans {
+  my ($self,$hub,$species,$tid) = @_;
+
+  my $t_a = $hub->get_adaptor('get_TranscriptAdaptor','core',$species);
+  return undef unless $t_a;
+  return $t_a->fetch_by_stable_id($tid);
+}
+
+sub _pid_to_trans {
+  my ($self,$hub,$species,$pid) = @_;
+
+  my $p_a = $hub->get_adaptor('get_TranslationAdaptor','core',$species);
+  return undef unless $p_a;
+  my $p = $p_a->fetch_by_stable_id($pid);
+  return undef unless $p;
+  my $t = $p->transcript();
+  return undef unless $t;
+  return $t;
+}
+
+sub _refseq_to_trans {
+  my ($self,$hub,$species,$rid) = @_;
+
+  my $t_a = $hub->get_adaptor('get_TranscriptAdaptor','core',$species);
+  return undef unless $t_a;
+  my $trans = $t_a->fetch_all_by_external_name($rid); # XXX do it properly
+  return undef unless @$trans;
+  return $trans->[0];
+}
+
+sub _hgvs_to_vid {
+  my ($self,$hub,$species,$hgvs,$ref) = @_;
+
+  my @out;
+  eval {
+    my $vf_a = $hub->get_adaptor('get_VariationFeatureAdaptor','variation',$species);
+    my $vf = $vf_a->fetch_by_hgvs_notation($hgvs);
+    return undef unless $vf;
+    my $slice = $vf->slice->sub_Slice($vf->start,$vf->end);
+    foreach my $vf (@{$vf_a->fetch_all_by_Slice($slice)}) {
+      my $found = 0;
+      my @ids;
+      foreach my $type (qw(g c p)) {
+        foreach my $notation (values %{$vf->get_all_hgvs_notations($ref,$type)}) {
+          push @ids,$notation;
+          if($notation eq $hgvs) { $found = 1; }
+        }
+      }
+      if($found) {
+        push @out,{
+          vf => $vf,
+          hgvs => \@ids,
+        };
+      }
+    }
+  };
+  return \@out;
+}
+
+sub hgvs { # XXX extend beyond HGVS to other semi-psychic things
+  my ($self,$hub) = @_;
+
+  my $id = $hub->param('id');
+
+  my (@links,$trans,$prot,$vs);
+  $trans = $self->_tid_to_trans($hub,'Homo_sapiens',$1) if $id =~ /^(ENST\d{11})\W/;
+  $trans = $self->_pid_to_trans($hub,'Homo_sapiens',$1) if $id =~ /^(ENSP\d{11})\W/;
+  $trans = $self->_refseq_to_trans($hub,'Homo_sapiens',$1) if $id =~ /^([A-Z]{2}\_[\d\.]{5,})\W/;
+  my $new_id = $id;
+  if($trans) {
+    $new_id =~ s/^.*?\://;
+    my $v = '';
+    $v = ".".$trans->translation->version if $trans->translation;
+    $new_id = $trans->stable_id.$v.":$new_id";
+  }
+  if($id) {
+    $vs = $self->_hgvs_to_vid($hub,'Homo_sapiens',$new_id,$trans);
+  }
+  foreach my $v (@$vs) {
+    my $vid = $v->{'vf'}->variation()->stable_id();
+    my $tail = ", which matches.";
+    if(@{$v->{'hgvs'}}) {
+      $tail =
+        ", which includes HGVS identifiers ".join(', ',@{$v->{'hgvs'}});
+    }
+    push @links,{
+      text => "View variation '$vid'",
+      tail => $tail,
+      url => "/Homo_sapiens/Variation/Explore?v=$vid",
+    };
+  }
+  if($trans) {
+    my $enstid = $trans->stable_id();
+    push @links,{
+      text => "View whole transcript $enstid",
+      url => "/Homo_sapiens/Transcript/Summary?db=core;t=$enstid",
+    };
+    my $prot = $trans->translation();
+    if($prot) {
+      my $enspid = $prot->stable_id();
+      push @links,{
+        text => "View whole protein $enspid",
+        url => "/Homo_sapiens/Transcript/ProteinSummary?db=core;p=$enspid",
+      };
+    }
+  }
+  print to_json({ id => $id, links => \@links });
+}
+
 sub psychic { # Invoke psychic via AJAX, to see if we need to redirect.
   my ($self,$hub) = @_;
 

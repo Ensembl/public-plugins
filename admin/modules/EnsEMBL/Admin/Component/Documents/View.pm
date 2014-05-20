@@ -20,7 +20,7 @@ package EnsEMBL::Admin::Component::Documents::View;
 
 use strict;
 
-use base qw(EnsEMBL::Admin::Component::Documents);
+use parent qw(EnsEMBL::Admin::Component::Documents);
 
 sub content {
   my $self    = shift;

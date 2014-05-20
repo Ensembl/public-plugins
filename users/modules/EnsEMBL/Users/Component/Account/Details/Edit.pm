@@ -24,7 +24,7 @@ package EnsEMBL::Users::Component::Account::Details::Edit;
 use strict;
 use warnings;
 
-use base qw(EnsEMBL::Users::Component::Account);
+use parent qw(EnsEMBL::Users::Component::Account);
 
 use constant JS_CLASS_CHANGE_EMAIL => '_change_email';
 

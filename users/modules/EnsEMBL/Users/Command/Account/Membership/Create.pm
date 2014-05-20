@@ -26,7 +26,7 @@ use warnings;
 
 use EnsEMBL::Users::Messages qw(MESSAGE_GROUP_NOT_FOUND MESSAGE_URL_EXPIRED);
 
-use base qw(EnsEMBL::Users::Command::Account::Membership);
+use parent qw(EnsEMBL::Users::Command::Account::Membership);
 
 sub modify_membership {
   my ($self, $membership) = @_;

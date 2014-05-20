@@ -20,7 +20,7 @@ package EnsEMBL::Admin::Component::Production;
 
 use strict;
 
-use base qw(EnsEMBL::ORM::Component::DbFrontend);
+use parent qw(EnsEMBL::ORM::Component::DbFrontend);
 
 sub get_printable {
   my ($self, $value) = @_;

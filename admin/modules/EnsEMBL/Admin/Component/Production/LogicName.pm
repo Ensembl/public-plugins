@@ -20,7 +20,7 @@ package EnsEMBL::Admin::Component::Production::LogicName;
 
 use strict;
 
-use base qw(EnsEMBL::ORM::Component::DbFrontend::List);
+use parent qw(EnsEMBL::ORM::Component::DbFrontend::List);
 
 sub caption {
   return '';
