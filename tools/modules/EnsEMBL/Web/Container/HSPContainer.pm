@@ -18,8 +18,8 @@ limitations under the License.
 
 package EnsEMBL::Web::Container::HSPContainer;
 
+### Proxy object passed to drawing code instead of Bio::EnsEMBL::Slice in case of blast results
 ### Wrapper around ORM::EnsEMBL::DB::Tools::Object::Result and provides method for compatibility with drawing code
-### TODO - removed non-container stuff from this!
 
 use strict;
 use warnings;
@@ -31,26 +31,22 @@ sub new {
   ## @param Colours map for the pointers
   my ($class, $object, $job, $colours) = @_;
 
-  my $job_data  = $job->job_data;
-  my $results   = $job->result;
+  my $sequence = $object->get_input_sequence_for_job($job);
 
   return bless {
-    'name'    => $job_data->{'sequence'}{'display_id'},
-    'length'  => CORE::length($job_data->{'sequence'}{'seq'}),
-    'hsps'    => [ map {
-      my $hsp       = $_->result_data;
-      $hsp->{'id'}  = $_->result_id;
-      $hsp->{'tl'}  = $object->create_url_param({'result_id' => $hsp->{'id'}});
-      $hsp;
-    } @$results ],
+    'name'    => $sequence->{'display_id'},
+    'length'  => CORE::length($sequence->{'sequence'}),
+    'hsps'    => $object->get_all_hits($job),
     'colours' => $colours
   }, $class;
 }
 
+sub hsps    { return shift->{'hsps'};     }
+
+# Methods as needed by drawing code
 sub start   { return 0;                   }
 sub end     { return shift->{'length'};   }
 sub length  { return shift->{'length'};   }
-sub hsps    { return shift->{'hsps'};     }
 sub colours { return shift->{'colours'};  }
 sub name    { return shift->{'name'};     }
 

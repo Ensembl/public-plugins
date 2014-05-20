@@ -23,7 +23,7 @@ package EnsEMBL::Web::Component::Tools::Blast::ResultsTable;
 use strict;
 use warnings;
 
-use base qw(EnsEMBL::Web::Component::Tools::Blast);
+use parent qw(EnsEMBL::Web::Component::Tools::Blast);
 
 sub content {
   my $self      = shift;
@@ -75,18 +75,18 @@ sub content {
     # Data for table rows
     for (@$results) {
       my $result_id     = $_->result_id;
-      my $result_data   = $_->result_data;
+      my $result_data   = $_->result_data->raw;
       my $url_param     = $object->create_url_param({'result_id' => $result_id});
-      my $location_link = $self->location_link($species, $url_param, $job_data, $result_data);
+      my $location_link = $self->location_link($job, $_);
 
-      $result_data->{'links'}     = $self->all_links($species, $url_param, $job_data, $result_data);
-      $result_data->{'options'}   = {'class' => "hsp_$result_id"};
+      $result_data->{'links'}   = $self->all_links($job, $_);
+      $result_data->{'options'} = {'class' => "hsp_$result_id"};
 
       if ($source =~ /latestgp/i) {
         $result_data->{'tid'} = $location_link;
       } else {
         $result_data->{'gid'} = $location_link;
-        $result_data->{'tid'} = $self->subject_link($species, $url_param, $job_data, $result_data);
+        $result_data->{'tid'} = $self->target_link($job, $_);
       }
       $table->add_row($result_data);
     }
@@ -98,75 +98,34 @@ sub content {
   return $html;
 }
 
-sub subject_link {
-  ## Gets the link for the subject column
-  my ($self, $species, $url_param, $job_data, $result_data) = @_;
+sub target_link {
+  ## Gets the link for the target column
+  my ($self, $job, $result) = @_;
 
-  my $source  = $job_data->{'source'};
-  my $param   = $source =~/abinitio/i ? 'pt' : $source eq 'PEP_ALL' ? 'p' : 't';
-
-  return sprintf '<a href="%s">%s</a>', $self->hub->url({
-    'species' => $species,
-    'type'    => 'Transcript',
-    'action'  => $source =~/cdna|ncrna/i ? 'Summary' : 'ProteinSummary',
-    $param    => $result_data->{'tid'},
-    'tl'      => $url_param
-  }), $result_data->{'tid'};
+  return sprintf '<a href="%s">%s</a>', $self->hub->url($self->object->get_result_url('target', $job, $result)), $result->result_data->{'tid'};
 }
 
 sub all_links {
   ## Gets the links to be displayed in the links column
-  my ($self, $species, $url_param, $job_data, $result_data) = @_;
+  my ($self, $job, $result) = @_;
 
-  my $hub         = $self->hub;
-  my $blast_prog  = $job_data->{'program'};
+  my $hub = $self->hub;
 
-  return join(' ',
-
-    # Alignment link
-    sprintf('<a href="%s" class="_ht" title="Alignment">[A]</a>', $hub->url({
-      'species'   => $species,
-      'type'      => 'Tools',
-      'action'    => 'Blast',
-      'function'  => $job_data->{'db_type'} eq 'peptide' || $job_data->{'query_type'} eq 'peptide' ? 'AlignmentProtein' : 'Alignment',
-      'tl'        => $url_param
-    })),
-
-    # Query sequence link
-    sprintf('<a href="%s" class="_ht" title="Query Sequence">[S]</a>', $hub->url({
-      'species'   => $species,
-      'type'      => 'Tools',
-      'action'    => 'Blast',
-      'function'  => 'QuerySeq',
-      'tl'        => $url_param
-    })),
-
-    # Genomic sequence link
-    sprintf('<a href="%s" class="_ht" title="Genomic Sequence">[G]</a>', $hub->url({
-      'species'   => $species,
-      'type'      => 'Tools',
-      'action'    => 'Blast',
-      'function'  => 'GenomicSeq',
-      'tl'        => $url_param
-    }))
+  return sprintf('<a href="%s" class="_ht" title="Alignment">[A]</a> <a href="%s" class="_ht" title="Query Sequence">[S]</a> <a href="%s" class="_ht" title="Genomic Sequence">[G]</a>',
+    $hub->url($self->object->get_result_url('alignment',        $job, $result)),  # Alignment link
+    $hub->url($self->object->get_result_url('query_sequence',   $job, $result)),  # Query sequence link
+    $hub->url($self->object->get_result_url('genomic_sequence', $job, $result))   # Genomic sequence link
   );
 }
 
 sub location_link {
   ## Gets a link to the location view page for the given result
-  my ($self, $species, $url_param, $job_data, $result_data) = @_;
+  my ($self, $job, $result) = @_;
 
-  my $region  = sprintf('%s:%s-%s', $result_data->{'gid'}, $result_data->{'gstart'}, $result_data->{'gend'});
-  my $url     = $self->hub->url({
-    'species'           => $species,
-    'type'              => 'Location',
-    'action'            => 'View',
-    'r'                 => $region,
-    'contigviewbottom'  => [qw(blast_hit=normal blast_hit_btop=normal)],
-    'tl'                => $url_param
-  });
+  my $url     = $self->object->get_result_url('location', $job, $result);
+  my $region  = $url->{'r'};
 
-  return qq(<a href="$url" class="_ht" title="Region in Detail">$region</a>);
+  return sprintf '<a href="%s" class="_ht" title="Region in Detail">%s</a>', $self->hub->url($url), $region;
 }
 
 1;

@@ -21,7 +21,7 @@ package EnsEMBL::Web::Component::Tools::Icons;
 use strict;
 use warnings;
 
-use base qw(EnsEMBL::Web::Component::Tools);
+use parent qw(EnsEMBL::Web::Component::Tools);
 
 sub _init {
   my $self = shift;

@@ -21,9 +21,9 @@ package EnsEMBL::Web::Job::VEP;
 use strict;
 use warnings;
 
-use base qw(EnsEMBL::Web::Job);
+use parent qw(EnsEMBL::Web::Job);
 
-sub process_for_hive_submission {
+sub prepare_to_dispatch {
   ## @override
   my $self        = shift;
   my $rose_object = $self->rose_object;
@@ -47,7 +47,7 @@ sub process_for_hive_submission {
       $vep_configs->{'filter_common'} = 'yes';
     } elsif($frequency_filtering eq 'advanced') {
       $vep_configs->{'check_frequency'} = 'yes';
-      $vep_configs->{$_} = $job_data->{$_} for qw(freq_pop freq_freq freq_gt_lt freq_filter);
+      $vep_configs->{$_} = $job_data->{$_} || 0 for qw(freq_pop freq_freq freq_gt_lt freq_filter);
     }
   }
 

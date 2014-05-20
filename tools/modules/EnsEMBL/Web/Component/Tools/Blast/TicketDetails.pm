@@ -21,7 +21,7 @@ package EnsEMBL::Web::Component::Tools::Blast::TicketDetails;
 use strict;
 use warnings;
 
-use base qw(
+use parent qw(
   EnsEMBL::Web::Component::Tools::TicketDetails
   EnsEMBL::Web::Component::Tools::Blast
 );

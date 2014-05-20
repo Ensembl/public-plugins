@@ -21,7 +21,7 @@ package EnsEMBL::Web::Component::Tools;
 use strict;
 use warnings;
 
-use base qw(EnsEMBL::Web::Component);
+use parent qw(EnsEMBL::Web::Component::Shared);
 
 sub object {
   ## @override
@@ -31,6 +31,16 @@ sub object {
 
 sub mcacheable {
   return 0;
+}
+
+sub new {
+  ## @constructor
+  ## @override To set the correct view config
+  my $self = shift->SUPER::new(@_);
+  if (my $hub = $self->hub) {
+    $self->{'view_config'} = $hub->get_viewconfig($self->id, $hub->action, 'cache');
+  }
+  return $self;
 }
 
 sub _init {
@@ -43,30 +53,30 @@ sub _init {
 }
 
 sub get_job_summary {
-  ## Reads the job hive_status field, and display status accordingly
+  ## Reads the job dispatcher_status field, and display status accordingly
   ## @param Job object
   ## @param Extra params hashref with keys:
   ##  - links: Arrayref with name of the links that need to be displayed (results, edit, delete)
   ## @return DIV node
   my ($self, $job, $params) = @_;
 
-  my $hub             = $self->hub;
-  my $job_id          = $job->job_id;
-  my $job_hive_status = $job->hive_status;
-  my $job_message     = $job->job_message->[0];
-  my $job_status      = $job->status;
-  my $url_param       = $self->object->create_url_param({'job_id' => $job_id});
-  my $job_status_div  = $self->dom->create_element('div', {
-    'children'    => [{
-      'node_name'   => 'p',
-      'inner_HTML'  => sprintf('Job %s: %s', $job->job_number, $job->job_desc // '-')
+  my $hub               = $self->hub;
+  my $job_id            = $job->job_id;
+  my $job_message       = $job->job_message->[0];
+  my $job_status        = $job->status;
+  my $dispatcher_status = $job->dispatcher_status;
+  my $url_param         = $self->object->create_url_param({'job_id' => $job_id});
+  my $job_status_div    = $self->dom->create_element('div', {
+    'children'            => [{
+      'node_name'           => 'p',
+      'inner_HTML'          => sprintf('Job %s: %s', $job->job_number, $job->job_desc // '-')
     }, {
-      'node_name'   => 'p',
-      'class'       => 'job-status-links',
-      'children'    => [{
-        'node_name'   => 'span',
-        'class'       => ['job-status', "job-status-$job_hive_status"],
-        'inner_HTML'  => ucfirst $job_hive_status =~ s/_/ /gr
+      'node_name'           => 'p',
+      'class'               => 'job-status-links',
+      'children'            => [{
+        'node_name'           => 'span',
+        'class'               => ['job-status', "job-status-$dispatcher_status"],
+        'inner_HTML'          => ucfirst $dispatcher_status =~ s/_/ /gr
       }]
     }]
   });
@@ -74,7 +84,8 @@ sub get_job_summary {
   if ($job_status eq 'done') {
     $job_status_div->last_child->append_child('a', {
       'class'       => [qw(small left-margin results-link)],
-      'inner_HTML'  => '[View Results]',
+      'flags'       => ['view_results_link'],
+      'inner_HTML'  => '[View results]',
       'href'        => $hub->url({
         'species'     => $job->species,
         'type'        => 'Tools',
@@ -116,10 +127,12 @@ sub get_job_summary {
     my $display_message         = $job_message->display_message;
     my $exception_is_fatal      = $job_message->fatal;
     my $job_message_class       = "_job_message_$job_id";
-
-    $job_status_div->append_child('p', {
+    my $error_div               = $job_status_div->append_child('div', {
       'class'       => 'job-error-msg',
-      'inner_HTML'  => join('', $display_message, $exception_is_fatal ? sprintf(' <a class="toggle closed" href="#more" rel="%s">Show details</a>', $job_message_class) : '')
+      'children'    => [{
+        'node_name'   => 'p',
+        'inner_HTML'  => join('', $display_message, $exception_is_fatal ? sprintf(' <a class="toggle closed" href="#more" rel="%s">Show details</a>', $job_message_class) : '')
+      }]
     });
 
     if ($exception_is_fatal) {
@@ -135,7 +148,7 @@ sub get_job_summary {
         $hub->url({'type' => 'Help', 'action' => 'Contact', 'subject' => 'Exception in Web Tools', 'message' => sprintf("\n\n\n%s with message (%s) (for job %s): %s", $job_message->exception->{'class'} || 'Exception', $display_message, $job_id, $details)})
       ;
 
-      $job_status_div->append_children({
+      $error_div->append_children({
         'node_name'   => 'div',
         'class'       => [ $job_message_class, 'toggleable', 'hidden', 'job_error_message' ],
         'inner_HTML'  => $details

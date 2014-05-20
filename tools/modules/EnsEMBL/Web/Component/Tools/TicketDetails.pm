@@ -21,7 +21,7 @@ package EnsEMBL::Web::Component::Tools::TicketDetails;
 use strict;
 use warnings;
 
-use base qw(EnsEMBL::Web::Component::Tools);
+use parent qw(EnsEMBL::Web::Component::Tools);
 
 use EnsEMBL::Web::Exceptions;
 

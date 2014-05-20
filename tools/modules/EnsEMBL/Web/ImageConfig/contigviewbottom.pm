@@ -18,8 +18,35 @@ limitations under the License.
 
 package EnsEMBL::Web::ImageConfig::contigviewbottom;
 
-use strict;
+### Plugin to core EnsEMBL::Web::ImageConfig::contigviewbottom to add blast result tracks to the image
 
-sub get_sortable_tracks { return grep { $_->get('sortable') && ($_->get('menu') ne 'no' || $_->id eq 'blast_hit_btop') } @{$_[0]->glyphset_configs}; } # Add blast to the sortable tracks
+use strict;
+use warnings;
+
+use previous qw(init);
+
+sub init {
+  ## @plugin
+  ## Adds blast track to the config
+  my $self = shift;
+  $self->PREV::init(@_);
+
+  # do not display the blast track if no job related to the urls param is found
+  my $display = 'no';
+  if (my $object = $self->hub->core_object('Tools')) {
+    $object   = $object->get_sub_object('Blast');
+    my $job   = $object->get_requested_job({'with_all_results' => 1});
+    $display  = 'yes' if $job && @{$job->result};
+  }
+
+  $self->add_track('sequence', 'blast', 'BLAST/BLAT hits', 'BlastHit', {
+    'description' => 'Track displaying BLAST/BLAT hits for the selected job',
+    'display'     => 'normal',
+    'strand'      => 'b',
+    'colourset'   => 'feature',
+    'sub_type'    => 'blast',
+    'menu'        => $display
+  });
+}
 
 1;

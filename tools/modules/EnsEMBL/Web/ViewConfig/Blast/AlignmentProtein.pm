@@ -20,7 +20,7 @@ package EnsEMBL::Web::ViewConfig::Blast::AlignmentProtein;
 
 use strict;
 
-use base qw(EnsEMBL::Web::ViewConfig::TextSequence);
+use parent qw(EnsEMBL::Web::ViewConfig::TextSequence);
 
 sub init {
   my $self = shift;

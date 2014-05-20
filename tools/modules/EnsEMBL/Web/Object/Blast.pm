@@ -27,61 +27,26 @@ package EnsEMBL::Web::Object::Blast;
 use strict;
 use warnings;
 
-use base qw(EnsEMBL::Web::Object::Tools);
+use EnsEMBL::Web::Tools::FileHandler qw(file_get_contents);
 
-use FileHandle;
-use Bio::SeqIO;
-use Bio::EnsEMBL::Registry;
-use EnsEMBL::Web::SpeciesDefs;
-use EnsEMBL::Web::ExtIndex;
+use parent qw(EnsEMBL::Web::Object::Tools);
 
-use EnsEMBL::Web::BlastConstants qw(MAX_SEQUENCE_LENGTH CONFIGURATION_FIELDS CONFIGURATION_DEFAULTS);
-
-sub ticket_prefix {
-  ## Abstract method implementation
-  return 'BLA';
-}
-
-sub ticket_type {
-  ## Abstract method implementation
-  return 'Blast';
-}
-
-sub process_job_for_hive_submission {
-  ## Abstract method implementation
-  my ($self, $job) = @_;
-
-  my $job_data = $job->job_data->raw;
-
-  if ($job_data->{'sequence'}{'is_invalid'}) {
-    $job->job_message([{'display_message' => $job_data->{'sequence'}{'is_invalid'}, 'fatal' => 0}]);
-    return;
-  }
-
+sub long_caption {
+  ## For customised heading of the page
+  my $self  = shift;
   my $hub   = $self->hub;
-  my $dba   = $hub->database('core', $job->species);
-  my $dbc   = $dba->dbc;
-  my $sd    = $hub->species_defs;
-
-  $job_data->{'dba'}  = {
-    -user               => $dbc->username,
-    -host               => $dbc->host,
-    -port               => $dbc->port,
-    -pass               => $dbc->password,
-    -dbname             => $dbc->dbname,
-    -driver             => $dbc->driver,
-    -species            => $dba->species,
-    -species_id         => $dba->species_id,
-    -multispecies_db    => $dba->is_multispecies,
-    -group              => $dba->group
-  };
-
-  my @search_type = $self->parse_search_type(delete $job_data->{'search_type'});
-
-  $job_data->{'blast_type'} = $search_type[0];
-  $job_data->{'program'}    = lc $search_type[1];
-
-  return $job_data;
+  if ($hub->function eq 'Results') {
+    if (my $job = $self->get_requested_job({'with_all_results' => 1})) {
+      my $job_desc = $job->job_desc;
+      return sprintf('Results for ticket %s (Job %s%s)',
+        $job->ticket->ticket_name,
+        $job->job_number,
+        $job_desc ? ": $job_desc" : ''
+      );
+    }
+    return 'Blast/Blat Results';
+  }
+  return '';
 }
 
 sub get_blast_form_params {
@@ -198,104 +163,33 @@ sub get_blast_form_params {
   };
 }
 
-sub form_inputs_to_jobs_data {
+sub get_edit_jobs_data {
   ## Abstract method implementation
-  ## Validates the inputs, then create set of parameters for each job, ready to be submitted
-  ## @return undefined if any of the parameters (other than sequences/species) are invalid (no specific message is returned since all validations were done at the frontend first - if input is still invalid, someone's just messing around)
-  my $self      = shift;
-  my $hub       = $self->hub;
-  my $sd        = $hub->species_defs;
-  my $params    = {};
+  my $self  = shift;
+  my $hub   = $self->hub;
+  my $jobs  = $self->get_requested_job || $self->get_requested_ticket;
 
-  # Validate Species
-  my @species = $sd->valid_species($hub->param('species'));
-  return unless @species;
-
-  # Validate Query Type, DB Type, Source Type and Search Type
-  for (qw(query_type db_type source search_type)) {
-    my $param_value = $params->{$_} = $hub->param($_);
-    return unless $param_value && $self->get_param_value_caption($_, $param_value); #get_param_value_caption returns undef if value is invalid
-  }
-
-  # process the extra configurations
-  $params->{'configs'} = $self->process_extra_configs($params->{'search_type'});
-  return unless $params->{'configs'};
-
-  # Process input sequences
-  my $input_seqs  = join "\n\n", $self->param('sequence');
-  my $file_handle = FileHandle->new(\$input_seqs, 'r');
-  my $seq_io      = Bio::SeqIO->new('-fh' => $file_handle, '-alphabet' => $params->{'query_type'} eq 'peptide' ? 'protein' : 'dna', '-format' => 'fasta');
-  my $seq_objects = [];
-
-  while (my $seq_object = $seq_io->next_seq) {
-    my $is_invalid  = $seq_object->validate_seq ? 0 : 1;
-    my $seq_string  = $seq_object->seq;
-    $is_invalid     = sprintf 'Sequence contains more than %s characters', MAX_SEQUENCE_LENGTH if !$is_invalid && length $seq_string > MAX_SEQUENCE_LENGTH;
-    push @$seq_objects, {
-      'display_id'  => $seq_object->display_id,
-      'seq'         => $seq_string,
-      'is_invalid'  => $is_invalid
-    };
-  }
-  $file_handle->close;
-
-  # Create parameter sets for individual jobs to be submitted (submit one job per sequence per species)
-  my $jobs      = [];
-  my $desc      = $self->param('description');
-  my $prog      = $self->parse_search_type($params->{'search_type'}, 'search_method');
-  my $db_types  = $sd->multi_val('ENSEMBL_BLAST_DB_TYPES');
-  my $job_num   = 0;
-  for my $species (@species) {
-    my $i = 0;
-    for my $seq_object (@$seq_objects) {
-      push @$jobs, {
-        'job_number'  => ++$job_num,
-        'job_desc'    => $desc || sprintf('%s search against %s %s.', $prog, $sd->get_config($species, 'SPECIES_COMMON_NAME'), $db_types->{$params->{'db_type'}}),
-        'species'     => $species,
-        'sequence'    => $seq_object,
-        'source_file' => $sd->get_config($species, 'ENSEMBL_BLAST_CONFIGS')->{$params->{'query_type'}}{$params->{'db_type'}}{$params->{'search_type'}}{$params->{'source'}},
-        %$params
-      };
-    }
-  }
-
-  return $jobs;
+  return [ map {
+    my $job_data = $_->job_data->raw;
+    $job_data->{'species'}  = $_->species;
+    $job_data->{'sequence'} = $self->get_input_sequence_for_job($_);
+    $job_data;
+  } @{ $jobs ? ref($jobs) =~ /Ticket/ ? $jobs->job : [ $jobs ] : [] } ];
 }
 
-sub process_extra_configs {
-  ## Gets all the extra configs from CGI depending upon the selected search type
-  ## @param Search type string
-  ## @return Hashref of config params, or undef in case of validation error
-  my ($self, $search_type_value) = @_;
+sub get_input_sequence_for_job {
+  ## Gets input sequence of a job from input file
+  ## @param Job rose object
+  ## @return Copy of hashref saved at $job->job_data->{'seuqnece'}, but with two extra keys 'display_id', 'sequence', but one removed key 'input_file'
+  my ($self, $job) = @_;
 
-  my $config_fields   = CONFIGURATION_FIELDS;
-  my $config_defaults = CONFIGURATION_DEFAULTS;
-  my $config_values   = {};
+  my $sequence    = $job->job_data->raw->{'sequence'};
+  my @fasta_lines = map { chomp; $_ } file_get_contents(sprintf "%s/%s", $job->job_dir, delete $sequence->{'input_file'});
 
-  while (my ($config_type, $config_field_group) = splice @$config_fields, 0, 2) {
+  $sequence->{'display_id'} = $fasta_lines[0] =~ s/^>// ? shift @fasta_lines : '';
+  $sequence->{'sequence'}   = join("", @fasta_lines);
 
-    while (my ($element_name, $element_params) = splice @$config_field_group, 0, 2) {
-
-      for ($search_type_value, 'all') {
-        if (exists $config_defaults->{$_}{$element_name}) {
-
-          my $element_value = $self->param("${search_type_value}__${element_name}") // '';
-
-          return unless grep {$_ eq $element_value} map($_->{'value'}, @{$element_params->{'values'}}), $element_params->{'type'} eq 'checklist' ? '' : (); # checklist is also allowed to have null value
-
-          if (($element_params->{'commandline_type'} || '') eq 'flag') {
-            $config_values->{$element_name} = '' if $element_value;
-          } else {
-            $config_values->{$element_name} = exists $element_params->{'commandline_values'} ? $element_params->{'commandline_values'}{$element_value} : $element_value;
-          }
-
-          last;
-        }
-      }
-    }
-  }
-
-  return $config_values;
+  return $sequence;
 }
 
 sub get_param_value_caption {
@@ -345,414 +239,417 @@ sub get_target_object {
   ## @param Blast result hit
   ## @param DB Source type
   ## @return PredictionTranscript/Transcript/Translation object
-  my ($self, $hit, $source_type)  = @_;
+  my ($self, $hit, $source)  = @_;
   my $target_id     = $hit->{'tid'};
   my $species       = $hit->{'species'};
-  my $feature_type  = $source_type =~ /abinitio/i ? 'PredictionTranscript' : $source_type =~ /cdna/i ? 'Transcript' : 'Translation';
+  my $feature_type  = $source =~ /abinitio/i ? 'PredictionTranscript' : $source =~ /cdna/i ? 'Transcript' : 'Translation';
   my $adaptor       = $self->hub->get_adaptor("get_${feature_type}Adaptor", 'core', $species);
-  
+
   return $adaptor->fetch_by_stable_id($target_id);
 }
 
-sub get_all_hits {
-  ## Gets all the result hits for the given job
+sub map_result_hits_to_karyotype {
+  ## Maps all the hit as a feature on the karyotype view
+  ## In case some hits are on a patch, it gets the actual chromosome name to draw that hit on the karyotype
   ## @param Job object
-  ## @return Hashref { result_id => result_data }
   my ($self, $job) = @_;
+
+  my $hub     = $self->hub;
+  my $species = $job->species;
+  my $results = $job->result;
+
+  my %all_chr = map { $_ => 1 } @{$hub->species_defs->get_config($species, 'ENSEMBL_CHROMOSOMES') || []};
+  my %alt_chr;
+
+  my @features;
+
+  for (@$results) {
+    my $hit_id  = $_->result_id;
+    my $hit     = $_->result_data;
+    my $feature = {
+      'region'    => $hit->{'gid'},
+      'start'     => $hit->{'gstart'},
+      'end'       => $hit->{'gend'},
+      'p_value'   => 1 + $hit->{'pident'} / 100,
+      'strand'    => $hit->{'gori'},
+      'href'      => $hub->url('ZMenu', {
+        'species'   => $species,
+        'type'      => 'Tools',
+        'action'    => 'Blast',
+        'function'  => '',
+        'tl'        => $self->create_url_param,
+        'hit'       => $hit_id
+      }),
+      'html_id'   => "hsp_$hit_id"
+    };
+
+    if (!$all_chr{$hit->{'gid'}}) { # if it's a patch region, get the actual chromosome name
+      if (!exists $alt_chr{$hit->{'gid'}}) {
+        my $slice = $hub->get_adaptor('get_SliceAdaptor')->fetch_by_region('toplevel', $hit->{'gid'}, $hit->{'gstart'}, $hit->{'gend'});
+        my ($alt) = @{$hub->get_adaptor('get_AssemblyExceptionFeatureAdaptor')->fetch_all_by_Slice($slice)};
+        my $alt_slice;
+
+        if ($alt) {
+          $alt_slice = $alt->alternate_slice;
+        }
+
+        $alt_chr{$hit->{'gid'}} = $alt_slice ? $alt_slice->seq_region_name : undef;
+      }
+
+      next unless $alt_chr{$hit->{'gid'}};
+
+      $feature->{'actual_region'} = $hit->{'gid'};
+      $feature->{'region'}        = $alt_chr{$hit->{'gid'}};
+    }
+
+    push @features, $feature;
+  }
+
+  return \@features;
+}
+
+sub get_all_hits {
+  ## Gets all the result hits (hashrefs) for the given job, and adds result_id and tl (url param) to the individual hit
+  ## @param Job object
+  ## @param Optional sort subroutine to sort the hits (defaults to sorting by result id)
+  ## @return Arrayref of hits hashref
+  my ($self, $job, $sort) = @_;
+
+  $sort ||= sub { $a->{'result_id'} <=> $b->{'result_id'} };
 
   $job->load('with' => 'result');
 
-  return { map { $_->result_id => $_->result_data } @{$job->result} };
+  return [ sort $sort map {
+
+    my $result_id   = $_->result_id;
+    my $result_data = $_->result_data->raw;
+
+    $result_data->{'result_id'} = $result_id;
+    $result_data->{'tl'}        = $self->create_url_param({'result_id' => $result_id});
+
+    $result_data
+
+  } @{$job->result} ];
 }
 
 sub get_all_hits_in_slice_region {
   ## Gets all the result hits for the given job in the given slice region
   ## @param Job object
   ## @param Slice object
-  ## @return Hashref { result_id => result_data }
-  my ($self, $job, $slice) = @_;
+  ## @param Sort subroutine as accepted by get_all_hits
+  ## @return Array of hits hashrefs
+  my ($self, $job, $slice, $sort) = @_;
 
-  my $hits      = $self->get_all_hits($job);
   my $s_name    = $slice->seq_region_name;
   my $s_start   = $slice->start;
   my $s_end     = $slice->end;
 
-  my ($gid, $gstart, $gend);
+  return [ grep {
 
-  while (my ($hit_id, $hit) = each %$hits) {
+    my $gid    = $_->{'gid'};
+    my $gstart = $_->{'gstart'};
+    my $gend   = $_->{'gend'};
 
-    $gid    = $hit->{'gid'};
-    $gstart = $hit->{'gstart'};
-    $gend   = $hit->{'gend'};
+    $s_name eq $gid && (
+      $gstart >= $s_start && $gend <= $s_end ||
+      $gstart < $s_start && $gend <= $s_end && $gend > $s_start ||
+      $gstart >= $s_start && $gstart <= $s_end && $gend > $s_end ||
+      $gstart < $s_start && $gend > $s_end && $gstart < $s_end
+    )
 
-    if ($s_name eq $gid) {
-
-      if (
-        $gstart >= $s_start && $gend <= $s_end ||
-        $gstart < $s_start && $gend <= $s_end && $gend > $s_start ||
-        $gstart >= $s_start && $gstart <= $s_end && $gend > $s_end ||
-        $gstart < $s_start && $gend > $s_end && $gstart < $s_end
-      ) {
-        next;
-      }
-    }
-
-    delete $hits->{$hit_id};
-  }
-
-  return $hits;
+  } @{$self->get_all_hits($job, $sort)} ];
 }
 
-sub get_all_hits_by_coords {
-  ## Gets all the result hits for the given job for given coords
+sub get_result_url {
+  ## Gets required url links for the result hit
+  ## @param Link type (either one of these: target, location, alignment, query_sequence, genomic_sequence)
   ## @param Job object
-  ## @param Coords
-  ## @return Hashref { result_id => result_data }
-  my ($self, $job, $coords) = @_;
+  ## @param Result object
+  ## @return Hashref as accepted by hub->url
+  my ($self, $link_type, $job, $result) = @_;
 
-  my $slice = $self->database('core', $job->species)->get_SliceAdaptor->fetch_by_toplevel_location($coords);
+  my $species     = $job->species;
+  my $job_data    = $job->job_data;
+  my $result_data = $result->result_data;
+  my $url_param   = $self->create_url_param({'job_id' => $job->job_id, 'result_id' => $result->result_id});
 
-  return $self->get_all_hits_in_slice_region($job, $slice);
-}
+  if ($link_type eq 'target') {
 
-## TODO
-##/*********************************************/
+    my $source  = $job_data->{'source'};
+    my $param   = $source =~/abinitio/i ? 'pt' : $source eq 'PEP_ALL' ? 'p' : 't';
 
+    return {
+      'species' => $species,
+      'type'    => 'Transcript',
+      'action'  => $source =~/cdna|ncrna/i ? 'Summary' : 'ProteinSummary',
+      $param    => $result_data->{'tid'},
+      'tl'      => $url_param
+    };
 
-sub process_input_sequence { ## DONT DELETE THIS YET! THIS CONTAINS THE ACCESSION ID RETRIEVAL CODE
-  my $self    = shift;
-  my $i       = 0;
-  my $length  = 0;
+  } elsif ($link_type eq 'location') {
 
-  if ( my $file = $self->param('file') ) {
-    my $file_contents;
-    {
-      local $/ = undef;
-      $file_contents = <$file>;
-    }
-    close $file;
+    my $region = sprintf('%s:%s-%s', $result_data->{'gid'}, $result_data->{'gstart'}, $result_data->{'gend'});
 
-    my $fh = IO::String->new($file_contents);
-    my $seq_io = Bio::SeqIO->new(-fh=>$fh );
-    while( my $seq = $seq_io->next_seq ){
-      $length += $seq->length;
-      $i++;
-      $self->add_seq($seq, $i, $length, 'file');
-      last if exists $self->{'_error'}{'file'};
-    }
-    $self->hub->delete_param('file');
-    $self->{'data'}{'_input'}{'.tmpfiles'} = {};
-  }
-  elsif ( my $seq = $self->param('query_sequence') and $self->param('query_sequence') !~ /^\*\*\*/o ){
-    $seq =~ s/^\s+//;
-    if( $seq !~ /^>/ ){ $seq = ">unnamed\n".$seq }
-    my $fh = IO::Scalar->new(\$seq);
-    my $seq_io = Bio::SeqIO->new(-fh=>$fh );
-    while( my $bioseq = $seq_io->next_seq){
-      $length += $bioseq->length;
-      $i++;
-      $self->add_seq($bioseq, $i, $length, 'query_sequence');
-      last if exists $self->{'_error'}{'query_sequence'};
-    }
-  }
-  elsif (my $id = $self->param('retrieve_accession')){
-    my $seq;
+    return {
+      '__clear'           => 1,
+      'species'           => $species,
+      'type'              => 'Location',
+      'action'            => 'View',
+      'r'                 => $region,
+      'contigviewbottom'  => 'blast=normal',
+      'tl'                => $url_param
+    };
 
-    if ($id =~/^ENS[GTP]\d{11}?/ || $id =~/^ENS\w\w\w[GTP]\d{11}?/){ # Have Ensembl sequence
-      my ($species, $object_type, $db_type) = Bio::EnsEMBL::Registry->get_species_and_object_type($id);
-      my $adaptor = $self->hub->get_adaptor('get_' . $object_type .'Adaptor', $db_type, $species);
-      my $seq_object = $adaptor->fetch_by_stable_id($id);
+  } elsif ($link_type eq 'alignment') {
 
-      if ($object_type eq 'Gene' || $object_type eq 'Transcript'){
-        $seq = '>'.$id."\n".$seq_object->feature_Slice->seq;
-      } elsif ($object_type eq 'Translation'){
-        $seq = '>'.$id."\n".$seq_object->seq;
-      }
+    return {
+      'species'   => $species,
+      'type'      => 'Tools',
+      'action'    => 'Blast',
+      'function'  => $self->get_alignment_component_name_for_job($job),
+      'tl'        => $url_param
+    };
 
-      if(!$seq){
-        $self->{'_error'}{'retrieve_accession'} = 'Could not retrieve sequence' . $self->param('retrieve_accession');
-      }
+  } elsif ($link_type eq 'query_sequence') {
 
-    } else { # try and fetch via pfetch
-      my $indexer = EnsEMBL::Web::ExtIndex->new( $self->species_defs );
-      $seq = join ("", @{$indexer->get_seq_by_id({ DB =>"PUBLIC",
-                                                     ID => $id})} );
-      if( ! $seq or $seq =~ /^no match/ ){
-      $seq = join( "", @{$indexer->get_seq_by_acc({DB=>"PUBLIC",
-                                                   ACC=>$id})} );
-        if( ! $seq or $seq =~ /^no match/ ){
-          $self->{'_error'}{'retrieve_accession'} = 'Could not retrieve sequence' . $self->param('retrieve_accession');
-        }
-      }
-    }
+    return {
+      'species'   => $species,
+      'type'      => 'Tools',
+      'action'    => 'Blast',
+      'function'  => 'QuerySeq',
+      'tl'        => $url_param
+    };
 
-    if ($seq =~/^\w+|^\>/){
-      my $fh = IO::Scalar->new(\$seq);
-      my $seq_io = Bio::SeqIO->new(-fh=>$fh );
-      while( my $bioseq = $seq_io->next_seq){
-        $bioseq->display_id($id);
-        $length += $bioseq->length;
-        $i++;
-        $self->add_seq($bioseq, $i, $length, 'query_sequence');
-        last if exists $self->{'_error'}{'query_sequence'};
-      }
-    }
-  }
-  else {
-    $self->{'_error'}{'file'} = 'No query sequences have been entered';
-    return;
+  } elsif ($link_type eq 'genomic_sequence') {
+
+    return {
+      'species'   => $species,
+      'type'      => 'Tools',
+      'action'    => 'Blast',
+      'function'  => 'GenomicSeq',
+      'tl'        => $url_param
+    };
   }
 }
 
-sub add_seq {
-  my ($self, $seq, $seq_count, $seq_length, $error_type)  = @_;
-  my $max_queries = 10;
-  my $method = $self->param('blastmethod');
-  my %max_lengths = (
-          DEFAULT => 200000 );
-  my $max_length = $max_lengths{$method} || $max_lengths{DEFAULT};
-  my $max_number = 30;
-
-  unless( ref($seq) && $seq->isa("Bio::Seq") && $seq->validate_seq) {
-    return $self->{'_error'}{$error_type} = "No queries submitted: ".
-      "Query sequence is not of a recognised format";
-  }
-
-  # Check not exceeded number of input sequences or query length:
-  if ($seq_count > $max_queries) {
-    return $self->{'_error'}{$error_type} =  "No queries submitted: ".
-      "The maximum number of query sequences ($max_number) has been exceeded.";
-  } elsif ($seq_length > $max_length) {
-    return $self->{'_error'}{$error_type} = "No queries submitted: ".
-      "The maximum length for a single query sequence ".
-      "($max_length bp for $method) ".
-      "has been exceeded";
-  }
-
-  # Get a unique ID
-  my $id = $seq->display_id() || 'Unknown';
-  my $id_new = $id;
-  my $i = 0;
-  if ( $self->{'_seqs'}->{$id} ){
-    $i++;
-    $id_new = $id.'_copy'.$i;
-  }
-  $id = $id_new;
-  $seq->display_id( $id );
-  $self->{'_seqs'}->{$id} = $seq;
-
-  return $id;
-
+sub get_alignment_component_name_for_job {
+  ## Returns 'Alignment' or 'AlignmentProtein' () depending upon job object
+  my ($self, $job) = @_;
+  return $job->job_data->{'db_type'} eq 'peptide' || $job->job_data->{'query_type'} eq 'peptide' ? 'AlignmentProtein' : 'Alignment';
 }
 
-sub map_btop_to_genomic_coords {
-  my ($self, $hit, $result_id) = @_;
+sub handle_download {
+  ## Method reached by url ensembl.org/Download/Blast/
+  my ($self, $r) = @_;
+  my $job = $self->get_requested_job;
 
-#   my $result = $self->job->result->[0];
-# 
-#   $result->result_da
+  # TODO redirect to job not found page if !$job
 
-  return $hit->{'galn'} if $hit->{'galn'}; ## TODO - cache in db for later use
+  my $result_file = sprintf '%s/%s', $job->job_dir, $job->job_data->{'output_file'};
 
-  my $btop      = $hit->{'aln'};
-  chomp $btop;
-  my $genomic_btop;
-  my $coords    = $hit->{'g_coords'} || undef;
-  my $source_type = $hit->{'db_type'}; # TODO - change 'db_type' to 'source' when writing the results to make it consistant
+  # TODO - result file is missing, or temporarily not available if !-e $result_file
 
-  my $target_object = $self->get_target_object($hit, $source_type);
-  my $mapping_type = $source_type =~/pep/i ? 'pep2genomic' : 'cdna2genomic';
+  my $content = join '', file_get_contents($result_file);
 
-  my $gap_start = $coords->[0]->end;
-  my $gap_count = scalar @$coords;
-  my $processed_gaps = 0;
+  $r->headers_out->add('Content-Type'         => 'text/plain');
+  $r->headers_out->add('Content-Length'       => length $content);
+  $r->headers_out->add('Content-Disposition'  => sprintf 'attachment; filename=%s.blast.txt', $self->create_url_param);
 
-  # reverse btop string if necessary so always dealing with + strand genomic coords
-  my $object_strand = $target_object->isa('Bio::EnsEMBL::Translation') ? $target_object->translation->start_Exon->strand : $target_object->strand;
-
-  my $rev_flag = $object_strand ne $hit->{'tori'} ? 1 : undef;
-
-  $btop = $self->reverse_btop($btop) if $rev_flag;
-
-  # account for btop strings that do not start with a match;
-  $btop = '0'.$btop  if $btop !~/^\d+/ ;
-
-
-  $btop =~s/(\d+)/:$1:/g;
-  $btop =~s/^:|:$//g;
-  my @btop_features = split (/:/, $btop);
-
-  my $genomic_start = $hit->{'gstart'};
-  my $genomic_end   = $hit->{'gend'};
-  my $genomic_offset = $genomic_start;
-  my $target_offset  = !$rev_flag ? $hit->{'tstart'} : $hit->{'tend'};
-
-  while (scalar @btop_features > 0){
-    my $num_matches = shift @btop_features;
-    my $diff_string = shift @btop_features;
-    next unless $diff_string;
-
-    my $diff_length = (length $diff_string) / 2;
-    my $temp = $diff_string;
-    my @diffs = (split //, $temp);
-
-    # Account for bases inserted in query relative to target
-    my $insert_in_query = 0;
-
-    while (defined( my $query_base = shift @diffs)){
-      my $target_base = shift @diffs;
-      $insert_in_query++ if $target_base eq '-' && $query_base ne '-';
-    }
-
-    my ($difference_start, $difference_end);
-
-    if ($rev_flag) {
-      $difference_end = $target_offset - $num_matches;
-      $difference_start = $difference_end - $diff_length + $insert_in_query + 1;
-      $target_offset = $difference_start -1;
-    } else {
-      $difference_start = $target_offset + $num_matches;
-      $difference_end  = $difference_start + $diff_length - $insert_in_query -1;
-      $target_offset = $difference_end +1;
-    }
-;
-
-    my @mapped_coords = ( sort { $a->start <=> $b->start }
-                          grep { ! $_->isa('Bio::EnsEMBL::Mapper::Gap') }
-                          $target_object->$mapping_type($difference_start, $difference_end, $hit->{'tori'} )
-                        );
-
-    my $mapped_start = $mapped_coords[0]->start;
-    my $mapped_end   = $mapped_coords[-1]->end;
-;
-
-    # Check that mapping occurs before the next gap
-    if ($mapped_start < $gap_start && $mapped_end <= $gap_start){
-      $genomic_btop .= $num_matches;
-      $genomic_btop .= $diff_string;
-      $genomic_offset = $mapped_end +1;
-    } elsif ($mapped_start > $gap_start){
-
-      # process any gaps in mapped genomic coords first
-      while ($mapped_start > $gap_start){
-        my $matches_before_gap = $gap_start - $genomic_offset + 1;
-        my $gap_end = $coords->[$processed_gaps + 1]->start -1;
-        my $gap_length = ($gap_end - $gap_start);
-        my $gap_string = '--'x $gap_length;
-        $genomic_offset = $gap_end + 1;
-        $genomic_btop .= $matches_before_gap;
-        $genomic_btop .= $gap_string;
-
-        $processed_gaps++;
-        $gap_start = $coords->[$processed_gaps]->end || $genomic_end;
-      }
-
-      # Add difference info
-      my $matches_after_gap = $mapped_start - $genomic_offset;
-      $genomic_btop .= $matches_after_gap;
-      $genomic_btop .= $diff_string;
-      $genomic_offset = $mapped_end +1;;
-    } elsif( $mapped_start < $gap_start && $mapped_end > $gap_start) {
-      # Difference in btop string spans a gap in the genomic coords
-
-      my $diff_matches_before_gap = $gap_start - $mapped_start;
-      my $diff_index = ( $diff_matches_before_gap * 2 ) -1;
-      my $diff_before_gap = join('', @diffs[0..$diff_index]);
-      $diff_index++;
-
-      $genomic_btop .= $num_matches;
-      $genomic_btop .= $diff_before_gap;
-
-
-      while ($mapped_end > $gap_start) {
-        my $gap_end = $coords->[$processed_gaps + 1]->start -1;
-        my $gap_length = ($gap_end - $gap_start);
-        my $gap_string = '--'x $gap_length;
-        $processed_gaps++;
-        $gap_start = $coords->[$processed_gaps]->end || $genomic_end;
-
-        my $match_number = $gap_start - $gap_end;
-        my $diff_end = $diff_index + ( $match_number * 2 ) -1;
-
-        my $diff_after_gap = join('', @diffs[$diff_index..$diff_end]);
-        $genomic_btop .= $gap_string;
-        $genomic_btop .= $diff_after_gap;
-        $diff_index = $diff_end +1;
-      }
-
-      my $diff_after_gap = join('', @diffs[$diff_index..-1]);
-      $genomic_btop .= $diff_after_gap;
-
-      $genomic_offset = $mapped_end +1;
-    } else {
-      warn ">> mapping case not caught!  $mapped_start $mapped_end $gap_start";
-    }
-  }
-
-
-  # Add in any gaps from mapping to genomic coords that occur after last btop feature
-  while ($gap_count > $processed_gaps +1){
-    my $num_matches = $gap_start - $genomic_offset + 1;
-    my $gap_end = $coords->[$processed_gaps + 1]->start -1;
-    my $gap_length = ($gap_end - $gap_start);
-    my $gap_string = '--'x $gap_length;
-
-    $genomic_btop .= $num_matches;
-    $genomic_btop .= $gap_string;
-
-    $genomic_offset = $gap_end +1;
-    $gap_start = $coords->[$processed_gaps + 1]->end;
-    $processed_gaps++;
-  }
-
-
-  my $btop_end =  $genomic_end - $genomic_offset +1;
-  $genomic_btop .= $btop_end;
-
-  # Write back to database so we only have to do this once
-#   $hit->{'galn'} = $genomic_btop;
-#   delete $hit->{'data'};
-
-#   my $serialised_hit = nfreeze($hit);
-#   my $serialised_gzip;
-#   gzip \$serialised_hit => \$serialised_gzip, -LEVEL => 9 or die "gzip failed: $GzipError";
-
-#  $result->result($serialised_hit);
-#  $result->save;
-
-  return $genomic_btop;
-}
-
-sub reverse_btop {
-  my ($self, $incoming_btop) = @_;
-  $incoming_btop = uc($incoming_btop);
-  my $reversed_btop = reverse $incoming_btop; #reverse btop orientation. We fix a few more things later
-  my @captures = $reversed_btop =~ /(\d+)([-ACTG]*)/xmsg;
-  my $new_btop = q{};
-  while(1) {
-    my $match_number = shift @captures;
-    my $btop_states = shift @captures;
-    if(length("$match_number") > 1) { #reversing the string means numbers like 15 become 51 so we fix it
-      $match_number = reverse $match_number;
-    }
-    my @doubles = $btop_states =~ /([-ACTG]{2})/xmsg; #pairs of chars are taken
-    my $new_btop_states = join(q{}, map { my $v = reverse $_; $v; } @doubles); #we reverse the pairs of chars. map is funny with these things
-    $new_btop .= $match_number if $match_number; #only add the match number if it was defined
-    $new_btop .= $new_btop_states;
-    last if scalar(@captures) == 0;
-  }
-  return $new_btop;
+  print $content;
 }
 
 sub get_hit_genomic_slice {
-  my ($self, $hit, $species, $flank5, $flank3) = @_; 
-  my $start = $hit->{'gstart'} < $hit->{'gend'} ? $hit->{'gstart'} : $hit->{'gend'};
-  my $end = $hit->{'gstart'} > $hit->{'gend'} ? $hit->{'gstart'} : $hit->{'gend'};
-  my $coords = $hit->{'gid'}.':'.$start.'-'.$end.':'.$hit->{'gori'}; 
-  my $slice_adaptor = $self->hub->get_adaptor('get_SliceAdaptor', 'core', $species);
-  my $slice = $slice_adaptor->fetch_by_toplevel_location($coords); 
+  ## Gets the genomic slice according to the coordinates returned in the blast results
+  ## @param Result hit
+  my ($self, $hit, $flank5, $flank3) = @_;
+  my $start   = $hit->{'gstart'} < $hit->{'gend'} ? $hit->{'gstart'} : $hit->{'gend'};
+  my $end     = $hit->{'gstart'} > $hit->{'gend'} ? $hit->{'gstart'} : $hit->{'gend'};
+  my $coords  = $hit->{'gid'}.':'.$start.'-'.$end.':'.$hit->{'gori'};
+  my $slice   = $self->hub->get_adaptor('get_SliceAdaptor', 'core', $hit->{'species'})->fetch_by_toplevel_location($coords);
   return $flank5 || $flank3 ? $slice->expand($flank5, $flank3) : $slice;
 }
 
+sub map_btop_to_genomic_coords {
+  ## Maps the btop format returned by NCBI BLAST to genomic alignment
+  ## @param Hit object
+  ## @param Job object (needed to cache the mapped genomic aligment for future use)
+  my ($self, $hit, $job) = @_;
+
+  my $source  = $hit->{'source'};
+  my $galn    = '';
+
+  # don't need to map for dbs other than cdna
+  return $hit->{'aln'} unless $source =~/cdna/i;
+
+  # find the alignment and cache it in the db in case not already saved
+  unless ($galn = $hit->{'galn'}) {
+
+    my $btop            = $hit->{'aln'} =~ s/^\s|\s$//gr;
+    my $coords          = $hit->{'g_coords'};
+    my $target_object   = $self->get_target_object($hit, $source);
+    my $mapping_type    = $source =~/pep/i ? 'pep2genomic' : 'cdna2genomic';
+    my $gap_start       = $coords->[0]->end;
+    my $gap_count       = scalar @$coords;
+    my $processed_gaps  = 0;
+
+    # reverse btop string if necessary so always dealing with + strand genomic coords
+    my $object_strand   = $target_object->isa('Bio::EnsEMBL::Translation') ? $target_object->translation->start_Exon->strand : $target_object->strand;
+    my $rev_flag        = $object_strand ne $hit->{'tori'};
+    $btop               = $self->_reverse_btop($btop) if $rev_flag;
+
+    # account for btop strings that do not start with a match;
+    $btop = "0$btop" if $btop !~/^\d+/ ;
+    $btop =~s/(\d+)/:$1:/g;
+    $btop =~s/^:|:$//g;
+
+    my @btop_features   = split (/:/, $btop);
+    my $genomic_start   = $hit->{'gstart'};
+    my $genomic_end     = $hit->{'gend'};
+    my $genomic_offset  = $genomic_start;
+    my $target_offset   = !$rev_flag ? $hit->{'tstart'} : $hit->{'tend'};
+
+    while (my ($num_matches, $diff_string) = splice @btop_features, 0, 2) {
+
+      next unless $diff_string;
+
+      my $diff_length = (length $diff_string) / 2;
+      my $temp        = $diff_string;
+      my @diffs       = split //, $temp;
+
+      # Account for bases inserted in query relative to target
+      my $insert_in_query = 0;
+
+      while (my ($query_base, $target_base) = splice @diffs, 0, 2) {
+        $insert_in_query++ if $target_base eq '-' && $query_base ne '-';
+      }
+
+      my ($difference_start, $difference_end);
+
+      if ($rev_flag) {
+        $difference_end   = $target_offset - $num_matches;
+        $difference_start = $difference_end - $diff_length + $insert_in_query + 1;
+        $target_offset    = $difference_start - 1;
+      } else {
+        $difference_start = $target_offset + $num_matches;
+        $difference_end   = $difference_start + $diff_length - $insert_in_query - 1;
+        $target_offset    = $difference_end + 1;
+      }
+
+      my @mapped_coords = sort { $a->start <=> $b->start } grep { ! $_->isa('Bio::EnsEMBL::Mapper::Gap') } $target_object->$mapping_type($difference_start, $difference_end, $hit->{'tori'});
+      my $mapped_start  = $mapped_coords[0]->start;
+      my $mapped_end    = $mapped_coords[-1]->end;
+
+      # Check that mapping occurs before the next gap
+      if ($mapped_start < $gap_start && $mapped_end <= $gap_start) {
+
+        $galn          .= $num_matches;
+        $galn          .= $diff_string;
+        $genomic_offset = $mapped_end + 1;
+
+      } elsif ($mapped_start > $gap_start) {
+
+        # process any gaps in mapped genomic coords first
+        while ($mapped_start > $gap_start) {
+          my $matches_before_gap  = $gap_start - $genomic_offset + 1;
+          my $gap_end             = $coords->[$processed_gaps + 1]->start -1;
+          my $gap_length          = ($gap_end - $gap_start);
+          my $gap_string          = '--' x $gap_length;
+          $genomic_offset         = $gap_end + 1;
+
+          $galn .= $matches_before_gap;
+          $galn .= $gap_string;
+
+          $processed_gaps++;
+          $gap_start = $coords->[$processed_gaps]->end || $genomic_end;
+        }
+
+        # Add difference info
+        my $matches_after_gap = $mapped_start - $genomic_offset;
+        $galn .= $matches_after_gap;
+        $galn .= $diff_string;
+        $genomic_offset = $mapped_end + 1;
+
+      } elsif ($mapped_start < $gap_start && $mapped_end > $gap_start) { # Difference in btop string spans a gap in the genomic coords
+
+        my $diff_matches_before_gap = $gap_start - $mapped_start;
+        my $diff_index              = $diff_matches_before_gap * 2 - 1;
+        my $diff_before_gap         = join '', @diffs[0..$diff_index];
+        $diff_index++;
+
+        $galn .= $num_matches;
+        $galn .= $diff_before_gap;
+
+        while ($mapped_end > $gap_start) {
+          my $gap_end     = $coords->[$processed_gaps + 1]->start - 1;
+          my $gap_length  = ($gap_end - $gap_start);
+          my $gap_string  = '--' x $gap_length;
+          $processed_gaps++;
+          $gap_start = $coords->[$processed_gaps]->end || $genomic_end;
+
+          my $match_number    = $gap_start - $gap_end;
+          my $diff_end        = $diff_index + ( $match_number * 2 ) - 1;
+          my $diff_after_gap  = join '', @diffs[$diff_index..$diff_end];
+
+          $galn .= $gap_string;
+          $galn .= $diff_after_gap;
+
+          $diff_index = $diff_end + 1;
+        }
+
+        my $diff_after_gap = join '', @diffs[$diff_index..-1];
+        $galn .= $diff_after_gap;
+
+        $genomic_offset = $mapped_end + 1;
+
+      } else {
+        warn "Object::Blast::map_btop_to_genomic_coords: mapping case not caught!  $mapped_start $mapped_end $gap_start";
+      }
+    }
+
+    # Add in any gaps from mapping to genomic coords that occur after last btop feature
+    while ($gap_count > $processed_gaps + 1) {
+      my $num_matches = $gap_start - $genomic_offset + 1;
+      my $gap_end     = $coords->[$processed_gaps + 1]->start - 1;
+      my $gap_length  = ($gap_end - $gap_start);
+      my $gap_string  = '--' x $gap_length;
+
+      $galn .= $num_matches;
+      $galn .= $gap_string;
+
+      $genomic_offset = $gap_end + 1;
+      $gap_start      = $coords->[$processed_gaps + 1]->end;
+      $processed_gaps++;
+    }
+
+    my $btop_end = $genomic_end - $genomic_offset + 1;
+    $galn .= $btop_end;
+
+    # Write back to database so we only have to do this once
+    if ($job && (my $result_id = $hit->{'result_id'})) {
+      my ($result) = grep { $result_id eq $_->result_id} @{$job->result};
+      $result->result_data->{'galn'} = $galn;
+      $result->save;
+    }
+  }
+
+  return $galn && $source =~ /latest/i && $hit->{'gori'} ne '1' ? $self->_reverse_btop($galn) : $galn;
+}
+
+sub _reverse_btop {
+  ## @private
+  my ($self, $incoming_btop) = @_;
+  $incoming_btop      = uc $incoming_btop;
+  my $reversed_btop   = reverse $incoming_btop;
+  my @captures        = $reversed_btop =~ /(\d+)([-ACTG]*)/xmsg;
+  my $new_btop        = '';
+  while (my ($match_number, $btop_states) = splice @captures, 0, 1) {
+    $match_number       = reverse $match_number if length "$match_number" > 1;  # reversing the string means numbers like 15 become 51 so we fix it
+    my @doubles         = $btop_states =~ /([-ACTG]{2})/xmsg;                   # pairs of chars are taken
+    my $new_btop_states = join('', map { my $v = reverse $_; $v; } @doubles);   # we reverse the pairs of chars
+    $new_btop          .= $match_number if $match_number;                       # only add the match number if it was defined
+    $new_btop          .= $new_btop_states;
+  }
+  return $new_btop;
+}
 
 1;

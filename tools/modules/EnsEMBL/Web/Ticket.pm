@@ -18,13 +18,10 @@ limitations under the License.
 
 package EnsEMBL::Web::Ticket;
 
-### Wrapper around ORM::EnsEMBL::DB::Tools::Ticket
-
 use strict;
 use warnings;
 
 use EnsEMBL::Web::Exceptions;
-use Bio::EnsEMBL::Hive::AnalysisJob;
 
 sub hub         { return shift->{'_hub'};         }
 sub object      { return shift->{'_object'};      }
@@ -43,8 +40,8 @@ sub process {
     # submit ticket and jobs to the tools db
     $self->submit_to_toolsdb;
 
-    # submit to hive db
-    $self->submit_to_hivedb;
+    # dispatch the job(s) to job dispatcher
+    $self->dispatch_jobs;
 
   } catch {
 
@@ -82,7 +79,8 @@ sub submit_to_toolsdb {
   my $object      = $self->object;
   my $user        = $hub->user;
   my $now         = $object->get_time_now;
-  my $ticket_type = $object->rose_manager(qw(Tools TicketType))->get_objects('query' => [ 'ticket_type_name' => $object->ticket_type ])->[0];
+  my $tool_type   = $object->tool_type or throw exception('WebError', 'Ticket can not be submitted without specifying a ticket type');
+  my $ticket_type = $object->rose_manager(qw(Tools TicketType))->get_objects('query' => [ 'ticket_type_name' => $tool_type ])->[0];
   my $ticket_name = $object->generate_ticket_name;
   my $jobs        = $self->jobs;
 
@@ -103,7 +101,7 @@ sub submit_to_toolsdb {
       }) : undef
     });
 
-    throw exception('CodeError', 'Multiple jobs can not be submitted with same job number') if $job_nums{$job_num}; # can't have more than one jobs with same job number
+    throw exception('WebError', 'Multiple jobs can not be submitted with same job number') if $job_nums{$job_num}; # can't have more than one jobs with same job number
 
     $job_nums{$job_num} = 1;
   }
@@ -121,44 +119,42 @@ sub submit_to_toolsdb {
   $self->{'_rose_object'} = $tools_ticket if $ticket_type->save('changes_only' => 1);
 }
 
-sub submit_to_hivedb {
-  ## Submits the jobs linked to the ticket to hive
-  my $self              = shift;
-  my $object            = $self->object;
-  my $hub               = $self->hub;
-  my $tools_ticket      = $self->rose_object;
-  my $hive_adaptor      = $object->hive_adaptor;
-  my $hive_job_adaptor  = $hive_adaptor->get_AnalysisJobAdaptor;
-  my $hive_analysis_id  = $hive_adaptor->get_AnalysisAdaptor->fetch_by_logic_name_or_url($tools_ticket->ticket_type_name)->dbID;
+sub dispatch_jobs {
+  ## Submits the jobs via the required job dispatcher
+  my $self          = shift;
+  my $object        = $self->object;
+  my $hub           = $self->hub;
+  my $tools_ticket  = $self->rose_object;
+  my $ticket_id     = $tools_ticket->ticket_id;
+  my $ticket_name   = $tools_ticket->ticket_name;
+  my $ticket_type   = $tools_ticket->ticket_type_name;
+  my $dispatcher    = $object->get_job_dispatcher($ticket_type);
 
   foreach my $job (@{$self->jobs}) {
 
-    if (my $hive_job_data = $job->process_for_hive_submission) {
+    if (my $dispatcher_data = $job->prepare_to_dispatch) {
 
-      # add some generic params to job data to be submitted
-      $hive_job_data->{'ticket_id'}   = $tools_ticket->ticket_id;
-      $hive_job_data->{'ticket_name'} = $tools_ticket->ticket_name;
-      $hive_job_data->{'job_id'}      = $job->get_param('job_id');
-      $hive_job_data->{'species'}     = $job->get_param('species');
+      # add some generic info to job data to be submitted
+      $dispatcher_data->{'ticket_id'}   = $ticket_id;
+      $dispatcher_data->{'ticket_name'} = $ticket_name;
+      $dispatcher_data->{'job_id'}      = $job->get_param('job_id');
+      $dispatcher_data->{'species'}     = $job->get_param('species');
 
-      # Submit job to hive
-    	my $hive_job = Bio::EnsEMBL::Hive::AnalysisJob->new(
-		    -analysis_id  => $hive_analysis_id,
-		    -input_id	    => $hive_job_data,
-      );
+      # Dispatch the job
+      my $dispatcher_reference = $dispatcher->dispatch_job($ticket_type, $dispatcher_data);
 
-    	my ($hive_job_id) = @{ $hive_job_adaptor->store_jobs_and_adjust_counters( [ $hive_job ] ) };
-
-      if ($hive_job_id) {
+      # Save the extra info in the tools db
+      if ($dispatcher_reference) {
         $job->set_params({
-          'hive_job_id'   => $hive_job_id,
-          'hive_job_data' => $hive_job_data,
-          'status'        => 'awaiting_hive_response',
-          'hive_status'   => 'queued'
+          'dispatcher_reference'  => $dispatcher_reference,
+          'dispatcher_data'       => $dispatcher_data,
+          'dispatcher_status'     => 'queued',
+          'status'                => 'awaiting_dispatcher_response'
         });
       }
     }
-    $job->save('changes_only' => 1); # only update if anything changed (process_job_for_hive_submission method may also have changed the job, so keep this outside the if statement)
+
+    $job->save('changes_only' => 1); # only update if anything changed (prepare_to_dispatch method may also have changed the job, so keep this outside the if statement)
   }
 }
 
@@ -170,7 +166,7 @@ sub add_job {
 }
 
 sub is_dir_needed {
-  ## Flag to tell whether a work dir in the shared location is needed by eHive to run the jobs
+  ## Flag to tell whether a work dir in the shared location is needed to save the input files (or run the jobs)
   ## Override if required
   return 1;
 }

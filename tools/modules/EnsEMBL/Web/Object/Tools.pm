@@ -18,33 +18,53 @@ limitations under the License.
 
 package EnsEMBL::Web::Object::Tools;
 
-### Base abstract class for all the Tools based objects
+### Base class for all the Tools based objects
 ### Avoid using an instance of this class, use child classes instances by calling get_sub_object() method
 
 use strict;
 use warnings;
 
 use Digest::MD5 qw(md5_hex);
-use JSON qw(from_json);
-
-use Bio::EnsEMBL::Hive::DBSQL::DBAdaptor;
 
 use EnsEMBL::Web::Exceptions;
 use EnsEMBL::Web::Tools::RandomString qw(random_string);
 use EnsEMBL::Web::Tools::FileSystem qw(create_path remove_empty_path copy_dir_contents);
+use EnsEMBL::Web::Utils::DynamicLoader qw(dynamic_require);
 
-use base qw(EnsEMBL::Web::Object);
+use parent qw(EnsEMBL::Web::Object);
 
 sub caption               { return 'Tools'; } # override in child class
-sub short_caption         { return $_[1] && $_[1] eq 'global' ? 'Jobs' : 'Tools'; } # TODO - change it for 76
 sub long_caption          { return 'Tools'; } # override in child class
-sub default_error_message { return 'Some error occurred while running the job.'; }
 
-sub default_action { # TODO - modify for 76
+sub short_caption {
+  ## Caption for the tab
+  ## @return Tab caption/menu heading according to the current page and tl param
+  my ($self, $global) = @_;
+  my $hub = $self->hub;
+
+  # If page is not Tools related
+  if ($hub->type ne 'Tools' && $global && $global eq 'global') {
+    my $job       = $self->get_requested_job;
+    my $ticket    = $job && $job->ticket;
+    my $job_count = $ticket && $ticket->job_count;
+    return $job && $job->status eq 'done' ? sprintf('%s results: %s'.($job_count > 1 ? ' (%s)' : ''), $ticket->ticket_type_name, $ticket->ticket_name, $job->job_number) : 'Jobs';
+  }
+
+  my $sub_object = $self->get_sub_object;
+  return $global ? $sub_object->tool_type || 'Tools' : 'Web Tools'; # generic Tools page or Blast/VEP pages for tab, 'Web Tools' for menu heading
+}
+
+sub default_action {
+  ## URL action part of the tools tab
+  ## @return Current action for all tools page, link to the Results page for external pages if the url contains a valid job id
   my $self  = shift;
   my $hub   = $self->hub;
-  my $job   = $self->get_sub_object('VEP')->get_requested_job;
-  return join '/', 'VEP', $hub->type eq 'Tools' ? $hub->function || () : $job && $job->status eq 'done' && 'Results' || ();
+
+  return join '/', $hub->action || 'Summary', $hub->function || () if $hub->type eq 'Tools';
+
+  my $job   = $self->get_requested_job;
+
+  return $job && $job->status eq 'done' ? sprintf '%s/%s', $job->ticket->ticket_type_name, 'Results' : 'Summary';
 }
 
 sub get_sub_object {
@@ -56,17 +76,19 @@ sub get_sub_object {
   return $self->{"_sub_object_$type"} ||= $type && ref $self eq __PACKAGE__ && $self->new_object($type, {}, $self->__data) || $self;
 }
 
-sub ticket_type {
-  ## @abstract method
-  ## Should return the ticket type as saved in ticket_type table
-  throw exception('AbstractMethodNotImplemented');
+sub tool_type {
+  ## Tells what type of the tools object is it
+  ## @return Blast, VEP etc
+  my $self = shift;
+  return $self->{'_tool_type'} if exists $self->{'_tool_type'};
+  my $class = ref $self;
+  return $self->{'_tool_type'} = $class eq __PACKAGE__ ? undef : [ $class =~ /\:([^\:]+)$/ ]->[0];
 }
 
 sub ticket_class {
   ## Class name for the ticket object
   ## @return package name
-  my $self = shift;
-  return $self->dynamic_use_fallback('EnsEMBL::Web::Ticket::'.$self->ticket_type, 'EnsEMBL::Web::Ticket');
+  return dynamic_require(sprintf 'EnsEMBL::Web::Ticket::%s', shift->tool_type);
 }
 
 sub create_url_param {
@@ -112,26 +134,26 @@ sub parse_url_param {
   return $self->{'_url_param'};
 }
 
-sub hive_adaptor {
-  ## Gets new or cached hive adaptor
-  ## @return Bio::EnsEMBL::Hive::DBSQL::DBAdaptor object
-  my $self = shift;
+sub get_job_dispatcher {
+  ## Gets new or cached job dispatcher
+  ## @return EnsEMBL::Web::JobDispatcher subclass
+  my ($self, $ticket_type) = @_;
 
-  unless ($self->{'_hive_adaptor'}) {
-    my $sd      = $self->hub->species_defs;
-    my $hivedb  = $sd->multidb->{'DATABASE_WEB_HIVE'};
+  $ticket_type ||= $self->tool_type;
 
-    $ENV{'EHIVE_ROOT_DIR'} ||= $sd->ENSEMBL_SERVERROOT.'/ensembl-hive/';
+  unless ($self->{'_job_dispatcher'}) {
 
-    $self->{'_hive_adaptor'} = Bio::EnsEMBL::Hive::DBSQL::DBAdaptor->new(
-      -user   => $hivedb->{'USER'} || $sd->DATABASE_WRITE_USER,
-      -pass   => $hivedb->{'PASS'} || $sd->DATABASE_WRITE_PASS,
-      -host   => $hivedb->{'HOST'},
-      -port   => $hivedb->{'PORT'},
-      -dbname => $hivedb->{'NAME'},
-    );
+    my $dispatcher  = ($self->hub->species_defs->ENSEMBL_TOOLS_JOB_DISPATCHER || {})->{$ticket_type};
+
+    throw exception('WebToolsException', "Job dispatcher for ticket type $ticket_type not configured.") unless $dispatcher;
+
+    $dispatcher = dynamic_require("EnsEMBL::Web::JobDispatcher::$dispatcher");
+    $dispatcher = $dispatcher->new($self->hub);
+
+    $self->{'_job_dispatcher'} = $dispatcher;
   }
-  return $self->{'_hive_adaptor'};
+
+  return $self->{'_job_dispatcher'};
 }
 
 sub generate_ticket_name {
@@ -184,18 +206,14 @@ sub delete_ticket_or_job {
   pop @dir_path if !$dir_path[-1];       # trailing slash
   pop @dir_path if $ticket && @dir_path; # this is to get the parent directory for all jobs (required if removing a ticket)
 
-  # get the hive job ids of the jobs that need to be removed
-  my @hive_job_ids = map { $_ && $_->hive_job_id || () } $ticket ? $ticket->job : $job;
+  # get the dispatcher job ids of the jobs that need to be removed
+  my @dispatcher_references = map { $_ && $_->dispatcher_reference || () } $ticket ? $ticket->job : $job;
 
-  # after deleting the ticket or the job successfully, remove the directories, and the hive jobs
+  # after deleting the ticket or the job successfully, remove the directories, and the dispatched jobs
   if ($ticket ? $ticket->delete : $job && $job->delete) {
 
-    # remove hive jobs
-    if (@hive_job_ids) {
-      my $hive_adaptor = $self->hive_adaptor;
-      $hive_adaptor->get_AnalysisJobAdaptor->remove_all(sprintf '`job_id` in (%s)', join(',', @hive_job_ids));
-      $hive_adaptor->get_Queen->safe_synchronize_AnalysisStats($hive_adaptor->get_AnalysisAdaptor->fetch_by_logic_name_or_url($ticket_type)->stats);
-    }
+    # remove dispatched jobs
+    $self->get_job_dispatcher($ticket_type)->delete_jobs($ticket_type, @dispatcher_references) if @dispatcher_references;
 
     # remove dirs
     remove_empty_path(join('/', @dir_path), { 'remove_contents' => 1, 'exclude' => [ $ticket_type ], 'no_exception' => 1 }) if @dir_path; # ignore any error - files left orphaned will eventually get removed.
@@ -256,19 +274,20 @@ sub get_current_tickets {
   my $self = shift;
 
   unless (exists $self->{'_current_tickets'}) {
-    my $hub     = $self->hub;
-    my $user    = $hub->user;
-    my $action  = $hub->action;
+    my $hub       = $self->hub;
+    my $user      = $hub->user;
+    my $action    = $hub->action;
+    my $tool_type = $self->tool_type;
 
     my $ticket_types  = $self->rose_manager(qw(Tools TicketType))->fetch_with_current_tickets({
       'site_type'       => $hub->species_defs->ENSEMBL_SITETYPE,
       'session_id'      => $hub->session->session_id, $user ? (
-      'user_id'         => $user->user_id ) : (), ref $self ne __PACKAGE__ ? ( # If object is Tools, show all tickets
-      'type'            => $self->ticket_type) : ()
+      'user_id'         => $user->user_id ) : (), $tool_type ? ( # If object is Tools, show all tickets
+      'type'            => $tool_type) : ()
     });
 
     my @tickets = sort { $b->created_at <=> $a->created_at } map $_->ticket, @$ticket_types;
-    $self->update_jobs_from_hive($_) for @tickets;
+    $self->update_jobs_from_dispatcher(\@tickets);
     $self->{'_current_tickets'} = \@tickets;
   }
 
@@ -296,7 +315,7 @@ sub get_requested_ticket {
 
       if (@$ticket_type) {
         $ticket = $ticket_type->[0]->ticket->[0];
-        $self->update_jobs_from_hive($ticket);
+        $self->update_jobs_from_dispatcher([ $ticket ]);
       }
     }
 
@@ -306,83 +325,13 @@ sub get_requested_ticket {
   return $self->{'_requested_ticket'};
 }
 
-sub update_jobs_from_hive {
-  ## Updates jobs linked to the given ticket from the corresponding ones in the hive db
-  ## @param Ticket object to which jobs are linked
+sub update_jobs_from_dispatcher {
+  ## Updates jobs linked to the given tickets from the corresponding ones in the dispatcher
+  ## @param Arrayref of Ticket objects to which jobs are linked
   ## @return No return value
-  my ($self, $ticket) = @_;
+  my ($self, $tickets) = @_;
 
-  foreach my $job ($ticket->job) {
-
-    my $status = $job->status;
-
-    if ($status eq 'awaiting_hive_response') {
-
-      my $hive_job_id   = $job->hive_job_id;
-      my $hive_adaptor  = $self->hive_adaptor;
-      my $hive_job      = $hive_adaptor->get_AnalysisJobAdaptor->fetch_by_dbID($hive_job_id);
-
-      if ($hive_job) {
-        my $hive_job_status = $hive_job->status;
-
-        if ($hive_job_status eq 'DONE') {
-
-          # job is done, no more actions required
-          $job->status('done');
-          $job->hive_status('done');
-
-        } elsif ($hive_job_status =~ /^(FAILED|PASSED_ON)$/) {
-
-          # job failed due to some reason, need user to look into it
-          $job->status('awaiting_user_response');
-          $job->hive_status('failed');
-
-          # Get the log message and save it in the message column
-          my ($message) = map {$_->{'is_error'} && $_->{'msg'} || ()} @{$hive_adaptor->get_LogMessageAdaptor->fetch_all_by_job_id($hive_job_id)}; # ignore if msg is an empty string
-          if ($message && $message =~ /^{.*}$/) { # possibly json
-            try {
-              $message = from_json($message);
-            } catch {};
-          }
-
-          $job->job_message([ref $message
-            ? {
-              'display_message'   => delete $message->{'data'}{'display_message'} // $self->default_error_message,
-              'fatal'             => delete $message->{'data'}{'fatal'} // 1,
-              'data'              => delete $message->{'data'},
-              'exception'         => $message,
-            }
-            : {
-              'display_message'   => $self->default_error_message,
-              'exception'         => {'exception' => $message || 'Unknown error'},
-              'fatal'             => 1
-            }
-          ]);
-
-        } elsif ($hive_job_status =~ /^(SEMAPHORED|CLAIMED|COMPILATION)$/) {
-
-          # job is just submitted to a queue
-          $job->hive_status('submitted') if $job->hive_status ne 'submitted';
-
-        } elsif ($hive_job_status =~ /^(PRE_CLEANUP|FETCH_INPUT|RUN|WRITE_OUTPUT|POST_CLEANUP)$/) {
-
-          # job is still running, but keep an eye in it, so no need to change 'status', only set the 'hive_status' ('if' condition prevents an extra SQL query)
-          $job->hive_status('running') if $job->hive_status ne 'running';
-
-        } # for READY status, no need to change status or hive_status
-
-      } else {
-
-        # this will only get executed if the job got removed from the hive db's job table somehow (very unlikely though)
-        $job->status('awaiting_user_response');
-        $job->hive_status('deleted');
-        $job->job_message([{'display_message' => 'Submitted job has been deleted from the queue.'}]);
-      }
-
-      # update if anything is changed
-      $job->save('changes_only' => 1);
-    }
-  }
+  $self->get_job_dispatcher($tickets->[0]->ticket_type_name)->update_jobs( [ map { grep {$_->status eq 'awaiting_dispatcher_response'} $_->job } @$tickets ] );
 }
 
 sub get_requested_job {
@@ -399,6 +348,7 @@ sub get_requested_job {
     my $hub         = $self->hub;
     my $user        = $hub->user;
     my $url_params  = $self->parse_url_param;
+    my $tool_type   = $self->tool_type;
     my $job;
 
     if (my $job_id = $url_params->{'job_id'}) {
@@ -415,14 +365,14 @@ sub get_requested_job {
         'ticket_name'   => $url_params->{'ticket_name'},
         'job_id'        => $job_id,
         'session_id'    => $hub->session->session_id, $user ? (
-        'user_id'       => $user->user_id ) : (),
-        'type'          => $self->ticket_type,
+        'user_id'       => $user->user_id ) : (), $tool_type ? ( # If object is Tools, it could be any ticket being requested
+        'type'          => $tool_type) : (),
         %results_key
       });
 
       if ($ticket_type) {
         my $ticket = $ticket_type->ticket->[0];
-        $self->update_jobs_from_hive($ticket); # this will only update the required job but not all jobs linked to the ticket since only one job was actually fetched by providing job_id
+        $self->update_jobs_from_dispatcher([ $ticket ]); # this will only update the required job but not all jobs linked to the ticket since only one job was actually fetched by providing job_id
         $job = $ticket->job->[0];
       }
     }
@@ -434,15 +384,10 @@ sub get_requested_job {
 }
 
 sub get_edit_jobs_data {
+  ## @abstract
   ## Gets the data needed by JS for populating the input form while editing a ticket
   ## @return Arrayref of hashes, each corresponding to one of the multiple jobs being edited
-  my $self  = shift;
-  my $hub   = $self->hub;
-  my $jobs  = $self->get_requested_job || $self->get_requested_ticket;
-     $jobs  = $jobs ? ref($jobs) =~ /Ticket/ ? $jobs->job : [ $jobs ] : [];
-     $jobs  = [ map { 'species' => $_->species, %{$_->job_data->raw} }, @$jobs ];
-
-  return $jobs;
+  throw exception('AbstractMethodNotImplemented');
 }
 
 sub get_tickets_data_for_sync {
@@ -451,7 +396,7 @@ sub get_tickets_data_for_sync {
   my $self          = shift;
   my $tickets       = $self->get_current_tickets;
   my $tickets_data  = {}; 
-  my $auto_refresh  = undef; # this is set true if any of the jobs has status 'awaiting_hive_response'
+  my $auto_refresh  = undef; # this is set true if any of the jobs has status 'awaiting_dispatcher_response'
 
   if ($tickets && @$tickets) {
 
@@ -460,13 +405,20 @@ sub get_tickets_data_for_sync {
       my $ticket_name = $_->ticket_name;
 
       for ($_->job) {
-        $auto_refresh = 1 if $_->status eq 'awaiting_hive_response';
-        $tickets_data->{$ticket_name}{$_->job_id} = $_->hive_status;
+        $auto_refresh = 1 if $_->status eq 'awaiting_dispatcher_response';
+        $tickets_data->{$ticket_name}{$_->job_id} = $_->dispatcher_status;
       }
     }
   }
 
   return (md5_hex($self->jsonify($tickets_data)), $auto_refresh);
+}
+
+sub handle_download {
+  ## @override
+  ## Handles the download request, and calls the handle_download method of the required sub object
+  my $self = shift;
+  return $self->get_sub_object->handle_download(@_);
 }
 
 sub get_time_now {

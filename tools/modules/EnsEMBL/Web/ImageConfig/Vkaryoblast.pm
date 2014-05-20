@@ -23,7 +23,7 @@ package EnsEMBL::Web::ImageConfig::Vkaryoblast;
 use strict;
 use warnings;
 
-use base qw(EnsEMBL::Web::ImageConfig::Vertical);
+use parent qw(EnsEMBL::Web::ImageConfig::Vertical);
 
 sub init {
   my $self = shift;

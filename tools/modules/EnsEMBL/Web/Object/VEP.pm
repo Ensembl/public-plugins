@@ -25,15 +25,10 @@ use EnsEMBL::Web::TmpFile::ToolsOutput;
 use EnsEMBL::Web::TmpFile::VcfTabix;
 use EnsEMBL::Web::Tools::FileHandler qw(file_get_contents);
 
-use base qw(EnsEMBL::Web::Object::Tools);
-
-sub ticket_type {
-  ## Abstract method implementation
-  return 'VEP';
-}
+use parent qw(EnsEMBL::Web::Object::Tools);
 
 sub get_edit_jobs_data {
-  ## @override
+  ## Abstract method implementation
   my $self        = shift;
   my $hub         = $self->hub;
   my $ticket      = $self->get_requested_ticket   or return [];
@@ -66,7 +61,7 @@ sub result_files {
   if (!$self->{'_results_files'}) {
     my $ticket      = $self->get_requested_ticket or return;
     my $job         = $ticket->job->[0] or return;
-    my $job_config  = $job->hive_job_data->{'config'};
+    my $job_config  = $job->dispatcher_data->{'config'};
     my $job_dir     = $job->job_dir;
 
     $self->{'_results_files'} = {

@@ -26,7 +26,7 @@ use warnings;
 use EnsEMBL::Web::Exceptions;
 use EnsEMBL::Web::BlastConstants qw(CONFIGURATION_FIELDS);
 
-use base qw(EnsEMBL::Web::Component::Tools);
+use parent qw(EnsEMBL::Web::Component::Tools);
 
 sub job_details_table {
   ## A two column layout displaying a job's details
@@ -35,33 +35,35 @@ sub job_details_table {
   ## @return DIV node (as returned by new_twocol method)
   my ($self, $job, $params) = @_;
 
-  my $object    = $self->object;
-  my $sd        = $self->hub->species_defs;
-  my $job_data  = $job->job_data;
-  my $job_num   = $job->job_number;
-  my $species   = $job->species;
-  my $configs   = $self->_display_config($job_data->{'configs'});
-  my $two_col   = $self->new_twocol;
+  my $object      = $self->object;
+  my $hub         = $self->hub;
+  my $sd          = $hub->species_defs;
+  my $job_data    = $job->job_data;
+  my $job_num     = $job->job_number;
+  my $species     = $job->species;
+  my $configs     = $self->_display_config($job_data->{'configs'});
+  my $two_col     = $self->new_twocol;
+  my $sequence    = $object->get_input_sequence_for_job($job);
+  my $job_summary = $self->get_job_summary($job, $params);
+  my $result_link = $job_summary->get_nodes_by_flag('view_results_link')->[0];
 
-  $two_col->add_row('Job summary',    $self->get_job_summary($job, $params)->render);
+  if ($result_link) {
+    my $download_link = $result_link->clone_node;
+    $download_link->inner_HTML('[Download results file]');
+    $download_link->set_attribute('href', $hub->url('Download', {'function' => '', 'tl' => $object->create_url_param}));
+    $result_link->parent_node->insert_after($download_link, $result_link);
+  }
+
+  $two_col->add_row('Job summary',    $job_summary->render);
   $two_col->add_row('Species',        sprintf('<img class="job-species" src="%sspecies/16/%s.png" alt="" height="16" width="16">%s', $self->img_url, $species, $sd->species_label($species, 1)));
   $two_col->add_row('Search type',    $object->get_param_value_caption('search_type', $job_data->{'search_type'}));
-  $two_col->add_row('Sequence',       sprintf('<div class="input-seq">&gt;%s</div>', join("\n", $job_data->{'sequence'}{'display_id'} || '', ($job_data->{'sequence'}{'seq'} =~ /.{1,60}/g))));
+  $two_col->add_row('Sequence',       sprintf('<div class="input-seq">&gt;%s</div>', join("\n", $sequence->{'display_id'} || '', ($sequence->{'sequence'} =~ /.{1,60}/g))));
   $two_col->add_row('Query type',     $object->get_param_value_caption('query_type', $job_data->{'query_type'}));
   $two_col->add_row('DB type',        $object->get_param_value_caption('db_type', $job_data->{'db_type'}));
   $two_col->add_row('Source',         $object->get_param_value_caption('source', $job_data->{'source'}));
   $two_col->add_row('Configurations', $configs) if $configs;
 
   return $two_col;
-}
-
-sub blast_pointer_style {
-  ## Pointer style for blast result page images
-  return {
-    'style'     => 'rharrow',
-    'colour'    => 'gradient',
-    'gradient'  => [qw(10 gold orange chocolate firebrick darkred)]
-  };
 }
 
 sub no_result_hit_found {
@@ -95,28 +97,6 @@ sub _display_config {
   }
 
   return $two_col->is_empty ? '' : $two_col->render;
-}
-
-
-
-##########
-
-
-### - TODO
-sub get_download_link {
-  my ($self, $ticket, $format, $filename) = @_;
-  my $hub = $self->hub;
-
-  my $url = $hub->url({
-    'type'    => 'Tools',
-    'format'  => $format,
-    'action'  => 'Download',
-    'tk'      => $ticket,
-    'file'    => $filename,
-    '_format' => 'Text'
-  });
-
-  return $url;  
 }
 
 1;

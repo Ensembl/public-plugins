@@ -22,7 +22,7 @@ use strict;
 
 use Bio::EnsEMBL::Slice;
 
-use base qw(EnsEMBL::Web::Component::Tools::Blast::TextSequence);
+use parent qw(EnsEMBL::Web::Component::Tools::Blast::TextSequence);
 
 sub initialize {
   my ($self, $slice, $start, $end) = @_;
@@ -53,10 +53,10 @@ sub get_slice {
   my $self      = shift;
   my $job       = $self->job;
   my $hit       = $self->hit;
-  my $query_seq = $job->job_data->{'sequence'}{'seq'};
+  my $query_seq = $self->object->get_input_sequence_for_job($job)->{'sequence'};
   
   return Bio::EnsEMBL::Slice->new(
-    -coord_system    => $self->object->get_hit_genomic_slice($hit, $job->species)->coord_system,
+    -coord_system    => $self->object->get_hit_genomic_slice($hit)->coord_system,
     -seq_region_name => $hit->{'qid'},
     -start           => 1,
     -end             => length($query_seq),

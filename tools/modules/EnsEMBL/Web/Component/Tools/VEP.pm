@@ -21,7 +21,7 @@ package EnsEMBL::Web::Component::Tools::VEP;
 use strict;
 use warnings;
 
-use base qw(EnsEMBL::Web::Component::Tools);
+use parent qw(EnsEMBL::Web::Component::Tools);
 
 sub job_details_table {
   ## A two column layout displaying a job's details

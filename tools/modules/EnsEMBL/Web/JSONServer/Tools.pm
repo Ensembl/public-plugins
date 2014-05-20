@@ -21,7 +21,7 @@ package EnsEMBL::Web::JSONServer::Tools;
 use strict;
 use warnings;
 
-use base qw(EnsEMBL::Web::JSONServer);
+use parent qw(EnsEMBL::Web::JSONServer);
 
 sub object_type { 'Tools' }
 

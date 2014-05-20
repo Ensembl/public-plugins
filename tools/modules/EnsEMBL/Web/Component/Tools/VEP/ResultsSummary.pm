@@ -24,7 +24,7 @@ no warnings 'uninitialized';
 
 use Bio::EnsEMBL::Variation::Utils::Constants qw(%OVERLAP_CONSEQUENCES);
 
-use base qw(EnsEMBL::Web::Component::Tools::VEP);
+use parent qw(EnsEMBL::Web::Component::Tools::VEP);
 
 sub content {
   my $self   = shift;

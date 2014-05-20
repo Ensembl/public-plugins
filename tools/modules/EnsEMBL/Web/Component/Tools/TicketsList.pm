@@ -23,7 +23,7 @@ package EnsEMBL::Web::Component::Tools::TicketsList;
 use strict;
 use warnings;
 
-use base qw(EnsEMBL::Web::Component::Tools);
+use parent qw(EnsEMBL::Web::Component::Tools);
 
 sub content {
   my $self          = shift;
@@ -31,7 +31,7 @@ sub content {
   my $sd            = $hub->species_defs;
   my $object        = $self->object;
   my $tickets       = $object->get_current_tickets;
-  my $toggle        = ref $self ne __PACKAGE__; # The main landing page's table of tickets can not toggled
+  my $tool_type     = $object->tool_type;
   
   my $table         =  $self->new_table([
     { 'key' => 'analysis',  'title' => 'Analysis',      'sort' => 'string'          },
@@ -49,7 +49,7 @@ sub content {
     'queued'          => q(Your job has been submitted and will be processed soon.),
     'submitted'       => q(Your job has been submitted and will be processed soon.),
     'running'         => q(Your job is currently being processed. The page will refresh once it's finished running.),
-    'done'            => q(This job is finished. Please click on 'View Results' link to see the results),
+    'done'            => q(This job is finished. Please click on 'View results' link to see the results),
     'failed'          => q(This job has failed. Please click on the 'View details' icon for more information),
     'deleted'         => q(Your ticket has been deleted. This usually happens if the ticket is too old.)
   };
@@ -62,17 +62,17 @@ sub content {
       my @jobs_summary;
 
       for ($ticket->job) {
-        my $job_number  = $_->job_number;
-        my $hive_status = $_->hive_status;
+        my $job_number        = $_->job_number;
+        my $dispatcher_status = $_->dispatcher_status;
         push @jobs_summary, sprintf('<p><img class="job-species _ht" title="%s" src="%sspecies/16/%s.png" alt="" height="16" width="16"><span class="job-desc">%s%s</span><span class="_ht job-status job-status-%s left-margin" title="%s">%s</span>%s%s',
           $sd->species_label($_->species, 1),
           $self->img_url,
           $_->species,
           $job_number ? "Job $job_number: " : '',
           $_->job_desc || '',
-          $hive_status,
-          $status_tips->{$hive_status},
-          ucfirst $hive_status =~ s/_/ /gr,
+          $dispatcher_status,
+          $status_tips->{$dispatcher_status},
+          ucfirst $dispatcher_status =~ s/_/ /gr,
           $self->job_results_link($ticket, $_),
           $self->job_buttons($ticket, $_)
         );
@@ -117,7 +117,7 @@ sub content {
       'value'       => $auto_refresh
     }, {
       'node_name'   => 'h2',
-      'inner_HTML'  => $toggle ? '<a rel="_activity_summary" class="toggle set_cookie open" href="#">Recent Tickets:</a>' : 'Recent Tickets:'
+      'inner_HTML'  => $tool_type ? qq(<a rel="_activity_summary" class="toggle set_cookie open" href="#">Recent $tool_type tickets:</a>) : 'Recent tickets:'
     }, {
       'node_name'   => 'div',
       'class'       => ['toggleable', '_activity_summary'],
@@ -210,8 +210,8 @@ sub ticket_buttons {
 
 sub job_results_link {
   my ($self, $ticket, $job) = @_;
-  return $job->hive_status eq 'done'
-    ? sprintf('<a class="small left-margin" href="%s">[View Results]</a>', $self->hub->url({
+  return $job->dispatcher_status eq 'done'
+    ? sprintf('<a class="small left-margin" href="%s">[View results]</a>', $self->hub->url({
       'species'   => $job->species,
       'type'      => 'Tools',
       'action'    => $ticket->ticket_type_name,
