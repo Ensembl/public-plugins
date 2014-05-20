@@ -47,6 +47,7 @@ sub update_conf {
 
   # BLAST configs
   $SiteDefs::ENSEMBL_BLAST_LSF_QUEUE            = 'blast';                                          # LSF queue for blast jobs (not needed for local jobs)
+  $SiteDefs::ENSEMBL_BLAST_LSF_TIMEOUT          = undef;                                            # Max timelimit a blast job is allowed to run
   $SiteDefs::ENSEMBL_BLAST_ANALYSIS_CAPACITY    = 24;                                               # Number of jobs that can be run parallel in LSF in the blast queue
   $SiteDefs::ENSEMBL_NCBIBLAST_BIN_PATH         = '/localsw/bin/ncbi-blast/bin';                    # path to blast executables on the LSF host (or local machine if job running locally)
   $SiteDefs::ENSEMBL_NCBIBLAST_MATRIX           = '/localsw/bin/ncbi-blast/bin/data';               # path to blast matrix files on the LSF host (or local machine if job running locally)
@@ -56,6 +57,7 @@ sub update_conf {
 
   # VEP configs
   $SiteDefs::ENSEMBL_VEP_LSF_QUEUE              = 'VEP';                                            # LSF queue for VEP jobs, if running on farm
+  $SiteDefs::ENSEMBL_VEP_LSF_TIMEOUT            = '3:00';                                           # Max timelimit a VEP job is allowed to run
   $SiteDefs::ENSEMBL_VEP_ANALYSIS_CAPACITY      = 24;                                               # Number of jobs that can be run parallel in LSF in the queue
   $SiteDefs::ENSEMBL_VEP_SCRIPT_DEFAULT_OPTIONS = {                                                 # Default options for command line vep script (keys with value undef get ignored)
     '--host'        => undef,                                                                       # Database host (defaults to ensembldb.ensembl.org)

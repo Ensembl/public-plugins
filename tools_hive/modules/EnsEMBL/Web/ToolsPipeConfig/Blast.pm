@@ -43,8 +43,10 @@ sub default_options {
 
 sub resource_classes {
   my ($class, $conf) = @_;
-  my $lsf_queue = $conf->species_defs->ENSEMBL_BLAST_LSF_QUEUE;
-  return {$lsf_queue => { 'LSF' => "-q $lsf_queue" }};
+  my $sd          = $conf->species_defs;
+  my $lsf_queue   = $sd->ENSEMBL_BLAST_LSF_QUEUE;
+  my $lsf_timeout = $sd->ENSEMBL_BLAST_LSF_TIMEOUT;
+  return {$lsf_queue => { 'LSF' => $lsf_timeout ? "-q $lsf_queue -W $lsf_timeout" : "-q $lsf_queue" }};
 }
 
 sub pipeline_analyses {
