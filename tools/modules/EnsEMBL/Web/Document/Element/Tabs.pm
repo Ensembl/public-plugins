@@ -46,8 +46,8 @@ sub init {
 
     $self->add_entry({
       'type'    => 'Tools',
-      'caption' => 'Jobs', # TODO - change for 76
-      'url'     => $hub->url({qw(type Tools action VEP), %$tl_param}), # TODO - change VEP to Summary for 76
+      'caption' => 'Jobs',
+      'url'     => $hub->url({qw(type Tools action Summary), %$tl_param}),
       'class'   => 'tools '.($hub->type eq 'Tools' ? ' active' : '')
     });
   }
