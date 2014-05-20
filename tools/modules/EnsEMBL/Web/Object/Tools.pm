@@ -326,7 +326,7 @@ sub get_requested_ticket {
 
 sub update_jobs_from_dispatcher {
   ## Updates jobs linked to the given tickets from the corresponding ones in the dispatcher
-  ## @param Arrayref of Ticket objects to which jobs are linked
+  ## @params List of Ticket objects to which jobs are linked
   ## @return No return value
   my $self = shift;
   my $jobs = {};
