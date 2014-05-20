@@ -29,6 +29,7 @@ use Digest::MD5 qw(md5_hex);
 use EnsEMBL::Web::Exceptions;
 use EnsEMBL::Web::Tools::RandomString qw(random_string);
 use EnsEMBL::Web::Tools::FileSystem qw(create_path remove_empty_path copy_dir_contents);
+use EnsEMBL::Web::Utils::DynamicLoader qw(dynamic_require);
 
 use parent qw(EnsEMBL::Web::Object);
 
@@ -59,11 +60,11 @@ sub default_action {
   my $self  = shift;
   my $hub   = $self->hub;
 
-  return join '/', $hub->action || (), $hub->function || () if $hub->type eq 'Tools';
+  return join '/', $hub->action || 'Summary', $hub->function || () if $hub->type eq 'Tools';
 
   my $job   = $self->get_requested_job;
 
-  return $job && $job->status eq 'done' ? sprintf '%s/%s', $job->ticket->ticket_type_name, 'Results' : '';
+  return $job && $job->status eq 'done' ? sprintf '%s/%s', $job->ticket->ticket_type_name, 'Results' : 'Summary';
 }
 
 sub get_sub_object {
@@ -87,8 +88,7 @@ sub tool_type {
 sub ticket_class {
   ## Class name for the ticket object
   ## @return package name
-  my $self = shift;
-  return $self->dynamic_use_fallback('EnsEMBL::Web::Ticket::'.$self->tool_type, 'EnsEMBL::Web::Ticket');
+  return dynamic_require(sprintf 'EnsEMBL::Web::Ticket::%s', shift->tool_type);
 }
 
 sub create_url_param {
@@ -147,7 +147,7 @@ sub get_job_dispatcher {
 
     throw exception('WebToolsException', "Job dispatcher for ticket type $ticket_type not configured.") unless $dispatcher;
 
-    $dispatcher = $self->dynamic_use_fallback("EnsEMBL::Web::JobDispatcher::$dispatcher");
+    $dispatcher = dynamic_require("EnsEMBL::Web::JobDispatcher::$dispatcher");
     $dispatcher = $dispatcher->new($self->hub);
 
     $self->{'_job_dispatcher'} = $dispatcher;
