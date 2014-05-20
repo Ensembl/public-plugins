@@ -31,7 +31,7 @@ sub content {
   my $sd            = $hub->species_defs;
   my $object        = $self->object;
   my $tickets       = $object->get_current_tickets;
-  my $toggle        = ref $self ne __PACKAGE__; # The main landing page's table of tickets can not toggled
+  my $tool_type     = $object->tool_type;
   
   my $table         =  $self->new_table([
     { 'key' => 'analysis',  'title' => 'Analysis',      'sort' => 'string'          },
@@ -117,7 +117,7 @@ sub content {
       'value'       => $auto_refresh
     }, {
       'node_name'   => 'h2',
-      'inner_HTML'  => $toggle ? '<a rel="_activity_summary" class="toggle set_cookie open" href="#">Recent Tickets:</a>' : 'Recent Tickets:'
+      'inner_HTML'  => $tool_type ? qq(<a rel="_activity_summary" class="toggle set_cookie open" href="#">Recent $tool_type tickets:</a>) : 'Recent tickets:'
     }, {
       'node_name'   => 'div',
       'class'       => ['toggleable', '_activity_summary'],

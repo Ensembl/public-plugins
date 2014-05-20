@@ -40,15 +40,14 @@ sub populate_tree {
       icons           EnsEMBL::Web::Component::Tools::Icons
       tickets         EnsEMBL::Web::Component::Tools::TicketsList
     )],
-#     { 'availability' => 1, 'concise' => 'Web Tools' }
-    { 'availability' => 0, 'concise' => 'Web Tools' }
+    { 'availability' => 1, 'concise' => 'Web Tools' }
   );
 
   my $blast_node = $tools_node->append($self->create_subnode('Blast', 'BLAST/BLAT',
     [qw(
       sequence        EnsEMBL::Web::Component::Tools::Blast::InputForm
       details         EnsEMBL::Web::Component::Tools::Blast::TicketDetails
-      tickets         EnsEMBL::Web::Component::Tools::Blast::TicketsList
+      tickets         EnsEMBL::Web::Component::Tools::TicketsList
     )],
     { 'availability' => 1, 'concise' => 'BLAST/BLAT search' }
   ));
@@ -105,7 +104,7 @@ sub populate_tree {
     [qw(
       vepeffect       EnsEMBL::Web::Component::Tools::VEP::InputForm
       details         EnsEMBL::Web::Component::Tools::VEP::TicketDetails
-      tickets         EnsEMBL::Web::Component::Tools::VEP::TicketsList
+      tickets         EnsEMBL::Web::Component::Tools::TicketsList
     )],
     { 'availability' => 1, 'concise' => 'Variant Effect Predictor' }
   ));
