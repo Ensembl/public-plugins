@@ -79,7 +79,8 @@ sub submit_to_toolsdb {
   my $object      = $self->object;
   my $user        = $hub->user;
   my $now         = $object->get_time_now;
-  my $ticket_type = $object->rose_manager(qw(Tools TicketType))->get_objects('query' => [ 'ticket_type_name' => $object->ticket_type ])->[0];
+  my $tool_type   = $object->tool_type or throw exception('WebError', 'Ticket can not be submitted without specifying a ticket type');
+  my $ticket_type = $object->rose_manager(qw(Tools TicketType))->get_objects('query' => [ 'ticket_type_name' => $tool_type ])->[0];
   my $ticket_name = $object->generate_ticket_name;
   my $jobs        = $self->jobs;
 

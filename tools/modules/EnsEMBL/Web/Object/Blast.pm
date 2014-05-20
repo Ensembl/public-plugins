@@ -31,11 +31,6 @@ use EnsEMBL::Web::Tools::FileHandler qw(file_get_contents);
 
 use parent qw(EnsEMBL::Web::Object::Tools);
 
-sub ticket_type {
-  ## Abstract method implementation
-  return 'Blast';
-}
-
 sub long_caption {
   ## For customised heading of the page
   my $self  = shift;

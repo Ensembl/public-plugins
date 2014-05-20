@@ -27,11 +27,6 @@ use EnsEMBL::Web::Tools::FileHandler qw(file_get_contents);
 
 use parent qw(EnsEMBL::Web::Object::Tools);
 
-sub ticket_type {
-  ## Abstract method implementation
-  return 'VEP';
-}
-
 sub get_edit_jobs_data {
   ## Abstract method implementation
   my $self        = shift;

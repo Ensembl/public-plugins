@@ -37,7 +37,7 @@ sub long_caption          { return 'Tools'; } # override in child class
 
 sub short_caption {
   ## Caption for the tab
-  ## @return 'Tools' for landing page, or 'Blast' or 'VEP' for tools specific pages and 'Blast result' etc if current page is not tools related
+  ## @return Tab caption/menu heading according to the current page and tl param
   my ($self, $global) = @_;
   my $hub = $self->hub;
 
@@ -50,7 +50,7 @@ sub short_caption {
   }
 
   my $sub_object = $self->get_sub_object;
-  return $self eq $sub_object ? 'Tools' : $sub_object->ticket_type; # generic /Tools page or Blast/VEP pages
+  return $global ? $sub_object->tool_type || 'Tools' : 'Web Tools'; # generic Tools page or Blast/VEP pages for tab, 'Web Tools' for menu heading
 }
 
 sub default_action {
@@ -75,17 +75,20 @@ sub get_sub_object {
   return $self->{"_sub_object_$type"} ||= $type && ref $self eq __PACKAGE__ && $self->new_object($type, {}, $self->__data) || $self;
 }
 
-sub ticket_type {
-  ## @abstract method
-  ## Should return the ticket type as saved in ticket_type table
-  throw exception('AbstractMethodNotImplemented');
+sub tool_type {
+  ## Tells what type of the tools object is it
+  ## @return Blast, VEP etc
+  my $self = shift;
+  return $self->{'_tool_type'} if exists $self->{'_tool_type'};
+  my $class = ref $self;
+  return $self->{'_tool_type'} = $class eq __PACKAGE__ ? undef : [ $class =~ /\:([^\:]+)$/ ]->[0];
 }
 
 sub ticket_class {
   ## Class name for the ticket object
   ## @return package name
   my $self = shift;
-  return $self->dynamic_use_fallback('EnsEMBL::Web::Ticket::'.$self->ticket_type, 'EnsEMBL::Web::Ticket');
+  return $self->dynamic_use_fallback('EnsEMBL::Web::Ticket::'.$self->tool_type, 'EnsEMBL::Web::Ticket');
 }
 
 sub create_url_param {
@@ -136,7 +139,7 @@ sub get_job_dispatcher {
   ## @return EnsEMBL::Web::JobDispatcher subclass
   my ($self, $ticket_type) = @_;
 
-  $ticket_type ||= $self->ticket_type;
+  $ticket_type ||= $self->tool_type;
 
   unless ($self->{'_job_dispatcher'}) {
 
@@ -271,15 +274,16 @@ sub get_current_tickets {
   my $self = shift;
 
   unless (exists $self->{'_current_tickets'}) {
-    my $hub     = $self->hub;
-    my $user    = $hub->user;
-    my $action  = $hub->action;
+    my $hub       = $self->hub;
+    my $user      = $hub->user;
+    my $action    = $hub->action;
+    my $tool_type = $self->tool_type;
 
     my $ticket_types  = $self->rose_manager(qw(Tools TicketType))->fetch_with_current_tickets({
       'site_type'       => $hub->species_defs->ENSEMBL_SITETYPE,
       'session_id'      => $hub->session->session_id, $user ? (
-      'user_id'         => $user->user_id ) : (), ref $self ne __PACKAGE__ ? ( # If object is Tools, show all tickets
-      'type'            => $self->ticket_type) : ()
+      'user_id'         => $user->user_id ) : (), $tool_type ? ( # If object is Tools, show all tickets
+      'type'            => $tool_type) : ()
     });
 
     my @tickets = sort { $b->created_at <=> $a->created_at } map $_->ticket, @$ticket_types;
@@ -344,6 +348,7 @@ sub get_requested_job {
     my $hub         = $self->hub;
     my $user        = $hub->user;
     my $url_params  = $self->parse_url_param;
+    my $tool_type   = $self->tool_type;
     my $job;
 
     if (my $job_id = $url_params->{'job_id'}) {
@@ -360,8 +365,8 @@ sub get_requested_job {
         'ticket_name'   => $url_params->{'ticket_name'},
         'job_id'        => $job_id,
         'session_id'    => $hub->session->session_id, $user ? (
-        'user_id'       => $user->user_id ) : (), ref $self ne __PACKAGE__ ? ( # If object is Tools, it could be any ticket being requested
-        'type'          => $self->ticket_type) : (),
+        'user_id'       => $user->user_id ) : (), $tool_type ? ( # If object is Tools, it could be any ticket being requested
+        'type'          => $tool_type) : (),
         %results_key
       });
 
