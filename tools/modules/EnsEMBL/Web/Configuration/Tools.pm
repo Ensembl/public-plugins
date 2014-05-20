@@ -34,6 +34,7 @@ sub populate_tree {
   my $object      = $self->object->get_sub_object;
   my $url_param   = $object->parse_url_param;
   my $job         = $object->get_requested_job;
+  my $result_cap  = $url_param->{'ticket_name'} && $url_param->{'job_id'} ? "Results ($url_param->{'ticket_name'}/$url_param->{'job_id'})" : 'Results';
 
   my $tools_node  = $self->create_node('Summary', 'Web Tools',
     [qw(
@@ -52,7 +53,7 @@ sub populate_tree {
     { 'availability' => 1, 'concise' => 'BLAST/BLAT search' }
   ));
 
-  my $blast_results_node = $blast_node->append($self->create_subnode('Blast/Results', "Results ($url_param->{'ticket_name'}/$url_param->{'job_id'})",
+  my $blast_results_node = $blast_node->append($self->create_subnode('Blast/Results', $result_cap,
     [qw(
       results         EnsEMBL::Web::Component::Tools::Blast::ResultsSummary
       karyotype       EnsEMBL::Web::Component::Tools::Blast::Karyotype
@@ -109,7 +110,7 @@ sub populate_tree {
     { 'availability' => 1, 'concise' => 'Variant Effect Predictor' }
   ));
 
-  $vep_node->append($self->create_subnode('VEP/Results', "Results ($url_param->{'ticket_name'}/$url_param->{'job_id'})",
+  $vep_node->append($self->create_subnode('VEP/Results', $result_cap,
     [qw(
       ressummary  EnsEMBL::Web::Component::Tools::VEP::ResultsSummary
       results     EnsEMBL::Web::Component::Tools::VEP::Results
