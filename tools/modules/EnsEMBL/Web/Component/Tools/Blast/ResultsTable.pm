@@ -122,8 +122,9 @@ sub location_link {
   ## Gets a link to the location view page for the given result
   my ($self, $job, $result) = @_;
 
-  my $url     = $self->object->get_result_url('location', $job, $result);
-  my $region  = $url->{'r'};
+  my $result_data = $result->result_data;
+  my $url         = $self->object->get_result_url('location', $job, $result);
+  my $region      = sprintf '%s:%s-%s', $result_data->{'gid'}, $result_data->{'gstart'}, $result_data->{'gend'};
 
   return sprintf '<a href="%s" class="_ht" title="Region in Detail">%s</a>', $self->hub->url($url), $region;
 }
