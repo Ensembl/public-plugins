@@ -587,7 +587,7 @@ body_restrict_categories = () -> # Used for mobile site, etc
     prepare: (context,input,tags,depart) ->
       types = $.solr_config("static.ui.restrict_facets")
       if types and types.length
-        filter = ("feature_type:"+x for x in types).join(" OR ")
+        filter = ("feature_type:\"#{x}\"" for x in types).join(" OR ")
         input.q = "#{input.q} AND ( #{filter} )"
       return [[input,tags,depart]]
   }
@@ -792,7 +792,7 @@ dispatch_facet_request = (request,state,table,update_seq) ->
   
   types = $.solr_config("static.ui.restrict_facets")
   if types and types.length
-    filter = ("feature_type:"+x for x in types).join(" OR ")
+    filter = ("feature_type:\"#{x}\"" for x in types).join(" OR ")
     q = "#{q} AND ( #{filter} )"
   params = {
     q
