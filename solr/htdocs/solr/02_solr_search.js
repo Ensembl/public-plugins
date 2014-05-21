@@ -1055,7 +1055,7 @@
             _results = [];
             for (_i = 0, _len = types.length; _i < _len; _i++) {
               x = types[_i];
-              _results.push("feature_type:" + x);
+              _results.push("feature_type:\"" + x + "\"");
             }
             return _results;
           })()).join(" OR ");
@@ -1399,7 +1399,7 @@
         _results = [];
         for (_i = 0, _len = types.length; _i < _len; _i++) {
           x = types[_i];
-          _results.push("feature_type:" + x);
+          _results.push("feature_type:\"" + x + "\"");
         }
         return _results;
       })()).join(" OR ");
