@@ -393,9 +393,9 @@ sub get_result_url {
     my $length  = $end - $start;
 
     # Add 5% padding on both sides
-    $start  = $start - $length * 0.05;
+    $start  = int($start - $length * 0.05);
     $start  = 1 if $start < 1;
-    $end    = $end + $length * 0.05;
+    $end    = int($end + $length * 0.05);
 
     return {
       '__clear'           => 1,
