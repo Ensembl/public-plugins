@@ -101,14 +101,14 @@ sub _process_user_input {
           'output_file' => 'blast.out',
           'sequence'    => {
             'input_file'  => 'input.fa',
-            'is_invalid'  => delete $sequence->{'is_invalid'}
+            'is_invalid'  => $sequence->{'is_invalid'}
           },
           'source_file' => $sd->get_config($species, 'ENSEMBL_BLAST_CONFIGS')->{$params->{'query_type'}}{$params->{'db_type'}}{$params->{'search_type'}}{$params->{'source'}},
           %$params
         }
       }, {
         'input.fa'    => {
-          'content'     => delete $sequence->{'fasta'}
+          'content'     => $sequence->{'fasta'}
         }
       } ];
     }
