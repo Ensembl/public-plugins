@@ -36,7 +36,6 @@ sub update_user_history {
   my $param           = $referer_type ? $hub->object_types->{$referer_type} : undef;
 
   return unless $referer_type && $param;
-  return if $referer_type eq 'Tools';
 
   my @type_history    = grep $_->object eq $referer_type, @{$r_user->histories};
   my $value           = shift || $referer->{'params'}->{$param}->[0] or return;
