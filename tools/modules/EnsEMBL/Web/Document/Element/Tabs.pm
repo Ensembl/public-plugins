@@ -23,9 +23,10 @@ package EnsEMBL::Web::Document::Element::Tabs;
 use strict;
 use warnings;
 
-use previous qw(init);
+use previous qw(init dropdown);
 
 use ORM::EnsEMBL::DB::Tools::Manager::Ticket;
+use EnsEMBL::Web::DOM;
 
 sub init {
   my $self        = shift;
@@ -35,22 +36,106 @@ sub init {
 
   $self->PREV::init(@_);
 
-  if (!$controller->builder->object('Tools') && ORM::EnsEMBL::DB::Tools::Manager::Ticket->count_current_tickets({
-    'site_type'   => $hub->species_defs->ENSEMBL_SITETYPE,
-    'session_id'  => $hub->session->session_id, $user ? (
-    'user_id'     => $user->user_id ) : ()
-  })) {
+  # if tools tab is already there because of the tl param, force dropdown
+  if (my ($tools_tab) = grep {$_->{'type'} eq 'Tools'} @{$self->entries}) {
+    $tools_tab->{'dropdown'} = 'tools';
 
-    my $tl_param  = $hub->param('tl');
-       $tl_param  = $tl_param ? {'tl' => $tl_param} : {};
+  } else {
 
-    $self->add_entry({
-      'type'    => 'Tools',
-      'caption' => 'Jobs',
-      'url'     => $hub->url({qw(type Tools action Summary), %$tl_param}),
-      'class'   => 'tools '.($hub->type eq 'Tools' ? ' active' : '')
-    });
+    # if tl param is not present, but the user has some tickets, add tools tab now
+    if (ORM::EnsEMBL::DB::Tools::Manager::Ticket->count_current_tickets({
+      'site_type'   => $hub->species_defs->ENSEMBL_SITETYPE,
+      'session_id'  => $hub->session->session_id, $user ? (
+      'user_id'     => $user->user_id ) : ()
+    })) {
+
+      $self->add_entry({
+        'type'      => 'Tools',
+        'caption'   => 'Jobs',
+        'url'       => $hub->url({qw(type Tools action Summary __clear 1)}),
+        'class'     => 'tools',
+        'dropdown'  => 'tools'
+      });
+    }
   }
+}
+
+sub dropdown {
+  ## we override this to display a custom dropdown for tools
+  my $self      = shift;
+  my $hub       = $self->hub;
+  my $dom       = EnsEMBL::Web::DOM->new;
+  my $div       = $dom->create_element('div', {'class' => 'dropdown tools'});
+  my $dropdowns = $self->PREV::dropdown(@_);
+  my @jobs;
+
+  while (($dropdowns->{'tools'} || '') =~ m/(\?|;|\&)tl\=([a-z0-9\-_]+)/ig) {
+    my ($ticket_name, $job_id) = split /-/, $2;
+    push @jobs, {
+      'url_param'   => "$ticket_name-$job_id",
+      'ticket_name' => $ticket_name,
+      'job_id'      => $job_id
+    };
+  }
+
+  if (@jobs) {
+
+    my $recent_tickets = ORM::EnsEMBL::DB::Tools::Manager::Ticket->get_objects('query' => ['ticket_name' => [ keys %{{ map { $_->{'ticket_name'} => 1 } @jobs }} ]]);
+
+    foreach my $job (@jobs) {
+      for (@$recent_tickets) {
+        if ($_->ticket_name eq $job->{'ticket_name'}) {
+          my $job_rose_object = shift @{$_->find_job('query' => [ 'job_id' => $job->{'job_id'} ])};
+          if ($job_rose_object && $job_rose_object->status eq 'done') {
+            $job->{'ticket_type'} = $_->ticket_type_name;
+            $job->{'species'}     = $job_rose_object->species;
+          }
+        }
+      }
+    }
+
+    if (@jobs = sort {$a->{'ticket_type'} cmp $b->{'ticket_type'}} grep { $_->{'species'} } @jobs) {
+
+      my $species_defs  = $hub->species_defs;
+      my $ticket_type   = '';
+      my $duplicates    = {};
+
+      for (@jobs) {
+
+        next if $duplicates->{$_->{'url_param'}};
+        $duplicates->{$_->{'url_param'}} = 1;
+
+        if ($_->{'ticket_type'} ne $ticket_type) {
+          $ticket_type  = $_->{'ticket_type'};
+          $div->append_children({'node_name' => 'h4', 'inner_HTML' => "Recent $ticket_type jobs"}, {'node_name' => 'ul', 'class' => 'recent'});
+        }
+        $div->last_child->append_child('li', {'inner_HTML' => sprintf('<a href="%s" class="constant tools">%s: %s</a>', $hub->url({
+          '__clear'   => 1,
+          'species'   => $_->{'species'},
+          'type'      => 'Tools',
+          'action'    => $ticket_type,
+          'function'  => 'Results',
+          'tl' => $_->{'url_param'}
+        }), $species_defs->get_config($_->{'species'}, 'SPECIES_COMMON_NAME'), $_->{'ticket_name'})});
+      }
+
+      $div->last_child->append_child('li', {
+        'inner_HTML' => sprintf('<a href="%s" class="constant clear_history bold">Clear history</a>', $hub->url({qw(type Account action ClearHistory object Tools)}))
+      });
+    }
+  }
+
+  $div->append_children({'node_name' => 'h4', 'inner_HTML' => 'Web tools'}, {'node_name' => 'ul', 'children' => [{
+    'node_name'   => 'li',
+    'inner_HTML'  => sprintf('<a href="%s">BLAST/BLAT</a>', $hub->url({'type' => 'Tools', 'action' => 'Blast', 'function' => '', '__clear' => 1}))
+  }, {
+    'node_name'   => 'li',
+    'inner_HTML'  => sprintf('<a href="%s">Variant Effect Predictor</a>', $hub->url({'type' => 'Tools', 'action' => 'VEP', 'function' => '', '__clear' => 1}))
+  }]});
+
+  $dropdowns->{'tools'} = $div->render;
+
+  return $dropdowns;
 }
 
 1;
