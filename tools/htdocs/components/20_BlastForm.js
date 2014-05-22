@@ -503,7 +503,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     seqLoop:
     for (var i in editingJobSequences) {
       for (var j in this.sequences) {
-        if (editingJobSequences[i].seq == this.sequences[j].string) {
+        if (editingJobSequences[i]['sequence'] === this.sequences[j].string) {
           continue seqLoop;
         }
       }
