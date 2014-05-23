@@ -30,11 +30,18 @@ sub _init {
 }
 
 sub content {
-  my $self  = shift;
-  my $hub   = $self->hub;
+  my $self        = shift;
+  my $hub         = $self->hub;
+  my @tool_types  = @{$hub->species_defs->ENSEMBL_TOOLS_LIST};
+  my $html        = '';
 
-  return sprintf '<p><a href="%s">BLAST/BLAT Search</a></p><p><a href="%s">VEP</a></p>', $hub->url({'action' => 'Blast'}), $hub->url({'action' => 'VEP'});
-  
+  for (@tool_types) {
+    while (my ($key, $caption) = splice @tool_types, 0, 2) {
+      $html .= sprintf '<p><a href="%s">%s</a>', $hub->url({'action' => $key}), $caption;
+    }
+  }
+
+  return $html;
 }
 
 1;

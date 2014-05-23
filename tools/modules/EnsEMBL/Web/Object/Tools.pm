@@ -85,6 +85,22 @@ sub tool_type {
   return $self->{'_tool_type'} = $class eq __PACKAGE__ ? undef : [ $class =~ /\:([^\:]+)$/ ]->[0];
 }
 
+sub get_tool_caption {
+  ## Gets the caption for the given tool as specified in SiteDefs
+  ## @return String
+  my ($self, $tool_type) = @_;
+
+  $tool_type      ||= $self->tool_type;
+  my $sd            = $self->hub->species_defs;
+  my @ticket_types  = @{$sd->ENSEMBL_TOOLS_LIST};
+
+  for (@ticket_types) {
+    while (my ($key, $caption) = splice @ticket_types, 0, 2) {
+      return $caption if $key eq $tool_type;
+    }
+  }
+}
+
 sub ticket_class {
   ## Class name for the ticket object
   ## @return package name

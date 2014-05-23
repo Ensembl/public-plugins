@@ -44,7 +44,7 @@ sub long_caption {
         $job_desc ? ": $job_desc" : ''
       );
     }
-    return 'Blast/Blat Results';
+    return sprintf '%s Results', $self->get_tool_caption;
   }
   return '';
 }

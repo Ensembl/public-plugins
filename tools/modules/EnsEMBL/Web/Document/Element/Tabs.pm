@@ -66,11 +66,12 @@ sub dropdown {
   my $hub       = $self->hub;
   my $dom       = EnsEMBL::Web::DOM->new;
   my $div       = $dom->create_element('div', {'class' => 'dropdown tools'});
+  my $sd        = $hub->species_defs;
   my $dropdowns = $self->PREV::dropdown(@_);
   my @jobs;
 
   while (($dropdowns->{'tools'} || '') =~ m/(\?|;|\&)tl\=([a-z0-9\-_]+)/ig) {
-    my ($ticket_name, $job_id) = split /-/, $2;
+    my ($ticket_name, $job_id) = split /-/, "$2-";
     push @jobs, {
       'url_param'   => "$ticket_name-$job_id",
       'ticket_name' => $ticket_name,
@@ -96,9 +97,8 @@ sub dropdown {
 
     if (@jobs = sort {$a->{'ticket_type'} cmp $b->{'ticket_type'}} grep { $_->{'species'} } @jobs) {
 
-      my $species_defs  = $hub->species_defs;
-      my $ticket_type   = '';
-      my $duplicates    = {};
+      my $ticket_type = '';
+      my $duplicates  = {};
 
       for (@jobs) {
 
@@ -116,7 +116,7 @@ sub dropdown {
           'action'    => $ticket_type,
           'function'  => 'Results',
           'tl' => $_->{'url_param'}
-        }), $species_defs->get_config($_->{'species'}, 'SPECIES_COMMON_NAME'), $_->{'ticket_name'})});
+        }), $sd->get_config($_->{'species'}, 'SPECIES_COMMON_NAME'), $_->{'ticket_name'})});
       }
 
       $div->last_child->append_child('li', {
@@ -125,13 +125,17 @@ sub dropdown {
     }
   }
 
-  $div->append_children({'node_name' => 'h4', 'inner_HTML' => 'Web tools'}, {'node_name' => 'ul', 'children' => [{
-    'node_name'   => 'li',
-    'inner_HTML'  => sprintf('<a href="%s">BLAST/BLAT</a>', $hub->url({'type' => 'Tools', 'action' => 'Blast', 'function' => '', '__clear' => 1}))
-  }, {
-    'node_name'   => 'li',
-    'inner_HTML'  => sprintf('<a href="%s">Variant Effect Predictor</a>', $hub->url({'type' => 'Tools', 'action' => 'VEP', 'function' => '', '__clear' => 1}))
-  }]});
+  $div->append_children({'node_name' => 'h4', 'inner_HTML' => 'Web tools'}, {'node_name' => 'ul'});
+
+  my @ticket_types = @{$sd->ENSEMBL_TOOLS_LIST};
+  for (@ticket_types) {
+    while (my ($key, $caption) = splice @ticket_types, 0, 2) {
+      $div->last_child->append_child({
+        'node_name'   => 'li',
+        'inner_HTML'  => sprintf('<a href="%s">%s</a>', $hub->url({'type' => 'Tools', 'action' => $key, 'function' => '', '__clear' => 1}), $caption)
+      });
+    }
+  }
 
   $dropdowns->{'tools'} = $div->render;
 
