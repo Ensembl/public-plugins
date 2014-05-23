@@ -64,10 +64,9 @@ sub dropdown {
   ## we override this to display a custom dropdown for tools
   my $self      = shift;
   my $hub       = $self->hub;
-  my $dom       = EnsEMBL::Web::DOM->new;
-  my $div       = $dom->create_element('div', {'class' => 'dropdown tools'});
   my $sd        = $hub->species_defs;
   my $dropdowns = $self->PREV::dropdown(@_);
+  my $div       = EnsEMBL::Web::DOM->new->create_element('div', {'class' => 'dropdown tools', 'children' => [{'node_name' => 'h4', 'inner_HTML' => 'Recent jobs'}, {'node_name' => 'ul'}]});
   my @jobs;
 
   while (($dropdowns->{'tools'} || '') =~ m/(\?|;|\&)tl\=([a-z0-9\-_]+)/ig) {
@@ -77,6 +76,18 @@ sub dropdown {
       'ticket_name' => $ticket_name,
       'job_id'      => $job_id
     };
+  }
+
+  my $tools_divs = {};
+  my @tool_types = @{$sd->ENSEMBL_TOOLS_LIST};
+
+  for (@tool_types) {
+    while (my ($key, $caption) = splice @tool_types, 0, 2) {
+      $tools_divs->{$key} = $div->last_child->append_child({
+        'node_name' => 'li',
+        'children'  => [{'node_name' => 'a', 'href' => $hub->url({'type' => 'Tools', 'action' => $key, 'function' => '', '__clear' => 1}), 'inner_HTML' => $caption}]
+      });
+    }
   }
 
   if (@jobs) {
@@ -107,9 +118,9 @@ sub dropdown {
 
         if ($_->{'ticket_type'} ne $ticket_type) {
           $ticket_type  = $_->{'ticket_type'};
-          $div->append_children({'node_name' => 'h4', 'inner_HTML' => "Recent $ticket_type jobs"}, {'node_name' => 'ul', 'class' => 'recent'});
+          $tools_divs->{$ticket_type}->append_child('ul', {'class' => 'recent'}) unless $tools_divs->{$ticket_type}->last_child->node_name eq 'ul';
         }
-        $div->last_child->append_child('li', {'inner_HTML' => sprintf('<a href="%s" class="constant tools">%s: %s</a>', $hub->url({
+        $tools_divs->{$ticket_type}->last_child->append_child('li', {'inner_HTML' => sprintf('<a href="%s" class="constant tools">%s: %s</a>', $hub->url({
           '__clear'   => 1,
           'species'   => $_->{'species'},
           'type'      => 'Tools',
@@ -121,18 +132,6 @@ sub dropdown {
 
       $div->last_child->append_child('li', {
         'inner_HTML' => sprintf('<a href="%s" class="constant clear_history bold">Clear history</a>', $hub->url({qw(type Account action ClearHistory object Tools)}))
-      });
-    }
-  }
-
-  $div->append_children({'node_name' => 'h4', 'inner_HTML' => 'Web tools'}, {'node_name' => 'ul'});
-
-  my @ticket_types = @{$sd->ENSEMBL_TOOLS_LIST};
-  for (@ticket_types) {
-    while (my ($key, $caption) = splice @ticket_types, 0, 2) {
-      $div->last_child->append_child({
-        'node_name'   => 'li',
-        'inner_HTML'  => sprintf('<a href="%s">%s</a>', $hub->url({'type' => 'Tools', 'action' => $key, 'function' => '', '__clear' => 1}), $caption)
       });
     }
   }
