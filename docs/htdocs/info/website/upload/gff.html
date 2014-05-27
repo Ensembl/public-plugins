@@ -25,7 +25,7 @@
 <p>Fields <strong>must</strong> be tab-separated. Also, all but the final field in each feature line must contain a value; "empty" columns should be denoted with a '.'</p>
 
 <ol>
-<li><strong>seqname</strong> - name of the chromosome or scaffold; chromosome names can be given with or without the 'chr' prefix.</li>
+<li><strong>seqname</strong> - name of the chromosome or scaffold; chromosome names can be given with or without the 'chr' prefix. <b>Important note</b>: the seqname must be one used within Ensembl, i.e. a standard chromosome name or an Ensembl identifier such as a scaffold ID, without any additional content such as species or assembly. See the example GFF output below.</li>
 <li><strong>source</strong> - name of the program that generated this feature, or the data source (database or project name)</li>
 <li><strong>feature</strong> - feature type name, e.g. Gene, Variation, Similarity</li>
 <li><strong>start</strong> - Start position of the feature, with sequence numbering starting at 1.</li>
