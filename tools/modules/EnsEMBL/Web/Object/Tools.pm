@@ -85,6 +85,22 @@ sub tool_type {
   return $self->{'_tool_type'} = $class eq __PACKAGE__ ? undef : [ $class =~ /\:([^\:]+)$/ ]->[0];
 }
 
+sub get_tool_caption {
+  ## Gets the caption for the given tool as specified in SiteDefs
+  ## @return String
+  my ($self, $tool_type) = @_;
+
+  $tool_type      ||= $self->tool_type;
+  my $sd            = $self->hub->species_defs;
+  my @ticket_types  = @{$sd->ENSEMBL_TOOLS_LIST};
+
+  for (@ticket_types) {
+    while (my ($key, $caption) = splice @ticket_types, 0, 2) {
+      return $caption if $key eq $tool_type;
+    }
+  }
+}
+
 sub ticket_class {
   ## Class name for the ticket object
   ## @return package name
@@ -140,20 +156,19 @@ sub get_job_dispatcher {
   my ($self, $ticket_type) = @_;
 
   $ticket_type ||= $self->tool_type;
+  $self->{'_job_dispatcher'} ||= {};
 
-  unless ($self->{'_job_dispatcher'}) {
+  unless ($self->{'_job_dispatcher'}{$ticket_type}) {
 
-    my $dispatcher  = ($self->hub->species_defs->ENSEMBL_TOOLS_JOB_DISPATCHER || {})->{$ticket_type};
+    my $dispatcher_class = ($self->hub->species_defs->ENSEMBL_TOOLS_JOB_DISPATCHER || {})->{$ticket_type};
 
-    throw exception('WebToolsException', "Job dispatcher for ticket type $ticket_type not configured.") unless $dispatcher;
+    throw exception('WebToolsException', "Job dispatcher for ticket type $ticket_type not configured.") unless $dispatcher_class;
 
-    $dispatcher = dynamic_require("EnsEMBL::Web::JobDispatcher::$dispatcher");
-    $dispatcher = $dispatcher->new($self->hub);
-
-    $self->{'_job_dispatcher'} = $dispatcher;
+    $self->{'_job_dispatcher'}{$ticket_type} =
+    $self->{'_job_dispatcher'}{'_by_class'}{$dispatcher_class} ||= dynamic_require("EnsEMBL::Web::JobDispatcher::$dispatcher_class")->new($self->hub);
   }
 
-  return $self->{'_job_dispatcher'};
+  return $self->{'_job_dispatcher'}{$ticket_type};
 }
 
 sub generate_ticket_name {
@@ -287,7 +302,7 @@ sub get_current_tickets {
     });
 
     my @tickets = sort { $b->created_at <=> $a->created_at } map $_->ticket, @$ticket_types;
-    $self->update_jobs_from_dispatcher(\@tickets);
+    $self->update_jobs_from_dispatcher(@tickets);
     $self->{'_current_tickets'} = \@tickets;
   }
 
@@ -315,7 +330,7 @@ sub get_requested_ticket {
 
       if (@$ticket_type) {
         $ticket = $ticket_type->[0]->ticket->[0];
-        $self->update_jobs_from_dispatcher([ $ticket ]);
+        $self->update_jobs_from_dispatcher($ticket);
       }
     }
 
@@ -327,11 +342,18 @@ sub get_requested_ticket {
 
 sub update_jobs_from_dispatcher {
   ## Updates jobs linked to the given tickets from the corresponding ones in the dispatcher
-  ## @param Arrayref of Ticket objects to which jobs are linked
+  ## @params List of Ticket objects to which jobs are linked
   ## @return No return value
-  my ($self, $tickets) = @_;
+  my $self = shift;
+  my $jobs = {};
 
-  $self->get_job_dispatcher($tickets->[0]->ticket_type_name)->update_jobs( [ map { grep {$_->status eq 'awaiting_dispatcher_response'} $_->job } @$tickets ] );
+  # group all jobs by ticket type and keep only those jobs that are awaiting dispatcher response
+  for (@_) {
+    my @jobs = grep {$_->status eq 'awaiting_dispatcher_response'} $_->job;
+    $jobs->{$_->ticket_type_name} = \@jobs if @jobs;
+  }
+
+  $self->get_job_dispatcher($_)->update_jobs($jobs->{$_}) for keys %$jobs;
 }
 
 sub get_requested_job {
@@ -372,7 +394,7 @@ sub get_requested_job {
 
       if ($ticket_type) {
         my $ticket = $ticket_type->ticket->[0];
-        $self->update_jobs_from_dispatcher([ $ticket ]); # this will only update the required job but not all jobs linked to the ticket since only one job was actually fetched by providing job_id
+        $self->update_jobs_from_dispatcher($ticket); # this will only update the required job but not all jobs linked to the ticket since only one job was actually fetched by providing job_id
         $job = $ticket->job->[0];
       }
     }

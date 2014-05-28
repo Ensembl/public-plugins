@@ -30,13 +30,14 @@ sub content {
 
   my $job     = $object->get_requested_job({'with_requested_result' => 1});
   my $result  = $job && $job->status eq 'done' ? $job->result->[0] : undef;
+  my $blast   = $object->get_tool_caption;
 
   if ($result) {
 
     my $hit   = $result->result_data;
     my $table = $self->new_twocol;
 
-    $table->add_row('Blast type',           $object->parse_search_type($job->job_data->{'search_type'}, 'search_method'));
+    $table->add_row("$blast type",          $object->parse_search_type($job->job_data->{'search_type'}, 'search_method'));
     $table->add_row('Query location',       sprintf '%s %s to %s (%s)', $hit->{'qid'}, $hit->{'qstart'}, $hit->{'qend'}, $hit->{'qori'} == 1 ? '+' : '-');
     $table->add_row('Database location',    sprintf '%s %s to %s (%s)', $hit->{'tid'}, $hit->{'tstart'}, $hit->{'tend'}, $hit->{'tori'} == 1 ? '+' : '-');
     $table->add_row('Genomic location',     sprintf '%s %s to %s (%s)', $hit->{'gid'}, $hit->{'gstart'}, $hit->{'gend'}, $hit->{'gori'} == 1 ? '+' : '-');

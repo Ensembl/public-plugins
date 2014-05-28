@@ -36,8 +36,6 @@ sub _init {
   my $distribution  = {};
   my @coords;
 
-  return if scalar @$all_hsps < 2;
-
   foreach my $hsp (@$all_hsps) {
 
     my ($start, $end) = $self->region($hsp);

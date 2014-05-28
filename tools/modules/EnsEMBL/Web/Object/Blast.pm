@@ -35,7 +35,7 @@ sub long_caption {
   ## For customised heading of the page
   my $self  = shift;
   my $hub   = $self->hub;
-  if ($hub->function eq 'Results') {
+  if (($hub->function || '') eq 'Results') {
     if (my $job = $self->get_requested_job({'with_all_results' => 1})) {
       my $job_desc = $job->job_desc;
       return sprintf('Results for ticket %s (Job %s%s)',
@@ -44,7 +44,7 @@ sub long_caption {
         $job_desc ? ": $job_desc" : ''
       );
     }
-    return 'Blast/Blat Results';
+    return sprintf '%s Results', $self->get_tool_caption;
   }
   return '';
 }
@@ -388,14 +388,21 @@ sub get_result_url {
 
   } elsif ($link_type eq 'location') {
 
-    my $region = sprintf('%s:%s-%s', $result_data->{'gid'}, $result_data->{'gstart'}, $result_data->{'gend'});
+    my $start   = $result_data->{'gstart'} < $result_data->{'gend'} ? $result_data->{'gstart'} : $result_data->{'gend'};
+    my $end     = $result_data->{'gstart'} > $result_data->{'gend'} ? $result_data->{'gstart'} : $result_data->{'gend'};
+    my $length  = $end - $start;
+
+    # Add 5% padding on both sides
+    $start  = int($start - $length * 0.05);
+    $start  = 1 if $start < 1;
+    $end    = int($end + $length * 0.05);
 
     return {
       '__clear'           => 1,
       'species'           => $species,
       'type'              => 'Location',
       'action'            => 'View',
-      'r'                 => $region,
+      'r'                 => sprintf('%s:%s-%s', $result_data->{'gid'}, $start, $end),
       'contigviewbottom'  => 'blast=normal',
       'tl'                => $url_param
     };

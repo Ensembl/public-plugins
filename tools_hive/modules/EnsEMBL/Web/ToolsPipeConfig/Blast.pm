@@ -28,13 +28,11 @@ sub default_options {
   my ($class, $conf) = @_;
   my $sd = $conf->species_defs;
   return {
-    'NCBIBLAST_work_dir'          => $sd->ENSEMBL_TMP_DIR_BLAST,
     'NCBIBLAST_bin_dir'           => $sd->ENSEMBL_NCBIBLAST_BIN_PATH,
     'NCBIBLAST_matrix'            => $sd->ENSEMBL_NCBIBLAST_MATRIX,
     'NCBIBLAST_index_files'       => $sd->ENSEMBL_NCBIBLAST_DATA_PATH,
     'NCBIBLAST_dna_index_files'   => $sd->ENSEMBL_NCBIBLAST_DATA_PATH_DNA,
     'NCBIBLAST_repeat_mask_bin'   => $sd->ENSEMBL_REPEATMASK_BIN_PATH,
-#     'WUBLAST_work_dir'            => $sd->ENSEMBL_TMP_DIR_BLAST,
 #     'WUBLAST_bin_dir'             => $sd->ENSEMBL_WUBLAST_BIN_PATH,
 #     'WUBLAST_matrix'              => $sd->ENSEMBL_WUBLAST_MATRIX,
 #     'WUBLAST_index_files'         => $sd->ENSEMBL_WUBLAST_DATA_PATH,
@@ -45,8 +43,10 @@ sub default_options {
 
 sub resource_classes {
   my ($class, $conf) = @_;
-  my $lsf_queue = $conf->species_defs->ENSEMBL_BLAST_LSF_QUEUE;
-  return {$lsf_queue => { 'LSF' => "-q $lsf_queue" }};
+  my $sd          = $conf->species_defs;
+  my $lsf_queue   = $sd->ENSEMBL_BLAST_LSF_QUEUE;
+  my $lsf_timeout = $sd->ENSEMBL_BLAST_LSF_TIMEOUT;
+  return {$lsf_queue => { 'LSF' => $lsf_timeout ? "-q $lsf_queue -W $lsf_timeout" : "-q $lsf_queue" }};
 }
 
 sub pipeline_analyses {
@@ -54,16 +54,20 @@ sub pipeline_analyses {
 
   my %default_options = map { $_ => $conf->o($_) } keys %{$class->default_options($conf)}; # pass all default_options to hive
 
+  my $sd = $conf->species_defs;
+
   return [{
-    '-logic_name'       => 'Blast',
-    '-module'           => 'EnsEMBL::Web::RunnableDB::Blast::Submit',
-    '-parameters'       => {
-      'ticket_db'         => $conf->o('ticket_db'),
+    '-logic_name'           => 'Blast',
+    '-module'               => 'EnsEMBL::Web::RunnableDB::Blast::Submit',
+    '-parameters'           => {
+      'ticket_db'             => $conf->o('ticket_db'),
       %default_options
     },
-    '-hive_capacity'    => 15,
-    '-max_retry_count'  => 0,
-    '-rc_name'          => $conf->species_defs->ENSEMBL_BLAST_LSF_QUEUE
+    '-analysis_capacity'    => $sd->ENSEMBL_BLAST_ANALYSIS_CAPACITY || 12,
+    '-max_retry_count'      => 1,
+    '-meadow_type'          => 'LSF',
+    '-rc_name'              => $sd->ENSEMBL_BLAST_LSF_QUEUE,
+    '-failed_job_tolerance' => 100
   }];
 }
 
