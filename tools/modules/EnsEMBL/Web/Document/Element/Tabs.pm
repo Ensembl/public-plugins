@@ -37,7 +37,7 @@ sub init {
   $self->PREV::init(@_);
 
   # if tools tab is already there because of the tl param, force dropdown
-  if (my ($tools_tab) = grep {$_->{'type'} eq 'Tools'} @{$self->entries}) {
+  if (my ($tools_tab) = grep {($_->{'type'} || '') eq 'Tools'} @{$self->entries}) {
     $tools_tab->{'dropdown'} = 'tools';
 
   } else {
@@ -45,7 +45,7 @@ sub init {
     # if tl param is not present, but the user has some tickets, add tools tab now
     if (ORM::EnsEMBL::DB::Tools::Manager::Ticket->count_current_tickets({
       'site_type'   => $hub->species_defs->ENSEMBL_SITETYPE,
-      'session_id'  => $hub->session->session_id, $user ? (
+      'session_id'  => $hub->session->create_session_id, $user ? (
       'user_id'     => $user->user_id ) : ()
     })) {
 
