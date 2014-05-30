@@ -58,7 +58,7 @@ sub pipeline_analyses {
 
   return [{
     '-logic_name'           => 'Blast',
-    '-module'               => 'EnsEMBL::Web::RunnableDB::Blast::Submit',
+    '-module'               => 'EnsEMBL::Web::RunnableDB::Blast',
     '-parameters'           => {
       'ticket_db'             => $conf->o('ticket_db'),
       %default_options
