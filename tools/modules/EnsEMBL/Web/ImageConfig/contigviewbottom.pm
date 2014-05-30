@@ -31,22 +31,27 @@ sub init {
   my $self = shift;
   $self->PREV::init(@_);
 
-  # do not display the blast track if no job related to the urls param is found
-  my $display = 'no';
+  # display the blast track if required
   if (my $object = $self->hub->core_object('Tools')) {
     $object   = $object->get_sub_object('Blast');
     my $job   = $object->get_requested_job({'with_all_results' => 1});
-    $display  = 'yes' if $job && @{$job->result};
-  }
 
-  $self->add_track('sequence', 'blast', 'BLAST/BLAT hits', 'BlastHit', {
-    'description' => 'Track displaying BLAST/BLAT hits for the selected job',
-    'display'     => 'normal',
-    'strand'      => 'b',
-    'colourset'   => 'feature',
-    'sub_type'    => 'blast',
-    'menu'        => $display
-  });
+    if ($job && @{$job->result}) {
+      $self->add_track('sequence', 'blast', 'BLAST/BLAT hits', 'BlastHit', {
+        'description' => 'Track displaying BLAST/BLAT hits for the selected job',
+        'display'     => 'normal',
+        'strand'      => 'b',
+        'colourset'   => 'feature',
+        'sub_type'    => 'blast',
+      });
+
+      $self->add_track('information', 'blast_legend', 'BLAST/BLAT Legend', 'HSP_legend', {
+        'display'     => 'normal',
+        'strand'      => 'r',
+        'name'        => 'HSP Legend',
+      });
+    }
+  }
 }
 
 1;

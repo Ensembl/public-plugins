@@ -20,7 +20,9 @@ package EnsEMBL::Draw::GlyphSet::HSP_legend;
 
 use strict;
 
-use base qw(EnsEMBL::Draw::GlyphSet::legend);
+use EnsEMBL::Web::BlastConstants qw(BLAST_KARYOTYPE_POINTER);
+
+use parent qw(EnsEMBL::Draw::GlyphSet::legend);
 
 sub _init {
   my $self = shift;
@@ -28,8 +30,8 @@ sub _init {
   $self->init_legend(2);
 
   $self->add_to_legend({
-    'legend' => 'Colours representing % ID on blast hits',
-    'colour' => $self->{'container'}->colours,
+    'legend' => '% ID on blast hits',
+    'colour' => [ $self->{'config'}->hub->colourmap->build_linear_gradient(@{BLAST_KARYOTYPE_POINTER->{'gradient'}}) ],
   });
 }
 
