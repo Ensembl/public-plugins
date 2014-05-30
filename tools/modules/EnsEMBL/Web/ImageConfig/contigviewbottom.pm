@@ -48,7 +48,7 @@ sub init {
       $self->add_track('information', 'blast_legend', 'BLAST/BLAT Legend', 'HSP_legend', {
         'display'     => 'normal',
         'strand'      => 'r',
-        'name'        => 'HSP Legend',
+        'name'        => 'BLAST/BLAT Legend',
       });
     }
   }
