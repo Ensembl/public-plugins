@@ -140,7 +140,7 @@
 }
 
 .se_search .search_button {
-  background: url("/i/16/rev/search.png") no-repeat scroll 50% 50% [[GRADBUTTON_MAIN]];
+  background: url("/i/16/rev/search.png") no-repeat scroll 50% 50% [[MH_TAB]];
   display: block;
   height: 26px;
   vertical-align: bottom;
@@ -152,7 +152,7 @@
   position: absolute;
   top: 16px;
   right: 16px; 
-  background: -moz-linear-gradient(center top , [[GRADBUTTON_MAIN]],[[GRADBUTTON_MAIN]], [[GRADBUTTON_DARK]]) repeat scroll 0 0 transparent;
+  background: -moz-linear-gradient(center top , [[MH_TAB]],[[MH_TAB]], [[MH_BG]]) repeat scroll 0 0 transparent;
   background: -webkit-linear-gradient(center top , [[GRADBUTTON_MAIN]],[[GRADBUTTON_MAIN]], [[GRADBUTTON_DARK]]) repeat scroll 0 0 transparent;
   background: -ms-linear-gradient(center top , [[GRADBUTTON_MAIN]],[[GRADBUTTON_MAIN]], [[GRADBUTTON_DARK]]) repeat scroll 0 0 transparent;
   background: -o-linear-gradient(center top , [[GRADBUTTON_MAIN]],[[GRADBUTTON_MAIN]], [[GRADBUTTON_DARK]]) repeat scroll 0 0 transparent;
