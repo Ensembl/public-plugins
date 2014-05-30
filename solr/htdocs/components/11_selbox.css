@@ -7,7 +7,7 @@
   -o-user-select: none;
   user-select: none;
   background: #336699;
-  background: -moz-linear-gradient(center top , #336699, #336699, #115599) repeat scroll 0 0 #336699;
+  background: -moz-linear-gradient(center top , [[MH_TAB]], [[MH_TAB]], [[MH_BG]]) repeat scroll 0 0 #336699;
   color: white;
   font-weight: bold;
   font-family: "Luxi Sans",Helvetica,Arial,Geneva,sans-serif;
@@ -15,7 +15,7 @@
 
 .selbox {
   border-radius: 4px 0 0 4px;
-  border-color: #666699 #335566 #336666;
+  border-color: [[MH_TAB]] [[MH_TAB]] [[MH_BG]];
   font-size: 12px;
   width: 200px;
 }
