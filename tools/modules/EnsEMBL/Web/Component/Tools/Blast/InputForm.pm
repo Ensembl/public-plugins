@@ -228,7 +228,7 @@ sub content {
       'children'    => [{
         'node_name'   => 'a',
         'rel'         => '_blast_configs',
-        'class'       => ['toggle', 'set_cookie', 'closed'],
+        'class'       => [qw(_slide_toggle toggle set_cookie closed)],
         'href'        => '#Configuration',
         'title'       => 'Click to see configuration options',
         'inner_HTML'  => 'Configuration Options'

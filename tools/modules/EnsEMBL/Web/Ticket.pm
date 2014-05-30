@@ -107,7 +107,7 @@ sub submit_to_toolsdb {
   }
 
   my ($tools_ticket) = $ticket_type->add_ticket({
-    'owner_id'    => $user ? $user->user_id : $hub->session->session_id,
+    'owner_id'    => $user ? $user->user_id : $hub->session->create_session_id,
     'owner_type'  => $user ? 'user' : 'session',
     'created_at'  => $now,
     'modified_at' => $now,

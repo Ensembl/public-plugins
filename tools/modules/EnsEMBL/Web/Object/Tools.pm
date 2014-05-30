@@ -296,7 +296,7 @@ sub get_current_tickets {
 
     my $ticket_types  = $self->rose_manager(qw(Tools TicketType))->fetch_with_current_tickets({
       'site_type'       => $hub->species_defs->ENSEMBL_SITETYPE,
-      'session_id'      => $hub->session->session_id, $user ? (
+      'session_id'      => $hub->session->create_session_id, $user ? (
       'user_id'         => $user->user_id ) : (), $tool_type ? ( # If object is Tools, show all tickets
       'type'            => $tool_type) : ()
     });
@@ -324,7 +324,7 @@ sub get_requested_ticket {
       my $ticket_type = $self->rose_manager(qw(Tools TicketType))->fetch_with_current_tickets({
         'site_type'     => $hub->species_defs->ENSEMBL_SITETYPE,
         'ticket_name'   => $ticket_name,
-        'session_id'    => $hub->session->session_id, $user ? (
+        'session_id'    => $hub->session->create_session_id, $user ? (
         'user_id'       => $user->user_id ) : ()
       });
 
@@ -386,7 +386,7 @@ sub get_requested_job {
         'site_type'     => $hub->species_defs->ENSEMBL_SITETYPE,
         'ticket_name'   => $url_params->{'ticket_name'},
         'job_id'        => $job_id,
-        'session_id'    => $hub->session->session_id, $user ? (
+        'session_id'    => $hub->session->create_session_id, $user ? (
         'user_id'       => $user->user_id ) : (), $tool_type ? ( # If object is Tools, it could be any ticket being requested
         'type'          => $tool_type) : (),
         %results_key
