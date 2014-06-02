@@ -41,17 +41,19 @@ sub login_form {
   my $form              = $self->new_form({'id' => 'login', 'action' => {qw(action User function Authenticate)}});
   my $then_param        = $is_ajax ? '' : $self->get_then_param;
   my $ex_email          = $is_ajax ? '' : $hub->param('email');
+  my $register_link     = $hub->species_defs->ENSEMBL_SITETYPE eq 'Ensembl mobile' ? "" : sprintf (' | <a href="%s" class="modal_link">Register</a></p>', $hub->url({qw(action Register)}));
 
   $form->add_hidden({ 'name' => 'then',      'value' => $then_param       }) if $then_param;
   $form->add_hidden({ 'name' => 'modal_tab', 'value' => 'modal_user_data' });
   $form->add_field([
     {'type'  => 'Email',    'name'  => 'email',     'label' => 'Email',     'required' => 'yes', $ex_email ? ('value' => $ex_email) : ()},
     {'type'  => 'Password', 'name'  => 'password',  'label' => 'Password',  'required' => 'yes'},
-    {'type'  => 'Submit',   'name'  => 'submit',    'value' => 'Log in',    'notes'    => sprintf('<p><a href="%s" class="modal_link">Lost password</a> | <a href="%s" class="modal_link">Register</a></p>',
+    {'type'  => 'Submit',   'name'  => 'submit',    'value' => 'Log in',    'notes'    => sprintf('<p><a href="%s" class="modal_link">Lost password</a>'.$register_link,
       $hub->url({qw(action Password function Lost), $ex_email ? ('email' => $ex_email) : ()}),
-      $hub->url({qw(action Register)})
     )}
   ]);
+
+  $_->set_attribute('data-role', 'none') for @{$form->get_elements_by_tag_name('input')};
 
   return $form;
 }
