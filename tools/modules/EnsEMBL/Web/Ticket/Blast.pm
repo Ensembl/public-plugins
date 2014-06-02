@@ -66,7 +66,9 @@ sub _process_user_input {
   my $sequences = [];
   for ($hub->param('sequence')) {
 
-    my @seq_lines = split /[\n\r]/, $_;
+    next if ($_ // '') eq '';
+
+    my @seq_lines = split /\R/, $_;
     my $fasta     = $seq_lines[0] =~ /^>/ ? [ shift @seq_lines ] : [ '>' ];
     my $sequence  = join '', @seq_lines;
 
@@ -82,6 +84,7 @@ sub _process_user_input {
         : sprintf('Sequence contains invalid characters (%s)', join('', ($sequence =~ m/[^$valid_chars]/g)))
     };
   }
+  return unless @$sequences;
 
   # Create parameter sets for individual jobs to be submitted (submit one job per sequence per species)
   my $jobs      = [];
