@@ -16,7 +16,7 @@ limitations under the License.
 
 =cut
 
-package EnsEMBL::Web::RunnableDB::VEP::Submit;
+package EnsEMBL::Web::RunnableDB::VEP;
 
 ### Hive Process RunnableDB for VEP
 

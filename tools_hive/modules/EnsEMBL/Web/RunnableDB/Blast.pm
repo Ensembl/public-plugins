@@ -16,7 +16,7 @@ limitations under the License.
 
 =cut
 
-package EnsEMBL::Web::RunnableDB::Blast::Submit;
+package EnsEMBL::Web::RunnableDB::Blast;
 
 ### Hive Process RunnableDB for BLAST
 

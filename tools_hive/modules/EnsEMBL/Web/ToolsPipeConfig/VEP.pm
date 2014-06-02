@@ -44,7 +44,7 @@ sub pipeline_analyses {
 
   return [{
     '-logic_name'           => 'VEP',
-    '-module'               => 'EnsEMBL::Web::RunnableDB::VEP::Submit',
+    '-module'               => 'EnsEMBL::Web::RunnableDB::VEP',
     '-parameters'           => {
       'ticket_db'             => $conf->o('ticket_db'),
       'script'                => $conf->o('ensembl_codebase').'/'.$species_defs->ENSEMBL_VEP_SCRIPT,
