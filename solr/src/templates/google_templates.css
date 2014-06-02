@@ -692,6 +692,10 @@ a.location:hover {
   white-space: nowrap;
 }
 
+body.mobile-page .solr_result_restricted ul {
+  display: block;
+}
+
 .solr_result_restricted ul {
   display: inline;
   padding: 0;
