@@ -38,9 +38,7 @@ sub content {
   my $edit_jobs     = ($hub->function || '') eq 'Edit' ? $object->get_edit_jobs_data : [];
 
   if (!@$edit_jobs && (my $existing_seq = $hub->param('query_sequence'))) { # If coming from "BLAST this sequence" link
-    my $existing_type = $hub->param('query_type') || 'dna';
-    $existing_seq     = uc($existing_seq) =~ s/[^A-Z]+//rg;
-    $edit_jobs        = [ {'query_type' => $existing_type, 'sequence' => {'sequence' => $existing_seq}} ];
+    $edit_jobs = [ {'sequence' => {'sequence' => $existing_seq}} ];
   }
 
   my $form          = $self->new_tool_form('Blast', {'class' => 'blast-form'});

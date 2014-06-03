@@ -288,7 +288,12 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
 
     if (!$.isEmptyObject(formInput)) {
       this.toggleForm(true, true);
-      this.addEditingJobSequences(formInput['sequence'], formInput['query_type']);
+      if (formInput['query_type']) {
+        this.addEditingJobSequences(formInput['sequence'], formInput['query_type']);
+      } else {
+        // in case sequence is recieved from 'BLAST this sequence' link, it doesn't have query_type
+        this.addSequences(formInput['sequence'][0]['sequence']);
+      }
       this.refreshSpecies(formInput.species);
       for (var i in this.fieldTags) {
         if (i in formInput) {
