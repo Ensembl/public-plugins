@@ -16,15 +16,28 @@
 
 Ensembl.Panel.LocalContext = Ensembl.Panel.LocalContext.extend({
 
-  constructor: function() {
+  init: function() {
     this.base.apply(this, arguments);
 
-    Ensembl.EventManager.register('runBlastSeq', this, this.runBlastSeq);
+    Ensembl.EventManager.register('enableBlastButton',  this, this.enableBlastButton);
+    Ensembl.EventManager.register('runBlastSeq',        this, this.runBlastSeq);
   },
-  
+
+  enableBlastButton: function(seq) {
+    var panel = this;
+
+    this.elLk.blastForm = this.el.find('.tool_buttons').find('a._blast_button').on('click', function (e) {
+      e.preventDefault();
+      panel.runBlastSeq(seq);
+    }).end().find('form._blast_form');
+
+    return !!this.elLk.blastForm.length;
+  },
+
   runBlastSeq: function(seq) {
-    if (this.elLk.seqBlastForm) {
-      this.elLk.seqBlastForm.find('input[name=query_sequence]').val(seq).end().submit();
+    if (this.elLk.blastForm) {
+      this.elLk.blastForm.find('input[name=query_sequence]').val(seq);
+      this.elLk.blastForm.submit();
     }
   }
 });

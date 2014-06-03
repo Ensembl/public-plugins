@@ -17,27 +17,38 @@
 Ensembl.Panel.TextSequence = Ensembl.Panel.TextSequence.extend({
   init: function() {
 
-    this.base();
+    this.base.apply(this, arguments);
 
     var panel = this;
 
+    // Enable the 'BLAST selected sequence' popup botton only if 'BLAST this sequence' link is present on LHS menu
+    if (!Ensembl.EventManager.trigger('enableBlastButton', this.el.clone().find('._seq').text())) {
+      return;
+    }
+
     this.el.find('span._seq').on({
-      'mouseup': function(e) {
 
-        var div = $('<div>');
+      'mousedown': function() {
+        $(document).on('mouseup.TextSequence', function(e) {
+          var seq;
 
-        if (document.selection && document.selection.createRange) {
-          div.html(document.selection.createRange().htmlText);
-        }
-        else if (window.getSelection) {
-          var selection = window.getSelection();
-          if (selection.rangeCount > 0) {
-            div.append(selection.getRangeAt(0).cloneContents());
+          if (document.selection && document.selection.createRange) {
+            seq = $('<div>').html(document.selection.createRange().htmlText).find('._seq').text();
+          } else if (window.getSelection) {
+            var selection = window.getSelection();
+            if (selection.rangeCount > 0) {
+              if ($(selection.anchorNode).parents('._seq')[0] === $(selection.focusNode).parents('._seq')[0]) {
+                seq = $('<div>').append(selection.getRangeAt(0).cloneContents()).text();
+              } else {
+                seq = $('<div>').append(selection.getRangeAt(0).cloneContents()).find('._seq').text();
+              }
+            }
+            selection = null;
           }
-          selection = null;
-        }
 
-        panel.showBlastPopup(div.find(':not(._seq)').remove().end().text(), e);
+          panel.showBlastPopup(seq, e);
+          $(document).off('mouseup.TextSequence');
+        });
       },
       'click': function(e) {
         if (panel.blastSeq) {
@@ -62,9 +73,9 @@ Ensembl.Panel.TextSequence = Ensembl.Panel.TextSequence.extend({
 
       this.elLk.blastPopup.css({ left: event.pageX, top: event.pageY }).show();
 
-      $(document).on('click.removeBlastPopup', function() {
+      $(document).on('click.TextSequence', function() {
         panel.elLk.blastPopup.hide();
-        $(document).off('click.removeBlastPopup');
+        $(document).off('click.TextSequence');
       });
     }
   }
