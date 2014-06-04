@@ -38,3 +38,4 @@ a.out
 *.obj
 *.class
 ap5/conf/SiteDefs.pm
+ap5/conf/ini-files/*
