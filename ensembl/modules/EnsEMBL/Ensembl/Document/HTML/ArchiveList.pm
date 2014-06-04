@@ -21,26 +21,34 @@ package EnsEMBL::Ensembl::Document::HTML::ArchiveList;
 use strict;
 use warnings;
 
-use EnsEMBL::Web::RegObj;
+use EnsEMBL::Web::DBSQL::ArchiveAdaptor;
 
-{
+use base qw(EnsEMBL::Web::Document::HTML);
 
 sub render {
-  my ($class, $request) = @_;
+  my $self = shift;
 
-  my $SD = $ENSEMBL_WEB_REGISTRY->species_defs;
-  my $species = $SD->ENSEMBL_PRIMARY_SPECIES;
-  my %archive_info = %{$SD->ENSEMBL_ARCHIVES};
+  ### Use the db adaptor rather than getting the data from config.packed,
+  ### otherwise we have to regenerate MULTI.db.packed on all archives every release
+  my $adaptor = EnsEMBL::Web::DBSQL::ArchiveAdaptor->new($self->hub);
+  my @release_info = @{$adaptor->fetch_releases};
   my $html = qq(<h3 class="boxed">List of currently available archives</h3>
 <ul class="spaced">);
   my $count = 0;
 
-  foreach my $release (reverse sort keys %archive_info) {
-    next if $release > $SD->ENSEMBL_VERSION; ## In case this is a dev site on a yet-to-be-released version
-    my $subdomain = $archive_info{$release};
+  foreach my $release (reverse @release_info) {
+    next unless $release->{'online'} eq 'Y';
+    my $version = $release->{'id'};
+    my $subdomain = $release->{'archive'};
     (my $date = $subdomain) =~ s/20/ 20/; 
-    $html .= qq(<li><strong><a href="http://$subdomain.archive.ensembl.org">Ensembl $release: $date</a>);
-    $html .= ' - currently www.ensembl.org' if $release == $SD->ENSEMBL_VERSION;
+    $html .= qq(<li><strong><a href="http://$subdomain.archive.ensembl.org">Ensembl $version: $date</a>);
+    ## Assume the first on the list is the live site
+    if ($version == $self->hub->species_defs->ENSEMBL_VERSION) {
+      $html .= ' - this site';
+    }
+    elsif ($count == 0) {
+      $html .= ' - forwards to www.ensembl.org';
+    }
     $html .= '</strong></li>';
     $count++;
   }
@@ -50,8 +58,6 @@ sub render {
   $html .= qq(<p><a href="/info/website/archives/assembly.html">Table of archives showing assemblies present in each one</a>.</p>);
 
   return $html;
-}
-
 }
 
 1;
