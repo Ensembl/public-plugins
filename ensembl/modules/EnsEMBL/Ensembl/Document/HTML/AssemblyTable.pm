@@ -37,42 +37,37 @@ sub render {
   my $hub = EnsEMBL::Web::Hub->new;
 
   my $SD = $hub->species_defs;
+  my @spp = sort $SD->valid_species;
   my $this_release = $SD->ENSEMBL_VERSION;
-  my $archives = $SD->ENSEMBL_ARCHIVES;
-
-  my $first_archive = [sort keys %$archives]->[0];
-
-  my $adaptor = EnsEMBL::Web::DBSQL::ArchiveAdaptor->new($hub);
 
   ## get assembly info for each species
-  my $species = $adaptor->fetch_all_species;
-  my @releases = sort { $b->{'id'} <=> $a->{'id'} } @{$adaptor->fetch_releases};
-  my @archives = @{$adaptor->fetch_archives($first_archive)};
+  my $adaptor = EnsEMBL::Web::DBSQL::ArchiveAdaptor->new($hub);
 
-  my @archive_releases;
-  foreach (@releases) { 
-    if ($_->{'id'} >= $first_archive) {
-      push @archive_releases, $_; 
-    }
+  ## We only want the releases after the first current archive
+  my $first_archive = 0;
+  my @releases;
+  my @all_releases = @{$adaptor->fetch_releases};
+  foreach (@all_releases) {
+    $first_archive = $_->{'id'} if (!$first_archive && $_->{'online'} eq 'Y');
+    next unless $first_archive;
+    ### final list needs to be in descending order
+    unshift @releases, $_;
   }
 
   ## Split the table in two so it isn't too wide
-  my $release_break = int(scalar(@archive_releases)/2);
+  my $release_break = int(scalar(@releases)/2);
 
-  my $split_releases = [ [ splice (@archive_releases, 0, $release_break) ], \@archive_releases ];
+  my $split_releases = [ [ splice (@releases, 0, $release_break) ], \@releases ];
 
-  my $release_to_species = {};
-  foreach (@archives) {
-    $release_to_species->{$_->{'species_id'}}{$_->{'id'}} = $_->{'assembly'};
-  }
+  my $assemblies = $adaptor->fetch_archive_assemblies($first_archive);
 
-  $html .= render_assembly_table($split_releases->[0], $species, $release_to_species, 1).render_assembly_table($split_releases->[1], $species, $release_to_species, 2);
+  $html .= render_assembly_table($split_releases->[0], \@spp, $assemblies, 1).render_assembly_table($split_releases->[1], \@spp, $assemblies, 2);
   return $html;
 }
 
 sub render_assembly_table {
-  my ($releases, $species, $release_species, $table_count) = @_;
-  return unless @$releases;
+  my ($releases, $spp, $assemblies, $table_count) = @_;
+  return unless @$releases && keys %$assemblies;
 
   my $border = 'border-style:solid;border-color:#fff;border-width:0 1px 1px 0';
   my $header = qq(<tr>
@@ -80,15 +75,12 @@ sub render_assembly_table {
   );
   my $body = "";
 
-  my ($date, $version, $order, $species_name, $common, $row, $rs, $cells, $assembly_name, $current_name, $online, $class);
-
-  my $c = { -1 => 'bg4', 1 => 'bg2', x => 1 }; # CSS class flip-flop for tds
-
+  ## Render headers
   my $style = sprintf( ' style="width:%0.3f%%;%s"', 80 / @$releases, $border );
   foreach my $rel (@$releases) {
     my $short_date = $rel->{'archive'};
     $short_date =~ s/20/ 20/;
-    $date = $rel->{'online'} eq 'Y' ? qq{<a href="http://} . $rel->{'archive'} . qq{.archive.ensembl.org">} . $short_date . "</a>" : $short_date;
+    my $date = $rel->{'online'} eq 'Y' ? qq{<a href="http://} . $rel->{'archive'} . qq{.archive.ensembl.org">} . $short_date . "</a>" : $short_date;
 
     $header .= "<th$style>$date<br />v".$rel->{'id'}."</th>";
   }
@@ -96,37 +88,48 @@ sub render_assembly_table {
   $header .= "</tr>\n";
   
   my @rows = ();
- 
-  foreach my $s (sort { $a->{'name'} cmp $b->{'name'} } @$species) {
-    ($species_name = $s->{'name'}) =~ s/_/ /g;
-    $common = $s->{'common_name'};
-    $cells = {};
-    $assembly_name = "";
-    $current_name = "";
-    $order = 1;
-    
+  my $c = { -1 => 'bg4', 1 => 'bg2', x => 1 }; # CSS class flip-flop for tds
+
+  foreach my $species (@$spp) {
+    my $info = $assemblies->{$species};
+    my ($species_header, $assembly_name, $current_name);
+    my $cells = {};
+    my $order = 1;
+    my $row .= '<tr>';
     $c->{'x'} = 1; # Reset the flip-flop
 
-    my $name_string = "<i>$species_name</i>";
-    $name_string .= " ($common)" unless $common =~ /\./;
-    $row = sprintf('<tr><th style="%s"><a href="/%s/"><i>%s</i></a>', $border, $s->{'name'}, $species_name);
-    $row .= " ($common)" unless $common =~ /\./;
-    $row .= '</th>';
+    foreach my $release (@$releases) {
+      my $version = $release->{'id'};
+      ## Create side header
+      unless ($species_header) {
+        (my $display_name = $species) =~ s/_/ /g;
+        my $common = $info->{$version}{'common_name'};
+        my $name_string = "<i>$display_name</i>";
+        $name_string .= " ($common)" unless $common =~ /\./;
+        $species_header = sprintf('<th style="%s"><a href="/%s/"><i>%s</i></a>', $border, $species, $display_name);
+        $species_header .= " ($common)" unless $common =~ /\./;
+        $species_header .= '</th>';
+        $row .= $species_header;
+      }
 
-    foreach my $r (@$releases)  {  
-      $assembly_name = $release_species->{$s->{'id'}}->{$r->{'id'}} || 'none';
-
+      ## Create cells
+      my $assembly_name = $info->{$version}{'assembly'} || 'none';
+      ## We have to have an assembly name or this check fails!
       $order++ if ($current_name ne $assembly_name);
+
       $current_name = $assembly_name;
+      ## Now reset the assembly name to blank, because we don't want to display it!
       $assembly_name = '' if $assembly_name eq 'none';
 
       $cells->{$order} ||= { name => $assembly_name, count => 0 };
-      $cells->{$order}->{'count'}++;
+      $cells->{$order}{'count'}++;
+    
     }
 
     # Don't print empty row
     next if !$cells->{$order}->{'name'} && $cells->{$order}->{'count'} == scalar @$releases;
 
+    my $class;
     my $i = 0;
     my $one_border = 'style="border-style:solid;border-color:#ccc;border-width:0 0 1px 0"';
     my $two_borders = 'style="border-style:solid;border-color:#ccc;border-width:0 0 1px 1px"';
