@@ -37,7 +37,7 @@ sub init {
 
   if (!$controller->builder->object('Tools') && ORM::EnsEMBL::DB::Tools::Manager::Ticket->count_current_tickets({
     'site_type'   => $hub->species_defs->ENSEMBL_SITETYPE,
-    'session_id'  => $hub->session->session_id, $user ? (
+    'session_id'  => $hub->session->create_session_id, $user ? (
     'user_id'     => $user->user_id ) : ()
   })) {
 
