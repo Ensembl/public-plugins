@@ -56,9 +56,9 @@ sub populate_tree {
   my $blast_results_node = $blast_node->append($self->create_subnode('Blast/Results', $result_cap,
     [qw(
       results         EnsEMBL::Web::Component::Tools::Blast::ResultsSummary
+      table           EnsEMBL::Web::Component::Tools::Blast::ResultsTable
       karyotype       EnsEMBL::Web::Component::Tools::Blast::Karyotype
       hsps            EnsEMBL::Web::Component::Tools::Blast::HspQueryPlot
-      table           EnsEMBL::Web::Component::Tools::Blast::ResultsTable
     )],
     { 'availability' => 1, 'concise' => $object ? $object->long_caption : '', 'no_menu_entry' => "$action/$function" !~ /^Blast\/(Results|Alignment(Protein)?|(Genomic|Query)Seq)$/ }
   ));
