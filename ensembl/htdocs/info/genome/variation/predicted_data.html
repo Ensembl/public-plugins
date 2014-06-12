@@ -81,16 +81,7 @@ this pipeline for your own data via the <a href="/info/docs/tools/vep">VEP</a>.
 </p>
 
 <p>
-Prior to release 68 we used our own internal terms to describe consequence
-types and these continue to be available as an option on the website using 
-'Configure this page', in the API and in the <a href="#VEP">VEP</a>. We refer
-to these as 'Old Ensembl terms' and list these and their SO equivalents in 
-the table below.
-</p>
-
-<p>
-From release 68 however, we use <a rel="external"
-href="http://www.sequenceontology.org">SO terms </a> by default. There is an equivalent 
+We used <a rel="external" href="http://www.sequenceontology.org">SO terms</a> by default since the Ensembl release 68. There is an equivalent 
 SO term for each of our old Ensembl terms but in a few cases there is a more specific 
 SO term available, as shown in the table below. If you have text files or VEP outputs 
 with our old Ensembl terms, you can easily update these to using the SO terms by running the following 
@@ -101,26 +92,21 @@ script</a> e.g. <br />
 <code style="border: 1px solid #CCC;padding:3px" >perl convert_ensembl_to_SO_consequences.pl input.txt > converted.txt</code>
 </p>
 
+<p style="padding-top:15px">
+See below a diagram showing the location of each display 
+term relative to the transcript structure:
+<a rel="external" href="consequences.jpg">
+  <img src="consequences.jpg" style="width:700px;height:250px" alt="consequence diagram" />
+</a>
+</p>
 
-
-<p>
-The terms in the table are shown in order of severity as estimated by
+<p style="padding-top:10px">
+The terms in the table below are <b>shown in order of severity</b> (more severe to less severe) as estimated by
 Ensembl, and this ordering is used on the website summary views. This ordering
 is necessarily subjective and API and VEP users can always get the full set of
 consequences for each allele and make their own severity judgement.
 </p>
 
-
-<p>
-See below a diagram showing the location of each display 
-term relative to the transcript structure:
-</p>
-<a rel="external" href="consequences.jpg">
-  <img src="consequences.jpg" style="width:700px;height:250px" alt="consequence diagram" />
-</a>
-
-
-<br /><br />
 <table id="consequence_type_table" class="ss">
   <tr>
     <th style="width:5px;padding-left:0px;padding-right:0px;text-align:center">*</th>
