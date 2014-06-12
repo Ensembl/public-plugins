@@ -86,11 +86,14 @@ Ensembl.Panel.ToolsForm = Ensembl.Panel.ContentTools.extend({
       }, 100); // :(
     }).filter('._tools_form_cancel');
 
+    // Height adjustable divs
+    this.elLk.adjustableDivs = this.elLk.form.find('div._adjustable_height').css('minHeight', function() { return $(this).height(); });
+
     // if there is no job in the ticket list, then show the form
     Ensembl.EventManager.trigger('toolsToggleEmptyTable');
   },
 
-  editExisting: function() {
+  editExisting: function(noReset) {
   /*
    * Checks and populates the form with existing job if job data present as a hidden input
    * @return true if existing job present, false otherwise
@@ -100,18 +103,20 @@ Ensembl.Panel.ToolsForm = Ensembl.Panel.ContentTools.extend({
       editingJobsData         = $.parseJSON(this.elLk.form.find('input[name=edit_jobs]').remove().val());
     } catch (ex) {}
     if (editingJobsData.length) {
-      this.populateForm(editingJobsData);
+      this.populateForm(editingJobsData, noReset);
       return true;
     }
     return false;
   },
 
-  populateForm: function(jobsData) {
+  populateForm: function(jobsData, noReset) {
   /*
    * Populate the input form from the given map of param name to value
    */
     if (jobsData) {
-      this.reset();
+      if (!noReset) {
+        this.reset();
+      }
       for (var paramName in jobsData) {
         var vals  = $.isArray(jobsData[paramName]) ? jobsData[paramName] : [ jobsData[paramName] ];
         var flag  = function() { return $.inArray(this.value, vals) >= 0; }
