@@ -199,7 +199,7 @@ Ensembl.Panel.ContentTools = Ensembl.Panel.Content.extend({
     this.elLk.errorDiv.find('._error_heading').html(heading).end().find('._error_message').html(message).end().show();
   },
 
-  toggleSpinner: function(flag) {
+  toggleSpinner: function(flag, message) {
   /*
    * Shows/hides the ensembl spinner on top of the panel according to the flag
    */
@@ -207,6 +207,7 @@ Ensembl.Panel.ContentTools = Ensembl.Panel.Content.extend({
       this.elLk.spinnerDivs = $('<div class="tools-overlay"></div><div class="overlay-spinner spinner"></div>').appendTo(document.body);
     }
     this.elLk.spinnerDivs.css(flag ? $.extend({ 'height': this.el.height(), 'width': this.el.width() }, this.el.offset()) : {}).toggle(flag);
+    this.elLk.spinnerDivs.last().empty().html(message ? '<div>' + message + '</div>' : '');
   },
 
   hideError: function() {

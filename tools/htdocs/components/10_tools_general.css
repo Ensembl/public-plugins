@@ -17,6 +17,8 @@
 /* For all tools pages */
 div.tools-overlay                 { position: absolute; background-color: [[PANEL_BG]]; opacity: 0.6; z-index: 399; }
 div.overlay-spinner               { position: absolute; background-position: center center; border: 0 none; margin: 0; padding: 0; min-height: 66px; z-index: 400; }
+div.overlay-spinner div           { margin-top: 50px; position: absolute; text-align: center; top: 50%; width: 100%; }
+
 div.error-overlay                 { position: fixed; left: 0; top: 0; height: 100%; width: 100%; background-color: #000000; opacity: 0; z-index: 100000; }
 div.error-popup                   { position: fixed; left: 50%; top: 40%; width: 400px; margin-left: -200px; z-index: 100001; border-radius: 8px; box-shadow: #999 1px 1px 50px; }
 div.error-popup .error-pad        { background-color: [[PANEL_BG]]; }
