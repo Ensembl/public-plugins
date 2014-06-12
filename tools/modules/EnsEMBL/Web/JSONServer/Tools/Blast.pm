@@ -30,12 +30,13 @@ use parent qw(EnsEMBL::Web::JSONServer::Tools);
 sub object_type { 'Blast' }
 
 sub json_fetch_sequence {
-  my $self      = shift;
-  my $hub       = $self->hub;
-  my $id        = $hub->param('id') or return;
+  my ($self, $on_update) = @_;
+  my $hub = $self->hub;
+  my $id  = $hub->param('id') or return;
   my @seqs;
 
   for ($self->_possible_dbs($id)) {
+    $on_update->([ $_ ]) if $on_update;
     @seqs = $hub->get_ext_seq($_, {'id' => $id});
     last if @seqs && $seqs[0]{'sequence'};
   }
