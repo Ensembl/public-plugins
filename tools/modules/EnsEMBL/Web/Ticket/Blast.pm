@@ -87,17 +87,19 @@ sub _process_user_input {
   return unless @$sequences;
 
   # Create parameter sets for individual jobs to be submitted (submit one job per sequence per species)
-  my $jobs      = [];
-  my $desc      = $hub->param('description');
-  my $prog      = $object->parse_search_type($params->{'search_type'}, 'search_method');
-  my $db_types  = $sd->multi_val('ENSEMBL_BLAST_DB_TYPES');
-  my $job_num   = 0;
+  my ($blast_type, $search_method)  = $object->parse_search_type($params->{'search_type'});
+  my $desc                          = $hub->param('description');
+  my $db_types                      = $sd->multi_val('ENSEMBL_BLAST_DB_TYPES');
+  my $jobs                          = [];
+  my $job_num                       = 0;
+
   for my $species (@species) {
-    my $i = 0;
+
     for my $sequence (@$sequences) {
+
       push @$jobs, [ {
         'job_number'  => ++$job_num,
-        'job_desc'    => $desc || sprintf('%s search against %s %s.', $prog, $sd->get_config($species, 'SPECIES_COMMON_NAME'), $db_types->{$params->{'db_type'}}),
+        'job_desc'    => $desc || sprintf('%s search against %s %s.', $search_method, $sd->get_config($species, 'SPECIES_COMMON_NAME'), $db_types->{$params->{'db_type'}}),
         'species'     => $species,
         'assembly'    => $sd->get_config($species, 'ASSEMBLY_NAME'),
         'job_data'    => {
@@ -106,7 +108,7 @@ sub _process_user_input {
             'input_file'  => 'input.fa',
             'is_invalid'  => $sequence->{'is_invalid'}
           },
-          'source_file' => $sd->get_config($species, 'ENSEMBL_BLAST_CONFIGS')->{$params->{'query_type'}}{$params->{'db_type'}}{$params->{'search_type'}}{$params->{'source'}},
+          'source_file' => $sd->get_config($species, 'ENSEMBL_BLAST_DATASOURCES')->{$blast_type}{$params->{'source'}},
           %$params
         }
       }, {

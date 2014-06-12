@@ -41,67 +41,49 @@ sub _configure_blast {
   my $multi_tree  = $self->full_tree->{'MULTI'};
   my $species     = $self->species;
   my $blast_types = $multi_tree->{'ENSEMBL_BLAST_TYPES'};
+  my $sources     = $multi_tree->{'ENSEMBL_BLAST_DATASOURCES_BY_TYPE'};
+  my $blast_conf  = {};
 
-  while (my ($blast_type, $blast_label) = each %$blast_types) { #NCBIBLAST, BLAT, WUBLAST etc
+  while (my ($blast_type, undef) = each %$blast_types) { #BLAT, NCBIBLAST, WUBLAST etc
     next if $blast_type eq 'ORDER';
 
-    my $dbtype_to_sourcetype = {};
+    my $method = sprintf '_get_%s_source_file', $blast_type;
 
-    my $source_types = $multi_tree->{'ENSEMBL_BLAST_DATASOURCES_'.$blast_type} || {};
-    while (my ($source_type, $source_type_details) = each %$source_types) { #LATESTGP, CDNA_ALL, PEP_ALL etc
-      next if $source_type eq 'ORDER';
-
-      $source_type_details =~ /^([^\s]+)/;
-
-      my $db_type = $1;
-      my $method  = sprintf '_get_%s_source_file', $blast_type;
-
-      ## TODO - before adding this entry, check if this species actually has this source
-
-      $dbtype_to_sourcetype->{$db_type}{$source_type} = $self->$method($source_type);
-    }
-
-    my $search_types = $multi_tree->{'ENSEMBL_BLAST_METHODS_'.$blast_type} || {};
-    while (my ($search_type, $search_type_details) = each %$search_types) { #BLASTN, BLASTP, TBLASTX etc
-      next if $search_type eq 'ORDER';
-
-      my ($query_type, $db_type, $program) = @$search_type_details;
-
-      $tree->{'ENSEMBL_BLAST_CONFIGS'}{$query_type}{$db_type}{"${blast_type}_${search_type}"} = { %{$dbtype_to_sourcetype->{$db_type} || {}} };
-    }
+    $blast_conf->{$blast_type}{$_} = $self->$method($_) for @{$sources->{$blast_type} || []} #LATESTGP, CDNA_ALL, PEP_ALL etc
   }
+
+  $tree->{'ENSEMBL_BLAST_DATASOURCES'} = $blast_conf;
 }
 
 sub _configure_blast_multi {
   my $self                  = shift;
   my $multi_tree            = $self->full_tree->{'MULTI'};
   my $blast_types           = {%{$multi_tree->{'ENSEMBL_BLAST_TYPES'} || {}}};
-  my $blast_types_ordered   = [ map { delete $blast_types->{$_} ? [ $_ ] : () } @{delete $blast_types->{'ORDER'} || []}, sort keys %$blast_types ];
+  my $blast_types_ordered   = [ map { delete $blast_types->{$_} ? $_ : () } @{delete $blast_types->{'ORDER'} || []}, sort keys %$blast_types ];
+  my $source_types          = $multi_tree->{'ENSEMBL_BLAST_DATASOURCES_ALL'};
   my $search_types_ordered  = [];
   my $all_sources           = {};
   my $all_sources_order     = [];
+  my $sources               = {};
 
-  foreach my $blast_type (@$blast_types_ordered) {
+  foreach my $source_type (@{delete $source_types->{'ORDER'} || []}, sort keys %$source_types) { #LATESTGP, CDNA_ALL, PEP_ALL etc
+    my $source_type_details = delete $source_types->{$source_type} or next;
+       $source_type_details =~ /^([^\s]+)\s+(.+)$/;
 
-    my $sources       = {};
-    my $source_types  = $multi_tree->{'ENSEMBL_BLAST_DATASOURCES_'.$blast_type->[0]} || {};
+    my $db_type = $1;
+    my $label   = $2;
+    push @{$sources->{$db_type}}, $source_type;
+    push @{$all_sources_order}, $source_type;
+    $all_sources->{$source_type} = $label;
+  }
 
-    foreach my $source_type (@{delete $source_types->{'ORDER'} || []}, sort keys %$source_types) { #LATESTGP, CDNA_ALL, PEP_ALL etc
-      my $source_type_details = delete $source_types->{$source_type} or next;
-         $source_type_details =~ /^([^\s]+)\s+(.+)$/;
+  foreach my $blast_type (@$blast_types_ordered) { #BLAT, NCBIBLAST etc
+    my $search_types = {%{$multi_tree->{'ENSEMBL_BLAST_METHODS_'.$blast_type}}};
 
-      my $db_type = $1;
-      my $label   = $2;
-      push @{$sources->{$db_type}}, $source_type;
-      push @$all_sources_order, $source_type;
-      $all_sources->{$source_type} = $label;
-    }
-
-    my $search_types = {%{$multi_tree->{'ENSEMBL_BLAST_METHODS_'.$blast_type->[0]}}};
-    for (@{delete $search_types->{'ORDER'} || []}, sort keys %$search_types) {
+    for (@{delete $search_types->{'ORDER'} || []}, sort keys %$search_types) { #BLASTN, BLASTX, BLASTP etc
       if ($search_types->{$_}) {
         push @$search_types_ordered, {
-          'search_type' => "$blast_type->[0]_$_",
+          'search_type' => "${blast_type}_$_",
           'query_type'  => $search_types->{$_}[0],
           'db_type'     => $search_types->{$_}[1],
           'program'     => $search_types->{$_}[2],
@@ -111,6 +93,7 @@ sub _configure_blast_multi {
       }
     }
   }
+
   $multi_tree->{'ENSEMBL_BLAST_DATASOURCES_ORDER'}  = $all_sources_order;
   $multi_tree->{'ENSEMBL_BLAST_DATASOURCES'}        = $all_sources;
   $multi_tree->{'ENSEMBL_BLAST_CONFIGS'}            = $search_types_ordered;
