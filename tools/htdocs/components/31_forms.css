@@ -26,5 +26,3 @@ span.extra_configs_info           { color: #999; font-style: italic; margin-left
 div.species-tag                   { padding-left: 23px; width: 189px; background-repeat: no-repeat; background-position: 2px 2px; }
 div.species-tag.disabled          { background-color: [[NEUTRAL_BG]]; border: 1px solid [[NEUTRAL_BORDER]]; color: [[NEUTRAL_BORDER]]; }
 div.species-tag img               { display: block; float: left; margin: 2px 5px 2px 2px; }
-
-div.file-upload-label             { padding-top: 9px !important; float: left; }
