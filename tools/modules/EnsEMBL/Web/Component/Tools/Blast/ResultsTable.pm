@@ -90,11 +90,11 @@ sub content {
       }
 
       # add links to query name and pid columns
-      $result_data->{'qid'} = sprintf('<span class="left-float">%s</span>&nbsp;<a href="%s" class="small _ht" title="View Query Sequence">[Sequence]</a>',
+      $result_data->{'qid'} = sprintf('<span>%s</span>&nbsp;<a href="%s" class="small _ht" title="View Query Sequence">[Sequence]</a>',
         $result_data->{'qid'},
         $hub->url($object->get_result_url('query_sequence', $job, $_))
       );
-      $result_data->{'pident'} = sprintf('<span class="left-float">%s</span>&nbsp;<a href="%s" class="small _ht" title="View Alignment">[Alignment]</a>',
+      $result_data->{'pident'} = sprintf('<span>%s</span>&nbsp;<a href="%s" class="small _ht" title="View Alignment">[Alignment]</a>',
         $result_data->{'pident'},
         $hub->url($object->get_result_url('alignment', $job, $_))
       );
@@ -125,7 +125,7 @@ sub location_link {
   my $url         = $self->object->get_result_url('location', $job, $result);
   my $region      = sprintf '%s:%s-%s', $result_data->{'gid'}, $result_data->{'gstart'}, $result_data->{'gend'};
 
-  return sprintf('<a class="left-float" href="%s" class="_ht" title="Region in Detail">%s</a>&nbsp;<a href="%s" class="small _ht" title="View Genomic Sequence">[Sequence]</a>',
+  return sprintf('<a href="%s" class="_ht" title="Region in Detail">%s</a>&nbsp;<a href="%s" class="small _ht" title="View Genomic Sequence">[Sequence]</a>',
     $hub->url($url),
     $region,
     $hub->url($self->object->get_result_url('genomic_sequence', $job, $result))
