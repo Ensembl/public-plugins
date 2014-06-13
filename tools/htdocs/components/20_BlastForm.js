@@ -20,11 +20,8 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
 
     this.sequences            = [];
     this.combinations         = [];
-    this.fieldsOrder          = {};
-    this.fieldTags            = {};
     this.speciesTags          = {};
-    this.dropdowns            = {};
-    this.selectedValues       = {};
+    this.selectedQueryType    = false;
     this.maxSequenceLength    = 0;
     this.maxNumSequences      = 0;
     this.dnaThresholdPercent  = 0;
@@ -34,7 +31,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
   init: function () {
 
     this.base();
-    var panel                 = this;
+    var panel = this;
 
     this.maxSequenceLength    = this.elLk.form.find('input[name=max_sequence_length]').remove().val();
     this.maxNumSequences      = this.elLk.form.find('input[name=max_number_sequences]').remove().val();
@@ -44,22 +41,9 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
 
     try {
       // parse the combination JSON from the HTML - if this doesn't work, there is nothing we can do!
-      this.combinations       = $.parseJSON(this.elLk.form.find('input[name=valid_combinations]').remove().val());
-
-      // get the fields order from the order they appear on the form
-      this.elLk.form.find($.map(this.combinations[0], function(val, key) {
-        return '[name=' + key + ']';
-      }).toString()).each(function(key, el) {
-        if (!(el.name in panel.fieldsOrder)) {
-          panel.fieldsOrder[el.name] = 1;
-        }
-      });
-
-      // sort the combinations according to the field's order
-      this.sortCombinations();
-
+      this.combinations = $.parseJSON(this.elLk.form.find('input[name=valid_combinations]').remove().val());
     } catch (ex) {
-      this.combinations       = false;
+      this.combinations = false;
     }
 
     // nothing can be done if any of these is missing!
@@ -68,172 +52,131 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
       return;
     }
 
-    this.elLk.sequences       = this.elLk.form.find('div._sequence').first().removeClass('_sequence');
-    this.elLk.sequenceFields  = this.elLk.form.find('div._sequence');
-    this.elLk.speciesDropdown = this.elLk.form.find('div._species_dropdown');
-    this.elLk.adjustableDivs  = this.elLk.form.find('div._adjustable_height').css('minHeight', function() { return $(this).height(); });
-    this.elLk.configFields    = this.elLk.form.find('div._config_field');
-
-    // Save the default species for later use
-    this.defaultSpecies       = this.elLk.speciesDropdown.find('input:checked').val();
-
-    // 'Add more sequences' link
-    this.elLk.addSeqLink      = this.elLk.sequences.find('._add_sequence').on('click', function(e) {
-      e.preventDefault();
-      panel.toggleSequenceFields(true);
-    });
-
-    // Query type radio button
-    this.elLk.queryType       = this.elLk.form.find('input[name=query_type]').on('change', function() {
-      panel.setQueryTypeValue(this.value);
-    });
-
-    // species tags
-    this.elLk.speciesTags     = this.elLk.form.find('._species_tags').find('div').each(function() {
-      panel.speciesTags[$(this).find('input').val()] = new Ensembl.Panel.ToolsForm.SpeciesTag($(this), panel);
-    }).end();
-
-    // 'Add species' link
-    this.elLk.addSpeciesLink  = this.elLk.form.find('._add_species').find('a').on('click', function(e) {
-      e.preventDefault();
-      panel.toggleSpeciesFields(true);
-    }).end();
-
-    // 'Done' link - done adding species
-    this.elLk.doneSpeciesLink = this.elLk.form.find('._add_species_done').find('a').on('click', function(e) {
-      e.preventDefault();
-      panel.refreshSpecies();
-      panel.toggleSpeciesFields(false);
-    }).end();
-
-    // for all the fields that affect the selectable options in other fields, provide the event handlers; and initialise the Dropdown instances
-    this.elLk.form.find('._validate_onchange').on('change', function() {
-      panel.fieldTags[this.name].select(this.nodeName == 'INPUT' ? $(this) : $(this).find('option:selected'));
-    }).filter('select').each(function() {
-      panel.dropdowns[this.name] = new Ensembl.Panel.ToolsForm.Dropdown($(this), panel);
-    });
+    this.elLk.sequences       = this.elLk.form.find('div._sequence');
+    this.elLk.sequenceField   = this.elLk.form.find('div._sequence_field');
+    this.elLk.speciesDropdown = this.elLk.form.find('select[name=species]');
 
     // provide event handlers to the textarea where sequence text is typed
-    this.elLk.sequenceInput   =  this.elLk.form.find('textarea[name=query_sequence]').on({
+    var sequenceInputEvent = function(e) { // add some delay to make sure the blur event actually gets fired after making sure some other event hasn't removed the input string
+      var element = $(this).off('blur change paste').trigger('blur'); // prevent all events to fire at once
+      setTimeout(function() {
+        element.trigger('finish').on('blur change paste', sequenceInputEvent);
+        element = null;
+      }, 100);
+    };
+    this.elLk.sequenceInput =  this.elLk.form.find('textarea[name=query_sequence]').on({
       'focus': function(e) {
-        if (!this.value || this.value == this.defaultValue) {
+        if (!this.value || this.value === this.defaultValue) {
           $(this).val('').removeClass('inactive');
         }
       },
-      'blur change.noinput': function() {
-        if (!this.value || this.value == this.defaultValue) {
-          $(this).addClass('inactive').val(this.defaultValue).trigger('showButtons', false);
+      'finish': function() {
+        this.value = this.value.trim();
+        if (this.value && this.value !== this.defaultValue) {
+          if (this.value.match(/[0-9]+/) && this.value.match(/^[a-z]{1}[a-z0-9\.\-\_]{4,30}$/i)) { // accession/sequence id etc
+            panel.ajax({
+              'comet'   : true,
+              'url'     : panel.fetchSequenceURL,
+              'data'    : { id: this.value },
+              'spinner' : true,
+              'update'  : function(json) {
+                this.toggleSpinner(true, 'Searching ' + json[0] + ' databases&#8230;');
+              }
+            });
+          } else {
+            panel.addSequences(this.value);
+          }
+        } else {
+          $(this).val(this.defaultValue).addClass('inactive');
         }
       },
-      'input cut.noinput paste.noinput keyup.noinput': function(e) {
-        if (e.type == 'input') {
-          $(this).off('.noinput'); // we only need these extra events if input event is not supported
-        }
-        $(this).trigger('showButtons', e.type != 'input' || !!this.value);
-      },
-      'showButtons': function(e, flag) {
-        var textarea = $(this);
-        var buttons = textarea.data('buttons');
-        if (!buttons) {
-          buttons = $('<div class="fasta-buttons"><span>Done</span><span>Clear</span></div>').appendTo($(this).parent()).on('click', 'span', function() {
-            if (this.innerHTML == 'Done') {
-              textarea.trigger('addSequences').trigger('showButtons', false);
-            } else {
-              textarea.val('').trigger('focus').trigger('showButtons', false);
-            }
-          });
-          textarea.data('buttons', buttons);
-        }
-        buttons.toggle(flag);
-        panel.sequencePending = flag;
-      },
-      'addSequences': function() {
-        if (this.value && this.value != this.defaultValue) {
-          panel.addSequences(this.value);
-        }
-      }
+      'blur change paste': sequenceInputEvent
+    });
+
+    // close botton to hide the sequence textarea
+    this.elLk.sequenceInputClose = this.elLk.sequenceInput.prev().on('click', function() {
+      panel.toggleSequenceFields(false);
+      panel.updateSeqInfo(true);
     });
 
     // if any file is added to the file field, read it and display the sequence
-    this.elLk.queryFile = this.elLk.form.find('input[name=query_file]').on('change', function() {
-      if (window.FileList && window.File && window.FileReader) {
-        if (!panel.fileReader) { // to avoid multiple instances
-          panel.fileReader = new FileReader();
-        }
-        panel.fileReader.onload = function(readerEvent) {
-          var seqText = readerEvent.target.result;
-          panel.addSequences(seqText);
-          panel.toggleSpinner(false);
-          panel.elLk.queryFile.val('');
-        };
-        panel.fileReader.onerror = function(readerEvent) {
-          pabel.showError(readerEvent.target.error.code, "Error reading file");
-          panel.toggleSpinner(false);
-        };
-        panel.toggleSpinner(true);
-        panel.fileReader.readAsText(this.files[0]);
-      } else {
-        panel.ajax({
-          'url'     : panel.readFileURL,
-          'iframe'  : true,
-          'form'    : panel.elLk.form,
-          'spinner' : true,
-          'success' : function(json) {
-            if ('file_error' in json) {
-              this.showError(json['file_error']);
-            } else if ('file' in json) {
-              this.addSequences(json['file']);
-            }
-          },
-          'complete': function() {
-            this.elLk.queryFile.val('');
+    this.elLk.queryFile = this.elLk.form.find('input[name=query_file]').on({
+      'click': function() { // this is to prevent the blur event on sequenceInput from adding the currently added text as sequence
+        panel.elLk.sequenceInput.val('');
+      },
+      'change': function() {
+        if (window.FileList && window.File && window.FileReader) {
+          if (!panel.fileReader) { // to avoid multiple instances
+            panel.fileReader = new FileReader();
           }
-        });
-      }
-    });
-
-    // Retrieve the sequence if external id etc is provided
-    this.elLk.form.find('._fetch_sequence').on('click', function(e) {
-      e.preventDefault();
-      panel.ajax({
-        'url'     : panel.fetchSequenceURL,
-        'data'    : { id: $('[name=fetch_sequence]').val() },
-        'spinner' : true
-      });
-    });
-
-    // initialise the FieldTag instances
-    this.elLk.form.find('select, input').each(function() {
-      var tagDiv = panel.elLk.form.find('._tag_' + this.name);
-      if (tagDiv.length) {
-        if (!panel.fieldTags[this.name]) {
-          panel.fieldTags[this.name] = new Ensembl.Panel.BlastForm.FieldTag(tagDiv, panel);
+          panel.fileReader.onload = function(readerEvent) {
+            panel.addSequences(readerEvent.target.result);
+            panel.toggleSpinner(false);
+            panel.elLk.queryFile.val('');
+          };
+          panel.fileReader.onerror = function(readerEvent) {
+            pabel.showError(readerEvent.target.error.code, "Error reading file");
+            panel.toggleSpinner(false);
+          };
+          panel.toggleSpinner(true);
+          panel.fileReader.readAsText(this.files[0]);
+        } else {
+          panel.ajax({
+            'url'     : panel.readFileURL,
+            'iframe'  : true,
+            'form'    : panel.elLk.form,
+            'spinner' : true,
+            'success' : function(json) {
+              if ('file_error' in json) {
+                this.showError(json['file_error']);
+              } else if ('file' in json) {
+                this.addSequences(json['file']);
+              }
+            },
+            'complete': function() {
+              this.elLk.queryFile.val('');
+            }
+          });
         }
-        panel.fieldTags[this.name].addField($(this));
       }
     });
+
+    // Query type radio button
+    this.elLk.queryType = this.elLk.form.find('input[name=query_type]').on('change', function() {
+      panel.setQueryTypeValue(this.value);
+    }).first().prop('checked', true).end();
+
+    // DB type radio buttons
+    this.elLk.dbType = this.elLk.form.find('input[name=db_type]').on('click', function() {
+      panel.resetSearchTools();
+    }).first().prop('checked', true).end();
+
+    // Source type dropdown
+    this.elLk.source = this.elLk.form.find('select[name^=source_]').on('change', function() {
+      panel.elLk.dbType.filter('[value=' + this.name.split('_')[1] + ']').prop('checked', true);
+      panel.resetSearchTools();
+    });
+
+    // Search type dropdown
+    this.elLk.searchType = this.elLk.form.find('select[name=search_type]');
+    this.elLk.searchTypeOptions = this.elLk.searchType.find('option').clone(); // take a copy to preserve a list of all supported search types
+
+    // Save the default species for later use
+    this.defaultSpecies = this.elLk.speciesDropdown.val();
 
     // finally add a validate event to the form which gets triggered before submitting it
     this.elLk.form.on('validate', function(e) {
-      if (panel.sequencePending) { // this mean the 'Done' button has not been clicked
-        panel.elLk.sequenceInput.trigger('addSequences').trigger('showButtons', false);
-      }
-      if (!$.grep(panel.sequences, function(seq) { return seq.isSelected(); }).length) {
+      if (!panel.sequences.length) {
         panel.showError('Please provide a sequence to run BLAST/BLAT.', 'No sequence found');
         $(this).data('valid', false);
       }
     });
 
-    // add child tags to the FieldTags (eg. source is child tag of db_type - if db_type tag is removed, source gets removed too)
-    for (var fieldName in this.fieldTags) {
-      this.fieldTags[fieldName].setChildTags(this.fieldTags);
-    }
-    fieldName = null;
+    // Show only the appropriate search types depending upon the default selected values for query type and db type source
+    this.resetSearchTools();
 
     // Fill in the form if editing an existing job
-    if (!this.editExisting()) {
-      this.refreshSpecies();
-    }
+    this.editExisting(true);
   },
 
   reset: function() {
@@ -244,24 +187,21 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     this.base();
 
     // Reset sequences
-    for (var i in this.sequences) {
+    for (var i = this.sequences.length - 1; i >= 0; i--) {
       this.sequences[i].destructor();
     }
     this.sequences = [];
     this.updateSeqInfo(false);
-    this.toggleSequenceFields(true, false);
+    this.toggleSequenceFields(true);
+
+    // Reset query type, db type and source type to first option, then set search tool accordingly
+    this.elLk.queryType.first().prop('checked', true);
+    this.elLk.dbType.first().prop('checked', true);
+    this.elLk.source.find('option').first().prop('selected', true);
+    this.resetSearchTools();
 
     // Reset species
-    this.refreshSpecies([ this.defaultSpecies ]);
-
-    // Reset query_type, db_type, source and search_type
-    for (var i in this.fieldTags) {
-      this.fieldTags[i].select(false, true); // second argument prevents calling updateSelections, which is a slow method and is done once all tags are deselected.
-    }
-    this.updateSelections('');
-
-    // Set focus on the sequence textarea
-    this.elLk.sequenceInput.trigger('focus').trigger('showButtons', false);
+    this.resetSpecies(this.defaultSpecies);
   },
 
   populateForm: function(jobsData) {
@@ -269,12 +209,12 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
    * Populates the form according to the provided ticket data
    */
     this.reset();
-    
+
     var formInput = {};
     if (jobsData.length) {
-      for (var i in jobsData) {
+      for (var i = jobsData.length - 1; i >= 0; i--) {
         for (var paramName in jobsData[i]) {
-          if (paramName == 'sequence' || paramName == 'species') {
+          if (paramName === 'sequence' || paramName === 'species') {
             if (!(paramName in formInput)) {
               formInput[paramName] = [];
             }
@@ -288,18 +228,23 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
 
     if (!$.isEmptyObject(formInput)) {
       this.toggleForm(true, true);
+
+      // set sequence and query type
       if (formInput['query_type']) {
         this.addEditingJobSequences(formInput['sequence'], formInput['query_type']);
       } else {
         // in case sequence is recieved from 'BLAST this sequence' link, it doesn't have query_type
         this.addSequences(formInput['sequence'][0]['sequence']);
       }
-      this.refreshSpecies(formInput.species);
-      for (var i in this.fieldTags) {
-        if (i in formInput) {
-          this.fieldTags[i].select(formInput[i]);
-        }
-      }
+
+      // set db type, source and search type
+      this.elLk.form.find('[name=db_type][value=' + formInput['db_type'] + ']').prop('checked', true);
+      this.elLk.form.find('[name^=source_] option[value=' + formInput['source'] + ']').prop('selected', true);
+      this.resetSearchTools(formInput['search_type']);
+
+      // set species
+      this.resetSpecies(formInput['species']);
+
       if (formInput['configs']) {
         for (var name in formInput['configs']) {
           this.elLk.form.find('[name=' + formInput['search_type'] + '__' + name + ']')
@@ -308,78 +253,6 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
         }
       }
     }
-  },
-
-  sortCombinations: function() {
-  /*
-   * Sorts the combinations according to the order of their respective fields as they are displayed on the form
-   */
-    var panel = this;
-    this.combinations = $.map(this.combinations, function(combination) {
-      var sortedCombination = {};
-      for (var i in panel.fieldsOrder) {
-        sortedCombination[i] = combination[i];
-      }
-      return sortedCombination;
-    });
-  },
-
-  getQueryTypeValue: function() {
-  /*
-   * Gets the currently selected query type value
-   */
-    return this.elLk.queryType.filter(':checked').val();
-  },
-
-  setQueryTypeValue: function(queryType) {
-  /*
-   * Sets the query type value according to the one privided, and selects the sequences falling under the same query type
-   * If no query type is provided, it tries to find out the best suitable, eg. if already selected by user, or which type are sequences have a majority
-   */
-    var selectedQueryType;
-
-    if (!queryType) {
-
-      // if a query type has already been selected by the user, that can not be changed!
-      selectedQueryType = this.selectedValues[this.elLk.queryType.attr('name')];
-
-      // if no query type is selected, but there is only one enabled input, there's no option other than to select it
-      if (!selectedQueryType && this.elLk.queryType.filter(':enabled').length === 1) {
-        selectedQueryType = this.elLk.queryType.filter(':enabled').val();
-      }
-
-      // if both options can be selected, check which query type has more number of sequences
-      if (!selectedQueryType) {
-        var queryTypes = {'peptide': 0, 'dna': 0};
-        $.each(this.sequences, function() {
-          queryTypes[this.type]++;
-        });
-
-        // give preference to already selected one if both are equal
-        if (queryTypes.peptide == queryTypes.dna) {
-          queryType = this.getQueryTypeValue();
-        } else {
-          queryType = queryTypes.peptide < queryTypes.dna ? 'dna' : 'peptide';
-        }
-      }
-    }
-
-    // update the other selections accordingly, but only when new query_type selection is made
-    if (!selectedQueryType) {
-      this.fieldTags[this.elLk.queryType.attr('name')].select(queryType);
-    }
-
-    // select only those sequences which fall under the current selected queryType
-    this.selectSequences(selectedQueryType || queryType);
-  },
-
-  selectSequences: function(queryType) {
-  /*
-   * Selects the sequences of the given query type, and unselect others
-   */
-    $.each(this.sequences, function() {
-      this.resetCheckbox(queryType);
-    });
   },
 
   addSequences: function(rawText, existingSequence) {
@@ -399,8 +272,11 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     seqLoop:
     for (indexParsedSeq = 0; indexParsedSeq < numParsedSeqs; indexParsedSeq++) {
       for (indexSeq = 0; indexSeq < numSeqs; indexSeq++) {
-        if (parsedSeqs.sequences[indexParsedSeq].string == this.sequences[indexSeq].string && !(existingSequence && this.sequences[indexSeq] == existingSequence)) {
+        if (parsedSeqs.sequences[indexParsedSeq].string === this.sequences[indexSeq].string && !(existingSequence && this.sequences[indexSeq] === existingSequence)) {
           duplicates++;
+          if (modifyingExisting && numParsedSeqs === 1) { // editing a sequence, and only one sequence parsed, that too is a duplicate now
+            this.removeSequence(existingSequence);
+          }
           continue seqLoop;
         }
       }
@@ -418,8 +294,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
 
     if (numSeqs) {
       this.setQueryTypeValue(); // let it decide the query type itself
-      this.toggleSequenceFields(false, true);
-      this.adjustDivsHeight();
+      this.toggleSequenceFields(false);
     }
 
     this.updateSeqInfo({'added': indexParsedSeq - duplicates, 'invalids': parsedSeqs.invalids + duplicates});
@@ -430,10 +305,11 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
   },
 
   parseRawSequences: function(rawText) {
-  /* Parses raw text into fasta sequences, possibly multiple fasta sequences
+  /*
+   * Parses raw text into fasta sequences, possibly multiple fasta sequences
    * @return Object with following keys
    *  sequences: Array of objects each containing three keys: type, description and string
-   *  duplicates: number of duplicates ignored
+   *  invalids: number of invalid or duplicate sequences ignored
    */
     var bases           = 'ACTGNX';
     var inputSeqs       = rawText.replace(/^[\s\n\t]+|[\s\n\t]+$/g, '').split(/(?=>)|\n+[\s\t]*\n+/); // '>' or an empty line represents start of a new sequence
@@ -454,7 +330,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
         seqLine = sequenceLines[j];
         pointer = 0;
         if (seqLine.match(/^(>|\;)/)) {
-          if (j == 0) { // it's description if it's the first line, otherwise ignore, as it's a comment
+          if (j === 0) { // it's description if it's the first line, otherwise ignore, as it's a comment
             sequence.description = seqLine.replace(/^(>|\;)(\s\t)+/, '');
           }
         } else {
@@ -482,7 +358,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
 
       // skip if it's a duplicate, or invalid sequence
       for (j in sequences) {
-        if (sequences[j].string == sequence.string) {
+        if (sequences[j].string === sequence.string) {
           continue rawSeqLoop;
         }
       }
@@ -506,8 +382,8 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
    * Adds the sequences from the data received from the backend for a job that needs to be edited
    */
     seqLoop:
-    for (var i in editingJobSequences) {
-      for (var j in this.sequences) {
+    for (var i = 0; i < editingJobSequences.length; i++) {
+      for (var j = this.sequences.length - 1; j >= 0; j--) {
         if (editingJobSequences[i]['sequence'] === this.sequences[j].string) {
           continue seqLoop;
         }
@@ -524,8 +400,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
 
     if (this.sequences.length) {
       this.setQueryTypeValue(type);
-      this.toggleSequenceFields(false, true);
-      this.adjustDivsHeight();
+      this.toggleSequenceFields(false);
     }
 
     this.updateSeqInfo({'added': this.sequences.length});
@@ -543,29 +418,109 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     }
 
     // remove the sequence otherwise
+    this.removeSequence(sequenceObject);
+  },
+
+  removeSequence: function(sequenceObject) {
+  /*
+   * Removes an existing sequence from this panel and dom tree
+   */
     this.sequences.splice(this.sequences.indexOf(sequenceObject), 1);
     sequenceObject.destructor();
-    sequenceObject = null;
-
     var flag = !!this.sequences.length;
-    this.toggleSequenceFields(!flag, flag);
     this.updateSeqInfo(flag);
+    this.toggleSequenceFields(!flag);
+    this.setQueryTypeValue();
+  },
+
+  toggleSequenceFields: function(flag) {
+  /*
+   * Show/hide sequence input box according to the flag provided
+   */
+    var panel = this;
+    this.elLk.sequenceField.toggle(flag);
+    this.elLk.sequenceInput.val('').focus();
+    if (this.elLk.sequenceInfo) {
+      this.elLk.sequenceInfo.toggle(!flag);
+    }
+    if (flag) {
+      this.elLk.sequenceInputClose.toggle(!!this.sequences.length);
+      if (!this.sequences.length) {
+        this.elLk.sequences.hide();
+      }
+    }
     this.adjustDivsHeight();
   },
 
-  toggleSequenceFields: function(flag1, flag2) {
-    if ($.type(flag2) === 'boolean') {
-      this.elLk.sequences.toggle(flag2);
+  setQueryTypeValue: function(queryType) {
+  /*
+   * Sets the query type value according to the one provided, or if no query type is provided, it sets the one with majority number of sequences
+   */
+
+    if (queryType) {
+      this.selectedQueryType = queryType;
+    } else {
+
+      // if a query type has already been selected by the user, that can not be changed!
+      queryType = this.selectedQueryType;
+
+      // if any of the options can be selected, check which query type was guessed for more number of sequences
+      if (!queryType) {
+        var queryTypes = {'peptide': 0, 'dna': 0};
+        $.each(this.sequences, function() {
+          queryTypes[this.guessedType]++;
+        });
+
+        // give preference to already selected one if both are equal
+        if (queryTypes.peptide === queryTypes.dna) {
+          queryType = this.elLk.queryType.filter(':checked').val();
+        } else {
+          queryType = queryTypes.peptide < queryTypes.dna ? 'dna' : 'peptide';
+        }
+      }
     }
-    this.elLk.addSeqLink.toggle(!flag1 && this.sequences.length < this.maxNumSequences);
-    this.elLk.sequenceFields.toggle(flag1).find('input[type=text], textarea').val('').first().focus();
+
+    // select the appropriate radio button
+    this.elLk.queryType.filter('[value=' + queryType + ']').prop('checked', true);
+
+    // reset the available search tools
+    this.resetSearchTools();
+  },
+
+  resetSearchTools: function(selectedValue) {
+  /*
+   * Resets the search tool dropdown according to the currently selected values of query type, db type and source type
+   */
+    var queryType = this.elLk.queryType.filter(':checked').val();
+    var dbType    = this.elLk.dbType.filter(':checked').val();
+    var source    = this.elLk.source.filter('[name=source_' + dbType + ']').val();
+    var valid     = [];
+
+    for (var i = this.combinations.length - 1; i >= 0; i--) {
+      if (this.combinations[i]['query_type'] === queryType && this.combinations[i]['db_type'] === dbType && this.combinations[i]['sources'].indexOf(source) >= 0) {
+        valid.push(this.combinations[i]['search_type']);
+      }
+    }
+
+    // now remove the invalid options for the selected combination of query type, db type and source type
+    this.elLk.searchType.empty()
+      .append(this.elLk.searchTypeOptions.filter(function() { return valid.indexOf(this.value) >= 0; }).clone())
+      .find('option[value=' + (selectedValue || '') + ']').prop('selected', true).end().selectToToggle('trigger');
   },
 
   updateSeqInfo: function(info) {
-    if (!this.elLk.seuqenceInfo) {
-      this.elLk.seuqenceInfo = this.elLk.sequences.clone().empty().insertAfter(this.elLk.sequences).addClass('italic').show();
+  /*
+   * Updates the text content below the sequence
+   */
+    var panel = this;
+    if (!this.elLk.sequenceInfo) {
+      this.elLk.sequenceInfo = $('<div class="italic">').appendTo(this.elLk.sequences).on('click', 'a', function(e) {
+        e.preventDefault();
+        panel.elLk.sequenceInfo.hide();
+        panel.toggleSequenceFields(true);
+      });
     }
-    var message = ($.type(info) == 'object'
+    var message = ($.type(info) === 'object'
       ? (parseInt(info.added) || 'No')
         + (this.sequences.length - info.added ? ' more' : '')
         + ' sequence'
@@ -575,186 +530,18 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
         + ', '
       : ''
     );
-    this.elLk.seuqenceInfo.toggle(!!info).html( message
+    this.elLk.sequenceInfo.toggle(!!info).html( message
       + ((this.maxNumSequences - this.sequences.length) || (message ? 'no' : 'No'))
       + (this.sequences.length ? ' more' : '')
       + ' sequence'
       + (this.maxNumSequences - this.sequences.length > 1 ? 's' : '')
       + ' allowed'
+      + (this.maxNumSequences === this.sequences.length ? '' : ' (<a href="#">Add more sequences</a>)')
     );
   },
 
-  toggleSpeciesFields: function(flag) {
-    this.elLk.addSpeciesLink.toggle(!flag);
-    this.elLk.speciesDropdown.toggle(flag);
-    this.elLk.speciesTags.toggle(!flag);
-    this.elLk.doneSpeciesLink.toggle(flag);
-    if (flag) {
-      this.elLk.speciesDropdown.find('._fd').filterableDropdown().find('input[type=text]').trigger('focus');
-    }
-  },
-
-  refreshSpecies: function(
-    species // array of species, if provided, will remove other species and add the specified ones only.
-  ) {
-
-    var speciesCheckboxes, existingTag, speciesName, selectedSpecies = {};
-
-    if (species) {
-      this.elLk.speciesDropdown.find('input').prop('checked', false).each(function() {
-        if (species.indexOf(this.value) > -1) {
-          this.checked = true;
-        }
-      });
-    }
-
-    speciesCheckboxes = this.elLk.speciesDropdown.find('input').filter(':checked').each(function() {
-      return selectedSpecies[this.value] = $(this).parent().find('label').html();
-    }).end();
-
-    // if none selected, re-select the previously selected ones and ignore any changed
-    if (!speciesCheckboxes.filter(':checked').length) {
-      for (speciesName in this.speciesTags) {
-        speciesCheckboxes.filter('[value="' + speciesName + '"]').prop('checked', true);
-      }
-      return;
-    }
-
-    // add new tags first (if we do if after removing the un-select tags, we may not get any tag to clone the new tags from)
-    for (speciesName in this.speciesTags) {
-      existingTag = this.speciesTags[speciesName];
-      break;
-    }
-    for (speciesName in selectedSpecies) {
-      if (!(speciesName in this.speciesTags)) {
-        this.speciesTags[speciesName] = new Ensembl.Panel.ToolsForm.SpeciesTag(false, this, existingTag, {'value': speciesName, 'caption': selectedSpecies[speciesName]});
-        
-        //TODO - make an ajax request to refresh combinations
-      }
-    }
-
-    // now remove the unselected ones
-    for (speciesName in this.speciesTags) {
-      if (!(speciesName in selectedSpecies)) {
-        this.speciesTags[speciesName].remove();
-        delete this.speciesTags[speciesName];
-      }
-    }
-
-    for (speciesName in this.speciesTags) {
-      this.speciesTags[speciesName].setRemovable(speciesCheckboxes.filter(':checked').length !== 1);
-    }
-  },
-
-  updateSelections: function(targetFieldName) {
-
-    var i,
-        elements,
-        fieldName,
-        fieldValue,
-        fieldTag,
-        speciesNames,
-        availableValues         = {},
-        availableDefaultValues  = [],
-        defaultFieldValues      = [],
-        defaultValuesSelector   = []
-    ;
-
-    // filter out the mismatching ones
-    FilteringLoop:
-    for (i in this.combinations) {
-
-      // skip if any of the fields is misatching
-      for (fieldName in this.selectedValues) {
-        if (this.combinations[i][fieldName] !== this.selectedValues[fieldName]) {
-          continue FilteringLoop;
-        }
-      }
-
-      // create a better accessible data structure for available values
-      for (fieldName in this.combinations[i]) {
-        if (!availableValues[fieldName]) {
-          availableValues[fieldName] = [];
-        }
-        availableValues[fieldName][String(this.combinations[i][fieldName])] = 1;
-      }
-
-      // save the valid combinations for finding out the possible default options for the fields that have not been selected by the user yet
-      availableDefaultValues.push(this.combinations[i]);
-    }
-
-    // select/deselect fields accordingly, and show/hide the FieldTags as required
-    for (fieldName in availableValues) {
-      if (fieldName == 'species') {
-        for (speciesNames in availableValues[fieldName]) {
-          // TODO - update the species list - disable the species that don't have this db
-          // console.log(speciesNames);
-        }
-      } else {
-        fieldTag  = this.fieldTags[fieldName];
-        dropdown  = this.dropdowns[fieldName];
-
-        // unhide all the hidden options first
-        if (dropdown) {
-          dropdown.reset();
-        }
-
-        // enabled/disable options according to their availability
-        elements = this.elLk.form.find('select[name=' + fieldName + '] option, input[name=' + fieldName + ']').prop('disabled', function() {
-          return !(this.value in availableValues[fieldName]);
-        });
-
-        // change all the fields other than the targeted field
-        if (targetFieldName != fieldName) {
-
-          // TODO - get the actual default values from the backend (eg. if db_type = DNA, source should default to 'Genomic sequence')
-          // all the values that this field can default to if not selected by the user, and create a selector to select fields that those values only
-          defaultFieldValues    = $.map(availableDefaultValues, function(defaultValues) { return defaultValues[fieldName]; });
-          defaultValuesSelector = $.map(defaultFieldValues, function(defaultValue) { return '[value="' + defaultValue + '"]'; }).toString();
-
-          if (elements.prop('nodeName') == 'OPTION') {
-
-            // if selected option is not enabled and not found in list of available default values, select the first enabled option from the available default options list
-            if (defaultFieldValues.indexOf(elements.parents('select').find('option:selected:enabled').val()) < 0) {
-              elements.filter(defaultValuesSelector).first().prop('selected', true);
-            }
-
-            // if the value isn't selected, show readonly tag if only one option is available
-            if (!(fieldName in this.selectedValues)) {
-              fieldTag.setReadonly(elements.filter(':enabled').length == 1);
-            }
-
-          // for input tag, select the first available option if none selected
-          } else {
-            if (defaultFieldValues.indexOf(elements.filter(':checked:enabled').val()) < 0) {
-              elements.filter(defaultValuesSelector).first().prop('checked', true);
-            }
-          }
-
-          fieldValue = elements.filter(':selected, :checked').val();
-
-          // filter the availableDefaultValues according to the selected values
-          availableDefaultValues = $.grep(availableDefaultValues, function(combination) {
-            return combination[fieldName] === fieldValue;
-          });
-
-          // now if the current selection changed the queryType (triggered by some other field change), we need to update the selected sequences
-/*
-          if (fieldName == this.elLk.queryType.attr('name')) {
-            this.selectSequences(fieldValue);
-          }
-*/
-        }
-
-        // hide the disabled options, and trigger selecttotoggle event
-        if (dropdown) {
-          dropdown.removeDisabledOptions();
-          dropdown.triggerSelectToToggle();
-        }
-      }
-    }
-
-    i = elements = fieldName = fieldValue = fieldTag = speciesNames = availableValues = availableDefaultValues = defaultFieldValues = defaultValuesSelector = null;
+  resetSpecies: function(speciesList) {
+    this.elLk.speciesDropdown.find('option').prop('selected', function() { return speciesList.indexOf(this.value) >= 0; });
   }
 });
 
@@ -771,18 +558,8 @@ Ensembl.Panel.BlastForm.Sequence = Ensembl.Panel.ToolsForm.SubElement.extend({
     var self    = this;
     this.parent = parent;
 
-    // tag on the rhs
-    this.elLk.queryTypeTag = $('<div>', {'class': 'seq-type'});
-
-    // checkbox on the lhs
-    this.elLk.checkbox = $('<input>', {'type' : 'checkbox', 'name': 'sequence', 'checked': true, 'value': ''}).on('change', function(e) {
-      $(this).data('userChecked', this.checked);
-      if (this.checked) {
-        self.type = self.parent.getQueryTypeValue();
-        self.resetQueryTypeTag();
-      }
-      self.checkboxChanged(e);
-    });
+    this.elLk.input = $('<input>', {'type' : 'hidden', 'name': 'sequence', 'value': ''}); // hidden input containing the sequence value
+    this.elLk.close = parent.elLk.sequenceInputClose.clone().helptip({content: 'Remove sequence'}).show().on('click', function() { self.parent.removeSequence(self); });
 
     // actual editable sequence box
     this.elLk.seqBox = $('<div>', {'class': 'fasta-input'}).on({
@@ -790,9 +567,9 @@ Ensembl.Panel.BlastForm.Sequence = Ensembl.Panel.ToolsForm.SubElement.extend({
         $(this).filter(':not(.editable)').addClass('editable').prop({'contentEditable': true, 'spellcheck': false}).focus().data('prevSequence', $(this).text());
       },
       'blur keyup': function(e) {
-        if (e.type == 'blur' || e.type == 'keyup' && e.which == 27) {
+        if (e.type === 'blur' || e.type === 'keyup' && e.which === 27) {
           var seqBox = $(this).filter('.editable').removeClass('editable').prop('contentEditable', false).find('br').replaceWith('\n').end().end();
-          if (e.type == 'keyup') { // escape key
+          if (e.type === 'keyup') { // escape key
             seqBox.text(seqBox.data('prevSequence'));
           } else if (seqBox.data('prevSequence') != seqBox.text()) {
             self.parent.modifySequence(self, seqBox.text());
@@ -800,7 +577,7 @@ Ensembl.Panel.BlastForm.Sequence = Ensembl.Panel.ToolsForm.SubElement.extend({
         }
       },
       'keypress': function(e) {
-        if (e.which == 13) {
+        if (e.which === 13) {
           if (window.getSelection) {
             e.preventDefault();
             var selection = window.getSelection();
@@ -819,7 +596,7 @@ Ensembl.Panel.BlastForm.Sequence = Ensembl.Panel.ToolsForm.SubElement.extend({
      });
 
     // wrapping div
-    this.elLk.div = $('<div>', {'class': 'seq-wrapper'}).append($('<div>').append(this.elLk.checkbox), this.elLk.seqBox, this.elLk.queryTypeTag).insertBefore(previous && previous.elLk.div.next() || parent.elLk.addSeqLink.parent());
+    this.elLk.div = $('<div>', {'class': 'seq-wrapper'}).append(this.elLk.input, this.elLk.seqBox, this.elLk.close).appendTo(parent.elLk.sequences.show()).insertBefore(previous && previous.elLk.div.next() || parent.elLk.sequenceInfo).end();
 
     this.init(seq);
   },
@@ -834,125 +611,7 @@ Ensembl.Panel.BlastForm.Sequence = Ensembl.Panel.ToolsForm.SubElement.extend({
 
     var seqString     = this.description + '\n' + this.string.match(/(.{1,60})/g).join('\n'); // split strings into 60 char each (fasta format)
 
-    this.elLk.checkbox.val(seqString);
+    this.elLk.input.val(seqString);
     this.elLk.seqBox.text(seqString);
-
-    this.resetQueryTypeTag();
-  },
-
-  checkboxChanged: function(e) {
-  /* Greys out the sequence text when checkbox is unselected and vice-versa
-   */
-    this.elLk.div.toggleClass('inactive', !this.elLk.checkbox[0].checked);
-  },
-
-  resetCheckbox: function(queryType) {
-  /* Resets the checkbox according to the given querytype
-   */
-
-    // Do not change it if it's been changed by user, just change the type to fit the current selection
-    if (typeof this.elLk.checkbox.data('userChecked') !== 'undefined') {
-      if (this.elLk.checkbox.data('userChecked')) {
-        this.type = queryType;
-        this.resetQueryTypeTag();
-      }
-      return;
-    }
-
-    // if it's checked but query types don't match, or if it's not checked but the query types match
-    if (this.elLk.checkbox.is(':checked') != (queryType == this.type)) {
-      this.elLk.checkbox.prop('checked', queryType == this.type);
-      this.checkboxChanged();
-    }
-  },
-
-  resetQueryTypeTag: function() {
-  /* Resets the query type tag on the right hand side according to the guessed type for the sequence and the type forced by the user
-   */
-    this.elLk.queryTypeTag.html(this.type == this.guessedType ? this.guessedType :  '<span>' + this.guessedType + '</span>' + this.type);// TODO - the tooltip is jumpy due to nested span
-    if (this.type == this.guessedType) {
-      this.elLk.queryTypeTag.helptip({}).helptip('destroy');
-    } else {
-      this.elLk.queryTypeTag.helptip({'content' : 'This seems to be a ' + this.guessedType + ' sequence, but will be considered as a ' + this.type + ' sequence'});
-    }
-  },
-
-  isSelected: function() {
-    return this.elLk.checkbox.prop('checked');
-  }
-});
-
-Ensembl.Panel.BlastForm.FieldTag = Ensembl.Panel.ToolsForm.SubElement.extend({
-/*
- *  This class represents the Tags with an edit icon on the right
- *  The purpose of this element in the interface is to get hold of an event when user wants to unselect something.
- *  When an input field is selected by a user, this tag is disaplayed (and field is hidden), forcing other field's options to be adjusted according to this field's selection
- *  When this tag is removed, it's field still shows the same selected option, but other fields now can be changed by the user without considering this field's selected value
- */
-  constructor: function(div, panel) {
-    var self        = this;
-    this.panel      = panel;
-    this.div        = div.on('click', function() { self.readOnly || self.select(false); });
-    this.parentDivs = this.div.parents('div:not(:visible)').first();
-    this.selected   = false; // flag telling whether selected by user or not
-    this.field      = $();
-    this.childTags  = [];
-    this.type       = '';
-    this.name       = '';
-    this.readOnly   = false;
-  },
-
-  addField: function(field) {
-    this.field  = this.field.add(field);
-    this.type   = this.field.prop('nodeName');
-    this.name   = this.field.attr('name');
-  },
-
-  select: function(target, noUpdate) {
-    if (target === false) {
-      if (!this.selected) { // already not selected
-        return;
-      }
-      for (var i in this.childTags) {
-        this.childTags[i].select(false, true);
-      }
-      delete this.panel.selectedValues[this.name];
-      if (!noUpdate) {
-        this.panel.updateSelections(this.name);
-      }
-    } else {
-      if (!(target instanceof $)) {
-        target = this.type == 'INPUT' ? this.field.filter('[value=' + target + ']').prop('checked', true) : this.field.find('option[value=' + target + ']').prop('selected', true);
-      }
-      this.panel.selectedValues[this.name] = target.val();
-      if (!noUpdate) {
-        this.panel.updateSelections(this.name);
-      }
-    }
-    this.toggle(this.selected = !!target);
-  },
-
-  setChildTags: function(allTags) {
-    var match, className = this.div.prop('className'), rexExp = /_tag_child_([^\s]+)/g;
-    while (match = rexExp.exec(className)) {
-      if (allTags[match[1]]) {
-        this.childTags.push(allTags[match[1]]);
-      }
-    }
-  },
-
-  setReadonly: function(readOnly) {
-    this.toggle(readOnly);
-    this.div.toggleClass('readonly', readOnly);
-    this.readOnly = readOnly;
-  },
-
-  toggle: function(flag) {
-    this.parentDivs.toggle(flag);
-    this.field.parents('div').first().toggle(!flag);
-    if (flag) {
-      this.div.children(':first-child').html(this.type == 'INPUT' ? this.field.filter(':checked').parent().find('label').html() : this.field.find('option:selected').html());
-    }
-    this.panel.adjustDivsHeight();
   }
 });

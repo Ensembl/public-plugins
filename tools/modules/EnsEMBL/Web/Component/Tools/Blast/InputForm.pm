@@ -30,11 +30,11 @@ sub content {
   my $hub           = $self->hub;
   my $sd            = $hub->species_defs;
   my $object        = $self->object;
-  my $form_params   = $object->get_blast_form_params;
-  my $fields        = delete $form_params->{'fields'};
+  my $form_params   = $object->get_blast_form_options;
+  my $options       = delete $form_params->{'options'};
   my $combinations  = delete $form_params->{'combinations'};
-  my $selected      = delete $form_params->{'selected'};
-  my $all_species   = delete $form_params->{'species'};
+  my $species       = $hub->species;
+     $species       = $hub->get_favourite_species->[0] if $species =~ /multi|common/i;
   my $edit_jobs     = ($hub->function || '') eq 'Edit' ? $object->get_edit_jobs_data : [];
 
   if (!@$edit_jobs && (my $existing_seq = $hub->param('query_sequence'))) { # If coming from "BLAST this sequence" link
@@ -79,132 +79,83 @@ sub content {
     'value'           => $hub->url('Json', {'function' => 'fetch_sequence'})
   });
 
-  $fieldset->add_field({
+  my $query_seq_field = $fieldset->add_field({
     'label'           => 'Sequence data',
     'field_class'     => '_adjustable_height',
+    'helptip'         => 'Enter sequence as plain text or in FASTA format, or enter a sequence ID or accession from EnsEMBL, EMBL, UniProt or RefSeq',
     'elements'        => [{
-      'type'            => 'iconlink',
-      'caption'         => 'Add more sequences',
-      'link_class'      => '_add_sequence',
-      'link_icon'       => 'add',
-      'element_class'   => '_sequence hidden'
+      'type'            => 'div',  # container used by js for adding sequence divs
+      'element_class'   => '_sequence js_sequence_wrapper hidden',
+    }, {
+      'type'            => 'div',  # other sequence input elements will get wrapped in this one later
+      'element_class'   => '_sequence_field',
+      'children'        => [{'node_name' => 'div', 'class' => 'query_sequence_wrapper'}]
     }, {
       'type'            => 'text',
-      'value'           =>  sprintf('Maximum of %s sequences (type in plain text or FASTA)', MAX_NUM_SEQUENCES),
+      'value'           =>  sprintf('Maximum of %s sequences (type in plain text, FASTA or sequence ID)', MAX_NUM_SEQUENCES),
       'class'           => 'inactive query_sequence',
       'name'            => 'query_sequence',
-      'element_class'   => '_sequence'
     }, {
       'type'            => 'noedit',
       'value'           => 'Or upload sequence file',
       'no_input'        => 1,
-      'element_class'   => '_sequence file-upload-label'
+      'element_class'   => 'file_upload_element'
     }, {
       'type'            => 'file',
       'name'            => 'query_file',
-      'element_class'   => '_sequence'
-    }, {
-      'type'            => 'noedit',
-      'value'           => '<span class="ht _ht" title="EnsEMBL, EMBL, UniProt or RefSeq">Or enter a sequence ID or accession</span>',
-      'is_html'         => 1,
-      'no_input'        => 1,
-      'element_class'   => '_sequence'
-    }, {
-      'type'            => 'string',
-      'name'            => 'fetch_sequence',
-      'size'            => '40',
-      'element_class'   => '_sequence',
-      'inline'          => 1
-    }, {
-      'type'            => 'button',
-      'element_class'   => '_sequence',
-      'value'           => 'Get sequence',
-      'class'           => '_fetch_sequence',
-      'inline'          => 1
+      'element_class'   => 'file_upload_element'
     }, {
       'type'            => 'radiolist',
       'name'            => 'query_type',
-      'values'          => $fields->{'query_type'},
-      'value'           => $selected->{'query_type'}
-    }, {
-      'type'            => 'editabletag',
-      'element_class'   => 'hidden',
-      'tag_class'       => '_tag_query_type _tag_child_search_type',
-      'no_input'        => 1
+      'values'          => $options->{'query_type'},
     }]
   });
+  my $query_seq_elements = $query_seq_field->elements;
 
-  my %requested_sepcies = map {$_->{'value'} => 1} @{$fields->{'species'}};
-  my %selected_species  = map {$_ => 1} @{delete $selected->{'species'}};
-  $fieldset->add_field({
+  # add a close button to the textarea element
+  $query_seq_elements->[2]->prepend_child('span', {'class' => 'sprite cross_icon _ht', 'title' => 'Cancel'});
+
+  # wrap the sequence input elements
+  $query_seq_elements->[1]->first_child->append_children(map { $query_seq_elements->[$_]->remove_attribute('class', $query_seq_field->CSS_CLASS_ELEMENT_DIV); $query_seq_elements->[$_]; } 2..4);
+
+  my $search_against_field = $fieldset->add_field({
     'label'           => 'Search against',
     'field_class'     => '_adjustable_height',
     'elements'        => [{
-      'type'            => 'editabletag',
-      'element_class'   => '_species_tags',
-      'name'            => 'species',
-      'tags'            => [ map {
-        'tag_type'        => 'removable',
-        'tag_class'       => ['species-tag', $selected_species{$_->{'value'}} ? () : 'disabled'],
-        'tag_attribs'     => {'style' => sprintf(q{background-image: url('%sspecies/16/%s.png')}, $self->img_url, $_->{'value'})},
-        'caption'         => $_->{'caption'},
-        'value'           => $_->{'value'}
-      }, @{$fields->{'species'}} ]
-    }, {
-      'type'            => 'iconlink',
-      'element_class'   => '_add_species',
-      'caption'         => 'Add/remove species',
-      'link_icon'       => 'add'
-    }, {
-      'type'            => 'filterable',
-      'multiple'        => 1,
-      'element_class'   => 'hidden _species_dropdown',
-      'values'          => [ sort {$a->{'caption'} cmp $b->{'caption'}} @$all_species ],
-      'value'           => [ keys %requested_sepcies ],
-      'filter_text'     => 'type a species name to filter&#8230;'
-    }, {
-      'type'            => 'iconlink',
-      'caption'         => 'Done',
-      'element_class'   => 'hidden _add_species_done',
-      'link_icon'       => 'check'
-    }, {
-      'type'            => 'radiolist',
-      'name'            => 'db_type',
-      'class'           => '_validate_onchange',
-      'values'          => $fields->{'db_type'},
-      'value'           => $selected->{'db_type'}
-    }, {
-      'type'            => 'editabletag',
-      'no_input'        => 1,
-      'element_class'   => 'hidden',
-      'tag_class'       => '_tag_db_type _tag_child_source _tag_child_search_type'
-    }, {
       'type'            => 'dropdown',
-      'name'            => 'source',
-      'class'           => '_validate_onchange',
-      'values'          => $fields->{'source'},
-      'value'           => $selected->{'source'}
-    }, {
-      'type'            => 'editabletag',
-      'no_input'        => 1,
-      'element_class'   => 'hidden',
-      'tag_class'       => '_tag_source'
+      'name'            => 'species',
+      'values'          => $options->{'species'},
+      'value'           => $species,
+      'multiple'        => 1
     }]
   });
+
+  for (@{$options->{'db_type'}}) {
+
+    $search_against_field->add_element({
+      'type'            => 'radiolist',
+      'name'            => 'db_type',
+      'element_class'   => 'blast_db_type',
+      'values'          => [ $_ ],
+      'inline'          => 1
+    });
+
+    $search_against_field->add_element({
+      'type'            => 'dropdown',
+      'name'            => "source_$_->{'value'}",
+      'element_class'   => 'blast_source',
+      'values'          => $options->{'source'}{$_->{'value'}},
+      'inline'          => 1
+    });
+  }
 
   $fieldset->add_field({
     'label'           => 'Search tool',
     'elements'        => [{
       'type'            => 'dropdown',
       'name'            => 'search_type',
-      'class'           => '_validate_onchange _stt',
-      'values'          => $fields->{'search_type'},
-      'value'           => $selected->{'search_type'}
-    }, {
-      'type'            => 'editabletag',
-      'no_input'        => 1,
-      'element_class'   => 'hidden',
-      'tag_class'       => '_tag_search_type'
+      'class'           => '_stt',
+      'values'          => $options->{'search_type'}
     }]
   });
 
@@ -221,7 +172,7 @@ sub content {
   my $config_fields   = CONFIGURATION_FIELDS;
   my $config_defaults = CONFIGURATION_DEFAULTS;
 
-  my @search_types    = map $_->{'value'}, @{$fields->{'search_type'}};
+  my @search_types    = map $_->{'value'}, @{$options->{'search_type'}};
   my %stt_classes     = map {$_ => "_stt_$_"} @search_types; # class names for selectToToggle
 
   while (my ($config_type, $config_field_group) = splice @$config_fields, 0, 2) {
@@ -265,7 +216,7 @@ sub content {
               'element_class' => $element_class
             };
             $field_class{$element_class}    = 1; # adding same class to the field makes sure the field is only visible if at least one of the elements is visible
-            $wrapper_class{$element_class}  = 1; # adding same class to the congif wrapper div makes sure the div is only visible if at least one of the field is visible
+            $wrapper_class{$element_class}  = 1; # adding same class to the config wrapper div makes sure the div is only visible if at least one of the field is visible
             last;
           }
         }
@@ -273,11 +224,9 @@ sub content {
 
       my $field = $fieldset->add_field({ 'label' => $label, 'elements' => \@elements});
       $field->set_attribute('class', [ keys %field_class ]) unless keys %field_class == keys %stt_classes; # if all classes are there, this field is actually never hidden.
-
     }
 
-    $config_wrapper->set_attribute('class', [ keys %wrapper_class]) unless scalar keys %wrapper_class == scalar keys %stt_classes; # if all classes are there, this wrapper div is actually never hidden.
-
+    $config_wrapper->set_attribute('class', [ keys %wrapper_class ]) unless scalar keys %wrapper_class == scalar keys %stt_classes; # if all classes are there, this wrapper div is actually never hidden.
   }
 
   # add the 'Run' button in a new fieldset

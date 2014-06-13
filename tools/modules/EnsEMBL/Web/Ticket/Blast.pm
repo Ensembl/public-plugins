@@ -52,6 +52,9 @@ sub _process_user_input {
   my @species = $sd->valid_species($hub->param('species'));
   return unless @species;
 
+  # Source param depends upon the selected db type
+  $hub->param('source', $hub->param('source_'.$hub->param('db_type')));
+
   # Validate Query Type, DB Type, Source Type and Search Type
   for (qw(query_type db_type source search_type)) {
     my $param_value = $params->{$_} = $hub->param($_);

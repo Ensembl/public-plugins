@@ -15,17 +15,23 @@
  */
 
 form.blast-form input.inactive                    { font-style: italic; color: [[PAGE_TEXT]]; }
-form.blast-form textarea.query_sequence           { width: 500px; margin-bottom: 0; outline: none; display: inherit; }
-form.blast-form textarea.query_sequence.inactive  { color: [[PAGE_TEXT]]; font-size: 12px; font-style: italic; }
 
-div.seq-wrapper                                   { background-color: [[PAGE_BG]]; border: 1px solid [[NEUTRAL_BORDER]]; margin-bottom: 8px; padding: 4px; overflow: hidden; width: 580px; }
-div.seq-wrapper.inactive                          { color: [[NEUTRAL_BORDER]]; }
-div.seq-wrapper div                               { float: left; margin-right: 8px; }
-div.seq-wrapper div.seq-type                      { float: right; background-color: [[BUTTON_BG]]; border-radius: 7px; color: [[BUTTON_TEXT]]; float: right; font-size: 80%; line-height: 12px; margin: 0; padding: 4px; cursor: default; }
-div.seq-wrapper.inactive div.seq-type             { background-color: [[BUTTON_DISABLED]]; }
-div.seq-wrapper div.seq-type span                 { text-decoration: line-through; padding-right: 3px; }
+div.query_sequence_wrapper                        { background-color: [[PAGE_BG]]; border: 1px solid [[NEUTRAL_BORDER]]; padding: 6px; width: 576px; overflow: hidden; }
+div.query_sequence_wrapper span.sprite            { float: right; display: none; }
 
-div.fasta-input                                   { overflow: hidden; font: 12px courier; white-space: pre; width: 480px; max-height: 400px; outline: none; border: transparent solid 1px; cursor: pointer; }
+textarea.query_sequence                           { width: 500px; margin-bottom: 0; outline: none; display: inherit; }
+textarea.query_sequence.inactive                  { color: [[PAGE_TEXT]]; font-size: 12px; font-style: italic; }
+
+form.blast-form div.blast_db_type                 { float: left; width: 150px; }
+
+div.js_sequence_wrapper                           { padding-bottom: 94px !important; }
+div.js_sequence_wrapper > div                     { margin: 12px 0; }
+
+div.js_sequence_wrapper div.seq-wrapper           { background-color: [[PAGE_BG]]; border: 1px solid [[NEUTRAL_BORDER]]; margin: 6px 0 0 0; padding: 4px; overflow: hidden; width: 580px; }
+div.js_sequence_wrapper div.seq-wrapper:first-child { margin-top: 0; }
+div.seq-wrapper span.sprite                       { float: right; }
+
+div.fasta-input                                   { overflow: hidden; font: 12px courier; white-space: pre; width: 480px; max-height: 400px; outline: none; border: transparent solid 1px; cursor: pointer; float: left; margin-right: 8px;  }
 div.fasta-input:hover                             { overflow: auto; }
 div.fasta-input.editable                          { overflow: auto; background-color: #ffd; border-color: [[PANEL_BORDER]]; cursor: text; }
 
@@ -35,3 +41,5 @@ div.fasta-buttons span                            { display: inline-block; heigh
 div.blast-configs div.row div.lhs                 { font-weight: normal; height: 20px; width: 464px; }
 
 div.input-seq                                     { white-space: pre; max-height: 300px; overflow: auto; font-family: Courier; }
+
+div.file_upload_element                           { line-height: 32px; float: left; margin-right: 16px; }

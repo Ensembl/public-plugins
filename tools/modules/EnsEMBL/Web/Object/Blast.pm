@@ -37,129 +37,57 @@ sub long_caption {
   my $hub   = $self->hub;
   if (($hub->function || '') eq 'Results') {
     if (my $job = $self->get_requested_job({'with_all_results' => 1})) {
-      my $job_desc = $job->job_desc;
-      return sprintf('Results for ticket %s (Job %s%s)',
-        $job->ticket->ticket_name,
-        $job->job_number,
-        $job_desc ? ": $job_desc" : ''
-      );
+      my $ticket      = $job->ticket;
+      my $job_count   = $ticket->job_count;
+      my $job_number  = $job->job_number;
+      my $job_counter = $job_count == 1 && $job_number == 1 ? '' : " (Job $job_number/$job_count)";
+      return sprintf 'Results for ticket %s%s', $ticket->ticket_name, $job_counter;
     }
     return sprintf '%s Results', $self->get_tool_caption;
   }
   return '';
 }
 
-sub get_blast_form_params {
-  ## Gets the field params for the blast input form
-  ## @param Hashref with keys:
-  ##  - species     arrayref of selected species
-  ##  - query_type  selected query type
-  ##  - db_type     selected db type to search the query against
-  ##  - search_type selected method eg. NCBIBLAST|BLASTP, BLAT|BLAT etc
-  ##  - source      selected db name eg. LATESTGP, NCRNA, PEP_ALL etc
-  my ($self, $params) = @_;
+sub get_blast_form_options {
+  ## Gets the list of options for dropdown fields in the blast input form
+  my $self = shift;
 
-  my $hub                     = $self->hub;
-  $params                   ||= {};
-  $params->{'species'}      ||= [];
-  $params->{'query_type'}   ||= '';
-  $params->{'db_type'}      ||= '';
-  $params->{'search_type'}  ||= '';
-  $params->{'source'}       ||= '';
+  my $hub             = $self->hub;
+  my $sd              = $self->species_defs;
+  my $blast_types     = $sd->multi_val('ENSEMBL_BLAST_TYPES');              # hashref with keys as BLAT, NCBIBLAST etc
+  my $query_types     = $sd->multi_val('ENSEMBL_BLAST_QUERY_TYPES');        # hashref with keys dna, peptide
+  my $db_types        = $sd->multi_val('ENSEMBL_BLAST_DB_TYPES');           # hashref with keys dna, peptide
+  my $blast_configs   = $sd->multi_val('ENSEMBL_BLAST_CONFIGS');            # hashref with valid combinations of query_type, db_type, sources, search_type (and program for the search_type)
+  my $sources         = $sd->multi_val('ENSEMBL_BLAST_DATASOURCES');        # hashref with keys as blast type and value as a hashref of data sources type and label
+  my $sources_ordered = $sd->multi_val('ENSEMBL_BLAST_DATASOURCES_ORDER');  # hashref with keys as blast type and value as a ordered array if data sources type
+  my $search_types    = [ map { $_->{'search_type'} } @$blast_configs ];    # NCBIBLAST_BLASTN, NCBIBLAST_BLASTP, BLAT_BLAT etc
 
-  my $sd                      = $self->species_defs;
-  my @all_species             = $sd->valid_species;
-  my %requested_species       = map {$_ => 1} @{$params->{'species'} || []};
-  my @species                 = grep $requested_species{$_}, @all_species;
-  if (!@species) {
-    @species                  = ($hub->species);
-    @species                  = ($hub->get_favourite_species->[0]) if $species[0] =~ /multi|common/i;
-  }
+  my $options         = {}; # Options for different dropdown fields
 
-  my %species_confs           = map { $_ => $sd->get_config($_, 'ENSEMBL_BLAST_CONFIGS') } @species;
-  my $blast_types             = $sd->multi_val('ENSEMBL_BLAST_TYPES');
-  my $query_types             = $sd->multi_val('ENSEMBL_BLAST_QUERY_TYPES');
-  my $db_types                = $sd->multi_val('ENSEMBL_BLAST_DB_TYPES');
-  my $blast_methods           = $sd->multi_val('ENSEMBL_BLAST_CONFIGS');
-  my $sources                 = $sd->multi_val('ENSEMBL_BLAST_DATASOURCES');
-  my $sources_ordered         = $sd->multi_val('ENSEMBL_BLAST_DATASOURCES_ORDER');
-  my $search_types            = [ map { $_->{'search_type'} } @$blast_methods ]; # NCBIBLAST|BLASTN, NCBIBLAST|BLASTP, BLAT|BLAT etc
+  # Species, query types and db types options
+  $options->{'species'}        = [ map { 'value' => $_, 'caption' => $sd->species_label($_, 1) }, $sd->valid_species ];
+  $options->{'query_type'}     = [ map { 'value' => $_, 'caption' => $query_types->{$_}        }, keys %$query_types ];
+  $options->{'db_type'}        = [ map { 'value' => $_, 'caption' => $db_types->{$_}           }, keys %$db_types    ];
 
-  # Fields to return
-  my $fields                  = {};
-
-  # Options to be selected on the form by default
-  my $selected                = {};
-
-  # A multidimensional map to link valid search types for query type, db type, search type and sources
-  my $options_map             = [];
-
-  foreach my $blast_method (@$blast_methods) {
-    my %details = map { $_ => $blast_method->{$_} } qw(query_type db_type search_type);
-    foreach my $source (@{$blast_method->{'sources'}}) {
-      push @$options_map, { %details, 'source' => $source, 'species' => [] };
-    }
-  }
-
-  # Filter the parameters to the ones supported by the selected species - %species_confs = species => {query_type => {db_type => {search_type => {source => ?}}}}
-  while (my ($species, $species_conf) = each %species_confs) {
-
-    # add an entry for this species for each combination of options that it can accept
-    foreach my $query_type (keys %$species_conf) {
-      foreach my $db_type (keys %{$species_conf->{$query_type}}) {
-        foreach my $search_type (keys %{$species_conf->{$query_type}{$db_type}}) {
-          foreach my $source (keys %{$species_conf->{$query_type}{$db_type}{$search_type}}) {
-            for (grep {$_->{'query_type'} eq $query_type && $_->{'db_type'} eq $db_type && $_->{'search_type'} eq $search_type && $_->{'source'} eq $source} @$options_map) {
-              push @{$_->{'species'}}, $species;
-            }
-          }
-        }
-      }
-    }
-  }
-
-  # Return fields
-  $fields->{'species'}        = [ map { 'value' => $_, 'caption' => $sd->species_label($_, 1) }, @species           ];
-  $fields->{'query_type'}     = [ map { 'value' => $_, 'caption' => $query_types->{$_}        }, keys %$query_types ];
-  $fields->{'db_type'}        = [ map { 'value' => $_, 'caption' => $db_types->{$_}           }, keys %$db_types    ];
-  $fields->{'source'}         = [ map { 'value' => $_, 'caption' => $sources->{$_}            }, @$sources_ordered  ];
-  $fields->{'search_type'}    = [];
+  # Search type options
   foreach my $search_type (@$search_types) {
     my ($blast_type, $search_method) = $self->parse_search_type($search_type);
-    push @{$fields->{'search_type'}}, { 'value' => $search_type, 'caption' => $search_method, 'group' => $blast_types->{$blast_type} };
+    push @{$options->{'search_type'}}, { 'value' => $search_type, 'caption' => $search_method };
   }
 
-  # Now make the first valid option from the option list 'checked'
-  # If already selected, validate the selected one, and set 'checked' key to true
-  SELECTION:
-  foreach my $query_type ($params->{'query_type'} || (),  map $_->{'value'}, @{$fields->{'query_type'}}) {
-    foreach my $db_type ($params->{'db_type'} || (),  map $_->{'value'}, @{$fields->{'db_type'}}) {
-      foreach my $search_type ($params->{'search_type'} || (),  map $_->{'value'}, @{$fields->{'search_type'}}) {
-        foreach my $source ($params->{'source'} || (),  map $_->{'value'}, @{$fields->{'source'}}) {
-          for (
-            sort { @{$a->{'species'}} <=> @{$b->{'species'}} }
-            grep {$_->{'query_type'} eq $query_type && $_->{'db_type'} eq $db_type && $_->{'search_type'} eq $search_type && $_->{'source'} eq $source && @{$_->{'species'}}}
-            @$options_map
-          ) {
-            $selected = {
-              'species'         => $_->{'species'},
-              'query_type'      => $query_type,
-              'db_type'         => $db_type,
-              'search_type'     => $search_type,
-              'source'          => $source
-            };
-            last SELECTION;
-          }
-        }
+  # DB Source options
+  foreach my $source_type (@$sources_ordered) {
+    for (@$blast_configs) {
+      if (grep { $source_type eq $_ } @{$_->{'sources'}}) {
+        push @{$options->{'source'}{$_->{'db_type'}}}, { 'value' => $source_type, 'caption' => $sources->{$source_type} };
+        last;
       }
     }
   }
 
   return {
-    'species'       => [ map { 'value' => $_, 'caption' => $sd->species_label($_, 1) }, @all_species ],
-    'fields'        => $fields,
-    'selected'      => $selected,
-    'combinations'  => $self->jsonify($options_map)
+    'options'       => $options,
+    'combinations'  => $self->jsonify($blast_configs)
   };
 }
 
@@ -171,6 +99,7 @@ sub get_edit_jobs_data {
 
   return [ map {
     my $job_data = $_->job_data->raw;
+    delete $job_data->{$_} for qw(source_file output_file);
     $job_data->{'species'}  = $_->species;
     $job_data->{'sequence'} = $self->get_input_sequence_for_job($_);
     $job_data;
