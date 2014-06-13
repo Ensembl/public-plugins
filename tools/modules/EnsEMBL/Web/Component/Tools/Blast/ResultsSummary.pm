@@ -43,12 +43,12 @@ sub content {
     return $status eq 'done'
       ? @{$job->result}
         ? ''
-        : $self->_error('No results found', sprintf('If you believe that there should be a match to your query sequence please adjust the configuration parameters you selected and <a href="%s">resubmit the search</a>.', $hub->url({'function' => 'Edit', 'tl' => $url_param})))
-      : $self->_error('No results found', sprintf('The job is either not done yet, or has failed. Click <a href="%s">here</a> to view', $hub->url({'function' => 'View', 'tl' => $url_param})))
+        : $self->_info('No results found', sprintf('If you believe that there should be a match to your query sequence please adjust the configuration parameters you selected and <a href="%s">resubmit the search</a>.', $hub->url({'function' => 'Edit', 'tl' => $url_param})))
+      : $self->_info('No results found', sprintf('The job is either not done yet, or has failed. Click <a href="%s">here</a> to view', $hub->url({'function' => 'View', 'tl' => $url_param})))
     ;
   }
 
-  return $self->_error('Job not found', 'The job you requested was not found. It has either been expired, or you clicked on an invalid link.');
+  return $self->_warning('Job not found', 'The job you requested was not found. It has either been expired, or you clicked on an invalid link.');
 }
 
 1;
