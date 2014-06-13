@@ -216,34 +216,36 @@ sub content {
   });
 
   # Advanced config options
+  $form->add_fieldset('Configuration options');
+
   my $config_fields   = CONFIGURATION_FIELDS;
   my $config_defaults = CONFIGURATION_DEFAULTS;
-  my $config_wrapper  = $form->append_child('div', {
-    'class'       => 'extra_configs_wrapper',
-    'children'    => [{
-      'node_name'   => 'div',
-      'class'       => 'extra_configs_button',
-      'children'    => [{
-        'node_name'   => 'a',
-        'rel'         => '_blast_configs',
-        'class'       => [qw(_slide_toggle toggle set_cookie closed)],
-        'href'        => '#Configuration',
-        'title'       => 'Click to see configuration options',
-        'inner_HTML'  => 'Configuration Options'
-      }]
-    }, {
-      'node_name'   => 'div',
-      'class'       => [qw(extra_configs _blast_configs toggleable _adjustable_height hidden)]
-    }]
-  });
 
   my @search_types    = map $_->{'value'}, @{$fields->{'search_type'}};
   my %stt_classes     = map {$_ => "_stt_$_"} @search_types; # class names for selectToToggle
 
   while (my ($config_type, $config_field_group) = splice @$config_fields, 0, 2) {
+    my $config_title    = ucfirst "$config_type options:" =~ s/_/ /gr;
+    my $config_wrapper  = $form->append_child('div', {
+      'class'       => 'extra_configs_wrapper',
+      'children'    => [{
+        'node_name'   => 'div',
+        'class'       => 'extra_configs_button',
+        'children'    => [{
+          'node_name'   => 'a',
+          'rel'         => "_blast_configs_$config_type",
+          'class'       => [qw(_slide_toggle toggle set_cookie closed)],
+          'href'        => "#Configuration_$config_type",
+          'inner_HTML'  => $config_title
+        }]
+      }, {
+        'node_name'   => 'div',
+        'class'       => "extra_configs _blast_configs_$config_type toggleable hidden"
+      }]
+    });
 
-    my $fieldset        = $config_wrapper->last_child->append_child($form->add_fieldset(ucfirst "$config_type options:" =~ s/_/ /gr)); # moving it from the form to the config div
-    my %fieldset_class;
+    my $fieldset        = $config_wrapper->last_child->append_child($form->add_fieldset); # moving it from the form to the config div
+    my %wrapper_class;
 
     while (my ($element_name, $element_params) = splice @$config_field_group, 0, 2) {
 
@@ -263,7 +265,7 @@ sub content {
               'element_class' => $element_class
             };
             $field_class{$element_class}    = 1; # adding same class to the field makes sure the field is only visible if at least one of the elements is visible
-            $fieldset_class{$element_class} = 1; # adding same class to the fieldset makes sure the fieldset is only visible if at least one of the field is visible
+            $wrapper_class{$element_class}  = 1; # adding same class to the congif wrapper div makes sure the div is only visible if at least one of the field is visible
             last;
           }
         }
@@ -274,7 +276,7 @@ sub content {
 
     }
 
-    $fieldset->set_attribute('class', [ keys %fieldset_class]) unless scalar keys %fieldset_class == scalar keys %stt_classes; # if all classes are there, this fieldset is actually never hidden.
+    $config_wrapper->set_attribute('class', [ keys %wrapper_class]) unless scalar keys %wrapper_class == scalar keys %stt_classes; # if all classes are there, this wrapper div is actually never hidden.
 
   }
 
