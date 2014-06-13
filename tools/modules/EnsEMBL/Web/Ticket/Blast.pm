@@ -89,7 +89,7 @@ sub _process_user_input {
   # Create parameter sets for individual jobs to be submitted (submit one job per sequence per species)
   my ($blast_type, $search_method)  = $object->parse_search_type($params->{'search_type'});
   my $desc                          = $hub->param('description');
-  my $db_types                      = $sd->multi_val('ENSEMBL_BLAST_DB_TYPES');
+  my $source_types                  = $sd->multi_val('ENSEMBL_BLAST_DATASOURCES');
   my $jobs                          = [];
   my $job_num                       = 0;
 
@@ -99,7 +99,7 @@ sub _process_user_input {
 
       push @$jobs, [ {
         'job_number'  => ++$job_num,
-        'job_desc'    => $desc || sprintf('%s search against %s %s.', $search_method, $sd->get_config($species, 'SPECIES_COMMON_NAME'), $db_types->{$params->{'db_type'}}),
+        'job_desc'    => $desc || sprintf('%s against %s (%s)', $search_method, $sd->get_config($species, 'SPECIES_COMMON_NAME'), $source_types->{$params->{'source'}}),
         'species'     => $species,
         'assembly'    => $sd->get_config($species, 'ASSEMBLY_NAME'),
         'job_data'    => {
