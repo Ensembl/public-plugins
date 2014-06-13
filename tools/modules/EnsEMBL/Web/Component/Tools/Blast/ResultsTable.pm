@@ -40,34 +40,32 @@ sub content {
     my $source      = $job_data->{'source'};
     my $table       = $self->new_table($source =~/latestgp/i
       ? [
-          { 'key' => 'links',   'title'=> 'Links',          'align' => 'left',  'sort' => 'none'    },
+          { 'key' => 'tid',     'title'=> 'Gene Location',  'align' => 'left',  'sort' => 'string'  },
+          { 'key' => 'tori',    'title'=> 'Orientation',    'align' => 'left',  'sort' => 'string'  },
           { 'key' => 'qid',     'title'=> 'Query name',     'align' => 'left',  'sort' => 'string'  },
-          { 'key' => 'qstart',  'title'=> 'Query start',    'align' => 'left',  'sort' => 'none'    },
-          { 'key' => 'qend',    'title'=> 'Query end',      'align' => 'left',  'sort' => 'none'    },
-          { 'key' => 'qori',    'title'=> 'Query Ori',      'align' => 'left',  'sort' => 'none'    },
-          { 'key' => 'tid',     'title'=> 'Subject name',   'align' => 'left',  'sort' => 'string'  },
-          { 'key' => 'tori',    'title'=> 'Subject Ori',    'align' => 'left',  'sort' => 'none'    },
+          { 'key' => 'qstart',  'title'=> 'Query start',    'align' => 'left',  'sort' => 'numeric' },
+          { 'key' => 'qend',    'title'=> 'Query end',      'align' => 'left',  'sort' => 'numeric' },
+          { 'key' => 'qori',    'title'=> 'Query ori',      'align' => 'left',  'sort' => 'string'  },
+          { 'key' => 'len',     'title'=> 'Length',         'align' => 'left',  'sort' => 'numeric' },
           { 'key' => 'score',   'title'=> 'Score',          'align' => 'left',  'sort' => 'numeric' },
           { 'key' => 'evalue',  'title'=> 'E-val',          'align' => 'left',  'sort' => 'numeric' },
           { 'key' => 'pident',  'title'=> '%ID',            'align' => 'left',  'sort' => 'numeric' },
-          { 'key' => 'len',     'title'=> 'Length',         'align' => 'left',  'sort' => 'numeric' },
         ]
       : [
-          { 'key' => 'links',   'title'=> 'Links',          'align' => 'left',  'sort' => 'none'    },
-          { 'key' => 'qid',     'title'=> 'Query name',     'align' => 'left',  'sort' => 'string'  },
-          { 'key' => 'qstart',  'title'=> 'Query start',    'align' => 'left',  'sort' => 'none'    },
-          { 'key' => 'qend',    'title'=> 'Query end',      'align' => 'left',  'sort' => 'none'    },
-          { 'key' => 'qori',    'title'=> 'Query Ori',      'align' => 'left',  'sort' => 'none'    },
           { 'key' => 'tid',     'title'=> 'Subject name',   'align' => 'left',  'sort' => 'string'  },
-          { 'key' => 'tstart',  'title'=> 'Subject start',  'align' => 'left',  'sort' => 'none'    },
-          { 'key' => 'tend',    'title'=> 'Subject end',    'align' => 'left',  'sort' => 'none'    },
-          { 'key' => 'tori',    'title'=> 'Subject Ori',    'align' => 'left',  'sort' => 'none'    },
-          { 'key' => 'gid',     'title'=> 'Chr name',       'align' => 'left',  'sort' => 'string'  },
-          { 'key' => 'gori',    'title'=> 'Chr Ori',        'align' => 'left',  'sort' => 'none'    },
+          { 'key' => 'tstart',  'title'=> 'Subject start',  'align' => 'left',  'sort' => 'numeric' },
+          { 'key' => 'tend',    'title'=> 'Subject end',    'align' => 'left',  'sort' => 'numeric' },
+          { 'key' => 'tori',    'title'=> 'Subject ori',    'align' => 'left',  'sort' => 'string'  },
+          { 'key' => 'gid',     'title'=> 'Gene Location',  'align' => 'left',  'sort' => 'string'  },
+          { 'key' => 'gori',    'title'=> 'Orientation',    'align' => 'left',  'sort' => 'string'  },
+          { 'key' => 'qid',     'title'=> 'Query name',     'align' => 'left',  'sort' => 'string'  },
+          { 'key' => 'qstart',  'title'=> 'Query start',    'align' => 'left',  'sort' => 'numeric' },
+          { 'key' => 'qend',    'title'=> 'Query end',      'align' => 'left',  'sort' => 'numeric' },
+          { 'key' => 'qori',    'title'=> 'Query ori',      'align' => 'left',  'sort' => 'string'  },
+          { 'key' => 'len',     'title'=> 'Length',         'align' => 'left',  'sort' => 'numeric' },
           { 'key' => 'score',   'title'=> 'Score',          'align' => 'left',  'sort' => 'numeric' },
           { 'key' => 'evalue',  'title'=> 'E-val',          'align' => 'left',  'sort' => 'numeric' },
           { 'key' => 'pident',  'title'=> '%ID',            'align' => 'left',  'sort' => 'numeric' },
-          { 'key' => 'len',     'title'=> 'Length',         'align' => 'left',  'sort' => 'numeric' },
         ],
       [], {'data_table' => 1, 'exportable' => 0, 'sorting' => ['score desc']}
     );
@@ -79,8 +77,10 @@ sub content {
       my $url_param     = $object->create_url_param({'result_id' => $result_id});
       my $location_link = $self->location_link($job, $_);
 
-      $result_data->{'links'}   = $self->all_links($job, $_);
       $result_data->{'options'} = {'class' => "hsp_$result_id"};
+
+      # orientation
+      $result_data->{$_} = $result_data->{$_} == 1 ? 'Forward' : 'Reverse' for grep m/ori$/, keys %$result_data;
 
       if ($source =~ /latestgp/i) {
         $result_data->{'tid'} = $location_link;
@@ -88,6 +88,17 @@ sub content {
         $result_data->{'gid'} = $location_link;
         $result_data->{'tid'} = $self->target_link($job, $_);
       }
+
+      # add links to query name and pid columns
+      $result_data->{'qid'} = sprintf('<span class="left-float">%s</span>&nbsp;<a href="%s" class="small _ht" title="View Query Sequence">[Sequence]</a>',
+        $result_data->{'qid'},
+        $hub->url($object->get_result_url('query_sequence', $job, $_))
+      );
+      $result_data->{'pident'} = sprintf('<span class="left-float">%s</span>&nbsp;<a href="%s" class="small _ht" title="View Alignment">[Alignment]</a>',
+        $result_data->{'pident'},
+        $hub->url($object->get_result_url('alignment', $job, $_))
+      );
+
       $table->add_row($result_data);
     }
 
@@ -105,28 +116,20 @@ sub target_link {
   return sprintf '<a href="%s">%s</a>', $self->hub->url($self->object->get_result_url('target', $job, $result)), $result->result_data->{'tid'};
 }
 
-sub all_links {
-  ## Gets the links to be displayed in the links column
-  my ($self, $job, $result) = @_;
-
-  my $hub = $self->hub;
-
-  return sprintf('<a href="%s" class="_ht" title="Alignment">[A]</a> <a href="%s" class="_ht" title="Query Sequence">[S]</a> <a href="%s" class="_ht" title="Genomic Sequence">[G]</a>',
-    $hub->url($self->object->get_result_url('alignment',        $job, $result)),  # Alignment link
-    $hub->url($self->object->get_result_url('query_sequence',   $job, $result)),  # Query sequence link
-    $hub->url($self->object->get_result_url('genomic_sequence', $job, $result))   # Genomic sequence link
-  );
-}
-
 sub location_link {
   ## Gets a link to the location view page for the given result
   my ($self, $job, $result) = @_;
 
+  my $hub         = $self->hub;
   my $result_data = $result->result_data;
   my $url         = $self->object->get_result_url('location', $job, $result);
   my $region      = sprintf '%s:%s-%s', $result_data->{'gid'}, $result_data->{'gstart'}, $result_data->{'gend'};
 
-  return sprintf '<a href="%s" class="_ht" title="Region in Detail">%s</a>', $self->hub->url($url), $region;
+  return sprintf('<a class="left-float" href="%s" class="_ht" title="Region in Detail">%s</a>&nbsp;<a href="%s" class="small _ht" title="View Genomic Sequence">[Sequence]</a>',
+    $hub->url($url),
+    $region,
+    $hub->url($self->object->get_result_url('genomic_sequence', $job, $result))
+  );
 }
 
 1;
