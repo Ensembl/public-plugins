@@ -24,8 +24,6 @@ Ensembl.Panel.ActivitySummary = Ensembl.Panel.ContentTools.extend({
 
     this.POLL_INTERVAL  = 30; //seconds
     this.MAX_POLLS      = 10;
-
-    this.currentTicket  = (window.location.href.match(/tl=([a-z0-9_]+)/i) || []).pop();
     this.pollCounter    = 0;
   },
 
@@ -52,20 +50,14 @@ Ensembl.Panel.ActivitySummary = Ensembl.Panel.ContentTools.extend({
     // Edit icons
     this.el.find('._ticket_edit').on('click', function() {
       var ticketName = (this.href.match(/tl=([a-z0-9_-]+)/i) || []).pop();
-      if (ticketName !== panel.currentTicket) {
-        Ensembl.EventManager.trigger('toolsHideTicket');
-        panel.currentTicket = ticketName;
-      }
+      Ensembl.EventManager.trigger('toolsHideTicket');
       return !!ticketName && !Ensembl.EventManager.trigger('toolsEditTicket', ticketName);
     });
 
     // View ticket link
     this.el.find('._ticket_view').on('click', function() {
       var ticketName = (this.href.match(/tl=([a-z0-9_-]+)/i) || []).pop();
-      if (ticketName !== panel.currentTicket) {
-        Ensembl.EventManager.trigger('toolsToggleForm', false);
-        panel.currentTicket = ticketName;
-      }
+      Ensembl.EventManager.trigger('toolsToggleForm', false);
       return !!ticketName && !Ensembl.EventManager.trigger('toolsViewTicket', ticketName);
     });
 
