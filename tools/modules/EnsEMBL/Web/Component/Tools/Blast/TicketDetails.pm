@@ -30,10 +30,17 @@ sub content_ticket {
   my ($self, $ticket, $jobs) = @_;
   my $hub     = $self->hub;
   my $div     = $self->dom->create_element('div');
+  my $is_view = ($hub->function || '') eq 'View';
 
-  $div->append_child($self->job_details_table($_, {'links' => [qw(results edit delete)]}))->set_attribute('class', 'plain-box') for @$jobs;
+  $div->set_attribute('class', $is_view ? 'plain-box' : '_ticket_details hidden toggleable');
+
+  $div->append_child($self->job_details_table($_, $is_view ? [qw(status results edit delete)] : ())) for @$jobs;
 
   return $div->render;
+}
+
+sub allowed_url_functions {
+  return qw(View Results);
 }
 
 1;

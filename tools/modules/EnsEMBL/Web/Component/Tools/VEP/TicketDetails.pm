@@ -31,7 +31,7 @@ sub content_ticket {
   my $hub     = $self->hub;
   my $div     = $self->dom->create_element('div');
 
-  $div->append_child($self->job_details_table($_, {'links' => [qw(results edit delete)]}))->set_attribute('class', 'plain-box') for @$jobs;
+  $div->append_child($self->job_details_table($_, [qw(status results edit delete)]))->set_attribute('class', 'plain-box') for @$jobs;
 
   return $div->render;
 }

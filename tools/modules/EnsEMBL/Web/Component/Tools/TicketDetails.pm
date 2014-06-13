@@ -26,29 +26,36 @@ use parent qw(EnsEMBL::Web::Component::Tools);
 use EnsEMBL::Web::Exceptions;
 
 sub content {
-  my $self    = shift;
-  my $object  = $self->object;
-  my $hub     = $self->hub;
-  my $ticket  = ($hub->function || '') eq 'View' ? $object->get_requested_ticket : undef;
-  my $jobs    = $ticket ? [ $object->get_requested_job || () ] : [];
-     $jobs    = $ticket->job if $ticket && !@$jobs;
+  my $self      = shift;
+  my $object    = $self->object;
+  my $hub       = $self->hub;
+  my $function  = $hub->function || '';
+  my $ticket    = grep({ $function eq $_ } $self->allowed_url_functions) ? $object->get_requested_ticket : undef;
+  my $jobs      = $ticket ? [ $object->get_requested_job || () ] : [];
+     $jobs      = $ticket->job if $ticket && !@$jobs;
+  my $is_view   = $function eq 'View';
 
-  return sprintf '<input type="hidden" class="panel_type" value="TicketDetails" />%s', ($ticket
-    ? sprintf(q(<h3>Job%s for %s ticket %s<a href="%s" class="left-margin _ticket_hide small _change_location">[Hide]</a></h3>%s),
-      @$jobs > 1 ? 's' : '',
-      $ticket->ticket_type->ticket_type_caption,
-      $ticket->ticket_name,
-      $hub->url({'tl' => undef, 'function' => ''}),
-      $self->content_ticket($ticket, $jobs)
-    )
-    : ''
-  );
+  my $heading = $is_view
+    ? sprintf('<h3>Job%s for %s ticket %s<a href="%s" class="left-margin _ticket_hide small _change_location">[Hide]</a></h3>',
+        @$jobs > 1 ? 's' : '',
+        $ticket->ticket_type->ticket_type_caption,
+        $ticket->ticket_name,
+        $is_view ? $hub->url({'tl' => undef, 'function' => ''}) : '',
+      )
+    : '<h3><a rel="_ticket_details" class="toggle set_cookie closed" href="#">Job details</a></h3>';
+
+  return sprintf '<input type="hidden" class="panel_type" value="TicketDetails" />%s%s', $ticket ? ($heading, $self->content_ticket($ticket, $jobs)) : ('', '');
 }
 
 sub content_ticket {
   ## @abstract method
   ## Should return disaply html for the ticket
   throw exception('AbstractMethodNotImplemented');
+}
+
+sub allowed_url_functions {
+  ## List of url function that can display ticket details (this is to enable dynamic behaviour of displaying ticket details)
+  return qw(View);
 }
 
 1;

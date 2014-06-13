@@ -26,9 +26,9 @@ use parent qw(EnsEMBL::Web::Component::Tools);
 sub job_details_table {
   ## A two column layout displaying a job's details
   ## @param Job object
-  ## @param Extra param hashref as required by get_job_summary method
+  ## @params Extra params as required by get_job_summary method
   ## @return DIV node (as returned by new_twocol method)
-  my ($self, $job, $params) = @_;
+  my ($self, $job) = splice @_, 0, 2;
 
   my $object    = $self->object;
   my $job_data  = $job->job_data;
@@ -36,7 +36,7 @@ sub job_details_table {
   my $sd        = $self->hub->species_defs;
   my $two_col   = $self->new_twocol;
 
-  $two_col->add_row('Job summary',  $self->get_job_summary($job, $params)->render =~ s/Job 0\: //r);
+  $two_col->add_row('Job summary',  $self->get_job_summary($job, @_)->render =~ s/Job 0\: //r);
   $two_col->add_row('Species',      sprintf('<img class="job-species" src="%sspecies/16/%s.png" alt="" height="16" width="16">%s', $self->img_url, $species, $sd->species_label($species, 1)));
 
   return $two_col;

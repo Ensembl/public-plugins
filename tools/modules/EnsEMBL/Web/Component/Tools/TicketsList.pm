@@ -59,6 +59,7 @@ sub content {
     foreach my $ticket (@$tickets) {
 
       my $ticket_name   = $ticket->ticket_name;
+      my $job_count     = $ticket->job_count;
       my @jobs_summary;
 
       for ($ticket->job) {
@@ -68,7 +69,7 @@ sub content {
           $sd->species_label($_->species, 1),
           $self->img_url,
           $_->species,
-          $job_number ? "Job $job_number: " : '',
+          $job_number == 1 && $job_count == 1 ? '' : "Job $job_number/$job_count: ",
           $_->job_desc || '',
           $dispatcher_status,
           $status_tips->{$dispatcher_status},

@@ -129,7 +129,7 @@ sub job_status {
   my $job  = shift;
   
   my $div = $self->dom->create_element('div');
-  $div->append_child($self->job_details_table($job, {'links' => [qw(results edit delete)]}))->set_attribute('class', 'plain-box');
+  $div->append_child($self->job_details_table($job, [qw(status results edit delete)]))->set_attribute('class', 'plain-box');
 
   return $div->render;
   

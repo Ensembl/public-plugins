@@ -55,6 +55,7 @@ sub populate_tree {
 
   my $blast_results_node = $blast_node->append($self->create_subnode('Blast/Results', $result_cap,
     [qw(
+      details         EnsEMBL::Web::Component::Tools::Blast::TicketDetails
       results         EnsEMBL::Web::Component::Tools::Blast::ResultsSummary
       table           EnsEMBL::Web::Component::Tools::Blast::ResultsTable
       karyotype       EnsEMBL::Web::Component::Tools::Blast::Karyotype

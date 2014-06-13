@@ -55,33 +55,37 @@ sub _init {
 sub get_job_summary {
   ## Reads the job dispatcher_status field, and display status accordingly
   ## @param Job object
-  ## @param Extra params hashref with keys:
-  ##  - links: Arrayref with name of the links that need to be displayed (results, edit, delete)
+  ## @param Arrayref with name of the links that need to be displayed (results, edit, delete, status)
   ## @return DIV node
-  my ($self, $job, $params) = @_;
+  my ($self, $job, $links) = @_;
+
+  $links ||= [];
 
   my $hub               = $self->hub;
   my $job_id            = $job->job_id;
   my $job_message       = $job->job_message->[0];
   my $job_status        = $job->status;
+  my $job_number        = $job->job_number;
   my $dispatcher_status = $job->dispatcher_status;
   my $url_param         = $self->object->create_url_param({'job_id' => $job_id});
+  my $total_jobs        = $job->ticket->job_count;
+  my $job_prefix        = $job_number == 1 && $total_jobs == 1 ? '' : "Job $job_number/$total_jobs: ";
   my $job_status_div    = $self->dom->create_element('div', {
     'children'            => [{
       'node_name'           => 'p',
-      'inner_HTML'          => sprintf('Job %s: %s', $job->job_number, $job->job_desc // '-')
+      'inner_HTML'          => sprintf('%s%s', $job_prefix, $job->job_desc // '-')
     }, {
       'node_name'           => 'p',
       'class'               => 'job-status-links',
-      'children'            => [{
+      'children'            => [ grep($_ eq 'status', @$links) ? {
         'node_name'           => 'span',
         'class'               => ['job-status', "job-status-$dispatcher_status"],
         'inner_HTML'          => ucfirst $dispatcher_status =~ s/_/ /gr
-      }]
+      } : ()]
     }]
   });
 
-  if ($job_status eq 'done') {
+  if ($job_status eq 'done' && grep($_ eq 'results', @$links)) {
     $job_status_div->last_child->append_child('a', {
       'class'       => [qw(small left-margin results-link)],
       'flags'       => ['view_results_link'],
@@ -103,7 +107,7 @@ sub get_job_summary {
 
   my $margin_left_class = 'left-margin';
 
-  foreach my $link (@{($params || {})->{'links'} || []}) {
+  foreach my $link (@$links) {
     if ($icons->{$link}) {
       $job_status_div->last_child->append_child('a', {
         'href'        => $hub->url(@{$icons->{$link}{'url'}}),
