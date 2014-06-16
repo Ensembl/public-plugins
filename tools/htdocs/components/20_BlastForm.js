@@ -321,7 +321,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     var sequenceLines, pointer, seqLine, seqChar, seqDNACharCount, i, j;
 
     rawSeqLoop:
-    for (i in inputSeqs) {
+    for (i = 0; i < inputSeqs.length; i++) {
       sequenceLines   = inputSeqs[i].split(/[\s\t]*\n[\s\t]*/);
       pointer         = 0;
       seqDNACharCount = 0;
@@ -329,7 +329,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
       sequence        = {'string': '', 'description': '>', 'type': ''};
 
       seqLineLoop:
-      for (j in sequenceLines) {
+      for (j = 0; j < sequenceLines.length; j++) {
         seqLine = sequenceLines[j];
         pointer = 0;
         if (seqLine.match(/^(>|\;)/)) {
@@ -360,7 +360,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
       sequence.type   = 100 * seqDNACharCount / sequence.string.length < this.dnaThresholdPercent ? 'peptide' : 'dna';
 
       // skip if it's a duplicate, or invalid sequence
-      for (j in sequences) {
+      for (j = 0; j < sequences.length; j++) {
         if (sequences[j].string === sequence.string) {
           continue rawSeqLoop;
         }
