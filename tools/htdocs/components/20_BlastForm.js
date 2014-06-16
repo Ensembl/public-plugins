@@ -167,6 +167,9 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     // finally add a validate event to the form which gets triggered before submitting it
     this.elLk.form.on('validate', function(e) {
       if (!panel.sequences.length) {
+        panel.elLk.sequenceInput.trigger('finish');
+      }
+      if (!panel.sequences.length) {
         panel.showError('Please provide a sequence to run BLAST/BLAT.', 'No sequence found');
         $(this).data('valid', false);
       }
