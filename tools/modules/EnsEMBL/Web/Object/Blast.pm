@@ -65,9 +65,9 @@ sub get_blast_form_options {
   my $options         = {}; # Options for different dropdown fields
 
   # Species, query types and db types options
-  $options->{'species'}        = [ map { 'value' => $_, 'caption' => $sd->species_label($_, 1) }, $sd->valid_species ];
-  $options->{'query_type'}     = [ map { 'value' => $_, 'caption' => $query_types->{$_}        }, keys %$query_types ];
-  $options->{'db_type'}        = [ map { 'value' => $_, 'caption' => $db_types->{$_}           }, keys %$db_types    ];
+  $options->{'species'}        = [ sort { $a->{'caption'} cmp $b->{'caption'} } map { 'value' => $_, 'caption' => $sd->species_label($_, 1) }, $sd->valid_species ];
+  $options->{'query_type'}     = [ map { 'value' => $_, 'caption' => $query_types->{$_} }, keys %$query_types ];
+  $options->{'db_type'}        = [ map { 'value' => $_, 'caption' => $db_types->{$_}    }, keys %$db_types    ];
 
   # Search type options
   foreach my $search_type (@$search_types) {
