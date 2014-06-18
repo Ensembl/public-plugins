@@ -25,7 +25,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     this.maxSequenceLength    = 0;
     this.maxNumSequences      = 0;
     this.dnaThresholdPercent  = 0;
-    this.defaultSpecies       = '';
+    this.defaultSpecies       = [];
   },
 
   init: function () {
@@ -38,6 +38,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     this.dnaThresholdPercent  = this.elLk.form.find('input[name=dna_threshold_percent]').remove().val();
     this.readFileURL          = this.elLk.form.find('input[name=read_file_url]').remove().val();
     this.fetchSequenceURL     = this.elLk.form.find('input[name=fetch_sequence_url]').remove().val();
+    this.speciesTagImgSrc     = this.elLk.form.find('input[name=species_tag_image]').remove().val();
 
     try {
       // parse the combination JSON from the HTML - if this doesn't work, there is nothing we can do!
@@ -52,9 +53,14 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
       return;
     }
 
-    this.elLk.sequences       = this.elLk.form.find('div._sequence');
-    this.elLk.sequenceField   = this.elLk.form.find('div._sequence_field');
-    this.elLk.speciesDropdown = this.elLk.form.find('select[name=species]');
+    this.elLk.sequences         = this.elLk.form.find('div._sequence');
+    this.elLk.sequenceField     = this.elLk.form.find('div._sequence_field');
+    this.elLk.speciesCheckboxes = this.elLk.form.find('input[name=species]');
+    this.elLk.speciesDropdown   = this.elLk.form.find('._species_dropdown').filterableDropdown({refresh: true, change: function() {
+      $(this).find('._species_tags').css('background-image', function() {
+        return 'url(' + panel.speciesTagImgSrc.replace('[SPECIES]', $($(this).data('input')).val()) + ')';
+      });
+    }});
 
     // provide event handlers to the textarea where sequence text is typed
     var sequenceInputEvent = function(e) { // add some delay to make sure the blur event actually gets fired after making sure some other event hasn't removed the input string
@@ -162,7 +168,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     this.elLk.searchTypeOptions = this.elLk.searchType.find('option').clone(); // take a copy to preserve a list of all supported search types
 
     // Save the default species for later use
-    this.defaultSpecies = this.elLk.speciesDropdown.val();
+    this.defaultSpecies = this.elLk.speciesCheckboxes.filter(':checked').map(function() { return this.value; }).toArray();
 
     // finally add a validate event to the form which gets triggered before submitting it
     this.elLk.form.on('validate', function(e) {
@@ -171,6 +177,10 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
       }
       if (!panel.sequences.length) {
         panel.showError('Please provide a sequence to run BLAST/BLAT.', 'No sequence found');
+        $(this).data('valid', false);
+      }
+      if (!panel.elLk.speciesCheckboxes.filter(':checked').length) {
+        panel.showError('Please select a species to run BLAST/BLAT against.', 'No species selected');
         $(this).data('valid', false);
       }
     });
@@ -357,7 +367,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
         continue rawSeqLoop;
       }
 
-      sequence.type   = 100 * seqDNACharCount / sequence.string.length < this.dnaThresholdPercent ? 'peptide' : 'dna';
+      sequence.type = 100 * seqDNACharCount / sequence.string.length < this.dnaThresholdPercent ? 'peptide' : 'dna';
 
       // skip if it's a duplicate, or invalid sequence
       for (j = 0; j < sequences.length; j++) {
@@ -377,7 +387,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
         break rawSeqLoop;
       }
     }
-    return {'sequences': sequences, 'invalids': 1 + parseInt(i) - sequences.length};
+    return {'sequences': sequences, 'invalids': i - sequences.length};
   },
 
   addEditingJobSequences: function(editingJobSequences, type) {
@@ -544,7 +554,8 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
   },
 
   resetSpecies: function(speciesList) {
-    this.elLk.speciesDropdown.find('option').prop('selected', function() { return speciesList.indexOf(this.value) >= 0; });
+    this.elLk.speciesCheckboxes.prop('checked', function() { return speciesList.indexOf(this.value) >= 0; });
+    this.elLk.speciesDropdown.filterableDropdown({refresh: true});
   }
 });
 
