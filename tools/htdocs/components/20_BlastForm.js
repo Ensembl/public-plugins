@@ -178,10 +178,12 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
       if (!panel.sequences.length) {
         panel.showError('Please provide a sequence to run BLAST/BLAT.', 'No sequence found');
         $(this).data('valid', false);
+        return;
       }
       if (!panel.elLk.speciesCheckboxes.filter(':checked').length) {
         panel.showError('Please select a species to run BLAST/BLAT against.', 'No species selected');
         $(this).data('valid', false);
+        return;
       }
     });
 
