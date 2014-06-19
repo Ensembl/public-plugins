@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-form.blast-form input.inactive                    { font-style: italic; color: [[PAGE_TEXT]]; }
-
 div.query_sequence_wrapper                        { background-color: [[PAGE_BG]]; border: 1px solid [[NEUTRAL_BORDER]]; padding: 6px; width: 576px; overflow: hidden; }
 div.query_sequence_wrapper span.sprite            { float: right; display: none; }
 
