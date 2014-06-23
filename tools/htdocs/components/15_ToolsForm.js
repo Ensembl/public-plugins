@@ -174,7 +174,6 @@ Ensembl.Panel.ToolsForm = Ensembl.Panel.ContentTools.extend({
    * Reset the form
    */
     this.elLk.form[0].reset();
-    this.resetSelectToToggle();
   },
 
   resetSelectToToggle: function() {
