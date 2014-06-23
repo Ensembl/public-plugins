@@ -171,15 +171,14 @@ sub content {
   my $species_dropdown = $form2->add_field({
     'label'         => 'Species',
     'elements'      => [{
-      'type'          => 'dropdown',
+      'type'          => 'speciesdropdown',
       'name'          => 'species',
       'value'         => $current_species,
-      'class'         => '_stt',
       'values'        => [ map {
         'value'         => $_->{'value'},
         'caption'       => $_->{'caption'},
         'class'         => [  #selectToToggle classes for JavaScript
-          '_sttmulti',
+          '_stt', '_sttmulti',
           $_->{'variation'}             ? '_stt__var'   : '_stt__novar',
           $_->{'refseq'}                ? '_stt__rfq'   : (),
           $_->{'variation'}{'POLYPHEN'} ? '_stt__pphn'  : (),
