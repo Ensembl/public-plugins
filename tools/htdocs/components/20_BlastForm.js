@@ -1,12 +1,12 @@
 /*
  * Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -56,11 +56,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     this.elLk.sequences         = this.elLk.form.find('div._sequence');
     this.elLk.sequenceField     = this.elLk.form.find('div._sequence_field');
     this.elLk.speciesCheckboxes = this.elLk.form.find('input[name=species]');
-    this.elLk.speciesDropdown   = this.elLk.form.find('._species_dropdown').filterableDropdown({refresh: true, change: function() {
-      $(this).find('._species_tags').css('background-image', function() {
-        return 'url(' + panel.speciesTagImgSrc.replace('[SPECIES]', $($(this).data('input')).val()) + ')';
-      });
-    }});
+    this.elLk.speciesDropdown   = this.elLk.form.find('._species_dropdown').speciesDropdown({refresh: true});
 
     // provide event handlers to the textarea where sequence text is typed
     var sequenceInputEvent = function(e) { // add some delay to make sure the blur event actually gets fired after making sure some other event hasn't removed the input string
@@ -198,8 +194,8 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
   /*
    * Resets the form, ready to accept next job input
    */
-   
-    this.base();
+
+    this.base.apply(this, arguments);
 
     // Reset sequences
     for (var i = this.sequences.length - 1; i >= 0; i--) {
@@ -557,7 +553,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
 
   resetSpecies: function(speciesList) {
     this.elLk.speciesCheckboxes.prop('checked', function() { return speciesList.indexOf(this.value) >= 0; });
-    this.elLk.speciesDropdown.filterableDropdown({refresh: true});
+    this.elLk.speciesDropdown.speciesDropdown({refresh: true});
   }
 });
 
