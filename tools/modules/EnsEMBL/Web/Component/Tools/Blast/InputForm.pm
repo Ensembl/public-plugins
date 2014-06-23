@@ -65,11 +65,6 @@ sub content {
   });
 
   $fieldset->add_hidden({
-    'name'            => 'species_tag_image',
-    'value'           => sprintf('%sspecies/16/[SPECIES].png', $self->img_url)
-  });
-
-  $fieldset->add_hidden({
     'name'            => 'edit_jobs',
     'value'           => $self->jsonify($edit_jobs)
   });
@@ -127,15 +122,14 @@ sub content {
     'label'           => 'Search against',
     'field_class'     => '_adjustable_height',
     'elements'        => [{
-      'type'            => 'filterable',
+      'type'            => 'speciesdropdown',
       'name'            => 'species',
       'values'          => $options->{'species'},
       'value'           => $species,
       'multiple'        => 1,
       'wrapper_class'   => '_species_dropdown',
       'filter_text'     => 'Type in to add a species&#8230;',
-      'filter_no_match' => 'No matching species found',
-      'tag_attribs'     => {'class' => 'species-tag _species_tags'}
+      'filter_no_match' => 'No matching species found'
     }]
   });
 
