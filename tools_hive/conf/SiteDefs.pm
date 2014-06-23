@@ -22,7 +22,11 @@ use strict;
 
 sub update_conf {
 
-  $SiteDefs::ENSEMBL_TOOLS_JOB_DISPATCHER       = { 'Blast' => 'Hive', 'VEP' => 'Hive' };           # Overriding tools plugin variable
+  $SiteDefs::ENSEMBL_TOOLS_JOB_DISPATCHER       = { 
+                                                    'Blast'             => 'Hive', 
+                                                    'VEP'               => 'Hive', 
+                                                    'AssemblyConverter' => 'Hive', 
+                                                  };           # Overriding tools plugin variable
   $SiteDefs::ENSEMBL_LSF_HOSTS                  = [];                                               # List of hosts where LSF jobs will be run
   $SiteDefs::ENSEMBL_LSF_CODE_LOCATION          = $SiteDefs::ENSEMBL_SERVERROOT;                    # path from where LSF hosts can access ensembl code (same as web root for jobs running on local machine)
   $SiteDefs::ENSEMBL_TOOLS_PIPELINE_PACKAGE     = 'EnsEMBL::Web::PipeConfig::Tools_conf';           # package read by init_pipeline.pl script from hive to create the hive database
@@ -70,6 +74,22 @@ sub update_conf {
   };
   $SiteDefs::ENSEMBL_VEP_SCRIPT                 = 'ensembl-tools/scripts/variant_effect_predictor/variant_effect_predictor.pl';
                                                                                                     # location of the VEP script accessible to the local machine or LSF host running the job
+
+
+  # Assembly Converter configs
+  $SiteDefs::ENSEMBL_AC_LSF_QUEUE              = 'AC';                                            # LSF queue for AC jobs, if running on farm
+  $SiteDefs::ENSEMBL_AC_LSF_TIMEOUT            = '3:00';                                           # Max timelimit an AC job is allowed to run
+  $SiteDefs::ENSEMBL_AC_ANALYSIS_CAPACITY      = 24;                                               # Number of jobs that can be run parallel in LSF in the queue
+  $SiteDefs::ENSEMBL_AC_SCRIPT_DEFAULT_OPTIONS = {                                                 # Default options for command line assembly converter script (keys with value undef get ignored)
+    '--host'        => undef,                                                                       # Database host (defaults to ensembldb.ensembl.org)
+    '--user'        => undef,                                                                       # Defaults to 'anonymous'
+    '--password'    => undef,                                                                       # Not used by default
+    '--port'        => undef,                                                                       # Defaults to 5306
+    '--fork'        => 4,                                                                           # Enable forking, using 4 forks
+    '--dir'         => '/data_ensembl/assembly_converter/',     # path to CrossMap chain files
+  };
+
+
 }
 
 1;

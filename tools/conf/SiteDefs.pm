@@ -26,14 +26,16 @@ sub update_conf {
 
   $SiteDefs::ENSEMBL_ORM_DATABASES->{'ticket'}  = 'DATABASE_WEB_TOOLS';                             # Database key name for tools db as defined in MULTI.ini
 
-  $SiteDefs::ENSEMBL_TOOLS_LIST                 = [ 'Blast' => 'BLAST/BLAT', 'VEP' => 'Variant Effect Predictor' ];
+  $SiteDefs::ENSEMBL_TOOLS_LIST                 = [ 'Blast' => 'BLAST/BLAT', 'VEP' => 'Variant Effect Predictor', 'AssemblyConverter' => 'Assembly Converter' ];
                                                                                                     # Entries as added to the tools db ticket_type_name table
-  $SiteDefs::ENSEMBL_TOOLS_JOB_DISPATCHER       = { 'Blast' => '', 'VEP' => '' };                   # Which dispatcher to be used for the jobs
+  $SiteDefs::ENSEMBL_TOOLS_JOB_DISPATCHER       = { 'Blast' => '', 'VEP' => '', 'AssemblyConverter' => '' };                   # Which dispatcher to be used for the jobs
 
   $SiteDefs::ENSEMBL_TOOLS_TMP_DIR              = $SiteDefs::ENSEMBL_TMP_DIR.'/tools';              # tmp directory for jobs i/o files
   $SiteDefs::ENSEMBL_BLAST_ENABLED              = 1;                                                # Flag to enable/disable BLAST
   $SiteDefs::ENSEMBL_VEP_ENABLED                = 1;                                                # Flag to enable/disable VEP
+  $SiteDefs::ENSEMBL_AC_ENABLED                 = 1;                                                # Flag to enable/disable Assembly Converter
   $SiteDefs::ENSEMBL_VEP_CGI_POST_MAX           = 52428800;                                         # 50MB limit for VEP input files
+  $SiteDefs::ENSEMBL_AC_CGI_POST_MAX            = 52428800;                                         # 50MB limit for Assembly Converter input files
   $SiteDefs::ENSEMBL_VEP_FILTER_SCRIPT          = 'ensembl-tools/scripts/variant_effect_predictor/filter_vep.pl';
                                                                                                     # location of the VEP filter script accessible to the web machine for filtering Results pages output
   $SiteDefs::ENSEMBL_VEP_FILTER_SCRIPT_OPTIONS  = {                                                 # Command line options for VEP filter script

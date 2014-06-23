@@ -26,6 +26,7 @@ use EnsEMBL::Web::SpeciesDefs;
 
 use EnsEMBL::Web::ToolsPipeConfig::Blast;
 use EnsEMBL::Web::ToolsPipeConfig::VEP;
+use EnsEMBL::Web::ToolsPipeConfig::AssemblyConverter;
 
 use parent qw(Bio::EnsEMBL::Hive::PipeConfig::HiveGeneric_conf);
 
@@ -37,8 +38,9 @@ sub new {
   my $sd    = $self->{'_species_defs'} = EnsEMBL::Web::SpeciesDefs->new;
 
   $self->{'_available_tools'} = [
-    $sd->ENSEMBL_BLAST_ENABLED ? 'EnsEMBL::Web::ToolsPipeConfig::Blast' : (),
-    $sd->ENSEMBL_VEP_ENABLED   ? 'EnsEMBL::Web::ToolsPipeConfig::VEP'   : ()
+    $sd->ENSEMBL_BLAST_ENABLED ? 'EnsEMBL::Web::ToolsPipeConfig::Blast'             : (),
+    $sd->ENSEMBL_VEP_ENABLED   ? 'EnsEMBL::Web::ToolsPipeConfig::VEP'               : (),
+    $sd->ENSEMBL_AC_ENABLED    ? 'EnsEMBL::Web::ToolsPipeConfig::AssemblyConverter' : (),
   ];
 
   return $self;

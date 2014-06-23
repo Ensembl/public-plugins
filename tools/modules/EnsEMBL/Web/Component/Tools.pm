@@ -86,18 +86,7 @@ sub get_job_summary {
   });
 
   if ($job_status eq 'done' && grep($_ eq 'results', @$links)) {
-    $job_status_div->last_child->append_child('a', {
-      'class'       => [qw(small left-margin results-link)],
-      'flags'       => ['view_results_link'],
-      'inner_HTML'  => '[View results]',
-      'href'        => $hub->url({
-        'species'     => $job->species,
-        'type'        => 'Tools',
-        'action'      => $job->ticket->ticket_type_name,
-        'function'    => 'Results',
-        'tl'          => $url_param
-      })
-    });
+    $job_status_div->last_child->append_child('a', $self->_result_link_params($job, $url_param));
   }
 
   my $icons = {
@@ -165,6 +154,24 @@ sub get_job_summary {
 
   return $job_status_div;
 }
+
+sub _results_link_params {
+  my ($self, $job, $url_param) = @_;
+  my $link_params = {
+      'class'       => [qw(small left-margin results-link)],
+      'flags'       => ['view_results_link'],
+      'inner_HTML'  => '[View results]',
+      'href'        => $self->hub->url({
+        'species'     => $job->species,
+        'type'        => 'Tools',
+        'action'      => $job->ticket->ticket_type_name,
+        'function'    => 'Results',
+        'tl'          => $url_param
+      })
+  };
+  return $link_params;
+}
+
 
 sub new_tool_form {
   ## Creates a new Form object with the information required by all Tools based form pages
