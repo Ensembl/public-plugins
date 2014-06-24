@@ -135,7 +135,7 @@ sub get_job_summary {
       'class'       => 'job-error-msg',
       'children'    => [{
         'node_name'   => 'p',
-        'inner_HTML'  => join('', $display_message, $exception_is_fatal ? sprintf(' <a class="toggle closed" href="#more" rel="%s">Show details</a>', $job_message_class) : '')
+        'inner_HTML'  => join('', $display_message, $exception_is_fatal ? sprintf(' <a class="toggle _slide_toggle closed" href="#more" rel="%s">Show details</a>', $job_message_class) : '')
       }]
     });
 

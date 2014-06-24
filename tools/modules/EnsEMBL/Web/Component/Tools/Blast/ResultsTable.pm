@@ -102,7 +102,7 @@ sub content {
       $table->add_row($result_data);
     }
 
-    $html .= sprintf '<h3><a rel="_blast_results_table" class="toggle set_cookie open" href="#">Results table</a></h3>
+    $html .= sprintf '<h3><a rel="_blast_results_table" class="toggle _slide_toggle set_cookie open" href="#">Results table</a></h3>
       <div class="_blast_results_table toggleable">%s</div>', $table->render;
   }
 

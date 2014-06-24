@@ -49,7 +49,7 @@ sub content {
   $image->karyotype($hub, $object, $pointers, 'Vkaryoblast');
 
   return sprintf('
-    <h3><a rel ="_blast_karyotype" class="toggle set_cookie open" href="#">HSP distribution on genome:</a></h3>
+    <h3><a rel ="_blast_karyotype" class="toggle _slide_toggle set_cookie open" href="#">HSP distribution on genome:</a></h3>
     <div class="_blast_karyotype">
       <div class="toggleable">%s</div>
     </div>',
