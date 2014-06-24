@@ -43,12 +43,7 @@ sub content {
   my $name = $self->object->parse_url_param->{ticket_name};
 
   ## We have a ticket!
-  my $hide = $self->hub->get_cookie_value('toggle_stats_status') eq 'closed';
-  my $html = sprintf ('<h3><a rel ="job_stats" class="toggle set_cookie %s" href="#">Summary statistics for ticket %s:</a></h3>',
-    $hide ? 'closed' : 'open',
-    $name
-  );
-  
+  my $html = qq(<h3><a rel ="job_stats" class="toggle set_cookie open" href="#">Summary statistics for ticket $name:</a></h3>);
   $html .= '<input type="hidden" class="panel_type" value="VEPResultsSummary" />';
   $html .= '<div class="job_stats"><div class="toggleable">';
 
