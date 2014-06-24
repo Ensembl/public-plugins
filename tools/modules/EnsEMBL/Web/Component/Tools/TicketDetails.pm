@@ -42,7 +42,7 @@ sub content {
         $ticket->ticket_name,
         $is_view ? $hub->url({'tl' => undef, 'function' => ''}) : '',
       )
-    : '<h3><a rel="_ticket_details" class="toggle set_cookie closed" href="#">Job details</a></h3>';
+    : '<h3><a rel="_ticket_details" class="toggle closed" href="#">Job details</a></h3>';
 
   return sprintf '<input type="hidden" class="panel_type" value="TicketDetails" />%s%s', $ticket ? ($heading, $self->content_ticket($ticket, $jobs)) : ('', '');
 }
