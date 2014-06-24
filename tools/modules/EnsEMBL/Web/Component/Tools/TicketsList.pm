@@ -23,16 +23,17 @@ package EnsEMBL::Web::Component::Tools::TicketsList;
 use strict;
 use warnings;
 
+use EnsEMBL::Web::Utils::DynamicLoader qw(dynamic_require);
+
 use parent qw(EnsEMBL::Web::Component::Tools);
 
 sub content {
   my $self          = shift;
   my $hub           = $self->hub;
-  my $sd            = $hub->species_defs;
   my $object        = $self->object;
   my $tickets       = $object->get_current_tickets;
   my $tool_type     = $object->tool_type;
-  
+
   my $table         =  $self->new_table([
     { 'key' => 'analysis',  'title' => 'Analysis',      'sort' => 'string'          },
     { 'key' => 'ticket',    'title' => 'Ticket',        'sort' => 'string'          },
@@ -44,49 +45,26 @@ sub content {
     'exportable'  => 0
   });
 
-  my $status_tips   = {
-    'not_submitted'   => q(This job could not be submitted due to some problems. Please click on the 'View details' icon for more information),
-    'queued'          => q(Your job has been submitted and will be processed soon.),
-    'submitted'       => q(Your job has been submitted and will be processed soon.),
-    'running'         => q(Your job is currently being processed. The page will refresh once it's finished running.),
-    'done'            => q(This job is finished. Please click on 'View results' link to see the results),
-    'failed'          => q(This job has failed. Please click on the 'View details' icon for more information),
-    'deleted'         => q(Your ticket has been deleted. This usually happens if the ticket is too old.)
-  };
-
   if ($tickets && @$tickets > 0) {
 
     foreach my $ticket (@$tickets) {
 
-      my $ticket_name   = $ticket->ticket_name;
-      my $job_count     = $ticket->job_count;
-      my @jobs_summary;
+      my $ticket_type     = $ticket->ticket_type_name;
+      my $ticket_name     = $ticket->ticket_name;
+      my $component       = ref $self eq __PACKAGE__ && dynamic_require(__PACKAGE__ =~ s/(::[^:]+)$/::$ticket_type$1/r, 1) || ref $self; # FIXME this really needs to be tidied up!
+      my $job_summary     = "${component}::job_summary_section";
+      my @jobs_summary    = map $self->$job_summary($ticket, $_)->render, $ticket->job;
+      my $created_at      = $ticket->created_at;
 
-      for ($ticket->job) {
-        my $job_number        = $_->job_number;
-        my $dispatcher_status = $_->dispatcher_status;
-        push @jobs_summary, sprintf('<p><img class="job-species _ht" title="%s" src="%sspecies/16/%s.png" alt="" height="16" width="16"><span class="job-desc">%s%s</span><span class="_ht job-status job-status-%s left-margin" title="%s">%s</span>%s%s',
-          $sd->species_label($_->species, 1),
-          $self->img_url,
-          $_->species,
-          $job_number == 1 && $job_count == 1 ? '' : "Job $job_number/$job_count: ",
-          $_->job_desc || '',
-          $dispatcher_status,
-          $status_tips->{$dispatcher_status},
-          ucfirst $dispatcher_status =~ s/_/ /gr,
-          $self->job_results_link($ticket, $_),
-          $self->job_buttons($ticket, $_)
-        );
-      }
-
-      my $created_at = $ticket->created_at;
+      my $ticket_link     = "${component}::ticket_link";
+      my $ticket_buttons  = "${component}::ticket_buttons";
 
       $table->add_row({
         'analysis'  => $ticket->ticket_type->ticket_type_caption,
-        'ticket'    => $self->ticket_link($ticket),
+        'ticket'    => $self->$ticket_link($ticket),
         'jobs'      => join('', @jobs_summary),
         'created'   => sprintf('<span class="hidden">%d</span>%s', $created_at =~ s/[^\d]//gr, $self->format_date($created_at)),
-        'extras'    => $self->ticket_buttons($ticket)->render,
+        'extras'    => $self->$ticket_buttons($ticket)->render,
         'options'   => {'class' => "_ticket_$ticket_name"}
       });
     }
@@ -99,7 +77,7 @@ sub content {
     'children'    => [{
       'node_name'   => 'input',
       'type'        => 'hidden',
-      'class'       => 'panel_type',
+      'class'       => ['panel_type'],
       'value'       => 'ActivitySummary'
     }, {
       'node_name'   => 'input',
@@ -118,19 +96,19 @@ sub content {
       'value'       => $auto_refresh
     }, {
       'node_name'   => 'h2',
-      'inner_HTML'  => $tool_type ? qq(<a rel="_activity_summary" class="toggle set_cookie open" href="#">Recent $tool_type tickets:</a>) : 'Recent tickets:'
+      'inner_HTML'  => $tool_type ? qq(<a rel="_activity_summary" class="toggle _slide_toggle set_cookie open" href="#">Recent $tool_type tickets:</a>) : 'Recent tickets:'
     }, {
       'node_name'   => 'div',
-      'class'       => ['toggleable', '_activity_summary'],
+      'class'       => [qw(toggleable _activity_summary)],
       'children'    => [{
         'node_name'   => 'div',
-        'class'       => '_ticket_table',
+        'class'       => ['_ticket_table'],
         'children'    => [{
           'node_name'   => 'p',
           'children'    => [{
             'node_name'   => 'a',
             'href'        => '',
-            'class'       => 'button _tickets_refresh',
+            'class'       => [qw(button _tickets_refresh)],
             'inner_HTML'  => '<span class="tickets-refresh"></span><span class="hidden tickets-timer"></span><span>Refresh</span>'
           }]
         }, {
@@ -146,13 +124,110 @@ sub content {
   })->render;
 }
 
+sub status_tips {
+  return {
+    'not_submitted'   => q(This job could not be submitted due to some problems. Please click on the 'View details' icon for more information),
+    'queued'          => q(Your job has been submitted and will be processed soon.),
+    'submitted'       => q(Your job has been submitted and will be processed soon.),
+    'running'         => q(Your job is currently being processed. The page will refresh once it's finished running.),
+    'done'            => q(This job is finished. Please click on 'View results' link to see the results),
+    'failed'          => q(This job has failed. Please click on the 'View details' icon for more information),
+    'deleted'         => q(Your ticket has been deleted. This usually happens if the ticket is too old.)
+  };
+}
+
+sub job_summary_section {
+  my ($self, $ticket, $job) = @_;
+
+  my $hub               = $self->hub;
+  my $ticket_name       = $ticket->ticket_name;
+  my $url_param         = $self->object->create_url_param({'ticket_name' => $ticket_name, 'job_id' => $job->job_id});
+  my $action            = $ticket->ticket_type_name;
+  my $species_defs      = $hub->species_defs;
+  my $job_count         = $ticket->job_count;
+  my $job_number        = $job->job_number;
+  my $dispatcher_status = $job->dispatcher_status;
+
+  return $self->dom->create_element('p', {
+    'children'    => [{
+      'node_name'   => 'img',
+      'class'       => [qw(job-species _ht)],
+      'title'       => $species_defs->species_label($job->species, 1),
+      'src'         => sprintf('%sspecies/16/%s.png', $self->img_url, $job->species),
+      'alt'         => '',
+      'style'       => {
+        'width'       => '16px',
+        'height'      => '16px'
+      }
+    }, {
+      'node_name'   => 'span',
+      'class'       => ['job-desc'],
+      'inner_HTML'  => sprintf('%s%s', $job_number == 1 && $job_count == 1 ? '' : "Job $job_number/$job_count: ", $job->job_desc || ''),
+    }, {
+      'node_name'   => 'span',
+      'flags'       => ['job_status_tag'],
+      'class'       => [qw(_ht job-status left-margin), "job-status-$dispatcher_status"],
+      'title'       => $self->status_tips->{$dispatcher_status},
+      'inner_HTML'  => ucfirst $dispatcher_status =~ s/_/ /gr
+    },
+    $dispatcher_status eq 'done' ? {
+      'node_name'   => 'a',
+      'inner_HTML'  => '[View results]',
+      'flags'       => ['job_results_link'],
+      'class'       => [qw(small left-margin)],
+      'href'        => $hub->url({
+        'species'     => $job->species,
+        'type'        => 'Tools',
+        'action'      => $ticket->ticket_type_name,
+        'function'    => 'Results',
+        'tl'          => $self->object->create_url_param({'ticket_name' => $ticket->ticket_name, 'job_id' => $job->job_id})
+      })
+    } : (), {
+      'node_name'   => 'span',
+      'class'       => ['job-sprites'],
+      'children'    => [{
+        'node_name'   => 'a',
+        'class'       => [qw(_ticket_view _change_location job-sprite)],
+        'href'        => $hub->url({'action' => $action, 'function' => 'View', 'tl' => $url_param}),
+        'children'    => [{
+          'node_name'   => 'span',
+          'class'       => [qw(_ht sprite view_icon)],
+          'title'       => 'View details'
+        }]
+      }, {
+        'node_name'     => 'a',
+        'class'         => [qw(_ticket_edit _change_location job-sprite)],
+        'href'          => $hub->url({'action' => $action, 'function' => 'Edit', 'tl' => $url_param}),
+        'children'      => [{
+          'node_name'     => 'span',
+          'class'         => [qw(_ht sprite edit_icon)],
+          'title'         => 'Edit &amp; resubmit job'
+        }]
+      }, {
+        'node_name'     => 'a',
+        'class'         => [qw(_json_link job-sprite)],
+        'href'          => $hub->url('Json', {'action' => $action, 'function' => 'delete', 'tl' => $url_param}),
+        'children'      => [{
+          'node_name'     => 'span',
+          'class'         => [qw(_ht sprite delete_icon)],
+          'title'         => 'Delete job'
+        }, {
+          'node_name'     => 'span',
+          'class'         => [qw(hidden _confirm)],
+          'inner_HTML'    => @{$ticket->job} > 1 ? sprintf(q(This will delete job number %s from ticket '%s' permanently.), $job->job_number, $ticket_name) : sprintf(q(This will delete ticket '%s' permanently.), $ticket_name)
+        }]
+      }]}
+    ]
+  });
+}
+
 sub ticket_link {
   my ($self, $ticket) = @_;
   my $ticket_name = $ticket->ticket_name;
 
   return sprintf('<a class="_ticket_view _change_location" href="%s">%s</a>',
     $self->hub->url({
-      'action'    => $ticket->ticket_type->ticket_type_name,
+      'action'    => $ticket->ticket_type_name,
       'function'  => 'View',
       'tl'        => $self->object->create_url_param({'ticket_name' => $ticket_name})
     }),
@@ -167,11 +242,11 @@ sub ticket_buttons {
   my $ticket_name   = $ticket->ticket_name;
   my $owner_is_user = $ticket->owner_type eq 'user';
   my $url_param     = $self->object->create_url_param({'ticket_name' => $ticket_name});
-  my $action        = $ticket->ticket_type->ticket_type_name;
+  my $action        = $ticket->ticket_type_name;
 
   my $save_button   = {
     'node_name'       => 'span',
-    'class'           => ['_ht', 'sprite', 'save_icon', $user && $owner_is_user ? 'sprite_disabled' : ()],
+    'class'           => [qw(_ht sprite save_icon), $user && $owner_is_user ? 'sprite_disabled' : ()],
     'title'           => $user ? $owner_is_user ? 'Already saved to account' : 'Save to account' : 'Login to save to account'
   };
 
@@ -193,75 +268,20 @@ sub ticket_buttons {
     }]
   }, {
     'node_name'       => 'a',
-    'class'           => '_json_link',
+    'class'           => ['_json_link'],
     'href'            => $hub->url('Json', {'action' => $action, 'function' => 'delete', 'tl' => $url_param}),
     'children'        => [{
       'node_name'       => 'span',
-      'class'           => [ '_ht', 'sprite', 'delete_icon' ],
+      'class'           => [qw(_ht sprite delete_icon)],
       'title'           => 'Delete ticket'
     }, {
       'node_name'       => 'span',
-      'class'           => 'hidden _confirm',
+      'class'           => [qw(hidden _confirm)],
       'inner_HTML'      => "This will delete ticket '$ticket_name' permanently."
     }]
   }]});
 
   return $buttons;
-}
-
-sub job_results_link {
-  my ($self, $ticket, $job) = @_;
-  return $job->dispatcher_status eq 'done'
-    ? sprintf('<a class="small left-margin" href="%s">[View results]</a>', $self->hub->url({
-      'species'   => $job->species,
-      'type'      => 'Tools',
-      'action'    => $ticket->ticket_type_name,
-      'function'  => 'Results',
-      'tl'        => $self->object->create_url_param({'ticket_name' => $ticket->ticket_name, 'job_id' => $job->job_id})
-    }))
-    : '';
-}
-
-sub job_buttons {
-  my ($self, $ticket, $job) = @_;
-
-  my $hub           = $self->hub;
-  my $ticket_name   = $ticket->ticket_name;
-  my $url_param     = $self->object->create_url_param({'ticket_name' => $ticket_name, 'job_id' => $job->job_id});
-  my $action        = $ticket->ticket_type->ticket_type_name;
-
-  return $self->dom->create_element('span', { 'class' => 'job-sprites', 'children' => [ {
-    'node_name'       => 'a',
-    'class'           => [qw(_ticket_view _change_location job-sprite)],
-    'href'            => $hub->url({'action' => $action, 'function' => 'View', 'tl' => $url_param}),
-    'children'        => [ {
-      'node_name'       => 'span',
-      'class'           => [qw(_ht sprite view_icon)],
-      'title'           => 'View details'
-    }]
-  }, {
-    'node_name'       => 'a',
-    'class'           => [qw(_ticket_edit _change_location job-sprite)],
-    'href'            => $hub->url({'action' => $action, 'function' => 'Edit', 'tl' => $url_param}),
-    'children'        => [{
-      'node_name'       => 'span',
-      'class'           => [qw(_ht sprite edit_icon)],
-      'title'           => 'Edit &amp; resubmit job'
-    }]
-  }, {
-    'node_name'       => 'a',
-    'class'           => [qw(_json_link job-sprite)],
-    'href'            => $hub->url('Json', {'action' => $action, 'function' => 'delete', 'tl' => $url_param}),
-    'children'        => [{
-      'node_name'       => 'span',
-      'class'           => [ '_ht', 'sprite', 'delete_icon' ],
-      'title'           => 'Delete job'
-    }, {
-      'node_name'       => 'span',
-      'class'           => 'hidden _confirm',
-      'inner_HTML'      => @{$ticket->job} > 1 ? sprintf(q(This will delete job number %s from ticket '%s' permanently.), $job->job_number, $ticket_name) : sprintf(q(This will delete ticket '%s' permanently.), $ticket_name)
-    }]
-  }]})->render;
 }
 
 1;
