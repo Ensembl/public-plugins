@@ -320,6 +320,7 @@ sub get_result_url {
     my $start   = $result_data->{'gstart'} < $result_data->{'gend'} ? $result_data->{'gstart'} : $result_data->{'gend'};
     my $end     = $result_data->{'gstart'} > $result_data->{'gend'} ? $result_data->{'gstart'} : $result_data->{'gend'};
     my $length  = $end - $start;
+    my $p_track = $self->parse_search_type($job->job_data->{'search_type'}, 'search_method') eq 'BLASTP' ? ',codon_seq=normal' : '';
 
     # Add 5% padding on both sides
     $start  = int($start - $length * 0.05);
@@ -332,7 +333,7 @@ sub get_result_url {
       'type'              => 'Location',
       'action'            => 'View',
       'r'                 => sprintf('%s:%s-%s', $result_data->{'gid'}, $start, $end),
-      'contigviewbottom'  => 'blast=normal',
+      'contigviewbottom'  => "blast=normal$p_track",
       'tl'                => $url_param
     };
 
