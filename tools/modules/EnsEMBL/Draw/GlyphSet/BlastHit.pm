@@ -495,11 +495,11 @@ sub draw_btop_feature {
   }
 
   # Add insert markers
-  foreach my $ins (@inserts){
+  foreach my $ins (@inserts) {
     my $y = $params->{'y_offset'} || 0;
     $self->push($self->Triangle({
-      mid_point     => [$ins->{'pos'}, $height + $y -8],
-      width         => 10 / $pix_per_bp,
+      mid_point     => [$ins->{'pos'}, $height + $y - 12],
+      width         => 8 / $pix_per_bp,
       height        => 4,
       colour        => 'black',
       direction     => 'down',
