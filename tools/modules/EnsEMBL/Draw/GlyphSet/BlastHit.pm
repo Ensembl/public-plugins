@@ -310,7 +310,7 @@ sub draw_btop_feature {
   my $mismatch_colour  = $self->{'config'}->colourmap->mix($match_colour, 'white', 0.9);
   my($font, $fontsize) = $self->get_font_details( $self->fixed ? 'fixed' : 'innertext' );
   my($tmp1, $tmp2, $font_w, $font_h) = $self->get_text_width(0, 'X', '', 'font' => $font, 'ptsize' => $fontsize);
-  my $text_fits =  $font_w * $slice->length <= int($slice->length * $pix_per_bp);
+  my $text_fits =  0.8 * $font_w * $slice->length <= int($slice->length * $pix_per_bp);
 
   my $btop = $params->{'btop'};
   $btop =~s/(\d+)/:$1:/g;
@@ -462,7 +462,7 @@ sub draw_btop_feature {
   }
 
   # Add alignment seq if zoomed in
-  if ($text_fits){
+  if ($text_fits) {
     my $i = 0;
     foreach my $base ( split //, $seq) {
       my $x = $seq_start + $i;
