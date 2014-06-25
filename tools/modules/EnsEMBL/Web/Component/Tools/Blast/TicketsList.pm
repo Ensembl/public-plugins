@@ -22,26 +22,15 @@ use strict;
 use warnings;
 
 use parent qw(
-  EnsEMBL::Web::Component::Tools::TicketsList
   EnsEMBL::Web::Component::Tools::Blast
+  EnsEMBL::Web::Component::Tools::TicketsList
 );
 
 sub job_summary_section {
   ## @override
-  my ($self, $ticket, $job) = @_;
+  my ($self, $ticket, $job, $hit_count) = @_;
 
-  my $summary   = $self->SUPER::job_summary_section($ticket, $job);
-  my $hit_count = $job->result_count;
-
-  for (@{$summary->get_nodes_by_flag('job_status_tag')}) {
-    $_->append_HTML(sprintf ': %s hit%s found', $hit_count || 'No', $hit_count == 1 ? '' : 's');
-
-    unless ($hit_count) {
-      $_->set_attribute('title', "This job is finished, but no hits were found. If you believe that there should be a match to your query sequence please edit the job using the icon on the right to adjust the configuration parameters and resubmit the search.");
-      $_->set_attribute('class', 'job-status-noresult');
-      $_->remove_attribute('class', 'job-status-done');
-    }
-  }
+  my $summary = $self->SUPER::job_summary_section($ticket, $job, $hit_count);
 
   unless ($hit_count) {
     $_->parent_node->remove_child($_) for @{$summary->get_nodes_by_flag('job_results_link')};
