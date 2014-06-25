@@ -72,6 +72,8 @@ sub content {
         'options'   => {'class' => "_ticket_$ticket_name"}
       });
     }
+
+    bless $self, $class; # back to the original class
   }
 
   my ($tickets_data_hash, $auto_refresh) = $object->get_tickets_data_for_sync;
