@@ -22,8 +22,8 @@ use strict;
 use warnings;
 
 use parent qw(
-  EnsEMBL::Web::Component::Tools::TicketDetails
   EnsEMBL::Web::Component::Tools::VEP
+  EnsEMBL::Web::Component::Tools::TicketDetails
 );
 
 sub content_ticket {
