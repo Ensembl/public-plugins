@@ -22,8 +22,8 @@ use strict;
 use warnings;
 
 use parent qw(
-  EnsEMBL::Web::Component::Tools::TicketDetails
   EnsEMBL::Web::Component::Tools::Blast
+  EnsEMBL::Web::Component::Tools::TicketDetails
 );
 
 sub content_ticket {
@@ -34,7 +34,7 @@ sub content_ticket {
 
   $div->set_attribute('class', $is_view ? 'plain-box' : '_ticket_details hidden toggleable');
 
-  $div->append_child($self->job_details_table($_, $is_view ? [qw(status results edit delete)] : ())) for @$jobs;
+  $div->append_child($self->job_details_table($_, $is_view ? [qw(status edit delete), $_->result_count ? 'results' : ()] : ())) for @$jobs;
 
   return $div->render;
 }
