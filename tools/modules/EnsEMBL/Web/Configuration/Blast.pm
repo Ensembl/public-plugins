@@ -23,6 +23,6 @@ package EnsEMBL::Web::Configuration::Blast;
 use strict;
 use warnings;
 
-use parent qw( EnsEMBL::Web::Configuration::Tools);
+use parent qw(EnsEMBL::Web::Configuration::Tools);
 
 1;

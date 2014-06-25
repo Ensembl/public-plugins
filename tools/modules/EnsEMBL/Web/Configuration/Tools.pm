@@ -21,7 +21,7 @@ package EnsEMBL::Web::Configuration::Tools;
 use strict;
 use warnings;
 
-use parent qw( EnsEMBL::Web::Configuration );
+use parent qw(EnsEMBL::Web::Configuration);
 
 sub modify_page_elements  { $_[0]->page->remove_body_element('summary');  }
 sub set_default_action    { $_[0]->{'_data'}{'default'} = 'Summary';      }
@@ -48,7 +48,7 @@ sub populate_tree {
     [qw(
       sequence        EnsEMBL::Web::Component::Tools::Blast::InputForm
       details         EnsEMBL::Web::Component::Tools::Blast::TicketDetails
-      tickets         EnsEMBL::Web::Component::Tools::TicketsList
+      tickets         EnsEMBL::Web::Component::Tools::Blast::TicketsList
     )],
     { 'availability' => 1, 'concise' => 'BLAST/BLAT search' }
   ));
