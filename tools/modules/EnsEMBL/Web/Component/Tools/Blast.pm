@@ -71,6 +71,24 @@ sub no_result_hit_found {
   return 'No result hit was found according to your request.';# TODO - display button to go back to summary page
 }
 
+sub job_status_tag {
+  ## @override
+  my ($self, $job, $status, $hits) = @_;
+
+  my $tag = $self->SUPER::job_status_tag($job, $status, $hits);
+
+  if ($status eq 'done') {
+    $tag->{'inner_HTML'} .= sprintf ': %s hit%s found', $hits || 'No', $hits == 1 ? '' : 's';
+
+    unless ($hits) {
+      $tag->{'class'} = [ 'job-status-noresult', grep { $_ ne 'job-status-done' } @{$tag->{'class'}} ];
+      $tag->{'title'} = 'This job is finished, but no hits were found. If you believe that there should be a match to your query sequence please edit the job using the icon on the right to adjust the configuration parameters and resubmit the search.';
+    }
+  }
+
+  return $tag;
+}
+
 sub _display_config {
   ## @private
   my ($self, $configs) = @_;
