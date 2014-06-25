@@ -29,6 +29,7 @@ use parent qw(EnsEMBL::Web::Component::Tools);
 
 sub content {
   my $self          = shift;
+  my $class         = ref $self;
   my $hub           = $self->hub;
   my $object        = $self->object;
   my $tickets       = $object->get_current_tickets;
@@ -49,22 +50,25 @@ sub content {
 
     foreach my $ticket (@$tickets) {
 
-      my $ticket_type     = $ticket->ticket_type_name;
-      my $ticket_name     = $ticket->ticket_name;
-      my $component       = ref $self eq __PACKAGE__ && dynamic_require(__PACKAGE__ =~ s/(::[^:]+)$/::$ticket_type$1/r, 1) || ref $self; # FIXME this really needs to be tidied up!
-      my $job_summary     = "${component}::job_summary_section";
-      my @jobs_summary    = map $self->$job_summary($ticket, $_)->render, $ticket->job;
-      my $created_at      = $ticket->created_at;
+      my $ticket_type = $ticket->ticket_type_name;
+      my $ticket_name = $ticket->ticket_name;
 
-      my $ticket_link     = "${component}::ticket_link";
-      my $ticket_buttons  = "${component}::ticket_buttons";
+      # Decorator design pattern
+      if (my $component = $class eq __PACKAGE__ && dynamic_require(__PACKAGE__ =~ s/(::[^:]+)$/::$ticket_type$1/r, 1)) {
+        bless $self, $component;
+      } else {
+        bless $self, $class; # fallback
+      }
+
+      my @jobs_summary  = map $self->job_summary_section($ticket, $_, $_->result_count)->render, $ticket->job;
+      my $created_at    = $ticket->created_at;
 
       $table->add_row({
         'analysis'  => $ticket->ticket_type->ticket_type_caption,
-        'ticket'    => $self->$ticket_link($ticket),
+        'ticket'    => $self->ticket_link($ticket),
         'jobs'      => join('', @jobs_summary),
         'created'   => sprintf('<span class="hidden">%d</span>%s', $created_at =~ s/[^\d]//gr, $self->format_date($created_at)),
-        'extras'    => $self->$ticket_buttons($ticket)->render,
+        'extras'    => $self->ticket_buttons($ticket)->render,
         'options'   => {'class' => "_ticket_$ticket_name"}
       });
     }
@@ -124,20 +128,8 @@ sub content {
   })->render;
 }
 
-sub status_tips {
-  return {
-    'not_submitted'   => q(This job could not be submitted due to some problems. Please click on the 'View details' icon for more information),
-    'queued'          => q(Your job has been submitted and will be processed soon.),
-    'submitted'       => q(Your job has been submitted and will be processed soon.),
-    'running'         => q(Your job is currently being processed. The page will refresh once it's finished running.),
-    'done'            => q(This job is finished. Please click on 'View results' link to see the results),
-    'failed'          => q(This job has failed. Please click on the 'View details' icon for more information),
-    'deleted'         => q(Your ticket has been deleted. This usually happens if the ticket is too old.)
-  };
-}
-
 sub job_summary_section {
-  my ($self, $ticket, $job) = @_;
+  my ($self, $ticket, $job, $result_count) = @_;
 
   my $hub               = $self->hub;
   my $ticket_name       = $ticket->ticket_name;
@@ -161,15 +153,10 @@ sub job_summary_section {
       }
     }, {
       'node_name'   => 'span',
-      'class'       => ['job-desc'],
+      'class'       => ['right-margin'],
       'inner_HTML'  => sprintf('%s%s', $job_number == 1 && $job_count == 1 ? '' : "Job $job_number/$job_count: ", $job->job_desc || ''),
-    }, {
-      'node_name'   => 'span',
-      'flags'       => ['job_status_tag'],
-      'class'       => [qw(_ht job-status left-margin), "job-status-$dispatcher_status"],
-      'title'       => $self->status_tips->{$dispatcher_status},
-      'inner_HTML'  => ucfirst $dispatcher_status =~ s/_/ /gr
     },
+    $self->job_status_tag($job, $dispatcher_status, $result_count),
     $dispatcher_status eq 'done' ? {
       'node_name'   => 'a',
       'inner_HTML'  => '[View results]',
