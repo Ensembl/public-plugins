@@ -44,9 +44,10 @@ sub features {
      $object  = $object->get_sub_object('Blast');
   my $job     = $object->get_requested_job({'with_all_results' => 1}) or return;
   my $method  = $object->parse_search_type($job->job_data->{'search_type'}, 'search_method');
-  my $hits    = $object->get_all_hits_in_slice_region($job, $slice, sub { ($a->{'score'} || 0) <=> ($b->{'score'} || 0) });
+  my $strand  = $self->strand;
+  my @hits    = grep $strand eq $_->{'gori'}, @{$object->get_all_hits_in_slice_region($job, $slice, sub { ($a->{'score'} || 0) <=> ($b->{'score'} || 0) })};
 
-  return unless @$hits;
+  return unless @hits;
 
   my $analysis = Bio::EnsEMBL::Analysis->new(
     -id               => 1,
@@ -68,9 +69,8 @@ sub features {
 
   my (@features, %features_info);
 
-  foreach my $hit (@$hits) {
+  foreach my $hit (@hits) {
 
-    next if $hit->{'gori'} ne $self->strand;
     my $result_id     = $hit->{'result_id'};
     my $coords        = $hit->{'g_coords'} || [];
     my $colour        = $self->get_colour($hit->{'pident'});
@@ -138,6 +138,8 @@ sub render_normal {
   my $features_bumped       = 0;
 
   $self->_init_bump(undef, $dep);
+
+  return $self->no_track_on_strand unless @$features;
 
   foreach my $feature (@$features) {
 
