@@ -190,7 +190,7 @@ sub job_summary_section {
         'children'      => [{
           'node_name'     => 'span',
           'class'         => [qw(_ht sprite edit_icon)],
-          'title'         => 'Edit &amp; resubmit job'
+          'title'         => 'Edit &amp; resubmit job (create a new ticket)'
         }]
       }, {
         'node_name'     => 'a',
@@ -253,7 +253,7 @@ sub ticket_buttons {
     'children'        => [{
       'node_name'       => 'span',
       'class'           => [qw(_ht sprite edit_icon)],
-      'title'           => 'Edit &amp; resubmit ticket'
+      'title'           => 'Edit &amp; resubmit ticket (create new ticket)'
     }]
   }, {
     'node_name'       => 'a',

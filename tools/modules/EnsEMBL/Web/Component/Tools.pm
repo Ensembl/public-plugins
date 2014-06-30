@@ -97,11 +97,22 @@ sub get_job_summary {
   }
 
   my $icons = {
-    'edit'    => {'icon' => 'edit_icon',    'title' => 'Edit &amp; resubmit', 'url' => [        {'function' => 'Edit',    'tl' => $url_param  }], 'class' => '_ticket_edit _change_location'},
-    'delete'  => {'icon' => 'delete_icon',  'title' => 'Delete',              'url' => ['Json', {'function' => 'delete',  'tl' => $url_param  }], 'class' => '_json_link', 'confirm' => "This will delete this job permanently."}
+    'edit'    => {
+      'icon'    => 'edit_icon',
+      'title'   => 'Edit &amp; resubmit (create new ticket)',
+      'url'     => [{ 'function' => 'Edit', 'tl' => $url_param }],
+      'class'   => '_ticket_edit _change_location'
+    },
+    'delete'  => {
+      'icon'    => 'delete_icon',
+      'title'   => 'Delete',
+      'url'     => ['Json', {'function' => 'delete',  'tl' => $url_param  }],
+      'class'   => '_json_link',
+      'confirm' => 'This will delete this job permanently.'
+    }
   };
 
-  my $margin_left_class = 'left-margin';
+  my $margin_left_class = @{$job_status_div->last_child->child_nodes} ? 'left-margin' : ''; # set left margin only if required
 
   foreach my $link (@$links) {
     if ($icons->{$link}) {
@@ -232,7 +243,6 @@ sub job_status_tag {
     'inner_HTML'    => ucfirst $status =~ s/_/ /gr
   }
 }
-
 
 sub format_date {
   ## Formats datetime from db into a printable form
