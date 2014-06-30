@@ -415,8 +415,8 @@ sub map_btop_to_genomic_coords {
   my $source  = $hit->{'source'};
   my $galn    = '';
 
-  # don't need to map for dbs other than cdna
-  return $hit->{'aln'} unless $source =~/cdna/i;
+  # don't need to map for other dbs
+  return $hit->{'aln'} unless $source =~/cdna|pep/i;
 
   # find the alignment and cache it in the db in case not already saved
   unless ($galn = $hit->{'galn'}) {
@@ -430,7 +430,7 @@ sub map_btop_to_genomic_coords {
     my $processed_gaps  = 0;
 
     # reverse btop string if necessary so always dealing with + strand genomic coords
-    my $object_strand   = $target_object->isa('Bio::EnsEMBL::Translation') ? $target_object->translation->start_Exon->strand : $target_object->strand;
+    my $object_strand   = $target_object->isa('Bio::EnsEMBL::Translation') ? $target_object->start_Exon->strand : $target_object->strand;
     my $rev_flag        = $object_strand ne $hit->{'tori'};
     $btop               = $self->_reverse_btop($btop) if $rev_flag;
 
