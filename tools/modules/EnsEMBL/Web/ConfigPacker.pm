@@ -41,7 +41,7 @@ sub _configure_blast {
   my $multi_tree  = $self->full_tree->{'MULTI'};
   my $species     = $self->species;
   my $blast_types = $multi_tree->{'ENSEMBL_BLAST_TYPES'};
-  my $sources     = $multi_tree->{'ENSEMBL_BLAST_DATASOURCES_BY_TYPE'};
+  my $sources     = $tree->{'ENSEMBL_BLAST_DATASOURCES_BY_TYPE'} || $multi_tree->{'ENSEMBL_BLAST_DATASOURCES_BY_TYPE'}; # give precedence to species.ini entry
   my $blast_conf  = {};
 
   while (my ($blast_type, undef) = each %$blast_types) { #BLAT, NCBIBLAST, WUBLAST etc
