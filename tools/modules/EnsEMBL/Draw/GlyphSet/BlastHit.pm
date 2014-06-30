@@ -325,24 +325,24 @@ sub draw_btop_feature {
 
   my $seq_start = $feature->start > $slice_start ? $feature->start - $slice_start : 0;
   my $s1 = $feature->start - $slice_start;
-  my $width = $end - $seq_start +1;
+  my $width = $end - $seq_start + 1;
 
   $seq = substr($seq, $seq_start, $width);
   my (%seq_diffs, @inserts);
 
-  while (scalar @btop_features > 0 ){
-    my $seq_index  = shift @btop_features;
+  while (scalar @btop_features > 0) {
+    my $seq_index   = shift @btop_features;
     my $diff_string = shift @btop_features || '';
     my $diff_length = (length $diff_string) /2;
     my @diffs = split (//, $diff_string);
 
     my ($processed_diffs, $previous_state);
-    my $count = 0;
-    my $insert_count = 0;
-    my $gap_count = 0;
+    my $count         = 0;
+    my $insert_count  = 0;
+    my $gap_count     = 0;
 
     if (scalar @diffs > 2) {
-      while (my $query_base = shift @diffs){
+      while (my $query_base = shift @diffs) {
         my $target_base = shift @diffs;
 
         my $state = $target_base eq '-' && $query_base ne '-' ? 'insert' :
@@ -351,13 +351,13 @@ sub draw_btop_feature {
 
         my @diff = ($query_base, $target_base);
         $insert_count++ if $state eq 'insert';
-        $gap_count++ if $state eq 'gap';
+        $gap_count++    if $state eq 'gap';
 
-        if (!$previous_state){
+        if (!$previous_state) {
           $processed_diffs->[0] = \@diff;
-        } elsif ( $state eq $previous_state){
+        } elsif ($state eq $previous_state) {
           my @temp = @{$processed_diffs->[$count]};
-          push @temp,  @diff;
+          push @temp, @diff;
           $processed_diffs->[$count] = \@temp;
         } else {
           $count++;
