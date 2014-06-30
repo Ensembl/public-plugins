@@ -79,7 +79,7 @@ sub features {
 
     my $btop;
 
-    if ($slice_length < 10000 && $method =~ /^blastn/i) { # draw btop in this case
+    if ($slice_length < 10000 && $method =~ /^blastn/i ) { # draw btop in this case
 
       $btop = $object->map_btop_to_genomic_coords($hit, $job);
 
@@ -245,16 +245,16 @@ sub highlight {
 
 sub draw_aln_coords {
   my ($self, $params) = @_;
-  my ($composite, $f, $height) = map $params->{$_}, qw(composite feature height);
-  my $pix_per_bp = $self->scalex;
-  my $slice = $self->{'container'};
-  my $length = $slice->length;
-  my $slice_start = $slice->start;
-  my $slice_end = $slice->end;
-  my $match_colour = $params->{'feature_colour'};
-  my $method = $params->{'blast_method'};
-
-  my $coords = $params->{'coords'};
+  my $pix_per_bp      = $self->scalex;
+  my $slice           = $self->{'container'};
+  my $length          = $slice->length;
+  my $slice_start     = $slice->start;
+  my $slice_end       = $slice->end;
+  my $composite       = $params->{'composite'};
+  my $height          = $params->{'height'};
+  my $match_colour    = $params->{'feature_colour'};
+  my $method          = $params->{'blast_method'};
+  my $coords          = $params->{'coords'};
 
   my ($first_exon_start, $last_exon_end, $exon_drawn, $previous_end);
 
@@ -265,14 +265,14 @@ sub draw_aln_coords {
     next if $start < 0 && $end < 0;
     next if $start > $slice_end;
 
-    $start = 0 if $start < 0;
+    $start            = 0 if $start < 0;
     $first_exon_start = $start if !$exon_drawn;
-    $end = $slice_end if $end > $slice_end;
-    $last_exon_end = $end;
+    $end              = $slice_end if $end > $slice_end;
+    $last_exon_end    = $end;
 
-    my $block_length = $end - $start + 1;
+    my $block_length  = $end - $start + 1;
 
-    if ( $exon_drawn ){
+    if ($exon_drawn) {
       my $gap_start = $previous_end < 0 ? 0 : $previous_end;
       my $gap_width = $start - $previous_end;
 
@@ -292,27 +292,28 @@ sub draw_aln_coords {
       height    => $height,
       colour    => $match_colour,
     }));
-    $exon_drawn = 1;
+    $exon_drawn   = 1;
     $previous_end = $end;
   }
 }
 
 sub draw_btop_feature {
   my ($self, $params) = @_;
-  my ($composite, $feature, $height) = map $params->{$_}, qw(composite feature height);
-  my $pix_per_bp = $self->scalex;
-  my $slice = $self->{'container'};
-  my $length = $slice->length;
-  my $slice_start = $slice->start;
-  my $slice_end = $slice->end;
+  my $composite       = $params->{'composite'};
+  my $feature         = $params->{'feature'};
+  my $height          = $params->{'height'};
+  my $pix_per_bp      = $self->scalex;
+  my $slice           = $self->{'container'};
+  my $length          = $slice->length;
+  my $slice_start     = $slice->start;
+  my $slice_end       = $slice->end;
+  my $seq             = $slice->seq;
 
-  my $seq   = $slice->seq;
-
-  my $match_colour = $params->{'feature_colour'};
-  my $mismatch_colour  = $self->{'config'}->colourmap->mix($match_colour, 'white', 0.9);
-  my($font, $fontsize) = $self->get_font_details( $self->fixed ? 'fixed' : 'innertext' );
-  my($tmp1, $tmp2, $font_w, $font_h) = $self->get_text_width(0, 'X', '', 'font' => $font, 'ptsize' => $fontsize);
-  my $text_fits =  0.8 * $font_w * $slice->length <= int($slice->length * $pix_per_bp);
+  my $match_colour      = $params->{'feature_colour'};
+  my $mismatch_colour   = $self->{'config'}->colourmap->mix($match_colour, 'white', 0.9);
+  my ($font, $fontsize) = $self->get_font_details( $self->fixed ? 'fixed' : 'innertext' );
+  my ($tmp1, $tmp2, $font_w, $font_h) = $self->get_text_width(0, 'X', '', 'font' => $font, 'ptsize' => $fontsize);
+  my $text_fits         = 0.8 * $font_w * $slice->length <= int($slice->length * $pix_per_bp);
 
   my $btop = $params->{'btop'};
   $btop =~s/(\d+)/:$1:/g;
