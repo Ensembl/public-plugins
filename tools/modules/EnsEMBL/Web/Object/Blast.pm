@@ -320,7 +320,7 @@ sub get_result_url {
     my $start   = $result_data->{'gstart'} < $result_data->{'gend'} ? $result_data->{'gstart'} : $result_data->{'gend'};
     my $end     = $result_data->{'gstart'} > $result_data->{'gend'} ? $result_data->{'gstart'} : $result_data->{'gend'};
     my $length  = $end - $start;
-    my $p_track = $self->parse_search_type($job->job_data->{'search_type'}, 'search_method') eq 'BLASTP' ? ',codon_seq=normal' : '';
+    my $p_track = $self->parse_search_type($job->job_data->{'search_type'}, 'search_method') ne 'BLASTN' ? ',codon_seq=normal' : ''; # show translated track for any seach type other than dna vs dna
 
     # Add 5% padding on both sides
     $start  = int($start - $length * 0.05);
