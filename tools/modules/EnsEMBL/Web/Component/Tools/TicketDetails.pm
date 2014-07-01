@@ -35,6 +35,8 @@ sub content {
      $jobs      = $ticket->job if $ticket && !@$jobs;
   my $is_view   = $function eq 'View';
 
+  return unless @$jobs;
+
   my $heading = $is_view
     ? sprintf('<h3>Job%s for %s ticket %s<a href="%s" class="left-margin _ticket_hide small _change_location">[Hide]</a></h3>',
         @$jobs > 1 ? 's' : '',
