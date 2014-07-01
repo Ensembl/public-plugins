@@ -35,6 +35,7 @@ sub populate_tree {
   my $url_param   = $object && $object->parse_url_param;
   my $job         = $object && $object->get_requested_job;
   my $result_cap  = $url_param && $url_param->{'ticket_name'} && $url_param->{'job_id'} ? "Results ($url_param->{'ticket_name'}/$url_param->{'job_id'})" : 'Results';
+  my $ticket_cap  = $url_param && $url_param->{'ticket_name'} ? "Ticket ($url_param->{'ticket_name'})" : 'Ticket';
 
   my $tools_node  = $self->create_node('Summary', 'Web Tools',
     [qw(
@@ -53,7 +54,20 @@ sub populate_tree {
     { 'availability' => 1, 'concise' => 'BLAST/BLAT search' }
   ));
 
-  my $blast_results_node = $blast_node->append($self->create_subnode('Blast/Results', $result_cap,
+  # Flags to display blast nodes and sub-nodes
+  my $hide_result           = $action ne 'Blast' || $function !~ /^(Results|Alignment(Protein)?|(Genomic|Query)Seq)$/;
+  my $hide_ticket           = "$action/$function" ne 'Blast/Ticket' && $hide_result;
+  my $hide_sub_result_nodes = "$action/$function" eq 'Blast/Results';
+  my $alignment_type        = $job && $object->can('get_alignment_component_name_for_job') ? $object->get_alignment_component_name_for_job($job) : '';
+
+  my $blast_ticket_node = $blast_node->append($self->create_subnode('Blast/Ticket', $ticket_cap,
+    [qw(
+      tickets         EnsEMBL::Web::Component::Tools::Blast::TicketsList
+    )],
+    { 'availability' => 1, 'concise' => 'BLAST/BLAT Ticket', 'no_menu_entry' => $hide_ticket }
+  ));
+
+  my $blast_results_node = $blast_ticket_node->append($self->create_subnode('Blast/Results', $result_cap,
     [qw(
       details         EnsEMBL::Web::Component::Tools::Blast::TicketDetails
       results         EnsEMBL::Web::Component::Tools::Blast::ResultsSummary
@@ -61,12 +75,8 @@ sub populate_tree {
       karyotype       EnsEMBL::Web::Component::Tools::Blast::Karyotype
     )],
 #      hsps            EnsEMBL::Web::Component::Tools::Blast::HspQueryPlot
-    { 'availability' => 1, 'concise' => $object ? $object->long_caption : '', 'no_menu_entry' => "$action/$function" !~ /^Blast\/(Results|Alignment(Protein)?|(Genomic|Query)Seq)$/ }
+    { 'availability' => 1, 'concise' => $object ? $object->long_caption : '', 'no_menu_entry' => $hide_result }
   ));
-
-  # Flags to display blast result sub-nodes
-  my $hide_sub_result_nodes = "$action/$function" eq 'Blast/Results';
-  my $alignment_type        = $job && $object->can('get_alignment_component_name_for_job') ? $object->get_alignment_component_name_for_job($job) : '';
 
   $blast_results_node->append($_) for (
 
