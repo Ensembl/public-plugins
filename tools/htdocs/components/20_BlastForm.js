@@ -219,7 +219,6 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
 
     // Reset species
     this.resetSpecies(this.defaultSpecies);
-    this.resetSourceTypes(this.defaultSpecies);
   },
 
   populateForm: function(jobsData) {
