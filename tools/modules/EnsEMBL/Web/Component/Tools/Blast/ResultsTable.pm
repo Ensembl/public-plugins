@@ -113,7 +113,17 @@ sub target_link {
   ## Gets the link for the target column
   my ($self, $job, $result) = @_;
 
-  return sprintf '<a href="%s">%s</a>', $self->hub->url($self->object->get_result_url('target', $job, $result)), $result->result_data->{'tid'};
+  my $hub = $self->hub;
+
+  my ($target_url, $gene_url, $gene_label) = $self->object->get_result_url('target', $job, $result);
+
+  return sprintf('<a href="%s">%s</a>%s',
+    $hub->url($target_url),
+    $result->result_data->{'tid'},
+    $gene_url && $gene_label
+      ? sprintf(' (Gene: <a href="%s">%s</a>)', $hub->url($gene_url), $gene_label)
+      : ''
+  );
 }
 
 sub location_link {

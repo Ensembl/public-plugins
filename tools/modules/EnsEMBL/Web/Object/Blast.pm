@@ -196,7 +196,7 @@ sub get_target_object {
   my ($self, $hit, $source)  = @_;
   my $target_id     = $hit->{'tid'};
   my $species       = $hit->{'species'};
-  my $feature_type  = $source =~ /abinitio/i ? 'PredictionTranscript' : $source =~ /cdna/i ? 'Transcript' : 'Translation';
+  my $feature_type  = $source =~ /abinitio/i ? 'PredictionTranscript' : $source =~ /cdna|ncrna/i ? 'Transcript' : 'Translation';
   my $adaptor       = $self->hub->get_adaptor("get_${feature_type}Adaptor", 'core', $species);
 
   return $adaptor->fetch_by_stable_id($target_id);
@@ -329,16 +329,44 @@ sub get_result_url {
 
   if ($link_type eq 'target') {
 
-    my $source  = $job_data->{'source'};
-    my $param   = $source =~/abinitio/i ? 'pt' : $source eq 'PEP_ALL' ? 'p' : 't';
+    my ($param, $gene, $gene_url, $gene_display);
 
-    return {
+    my $source  = $job_data->{'source'};
+    my $target  = $self->get_target_object($result_data, $source);
+
+    if ($target->isa('Bio::EnsEMBL::Translation')) {
+      $param  = 'p';
+      $target = $target->transcript;
+    }
+
+    if ($target->isa('Bio::EnsEMBL::PredictionTranscript')) {
+      $param  = 'pt';
+    } else { # Bio::EnsEMBL::Transcript
+      $param  = 't';
+      $gene   = $target->get_Gene;
+    }
+
+    if ($gene) {
+      $gene_url = {
+        'species' => $species,
+        'type'    => 'Gene',
+        'action'  => 'Summary',
+        'g'       => $gene->stable_id,
+        'tl'      => $url_param
+      };
+      $gene_display = $gene->display_xref;
+      $gene_display = $gene_display ? $gene_display->display_id : $gene->stable_id;
+    }
+
+    my $transcript_url = {
       'species' => $species,
       'type'    => 'Transcript',
       'action'  => $source =~/cdna|ncrna/i ? 'Summary' : 'ProteinSummary',
       $param    => $result_data->{'tid'},
       'tl'      => $url_param
     };
+
+    return wantarray ? ($transcript_url, $gene_url, $gene_display) : $transcript_url;
 
   } elsif ($link_type eq 'location') {
 
