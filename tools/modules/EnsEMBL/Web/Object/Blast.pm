@@ -54,6 +54,7 @@ sub get_blast_form_options {
 
   my $hub             = $self->hub;
   my $sd              = $self->species_defs;
+  my @species         = $sd->valid_species;
   my $blast_types     = $sd->multi_val('ENSEMBL_BLAST_TYPES');              # hashref with keys as BLAT, NCBIBLAST etc
   my $query_types     = $sd->multi_val('ENSEMBL_BLAST_QUERY_TYPES');        # hashref with keys dna, peptide
   my $db_types        = $sd->multi_val('ENSEMBL_BLAST_DB_TYPES');           # hashref with keys dna, peptide
@@ -63,9 +64,10 @@ sub get_blast_form_options {
   my $search_types    = [ map { $_->{'search_type'} } @$blast_configs ];    # NCBIBLAST_BLASTN, NCBIBLAST_BLASTP, BLAT_BLAT etc
 
   my $options         = {}; # Options for different dropdown fields
+  my $missing_sources = {}; # List of missing source files per species
 
   # Species, query types and db types options
-  $options->{'species'}        = [ sort { $a->{'caption'} cmp $b->{'caption'} } map { 'value' => $_, 'caption' => $sd->species_label($_, 1) }, $sd->valid_species ];
+  $options->{'species'}        = [ sort { $a->{'caption'} cmp $b->{'caption'} } map { 'value' => $_, 'caption' => $sd->species_label($_, 1) }, @species ];
   $options->{'query_type'}     = [ map { 'value' => $_, 'caption' => $query_types->{$_} }, keys %$query_types ];
   $options->{'db_type'}        = [ map { 'value' => $_, 'caption' => $db_types->{$_}    }, keys %$db_types    ];
 
@@ -85,9 +87,18 @@ sub get_blast_form_options {
     }
   }
 
+  # Find the missing source files
+  for (@species) {
+    my %available_sources = map {$_ => 1} map { keys %$_ } values %{$sd->get_config($_, 'ENSEMBL_BLAST_DATASOURCES')};
+    if (my @missing = grep !$available_sources{$_}, keys %$sources) {
+      $missing_sources->{$_} = \@missing;
+    }
+  }
+
   return {
-    'options'       => $options,
-    'combinations'  => $self->jsonify($blast_configs)
+    'options'         => $options,
+    'missing_sources' => $self->jsonify($missing_sources),
+    'combinations'    => $self->jsonify($blast_configs)
   };
 }
 

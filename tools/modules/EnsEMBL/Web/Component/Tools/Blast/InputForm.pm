@@ -26,27 +26,33 @@ use EnsEMBL::Web::BlastConstants qw(:all);
 use parent qw(EnsEMBL::Web::Component::Tools::Blast);
 
 sub content {
-  my $self          = shift;
-  my $hub           = $self->hub;
-  my $sd            = $hub->species_defs;
-  my $object        = $self->object;
-  my $form_params   = $object->get_blast_form_options;
-  my $options       = delete $form_params->{'options'};
-  my $combinations  = delete $form_params->{'combinations'};
-  my $species       = $hub->species;
-     $species       = $hub->get_favourite_species->[0] if $species =~ /multi|common/i;
-  my $edit_jobs     = ($hub->function || '') eq 'Edit' ? $object->get_edit_jobs_data : [];
+  my $self            = shift;
+  my $hub             = $self->hub;
+  my $sd              = $hub->species_defs;
+  my $object          = $self->object;
+  my $form_params     = $object->get_blast_form_options;
+  my $options         = delete $form_params->{'options'};
+  my $combinations    = delete $form_params->{'combinations'};
+  my $missing_sources = delete $form_params->{'missing_sources'};
+  my $species         = $hub->species;
+     $species         = $hub->get_favourite_species->[0] if $species =~ /multi|common/i;
+  my $edit_jobs       = ($hub->function || '') eq 'Edit' ? $object->get_edit_jobs_data : [];
 
   if (!@$edit_jobs && (my $existing_seq = $hub->param('query_sequence'))) { # If coming from "BLAST this sequence" link
     $edit_jobs = [ {'sequence' => {'sequence' => $existing_seq}} ];
   }
 
-  my $form          = $self->new_tool_form('Blast', {'class' => 'blast-form'});
-  my $fieldset      = $form->add_fieldset;
+  my $form      = $self->new_tool_form('Blast', {'class' => 'blast-form'});
+  my $fieldset  = $form->add_fieldset;
 
   $fieldset->add_hidden({
     'name'            => 'valid_combinations',
     'value'           => $combinations
+  });
+
+  $fieldset->add_hidden({
+    'name'            => 'missing_sources',
+    'value'           => $missing_sources
   });
 
   $fieldset->add_hidden({

@@ -20,7 +20,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
 
     this.sequences            = [];
     this.combinations         = [];
-    this.speciesTags          = {};
+    this.missingSources       = {};
     this.selectedQueryType    = false;
     this.maxSequenceLength    = 0;
     this.maxNumSequences      = 0;
@@ -42,9 +42,10 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
 
     try {
       // parse the combination JSON from the HTML - if this doesn't work, there is nothing we can do!
-      this.combinations = $.parseJSON(this.elLk.form.find('input[name=valid_combinations]').remove().val());
+      this.combinations   = $.parseJSON(this.elLk.form.find('input[name=valid_combinations]').remove().val());
+      this.missingSources = $.parseJSON(this.elLk.form.find('input[name=missing_sources]').remove().val());
     } catch (ex) {
-      this.combinations = false;
+      this.combinations = this.missingSources = false;
     }
 
     // nothing can be done if any of these is missing!
@@ -53,10 +54,9 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
       return;
     }
 
+    // sequence input fields
     this.elLk.sequences         = this.elLk.form.find('div._sequence');
     this.elLk.sequenceField     = this.elLk.form.find('div._sequence_field');
-    this.elLk.speciesCheckboxes = this.elLk.form.find('input[name=species]');
-    this.elLk.speciesDropdown   = this.elLk.form.find('._species_dropdown').speciesDropdown({refresh: true});
 
     // provide event handlers to the textarea where sequence text is typed
     var sequenceInputEvent = function(e) { // add some delay to make sure the blur event actually gets fired after making sure some other event hasn't removed the input string
@@ -158,6 +158,12 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
       panel.elLk.dbType.filter('[value=' + this.name.split('_')[1] + ']').prop('checked', true);
       panel.resetSearchTools();
     });
+
+    // Species dropdown
+    this.elLk.speciesCheckboxes = this.elLk.form.find('input[name=species]');
+    this.elLk.speciesDropdown   = this.elLk.form.find('._species_dropdown').speciesDropdown({refresh: true, change: function() {
+      panel.resetSourceTypes(panel.elLk.speciesCheckboxes.filter(':checked').map(function() { return this.value; } ).toArray());
+    }});
 
     // Search type dropdown
     this.elLk.searchType = this.elLk.form.find('select[name=search_type]');
@@ -517,6 +523,24 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     this.elLk.searchType.empty()
       .append(this.elLk.searchTypeOptions.filter(function() { return valid.indexOf(this.value) >= 0; }).clone())
       .find('option[value=' + (selectedValue || '') + ']').prop('selected', true).end().selectToToggle('trigger');
+  },
+
+  resetSourceTypes: function(selectedSpecies) {
+  /*
+   * Resets the source type dropdown to disable the source options that are not available for one of the selected species
+   */
+    var sourcesToDisable = [];
+    for (var i = selectedSpecies.length - 1; i >= 0; i--) {
+      sourcesToDisable = sourcesToDisable.concat(this.missingSources[selectedSpecies[i]] || []);
+    }
+
+    this.elLk.source.find('option').prop('disabled', function() { return sourcesToDisable.indexOf(this.value) >= 0; }).end().each(function() {
+      var opts = $(this).find('option:enabled');
+      if (!opts.filter(':selected').length) {
+        opts.first().prop('selected', true);
+      }
+      opts = null;
+    });
   },
 
   updateSeqInfo: function(info) {
