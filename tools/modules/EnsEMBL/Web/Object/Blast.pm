@@ -48,6 +48,20 @@ sub long_caption {
   return '';
 }
 
+sub get_current_tickets {
+  ## @override
+  ## Filters ticket on given ticket id instead of returning all tickets
+  ## @return Arrayref of ticket objects
+  my $self      = shift;
+  my $hub       = $self->hub;
+  my $function  = $hub->function || '';
+
+  return $function eq 'refresh_tickets' && $hub->referer->{'ENSEMBL_FUNCTION'} eq 'Ticket' || $function eq 'Ticket'
+    ? [ $self->get_requested_ticket(@_) ]
+    : $self->SUPER::get_current_tickets(@_)
+  ;
+}
+
 sub get_blast_form_options {
   ## Gets the list of options for dropdown fields in the blast input form
   my $self = shift;
