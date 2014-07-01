@@ -60,9 +60,9 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
 
     // provide event handlers to the textarea where sequence text is typed
     var sequenceInputEvent = function(e) { // add some delay to make sure the blur event actually gets fired after making sure some other event hasn't removed the input string
-      var element = $(this).off('blur change paste').trigger('blur'); // prevent all events to fire at once
+      var element = $(this).off('blur change paste'); // prevent all events to fire at once
       setTimeout(function() {
-        element.trigger('finish').on('blur change paste', sequenceInputEvent);
+        element.trigger('finish').trigger('blur').on('blur change paste', sequenceInputEvent);
         element = null;
       }, 100);
     };
