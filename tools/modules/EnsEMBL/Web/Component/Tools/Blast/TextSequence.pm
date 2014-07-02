@@ -19,10 +19,11 @@ limitations under the License.
 package EnsEMBL::Web::Component::Tools::Blast::TextSequence;
 
 use strict;
+use warnings;
 
 use parent qw(
-  EnsEMBL::Web::Component::Tools::Blast
   EnsEMBL::Web::Component::TextSequence
+  EnsEMBL::Web::Component::Tools::Blast
 );
 
 sub job            { return $_[0]{'_job'};                        } ## @return The cached requested job object
