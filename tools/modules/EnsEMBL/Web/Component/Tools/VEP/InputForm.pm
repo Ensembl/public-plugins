@@ -152,7 +152,7 @@ sub content {
       $self->$method($form, $config_div->last_child); # add required fieldsets
     }
 
-    $self->add_buttons_fieldset($form, {'reset' => 'Reset', 'cancel' => 'Cancel'});
+    $self->add_buttons_fieldset($form, {'reset' => 'Reset', 'cancel' => 'Close form'});
 
     $form = $form->render;
 

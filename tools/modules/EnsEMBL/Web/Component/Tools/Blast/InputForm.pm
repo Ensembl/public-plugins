@@ -239,7 +239,7 @@ sub content {
   }
 
   # add the 'Run' button in a new fieldset
-  $self->add_buttons_fieldset($form, {'reset' => 'Clear', 'cancel' => 'Cancel'});
+  $self->add_buttons_fieldset($form, {'reset' => 'Clear', 'cancel' => 'Close form'});
 
   return sprintf('<div class="hidden _tool_new"><p><a class="button _change_location" href="%s">New Search</a></p></div><div class="hidden _tool_form_div"><h2>Create new ticket:</h2><input type="hidden" class="panel_type" value="BlastForm" />%s</div>',
     $hub->url({'function' => ''}),
