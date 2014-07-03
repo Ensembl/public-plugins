@@ -171,7 +171,7 @@ sub content {
   my $self    = shift;
   my $slice   = $self->get_slice;
   my $length  = $slice->length;
-  my $html    = $self->tool_buttons;
+  my $html    = '';
 
   if ($length >= $self->{'subslice_length'}) {
     $html .= '<div class="sequence_key"></div>' . $self->chunked_content($length, $self->{'subslice_length'}, { length => $length, name => $slice->name });
