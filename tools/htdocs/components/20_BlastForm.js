@@ -260,7 +260,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
       this.resetSearchTools(formInput['search_type']);
 
       // set species
-      this.resetSpecies(formInput['species']);
+      this.resetSpecies(formInput['species'] || this.defaultSpecies);
 
       if (formInput['configs']) {
         for (var name in formInput['configs']) {
