@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-Ensembl.Panel.LocalContext = Ensembl.Panel.LocalContext.extend({
+Ensembl.Panel.Content = Ensembl.Panel.Content.extend({
 
   init: function() {
     this.base.apply(this, arguments);
+
+    this.blastButtonEnabled = false;
 
     Ensembl.EventManager.register('enableBlastButton',  this, this.enableBlastButton);
     Ensembl.EventManager.register('runBlastSeq',        this, this.runBlastSeq);
@@ -26,17 +28,32 @@ Ensembl.Panel.LocalContext = Ensembl.Panel.LocalContext.extend({
   enableBlastButton: function(seq) {
     var panel = this;
 
-    this.elLk.blastForm = this.el.find('.tool_buttons').find('a._blast_button').on('click', function (e) {
-      e.preventDefault();
-      panel.runBlastSeq(seq);
-    }).end().find('form._blast_form');
+    if (seq && !this.blastButtonEnabled) {
 
-    return !!this.elLk.blastForm.length;
+      this.elLk.blastButton = this.el.find('._blast_button').removeClass('modal_link hidden').on('click', function(e) {
+        e.preventDefault();
+        panel.runBlastSeq();
+      });
+
+      if (this.elLk.blastButton.length) {
+
+        this.elLk.blastForm = $('<form>').appendTo(document.body).hide()
+          .attr({action: this.elLk.blastButton.attr('href'), method: 'post'})
+          .append($.map(Ensembl.coreParams, function(n, v) { return $('<input type="hidden" name="' + n + '" value="' + v + '" />'); }))
+          .append($('<input type="hidden" name="query_sequence" value="' + seq + '" />'));
+
+        this.blastButtonEnabled = true;
+      }
+    }
+
+    return this.blastButtonEnabled;
   },
 
   runBlastSeq: function(seq) {
     if (this.elLk.blastForm) {
-      this.elLk.blastForm.find('input[name=query_sequence]').val(seq);
+      if (seq) {
+        this.elLk.blastForm.find('input[name=query_sequence]').val(seq);
+      }
       this.elLk.blastForm.submit();
     }
   }
