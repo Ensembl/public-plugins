@@ -38,6 +38,7 @@ sub content {
   my $cache           = $hub->cache;
   my $form            = $cache ? $cache->get('VEPFORM') : undef;
   my $current_species = $hub->species;
+     $current_species = $hub->get_favourite_species->[0] if $current_species =~ /multi|common/i;
   my $input_formats   = INPUT_FORMATS;
 
   if (!$form) {
