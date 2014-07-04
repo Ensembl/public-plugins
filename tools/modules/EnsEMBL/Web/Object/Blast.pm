@@ -29,6 +29,8 @@ use warnings;
 
 use EnsEMBL::Web::Tools::FileHandler qw(file_get_contents);
 
+use EnsEMBL::Web::BlastConstants qw(CONFIGURATION_FIELDS);
+
 use parent qw(EnsEMBL::Web::Object::Tools);
 
 sub long_caption {
@@ -121,14 +123,27 @@ sub get_edit_jobs_data {
   my $self  = shift;
   my $hub   = $self->hub;
   my $jobs  = $self->get_requested_job || $self->get_requested_ticket;
+     $jobs  = $jobs ? ref($jobs) =~ /Ticket/ ? $jobs->job : [ $jobs ] : [];
 
-  return [ map {
-    my $job_data = $_->job_data->raw;
-    delete $job_data->{$_} for qw(source_file output_file);
-    $job_data->{'species'}  = $_->species;
-    $job_data->{'sequence'} = $self->get_input_sequence_for_job($_);
-    $job_data;
-  } @{ $jobs ? ref($jobs) =~ /Ticket/ ? $jobs->job : [ $jobs ] : [] } ];
+  my @jobs_data;
+
+  if (@$jobs) {
+
+    my %config_fields = map { @$_ } values %{{ @{CONFIGURATION_FIELDS()} }};
+
+    for (@$jobs) {
+      my $job_data = $_->job_data->raw;
+      delete $job_data->{$_} for qw(source_file output_file);
+      $job_data->{'species'}  = $_->species;
+      $job_data->{'sequence'} = $self->get_input_sequence_for_job($_);
+      for (keys %{$job_data->{'configs'}}) {
+        $job_data->{'configs'}{$_} = { reverse %{$config_fields{$_}{'commandline_values'}} }->{ $job_data->{'configs'}{$_} } if exists $config_fields{$_}{'commandline_values'};
+      }
+      push @jobs_data, $job_data;
+    }
+  }
+
+  return \@jobs_data;
 }
 
 sub get_input_sequence_for_job {
