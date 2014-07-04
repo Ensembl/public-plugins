@@ -24,7 +24,7 @@ use warnings;
 use previous qw(OBJECT_PARAMS upload_size_limit);
 
 sub OBJECT_PARAMS {
-  return [ @{PREV::OBJECT_PARAMS}, [ 'Tools' => 'tl' ] ];
+  return [ @{PREV::OBJECT_PARAMS()}, [ 'Tools' => 'tl' ] ];
 }
 
 sub upload_size_limit {
