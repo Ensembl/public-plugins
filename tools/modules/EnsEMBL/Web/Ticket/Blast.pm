@@ -80,6 +80,7 @@ sub _process_user_input {
 
     push @$sequences, {
       'fasta'       => join("\n", @$fasta),
+      'display_id'  => $fasta->[0] =~ s/^>\s*//r,
       'is_invalid'  => $sequence =~ m/^[$valid_chars]*$/
         ? (length $sequence <= MAX_SEQUENCE_LENGTH)
         ? 0
@@ -100,9 +101,11 @@ sub _process_user_input {
 
     for my $sequence (@$sequences) {
 
+      my $summary = sprintf('%s against %s (%s)', $search_method, $sd->get_config($species, 'SPECIES_COMMON_NAME'), $source_types->{$params->{'source'}});
+
       push @$jobs, [ {
         'job_number'  => ++$job_num,
-        'job_desc'    => $desc || sprintf('%s against %s (%s)', $search_method, $sd->get_config($species, 'SPECIES_COMMON_NAME'), $source_types->{$params->{'source'}}),
+        'job_desc'    => $desc || $sequence->{'display_id'} || $summary,
         'species'     => $species,
         'assembly'    => $sd->get_config($species, 'ASSEMBLY_NAME'),
         'job_data'    => {
@@ -111,6 +114,7 @@ sub _process_user_input {
             'input_file'  => 'input.fa',
             'is_invalid'  => $sequence->{'is_invalid'}
           },
+          'summary'     => $summary,
           'source_file' => $sd->get_config($species, 'ENSEMBL_BLAST_DATASOURCES')->{$blast_type}{$params->{'source'}},
           %$params
         }
