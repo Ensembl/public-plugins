@@ -35,18 +35,18 @@ sub content {
      $jobs      = $ticket->job if $ticket && !@$jobs;
   my $is_view   = $function eq 'View';
 
-  return unless @$jobs;
-
-  my $heading = $is_view
-    ? sprintf('<h3>Job%s for %s ticket %s<a href="%s" class="left-margin _ticket_hide small _change_location">[Hide]</a></h3>',
+  my $heading = @$jobs ? $is_view
+    ? sprintf('<h3>Job%s for %s ticket %s<a href="%s" class="left-margin _ticket_hide small _change_location">[Close]</a></h3>',
         @$jobs > 1 ? 's' : '',
         $ticket->ticket_type->ticket_type_caption,
         $ticket->ticket_name,
         $is_view ? $hub->url({'tl' => undef, 'function' => ''}) : '',
       )
-    : '<h3><a rel="_ticket_details" class="toggle _slide_toggle closed" href="#">Job details</a></h3>';
+    : '<h3><a rel="_ticket_details" class="toggle _slide_toggle closed" href="#">Job details</a></h3>'
+    : ''
+  ;
 
-  return sprintf '<input type="hidden" class="panel_type" value="TicketDetails" />%s%s', $ticket ? ($heading, $self->content_ticket($ticket, $jobs)) : ('', '');
+  return sprintf '<input type="hidden" class="panel_type" value="TicketDetails" />%s%s', @$jobs ? ($heading, $self->content_ticket($ticket, $jobs)) : ('', '');
 }
 
 sub content_ticket {
