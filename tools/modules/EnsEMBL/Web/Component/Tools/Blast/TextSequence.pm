@@ -39,7 +39,7 @@ sub new {
   my $self   = shift->SUPER::new(@_);
   my $object = $self->object;
 
-  $self->{'_job'}               = $object->get_requested_job({ with_requsted_result => 1 }) or return $self;
+  $self->{'_job'}               = $object->get_requested_job({ with_requested_result => 1 }) or return $self;
   $self->{'_blast_method'}      = $object->parse_search_type($self->{'_job'}->job_data->{'search_type'}, 'search_method');
   $self->{'_is_protein'}        = $self->{'_blast_method'} =~ /^(blastx|blastp)$/i ? 1 : 0;
   $self->{'_hit'}               = $self->{'_job'}->result->[0]->result_data->raw;

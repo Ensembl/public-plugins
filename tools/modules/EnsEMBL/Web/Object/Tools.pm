@@ -360,7 +360,7 @@ sub get_requested_job {
   ## Gets the job object according to the URL param
   ## @param Hashref with one of the following keys
   ##  - 'with_all_results'      Flag if on, will get all results linked to the job object
-  ##  - 'with_requsted_result'  Flag if on, will only get the result object with ID in the URL 'tl' param
+  ##  - 'with_requested_result' Flag if on, will only get the result object with ID in the URL 'tl' param
   ## @return Job object, or undef if no job found for the given id, or job doesn't belong to the logged in user or current session, or requested result doesn't belong to the job
   my ($self, $params) = @_;
 
