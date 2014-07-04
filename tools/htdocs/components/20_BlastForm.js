@@ -212,6 +212,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     this.toggleSequenceFields(true);
 
     // Reset query type, db type and source type to first option, then set search tool accordingly
+    this.selectedQueryType = false;
     this.elLk.queryType.first().prop('checked', true);
     this.elLk.dbType.first().prop('checked', true);
     this.elLk.source.find('option').first().prop('selected', true);
