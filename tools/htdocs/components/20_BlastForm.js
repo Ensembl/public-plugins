@@ -265,7 +265,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
       if (formInput['configs']) {
         for (var name in formInput['configs']) {
           this.elLk.form.find('[name=' + formInput['search_type'] + '__' + name + ']')
-            .filter('input[type=checkbox]').prop('checked', true).end()
+            .filter('input[type=checkbox]').prop('checked', !!formInput['configs'][name]).end()
             .filter('select').find('option[value=' + formInput['configs'][name] + ']').prop('selected', true);
         }
       }
