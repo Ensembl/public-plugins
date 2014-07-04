@@ -156,6 +156,7 @@ sub job_summary_section {
     }, {
       'node_name'   => 'span',
       'class'       => ['right-margin'],
+      'flags'       => ['job_desc_span'],
       'inner_HTML'  => sprintf('%s%s', $job_number == 1 && $job_count == 1 ? '' : "Job $job_number/$job_count: ", $job->job_desc || ''),
     },
     $self->job_status_tag($job, $dispatcher_status, $result_count),

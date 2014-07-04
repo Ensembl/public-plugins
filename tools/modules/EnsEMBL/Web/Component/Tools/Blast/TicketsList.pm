@@ -31,10 +31,10 @@ sub job_summary_section {
   my ($self, $ticket, $job, $hit_count) = @_;
 
   my $summary = $self->SUPER::job_summary_section($ticket, $job, $hit_count);
+  my $desc    = $job->job_data->{'summary'};
 
-  unless ($hit_count) {
-    $_->parent_node->remove_child($_) for @{$summary->get_nodes_by_flag('job_results_link')};
-  }
+  !$hit_count             and $_->parent_node->remove_child($_)                         for @{$summary->get_nodes_by_flag('job_results_link')};
+  $_->inner_HTML ne $desc and $_->set_attributes({'title' => $desc, 'class' => '_ht'})  for @{$summary->get_nodes_by_flag('job_desc_span')};
 
   return $summary;
 }
