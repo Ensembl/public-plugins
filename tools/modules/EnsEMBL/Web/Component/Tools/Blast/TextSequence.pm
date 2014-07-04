@@ -139,8 +139,8 @@ sub markup_hsp {
       my %types = map { $_ => 1 } @{$hsp->{'type'}};
       my $type  = $types{'sel'} ? 'sel' : 'other'; # Both types are denoted by foreground colour, so only mark the more important type
 
-      $seq->[$_]{'class'} .= "hsp_$type " unless $seq->[$_]{'class'} =~ /\bhsp_$type\b/;
-      $hsp_types{$type}    = 1;
+      $seq->[$_]{'class'} = join ' ', "hsp_$type", $seq->[$_]{'class'} || () unless ($seq->[$_]{'class'} || '') =~ /\bhsp_$type\b/;
+      $hsp_types{$type}   = 1;
     }
 
     $i++;
@@ -185,7 +185,7 @@ sub content {
 sub content_sub_slice {
   my ($self, $slice) = @_;
   my $hub     = $self->hub;
-  my $start   = $hub->param('subslice_start');
+  my $start   = $hub->param('subslice_start') || 0;
   my $end     = $hub->param('subslice_end');
   my $length  = $hub->param('length');
      $slice ||= $self->get_slice;
