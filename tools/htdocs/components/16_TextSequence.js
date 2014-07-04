@@ -21,8 +21,12 @@ Ensembl.Panel.TextSequence = Ensembl.Panel.TextSequence.extend({
 
     var panel = this;
 
-    // Enable the 'BLAST selected sequence' popup botton only if 'BLAST this sequence' link is present on LHS menu
-    if (!Ensembl.EventManager.trigger('enableBlastButton', this.el.clone().find('._seq').text())) {
+    // Enable the 'BLAST selected sequence' popup botton only if 'BLAST this sequence' link is present in component buttons
+    var bottonPresent = Ensembl.EventManager.trigger('enableBlastButton', this.el.clone().find('._seq').text());
+    if (typeof bottonPresent !== 'boolean') {
+      bottonPresent = !!$.grep($.map(bottonPresent, function(f, i) { return f; }), function(i) { return i; }).length;
+    }
+    if (!bottonPresent) {
       return;
     }
 
