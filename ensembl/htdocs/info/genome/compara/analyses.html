@@ -37,7 +37,7 @@ to produce the best sub-chain for the reference species (Translated Blat Net).</
 
 <h3>Translated Blat Net</h3>
 
-[[SCRIPT::EnsEMBL::Web::Document::HTML::Compara::TBlat]]
+[[SCRIPT::EnsEMBL::Web::Document::HTML::Compara::draw_stepped_table(TRANSLATED_BLAT_NET)]]
 
 <h2 id="pecan">PECAN Multiple Alignment Analysis</h2>
 
@@ -54,7 +54,7 @@ heuristics it employs are highly user configurable, it is written
 entirely in Java and also requires the installation of Exonerate.
 <a href="http://github.com/benedictpaten/pecan">Pecan source code</a>.</p>
 
-[[SCRIPT::EnsEMBL::Web::Document::HTML::Compara::Pecan]]
+[[SCRIPT::EnsEMBL::Web::Document::HTML::Compara::format_wga_list(PECAN)]]
 
 <h2 id="epo">EPO Multiple Alignment Analysis</h2>
 
@@ -76,11 +76,11 @@ Further details on these methods can be found at:</p>
 <p>Each alignment set can be accessed using the <a href="/info/docs/Doxygen/compara-api/index.html"> Compara API</a> via the Bio::EnsEMBL::DBSQL::MethodLinkSpeciesSetAdaptor using the method_link_type and either the list of the species or the species_set_name. </p>
 
 
-[[SCRIPT::EnsEMBL::Web::Document::HTML::Compara::EPO]]
+[[SCRIPT::EnsEMBL::Web::Document::HTML::Compara::format_wga_list(EPO)]]
 
 <p>The full set of eutherian mammmal alignments were not generated using the EPO pipeline due to difficulties with running Ortheus on the low coverage genomes. Instead the low coverage genomes were projected on to the high coverage EPO eutherian mammal alignments using (B)lastZ-net alignments. </p>
 
-[[SCRIPT::EnsEMBL::Web::Document::HTML::Compara::EPOlc]]
+[[SCRIPT::EnsEMBL::Web::Document::HTML::Compara::format_wga_list(EPO_LOW_COVERAGE)]]
 
 
 <p id="ancestral"><strong>Ancestral sequences</strong> are inferred from the EPO multiple alignments 
@@ -100,7 +100,7 @@ is compared to its immediate inferred ancestor, then its ancestor, etc. until a 
 The inferred substitution event therefore occurred on a specific branch of the tree, which is identified
 by all the extant species which eventually descended from that branch, as illustrated below.</p>
 
-<img src="age_of_base.png" width=400/>
+<img src="age_of_base.png" alt="Age of Base schema" width=400/>
 
 <h2 id="conservation">Conservation Analysis</h2>
 
@@ -123,7 +123,7 @@ kbp are grouped. In the second phase, the groups that are in synteny are
 linked provided that no more than 2 non-syntenic groups are found between
 them and they are less than 3Mbp apart.</p>
 
-[[SCRIPT::EnsEMBL::Web::Document::HTML::Compara::Synteny]]
+[[SCRIPT::EnsEMBL::Web::Document::HTML::Compara::draw_stepped_table(SYNTENY)]]
 
 </body>
 </html>
