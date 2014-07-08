@@ -60,6 +60,7 @@ sub update_conf {
   $SiteDefs::__species_aliases{ 'Otolemur_garnettii'                } = [qw(og ogar bushbaby otolemur)];
   $SiteDefs::__species_aliases{ 'Ovis_aries'                        } = [qw(oa oar sheep ovis)];
   $SiteDefs::__species_aliases{ 'Pan_troglodytes'                   } = [qw(pt ptro chimp)];
+  $SiteDefs::__species_aliases{ 'Papio_anubis'                      } = [qw(pa panu baboon panubis)];
   $SiteDefs::__species_aliases{ 'Pongo_abelii'                      } = [qw(pp Pongo_pygmaeus orang orangutan librarian ook)];
   $SiteDefs::__species_aliases{ 'Procavia_capensis'                 } = [qw(pc hyrax dassy dassie pimbi)];
   $SiteDefs::__species_aliases{ 'Pteropus_vampyrus'                 } = [qw(pv megabat flyingfox)];
@@ -82,6 +83,7 @@ sub update_conf {
   $SiteDefs::__species_aliases{ 'Danio_rerio'                       } = [qw(dr drer zfish zebrafish)];
   $SiteDefs::__species_aliases{ 'Gasterosteus_aculeatus'            } = [qw(ga gacu stickleback gasterosteus)];
   $SiteDefs::__species_aliases{ 'Lepisosteus_oculatus'              } = [qw(lo locu spotted gar)];
+  $SiteDefs::__species_aliases{ 'Poecilia_formosa'                  } = [qw(pf pfor amazon molly)];
   $SiteDefs::__species_aliases{ 'Oreochromis_niloticus'             } = [qw(on onil nile tilapia)];
   $SiteDefs::__species_aliases{ 'Oryzias_latipes'                   } = [qw(ol olat medaka)];
   $SiteDefs::__species_aliases{ 'Takifugu_rubripes'                 } = [qw(fr trub ffish fugu takifugu f_rubripes fugu_rubripes)];
