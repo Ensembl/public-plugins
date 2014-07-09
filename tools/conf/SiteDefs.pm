@@ -32,6 +32,7 @@ sub update_conf {
 
   $SiteDefs::ENSEMBL_TOOLS_TMP_DIR              = $SiteDefs::ENSEMBL_TMP_DIR.'/tools';              # tmp directory for jobs i/o files
   $SiteDefs::ENSEMBL_BLAST_ENABLED              = 1;                                                # Flag to enable/disable BLAST
+  $SiteDefs::ENSEMBL_BLAT_BIN_PATH              = '/localsw/bin/gfClient';                          # Path to BLAT client
   $SiteDefs::ENSEMBL_VEP_ENABLED                = 1;                                                # Flag to enable/disable VEP
   $SiteDefs::ENSEMBL_VEP_CGI_POST_MAX           = 52428800;                                         # 50MB limit for VEP input files
   $SiteDefs::ENSEMBL_VEP_FILTER_SCRIPT          = 'ensembl-tools/scripts/variant_effect_predictor/filter_vep.pl';
