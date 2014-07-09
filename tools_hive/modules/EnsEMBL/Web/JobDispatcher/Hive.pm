@@ -32,16 +32,16 @@ use parent qw(EnsEMBL::Web::JobDispatcher);
 
 sub dispatch_job {
   ## Abstract method implementation
-  my ($self, $ticket_type, $job_data) = @_;
+  my ($self, $logic_name, $job_data) = @_;
 
   my $hive_dba    = $self->hive_dba;
   my $job_adaptor = $self->job_adaptor;
 
-  $self->{'_analysis_id'}{$ticket_type} ||= $hive_dba->get_AnalysisAdaptor->fetch_by_logic_name_or_url($ticket_type)->dbID;
+  $self->{'_analysis_id'}{$logic_name} ||= $hive_dba->get_AnalysisAdaptor->fetch_by_logic_name_or_url($logic_name)->dbID;
 
   # Submit job to hive db
   my $hive_job = Bio::EnsEMBL::Hive::AnalysisJob->new(
-		'analysis_id' => $self->{'_analysis_id'}{$ticket_type},
+		'analysis_id' => $self->{'_analysis_id'}{$logic_name},
 		'input_id'    => $job_data
   );
 
@@ -52,11 +52,11 @@ sub dispatch_job {
 
 sub delete_jobs {
   ## Abstract method implementation
-  my ($self, $ticket_type, $job_ids) = @_;
+  my ($self, $logic_name, $job_ids) = @_;
   my $hive_dba = $self->hive_dba;
 
   $self->job_adaptor->remove_all(sprintf '`job_id` in (%s)', join(',', @$job_ids));
-  $hive_dba->get_Queen->safe_synchronize_AnalysisStats($hive_dba->get_AnalysisAdaptor->fetch_by_logic_name_or_url($ticket_type)->stats);
+  $hive_dba->get_Queen->safe_synchronize_AnalysisStats($hive_dba->get_AnalysisAdaptor->fetch_by_logic_name_or_url($logic_name)->stats);
 }
 
 sub update_jobs {
