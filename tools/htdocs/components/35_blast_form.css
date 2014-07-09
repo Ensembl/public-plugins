@@ -29,8 +29,7 @@ div.js_sequence_wrapper div.seq-wrapper           { background-color: [[PAGE_BG]
 div.js_sequence_wrapper div.seq-wrapper:first-child { margin-top: 0; }
 div.seq-wrapper span.sprite                       { float: right; }
 
-div.fasta-input                                   { overflow: hidden; font: 12px courier; white-space: pre; width: 480px; max-height: 400px; outline: none; border: transparent solid 1px; cursor: pointer; float: left; margin-right: 8px;  }
-div.fasta-input:hover                             { overflow: auto; }
+div.fasta-input                                   { overflow: auto; font: 12px courier; white-space: pre; width: 480px; max-height: 400px; outline: none; border: transparent solid 1px; cursor: pointer; float: left; margin-right: 8px;  }
 div.fasta-input.editable                          { overflow: auto; background-color: #ffd; border-color: [[PANEL_BORDER]]; cursor: text; }
 
 div.fasta-buttons                                 { position: absolute; margin-top: -1px; }
