@@ -47,6 +47,7 @@ sub new {
 sub get_dispatcher_class {
   ## Gets the dispatcher class name that should be used for this perticulat job
   ## Override this to add any rule to decide which dispatcher should be used
+  ## @param Dispatcher data - hashref of data that will be passed to dispatcher
   ## @return Class name suffix for the required dispatcher (to go after EnsEMBL::Web::JobDispatcher::), or undef if default dispatcher should be used
 }
 
