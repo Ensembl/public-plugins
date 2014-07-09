@@ -245,7 +245,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     }
 
     if (!$.isEmptyObject(formInput)) {
-      this.toggleForm(true, true);
+      this.toggleForm(true);
 
       // set sequence and query type
       if (formInput['query_type']) {
