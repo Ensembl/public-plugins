@@ -44,6 +44,12 @@ sub new {
   }, $class;
 }
 
+sub get_dispatcher_class {
+  ## Gets the dispatcher class name that should be used for this perticulat job
+  ## Override this to add any rule to decide which dispatcher should be used
+  ## @return Class name suffix for the required dispatcher (to go after EnsEMBL::Web::JobDispatcher::), or undef if default dispatcher should be used
+}
+
 sub get_param {
   ## Gets a param value (column value in the table) for the job
   ## @param Valid column name for tools.job table
