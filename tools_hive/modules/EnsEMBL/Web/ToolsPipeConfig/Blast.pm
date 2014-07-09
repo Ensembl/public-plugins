@@ -32,12 +32,7 @@ sub default_options {
     'NCBIBLAST_matrix'            => $sd->ENSEMBL_NCBIBLAST_MATRIX,
     'NCBIBLAST_index_files'       => $sd->ENSEMBL_NCBIBLAST_DATA_PATH,
     'NCBIBLAST_dna_index_files'   => $sd->ENSEMBL_NCBIBLAST_DATA_PATH_DNA,
-    'NCBIBLAST_repeat_mask_bin'   => $sd->ENSEMBL_REPEATMASK_BIN_PATH,
-#     'WUBLAST_bin_dir'             => $sd->ENSEMBL_WUBLAST_BIN_PATH,
-#     'WUBLAST_matrix'              => $sd->ENSEMBL_WUBLAST_MATRIX,
-#     'WUBLAST_index_files'         => $sd->ENSEMBL_WUBLAST_DATA_PATH,
-#     'WUBLAST_dna_index_files'     => $sd->ENSEMBL_WUBLAST_DATA_PATH_DNA,
-#     'WUBLAST_repeat_mask_bin'     => $sd->ENSEMBL_REPEATMASK_BIN_PATH
+    'NCBIBLAST_repeat_mask_bin'   => $sd->ENSEMBL_REPEATMASK_BIN_PATH
   };
 }
 
@@ -69,31 +64,6 @@ sub pipeline_analyses {
     '-rc_name'              => $sd->ENSEMBL_BLAST_LSF_QUEUE,
     '-failed_job_tolerance' => 100
   }];
-}
-
-sub pipeline_validate {
-  my ($class, $conf) = @_;
-
-  my $sd = $conf->species_defs;
-  my @errors;
-
-#   my $blast_options = $conf->o('blast_options');
-#   my $bin_dir       = $blast_options->{'bin_dir'};
-#   my $work_dir      = $blast_options->{'work_dir'};
-#   if (opendir(DIR, $bin_dir)) {
-#     while (my $file = readdir(DIR)) {
-#       next if $file =~ /^\./;
-#       push @errors, "File $bin_dir/$file may be used later by the script, so it needs to be executable." unless -x "$bin_dir/$file";
-#     }
-#     closedir(DIR);
-#   } else {
-#     push @errors, "Directory $bin_dir: BLAST program directory is either not existing, or not accessible.";
-#   }
-#   unless (-d $work_dir && -w $work_dir) {
-#     push @errors, "Work directory $work_dir: BLAST work directory is either not existing, or not writable.";
-#   }
-# 
-#   return @errors;
 }
 
 1;

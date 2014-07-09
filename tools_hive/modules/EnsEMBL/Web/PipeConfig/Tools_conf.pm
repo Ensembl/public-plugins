@@ -121,14 +121,14 @@ sub pipeline_validate {
   my $self = shift;
 
   my @errors;
-  
+
   # Check connection to the ticket database
   my $ticket_db = $self->o('ticket_db');
   my $dbh       = DBI->connect(sprintf('dbi:mysql:%s:%s:%s', $ticket_db->{'-dbname'}, $ticket_db->{'-host'}, $ticket_db->{'-port'}), $ticket_db->{'-user'}, $ticket_db->{'-pass'}, { 'PrintError' => 0 });
   push @errors, "Ticket database: Connection could not be created ($DBI::errstr)" unless $dbh;
 
   # Run tool specific validation
-  push @errors, map($_->pipeline_validate($self) || (), $self->available_tools);
+  push @errors, map($_->can('pipeline_validate') && $_->pipeline_validate($self) || (), $self->available_tools);
 
   return @errors;
 }
