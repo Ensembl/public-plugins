@@ -711,13 +711,13 @@ example, a three base pair deletion of nucleotides 12600, 12601, and
 <p>For each variant we store population data (allele
 frequencies, genotypes) available from different projects (e.g. 1000
 Genomes, HapMap). You can see this on our variation pages, for
-example: <a href="/Homo_sapiens/Variation/Population?v=rs1333049">rs1333049</a>.<br />
-Below we list the population names associated with the 1000 Genomes Project and the HapMap Project:
+example: <a href="/Homo_sapiens/Variation/Population?v=rs699">rs699</a>.<br />
+Below we list the population names associated with the 1000 Genomes Project, the HapMap Project and the ESP project:
 </p>
 
-<h4>Populations from the 1000 Genomes Project (Human)</h4>
-<table id="1000_genomes" class="ss">
-
+<h4>Populations from the <a href="http://www.1000genomes.org" target="_blank" style="text-decoration:none">1000 Genomes Project</a> (Human)</h4>
+<table id="1000_genomes" class="ss" style="margin-bottom:4px">
+  
   <tr>
     <th style="width:200px">Name</th>
     <th>Size</th>
@@ -821,9 +821,13 @@ Below we list the population names associated with the 1000 Genomes Project and 
   </tr>
 </table>
 
-<h4>Populations from the HapMap Project (Human)</h4>
-<table id="hapmap" class="ss">
-
+<p style="margin-bottom:25px">
+Variants which have been discovered in this project have the "evidence status" <a href="#evidence_status"><b>1000Genomes</b></a>.
+On the website this corresponds to the icon <a href="#evidence_status"><img class="_ht" src="/i/val/evidence_1000Genomes.png" title="1000Genomes" style="vertical-align:bottom"/></a>.
+</p>
+    <h4>Populations from the <a href="http://hapmap.ncbi.nlm.nih.gov/index.html.en" target="_blank" style="text-decoration:none">HapMap Project</a> (Human)</h4>
+<table id="hapmap" class="ss" style="margin-bottom:4px">
+  
   <tr>
     <th style="width:200px">Name</th>
     <th>Size</th>
@@ -892,7 +896,38 @@ Below we list the population names associated with the 1000 Genomes Project and 
   </tr>
 </table>
 
-<p>This population data is stored in the <i>population</i> table of the Variation database. You can see a description of the <i>population</i>
+<p style="margin-bottom:25px">
+Variants which have been discovered in this project have the "evidence status" <a href="#evidence_status"><b>HapMap</b></a>.
+On the website this corresponds to the icon <a href="#evidence_status"><img class="_ht" src="/i/val/evidence_HapMap.png" title="HapMap" style="vertical-align:bottom"/></a>.
+</p>
+    <h4>Populations from the <a href="http://evs.gs.washington.edu/EVS/" target="_blank" style="text-decoration:none">Exome Sequencing Project (ESP)</a> (Human)</h4>
+<table id="exome_sequencing_project_(esp)" class="ss" style="margin-bottom:4px">
+  
+  <tr>
+    <th style="width:200px">Name</th>
+    <th>Size</th>
+    <th>Description</th>
+  </tr>
+
+  <tr>
+    <td>ESP6500:<b>African_American</b></td>
+    <td style="text-align:right">-</td>
+    <td>-</td>
+  </tr>
+  <tr class="bg2">
+    <td>ESP6500:<b>European_American</b></td>
+    <td style="text-align:right">-</td>
+    <td>-</td>
+  </tr>
+</table>
+
+<p style="margin-bottom:20px">
+Variants which have been discovered in this project have the "evidence status" <a href="#evidence_status"><b>ESP</b></a>.
+On the website this corresponds to the icon <a href="#evidence_status"><img class="_ht" src="/i/val/evidence_ESP.png" title="ESP" style="vertical-align:bottom"/></a>.
+</p>
+ 
+
+<p><b>Note:</b> This population data is stored in the <i>population</i> table of the Variation database. You can see a description of the <i>population</i>
 table <a href="/info/docs/api/variation/variation_schema.html#population">here</a>.
 </p>
 
