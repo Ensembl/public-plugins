@@ -1379,7 +1379,7 @@ A quality control process is employed to check imported variation data. Suspect 
   </tr>
 
   <tr>
-    <td rowspan="4" class="bg2"><b>Mapping checks</b></td>
+    <td rowspan="4" style="background-color:#E5E5E5"><b>Mapping checks</b></td>
     <td>Variation does not map to the genome </td>
     <td> Variations with flanking sequences which do not map to reference or non-reference genomic sequences are flagged as failed.</td>
   </tr>
@@ -1397,8 +1397,9 @@ A quality control process is employed to check imported variation data. Suspect 
     <td class="bg2">None of the variant alleles match the reference allele </td>
     <td class="bg2"> The sequence at the coordinates specified for the variation are extracted from the reference genome and compared to the dbSNP refSNP alleles. If the extracted sequence does not match the expected alleles, the variation is flagged as failed.</td>
   </tr>
+  <tr><td colspan="3" style="background-color:#555;height:1px;padding:0px;margin:0px"></td></tr>
   <tr>
-    <td rowspan="4" class="bg2"><b>Checks on the alleles of refSNPs</b></td>
+    <td rowspan="4" style="background-color:#E5E5E5"><b>Checks on the alleles of refSNPs</b></td>
     <td>Loci with no observed variant alleles in dbSNP   </td>
     <td>Variations with dbSNP refSNP alleles reported as 'NOVARIATION' are flagged as failed.</td>
   </tr>
@@ -1414,16 +1415,24 @@ A quality control process is employed to check imported variation data. Suspect 
     <td class="bg2">Alleles contain non-nucleotide characters  </td>
     <td class="bg2">Variations with unexpected characters in the dbSNP refSNP alleles are reported as failed.</td>
   </tr>
+  <tr><td colspan="3" style="background-color:#555;height:1px;padding:0px;margin:0px"></td></tr>
   <tr>
-    <td rowspan="1" class="bg2"><b>Checks on the alleles in dbSNP submissions</b></td>
+    <td rowspan="1" style="background-color:#E5E5E5"><b>Checks on the alleles in dbSNP submissions</b></td>
     <td> Additional submitted allele data from dbSNP does not agree with the dbSNP refSNP alleles </td>
     <td> Alleles from dbSNP submissions ( primarily frequency submissions, but also variant discovery submissions which have been merged in the dbSNP pipeline with the pre-existing refSNP variation) are checked against the dbSNP refSNP alleles and discrepant sets flagged as failed.  Often this will highlight a strand error in the submission of frequency information for a known variation. Tradditionally, the failure would be flagged at the variation level, in new database builds it is flagged at the allele submission level.
     </td>
   </tr>
+  <tr><td colspan="3" style="background-color:#555;height:1px;padding:0px;margin:0px"></td></tr>
   <tr>
-    <td rowspan="1" class="bg2"><b>External failure classification</b></td>
+    <td rowspan="1" style="background-color:#E5E5E5"><b>External failure classification</b></td>
     <td class="bg2"> Flagged as suspect by dbSNP </td>
     <td class="bg2">Variations reported as being suspect by dbSNP due to being in probable paralogous regions are imported but flagged as failed (human only).</td>
+  </tr>
+  <tr><td colspan="3" style="background-color:#555;height:1px;padding:0px;margin:0px"></td></tr>
+  <tr>
+    <td rowspan="1" style="background-color:#E5E5E5"><b>New assembly</b></td>
+    <td>Variation can not be re-mapped to the current assembly</td>
+    <td>Variations that mapped to the previous assembly, but couldn't be remapped to the current assembly are flagged as failed.</td>
   </tr>
 </table>
 <br />
