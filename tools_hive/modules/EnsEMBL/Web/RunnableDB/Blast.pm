@@ -31,65 +31,84 @@ use EnsEMBL::Web::Tools::FileHandler qw(file_get_contents);
 use EnsEMBL::Web::Utils::DynamicLoader qw(dynamic_require);
 
 ## STEP 1
-## Fetch input : Set up all the required parameters, directories, file names etc and do requreid validations
+## Fetch input : Set up all the required parameters, directories, file names etc and do required validations
 sub fetch_input {
-  my $self = shift;
-
-  my $species     = $self->param_required('species');
+  my $self        = shift;
   my $blast_type  = $self->param_required('blast_type');
-  my $bin_dir     = $self->param_required("${blast_type}_bin_dir");
-  my $program     = $self->param_required('program');
-  my $source_type = $self->param_required('source');
-  my $query_type  = $self->param_required('query_type');
-  my $sequence    = $self->param_required('sequence');
-  my $source_dir  = $self->param_required(sprintf '%s%s_index_files', $blast_type, $source_type =~ /LATESTGP/ ? '_dna' : '');
-  my $source_file = $self->param_required('source_file');
-  my $work_dir    = $self->work_dir;
-  my $input_file  = sprintf '%s/%s', $work_dir, $sequence->{'input_file'};
-  my $output_file = sprintf '%s/%s', $work_dir, $self->param_required('output_file');
+
+  $self->setup_iofiles($blast_type);
+  $self->setup_executables($blast_type);
+  $self->setup_source_file($blast_type);
 
   # Other required params
   $self->param_required($_) for qw(job_id ticket_db);
+
+  return 1;
+}
+
+## STEP 1.1
+## Setup IO files
+sub setup_iofiles {
+  my ($self, $blast_type) = @_;
+
+  my $work_dir    = $self->work_dir;
+  my $sequence    = $self->param_required('sequence');
+  my $input_file  = sprintf '%s/%s', $work_dir, $sequence->{'input_file'};
+  my $output_file = sprintf '%s/%s', $work_dir, $self->param_required('output_file');
 
   # Input file
   throw exception('HiveException', 'Input file could not be found.') unless -f $input_file && -r $input_file;
 
   # Setup the files names
-  $self->param('__query_file',        "$input_file");
-  $self->param('__results_raw',       "$output_file");
-  $self->param('__results_file',      "$output_file.unformatted");
-  $self->param('__results_tab',       "$output_file.tab");
+  $self->param('__query_file',    "$input_file");
+  $self->param('__results_raw',   "$output_file");
+  $self->param('__results_file',  "$output_file.unformatted");
+  $self->param('__results_tab',   "$output_file.tab");
+}
 
-  # Setup the actual command line executable file
+## STEP 1.2
+## Setup executable files
+sub setup_executables {
+  my ($self, $blast_type) = @_;
+
+  my $bin_dir = $self->param_required("${blast_type}_bin_dir");
+  my $program = $self->param_required('program');
+
   throw exception('HiveException', 'Directory containing the executable file could not be found.')                  unless -d $bin_dir;
   throw exception('HiveException', 'Executable file for running the job could not be found, or is not accessible.') unless -x "$bin_dir/$program";
   throw exception('HiveException', 'Reformatter executable file could not be found, or is not accessible.')         unless -x "$bin_dir/blast_formatter";
   $self->param('__program_file',      "$bin_dir/$program");
   $self->param('__reformat_program',  "$bin_dir/blast_formatter");
 
-  # Setup the data files name
-  throw exception('HiveException', "Directory containing the '$source_type' source files could not be found. $source_dir")  unless opendir SOURCE_DIR, $source_dir;
-  throw exception('HiveException', "Required source file $source_file is missing for $species")                             unless grep { !-d && m/^$source_file/ } readdir SOURCE_DIR;
-  $self->param('__source_file', "$source_dir/$source_file");
-  closedir SOURCE_DIR;
-
   # Setup the repeat masker bin file if required
-  my $configs = $self->param('configs') || {};
+  my $configs = $self->param_is_defined('configs') && $self->param('configs') || {};
   if ($configs->{'repeat_mask'}) {
     my $rm_binary = $self->param_required("${blast_type}_repeat_mask_bin");
     throw exception('HiveException', 'RepeatMasking executable file is either missing or not accessible.') unless -x $rm_binary;
     $self->param('__repeat_mask_bin', $rm_binary);
   }
+}
 
-  return 1;
+## STEP 1.3
+## Setup source file
+sub setup_source_file {
+  my ($self, $blast_type) = @_;
+
+  my $species     = $self->param_required('species');
+  my $source_type = $self->param_required('source');
+  my $query_type  = $self->param_required('query_type');
+  my $source_dir  = $self->param_required(sprintf '%s%s_index_files', $blast_type, $source_type =~ /LATESTGP/ ? '_dna' : '');
+  my $source_file = $self->param_required('source_file');
+
+  # Setup the data files name
+  throw exception('HiveException', "Directory containing the '$source_type' source files could not be found. $source_dir")  unless opendir SOURCE_DIR, $source_dir;
+  throw exception('HiveException', "Required source file $source_file is missing for $species")                             unless grep { !-d && m/^$source_file/ } readdir SOURCE_DIR;
+  $self->param('__source_file', "$source_dir/$source_file");
+  closedir SOURCE_DIR;
 }
 
 ## STEP 2
 ## Run: Run the actual blast program to get the results saved in the results file
-
-## TODO - add a step by step check to make sure same step in not repeated in the next attempt if it fails anywhere!
-## TODO - give an increment to log files, and intermediate files if they already exist - to make sure we don't overwrite any log file left from previous attempt
-
 sub run {
   my $self = shift;
 
@@ -180,9 +199,15 @@ sub write_output {
   my $self        = shift;
   my $job_id      = $self->param('job_id');
   my $blast_type  = $self->param('blast_type');
-  my $module      = dynamic_require("EnsEMBL::Web::Parsers::$blast_type", 1) or throw exception('HiveException', "Blast output parser for $blast_type could not be loaded.");
+  my $result_file = $self->param('__results_tab');
+  my $module;
+  try {
+    $module = dynamic_require("EnsEMBL::Web::Parsers::$blast_type");
+  } catch {
+    throw exception('HiveException', $_->message(1));
+  };
 
-  $self->save_results($job_id, {}, @{ $module->new($self)->parse });
+  $self->save_results($job_id, {}, @{ $module->new($self)->parse($result_file) });
 
   return 1;
 }

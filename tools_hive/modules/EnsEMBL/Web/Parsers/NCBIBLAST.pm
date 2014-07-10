@@ -26,22 +26,22 @@ use Bio::EnsEMBL::Utils::IO qw(iterate_file);
 
 sub new {
   my ($class, $runnable) = @_;
-  return bless { 'runnable'  => $runnable }, $class;
-}
-
-sub runnable {
-  return shift->{'runnable'};
+  return bless {
+    'dba'       => Bio::EnsEMBL::DBSQL::DBAdaptor->new(%{$runnable->param('dba')}),
+    'runnable'  => $runnable
+  }, $class;
 }
 
 sub parse {
-  my $self      = shift;
-  my $runnable  = $self->runnable;
-  my $tab_file  = $runnable->param('__results_tab');
-  my $dba       = Bio::EnsEMBL::DBSQL::DBAdaptor->new(%{$runnable->param('dba')});
+  my ($self, $file) = @_;
+  my $runnable      = $self->{'runnable'};
+  my $dba           = $self->{'dba'};
+  my $species       = $runnable->param('species');
+  my $source_type   = $runnable->param('source');
 
   my @results;
 
-  iterate_file($tab_file, sub {
+  iterate_file($file, sub {
     my ($line)    = @_;
 
     my @hit_data  = split (/\t/, $line);
@@ -69,7 +69,7 @@ sub parse {
       aln           => $hit_data[10],
     };
 
-    push @results, $self->map_to_genome($hit, $dba);
+    push @results, $self->map_to_genome($hit, $species, $source_type);
   });
 
   $dba->dbc->disconnect_if_idle;
@@ -78,13 +78,12 @@ sub parse {
 }
 
 sub map_to_genome {
-  my ($self, $hit, $dba)  = @_;
-  my $source_type   = $self->runnable->param('source');
-  my $species       = $self->runnable->param('species');
+  my ($self, $hit, $species, $source_type) = @_;
+  my $dba = $self->{'dba'};
 
   my ($g_id, $g_start, $g_end, $g_ori, $g_coords);
 
-  if ($source_type =~/LATESTGP/){
+  if ($source_type =~/LATESTGP/) {
 
     $g_id     = $hit->{'tid'};
     $g_start  = $hit->{'tstart'};
