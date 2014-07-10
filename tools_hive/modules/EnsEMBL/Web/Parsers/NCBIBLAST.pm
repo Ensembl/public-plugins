@@ -69,7 +69,7 @@ sub parse {
       aln           => $hit_data[10],
     };
 
-    push @results, $self->map_to_genome($hit, $species, $source_type);
+    push @results, $self->map_to_genome($hit, $species, $source_type, $dba);
   });
 
   $dba->dbc->disconnect_if_idle;
@@ -78,8 +78,7 @@ sub parse {
 }
 
 sub map_to_genome {
-  my ($self, $hit, $species, $source_type) = @_;
-  my $dba = $self->{'dba'};
+  my ($self, $hit, $species, $source_type, $dba) = @_;
 
   my ($g_id, $g_start, $g_end, $g_ori, $g_coords);
 
