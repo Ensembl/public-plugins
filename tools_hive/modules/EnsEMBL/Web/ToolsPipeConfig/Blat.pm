@@ -1,0 +1,71 @@
+=head1 LICENSE
+
+Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+=cut
+
+package EnsEMBL::Web::ToolsPipeConfig::Blat;
+
+### Provides configs for Blat for tools pipeline
+
+use strict;
+use warnings;
+
+use constant BLAT_RESOURCE_NAME => 'blatlocal';
+
+sub default_options {
+  my ($class, $conf) = @_;
+  my $sd = $conf->species_defs;
+  return { 'BLAT_bin_path' => $sd->ENSEMBL_BLAT_BIN_PATH };
+}
+
+sub resource_classes {
+  my ($class, $conf) = @_;
+  return {$class->BLAT_RESOURCE_NAME => { 'LOCAL' => ''}};
+}
+
+sub pipeline_analyses {
+  my ($class, $conf) = @_;
+
+  my %default_options = map { $_ => $conf->o($_) } keys %{$class->default_options($conf)}; # pass all default_options to hive
+
+  my $sd = $conf->species_defs;
+
+  return [{
+    '-logic_name'           => 'Blat',
+    '-module'               => 'EnsEMBL::Web::RunnableDB::Blat',
+    '-parameters'           => {
+      'ticket_db'             => $conf->o('ticket_db'),
+      %default_options
+    },
+    '-rc_name'              => $class->BLAT_RESOURCE_NAME,
+    '-max_retry_count'      => 0,
+    '-meadow_type'          => 'LOCAL',
+    '-failed_job_tolerance' => 100
+  }];
+}
+
+sub pipeline_validate {
+  my ($class, $conf) = @_;
+
+  my @errors;
+
+  my $bin_path = $conf->o('BLAT_bin_path');
+  push @errors, "Binary file $bin_path either seems to be missing or not executable." unless -x $bin_path;
+
+  return @errors;
+}
+
+1;

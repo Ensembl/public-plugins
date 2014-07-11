@@ -23,9 +23,7 @@ use warnings;
 
 use DBI;
 use EnsEMBL::Web::SpeciesDefs;
-
-use EnsEMBL::Web::ToolsPipeConfig::Blast;
-use EnsEMBL::Web::ToolsPipeConfig::VEP;
+use EnsEMBL::Web::Utils::DynamicLoader qw(dynamic_require);
 
 use parent qw(Bio::EnsEMBL::Hive::PipeConfig::HiveGeneric_conf);
 
@@ -36,10 +34,10 @@ sub new {
   my $self  = shift->SUPER::new(@_);
   my $sd    = $self->{'_species_defs'} = EnsEMBL::Web::SpeciesDefs->new;
 
-  $self->{'_available_tools'} = [
-    $sd->ENSEMBL_BLAST_ENABLED ? 'EnsEMBL::Web::ToolsPipeConfig::Blast' : (),
-    $sd->ENSEMBL_VEP_ENABLED   ? 'EnsEMBL::Web::ToolsPipeConfig::VEP'   : ()
-  ];
+  $self->{'_available_tools'} = [ map dynamic_require($_), (
+    $sd->ENSEMBL_BLAST_ENABLED ? ('EnsEMBL::Web::ToolsPipeConfig::Blast', 'EnsEMBL::Web::ToolsPipeConfig::Blat') : (),
+    $sd->ENSEMBL_VEP_ENABLED   ? 'EnsEMBL::Web::ToolsPipeConfig::VEP' : ()
+  ) ];
 
   return $self;
 }
