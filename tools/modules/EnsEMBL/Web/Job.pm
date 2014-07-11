@@ -111,7 +111,7 @@ sub create_work_dir {
   my ($self, $params) = @_;
 
   my $files = $self->{'_input_files'};
-  my $dir   = join '/', $self->hub->species_defs->ENSEMBL_TOOLS_TMP_DIR, ($params->{'persistent'} ? 'persistent' : 'temporary'), $params->{'ticket_type'}, ($params->{'ticket_name'} =~ /.{1,3}/g), $params->{'job_number'};
+  my $dir   = join '/', $self->hub->species_defs->ENSEMBL_TMP_DIR_TOOLS, ($params->{'persistent'} ? 'persistent' : 'temporary'), $params->{'ticket_type'}, ($params->{'ticket_name'} =~ /.{1,3}/g), $params->{'job_number'};
 
   # Create the work directory
   create_path($dir);
