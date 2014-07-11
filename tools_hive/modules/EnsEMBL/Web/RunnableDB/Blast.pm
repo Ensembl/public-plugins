@@ -23,12 +23,12 @@ package EnsEMBL::Web::RunnableDB::Blast;
 use strict;
 use warnings;
 
-use parent qw(EnsEMBL::Web::RunnableDB);
-
 use EnsEMBL::Web::Exceptions;
 use EnsEMBL::Web::SystemCommand;
 use EnsEMBL::Web::Tools::FileHandler qw(file_get_contents);
 use EnsEMBL::Web::Utils::DynamicLoader qw(dynamic_require);
+
+use parent qw(EnsEMBL::Web::RunnableDB);
 
 ## STEP 1
 ## Fetch input : Set up all the required parameters, directories, file names etc and do required validations
