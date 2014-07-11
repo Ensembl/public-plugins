@@ -38,7 +38,6 @@ sub prepare_to_dispatch {
   my $hub     = $self->hub;
   my $dba     = $hub->database('core', $rose_object->species);
   my $dbc     = $dba->dbc;
-  my $sd      = $hub->species_defs;
 
   $job_data->{'dba'}  = {
     -user               => $dbc->username,
@@ -60,6 +59,12 @@ sub prepare_to_dispatch {
   $job_data->{'work_dir'}   = $rose_object->job_dir;
 
   return $job_data;
+}
+
+sub get_dispatcher_class {
+  ## For Blat, we use the local Blat dispatcher, otherwise whatever is configured in SiteDefs.
+  my ($self, $data) = @_;
+  return $data->{'blast_type'} eq 'BLAT' ? 'Blat' : undef;
 }
 
 1;
