@@ -1,4 +1,3 @@
-
 <html>
 <head>
 <title>Regulation (Funcgen) Schema Documentation</title>
@@ -72,7 +71,12 @@
 
 <h1>Ensembl Regulation (Funcgen) Schema Documentation</h1>
 <h2>Introduction</h2>
-<p><i>please, insert your introduction here</i><p><br />
+<p>
+
+This document gives a describes the tables that make up the Ensembl Regulation schema. Tables are grouped logically by their function, and the purpose of each table is explained. This document refers to version 76 of the Ensembl Regulation schema.<br />
+<br />
+A simplified entity relationship diagram of the schema is available <a href="./trimmed_funcgen_schema.png">here</a>. Core, core like and some ancilliary tables have been omitted from the schema diagram.
+<p><br />
 
 <h3 id="top">List of the tables:</h3>
 <div>
@@ -110,11 +114,8 @@
         <li><a href="#supporting_set"><b>supporting_set</b></a></li>
         <li><a href="#feature_set"><b>feature_set</b></a></li>
         <li><a href="#result_set"><b>result_set</b></a></li>
-        <li><a href="#result_set_input"><b>result_set_input</b></a></li>
         <li><a href="#dbfile_registry"><b>dbfile_registry</b></a></li>
-        <li><a href="#input_set"><b>input_set</b></a></li>
         <li><a href="#input_subset"><b>input_subset</b></a></li>
-        <li><a href="#input_set_input_subset"><b>input_set_input_subset</b></a></li>
 
       </ul>
     </div>
@@ -621,7 +622,6 @@
     <li><a href="#associated_feature_type">associated_feature_type</a></li>
     <li><a href="#feature_set">feature_set</a></li>
     <li><a href="#result_set">result_set</a></li>
-    <li><a href="#input_set">input_set</a></li>
     <li><a href="#experimental_chip">experimental_chip</a></li>
     <li><a href="#regulatory_feature">regulatory_feature</a></li>
     <li><a href="#external_feature">external_feature</a></li>
@@ -707,7 +707,7 @@
       <tr class="center" style="color:#FFFFFF;background-color:#667aa6"><th style="color:#FFF;padding:2px">Column</th><th style="color:#FFF;padding:2px">Type</th><th style="color:#FFF;padding:2px;min-width:80px">Default value</th><th style="color:#FFF;padding:2px;min-width:500px">Description</th><th style="color:#FFF;padding:2px;min-width:100px">Index</th></tr>
       <tr class="bg1"><td><b>data_set_id</b></td><td>int(10)</td><td>-</td><td>Internal ID</td><td>primary key</td></tr>
       <tr class="bg2"><td><b>supporting_set_id</b></td><td>int(10)</td><td>-</td><td>Table ID of supporting set</td><td>primary key</td></tr>
-      <tr class="bg1"><td><b>type</b></td><td>enum('result','feature','input')</td><td>NULL</td><td>Type of supporting set e.g. result, feature or input set.</td><td>primary key<br />key: type_idx</td></tr>
+      <tr class="bg1"><td><b>type</b></td><td>enum('result','feature')</td><td>NULL</td><td>Type of supporting set e.g. result or feature set </td><td>primary key<br />key: type_idx</td></tr>
     </table>
   </div>
   <p style="margin-top:10px"><b>See also:</b></p>
@@ -715,7 +715,6 @@
     <li><a href="#data_set">data_set</a></li>
     <li><a href="#result_set">result_set</a></li>
     <li><a href="#feature_set">feature_set</a></li>
-    <li><a href="#input_set">input_set</a></li>
   </ul>
 
 
@@ -755,7 +754,6 @@
     <li><a href="#annotated_feature">annotated_feature</a></li>
     <li><a href="#regulatory_feature">regulatory_feature</a></li>
     <li><a href="#external_feature">external_feature</a></li>
-    <li><a href="#input_set">input_set</a></li>
     <li><a href="#experiment">experiment</a></li>
   </ul>
 
@@ -788,7 +786,6 @@
   </div>
   <p style="margin-top:10px"><b>See also:</b></p>
   <ul>
-    <li><a href="#result_set_input">result_set_input</a></li>
     <li><a href="#cell_type">cell_type</a></li>
     <li><a href="#experiment">experiment</a></li>
     <li><a href="#feature_type">feature_type</a></li>
@@ -798,32 +795,9 @@
   </ul>
 
 
-  <div id="result_set_input" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#66CCFF;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">result_set_input</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_result_set_input" style="cursor:pointer;text-decoration:none" onclick="show_hide('result_set_input')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
-    </div>
-  </div>
-  <p style="padding:5px 0px;margin-bottom:0px;width:800px">Link table between <a href="#result_set">result_set</a> and it's contstituents which can vary between an array experiment (experimental_chip / channel) and a sequencing experiment (input_set). Note the joint primary key as inputs can be re-used between result sets.</p>
-
-  <div id="div_result_set_input" style="display:none">
-    <table style="border:1px solid #667aa6;padding:0px;min-width:1000px;max-width:1200px">
-      <tr class="center" style="color:#FFFFFF;background-color:#667aa6"><th style="color:#FFF;padding:2px">Column</th><th style="color:#FFF;padding:2px">Type</th><th style="color:#FFF;padding:2px;min-width:80px">Default value</th><th style="color:#FFF;padding:2px;min-width:500px">Description</th><th style="color:#FFF;padding:2px;min-width:100px">Index</th></tr>
-      <tr class="bg1"><td><b>result_set_input_id</b></td><td>int(10)</td><td>-</td><td>Internal ID</td><td>primary key</td></tr>
-      <tr class="bg2"><td><b>result_set_id</b></td><td>int(10)</td><td>-</td><td><a href="#result_set">result_set</a> table ID</td><td>primary key<br />unique key: rset_table_idname_idx</td></tr>
-      <tr class="bg1"><td><b>table_id</b></td><td>int(10)</td><td>-</td><td>Table ID for input</td><td>unique key: rset_table_idname_idx</td></tr>
-      <tr class="bg2"><td><b>table_name</b></td><td>enum('experimental_chip','channel','input_set', 'input_subset')</td><td>NULL</td><td>Table name for input e.g. <a href="#input_set">input_set</a>, <a href="#experimental_chip">experimental_chip</a>, <a href="#channel">channel</a></td><td>unique key: rset_table_idname_idx</td></tr>
-    </table>
-  </div>
   <p style="margin-top:10px"><b>See also:</b></p>
   <ul>
     <li><a href="#result_set">result_set</a></li>
-    <li><a href="#input_set">input_set</a></li>
     <li><a href="#experimental_chip">experimental_chip</a></li>
     <li><a href="#channel">channel</a></li>
   </ul>
@@ -857,43 +831,6 @@
   </ul>
 
 
-  <div id="input_set" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#66CCFF;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">input_set</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_input_set" style="cursor:pointer;text-decoration:none" onclick="show_hide('input_set')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
-    </div>
-  </div>
-  <p style="padding:5px 0px;margin-bottom:0px;width:800px">Defines a distinct set input data which is not imported into the DB, but used for some analysis e.g. a BAM file.</p>
-
-  <div id="div_input_set" style="display:none">
-    <table style="border:1px solid #667aa6;padding:0px;min-width:1000px;max-width:1200px">
-      <tr class="center" style="color:#FFFFFF;background-color:#667aa6"><th style="color:#FFF;padding:2px">Column</th><th style="color:#FFF;padding:2px">Type</th><th style="color:#FFF;padding:2px;min-width:80px">Default value</th><th style="color:#FFF;padding:2px;min-width:500px">Description</th><th style="color:#FFF;padding:2px;min-width:100px">Index</th></tr>
-      <tr class="bg1"><td><b>input_set_id</b></td><td>int(10)</td><td>-</td><td>Internal ID</td><td>primary key</td></tr>
-      <tr class="bg2"><td><b>analysis_id</b></td><td>smallint(5)</td><td>-</td><td>Table ID for <a href="#analysis">analysis</a></td><td></td></tr>
-      <tr class="bg1"><td><b>cell_type_id</b></td><td>int(10)</td><td>NULL</td><td>Table ID for <a href="#cell_type">cell_type</a></td><td>key: cell_type_idx</td></tr>
-      <tr class="bg2"><td><b>experiment_id</b></td><td>int(10)</td><td>NULL</td><td>Table ID for <a href="#experiment">experiment</a></td><td>key: experiment_idx</td></tr>
-      <tr class="bg1"><td><b>feature_type_id</b></td><td>int(10)</td><td>NULL</td><td>Table ID for <a href="#feature_type">feature_type</a></td><td>key: feature_type_idx</td></tr>
-      <tr class="bg2"><td><b>name</b></td><td>varchar(100)</td><td>-</td><td>Name of input_set</td><td>unique key: name_idx</td></tr>
-      <tr class="bg1"><td><b>type</b></td><td>enum('annotated', 'result', 'segmentation', 'dna_methylation')</td><td>NULL</td><td>Type of feature imported as result of analysis e.g. result, annotated</td><td></td></tr>
-      <tr class="bg2"><td><b>replicate</b></td><td>tinyint(3)</td><td>-</td><td>Number of the replicate. 0 represents  a pooled subset, 255 is a subset we have not processed</td><td></td></tr>
-    </table>
-  </div>
-  <p style="margin-top:10px"><b>See also:</b></p>
-  <ul>
-    <li><a href="#analysis">analysis</a></li>
-    <li><a href="#cell_type">cell_type</a></li>
-    <li><a href="#experiment">experiment</a></li>
-    <li><a href="#feature_type">feature_type</a></li>
-    <li><a href="#result_set_input">result_set_input</a></li>
-    <li><a href="#supporting_set">supporting_set</a></li>
-  </ul>
-
-
   <div id="input_subset" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
         <div style="float:left;padding:0px;height:20px;width:10px;background-color:#66CCFF;margin-right:10px"></div>
     <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">input_subset</div>
@@ -905,7 +842,7 @@
       <b> | </b> <a href="#top">[Back to top]</a>
     </div>
   </div>
-  <p style="padding:5px 0px;margin-bottom:0px;width:800px">Defines a file from an input_set, required for import tracking and recovery.</p>
+  <p style="padding:5px 0px;margin-bottom:0px;width:800px">Defines an experimental file (e.g. from a ChIP-Seq experiment), usually in FASTQ format. Used for import tracking and recovery.</p>
 
   <div id="div_input_subset" style="display:none">
     <table style="border:1px solid #667aa6;padding:0px;min-width:1000px;max-width:1200px">
@@ -922,39 +859,10 @@
   </div>
   <p style="margin-top:10px"><b>See also:</b></p>
   <ul>
-    <li><a href="#input_set">input_set</a></li>
     <li><a href="#experiment">experiment</a></li>
     <li><a href="#cell_type">cell_type</a></li>
     <li><a href="#feature_type">feature_type</a></li>
   </ul>
-
-
-  <div id="input_set_input_subset" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#66CCFF;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">input_set_input_subset</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_input_set_input_subset" style="cursor:pointer;text-decoration:none" onclick="show_hide('input_set_input_subset')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
-    </div>
-  </div>
-  <p style="padding:5px 0px;margin-bottom:0px;width:800px">Link table input_set / input_subset</p>
-
-  <div id="div_input_set_input_subset" style="display:none">
-    <table style="border:1px solid #667aa6;padding:0px;min-width:1000px;max-width:1200px">
-      <tr class="center" style="color:#FFFFFF;background-color:#667aa6"><th style="color:#FFF;padding:2px">Column</th><th style="color:#FFF;padding:2px">Type</th><th style="color:#FFF;padding:2px;min-width:80px">Default value</th><th style="color:#FFF;padding:2px;min-width:500px">Description</th><th style="color:#FFF;padding:2px;min-width:100px">Index</th></tr>
-      <tr class="bg1"><td><b>input_subset_id</b></td><td>int(10)</td><td>-</td><td><a href="#input_subset">input_subset</a> table  ID</td><td>unique key: iset_subset_table_idx</td></tr>
-      <tr class="bg2"><td><b>input_set_id</b></td><td>int(10)</td><td>-</td><td><a href="#input_set">input_set</a> table ID</td><td>unique key: iset_subset_table_idx</td></tr>
-    </table>
-  </div>
-  <p style="margin-top:10px"><b>See also:</b></p>
-  <ul>
-    <li><a href="#input_set">input_set</a></li>
-    <li><a href="#input_subset">input_subset</a></li>
-  </ul>
-
 
 <br /><br />
 <div style="background-color:#F2F2F2;padding:5px;margin:5px 0px;border-top:2px solid #FF6666">
@@ -1213,7 +1121,6 @@
   <ul>
     <li><a href="#array_chip">array_chip</a></li>
     <li><a href="#experiment">experiment</a></li>
-    <li><a href="#result_set_input">result_set_input</a></li>
     <li><a href="#channel">channel</a></li>
     <li><a href="#feature_type">feature_type</a></li>
     <li><a href="#cell_type">cell_type</a></li>
@@ -1269,7 +1176,6 @@
       <tr class="bg1"><td><b>result_id</b></td><td>int(10)</td><td>-</td><td>Internal ID</td><td>primary key</td></tr>
       <tr class="bg2"><td><b>probe_id</b></td><td>int(10)</td><td>NULL</td><td><a href="#probe">probe</a> table ID</td><td>key: probe_idx</td></tr>
       <tr class="bg1"><td><b>score</b></td><td>double</td><td>NULL</td><td>Intensity value (raw or normalised)</td><td></td></tr>
-      <tr class="bg2"><td><b>result_set_input_id</b></td><td>int(10)</td><td>-</td><td><a href="#result_set_input">result_set_input</a> table ID</td><td>key: result_set_input_idx</td></tr>
       <tr class="bg1"><td><b>X</b></td><td>smallint(4)</td><td>NULL</td><td>X coordinate of probe location on experimental_chip</td><td></td></tr>
       <tr class="bg2"><td><b>Y</b></td><td>smallint(4)</td><td>NULL</td><td>Y coordinate of probe location on experimental_chip</td><td></td></tr>
     </table>
@@ -1277,7 +1183,6 @@
   <p style="margin-top:10px"><b>See also:</b></p>
   <ul>
     <li><a href="#probe">probe</a></li>
-    <li><a href="#result_set_input">result_set_input</a></li>
   </ul>
 
 
@@ -1315,7 +1220,6 @@
   <ul>
     <li><a href="#feature_set">feature_set</a></li>
     <li><a href="#result_set">result_set</a></li>
-    <li><a href="#input_set">input_set</a></li>
     <li><a href="#experimental_chip">experimental_chip</a></li>
   </ul>
 
