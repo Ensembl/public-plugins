@@ -30,7 +30,7 @@ sub update_conf {
                                                                                                     # Entries as added to the tools db ticket_type_name table
   $SiteDefs::ENSEMBL_TOOLS_JOB_DISPATCHER       = { 'Blast' => '', 'VEP' => '' };                   # Which dispatcher to be used for the jobs
 
-  $SiteDefs::ENSEMBL_TMP_DIR_TOOLS              = $SiteDefs::ENSEMBL_TMP_DIR.'/tools';              # tmp directory for jobs i/o files
+  $SiteDefs::ENSEMBL_TMP_DIR_TOOLS              = defer { $SiteDefs::ENSEMBL_TMP_DIR.'/tools' };    # tmp directory for jobs i/o files
   $SiteDefs::ENSEMBL_BLAST_ENABLED              = 1;                                                # Flag to enable/disable BLAST
   $SiteDefs::ENSEMBL_BLAT_BIN_PATH              = '/localsw/bin/gfClient';                          # Path to BLAT client
   $SiteDefs::ENSEMBL_VEP_ENABLED                = 1;                                                # Flag to enable/disable VEP
