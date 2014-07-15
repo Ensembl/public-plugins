@@ -176,7 +176,7 @@ sub get_param_value_caption {
     for (@{$sd->multi_val('ENSEMBL_BLAST_CONFIGS')}) {
       if ($param_value eq $_->{'search_type'}) {
         my ($blast_type, $search_method) = $self->parse_search_type($param_value);
-        return sprintf '%s (%s)', $search_method, $blast_types->{$blast_type};
+        return $search_method eq $blast_types->{$blast_type} ? $search_method : sprintf('%s (%s)', $search_method, $blast_types->{$blast_type});
       }
     }
   } else {
