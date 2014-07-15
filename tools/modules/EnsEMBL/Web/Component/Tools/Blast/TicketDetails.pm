@@ -32,9 +32,18 @@ sub content_ticket {
   my $div     = $self->dom->create_element('div');
   my $is_view = ($hub->function || '') eq 'View';
 
-  $div->set_attribute('class', $is_view ? 'plain-box' : '_ticket_details hidden toggleable');
+  $div->set_attribute('class', 'plain-box') if $is_view;
 
-  $div->append_child($self->job_details_table($_, $is_view ? [qw(status edit delete), $_->result_count ? 'results' : ()] : [qw(edit delete)])) for @$jobs;
+  for (@$jobs) {
+    my $job_table = $self->job_details_table($_, $is_view ? [qw(status edit delete), $_->result_count ? 'results' : ()] : [qw(edit delete)]);
+    if (!$is_view) {
+      $job_table->append_child('div', {
+        'class'     => [qw(_ticket_details hidden toggleable)], # this div is hidden by default
+        'children'  => [ splice @{$job_table->child_nodes}, 2 ] # first two rows should always stay on
+      });
+    }
+    $div->append_child($job_table);
+  }
 
   return $div->render;
 }
