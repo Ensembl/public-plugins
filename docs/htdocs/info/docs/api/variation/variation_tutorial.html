@@ -495,9 +495,7 @@ foreach my $pf (@{$pf_adaptor->fetch_all_by_Variation($var)}) {
 	
 	print ".\n";
 	
-	next unless defined $pf->risk_allele;
-	my $risk_allele = (split /\-/, $pf->risk_allele)[1];
-	print "The risk allele is ", $risk_allele, ".\n";
+	print "The risk allele is ", $pf->risk_allele, ".\n" if (defined($pf->risk_allele));
 }
 </pre>
 
