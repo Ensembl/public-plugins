@@ -9,10 +9,82 @@
 
 <BODY LANG="en-GB" DIR="LTR">
 
-<h1>The Regulatory Build</h1>
+<h1>The Ensembl Regulatory Build on human</h1>
 
 <p>
 The Ensembl Regulatory Build provides a genome-wide set of regions that are likely to be involved in gene regulation. The classification of these regions are:
+<ul>
+	<li>Predicted promoters</li>
+	<li>Predicted promoter flanking regions</li>
+	<li>Predicted enhancers</li>
+	<li>CTCF binding sites</li>
+	<li>Unannotated transcription factor binding sites</li>
+	<li>Unannotated open chromatin regions</li>
+</ul>
+</p>
+
+<h2>Segmentation and annotation of segmentation states</h2>
+
+<p>
+We start by running a segmentation across all possible cell-types. Because of heterogeneous datasets, we allow for multiple segmentations to be run separately on different sets of cells. Each segmentation annotates the genomes of its designated cell-types with a fixed number of states, which are generally identified with a number.
+</p>
+
+<p>
+For each state of each segmentation, we create a summary track which represents the number of cell-types that have that state at any given base pair of the genome. The overlaps of this summary function with known features (transcription start sites, exons) and experimental features (CTCF binding sites, known chromatin repression marks) are used to assign a preliminary label to that state. For practical purposes, this annotation is manually curated. The labels used are either one of the above functional labels, or non-functional labels (<i>dead,weak</i> or <i>repressed</i>).
+</p>
+
+<h2>Defining the MutliCell regulatory features</h2>
+
+<p>
+We first determine the a cell type independent functional annotation of the genome, referred to as the MultiCell Regulatory Build. This build defines the function of genomic regions.
+</p>
+
+<p>
+To determine whether a state is useful in practice, it is compared to the overall density of transcription factor binding (as measured with ChIP-Seq). Applying increasing integer cutoffs to this signal, we define progressively smaller regions. If these regions reach a 2 fold enrichment in transcription factor binding signali, then the state is retained for the build. This means that although all states are annotated, not all are used to build the Regulatory Build.
+</p>
+
+<p>
+For any given segmentation, we define initial regions. For every functional label, all the state summaries that were assigned that labelled and judged informative are summed into a single function. Using the overall TF binding signal as true signal, we select the threshold which produces the highest F-score.
+</p>
+
+<p>
+We then merge the regulatory features across segmentations by annotation. 
+</p>
+
+<p>
+Some simplifications are applied <i>a posteriori</i>:
+<ul>
+<li>Distal enhancers which overlap promoter flanking regions are merged into the latter. </li>
+<li>Promoter flanking regions which overlap transcription start sites are incorporated into the flanking regions of the latter features.</li>
+</ul>
+</p>
+
+<h2>Extra features</h2>
+
+<p>
+In addition to the segmentation states, which are essentially derived from histone marks, we integrate independent experimental evidence:
+<ul>
+<li>Transcription factor binding sites which were observed through ChIP-Seq but are covered by none of the newly defined features are added to the Build.</li>
+<li>Open chromatin regions which were experimentally observed but covered by none of the above annotations, are also added to the Build.</li>
+</ul>
+</p>
+
+<h2>Cell type specific annotations</h2>
+
+<p>
+The cell type specific regulatory features are identical to the MultiCell ones in position and classification but have an added activity annotation. Currently this activity state is purely binary (on/off) although this could be extended to finer annotations (poised, repressed, information not available, ...).
+</p>
+
+<p>
+For each cell type and each functional annotation, we check whether there is segmentation state or experimental evidence which could be used to test the activity of this annotation. If this evidence exists, then all MultiCell features with that label are annotated as on or off by simple overlap analysis. If this evidence is not available, these features are not represented in the cell type specific annotation (Note: this could change in the near future).
+</p>
+
+<br>
+
+<h1>The Regulatory Build for non-human species</h1>
+
+<p>
+Because not all species are studied as intensively, segmentation software cannot always be run on the available data. The preliminary Ensembl Regulatory Build provides a genome-wide set of regions that are likely to be involved in gene regulation. The classification of these regions are:
 <ul>
 <li>Promoter associated</li>
 <li>Gene associated</li>

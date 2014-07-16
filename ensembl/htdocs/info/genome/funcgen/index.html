@@ -27,11 +27,12 @@ Ensembl maintains a database of regions in the human and mouse genomes that coul
 <p>
 From this data, a process called the <a href="regulatory_build.html">Regulatory Build</a> computes MultiCell features, independently of cell-type. For each of 13 human and 5 mouse cell lines, each feature is annotated into one of the following categories:
 <ul>
-	<li>Promoter associated</li>
-	<li>Gene associated</li>
-	<li>Non-gene associated (<i>i.e.</i> putative enhancers)</li>
-	<li>Polymerase III associated</li>
-	<li>Unclassified</li>
+	<li>Predicted promoters</li>
+	<li>Predicted promoter flanking regions</li>
+	<li>Predicted enhancers</li>
+	<li>CTCF binding sites</li>
+	<li>Unannotated transcription factor binding sites</li>
+	<li>Unannotated open chromatin regions</li>
 </ul>
 </p>
 
@@ -56,11 +57,9 @@ Ensembl stores <a href="/info/genome/microarray_probe_set_mapping.html">microarr
 <p>
 Ensembl Regulation databases also store data directly imported from external sources:
 <ul>
-<li>Micro RNA target predictions for human and mouse using <a rel="external" href="http://www.ebi.ac.uk/enright-srv/microcosm/htdocs/targets/v5/">Microcosm</a>.</li>
+<li>Micro RNA target predictions for human and mouse using <a rel="external" href="http://diana.imis.athena-innovation.gr/DianaTools/index.php?r=tarbase/index">Diana TarBase</a>.</li>
 <li>Experimentally validated human enhancers from the <a rel="external" href="http://enhancer.lbl.gov/">VISTA Browser</a>.</li>
-<li>Genome-wide human and mouse regulatory module and element predictions from <a rel="external" href="http://www.cisred.org">cisRED</a>.</li>
 <li>Reduced Representation Bisulfite Sequencing (RRBS) assays on 44 cell lines and Whole Genome Bisulphite Sequencing (assays) on three cell lines (<a rel="external" href="http://encodeproject.org">ENCODE</a>).<br></li>
-<li>MeDIP-Chip methylation for 17 human cell lines and tissues (<a rel="external" href="http://www.ncbi.nlm.nih.gov/pubmed?term=18577705">Rakyan <i>et al.</i>, 2008</a>) stored on <a href="/info/data/ensembl_das.html">DAS</a> tracks.</li>
 </ul>
 </p>
 
@@ -92,7 +91,7 @@ Click on the Regulation link in the left hand side menu to view the <a href="/Ho
 
 <h3><a href="/Homo_sapiens/Regulation/Cell_line?db=funcgen;fdb=funcgen;r=17:46617590-46621119;rf=ENSR00001348194">Regulation tab</a></h3>
 <p>
-Clicking on a regulatory feature will open a Regulation tab with information about the evidence supporting that regulatory feature as well as cell-specific annotations. Different views can be selected:
+Clicking on a regulatory feature will open a Regulation tab with information about the evidence supporting that regulatory feature as well as cell-specific activity estimates. Different views can be selected:
 <ul>
 	<li><b>Summary:</b> displays both the MultiCell (in grey) and cell-specific regulatory features. The core evidence (see <a href="regulatory_build.html">the Regulatory Build</a> for further explanations) is displayed for MultiCell features by default but not for cell-specific features.</li>
 	<li><b>Details by cell line:</b> this is the default view, where you get the generic MultiCell regulatory feature, cell-specific annotation and a default set of supporting evidence. You can display more evidence tracks by clicking on <i>Configure this page</i>.</li>
