@@ -39,7 +39,7 @@ sub content_ticket {
     if (!$is_view) {
       $job_table->append_child('div', {
         'class'     => [qw(_ticket_details hidden toggleable)], # this div is hidden by default
-        'children'  => [ splice @{$job_table->child_nodes}, 2 ] # first two rows should always stay on
+        'children'  => [ splice @{$job_table->child_nodes}, 3 ] # first three rows should always stay on
       });
     }
     $div->append_child($job_table);
