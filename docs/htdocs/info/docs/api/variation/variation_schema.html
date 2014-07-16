@@ -6,25 +6,23 @@
 
 <script language="Javascript" type="text/javascript">
   var img_plus   = '<img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>';
-  var img_minus  = '<img src="/i/16/minus-button.png" style="width:12px;height:12px;vertical-align:middle;margin-right:6px" alt="hide"/>';
-  var link_text  = 'columns';
-  var span_open  = ' <span style="vertical-align:middle">';
+  var img_minus  = '<img src="/i/16/minus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="hide"/>';
+  var span_open  = ' <span style="vertical-align:middle;color:#000;font-weight:bold;padding-right:2px">';
   var span_close = '</span>';
 
   // Function to show/hide the columns table
-  function show_hide (param, type) {
-    // Example tables
-    if (type === 'example') {
-      div    = document.getElementById('ex_'+param);
-      alink  = document.getElementById('e_'+param);
-      a_text = 'query results'; 
-    } 
+  function show_hide (param, a_text) {
+  
     // Schema tables
-    else { 
-      div    = document.getElementById('div_'+param);
-      alink  = document.getElementById('a_'+param);
-      a_text = link_text;
+    if (a_text === 'columns') {
+      div   = document.getElementById('div_'+param);
+      alink = document.getElementById('a_'+param);
     }  
+    // Example tables
+    else {
+      div   = document.getElementById('ex_'+param);
+      alink = document.getElementById('e_'+param);
+    } 
     
     if (div.style.display=='inline') {
       div.style.display='none';
@@ -39,7 +37,7 @@
   }
   
   // Function to show/hide all the tables
-  function show_hide_all () {
+  function show_hide_all (link_text) {
     expand_flag = document.getElementById('expand');
     divs = document.getElementsByTagName('div');
     for(var i=0; i < divs.length; i++){
@@ -66,7 +64,6 @@
     }
   }
 </script>
-
 </head>
 <body>
 
@@ -103,7 +100,7 @@ tables that they've not used before.
 <h3 id="top">List of the tables:</h3>
 <div>
 
-  <div style="background-color:#F2F2F2;border-radius:5px;margin-bottom:15px;float:left;margin-right:20px;width:200px">
+  <div style="background-color:#F0F0F0;border-radius:5px;margin-bottom:15px;float:left;margin-right:20px;width:200px">
     <div style="padding:2px 5px;background-color:#336;border-top-left-radius:5px;border-top-right-radius:5px">
       <div style="background-color:#FF0000;border:1px solid #FFF;padding:0px 8px;display:inline;vertical-align:middle"></div>
       <h2 style="margin-left:8px;display:inline;color:#FFF;vertical-align:middle">Attributes tables</h2>
@@ -116,7 +113,7 @@ tables that they've not used before.
       </ul>
     </div>
 
-  <div style="background-color:#F2F2F2;border-radius:5px;margin-bottom:15px;float:left;margin-right:20px">
+  <div style="background-color:#F0F0F0;border-radius:5px;margin-bottom:15px;float:left;margin-right:20px">
     <div style="padding:2px 5px;background-color:#336;border-top-left-radius:5px;border-top-right-radius:5px">
       <div style="background-color:#3CB371;border:1px solid #FFF;padding:0px 8px;display:inline;vertical-align:middle"></div>
       <h2 style="margin-left:8px;display:inline;color:#FFF;vertical-align:middle">Failed tables</h2>
@@ -130,7 +127,7 @@ tables that they've not used before.
       </ul>
     </div>
 
-  <div style="background-color:#F2F2F2;border-radius:5px;margin-bottom:15px;float:left;margin-right:20px">
+  <div style="background-color:#F0F0F0;border-radius:5px;margin-bottom:15px;float:left;margin-right:20px">
     <div style="padding:2px 5px;background-color:#336;border-top-left-radius:5px;border-top-right-radius:5px">
       <div style="background-color:#FF8500;border:1px solid #FFF;padding:0px 8px;display:inline;vertical-align:middle"></div>
       <h2 style="margin-left:8px;display:inline;color:#FFF;vertical-align:middle">Genotype tables</h2>
@@ -146,7 +143,7 @@ tables that they've not used before.
       </ul>
     </div>
 
-  <div style="background-color:#F2F2F2;border-radius:5px;margin-bottom:15px;float:left;margin-right:20px;width:200px">
+  <div style="background-color:#F0F0F0;border-radius:5px;margin-bottom:15px;float:left;margin-right:20px;width:200px">
     <div style="padding:2px 5px;background-color:#336;border-top-left-radius:5px;border-top-right-radius:5px">
       <div style="background-color:#BC5CEC;border:1px solid #FFF;padding:0px 8px;display:inline;vertical-align:middle"></div>
       <h2 style="margin-left:8px;display:inline;color:#FFF;vertical-align:middle">Metadata tables</h2>
@@ -161,7 +158,7 @@ tables that they've not used before.
 </div>
 
 <div>
-  <div style="background-color:#F2F2F2;border-radius:5px;margin-bottom:15px;float:left;margin-right:20px;width:200px">
+  <div style="background-color:#F0F0F0;border-radius:5px;margin-bottom:15px;float:left;margin-right:20px;width:200px">
     <div style="padding:2px 5px;background-color:#336;border-top-left-radius:5px;border-top-right-radius:5px">
       <div style="background-color:#000;border:1px solid #FFF;padding:0px 8px;display:inline;vertical-align:middle"></div>
       <h2 style="margin-left:8px;display:inline;color:#FFF;vertical-align:middle">Other tables</h2>
@@ -179,7 +176,7 @@ tables that they've not used before.
       </ul>
     </div>
 
-  <div style="background-color:#F2F2F2;border-radius:5px;margin-bottom:15px;float:left;margin-right:20px;width:200px">
+  <div style="background-color:#F0F0F0;border-radius:5px;margin-bottom:15px;float:left;margin-right:20px;width:200px">
     <div style="padding:2px 5px;background-color:#336;border-top-left-radius:5px;border-top-right-radius:5px">
       <div style="background-color:#22949b;border:1px solid #FFF;padding:0px 8px;display:inline;vertical-align:middle"></div>
       <h2 style="margin-left:8px;display:inline;color:#FFF;vertical-align:middle">Phenotype tables</h2>
@@ -191,7 +188,7 @@ tables that they've not used before.
       </ul>
     </div>
 
-  <div style="background-color:#F2F2F2;border-radius:5px;margin-bottom:15px;float:left;margin-right:20px">
+  <div style="background-color:#F0F0F0;border-radius:5px;margin-bottom:15px;float:left;margin-right:20px">
     <div style="padding:2px 5px;background-color:#336;border-top-left-radius:5px;border-top-right-radius:5px">
       <div style="background-color:#1E90FF;border:1px solid #FFF;padding:0px 8px;display:inline;vertical-align:middle"></div>
       <h2 style="margin-left:8px;display:inline;color:#FFF;vertical-align:middle">Protein tables</h2>
@@ -203,7 +200,7 @@ tables that they've not used before.
       </ul>
     </div>
 
-  <div style="background-color:#F2F2F2;border-radius:5px;margin-bottom:15px;float:left;margin-right:20px;width:200px">
+  <div style="background-color:#F0F0F0;border-radius:5px;margin-bottom:15px;float:left;margin-right:20px;width:200px">
     <div style="padding:2px 5px;background-color:#336;border-top-left-radius:5px;border-top-right-radius:5px">
       <div style="background-color:#FF8500;border:1px solid #FFF;padding:0px 8px;display:inline;vertical-align:middle"></div>
       <h2 style="margin-left:8px;display:inline;color:#FFF;vertical-align:middle">Sample tables</h2>
@@ -224,7 +221,7 @@ tables that they've not used before.
 </div>
 
 <div>
-  <div style="background-color:#F2F2F2;border-radius:5px;margin-bottom:15px;float:left;margin-right:20px;width:200px">
+  <div style="background-color:#F0F0F0;border-radius:5px;margin-bottom:15px;float:left;margin-right:20px;width:200px">
     <div style="padding:2px 5px;background-color:#336;border-top-left-radius:5px;border-top-right-radius:5px">
       <div style="background-color:#7CFC00;border:1px solid #FFF;padding:0px 8px;display:inline;vertical-align:middle"></div>
       <h2 style="margin-left:8px;display:inline;color:#FFF;vertical-align:middle">Source/study tables</h2>
@@ -240,7 +237,7 @@ tables that they've not used before.
       </ul>
     </div>
 
-  <div style="background-color:#F2F2F2;border-radius:5px;margin-bottom:15px;float:left;margin-right:20px">
+  <div style="background-color:#F0F0F0;border-radius:5px;margin-bottom:15px;float:left;margin-right:20px">
     <div style="padding:2px 5px;background-color:#336;border-top-left-radius:5px;border-top-right-radius:5px">
       <div style="background-color:#01D4F7;border:1px solid #FFF;padding:0px 8px;display:inline;vertical-align:middle"></div>
       <h2 style="margin-left:8px;display:inline;color:#FFF;vertical-align:middle">Structural variation tables</h2>
@@ -254,7 +251,7 @@ tables that they've not used before.
       </ul>
     </div>
 
-  <div style="background-color:#F2F2F2;border-radius:5px;margin-bottom:15px;float:left;margin-right:20px">
+  <div style="background-color:#F0F0F0;border-radius:5px;margin-bottom:15px;float:left;margin-right:20px">
     <div style="padding:2px 5px;background-color:#336;border-top-left-radius:5px;border-top-right-radius:5px">
       <div style="background-color:#FF4DC8;border:1px solid #FFF;padding:0px 8px;display:inline;vertical-align:middle"></div>
       <h2 style="margin-left:8px;display:inline;color:#FFF;vertical-align:middle">Variation effect tables</h2>
@@ -269,7 +266,7 @@ tables that they've not used before.
       </ul>
     </div>
 
-  <div style="background-color:#F2F2F2;border-radius:5px;margin-bottom:15px;float:left;margin-right:20px">
+  <div style="background-color:#F0F0F0;border-radius:5px;margin-bottom:15px;float:left;margin-right:20px">
     <div style="padding:2px 5px;background-color:#336;border-top-left-radius:5px;border-top-right-radius:5px">
       <div style="background-color:#FFD700;border:1px solid #FFF;padding:0px 8px;display:inline;vertical-align:middle"></div>
       <h2 style="margin-left:8px;display:inline;color:#FFF;vertical-align:middle">Variation set tables</h2>
@@ -286,7 +283,7 @@ tables that they've not used before.
 </div>
 
 <div>
-  <div style="background-color:#F2F2F2;border-radius:5px;margin-bottom:15px;float:left;margin-right:20px;width:200px">
+  <div style="background-color:#F0F0F0;border-radius:5px;margin-bottom:15px;float:left;margin-right:20px;width:200px">
     <div style="padding:2px 5px;background-color:#336;border-top-left-radius:5px;border-top-right-radius:5px">
       <div style="background-color:#000;border:1px solid #FFF;padding:0px 8px;display:inline;vertical-align:middle"></div>
       <h2 style="margin-left:8px;display:inline;color:#FFF;vertical-align:middle">Variation tables</h2>
@@ -302,24 +299,28 @@ tables that they've not used before.
 
   <div style="clear:both" />
 </div>
-  <input type="button" onclick="show_hide_all()" class="fbutton" value="Show/hide all"/>
+  <input type="button" onclick="show_hide_all('columns')" class="fbutton" value="Show/hide all"/>
   <input type="hidden" id="expand" value="0" />
   
-<br /><br />
-<div style="background-color:#F2F2F2;padding:5px;margin:5px 0px;border-top:2px solid #FF0000">
-  <h2 id="1" style="display:inline;color:#000">Attributes tables</h2>
+
+<div style="background-color:#F0F0F0;padding:5px 4px;margin:75px 0px 5px;border-top:2px solid #FF0000;border-bottom:1px solid #FF0000">
+  <div id="1" style="background-color:#FF0000;border:1px solid #FFF;padding:0px 8px;display:inline;vertical-align:top"></div>
+  <h2 id="1" style="display:inline;color:#000;padding-top:0px;margin-left:6px">Attributes tables</h2>
 </div>
 <p style="width:800px">These tables define the variation attributes data.</p>
-  <div id="attrib" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#FF0000;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">attrib</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_attrib" style="cursor:pointer;text-decoration:none" onclick="show_hide('attrib')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
+  <div id="attrib" style="width:850px;background-color:#F0F0F0;margin-top:50px;margin-bottom:2px;padding:4px;border-top:1px solid #FF0000">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#FF0000;vertical-align:middle"></span>attrib</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_attrib" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('attrib','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show columns</span>
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top">[Back to top]</a>
     </div>
+    <div style="clear:both"></div>
   </div>
   <p style="padding:5px 0px;margin-bottom:0px;width:800px">Defines various attributes used elsewhere in the database</p>
 
@@ -331,7 +332,11 @@ tables that they've not used before.
       <tr class="bg1"><td><b>value</b></td><td>TEXT</td><td>-</td><td>The value of this attribute</td><td>unique key: type_val_idx</td></tr>
     </table>
   </div>
-<div style="margin: 10px 5px"><p style="font-weight:bold">Example:</p><p style="padding-left:10px">See below the query to display a subset of the attrib entries: </p><pre style="display:inline;border:1px solid #555;padding:2px;margin-right:15px;margin-left:10px">SELECT * FROM attrib WHERE attrib_type_id IN (1,2,3) ORDER BY attrib_id LIMIT 21;</pre> <a id="e_attrib" style="cursor:pointer;text-decoration:none" onclick="show_hide('attrib','example')"><img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/><span style="vertical-align:middle"> Show query results</span></a>
+<div style="margin: 10px 5px"><p style="font-weight:bold">Example:</p><p style="padding-left:10px">See below the query to display a subset of the attrib entries: </p><pre style="display:inline;border:1px solid #555;padding:2px;margin-right:15px;margin-left:10px">SELECT * FROM attrib WHERE attrib_type_id IN (1,2,3) ORDER BY attrib_id LIMIT 21;</pre> 
+  <a id="e_attrib" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('attrib','query results')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show query results</span>
+  </a>
 
   <div id="ex_attrib" style="display:none;">
     <table class="ss" style="width:50%;margin-top:20px;margin-left:10px;border-spacing:2px">
@@ -343,16 +348,19 @@ tables that they've not used before.
   </ul>
 
 
-  <div id="attrib_set" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#FF0000;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">attrib_set</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_attrib_set" style="cursor:pointer;text-decoration:none" onclick="show_hide('attrib_set')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
+  <div id="attrib_set" style="width:850px;background-color:#F0F0F0;margin-top:50px;margin-bottom:2px;padding:4px;border-top:1px solid #FF0000">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#FF0000;vertical-align:middle"></span>attrib_set</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_attrib_set" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('attrib_set','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show columns</span>
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top">[Back to top]</a>
     </div>
+    <div style="clear:both"></div>
   </div>
   <p style="padding:5px 0px;margin-bottom:0px;width:800px">Groups related attributes together</p>
 
@@ -370,16 +378,19 @@ tables that they've not used before.
   </ul>
 
 
-  <div id="attrib_type" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#FF0000;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">attrib_type</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_attrib_type" style="cursor:pointer;text-decoration:none" onclick="show_hide('attrib_type')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
+  <div id="attrib_type" style="width:850px;background-color:#F0F0F0;margin-top:50px;margin-bottom:2px;padding:4px;border-top:1px solid #FF0000">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#FF0000;vertical-align:middle"></span>attrib_type</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_attrib_type" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('attrib_type','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show columns</span>
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top">[Back to top]</a>
     </div>
+    <div style="clear:both"></div>
   </div>
   <p style="padding:5px 0px;margin-bottom:0px;width:800px">Defines the set of possible attribute types used in the attrib table</p>
 
@@ -392,7 +403,11 @@ tables that they've not used before.
       <tr class="bg2"><td><b>description</b></td><td>TEXT</td><td>NULL</td><td>Longer description of this type</td><td></td></tr>
     </table>
   </div>
-<div style="margin: 10px 5px"><p style="font-weight:bold">Example:</p><p style="padding-left:10px">See below the command to display a subset of the attrib_type entries: </p><pre style="display:inline;border:1px solid #555;padding:2px;margin-right:15px;margin-left:10px">SELECT * FROM attrib_type LIMIT 10;</pre> <a id="e_attrib_type" style="cursor:pointer;text-decoration:none" onclick="show_hide('attrib_type','example')"><img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/><span style="vertical-align:middle"> Show query results</span></a>
+<div style="margin: 10px 5px"><p style="font-weight:bold">Example:</p><p style="padding-left:10px">See below the command to display a subset of the attrib_type entries: </p><pre style="display:inline;border:1px solid #555;padding:2px;margin-right:15px;margin-left:10px">SELECT * FROM attrib_type LIMIT 10;</pre> 
+  <a id="e_attrib_type" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('attrib_type','query results')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show query results</span>
+  </a>
 
   <div id="ex_attrib_type" style="display:none;">
     <table class="ss" style="width:50%;margin-top:20px;margin-left:10px;border-spacing:2px">
@@ -404,21 +419,25 @@ tables that they've not used before.
   </ul>
 
 
-<br /><br />
-<div style="background-color:#F2F2F2;padding:5px;margin:5px 0px;border-top:2px solid #3CB371">
-  <h2 id="2" style="display:inline;color:#000">Failed tables</h2>
+
+<div style="background-color:#F0F0F0;padding:5px 4px;margin:75px 0px 5px;border-top:2px solid #3CB371;border-bottom:1px solid #3CB371">
+  <div id="2" style="background-color:#3CB371;border:1px solid #FFF;padding:0px 8px;display:inline;vertical-align:top"></div>
+  <h2 id="2" style="display:inline;color:#000;padding-top:0px;margin-left:6px">Failed tables</h2>
 </div>
 <p style="width:800px">These tables define the list of variants/alleles flagged as "failed" in the Variation pipeline.<br /> The list of reasons for a variation being flagged as failed is available in the <a href="/info/genome/variation/data_description.html#quality_control">Quality Control documentation</a>.</p>
-  <div id="failed_allele" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#3CB371;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">failed_allele</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_failed_allele" style="cursor:pointer;text-decoration:none" onclick="show_hide('failed_allele')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
+  <div id="failed_allele" style="width:850px;background-color:#F0F0F0;margin-top:50px;margin-bottom:2px;padding:4px;border-top:1px solid #3CB371">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#3CB371;vertical-align:middle"></span>failed_allele</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_failed_allele" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('failed_allele','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show columns</span>
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top">[Back to top]</a>
     </div>
+    <div style="clear:both"></div>
   </div>
   <p style="padding:5px 0px;margin-bottom:0px;width:800px">Contains alleles that did not pass the Ensembl filters</p>
 
@@ -437,16 +456,19 @@ tables that they've not used before.
   </ul>
 
 
-  <div id="failed_description" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#3CB371;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">failed_description</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_failed_description" style="cursor:pointer;text-decoration:none" onclick="show_hide('failed_description')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
+  <div id="failed_description" style="width:850px;background-color:#F0F0F0;margin-top:50px;margin-bottom:2px;padding:4px;border-top:1px solid #3CB371">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#3CB371;vertical-align:middle"></span>failed_description</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_failed_description" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('failed_description','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show columns</span>
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top">[Back to top]</a>
     </div>
+    <div style="clear:both"></div>
   </div>
   <p style="padding:5px 0px;margin-bottom:0px;width:800px">This table contains descriptions of reasons for a variation being flagged as failed.</p>
 
@@ -457,7 +479,11 @@ tables that they've not used before.
       <tr class="bg2"><td><b>description</b></td><td>text</td><td>-</td><td>Text containing the reason why the Variation has been flagged as failed. e.g. "Variation does not map to the genome".</td><td></td></tr>
     </table>
   </div>
-<div style="margin: 10px 5px"><p style="font-weight:bold">Example:</p><p style="padding-left:10px">See below the list of the descriptions available in the ensembl variation databases: </p><pre style="display:inline;border:1px solid #555;padding:2px;margin-right:15px;margin-left:10px">SELECT * FROM failed_description;</pre> <a id="e_failed_description" style="cursor:pointer;text-decoration:none" onclick="show_hide('failed_description','example')"><img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/><span style="vertical-align:middle"> Show query results</span></a>
+<div style="margin: 10px 5px"><p style="font-weight:bold">Example:</p><p style="padding-left:10px">See below the list of the descriptions available in the ensembl variation databases: </p><pre style="display:inline;border:1px solid #555;padding:2px;margin-right:15px;margin-left:10px">SELECT * FROM failed_description;</pre> 
+  <a id="e_failed_description" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('failed_description','query results')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show query results</span>
+  </a>
 
   <div id="ex_failed_description" style="display:none;">
     <table class="ss" style="width:50%;margin-top:20px;margin-left:10px;border-spacing:2px">
@@ -470,16 +496,19 @@ tables that they've not used before.
   </ul>
 
 
-  <div id="failed_structural_variation" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#3CB371;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">failed_structural_variation</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_failed_structural_variation" style="cursor:pointer;text-decoration:none" onclick="show_hide('failed_structural_variation')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
+  <div id="failed_structural_variation" style="width:850px;background-color:#F0F0F0;margin-top:50px;margin-bottom:2px;padding:4px;border-top:1px solid #3CB371">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#3CB371;vertical-align:middle"></span>failed_structural_variation</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_failed_structural_variation" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('failed_structural_variation','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show columns</span>
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top">[Back to top]</a>
     </div>
+    <div style="clear:both"></div>
   </div>
   <p style="padding:5px 0px;margin-bottom:0px;width:800px">For various reasons it may be necessary to store information about a structural variation that has failed quality checks (mappings) in the Structural Variation pipeline. This table acts as a flag for such failures.</p>
 
@@ -498,16 +527,19 @@ tables that they've not used before.
   </ul>
 
 
-  <div id="failed_variation" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#3CB371;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">failed_variation</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_failed_variation" style="cursor:pointer;text-decoration:none" onclick="show_hide('failed_variation')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
+  <div id="failed_variation" style="width:850px;background-color:#F0F0F0;margin-top:50px;margin-bottom:2px;padding:4px;border-top:1px solid #3CB371">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#3CB371;vertical-align:middle"></span>failed_variation</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_failed_variation" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('failed_variation','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show columns</span>
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top">[Back to top]</a>
     </div>
+    <div style="clear:both"></div>
   </div>
   <p style="padding:5px 0px;margin-bottom:0px;width:800px">For various reasons it may be necessary to store information about a variation that has failed quality checks in the Variation pipeline. This table acts as a flag for such failures.</p>
 
@@ -526,21 +558,25 @@ tables that they've not used before.
   </ul>
 
 
-<br /><br />
-<div style="background-color:#F2F2F2;padding:5px;margin:5px 0px;border-top:2px solid #FF8500">
-  <h2 id="3" style="display:inline;color:#000">Genotype tables</h2>
+
+<div style="background-color:#F0F0F0;padding:5px 4px;margin:75px 0px 5px;border-top:2px solid #FF8500;border-bottom:1px solid #FF8500">
+  <div id="3" style="background-color:#FF8500;border:1px solid #FFF;padding:0px 8px;display:inline;vertical-align:top"></div>
+  <h2 id="3" style="display:inline;color:#000;padding-top:0px;margin-left:6px">Genotype tables</h2>
 </div>
 <p style="width:800px">These tables define the genotype data at the individual and population levels.</p>
-  <div id="compressed_genotype_region" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#FF8500;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">compressed_genotype_region</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_compressed_genotype_region" style="cursor:pointer;text-decoration:none" onclick="show_hide('compressed_genotype_region')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
+  <div id="compressed_genotype_region" style="width:850px;background-color:#F0F0F0;margin-top:50px;margin-bottom:2px;padding:4px;border-top:1px solid #FF8500">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#FF8500;vertical-align:middle"></span>compressed_genotype_region</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_compressed_genotype_region" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('compressed_genotype_region','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show columns</span>
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top">[Back to top]</a>
     </div>
+    <div style="clear:both"></div>
   </div>
   <p style="padding:5px 0px;margin-bottom:0px;width:800px">This table holds genotypes compressed using the pack() method in Perl. These genotypes are mapped to particular genomic locations rather than variation objects. The data have been compressed to reduce table size and increase the speed of the web code when retrieving strain slices and LD data. Only data from resequenced and individuals used for LD calculations are included in this table</p>
 
@@ -552,7 +588,7 @@ tables that they've not used before.
       <tr class="bg1"><td><b>seq_region_start</b></td><td>int(11)</td><td>-</td><td>The start position of the variation on the <a href="#seq_region">seq_region</a>.</td><td>key: pos_idx</td></tr>
       <tr class="bg2"><td><b>seq_region_end</b></td><td>int(11)</td><td>-</td><td>The end position of the variation on the <a href="#seq_region">seq_region</a>.</td><td></td></tr>
       <tr class="bg1"><td><b>seq_region_strand</b></td><td>tinyint(4)</td><td>-</td><td>The orientation of the variation on the <a href="#seq_region">seq_region</a>.</td><td></td></tr>
-      <tr class="bg2"><td><b>genotypes</b></td><td>blob</td><td>NULL</td><td>Encoded representation of the genotype data:<br />Each row in the compressed table stores genotypes from one individual in one fixed-size region of the genome (arbitrarily defined as 100 Kb). The compressed string (using Perl's pack method) consisting of a repeating triplet of elements: a distance in base pairs from the previous genotype; a variation dbID; a genotype_code_id identifier.<br />For example, a given row may have a start position of 1000, indicating the chromosomal position of the first genotype in this row. The unpacked genotypes field then may contain the following elements:<br />0, 1, 1, 20, 2, 5, 35, 3, 3, ...<br />The first genotype has a position of 1000 + 0 = 1000, and corresponds to the variation with the identifier 1 and genotype_code corresponding to A and G.<br />The second genotype has a position of 1000 + 20 = 1020, variation_id 2 and genotype_code representing C and C.<br />The third genotype similarly has a position of 1055, and so on.</td><td></td></tr>
+      <tr class="bg2"><td><b>genotypes</b></td><td>blob</td><td>NULL</td><td>Encoded representation of the genotype data:<br />Each row in the compressed table stores genotypes from one individual in one fixed-size region of the genome (arbitrarily defined as 100 Kb). The compressed string (using Perl's pack method) consisting of a repeating triplet of elements: a  <span style="color:#D00">distance</span> in base pairs from the previous genotype; a <span style="color:#090">variation dbID</span>; a <span style="color:#00D">genotype_code_id</span> identifier.<br />For example, a given row may have a start position of 1000, indicating the chromosomal position of the first genotype in this row. The unpacked genotypes field then may contain the following elements:<br /><b><span style="color:#D00">0</span>, <span style="color:#090">1</span>,  <span style="color:#00D">1</span>, <span style="color:#D00">20</span>, <span style="color:#090">2</span>, <span style="color:#00D">5</span>, <span style="color:#D00">35</span>, <span style="color:#090">3</span>, <span style="color:#00D">3</span>, ...</b><br />The first genotype ("<span style="color:#D00">0</span>,<span style="color:#090">1</span>,<span style="color:#00D">1</span>") has a position of 1000 + <span style="color:#D00">0</span> = 1000, and corresponds to the variation with the internal identifier <span style="color:#090">1</span> and genotype_code_id corresponding to the genotype A|G (internal ID <span style="color:#00D">1</span>).<br />The second genotype ("<span style="color:#D00">20</span>,<span style="color:#090">2</span>,<span style="color:#00D">5</span>") has a position of 1000 + <span style="color:#D00">20</span> = 1020, internal variation_id <span style="color:#090">2</span> and genotype_code_id corresponding to the genotype C|C ( internal ID <span style="color:#00D">5</span>).<br />The third genotype similarly has a position of 1055, and so on.</td><td></td></tr>
     </table>
   </div>
   <p style="margin-top:10px"><b>See also:</b></p>
@@ -564,18 +600,21 @@ tables that they've not used before.
   </ul>
 
 
-  <div id="compressed_genotype_var" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#FF8500;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">compressed_genotype_var</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_compressed_genotype_var" style="cursor:pointer;text-decoration:none" onclick="show_hide('compressed_genotype_var')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
+  <div id="compressed_genotype_var" style="width:850px;background-color:#F0F0F0;margin-top:50px;margin-bottom:2px;padding:4px;border-top:1px solid #FF8500">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#FF8500;vertical-align:middle"></span>compressed_genotype_var</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_compressed_genotype_var" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('compressed_genotype_var','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show columns</span>
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top">[Back to top]</a>
     </div>
+    <div style="clear:both"></div>
   </div>
-  <p style="padding:5px 0px;margin-bottom:0px;width:800px">This table holds genotypes compressed using the pack() method in Perl. These genotypes are mapped directly to variation objects. The data have been compressed to reduce table size. All genotypes in the database are included in this table (included duplicates of those genotypes contained in the compressed_genotype_region table). This table is optimised for retrieval from </p>
+  <p style="padding:5px 0px;margin-bottom:0px;width:800px">This table holds genotypes compressed using the pack() method in Perl. These genotypes are mapped directly to variation objects. The data have been compressed to reduce table size. All genotypes in the database are included in this table (included duplicates of those genotypes contained in the compressed_genotype_region table). This table is optimised for retrieval from variation.</p>
 
   <div id="div_compressed_genotype_var" style="display:none">
     <table style="border:1px solid #667aa6;padding:0px;min-width:1000px;max-width:1200px">
@@ -594,16 +633,19 @@ tables that they've not used before.
   </ul>
 
 
-  <div id="individual_genotype_multiple_bp" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#FF8500;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">individual_genotype_multiple_bp</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_individual_genotype_multiple_bp" style="cursor:pointer;text-decoration:none" onclick="show_hide('individual_genotype_multiple_bp')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
+  <div id="individual_genotype_multiple_bp" style="width:850px;background-color:#F0F0F0;margin-top:50px;margin-bottom:2px;padding:4px;border-top:1px solid #FF8500">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#FF8500;vertical-align:middle"></span>individual_genotype_multiple_bp</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_individual_genotype_multiple_bp" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('individual_genotype_multiple_bp','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show columns</span>
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top">[Back to top]</a>
     </div>
+    <div style="clear:both"></div>
   </div>
   <p style="padding:5px 0px;margin-bottom:0px;width:800px">This table holds uncompressed genotypes for given variations.</p>
 
@@ -625,16 +667,19 @@ tables that they've not used before.
   </ul>
 
 
-  <div id="population_genotype" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#FF8500;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">population_genotype</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_population_genotype" style="cursor:pointer;text-decoration:none" onclick="show_hide('population_genotype')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
+  <div id="population_genotype" style="width:850px;background-color:#F0F0F0;margin-top:50px;margin-bottom:2px;padding:4px;border-top:1px solid #FF8500">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#FF8500;vertical-align:middle"></span>population_genotype</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_population_genotype" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('population_genotype','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show columns</span>
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top">[Back to top]</a>
     </div>
+    <div style="clear:both"></div>
   </div>
   <p style="padding:5px 0px;margin-bottom:0px;width:800px">This table stores genotypes and frequencies for variations in given populations.</p>
 
@@ -659,16 +704,19 @@ tables that they've not used before.
   </ul>
 
 
-  <div id="read_coverage" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#FF8500;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">read_coverage</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_read_coverage" style="cursor:pointer;text-decoration:none" onclick="show_hide('read_coverage')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
+  <div id="read_coverage" style="width:850px;background-color:#F0F0F0;margin-top:50px;margin-bottom:2px;padding:4px;border-top:1px solid #FF8500">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#FF8500;vertical-align:middle"></span>read_coverage</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_read_coverage" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('read_coverage','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show columns</span>
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top">[Back to top]</a>
     </div>
+    <div style="clear:both"></div>
   </div>
   <p style="padding:5px 0px;margin-bottom:0px;width:800px">This table stores the read coverage in the resequencing of individuals. Each row contains an individual ID, chromosomal coordinates and a read coverage level.</p>
 
@@ -689,18 +737,21 @@ tables that they've not used before.
   </ul>
 
 
-  <div id="tmp_individual_genotype_single_bp" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#FF8500;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">tmp_individual_genotype_single_bp</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_tmp_individual_genotype_single_bp" style="cursor:pointer;text-decoration:none" onclick="show_hide('tmp_individual_genotype_single_bp')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
+  <div id="tmp_individual_genotype_single_bp" style="width:850px;background-color:#F0F0F0;margin-top:50px;margin-bottom:2px;padding:4px;border-top:1px solid #FF8500">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#FF8500;vertical-align:middle"></span>tmp_individual_genotype_single_bp</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_tmp_individual_genotype_single_bp" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('tmp_individual_genotype_single_bp','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show columns</span>
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top">[Back to top]</a>
     </div>
+    <div style="clear:both"></div>
   </div>
-  <p style="padding:5px 0px;margin-bottom:0px;width:800px">his table is only needed to create master schema when run healthcheck system. Needed for other species, but human, so keep it.</p>
+  <p style="padding:5px 0px;margin-bottom:0px;width:800px">This table is only needed to create master schema when run healthcheck system. Needed for other species, but human, so keep it.</p>
 
   <div id="div_tmp_individual_genotype_single_bp" style="display:none">
     <table style="border:1px solid #667aa6;padding:0px;min-width:1000px;max-width:1200px">
@@ -720,21 +771,25 @@ tables that they've not used before.
   </ul>
 
 
-<br /><br />
-<div style="background-color:#F2F2F2;padding:5px;margin:5px 0px;border-top:2px solid #BC5CEC">
-  <h2 id="4" style="display:inline;color:#000">Metadata tables</h2>
+
+<div style="background-color:#F0F0F0;padding:5px 4px;margin:75px 0px 5px;border-top:2px solid #BC5CEC;border-bottom:1px solid #BC5CEC">
+  <div id="4" style="background-color:#BC5CEC;border:1px solid #FFF;padding:0px 8px;display:inline;vertical-align:top"></div>
+  <h2 id="4" style="display:inline;color:#000;padding-top:0px;margin-left:6px">Metadata tables</h2>
 </div>
 <p style="width:800px">These tables define some metadata information.</p>
-  <div id="meta" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#BC5CEC;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">meta</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_meta" style="cursor:pointer;text-decoration:none" onclick="show_hide('meta')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
+  <div id="meta" style="width:850px;background-color:#F0F0F0;margin-top:50px;margin-bottom:2px;padding:4px;border-top:1px solid #BC5CEC">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#BC5CEC;vertical-align:middle"></span>meta</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_meta" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('meta','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show columns</span>
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top">[Back to top]</a>
     </div>
+    <div style="clear:both"></div>
   </div>
   <p style="padding:5px 0px;margin-bottom:0px;width:800px">This table stores various metadata relating to the database, generally used by the Ensembl web code.</p>
 
@@ -748,16 +803,19 @@ tables that they've not used before.
     </table>
   </div>
 
-  <div id="meta_coord" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#BC5CEC;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">meta_coord</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_meta_coord" style="cursor:pointer;text-decoration:none" onclick="show_hide('meta_coord')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
+  <div id="meta_coord" style="width:850px;background-color:#F0F0F0;margin-top:50px;margin-bottom:2px;padding:4px;border-top:1px solid #BC5CEC">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#BC5CEC;vertical-align:middle"></span>meta_coord</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_meta_coord" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('meta_coord','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show columns</span>
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top">[Back to top]</a>
     </div>
+    <div style="clear:both"></div>
   </div>
   <p style="padding:5px 0px;margin-bottom:0px;width:800px">This table gives the coordinate system used by various tables in the database.</p>
 
@@ -770,21 +828,25 @@ tables that they've not used before.
     </table>
   </div>
 
-<br /><br />
-<div style="background-color:#F2F2F2;padding:5px;margin:5px 0px;border-top:2px solid #000">
-  <h2 id="5" style="display:inline;color:#000">Other tables</h2>
+
+<div style="background-color:#F0F0F0;padding:5px 4px;margin:75px 0px 5px;border-top:2px solid #000;border-bottom:1px solid #000">
+  <div id="5" style="background-color:#000;border:1px solid #FFF;padding:0px 8px;display:inline;vertical-align:top"></div>
+  <h2 id="5" style="display:inline;color:#000;padding-top:0px;margin-left:6px">Other tables</h2>
 </div>
 <p style="width:800px">These tables define the other data associated with a variation.</p>
-  <div id="allele_code" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#000;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">allele_code</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_allele_code" style="cursor:pointer;text-decoration:none" onclick="show_hide('allele_code')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
+  <div id="allele_code" style="width:850px;background-color:#F0F0F0;margin-top:50px;margin-bottom:2px;padding:4px;border-top:1px solid #000">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#000;vertical-align:middle"></span>allele_code</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_allele_code" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('allele_code','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show columns</span>
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top">[Back to top]</a>
     </div>
+    <div style="clear:both"></div>
   </div>
   <p style="padding:5px 0px;margin-bottom:0px;width:800px">This table stores the relationship between the internal allele identifiers and the alleles themselves.</p>
 
@@ -795,7 +857,11 @@ tables that they've not used before.
       <tr class="bg2"><td><b>allele</b></td><td>varchar(60000)</td><td>NULL</td><td>String representing the allele. Has a unique constraint on the first 1000 characters (max allowed by MySQL).</td><td>unique key: allele_idx</td></tr>
     </table>
   </div>
-<div style="margin: 10px 5px"><p style="font-weight:bold">Example:</p><p style="padding-left:10px">See below the first entries in the allele_code table: </p><pre style="display:inline;border:1px solid #555;padding:2px;margin-right:15px;margin-left:10px">SELECT * FROM allele_code LIMIT 6;</pre> <a id="e_allele_code" style="cursor:pointer;text-decoration:none" onclick="show_hide('allele_code','example')"><img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/><span style="vertical-align:middle"> Show query results</span></a>
+<div style="margin: 10px 5px"><p style="font-weight:bold">Example:</p><p style="padding-left:10px">See below the first entries in the allele_code table: </p><pre style="display:inline;border:1px solid #555;padding:2px;margin-right:15px;margin-left:10px">SELECT * FROM allele_code LIMIT 6;</pre> 
+  <a id="e_allele_code" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('allele_code','query results')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show query results</span>
+  </a>
 
   <div id="ex_allele_code" style="display:none;">
     <table class="ss" style="width:50%;margin-top:20px;margin-left:10px;border-spacing:2px">
@@ -807,16 +873,19 @@ tables that they've not used before.
   </ul>
 
 
-  <div id="coord_system" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#000;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">coord_system</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_coord_system" style="cursor:pointer;text-decoration:none" onclick="show_hide('coord_system')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
+  <div id="coord_system" style="width:850px;background-color:#F0F0F0;margin-top:50px;margin-bottom:2px;padding:4px;border-top:1px solid #000">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#000;vertical-align:middle"></span>coord_system</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_coord_system" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('coord_system','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show columns</span>
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top">[Back to top]</a>
     </div>
+    <div style="clear:both"></div>
   </div>
   <p style="padding:5px 0px;margin-bottom:0px;width:800px">Stores information about the available co-ordinate systems for the species identified through the species_id field. Note that for each species, there must be one co-ordinate system that has the attribute "top_level" and one that has the attribute "sequence_level".</p>
 
@@ -839,16 +908,19 @@ tables that they've not used before.
   </ul>
 
 
-  <div id="genotype_code" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#000;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">genotype_code</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_genotype_code" style="cursor:pointer;text-decoration:none" onclick="show_hide('genotype_code')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
+  <div id="genotype_code" style="width:850px;background-color:#F0F0F0;margin-top:50px;margin-bottom:2px;padding:4px;border-top:1px solid #000">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#000;vertical-align:middle"></span>genotype_code</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_genotype_code" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('genotype_code','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show columns</span>
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top">[Back to top]</a>
     </div>
+    <div style="clear:both"></div>
   </div>
   <p style="padding:5px 0px;margin-bottom:0px;width:800px">This table stores genotype codes as multiple rows of allele_code identifiers, linked by genotype_code_id and ordered by haplotype_id.</p>
 
@@ -868,16 +940,19 @@ tables that they've not used before.
   </ul>
 
 
-  <div id="phenotype" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#000;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">phenotype</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_phenotype" style="cursor:pointer;text-decoration:none" onclick="show_hide('phenotype')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
+  <div id="phenotype" style="width:850px;background-color:#F0F0F0;margin-top:50px;margin-bottom:2px;padding:4px;border-top:1px solid #000">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#000;vertical-align:middle"></span>phenotype</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_phenotype" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('phenotype','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show columns</span>
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top">[Back to top]</a>
     </div>
+    <div style="clear:both"></div>
   </div>
   <p style="padding:5px 0px;margin-bottom:0px;width:800px">This table stores details of the phenotypes associated with phenotype_features.</p>
 
@@ -896,16 +971,19 @@ tables that they've not used before.
   </ul>
 
 
-  <div id="seq_region" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#000;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">seq_region</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_seq_region" style="cursor:pointer;text-decoration:none" onclick="show_hide('seq_region')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
+  <div id="seq_region" style="width:850px;background-color:#F0F0F0;margin-top:50px;margin-bottom:2px;padding:4px;border-top:1px solid #000">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#000;vertical-align:middle"></span>seq_region</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_seq_region" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('seq_region','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show columns</span>
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top">[Back to top]</a>
     </div>
+    <div style="clear:both"></div>
   </div>
   <p style="padding:5px 0px;margin-bottom:0px;width:800px">This table stores the relationship between Ensembl's internal coordinate system identifiers and traditional chromosome names.</p>
 
@@ -926,16 +1004,19 @@ tables that they've not used before.
   </ul>
 
 
-  <div id="submitter_handle" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#000;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">submitter_handle</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_submitter_handle" style="cursor:pointer;text-decoration:none" onclick="show_hide('submitter_handle')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
+  <div id="submitter_handle" style="width:850px;background-color:#F0F0F0;margin-top:50px;margin-bottom:2px;padding:4px;border-top:1px solid #000">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#000;vertical-align:middle"></span>submitter_handle</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_submitter_handle" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('submitter_handle','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show columns</span>
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top">[Back to top]</a>
     </div>
+    <div style="clear:both"></div>
   </div>
   <p style="padding:5px 0px;margin-bottom:0px;width:800px">This table holds a short string to distinguish data submitters</p>
 
@@ -952,16 +1033,19 @@ tables that they've not used before.
   </ul>
 
 
-  <div id="subsnp_handle" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#000;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">subsnp_handle</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_subsnp_handle" style="cursor:pointer;text-decoration:none" onclick="show_hide('subsnp_handle')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
+  <div id="subsnp_handle" style="width:850px;background-color:#F0F0F0;margin-top:50px;margin-bottom:2px;padding:4px;border-top:1px solid #000">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#000;vertical-align:middle"></span>subsnp_handle</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_subsnp_handle" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('subsnp_handle','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show columns</span>
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top">[Back to top]</a>
     </div>
+    <div style="clear:both"></div>
   </div>
   <p style="padding:5px 0px;margin-bottom:0px;width:800px">This table contains the SubSNP(ss) ID and the name of the submitter handle of dbSNP.</p>
 
@@ -982,16 +1066,19 @@ tables that they've not used before.
   </ul>
 
 
-  <div id="tagged_variation_feature" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#000;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">tagged_variation_feature</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_tagged_variation_feature" style="cursor:pointer;text-decoration:none" onclick="show_hide('tagged_variation_feature')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
+  <div id="tagged_variation_feature" style="width:850px;background-color:#F0F0F0;margin-top:50px;margin-bottom:2px;padding:4px;border-top:1px solid #000">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#000;vertical-align:middle"></span>tagged_variation_feature</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_tagged_variation_feature" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('tagged_variation_feature','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show columns</span>
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top">[Back to top]</a>
     </div>
+    <div style="clear:both"></div>
   </div>
   <p style="padding:5px 0px;margin-bottom:0px;width:800px">This table lists variation feature IDs that are tagged by another variation feature ID. Tag pairs are defined as having an r<sup>2</sup> &gt; 0.99.</p>
 
@@ -1010,21 +1097,25 @@ tables that they've not used before.
   </ul>
 
 
-<br /><br />
-<div style="background-color:#F2F2F2;padding:5px;margin:5px 0px;border-top:2px solid #22949b">
-  <h2 id="6" style="display:inline;color:#000">Phenotype tables</h2>
+
+<div style="background-color:#F0F0F0;padding:5px 4px;margin:75px 0px 5px;border-top:2px solid #22949b;border-bottom:1px solid #22949b">
+  <div id="6" style="background-color:#22949b;border:1px solid #FFF;padding:0px 8px;display:inline;vertical-align:top"></div>
+  <h2 id="6" style="display:inline;color:#000;padding-top:0px;margin-left:6px">Phenotype tables</h2>
 </div>
 <p style="width:800px">These tables store information linking entities (variants, genes, QTLs) with phenotypes and other annotations.</p>
-  <div id="phenotype_feature" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#22949b;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">phenotype_feature</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_phenotype_feature" style="cursor:pointer;text-decoration:none" onclick="show_hide('phenotype_feature')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
+  <div id="phenotype_feature" style="width:850px;background-color:#F0F0F0;margin-top:50px;margin-bottom:2px;padding:4px;border-top:1px solid #22949b">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#22949b;vertical-align:middle"></span>phenotype_feature</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_phenotype_feature" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('phenotype_feature','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show columns</span>
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top">[Back to top]</a>
     </div>
+    <div style="clear:both"></div>
   </div>
   <p style="padding:5px 0px;margin-bottom:0px;width:800px">This table stores information linking entities (variants, genes, QTLs) and phenotypes.</p>
 
@@ -1054,16 +1145,19 @@ tables that they've not used before.
   </ul>
 
 
-  <div id="phenotype_feature_attrib" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#22949b;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">phenotype_feature_attrib</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_phenotype_feature_attrib" style="cursor:pointer;text-decoration:none" onclick="show_hide('phenotype_feature_attrib')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
+  <div id="phenotype_feature_attrib" style="width:850px;background-color:#F0F0F0;margin-top:50px;margin-bottom:2px;padding:4px;border-top:1px solid #22949b">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#22949b;vertical-align:middle"></span>phenotype_feature_attrib</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_phenotype_feature_attrib" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('phenotype_feature_attrib','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show columns</span>
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top">[Back to top]</a>
     </div>
+    <div style="clear:both"></div>
   </div>
   <p style="padding:5px 0px;margin-bottom:0px;width:800px">This table stores additional information on a given phenotype/object association. It is styled as an attrib table to allow for a variety of fields to be populated across different object types.</p>
 
@@ -1082,21 +1176,25 @@ tables that they've not used before.
   </ul>
 
 
-<br /><br />
-<div style="background-color:#F2F2F2;padding:5px;margin:5px 0px;border-top:2px solid #1E90FF">
-  <h2 id="7" style="display:inline;color:#000">Protein tables</h2>
+
+<div style="background-color:#F0F0F0;padding:5px 4px;margin:75px 0px 5px;border-top:2px solid #1E90FF;border-bottom:1px solid #1E90FF">
+  <div id="7" style="background-color:#1E90FF;border:1px solid #FFF;padding:0px 8px;display:inline;vertical-align:top"></div>
+  <h2 id="7" style="display:inline;color:#000;padding-top:0px;margin-left:6px">Protein tables</h2>
 </div>
 <p style="width:800px">These tables define the protein prediction data.</p>
-  <div id="protein_function_predictions" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#1E90FF;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">protein_function_predictions</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_protein_function_predictions" style="cursor:pointer;text-decoration:none" onclick="show_hide('protein_function_predictions')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
+  <div id="protein_function_predictions" style="width:850px;background-color:#F0F0F0;margin-top:50px;margin-bottom:2px;padding:4px;border-top:1px solid #1E90FF">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#1E90FF;vertical-align:middle"></span>protein_function_predictions</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_protein_function_predictions" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('protein_function_predictions','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show columns</span>
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top">[Back to top]</a>
     </div>
+    <div style="clear:both"></div>
   </div>
   <p style="padding:5px 0px;margin-bottom:0px;width:800px">Contains encoded protein function predictions for every protein-coding transcript in this species.</p>
 
@@ -1115,16 +1213,19 @@ tables that they've not used before.
   </ul>
 
 
-  <div id="translation_md5" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#1E90FF;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">translation_md5</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_translation_md5" style="cursor:pointer;text-decoration:none" onclick="show_hide('translation_md5')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
+  <div id="translation_md5" style="width:850px;background-color:#F0F0F0;margin-top:50px;margin-bottom:2px;padding:4px;border-top:1px solid #1E90FF">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#1E90FF;vertical-align:middle"></span>translation_md5</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_translation_md5" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('translation_md5','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show columns</span>
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top">[Back to top]</a>
     </div>
+    <div style="clear:both"></div>
   </div>
   <p style="padding:5px 0px;margin-bottom:0px;width:800px">Maps a hex MD5 hash of a translation sequence to an ID used for the protein function predictions</p>
 
@@ -1141,21 +1242,25 @@ tables that they've not used before.
   </ul>
 
 
-<br /><br />
-<div style="background-color:#F2F2F2;padding:5px;margin:5px 0px;border-top:2px solid #FF8500">
-  <h2 id="8" style="display:inline;color:#000">Sample tables</h2>
+
+<div style="background-color:#F0F0F0;padding:5px 4px;margin:75px 0px 5px;border-top:2px solid #FF8500;border-bottom:1px solid #FF8500">
+  <div id="8" style="background-color:#FF8500;border:1px solid #FFF;padding:0px 8px;display:inline;vertical-align:top"></div>
+  <h2 id="8" style="display:inline;color:#000;padding-top:0px;margin-left:6px">Sample tables</h2>
 </div>
 <p style="width:800px">These tables define the individual and population information.</p>
-  <div id="display_group" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#FF8500;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">display_group</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_display_group" style="cursor:pointer;text-decoration:none" onclick="show_hide('display_group')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
+  <div id="display_group" style="width:850px;background-color:#F0F0F0;margin-top:50px;margin-bottom:2px;padding:4px;border-top:1px solid #FF8500">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#FF8500;vertical-align:middle"></span>display_group</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_display_group" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('display_group','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show columns</span>
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top">[Back to top]</a>
     </div>
+    <div style="clear:both"></div>
   </div>
   <p style="padding:5px 0px;margin-bottom:0px;width:800px">Used to store groups of populations displayed separately on the Population Genetics page</p>
 
@@ -1173,16 +1278,19 @@ tables that they've not used before.
   </ul>
 
 
-  <div id="individual" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#FF8500;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">individual</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_individual" style="cursor:pointer;text-decoration:none" onclick="show_hide('individual')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
+  <div id="individual" style="width:850px;background-color:#F0F0F0;margin-top:50px;margin-bottom:2px;padding:4px;border-top:1px solid #FF8500">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#FF8500;vertical-align:middle"></span>individual</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_individual" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('individual','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show columns</span>
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top">[Back to top]</a>
     </div>
+    <div style="clear:both"></div>
   </div>
   <p style="padding:5px 0px;margin-bottom:0px;width:800px">Stores information about an identifiable individual, including gender and the identifiers of the individual's parents (if known).</p>
 
@@ -1209,16 +1317,19 @@ tables that they've not used before.
   </ul>
 
 
-  <div id="individual_population" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#FF8500;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">individual_population</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_individual_population" style="cursor:pointer;text-decoration:none" onclick="show_hide('individual_population')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
+  <div id="individual_population" style="width:850px;background-color:#F0F0F0;margin-top:50px;margin-bottom:2px;padding:4px;border-top:1px solid #FF8500">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#FF8500;vertical-align:middle"></span>individual_population</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_individual_population" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('individual_population','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show columns</span>
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top">[Back to top]</a>
     </div>
+    <div style="clear:both"></div>
   </div>
   <p style="padding:5px 0px;margin-bottom:0px;width:800px">This table resolves the many-to-many relationship between the individual and population tables; i.e. individuals may belong to more than one population. Hence it is composed of rows of individual and population identifiers.</p>
 
@@ -1236,16 +1347,19 @@ tables that they've not used before.
   </ul>
 
 
-  <div id="individual_synonym" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#FF8500;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">individual_synonym</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_individual_synonym" style="cursor:pointer;text-decoration:none" onclick="show_hide('individual_synonym')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
+  <div id="individual_synonym" style="width:850px;background-color:#F0F0F0;margin-top:50px;margin-bottom:2px;padding:4px;border-top:1px solid #FF8500">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#FF8500;vertical-align:middle"></span>individual_synonym</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_individual_synonym" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('individual_synonym','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show columns</span>
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top">[Back to top]</a>
     </div>
+    <div style="clear:both"></div>
   </div>
   <p style="padding:5px 0px;margin-bottom:0px;width:800px">Used to store alternative names for individuals when data comes from multiple sources.</p>
 
@@ -1265,16 +1379,19 @@ tables that they've not used before.
   </ul>
 
 
-  <div id="individual_type" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#FF8500;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">individual_type</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_individual_type" style="cursor:pointer;text-decoration:none" onclick="show_hide('individual_type')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
+  <div id="individual_type" style="width:850px;background-color:#F0F0F0;margin-top:50px;margin-bottom:2px;padding:4px;border-top:1px solid #FF8500">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#FF8500;vertical-align:middle"></span>individual_type</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_individual_type" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('individual_type','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show columns</span>
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top">[Back to top]</a>
     </div>
+    <div style="clear:both"></div>
   </div>
   <p style="padding:5px 0px;margin-bottom:0px;width:800px">This table gives a deatailed description for each of the possible individual types: fully_inbred, partly_inbred, outbred, mutant  </p>
 
@@ -1286,7 +1403,11 @@ tables that they've not used before.
       <tr class="bg1"><td><b>description</b></td><td>text</td><td>NULL</td><td>Long name of the individual type.</td><td></td></tr>
     </table>
   </div>
-<div style="margin: 10px 5px"><p style="font-weight:bold">Example:</p><p style="padding-left:10px">See below the list of individual types: </p><pre style="display:inline;border:1px solid #555;padding:2px;margin-right:15px;margin-left:10px">SELECT * FROM individual_type;</pre> <a id="e_individual_type" style="cursor:pointer;text-decoration:none" onclick="show_hide('individual_type','example')"><img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/><span style="vertical-align:middle"> Show query results</span></a>
+<div style="margin: 10px 5px"><p style="font-weight:bold">Example:</p><p style="padding-left:10px">See below the list of individual types: </p><pre style="display:inline;border:1px solid #555;padding:2px;margin-right:15px;margin-left:10px">SELECT * FROM individual_type;</pre> 
+  <a id="e_individual_type" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('individual_type','query results')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show query results</span>
+  </a>
 
   <div id="ex_individual_type" style="display:none;">
     <table class="ss" style="width:50%;margin-top:20px;margin-left:10px;border-spacing:2px">
@@ -1297,16 +1418,19 @@ tables that they've not used before.
   </ul>
 
 
-  <div id="population" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#FF8500;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">population</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_population" style="cursor:pointer;text-decoration:none" onclick="show_hide('population')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
+  <div id="population" style="width:850px;background-color:#F0F0F0;margin-top:50px;margin-bottom:2px;padding:4px;border-top:1px solid #FF8500">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#FF8500;vertical-align:middle"></span>population</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_population" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('population','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show columns</span>
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top">[Back to top]</a>
     </div>
+    <div style="clear:both"></div>
   </div>
   <p style="padding:5px 0px;margin-bottom:0px;width:800px">Stores information about a population. A population may be an ethnic group (e.g. caucasian, hispanic), assay group (e.g. 24 europeans), phenotypic group (e.g. blue eyed, diabetes) etc. Populations may be composed of other populations by defining relationships in the population_structure table.</p>
 
@@ -1335,16 +1459,19 @@ tables that they've not used before.
   </ul>
 
 
-  <div id="population_structure" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#FF8500;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">population_structure</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_population_structure" style="cursor:pointer;text-decoration:none" onclick="show_hide('population_structure')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
+  <div id="population_structure" style="width:850px;background-color:#F0F0F0;margin-top:50px;margin-bottom:2px;padding:4px;border-top:1px solid #FF8500">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#FF8500;vertical-align:middle"></span>population_structure</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_population_structure" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('population_structure','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show columns</span>
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top">[Back to top]</a>
     </div>
+    <div style="clear:both"></div>
   </div>
   <p style="padding:5px 0px;margin-bottom:0px;width:800px">This table stores hierarchical relationships between populations by relating them as populations and sub-populations.</p>
 
@@ -1361,16 +1488,19 @@ tables that they've not used before.
   </ul>
 
 
-  <div id="population_synonym" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#FF8500;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">population_synonym</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_population_synonym" style="cursor:pointer;text-decoration:none" onclick="show_hide('population_synonym')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
+  <div id="population_synonym" style="width:850px;background-color:#F0F0F0;margin-top:50px;margin-bottom:2px;padding:4px;border-top:1px solid #FF8500">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#FF8500;vertical-align:middle"></span>population_synonym</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_population_synonym" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('population_synonym','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show columns</span>
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top">[Back to top]</a>
     </div>
+    <div style="clear:both"></div>
   </div>
   <p style="padding:5px 0px;margin-bottom:0px;width:800px">Used to store alternative names for populations when data comes from multiple sources.</p>
 
@@ -1390,21 +1520,25 @@ tables that they've not used before.
   </ul>
 
 
-<br /><br />
-<div style="background-color:#F2F2F2;padding:5px;margin:5px 0px;border-top:2px solid #7CFC00">
-  <h2 id="9" style="display:inline;color:#000">Source/study tables</h2>
+
+<div style="background-color:#F0F0F0;padding:5px 4px;margin:75px 0px 5px;border-top:2px solid #7CFC00;border-bottom:1px solid #7CFC00">
+  <div id="9" style="background-color:#7CFC00;border:1px solid #FFF;padding:0px 8px;display:inline;vertical-align:top"></div>
+  <h2 id="9" style="display:inline;color:#000;padding-top:0px;margin-left:6px">Source/study tables</h2>
 </div>
 <p style="width:800px">These tables define the variation source and study information.</p>
-  <div id="associate_study" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#7CFC00;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">associate_study</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_associate_study" style="cursor:pointer;text-decoration:none" onclick="show_hide('associate_study')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
+  <div id="associate_study" style="width:850px;background-color:#F0F0F0;margin-top:50px;margin-bottom:2px;padding:4px;border-top:1px solid #7CFC00">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#7CFC00;vertical-align:middle"></span>associate_study</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_associate_study" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('associate_study','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show columns</span>
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top">[Back to top]</a>
     </div>
+    <div style="clear:both"></div>
   </div>
   <p style="padding:5px 0px;margin-bottom:0px;width:800px">This table contains identifiers of associated studies (e.g. NHGRI and EGA studies with the same pubmed identifier).</p>
 
@@ -1421,16 +1555,19 @@ tables that they've not used before.
   </ul>
 
 
-  <div id="publication" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#7CFC00;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">publication</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_publication" style="cursor:pointer;text-decoration:none" onclick="show_hide('publication')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
+  <div id="publication" style="width:850px;background-color:#F0F0F0;margin-top:50px;margin-bottom:2px;padding:4px;border-top:1px solid #7CFC00">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#7CFC00;vertical-align:middle"></span>publication</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_publication" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('publication','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show columns</span>
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top">[Back to top]</a>
     </div>
+    <div style="clear:both"></div>
   </div>
   <p style="padding:5px 0px;margin-bottom:0px;width:800px">This table contains details of publications citing variations. This information comes from dbSNP, UCSC and Europe PMC.</p>
 
@@ -1453,16 +1590,19 @@ tables that they've not used before.
   </ul>
 
 
-  <div id="source" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#7CFC00;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">source</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_source" style="cursor:pointer;text-decoration:none" onclick="show_hide('source')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
+  <div id="source" style="width:850px;background-color:#F0F0F0;margin-top:50px;margin-bottom:2px;padding:4px;border-top:1px solid #7CFC00">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#7CFC00;vertical-align:middle"></span>source</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_source" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('source','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show columns</span>
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top">[Back to top]</a>
     </div>
+    <div style="clear:both"></div>
   </div>
   <p style="padding:5px 0px;margin-bottom:0px;width:800px">This table contains details of the source from which a variation is derived. Most commonly this is NCBI's dbSNP; other sources include SNPs called by Ensembl.<br /> You can see the complete list, by species, <a href="/info/genome/variation/sources_documentation.html">here</a>.</p>
 
@@ -1479,11 +1619,15 @@ tables that they've not used before.
       <tr class="bg2"><td><b>data_types</b></td><td>SET('variation','variation_synonym','structural_variation','phenotype_feature','study')</td><td>NULL</td><td>Indicates the type(s) of data provided by the source  </td><td></td></tr>
     </table>
   </div>
-<div style="margin: 10px 5px"><p style="font-weight:bold">Example:</p><p style="padding-left:10px">See below the command listing all the data sources in the human variation database: </p><pre style="display:inline;border:1px solid #555;padding:2px;margin-right:15px;margin-left:10px">SELECT * FROM source ORDER BY source_id;</pre> <a id="e_source" style="cursor:pointer;text-decoration:none" onclick="show_hide('source','example')"><img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/><span style="vertical-align:middle"> Show query results</span></a>
+<div style="margin: 10px 5px"><p style="font-weight:bold">Example:</p><p style="padding-left:10px">See below the command listing all the data sources in the human variation database: </p><pre style="display:inline;border:1px solid #555;padding:2px;margin-right:15px;margin-left:10px">SELECT * FROM source ORDER BY source_id;</pre> 
+  <a id="e_source" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('source','query results')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show query results</span>
+  </a>
 
   <div id="ex_source" style="display:none;">
     <table class="ss" style="width:50%;margin-top:20px;margin-left:10px;border-spacing:2px">
-      <tr><th>source_id</th><th>name</th><th>version</th><th>description</th><th>url</th><th>type</th><th>somatic_status</th><th>data_types</th></tr>      <tr><td>1</td><td>dbSNP</td><td>138</td><td>Variants (including SNPs and indels) imported from dbSNP (mapped to GRCh38)</td><td>http://www.ncbi.nlm.nih.gov/projects/SNP/</td><td></td><td>mixed</td><td>variation</td></tr>      <tr class="bg2"><td>2</td><td>Archive dbSNP</td><td>138</td><td>Former variants names imported from dbSNP</td><td>http://www.ncbi.nlm.nih.gov/projects/SNP/</td><td></td><td>mixed</td><td>variation_synonym</td></tr>      <tr><td>3</td><td>LSDB</td><td></td><td>Variants dbSNP annotates as being from LSDBs</td><td>http://www.ncbi.nlm.nih.gov/projects/SNP/</td><td></td><td>germline</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>4</td><td>PubMed</td><td>20140601</td><td>Variants with pubmed citations</td><td>http://www.ncbi.nlm.nih.gov/pubmed/</td><td></td><td>germline</td><td></td></tr>      <tr><td>6</td><td>PhenCode</td><td>20140430</td><td>PhenCode is a collaborative project to better understand the relationship between genotype and phenotype in humans</td><td>http://phencode.bx.psu.edu/</td><td></td><td></td><td>variation,variation_synonym,structural_variation</td></tr>      <tr class="bg2"><td>7</td><td>ESP</td><td>20140509</td><td>Data from NHLBI ESP version v.0.0.28. The goal of the NHLBI GO Exome Sequencing Project is to discover novel genes and mechanisms contributing to heart, lung and blood disorders by sequencing the protein coding regions of the human genome across diverse, </td><td>http://evs.gs.washington.edu/EVS/</td><td></td><td>germline</td><td>variation,variation_synonym</td></tr>      <tr><td>8</td><td>HGMD-PUBLIC</td><td>20134</td><td>Variants from HGMD-PUBLIC dataset December 2013</td><td>http://www.hgmd.cf.ac.uk/ac/index.php</td><td></td><td>germline</td><td>variation,phenotype_feature</td></tr>      <tr class="bg2"><td>9</td><td>dbPEX</td><td></td><td>dbPEX, PEX Gene Database</td><td>http://www.dbpex.org/home.php?select_db=PEX1</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr><td>10</td><td>KAT6BDB</td><td></td><td>K(lysine) acetyltransferase 6B database, BCM</td><td>https://grenada.lumc.nl/LOVD2/BCM/home.php?select_db=KAT6B</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>11</td><td>DGVa</td><td>201406</td><td>Database of Genomic Variants Archive</td><td>http://www.ebi.ac.uk/dgva/</td><td></td><td>mixed</td><td>structural_variation,phenotype_feature,study</td></tr>      <tr><td>13</td><td>NHGRI_GWAS_catalog</td><td>20140528</td><td>Variants associated with phenotype data from the NHGRI GWAS catalog</td><td>http://www.genome.gov/gwastudies/</td><td></td><td>germline</td><td>phenotype_feature,study</td></tr>      <tr class="bg2"><td>15</td><td>EGA</td><td>201406</td><td>Variants imported from the European Genome-phenome Archive with phenotype association</td><td>http://www.ebi.ac.uk/ega/</td><td></td><td>germline</td><td>study</td></tr>      <tr><td>16</td><td>Uniprot</td><td>20140514</td><td>Variants with protein annotation imported from Uniprot</td><td>http://www.uniprot.org/</td><td></td><td>mixed</td><td>variation_synonym,phenotype_feature,study</td></tr>      <tr class="bg2"><td>18</td><td>OMIM</td><td>20140602</td><td>Variations linked to entries in the Online Mendelian Inheritance in Man (OMIM) database</td><td>http://www.omim.org/</td><td></td><td>germline</td><td>phenotype_feature,study</td></tr>      <tr><td>20</td><td>Illumina_CytoSNP12v1</td><td></td><td>Variants from the Illumina Cyto SNP-12 v1 whole genome SNP genotyping chip designed for cytogenetic analysis</td><td>http://www.illumina.com/</td><td>chip</td><td>germline</td><td>structural_variation</td></tr>      <tr class="bg2"><td>21</td><td>Illumina_Human660W-quad</td><td></td><td>Variants from the Illumina Human 660W-Quad whole genome SNP genotyping chip designed for association studies</td><td>http://www.illumina.com/</td><td>chip</td><td>germline</td><td>structural_variation</td></tr>      <tr><td>22</td><td>Illumina_Human1M-duoV3</td><td></td><td>Variants from the Illumina Human 1M-DuoV3 whole genome SNP genotyping chip designed for association studies</td><td>http://www.illumina.com/</td><td>chip</td><td>germline</td><td>structural_variation</td></tr>      <tr class="bg2"><td>23</td><td>Affy GenomeWideSNP_6 CNV</td><td></td><td>Copy Number Variation (CNV) probes from the Affymetrix Genome-Wide Human SNP Array 6.0</td><td>http://www.affymetrix.com/</td><td>chip</td><td>germline</td><td>structural_variation</td></tr>      <tr><td>26</td><td>COSMIC</td><td>69</td><td>Somatic mutations found in human cancers from the COSMIC project</td><td>http://cancer.sanger.ac.uk/cancergenome/projects/cosmic/</td><td></td><td>somatic</td><td>variation,phenotype_feature</td></tr>      <tr class="bg2"><td>27</td><td>LSDB_PPIB</td><td>110217</td><td>PPIB homepage - Osteogenesis Imperfecta Variant Database - Leiden Open Variation Database</td><td>https://oi.gene.le.ac.uk/home.php?select_db=PPIB</td><td>lsdb</td><td>mixed</td><td>variation_synonym</td></tr>      <tr><td>28</td><td>LSDB_CRTAP</td><td>110408</td><td>CRTAP homepage - Osteogenesis Imperfecta Variant Database - Leiden Open Variation Database</td><td>https://oi.gene.le.ac.uk/home.php?select_db=CRTAP</td><td>lsdb</td><td>mixed</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>29</td><td>LSDB_LEPRE1</td><td>110408</td><td>LEPRE1 homepage - Osteogenesis Imperfecta Variant Database - Leiden Open Variation Database</td><td>https://oi.gene.le.ac.uk/home.php?select_db=LEPRE1</td><td>lsdb</td><td>mixed</td><td>variation_synonym</td></tr>      <tr><td>30</td><td>LSDB_FKBP10</td><td>110516</td><td>FKBP10 homepage - Osteogenesis Imperfecta Variant Database - Leiden Open Variation Database</td><td>https://oi.gene.le.ac.uk/home.php?select_db=FKBP10</td><td>lsdb</td><td>mixed</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>32</td><td>ClinVar</td><td>20131230</td><td>Variants of clinical significance imported from ClinVar</td><td>http://www.ncbi.nlm.nih.gov/projects/SNP/</td><td></td><td>germline</td><td>variation,phenotype_feature</td></tr>      <tr><td>33</td><td>DDG2P</td><td>20131107</td><td>Developmental Disorders Genotype-to-Phenotype Database</td><td>http://decipher.sanger.ac.uk/</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr class="bg2"><td>34</td><td>GIANT</td><td>1</td><td>The Genetic Investigation of ANthropometric Traits (GIANT) consortium is an international collaboration that seeks to identify genetic loci that modulate human body size and shape, including height and measures of obesity.</td><td>http://www.broadinstitute.org/collaboration/giant/index.php/Main_Page</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr><td>35</td><td>OMIMGENE</td><td></td><td>Online Mendelian Inheritance in Man (OMIM) database</td><td>http://www.omim.org/</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr class="bg2"><td>36</td><td>Orphanet</td><td>20131022</td><td>The portal for rare diseases and drugs</td><td>http://www.orpha.net/</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr><td>37</td><td>MAGIC</td><td>1</td><td>MAGIC (the Meta-Analyses of Glucose and Insulin-related traits Consortium) represents a collaborative effort to combine data from multiple GWAS to identify additional loci that impact on glycemic and metabolic traits</td><td>http://www.magicinvestigators.org/</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr class="bg2"><td>39</td><td>HbVar</td><td></td><td>A Database of Human Hemoglobin Variants and Thalassemias</td><td>http://globin.bx.psu.edu/hbvar/menu.html</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr><td>40</td><td>LMDD</td><td></td><td>Leiden Muscular Dystrophy Database</td><td>http://www.dmd.nl/</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>41</td><td>OIVD</td><td></td><td>Osteogenesis Imperfecta Variant Database</td><td>https://oi.gene.le.ac.uk/home.php</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr><td>42</td><td>PAHdb</td><td></td><td>Phenylalanine hydroxylas database</td><td>http://www.pahdb.mcgill.ca/</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>43</td><td>Infevers</td><td></td><td>The registry of Hereditary Auto-inflammatory Disorders Mutations</td><td>http://fmf.igh.cnrs.fr/ISSAID/infevers/index.php</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr><td>46</td><td>dbGaP</td><td>201405</td><td>The database of Genotypes and Phenotypes.</td><td>http://www.ncbi.nlm.nih.gov/gap</td><td></td><td>germline</td><td>phenotype_feature,study</td></tr>      <tr class="bg2"><td>47</td><td>AMDGC</td><td>1</td><td>The AMD Gene consortium is an international collaboration that seeks to identify genetic loci associated with age-related macular degeneration .</td><td>http://www.sph.umich.edu/csg/abecasis/public/amdgene2012/</td><td></td><td>germline</td><td>phenotype_feature,study</td></tr>      <tr><td>48</td><td>GEFOS</td><td>1</td><td>The GEnetic Factors for OSteoporosis Consortium international collaboration that seeks to identify common risk gene variants for osteoporosis</td><td>http://www.gefos.org</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr class="bg2"><td>49</td><td>IIBDGC</td><td>1</td><td>International Inflammatory Bowel Disease Genetics Consortium</td><td>http://www.ibdgenetics.org/</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr><td>50</td><td>Teslovich</td><td>1</td><td>Biological, clinical and population relevance of 95 loci for blood lipids</td><td>http://www.sph.umich.edu/csg/abecasis/public/lipids2010/</td><td></td><td>germline</td><td>phenotype_feature</td></tr>    </table>
+      <tr><th>source_id</th><th>name</th><th>version</th><th>description</th><th>url</th><th>type</th><th>somatic_status</th><th>data_types</th></tr>      <tr><td>1</td><td>dbSNP</td><td>138</td><td>Variants (including SNPs and indels) imported from dbSNP (mapped to GRCh38)</td><td>http://www.ncbi.nlm.nih.gov/projects/SNP/</td><td></td><td>mixed</td><td>variation</td></tr>      <tr class="bg2"><td>2</td><td>Archive dbSNP</td><td>138</td><td>Former variants names imported from dbSNP</td><td>http://www.ncbi.nlm.nih.gov/projects/SNP/</td><td></td><td>mixed</td><td>variation_synonym</td></tr>      <tr><td>3</td><td>LSDB</td><td></td><td>Variants dbSNP annotates as being from LSDBs</td><td>http://www.ncbi.nlm.nih.gov/projects/SNP/</td><td></td><td>germline</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>4</td><td>PubMed</td><td>20140601</td><td>Variants with pubmed citations</td><td>http://www.ncbi.nlm.nih.gov/pubmed/</td><td></td><td>germline</td><td></td></tr>      <tr><td>6</td><td>PhenCode</td><td>20140430</td><td>PhenCode is a collaborative project to better understand the relationship between genotype and phenotype in humans</td><td>http://phencode.bx.psu.edu/</td><td></td><td></td><td>variation,variation_synonym,structural_variation</td></tr>      <tr class="bg2"><td>7</td><td>ESP</td><td>20140509</td><td>Data from NHLBI ESP version v.0.0.28. The goal of the NHLBI GO Exome Sequencing Project is to discover novel genes and mechanisms contributing to heart, lung and blood disorders by sequencing the protein coding regions of the human genome across diverse, </td><td>http://evs.gs.washington.edu/EVS/</td><td></td><td>germline</td><td>variation,variation_synonym</td></tr>      <tr><td>8</td><td>HGMD-PUBLIC</td><td>20134</td><td>Variants from HGMD-PUBLIC dataset December 2013</td><td>http://www.hgmd.cf.ac.uk/ac/index.php</td><td></td><td>germline</td><td>variation,phenotype_feature</td></tr>      <tr class="bg2"><td>9</td><td>dbPEX</td><td></td><td>dbPEX, PEX Gene Database</td><td>http://www.dbpex.org/home.php?select_db=PEX1</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr><td>10</td><td>KAT6BDB</td><td></td><td>K(lysine) acetyltransferase 6B database, BCM</td><td>https://grenada.lumc.nl/LOVD2/BCM/home.php?select_db=KAT6B</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>11</td><td>DGVa</td><td>201406</td><td>Database of Genomic Variants Archive</td><td>http://www.ebi.ac.uk/dgva/</td><td></td><td>mixed</td><td>structural_variation,phenotype_feature,study</td></tr>      <tr><td>13</td><td>NHGRI_GWAS_catalog</td><td>20140528</td><td>Variants associated with phenotype data from the NHGRI GWAS catalog</td><td>http://www.genome.gov/gwastudies/</td><td></td><td>germline</td><td>phenotype_feature,study</td></tr>      <tr class="bg2"><td>15</td><td>EGA</td><td>201406</td><td>Variants imported from the European Genome-phenome Archive with phenotype association</td><td>http://www.ebi.ac.uk/ega/</td><td></td><td>germline</td><td>study</td></tr>      <tr><td>16</td><td>Uniprot</td><td>20140514</td><td>Variants with protein annotation imported from Uniprot</td><td>http://www.uniprot.org/</td><td></td><td>mixed</td><td>variation_synonym,phenotype_feature,study</td></tr>      <tr class="bg2"><td>18</td><td>OMIM</td><td>20140602</td><td>Variations linked to entries in the Online Mendelian Inheritance in Man (OMIM) database</td><td>http://www.omim.org/</td><td></td><td>germline</td><td>phenotype_feature,study</td></tr>      <tr><td>20</td><td>Illumina_CytoSNP12v1</td><td></td><td>Variants from the Illumina Cyto SNP-12 v1 whole genome SNP genotyping chip designed for cytogenetic analysis</td><td>http://www.illumina.com/</td><td>chip</td><td>germline</td><td>structural_variation</td></tr>      <tr class="bg2"><td>21</td><td>Illumina_Human660W-quad</td><td></td><td>Variants from the Illumina Human 660W-Quad whole genome SNP genotyping chip designed for association studies</td><td>http://www.illumina.com/</td><td>chip</td><td>germline</td><td>structural_variation</td></tr>      <tr><td>22</td><td>Illumina_Human1M-duoV3</td><td></td><td>Variants from the Illumina Human 1M-DuoV3 whole genome SNP genotyping chip designed for association studies</td><td>http://www.illumina.com/</td><td>chip</td><td>germline</td><td>structural_variation</td></tr>      <tr class="bg2"><td>23</td><td>Affy GenomeWideSNP_6 CNV</td><td></td><td>Copy Number Variation (CNV) probes from the Affymetrix Genome-Wide Human SNP Array 6.0</td><td>http://www.affymetrix.com/</td><td>chip</td><td>germline</td><td>structural_variation</td></tr>      <tr><td>26</td><td>COSMIC</td><td>69</td><td>Somatic mutations found in human cancers from the COSMIC project</td><td>http://cancer.sanger.ac.uk/cancergenome/projects/cosmic/</td><td></td><td>somatic</td><td>variation,phenotype_feature</td></tr>      <tr class="bg2"><td>27</td><td>LSDB_PPIB</td><td>110217</td><td>PPIB homepage - Osteogenesis Imperfecta Variant Database - Leiden Open Variation Database</td><td>https://oi.gene.le.ac.uk/home.php?select_db=PPIB</td><td>lsdb</td><td>mixed</td><td>variation_synonym</td></tr>      <tr><td>28</td><td>LSDB_CRTAP</td><td>110408</td><td>CRTAP homepage - Osteogenesis Imperfecta Variant Database - Leiden Open Variation Database</td><td>https://oi.gene.le.ac.uk/home.php?select_db=CRTAP</td><td>lsdb</td><td>mixed</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>29</td><td>LSDB_LEPRE1</td><td>110408</td><td>LEPRE1 homepage - Osteogenesis Imperfecta Variant Database - Leiden Open Variation Database</td><td>https://oi.gene.le.ac.uk/home.php?select_db=LEPRE1</td><td>lsdb</td><td>mixed</td><td>variation_synonym</td></tr>      <tr><td>30</td><td>LSDB_FKBP10</td><td>110516</td><td>FKBP10 homepage - Osteogenesis Imperfecta Variant Database - Leiden Open Variation Database</td><td>https://oi.gene.le.ac.uk/home.php?select_db=FKBP10</td><td>lsdb</td><td>mixed</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>32</td><td>ClinVar</td><td>20131230</td><td>Variants of clinical significance imported from ClinVar</td><td>http://www.ncbi.nlm.nih.gov/projects/SNP/</td><td></td><td>germline</td><td>variation,phenotype_feature</td></tr>      <tr><td>33</td><td>DDG2P</td><td>20131107</td><td>Developmental Disorders Genotype-to-Phenotype Database</td><td>http://decipher.sanger.ac.uk/</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr class="bg2"><td>34</td><td>GIANT</td><td>1</td><td>The Genetic Investigation of ANthropometric Traits (GIANT) consortium is an international collaboration that seeks to identify genetic loci that modulate human body size and shape, including height and measures of obesity.</td><td>http://www.broadinstitute.org/collaboration/giant/index.php/Main_Page</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr><td>35</td><td>OMIMGENE</td><td>20140602</td><td>Online Mendelian Inheritance in Man (OMIM) database</td><td>http://www.omim.org/</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr class="bg2"><td>36</td><td>Orphanet</td><td>20140625</td><td>The portal for rare diseases and drugs</td><td>http://www.orpha.net/</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr><td>37</td><td>MAGIC</td><td>1</td><td>MAGIC (the Meta-Analyses of Glucose and Insulin-related traits Consortium) represents a collaborative effort to combine data from multiple GWAS to identify additional loci that impact on glycemic and metabolic traits</td><td>http://www.magicinvestigators.org/</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr class="bg2"><td>39</td><td>HbVar</td><td></td><td>A Database of Human Hemoglobin Variants and Thalassemias</td><td>http://globin.bx.psu.edu/hbvar/menu.html</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr><td>40</td><td>LMDD</td><td></td><td>Leiden Muscular Dystrophy Database</td><td>http://www.dmd.nl/</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>41</td><td>OIVD</td><td></td><td>Osteogenesis Imperfecta Variant Database</td><td>https://oi.gene.le.ac.uk/home.php</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr><td>42</td><td>PAHdb</td><td></td><td>Phenylalanine hydroxylas database</td><td>http://www.pahdb.mcgill.ca/</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>43</td><td>Infevers</td><td></td><td>The registry of Hereditary Auto-inflammatory Disorders Mutations</td><td>http://fmf.igh.cnrs.fr/ISSAID/infevers/index.php</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr><td>46</td><td>dbGaP</td><td>201405</td><td>The database of Genotypes and Phenotypes.</td><td>http://www.ncbi.nlm.nih.gov/gap</td><td></td><td>germline</td><td>phenotype_feature,study</td></tr>      <tr class="bg2"><td>47</td><td>AMDGC</td><td>1</td><td>The AMD Gene consortium is an international collaboration that seeks to identify genetic loci associated with age-related macular degeneration .</td><td>http://www.sph.umich.edu/csg/abecasis/public/amdgene2012/</td><td></td><td>germline</td><td>phenotype_feature,study</td></tr>      <tr><td>48</td><td>GEFOS</td><td>1</td><td>The GEnetic Factors for OSteoporosis Consortium international collaboration that seeks to identify common risk gene variants for osteoporosis</td><td>http://www.gefos.org</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr class="bg2"><td>49</td><td>IIBDGC</td><td>1</td><td>International Inflammatory Bowel Disease Genetics Consortium</td><td>http://www.ibdgenetics.org/</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr><td>50</td><td>Teslovich</td><td>1</td><td>Biological, clinical and population relevance of 95 loci for blood lipids</td><td>http://www.sph.umich.edu/csg/abecasis/public/lipids2010/</td><td></td><td>germline</td><td>phenotype_feature</td></tr>    </table>
   </div></div>  <p style="margin-top:10px"><b>See also:</b></p>
   <ul>
     <li><a href="#variation">variation</a></li>
@@ -1496,16 +1640,19 @@ tables that they've not used before.
   </ul>
 
 
-  <div id="study" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#7CFC00;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">study</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_study" style="cursor:pointer;text-decoration:none" onclick="show_hide('study')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
+  <div id="study" style="width:850px;background-color:#F0F0F0;margin-top:50px;margin-bottom:2px;padding:4px;border-top:1px solid #7CFC00">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#7CFC00;vertical-align:middle"></span>study</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_study" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('study','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show columns</span>
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top">[Back to top]</a>
     </div>
+    <div style="clear:both"></div>
   </div>
   <p style="padding:5px 0px;margin-bottom:0px;width:800px">This table contains details of the studies. The studies information can come from internal studies (DGVa, EGA) or from external studies (Uniprot, NHGRI, ...).</p>
 
@@ -1528,16 +1675,19 @@ tables that they've not used before.
   </ul>
 
 
-  <div id="study_variation" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#7CFC00;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">study_variation</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_study_variation" style="cursor:pointer;text-decoration:none" onclick="show_hide('study_variation')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
+  <div id="study_variation" style="width:850px;background-color:#F0F0F0;margin-top:50px;margin-bottom:2px;padding:4px;border-top:1px solid #7CFC00">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#7CFC00;vertical-align:middle"></span>study_variation</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_study_variation" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('study_variation','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show columns</span>
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top">[Back to top]</a>
     </div>
+    <div style="clear:both"></div>
   </div>
   <p style="padding:5px 0px;margin-bottom:0px;width:800px">Links a variation to a study</p>
 
@@ -1555,16 +1705,19 @@ tables that they've not used before.
   </ul>
 
 
-  <div id="variation_citation" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#7CFC00;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">variation_citation</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_variation_citation" style="cursor:pointer;text-decoration:none" onclick="show_hide('variation_citation')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
+  <div id="variation_citation" style="width:850px;background-color:#F0F0F0;margin-top:50px;margin-bottom:2px;padding:4px;border-top:1px solid #7CFC00">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#7CFC00;vertical-align:middle"></span>variation_citation</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_variation_citation" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('variation_citation','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show columns</span>
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top">[Back to top]</a>
     </div>
+    <div style="clear:both"></div>
   </div>
   <p style="padding:5px 0px;margin-bottom:0px;width:800px">This table links a variation to a publication</p>
 
@@ -1582,21 +1735,25 @@ tables that they've not used before.
   </ul>
 
 
-<br /><br />
-<div style="background-color:#F2F2F2;padding:5px;margin:5px 0px;border-top:2px solid #01D4F7">
-  <h2 id="10" style="display:inline;color:#000">Structural variation tables</h2>
+
+<div style="background-color:#F0F0F0;padding:5px 4px;margin:75px 0px 5px;border-top:2px solid #01D4F7;border-bottom:1px solid #01D4F7">
+  <div id="10" style="background-color:#01D4F7;border:1px solid #FFF;padding:0px 8px;display:inline;vertical-align:top"></div>
+  <h2 id="10" style="display:inline;color:#000;padding-top:0px;margin-left:6px">Structural variation tables</h2>
 </div>
 <p style="width:800px">These tables define the structural variation data.</p>
-  <div id="structural_variation" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#01D4F7;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">structural_variation</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_structural_variation" style="cursor:pointer;text-decoration:none" onclick="show_hide('structural_variation')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
+  <div id="structural_variation" style="width:850px;background-color:#F0F0F0;margin-top:50px;margin-bottom:2px;padding:4px;border-top:1px solid #01D4F7">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#01D4F7;vertical-align:middle"></span>structural_variation</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_structural_variation" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('structural_variation','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show columns</span>
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top">[Back to top]</a>
     </div>
+    <div style="clear:both"></div>
   </div>
   <p style="padding:5px 0px;margin-bottom:0px;width:800px">This table stores information about structural variation.</p>
 
@@ -1623,16 +1780,19 @@ tables that they've not used before.
   </ul>
 
 
-  <div id="structural_variation_association" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#01D4F7;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">structural_variation_association</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_structural_variation_association" style="cursor:pointer;text-decoration:none" onclick="show_hide('structural_variation_association')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
+  <div id="structural_variation_association" style="width:850px;background-color:#F0F0F0;margin-top:50px;margin-bottom:2px;padding:4px;border-top:1px solid #01D4F7">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#01D4F7;vertical-align:middle"></span>structural_variation_association</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_structural_variation_association" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('structural_variation_association','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show columns</span>
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top">[Back to top]</a>
     </div>
+    <div style="clear:both"></div>
   </div>
   <p style="padding:5px 0px;margin-bottom:0px;width:800px">This table stores the associations between structural variations and their supporting evidences.</p>
 
@@ -1649,16 +1809,19 @@ tables that they've not used before.
   </ul>
 
 
-  <div id="structural_variation_feature" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#01D4F7;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">structural_variation_feature</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_structural_variation_feature" style="cursor:pointer;text-decoration:none" onclick="show_hide('structural_variation_feature')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
+  <div id="structural_variation_feature" style="width:850px;background-color:#F0F0F0;margin-top:50px;margin-bottom:2px;padding:4px;border-top:1px solid #01D4F7">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#01D4F7;vertical-align:middle"></span>structural_variation_feature</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_structural_variation_feature" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('structural_variation_feature','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show columns</span>
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top">[Back to top]</a>
     </div>
+    <div style="clear:both"></div>
   </div>
   <p style="padding:5px 0px;margin-bottom:0px;width:800px">This table stores information about structural variation features (i.e. mappings of structural variations to genomic locations).</p>
 
@@ -1698,16 +1861,19 @@ tables that they've not used before.
   </ul>
 
 
-  <div id="structural_variation_sample" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#01D4F7;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">structural_variation_sample</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_structural_variation_sample" style="cursor:pointer;text-decoration:none" onclick="show_hide('structural_variation_sample')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
+  <div id="structural_variation_sample" style="width:850px;background-color:#F0F0F0;margin-top:50px;margin-bottom:2px;padding:4px;border-top:1px solid #01D4F7">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#01D4F7;vertical-align:middle"></span>structural_variation_sample</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_structural_variation_sample" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('structural_variation_sample','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show columns</span>
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top">[Back to top]</a>
     </div>
+    <div style="clear:both"></div>
   </div>
   <p style="padding:5px 0px;margin-bottom:0px;width:800px">This table stores individual and strain information for structural variants and their supporting evidences.</p>
 
@@ -1727,21 +1893,25 @@ tables that they've not used before.
   </ul>
 
 
-<br /><br />
-<div style="background-color:#F2F2F2;padding:5px;margin:5px 0px;border-top:2px solid #FF4DC8">
-  <h2 id="11" style="display:inline;color:#000">Variation effect tables</h2>
+
+<div style="background-color:#F0F0F0;padding:5px 4px;margin:75px 0px 5px;border-top:2px solid #FF4DC8;border-bottom:1px solid #FF4DC8">
+  <div id="11" style="background-color:#FF4DC8;border:1px solid #FFF;padding:0px 8px;display:inline;vertical-align:top"></div>
+  <h2 id="11" style="display:inline;color:#000;padding-top:0px;margin-left:6px">Variation effect tables</h2>
 </div>
 <p style="width:800px">These tables define the variation effect prediction data in different Ensembl features.</p>
-  <div id="motif_feature_variation" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#FF4DC8;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">motif_feature_variation</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_motif_feature_variation" style="cursor:pointer;text-decoration:none" onclick="show_hide('motif_feature_variation')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
+  <div id="motif_feature_variation" style="width:850px;background-color:#F0F0F0;margin-top:50px;margin-bottom:2px;padding:4px;border-top:1px solid #FF4DC8">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#FF4DC8;vertical-align:middle"></span>motif_feature_variation</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_motif_feature_variation" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('motif_feature_variation','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show columns</span>
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top">[Back to top]</a>
     </div>
+    <div style="clear:both"></div>
   </div>
   <p style="padding:5px 0px;margin-bottom:0px;width:800px">This table relates a single allele of a variation_feature to a motif feature (see Regulation documentation). It contains the consequence of the allele.</p>
 
@@ -1768,16 +1938,19 @@ tables that they've not used before.
   </ul>
 
 
-  <div id="regulatory_feature_variation" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#FF4DC8;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">regulatory_feature_variation</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_regulatory_feature_variation" style="cursor:pointer;text-decoration:none" onclick="show_hide('regulatory_feature_variation')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
+  <div id="regulatory_feature_variation" style="width:850px;background-color:#F0F0F0;margin-top:50px;margin-bottom:2px;padding:4px;border-top:1px solid #FF4DC8">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#FF4DC8;vertical-align:middle"></span>regulatory_feature_variation</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_regulatory_feature_variation" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('regulatory_feature_variation','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show columns</span>
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top">[Back to top]</a>
     </div>
+    <div style="clear:both"></div>
   </div>
   <p style="padding:5px 0px;margin-bottom:0px;width:800px">This table relates a single allele of a variation_feature to a regulatory feature (see Regulation documentation). It contains the consequence of the allele.</p>
 
@@ -1799,16 +1972,19 @@ tables that they've not used before.
   </ul>
 
 
-  <div id="transcript_variation" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#FF4DC8;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">transcript_variation</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_transcript_variation" style="cursor:pointer;text-decoration:none" onclick="show_hide('transcript_variation')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
+  <div id="transcript_variation" style="width:850px;background-color:#F0F0F0;margin-top:50px;margin-bottom:2px;padding:4px;border-top:1px solid #FF4DC8">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#FF4DC8;vertical-align:middle"></span>transcript_variation</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_transcript_variation" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('transcript_variation','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show columns</span>
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top">[Back to top]</a>
     </div>
+    <div style="clear:both"></div>
   </div>
   <p style="padding:5px 0px;margin-bottom:0px;width:800px">This table relates a single allele of a variation_feature to a transcript (see Core documentation). It contains the consequence of the allele e.g. intron_variant, non_synonymous_codon, stop_lost etc, along with the change in amino acid in the resulting protein if applicable.</p>
 
@@ -1845,16 +2021,19 @@ tables that they've not used before.
   </ul>
 
 
-  <div id="variation_genename" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#FF4DC8;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">variation_genename</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_variation_genename" style="cursor:pointer;text-decoration:none" onclick="show_hide('variation_genename')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
+  <div id="variation_genename" style="width:850px;background-color:#F0F0F0;margin-top:50px;margin-bottom:2px;padding:4px;border-top:1px solid #FF4DC8">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#FF4DC8;vertical-align:middle"></span>variation_genename</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_variation_genename" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('variation_genename','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show columns</span>
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top">[Back to top]</a>
     </div>
+    <div style="clear:both"></div>
   </div>
   <p style="padding:5px 0px;margin-bottom:0px;width:800px">This table is used in web index creation. It links a variation_id to the names of the genes the variation is within</p>
 
@@ -1871,16 +2050,19 @@ tables that they've not used before.
   </ul>
 
 
-  <div id="variation_hgvs" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#FF4DC8;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">variation_hgvs</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_variation_hgvs" style="cursor:pointer;text-decoration:none" onclick="show_hide('variation_hgvs')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
+  <div id="variation_hgvs" style="width:850px;background-color:#F0F0F0;margin-top:50px;margin-bottom:2px;padding:4px;border-top:1px solid #FF4DC8">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#FF4DC8;vertical-align:middle"></span>variation_hgvs</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_variation_hgvs" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('variation_hgvs','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show columns</span>
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top">[Back to top]</a>
     </div>
+    <div style="clear:both"></div>
   </div>
   <p style="padding:5px 0px;margin-bottom:0px;width:800px">This table is used in web index creation. It links a variation_id to all possible transcript and protein level change descriptions in HGVS annotation.</p>
 
@@ -1897,21 +2079,25 @@ tables that they've not used before.
   </ul>
 
 
-<br /><br />
-<div style="background-color:#F2F2F2;padding:5px;margin:5px 0px;border-top:2px solid #FFD700">
-  <h2 id="12" style="display:inline;color:#000">Variation set tables</h2>
+
+<div style="background-color:#F0F0F0;padding:5px 4px;margin:75px 0px 5px;border-top:2px solid #FFD700;border-bottom:1px solid #FFD700">
+  <div id="12" style="background-color:#FFD700;border:1px solid #FFF;padding:0px 8px;display:inline;vertical-align:top"></div>
+  <h2 id="12" style="display:inline;color:#000;padding-top:0px;margin-left:6px">Variation set tables</h2>
 </div>
 <p style="width:800px">These tables define the variation and structural variation set data. The complete list of variation sets with their descriptions is available <a href="/info/genome/variation/data_description.html#variation_sets">here</a>.</p>
-  <div id="variation_set" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#FFD700;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">variation_set</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_variation_set" style="cursor:pointer;text-decoration:none" onclick="show_hide('variation_set')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
+  <div id="variation_set" style="width:850px;background-color:#F0F0F0;margin-top:50px;margin-bottom:2px;padding:4px;border-top:1px solid #FFD700">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#FFD700;vertical-align:middle"></span>variation_set</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_variation_set" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('variation_set','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show columns</span>
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top">[Back to top]</a>
     </div>
+    <div style="clear:both"></div>
   </div>
   <p style="padding:5px 0px;margin-bottom:0px;width:800px">This table containts the name of sets and subsets of variations stored in the database. It usually represents the name of the project or subproject where a group of variations has been identified.</p>
 
@@ -1932,16 +2118,19 @@ tables that they've not used before.
   </ul>
 
 
-  <div id="variation_set_structural_variation" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#FFD700;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">variation_set_structural_variation</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_variation_set_structural_variation" style="cursor:pointer;text-decoration:none" onclick="show_hide('variation_set_structural_variation')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
+  <div id="variation_set_structural_variation" style="width:850px;background-color:#F0F0F0;margin-top:50px;margin-bottom:2px;padding:4px;border-top:1px solid #FFD700">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#FFD700;vertical-align:middle"></span>variation_set_structural_variation</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_variation_set_structural_variation" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('variation_set_structural_variation','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show columns</span>
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top">[Back to top]</a>
     </div>
+    <div style="clear:both"></div>
   </div>
   <p style="padding:5px 0px;margin-bottom:0px;width:800px">A table for mapping structural variations to variation_sets.</p>
 
@@ -1959,16 +2148,19 @@ tables that they've not used before.
   </ul>
 
 
-  <div id="variation_set_structure" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#FFD700;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">variation_set_structure</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_variation_set_structure" style="cursor:pointer;text-decoration:none" onclick="show_hide('variation_set_structure')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
+  <div id="variation_set_structure" style="width:850px;background-color:#F0F0F0;margin-top:50px;margin-bottom:2px;padding:4px;border-top:1px solid #FFD700">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#FFD700;vertical-align:middle"></span>variation_set_structure</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_variation_set_structure" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('variation_set_structure','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show columns</span>
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top">[Back to top]</a>
     </div>
+    <div style="clear:both"></div>
   </div>
   <p style="padding:5px 0px;margin-bottom:0px;width:800px">This table stores hierarchical relationships between variation sets by relating them as variation sets and variation subsets.</p>
 
@@ -1985,16 +2177,19 @@ tables that they've not used before.
   </ul>
 
 
-  <div id="variation_set_variation" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#FFD700;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">variation_set_variation</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_variation_set_variation" style="cursor:pointer;text-decoration:none" onclick="show_hide('variation_set_variation')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
+  <div id="variation_set_variation" style="width:850px;background-color:#F0F0F0;margin-top:50px;margin-bottom:2px;padding:4px;border-top:1px solid #FFD700">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#FFD700;vertical-align:middle"></span>variation_set_variation</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_variation_set_variation" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('variation_set_variation','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show columns</span>
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top">[Back to top]</a>
     </div>
+    <div style="clear:both"></div>
   </div>
   <p style="padding:5px 0px;margin-bottom:0px;width:800px">A table for mapping variations to variation_sets.</p>
 
@@ -2012,21 +2207,25 @@ tables that they've not used before.
   </ul>
 
 
-<br /><br />
-<div style="background-color:#F2F2F2;padding:5px;margin:5px 0px;border-top:2px solid #000">
-  <h2 id="13" style="display:inline;color:#000">Variation tables</h2>
+
+<div style="background-color:#F0F0F0;padding:5px 4px;margin:75px 0px 5px;border-top:2px solid #000;border-bottom:1px solid #000">
+  <div id="13" style="background-color:#000;border:1px solid #FFF;padding:0px 8px;display:inline;vertical-align:top"></div>
+  <h2 id="13" style="display:inline;color:#000;padding-top:0px;margin-left:6px">Variation tables</h2>
 </div>
 <p style="width:800px">These tables define the central variation data.</p>
-  <div id="allele" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#000;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">allele</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_allele" style="cursor:pointer;text-decoration:none" onclick="show_hide('allele')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
+  <div id="allele" style="width:850px;background-color:#F0F0F0;margin-top:50px;margin-bottom:2px;padding:4px;border-top:1px solid #000">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#000;vertical-align:middle"></span>allele</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_allele" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('allele','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show columns</span>
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top">[Back to top]</a>
     </div>
+    <div style="clear:both"></div>
   </div>
   <p style="padding:5px 0px;margin-bottom:0px;width:800px">This table stores information about each of a variation's alleles, along with population frequencies.</p>
 
@@ -2053,16 +2252,19 @@ tables that they've not used before.
   </ul>
 
 
-  <div id="variation" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#000;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">variation</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_variation" style="cursor:pointer;text-decoration:none" onclick="show_hide('variation')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
+  <div id="variation" style="width:850px;background-color:#F0F0F0;margin-top:50px;margin-bottom:2px;padding:4px;border-top:1px solid #000">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#000;vertical-align:middle"></span>variation</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_variation" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('variation','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show columns</span>
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top">[Back to top]</a>
     </div>
+    <div style="clear:both"></div>
   </div>
   <p style="padding:5px 0px;margin-bottom:0px;width:800px">This is the schema's generic representation of a variation, defined as a genetic feature that varies between individuals of the same species.  The most common type is the single nucleotide variation (SNP) though the schema also accommodates copy number variations (CNVs) and structural variations (SVs).<br /> In Ensembl, a variation is defined by its flanking sequence rather than its mapped location on a chromosome; a variation may in fact have multiple mappings across a genome,  although this fails our <a href="/info/genome/variation/data_description.html#quality_control">Quality Control</a>.<br />  This table stores a variation's name (commonly an ID of the form e.g. rs123456, assigned by dbSNP), along with a validation status and ancestral (or reference) allele.</p>
 
@@ -2076,7 +2278,7 @@ tables that they've not used before.
       <tr class="bg1"><td><b>ancestral_allele</b></td><td>varchar(255)</td><td>NULL</td><td>Taken from dbSNP to show ancestral allele for the variation.</td><td></td></tr>
       <tr class="bg2"><td><b>flipped</b></td><td>tinyint(1)</td><td>NULL</td><td>This is set to 1 if the variant is flipped from the negative to the positive strand during import.</td><td></td></tr>
       <tr class="bg1"><td><b>class_attrib_id</b></td><td>int(10)</td><td>0</td><td>Class of the variation, key into the <a href="#attrib">attrib</a> table.<br /> The list of variation classes is available <a href="/info/genome/variation/data_description.html#classes">here</a>.</td><td></td></tr>
-      <tr class="bg2"><td><b>somatic</b></td><td>tinyint(1)</td><td>0</td><td>flags whether this variation is known to be somatic or not</td><td></td></tr>
+      <tr class="bg2"><td><b>somatic</b></td><td>tinyint(1)</td><td>0</td><td>Flags whether this variation is known to be somatic or not</td><td></td></tr>
       <tr class="bg1"><td><b>minor_allele</b></td><td>varchar(50)</td><td>NULL</td><td>The minor allele of this variant, as reported by dbSNP</td><td></td></tr>
       <tr class="bg2"><td><b>minor_allele_freq</b></td><td>float</td><td>NULL</td><td>The 'global' frequency of the minor allele of this variant, as reported by dbSNP</td><td></td></tr>
       <tr class="bg1"><td><b>minor_allele_count</b></td><td>int(10)</td><td>NULL</td><td>The number of samples the minor allele of this variant is found in, as reported by dbSNP</td><td></td></tr>
@@ -2097,16 +2299,19 @@ tables that they've not used before.
   </ul>
 
 
-  <div id="variation_feature" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#000;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">variation_feature</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_variation_feature" style="cursor:pointer;text-decoration:none" onclick="show_hide('variation_feature')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
+  <div id="variation_feature" style="width:850px;background-color:#F0F0F0;margin-top:50px;margin-bottom:2px;padding:4px;border-top:1px solid #000">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#000;vertical-align:middle"></span>variation_feature</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_variation_feature" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('variation_feature','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show columns</span>
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top">[Back to top]</a>
     </div>
+    <div style="clear:both"></div>
   </div>
   <p style="padding:5px 0px;margin-bottom:0px;width:800px">This table represents mappings of variations to genomic locations. It stores an allele string representing the different possible alleles that are found at that locus e.g. "A/T" for a SNP, as well as a "worst case" consequence of the mutation. It also acts as part of the relationship between variations and transcripts.</p>
 
@@ -2148,16 +2353,19 @@ tables that they've not used before.
   </ul>
 
 
-  <div id="variation_synonym" style="width:820px;height:20px;border: 2px groove #CCC;background-color:#FAFAFF;padding:2px;margin-top:35px;margin-bottom:2px">
-        <div style="float:left;padding:0px;height:20px;width:10px;background-color:#000;margin-right:10px"></div>
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold">variation_synonym</div>
-    <div style="float:right;text-align:right;padding-right:1px">
-      <a id="a_variation_synonym" style="cursor:pointer;text-decoration:none" onclick="show_hide('variation_synonym')">
-        <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
-        <span style="vertical-align:middle">Show columns</span>
-      </a> 
-      <b> | </b> <a href="#top">[Back to top]</a>
+  <div id="variation_synonym" style="width:850px;background-color:#F0F0F0;margin-top:50px;margin-bottom:2px;padding:4px;border-top:1px solid #000">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#000;vertical-align:middle"></span>variation_synonym</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_variation_synonym" style="cursor:pointer;text-decoration:none;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px" onclick="show_hide('variation_synonym','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;vertical-align:middle" alt="show"/>
+    <span style="vertical-align:middle;color:#000;font-weight:bold"> Show columns</span>
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top">[Back to top]</a>
     </div>
+    <div style="clear:both"></div>
   </div>
   <p style="padding:5px 0px;margin-bottom:0px;width:800px">This table allows for a variation to have multiple IDs, generally given by multiple sources.</p>
 
