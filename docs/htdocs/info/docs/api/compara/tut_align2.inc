@@ -11,7 +11,7 @@
     <span class="comp_tut str">'Multi'</span><span class="comp_tut opt">,</span> <span class="comp_tut str">'compara'</span><span class="comp_tut opt">,</span> <span class="comp_tut str">'MethodLinkSpeciesSet'</span><span class="comp_tut opt">);</span>
 
 <span class="comp_tut slc"># Fetching the MethodLinkSpeciesSet object corresponding to LASTZ_NET alignments between human and mouse genomic sequences:</span>
-<span class="comp_tut kwc">my</span> <span class="comp_tut kwb">$human_mouse_blastz_net_mlss</span> <span class="comp_tut opt">=</span>
+<span class="comp_tut kwc">my</span> <span class="comp_tut kwb">$human_mouse_lastz_net_mlss</span> <span class="comp_tut opt">=</span>
     <span class="comp_tut kwb">$method_link_species_set_adaptor</span><span class="comp_tut opt">-&gt;</span><span class="comp_tut kwd">fetch_by_method_link_type_GenomeDBs</span><span class="comp_tut opt">(</span>
         <span class="comp_tut str">&quot;LASTZ_NET&quot;</span><span class="comp_tut opt">,</span>
         <span class="comp_tut opt">[</span><span class="comp_tut kwb">$human_genome_db</span><span class="comp_tut opt">,</span> <span class="comp_tut kwb">$mouse_genome_db</span><span class="comp_tut opt">]</span>

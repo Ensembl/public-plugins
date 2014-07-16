@@ -14,8 +14,16 @@
     <span class="comp_tut kwb">$seq_region_start</span><span class="comp_tut opt">,</span>
     <span class="comp_tut kwb">$seq_region_end</span><span class="comp_tut opt">);</span>
 
-<span class="comp_tut slc"># Fetching all the GenomicAlignBlock corresponding to this Slice:</span>
+<span class="comp_tut slc"># Fetching all the GenomicAlignBlock corresponding to this Slice from the pairwise alignments (LASTZ_NET)</span>
+<span class="comp_tut slc"># between human and mouse:</span>
 <span class="comp_tut kwc">my</span> <span class="comp_tut kwb">$genomic_align_blocks</span> <span class="comp_tut opt">=</span>
     <span class="comp_tut kwb">$genomic_align_block_adaptor</span><span class="comp_tut opt">-&gt;</span><span class="comp_tut kwd">fetch_all_by_MethodLinkSpeciesSet_Slice</span><span class="comp_tut opt">(</span>
-      <span class="comp_tut kwb">$human_mouse_blastz_net_mlss</span><span class="comp_tut opt">,</span>
+      <span class="comp_tut kwb">$human_mouse_lastz_net_mlss</span><span class="comp_tut opt">,</span>
       <span class="comp_tut kwb">$query_slice</span><span class="comp_tut opt">);</span>
+
+<span class="comp_tut slc"># We will then (usually) need to restrict the blocks to the required positions in the reference sequence </span>
+<span class="comp_tut slc"># ($seq_region_start and $seq_region_end)</span>
+
+<span class="comp_tut kwa">foreach</span> <span class="comp_tut kwc">my</span> <span class="comp_tut kwb">$genomic_align_block</span><span class="comp_tut opt">(</span> &#64;<span class="comp_tut opt">{</span> <span class="comp_tut kwb">$genomic_align_blocks</span> <span class="comp_tut opt">}) {</span>
+    <span class="comp_tut kwc">my</span> <span class="comp_tut kwb">$restricted_gab</span> <span class="comp_tut opt">=</span> <span class="comp_tut kwb">$genomic_align_block</span><span class="comp_tut opt">-&gt;</span><span class="comp_tut kwd">restrict_between_reference_positions</span><span class="comp_tut opt">(</span><span class="comp_tut kwb">$seq_region_start</span><span class="comp_tut opt">,</span> <span class="comp_tut kwb">$seq_region_end</span><span class="comp_tut opt">);</span>
+<span class="comp_tut opt">}</span>

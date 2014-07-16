@@ -1,9 +1,7 @@
 <span class="comp_tut kwa">use</span> strict<span class="comp_tut opt">;</span>
 <span class="comp_tut kwa">use</span> Bio<span class="comp_tut opt">::</span>EnsEMBL<span class="comp_tut opt">::</span>Registry<span class="comp_tut opt">;</span>
 <span class="comp_tut kwa">use</span> Bio<span class="comp_tut opt">::</span>EnsEMBL<span class="comp_tut opt">::</span>Utils<span class="comp_tut opt">::</span>Exception <span class="comp_tut kwc">qw</span><span class="comp_tut opt">(</span>throw<span class="comp_tut opt">);</span>
-<span class="comp_tut kwa">use</span> Bio<span class="comp_tut opt">::</span>SimpleAlign<span class="comp_tut opt">;</span>
 <span class="comp_tut kwa">use</span> Bio<span class="comp_tut opt">::</span>AlignIO<span class="comp_tut opt">;</span>
-<span class="comp_tut kwa">use</span> Bio<span class="comp_tut opt">::</span>LocatableSeq<span class="comp_tut opt">;</span>
 <span class="comp_tut kwa">use</span> Getopt<span class="comp_tut opt">::</span>Long<span class="comp_tut opt">;</span>
 
 <span class="comp_tut kwc">my</span> <span class="comp_tut kwb">$usage</span> <span class="comp_tut opt">=</span> <span class="comp_tut kwc">qq</span><span class="comp_tut opt">{</span>
