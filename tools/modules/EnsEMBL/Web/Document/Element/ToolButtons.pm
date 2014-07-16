@@ -33,32 +33,6 @@ sub init {
 
   # can not share any tools pages via urls
   $_->{'class'} = sprintf 'disabled %s', $_->{'class'} || '' for grep {$_->{'caption'} eq 'Share this page'} @{$self->entries};
-
-  if (($hub->action || '') eq 'Blast' && ($hub->function || '') eq 'Results') {
-
-    my $job = $object->get_sub_object->get_requested_job({'with_all_results' => 1});
-
-    if ($job && $job->result_count) {
-
-      $self->add_entry({
-        'class'     => 'export',
-        'caption'   => 'Download results file',
-        'url'       => $hub->url('Download', {
-          '__clear'   => 1,
-          'function'  => '',
-          'tl'        => $object->create_url_param
-        })
-      });
-
-    } else {
-      $self->add_entry({
-        'caption' => 'Download results file',
-        'class'   => 'disabled export',
-        'title'   => 'No file available for download',
-        'url'     => undef
-      });
-    }
-  }
 }
 
 1;
