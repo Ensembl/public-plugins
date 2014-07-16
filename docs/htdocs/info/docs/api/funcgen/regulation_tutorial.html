@@ -79,7 +79,8 @@ To obtain all the regulatory features present in a given region of the genome, u
 
 <pre class="code">
 
-my $regfeat_adaptor = $registry->get_adaptor('Human', 'funcgen', 'regulatoryfeature');
+my $regfeat_adaptor = $registry->get_adaptor('Human', 'Funcgen', 'RegulatoryFeature');
+my $slice_adaptor   = $registry->get_adaptor('Human', 'Core', 'Slice');
 
 my $slice = $slice_adaptor->fetch_by_region('chromosome',1,54960000,54980000);
 
@@ -305,7 +306,7 @@ You can for example get all the regulatory feature sets grouped by cell type (in
 </p>
 
 <pre class="code">
-my @reg_fsets = @{$fset_adaptor->fetch_all_by_type('regulatory')};
+my @reg_fsets = @{$fset_adaptor->fetch_all_by_feature_class('regulatory')};
 </pre>
 
 Feature Sets include the following properties:
@@ -347,7 +348,7 @@ These are stored as External Features and can be accessed as follows:
 <pre class="code">
 
 #Grab and list all the external feature sets
-my @ext_fsets = @{$fset_adaptor->fetch_all_by_type('external')};
+my @ext_fsets = @{$fset_adaptor->fetch_all_by_feature_class('external')};
 
 foreach my $ext_fset (@ext_fsets){
   print "External FeatureSet:\t".$ext_fset->name."\n";
