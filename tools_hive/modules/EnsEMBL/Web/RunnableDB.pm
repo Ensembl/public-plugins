@@ -33,7 +33,7 @@ use Storable qw(nfreeze);
 
 use EnsEMBL::Web::Exceptions;
 use EnsEMBL::Web::Tools::FileSystem qw(copy_files);
-use EnsEMBL::Web::Tools::FileHandler qw(file_put_contents);
+use EnsEMBL::Web::Utils::FileHandler qw(file_put_contents);
 
 use parent qw(Bio::EnsEMBL::Hive::Process);
 

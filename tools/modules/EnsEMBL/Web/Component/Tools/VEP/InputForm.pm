@@ -24,7 +24,7 @@ use warnings;
 use List::Util qw(first);
 
 use EnsEMBL::Web::TmpFile::Text;
-use EnsEMBL::Web::Tools::FileHandler qw(file_get_contents);
+use EnsEMBL::Web::Utils::FileHandler qw(file_get_contents);
 use EnsEMBL::Web::Exceptions;
 use EnsEMBL::Web::VEPConstants qw(INPUT_FORMATS CONFIG_SECTIONS);
 

@@ -27,7 +27,7 @@ use Bio::EnsEMBL::Variation::Utils::VEP qw(detect_format);
 use EnsEMBL::Web::Exceptions;
 use EnsEMBL::Web::Command::UserData;
 use EnsEMBL::Web::TmpFile::Text;
-use EnsEMBL::Web::Tools::FileHandler qw(file_get_contents);
+use EnsEMBL::Web::Utils::FileHandler qw(file_get_contents);
 use EnsEMBL::Web::Job::VEP;
 
 use parent qw(EnsEMBL::Web::Ticket);

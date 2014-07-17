@@ -23,7 +23,7 @@ use warnings;
 
 use EnsEMBL::Web::TmpFile::ToolsOutput;
 use EnsEMBL::Web::TmpFile::VcfTabix;
-use EnsEMBL::Web::Tools::FileHandler qw(file_get_contents);
+use EnsEMBL::Web::Utils::FileHandler qw(file_get_contents);
 
 use parent qw(EnsEMBL::Web::Object::Tools);
 
