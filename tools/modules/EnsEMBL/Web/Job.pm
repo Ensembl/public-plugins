@@ -22,8 +22,8 @@ use strict;
 use warnings;
 
 use EnsEMBL::Web::Exceptions;
-use EnsEMBL::Web::Tools::FileSystem qw(create_path copy_files);
-use EnsEMBL::Web::Tools::FileHandler qw(file_put_contents);
+use EnsEMBL::Web::Utils::FileSystem qw(create_path copy_files);
+use EnsEMBL::Web::Utils::FileHandler qw(file_put_contents);
 
 sub object  { return shift->{'_object'};  }
 sub hub     { return shift->{'_hub'};     }

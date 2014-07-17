@@ -77,6 +77,7 @@ if (!$config) {
   my $sd  = EnsEMBL::Web::SpeciesDefs->new();
   $config = {
     'EHIVE_ROOT_DIR'  => $ENV{'EHIVE_ROOT_DIR'},
+    'json_configs'    => ["$ENV{'EHIVE_ROOT_DIR'}/hive_config.json", "$code_path/sanger-plugins/tools_hive/conf/hive_config.json"],
     'inc'             => \@INC,
     'db'              => {
       'host'            =>  $sd->multidb->{'DATABASE_WEB_HIVE'}{'HOST'},
@@ -122,10 +123,17 @@ exit if $kill;
 my $dbh = DBI->connect(sprintf('dbi:mysql:%s:%s:%s', $config->{'db'}{'name'}, $config->{'db'}{'host'}, $config->{'db'}{'port'}), $config->{'db'}{'user'}, $config->{'db'}{'pass'}, { 'PrintError' => 0 });
 
 die "Database connection to hive db could not be created. Please make sure the pipiline is initialised.\nError: $DBI::errstr\n"   unless $dbh;
-die "ENV variable EHIVE_ROOT_DIR is not set. Please set it to the location containg HIVE code.\n"                                 unless $config->{'EHIVE_ROOT_DIR'};
+die "ENV variable EHIVE_ROOT_DIR is not set. Please set it to the location containing HIVE code.\n"                               unless $config->{'EHIVE_ROOT_DIR'};
 die "Could not find location of the hive $script_name script.\n"                                                                  unless chdir "$config->{'EHIVE_ROOT_DIR'}/scripts/";
 
 warn "Running beekeeper\n";
-system(join ' ', $command, $sleep_time ? ("--sleep=$sleep_time") : (), grep($_ !~ /^\-\-(redirect_output|no_cache_config|kill)$/, @ARGV), $redirect_out ? ('>&', $log_file) : ());
+
+system(join ' ',
+  $command,
+  map({ -r $_ ? qq(--config_file="$_") : () } @{$config->{'json_configs'} }),
+  $sleep_time ? qq(--sleep=$sleep_time) : (),
+  grep($_ !~ /^\-\-(redirect_output|no_cache_config|kill)$/, @ARGV),
+  $redirect_out ? ('>&', $log_file) : ()
+);
 
 1;

@@ -27,7 +27,7 @@ package EnsEMBL::Web::Object::Blast;
 use strict;
 use warnings;
 
-use EnsEMBL::Web::Tools::FileHandler qw(file_get_contents);
+use EnsEMBL::Web::Utils::FileHandler qw(file_get_contents);
 
 use EnsEMBL::Web::BlastConstants qw(CONFIGURATION_FIELDS);
 

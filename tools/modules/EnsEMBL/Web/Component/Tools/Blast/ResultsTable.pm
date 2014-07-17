@@ -25,6 +25,26 @@ use warnings;
 
 use parent qw(EnsEMBL::Web::Component::Tools::Blast);
 
+sub buttons {
+  my $self    = shift;
+  my $hub     = $self->hub;
+  my $object  = $self->object;
+  my $job     = $object->get_requested_job({'with_all_results' => 1});
+
+  if ($job && $job->status eq 'done' && @{$job->result}) {
+
+    return {
+      'class'     => 'export',
+      'caption'   => 'Download results file',
+      'url'       => $hub->url('Download', {
+          '__clear'   => 1,
+          'function'  => '',
+          'tl'        => $object->create_url_param
+      })
+    };
+  }
+}
+
 sub content {
   my $self      = shift;
   my $hub       = $self->hub;

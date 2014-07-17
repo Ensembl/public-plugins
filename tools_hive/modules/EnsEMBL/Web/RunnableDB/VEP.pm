@@ -27,7 +27,7 @@ use parent qw(EnsEMBL::Web::RunnableDB);
 
 use EnsEMBL::Web::Exceptions;
 use EnsEMBL::Web::SystemCommand;
-use EnsEMBL::Web::Tools::FileHandler qw(file_get_contents);
+use EnsEMBL::Web::Utils::FileHandler qw(file_get_contents);
 
 sub run {
   my $self = shift;
