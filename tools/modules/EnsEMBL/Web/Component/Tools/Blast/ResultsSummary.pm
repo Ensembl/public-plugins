@@ -35,20 +35,23 @@ sub content {
   my $object      = $self->object;
   my $job         = $object->get_requested_job({'with_all_results' => 1});
   my $url_param   = $object->create_url_param;
+  my $status      = $job && $job->dispatcher_status;
 
-  if ($job) {
+  # invalid job id
+  return $self->warning_panel('Job not found', 'The job you requested was not found. It has either been expired, or you clicked on an invalid link.') unless $job;
 
-    my $status = $job->status;
+  # job failed
+  return $self->info_panel('No results found', 'The job has failed.') if $status eq 'failed';
 
-    return $status eq 'done'
-      ? @{$job->result}
-        ? ''
-        : $self->_info('No results found', sprintf('If you believe that there should be a match to your query sequence please adjust the configuration parameters you selected and <a href="%s">resubmit the search</a>.', $hub->url({'function' => 'Edit', 'tl' => $url_param})))
-      : $self->_info('No results found', sprintf('The job is either not done yet, or has failed. Click <a href="%s">here</a> to view', $hub->url({'function' => 'View', 'tl' => $url_param})))
-    ;
-  }
+  # job still running
+  return $self->info_panel('No results found', 'The job is not done yet') if $status ne 'done';
 
-  return $self->_warning('Job not found', 'The job you requested was not found. It has either been expired, or you clicked on an invalid link.');
+  # no results found
+  return $self->info_panel('No results found', sprintf('If you believe that there should be a match to your query sequence please adjust the configuration parameters you selected and <a href="%s">resubmit the search</a>.', $hub->url({'function' => 'Edit', 'tl' => $url_param})))
+    unless @{$job->result};
+
+  # result found, don't display anything, leave that to other components
+  return '';
 }
 
 1;
