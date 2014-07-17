@@ -33,19 +33,6 @@ use EnsEMBL::Web::BlastConstants qw(CONFIGURATION_FIELDS);
 
 use parent qw(EnsEMBL::Web::Object::Tools);
 
-sub long_caption {
-  ## For customised heading of the page
-  my $self  = shift;
-  my $hub   = $self->hub;
-  if (($hub->function || '') eq 'Results') {
-    if (my $job = $self->get_requested_job({'with_all_results' => 1})) {
-      return sprintf 'Results for %s', $self->get_job_description($job);
-    }
-    return sprintf '%s Results', $self->get_tool_caption;
-  }
-  return '';
-}
-
 sub get_current_tickets {
   ## @override
   ## Filters ticket on given ticket id instead of returning all tickets

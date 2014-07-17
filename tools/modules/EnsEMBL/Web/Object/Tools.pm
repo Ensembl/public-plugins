@@ -33,8 +33,20 @@ use EnsEMBL::Web::Utils::DynamicLoader qw(dynamic_require);
 
 use parent qw(EnsEMBL::Web::Object);
 
-sub caption               { return 'Tools'; } # override in child class
-sub long_caption          { return 'Tools'; } # override in child class
+sub caption { return 'Tools'; } # override in child class
+
+sub long_caption {
+  ## For customised heading of the page
+  my $self  = shift;
+  my $hub   = $self->hub;
+  if (($hub->function || '') eq 'Results') {
+    if (my $job = $self->get_requested_job({'with_all_results' => 1})) {
+      return sprintf 'Results for %s', $self->get_job_description($job);
+    }
+    return 'Results';
+  }
+  return '';
+}
 
 sub short_caption {
   ## Caption for the tab
