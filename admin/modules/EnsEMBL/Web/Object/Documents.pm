@@ -23,7 +23,7 @@ use strict;
 use File::Copy;
 
 use EnsEMBL::Web::Exceptions;
-use EnsEMBL::Web::Tools::FileHandler qw(file_get_contents file_put_contents);
+use EnsEMBL::Web::Utils::FileHandler qw(file_get_contents file_put_contents);
 use EnsEMBL::Admin::Tools::DocumentParser qw(parse_file);
 
 use parent qw(EnsEMBL::Web::Object);
