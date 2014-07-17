@@ -59,7 +59,7 @@ sub get_current_tickets {
   my $function  = $hub->function || '';
 
   return $function eq 'refresh_tickets' && ($hub->referer->{'ENSEMBL_FUNCTION'} || '') eq 'Ticket' || $function eq 'Ticket'
-    ? [ $self->get_requested_ticket(@_) ]
+    ? [ $self->get_requested_ticket(@_) || () ]
     : $self->SUPER::get_current_tickets(@_)
   ;
 }
