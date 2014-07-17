@@ -27,7 +27,7 @@ package EnsEMBL::Web::Record;
 use strict;
 use warnings;
 
-use EnsEMBL::Web::Tools::MethodMaker qw(add_method);
+use EnsEMBL::Web::Utils::MethodMaker qw(add_method);
 
 use ORM::EnsEMBL::DB::Accounts::Manager::Record;
 
