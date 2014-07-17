@@ -44,9 +44,10 @@ sub features {
      $object  = $object->get_sub_object('Blast');
   my $job     = $object->get_requested_job({'with_all_results' => 1}) or return;
   my $method  = $object->parse_search_type($job->job_data->{'search_type'}, 'search_method');
-  my $hits    = $object->get_all_hits_in_slice_region($job, $slice, sub { ($a->{'score'} || 0) <=> ($b->{'score'} || 0) });
+  my $strand  = $self->strand;
+  my @hits    = grep $strand eq $_->{'gori'}, @{$object->get_all_hits_in_slice_region($job, $slice, sub { ($a->{'score'} || 0) <=> ($b->{'score'} || 0) })};
 
-  return unless @$hits;
+  return unless @hits;
 
   my $analysis = Bio::EnsEMBL::Analysis->new(
     -id               => 1,
@@ -68,9 +69,8 @@ sub features {
 
   my (@features, %features_info);
 
-  foreach my $hit (@$hits) {
+  foreach my $hit (@hits) {
 
-    next if $hit->{'gori'} ne $self->strand;
     my $result_id     = $hit->{'result_id'};
     my $coords        = $hit->{'g_coords'} || [];
     my $colour        = $self->get_colour($hit->{'pident'});
@@ -79,7 +79,7 @@ sub features {
 
     my $btop;
 
-    if ($slice_length < 10000 && $method =~ /^blastn/i) { # draw btop in this case
+    if ($slice_length < 10000 && $method =~ /^blastn/i ) { # draw btop in this case
 
       $btop = $object->map_btop_to_genomic_coords($hit, $job);
 
@@ -138,6 +138,8 @@ sub render_normal {
   my $features_bumped       = 0;
 
   $self->_init_bump(undef, $dep);
+
+  return $self->no_track_on_strand unless @$features;
 
   foreach my $feature (@$features) {
 
@@ -243,16 +245,16 @@ sub highlight {
 
 sub draw_aln_coords {
   my ($self, $params) = @_;
-  my ($composite, $f, $height) = map $params->{$_}, qw(composite feature height);
-  my $pix_per_bp = $self->scalex;
-  my $slice = $self->{'container'};
-  my $length = $slice->length;
-  my $slice_start = $slice->start;
-  my $slice_end = $slice->end;
-  my $match_colour = $params->{'feature_colour'};
-  my $method = $params->{'blast_method'};
-
-  my $coords = $params->{'coords'};
+  my $pix_per_bp      = $self->scalex;
+  my $slice           = $self->{'container'};
+  my $length          = $slice->length;
+  my $slice_start     = $slice->start;
+  my $slice_end       = $slice->end;
+  my $composite       = $params->{'composite'};
+  my $height          = $params->{'height'};
+  my $match_colour    = $params->{'feature_colour'};
+  my $method          = $params->{'blast_method'};
+  my $coords          = $params->{'coords'};
 
   my ($first_exon_start, $last_exon_end, $exon_drawn, $previous_end);
 
@@ -263,14 +265,14 @@ sub draw_aln_coords {
     next if $start < 0 && $end < 0;
     next if $start > $slice_end;
 
-    $start = 0 if $start < 0;
+    $start            = 0 if $start < 0;
     $first_exon_start = $start if !$exon_drawn;
-    $end = $slice_end if $end > $slice_end;
-    $last_exon_end = $end;
+    $end              = $slice_end if $end > $slice_end;
+    $last_exon_end    = $end;
 
-    my $block_length = $end - $start + 1;
+    my $block_length  = $end - $start + 1;
 
-    if ( $exon_drawn ){
+    if ($exon_drawn) {
       my $gap_start = $previous_end < 0 ? 0 : $previous_end;
       my $gap_width = $start - $previous_end;
 
@@ -290,27 +292,28 @@ sub draw_aln_coords {
       height    => $height,
       colour    => $match_colour,
     }));
-    $exon_drawn = 1;
+    $exon_drawn   = 1;
     $previous_end = $end;
   }
 }
 
 sub draw_btop_feature {
   my ($self, $params) = @_;
-  my ($composite, $feature, $height) = map $params->{$_}, qw(composite feature height);
-  my $pix_per_bp = $self->scalex;
-  my $slice = $self->{'container'};
-  my $length = $slice->length;
-  my $slice_start = $slice->start;
-  my $slice_end = $slice->end;
+  my $composite       = $params->{'composite'};
+  my $feature         = $params->{'feature'};
+  my $height          = $params->{'height'};
+  my $pix_per_bp      = $self->scalex;
+  my $slice           = $self->{'container'};
+  my $length          = $slice->length;
+  my $slice_start     = $slice->start;
+  my $slice_end       = $slice->end;
+  my $seq             = $slice->seq;
 
-  my $seq   = $slice->seq;
-
-  my $match_colour = $params->{'feature_colour'};
-  my $mismatch_colour  = $self->{'config'}->colourmap->mix($match_colour, 'white', 0.9);
-  my($font, $fontsize) = $self->get_font_details( $self->fixed ? 'fixed' : 'innertext' );
-  my($tmp1, $tmp2, $font_w, $font_h) = $self->get_text_width(0, 'X', '', 'font' => $font, 'ptsize' => $fontsize);
-  my $text_fits =  $font_w * $slice->length <= int($slice->length * $pix_per_bp);
+  my $match_colour      = $params->{'feature_colour'};
+  my $mismatch_colour   = $self->{'config'}->colourmap->mix($match_colour, 'white', 0.9);
+  my ($font, $fontsize) = $self->get_font_details( $self->fixed ? 'fixed' : 'innertext' );
+  my ($tmp1, $tmp2, $font_w, $font_h) = $self->get_text_width(0, 'X', '', 'font' => $font, 'ptsize' => $fontsize);
+  my $text_fits         = 0.8 * $font_w * $slice->length <= int($slice->length * $pix_per_bp);
 
   my $btop = $params->{'btop'};
   $btop =~s/(\d+)/:$1:/g;
@@ -322,24 +325,24 @@ sub draw_btop_feature {
 
   my $seq_start = $feature->start > $slice_start ? $feature->start - $slice_start : 0;
   my $s1 = $feature->start - $slice_start;
-  my $width = $end - $seq_start +1;
+  my $width = $end - $seq_start + 1;
 
   $seq = substr($seq, $seq_start, $width);
   my (%seq_diffs, @inserts);
 
-  while (scalar @btop_features > 0 ){
-    my $seq_index  = shift @btop_features;
+  while (scalar @btop_features > 0) {
+    my $seq_index   = shift @btop_features;
     my $diff_string = shift @btop_features || '';
     my $diff_length = (length $diff_string) /2;
     my @diffs = split (//, $diff_string);
 
     my ($processed_diffs, $previous_state);
-    my $count = 0;
-    my $insert_count = 0;
-    my $gap_count = 0;
+    my $count         = 0;
+    my $insert_count  = 0;
+    my $gap_count     = 0;
 
     if (scalar @diffs > 2) {
-      while (my $query_base = shift @diffs){
+      while (my $query_base = shift @diffs) {
         my $target_base = shift @diffs;
 
         my $state = $target_base eq '-' && $query_base ne '-' ? 'insert' :
@@ -348,13 +351,13 @@ sub draw_btop_feature {
 
         my @diff = ($query_base, $target_base);
         $insert_count++ if $state eq 'insert';
-        $gap_count++ if $state eq 'gap';
+        $gap_count++    if $state eq 'gap';
 
-        if (!$previous_state){
+        if (!$previous_state) {
           $processed_diffs->[0] = \@diff;
-        } elsif ( $state eq $previous_state){
+        } elsif ($state eq $previous_state) {
           my @temp = @{$processed_diffs->[$count]};
-          push @temp,  @diff;
+          push @temp, @diff;
           $processed_diffs->[$count] = \@temp;
         } else {
           $count++;
@@ -462,7 +465,7 @@ sub draw_btop_feature {
   }
 
   # Add alignment seq if zoomed in
-  if ($text_fits){
+  if ($text_fits) {
     my $i = 0;
     foreach my $base ( split //, $seq) {
       my $x = $seq_start + $i;
@@ -493,11 +496,11 @@ sub draw_btop_feature {
   }
 
   # Add insert markers
-  foreach my $ins (@inserts){
+  foreach my $ins (@inserts) {
     my $y = $params->{'y_offset'} || 0;
     $self->push($self->Triangle({
-      mid_point     => [$ins->{'pos'}, $height + $y -8],
-      width         => 10 / $pix_per_bp,
+      mid_point     => [$ins->{'pos'}, $height + $y - 12],
+      width         => 8 / $pix_per_bp,
       height        => 4,
       colour        => 'black',
       direction     => 'down',

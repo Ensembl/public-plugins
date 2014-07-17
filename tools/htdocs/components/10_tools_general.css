@@ -31,7 +31,7 @@ span.tickets-timer                { border-radius: 8px; color: [[BUTTON_BG]]; cu
 
 /* Menu for 'Blast this sequence' on other sequence views */
 div.blast-popup                   { position: absolute; }
-div.blast-popup a                 { background: [[BUTTON_BG]] url('/i/16/rev/search.png') 7px center no-repeat; color: [[BUTTON_TEXT]]; display: block; text-decoration: none; border: 3px double [[PAGE_BG]]; padding: 4px 4px 4px 29px; box-shadow: 1px 1px 6px #999999; }
+div.blast-popup a                 { background: [[BUTTON_BG]] url('/i/16/rev/blast.png') 7px center no-repeat; color: [[BUTTON_TEXT]]; display: block; text-decoration: none; border: 3px double [[PAGE_BG]]; padding: 4px 4px 4px 29px; box-shadow: 1px 1px 6px #999999; }
 
 /* Job  status for Activity Summary table */
 span.job-status                   { font-weight: bold; font-size: 80%; border-radius: 4px; color: [[PAGE_BG]]; padding: 2px 3px 1px; cursor: default; }
@@ -42,6 +42,7 @@ span.job-status-queued,
 span.job-status-submitted,
 span.job-status-running           { background-color: #999999; }
 span.job-status-done              { background-color: #55AA55; }
+span.job-status-noresult          { background-color: #666666; }
 
 /* Sprites for individual jobs on Activity Summary table */
 p span.job-sprites                { position: absolute; display: none; }

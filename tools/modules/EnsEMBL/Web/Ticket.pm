@@ -128,7 +128,6 @@ sub dispatch_jobs {
   my $ticket_id     = $tools_ticket->ticket_id;
   my $ticket_name   = $tools_ticket->ticket_name;
   my $ticket_type   = $tools_ticket->ticket_type_name;
-  my $dispatcher    = $object->get_job_dispatcher($ticket_type);
 
   foreach my $job (@{$self->jobs}) {
 
@@ -141,11 +140,14 @@ sub dispatch_jobs {
       $dispatcher_data->{'species'}     = $job->get_param('species');
 
       # Dispatch the job
-      my $dispatcher_reference = $dispatcher->dispatch_job($ticket_type, $dispatcher_data);
+      my $dispatcher            = $job->get_dispatcher_class($dispatcher_data);
+         $dispatcher            = $object->get_job_dispatcher($dispatcher ? {'class' => $dispatcher} : {'ticket_type' => $ticket_type});
+      my $dispatcher_reference  = $dispatcher->dispatch_job($ticket_type, $dispatcher_data);
 
       # Save the extra info in the tools db
       if ($dispatcher_reference) {
         $job->set_params({
+          'dispatcher_class'      => [ split /::/, ref $dispatcher ]->[-1],
           'dispatcher_reference'  => $dispatcher_reference,
           'dispatcher_data'       => $dispatcher_data,
           'dispatcher_status'     => 'queued',

@@ -44,6 +44,13 @@ sub new {
   }, $class;
 }
 
+sub get_dispatcher_class {
+  ## Gets the dispatcher class name that should be used for this perticulat job
+  ## Override this to add any rule to decide which dispatcher should be used
+  ## @param Dispatcher data - hashref of data that will be passed to dispatcher
+  ## @return Class name suffix for the required dispatcher (to go after EnsEMBL::Web::JobDispatcher::), or undef if default dispatcher should be used
+}
+
 sub get_param {
   ## Gets a param value (column value in the table) for the job
   ## @param Valid column name for tools.job table
@@ -104,7 +111,7 @@ sub create_work_dir {
   my ($self, $params) = @_;
 
   my $files = $self->{'_input_files'};
-  my $dir   = join '/', $self->hub->species_defs->ENSEMBL_TOOLS_TMP_DIR, ($params->{'persistent'} ? 'persistent' : 'temporary'), $params->{'ticket_type'}, ($params->{'ticket_name'} =~ /.{1,3}/g), $params->{'job_number'};
+  my $dir   = join '/', $self->hub->species_defs->ENSEMBL_TMP_DIR_TOOLS, ($params->{'persistent'} ? 'persistent' : 'temporary'), $params->{'ticket_type'}, ($params->{'ticket_name'} =~ /.{1,3}/g), $params->{'job_number'};
 
   # Create the work directory
   create_path($dir);

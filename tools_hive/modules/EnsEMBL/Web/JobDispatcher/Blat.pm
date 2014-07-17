@@ -16,13 +16,32 @@ limitations under the License.
 
 =cut
 
-package EnsEMBL::Web::Configuration::Blast;
+package EnsEMBL::Web::JobDispatcher::Blat;
 
-## Only used for 'Configure this page' link
+### Dispatcher to run the BLAT jobs
+### It forces the hive to run BLAT jobs under Blat logic name instead of default Blast
 
 use strict;
 use warnings;
 
-use parent qw(EnsEMBL::Web::Configuration::Tools);
+use IO::Socket;
+
+use parent qw(EnsEMBL::Web::JobDispatcher::Hive);
+
+sub dispatch_job {
+  ## @override
+  my $self = shift;
+  shift;
+
+  return $self->SUPER::dispatch_job('Blat', @_);
+}
+
+sub delete_jobs {
+  ## @override
+  my $self = shift;
+  shift;
+
+  return $self->SUPER::delete_jobs('Blat', @_);
+}
 
 1;

@@ -26,27 +26,33 @@ use EnsEMBL::Web::BlastConstants qw(:all);
 use parent qw(EnsEMBL::Web::Component::Tools::Blast);
 
 sub content {
-  my $self          = shift;
-  my $hub           = $self->hub;
-  my $sd            = $hub->species_defs;
-  my $object        = $self->object;
-  my $form_params   = $object->get_blast_form_options;
-  my $options       = delete $form_params->{'options'};
-  my $combinations  = delete $form_params->{'combinations'};
-  my $species       = $hub->species;
-     $species       = $hub->get_favourite_species->[0] if $species =~ /multi|common/i;
-  my $edit_jobs     = ($hub->function || '') eq 'Edit' ? $object->get_edit_jobs_data : [];
+  my $self            = shift;
+  my $hub             = $self->hub;
+  my $sd              = $hub->species_defs;
+  my $object          = $self->object;
+  my $form_params     = $object->get_blast_form_options;
+  my $options         = delete $form_params->{'options'};
+  my $combinations    = delete $form_params->{'combinations'};
+  my $missing_sources = delete $form_params->{'missing_sources'};
+  my $species         = $hub->species;
+     $species         = $hub->get_favourite_species->[0] if $species =~ /multi|common/i;
+  my $edit_jobs       = ($hub->function || '') eq 'Edit' ? $object->get_edit_jobs_data : [];
 
   if (!@$edit_jobs && (my $existing_seq = $hub->param('query_sequence'))) { # If coming from "BLAST this sequence" link
     $edit_jobs = [ {'sequence' => {'sequence' => $existing_seq}} ];
   }
 
-  my $form          = $self->new_tool_form('Blast', {'class' => 'blast-form'});
-  my $fieldset      = $form->add_fieldset;
+  my $form      = $self->new_tool_form('Blast', {'class' => 'blast-form'});
+  my $fieldset  = $form->add_fieldset;
 
   $fieldset->add_hidden({
     'name'            => 'valid_combinations',
     'value'           => $combinations
+  });
+
+  $fieldset->add_hidden({
+    'name'            => 'missing_sources',
+    'value'           => $missing_sources
   });
 
   $fieldset->add_hidden({
@@ -62,11 +68,6 @@ sub content {
   $fieldset->add_hidden({
     'name'            => 'max_number_sequences',
     'value'           => MAX_NUM_SEQUENCES,
-  });
-
-  $fieldset->add_hidden({
-    'name'            => 'species_tag_image',
-    'value'           => sprintf('%sspecies/16/[SPECIES].png', $self->img_url)
   });
 
   $fieldset->add_hidden({
@@ -127,15 +128,14 @@ sub content {
     'label'           => 'Search against',
     'field_class'     => '_adjustable_height',
     'elements'        => [{
-      'type'            => 'filterable',
+      'type'            => 'speciesdropdown',
       'name'            => 'species',
       'values'          => $options->{'species'},
       'value'           => $species,
       'multiple'        => 1,
       'wrapper_class'   => '_species_dropdown',
       'filter_text'     => 'Type in to add a species&#8230;',
-      'filter_no_match' => 'No matching species found',
-      'tag_attribs'     => {'class' => 'species-tag _species_tags'}
+      'filter_no_match' => 'No matching species found'
     }]
   });
 
@@ -239,7 +239,7 @@ sub content {
   }
 
   # add the 'Run' button in a new fieldset
-  $self->add_buttons_fieldset($form, {'reset' => 'Clear', 'cancel' => 'Cancel'});
+  $self->add_buttons_fieldset($form, {'reset' => 'Clear', 'cancel' => 'Close form'});
 
   return sprintf('<div class="hidden _tool_new"><p><a class="button _change_location" href="%s">New Search</a></p></div><div class="hidden _tool_form_div"><h2>Create new ticket:</h2><input type="hidden" class="panel_type" value="BlastForm" />%s</div>',
     $hub->url({'function' => ''}),

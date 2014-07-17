@@ -19,6 +19,7 @@ limitations under the License.
 package EnsEMBL::Web::Component::Tools::Blast::TextSequence;
 
 use strict;
+use warnings;
 
 use parent qw(
   EnsEMBL::Web::Component::TextSequence
@@ -38,7 +39,7 @@ sub new {
   my $self   = shift->SUPER::new(@_);
   my $object = $self->object;
 
-  $self->{'_job'}               = $object->get_requested_job({ with_requsted_result => 1 }) or return $self;
+  $self->{'_job'}               = $object->get_requested_job({ with_requested_result => 1 }) or return $self;
   $self->{'_blast_method'}      = $object->parse_search_type($self->{'_job'}->job_data->{'search_type'}, 'search_method');
   $self->{'_is_protein'}        = $self->{'_blast_method'} =~ /^(blastx|blastp)$/i ? 1 : 0;
   $self->{'_hit'}               = $self->{'_job'}->result->[0]->result_data->raw;
@@ -138,8 +139,8 @@ sub markup_hsp {
       my %types = map { $_ => 1 } @{$hsp->{'type'}};
       my $type  = $types{'sel'} ? 'sel' : 'other'; # Both types are denoted by foreground colour, so only mark the more important type
 
-      $seq->[$_]{'class'} .= "hsp_$type " unless $seq->[$_]{'class'} =~ /\bhsp_$type\b/;
-      $hsp_types{$type}    = 1;
+      $seq->[$_]{'class'} = join ' ', "hsp_$type", $seq->[$_]{'class'} || () unless ($seq->[$_]{'class'} || '') =~ /\bhsp_$type\b/;
+      $hsp_types{$type}   = 1;
     }
 
     $i++;
@@ -170,7 +171,7 @@ sub content {
   my $self    = shift;
   my $slice   = $self->get_slice;
   my $length  = $slice->length;
-  my $html    = $self->tool_buttons;
+  my $html    = '';
 
   if ($length >= $self->{'subslice_length'}) {
     $html .= '<div class="sequence_key"></div>' . $self->chunked_content($length, $self->{'subslice_length'}, { length => $length, name => $slice->name });
@@ -184,7 +185,7 @@ sub content {
 sub content_sub_slice {
   my ($self, $slice) = @_;
   my $hub     = $self->hub;
-  my $start   = $hub->param('subslice_start');
+  my $start   = $hub->param('subslice_start') || 0;
   my $end     = $hub->param('subslice_end');
   my $length  = $hub->param('length');
      $slice ||= $self->get_slice;

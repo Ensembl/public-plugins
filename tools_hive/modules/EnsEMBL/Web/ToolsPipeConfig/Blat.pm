@@ -16,32 +16,24 @@ limitations under the License.
 
 =cut
 
-package EnsEMBL::Web::ToolsPipeConfig::Blast;
+package EnsEMBL::Web::ToolsPipeConfig::Blat;
 
-### Provides configs for Blast for tools pipeline
-### To add another tool, add a similar package with similar methods
+### Provides configs for Blat for tools pipeline
 
 use strict;
 use warnings;
 
+use constant BLAT_RESOURCE_NAME => 'blatlocal';
+
 sub default_options {
   my ($class, $conf) = @_;
   my $sd = $conf->species_defs;
-  return {
-    'NCBIBLAST_bin_dir'           => $sd->ENSEMBL_NCBIBLAST_BIN_PATH,
-    'NCBIBLAST_matrix'            => $sd->ENSEMBL_NCBIBLAST_MATRIX,
-    'NCBIBLAST_index_files'       => $sd->ENSEMBL_NCBIBLAST_DATA_PATH,
-    'NCBIBLAST_dna_index_files'   => $sd->ENSEMBL_NCBIBLAST_DATA_PATH_DNA,
-    'NCBIBLAST_repeat_mask_bin'   => $sd->ENSEMBL_REPEATMASK_BIN_PATH
-  };
+  return { 'BLAT_bin_path' => $sd->ENSEMBL_BLAT_BIN_PATH };
 }
 
 sub resource_classes {
   my ($class, $conf) = @_;
-  my $sd          = $conf->species_defs;
-  my $lsf_queue   = $sd->ENSEMBL_BLAST_LSF_QUEUE;
-  my $lsf_timeout = $sd->ENSEMBL_BLAST_LSF_TIMEOUT;
-  return {$lsf_queue => { 'LSF' => $lsf_timeout ? "-q $lsf_queue -W $lsf_timeout" : "-q $lsf_queue" }};
+  return {$class->BLAT_RESOURCE_NAME => { 'LOCAL' => ''}};
 }
 
 sub pipeline_analyses {
@@ -52,18 +44,28 @@ sub pipeline_analyses {
   my $sd = $conf->species_defs;
 
   return [{
-    '-logic_name'           => 'Blast',
-    '-module'               => 'EnsEMBL::Web::RunnableDB::Blast',
+    '-logic_name'           => 'Blat',
+    '-module'               => 'EnsEMBL::Web::RunnableDB::Blat',
     '-parameters'           => {
       'ticket_db'             => $conf->o('ticket_db'),
       %default_options
     },
-    '-analysis_capacity'    => $sd->ENSEMBL_BLAST_ANALYSIS_CAPACITY || 12,
-    '-max_retry_count'      => 1,
-    '-meadow_type'          => 'LSF',
-    '-rc_name'              => $sd->ENSEMBL_BLAST_LSF_QUEUE,
+    '-rc_name'              => $class->BLAT_RESOURCE_NAME,
+    '-max_retry_count'      => 0,
+    '-meadow_type'          => 'LOCAL',
     '-failed_job_tolerance' => 100
   }];
+}
+
+sub pipeline_validate {
+  my ($class, $conf) = @_;
+
+  my @errors;
+
+  my $bin_path = $conf->o('BLAT_bin_path');
+  push @errors, "Binary file $bin_path either seems to be missing or not executable." unless -x $bin_path;
+
+  return @errors;
 }
 
 1;

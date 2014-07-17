@@ -29,6 +29,8 @@ use warnings;
 
 use EnsEMBL::Web::Tools::FileHandler qw(file_get_contents);
 
+use EnsEMBL::Web::BlastConstants qw(CONFIGURATION_FIELDS);
+
 use parent qw(EnsEMBL::Web::Object::Tools);
 
 sub long_caption {
@@ -48,12 +50,27 @@ sub long_caption {
   return '';
 }
 
+sub get_current_tickets {
+  ## @override
+  ## Filters ticket on given ticket id instead of returning all tickets
+  ## @return Arrayref of ticket objects
+  my $self      = shift;
+  my $hub       = $self->hub;
+  my $function  = $hub->function || '';
+
+  return $function eq 'refresh_tickets' && ($hub->referer->{'ENSEMBL_FUNCTION'} || '') eq 'Ticket' || $function eq 'Ticket'
+    ? [ $self->get_requested_ticket(@_) ]
+    : $self->SUPER::get_current_tickets(@_)
+  ;
+}
+
 sub get_blast_form_options {
   ## Gets the list of options for dropdown fields in the blast input form
   my $self = shift;
 
   my $hub             = $self->hub;
   my $sd              = $self->species_defs;
+  my @species         = $sd->valid_species;
   my $blast_types     = $sd->multi_val('ENSEMBL_BLAST_TYPES');              # hashref with keys as BLAT, NCBIBLAST etc
   my $query_types     = $sd->multi_val('ENSEMBL_BLAST_QUERY_TYPES');        # hashref with keys dna, peptide
   my $db_types        = $sd->multi_val('ENSEMBL_BLAST_DB_TYPES');           # hashref with keys dna, peptide
@@ -63,9 +80,10 @@ sub get_blast_form_options {
   my $search_types    = [ map { $_->{'search_type'} } @$blast_configs ];    # NCBIBLAST_BLASTN, NCBIBLAST_BLASTP, BLAT_BLAT etc
 
   my $options         = {}; # Options for different dropdown fields
+  my $missing_sources = {}; # List of missing source files per species
 
   # Species, query types and db types options
-  $options->{'species'}        = [ sort { $a->{'caption'} cmp $b->{'caption'} } map { 'value' => $_, 'caption' => $sd->species_label($_, 1) }, $sd->valid_species ];
+  $options->{'species'}        = [ sort { $a->{'caption'} cmp $b->{'caption'} } map { 'value' => $_, 'caption' => $sd->species_label($_, 1) }, @species ];
   $options->{'query_type'}     = [ map { 'value' => $_, 'caption' => $query_types->{$_} }, keys %$query_types ];
   $options->{'db_type'}        = [ map { 'value' => $_, 'caption' => $db_types->{$_}    }, keys %$db_types    ];
 
@@ -85,9 +103,18 @@ sub get_blast_form_options {
     }
   }
 
+  # Find the missing source files
+  for (@species) {
+    my %available_sources = map {$_ => 1} map { keys %$_ } values %{$sd->get_config($_, 'ENSEMBL_BLAST_DATASOURCES')};
+    if (my @missing = grep !$available_sources{$_}, keys %$sources) {
+      $missing_sources->{$_} = \@missing;
+    }
+  }
+
   return {
-    'options'       => $options,
-    'combinations'  => $self->jsonify($blast_configs)
+    'options'         => $options,
+    'missing_sources' => $self->jsonify($missing_sources),
+    'combinations'    => $self->jsonify($blast_configs)
   };
 }
 
@@ -96,14 +123,27 @@ sub get_edit_jobs_data {
   my $self  = shift;
   my $hub   = $self->hub;
   my $jobs  = $self->get_requested_job || $self->get_requested_ticket;
+     $jobs  = $jobs ? ref($jobs) =~ /Ticket/ ? $jobs->job : [ $jobs ] : [];
 
-  return [ map {
-    my $job_data = $_->job_data->raw;
-    delete $job_data->{$_} for qw(source_file output_file);
-    $job_data->{'species'}  = $_->species;
-    $job_data->{'sequence'} = $self->get_input_sequence_for_job($_);
-    $job_data;
-  } @{ $jobs ? ref($jobs) =~ /Ticket/ ? $jobs->job : [ $jobs ] : [] } ];
+  my @jobs_data;
+
+  if (@$jobs) {
+
+    my %config_fields = map { @$_ } values %{{ @{CONFIGURATION_FIELDS()} }};
+
+    for (@$jobs) {
+      my $job_data = $_->job_data->raw;
+      delete $job_data->{$_} for qw(source_file output_file);
+      $job_data->{'species'}  = $_->species;
+      $job_data->{'sequence'} = $self->get_input_sequence_for_job($_);
+      for (keys %{$job_data->{'configs'}}) {
+        $job_data->{'configs'}{$_} = { reverse %{$config_fields{$_}{'commandline_values'}} }->{ $job_data->{'configs'}{$_} } if exists $config_fields{$_}{'commandline_values'};
+      }
+      push @jobs_data, $job_data;
+    }
+  }
+
+  return \@jobs_data;
 }
 
 sub get_input_sequence_for_job {
@@ -136,7 +176,7 @@ sub get_param_value_caption {
     for (@{$sd->multi_val('ENSEMBL_BLAST_CONFIGS')}) {
       if ($param_value eq $_->{'search_type'}) {
         my ($blast_type, $search_method) = $self->parse_search_type($param_value);
-        return sprintf '%s (%s)', $search_method, $blast_types->{$blast_type};
+        return $search_method eq $blast_types->{$blast_type} ? $search_method : sprintf('%s (%s)', $search_method, $blast_types->{$blast_type});
       }
     }
   } else {
@@ -171,7 +211,7 @@ sub get_target_object {
   my ($self, $hit, $source)  = @_;
   my $target_id     = $hit->{'tid'};
   my $species       = $hit->{'species'};
-  my $feature_type  = $source =~ /abinitio/i ? 'PredictionTranscript' : $source =~ /cdna/i ? 'Transcript' : 'Translation';
+  my $feature_type  = $source =~ /abinitio/i ? 'PredictionTranscript' : $source =~ /cdna|ncrna/i ? 'Transcript' : 'Translation';
   my $adaptor       = $self->hub->get_adaptor("get_${feature_type}Adaptor", 'core', $species);
 
   return $adaptor->fetch_by_stable_id($target_id);
@@ -304,10 +344,36 @@ sub get_result_url {
 
   if ($link_type eq 'target') {
 
-    my $source  = $job_data->{'source'};
-    my $param   = $source =~/abinitio/i ? 'pt' : $source eq 'PEP_ALL' ? 'p' : 't';
+    my ($param, $gene, $gene_url, $gene_display);
 
-    return {
+    my $source  = $job_data->{'source'};
+    my $target  = $self->get_target_object($result_data, $source);
+
+    if ($target->isa('Bio::EnsEMBL::Translation')) {
+      $param  = 'p';
+      $target = $target->transcript;
+    }
+
+    if ($target->isa('Bio::EnsEMBL::PredictionTranscript')) {
+      $param  = 'pt';
+    } else { # Bio::EnsEMBL::Transcript
+      $param  = 't';
+      $gene   = $target->get_Gene;
+    }
+
+    if ($gene) {
+      $gene_url = {
+        'species' => $species,
+        'type'    => 'Gene',
+        'action'  => 'Summary',
+        'g'       => $gene->stable_id,
+        'tl'      => $url_param
+      };
+      $gene_display = $gene->display_xref;
+      $gene_display = $gene_display ? $gene_display->display_id : $gene->stable_id;
+    }
+
+    my $transcript_url = {
       'species' => $species,
       'type'    => 'Transcript',
       'action'  => $source =~/cdna|ncrna/i ? 'Summary' : 'ProteinSummary',
@@ -315,11 +381,14 @@ sub get_result_url {
       'tl'      => $url_param
     };
 
+    return wantarray ? ($transcript_url, $gene_url, $gene_display) : $transcript_url;
+
   } elsif ($link_type eq 'location') {
 
     my $start   = $result_data->{'gstart'} < $result_data->{'gend'} ? $result_data->{'gstart'} : $result_data->{'gend'};
     my $end     = $result_data->{'gstart'} > $result_data->{'gend'} ? $result_data->{'gstart'} : $result_data->{'gend'};
     my $length  = $end - $start;
+    my $p_track = $self->parse_search_type($job->job_data->{'search_type'}, 'search_method') ne 'BLASTN' ? ',codon_seq=normal' : ''; # show translated track for any seach type other than dna vs dna
 
     # Add 5% padding on both sides
     $start  = int($start - $length * 0.05);
@@ -332,7 +401,7 @@ sub get_result_url {
       'type'              => 'Location',
       'action'            => 'View',
       'r'                 => sprintf('%s:%s-%s', $result_data->{'gid'}, $start, $end),
-      'contigviewbottom'  => 'blast=normal',
+      'contigviewbottom'  => "blast=normal$p_track",
       'tl'                => $url_param
     };
 
@@ -414,8 +483,8 @@ sub map_btop_to_genomic_coords {
   my $source  = $hit->{'source'};
   my $galn    = '';
 
-  # don't need to map for dbs other than cdna
-  return $hit->{'aln'} unless $source =~/cdna/i;
+  # don't need to map for other dbs
+  return $hit->{'aln'} unless $source =~/cdna|pep/i;
 
   # find the alignment and cache it in the db in case not already saved
   unless ($galn = $hit->{'galn'}) {
@@ -429,7 +498,7 @@ sub map_btop_to_genomic_coords {
     my $processed_gaps  = 0;
 
     # reverse btop string if necessary so always dealing with + strand genomic coords
-    my $object_strand   = $target_object->isa('Bio::EnsEMBL::Translation') ? $target_object->translation->start_Exon->strand : $target_object->strand;
+    my $object_strand   = $target_object->isa('Bio::EnsEMBL::Translation') ? $target_object->start_Exon->strand : $target_object->strand;
     my $rev_flag        = $object_strand ne $hit->{'tori'};
     $btop               = $self->_reverse_btop($btop) if $rev_flag;
 

@@ -151,24 +151,26 @@ sub parse_url_param {
 }
 
 sub get_job_dispatcher {
-  ## Gets new or cached job dispatcher
-  ## @return EnsEMBL::Web::JobDispatcher subclass
-  my ($self, $ticket_type) = @_;
+  ## Gets new or cached job dispatcher object
+  ## @param Hashref with either of the following keys
+  ##  - class: Class name suffix (if provided, will suffix that to EnsEMBL::Web::JobDispatcher::)
+  ##  - ticket_type: Ticket type name (if provided, will get the default dispatcher for this ticket type from SiteDefs)
+  ## @return An instance of EnsEMBL::Web::JobDispatcher subclass
+  my ($self, $params) = @_;
 
-  $ticket_type ||= $self->tool_type;
   $self->{'_job_dispatcher'} ||= {};
 
-  unless ($self->{'_job_dispatcher'}{$ticket_type}) {
+  my $dispatcher_class;
 
-    my $dispatcher_class = ($self->hub->species_defs->ENSEMBL_TOOLS_JOB_DISPATCHER || {})->{$ticket_type};
-
-    throw exception('WebToolsException', "Job dispatcher for ticket type $ticket_type not configured.") unless $dispatcher_class;
-
-    $self->{'_job_dispatcher'}{$ticket_type} =
-    $self->{'_job_dispatcher'}{'_by_class'}{$dispatcher_class} ||= dynamic_require("EnsEMBL::Web::JobDispatcher::$dispatcher_class")->new($self->hub);
+  if ($params->{'class'}) {
+    $dispatcher_class = $params->{'class'};
+  } elsif ($params->{'ticket_type'}) {
+    $dispatcher_class = $self->{'_job_dispatcher'}{'_by_ticket_type'}{$params->{'ticket_type'}} ||= ($self->hub->species_defs->ENSEMBL_TOOLS_JOB_DISPATCHER || {})->{$params->{'ticket_type'}};
   }
 
-  return $self->{'_job_dispatcher'}{$ticket_type};
+  throw exception('WebToolsException', "Job dispatcher not found for given arguments.") unless $dispatcher_class;
+
+  return $self->{'_job_dispatcher'}{$dispatcher_class} ||= dynamic_require("EnsEMBL::Web::JobDispatcher::$dispatcher_class")->new($self->hub);
 }
 
 sub generate_ticket_name {
@@ -221,14 +223,15 @@ sub delete_ticket_or_job {
   pop @dir_path if !$dir_path[-1];       # trailing slash
   pop @dir_path if $ticket && @dir_path; # this is to get the parent directory for all jobs (required if removing a ticket)
 
-  # get the dispatcher job ids of the jobs that need to be removed
-  my @dispatcher_references = map { $_ && $_->dispatcher_reference || () } $ticket ? $ticket->job : $job;
+  # get the dispatcher reference ids of the jobs that need to be removed and group them according to the job dispatcher
+  my %dispatcher_references;
+  push @{$dispatcher_references{$_->dispatcher_class} ||= []}, $_->dispatcher_reference for grep { $_ && $_->dispatcher_reference } $ticket ? $ticket->job : $job;
 
   # after deleting the ticket or the job successfully, remove the directories, and the dispatched jobs
   if ($ticket ? $ticket->delete : $job && $job->delete) {
 
     # remove dispatched jobs
-    $self->get_job_dispatcher($ticket_type)->delete_jobs($ticket_type, @dispatcher_references) if @dispatcher_references;
+    $self->get_job_dispatcher({'class' => $_})->delete_jobs($ticket_type, $dispatcher_references{$_}) for keys %dispatcher_references;
 
     # remove dirs
     remove_empty_path(join('/', @dir_path), { 'remove_contents' => 1, 'exclude' => [ $ticket_type ], 'no_exception' => 1 }) if @dir_path; # ignore any error - files left orphaned will eventually get removed.
@@ -347,20 +350,19 @@ sub update_jobs_from_dispatcher {
   my $self = shift;
   my $jobs = {};
 
-  # group all jobs by ticket type and keep only those jobs that are awaiting dispatcher response
+  # group all jobs by dispatcher type and keep only those jobs that are awaiting dispatcher response
   for (@_) {
-    my @jobs = grep {$_->status eq 'awaiting_dispatcher_response'} $_->job;
-    $jobs->{$_->ticket_type_name} = \@jobs if @jobs;
+    push @{$jobs->{$_->dispatcher_class} ||= []}, $_ for grep {$_->status eq 'awaiting_dispatcher_response'} $_->job;
   }
 
-  $self->get_job_dispatcher($_)->update_jobs($jobs->{$_}) for keys %$jobs;
+  $self->get_job_dispatcher({'class' => $_})->update_jobs($jobs->{$_}) for keys %$jobs;
 }
 
 sub get_requested_job {
   ## Gets the job object according to the URL param
   ## @param Hashref with one of the following keys
   ##  - 'with_all_results'      Flag if on, will get all results linked to the job object
-  ##  - 'with_requsted_result'  Flag if on, will only get the result object with ID in the URL 'tl' param
+  ##  - 'with_requested_result' Flag if on, will only get the result object with ID in the URL 'tl' param
   ## @return Job object, or undef if no job found for the given id, or job doesn't belong to the logged in user or current session, or requested result doesn't belong to the job
   my ($self, $params) = @_;
 

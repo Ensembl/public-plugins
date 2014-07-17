@@ -22,7 +22,7 @@ Ensembl.Panel.ActivitySummary = Ensembl.Panel.ContentTools.extend({
     Ensembl.EventManager.register('toolsRefreshActivitySummary', this, this.refresh);
     Ensembl.EventManager.register('toolsToggleEmptyTable', this, this.toggleEmptyTable);
 
-    this.POLL_INTERVAL  = 30; //seconds
+    this.POLL_INTERVAL  = 10; //seconds
     this.MAX_POLLS      = 10;
     this.pollCounter    = 0;
   },

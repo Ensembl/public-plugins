@@ -59,15 +59,4 @@ sub pipeline_analyses {
   }];
 }
 
-sub pipeline_validate {
-  my ($class, $conf) = @_;
-
-  my $species_defs = $conf->species_defs;
-  my @errors;
-
-  # TODO
-
-  return @errors;
-}
-
 1;

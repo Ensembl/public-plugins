@@ -38,6 +38,7 @@ sub content {
   my $cache           = $hub->cache;
   my $form            = $cache ? $cache->get('VEPFORM') : undef;
   my $current_species = $hub->species;
+     $current_species = $hub->get_favourite_species->[0] if $current_species =~ /multi|common/i;
   my $input_formats   = INPUT_FORMATS;
 
   if (!$form) {
@@ -152,7 +153,7 @@ sub content {
       $self->$method($form, $config_div->last_child); # add required fieldsets
     }
 
-    $self->add_buttons_fieldset($form, {'reset' => 'Reset', 'cancel' => 'Cancel'});
+    $self->add_buttons_fieldset($form, {'reset' => 'Reset', 'cancel' => 'Close form'});
 
     $form = $form->render;
 
@@ -161,25 +162,24 @@ sub content {
   }
 
   # Add the non-cacheable fields to this dummy form and replace the placeholders from the actual form HTML
-  my $form2 = $self->new_form;
+  my $fieldset2 = $self->new_form->add_fieldset;
 
   # Previous job params for JavaScript
   my $edit_job = ($hub->function || '') eq 'Edit' ? $self->object->get_edit_jobs_data : [];
-     $edit_job = @$edit_job ? $form2->add_hidden({ 'name'  => 'edit_jobs', 'value' => $self->jsonify($edit_job) })->render : '';
+     $edit_job = @$edit_job ? $fieldset2->add_hidden({ 'name'  => 'edit_jobs', 'value' => $self->jsonify($edit_job) }) : '';
 
   # Species dropdown list with stt classes to dynamically toggle other fields
-  my $species_dropdown = $form2->add_field({
+  my $species_dropdown = $fieldset2->add_field({
     'label'         => 'Species',
     'elements'      => [{
-      'type'          => 'dropdown',
+      'type'          => 'speciesdropdown',
       'name'          => 'species',
       'value'         => $current_species,
-      'class'         => '_stt',
       'values'        => [ map {
         'value'         => $_->{'value'},
         'caption'       => $_->{'caption'},
         'class'         => [  #selectToToggle classes for JavaScript
-          '_sttmulti',
+          '_stt', '_sttmulti',
           $_->{'variation'}             ? '_stt__var'   : '_stt__novar',
           $_->{'refseq'}                ? '_stt__rfq'   : (),
           $_->{'variation'}{'POLYPHEN'} ? '_stt__pphn'  : (),
@@ -192,7 +192,7 @@ sub content {
       'no_input'      => 1,
       'is_html'       => 1
     }]
-  })->render;
+  });
 
   # Previously uploaded files
   my $file_dropdown   = '';
@@ -227,19 +227,22 @@ sub content {
     }
 
     if (@to_form > 1) {
-      $file_dropdown = $form2->add_field({
+      $file_dropdown = $fieldset2->add_field({
         'type'    => 'dropdown',
         'name'    => 'userdata',
         'label'   => 'Or select previously uploaded file',
         'values'  => \@to_form,
-      })->render;
+      });
     }
   }
 
+  # Add the render-time changes to the fields
+  $fieldset2->prepare_to_render;
+
   # Regexp to replace all placeholders from cached form
-  $form =~ s/EDIT_JOB/$edit_job/;
-  $form =~ s/SPECIES_DROPDOWN/$species_dropdown/;
-  $form =~ s/FILES_DROPDOWN/$file_dropdown/;
+  $form =~ s/EDIT_JOB/$edit_job && $edit_job->render/e;
+  $form =~ s/SPECIES_DROPDOWN/$species_dropdown->render/e;
+  $form =~ s/FILES_DROPDOWN/$file_dropdown && $file_dropdown->render/e;
 
   return sprintf('
     <div class="hidden _tool_new">

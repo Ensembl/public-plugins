@@ -37,8 +37,18 @@ use EnsEMBL::Web::Tools::FileHandler qw(file_put_contents);
 
 use parent qw(Bio::EnsEMBL::Hive::Process);
 
+sub new {
+  ## @override
+  ## Redirect all warnings from now onwards to hive database's log_message table
+  my $self = shift->SUPER::new(@_);
+  $SIG{'__WARN__'} = sub {
+    $self->warning($_[0]);
+  };
+  return $self;
+}
+
 sub param_required {
-  ## @overrides
+  ## @override
   ## Throws a HiveException in case a param is not defined and is required
   my ($self, $param_name) = @_;
 

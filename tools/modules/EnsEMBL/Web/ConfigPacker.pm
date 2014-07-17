@@ -41,7 +41,7 @@ sub _configure_blast {
   my $multi_tree  = $self->full_tree->{'MULTI'};
   my $species     = $self->species;
   my $blast_types = $multi_tree->{'ENSEMBL_BLAST_TYPES'};
-  my $sources     = $multi_tree->{'ENSEMBL_BLAST_DATASOURCES_BY_TYPE'};
+  my $sources     = $tree->{'ENSEMBL_BLAST_DATASOURCES_BY_TYPE'} || $multi_tree->{'ENSEMBL_BLAST_DATASOURCES_BY_TYPE'}; # give precedence to species.ini entry
   my $blast_conf  = {};
 
   while (my ($blast_type, undef) = each %$blast_types) { #BLAT, NCBIBLAST, WUBLAST etc
@@ -62,6 +62,7 @@ sub _configure_blast_multi {
   my $blast_types_ordered   = [ map { delete $blast_types->{$_} ? $_ : () } @{delete $blast_types->{'ORDER'} || []}, sort keys %$blast_types ];
   my $source_types          = $multi_tree->{'ENSEMBL_BLAST_DATASOURCES_ALL'};
   my $search_types_ordered  = [];
+  my $sources_by_type       = $multi_tree->{'ENSEMBL_BLAST_DATASOURCES_BY_TYPE'};
   my $all_sources           = {};
   my $all_sources_order     = [];
   my $sources               = {};
@@ -87,7 +88,7 @@ sub _configure_blast_multi {
           'query_type'  => $search_types->{$_}[0],
           'db_type'     => $search_types->{$_}[1],
           'program'     => $search_types->{$_}[2],
-          'sources'     => [ @{$sources->{$search_types->{$_}[1]}} ] # clone the array to avoid future accidental manipulation
+          'sources'     => [ grep { my $s = $_; !!grep($_ eq $s, @{$sources_by_type->{$blast_type}}) } @{$sources->{$search_types->{$_}[1]}} ] # filter out the sources that are not valid for this blast type
         };
         delete $search_types->{$_};
       }

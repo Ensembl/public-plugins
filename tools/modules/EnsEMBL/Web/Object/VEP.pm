@@ -41,7 +41,7 @@ sub get_edit_jobs_data {
     if (-s $input_file <= 1024) {
       $job_data->{"text_$format"} = join('', file_get_contents($input_file));
     } else {
-      my $dir_loc   = $hub->species_defs->ENSEMBL_TOOLS_TMP_DIR;
+      my $dir_loc   = $hub->species_defs->ENSEMBL_TMP_DIR_TOOLS;
       my $file_loc  = $input_file =~ s/^$dir_loc\/(temporary|persistent)\/VEP\///r;
 
       $job_data->{'input_file_type'}  = 'text';

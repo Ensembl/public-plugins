@@ -24,9 +24,7 @@ use warnings;
 use DBI;
 use EnsEMBL::Web::SpeciesDefs;
 
-use EnsEMBL::Web::ToolsPipeConfig::Blast;
-use EnsEMBL::Web::ToolsPipeConfig::VEP;
-use EnsEMBL::Web::ToolsPipeConfig::AssemblyConverter;
+use EnsEMBL::Web::Utils::DynamicLoader qw(dynamic_require);
 
 use parent qw(Bio::EnsEMBL::Hive::PipeConfig::HiveGeneric_conf);
 
@@ -37,11 +35,11 @@ sub new {
   my $self  = shift->SUPER::new(@_);
   my $sd    = $self->{'_species_defs'} = EnsEMBL::Web::SpeciesDefs->new;
 
-  $self->{'_available_tools'} = [
-    $sd->ENSEMBL_BLAST_ENABLED ? 'EnsEMBL::Web::ToolsPipeConfig::Blast'             : (),
-    $sd->ENSEMBL_VEP_ENABLED   ? 'EnsEMBL::Web::ToolsPipeConfig::VEP'               : (),
+  $self->{'_available_tools'} = [ map dynamic_require($_), (
+    $sd->ENSEMBL_BLAST_ENABLED ? ('EnsEMBL::Web::ToolsPipeConfig::Blast', 'EnsEMBL::Web::ToolsPipeConfig::Blat') : (),
+    $sd->ENSEMBL_VEP_ENABLED   ? 'EnsEMBL::Web::ToolsPipeConfig::VEP' : ()
     $sd->ENSEMBL_AC_ENABLED    ? 'EnsEMBL::Web::ToolsPipeConfig::AssemblyConverter' : (),
-  ];
+  ) ];
 
   return $self;
 }
@@ -123,14 +121,14 @@ sub pipeline_validate {
   my $self = shift;
 
   my @errors;
-  
+
   # Check connection to the ticket database
   my $ticket_db = $self->o('ticket_db');
   my $dbh       = DBI->connect(sprintf('dbi:mysql:%s:%s:%s', $ticket_db->{'-dbname'}, $ticket_db->{'-host'}, $ticket_db->{'-port'}), $ticket_db->{'-user'}, $ticket_db->{'-pass'}, { 'PrintError' => 0 });
   push @errors, "Ticket database: Connection could not be created ($DBI::errstr)" unless $dbh;
 
   # Run tool specific validation
-  push @errors, map($_->pipeline_validate($self) || (), $self->available_tools);
+  push @errors, map($_->can('pipeline_validate') && $_->pipeline_validate($self) || (), $self->available_tools);
 
   return @errors;
 }

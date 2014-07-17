@@ -32,7 +32,7 @@ foreach my $p ($cgi->param) {
   }
 }
 
-my $file   = join '/', $SiteDefs::ENSEMBL_TOOLS_TMP_DIR, $params{'persistent'} ? 'persistent' : 'temporary', 'VEP', $params{'file'};
+my $file   = join '/', $SiteDefs::ENSEMBL_TMP_DIR_TOOLS, $params{'persistent'} ? 'persistent' : 'temporary', 'VEP', $params{'file'};
 my $name   = $params{'name'} || $file;
 my $format = $params{'format'} || 'vcf';
 my $prefix = $params{'prefix'};

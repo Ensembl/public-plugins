@@ -77,11 +77,7 @@ sub get_job_summary {
     }, {
       'node_name'           => 'p',
       'class'               => 'job-status-links',
-      'children'            => [ grep($_ eq 'status', @$links) ? {
-        'node_name'           => 'span',
-        'class'               => ['job-status', "job-status-$dispatcher_status"],
-        'inner_HTML'          => ucfirst $dispatcher_status =~ s/_/ /gr
-      } : ()]
+      'children'            => [ grep($_ eq 'status', @$links) ? $self->job_status_tag($job, $dispatcher_status, $job->result_count) : () ]
     }]
   });
 
@@ -90,11 +86,22 @@ sub get_job_summary {
   }
 
   my $icons = {
-    'edit'    => {'icon' => 'edit_icon',    'title' => 'Edit &amp; resubmit', 'url' => [        {'function' => 'Edit',    'tl' => $url_param  }], 'class' => '_ticket_edit _change_location'},
-    'delete'  => {'icon' => 'delete_icon',  'title' => 'Delete',              'url' => ['Json', {'function' => 'delete',  'tl' => $url_param  }], 'class' => '_json_link', 'confirm' => "This will delete this job permanently."}
+    'edit'    => {
+      'icon'    => 'edit_icon',
+      'title'   => 'Edit &amp; resubmit (create new ticket)',
+      'url'     => [{ 'function' => 'Edit', 'tl' => $url_param }],
+      'class'   => '_ticket_edit _change_location'
+    },
+    'delete'  => {
+      'icon'    => 'delete_icon',
+      'title'   => 'Delete',
+      'url'     => ['Json', {'function' => 'delete',  'tl' => $url_param  }],
+      'class'   => '_json_link',
+      'confirm' => 'This will delete this job permanently.'
+    }
   };
 
-  my $margin_left_class = 'left-margin';
+  my $margin_left_class = @{$job_status_div->last_child->child_nodes} ? 'left-margin' : ''; # set left margin only if required
 
   foreach my $link (@$links) {
     if ($icons->{$link}) {
@@ -124,7 +131,7 @@ sub get_job_summary {
       'class'       => 'job-error-msg',
       'children'    => [{
         'node_name'   => 'p',
-        'inner_HTML'  => join('', $display_message, $exception_is_fatal ? sprintf(' <a class="toggle closed" href="#more" rel="%s">Show details</a>', $job_message_class) : '')
+        'inner_HTML'  => join('', $display_message, $exception_is_fatal ? sprintf(' <a class="toggle _slide_toggle closed" href="#more" rel="%s">Show details</a>', $job_message_class) : '')
       }]
     });
 
@@ -221,6 +228,27 @@ sub add_buttons_fieldset {
   } : ());
 
   $field->elements->[-1]->append_children(@extras) if @extras;
+}
+
+sub job_status_tag {
+  ## Tag to be displayed next to each job in ticket list table, or job details page
+  ## @param Ticket object
+  ## @param Job object
+  my ($self, $job, $status, $result_count) = @_;
+  return {
+    'node_name'     => 'span',
+    'class'         => [qw(_ht job-status), "job-status-$status"],
+    'title'         => {
+      'not_submitted' => q(This job could not be submitted due to some problems. Please click on the 'View details' icon for more information),
+      'queued'        => q(Your job has been submitted and will be processed soon.),
+      'submitted'     => q(Your job has been submitted and will be processed soon.),
+      'running'       => q(Your job is currently being processed. The page will refresh once it's finished running.),
+      'done'          => q(This job is finished. Please click on 'View results' link to see the results),
+      'failed'        => q(This job has failed. Please click on the 'View details' icon for more information),
+      'deleted'       => q(Your ticket has been deleted. This usually happens if the ticket is too old.)
+    }->{$status},
+    'inner_HTML'    => ucfirst $status =~ s/_/ /gr
+  }
 }
 
 sub format_date {

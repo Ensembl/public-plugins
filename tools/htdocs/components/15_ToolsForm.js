@@ -81,7 +81,7 @@ Ensembl.Panel.ToolsForm = Ensembl.Panel.ContentTools.extend({
         if (!isCancel) {
           panel.reset();
         } else {
-          panel.toggleForm(false, true);
+          panel.toggleForm(false);
         }
         panel.toggleSpinner(false);
       }, 100); // :(
@@ -127,7 +127,7 @@ Ensembl.Panel.ToolsForm = Ensembl.Panel.ContentTools.extend({
           .filter('[type=checkbox], [type=radio]').prop('checked', flag).end()
           .filter('select').find('option').prop('selected', flag);
 
-        this.toggleForm(true, true);
+        this.toggleForm(true);
       }
       this.resetSelectToToggle();
     }
@@ -141,7 +141,7 @@ Ensembl.Panel.ToolsForm = Ensembl.Panel.ContentTools.extend({
     this.toggleForm(false, true);
   },
 
-  toggleForm: function(flag, showCancel) {
+  toggleForm: function(flag, toggleCloseButton) {
   /*
    * Shows/hides the form, and does the opposite to the 'add new' link
    */
@@ -149,9 +149,9 @@ Ensembl.Panel.ToolsForm = Ensembl.Panel.ContentTools.extend({
       this.reset();
     }
     this.elLk.buttonDiv.toggle(!flag);
-    this.elLk.formDiv.clearQueue()[flag ? 'slideDown' : 'slideUp'](200);
-    if (typeof showCancel === 'boolean') {
-      this.elLk.cancelButton.toggle(showCancel);
+    this.elLk.formDiv[flag ? 'slideDown' : 'slideUp'](200);
+    if (typeof toggleCloseButton === 'boolean') {
+      this.elLk.cancelButton.toggle(toggleCloseButton);
     }
   },
 
@@ -174,7 +174,6 @@ Ensembl.Panel.ToolsForm = Ensembl.Panel.ContentTools.extend({
    * Reset the form
    */
     this.elLk.form[0].reset();
-    this.resetSelectToToggle();
   },
 
   resetSelectToToggle: function() {

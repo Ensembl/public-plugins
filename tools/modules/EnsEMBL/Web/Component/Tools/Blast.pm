@@ -54,7 +54,7 @@ sub job_details_table {
     $result_link->parent_node->insert_after($download_link, $result_link);
   }
 
-  $two_col->add_row('Job summary',    $job_summary->render);
+  $two_col->add_row('Job name',       $job_summary->render);
   $two_col->add_row('Species',        sprintf('<img class="job-species" src="%sspecies/16/%s.png" alt="" height="16" width="16">%s', $self->img_url, $species, $sd->species_label($species, 1)));
   $two_col->add_row('Search type',    $object->get_param_value_caption('search_type', $job_data->{'search_type'}));
   $two_col->add_row('Sequence',       sprintf('<div class="input-seq">&gt;%s</div>', join("\n", $sequence->{'display_id'} || '', ($sequence->{'sequence'} =~ /.{1,60}/g))));
@@ -69,6 +69,24 @@ sub job_details_table {
 sub no_result_hit_found {
   ## Default HTML to be displayed if no hit was found according to the URL params
   return 'No result hit was found according to your request.';# TODO - display button to go back to summary page
+}
+
+sub job_status_tag {
+  ## @override
+  my ($self, $job, $status, $hits) = @_;
+
+  my $tag = $self->SUPER::job_status_tag($job, $status, $hits);
+
+  if ($status eq 'done') {
+    $tag->{'inner_HTML'} .= sprintf ': %s hit%s found', $hits || 'No', $hits == 1 ? '' : 's';
+
+    unless ($hits) {
+      $tag->{'class'} = [ 'job-status-noresult', grep { $_ ne 'job-status-done' } @{$tag->{'class'}} ];
+      $tag->{'title'} = 'This job is finished, but no hits were found. If you believe that there should be a match to your query sequence please edit the job using the icon on the right to adjust the configuration parameters and resubmit the search.';
+    }
+  }
+
+  return $tag;
 }
 
 sub _display_config {

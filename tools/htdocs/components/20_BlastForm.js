@@ -1,12 +1,12 @@
 /*
  * Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,7 +20,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
 
     this.sequences            = [];
     this.combinations         = [];
-    this.speciesTags          = {};
+    this.missingSources       = {};
     this.selectedQueryType    = false;
     this.maxSequenceLength    = 0;
     this.maxNumSequences      = 0;
@@ -42,9 +42,10 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
 
     try {
       // parse the combination JSON from the HTML - if this doesn't work, there is nothing we can do!
-      this.combinations = $.parseJSON(this.elLk.form.find('input[name=valid_combinations]').remove().val());
+      this.combinations   = $.parseJSON(this.elLk.form.find('input[name=valid_combinations]').remove().val());
+      this.missingSources = $.parseJSON(this.elLk.form.find('input[name=missing_sources]').remove().val());
     } catch (ex) {
-      this.combinations = false;
+      this.combinations = this.missingSources = false;
     }
 
     // nothing can be done if any of these is missing!
@@ -53,20 +54,15 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
       return;
     }
 
+    // sequence input fields
     this.elLk.sequences         = this.elLk.form.find('div._sequence');
     this.elLk.sequenceField     = this.elLk.form.find('div._sequence_field');
-    this.elLk.speciesCheckboxes = this.elLk.form.find('input[name=species]');
-    this.elLk.speciesDropdown   = this.elLk.form.find('._species_dropdown').filterableDropdown({refresh: true, change: function() {
-      $(this).find('._species_tags').css('background-image', function() {
-        return 'url(' + panel.speciesTagImgSrc.replace('[SPECIES]', $($(this).data('input')).val()) + ')';
-      });
-    }});
 
     // provide event handlers to the textarea where sequence text is typed
     var sequenceInputEvent = function(e) { // add some delay to make sure the blur event actually gets fired after making sure some other event hasn't removed the input string
-      var element = $(this).off('blur change paste').trigger('blur'); // prevent all events to fire at once
+      var element = $(this).off('blur change paste'); // prevent all events to fire at once
       setTimeout(function() {
-        element.trigger('finish').on('blur change paste', sequenceInputEvent);
+        element.trigger('finish').trigger('blur').on('blur change paste', sequenceInputEvent);
         element = null;
       }, 100);
     };
@@ -163,6 +159,12 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
       panel.resetSearchTools();
     });
 
+    // Species dropdown
+    this.elLk.speciesCheckboxes = this.elLk.form.find('input[name=species]');
+    this.elLk.speciesDropdown   = this.elLk.form.find('._species_dropdown').speciesDropdown({refresh: true, change: function() {
+      panel.resetSourceTypes(panel.elLk.speciesCheckboxes.filter(':checked').map(function() { return this.value; } ).toArray());
+    }});
+
     // Search type dropdown
     this.elLk.searchType = this.elLk.form.find('select[name=search_type]');
     this.elLk.searchTypeOptions = this.elLk.searchType.find('option').clone(); // take a copy to preserve a list of all supported search types
@@ -198,8 +200,8 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
   /*
    * Resets the form, ready to accept next job input
    */
-   
-    this.base();
+
+    this.base.apply(this, arguments);
 
     // Reset sequences
     for (var i = this.sequences.length - 1; i >= 0; i--) {
@@ -210,6 +212,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     this.toggleSequenceFields(true);
 
     // Reset query type, db type and source type to first option, then set search tool accordingly
+    this.selectedQueryType = false;
     this.elLk.queryType.first().prop('checked', true);
     this.elLk.dbType.first().prop('checked', true);
     this.elLk.source.find('option').first().prop('selected', true);
@@ -242,7 +245,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     }
 
     if (!$.isEmptyObject(formInput)) {
-      this.toggleForm(true, true);
+      this.toggleForm(true);
 
       // set sequence and query type
       if (formInput['query_type']) {
@@ -258,12 +261,12 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
       this.resetSearchTools(formInput['search_type']);
 
       // set species
-      this.resetSpecies(formInput['species']);
+      this.resetSpecies(formInput['species'] || this.defaultSpecies);
 
       if (formInput['configs']) {
         for (var name in formInput['configs']) {
           this.elLk.form.find('[name=' + formInput['search_type'] + '__' + name + ']')
-            .filter('input[type=checkbox]').prop('checked', true).end()
+            .filter('input[type=checkbox]').prop('checked', !!formInput['configs'][name]).end()
             .filter('select').find('option[value=' + formInput['configs'][name] + ']').prop('selected', true);
         }
       }
@@ -523,6 +526,24 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
       .find('option[value=' + (selectedValue || '') + ']').prop('selected', true).end().selectToToggle('trigger');
   },
 
+  resetSourceTypes: function(selectedSpecies) {
+  /*
+   * Resets the source type dropdown to disable the source options that are not available for one of the selected species
+   */
+    var sourcesToDisable = [];
+    for (var i = selectedSpecies.length - 1; i >= 0; i--) {
+      sourcesToDisable = sourcesToDisable.concat(this.missingSources[selectedSpecies[i]] || []);
+    }
+
+    this.elLk.source.find('option').prop('disabled', function() { return sourcesToDisable.indexOf(this.value) >= 0; }).end().each(function() {
+      var opts = $(this).find('option:enabled');
+      if (!opts.filter(':selected').length) {
+        opts.first().prop('selected', true);
+      }
+      opts = null;
+    });
+  },
+
   updateSeqInfo: function(info) {
   /*
    * Updates the text content below the sequence
@@ -557,7 +578,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
 
   resetSpecies: function(speciesList) {
     this.elLk.speciesCheckboxes.prop('checked', function() { return speciesList.indexOf(this.value) >= 0; });
-    this.elLk.speciesDropdown.filterableDropdown({refresh: true});
+    this.elLk.speciesDropdown.speciesDropdown({refresh: true});
   }
 });
 

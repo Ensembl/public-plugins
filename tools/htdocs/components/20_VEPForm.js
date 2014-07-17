@@ -39,7 +39,11 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
   },
 
   reset: function() {
+  /*
+   * Resets the form, ready to accept next job input
+   */
     this.base.apply(this, arguments);
-    this.elLk.form.find('._download_link').remove();
+    this.elLk.form.find('._download_link').remove().end().find('._sdd').speciesDropdown({refresh: true});
+    this.resetSelectToToggle();
   }
 });

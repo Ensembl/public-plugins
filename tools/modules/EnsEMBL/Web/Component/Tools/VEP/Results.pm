@@ -530,7 +530,7 @@ sub content {
   ## DOWNLOAD
   ###########
 
-  my $dir_loc  = $hub->species_defs->ENSEMBL_TOOLS_TMP_DIR;
+  my $dir_loc  = $hub->species_defs->ENSEMBL_TMP_DIR_TOOLS;
   my $file_loc = $output_file_obj->filename =~ s/^$dir_loc\/(temporary|persistent)\/VEP\///r;
 
   $html .= '<div class="toolbox">';

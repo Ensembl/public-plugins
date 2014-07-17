@@ -36,7 +36,7 @@ sub job_details_table {
   my $sd        = $self->hub->species_defs;
   my $two_col   = $self->new_twocol;
 
-  $two_col->add_row('Job summary',  $self->get_job_summary($job, @_)->render =~ s/Job 0\: //r);
+  $two_col->add_row('Job summary',  $self->get_job_summary($job, @_)->render);
   $two_col->add_row('Species',      sprintf('<img class="job-species" src="%sspecies/16/%s.png" alt="" height="16" width="16">%s', $self->img_url, $species, $sd->species_label($species, 1)));
 
   return $two_col;

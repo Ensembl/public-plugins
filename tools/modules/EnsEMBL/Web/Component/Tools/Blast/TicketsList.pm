@@ -16,24 +16,27 @@ limitations under the License.
 
 =cut
 
-package EnsEMBL::Web::Component::Tools::VEP::TicketDetails;
+package EnsEMBL::Web::Component::Tools::Blast::TicketsList;
 
 use strict;
 use warnings;
 
 use parent qw(
-  EnsEMBL::Web::Component::Tools::VEP
-  EnsEMBL::Web::Component::Tools::TicketDetails
+  EnsEMBL::Web::Component::Tools::Blast
+  EnsEMBL::Web::Component::Tools::TicketsList
 );
 
-sub content_ticket {
-  my ($self, $ticket, $jobs) = @_;
-  my $hub     = $self->hub;
-  my $div     = $self->dom->create_element('div');
+sub job_summary_section {
+  ## @override
+  my ($self, $ticket, $job, $hit_count) = @_;
 
-  $div->append_child($self->job_details_table($_, [qw(status results edit delete)]))->set_attribute('class', 'plain-box') for @$jobs;
+  my $summary = $self->SUPER::job_summary_section($ticket, $job, $hit_count);
+  my $desc    = $job->job_data->{'summary'};
 
-  return $div->render;
+  !$hit_count                       and $_->parent_node->remove_child($_)                         for @{$summary->get_nodes_by_flag('job_results_link')};
+  $desc && $_->inner_HTML ne $desc  and $_->set_attributes({'title' => $desc, 'class' => '_ht'})  for @{$summary->get_nodes_by_flag('job_desc_span')};
+
+  return $summary;
 }
 
 1;

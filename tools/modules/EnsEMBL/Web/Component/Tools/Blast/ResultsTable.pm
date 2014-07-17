@@ -40,32 +40,32 @@ sub content {
     my $source      = $job_data->{'source'};
     my $table       = $self->new_table($source =~/latestgp/i
       ? [
-          { 'key' => 'tid',     'title'=> 'Gene Location',  'align' => 'left',  'sort' => 'string'  },
-          { 'key' => 'tori',    'title'=> 'Orientation',    'align' => 'left',  'sort' => 'string'  },
-          { 'key' => 'qid',     'title'=> 'Query name',     'align' => 'left',  'sort' => 'string'  },
-          { 'key' => 'qstart',  'title'=> 'Query start',    'align' => 'left',  'sort' => 'numeric' },
-          { 'key' => 'qend',    'title'=> 'Query end',      'align' => 'left',  'sort' => 'numeric' },
-          { 'key' => 'qori',    'title'=> 'Query ori',      'align' => 'left',  'sort' => 'string'  },
-          { 'key' => 'len',     'title'=> 'Length',         'align' => 'left',  'sort' => 'numeric' },
-          { 'key' => 'score',   'title'=> 'Score',          'align' => 'left',  'sort' => 'numeric' },
-          { 'key' => 'evalue',  'title'=> 'E-val',          'align' => 'left',  'sort' => 'numeric' },
-          { 'key' => 'pident',  'title'=> '%ID',            'align' => 'left',  'sort' => 'numeric' },
+          { 'key' => 'tid',     'title'=> 'Genomic Location', 'align' => 'left',  'sort' => 'string'  },
+          { 'key' => 'tori',    'title'=> 'Orientation',      'align' => 'left',  'sort' => 'string'  },
+          { 'key' => 'qid',     'title'=> 'Query name',       'align' => 'left',  'sort' => 'string'  },
+          { 'key' => 'qstart',  'title'=> 'Query start',      'align' => 'left',  'sort' => 'numeric' },
+          { 'key' => 'qend',    'title'=> 'Query end',        'align' => 'left',  'sort' => 'numeric' },
+          { 'key' => 'qori',    'title'=> 'Query ori',        'align' => 'left',  'sort' => 'string'  },
+          { 'key' => 'len',     'title'=> 'Length',           'align' => 'left',  'sort' => 'numeric' },
+          { 'key' => 'score',   'title'=> 'Score',            'align' => 'left',  'sort' => 'numeric' },
+          { 'key' => 'evalue',  'title'=> 'E-val',            'align' => 'left',  'sort' => 'numeric' },
+          { 'key' => 'pident',  'title'=> '%ID',              'align' => 'left',  'sort' => 'numeric' },
         ]
       : [
-          { 'key' => 'tid',     'title'=> 'Subject name',   'align' => 'left',  'sort' => 'string'  },
-          { 'key' => 'tstart',  'title'=> 'Subject start',  'align' => 'left',  'sort' => 'numeric' },
-          { 'key' => 'tend',    'title'=> 'Subject end',    'align' => 'left',  'sort' => 'numeric' },
-          { 'key' => 'tori',    'title'=> 'Subject ori',    'align' => 'left',  'sort' => 'string'  },
-          { 'key' => 'gid',     'title'=> 'Gene Location',  'align' => 'left',  'sort' => 'string'  },
-          { 'key' => 'gori',    'title'=> 'Orientation',    'align' => 'left',  'sort' => 'string'  },
-          { 'key' => 'qid',     'title'=> 'Query name',     'align' => 'left',  'sort' => 'string'  },
-          { 'key' => 'qstart',  'title'=> 'Query start',    'align' => 'left',  'sort' => 'numeric' },
-          { 'key' => 'qend',    'title'=> 'Query end',      'align' => 'left',  'sort' => 'numeric' },
-          { 'key' => 'qori',    'title'=> 'Query ori',      'align' => 'left',  'sort' => 'string'  },
-          { 'key' => 'len',     'title'=> 'Length',         'align' => 'left',  'sort' => 'numeric' },
-          { 'key' => 'score',   'title'=> 'Score',          'align' => 'left',  'sort' => 'numeric' },
-          { 'key' => 'evalue',  'title'=> 'E-val',          'align' => 'left',  'sort' => 'numeric' },
-          { 'key' => 'pident',  'title'=> '%ID',            'align' => 'left',  'sort' => 'numeric' },
+          { 'key' => 'tid',     'title'=> 'Subject name',     'align' => 'left',  'sort' => 'string'  },
+          { 'key' => 'tstart',  'title'=> 'Subject start',    'align' => 'left',  'sort' => 'numeric' },
+          { 'key' => 'tend',    'title'=> 'Subject end',      'align' => 'left',  'sort' => 'numeric' },
+          { 'key' => 'tori',    'title'=> 'Subject ori',      'align' => 'left',  'sort' => 'string'  },
+          { 'key' => 'gid',     'title'=> 'Genomic Location', 'align' => 'left',  'sort' => 'string'  },
+          { 'key' => 'gori',    'title'=> 'Orientation',      'align' => 'left',  'sort' => 'string'  },
+          { 'key' => 'qid',     'title'=> 'Query name',       'align' => 'left',  'sort' => 'string'  },
+          { 'key' => 'qstart',  'title'=> 'Query start',      'align' => 'left',  'sort' => 'numeric' },
+          { 'key' => 'qend',    'title'=> 'Query end',        'align' => 'left',  'sort' => 'numeric' },
+          { 'key' => 'qori',    'title'=> 'Query ori',        'align' => 'left',  'sort' => 'string'  },
+          { 'key' => 'len',     'title'=> 'Length',           'align' => 'left',  'sort' => 'numeric' },
+          { 'key' => 'score',   'title'=> 'Score',            'align' => 'left',  'sort' => 'numeric' },
+          { 'key' => 'evalue',  'title'=> 'E-val',            'align' => 'left',  'sort' => 'numeric' },
+          { 'key' => 'pident',  'title'=> '%ID',              'align' => 'left',  'sort' => 'numeric' },
         ],
       [], {'data_table' => 1, 'exportable' => 0, 'sorting' => ['score desc']}
     );
@@ -102,7 +102,7 @@ sub content {
       $table->add_row($result_data);
     }
 
-    $html .= sprintf '<h3><a rel="_blast_results_table" class="toggle set_cookie open" href="#">Results table</a></h3>
+    $html .= sprintf '<h3><a rel="_blast_results_table" class="toggle _slide_toggle set_cookie open" href="#">Results table</a></h3>
       <div class="_blast_results_table toggleable">%s</div>', $table->render;
   }
 
@@ -113,7 +113,17 @@ sub target_link {
   ## Gets the link for the target column
   my ($self, $job, $result) = @_;
 
-  return sprintf '<a href="%s">%s</a>', $self->hub->url($self->object->get_result_url('target', $job, $result)), $result->result_data->{'tid'};
+  my $hub = $self->hub;
+
+  my ($target_url, $gene_url, $gene_label) = $self->object->get_result_url('target', $job, $result);
+
+  return sprintf('<a href="%s">%s</a>%s',
+    $hub->url($target_url),
+    $result->result_data->{'tid'},
+    $gene_url && $gene_label
+      ? sprintf(' (Gene: <a href="%s">%s</a>)', $hub->url($gene_url), $gene_label)
+      : ''
+  );
 }
 
 sub location_link {
