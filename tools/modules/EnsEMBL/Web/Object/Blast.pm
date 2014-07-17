@@ -39,11 +39,7 @@ sub long_caption {
   my $hub   = $self->hub;
   if (($hub->function || '') eq 'Results') {
     if (my $job = $self->get_requested_job({'with_all_results' => 1})) {
-      my $ticket      = $job->ticket;
-      my $job_count   = $ticket->job_count;
-      my $job_number  = $job->job_number;
-      my $job_counter = $job_count == 1 && $job_number == 1 ? '' : " (Job $job_number/$job_count)";
-      return sprintf 'Results for ticket %s%s', $ticket->ticket_name, $job_counter;
+      return sprintf 'Results for %s', $self->get_job_description($job);
     }
     return sprintf '%s Results', $self->get_tool_caption;
   }

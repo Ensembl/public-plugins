@@ -62,18 +62,16 @@ sub get_job_summary {
   $links ||= [];
 
   my $hub               = $self->hub;
+  my $object            = $self->object;
   my $job_id            = $job->job_id;
   my $job_message       = $job->job_message->[0];
   my $job_status        = $job->status;
-  my $job_number        = $job->job_number;
   my $dispatcher_status = $job->dispatcher_status;
-  my $url_param         = $self->object->create_url_param({'job_id' => $job_id});
-  my $total_jobs        = $job->ticket->job_count;
-  my $job_prefix        = $job_number == 1 && $total_jobs == 1 ? '' : "Job $job_number/$total_jobs: ";
+  my $url_param         = $object->create_url_param({'job_id' => $job_id});
   my $job_status_div    = $self->dom->create_element('div', {
     'children'            => [{
       'node_name'           => 'p',
-      'inner_HTML'          => sprintf('%s%s', $job_prefix, $job->job_desc // '-')
+      'inner_HTML'          => $object->get_job_description($job)
     }, {
       'node_name'           => 'p',
       'class'               => 'job-status-links',

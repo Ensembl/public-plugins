@@ -135,12 +135,11 @@ sub job_summary_section {
   my ($self, $ticket, $job, $result_count) = @_;
 
   my $hub               = $self->hub;
+  my $object            = $self->object;
   my $ticket_name       = $ticket->ticket_name;
-  my $url_param         = $self->object->create_url_param({'ticket_name' => $ticket_name, 'job_id' => $job->job_id});
+  my $url_param         = $object->create_url_param({'ticket_name' => $ticket_name, 'job_id' => $job->job_id});
   my $action            = $ticket->ticket_type_name;
   my $species_defs      = $hub->species_defs;
-  my $job_count         = $ticket->job_count;
-  my $job_number        = $job->job_number;
   my $dispatcher_status = $job->dispatcher_status;
 
   return $self->dom->create_element('p', {
@@ -158,7 +157,7 @@ sub job_summary_section {
       'node_name'   => 'span',
       'class'       => ['right-margin'],
       'flags'       => ['job_desc_span'],
-      'inner_HTML'  => sprintf('%s%s', $job_number == 1 && $job_count == 1 ? '' : "Job $job_number/$job_count: ", $job->job_desc || ''),
+      'inner_HTML'  => $object->get_job_description($job)
     },
     $self->job_status_tag($job, $dispatcher_status, $result_count),
     $dispatcher_status eq 'done' ? {
@@ -171,7 +170,7 @@ sub job_summary_section {
         'type'        => 'Tools',
         'action'      => $ticket->ticket_type_name,
         'function'    => 'Results',
-        'tl'          => $self->object->create_url_param({'ticket_name' => $ticket->ticket_name, 'job_id' => $job->job_id})
+        'tl'          => $object->create_url_param({'ticket_name' => $ticket->ticket_name, 'job_id' => $job->job_id})
       })
     } : (), {
       'node_name'   => 'span',
