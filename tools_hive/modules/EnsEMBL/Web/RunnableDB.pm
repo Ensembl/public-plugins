@@ -32,7 +32,7 @@ use Scalar::Util qw(blessed);
 use Storable qw(nfreeze);
 
 use EnsEMBL::Web::Exceptions;
-use EnsEMBL::Web::Tools::FileSystem qw(copy_files);
+use EnsEMBL::Web::Utils::FileSystem qw(copy_files);
 use EnsEMBL::Web::Utils::FileHandler qw(file_put_contents);
 
 use parent qw(Bio::EnsEMBL::Hive::Process);
