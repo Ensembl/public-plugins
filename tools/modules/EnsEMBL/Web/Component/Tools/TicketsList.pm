@@ -42,8 +42,9 @@ sub content {
     { 'key' => 'created',   'title' => 'Submitted at',  'sort' => 'numeric_hidden'  },
     { 'key' => 'extras',    'title' => '',              'sort' => 'none'            }
   ], [], {
-    'data_table'  => 'no_col_toggle',
-    'exportable'  => 0
+    'data_table'      => 1,
+    'exportable'      => 0,
+    'hidden_columns'  => [1],
   });
 
   if ($tickets && @$tickets > 0) {
