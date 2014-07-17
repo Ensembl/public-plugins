@@ -438,6 +438,13 @@ sub get_tickets_data_for_sync {
   return (md5_hex($self->jsonify($tickets_data)), $auto_refresh);
 }
 
+sub get_job_description {
+  ## Gets the job description for the job
+  ## @param Job object
+  my ($self, $job) = @_;
+  return join ' ', $job->ticket->job_count == 1 ? () : sprintf('Job %s:', $job->job_number), $job->job_desc // '-';
+}
+
 sub handle_download {
   ## @override
   ## Handles the download request, and calls the handle_download method of the required sub object
