@@ -9,29 +9,26 @@
 
 <h2 id="Introduction">Introduction</h2>
 <p>
-Gene annotation provided by Ensembl includes both automatic annotation, 
-i.e. genome-wide determination of transcripts, and manual curation, i.e. 
-reviewed determination of transcripts on a case-by-case basis (in this 
-case limited to some species such as human and mouse). Furthermore, 
-Ensembl imports annotation from <a href="http://flybase.org/">FlyBase</a>, 
-<a href="http://www.wormbase.org/">WormBase</a> and 
-<a href="http://www.yeastgenome.org/">SGD</a>. Ensembl transcripts
-displayed on our website are products of the Ensembl automatic
-pipeline, termed the Ensembl genebuild. All Ensembl transcripts are
-based on experimental evidence and thus the automated pipeline relies
-on the mRNAs and protein sequences deposited into public databases
-from the scientific community. Manually-curated transcripts produced
-by the <a rel="external"
-href="http://www.sanger.ac.uk/research/projects/vertebrategenome/havana/">HAVANA</a> group at the
-Welcome Trust Sanger Institute are displayed in a separate track on
-our website.
+Gene annotation provided by Ensembl includes automatic annotation, 
+i.e. genome-wide determination of transcripts. For selected species 
+(eg. human, mouse, pig, rat), gene annotation may also include manual 
+curation, i.e. reviewed determination of transcripts on a case-by-case 
+basis. Furthermore, Ensembl imports annotation from FlyBase, WormBase and SGD. 
+Ensembl transcripts displayed on our website are products of the 
+Ensembl automatic gene annotation system (a collection of gene annotation 
+pipelines), termed the Ensembl genebuild. All Ensembl transcripts are 
+based on experimental evidence and thus the automated pipeline relies on 
+the mRNAs and protein sequences deposited into public databases from the 
+scientific community. Manually-curated transcripts produced by the HAVANA 
+group at the Welcome Trust Sanger Institute are displayed in a separate track on our website.
 </p>
 
 <p>
-An Ensembl gene (with a unique ENSG... ID) includes any spliced
-transcripts (ENST...) with overlapping coding sequence. Transcripts
-from the Ensembl genebuild (see below), the Havana/Vega set and the
-Consensus Coding Sequence (<a href="ccds.html">CCDS</a>) set may all
+An Ensembl gene (with a unique ENSG... ID) includes any spliced 
+transcripts (ENST...) with overlapping coding sequence, with the 
+exception of manually annotated readthrough genes which are annotated 
+as a separate locus. Transcripts from the Ensembl genebuild (see below), 
+the Havana/Vega set and the Consensus Coding Sequence (<a href="ccds.html">CCDS</a>) set may all
 be clustered into the same gene. Transcripts that belong to the same
 gene ID may differ in splice events, exons, and can give rise to very
 different proteins. These are isoforms, arising from alternative
@@ -63,9 +60,9 @@ for the gene structures displayed on our website.
 
 <p>
 The first stage of the genebuild is known as the Targetted
-stage. Here, species-specific proteins are aligned to the genome and
-Genewise is used to build a transcript structure for the protein on
-the genome. 
+stage. Here, species-specific proteins are aligned to the 
+genome and Genewise and/or Exonerate is used to build a 
+transcript structure for the protein on the genome.
 </p>
 
 <p>
@@ -89,6 +86,13 @@ evidence in the genebuild.
 </p>
 
 <p>
+Where available, we also align <a href="/info/genome/genebuild/rnaseq_annotation.html">RNA-seq</a> reads to the genome and build 
+RNA-seq based transcript models from these data. These models may also 
+be used to add new genes or transcript isoforms into the gene set, and 
+to add UTR to protein-coding models.
+</p>
+
+<p>
 The final set of gene predictions is obtained by merging identical
 transcripts built from different proteins sequences to produce
 multi-transcript gene predictions, each with a non-redundant set of
@@ -105,18 +109,28 @@ genes. These include protein domain annotation, ncRNA annotation,
 pseudogene prediction and cross-referencing to external databases.
 </p>
 
+<h2 id="gencode">GENCODE</h2>
 <p>
-The human and mouse genebuilds involve additional steps not included
-in the standard Ensembl build. For both species, transcripts from the
-Consensus Coding Sequence (<a href="ccds.html">CCDS</a>) set are
-imported directly and not altered by the genebuild process. In
-addition, where manual curation is available for a transcript, the
-Ensembl and HAVANA transcript models are compared. The Ensembl and
-HAVANA models are merged when they agree on the same coding
-sequence. Merged models will be coloured gold in the browser. A
-merged, or golden, gene indicates one or more common transcripts
-between Ensembl and HAVANA. This combined geneset is the default gene
-set from the <a href="http://www.gencodegenes.org">GENCODE project</a>.
+The human and mouse genebuilds involve additional steps not included 
+in the standard Ensembl build, to produce the GENCODE gene sets. Where 
+manual curation is available for a transcript, the Ensembl and HAVANA 
+transcript models are compared and merged when their splicing structure 
+is identical. Merged models will be coloured gold in the browser. A 
+merged, or golden, gene indicates that annotation was provided by both 
+Ensembl and HAVANA. A merged gene will either contain at least one merged 
+transcript model, or it will contain unmerged transcripts from both Ensembl 
+and HAVANA. Where a transcript model is annotated only by Ensembl or HAVANA, 
+it will be included in the GENCODE gene set as an unmerged (red) model and 
+named as described below. This combined Ensembl/HAVANA gene set is the 
+default gene set from the GENCODE project. For both human and mouse, we 
+also guarantee that all transcripts from the Consensus Coding Sequence (CCDS) 
+set are present in the GENCODE gene set. 
+</p>
+
+<p>
+The complete GENCODE gene set for human and mouse can be viewed on our website 
+in the GENCODE Comprehensive track. A subset of these transcript models are 
+tagged as being in the GENCODE Basic set, which is also available on our website.
 </p>
 
 <p>
