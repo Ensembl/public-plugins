@@ -34,8 +34,7 @@ sub populate_tree {
   my $object      = $self->object && $self->object->get_sub_object;
   my $url_param   = $object && $object->parse_url_param;
   my $job         = $object && $object->get_requested_job;
-  my $result_cap  = $url_param && $url_param->{'ticket_name'} && $url_param->{'job_id'} ? "Results ($url_param->{'ticket_name'}/$url_param->{'job_id'})" : 'Results';
-  my $ticket_cap  = $url_param && $url_param->{'ticket_name'} ? "Ticket ($url_param->{'ticket_name'})" : 'Ticket';
+  my $result_cap  = $job ? $object->get_job_description($job) : 'Results';
 
   my $tools_node  = $self->create_node('Summary', 'Web Tools',
     [qw(
@@ -60,7 +59,7 @@ sub populate_tree {
   my $hide_sub_result_nodes = "$action/$function" eq 'Blast/Results';
   my $alignment_type        = $job && $object->can('get_alignment_component_name_for_job') ? $object->get_alignment_component_name_for_job($job) : '';
 
-  my $blast_ticket_node = $blast_node->append($self->create_subnode('Blast/Ticket', $ticket_cap,
+  my $blast_ticket_node = $blast_node->append($self->create_subnode('Blast/Ticket', 'Ticket',
     [qw(
       tickets         EnsEMBL::Web::Component::Tools::Blast::TicketsList
     )],
@@ -110,6 +109,25 @@ sub populate_tree {
       { 'availability' => 1, 'concise' => 'BLAST/BLAT Genomic Sequence', 'no_menu_entry' => $hide_sub_result_nodes }
     )
   );
+
+  ## Extra blast results
+  for (!$hide_result && $job ? $job->ticket->job : ()) {
+    my $job_id = $_->job_id;
+
+    next unless $_->result_count;
+
+    # keep the order of jobs preserved
+    if ($job->job_id eq $job_id) {
+      $blast_ticket_node->append($blast_results_node);
+      next;
+    }
+
+    $blast_ticket_node->append($self->create_subnode("Blast/Results/$job_id", $object->get_job_description($_), [], {
+      'availability'  => 1,
+      'raw'           => 1,
+      'url'           => $hub->url({qw(type Tools action Blast function Results), 'tl' => $object->create_url_param({'job_id' => $job_id})})
+    }));
+  }
 
   ## VEP specific nodes
   my $vep_node = $tools_node->append($self->create_subnode('VEP', 'Variant Effect Predictor',
