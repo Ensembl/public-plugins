@@ -31,8 +31,7 @@ sub content {
   my $hub       = $self->hub;
   my $function  = $hub->function || '';
   my $ticket    = grep({ $function eq $_ } $self->allowed_url_functions) ? $object->get_requested_ticket : undef;
-  my $jobs      = $ticket ? [ $object->get_requested_job || () ] : [];
-     $jobs      = $ticket->job if $ticket && !@$jobs;
+  my $jobs      = $ticket ? [ $object->parse_url_param->{'job_id'} ? $object->get_requested_job || () : $ticket->job ] : [];
   my $is_view   = $function eq 'View';
 
   my $heading = @$jobs ? $is_view
