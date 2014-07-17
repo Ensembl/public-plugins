@@ -33,8 +33,18 @@ sub job_summary_section {
   my $summary = $self->SUPER::job_summary_section($ticket, $job, $hit_count);
   my $desc    = $job->job_data->{'summary'};
 
-  !$hit_count                       and $_->parent_node->remove_child($_)                         for @{$summary->get_nodes_by_flag('job_results_link')};
-  $desc && $_->inner_HTML ne $desc  and $_->set_attributes({'title' => $desc, 'class' => '_ht'})  for @{$summary->get_nodes_by_flag('job_desc_span')};
+  # remove result links if no hit found
+  unless ($hit_count) {
+    $_->parent_node->remove_child($_) for @{$summary->get_nodes_by_flag('job_results_link')};
+  }
+
+  # provide default summary as helptip to the description if user provided a custom description
+  for (@{$summary->get_nodes_by_flag('job_desc_span')}) {
+    my $escaped_desc = quotemeta $desc;
+    if ($_->inner_HTML !~ /$escaped_desc/) {
+      $_->set_attributes({'title' => $desc, 'class' => '_ht'});
+    }
+  }
 
   return $summary;
 }
