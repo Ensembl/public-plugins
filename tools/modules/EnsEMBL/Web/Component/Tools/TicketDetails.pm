@@ -56,7 +56,7 @@ sub content_ticket {
 
 sub allowed_url_functions {
   ## List of url function that can display ticket details (this is to enable dynamic behaviour of displaying ticket details)
-  return qw(View);
+  return qw(View Results);
 }
 
 1;
