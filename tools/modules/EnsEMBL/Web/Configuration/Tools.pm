@@ -141,6 +141,7 @@ sub populate_tree {
 
   $vep_node->append($self->create_subnode('VEP/Results', $result_cap,
     [qw(
+      details     EnsEMBL::Web::Component::Tools::VEP::TicketDetails
       ressummary  EnsEMBL::Web::Component::Tools::VEP::ResultsSummary
       results     EnsEMBL::Web::Component::Tools::VEP::Results
     )],

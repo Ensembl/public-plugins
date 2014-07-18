@@ -43,7 +43,7 @@ sub content {
   my $name = $self->object->parse_url_param->{ticket_name};
 
   ## We have a ticket!
-  my $html = qq(<h3><a rel ="job_stats" class="toggle set_cookie open" href="#">Summary statistics for ticket $name:</a></h3>);
+  my $html = qq(<h3><a rel ="job_stats" class="toggle set_cookie open" href="#">Summary statistics:</a></h3>);
   $html .= '<input type="hidden" class="panel_type" value="VEPResultsSummary" />';
   $html .= '<div class="job_stats"><div class="toggleable">';
 
@@ -103,18 +103,7 @@ sub content {
   }
   $html .= '<div>'.join('', @inputs).'</div>';
   $html .= '</div>';
-  
-  $html .= sprintf('<a class="button edit-button" href="%s">Edit &amp; resubmit</a>',
-    $hub->url({
-      'type'      => 'Tools',
-      'action'    => 'VEP',
-      'function'  => 'Edit',
-      'tl'        => $ticket->ticket_name
-    }),
-    $self->img_url
-  );
-  
-  $html .= '<hr/></div></div>';
+  $html .= '</div></div>';
   
   return $html;
 }

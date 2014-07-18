@@ -29,11 +29,15 @@ use parent qw(
 sub content_ticket {
   my ($self, $ticket, $jobs) = @_;
   my $hub     = $self->hub;
-  my $div     = $self->dom->create_element('div');
+  my $is_view = ($hub->function || '') eq 'View';
+  my $table;
 
-  $div->append_child($self->job_details_table($_, [qw(status results edit delete)]))->set_attribute('class', 'plain-box') for @$jobs;
+  for (@$jobs) {
+    $table = $self->job_details_table($_, [$is_view ? qw(status results) : (), qw(edit delete)]);
+    $table->set_attribute('class', $is_view ? 'plain-box' : 'toggleable hidden _ticket_details');
+  }
 
-  return $div->render;
+  return $table ? $table->render : '';
 }
 
 1;
