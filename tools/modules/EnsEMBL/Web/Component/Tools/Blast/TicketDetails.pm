@@ -48,8 +48,4 @@ sub content_ticket {
   return $div->render;
 }
 
-sub allowed_url_functions {
-  return qw(View Results);
-}
-
 1;
