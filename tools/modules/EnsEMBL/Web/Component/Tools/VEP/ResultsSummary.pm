@@ -20,36 +20,33 @@ package EnsEMBL::Web::Component::Tools::VEP::ResultsSummary;
 
 use strict;
 use warnings;
-no warnings 'uninitialized';
 
+use HTML::Entities qw(encode_entities);
 use Bio::EnsEMBL::Variation::Utils::Constants qw(%OVERLAP_CONSEQUENCES);
 
-use parent qw(EnsEMBL::Web::Component::Tools::VEP);
+use parent qw(
+  EnsEMBL::Web::Component::Tools::ResultsSummary
+  EnsEMBL::Web::Component::Tools::VEP
+);
 
 sub content {
-  my $self   = shift;
-  my $hub    = $self->hub;
-  my $object = $self->object;
-  my $ticket = $object->get_requested_ticket;
-  
-  return '<div><h3>No ticket selected</h3></div>' unless defined $ticket;
-  
-  my $job    = ($ticket->job)[0];
-  
-  return '<div><h3>No job selected</h3></div>' unless defined $job;
-  
-  return $self->job_status($job) if $job->status ne 'done';
-  
-  my $name = $self->object->parse_url_param->{ticket_name};
+  my $self    = shift;
+  my $message = $self->SUPER::content;
 
-  ## We have a ticket!
-  my $html = qq(<h3><a rel ="job_stats" class="toggle set_cookie open" href="#">Summary statistics:</a></h3>);
+  return $message if $message;
+
+  my $hub     = $self->hub;
+  my $object  = $self->object;
+  my $ticket  = $object->get_requested_ticket;
+  my $job     = $ticket ? $ticket->job->[0] : undef;
+
+  my $html = qq(<h3><a rel="job_stats" class="toggle set_cookie open" href="#">Summary statistics:</a></h3>);
   $html .= '<input type="hidden" class="panel_type" value="VEPResultsSummary" />';
   $html .= '<div class="job_stats"><div class="toggleable">';
 
   my $stats = $self->job_statistics;
-  
-  my $section = 'General statistics';  
+
+  my $section = 'General statistics';
   my $general_stats_table = $self->new_table(
     [
       {key => 'category', title => 'Category'},
@@ -57,42 +54,41 @@ sub content {
     ],
     [map {{category => $_, count => $stats->{$section}->{$_}}} grep {$_ !~ /Lines/} @{$stats->{sort}->{$section}}]
   );
-  
+
   # make a hash of consequence colours
   my $cons =  \%OVERLAP_CONSEQUENCES;
 
   my $var_styles   = $hub->species_defs->colour('variation');
   my $colourmap    = $hub->colourmap;
   my %colours;
-  
+
   foreach my $con (keys %OVERLAP_CONSEQUENCES) {
     $colours{$con} = $colourmap->hex_by_name($var_styles->{lc $con}->{'default'}) || 'no_colour';
   }
-  
+
   # encode it in JSON to send to the JS
-  my $colour_json = $self->jsonify(\%colours);
-  $colour_json =~ s/\"/\'/g;
-  
+  my $colour_json = encode_entities($self->jsonify(\%colours));
+
   my @inputs = (
-    q{<input class="graph_config" type="hidden" name="legendpos" value="'east'" />},
-    q{<input class="graph_config" type="hidden" name="legendmark" value="'circle'" />},
-    q{<input class="graph_config" type="hidden" name="maxSlices" value="100" />},
-    q{<input class="graph_config" type="hidden" name="minPercent" value="0" />},
-    '<input class="graph_dimensions" type="hidden" value="[65,85,60]" />',
-    '<input class="js_param" type="hidden" name="cons_colours" value="'.$colour_json.'" />'
+    q(<input class="graph_config" type="hidden" name="legendpos" value="'east'" />),
+    q(<input class="graph_config" type="hidden" name="legendmark" value="'circle'" />),
+    q(<input class="graph_config" type="hidden" name="maxSlices" value="100" />),
+    q(<input class="graph_config" type="hidden" name="minPercent" value="0" />),
+    q(<input class="graph_dimensions" type="hidden" value="[65,85,60]" />),
+    qq(<input class="js_param" type="hidden" name="cons_colours" value="$colour_json" />)
   );
-  
+
   my @pie_charts = ('Consequences (all)', 'Coding consequences');
   $html .= '<div class="population_genetics_pie">';
-  $html .= '<div style="float:left; margin-right: 5px;">'.$general_stats_table->render.'</div>';
-  
+  $html .= '<div style="float:left; margin-right: 16px;">'.$general_stats_table->render.'</div>';
+
   for my $i(0..$#pie_charts) {
     $section = $pie_charts[$i];
     my @values = map { sprintf("[%s,'%s']", $stats->{$section}->{$_}, $_) } sort {$stats->{$section}->{$b} <=> $stats->{$section}->{$a}} keys %{$stats->{$section}};
     my $values_string = join(",", @values);
     next unless $values_string;
-    push @inputs, qq{<input type="hidden" class="graph_data" value="[$values_string]" />};
-    
+    push @inputs, qq(<input type="hidden" class="graph_data" value="[$values_string]" />);
+
     $html .= sprintf('
       <div class="pie_chart_holder">
         <div class="pie_chart" title="%s">
@@ -104,19 +100,8 @@ sub content {
   $html .= '<div>'.join('', @inputs).'</div>';
   $html .= '</div>';
   $html .= '</div></div>';
-  
+
   return $html;
-}
-
-sub job_status {
-  my $self = shift;
-  my $job  = shift;
-  
-  my $div = $self->dom->create_element('div');
-  $div->append_child($self->job_details_table($job, [qw(status results edit delete)]))->set_attribute('class', 'plain-box');
-
-  return $div->render;
-  
 }
 
 1;

@@ -21,7 +21,10 @@ package EnsEMBL::Web::Component::Tools::Blast::ResultsSummary;
 use strict;
 use warnings;
 
-use parent qw(EnsEMBL::Web::Component::Tools::Blast);
+use parent qw(
+  EnsEMBL::Web::Component::Tools::ResultsSummary
+  EnsEMBL::Web::Component::Tools::Blast
+);
 
 sub _init {
   my $self = shift;
@@ -30,21 +33,16 @@ sub _init {
 }
 
 sub content {
-  my $self        = shift;
-  my $hub         = $self->hub;
-  my $object      = $self->object;
-  my $job         = $object->get_requested_job({'with_all_results' => 1});
-  my $url_param   = $object->create_url_param;
-  my $status      = $job && $job->dispatcher_status;
+  my $self    = shift;
+  my $message = $self->SUPER::content;
 
-  # invalid job id
-  return $self->warning_panel('Job not found', 'The job you requested was not found. It has either been expired, or you clicked on an invalid link.') unless $job;
+  # display the message if something goes wrong
+  return $message if $message;
 
-  # job failed
-  return $self->info_panel('No results found', 'The job has failed.') if $status eq 'failed';
-
-  # job still running
-  return $self->info_panel('No results found', 'The job is not done yet') if $status ne 'done';
+  my $hub       = $self->hub;
+  my $object    = $self->object;
+  my $job       = $object->get_requested_job({'with_all_results' => 1});
+  my $url_param = $object->create_url_param;
 
   # no results found
   return $self->info_panel('No results found', sprintf('If you believe that there should be a match to your query sequence please adjust the configuration parameters you selected and <a href="%s">resubmit the search</a>.', $hub->url({'function' => 'Edit', 'tl' => $url_param})))
