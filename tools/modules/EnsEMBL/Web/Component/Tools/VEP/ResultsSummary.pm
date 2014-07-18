@@ -80,7 +80,7 @@ sub content {
 
   my @pie_charts = ('Consequences (all)', 'Coding consequences');
   $html .= '<div class="population_genetics_pie">';
-  $html .= '<div style="float:left; margin-right: 16px;">'.$general_stats_table->render.'</div>';
+  $html .= '<div style="float:left;" class="right-margin">'.$general_stats_table->render.'</div>';
 
   for my $i(0..$#pie_charts) {
     $section = $pie_charts[$i];
@@ -90,7 +90,7 @@ sub content {
     push @inputs, qq(<input type="hidden" class="graph_data" value="[$values_string]" />);
 
     $html .= sprintf('
-      <div class="pie_chart_holder">
+      <div class="pie_chart_holder right-margin">
         <div class="pie_chart" title="%s">
           <h4>%s</h4>
           <div id="graphHolder%i" style="width:350px;height:183px"></div>
