@@ -80,7 +80,7 @@ sub get_job_summary {
   });
 
   if ($job_status eq 'done' && grep($_ eq 'results', @$links)) {
-    $job_status_div->last_child->append_child('a', $self->_result_link_params($job, $url_param));
+    $job_status_div->last_child->append_child('a', $self->_results_link_params($job, $url_param));
   }
 
   my $icons = {
