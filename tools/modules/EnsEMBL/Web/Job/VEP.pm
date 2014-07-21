@@ -89,6 +89,7 @@ sub prepare_to_dispatch {
     # MAFs in human
     if ($species eq 'Homo_sapiens') {
       ($job_data->{'gmaf'} // '') eq 'yes' and $vep_configs->{$_} = 'yes' for qw(gmaf maf_1kg maf_esp);
+      $vep_configs->{'pubmed'} = $job_data->{'pubmed'} if $job_data->{'pubmed'};
     }
   }
 

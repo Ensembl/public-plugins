@@ -429,6 +429,14 @@ sub _build_identifiers {
           'value'         => 'yes',
           'checked'       => 0
         }]
+      }), $fieldset->add_field({
+        'type' => 'checkbox',
+        'name' => 'pubmed',
+        'label' => 'PubMed IDs for citations of co-located variants',
+        'helptip' => 'Report the PubMed IDs of any publications that cite this variant',
+        'value' => 'yes',
+        'checked' => 1,
+        'field_class'   => [qw(_stt_yes _stt_allele)],
       })]
     });
   }
