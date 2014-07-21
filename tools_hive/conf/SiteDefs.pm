@@ -74,7 +74,8 @@ sub update_conf {
   };
   $SiteDefs::ENSEMBL_VEP_SCRIPT                 = 'ensembl-tools/scripts/variant_effect_predictor/variant_effect_predictor.pl';
                                                                                                     # location of the VEP script accessible to the local machine or LSF host running the job
-
+  $SiteDefs::ENSEMBL_VEP_TO_WEB_SCRIPT          = 'ensembl-tools/scripts/variant_effect_predictor/vep_to_web.pl';
+                                                                                                    # location of the VEP script accessible to the local machine or LSF host to parse VCF results
 
   # Assembly Converter configs
   $SiteDefs::ENSEMBL_AC_LSF_QUEUE              = 'AC';                                            # LSF queue for AC jobs, if running on farm

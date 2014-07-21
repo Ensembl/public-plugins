@@ -29,6 +29,13 @@ use EnsEMBL::Web::Exceptions;
 use EnsEMBL::Web::SystemCommand;
 use EnsEMBL::Web::Utils::FileHandler qw(file_get_contents);
 
+sub fetch_input {
+  my $self = shift;
+  $self->param_required($_) for qw(perl_bin script work_dir config job_id vep_to_web_script);
+
+  -X $_ or throw exception('HiveException', "Script $_ doesn't exist, or is not executable.") for map $self->param($_), qw(script vep_to_web_script);
+}
+
 sub run {
   my $self = shift;
 
@@ -43,11 +50,42 @@ sub run {
   $options->{"--$_"}  = sprintf '"%s/%s"', $work_dir, delete $config->{$_} for qw(input_file output_file stats_file);
   $options->{"--$_"}  = $config->{$_} eq 'yes' ? '' : $config->{$_} for grep { defined $config->{$_} && $config->{$_} ne 'no' } keys %$config;
 
-  my $command         = EnsEMBL::Web::SystemCommand->new($self, "$perl_bin $script", $options)->execute({'log_file' => $log_file});
+  # save the result file name for later use
+  $self->param('result_file', $options->{'--output_file'} =~ s/(^\")|(\"$)//rg);
 
-  return unless $command->error_code;
+  my $command = EnsEMBL::Web::SystemCommand->new($self, "$perl_bin $script", $options)->execute({'log_file' => $log_file});
 
-  throw exception('HiveException', join('', file_get_contents($log_file)));
+  throw exception('HiveException', join('', file_get_contents($log_file))) if $command->error_code;
+
+  return 1;
+}
+
+sub write_output {
+  my $self        = shift;
+  my $job_id      = $self->param('job_id');
+  my $perl_bin    = $self->param('perl_bin');
+  my $script      = $self->param('vep_to_web_script');
+  my $result_file = $self->param('result_file');
+  my $result_web  = "$result_file.web";
+
+  throw exception('HiveException', "Result file doesn't exist.") unless -r $result_file;
+
+  my $command = EnsEMBL::Web::SystemCommand->new($self, "$perl_bin $script $result_file")->execute({'output_file' => $result_web, 'log_file' => "$result_web.log"});
+
+  throw exception('HiveException', sprintf "Error reading the web results file:\n%s", join('', file_get_contents("$result_web.log"))) unless -r $result_web;
+
+  my @result_keys = qw(chr start end allele SO var_name cons);
+  my @rows;
+
+  for (file_get_contents($result_web)) {
+    chomp;
+    my @cols = split /\t/, $_;
+    push @rows, { map { $result_keys[$_] => $cols[$_] } 0..$#result_keys };
+  };
+
+  $self->save_results($job_id, {}, \@rows);
+
+  return 1;
 }
 
 1;

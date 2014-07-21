@@ -48,6 +48,7 @@ sub pipeline_analyses {
     '-parameters'           => {
       'ticket_db'             => $conf->o('ticket_db'),
       'script'                => $conf->o('ensembl_codebase').'/'.$species_defs->ENSEMBL_VEP_SCRIPT,
+      'vep_to_web_script'     => $conf->o('ensembl_codebase').'/'.$species_defs->ENSEMBL_VEP_TO_WEB_SCRIPT,
       'script_options'        => { map { defined $script_options->{$_} ? ( $_ => $script_options->{$_} ) : () } keys %$script_options }, # filter out the undef values
       'perl_bin'              => $perl_bin
     },
