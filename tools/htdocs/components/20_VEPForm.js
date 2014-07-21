@@ -19,6 +19,8 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
   init: function() {
     this.base();
     this.editExisting();
+
+    this.elLk.speciesDropdown = this.elLk.form.find('._sdd');
   },
 
   populateForm: function(jobsData) {
@@ -35,6 +37,8 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
           : 'You previously uploaded a compressed file to run this job.'
         ) + '</p>');
       }
+
+      this.elLk.speciesDropdown.speciesDropdown({refresh: true});
     }
   },
 
@@ -43,7 +47,8 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
    * Resets the form, ready to accept next job input
    */
     this.base.apply(this, arguments);
-    this.elLk.form.find('._download_link').remove().end().find('._sdd').speciesDropdown({refresh: true});
+    this.elLk.form.find('._download_link').remove();
+    this.elLk.speciesDropdown.speciesDropdown({refresh: true});
     this.resetSelectToToggle();
   }
 });
