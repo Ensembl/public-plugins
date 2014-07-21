@@ -37,7 +37,7 @@ sub new {
 
   $self->{'_available_tools'} = [ map dynamic_require($_), (
     $sd->ENSEMBL_BLAST_ENABLED ? ('EnsEMBL::Web::ToolsPipeConfig::Blast', 'EnsEMBL::Web::ToolsPipeConfig::Blat') : (),
-    $sd->ENSEMBL_VEP_ENABLED   ? 'EnsEMBL::Web::ToolsPipeConfig::VEP' : ()
+    $sd->ENSEMBL_VEP_ENABLED   ? 'EnsEMBL::Web::ToolsPipeConfig::VEP' : (),
     $sd->ENSEMBL_AC_ENABLED    ? 'EnsEMBL::Web::ToolsPipeConfig::AssemblyConverter' : (),
   ) ];
 
