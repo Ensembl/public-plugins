@@ -45,7 +45,7 @@ sub init_genoverse {
   $self->modify_configs([ 'variation_feature_structural_smaller'         ], { genoverse => { type   => 'StructuralVariation', bin_size => 1e6, threshold => 5e6   } });
   $self->modify_configs([ map "${_}structural_variation", '', 'somatic_' ], { genoverse => { type   => 'StructuralVariation',                  threshold => 5e6   } });
   $self->modify_configs([ 'scalebar', 'ruler', 'draggable', 'info'       ], { genoverse => { remove => 1                                                          } });
-  
+  $self->modify_configs([ 'gencode'                                      ], { genoverse => { type   => 'Gene'                                                     } });  
   my $info  = $self->get_node('information');
   my $order = 1e6;
   

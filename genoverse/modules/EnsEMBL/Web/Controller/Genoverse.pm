@@ -177,6 +177,10 @@ sub fetch_features_generic {
   return \@features;
 }
 
+sub fetch_gencode {
+  return shift->fetch_transcript(@_);
+}
+
 sub fetch_transcript {
   my ($self, $slice, $image_config, $function, $node) = @_;
   my $hub       = $self->hub;
