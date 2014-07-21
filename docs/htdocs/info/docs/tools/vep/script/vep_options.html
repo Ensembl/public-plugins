@@ -530,9 +530,10 @@ host          useastdb.ensembl.org</pre>
         Add <a rel="external" href="http://www.hgvs.org/mutnomen/"
         target="_blank">HGVS</a> nomenclature based on Ensembl stable
         identifiers to the output. Both coding and protein sequence
-        names are added where appropriate. Currently it is not possible
-        to generate HGVS identifiers from the cache; a database
-        connection must be made. <i>Not used by default</i>
+        names are added where appropriate. To generate HGVS identifiers when
+        using <a href="#opt_cache">--cache</a> or <a
+        href="#opt_offline">--offline</a> you must use a FASTA file and <a
+        href="#opt_fasta">--fasta</a>. <i>Not used by default</i>
       </td>
     </tr>
     <tr id="opt_protein">
