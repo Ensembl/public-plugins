@@ -80,8 +80,8 @@ sub save_results {
   ##  - location  : Temporary file location from where the file needs to be moved to work dir (only works if 'content' key is missing)
   ##  - delete    : Flag to tell whether to delete the temporary file after copying the file to the new location (only if 'location' key is provided)
   ##  - gzip      : Flag if on, will gzip the file (only works if 'content' key is provided)
-  ## @params List of hashrefs, each goes in result_data column of the individual result table row
-  my ($self, $job_id, $files, @result_data) = @_;
+  ## @params Arrayref of hashrefs, each goes in result_data column of the individual result table row
+  my ($self, $job_id, $files, $result_data) = @_;
 
   my $work_dir    = $self->work_dir;
   my $result_file = $self->_result_file($job_id);
@@ -121,16 +121,16 @@ sub save_results {
   }
 
   # Now save the result_data to result table
-  if (@result_data) {
+  if (@$result_data) {
 
     my $ticket_db   = $self->param_required('ticket_db');
     my $ticket_dbh  = DBI->connect(sprintf('dbi:mysql:%s:%s:%s', $ticket_db->{'-dbname'}, $ticket_db->{'-host'}, $ticket_db->{'-port'}), $ticket_db->{'-user'}, $ticket_db->{'-pass'}, { 'PrintError' => 0 });
 
     if ($ticket_dbh) {
       my $now = $self->_get_time_now;
-      my $sth = $ticket_dbh->prepare('INSERT INTO `result` (`job_id`, `result_data`, `created_at`) values ' . join(',', map {'(?,?,?)'} @result_data));
+      my $sth = $ticket_dbh->prepare('INSERT INTO `result` (`job_id`, `result_data`, `created_at`) values ' . join(',', map {'(?,?,?)'} @$result_data));
 
-      $sth->execute(map {($job_id, _to_ensorm_datastructure_string($_ || {}), $now)} @result_data);
+      $sth->execute(map {($job_id, _to_ensorm_datastructure_string($_ || {}), $now)} @$result_data);
     } else {
 
       throw exception ('HiveException', "Ticket database: Connection could not be created ($DBI::errstr)");

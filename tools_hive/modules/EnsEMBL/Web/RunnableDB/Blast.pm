@@ -207,7 +207,7 @@ sub write_output {
     throw exception('HiveException', $_->message(1));
   };
 
-  $self->save_results($job_id, {}, @{ $module->new($self)->parse($result_file) });
+  $self->save_results($job_id, {}, $module->new($self)->parse($result_file));
 
   return 1;
 }
