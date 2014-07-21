@@ -21,6 +21,8 @@ package EnsEMBL::Web::Job::VEP;
 use strict;
 use warnings;
 
+use EnsEMBL::Web::VEPConstants qw(REST_DISPATCHER_FILESIZE_LIMIT);
+
 use parent qw(EnsEMBL::Web::Job);
 
 sub prepare_to_dispatch {
@@ -104,6 +106,16 @@ sub prepare_to_dispatch {
   }
 
   return { 'species' => $vep_configs->{'species'}, 'work_dir' => $rose_object->job_dir, 'config' => $vep_configs };
+}
+
+sub get_dispatcher_class {
+  ## For smaller VEP jobs, we use the VEP REST API dispatcher, otherwise whatever is configured in SiteDefs.
+  my ($self, $data) = @_;
+
+  my $filesize  = -s join '/', $data->{'work_dir'}, $data->{'config'}->{'input_file'};
+  my $limit     = REST_DISPATCHER_FILESIZE_LIMIT || 0;
+
+  return $limit > $filesize ? 'VEPRest' : undef;
 }
 
 sub _species_details {

@@ -22,7 +22,7 @@ use strict;
 use warnings;
 
 use Exporter qw(import);
-our @EXPORT_OK = qw(INPUT_FORMATS CONFIG_SECTIONS);
+our @EXPORT_OK = qw(INPUT_FORMATS CONFIG_SECTIONS REST_DISPATCHER_FILESIZE_LIMIT REST_DISPATCHER_SERVER_ENDPOINT);
 
 sub INPUT_FORMATS {
   return [
@@ -48,6 +48,15 @@ sub CONFIG_SECTIONS {
     'title'     => 'Filtering options',
     'caption'   => 'Pre-filter results by frequency or consequence type'
   }];
+}
+
+sub REST_DISPATCHER_SERVER_ENDPOINT {
+  return 'http://rest.ensembl.org/vep/:species/region/';
+}
+
+sub REST_DISPATCHER_FILESIZE_LIMIT {
+  ## Size of the input file in bytes below which job should be processed by using the REST server
+  return 0; # disabled
 }
 
 1;
