@@ -74,7 +74,7 @@ sub write_output {
 
   throw exception('HiveException', sprintf "Error reading the web results file:\n%s", join('', file_get_contents("$result_web.log"))) unless -r $result_web;
 
-  my @result_keys = qw(chr start end allele SO var_name cons);
+  my @result_keys = qw(chr start end allele_string strand variation_name consequence_type);
   my @rows;
 
   for (file_get_contents($result_web)) {
