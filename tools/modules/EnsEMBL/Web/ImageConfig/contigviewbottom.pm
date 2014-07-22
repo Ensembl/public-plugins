@@ -31,12 +31,16 @@ sub init {
   my $self = shift;
   $self->PREV::init(@_);
 
-  # display the blast track if required
+  # display the tools related track if required
   if (my $object = $self->hub->core_object('Tools')) {
-    $object   = $object->get_sub_object('Blast');
-    my $job   = $object->get_requested_job({'with_all_results' => 1});
+    my $job     = $object->get_requested_job({'with_all_results' => 1});
+    my $results = $job && $job->result || [];
 
-    if ($job && @{$job->result}) {
+    return unless @$results;
+
+    my $ticket_type = $job->ticket->ticket_type_name;
+
+    if ($ticket_type eq 'Blast') {
       $self->add_track('sequence', 'blast', 'BLAST/BLAT hits', 'BlastHit', {
         'description' => 'Track displaying BLAST/BLAT hits for the selected job',
         'display'     => 'normal',
@@ -49,6 +53,15 @@ sub init {
         'display'     => 'normal',
         'strand'      => 'r',
         'name'        => 'BLAST/BLAT Legend',
+      });
+
+    } elsif ($ticket_type eq 'VEP') {
+      $self->add_track('sequence', 'vep_job', 'VEP result', 'VEPSequence', { # TODO - move it to variation menu
+        'description' => 'Track displaying sequence variant for the VEP job',
+        'display'     => 'normal',
+        'strand'      => 'f',
+        'colourset'   => 'feature',
+        'sub_type'    => 'variant',
       });
     }
   }

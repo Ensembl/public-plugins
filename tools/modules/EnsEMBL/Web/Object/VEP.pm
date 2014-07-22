@@ -73,4 +73,31 @@ sub result_files {
   return $self->{'_results_files'};
 }
 
+sub get_all_variants_in_slice_region {
+  ## Gets all the result variants for the given job in the given slice region
+  ## @param Job object
+  ## @param Slice object
+  ## @return Array of result data hashrefs
+  my ($self, $job, $slice) = @_;
+
+  my $s_name    = $slice->seq_region_name;
+  my $s_start   = $slice->start;
+  my $s_end     = $slice->end;
+
+  return [ grep {
+
+    my $chr   = $_->{'chr'};
+    my $start = $_->{'start'};
+    my $end   = $_->{'end'};
+
+    $s_name eq $chr && (
+      $start >= $s_start && $end <= $s_end ||
+      $start < $s_start && $end <= $s_end && $end > $s_start ||
+      $start >= $s_start && $start <= $s_end && $end > $s_end ||
+      $start < $s_start && $end > $s_end && $start < $s_end
+    )
+
+  } map $_->result_data, $job->result ];
+}
+
 1;
