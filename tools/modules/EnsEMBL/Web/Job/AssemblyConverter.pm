@@ -29,17 +29,16 @@ sub prepare_to_dispatch {
   my $rose_object = $self->rose_object;
   my $job_data    = $rose_object->job_data;
   my $species     = $job_data->{'species'};
-  my $sp_details  = $self->_species_details($species);
-  my $converter_configs = {};
 
-  $converter_configs->{'format'}  = $job_data->{'format'};
-  $converter_configs->{'species'} = lc $species;
+  my $converter_configs = {};
+  $converter_configs->{'format'}  = lc($job_data->{'format'});
 
   # i/o files
+  $converter_configs->{'chain_file'}  = $job_data->{'chain_file'};
   $converter_configs->{'input_file'}  = $job_data->{'input_file'};
   $converter_configs->{'output_file'} = 'output_'. $job_data->{'input_file'};
 
-  return { 'species' => $converter_configs->{'species'}, 'work_dir' => $rose_object->job_dir, 'config' => $converter_configs };
+  return { 'species' => $converter_configs->{'species'}, 'work_dir' => $rose_object->job_dir, 'config' => $converter_configs, 'script_options'};
 }
 
 1;

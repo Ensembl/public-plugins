@@ -16,7 +16,7 @@ limitations under the License.
 
 =cut
 
-package EnsEMBL::Web::Ticket::VEP;
+package EnsEMBL::Web::Ticket::AssemblyConverter;
 
 use strict;
 use warnings;
@@ -26,7 +26,7 @@ use List::Util qw(first);
 use EnsEMBL::Web::Exceptions;
 use EnsEMBL::Web::Command::UserData;
 use EnsEMBL::Web::TmpFile::Text;
-use EnsEMBL::Web::Tools::FileHandler qw(file_get_contents);
+use EnsEMBL::Web::Utils::FileHandler qw(file_get_contents);
 use EnsEMBL::Web::Job::AssemblyConverter;
 
 use parent qw(EnsEMBL::Web::Ticket);
@@ -78,14 +78,13 @@ sub init_from_user_input {
   $file_name    = $file_name =~ s/.*\///r;
 
   # check file format is matching
-  my $detected_format;
-  first { m/^[^\#]/ && ($detected_format = detect_format($_)) } file_get_contents($file_path);
-  throw exception('InputError', "Selected file format ($format) does not match detected format ($detected_format)") unless $format eq $detected_format;
+  ## TODO VEP can do this - need similar generic functionality in EnsEMBL::IO
 
   my $job_data = { map { my @val = $hub->param($_); $_ => @val > 1 ? \@val : $val[0] } grep { $_ !~ /^text/ } $hub->param };
 
   $job_data->{'species'}    = $species;
   $job_data->{'input_file'} = $file_name;
+  $job_data->{'chain_file'} = $hub->param('mapping').'.over.chain.gz';
 
   $self->add_job(EnsEMBL::Web::Job::AssemblyConverter->new($self, {
     'job_desc'    => $description,

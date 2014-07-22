@@ -18,43 +18,41 @@ limitations under the License.
 
 package EnsEMBL::Web::ToolsPipeConfig::AssemblyConverter;
 
-### Provides configs for Assembly Converter for tools pipeline
+### Provides configs for CrossMap for tools pipeline
 
 use strict;
 use warnings;
 
+use constant AC_RESOURCE_NAME => 'ac_local';
+
 sub default_options {
-  return {};
+  my ($class, $conf) = @_;
+  my $sd = $conf->species_defs;
+  return { 'AC_bin_path' => $sd->ASSEMBLY_CONVERTER_BIN_PATH };
 }
 
 sub resource_classes {
   my ($class, $conf) = @_;
-  my $sd          = $conf->species_defs;
-  my $lsf_queue   = $sd->ENSEMBL_AC_LSF_QUEUE;
-  my $lsf_timeout = $sd->ENSEMBL_AC_LSF_TIMEOUT;
-  return {$lsf_queue => { 'LSF' => $lsf_timeout ? "-q $lsf_queue -W $lsf_timeout" : "-q $lsf_queue" }};
+  return {$class->AC_RESOURCE_NAME => { 'LOCAL' => ''}};
 }
 
 sub pipeline_analyses {
   my ($class, $conf) = @_;
 
-  my $species_defs    = $conf->species_defs;
-  my $script_options  = $species_defs->ENSEMBL_AC_SCRIPT_DEFAULT_OPTIONS;
-  my $perl_bin        = join ' ', $species_defs->ENSEMBL_TOOLS_PERL_BIN, '-I', $species_defs->ENSEMBL_TOOLS_BIOPERL_DIR, map(sprintf('-I %s/%s', $species_defs->ENSEMBL_LSF_CODE_LOCATION, $_), @{$species_defs->ENSEMBL_TOOLS_LIB_DIRS});
+  my %default_options = map { $_ => $conf->o($_) } keys %{$class->default_options($conf)}; # pass all default_options to hive
+
+  my $sd = $conf->species_defs;
 
   return [{
-    '-logic_name'           => 'VEP',
+    '-logic_name'           => 'AssemblyConverter',
     '-module'               => 'EnsEMBL::Web::RunnableDB::AssemblyConverter',
     '-parameters'           => {
       'ticket_db'             => $conf->o('ticket_db'),
-      'script'                => $conf->o('ensembl_codebase').'/'.$species_defs->ENSEMBL_AC_SCRIPT,
-      'script_options'        => { map { defined $script_options->{$_} ? ( $_ => $script_options->{$_} ) : () } keys %$script_options }, # filter out the undef values
-      'perl_bin'              => $perl_bin
+      %default_options
     },
-    '-analysis_capacity'    => $species_defs->ENSEMBL_AC_ANALYSIS_CAPACITY || 12,
-    '-meadow_type'          => 'LSF',
-    '-rc_name'              => $conf->species_defs->ENSEMBL_AC_LSF_QUEUE,
+    '-rc_name'              => $class->AC_RESOURCE_NAME,
     '-max_retry_count'      => 0,
+    '-meadow_type'          => 'LOCAL',
     '-failed_job_tolerance' => 100
   }];
 }
@@ -62,10 +60,10 @@ sub pipeline_analyses {
 sub pipeline_validate {
   my ($class, $conf) = @_;
 
-  my $species_defs = $conf->species_defs;
   my @errors;
 
-  # TODO
+  my $bin_path = $conf->o('AC_bin_path');
+  push @errors, "Binary file $bin_path either seems to be missing or not executable." unless -x $bin_path;
 
   return @errors;
 }
