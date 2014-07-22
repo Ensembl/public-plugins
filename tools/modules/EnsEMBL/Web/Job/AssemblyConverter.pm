@@ -38,7 +38,6 @@ sub prepare_to_dispatch {
   # i/o files
   $converter_configs->{'input_file'}  = $job_data->{'input_file'};
   $converter_configs->{'output_file'} = 'output_'. $job_data->{'input_file'};
-  $converter_configs->{'stats_file'}  = 'stats.txt';
 
   return { 'species' => $converter_configs->{'species'}, 'work_dir' => $rose_object->job_dir, 'config' => $converter_configs };
 }
