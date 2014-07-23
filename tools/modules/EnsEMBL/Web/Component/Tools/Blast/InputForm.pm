@@ -209,16 +209,17 @@ sub content {
 
     while (my ($element_name, $element_params) = splice @$config_field_group, 0, 2) {
 
-      my $label         = delete $element_params->{'label'} // '';
+      my $field_params = { map { exists $element_params->{$_} ? ($_ => delete $element_params->{$_}) : () } qw(field_class label helptip notes head_notes inline) };
+      $field_params->{'elements'} = [];
+
       my %field_class;
-      my @elements;
 
       ## add one element for each with its own default value for each valid search type
       foreach my $search_type_value (@search_types) {
         for ($search_type_value, 'all') {
           if (exists $config_defaults->{$_}{$element_name}) {
             my $element_class = $stt_classes{$search_type_value};
-            push @elements, {
+            push @{$field_params->{'elements'}}, {
               %{$self->deepcopy($element_params)},
               'name'          => "${search_type_value}__${element_name}",
               'value'         => $config_defaults->{$_}{$element_name},
@@ -231,7 +232,7 @@ sub content {
         }
       }
 
-      my $field = $fieldset->add_field({ 'label' => $label, 'elements' => \@elements});
+      my $field = $fieldset->add_field($field_params);
       $field->set_attribute('class', [ keys %field_class ]) unless keys %field_class == keys %stt_classes; # if all classes are there, this field is actually never hidden.
     }
 
