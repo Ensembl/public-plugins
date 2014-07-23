@@ -61,7 +61,7 @@ sub content {
   $input_fieldset->add_field({
       'type'          => 'dropdown',
       'name'          => 'format',
-      'label'         => sprintf('Input file format (<a href="%s#input" class="popup">details</a>)', $hub->url({
+      'label'         => sprintf('Input file format)', $hub->url({
             'type'          => 'Help',
             'action'        => 'View',
             'id'            => { $sd->multiX('ENSEMBL_HELP') }->{'Tools/AssemblyConverter/AssemblyConverter_formats'},
