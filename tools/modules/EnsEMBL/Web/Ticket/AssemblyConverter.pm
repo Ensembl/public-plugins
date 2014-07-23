@@ -59,7 +59,7 @@ sub init_from_user_input {
     $description = $hub->param('name') || ($method eq 'text' ? 'pasted data' : ($method eq 'url' ? 'data from URL' : sprintf("%s", $hub->param('file'))));
 
     # upload from file/text/url
-    my $response = EnsEMBL::Web::Command::UserData->new({'object' => $self->object, 'hub' => $hub})->upload($method); # FIXME - upload method needs to be taken out of EnsEMBL::Web::Command::UserData
+    my $response = EnsEMBL::Web::Command::UserData->new({'object' => $self->object, 'hub' => $hub})->upload($method, 'no_attach'); # FIXME - upload method needs to be taken out of EnsEMBL::Web::Command::UserData
 
     throw exception('InputError', $response && $response->{'error'} ? $response->{'error'} : "Upload failed: $response->{'filter_code'}") unless $response && $response->{'code'};
 
@@ -80,7 +80,7 @@ sub init_from_user_input {
   # check file format is matching
   ## TODO VEP can do this - need similar generic functionality in EnsEMBL::IO
 
-  my $job_data = { map { my @val = $hub->param($_); $_ => @val > 1 ? \@val : $val[0] } grep { $_ !~ /^text/ } $hub->param };
+  my $job_data = { map { my @val = $hub->param($_); $_ => @val > 1 ? \@val : $val[0] } grep { $_ !~ /^text|file/ } $hub->param };
 
   $job_data->{'species'}    = $species;
   $job_data->{'input_file'} = $file_name;

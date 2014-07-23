@@ -22,47 +22,16 @@ use strict;
 use warnings;
 
 use EnsEMBL::Web::TmpFile::ToolsOutput;
-use EnsEMBL::Web::Utils::FileHandler qw(file_get_contents);
 
 use parent qw(EnsEMBL::Web::Object::Tools);
 
-
 sub handle_download {
-
-}
-
-=pod
-
-sub get_edit_jobs_data {
-  ## Abstract method implementation
-  my $self        = shift;
-  my $hub         = $self->hub;
-  my $ticket      = $self->get_requested_ticket   or return [];
-  my $job         = shift @{ $ticket->job || [] } or return [];
-  my $job_data    = $job->job_data->raw;
-  my $input_file  = sprintf '%s/%s', $job->job_dir, $job_data->{'input_file'};
-  my $format      = $job_data->{"format_$job_data->{'species'}"};
-
-  if (-T $input_file && $input_file !~ /\.gz$/ && $input_file !~ /\.zip$/) { # TODO - check if the file is binary!
-    if (-s $input_file <= 1024) {
-      $job_data->{"text_$format"} = join('', file_get_contents($input_file));
-    } else {
-      my $dir_loc   = $hub->species_defs->ENSEMBL_TOOLS_TMP_DIR;
-      my $file_loc  = $input_file =~ s/^$dir_loc\/(temporary|persistent)\/VEP\///r;
-
-      $job_data->{'input_file_type'}  = 'text';
-      $job_data->{'input_file_url'}   = sprintf('/%s/vep_download?file=%s;name=%s;persistent=%s;download=1', $hub->species, $file_loc, $file_loc =~ s/.*\///r, $ticket->owner_type eq 'user' ? 1 : 0);
-    }
-  } else {
-    $job_data->{'input_file_type'} = 'binary';
-  }
-
-  return [ $job_data ];
-}
-
-sub result_files {
-  ## Gets the result stats and ouput files
-  my $self = shift;
+### Retrieves file contents and outputs direct to Apache
+### request, so that the browser will download it instead
+### of displaying it in the window.
+### Uses Controller::Download, via url /Download/DataExport/
+  my ($self, $r) = @_;
+  my $hub = $self->hub;
 
   if (!$self->{'_results_files'}) {
     my $ticket      = $self->get_requested_ticket or return;
@@ -70,14 +39,27 @@ sub result_files {
     my $job_config  = $job->dispatcher_data->{'config'};
     my $job_dir     = $job->job_dir;
 
-    $self->{'_results_files'} = {
-      'output_file' => EnsEMBL::Web::TmpFile::VcfTabix->new('filename' => "$job_dir/$job_config->{'output_file'}"),
-      'stats_file'  => EnsEMBL::Web::TmpFile::ToolsOutput->new('filename' => "$job_dir/$job_config->{'stats_file'}")
-    };
-  }
+    my $filename    = $job_config->{'output_file'};
+    my $path        = $job_dir.'/'.$filename;
 
-  return $self->{'_results_files'};
+    ## Strip double dots to prevent downloading of files outside tmp directory
+    $path =~ s/\.\.//g;
+    ## Remove any remaining illegal characters
+    $path =~ s/[^\w|-|\.|\/]//g;
+
+    my $tmpfile = EnsEMBL::Web::TmpFile::ToolsOutput->new('filename' => $path); 
+
+    if ($tmpfile->exists) {
+      my $content = $tmpfile->content;
+
+      $r->headers_out->add('Content-Type'         => 'text/plain');
+      $r->headers_out->add('Content-Length'       => length $content);
+      $r->headers_out->add('Content-Disposition'  => sprintf 'attachment; filename=%s', $filename);
+
+      print $content;
+    }
+    else { warn ">>> PATH NOT RECOGNISED: $path"; }
+  }
 }
-=cut
 
 1;
