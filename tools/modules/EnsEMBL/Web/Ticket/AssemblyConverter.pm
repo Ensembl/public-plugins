@@ -74,7 +74,7 @@ sub init_from_user_input {
   # finalise input file path and description
   $file_path    = EnsEMBL::Web::TmpFile::Text->new('filename' => $file_name)->{'full_path'}; # absolute path of the temporary input file
   $description  = "Assembly conversion of $description in $species";
-  $file_name    = "$file_name.txt" if $file_name !~ /\./ && -T $file_path;
+  $file_name    .= '.'.lc($format) if $file_name !~ /\./ && -T $file_path;
   $file_name    = $file_name =~ s/.*\///r;
 
   # check file format is matching
