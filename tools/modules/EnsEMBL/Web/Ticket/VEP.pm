@@ -83,7 +83,7 @@ sub init_from_user_input {
   first { m/^[^\#]/ && ($detected_format = detect_format($_)) } file_get_contents($file_path);
   throw exception('InputError', "Selected file format ($format) does not match detected format ($detected_format)") unless $format eq $detected_format;
 
-  my $job_data = { map { my @val = $hub->param($_); $_ => @val > 1 ? \@val : $val[0] } grep { $_ !~ /^text/ } $hub->param };
+  my $job_data = { map { my @val = $hub->param($_); $_ => @val > 1 ? \@val : $val[0] } grep { $_ !~ /^text/ && $_ !~ /^(file|url|userdata)$/ } $hub->param };
 
   $job_data->{'species'}    = $species;
   $job_data->{'input_file'} = $file_name;
