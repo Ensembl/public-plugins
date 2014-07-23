@@ -50,10 +50,10 @@ sub run {
   my $config      = $self->param('config');
   my $options     = $config->{'format'};
 
+  my $log_file    = $config->{'output_file'}.'.log';
+
   $options .= ' /data_ensembl/assembly_converter/'.$config->{'chain_file'};
   $options .= sprintf ' %s/%s', $work_dir, delete $config->{$_} for qw(input_file output_file);
-
-  my $log_file    = $config->{'output_file'}.'.log';
 
   my $ac_command = EnsEMBL::Web::SystemCommand->new($self, $ac_bin, $options)->execute({'log_file' => $log_file});
 
