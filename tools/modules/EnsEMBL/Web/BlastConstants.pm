@@ -253,7 +253,6 @@ sub CONFIGURATION_DEFAULTS {
     'all'                     => {
       'evalue'                  => '1e-1',
       'max_target_seqs'         => '100',
-      'culling_limit'           => '5',
     },
 
     'NCBIBLAST_BLASTN'        => {
@@ -265,6 +264,7 @@ sub CONFIGURATION_DEFAULTS {
       'gapextend'               => '2',
       'dust'                    => '1',
       'repeat_mask'             => '1',
+      'culling_limit'           => '5',
     },
 
     'NCBIBLAST_BLASTN-SHORT'  => {
@@ -276,6 +276,7 @@ sub CONFIGURATION_DEFAULTS {
       'gapextend'               => '2',
       'dust'                    => '1',
       'repeat_mask'             => '1',
+      'culling_limit'           => '5',
     },
 
     'NCBIBLAST_BLASTP'        => {
@@ -287,6 +288,7 @@ sub CONFIGURATION_DEFAULTS {
       'threshold'               => '11',
       'comp_based_stats'        => '2',
       'seg'                     => '1',
+      'culling_limit'           => '5',
     },
 
     'NCBIBLAST_BLASTP-SHORT'  => {
@@ -298,6 +300,7 @@ sub CONFIGURATION_DEFAULTS {
       'threshold'               => '16',
       'comp_based_stats'        => '0',
       'seg'                     => '1',
+      'culling_limit'           => '5',
     },
 
     'NCBIBLAST_BLASTX'        => {
@@ -308,6 +311,7 @@ sub CONFIGURATION_DEFAULTS {
       'threshold'               => '11',
       'seg'                     => '1',
       'repeat_mask'             => '1',
+      'culling_limit'           => '5',
     },
 
     'NCBIBLAST_TBLASTN'       => {
@@ -319,6 +323,7 @@ sub CONFIGURATION_DEFAULTS {
       'threshold'               => '13',
       'comp_based_stats'        => '2',
       'seg'                     => '1',
+      'culling_limit'           => '5',
     },
 
     'NCBIBLAST_TBLASTX'       => {
@@ -327,6 +332,7 @@ sub CONFIGURATION_DEFAULTS {
       'matrix'                  => 'BLOSUM62',
       'threshold'               => '13',
       'seg'                     => '1',
+      'culling_limit'           => '5',
     }
   };
 }
