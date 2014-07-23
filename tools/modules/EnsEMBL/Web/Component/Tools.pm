@@ -55,11 +55,11 @@ sub _init {
 sub get_job_summary {
   ## Reads the job dispatcher_status field, and display status accordingly
   ## @param Job object
-  ## @param Arrayref with name of the links that need to be displayed (results, edit, delete, status)
+  ## @param Arrayref with name of the links that need to be displayed (edit and delete) (defaults to displaying both)
   ## @return DIV node
   my ($self, $job, $links) = @_;
 
-  $links ||= [];
+  $links ||= [qw(edit delete)];
 
   my $hub               = $self->hub;
   my $object            = $self->object;
@@ -74,14 +74,9 @@ sub get_job_summary {
       'inner_HTML'          => $object->get_job_description($job)
     }, {
       'node_name'           => 'p',
-      'class'               => 'job-status-links',
-      'children'            => [ grep($_ eq 'status', @$links) ? $self->job_status_tag($job, $dispatcher_status, $job->result_count) : () ]
+      'class'               => 'job-icons'
     }]
   });
-
-  if ($job_status eq 'done' && grep($_ eq 'results', @$links)) {
-    $job_status_div->last_child->append_child('a', $self->_results_link_params($job, $url_param));
-  }
 
   my $icons = {
     'edit'    => {

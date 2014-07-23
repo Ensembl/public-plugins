@@ -42,22 +42,6 @@ sub job_details_table {
   return $two_col;
 }
 
-sub _results_link_params {
-  my ($self, $job, $url_param) = @_;
-  my $link_params = {
-      'class'       => [qw(small left-margin results-link)],
-      'flags'       => ['view_results_link'],
-      'inner_HTML'  => '[Download results]',
-      'href'        => $self->hub->url({
-        'species'     => $job->species,
-        'type'        => 'Download',
-        'action'      => 'Tools',
-      })
-  };
-  return $link_params;
-}
-
-
 sub job_statistics {
   ## Gets the job result stats for display on results pages
   my $self    = shift;

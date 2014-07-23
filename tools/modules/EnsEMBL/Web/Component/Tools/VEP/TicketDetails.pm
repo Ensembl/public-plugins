@@ -33,7 +33,7 @@ sub content_ticket {
   my $table;
 
   for (@$jobs) {
-    $table = $self->job_details_table($_, [$is_view ? qw(status results) : (), qw(edit delete)]);
+    $table = $self->job_details_table($_);
     $table->set_attribute('class', $is_view ? 'plain-box' : 'toggleable hidden _ticket_details');
   }
 

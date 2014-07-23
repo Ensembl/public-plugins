@@ -35,7 +35,7 @@ sub content_ticket {
   $div->set_attribute('class', 'plain-box') if $is_view;
 
   for (@$jobs) {
-    my $job_table = $self->job_details_table($_, $is_view ? [qw(status edit delete), $_->result_count ? 'results' : ()] : [qw(edit delete)]);
+    my $job_table = $self->job_details_table($_);
     if (!$is_view) {
       $job_table->append_child('div', {
         'class'     => [qw(_ticket_details hidden toggleable)], # this div is hidden by default

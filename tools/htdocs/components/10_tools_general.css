@@ -57,9 +57,6 @@ img.job-species                   { border-radius: 2px; float: left; margin: 0 6
 
 /* Icons and job summary section on job details page */
 div.job-error-msg                 { background-color: #FFDDDD; padding: 8px 8px 4px; margin: 8px 0; }
-p.job-status-links                { overflow: hidden; }
-p.job-status-links .job-status,
-p.job-status-links .results-link  { float: left; }
-
+p.job-icons                       { overflow: hidden; }
 
 a.edit-button                     { background-image: url("/i/16/rev/pencil.png"); background-position: 6px center; background-repeat: no-repeat; padding: 4px 4px 4px 29px !important; line-height: 16px; }
