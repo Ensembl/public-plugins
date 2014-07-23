@@ -22,6 +22,7 @@ use strict;
 use warnings;
 
 use URI::Escape qw(uri_unescape);
+use HTML::Entities qw(encode_entities);
 use Bio::EnsEMBL::Variation::Utils::Constants qw(%OVERLAP_CONSEQUENCES);
 use Bio::EnsEMBL::Variation::Utils::VEP qw(@REG_FEAT_TYPES %COL_DESCS);
 
@@ -30,6 +31,7 @@ use parent qw(EnsEMBL::Web::Component::Tools::VEP);
 sub content {
   my $self    = shift;
   my $hub     = $self->hub;
+  my $sd      = $hub->species_defs;
   my $object  = $self->object;
   my $ticket  = $object->get_requested_ticket;
   my $job     = $ticket ? $ticket->job->[0] : undef;
@@ -47,157 +49,140 @@ sub content {
   my $output_lines = $stats->{'General statistics'}->{'Lines of output written'} || 0;
 
   # get all params
-  my %params;
-  foreach my $p($hub->param) {
-    next if $p eq 'update_panel';
-    foreach my $v($hub->param($p)) {
-      $params{$p} = $v;
-    }
-  }
+  my %params = map { $_ eq 'update_panel' ? () : ($_ => $hub->param($_)) } $hub->param;
 
-  my $html;
-  my $ticket_name = $self->object->parse_url_param->{'ticket_name'};
+  my $html = '';
+  my $ticket_name = $object->parse_url_param->{'ticket_name'};
 
   # get params
-  my $size  = $params{size} || 5;
-  my $from  = $params{from} || 1;
-  my $to    = $params{to};
-  my $match = $params{match} || 'and';
+  my $size  = $params{'size'}   || 5;
+  my $from  = $params{'from'}   || 1;
+  my $to    = $params{'to'};
+  my $match = $params{'match'}  || 'and';
 
-  if(defined($to)) {
-    $size = ($to - $from) + 1;
-  }
-  else {
-    $to = ($from + ($size - 1));
+  if (defined $to) {
+    $size = $to - $from + 1;
+  } else {
+    $to = $from + $size - 1;
   }
 
   # define max filters
-  my $max_filters = 50;
-  my ($filter_string, $location);
+  my $max_filters   = 50;
+  my $filter_string = '';
+  my $location      = '';
 
   # construct filter string
-  for my $i(1..$max_filters) {
-    if($params{"field$i"}) {
+  for (1..$max_filters) {
+    if ($params{"field$_"}) {
 
-      if($params{"field$i"} eq 'Location') {
-        $location .= " ".$params{"value$i"};
-      }
-      else {
+      if ($params{"field$_"} eq 'Location') {
+        $location .= ' '.$params{"value$_"};
+      } else {
         $filter_string .= sprintf('%s%s %s %s',
           ($filter_string ? " $match " : ''),
-          $params{"field$i"},
-          $params{"operator$i"},
-          $params{"value$i"}
+          $params{"field$_"},
+          $params{"operator$_"},
+          $params{"value$_"}
         );
       }
     }
   }
 
-  $filter_string =~ s/^\s+//g;
-  $location =~ s/^\s+//g;
-
+  $filter_string  =~ s/^\s+//g;
+  $location       =~ s/^\s+//g;
 
   # READ DATA
   ###########
 
   my %content_args = (
-    from => $from,
-    to => $to,
-    filter => $filter_string,
-    location => $location
+    from      => $from,
+    to        => $to,
+    filter    => $filter_string,
+    location  => $location
   );
 
   my ($headers, $rows, $line_count) = @{$output_file_obj->parse_content($output_file_obj->content(%content_args))};
-  my $actual_to = ($from + $line_count) - 1;
+  my $actual_to = $from - 1 + ($line_count || 0);
   my $row_count = scalar @$rows;
 
   # niceify for table
   my %header_titles = (
-    'ID' => 'Uploaded variation',
-    'MOTIF_NAME' => 'Motif name',
-    'MOTIF_POS' => 'Motif position',
-    'MOTIF_SCORE_CHANGE' => 'Motif score change',
-    'DISTANCE' => 'Distance to transcript',
-    'EXON' => 'Exon',
-    'INTRON' => 'Intron',
-    'CLIN_SIG'     => 'Clinical significance',
-    'BIOTYPE'      => 'Biotype',
-    'PUBMED'       => 'Pubmed',
-    'HIGH_INF_POS' => 'High info position',
-    'CELL_TYPE' => 'Cell type',
-    'CANONICAL' => 'Canonical',
-    'SYMBOL' => 'Symbol',
-    'SYMBOL_SOURCE' => 'Symbol source',
-    'DOMAINS' => 'Domains',
-    'STRAND' => 'Feature strand',
+    'ID'                  => 'Uploaded variation',
+    'MOTIF_NAME'          => 'Motif name',
+    'MOTIF_POS'           => 'Motif position',
+    'MOTIF_SCORE_CHANGE'  => 'Motif score change',
+    'DISTANCE'            => 'Distance to transcript',
+    'EXON'                => 'Exon',
+    'INTRON'              => 'Intron',
+    'CLIN_SIG'            => 'Clinical significance',
+    'BIOTYPE'             => 'Biotype',
+    'PUBMED'              => 'Pubmed',
+    'HIGH_INF_POS'        => 'High info position',
+    'CELL_TYPE'           => 'Cell type',
+    'CANONICAL'           => 'Canonical',
+    'SYMBOL'              => 'Symbol',
+    'SYMBOL_SOURCE'       => 'Symbol source',
+    'DOMAINS'             => 'Domains',
+    'STRAND'              => 'Feature strand',
   );
-  foreach my $header(grep {/\_/} @$headers) {
-    my $tmp = $header;
-    $tmp =~ s/\_/ /g;
-    $header_titles{$header} ||= $tmp;
+  for (grep {/\_/} @$headers) {
+    $header_titles{$_} ||= $_ =~ s/\_/ /gr;
   }
 
   # hash for storing seen IDs, used to link to BioMart
   my %seen_ids;
 
   # linkify row content
-  foreach my $row(@$rows) {
+  foreach my $row (@$rows) {
 
     # store IDs
-    push @{$seen_ids{vars}}, $row->{Existing_variation} if defined($row->{Existing_variation}) && $row->{Existing_variation} =~ /\w+/;
-    push @{$seen_ids{genes}}, $row->{Gene} if defined($row->{Gene}) && $row->{Gene} =~ /\w+/;
+    push @{$seen_ids{'vars'}}, $row->{'Existing_variation'} if defined $row->{'Existing_variation'} && $row->{'Existing_variation'} =~ /\w+/;
+    push @{$seen_ids{'genes'}}, $row->{'Gene'} if defined $row->{'Gene'} && $row->{'Gene'} =~ /\w+/;
 
     # linkify content
-    $row->{$headers->[$_]} = $self->linkify($headers->[$_], $row->{$headers->[$_]}, $species) for (0..$#{$headers});
+    $row->{$_} = $self->linkify($_, $row->{$_}, $species) for @$headers;
   }
 
   # extras
   my %table_sorts = (
-    Location => 'position_html',
-    GMAF => 'hidden_position',
-    cDNA_position => 'numeric',
-    CDS_position => 'numeric',
-    Protein_position => 'numeric',
-    MOTIF_POS => 'numeric',
-    MOTIF_SCORE_CHANGE => 'numeric',
-    SIFT => 'hidden_position',
-    PolyPhen => 'hidden_position',
-    AFR_MAF => 'numeric',
-    AMR_MAF => 'numeric',
-    ASN_MAF => 'numeric',
-    EUR_MAF => 'numeric',
-    AA_MAF => 'numeric',
-    EA_MAF => 'numeric',
-    DISTANCE => 'numeric',
-    EXON => 'hidden_position',
-    INTRON => 'hidden_position'
+    'Location'            => 'position_html',
+    'GMAF'                => 'hidden_position',
+    'cDNA_position'       => 'numeric',
+    'CDS_position'        => 'numeric',
+    'Protein_position'    => 'numeric',
+    'MOTIF_POS'           => 'numeric',
+    'MOTIF_SCORE_CHANGE'  => 'numeric',
+    'SIFT'                => 'hidden_position',
+    'PolyPhen'            => 'hidden_position',
+    'AFR_MAF'             => 'numeric',
+    'AMR_MAF'             => 'numeric',
+    'ASN_MAF'             => 'numeric',
+    'EUR_MAF'             => 'numeric',
+    'AA_MAF'              => 'numeric',
+    'EA_MAF'              => 'numeric',
+    'DISTANCE'            => 'numeric',
+    'EXON'                => 'hidden_position',
+    'INTRON'              => 'hidden_position'
   );
 
-  my @table_headers = map {{ key => $_, title => $header_titles{$_} || $_, sort => $table_sorts{$_} || 'string', help => $COL_DESCS{$_}}} @$headers;
+  my @table_headers = map {{ 'key' => $_, 'title' => $header_titles{$_} || $_, 'sort' => $table_sorts{$_} || 'string', 'help' => $COL_DESCS{$_} }} @$headers;
 
   $html .= '<div><h3>Results preview</h3>';
   $html .= '<input type="hidden" class="panel_type" value="VEPResults" />';
 
   # construct hash for autocomplete
-  my $vdbc = $hub->species_defs->get_config($species, 'databases')->{'DATABASE_VARIATION'};
+  my $vdbc = $sd->get_config($species, 'databases')->{'DATABASE_VARIATION'};
 
   my %ac = (
-    Allele => [
-      'A', 'C', 'G', 'T'
-    ],
-    Feature_type => [
-      'Transcript', @REG_FEAT_TYPES
-    ],
-    Consequence => [
-      keys %OVERLAP_CONSEQUENCES
-    ],
-    SIFT => $vdbc->{'SIFT_VALUES'},
-    PolyPhen => $vdbc->{'POLYPHEN_VALUES'},
-    BIOTYPE => $hub->species_defs->get_config($species, 'databases')->{'DATABASE_CORE'}->{'tables'}{'transcript'}{'biotypes'},
+    'Allele'        => [ 'A', 'C', 'G', 'T' ],
+    'Feature_type'  => [ 'Transcript', @REG_FEAT_TYPES ],
+    'Consequence'   => [ keys %OVERLAP_CONSEQUENCES ],
+    'SIFT'          => $vdbc->{'SIFT_VALUES'},
+    'PolyPhen'      => $vdbc->{'POLYPHEN_VALUES'},
+    'BIOTYPE'       => $sd->get_config($species, 'databases')->{'DATABASE_CORE'}->{'tables'}{'transcript'}{'biotypes'},
   );
 
-  my $ac_json = $self->jsonify(\%ac);
-  $ac_json =~ s/\"/\'/g;
+  my $ac_json = encode_entities($self->jsonify(\%ac));
   $html .= '<input class="js_param" type="hidden" name="auto_values" value="'.$ac_json.'" />';
 
 
@@ -216,7 +201,7 @@ sub content {
   # number of entries
   $html .= ' | <b>Show</b> ';
 
-  foreach my $opt_size(qw(1 5 10 50)) {
+  foreach my $opt_size (qw(1 5 10 50)) {
     next if $opt_size > $output_lines;
 
     if($size eq $opt_size) {
@@ -224,74 +209,69 @@ sub content {
     }
     else {
       $html .= ' '. $self->reload_link($opt_size, {
-        from => $from,
-        to   => $to + ($opt_size - $size)
+        'from' => $from,
+        'to'   => $to + ($opt_size - $size)
       });
     }
   }
 
   # showing all?
-  if(($to - $from) == ($output_lines - 1)) {
+  if (($to - $from) == ($output_lines - 1)) {
     $html .= ' All';
-  }
-  else {
+  } else {
     my $warning = '';
     if($output_lines > 500) {
       $warning  = '<img class="_ht" src="/i/16/alert.png" style="vertical-align: top;" title="<span style=\'color: yellow; font-weight: bold;\'>WARNING</span>: table with all data may not load in your browser - use Download links instead">';
     }
 
     $html .=  ' ' . $self->reload_link("All$warning", {
-      from => 1,
-      to   => $output_lines
+      'from' => 1,
+      'to'   => $output_lines
     });
 
     # navigation
-    $html .= ' | ';#<b>Navigation</b> ';
+    $html .= ' | ';
 
-    my $style = 'style="vertical-align:top; height:16px; width:16px"';
-    my $disabled_style = 'style="vertical-align:top; height:16px; width:16px; opacity: 0.5;"';
+    my $style           = 'style="vertical-align:top; height:16px; width:16px"';
+    my $disabled_style  = 'style="vertical-align:top; height:16px; width:16px; opacity: 0.5;"';
 
     # first
-    if($from > 1) {
+    if ($from > 1) {
       $html .= $self->reload_link(qq(<img src="/i/nav-l2.gif" $style title="First page"/>), {
-        from => 1,
-        to   => $size,
+        'from' => 1,
+        'to'   => $size,
       });
-    }
-    else {
+    } else {
       $html .= '<img src="/i/nav-l2.gif" '.$disabled_style.'/>';
     }
 
     # prev page
-    if($from > 1) {
+    if ($from > 1) {
       $html .= $self->reload_link(sprintf('<img src="/i/nav-l1.gif" %s title="Previous %s variant%s"/></a>', $style, $size == 1 ? ('', '') : ($size, 's')), {
-        from => $from - $size,
-        to   => $to - $size,
+        'from' => $from - $size,
+        'to'   => $to - $size,
       });
-    }
-    else {
+    } else {
       $html .= '<img src="/i/nav-l1.gif" '.$disabled_style.'/>';
     }
 
     # next page
-    if($to <= $actual_to && $to < $output_lines) {
+    if ($to <= $actual_to && $to < $output_lines) {
       $html .= $self->reload_link(sprintf('<img src="/i/nav-r1.gif" %s title="Next %s variant%s"/></a>', $style, $size == 1 ? ('', '') : ($size, 's')), {
-        from => $from + $size,
-        to   => $to + $size,
+        'from' => $from + $size,
+        'to'   => $to + $size,
       });
-    }
-    else {
+    } else {
       $html .= '<img src="/i/nav-r1.gif" '.$disabled_style.'/>';
     }
 
     # last
-    if($to < $output_lines && !$filter_string && !$location) {
+    if ($to < $output_lines && !$filter_string && !$location) {
       $html .= $self->reload_link(qq(<img src="/i/nav-r2.gif" $style title="Last page"/></a>), {
-        from => $size * int($output_lines / $size),
-        to   => $output_lines,
+        'from' => $size * int($output_lines / $size),
+        'to'   => $output_lines,
       });
-    }
-    else {
+    } else {
       $html .= '<img src="/i/nav-r2.gif" '.$disabled_style.'/>';
     }
   }
@@ -309,23 +289,20 @@ sub content {
   my $form_url = $hub->url();
   my $ajax_url = $self->ajax_url(undef, {'__clear' => 1});
 
-  my $ajax_html .= qq{
-    <form action="#" class="_apply_filter" style="margin: 0 0 0 0;">
-      <input type="hidden" name="ajax_url" value="$ajax_url" />
-  };
+  my $ajax_html .= qq(<form action="#" class="_apply_filter" style="margin: 0;"><input type="hidden" name="ajax_url" value="$ajax_url" />);
 
   # define operators
   my @operators = (
-    {name => 'is',  title => 'is'},
-    {name => 'ne',  title => 'is not'},
-    {name => 're',  title => 'matches'},
-    {name => 'lt',  title => '<'},
-    {name => 'gt',  title => '>'},
-    {name => 'lte', title => '<='},
-    {name => 'gte', title => '>='},
+    {'name' => 'is',  'title' => 'is'},
+    {'name' => 'ne',  'title' => 'is not'},
+    {'name' => 're',  'title' => 'matches'},
+    {'name' => 'lt',  'title' => '<'},
+    {'name' => 'gt',  'title' => '>'},
+    {'name' => 'lte', 'title' => '<='},
+    {'name' => 'gte', 'title' => '>='},
   );
   my @non_numerical = @operators[0..2];
-  my %operators = map {$_->{name} => $_->{title}} @operators;
+  my %operators = map {$_->{'name'} => $_->{'title'}} @operators;
 
   # active filters
   my $active_filters = 0;
@@ -335,8 +312,8 @@ sub content {
   my @location_divs;
 
   $html .= '<div>';
-  for my $i(1..$max_filters) {
-    if($params{"field$i"}) {
+  foreach my $i (1..$max_filters) {
+    if ($params{"field$i"}) {
       my $tmp_html;
 
       $active_filters++;
@@ -364,11 +341,11 @@ sub content {
       );
 
       # edit filter
-      $tmp_html .= '<div class="filter_edit_'.$i.'" style="display:none;">';
+      $tmp_html .= qq(<div class="filter_edit_$i" style="display:none;">);
       $tmp_html .= $ajax_html;
 
       # field
-      $tmp_html .= '<select class="autocomplete" name="field'.$i.'">';
+      $tmp_html .= qq('<select class="autocomplete" name="field$i">);
       $tmp_html .= sprintf(
         '<option value="%s" %s>%s</option>',
         $_,
@@ -378,49 +355,47 @@ sub content {
       $tmp_html .= '</select>';
 
       # operator
-      $tmp_html .= '<select name="operator'.$i.'">';
+      $tmp_html .= qq(<select name="operator$i">);
       $tmp_html .= sprintf(
         '<option value="%s" %s>%s</option>',
-        $_->{name},
-        ($_->{name} eq $params{"operator$i"} ? 'selected="selected"' : ''),
-        $_->{title}
+        $_->{'name'},
+        ($_->{'name'} eq $params{"operator$i"} ? 'selected="selected"' : ''),
+        $_->{'title'}
       ) for @operators;
       $tmp_html .= '</select>';
 
       # value and submit
-      $tmp_html .= '<input class="autocomplete" type="text" placeholder="defined" name="value'.$i.'" value="'.$params{"value$i"}.'">';
-      $tmp_html .= '<input value="Update" class="fbutton" type="submit">';
+      $tmp_html .= sprintf qq(<input class="autocomplete" type="text" placeholder="defined" name="value$i" value="%s" />), $params{"value$i"};
+      $tmp_html .= '<input value="Update" class="fbutton" type="submit" />';
 
       # add hidden fields
       $tmp_html .= sprintf('<input type="hidden" name="%s" value="%s">', $_, $params{$_}) for grep {!/[a-z]$i$/i} keys %params;
       $tmp_html .= '</form>';
-      $tmp_html .= '<div style="padding-left: 2px;"><a href="#" class="small filter_toggle" style="color:white;" rel="filter_edit_'.$i.'">Cancel</a></div>';
+      $tmp_html .= qq(<div style="padding-left: 2px;"><a href="#" class="small filter_toggle" style="color:white;" rel="filter_edit_$i">Cancel</a></div>);
       $tmp_html .= '</div>';
 
       if($params{"field$i"} =~ /^Location/) {
         push @location_divs, $tmp_html;
-      }
-      else {
+      } else {
         push @filter_divs, $tmp_html;
       }
-    }
-    else {
+    } else {
       $filter_number ||= $i;
     }
   }
 
-  foreach my $div(@location_divs) {
-    $html .= '<div class="location-filter-box filter-box">'.$div.'</div>';
+  foreach my $div (@location_divs) {
+    $html .= qq(<div class="location-filter-box filter-box">$div</div>);
   }
-  $html .= '<hr>' if scalar @location_divs && scalar @filter_divs;
+  $html .= '<hr />' if scalar @location_divs && scalar @filter_divs;
 
-  foreach my $div(@filter_divs) {
-    $html .= '<div class="filter-box">'.$div.'</div>';
+  foreach my $div (@filter_divs) {
+    $html .= qq(<div class="filter-box">$div</div>);
   }
 
   $html .= '</div>';
 
-  if($active_filters > 1) {
+  if ($active_filters > 1) {
     my %logic = (
       'or'  => 'any',
       'and' => 'all',
@@ -460,26 +435,6 @@ sub content {
   $html .= sprintf('<option value="%s" %s>%s</option>', $_->{name}, ($_->{name} eq 'is' ? 'selected="selected"' : ''), $_->{title}) for @operators;
   $html .= '</select>';
 
-  # define numerical fields
-  #my %numerical = (
-  #  cDNA_position      => 1,
-  #  CDS_position       => 1,
-  #  Protein_position   => 1,
-  #  MOTIF_POS          => 1,
-  #  MOTIF_SCORE_CHANGE => 1,
-  #  DISTANCE           => 1,
-  #  EXON               => 1,
-  #  INTRON             => 1,
-  #  SIFT               => 1,
-  #  PolyPhen           => 1
-  #);
-  #
-  #$html .= '<select name="operator'.$filter_number.'">';
-  #foreach my $header(@$headers) {
-  #  $html .= sprintf('<option value="%s" class="_stt_%s" %s>%s</option>', $_->{name}, $header, ($_->{name} eq 'is' ? 'selected="selected"' : ''), $_->{title}) for ($numerical{$header} ? @operators : @non_numerical);
-  #}
-  #$html .= '</select>';
-
   # value and submit
   $html .= '<input class="autocomplete" type="text" placeholder="defined" name="value'.$filter_number.'">';
   $html .= '<input value="Add" class="fbutton" type="submit">';
@@ -488,43 +443,13 @@ sub content {
   $html .= sprintf('<input type="hidden" name="%s" value="%s">', $_, $params{$_}) for keys %params;
   $html .= '</form></div>';
 
-
-  # presets
-  #$html .= '<div style="clear:left;"><div><a rel="filter_presets" class="toggle closed small">Common filter presets</a></div>';
-  #$html .= '<div class="filter_presets"><div class="toggleable hidden">';
-  #
-  #my @presets = (
-  #  {
-  #    desc => 'Show only novel variants',
-  #    url  => 'field22=Existing_variation;operator22=ne;value22='
-  #  },
-  #  {
-  #    desc => 'Select only CCDS protein coding transcripts',
-  #    url  => 'field20=CCDS;operator20=is;value20=;field21=BIOTYPE;operator21=is;value21=protein_coding'
-  #  },
-  #);
-  #
-  #my $base_url = $self->ajax_url(undef);
-  #
-  #foreach my $preset(@presets) {
-  #  $html .= sprintf(
-  #    '<div class="filter-box" style="background-color:white;"><a class="update_panel" rel="%s" href="%s">%s</a></div>',
-  #    $panel_id,
-  #    $base_url.';'.$preset->{url},
-  #    $preset->{desc}
-  #  );
-  #}
-  #
-  #$html .= '</ul></div></div>';
-  #$html .= '</div>';
-
   $html .= '</div></div>';
 
 
   ## DOWNLOAD
   ###########
 
-  my $dir_loc  = $hub->species_defs->ENSEMBL_TMP_DIR_TOOLS;
+  my $dir_loc  = $sd->ENSEMBL_TMP_DIR_TOOLS;
   my $file_loc = $output_file_obj->filename =~ s/^$dir_loc\/(temporary|persistent)\/VEP\///r;
 
   $html .= '<div class="toolbox">';
@@ -562,7 +487,7 @@ sub content {
   ## BIOMART
   ##########
 
-  if($hub->species_defs->ENSEMBL_MART_ENABLED) {
+  if($sd->ENSEMBL_MART_ENABLED) {
 
     # uniquify lists, retain order
     foreach my $key(keys %seen_ids) {
@@ -634,6 +559,9 @@ sub linkify {
   my $species = shift;
   my $new_value;
   my $hub = $self->hub;
+  my $sd = $hub->species_defs;
+
+  return '-' unless defined $value && $value ne '';
 
   $value =~ s/\,/\, /g;
 
@@ -721,7 +649,7 @@ sub linkify {
   # consequence type
   elsif($field eq 'Consequence' && $value =~ /\w+/) {
     my $cons = \%OVERLAP_CONSEQUENCES;
-    my $var_styles   = $hub->species_defs->colour('variation');
+    my $var_styles   = $sd->colour('variation');
     my $colourmap    = $hub->colourmap;
 
     foreach my $con(split /\,\s+/, $value) {
