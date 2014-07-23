@@ -59,7 +59,8 @@ sub CONFIGURATION_FIELDS {
 
       'culling_limit'       => {
         'type'                => 'dropdown',
-        'label'               => 'Throw away hits that are enveloped by at least this many higher-scoring hits',
+        'label'               => 'Culling limit',
+        'helptip'             => 'This will throw away hits that are enveloped by at least this many higher-scoring hits',
         'values'              => [
                                   { 'value' => '1',   'caption' => '1' },
                                   { 'value' => '2',   'caption' => '2' },
