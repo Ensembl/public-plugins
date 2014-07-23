@@ -55,11 +55,8 @@ sub content {
       my $ticket_name = $ticket->ticket_name;
 
       # Decorator design pattern
-      if (my $component = $class eq __PACKAGE__ && dynamic_require(__PACKAGE__ =~ s/(::[^:]+)$/::$ticket_type$1/r, 1)) {
-        bless $self, $component;
-      } else {
-        bless $self, $class; # fallback
-      }
+      my $component = $class eq __PACKAGE__ && dynamic_require(__PACKAGE__ =~ s/(::[^:]+)$/::$ticket_type$1/r, 1) || $class; # fallback to the generic parent class
+      bless $self, $component unless ref $self eq $component;
 
       my @jobs_summary  = map $self->job_summary_section($ticket, $_, $_->result_count)->render, $ticket->job;
       my $created_at    = $ticket->created_at;
@@ -74,7 +71,7 @@ sub content {
       });
     }
 
-    bless $self, $class; # back to the original class
+    bless $self, $class unless ref $self eq $class; # back to the original class
   }
 
   my ($tickets_data_hash, $auto_refresh) = $object->get_tickets_data_for_sync;
