@@ -33,7 +33,6 @@ sub parse {
   my $source_type   = $runnable->param('source');
   my $configs       = $runnable->param_is_defined('configs') ? $runnable->param('configs') : {};
 
-  my $culling_limit = $configs->{'culling_limit'}; # TODO
   my $max_evalue    = exists $configs->{'evalue'} ? sprintf("%.10g", $configs->{'evalue'}) : undef;
   my $max_target    = exists $configs->{'max_target_seqs'} ? $configs->{'max_target_seqs'} : undef;
 
