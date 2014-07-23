@@ -230,22 +230,37 @@ sub add_buttons_fieldset {
 
 sub job_status_tag {
   ## Tag to be displayed next to each job in ticket list table, or job details page
-  ## @param Ticket object
   ## @param Job object
-  my ($self, $job, $status, $result_count) = @_;
+  ## @param Dispatcher status (string)
+  ## @param Number of results
+  ## @param Current assembly for the job species if it's not the same as the one to which the job was originally submitted to
+  my ($self, $job, $status, $result_count, $assembly_mismatch) = @_;
+
+  my $css_class = "job-status-$status";
+  my $title     = {
+    'not_submitted' => q(This job could not be submitted due to some problems. Please click on the 'View details' icon for more information),
+    'queued'        => q(Your job has been submitted and will be processed soon.),
+    'submitted'     => q(Your job has been submitted and will be processed soon.),
+    'running'       => q(Your job is currently being processed. The page will refresh once it's finished running.),
+    'done'          => q(This job is finished. Please click on 'View results' link to see the results),
+    'failed'        => q(This job has failed. Please click on the 'View details' icon for more information),
+    'deleted'       => q(Your ticket has been deleted. This usually happens if the ticket is too old.)
+  }->{$status};
+
+  if ($status eq 'done' && $assembly_mismatch) {
+    $css_class  = 'job-status-mismatch';
+    $title      = sprintf(q(The job was run on %s assembly for %s. You can resubmit the job to %s assembly by clicking on the 'Edit &amp; resubmit' icon.),
+      $job->assembly,
+      $job->species,
+      $assembly_mismatch
+    );
+  }
+
   return {
-    'node_name'     => 'span',
-    'class'         => [qw(_ht job-status), "job-status-$status"],
-    'title'         => {
-      'not_submitted' => q(This job could not be submitted due to some problems. Please click on the 'View details' icon for more information),
-      'queued'        => q(Your job has been submitted and will be processed soon.),
-      'submitted'     => q(Your job has been submitted and will be processed soon.),
-      'running'       => q(Your job is currently being processed. The page will refresh once it's finished running.),
-      'done'          => q(This job is finished. Please click on 'View results' link to see the results),
-      'failed'        => q(This job has failed. Please click on the 'View details' icon for more information),
-      'deleted'       => q(Your ticket has been deleted. This usually happens if the ticket is too old.)
-    }->{$status},
-    'inner_HTML'    => ucfirst $status =~ s/_/ /gr
+    'node_name'   => 'span',
+    'class'       => [$css_class, qw(_ht job-status)],
+    'title'       => $title,
+    'inner_HTML'  => ucfirst $status =~ s/_/ /gr
   }
 }
 

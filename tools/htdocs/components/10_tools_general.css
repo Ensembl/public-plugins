@@ -43,6 +43,7 @@ span.job-status-submitted,
 span.job-status-running           { background-color: #999999; }
 span.job-status-done              { background-color: #55AA55; }
 span.job-status-noresult          { background-color: #666666; }
+span.job-status-mismatch          { background-color: #5555AA; }
 
 /* Sprites for individual jobs on Activity Summary table */
 p span.job-sprites                { position: absolute; display: none; }
