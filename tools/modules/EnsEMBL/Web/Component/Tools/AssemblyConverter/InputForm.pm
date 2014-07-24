@@ -58,7 +58,7 @@ sub content {
       'label'         => 'Name for this data (optional)'
     });
 
-  $input_fieldset->add_field({
+    $input_fieldset->add_field({
       'type'          => 'dropdown',
       'name'          => 'format',
       'label'         => sprintf('Input file format)', $hub->url({
@@ -71,7 +71,7 @@ sub content {
       'class'         => '_stt format'
     });
 
-  $input_fieldset->add_field({
+    $input_fieldset->add_field({
       'label'         => 'Either paste data',
       'elements'      => [ map {
         'type'          => 'text',
@@ -81,14 +81,14 @@ sub content {
         }, @$input_formats ]
     });
 
-  $input_fieldset->add_field({
+    $input_fieldset->add_field({
       'type'          => 'file',
       'name'          => 'file',
       'label'         => 'Or upload file',
       'helptip'       => sprintf('File uploads are limited to %sMB in size. Files may be compressed using gzip or zip', $sd->ENSEMBL_AC_CGI_POST_MAX / 1048576)
     });
 
-  $input_fieldset->add_field({
+    $input_fieldset->add_field({
       'type'          => 'url',
       'name'          => 'url',
       'label'         => 'Or provide file URL',
@@ -96,26 +96,26 @@ sub content {
       'class'         => 'url'
     });
 
-  # Placeholder for previous files select box
-  $input_fieldset->append_child('text', 'FILES_DROPDOWN');
+    # Placeholder for previous files select box
+    $input_fieldset->append_child('text', 'FILES_DROPDOWN');
 
-  $self->add_buttons_fieldset($form, {'reset' => 'Reset', 'cancel' => 'Cancel'});
+    $self->add_buttons_fieldset($form, {'reset' => 'Reset', 'cancel' => 'Cancel'});
 
-  $form = $form->render;
+    $form = $form->render;
 
-  # Save in cache to skip the form generation process next time
-  $cache->set('AssemblyConverterFORM', $form) if $cache;
-}
+    # Save in cache to skip the form generation process next time
+    $cache->set('AssemblyConverterFORM', $form) if $cache;
+  }
 
-# Add the non-cacheable fields to this dummy form and replace the placeholders from the actual form HTML
-my $form2 = $self->new_form;
+  # Add the non-cacheable fields to this dummy form and replace the placeholders from the actual form HTML
+  my $form2 = $self->new_form;
 
-# Previous job params for JavaScript
-my $edit_job = ($hub->function || '') eq 'Edit' ? $self->object->get_edit_jobs_data : [];
-$edit_job = @$edit_job ? $form2->add_hidden({ 'name'  => 'edit_jobs', 'value' => $self->jsonify($edit_job) })->render : '';
+  # Previous job params for JavaScript
+  my $edit_job = ($hub->function || '') eq 'Edit' ? $self->object->get_edit_jobs_data : [];
+  $edit_job = @$edit_job ? $form2->add_hidden({ 'name'  => 'edit_jobs', 'value' => $self->jsonify($edit_job) })->render : '';
 
-# Species dropdown list with stt classes to dynamically toggle other fields
-my $species_dropdown = $form2->add_field({
+  # Species dropdown list with stt classes to dynamically toggle other fields
+  my $species_dropdown = $form2->add_field({
     'label'         => 'Species',
     'type'          => 'dropdown',
     'name'          => 'species',
@@ -127,10 +127,10 @@ my $species_dropdown = $form2->add_field({
       }, @$species ]
   })->render; 
 
-my $mappings = [];
-for (@$species) {
-  foreach my $m (@{$_->{'mappings'}||[]}) {
-    $m->{'class'} = $_->{'value'} eq $current_species ? '' : 'hidden';
+  my $mappings = [];
+  for (@$species) {
+    foreach my $m (@{$_->{'mappings'}||[]}) {
+      $m->{'class'} = $_->{'value'} eq $current_species ? '' : 'hidden';
       push @$mappings, $m; 
     }
   }
