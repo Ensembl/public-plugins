@@ -36,7 +36,7 @@ sub content {
   my $sd              = $hub->species_defs;
   my $species         = $self->_species;
   my $cache           = $hub->cache;
-  my $form            = $cache ? $cache->get('AssemblyConverterFORM') : undef;
+  my $form; #            = $cache ? $cache->get('AssemblyConverterFORM') : undef;
   my $current_species = $hub->species;
   my $input_formats   = INPUT_FORMATS;
 
@@ -215,18 +215,29 @@ sub _species {
     my $sd      = $hub->species_defs;
     my %fav     = map { $_ => 1 } @{$hub->get_favourite_species};
     my @species;
-  
-    #my @ok_species = $sd->valid_species;
-    my @ok_species = ('Homo_sapiens');
 
-    for (@ok_species) {
+    ## Need to fetch chain file info from tools server somehow!
+    my @ok_species = qw(Bos_taurus Canis_familiaris Homo_sapiens Mus_musculus Rattus_norvegicus Saccharomyces_cerevisiae Sus_scrofa);
+    my $chain_files = {
+                      'Homo_sapiens' => ['GRCh37_to_GRCh38', 'NCBI36_to_GRCh38'],
+                      'Mus_musculus' => ['GRCm38_to_NCBIM36', 'GRCm38_to_NCBIM37',
+                                         'NCBIM36_to_GRCm38', 'NCBIM37_to_GRCm38'],
+                      'Canis_familiaris' => ['BROADD2_to_CanFam3.1',
+                                             'CanFam3.1_to_BROADD2'],
+                      'Bos_taurus' => ['Btau_4.0_to_UMD3.1', 'UMD3.1_to_Btau_4.0'],
+                      'Sus_scrofa' => ['Sscrofa10.2_to_Sscrofa9', 'Sscrofa9_to_Sscrofa10.2'],
+                      'Saccharomyces_cerevisiae' => ['EF1_to_R64-1-1', 'EF2_to_R64-1-1',
+                                                     'EF3_to_R64-1-1', 'R64-1-1_to_EF1',
+                                                     'R64-1-1_to_EF2', 'R64-1-1_to_EF3'],
+                      };
 
-      #my $mappings =  $hub->species_defs->get_config($_, 'ASSEMBLY_MAPPINGS') || [];
-      my $mappings = [
-                      {'caption' => 'GRCh37 -> GRCh38', 'value' => 'GRCh37_to_GRCh38'},
-                      {'caption' => 'NCBI36 -> GRCh38', 'value' => 'NCBI36_to_GRCh38'},
-                      ];
-
+    for (sort {$sd->get_config($a, 'SPECIES_COMMON_NAME') cmp $sd->get_config($b, 'SPECIES_COMMON_NAME')} @ok_species) {
+      
+      my $mappings = [];
+      foreach my $map (@{$chain_files->{$_}||[]}) {
+        (my $caption = $map) =~ s/_to_/ -> /;
+        push @$mappings, {'caption' => $caption, 'value' => $map};
+      }
       my $db_config = $sd->get_config($_, 'databases');
 
       push @species, {
