@@ -626,24 +626,23 @@ sub print_set {
   # Get the first 10 examples and print some data from them
   while ($fetched &lt; $limit &amp;&amp; $it->has_next()) {
   	
-  	# Print the name of the variation
-  	my $var = $it->next();
-  	printf("\t\%s has been found to be associated with:\n",$var->name());
+    # Print the name of the variation
+    my $var = $it->next();
+    printf("\t\%s has been found to be associated with:\n",$var->name());
   	
-  	# Get the PhenotypeFeature objects for the variation
-  	my $pfs = $var->get_all_PhenotypeFeatures();
+    # Get the PhenotypeFeature objects for the variation
+    my $pfs = $var->get_all_PhenotypeFeatures();
   	
-  	# Loop over the annotations and print the phenotypes
-  	foreach my $pf (@{$pfs}) {
-        my @output = ();
-        push @output, 'Desc: ' . $pf->phenotype->description;
-        push @output, 'p-value: ' . $pf->p_value if (defined $pf->p_value);
-        push @output, 'study_type: ' . $pf->study->type if (defined $pf->study && defined $pf->study->type);
-        push @output, 'study_name: ' . $pf->study->name if (defined $pf->study && defined $pf->study->name);
-        print join(' ', @output), "\n";
-  	}
-  	
-  	$fetched++;
+    # Loop over the annotations and print the phenotypes
+    foreach my $pf (@{$pfs}) {
+      my @output = ();
+      push @output, 'Desc: ' . $pf->phenotype->description;
+      push @output, 'p-value: ' . $pf->p_value if (defined $pf->p_value);
+      push @output, 'study_type: ' . $pf->study->type if (defined $pf->study && defined $pf->study->type);
+      push @output, 'study_name: ' . $pf->study->name if (defined $pf->study && defined $pf->study->name);
+      print join(' ', @output), "\n";
+    }
+    $fetched++;
   }
 </pre>
 <p>
