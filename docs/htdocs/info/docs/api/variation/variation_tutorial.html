@@ -721,9 +721,12 @@ my $variation_adaptor = $registry-&gt;get_adaptor('mus_musculus', 'variation', '
 my $variation = $variation_adaptor-&gt;fetch_by_name('rs4224828');
 my $alleles = $variation-&gt;get_all_Alleles();
 
-foreach my $allele(@{$alleles}) {
-	print "Allele ", $allele-&gt;allele, " has frequency ", $allele-&gt;frequency,
-		" in population ", $allele-&gt;population-&gt;name, "\n";
+foreach my $allele (@{$alleles}) {
+    next unless (defined $allele-&gt;population);
+    my $allele_string   = $allele-&gt;allele;
+    my $frequency       = $allele-&gt;frequency || 'NA';
+    my $population_name = $allele-&gt;population-&gt;name;
+    printf("Allele %s has frequency: %s in population %s.\n", $allele_string, $frequency, $population_name);
 }
 </pre>
 
