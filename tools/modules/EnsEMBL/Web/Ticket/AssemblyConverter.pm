@@ -94,7 +94,7 @@ sub init_from_user_input {
   }
 
   $job_data->{'species'}      = $species;
-  $job_data->{'chain_file'}   = $hub->param('mapping').'.over.chain.gz';
+  $job_data->{'chain_file'}   = lc($species).'/'.$hub->param('mapping').'.chain.gz';
   $job_data->{'input_file'}   = $file_name;
   $job_data->{'output_file'}  = 'output_'.$file_name;
 
