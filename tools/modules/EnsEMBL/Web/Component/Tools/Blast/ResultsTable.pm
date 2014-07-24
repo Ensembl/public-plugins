@@ -68,7 +68,7 @@ sub content {
           { 'key' => 'len',     'title'=> 'Length',           'align' => 'left',  'sort' => 'numeric' },
           { 'key' => 'score',   'title'=> 'Score',            'align' => 'left',  'sort' => 'numeric' },
           { 'key' => 'evalue',  'title'=> 'E-val',            'align' => 'left',  'sort' => 'numeric' },
-          { 'key' => 'pident',  'title'=> '%ID',              'align' => 'left',  'sort' => 'numeric' },
+          { 'key' => 'pident',  'title'=> '%ID',              'align' => 'left',  'sort' => 'numeric_hidden' },
         ]
       : [
           { 'key' => 'tid',     'title'=> 'Subject name',     'align' => 'left',  'sort' => 'string'  },
@@ -84,7 +84,7 @@ sub content {
           { 'key' => 'len',     'title'=> 'Length',           'align' => 'left',  'sort' => 'numeric' },
           { 'key' => 'score',   'title'=> 'Score',            'align' => 'left',  'sort' => 'numeric' },
           { 'key' => 'evalue',  'title'=> 'E-val',            'align' => 'left',  'sort' => 'numeric' },
-          { 'key' => 'pident',  'title'=> '%ID',              'align' => 'left',  'sort' => 'numeric' },
+          { 'key' => 'pident',  'title'=> '%ID',              'align' => 'left',  'sort' => 'numeric_hidden' },
         ],
       [], {'data_table' => 1, 'exportable' => 0, 'sorting' => ['score desc']}
     );
