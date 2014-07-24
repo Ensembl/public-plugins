@@ -69,6 +69,16 @@ sub run {
     throw exception('HiveException', $error_details);
   }
 
+  ## CrossMap's error reporting is poor, so check it produced actual output
+  my $output = $work_dir.'/'.$config->{'output_file'};
+  unless (-e $output && -s $output) { 
+    my $error_message = 'Output file';
+    $error_message   .= -e $output ? ' empty (zero bytes).' : ' not created.';
+    my $display_message = 'Sorry, your input file could not be mapped. Please check that your data complies with <a href="/info/website/upload/index.html#formats">file format specifications</a>.';
+    throw exception('HiveException', $error_message, {'display_message' => $display_message, 'fatal' => 0});
+  }
+
+
   return 1;
 }
 
