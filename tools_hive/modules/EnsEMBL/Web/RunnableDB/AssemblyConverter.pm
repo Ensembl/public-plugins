@@ -59,7 +59,7 @@ sub run {
     $options .= sprintf(' %s/%s', $work_dir, $config->{$_});
   }
 
-  my $log_file    = $config->{'output_file'}.'.log';
+  my $log_file    = sprintf('%s/%s.log', $work_dir, $config->{'output_file'});
 
   my $ac_command = EnsEMBL::Web::SystemCommand->new($self, $ac_bin, $options)->execute({'log_file' => $log_file});
 
