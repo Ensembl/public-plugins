@@ -246,7 +246,7 @@ sub job_status_tag {
     $css_class  = 'job-status-mismatch';
     $title      = sprintf(q(The job was run on %s assembly for %s. You can resubmit the job to %s assembly by clicking on the 'Edit &amp; resubmit' icon.),
       $job->assembly,
-      $job->species,
+      $self->hub->species_defs->get_config($job->species, 'SPECIES_COMMON_NAME'),
       $assembly_mismatch
     );
   }
