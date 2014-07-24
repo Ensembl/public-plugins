@@ -635,8 +635,12 @@ sub print_set {
   	
   	# Loop over the annotations and print the phenotypes
   	foreach my $pf (@{$pfs}) {
-  		printf("\t\t\%s\t\%s\t\%s\n",$pf->phenotype->description(),(defined($pf->p_value) ? sprintf("(\%s, \%s study)",
-  		        $pf->p_value(),$pf->study->type()) : ""),$pf->study->name());
+        my @output = ();
+        push @output, 'Desc: ' . $pf->phenotype->description;
+        push @output, 'p-value: ' . $pf->p_value if (defined $pf->p_value);
+        push @output, 'study_type: ' . $pf->study->type if (defined $pf->study && defined $pf->study->type);
+        push @output, 'study_name: ' . $pf->study->name if (defined $pf->study && defined $pf->study->name);
+        print join(' ', @output), "\n";
   	}
   	
   	$fetched++;
