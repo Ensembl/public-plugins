@@ -36,7 +36,9 @@ sub prepare_to_dispatch {
   # i/o files
   $converter_configs->{'chain_file'}  = $job_data->{'chain_file'};
   $converter_configs->{'input_file'}  = $job_data->{'input_file'};
-  $converter_configs->{'output_file'} = 'output_'. $job_data->{'input_file'};
+  $converter_configs->{'output_file'} = $job_data->{'output_file'};
+  ## Don't set FASTA param, even to nothing if it's not needed!
+  $converter_configs->{'fasta_file'}  = $job_data->{'fasta_file'} if $job_data->{'fasta_file'};
 
   return { 'species' => $converter_configs->{'species'}, 'work_dir' => $rose_object->job_dir, 'config' => $converter_configs, 'script_options'};
 }

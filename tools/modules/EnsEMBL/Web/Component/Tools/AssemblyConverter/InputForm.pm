@@ -198,6 +198,7 @@ for (@$species) {
     <div class="hidden _tool_form_div">
       <h2>New Assembly Converter job:</h2>
       <p class="info">This online tool currently uses <a href="http://crossmap.sourceforge.net">CrossMap</a>, which supports a limited number of formats (see our online documentation for <a href="/info/website/upload/index.html#formats">details of the individual data formats</a> listed below). CrossMap also discards metadata in files, so track definitions, etc, will be lost on conversion.</p>
+      <p><b>Important note</b>: CrossMap converts WIG files to BedGraph internally for efficiency, and also outputs them in BedGraph format.</p>
       <input type="hidden" class="panel_type" value="AssemblyConverterForm" />%s
     </div>',
     $hub->url({'function' => ''}),

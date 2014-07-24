@@ -48,12 +48,18 @@ sub run {
   my $ac_bin      = $self->param('AC_bin_path');
   my $work_dir    = $self->param('work_dir');
   my $config      = $self->param('config');
-  my $options     = $config->{'format'};
-
-  my $log_file    = $config->{'output_file'}.'.log';
+  my $format      = $config->{'format'};
+  ## Bit of a hack, but CrossMap treats these formats the same
+  $format = 'gff' if $format eq 'gtf'; 
+  my $options     = $format;
 
   $options .= ' /data_ensembl/assembly_converter/'.$config->{'chain_file'};
-  $options .= sprintf ' %s/%s', $work_dir, delete $config->{$_} for qw(input_file output_file);
+  for (qw(input_file fasta_file output_file)) {
+    next unless $config->{$_};
+    $options .= sprintf(' %s/%s', $work_dir, $config->{$_});
+  }
+
+  my $log_file    = $config->{'output_file'}.'.log';
 
   my $ac_command = EnsEMBL::Web::SystemCommand->new($self, $ac_bin, $options)->execute({'log_file' => $log_file});
 

@@ -40,6 +40,11 @@ sub handle_download {
     my $job_dir     = $job->job_dir;
 
     my $filename    = $job_config->{'output_file'};
+
+    ## Horrible hack for CrossMap stupidity
+    if ($job_config->{'format'} eq 'wig') {
+      $filename .= '.bgr';
+    }
     my $path        = $job_dir.'/'.$filename;
 
     ## Strip double dots to prevent downloading of files outside tmp directory

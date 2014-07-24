@@ -82,9 +82,21 @@ sub init_from_user_input {
 
   my $job_data = { map { my @val = $hub->param($_); $_ => @val > 1 ? \@val : $val[0] } grep { $_ !~ /^text|file/ } $hub->param };
 
-  $job_data->{'species'}    = $species;
-  $job_data->{'input_file'} = $file_name;
-  $job_data->{'chain_file'} = $hub->param('mapping').'.over.chain.gz';
+  ## Format-specific input tweaks
+  if ($format eq 'VCF') {
+    ## Extra parameter for VCF
+    my @assemblies = split('_to_', $hub->param('mapping'));
+    $job_data->{'fasta_file'} = $species.'_'.$assemblies[1].'.fa';
+  } 
+  elsif ($format eq 'WIG') {
+    ## WIG is output as BedGraph, so remove extension
+    $file_name =~ s/\.wig//;
+  }
+
+  $job_data->{'species'}      = $species;
+  $job_data->{'chain_file'}   = $hub->param('mapping').'.over.chain.gz';
+  $job_data->{'input_file'}   = $file_name;
+  $job_data->{'output_file'}  = 'output_'.$file_name;
 
   $self->add_job(EnsEMBL::Web::Job::AssemblyConverter->new($self, {
     'job_desc'    => $description,
