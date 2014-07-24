@@ -650,47 +650,47 @@ sub print_set {
 	In the example below, we fetch all VariationFeatures discovered by the third 1000 genomes pilot study on the RIC8A gene.
 </p>
 <pre class="code">
-	# Get the variation set object
-	$vs = $vs_adaptor->fetch_by_short_name('1kg_hct');
-	
-	# Get a gene adaptor and the gene object for the RIC8A gene
-	my $gene_adaptor = $registry->get_adaptor('human','core','gene');
-	my $gene = $gene_adaptor->fetch_by_display_label('RIC8A');
-	
-	# Get the variation features on the slice belonging to the variation set
-	my $vfs = $vs->get_all_VariationFeatures_by_Slice($gene->feature_Slice());
-	
-	# Loop over the variation features and print the variation using HGVS notation relative to the canonical transcript
-	foreach my $vf (@{$vfs}) {
-        my $tvs = $vf->get_all_TranscriptVariations([$gene->canonical_transcript()]);
-        my $tv = $tvs->[0];
-        my @hgvs_notations = ();
-        foreach my $hgvs_type (qw/hgvs_genomic hgvs_transcript hgvs_protein/) {
-            for my $hgvs_notation (values %{$tv->$hgvs_type}) {
-                push @hgvs_notations, ((defined $hgvs_notation) ? $hgvs_notation : "no $hgvs_type");
-            }
-        }
-        print $vf->variation_name, ': ', join(', ', @hgvs_notations), "\n";
-	}
+  # Get the variation set object
+  $vs = $vs_adaptor->fetch_by_short_name('1kg_hct');
+
+  # Get a gene adaptor and the gene object for the RIC8A gene
+  my $gene_adaptor = $registry->get_adaptor('human','core','gene');
+  my $gene = $gene_adaptor->fetch_by_display_label('RIC8A');
+
+  # Get the variation features on the slice belonging to the variation set
+  my $vfs = $vs->get_all_VariationFeatures_by_Slice($gene->feature_Slice());
+
+  # Loop over the variation features and print the variation using HGVS notation relative to the canonical transcript
+  foreach my $vf (@{$vfs}) {
+    my $tvs = $vf->get_all_TranscriptVariations([$gene->canonical_transcript()]);
+    my $tv = $tvs->[0];
+    my @hgvs_notations = ();
+    foreach my $hgvs_type (qw/hgvs_genomic hgvs_transcript hgvs_protein/) {
+      for my $hgvs_notation (values %{$tv->$hgvs_type}) {
+        push @hgvs_notations, ((defined $hgvs_notation) ? $hgvs_notation : "no $hgvs_type");
+      }
+    }
+    print $vf->variation_name, ': ', join(', ', @hgvs_notations), "\n";
+  }
 </pre>
 <p>
 The variation sets can also be retrieved from the structural variations.
 </p>
 <pre class="code">
-# Get the StructuralVariation object
-my $sv_adaptor  = $registry->get_adaptor( 'human', 'variation', 'structuralvariation' );
-my $sv = $sv_adaptor->fetch_by_name('esv2663683');
+  # Get the StructuralVariation object
+  my $sv_adaptor  = $registry->get_adaptor( 'human', 'variation', 'structuralvariation' );
+  my $sv = $sv_adaptor->fetch_by_name('esv2663683');
 
-# Get the structural variation features
-my $svfs = $sv->get_all_StructuralVariationFeatures();
+  # Get the structural variation features
+  my $svfs = $sv->get_all_StructuralVariationFeatures();
 
-# Loop over the structural variation features and print the corresponding variation set(s)
-foreach my $svf (@{$svfs}) {
-  my $vss = $svf->get_all_VariationSets();
-  foreach my $vs (@{$vss}) {
-    print "The structural variation belongs to the set ", $vs->name, "\n";
+  # Loop over the structural variation features and print the corresponding variation set(s)
+  foreach my $svf (@{$svfs}) {
+    my $vss = $svf->get_all_VariationSets();
+    foreach my $vs (@{$vss}) {
+      print "The structural variation belongs to the set ", $vs->name, "\n";
+    }
   }
-}
 </pre>
 
 
@@ -711,8 +711,8 @@ use Bio::EnsEMBL::Registry;
 my $registry = 'Bio::EnsEMBL::Registry';
 
 $registry-&gt;load_registry_from_db(
-    -host =&gt; 'ensembldb.ensembl.org',
-    -user =&gt; 'anonymous'
+  -host =&gt; 'ensembldb.ensembl.org',
+  -user =&gt; 'anonymous'
 );
 
 my $variation_adaptor = $registry-&gt;get_adaptor('mus_musculus', 'variation', 'variation');
@@ -721,11 +721,11 @@ my $variation = $variation_adaptor-&gt;fetch_by_name('rs4224828');
 my $alleles = $variation-&gt;get_all_Alleles();
 
 foreach my $allele (@{$alleles}) {
-    next unless (defined $allele-&gt;population);
-    my $allele_string   = $allele-&gt;allele;
-    my $frequency       = $allele-&gt;frequency || 'NA';
-    my $population_name = $allele-&gt;population-&gt;name;
-    printf("Allele %s has frequency: %s in population %s.\n", $allele_string, $frequency, $population_name);
+  next unless (defined $allele-&gt;population);
+  my $allele_string   = $allele-&gt;allele;
+  my $frequency       = $allele-&gt;frequency || 'NA';
+  my $population_name = $allele-&gt;population-&gt;name;
+  printf("Allele %s has frequency: %s in population %s.\n", $allele_string, $frequency, $population_name);
 }
 </pre>
 
