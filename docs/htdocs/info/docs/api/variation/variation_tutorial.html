@@ -659,10 +659,15 @@ sub print_set {
 	
 	# Loop over the variation features and print the variation using HGVS notation relative to the canonical transcript
 	foreach my $vf (@{$vfs}) {
-		my $tvs = $vf->get_all_TranscriptVariations([$gene->canonical_transcript()]);
-		my @hgvs_transcript = values(%{$tvs->[0]->hgvs_transcript()});
-		my @hgvs_protein = values(%{$tvs->[0]->hgvs_protein()});
-		printf("\%s\t\%s\t\%s\n",$vf->variation_name(),join(",",@hgvs_transcript),join(",",@hgvs_protein));
+        my $tvs = $vf->get_all_TranscriptVariations([$gene->canonical_transcript()]);
+        my $tv = $tvs->[0];
+        my @hgvs_notations = ();
+        foreach my $hgvs_type (qw/hgvs_genomic hgvs_transcript hgvs_protein/) {
+            for my $hgvs_notation (values %{$tv->$hgvs_type}) {
+                push @hgvs_notations, ((defined $hgvs_notation) ? $hgvs_notation : "no $hgvs_type");
+            }
+        }
+        print $vf->variation_name, ': ', join(', ', @hgvs_notations), "\n";
 	}
 </pre>
 <p>
