@@ -54,10 +54,11 @@ sub run {
   my $options     = $format;
 
   $options .= ' /data_ensembl/assembly_converter/'.$config->{'chain_file'};
-  for (qw(input_file fasta_file output_file)) {
-    next unless $config->{$_};
-    $options .= sprintf(' %s/%s', $work_dir, $config->{$_});
+  $options .= sprintf(' %s/%s', $work_dir, $config->{'input_file'});
+  if ($format eq 'vcf') {
+    $options .= ' /data_ensembl/assembly_converter/'.$config->{'fasta_file'};
   }
+  $options .= sprintf(' %s/%s', $work_dir, $config->{'output_file'});
 
   my $log_file    = sprintf('%s/%s.log', $work_dir, $config->{'output_file'});
 
