@@ -48,28 +48,28 @@ sub content {
 
     my $input_fieldset = $form->add_fieldset({'legend' => 'Input', 'class' => '_stt_input', 'no_required_notes' => 1});
 
-  # Species dropdown list with stt classes to dynamically toggle other fields
-  $input_fieldset->add_field({
-    'label'         => 'Species',
-    'type'          => 'dropdown',
-    'name'          => 'species',
-    'value'         => $current_species,
-    'class'         => '_stt',
-    'values'        => [ map {
-      'value'         => $_->{'value'},
-      'caption'       => $_->{'caption'},
-      }, @$species ]
-  }); 
+    # Species dropdown list with stt classes to dynamically toggle other fields
+    $input_fieldset->add_field({
+      'label'         => 'Species',
+      'type'          => 'dropdown',
+      'name'          => 'species',
+      'value'         => $current_species,
+      'class'         => '_stt',
+      'values'        => [ map {
+        'value'         => $_->{'value'},
+        'caption'       => $_->{'caption'},
+        }, @$species ]
+    }); 
 
-  $input_fieldset->add_field({
+    $input_fieldset->add_field({
       'label'         => 'Assembly mapping',
       'elements'      => [ map {
                             'type'          => 'dropdown',
                             'name'          => 'mappings_for_'.$_->{'value'},
                             'values'        => $_->{'mappings'},
                             'element_class' => '_stt_'.$_->{'value'},  
-                          } @$species],  
-  });
+                          }, @$species],  
+    });
 
     $input_fieldset->add_field({
       'type'          => 'string',
