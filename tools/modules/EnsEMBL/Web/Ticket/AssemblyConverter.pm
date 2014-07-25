@@ -99,7 +99,6 @@ sub init_from_user_input {
       $job_data->{$_} = @val > 1 ? \@val : $val[0];
     } 
   }
-# = { map { my @val = $hub->param($_); $_ => @val > 1 ? \@val : $val[0] } grep { $_ !~ /^text|file/ } $hub->param };
 
   ## Format-specific input tweaks
   if ($format eq 'VCF') {
