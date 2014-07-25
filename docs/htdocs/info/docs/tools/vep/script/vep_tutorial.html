@@ -88,23 +88,24 @@ Do you want to install any cache files (y/n)? y
 
 Downloading list of available cache files
 The following species/files are available; which do you want (can specify multiple separated by spaces):
-1 : ailuropoda_melanoleuca_vep_[[SPECIESDEFS::ENSEMBL_VERSION]].tar.gz
-2 : anolis_carolinensis_vep_[[SPECIESDEFS::ENSEMBL_VERSION]].tar.gz
-3 : bos_taurus_vep_[[SPECIESDEFS::ENSEMBL_VERSION]].tar.gz
+1 : ailuropoda_melanoleuca_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_ailMel1.tar.gz
+2 : anas_platyrhynchos_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_BGI_duck_1.0.tar.gz
+3 : anolis_carolinensis_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_AnoCar2.0.tar.gz
 ...
-24 : homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]].tar.gz
+24 : homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz
 ...
 
 ?</pre>
-    <p> Type "24" (or the relevant number for homo_sapiens) to install the cache
-    for human. This will take a little while to download and unpack! By default
-    the VEP assumes you are working in human; it's easy to switch to any other
+    <p> Type "24" (or the relevant number for homo_sapiens and GRCh38) to
+    install the cache for the latest human assembly. This will take a little
+    while to download and unpack! By default the VEP assumes you are working in
+    human; it's easy to switch to any other
     species using <a href="vep_options.html#opt_species">--species
     [species]</a>. </p>
     
     <pre class="code">? 24
- - downloading ftp://ftp.ensembl.org/pub/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/VEP/homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]].tar.gz
- - unpacking homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]].tar.gz
+ - downloading ftp://ftp.ensembl.org/pub/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/variation/VEP/homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz
+ - unpacking homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]]_GRCh38.tar.gz
 
 Success</pre>
     
@@ -122,10 +123,10 @@ Success</pre>
     formats</a> page for more information. </p>
     
     <p> We can now use our cache file to run the VEP on the supplied example
-    file <b>example.vcf</b>, which is a VCF file containing variants from the
-    1000 Genomes Project exon-sequencing pilot: </p>
+    file <b>example_GRCh38.vcf</b>, which is a VCF file containing variants from
+    the 1000 Genomes Project exon-sequencing pilot, remapped to GRCh38: </p>
     
-    <pre class="code"><b>&gt; perl variant_effect_predictor.pl -i example.vcf --cache</b>
+    <pre class="code"><b>&gt; perl variant_effect_predictor.pl -i example_GRCh38.vcf --cache</b>
 2013-07-31 09:17:54 - Read existing cache info
 2013-07-31 09:17:54 - Starting...
 ERROR: Output file variant_effect_output.txt already exists. Specify a different output file
@@ -136,7 +137,7 @@ with --output_file or overwrite existing file with --force_overwrite</pre>
     So let's tell it to using <a
     href="vep_options.html#opt_force_overwrite">--force_overwrite</a> </p>
     
-    <pre class="code"><b>&gt; perl variant_effect_predictor.pl -i example.vcf --cache --force_overwrite</b>
+    <pre class="code"><b>&gt; perl variant_effect_predictor.pl -i example_GRCh38.vcf --cache --force_overwrite</b>
 2013-07-31 09:19:30 - Read existing cache info
 2013-07-31 09:19:30 - Starting...
 2013-07-31 09:19:30 - Detected format of input file as vcf
@@ -162,8 +163,9 @@ with --output_file or overwrite existing file with --force_overwrite</pre>
     cache - this means the cache we downloaded is working OK. </p>
     
     <p> The VEP produces status output as it runs to give you an idea of the
-    progress it is making. You can silence this output using <a href="vep_options.html#opt_quiet">--quiet</a>,
-    though note that errors and warnings will still be printed out. </p>
+    progress it is making. You can silence this output using <a
+    href="vep_options.html#opt_quiet">--quiet</a>, though note that errors and
+    warnings will still be printed out. </p>
     
     <p> By default the VEP writes to a file named "variant_effect_output.txt" -
     you can change this file name using <a
@@ -172,15 +174,15 @@ with --output_file or overwrite existing file with --force_overwrite</pre>
     
     <pre class="code"><b>&gt; head variant_effect_output.txt</b>
 ## ENSEMBL VARIANT EFFECT PREDICTOR v[[SPECIESDEFS::ENSEMBL_VERSION]]
-## Output produced at 2013-07-31 09:19:30
-## Connected to homo_sapiens_core_[[SPECIESDEFS::ENSEMBL_VERSION]]_37 on ensembldb.ensembl.org
+## Output produced at xxxx-xx-xx 09:19:30
+## Connected to homo_sapiens_core_[[SPECIESDEFS::ENSEMBL_VERSION]]_38 on ensembldb.ensembl.org
 ## Using cache in /nfs/users/nfs_w/wm2/.vep/homo_sapiens/[[SPECIESDEFS::ENSEMBL_VERSION]]
 ## Using API version [[SPECIESDEFS::ENSEMBL_VERSION]], DB version [[SPECIESDEFS::ENSEMBL_VERSION]]
 ## Extra column keys:
 ## DISTANCE : Shortest distance from variant to transcript
-<span style="color:#006">#Uploaded_variation  Location      Allele  Gene            Feature         Feature_type    Consequence ...</span>
-rs116645811          21:26960070   A       ENSG00000260583 ENST00000567517 Transcript      upstream_gene_variant ...
-rs116645811          21:26960070   A       ENSG00000154719 ENST00000352957 Transcript      intron_variant ...</pre>
+<span style="color:#006; background-color:white;">#Uploaded_variation  Location      Allele  Gene            Feature         Feature_type    Consequence ...</span>
+rs116645811          21:25587758   A       ENSG00000260583 ENST00000567517 Transcript      upstream_gene_variant ...
+rs116645811          21:25587758   A       ENSG00000154719 ENST00000352957 Transcript      intron_variant ...</pre>
     
     <p> The lines starting with "#" are header or meta information lines. The
     final one of these (highlighted in blue above) gives the column names for
@@ -211,7 +213,7 @@ rs116645811          21:26960070   A       ENSG00000154719 ENST00000352957 Trans
     href="vep_options.html#opt_sift">--sift b</a> (the b means we want
     <b>b</b>oth the prediction and the score):</p>
     
-    <pre class="code"><b>&gt; perl variant_effect_predictor.pl -i example.vcf --cache --force_overwrite --sift b</b></pre>
+    <pre class="code"><b>&gt; perl variant_effect_predictor.pl -i example_GRCh38.vcf --cache --force_overwrite --sift b</b></pre>
     
     <p> SIFT calls variants either "deleterious" or "tolerated". We can use the
     VEP's <a href="vep_filter.html">filtering script</a> to find only those that
@@ -221,10 +223,10 @@ rs116645811          21:26960070   A       ENSG00000154719 ENST00000352957 Trans
 ...
 ## SIFT : SIFT prediction
 #Uploaded_variation     Location        Allele  Gene            Feature         ...  Extra
-rs114053718             21:34029195     G       ENSG00000159082 ENST00000382499 ...  SIFT=deleterious(0)
-rs114053718             21:34029195     G       ENSG00000159082 ENST00000382491 ...  SIFT=deleterious(0)
-rs114053718             21:34029195     G       ENSG00000159082 ENST00000322229 ...  SIFT=deleterious(0)
-rs114053718             21:34029195     G       ENSG00000159082 ENST00000433931 ...  SIFT=deleterious(0)</pre>
+rs114053718             21:32656885     G       ENSG00000159082 ENST00000382499 ...  SIFT=deleterious(0)
+rs114053718             21:32656885     G       ENSG00000159082 ENST00000382491 ...  SIFT=deleterious(0)
+rs114053718             21:32656885     G       ENSG00000159082 ENST00000322229 ...  SIFT=deleterious(0)
+rs114053718             21:32656885     G       ENSG00000159082 ENST00000433931 ...  SIFT=deleterious(0)</pre>
     
     <p> Note that the SIFT score appears in the "Extra" column, as a key/value
     pair. This column can contain multiple key/value pairs depending on the
@@ -244,7 +246,7 @@ rs114053718             21:34029195     G       ENSG00000159082 ENST00000433931 
     pipe to pass the output from the VEP directly into the filtering script:
     </p>
     
-    <pre class="code"><b>&gt; perl variant_effect_predictor.pl -i example.vcf --cache --force_overwrite --sift b --canonical --symbol \
+    <pre class="code"><b>&gt; perl variant_effect_predictor.pl -i example_GRCh38.vcf --cache --force_overwrite --sift b --canonical --symbol \
 --fields Uploaded_variation,SYMBOL,CANONICAL,SIFT -o STDOUT | \
 perl filter_vep.pl -format vep -filter "CANONICAL is YES and SIFT is deleterious"</b>
 ...

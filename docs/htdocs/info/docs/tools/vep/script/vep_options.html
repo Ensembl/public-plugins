@@ -125,6 +125,7 @@ host          useastdb.ensembl.org</pre>
           <a href="#opt_sift">--sift b</a>,
           <a href="#opt_polyphen">--polyphen b</a>,
           <a href="#opt_ccds">--ccds</a>,
+          <a href="#opt_uniprot">--uniprot</a>,
           <a href="#opt_hgvs">--hgvs</a>,
           <a href="#opt_symbol">--symbol</a>,
           <a href="#opt_numbers">--numbers</a>,
@@ -173,6 +174,17 @@ host          useastdb.ensembl.org</pre>
         latin name can speed up initial database connection as the
         registry does not have to load all available database aliases on
         the server. <i>Default = "homo_sapiens"</i>
+      </td>
+    </tr>
+    <tr id="opt_assembly">
+      <td><pre>--assembly [name]</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        Select the assembly version to use if more than one available. If using
+        the cache, you must have the appropriate assembly's cache file
+        installed. If not specified and you have only 1 assembly version
+        installed, this will be chosen by default. <i>Default = use found
+        assembly version</i>
       </td>
     </tr>
     <tr id="opt_input_file">
@@ -560,6 +572,16 @@ host          useastdb.ensembl.org</pre>
         output. <i>Not used by default</i>
       </td>
     </tr>
+    <tr id="opt_uniprot">
+      <td><pre>--uniprot</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        Adds identifiers for translated protein products from three <a
+        href="http://www.ebi.ac.uk/uniprot" rel="external">UniProt</a>-related
+        databases (SWISSPROT, TREMBL and UniParc) to the output. <i>Not used by
+        default</i>
+      </td>
+    </tr>
     <tr id="opt_canonical">
       <td><pre>--canonical</pre></td>
       <td>&nbsp;</td>
@@ -699,17 +721,25 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--vcf</pre></td>
       <td>&nbsp;</td>
       <td>
-        Writes output in VCF format. Consequences are added in the INFO field of
-        the VCF file, using the key "CSQ". Data fields are encoded separated by
-        "&#124;"; the order of fields is written in the VCF header. Output
-        fields can be selected by using <a
-        href="#opt_fields">--fields</a>.<br/><br/> If the input format was VCF,
-        the file will remain unchanged save for the addition of the CSQ field
-        (unless using any filtering).<br/><br/> Custom data added with <a
+        Writes output in <a href="../vep_formats.html#vcfout">VCF format</a>.
+        Consequences are added in the INFO field of the VCF file, using the key
+        "CSQ". Data fields are encoded separated by "&#124;"; the order of
+        fields is written in the VCF header. Output fields can be selected by
+        using <a href="#opt_fields">--fields</a>.<br/><br/> If the input format
+        was VCF, the file will remain unchanged save for the addition of the CSQ
+        field (unless using any filtering).<br/><br/> Custom data added with <a
         href="#opt_custom">--custom</a> are added as separate fields, using the
         key specified for each data file.<br/><br/> Commas in fields are
         replaced with ampersands (&amp;) to preserve VCF format.<br/><br/><i>Not
         used by default</i>
+      </td>
+    </tr>
+    <tr id="opt_json">
+      <td><pre>--json</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        Writes output in <a href="../vep_formats.html#json">JSON format</a>.
+        <i>Not used by default</i>
       </td>
     </tr>
     <tr id="opt_gvf">
@@ -1190,73 +1220,6 @@ host          useastdb.ensembl.org</pre>
   </table>
   
   
-  
-  <hr/>
-  
-  
-  <h2 id="examples">Examples</h2>
-  
-  <ul>
-    <li>
-      Read input from STDIN, output to STDOUT
-  <pre class="code">perl variant_effect_predictor.pl -cache -o stdout</pre>
-    </li>
-    <li>
-      Add regulatory region consequences
-  <pre class="code">perl variant_effect_predictor.pl -cache -i variants.txt -regulatory</pre>
-    </li>
-    <li>
-      Input file variants.vcf.txt, input file format VCF, add gene symbol
-      identifiers, output SO consequence terms
-  <pre class="code">perl variant_effect_predictor.pl -cache -i variants.vcf.txt -format vcf -symbol -t so</pre>
-    </li>
-    <li>
-      Filter out common variants based on 1000 genomes data
-  <pre class="code">perl variant_effect_predictor.pl -cache -i variants.txt -filter_common</pre>
-    </li>
-    <li>
-      Force overwrite of output file variants_output.txt, check for existing
-      co-located variants, output only coding sequence consequences, output
-      HGVS names
-  <pre class="code">perl variant_effect_predictor.pl -cache -i variants.txt -o variants_output.txt -force -check_existing -coding_only -hgvs</pre>
-    </li>
-    <li>
-      Specify DB connection parameters in registry file ensembl.registry, add SIFT
-      score and prediction, PolyPhen prediction
-  <pre class="code">perl variant_effect_predictor.pl -database -i variants.txt -registry ensembl.registry -sift b -polyphen p</pre>
-    </li>
-    <li>
-      Connect to Ensembl Genomes db server for A.thaliana
-  <pre class="code">perl variant_effect_predictor.pl -database -i variants.txt -genomes -species arabidopsis_thaliana</pre>
-    </li>
-    <li>
-      Load config from ini file, run in quiet mode
-  <pre class="code">perl variant_effect_predictor.pl -config vep.ini -i variants.txt -q</pre>
-    </li>
-    <li>
-      Use cache in /home/vep/mycache/, use gzcat instead of zcat
-  <pre class="code">perl variant_effect_predictor.pl -cache -dir /home/vep/mycache/ -i variants.txt -compress gzcat</pre>
-    </li>
-    <li>
-      Convert RefSeq-based HGVS notations to genomic coordinates in VCF format
-  <pre class="code">perl variant_effect_predictor.pl -database -i hgvs.txt -o hgvs.vcf -refseq -convert vcf</pre>
-    </li>
-    <li>
-      Filter input file on consequence type to include only variants that
-      cause a coding sequence change, write output in original input format
-  <pre class="code">perl variant_effect_predictor.pl -cache -i variants.vcf -o variants_filtered.vcf -filter coding_change -original</pre>
-    </li>
-    <li>
-      Add custom position-based phenotype annotation from remote BED file
-  <pre class="code">perl variant_effect_predictor.pl -cache -i variants.vcf -custom ftp://ftp.myhost.org/data/phenotypes.bed.gz,phenotype</pre>
-    </li>
-    <li>
-      Use the plugin named MyPlugin, output only the variation name, feature, consequence type and MyPluginOutput fields
-  <pre class="code">perl variant_effect_predictor.pl -cache -i variants.vcf -plugin MyPlugin -fields Uploaded_variation,Feature,Consequence,MyPluginOutput</pre>
-    </li>
-  </ul>
-  
-    
   <hr/>
   <h2 id="performance">Performance</h2>
   

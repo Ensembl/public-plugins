@@ -1,7 +1,7 @@
 <html>
 <head>
 <title>Other information</title>
-<meta name="order" content="8" />
+<meta name="order" content="9" />
 </head>
 <body>
 <div>
@@ -9,7 +9,25 @@
 	<div style="float:right"><img src="/img/vep_logo.png"/></div>
 	
 	<h1 id="top"><span style="color:#006">Variant Effect Predictor</span> <img src="/i/16/info.png"> <span style="color:#666">Other information</span></h1>
-	<hr/>
+  <hr/>
+	<h2 id="assembly">Species with multiple assemblies</h2>
+	
+  <p> With the arrival of GRCh38, Ensembl now supports two different assembly
+  versions for the human genome while users transition from GRCh37. We provide a
+  VEP cache download on the latest software version
+  ([[SPECIESDEFS::ENSEMBL_VERSION]]) for both assembly versions. </p>
+  
+  <p> For users looking to move their data between assemblies, Ensembl provides
+  an assembly converter tool - if you've downloaded the VEP, then you have it
+  already! The script is found in the ensembl-tools/scripts/assembly_converter
+  folder. There is also an <a href="/info/docs/tools/index.html">online version
+  of the tool</a> available. Both UCSC (<a
+  href="https://genome.ucsc.edu/util.html" rel="external">liftOver</a>) and NCBI
+  (<a href="http://www.ncbi.nlm.nih.gov/genome/tools/remap"
+  rel="external">Remap</a>) also provide tools for converting data between
+  assemblies. </p>
+  
+  <hr/>
     
 	<h2 id="hgvs">HGVS notations</h2>
 	

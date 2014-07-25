@@ -49,6 +49,7 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
 	
 	<div id="div_versions" style="display:none;">
 	<ul>
+		<li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/75.zip">Download version 75</a> (Ensembl 75) </li>
 		<li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/74.zip">Download version 74</a> (Ensembl 74) </li>
 		<li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/73.zip">Download version 73</a> (Ensembl 73) </li>
 		<li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/72.zip">Download version 72</a> (Ensembl 72) </li>
@@ -66,7 +67,28 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
 	</div><hr/>
 	<h2 id="new">What's new</h2>
 	
-	<h4> New in version 75 <i>(February 2013)</i> </h4>
+	<h4> New in version 76 <i>(August 2014)</i> </h4>
+	
+	<ul>
+    <li>VEP now supports caches from multiple assemblies (<a href="vep_options.html#opt_assembly">--assembly</a>) on the same software
+    version - e.g. human builds GRCh37 and GRCh38</li>
+    <li>Protein identifiers from UniProt (SWISSPROT, TrEMBL and UniParc) now
+    available using <a href="vep_options.html#opt_uniprot">--uniprot</a></li>
+    <li>VEP can generate <a href="../vep_formats.html#json">JSON output</a>
+    using <a href="vep_options.html#opt_json">--json</a></li>
+    <li>Let VEP pick one consequence per variant allele using <a
+    href="vep_options.html#opt_pick_allele">--pick_allele</a></li>
+    <li>Not strictly script-related, but the <a
+    href="http://rest.ensembl.org/#Variation" rel="external">VEP REST API</a>
+    has come out of beta!</li>
+	</ul>
+	
+	<h4 id="history"> Previous version history: <a href="#history"
+	onclick="show_hide('history');"	id="a_history">Show</a> </h4>
+	
+	<div id="div_history" style="display: none;">
+	
+	<h4> New in version 75 <i>(February 2014)</i> </h4>
 	
 	<ul>
     <li>let VEP pick one consequence per variant for you using <a
@@ -80,11 +102,6 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     <li>Added <a href="vep_options.html#opt_cache_version">--cache_version</a>
     option, primarily to aid Ensembl Genomes users.</li>
 	</ul>
-	
-	<h4 id="history"> Previous version history: <a href="#history"
-	onclick="show_hide('history');"	id="a_history">Show</a> </h4>
-	
-	<div id="div_history" style="display: none;">
 	
 	<h4> New in version 74 <i>(December 2013)</i> </h4>
 	
@@ -353,9 +370,9 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
 			<td><pre>--VERSION [version]</pre></td>
 			<td><pre>-v</pre></td>
 			<td>
-        By default the script will install the latest version of the
-        Ensembl API (currently 71). Users can force the script to install a
-        different version at their own risk
+        By default the script will install the latest version of the Ensembl API
+        (currently [[SPECIESDEFS::ENSEMBL_VERSION]]). Users can force the script
+        to install a different version at their own risk
       </td>
 		</tr>
 		<tr>
@@ -366,8 +383,8 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
         subdirectory of the user's home area. Using this option users can
         configure where cache files are installed. The <a
         href="vep_options.html#opt_dir">--dir</a> flag must be passed when
-        running the VEP if a non-default directory is given: <pre>perl
-        variant_effect_predictor.pl --dir [dir]</pre>
+        running the VEP if a non-default directory is given:
+        <pre class="code">perl variant_effect_predictor.pl --dir [dir]</pre>
 			</td>
 		</tr>
 		<tr>
@@ -436,18 +453,9 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
 			</ul>
 		</li>
 		<li> Click through the rest of the install process </li>
-		<li> You will then need to install BioPerl and the Ensembl API as per
-		the <a
-		href="/info/docs/api/api_installation.html">instructions
-		here</a>. You can copy downloaded files from your Windows area to your
-		Cygwin area - by default the Cygwin home directory is
-		"C:/cygwin/home/[username]/". The default shell under Cygwin is bash, so
-		follow the instructions for adding the modules to your PERL5LIB for
-		bash. </li>
-		<li> Download the VEP package from the <a href="#download">download link</a> </li>
-		<li> Open a Cygwin terminal </li>
-		<li> Unpack the VEP package in Cygwin with <pre class="code">tar xvfz variant_effect_predictor.tar.gz</pre> </li>
-        <li> Run the <a href="#installer">installer</a> </li>
+    <li> Download and unpack the VEP package from the <a
+    href="#download">download link</a> </li>
+		<li> Run the VEP <a href="#installer">installer</a> </li>
 	</ol>
 	
 	<h4 id="activestate"> ActiveState Perl </h4>
@@ -473,16 +481,13 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
 		icon to select it for installation </li>
 		<li> Click the green arrow in the top right of the window to install the
 		packages </li>
-		<li> To install the VEP package you will need a program that can unpack
-		tar.gz archives - <a rel="external" href="http://7-zip.org/">7-zip</a> is a freeware
-		program to do this. </li>
-        <li> Download and unpack the VEP package from the <a
-        href="#download">download link</a> </li>
+    <li> Download and unpack the VEP package from the <a
+    href="#download">download link</a> </li>
 		<li> Start an MS-DOS window by clicking on the Start Menu, then Run...,
 		type "cmd" in the box and press enter. Change directory to where you
 		unpacked the VEP package using the <b>cd</b> command:
-<pre class="code">cd C:\Perl\variant_effect_predictor\</pre></li>
-        <li> Run the <a href="#installer">installer</a> </li>
+<pre class="code">cd C:\Perl\ensembl-tools\scripts\variant_effect_predictor\</pre></li>
+    <li> Run the VEP <a href="#installer">installer</a> </li>
 		<li> To use cache files, you will need to download the <a
 		rel="external" href="http://www.gzip.org/">gzip utility</a> and put "gzip.exe" either
 		in your executable path or in the same directory as the
@@ -490,11 +495,9 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
 		'--compress "gzip -dc"' when running the VEP </li>
 	</ol>
 	
-	<p><b>NB:</b> Under ActiveState Perl on Windows there is a known issue when
-	using the pre-built human cache file including SIFT and PolyPhen scores.
-	Users should use either the cache file without SIFT and PolyPhen (scores can
-	still be obtained by the script from the public database), or a virtual
-	machine or Cygwin as described above. </p>
+  <p><b>NB:</b> Under ActiveState Perl on Windows there is a known issue when
+  using cache files including SIFT and/or PolyPhen scores. Users should use
+  either a virtual machine or Cygwin as described above. </p>
 	
 	</div>
 </div>
