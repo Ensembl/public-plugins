@@ -33,6 +33,7 @@ sub update_conf {
   $SiteDefs::ENSEMBL_TMP_DIR_TOOLS              = defer { $SiteDefs::ENSEMBL_TMP_DIR.'/tools' };    # tmp directory for jobs i/o files
   $SiteDefs::ENSEMBL_BLAST_ENABLED              = 1;                                                # Flag to enable/disable BLAST
   $SiteDefs::ENSEMBL_BLAT_BIN_PATH              = '/localsw/bin/gfClient';                          # Path to BLAT client
+  $SiteDefs::ENSEMBL_BLAT_BTOP_SCRIPT           = 'sanger-plugins/tools/utils/BLAT_alignments_to_BTOP.pl';  # Script to convert BLAT alignments to BTOP
   $SiteDefs::ASSEMBLY_CONVERTER_BIN_PATH        = '/localsw/CrossMap-0.1.3/usr/local/bin/CrossMap.py';                          # Path to CrossMap
   $SiteDefs::ENSEMBL_VEP_ENABLED                = 1;                                                # Flag to enable/disable VEP
   $SiteDefs::ENSEMBL_AC_ENABLED                 = 1;                                                # Flag to enable/disable Assembly Converter

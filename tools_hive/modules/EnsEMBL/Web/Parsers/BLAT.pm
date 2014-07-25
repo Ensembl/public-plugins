@@ -41,6 +41,8 @@ sub parse {
   iterate_file($file, sub {
     my ($line)    = @_;
 
+    chomp $line;
+
     my @hit_data  = split (/\t/, $line);
     my $q_ori     = $hit_data[6] < $hit_data[7] ? 1 : -1;
     my $t_ori     = $hit_data[8] < $hit_data[9] ? 1 : -1;
@@ -62,7 +64,8 @@ sub parse {
       score         => $hit_data[11],
       evalue        => $hit_data[10],
       pident        => $hit_data[2],
-      len           => $hit_data[3]
+      len           => $hit_data[3],
+      aln           => $hit_data[12],
     };
 
     push @results, $hit;

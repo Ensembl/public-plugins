@@ -35,10 +35,12 @@ sub setup_executables {
   ## @override
   my ($self, $blast_type) = @_;
 
-  my $blat_bin = $self->param_required('BLAT_bin_path');
+  my $blat_bin    = $self->param_required('BLAT_bin_path');
+  my $BTOP_script = $self->param_required('BLAT_BTOP_script');
 
   throw exception('HiveException', "$blast_type can not be run with ".__PACKAGE__) unless $blast_type eq 'BLAT';
   throw exception('HiveException', 'BLAT client binary file is either missing or is not executable.') unless -x $blat_bin;
+  throw exception('HiveException', 'BLAT to BTOP script is either missing or not .') unless -e $BTOP_script;
 }
 
 sub setup_source_file {
@@ -68,6 +70,7 @@ sub run {
 
   # Set up the job
   my $blat_bin    = $self->param('BLAT_bin_path');
+  my $BTOP_script = $self->param('BLAT_BTOP_script');
   my $host        = $self->param('__host');
   my $port        = $self->param('__port');
   my $nib_dir     = $self->param('__nib_dir');
@@ -94,6 +97,19 @@ sub run {
       my ($error_details) = file_get_contents($log_file);
       throw exception('HiveException', $error_details);
     }
+  }
+
+  # now both output are available, run the BTOP script to save BTOP alignments to tab output file
+  my $log_file = "$raw_output.BTOP.log";
+  my $BTOP_command = EnsEMBL::Web::SystemCommand->new($self, $BTOP_script, {
+    '--in'  => $raw_output,
+    '--out' => $tab_output
+  })->execute({'log_file' => $log_file});
+
+  # throw exception if alignment parsing failed
+  if (my $error_code = $BTOP_command->error_code) {
+    my ($error_details) = file_get_contents($log_file);
+    throw exception('HiveException', $error_details);
   }
 
   return 1;

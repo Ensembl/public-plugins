@@ -26,9 +26,7 @@ use warnings;
 use constant BLAT_RESOURCE_NAME => 'blatlocal';
 
 sub default_options {
-  my ($class, $conf) = @_;
-  my $sd = $conf->species_defs;
-  return { 'BLAT_bin_path' => $sd->ENSEMBL_BLAT_BIN_PATH };
+  return {};
 }
 
 sub resource_classes {
@@ -48,6 +46,8 @@ sub pipeline_analyses {
     '-module'               => 'EnsEMBL::Web::RunnableDB::Blat',
     '-parameters'           => {
       'ticket_db'             => $conf->o('ticket_db'),
+      'BLAT_bin_path'         => $sd->ENSEMBL_BLAT_BIN_PATH,
+      'BLAT_BTOP_script'      => $conf->o('ensembl_codebase').'/'.$sd->ENSEMBL_BLAT_BTOP_SCRIPT,
       %default_options
     },
     '-rc_name'              => $class->BLAT_RESOURCE_NAME,
