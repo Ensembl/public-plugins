@@ -104,7 +104,7 @@ sub init_from_user_input {
   if ($format eq 'VCF') {
     ## Extra parameter for VCF
     my @assemblies = split('_to_', $job_data->{'mapping'});
-    $job_data->{'fasta_file'} = $species.'_'.$assemblies[1].'.fa';
+    $job_data->{'fasta_file'} = sprintf('%s/%s.%s.dna.toplevel.fa', lc($species), $species, $assemblies[1]);
   } 
   elsif ($format eq 'WIG') {
     ## WIG is output as BedGraph, so remove extension
