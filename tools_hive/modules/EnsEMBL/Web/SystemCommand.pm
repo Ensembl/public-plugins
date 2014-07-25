@@ -18,7 +18,7 @@ limitations under the License.
 
 package EnsEMBL::Web::SystemCommand;
 
-### Wrapper around system() method
+### Wrapper around system()
 
 use strict;
 use warnings;
@@ -46,7 +46,6 @@ sub execute {
   ## @param Hashref with following keys
   ##  - output_file Name of the file to capture the output (optional)
   ##  - log_file    Name of the file to capture error logs (optional)
-  ##  - debug       Flag if on, will print the debug info to STDERR (not to the log file even if provided) (optional)
   ## @return the command object itself
   my ($self, $params) = @_;
 
