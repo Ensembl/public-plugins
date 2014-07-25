@@ -79,13 +79,32 @@ sub init_from_user_input {
 
   # check file format is matching
   ## TODO VEP can do this - need similar generic functionality in EnsEMBL::IO
+  ## Do simple check of file extension for now
+  $file_name =~ /\.(\w{2,4}$)/;
+  my $extension = $1;
+  if (lc($extension) ne lc($format)) {
+    throw exception('InputError', 'Your file does not appear to match the selected format.');
+  }
 
-  my $job_data = { map { my @val = $hub->param($_); $_ => @val > 1 ? \@val : $val[0] } grep { $_ !~ /^text|file/ } $hub->param };
+  my $job_data;
+  foreach ($hub->param) {
+    next if $_ =~ /^text/;
+    next if $_ eq 'file';
+    if ($_ =~ /mappings_for_(\w+)/) {
+      next unless $1 eq $species;
+      $job_data->{'mapping'} = $hub->param($_); 
+    }
+    else {
+      my @val = $hub->param($_);
+      $job_data->{$_} = @val > 1 ? \@val : $val[0];
+    } 
+  }
+# = { map { my @val = $hub->param($_); $_ => @val > 1 ? \@val : $val[0] } grep { $_ !~ /^text|file/ } $hub->param };
 
   ## Format-specific input tweaks
   if ($format eq 'VCF') {
     ## Extra parameter for VCF
-    my @assemblies = split('_to_', $hub->param('mapping'));
+    my @assemblies = split('_to_', $job_data->{'mapping'});
     $job_data->{'fasta_file'} = $species.'_'.$assemblies[1].'.fa';
   } 
   elsif ($format eq 'WIG') {
@@ -94,7 +113,8 @@ sub init_from_user_input {
   }
 
   $job_data->{'species'}      = $species;
-  $job_data->{'chain_file'}   = lc($species).'/'.$hub->param('mapping').'.chain.gz';
+
+  $job_data->{'chain_file'}   = lc($species).'/'.$job_data->{'mapping'}.'.chain.gz';
   $job_data->{'input_file'}   = $file_name;
   $job_data->{'output_file'}  = 'output_'.$file_name;
 
