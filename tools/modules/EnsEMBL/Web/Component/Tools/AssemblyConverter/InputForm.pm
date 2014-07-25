@@ -48,9 +48,28 @@ sub content {
 
     my $input_fieldset = $form->add_fieldset({'legend' => 'Input', 'class' => '_stt_input', 'no_required_notes' => 1});
 
-    # Placeholders for species & assembly mapping dropdowns
-    $input_fieldset->append_child('text', 'SPECIES_DROPDOWN');
-    $input_fieldset->append_child('text', 'MAPPING_DROPDOWN');
+  # Species dropdown list with stt classes to dynamically toggle other fields
+  $input_fieldset->add_field({
+    'label'         => 'Species',
+    'type'          => 'dropdown',
+    'name'          => 'species',
+    'value'         => $current_species,
+    'class'         => '_stt',
+    'values'        => [ map {
+      'value'         => $_->{'value'},
+      'caption'       => $_->{'caption'},
+      }, @$species ]
+  }); 
+
+  $input_fieldset->add_field({
+      'label'         => 'Assembly mapping',
+      'elements'      => [ map {
+                            'type'          => 'dropdown',
+                            'name'          => 'mappings_for_'.$_->{'value'},
+                            'values'        => $_->{'mappings'},
+                            'element_class' => '_stt_'.$_->{'value'},  
+                          } @$species],  
+  });
 
     $input_fieldset->add_field({
       'type'          => 'string',
@@ -61,12 +80,7 @@ sub content {
     $input_fieldset->add_field({
       'type'          => 'dropdown',
       'name'          => 'format',
-      'label'         => sprintf('Input file format)', $hub->url({
-            'type'          => 'Help',
-            'action'        => 'View',
-            'id'            => { $sd->multiX('ENSEMBL_HELP') }->{'Tools/AssemblyConverter/AssemblyConverter_formats'},
-            '__clear'       => 1
-          })),
+      'label'         => 'Input file format',
       'values'        => $input_formats, 
       'class'         => '_stt format'
     });
@@ -114,36 +128,7 @@ sub content {
   my $edit_job = ($hub->function || '') eq 'Edit' ? $self->object->get_edit_jobs_data : [];
   $edit_job = @$edit_job ? $form2->add_hidden({ 'name'  => 'edit_jobs', 'value' => $self->jsonify($edit_job) })->render : '';
 
-  # Species dropdown list with stt classes to dynamically toggle other fields
-  my $species_dropdown = $form2->add_field({
-    'label'         => 'Species',
-    'type'          => 'dropdown',
-    'name'          => 'species',
-    'value'         => $current_species,
-    'class'         => '_stt',
-    'values'        => [ map {
-      'value'         => $_->{'value'},
-      'caption'       => $_->{'caption'},
-      }, @$species ]
-  })->render; 
-
-  my $mappings = [];
-  for (@$species) {
-    foreach my $m (@{$_->{'mappings'}||[]}) {
-      $m->{'class'} = $_->{'value'} eq $current_species ? '' : 'hidden';
-      push @$mappings, $m; 
-    }
-  }
-
-  my $mapping_dropdown = $form2->add_field({
-      'label'         => 'Assembly mapping',
-      'type'          => 'dropdown',
-      'name'          => 'mapping',
-      'values'        => $mappings,
-    #  'values'        => join '', map { sprintf '<span class="_stt_%s%s">%s</span>', $_->{'value'}, $_->{'value'} eq $current_species ? '' : ' hidden', delete $_->{'assembly'} } @species, 
-  })->render;
-
-  # Previously uploaded files
+# Previously uploaded files
   my $file_dropdown   = '';
   my %allowed_formats = map { $_->{'value'} => $_->{'caption'} } @$input_formats;
   my @user_files      = sort { $b->{'timestamp'} <=> $a->{'timestamp'} } grep { $_->{'format'} && $allowed_formats{$_->{'format'}} } $hub->session->get_data('type' => 'upload'), $hub->user ? $hub->user->uploads : ();
@@ -187,8 +172,6 @@ sub content {
 
   # Regexp to replace all placeholders from cached form
   $form =~ s/EDIT_JOB/$edit_job/;
-  $form =~ s/SPECIES_DROPDOWN/$species_dropdown/;
-  $form =~ s/MAPPING_DROPDOWN/$mapping_dropdown/;
   $form =~ s/FILES_DROPDOWN/$file_dropdown/;
 
   return sprintf('
@@ -215,6 +198,7 @@ sub _species {
     my $sd      = $hub->species_defs;
     my %fav     = map { $_ => 1 } @{$hub->get_favourite_species};
     my @species;
+    my $current_species = $hub->species;
 
     ## Need to fetch chain file info from tools server somehow!
     my @ok_species = qw(Bos_taurus Canis_familiaris Homo_sapiens Mus_musculus Rattus_norvegicus Saccharomyces_cerevisiae Sus_scrofa);
@@ -222,6 +206,7 @@ sub _species {
                       'Homo_sapiens' => ['GRCh37_to_GRCh38', 'NCBI36_to_GRCh38'],
                       'Mus_musculus' => ['GRCm38_to_NCBIM36', 'GRCm38_to_NCBIM37',
                                          'NCBIM36_to_GRCm38', 'NCBIM37_to_GRCm38'],
+                      'Rattus_norvegicus' => ['RGSC3.4_to_Rnor_5.0', 'Rnor_5.0_to_RGSC3.4'],
                       'Canis_familiaris' => ['BROADD2_to_CanFam3.1',
                                              'CanFam3.1_to_BROADD2'],
                       'Bos_taurus' => ['Btau_4.0_to_UMD3.1', 'UMD3.1_to_Btau_4.0'],
