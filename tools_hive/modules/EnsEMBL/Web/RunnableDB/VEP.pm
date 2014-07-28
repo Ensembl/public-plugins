@@ -28,12 +28,33 @@ use parent qw(EnsEMBL::Web::RunnableDB);
 use EnsEMBL::Web::Exceptions;
 use EnsEMBL::Web::SystemCommand;
 use EnsEMBL::Web::Utils::FileHandler qw(file_get_contents);
+use EnsEMBL::Web::Utils::FileSystem qw(list_dir_contents);
 
 sub fetch_input {
   my $self = shift;
-  $self->param_required($_) for qw(perl_bin script work_dir config job_id vep_to_web_script);
 
-  -X $_ or throw exception('HiveException', "Script $_ doesn't exist, or is not executable.") for map $self->param($_), qw(script vep_to_web_script);
+  my $code_root = $self->param_required('code_root');
+  my $script_path;
+
+  # set up absolute locations for the scripts
+  for (qw(script vep_to_web_script)) {
+    my $abs_location = sprintf '%s/%s', $code_root, $self->param_required($_);
+    throw exception('HiveException', "Script $abs_location doesn't exist, or is not executable.") unless -x $abs_location;
+    $self->param($_, $abs_location);
+    $script_path = $abs_location =~ s/(\/[^\/]+$)//r if $_ eq 'script'; # script path also needs to go into perl_bin
+  }
+
+  # set up perl bin with the required library locations
+  try {
+    my @modules   = map { -d "$code_root/$_/modules" ? "-I $code_root/$_/modules" : () } @{list_dir_contents($code_root)};
+    my $perl_bin  = join ' ', $self->param_required('perl_bin'), '-I', $self->param_required('bioperl_dir'), '-I', $script_path, @modules;
+    $self->param('perl_bin', $perl_bin);
+  } catch {
+    throw exception('HiveException', $_->message(1));
+  };
+
+  # other required params
+  $self->param_required($_) for qw(work_dir config job_id cache_dir);
 }
 
 sub run {
@@ -49,6 +70,7 @@ sub run {
   $options->{"--$_"}  = '' for qw(force quiet vcf tabix stats_text cache); # we need these options set on always!
   $options->{"--$_"}  = sprintf '"%s/%s"', $work_dir, delete $config->{$_} for qw(input_file output_file stats_file);
   $options->{"--$_"}  = $config->{$_} eq 'yes' ? '' : $config->{$_} for grep { defined $config->{$_} && $config->{$_} ne 'no' } keys %$config;
+  $options->{"--dir"} = $self->param('cache_dir');
 
   # save the result file name for later use
   $self->param('result_file', $options->{'--output_file'} =~ s/(^\")|(\"$)//rg);

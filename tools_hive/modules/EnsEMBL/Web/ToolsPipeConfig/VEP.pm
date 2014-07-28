@@ -23,10 +23,6 @@ package EnsEMBL::Web::ToolsPipeConfig::VEP;
 use strict;
 use warnings;
 
-sub default_options {
-  return {};
-}
-
 sub resource_classes {
   my ($class, $conf) = @_;
   my $sd          = $conf->species_defs;
@@ -38,23 +34,23 @@ sub resource_classes {
 sub pipeline_analyses {
   my ($class, $conf) = @_;
 
-  my $species_defs    = $conf->species_defs;
-  my $script_options  = $species_defs->ENSEMBL_VEP_SCRIPT_DEFAULT_OPTIONS;
-  my $perl_bin        = join ' ', $species_defs->ENSEMBL_TOOLS_PERL_BIN, '-I', $species_defs->ENSEMBL_TOOLS_BIOPERL_DIR, map(sprintf('-I %s/%s', $species_defs->ENSEMBL_LSF_CODE_LOCATION, $_), @{$species_defs->ENSEMBL_TOOLS_LIB_DIRS});
+  my $sd              = $conf->species_defs;
+  my $script_options  = $sd->ENSEMBL_VEP_SCRIPT_DEFAULT_OPTIONS;
 
   return [{
     '-logic_name'           => 'VEP',
     '-module'               => 'EnsEMBL::Web::RunnableDB::VEP',
     '-parameters'           => {
       'ticket_db'             => $conf->o('ticket_db'),
-      'script'                => $conf->o('ensembl_codebase').'/'.$species_defs->ENSEMBL_VEP_SCRIPT,
-      'vep_to_web_script'     => $conf->o('ensembl_codebase').'/'.$species_defs->ENSEMBL_VEP_TO_WEB_SCRIPT,
-      'script_options'        => { map { defined $script_options->{$_} ? ( $_ => $script_options->{$_} ) : () } keys %$script_options }, # filter out the undef values
-      'perl_bin'              => $perl_bin
+      'perl_bin'              => $sd->ENSEMBL_TOOLS_PERL_BIN,
+      'bioperl_dir'           => $sd->ENSEMBL_TOOLS_BIOPERL_DIR,
+      'script'                => $sd->ENSEMBL_VEP_SCRIPT,
+      'vep_to_web_script'     => $sd->ENSEMBL_VEP_TO_WEB_SCRIPT,
+      'script_options'        => { map { defined $script_options->{$_} ? ( $_ => $script_options->{$_} ) : () } keys %$script_options } # filter out the undef values
     },
-    '-analysis_capacity'    => $species_defs->ENSEMBL_VEP_ANALYSIS_CAPACITY || 12,
+    '-analysis_capacity'    => $sd->ENSEMBL_VEP_ANALYSIS_CAPACITY || 12,
     '-meadow_type'          => 'LSF',
-    '-rc_name'              => $conf->species_defs->ENSEMBL_VEP_LSF_QUEUE,
+    '-rc_name'              => $sd->ENSEMBL_VEP_LSF_QUEUE,
     '-max_retry_count'      => 0,
     '-failed_job_tolerance' => 100
   }];
