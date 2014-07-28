@@ -23,11 +23,15 @@ package EnsEMBL::Web::ToolsPipeConfig::Blat;
 use strict;
 use warnings;
 
-use constant BLAT_RESOURCE_NAME => 'blatlocal';
-
 sub resource_classes {
   my ($class, $conf) = @_;
-  return {$class->BLAT_RESOURCE_NAME => { 'LOCAL' => ''}};
+  my $sd = $conf->species_defs;
+
+  return { $sd->ENSEMBL_BLAT_LOCAL_QUEUE => {'LOCAL' => ''} } if $sd->ENSEMBL_BLAT_RUN_LOCAL;
+
+  my $lsf_queue   = $sd->ENSEMBL_BLAT_LSF_QUEUE;
+  my $lsf_timeout = $sd->ENSEMBL_BLAT_LSF_TIMEOUT;
+  return {$lsf_queue => { 'LSF' => $lsf_timeout ? "-q $lsf_queue -W $lsf_timeout" : "-q $lsf_queue" }};
 }
 
 sub pipeline_analyses {
@@ -43,9 +47,10 @@ sub pipeline_analyses {
       'BLAT_bin_path'         => $sd->ENSEMBL_BLAT_BIN_PATH,
       'BLAT_BTOP_script'      => $sd->ENSEMBL_BLAT_BTOP_SCRIPT
     },
-    '-rc_name'              => $class->BLAT_RESOURCE_NAME,
+    '-rc_name'              => $sd->ENSEMBL_BLAT_RUN_LOCAL ? $sd->ENSEMBL_BLAT_LOCAL_QUEUE : $sd->ENSEMBL_BLAT_LSF_QUEUE,
+    '-analysis_capacity'    => $sd->ENSEMBL_BLAT_ANALYSIS_CAPACITY || 4,
     '-max_retry_count'      => 0,
-    '-meadow_type'          => 'LOCAL',
+    '-meadow_type'          => $sd->ENSEMBL_BLAT_RUN_LOCAL ? 'LOCAL' : 'LSF',
     '-failed_job_tolerance' => 100
   }];
 }

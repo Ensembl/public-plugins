@@ -61,6 +61,11 @@ sub update_conf {
   $SiteDefs::ENSEMBL_REPEATMASK_BIN_PATH        = '/localsw/bin/RepeatMasker';                      # path to RepeatMasker executable on the  LSF host (or local machine if job running locally)
 
   # BLAT configs
+  $SiteDefs::ENSEMBL_BLAT_RUN_LOCAL             = 1;                                                # Flag if on, will run blat jobs on LOCAL meadow
+  $SiteDefs::ENSEMBL_BLAT_LOCAL_QUEUE           = 'blat_local';                                     # LOCAL meadow resource for BLAT jobs
+  $SiteDefs::ENSEMBL_BLAT_LSF_QUEUE             = 'toolsgeneral';                                   # LSF queue for blat jobs
+  $SiteDefs::ENSEMBL_BLAT_LSF_TIMEOUT           = undef;                                            # Max timelimit a blat job is allowed to run
+  $SiteDefs::ENSEMBL_BLAT_ANALYSIS_CAPACITY     = 4;                                                # Number of jobs that can be run parallel in LSF in the tools queue
   $SiteDefs::ENSEMBL_BLAT_TWOBIT_DIR            = '/data_ensembl/blat/ensembl';                     # location where blat twobit files are located on LSF node
 
   # VEP configs
@@ -80,18 +85,11 @@ sub update_conf {
   $SiteDefs::ENSEMBL_VEP_TO_WEB_SCRIPT          = 'sanger-plugins/tools/utils/vep_to_web.pl';       # location of the VEP script accessible to the local machine or LSF host to parse VCF results
 
   # Assembly Converter configs
-  $SiteDefs::ENSEMBL_AC_LSF_QUEUE              = 'AC';                                            # LSF queue for AC jobs, if running on farm
-  $SiteDefs::ENSEMBL_AC_LSF_TIMEOUT            = '3:00';                                           # Max timelimit an AC job is allowed to run
-  $SiteDefs::ENSEMBL_AC_ANALYSIS_CAPACITY      = 24;                                               # Number of jobs that can be run parallel in LSF in the queue
-  $SiteDefs::ENSEMBL_AC_SCRIPT_DEFAULT_OPTIONS = {                                                 # Default options for command line assembly converter script (keys with value undef get ignored)
-    '--host'        => undef,                                                                       # Database host (defaults to ensembldb.ensembl.org)
-    '--user'        => undef,                                                                       # Defaults to 'anonymous'
-    '--password'    => undef,                                                                       # Not used by default
-    '--port'        => undef,                                                                       # Defaults to 5306
-    '--fork'        => 4,                                                                           # Enable forking, using 4 forks
-    '--dir'         => '/data_ensembl/assembly_converter/',     # path to CrossMap chain files
-  };
-
+  $SiteDefs::ENSEMBL_AC_RUN_LOCAL               = 1;                                                # Flag if on, will run AC jobs on LOCAL meadow
+  $SiteDefs::ENSEMBL_AC_LOCAL_QUEUE             = 'ac_local';                                       # LOCAL meadow resource for AC jobs
+  $SiteDefs::ENSEMBL_AC_LSF_QUEUE               = 'toolsgeneral';                                   # LSF queue for AC jobs, if running on farm
+  $SiteDefs::ENSEMBL_AC_LSF_TIMEOUT             = undef;                                            # Max timelimit an AC job is allowed to run
+  $SiteDefs::ENSEMBL_AC_ANALYSIS_CAPACITY       = 4;                                                # Number of jobs that can be run parallel in LSF in the queue
 
 }
 

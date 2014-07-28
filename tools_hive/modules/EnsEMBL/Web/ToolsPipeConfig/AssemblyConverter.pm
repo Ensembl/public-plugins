@@ -23,11 +23,15 @@ package EnsEMBL::Web::ToolsPipeConfig::AssemblyConverter;
 use strict;
 use warnings;
 
-use constant AC_RESOURCE_NAME => 'ac_local';
-
 sub resource_classes {
   my ($class, $conf) = @_;
-  return {$class->AC_RESOURCE_NAME => { 'LOCAL' => ''}};
+  my $sd = $conf->species_defs;
+
+  return { $sd->ENSEMBL_AC_LOCAL_QUEUE => {'LOCAL' => ''} } if $sd->ENSEMBL_AC_RUN_LOCAL;
+
+  my $lsf_queue   = $sd->ENSEMBL_AC_LSF_QUEUE;
+  my $lsf_timeout = $sd->ENSEMBL_AC_LSF_TIMEOUT;
+  return {$lsf_queue => { 'LSF' => $lsf_timeout ? "-q $lsf_queue -W $lsf_timeout" : "-q $lsf_queue" }};
 }
 
 sub pipeline_analyses {
@@ -42,9 +46,10 @@ sub pipeline_analyses {
       'ticket_db'             => $conf->o('ticket_db'),
       'AC_bin_path'           => $sd->ASSEMBLY_CONVERTER_BIN_PATH,
     },
-    '-rc_name'              => $class->AC_RESOURCE_NAME,
+    '-rc_name'              => $sd->ENSEMBL_AC_RUN_LOCAL ? $sd->ENSEMBL_AC_LOCAL_QUEUE : $sd->ENSEMBL_AC_LSF_QUEUE,
+    '-analysis_capacity'    => $sd->ENSEMBL_AC_ANALYSIS_CAPACITY || 4,
     '-max_retry_count'      => 0,
-    '-meadow_type'          => 'LOCAL',
+    '-meadow_type'          => $sd->ENSEMBL_AC_RUN_LOCAL ? 'LOCAL' : 'LSF',
     '-failed_job_tolerance' => 100
   }];
 }
