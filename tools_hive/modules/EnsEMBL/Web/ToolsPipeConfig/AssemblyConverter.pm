@@ -25,12 +25,6 @@ use warnings;
 
 use constant AC_RESOURCE_NAME => 'ac_local';
 
-sub default_options {
-  my ($class, $conf) = @_;
-  my $sd = $conf->species_defs;
-  return { 'AC_bin_path' => $sd->ASSEMBLY_CONVERTER_BIN_PATH };
-}
-
 sub resource_classes {
   my ($class, $conf) = @_;
   return {$class->AC_RESOURCE_NAME => { 'LOCAL' => ''}};
@@ -39,8 +33,6 @@ sub resource_classes {
 sub pipeline_analyses {
   my ($class, $conf) = @_;
 
-  my %default_options = map { $_ => $conf->o($_) } keys %{$class->default_options($conf)}; # pass all default_options to hive
-
   my $sd = $conf->species_defs;
 
   return [{
@@ -48,7 +40,7 @@ sub pipeline_analyses {
     '-module'               => 'EnsEMBL::Web::RunnableDB::AssemblyConverter',
     '-parameters'           => {
       'ticket_db'             => $conf->o('ticket_db'),
-      %default_options
+      'AC_bin_path'           => $sd->ASSEMBLY_CONVERTER_BIN_PATH,
     },
     '-rc_name'              => $class->AC_RESOURCE_NAME,
     '-max_retry_count'      => 0,

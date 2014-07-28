@@ -19,22 +19,9 @@ limitations under the License.
 package EnsEMBL::Web::ToolsPipeConfig::Blast;
 
 ### Provides configs for Blast for tools pipeline
-### To add another tool, add a similar package with similar methods
 
 use strict;
 use warnings;
-
-sub default_options {
-  my ($class, $conf) = @_;
-  my $sd = $conf->species_defs;
-  return {
-    'NCBIBLAST_bin_dir'           => $sd->ENSEMBL_NCBIBLAST_BIN_PATH,
-    'NCBIBLAST_matrix'            => $sd->ENSEMBL_NCBIBLAST_MATRIX,
-    'NCBIBLAST_index_files'       => $sd->ENSEMBL_NCBIBLAST_DATA_PATH,
-    'NCBIBLAST_dna_index_files'   => $sd->ENSEMBL_NCBIBLAST_DATA_PATH_DNA,
-    'NCBIBLAST_repeat_mask_bin'   => $sd->ENSEMBL_REPEATMASK_BIN_PATH
-  };
-}
 
 sub resource_classes {
   my ($class, $conf) = @_;
@@ -47,16 +34,16 @@ sub resource_classes {
 sub pipeline_analyses {
   my ($class, $conf) = @_;
 
-  my %default_options = map { $_ => $conf->o($_) } keys %{$class->default_options($conf)}; # pass all default_options to hive
-
   my $sd = $conf->species_defs;
 
   return [{
     '-logic_name'           => 'Blast',
     '-module'               => 'EnsEMBL::Web::RunnableDB::Blast',
     '-parameters'           => {
-      'ticket_db'             => $conf->o('ticket_db'),
-      %default_options
+      'ticket_db'                 => $conf->o('ticket_db'),
+      'NCBIBLAST_bin_dir'         => $sd->ENSEMBL_NCBIBLAST_BIN_PATH,
+      'NCBIBLAST_matrix'          => $sd->ENSEMBL_NCBIBLAST_MATRIX,
+      'NCBIBLAST_repeat_mask_bin' => $sd->ENSEMBL_REPEATMASK_BIN_PATH,
     },
     '-analysis_capacity'    => $sd->ENSEMBL_BLAST_ANALYSIS_CAPACITY || 12,
     '-max_retry_count'      => 1,

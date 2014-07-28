@@ -95,18 +95,14 @@ sub default_options {
       '-dbname'               =>  $sd->multidb->{'DATABASE_WEB_TOOLS'}{'NAME'},
     },
 
-    map %{$_->default_options($self)}, $self->available_tools
+    map %{$_->can('default_options') ? $_->default_options($self) : {}}, $self->available_tools
   };
 }
 
 sub resource_classes {
   ## @override
   my $self = shift;
-  return {
-    'default' => { 'LSF' => '' },
-    'urgent'  => { 'LSF' => '-q yesterday' },
-    map %{$_->resource_classes($self)}, $self->available_tools
-  };
+  return { map %{$_->resource_classes($self)}, $self->available_tools };
 }
 
 sub pipeline_analyses {
