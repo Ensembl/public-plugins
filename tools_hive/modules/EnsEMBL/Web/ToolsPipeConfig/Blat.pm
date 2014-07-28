@@ -25,10 +25,6 @@ use warnings;
 
 use constant BLAT_RESOURCE_NAME => 'blatlocal';
 
-sub default_options {
-  return {};
-}
-
 sub resource_classes {
   my ($class, $conf) = @_;
   return {$class->BLAT_RESOURCE_NAME => { 'LOCAL' => ''}};
@@ -36,8 +32,6 @@ sub resource_classes {
 
 sub pipeline_analyses {
   my ($class, $conf) = @_;
-
-  my %default_options = map { $_ => $conf->o($_) } keys %{$class->default_options($conf)}; # pass all default_options to hive
 
   my $sd = $conf->species_defs;
 
@@ -47,8 +41,7 @@ sub pipeline_analyses {
     '-parameters'           => {
       'ticket_db'             => $conf->o('ticket_db'),
       'BLAT_bin_path'         => $sd->ENSEMBL_BLAT_BIN_PATH,
-      'BLAT_BTOP_script'      => $conf->o('ensembl_codebase').'/'.$sd->ENSEMBL_BLAT_BTOP_SCRIPT,
-      %default_options
+      'BLAT_BTOP_script'      => $sd->ENSEMBL_BLAT_BTOP_SCRIPT
     },
     '-rc_name'              => $class->BLAT_RESOURCE_NAME,
     '-max_retry_count'      => 0,

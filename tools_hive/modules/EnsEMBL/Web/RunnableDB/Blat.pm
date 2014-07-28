@@ -36,11 +36,13 @@ sub setup_executables {
   my ($self, $blast_type) = @_;
 
   my $blat_bin    = $self->param_required('BLAT_bin_path');
-  my $BTOP_script = $self->param_required('BLAT_BTOP_script');
+  my $BTOP_script = sprintf '%s/%s', $self->param_required('code_root'), $self->param_required('BLAT_BTOP_script');
 
   throw exception('HiveException', "$blast_type can not be run with ".__PACKAGE__) unless $blast_type eq 'BLAT';
   throw exception('HiveException', 'BLAT client binary file is either missing or is not executable.') unless -x $blat_bin;
   throw exception('HiveException', 'BLAT to BTOP script is either missing or not .') unless -e $BTOP_script;
+
+  $self->param('BLAT_BTOP_script', $BTOP_script);
 }
 
 sub setup_source_file {
