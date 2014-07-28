@@ -34,24 +34,7 @@ sub prepare_to_dispatch {
     return;
   }
 
-  my $object  = $self->object;
-  my $hub     = $self->hub;
-  my $dba     = $hub->database('core', $rose_object->species);
-  my $dbc     = $dba->dbc;
-
-  $job_data->{'dba'}  = {
-    -user               => $dbc->username,
-    -host               => $dbc->host,
-    -port               => $dbc->port,
-    -pass               => $dbc->password,
-    -dbname             => $dbc->dbname,
-    -driver             => $dbc->driver,
-    -species            => $dba->species,
-    -species_id         => $dba->species_id,
-    -multispecies_db    => $dba->is_multispecies,
-    -group              => $dba->group
-  };
-
+  my $object      = $self->object;
   my @search_type = $object->parse_search_type(delete $job_data->{'search_type'});
 
   $job_data->{'blast_type'} = $search_type[0];
@@ -62,7 +45,7 @@ sub prepare_to_dispatch {
 }
 
 sub get_dispatcher_class {
-  ## For Blat, we use the local Blat dispatcher, otherwise whatever is configured in SiteDefs.
+  ## For Blat, we use the Blat dispatcher, otherwise whatever is configured in SiteDefs.
   my ($self, $data) = @_;
   return $data->{'blast_type'} eq 'BLAT' ? 'Blat' : undef;
 }
