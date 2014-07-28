@@ -120,7 +120,7 @@ sub _get_NCBIBLAST_source_file {
 
 sub _get_BLAT_source_file {
   my ($self, $source_type) = @_;
-  return $self->tree->{'BLAT_DATASOURCES'}{$source_type};
+  return join ':', $self->tree->{'BLAT_DATASOURCES'}{$source_type}, $SiteDefs::ENSEMBL_BLAT_TWOBIT_DIR;
 }
 
 1;

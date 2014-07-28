@@ -44,6 +44,9 @@ sub update_conf {
   # Path to BLAT client
   $SiteDefs::ENSEMBL_BLAT_BIN_PATH = '/localsw/bin/gfClient';
 
+  # Dir containing BLAT's two bit files
+  $SiteDefs::ENSEMBL_BLAT_TWOBIT_DIR = '/ensemblweb/blat';
+
   # Script to convert BLAT alignment strings to BTOP
   $SiteDefs::ENSEMBL_BLAT_BTOP_SCRIPT = 'sanger-plugins/tools/utils/BLAT_alignments_to_BTOP.pl';
 

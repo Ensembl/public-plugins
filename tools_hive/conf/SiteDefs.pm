@@ -60,6 +60,9 @@ sub update_conf {
   $SiteDefs::ENSEMBL_NCBIBLAST_DATA_PATH_DNA    = "/data_ensembl/blastdb/ensembl/$release/genomic"; # path for the blast DNA index files on the LSF host (or local machine if job running locally)
   $SiteDefs::ENSEMBL_REPEATMASK_BIN_PATH        = '/localsw/bin/RepeatMasker';                      # path to RepeatMasker executable on the  LSF host (or local machine if job running locally)
 
+  # BLAT configs
+  $SiteDefs::ENSEMBL_BLAT_TWOBIT_DIR            = '/data_ensembl/blat/ensembl';                     # location where blat twobit files are located on LSF node
+
   # VEP configs
   $SiteDefs::ENSEMBL_VEP_LSF_QUEUE              = 'VEP';                                            # LSF queue for VEP jobs, if running on farm
   $SiteDefs::ENSEMBL_VEP_LSF_TIMEOUT            = '3:00';                                           # Max timelimit a VEP job is allowed to run
