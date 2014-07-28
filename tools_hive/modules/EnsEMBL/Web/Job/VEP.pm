@@ -27,12 +27,14 @@ use previous qw(prepare_to_dispatch);
 
 sub prepare_to_dispatch {
   ## @plugin
-  my $self  = shift;
-  my $data  = $self->PREV::prepare_to_dispatch(@_);
-  my $sd    = $self->hub->species_defs;
+  my $self    = shift;
+  my $data    = $self->PREV::prepare_to_dispatch(@_);
+  my $sd      = $self->hub->species_defs;
+  my $options = $sd->ENSEMBL_VEP_SCRIPT_DEFAULT_OPTIONS;
 
-  $data->{'code_root'}  = $sd->ENSEMBL_LSF_CODE_LOCATION;
-  $data->{'cache_dir'}  = $sd->ENSEMBL_VEP_CACHE_DIR;
+  $data->{'script_options'} = { map { defined $options->{$_} ? ( $_ => $options->{$_} ) : () } keys %$options }; # filter out the undef values
+  $data->{'code_root'}      = $sd->ENSEMBL_LSF_CODE_LOCATION;
+  $data->{'cache_dir'}      = $sd->ENSEMBL_VEP_CACHE_DIR;
 
   return $data;
 }

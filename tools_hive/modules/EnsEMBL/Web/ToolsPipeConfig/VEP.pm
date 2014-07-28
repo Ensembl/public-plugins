@@ -34,8 +34,7 @@ sub resource_classes {
 sub pipeline_analyses {
   my ($class, $conf) = @_;
 
-  my $sd              = $conf->species_defs;
-  my $script_options  = $sd->ENSEMBL_VEP_SCRIPT_DEFAULT_OPTIONS;
+  my $sd = $conf->species_defs;
 
   return [{
     '-logic_name'           => 'VEP',
@@ -45,8 +44,7 @@ sub pipeline_analyses {
       'perl_bin'              => $sd->ENSEMBL_TOOLS_PERL_BIN,
       'bioperl_dir'           => $sd->ENSEMBL_TOOLS_BIOPERL_DIR,
       'script'                => $sd->ENSEMBL_VEP_SCRIPT,
-      'vep_to_web_script'     => $sd->ENSEMBL_VEP_TO_WEB_SCRIPT,
-      'script_options'        => { map { defined $script_options->{$_} ? ( $_ => $script_options->{$_} ) : () } keys %$script_options } # filter out the undef values
+      'vep_to_web_script'     => $sd->ENSEMBL_VEP_TO_WEB_SCRIPT
     },
     '-analysis_capacity'    => $sd->ENSEMBL_VEP_ANALYSIS_CAPACITY || 12,
     '-meadow_type'          => 'LSF',
