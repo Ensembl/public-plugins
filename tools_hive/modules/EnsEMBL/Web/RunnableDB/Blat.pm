@@ -54,9 +54,6 @@ sub setup_source_file {
   my ($host, $port, $nib_dir) = split ':', $source_file, 3;
   $nib_dir ||= '/';
 
-  ## TODO - hack to fix file path
-  $nib_dir =~ s/ensemblweb/data_ensembl/;
-
   throw exception('HiveException', "BLAT Nib dir $nib_dir does not exists") unless -e $nib_dir && -d $nib_dir;
   throw exception('HiveException', "Bad format for BLAT search DB: $source_file. Format host:port:nib_path needed.") unless $host && $port;
   throw exception('HiveException', "BLAT server unavailable $@") unless $self->_check_server($host, $port);
