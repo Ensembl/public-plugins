@@ -97,7 +97,7 @@ sub setup_source_file {
   my $species     = $self->param_required('species');
   my $source_type = $self->param_required('source');
   my $query_type  = $self->param_required('query_type');
-  my $source_dir  = $self->param_required(sprintf '%s%s_index_files', $blast_type, $source_type =~ /LATESTGP/ ? '_dna' : '');
+  my $source_dir  = $self->param_required($source_type =~ /LATESTGP/ ? 'dna_index_files' : 'index_files');
   my $source_file = $self->param_required('source_file');
 
   # Setup the data files name

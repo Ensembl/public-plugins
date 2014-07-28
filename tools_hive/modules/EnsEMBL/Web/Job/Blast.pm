@@ -54,12 +54,12 @@ sub prepare_to_dispatch {
   if ($data->{'blast_type'}) {
     for (sprintf 'ENSEMBL_%s_DATA_PATH', $blast_type) {
       if (my $path = $sd->$_) {
-        $data->{$blast_type.'_index_files'} = $path;
+        $data->{'index_files'} = $path;
       }
     }
     for (sprintf 'ENSEMBL_%s_DATA_PATH_DNA', $blast_type) {
       if (my $path = $sd->$_) {
-        $data->{$blast_type.'_dna_index_files'} = $path;
+        $data->{'dna_index_files'} = $path;
       }
     }
   }
