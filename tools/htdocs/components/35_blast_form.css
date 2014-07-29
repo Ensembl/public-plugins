@@ -1,0 +1,42 @@
+/*
+ * Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+div.query_sequence_wrapper                        { background-color: [[PAGE_BG]]; border: 1px solid [[NEUTRAL_BORDER]]; padding: 6px; width: 576px; overflow: hidden; }
+div.query_sequence_wrapper span.sprite            { float: right; display: none; }
+
+textarea.query_sequence                           { width: 500px; margin-bottom: 0; outline: none; display: inherit; }
+textarea.query_sequence.inactive                  { color: [[PAGE_TEXT]]; font-size: 12px; font-style: italic; }
+
+form.blast-form div.blast_db_type                 { float: left; width: 150px; }
+
+div.js_sequence_wrapper                           { padding-bottom: 94px !important; }
+div.js_sequence_wrapper > div                     { margin: 12px 0; }
+
+div.js_sequence_wrapper div.seq-wrapper           { background-color: [[PAGE_BG]]; border: 1px solid [[NEUTRAL_BORDER]]; margin: 6px 0 0 0; padding: 4px; overflow: hidden; width: 580px; }
+div.js_sequence_wrapper div.seq-wrapper:first-child { margin-top: 0; }
+div.seq-wrapper span.sprite                       { float: right; }
+
+div.fasta-input                                   { overflow: auto; font: 12px courier; white-space: pre; width: 480px; max-height: 400px; outline: none; border: transparent solid 1px; cursor: pointer; float: left; margin-right: 8px;  }
+div.fasta-input.editable                          { overflow: auto; background-color: #ffd; border-color: [[PANEL_BORDER]]; cursor: text; }
+
+div.fasta-buttons                                 { position: absolute; margin-top: -1px; }
+div.fasta-buttons span                            { display: inline-block; height: 20px; line-height: 20px; background: none repeat scroll 0 0 [[PAGE_BG]]; border: 1px solid [[PANEL_BORDER]]; border-top: none; border-radius: 0 0 6px 6px; color: [[BUTTON_BG]]; font-weight: bold; margin: 0 6px; padding: 2px 10px; cursor: pointer; }
+
+div.blast-configs div.row div.lhs                 { font-weight: normal; height: 20px; width: 464px; }
+
+div.input-seq                                     { white-space: pre; max-height: 300px; overflow: auto; font-family: Courier; }
+
+div.file_upload_element                           { line-height: 32px; float: left; margin-right: 16px; }
