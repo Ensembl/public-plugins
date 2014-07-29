@@ -48,7 +48,7 @@ sub update_conf {
   $SiteDefs::ENSEMBL_BLAT_TWOBIT_DIR = '/ensemblweb/blat';
 
   # Script to convert BLAT alignment strings to BTOP
-  $SiteDefs::ENSEMBL_BLAT_BTOP_SCRIPT = 'sanger-plugins/tools/utils/BLAT_alignments_to_BTOP.pl';
+  $SiteDefs::ENSEMBL_BLAT_BTOP_SCRIPT = 'public-plugins/tools/utils/BLAT_alignments_to_BTOP.pl';
 
   # Path to CrossMap
   $SiteDefs::ASSEMBLY_CONVERTER_BIN_PATH = '/localsw/CrossMap-0.1.3/usr/local/bin/CrossMap.py';

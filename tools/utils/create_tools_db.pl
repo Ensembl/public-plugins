@@ -28,7 +28,7 @@ if ($@) {
   die "ERROR: Can't use SiteDefs - $@\n";
 }
 
-unshift @INC, reverse ("$code_path/sanger-plugins/tools/modules/", @{SiteDefs::ENSEMBL_LIB_DIRS});
+unshift @INC, reverse ("$code_path/public-plugins/tools/modules/", @{SiteDefs::ENSEMBL_LIB_DIRS});
 $ENV{'PERL5LIB'} = join ':', $ENV{'PERL5LIB'} || (), @INC;
 
 require EnsEMBL::Web::SpeciesDefs;
