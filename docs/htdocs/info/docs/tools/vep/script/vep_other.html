@@ -17,6 +17,26 @@
   VEP cache download on the latest software version
   ([[SPECIESDEFS::ENSEMBL_VERSION]]) for both assembly versions. </p>
   
+  <p> The <a href="vep_download.html#installer">VEP installer</a> will install
+  and set up the correct cache and FASTA file for your assembly of interest. If
+  using the --AUTO functionality to install without prompts, remember to add the
+  assembly version required using e.g. "--ASSEMBLY GRCh37". It is also possible
+  to have concurrent installations of caches from both assemblies; just use the
+  <a href="vep_options.html#opt_assembly">--assembly</a> to select the correct
+  one when you run the VEP script. </p>
+  
+  <p> Once you have installed the relevant cache and FASTA file, you are then
+  able to use the VEP as normal. For those using GRCh37 and requiring database
+  access in addition to the cache (for example, to look up variant identifiers
+  using <a href="vep_options.html#opt_format">--format id</a>, see <a
+  href="vep_cache.html#limitations">cache limitations</a>), the script will warn
+  you that you must change the database port in order to connect to the correct
+  database: </p>
+  
+  <pre class="code">ERROR: Cache assembly version (GRCh37) and database or selected assembly version (GRCh38) do not match
+
+If using human GRCh37 add "--port 3337" to use the GRCh37 database, or --offline to avoid database connection entirely</pre>
+  
   <p> For users looking to move their data between assemblies, Ensembl provides
   an assembly converter tool - if you've downloaded the VEP, then you have it
   already! The script is found in the ensembl-tools/scripts/assembly_converter
