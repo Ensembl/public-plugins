@@ -42,8 +42,8 @@ sub update_conf {
     ensembl-tools/scripts/variant_effect_predictor
     ensembl-webcode/conf
     ensembl-webcode/modules
-    sanger-plugins/tools/modules
-    public-plugins
+    public-plugins/tools/modules
+    public-plugins/tools_hive/modules
   );
 
   $SiteDefs::ENSEMBL_TOOLS_PERL_BIN             = '/usr/local/bin/perl';                            # Path to perl bin for machine running the job
@@ -82,7 +82,7 @@ sub update_conf {
   };
   $SiteDefs::ENSEMBL_VEP_SCRIPT                 = 'ensembl-tools/scripts/variant_effect_predictor/variant_effect_predictor.pl';
                                                                                                     # location of the VEP script accessible to the local machine or LSF host running the job
-  $SiteDefs::ENSEMBL_VEP_TO_WEB_SCRIPT          = 'sanger-plugins/tools/utils/vep_to_web.pl';       # location of the VEP script accessible to the local machine or LSF host to parse VCF results
+  $SiteDefs::ENSEMBL_VEP_TO_WEB_SCRIPT          = 'public-plugins/tools/utils/vep_to_web.pl';       # location of the VEP script accessible to the local machine or LSF host to parse VCF results
 
   # Assembly Converter configs
   $SiteDefs::ENSEMBL_AC_RUN_LOCAL               = 1;                                                # Flag if on, will run AC jobs on LOCAL meadow

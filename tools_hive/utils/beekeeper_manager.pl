@@ -69,7 +69,7 @@ if (!$config) {
   if ($@) {
     die "Can't use SiteDefs - $@\n";
   }
-  unshift @INC, reverse(map("$code_path/sanger-plugins/$_/modules/", qw(tools_hive tools)), @{SiteDefs::ENSEMBL_LIB_DIRS});
+  unshift @INC, reverse(map("$code_path/public-plugins/$_/modules/", qw(tools_hive tools)), @{SiteDefs::ENSEMBL_LIB_DIRS});
   $ENV{'PERL5LIB'} = join ':', $ENV{'PERL5LIB'} || (), @INC;
 
   require EnsEMBL::Web::SpeciesDefs;
@@ -77,7 +77,7 @@ if (!$config) {
   my $sd  = EnsEMBL::Web::SpeciesDefs->new();
   $config = {
     'EHIVE_ROOT_DIR'  => $ENV{'EHIVE_ROOT_DIR'},
-    'json_configs'    => ["$ENV{'EHIVE_ROOT_DIR'}/hive_config.json", "$code_path/sanger-plugins/tools_hive/conf/hive_config.json"],
+    'json_configs'    => ["$ENV{'EHIVE_ROOT_DIR'}/hive_config.json", "$code_path/public-plugins/tools_hive/conf/hive_config.json"],
     'inc'             => \@INC,
     'db'              => {
       'host'            =>  $sd->multidb->{'DATABASE_WEB_HIVE'}{'HOST'},
