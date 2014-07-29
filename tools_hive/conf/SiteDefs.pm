@@ -35,19 +35,18 @@ sub update_conf {
   push @SiteDefs::ENSEMBL_LIB_DIRS, "$SiteDefs::ENSEMBL_SERVERROOT/ensembl-hive/modules";
 
   @SiteDefs::ENSEMBL_TOOLS_LIB_DIRS = qw(
-    ensembl/modules
-    ensembl-hive/modules
-    ensembl-variation/modules
-    ensembl-funcgen/modules
-    ensembl-tools/scripts/variant_effect_predictor
-    ensembl-webcode/conf
-    ensembl-webcode/modules
-    public-plugins/tools/modules
-    public-plugins/tools_hive/modules
+    ensembl
+    ensembl-hive
+    ensembl-variation
+    ensembl-funcgen
+    ensembl-tools
+    ensembl-webcode
+    public-plugins
+    sanger-plugins
   );
 
   $SiteDefs::ENSEMBL_TOOLS_PERL_BIN             = '/usr/local/bin/perl';                            # Path to perl bin for machine running the job
-  $SiteDefs::ENSEMBL_TOOLS_BIOPERL_DIR          = $SiteDefs::BIOPERL_DIR;                           # Location of bioperl on the LSF host machine (will be same as BIOPERL_DIR for jobs running locally)
+  $SiteDefs::ENSEMBL_TOOLS_BIOPERL_DIR          = defer { $SiteDefs::BIOPERL_DIR };                 # Location of bioperl on the LSF host machine (will be same as BIOPERL_DIR for jobs running locally)
 
   # BLAST configs
   my $release = "release-".$SiteDefs::ENSEMBL_VERSION;
