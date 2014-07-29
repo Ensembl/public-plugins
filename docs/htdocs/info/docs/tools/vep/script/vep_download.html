@@ -70,14 +70,23 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
 	<h4> New in version 76 <i>(August 2014)</i> </h4>
 	
 	<ul>
-    <li>VEP now supports caches from multiple assemblies (<a href="vep_options.html#opt_assembly">--assembly</a>) on the same software
-    version - e.g. human builds GRCh37 and GRCh38</li>
+    <li>VEP now supports caches from multiple assemblies (<a
+    href="vep_options.html#opt_assembly">--assembly</a>) on the same software
+    version - e.g. <a href="vep_other.html#assembly">human builds GRCh37 and
+    GRCh38</a></li>
     <li>Protein identifiers from UniProt (SWISSPROT, TrEMBL and UniParc) now
     available using <a href="vep_options.html#opt_uniprot">--uniprot</a></li>
     <li>VEP can generate <a href="../vep_formats.html#json">JSON output</a>
     using <a href="vep_options.html#opt_json">--json</a></li>
+    <li>Two new analysis set options - <a
+    href="vep_options.html#opt_gencode_basic">--gencode_basic</a> and the merged
+    Ensembl/RefSeq cache (<a
+    href="vep_options.html#opt_merged">--merged</a>)</li>
     <li>Let VEP pick one consequence per variant allele using <a
     href="vep_options.html#opt_pick_allele">--pick_allele</a></li>
+    <li>Allele now included alongside frequency for 1000 Genomes (<a
+    href="vep_options.html#opt_maf_1kg">--maf_1kg</a>) and ESP (<a
+    href="vep_options.html#opt_maf_esp">--maf_esp</a>) data</li>
     <li>Not strictly script-related, but the <a
     href="http://rest.ensembl.org/#Variation" rel="external">VEP REST API</a>
     has come out of beta!</li>
@@ -349,11 +358,24 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
       <td>
         Comma-separated list of species to install when using --AUTO. To
         install the RefSeq cache, add "_refseq" to the species name, e.g.
-        "homo_sapiens_refseq". Remember to use <a
-        href="vep_options.html#opt_refseq">--refseq</a> when running the VEP
-        with this cache!
+        "homo_sapiens_refseq", or "_merged" to install the merged Ensembl/RefSeq
+        cache. Remember to use <a
+        href="vep_options.html#opt_refseq">--refseq</a> or <a
+        href="vep_options.html#opt_merged">--merged</a> when running the VEP
+        with the relevant cache!
 			</td>
 		</tr>
+		<tr>
+			<td><pre>--ASSEMBLY</pre></td>
+			<td><pre>-y</pre></td>
+      <td>
+        Assembly version to use when using --AUTO. Most species have only one
+        assembly available on each software release; currently this is only
+        required for <a href="vep_other.html#assembly">human on release 76</a>
+        onwards.
+			</td>
+		</tr>
+    <tr>
 			<td><pre>--DESTDIR [dir]</pre></td>
 			<td><pre>-d</pre></td>
 			<td>
