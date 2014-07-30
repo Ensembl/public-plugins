@@ -96,8 +96,9 @@ Ensembl.Panel.GenoverseMenu = Ensembl.Panel.ZMenu.extend({
   populateRegion: function () {
     var zoom = this.params.browser.wheelAction === false ? 'Jump' : 'Zoom';
     
-    this.buildMenu(
-      [ '<a class="' + zoom.toLowerCase() + 'Here constant" href="#">' + zoom + ' to region (' + (this.drag.end - this.drag.start + 1) + ' bp)</a>', '<a class="center constant" href="#">Centre here</a>' ],
+    this.buildMenu(this.drag.end === this.drag.start
+      ? [ '<a class="center constant" href="#">Centre here</a>' ]
+      : [ '<a class="' + zoom.toLowerCase() + 'Here constant" href="#">' + zoom + ' to region (' + (this.drag.end - this.drag.start + 1) + ' bp)</a>' ],
       'Region: ' + this.drag.chr + ':' + this.drag.start + '-' + this.drag.end
     );
   }
