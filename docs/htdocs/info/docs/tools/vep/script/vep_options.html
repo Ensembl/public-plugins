@@ -1113,14 +1113,11 @@ host          useastdb.ensembl.org</pre>
       <td>
         <p> Instead of using the core database, use the otherfeatures
         database to retrieve transcripts. This database contains
-        transcript objects corresponding to RefSeq transcripts, along
-        with CCDS and Ensembl ESTs. Consequence output will be given
-        relative to these transcripts in place of the default Ensembl
-        transcripts. See <a
-        href="/info/docs/api/core/index.html#est">here</a> for more
-        details on the contents of the otherfeatures database. The
-        otherfeatures database currently only exists for human and
-        mouse. <p>
+        transcript objects corresponding to RefSeq transcripts (to include CCDS
+        and Ensembl ESTs also, use <a href="#opt_all_refseq">--all_refseq</a>).
+        Consequence output will be given relative to these transcripts in place
+        of the default Ensembl transcripts (see <a
+        href="vep_other.html#refseq">documentation</a>)</p>
         
         <p> You should also specify this option if you have installed the RefSeq
         cache in order for the VEP to pick up the alternate cache directory.
@@ -1135,13 +1132,14 @@ host          useastdb.ensembl.org</pre>
         with the SOURCE of each transcript used. <p>
       </td>
     </tr>
-    <tr id="opt_only_refseq">
-      <td><pre>--only_refseq</pre></td>
+    <tr id="opt_all_refseq">
+      <td><pre>--all_refseq</pre></td>
       <td>&nbsp;</td>
       <td>
-        For transcripts from the RefSeq cache, include only those from RefSeq
-        itself i.e. exclude CCDS and Ensembl EST transcripts. Only works when
-        using <a href="vep_options.html#opt_refseq">--refseq</a> or <a
+        When using the RefSeq or merged cache, include e.g. CCDS and Ensembl EST
+        transcripts in addition to those from RefSeq (see <a
+        href="vep_other.html#refseq">documentation</a>). Only works when using
+        <a href="vep_options.html#opt_refseq">--refseq</a> or <a
         href="vep_options.html#opt_merged">--merged</a>
       </td>
     </tr>
