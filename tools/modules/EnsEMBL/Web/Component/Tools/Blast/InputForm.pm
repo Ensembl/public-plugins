@@ -168,6 +168,35 @@ sub content {
     }]
   });
 
+  # Search sensitivity config sets
+  my @sensitivity_elements;
+  my @field_classes;
+  my ($config_options, $all_config_sets) = CONFIGURATION_SETS;
+
+  for (@{$options->{'search_type'}}) {
+
+    my $search_type = $_->{'value'};
+
+    if (my $config_sets = $all_config_sets->{$search_type}) {
+
+      push @sensitivity_elements, {
+        'type'          => 'dropdown',
+        'name'          => "config_set_$search_type",
+        'element_class' => "_stt_$search_type",
+        'values'        => [ grep { $config_sets->{$_->{'value'}} } @$config_options ]
+      };
+      push @field_classes, "_stt_$search_type";
+    }
+  }
+
+  if (@sensitivity_elements) {
+    $fieldset->add_field({
+      'label'       => 'Search Sensitivity:',
+      'elements'    => \@sensitivity_elements,
+      'field_class' => \@field_classes
+    });
+  }
+
   $fieldset->add_field({
     'label'           => 'Description (optional):',
     'type'            => 'string',

@@ -22,7 +22,7 @@ use strict;
 use warnings;
 
 use Exporter qw(import);
-our @EXPORT_OK    = qw(MAX_SEQUENCE_LENGTH MAX_NUM_SEQUENCES DNA_THRESHOLD_PERCENT BLAST_KARYOTYPE_POINTER CONFIGURATION_FIELDS CONFIGURATION_DEFAULTS SEQUENCE_VALID_CHARS);
+our @EXPORT_OK    = qw(MAX_SEQUENCE_LENGTH MAX_NUM_SEQUENCES DNA_THRESHOLD_PERCENT SEQUENCE_VALID_CHARS BLAST_KARYOTYPE_POINTER CONFIGURATION_FIELDS CONFIGURATION_DEFAULTS CONFIGURATION_SETS);
 our %EXPORT_TAGS  = ('all' => [ @EXPORT_OK ]);
 
 sub MAX_SEQUENCE_LENGTH   { 200000              }
@@ -334,6 +334,47 @@ sub CONFIGURATION_DEFAULTS {
       'threshold'               => '13',
       'seg'                     => '1',
       'culling_limit'           => '5',
+    }
+  };
+}
+
+sub CONFIGURATION_SETS {
+  return [
+    { 'value' => 'near',        'caption' => 'Near match'},
+    { 'value' => 'near_oligo',  'caption' => 'Short sequences'},
+    { 'value' => 'normal',      'caption' => 'Normal', 'selected' => 'true'},
+    { 'value' => 'distant',     'caption' => 'Distant Homologies'}
+  ], {
+
+    'NCBIBLAST_BLASTN'        => {
+      'near'                    => {},
+      'near_oligo'              => {},
+      'normal'                  => {},
+      'distant'                 => {},
+    },
+
+    'NCBIBLAST_BLASTP'        => {
+      'near'                    => {},
+      'normal'                  => {},
+      'distant'                 => {},
+    },
+
+    'NCBIBLAST_BLASTX'        => {
+      'near'                    => {},
+      'normal'                  => {},
+      'distant'                 => {},
+    },
+
+    'NCBIBLAST_TBLASTN'       => {
+      'near'                    => {},
+      'normal'                  => {},
+      'distant'                 => {},
+    },
+
+    'NCBIBLAST_TBLASTX'       => {
+      'near'                    => {},
+      'normal'                  => {},
+      'distant'                 => {},
     }
   };
 }
