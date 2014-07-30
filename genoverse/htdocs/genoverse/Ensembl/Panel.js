@@ -197,9 +197,8 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
     
     if (this.prevHighlight.start !== start || this.prevHighlight.end !== end) {
       this.prevHighlight = { start: start, end: end };
+      this.genoverse.highlightRegion.css({ left: left, width: width, display: 'block' });
     }
-    
-    this.genoverse.highlightRegion.css({ left: left, width: width, display: 'block' });
   },
   
   sortUpdate: function (label, order) {
