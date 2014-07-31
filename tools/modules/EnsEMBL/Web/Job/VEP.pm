@@ -37,8 +37,10 @@ sub prepare_to_dispatch {
   $vep_configs->{'format'}  = $job_data->{'format'};
   $vep_configs->{'species'} = lc $species;
 
-  # refseq
+  # select transcript set
   $vep_configs->{'refseq'}  = 'yes' if $sp_details->{'refseq'} && ($job_data->{'core_type'} // '') eq 'refseq';
+  $vep_configs->{'merged'}  = 'yes' if $sp_details->{'refseq'} && ($job_data->{'core_type'} // '') eq 'merged';
+  $vep_configs->{'gencode_basic'} = 'yes' if ($job_data->{'core_type'} // '') eq 'gencode_basic';
 
   # filters
   my $frequency_filtering = $job_data->{'frequency'};
@@ -99,7 +101,7 @@ sub prepare_to_dispatch {
   $vep_configs->{'stats_file'}  = 'stats.txt';
 
   # extra and identifiers
-  $job_data->{$_} and $vep_configs->{$_} = $job_data->{$_} for qw(numbers canonical domains biotype symbol ccds protein hgvs coding_only);
+  $job_data->{$_} and $vep_configs->{$_} = $job_data->{$_} for qw(numbers canonical domains biotype symbol ccds protein uniprot hgvs coding_only all_refseq);
 
   # check for incompatibilities
   if ($vep_configs->{'most_severe'} || $vep_configs->{'summary'}) {
