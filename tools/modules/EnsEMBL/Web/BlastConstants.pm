@@ -343,7 +343,7 @@ sub CONFIGURATION_SETS {
     { 'value' => 'near',        'caption' => 'Near match'},
     { 'value' => 'near_oligo',  'caption' => 'Short sequences'},
     { 'value' => 'normal',      'caption' => 'Normal', 'selected' => 'true'},
-    { 'value' => 'distant',     'caption' => 'Distant Homologies'}
+    { 'value' => 'distant',     'caption' => 'Distant homologies'}
   ], {
 
     'NCBIBLAST_BLASTN'        => {
