@@ -55,8 +55,8 @@ sub update_conf {
   $SiteDefs::ENSEMBL_BLAST_ANALYSIS_CAPACITY    = 24;                                               # Number of jobs that can be run parallel in LSF in the blast queue
   $SiteDefs::ENSEMBL_NCBIBLAST_BIN_PATH         = '/localsw/bin/ncbi-blast/bin';                    # path to blast executables on the LSF host (or local machine if job running locally)
   $SiteDefs::ENSEMBL_NCBIBLAST_MATRIX           = '/localsw/bin/ncbi-blast/bin/data';               # path to blast matrix files on the LSF host (or local machine if job running locally)
-  $SiteDefs::ENSEMBL_NCBIBLAST_DATA_PATH        = "/data_ensembl/blastdb/ensembl/$release/genes";   # path for the blast index files (other than DNA) on the LSF host (or local machine if job running locally)
-  $SiteDefs::ENSEMBL_NCBIBLAST_DATA_PATH_DNA    = "/data_ensembl/blastdb/ensembl/$release/genomic"; # path for the blast DNA index files on the LSF host (or local machine if job running locally)
+  $SiteDefs::ENSEMBL_NCBIBLAST_DATA_PATH        = "/data_ensembl/blastdb/ensembl/genes/$release";   # path for the blast index files (other than DNA) on the LSF host (or local machine if job running locally)
+  $SiteDefs::ENSEMBL_NCBIBLAST_DATA_PATH_DNA    = "/data_ensembl/blastdb/ensembl/dna/$release";     # path for the blast DNA index files on the LSF host (or local machine if job running locally)
   $SiteDefs::ENSEMBL_REPEATMASK_BIN_PATH        = '/localsw/bin/RepeatMasker';                      # path to RepeatMasker executable on the  LSF host (or local machine if job running locally)
 
   # BLAT configs
@@ -65,13 +65,13 @@ sub update_conf {
   $SiteDefs::ENSEMBL_BLAT_LSF_QUEUE             = 'toolsgeneral';                                   # LSF queue for blat jobs
   $SiteDefs::ENSEMBL_BLAT_LSF_TIMEOUT           = undef;                                            # Max timelimit a blat job is allowed to run
   $SiteDefs::ENSEMBL_BLAT_ANALYSIS_CAPACITY     = 4;                                                # Number of jobs that can be run parallel in LSF in the tools queue
-  $SiteDefs::ENSEMBL_BLAT_TWOBIT_DIR            = '/data_ensembl/blat/ensembl';                     # location where blat twobit files are located on LSF node
+  $SiteDefs::ENSEMBL_BLAT_TWOBIT_DIR            = "/data_ensembl/blat/ensembl/$release";            # location where blat twobit files are located on LSF node
 
   # VEP configs
   $SiteDefs::ENSEMBL_VEP_LSF_QUEUE              = 'VEP';                                            # LSF queue for VEP jobs, if running on farm
   $SiteDefs::ENSEMBL_VEP_LSF_TIMEOUT            = '3:00';                                           # Max timelimit a VEP job is allowed to run
   $SiteDefs::ENSEMBL_VEP_ANALYSIS_CAPACITY      = 24;                                               # Number of jobs that can be run parallel in LSF in the queue
-  $SiteDefs::ENSEMBL_VEP_CACHE_DIR              = '/data_ensembl/vep/'.$SiteDefs::ENSEMBL_VERSION;  # path to vep cache files
+  $SiteDefs::ENSEMBL_VEP_CACHE_DIR              = "/data_ensembl/vep/ensembl/$release";             # path to vep cache files
   $SiteDefs::ENSEMBL_VEP_SCRIPT_DEFAULT_OPTIONS = {                                                 # Default options for command line vep script (keys with value undef get ignored)
     '--host'        => undef,                                                                       # Database host (defaults to ensembldb.ensembl.org)
     '--user'        => undef,                                                                       # Defaults to 'anonymous'
