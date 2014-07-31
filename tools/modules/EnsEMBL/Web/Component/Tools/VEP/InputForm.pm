@@ -107,16 +107,34 @@ sub content {
         'type'          => 'radiolist',
         'name'          => 'core_type',
         'label'         => 'Transcript database to use',
-        'helptip'       => 'Select RefSeq to use the otherfeatures transcript database, which contains basic aligned RefSeq transcript sequences in place of complete Ensembl transcript models',
+        'helptip'       =>
+          '<b>Gencode basic:</b> a subset of the Ensembl transcript set; partial and other low quality transcripts are removed<br/>'.
+          '<b>RefSeq:</b> aligned transcripts from NCBI RefSeq',
         'value'         => 'core',
         'class'         => '_stt',
         'values'        => [{
           'value'         => 'core',
           'caption'       => 'Ensembl transcripts'
         }, {
+          'value'         => 'gencode_basic',
+          'caption'       => 'Gencode basic transcripts'
+        }, {
           'value'         => 'refseq',
-          'caption'       => 'RefSeq and other transcripts'
+          'caption'       => 'RefSeq transcripts'
+        }, {
+          'value'         => 'merged',
+          'caption'       => 'Ensembl and RefSeq transcripts'
         }]
+      });
+      
+      $input_fieldset->add_field({
+        'field_class'   => '_stt_rfq _stt_merged _stt_refseq',
+        'type'    => 'checkbox',
+        'name'    => "all_refseq",
+        'label'   => 'Include additional EST and CCDS transcripts',
+        'helptip' => 'The RefSeq transcript set also contains aligned EST and CCDS transcripts that are excluded by default',
+        'value'   => 'yes',
+        'checked' => 0
       });
     }
 
@@ -338,6 +356,7 @@ sub _build_filters {
     'values'  => [
       { 'value' => 'no',          'caption' => 'Show all results' },
       { 'value' => 'pick',        'caption' => 'Show one selected consequence per variant'},
+      { 'value' => 'pick_allele', 'caption' => 'Show one selected consequence per variant allele'},
       { 'value' => 'per_gene',    'caption' => 'Show one selected consequence per gene' },
       { 'value' => 'summary',     'caption' => 'Show only list of consequences per variant' },
       { 'value' => 'most_severe', 'caption' => 'Show most severe consequence per variant' },
@@ -362,7 +381,7 @@ sub _build_identifiers {
   });
 
   $fieldset->add_field({
-    'field_class' => '_stt_core',
+    'field_class' => '_stt_core _stt_merged _stt_gencode_basic',
     'type'        => 'checkbox',
     'name'        => 'ccds',
     'label'       => 'CCDS',
@@ -375,6 +394,14 @@ sub _build_identifiers {
     'name'        => 'protein',
     'label'       => 'Protein',
     'helptip'     => 'Report the Ensembl protein identifier',
+    'value'       => 'yes'
+  });
+
+  $fieldset->add_field({
+    'type'        => 'checkbox',
+    'name'        => 'uniprot',
+    'label'       => 'Uniprot',
+    'helptip'     => 'Report identifiers from SWISSPROT, TrEMBL and UniParc',
     'value'       => 'yes'
   });
 
@@ -418,14 +445,14 @@ sub _build_identifiers {
           'checked'       => 1
         }, {
           'name'          => "maf_1kg",
-          'caption'       => '1000 Genomes continental minor allele frequencies',
-          'helptip'       => 'Report the minor allele frequencies for the combined 1000 Genomes Project phase 1 continental populations - AFR (African), AMR (American), ASN (Asian) and EUR (European)',
+          'caption'       => '1000 Genomes continental allele frequencies',
+          'helptip'       => 'Report the allele frequencies for the combined 1000 Genomes Project phase 1 continental populations - AFR (African), AMR (American), ASN (Asian) and EUR (European)',
           'value'         => 'yes',
           'checked'       => 0
         }, {
           'name'          => "maf_esp",
-          'caption'       => 'ESP minor allele frequencies',
-          'helptip'       => 'Report the minor allele frequencies for the NHLBI Exome Sequencing Project populations - AA (African American) and EA (European American)',
+          'caption'       => 'ESP allele frequencies',
+          'helptip'       => 'Report the allele frequencies for the NHLBI Exome Sequencing Project populations - AA (African American) and EA (European American)',
           'value'         => 'yes',
           'checked'       => 0
         }]
@@ -459,7 +486,7 @@ sub _build_extra {
   });
 
   $fieldset->add_field({
-    'field_class' => '_stt_core',
+    'field_class' => '_stt_core _stt_gencode_basic _stt_merged',
     'type'        => 'checkbox',
     'name'        => 'domains',
     'label'       => 'Protein domains',
@@ -478,7 +505,7 @@ sub _build_extra {
   });
 
   $fieldset->add_field({
-    'field_class' => '_stt_core',
+    'field_class' => '_stt_core _stt_gencode_basic _stt_merged',
     'type'        => 'checkbox',
     'name'        => 'canonical',
     'label'       => 'Identify canonical transcripts',
