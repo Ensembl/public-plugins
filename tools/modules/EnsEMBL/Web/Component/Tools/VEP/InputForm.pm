@@ -171,7 +171,8 @@ sub content {
       $self->$method($form, $config_div->last_child); # add required fieldsets
     }
 
-    $self->add_buttons_fieldset($form, {'reset' => 'Reset', 'cancel' => 'Close form'});
+    # Placeholder for Run/Close buttons
+    $form->append_child('text', 'BUTTONS_FIELDSET');
 
     $form = $form->render;
 
@@ -254,6 +255,9 @@ sub content {
     }
   }
 
+  # Buttons
+  my $buttons_fieldset = $self->add_buttons_fieldset($fieldset2->form, {'reset' => 'Reset', 'cancel' => 'Close form'});
+
   # Add the render-time changes to the fields
   $fieldset2->prepare_to_render;
 
@@ -261,6 +265,7 @@ sub content {
   $form =~ s/EDIT_JOB/$edit_job && $edit_job->render/e;
   $form =~ s/SPECIES_DROPDOWN/$species_dropdown->render/e;
   $form =~ s/FILES_DROPDOWN/$file_dropdown && $file_dropdown->render/e;
+  $form =~ s/BUTTONS_FIELDSET/$buttons_fieldset->render/e;
 
   return sprintf('
     <div class="hidden _tool_new">

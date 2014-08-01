@@ -201,14 +201,16 @@ sub add_buttons_fieldset {
   ## Adds the genetic buttons fieldset to the tools form
   ## @param Form object
   ## @param Hashref of keys as the name of the extra links needed ('reset' and 'cancel') and value their caption
+  ## @return The added fieldset object
   my ($self, $form, $params) = @_;
 
-  my $url     = $self->hub->url({'function' => ''});
-  my $field   = $form->add_fieldset->add_field({
+  my $url       = $self->hub->url({'function' => ''});
+  my $fieldset  = $form->add_fieldset;
+  my $field     = $fieldset->add_field({
     'type'            => 'submit',
     'value'           => 'Run &rsaquo;'
   });
-  my @extras  = (exists $params->{'reset'} ? {
+  my @extras    = (exists $params->{'reset'} ? {
     'node_name'       => 'a',
     'href'            => $url,
     'class'           => [qw(_tools_form_reset left-margin _change_location)],
@@ -221,6 +223,8 @@ sub add_buttons_fieldset {
   } : ());
 
   $field->elements->[-1]->append_children(@extras) if @extras;
+
+  return $fieldset;
 }
 
 sub job_status_tag {

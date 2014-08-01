@@ -260,8 +260,8 @@ sub content {
       $config_wrapper->set_attribute('class', [ keys %wrapper_class ]) unless scalar keys %wrapper_class == scalar keys %stt_classes; # if all classes are there, this wrapper div is actually never hidden.
     }
 
-    # add the 'Run' button in a new fieldset
-    $self->add_buttons_fieldset($form, {'reset' => 'Clear', 'cancel' => 'Close form'});
+    # Placeholder for Run/Close buttons
+    $form->append_child('text', 'BUTTONS_FIELDSET');
 
     $form = $form->render;
 
@@ -296,12 +296,16 @@ sub content {
     }]
   })->elements->[0];
 
+  # Buttons in a new fieldset
+  $buttons_fieldset = $self->add_buttons_fieldset($fieldset2->form, {'reset' => 'Clear', 'cancel' => 'Close form'});
+
   # Add the render-time changes to the fields
   $fieldset2->prepare_to_render;
 
   # Regexp to replace all placeholders from cached form
   $form =~ s/EDIT_JOB/$edit_jobs && $edit_jobs->render/e;
   $form =~ s/SPECIES_SELECTOR/$species_selector->render/e;
+  $form =~ s/BUTTONS_FIELDSET/$buttons_fieldset->render/e;
 
   return sprintf('<div class="hidden _tool_new"><p><a class="button _change_location" href="%s">New Search</a></p></div><div class="hidden _tool_form_div"><h2>Create new ticket:</h2><input type="hidden" class="panel_type" value="BlastForm" />%s</div>',
     $hub->url({'function' => ''}),
