@@ -17,7 +17,7 @@
 # -----------------
 
 CREATE TABLE `ticket_type` (
-  `ticket_type_name` varchar(16) NOT NULL DEFAULT '',
+  `ticket_type_name` varchar(32) NOT NULL DEFAULT '',
   `ticket_type_caption` varchar(32) NOT NULL DEFAULT '',
   PRIMARY KEY (`ticket_type_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -29,7 +29,7 @@ CREATE TABLE `ticket_type` (
 CREATE TABLE `ticket` (
   `ticket_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `ticket_name` varchar(16) NOT NULL DEFAULT '',
-  `ticket_type_name` varchar(16) NOT NULL,
+  `ticket_type_name` varchar(32) NOT NULL DEFAULT '',
   `owner_id` varchar(32) NOT NULL,
   `owner_type` enum('user','session') NOT NULL DEFAULT 'session',
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -58,10 +58,11 @@ CREATE TABLE `job` (
   `job_desc` varchar(160) DEFAULT NULL,
   `job_dir` varchar(255) DEFAULT NULL,
   `status` enum('awaiting_dispatcher_response','awaiting_user_response','done') NOT NULL DEFAULT 'awaiting_user_response',
+  `dispatcher_class` varchar(255) DEFAULT NULL,
   `dispatcher_reference` varchar(255) DEFAULT NULL,
   `dispatcher_data` text,
   `dispatcher_status` enum('not_submitted','queued','submitted','running','done','failed','deleted') NOT NULL DEFAULT 'not_submitted',
-  `modified_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
+  `modified_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`job_id`),
   KEY `ticket_id` (`ticket_id`),
   CONSTRAINT `job_ibfk_1` FOREIGN KEY (`ticket_id`) REFERENCES `ticket` (`ticket_id`) ON DELETE CASCADE
@@ -95,4 +96,4 @@ CREATE TABLE `job_message` (
   PRIMARY KEY (`job_message_id`),
   KEY `job_id` (`job_id`),
   CONSTRAINT `job_message_ibfk_1` FOREIGN KEY (`job_id`) REFERENCES `job` (`job_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
