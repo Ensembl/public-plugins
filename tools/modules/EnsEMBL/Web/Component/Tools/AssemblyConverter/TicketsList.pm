@@ -31,7 +31,6 @@ sub job_summary_section {
   my ($self, $ticket, $job, $hit_count) = @_;
 
   my $summary = $self->SUPER::job_summary_section($ticket, $job, $hit_count);
-  my $desc    = $job->job_data->{'summary'};
 
   ## Assembly converter doesn't have a results page - instead, attach this file to the browser
   my @results_links = @{$summary->get_nodes_by_flag('job_results_link')||[]};
@@ -63,9 +62,12 @@ sub job_summary_section {
 
 sub ticket_buttons {
   my ($self, $ticket) = @_;
-  my $buttons   = $self->SUPER::ticket_buttons($ticket);
+  my $buttons = $self->SUPER::ticket_buttons($ticket);
+  my ($job)   = $ticket && $ticket->job;
 
-  $buttons->prepend_child({
+  if ($job && $job->dispatcher_status eq 'done') {
+
+    $buttons->prepend_child({
                       'node_name'   => 'a',
                       'class'       => [qw(_download)],
                       'href'        => $self->_download_url($ticket),
@@ -76,6 +78,7 @@ sub ticket_buttons {
                                         }],
    
                       });
+  }
 
   return $buttons;
 }
