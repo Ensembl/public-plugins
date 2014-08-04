@@ -22,14 +22,41 @@ use strict;
 use warnings;
 
 use EnsEMBL::Web::TmpFile::ToolsOutput;
+use EnsEMBL::Web::Utils::FileHandler qw(file_get_contents);
 
 use parent qw(EnsEMBL::Web::Object::Tools);
+
+sub get_edit_jobs_data {
+  ## Abstract method implementation
+  my $self        = shift;
+  my $hub         = $self->hub;
+  my $ticket      = $self->get_requested_ticket   or return [];
+  my $job         = shift @{ $ticket->job || [] } or return [];
+  my $job_data    = $job->job_data->raw;
+  my $input_file  = sprintf '%s/%s', $job->job_dir, $job_data->{'input_file'};
+  warn ">>> INPUT $input_file";
+  my $format      = $job_data->{'format'};
+
+  if (-T $input_file && $input_file !~ /\.gz$/ && $input_file !~ /\.zip$/) { # TODO - check if the file is binary!
+    if (-s $input_file <= 1024) {
+      $job_data->{"text_$format"} = join('', file_get_contents($input_file));
+    } else {
+      my $url_param   = $self->create_url_param({'ticket_name' => $ticket->ticket_name});
+      $job_data->{'input_file_type'}  = 'text';
+      $job_data->{'input_file_url'}   = sprintf('/Download/AssemblyConverter?tl=%s;input=1', $url_param);
+    }
+  } else {
+    $job_data->{'input_file_type'} = 'binary';
+  }
+
+  return [ $job_data ];
+}
 
 sub handle_download {
 ### Retrieves file contents and outputs direct to Apache
 ### request, so that the browser will download it instead
 ### of displaying it in the window.
-### Uses Controller::Download, via url /Download/DataExport/
+### Uses Controller::Download, via url /Download/AssemblyConverter/
   my ($self, $r) = @_;
   my $hub = $self->hub;
 
@@ -39,10 +66,10 @@ sub handle_download {
     my $job_config  = $job->dispatcher_data->{'config'};
     my $job_dir     = $job->job_dir;
 
-    my $filename    = $job_config->{'output_file'};
+    my $filename    = $hub->param('input') ? $job_config->{'input_file'} : $job_config->{'output_file'};
 
     ## Horrible hack for CrossMap stupidity
-    if ($job_config->{'format'} eq 'wig') {
+    if (!$hub->param('input') && ($job_config->{'format'} eq 'wig')) {
       $filename .= '.bgr';
     }
     my $path        = $job_dir.'/'.$filename;
