@@ -139,8 +139,9 @@ sub job_summary_section {
   my $species_defs      = $hub->species_defs;
   my $dispatcher_status = $job->dispatcher_status;
   my $job_species       = $job->species;
+  my $valid_species     = $species_defs->valid_species($job_species);
   my $job_assembly      = $job->assembly;
-  my $current_assembly  = $species_defs->get_config($job_species, 'ASSEMBLY_NAME') || '0'; # '0' if species doesn't exist
+  my $current_assembly  = $valid_species ? $species_defs->get_config($job_species, 'ASSEMBLY_NAME') : '0';
   my $assembly_mismatch = $job_assembly ne $current_assembly;
   my $assembly_site     = $assembly_mismatch && $species_defs->SWITCH_ASSEMBLY eq $job_assembly ? 'http://'.$species_defs->SWITCH_ARCHIVE_URL : '';
 
@@ -148,7 +149,7 @@ sub job_summary_section {
     'children'    => [{
       'node_name'   => 'img',
       'class'       => [qw(job-species _ht)],
-      'title'       => $species_defs->species_label($job_species, 1),
+      'title'       => $valid_species ? $species_defs->species_label($job_species, 1) : $job_species =~ s/_/ /rg,
       'src'         => sprintf('%sspecies/16/%s.png', $self->img_url, $job_species),
       'alt'         => '',
       'style'       => {
