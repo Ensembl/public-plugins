@@ -49,7 +49,7 @@ Ensembl.Panel.GenoverseMenu = Ensembl.Panel.ZMenu.extend({
     this[this.drag ? 'populateRegion' : this.href ? 'populateAjax' : 'populate']();
     
     if (this.drag) {
-      $('a', this.el).on('click', function () {
+      $('a', this.el).on('click', function (e) {
         var cls = this.className.replace(' constant', '');
         
         if (cls === 'jumpHere') {
@@ -65,6 +65,7 @@ Ensembl.Panel.GenoverseMenu = Ensembl.Panel.ZMenu.extend({
           }
           
           browser.cancelSelect();
+          browser.moveSelector(e);
         } else {
           $('.selector_controls .' + cls, '#' + panel.imageId).trigger('click');
         }
