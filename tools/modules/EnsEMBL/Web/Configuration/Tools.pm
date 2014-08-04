@@ -25,6 +25,7 @@ use parent qw(EnsEMBL::Web::Configuration);
 
 sub modify_page_elements  { $_[0]->page->remove_body_element('summary');  }
 sub set_default_action    { $_[0]->{'_data'}{'default'} = 'Summary';      }
+sub tree_cache_key        { return undef; } # don't cache tree as it contains user specific tickets etc
 
 sub populate_tree {
   my $self        = shift;
