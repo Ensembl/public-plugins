@@ -139,7 +139,7 @@ sub job_summary_section {
   my $species_defs      = $hub->species_defs;
   my $dispatcher_status = $job->dispatcher_status;
   my $job_assembly      = $job->assembly;
-  my $current_assembly  = $species_defs->get_config($job->species, 'ASSEMBLY_NAME');
+  my $current_assembly  = $species_defs->get_config($job->species, 'ASSEMBLY_NAME') || '0'; # '0' is species doesn't exist
   my $assembly_mismatch = $job_assembly ne $current_assembly;
   my $assembly_site     = $assembly_mismatch && $species_defs->SWITCH_ASSEMBLY eq $job_assembly ? 'http://'.$species_defs->SWITCH_ARCHIVE_URL : '';
 
@@ -160,7 +160,7 @@ sub job_summary_section {
       'flags'       => ['job_desc_span'],
       'inner_HTML'  => $object->get_job_description($job)
     },
-    $self->job_status_tag($job, $dispatcher_status, $result_count, $assembly_mismatch && ($current_assembly || 0)), # '0' if current assembly is missing (ie. species is missing)
+    $self->job_status_tag($job, $dispatcher_status, $result_count, $assembly_mismatch && $current_assembly),
     $dispatcher_status eq 'done' && (!$assembly_mismatch || $assembly_site) ? { # either job is from current assembly, or job is from another assembly and we do have a site for that assembly
       'node_name'   => 'a',
       'inner_HTML'  => $assembly_site ? "[View results on $job_assembly site]" : '[View results]',
