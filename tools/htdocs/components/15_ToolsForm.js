@@ -26,8 +26,7 @@ Ensembl.Panel.ToolsForm = Ensembl.Panel.ContentTools.extend({
     Ensembl.EventManager.register('toolsToggleForm', this, this.toggleForm);
     Ensembl.EventManager.register('toolsEditTicket', this, this.loadTicket);
 
-    this.loadTicketURL  = '';
-    this.submitDisabled = false;
+    this.loadTicketURL = '';
   },
 
   init: function() {
