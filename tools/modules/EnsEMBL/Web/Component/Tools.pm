@@ -232,7 +232,7 @@ sub job_status_tag {
   ## @param Job object
   ## @param Dispatcher status (string)
   ## @param Number of results
-  ## @param Current assembly for the job species if it's not the same as the one to which the job was originally submitted to
+  ## @param Current assembly for the job species if it's not the same as the one to which the job was originally submitted to, 0 if species doesn't exist on current site
   my ($self, $job, $status, $result_count, $assembly_mismatch) = @_;
 
   my $css_class = "job-status-$status";
@@ -246,13 +246,18 @@ sub job_status_tag {
     'deleted'       => q(Your ticket has been deleted. This usually happens if the ticket is too old.)
   }->{$status};
 
-  if ($status eq 'done' && $assembly_mismatch) {
-    $css_class  = 'job-status-mismatch';
-    $title      = sprintf(q(The job was run on %s assembly for %s. You can resubmit the job to %s assembly by clicking on the 'Edit &amp; resubmit' icon.),
-      $job->assembly,
-      $self->hub->species_defs->get_config($job->species, 'SPECIES_COMMON_NAME'),
-      $assembly_mismatch
-    );
+  if ($status eq 'done') {
+    if ($assembly_mismatch) {
+      $css_class  = 'job-status-mismatch';
+      $title      = sprintf(q(The job was run on %s assembly for %s. You can resubmit the job to %s assembly by clicking on the 'Edit &amp; resubmit' icon.),
+        $job->assembly,
+        $self->hub->species_defs->get_config($job->species, 'SPECIES_COMMON_NAME'),
+        $assembly_mismatch
+      );
+    } elsif (defined $assembly_mismatch && $assembly_mismatch eq '0') {
+      $css_class  = 'job-status-mismatch';
+      $title      = sprintf(q(The job was run on %s which does not exist on this site.), $job->species);
+    }
   }
 
   return {
