@@ -138,8 +138,9 @@ sub job_summary_section {
   my $action            = $ticket->ticket_type_name;
   my $species_defs      = $hub->species_defs;
   my $dispatcher_status = $job->dispatcher_status;
+  my $job_species       = $job->species;
   my $job_assembly      = $job->assembly;
-  my $current_assembly  = $species_defs->get_config($job->species, 'ASSEMBLY_NAME') || '0'; # '0' is species doesn't exist
+  my $current_assembly  = $species_defs->get_config($job_species, 'ASSEMBLY_NAME') || '0'; # '0' if species doesn't exist
   my $assembly_mismatch = $job_assembly ne $current_assembly;
   my $assembly_site     = $assembly_mismatch && $species_defs->SWITCH_ASSEMBLY eq $job_assembly ? 'http://'.$species_defs->SWITCH_ARCHIVE_URL : '';
 
@@ -147,8 +148,8 @@ sub job_summary_section {
     'children'    => [{
       'node_name'   => 'img',
       'class'       => [qw(job-species _ht)],
-      'title'       => $species_defs->species_label($job->species, 1),
-      'src'         => sprintf('%sspecies/16/%s.png', $self->img_url, $job->species),
+      'title'       => $species_defs->species_label($job_species, 1),
+      'src'         => sprintf('%sspecies/16/%s.png', $self->img_url, $job_species),
       'alt'         => '',
       'style'       => {
         'width'       => '16px',
@@ -168,7 +169,7 @@ sub job_summary_section {
       'class'       => [qw(small left-margin)],
       'href'        => sprintf('%s%s', $assembly_site, $hub->url({
         '__clear'     => !!$assembly_site, # remove extra params for the external site
-        'species'     => $job->species,
+        'species'     => $job_species,
         'type'        => 'Tools',
         'action'      => $ticket->ticket_type_name,
         'function'    => 'Results',
