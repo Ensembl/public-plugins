@@ -437,7 +437,7 @@ sub handle_download {
 
   # TODO - result file is missing, or temporarily not available if !-e $result_file
 
-  my $content = join '', file_get_contents($result_file);
+  my $content = join '', map { s/\R/\r\n/r } file_get_contents($result_file);
 
   $r->headers_out->add('Content-Type'         => 'text/plain');
   $r->headers_out->add('Content-Length'       => length $content);
