@@ -174,18 +174,6 @@ sub CONFIGURATION_DEFAULTS {
       'culling_limit'           => '5',
     },
 
-    'NCBIBLAST_BLASTN-SHORT'  => {
-      'word_size'               => '7',
-      'reward'                  => '1',
-      'penalty'                 => '-3',
-      'ungapped'                => '0',
-      'gapopen'                 => '5',
-      'gapextend'               => '2',
-      'dust'                    => '1',
-      'repeat_mask'             => '1',
-      'culling_limit'           => '5',
-    },
-
     'NCBIBLAST_BLASTP'        => {
       'word_size'               => '3',
       'ungapped'                => '0',
@@ -194,18 +182,6 @@ sub CONFIGURATION_DEFAULTS {
       'gapextend'               => '1',
       'threshold'               => '11',
       'comp_based_stats'        => '2',
-      'seg'                     => '1',
-      'culling_limit'           => '5',
-    },
-
-    'NCBIBLAST_BLASTP-SHORT'  => {
-      'word_size'               => '2',
-      'ungapped'                => '0',
-      'matrix'                  => 'PAM30',
-      'gapopen'                 => '9',
-      'gapextend'               => '1',
-      'threshold'               => '16',
-      'comp_based_stats'        => '0',
       'seg'                     => '1',
       'culling_limit'           => '5',
     },
