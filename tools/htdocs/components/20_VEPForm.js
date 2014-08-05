@@ -38,6 +38,10 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
         ) + '</p>');
       }
 
+      if (!this.elLk.speciesDropdown.find('input:checked').length) {
+        this.elLk.speciesDropdown.find('input[type=radio]').first().click();
+      }
+
       this.elLk.speciesDropdown.speciesDropdown({refresh: true});
     }
   },
