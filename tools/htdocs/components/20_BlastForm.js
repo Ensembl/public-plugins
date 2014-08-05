@@ -175,7 +175,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     this.elLk.searchTypeOptions = this.elLk.searchType.find('option').clone(); // take a copy to preserve a list of all supported search types
 
     // Search sensitivity
-    this.elLk.sensitivityOptions = this.elLk.form.find('select[name^=config_set_]').on('change': function() {
+    this.elLk.sensitivityOptions = this.elLk.form.find('select[name^=config_set_]').on('change', function() {
       panel.setSensitivityConfigs($(this));
     });
 
