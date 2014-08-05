@@ -85,7 +85,7 @@ sub CONFIGURATION_FIELDS {
 
       'ungapped'            => {
         'type'                => 'checklist',
-        'label'               => 'Allow gaps in Alignment',
+        'label'               => 'Disallow gaps in Alignment',
         'values'              => [ { 'value' => '1' } ],
         'commandline_type'    => 'flag',
       },
