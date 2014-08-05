@@ -55,15 +55,20 @@ enter your data and alter various options.</p>
               </li>
               
               <li>
-                  For some species you can select which transcript database to
-                  use. The default is to use Ensembl transcripts, which offer
-                  the most rich annotation through the VEP. You can also select
-                  to use RefSeq transcripts from the <a
+                  <p> For some species you can select which transcript database
+                  to use. The default is to use Ensembl transcripts, which offer
+                  the most rich annotation through the VEP. </p>
+                  <p> The Gencode basic set is a subset of the Ensembl
+                  transcripts that contains all of the same genes but has some
+                  partial and lower quality transcripts removed. </p>
+                  <p>You can also select to use RefSeq transcripts from the <a
                   href="/info/docs/api/core/index.html#est">otherfeatures
                   database</a>; note though that these transcripts are simply
                   aligned to the reference genome and the database is missing
                   much of the annotation found when using the main Ensembl
-                  database (e.g. protein domains, CCDS identifiers).
+                  database (e.g. protein domains, CCDS identifiers). When using
+                  RefSeq transcripts you may choose to include aligned EST and
+                  CCDS transcripts also. </p>
               </li>
           </ol>
       </div>
@@ -106,6 +111,12 @@ enter your data and alter various options.</p>
                 Equivalent to <a
                 href="/info/docs/tools/vep/script/vep_options.html#opt_protein">--protein</a></li>
                 
+                <li> <B>Uniprot</B> - add identifiers for translated protein
+                products from three <a href="http://www.ebi.ac.uk/uniprot"
+                rel="external">UniProt</a>-related databases (SWISSPROT, TREMBL
+                and UniParc). Equivalent to <a
+                href="/info/docs/tools/vep/script/vep_options.html#opt_uniprot">--uniprot</a></li>
+                
                 <li> <b>HGVS</b> - generate <a
                 href="http://www.hgvs.org/mutnomen/" rel="external">HGVS</a>
                 identifiers for your input variants relative to the transcript
@@ -136,6 +147,9 @@ enter your data and alter various options.</p>
                     This is equivalent to using <a
                     href="/info/docs/tools/vep/script/vep_options.html#opt_check_alleles">--check_alleles</a>
                     in the VEP script. </p>
+                    <p> For known variants the VEP can also provide PubMed IDs
+                    of publications citing the variant (equivalent to <a
+                    href="/info/docs/tools/vep/script/vep_options.html#opt_uniprot">--pubmed</a>).</p>
                 </li>
                 <li>
                     <p> The VEP can also report minor allele frequency (MAF)
