@@ -520,7 +520,7 @@ sub save_config {
   my $config = from_json($hub->param('config'));
    
   $track->set_user($_, $config->{$_} eq 'undef' ? undef : $config->{$_}) for keys %$config;
-  $image_config->altered = 1;
+  push @{$image_config->altered},"Genoverse";
   $hub->session->store;
 }
 
@@ -534,7 +534,7 @@ sub reset_track_heights {
   }
   
   $image_config->get_node('auto_height')->set_user('display', 'off');
-  $image_config->altered = 1;
+  push @{$image_config->altered},"Genoverse";
   $hub->session->store;
 }
 
@@ -556,7 +556,7 @@ sub auto_track_heights {
   }
   
   $image_config->get_node('auto_height')->set_user('display', $auto_height ? 'normal' : 'off');
-  $image_config->altered = 1;
+  push @{$image_config->altered},"Genoverse";
   $hub->session->store;
   
   print to_json(\%json);
