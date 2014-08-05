@@ -187,7 +187,9 @@ sub content {
         'elements'    => \@sensitivity_elements,
         'field_class' => \@field_classes
       });
+      $fieldset->add_hidden({'name' => 'sensitivity_configs', 'value' => $self->jsonify($all_config_sets)});
     }
+
 
     $fieldset->add_field({
       'label'           => 'Description (optional):',
