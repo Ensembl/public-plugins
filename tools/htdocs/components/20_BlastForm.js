@@ -25,6 +25,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     this.maxSequenceLength    = 0;
     this.maxNumSequences      = 0;
     this.dnaThresholdPercent  = 0;
+    this.sensitivityConfigs   = {};
     this.defaultSpecies       = [];
   },
 
@@ -42,8 +43,10 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
 
     try {
       // parse the combination JSON from the HTML - if this doesn't work, there is nothing we can do!
-      this.combinations   = $.parseJSON(this.elLk.form.find('input[name=valid_combinations]').remove().val());
-      this.missingSources = $.parseJSON(this.elLk.form.find('input[name=missing_sources]').remove().val());
+      this.combinations       = $.parseJSON(this.elLk.form.find('input[name=valid_combinations]').remove().val());
+      this.missingSources     = $.parseJSON(this.elLk.form.find('input[name=missing_sources]').remove().val());
+      this.sensitivityConfigs = $.parseJSON(this.elLk.form.find('input[name=sensitivity_configs]').remove().val() || "{}");
+
     } catch (ex) {
       this.combinations = this.missingSources = false;
     }
@@ -166,8 +169,15 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     }});
 
     // Search type dropdown
-    this.elLk.searchType = this.elLk.form.find('select[name=search_type]');
+    this.elLk.searchType = this.elLk.form.find('select[name=search_type]').on('change', function() {
+      panel.setSensitivityConfigs($(this).find('option:selected').val());
+    });
     this.elLk.searchTypeOptions = this.elLk.searchType.find('option').clone(); // take a copy to preserve a list of all supported search types
+
+    // Search sensitivity
+    this.elLk.sensitivityOptions = this.elLk.form.find('select[name^=config_set_]').on('change': function() {
+      panel.setSensitivityConfigs($(this));
+    });
 
     // Save the default species for later use
     this.defaultSpecies = this.elLk.speciesCheckboxes.filter(':checked').map(function() { return this.value; }).toArray();
@@ -523,7 +533,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     // now remove the invalid options for the selected combination of query type, db type and source type
     this.elLk.searchType.empty()
       .append(this.elLk.searchTypeOptions.filter(function() { return valid.indexOf(this.value) >= 0; }).clone())
-      .find('option[value=' + (selectedValue || '') + ']').prop('selected', true).end().selectToToggle('trigger');
+      .find('option[value=' + (selectedValue || '') + ']').prop('selected', true).end().selectToToggle('trigger').trigger('change');
   },
 
   resetSourceTypes: function(selectedSpecies) {
@@ -579,6 +589,34 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
   resetSpecies: function(speciesList) {
     this.elLk.speciesCheckboxes.prop('checked', function() { return speciesList.indexOf(this.value) >= 0; });
     this.elLk.speciesDropdown.speciesDropdown({refresh: true});
+  },
+
+  setSensitivityConfigs: function(el) {
+  /*
+   * Sets the configurations according to current value of the sensitivity dropdown
+   * @param The relevant sensitivity dropdown object, or the type of blast currently selected
+   */
+    var panel = this;
+    if (typeof el === 'string') {
+      el = this.elLk.sensitivityOptions.filter('[name$=' + el + ']').first();
+    }
+    if (!el.length) {
+      return;
+    }
+    var btype   = el.prop('name').replace('config_set_','');
+    var ctype   = el.find('option:selected').val();
+    var config  = false;
+    if (btype in this.sensitivityConfigs) {
+      if (ctype in this.sensitivityConfigs[btype]) {
+        config = this.sensitivityConfigs[btype][ctype];
+      }
+    }
+    if (config && !$.isEmptyObject(config)) {
+      $.each(config, function(name, value) {
+        panel.elLk.form.find('[name=' + btype + '__' + name + ']').filter('input').prop('checked', !!value).end().filter('select').find('option[value=' + value + ']').prop('selected', true);
+      });
+    }
+    btype = ctype = config = null;
   }
 });
 
