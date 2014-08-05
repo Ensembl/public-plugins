@@ -339,43 +339,76 @@ sub CONFIGURATION_DEFAULTS {
 }
 
 sub CONFIGURATION_SETS {
+
+  my $sets = {
+    'dna'         => {
+      'near'        => {
+        'word_size'   => 15,
+        'dust'        => 1,
+        'evalue'      => 10,
+        'reward'      => 1,
+        'penalty'     => -3,
+        'gapopen'     => 5,
+        'gapextend'   => 2
+      },
+      'near_oligo'  => {
+        'word_size'   => 7,
+        'dust'        => 0,
+        'evalue'      => 1000,
+        'reward'      => 1,
+        'penalty'     => -3,
+        'gapopen'     => 5,
+        'gapextend'   => 2
+      },
+      'normal'      => {
+        'word_size'   => 11,
+        'dust'        => 1,
+        'evalue'      => 10,
+        'reward'      => 1,
+        'penalty'     => -3,
+        'gapopen'     => 5,
+        'gapextend'   => 2
+      },
+      'distant'     => {
+        'word_size'   => 9,
+        'dust'        => 1,
+        'evalue'      => 10,
+        'reward'      => 1,
+        'penalty'     => -1,
+        'gapopen'     => 2,
+        'gapextend'   => 1
+      },
+    },
+    'protein'     => {
+      'near'        => {
+        'matrix'      => 'BLOSUM90',
+        'gapopen'     => 10,
+        'gapextend'   => 1
+      },
+      'normal'      => {
+        'matrix'      => 'BLOSUM62',
+        'gapopen'     => 11,
+        'gapextend'   => 1
+      },
+      'distant'     => {
+        'matrix'      => 'BLOSUM45',
+        'gapopen'     => 14,
+        'gapextend'   => 2
+      },
+    }
+  };
+
   return [
     { 'value' => 'near',        'caption' => 'Near match'},
     { 'value' => 'near_oligo',  'caption' => 'Short sequences'},
     { 'value' => 'normal',      'caption' => 'Normal', 'selected' => 'true'},
     { 'value' => 'distant',     'caption' => 'Distant homologies'}
   ], {
-
-    'NCBIBLAST_BLASTN'        => {
-      'near'                    => {},
-      'near_oligo'              => {},
-      'normal'                  => {},
-      'distant'                 => {},
-    },
-
-    'NCBIBLAST_BLASTP'        => {
-      'near'                    => {},
-      'normal'                  => {},
-      'distant'                 => {},
-    },
-
-    'NCBIBLAST_BLASTX'        => {
-      'near'                    => {},
-      'normal'                  => {},
-      'distant'                 => {},
-    },
-
-    'NCBIBLAST_TBLASTN'       => {
-      'near'                    => {},
-      'normal'                  => {},
-      'distant'                 => {},
-    },
-
-    'NCBIBLAST_TBLASTX'       => {
-      'near'                    => {},
-      'normal'                  => {},
-      'distant'                 => {},
-    }
+    'NCBIBLAST_BLASTN'        => { map { $_ => $sets->{'dna'}{$_} } qw(near near_oligo normal distant) },
+    'NCBIBLAST_BLASTP'        => { map { $_ => $sets->{'protein'}{$_} } qw(near normal distant) },
+    'NCBIBLAST_BLASTX'        => { map { $_ => $sets->{'protein'}{$_} } qw(near normal distant) },
+    'NCBIBLAST_TBLASTN'       => { map { $_ => $sets->{'protein'}{$_} } qw(near normal distant) },
+    'NCBIBLAST_TBLASTX'       => { map { $_ => $sets->{'protein'}{$_} } qw(near normal distant) },
   };
 }
 
