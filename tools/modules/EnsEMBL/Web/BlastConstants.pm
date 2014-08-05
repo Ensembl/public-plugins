@@ -46,66 +46,26 @@ sub CONFIGURATION_FIELDS {
       'max_target_seqs'     => {
         'type'                => 'dropdown',
         'label'               => 'Maximum number of hits to report',
-        'values'              => [
-                                  { 'value' => '10',    'caption' => '10' },
-                                  { 'value' => '50',    'caption' => '50' },
-                                  { 'value' => '100',   'caption' => '100' },
-                                  { 'value' => '250',   'caption' => '250' },
-                                  { 'value' => '500',   'caption' => '500' },
-                                  { 'value' => '1000',  'caption' => '1000' },
-                                  { 'value' => '5000',  'caption' => '5000' }
-        ],
+        'values'              => [ map { 'value' => $_, 'caption' => $_ }, qw(10 50 100 250 500 1000 5000) ]
       },
 
       'culling_limit'       => {
         'type'                => 'dropdown',
         'label'               => 'Culling limit',
         'helptip'             => 'This will throw away hits that are enveloped by at least this many higher-scoring hits',
-        'values'              => [
-                                  { 'value' => '1',   'caption' => '1' },
-                                  { 'value' => '2',   'caption' => '2' },
-                                  { 'value' => '3',   'caption' => '3' },
-                                  { 'value' => '4',   'caption' => '4' },
-                                  { 'value' => '5',   'caption' => '5' },
-                                  { 'value' => '7',   'caption' => '7' },
-                                  { 'value' => '10',  'caption' => '10' },
-                                  { 'value' => '15',  'caption' => '15' },
-                                  { 'value' => '20',  'caption' => '20' },
-                                  { 'value' => '999', 'caption' => '999' },
-        ]
+        'values'              => [ map { 'value' => $_, 'caption' => $_ }, 1..10,15,20,999 ]
       },
 
       'evalue'              => {
         'type'                => 'dropdown',
         'label'               => 'Maximum E-value for reported alignments',
-        'values'              => [
-                                  { 'value' => '1e-200',  'caption' => '1e-200' },
-                                  { 'value' => '1e-100',  'caption' => '1e-100' },
-                                  { 'value' => '1e-50',   'caption' => '1e-50' },
-                                  { 'value' => '1e-10',   'caption' => '1e-10' },
-                                  { 'value' => '1e-5',    'caption' => '1e-5' },
-                                  { 'value' => '1e-4',    'caption' => '1e-4' },
-                                  { 'value' => '1e-3',    'caption' => '1e-3' },
-                                  { 'value' => '1e-2',    'caption' => '1e-2' },
-                                  { 'value' => '1e-1',    'caption' => '1e-1' },
-                                  { 'value' => '1',       'caption' => '1.0' },
-                                  { 'value' => '10',      'caption' => '10' },
-                                  { 'value' => '100',     'caption' => '100' },
-                                  { 'value' => '1000',    'caption' => '1000' },
-        ]
+        'values'              => [ map { 'value' => $_, 'caption' => $_ }, qw(1e-200 1e-100 1e-50 1e-10 1e-5 1e-4 1e-3 1e-2 1e-1 1.0 10 100 1000) ]
       },
 
       'word_size'           => {
         'type'                => 'dropdown',
         'label'               => 'Word size for seeding alignments',
-        'values'              => [
-                                  { 'value' => '2',   'caption' => '2' },
-                                  { 'value' => '3',   'caption' => '3' },
-                                  { 'value' => '4',   'caption' => '4' },
-                                  { 'value' => '6',   'caption' => '8' },
-                                  { 'value' => '11',  'caption' => '11' },
-                                  { 'value' => '15',  'caption' => '15' },
-        ]
+        'values'              => [ map { 'value' => $_, 'caption' => $_ }, 2..15 ]
       }
     ],
 
@@ -114,37 +74,13 @@ sub CONFIGURATION_FIELDS {
       'gapopen'             => {
         'type'                => 'dropdown',
         'label'               => 'Penalty for opening a gap',
-        'values'              => [
-                                  { 'value' => '1',   'caption' => '1' },
-                                  { 'value' => '2',   'caption' => '2' },
-                                  { 'value' => '3',   'caption' => '3' },
-                                  { 'value' => '4',   'caption' => '4' },
-                                  { 'value' => '5',   'caption' => '5' },
-                                  { 'value' => '6',   'caption' => '6' },
-                                  { 'value' => '7',   'caption' => '7' },
-                                  { 'value' => '8',   'caption' => '8' },
-                                  { 'value' => '9',   'caption' => '9' },
-                                  { 'value' => '10',  'caption' => '10' },
-                                  { 'value' => '11',  'caption' => '11' },
-                                  { 'value' => '12',  'caption' => '12' },
-                                  { 'value' => '13',  'caption' => '13' },
-                                  { 'value' => '14',  'caption' => '14' },
-                                  { 'value' => '15',  'caption' => '15' },
-        ],
+        'values'              => [ map { 'value' => $_, 'caption' => $_ }, 1..15 ]
       },
 
       'gapextend'           => {
         'type'                => 'dropdown',
         'label'               =>  'Penalty for extending a gap',
-        'values'              => [
-                                  { 'value' => '1',   'caption' => '1' },
-                                  { 'value' => '2',   'caption' => '2' },
-                                  { 'value' => '3',   'caption' => '3' },
-                                  { 'value' => '5',   'caption' => '5' },
-                                  { 'value' => '9',   'caption' => '9' },
-                                  { 'value' => '10',  'caption' => '10' },
-                                  { 'value' => '15',  'caption' => '15' },
-        ],
+        'values'              => [ map { 'value' => $_, 'caption' => $_ }, 1..15 ]
       },
 
       'ungapped'            => {
@@ -157,40 +93,19 @@ sub CONFIGURATION_FIELDS {
       'reward'              => {
         'type'                => 'dropdown',
         'label'               => 'Match score',
-        'values'              => [
-                                  { 'value' => '1', 'caption' => '1' },
-                                  { 'value' => '2', 'caption' => '2' },
-                                  { 'value' => '3', 'caption' => '3' },
-                                  { 'value' => '4', 'caption' => '4' },
-                                  { 'value' => '5', 'caption' => '5' },
-        ]
+        'values'              => [ map { 'value' => $_, 'caption' => $_ }, 1..5 ]
       },
 
       'penalty'             => {
         'type'                => 'dropdown',
         'label'               => 'Mismatch score',
-        'values'              => [
-                                  { 'value' => '-1', 'caption' => '-1' },
-                                  { 'value' => '-2', 'caption' => '-2' },
-                                  { 'value' => '-3', 'caption' => '-3' },
-                                  { 'value' => '-4', 'caption' => '-4' },
-                                  { 'value' => '-5', 'caption' => '-5' },
-        ],
+        'values'              => [ reverse map { 'value' => $_, 'caption' => $_ }, -5..-1 ]
       },
 
       'matrix'              => {
         'type'                => 'dropdown',
         'label'               => 'Scoring matrix to use',
-        'values'              => [
-                                  { 'value' => 'PAM30',     'caption' => 'PAM30' },
-                                  { 'value' => 'PAM70',     'caption' => 'PAM70' },
-                                  { 'value' => 'PAM250',    'caption' => 'PAM250'},
-                                  { 'value' => 'BLOSUM45',  'caption' => 'BLOSUM45' },
-                                  { 'value' => 'BLOSUM50',  'caption' => 'BLOSUM50' },
-                                  { 'value' => 'BLOSUM62',  'caption' => 'BLOSUM62' },
-                                  { 'value' => 'BLOSUM80',  'caption' => 'BLOSUM80' },
-                                  { 'value' => 'BLOSUM90',  'caption' => 'BLOSUM90' },
-        ]
+        'values'              => [ map { 'value' => $_, 'caption' => $_ }, qw(PAM30 PAM70 PAM250 BLOSUM45 BLOSUM50 BLOSUM62 BLOSUM80 BLOSUM90) ]
       },
 
       'comp_based_stats'    => {
@@ -207,16 +122,7 @@ sub CONFIGURATION_FIELDS {
       'threshold'           => {
         'type'                => 'dropdown',
         'label'               => 'Minimium score to add a word to the BLAST lookup table',
-        'values'              => [
-                                  { 'value' => '11',  'caption' => '11' },
-                                  { 'value' => '12',  'caption' => '12' },
-                                  { 'value' => '13',  'caption' => '13' },
-                                  { 'value' => '14',  'caption' => '14' },
-                                  { 'value' => '15',  'caption' => '15' },
-                                  { 'value' => '16',  'caption' => '16' },
-                                  { 'value' => '20',  'caption' => '20' },
-                                  { 'value' => '999', 'caption' => '999' },
-        ],
+        'values'              => [ map { 'value' => $_, 'caption' => $_ }, 11..16,20,999 ]
       },
 
     ],
@@ -404,11 +310,11 @@ sub CONFIGURATION_SETS {
     { 'value' => 'normal',      'caption' => 'Normal', 'selected' => 'true'},
     { 'value' => 'distant',     'caption' => 'Distant homologies'}
   ], {
-    'NCBIBLAST_BLASTN'        => { map { $_ => $sets->{'dna'}{$_} } qw(near near_oligo normal distant) },
-    'NCBIBLAST_BLASTP'        => { map { $_ => $sets->{'protein'}{$_} } qw(near normal distant) },
-    'NCBIBLAST_BLASTX'        => { map { $_ => $sets->{'protein'}{$_} } qw(near normal distant) },
-    'NCBIBLAST_TBLASTN'       => { map { $_ => $sets->{'protein'}{$_} } qw(near normal distant) },
-    'NCBIBLAST_TBLASTX'       => { map { $_ => $sets->{'protein'}{$_} } qw(near normal distant) },
+    'NCBIBLAST_BLASTN'        => $sets->{'dna'},
+    'NCBIBLAST_BLASTP'        => $sets->{'protein'},
+    'NCBIBLAST_BLASTX'        => $sets->{'protein'},
+    'NCBIBLAST_TBLASTN'       => $sets->{'protein'},
+    'NCBIBLAST_TBLASTX'       => $sets->{'protein'},
   };
 }
 
