@@ -39,7 +39,7 @@ sub content {
   unless ($form && $all_species) {
     $form = $self->new_tool_form('Blast', {'class' => 'blast-form'});
 
-    my $fieldset        = $form->add_fieldset;
+    my $fieldset        = $form->fieldset;
     my $form_params     = $object->get_blast_form_options;
     my $options         = delete $form_params->{'options'};
     my $combinations    = delete $form_params->{'combinations'};
