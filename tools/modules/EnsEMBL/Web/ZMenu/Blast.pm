@@ -57,7 +57,7 @@ sub add_hit_content {
   $self->add_entry({
     'type'        => 'Genomic bp',
     'label_html'  => sprintf('%s:<wbr>%s-<wbr>%s', $hit->{'gid'}, $hit->{'gstart'}, $hit->{'gend'}),
-    'link'        => $hub->url($object->get_result_url('location', $job, $_))
+    'link'        => $hub->url($object->get_result_url('location', $job, $result))
   });
 
   $self->add_entry({
@@ -68,7 +68,7 @@ sub add_hit_content {
   $self->add_entry({
     'type'        => 'Target',
     'label'       => $hit->{'tid'}, $hit->{'source'} !~/latest/i ? (
-    'link'        => $hub->url($object->get_result_url('target', $job, $_))) : ()
+    'link'        => $hub->url($object->get_result_url('target', $job, $result))) : ()
   });
 
   $self->add_entry({ 'type' => 'Score',   'label' => $hit->{'score'}  });
@@ -76,14 +76,10 @@ sub add_hit_content {
   $self->add_entry({ 'type' => '%ID',     'label' => $hit->{'pident'} });
   $self->add_entry({ 'type' => 'Length',  'label' => $hit->{'len'}    });
 
-  $self->add_entry({
-    'type'        => 'Links',
-    'label_html'  => sprintf('<a href="%s" class="_ht" title="Alignment">[A]</a> <a href="%s" class="_ht" title="Query Sequence">[S]</a> <a href="%s" class="_ht" title="Genomic Sequence">[G]</a>',
-      $hub->url($object->get_result_url('alignment',        $job, $_)),  # Alignment link
-      $hub->url($object->get_result_url('query_sequence',   $job, $_)),  # Query sequence link
-      $hub->url($object->get_result_url('genomic_sequence', $job, $_))   # Genomic sequence link
-    )
-  });
+  # Alignment and sequence links
+  for (qw(alignment query_sequence genomic_sequence)) {
+    $self->add_entry({ 'label_html' => sprintf('<a href="%s" class="_ht">%s</a>', $hub->url($object->get_result_url($_, $job, $result)), ucfirst $_ =~ s/_/ /r) });
+  }
 }
 
 1;
