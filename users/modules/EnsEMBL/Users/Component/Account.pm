@@ -82,18 +82,6 @@ sub render_message {
   }
 }
 
-sub get_then_param {
-  ## Gets the 'then' param for the url that needs to be followed after the login is done
-  ## Use for Login type pages only.
-  ## @return URL string, if any, undef otherwise
-  my $self    = shift;
-  my $hub     = $self->hub;
-  my $referer = $hub->referer;
-  my $then    = $hub->param('then') || ($referer->{'external'} ? $referer->{'absolute_url'} : '') || '';
-     $then    = $hub->species_defs->ENSEMBL_BASE_URL.$hub->current_url if $hub->action !~ /^(Login|Register)$/ && $hub->function ne 'AddLogin'; # if ended up on this page from some 'available for logged-in user only' page for Account type
-  return $then;
-}
-
 sub get_group_types {
   ## Gets the type of groups with the display text
   return [

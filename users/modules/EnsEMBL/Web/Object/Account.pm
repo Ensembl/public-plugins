@@ -46,6 +46,18 @@ sub new_login_account     { return ORM::EnsEMBL::DB::Accounts::Manager::Login->c
 sub fetch_login_account   { return ORM::EnsEMBL::DB::Accounts::Manager::Login->get_with_user($_[1]);                  }
 sub fetch_user_by_email   { return ORM::EnsEMBL::DB::Accounts::Manager::User->get_by_email($_[1]);                    }
 
+sub get_then_param {
+  ## Gets the 'then' param for the url that needs to be followed after the login is done
+  ## Use for Login type pages only.
+  ## @return URL string, if any, undef otherwise
+  my $self    = shift;
+  my $hub     = $self->hub;
+  my $referer = $hub->referer;
+  my $then    = $hub->param('then') || ($referer->{'external'} ? $referer->{'absolute_url'} : '') || '';
+     $then    = $hub->species_defs->ENSEMBL_BASE_URL.$hub->current_url if $hub->action !~ /^(Login|Register)$/ && $hub->function ne 'AddLogin'; # if ended up on this page from some 'available for logged-in user only' page for Account type
+  return $then;
+}
+
 sub fetch_membership {
   ## Fetches a membership object with the given id
   ## Wrapper around fetch_by_primary_key of the manager class
