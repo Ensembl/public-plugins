@@ -145,6 +145,23 @@ sub job_summary_section {
   my $assembly_mismatch = $job_assembly ne $current_assembly;
   my $assembly_site     = $assembly_mismatch && $species_defs->SWITCH_ASSEMBLY eq $job_assembly ? 'http://'.$species_defs->SWITCH_ARCHIVE_URL : '';
 
+  my $result_url = $dispatcher_status eq 'done' ? {
+    '__clear'     => !!$assembly_site, # remove extra params for the external site
+    'species'     => $job_species,
+    'type'        => 'Tools',
+    'action'      => $ticket->ticket_type_name,
+    'function'    => 'Results',
+    'tl'          => $object->create_url_param({'ticket_name' => $ticket->ticket_name, 'job_id' => $job->job_id})
+  } : undef;
+
+  if ($result_url && $assembly_mismatch && $assembly_site && $ticket->owner_type eq 'user') { # if job is from another assembly and we do have a site for that assembly
+    $result_url = { # result can only be seen by logged in user
+      'then'      => $hub->url($result_url),
+      'type'      => 'Account',
+      'action'    => 'Login',
+    };
+  }
+
   return $self->dom->create_element('p', {
     'children'    => [{
       'node_name'   => 'img',
@@ -163,19 +180,12 @@ sub job_summary_section {
       'inner_HTML'  => $object->get_job_description($job)
     },
     $self->job_status_tag($job, $dispatcher_status, $result_count, $assembly_mismatch && $current_assembly, !!$assembly_site),
-    $dispatcher_status eq 'done' && (!$assembly_mismatch || ($assembly_site && $ticket->owner_type eq 'user')) ? { # either job is from current assembly, or job is from another assembly and we do have a site for that assembly
+    $result_url ? {
       'node_name'   => 'a',
       'inner_HTML'  => $assembly_site ? "[View results on $job_assembly site]" : '[View results]',
       'flags'       => ['job_results_link'],
       'class'       => [qw(small left-margin)],
-      'href'        => sprintf('%s%s', $assembly_site, $hub->url({
-        '__clear'     => !!$assembly_site, # remove extra params for the external site
-        'species'     => $job_species,
-        'type'        => 'Tools',
-        'action'      => $ticket->ticket_type_name,
-        'function'    => 'Results',
-        'tl'          => $object->create_url_param({'ticket_name' => $ticket->ticket_name, 'job_id' => $job->job_id})
-      }))
+      'href'        => sprintf('%s%s', $assembly_site, $hub->url($result_url))
     } : (), {
       'node_name'   => 'span',
       'class'       => ['job-sprites'],
