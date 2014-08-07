@@ -37,7 +37,6 @@ sub job_summary_section {
   
   my $location = $self->hub->param('r') || $self->hub->species_defs->SAMPLE_DATA->{'LOCATION_PARAM'};
   foreach (@results_links) {
-    my $site = $self->hub->species_defs->ENSEMBL_BASE_URL;
     my $url = $self->_download_url($ticket);
     $summary->insert_before({
                           'node_name'   => 'a',
