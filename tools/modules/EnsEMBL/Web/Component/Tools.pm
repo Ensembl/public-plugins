@@ -255,7 +255,8 @@ sub job_status_tag {
   ## @param Dispatcher status (string)
   ## @param Number of results
   ## @param Current assembly for the job species if it's not the same as the one to which the job was originally submitted to, 0 if species doesn't exist on current site
-  my ($self, $job, $status, $result_count, $assembly_mismatch) = @_;
+  ## @param Flag kept on if the job can be viewed on a different assembly website (only applicable if assembly different)
+  my ($self, $job, $status, $result_count, $assembly_mismatch, $has_assembly_site) = @_;
 
   my $css_class = "job-status-$status";
   my $title     = {
@@ -271,14 +272,12 @@ sub job_status_tag {
   if ($status eq 'done') {
     if ($assembly_mismatch) {
       $css_class  = 'job-status-mismatch';
-      $title      = sprintf(q(The job was run on %s assembly for %s. You can resubmit the job to %s assembly by clicking on the 'Edit &amp; resubmit' icon.),
-        $job->assembly,
-        $self->hub->species_defs->get_config($job->species, 'SPECIES_COMMON_NAME'),
-        $assembly_mismatch
-      );
+      $title      = sprintf 'The job was run on %s assembly for %s. ', $job->assembly, $self->hub->species_defs->get_config($job->species, 'SPECIES_COMMON_NAME');
+      $title     .= $has_assembly_site && $job->ticket->owner_type ne 'user' ? sprintf('Please save this ticket to your account using the icon on the right to be able to view this job on %s site. ', $job->assembly) : '';
+      $title     .= sprintf q(To resubmit the job to %s assembly, please click on the 'Edit &amp; resubmit' icon.), $job->assembly, $assembly_mismatch;
     } elsif (defined $assembly_mismatch && $assembly_mismatch eq '0') {
       $css_class  = 'job-status-mismatch';
-      $title      = sprintf(q(The job was run on %s which does not exist on this site.), $job->species);
+      $title      = sprintf q(The job was run on %s which does not exist on this site.), $job->species =~ s/_/ /gr;
     }
   }
 
