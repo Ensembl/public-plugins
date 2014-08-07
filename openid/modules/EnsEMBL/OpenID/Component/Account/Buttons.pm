@@ -33,7 +33,7 @@ sub content {
   my $object            = $self->object;
   my $hub               = $self->hub;
   my $openid_providers  = $object->openid_providers;
-  my $then_param        = $self->get_then_param;
+  my $then_param        = $object->get_then_param;
   my $trademarks        = [];
   my $trademark_owners  = [];
   my $section           = {
