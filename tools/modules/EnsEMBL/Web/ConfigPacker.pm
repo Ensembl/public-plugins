@@ -109,7 +109,7 @@ sub _get_NCBIBLAST_source_file {
 
   (my $type     = lc $source_type) =~ s/_/\./;
 
-  return sprintf '%s.%s.%s.%s.fa', $species, $assembly, $db_tree->{'DB_RELEASE_VERSION'} || $SiteDefs::ENSEMBL_VERSION, $type unless $type =~ /latestgp/;
+  return sprintf '%s.%s.%s.fa', $species, $assembly, $type unless $type =~ /latestgp/;
 
   $type =~ s/latestgp(.*)/dna$1\.toplevel/;
   $type =~ s/.masked/_rm/;
