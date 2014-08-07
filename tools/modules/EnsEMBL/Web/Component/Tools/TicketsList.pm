@@ -162,8 +162,8 @@ sub job_summary_section {
       'flags'       => ['job_desc_span'],
       'inner_HTML'  => $object->get_job_description($job)
     },
-    $self->job_status_tag($job, $dispatcher_status, $result_count, $assembly_mismatch && $current_assembly),
-    $dispatcher_status eq 'done' && (!$assembly_mismatch || $assembly_site) ? { # either job is from current assembly, or job is from another assembly and we do have a site for that assembly
+    $self->job_status_tag($job, $dispatcher_status, $result_count, $assembly_mismatch && $current_assembly, !!$assembly_site),
+    $dispatcher_status eq 'done' && (!$assembly_mismatch || ($assembly_site && $ticket->owner_type eq 'user')) ? { # either job is from current assembly, or job is from another assembly and we do have a site for that assembly
       'node_name'   => 'a',
       'inner_HTML'  => $assembly_site ? "[View results on $job_assembly site]" : '[View results]',
       'flags'       => ['job_results_link'],
