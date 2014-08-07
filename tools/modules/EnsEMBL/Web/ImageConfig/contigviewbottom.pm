@@ -23,13 +23,13 @@ package EnsEMBL::Web::ImageConfig::contigviewbottom;
 use strict;
 use warnings;
 
-use previous qw(init);
+use previous qw(initialize);
 
-sub init {
+sub initialize {
   ## @plugin
   ## Adds blast track to the config
   my $self = shift;
-  $self->PREV::init(@_);
+  $self->PREV::initialize(@_);
 
   # display the tools related track if required
   if (my $object = $self->hub->core_object('Tools')) {
