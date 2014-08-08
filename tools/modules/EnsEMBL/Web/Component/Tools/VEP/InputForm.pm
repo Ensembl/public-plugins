@@ -272,9 +272,10 @@ sub content {
       <p><a class="button _change_location" href="%s">New VEP job</a></p>
     </div>
     <div class="hidden _tool_form_div">
-      <h2>New VEP job:</h2><input type="hidden" class="panel_type" value="VEPForm" />%s
+      <h2>New VEP job:</h2><input type="hidden" class="panel_type" value="VEPForm" />%s%s
     </div>',
     $hub->url({'function' => ''}),
+    $self->alt_assembly_info($current_species, 'VEP', 'VEP'),
     $form
   );
 }
