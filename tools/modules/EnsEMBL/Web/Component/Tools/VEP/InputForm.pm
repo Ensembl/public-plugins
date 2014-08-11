@@ -166,6 +166,8 @@ sub content {
     ### Advanced config options
     my $sections = CONFIG_SECTIONS;
     foreach my $section (@$sections) {
+      next if $section->{'id'} eq 'plugins' and !$sd->ENSEMBL_VEP_PLUGIN_ENABLED;
+      
       my $method      = '_build_'.$section->{'id'};
       my $config_div  = $form->append_child('div', {
         'class'       => 'extra_configs_wrapper vep-configs',
@@ -633,6 +635,44 @@ sub _build_extra {
       }]
     }) if $hub->get_adaptor('get_CellTypeAdaptor', 'funcgen', $_);
   }
+}
+
+sub _build_plugins {
+  my ($self, $form, $extra_div) = @_;
+  my $hub       = $self->hub;
+  my $sd        = $hub->species_defs;
+  my $species   = $self->_species;
+  my $fieldset  = $extra_div->append_child($form->add_fieldset);
+  
+  foreach my $pl_key(keys %{$sd->ENSEMBL_VEP_PLUGIN_CONFIG}) {
+    my $pl = $sd->ENSEMBL_VEP_PLUGIN_CONFIG->{$pl_key};
+    
+    $fieldset->add_field({
+      'class' => "_stt",
+      'field_class' => [map {"_stt_".ucfirst($_)} @{$pl->{species} || []}],
+      'type' => 'dropdown',
+      'helptip' => $pl->{helptip},
+      'name' => 'plugin_'.$pl_key,
+      'label' => $pl->{label} || $pl_key,
+      'value' => 'no',
+      'values' => [
+        { 'value' => 'no', 'caption' => 'Disabled' },
+        { 'value' => 'plugin_'.$pl_key, 'caption' => 'Enabled' },
+      ],
+    });
+    
+    if($pl->{form}) {
+      foreach my $el(@{$pl->{form}}) {
+        $el->{field_class} = '_stt_plugin_'.$pl_key;
+        $el->{label} ||= $el->{name};
+        $el->{value} ||= $el->{name};
+        $el->{name}  = 'plugin_'.$pl_key.'_'.$el->{name};
+        
+        $fieldset->add_field($el);
+      }
+    }
+  }
+  #$fieldset->add_field({});
 }
 
 sub _species {
