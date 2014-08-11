@@ -18,9 +18,8 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
 
   init: function() {
     this.base();
+    this.resetSpecies(this.elLk.form.find('input[name=default_species]').remove().val());
     this.editExisting();
-
-    this.elLk.speciesDropdown = this.elLk.form.find('._sdd');
   },
 
   populateForm: function(jobsData) {
@@ -42,7 +41,7 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
         this.elLk.speciesDropdown.find('input[type=radio]').first().click();
       }
 
-      this.elLk.speciesDropdown.speciesDropdown({refresh: true});
+      this.resetSpecies();
     }
   },
 
@@ -52,7 +51,22 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
    */
     this.base.apply(this, arguments);
     this.elLk.form.find('._download_link').remove();
-    this.elLk.speciesDropdown.speciesDropdown({refresh: true});
+    this.resetSpecies();
     this.resetSelectToToggle();
+  },
+
+  resetSpecies: function (species) {
+  /*
+   * Resets the species dropdown to select the given species or simply refresh the dropdown
+   */
+    if (!this.elLk.speciesDropdown) {
+      this.elLk.speciesDropdown = this.elLk.form.find('._sdd');
+    }
+
+    if (species) {
+      this.elLk.speciesDropdown.find('input[value=' + species + ']').first().click();
+    }
+
+    this.elLk.speciesDropdown.speciesDropdown({refresh: true});
   }
 });
