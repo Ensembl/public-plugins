@@ -2,6 +2,11 @@
 <head>
 <title>Variation API Tutorial</title>
 <meta name="order" content="3" />
+<script type="text/javascript">
+  window.onload=function() {
+    sh_highlightDocument();
+  }
+</script>
 </head>
 
 <body>
@@ -26,7 +31,7 @@ Documentation about the Variation database schema is available
 </p>
 
 <br />
-<h2 id="code">Code Conventions</h2>
+<h2 id="code sh_perl">Code Conventions</h2>
 
 <p>
 Refer to the <a href="/info/docs/api/core/core_tutorial.html">Ensembl Core tutorial</a> for a good description of the coding conventions normally used in Ensembl. We try as much as possible to stick to these rules in Variation.
@@ -39,7 +44,7 @@ Refer to the <a href="/info/docs/api/core/core_tutorial.html">Ensembl Core tutor
 Connecting to an Ensembl Variation database is made simple by using the Bio::EnsEMBL::Registry module:
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 use Bio::EnsEMBL::Registry;
 
 my $registry = 'Bio::EnsEMBL::Registry';
@@ -58,7 +63,7 @@ type. The Ensembl variation API uses a number of object types that relate to the
 data stored in the database. For example, in order to generate variation
 objects, you should first create a variation adaptor: </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 use Bio::EnsEMBL::Registry;
 
 my $registry = 'Bio::EnsEMBL::Registry';
@@ -109,7 +114,7 @@ One of the most important uses for the variation database is to be able to get a
 Below it is a simple commented perl script to illustrate how to get all variations in chromosome 25 in zebrafish.
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 use strict;
 use warnings;
 use Bio::EnsEMBL::Registry;
@@ -168,7 +173,7 @@ including the PolyPhen and SIFT predictions. It is also shown how to retrieve
 the Sequence Ontology terms for the consequences.
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 use strict;
 use warnings;
 use Bio::EnsEMBL::Registry;
@@ -230,7 +235,7 @@ It is also possible to calculate consequence types for variations not currently 
 A script is also provided in ftp://ftp.ensembl.org/pub/misc-scripts/ that will calculate consequence types from a list of variations provided in an input file.
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 use strict;
 use Bio::EnsEMBL::Registry;
 
@@ -281,7 +286,7 @@ we want to get, for a list of variation names, information about alleles, flanki
 in transcripts, position in the transcript (in case it has a coding effect) and genes containing the transcripts.
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 use strict;
 use warnings;
 use Bio::EnsEMBL::Registry;
@@ -356,7 +361,7 @@ sub get_TranscriptVariations{
 	Below it is a simple commented perl script to illustrate how to get data related to variations that have been flagged as failed.
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 	
 use strict;
 use warnings;
@@ -399,7 +404,7 @@ print "There are " . scalar(@{$vfs}) . " variations in the " . $slice->display_i
 	variations we got and find out how many are flagged as failed and why.
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 	
 my $failed = 0;
 my %descriptions;
@@ -432,7 +437,7 @@ map { print "\t" . $descriptions{$_} . " variations failed because " . $_ . "\n"
 	have been flagged as failed.
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 	
 foreach my $vf (@{$vfs}) {
 	
@@ -469,7 +474,7 @@ associated with various Ensembl object types (variations, structural variations,
 genes, and QTLs). These data, stored into the Ensembl variation database, are
 imported from different sources (e.g. NHGRI GWAS catalog, OMIM, UniProt, Open
 Access GWAS Database, EGA, COSMIC, HGMD, ...).</p>
-<pre class="code">
+<pre class="code sh_perl">
 use strict;
 use warnings;
 use Bio::EnsEMBL::Registry;
@@ -502,7 +507,7 @@ foreach my $pf (@{$pf_adaptor->fetch_all_by_Variation($var)}) {
 <p>It is also possible to retrieve all features associated with a phenotype
 description and an optional source name.</p>
 
-<pre class="code">
+<pre class="code sh_perl">
 my $source_name = 'NHGRI_GWAS_catalog';
 my $phenotype   = 'Cardiac hypertrophy';
 
@@ -521,7 +526,7 @@ foreach my $pf (@{$pf_adaptor->fetch_all_by_phenotype_description_source_name($p
 However the database stores also non significant phenotype associations.
 In order to fetch this data, an extra line in the code needs to be added after the creation of the adaptor:
 </p>  
-<pre class="code">
+<pre class="code sh_perl">
 my $pf_adaptor = $registry->get_adaptor('homo_sapiens', 'variation', 'phenotypefeature');
 
 $pf_adaptor->db->include_non_significant_phenotype_associations(1); # Use the value 0 to revert to only significant associations.
@@ -554,7 +559,7 @@ $pf_adaptor->db->include_non_significant_phenotype_associations(1); # Use the va
 <p>
 	First, we get a connection and an adaptor:
 </p>	
-<pre class="code">
+<pre class="code sh_perl">
 use strict;
 use warnings;
 use Bio::EnsEMBL::Registry;
@@ -575,7 +580,7 @@ my $vs_adaptor = $registry->get_adaptor('human','variation','variationset');
 	Next, we get the VariationSet objects from the adaptor. In order to display the hierarchical relationships between VariationSets, we fetch only the top level sets and for each set, recursively
 	get the subsets. We print the name and short name attributes for each set and indicate the hierarchy by increasing indentation.
 </p>
-<pre class="code">
+<pre class="code sh_perl">
 
 # Get all top-level variation sets
 my $top_vss = $vs_adaptor->fetch_all_top_VariationSets();
@@ -612,7 +617,7 @@ sub print_set {
 	memory at once which could otherwise easily cause your script to crash. The main methods we will use on the iterator are the has_next() and next() methods. In the example below, we fetch a variation set that contains  
 	variations that have been linked to phenotypes and print the first 10 examples. Note that getting variations from a variation set that has subsets below it automatically returns the variations from the subsets.  
 </p>
-<pre class="code">
+<pre class="code sh_perl">
 
   # Get the variation set for the phenotype-associated variants.
   my $vs = $vs_adaptor->fetch_by_short_name('ph_variants');
@@ -649,7 +654,7 @@ sub print_set {
 	You can also use Slices to retrieve VariationFeatures belonging to a desired variation set in a particular genomic region. 
 	In the example below, we fetch all VariationFeatures discovered by the third 1000 genomes pilot study on the RIC8A gene.
 </p>
-<pre class="code">
+<pre class="code sh_perl">
   # Get the variation set object
   $vs = $vs_adaptor->fetch_by_short_name('1kg_hct');
 
@@ -676,7 +681,7 @@ sub print_set {
 <p>
 The variation sets can also be retrieved from the structural variations.
 </p>
-<pre class="code">
+<pre class="code sh_perl">
   # Get the StructuralVariation object
   my $sv_adaptor  = $registry->get_adaptor( 'human', 'variation', 'structuralvariation' );
   my $sv = $sv_adaptor->fetch_by_name('esv2663683');
@@ -703,7 +708,7 @@ The variation sets can also be retrieved from the structural variations.
 Most variations in the Ensembl Variation database have associated allele frequencies. Each allele object associated with a variation represents an observation of a variant allele in a given population, and may have an associated frequency. Populations are also represented as objects.
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 use strict;
 use warnings;
 use Bio::EnsEMBL::Registry;
@@ -737,7 +742,7 @@ foreach my $allele (@{$alleles}) {
 Many variations in the Ensembl Variation database, especially those genotyped in the HapMap or 1000 Genomes projects, have associated genotypes. Genotypes are stored per individual as IndividualGenotype objects, and are associated with a Variation and Individual object. They can be retrieved from an IndividualGenotypeAdaptor, or directly from a Variation object.
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 use strict;
 use warnings;
 use Bio::EnsEMBL::Registry;
@@ -777,7 +782,7 @@ foreach my $genotype(@{$genotypes}) {
 In the example below, it calculates the LD in a region in human chromosome 6 for a HAPMAP population, but only prints when there is a high LD
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 use strict;
 use warnings;
 use Bio::EnsEMBL::Registry;
@@ -833,7 +838,7 @@ work with your specific strain as if it was the reference one, and compare it ag
 object for a region in Craig Venter's sequence and compare it against the reference sequence.
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 use strict;
 use warnings;
 
@@ -871,7 +876,7 @@ foreach my $diff (@differences){
 <p>
 The Ensembl variation database also stores information about structural variations. These data are imported from the DGVa (Database of Genomic Variants archive). Structural variants are remapped to the current genome assembly using the $slice->project() method from the Ensembl Core API, allowing for one gap in the resultant mapping.</p>
 
-<pre class="code">
+<pre class="code sh_perl">
 use strict;
 use warnings;
 
@@ -900,7 +905,7 @@ if ($sv->study) {
 }
 </pre>
 <p>Like the variation, you can fetch the structural variations using a Slice.</p>
-<pre class="code">
+<pre class="code sh_perl">
 #  Get adaptor to Slice object from core
 my $sa = $reg-&gt;get_adaptor("human", "core", "slice");
 
@@ -918,7 +923,7 @@ foreach my $svf (@$svfs) {
 <p>
 You can also retrieve all the supporting evidences associated to a structural variant.
 </p>
-<pre class="code">
+<pre class="code sh_perl">
 # Get adaptor to StructuralVariation object from variation
 my $sva = $reg->get_adaptor("human", "variation", "structuralvariation");
 
@@ -971,7 +976,7 @@ their transforming and filtering on each object in turn, without needing all obj
 are therefore much more memory-efficient than mapping and grepping a native perl array.
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 use strict;
 use warnings;
 
@@ -1017,7 +1022,7 @@ while ($cosmic_name_iter-&gt;has_next()) {
 <br />
 <h2 id="slice">Fetching variation features or structural variation features from a Slice</h2>
 <p>Variation features and structural variation features can be fetched using a Slice object (from the <a href="/info/docs/api/core/core_tutorial.html#slices">Core API</a>).</p>
-<pre class="code">
+<pre class="code sh_perl">
 # Slice adaptor
 my $slice_adaptor = $registry->get_adaptor( 'Human', 'Core', 'Slice' );
 # Slice object
@@ -1034,7 +1039,7 @@ print "Number of structural variations: ", scalar @sv_features, "\n";
 </pre>
 <p>It is also possible to fetch all the variation features overlapping a structural variation feature, using a Slice through a structural variation feature object.</p>
 
-<pre class="code">
+<pre class="code sh_perl">
 # Structural variation adaptor
 my $sv_adaptor = $registry->get_adaptor( 'human', 'variation', 'structuralvariation' );
 # Structural variation object
@@ -1052,7 +1057,7 @@ foreach my $svf (@{$sv->get_all_StructuralVariationFeatures()}){
 </pre>
 
 <p>And you can do the same with the variation features, for example.</p>
-<pre class="code">
+<pre class="code sh_perl">
 # Variation adaptor
 my $var_adaptor = $registry->get_adaptor( 'human', 'variation', 'variation' );
 # Variation object
