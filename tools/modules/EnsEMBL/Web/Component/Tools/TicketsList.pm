@@ -133,8 +133,7 @@ sub job_summary_section {
 
   my $hub               = $self->hub;
   my $object            = $self->object;
-  my $ticket_name       = $ticket->ticket_name;
-  my $url_param         = $object->create_url_param({'ticket_name' => $ticket_name, 'job_id' => $job->job_id});
+  my $url_param         = $object->create_url_param({'ticket_name' => $ticket->ticket_name, 'job_id' => $job->job_id});
   my $action            = $ticket->ticket_type_name;
   my $species_defs      = $hub->species_defs;
   my $dispatcher_status = $job->dispatcher_status;
@@ -144,6 +143,7 @@ sub job_summary_section {
   my $current_assembly  = $valid_job_species ? $species_defs->get_config($job_species, 'ASSEMBLY_NAME') : '0';
   my $assembly_mismatch = $job_assembly ne $current_assembly;
   my $assembly_site     = $assembly_mismatch && $species_defs->get_config($job_species, 'SWITCH_ASSEMBLY') eq $job_assembly ? 'http://'.$species_defs->get_config($job_species, 'SWITCH_ARCHIVE_URL') : '';
+  my $job_description   = $object->get_job_description($job);
 
   my $result_url = $dispatcher_status eq 'done' ? {
     '__clear'     => !!$assembly_site, # remove extra params for the external site
@@ -151,7 +151,7 @@ sub job_summary_section {
     'type'        => 'Tools',
     'action'      => $ticket->ticket_type_name,
     'function'    => 'Results',
-    'tl'          => $object->create_url_param({'ticket_name' => $ticket->ticket_name, 'job_id' => $job->job_id})
+    'tl'          => $url_param
   } : undef;
 
   if ($result_url && $assembly_mismatch) {
@@ -181,7 +181,7 @@ sub job_summary_section {
       'node_name'   => 'span',
       'class'       => ['right-margin'],
       'flags'       => ['job_desc_span'],
-      'inner_HTML'  => $object->get_job_description($job)
+      'inner_HTML'  => $job_description
     },
     $self->job_status_tag($job, $dispatcher_status, $result_count, $assembly_mismatch && $current_assembly, !!$assembly_site),
     $result_url ? {
@@ -222,7 +222,7 @@ sub job_summary_section {
         }, {
           'node_name'     => 'span',
           'class'         => [qw(hidden _confirm)],
-          'inner_HTML'    => @{$ticket->job} > 1 ? sprintf(q(This will delete job number %s from ticket '%s' permanently.), $job->job_number, $ticket_name) : sprintf(q(This will delete ticket '%s' permanently.), $ticket_name)
+          'inner_HTML'    => qq(This will delete the following job permanently:\n$job_description)
         }]
       }]}
     ]
@@ -246,10 +246,11 @@ sub ticket_link {
 sub ticket_buttons {
   my ($self, $ticket) = @_;
   my $hub           = $self->hub;
+  my $object        = $self->object;
   my $user          = $hub->user;
-  my $ticket_name   = $ticket->ticket_name;
   my $owner_is_user = $ticket->owner_type eq 'user';
-  my $url_param     = $self->object->create_url_param({'ticket_name' => $ticket_name});
+  my $url_param     = $object->create_url_param({'ticket_name' => $ticket->ticket_name});
+  my $job_count     = $ticket->job_count;
   my $action        = $ticket->ticket_type_name;
 
   my $save_button   = {
@@ -285,7 +286,9 @@ sub ticket_buttons {
     }, {
       'node_name'       => 'span',
       'class'           => [qw(hidden _confirm)],
-      'inner_HTML'      => "This will delete ticket '$ticket_name' permanently."
+      'inner_HTML'      => $job_count == 1
+        ? sprintf("This will delete the following job permanently:\n%s", $object->get_job_description($ticket->job->[0]))
+        : sprintf('This will delete %s jobs for this ticket.', $job_count == 2 ? 'both' : "all $job_count")
     }]
   }]});
 
