@@ -22,8 +22,8 @@ Ensembl.Panel.ActivitySummary = Ensembl.Panel.ContentTools.extend({
     Ensembl.EventManager.register('toolsRefreshActivitySummary', this, this.refresh);
     Ensembl.EventManager.register('toolsToggleEmptyTable', this, this.toggleEmptyTable);
 
-    this.POLL_INTERVAL  = 10; //seconds
-    this.MAX_POLLS      = 10;
+    this.POLL_INTERVAL  = 4; //seconds
+    this.MAX_POLLS      = -1; // no maximum
     this.pollCounter    = 0;
   },
 
@@ -136,7 +136,7 @@ Ensembl.Panel.ActivitySummary = Ensembl.Panel.ContentTools.extend({
     }
     this.autoRefresh = !!autoRefresh;
 
-    if (this.autoRefresh && this.pollCounter < this.MAX_POLLS) {
+    if (this.autoRefresh && (this.MAX_POLLS < 0 || this.pollCounter < this.MAX_POLLS)) {
       Ensembl.Panel.ActivitySummary.poll = setTimeout(function () {
         panel.refresh(false, false, false);
       }, this.POLL_INTERVAL * 1000);
