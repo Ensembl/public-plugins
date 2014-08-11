@@ -32,11 +32,10 @@ sub content {
   my $object          = $self->object;
   my $cache           = $hub->cache;
   my $form            = $cache ? $cache->get('BLASTFORM') : undef;
-  my $all_species     = $cache ? $cache->get('BLASTSPECIES') : undef;
   my $species         = $hub->species;
      $species         = $hub->get_favourite_species->[0] if $species =~ /multi|common/i;
 
-  unless ($form && $all_species) {
+  if (!$form) {
     $form = $self->new_tool_form('Blast', {'class' => 'blast-form'});
 
     my $fieldset        = $form->fieldset;
@@ -45,10 +44,9 @@ sub content {
     my $combinations    = delete $form_params->{'combinations'};
     my $missing_sources = delete $form_params->{'missing_sources'};
 
-    $all_species = delete $options->{'species'};
-
-    # Placeholder for previous job json hidden input
+    # Placeholders for previous job json and species hidden input
     $form->append_child('text', 'EDIT_JOB');
+    $form->append_child('text', 'SPECIES_INPUT');
 
     $fieldset->add_hidden({
       'name'            => 'valid_combinations',
@@ -127,9 +125,14 @@ sub content {
     my $search_against_field = $fieldset->add_field({
       'label'           => 'Search against',
       'field_class'     => '_adjustable_height',
+      'type'            => 'speciesdropdown',
+      'name'            => 'species',
+      'values'          => delete $options->{'species'},
+      'multiple'        => 1,
+      'wrapper_class'   => '_species_dropdown',
+      'filter_text'     => 'Type in to add a species&#8230;',
+      'filter_no_match' => 'No matching species found'
     });
-
-    $search_against_field->append_child('text', 'SPECIES_SELECTOR');
 
     for (@{$options->{'db_type'}}) {
 
@@ -268,10 +271,7 @@ sub content {
     $form = $form->render;
 
     # Save in cache to skip the form generation process next time
-    if ($cache) {
-      $cache->set('BLASTFORM', $form);
-      $cache->set('BLASTSPECIES', $all_species);
-    }
+    $cache->set('BLASTFORM', $form) if $cache;
   }
 
   # Add the non-cacheable fields to this dummy form and replace the placeholders from the actual form HTML
@@ -284,19 +284,8 @@ sub content {
   }
   $edit_jobs = @$edit_jobs ? $fieldset2->add_hidden({ 'name' => 'edit_jobs', 'value' => $self->jsonify($edit_jobs) }) : '';
 
-  # Species selector
-  my $species_selector = $fieldset2->add_field({
-    'elements'        => [{
-      'type'            => 'speciesdropdown',
-      'name'            => 'species',
-      'values'          => $all_species,
-      'value'           => $species,
-      'multiple'        => 1,
-      'wrapper_class'   => '_species_dropdown',
-      'filter_text'     => 'Type in to add a species&#8230;',
-      'filter_no_match' => 'No matching species found'
-    }]
-  })->elements->[0];
+  # Current species as hidden field
+  my $species_input = $fieldset2->add_hidden({'name' => 'default_species', 'value' => $species});
 
   # Buttons in a new fieldset
   my $buttons_fieldset = $self->add_buttons_fieldset($fieldset2->form, {'reset' => 'Clear', 'cancel' => 'Close form'});
@@ -305,8 +294,8 @@ sub content {
   $fieldset2->prepare_to_render;
 
   # Regexp to replace all placeholders from cached form
+  $form =~ s/SPECIES_INPUT/$species_input && $species_input->render/e;
   $form =~ s/EDIT_JOB/$edit_jobs && $edit_jobs->render/e;
-  $form =~ s/SPECIES_SELECTOR/$species_selector->render/e;
   $form =~ s/BUTTONS_FIELDSET/$buttons_fieldset->render/e;
 
   return sprintf('<div class="hidden _tool_new"><p><a class="button _change_location" href="%s">New Search</a></p></div><div class="hidden _tool_form_div"><h2>Create new ticket:</h2><input type="hidden" class="panel_type" value="BlastForm" />%s%s</div>',
@@ -317,4 +306,3 @@ sub content {
 }
 
 1;
-

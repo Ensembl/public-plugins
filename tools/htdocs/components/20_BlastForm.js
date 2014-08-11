@@ -26,7 +26,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     this.maxNumSequences      = 0;
     this.dnaThresholdPercent  = 0;
     this.sensitivityConfigs   = {};
-    this.defaultSpecies       = [];
+    this.defaultSpecies       = '';
   },
 
   init: function () {
@@ -34,6 +34,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     this.base();
     var panel = this;
 
+    this.defaultSpecies       = this.elLk.form.find('input[name=default_species]').remove().val();
     this.maxSequenceLength    = this.elLk.form.find('input[name=max_sequence_length]').remove().val();
     this.maxNumSequences      = this.elLk.form.find('input[name=max_number_sequences]').remove().val();
     this.dnaThresholdPercent  = this.elLk.form.find('input[name=dna_threshold_percent]').remove().val();
@@ -179,9 +180,6 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
       panel.setSensitivityConfigs($(this));
     });
 
-    // Save the default species for later use
-    this.defaultSpecies = this.elLk.speciesCheckboxes.filter(':checked').map(function() { return this.value; }).toArray();
-
     // finally add a validate event to the form which gets triggered before submitting it
     this.elLk.form.on('validate', function(e) {
       if (!panel.sequences.length) {
@@ -201,6 +199,9 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
 
     // Show only the appropriate search types depending upon the default selected values for query type and db type source
     this.resetSearchTools();
+
+    // Select species
+    this.resetSpecies([ this.defaultSpecies ]);
 
     // Fill in the form if editing an existing job
     this.editExisting(true);
@@ -229,7 +230,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     this.resetSearchTools();
 
     // Reset species
-    this.resetSpecies(this.defaultSpecies);
+    this.resetSpecies([ this.defaultSpecies ]);
   },
 
   populateForm: function(jobsData) {
@@ -271,7 +272,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
       this.resetSearchTools(formInput['search_type']);
 
       // set species
-      this.resetSpecies(formInput['species'] || this.defaultSpecies);
+      this.resetSpecies(formInput['species'] || [ this.defaultSpecies ]);
 
       if (formInput['configs']) {
         for (var name in formInput['configs']) {
