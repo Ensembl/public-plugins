@@ -294,7 +294,7 @@ sub content {
   $fieldset2->prepare_to_render;
 
   # Regexp to replace all placeholders from cached form
-  $form =~ s/SPECIES_INPUT/$species_input && $species_input->render/e;
+  $form =~ s/SPECIES_INPUT/$species_input->render/e;
   $form =~ s/EDIT_JOB/$edit_jobs && $edit_jobs->render/e;
   $form =~ s/BUTTONS_FIELDSET/$buttons_fieldset->render/e;
 
