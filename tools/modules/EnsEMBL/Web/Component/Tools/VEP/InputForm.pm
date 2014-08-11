@@ -44,13 +44,37 @@ sub content {
   if (!$form) {
     $form = $self->new_tool_form('VEP');
 
-    # Placeholder for previous job json hidden input
+    # Placeholders for previous job json and species hidden inputs
     $form->append_child('text', 'EDIT_JOB');
+    $form->append_child('text', 'SPECIES_INPUT');
 
     my $input_fieldset = $form->add_fieldset({'legend' => 'Input', 'class' => '_stt_input', 'no_required_notes' => 1});
 
-    # Placeholder for species dropdown
-    $input_fieldset->append_child('text', 'SPECIES_DROPDOWN');
+    # Species dropdown list with stt classes to dynamically toggle other fields
+    $input_fieldset->add_field({
+      'label'         => 'Species',
+      'elements'      => [{
+        'type'          => 'speciesdropdown',
+        'name'          => 'species',
+        'value'         => $current_species,
+        'values'        => [ map {
+          'value'         => $_->{'value'},
+          'caption'       => $_->{'caption'},
+          'class'         => [  #selectToToggle classes for JavaScript
+            '_stt', '_sttmulti',
+            $_->{'variation'}             ? '_stt__var'   : '_stt__novar',
+            $_->{'refseq'}                ? '_stt__rfq'   : (),
+            $_->{'variation'}{'POLYPHEN'} ? '_stt__pphn'  : (),
+            $_->{'variation'}{'SIFT'}     ? '_stt__sift'  : ()
+          ]
+        }, @$species ]
+      }, {
+        'type'          => 'noedit',
+        'value'         => 'Assembly: '. join('', map { sprintf '<span class="_stt_%s">%s</span>', $_->{'value'}, $_->{'assembly'} } @$species),
+        'no_input'      => 1,
+        'is_html'       => 1
+      }]
+    });
 
     $input_fieldset->add_field({
       'type'          => 'string',
@@ -187,31 +211,8 @@ sub content {
   my $edit_job = ($hub->function || '') eq 'Edit' ? $self->object->get_edit_jobs_data : [];
      $edit_job = @$edit_job ? $fieldset2->add_hidden({ 'name'  => 'edit_jobs', 'value' => $self->jsonify($edit_job) }) : '';
 
-  # Species dropdown list with stt classes to dynamically toggle other fields
-  my $species_dropdown = $fieldset2->add_field({
-    'label'         => 'Species',
-    'elements'      => [{
-      'type'          => 'speciesdropdown',
-      'name'          => 'species',
-      'value'         => $current_species,
-      'values'        => [ map {
-        'value'         => $_->{'value'},
-        'caption'       => $_->{'caption'},
-        'class'         => [  #selectToToggle classes for JavaScript
-          '_stt', '_sttmulti',
-          $_->{'variation'}             ? '_stt__var'   : '_stt__novar',
-          $_->{'refseq'}                ? '_stt__rfq'   : (),
-          $_->{'variation'}{'POLYPHEN'} ? '_stt__pphn'  : (),
-          $_->{'variation'}{'SIFT'}     ? '_stt__sift'  : ()
-        ]
-      }, @$species ]
-    }, {
-      'type'          => 'noedit',
-      'value'         => 'Assembly: '. join('', map { sprintf '<span class="_stt_%s">%s</span>', $_->{'value'}, $_->{'assembly'} } @$species),
-      'no_input'      => 1,
-      'is_html'       => 1
-    }]
-  });
+  # Current species as hidden field
+  my $species_input = $fieldset2->add_hidden({'name' => 'default_species', 'value' => $current_species});
 
   # Previously uploaded files
   my $file_dropdown   = '';
@@ -262,8 +263,8 @@ sub content {
   $fieldset2->prepare_to_render;
 
   # Regexp to replace all placeholders from cached form
+  $form =~ s/SPECIES_INPUT/$species_input->render/e;
   $form =~ s/EDIT_JOB/$edit_job && $edit_job->render/e;
-  $form =~ s/SPECIES_DROPDOWN/$species_dropdown->render/e;
   $form =~ s/FILES_DROPDOWN/$file_dropdown && $file_dropdown->render/e;
   $form =~ s/BUTTONS_FIELDSET/$buttons_fieldset->render/e;
 
