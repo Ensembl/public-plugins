@@ -32,6 +32,7 @@ sub prepare_to_dispatch {
   my $job_data    = $rose_object->job_data;
   my $species     = $job_data->{'species'};
   my $sp_details  = $self->_species_details($species);
+  my $sd          = $self->hub->species_defs;
   my $vep_configs = {};
 
   $vep_configs->{'format'}  = $job_data->{'format'};
@@ -107,6 +108,60 @@ sub prepare_to_dispatch {
   if ($vep_configs->{'most_severe'} || $vep_configs->{'summary'}) {
     delete $vep_configs->{$_} for(qw(coding_only protein symbol sift polyphen ccds canonical numbers domains biotype tsl));
   }
+  
+  # plugins
+  my $plugin_string = '';
+  
+  use Data::Dumper;
+  $Data::Dumper::Maxdepth = 3;
+  warn Dumper $job_data;
+  
+  foreach my $pl_key(grep {$_ =~ /^plugin\_/ && $job_data->{$_} eq $_} keys %$job_data) {
+  #foreach my $pl_key(grep {$_ =~ /^plugin\_/} keys %$job_data) {
+    $pl_key =~ s/^plugin\_//;
+    my $pl = $sd->ENSEMBL_VEP_PLUGIN_CONFIG->{$pl_key};
+    next unless $pl;
+    
+    my @params;
+    
+    foreach my $param(@{$pl->{params}}) {
+      
+      # links to something in the form
+      if($param =~ /^\@/) {
+        $param =~ s/^\@//;
+        
+        my @matched = ();
+        
+        # fuzzy match?
+        if($param =~ /\*/) {
+          $param =~ s/\*/\.\+/;
+          @matched = grep {$_->{name} =~ /$param/} @{$pl->{form}};
+        }
+        
+        else {
+          @matched = grep {$_->{name} eq $param} @{$pl->{form}};
+        }
+        
+        foreach my $el(@matched) {
+          if(($job_data->{'plugin_'.$pl_key.'_'.$el->{name}} // '') eq $el->{name}) {
+            push @params, $job_data->{'plugin_'.$pl_key.'_'.$el->{name}};
+          }
+        }
+      }
+      
+      # otherwise just plain text
+      else {
+        push @params, $param;
+      }
+    }
+    
+    $plugin_string .= ' --plugin ' if $plugin_string;
+    $plugin_string .= join(",", ($pl_key, @params));
+  }
+  
+  print STDERR "--plugin $plugin_string\n";
+  
+  $vep_configs->{plugin} = $plugin_string if $plugin_string;
 
   return { 'species' => $vep_configs->{'species'}, 'work_dir' => $rose_object->job_dir, 'config' => $vep_configs };
 }
