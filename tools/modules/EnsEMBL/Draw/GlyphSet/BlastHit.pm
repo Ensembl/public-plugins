@@ -107,7 +107,7 @@ sub features {
     $features_info{$result_id} = {
       btop_string   => $btop,
       coords        => $coords,
-      target_strand => $hit->{'tori'},
+      q_strand      => $hit->{'qori'},
       tl            => $hit->{'tl'},
       colour        => $colour,
       blast_type    => $method
@@ -150,7 +150,7 @@ sub render_normal {
        $start       = $slice_start if $start < $slice_start;
     my $end         = $feature->end;
        $end         = $slice_end if $end > $slice_end;
-    my $invert      = $feature->strand != $feat_info->{'target_strand'};
+    my $invert      = $feature->strand != $feat_info->{'q_strand'};
     my $bump_start  = int($pix_per_bp * ($start - $slice_start < 1 ? 1 : $start - $slice_start)) -1;
     my $bump_end    = int($pix_per_bp * ($end - $slice_start > $length ? $length : $end - $slice_start));
 
@@ -307,7 +307,7 @@ sub draw_btop_feature {
   my $length          = $slice->length;
   my $slice_start     = $slice->start;
   my $slice_end       = $slice->end;
-  my $seq             = $slice->seq;
+  my $seq             = $params->{'seq_invert'} ? reverse $slice->invert->seq : $slice->seq;
 
   my $match_colour      = $params->{'feature_colour'};
   my $mismatch_colour   = $self->{'config'}->colourmap->mix($match_colour, 'white', 0.9);
@@ -471,9 +471,6 @@ sub draw_btop_feature {
       my $x = $seq_start + $i;
       my $pos = $slice_start + $seq_start + $i;
       my $colour = 'white';
-
-      $base =~ tr/ACGTacgt/TGCAtgca/ if $params->{'seq_invert'};
-
       if ($seq_diffs{$pos}){
         $base = $seq_diffs{$pos}->[0];
         $colour = $seq_diffs{$pos}->[1];
