@@ -346,9 +346,34 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
 
     var sequenceLines, pointer, seqLine, seqChar, seqDNACharCount, i, j;
 
+    // if input sequence was copied from a web page, it could contain spaces instead of new line characters
+    var spaceToNewLine = function(seqLines) {
+
+      var seqIn, seqOut = [], only60char = false, seq;
+
+      if (seqLines.length === 1 && seqLines[0].match(/^>/)) { // if it looks like only header text is pasted, it could contian the entire sequence with new lines replaced with spaces
+        seqIn = seqLines[0].split(/[\s\t]+/);
+        while (seqIn.length) {
+          seq = seqIn.pop();
+          if (seq.match(/^[A-Z\*\-]+$/i) && (!only60char || seq.length === 60)) {
+            seqOut.unshift(seq);
+          } else {
+            seqIn.push(seq);
+            break;
+          }
+          only60char = true; // only last line of the possible sequence could be less than 60 characters
+        }
+        seqOut.unshift(seqIn.join(' ')); // remaining text is header
+      }
+
+      seqIn = only60char = seq = null;
+
+      return seqOut.length > 1 ? seqOut : seqLines;
+    };
+
     rawSeqLoop:
     for (i = 0; i < inputSeqs.length; i++) {
-      sequenceLines   = inputSeqs[i].split(/[\s\t]*\n[\s\t]*/);
+      sequenceLines   = spaceToNewLine(inputSeqs[i].trim().split(/[\s\t]*\n[\s\t]*/));
       pointer         = 0;
       seqDNACharCount = 0;
       seqString       = '';
@@ -403,6 +428,9 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
         break rawSeqLoop;
       }
     }
+
+    bases = inputSeqs = sequenceLines = pointer = seqLine = seqChar = seqDNACharCount = j = spaceToNewLine = null;
+
     return {'sequences': sequences, 'invalids': i - sequences.length};
   },
 
