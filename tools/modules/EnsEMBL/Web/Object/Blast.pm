@@ -467,7 +467,9 @@ sub map_btop_to_genomic_coords {
   my $galn    = '';
 
   # don't need to map for other dbs
-  return $hit->{'aln'} unless $source =~/cdna|pep/i;
+  if ($source !~/cdna|pep/i) {
+    return $hit->{'gori'} == $hit->{'qori'} ? $hit->{'aln'} : $self->_reverse_btop($hit->{'aln'});
+  }
 
   # find the alignment and cache it in the db in case not already saved
   unless ($galn = $hit->{'galn'}) {
