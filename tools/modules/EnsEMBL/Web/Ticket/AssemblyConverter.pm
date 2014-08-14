@@ -81,8 +81,8 @@ sub init_from_user_input {
   ## TODO VEP can do this - need similar generic functionality in EnsEMBL::IO
   ## Do simple check of file extension for now
   $file_name =~ /\.(\w{2,4}$)/;
-  my $extension = $1;
-  if (lc($extension) ne lc($format)) {
+  my $extension = lc $1;
+  if ($extension !~ /^(txt|gz|zip)$/ && $extension ne lc($format)) {
     throw exception('InputError', 'Your file does not appear to match the selected format.');
   }
 
@@ -115,7 +115,7 @@ sub init_from_user_input {
 
   $job_data->{'chain_file'}   = lc($species).'/'.$job_data->{'mapping'}.'.chain.gz';
   $job_data->{'input_file'}   = $file_name;
-  $job_data->{'output_file'}  = 'output_'.$file_name;
+  $job_data->{'output_file'}  = sprintf 'output_%s.%s', $file_name =~ s/\.[^\/]+$//r, lc $format;
 
   $self->add_job(EnsEMBL::Web::Job::AssemblyConverter->new($self, {
     'job_desc'    => $description,
