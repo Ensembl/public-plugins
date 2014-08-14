@@ -100,6 +100,9 @@ sub init_from_user_input {
     } 
   }
 
+  # change file name extensions according to format (remove gz, zip, txt etc) (gz, zip are useless anyway as UserData decompresses the files)
+  $file_name  = sprintf '%s.%s', $file_name =~ s/\.[^\/]+$//r, lc $format;
+
   ## Format-specific input tweaks
   if ($format eq 'VCF') {
     ## Extra parameter for VCF
@@ -112,10 +115,9 @@ sub init_from_user_input {
   }
 
   $job_data->{'species'}      = $species;
-
   $job_data->{'chain_file'}   = lc($species).'/'.$job_data->{'mapping'}.'.chain.gz';
   $job_data->{'input_file'}   = $file_name;
-  $job_data->{'output_file'}  = sprintf 'output_%s.%s', $file_name =~ s/\.[^\/]+$//r, lc $format;
+  $job_data->{'output_file'}  = "output_$file_name";
 
   $self->add_job(EnsEMBL::Web::Job::AssemblyConverter->new($self, {
     'job_desc'    => $description,
