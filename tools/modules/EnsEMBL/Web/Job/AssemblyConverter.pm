@@ -40,7 +40,7 @@ sub prepare_to_dispatch {
   ## Don't set FASTA param, even to nothing if it's not needed!
   $converter_configs->{'fasta_file'}  = $job_data->{'fasta_file'} if $job_data->{'fasta_file'};
 
-  return { 'species' => $converter_configs->{'species'}, 'work_dir' => $rose_object->job_dir, 'config' => $converter_configs, 'script_options'};
+  return { 'species' => $converter_configs->{'species'}, 'work_dir' => $rose_object->job_dir, 'config' => $converter_configs };
 }
 
 1;
