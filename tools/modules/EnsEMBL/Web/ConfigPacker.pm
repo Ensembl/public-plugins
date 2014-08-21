@@ -38,6 +38,9 @@ sub munge_config_tree_multi {
 sub _configure_blast {
   my $self        = shift;
   my $tree        = $self->tree;
+
+  return if $tree->{'ENSEMBL_BLAST_DATASOURCES'};
+
   my $multi_tree  = $self->full_tree->{'MULTI'};
   my $species     = $self->species;
   my $blast_types = $multi_tree->{'ENSEMBL_BLAST_TYPES'};
@@ -58,6 +61,9 @@ sub _configure_blast {
 sub _configure_blast_multi {
   my $self                  = shift;
   my $multi_tree            = $self->full_tree->{'MULTI'};
+
+  return if $multi_tree->{'ENSEMBL_BLAST_DATASOURCES'};
+
   my $blast_types           = {%{$multi_tree->{'ENSEMBL_BLAST_TYPES'} || {}}};
   my $blast_types_ordered   = [ map { delete $blast_types->{$_} ? $_ : () } @{delete $blast_types->{'ORDER'} || []}, sort keys %$blast_types ];
   my $source_types          = $multi_tree->{'ENSEMBL_BLAST_DATASOURCES_ALL'};
