@@ -2,7 +2,6 @@
 <head>
 <title>Compara API Tutorial</title>
 
-<link rel="stylesheet" type="text/css" media="all" href="/info/docs/api/compara/highlight.css"/>
 </head>
 
 <body>
@@ -69,8 +68,12 @@ Registry loader. For instance, if you want to connect to the the public EnsEMBL 
 use the following command in your scripts:
 </p>
 
-<pre class="code">
-[[INCLUDE::/info/docs/api/compara/tut_registry1.inc]]
+<pre class="code sh_perl">
+use Bio::EnsEMBL::Registry;
+Bio::EnsEMBL::Registry-&gt;load_registry_from_db(
+    -host =&gt; 'ensembldb.ensembl.org',
+    -user =&gt; 'anonymous',
+    -port =&gt; 5306);
 </pre>
 
 <p>
@@ -78,8 +81,9 @@ This will initialize the Registry, from which you will be able to create object-
 
 Alternatively, you can use a shorter version based on a URL:</p>
 
-<pre class="code">
-[[INCLUDE::/info/docs/api/compara/tut_registry2.inc]]
+<pre class="code sh_perl">
+use Bio::EnsEMBL::Registry;
+Bio::EnsEMBL::Registry-&gt;load_registry_from_url('mysql://anonymous@ensembldb.ensembl.org:5306/');
 </pre>
 
 <h3>Implicitly, using the Bio::EnsEMBL::Registry configuration file</h3>
@@ -103,8 +107,20 @@ but using a Compara-specific DBAdaptor. One parameter you have to supply
 in addition to the ones needed by the Registry is the <code>-dbname</code>, which by convention contains the release number:
 </p>
 
-<pre class="code">
-[[INCLUDE::/info/docs/api/compara/tut_registry3.inc]]
+<pre class="code sh_perl">
+use Bio::EnsEMBL::Compara::DBSQL::DBAdaptor
+
+my $host   = 'ensembldb.ensembl.org';
+my $user   = 'anonymous';
+my $port   = 5306;
+my $dbname = 'ensembl_compara_51';
+
+my $comparadb= new Bio::EnsEMBL::Compara::DBSQL::DBAdaptor(
+    -host   =&gt; $host,
+    -port   =&gt; $port,
+    -user   =&gt; $user,
+    -dbname =&gt; $dbname,
+);
 </pre>
 
 <h2 id="adaptors">EnsEMBL Compara object-specific adaptors</h2>
@@ -124,7 +140,7 @@ Below is a non-exhaustive list of EnsEMBL Compara adaptors that are most often u
 <li>GenomicAlignBlockAdaptor to fetch Bio::EnsEMBL::Compara::GenomicAlignBlock objects</li>
 <li>DnaAlignFeatureAdaptor to fetch Bio::EnsEMBL::DnaDnaAlignFeature objects
 (note that this adaptor returns an EnsEMBL Core object)</li>
-<li>SyntenyAdaptor to fetch Bio::EnsEMBL::Compara::SyntenyRegion objects</li>
+<li>SyntenyRegionAdaptor to fetch Bio::EnsEMBL::Compara::SyntenyRegion objects</li>
 <li>GeneMemberAdaptor to fetch Bio::EnsEMBL::Compara::GeneMember objects</li>
 <li>GeneTreeAdaptor to fetch Bio::EnsEMBL::Compara::GeneTree objects</li>
 <li>HomologyAdaptor to fetch Bio::EnsEMBL::Compara::Homology objects</li>
@@ -141,8 +157,9 @@ species name, the type of database and the type of object. Therefore, in order t
 Compara database, you will need the following command:
 </p>
 
-<pre class="code">
-[[INCLUDE::/info/docs/api/compara/tut_genomedb1.inc]]
+<pre class="code sh_perl">
+my $genome_db_adaptor = Bio::EnsEMBL::Registry-&gt;get_adaptor(
+    'Multi', 'compara', 'GenomeDB');
 </pre>
 
 <p>
@@ -160,12 +177,15 @@ Refer to the <a href="/info/docs/api/core/index.html">EnsEMBL core tutorial</a> 
 We can divide the fetching methods of the ObjectAdaptors into two categories: the <code>fetch_by</code> and <code>fetch_all_by</code>. The former return one single object while the latter return a reference to an array of objects.
 </p>
 
-<pre class="code">
-[[INCLUDE::/info/docs/api/compara/tut_genomedb2.inc]]
+<pre class="code sh_perl">
+my $this_genome_db = $genome_db_adaptor-&gt;fetch_by_name_assembly("Homo sapiens", "NCBI36");
 </pre>
 
-<pre class="code">
-[[INCLUDE::/info/docs/api/compara/tut_genomedb3.inc]]
+<pre class="code sh_perl">
+my $all_genome_dbs = $genome_db_adaptor-&gt;fetch_all();
+foreach my $this_genome_db (@{$all_genome_dbs}) {
+  print $this_genome_db-&gt;name, "\n";
+}
 </pre>
 
 <h2 id="genomic_align">Whole Genome Alignments</h2>
@@ -187,8 +207,10 @@ Therefore the usual way to fetch genomic alignments is by fetching GenomicAlignB
 We have to start by getting the corresponding adaptor:
 </p>
 
-<pre class="code">
-[[INCLUDE::/info/docs/api/compara/tut_align1.inc]]
+<pre class="code sh_perl">
+# Getting the GenomicAlignBlock adaptor:
+my $genomic_align_block_adaptor = Bio::EnsEMBL::Registry-&gt;get_adaptor(
+    'Multi', 'compara', 'GenomicAlignBlock');
 </pre>
 
 <p>
@@ -200,8 +222,25 @@ In order to simply this task, you could use the new Bio::EnsEMBL::Compara::Metho
 The best way to use them is by fetching them from the database:
 </p>
 
-<pre class="code">
-[[INCLUDE::/info/docs/api/compara/tut_align2.inc]]
+<pre class="code sh_perl">
+# Getting the GenomeDB adaptor:
+my $genome_db_adaptor = Bio::EnsEMBL::Registry-&gt;get_adaptor(
+    'Multi', 'compara', 'GenomeDB');
+
+# Fetching GenomeDB objects for human and mouse:
+my $human_genome_db = $genome_db_adaptor-&gt;fetch_by_name_assembly('homo_sapiens');
+my $mouse_genome_db = $genome_db_adaptor-&gt;fetch_by_name_assembly('mus_musculus');
+
+# Getting the MethodLinkSpeciesSet adaptor:
+my $method_link_species_set_adaptor = Bio::EnsEMBL::Registry-&gt;get_adaptor(
+    'Multi', 'compara', 'MethodLinkSpeciesSet');
+
+# Fetching the MethodLinkSpeciesSet object corresponding to LASTZ_NET alignments between human and mouse genomic sequences:
+my $human_mouse_lastz_net_mlss =
+    $method_link_species_set_adaptor-&gt;fetch_by_method_link_type_GenomeDBs(
+        "LASTZ_NET",
+        [$human_genome_db, $mouse_genome_db]
+    );
 </pre>
 
 <p>
@@ -211,16 +250,193 @@ Bio::EnsEMBL::Compara::DnaFrag objects for specifying the piece of genomic
 sequence in which we are looking for alignments.
 </p>
 
-<pre class="code">
-[[INCLUDE::/info/docs/api/compara/tut_align3.inc]]
+<pre class="code sh_perl">
+my $query_species = 'human';
+my $seq_region = '14';
+my $seq_region_start = 75000000;
+my $seq_region_end   = 75010000;
+
+# Getting the Slice adaptor:
+my $slice_adaptor = Bio::EnsEMBL::Registry-&gt;get_adaptor(
+    $query_species, 'core', 'Slice');
+
+# Fetching a Slice object:
+my $query_slice = $slice_adaptor-&gt;fetch_by_region(
+    'toplevel',
+    $seq_region,
+    $seq_region_start,
+    $seq_region_end);
+
+# Fetching all the GenomicAlignBlock corresponding to this Slice from the pairwise alignments (LASTZ_NET)
+# between human and mouse:
+my $genomic_align_blocks =
+    $genomic_align_block_adaptor-&gt;fetch_all_by_MethodLinkSpeciesSet_Slice(
+      $human_mouse_lastz_net_mlss,
+      $query_slice);
+
+# We will then (usually) need to restrict the blocks to the required positions in the reference sequence 
+# ($seq_region_start and $seq_region_end)
+
+foreach my $genomic_align_block( @{ $genomic_align_blocks }) {
+    my $restricted_gab = $genomic_align_block-&gt;restrict_between_reference_positions($seq_region_start, $seq_region_end);
+}
 </pre>
 
 <p>
 Here is an example script with all of this:
 </p>
 
-<pre class="code">
-[[INCLUDE::/info/docs/api/compara/tut_align4.inc]]
+<pre class="code sh_perl">
+use strict;
+use Bio::EnsEMBL::Registry;
+use Bio::EnsEMBL::Utils::Exception qw(throw);
+use Bio::AlignIO;
+use Getopt::Long;
+
+my $usage = qq{
+perl DumpMultiAlign.pl
+  Getting help:
+    [--help]
+
+  For the query slice:
+    [--species species]
+        Query species. Default is "human"
+    [--coord_system coordinates_name]
+        Query coordinate system. Default is "chromosome"
+    --seq_region region_name
+        Query region name, i.e. the chromosome name
+    --seq_region_start start
+    --seq_region_end end
+
+  For the alignments:
+    [--alignment_type method_link_name]
+        The type of alignment. Default is "LASTZ_NET"
+    [--set_of_species species1:species2:species3:...]
+        The list of species used to get those alignments. Default is
+        "human:mouse". The names should correspond to the name of the
+        core database in the registry_configuration_file or any of its
+        aliases
+
+  Ouput:
+    [--output_format clustalw|fasta|...]
+        The type of output you want. "clustalw" is the default.
+    [--output_file filename]
+        The name of the output file. By default the output is the
+        standard output
+};
+
+my $species = "human";
+my $coord_system = "chromosome";
+my $seq_region = "14";
+my $seq_region_start = 75000000;
+my $seq_region_end = 75010000;
+my $alignment_type = "LASTZ_NET";
+my $set_of_species = "human:mouse";
+my $output_file = undef;
+my $output_format = "clustalw";
+my $help;
+
+GetOptions(
+    "help" =&gt; \$help,
+    "species=s" =&gt; \$species,
+    "coord_system=s" =&gt; \$coord_system,
+    "seq_region=s" =&gt; \$seq_region,
+    "seq_region_start=i" =&gt; \$seq_region_start,
+    "seq_region_end=i" =&gt; \$seq_region_end,
+    "alignment_type=s" =&gt; \$alignment_type,
+    "set_of_species=s" =&gt; \$set_of_species,
+    "output_format=s" =&gt; \$output_format,
+    "output_file=s" =&gt; \$output_file);
+
+# Print Help and exit
+if ($help) {
+    print $usage;
+    exit(0);
+}
+
+if ($output_file) {
+    open(STDOUT, "&gt;$output_file") or die("Cannot open $output_file");
+}
+
+Bio::EnsEMBL::Registry-&gt;load_registry_from_db(
+    -host =&gt; 'ensembldb.ensembl.org', -user =&gt; 'anonymous');
+
+# Getting all the Bio::EnsEMBL::Compara::GenomeDB objects
+my $genome_dbs;
+my $genome_db_adaptor = Bio::EnsEMBL::Registry-&gt;get_adaptor(
+    'Multi', 'compara', 'GenomeDB');
+
+throw("Cannot connect to Compara") if (!$genome_db_adaptor);
+
+foreach my $this_species (split(":", $set_of_species)) {
+    my $this_meta_container_adaptor = Bio::EnsEMBL::Registry-&gt;get_adaptor(
+        $this_species, 'core', 'MetaContainer');
+
+    throw("Registry configuration file has no data for connecting to &lt;$this_species&gt;")
+        if (!$this_meta_container_adaptor);
+
+    my $this_production_name = $this_meta_container_adaptor-&gt;get_production_name;
+
+    # Fetch Bio::EnsEMBL::Compara::GenomeDB object
+    my $genome_db = $genome_db_adaptor-&gt;fetch_by_name_assembly($this_production_name);
+
+    # Add Bio::EnsEMBL::Compara::GenomeDB object to the list
+    push(@$genome_dbs, $genome_db);
+}
+
+# Getting Bio::EnsEMBL::Compara::MethodLinkSpeciesSet object
+my $method_link_species_set_adaptor = Bio::EnsEMBL::Registry-&gt;get_adaptor(
+    'Multi', 'compara', 'MethodLinkSpeciesSet');
+
+my $method_link_species_set =
+    $method_link_species_set_adaptor-&gt;fetch_by_method_link_type_GenomeDBs(
+      $alignment_type, 
+      $genome_dbs);
+
+throw("The database do not contain any $alignment_type data for $set_of_species!")
+    if (!$method_link_species_set);
+
+# Fetching the query Slice:
+my $slice_adaptor = Bio::EnsEMBL::Registry-&gt;get_adaptor($species, 'core', 'Slice');
+
+throw("Registry configuration file has no data for connecting to &lt;$species&gt;")
+    if (!$slice_adaptor);
+
+my $query_slice = $slice_adaptor-&gt;fetch_by_region('toplevel', $seq_region, $seq_region_start, $seq_region_end);
+
+throw("No Slice can be created with coordinates $seq_region:$seq_region_start-".
+    "$seq_region_end") if (!$query_slice);
+
+# Fetching all the GenomicAlignBlock corresponding to this Slice:
+my $genomic_align_block_adaptor = Bio::EnsEMBL::Registry-&gt;get_adaptor(
+    'Multi', 'compara', 'GenomicAlignBlock');
+
+my $genomic_align_blocks =
+    $genomic_align_block_adaptor-&gt;fetch_all_by_MethodLinkSpeciesSet_Slice(
+      $method_link_species_set, 
+      $query_slice);
+
+my $all_aligns;
+
+# Get a Bio::SimpleAlign object from every GenomicAlignBlock
+foreach my $this_genomic_align_block (@$genomic_align_blocks) {
+    my $simple_align = $this_genomic_align_block-&gt;get_SimpleAlign;
+    push(@$all_aligns, $simple_align);
+}
+
+# print all the genomic alignments using a Bio::AlignIO object
+my $alignIO = Bio::AlignIO-&gt;newFh(
+    -interleaved =&gt; 0,
+    -fh =&gt; \*STDOUT,
+    -format =&gt; $output_format,
+    -idlength =&gt; 10
+);
+  
+foreach my $this_align (@$all_aligns) {
+    print $alignIO $this_align;
+}
+
+exit;
 </pre>
 
 <h2 id="gene_resources">Homologies and Protein clusters</h2>
@@ -234,21 +450,47 @@ All the homologies and families refer to GeneMembers and SeqMembers. Homology ob
 
 <p>
 A member represent either a gene (GeneMember) or a sequence-bearing locus, e.g. a protein or a transcript (SeqMember). Most of them
-are defined in the corresponding Ensembl core database. For
+are defined in the corresponding EnsEMBL core database. For
 instance, the sequence for the human gene ENSG00000004059
 is stored in the human core database.
 </p>
 
 <p>
-The fetch_by_source_stable_id method of the corresponding *MemberAdaptor takes two arguments. The first one is the
-source of the member and can be:
+The fetch_by_stable_id method of the corresponding *MemberAdaptor returns Members by their stable_id.
+Here is a simple example:
 </p>
+
+<pre class="code sh_perl">
+# get the MemberAdaptor
+my $genemember_adaptor = Bio::EnsEMBL::Registry-&gt;get_adaptor('Multi','compara','GeneMember');
+
+# fetch a Member
+my $member = $genemember_adaptor-&gt;fetch_by_stable_id('ENSG00000004059');
+
+# print out some information about the Member
+print $member-&gt;source_name, ": ", $member-&gt;dnafrag-&gt;name, " ( ", $member-&gt;dnafrag_start, " - ", $member-&gt;dnafrag_end, " ): ", $member-&gt;description, "\n";
+</pre>
+
+<p>
+The *Member objects have several attributes:
+</p>
+<ul>
+<li><code>stable_id</code> define this member.</li>
+<li><code>chr_name</code>, <code>chr_start</code>, <code>chr_end</code>, <code>chr_strand</code> locate this member on the genome but
+are only available for ENSEMBLGENE and ENSEMBLPEP.</li>
+<li><code>taxon_id</code> corresponds to the NCBI taxonomy identifier (see
+<a href="http://www.ncbi.nlm.nih.gov/Taxonomy/taxonomyhome.html/">http://www.ncbi.nlm.nih.gov/Taxonomy/taxonomyhome.html/</a>
+for more details).</li>
+<li><code>taxon</code> returns a Bio::EnsEMBL::Compara::NCBITaxon object.
+From this object you can get additional information about the species.</li>
+<li><code>source_name</code> is a string describing where the Member comes from
 
 <dl>
 <dt>for GeneMember</dt>
 <dd>
 	<ul>
 	<li>ENSEMBLGENE, derived from an EnsEMBL gene</li>
+	<li>EXTERNALGENE, loaded from an external source (currently unused in the live databases)</li>
 	</ul>
 </dd>
 <dt>for SeqMember</dt>
@@ -258,34 +500,23 @@ source of the member and can be:
 	<li>ENSEMBLTRANS, derived from an EnsEMBL transcript</li>
 	<li>Uniprot/SWISSPROT, derived from a Uniprot/Swissprot entry</li>
 	<li>Uniprot/SPTREMBL, derived from a Uniprot/SP-TrEMBL entry</li>
+	<li>EXTERNALPEP, loaded from an external source (currently unused in the live databases)</li>
+	<li>EXTERNALLTRANS, loaded from an external source (currently unused in the live databases)</li>
 	</ul>
 </dd>
 </dl>
 
-<p>
-The second argument is the identifier for the member. Here is a simple example:
-</p>
+</li></ul>
 
-<pre class="code">
-[[INCLUDE::/info/docs/api/compara/tut_member1.inc]]
-</pre>
 
-<p>
-The *Member objects have several attributes:
-</p>
-<ul>
-<li><code>source_name</code> and <code>stable_id</code> define this member.</li>
-<li><code>chr_name</code>, <code>chr_start</code>, <code>chr_end</code>, <code>chr_strand</code> locate this member on the genome but
-are only available for ENSEMBLGENE and ENSEMBLPEP.</li>
-<li><code>taxon_id</code> corresponds to the NCBI taxonomy identifier (see
-<a href="http://www.ncbi.nlm.nih.gov/Taxonomy/taxonomyhome.html/">http://www.ncbi.nlm.nih.gov/Taxonomy/taxonomyhome.html/</a>
-for more details).</li>
-<li><code>taxon</code> returns a Bio::EnsEMBL::Compara::NCBITaxon object.
-From this object you can get additional information about the species.</li>
-</ul>
 
-<pre class="code">
-[[INCLUDE::/info/docs/api/compara/tut_member2.inc]]
+<pre class="code sh_perl">
+my $taxon = $member-&gt;taxon;
+print "common_name ", $taxon-&gt;common_name,"\n";
+print "genus ", $taxon-&gt;genus,"\n";
+print "species ", $taxon-&gt;species,"\n";
+print "binomial ", $taxon-&gt;binomial,"\n";
+print "classification ", $taxon-&gt;classification,"\n";
 </pre>
 
 <p>
@@ -312,8 +543,34 @@ fetching method called fetch_all_by_Member(). You will need the GeneMember objec
 query gene, therefore you will fetch the GeneMember first like in this example:
 </p>
 
-<pre class="code">
-[[INCLUDE::/info/docs/api/compara/tut_homology1.inc]]
+<pre class="code sh_perl">
+# first you have to get a GeneMember object. In case of homology is a gene, in 
+# case of family it can be a gene or a protein
+
+my $gene_member_adaptor = Bio::EnsEMBL::Registry-&gt;get_adaptor('Multi', 'compara', 'GeneMember');
+my $gene_member = $gene_member_adaptor-&gt;fetch_by_stable_id('ENSG00000004059');
+
+# then you get the homologies where the member is involved
+
+my $homology_adaptor = Bio::EnsEMBL::Registry-&gt;get_adaptor('Multi', 'compara', 'Homology');
+my $homologies = $homology_adaptor-&gt;fetch_all_by_Member($gene_member);
+
+# That will return a reference to an array with all homologies (orthologues in
+# other species and paralogues in the same one)
+# Then for each homology, you can get all the Members implicated
+
+foreach my $homology (@{$homologies}) {
+  # You will find different kind of description
+  # see ensembl-compara/docs/docs/schema_doc.html for more details
+
+  print $homology-&gt;description," ", $homology-&gt;taxonomy_level,"\n";
+
+  # And if they are defined dN and dS related values
+
+  print " dn ", $homology-&gt;dn,"\n";
+  print " ds ", $homology-&gt;ds,"\n";
+  print " dnds_ratio ", $homology-&gt;dnds_ratio,"\n";
+}
 </pre>
 
 <p>
@@ -322,16 +579,35 @@ The get_all_Members method returns an array of SeqMember objects. The SeqMember 
 (for the underlying protein) and contains information about how this SeqMember has been aligned.
 </p>
 
-<pre class="code">
-[[INCLUDE::/info/docs/api/compara/tut_homology2.inc]]
+<pre class="code sh_perl">
+my $homology = $homologies-&gt;[0]; # take one of the homologies and look into it
+
+foreach my $member (@{$homology-&gt;get_all_Members}) {
+
+  # each AlignedMember contains both the information on the SeqMember and in
+  # relation to the homology
+
+  print (join " ", map { $member-&gt;$_ } qw(stable_id taxon_id))."\n";
+  print (join " ", map { $member-&gt;$_ } qw(perc_id perc_pos perc_cov))."\n";
+
+}
 </pre>
 
 <p>
 You can get the original alignment used to define an homology:
 </p>
 
-<pre class="code">
-[[INCLUDE::/info/docs/api/compara/tut_homology3.inc]]
+<pre class="code sh_perl">
+use Bio::AlignIO;
+
+my $simple_align = $homology-&gt;get_SimpleAlign();
+my $alignIO = Bio::AlignIO-&gt;newFh(
+    -interleaved =&gt; 0,
+    -fh =&gt; \*STDOUT,
+    -format =&gt; "clustalw",
+    -idlength =&gt; 20);
+
+print $alignIO $simple_align;
 </pre>
 
 <h3>Family Objects</h3>
@@ -342,8 +618,38 @@ metazoan SwissProt and SP-Trembl entries. The object and the adaptor are really
 similar to the previous ones.
 </p>
 
-<pre class="code">
-[[INCLUDE::/info/docs/api/compara/tut_family1.inc]]
+<pre class="code sh_perl">
+my $gene_member_adaptor = Bio::EnsEMBL::Registry-&gt;get_adaptor('Multi', 'compara', 'GeneMember');
+my $gene_member = $gene_member_adaptor-&gt;fetch_by_stable_id('ENSG00000004059');
+
+my $family_adaptor = Bio::EnsEMBL::Registry-&gt;get_adaptor('Multi','compara','Family');
+my $families = $family_adaptor-&gt;fetch_all_by_Member($gene_member);
+
+foreach my $family (@{$families}) {
+    print join(" ", map { $family-&gt;$_ }  qw(description description_score))."\n";
+
+    foreach my $member (@{$family-&gt;get_all_Members}) {
+        print $member-&gt;stable_id," ",$member-&gt;taxon_id,"\n";
+    }
+
+    my $simple_align = $family-&gt;get_SimpleAlign();
+    my $alignIO = Bio::AlignIO-&gt;newFh(
+        -interleaved =&gt; 0,
+        -fh          =&gt; \*STDOUT,
+        -format      =&gt; "phylip",
+        -idlength    =&gt; 20);
+
+    print $alignIO $simple_align;
+
+    $simple_align = $family-&gt;get_SimpleAlign(-seq_type =&gt; 'cds');
+    $alignIO = Bio::AlignIO-&gt;newFh(
+        -interleaved =&gt; 0,
+        -fh          =&gt; \*STDOUT,
+        -format      =&gt; "phylip",
+        -idlength    =&gt; 20);
+
+    print $alignIO $simple_align;
+}
 </pre>
 
 
