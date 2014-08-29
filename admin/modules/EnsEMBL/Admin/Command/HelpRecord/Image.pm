@@ -22,12 +22,14 @@ use strict;
 use warnings;
 
 use EnsEMBL::Web::Exceptions;
+use EnsEMBL::Web::Utils::FileSystem qw(copy_files);
 
 use parent qw(EnsEMBL::Web::Command);
 
 sub process {
   my $self      = shift;
   my $hub       = $self->hub;
+  my $user      = $hub->user;
   my $object    = $self->object;
   my $function  = $hub->function;
   my $redirect  = {'action' => 'Images', 'function' => 'List'};
@@ -41,45 +43,80 @@ sub process {
 
   unless ($error) {
   
+    # change to the images dir
+    my $root = `pwd`;
+    chdir $object->get_help_images_dir;
+
     my $file  = $hub->param('file');
-    ($file)   = grep {$_->{'name'} eq $file} @$list if $file;
+    ($file)   = grep { $_->{'name'} eq $file } @$list if $file;
 
-    # validation
-    if (!$file && $function eq 'Upload' || $file && grep {$_ eq $function} @{$file->{'action'}}) {
+    # Upload new or replace existing
+    if ($function eq 'Upload') {
+      $redirect->{'function'} = 'View';
+      $redirect->{'file'}     = $self->upload_file({'param' => 'upload', 'name' => $file ? $file->{'name'} : ''});
 
-      my $root = `pwd`;
-      chdir $object->get_help_images_dir;
+    # Push changes
+    } elsif ($function eq 'Push') {
 
-      # Update from head
-      if ($function eq 'Update') {
-        system('cvs', '-Q', 'update', '-A', $file->{'name'});
-
-      # Upload new image or replace an existing image
-      } elsif ($function eq 'Upload') {
-        $redirect->{'function'} = 'View';
-        $redirect->{'file'}     = $self->upload_file({'param' => 'upload', 'name' => $file->{'name'} || ''});
-
-      # Delete new image or reset a locally modified image
-      } elsif ($function eq 'Delete') {
-        if (unlink($file->{'name'})) {
-          unless ($file->{'cvs'} eq 'New') {
-            system('cvs', '-Q', 'update', '-A', $file->{'name'});
-            $redirect->{'function'} = 'View';
-            $redirect->{'file'}     = $file->{'name'};
+      my (@deleted, @modified, @new);
+      foreach my $file ($hub->param('files')) {
+        for (@$list) {
+          if ($_->{'name'} eq $file) {
+            push @deleted,  $_ if $_->{'status'} eq 'Deleted';
+            push @modified, $_ if $_->{'status'} eq 'Modified';
+            push @new,      $_ if $_->{'status'} eq 'New';
           }
         }
-
-      # Commit local modifications to cvs
-      } elsif ($function eq 'Commit') {
-        my $message = $hub->param('message');
-        system('cvs', 'add', $file->{'name'}) if $file->{'cvs'} eq 'New';
-        system('cvs', 'commit', '-m', sprintf('%sCommitted by %s via Admin site', $message ? "$message - " : '', split('@', $hub->user->email)), $file->{'name'});
       }
 
-      # reset folder location
-      chop  $root;
-      chdir $root;
+      # git remove the deleted files
+      if (@deleted) {
+        unlink map { $_->{'name'}, $_->{'modified'} } @deleted;
+        system('git', 'rm', map $_->{'name'}, @deleted);
+      }
+
+      # copy the modified files and add them to git
+      if (@modified || @new) {
+        if (@modified) {
+          copy_files({ map { $_->{'modified'} => $_->{'name'} } @modified });
+          unlink map { $_->{'modified'} } @modified;
+        }
+        system('git', 'add', map $_->{'name'}, @modified, @new);
+      }
+
+      # If we have something staged to commit in the current dir
+      if (`git diff --name-only --staged .`) {
+        if (!system('git', 'ensconfig', '--set', sprintf('%s <%s>', $user->name, $user->email))) { # force the logged in user to be author and committer for a shared git user
+          if (!system('git', 'commit', '-m', $hub->param('message') || 'Committed via Admin Site', '.')) { # commit only stuff in current folder
+
+            my $branch = `git rev-parse --abbrev-ref HEAD` =~ s/\R//r;
+            my $tracking_remote = `git config branch.$branch.remote` =~ s/\R//r;
+            system('git', 'push', $tracking_remote, 'HEAD') and throw exception('GitException', 'Could not commit changes.');
+
+          } else {
+            throw exception('GitException', 'Could not commit changes.');
+          }
+        } else {
+          throw exception('GitException', 'Could not force the logged in user as the author.');
+        }
+      }
+
+    # File specific operations
+    } elsif ($file && grep {$_ eq $function} @{$file->{'action'}}) {
+
+      # Reset any changes made to the file
+      if ($function eq 'Reset') {
+        unlink($file->{'modified'}) if $file->{'modified'};
+
+      # Delete a file
+      } elsif ($function eq 'Delete') {
+        unlink($file->{'name'}, $file->{'modified'} || ());
+      }
     }
+
+    # reset folder location
+    chop  $root;
+    chdir $root;
   }
 
   return $self->ajax_redirect($hub->url($redirect));

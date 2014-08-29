@@ -45,9 +45,9 @@ sub content {
   ($file)       = grep {$_->{'name'} eq $file} @$list if $file;
 
   # Upload form page
-  if ($function eq 'Upload') {
+  if ($function eq 'Replace' || $function eq 'Upload') {
 
-    if (!$file || grep {$_ eq 'Upload'} @{$file->{'action'}}) {
+    if (!$file || grep {$_ eq 'Replace'} @{$file->{'action'}}) {
       my $form = $self->new_form({'action' => {'action' => 'Image', 'function' => 'Upload'}, 'enctype' => 'multipart/form-data'});
       $form->add_field({'type' => 'noedit', 'label' => 'Replace image', 'name' => 'file', 'value' => $file->{'name'}}) if $file;
       $form->add_field({'type' => 'file', 'label' => 'New image', 'name' => 'upload', 'notes' => 'Upto 500KB', 'required' => 1});
@@ -57,31 +57,45 @@ sub content {
       return sprintf '<h3>Upload image</h3>%s', $form->render;
     }
 
+  # Add, Commit and then Push
+  } elsif ($function eq 'Push') {
+
+    my $form = $self->new_form({'action' => {'action' => 'Image', 'function' => 'Push'}});
+    $form->add_field({'type' => 'checklist', 'name' => 'files', 'label' => 'Files to be pushed', 'values' => [ map { $_->{'status'} !~ /up-to-date/i ? {
+      'value'   => $_->{'name'},
+      'group'   => $_->{'status'},
+      'caption' => $_->{'name'},
+      'checked' => 1
+    } : () } @$list ]});
+    $form->add_field({'type' => 'string', 'label' => 'Message', 'name' => 'message', 'value' => 'Committed via Admin Site'});
+    $form->add_button({'value' => 'Push to GitHub'});
+    $form->force_reload_on_submit;
+
+    return sprintf '<h3>Push changes</h3>%s', $form->render;
+
   } elsif ($file && grep {$_ eq $function} @{$file->{'action'}}) { # perform these action only if allowed
 
     # Delete confirmation page
     if ($function eq 'Delete') {
 
-      return $self->info_panel(
-        sprintf('%s %s', $file->{'cvs'} eq 'New' ? 'Delete' : 'Reset', $file->{'name'}),
-        sprintf('<p>Are you sure you want to %s?</p><p class="button"><a href="%s">Yes</a><a href="%s">No</a></p>',
-          $file->{'cvs'} eq 'New' ? 'delete this file' : 'ignore any local modifications and update this file from head',
+      return $self->info_panel("Delete $file->{'name'}",
+        sprintf('<p>Are you sure you want to delete this image?</p><p class="button"><a href="%s">Yes</a><a href="%s">No</a></p>',
           $hub->url({'action' => 'Image', 'function' => 'Delete', 'file' => $file->{'name'}}),
-          $hub->url({'function' => ''})
+          $hub->url({'function' => 'List'})
         ),
         '100%'
       );
 
-    # Commit form page
-    } elsif ($function eq 'Commit') {
+    # Reset local changes to the file
+    } elsif ($function eq 'Reset') {
 
-      my $form = $self->new_form({'action' => {'action' => 'Image', 'function' => 'Commit'}});
-      $form->add_field({'type' => 'noedit', 'label' => 'File to Commit', 'name' => 'file', 'value' => $file->{'name'}});
-      $form->add_field({'type' => 'string', 'label' => 'Message', 'name' => 'message', 'shortnote' => sprintf(' - Committed by %s via Admin site', split('@', $hub->user->email)), 'no_asterisk' => 1, 'required' => 1});
-      $form->add_button({'value' => 'Commit'});
-      $form->force_reload_on_submit;
-
-      return sprintf '<h3>CVS commit</h3>%s', $form->render;
+      return $self->info_panel("Reset $file->{'name'}",
+        sprintf('<p>Are you sure you want to reset all the changes made to this image?</p><p class="button"><a href="%s">Yes</a><a href="%s">No</a></p>',
+          $hub->url({'action' => 'Image', 'function' => 'Reset', 'file' => $file->{'name'}}),
+          $hub->url({'function' => 'List'})
+        ),
+        '100%'
+      );
 
     # View image page
     } elsif ($function eq 'View') {
@@ -90,23 +104,56 @@ sub content {
         'node_name'   => 'a',
         'class'       => 'modal_link',
         'href'        => $hub->url({'function' => $_, 'file' => $file->{'name'}}),
-        'inner_HTML'  => _get_link_caption($file, $_)
+        'inner_HTML'  => $_
       }} @{$file->{'action'}} ];
 
-      my $embed_code = $file->{'dim'} ? qq([[IMAGE::$file->{'name'} height="$file->{'dim'}{'y'}" width="$file->{'dim'}{'x'}"]]) : '';
+      my $info        = $object->get_image_details($file->{'modified'} || $file->{'name'});
+      my $dir         = $object->get_help_images_dir;
+      my $embed_code  = $info->{'dim'} ? qq([[IMAGE::$file->{'name'} height="$info->{'dim'}{'y'}" width="$info->{'dim'}{'x'}"]]) : '';
 
-      return $self->dom->create_element('div', {
-        'children' => [
-          {'node_name' => 'h3', 'inner_HTML' => "View $file->{'name'}"},
-          {'node_name' => 'div', 'class' => 'tinted-box', 'children' => [
-            {'node_name' => 'p', 'children' => [
-              {'node_name' => 'img', 'src' => sprintf('%4$s%s?cache=%s', $file->{'name'}, $file->{'md5'}, split('/htdocs', $object->get_help_images_dir)), 'alt' => $file->{'name'}}
-            ]}
-          ]},
-          $embed_code ? {'node_name' => 'p', 'inner_HTML' => qq(Embed code: <span class="code">$embed_code</span>)} : (),
-          @$buttons   ? {'node_name' => 'p', 'class' => 'button', 'children' => $buttons} : ()
-        ]
-      })->render;
+      my $image_divs  = [{
+        'node_name'     => 'div',
+        'class'         => 'tinted-box',
+        'children'      => [ $file->{'modified'} ? {
+          'node_name'     => 'p',
+          'inner_HTML'    => 'Modified Version'
+        } : (), $file->{'status'} =~ /deleted/i ? {
+          'node_name'     => 'p',
+          'inner_HTML'    => '<b>Deleted</b>'
+        } : {
+          'node_name'     => 'p',
+          'children'      => [{
+            'node_name'     => 'img',
+            'src'           => sprintf('%4$s/%s?cache=%s', $file->{'modified'} || $file->{'name'}, $info->{'md5'}, split('/htdocs', $dir)),
+            'alt'           => $file->{'name'}
+          }]
+        }]
+      }];
+
+      if ($file->{'modified'} && (my $info_previous = $object->get_image_details($file->{'name'}))) { # if we have a modified version
+        push @$image_divs, {
+          'node_name'   => 'div',
+          'class'       => 'tinted-box',
+          'children'    => [{
+            'node_name'   => 'p',
+            'inner_HTML'  => 'Previous version'
+          }, {
+            'node_name'   => 'p',
+            'children'    => [{
+              'node_name'   => 'img',
+              'src'         => sprintf('%4$s/%s?cache=%s', $file->{'name'}, $info_previous->{'md5'}, split('/htdocs', $dir)),
+              'alt'         => "Previous version of $file->{'name'}"
+            }]
+          }]
+        };
+      }
+
+      return $self->dom->create_element('div', { 'children' => [
+        {'node_name' => 'h3', 'inner_HTML' => "View $file->{'name'}" },
+        @$image_divs,
+        $embed_code ? {'node_name' => 'p', 'inner_HTML' => qq(Embed code: <span class="code">$embed_code</span>)} : (),
+        @$buttons   ? {'node_name' => 'p', 'class' => 'button', 'children' => $buttons} : ()
+      ] })->render;
     }
   }
 
@@ -114,38 +161,24 @@ sub content {
   my $table   = $self->new_table([
     {'key'  => 'name',    'title' => 'Name', 'sort' => 'html'},
     {'key'  => 'size',    'title' => 'Size', 'sort' => 'numeric_hidden'},
-    {'key'  => 'cvs',     'title' => 'CVS status'},
+    {'key'  => 'status',  'title' => 'GIT status'},
     {'key'  => 'action',  'title' => 'Action', 'sort' => 'none'}
   ], [], {'data_table' => 1, 'class' => 'no_col_toggle', 'exportable' => 0});
 
   for my $file (@$list) {
+    $file->{'size'}   = sprintf('<span class="hidden">%s</span>', $file->{'size'} || 0).($file->{'size'} ? $file->{'size'} >= 1024 ? sprintf('%d KB', ($file->{'size'} + 512) / 1024) : '< 1 KB' : 'Unknown');
     $file->{'action'} = $file->{'action'}
-      ? join ' &middot; ', map
-        {
-          sprintf '<a href="%s">%s</a>',
-          $hub->url({'action' => 'Image'.($_ eq 'Update' ? '' : 's'), 'function' => $_, 'file' => $file->{'name'}}),
-          _get_link_caption($file, $_)
-        }
-        @{$file->{'action'}}
+      ? join ' &middot; ', map { sprintf '<a href="%s">%s</a>', $hub->url({'action' => 'Images', 'function' => $_, 'file' => $file->{'name'}}), $_ } @{$file->{'action'}}
       : '<i>Permission denied to make any changes</i>'
     ;
-
-    $file->{'size'}   = sprintf('<span class="hidden">%s</span>', $file->{'size'} || 0).($file->{'size'} ? $file->{'size'} >= 1024 ? sprintf('%d KB', ($file->{'size'} + 512) / 1024) : '< 1 KB' : 'Unknown');
-    $file->{'cvs'}   .= ' (Not committed)' if $file->{'cvs'} eq 'New';
-    $file->{'cvs'}   .= " (Tag: $file->{'tag'})" if $file->{'tag'};
 
     $table->add_row($file);
   }
 
-  return sprintf '%s<p class="button"><a href="%s" class="modal_link">%s</a></p>', $table->render, $hub->url({'action' => 'Images', 'function' => 'Upload'}), 'Add new image';
-}
-
-sub _get_link_caption {
-  my ($file, $action) = @_;
-  return 'Upload new'                                   if $action eq 'Upload';
-  return 'Update from head'                             if $action eq 'Update' && $file->{'tag'};
-  return $file->{'cvs'} eq 'New' ? 'Delete' : 'Reset'   if $action eq 'Delete';
-  return $action;
+  return sprintf '<p class="button"><a href="%s" class="modal_link">Add new image</a><a href="%s">Push changes to GitHub</a></p>%s',
+    $hub->url({'action' => 'Images', 'function' => 'Upload'}),
+    $hub->url({'action' => 'Images', 'function' => 'Push'}),
+    $table->render;
 }
 
 1;

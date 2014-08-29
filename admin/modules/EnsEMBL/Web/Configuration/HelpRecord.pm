@@ -87,14 +87,14 @@ sub populate_tree {
     'raw'           => 1,
     'url'           => $hub->url({'type' => 'HelpRecord', 'action' => 'Images', 'function' => $_}),
     'no_menu_entry' => $_ !~ /^(List|Upload)$/
-  })) for qw(List Upload Delete View Commit);
+  })) for qw(List Replace Reset Upload Delete View Push);
 
   $images_menu->append($self->create_node("HelpRecord/Image/$_", '', [], {
     'command'       => 'EnsEMBL::Admin::Command::HelpRecord::Image',
     'availability'  => 1,
     'filters'       => ['WebAdmin'],
     'no_menu_entry' => 1
-  })) for qw(Upload Update Delete Commit);
+  })) for qw(Upload Delete Reset Push);
 }
 
 1;
