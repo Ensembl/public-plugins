@@ -60,13 +60,17 @@ sub content {
   # Add, Commit and then Push
   } elsif ($function eq 'Push') {
 
+    my @to_push = grep { $_->{'status'} !~ /up-to-date/i } @$list;
+
+    return '<p>No changes to push</p>' unless @to_push;
+
     my $form = $self->new_form({'action' => {'action' => 'Image', 'function' => 'Push'}});
-    $form->add_field({'type' => 'checklist', 'name' => 'files', 'label' => 'Files to be pushed', 'values' => [ map { $_->{'status'} !~ /up-to-date/i ? {
+    $form->add_field({'type' => 'checklist', 'name' => 'files', 'label' => 'Files to be pushed', 'values' => [ map {
       'value'   => $_->{'name'},
       'group'   => $_->{'status'},
       'caption' => $_->{'name'},
       'checked' => 1
-    } : () } @$list ]});
+    }, @to_push ]});
     $form->add_field({'type' => 'string', 'label' => 'Message', 'name' => 'message', 'value' => 'Committed via Admin Site'});
     $form->add_button({'value' => 'Push to GitHub'});
     $form->force_reload_on_submit;
