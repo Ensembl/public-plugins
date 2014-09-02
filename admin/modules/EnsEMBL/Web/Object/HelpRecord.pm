@@ -92,7 +92,9 @@ sub get_help_images_list {
   }
 
   # create a new temp branch and update it to latest remote version
-  `git reset HEAD --hard`;
+  `git reset HEAD --soft`;
+  `git checkout -- .`;
+  my $stash = `git stash | grep "^Saved" | wc -l`;
   `git fetch $tracking_remote`;
   `git checkout -B $tmp_branch $tracking_remote/$tracking_branch`;
 
@@ -104,6 +106,8 @@ sub get_help_images_list {
   `git branch -d $tmp_branch`;
   copy_dir_contents($tmp_dir, $dir, {'recursive' => 1});
   remove_directory($tmp_dir);
+
+  `git stash pop` if $stash;
 
   # Rename any files deleted by the user that got checked out again
   copy_files(\%modified);
