@@ -100,7 +100,12 @@ sub content {
     # View image page
     } elsif ($function eq 'View') {
 
-      my $buttons = [ map {$_ eq 'View' ? () : {
+      my $buttons = [ {
+        'node_name'   => 'a',
+        'class'       => 'modal_link',
+        'href'        => $hub->url({'function' => 'List'}),
+        'inner_HTML'  => 'View all'
+      }, map {$_ eq 'View' ? () : {
         'node_name'   => 'a',
         'class'       => 'modal_link',
         'href'        => $hub->url({'function' => $_, 'file' => $file->{'name'}}),
