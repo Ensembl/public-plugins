@@ -59,7 +59,7 @@ sub CONFIGURATION_FIELDS {
       'evalue'              => {
         'type'                => 'dropdown',
         'label'               => 'Maximum E-value for reported alignments',
-        'values'              => [ map { 'value' => $_, 'caption' => $_ }, qw(1e-200 1e-100 1e-50 1e-10 1e-5 1e-4 1e-3 1e-2 1e-1 1.0 10 100 1000) ]
+        'values'              => [ map { 'value' => $_, 'caption' => $_ }, qw(1e-200 1e-100 1e-50 1e-10 1e-5 1e-4 1e-3 1e-2 1e-1 1.0 10 100 1000 10000 100000) ]
       },
 
       'word_size'           => {
