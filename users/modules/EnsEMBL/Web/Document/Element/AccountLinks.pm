@@ -75,19 +75,19 @@ sub content_ajax {
             $_->name,
             $_->url
         } @$bookmarks) || '<p><i>No bookmark added</i></p>',
-        @$bookmarks ? sprintf('
+        sprintf('
           <div>
-            <p><a href="%s" class="modal_link constant">Bookmark this page</a></p>
-            <p><a href="%s" class="modal_link constant" rel="modal_user_data">View all bookmarks</a></p>
-          </div>',
+            <p><a href="%s" class="modal_link constant">Bookmark this page</a></p>'. ( @$bookmarks ?
+           '<p><a href="%s" class="modal_link constant%s" rel="modal_user_data">View all bookmarks</a></p>' : '').
+          '</div>',
           $hub->url({
             'type'        => 'Account',
             'action'      => 'Bookmark',
             'function'    => 'Add',
             map {$_ => $hub->param($_) || ''} qw(name description url)
           }),
-          $hub->url({qw(type Account action Bookmark function View)})
-        ) : '',
+          $hub->url({qw(type Account action Bookmark function View)}),
+        ),
         $hub->url({qw(type Account action Logout)})
       )
     : sprintf('<a class="constant account-link _accounts_no_user%s" href="%s" title="%s">Login/Register</a>', $users_available
