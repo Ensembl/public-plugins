@@ -156,7 +156,7 @@ sub fetch_features_generic {
     }
     
     my $feature = {
-      id          => $_->dbID,
+      id          => $_->adaptor->get_seq_region_id($_),
       start       => ($_->can('seq_region_start') ? $_->seq_region_start : $_->start) + 0,
       end         => ($_->can('seq_region_end')   ? $_->seq_region_end   : $_->end)   + 0,
       label       => $glyphset->feature_label($_),
