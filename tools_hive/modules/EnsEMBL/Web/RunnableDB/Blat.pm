@@ -40,7 +40,7 @@ sub setup_executables {
 
   throw exception('HiveException', "$blast_type can not be run with ".__PACKAGE__) unless $blast_type eq 'BLAT';
   throw exception('HiveException', 'BLAT client binary file is either missing or is not executable.') unless -x $blat_bin;
-  throw exception('HiveException', 'BLAT to BTOP script is either missing or not .') unless -e $BTOP_script;
+  throw exception('HiveException', 'BLAT to BTOP script is either missing or not accessible.') unless -e $BTOP_script;
 
   $self->param('BLAT_BTOP_script', $BTOP_script);
 }

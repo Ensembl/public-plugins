@@ -24,8 +24,6 @@ package EnsEMBL::Web::JobDispatcher::Blat;
 use strict;
 use warnings;
 
-use IO::Socket;
-
 use parent qw(EnsEMBL::Web::JobDispatcher::Hive);
 
 sub dispatch_job {
