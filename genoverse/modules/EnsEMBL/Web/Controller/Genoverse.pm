@@ -215,7 +215,7 @@ sub fetch_transcript {
         label      => $no_label ? '' : $glyphset->feature_label($gene, $transcript),
         color      => $colourmap->hex_by_name($glyphset->my_colour($colour_key)),
         labelColor => $colourmap->hex_by_name($glyphset->my_colour($colour_key, 'label')),
-        legend     => ucfirst $glyphset->my_colour($colour_key, 'text'),
+        legend     => $glyphset->my_colour($colour_key, 'text'),
         menu       => $glyphset->href($gene, $transcript),
         group      => scalar keys %$transcripts ? 1 : 0
       };
