@@ -156,7 +156,6 @@ sub fetch_features_generic {
     }
     
     my $feature = {
-      id          => $_->adaptor->get_seq_region_id($_),
       start       => ($_->can('seq_region_start') ? $_->seq_region_start : $_->start) + 0,
       end         => ($_->can('seq_region_end')   ? $_->seq_region_end   : $_->end)   + 0,
       label       => $glyphset->feature_label($_),
@@ -284,7 +283,6 @@ sub fetch_structural_variation {
     next if $breakpoint;
     
     my $feature = {
-      id          => $f->dbID,
       start       => ($f->can('seq_region_start') ? $f->seq_region_start : $f->start) + 0,
       end         => ($f->can('seq_region_end')   ? $f->seq_region_end   : $f->end)   + 0,
       menu        => $glyphset->href($f),
@@ -356,7 +354,6 @@ sub fetch_synteny {
   
   foreach (@{$glyphset->features}) {
     push @features, {
-      id    => $_->dbID,
       start => ($_->can('seq_region_start') ? $_->seq_region_start : $_->start) + 0,
       end   => ($_->can('seq_region_end')   ? $_->seq_region_end   : $_->end)   + 0,
       label => $glyphset->feature_label($_),
