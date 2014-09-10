@@ -89,7 +89,7 @@ sub reset {
     foreach my $track (keys %$user_data) {
       foreach (keys %{$user_data->{$track}}) {
         next if /^(display|track_order)$/;
-        $self->altered = 1 if delete $user_data->{$track}{$_};
+        $self->altered($track) if delete $user_data->{$track}{$_};
       }
     }
   }
