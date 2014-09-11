@@ -23,6 +23,9 @@ sub update_conf {
   $SiteDefs::ENSEMBL_PRIMARY_SPECIES    = 'Homo_sapiens'; # Default species
   $SiteDefs::ENSEMBL_SECONDARY_SPECIES  = 'Mus_musculus'; # Secondary species
 
+  $SiteDefs::ENSEMBL_REST_URL           = 'http://rest.ensembl.org';  # URL for the REST API
+  $SiteDefs::ENSEMBL_REST_DOC_URL       = 'https://github.com/Ensembl/ensembl-rest/wiki';
+
 ## This hash is used to configure the species available in this
 ## copy of EnsEMBL - comment out any lines which are not relevant
 ## If you add a new species MAKE sure that one of the values of the
