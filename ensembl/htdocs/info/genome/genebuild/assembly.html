@@ -57,16 +57,17 @@
 
 <h2>Pseudoautosomal region in human</h2>
 
-<p>The pseudoautosomal regions (PAR), where chromosome X and Y share homologous sequence, are defined for human. In Ensembl, the full-length Y chromosome is displayed on our browser. However, within our core human database, the Y chromosome is divided into four regions:</p> 
+<p>The pseudoautosomal regions (PAR), where chromosome X and Y share homologous sequence, are <a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/genbank/vertebrate_mammalian/Homo_sapiens/latest_assembly_versions/GCA_000001405.15_GRCh38/GCA_000001405.15_GRCh38_assembly_structure/genomic_regions_definitions.txt">defined by the GRC</a> for human. In Ensembl, the full-length Y chromosome is displayed on our browser. However, within our core human database, the Y chromosome is divided into five regions:</p> 
 
 <ul>
 <li>chromosome:GRCh37:Y:1 - 10000 is unique to Y but is a string of 10000 Ns</li> 
-<li>chromosome:GRCh37:Y:10001 - 2649520 is shared with X (PAR1)</li> 
-<li>chromosome:GRCh37:Y:2649521- 59034049 is unique to Y</li>
-<li>chromosome:GRCh37:Y:59034050 - 59373566 is shared with X (PAR2)</li> 
+<li>chromosome:GRCh37:Y:10001 - 2781479 is shared with X:10001 - 2781479 (PAR1)</li> 
+<li>chromosome:GRCh37:Y:2781480- 56887902 is unique to Y</li>
+<li>chromosome:GRCh37:Y:56887903 - 57217415 is shared with X (PAR2)</li> 
+<li>chromosome:GRCh37:Y: 57217416- 57227415 is unique to Y</li>
 </ul>
 
-<p>We store sequence for only the two unique regions of Y in our database. The DNA for PAR1 and PAR2 are loaded only for chromosome X. The full-length chromosome Y can be generated on-the-fly by our API, where we stitch in the shared sequence from X.</p> 
+<p>We store sequence for only the three unique regions of Y in our database. The DNA for PAR1 and PAR2 are loaded only for chromosome X. The full-length chromosome Y can be generated on-the-fly by our API, where we stitch in the shared sequence from X.</p> 
 
 <h2>Mitochondrion</h2> 
 
