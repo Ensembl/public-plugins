@@ -49,7 +49,7 @@ Ensembl.Panel.GenoverseMenu = Ensembl.Panel.ZMenu.extend({
     this[this.drag ? 'populateRegion' : this.href ? 'populateAjax' : 'populate']();
     
     if (this.drag) {
-      $('a', this.el).on('click', function () {
+      $('a', this.el).on('click', function (e) {
         var cls = this.className.replace(' constant', '');
         
         if (cls === 'jumpHere') {
@@ -58,11 +58,12 @@ Ensembl.Panel.GenoverseMenu = Ensembl.Panel.ZMenu.extend({
           
           browser.moveTo(position.start, position.end);
           
-          if (browser.prev.start !== browser.start || browser.prev.end !== browser.end) {
-            browser.updateURL(position);
-          }
+          Ensembl.EventManager.trigger('highlightImage', browser.panel.imageNumber + 1, 0, position.start, position.end);
+          
+          browser.updateURL(position);
           
           browser.cancelSelect();
+          browser.moveSelector(e);
         } else {
           $('.selector_controls .' + cls, '#' + panel.imageId).trigger('click');
         }
@@ -94,8 +95,9 @@ Ensembl.Panel.GenoverseMenu = Ensembl.Panel.ZMenu.extend({
   populateRegion: function () {
     var zoom = this.params.browser.wheelAction === false ? 'Jump' : 'Zoom';
     
-    this.buildMenu(
-      [ '<a class="' + zoom.toLowerCase() + 'Here constant" href="#">' + zoom + ' to region (' + (this.drag.end - this.drag.start + 1) + ' bp)</a>', '<a class="center constant" href="#">Centre here</a>' ],
+    this.buildMenu(this.drag.end === this.drag.start
+      ? [ '<a class="center constant" href="#">Centre here</a>' ]
+      : [ '<a class="' + zoom.toLowerCase() + 'Here constant" href="#">' + zoom + ' to region (' + (this.drag.end - this.drag.start + 1) + ' bp)</a>' ],
       'Region: ' + this.drag.chr + ':' + this.drag.start + '-' + this.drag.end
     );
   }

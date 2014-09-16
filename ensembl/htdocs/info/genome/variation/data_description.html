@@ -46,269 +46,570 @@
 
 
 <br />
-<h2 id="sources">Variation species and data sources</h2>
+<h2 id="sources">Variation species and data types</h2>
 
+<!-- Data types -->
+<p>
+The Ensembl Variation database stores data imported from external sources and also data calculated on site.
+</p>
+
+<ul>
+  <li><b>Data imported</b> from external sources (dbSNP, Sanger, DGVa, ...):
+    <ul>
+      <li>Variations <i>(SNPs, in-dels, insertion, deletion, ...)</i></li>
+      <li>Structural variations <i>(copy number variation, tandem duplication, inversion, ...)</i></li>
+      <li>Probes for copy number variations</li>
+      <li>Locations for variations and structural variations</li>
+      <li>Alleles</li>
+      <li>Populations</li>
+      <li>Genotypes</li>
+      <li>Phenotypes (e.g. <a href="/Homo_sapiens/Phenotype/All">list of phenotypes in human</a>)</li>
+      <li>Citations (extracted from dbSNP submissions and text mining performed by <a href="http://europepmc.org/" >EPMC</a> and <a href="http://text.soe.ucsc.edu/">UCSC</a>)</li>
+    </ul>
+  </li>
+  <li><b>Calculated data</b>: see the <a href="predicted_data.html">Predicted data page</a>.</li>
+</ul>
+
+<!-- Species list -->
+<br />
 <p>
 Ensembl stores variation data for the following species, but note that users can still use the 
 <a href="/info/docs/tools/vep/index.html">Variant Effect Predictor <img src="/i/vep_logo_sm.png" style="width:40px;height:19px;vertical-align:middle" alt="VEP" /></a> on species for which we do not currently have 
 a variation database.
 </p>
+
 <p style="padding-top:0px;margin-top:0px">There are currently <span style="font-weight:bold;font-size:1.1em;color:#000">22</span> variation databases in Ensembl:</p>
-<table style="border:1px solid #CCC;border-radius:8px;padding:6px 6px 0px;margin-bottom:5px"><tr><td>
-    <div style="margin-bottom:6px;padding-right:4px;overflow:hidden">
-      <a href="/Bos_taurus/Info/Index" title="Bos taurus Ensembl Home page" style="float:left"/>
-        <img src="/i/species/48/Bos_taurus.png" alt="Bos taurus" class="sp-thumb" style="margin-right:4px;vertical-align:middle" />
-      </a>
-      <div style="float:left">
-        <div style="font-style:italic;font-weight:bold;margin-bottom:3px">Bos taurus</div>
-        <div>> 73 millions variants</div>
-        <span><a href="sources_documentation.html#bos_taurus">[sources]</a></span>
+<table class="ss" style="width:auto"><tr class="ss_header"><th>Species</th><th>Sequence variant count</th>
+                      <th>Structural variant</th><th>Genotype - Individual</th><th>Genotype - Population</th><th>Phenotype</th><th>Citation</th><th>SIFT</th><th>PolyPhen</th></tr>
+                     
+  <tr>
+    <td>
+      <div>
+        <div style="float:left;vertical-align:middle;margin-right:4px">
+          <a rel="external" href="/Bos_taurus/Info/Index" title="Bos taurus Ensembl Home page" style="vertical-align:middle">
+            <img src="/i/species/48/Bos_taurus.png" alt="Bos taurus" class="sp-thumb" style="vertical-align:middle;width:32px;height:32px" />
+          </a>
+        </div>
+        <div style="float:left;margin-top:0px">
+          <div class="bigtext" style="font-style:italic;margin-bottom:2px">Bos taurus</div>
+          <div><a href="sources_documentation.html#bos_taurus" style="text-decoration:none" title="Bos taurus sources list">[sources]</a></div>
+        </div>
+        <div style="clear:both"></div>
       </div>
-    </div>
-
-    <div style="margin-bottom:6px;padding-right:4px;overflow:hidden">
-      <a href="/Canis_familiaris/Info/Index" title="Canis familiaris Ensembl Home page" style="float:left"/>
-        <img src="/i/species/48/Canis_familiaris.png" alt="Canis familiaris" class="sp-thumb" style="margin-right:4px;vertical-align:middle" />
-      </a>
-      <div style="float:left">
-        <div style="font-style:italic;font-weight:bold;margin-bottom:3px">Canis familiaris</div>
-        <div>> 3 millions variants</div>
-        <span><a href="sources_documentation.html#canis_familiaris">[sources]</a></span>
+    </td>
+    <td>> 73 millions variants</td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center">-</td>
+  </tr>
+  <tr class="bg2">
+    <td>
+      <div>
+        <div style="float:left;vertical-align:middle;margin-right:4px">
+          <a rel="external" href="/Canis_familiaris/Info/Index" title="Canis familiaris Ensembl Home page" style="vertical-align:middle">
+            <img src="/i/species/48/Canis_familiaris.png" alt="Canis familiaris" class="sp-thumb" style="vertical-align:middle;width:32px;height:32px" />
+          </a>
+        </div>
+        <div style="float:left;margin-top:0px">
+          <div class="bigtext" style="font-style:italic;margin-bottom:2px">Canis familiaris</div>
+          <div><a href="sources_documentation.html#canis_familiaris" style="text-decoration:none" title="Canis familiaris sources list">[sources]</a></div>
+        </div>
+        <div style="clear:both"></div>
       </div>
-    </div>
-
-    <div style="margin-bottom:6px;padding-right:4px;overflow:hidden">
-      <a href="/Danio_rerio/Info/Index" title="Danio rerio Ensembl Home page" style="float:left"/>
-        <img src="/i/species/48/Danio_rerio.png" alt="Danio rerio" class="sp-thumb" style="margin-right:4px;vertical-align:middle" />
-      </a>
-      <div style="float:left">
-        <div style="font-style:italic;font-weight:bold;margin-bottom:3px">Danio rerio</div>
-        <div>> 1 million variants</div>
-        <span><a href="sources_documentation.html#danio_rerio">[sources]</a></span>
+    </td>
+    <td>> 3 millions variants</td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center">-</td>
+  </tr>
+  <tr>
+    <td>
+      <div>
+        <div style="float:left;vertical-align:middle;margin-right:4px">
+          <a rel="external" href="/Danio_rerio/Info/Index" title="Danio rerio Ensembl Home page" style="vertical-align:middle">
+            <img src="/i/species/48/Danio_rerio.png" alt="Danio rerio" class="sp-thumb" style="vertical-align:middle;width:32px;height:32px" />
+          </a>
+        </div>
+        <div style="float:left;margin-top:0px">
+          <div class="bigtext" style="font-style:italic;margin-bottom:2px">Danio rerio</div>
+          <div><a href="sources_documentation.html#danio_rerio" style="text-decoration:none" title="Danio rerio sources list">[sources]</a></div>
+        </div>
+        <div style="clear:both"></div>
       </div>
-    </div>
-
-    <div style="margin-bottom:6px;padding-right:4px;overflow:hidden">
-      <a href="/Drosophila_melanogaster/Info/Index" title="Drosophila melanogaster Ensembl Home page" style="float:left"/>
-        <img src="/i/species/48/Drosophila_melanogaster.png" alt="Drosophila melanogaster" class="sp-thumb" style="margin-right:4px;vertical-align:middle" />
-      </a>
-      <div style="float:left">
-        <div style="font-style:italic;font-weight:bold;margin-bottom:3px">Drosophila melanogaster</div>
-        <div>> 6 millions variants</div>
-        <span><a href="sources_documentation.html#drosophila_melanogaster">[sources]</a></span>
+    </td>
+    <td>> 1 million variants</td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center">-</td>
+  </tr>
+  <tr class="bg2">
+    <td>
+      <div>
+        <div style="float:left;vertical-align:middle;margin-right:4px">
+          <a rel="external" href="/Drosophila_melanogaster/Info/Index" title="Drosophila melanogaster Ensembl Home page" style="vertical-align:middle">
+            <img src="/i/species/48/Drosophila_melanogaster.png" alt="Drosophila melanogaster" class="sp-thumb" style="vertical-align:middle;width:32px;height:32px" />
+          </a>
+        </div>
+        <div style="float:left;margin-top:0px">
+          <div class="bigtext" style="font-style:italic;margin-bottom:2px">Drosophila melanogaster</div>
+          <div><a href="sources_documentation.html#drosophila_melanogaster" style="text-decoration:none" title="Drosophila melanogaster sources list">[sources]</a></div>
+        </div>
+        <div style="clear:both"></div>
       </div>
-    </div>
-
-    <div style="margin-bottom:6px;padding-right:4px;overflow:hidden">
-      <a href="/Equus_caballus/Info/Index" title="Equus caballus Ensembl Home page" style="float:left"/>
-        <img src="/i/species/48/Equus_caballus.png" alt="Equus caballus" class="sp-thumb" style="margin-right:4px;vertical-align:middle" />
-      </a>
-      <div style="float:left">
-        <div style="font-style:italic;font-weight:bold;margin-bottom:3px">Equus caballus</div>
-        <div>> 4 millions variants</div>
-        <span><a href="sources_documentation.html#equus_caballus">[sources]</a></span>
+    </td>
+    <td>> 6 millions variants</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+  </tr>
+  <tr>
+    <td>
+      <div>
+        <div style="float:left;vertical-align:middle;margin-right:4px">
+          <a rel="external" href="/Equus_caballus/Info/Index" title="Equus caballus Ensembl Home page" style="vertical-align:middle">
+            <img src="/i/species/48/Equus_caballus.png" alt="Equus caballus" class="sp-thumb" style="vertical-align:middle;width:32px;height:32px" />
+          </a>
+        </div>
+        <div style="float:left;margin-top:0px">
+          <div class="bigtext" style="font-style:italic;margin-bottom:2px">Equus caballus</div>
+          <div><a href="sources_documentation.html#equus_caballus" style="text-decoration:none" title="Equus caballus sources list">[sources]</a></div>
+        </div>
+        <div style="clear:both"></div>
       </div>
-    </div>
-
-    <div style="margin-bottom:6px;padding-right:4px;overflow:hidden">
-      <a href="/Felis_catus/Info/Index" title="Felis catus Ensembl Home page" style="float:left"/>
-        <img src="/i/species/48/Felis_catus.png" alt="Felis catus" class="sp-thumb" style="margin-right:4px;vertical-align:middle" />
-      </a>
-      <div style="float:left">
-        <div style="font-style:italic;font-weight:bold;margin-bottom:3px">Felis catus</div>
-        <div>> 327,000 variants</div>
-        <span><a href="sources_documentation.html#felis_catus">[sources]</a></span>
+    </td>
+    <td>> 4 millions variants</td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center">-</td>
+  </tr>
+  <tr class="bg2">
+    <td>
+      <div>
+        <div style="float:left;vertical-align:middle;margin-right:4px">
+          <a rel="external" href="/Felis_catus/Info/Index" title="Felis catus Ensembl Home page" style="vertical-align:middle">
+            <img src="/i/species/48/Felis_catus.png" alt="Felis catus" class="sp-thumb" style="vertical-align:middle;width:32px;height:32px" />
+          </a>
+        </div>
+        <div style="float:left;margin-top:0px">
+          <div class="bigtext" style="font-style:italic;margin-bottom:2px">Felis catus</div>
+          <div><a href="sources_documentation.html#felis_catus" style="text-decoration:none" title="Felis catus sources list">[sources]</a></div>
+        </div>
+        <div style="clear:both"></div>
       </div>
-    </div>
-
-  </td>
-  <td style="width:8px"></td>
-  <td>
-
-    <div style="margin-bottom:6px;padding-right:4px;overflow:hidden">
-      <a href="/Gallus_gallus/Info/Index" title="Gallus gallus Ensembl Home page" style="float:left"/>
-        <img src="/i/species/48/Gallus_gallus.png" alt="Gallus gallus" class="sp-thumb" style="margin-right:4px;vertical-align:middle" />
-      </a>
-      <div style="float:left">
-        <div style="font-style:italic;font-weight:bold;margin-bottom:3px">Gallus gallus</div>
-        <div>> 9 millions variants</div>
-        <span><a href="sources_documentation.html#gallus_gallus">[sources]</a></span>
+    </td>
+    <td>> 327,000 variants</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+  </tr>
+  <tr>
+    <td>
+      <div>
+        <div style="float:left;vertical-align:middle;margin-right:4px">
+          <a rel="external" href="/Gallus_gallus/Info/Index" title="Gallus gallus Ensembl Home page" style="vertical-align:middle">
+            <img src="/i/species/48/Gallus_gallus.png" alt="Gallus gallus" class="sp-thumb" style="vertical-align:middle;width:32px;height:32px" />
+          </a>
+        </div>
+        <div style="float:left;margin-top:0px">
+          <div class="bigtext" style="font-style:italic;margin-bottom:2px">Gallus gallus</div>
+          <div><a href="sources_documentation.html#gallus_gallus" style="text-decoration:none" title="Gallus gallus sources list">[sources]</a></div>
+        </div>
+        <div style="clear:both"></div>
       </div>
-    </div>
-
-    <div style="margin-bottom:6px;padding-right:4px;overflow:hidden">
-      <a href="/Homo_sapiens/Info/Index" title="Homo sapiens Ensembl Home page" style="float:left"/>
-        <img src="/i/species/48/Homo_sapiens.png" alt="Homo sapiens" class="sp-thumb" style="margin-right:4px;vertical-align:middle" />
-      </a>
-      <div style="float:left">
-        <div style="font-style:italic;font-weight:bold;margin-bottom:3px">Homo sapiens</div>
-        <div>> 64 millions variants</div>
-        <span><a href="sources_documentation.html#homo_sapiens">[sources]</a></span>
+    </td>
+    <td>> 9 millions variants</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center">-</td>
+  </tr>
+  <tr class="bg2">
+    <td>
+      <div>
+        <div style="float:left;vertical-align:middle;margin-right:4px">
+          <a rel="external" href="/Homo_sapiens/Info/Index" title="Homo sapiens Ensembl Home page" style="vertical-align:middle">
+            <img src="/i/species/48/Homo_sapiens.png" alt="Homo sapiens" class="sp-thumb" style="vertical-align:middle;width:32px;height:32px" />
+          </a>
+        </div>
+        <div style="float:left;margin-top:0px">
+          <div class="bigtext" style="font-style:italic;margin-bottom:2px">Homo sapiens</div>
+          <div><a href="sources_documentation.html#homo_sapiens" style="text-decoration:none" title="Homo sapiens sources list">[sources]</a></div>
+        </div>
+        <div style="clear:both"></div>
       </div>
-    </div>
-
-    <div style="margin-bottom:6px;padding-right:4px;overflow:hidden">
-      <a href="/Macaca_mulatta/Info/Index" title="Macaca mulatta Ensembl Home page" style="float:left"/>
-        <img src="/i/species/48/Macaca_mulatta.png" alt="Macaca mulatta" class="sp-thumb" style="margin-right:4px;vertical-align:middle" />
-      </a>
-      <div style="float:left">
-        <div style="font-style:italic;font-weight:bold;margin-bottom:3px">Macaca mulatta</div>
-        <div>> 3 millions variants</div>
-        <span><a href="sources_documentation.html#macaca_mulatta">[sources]</a></span>
+    </td>
+    <td>> 64 millions variants</td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+  </tr>
+  <tr>
+    <td>
+      <div>
+        <div style="float:left;vertical-align:middle;margin-right:4px">
+          <a rel="external" href="/Macaca_mulatta/Info/Index" title="Macaca mulatta Ensembl Home page" style="vertical-align:middle">
+            <img src="/i/species/48/Macaca_mulatta.png" alt="Macaca mulatta" class="sp-thumb" style="vertical-align:middle;width:32px;height:32px" />
+          </a>
+        </div>
+        <div style="float:left;margin-top:0px">
+          <div class="bigtext" style="font-style:italic;margin-bottom:2px">Macaca mulatta</div>
+          <div><a href="sources_documentation.html#macaca_mulatta" style="text-decoration:none" title="Macaca mulatta sources list">[sources]</a></div>
+        </div>
+        <div style="clear:both"></div>
       </div>
-    </div>
-
-    <div style="margin-bottom:6px;padding-right:4px;overflow:hidden">
-      <a href="/Meleagris_gallopavo/Info/Index" title="Meleagris gallopavo Ensembl Home page" style="float:left"/>
-        <img src="/i/species/48/Meleagris_gallopavo.png" alt="Meleagris gallopavo" class="sp-thumb" style="margin-right:4px;vertical-align:middle" />
-      </a>
-      <div style="float:left">
-        <div style="font-style:italic;font-weight:bold;margin-bottom:3px">Meleagris gallopavo</div>
-        <div>> 9,000 variants</div>
-        <span><a href="sources_documentation.html#meleagris_gallopavo">[sources]</a></span>
+    </td>
+    <td>> 3 millions variants</td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+  </tr>
+  <tr class="bg2">
+    <td>
+      <div>
+        <div style="float:left;vertical-align:middle;margin-right:4px">
+          <a rel="external" href="/Meleagris_gallopavo/Info/Index" title="Meleagris gallopavo Ensembl Home page" style="vertical-align:middle">
+            <img src="/i/species/48/Meleagris_gallopavo.png" alt="Meleagris gallopavo" class="sp-thumb" style="vertical-align:middle;width:32px;height:32px" />
+          </a>
+        </div>
+        <div style="float:left;margin-top:0px">
+          <div class="bigtext" style="font-style:italic;margin-bottom:2px">Meleagris gallopavo</div>
+          <div><a href="sources_documentation.html#meleagris_gallopavo" style="text-decoration:none" title="Meleagris gallopavo sources list">[sources]</a></div>
+        </div>
+        <div style="clear:both"></div>
       </div>
-    </div>
-
-    <div style="margin-bottom:6px;padding-right:4px;overflow:hidden">
-      <a href="/Monodelphis_domestica/Info/Index" title="Monodelphis domestica Ensembl Home page" style="float:left"/>
-        <img src="/i/species/48/Monodelphis_domestica.png" alt="Monodelphis domestica" class="sp-thumb" style="margin-right:4px;vertical-align:middle" />
-      </a>
-      <div style="float:left">
-        <div style="font-style:italic;font-weight:bold;margin-bottom:3px">Monodelphis domestica</div>
-        <div>> 1 million variants</div>
-        <span><a href="sources_documentation.html#monodelphis_domestica">[sources]</a></span>
+    </td>
+    <td>> 9,000 variants</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+  </tr>
+  <tr>
+    <td>
+      <div>
+        <div style="float:left;vertical-align:middle;margin-right:4px">
+          <a rel="external" href="/Monodelphis_domestica/Info/Index" title="Monodelphis domestica Ensembl Home page" style="vertical-align:middle">
+            <img src="/i/species/48/Monodelphis_domestica.png" alt="Monodelphis domestica" class="sp-thumb" style="vertical-align:middle;width:32px;height:32px" />
+          </a>
+        </div>
+        <div style="float:left;margin-top:0px">
+          <div class="bigtext" style="font-style:italic;margin-bottom:2px">Monodelphis domestica</div>
+          <div><a href="sources_documentation.html#monodelphis_domestica" style="text-decoration:none" title="Monodelphis domestica sources list">[sources]</a></div>
+        </div>
+        <div style="clear:both"></div>
       </div>
-    </div>
-
-    <div style="margin-bottom:6px;padding-right:4px;overflow:hidden">
-      <a href="/Mus_musculus/Info/Index" title="Mus musculus Ensembl Home page" style="float:left"/>
-        <img src="/i/species/48/Mus_musculus.png" alt="Mus musculus" class="sp-thumb" style="margin-right:4px;vertical-align:middle" />
-      </a>
-      <div style="float:left">
-        <div style="font-style:italic;font-weight:bold;margin-bottom:3px">Mus musculus</div>
-        <div>> 71 millions variants</div>
-        <span><a href="sources_documentation.html#mus_musculus">[sources]</a></span>
+    </td>
+    <td>> 1 million variants</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+  </tr>
+  <tr class="bg2">
+    <td>
+      <div>
+        <div style="float:left;vertical-align:middle;margin-right:4px">
+          <a rel="external" href="/Mus_musculus/Info/Index" title="Mus musculus Ensembl Home page" style="vertical-align:middle">
+            <img src="/i/species/48/Mus_musculus.png" alt="Mus musculus" class="sp-thumb" style="vertical-align:middle;width:32px;height:32px" />
+          </a>
+        </div>
+        <div style="float:left;margin-top:0px">
+          <div class="bigtext" style="font-style:italic;margin-bottom:2px">Mus musculus</div>
+          <div><a href="sources_documentation.html#mus_musculus" style="text-decoration:none" title="Mus musculus sources list">[sources]</a></div>
+        </div>
+        <div style="clear:both"></div>
       </div>
-    </div>
-
-  </td>
-  <td style="width:8px"></td>
-  <td>
-
-    <div style="margin-bottom:6px;padding-right:4px;overflow:hidden">
-      <a href="/Nomascus_leucogenys/Info/Index" title="Nomascus leucogenys Ensembl Home page" style="float:left"/>
-        <img src="/i/species/48/Nomascus_leucogenys.png" alt="Nomascus leucogenys" class="sp-thumb" style="margin-right:4px;vertical-align:middle" />
-      </a>
-      <div style="float:left">
-        <div style="font-style:italic;font-weight:bold;margin-bottom:3px">Nomascus leucogenys</div>
-        <div>> 1 million variants</div>
-        <span><a href="sources_documentation.html#nomascus_leucogenys">[sources]</a></span>
+    </td>
+    <td>> 71 millions variants</td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center">-</td>
+  </tr>
+  <tr>
+    <td>
+      <div>
+        <div style="float:left;vertical-align:middle;margin-right:4px">
+          <a rel="external" href="/Nomascus_leucogenys/Info/Index" title="Nomascus leucogenys Ensembl Home page" style="vertical-align:middle">
+            <img src="/i/species/48/Nomascus_leucogenys.png" alt="Nomascus leucogenys" class="sp-thumb" style="vertical-align:middle;width:32px;height:32px" />
+          </a>
+        </div>
+        <div style="float:left;margin-top:0px">
+          <div class="bigtext" style="font-style:italic;margin-bottom:2px">Nomascus leucogenys</div>
+          <div><a href="sources_documentation.html#nomascus_leucogenys" style="text-decoration:none" title="Nomascus leucogenys sources list">[sources]</a></div>
+        </div>
+        <div style="clear:both"></div>
       </div>
-    </div>
-
-    <div style="margin-bottom:6px;padding-right:4px;overflow:hidden">
-      <a href="/Ornithorhynchus_anatinus/Info/Index" title="Ornithorhynchus anatinus Ensembl Home page" style="float:left"/>
-        <img src="/i/species/48/Ornithorhynchus_anatinus.png" alt="Ornithorhynchus anatinus" class="sp-thumb" style="margin-right:4px;vertical-align:middle" />
-      </a>
-      <div style="float:left">
-        <div style="font-style:italic;font-weight:bold;margin-bottom:3px">Ornithorhynchus anatinus</div>
-        <div>> 1 million variants</div>
-        <span><a href="sources_documentation.html#ornithorhynchus_anatinus">[sources]</a></span>
+    </td>
+    <td>> 1 million variants</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+  </tr>
+  <tr class="bg2">
+    <td>
+      <div>
+        <div style="float:left;vertical-align:middle;margin-right:4px">
+          <a rel="external" href="/Ornithorhynchus_anatinus/Info/Index" title="Ornithorhynchus anatinus Ensembl Home page" style="vertical-align:middle">
+            <img src="/i/species/48/Ornithorhynchus_anatinus.png" alt="Ornithorhynchus anatinus" class="sp-thumb" style="vertical-align:middle;width:32px;height:32px" />
+          </a>
+        </div>
+        <div style="float:left;margin-top:0px">
+          <div class="bigtext" style="font-style:italic;margin-bottom:2px">Ornithorhynchus anatinus</div>
+          <div><a href="sources_documentation.html#ornithorhynchus_anatinus" style="text-decoration:none" title="Ornithorhynchus anatinus sources list">[sources]</a></div>
+        </div>
+        <div style="clear:both"></div>
       </div>
-    </div>
-
-    <div style="margin-bottom:6px;padding-right:4px;overflow:hidden">
-      <a href="/Ovis_aries/Info/Index" title="Ovis aries Ensembl Home page" style="float:left"/>
-        <img src="/i/species/48/Ovis_aries.png" alt="Ovis aries" class="sp-thumb" style="margin-right:4px;vertical-align:middle" />
-      </a>
-      <div style="float:left">
-        <div style="font-style:italic;font-weight:bold;margin-bottom:3px">Ovis aries</div>
-        <div>> 32 millions variants</div>
-        <span><a href="sources_documentation.html#ovis_aries">[sources]</a></span>
+    </td>
+    <td>> 1 million variants</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+  </tr>
+  <tr>
+    <td>
+      <div>
+        <div style="float:left;vertical-align:middle;margin-right:4px">
+          <a rel="external" href="/Ovis_aries/Info/Index" title="Ovis aries Ensembl Home page" style="vertical-align:middle">
+            <img src="/i/species/48/Ovis_aries.png" alt="Ovis aries" class="sp-thumb" style="vertical-align:middle;width:32px;height:32px" />
+          </a>
+        </div>
+        <div style="float:left;margin-top:0px">
+          <div class="bigtext" style="font-style:italic;margin-bottom:2px">Ovis aries</div>
+          <div><a href="sources_documentation.html#ovis_aries" style="text-decoration:none" title="Ovis aries sources list">[sources]</a></div>
+        </div>
+        <div style="clear:both"></div>
       </div>
-    </div>
-
-    <div style="margin-bottom:6px;padding-right:4px;overflow:hidden">
-      <a href="/Pan_troglodytes/Info/Index" title="Pan troglodytes Ensembl Home page" style="float:left"/>
-        <img src="/i/species/48/Pan_troglodytes.png" alt="Pan troglodytes" class="sp-thumb" style="margin-right:4px;vertical-align:middle" />
-      </a>
-      <div style="float:left">
-        <div style="font-style:italic;font-weight:bold;margin-bottom:3px">Pan troglodytes</div>
-        <div>> 1 million variants</div>
-        <span><a href="sources_documentation.html#pan_troglodytes">[sources]</a></span>
+    </td>
+    <td>> 32 millions variants</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center">-</td>
+  </tr>
+  <tr class="bg2">
+    <td>
+      <div>
+        <div style="float:left;vertical-align:middle;margin-right:4px">
+          <a rel="external" href="/Pan_troglodytes/Info/Index" title="Pan troglodytes Ensembl Home page" style="vertical-align:middle">
+            <img src="/i/species/48/Pan_troglodytes.png" alt="Pan troglodytes" class="sp-thumb" style="vertical-align:middle;width:32px;height:32px" />
+          </a>
+        </div>
+        <div style="float:left;margin-top:0px">
+          <div class="bigtext" style="font-style:italic;margin-bottom:2px">Pan troglodytes</div>
+          <div><a href="sources_documentation.html#pan_troglodytes" style="text-decoration:none" title="Pan troglodytes sources list">[sources]</a></div>
+        </div>
+        <div style="clear:both"></div>
       </div>
-    </div>
-
-    <div style="margin-bottom:6px;padding-right:4px;overflow:hidden">
-      <a href="/Pongo_abelii/Info/Index" title="Pongo abelii Ensembl Home page" style="float:left"/>
-        <img src="/i/species/48/Pongo_abelii.png" alt="Pongo abelii" class="sp-thumb" style="margin-right:4px;vertical-align:middle" />
-      </a>
-      <div style="float:left">
-        <div style="font-style:italic;font-weight:bold;margin-bottom:3px">Pongo abelii</div>
-        <div>> 10 millions variants</div>
-        <span><a href="sources_documentation.html#pongo_abelii">[sources]</a></span>
+    </td>
+    <td>> 1 million variants</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+  </tr>
+  <tr>
+    <td>
+      <div>
+        <div style="float:left;vertical-align:middle;margin-right:4px">
+          <a rel="external" href="/Pongo_abelii/Info/Index" title="Pongo abelii Ensembl Home page" style="vertical-align:middle">
+            <img src="/i/species/48/Pongo_abelii.png" alt="Pongo abelii" class="sp-thumb" style="vertical-align:middle;width:32px;height:32px" />
+          </a>
+        </div>
+        <div style="float:left;margin-top:0px">
+          <div class="bigtext" style="font-style:italic;margin-bottom:2px">Pongo abelii</div>
+          <div><a href="sources_documentation.html#pongo_abelii" style="text-decoration:none" title="Pongo abelii sources list">[sources]</a></div>
+        </div>
+        <div style="clear:both"></div>
       </div>
-    </div>
-
-    <div style="margin-bottom:6px;padding-right:4px;overflow:hidden">
-      <a href="/Rattus_norvegicus/Info/Index" title="Rattus norvegicus Ensembl Home page" style="float:left"/>
-        <img src="/i/species/48/Rattus_norvegicus.png" alt="Rattus norvegicus" class="sp-thumb" style="margin-right:4px;vertical-align:middle" />
-      </a>
-      <div style="float:left">
-        <div style="font-style:italic;font-weight:bold;margin-bottom:3px">Rattus norvegicus</div>
-        <div>> 5 millions variants</div>
-        <span><a href="sources_documentation.html#rattus_norvegicus">[sources]</a></span>
+    </td>
+    <td>> 10 millions variants</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+  </tr>
+  <tr class="bg2">
+    <td>
+      <div>
+        <div style="float:left;vertical-align:middle;margin-right:4px">
+          <a rel="external" href="/Rattus_norvegicus/Info/Index" title="Rattus norvegicus Ensembl Home page" style="vertical-align:middle">
+            <img src="/i/species/48/Rattus_norvegicus.png" alt="Rattus norvegicus" class="sp-thumb" style="vertical-align:middle;width:32px;height:32px" />
+          </a>
+        </div>
+        <div style="float:left;margin-top:0px">
+          <div class="bigtext" style="font-style:italic;margin-bottom:2px">Rattus norvegicus</div>
+          <div><a href="sources_documentation.html#rattus_norvegicus" style="text-decoration:none" title="Rattus norvegicus sources list">[sources]</a></div>
+        </div>
+        <div style="clear:both"></div>
       </div>
-    </div>
-
-  </td>
-  <td style="width:8px"></td>
-  <td>
-
-    <div style="margin-bottom:6px;padding-right:4px;overflow:hidden">
-      <a href="/Saccharomyces_cerevisiae/Info/Index" title="Saccharomyces cerevisiae Ensembl Home page" style="float:left"/>
-        <img src="/i/species/48/Saccharomyces_cerevisiae.png" alt="Saccharomyces cerevisiae" class="sp-thumb" style="margin-right:4px;vertical-align:middle" />
-      </a>
-      <div style="float:left">
-        <div style="font-style:italic;font-weight:bold;margin-bottom:3px">Saccharomyces cerevisiae</div>
-        <div>> 263,000 variants</div>
-        <span><a href="sources_documentation.html#saccharomyces_cerevisiae">[sources]</a></span>
+    </td>
+    <td>> 5 millions variants</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center">-</td>
+  </tr>
+  <tr>
+    <td>
+      <div>
+        <div style="float:left;vertical-align:middle;margin-right:4px">
+          <a rel="external" href="/Saccharomyces_cerevisiae/Info/Index" title="Saccharomyces cerevisiae Ensembl Home page" style="vertical-align:middle">
+            <img src="/i/species/48/Saccharomyces_cerevisiae.png" alt="Saccharomyces cerevisiae" class="sp-thumb" style="vertical-align:middle;width:32px;height:32px" />
+          </a>
+        </div>
+        <div style="float:left;margin-top:0px">
+          <div class="bigtext" style="font-style:italic;margin-bottom:2px">Saccharomyces cerevisiae</div>
+          <div><a href="sources_documentation.html#saccharomyces_cerevisiae" style="text-decoration:none" title="Saccharomyces cerevisiae sources list">[sources]</a></div>
+        </div>
+        <div style="clear:both"></div>
       </div>
-    </div>
-
-    <div style="margin-bottom:6px;padding-right:4px;overflow:hidden">
-      <a href="/Sus_scrofa/Info/Index" title="Sus scrofa Ensembl Home page" style="float:left"/>
-        <img src="/i/species/48/Sus_scrofa.png" alt="Sus scrofa" class="sp-thumb" style="margin-right:4px;vertical-align:middle" />
-      </a>
-      <div style="float:left">
-        <div style="font-style:italic;font-weight:bold;margin-bottom:3px">Sus scrofa</div>
-        <div>> 28 millions variants</div>
-        <span><a href="sources_documentation.html#sus_scrofa">[sources]</a></span>
+    </td>
+    <td>> 263,000 variants</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+  </tr>
+  <tr class="bg2">
+    <td>
+      <div>
+        <div style="float:left;vertical-align:middle;margin-right:4px">
+          <a rel="external" href="/Sus_scrofa/Info/Index" title="Sus scrofa Ensembl Home page" style="vertical-align:middle">
+            <img src="/i/species/48/Sus_scrofa.png" alt="Sus scrofa" class="sp-thumb" style="vertical-align:middle;width:32px;height:32px" />
+          </a>
+        </div>
+        <div style="float:left;margin-top:0px">
+          <div class="bigtext" style="font-style:italic;margin-bottom:2px">Sus scrofa</div>
+          <div><a href="sources_documentation.html#sus_scrofa" style="text-decoration:none" title="Sus scrofa sources list">[sources]</a></div>
+        </div>
+        <div style="clear:both"></div>
       </div>
-    </div>
-
-    <div style="margin-bottom:6px;padding-right:4px;overflow:hidden">
-      <a href="/Taeniopygia_guttata/Info/Index" title="Taeniopygia guttata Ensembl Home page" style="float:left"/>
-        <img src="/i/species/48/Taeniopygia_guttata.png" alt="Taeniopygia guttata" class="sp-thumb" style="margin-right:4px;vertical-align:middle" />
-      </a>
-      <div style="float:left">
-        <div style="font-style:italic;font-weight:bold;margin-bottom:3px">Taeniopygia guttata</div>
-        <div>> 1 million variants</div>
-        <span><a href="sources_documentation.html#taeniopygia_guttata">[sources]</a></span>
+    </td>
+    <td>> 28 millions variants</td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center">-</td>
+  </tr>
+  <tr>
+    <td>
+      <div>
+        <div style="float:left;vertical-align:middle;margin-right:4px">
+          <a rel="external" href="/Taeniopygia_guttata/Info/Index" title="Taeniopygia guttata Ensembl Home page" style="vertical-align:middle">
+            <img src="/i/species/48/Taeniopygia_guttata.png" alt="Taeniopygia guttata" class="sp-thumb" style="vertical-align:middle;width:32px;height:32px" />
+          </a>
+        </div>
+        <div style="float:left;margin-top:0px">
+          <div class="bigtext" style="font-style:italic;margin-bottom:2px">Taeniopygia guttata</div>
+          <div><a href="sources_documentation.html#taeniopygia_guttata" style="text-decoration:none" title="Taeniopygia guttata sources list">[sources]</a></div>
+        </div>
+        <div style="clear:both"></div>
       </div>
-    </div>
-
-    <div style="margin-bottom:6px;padding-right:4px;overflow:hidden">
-      <a href="/Tetraodon_nigroviridis/Info/Index" title="Tetraodon nigroviridis Ensembl Home page" style="float:left"/>
-        <img src="/i/species/48/Tetraodon_nigroviridis.png" alt="Tetraodon nigroviridis" class="sp-thumb" style="margin-right:4px;vertical-align:middle" />
-      </a>
-      <div style="float:left">
-        <div style="font-style:italic;font-weight:bold;margin-bottom:3px">Tetraodon nigroviridis</div>
-        <div>> 902,000 variants</div>
-        <span><a href="sources_documentation.html#tetraodon_nigroviridis">[sources]</a></span>
+    </td>
+    <td>> 1 million variants</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+  </tr>
+  <tr class="bg2">
+    <td>
+      <div>
+        <div style="float:left;vertical-align:middle;margin-right:4px">
+          <a rel="external" href="/Tetraodon_nigroviridis/Info/Index" title="Tetraodon nigroviridis Ensembl Home page" style="vertical-align:middle">
+            <img src="/i/species/48/Tetraodon_nigroviridis.png" alt="Tetraodon nigroviridis" class="sp-thumb" style="vertical-align:middle;width:32px;height:32px" />
+          </a>
+        </div>
+        <div style="float:left;margin-top:0px">
+          <div class="bigtext" style="font-style:italic;margin-bottom:2px">Tetraodon nigroviridis</div>
+          <div><a href="sources_documentation.html#tetraodon_nigroviridis" style="text-decoration:none" title="Tetraodon nigroviridis sources list">[sources]</a></div>
+        </div>
+        <div style="clear:both"></div>
       </div>
-    </div>
-</td></tr></table>
+    </td>
+    <td>> 902,000 variants</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+  </tr></table>
 <p style="padding-top:5px">The <b>full list of species</b> and their assembly versions in Ensembl is available <a href="/info/about/species.html">here</a>.</p>
 
 <br />
@@ -377,31 +678,8 @@ API</a> (<a href="/info/docs/api/variation/index.html"
 class="cp-external">variation API</a>).
 </p>
 
-<h2 id="datatypes">Data types</h2>
-<p>
-The Ensembl Variation database stores data imported from external sources and also data calculated on site.
-</p>
-
-<ul>
-  <li><b>Data imported</b> from external sources (dbSNP, Sanger, DGVa, ...):
-    <ul>
-      <li>Variations <i>(SNPs, in-dels, insertion, deletion, ...)</i></li>
-      <li>Structural variations <i>(copy number variation, tandem duplication, inversion, ...)</i></li>
-      <li>Probes for copy number variations</li>
-      <li>Locations for variations and structural variations</li>
-      <li>Alleles</li>
-      <li>Populations</li>
-      <li>Genotypes</li>
-      <li>Phenotypes (e.g. <a href="/Homo_sapiens/Phenotype/All">list of phenotypes in human</a>)</li>
-      <li>Citations (extracted from dbSNP submissions and text mining performed by <a href="http://europepmc.org/" >EPMC</a> and <a href="http://text.soe.ucsc.edu/">UCSC</a>)</li>
-    </ul>
-  </li>
-  <li><b>Calculated data</b>: see the <a href="predicted_data.html">Predicted data page</a>.</li>
-</ul>
-
 
 <br />
-
 <h2 id="classes">Variation classes</h2>
 
 <p>
@@ -441,17 +719,29 @@ somatic mutations from germline variations in the display term, prefixing the te
 
   <tr class="bg2">
     <td rowspan="2" style="padding:0px;margin:0px"></td>
+    <td rowspan="2">genetic_marker</td>
+    <td rowspan="2">A measurable sequence feature that varies within a population.</td>
+    <td rowspan="2"><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001645">SO:0001645</a></td>
+    <td>genetic_marker</td>
+    <td rowspan="2">Variation</td>
+  </tr>
+  <tr class="bg2">
+    <td>somatic_genetic_marker</td>
+  </tr>
+
+  <tr>
+    <td rowspan="2" style="padding:0px;margin:0px"></td>
     <td rowspan="2">indel</td>
     <td rowspan="2">A sequence alteration which included an insertion and a deletion, affecting 2 or more bases.</td>
     <td rowspan="2"><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:1000032">SO:1000032</a></td>
     <td>indel</td>
     <td rowspan="2">Variation</td>
   </tr>
-  <tr class="bg2">
+  <tr>
     <td>somatic_indel</td>
   </tr>
 
-  <tr>
+  <tr class="bg2">
     <td rowspan="2" style="padding:0px;margin:0px"></td>
     <td rowspan="2">substitution</td>
     <td rowspan="2">A sequence alteration where the length of the change in the variant is the same as that of the reference.</td>
@@ -459,11 +749,11 @@ somatic mutations from germline variations in the display term, prefixing the te
     <td>substitution</td>
     <td rowspan="2">Variation</td>
   </tr>
-  <tr>
+  <tr class="bg2">
     <td>somatic_substitution</td>
   </tr>
 
-  <tr class="bg2">
+  <tr>
     <td rowspan="2" style="padding:0px;margin:0px"></td>
     <td rowspan="2">tandem_repeat</td>
     <td rowspan="2">Two or more adjcent copies of a region (of length greater than 1).</td>
@@ -471,11 +761,11 @@ somatic mutations from germline variations in the display term, prefixing the te
     <td>tandem_repeat</td>
     <td rowspan="2">Variation</td>
   </tr>
-  <tr class="bg2">
+  <tr>
     <td>somatic_tandem_repeat</td>
   </tr>
 
-  <tr>
+  <tr class="bg2">
     <td rowspan="2" style="padding:0px;margin:0px;background-color:#99CCFF;border-top:1px solid #FFF"></td>
     <td rowspan="2">complex_structural_alteration</td>
     <td rowspan="2">A structural sequence alteration or rearrangement encompassing one or more genome fragments.</td>
@@ -483,11 +773,11 @@ somatic mutations from germline variations in the display term, prefixing the te
     <td>Complex</td>
     <td rowspan="2">Structural variation</td>
   </tr>
-  <tr>
+  <tr class="bg2">
     <td>somatic_Complex</td>
   </tr>
 
-  <tr class="bg2">
+  <tr>
     <td rowspan="2" style="padding:0px;margin:0px;background-color:#0000CC;border-top:1px solid #FFF"></td>
     <td rowspan="2">copy_number_gain</td>
     <td rowspan="2">A sequence alteration whereby the copy number of a given regions is greater than the reference sequence.</td>
@@ -495,11 +785,11 @@ somatic mutations from germline variations in the display term, prefixing the te
     <td>Gain</td>
     <td rowspan="2">Structural variation</td>
   </tr>
-  <tr class="bg2">
+  <tr>
     <td>somatic_Gain</td>
   </tr>
 
-  <tr>
+  <tr class="bg2">
     <td rowspan="2" style="padding:0px;margin:0px;background-color:#CC0000;border-top:1px solid #FFF"></td>
     <td rowspan="2">copy_number_loss</td>
     <td rowspan="2">A sequence alteration whereby the copy number of a given region is less than the reference sequence.</td>
@@ -507,11 +797,11 @@ somatic mutations from germline variations in the display term, prefixing the te
     <td>Loss</td>
     <td rowspan="2">Structural variation</td>
   </tr>
-  <tr>
+  <tr class="bg2">
     <td>somatic_Loss</td>
   </tr>
 
-  <tr class="bg2">
+  <tr>
     <td rowspan="2" style="padding:0px;margin:0px;background-color:#000000;border-top:1px solid #FFF"></td>
     <td rowspan="2">copy_number_variation</td>
     <td rowspan="2">A variation that increases or decreases the copy number of a given region.</td>
@@ -519,11 +809,11 @@ somatic mutations from germline variations in the display term, prefixing the te
     <td>CNV</td>
     <td rowspan="2">Structural variation</td>
   </tr>
-  <tr class="bg2">
+  <tr>
     <td>somatic_CNV</td>
   </tr>
 
-  <tr>
+  <tr class="bg2">
     <td rowspan="2" style="padding:0px;margin:0px;background-color:#000000;border-top:1px solid #FFF"></td>
     <td rowspan="2">duplication</td>
     <td rowspan="2">An insertion which derives from, or is identical in sequence to, nucleotides present at a known location in the genome.</td>
@@ -531,11 +821,11 @@ somatic mutations from germline variations in the display term, prefixing the te
     <td>Duplication</td>
     <td rowspan="2">Structural variation</td>
   </tr>
-  <tr>
+  <tr class="bg2">
     <td>somatic_Duplication</td>
   </tr>
 
-  <tr class="bg2">
+  <tr>
     <td rowspan="2" style="padding:0px;margin:0px;background-color:#B2B2B2;border-top:1px solid #FFF"></td>
     <td rowspan="2">interchromosomal_breakpoint</td>
     <td rowspan="2">A rearrangement breakpoint between two different chromosomes.</td>
@@ -543,11 +833,11 @@ somatic mutations from germline variations in the display term, prefixing the te
     <td>Interchromosomal breakpoint</td>
     <td rowspan="2">Structural variation</td>
   </tr>
-  <tr class="bg2">
+  <tr>
     <td>somatic_Interchromosomal breakpoint</td>
   </tr>
 
-  <tr>
+  <tr class="bg2">
     <td rowspan="2" style="padding:0px;margin:0px;background-color:#B2B2B2;border-top:1px solid #FFF"></td>
     <td rowspan="2">intrachromosomal_breakpoint</td>
     <td rowspan="2">A rearrangement breakpoint within the same chromosome.</td>
@@ -555,11 +845,11 @@ somatic mutations from germline variations in the display term, prefixing the te
     <td>Intrachromosomal breakpoint</td>
     <td rowspan="2">Structural variation</td>
   </tr>
-  <tr>
+  <tr class="bg2">
     <td>somatic_Intrachromosomal breakpoint</td>
   </tr>
 
-  <tr class="bg2">
+  <tr>
     <td rowspan="2" style="padding:0px;margin:0px;background-color:#9933FF;border-top:1px solid #FFF"></td>
     <td rowspan="2">inversion</td>
     <td rowspan="2">A continuous nucleotide sequence is inverted in the same position.</td>
@@ -567,11 +857,11 @@ somatic mutations from germline variations in the display term, prefixing the te
     <td>inversion</td>
     <td rowspan="2">Structural variation</td>
   </tr>
-  <tr class="bg2">
+  <tr>
     <td>somatic_inversion</td>
   </tr>
 
-  <tr>
+  <tr class="bg2">
     <td rowspan="2" style="padding:0px;margin:0px;background-color:#FFCC00;border-top:1px solid #FFF"></td>
     <td rowspan="2">mobile_element_insertion</td>
     <td rowspan="2">A kind of insertion where the inserted sequence is a mobile element.</td>
@@ -579,11 +869,11 @@ somatic mutations from germline variations in the display term, prefixing the te
     <td>Mobile element insertion</td>
     <td rowspan="2">Structural variation</td>
   </tr>
-  <tr>
+  <tr class="bg2">
     <td>somatic_Mobile element insertion</td>
   </tr>
 
-  <tr class="bg2">
+  <tr>
     <td rowspan="2" style="padding:0px;margin:0px;background-color:#FFCC00;border-top:1px solid #FFF"></td>
     <td rowspan="2">novel_sequence_insertion</td>
     <td rowspan="2">An insertion the sequence of which cannot be mapped to the reference genome.</td>
@@ -591,11 +881,11 @@ somatic mutations from germline variations in the display term, prefixing the te
     <td>Novel sequence insertion</td>
     <td rowspan="2">Structural variation</td>
   </tr>
-  <tr class="bg2">
+  <tr>
     <td>somatic_Novel sequence insertion</td>
   </tr>
 
-  <tr>
+  <tr class="bg2">
     <td rowspan="2" style="padding:0px;margin:0px;background-color:#732E00;border-top:1px solid #FFF"></td>
     <td rowspan="2">tandem_duplication</td>
     <td rowspan="2">A duplication consisting of 2 identical adjacent regions.</td>
@@ -603,11 +893,11 @@ somatic mutations from germline variations in the display term, prefixing the te
     <td>Tandem duplication</td>
     <td rowspan="2">Structural variation</td>
   </tr>
-  <tr>
+  <tr class="bg2">
     <td>somatic_Tandem duplication</td>
   </tr>
 
-  <tr class="bg2">
+  <tr>
     <td rowspan="2" style="padding:0px;margin:0px;background-color:#C3A4FF;border-top:1px solid #FFF"></td>
     <td rowspan="2">translocation</td>
     <td rowspan="2">A region of nucleotide sequence that has translocated to a new position.</td>
@@ -615,11 +905,11 @@ somatic mutations from germline variations in the display term, prefixing the te
     <td>translocation</td>
     <td rowspan="2">Structural variation</td>
   </tr>
-  <tr class="bg2">
+  <tr>
     <td>somatic_translocation</td>
   </tr>
 
-  <tr>
+  <tr class="bg2">
     <td rowspan="2" style="padding:0px;margin:0px;background-color:#CC0000;border-top:1px solid #FFF"></td>
     <td rowspan="2">deletion</td>
     <td rowspan="2">The point at which one or more contiguous nucleotides were excised.</td>
@@ -627,11 +917,11 @@ somatic mutations from germline variations in the display term, prefixing the te
     <td>deletion</td>
     <td rowspan="2">Variation<br />Structural variation</td>
   </tr>
-  <tr>
+  <tr class="bg2">
     <td>somatic_deletion</td>
   </tr>
 
-  <tr class="bg2">
+  <tr>
     <td rowspan="2" style="padding:0px;margin:0px;background-color:#FFCC00;border-top:1px solid #FFF"></td>
     <td rowspan="2">insertion</td>
     <td rowspan="2">The sequence of one or more nucleotides added between two adjacent nucleotides in the sequence.</td>
@@ -639,11 +929,11 @@ somatic mutations from germline variations in the display term, prefixing the te
     <td>insertion</td>
     <td rowspan="2">Variation<br />Structural variation</td>
   </tr>
-  <tr class="bg2">
+  <tr>
     <td>somatic_insertion</td>
   </tr>
 
-  <tr>
+  <tr class="bg2">
     <td rowspan="2" style="padding:0px;margin:0px;background-color:#B2B2B2;border-top:1px solid #FFF"></td>
     <td rowspan="2">sequence_alteration</td>
     <td rowspan="2">A sequence_alteration is a sequence_feature whose extent is the deviation from another sequence.</td>
@@ -651,11 +941,11 @@ somatic mutations from germline variations in the display term, prefixing the te
     <td>sequence_alteration</td>
     <td rowspan="2">Variation<br />Structural variation</td>
   </tr>
-  <tr>
+  <tr class="bg2">
     <td>somatic_sequence_alteration</td>
   </tr>
 
-  <tr class="bg2">
+  <tr>
     <td style="padding:0px;margin:0px;background-color:#4682B4;border-top:1px solid #FFF"></td>
     <td>probe</td>
     <td>A DNA sequence used experimentally to detect the presence or absence of a complementary nucleic acid.</td>
@@ -674,14 +964,14 @@ The colours are based on the <a rel="external" href="http://www.ncbi.nlm.nih.gov
   <input class="graph_config" type="hidden" name="legendpos" value="'east'" />
   <input class="graph_dimensions" type="hidden" value="[90,80,80]" />
   
-  <input type="hidden" class="graph_data" value="[[56178765,'SNV'],[3582995,'insertion'],[3392047,'deletion'],[645068,'sequence_alteration'],[402187,'indel'],[112153,'substitution'],[4770,'tandem_repeat']]" />
+  <input type="hidden" class="graph_data" value="[[56166900,'SNV'],[3582636,'insertion'],[3391917,'deletion'],[647616,'sequence_alteration'],[403273,'indel'],[113801,'substitution'],[6944,'genetic_marker'],[4822,'tandem_repeat']]" />
   
   <div class="pie_chart_classes" title="classes" style="width:400px;height:220px;border:1px solid #CCC;border-radius:8px;box-shadow:0 1px 3px #666">
-     <h3 style="padding:10px 10px 5px">Human Variation class distribution - Ensembl 76</h4>
+     <h3 style="padding:10px 10px 5px">Human Variation class distribution - Ensembl 77</h4>
      <div id="graphHolder0"></div>
   </div>
 </div>
-   
+  
  
 <br />
 <h2 id="indel">Insertion and Deletion coordinates </h2>
@@ -1276,8 +1566,8 @@ variation sets in the Ensembl variation database (subsets are indicated by bulle
   <tr class="bg2"><td style="text-align:center"><img src="/i/val/clinsig_benign.png" title="benign"/></td><td>benign</td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Explore?v=rs328">rs328</a></td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/StructuralVariation/Evidence?sv=nsv491526">nsv491526</a></td></tr>
   <tr><td style="text-align:center"><img src="/i/val/clinsig_confers-sensitivity.png" title="confers sensitivity"/></td><td>confers sensitivity</td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Explore?v=rs1799853">rs1799853</a></td><td style="border-left:1px solid #BBB">-</td></tr>
   <tr class="bg2"><td style="text-align:center"><img src="/i/val/clinsig_drug-response.png" title="drug response"/></td><td>drug response</td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Explore?v=rs671">rs671</a></td><td style="border-left:1px solid #BBB">-</td></tr>
-  <tr><td style="text-align:center"><img src="/i/val/clinsig_likely-benign.png" title="likely benign"/></td><td>likely benign</td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Explore?v=rs140591">rs140591</a></td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/StructuralVariation/Evidence?sv=nsv917620">nsv917620</a></td></tr>
-  <tr class="bg2"><td style="text-align:center"><img src="/i/val/clinsig_likely-pathogenic.png" title="likely pathogenic"/></td><td>likely pathogenic</td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Explore?v=rs363853">rs363853</a></td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/StructuralVariation/Evidence?sv=esv1791726">esv1791726</a></td></tr>
+  <tr><td style="text-align:center"><img src="/i/val/clinsig_likely-benign.png" title="likely benign"/></td><td>likely benign</td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Explore?v=rs693">rs693</a></td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/StructuralVariation/Evidence?sv=nsv917620">nsv917620</a></td></tr>
+  <tr class="bg2"><td style="text-align:center"><img src="/i/val/clinsig_likely-pathogenic.png" title="likely pathogenic"/></td><td>likely pathogenic</td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Explore?v=rs140603">rs140603</a></td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/StructuralVariation/Evidence?sv=esv1791726">esv1791726</a></td></tr>
   <tr><td style="text-align:center"><img src="/i/val/clinsig_not-provided.png" title="not provided"/></td><td>not provided</td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Explore?v=rs661">rs661</a></td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/StructuralVariation/Evidence?sv=nsv508007">nsv508007</a></td></tr>
   <tr class="bg2"><td style="text-align:center"><img src="/i/val/clinsig_other.png" title="other"/></td><td>other</td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Explore?v=rs4220">rs4220</a></td><td style="border-left:1px solid #BBB">-</td></tr>
   <tr><td style="text-align:center"><img src="/i/val/clinsig_pathogenic.png" title="pathogenic"/></td><td>pathogenic</td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Explore?v=rs268">rs268</a></td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/StructuralVariation/Evidence?sv=esv2830397">esv2830397</a></td></tr>
@@ -1294,23 +1584,23 @@ variation sets in the Ensembl variation database (subsets are indicated by bulle
   <tr>
     <td><span class="_ht" title="not classified by submitter"><img style="vertical-align:top" src="/i/val/grey_star.png" alt="grey"/><img style="vertical-align:top" src="/i/val/grey_star.png" alt="grey"/><img style="vertical-align:top" src="/i/val/grey_star.png" alt="grey"/><img style="vertical-align:top" src="/i/val/grey_star.png" alt="grey"/></span></td>
     <td>not classified by submitter</td>
-    <td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Phenotype?v=rs145690431">rs145690431</a></td>
+    <td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Phenotype?v=rs483353044">rs483353044</a></td>
   </tr>  <tr class="bg2">
     <td><span class="_ht" title="classified by single submitter"><img style="vertical-align:top" src="/i/val/gold_star.png" alt="gold"/><img style="vertical-align:top" src="/i/val/grey_star.png" alt="grey"/><img style="vertical-align:top" src="/i/val/grey_star.png" alt="grey"/><img style="vertical-align:top" src="/i/val/grey_star.png" alt="grey"/></span></td>
     <td>classified by single submitter</td>
-    <td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Phenotype?v=rs199473705">rs199473705</a></td>
+    <td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Phenotype?v=rs121908823">rs121908823</a></td>
   </tr>  <tr>
     <td><span class="_ht" title="classified by multiple submitters"><img style="vertical-align:top" src="/i/val/gold_star.png" alt="gold"/><img style="vertical-align:top" src="/i/val/gold_star.png" alt="gold"/><img style="vertical-align:top" src="/i/val/grey_star.png" alt="grey"/><img style="vertical-align:top" src="/i/val/grey_star.png" alt="grey"/></span></td>
     <td>classified by multiple submitters</td>
-    <td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Phenotype?v=rs77103971">rs77103971</a></td>
+    <td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Phenotype?v=rs112868646">rs112868646</a></td>
   </tr>  <tr class="bg2">
     <td><span class="_ht" title="reviewed by expert panel"><img style="vertical-align:top" src="/i/val/gold_star.png" alt="gold"/><img style="vertical-align:top" src="/i/val/gold_star.png" alt="gold"/><img style="vertical-align:top" src="/i/val/gold_star.png" alt="gold"/><img style="vertical-align:top" src="/i/val/grey_star.png" alt="grey"/></span></td>
     <td>reviewed by expert panel</td>
-    <td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Phenotype?v=rs36210737">rs36210737</a></td>
+    <td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Phenotype?v=rs267608155">rs267608155</a></td>
   </tr>  <tr>
     <td><span class="_ht" title="reviewed by professional society"><img style="vertical-align:top" src="/i/val/gold_star.png" alt="gold"/><img style="vertical-align:top" src="/i/val/gold_star.png" alt="gold"/><img style="vertical-align:top" src="/i/val/gold_star.png" alt="gold"/><img style="vertical-align:top" src="/i/val/gold_star.png" alt="gold"/></span></td>
     <td>reviewed by professional society</td>
-    <td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Phenotype?v=rs75039782">rs75039782</a></td>
+    <td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Phenotype?v=rs113993960">rs113993960</a></td>
   </tr>
 </table>
 

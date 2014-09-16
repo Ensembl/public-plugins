@@ -21,7 +21,7 @@ The Registry system allows to tell your programs where to find the EnsEMBL datab
 The following call will load all the "latest" databases from the public EnsEMBL MySQL server ensembldb.ensembl.org:
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 Bio::EnsEMBL::Registry-&gt;load_registry_from_db(
   -host    =&gt; 'ensembldb.ensembl.org',
   -user    =&gt; 'anonymous',
@@ -38,7 +38,7 @@ The latest database is the one with the highest release for each species.
 Alternatively, a custom registry configuration file could be typically loaded at the beginning of the script using the command:
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 Bio::EnsEMBL::Registry-&gt;load_all();
 </pre>
 
@@ -56,7 +56,7 @@ The Registry configuration file for the Perl API is a Perl file which defines th
 You should start with a:
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 use strict;
 </pre>
 
@@ -64,7 +64,7 @@ use strict;
 clause. You will have to import some modules:
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 use Bio::EnsEMBL::Utils::ConfigRegistry;
 use Bio::EnsEMBL::DBSQL::DBAdaptor;
 use Bio::EnsEMBL::Compara::DBSQL::DBAdaptor;
@@ -81,7 +81,7 @@ You may also add some aliases of the name using the Bio::EnsEMBL::Utils::ConfigR
 Here is an example for the public human core database (release 70):
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 new Bio::EnsEMBL::DBSQL::DBAdaptor(
   -host    =&gt; 'ensembldb.ensembl.org',
   -user    =&gt; 'anonymous',
@@ -105,7 +105,7 @@ In order to find out the exact name of the new database you can use the
 "SHOW DATABASES" command of MySQL:
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 shell&gt; mysql -u anonymous -h ensembldb.ensembl.org -P 3306
 mysql&gt; SHOW DATABASES LIKE "homo_sapiens_core_%";
 </pre>
@@ -133,7 +133,7 @@ the binomial name lowercased with spaces replaced by underscores e.g. <i>Homo sa
 For connecting to the EnsEMBL Compara database, you will have to create a Bio::EnsEMBL::Compara::DBSQL::DBAdaptor. Here is an example:
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 new Bio::EnsEMBL::Compara::DBSQL::DBAdaptor(
   -host    =&gt; 'ensembldb.ensembl.org',
   -user    =&gt; 'anonymous',
@@ -154,7 +154,7 @@ Bio::EnsEMBL::Utils::ConfigRegistry-&gt;add_alias(
 Finally, you have to end with a 1 for the import to be successful:
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 1;
 </pre>
 
@@ -172,7 +172,7 @@ Here are a couple of examples of how to configure your environment depending on 
 <li>
 Under bash:
 
-<pre class="code">
+<pre class="code sh_perl">
 ENSEMBL_REGISTRY="/usr/local/share/ensembl_registry.conf"
 export ENSEMBL_REGISTRY
 </pre>
@@ -181,7 +181,7 @@ export ENSEMBL_REGISTRY
 <li>
 Under csh or tcsh:
 
-<pre class="code">
+<pre class="code sh_perl">
 setenv ENSEMBL_REGISTRY "/usr/local/share/ensembl_registry.conf"
 </pre>
 </li>

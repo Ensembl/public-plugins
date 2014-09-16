@@ -124,6 +124,8 @@ sub populate_tree {
       # command to make changes to a membership object
       $self->create_account_node("Membership/$_",   '', [], { 'no_menu_entry' => 1, 'command' => "EnsEMBL::Users::Command::Account::Membership::$_" }) for (qw(Accept Decline BlockGroup Allow Ignore BlockUser Remove Unjoin Change Create));
 
+      # page not actually used to login, but to do redirection to further appropriate page
+      $self->create_account_node('Login',           '', [], { 'no_menu_entry' => 1, 'command' => 'EnsEMBL::Users::Command::Account::LoginRedirect'  });
 
     ## PAGES AVAILABLE ONLY WHEN NO USER LOGGED IN
     } else {

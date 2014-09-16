@@ -128,7 +128,7 @@ sub fetch_for_select {
   my $manager = $self->manager_class;
 
   $params               ||= {};
-  $params->{'sort_by'}  ||= $self->_get_sort_by_column;
+  $params->{'sort_by'}  ||= $self->get_sort_by_column;
 
   $self->rose_objects($manager->get_objects(%$params));
 }
@@ -166,7 +166,7 @@ sub _fetch_all {
     $self->rose_objects($manager->fetch_by_primary_keys([@ids], $self->_get_with_objects_params($page, $params)));
   }
   else {
-    $params->{'sort_by'} ||= $self->_get_sort_by_column;
+    $params->{'sort_by'} ||= $self->get_sort_by_column;
     $self->rose_objects($manager->fetch_by_page($self->pagination, $self->get_page_number, $self->_get_with_objects_params($page, $params)));
   }
 }
@@ -310,7 +310,7 @@ sub _get_with_objects_params {
   return $params;
 }
 
-sub _get_sort_by_column {
+sub get_sort_by_column {
   ## Returns either title column name or primary column name depending upon the value of title column
   my $self    = shift;
   my $meta    = $self->manager_class->object_class->meta;

@@ -156,7 +156,6 @@ sub fetch_features_generic {
     }
     
     my $feature = {
-      id          => $_->dbID,
       start       => ($_->can('seq_region_start') ? $_->seq_region_start : $_->start) + 0,
       end         => ($_->can('seq_region_end')   ? $_->seq_region_end   : $_->end)   + 0,
       label       => $glyphset->feature_label($_),
@@ -175,6 +174,10 @@ sub fetch_features_generic {
   }
   
   return \@features;
+}
+
+sub fetch_gencode {
+  return shift->fetch_transcript(@_);
 }
 
 sub fetch_transcript {
@@ -211,7 +214,7 @@ sub fetch_transcript {
         label      => $no_label ? '' : $glyphset->feature_label($gene, $transcript),
         color      => $colourmap->hex_by_name($glyphset->my_colour($colour_key)),
         labelColor => $colourmap->hex_by_name($glyphset->my_colour($colour_key, 'label')),
-        legend     => ucfirst $glyphset->my_colour($colour_key, 'text'),
+        legend     => $glyphset->my_colour($colour_key, 'text'),
         menu       => $glyphset->href($gene, $transcript),
         group      => scalar keys %$transcripts ? 1 : 0
       };
@@ -280,7 +283,6 @@ sub fetch_structural_variation {
     next if $breakpoint;
     
     my $feature = {
-      id          => $f->dbID,
       start       => ($f->can('seq_region_start') ? $f->seq_region_start : $f->start) + 0,
       end         => ($f->can('seq_region_end')   ? $f->seq_region_end   : $f->end)   + 0,
       menu        => $glyphset->href($f),
@@ -352,7 +354,6 @@ sub fetch_synteny {
   
   foreach (@{$glyphset->features}) {
     push @features, {
-      id    => $_->dbID,
       start => ($_->can('seq_region_start') ? $_->seq_region_start : $_->start) + 0,
       end   => ($_->can('seq_region_end')   ? $_->seq_region_end   : $_->end)   + 0,
       label => $glyphset->feature_label($_),
@@ -516,7 +517,7 @@ sub save_config {
   my $config = from_json($hub->param('config'));
    
   $track->set_user($_, $config->{$_} eq 'undef' ? undef : $config->{$_}) for keys %$config;
-  $image_config->altered = 1;
+  $image_config->altered('Genoverse');
   $hub->session->store;
 }
 
@@ -530,7 +531,7 @@ sub reset_track_heights {
   }
   
   $image_config->get_node('auto_height')->set_user('display', 'off');
-  $image_config->altered = 1;
+  $image_config->altered('Genoverse');
   $hub->session->store;
 }
 
@@ -552,7 +553,7 @@ sub auto_track_heights {
   }
   
   $image_config->get_node('auto_height')->set_user('display', $auto_height ? 'normal' : 'off');
-  $image_config->altered = 1;
+  $image_config->altered('Genoverse');
   $hub->session->store;
   
   print to_json(\%json);

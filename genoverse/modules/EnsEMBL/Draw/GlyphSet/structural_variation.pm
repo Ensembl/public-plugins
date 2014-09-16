@@ -31,6 +31,7 @@ sub genoverse_attributes {
   my ($self, $f) = @_;
   my %attrs = $self->{'display'} ne 'compact' && $f->is_somatic && $f->breakpoint_order ? ( breakpoint => 1, height => 12, marginRight => 9 ) : ();
   $attrs{'legend'} = $self->_labels->{$self->colour_key($f)}{'display_term'};
+  $attrs{'id'}     = $f->dbID;
   return %attrs;
 }
 

@@ -38,18 +38,22 @@ sub render {
 
   foreach my $release (reverse @release_info) {
     next unless $release->{'online'} eq 'Y';
-    my $version = $release->{'id'};
+    my $version = $release->{'version'};
     my $subdomain = $release->{'archive'};
     (my $date = $subdomain) =~ s/20/ 20/; 
-    $html .= qq(<li><strong><a href="http://$subdomain.archive.ensembl.org">Ensembl $version: $date</a>);
-    ## Assume the first on the list is the live site
-    if ($version == $self->hub->species_defs->ENSEMBL_VERSION) {
-      $html .= ' - this site';
+    if ($release->{'id'} > 10000) { ## Special archive!
+      $html .= sprintf('<li><strong><a href="http://%s.ensembl.org">Ensembl %s</a></strong>: %s', lc($subdomain), $subdomain, $release->{'description'});
     }
-    elsif ($count == 0) {
-      $html .= ' - forwards to www.ensembl.org';
+    else {
+      $html .= qq(<li><strong><a href="http://$subdomain.archive.ensembl.org">Ensembl $version: $date</a></strong>);
+      if ($version eq $self->hub->species_defs->ENSEMBL_VERSION) {
+        $html .= ' - this site';
+      }
+      elsif ($count == 0) {
+        $html .= ' - forwards to www.ensembl.org';
+      }
     }
-    $html .= '</strong></li>';
+    $html .= '</li>';
     $count++;
   }
 

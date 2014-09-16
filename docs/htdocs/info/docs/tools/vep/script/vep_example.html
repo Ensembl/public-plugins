@@ -1,0 +1,207 @@
+<html>
+<head>
+<title>Examples and use cases</title>
+<meta name="order" content="8" />
+</head>
+
+<body>
+    
+<div>
+	
+	<div style="float:right"><img src="/img/vep_logo.png"/></div>
+	
+	<h1 id="top"><span style="color:#006">Variant Effect Predictor</span> <img src="/i/16/user.png"> <span style="color:#666">Examples and use cases</span></h1>
+	<hr/>	
+  
+  
+  <h2 id="examples">Example commands</h2>
+  
+  <ul>
+    <li>
+      Read input from STDIN, output to STDOUT
+  <pre class="code">perl variant_effect_predictor.pl -cache -o stdout</pre>
+    </li>
+    <li>
+      Add regulatory region consequences
+  <pre class="code">perl variant_effect_predictor.pl -cache -i variants.txt -regulatory</pre>
+    </li>
+    <li>
+      Input file variants.vcf.txt, input file format VCF, add gene symbol
+      identifiers
+  <pre class="code">perl variant_effect_predictor.pl -cache -i variants.vcf.txt -format vcf -symbol</pre>
+    </li>
+    <li>
+      Filter out common variants based on 1000 genomes data
+  <pre class="code">perl variant_effect_predictor.pl -cache -i variants.txt -filter_common</pre>
+    </li>
+    <li>
+      Force overwrite of output file variants_output.txt, check for existing
+      co-located variants, output only coding sequence consequences, output
+      HGVS names
+  <pre class="code">perl variant_effect_predictor.pl -cache -i variants.txt -o variants_output.txt -force -check_existing -coding_only -hgvs</pre>
+    </li>
+    <li>
+      Specify DB connection parameters in registry file ensembl.registry, add SIFT
+      score and prediction, PolyPhen prediction
+  <pre class="code">perl variant_effect_predictor.pl -database -i variants.txt -registry ensembl.registry -sift b -polyphen p</pre>
+    </li>
+    <li>
+      Connect to Ensembl Genomes db server for A.thaliana
+  <pre class="code">perl variant_effect_predictor.pl -database -i variants.txt -genomes -species arabidopsis_thaliana</pre>
+    </li>
+    <li>
+      Load config from ini file, run in quiet mode
+  <pre class="code">perl variant_effect_predictor.pl -config vep.ini -i variants.txt -q</pre>
+    </li>
+    <li>
+      Use cache in /home/vep/mycache/, use gzcat instead of zcat
+  <pre class="code">perl variant_effect_predictor.pl -cache -dir /home/vep/mycache/ -i variants.txt -compress gzcat</pre>
+    </li>
+    <li>
+      Convert RefSeq-based HGVS notations to genomic coordinates in VCF format
+  <pre class="code">perl variant_effect_predictor.pl -database -i hgvs.txt -o hgvs.vcf -refseq -convert vcf</pre>
+    </li>
+    <li>
+      Filter input file on consequence type to include only variants that
+      cause a coding sequence change, write output in original input format
+  <pre class="code">perl variant_effect_predictor.pl -cache -i variants.vcf -o variants_filtered.vcf -filter coding_change -original</pre>
+    </li>
+    <li>
+      Add custom position-based phenotype annotation from remote BED file
+  <pre class="code">perl variant_effect_predictor.pl -cache -i variants.vcf -custom ftp://ftp.myhost.org/data/phenotypes.bed.gz,phenotype</pre>
+    </li>
+    <li>
+      Use the plugin named MyPlugin, output only the variation name, feature, consequence type and MyPluginOutput fields
+  <pre class="code">perl variant_effect_predictor.pl -cache -i variants.vcf -plugin MyPlugin -fields Uploaded_variation,Feature,Consequence,MyPluginOutput</pre>
+    </li>
+  </ul>
+  
+    
+  <hr/>
+  
+  
+  <h2 id="gerp">GERP / conservation scores</h2>
+  
+  <p> You can use the VEP's <a href="vep_custom.html">custom annotation</a>
+  feature to add conservation scores to your output. For example, to add GERP
+  scores, download the bigWig file from the list below, and run VEP with the
+  following flag:</p>
+  
+  <pre class="code">perl variant_effect_predictor.pl -cache -i example.vcf -custom All_hg19_RS.bw,GERP,bigwig</pre>
+  
+  <p> Note that to make use of bigWig files you will need the bigWigToWig
+  utility from the <a href="http://hgwdev.cse.ucsc.edu/~kent/src/"
+  rel="external">Kent source package</a> installed in your path. </p>
+  
+  <p> Example conservation score files: </p>
+  
+  <ul>
+    <li> <a href="ftp://hgdownload.soe.ucsc.edu/gbdb/hg19/bbi/All_hg19_RS.bw" rel="external">GERP Human (GRCh37)</a> </li>
+    <li> <a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/hg19/phastCons100way/" rel="external">phastCons Human (GRCh37)</a> </li>
+    <li> <a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/hg19/phyloP100way/" rel="external">phyloP Human (GRCh37)</a> </li>
+  </ul>
+  
+  <p> All files provided by the UCSC genome browser - files for other species
+  are available from their <a
+  href="ftp://hgdownload.soe.ucsc.edu/goldenPath/" rel="external">FTP site</a>, though be sure
+  to use the file corresponding to the <a
+  href="/Homo_sapiens/Info/Annotation#assembly">correct assembly</a>. </p>
+    
+  <hr/>
+  
+  
+  <h2 id="dbNSFP">dbNSFP</h2>
+  
+  <p> dbNSFP - <a href="http://www.ncbi.nlm.nih.gov/pubmed/21520341"
+  rel="external">&quot;a lightweight database of human nonsynonymous SNPs and
+  their functional predictions&quot;</a> - provides pathogenicity predictions
+  from many tools (including SIFT, PolyPhen, LRT, MutationTaster, FATHMM) across
+  every possible missense substitution in the human proteome. The data is
+  available to <a href="http://dbnsfp.houstonbioinformatics.org/dbNSFPzip/"
+  rel="external">download</a>, and while it cannot be immediately used by the
+  VEP it is simple to process the data into a format that the dbNSFP.pm plugin
+  can use. </p>
+  
+  <p> After downloading the file, you will need to process it so that tabix can
+  index it correctly. This will take a while as the file is very large! Note
+  that you will need the <a href="http://samtools.sourceforge.net/tabix.shtml"
+  rel="external">tabix</a> utility in your path to use dbNSFP.</p>
+  
+  <pre class="code">unzip dbNSFP2.0.zip
+cat dbNSFP2.0_variant.chr* > dbNSFP
+rm dbNSFP2.0_variant.chr*
+bgzip dbNSFP
+tabix -s 1 -b 2 -e 2 dbNSFP.gz</pre>
+  
+  <p> Then simply download the <a
+  href="https://github.com/ensembl-variation/VEP_plugins/blob/master/dbNSFP.pm"
+  rel="external">dbNSFP VEP plugin</a> and place it either in
+  <b>$HOME/.vep/Plugins/</b> or a path in your <b>$PERL5LIB</b>. When you run
+  the VEP with the plugin, you will need to select some of the columns that you
+  wish to retrieve; to list them run the VEP with the plugin and the path to the
+  dbNSFP file and no further parameters: </p>
+  
+  <pre class="code">perl variant_effect_predictor.pl -cache -force -plugin dbNSFP,dbNSFP.gz
+2014-04-04 11:27:05 - Read existing cache info
+2014-04-04 11:27:05 - Auto-detected FASTA file in cache directory
+2014-04-04 11:27:05 - Checking/creating FASTA index
+2014-04-04 11:27:05 - Failed to instantiate plugin dbNSFP: ERROR: No columns selected to fetch. Available columns are:
+#chr,pos(1-coor),ref,alt,aaref,aaalt,hg18_pos(1-coor),genename,Uniprot_acc,
+Uniprot_id,Uniprot_aapos,Interpro_domain,cds_strand,refcodon,SLR_test_statistic,
+codonpos,fold-degenerate,Ancestral_allele,Ensembl_geneid,Ensembl_transcriptid,
+aapos,SIFT_score,Polyphen2_HDIV_score,Polyphen2_HDIV_pred,Polyphen2_HVAR_score,
+Polyphen2_HVAR_pred,LRT_score,LRT_pred,MutationTaster_score,MutationTaster_pred,
+MutationAssessor_score,MutationAssessor_pred,FATHMM_score,GERP++_NR,GERP++_RS,
+phyloP,29way_pi,29way_logOdds,LRT_Omega,UniSNP_ids,1000Gp1_AC,1000Gp1_AF,
+1000Gp1_AFR_AC,1000Gp1_AFR_AF,1000Gp1_EUR_AC,1000Gp1_EUR_AF,1000Gp1_AMR_AC,
+1000Gp1_AMR_AF,1000Gp1_ASN_AC,1000Gp1_ASN_AF,ESP6500_AA_AF,ESP6500_EA_AF
+[Ctrl-C]</pre>
+  
+  <p> Note that some of these fields are replicates of those produced by the
+  core VEP code (e.g. <a href="vep_options.html#opt_sift">SIFT</a>, <a
+  href="vep_options.html#opt_polyphen">PolyPhen</a>, the <a
+  href="vep_options.html#opt_maf_1kg">1000 Genomes</a> and <a
+  href="vep_options.html#opt_maf_esp">ESP</a> frequencies) - you should use the
+  options to enable these from the VEP code in place of the annotations from
+  dbNSFP as the dbNSFP file covers <b>only</b> missense substitutions. Other
+  fields, such as the conservation scores, may be better served by using
+  genome-wide files as described <a href="#gerp">above</a>. </p>
+  
+  <p> To select fields, just add them as a comma-separated list to your command
+  line:</p>
+  
+  <pre class="code">perl variant_effect_predictor.pl -cache -force -plugin dbNSFP,dbNSFP.gz,LRT_score,FATHM_score,MutationTaster_score</pre>
+  
+  <p> One final point to note is that the dbNSFP scores are frozen on a
+  particular Ensembl release's transcript set; check the readme file on their
+  download site to find out exactly which. While in the majority of cases
+  protein sequences don't change between releases, in some circumstances the
+  protein sequence used by the VEP in the latest release may differ from the
+  sequence used to calculate the scores in dbNSFP. </p>
+  
+  <hr/>
+  
+  <h2 id="citations">Citations and VEP users</h2>
+  
+  <p> The VEP is used by many organisations and projects: </p>
+  
+  <ul>
+    <li> VEP forms a part of <a href="http://variantstudio.software.illumina.com/" rel="external">Illumina's VariantStudio</a> software </li>
+    <li> <a href="http://gemini.readthedocs.org/" rel="external">Gemini</a> is a framework for exploring genome variation that uses the VEP </li>
+    <li> The <a href="http://decipher.sanger.ac.uk/" rel="external">DECIPHER project</a> uses VEP in its analysis pipelines</li>
+  </ul>
+  
+  <p> Other citations and use cases: </p>
+  
+  <ul>
+    <li> <a href="http://bib.oxfordjournals.org/content/early/2014/03/12/bib.bbu008.full" rel="external">VAX</a> is a suite of plugins for VEP that expands its functionality</li>
+    <li> <a href="http://research-pub.gene.com/pviz/app/vep/" rel="external">pViz</a> is a visualisation tool for VEP results files </li>
+    <li> <a href="http://genomemedicine.com/content/6/3/26/abstract" rel="external">McCarthy <i>et al</i></a> compares the VEP to AnnoVar </li>
+    <li> <a href="http://bib.oxfordjournals.org/content/early/2013/01/21/bib.bbs086.full" rel="external">Pabinger <i>et al</i></a> reviews variant analysis software, including the VEP</li>
+  </ul>
+  
+  
+</div>
+
+</body>
+</html>

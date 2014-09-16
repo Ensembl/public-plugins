@@ -194,9 +194,9 @@ perl variant_effect_predictor.pl -offline -i my_species_variants.vcf -s my_speci
 	large (25GB for human). An example set of commands for setting up the data
 	for human follows: </p>
 	
-	<pre class="code">wget ftp://ftp.ensembl.org/pub/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/fasta/homo_sapiens/dna/Homo_sapiens.GRCh37.[[SPECIESDEFS::ENSEMBL_VERSION]].dna.primary_assembly.fa.gz
-gzip -d Homo_sapiens.GRCh37.[[SPECIESDEFS::ENSEMBL_VERSION]].dna.primary_assembly.fa.gz
-perl variant_effect_predictor.pl -i input.vcf --offline --hgvs --fasta Homo_sapiens.GRCh37.[[SPECIESDEFS::ENSEMBL_VERSION]].dna.primary_assembly.fa</pre>
+	<pre class="code">wget ftp://ftp.ensembl.org/pub/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.[[SPECIESDEFS::ENSEMBL_VERSION]].dna.primary_assembly.fa.gz
+gzip -d Homo_sapiens.GRCh38.[[SPECIESDEFS::ENSEMBL_VERSION]].dna.primary_assembly.fa.gz
+perl variant_effect_predictor.pl -i input.vcf --offline --hgvs --fasta Homo_sapiens.GRCh38.[[SPECIESDEFS::ENSEMBL_VERSION]].dna.primary_assembly.fa</pre>
 	
 	
 	<hr/>
@@ -325,10 +325,10 @@ perl variant_effect_predictor.pl -i input.vcf --offline --hgvs --fasta Homo_sapi
     target="_blank">here</a>. You will need a MySQL server that you can connect
     to from the machine where you will run the script (this can be the same
     machine). For most of the functionality of the VEP, you will only need the
-    Core database (e.g. homo_sapiens_core_[[SPECIESDEFS::ENSEMBL_VERSION]]_37)
+    Core database (e.g. homo_sapiens_core_[[SPECIESDEFS::ENSEMBL_VERSION]]_38)
     installed. In order to find co-located variations or to use SIFT or
     PolyPhen, it is also necessary to install the relevant variation database
-    (e.g. homo_sapiens_variation_[[SPECIESDEFS::ENSEMBL_VERSION]]_37). </p>
+    (e.g. homo_sapiens_variation_[[SPECIESDEFS::ENSEMBL_VERSION]]_38). </p>
 	
 	<p> Note that unless you have custom data to insert in the database, in most
 	cases it will be much more efficient to use a <a href="#pre">pre-built
@@ -354,7 +354,7 @@ Bio::EnsEMBL::DBSQL::DBAdaptor->new(
   '-host'    => 'ensembldb.ensembl.org',
   '-user'    => 'anonymous',
   '-pass'    => '',
-  '-dbname'  => 'homo_sapiens_core_[[SPECIESDEFS::ENSEMBL_VERSION]]_37'
+  '-dbname'  => 'homo_sapiens_core_[[SPECIESDEFS::ENSEMBL_VERSION]]_38'
 );
 
 Bio::EnsEMBL::Variation::DBSQL::DBAdaptor->new(
@@ -364,7 +364,7 @@ Bio::EnsEMBL::Variation::DBSQL::DBAdaptor->new(
   '-host'    => 'ensembldb.ensembl.org',
   '-user'    => 'anonymous',
   '-pass'    => '',
-  '-dbname'  => 'homo_sapiens_variation_[[SPECIESDEFS::ENSEMBL_VERSION]]_37'
+  '-dbname'  => 'homo_sapiens_variation_[[SPECIESDEFS::ENSEMBL_VERSION]]_38'
 );
 
 Bio::EnsEMBL::Registry->add_alias("Homo_sapiens","human");

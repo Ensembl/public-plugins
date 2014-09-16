@@ -24,6 +24,8 @@ package EnsEMBL::Web::Object;
 use strict;
 use warnings;
 
+use EnsEMBL::Web::Exceptions;
+
 sub rose_objects {
   ## Getter/Setter for the rose objects
   ## Basically this method takes the data across from Web::Object to the Web::Component, to keep 'business logic' away from Components
@@ -110,10 +112,15 @@ sub save {
   my %user = ('user' => delete $params->{'user'} || $self->hub->user->rose_object);
 
   for (@{$self->rose_objects($type || '0')}) {
-    if (my $obj = $_->save(%$params, $_->meta->trackable ? %user : ())) {
+
+    my $obj;
+
+    try {
+      $obj = $_->save(%$params, $_->meta->trackable ? %user : ());
       push @$objs, $_;
-    }
-    else {
+    } catch {};
+
+    if (!$obj) {
       push @{$self->{'_rose_error'}}, $_->error;
     }
   }

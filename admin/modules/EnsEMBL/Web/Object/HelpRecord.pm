@@ -21,6 +21,7 @@ package EnsEMBL::Web::Object::HelpRecord;
 use strict;
 
 use EnsEMBL::Web::Exceptions;
+use EnsEMBL::Web::Utils::FileSystem qw(create_path remove_directory remove_empty_path copy_dir_contents copy_files list_dir_contents);
 
 use parent qw(EnsEMBL::Web::Object::DbFrontend);
 
@@ -53,7 +54,7 @@ sub fetch_for_list {
 sub get_help_images_dir {
   ## Returns the absolute address of the directory that contains help images
   my $sd = shift->hub->species_defs;
-  return $sd->ENSEMBL_WEBROOT.'/htdocs'.$sd->ENSEMBL_HELP_IMAGE_ROOT;
+  return $sd->ENSEMBL_WEBROOT.'/htdocs'.$sd->ENSEMBL_HELP_IMAGE_ROOT =~ s/\/$//r;
 }
 
 sub get_help_images_list {
@@ -63,79 +64,115 @@ sub get_help_images_list {
   my $hub       = $self->hub;
   my $function  = $hub->function;
   my $root      = `pwd`;
-
-  my %list;
+  my $suffix    = '_sanger_plugin_tmp';
 
   chdir $dir or throw exception("Error getting to images directory: $!");
 
-  open ENTRIES, '<', 'CVS/Entries' or throw exception("Error reading CVS entries file: $!");
-  my %cvs_entries;
-  for (<ENTRIES>) {
-    chop;
-    my ($type, $name, $rev, $timestamp, $options, $tagdate) = split '/', $_;
-    next if $type eq 'D';
-    $cvs_entries{$name} = $tagdate && $tagdate =~ /^T(.+)/ ? $1 : undef;
+  my %list;
+
+  my $repos_path      = `git rev-parse --show-toplevel` =~ s/\/?\R*$//gr;
+  my $repos_name      = $repos_path =~ s/.+\///rg;
+  my $current_branch  = `git rev-parse --abbrev-ref HEAD` =~ s/\R//r;
+  my $branch          = $current_branch =~ s/$suffix$//r;
+  my $tmp_branch      = "$branch$suffix";
+  my $tmp_dir         = "$dir$suffix";
+  my $tracking_branch = `git config branch.$branch.merge` =~ s/(refs\/heads\/|\R)//rg;
+  my $tracking_remote = `git config branch.$branch.remote` =~ s/\R//r;
+
+  # the current branch needs to be tracking one in order to push changes to remote
+  throw exception("The current branch on $repos_name is not tracking to any remote branch. Please checkout your GIT repository to a tracking branch.") unless $tracking_branch && $tracking_remote;
+
+  # Make sure it's on the actual branch
+  `git checkout --force $branch` unless $current_branch eq $branch;
+
+  # It's likely that anything that is modified on the current branch in images folder is modified by the website user, so preserve those changes
+  my %modified = map { $_ => -e $_ ? $_ =~ s/([^\/]+)$/_modified.$1/r : s/([^\/]+)$/_deleted.$1/r } map { join '/', $repos_path, $_ =~ s/\R//r } `git diff --name-only .`;
+  if (my @backup = map { $modified{$_} !~ /\/_deleted./ ? ($_ => delete $modified{$_}) : () } keys %modified) {
+    copy_files({ @backup });
   }
-  close ENTRIES;
 
-  opendir IMAGES_DIR, '.';
+  # create a new temp branch and update it to latest remote version
+  `git reset HEAD --soft`;
+  `git checkout -- .`;
+  my $stash = `git stash | grep "^Saved" | wc -l`;
+  `git fetch $tracking_remote`;
+  `git checkout -B $tmp_branch $tracking_remote/$tracking_branch`;
 
-  for (readdir IMAGES_DIR) {
+  # backup the latest files to a temporary dir
+  copy_dir_contents($dir, $tmp_dir, {'create_path' => 1, 'recursive' => 1});
+
+  # now checkout on the original branch, delete the temp branch and get the modified files from the backup folder
+  `git checkout --force $branch`;
+  `git branch -d $tmp_branch`;
+  copy_dir_contents($tmp_dir, $dir, {'recursive' => 1});
+  remove_directory($tmp_dir);
+
+  `git stash pop` if $stash;
+
+  # Rename any files deleted by the user that got checked out again
+  copy_files(\%modified);
+
+  # ok, now we have the folder with latest changes from remote and any local modifications as seperate copies
+  for (@{list_dir_contents($dir)}) {
     next if -d; # skip directories
+    next if $_ =~ /^(_modified|_deleted)/;
+
+    my $modified = "_%s.$_";
+    my $status;
+
+    for (qw(modified deleted)) {
+      if (-e sprintf "$dir/$modified", $_) {
+        $modified = sprintf $modified, $_;
+        $status   = ucfirst $_;
+        last;
+      }
+    }
+
+    if (!$status) {
+      $modified = undef;
+      $status   = `git ls-files $_` ? 'Up-to-date' : 'New';
+    }
 
     $list{$_} = {
       'name'      => $_,
       'writable'  => -W || 0,
       'size'      => -s,
-      'cvs'       => exists $cvs_entries{$_} ? _get_cvs_status($_) : 'New',
-      'tag'       => delete $cvs_entries{$_}
-    };
-
-    if ($list{$_}{'writable'} && $function eq 'View' && $hub->param('file') eq $_) {
-      open IMG, "<$_" or throw exception("Error reading image $_: $!");
-      my $ctx = Digest::MD5->new;
-      $ctx->addfile (*IMG);
-      $list{$_}{'md5'} = substr $ctx->hexdigest, 0, 8;
-      close IMG;
-
-      if ($list{$_}{'cvs'} eq 'Up-to-date' && !$list{$_}{'tag'}) {
-        `file $_` =~ /\s+([0-9]+)\s+x\s+([0-9]+)/;
-        $list{$_}{'dim'} = {'x' => $1, 'y' => $2} if $1 && $2;
-      }
-    }
-  }
-
-  closedir IMAGES_DIR;
-
-  for (keys %cvs_entries) { # if any file doesn't exist on file system but is in cvs entries
-    $list{$_} = {
-      'name'      => $_,
-      'writable'  => 1,
-      'missing'   => 1,
-      'cvs'       => _get_cvs_status($_)
+      'status'    => $status,
+      'modified'  => $modified,
+      'action'    => [ 'View', $status !~ /deleted/i ? qw(Replace Delete) : (), $status =~ /deleted|modified/i ? 'Reset' : () ]
     };
   }
 
   chop  $root;
   chdir $root;
 
-  ## validate actions for each file
-  for my $file (values %list) {
-    if ($file->{'writable'}) {
-      $file->{'action'} = [ $file->{'missing'} ? () : 'View' ];
-      if ($file->{'cvs'} =~ /^(Needs (Patch|Checkout))$/ || $file->{'tag'}) {
-        push @{$file->{'action'}}, 'Update';
-      } elsif ($file->{'cvs'} =~ /^(Locally Modified|New)$/) {
-        push @{$file->{'action'}}, 'Commit', 'Delete', 'Upload';
-      } elsif ($file->{'cvs'} eq 'Up-to-date') {
-        push @{$file->{'action'}}, 'Upload';
-      } elsif ($file->{'cvs'} eq 'Needs Merge') {
-        push @{$file->{'action'}}, 'Delete';
-      }
-    }
+  return [ map $list{$_}, sort keys %list ];
+}
+
+sub get_image_details {
+  ## Gets MD5 and dimensions of an image file
+  ## @param File name
+  ## @return Hashref with keys md5 and dimensions
+  my ($self, $file) = @_;
+
+  my $file_path = sprintf '%s/%s', $self->get_help_images_dir, $file;
+  my $info = {};
+
+  if (-W $file_path) {
+
+    # MD5
+    open IMG, "<$file_path" or throw exception("Error reading image $file: $!");
+    my $ctx = Digest::MD5->new;
+    $ctx->addfile (*IMG);
+    $info->{'md5'} = substr $ctx->hexdigest, 0, 8;
+    close IMG;
+
+    # Dimensions
+    `file $file_path` =~ /\s+([0-9]+)\s+x\s+([0-9]+)/;
+    $info->{'dim'} = {'x' => $1, 'y' => $2} if $1 && $2;
   }
 
-  return [ map $list{$_}, sort keys %list ];
+  return $info;
 }
 
 sub get_count {
@@ -279,13 +316,6 @@ sub get_fields {
 sub permit_delete {
   ## @overrides
   return 'delete';
-}
-
-sub _get_cvs_status {
-  ## @private
-  my $file        = shift;
-  my @cvs_status  = `cvs status $file`;
-  $_ =~ /Status: ([^\n]+)/ and return $1 for @cvs_status;
 }
 
 1;

@@ -23,6 +23,9 @@ sub update_conf {
   $SiteDefs::ENSEMBL_PRIMARY_SPECIES    = 'Homo_sapiens'; # Default species
   $SiteDefs::ENSEMBL_SECONDARY_SPECIES  = 'Mus_musculus'; # Secondary species
 
+  $SiteDefs::ENSEMBL_REST_URL           = 'http://rest.ensembl.org';  # URL for the REST API
+  $SiteDefs::ENSEMBL_REST_DOC_URL       = 'https://github.com/Ensembl/ensembl-rest/wiki';
+
 ## This hash is used to configure the species available in this
 ## copy of EnsEMBL - comment out any lines which are not relevant
 ## If you add a new species MAKE sure that one of the values of the
@@ -34,6 +37,7 @@ sub update_conf {
   $SiteDefs::__species_aliases{ 'Callithrix_jacchus'                } = [qw(cj cjac marmoset)]; 
   $SiteDefs::__species_aliases{ 'Canis_familiaris'                  } = [qw(cf cfam dog)]; 
   $SiteDefs::__species_aliases{ 'Cavia_porcellus'                   } = [qw(cp cpor guineapig)];
+  $SiteDefs::__species_aliases{ 'Chlorocebus_sabaeus'               } = [qw(csab chlsab csabaeus vervet monkey-AGM chlorocebus_sabaeus)];
   $SiteDefs::__species_aliases{ 'Choloepus_hoffmanni'               } = [qw(ch chof sloth)];
   $SiteDefs::__species_aliases{ 'Dasypus_novemcinctus'              } = [qw(dn dnov dasypus armadillo)];
   $SiteDefs::__species_aliases{ 'Dipodomys_ordii'                   } = [qw(do kangaroorat)];

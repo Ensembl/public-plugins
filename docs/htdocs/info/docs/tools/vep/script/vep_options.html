@@ -125,6 +125,7 @@ host          useastdb.ensembl.org</pre>
           <a href="#opt_sift">--sift b</a>,
           <a href="#opt_polyphen">--polyphen b</a>,
           <a href="#opt_ccds">--ccds</a>,
+          <a href="#opt_uniprot">--uniprot</a>,
           <a href="#opt_hgvs">--hgvs</a>,
           <a href="#opt_symbol">--symbol</a>,
           <a href="#opt_numbers">--numbers</a>,
@@ -173,6 +174,17 @@ host          useastdb.ensembl.org</pre>
         latin name can speed up initial database connection as the
         registry does not have to load all available database aliases on
         the server. <i>Default = "homo_sapiens"</i>
+      </td>
+    </tr>
+    <tr id="opt_assembly">
+      <td><pre>--assembly [name]</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        Select the assembly version to use if more than one available. If using
+        the cache, you must have the appropriate assembly's cache file
+        installed. If not specified and you have only 1 assembly version
+        installed, this will be chosen by default. <i>Default = use found
+        assembly version</i>
       </td>
     </tr>
     <tr id="opt_input_file">
@@ -530,9 +542,10 @@ host          useastdb.ensembl.org</pre>
         Add <a rel="external" href="http://www.hgvs.org/mutnomen/"
         target="_blank">HGVS</a> nomenclature based on Ensembl stable
         identifiers to the output. Both coding and protein sequence
-        names are added where appropriate. Currently it is not possible
-        to generate HGVS identifiers from the cache; a database
-        connection must be made. <i>Not used by default</i>
+        names are added where appropriate. To generate HGVS identifiers when
+        using <a href="#opt_cache">--cache</a> or <a
+        href="#opt_offline">--offline</a> you must use a FASTA file and <a
+        href="#opt_fasta">--fasta</a>. <i>Not used by default</i>
       </td>
     </tr>
     <tr id="opt_protein">
@@ -557,6 +570,16 @@ host          useastdb.ensembl.org</pre>
       <td>
         Adds the CCDS transcript identifer (where available) to the
         output. <i>Not used by default</i>
+      </td>
+    </tr>
+    <tr id="opt_uniprot">
+      <td><pre>--uniprot</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        Adds identifiers for translated protein products from three <a
+        href="http://www.ebi.ac.uk/uniprot" rel="external">UniProt</a>-related
+        databases (SWISSPROT, TREMBL and UniParc) to the output. <i>Not used by
+        default</i>
       </td>
     </tr>
     <tr id="opt_canonical">
@@ -647,8 +670,8 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--maf_1kg</pre></td>
       <td>&nbsp;</td>
       <td>
-        Add MAF from continental populations (AFR,AMR,ASN,EUR) of 1000
-        Genomes Phase 1 to the output. Must be used with <a
+        Add allele frequency from continental populations (AFR,AMR,ASN,EUR) of 1000
+        Genomes Phase 1 to the output. Note the reported allele(s) and frequencies are for the non-reference allele from the original data, not necessarily the alternate allele from user input. Must be used with <a
         href="#opt_cache">--cache</a> <i>Not used by default</i>
       </td>
     </tr>
@@ -656,8 +679,15 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--maf_esp</pre></td>
       <td>&nbsp;</td>
       <td>
-        Include MAF from NHLBI-ESP populations. Must be used with
+        Include allele frequency from NHLBI-ESP populations. Note the reported allele(s) and frequencies are for the non-reference allele from the originial data, not necessarily the alternate allele from user input. Must be used with
         <a href="#opt_cache">--cache</a> <i>Not used  by default</i>
+      </td>
+    </tr>
+    <tr id="opt_old_maf">
+      <td><pre>--old_maf</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        For <a href="#opt_maf_1kg">--maf_1kg</a> and <a href="#opt_maf_esp">--maf_esp</a> report only the frequency (no allele) and convert this frequency so it is always a <b>minor</b> frequency, i.e. &lt; 0.5
       </td>
     </tr>
     <tr id="opt_pubmed">
@@ -698,17 +728,25 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--vcf</pre></td>
       <td>&nbsp;</td>
       <td>
-        Writes output in VCF format. Consequences are added in the INFO field of
-        the VCF file, using the key "CSQ". Data fields are encoded separated by
-        "&#124;"; the order of fields is written in the VCF header. Output
-        fields can be selected by using <a
-        href="#opt_fields">--fields</a>.<br/><br/> If the input format was VCF,
-        the file will remain unchanged save for the addition of the CSQ field
-        (unless using any filtering).<br/><br/> Custom data added with <a
+        Writes output in <a href="../vep_formats.html#vcfout">VCF format</a>.
+        Consequences are added in the INFO field of the VCF file, using the key
+        "CSQ". Data fields are encoded separated by "&#124;"; the order of
+        fields is written in the VCF header. Output fields can be selected by
+        using <a href="#opt_fields">--fields</a>.<br/><br/> If the input format
+        was VCF, the file will remain unchanged save for the addition of the CSQ
+        field (unless using any filtering).<br/><br/> Custom data added with <a
         href="#opt_custom">--custom</a> are added as separate fields, using the
         key specified for each data file.<br/><br/> Commas in fields are
         replaced with ampersands (&amp;) to preserve VCF format.<br/><br/><i>Not
         used by default</i>
+      </td>
+    </tr>
+    <tr id="opt_json">
+      <td><pre>--json</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        Writes output in <a href="../vep_formats.html#json">JSON format</a>.
+        <i>Not used by default</i>
       </td>
     </tr>
     <tr id="opt_gvf">
@@ -821,6 +859,16 @@ host          useastdb.ensembl.org</pre>
         href="/info/genome/variation/predicted_data.html#consequences">this
         table</a>. This is the best method to use if you are interested only in
         one consequence per variant. <i>Not used by default</i>
+      </td>
+    </tr>
+    <tr id="opt_pick_allele">
+      <td><pre>--pick_allele</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        Like <a href="#opt_pick">--pick</a>, but chooses one line of
+        consequence data per variant allele. Will only differ in behaviour from
+        --pick when the input variant has multiple alternate alleles.
+        <i>Not used by default</i>
       </td>
     </tr>
     <tr id="opt_most_severe">
@@ -1051,24 +1099,58 @@ host          useastdb.ensembl.org</pre>
         default</i>
       </td>
     </tr>
+    <tr id="opt_gencode_basic">
+      <td><pre>--gencode_basic</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        Limit your analysis to transcripts belonging to the GENCODE
+        basic set. This set has fragmented or problematic transcripts removed.
+      </td>
+    </tr> 
     <tr id="opt_refseq">
       <td><pre>--refseq</pre></td>
       <td>&nbsp;</td>
       <td>
         <p> Instead of using the core database, use the otherfeatures
         database to retrieve transcripts. This database contains
-        transcript objects corresponding to RefSeq transcripts, along
-        with CCDS and Ensembl ESTs. Consequence output will be given
-        relative to these transcripts in place of the default Ensembl
-        transcripts. See <a
-        href="/info/docs/api/core/index.html#est">here</a> for more
-        details on the contents of the otherfeatures database. The
-        otherfeatures database currently only exists for human and
-        mouse. <p>
+        transcript objects corresponding to RefSeq transcripts (to include CCDS
+        and Ensembl ESTs also, use <a href="#opt_all_refseq">--all_refseq</a>).
+        Consequence output will be given relative to these transcripts in place
+        of the default Ensembl transcripts (see <a
+        href="vep_other.html#refseq">documentation</a>)</p>
         
         <p> You should also specify this option if you have installed the RefSeq
         cache in order for the VEP to pick up the alternate cache directory.
         </p>
+      </td>
+    </tr>
+    <tr id="opt_merged">
+      <td><pre>--merged</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        <p> Use the merged Ensembl and RefSeq cache. Consequences are flagged
+        with the SOURCE of each transcript used. <p>
+      </td>
+    </tr>
+    <tr id="opt_all_refseq">
+      <td><pre>--all_refseq</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        When using the RefSeq or merged cache, include e.g. CCDS and Ensembl EST
+        transcripts in addition to those from RefSeq (see <a
+        href="vep_other.html#refseq">documentation</a>). Only works when using
+        <a href="vep_options.html#opt_refseq">--refseq</a> or <a
+        href="vep_options.html#opt_merged">--merged</a>
+      </td>
+    </tr>
+    <tr id="opt_lrg">
+      <td><pre>--lrg</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        Map input variants to LRG coordinates (or to chromosome coordinates if
+        given in LRG coordinates), and provide consequences on both LRG and
+        chromosomal transcripts. Not compatible with <a
+        href="#opt_offline">--offline</a>
       </td>
     </tr>
     <tr id="opt_db_version">
@@ -1189,73 +1271,6 @@ host          useastdb.ensembl.org</pre>
   </table>
   
   
-  
-  <hr/>
-  
-  
-  <h2 id="examples">Examples</h2>
-  
-  <ul>
-    <li>
-      Read input from STDIN, output to STDOUT
-  <pre class="code">perl variant_effect_predictor.pl -cache -o stdout</pre>
-    </li>
-    <li>
-      Add regulatory region consequences
-  <pre class="code">perl variant_effect_predictor.pl -cache -i variants.txt -regulatory</pre>
-    </li>
-    <li>
-      Input file variants.vcf.txt, input file format VCF, add gene symbol
-      identifiers, output SO consequence terms
-  <pre class="code">perl variant_effect_predictor.pl -cache -i variants.vcf.txt -format vcf -symbol -t so</pre>
-    </li>
-    <li>
-      Filter out common variants based on 1000 genomes data
-  <pre class="code">perl variant_effect_predictor.pl -cache -i variants.txt -filter_common</pre>
-    </li>
-    <li>
-      Force overwrite of output file variants_output.txt, check for existing
-      co-located variants, output only coding sequence consequences, output
-      HGVS names
-  <pre class="code">perl variant_effect_predictor.pl -cache -i variants.txt -o variants_output.txt -force -check_existing -coding_only -hgvs</pre>
-    </li>
-    <li>
-      Specify DB connection parameters in registry file ensembl.registry, add SIFT
-      score and prediction, PolyPhen prediction
-  <pre class="code">perl variant_effect_predictor.pl -database -i variants.txt -registry ensembl.registry -sift b -polyphen p</pre>
-    </li>
-    <li>
-      Connect to Ensembl Genomes db server for A.thaliana
-  <pre class="code">perl variant_effect_predictor.pl -database -i variants.txt -genomes -species arabidopsis_thaliana</pre>
-    </li>
-    <li>
-      Load config from ini file, run in quiet mode
-  <pre class="code">perl variant_effect_predictor.pl -config vep.ini -i variants.txt -q</pre>
-    </li>
-    <li>
-      Use cache in /home/vep/mycache/, use gzcat instead of zcat
-  <pre class="code">perl variant_effect_predictor.pl -cache -dir /home/vep/mycache/ -i variants.txt -compress gzcat</pre>
-    </li>
-    <li>
-      Convert RefSeq-based HGVS notations to genomic coordinates in VCF format
-  <pre class="code">perl variant_effect_predictor.pl -database -i hgvs.txt -o hgvs.vcf -refseq -convert vcf</pre>
-    </li>
-    <li>
-      Filter input file on consequence type to include only variants that
-      cause a coding sequence change, write output in original input format
-  <pre class="code">perl variant_effect_predictor.pl -cache -i variants.vcf -o variants_filtered.vcf -filter coding_change -original</pre>
-    </li>
-    <li>
-      Add custom position-based phenotype annotation from remote BED file
-  <pre class="code">perl variant_effect_predictor.pl -cache -i variants.vcf -custom ftp://ftp.myhost.org/data/phenotypes.bed.gz,phenotype</pre>
-    </li>
-    <li>
-      Use the plugin named MyPlugin, output only the variation name, feature, consequence type and MyPluginOutput fields
-  <pre class="code">perl variant_effect_predictor.pl -cache -i variants.vcf -plugin MyPlugin -fields Uploaded_variation,Feature,Consequence,MyPluginOutput</pre>
-    </li>
-  </ul>
-  
-    
   <hr/>
   <h2 id="performance">Performance</h2>
   

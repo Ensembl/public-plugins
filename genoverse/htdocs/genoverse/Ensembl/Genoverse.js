@@ -273,7 +273,12 @@ Ensembl.Genoverse = Genoverse.extend({
       var end   = Math.round((left + this.selector.outerWidth(true)) / this.scale) + this.start - 1;
           end   = end <= start ? start : end;
       
-      this.makeZMenu({ event: e, feature: {}, drag: { chr: this.chr, start: start, end: end, browser: this }, imageId: this.panel.id }, 'zmenu_region_select');
+      this.makeZMenu({ event: e, feature: {}, drag: { chr: this.chr, start: start, end: end, browser: this }, imageId: this.panel.id, onClose: function(e) {
+        this.cancelSelect();
+        this.moveSelector(e);
+      } }, 'zmenu_region_select');
+      
+      this.selectorStalled = true;
     }
   },
   
@@ -306,6 +311,12 @@ Ensembl.Genoverse = Genoverse.extend({
     
     if (track) {
       track.prop('menus', track.prop('menus').add(menu));
+    }
+    
+    if (params.onClose) {
+      menu.find('span.close').off('.genoverse').on('click.genoverse', function(e) {
+        params.onClose.call(params.browser, e);
+      });
     }
     
     menu = null;

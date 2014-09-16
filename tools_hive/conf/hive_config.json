@@ -1,0 +1,7 @@
+{
+  "Meadow" : {
+    "LOCAL" : {
+      "TotalRunningWorkersMax" : 10
+    }
+  }
+}

@@ -1,0 +1,53 @@
+<p>
+The olive baboon assembly was annotated using a standard Ensembl gene annotation system, incorporating RNAseq data provided through a collaboration
+between the <a href="http://nhprtr.org" target"_blank">Nonhuman Primate
+        Reference Transcriptome Resource</a> and the <a
+        href="http://hgsc.bcm.edu" target="_external">Human Genome Sequencing
+        Center,</a> Baylor College of Medicine.</p>
+
+<h3>RNASeq data set</h3>
+<p>In addition to the Ensembl gene set, we produced RNASeq-based gene models and
+      an indexed BAM file for each of the fourteen tissue samples used by the
+      RNASeq pipeline and also for the merged data from all tissues. Each
+      RNASeq-based gene model represents only the best supported transcript
+      model. We did a BLASTp of these transcript models against UniProt proteins
+      of protein existence level 1 and 2 in order to annotate the open reading
+      frame. The best BLAST hit is displayed as a transcript supporting
+      evidence.</p>
+
+<p>A total of 13548 gene models in the Ensembl gene set include RNAseq data as
+      supporting evidence. Of these 13548 gene models, 8520 are annotated
+      exclusively from RNASeq data, with a further 5028 gene models annotated
+      using a combination of RNASeq data and other protein evidence. The RNASeq
+      data were used to add UTR to protein coding models.</p>
+
+<p>The tissue-specific sets of transcript models built using our RNAseq pipeline
+      are as follows:</p>
+<table class="ss tint">
+  <tr><th>Tissue</th><th>Number of gene models</th></tr>
+<tr class="bg1"><td>bone marrow</td><td>9323</td></tr> 
+<tr class="bg2"><td>cerebellum</td><td>10947</td></tr>
+<tr class="bg1"><td>colon</td><td>	10690</td></tr>
+<tr class="bg2"><td>frontal cortex</td><td>12074</td></tr>
+<tr class="bg1"><td>heart</td><td>	10056</td></tr>
+<tr class="bg2"><td>kidney</td><td>10682</td></tr>
+<tr class="bg1"><td>liver</td><td>	9642</td></tr>
+<tr class="bg2"><td>lung</td><td>11123</td></tr>
+<tr class="bg1"><td>lymph node</td><td>10280</td></tr>
+<tr class="bg2"><td>merged</td><td>18190</td></tr>
+<tr class="bg1"><td>pituitary</td><td>11090</td></tr>
+<tr class="bg2"><td>skeletal</td><td>9530</td></tr>
+<tr class="bg1"><td>spleen</td><td>11163</td></tr>
+<tr class="bg2"><td>temporal lobe</td><td>12058</td></tr>
+<tr class="bg1"><td>thymus</td><td>12796</td></tr>
+</table>
+
+<p>Additional splice junctions (introns) may have been identified by our
+      pipeline and not included in the best supported transcript model. We
+      therefore provide users with the full set of introns identified by our
+      RNAseq pipeline to enable further analysis. These introns were identified
+      by searching for reads that splice when mapped to the genome.</p>
+<ul>
+  <li><a href="/info/genome/genebuild/2014_07_baboon_genebuild.pdf">Detailed information on genebuild</a> (PDF)</li>
+</ul>
+

@@ -42,16 +42,17 @@ To maintain a standardised peak calling methodology, we start our analyses with 
 <p>
 Peak calling is performed using two algorithms:
 <ul>
-	<li>SWEMBL (S. Wilder <i>et al.</i>, in preparation)</li>
-<ul></li>
-<li>Strict parameters (-f 150 -R 0.015) are used for most experiments. These were obtained using CTCF as a reference dataset.</li>
-<li>Less stringent settings (-f 150 -R 0.0025) are used for data that has a broader distribution of reads. This is generally used with DNase1 datasets to enable a greater set of potential regulatory regions.</li>
-</ul></li>
-<li><a rel='external' href='http://www.ncbi.nlm.nih.gov/pubmed?term=20371496'>CCAT (Xu <i>et al.</i>, 2010)</a></li>
-
-<ul></li>
-<li>The algorithm described by Xu et al, is specifically designed for peak calling of broad features, such as H3K36me3. The parameters for histone calling were set using a 1kb window.</li>
-</ul>
+  <li>SWEMBL (S. Wilder <i>et al.</i>, in preparation):
+    <ul>
+      <li>When replicates are available, permissive settings (-f 150 -R 0.0005 -d 150) are used, of which we choose the best peaks, so as to fit an IDR score of 0.01. This number of peaks is linearly adjusted to take into accounts replicate pairs with different numbers of peaks.</li>
+      <li>Otherwise, different stringent settings are used for very tight peaks (e.g. DNAse1) (-f 150 -R 0.0025) and larger ones (-f 150 -R 0.015).</li>
+    </ul>
+  </li>
+  <li><a rel='external' href='http://www.ncbi.nlm.nih.gov/pubmed?term=20371496'>CCAT (Xu <i>et al.</i>, 2010)</a>
+    <ul>
+      <li>The algorithm described by Xu et al, is specifically designed for peak calling of broad features, such as H3K36me3. The parameters were set empirically to (fragmentSize 200; slidingWinSize 150; movingStep 20; isStrandSensitiveMode 0; minCount 10; outputNum 100000; randomSeed 123456; minScore 4.0; bootstrapPass 50).</li>
+    </ul>
+  </li>
 </ul>
 </p>
 

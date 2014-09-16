@@ -28,6 +28,9 @@ package EnsEMBL::ORM::Component::DbFrontend::List;
 use strict;
 use warnings;
 
+use JSON qw(to_json);
+use HTML::Entities qw(encode_entities);
+
 use parent qw(EnsEMBL::ORM::Component::DbFrontend);
 
 sub content_tree {
@@ -37,6 +40,7 @@ sub content_tree {
   my $self    = shift;
   my $object  = $self->object;
   my $records = $object->rose_objects;
+  my $columns = $object->show_columns;
   
   return $self->SUPER::content_tree unless $records && @$records;
 
@@ -45,6 +49,10 @@ sub content_tree {
 
   my @bg = qw(bg1 bg2);
   
+  my $sort_col   = $object->list_is_datatable ? $object->get_sort_by_column : undef;
+     ($sort_col) = grep { $columns->[$_] eq $sort_col } 0..scalar @$columns - 1 if defined $sort_col;
+     $sort_col   = $sort_col / 2 if $sort_col;
+
   return $self->dom->create_element('div', {
     'class'     => $object->content_css,
     'children'  => [
@@ -54,7 +62,7 @@ sub content_tree {
         'class'     => 'js_panel',
         'children'  => [{
           'node_name'   => 'inputhidden',
-          'class'       => 'panel_type',
+          'class'       => ['panel_type', 'datatable_wrapper'],
           'value'       => 'DbFrontendList'
         }, {
           'node_name'   => 'table',
@@ -69,7 +77,12 @@ sub content_tree {
             'node_name'   => 'tbody',
             'children'    => [map {@bg = reverse @bg; $self->record_tree($_, $bg[1])} @$records]
           }]
-        }]
+        }, defined $sort_col ? {
+          'node_name'   => 'form',
+          'action'      => '#',
+          'class'       => ['hidden', 'data_table_config'],
+          'inner_HTML'  => sprintf('<input type="hidden" name="aaSorting" value="%s" />', encode_entities(to_json([[ $sort_col + 1, 'asc' ]])))
+        } : ()]
       },
       $links ? $links->clone_node(1) : () # Bottom pagination
     ]

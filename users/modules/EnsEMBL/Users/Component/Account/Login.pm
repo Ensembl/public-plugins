@@ -39,9 +39,9 @@ sub login_form {
   my $object            = $self->object;
   my $hub               = $self->hub;
   my $form              = $self->new_form({'id' => 'login', 'action' => {qw(action User function Authenticate)}});
-  my $then_param        = $is_ajax ? '' : $self->get_then_param;
+  my $then_param        = $is_ajax ? '' : $object->get_then_param;
   my $ex_email          = $is_ajax ? '' : $hub->param('email');
-  my $register_link     = $hub->species_defs->ENSEMBL_SITETYPE eq 'Ensembl mobile' ? "" : sprintf (' | <a href="%s" class="modal_link">Register</a></p>', $hub->url({qw(action Register)}));
+  my $register_link     = $hub->species_defs->ENSEMBL_SUBTYPE eq 'mobile' ? "" : sprintf (' | <a href="%s" class="modal_link">Register</a></p>', $hub->url({qw(action Register)}));
 
   $form->add_hidden({ 'name' => 'then',      'value' => $then_param       }) if $then_param;
   $form->add_hidden({ 'name' => 'modal_tab', 'value' => 'modal_user_data' });

@@ -44,7 +44,7 @@ sub csrf_safe_process {
 
     return $self->ajax_redirect($hub->url($record_owner->RECORD_TYPE eq 'group'
       ? {'action' => 'Groups',    'function' => 'View', 'id' => $record_owner->group_id}
-      : {'action' => 'Bookmark',  'function' => ''}
+      : {'action' => 'Bookmark',  'function' => 'View'}
     ));
 
   } else {

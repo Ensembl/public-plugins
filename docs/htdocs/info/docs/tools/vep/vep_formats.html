@@ -5,6 +5,11 @@
 </head>
 
 <body>
+    
+<style>
+tr:nth-child(odd) {background-color: #f0f0f0;}
+</style>
+
   <img src="/img/vep_logo.png" class="float-right" style="width:111px;height:50px" />	
 	<h1 id="top">Variant Effect Predictor data formats</h1>
 
@@ -257,6 +262,9 @@ NM_001025204.1:c.336G>A</pre>
                 <li><i>SYMBOL_SOURCE</i> - the source of the gene symbol</li>
                 <li><i>STRAND</i> - the DNA strand (1 or -1) on which the transcript/feature lies</li>
                 <li><i>ENSP</i> - the Ensembl protein identifier of the affected transcript</li>
+                <li><i>SWISSPROT</i> - UniProtKB/Swiss-Prot identifier of protein product
+                <li><i>TREMBL</i> - UniProtKB/TrEMBL identifier of protein product</li>
+                <li><i>UNIPARC</i> - UniParc identifier of protein product</li>
                 <li><i>HGVSc</i> - the HGVS coding sequence name</li>
                 <li><i>HGVSp</i> - the HGVS protein sequence name</li>
                 <li><i>SIFT</i> - the SIFT prediction and/or score, with both given as prediction(score)</li>
@@ -286,6 +294,7 @@ NM_001025204.1:c.336G>A</pre>
                 <li><i>CLIN_SIG</i> - Clinical significance of variant from dbSNP</li>
                 <li><i>BIOTYPE</i> - Biotype of transcript</li>
                 <li><i>PUBMED</i> - Pubmed ID(s) of publications that cite existing variant</li>
+                <li><i>SOMATIC</i> - Somatic status of existing variation(s)</li>
                 <li><i>ALLELE_NUM</i> - Allele number from input; 0 is reference, 1 is first alternate etc</li>
             </ul>
         </li>
@@ -310,8 +319,8 @@ NM_001025204.1:c.336G>A</pre>
     
     <pre class="code">
 ## ENSEMBL VARIANT EFFECT PREDICTOR v[[SPECIESDEFS::ENSEMBL_VERSION]]
-## Output produced at 2013-06-16 16:09:38
-## Connected to homo_sapiens_core_[[SPECIESDEFS::ENSEMBL_VERSION]]_37 on ensembldb.ensembl.org
+## Output produced at 2014-08-01 16:09:38
+## Connected to homo_sapiens_core_[[SPECIESDEFS::ENSEMBL_VERSION]]_38 on ensembldb.ensembl.org
 ## Using API version [[SPECIESDEFS::ENSEMBL_VERSION]], DB version [[SPECIESDEFS::ENSEMBL_VERSION]]
 ## Extra column keys:
 ## DISTANCE : Shortest distance from variant to transcript</pre>
@@ -345,6 +354,211 @@ NM_001025204.1:c.336G>A</pre>
     <pre class="code">##INFO=&lt;ID=CSQ,Number=.,Type=String,Description="Consequence type as predicted by VEP. Format: Allele|Gene|Feature|Feature_type|Consequence|cDNA_position|CDS_position|Protein_position|Amino_acids|Codons|Existing_variation|DISTANCE|SYMBOL|SIFT"&gt;
 #CHROM  POS     ID      REF     ALT     QUAL    FILTER  INFO
 21      26960070        rs116645811     G       A       .       .       CSQ=A|ENSG00000260583|ENST00000567517|Transcript|upstream_gene_variant|||||||4432|LINC00515|,A|ENSG00000154719|ENST00000352957|Transcript|intron_variant||||||||MRPL39|,A|ENSG00000154719|ENST00000307301|Transcript|missense_variant|1043|1001|334|T/M|aCg/aTg|||MRPL39|tolerated(0.06)</pre>
+    
+    
+    <hr/>
+    <h2 id="json">JSON output</h2>
+    
+    <p> The VEP can produce output in the form of serialised <a
+    href="http://json.org/" rel="external">JSON</a> objects using the <a
+    href="script/vep_options.html#opt_json">--json</a> flag. JSON is a
+    serialisation format that can be parsed and processed easily by many
+    packages and programming languages; it is used as the default output format
+    for <a href="http://rest.ensembl.org" rel="external">Ensembl's REST
+    server</a>. </p>
+    
+    <p> Each input variant is reported as a single JSON object which constitutes
+    one line of the output file. The JSON object is structured somewhat
+    differently to the other VEP output formats, in that per-variant fields
+    (e.g. co-located existing variant details) are reported only once.
+    Consequences are grouped under the feature type that they affect
+    (Transcript, Regulatory Feature, etc). The original input line (e.g. from
+    VCF input) is reported under the "input" key in order to aid aligning input
+    with output.</p>
+    
+    <p> Here follows an example of JSON output (prettified and redacted for display here): </p>
+    
+    <pre class="code">{
+  <span style="color:blue">"input"</span>: <span style="color:blue">"1 230845794 test1 A G . . ."</span>,
+  <span style="color:blue">"id"</span>: <span style="color:blue">"test1"</span>,
+  <span style="color:blue">"seq_region_name"</span>: <span style="color:blue">"1"</span>,
+  <span style="color:blue">"start"</span>: <span style="color:green">230845794</span>,
+  <span style="color:blue">"end"</span>: <span style="color:green">230845794</span>,
+  <span style="color:blue">"strand"</span>: <span style="color:green">1</span>,
+  <span style="color:blue">"allele_string"</span>: <span style="color:blue">"A/G"</span>,
+  <span style="color:blue">"most_severe_consequence"</span>: <span style="color:blue">"missense_variant"</span>,
+  <span style="color:blue">"colocated_variants"</span>: [
+    {
+      <span style="color:blue">"id"</span>: <span style="color:blue">"rs699"</span>,
+      <span style="color:blue">"seq_region_name"</span>: <span style="color:blue">"1"</span>,
+      <span style="color:blue">"start"</span>: <span style="color:green">230845794</span>,
+      <span style="color:blue">"end"</span>: <span style="color:green">230845794</span>,
+      <span style="color:blue">"strand"</span>: <span style="color:green">1</span>,
+      <span style="color:blue">"allele_string"</span>: <span style="color:blue">"A/G"</span>,
+      <span style="color:blue">"minor_allele"</span>: <span style="color:blue">"A"</span>,
+      <span style="color:blue">"minor_allele_freq"</span>: <span style="color:green">0.3384</span>,
+      <span style="color:blue">"afr_allele"</span>: <span style="color:blue">"A"</span>,
+      <span style="color:blue">"afr_maf"</span>: <span style="color:green">0.13</span>,
+      <span style="color:blue">"amr_allele"</span>: <span style="color:blue">"A"</span>,
+      <span style="color:blue">"amr_maf"</span>: <span style="color:green">0.36</span>,
+      <span style="color:blue">"asn_allele"</span>: <span style="color:blue">"A"</span>,
+      <span style="color:blue">"asn_maf"</span>: <span style="color:green">0.16</span>,
+      <span style="color:blue">"eur_allele"</span>: <span style="color:blue">"A"</span>,
+      <span style="color:blue">"eur_maf"</span>: <span style="color:green">0.41</span>,
+      <span style="color:blue">"pubmed"</span>: [
+        <span style="color:green">18513389</span>,
+        <span style="color:green">23716723</span>
+      ]
+    },
+    {
+      <span style="color:blue">"seq_region_name"</span>: <span style="color:blue">"1"</span>,
+      <span style="color:blue">"strand"</span>: <span style="color:green">1</span>,
+      <span style="color:blue">"id"</span>: <span style="color:blue">"COSM425562"</span>,
+      <span style="color:blue">"allele_string"</span>: <span style="color:blue">"A/G"</span>,
+      <span style="color:blue">"start"</span>: <span style="color:green">230845794</span>,
+      <span style="color:blue">"end"</span>: <span style="color:green">230845794</span>
+    }
+  ],
+  <span style="color:blue">"transcript_consequences"</span>: [
+    {
+      <span style="color:blue">"variant_allele"</span>: <span style="color:blue">"G"</span>,
+      <span style="color:blue">"consequence_terms"</span>: [
+        <span style="color:blue">"missense_variant"</span>
+      ],
+      <span style="color:blue">"gene_id"</span>: <span style="color:blue">"ENSG00000135744"</span>,
+      <span style="color:blue">"gene_symbol"</span>: <span style="color:blue">"AGT"</span>,
+      <span style="color:blue">"gene_symbol_source"</span>: <span style="color:blue">"HGNC"</span>,
+      <span style="color:blue">"transcript_id"</span>: <span style="color:blue">"ENST00000366667"</span>,
+      <span style="color:blue">"biotype"</span>: <span style="color:blue">"protein_coding"</span>,
+      <span style="color:blue">"strand"</span>: <span style="color:green">-1</span>,
+      <span style="color:blue">"cdna_start"</span>: <span style="color:green">1018</span>,
+      <span style="color:blue">"cdna_end"</span>: <span style="color:green">1018</span>,
+      <span style="color:blue">"cds_start"</span>: <span style="color:green">803</span>,
+      <span style="color:blue">"cds_end"</span>: <span style="color:green">803</span>,
+      <span style="color:blue">"protein_start"</span>: <span style="color:green">268</span>,
+      <span style="color:blue">"protein_end"</span>: <span style="color:green">268</span>,
+      <span style="color:blue">"codons"</span>: <span style="color:blue">"aTg/aCg"</span>,
+      <span style="color:blue">"amino_acids"</span>: <span style="color:blue">"M/T"</span>,
+      <span style="color:blue">"polyphen_prediction"</span>: <span style="color:blue">"benign"</span>,
+      <span style="color:blue">"polyphen_score"</span>: <span style="color:green">0</span>,
+      <span style="color:blue">"sift_prediction"</span>: <span style="color:blue">"tolerated"</span>,
+      <span style="color:blue">"sift_score"</span>: <span style="color:green">1</span>,
+      <span style="color:blue">"hgvsc"</span>: <span style="color:blue">"ENST00000366667.4:c.803T>C"</span>,
+      <span style="color:blue">"hgvsp"</span>: <span style="color:blue">"ENSP00000355627.4:p.Met268Thr"</span>
+    }
+  ],
+  <span style="color:blue">"regulatory_feature_consequences"</span>: [
+    {
+      <span style="color:blue">"variant_allele"</span>: <span style="color:blue">"G"</span>,
+      <span style="color:blue">"consequence_terms"</span>: [
+        <span style="color:blue">"regulatory_region_variant"</span>
+      ],
+      <span style="color:blue">"regulatory_feature_id"</span>: <span style="color:blue">"ENSR00001529861"
+    }
+  ]
+}</pre>
+    
+    <p> In accordance with JSON conventions, all keys are lower-case. Some keys
+    also have different names and structures to those found in the other VEP
+    output formats: </p>
+    
+    <table class="ss">
+      <tr>
+        <th>Key</th>
+        <th>JSON equivalent(s)</th>
+        <th>Notes</th>
+      </tr>
+      <tr>
+        <td>Consequence</td>
+        <td>consequence_terms</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Gene</td>
+        <td>gene_id</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Feature</td>
+        <td>transcript_id, regulatory_feature_id, motif_feature_id</td>
+        <td>Consequences are grouped under the feature type they affect</td>
+      </tr>
+      <tr>
+        <td>ALLELE</td>
+        <td>variant_allele</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>SYMBOL</td>
+        <td>gene_symbol</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>SYMBOL_SOURCE</td>
+        <td>gene_symbol_source</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>ENSP</td>
+        <td>protein_id</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>OverlapBP</td>
+        <td>bp_overlap</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>OverlapPC</td>
+        <td>percentage_overlap</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Uploaded_variation</td>
+        <td>id</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Location</td>
+        <td>seq_region_name, start, end, strand</td>
+        <td>The variant's location field is broken down into constituent coordinate parts for clarity. "seq_region_name" is used in place of "chr" or "chromosome" for consistency with other parts of Ensembl's REST API</td>
+      </tr>
+      <tr>
+        <td>GMAF</td>
+        <td>minor_allele, minor_allele_freq</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>*_maf</td>
+        <td>*_allele, *_maf</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>cDNA_position</td>
+        <td>cdna_start, cdna_end</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>CDS_position</td>
+        <td>cds_start, cds_end</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Protein_position</td>
+        <td>protein_start, protein_end</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>SIFT</td>
+        <td>sift_prediction, sift_score</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>PolyPhen</td>
+        <td>polyphen_prediction, polyphen_score</td>
+        <td></td>
+      </tr>
+    </table>
     
     <hr/>
     <h2 id="stats">Statistics</h2>
