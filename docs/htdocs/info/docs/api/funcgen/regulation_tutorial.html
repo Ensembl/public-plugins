@@ -32,7 +32,7 @@ Connecting to any Ensembl database is made simple by using the
 <kbd>Bio::EnsEMBL::Registry</kbd> module:
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 
 use strict;
 use warnings;
@@ -77,7 +77,7 @@ To obtain all the regulatory features present in a given region of the genome, u
 <kbd>fetch_all_by_Slice</kbd>:
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 
 my $regfeat_adaptor = $registry->get_adaptor('Human', 'Funcgen', 'RegulatoryFeature');
 my $slice_adaptor   = $registry->get_adaptor('Human', 'Core', 'Slice');
@@ -92,7 +92,7 @@ my @reg_feats = @{$regfeat_adaptor->fetch_all_by_Slice($slice)};
 The features you obtain this way are global 'MultiCell' Regulatory Features.
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 
 foreach my $rf (@reg_feats){ 	
 	print $rf->stable_id.": ";
@@ -116,7 +116,7 @@ sub print_feature {
 To access the features supporting a specific regulatory region, you just need to obtain the regulatory feature's attributes: 
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 
 foreach my $feature (@{$rf->regulatory_attributes()}){
 	print_feature($feature) 
@@ -139,7 +139,7 @@ information is then gathered to provide a cell-specific classification for the r
 (eg. promoter-associated).  
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 
 my $rfs = $regfeat_adaptor->fetch_all_by_stable_ID('ENSR00000165384'); 
 
@@ -182,7 +182,7 @@ Annotated Features for these experiments define cell-specific boundaries for Reg
 To specifically access Annotated Features that serve as attributes for a given Regulatory Feature, you just need to specify:
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 
 my @annotated_features = @{$rf->regulatory_attributes('annotated')};
 
@@ -197,7 +197,7 @@ Annotated Features contain specific properties:
 	experiment. It is dependent on the analysis and sometimes it may not be present.</li> 
 </ul>
 
-<pre class="code">
+<pre class="code sh_perl">
 
 #An example to print annotated feature properties
 foreach my $annotated_feature (@annotated_features) {
@@ -229,12 +229,12 @@ on the <a href="/info/genome/funcgen/index.html">RegulatoryBuild</a> page.
 To obtain the motif features present in a given Regulatory Feature, you just need to specify:
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 
 my @motif_features = @{$rf->regulatory_attributes('motif')};
 </pre>
 or
-<pre class="code">
+<pre class="code sh_perl">
 my $motifFeature_adaptor = $registry->get_adaptor('Human', 'funcgen', 'motiffeature');
 my $slice = $slice_adaptor->fetch_by_region('chromosome',1,54960000,54980000);
 my @motif_features = @{$motifFeature_adaptor->fetch_all_by_Slice($slice)};
@@ -252,7 +252,7 @@ Motif Features contain specific properties:
 </ul>
 
 
-<pre class="code">
+<pre class="code sh_perl">
 
 #An example to print motif feature properties
 foreach my $motif_feature (@motif_features) {
@@ -273,7 +273,7 @@ foreach my $motif_feature (@motif_features) {
 As Motif Features are defined using Annotated Features, you can also access Motif Features present in an annotated feature:
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 
 my @motif_features = @{$annot_feat->get_associated_MotifFeatures()};
 
@@ -297,7 +297,7 @@ can only be grouped by Binding Matrix, and are not currently grouped by Feature 
 To access Feature Sets, you need to use a specific adaptor:
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 my $fset_adaptor = $registry->get_adaptor('Human', 'funcgen', 'featureset');
 </pre>
 
@@ -305,7 +305,8 @@ my $fset_adaptor = $registry->get_adaptor('Human', 'funcgen', 'featureset');
 You can for example get all the regulatory feature sets grouped by cell type (including the global 'MultiCell'):
 </p>
 
-<pre class="code">
+
+<pre class="code sh_perl">
 my @reg_fsets = @{$fset_adaptor->fetch_all_by_feature_class('regulatory')};
 </pre>
 
@@ -319,7 +320,7 @@ Feature Sets include the following properties:
 </ul>
 
 
-<pre class="code">
+<pre class="code sh_perl">
 
 foreach my $reg_fset (@reg_fsets) {
 	print $reg_fset->name."\n";
@@ -345,7 +346,7 @@ There are some Feature Sets that are either entirely or partially curated by ext
 These are stored as External Features and can be accessed as follows:
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 
 #Grab and list all the external feature sets
 my @ext_fsets = @{$fset_adaptor->fetch_all_by_feature_class('external')};
@@ -361,7 +362,7 @@ Knowing the name of a feature set, you can specifically access it. For example, 
 <a href="http://enhancer.lbl.gov">Vista Enhancer Browser</a>.
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 
 #Grab the specific Vista set
 my $vista_fset = $fset_adaptor->fetch_by_name('VISTA enhancer set');
@@ -387,7 +388,7 @@ the origin of the data. Feature Types can be accessed using a specific adaptor:
 </p>
 
 
-<pre class="code">
+<pre class="code sh_perl">
 
 my $ftype_adaptor = $registry->get_adaptor('Human', 'funcgen', 'featuretype');
 
@@ -417,7 +418,7 @@ Feature Types by classes of functionally related Feature Types. For example, you
 related to Transcription Factor binding. For this, you just have to use appropriate adaptors: 
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 
 my @tfs =  @{$ftype_adaptor->fetch_all_by_class('Transcription Factor')}; 
 foreach my $ft (@tfs){
@@ -436,7 +437,7 @@ This code demonstrates the use of adaptors, specifically the ArrayAdaptor.
 In this example, we export all microarray platforms and associated information.
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 
 #Grab the adaptors
 my $array_adaptor = $registry->get_adaptor('Human','funcgen','array');
@@ -466,7 +467,7 @@ foreach my $array ( @array ){
 In this example, probesets from the NIMBLEGEN HG17 tiling array are obtained.
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 
 #Grab the adaptors
 my $probe_adaptor = $registry->get_adaptor('Human','funcgen','probe');
@@ -493,7 +494,7 @@ foreach my $pfeature ( @pfeatures ){
 In this example, the FOXP2 transcript is specified and all available ProbeSet annotations are printed.
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 
 #Grab the relevant adaptors
 my $tx_adaptor = $registry->get_adaptor("human","core","Transcript");
