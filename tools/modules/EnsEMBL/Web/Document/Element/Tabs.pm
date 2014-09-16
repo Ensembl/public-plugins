@@ -25,8 +25,9 @@ use warnings;
 
 use previous qw(init dropdown);
 
-use ORM::EnsEMBL::DB::Tools::Manager::Ticket;
 use EnsEMBL::Web::DOM;
+use EnsEMBL::Web::Exceptions;
+use EnsEMBL::Web::Utils::DynamicLoader qw(dynamic_require);
 
 sub init {
   my $self        = shift;
@@ -36,6 +37,8 @@ sub init {
 
   $self->PREV::init(@_);
 
+  $self->{'_ticket_manager'} = dynamic_require('ORM::EnsEMBL::DB::Tools::Manager::Ticket', 1) or return;
+
   # if tools tab is already there because of the tl param, force dropdown
   if (my ($tools_tab) = grep {($_->{'type'} || '') eq 'Tools'} @{$self->entries}) {
     $tools_tab->{'dropdown'} = 'tools';
@@ -43,20 +46,24 @@ sub init {
   } else {
 
     # if tl param is not present, but the user has some tickets, add tools tab now
-    if (ORM::EnsEMBL::DB::Tools::Manager::Ticket->count_current_tickets({
-      'site_type'   => $hub->species_defs->ENSEMBL_SITETYPE,
-      'session_id'  => $hub->session->create_session_id, $user ? (
-      'user_id'     => $user->user_id ) : ()
-    })) {
+    try {
+      if ($self->{'_ticket_manager'}->count_current_tickets({
+        'site_type'   => $hub->species_defs->ENSEMBL_SITETYPE,
+        'session_id'  => $hub->session->create_session_id, $user ? (
+        'user_id'     => $user->user_id ) : ()
+      })) {
 
-      $self->add_entry({
-        'type'      => 'Tools',
-        'caption'   => 'Jobs',
-        'url'       => $hub->url({qw(type Tools action Summary __clear 1)}),
-        'class'     => 'tools',
-        'dropdown'  => 'tools'
-      });
-    }
+        $self->add_entry({
+          'type'      => 'Tools',
+          'caption'   => 'Jobs',
+          'url'       => $hub->url({qw(type Tools action Summary __clear 1)}),
+          'class'     => 'tools',
+          'dropdown'  => 'tools'
+        });
+      }
+    } catch {
+      $self->{'_ticket_manager'} = undef;
+    };
   }
 }
 
@@ -66,7 +73,10 @@ sub dropdown {
   my $hub       = $self->hub;
   my $sd        = $hub->species_defs;
   my $dropdowns = $self->PREV::dropdown(@_);
-  my $div       = EnsEMBL::Web::DOM->new->create_element('div', {'class' => 'dropdown tools', 'children' => [{'node_name' => 'h4', 'inner_HTML' => 'Recent jobs'}, {'node_name' => 'ul'}]});
+
+  return $dropdowns unless $self->{'_ticket_manager'};
+
+  my $div = EnsEMBL::Web::DOM->new->create_element('div', {'class' => 'dropdown tools', 'children' => [{'node_name' => 'h4', 'inner_HTML' => 'Recent jobs'}, {'node_name' => 'ul'}]});
   my @jobs;
 
   while (($dropdowns->{'tools'} || '') =~ m/(\?|;|\&)tl\=([a-z0-9\-_]+)/ig) {
@@ -92,7 +102,7 @@ sub dropdown {
 
   if (@jobs) {
 
-    my $recent_tickets = ORM::EnsEMBL::DB::Tools::Manager::Ticket->get_objects('query' => ['ticket_name' => [ keys %{{ map { $_->{'ticket_name'} => 1 } @jobs }} ]]);
+    my $recent_tickets = $self->{'_ticket_manager'}->get_objects('query' => ['ticket_name' => [ keys %{{ map { $_->{'ticket_name'} => 1 } @jobs }} ]]);
 
     foreach my $job (@jobs) {
       for (@$recent_tickets) {
