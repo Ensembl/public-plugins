@@ -83,6 +83,24 @@ while(<$in_fh>) {
   $vf->{chr} =~ s/^chr//i unless $vf->{chr} =~ /chromosome/i;
   $vf->{variation_name} ||= $vf->{chr}.'_'.$vf->{start}.'_'.($vf->{allele_string} || $vf->{class_SO_term});  
   
+  if(defined($vf->{allele_string}) && length($vf->{allele_string}) > 50) {
+    my @new_alleles;
+    
+    foreach my $allele(split(/\//, $vf->{allele_string})) {
+      if(length($allele) > 50) {
+        my $new = length($allele).'BP_SEQ';
+        push @new_alleles, $new;
+        
+        $vf->{variation_name} =~ s/$allele/$new/e;
+      }
+      else {
+        push @new_alleles, $allele;
+      }
+    }
+    
+    $vf->{allele_string} = join("/", @new_alleles);
+  }
+  
   printf(
     "%s\t%i\t%i\t%s\t%s\t%s\t%s\n",
     $vf->{chr}, $vf->{start}, $vf->{end},
