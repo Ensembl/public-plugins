@@ -614,6 +614,8 @@ sub map_btop_to_genomic_coords {
     my $btop_end = $genomic_end - $genomic_offset + 1;
     $galn .= $btop_end;
 
+    $self->_compress_galn(\$galn);
+
     # Write back to database so we only have to do this once
     if ($job && (my $result_id = $hit->{'result_id'})) {
       my ($result) = grep { $result_id eq $_->result_id} @{$job->result};
@@ -621,6 +623,8 @@ sub map_btop_to_genomic_coords {
       $result->save;
     }
   }
+
+  $self->_decompress_galn(\$galn);
 
   return $galn && $source =~ /latest/i && $hit->{'gori'} ne '1' ? $self->_reverse_btop($galn) : $galn;
 }
@@ -640,6 +644,38 @@ sub _reverse_btop {
     $new_btop          .= $new_btop_states;
   }
   return $new_btop;
+}
+
+sub _compress_galn {
+  ## @private
+  ## Compresses the galn string by replacing repeating hyphens with the count enclosed in brackets
+  my ($self, $galn_ref) = @_;
+
+  my @offsets;
+
+  while ($$galn_ref =~ /([\-]{4,})/g) { # ignore less then 4 hiphens
+    push @offsets, [ $-[1], length $1 ];
+  }
+
+  for (reverse @offsets) {
+    substr $$galn_ref, $_->[0], $_->[1], "($_->[1])";
+  }
+}
+
+sub _decompress_galn {
+  ## @private
+  ## Decompresses the galn string by replacing the counts of hyphens enclosed in brackets with actual number of hyphens
+  my ($self, $galn_ref) = @_;
+
+  my @offsets;
+
+  while ($$galn_ref =~ /(\((\d+)\))/g) {
+    push @offsets, [ $-[1], length $1, $2 ];
+  }
+
+  for (reverse @offsets) {
+    substr $$galn_ref, $_->[0], $_->[1], '-' x $_->[2];
+  }
 }
 
 1;
