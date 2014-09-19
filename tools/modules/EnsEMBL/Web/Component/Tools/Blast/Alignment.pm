@@ -199,6 +199,13 @@ sub get_mapped_slice {
     my $edit_len = length($edit_string) / 2;
     my ($type, $diffs);
 
+    if ($edit_string =~ /^\-+$/) {
+      $edits{$seq_index} = [ $seq_index - $last_edit_pos, 'gap', $edit_len ];
+      $seq_index++;
+      $last_edit_pos = $seq_index;
+      next;
+    }
+
     if ($edit_len > 1) {
       my @base_edits = split //, $edit_string;
       my $count      = 0;
