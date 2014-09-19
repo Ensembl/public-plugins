@@ -142,7 +142,8 @@ sub job_summary_section {
   my $job_assembly      = $job->assembly;
   my $current_assembly  = $valid_job_species ? $species_defs->get_config($job_species, 'ASSEMBLY_NAME') : '0';
   my $assembly_mismatch = $job_assembly ne $current_assembly;
-  my $assembly_site     = $assembly_mismatch && $species_defs->get_config($job_species, 'SWITCH_ASSEMBLY') eq $job_assembly ? 'http://'.$species_defs->get_config($job_species, 'SWITCH_ARCHIVE_URL') : '';
+  my $switch_assembly   = $species_defs->get_config($job_species, 'SWITCH_ASSEMBLY') || '';
+  my $assembly_site     = $assembly_mismatch && $switch_assembly eq $job_assembly ? 'http://'.$species_defs->get_config($job_species, 'SWITCH_ARCHIVE_URL') : '';
   my $job_description   = $object->get_job_description($job);
 
   my $result_url = $dispatcher_status eq 'done' ? {
