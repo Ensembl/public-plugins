@@ -144,7 +144,7 @@ example. The important thing to note is the language syntax; the
 concepts will be described later.
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 # get a slice adaptor for the human core database
 my $slice_adaptor = $registry-&gt;get_adaptor( 'Human', 'Core', 'Slice' );
 
@@ -231,7 +231,7 @@ this connection. Almost every Ensembl script that you will write will
 contain a use statement like the following:
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 use Bio::EnsEMBL::Registry;
 
 my $registry = 'Bio::EnsEMBL::Registry';
@@ -261,7 +261,7 @@ The registry may be used to, for example, get a list of all Ensembl
 databases installed on a given database host:
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 use Bio::EnsEMBL::Registry;
 
 my $registry = 'Bio::EnsEMBL::Registry';
@@ -317,7 +317,7 @@ following after having loaded the Registry, here
 called <kbd>$registry</kbd>, as above:
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 my $gene_adaptor  = $registry-&gt;get_adaptor( 'Human', 'Core', 'Gene' );
 my $slice_adaptor = $registry-&gt;get_adaptor( 'Human', 'Core', 'Slice' );
 </pre>
@@ -342,7 +342,7 @@ necessary to get a slice adaptor. Here we get such an adaptor for the
 latest version of the Human database.
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 my $slice_adaptor = $registry-&gt;get_adaptor( 'Human', 'Core', 'Slice' );
 </pre>
 
@@ -358,7 +358,7 @@ The following are several examples of how to use the
 <kbd>fetch_by_region()</kbd> method:
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 # get a slice adaptor for the human core database
 my $slice_adaptor = $registry-&gt;get_adaptor( 'Human', 'Core', 'Slice' );
 
@@ -380,7 +380,7 @@ $slice = $slice_adaptor-&gt;fetch_by_region( 'chromosome', '20', 1e6, 2e6 );
 Another useful way to obtain a slice is with respect to a gene:
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 my $slice = $slice_adaptor-&gt;fetch_by_gene_stable_id( 'ENSG00000099889', 5e3 );
 </pre>
 
@@ -401,7 +401,7 @@ To retrieve a set of slices from a particular coordinate system the
 <kbd>fetch_all()</kbd> method can be used:
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 # Retrieve slices of every chromosome in the database
 @slices = @{ $slice_adaptor-&gt;fetch_all('chromosome') };
 
@@ -416,7 +416,7 @@ be imported from the Bio::EnsEMBL::Utils::Slice module to break up
 larger slices into smaller component slices.
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 use Bio::EnsEMBL::Utils::Slice qw(split_Slices);
 
 # ...
@@ -438,7 +438,7 @@ To obtain sequence from a slice the <kbd>seq()</kbd> or
 <kbd>subseq()</kbd> methods can be used:
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 my $sequence = $slice-&gt;seq();
 print $sequence, "\n";
 
@@ -449,7 +449,7 @@ $sequence = $slice-&gt;subseq( 100, 200 );
 We can query the slice for information about itself:
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 # The method coord_system() returns a Bio::EnsEMBL::CoordSystem object
 my $coord_sys  = $slice-&gt;coord_system()-&gt;name();
 my $seq_region = $slice-&gt;seq_region_name();
@@ -467,7 +467,7 @@ which overlap its region. The following are two ways to obtain a list
 of genes which overlap a slice:
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 @genes = @{ $gene_adaptor-&gt;fetch_all_by_Slice($slice) };
 
 # Another way of doing the same thing:
@@ -496,7 +496,7 @@ All features in the database can be retrieved in similar ways from their
 own object adaptors.
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 my $slice_adaptor = $registry-&gt;get_adaptor( 'Human', 'Core', 'Slice' );
 my $tr_adaptor    = $registry-&gt;get_adaptor( 'Human', 'Core', 'Transcript' );
 my $daf_adaptor   = $registry-&gt;get_adaptor( 'Human', 'Core', 'DnaAlignFeature' );
@@ -580,7 +580,7 @@ The following is an example of the retrieval of a set of genes,
 transcripts and exons:
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 sub feature2string
 {
     my $feature = shift;
@@ -625,7 +625,7 @@ return Bio::Seq objects.
 The following example demonstrates the use of some of these methods:
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 # The spliced_seq() method returns the concatenation of the exon
 # sequences. This is the cDNA of the transcript
 print "cDNA: ", $transcript-&gt;spliced_seq(), "\n";
@@ -667,7 +667,7 @@ The following example obtains the protein sequence of a Transcript and
 the Translation's stable identifier:
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 my $stable_id = 'ENST00000528762';
 
 my $transcript_adaptor =
@@ -687,7 +687,7 @@ The method <kbd>get_all_ProteinFeatures()</kbd> can be used to obtain
 a set of protein features from a Translation object.
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 $translation = $transcript-&gt;translation();
 
 my $pfeatures = $translation-&gt;get_all_ProteinFeatures();
@@ -711,7 +711,7 @@ features the convenience method <kbd>get_all_DomainFeatures()</kbd>
 can be used:
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 my $seg_features    = $translation-&gt;get_all_ProteinFeatures('Seg');
 my $domain_features = $translation-&gt;get_all_DomainFeatures();
 </pre>
@@ -726,7 +726,7 @@ Prediction transcripts have the same interface as normal transcripts and
 thus they can be used in the same way.
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 my $ptranscripts = $slice-&gt;get_all_PredictionTranscripts();
 
 while ( my $ptranscript = shift @{$ptranscripts} ) {
@@ -761,7 +761,7 @@ a list of FeaturePair objects.
 The following example shows the retrieval of some alignment features.
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 # Retrieve dna-dna alignment features from the slice region
 my @features = @{ $slice-&gt;get_all_DnaAlignFeatures('Vertrna') };
 print_align_features( \@features );
@@ -816,7 +816,7 @@ RepeatFeatures can be retrieved and used in the same way as other
 Ensembl features.
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 my @repeats = @{ $slice-&gt;get_all_RepeatFeatures() };
 
 foreach my $repeat (@repeats) {
@@ -834,7 +834,7 @@ Soft-masking replaces sequence in repeat regions with lower-case
 sequence.
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 my $unmasked_seq   = $slice-&gt;seq();
 my $hardmasked_seq = $slice-&gt;get_repeatmasked_seq();
 my $softmasked_seq = $slice-&gt;get_repeatmasked_seq( undef, 1 );
@@ -860,7 +860,7 @@ obtained from actual experimental evidence are also accessible.
 Markers can be fetched via their name from the MarkerAdaptor.
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 my $marker_adaptor = $registry-&gt;get_adaptor( 'Human', 'Core', 'Marker' );
 
 # Obtain marker by synonym (this returns a list, but there's seldom more
@@ -899,7 +899,7 @@ MarkerFeatures, which represent genomic positions of markers, can be
 retrieved and manipulated in the same way as other Ensembl features.
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 # Obtain the positions for an already retrieved marker
 foreach my $marker_feature ( @{ $marker-&gt;get_all_MarkerFeatures() } ) {
     printf( "%s %d-%d\n",
@@ -939,7 +939,7 @@ The following example retrieves all MiscFeatures representing ENCODE
 regions on a given slice and prints out their attributes:
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 my $encode_regions = $slice-&gt;get_all_MiscFeatures('encode');
 
 while ( my $encode_region = shift @{$encode_regions} ) {
@@ -955,7 +955,7 @@ This example retrieves all misc features representing a BAC clone via
 its name and prints out their location and other information:
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 my $mf_adaptor = $registry-&gt;get_adaptor( 'Human', 'Core', 'MiscFeature' );
 
 my $clones =
@@ -986,7 +986,7 @@ code snippet retrieves and prints DBEntries for a gene, its
 transcripts and its translations:
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 # Define a helper subroutine to print DBEntries
 sub print_DBEntries
 {
@@ -1126,7 +1126,7 @@ used internally. The following example fetches a chromosome
 coordinate system object from the database:
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 my $cs_adaptor = $registry-&gt;get_adaptor( 'Human', 'Core', 'CoordSystem' );
 my $cs = $cs_adaptor-&gt;fetch_by_name('chromosome');
 
@@ -1156,7 +1156,7 @@ Similarly the version may also be specified (though it can almost always
 be omitted):
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 $slice =
   $slice_adaptor-&gt;fetch_by_region( 'chromosome', 'X', 1e6, 10e6, '1', 'NCBI36' );
 </pre>
@@ -1168,7 +1168,7 @@ method
 <kbd>fetch_all()</kbd>:
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 my @chromosomes = @{ $slice_adaptor-&gt;fetch_all('chromosome') };
 my @clones      = @{ $slice_adaptor-&gt;fetch_all('clone') };
 </pre>
@@ -1192,7 +1192,7 @@ the supercontig coordinate system depending on the region it is used
 in.
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 # List all coordinate systems in this database:
 my @coord_systems = @{ $cs_adaptor-&gt;fetch_all() };
 foreach $cs (@coord_systems) {
@@ -1220,7 +1220,7 @@ The feature will be placed on a slice which spans the entire sequence
 that the feature is on in the requested coordinate system.
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 if ( my $new_feature = $feature-&gt;transform('clone') ) {
     printf(
         "Feature's clonal position is: %s %d-%d (%+d)\n",
@@ -1264,7 +1264,7 @@ to move the feature to the highest possible coordinate system in a given
 region:
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 my $new_feature = $feature-&gt;transform('toplevel');
 
 printf(
@@ -1298,7 +1298,7 @@ which it has coordinates past the slice end or before the slice start.
 The following example illustrates the use of the transfer method:
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 my $slice = $slice_adaptor-&gt;fetch_by_region( 'chromosome', '2',
 1e6, 2e6 );
 
@@ -1356,7 +1356,7 @@ coordinate system toplevel can be used to indicate you wish to project
 to the highest possible level.
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 printf( "Feature at: %s %d-%d (%+d) projects to\n",
     $feature-&gt;seq_region_name(), $feature-&gt;start(),
     $feature-&gt;end(),             $feature-&gt;strand() );
@@ -1391,7 +1391,7 @@ slice. For convenience a number of methods are provided that can be
 used to easily obtain a feature's absolute coordinates.
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 # Shortcuts to doing $feat-&gt;slice()-&gt;coord_system()-&gt;name() and
 # $feat-&gt;slice()-&gt;seq_region_name();
 print $feature-&gt;coord_system_name(), ' ', $feature-&gt;seq_region_name(), ' ';
@@ -1411,7 +1411,7 @@ name/symbol, for an alignment feature this would return the hit
 sequence name (hseqname), etc.
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 # The display_id() method returns a suitable display value for any
 # feature type
 print $feature-&gt;display_id(), "\n";
@@ -1424,7 +1424,7 @@ then be used to obtain the underlying sequence of the feature or to
 retrieve other features that overlap the same region, etc.
 </p>
 
-<pre class="code">
+<pre class="code sh_perl">
 $feature_slice = $feature-&gt;feature_Slice();
 
 # Display the sequence of the feature region
