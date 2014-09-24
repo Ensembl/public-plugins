@@ -37,20 +37,10 @@ sub job_summary_section {
   
   my $location = $self->hub->param('r') || $self->hub->species_defs->SAMPLE_DATA->{'LOCATION_PARAM'};
   foreach (@results_links) {
-    my $site = $self->hub->species_defs->ENSEMBL_BASE_URL;
-    my $is_mirror = $site =~ /www|sanger/ ? 0 : 1;
-    my $text = $is_mirror ? 'Download output' : 'View in browser';
-    my $url = $is_mirror ? $self->_download_url($ticket) 
-                         : $self->hub->url({
-                                              'species'   => $job->species,
-                                              'type'      => 'Location',
-                                              'action'    => 'View',
-                                              'function'  => '',
-                                              'r'         => $location,
-                                            });
+    my $url = $self->_download_url($ticket);
     $summary->insert_before({
                           'node_name'   => 'a',
-                          'inner_HTML'  => "[$text]",
+                          'inner_HTML'  => "[Download results]",
                           'class'       => [qw(small left-margin)],
                           'href'        => $url,
                   }, $_);

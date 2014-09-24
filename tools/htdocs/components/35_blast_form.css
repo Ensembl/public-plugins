@@ -20,7 +20,7 @@ div.query_sequence_wrapper span.sprite            { float: right; display: none;
 textarea.query_sequence                           { width: 500px; margin-bottom: 0; outline: none; display: inherit; }
 textarea.query_sequence.inactive                  { color: [[PAGE_TEXT]]; font-size: 12px; font-style: italic; }
 
-form.blast-form div.blast_db_type                 { float: left; width: 150px; }
+form.blast-form div.blast_db_type                 { float: left; clear: left; width: 150px; }
 
 div.js_sequence_wrapper                           { padding-bottom: 94px !important; }
 div.js_sequence_wrapper > div                     { margin: 12px 0; }

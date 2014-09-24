@@ -33,7 +33,8 @@ sub render {
   my $adaptor = EnsEMBL::Web::DBSQL::ArchiveAdaptor->new($self->hub);
   my @release_info = @{$adaptor->fetch_releases};
   my $html = qq(<h3 class="boxed">List of currently available archives</h3>
-<ul class="spaced">);
+<ul class="spaced">
+<li><strong><a href="http://grch37.ensembl.org">Ensembl GRCh37</a></strong>: Full Feb 2014 archive with BLAST, VEP and BioMart</li>);
   my $count = 0;
 
   foreach my $release (reverse @release_info) {
