@@ -70,7 +70,7 @@ sub content {
 
   my ($sequence, $config) = $self->initialize;
 
-  return sprintf '<div class="sequence_key">%s</div>%s', $self->get_key($config), $self->build_sequence($sequence, $config);
+  return sprintf $self->build_sequence($sequence, $config);
 }
 
 sub get_slice {
