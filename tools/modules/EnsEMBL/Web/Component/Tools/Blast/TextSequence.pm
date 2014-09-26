@@ -174,7 +174,7 @@ sub content {
   my $html    = '';
 
   if ($length >= $self->{'subslice_length'}) {
-    $html .= '<div class="sequence_key"></div>' . $self->chunked_content($length, $self->{'subslice_length'}, { length => $length, name => $slice->name });
+    $html .= $self->chunked_content($length, $self->{'subslice_length'}, { length => $length, name => $slice->name });
   } else {
     $html .= $self->content_sub_slice($slice); # Direct call if the sequence length is short enough
   }
@@ -195,7 +195,6 @@ sub content_sub_slice {
   my ($sequence, $config) = $self->initialize($slice, $start, $end);
 
   my $template = '<pre class="text_sequence%s">%s%%s</pre><p class="invisible">.</p>';
-     $template = sprintf('<div class="sequence_key">%s</div>', $self->get_key($config)) . $template unless $start;
 
   $config->{'html_template'} = sprintf $template, ($start == 1) || ($end && $end != $length) ? ' no-bottom-margin' : '', $start == 1 || !$start ? "&gt;$name\n" : '';
 
