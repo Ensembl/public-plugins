@@ -1111,7 +1111,7 @@
                 if (doc.uid != null) {
                   if (data.result.highlighting[doc.uid]) {
                     if (data.result.highlighting[doc.uid]._hr) {
-                      doc.description += " " + data.result.highlighting[doc.uid]._hr.join(" ");
+                      doc.description += ' <div class="result-hr"> ' + data.result.highlighting[doc.uid]._hr.join(" ") + '</div>';
                     }
                     _ref1 = data.result.highlighting[doc.uid];
                     for (v = _j = 0, _len1 = _ref1.length; _j < _len1; v = ++_j) {

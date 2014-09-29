@@ -330,8 +330,8 @@
   jump_to = function(q) {
     var url;
     url = $('#se_q').parents("form").attr('action');
-    if(url) { 
-      url = url.split('/')[1]; 
+    if (url) {
+      url = url.split('/')[1];
       if (url === 'common') {
         url = 'Multi';
       }
@@ -505,7 +505,7 @@
           }).done(function(data) {
             var q, url;
             url = $('#se_q').parents("form").attr('action');
-            if(url) { 
+            if (url) {
               url = url.split('/')[1];
               if (url === 'common') {
                 url = 'Multi';

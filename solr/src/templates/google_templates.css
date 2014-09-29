@@ -770,3 +770,7 @@ body.mobile-page .solr_result_restricted li {
 div.result-type-species-homepage div.preview_float {
   display: none;
 }
+
+.result-hr {
+  margin: 8px 0 4px 0;
+}
