@@ -49,4 +49,9 @@ sub job_summary_section {
   return $summary;
 }
 
+sub analysis_caption {
+  my ($self, $ticket) = @_;
+  return $self->object->get_sub_object('Blast')->parse_search_type($ticket->job->[0]->job_data->{'search_type'}, 'search_method');
+}
+
 1;
