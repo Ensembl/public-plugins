@@ -111,6 +111,7 @@ sub dropdown {
           if ($job_rose_object && $job_rose_object->status eq 'done') {
             $job->{'ticket_type'} = $_->ticket_type_name;
             $job->{'species'}     = $job_rose_object->species;
+            $job->{'job_desc'}    = $job_rose_object->job_desc;
           }
         }
       }
@@ -137,7 +138,7 @@ sub dropdown {
           'action'    => $ticket_type,
           'function'  => 'Results',
           'tl' => $_->{'url_param'}
-        }), $sd->get_config($_->{'species'}, 'SPECIES_COMMON_NAME'), $_->{'ticket_name'})});
+        }), $sd->get_config($_->{'species'}, 'SPECIES_COMMON_NAME'), $_->{'job_desc'})});
       }
 
       $div->last_child->append_child('li', {
