@@ -620,8 +620,9 @@ body_highlights = () ->
               if doc.uid?
                 if data.result.highlighting[doc.uid]
                   if data.result.highlighting[doc.uid]._hr
-                    doc.description += " " +
-                      data.result.highlighting[doc.uid]._hr.join(" ")
+                    doc.description += ' <div class="result-hr"> ' +
+                      data.result.highlighting[doc.uid]._hr.join(" ") +
+                      '</div>'
                   for k,v in data.result.highlighting[doc.uid]
                     if k == '_hr' then continue
                     for h in $.solr_config('static.ui.highlights')
