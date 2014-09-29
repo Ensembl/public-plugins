@@ -62,7 +62,7 @@ sub content {
       my $created_at    = $ticket->created_at;
 
       $table->add_row({
-        'analysis'  => $ticket->ticket_type->ticket_type_caption,
+        'analysis'  => $self->analysis_caption($ticket),
         'ticket'    => $self->ticket_link($ticket),
         'jobs'      => join('', @jobs_summary),
         'created'   => sprintf('<span class="hidden">%d</span>%s', $created_at =~ s/[^\d]//gr, $self->format_date($created_at)),
@@ -294,6 +294,11 @@ sub ticket_buttons {
   }]});
 
   return $buttons;
+}
+
+sub analysis_caption {
+  my ($self, $ticket) = @_;
+  return $ticket->ticket_type->ticket_type_caption;
 }
 
 1;
