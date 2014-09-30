@@ -605,13 +605,13 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
         + ', '
       : ''
     );
-    this.elLk.sequenceInfo.toggle(!!info).html( message
+    this.elLk.sequenceInfo.toggle(!!info).html((this.maxNumSequences === this.sequences.length ? '' : '<a href="#">Add more sequences</a> ')
+      + '(' + message
       + ((this.maxNumSequences - this.sequences.length) || (message ? 'no' : 'No'))
       + (this.sequences.length ? ' more' : '')
       + ' sequence'
       + (this.maxNumSequences - this.sequences.length > 1 ? 's' : '')
-      + ' allowed'
-      + (this.maxNumSequences === this.sequences.length ? '' : ' (<a href="#">Add more sequences</a>)')
+      + ' allowed)'
     );
   },
 
