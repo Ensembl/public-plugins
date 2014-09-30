@@ -604,7 +604,7 @@ sub _species {
 
     # at the moment only human, chicken and mouse have RefSeqs in their otherfeatures DB
     # there's no config for this currently so species are listed manually
-    my %refseq  = map { $_ => 1 } qw(Gallus_gallus Homo_sapiens Mus_musculus);
+    my %refseq  = map { $_ => 1 } qw(Danio_rerio Gallus_gallus Homo_sapiens Mus_musculus Rattus_norvegicus Sus_scrofa);
     my @species;
 
     for ($sd->valid_species) {
