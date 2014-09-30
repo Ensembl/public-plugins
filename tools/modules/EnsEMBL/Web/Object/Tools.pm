@@ -28,7 +28,7 @@ use Digest::MD5 qw(md5_hex);
 
 use EnsEMBL::Web::Exceptions;
 use EnsEMBL::Web::Tools::RandomString qw(random_string);
-use EnsEMBL::Web::Utils::FileSystem qw(create_path remove_empty_path copy_dir_contents);
+use EnsEMBL::Web::Utils::FileSystem qw(create_path remove_empty_path remove_directory copy_dir_contents);
 use EnsEMBL::Web::Utils::DynamicLoader qw(dynamic_require);
 
 use parent qw(EnsEMBL::Web::Object);
@@ -291,8 +291,20 @@ sub save_ticket_to_account {
 
     $result = $ticket->save('cascade' => 1);
 
-    # now we have two copies of the ticket dir, remove the one not required
-    remove_empty_path($_, { 'remove_contents' => 1, 'exclude' => [ $ticket_type ], 'no_exception' => 1 }) for $result ? keys %dirs : values %dirs;
+    # delete the old location and create symlinks from the old locations to new locations to prevent any running job from failing
+    if ($result) {
+      try {
+
+        for (keys %dirs) {
+          remove_directory($_);
+          symlink $dirs{$_}, $_;
+        }
+      } catch {};
+
+    # if it fails, remove the newly copied folder completely
+    } else {
+      remove_empty_path($_, { 'remove_contents' => 1, 'exclude' => [ $ticket_type ], 'no_exception' => 1 }) for values %dirs;
+    }
   }
 
   return $result;
