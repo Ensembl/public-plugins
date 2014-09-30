@@ -452,19 +452,45 @@ body_elevate_quoted = () ->
               [input_unquoted,tags_in,    depart]]
   }
 
+traditional_boost = (q,field,values,boost) ->
+  bq = []
+  for s,i in values
+    v = Math.floor(boost*(values.length-i-1)/(values.length-1))
+    bq.push(field+':"'+s+'"'+(if v then "^"+v else ""))
+  q.push("( "+bq.join(" OR ")+" )")
+  return q
+
+# Only better in the limited circumstances in which it works!
+better_boost = (q,field,values,boost) ->
+  out = []
+  for s,i in values
+    v = Math.floor(boost*(values.length-i-1)/(values.length-1))
+    if v then v = '^'+v else v = ''
+    out.push("#{q[0]}#{v} AND #{field}:#{s}")
+  out = ( "( "+x+" )" for x in out).join(' OR ')
+  return [out]
+
 add_extra_constraints = (q_in,fq_in,extra) ->
   q = [q_in]
   fq = fq_in[..]
+  # Which boost should we use (if any)
+  use_better_boost = true
+  if q_in.match(/[ \t]/)
+    use_better_boost = false
+  if q_in.match(/^(\w+:)?"[\w ]+"$/)
+    use_better_boost = true
   for [field,invert,values,boost] in extra
+    # Add to facets (fq=)
     str = (field+':"'+s+'"' for s in values).join(" OR ")
     str = (if invert then "(NOT ( #{str} ))" else "( #{str} )")
     fq.push(str)
+    # Add boosts
     bq = []
     if boost?
-      for s,i in values
-        v = Math.floor(boost*(values.length-i-1)/(values.length-1))
-        bq.push(field+':"'+s+'"'+(if v then "^"+v else ""))
-      q.push("( "+bq.join(" OR ")+" )")
+      if use_better_boost
+        q = better_boost(q,field,values,boost)
+      else
+        q = traditional_boost(q,field,values,boost)
   if q.length > 1
     q = ( "( "+x+" )" for x in q).join(" AND ")
   [q,fq]
