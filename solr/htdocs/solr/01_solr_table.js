@@ -108,7 +108,11 @@
     };
 
     TableState.prototype.pagesize = function() {
-      return this.el.data('pagesize');
+      if (this.pagesize_override) {
+        return this.pagesize_override;
+      } else {
+        return this.el.data('pagesize');
+      }
     };
 
     TableState.prototype.start = function() {
