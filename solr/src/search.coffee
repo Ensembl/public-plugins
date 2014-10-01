@@ -749,9 +749,6 @@ run_all_prepares = (contexts,plugins,input) ->
   return output
  
 dispatch_main_requests = (request,state,table,update_seq) ->
-  t = table.xxx_table()
-  t.reset()
-  
   plugins = (b() for b in body_requests)
   # Determine what the blocks are to be: XXX cache this
   contexts = []
@@ -802,15 +799,23 @@ dispatch_main_requests = (request,state,table,update_seq) ->
             plugins[i].inspect(contexts[i],requests,docs_frags)
         .then(() => return docs_frags)
     # XXX order
-    # Draw the table
-    return results.then((docs_frags) ->
-      if update_seq != current_update_seq then return $.Deferred().reject()
-      each_block requests.length,(i) =>
-        if requests[i][0] != -1
-          return t.draw_rows({ rows: docs_frags[i], cols: state.columns() })
-        else
-          return $.Deferred().resolve(null)
-    )
+    return [requests,results]
+
+draw_main_requests = (t,state,requests,results,update_seq) ->
+  return results.then((docs_frags) ->
+    if update_seq != current_update_seq then return $.Deferred().reject()
+    each_block requests.length,(i) =>
+      if requests[i][0] != -1
+        return t.draw_rows({ rows: docs_frags[i], cols: state.columns() })
+      else
+        return $.Deferred().resolve(null)
+  )
+
+dispatch_draw_main = (request,state,table,update_seq) ->
+  t = table.xxx_table()
+  t.reset()
+  dispatch_main_requests(request,state,table,update_seq).then ([req,res]) =>
+    draw_main_requests(t,state,req,res,update_seq)
 
 dispatch_facet_request = (request,state,table,update_seq) ->
   fq = ("#{k}:\"#{v}\"" for k,v of state.q_facets()).join(' AND ')
@@ -865,7 +870,7 @@ generate_block_list = (rigid) ->
   return expand_criteria(rigid,remainder_criteria(rigid))
  
 all_requests = {
-  main: dispatch_main_requests
+  main: dispatch_draw_main
   faceter: dispatch_facet_request
 }
 
@@ -976,20 +981,20 @@ class Renderer
     $('.preview_holder').trigger('preview_close')
     @hub.request().render_table(@table,@state)
   
-  get_data: (start,num) ->
-    # XXX configurable incr except for download
-    @source.get(@state.filter(),@state.columns(),@state.order(),start,num,true)
+  get_all_data: (start,num) ->
+    fixed_state = $.extend(true,{},@state)
+    fixed_state.pagesize_override = 1000
+    return @get_data(fixed_state)
   
-  get_all_data: () ->
-    acc = { rows: [] }
-    return window.in_chunks -1, 100, (got,chunksize) =>
-        return @get_data(got,chunksize).then (data) =>
-          if data.cols? and not acc.cols? then acc.cols = data.cols
-          if data.rows.length == 0 or (@max? and got+data.rows.length > @max)
-            return -1
-          acc.rows = acc.rows.concat(data.rows)
-          return data.rows.length
-      .then((d) => return acc)
+  get_data: (state) ->
+    state = @state unless state?
+    update_seq = current_update_seq
+    return dispatch_main_requests(@hub.request(),state,@table,update_seq).then ([req,res]) =>
+      return res.then (docs) =>
+        data = { rows: [], cols: state.columns() }
+        for d in docs
+          data.rows = data.rows.concat(d)
+        return data
 
   render_style: (root,table) ->
     clayout = @hub.layout()
@@ -1005,7 +1010,7 @@ class Renderer
         table_ready: (el,data) => @table.collect_view_model(el,data)
         state: @state
         download_curpage: (el,fn) =>
-          @get_data(@state.start(),@state.pagesize()).done((data) =>
+          @get_data().done((data) =>
             @table.transmit_data(el,fn,data)
           )
         download_all: (el,fn) =>

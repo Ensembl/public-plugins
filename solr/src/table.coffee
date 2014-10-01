@@ -79,7 +79,8 @@ class TableState
       @_update_sortkey()
     @_order
   page: (p) -> (if p? then @el.data('page',p)); @el.data('page') ? 1
-  pagesize: () -> @el.data('pagesize')
+  pagesize: () ->
+    if @pagesize_override then @pagesize_override else @el.data('pagesize')
   start: -> (@page()-1)*@pagesize()
   coldata: -> (@_colkey[k] for k in @el.data('columns'))
   sortkey: (k) -> @_sortkey[k]
