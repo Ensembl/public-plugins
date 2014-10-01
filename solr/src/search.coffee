@@ -993,7 +993,8 @@ class Renderer
       return res.then (docs) =>
         data = { rows: [], cols: state.columns() }
         for d in docs
-          data.rows = data.rows.concat(d)
+          if d?
+            data.rows = data.rows.concat(d)
         return data
 
   render_style: (root,table) ->

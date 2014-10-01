@@ -1732,7 +1732,9 @@
           };
           for (_i = 0, _len = docs.length; _i < _len; _i++) {
             d = docs[_i];
-            data.rows = data.rows.concat(d);
+            if (d != null) {
+              data.rows = data.rows.concat(d);
+            }
           }
           return data;
         });
