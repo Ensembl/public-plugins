@@ -74,7 +74,7 @@ sub _species_sets {
       }
       $species_sets->{'primates'}{'none'}++ if $no_ortho;
     }
-    if ($group eq 'Euarchontoglires') {
+    if ($group eq 'Glires') {
       push @$sets, 'rodents';
       push @{$species_sets->{'rodents'}{'species'}}, $species;
       while (my ($k, $v) = each (%{$ortho_type->{$species}})) {
@@ -106,7 +106,7 @@ sub _species_sets {
       }
       $species_sets->{'sauria'}{'none'}++ if $no_ortho;
     }
-    if ($group eq 'Euteleostomi') {
+    if ($group eq 'Actinopterygii') {
       push @$sets, 'fish';
       push @{$species_sets->{'fish'}{'species'}}, $species;
       while (my ($k, $v) = each (%{$ortho_type->{$species}})) {
