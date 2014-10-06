@@ -632,18 +632,9 @@ sub map_btop_to_genomic_coords {
 sub _reverse_btop {
   ## @private
   my ($self, $incoming_btop) = @_;
-  $incoming_btop      = uc $incoming_btop;
-  my $reversed_btop   = reverse $incoming_btop;
-  my @captures        = $reversed_btop =~ /(\d+)([-ACTG]*)/xmsg;
-  my $new_btop        = '';
-  while (my ($match_number, $btop_states) = splice @captures, 0, 1) {
-    $match_number       = reverse $match_number if length "$match_number" > 1;  # reversing the string means numbers like 15 become 51 so we fix it
-    my @doubles         = $btop_states =~ /([-ACTG]{2})/xmsg;                   # pairs of chars are taken
-    my $new_btop_states = join('', map { my $v = reverse $_; $v; } @doubles);   # we reverse the pairs of chars
-    $new_btop          .= $match_number if $match_number;                       # only add the match number if it was defined
-    $new_btop          .= $new_btop_states;
-  }
-  return $new_btop;
+  $incoming_btop  = uc $incoming_btop =~ s/(\d+)/:$1:/rg =~ s/^:|:$//rg;
+  $incoming_btop .= ':0' if $incoming_btop !~ /\d+$/;
+  return join '', reverse split ':', $incoming_btop;
 }
 
 sub _compress_galn {
