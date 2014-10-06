@@ -25,9 +25,10 @@ use previous qw(links);
 
 sub links {
   my $self  = shift;
+  my $hub   = $self->hub;
   my $links = $self->PREV::links(@_);
 
-  unshift @$links, 'blast', sprintf '<a class="constant" href="%s">BLAST/BLAT</a>', $self->hub->url({'species' => '', 'type' => 'Tools', 'action' => 'Blast'});
+  unshift @$links, 'blast', sprintf '<a class="constant" href="%s">BLAST/BLAT</a>', $hub->url({'species' => $hub->species || 'Multi', 'type' => 'Tools', 'action' => 'Blast'});
 
   return $links;
 }
