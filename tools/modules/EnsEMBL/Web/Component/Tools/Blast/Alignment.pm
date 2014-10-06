@@ -302,21 +302,21 @@ sub get_mapped_slice {
     }
   }
 
-  if (($mapping_orientation == 1 && $ms_start < $seq_index) || ($mapping_orientation != 1 && $ms_start > 0)) {
-    my $ms_end = $rev_flag ? 1 : $end  - $ref_start + $ms_start;
-
-    ($ms_start, $ms_end) = ($ms_end, $ms_start) if $ms_start > $ms_end;
-
-    $mapper->add_map_coordinates(
-     'mapped_slice',
-      $ms_start,
-      $ms_end,
-      $mapping_orientation,,
-      $sr_name,
-      $ref_start,
-      $end,
-    );
-  }
+#   if (($mapping_orientation == 1 && $ms_start < $seq_index) || ($mapping_orientation != 1 && $ms_start > 0)) {
+#     my $ms_end = $rev_flag ? 1 : $end  - $ref_start + $ms_start;
+# 
+#     ($ms_start, $ms_end) = ($ms_end, $ms_start) if $ms_start > $ms_end;
+# 
+#     $mapper->add_map_coordinates(
+#      'mapped_slice',
+#       $ms_start,
+#       $ms_end,
+#       $mapping_orientation,,
+#       $sr_name,
+#       $ref_start,
+#       $end,
+#     );
+#   }
 
   $reference_slice = $reference_slice->expand(undef, $total_insert_size, 1);
   $ms->add_Slice_Mapper_pair($reference_slice, $mapper);
