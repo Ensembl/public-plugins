@@ -48,6 +48,7 @@ sub render {
   my @releases;
   my @all_releases = @{$adaptor->fetch_releases};
   foreach (@all_releases) {
+    next if $_->{'id'} > 10000;
     $first_archive = $_->{'id'} if (!$first_archive && $_->{'online'} eq 'Y');
     next unless $first_archive;
     ### final list needs to be in descending order
