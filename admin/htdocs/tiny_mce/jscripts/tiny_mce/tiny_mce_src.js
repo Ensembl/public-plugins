@@ -5157,7 +5157,7 @@ tinymce.create('static tinymce.util.XHR', {
 				});
 			}
 
-			// Remove XHTML element endings i.e. produce crap :) XHTML is better
+			// Remove XHTML element endings i.e. produce rubbish :) XHTML is better
 			if (s.element_format == 'html') {
 				t.onPostProcess.add(function(se, o) {
 					o.content = o.content.replace(/<([^>]+) \/>/g, '<$1>');
