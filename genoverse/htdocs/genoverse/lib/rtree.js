@@ -64,7 +64,7 @@ var RTree = function(width){
     })();
 
 	// This is my special addition to the world of r-trees
-	// every other (simple) method I found produced crap trees
+	// every other (simple) method I found produced rubbish trees
 	// this skews insertions to prefering squarer and emptier nodes
 	RTree.Rectangle.squarified_ratio = function(l, w, fill) {
 	  // Area of new enlarged rectangle
