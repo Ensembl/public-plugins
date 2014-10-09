@@ -101,7 +101,7 @@ sub test_blog {
  
  $sel->open_ok("/"); 
  #$sel->ensembl_wait_for_page_to_load_ok;
- $sel->ensembl_click("link=More release news on our blog ?");
+ $sel->ensembl_click("link=More news on our blog");
  $sel->ensembl_wait_for_page_to_load("50000")
  and $sel->ensembl_is_text_present('Category Archives'); 
 }
@@ -133,7 +133,7 @@ sub test_doc {
  my ($self, $links) = @_;
  my $sel      = $self->sel;
  my $location = $self->get_location();
- my @skip_link = ('Home', 'Frequently Asked Questions');
+ my @skip_link = ('Home', 'FAQ');
  
  $sel->open_ok("/info/index.html");
  print "URL:: $location \n\n" unless $sel->ensembl_wait_for_page_to_load; 
@@ -150,7 +150,7 @@ sub test_faq {
   
   my @skip_link = ("Home", "contact our HelpDesk", "developers' mailing list");
   
-  $sel->ensembl_click_ok("link=Frequently Asked Questions",'50000')
+  $sel->ensembl_click_ok("link=FAQ",'50000')
   and $sel->wait_for_pop_up_ok("", "5000")
   and $sel->select_window_ok("name=popup_selenium_main_app_window")  #thats only handling one popup with no window name cannot be used for multiple popups
   and $sel->ensembl_click_all_links(".content", \@skip_link, 'More FAQs');
@@ -186,9 +186,9 @@ sub test_register {
  $sel->ensembl_click("link=Register")
  and $sel->ensembl_wait_for_ajax_ok(undef,5000);
  
- $sel->ensembl_is_text_present("Name");
+ $sel->ensembl_is_text_present("Email");
  
- $sel->ensembl_click("link=Lost Password")
+ $sel->ensembl_click("link=Lost password")
  and $sel->ensembl_wait_for_ajax_ok(undef,5000)
  and $sel->ensembl_is_text_present("If you have lost your password");
 }
@@ -206,7 +206,7 @@ sub test_search {
  #$sel->ensembl_wait_for_page_to_load_ok;
  $sel->ensembl_is_text_present("results match");
 # $sel->ensembl_click("link=Gene");
- $sel->ensembl_click("//div[\@id='solr_content']//div[\@class='solr_sidebar']//div[\@class='solr_beak_p_contents']/a[1]")
+ $sel->ensembl_click("//div[\@id='solr_content']//div[\@class='solr_sidebar']//div[\@class='faceters']//div[\@class='table_faceter']//div[\@class='solr_beak_p_contents']/a[1]")
  and $sel->ensembl_wait_for_ajax_ok(undef,5000);
  $sel->ensembl_is_text_present("when restricted to");
  $sel->ensembl_is_text_present("category: Gene");
