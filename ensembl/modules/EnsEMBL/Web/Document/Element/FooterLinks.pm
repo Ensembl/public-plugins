@@ -33,6 +33,7 @@ sub content {
         <a href="http://www.twitter.com/Ensembl"><img src="/i/twitter.png" title="Follow us on Twitter!" alt="[twitter logo]" /></a>
         <a href="/info/about/index.html" class="constant">About&nbsp;Ensembl</a> | 
         <a href="/info/about/legal/privacy.html" class="constant">Privacy&nbsp;Policy</a> | 
+        <a href="/info/about/legal/" class="constant">Disclaimer</a> | 
         <a href="/info/about/contact/" class="constant">Contact&nbsp;Us</a>
       </p>
     </div>
