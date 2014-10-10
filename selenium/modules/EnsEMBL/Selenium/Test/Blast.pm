@@ -74,6 +74,7 @@ sub test_blast {
   });
   
   $sel->open_ok($result_link);
+  $self->no_mirrors_redirect; #click link not to redirect to mirrors and stay on www
   $sel->ensembl_is_text_present("Sequences producing");  
 }
 1;
