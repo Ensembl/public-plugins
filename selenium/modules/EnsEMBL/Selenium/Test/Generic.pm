@@ -63,17 +63,18 @@ sub test_species_list {
  my $release_version = $SD->ENSEMBL_VERSION;
  my @valid_species = $SD->valid_species;
  my $url = $self->url;
- 
+
  $sel->open_ok("/info/about/species.html");
 
  foreach my $species (@valid_species) {   
-   my $species_label = $SD->species_label($species,1);
-
-   $species_label =~ s/(\s\(.*?\))// if($species_label =~ /\(/);    
-   $sel->ensembl_click_links(["link=$species_label"],'10000');
+   my $common_name   = $SD->get_config($species, 'SPECIES_COMMON_NAME');
+   my $sc_name       = $SD->get_config($species, 'SPECIES_SCIENTIFIC_NAME');
+   
+   $common_name   =~ s/([A-Z])([a-z]+)\s+([a-z]+)/$1. $3/ if($common_name eq $sc_name);
+   $sel->ensembl_click_links(["link=$common_name"],'10000');
 
    #my $species_image = qq{pic_$species};
-   #$species_image = qq{pic_Pongo_pygmaeus} if($species eq 'Pongo_abelii'); #hack for Pongo as it is the only species which did not follow the species image naming rule. 
+   #$species_image = qq{pic_Pongo_pygmaeus} if($species eq 'Pongo_abelii'); #hack for Pongo as it is the only species which did not follow the species image naming rule.
 
    #CHECK FOR SPECIES IMAGES
    $sel->run_script(qq{
@@ -85,12 +86,11 @@ sub test_species_list {
        jQuery('body').append("<p>Species images present</p>");
      }
   });
-    my $species_latin_name = $SD->get_config($species,'SPECIES_BIO_NAME');
-    $species_label =~ s/Ciona /C./g; #species label shorten for Ciona
+  
     $sel->ensembl_is_text_present("Species images present")
-    and $sel->ensembl_is_text_present($species_latin_name)
-    and $sel->ensembl_is_text_present("What's New in $species_label release $release_version");
-    
+    and $sel->ensembl_is_text_present($sc_name)
+    and $sel->ensembl_is_text_present("What's New in");
+
     $sel->go_back();
  }
 }
