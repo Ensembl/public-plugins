@@ -87,8 +87,7 @@ sub test_blat {
     \$('a[target^=BLAST_RESULT]').attr('href');
   });
   
-  $sel->open_ok($result_link);
-  $self->no_mirrors_redirect; #click link not to redirect to mirrors and stay on www
+  $sel->open_ok($result_link);  
   $sel->pause(2000);
   $sel->ensembl_is_text_present("Sequences producing");
 }

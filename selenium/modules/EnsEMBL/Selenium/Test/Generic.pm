@@ -33,8 +33,8 @@ sub test_homepage {
   my $this_release = $SD->ENSEMBL_VERSION;
   my $location     = $self->get_location();  
 
-  $sel->open_ok("/");
   $self->no_mirrors_redirect;
+  $sel->open_ok("/");  
 
   $sel->ensembl_wait_for_page_to_load
   and $sel->ensembl_is_text_present("Ensembl release $this_release")
@@ -64,9 +64,9 @@ sub test_species_list {
  my $release_version = $SD->ENSEMBL_VERSION;
  my @valid_species = $SD->valid_species;
  my $url = $self->url;
-
- $sel->open_ok("/info/about/species.html");
+ 
  $self->no_mirrors_redirect;
+ $sel->open_ok("/info/about/species.html"); 
 
  foreach my $species (@valid_species) {   
    my $common_name   = $SD->get_config($species, 'SPECIES_COMMON_NAME');
@@ -101,7 +101,7 @@ sub test_blog {
  my ($self, $links) = @_;
  my $sel = $self->sel;
  
- $sel->open_ok("/"); 
+ $sel->open_ok("/");
  $self->no_mirrors_redirect;
  #$sel->ensembl_wait_for_page_to_load_ok;
  $sel->ensembl_click("link=More news on our blog");
@@ -138,8 +138,8 @@ sub test_doc {
  my $location = $self->get_location();
  my @skip_link = ('Home', 'FAQs');
  
- $sel->open_ok("/info/index.html");
  $self->no_mirrors_redirect;
+ $sel->open_ok("/info/index.html"); 
  print "URL:: $location \n\n" unless $sel->ensembl_wait_for_page_to_load; 
  $sel->ensembl_click_all_links('#main', \@skip_link); 
 }
@@ -149,8 +149,8 @@ sub test_faq {
   my $sel      = $self->sel;
   my $location = $self->get_location(); 
   
-  $sel->open_ok("/info/index.html");
   $self->no_mirrors_redirect;
+  $sel->open_ok("/info/index.html");  
   print "URL:: $location \n\n" unless $sel->ensembl_wait_for_page_to_load; 
   
   my @skip_link = ("Home", "contact our HelpDesk", "developers' mailing list");
@@ -166,8 +166,8 @@ sub test_login {
  my $sel = $self->sel;
  my $location = $self->get_location(); 
 
- $sel->open_ok("/");
  $self->no_mirrors_redirect;
+ $sel->open_ok("/"); 
  
  $sel->ensembl_click("link=Login/Register")
  and $sel->ensembl_wait_for_ajax_ok(undef,5000)
@@ -184,8 +184,9 @@ sub test_register {
  my ($self, $links) = @_;
  my $sel = $self->sel;
 
- $sel->open_ok("/");
  $self->no_mirrors_redirect;
+ $sel->open_ok("/");
+ 
  #$sel->ensembl_wait_for_page_to_load_ok;
  $sel->ensembl_click("link=Login/Register")
  and $sel->ensembl_wait_for_ajax_ok(undef,5000);
@@ -205,8 +206,8 @@ sub test_search {
  my $sel      = $self->sel;
  my $location = $self->get_location();
 
- $sel->open_ok("/");
  $self->no_mirrors_redirect;
+ $sel->open_ok("/"); 
  #$sel->ensembl_wait_for_page_to_load_ok;
  
  $sel->type_ok("name=q", "BRCA2");
@@ -231,8 +232,8 @@ sub test_contact_us {
  my $sel = $self->sel;
  my $sd = $self->get_species_def;
 
- $sel->open_ok("/info/about/contact");
  $self->no_mirrors_redirect;
+ $sel->open_ok("/info/about/contact"); 
  $sel->ensembl_is_text_present("Contact Ensembl");
  $sel->ensembl_click("link=email Helpdesk"); 
  $sel->wait_for_pop_up_ok("", "5000");

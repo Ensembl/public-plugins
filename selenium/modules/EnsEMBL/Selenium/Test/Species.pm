@@ -307,9 +307,10 @@ sub open_species_homepage {
 #  my $species_name = $species;
 #  $species_name    =~ s/_/ /;
 
+  $self->no_mirrors_redirect;
+
   ##TODO::CHeck for species image loaded fine
-  $sel->open_ok("$species/Info/Index")
-  and $self->no_mirrors_redirect
+  $sel->open_ok("$species/Info/Index")  
   and $sel->ensembl_wait_for_page_to_load($timeout)
   and $sel->ensembl_is_text_present($species_bio_name);
 }

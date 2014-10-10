@@ -136,8 +136,7 @@ sub test_location {
       $sel->pause(15000);
       $sel->ensembl_is_text_present("Basepairs in secondary ");
 
-      $sel->open_ok("Homo_sapiens/Location/LD?db=core;r=6:27996744-27996844;pop1=12131");
-      $self->no_mirrors_redirect;
+      $sel->open_ok("Homo_sapiens/Location/LD?db=core;r=6:27996744-27996844;pop1=12131");      
       $sel->pause(5000);
       $sel->ensembl_is_text_present("Prediction method");
       
