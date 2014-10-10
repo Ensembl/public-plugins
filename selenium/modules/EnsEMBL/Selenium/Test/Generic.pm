@@ -65,15 +65,14 @@ sub test_species_list {
  my @valid_species = $SD->valid_species;
  my $url = $self->url;
  
- $self->no_mirrors_redirect;
- $sel->open_ok("/info/about/species.html"); 
+ $sel->open_ok("/info/about/species.html");
 
  foreach my $species (@valid_species) {   
    my $common_name   = $SD->get_config($species, 'SPECIES_COMMON_NAME');
    my $sc_name       = $SD->get_config($species, 'SPECIES_SCIENTIFIC_NAME');
    
    $common_name   =~ s/([A-Z])([a-z]+)\s+([a-z]+)/$1. $3/ if($common_name eq $sc_name);
-   $sel->ensembl_click_links(["link=$common_name"],'10000');
+   $sel->ensembl_click_links(["link=$common_name"],'50000');
 
    #my $species_image = qq{pic_$species};
    #$species_image = qq{pic_Pongo_pygmaeus} if($species eq 'Pongo_abelii'); #hack for Pongo as it is the only species which did not follow the species image naming rule.
@@ -159,6 +158,9 @@ sub test_faq {
   and $sel->wait_for_pop_up_ok("", "5000")
   and $sel->select_window_ok("name=popup_selenium_main_app_window")  #thats only handling one popup with no window name cannot be used for multiple popups
   and $sel->ensembl_click_all_links(".content", \@skip_link, 'More FAQs');
+
+  $sel->close();
+  $sel->select_window();
 }
 
 sub test_login {
@@ -196,7 +198,7 @@ sub test_register {
  
  $sel->ensembl_is_text_present("Email");
  
- $sel->ensembl_click("link=Lost password")
+ $sel->ensembl_click("link=Lost Password")
  and $sel->ensembl_wait_for_ajax_ok(undef,5000)
  and $sel->ensembl_is_text_present("If you have lost your password");
 }
@@ -212,7 +214,7 @@ sub test_search {
  
  $sel->type_ok("name=q", "BRCA2");
  $sel->ensembl_click_links(["//input[\@type='image']"]);
- #$sel->ensembl_wait_for_page_to_load_ok;
+ #$sel->ensembl_wait_for_page_to_load_ok(50000);
  $sel->ensembl_is_text_present("results match");
 # $sel->ensembl_click("link=Gene");
  $sel->ensembl_click("//a[contains(\@href, '#Gene')]")
