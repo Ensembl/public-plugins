@@ -33,7 +33,6 @@ sub init {
     tc_healthcheck_bug         => 'off',
     tc_manual_ok               => 'off',
     tc_manual_ok_this_assembly => 'off',
-    tc_manual_ok_all_releases  => 'off',
   });
 }
 
@@ -113,13 +112,6 @@ sub form {
     name  => 'tc_manual_ok_this_assembly',
     type  => 'AltCheckBox',
     notes => 'Manual - OK this assembly',
-    value => 'on',
-  });
-  
-  $self->add_form_element({
-    name  => 'tc_manual_ok_all_releases',
-    type  => 'AltCheckBox',
-    notes => 'Manual - OK all releases',
     value => 'on',
   });
 }
