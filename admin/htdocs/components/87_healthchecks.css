@@ -15,7 +15,8 @@
  */
 
 div.hc-formfield label.ff-label {
-  width: 240px;
+  width: auto;
+  margin-right: 4px;
   line-height: 18px;
 }
 div.hc-formfield div.ff-right {
