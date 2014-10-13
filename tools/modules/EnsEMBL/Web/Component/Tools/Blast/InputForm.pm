@@ -281,6 +281,12 @@ sub content {
   my $edit_jobs = ($hub->function || '') eq 'Edit' ? $object->get_edit_jobs_data : [];
   if (!@$edit_jobs && (my $existing_seq = $hub->param('query_sequence'))) { # If coming from "BLAST this sequence" link
     $edit_jobs = [ {'sequence' => {'sequence' => $existing_seq}} ];
+    if (my $search_type = $hub->param('search_type')) {
+      $edit_jobs->[0]{'search_type'} = $search_type;
+    }
+    if (my $source = $hub->param('source')) {
+      $edit_jobs->[0]{'source'} = $source;
+    }
   }
   $edit_jobs = @$edit_jobs ? $fieldset2->add_hidden({ 'name' => 'edit_jobs', 'value' => $self->jsonify($edit_jobs) }) : '';
 
