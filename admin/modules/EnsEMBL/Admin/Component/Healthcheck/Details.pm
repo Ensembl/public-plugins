@@ -34,6 +34,7 @@ sub content {
 
   my $object  = $self->object;
   my $hub     = $self->hub;
+  my $url     = $hub->current_url;
   my $reports = $object->rose_objects('reports');
   my $param   = $object->view_param;
   my $type    = $object->view_type;
@@ -55,17 +56,27 @@ sub content {
   my $html    = '';
   my $db_list = [];
 
-  #group all reports by database_name
-  my $grouped_reports = {};
-  push @{$grouped_reports->{$_->database_name} ||= []}, $_ for @$reports;
-
-  my $serial_number = 0;
-
+  # View in release dropdown
   if ($type ne 'database_name') {
     my $form = $self->get_all_releases_dropdown_form('View in release', 'release');
     $form->add_hidden({'name' => '1', 'value' => $param});
     $html .= $form->render;
   }
+
+  # display group-by links
+  my @grouping_params = qw(database_name species database_type testcase team_responsible);
+  my $grouping_param  = $hub->param('group_by');
+     $grouping_param  = $grouping_params[0] if !$grouping_param || !grep { $_ eq $grouping_param } @grouping_params;
+  $html .= sprintf '<p><b>Sub groupp by</b>: %s</p>', join ' &middot ', map { $_ eq $grouping_param
+    ? sprintf '<b>%s</b>', ucfirst $grouping_param =~ s/_/ /gr
+    : sprintf '<a href="%s;group_by=%s">%s</a>', $url =~ s/group_by\=[a-z_]+(\;|\&)?//r, $_, ucfirst $_ =~ s/_/ /gr
+  } @grouping_params;
+
+  # group all reports by given param
+  my $grouped_reports = {};
+  push @{$grouped_reports->{$_->$grouping_param} ||= []}, $_ for @$reports;
+
+  my $serial_number = 0;
 
   $html .= qq{<div class="_hc_infobox tinted-box">
     <p>For each database, reports are sorted on the basis of Date (initial failure date) with latest report appearing on the top.</p>
@@ -75,7 +86,7 @@ sub content {
   </div>};
 
   my $js_ref = 0; #counter used by JavaScript only
-  foreach my $database_name (sort keys %$grouped_reports) {
+  foreach my $group_title (sort keys %$grouped_reports) {
   
     $js_ref++;
     my $table = $self->new_table([], [], {'class' => 'tint'});
@@ -92,7 +103,7 @@ sub content {
     #sort reports on the basis of creation time 
     my $i = 0;
     my $db_reports = [];
-    my $temp = { map { ($_->created || '0').++$i => $_ } @{$grouped_reports->{$database_name}} };
+    my $temp = { map { ($_->created || '0').++$i => $_ } @{$grouped_reports->{$group_title}} };
     push @$db_reports, $temp->{$_} for reverse sort keys %$temp;
 
     foreach my $report (@$db_reports) {
@@ -149,11 +160,11 @@ sub content {
       });
     }
 
-    $html .= sprintf('<a name="%s"></a><h3 class="hc-dbheading">%1$s</h3>%s', $database_name || 'Unknown', $table->render);
-    push @$db_list, $database_name || 'Unknown';
+    $html .= sprintf('<a name="%s"></a><h3 class="hc-dbheading">%1$s</h3>%s', $group_title || 'Unknown', $table->render);
+    push @$db_list, $group_title || 'Unknown';
   }
 
-  return sprintf('%s%s', $object->function eq 'Database' ? '' : sprintf('<h3>List of affected databases:</h3><ul>%s</ul>', join('', map {sprintf('<li><a href="#%s">%1$s</a></li>', $_)} @$db_list)), $html);
+  return sprintf('%s%s', $object->function eq 'Database' ? '' : sprintf('<ul>%s</ul>', join('', map {sprintf('<li><a href="#%s">%1$s</a></li>', $_)} @$db_list)), $html);
 }
 
 sub _get_user_link {
