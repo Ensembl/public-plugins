@@ -164,10 +164,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     });
 
     // Species dropdown
-    this.elLk.speciesCheckboxes = this.elLk.form.find('input[name=species]');
-    this.elLk.speciesDropdown   = this.elLk.form.find('._species_dropdown').speciesDropdown({refresh: true, change: function() {
-      panel.resetSourceTypes(panel.elLk.speciesCheckboxes.filter(':checked').map(function() { return this.value; } ).toArray());
-    }});
+    this.initSpecies();
 
     // Search type dropdown
     this.elLk.searchType = this.elLk.form.find('select[name=search_type]').on('change', function() {
@@ -190,7 +187,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
         $(this).data('valid', false);
         return;
       }
-      if (!panel.elLk.speciesCheckboxes.filter(':checked').length) {
+      if (!panel.getSelectedSpecies().length) {
         panel.showError('Please select a species to run BLAST/BLAT against.', 'No species selected');
         $(this).data('valid', false);
         return;
@@ -615,9 +612,30 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     );
   },
 
+  initSpecies: function() {
+  /*
+   * Initialises the species dropdown to make it filterable
+   */
+    var panel = this;
+    this.elLk.speciesCheckboxes = this.elLk.form.find('input[name=species]');
+    this.elLk.speciesDropdown   = this.elLk.form.find('._species_dropdown').speciesDropdown({refresh: true, change: function() {
+      panel.resetSourceTypes(panel.getSelectedSpecies());
+    }});
+  },
+
   resetSpecies: function(speciesList) {
+  /*
+   * Resets the checkboxes to select only those species that are given in speciesList
+   */
     this.elLk.speciesCheckboxes.prop('checked', function() { return speciesList.indexOf(this.value) >= 0; });
     this.elLk.speciesDropdown.speciesDropdown({refresh: true});
+  },
+
+  getSelectedSpecies: function() {
+  /*
+   * Returns an array of species with checked checkboxes
+   */
+    return this.elLk.speciesCheckboxes.filter(':checked').map(function() { return this.value; } ).toArray();
   },
 
   setSensitivityConfigs: function(el) {
