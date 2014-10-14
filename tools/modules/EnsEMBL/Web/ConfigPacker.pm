@@ -94,6 +94,7 @@ sub _configure_blast_multi {
           'query_type'  => $search_types->{$_}[0],
           'db_type'     => $search_types->{$_}[1],
           'program'     => $search_types->{$_}[2],
+          'min_length'  => $search_types->{$_}[3] || 0,
           'sources'     => [ grep { my $s = $_; !!grep($_ eq $s, @{$sources_by_type->{$blast_type}}) } @{$sources->{$search_types->{$_}[1]}} ] # filter out the sources that are not valid for this blast type
         };
         delete $search_types->{$_};

@@ -33,8 +33,10 @@ sub test_ftptable {
   my $sel    = $self->sel;
   my $location = $self->get_location();
     
+  $self->no_mirrors_redirect;
+  
   $sel->open_ok('info/data/ftp/index.html')
-  and $sel->ensembl_wait_for_page_to_load;
+  and $sel->ensembl_wait_for_page_to_load;  
   
   $sel->ensembl_click_all_links('#ftp-table1');     #click through all the links on the top FTP table (Multi species data)
   $sel->ensembl_click_all_links('#ftp-table');      # and for the FTP table Single species data

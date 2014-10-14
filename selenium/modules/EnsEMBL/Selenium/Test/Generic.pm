@@ -33,7 +33,8 @@ sub test_homepage {
   my $this_release = $SD->ENSEMBL_VERSION;
   my $location     = $self->get_location();  
 
-  $sel->open_ok("/"); 
+  $self->no_mirrors_redirect;
+  $sel->open_ok("/");  
 
   $sel->ensembl_wait_for_page_to_load
   and $sel->ensembl_is_text_present("Ensembl release $this_release")
@@ -67,13 +68,14 @@ sub test_species_list {
  $sel->open_ok("/info/about/species.html");
 
  foreach my $species (@valid_species) {   
-   my $species_label = $SD->species_label($species,1);
-
-   $species_label =~ s/(\s\(.*?\))// if($species_label =~ /\(/);    
-   $sel->ensembl_click_links(["link=$species_label"],'10000');
+   my $common_name   = $SD->get_config($species, 'SPECIES_COMMON_NAME');
+   my $sc_name       = $SD->get_config($species, 'SPECIES_SCIENTIFIC_NAME');
+   
+   $common_name   =~ s/([A-Z])([a-z]+)\s+([a-z]+)/$1. $3/ if($common_name eq $sc_name);
+   $sel->ensembl_click_links(["link=$common_name"],'50000');
 
    #my $species_image = qq{pic_$species};
-   #$species_image = qq{pic_Pongo_pygmaeus} if($species eq 'Pongo_abelii'); #hack for Pongo as it is the only species which did not follow the species image naming rule. 
+   #$species_image = qq{pic_Pongo_pygmaeus} if($species eq 'Pongo_abelii'); #hack for Pongo as it is the only species which did not follow the species image naming rule.
 
    #CHECK FOR SPECIES IMAGES
    $sel->run_script(qq{
@@ -85,12 +87,11 @@ sub test_species_list {
        jQuery('body').append("<p>Species images present</p>");
      }
   });
-    my $species_latin_name = $SD->get_config($species,'SPECIES_BIO_NAME');
-    $species_label =~ s/Ciona /C./g; #species label shorten for Ciona
+  
     $sel->ensembl_is_text_present("Species images present")
-    and $sel->ensembl_is_text_present($species_latin_name)
-    and $sel->ensembl_is_text_present("What's New in $species_label release $release_version");
-    
+    and $sel->ensembl_is_text_present($sc_name)
+    and $sel->ensembl_is_text_present("What's New in");
+
     $sel->go_back();
  }
 }
@@ -99,9 +100,10 @@ sub test_blog {
  my ($self, $links) = @_;
  my $sel = $self->sel;
  
- $sel->open_ok("/"); 
+ $sel->open_ok("/");
+ $self->no_mirrors_redirect;
  #$sel->ensembl_wait_for_page_to_load_ok;
- $sel->ensembl_click("link=More release news on our blog ?");
+ $sel->ensembl_click("link=More news on our blog");
  $sel->ensembl_wait_for_page_to_load("50000")
  and $sel->ensembl_is_text_present('Category Archives'); 
 }
@@ -110,7 +112,7 @@ sub test_robots_file {
   my ($self, $links) = @_;
   my $sel = $self->sel;
   
-  next unless $sel->open_ok("/robots.txt")
+  next unless $sel->open_ok("/robots.txt")  
   and $sel->ensembl_is_text_present('User-agent: *')
   and $sel->ensembl_is_text_present('Disallow:*/Gene/A*')
   and $sel->ensembl_is_text_present('Sitemap: http://www.ensembl.org/sitemap-index.xml');
@@ -133,9 +135,10 @@ sub test_doc {
  my ($self, $links) = @_;
  my $sel      = $self->sel;
  my $location = $self->get_location();
- my @skip_link = ('Home', 'Frequently Asked Questions');
+ my @skip_link = ('Home', 'FAQs');
  
- $sel->open_ok("/info/index.html");
+ $self->no_mirrors_redirect;
+ $sel->open_ok("/info/index.html"); 
  print "URL:: $location \n\n" unless $sel->ensembl_wait_for_page_to_load; 
  $sel->ensembl_click_all_links('#main', \@skip_link); 
 }
@@ -145,15 +148,19 @@ sub test_faq {
   my $sel      = $self->sel;
   my $location = $self->get_location(); 
   
-  $sel->open_ok("/info/index.html");
+  $self->no_mirrors_redirect;
+  $sel->open_ok("/info/index.html");  
   print "URL:: $location \n\n" unless $sel->ensembl_wait_for_page_to_load; 
   
   my @skip_link = ("Home", "contact our HelpDesk", "developers' mailing list");
   
-  $sel->ensembl_click_ok("link=Frequently Asked Questions",'50000')
+  $sel->ensembl_click_ok("link=FAQs",'50000')
   and $sel->wait_for_pop_up_ok("", "5000")
   and $sel->select_window_ok("name=popup_selenium_main_app_window")  #thats only handling one popup with no window name cannot be used for multiple popups
   and $sel->ensembl_click_all_links(".content", \@skip_link, 'More FAQs');
+
+  $sel->close();
+  $sel->select_window();
 }
 
 sub test_login {
@@ -161,7 +168,8 @@ sub test_login {
  my $sel = $self->sel;
  my $location = $self->get_location(); 
 
- $sel->open_ok("/");
+ $self->no_mirrors_redirect;
+ $sel->open_ok("/"); 
  
  $sel->ensembl_click("link=Login/Register")
  and $sel->ensembl_wait_for_ajax_ok(undef,5000)
@@ -178,7 +186,9 @@ sub test_register {
  my ($self, $links) = @_;
  my $sel = $self->sel;
 
+ $self->no_mirrors_redirect;
  $sel->open_ok("/");
+ 
  #$sel->ensembl_wait_for_page_to_load_ok;
  $sel->ensembl_click("link=Login/Register")
  and $sel->ensembl_wait_for_ajax_ok(undef,5000);
@@ -186,7 +196,7 @@ sub test_register {
  $sel->ensembl_click("link=Register")
  and $sel->ensembl_wait_for_ajax_ok(undef,5000);
  
- $sel->ensembl_is_text_present("Name");
+ $sel->ensembl_is_text_present("Email");
  
  $sel->ensembl_click("link=Lost Password")
  and $sel->ensembl_wait_for_ajax_ok(undef,5000)
@@ -198,15 +208,16 @@ sub test_search {
  my $sel      = $self->sel;
  my $location = $self->get_location();
 
- $sel->open_ok("/");
+ $self->no_mirrors_redirect;
+ $sel->open_ok("/"); 
  #$sel->ensembl_wait_for_page_to_load_ok;
  
  $sel->type_ok("name=q", "BRCA2");
  $sel->ensembl_click_links(["//input[\@type='image']"]);
- #$sel->ensembl_wait_for_page_to_load_ok;
+ #$sel->ensembl_wait_for_page_to_load_ok(50000);
  $sel->ensembl_is_text_present("results match");
 # $sel->ensembl_click("link=Gene");
- $sel->ensembl_click("//div[\@id='solr_content']//div[\@class='solr_sidebar']//div[\@class='solr_beak_p_contents']/a[1]")
+ $sel->ensembl_click("//a[contains(\@href, '#Gene')]")
  and $sel->ensembl_wait_for_ajax_ok(undef,5000);
  $sel->ensembl_is_text_present("when restricted to");
  $sel->ensembl_is_text_present("category: Gene");
@@ -223,7 +234,8 @@ sub test_contact_us {
  my $sel = $self->sel;
  my $sd = $self->get_species_def;
 
- $sel->open_ok("/info/about/contact");
+ $self->no_mirrors_redirect;
+ $sel->open_ok("/info/about/contact"); 
  $sel->ensembl_is_text_present("Contact Ensembl");
  $sel->ensembl_click("link=email Helpdesk"); 
  $sel->wait_for_pop_up_ok("", "5000");

@@ -101,7 +101,7 @@ Ensembl.Panel.Configurator = Ensembl.Panel.Configurator.extend({
   }
 });
 
-Ensembl.Panel.LocationNav = Ensembl.Panel.LocationNav.extend({
+Ensembl.Panel.LocationNavDisabled = Ensembl.Panel.LocationNav.extend({ // TODO
   init: function () {
     var panel = this;
     

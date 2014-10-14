@@ -29,7 +29,7 @@ sub buttons {
   my $input   = $hub->input;
   my @buttons = $self->PREV::buttons(@_);
 
-  if ($hub->type ne 'Tools') {
+  if ($hub->type ne 'Tools' && $hub->action !~ /Align/) {
     push @buttons, {
       'caption'   => 'BLAST this sequence',
       'url'       => $hub->url({qw(type Tools action Blast)}),

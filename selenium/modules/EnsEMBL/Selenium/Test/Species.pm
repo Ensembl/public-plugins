@@ -246,7 +246,8 @@ sub export_data {
   $output_url =~ s/^(\s)*//g;
 
   $sel->ensembl_click("modal_bg");  
-  $sel->open_ok("$output_url")  
+  $sel->open_ok("$output_url")
+  and $self->no_mirrors_redirect
   and $sel->ensembl_wait_for_page_to_load(50000);
   $sel->ensembl_is_text_present("$text_to_check");
 }
@@ -306,8 +307,10 @@ sub open_species_homepage {
 #  my $species_name = $species;
 #  $species_name    =~ s/_/ /;
 
+  $self->no_mirrors_redirect;
+
   ##TODO::CHeck for species image loaded fine
-  $sel->open_ok("$species/Info/Index")
+  $sel->open_ok("$species/Info/Index")  
   and $sel->ensembl_wait_for_page_to_load($timeout)
   and $sel->ensembl_is_text_present($species_bio_name);
 }

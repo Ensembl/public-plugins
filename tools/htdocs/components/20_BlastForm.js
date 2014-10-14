@@ -550,8 +550,14 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     var source    = this.elLk.source.filter('[name=source_' + dbType + ']').val();
     var valid     = [];
 
+    validationFilter:
     for (var i = this.combinations.length - 1; i >= 0; i--) {
       if (this.combinations[i]['query_type'] === queryType && this.combinations[i]['db_type'] === dbType && this.combinations[i]['sources'].indexOf(source) >= 0) {
+        for (var j = this.sequences.length -1; j >= 0; j--) {
+          if (this.sequences[j].string.length < this.combinations[i]['min_length']) {
+            break validationFilter;
+          }
+        }
         valid.push(this.combinations[i]['search_type']);
       }
     }

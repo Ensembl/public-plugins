@@ -15,7 +15,9 @@ behavioural structure of honey bees.  It implements all functionality of both
 data-flow graphs and block-branch diagrams which should allow it to codify
 any program, algorithm, or parallel processing job control system.  It is
 not bound to any processing 'farm' system and can be adapted to any GRID.
+</p>
 
+<p>
 A pipeline is defined by a set of initial <i>jobs</i>
 and a graph whose nodes are <i>analyses</i> ("types" of jobs)
 and whose arcs represent <i>dataflow rules</i> (rules that control how running jobs generate new jobs)
@@ -23,11 +25,18 @@ and <i>analysis control rules</i> (rules that block jobs of one analysis until a
 </p>
 
 <h2>Documentation</h2>
+
+<p>
+eHive is now hosted on <a href="https://github.com/Ensembl/ensembl-hive">GitHub</a>, like the other Ensembl components,
+and the up-to-date documentation is to be found there.
+We currently maintain three stable (they only receive bug-fixes) versions of eHive.
+</p>
+
 <ul>
-<li><a href="installation.html">Installation</a></li>
-<li><a href="example1.html">Toy example</a> (multiplication of large numbers)</li>
-<li><a href="init_pipeline.html">init_pipeline script</a></li>
-<li><a href="beekeeper.html">beekeeper script</a></li>
+	<li><a href="https://rawgit.com/Ensembl/ensembl-hive/version/2.1/docs/index.html">v2.1</a> (recommended): introduces a better tracking of workers that specialize in multiple tasks.</li>
+	<li><a href="https://rawgit.com/Ensembl/ensembl-hive/version/2.0/docs/index.html">v2.0</a>: the first version to be independent from the Ensembl Core API.</li>
+	<li><a href="https://rawgit.com/Ensembl/ensembl-hive/version/1.9/docs/index.html">v1.9</a>: still dependent on the Ensembl Core API (for legacy only).</li>
 </ul>
+
 </body>
 </html>

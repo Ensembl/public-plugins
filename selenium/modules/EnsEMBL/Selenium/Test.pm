@@ -140,4 +140,16 @@ sub set_species {
  my ($self, $species) = @_; 
  $self->{'_species'} = $species;  
 }
+
+# Because the test are being run on a useast machine accessing www on this machine will cause a redirect to useast and hence stopping the redirect, shouldn't be a problem to test useast.ensembl.org as the link won't be here
+sub no_mirrors_redirect {
+  my $self = shift;
+  
+  if($self->sel->is_text_present("You are being redirected to")) {
+    print"Click link to stop redirect to mirrors...\n";
+    $self->sel->open("/");
+    $self->sel->click("link=here")
+    and $self->sel->pause(5000);
+  }
+}
 1;
