@@ -67,7 +67,7 @@ sub content {
   my @grouping_params = qw(database_name species database_type testcase team_responsible);
   my $grouping_param  = $hub->param('group_by');
      $grouping_param  = $grouping_params[0] if !$grouping_param || !grep { $_ eq $grouping_param } @grouping_params;
-  $html .= sprintf '<p><b>Sub groupp by</b>: %s</p>', join ' &middot ', map { $_ eq $grouping_param
+  $html .= sprintf '<p><b>Sub group by</b>: %s</p>', join ' &middot ', map { $_ eq $grouping_param
     ? sprintf '<b>%s</b>', ucfirst $grouping_param =~ s/_/ /gr
     : sprintf '<a href="%s;group_by=%s">%s</a>', $url =~ s/group_by\=[a-z_]+(\;|\&)?//r, $_, ucfirst $_ =~ s/_/ /gr
   } @grouping_params;
