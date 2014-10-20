@@ -836,7 +836,7 @@
       } else {
         v = '';
       }
-      out.push("" + q[0] + v + " AND " + field + ":" + s);
+      out.push("" + q[0] + v + " AND " + field + ":\"" + s + "\"");
     }
     out = ((function() {
       var _j, _len1, _results;

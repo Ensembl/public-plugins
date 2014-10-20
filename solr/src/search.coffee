@@ -466,7 +466,7 @@ better_boost = (q,field,values,boost) ->
   for s,i in values
     v = Math.floor(boost*(values.length-i-1)/(values.length-1))
     if v then v = '^'+v else v = ''
-    out.push("#{q[0]}#{v} AND #{field}:#{s}")
+    out.push("#{q[0]}#{v} AND #{field}:\"#{s}\"")
   out = ( "( "+x+" )" for x in out).join(' OR ')
   return [out]
 
