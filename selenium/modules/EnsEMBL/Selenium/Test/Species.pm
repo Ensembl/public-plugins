@@ -271,7 +271,7 @@ sub features_karyotype {
 
   $sel->type_ok("name=id","$feature_id")
   and $sel->ensembl_click("name=submit_button")
-  and $sel->ensembl_wait_for_ajax_ok(50000,5000) #timeout=50s and pause=5s
+  and $sel->ensembl_wait_for_ajax_ok(50000,10000) #timeout=50s and pause=5s
   and $sel->ensembl_is_text_present("$feature_id");
 }
 
@@ -379,17 +379,29 @@ sub turn_track {
     goto SKIP;
   }
 
-  $sub_track += 1 if($sel->get_attribute("$track_image_xpath\@class") =~ / off/ && lc($action) eq 'on');  # track is chosen, track count should increment by 1 only do this if track is off and action is turning track on.
-  $sub_track -= 1 if($sel->get_attribute("$track_image_xpath\@class") =~ / on/ && lc($action) eq 'off'); # unselecting track, track count should decement by 1 only if it wasn't off before and action is turning track off.
+  my $li_xpath = $track_image_xpath; 
+  if ($li_xpath =~ m/li\[\d\]/g) {
+     $li_xpath =~  s/li(\[\d\])(.+?)*/li$1/g;
+  } else {
+    $li_xpath =~ s/li(.+?)*|li/li/g; 
+  }
+  $sub_track += 1 if($sel->get_attribute("$li_xpath\@class") =~ / off/ && lc($action) eq 'on');  # track is chosen, track count should increment by 1 only do this if track is off and action is turning track on.
+  $sub_track -= 1 if($sel->get_attribute("$li_xpath\@class") =~ / on/ && lc($action) eq 'off'); # unselecting track, track count should decement by 1 only if it wasn't off before and action is turning track off.
 
   my $track_select_image = $track_image_xpath;
-  $track_select_image =~ s/li/li\/ul\/li[4]/g if(lc($action) eq 'on'); #generating the xpath for the track select image (the normal one)
-  $track_select_image =~ s/li/li\/ul\/li[2]/g if(lc($action) eq 'off');#generating the xpath for the track select image (the blank one)
+  if ($track_image_xpath =~ m/li\[\d\]/g) {
+    $track_select_image =~ s/li(\[\d\])(.+?)*/li$1\/ul\/li[4]/g if(lc($action) eq 'on'); #generating the xpath for the track select image (the normal one) which is like this div[5]/div/ul/li/ul/li[4]
+    $track_select_image =~ s/li(\[\d\])(.+?)*/li$1\/ul\/li[2]/g if(lc($action) eq 'off');#generating the xpath for the track select image (the blank one)
+  } else {
+    $track_select_image =~ s/li(.+?)*|li/li\/ul\/li[4]/g if(lc($action) eq 'on'); #generating the xpath for the track select image (the normal one) which is like this div[5]/div/ul/li/ul/li[4]
+    $track_select_image =~ s/li(.+?)*|li/li\/ul\/li[2]/g if(lc($action) eq 'off');#generating the xpath for the track select image (the blank one)
+  }
 
   $sel->ensembl_click($track_image_xpath)
+  and $sel->pause(5000)
   and $sel->ensembl_click($track_select_image)
   and $sel->ensembl_is_text_present("$track_name($sub_track/*");  #maybe add a different error if failure (use selenium is_text_present instead of ensembl one)  
-  
+
   $sel->ensembl_is_text_present($parent_track) if($parent_test);
   
   SKIP:

@@ -59,13 +59,13 @@ sub test_regulation {
     and $sel->ensembl_wait_for_ajax_ok('50000','5000')
     and $sel->ensembl_click("link=Repeat regions")
     and $sel->ensembl_wait_for_ajax_ok('20000')    
-    and $sel->ensembl_click("//form[\@id='regulation_featuresbycellline_configuration']/div[7]/div/ul/li")
+    and $sel->ensembl_click("//form[\@id='regulation_featuredetails_configuration']/div[7]/div/ul/li/div[2]")
     and $sel->ensembl_is_text_present("Repeat regions(1/*")
     and $sel->ensembl_click("modal_bg")
     and $sel->ensembl_wait_for_ajax_ok('50000', 5000)
     and $sel->ensembl_images_loaded;
     
-    $sel->ensembl_click_links(["link=Feature Context", "link=Evidence"]);
+    $sel->ensembl_click_links(["link=Feature Context", "link=Source Data"]);
   }
 }
 1;

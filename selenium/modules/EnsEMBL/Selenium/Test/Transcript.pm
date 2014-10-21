@@ -67,7 +67,7 @@ sub test_transcript {
     my $oligos = $self->count_oligos($transcript_param);
     $sel->ensembl_click_links(["link=Oligo probes*"]) if($oligos);
 
-    $sel->ensembl_click_links(["link=Ontology graph*", "link=Ontology table*"],'20000') if(lc($self->species) eq 'homo_sapiens' or lc($self->species) eq 'mus_musculus');
+    $sel->ensembl_click_links(["link=GO graph*", "link=GO table*"],'20000') if(lc($self->species) eq 'homo_sapiens' or lc($self->species) eq 'mus_musculus');
     $sel->ensembl_click_links(["link=Variation table", "link=Variation image"]) if($species_db->{'database:variation'});
     $sel->ensembl_click_links(["link=Population comparison", "link=Comparison image"],'50000') if($species_db->{'database:variation'} && $SD->databases(ucfirst($self->species))->{'DATABASE_VARIATION'}->{'#STRAINS'});
     $sel->ensembl_click_links(["link=Protein summary"],'20000');
@@ -79,7 +79,7 @@ sub test_transcript {
       and $sel->ensembl_wait_for_ajax_ok('30000','10000')
       and $sel->ensembl_click("link=Somatic mutations")
       and $sel->ensembl_wait_for_ajax_ok('10000','10000')
-      and $sel->ensembl_click("//form[\@id='transcript_translationimage_configuration']/div[4]/div/ul/li") #turning first track off     
+      and $sel->ensembl_click("//form[\@id='transcript_translationimage_configuration']/div/div/ul/li/div[2]") #turning first track off     
       and $sel->ensembl_click("modal_bg")
 #      and $sel->ensembl_wait_for_ajax_ok('15000')
       and $sel->ensembl_images_loaded;
