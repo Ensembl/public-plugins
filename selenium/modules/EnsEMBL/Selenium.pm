@@ -140,7 +140,6 @@ sub ensembl_click_all_links {
     \$('$div').find('a');
   });
 
-warn ">>$div";    
   my @links_array = split(',',$links_href);
   my $i = 0;
 
