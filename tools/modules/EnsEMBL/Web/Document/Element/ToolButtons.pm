@@ -32,7 +32,9 @@ sub init {
   $self->PREV::init(@_);
 
   # can not share any tools pages via urls
-  $_->{'class'} = sprintf 'disabled %s', $_->{'class'} || '' for grep {$_->{'caption'} eq 'Share this page'} @{$self->entries};
+  if($hub->type eq 'Tools') {
+    $_->{'class'} = sprintf 'disabled %s', $_->{'class'} || '' for grep {$_->{'caption'} eq 'Share this page'} @{$self->entries};
+  }
 }
 
 1;
