@@ -53,7 +53,7 @@ sub test_variation {
     
     #TODO Test the Show table link
     
-    #Adding a track from the configuration panel
+    #Adding a track from the configuration panel, testing zmenu and other human specific link
     if(lc($self->species) eq 'homo_sapiens') {
       print "  Test Configure page, adding a track \n";
       $sel->ensembl_click("link=Configure this page")
@@ -64,19 +64,17 @@ sub test_variation {
       and $sel->ensembl_click("modal_bg")
       and $sel->ensembl_wait_for_ajax_ok('50000', '50000')
       and $sel->ensembl_images_loaded;
-    }
+        
+      #Test ZMenu    
+      $sel->ensembl_open_zmenu('Context','title^="Variation:"');
+      $sel->pause(8000);
+      $sel->ensembl_click("link=more about*")
+      and $sel->ensembl_wait_for_ajax_ok('50000','5000')
+      and $sel->go_back();    
     
-    #Test ZMenu    
-    $sel->ensembl_open_zmenu('Context','title^="Variation:"');
-    $sel->pause(8000);
-    $sel->ensembl_click("link=more about*")
-    and $sel->ensembl_wait_for_ajax_ok('50000','5000')
-    and $sel->go_back();    
+      $sel->ensembl_wait_for_page_to_load;
+      $sel->pause(3000);
     
-    $sel->ensembl_wait_for_page_to_load;
-    $sel->pause(3000);
-    
-    if(lc($self->species) eq 'homo_sapiens') {        
       $sel->ensembl_click_links(["link=Linkage disequilibrium", "link=Phenotype Data*"],'10000');
       
       $sel->ensembl_click_links(["link=View on Karyotype"],'50000');

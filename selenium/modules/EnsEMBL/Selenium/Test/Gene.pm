@@ -91,7 +91,7 @@ sub test_gene {
       "link=Gene gain/loss tree"
     ],'20000') if(lc($self->species) ne 'saccharomyces_cerevisiae');
 
-    my $counts = $self->count_homologues($gene_param);
+    my $counts = lc($self->species) eq 'ciona_intestinalis' ? * : $self->count_homologues($gene_param);
     $sel->ensembl_click_links(["link=Orthologues ($counts->{'orthologs'})"],'20000') if($counts->{'orthologs'});
     $sel->ensembl_click_links(["link=Paralogues ($counts->{'paralogs'})"],'20000') if($counts->{'paralogs'});
     $sel->ensembl_click_links(["link=Protein families*"],'50000') if($counts->{'families'});

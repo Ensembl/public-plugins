@@ -83,7 +83,7 @@ sub test_location {
       #TODO:: ZMenu on viewtop and ViewBottom panel
     }
     #Whole genome link    
-    $sel->ensembl_click_links(["link=Whole genome"]);
+    $sel->ensembl_click_links(["link=Whole genome"],"60000");
     $sel->ensembl_is_text_present("This genome has yet to be assembled into chromosomes") if(!scalar @{$SD->get_config(ucfirst($self->species), 'ENSEMBL_CHROMOSOMES')});
 
     @location_array[0] =~ s/chr//;

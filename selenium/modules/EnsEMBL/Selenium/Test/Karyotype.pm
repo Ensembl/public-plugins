@@ -39,7 +39,7 @@ sub test_karyotype {
     print "  No Karyotype \n";
     #$sel->ensembl_is_text_present("Karyotype (not available)");
   } else {
-    $sel->ensembl_click_links(["link=View karyotype"]);
+    $sel->ensembl_click_links(["link=View karyotype"], "60000");
     $sel->ensembl_is_text_present("Click on the image above to jump to a chromosome");
 
     #Checking if karyotype image loaded fine

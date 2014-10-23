@@ -47,7 +47,7 @@ sub test_regulation {
     #Test ZMenu
     print "  Test ZMenu on Regulation Details by cell line \n";
     $sel->ensembl_open_zmenu('FeatureDetails', 'title^="Regulatory Feature:"', 'Reg Feats');
-    $sel->pause(2000);
+    $sel->pause(5000);
     $sel->ensembl_click("link=ENSMUSR*")
     and $sel->ensembl_wait_for_ajax_ok('50000','2000');
     
