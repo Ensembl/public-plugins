@@ -47,10 +47,10 @@ sub CONFIG_SECTIONS {
     'id'        => 'filters',
     'title'     => 'Filtering options',
     'caption'   => 'Pre-filter results by frequency or consequence type'
-  #}, {
-  #  'id'        => 'plugins',
-  #  'title'     => 'Plugins',
-  #  'caption'   => 'Extra functionality from VEP plugins'
+  }, {
+   'id'        => 'plugins',
+   'title'     => 'Plugins',
+   'caption'   => 'Extra functionality from VEP plugins'
   }];
 }
 
