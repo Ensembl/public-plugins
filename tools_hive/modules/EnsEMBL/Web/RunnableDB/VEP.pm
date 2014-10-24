@@ -67,7 +67,7 @@ sub run {
   my $options         = $self->param('script_options') || {};
   my $log_file        = "$work_dir/lsf_log.txt";
 
-  $options->{"--$_"}  = '' for qw(force quiet vcf tabix stats_text cache); # we need these options set on always!
+  $options->{"--$_"}  = '' for qw(force quiet safe vcf tabix stats_text cache); # we need these options set on always!
   $options->{"--$_"}  = sprintf '"%s/%s"', $work_dir, delete $config->{$_} for qw(input_file output_file stats_file);
   $options->{"--$_"}  = $config->{$_} eq 'yes' ? '' : $config->{$_} for grep { defined $config->{$_} && $config->{$_} ne 'no' } keys %$config;
   $options->{"--dir"} = $self->param('cache_dir');
