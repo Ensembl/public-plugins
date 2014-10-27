@@ -638,18 +638,21 @@ sub _build_extra {
 }
 
 sub _build_plugins {
-  my ($self, $form, $extra_div) = @_;
-  my $hub       = $self->hub;
-  my $sd        = $hub->species_defs;
-  my $species   = $self->_species;
-  my $fieldset  = $extra_div->append_child($form->add_fieldset);
+  my ($self, $form, $plugin_div) = @_;
+  my $hub = $self->hub;
+  my $sd  = $hub->species_defs;
+  my $pl  = $sd->multi_val('ENSEMBL_VEP_PLUGIN_CONFIG');
+  return unless $pl;
   
-  foreach my $pl_key(keys %{$sd->ENSEMBL_VEP_PLUGIN_CONFIG}) {
-    my $pl = $sd->ENSEMBL_VEP_PLUGIN_CONFIG->{$pl_key};
+  my $species   = $self->_species;
+  my $fieldset  = $plugin_div->append_child($form->add_fieldset);
+  
+  foreach my $pl_key(keys %$pl) {
+    my $plugin = $pl->{$pl_key};
     
     $fieldset->add_field({
       'class' => "_stt",
-      'field_class' => [map {"_stt_".ucfirst($_)} @{$pl->{species} || []}],
+      'field_class' => [map {"_stt_".ucfirst($_)} @{$plugin->{species} || []}],
       'type' => 'dropdown',
       'helptip' => $pl->{helptip},
       'name' => 'plugin_'.$pl_key,
@@ -672,7 +675,6 @@ sub _build_plugins {
       }
     }
   }
-  #$fieldset->add_field({});
 }
 
 sub _species {
