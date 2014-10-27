@@ -664,8 +664,8 @@ sub _build_plugins {
       ],
     });
     
-    if($pl->{form}) {
-      foreach my $el(@{$pl->{form}}) {
+    if($plugin->{form}) {
+      foreach my $el(@{$plugin->{form}}) {
         $el->{field_class} = '_stt_plugin_'.$pl_key;
         $el->{label} ||= $el->{name};
         $el->{value} ||= $el->{name};
