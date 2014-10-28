@@ -35,7 +35,7 @@ All commands in this video can be found from the following
 <p>
 There are two ways of installing the Perl API. You can <a href="/info/docs/api/api_git.html">clone it from GitHub using Git</a> 
 if you have that available, or you can download the files in gzipped TAR format from our 
-<a href="ftp://ftp.ensembl.org/pub/ensembl-api.tar.gz" rel="external">FTP site</a>. You will also need <a href='http://bioperl.org/DIST/old_releases/bioperl-1.2.3.tar.gz' rel="external">BioPerl 1.2.3</a>.
+<a href="ftp://ftp.ensembl.org/pub/ensembl-api.tar.gz" rel="external">FTP site</a>. You will also need <a href='http://bioperl.org/DIST/BioPerl-1.6.1.tar.gz' rel="external">BioPerl 1.6.1 core modules</a> (bioperl-live).
 </p>
 <p>
 <strong>N.B.</strong> We recommend waiting until a few days after a
@@ -53,7 +53,7 @@ $ cd
 $ mkdir src
 $ cd src
 $ wget ftp://ftp.ensembl.org/pub/ensembl-api.tar.gz
-$ wget http://bioperl.org/DIST/old_releases/bioperl-1.2.3.tar.gz
+$ wget http://bioperl.org/DIST/BioPerl-1.6.1.tar.gz 
 </pre>
 </li>
 
@@ -63,7 +63,7 @@ Unpack the downloaded files. In the Unix command line, type:
 </p>
 <pre>
 $ tar zxvf ensembl-api.tar.gz
-$ tar zxvf bioperl-1.2.3.tar.gz
+$ tar zxvf bioperl-1.6.1.tar.gz
 </pre>
 
 <p>
@@ -91,7 +91,7 @@ Under <kbd>bash</kbd>, <kbd>ksh</kbd>, or any <kbd>sh</kbd>-derived shell:
 </p>
 
 <pre>
-PERL5LIB=${PERL5LIB}:${HOME}/src/bioperl-1.2.3
+PERL5LIB=${PERL5LIB}:${HOME}/src/bioperl-1.6.1
 PERL5LIB=${PERL5LIB}:${HOME}/src/ensembl/modules
 PERL5LIB=${PERL5LIB}:${HOME}/src/ensembl-compara/modules
 PERL5LIB=${PERL5LIB}:${HOME}/src/ensembl-variation/modules
@@ -106,7 +106,7 @@ Under <kbd>csh</kbd> or <kbd>tcsh</kbd>:
 </p>
 
 <pre>
-setenv PERL5LIB ${PERL5LIB}:${HOME}/src/bioperl-1.2.3
+setenv PERL5LIB ${PERL5LIB}:${HOME}/src/bioperl-1.6.1
 setenv PERL5LIB ${PERL5LIB}:${HOME}/src/ensembl/modules
 setenv PERL5LIB ${PERL5LIB}:${HOME}/src/ensembl-compara/modules
 setenv PERL5LIB ${PERL5LIB}:${HOME}/src/ensembl-variation/modules
@@ -120,14 +120,14 @@ Under Windows (assuming you installed the APIs in C:\src\):
 </p>
 
 <pre>
-set PERL5LIB=C:\src\bioperl-1.2.3;C:\src\ensembl\modules;C:\src\ensembl-compara\modules;C:\src\ensembl-variation\modules;C:\src\ensembl-funcgen\modules
+set PERL5LIB=C:\src\bioperl-1.6.1;C:\src\ensembl\modules;C:\src\ensembl-compara\modules;C:\src\ensembl-variation\modules;C:\src\ensembl-funcgen\modules
 </pre>
 </li>
 
 <li>
 	<p>In Perl (we do not recommend creating hard-coded dependencies in Perl scripts):</p>
 	<pre>
-use lib "$ENV{HOME}/src/bioperl-1.2.3";
+use lib "$ENV{HOME}/src/bioperl-1.6.1";
 use lib "$ENV{HOME}/src/ensembl/modules";
 use lib "$ENV{HOME}/src/ensembl-compara/modules";
 use lib "$ENV{HOME}/src/ensembl-variation/modules";
