@@ -299,7 +299,7 @@ sub alt_assembly_info {
   my $hub   = $self->hub;
   my $sd    = $hub->species_defs;
   my $html;
-  if (my $alt_assembly = $sd->get_config($species, 'SWITCH_ASSEMBLY')) {
+  if ($caption ne 'Assembly Converter' && my $alt_assembly = $sd->get_config($species, 'SWITCH_ASSEMBLY')) {
     my $alt_assembly_url    = $sd->get_config($species, 'SWITCH_ARCHIVE_URL');
     my $species_common_name = $sd->get_config($species, 'SPECIES_COMMON_NAME');
     $html .= $self->info_panel(
@@ -316,7 +316,7 @@ sub alt_assembly_info {
   if ($sd->ENSEMBL_SERVERNAME eq 'grch37.ensembl.org') {
     $html .= $self->info_panel(
                 sprintf('%s for non-human species', $caption),
-                sprintf('%s is now only available on this site for Human (GRCh37). For other species, please visit our main site at <a href="http://www.ensembl.org">www.ensembl.org</a>.', $caption),
+                sprintf('%s is now only available on this site for Human. For other species, please visit our main site at <a href="http://www.ensembl.org">www.ensembl.org</a>.', $caption),
               );
   }
   return $html;
