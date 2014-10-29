@@ -201,7 +201,7 @@ sub _species {
     my $current_species = $hub->species;
 
     ## Need to fetch chain file info from tools server somehow!
-    my @ok_species = qw(Bos_taurus Canis_familiaris Homo_sapiens Mus_musculus Rattus_norvegicus Saccharomyces_cerevisiae Sus_scrofa);
+    my @ok_species = $sd->ENSEMBL_SERVERNAME eq 'grch37.ensembl.org' ? qw(Homo_sapiens) : qw(Bos_taurus Canis_familiaris Homo_sapiens Mus_musculus Rattus_norvegicus Saccharomyces_cerevisiae Sus_scrofa);
     my $chain_files = {
                       'Homo_sapiens' => ['GRCh37_to_GRCh38', 'NCBI36_to_GRCh38'],
                       'Mus_musculus' => ['GRCm38_to_NCBIM36', 'GRCm38_to_NCBIM37',
