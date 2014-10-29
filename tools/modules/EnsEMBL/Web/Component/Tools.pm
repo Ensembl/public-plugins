@@ -298,10 +298,11 @@ sub alt_assembly_info {
   my ($self, $species, $caption, $tool_type) = @_;
   my $hub   = $self->hub;
   my $sd    = $hub->species_defs;
+  my $html;
   if (my $alt_assembly = $sd->get_config($species, 'SWITCH_ASSEMBLY')) {
     my $alt_assembly_url    = $sd->get_config($species, 'SWITCH_ARCHIVE_URL');
     my $species_common_name = $sd->get_config($species, 'SPECIES_COMMON_NAME');
-    return $self->info_panel(
+    $html .= $self->info_panel(
       sprintf('%s for %s %s', $caption, $species_common_name, $alt_assembly),
       sprintf('If you are looking for %s for %s %s, please go to <a href="http://%s%s">%3$s website</a>.',
         $caption,
@@ -310,9 +311,15 @@ sub alt_assembly_info {
         $alt_assembly_url,
         $hub->url({'__clear' => 1, 'species' => $species, 'type' => 'Tools', 'action' => $tool_type })
       )
-    ),
+    );
   }
-  return '';
+  if ($sd->ENSEMBL_SERVERNAME eq 'grch37.ensembl.org') {
+    $html .= $self->info_panel(
+                sprintf('%s for non-human species', $caption),
+                sprintf('%s is now only available on this site for Human (GRCh37). For other species, please visit our main site at <a href="http://www.ensembl.org">www.ensembl.org</a>.', $caption),
+              );
+  }
+  return $html;
 }
 
 sub format_date {
