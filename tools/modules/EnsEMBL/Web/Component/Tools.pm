@@ -298,8 +298,9 @@ sub alt_assembly_info {
   my ($self, $species, $caption, $tool_type) = @_;
   my $hub   = $self->hub;
   my $sd    = $hub->species_defs;
-  my $html;
-  if ($caption ne 'Assembly Converter' && my $alt_assembly = $sd->get_config($species, 'SWITCH_ASSEMBLY')) {
+  my $html; 
+  my $alt_assembly = $sd->get_config($species, 'SWITCH_ASSEMBLY');
+  if ($caption ne 'Assembly Converter' && $alt_assembly) {
     my $alt_assembly_url    = $sd->get_config($species, 'SWITCH_ARCHIVE_URL');
     my $species_common_name = $sd->get_config($species, 'SPECIES_COMMON_NAME');
     $html .= $self->info_panel(
