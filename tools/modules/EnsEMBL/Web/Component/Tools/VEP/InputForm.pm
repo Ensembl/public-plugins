@@ -607,7 +607,9 @@ sub _species {
     my %refseq  = map { $_ => 1 } qw(Danio_rerio Gallus_gallus Homo_sapiens Mus_musculus Rattus_norvegicus Sus_scrofa);
     my @species;
 
-    for ($sd->valid_species) {
+    my @valid_species = $sd->ENSEMBL_SERVERNAME eq 'grch37.ensembl.org' ? ('Homo_sapiens') : $sd->valid_species;
+
+    for (@valid_species) {
 
       my $db_config = $sd->get_config($_, 'databases');
 
