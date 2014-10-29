@@ -170,7 +170,7 @@ sub get_form_node {
   $query_seq_elements->[1]->first_child->append_children(map { $query_seq_elements->[$_]->remove_attribute('class', $query_seq_field->CSS_CLASS_ELEMENT_DIV); $query_seq_elements->[$_]; } 2..4);
 
   my $search_against_field; 
-  if ($sd->ENSEMBL_SERVERNAME eq 'GRCh37') {
+  if ($hub->species_defs->ENSEMBL_SERVERNAME eq 'GRCh37') {
     $search_against_field = $fieldset->add_field({
       'label'           => 'Search against',
       'type'            => 'NoEdit',
