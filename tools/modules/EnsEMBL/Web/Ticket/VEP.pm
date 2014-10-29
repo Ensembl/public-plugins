@@ -37,9 +37,6 @@ sub init_from_user_input {
   my $self      = shift;
   my $hub       = $self->hub;
   my $species   = $hub->param('species');
-  my $format    = $hub->param('format');
-
-  $hub->param('text', $hub->param("text_$format"));
 
   my $method    = first { $hub->param($_) } qw(file url userdata text);
 
@@ -78,15 +75,15 @@ sub init_from_user_input {
   $file_name    = "$file_name.txt" if $file_name !~ /\./ && -T $file_path;
   $file_name    = $file_name =~ s/.*\///r;
 
-  # check file format is matching
+  # detect file format
   my $detected_format;
   first { m/^[^\#]/ && ($detected_format = detect_format($_)) } file_get_contents($file_path);
-  throw exception('InputError', "Selected file format ($format) does not match detected format ($detected_format)") unless $format eq $detected_format;
 
   my $job_data = { map { my @val = $hub->param($_); $_ => @val > 1 ? \@val : $val[0] } grep { $_ !~ /^text/ && $_ ne 'file' } $hub->param };
 
   $job_data->{'species'}    = $species;
   $job_data->{'input_file'} = $file_name;
+  $job_data->{'format'}     = $detected_format;
 
   $self->add_job(EnsEMBL::Web::Job::VEP->new($self, {
     'job_desc'    => $description,
