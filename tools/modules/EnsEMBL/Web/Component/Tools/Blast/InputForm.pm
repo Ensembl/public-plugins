@@ -169,17 +169,31 @@ sub get_form_node {
   # wrap the sequence input elements
   $query_seq_elements->[1]->first_child->append_children(map { $query_seq_elements->[$_]->remove_attribute('class', $query_seq_field->CSS_CLASS_ELEMENT_DIV); $query_seq_elements->[$_]; } 2..4);
 
-  my $search_against_field = $fieldset->add_field({
-    'label'           => 'Search against',
-    'field_class'     => '_adjustable_height',
-    'type'            => 'speciesdropdown',
-    'name'            => 'species',
-    'values'          => delete $options->{'species'},
-    'multiple'        => 1,
-    'wrapper_class'   => '_species_dropdown',
-    'filter_text'     => 'Type in to add a species&#8230;',
-    'filter_no_match' => 'No matching species found'
-  });
+  my $search_against_field; 
+  if ($sd->ENSEMBL_SERVERNAME eq 'GRCh37') {
+    $search_against_field = $fieldset->add_field({
+      'label'           => 'Search against',
+      'type'            => 'NoEdit',
+      'value'           => 'Human (Homo sapiens)',
+    });
+    $fieldset_add_hidden({
+      'name'            => 'species',
+      'value'           => 'Homo_sapiens',
+    });
+  }
+  else {
+    $search_against_field = $fieldset->add_field({
+      'label'           => 'Search against',
+      'field_class'     => '_adjustable_height',
+      'type'            => 'speciesdropdown',
+      'name'            => 'species',
+      'values'          => delete $options->{'species'},
+      'multiple'        => 1,
+      'wrapper_class'   => '_species_dropdown',
+      'filter_text'     => 'Type in to add a species&#8230;',
+      'filter_no_match' => 'No matching species found'
+    });
+  }
 
   for (@{$options->{'db_type'}}) {
 
