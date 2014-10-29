@@ -176,7 +176,7 @@ sub get_form_node {
       'type'            => 'NoEdit',
       'value'           => 'Human (Homo sapiens)',
     });
-    $fieldset_add_hidden({
+    $fieldset->add_hidden({
       'name'            => 'species',
       'value'           => 'Homo_sapiens',
     });
