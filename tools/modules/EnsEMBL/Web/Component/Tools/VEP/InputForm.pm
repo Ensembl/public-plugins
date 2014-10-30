@@ -72,7 +72,7 @@ sub content {
         }, @$species ]
       }, {
         'type'          => 'noedit',
-        'value'         => 'Assembly: '. join('', map { sprintf '<span class="_stt_%s">%s</span>', $_->{'value'}, $_->{'assembly'} } @$species),
+        'value'         => 'Assembly: '. join('', map { sprintf '<span class="_stt_%s _vep_assembly" rel="%s">%s</span>', $_->{'value'}, $_->{'assembly'}, $_->{'assembly'} } @$species),
         'no_input'      => 1,
         'is_html'       => 1
       }]
@@ -104,7 +104,7 @@ sub content {
           'type'            => 'button',
           'name'            => 'preview',
           'class'           => 'hidden',
-          'value'           => 'Preview first variant &rsaquo;',
+          'value'           => 'Preview results for first variant &rsaquo;',
           'helptip'         => 'See a quick preview of results for data pasted above',
         }
       ]
