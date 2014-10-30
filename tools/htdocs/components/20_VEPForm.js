@@ -71,7 +71,7 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
     
     // get assembly
     if(species === 'Homo_sapiens') {
-      var assembly = $('._stt_' + species).html().toLowerCase() + '.';
+      var assembly = $('._stt_' + species + '._vep_assembly').attr('rel').toLowerCase() + '.';
     }
     
     // construct the URL
@@ -121,7 +121,7 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
     
     div.append('<img src="/i/ajax-loader.gif"/>');
     
-    console.log(url);
+    // console.log(url);
   
     // do the AJAX request
     $.ajax({
@@ -164,7 +164,7 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
         
         // function to render link as ZMenu link
         var renderZmenuLink = function(species, type, id, label) {
-          var t = type.substring(0,1).toLowerCase();
+          var t = type.replace(/[a-z]/g, '').toLowerCase();
           var html =
             '<a class="zmenu" href="/' + species +
             '/ZMenu/' + type + '?' + t + '=' + id +
@@ -172,7 +172,7 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
           return html;
         }
         
-        var table =
+        var previewContent =
           '<style>tr:nth-child(odd) {background-color: #eaeeff;}</style>' +
           '<div class="hint"><h3><img src="/i/close.png" alt="Hide" class="close_button" title="">Results preview for ' + input + '</h3>' +
           '<div class="message-box" style="padding: 10px; background-color: white;">' +
@@ -186,13 +186,17 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
               return ret;
             }).join(", ") + '<br/>' :
             ''
-          ) +
+          );
+          
+        var table =
           '<br/><table class="ss" style="margin-bottom:0px;" id="vep_preview_table"><tbody>' +
           '<tr><th>Gene/Feature/Type</th><th>Consequence</th><th>Details</th></tr>';
+          
+        var tableContent = '';
         
         // get data from transcript consequences
         $(res.transcript_consequences).each(function() {
-          table = table +
+          tableContent = tableContent +
             '<tr><td>' +
               '<b>' + renderZmenuLink(species, 'Gene', this.gene_id, this.gene_symbol) + '</b>: ' +
               renderZmenuLink(species, 'Transcript', this.transcript_id, this.transcript_id) +
@@ -217,12 +221,12 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
           }
           if(details.length === 0) details = '-';
           
-          table = table + '<td>' + details + '</td></tr>';
+          tableContent = tableContent + '<td>' + details + '</td></tr>';
         });
         
         // get data from regulatory consequences
         $(res.regulatory_feature_consequences).each(function() {
-          table = table +
+          tableContent = tableContent +
             '<tr><td>' +
               '<b>' + renderZmenuLink(species, 'RegulatoryFeature', this.regulatory_feature_id, this.regulatory_feature_id) + '</b>' +
               '<br/><span class="small"><b>Type: </b>' + this.biotype + '</span>' +
@@ -230,10 +234,16 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
               this.consequence_terms.map(function(a) { return renderConsequence(previewData, a) }).join(", ") +
             '</td>';
           
-          table = table + '<td>-</td></tr>';
+          tableContent = tableContent + '<td>-</td></tr>';
         });
+        
+        // add table
+        if(tableContent.length) previewContent = previewContent + table + tableContent;
+        
+        // add warning
+        previewContent = previewContent + '</table><br/><span class="small"><b>Note:</b> the above is a preview of results using the <i>' + species.replace('_', ' ') + '</i> Ensembl transcript database and does not include all data fields present in the full results set</span>';
 
-        var div = panel.elLk.form.find('#vep_preview').empty().append(table + '</div></div>');
+        var div = panel.elLk.form.find('#vep_preview').empty().append(previewContent + '</div></div>');
         
         // these need listeners adding as they are rendered after page load
         div.find('a.zmenu').on('click', panel.zmenu);
