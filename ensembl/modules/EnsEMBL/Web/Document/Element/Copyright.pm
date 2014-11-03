@@ -60,7 +60,7 @@ sub content {
     );
   
   $html .= '<p class="print_hide">'; 
-  unless ($ENV{'ENSEMBL_TYPE'} =~ /Help|Account|UserData/) {
+  unless ($ENV{'ENSEMBL_TYPE'} =~ /Help|Account|UserData|Tools/) {
     $html .= qq{
         <a class="modal_link" id="p_link" href="/Help/Permalink?url=$stable_URL">Permanent link</a>
     };
