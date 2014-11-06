@@ -43,6 +43,13 @@ sub content {
   my $testcases   = {};
   $_ =~ m/^([^:]+):(.+)$/ and push @{$testcases->{$1} ||= []}, $2 for split ',', $session->config;
 
+  # post e77 patch - format of config field is changed
+  if (!keys %$testcases) {
+    my ($groups, $db_list) = split ' ', $session->config;
+    $groups = [ split /;/, $groups ];
+    $testcases->{$_} = $groups for split /;/, $db_list;
+  }
+
   my $table = $self->new_twocol(
     ['Last session:' => $session->session_id.($start_time && $end_time ? "<ul><li>Started: $start_time</li><li>Ended: $end_time</li></ul>" : " <i>(running time not known)</i>")],
     ['Host:'         => $session->host ? join '', '<ul>', (map {sprintf('<li>%s</li>', $_)} split(',', $session->host)), '</ul>' : '<i>not known</i>'],
