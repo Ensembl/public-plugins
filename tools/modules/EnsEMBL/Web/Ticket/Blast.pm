@@ -115,7 +115,7 @@ sub _process_user_input {
             'is_invalid'  => $sequence->{'is_invalid'}
           },
           'summary'     => $summary,
-          'source_file' => $sd->get_config($species, 'ENSEMBL_BLAST_DATASOURCES')->{$blast_type}{$params->{'source'}},
+          'source_file' => $sd->get_blast_datasource_filename($species, $blast_type, $params->{'source'}),
           %$params
         }
       }, {

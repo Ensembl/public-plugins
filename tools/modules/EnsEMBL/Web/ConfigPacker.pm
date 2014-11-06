@@ -35,28 +35,7 @@ sub munge_config_tree_multi {
   $self->_configure_blast_multi;
 }
 
-sub _configure_blast {
-  my $self        = shift;
-  my $tree        = $self->tree;
-
-  return if $tree->{'ENSEMBL_BLAST_DATASOURCES'};
-
-  my $multi_tree  = $self->full_tree->{'MULTI'};
-  my $species     = $self->species;
-  my $blast_types = $multi_tree->{'ENSEMBL_BLAST_TYPES'};
-  my $sources     = $tree->{'ENSEMBL_BLAST_DATASOURCES_BY_TYPE'} || $multi_tree->{'ENSEMBL_BLAST_DATASOURCES_BY_TYPE'}; # give precedence to species.ini entry
-  my $blast_conf  = {};
-
-  while (my ($blast_type, undef) = each %$blast_types) { #BLAT, NCBIBLAST, WUBLAST etc
-    next if $blast_type eq 'ORDER';
-
-    my $method = sprintf '_get_%s_source_file', $blast_type;
-
-    $blast_conf->{$blast_type}{$_} = $self->$method($_) for @{$sources->{$blast_type} || []} #LATESTGP, CDNA_ALL, PEP_ALL etc
-  }
-
-  $tree->{'ENSEMBL_BLAST_DATASOURCES'} = $blast_conf;
-}
+sub _configure_blast {}
 
 sub _configure_blast_multi {
   my $self                  = shift;
@@ -105,29 +84,6 @@ sub _configure_blast_multi {
   $multi_tree->{'ENSEMBL_BLAST_DATASOURCES_ORDER'}  = $all_sources_order;
   $multi_tree->{'ENSEMBL_BLAST_DATASOURCES'}        = $all_sources;
   $multi_tree->{'ENSEMBL_BLAST_CONFIGS'}            = $search_types_ordered;
-}
-
-sub _get_NCBIBLAST_source_file {
-  my ($self, $source_type) = @_;
-
-  my $species   = $self->species;
-  my $assembly  = $self->tree->{$species}{'ASSEMBLY_NAME'};
-  my $db_tree   = $self->db_tree;
-
-  (my $type     = lc $source_type) =~ s/_/\./;
-
-  return sprintf '%s.%s.%s.fa', $species, $assembly, $type unless $type =~ /latestgp/;
-
-  $type =~ s/latestgp(.*)/dna$1\.toplevel/;
-  $type =~ s/.masked/_rm/;
-  $type =~ s/.soft/_sm/;
- 
-  return sprintf '%s.%s.%s.%s.fa', $species, $assembly, $db_tree->{'REPEAT_MASK_DATE'} || $db_tree->{'DB_RELEASE_VERSION'}, $type;
-}
-
-sub _get_BLAT_source_file {
-  my ($self, $source_type) = @_;
-  return join ':', $self->tree->{'BLAT_DATASOURCES'}{$source_type}, $SiteDefs::ENSEMBL_BLAT_TWOBIT_DIR;
 }
 
 1;

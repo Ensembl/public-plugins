@@ -88,8 +88,8 @@ sub get_blast_form_options {
 
   # Find the missing source files
   for (@species) {
-    my %available_sources = map {$_ => 1} map { keys %$_ } values %{$sd->get_config($_, 'ENSEMBL_BLAST_DATASOURCES')};
-    if (my @missing = grep !$available_sources{$_}, keys %$sources) {
+    my $available_sources = $sd->get_available_blast_datasources($_);
+    if (my @missing = grep !$available_sources->{$_}, keys %$sources) {
       $missing_sources->{$_} = \@missing;
     }
   }

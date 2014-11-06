@@ -30,4 +30,50 @@ sub new {
   return $self;
 }
 
+sub get_available_blast_datasources {
+  ## Gets all the available blast data sources for the given species
+  my ($self, $species) = @_;
+
+  my $blast_types   = $self->multi_val('ENSEMBL_BLAST_TYPES');
+  my $source_types  = $self->get_config($species, 'ENSEMBL_BLAST_DATASOURCES_BY_TYPE') || $self->multi_val('ENSEMBL_BLAST_DATASOURCES_BY_TYPE'); # give precedence to species.ini entry
+  my $datasources   = {};
+
+  foreach my $blast_type (keys %$blast_types) { #BLAT, NCBIBLAST, WUBLAST etc
+    next if $blast_type eq 'ORDER';
+
+    $datasources->{$_} = 1 for @{$source_types->{$blast_type} || []} #LATESTGP, CDNA_ALL, PEP_ALL etc
+  }
+
+  return $datasources;
+}
+
+sub get_blast_datasource_filename {
+  ## Get tha name of the source file name for the given species, blast type and source type
+  my ($self, $species, $blast_type, $source_type) = @_;
+
+  return $self->$_($species, $source_type) for sprintf '_get_%s_source_file', $blast_type;
+}
+
+sub _get_NCBIBLAST_source_file {
+  ## @private
+  my ($self, $species, $source_type) = @_;
+
+  my $assembly  = $self->get_config($species, 'ASSEMBLY_NAME');
+  my $type      = lc($source_type =~ s/_/\./r);
+
+  return sprintf '%s.%s.%s.fa', $species, $assembly, $type unless $type =~ /latestgp/;
+
+  $type =~ s/latestgp(.*)/dna$1\.toplevel/;
+  $type =~ s/.masked/_rm/;
+  $type =~ s/.soft/_sm/;
+
+  return sprintf '%s.%s.%s.%s.fa', $species, $assembly, $self->get_config($species, 'REPEAT_MASK_DATE') || $self->get_config($species, 'DB_RELEASE_VERSION'), $type;
+}
+
+sub _get_BLAT_source_file {
+  ## @private
+  my ($self, $species, $source_type) = @_;
+  return join ':', $self->get_config($species, 'BLAT_DATASOURCES')->{$source_type}, $self->ENSEMBL_BLAT_TWOBIT_DIR;
+}
+
 1;
