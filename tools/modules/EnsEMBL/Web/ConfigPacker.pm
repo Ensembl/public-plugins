@@ -65,7 +65,7 @@ sub _configure_blast_multi {
   return if $multi_tree->{'ENSEMBL_BLAST_DATASOURCES'};
 
   my $blast_types           = {%{$multi_tree->{'ENSEMBL_BLAST_TYPES'} || {}}};
-  my $blast_types_ordered   = [ map { delete $blast_types->{$_} ? $_ : () } @{delete $blast_types->{'ORDER'} || []}, sort keys %$blast_types ];
+  my $blast_types_ordered   = [ map { delete $blast_types->{$_} ? $_ : () } @{delete $blast_types->{'ORDER'} || []} ];
   my $source_types          = $multi_tree->{'ENSEMBL_BLAST_DATASOURCES_ALL'};
   my $search_types_ordered  = [];
   my $sources_by_type       = $multi_tree->{'ENSEMBL_BLAST_DATASOURCES_BY_TYPE'};
