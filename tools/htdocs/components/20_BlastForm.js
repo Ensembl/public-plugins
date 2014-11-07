@@ -641,10 +641,9 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
   /*
    * Returns an array of species with checked checkboxes
    */
-    // hack for grch37.ensembl.org
-    if (this.elLk.form.find('input[name=single_species]')) {  
-      var $speciesInput = this.elLk.form.find('input[name=species]');
-      return $speciesInput.map(function() { return this.value; } ).toArray();
+    // hack for grch37.ensembl.org - Remove it in 78!!
+    if (window.location.href.match('grch37.ensembl.org')) {
+      return this.elLk.form.find('input[name=species]').map(function() { return this.value; } ).toArray();
     }
     return this.elLk.speciesCheckboxes.filter(':checked').map(function() { return this.value; } ).toArray();
   },
