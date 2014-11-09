@@ -104,7 +104,7 @@ sub content {
           'type'            => 'button',
           'name'            => 'preview',
           'class'           => 'hidden',
-          'value'           => 'Preview results for first variant &rsaquo;',
+          'value'           => 'Quick results for first variant &rsaquo;',
           'helptip'         => 'See a quick preview of results for data pasted above',
         }
       ]
