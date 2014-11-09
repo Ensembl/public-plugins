@@ -21,11 +21,9 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
     this.resetSpecies(this.elLk.form.find('input[name=default_species]').remove().val());
     this.editExisting();
     
-    this.elLk.form.find('a._example_input').on('click', function() {
-      $('[name=text]').val(this.rel);
-      $('[name=preview]').show();
-    });
+    this.elLk.form.find('a._example_input').on('click', {panel: this}, this.pasteExampleData);
     
+    // multiple listeners required as user may type or delete or paste with mouse clicks
     this.elLk.form.find('textarea[name=text]')
       .on('keyup',  {panel: this}, this.showHidePreviewButton)
       .on('change', {panel: this}, this.showHidePreviewButton)
@@ -34,18 +32,50 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
     this.elLk.form.find('input[name=preview]').on('click', {panel: this}, this.preview);
   },
   
+  pasteExampleData: function(e) {
+  /*
+   * pastes example data into input box
+   */
+    var panel = e.data.panel;
+    panel.elLk.form.find('[name=text]').val(this.rel);
+    panel.showHidePreviewButton(e);
+  },
+  
   showHidePreviewButton: function(e) {
+  /*
+   * decides whether to show the preview button and whether to make it active
+   */
     var panel = e.data.panel;
     
-    if($(this).val().length > 0) {
-      panel.elLk.form.find('[name=preview]').show();
+    var button = panel.elLk.form.find('[name=preview]');
+    var input  = panel.elLk.form.find('textarea[name=text]');
+    
+    if(input.val().length > 0) {
+
+      button.show();
+      
+      // check format
+      var format = panel.detectFormat(input.val().split(/\r\n|\r|\n/)[0]);
+      
+      if(format === 'id' || format === 'vcf' || format === 'ensembl') {
+        button.removeClass('disabled').removeAttr("disabled");
+        //panel.preview(e);
+      }
+      else {
+        button.addClass('disabled').attr('disabled', true);
+        // 1;
+      }
+      
     }
     else {
-      panel.elLk.form.find('[name=preview]').hide();
+      button.hide();
     }
   },
   
   preview: function(e) {
+  /*
+   * renders VEP results preview
+   */
     
     var panel = e.data.panel;
 
@@ -63,7 +93,7 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
     var input = field.val().split(/\r\n|\r|\n/)[0];
     
     // detect format
-    var format = panel.detectFormat(input.split(/\s+/));
+    var format = panel.detectFormat(input);
     
     // get species
     var species = panel.elLk.form.find('input[name=species]:checked').val();
@@ -78,6 +108,7 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
     var baseURL = 'http://' + assembly + 'rest.ensembl.org/vep/' + species;
     var url;
     
+    // this switch formats the input into URL for REST API
     switch(format) {
       case "id":
         url = baseURL + '/id/' + input;
@@ -172,9 +203,10 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
           return html;
         }
         
+        // HTML for preview content
         var previewContent =
           '<style>tr:nth-child(odd) {background-color: #eaeeff;}</style>' +
-          '<div class="hint"><h3><img src="/i/close.png" alt="Hide" class="close_button" title="">Results preview for ' + input + '</h3>' +
+          '<div class="hint"><h3><img src="/i/close.png" alt="Hide" class="close_button" title="">Quick results for ' + input + '</h3>' +
           '<div class="message-box" style="padding: 10px; background-color: white;">' +
           '<b>Most severe consequence:</b> ' + renderConsequence(previewData, res.most_severe_consequence) + '<br/>' +
           (
@@ -187,7 +219,8 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
             }).join(", ") + '<br/>' :
             ''
           );
-          
+        
+        // beginnings of table HTML
         var table =
           '<br/><table class="ss" style="margin-bottom:0px;" id="vep_preview_table"><tbody>' +
           '<tr><th>Gene/Feature/Type</th><th>Consequence</th><th>Details</th></tr>';
@@ -237,13 +270,14 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
           tableContent = tableContent + '<td>-</td></tr>';
         });
         
-        // add table
+        // add table, but only if there is data in it
+        // intergenic variants will have no rows in the table
         if(tableContent.length) previewContent = previewContent + table + tableContent;
         
-        // add warning
-        previewContent = previewContent + '</table><br/><span class="small"><b>Note:</b> the above is a preview of results using the <i>' + species.replace('_', ' ') + '</i> Ensembl transcript database and does not include all data fields present in the full results set</span>';
+        // add info telling user this is not the full result set
+        previewContent = previewContent + '</table><br/><span class="small"><b>Note:</b> the above is a preview of results using the <i>' + species.replace('_', ' ') + '</i> Ensembl transcript database and does not include all data fields present in the full results set</span></div></div>';
 
-        var div = panel.elLk.form.find('#vep_preview').empty().append(previewContent + '</div></div>');
+        var div = panel.elLk.form.find('#vep_preview').empty().append(previewContent);
         
         // these need listeners adding as they are rendered after page load
         div.find('a.zmenu').on('click', panel.zmenu);
@@ -251,9 +285,11 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
         div.find('.close_button').on('click', {div: div}, function(e) { e.data.div.hide(); });
         return;
       },
+      
+      // error function for REST request
       error: function(jqXHR, textStatus, errorThrown) {
-       console.log(JSON.stringify(jqXHR));
-       console.log("AJAX error: " + textStatus + ' : ' + errorThrown);
+       // console.log(JSON.stringify(jqXHR));
+       // console.log("AJAX error: " + textStatus + ' : ' + errorThrown);
        
        var error = jqXHR.responseJSON.error;
        
@@ -264,9 +300,12 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
     });
   },
   
-  // this detects input format
-  // copied from Bio::EnsEMBL::Variation::Utils::VEP::detect_format  
-  detectFormat: function(data) {
+  detectFormat: function(input) {
+  /*
+   * this detects input format from data pasted into VEP input form
+   * code translated from Bio::EnsEMBL::Variation::Utils::VEP::detect_format
+   */
+    var data = input.split(/\s+/);
     
     // HGVS: ENST00000285667.3:c.1047_1048insC
     if (
@@ -283,6 +322,7 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
   
     // VCF: 20  14370  rs6054257  G  A  29  0  NS=58;DP=258;AF=0.786;DB;H2  GT:GQ:DP:HQ
     else if (
+      data.length >= 5 &&
       data[0].match(/(chr)?\w+/) &&
       data[1].match(/^\d+$/) &&
       data[3].match(/^[ACGTN\-\.]+$/i) &&
@@ -293,6 +333,7 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
   
     // pileup: chr1  60  T  A
     else if (
+      data.length === 4 &&
       data[0].match(/(chr)?\w+/) &&
       data[1].match(/^\d+$/) &&
       data[2].match(/^[\*ACGTN-]+$/i) &&
@@ -303,6 +344,7 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
   
     // ensembl: 20  14370  14370  A/G  +
     else if (
+      data.length >= 4 &&
       data[0].match(/\w+/) &&
       data[1].match(/^\d+$/) &&
       data[2].match(/^\d+$/) &&
@@ -317,6 +359,9 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
   },
   
   zmenu: function(e){
+  /*
+   * Adds zmenus when requested
+   */
     var el = $(this);
     Ensembl.EventManager.trigger('makeZMenu', el.text().replace(/\W/g, '_'), { event: e, area: {a: el}});
     return false;
