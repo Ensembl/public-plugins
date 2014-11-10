@@ -58,7 +58,7 @@ sub _get_NCBIBLAST_source_file {
   ## @private
   my ($self, $species, $source_type) = @_;
 
-  my $assembly  = $self->get_config($species, 'ASSEMBLY_NAME');
+  my $assembly  = $self->get_config($species, 'ASSEMBLY_VERSION');
   my $type      = lc($source_type =~ s/_/\./r);
 
   return sprintf '%s.%s.%s.fa', $species, $assembly, $type unless $type =~ /latestgp/;

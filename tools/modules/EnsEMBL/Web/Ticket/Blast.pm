@@ -107,7 +107,7 @@ sub _process_user_input {
         'job_number'  => ++$job_num,
         'job_desc'    => $desc || $sequence->{'display_id'} || $summary,
         'species'     => $species,
-        'assembly'    => $sd->get_config($species, 'ASSEMBLY_NAME'),
+        'assembly'    => $sd->get_config($species, 'ASSEMBLY_VERSION'),
         'job_data'    => {
           'output_file' => 'blast.out',
           'sequence'    => {

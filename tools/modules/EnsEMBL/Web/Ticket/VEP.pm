@@ -91,7 +91,7 @@ sub init_from_user_input {
   $self->add_job(EnsEMBL::Web::Job::VEP->new($self, {
     'job_desc'    => $description,
     'species'     => $species,
-    'assembly'    => $hub->species_defs->get_config($species, 'ASSEMBLY_NAME'),
+    'assembly'    => $hub->species_defs->get_config($species, 'ASSEMBLY_VERSION'),
     'job_data'    => $job_data
   }, {
     $file_name    => {'location' => $file_path}
