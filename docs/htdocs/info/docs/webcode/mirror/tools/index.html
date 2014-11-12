@@ -1,0 +1,140 @@
+<html>
+<head>
+<title>Tools Configuration</title>
+</head>
+<body>
+
+<h1>Ensembl Tools Configuration</h1>
+
+<h2 id="Intro">Introduction</h2>
+
+<p>Since release 75, we have been moving our online tools to a 
+new modular system that can be installed on any external site,
+without any dependencies on proprietary software.</p>
+
+<h2>System architecture</h2>
+
+<p>The basic components of the system are:</p>
+
+<ul>
+<li>a <b>ticket database</b>, allowing retrieval and storage of jobs</li>
+<li>a <b>dispatcher</b> and, for BLAST only (at present), an optional <b>queueing system</b> to run the jobs. The dispatcher and queueing system use Ensembl eHive by default, but
+can be replaced by other custom modules which use different technologies.</li>
+<li>two plugins to the ensembl webcode:
+  <ul> 
+  <li><b>public-plugins/tools</b>, which provides the user interface and manages the ticketing system
+  <li><b>public-plugins/tool_hive</b>, which manages job submission to eHive</li>
+  </ul>
+</li>
+</ul>
+
+<p>In addition, you will need the ensembl-orm codebase, which is a database access layer
+used by several web plugins, including user accounts. If you already have user accounts
+set up on your Ensembl mirror, they will automatically be available to the tools system,
+but it is not necessary to have accounts enabled in order to run Ensembl Tools.</p>
+
+<h2>Software installation</h2>
+
+<h3>1. Download code</h3>
+
+<p>First, set up your Ensembl mirror site as per the main <a href="/info/docs/webcode/mirror/">installation instructions</a>.</p>
+
+<p>Then, in the same directory as the rest of your Ensembl code, clone the 
+<a href="https://github.com/Ensembl/ensembl-orm">ensembl-orm</a> repo from 
+GitHub, if you don't already have it.</p>
+
+<p>To use the eHive dispatcher you will also need to follow the <a href="https://rawgit.com/Ensembl/ensembl-hive/HEAD/docs/install.html">eHive installation instructions</a>.</p>
+
+<h3>2. Create data files directory</h3>
+
+<p>All of the Ensembl tools use some kind of index/cache files for fast data
+processing, and it makes sense to keep all of them in the same place for easy 
+maintenance. Create this directory somewhere that the webserver can access, e.g.
+in the same directory as your ensembl git repositories. For example if you've
+used the default location given in the main installation instructions, you
+might put your data files in <kbd>/usr/local/ensembl/tools_data/</kbd>.</p>
+
+<h3>3. Configure</h3>
+
+<p>Configure the additional plugins in ensembl-webcode/conf/Plugins.pm as shown below:</p>
+
+<p><pre>
+  'EnsEMBL::Mirror'      =&gt; $SiteDefs::ENSEMBL_SERVERROOT.'/public-plugins/mirror',
+  'EnsEMBL::Tools_hive'  =&gt; $SiteDefs::ENSEMBL_SERVERROOT.'/public-plugins/tools_hive',
+  'EnsEMBL::Tools'       =&gt; $SiteDefs::ENSEMBL_SERVERROOT.'/public-plugins/tools',
+  'EnsEMBL::Ensembl'     =&gt; $SiteDefs::ENSEMBL_SERVERROOT.'/public-plugins/ensembl',
+  'EnsEMBL::Docs'        =&gt; $SiteDefs::ENSEMBL_SERVERROOT.'/public-plugins/docs'
+</pre></p>
+
+<p>Configure connections to the database server(s) where you wish to host your 
+tools and ehive databases, in public-plugins/mirror/conf/ini-files/MULTI.ini:</p>
+
+<pre>
+[databases]
+
+[DATABASE_WEB_TOOLS]
+HOST = myhost
+PORT = 3306
+USER = myuser
+
+[DATABASE_WEB_HIVE]
+HOST = myhost
+PORT = 3306
+USER = myuser
+</pre>
+
+<p>Note that you don't need to configure database names, as default names are provided in the plugins.</p>
+
+<h3>4. Restart your mirror website</h3>
+
+<p>In order to pick up the plugins and compile any required database settings, JavaScript, etc into your site, you will need to run <kbd>ctrl-scripts/restart</kbd> with the -r flag.</p>
+
+<p>Note: the code will complain that it can't find your ensembl_web_tools database, but that's OK - ignore the warning and continue with installation.</p>
+
+<h3>5. Create your tools database</h3>
+
+<p>From the tools plugin, run <kbd>utils/create_tools_db.pl</kbd> to set up the ensembl_web_tools MySQL database.</p>
+
+<h3>6. Set up individual tools</h3>
+
+<p>Each tool can be added to the interface separately, so for example you don't need to
+set up BLAST if you only need the VEP. However all tools are enabled by default, so
+if you don't need a tool, you'll need to disable it in public-plugins/mirror/SiteDefs.pm.
+For example:</p>
+
+<pre>
+  $SiteDefs::ENSEMBL_BLAST_ENABLED  = 0;
+  $SiteDefs::ENSEMBL_VEP_ENABLED    = 1;
+  $SiteDefs::ENSEMBL_AC_ENABLED     = 0;
+</pre>
+
+<p>For each enabled tool, you will need to do additional set-up - see the table below 
+for links to the instructions.</p>
+
+<p>The following tools have been ported to the new interface:</p>
+
+<table class="ss">
+<thead>
+<tr><th>Tool</th><th></th><th></th></tr>
+</thead>
+<tbody>
+<tr class="bg2">
+  <td>BLAST/BLAT</td>
+  <td><a href="blast.html">Setup instructions</a></td>
+  <td><a href="/Help/View?id=451">User guide</a></td>
+</tr>
+<tr>
+  <td>VEP</td>
+  <td><a href="vep.html">Setup instructions</a></td>
+  <td><a href="/info/docs/tools/vep/index.html">User guide</a></td>
+</tr>
+<tr class="bg2">
+  <td>Assembly Converter</td>
+  <td><a href="assembly_converter.html">Setup instructions</a></td>
+</tr>
+</tbody>
+</table>
+
+
+</body>
+</html>

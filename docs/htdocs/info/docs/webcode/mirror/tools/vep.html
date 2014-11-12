@@ -1,0 +1,75 @@
+<html>
+<head>
+<title>VEP setup instructions</title>
+</head>
+<body>
+
+<h1>VEP setup instructions</h1>
+
+<p>The online Variant Effect Predictor uses the same script as the offline version,
+with the limitation that you can't use VEP plugins with the web tool.</p>
+
+<h2>Installation and setup</h2>
+
+<ol>
+<li>Ensure that you have the core, variation and regulation databases set up
+for all the relevant species.</li>
+<li>In the same directory that contains your other Ensembl code, clone the 
+<a href="https://github.com/Ensembl/ensembl-tools">ensembl-tools repository</a>, 
+which contains the VEP script.</li>
+<li>Download the VEP cache files from our <a href="ftp://ftp.ensembl.org/pub/current_variation/VEP/">FTP site</a> and unzip them in your vep data directory (see below).</li>
+<li>Download the toplevel DNA FASTA files for each species from our FTP site. 
+For example, for human you would go to <a href="ftp://ftp.ensembl.org/pub/current_fasta/homo_sapiens/dna/">ftp://ftp.ensembl.org/pub/current_fasta/homo_sapiens/dna/</a> and
+scroll down to the bottom of the page to find <kbd>Homo_sapiens.GRCh38.dna.toplevel.fa.gz</kbd>.
+Unzip these files into the same species subdirectories as the cache files.
+<p>Your completed data structure should look something like this:</p>
+<p><pre>
+`-- /usr/local/ensembl/tools_data/vep
+      |-- homo_sapiens
+        |-- 1
+        |-- 10
+            ... (lots more chromosome/seq region directories)
+        |-- Homo_sapiens.GRCh38.dna.toplevel.fa
+        |-- Homo_sapiens.GRCh38.dna.toplevel.fa.index
+        |-- info.txt
+        |-- KI270442.1
+            ... (lots more chromosome/seq region directories)
+      |-- mus_musculus
+        |-- 1
+        |-- 10
+            ... (lots more chromosome/seq region directories)
+        |-- Mus_musculus.GRCm38.dna.toplevel.fa
+        |-- Mus_musculus.GRCm38.dna.toplevel.fa.index
+            ... (lots more chromosome/seq region directories)
+</pre></p>
+</li>
+<li>In <kbd>public-plugins/mirror/SiteDefs.pm</kbd>, configure the location for your 
+cache and FASTA files, e.g.
+<p><pre>
+    $SiteDefs::ENSEMBL_VEP_CACHE_DIR  = '/usr/local/ensembl/tools_data/vep';
+</pre></p>
+</li>
+<li>The VEP checks the genomic databases for available options, so the following 
+parameters need configuring with the location of your database server:
+<p><pre>
+  $SiteDefs::ENSEMBL_VEP_FILTER_SCRIPT_OPTIONS = {
+    '-host'         =&gt; 'mysqlhost',
+    '-port'         =&gt; '3306',
+    '-user'         =&gt; 'mysqluser',
+    '-pass'         =&gt; 'password'
+  };
+  $SiteDefs::ENSEMBL_VEP_SCRIPT_DEFAULT_OPTIONS = {
+    '-host'         =&gt; 'mysqlhost',
+    '-port'         =&gt; '3306',
+    '-user'         =&gt; 'mysqluser',
+    '-pass'         =&gt; 'password'
+  };
+</pre></p>
+</li>
+<li>You should now <kbd>restart -r</kbd> your webserver to pick up the configuration changes.</li>
+</ol>
+
+
+
+</body>
+</html>

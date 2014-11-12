@@ -1,0 +1,64 @@
+<html>
+<head>
+<title>Assembly Converter setup instructions</title>
+</head>
+<body>
+
+<h1>Assembly Converter setup instructions</h1>
+
+<p>Our current version of the Assembly Converter uses <a href="http://crossmap.sourceforge.net/">CrossMap</a>.</p>
+
+<h2>System requirements</h2>
+
+<p>CrossMap is a Python script which has been designed to run on Linux and OSX - for the
+latter you will need to install XCode command line tools.</p>
+
+<h2>Installation and setup</h2>
+
+<ol>
+<li>Install Python and prerequisite packages (including gcc, numpy and cython), and
+download the CrossMap script - full details are available on the 
+<a href="http://crossmap.sourceforge.net/#download">CrossMap project page</a>.</li>
+<li>Copy the CrossMap script to a location where python can find it. It's a good idea 
+at this point to run CrossMap from the command-line, to test that your basic setup is 
+correct.</li>
+<li>In <kbd>public-plugins/mirror/SiteDefs.pm</kbd>, configure the locations of your 
+CrossMap files, e.g.
+<p><pre>
+    $SiteDefs::ASSEMBLY_CONVERTER_BIN_PATH  = 'usr/local/bin/python/CrossMap.py';
+    $SiteDefs::ENSEMBL_CHAIN_FILE_DIR       = '/usr/local/ensembl/tools_data/assembly_converter';
+</pre></p>
+</li>
+<li>Download the pre-generated chain files from our <a href="ftp://ftp.ensembl.org/pub/current_chain_files/">FTP site</a> and put them in the above directory, making sure to keep them in their per-species subdirectories. Note: DO NOT UNZIP THEM.</li>
+<li>If you wish to input/output VCF files, you will also need the toplevel FASTA files 
+for each assembly that you wish to convert. Example download links for human are:
+  <ul>
+  <li>GRCh38: <a href="ftp://ftp.ensembl.org/pub/release-76/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.toplevel.fa.gz">ftp://ftp.ensembl.org/pub/release-76/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.toplevel.fa.gz</a></li>
+  <li>GRCh37: <a href="ftp://ftp.ensembl.org/pub/release-75/fasta/homo_sapiens/dna/Homo_sapiens.GRCh37.75.dna.toplevel.fa.gz">ftp://ftp.ensembl.org/pub/release-75/fasta/homo_sapiens/dna/Homo_sapiens.GRCh37.75.dna.toplevel.fa.gz</a></li>
+  <li>NCBI36: <a href="ftp://ftp.ensembl.org/pub/release-54/fasta/homo_sapiens/dna/Homo_sapiens.NCBI36.54.dna.toplevel.fa.gz">ftp://ftp.ensembl.org/pub/release-54/fasta/homo_sapiens/dna/Homo_sapiens.NCBI36.54.dna.toplevel.fa.gz</a></li>
+  </ul>
+<p>(If you are also using the VEP, you could instead symlink to the FASTA files in the VEP 
+cached directories, to save space).</p>
+<p>These files will need to be put in the same directory as the chain files and UNZIPPED.</p>
+<p>Your completed data structure should look something like this:</p>
+<p><pre>
+`-- /usr/local/ensembl/tools_data/assembly_converter
+      |-- homo_sapiens
+        |-- GRCh37_to_GRCh38.chain.gz
+        |-- GRCh38_to_GRCh37.chain.gz
+        |-- Homo_sapiens.GRCh37.dna.toplevel.fa
+        |-- Homo_sapiens.GRCh38.dna.toplevel.fa
+      |-- mus_musculus
+        |-- GRCm38_to_NCBIM37.chain.gz
+        |-- Mus_musculus.GRCm38.dna.toplevel.fa
+        |-- Mus_musculus.NCBIm37.dna.toplevel.fa
+        |-- NCBIM37_to_GRCm38.chain.gz
+</pre></p>
+</li>
+<li>You should now <kbd>restart -r</kbd> your webserver to pick up the configuration changes.</li>
+</ol>
+
+
+
+</body>
+</html>

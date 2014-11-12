@@ -1,0 +1,42 @@
+<html>
+<head>
+<title>BLAST/BLAT setup instructions</title>
+</head>
+<body>
+
+<h1>BLAST/BLAT setup instructions</h1>
+
+<p>As with our old code, the Tools system combines BLAST and BLAT sequence searches
+into one interface. However Ensembl now uses NCBI BLAST by default, though the Tools 
+system can be configured to use wu-blast instead.</p>
+
+<h2>Setting up BLAT</h2>
+
+<ol>
+<li>Install the BLAT executable, available from
+the <a href="http://hgdownload.cse.ucsc.edu/admin/exe/">UCSC</a>.</li>
+<li>Download the required FASTA files from the <a href="ftp://ftp.ensembl.org/pub/current_fasta/">Ensembl FTP site</a>, 
+and use them to create 2bit files for rapid indexing, as described in the 
+<a href="http://genome.ucsc.edu/goldenpath/help/blatSpec.html">UCSC BLAT specifications</a> N.B. you can use the same Ensembl pipeline, described below, to produce both BLAT and BLAST indices.</li>
+<li>Configure the locations of these files in <kbd>public-plugins/mirror/conf/SiteDefs.pm</kbd>:
+<p><pre>
+    $SiteDefs::ENSEMBL_BLAT_BIN_PATH    = '/usr/local/bin/gfClient';
+    $SiteDefs::ENSEMBL_BLAT_TWOBIT_DIR  = '/usr/local/ensembl/tools_data/blat';
+</pre></p>
+</li>
+</ol>
+
+<h2>Setting up NCBI-BLAST</h2>
+
+<ol>
+<li>Install a suitable version of the BLAST software, available from
+the <a href="ftp://ftp.ncbi.nlm.nih.gov/blast/executables/LATEST/">NCBI FTP site</a>.</li>
+<li>Generate the BLAST indices. We use an eHive pipeline, which is fully documented
+in the <a href="https://github.com/Ensembl/ensembl-production/blob/release/77/docs/fasta.textile">ensembl-production repository</a>.</li>
+</ol>
+
+
+<!-- <h2>Setting up WU-BLAST</h2>-->
+
+</body>
+</html>
