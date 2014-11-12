@@ -130,7 +130,7 @@ Ensembl.Panel.ContentTools = Ensembl.Panel.Content.extend({
         case 'parsererror':
           errorThrown = 'An error occured while parsing the server response.';
         default:
-          errorThrown = 'Some unknown error occurred';
+          errorThrown = 'An unknown error occurred';
       }
     }
     this.showError(errorThrown, heading);
@@ -170,7 +170,7 @@ Ensembl.Panel.ContentTools = Ensembl.Panel.Content.extend({
       case 500:
         // server error
         var exception = json.exception || {};
-        this.showError(exception.message, 'Server Error: ' + exception.type);
+        this.showError('There was a problem with one of the tools servers. Please report this issue to helpdesk@ensembl.org, giving your job ticket id if possible.', 'Server Error: ' + exception.type);
         return false;
       default:
         // not likely to come here, but anyway...
@@ -185,7 +185,7 @@ Ensembl.Panel.ContentTools = Ensembl.Panel.Content.extend({
    * To display error in a custom div, create panel.errorDiv before calling this method
    */
     heading = heading || (message ? 'Error' : 'Unknown Error');
-    message = message || 'Some unknown error has occoured.';
+    message = message || 'An unknown error has occurred.';
     if (!this.elLk.errorDiv) {
       var panel     = this;
       this.elLk.errorDiv = $('<div>')

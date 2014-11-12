@@ -8,35 +8,33 @@
 
 <h1>eHive production system</h1>
 
-<h2>Introduction</h2>
 <p>
-This is a distributed processing system based on 'autonomous agents' and the
-behavioural structure of honey bees.  It implements all functionality of both
-data-flow graphs and block-branch diagrams which should allow it to codify
-any program, algorithm, or parallel processing job control system.  It is
-not bound to any processing 'farm' system and can be adapted to any GRID.
+A big fraction of Ensembl's computation pipelines are run using eHive (Ensembl Hive) distributed scheduling system.
+The main goal behind creating it was to enable efficient parallel computation on Unix clusters using a simple Perl API.
+<br/>
+Recently eHive code was detached from Ensembl codebase and can now be used as a separate product
+by those who need to run computational pipelines.
+</p>
+
+
+<h2>Code and documentation</h2>
+
+<p>
+eHive system is hosted on <a href="https://github.com/Ensembl/ensembl-hive">GitHub</a> together with its recently updated documentation (see docs/index.html).
 </p>
 
 <p>
-A pipeline is defined by a set of initial <i>jobs</i>
-and a graph whose nodes are <i>analyses</i> ("types" of jobs)
-and whose arcs represent <i>dataflow rules</i> (rules that control how running jobs generate new jobs)
-and <i>analysis control rules</i> (rules that block jobs of one analysis until all jobs of another analysis have completed).
+guiHive is a Web app that helps both to visualize the progress of an eHive pipeline and to tune some parameters
+of the already running computations. It is also hosted on <a href="https://github.com/Ensembl/guiHive">GitHub</a> and has its own documentation (in README.md).
 </p>
 
-<h2>Documentation</h2>
-
-<p>
-eHive is now hosted on <a href="https://github.com/Ensembl/ensembl-hive">GitHub</a>, like the other Ensembl components,
-and the up-to-date documentation is to be found there.
-We currently maintain three stable (they only receive bug-fixes) versions of eHive.
-</p>
-
+<!--
+<p>Older (legacy) versions: <em>(they only receive bug-fixes)</em></p>
 <ul>
-	<li><a href="https://rawgit.com/Ensembl/ensembl-hive/version/2.1/docs/index.html">v2.1</a> (recommended): introduces a better tracking of workers that specialize in multiple tasks.</li>
 	<li><a href="https://rawgit.com/Ensembl/ensembl-hive/version/2.0/docs/index.html">v2.0</a>: the first version to be independent from the Ensembl Core API.</li>
-	<li><a href="https://rawgit.com/Ensembl/ensembl-hive/version/1.9/docs/index.html">v1.9</a>: still dependent on the Ensembl Core API (for legacy only).</li>
+	<li><a href="https://rawgit.com/Ensembl/ensembl-hive/version/1.9/docs/index.html">v1.9</a>: still dependent on the Ensembl Core API.</li>
 </ul>
+-->
 
 </body>
 </html>

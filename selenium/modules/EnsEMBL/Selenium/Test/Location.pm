@@ -48,8 +48,8 @@ sub test_location {
      if($sel->is_text_present("ncRNA(")){
       $sel->ensembl_click("modal_bg");
       
-      $self->turn_track("ncRNA", "//form[\@id='location_viewbottom_configuration']/div[4]/div/ul/li", "on");
-      $self->turn_track("ncRNA", "//form[\@id='location_viewbottom_configuration']/div[4]/div/ul/li", "off");      
+      $self->turn_track("ncRNA", "//form[\@id='location_viewbottom_configuration']/div[5]/div/ul/li/div[2]", "on");
+      $self->turn_track("ncRNA", "//form[\@id='location_viewbottom_configuration']/div[5]/div/ul/li/div[2]", "off"); 
       #next;
     } else {
       print "  No ncRNA Tracks \n";
@@ -59,12 +59,12 @@ sub test_location {
     #Test ZMENU (only for human)
     if(lc($self->species) eq 'homo_sapiens') {
       #Searching and adding decipher track
-      $self->turn_track("Variation","//form[\@id='location_viewbottom_configuration']/div[5]/div[7]/div/ul[3]/li", "on", "decipher");
+      $self->turn_track("Structural variants","//form[\@id='location_viewbottom_configuration']/div[6]/div[5]/div/ul[2]/li[2]/div[2]", "on", "decipher (st");
       
       #simulate ZMenu for this track (decipher)
       $sel->pause(5000); #pausing a bit to make sure the location panel loads fine from adding the track
       $sel->ensembl_open_zmenu('ViewBottom',"href*=decipher","Decipher track");
-      $sel->ensembl_is_text_present("decipher:");
+      $sel->ensembl_is_text_present("DECIPHER");
       
       #Test attach das
       $self->attach_das;
@@ -83,14 +83,14 @@ sub test_location {
       #TODO:: ZMenu on viewtop and ViewBottom panel
     }
     #Whole genome link    
-    $sel->ensembl_click_links(["link=Whole genome"]);
+    $sel->ensembl_click_links(["link=Whole genome"],"60000");
     $sel->ensembl_is_text_present("This genome has yet to be assembled into chromosomes") if(!scalar @{$SD->get_config(ucfirst($self->species), 'ENSEMBL_CHROMOSOMES')});
 
     @location_array[0] =~ s/chr//;
     #Chromosome summary link (only click for sepcies with chromosome)
     if(grep(/@location_array[0]/,@{$SD->get_config(ucfirst($self->species), 'ENSEMBL_CHROMOSOMES')})) {
-      $sel->ensembl_click_links(["link=Chromosome summary"]);
-      $sel->ensembl_is_text_present("Chromosome Statistics");
+      $sel->ensembl_click_links(["link=Chromosome summary"])
+      and $sel->ensembl_is_text_present("Chromosome Statistics");
     }
 
     $sel->ensembl_click_links(["link=Region overview","link=Region in detail","link=Comparative Genomics"]);
@@ -105,7 +105,7 @@ sub test_location {
       $sel->ensembl_click_links(["link=Alignments (image) ($alignment_count)"],'20000');
       
       if(lc($self->species) eq 'homo_sapiens' || lc($self->species) eq 'mus_musculus') {
-        $sel->select_ok("align", "label=13 eutherian mammals EPO")
+        $sel->select_ok("align", "label=17 eutherian mammals EPO")
         and $sel->ensembl_click("link=Go")
         and $sel->ensembl_wait_for_page_to_load(60000);
       }
@@ -119,7 +119,12 @@ sub test_location {
       $sel->ensembl_click_links(["link=Markers"]);
 
       if(lc($self->species) eq 'homo_sapiens') {
-        $sel->ensembl_is_text_present("mapped markers found:");
+         $sel->pause(5000);
+         $sel->type_ok("id=loc_r", "6:132817315-132817520");
+         $sel->ensembl_click("link=Go");
+         $sel->pause(15000);
+
+        $sel->ensembl_is_text_present("mapped marker");
         $sel->ensembl_click_links(["link=D6S989"]);
         $sel->ensembl_is_text_present("Marker D6S989");
         $sel->go_back();
@@ -131,10 +136,11 @@ sub test_location {
     
     #Testing genetic variations last for human only
     if(lc($self->species) eq 'homo_sapiens') {      
-      $sel->type_ok("loc_r", "6:27996744-27996844");
+      $sel->pause(5000);
+      $sel->type_ok("id=loc_r", "6:27996744-27996844");
       $sel->ensembl_click("link=Go");
       $sel->pause(15000);
-      $sel->ensembl_is_text_present("Basepairs in secondary ");
+      $sel->ensembl_is_text_present("Confirmed match to reference sequence");
 
       $sel->open_ok("Homo_sapiens/Location/LD?db=core;r=6:27996744-27996844;pop1=12131");      
       $sel->pause(5000);

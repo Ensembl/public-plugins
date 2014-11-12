@@ -53,39 +53,37 @@ sub test_variation {
     
     #TODO Test the Show table link
     
-    #Adding a track from the configuration panel
+    #Adding a track from the configuration panel, testing zmenu and other human specific link
     if(lc($self->species) eq 'homo_sapiens') {
       print "  Test Configure page, adding a track \n";
       $sel->ensembl_click("link=Configure this page")
       and $sel->ensembl_wait_for_ajax_ok('10000','5000')
       and $sel->ensembl_click("css=a.variation")  #don't know why link= wasn't working and css= works    
       and $sel->ensembl_wait_for_ajax_ok('10000','9000')
-      and $sel->ensembl_click("//form[\@id='variation_context_configuration']/div[3]/div[1]/ul[1]/li[2]") #choosing the second track    
+      and $sel->ensembl_click("//form[\@id='variation_context_configuration']/div[3]/div/div/ul/li[2]/div[2]") #choosing the second track    
       and $sel->ensembl_click("modal_bg")
       and $sel->ensembl_wait_for_ajax_ok('50000', '50000')
       and $sel->ensembl_images_loaded;
-    }
+        
+      #Test ZMenu    
+      $sel->ensembl_open_zmenu('Context','title^="Variation:"');
+      $sel->pause(8000);
+      $sel->ensembl_click("link=more about*")
+      and $sel->ensembl_wait_for_ajax_ok('50000','5000')
+      and $sel->go_back();    
     
-    #Test ZMenu    
-    $sel->ensembl_open_zmenu('Context','title^="Variation:"');
-    $sel->pause(8000);
-    $sel->ensembl_click("link=$variation_text properties")
-    and $sel->ensembl_wait_for_ajax_ok('50000','5000')
-    and $sel->go_back();    
+      $sel->ensembl_wait_for_page_to_load;
+      $sel->pause(3000);
     
-    $sel->ensembl_wait_for_page_to_load;
-    $sel->pause(3000);
-    
-    if(lc($self->species) eq 'homo_sapiens') {        
       $sel->ensembl_click_links(["link=Linkage disequilibrium", "link=Phenotype Data*"],'10000');
       
-      $sel->ensembl_click_links(["link=[View on Karyotype]"],'50000');
+      $sel->ensembl_click_links(["link=View on Karyotype"],'50000');
       $sel->go_back();
     }
 
     $sel->ensembl_click_links(["link=Phylogenetic Context*"],'30000');
     
-    $sel->select_ok("align", "label=6 primates EPO")
+    $sel->select_ok("align", "label=8 primates EPO")
     and $sel->ensembl_click("link=Go") if(lc($self->species) eq 'homo_sapiens');
     
     print "  Test Configure page on External Data \n";

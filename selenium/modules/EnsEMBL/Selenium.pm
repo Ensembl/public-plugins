@@ -139,7 +139,7 @@ sub ensembl_click_all_links {
     var \$ = selenium.browserbot.getCurrentWindow().jQuery;
     \$('$div').find('a');
   });
-    
+
   my @links_array = split(',',$links_href);
   my $i = 0;
 
