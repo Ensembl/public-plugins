@@ -10,7 +10,9 @@
 
 <p>Since release 75, we have been moving our online tools to a 
 new modular system that can be installed on any external site,
-without any dependencies on proprietary software.</p>
+without any dependencies on proprietary software. These tools
+can be integrated into any Ensembl-powered site, and modified
+by project developers to use any backend architecture required.</p>
 
 <h2>System architecture</h2>
 
@@ -19,7 +21,8 @@ without any dependencies on proprietary software.</p>
 <ul>
 <li>a <b>ticket database</b>, allowing retrieval and storage of jobs</li>
 <li>a <b>dispatcher</b> and, for BLAST only (at present), an optional <b>queueing system</b> to run the jobs. The dispatcher and queueing system use Ensembl eHive by default, but
-can be replaced by other custom modules which use different technologies.</li>
+can be replaced by other custom modules which use different technologies,
+such as the Ensembl REST API.</li>
 <li>two plugins to the ensembl webcode:
   <ul> 
   <li><b>public-plugins/tools</b>, which provides the user interface and manages the ticketing system
@@ -99,7 +102,7 @@ USER = myuser
 
 <p>Each tool can be added to the interface separately, so for example you don't need to
 set up BLAST if you only need the VEP. However all tools are enabled by default, so
-if you don't need a tool, you'll need to disable it in public-plugins/mirror/SiteDefs.pm.
+if you don't need a tool, you should disable it in public-plugins/mirror/SiteDefs.pm.
 For example:</p>
 
 <pre>
