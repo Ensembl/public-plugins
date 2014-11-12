@@ -59,10 +59,11 @@ parameters need configuring with the location of your database server:
     '-pass'         =&gt; 'password'
   };
   $SiteDefs::ENSEMBL_VEP_SCRIPT_DEFAULT_OPTIONS = {
-    '-host'         =&gt; 'mysqlhost',
-    '-port'         =&gt; '3306',
-    '-user'         =&gt; 'mysqluser',
-    '-pass'         =&gt; 'password'
+    '--host'        =&gt; 'mysqlhost',
+    '--port'        =&gt; '3306',
+    '--user'        =&gt; 'mysqluser',
+    '--pass'        =&gt; 'password',
+    '--fork'        =&gt; 4,
   };
 </pre></p>
 </li>
