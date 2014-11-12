@@ -102,7 +102,7 @@ Ensembl.Panel.ToolsForm = Ensembl.Panel.ContentTools.extend({
     try {
       editingJobsData         = $.parseJSON(this.elLk.form.find('input[name=edit_jobs]').remove().val());
     } catch (ex) {}
-    if (editingJobsData.length) {
+    if (editingJobsData && editingJobsData.length) {
       this.populateForm(editingJobsData, noReset);
       return true;
     }
