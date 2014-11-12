@@ -59,7 +59,7 @@ sub short_caption {
     my $job       = $self->get_requested_job;
     my $ticket    = $job && $job->ticket;
     my $job_count = $ticket && $ticket->job_count;
-    return $job && $job->status eq 'done' ? sprintf('%s results: %s'.($job_count > 1 ? ' (%s)' : ''), $ticket->ticket_type_name, $ticket->ticket_name, $job->job_number) : 'Jobs';
+    return $job && $job->status eq 'done' ? sprintf('%s results', $ticket->ticket_type_name) : 'Jobs';
   }
 
   my $sub_object = $self->get_sub_object;
