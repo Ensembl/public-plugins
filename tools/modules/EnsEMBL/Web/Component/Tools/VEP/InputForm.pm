@@ -22,11 +22,13 @@ use strict;
 use warnings;
 
 use List::Util qw(first);
+use HTML::Entities qw(encode_entities);
 
 use EnsEMBL::Web::TmpFile::Text;
 use EnsEMBL::Web::Utils::FileHandler qw(file_get_contents);
 use EnsEMBL::Web::Exceptions;
 use EnsEMBL::Web::VEPConstants qw(INPUT_FORMATS CONFIG_SECTIONS);
+use Bio::EnsEMBL::Variation::Utils::Constants;
 
 use parent qw(EnsEMBL::Web::Component::Tools::VEP);
 
@@ -70,7 +72,7 @@ sub content {
         }, @$species ]
       }, {
         'type'          => 'noedit',
-        'value'         => 'Assembly: '. join('', map { sprintf '<span class="_stt_%s">%s</span>', $_->{'value'}, $_->{'assembly'} } @$species),
+        'value'         => 'Assembly: '. join('', map { sprintf '<span class="_stt_%s _vep_assembly" rel="%s">%s</span>', $_->{'value'}, $_->{'assembly'}, $_->{'assembly'} } @$species),
         'no_input'      => 1,
         'is_html'       => 1
       }]
@@ -83,27 +85,29 @@ sub content {
     });
 
     $input_fieldset->add_field({
-      'type'          => 'dropdown',
-      'name'          => 'format',
-      'label'         => sprintf('Input file format (<a href="%s#input" class="popup">details</a>)', $hub->url({
-        'type'          => 'Help',
-        'action'        => 'View',
-        'id'            => { $sd->multiX('ENSEMBL_HELP') }->{'Tools/VEP/VEP_formats'},
-        '__clear'       => 1
-      })),
-      'values'        => [ map { { %$_, 'class' => ['_stt_var', $_->{'value'} =~ /id|hgvs/ ? () : '_stt_novar'] } } @$input_formats ],  # species without variation DBs can't use ID or HGVS (currently)
-      'value'         => 'ensembl',
-      'class'         => '_stt format'
-    });
-
-    $input_fieldset->add_field({
       'label'         => 'Either paste data',
-      'elements'      => [ map {
-        'type'          => 'text',
-        'name'          => 'text_'.$_->{'value'},
-        'element_class' => '_stt_'.$_->{'value'},
-        'value'         => $_->{'example'},
-      }, @$input_formats ]
+      'elements'      => [
+        {
+          'type' => 'text',
+          'name' => 'text',
+        },
+        {
+          'type' => 'noedit',
+          'noinput' => 1,
+          'is_html' => 1,
+          'caption' =>
+            '<span class="small"><b>Examples:</b> '.join(', ', map {
+              '<a href="javascript:void(0);" class="_example_input" rel="'.$_->{'example'}.'">'.$_->{'caption'}.'</a>'
+            } @$input_formats).'</span>',
+        },
+        {
+          'type'            => 'button',
+          'name'            => 'preview',
+          'class'           => 'hidden',
+          'value'           => 'Quick results for first variant &rsaquo;',
+          'helptip'         => 'See a quick preview of results for data pasted above',
+        }
+      ]
     });
 
     $input_fieldset->add_field({
@@ -267,14 +271,28 @@ sub content {
   $form =~ s/EDIT_JOB/$edit_job && $edit_job->render/e;
   $form =~ s/FILES_DROPDOWN/$file_dropdown && $file_dropdown->render/e;
   $form =~ s/BUTTONS_FIELDSET/$buttons_fieldset->render/e;
+    
+  # construct hash to pass to JS
+  # containing information needed to render preview
+  my %cons = map {$_->{SO_term} => {'description' => $_->{description}, 'rank' => $_->{rank}}} values %Bio::EnsEMBL::Variation::Utils::Constants::OVERLAP_CONSEQUENCES;
+  
+  # add colours
+  $cons{$_}->{colour} = $hub->colourmap->hex_by_name($sd->colour('variation')->{lc $_}->{'default'}) for keys %cons;
+  
+  # create input with data
+  my $json_html =
+    '<input class="js_param" type="hidden" name="preview_data" value="'.
+    encode_entities($self->jsonify(\%cons)).
+    '" />';
 
   return sprintf('
-    <div class="hidden _tool_new">
+    %s<div class="hidden _tool_new">
       <p><a class="button _change_location" href="%s">New VEP job</a></p>
     </div>
     <div class="hidden _tool_form_div">
       <h2>New VEP job:</h2><input type="hidden" class="panel_type" value="VEPForm" />%s%s
     </div>',
+    $json_html,
     $hub->url({'function' => ''}),
     $self->alt_assembly_info($current_species, 'VEP', 'VEP'),
     $form
