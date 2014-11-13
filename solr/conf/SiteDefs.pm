@@ -286,6 +286,14 @@ EOF
           url => "/{species}/Location/View?r={location};g={id};db={database_type}",
           conditions => { "{location}" => ".+" }
         },
+        { title => "External Refs.",
+          url => "/{species}/Gene/Matches?g={id}",
+          conditions => { "{feature_type}" => "^Gene\$" }
+        },
+        { title => "External Refs.",
+          url => "/{species}/Transcript/Similarity?t={id}",
+          conditions => { "{feature_type}" => "^Transcript\$" }
+        },
         { title => "Regulation",
           url => "/{species}/Gene/Regulation?g={id}",
           conditions => { "{feature_type}" => "^Gene\$" }
