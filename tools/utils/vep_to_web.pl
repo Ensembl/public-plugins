@@ -80,7 +80,7 @@ while(<$in_fh>) {
     map {split /\,/} $1
   )[0];
   
-  $vf->{chr} =~ s/^chr//i unless $vf->{chr} =~ /chromosome/i;
+  $vf->{chr} =~ s/^chr//i unless $vf->{chr} =~ /chromosome/i || $vf->{chr} =~ /^CHR\_/;
   $vf->{variation_name} ||= $vf->{chr}.'_'.$vf->{start}.'_'.($vf->{allele_string} || $vf->{class_SO_term});  
   
   if(defined($vf->{allele_string}) && length($vf->{allele_string}) > 50) {
