@@ -214,8 +214,10 @@ sub parse_content {
       
       my @split = split /\s+/;
       my %raw_data = map {$headers[$_] => $split[$_]} 0..$#split;
-      
-      $raw_data{CHROM} =~ s/^chr(om)?(osome)?//i;
+     
+      if($raw_data{CHROM} !~ /^chr_/i) { 
+        $raw_data{CHROM} =~ s/^chr(om)?(osome)?//i;
+      }
       
       # special case location col
       my ($start, $end) = ($raw_data{POS}, $raw_data{POS});
