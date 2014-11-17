@@ -214,15 +214,15 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
     // function to render consequence type with colour and description HT
     var renderConsequence = function(con) {
       return $('<nobr>').append(
-        $('<span>').addClass('colour').css('background-color', panel.previewData[con].colour).html('&nbsp'),
+        $('<span>').addClass('colour').css('background-color', panel.previewData[con]['colour']).html('&nbsp'),
         $('<span>').html('&nbsp;'),
-        $('<span>').attr({class: '_ht ht margin-left', title: panel.previewData[con].description}).html(con)
+        $('<span>').attr({'class': '_ht ht margin-left', title: panel.previewData[con]['description']}).html(con)
       ).wrap('<div>').parent().html();
     };
 
     // function to render link as ZMenu link
     var renderZmenuLink = function(species, type, id, label) {
-      return $('<a>').attr({class: 'zmenu', href: '/' + species + '/ZMenu/' + type + '?' + type.replace(/[a-z]/g, '').toLowerCase() + '=' + id}).html(label).wrap('<div>').parent().html();
+      return $('<a>').attr({'class': 'zmenu', 'href': '/' + species + '/ZMenu/' + type + '?' + type.replace(/[a-z]/g, '').toLowerCase() + '=' + id}).html(label).wrap('<div>').parent().html();
     };
 
     // HTML for preview content
