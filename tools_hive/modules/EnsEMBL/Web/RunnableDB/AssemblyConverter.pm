@@ -47,16 +47,17 @@ sub run {
   # Set up the job
   my $ac_bin      = $self->param('AC_bin_path');
   my $work_dir    = $self->param('work_dir');
+  my $data_dir    = $self->param('data_dir');
   my $config      = $self->param('config');
   my $format      = $config->{'format'};
   ## Bit of a hack, but CrossMap treats these formats the same
   $format = 'gff' if $format eq 'gtf'; 
   my $options     = $format;
 
-  $options .= ' /data_ensembl/assembly_converter/'.$config->{'chain_file'};
+  $options .= sprintf ' %s/%s', $data_dir, $config->{'chain_file'};
   $options .= sprintf(' %s/%s', $work_dir, $config->{'input_file'});
   if ($format eq 'vcf') {
-    $options .= ' /data_ensembl/assembly_converter/'.$config->{'fasta_file'};
+    $options .= sprintf ' %s/%s', $data_dir, $config->{'fasta_file'};
   }
   $options .= sprintf(' %s/%s', $work_dir, $config->{'output_file'});
 

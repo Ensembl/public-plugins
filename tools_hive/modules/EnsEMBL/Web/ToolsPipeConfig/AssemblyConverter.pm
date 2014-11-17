@@ -45,6 +45,7 @@ sub pipeline_analyses {
     '-parameters'           => {
       'ticket_db'             => $conf->o('ticket_db'),
       'AC_bin_path'           => $sd->ASSEMBLY_CONVERTER_BIN_PATH,
+      'data_dir'              => $sd->ENSEMBL_CHAIN_FILE_DIR,
     },
     '-rc_name'              => $sd->ENSEMBL_AC_RUN_LOCAL ? $sd->ENSEMBL_AC_LOCAL_QUEUE : $sd->ENSEMBL_AC_LSF_QUEUE,
     '-analysis_capacity'    => $sd->ENSEMBL_AC_ANALYSIS_CAPACITY || 4,
