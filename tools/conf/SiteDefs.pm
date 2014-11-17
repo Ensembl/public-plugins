@@ -43,16 +43,16 @@ sub update_conf {
   $SiteDefs::ENSEMBL_AC_ENABLED     = 1;
 
   # Path to BLAT client
-  $SiteDefs::ENSEMBL_BLAT_BIN_PATH = '/localsw/bin/gfClient';
+  $SiteDefs::ENSEMBL_BLAT_BIN_PATH = '/path/to/gfClient';
 
   # Dir containing BLAT's two bit files
-  $SiteDefs::ENSEMBL_BLAT_TWOBIT_DIR = '/ensemblweb/blat';
+  $SiteDefs::ENSEMBL_BLAT_TWOBIT_DIR = '/path/to/blat';
 
   # Script to convert BLAT alignment strings to BTOP
   $SiteDefs::ENSEMBL_BLAT_BTOP_SCRIPT = 'public-plugins/tools/utils/BLAT_alignments_to_BTOP.pl';
 
   # Path to CrossMap
-  $SiteDefs::ASSEMBLY_CONVERTER_BIN_PATH = '/localsw/CrossMap-0.1.3/usr/local/bin/CrossMap.py';
+  $SiteDefs::ASSEMBLY_CONVERTER_BIN_PATH = '/path/to/CrossMap.py';
 
   # Upload file size limits
   $SiteDefs::ENSEMBL_TOOLS_CGI_POST_MAX = {
