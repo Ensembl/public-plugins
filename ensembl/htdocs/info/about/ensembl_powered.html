@@ -15,72 +15,20 @@ The Ensembl project is both a source of genome sequence related data
 software system that can be used to organise any such data.
 </p>
 
-<h2>User-contributed code</h2>
-
-<p>Whilst we have developed a comprehensive Perl API in-house, we welcome contributions
-in other programming languages from the community.</p>
-
-<h3>Ruby</h3>
-
-<p>A Ruby API has been developed by Jan Aerts. A small example, showing what it can do 
-(including coordinate transformation and reflecting on the types of associations for a 
-given class) can be found on the wiki page.</p>
-
-<ul>
-<li><a href="https://github.com/jandot/ruby-ensembl-api">repository</a></li>
-<li><a href="https://github.com/jandot/ruby-ensembl-api/wiki">wiki</a></li>
-</ul>
-
-<h3>Java</h3>
-
-<p>
-An open source Java API (JEnsembl) has been developed by the
-Bioinformatics Group at
-<a href='http://www.roslin.ed.ac.uk/'>The Roslin Institute</a>. The code has
-been designed to be version-aware (a single installation works against
-current and previous releases) and is hosted, together with
-<a href='http://jensembl.sourceforge.net/apidocs/'>documentation</a>,
-<a href='http://jensembl.sourceforge.net/example.html'>examples</a>
-and
-<a href ='http://jensembl.sourceforge.net/contact.html'>contact
-information for the Roslin
-group</a>, at <a href='http://jensembl.sourceforge.net'>SourceForge</a>.
-</p>
-
-<p>Note that we do not support these user-contributed packages - please contact
-the original developer if you have any questions or comments.</p>
-
-<h2>Ensembl-powered Websites</h2>
-
-<p>
-Some projects make use of the Ensembl software system, or are
-derived from it.
-</p>
-
 <p class="center">
 <img src="/img/empowered.png" alt="'Powered by Ensembl' logo" width="98" height="20" />
 </p>
 
-<h3>Projects based at WTSI or EBI</h3>
+<h2 id="collaborations">Collaborations</h2>
+
+<p>
+</p>
 
 <table class="ss tint">
 <tr>
     <th>Project</th>
     <th>Description</th>
-    <th>Code used</th>
-</tr>
-
-<tr>
-    <td><strong><a href="http://ensemblgenomes.org/">Ensembl Genomes</a></strong></td>
-    <td>Websites presenting annotation for bacteria, protists, fungi, plants and invertebrate metazoa</td>
-    <td>Web front-end derived from Ensembl webcode, Ensembl schema databases, Ensembl pipelines and Perl API</td>
-</tr>
-
-<tr class="bg2">
-    <td><strong><a href="http://vega.sanger.ac.uk/">Vega</a></strong></td>
-    <td>Website to present curated vertebrate annotation</td>
-    <td>Web front-end derived from Ensembl webcode, Ensembl schema databases,
-	  Ensembl Compara pipeline and Perl API</td>
+    <th>Code used/data provided</th>
 </tr>
 
 <tr>
@@ -90,11 +38,55 @@ derived from it.
 </tr>
 
 <tr class="bg2">
-    <td><strong><a href="http://geval.sanger.ac.uk/index.html">Genome Reference Consortium gEVAL</a></strong></td>
+    <td><strong><a href="http://projects.ensembl.org/blueprint/">Blueprint</a></strong></td>
+    <td>Epigenomics project analysing samples from healthy and diseased individuals.</td>
+    <td>Track Hub available on the Ensembl browser</td>
+</tr>
+
+<tr>
+    <td><strong><a href="http://ensemblgenomes.org/">Ensembl Genomes</a></strong></td>
+    <td>Websites presenting annotation for bacteria, protists, fungi, plants and invertebrate metazoa</td>
+    <td>Web front-end derived from Ensembl webcode, Ensembl schema databases, Ensembl pipelines and Perl API</td>
+</tr>
+
+<tr class="bg2">
+    <td><strong><a href="http://geval.sanger.ac.uk/index.html">gEVAL</a></strong></td>
     <td>This browser can be used to inspect the reference assemblies of human, mouse
           and zebrafish being created by the GRC</td>
     <td>Customised webcode, pipelines (not genebuild) and compara</td>
 </tr>
+
+<tr>
+    <td><strong><a href="http://projects.ensembl.org/heroic/">HEROIC</a></strong></td>
+    <td>Functional genomics data for Mouse (Mus musculus)</td>
+    <td>Data viewable on Ensembl via DAS.</td>
+</tr>
+
+<tr class="bg2">
+    <td><strong><a href="http://projects.ensembl.org/neandertal/">Neanderthal Genome Browser</a></strong></td>
+    <td>Preliminary assembly of <i>Homo sapiens neanderthalensis</i>.</td>
+    <td>Web front-end derived from Ensembl webcode, Ensembl schema databases.</td>
+</tr>
+
+<tr>
+    <td><strong><a href="http://projects.ensembl.org/nextgen/">NextGen</a></strong></td>
+    <td>A collaborative project investigating biodiversity of livestock species.</td>
+    <td>Variant call sets produced using the Ensembl VEP, viewable in the Ensembl browser.</td>
+</tr>
+
+<tr class="bg2">
+    <td><strong><a href="http://projects.ensembl.org/quantomics/">Quantomics</a></strong></td>
+    <td>Large-scale project to analyse sequence and variation in livestock genomes.</td>
+    <td>Sequence alignments created using the Ensembl Compara pipelines.</td>
+</tr>
+
+<tr>
+    <td><strong><a href="http://vega.sanger.ac.uk/">Vega</a></strong></td>
+    <td>Website to present curated vertebrate annotation</td>
+    <td>Web front-end derived from Ensembl webcode, Ensembl schema databases,
+	  Ensembl Compara pipeline and Perl API</td>
+</tr>
+
 </table>
 
 <h3>External projects</h3>
@@ -166,12 +158,6 @@ derived from it.
     <td>API, compara</td>
 </tr>
 
-<tr>
-    <td><strong><a href="http://projects.ensembl.org/neandertal/">Neanderthal Genome Browser</a></strong></td>
-    <td>Preliminary assembly of <i>Homo sapiens neanderthalensis</i>.</td>
-    <td>Web front-end derived from Ensembl webcode, Ensembl schema databases.</td>
-</tr>
-
 <tr class="bg2">
     <td><strong><a href="http://www.vectorbase.org/">VectorBase</a></strong></td>
     <td>Bioinformatic Resource Centre for Invertebrate Vectors of Human Pathogens</td>
@@ -189,12 +175,6 @@ derived from it.
     <td><strong><a href="http://atensembl.arabidopsis.info/">AtEnsembl</a></strong></td>
     <td><i>Arabidopsis thaliana</i> genome browser</td>
     <td>Customised Ensembl pipeline, API, and webcode</td>
-</tr>
-
-<tr>
-    <td><strong><a href="http://projects.ensembl.org/heroic/">HEROIC</a></strong></td>
-    <td>Functional genomics data for Mouse (Mus musculus)</td>
-    <td>Data viewable on Ensembl via DAS.</td>
 </tr>
 
 <tr class="bg2">
@@ -278,6 +258,42 @@ derived from it.
 </p>
 
 <p>If you are using Ensembl code in your project, you might like to <a href="/img/empowered_lg.png">download the 'empowered' logo</a> (high-resolution PNG, suitable for use in print).</p>
+
+<h2 id="contribs">User-contributed code</h2>
+
+<p>Whilst we have developed a comprehensive Perl API in-house, we welcome contributions
+in other programming languages from the community.</p>
+
+<h3>Ruby</h3>
+
+<p>A Ruby API has been developed by Jan Aerts. A small example, showing what it can do 
+(including coordinate transformation and reflecting on the types of associations for a 
+given class) can be found on the wiki page.</p>
+
+<ul>
+<li><a href="https://github.com/jandot/ruby-ensembl-api">repository</a></li>
+<li><a href="https://github.com/jandot/ruby-ensembl-api/wiki">wiki</a></li>
+</ul>
+
+<h3>Java</h3>
+
+<p>
+An open source Java API (JEnsembl) has been developed by the
+Bioinformatics Group at
+<a href='http://www.roslin.ed.ac.uk/'>The Roslin Institute</a>. The code has
+been designed to be version-aware (a single installation works against
+current and previous releases) and is hosted, together with
+<a href='http://jensembl.sourceforge.net/apidocs/'>documentation</a>,
+<a href='http://jensembl.sourceforge.net/example.html'>examples</a>
+and
+<a href ='http://jensembl.sourceforge.net/contact.html'>contact
+information for the Roslin
+group</a>, at <a href='http://jensembl.sourceforge.net'>SourceForge</a>.
+</p>
+
+<p>Note that we do not support these user-contributed packages - please contact
+the original developer if you have any questions or comments.</p>
+
 
 </body>
 </html>
