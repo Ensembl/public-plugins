@@ -18,8 +18,8 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
 
   init: function() {
     this.base();
+
     this.resetSpecies(this.elLk.form.find('input[name=default_species]').remove().val());
-    this.editExisting();
 
     this.previewData = JSON.parse(this.params['preview_data']);
     delete this.params['preview_data'];
@@ -38,17 +38,20 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
       panel.preview();
     });
 
+    // Preview div
+    this.elLk.previewDiv = $('<div class="top-margin">').appendTo(this.elLk.previewButton.parent()).hide();
+
     // show hide preview button acc to the text in the input field
     this.elLk.dataField = this.elLk.form.find('textarea[name=text]').on({
       'input paste keyup click change': function(e) {
+
+        panel.elLk.previewButton.toggle(!!this.value.length);
 
         if ($(this).data('previousValue') === this.value) {
           return;
         } else {
           $(this).data('previousValue', this.value);
         }
-
-        panel.elLk.previewButton.toggle(!!this.value.length);
 
         if (!!this.value.length) {
 
@@ -60,6 +63,8 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
         }
       }
     });
+
+    this.editExisting();
   },
 
   preview: function() {
@@ -68,9 +73,6 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
    */
 
     // reset preview div
-    if(!this.elLk.previewDiv) {
-      this.elLk.previewDiv = $('<div class="top-margin">').appendTo(this.elLk.previewButton.parent());
-    }
     this.elLk.previewDiv.show().empty();
 
     // get input, format and species
@@ -335,6 +337,8 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
       }
 
       this.resetSpecies();
+
+      this.elLk.dataField.trigger('change');
     }
   },
 
@@ -344,6 +348,8 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
    */
     this.base.apply(this, arguments);
     this.elLk.form.find('._download_link').remove();
+    this.elLk.previewDiv.empty().hide();
+    this.elLk.previewButton.hide();
     this.resetSpecies();
     this.resetSelectToToggle();
   },
