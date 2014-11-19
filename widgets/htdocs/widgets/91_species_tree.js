@@ -44,6 +44,11 @@ var tnt_theme_tree_simple_species_tree = function(ncbi_tree) {
             var pos           = d3.select("#switch").attr("class");
             var current_width =  Math.floor(d3.select("#species_tree").style("width").replace(/px/g,'') / 100) * 100;
 
+            //just making sure all other menu are closed
+            d3.selectAll(".image_resize_menu").each(function(d,i) {
+              d3.select(this).style("display", "none");
+            });
+
             if(pos.match(/vertical/g)) {
               d3.select("#switch").attr("class", d3.select("#switch").attr("class").replace(/vertical/g,"radial"));
 
@@ -106,6 +111,10 @@ var tnt_theme_tree_simple_species_tree = function(ncbi_tree) {
           .attr("title", "switch between NCBI and Ensembl tree")
           .on("click", function() {
               if(d3.select(".tree_menu").style("display") == 'none') {
+                //just making sure all other menu are closed
+                d3.selectAll(".image_resize_menu").each(function(d,i) {
+                  d3.select(this).style("display", "none");
+                });
                 d3.select(".tree_menu").style("display", "block");
               } else {
                 d3.select(".tree_menu").style("display", "none");
@@ -118,6 +127,11 @@ var tnt_theme_tree_simple_species_tree = function(ncbi_tree) {
           .attr("title", "Resize this image")
           .on("click",function(){
             if(d3.select(".resize_menu").style("display") == 'none') {
+              //just making sure all other menu are closed
+              d3.selectAll(".image_resize_menu").each(function(d,i) {
+                d3.select(this).style("display", "none");
+              });
+            
               d3.select(".resize_menu").style("display", "block");
 
               d3.select(".resize_menu").selectAll("div").each(function(d, i) {                                  
