@@ -1,0 +1,13 @@
+This plugin is for the new speciestree and CAFE tree view but keeping in mind it will be the home for all future interactive views (can also moved genoverse in here).
+
+The speciestree and CAFE tree view is using d3.js (no jquery).
+
+htdocs/widgets/ holds js specific for the new trees and are only loaded on these views. 
+
+DO NOT PUT SPECIFIC JS IN htdocs/components/ as they will get loaded on all pages.
+
+00_d3.js, 90_tnt.js and 91_tnt.css are the main library for drawing the trees.
+
+90_tnt.js and 91_tnt.css are maintained by Miguel on https://github.com/emepyc/tnt (lib/tnt.js and lib/tnt.css)
+
+
