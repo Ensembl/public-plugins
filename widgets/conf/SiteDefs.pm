@@ -20,6 +20,9 @@ use strict;
 
 package EnsEMBL::Widgets::SiteDefs;
 
-sub update_conf { $SiteDefs::OBJECT_TO_SCRIPT->{'Genoverse'} = 'Genoverse'; }
+sub update_conf { 
+   
+
+}
 
 1;
