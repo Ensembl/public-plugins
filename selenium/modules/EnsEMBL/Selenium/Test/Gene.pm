@@ -94,7 +94,7 @@ sub test_gene {
     my $counts = $self->count_homologues($gene_param) if(lc($self->species) ne 'ciona_intestinalis');
     $sel->ensembl_click_links(["link=Orthologues ($counts->{'orthologs'})"],'20000') if($counts->{'orthologs'});
     $sel->ensembl_click_links(["link=Paralogues ($counts->{'paralogs'})"],'20000') if($counts->{'paralogs'});
-    $sel->ensembl_click_links(["link=Protein families*"],'50000') if($counts->{'families'});
+    $sel->ensembl_click_links(["link=Ensembl protein families*"],'50000') if($counts->{'families'});
 
 # commenting out because its too deep in the html now and need some crazy xpath to test it    
 #    $sel->ensembl_click("link=JalView")
