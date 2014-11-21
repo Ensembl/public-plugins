@@ -167,22 +167,18 @@ Ensembl.Genoverse = Genoverse.extend({
   },
   
   updateTrackOrder: function (e, ui) {
+
+    var track = ui.item.data('track');
+    var prev  = ui.item.prev().data('track');
+
     this.base(e, ui);
-    
-    var id    = ui.item.data('id');
-    var order = ui.item.data('order');
-    
-    $.ajax({
-      url  : '/' + Ensembl.species + '/Ajax/track_order',
-      type : 'post',
-      data : {
-        image_config : this.panel.imageConfig,
-        track        : id,
-        order        : order
-      }
-    });
-    
-    Ensembl.EventManager.triggerSpecific('changeTrackOrder', 'modal_config_' + this.panel.id.toLowerCase(), id, order);
+
+    track = track.prop('id') + (track.prop('strand') ? track.prop('strand') > 0 ? '.f' : '.r' : '');
+    prev  = prev.prop('id') + (prev.prop('strand') ? prev.prop('strand') > 0 ? '.f' : '.r' : '');
+
+    Ensembl.EventManager.triggerSpecific('changeTrackOrder', 'modal_config_' + this.panel.id.toLowerCase(), track, prev);
+
+    this.panel.saveSort(Ensembl.species, track, prev);
   },
   
   resetConfig: function () {
