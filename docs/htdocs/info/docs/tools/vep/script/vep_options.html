@@ -582,6 +582,14 @@ host          useastdb.ensembl.org</pre>
         default</i>
       </td>
     </tr>
+    <tr id="opt_tsl">
+      <td><pre>--tsl</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        Adds the transcript support level for this transcript to the output.
+        <i>Not used by default</i>
+      </td>
+    </tr>
     <tr id="opt_canonical">
       <td><pre>--canonical</pre></td>
       <td>&nbsp;</td>
@@ -853,12 +861,12 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--pick</pre></td>
       <td>&nbsp;</td>
       <td>
-        Pick once line of consequence data per variant, including
-        transcript-specific columns. Consequences are chosen by the canonical,
-        biotype status and length of the transcript, along with the ranking of
-        the consequence type according to <a
-        href="/info/genome/variation/predicted_data.html#consequences">this
-        table</a>. This is the best method to use if you are interested only in
+        Pick once line or block of consequence data per variant, including
+        transcript-specific columns. Consequences are chosen according to the
+        criteria described <a href="vep_other.html#pick">here</a>, and the
+        order the criteria are applied may be customised with
+        <a href="#opt_pick_order">--pick_order</a>.
+        This is the best method to use if you are interested only in
         one consequence per variant. <i>Not used by default</i>
       </td>
     </tr>
@@ -866,10 +874,48 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--pick_allele</pre></td>
       <td>&nbsp;</td>
       <td>
-        Like <a href="#opt_pick">--pick</a>, but chooses one line of
+        Like <a href="#opt_pick">--pick</a>, but chooses one line or block of
         consequence data per variant allele. Will only differ in behaviour from
         --pick when the input variant has multiple alternate alleles.
         <i>Not used by default</i>
+      </td>
+    </tr>
+    <tr id="opt_flag_pick">
+      <td><pre>--flag_pick</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        As per <a href="#opt_pick">--pick</a>, but adds the PICK flag to the
+        chosen block of consequence data and retains others. <i>Not used by
+        default</i>
+      </td>
+    </tr>
+    <tr id="opt_flag_pick_allele">
+      <td><pre>--flag_pick_allele</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        As per <a href="#opt_pick_allele">--pick_allele</a>, but adds the PICK
+        flag to the chosen block of consequence data and retains others. <i>Not
+        used by default</i>
+      </td>
+    </tr>
+    <tr id="opt_per_gene">
+      <td><pre>--per_gene</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        Output only the most severe consequence per gene. The transcript
+        selected is arbitrary if more than one has the same predicted
+        consequence. Uses the same ranking system as
+        <a href="#opt_pick">--pick</a>. <i>Not used by default</i>
+      </td>
+    </tr>
+    <tr id="opt_pick_order">
+      <td><pre>--pick_order [c1,c2,c3]</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        Customise the order of criteria applied when choosing a block of
+        annotation data with e.g. <a href="#opt_pick">--pick</a>. See
+        <a href="vep_other.html#pick">this page</a> for the default order.
+        Valid criteria are: <i>canonical, tsl, biotype, rank, length</i>
       </td>
     </tr>
     <tr id="opt_most_severe">
@@ -890,17 +936,6 @@ host          useastdb.ensembl.org</pre>
         Output only a comma-separated list of all observed consequences
         per variation. Transcript-specific columns will be left blank.
         <i>Not used by default</i>
-      </td>
-    </tr>
-    <tr id="opt_per_gene">
-      <td><pre>--per_gene</pre></td>
-      <td>&nbsp;</td>
-      <td>
-        Output only the most severe consequence per gene. The transcript
-        selected is arbitrary if more than one has the same predicted
-        consequence. Consequence ranks are given in <a
-        href="/info/genome/variation/predicted_data.html#consequences">this
-        table</a>. <i>Not used by default</i>
       </td>
     </tr>
     <tr id="opt_filter_common">

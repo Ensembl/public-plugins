@@ -49,6 +49,60 @@ If using human GRCh37 add "--port 3337" to use the GRCh37 database, or --offline
   
   <hr/>
     
+  <h2 id="pick">Producing one annotation per variant</h2>
+  
+  <p> By default the VEP is configured to provide annotation on every genomic
+  feature that each input variant overlaps. This means that if a variant
+  overlaps a gene with multiple alternate splicing variants (transcripts), then
+  a block of annotation for each of these transcripts is reported in the output.
+  In the <a href="../vep_formats.html#output">default VEP output format</a> each
+  of these blocks is written on a single line of output; in
+  <a href="../vep_formats.html#vcfout">VCF output format</a> the blocks are
+  separated by commas in the INFO field. </p>
+  
+  <p> For many users, however, this depth of annotation is not required, and to
+  this end the VEP provides a number of options to reduce the amount of output
+  produced. Which to choose depends on your motivations and requirements on the
+  output. </p>
+  
+  <p> <b>NB:</b> Wherever possible we would discourage users from summarising
+  data in this way. Summarising inevitably involves data loss, and invariably at
+  some point this will lead to the loss of biologically relevant information. For
+  example, if your variant overlaps both a regulatory feature and a transcript
+  and you use one of the flags below, the overlap with the regulatory feature
+  will be lost in your output, when in some cases this may be a clue to the
+  "real" functional effect of your variant. For these reasons we encourage users
+  to use one of the flagging options
+  (<a href="vep_options.html#opt_flag_pick">--flag_pick</a> or
+  <a href="vep_options.html#opt_flag_pick_allele">--flag_pick_allele</a>) and to
+  post-filter results. </p>
+  
+  <ul>
+    <li><b><a href="vep_options.html#opt_pick">--pick</a></b>: this is the optionwe anticipate will be of use to most users. The VEP chooses one block of annotation per variant, using an ordered set of criteria. This order may be customised using <a href="vep_options.html#opt_pick_order">--pick_order</a>.
+      <ol>
+        <li>canonical status of transcript</li>
+        <li>transcript support level</li>
+        <li>biotype of transcript (protein_coding preferred)</li>
+        <li>consequence rank according to <a href="/info/docs/variation/predicted_data.html#consequences">this table</a></li>
+        <li>transcript or feature length (longer preferred)</li>
+      </ol>
+    </li>
+    
+    <li><b><a href="vep_options.html#opt_pick_allele">--pick_allele</a></b>: as above, but chooses one consequence block per variant allele. This can be useful for <a href="../vep_formats.html#vcf">VCF input files</a> with more than one ALT allele</li>
+    
+    <li><b><a href="vep_options.html#opt_flag_pick">--flag_pick</a></b>: instead of choosing one block and removing the others, this option adds a flag &quot;PICK=1&quot; to picked annotation block, allowing users to easily filter on this later using the VEP's <a href="vep_filter.html">filtering script</a></li>
+    
+    <li><b><a href="vep_options.html#opt_flag_pick_allele">--flag_pick_allele</a></b>: as above, but flags one block per allele</li>
+    
+    <li><b><a href="vep_options.html#opt_per_gene">--per_gene</a></b>: as <a href="vep_options.html#opt_pick">--pick</a>, but chooses one annotation block per gene that the input variant overlaps</li>
+    
+    <li><b><a href="vep_options.html#opt_most_severe">--most_severe</a></b>: this flag reports only the consequence type of the block with the highest rank, according to <a href="/info/docs/variation/predicted_data.html#consequences">this table</a>. Feature-specific annotation is absent from the output using this flag, so use with caution!</li>
+    
+    <li><b><a href="vep_options.html#opt_summary">--summary</a></b>: this flag reports only a comma-separated list of the consequence types predicted for this variant. Feature-specific annotation is absent from the output using this flag, so use with caution!</li>
+  </ul>
+  
+  <hr/>
+    
   <h2 id="hgvs">HGVS notations</h2>
   
   <p> The VEP script supports using HGVS notations as input. This feature is
