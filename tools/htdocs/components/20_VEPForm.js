@@ -66,7 +66,7 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
 
           // check format
           var format      = panel.detectFormat(this.value.split(/[\r\n]+/)[0]);
-          var enablePrev  = format === 'id' || format === 'vcf' || format === 'ensembl';
+          var enablePrev  = format === 'id' || format === 'vcf' || format === 'ensembl' || format === 'hgvs';
 
           panel.elLk.previewButton.toggleClass('disabled', !enablePrev).prop('disabled', !enablePrev);
         }
@@ -96,6 +96,10 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
     switch (this.previewInp.format) {
       case "id":
         url = this.previewInp.baseURL + '/id/' + this.previewInp.input;
+        break;
+        
+      case "hgvs":
+        url = this.previewInp.baseURL + '/hgvs/' + encodeURIComponent(this.previewInp.input);
         break;
 
       case "ensembl":
