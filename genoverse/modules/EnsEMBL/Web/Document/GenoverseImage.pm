@@ -32,6 +32,10 @@ sub new {
   return bless $args, $class;
 }
 
+sub has_moveable_tracks {
+  return 1;
+}
+
 sub get_tracks {
   my $self         = shift;
   my $hub          = $self->{'hub'};
