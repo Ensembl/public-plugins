@@ -1,9 +1,10 @@
-var tnt_theme_tree_simple_species_tree = function(ncbi_tree) {
+var tnt_theme_tree_simple_species_tree = function(species_details) {
     "use strict";
 
     var pics_path     = "/i/species/48/";
     var width         = Math.floor(d3.select("#species_tree").style("width").replace(/px/g,'') / 100) * 100;
     var scale         = false;
+    var species_info  = species_details['species_tooltip'];    
 
     var tnt_theme = function (tree_vis, div) {
 
@@ -14,7 +15,6 @@ var tnt_theme_tree_simple_species_tree = function(ncbi_tree) {
               tree_vis.update();
       });
 */
-
       function draw_resize_menu(new_width) {
         var resize_menu = d3.select(".resize_menu");
 
@@ -31,11 +31,18 @@ var tnt_theme_tree_simple_species_tree = function(ncbi_tree) {
         }
 
       }
+      
+      function update_tree_label() {
+        var ensembl_ncbi  = d3.select(".tree_menu").select(".current").text().replace(/\sTree/g,'');
+        var species_clade = d3.select(".filter_menu").select(".current").text().match(/All species/g) ? "Species" : d3.select(".filter_menu").select(".current").text();
+        var new_label = ensembl_ncbi + " " + species_clade + " tree";
+        d3.select(".tree_label").text(new_label);
+      }
 
       // In the div, we set up a "select" to transition between a radial and a vertical tree
       var menu_pane = d3.select(div)
           .append("div")
-          .attr("class", "image_toolbar")
+          .attr("class", "image_toolbar")          
           .append("div")
           .attr("id", "switch")
           .attr("class", "layout_switch vertical")     
@@ -80,8 +87,11 @@ var tnt_theme_tree_simple_species_tree = function(ncbi_tree) {
               } else {
                 d3.select(".ncbi").classed("current", true);
                 d3.select(".ensembl").classed("current", false);
-                tree_vis.data(tnt.tree.parse_newick(ncbi_tree));
+                var species_type = d3.select(".filter_menu").select(".current").attr("class").replace(/\scurrent/g,'');
+                var tree_type    = species_type.match(/all_species/g) ? "ncbi_tree" : "ncbi_" + species_type;                
+                tree_vis.data(tnt.tree.parse_newick(species_details[tree_type]));
                 tree_vis.update();
+                update_tree_label();
                 d3.select(".tree_menu").style("display", "none");
               }
           });
@@ -95,15 +105,46 @@ var tnt_theme_tree_simple_species_tree = function(ncbi_tree) {
                 return; 
               } else {
                 d3.select(".ensembl").classed("current", true);
-                d3.select(".ncbi").classed("current", false);                
-                tree_vis.data(tnt.tree.parse_newick(newick));
+                d3.select(".ncbi").classed("current", false); 
+                var species_type = d3.select(".filter_menu").select(".current").attr("class").replace(/\scurrent/g,'');
+                var tree_type    = species_type.match(/all_species/g) ? "newick_tree" : "newick_" + species_type;                
+                tree_vis.data(tnt.tree.parse_newick(species_details[tree_type]));
                 tree_vis.update();
+                update_tree_label();
                 d3.select(".tree_menu").style("display", "none");
               }
           });
 
       d3.select("#species_tree").append("div").attr("class", "image_resize_menu resize_menu");
       draw_resize_menu(width);
+      
+      var filter_menu = d3.select("#species_tree")
+          .append("div")
+          .attr("class", "image_resize_menu filter_menu");
+
+      filter_menu.append("div")
+          .attr("class", "header")
+          .text("View tree for");
+
+      filter_menu.append("div")
+          .attr("class", "mammals")
+          .text("Mammals")
+
+      filter_menu.append("div")
+          .attr("class", "sauria")
+          .text("Sauropsids");         
+
+      filter_menu.append("div")
+          .attr("class", "amniota")
+          .text("Amniotes");
+
+      filter_menu.append("div")
+          .attr("class", "fish")
+          .text("Fish");
+          
+      filter_menu.append("div")
+          .attr("class", "all_species current ")
+          .text("All species");         
 
       var tree_icon = d3.select(".image_toolbar")
           .append("div")
@@ -119,6 +160,44 @@ var tnt_theme_tree_simple_species_tree = function(ncbi_tree) {
               } else {
                 d3.select(".tree_menu").style("display", "none");
               }
+          });
+          
+      var filter_icon = d3.select(".image_toolbar")
+          .append("div")
+          .attr("class", "filter_switch")
+          .attr("title", "Filter species tree by mammal, fish,...")          
+          .on("click", function() {
+            if(d3.select(".filter_menu").style("display") == 'none') {
+              //just making sure all other menu are closed
+              d3.selectAll(".image_resize_menu").each(function(d,i) {
+                d3.select(this).style("display", "none");
+              }); 
+              
+              d3.select(".filter_menu").style("display", "block");         
+              filter_menu.selectAll("div").each(function(d,i) { 
+                var filter_class = d3.select(this).attr("class");
+                
+                if(filter_class.match(/header/g))  return false;
+                
+                d3.select(this).on("click", function() {  
+                  if(filter_class.match(/current/g)) {
+                    d3.select(".filter_menu").style("display", "none");
+                    return;
+                  } else {          
+                    d3.select(".filter_menu").selectAll("div").classed("current", false);   //remove current from the corresponding div
+                    d3.select(this).classed("current", true);                
+                    var tree = d3.select(".tree_menu").select(".current").attr("class").match(/ensembl/g) ? tree = filter_class.match(/all_species/g) ? 'newick_tree' : 'newick_'+ filter_class
+                               : filter_class.match(/all_species/g) ? 'ncbi_tree' : 'ncbi_'+ filter_class;
+                    tree_vis.data(tnt.tree.parse_newick(species_details[tree]));
+                    tree_vis.update();
+                    update_tree_label();
+                    d3.select(".filter_menu").style("display", "none");  
+                  }
+                });
+              });              
+            } else {
+              d3.select(".filter_menu").style("display", "none");
+            }          
           });
 
       var resize_icon = d3.select(".image_toolbar")
@@ -161,8 +240,7 @@ var tnt_theme_tree_simple_species_tree = function(ncbi_tree) {
       var image_label = tnt.tree.label.img()
           .src(function(d) {
             if(d.is_leaf()) {
-              var pic_name = ncbi_tree ? d.data().name.replace(/\s/g,'_') : d.data.name;
-              return pics_path + pic_name + ".png";
+              return pics_path + species_info[d.data().name]['production_name'] + ".png";
             }
           })
           .width(function() {
@@ -175,7 +253,7 @@ var tnt_theme_tree_simple_species_tree = function(ncbi_tree) {
       var original_label = tnt.tree.label.text()
           .text(function (node) { 
             if(node.is_leaf()) { 
-              return node.node_name().replace(/_/g,' '); 
+              return node.node_name(); 
             } 
           }).fontsize(14);
 
@@ -184,23 +262,53 @@ var tnt_theme_tree_simple_species_tree = function(ncbi_tree) {
         .add_label(image_label)
         .add_label(original_label);
 
+      var node_tooltip = function (node) {
+        var obj = {};
+        obj.header = {
+          label : "Ensembl Name",
+          value : species_info[node.node_name()]['ensembl_name']
+        };
+
+        obj.rows = [];
+        obj.rows.push ({
+          label : 'Taxon ID',
+          value : species_info[node.node_name()]['taxon_id']          
+        });
+
+        if (node.is_leaf()) {        
+          obj.rows.push ({
+            label : "Assembly", 
+            value : species_info[node.node_name()]['assembly']    
+          });
+          obj.rows.push ({
+            label : "Species Homepage",            
+            value : '<a href="/'+species_info[node.node_name()]['ensembl_name']+'/Info/Index" title="Click to go to species homepage">'+species_info[node.node_name()]['ensembl_name']+'</a>'
+          });          
+        } else {
+          obj.rows.push ({
+            label : 'Timetree(million Years)',
+            value : species_info[node.node_name()]['timetree']
+          });        
+        }
+
+        tnt.tooltip.table().call (this, obj);
+      };
+ 
+
 	    tree_vis
-	      .data(tnt.tree.parse_newick(newick))
+	      .data(tnt.tree.parse_newick(species_details['newick_tree']))
         .label(joined_label)
-	      .node_circle_size(2)
-	      .node_color("black")
+        .node_display(tree_vis.node_display().size(4))
+        .on_click(node_tooltip)
 	      .link_color("black")
 	      .layout(tnt.tree.layout.vertical()
           .width(width)
 		      .scale(scale)
 		    );
-
-    	tree_vis(div);
+      
+    	tree_vis(div);      
+      d3.select(".image_toolbar").append("div").attr("class", "tree_label").text("Ensembl Species tree");
     };
 
     return tnt_theme;
 };
-
-// newick tree
-var newick = "(((Drosophila_melanogaster:1,Caenorhabditis_elegans:1):1,((Ciona_intestinalis:1,Ciona_savignyi:1):1,(((((((((Taeniopygia_guttata:1,Ficedula_albicollis:1):1,((Meleagris_gallopavo:1,Gallus_gallus:1):1,Anas_platyrhynchos:1):1):1,Pelodiscus_sinensis:1):1,Anolis_carolinensis:1):1,((((((Procavia_capensis:1,Loxodonta_africana:1):1,Echinops_telfairi:1):1,(Choloepus_hoffmanni:1,Dasypus_novemcinctus:1):1):1,((((Oryctolagus_cuniculus:1,Ochotona_princeps:1):1,((((Mus_musculus:1,Rattus_norvegicus:1):1,Dipodomys_ordii:1):1,Ictidomys_tridecemlineatus:1):1,Cavia_porcellus:1):1):1,(((Microcebus_murinus:1,Otolemur_garnettii:1):1,(((((Papio_anubis:1,Macaca_mulatta:1):1,Chlorocebus_sabaeus:1):1,((((Pan_troglodytes:1,Homo_sapiens:1):1,Gorilla_gorilla:1):1,Pongo_abelii:1):1,Nomascus_leucogenys:1):1):1,Callithrix_jacchus:1):1,Tarsius_syrichta:1):1):1,Tupaia_belangeri:1):1):1,((Sorex_araneus:1,Erinaceus_europaeus:1):1,(((Pteropus_vampyrus:1,Myotis_lucifugus:1):1,((((Mustela_putorius_furo:1,Ailuropoda_melanoleuca:1):1,Canis_familiaris:1):1,Felis_catus:1):1,Equus_caballus:1):1):1,((((Bos_taurus:1,Ovis_aries:1):1,Tursiops_truncatus:1):1,Vicugna_pacos:1):1,Sus_scrofa:1):1):1):1):1):1,((Macropus_eugenii:1,Sarcophilus_harrisii:1):1,Monodelphis_domestica:1):1):1,Ornithorhynchus_anatinus:1):1):1,Xenopus_tropicalis:1):1,Latimeria_chalumnae:1):1,(((Danio_rerio:1,Astyanax_mexicanus:1):1,(((Tetraodon_nigroviridis:1,Takifugu_rubripes:1):1,((((Poecilia_formosa:1,Xiphophorus_maculatus:1):1,Oryzias_latipes:1):1,Gasterosteus_aculeatus:1):1,Oreochromis_niloticus:1):1):1,Gadus_morhua:1):1):1,Lepisosteus_oculatus:1):1):1,Petromyzon_marinus:1):1):1):1,Saccharomyces_cerevisiae:1);"
-

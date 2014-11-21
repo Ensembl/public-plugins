@@ -1,11 +1,18 @@
 
-#species_tree div.image_toolbar                 { background: linear-gradient(to right, rgba(55,97,153,1) 0%,rgba(37,127,211,1) 50%,rgba(30,114,192,1) 51%,rgba(110,176,230,1) 100%); height: 20px;  }
+#species_tree div.image_toolbar                 { background: linear-gradient(to right, rgba(55,97,153,1) 0%,rgba(37,127,211,1) 50%,rgba(30,114,192,1) 51%,rgba(110,176,230,1) 100%); height: 20px; text-align: center; font-weight: bold;}
 #species_tree div.image_container               { margin-right: 20px; }
+div.tree_label                                  { color: #ffffff; }
 div.layout_switch                               { background-image: url("/i/switch.png"); cursor: pointer; float: left; height: 16px; margin: 0 4px 2px; width: 16px; }
 div.tree_switch                                 { background-image: url("/i/tree.png"); cursor: pointer; float: left; height: 16px; margin: -1px 6px 2px; width: 16px; height: 21px; }
+div.filter_switch                               { background-image: url("/i/filter.png"); cursor: pointer; float: left; height: 16px; margin: 0 4px 2px; width: 16px; }
 #species_tree div.image_resize_menu div         { font-weight: bold; border-width: 0px 1px 1px 0px; }
 #species_tree div.image_resize_menu div.current { background: url("/i/16/rev/check_grey.png") no-repeat scroll right center rgba(0, 0, 0, 0); color: grey; font-weight: bold; text-decoration: none; background-color: #eaeeff; }
 div.image_resize_menu div.header                { cursor: auto; }
-div.tree_menu                                   { display: none; }
+div.tree_menu, div.resize_menu, div.filter_menu { display: none; }
 div.resize                                      { background-image: url("/i/16/rev/image_resize.png"); cursor: pointer; float: left; height: 16px; margin: 0 4px 2px; width: 16px; }
-div.resize_menu                                 { display: none; }
+div .tnt_gene_info                              { background-color: #eaeeff; border: 1px solid #eaeeff; box-shadow: 5px 5px 15px #666; font-size: 10px; font-weight: bold; opacity: 0.94; padding: 0px; text-align: left; white-space: normal; width: 200px; position: absolute !important; }
+
+.tnt_zmenu                                      { width: 200px; border-style: none;}
+.tnt_gene_info_header                           { background: linear-gradient(to right, rgba(55,97,153,1) 0%,rgba(37,127,211,1) 50%,rgba(30,114,192,1) 51%,rgba(110,176,230,1) 100%); }
+.tnt_gene_info_header th                        { color: #ffffff; }
+.tnt_tree_node, .tnt_tree_label                 { cursor: pointer; }
