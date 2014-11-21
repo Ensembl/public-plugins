@@ -94,7 +94,7 @@ sub content {
         'noinput'       => 1,
         'is_html'       => 1,
         'caption'       => sprintf('<span class="small"><b>Examples:&nbsp;</b>%s</span>',
-          join(', ', map { sprintf('<a href="#" class="_example_input">%s<input type="hidden" value="%s" /></a>', $_->{'caption'}, $_->{'example'}) } @$input_formats)
+          join(', ', map { sprintf('<a href="#" class="_example_input" rel="%s">%s</a>', $_->{'value'}, $_->{'caption'}) } @$input_formats)
         )
       }, {
         'type'          => 'button',
@@ -273,11 +273,23 @@ sub content {
   
   # add colours
   $cons{$_}->{colour} = $hub->colourmap->hex_by_name($sd->colour('variation')->{lc $_}->{'default'}) for keys %cons;
+  
+  # add example data
+  my $ex_data;
+  
+  foreach my $sp(@$species) {
+    foreach my $key(grep {/^VEP/} keys %{$sp->{sample}}) {
+      my $value = $sp->{sample}->{$key};
+      $key =~ s/^VEP\_//;
+      $ex_data->{$sp->{value}}->{lc($key)} = $value;
+    }
+  }
 
   # create input with data
-  my $panel_params = sprintf('<input class="js_param" type="hidden" name="preview_data" value="%s" /><input class="js_param" type="hidden" name="rest_server_url" value="%s">',
+  my $panel_params = sprintf('<input class="js_param" type="hidden" name="preview_data" value="%s" /><input class="js_param" type="hidden" name="rest_server_url" value="%s"><input class="js_param" type="hidden" name="example_data" value="%s">',
     encode_entities($self->jsonify(\%cons)),
-    encode_entities($sd->ENSEMBL_REST_URL)
+    encode_entities($sd->ENSEMBL_REST_URL),
+    encode_entities($self->jsonify($ex_data))
   );
 
   return sprintf('
@@ -631,7 +643,8 @@ sub _species {
         'refseq'      => $refseq{$_} && $db_config->{'DATABASE_OTHERFEATURES'},
         'assembly'    => $sd->get_config($_, 'ASSEMBLY_NAME'),
         'regulatory'  => $sd->get_config($_, 'REGULATORY_BUILD'),
-        'favourite'   => $fav{$_} || 0
+        'favourite'   => $fav{$_} || 0,
+        'sample'      => $sd->get_config($_, 'SAMPLE_DATA'),
       };
     }
 

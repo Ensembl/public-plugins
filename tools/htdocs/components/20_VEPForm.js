@@ -23,13 +23,22 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
 
     this.previewData = JSON.parse(this.params['preview_data']);
     delete this.params['preview_data'];
+    
+    this.exampleData = JSON.parse(this.params['example_data']);
+    delete this.params['example_data'];
 
     var panel = this;
 
     // Change the input value on click of the examples link
     this.elLk.form.find('a._example_input').on('click', function(e) {
       e.preventDefault();
-      panel.elLk.dataField.val($(this).find('input').val()).trigger('change');
+
+      var species = panel.elLk.form.find('input[name=species]:checked').val();
+      var text = panel.exampleData[species][this.rel];
+      if(typeof(text) === 'undefined' || !text.length) text = "";
+      text = text.replace(/\\n/g, "\n");
+    
+      panel.elLk.dataField.val(text).trigger('change');
     });
 
     // Preview button
@@ -254,7 +263,7 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
       $.merge(tableRows, $.map(results['transcript_consequences'], function(cons) {
         var cols = [];
         cols.push('<p class="no-bottom-margin"><b>'
-          + renderZmenuLink(panel.previewInp.species, 'Gene', cons.gene_id, cons.gene_symbol)
+          + renderZmenuLink(panel.previewInp.species, 'Gene', cons.gene_id, cons.gene_symbol || cons.gene_id)
           + '</b>: '
           + renderZmenuLink(panel.previewInp.species, 'Transcript', cons.transcript_id, cons.transcript_id)
           + '</p>'
