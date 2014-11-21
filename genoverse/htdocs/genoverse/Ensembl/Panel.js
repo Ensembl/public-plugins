@@ -34,7 +34,7 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
     
     this.initControls();
     
-    Ensembl.EventManager.register('changeTrackOrder', this, this.sortUpdate);
+    Ensembl.EventManager.register('changeTrackOrder', this, this.externalOrder);
     Ensembl.EventManager.register('updatePanel',      this, this.update);
     Ensembl.EventManager.register('imageResize',      this, this.resize);
     Ensembl.EventManager.register('changeWidth',      this, this.resize);
@@ -201,7 +201,7 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
     }
   },
   
-  sortUpdate: function (label, order) {
+  externalOrder: function (label, order) {
     var labels = this.genoverse.labelContainer.children(':not(.unsortable)');
     
     label = labels.filter('.' + label).detach();
