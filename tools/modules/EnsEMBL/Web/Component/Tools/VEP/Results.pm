@@ -124,6 +124,10 @@ sub content {
     'SYMBOL_SOURCE'       => 'Symbol source',
     'DOMAINS'             => 'Domains',
     'STRAND'              => 'Feature strand',
+    'TSL'                 => 'Transcript support level',
+    'STRAND'              => 'Feature strand',
+    'SOMATIC'             => 'Somatic status',
+    'PICK'                => 'Selected annotation',
   );
   for (grep {/\_/} @$headers) {
     $header_titles{$_} ||= $_ =~ s/\_/ /gr;
