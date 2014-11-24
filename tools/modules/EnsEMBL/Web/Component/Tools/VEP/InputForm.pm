@@ -539,6 +539,16 @@ sub _build_extra {
   $fieldset->add_field({
     'field_class' => '_stt_core _stt_gencode_basic _stt_merged',
     'type'        => 'checkbox',
+    'name'        => 'tsl',
+    'label'       => 'Transcript support level',
+    'helptip'     => 'Report the transcript support level',
+    'value'       => 'yes',
+    'checked'     => 1,
+  });
+
+  $fieldset->add_field({
+    'field_class' => '_stt_core _stt_gencode_basic _stt_merged',
+    'type'        => 'checkbox',
     'name'        => 'canonical',
     'label'       => 'Identify canonical transcripts',
     'helptip'     => 'Indicate if an affected transcript is the canonical transcript for the gene',
