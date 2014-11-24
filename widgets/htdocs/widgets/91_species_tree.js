@@ -1,4 +1,6 @@
-var tnt_theme_tree_simple_species_tree = function(species_details) {
+Ensembl.SpeciesTree = {};
+Ensembl.SpeciesTree.tnt=tnt;
+Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_details) {
     "use strict";
 
     var pics_path     = "/i/species/48/";
@@ -312,3 +314,4 @@ var tnt_theme_tree_simple_species_tree = function(species_details) {
 
     return tnt_theme;
 };
+
