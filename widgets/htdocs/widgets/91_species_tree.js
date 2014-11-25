@@ -13,6 +13,7 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
         $(window).off("resize.tnt");
         window.setTimeout(function () {
           $(window).on("resize.tnt", tntResize);
+          $(".tnt_groupDiv").width(Math.floor(d3.select("#species_tree").style("width").replace(/px/g,'') / 100) * 100);
           tree_vis.layout().width(Math.floor(d3.select("#species_tree").style("width").replace(/px/g,'') / 100) * 100);
           tree_vis.update();
         }, 100);
