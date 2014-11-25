@@ -128,6 +128,7 @@ sub content {
     'STRAND'              => 'Feature strand',
     'SOMATIC'             => 'Somatic status',
     'PICK'                => 'Selected annotation',
+    'SOURCE'              => 'Transcript source',
   );
   for (grep {/\_/} @$headers) {
     $header_titles{$_} ||= $_ =~ s/\_/ /gr;
