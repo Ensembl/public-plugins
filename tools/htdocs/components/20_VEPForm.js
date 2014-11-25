@@ -256,7 +256,7 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
       '</div>' +
       '<p class="small"><b>Note:</b> the above is a preview of results using the <i>' +
         this.previewInp.species.replace('_', ' ') +
-        '</i> Ensembl transcript database and does not include all data fields present in the full results set</p>'
+        '</i> Ensembl transcript database and does not include all data fields present in the full results set. Please submit the job using the Run button below to obtain these.</p>'
     );
 
     // beginnings of table row
