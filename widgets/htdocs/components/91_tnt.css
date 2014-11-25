@@ -81,20 +81,21 @@ text.tnt_tooWide_text {
   filter: alpha(opacity=0.6);
   #    opacity: 0.6; }
 
-div .tnt_gene_info {
+div .tnt_tooltip {
   display: block;
   position: absolute;
   top: 0px;
   opacity: 0;
+  border: 2px solid;
   background-color: #FFFFFF;
   font-size: 12px; }
-  div .tnt_gene_info h1 {
+  div .tnt_tooltip h1 {
     font-size: 30px; }
-  div .tnt_gene_info .link {
+  div .tnt_tooltip .link {
     color: blue; }
-    div .tnt_gene_info .link:hover {
+    div .tnt_tooltip .link:hover {
       cursor: pointer; }
-div .tnt_gene_info_active {
+div .tnt_tooltip_active {
   opacity: 1;
   z-index: 1001; }
 

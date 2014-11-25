@@ -110,7 +110,7 @@ sub render {
   }
   $tree_details->{'species_tooltip'} = \%species_info;
   
-  my $json_info = to_json($tree_details);  
+  my $json_info = to_json($tree_details);
  
   my $html = qq{    
     <div  class="ajax js_panel image_container ui-resizable" id="species_tree" class="widget-toolbar"></div>

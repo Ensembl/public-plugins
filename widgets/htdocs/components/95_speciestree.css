@@ -10,9 +10,8 @@ div.filter_switch                               { background-image: url("/i/filt
 div.image_resize_menu div.header                { cursor: auto; }
 div.tree_menu, div.resize_menu, div.filter_menu { display: none; }
 div.resize                                      { background-image: url("/i/16/rev/image_resize.png"); cursor: pointer; float: left; height: 16px; margin: 0 4px 2px; width: 16px; }
-div .tnt_gene_info                              { background-color: #eaeeff; border: 1px solid #eaeeff; box-shadow: 5px 5px 15px #666; font-size: 10px; font-weight: bold; opacity: 0.94; padding: 0px; text-align: left; white-space: normal; width: 200px; position: absolute !important; }
-
+div .tnt_tooltip                                { background-color: #eaeeff; border: 1px solid #eaeeff; box-shadow: 5px 5px 15px #666; font-size: 10px; font-weight: bold; opacity: 0.94; padding: 0px; text-align: left; white-space: normal; width: 200px; position: absolute !important; }
 .tnt_zmenu                                      { width: 200px; border-style: none;}
-.tnt_gene_info_header                           { background: linear-gradient(to right, rgba(55,97,153,1) 0%,rgba(37,127,211,1) 50%,rgba(30,114,192,1) 51%,rgba(110,176,230,1) 100%); }
-.tnt_gene_info_header th                        { color: #ffffff; }
+.tnt_zmenu_header                               { background: linear-gradient(to right, rgba(55,97,153,1) 0%,rgba(37,127,211,1) 50%,rgba(30,114,192,1) 51%,rgba(110,176,230,1) 100%); }
+.tnt_zmenu_header th                            { color: #ffffff; }
 .tnt_tree_node, .tnt_tree_label                 { cursor: pointer; }

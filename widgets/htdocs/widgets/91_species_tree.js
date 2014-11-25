@@ -265,13 +265,10 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
         .add_label(original_label);
 
       var node_tooltip = function (node) {
-        var obj = {};
-        obj.header = {
-          label : "Ensembl Name",
-          value : species_info[node.node_name()]['ensembl_name']
-        };
-
-        obj.rows = [];
+        var obj    = {};
+        obj.header = "Ensembl Name: " + species_info[node.node_name()]['ensembl_name'];
+        obj.rows   = [];
+        
         obj.rows.push ({
           label : 'Taxon ID',
           value : species_info[node.node_name()]['taxon_id']          
@@ -293,7 +290,7 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
           });        
         }
 
-        tnt.tooltip.table().call (this, obj);
+        tnt.tooltip.table().width(200).call (this, obj);
       };
  
 
