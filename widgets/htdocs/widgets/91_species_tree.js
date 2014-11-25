@@ -9,14 +9,16 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
     var species_info  = species_details['species_tooltip'];    
 
     var tnt_theme = function (tree_vis, div) {
+      var tntResize = function () {
+        $(window).off("resize.tnt");
+        window.setTimeout(function () {
+          $(window).on("resize.tnt", tntResize);
+          tree_vis.layout().width(Math.floor(d3.select("#species_tree").style("width").replace(/px/g,'') / 100) * 100);
+          tree_vis.update();
+        }, 100);
+      }
+      $(window).on("resize.tnt", tntResize);
 
-/* this is not working, causing the browser to freeze
-      d3.select(window).on("resize", function resize () {
-//console.log(width);
-              tree_vis.layout().width(500);
-              tree_vis.update();
-      });
-*/
       function draw_resize_menu(new_width) {
         var resize_menu = d3.select(".resize_menu");
 
@@ -40,36 +42,11 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
         var new_label = ensembl_ncbi + " " + species_clade + " tree";
         d3.select(".tree_label").text(new_label);
       }
-
+    
       // In the div, we set up a "select" to transition between a radial and a vertical tree
       var menu_pane = d3.select(div)
           .append("div")
-          .attr("class", "image_toolbar")          
-          .append("div")
-          .attr("id", "switch")
-          .attr("class", "layout_switch vertical")     
-          .attr("title", "Switch between radial and vertical")
-          .on("click", function() {
-            var pos           = d3.select("#switch").attr("class");
-            var current_width =  Math.floor(d3.select("#species_tree").style("width").replace(/px/g,'') / 100) * 100;
-
-            //just making sure all other menu are closed
-            d3.selectAll(".image_resize_menu").each(function(d,i) {
-              d3.select(this).style("display", "none");
-            });
-
-            if(pos.match(/vertical/g)) {
-              d3.select("#switch").attr("class", d3.select("#switch").attr("class").replace(/vertical/g,"radial"));
-
-              tree_vis.layout(tnt.tree.layout.radial().width(current_width).scale(scale)).duration(1000);
-              tree_vis.update();
-            } else {
-              d3.select("#switch").attr("class", d3.select("#switch").attr("class").replace(/radial/g,"vertical"));
-
-              tree_vis.layout(tnt.tree.layout.vertical().width(current_width).scale(scale)).duration(1000);
-              tree_vis.update();
-            }
-          });
+          .attr("class", "image_toolbar");          
 
       var tree_menu = d3.select("#species_tree")
           .append("div")
@@ -81,7 +58,7 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
 
       tree_menu.append("div")
           .attr("class", "ncbi")
-          .text("NCBI Tree")
+          .text("NCBI Taxonomy Tree")
           .on("click", function() {
               if(d3.select(".ncbi").attr("class").match(/current/g)) {
                 d3.select(".tree_menu").style("display", "none");
@@ -90,8 +67,8 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
                 d3.select(".ncbi").classed("current", true);
                 d3.select(".ensembl").classed("current", false);
                 var species_type = d3.select(".filter_menu").select(".current").attr("class").replace(/\scurrent/g,'');
-                var tree_type    = species_type.match(/all_species/g) ? "ncbi_tree" : "ncbi_" + species_type;                
-                tree_vis.data(tnt.tree.parse_newick(species_details[tree_type]));
+                var tree_type    = species_type.match(/all_species/g) ? "ncbi_tree_obj" : "ncbi_" + species_type + "_tree_obj";
+                tree_vis.data(species_details[tree_type]);
                 tree_vis.update();
                 update_tree_label();
                 d3.select(".tree_menu").style("display", "none");
@@ -109,8 +86,8 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
                 d3.select(".ensembl").classed("current", true);
                 d3.select(".ncbi").classed("current", false); 
                 var species_type = d3.select(".filter_menu").select(".current").attr("class").replace(/\scurrent/g,'');
-                var tree_type    = species_type.match(/all_species/g) ? "newick_tree" : "newick_" + species_type;                
-                tree_vis.data(tnt.tree.parse_newick(species_details[tree_type]));
+                var tree_type    = species_type.match(/all_species/g) ? "newick_tree_obj" : "newick_" + species_type + "_tree_obj";                
+                tree_vis.data(species_details[tree_type]);
                 tree_vis.update();
                 update_tree_label();
                 d3.select(".tree_menu").style("display", "none");
@@ -129,7 +106,7 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
           .text("View tree for");
 
       filter_menu.append("div")
-          .attr("class", "mammals")
+          .attr("class", "mammalia")
           .text("Mammals")
 
       filter_menu.append("div")
@@ -141,7 +118,7 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
           .text("Amniotes");
 
       filter_menu.append("div")
-          .attr("class", "fish")
+          .attr("class", "neopterygii")
           .text("Fish");
           
       filter_menu.append("div")
@@ -188,9 +165,9 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
                   } else {          
                     d3.select(".filter_menu").selectAll("div").classed("current", false);   //remove current from the corresponding div
                     d3.select(this).classed("current", true);                
-                    var tree = d3.select(".tree_menu").select(".current").attr("class").match(/ensembl/g) ? tree = filter_class.match(/all_species/g) ? 'newick_tree' : 'newick_'+ filter_class
-                               : filter_class.match(/all_species/g) ? 'ncbi_tree' : 'ncbi_'+ filter_class;
-                    tree_vis.data(tnt.tree.parse_newick(species_details[tree]));
+                    var tree = d3.select(".tree_menu").select(".current").attr("class").match(/ensembl/g) ? tree = filter_class.match(/all_species/g) ? 'newick_tree_obj' : 'newick_'+ filter_class + "_tree_obj"
+                               : filter_class.match(/all_species/g) ? 'ncbi_tree_obj' : 'ncbi_'+ filter_class + "_tree_obj";
+                    tree_vis.data(species_details[tree]);
                     tree_vis.update();
                     update_tree_label();
                     d3.select(".filter_menu").style("display", "none");  
@@ -201,7 +178,34 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
               d3.select(".filter_menu").style("display", "none");
             }          
           });
+          
+      var layout_icon = d3.select(".image_toolbar")
+          .append("div")
+          .attr("id", "switch")
+          .attr("class", "layout_switch vertical")     
+          .attr("title", "Switch between radial and vertical")
+          .on("click", function() {
+            var pos           = d3.select("#switch").attr("class");
+            var current_width =  Math.floor(d3.select("#species_tree").style("width").replace(/px/g,'') / 100) * 100;
 
+            //just making sure all other menu are closed
+            d3.selectAll(".image_resize_menu").each(function(d,i) {
+              d3.select(this).style("display", "none");
+            });
+
+            if(pos.match(/vertical/g)) {
+              d3.select("#switch").attr("class", d3.select("#switch").attr("class").replace(/vertical/g,"radial"));
+
+              tree_vis.layout(tnt.tree.layout.radial().width(current_width).scale(scale)).duration(1000);
+              tree_vis.update();
+            } else {
+              d3.select("#switch").attr("class", d3.select("#switch").attr("class").replace(/radial/g,"vertical"));
+
+              tree_vis.layout(tnt.tree.layout.vertical().width(current_width).scale(scale)).duration(1000);
+              tree_vis.update();
+            }
+          });
+          
       var resize_icon = d3.select(".image_toolbar")
           .append("div")
           .attr("class", "resize")
@@ -266,9 +270,13 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
 
       var node_tooltip = function (node) {
         var obj    = {};
-        obj.header = "Ensembl Name: " + species_info[node.node_name()]['ensembl_name'];
+        obj.header = "Scientific Name: " + node.node_name();
         obj.rows   = [];
-        
+       
+        obj.rows.push ({
+          label : 'Ensembl Name',
+          value : species_info[node.node_name()]['ensembl_name']
+        });          
         obj.rows.push ({
           label : 'Taxon ID',
           value : species_info[node.node_name()]['taxon_id']          
@@ -285,17 +293,51 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
           });          
         } else {
           obj.rows.push ({
-            label : 'Timetree(million Years)',
+            label : 'Divergence Time<br>(million Years)',
             value : species_info[node.node_name()]['timetree']
           });        
         }
 
-        tnt.tooltip.table().width(200).call (this, obj);
+        tnt.tooltip.table().width(210).call (this, obj);
       };
- 
+      
+      // the point of this code is to create tree obj for the different type of trees data and just use the obj key to get the data for the specific tree
+      for(var j in species_details) {
+        if(species_details.hasOwnProperty(j) && j.match(/_tree$/)) {
+          var tree_key = j + "_obj";      
+          var root_node = tnt.tree.node(tnt.tree.parse_newick(species_details[j])); //making the tree object for each tree
+          
+          root_node.sort(function(node1, node2) { return species_info[node1.node_name()]['taxon_id'] - species_info[node2.node_name()]['taxon_id']; }); //sorting the tree obj based on taxonid
+          
+          //populating the species_details obj with all possible trees
+          species_details[j.replace(/_tree/g,'')+'_mammalia_tree_obj']    = root_node.find_node_by_name('Mammalia').data();
+          species_details[j.replace(/_tree/g,'')+'_sauria_tree_obj']      = root_node.find_node_by_name('Sauria').data();
+          species_details[j.replace(/_tree/g,'')+'_amniota_tree_obj']     = root_node.find_node_by_name('Amniota').data();
+          species_details[j.replace(/_tree/g,'')+'_neopterygii_tree_obj'] = root_node.find_node_by_name('Neopterygii').data();
+          
+          species_details[tree_key] = root_node.data();          
+        }
+      }
+      
+
+    var hash = {};
+    tnt.tree.node(species_details['newick_tree_obj']).apply(function (node){ 
+        if(hash[node.node_name()] == undefined ) { 
+            hash[node.node_name()] = 1;
+            node.property("unique_name", node.node_name());
+        } else {        
+          node.property("unique_name", node.node_name() + "_" + hash[node.node_name()]);
+          hash[node.node_name()]++;
+        }
+      });
+      
+      tnt.tree.node(species_details['ncbi_tree_obj']).apply(function (node) {
+        node.property("unique_name", node.node_name());
+      });
 
 	    tree_vis
-	      .data(tnt.tree.parse_newick(species_details['newick_tree']))
+	      .data(species_details['newick_tree_obj'])
+        .id("unique_name")
         .label(joined_label)
         .node_display(tree_vis.node_display().size(4))
         .on_click(node_tooltip)
@@ -312,3 +354,4 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
     return tnt_theme;
 };
 
+  

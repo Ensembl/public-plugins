@@ -3166,7 +3166,8 @@ tnt.tree = function () {
 	on_click         : function () {},
 	on_dbl_click     : function () {},
 	on_mouseover     : function () {},
-	link_color       : 'black'
+	link_color       : 'black',
+	id               : "_id"
     };
 
     // Keep track of the focused node
@@ -3276,7 +3277,7 @@ tnt.tree = function () {
 
 	// LINKS
 	var link = vis.selectAll("path.tnt_tree_link")
-	    .data(curr.links, function(d){return d.target._id});
+	    .data(curr.links, function(d){return d.target[conf.id]});
 	
 	link
 	    .enter()
@@ -3292,7 +3293,7 @@ tnt.tree = function () {
 
 	// NODES
 	var node = vis.selectAll("g.tnt_tree_node")
-	    .data(curr.nodes, function(d) {return d._id});
+	    .data(curr.nodes, function(d) {return d[conf.id]});
 
 	var new_node = node
 	    .enter().append("g")
@@ -3379,11 +3380,11 @@ tnt.tree = function () {
 
             // NODES
 	    var node = vis.selectAll("g.tnt_tree_node")
-		.data(curr.nodes, function(d) {return d._id});
+		.data(curr.nodes, function(d) {return d[conf.id]});
 
 	    // LINKS
 	    var link = vis.selectAll("path.tnt_tree_link")
-		.data(curr.links, function(d){return d.target._id});
+		.data(curr.links, function(d){return d.target[conf.id]});
 
 	    var exit_link = link
 		.exit()
@@ -3532,14 +3533,10 @@ tnt.tree = function () {
 
     api.method ('tooltip', function () {
 	// var tooltip = tnt.tooltip().type("table");
-	var tooltip = tnt.tooltip.table();
 	var tree_tooltip = function (node) {
 	    node = node.data();
 	    var obj = {};
-	    obj.header = {
-		label : "Name",
-		value : node.name
-	    };
+	    obj.header = "Name: " + node.name;
 	    obj.rows = [];
 	    obj.rows.push({
 		label : "_id",
@@ -3551,18 +3548,19 @@ tnt.tree = function () {
 	    });
 	    obj.rows.push({
 		label : "Length",
-		value : node.length
+		value : node.branch_length
 	    });
 	    obj.rows.push({
 		label : "N.Children",
 		value : node.children ? node.children.length : 0
 	    });
-	    tooltip.call(this, obj);
+	    
+	    tnt.tooltip.table()
+		.call(this, obj);
 	};
 
 	return tree_tooltip;
     });
-
 
     return tree;
 };
@@ -4248,31 +4246,25 @@ tnt.tree.node = function (data) {
     // We bind the data that has been passed
     node.data(data);
 
-    api.method ('find_node_by_field', function(value, field) {
-	if (typeof (field) === 'function') {
-	    if (field (data) === value) {
-		return node;
-	    }
-	} else {
-	    if (data[field] === value) {
-		return node;
-	    }
+    api.method ('find_node', function (cbak, deep) {
+	if (cbak(node)) {
+	    return node;
 	}
-	if (data._children !== undefined) {
-	    for (var j=0; j<data._children.length; j++) {
-		var c = tnt.tree.node(data._children[j]);
-		var f = c.find_node_by_field(value, field);
-		if (f !== undefined) {
-		    return f;
+
+	if (data.children !== undefined) {
+	    for (var j=0; j<data.children.length; j++) {
+		var found = tnt.tree.node(data.children[j]).find_node(cbak);
+		if (found) {
+		    return found;
 		}
 	    }
 	}
 
-	if (data.children !== undefined) {
-	    for (var i=0; i<data.children.length; i++) {
-		var n = tnt.tree.node(data.children[i]);
-		var found = n.find_node_by_field(value, field);
-		if (found !== undefined) {
+	if (deep && (data._children !== undefined)) {
+	    for (var i=0; i<data._children.length; i++) {
+		tnt.tree.node(data._children[i]).find_node(cbak)
+		var found = tnt.tree.node(data.children[j]).find_node(cbak);
+		if (found) {
 		    return found;
 		}
 	    }
@@ -4280,7 +4272,9 @@ tnt.tree.node = function (data) {
     });
 
     api.method ('find_node_by_name', function(name) {
-	return node.find_node_by_field(name, 'name');
+	return node.find_node (function (node) {
+	    return node.node_name() === name
+	});
     });
 
     api.method ('toggle', function() {
@@ -4499,7 +4493,7 @@ tnt.tree.node = function (data) {
     });
 
     // cbak is called with two nodes
-    // and should return -1,0,1
+    // and should return a negative number, 0 or a positive number
     api.method ('sort', function (cbak) {
 	if (data.children === undefined) {
 	    return;
@@ -4511,6 +4505,7 @@ tnt.tree.node = function (data) {
 	}
 
 	new_children.sort(cbak);
+
 	data.children = [];
 	for (var i=0; i<new_children.length; i++) {
 	    data.children.push(new_children[i].data());
@@ -4521,6 +4516,8 @@ tnt.tree.node = function (data) {
 	}
     });
 
+    // TODO: This method only 'apply's to non collapsed nodes (ie ._children is not visited)
+    // Would it be better to have an extra flag (true/false) to visit also collapsed nodes?
     api.method ('apply', function(cbak) {
 	cbak(node);
 	if (data.children !== undefined) {
@@ -5027,7 +5024,7 @@ tnt.tooltip = function() {
 	allow_drag : true,
 	show_closer : true,
 	fill : function () { throw "fill is not defined in the base object" },
-	width : 0
+	width : 180
     };
 
     var tooltip = function (data, event) {
