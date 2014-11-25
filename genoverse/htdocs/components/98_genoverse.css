@@ -106,7 +106,7 @@ body.mac .canvas_container .label_container li .handle   { cursor: ns-resize; }
 .canvas .genoverse_controls button.wheel_zoom            { background-position: -85px   1px; }
 .canvas .genoverse_controls button.wheel_zoom.off        { background-position: -85px -16px; }
 
-.canvas .genoverse_controls .label                       { margin-left: 20px; padding-right: 6px; font-size: 15px; color: #FFF; }
+.canvas .genoverse_controls .label                       { margin-left: 20px; padding-right: 6px; font-size: 15px; color: #FFF; line-height: 16px; }
 
 .canvas .genoverse_controls.narrow div                   { margin-left: 8px; }
 .canvas .genoverse_controls.narrow div.right             { margin-left: 0; }
