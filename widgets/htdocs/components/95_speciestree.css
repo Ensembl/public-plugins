@@ -10,7 +10,7 @@ div.filter_switch                               { background-image: url("/i/filt
 #species_tree div.image_resize_menu div.current { background: url("/i/16/rev/check_grey.png") no-repeat scroll right center rgba(0, 0, 0, 0); color: grey; font-weight: bold; text-decoration: none; background-color: #eaeeff; }
 div.image_resize_menu div.header                { cursor: auto; }
 div.tree_menu, div.resize_menu, div.filter_menu { display: none; }
-div.resize                                      { background-image: url("/i/16/rev/image_resize.png"); cursor: pointer; float: left; height: 16px; margin: 0 4px 2px; width: 16px; }
+#species_tree div.resize                        { background-image: url("/i/16/rev/image_resize.png"); cursor: pointer; float: left; height: 16px; margin: 0 4px 2px; width: 16px; }
 div .tnt_tooltip                                { background-color: #eaeeff; border: 1px solid #eaeeff; box-shadow: 5px 5px 15px #666; font-size: 10px; font-weight: bold; opacity: 0.94; padding: 0px; text-align: left; white-space: normal; width: 210px; position: absolute !important; }
 .tnt_zmenu                                      { width: 210px; border-style: none;}
 .tnt_zmenu_header                               { background-color: #667aa6; }
