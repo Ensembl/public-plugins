@@ -29,13 +29,19 @@ Ensembl.Genoverse = Genoverse.extend({
     $(window).off('hashchange.ensembl popstate.ensembl').on('hashchange.ensembl popstate.ensembl', $.proxy(Ensembl.LayoutManager.popState, Ensembl.LayoutManager));
     this.container.off('dblclick');
   },
+
+  moveTo: function() {
+    this.base.apply(this,arguments);
+    this.updateEnsembl(true);
+    Ensembl.EventManager.trigger('highlightAllImages');
+  },
   
-  updateEnsembl: function () {
+  updateEnsembl: function (allow_move) {
     Ensembl.images[this.panel.imageNumber][0][2] = this.start;
     Ensembl.images[this.panel.imageNumber][0][3] = this.end;
     
-    if (this.dragging) {
-      var location = this.getLocation(this.start, this.end, Ensembl.location.length);
+    if (this.dragging || allow_move) {
+      var location = this.getLocation(this.start, this.end,Ensembl.location.length,!allow_move);
       var text     = Ensembl.thousandify(location.start) + '-' + Ensembl.thousandify(location.end); 
       
       (this.updateEnsemblText = this.updateEnsemblText || $('h1.summary-heading, #masthead .location.long_tab a')).html(function (i, html) {
@@ -44,12 +50,12 @@ Ensembl.Genoverse = Genoverse.extend({
       Ensembl.images[this.panel.imageNumber+1][0][2] = location.start;
       Ensembl.images[this.panel.imageNumber+1][0][3] = location.end;
     }
-    
+
     Ensembl.EventManager.trigger('highlightAllImages');
   },
   
   updateURL: function (location) {
-    location = location || (this.prev.scale === this.scale ? this.getLocation(this.start, this.end, Ensembl.location.length) : this);
+    location = location || (this.prev.scale === this.scale ? this.getLocation(this.start, this.end, Ensembl.location.length,1) : this);
     
     if (Ensembl.location.start === location.start && Ensembl.location.end === location.end) {
       return;
@@ -72,11 +78,12 @@ Ensembl.Genoverse = Genoverse.extend({
   },
   
   setRange: function (start, end, update, keepLength) {
-    var location = this.getLocation(start, end); // Ensures that minSize is observed
+    var location = this.getLocation(start, end,undefined); // Ensures that minSize is observed
     this.base(location.start, location.end, update, keepLength);
   },
   
-  getLocation: function (s, e, l) {
+  getLocation: function (s, e, l, highlight_still) {
+    // pick l bases somewhere within the range s-e (usually middle)
     var browser     = this;
     var start       = Math.floor(s || this.start);
     var end         = Math.floor(e || this.end);
@@ -88,8 +95,17 @@ Ensembl.Genoverse = Genoverse.extend({
       if (length === newLength) {
         return;
       }
-      
-      start = Math.max(Math.round(start + (length - newLength) / 2), 1);
+
+      // centroid is proportion of way along about which to
+      // expand/contract. Usually 0.5, but sometimes the box is not in
+      // the middle, so that's not right. Think of how click-zoom works
+      // on a map when a long way off-centre.
+      var centroid = 0.5;
+      if(browser.highlight_left && browser.highlight_width && highlight_still) {
+        centroid = (browser.highlight_left + browser.highlight_width/2)/browser.width;
+      }
+      start = Math.round(start+length*centroid-newLength/2);
+      start = Math.max(start,1);
       end   = start + newLength - 1;
       
       if (end > browser.chromosomeSize) {
