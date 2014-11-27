@@ -23,11 +23,11 @@
   </tr>
   <tr class="bg1">
    <td>Bos taurus</td>
-   <td class="right">61.7</td>
+   <td class="right">61.3</td>
   </tr>
   <tr class="bg2">
    <td>Caenorhabditis elegans</td>
-   <td class="right">2.5</td>
+   <td class="right">0.5</td>
   </tr>
   <tr class="bg1">
    <td>Callithrix jacchus</td>
@@ -35,7 +35,7 @@
   </tr>
   <tr class="bg2">
    <td>Canis familiaris</td>
-   <td class="right">12.4</td>
+   <td class="right">12.3</td>
   </tr>
   <tr class="bg1">
    <td>Cavia porcellus</td>
@@ -71,7 +71,7 @@
   </tr>
   <tr class="bg1">
    <td>Drosophila melanogaster</td>
-   <td class="right">10.7</td>
+   <td class="right">10.9</td>
   </tr>
   <tr class="bg2">
    <td>Echinops telfairi</td>
@@ -91,7 +91,7 @@
   </tr>
   <tr class="bg2">
    <td>Ficedula albicollis</td>
-   <td class="right">7.5</td>
+   <td class="right">7.6</td>
   </tr>
   <tr class="bg1">
    <td>Gadus morhua</td>
@@ -99,7 +99,7 @@
   </tr>
   <tr class="bg2">
    <td>Gallus gallus</td>
-   <td class="right">15.6</td>
+   <td class="right">15.7</td>
   </tr>
   <tr class="bg1">
    <td>Gasterosteus aculeatus</td>
@@ -111,7 +111,7 @@
   </tr>
   <tr class="bg1">
    <td>Homo sapiens</td>
-   <td class="right">584.2</td>
+   <td class="right">588.0</td>
   </tr>
   <tr class="bg2">
    <td>Ictidomys tridecemlineatus</td>
@@ -123,7 +123,7 @@
   </tr>
   <tr class="bg2">
    <td>Lepisosteus oculatus</td>
-   <td class="right">6.3</td>
+   <td class="right">6.4</td>
   </tr>
   <tr class="bg1">
    <td>Loxodonta africana</td>
@@ -151,11 +151,11 @@
   </tr>
   <tr class="bg1">
    <td>Mus musculus</td>
-   <td class="right">98.7</td>
+   <td class="right">108.9</td>
   </tr>
   <tr class="bg2">
    <td>Mustela putorius</td>
-   <td class="right">13.6</td>
+   <td class="right">13.7</td>
   </tr>
   <tr class="bg1">
    <td>Myotis lucifugus</td>
@@ -175,7 +175,7 @@
   </tr>
   <tr class="bg1">
    <td>Ornithorhynchus anatinus</td>
-   <td class="right">9.0</td>
+   <td class="right">9.1</td>
   </tr>
   <tr class="bg2">
    <td>Oryctolagus cuniculus</td>
@@ -191,7 +191,7 @@
   </tr>
   <tr class="bg1">
    <td>Ovis aries</td>
-   <td class="right">32.2</td>
+   <td class="right">32.3</td>
   </tr>
   <tr class="bg2">
    <td>Pan troglodytes</td>
@@ -215,7 +215,7 @@
   </tr>
   <tr class="bg1">
    <td>Pongo abelii</td>
-   <td class="right">15.4</td>
+   <td class="right">15.5</td>
   </tr>
   <tr class="bg2">
    <td>Procavia capensis</td>
@@ -227,11 +227,11 @@
   </tr>
   <tr class="bg2">
    <td>Rattus norvegicus</td>
-   <td class="right">17.2</td>
+   <td class="right">17.4</td>
   </tr>
   <tr class="bg1">
    <td>Saccharomyces cerevisiae</td>
-   <td class="right">0.5</td>
+   <td class="right">0.6</td>
   </tr>
   <tr class="bg2">
    <td>Sarcophilus harrisii</td>
@@ -239,11 +239,11 @@
   </tr>
   <tr class="bg1">
    <td>Sorex araneus</td>
-   <td class="right">5.4</td>
+   <td class="right">5.5</td>
   </tr>
   <tr class="bg2">
    <td>Sus scrofa</td>
-   <td class="right">24.2</td>
+   <td class="right">24.0</td>
   </tr>
   <tr class="bg1">
    <td>Taeniopygia guttata</td>
@@ -283,7 +283,7 @@
   </tr>
   <tr>
    <th>Sub-total</th>
-   <th class="right">1296.7</th>
+   <th class="right">1309.2</th>
   </tr>
 
   <tr>
@@ -295,24 +295,36 @@
    <td class="right">47.5</td>
   </tr>
   <tr class="bg1">
-   <td>Compara</td>
-   <td class="right">269.5</td>
+   <td>Archive</td>
+   <td class="right">0.0</td>
   </tr>
   <tr class="bg2">
-   <td>Mart</td>
-   <td class="right">720.8</td>
+   <td>Compara</td>
+   <td class="right">271.2</td>
   </tr>
   <tr class="bg1">
+   <td>Mart</td>
+   <td class="right">709.5</td>
+  </tr>
+  <tr class="bg2">
    <td>Ontology</td>
    <td class="right">0.2</td>
+  </tr>
+  <tr class="bg1">
+   <td>Production</td>
+   <td class="right">0.0</td>
   </tr>
   <tr class="bg2">
    <td>Stable</td>
    <td class="right">3.0</td>
   </tr>
+  <tr class="bg1">
+   <td>Website</td>
+   <td class="right">0.1</td>
+  </tr>
   <tr>
    <th>Total</th>
-   <th class="right">2337.7</th>
+   <th class="right">2340.8</th>
   </tr>
  </tbody>
 </table>
