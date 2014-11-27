@@ -33,7 +33,6 @@ Ensembl.Genoverse = Genoverse.extend({
   moveTo: function() {
     this.base.apply(this,arguments);
     this.updateEnsembl(true);
-    Ensembl.EventManager.trigger('highlightAllImages');
   },
   
   updateEnsembl: function (allow_move) {
@@ -47,6 +46,7 @@ Ensembl.Genoverse = Genoverse.extend({
       (this.updateEnsemblText = this.updateEnsemblText || $('h1.summary-heading, #masthead .location.long_tab a')).html(function (i, html) {
         return html.replace(/^(.+:\s?).+/, '$1' + text);
       });
+      console.log("location",location.start,location.end);
       Ensembl.images[this.panel.imageNumber+1][0][2] = location.start;
       Ensembl.images[this.panel.imageNumber+1][0][3] = location.end;
     }
