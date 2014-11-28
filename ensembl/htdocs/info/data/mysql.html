@@ -11,11 +11,13 @@
 <p>
 For large amounts of data and more detailed analysis, we recommend you
 use one of our publicly-accessible MySQL
-servers <strong>ensembldb.ensembl.org</strong> or <strong>useastdb.ensembl.org</strong> which you can access
-as user 'anonymous'. A third 
+servers <strong>ensembldb.ensembl.org</strong>,
+      <strong>useastdb.ensembl.org</strong> or
+      <strong>asiadb.ensembl.org</strong> which you can access as user
+      'anonymous'. A third 
 server, <strong>martdb.ensembl.org</strong> provides public access to
-the BioMart databases.
-</p>
+the BioMart databases. If you are interested in data on the human <strong>GRCh37</strong> assembly this is available
+      at ensembldb.ensembl.org only (see below for connection details).</p>
 
 <p>
 There are two options for retrieving data from the Ensembl databases:
@@ -55,7 +57,7 @@ knowledge of the complex <a href="/info/docs/api/">database
 schemas</a> used by Ensembl, so we only recommend it if you are unable
 to install our API (e.g. if you have no access to Perl). Also note
 that direct MySQL queries on the database are not suited to retrieve
-sequences. To retrieve sequences please use the Perl API.
+sequences; to retrieve sequences please use the Perl API.
 </p>
 
 <h2>Biomart</h2>
@@ -91,28 +93,12 @@ will not be established.
 <th style="width:45%" class="left">Notes</th>
 </tr>
 
-<tr class="bg1">
-<td>ensembldb.ensembl.org</td>
-<td>anonymous</td>
-<td class="center">-</td>
-<td class="center">4306</td>
-<td class="left">Up to ensembl <strong>47</strong> ONLY</td>
-</tr>
-
 <tr class="bg2">
 <td>ensembldb.ensembl.org</td>
 <td>anonymous</td>
 <td class="center">-</td>
 <td class="center">3306 &amp; 5306</td>
-<td class="left">From ensembl <strong>48</strong> onwards ONLY</td>
-</tr>
-
-<tr class="bg1">
-<td>ensembldb.ensembl.org</td>
-<td>anonymous</td>
-<td class="center">-</td>
-<td class="center">3337</td>
-<td class="left">Databases for <b>archive GRCh37</b> - one on the current schema and one on the previous schema.</td>
+<td class="left">From Ensembl <strong>48</strong> onwards only</td>
 </tr>
 
 <tr class="bg2">
@@ -120,15 +106,15 @@ will not be established.
 <td>anonymous</td>
 <td class="center">-</td>
 <td class="center">3306 &amp; 5306</td>
-<td class="left"><strong>Current</strong> ensembl version with <strong>Previous</strong> ensembl version ONLY</td>
+<td class="left"><strong>Current</strong> and <strong>previous</strong> Ensembl version only</td>
 </tr>
 
-<tr class="bg1">
-<td>martdb.ensembl.org</td>
+<tr class="bg2">
+<td>asiadb.ensembl.org</td>
 <td>anonymous</td>
 <td class="center">-</td>
-<td class="center">3316</td>
-<td class="left">Up to ensembl <strong>47</strong> ONLY</td>
+<td class="center">3306 &amp; 5306</td>
+<td class="left"><strong>Current</strong> and <strong>previous</strong> Ensembl version only</td>
 </tr>
 
 <tr class="bg2">
@@ -136,7 +122,32 @@ will not be established.
 <td>anonymous</td>
 <td class="center">-</td>
 <td class="center">5316</td>
-<td class="left">From ensembl <strong>48</strong> onwards ONLY</td>
+<td class="left">From Ensembl <strong>48</strong> onwards only</td>
+</tr>
+
+<tr class="bg1">
+<td>ensembldb.ensembl.org</td>
+<td>anonymous</td>
+<td class="center">-</td>
+<td class="center">3337</td>
+<td class="left">Databases for <b>archive GRCh37</b> - <strong>current</strong> and <strong>previous</strong>
+          schema only</td>
+</tr>
+
+<tr class="bg1">
+<td>ensembldb.ensembl.org</td>
+<td>anonymous</td>
+<td class="center">-</td>
+<td class="center">4306</td>
+<td class="left">Up to Ensembl <strong>47</strong> only</td>
+</tr>
+
+<tr class="bg1">
+<td>martdb.ensembl.org</td>
+<td>anonymous</td>
+<td class="center">-</td>
+<td class="center">3316</td>
+<td class="left">Up to Ensembl <strong>47</strong> only</td>
 </tr>
 
 </table>
