@@ -183,7 +183,7 @@ sub content {
     'Feature_type'  => [ 'Transcript', @REG_FEAT_TYPES ],
     'Consequence'   => [ keys %OVERLAP_CONSEQUENCES ],
     'SIFT'          => $vdbc->{'SIFT_VALUES'},
-    'PolyPhen'      => $vdbc->{'POLYPHEN_VALUES'},
+    'PolyPhen'      => [ map {s/\s/\_/g; $_} @{$vdbc->{'POLYPHEN_VALUES'}} ],
     'BIOTYPE'       => $sd->get_config($species, 'databases')->{'DATABASE_CORE'}->{'tables'}{'transcript'}{'biotypes'},
   );
 
