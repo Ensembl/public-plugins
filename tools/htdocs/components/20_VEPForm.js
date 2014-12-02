@@ -243,7 +243,7 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
     // HTML for preview content
     this.elLk.previewDiv.html(
       '<div class="hint">' +
-        '<h3><img src="/i/close.png" alt="Hide" class="_close_button" title="">Quick results for ' + this.previewInp.input + '</h3>' +
+        '<h3><img src="/i/close.png" alt="Hide" class="_close_button" title="">Instant results for ' + this.previewInp.input + '</h3>' +
         '<div class="message-pad _preview_table" style="background-color:white">' +
           '<p><b>Most severe consequence:</b> ' + renderConsequence(results['most_severe_consequence']) + '</p>' +
           ( results['colocated_variants']
