@@ -60,7 +60,7 @@ sub initialize {
         'description' => 'Track displaying sequence variant for the VEP job',
         'display'     => 'normal',
         'strand'      => 'f',
-        'colourset'   => 'feature',
+        'colourset'   => 'variation',
         'sub_type'    => 'variant',
       });
     }
