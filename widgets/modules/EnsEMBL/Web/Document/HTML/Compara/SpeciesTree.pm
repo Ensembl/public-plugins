@@ -98,9 +98,7 @@ sub render {
         document.getElementById("species_tree").innerHTML = "<div class='error'><h3>Browser Compatibility Issue</h3><div class='message-pad'><p>Your Browser doesn't support the new view, download the static image in PDF using the link above.</p></div></div>";
       } else {
         window.onload = function() {
-          var tree_vis = Ensembl.SpeciesTree.tnt.tree();
-          var theme = Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree($json_info);
-          theme(tree_vis, document.getElementById("species_tree"));
+          Ensembl.SpeciesTree.displayTree($json_info);
         };
       }
     </script>
