@@ -267,6 +267,20 @@ sub ticket_buttons {
     'children'        => [ $save_button ]
   } unless $owner_is_user;
 
+  my $warning;
+  if ($ticket->status ne 'Current') {
+
+    my $life_left = $ticket->calculate_life_left($self->hub->species_defs->ENSEMBL_TICKETS_VALIDITY);
+       $life_left = sprintf '%d', $life_left / 86400;
+       $life_left = $life_left ? sprintf('after approximately %d day(s)', $life_left) : 'soon'; # less than 24 hours means 'soon'
+
+    $warning      = {
+      'node_name'   => 'span',
+      'class'       => [qw(ticket-expiring _ht)],
+      'title'       => "This ticket will get deleted $life_left. Please save it to your account to prevent it from getting deleted."
+    };
+  }
+
   my $buttons       = $self->dom->create_element('div', { 'children' => [ $save_button, {
     'node_name'       => 'a',
     'class'           => [qw(_ticket_edit _change_location)],
@@ -291,7 +305,7 @@ sub ticket_buttons {
         ? sprintf("This will delete the following job permanently:\n%s", $object->get_job_description($ticket->job->[0]))
         : sprintf('This will delete %s jobs for this ticket.', $job_count == 2 ? 'both' : "all $job_count")
     }]
-  }]});
+  }, $warning || () ]});
 
   return $buttons;
 }
