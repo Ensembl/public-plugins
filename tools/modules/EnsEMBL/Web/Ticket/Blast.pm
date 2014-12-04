@@ -49,7 +49,7 @@ sub _process_user_input {
   my $valid_chars = SEQUENCE_VALID_CHARS;
 
   # Validate Species
-  my @species = $sd->valid_species($hub->param('species'));
+  my @species = $sd->tools_valid_species($hub->param('species'));
   return unless @species;
 
   # Source param depends upon the selected db type
