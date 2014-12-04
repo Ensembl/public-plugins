@@ -30,6 +30,12 @@ sub new {
   return $self;
 }
 
+sub tools_valid_species {
+  ## Return a list of all valid species for tool
+  ## If list of species is provided as argument, it returns the valid ones among the list
+  return shift->valid_species(@_);
+}
+
 sub get_available_blast_datasources {
   ## Gets all the available blast data sources for the given species
   my ($self, $species) = @_;

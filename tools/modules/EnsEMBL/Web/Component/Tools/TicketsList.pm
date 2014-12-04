@@ -138,7 +138,7 @@ sub job_summary_section {
   my $species_defs      = $hub->species_defs;
   my $dispatcher_status = $job->dispatcher_status;
   my $job_species       = $job->species;
-  my $valid_job_species = $species_defs->valid_species($job_species);
+  my $valid_job_species = $species_defs->tools_valid_species($job_species);
   my $job_assembly      = $job->assembly;
   my $current_assembly  = $valid_job_species ? $species_defs->get_config($job_species, 'ASSEMBLY_VERSION') : '0';
   my $assembly_mismatch = $job_assembly ne $current_assembly;
