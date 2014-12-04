@@ -301,7 +301,7 @@ sub content {
     </div>',
     $panel_params,
     $hub->url({'function' => ''}),
-    $self->alt_assembly_info($current_species, 'VEP', 'VEP'),
+    $self->species_specific_info($current_species, 'VEP', 'VEP'),
     $form
   );
 }
@@ -642,7 +642,7 @@ sub _species {
     my %refseq  = map { $_ => 1 } qw(Danio_rerio Gallus_gallus Homo_sapiens Mus_musculus Rattus_norvegicus Sus_scrofa);
     my @species;
 
-    for ($sd->valid_species) {
+    for ($sd->tools_valid_species) {
 
       my $db_config = $sd->get_config($_, 'databases');
 
