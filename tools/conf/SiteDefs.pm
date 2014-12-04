@@ -70,7 +70,10 @@ sub update_conf {
     '-port'         => undef,
     '-pass'         => undef
   };
-}
 
+  # Tickets will expire after 10 days, and user will warned when less than three days are left
+  $SiteDefs::ENSEMBL_TICKETS_VALIDITY         = 10;
+  $SiteDefs::ENSEMBL_TICKETS_VALIDITY_WARNING = 3;
+}
 
 1;

@@ -288,6 +288,7 @@ sub save_ticket_to_account {
 
     $ticket->owner_id($self->hub->user->user_id);
     $ticket->owner_type('user');
+    $ticket->status('Current');
 
     $result = $ticket->save('cascade' => 1);
 
@@ -329,7 +330,7 @@ sub get_current_tickets {
     });
 
     my @tickets = sort { $b->created_at <=> $a->created_at } map $_->ticket, @$ticket_types;
-    $self->update_jobs_from_dispatcher(@tickets);
+    $self->update_ticket_and_jobs(@tickets);
     $self->{'_current_tickets'} = \@tickets;
   }
 
@@ -357,7 +358,7 @@ sub get_requested_ticket {
 
       if (@$ticket_type) {
         $ticket = $ticket_type->[0]->ticket->[0];
-        $self->update_jobs_from_dispatcher($ticket);
+        $self->update_ticket_and_jobs($ticket);
       }
     }
 
@@ -367,18 +368,39 @@ sub get_requested_ticket {
   return $self->{'_requested_ticket'};
 }
 
-sub update_jobs_from_dispatcher {
-  ## Updates jobs linked to the given tickets from the corresponding ones in the dispatcher
+sub update_ticket_and_jobs {
+  ## Updates the given tickets according to the validity and linked jobs according to the corresponding ones in the dispatcher
   ## @params List of Ticket objects to which jobs are linked
   ## @return No return value
   my $self = shift;
   my $jobs = {};
 
-  # group all jobs by dispatcher type and keep only those jobs that are awaiting dispatcher response
   for (@_) {
+
+    # group all jobs by dispatcher type and keep only those jobs that are awaiting dispatcher response
     push @{$jobs->{$_->dispatcher_class} ||= []}, $_ for grep {$_->status eq 'awaiting_dispatcher_response'} $_->job;
+
+    # update ticket's status field acc. to it's validity
+    if ($_->owner_type ne 'user') {
+      my $sd            = $self->hub->species_defs;
+      my $life_left     = $_->calculate_life_left($sd->ENSEMBL_TICKETS_VALIDITY);
+      my $warning_time  = 86400 * ($sd->ENSEMBL_TICKETS_VALIDITY_WARNING || 3);
+
+      if (!$life_left) {
+        if ($_->status ne 'Expired') {
+          $_->status('Expired');
+          $_->save;
+        }
+      } elsif ($life_left < $warning_time) {
+        if ($_->status ne 'Expiring') {
+          $_->status('Expiring');
+          $_->save;
+        }
+      }
+    }
   }
 
+  # update the jobs that are awaiting dispatcher's reponse
   $self->get_job_dispatcher({'class' => $_})->update_jobs($jobs->{$_}) for keys %$jobs;
 }
 
@@ -420,7 +442,7 @@ sub get_requested_job {
 
       if ($ticket_type) {
         my $ticket = $ticket_type->ticket->[0];
-        $self->update_jobs_from_dispatcher($ticket); # this will only update the required job but not all jobs linked to the ticket since only one job was actually fetched by providing job_id
+        $self->update_ticket_and_jobs($ticket); # this will only update the required job but not all jobs linked to the ticket since only one job was actually fetched by providing job_id
         $job = $ticket->job->[0];
       }
     }
