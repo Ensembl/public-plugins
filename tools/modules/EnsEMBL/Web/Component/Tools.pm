@@ -289,8 +289,8 @@ sub job_status_tag {
   }
 }
 
-sub alt_assembly_info {
-  ## Creates an info box containing a link to the alternative assembly
+sub species_specific_info {
+  ## Creates an info box alternative assembly info
   ## @param Species
   ## @param Tools type caption
   ## @param Tool type url name

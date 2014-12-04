@@ -301,7 +301,7 @@ sub content {
     </div>',
     $panel_params,
     $hub->url({'function' => ''}),
-    $self->alt_assembly_info($current_species, 'VEP', 'VEP'),
+    $self->species_specific_info($current_species, 'VEP', 'VEP'),
     $form
   );
 }
