@@ -1138,7 +1138,17 @@
   };
 
   body_highlights = function() {
-    var add_highlight_fields;
+    var add_highlight_fields, suppress_hack;
+    suppress_hack = function(r, hr) {
+      var res;
+      if ((r == null) || (r.name == null) || (hr == null)) {
+        return false;
+      }
+      hr = hr.replace(/<.*?>/g, '');
+      res = r.name.replace(/([.?*+^$[\]\\(){}|-])/g, "\\$1");
+      res += " *\\(Vega";
+      return ((new RegExp(res, 'g')).exec(hr)) != null;
+    };
     add_highlight_fields = function(orig) {
       return function(input, request, start, len) {
         var v,
@@ -1146,28 +1156,40 @@
         v = orig(input, request, start, len);
         if (start !== -1) {
           return v.then(function(_arg) {
-            var data, doc, docs, h, k, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2;
+            var data, doc, docs, h, hr, k, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2;
             data = _arg[0], docs = _arg[1];
             if (((_ref = data.result) != null ? _ref.highlighting : void 0) != null) {
               for (_i = 0, _len = docs.length; _i < _len; _i++) {
                 doc = docs[_i];
-                if (doc.uid != null) {
-                  if (data.result.highlighting[doc.uid]) {
-                    if (data.result.highlighting[doc.uid]._hr) {
-                      doc.description += ' <div class="result-hr"> ' + data.result.highlighting[doc.uid]._hr.join(" ") + '</div>';
-                    }
-                    _ref1 = data.result.highlighting[doc.uid];
-                    for (v = _j = 0, _len1 = _ref1.length; _j < _len1; v = ++_j) {
-                      k = _ref1[v];
-                      if (k === '_hr') {
-                        continue;
-                      }
-                      _ref2 = $.solr_config('static.ui.highlights');
-                      for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
-                        h = _ref2[_k];
-                        if (doc[h] && snippet[h]) {
-                          doc[h] = snippet[h].join(' ... ');
+                if ((doc.uid != null) && data.result.highlighting[doc.uid]) {
+                  hr = data.result.highlighting[doc.uid]._hr;
+                  if (hr) {
+                    hr = (function() {
+                      var _j, _len1, _results;
+                      _results = [];
+                      for (_j = 0, _len1 = hr.length; _j < _len1; _j++) {
+                        h = hr[_j];
+                        if (!suppress_hack(doc, h)) {
+                          _results.push(h);
                         }
+                      }
+                      return _results;
+                    })();
+                  }
+                  if (hr) {
+                    doc.description += ' <div class="result-hr"> ' + hr.join(" ") + '</div>';
+                  }
+                  _ref1 = data.result.highlighting[doc.uid];
+                  for (v = _j = 0, _len1 = _ref1.length; _j < _len1; v = ++_j) {
+                    k = _ref1[v];
+                    if (k === '_hr') {
+                      continue;
+                    }
+                    _ref2 = $.solr_config('static.ui.highlights');
+                    for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
+                      h = _ref2[_k];
+                      if (doc[h] && snippet[h]) {
+                        doc[h] = snippet[h].join(' ... ');
                       }
                     }
                   }

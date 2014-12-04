@@ -635,6 +635,14 @@ body_frontpage_specials = () ->
   }
 
 body_highlights = () ->
+  suppress_hack = (r,hr) ->
+    if (not r?) or (not r.name?) or not hr?
+      return false
+    hr = hr.replace(/<.*?>/g,'')
+    res = r.name.replace(/([.?*+^$[\]\\(){}|-])/g, "\\$1")
+    res += " *\\(Vega"
+    return ((new RegExp(res,'g')).exec(hr))?
+
   add_highlight_fields = (orig) ->
     return (input,request,start,len) ->
       v = orig(input,request,start,len)
@@ -643,17 +651,18 @@ body_highlights = () ->
           # Add _hr highlighting to description
           if data.result?.highlighting?
             for doc in docs
-              if doc.uid?
-                if data.result.highlighting[doc.uid]
-                  if data.result.highlighting[doc.uid]._hr
-                    doc.description += ' <div class="result-hr"> ' +
-                      data.result.highlighting[doc.uid]._hr.join(" ") +
-                      '</div>'
-                  for k,v in data.result.highlighting[doc.uid]
-                    if k == '_hr' then continue
-                    for h in $.solr_config('static.ui.highlights')
-                      if doc[h] and snippet[h]
-                        doc[h] = snippet[h].join(' ... ')
+              if doc.uid? and data.result.highlighting[doc.uid]
+                hr = data.result.highlighting[doc.uid]._hr
+                if hr
+                  hr = ( h for h in hr when not suppress_hack(doc,h) )
+                if hr
+                  doc.description += ' <div class="result-hr"> ' +
+                    hr.join(" ") + '</div>'
+                for k,v in data.result.highlighting[doc.uid]
+                  if k == '_hr' then continue
+                  for h in $.solr_config('static.ui.highlights')
+                    if doc[h] and snippet[h]
+                      doc[h] = snippet[h].join(' ... ')
           return [data,docs]
       return v
 
