@@ -72,8 +72,8 @@ sub update_conf {
   };
 
   # Tickets will expire after 10 days, and user will warned when less than three days are left
-  $SiteDefs::ENSEMBL_TICKETS_VALIDITY         = 10;
-  $SiteDefs::ENSEMBL_TICKETS_VALIDITY_WARNING = 3;
+  $SiteDefs::ENSEMBL_TICKETS_VALIDITY         = 10 * 24 * 60 * 60;
+  $SiteDefs::ENSEMBL_TICKETS_VALIDITY_WARNING = 3  * 24 * 60 * 60;
 }
 
 1;
