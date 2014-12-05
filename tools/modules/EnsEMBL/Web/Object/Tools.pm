@@ -384,7 +384,7 @@ sub update_ticket_and_jobs {
     if ($_->owner_type ne 'user') {
       my $sd            = $self->hub->species_defs;
       my $life_left     = $_->calculate_life_left($sd->ENSEMBL_TICKETS_VALIDITY);
-      my $warning_time  = 86400 * ($sd->ENSEMBL_TICKETS_VALIDITY_WARNING || 3);
+      my $warning_time  = $sd->ENSEMBL_TICKETS_VALIDITY_WARNING || 3 * 86400;
 
       if (!$life_left) {
         if ($_->status ne 'Expired') {
