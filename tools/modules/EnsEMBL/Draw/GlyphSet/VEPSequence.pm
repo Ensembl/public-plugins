@@ -54,7 +54,7 @@ sub features {
 
     my ($vstart, $vend) = $_->{'start'} < $_->{'end'} ? ($_->{'start'}, $_->{'end'}) : ($_->{'end'}, $_->{'start'});
     $vend   = $vend - $vstart;
-    $vstart = $vstart - $start;
+    $vstart = $vstart - $start + 1;
     $vend   = $vstart + $vend;
 
     my $snp = bless {
