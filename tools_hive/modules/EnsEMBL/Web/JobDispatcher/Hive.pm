@@ -163,4 +163,10 @@ sub job_adaptor {
   return $self->{'_job_adaptor'} ||= $self->hive_dba->get_AnalysisJobAdaptor;
 }
 
+sub DESTROY {
+  ## Close the hive db connection when exiting
+  my $self = shift;
+  $self->hive_dba->dbc->disconnect_when_inactive(1) if $self->hive_dba && $self->hive_dba->dbc;
+}
+
 1;
