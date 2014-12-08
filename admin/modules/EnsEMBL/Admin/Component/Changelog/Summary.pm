@@ -106,6 +106,8 @@ sub record_tree {
     {'node_name' => 'span', 'class' => 'cl-field-value',  'inner_HTML' => $self->display_field_value($record->priority, {'lookup' => {@{$object->show_fields}}->{'priority'}->{'values'} })},
     {'node_name' => 'span', 'class' => 'cl-field-title',  'inner_HTML' => 'Category:'},
     {'node_name' => 'span', 'class' => 'cl-field-value',  'inner_HTML' => $self->display_field_value($record->category, {'lookup' => {@{$object->show_fields}}->{'category'}->{'values'} })},
+    {'node_name' => 'span', 'class' => 'cl-field-title',  'inner_HTML' => 'Site type:'},
+    {'node_name' => 'span', 'class' => 'cl-field-value',  'inner_HTML' => $self->display_field_value($record->site_type, {'lookup' => {@{$object->show_fields}}->{'site_type'}->{'values'} })},
     {'node_name' => 'span', 'class' => 'cl-field-title',  'inner_HTML' => 'Declared by:'},
     {'node_name' => 'span', 'class' => 'cl-field-value',  'inner_HTML' => $self->display_field_value($record->created_by_user)},
     {'node_name' => 'span', 'class' => 'cl-field-title',  'inner_HTML' => 'Last updated:'},
