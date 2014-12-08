@@ -216,6 +216,12 @@ sub show_fields {
         {'value'    => 'other',      'caption' => 'Others'}
       ]
     },
+    site_type         => {
+      'type'      => 'dropdown',
+      'label'     => 'Site type',
+      'values'    => [{'value' => 'ensembl', 'caption' => 'Ensembl'}, {'value' => 'grch37', 'caption' => 'GRCh37'}]
+    },
+
 
     notes             => {
       'type'      => 'text',
