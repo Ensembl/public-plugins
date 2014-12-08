@@ -46,10 +46,9 @@ sub new {
 sub _init {
   ## Makes all the components in tools ajaxable but not cacheable
   ## Override this in a child class to modify the default behaviour
-  ## Make the Ajax request for loading components is sent via POST in case long query_sequence is there.
   my $self = shift;
   $self->cacheable(0);
-  $self->ajaxable(['query_sequence']);
+  $self->ajaxable(1);
 }
 
 sub get_job_summary {
