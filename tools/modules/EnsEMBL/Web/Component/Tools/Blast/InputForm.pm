@@ -25,6 +25,13 @@ use EnsEMBL::Web::BlastConstants qw(:all);
 
 use parent qw(EnsEMBL::Web::Component::Tools::Blast);
 
+sub _init {
+  ## Make the Ajax request for loading this component via POST in case query_sequence is there.
+  my $self = shift;
+  $self->SUPER::_init(@_);
+  $self->ajaxable($self->hub->param('query_sequence') ? 'post' : 1);
+}
+
 sub content {
   my $self            = shift;
   my $hub             = $self->hub;
