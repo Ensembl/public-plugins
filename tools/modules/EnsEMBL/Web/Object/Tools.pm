@@ -240,7 +240,7 @@ sub delete_ticket_or_job {
   push @{$dispatcher_references{$_->dispatcher_class} ||= []}, $_->dispatcher_reference for grep { $_ && $_->dispatcher_reference } $ticket ? $ticket->job : $job;
 
   # after deleting the ticket or the job successfully, remove the directories, and the dispatched jobs
-  if ($ticket ? $ticket->delete : $job && $job->delete) {
+  if ($ticket ? $ticket->mark_deleted : $job && $job->mark_deleted) {
 
     # remove dispatched jobs
     $self->get_job_dispatcher({'class' => $_})->delete_jobs($ticket_type, $dispatcher_references{$_}) for keys %dispatcher_references;
