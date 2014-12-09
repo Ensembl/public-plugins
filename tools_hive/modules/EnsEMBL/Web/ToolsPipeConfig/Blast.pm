@@ -25,10 +25,13 @@ use warnings;
 
 sub resource_classes {
   my ($class, $conf) = @_;
-  my $sd          = $conf->species_defs;
-  my $lsf_queue   = $sd->ENSEMBL_BLAST_LSF_QUEUE;
+  my $sd    = $conf->species_defs;
+  my $queue = $sd->ENSEMBL_BLAST_QUEUE;
+
+  return { $queue => {'LOCAL' => ''} } if $sd->ENSEMBL_BLAST_RUN_LOCAL;
+
   my $lsf_timeout = $sd->ENSEMBL_BLAST_LSF_TIMEOUT;
-  return {$lsf_queue => { 'LSF' => $lsf_timeout ? "-q $lsf_queue -W $lsf_timeout" : "-q $lsf_queue" }};
+  return {$queue => { 'LSF' => $lsf_timeout ? "-q $queue -W $lsf_timeout" : "-q $queue" }};
 }
 
 sub pipeline_analyses {
@@ -45,10 +48,10 @@ sub pipeline_analyses {
       'NCBIBLAST_matrix'          => $sd->ENSEMBL_NCBIBLAST_MATRIX,
       'NCBIBLAST_repeat_mask_bin' => $sd->ENSEMBL_REPEATMASK_BIN_PATH,
     },
+    '-rc_name'              => $sd->ENSEMBL_BLAST_QUEUE,
     '-analysis_capacity'    => $sd->ENSEMBL_BLAST_ANALYSIS_CAPACITY || 12,
-    '-max_retry_count'      => 1,
-    '-meadow_type'          => 'LSF',
-    '-rc_name'              => $sd->ENSEMBL_BLAST_LSF_QUEUE,
+    '-meadow_type'          => $sd->ENSEMBL_BLAST_RUN_LOCAL ? 'LOCAL' : 'LSF',
+    '-max_retry_count'      => 0,
     '-failed_job_tolerance' => 100
   }];
 }

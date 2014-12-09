@@ -36,10 +36,10 @@ use warnings;
 
 use SiteDefs;
 
-if (grep(m/^synchive/, @ARGV) && (my @lsf_hosts = @{ $SiteDefs::ENSEMBL_LSF_HOSTS || [] })) {
+if (grep(m/^synchive/, @ARGV) && (my @lsf_hosts = @{ $SiteDefs::ENSEMBL_HIVE_HOSTS || [] })) {
 
   my $source  = $SiteDefs::ENSEMBL_SERVERROOT;
-  my $dest    = $SiteDefs::ENSEMBL_LSF_CODE_LOCATION;
+  my $dest    = $SiteDefs::ENSEMBL_HIVE_HOSTS_CODE_LOCATION;
   my $args    = grep($_ eq 'synchiveverbose', @ARGV) ? '-aWv' : '-aWvq';
 
   for (@lsf_hosts) {

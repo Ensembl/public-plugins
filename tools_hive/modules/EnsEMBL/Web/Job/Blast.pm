@@ -49,7 +49,7 @@ sub prepare_to_dispatch {
     -group              => $dba->group
   };
 
-  $data->{'code_root'} = $sd->ENSEMBL_LSF_CODE_LOCATION;
+  $data->{'code_root'} = $sd->ENSEMBL_HIVE_HOSTS_CODE_LOCATION;
 
   if ($data->{'blast_type'}) {
     for (sprintf 'ENSEMBL_%s_DATA_PATH', $blast_type) {

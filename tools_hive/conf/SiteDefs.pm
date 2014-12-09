@@ -18,6 +18,12 @@ limitations under the License.
 
 package EnsEMBL::Tools_hive::SiteDefs;
 
+### tools_hive plugin is a backend for running the ensembl tools jobs (BLAST, BLAT, VEP etc) using ensembl-hive.
+### With this plugin, the jobs that are submitted by the website (via the tools plugin) are saved in the
+### ENSEMBL_WEB_HIVE db and another process called 'beekeeper' (that could possibly be running on a different
+### machine) continually looks at that database, runs the newly submitted jobs on LSF farm or on
+### the local machine (LOCAL) where this process itself is running.
+
 use strict;
 
 sub update_conf {
@@ -26,11 +32,13 @@ sub update_conf {
                                                     'Blast'             => 'Hive', 
                                                     'VEP'               => 'Hive', 
                                                     'AssemblyConverter' => 'Hive', 
-                                                  };           # Overriding tools plugin variable
-  $SiteDefs::ENSEMBL_LSF_HOSTS                  = [];                                               # List of hosts where LSF jobs will be run
-  $SiteDefs::ENSEMBL_LSF_CODE_LOCATION          = $SiteDefs::ENSEMBL_SERVERROOT;                    # path from where LSF hosts can access ensembl code (same as web root for jobs running on local machine)
+                                                  };                                                # Overriding tools plugin variable
+  $SiteDefs::ENSEMBL_HIVE_HOSTS                 = [];                                               # For LOCAL, the machine that runs the beekeeper unless it's same as the web server
+                                                                                                    # For LSF, list of hosts corresponding to the queues for all jobs plus the machine where
+                                                                                                    # beekeeper is running unless it's same as the web server
+  $SiteDefs::ENSEMBL_HIVE_HOSTS_CODE_LOCATION   = $SiteDefs::ENSEMBL_SERVERROOT;                    # path from where hive hosts can access ensembl code (same as web root for jobs running on local machine)
   $SiteDefs::ENSEMBL_TOOLS_PIPELINE_PACKAGE     = 'EnsEMBL::Web::PipeConfig::Tools_conf';           # package read by init_pipeline.pl script from hive to create the hive database
-  $ENV{'EHIVE_ROOT_DIR'}                        = $SiteDefs::ENSEMBL_SERVERROOT.'/ensembl-hive/';   # location from there hive scripts on the web server (not the LSF host) can access the hive API
+  $ENV{'EHIVE_ROOT_DIR'}                        = $SiteDefs::ENSEMBL_SERVERROOT.'/ensembl-hive/';   # location from there hive scripts on the web server (not the hive hosts) can access the hive API
 
   push @SiteDefs::ENSEMBL_LIB_DIRS, "$SiteDefs::ENSEMBL_SERVERROOT/ensembl-hive/modules";
 
@@ -45,32 +53,33 @@ sub update_conf {
     sanger-plugins
   );
 
-  $SiteDefs::ENSEMBL_TOOLS_PERL_BIN             = '/usr//bin/perl';   # Path to perl bin for machine running the job
-  $SiteDefs::ENSEMBL_TOOLS_BIOPERL_DIR          = defer { $SiteDefs::BIOPERL_DIR };                 # Location of bioperl on the LSF host machine (will be same as BIOPERL_DIR for jobs running locally)
+  $SiteDefs::ENSEMBL_TOOLS_PERL_BIN             = '/usr/bin/perl';                                  # Path to perl bin for machine running the job
+  $SiteDefs::ENSEMBL_TOOLS_BIOPERL_DIR          = defer { $SiteDefs::BIOPERL_DIR };                 # Location of bioperl on the hive host machine
 
   # BLAST configs
-  $SiteDefs::ENSEMBL_BLAST_LSF_QUEUE            = 'blast';                                          # LSF queue for blast jobs (not needed for local jobs)
-  $SiteDefs::ENSEMBL_BLAST_LSF_TIMEOUT          = undef;                                            # Max timelimit a blast job is allowed to run
-  $SiteDefs::ENSEMBL_BLAST_ANALYSIS_CAPACITY    = 24;                                               # Number of jobs that can be run parallel in LSF in the blast queue
-  $SiteDefs::ENSEMBL_NCBIBLAST_BIN_PATH         = '/path/to/ncbi-blast/bin';                    # path to blast executables on the LSF host (or local machine if job running locally)
-  $SiteDefs::ENSEMBL_NCBIBLAST_MATRIX           = '/path/to/ncbi-blast/data';               # path to blast matrix files on the LSF host (or local machine if job running locally)
-  $SiteDefs::ENSEMBL_NCBIBLAST_DATA_PATH        = "/path/to/genes";   # path for the blast index files (other than DNA) on the LSF host (or local machine if job running locally)
-  $SiteDefs::ENSEMBL_NCBIBLAST_DATA_PATH_DNA    = "/path/to/blast/dna";     # path for the blast DNA index files on the LSF host (or local machine if job running locally)
-  $SiteDefs::ENSEMBL_REPEATMASK_BIN_PATH        = '/path/to/RepeatMasker';                      # path to RepeatMasker executable on the  LSF host (or local machine if job running locally)
+  $SiteDefs::ENSEMBL_BLAST_RUN_LOCAL            = 0;                                                # Flag if on, will run blast jobs on LOCAL meadow
+  $SiteDefs::ENSEMBL_BLAST_QUEUE                = 'blast';                                          # LSF or LOCAL queue for blast jobs
+  $SiteDefs::ENSEMBL_BLAST_LSF_TIMEOUT          = undef;                                            # Max timelimit a blast job is allowed to run on LSF
+  $SiteDefs::ENSEMBL_BLAST_ANALYSIS_CAPACITY    = 24;                                               # Number of jobs that can be run parallel in the blast queue (LSF or LOCAL)
+  $SiteDefs::ENSEMBL_NCBIBLAST_BIN_PATH         = '/path/to/ncbi-blast/bin';                        # path to blast executables on the LSF host (or local machine if job running locally)
+  $SiteDefs::ENSEMBL_NCBIBLAST_MATRIX           = '/path/to/ncbi-blast/data';                       # path to blast matrix files on the LSF host (or local machine if job running locally)
+  $SiteDefs::ENSEMBL_NCBIBLAST_DATA_PATH        = "/path/to/genes";                                 # path for the blast index files (other than DNA) on the LSF host (or local machine if job running locally)
+  $SiteDefs::ENSEMBL_NCBIBLAST_DATA_PATH_DNA    = "/path/to/blast/dna";                             # path for the blast DNA index files on the LSF host (or local machine if job running locally)
+  $SiteDefs::ENSEMBL_REPEATMASK_BIN_PATH        = '/path/to/RepeatMasker';                          # path to RepeatMasker executable on the  LSF host (or local machine if job running locally)
 
   # BLAT configs
   $SiteDefs::ENSEMBL_BLAT_RUN_LOCAL             = 0;                                                # Flag if on, will run blat jobs on LOCAL meadow
-  $SiteDefs::ENSEMBL_BLAT_LOCAL_QUEUE           = 'blat_local';                                     # LOCAL meadow resource for BLAT jobs
-  $SiteDefs::ENSEMBL_BLAT_LSF_QUEUE             = 'toolsgeneral';                                   # LSF queue for blat jobs
-  $SiteDefs::ENSEMBL_BLAT_LSF_TIMEOUT           = undef;                                            # Max timelimit a blat job is allowed to run
-  $SiteDefs::ENSEMBL_BLAT_ANALYSIS_CAPACITY     = 4;                                                # Number of jobs that can be run parallel in LSF in the tools queue
-  $SiteDefs::ENSEMBL_BLAT_TWOBIT_DIR            = "/path/to/blat/twobit";            # location where blat twobit files are located on LSF node
+  $SiteDefs::ENSEMBL_BLAT_QUEUE                 = 'toolsgeneral';                                   # LSF or LOCAL queue for blat jobs
+  $SiteDefs::ENSEMBL_BLAT_LSF_TIMEOUT           = undef;                                            # Max timelimit a blat job is allowed to run on LSF
+  $SiteDefs::ENSEMBL_BLAT_ANALYSIS_CAPACITY     = 4;                                                # Number of jobs that can be run parallel in the blat queue (LSF or LOCAL)
+  $SiteDefs::ENSEMBL_BLAT_TWOBIT_DIR            = "/path/to/blat/twobit";                           # location where blat twobit files are located on LSF node (or local machine if job running locally)
 
   # VEP configs
-  $SiteDefs::ENSEMBL_VEP_LSF_QUEUE              = 'VEP';                                            # LSF queue for VEP jobs, if running on farm
-  $SiteDefs::ENSEMBL_VEP_LSF_TIMEOUT            = '3:00';                                           # Max timelimit a VEP job is allowed to run
-  $SiteDefs::ENSEMBL_VEP_ANALYSIS_CAPACITY      = 24;                                               # Number of jobs that can be run parallel in LSF in the queue
-  $SiteDefs::ENSEMBL_VEP_CACHE_DIR              = "/path/to/vep/cache";             # path to vep cache files
+  $SiteDefs::ENSEMBL_VEP_RUN_LOCAL              = 0;                                                # Flag if on, will run VEP jobs on LOCAL meadow
+  $SiteDefs::ENSEMBL_VEP_QUEUE                  = 'VEP';                                            # LSF or LOCAL queue for VEP jobs
+  $SiteDefs::ENSEMBL_VEP_LSF_TIMEOUT            = '3:00';                                           # Max timelimit a VEP job is allowed to run on LSF
+  $SiteDefs::ENSEMBL_VEP_ANALYSIS_CAPACITY      = 24;                                               # Number of jobs that can be run parallel in the VEP queue (LSF or LOCAL)
+  $SiteDefs::ENSEMBL_VEP_CACHE_DIR              = "/path/to/vep/cache";                             # path to vep cache files
   $SiteDefs::ENSEMBL_VEP_SCRIPT_DEFAULT_OPTIONS = {                                                 # Default options for command line vep script (keys with value undef get ignored)
     '--host'        => undef,                                                                       # Database host (defaults to ensembldb.ensembl.org)
     '--user'        => undef,                                                                       # Defaults to 'anonymous'
@@ -84,10 +93,9 @@ sub update_conf {
 
   # Assembly Converter configs
   $SiteDefs::ENSEMBL_AC_RUN_LOCAL               = 0;                                                # Flag if on, will run AC jobs on LOCAL meadow
-  $SiteDefs::ENSEMBL_AC_LOCAL_QUEUE             = 'ac_local';                                       # LOCAL meadow resource for AC jobs
-  $SiteDefs::ENSEMBL_AC_LSF_QUEUE               = 'toolsgeneral';                                   # LSF queue for AC jobs, if running on farm
-  $SiteDefs::ENSEMBL_AC_LSF_TIMEOUT             = undef;                                            # Max timelimit an AC job is allowed to run
-  $SiteDefs::ENSEMBL_AC_ANALYSIS_CAPACITY       = 4;                                                # Number of jobs that can be run parallel in LSF in the queue
+  $SiteDefs::ENSEMBL_AC_QUEUE                   = 'toolsgeneral';                                   # LSF or LOCAL queue for AC jobs
+  $SiteDefs::ENSEMBL_AC_LSF_TIMEOUT             = undef;                                            # Max timelimit an AC job is allowed to run on LSF
+  $SiteDefs::ENSEMBL_AC_ANALYSIS_CAPACITY       = 4;                                                # Number of jobs that can be run parallel in the queue (LSF or LOCAL)
 
 }
 

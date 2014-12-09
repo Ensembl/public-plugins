@@ -25,13 +25,13 @@ use warnings;
 
 sub resource_classes {
   my ($class, $conf) = @_;
-  my $sd = $conf->species_defs;
+  my $sd    = $conf->species_defs;
+  my $queue = $sd->ENSEMBL_AC_QUEUE;
 
-  return { $sd->ENSEMBL_AC_LOCAL_QUEUE => {'LOCAL' => ''} } if $sd->ENSEMBL_AC_RUN_LOCAL;
+  return { $queue => {'LOCAL' => ''} } if $sd->ENSEMBL_AC_RUN_LOCAL;
 
-  my $lsf_queue   = $sd->ENSEMBL_AC_LSF_QUEUE;
   my $lsf_timeout = $sd->ENSEMBL_AC_LSF_TIMEOUT;
-  return {$lsf_queue => { 'LSF' => $lsf_timeout ? "-q $lsf_queue -W $lsf_timeout" : "-q $lsf_queue" }};
+  return {$queue => { 'LSF' => $lsf_timeout ? "-q $queue -W $lsf_timeout" : "-q $queue" }};
 }
 
 sub pipeline_analyses {
@@ -47,10 +47,10 @@ sub pipeline_analyses {
       'AC_bin_path'           => $sd->ASSEMBLY_CONVERTER_BIN_PATH,
       'data_dir'              => $sd->ENSEMBL_CHAIN_FILE_DIR,
     },
-    '-rc_name'              => $sd->ENSEMBL_AC_RUN_LOCAL ? $sd->ENSEMBL_AC_LOCAL_QUEUE : $sd->ENSEMBL_AC_LSF_QUEUE,
+    '-rc_name'              => $sd->ENSEMBL_AC_QUEUE,
     '-analysis_capacity'    => $sd->ENSEMBL_AC_ANALYSIS_CAPACITY || 4,
-    '-max_retry_count'      => 0,
     '-meadow_type'          => $sd->ENSEMBL_AC_RUN_LOCAL ? 'LOCAL' : 'LSF',
+    '-max_retry_count'      => 0,
     '-failed_job_tolerance' => 100
   }];
 }
