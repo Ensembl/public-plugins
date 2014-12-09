@@ -26,6 +26,9 @@ use warnings;
 sub resource_classes {
   my ($class, $conf) = @_;
   my $sd          = $conf->species_defs;
+
+  return { $sd->ENSEMBL_BLAST_LSF_QUEUE => {'LOCAL' => ''} } if $sd->ENSEMBL_BLAST_RUN_LOCAL;
+
   my $lsf_queue   = $sd->ENSEMBL_BLAST_LSF_QUEUE;
   my $lsf_timeout = $sd->ENSEMBL_BLAST_LSF_TIMEOUT;
   return {$lsf_queue => { 'LSF' => $lsf_timeout ? "-q $lsf_queue -W $lsf_timeout" : "-q $lsf_queue" }};
@@ -47,7 +50,7 @@ sub pipeline_analyses {
     },
     '-analysis_capacity'    => $sd->ENSEMBL_BLAST_ANALYSIS_CAPACITY || 12,
     '-max_retry_count'      => 1,
-    '-meadow_type'          => 'LSF',
+    '-meadow_type'          => $sd->ENSEMBL_BLAST_RUN_LOCAL ? 'LOCAL' : 'LSF',
     '-rc_name'              => $sd->ENSEMBL_BLAST_LSF_QUEUE,
     '-failed_job_tolerance' => 100
   }];

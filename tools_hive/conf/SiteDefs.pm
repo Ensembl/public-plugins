@@ -49,6 +49,7 @@ sub update_conf {
   $SiteDefs::ENSEMBL_TOOLS_BIOPERL_DIR          = defer { $SiteDefs::BIOPERL_DIR };                 # Location of bioperl on the LSF host machine (will be same as BIOPERL_DIR for jobs running locally)
 
   # BLAST configs
+  $SiteDefs::ENSEMBL_BLAST_RUN_LOCAL            = 0;                                                # Flag if on, will run blast jobs on LOCAL meadow
   $SiteDefs::ENSEMBL_BLAST_LSF_QUEUE            = 'blast';                                          # LSF queue for blast jobs (not needed for local jobs)
   $SiteDefs::ENSEMBL_BLAST_LSF_TIMEOUT          = undef;                                            # Max timelimit a blast job is allowed to run
   $SiteDefs::ENSEMBL_BLAST_ANALYSIS_CAPACITY    = 24;                                               # Number of jobs that can be run parallel in LSF in the blast queue
@@ -67,6 +68,7 @@ sub update_conf {
   $SiteDefs::ENSEMBL_BLAT_TWOBIT_DIR            = "/path/to/blat/twobit";            # location where blat twobit files are located on LSF node
 
   # VEP configs
+  $SiteDefs::ENSEMBL_VEP_RUN_LOCAL              = 0;                                                # Flag if on, will run VEP jobs on LOCAL meadow
   $SiteDefs::ENSEMBL_VEP_LSF_QUEUE              = 'VEP';                                            # LSF queue for VEP jobs, if running on farm
   $SiteDefs::ENSEMBL_VEP_LSF_TIMEOUT            = '3:00';                                           # Max timelimit a VEP job is allowed to run
   $SiteDefs::ENSEMBL_VEP_ANALYSIS_CAPACITY      = 24;                                               # Number of jobs that can be run parallel in LSF in the queue

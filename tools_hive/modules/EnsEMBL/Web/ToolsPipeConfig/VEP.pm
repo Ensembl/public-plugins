@@ -26,6 +26,9 @@ use warnings;
 sub resource_classes {
   my ($class, $conf) = @_;
   my $sd          = $conf->species_defs;
+
+  return { $sd->ENSEMBL_VEP_LSF_QUEUE => {'LOCAL' => ''} } if $sd->ENSEMBL_VEP_RUN_LOCAL;
+
   my $lsf_queue   = $sd->ENSEMBL_VEP_LSF_QUEUE;
   my $lsf_timeout = $sd->ENSEMBL_VEP_LSF_TIMEOUT;
   return {$lsf_queue => { 'LSF' => $lsf_timeout ? "-q $lsf_queue -W $lsf_timeout" : "-q $lsf_queue" }};
@@ -47,7 +50,7 @@ sub pipeline_analyses {
       'vep_to_web_script'     => $sd->ENSEMBL_VEP_TO_WEB_SCRIPT
     },
     '-analysis_capacity'    => $sd->ENSEMBL_VEP_ANALYSIS_CAPACITY || 12,
-    '-meadow_type'          => 'LSF',
+    '-meadow_type'          => $sd->ENSEMBL_VEP_RUN_LOCAL ? 'LOCAL' : 'LSF',
     '-rc_name'              => $sd->ENSEMBL_VEP_LSF_QUEUE,
     '-max_retry_count'      => 0,
     '-failed_job_tolerance' => 100
