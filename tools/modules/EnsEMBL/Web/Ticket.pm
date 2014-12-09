@@ -76,6 +76,7 @@ sub submit_to_toolsdb {
   ## Also creates a job folder for writing i/o files (in the tools tmp directory) and saves input files to it
   my $self        = shift;
   my $hub         = $self->hub;
+  my $sd          = $hub->species_defs;
   my $object      = $self->object;
   my $user        = $hub->user;
   my $now         = $object->get_time_now;
@@ -111,8 +112,9 @@ sub submit_to_toolsdb {
     'owner_type'  => $user ? 'user' : 'session',
     'created_at'  => $now,
     'modified_at' => $now,
-    'site_type'   => $hub->species_defs->ENSEMBL_SITETYPE,
+    'site_type'   => $sd->ENSEMBL_SITETYPE,
     'ticket_name' => $ticket_name,
+    'release'     => $sd->ENSEMBL_VERSION,
     'job'         => [ map { $_->rose_object } @$jobs ]
   });
 
