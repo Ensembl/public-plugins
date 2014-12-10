@@ -142,7 +142,7 @@ sub hc_format_date {
 sub hc_format_compressed_date {
   ## Formates date for displaying the HC table column
   my ($self, $datetime) = @_; 
-  return format_date(parse_date($datetime), "%d/%m/%y %H:%M");  
+  return $datetime ? format_date(parse_date($datetime), "%d/%m/%y %H:%M") : '';
 }
 
 sub annotation_action {
