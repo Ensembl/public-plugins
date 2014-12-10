@@ -219,7 +219,7 @@ sub show_fields {
     site_type         => {
       'type'      => 'dropdown',
       'label'     => 'Site type',
-      'values'    => [{'value' => 'ensembl', 'caption' => 'Ensembl'}, {'value' => 'grch37', 'caption' => 'GRCh37'}]
+      'values'    => [{'value' => 'ensembl', 'caption' => 'Ensembl'}, {'value' => 'grch37', 'caption' => 'GRCh37'}, {'value' => 'pre', 'caption' => 'Pre'}]
     },
 
 
