@@ -345,6 +345,8 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
       return false;
     });
   },
+
+  positionLayers: function() {},
   
   updateTrackRenderer: function (trackName, renderer) {
     var track      = this.genoverse.tracksById[trackName];
