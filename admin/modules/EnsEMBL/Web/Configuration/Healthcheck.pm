@@ -48,60 +48,60 @@ sub populate_tree {
       failure_summary EnsEMBL::Admin::Component::Healthcheck::FailureSummary
       session_info    EnsEMBL::Admin::Component::Healthcheck::SessionInfo
     )],
-    { 'availability' => 1, 'filters' => [qw(WebAdmin)]}
+    { 'availability' => 1, 'filters' => [qw(WebAdmin)], 'raw' => 1, 'url' => $hub->url({qw(species common action Summary)})}
   );
  $self->create_node( 'Details/DBType', "Details (by DB Type)",
     [qw(
       database_report EnsEMBL::Admin::Component::Healthcheck::Details
     )],
-    { 'availability' => 1, 'filters' => [qw(WebAdmin)]}
+    { 'availability' => 1, 'filters' => [qw(WebAdmin)], 'raw' => 1, 'url' => $hub->url({qw(species common action Details function DBType)})}
   );
  $self->create_node( 'Details/Species', "Details (by Species)",
     [qw(
       species_report EnsEMBL::Admin::Component::Healthcheck::Details
     )],
-    { 'availability' => 1, 'filters' => [qw(WebAdmin)]}
+    { 'availability' => 1, 'filters' => [qw(WebAdmin)], 'raw' => 1, 'url' => $hub->url({qw(species common action Details function Species)})}
   );
  $self->create_node( 'Details/Team', "Details (by Team)",
     [qw(
       testcase_report EnsEMBL::Admin::Component::Healthcheck::Details
     )],
-    { 'availability' => 1, 'filters' => [qw(WebAdmin)]}
+    { 'availability' => 1, 'filters' => [qw(WebAdmin)], 'raw' => 1, 'url' => $hub->url({qw(species common action Details function Team)})}
   );
  $self->create_node( 'Details/Testcase', "Details (by Testcase)",
     [qw(
       testcase_report EnsEMBL::Admin::Component::Healthcheck::Details
     )],
-    { 'availability' => 1, 'filters' => [qw(WebAdmin)]}
+    { 'availability' => 1, 'filters' => [qw(WebAdmin)], 'raw' => 1, 'url' => $hub->url({qw(species common action Details function Testcase)})}
   );
  $self->create_node( 'Details/Database', "Details (by Database)",
     [qw(
       database_report EnsEMBL::Admin::Component::Healthcheck::Details
     )],
-    { 'availability' => 1, 'filters' => [qw(WebAdmin)]}
+    { 'availability' => 1, 'filters' => [qw(WebAdmin)], 'raw' => 1, 'url' => $hub->url({qw(species common action Details function Database)})}
   );
   $self->create_node( 'Database', "Database List",
     [qw(
       directory EnsEMBL::Admin::Component::Healthcheck::DatabaseList
     )],
-    { 'availability' => 1, 'filters' => [qw(WebAdmin)]}
+    { 'availability' => 1, 'filters' => [qw(WebAdmin)], 'raw' => 1, 'url' => $hub->url({qw(species common action Database)})}
   );
   $self->create_node( 'HealthcheckBugs', "Healthcheck Bugs",
     [qw(
       healthcheck_bugs EnsEMBL::Admin::Component::Healthcheck::HealthcheckBugs
     )],
-    { 'availability' => 1, 'filters' => [qw(WebAdmin)]}
+    { 'availability' => 1, 'filters' => [qw(WebAdmin)], 'raw' => 1, 'url' => $hub->url({qw(species common action HealthcheckBugs)})}
   );
   $self->create_node( 'Annotation', '',
     [qw(
       annotation EnsEMBL::Admin::Component::Healthcheck::Annotation
     )],
-    { 'no_menu_entry' => 1, 'filters' => [qw(WebAdmin)]}
+    { 'availability' => 1, 'filters' => [qw(WebAdmin)], 'raw' => 1, 'url' => $hub->url({qw(species common action Annotation)})}
   );  
 
   $self->create_node( 'AnnotationSave', '', [],
       { 'command' => 'EnsEMBL::Admin::Command::Healthcheck::Annotation',
-         'no_menu_entry' => 1, 'filters' => [qw(WebAdmin)]}
+         'no_menu_entry' => 1, 'filters' => [qw(WebAdmin)], 'raw' => 1, 'url' => $hub->url({qw(species common action AnnotationSave)})}
   );
 }
 
