@@ -157,6 +157,16 @@ sub fetch_for_annotationsave {
   $self->fetch_for_annotation;
 }
 
+sub fetch_for_healthcheckbugs {
+  ## Healthcheck details page
+  my $self = shift;
+
+  $self->rose_objects('hc_bug_reports', $self->rose_manager(qw(Healthcheck Report))->fetch_hc_bug_reports({
+    'first_session_id'  => $self->first_session_id,
+    'last_session_id'   => $self->last_session_id
+  }));
+}
+
 sub get_database_list {
   ## Gives list of all the current servers and their databases
   ## @return HashRef of 'server name' => {'species name' => [list of database names]}

@@ -86,6 +86,12 @@ sub populate_tree {
     )],
     { 'availability' => 1, 'filters' => [qw(WebAdmin)]}
   );
+  $self->create_node( 'HealthcheckBugs', "Healthcheck Bugs",
+    [qw(
+      healthcheck_bugs EnsEMBL::Admin::Component::Healthcheck::HealthcheckBugs
+    )],
+    { 'availability' => 1, 'filters' => [qw(WebAdmin)]}
+  );
   $self->create_node( 'Annotation', '',
     [qw(
       annotation EnsEMBL::Admin::Component::Healthcheck::Annotation

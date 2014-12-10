@@ -48,6 +48,7 @@ sub render {
     </ul>
   </li>
   <li><a href="/Healthcheck/Database">List of databases</a></li>
+  <li><a href="/Healthcheck/HealthcheckBugs">Healthcheck Bugs</a></li>
 </ul>
 );
   }
