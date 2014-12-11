@@ -107,7 +107,7 @@ Ensembl, and this ordering is used on the website summary views. This ordering
 is necessarily subjective and API and VEP users can always get the full set of
 consequences for each allele and make their own severity judgement.
 </p>
-
+<!-- consequences - start -->
 <table id="consequence_type_table" class="ss">
   <tr>
     <th style="width:5px;padding-left:0px;padding-right:0px;text-align:center">*</th>
@@ -355,6 +355,7 @@ consequences for each allele and make their own severity judgement.
   </tr>
 </table>
 <p><b>*</b> Corresponding colours for the Ensembl web displays.<p>
+<!-- consequences - end -->
 
 <script language="Javascript" type="text/javascript">
   window.onload=highlight_line()
@@ -397,14 +398,15 @@ a score &lt; 0.05 are called 'deleterious' and all others are called 'tolerated'
 </p>
 
 <p>
-We ran <b>SIFT version 5.0.2</b> following the instructions from the authors and used SIFT
+We ran <b>SIFT version <!-- sift_version - start -->5.0.2<!-- sift_version - end --></b> following the instructions from the authors and used SIFT
 to choose homologous proteins rather than supplying them ourselves. We used all 
-protein sequences available from UniRef90 (release 2012_11) as the protein database. 
+protein sequences available from <!-- sift_protein_db_version - start -->UniRef90 (release 2012_11)<!-- sift_protein_db_version - end --> as the protein database. 
 </p>
 </div>
 <div style="border-top:1px dotted #CCC;background-color:#FAFAFA">
 <div style="padding:4px">
   <div style="float:left;margin-right:10px">List of species with SIFT data:</div>
+  <!-- sift_species - start -->
   <div style="float:left;font-style:italic">
     <ul style="margin-bottom:0px">
       <li style="margin-top:0px">Bos taurus</li>
@@ -423,6 +425,7 @@ protein sequences available from UniRef90 (release 2012_11) as the protein datab
       <li>Sus scrofa</li>
     </ul>
   </div>
+   <!-- sift_species - end -->
   <div style="clear:both"></div>
 </div>
 </div>
@@ -448,7 +451,7 @@ Positive Rate of the classifier model used to make the predictions.
 </p>
 
 <p>
-We ran <b>PolyPhen-2 version 2.2.2, release 405</b> (available 
+We ran <b>PolyPhen-2 version <!-- polyphen_version - start -->2.2.2<!-- polyphen_version - end -->, release <!-- polyphen_release - start -->405<!-- polyphen_release - end --></b> (available 
 <a rel="external" href="http://genetics.bwh.harvard.edu/pph2/dokuwiki/downloads">here</a>)
 following all instructions from the authors and using the UniProtKB UniRef100 (release 2013_10) 
 non-redundant protein set as the protein database and DSSP (snapshot 22-Nov-2013) and PDB (snapshot 22-Nov-2013) 
@@ -462,11 +465,13 @@ and HumVar datasets. Both result sets are available through the variation API wh
 <div style="border-top:1px dotted #CCC;background-color:#FAFAFA">
   <div style="padding:4px">
     <div style="float:left;margin-right:10px">List of species with PolyPhen data:</div>
-    <div style="float:left;;font-style:italic">
+    <!-- polyphen_species - start -->
+    <div style="float:left;font-style:italic">
       <ul style="margin-bottom:0px">
         <li style="margin-top:0px">Homo sapiens</li>
       </ul>
     </div>
+    <!-- polyphen_species - end -->
     <div style="clear:both"></div>  
   </div>
 </div>
@@ -660,3 +665,4 @@ a precomputed SIFT and PolyPhen score on the fly.
 
 </body>
 </html>
+
