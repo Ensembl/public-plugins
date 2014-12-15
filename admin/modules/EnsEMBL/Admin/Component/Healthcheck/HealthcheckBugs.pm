@@ -33,9 +33,10 @@ sub content {
   my $hub     = $self->hub;
   my $reports	= $object->rose_objects('hc_bug_reports') || [];
   my $table   = $self->new_table([
-    {'key' => 'reports',    'title' => 'Report(s)',         'sort' => 'html',         'width' => q(40%)},
-    {'key' => 'annotation', 'title' => 'Annotation',        'sort' => 'html',         'width' => q(40%)},
+    {'key' => 'reports',    'title' => 'Report(s)',         'sort' => 'html',         'width' => q(35%)},
+    {'key' => 'annotation', 'title' => 'Annotation',        'sort' => 'html',         'width' => q(30%)},
     {'key' => 'time',       'title' => 'Last annotated at', 'sort' => 'html_numeric', 'width' => q(10%)},
+    {'key' => 'user',       'title' => 'Reported by',       'sort' => 'html',         'width' => q(15%)},
     {'key' => 'count',      'title' => 'Number of reports', 'sort' => 'numeric',      'width' => q(10%)}
   ], [], {'data_table' => 1});
 
@@ -61,13 +62,19 @@ sub content {
 
   while (my ($annotation_comment, $entry) = each %healthcheck_bugs) {
 
-    my @report_texts  = map { sprintf '<li>%s&nbsp;<span class="small">[<a href="%s">Edit annotation</a>]</span></li>', $_->text, $hub->url({'action' => 'Annotation', 'rid' => $_->report_id}) } @{$entry->{'reports'}};
-    my @report_ids    = map { $_->report_id } @{$entry->{'reports'}};
+    my (@report_texts, @report_ids, @annotators);
+
+    for (@{$entry->{'reports'}}) {
+      push @report_ids,   $_->report_id;
+      push @annotators,   $_->created_by_user || (), $_->modified_by_user || () for $_->annotation;
+      push @report_texts, sprintf('<li>%s&nbsp;<span class="small">[<a href="%s">Edit annotation</a>]</span></li>', $_->text, $hub->url({'action' => 'Annotation', 'rid' => $_->report_id}));
+    }
 
     $table->add_row({
       'reports'     => sprintf('<ul>%s</ul>', join '', @report_texts),
       'annotation'  => sprintf('%s&nbsp;<span class="small">[<a href="%s">Edit</a>]</span>', $annotation_comment, $hub->url({'action' => 'Annotation', 'rid' => join ',', @report_ids})),
       'time'        => $self->_annotated_at_field($entry->{'annotated_at'}),
+      'user'        => join(' ', map { sprintf('<a href="mailto:%s">%s</a>', $_->email, $_->name) } values %{{ map { $_->user_id => $_ } @annotators }}),
       'count'       => scalar @{$entry->{'reports'}}
     });
   }
