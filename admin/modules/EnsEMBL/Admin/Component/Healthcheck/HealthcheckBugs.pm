@@ -70,9 +70,16 @@ sub content {
       push @report_texts, sprintf('<li>%s&nbsp;<span class="small">[<a href="%s">Edit annotation</a>]</span></li>', $_->text, $hub->url({'action' => 'Annotation', 'rid' => $_->report_id}));
     }
 
+    $annotation_comment = sprintf(
+      '%s <span class="small">[<a href="%s">Edit</a>] [<a href="%s">View reports</a>]</span>',
+      $annotation_comment,
+      $hub->url({'action' => 'Annotation', 'rid' => join ',', @report_ids}),
+      $hub->url({'action' => 'Details', 'function' => 'Testcase', 'rid' => join ',', @report_ids})
+    );
+
     $table->add_row({
       'reports'     => sprintf('<ul>%s</ul>', join '', @report_texts),
-      'annotation'  => sprintf('%s&nbsp;<span class="small">[<a href="%s">Edit</a>]</span>', $annotation_comment, $hub->url({'action' => 'Annotation', 'rid' => join ',', @report_ids})),
+      'annotation'  => $annotation_comment,
       'time'        => $self->_annotated_at_field($entry->{'annotated_at'}),
       'user'        => join(' ', map { sprintf('<a href="mailto:%s">%s</a>', $_->email, $_->name) } values %{{ map { $_->user_id => $_ } @annotators }}),
       'count'       => scalar @{$entry->{'reports'}}
