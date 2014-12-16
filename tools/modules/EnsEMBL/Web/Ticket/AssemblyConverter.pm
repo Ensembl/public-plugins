@@ -103,6 +103,9 @@ sub init_from_user_input {
   # change file name extensions according to format (remove gz, zip, txt etc) (gz, zip are useless anyway as UserData decompresses the files)
   $file_name  = sprintf '%s.%s', $file_name =~ s/\.[^\/]+$//r, lc $format;
 
+  ## Replace spaces with underscores!
+  $file_name =~ s/ /_/g;
+
   ## Format-specific input tweaks
   if ($format eq 'VCF') {
     ## Extra parameter for VCF
