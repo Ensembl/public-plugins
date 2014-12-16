@@ -34,7 +34,6 @@ sub get_edit_jobs_data {
   my $job         = shift @{ $ticket->job || [] } or return [];
   my $job_data    = $job->job_data->raw;
   my $input_file  = sprintf '%s/%s', $job->job_dir, $job_data->{'input_file'};
-  warn ">>> INPUT $input_file";
   my $format      = $job_data->{'format'};
 
   if (-T $input_file && $input_file !~ /\.gz$/ && $input_file !~ /\.zip$/) { # TODO - check if the file is binary!
