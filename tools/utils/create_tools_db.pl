@@ -16,7 +16,6 @@ use strict;
 
 use DBI;
 use FindBin qw($Bin);
-use List::Util qw(first);
 use FileHandle;
 
 my $code_path = "$Bin/../../..";
@@ -42,8 +41,9 @@ my $db  = {
   'name'      =>  $sd->multidb->{'DATABASE_WEB_TOOLS'}{'NAME'}
 };
 
-my $schema_file = first { -e } map { sprintf "$Bin/schema_tools_db_$_.sql" } reverse 0 .. $sd->ENSEMBL_VERSION
-  or die "ERROR: Schema file does not exist in $Bin.\n";
+my $schema_file = "$Bin/schema_tools_db.sql";
+
+die "ERROR: Schema file does not exist in $Bin.\n" unless -e $schema_file;
 
 my $fh  = FileHandle->new("$schema_file", 'r') or die "ERROR: Can't open file ($schema_file) for reading\n";
 my @sql = split ';', join ' ', map { !m/^#/ && $_ || () } $fh->getlines;
