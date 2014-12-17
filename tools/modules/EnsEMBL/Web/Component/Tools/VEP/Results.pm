@@ -454,35 +454,26 @@ sub content {
   ## DOWNLOAD
   ###########
 
-  my $dir_loc  = $sd->ENSEMBL_TMP_DIR_TOOLS;
-  my $file_loc = $output_file_obj->filename =~ s/^$dir_loc\/(temporary|persistent)\/VEP\///r;
-
   $html .= '<div class="toolbox">';
   $html .= '<div class="toolbox-head"><img src="/i/16/download.png" style="vertical-align:top;"> Download</div><div style="padding:5px;">';
 
-  my $download_url = sprintf('/%s/vep_download?file=%s;name=%s;persistent=%s;prefix=vep', $species, $file_loc, $ticket_name.'.txt', $ticket->owner_type eq 'user' ? 1 : 0);
+  my $download_url = {'type' => 'VEP', 'action' => '', 'function' => '', 'tl' => $object->create_url_param};
 
   # all
   $html .= '<div><b>All</b><span style="float:right; margin-left:10px;">';
   $html .= sprintf(
-    ' <a class="_ht" title="Download all results in %s format%s" href="%s;format=%s">%s</a>',
-    $_, ($_ eq 'TXT' ? ' (best for Excel)' : ''), $download_url, lc($_), $_
+    ' <a class="_ht" title="Download all results in %s format%s" href="%s">%s</a>',
+    $_, ($_ eq 'TXT' ? ' (best for Excel)' : ''), $hub->url('Download', { %$download_url, 'format' => lc $_ }), $_
   ) for qw(VCF VEP TXT);
   $html .= '</span></div>';
 
   # filtered
   if($active_filters) {
-    my $filtered_name = $ticket_name.($location ? ' '.$location : '').($filter_string ? ' '.$filter_string : '');
-    $filtered_name =~ s/^\s+//g;
-    $filtered_name =~ s/\s+/\_/g;
-
-    my $filtered_url = sprintf('/%s/vep_download?file=%s;name=%s;persistent=%s;prefix=vep', $species, $file_loc, $filtered_name.'.txt', $ticket->owner_type eq 'user' ? 1 : 0);
-    $filtered_url .= ';'.join(";", map {"$_=$content_args{$_}"} grep {!/to|from/} keys %content_args);
 
     $html .= '<div><hr><b>Filtered</b><span style="float:right; margin-left:10px;">';
     $html .= sprintf(
-      ' <a class="_ht" title="Download filtered results in %s format%s" href="%s;format=%s">%s</a>',
-      $_, ($_ eq 'TXT' ? ' (best for Excel)' : ''), $filtered_url, lc($_), $_
+      ' <a class="_ht" title="Download filtered results in %s format%s" href="%s">%s</a>',
+      $_, ($_ eq 'TXT' ? ' (best for Excel)' : ''), $hub->url('Download', { %$download_url, 'format' => lc $_, map {$_ => $content_args{$_}} grep {!/to|from/} keys %content_args }), $_
     ) for qw(VCF VEP TXT);
     $html .= '</span></div>';
   }

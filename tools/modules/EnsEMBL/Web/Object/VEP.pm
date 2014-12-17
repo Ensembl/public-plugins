@@ -40,11 +40,8 @@ sub get_edit_jobs_data {
     if (-s $input_file <= 1024) {
       $job_data->{"text"} = join('', file_get_contents($input_file));
     } else {
-      my $dir_loc   = $hub->species_defs->ENSEMBL_TMP_DIR_TOOLS;
-      my $file_loc  = $input_file =~ s/^$dir_loc\/(temporary|persistent)\/VEP\///r;
-
       $job_data->{'input_file_type'}  = 'text';
-      $job_data->{'input_file_url'}   = sprintf('/%s/vep_download?file=%s;name=%s;persistent=%s;download=1', $hub->species, $file_loc, $file_loc =~ s/.*\///r, $ticket->owner_type eq 'user' ? 1 : 0);
+      $job_data->{'input_file_url'}   = $hub->url('Download', {'type' => 'VEP', 'action' => '', 'function' => '', 'tl' => $self->create_url_param, 'input' => 1});
     }
   } else {
     $job_data->{'input_file_type'} = 'binary';
@@ -97,6 +94,40 @@ sub get_all_variants_in_slice_region {
     )
 
   } map $_->result_data, $job->result ];
+}
+
+sub handle_download {
+  my ($self, $r) = @_;
+
+  my $hub = $self->hub;
+  my $job = $self->get_requested_job;
+
+  # if downloading the input file
+  if ($hub->param('input')) {
+
+    my $filename  = $job->job_data->{'input_file'};
+    my $content   = join '', map { s/\R/\r\n/r } file_get_contents(join '/', $job->job_dir, $filename);
+
+    $r->headers_out->add('Content-Type'         => 'text/plain');
+    $r->headers_out->add('Content-Length'       => length $content);
+    $r->headers_out->add('Content-Disposition'  => sprintf 'attachment; filename=%s', $filename);
+
+    print $content;
+
+  # if downloading the result file in any specified format
+  } else {
+
+    my $format    = $hub->param('format')   || 'vcf';
+    my $location  = $hub->param('location') || '';
+    my $filter    = $hub->param('filter')   || '';
+    my $file      = $self->result_files->{'output_file'};
+    my $filename  = join('.', $job->ticket->ticket_name, $location || (), $filter || (), $format eq 'txt' ? () : $format, 'txt') =~ s/\s+/\_/gr;
+
+    $r->headers_out->add('Content-Type'         => 'text/plain');
+    $r->headers_out->add('Content-Disposition'  => sprintf 'attachment; filename=%s', $filename);
+
+    print $file->content('format' => $format, 'location' => $location, 'filter' => $filter);
+  }
 }
 
 1;
