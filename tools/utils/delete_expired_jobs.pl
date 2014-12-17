@@ -56,6 +56,21 @@ if ($dry) {
   print "INFO: Dry run only, not actually making any changes.\n";
 }
 
+# Limit
+my $limit;
+for (@ARGV) {
+  if ($limit) {
+    $limit = $_ if $_ =~ /^\d+$/;
+    last;
+  }
+  if ($_ =~ /^\-?\-limit$/) {
+    $limit = -1;
+  }
+}
+if ($limit > 0) {
+  print "INFO: Limit applied, only first $limit tickets will be deleted.\n";
+}
+
 # Get db connection
 my $sd  = EnsEMBL::Web::SpeciesDefs->new();
 my $db  = {
@@ -78,7 +93,9 @@ ORM::EnsEMBL::Rose::DbConnection->register_database($db);
 my $tickets_iterator = ORM::EnsEMBL::DB::Tools::Manager::Ticket->get_objects_iterator(
   'query'         => [ 'owner_type' => {'ne' => 'user'}, 'status' => {'ne' => 'Deleted'} ],
   'with_objects'  => [ 'job', 'job.result', 'job.job_message' ],
-  'multi_many_ok' => 1,
+  'sort_by'       => 'created_at ASC',
+  'multi_many_ok' => 1, $limit > 0 ? (
+  'limit'         => $limit ) : (),
 #  'debug'         => 1,
 );
 
