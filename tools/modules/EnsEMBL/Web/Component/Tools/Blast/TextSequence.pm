@@ -160,8 +160,8 @@ sub class_to_style {
     my $styles  = $self->hub->species_defs->colour('sequence_markup');
     my $counter = scalar keys %{$self->{'class_to_style'}};
 
-    $self->{'class_to_style'}{'hsp_other'} = [ ++$counter, { 'font-weight' => 'bold', color => "#$styles->{'SEQ_HSP_OTHER'}{'default'}" }];
-    $self->{'class_to_style'}{'hsp_sel'}   = [ ++$counter, { 'font-weight' => 'bold', color => "#$styles->{'SEQ_HSP_SEL'}{'default'}"   }]; # selected is more important, so goes after other
+    $self->{'class_to_style'}{'hsp_other'} = [ ++$counter, { 'color' => "#$styles->{'SEQ_HSP_OTHER'}{'default'}" }];
+    $self->{'class_to_style'}{'hsp_sel'}   = [ ++$counter, { 'font-weight' => 'bold', 'color' => "#$styles->{'SEQ_HSP_SEL'}{'default'}"   }]; # selected is more important, so goes after other
   }
 
   return $self->{'class_to_style'};
