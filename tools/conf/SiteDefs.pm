@@ -42,6 +42,12 @@ sub update_conf {
   $SiteDefs::ENSEMBL_VEP_ENABLED    = 1;
   $SiteDefs::ENSEMBL_AC_ENABLED     = 1;
 
+  # Run all jobs locally by default
+  $SiteDefs::ENSEMBL_BLAST_RUN_LOCAL  = 1; 
+  $SiteDefs::ENSEMBL_BLAT_RUN_LOCAL   = 1; 
+  $SiteDefs::ENSEMBL_VEP_RUN_LOCAL    = 1; 
+  $SiteDefs::ENSEMBL_AC_RUN_LOCAL     = 1; 
+
   # Path to BLAT client
   $SiteDefs::ENSEMBL_BLAT_BIN_PATH = '/path/to/gfClient';
 
