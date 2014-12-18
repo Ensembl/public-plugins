@@ -33,6 +33,15 @@ and use them to create 2bit files for rapid indexing, as described in the
 the <a href="ftp://ftp.ncbi.nlm.nih.gov/blast/executables/LATEST/">NCBI FTP site</a>.</li>
 <li>Generate the BLAST indices. We use an eHive pipeline, which is fully documented
 in the <a href="https://github.com/Ensembl/ensembl-production/blob/release/77/docs/fasta.textile">ensembl-production repository</a>.</li>
+<li>Configure your BLAST paths in SiteDefs.pm:
+<p><pre>
+$SiteDefs::ENSEMBL_NCBIBLAST_BIN_PATH = '/path/to/ncbi-blast/bin'; # path to blast executables  
+$SiteDefs::ENSEMBL_NCBIBLAST_MATRIX = '/path/to/ncbi-blast/data'; # path to blast matrix files 
+$SiteDefs::ENSEMBL_NCBIBLAST_DATA_PATH_DNA = "/path/to/blast/dna"; # path for the blast DNA index files 
+$SiteDefs::ENSEMBL_NCBIBLAST_DATA_PATH = "/path/to/genes"; # path for the blast index files (other than DNA) 
+$SiteDefs::ENSEMBL_REPEATMASK_BIN_PATH = '/path/to/RepeatMasker'; # path to RepeatMasker executable
+</pre></p>
+</li>
 </ol>
 
 

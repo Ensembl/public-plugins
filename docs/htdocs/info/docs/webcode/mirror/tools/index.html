@@ -14,6 +14,12 @@ without any dependencies on proprietary software. These tools
 can be integrated into any Ensembl-powered site, and modified
 by project developers to use any backend architecture required.</p>
 
+<div class="info-box"><p>Whilst we aim to make our documentation as accurate 
+as we can, it is not possible to cover every contigency or variation in 
+server setup. If you are still having problems after following these
+instructions carefully, please <a href="/info/about/contact/">contact us</a> 
+and we will do our best to help.</p></div>
+
 <h2>System architecture</h2>
 
 <p>The basic components of the system are:</p>
@@ -21,7 +27,7 @@ by project developers to use any backend architecture required.</p>
 <ul>
 <li>a <b>ticket database</b>, allowing retrieval and storage of jobs</li>
 <li>a <b>dispatcher</b> and, for BLAST only (at present), an optional <b>queueing system</b> to run the jobs. The dispatcher and queueing system use Ensembl eHive by default, but
-can be replaced by other custom modules which use different technologies,
+could be replaced by other custom modules which use different technologies,
 such as the Ensembl REST API.</li>
 <li>two plugins to the ensembl webcode:
   <ul> 
@@ -101,7 +107,12 @@ USER = myuser
 
 <p>From the tools plugin, run <kbd>utils/create_tools_db.pl</kbd> to set up the ensembl_web_tools MySQL database.</p>
 
-<h3>6. Set up individual tools</h3>
+<h3>6. Create your eHive database</h3>
+
+<p>From the tools_hive plugin, run <kbd>utils/init_pipeline.pl</kbd> to set up the ensembl_web_hive MySQL database.</p>
+
+
+<h3>7. Set up individual tools</h3>
 
 <p>Each tool can be added to the interface separately, so for example you don't need to
 set up BLAST if you only need the VEP. However all tools are enabled by default, so
@@ -142,6 +153,13 @@ for links to the instructions.</p>
 </tbody>
 </table>
 
+<h3>8. Start the beekeeper process</h3>
+
+<p>Go to public-plugins/tools_hive/utils and run the script as follows:</p>
+
+<p><pre>
+perl beekeeper_manager.pl --keep_alive --sleep=0.5
+</pre></p>
 
 </body>
 </html>
