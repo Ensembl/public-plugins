@@ -44,8 +44,8 @@ sub content {
 }
 
 sub content_parsed {
-  ## Gets the parsed content from the files
-  ## @param Hashref with keys as accepted by content_iterate except the 'filter' key
+  ## Gets the parsed content from the file
+  ## @param Hashref with keys as accepted by content_iterate except the 'format' key
   my ($self, $params) = @_;
 
   delete $params->{'format'};
