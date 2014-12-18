@@ -126,7 +126,10 @@ sub handle_download {
     $r->headers_out->add('Content-Type'         => 'text/plain');
     $r->headers_out->add('Content-Disposition'  => sprintf 'attachment; filename=%s', $filename);
 
-    print $file->content('format' => $format, 'location' => $location, 'filter' => $filter);
+    $file->content_iterate({'format' => $format, 'location' => $location, 'filter' => $filter}, sub {
+      print "$_\r\n" for @_;
+      $r->rflush;
+    });
   }
 }
 

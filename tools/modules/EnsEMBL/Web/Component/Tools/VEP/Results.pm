@@ -101,7 +101,8 @@ sub content {
     location  => $location
   );
 
-  my ($headers, $rows, $line_count) = @{$output_file_obj->parse_content($output_file_obj->content(%content_args))};
+  my ($headers, $rows, $line_count) = @{$output_file_obj->content_parsed(\%content_args)};
+
   my $actual_to = $from - 1 + ($line_count || 0);
   my $row_count = scalar @$rows;
 
