@@ -175,7 +175,7 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
       data[0].match(/(chr)?\w+/) &&
       data[1].match(/^\d+$/) &&
       data[3].match(/^[ACGTN\-\.]+$/i) &&
-      typeof data[4] != 'undefined' && data[4].match(/^([\.ACGTN\-]+\,?)+$|^(\<[A-Z]+\>)$/i)
+      typeof data[4] != 'undefined' && data[4].match(/^([\.ACGTN\-]+\,?)+$|^(\<\w+\>)$/i)
     ) {
       return 'vcf';
     }
