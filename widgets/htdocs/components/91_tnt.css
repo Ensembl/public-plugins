@@ -3,7 +3,7 @@
   stroke: none;
   stroke-width: none; }
 .tnt_tree_node .dubious {
-  fill: white;
+  fill: #fff;
   stroke: steelblue;
   stroke-width: 1.5px; }
 .tnt_tree_node .present {
@@ -133,3 +133,5 @@ div .tnt_tooltip_active {
   border-radius: 20px;
   -webkit-border-radius: 20px;
   -moz-border-radius: 20px; }
+
+/*# sourceMappingURL=tnt.css.map */

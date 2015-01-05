@@ -92,7 +92,7 @@ sub render {
   my $json_info = to_json($tree_details);
  
   my $html = qq{    
-    <div  class="ajax js_panel image_container ui-resizable" id="species_tree" class="widget-toolbar"></div>
+    <div  class="js_tree ajax js_panel image_container ui-resizable" id="species_tree" class="widget-toolbar"></div>
     <script>  
       if(!document.implementation.hasFeature("http://www.w3.org/TR/SVG11/feature#Shape", "1.1")) {
         document.getElementById("species_tree").innerHTML = "<div class='error'><h3>Browser Compatibility Issue</h3><div class='message-pad'><p>Your Browser doesn't support the new view, download the static image in PDF using the link above.</p></div></div>";

@@ -30,8 +30,9 @@ sub init {
   $self->PREV::init;
   
   my $species_defs = $self->species_defs;
+  my @components   = @{$self->hub->components};
   
-  return unless $self->hub->apache_handle->unparsed_uri =~ /speciestree\.html/; #grep $_->[-1] eq 'genoverse', @{$self->hub->components}; 
+  return unless $self->hub->apache_handle->unparsed_uri =~ /speciestree\.html/ || grep $_->[0] eq 'SpeciesTree', @components; 
  
   if ($self->debug) {
     $self->add_source($_) for EnsEMBL::Web::Tools::JavascriptOrderWidgets->new({ species_defs => $species_defs })->get_files;

@@ -28,8 +28,8 @@ sub new {
 
 sub get_files {
   my ($self, $absolute) = @_;
-  
-  return map { ($absolute ? $self->{'dir'} : '') . "/widgets/$_" } @{list_dir_contents($self->{'dir'}.'/widgets')};
+   
+  return map { ($absolute ? $self->{'dir'} : '') . "/widgets/$_" } sort @{list_dir_contents($self->{'dir'}.'/widgets')};
 }
 
 1;
