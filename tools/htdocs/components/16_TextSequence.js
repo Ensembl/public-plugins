@@ -36,9 +36,11 @@ Ensembl.Panel.TextSequence = Ensembl.Panel.TextSequence.extend({
         panel.blastSeq = '';
         panel.resetSelection();
         panel.toggleBlastPopup(false);
+        $(document.body).addClass('sequence_selection');
         $(document).on('mouseup.TextSequence', function(e) {
           panel.blastSeq = panel.getSelection();
           panel.toggleBlastPopup(!!panel.blastSeq, e);
+          $(document.body).removeClass('sequence_selection');
         });
       },
       'mouseup': function(e) {
