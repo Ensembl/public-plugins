@@ -27,7 +27,7 @@ use warnings;
 use Digest::MD5 qw(md5_hex);
 
 use EnsEMBL::Web::Exceptions;
-use EnsEMBL::Web::Tools::RandomString qw(random_string);
+use EnsEMBL::Web::Utils::RandomString qw(random_string);
 use EnsEMBL::Web::Utils::FileSystem qw(create_path remove_empty_path remove_directory copy_dir_contents);
 use EnsEMBL::Web::Utils::DynamicLoader qw(dynamic_require);
 
