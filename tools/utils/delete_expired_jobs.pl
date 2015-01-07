@@ -92,7 +92,7 @@ ORM::EnsEMBL::Rose::DbConnection->register_database($db);
 # Fetch all non-user tickets that are not already marked as deleted
 my $tickets_iterator = ORM::EnsEMBL::DB::Tools::Manager::Ticket->get_objects_iterator(
   'query'         => [ 'owner_type' => {'ne' => 'user'}, 'status' => {'ne' => 'Deleted'} ],
-  'with_objects'  => [ 'job', 'job.result', 'job.job_message' ],
+  'with_objects'  => [ 'job' ],
   'sort_by'       => 'created_at ASC',
   'multi_many_ok' => 1, $limit > 0 ? (
   'limit'         => $limit ) : (),
