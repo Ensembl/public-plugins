@@ -353,7 +353,8 @@ sub get_requested_ticket {
         'site_type'     => $hub->species_defs->ENSEMBL_SITETYPE,
         'ticket_name'   => $ticket_name,
         'session_id'    => $hub->session->create_session_id,
-        'user_id'       => $user && $user->user_id
+        'user_id'       => $user && $user->user_id,
+        'public_ok'     => 1
       });
 
       if ($ticket_type) {
@@ -436,6 +437,7 @@ sub get_requested_job {
         'job_id'        => $job_id,
         'session_id'    => $hub->session->create_session_id,
         'user_id'       => $user && $user->user_id,
+        'public_ok'     => 1,
         'type'          => $tool_type,
         %results_key
       });
