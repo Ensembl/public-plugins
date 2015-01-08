@@ -324,9 +324,9 @@ sub get_current_tickets {
 
     my $ticket_types  = $self->rose_manager(qw(Tools TicketType))->fetch_with_current_tickets({
       'site_type'       => $hub->species_defs->ENSEMBL_SITETYPE,
-      'session_id'      => $hub->session->create_session_id, $user ? (
-      'user_id'         => $user->user_id ) : (), $tool_type ? ( # If object is Tools, show all tickets
-      'type'            => $tool_type) : ()
+      'session_id'      => $hub->session->create_session_id,
+      'user_id'         => $user && $user->user_id,
+      'type'            => $tool_type
     });
 
     my @tickets = sort { $b->created_at <=> $a->created_at } map $_->ticket, @$ticket_types;
@@ -349,15 +349,15 @@ sub get_requested_ticket {
     my $ticket;
 
     if ($ticket_name) {
-      my $ticket_type = $self->rose_manager(qw(Tools TicketType))->fetch_with_current_tickets({
+      my $ticket_type = $self->rose_manager(qw(Tools TicketType))->fetch_with_requested_ticket({
         'site_type'     => $hub->species_defs->ENSEMBL_SITETYPE,
         'ticket_name'   => $ticket_name,
-        'session_id'    => $hub->session->create_session_id, $user ? (
-        'user_id'       => $user->user_id ) : ()
+        'session_id'    => $hub->session->create_session_id,
+        'user_id'       => $user && $user->user_id
       });
 
-      if (@$ticket_type) {
-        $ticket = $ticket_type->[0]->ticket->[0];
+      if ($ticket_type) {
+        $ticket = $ticket_type->ticket->[0];
         $self->update_ticket_and_jobs($ticket);
       }
     }
@@ -430,13 +430,13 @@ sub get_requested_job {
           : ()
         );
 
-      my $ticket_type = $self->rose_manager(qw(Tools TicketType))->fetch_with_given_job({
+      my $ticket_type = $self->rose_manager(qw(Tools TicketType))->fetch_with_requested_ticket({
         'site_type'     => $hub->species_defs->ENSEMBL_SITETYPE,
         'ticket_name'   => $url_params->{'ticket_name'},
         'job_id'        => $job_id,
-        'session_id'    => $hub->session->create_session_id, $user ? (
-        'user_id'       => $user->user_id ) : (), $tool_type ? ( # If object is Tools, it could be any ticket being requested
-        'type'          => $tool_type) : (),
+        'session_id'    => $hub->session->create_session_id,
+        'user_id'       => $user && $user->user_id,
+        'type'          => $tool_type,
         %results_key
       });
 
