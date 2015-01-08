@@ -383,6 +383,20 @@ sub user_accessible_tickets {
   return grep { $_->owner_type eq 'user' ? $_->owner_id eq $user_id : $_->owner_id eq $session_id } @_;
 }
 
+sub get_ticket_share_link {
+  ## Gets a link to be used to share tickets with other users
+  ## @param Ticket object
+  ## @return URL hashref as accepted by hub->url method
+  my ($self, $ticket) = @_;
+  return {
+    '__clear'   => 1,
+    'type'      => 'Tools',
+    'action'    => $ticket->ticket_type_name,
+    'function'  => 'Ticket',
+    'tl'        => $self->create_url_param({'ticket_name' => $ticket->ticket_name})
+  };
+}
+
 sub update_ticket_and_jobs {
   ## Updates the given tickets according to the validity and linked jobs according to the corresponding ones in the dispatcher
   ## @params List of Ticket objects to which jobs are linked

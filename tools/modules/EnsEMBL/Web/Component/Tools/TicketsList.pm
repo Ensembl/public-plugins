@@ -254,8 +254,9 @@ sub ticket_buttons {
   my $url_param     = $object->create_url_param({'ticket_name' => $ticket->ticket_name});
   my $job_count     = $ticket->job_count;
   my $action        = $ticket->ticket_type_name;
+  my $buttons       = $self->dom->create_element('div');
 
-  my ($save_button, $edit_button, $delete_button, $expiring_warning);
+  my ($save_button, $edit_button, $share_button, $delete_button, $expiring_warning);
 
   # buttons that should only be displayed if user or session owns the ticket
   if ($is_owned_ticket) {
@@ -287,6 +288,25 @@ sub ticket_buttons {
       };
     }
 
+    # Share button
+    $share_button = {
+      'node_name'   => 'span',
+      'class'       => [qw(_ht sprite share_icon)],
+      'children'    => [{
+        'node_name'   => 'span',
+        'class'       => '_ht_tip hidden',
+        'inner_HTML'  => $buttons->encode_htmlentities(sprintf '<form class="_ticket_share ticket-share-form top-margin right-margin" action="%s">
+                            <p><label><input name="share" type="checkbox" value="1"%s />&nbsp;Share ticket via URL</label></p>
+                            <p class="_ticket_share_url"><input class="ticket-share-input" type="text" value="%s%s" /></p>
+                          </form>',
+                          $hub->url('Json', {'action' => $action, 'function' => 'share', 'tl' => $url_param}),
+                          $ticket->visibility eq 'public' ? ' checked="checked"' : '',
+                          $hub->species_defs->ENSEMBL_BASE_URL,
+                          $hub->url($object->get_ticket_share_link($ticket))
+        )
+      }]
+    };
+
     # Icon to delete the ticket
     $delete_button = {
       'node_name'   => 'a',
@@ -307,7 +327,7 @@ sub ticket_buttons {
   }
 
   # Edit icon
-  my $edit_button = {
+  $edit_button = {
     'node_name'     => 'a',
     'class'         => [qw(_ticket_edit _change_location)],
     'href'          => $hub->url({'action' => $action, 'function' => 'Edit', 'tl' => $url_param}),
@@ -318,7 +338,9 @@ sub ticket_buttons {
     }]
   };
 
-  return $self->dom->create_element('div', { 'children' => [ grep $_, $save_button, $edit_button, $delete_button, $expiring_warning ]});
+  $buttons->append_children(grep $_, $save_button, $edit_button, $share_button, $delete_button, $expiring_warning);
+
+  return $buttons;
 }
 
 sub analysis_caption {
