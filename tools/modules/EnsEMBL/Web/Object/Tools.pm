@@ -216,18 +216,20 @@ sub delete_ticket_or_job {
     if ($job) {
 
       # if there's only one job linked to a ticket, mark the ticket for removal
-      $ticket       = $job->ticket;
-      $ticket_type  = $ticket->ticket_type_name;
-      $ticket       = undef if $ticket->job_count > 1;
+      # skip if the ticket doesn't belong to the user
+      ($ticket)     = $self->user_accessible_tickets($job->ticket);
+      $ticket_type  = $ticket->ticket_type_name if $ticket;
+      $ticket       = undef if $ticket && $ticket->job_count > 1;
     }
 
   # if job_id is missing, but ticket_name is provided, it's a request to the ticket
   } elsif ($params->{'ticket_name'}) {
-    $ticket       = $self->get_requested_ticket;
+    ($ticket)     = $self->user_accessible_tickets($self->get_requested_ticket);
     $ticket_type  = $ticket->ticket_type_name if $ticket;
   }
 
-  return unless $ticket || $job;
+  # ticket type will be undef if no ticket/job was found with the given name/id that is owned by the user
+  return unless $ticket_type;
 
   # get the path of the related directory that needs to be removed
   ($job) = $ticket->job if !$job && $ticket;
@@ -258,7 +260,7 @@ sub save_ticket_to_account {
   my $self = shift;
   my $result;
 
-  if (my $ticket = $self->get_requested_ticket) {
+  if (my ($ticket) = $self->user_accessible_tickets($self->get_requested_ticket)) {
 
     my $ticket_type = $ticket->ticket_type_name;
     my %dirs;
@@ -367,6 +369,18 @@ sub get_requested_ticket {
   }
 
   return $self->{'_requested_ticket'};
+}
+
+sub user_accessible_tickets {
+  ## Filters a list of ticket objects to return only those that are owned by the user (either by user_id or session_id)
+  ## @param   List of ticket object
+  ## @return  List of ticket object
+  my $self        = shift;
+  my $hub         = $self->hub;
+  my $user_id     = $hub->user ? $hub->user->user_id : 0;
+  my $session_id  = $hub->session->create_session_id;
+
+  return grep { $_->owner_type eq 'user' ? $_->owner_id eq $user_id : $_->owner_id eq $session_id } @_;
 }
 
 sub update_ticket_and_jobs {
