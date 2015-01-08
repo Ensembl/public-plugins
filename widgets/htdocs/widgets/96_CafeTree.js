@@ -1,5 +1,13 @@
 Ensembl.CafeTree = {};
 
+Ensembl.CafeTree.displayTree = function(json,species_name) {
+  var tree_vis = tnt.tree();
+  var theme = Ensembl.CafeTree.tnt_theme_tree_cafe_tree()
+                 .json_data(json)
+                 .highlight(species_name);
+  theme(tree_vis, document.getElementById('cafe_tree'));
+}
+
 Ensembl.CafeTree.tnt_theme_tree_cafe_tree = function() {
     "use strict";
 
@@ -116,7 +124,7 @@ Ensembl.CafeTree.tnt_theme_tree_cafe_tree = function() {
 		        if (d.n_members === 0) {
 		            return 'lightgrey'
 		        }
-            if (d.tax.scientific_name === highlight) {
+            if (d.tax.scientific_name === highlight) {            
               return "red";
             }
 		        return 'black';
@@ -132,6 +140,16 @@ Ensembl.CafeTree.tnt_theme_tree_cafe_tree = function() {
       });          
           
       var species_label = tnt.tree.label.text()
+          .color(function (node) {
+            var d = node.data();
+		        if (d.n_members === 0) {
+		            return 'lightgrey'
+		        }
+            if (d.tax.scientific_name === highlight) {            
+              return "red";
+            }
+		        return 'black';          
+          })
           .text(function (node) {
             if(node.is_leaf()) {
               return node.data().tax.scientific_name;

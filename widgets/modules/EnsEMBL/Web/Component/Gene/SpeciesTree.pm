@@ -23,10 +23,10 @@ use strict;
 use Bio::EnsEMBL::Registry;
 use Bio::EnsEMBL::Compara::Utils::CAFETreeHash;
 
-use EnsEMBL::Web::Constants;
 use JSON qw(to_json);
 
-use base qw(EnsEMBL::Web::Component::Gene);
+use previous qw(content);
+
 
 sub content {
   my $self        = shift;
@@ -35,8 +35,9 @@ sub content {
   my $object      = $self->object;
   my $stable_id   = $hub->param('g');  
   my $image_type  = $hub->session->get_data(type => 'image_type', code => $self->id) || {};
-
-  return $self->SUPER::new_image({hub => $hub, component => $self->id, image_config => $hub->get_imageconfig($self->view_config->image_config)})->render if($image_type->{'static'} || $hub->param('static') || $hub->param('export') || !(grep $_->[0] eq 'SpeciesTree', @{$hub->components}));
+  my $html        = '<input type="hidden" value="Widget" class="panel_type">';
+   
+  return $self->PREV::content(@_) if($image_type->{'static'} || $hub->param('static') || $hub->param('export') || !(grep $_->[0] eq 'SpeciesTree', @{$hub->components}));
   
 #  return if $self->_export_image($image);
 
@@ -46,15 +47,9 @@ sub content {
   my $hash                              = Bio::EnsEMBL::Compara::Utils::CAFETreeHash->convert($tree);
   my $str                               = to_json($hash);    
 
-  my $html = "<div id='cafe_tree' class='js_tree ajax js_panel image_container ui-resizable'></div>
+  $html .= "<div id='cafe_tree' class='js_tree ajax js_panel image_container ui-resizable'></div>
             <script>
-            (function () {
-              var tree_vis = tnt.tree();
-              var theme = Ensembl.CafeTree.tnt_theme_tree_cafe_tree()
-                             .json_data($str)
-                             .highlight(\"$species_name\");
-              theme(tree_vis, document.getElementById('cafe_tree'));
-            })();
+              Ensembl.CafeTree.displayTree($str,\"$species_name\");
             </script>";
 
   return $html;
