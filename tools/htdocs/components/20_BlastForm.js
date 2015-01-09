@@ -79,19 +79,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
       'finish': function() {
         this.value = this.value.trim();
         if (this.value && this.value !== this.defaultValue) {
-          if (this.value.match(/[0-9]+/) && this.value.match(/^[a-z]{1}[a-z0-9\.\-\_]{4,30}$/i)) { // accession/sequence id etc
-            panel.ajax({
-              'comet'   : true,
-              'url'     : panel.fetchSequenceURL,
-              'data'    : { id: this.value },
-              'spinner' : true,
-              'update'  : function(json) {
-                this.toggleSpinner(true, 'Searching ' + json[0] + ' databases&#8230;');
-              }
-            });
-          } else {
-            panel.addSequences(this.value);
-          }
+          panel.addSequenceByID(this.value) || panel.addSequences(this.value);
         } else {
           $(this).val(this.defaultValue).addClass('inactive');
         }
@@ -260,7 +248,8 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
         this.addEditingJobSequences(formInput['sequence'], formInput['query_type']);
       } else {
         // in case sequence is recieved from 'BLAST this sequence' link, it doesn't have query_type
-        this.addSequences(formInput['sequence'][0]['sequence']);
+        // it could possible be a seq/accession id in that case
+        this.addSequenceByID(formInput['sequence'][0]['sequence']) || this.addSequences(formInput['sequence'][0]['sequence']);
       }
 
       // set db type, source and search type
@@ -328,6 +317,26 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     parsedSeqs = duplicates = modifyingExisting = numParsedSeqs = numSeqs = indexSeq = null;
 
     return indexParsedSeq;
+  },
+
+  addSequenceByID: function(seqId) {
+  /* Fetches a sequence by seq id or accession id and then adds it to the textarea
+   * @param Seq id or accession id
+   * @return false it seq id or accession id is invalid, true otherwise
+   */
+    if (seqId.match(/[0-9]+/) && seqId.match(/^[a-z]{1}[a-z0-9\.\-\_]{4,30}$/i)) {
+      this.ajax({
+        'comet'   : true,
+        'url'     : this.fetchSequenceURL,
+        'data'    : { id: seqId },
+        'spinner' : true,
+        'update'  : function(json) {
+          this.toggleSpinner(true, 'Searching ' + json[0] + ' databases&#8230;');
+        }
+      });
+      return true;
+    }
+    return false;
   },
 
   parseRawSequences: function(rawText) {
