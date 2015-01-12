@@ -24,7 +24,7 @@ use JSON qw(to_json from_json);
 use List::Util qw(min);
 
 use EnsEMBL::Web::Hub;
-use EnsEMBL::Web::Document::GenoverseImage;
+use EnsEMBL::Web::Document::Image::Genoverse;
 
 use parent qw(EnsEMBL::Web::Controller);
 
@@ -472,7 +472,7 @@ sub update {
   my $species      = $hub->species;
   my $view_config  = $hub->get_viewconfig($hub->param('config'), undef, 'cache');
   my $image_config = $hub->get_imageconfig($view_config->image_config);
-  my $image        = new EnsEMBL::Web::Document::GenoverseImage({ hub => $hub, image_config => $image_config });
+  my $image        = new EnsEMBL::Web::Document::Image::Genoverse({ hub => $hub, image_config => $image_config });
   my $tracks       = $image->get_tracks;
   my %existing     = map { split '=' } split ',', $hub->param('existing');
   my (@add, @change, @order);
