@@ -32,6 +32,7 @@ sub blast_method   { return $_[0]{'_blast_method'};               } ## @return B
 sub is_protein     { return $_[0]{'_is_protein'};                 } ## @return Flag whether the sequence is protein or not
 sub object         { return $_[0]->SUPER::object->get_sub_object; } ## Gets the actual blast object instead of the Tools object
 sub get_slice_name { return $_[1]->name;                          }
+sub blast_options  { return undef;                                } ## Don't display blast button for blast results
 
 sub new {
   ## @override

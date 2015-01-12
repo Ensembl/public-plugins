@@ -28,14 +28,17 @@ Ensembl.Panel.Content = Ensembl.Panel.Content.extend({
   enableBlastButton: function(seq) {
     var panel = this;
 
-    if (seq && !this.blastButtonEnabled) {
+    if (!this.blastButtonEnabled) {
 
-      this.elLk.blastButton = this.el.find('._blast_button').removeClass('modal_link hidden').on('click', function(e) {
+      this.elLk.blastButton = this.el.find('._blast_button').removeClass('modal_link').filter(':not(._blast_no_button)').removeClass('hidden').end().on('click', function(e) {
         e.preventDefault();
         panel.runBlastSeq();
       });
 
-      if (this.elLk.blastButton.length) {
+      // rel attribute takes precedence over the sequence parsed on page
+      seq = this.elLk.blastButton.prop('rel') || seq;
+
+      if (seq && this.elLk.blastButton.length) {
 
         this.elLk.blastForm = $('<form>').appendTo(document.body).hide()
           .attr({action: this.elLk.blastButton.attr('href'), method: 'post'})
