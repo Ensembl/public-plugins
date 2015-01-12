@@ -30,7 +30,7 @@ Ensembl.Panel.Content = Ensembl.Panel.Content.extend({
 
     if (!this.blastButtonEnabled) {
 
-      this.elLk.blastButton = this.el.find('._blast_button').removeClass('modal_link hidden').on('click', function(e) {
+      this.elLk.blastButton = this.el.find('._blast_button').removeClass('modal_link').filter(':not(._blast_no_button)').removeClass('hidden').end().on('click', function(e) {
         e.preventDefault();
         panel.runBlastSeq();
       });
