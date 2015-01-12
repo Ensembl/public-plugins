@@ -86,7 +86,10 @@ my $db  = {
   'trackable' => 0
 };
 
-print sprintf "INFO: Deleting tickets older than %s seconds from %s on %s:%s\n", $sd->ENSEMBL_TICKETS_VALIDITY, $db->{'database'}, $db->{'host'}, $db->{'port'};
+print sprintf "INFO: Current time %s\n", scalar localtime;
+print sprintf "INFO: Deleting tickets created before %s\n", scalar localtime(time - $sd->ENSEMBL_TICKETS_VALIDITY);
+print sprintf "INFO: Database %s\n", $db->{'database'};
+print sprintf "INFO: Host %s:%s\n", $db->{'host'}, $db->{'port'};
 
 # Register db with rose api
 ORM::EnsEMBL::Rose::DbConnection->register_database($db);
