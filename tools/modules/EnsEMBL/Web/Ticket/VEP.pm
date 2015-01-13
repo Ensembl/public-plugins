@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -77,8 +77,11 @@ sub init_from_user_input {
 
   # detect file format
   my $detected_format;
-  first { m/^[^\#]/ && ($detected_format = detect_format($_)) } file_get_contents($file_path);
-
+  try {
+    first { m/^[^\#]/ && ($detected_format = detect_format($_)) } file_get_contents($file_path);
+  } catch {
+    throw exception('InputError', "The input format is invalid: the format is not recognized or there is a formatting issue in the input");
+  };
   my $job_data = { map { my @val = $hub->param($_); $_ => @val > 1 ? \@val : $val[0] } grep { $_ !~ /^text/ && $_ ne 'file' } $hub->param };
 
   $job_data->{'species'}    = $species;
