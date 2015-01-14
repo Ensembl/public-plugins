@@ -219,6 +219,7 @@ sub show_fields {
     priority          => {
       'type'      => 'dropdown',
       'label'     => 'Headline position on homepage',
+      'value'     => '1',
       'values'    => [
                       {'value' => '4', 'caption' => '1st'}, 
                       {'value' => '3', 'caption' => '2nd'}, 
