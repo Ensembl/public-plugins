@@ -224,7 +224,7 @@ sub show_fields {
                       {'value' => '4', 'caption' => '1st'}, 
                       {'value' => '3', 'caption' => '2nd'}, 
                       {'value' => '2', 'caption' => '3rd'}, 
-                      {'value' => '1', 'caption' => 'Not a headline'},
+                      {'value' => '1', 'caption' => 'Not a headline', 'selected' => 1},
                     ],
     },
 
