@@ -27,13 +27,13 @@ use parent qw(
 );
 
 sub content_ticket {
-  my ($self, $ticket, $jobs) = @_;
+  my ($self, $ticket, $jobs, $is_owned_ticket) = @_;
   my $hub     = $self->hub;
   my $is_view = ($hub->function || '') eq 'View';
   my $table;
 
   for (@$jobs) {
-    $table = $self->job_details_table($_);
+    $table = $self->job_details_table($_, $is_owned_ticket);
     $table->set_attribute('class', $is_view ? 'plain-box' : 'toggleable hidden _ticket_details');
   }
 

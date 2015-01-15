@@ -29,11 +29,8 @@ use EnsEMBL::Web::BlastConstants qw(CONFIGURATION_FIELDS);
 use parent qw(EnsEMBL::Web::Component::Tools);
 
 sub job_details_table {
-  ## A two column layout displaying a job's details
-  ## @param Job object
-  ## @params Extra params as required by get_job_summary method
-  ## @return DIV node (as returned by new_twocol method)
-  my ($self, $job) = splice @_, 0, 2;
+  ## @override
+  my ($self, $job, $is_owned_ticket) = @_;
 
   my $object      = $self->object;
   my $hub         = $self->hub;
@@ -44,7 +41,7 @@ sub job_details_table {
   my $configs     = $self->_display_config($job_data->{'configs'});
   my $two_col     = $self->new_twocol;
   my $sequence    = $object->get_input_sequence_for_job($job);
-  my $job_summary = $self->get_job_summary($job, @_);
+  my $job_summary = $self->get_job_summary($job, $is_owned_ticket);
   my $result_link = $job_summary->get_nodes_by_flag('view_results_link')->[0];
 
   if ($result_link) {
