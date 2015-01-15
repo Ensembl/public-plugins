@@ -290,21 +290,18 @@ sub ticket_buttons {
 
     # Share button
     $share_button = {
-      'node_name'   => 'span',
-      'class'       => [qw(_ht sprite share_icon)],
-      'children'    => [{
-        'node_name'   => 'span',
-        'class'       => '_ht_tip hidden',
-        'inner_HTML'  => $buttons->encode_htmlentities(sprintf '<form class="_ticket_share ticket-share-form top-margin right-margin" action="%s">
-                            <p><label><input name="share" type="checkbox" value="1"%s />&nbsp;Share ticket via URL</label></p>
-                            <p class="_ticket_share_url"><input class="ticket-share-input" type="text" value="%s%s" /></p>
-                          </form>',
-                          $hub->url('Json', {'action' => $action, 'function' => 'share', 'tl' => $url_param}),
-                          $ticket->visibility eq 'public' ? ' checked="checked"' : '',
-                          $hub->species_defs->ENSEMBL_BASE_URL,
-                          $hub->url($object->get_ticket_share_link($ticket))
-        )
-      }]
+      'node_name'   => 'div',
+      'class'       => [qw(_ticket_share ticket-share-icon hidden sprite share_icon)],
+      'inner_HTML'  => sprintf('<form class="top-margin" action="%s">
+                          <p><label><input name="share" type="checkbox" value="1"%s />&nbsp;Share ticket via URL</label></p>
+                          <p class="_ticket_share_url%s"><input class="ticket-share-input" type="text" value="%s%s" /></p>
+                        </form>',
+                        $hub->url('Json', {'action' => $action, 'function' => 'share', 'tl' => $url_param}),
+                        $ticket->visibility eq 'public' ? ' checked="checked"' : '',
+                        $ticket->visibility eq 'public' ? '' : ' hidden',
+                        $hub->species_defs->ENSEMBL_BASE_URL,
+                        $hub->url($object->get_ticket_share_link($ticket))
+      )
     };
 
     # Icon to delete the ticket
