@@ -23,7 +23,8 @@ use warnings;
 
 sub blast_options {
   ## @override
-  return {'seq_id' => shift->hub->param('t')};
+  my $hub = shift->hub;
+  return $hub->species_defs->ENSEMBL_BLAST_BY_SEQID ? {'seq_id' => $hub->param('t')} : {'no_button' => 1};
 }
 
 1;
