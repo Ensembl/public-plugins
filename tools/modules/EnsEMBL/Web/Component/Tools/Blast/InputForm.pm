@@ -94,6 +94,7 @@ sub get_form_node {
   my $form            = $self->new_tool_form('Blast', {'class' => 'blast-form'});
   my $fieldset        = $form->fieldset;
   my $form_params     = $object->get_blast_form_options;
+  my $blast_by_seqid  = $hub->species_defs->ENSEMBL_BLAST_BY_SEQID;
   my $options         = delete $form_params->{'options'};
   my $combinations    = delete $form_params->{'combinations'};
   my $missing_sources = delete $form_params->{'missing_sources'};
@@ -135,12 +136,14 @@ sub get_form_node {
   $fieldset->add_hidden({
     'name'            => 'fetch_sequence_url',
     'value'           => $hub->url('Json', {'function' => 'fetch_sequence'})
-  });
+  }) if $blast_by_seqid;
 
   my $query_seq_field = $fieldset->add_field({
     'label'           => 'Sequence data',
     'field_class'     => '_adjustable_height',
-    'helptip'         => 'Enter sequence as plain text or in FASTA format, or enter a sequence ID or accession from EnsEMBL, EMBL, UniProt or RefSeq',
+    'helptip'         => $blast_by_seqid
+                            ? 'Enter sequence as plain text or in FASTA format, or enter a sequence ID or accession from EnsEMBL, EMBL, UniProt or RefSeq'
+                            : 'Enter sequence as plain text or in FASTA format',
     'elements'        => [{
       'type'            => 'div',  # container used by js for adding sequence divs
       'element_class'   => '_sequence js_sequence_wrapper hidden',
@@ -150,7 +153,7 @@ sub get_form_node {
       'children'        => [{'node_name' => 'div', 'class' => 'query_sequence_wrapper'}]
     }, {
       'type'            => 'text',
-      'value'           =>  sprintf('Maximum of %s sequences (type in plain text, FASTA or sequence ID)', MAX_NUM_SEQUENCES),
+      'value'           =>  sprintf('Maximum of %s sequences (%s)', MAX_NUM_SEQUENCES, $blast_by_seqid ? 'type in plain text, FASTA or sequence ID' : 'type in plain text or FASTA'),
       'class'           => 'inactive query_sequence',
       'name'            => 'query_sequence',
     }, {

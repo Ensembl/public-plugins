@@ -42,6 +42,9 @@ sub update_conf {
   $SiteDefs::ENSEMBL_VEP_ENABLED    = 1;
   $SiteDefs::ENSEMBL_AC_ENABLED     = 1;
 
+  # Leave it on if mechanism to fetch sequence by IDs is working
+  $SiteDefs::ENSEMBL_BLAST_BY_SEQID = 1;
+
   # Path to BLAT client
   $SiteDefs::ENSEMBL_BLAT_BIN_PATH = '/path/to/gfClient';
 

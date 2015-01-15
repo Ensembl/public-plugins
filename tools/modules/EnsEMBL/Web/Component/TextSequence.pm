@@ -30,12 +30,15 @@ sub buttons {
   my @buttons = $self->PREV::buttons(@_);
 
   if (my $blast_options = $self->blast_options) {
-    push @buttons, {
+    my $button = {
       'caption'   => $blast_options->{'caption'} || 'BLAST this sequence',
       'url'       => $hub->url($blast_options->{'url'} || {qw(type Tools action Blast)}),
-      'class'     => sprintf('blast hidden _blast_button%s', $blast_options->{'no_button'} ? ' _blast_no_button' : ''),
-      'rel'       => $blast_options->{'seq_id'} || ''
+      'class'     => sprintf('blast hidden _blast_button%s', $blast_options->{'no_button'} ? ' _blast_no_button' : '')
     };
+
+    $button->{'rel'} = $blast_options->{'seq_id'} || '' if $hub->species_defs->ENSEMBL_BLAST_BY_SEQID;
+
+    push @buttons, $button;
   }
 
   return @buttons;
@@ -46,7 +49,7 @@ sub blast_options {
   ## @return Hashref with following keys (or undef to prevent displaying the button)
   ##  - caption: Button caption
   ##  - url: URL hashref as accepted by hub->url
-  ##  - seq_id: Sequence id (JavaScript will parse the sequence displayed on the page if this is not provided)
+  ##  - seq_id: Sequence id (JavaScript will parse the sequence displayed on the page if this is not provided) (only works is ENSEMBL_BLAST_BY_SEQID is on)
   ##  - no_button: Flag to disable the blast button, but keep the 'BLAST selected sequence' popup only
   return shift->hub->action =~ /Align/ ? undef : {}; # disabled for Alignment pages by default
 }
