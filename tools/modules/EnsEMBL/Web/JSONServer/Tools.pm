@@ -62,6 +62,14 @@ sub json_refresh_tickets {
   return $self->call_js_panel_method('updateTicketList', [ $tickets_old eq $tickets_new ? undef : $tickets_new, $auto_refresh ]);
 }
 
+sub json_share {
+  my $self        = shift;
+  my $object      = $self->object;
+  my $visibility  = $object->change_ticket_visibility($self->hub->param('share') ? 'public' : 'private');
+
+  return { 'shared' => $visibility eq 'public' ? 1 : 0 };
+}
+
 sub json_load_ticket {
   my $self = shift;
 

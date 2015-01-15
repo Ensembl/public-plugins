@@ -397,6 +397,21 @@ sub get_ticket_share_link {
   };
 }
 
+sub change_ticket_visibility {
+  ## Changes the 'visibility' column of the ticket according to the argument provided
+  ## @param private or public
+  my ($self, $visibility) = @_;
+
+  my $ticket = $self->get_requested_ticket;
+
+  if ($ticket->visibility ne $visibility) {
+    $ticket->visibility($visibility);
+    $ticket->save;
+  }
+
+  return $ticket->visibility;
+}
+
 sub update_ticket_and_jobs {
   ## Updates the given tickets according to the validity and linked jobs according to the corresponding ones in the dispatcher
   ## @params List of Ticket objects to which jobs are linked
