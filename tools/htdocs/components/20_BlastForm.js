@@ -324,7 +324,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
    * @param Seq id or accession id
    * @return false it seq id or accession id is invalid, true otherwise
    */
-    if (seqId.match(/[0-9]+/) && seqId.match(/^[a-z]{1}[a-z0-9\.\-\_]{4,30}$/i)) {
+    if (this.fetchSequenceURL && seqId.match(/[0-9]+/) && seqId.match(/^[a-z]{1}[a-z0-9\.\-\_]{4,30}$/i)) {
       this.ajax({
         'comet'   : true,
         'url'     : this.fetchSequenceURL,

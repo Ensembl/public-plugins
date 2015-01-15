@@ -23,10 +23,7 @@ use warnings;
 
 sub blast_options {
   ## @override
-  return {
-    'seq_id'    => shift->hub->param('t'),
-    'no_button' => 1
-  };
+  return {'no_button' => 1};
 }
 
 1;
