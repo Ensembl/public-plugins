@@ -47,8 +47,8 @@ sub content {
 
   # final HTML
   return sprintf('
-    <h3><a rel="_blast_queryplot" class="toggle _slide_toggle set_cookie open" href="#">HSP distribution on query sequence:</a></h3>
-    <div class="_blast_queryplot toggleable">%s</div>',
+    <h3><a rel="_blast_queryplot" class="toggle _slide_toggle set_cookie closed" href="#">HSP distribution on query sequence:</a></h3>
+    <div class="_blast_queryplot toggleable hidden">%s</div>',
     $image->render,
   );
 }

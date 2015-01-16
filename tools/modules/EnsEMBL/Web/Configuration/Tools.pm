@@ -76,8 +76,8 @@ sub populate_tree {
         results         EnsEMBL::Web::Component::Tools::Blast::ResultsSummary
         table           EnsEMBL::Web::Component::Tools::Blast::ResultsTable
         karyotype       EnsEMBL::Web::Component::Tools::Blast::Karyotype
+        hsps            EnsEMBL::Web::Component::Tools::Blast::HspQueryPlot
       )],
-  #      hsps            EnsEMBL::Web::Component::Tools::Blast::HspQueryPlot
       { 'availability' => 1, 'concise' => $object ? $object->long_caption : '', 'no_menu_entry' => $hide_result }
     ));
 
