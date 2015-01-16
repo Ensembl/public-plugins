@@ -216,18 +216,20 @@ sub delete_ticket_or_job {
     if ($job) {
 
       # if there's only one job linked to a ticket, mark the ticket for removal
-      $ticket       = $job->ticket;
-      $ticket_type  = $ticket->ticket_type_name;
-      $ticket       = undef if $ticket->job_count > 1;
+      # skip if the ticket doesn't belong to the user
+      ($ticket)     = $self->user_accessible_tickets($job->ticket);
+      $ticket_type  = $ticket->ticket_type_name if $ticket;
+      $ticket       = undef if $ticket && $ticket->job_count > 1;
     }
 
   # if job_id is missing, but ticket_name is provided, it's a request to the ticket
   } elsif ($params->{'ticket_name'}) {
-    $ticket       = $self->get_requested_ticket;
+    ($ticket)     = $self->user_accessible_tickets($self->get_requested_ticket);
     $ticket_type  = $ticket->ticket_type_name if $ticket;
   }
 
-  return unless $ticket || $job;
+  # ticket type will be undef if no ticket/job was found with the given name/id that is owned by the user
+  return unless $ticket_type;
 
   # get the path of the related directory that needs to be removed
   ($job) = $ticket->job if !$job && $ticket;
@@ -258,7 +260,7 @@ sub save_ticket_to_account {
   my $self = shift;
   my $result;
 
-  if (my $ticket = $self->get_requested_ticket) {
+  if (my ($ticket) = $self->user_accessible_tickets($self->get_requested_ticket)) {
 
     my $ticket_type = $ticket->ticket_type_name;
     my %dirs;
@@ -324,9 +326,9 @@ sub get_current_tickets {
 
     my $ticket_types  = $self->rose_manager(qw(Tools TicketType))->fetch_with_current_tickets({
       'site_type'       => $hub->species_defs->ENSEMBL_SITETYPE,
-      'session_id'      => $hub->session->create_session_id, $user ? (
-      'user_id'         => $user->user_id ) : (), $tool_type ? ( # If object is Tools, show all tickets
-      'type'            => $tool_type) : ()
+      'session_id'      => $hub->session->create_session_id,
+      'user_id'         => $user && $user->user_id,
+      'type'            => $tool_type
     });
 
     my @tickets = sort { $b->created_at <=> $a->created_at } map $_->ticket, @$ticket_types;
@@ -349,15 +351,16 @@ sub get_requested_ticket {
     my $ticket;
 
     if ($ticket_name) {
-      my $ticket_type = $self->rose_manager(qw(Tools TicketType))->fetch_with_current_tickets({
+      my $ticket_type = $self->rose_manager(qw(Tools TicketType))->fetch_with_requested_ticket({
         'site_type'     => $hub->species_defs->ENSEMBL_SITETYPE,
         'ticket_name'   => $ticket_name,
-        'session_id'    => $hub->session->create_session_id, $user ? (
-        'user_id'       => $user->user_id ) : ()
+        'session_id'    => $hub->session->create_session_id,
+        'user_id'       => $user && $user->user_id,
+        'public_ok'     => 1
       });
 
-      if (@$ticket_type) {
-        $ticket = $ticket_type->[0]->ticket->[0];
+      if ($ticket_type) {
+        $ticket = $ticket_type->ticket->[0];
         $self->update_ticket_and_jobs($ticket);
       }
     }
@@ -366,6 +369,47 @@ sub get_requested_ticket {
   }
 
   return $self->{'_requested_ticket'};
+}
+
+sub user_accessible_tickets {
+  ## Filters a list of ticket objects to return only those that are owned by the user (either by user_id or session_id)
+  ## @param   List of ticket object
+  ## @return  List of ticket object
+  my $self        = shift;
+  my $hub         = $self->hub;
+  my $user_id     = $hub->user ? $hub->user->user_id : 0;
+  my $session_id  = $hub->session->create_session_id;
+
+  return grep { $_->owner_type eq 'user' ? $_->owner_id eq $user_id : $_->owner_id eq $session_id } @_;
+}
+
+sub get_ticket_share_link {
+  ## Gets a link to be used to share tickets with other users
+  ## @param Ticket object
+  ## @return URL hashref as accepted by hub->url method
+  my ($self, $ticket) = @_;
+  return {
+    '__clear'   => 1,
+    'type'      => 'Tools',
+    'action'    => $ticket->ticket_type_name,
+    'function'  => 'Ticket',
+    'tl'        => $self->create_url_param({'ticket_name' => $ticket->ticket_name})
+  };
+}
+
+sub change_ticket_visibility {
+  ## Changes the 'visibility' column of the ticket according to the argument provided
+  ## @param private or public
+  my ($self, $visibility) = @_;
+
+  my $ticket = $self->get_requested_ticket;
+
+  if ($ticket->visibility ne $visibility) {
+    $ticket->visibility($visibility);
+    $ticket->save;
+  }
+
+  return $ticket->visibility;
 }
 
 sub update_ticket_and_jobs {
@@ -430,13 +474,14 @@ sub get_requested_job {
           : ()
         );
 
-      my $ticket_type = $self->rose_manager(qw(Tools TicketType))->fetch_with_given_job({
+      my $ticket_type = $self->rose_manager(qw(Tools TicketType))->fetch_with_requested_ticket({
         'site_type'     => $hub->species_defs->ENSEMBL_SITETYPE,
         'ticket_name'   => $url_params->{'ticket_name'},
         'job_id'        => $job_id,
-        'session_id'    => $hub->session->create_session_id, $user ? (
-        'user_id'       => $user->user_id ) : (), $tool_type ? ( # If object is Tools, it could be any ticket being requested
-        'type'          => $tool_type) : (),
+        'session_id'    => $hub->session->create_session_id,
+        'user_id'       => $user && $user->user_id,
+        'public_ok'     => 1,
+        'type'          => $tool_type,
         %results_key
       });
 

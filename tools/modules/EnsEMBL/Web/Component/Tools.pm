@@ -54,11 +54,9 @@ sub _init {
 sub get_job_summary {
   ## Reads the job dispatcher_status field, and display status accordingly
   ## @param Job object
-  ## @param Arrayref with name of the links that need to be displayed (edit and delete) (defaults to displaying both)
+  ## @param Flag to tell whether user or session owns the ticket or not
   ## @return DIV node
-  my ($self, $job, $links) = @_;
-
-  $links ||= [qw(edit delete)];
+  my ($self, $job, $is_owned_ticket) = @_;
 
   my $hub               = $self->hub;
   my $object            = $self->object;
@@ -95,7 +93,7 @@ sub get_job_summary {
 
   my $margin_left_class = @{$job_status_div->last_child->child_nodes} ? 'left-margin' : ''; # set left margin only if required
 
-  foreach my $link (@$links) {
+  foreach my $link ($is_owned_ticket ? qw(edit delete) : qw(edit)) {
     if ($icons->{$link}) {
       $job_status_div->last_child->append_child('a', {
         'href'        => $hub->url(@{$icons->{$link}{'url'}}),
@@ -157,9 +155,9 @@ sub get_job_summary {
 sub job_details_table {
   ## A two column layout displaying a job's details
   ## @param Job object
-  ## @params Extra params as required by get_job_summary method
+  ## @param Flag to tell whether user or session owns the ticket or not
   ## @return DIV node (as returned by new_twocol method)
-  my ($self, $job) = splice @_, 0, 2;
+  my ($self, $job, $is_owned_ticket) = @_;
 
   my $object    = $self->object;
   my $job_data  = $job->job_data;
@@ -167,7 +165,7 @@ sub job_details_table {
   my $sd        = $self->hub->species_defs;
   my $two_col   = $self->new_twocol;
 
-  $two_col->add_row('Job summary',  $self->get_job_summary($job, @_)->render);
+  $two_col->add_row('Job summary',  $self->get_job_summary($job, $is_owned_ticket)->render);
   $two_col->add_row('Species',      $sd->tools_valid_species($species)
     ? sprintf('<img class="job-species" src="%sspecies/16/%s.png" alt="" height="16" width="16">%s', $self->img_url, $species, $sd->species_label($species, 1))
     : $species =~ s/_/ /rg

@@ -53,6 +53,8 @@ p:hover span.job-sprites          { display: inline-block; }
 table.ss tr.bg1 span.job-sprites  { background-color: [[PANEL_BG]];   }
 table.ss tr.bg2 span.job-sprites  { background-color: [[NEUTRAL_BG]]; }
 
+div.ticket-share-icon *           { display: none; }
+
 /* Species icon for a job */
 img.job-species                   { border-radius: 2px; float: left; margin: 0 6px 0 0; }
 

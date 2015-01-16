@@ -32,6 +32,7 @@ CREATE TABLE `ticket` (
   `ticket_type_name` varchar(32) NOT NULL DEFAULT '',
   `owner_id` varchar(32) NOT NULL,
   `owner_type` enum('user','session') NOT NULL DEFAULT 'session',
+  `visibility` enum('private','public') NOT NULL DEFAULT 'public',
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `modified_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
   `status` enum('Current','Expiring','Expired','Deleted') NOT NULL DEFAULT 'Current',

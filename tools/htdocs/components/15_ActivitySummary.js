@@ -61,6 +61,34 @@ Ensembl.Panel.ActivitySummary = Ensembl.Panel.ContentTools.extend({
       return !!ticketName && !Ensembl.EventManager.trigger('toolsViewTicket', ticketName);
     });
 
+    // Ticket share icon
+    this.el.find('._ticket_share').each(function() {
+      $(this).helptip({
+        content: $(this).html(),
+        close: function(e, ui, flag) {
+          if (flag) {
+            $(this).helptip('option', 'content', $(this).html()).helptip('close');
+          }
+        },
+        open: function(e, ui) {
+          ui.tooltip.find('input[type=checkbox]').on('change', { icon: $(this) }, function(e) {
+            var form = $(this).parents('form').on('submit', function() { return false; });
+            $.ajax({
+              'url'       : form.prop('action'),
+              'type'      : 'get',
+              'data'      : form.serialize(),
+              'dataType'  : 'json',
+              'context'   : { tooltip: ui.tooltip, icon: e.data.icon },
+              'success'   : function(json) {
+                this.tooltip.find('._ticket_share_url').toggle(!!json.shared);
+                this.icon.find('._ticket_share_url').toggle(!!json.shared).end().find('input[type=checkbox]')[json.shared ? 'attr' : 'removeAttr']('checked', 'checked'); // $.prop doesn't work as it doesn't change the raw html
+              }
+            });
+          });
+        }
+      });
+    });
+
     this.toggleEmptyTable();
     this.updateTicketList(false, !!this.el.find('input[name=_auto_refresh]').remove().val());
   },

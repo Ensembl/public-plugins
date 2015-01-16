@@ -27,11 +27,11 @@ use parent qw(
 );
 
 sub content_ticket {
-  my ($self, $ticket, $jobs) = @_;
+  my ($self, $ticket, $jobs, $is_owned_ticket) = @_;
   my $hub     = $self->hub;
   my $div     = $self->dom->create_element('div');
 
-  $div->append_child($self->job_details_table($_))->set_attribute('class', 'plain-box') for @$jobs;
+  $div->append_child($self->job_details_table($_, $is_owned_ticket))->set_attribute('class', 'plain-box') for @$jobs;
 
   return $div->render;
 }

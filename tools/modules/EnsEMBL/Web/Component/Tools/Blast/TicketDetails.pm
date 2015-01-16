@@ -27,7 +27,7 @@ use parent qw(
 );
 
 sub content_ticket {
-  my ($self, $ticket, $jobs) = @_;
+  my ($self, $ticket, $jobs, $is_owned_ticket) = @_;
   my $hub     = $self->hub;
   my $div     = $self->dom->create_element('div');
   my $is_view = ($hub->function || '') eq 'View';
@@ -35,7 +35,7 @@ sub content_ticket {
   $div->set_attribute('class', 'plain-box') if $is_view;
 
   for (@$jobs) {
-    my $job_table = $self->job_details_table($_);
+    my $job_table = $self->job_details_table($_, $is_owned_ticket);
     if (!$is_view) {
       $job_table->append_child('div', {
         'class'     => [qw(_ticket_details hidden toggleable)], # this div is hidden by default

@@ -34,6 +34,7 @@ sub content {
   my $object        = $self->object;
   my $tickets       = $object->get_current_tickets;
   my $tool_type     = $object->tool_type;
+  my $owned_tickets = { map { $_->ticket_name => 1 } $object->user_accessible_tickets(@$tickets) };
 
   my $table         =  $self->new_table([
     { 'key' => 'analysis',  'title' => 'Analysis',      'sort' => 'string'          },
@@ -47,7 +48,7 @@ sub content {
     'hidden_columns'  => [1],
   });
 
-  if ($tickets && @$tickets > 0) {
+  if (@$tickets) {
 
     foreach my $ticket (@$tickets) {
 
@@ -58,15 +59,15 @@ sub content {
       my $component = $class eq __PACKAGE__ && dynamic_require(__PACKAGE__ =~ s/(::[^:]+)$/::$ticket_type$1/r, 1) || $class; # fallback to the generic parent class
       bless $self, $component unless ref $self eq $component;
 
-      my @jobs_summary  = map $self->job_summary_section($ticket, $_, $_->result_count)->render, $ticket->job;
+      my @jobs_summary  = map $self->job_summary_section($ticket, $_, $_->result_count, $owned_tickets->{$ticket_name})->render, $ticket->job;
       my $created_at    = $ticket->created_at;
 
       $table->add_row({
         'analysis'  => $self->analysis_caption($ticket),
-        'ticket'    => $self->ticket_link($ticket),
+        'ticket'    => $self->ticket_link($ticket, $owned_tickets->{$ticket_name}),
         'jobs'      => join('', @jobs_summary),
         'created'   => sprintf('<span class="hidden">%d</span>%s', $created_at =~ s/[^\d]//gr, $self->format_date($created_at)),
-        'extras'    => $self->ticket_buttons($ticket)->render,
+        'extras'    => $self->ticket_buttons($ticket, $owned_tickets->{$ticket_name})->render,
         'options'   => {'class' => "_ticket_$ticket_name"}
       });
     }
@@ -129,7 +130,7 @@ sub content {
 }
 
 sub job_summary_section {
-  my ($self, $ticket, $job, $result_count) = @_;
+  my ($self, $ticket, $job, $result_count, $is_owned_ticket) = @_;
 
   my $hub               = $self->hub;
   my $object            = $self->object;
@@ -156,7 +157,7 @@ sub job_summary_section {
   } : undef;
 
   if ($result_url && $assembly_mismatch) {
-    if ($assembly_site && $ticket->owner_type eq 'user') { # if job is from another assembly and we do have a site for that assembly
+    if ($assembly_site && $ticket->owner_type eq 'user' && $is_owned_ticket) { # if job is from another assembly and we do have a site for that assembly
       $result_url = { # result can only be seen by logged in user
         'then'      => $hub->url($result_url),
         'type'      => 'Account',
@@ -212,7 +213,7 @@ sub job_summary_section {
           'class'         => [qw(_ht sprite edit_icon)],
           'title'         => 'Edit &amp; resubmit job (create a new ticket)'
         }]
-      }, {
+      }, $is_owned_ticket ? {
         'node_name'     => 'a',
         'class'         => [qw(_json_link job-sprite)],
         'href'          => $hub->url('Json', {'action' => $action, 'function' => 'delete', 'tl' => $url_param}),
@@ -225,13 +226,13 @@ sub job_summary_section {
           'class'         => [qw(hidden _confirm)],
           'inner_HTML'    => qq(This will delete the following job permanently:\n$job_description)
         }]
-      }]}
+      } : ()]}
     ]
   });
 }
 
 sub ticket_link {
-  my ($self, $ticket) = @_;
+  my ($self, $ticket, $is_owned_ticket) = @_;
   my $ticket_name = $ticket->ticket_name;
 
   return sprintf('<a class="_ticket_view _change_location" href="%s">%s</a>',
@@ -245,7 +246,7 @@ sub ticket_link {
 }
 
 sub ticket_buttons {
-  my ($self, $ticket) = @_;
+  my ($self, $ticket, $is_owned_ticket) = @_;
   my $hub           = $self->hub;
   my $object        = $self->object;
   my $user          = $hub->user;
@@ -253,59 +254,88 @@ sub ticket_buttons {
   my $url_param     = $object->create_url_param({'ticket_name' => $ticket->ticket_name});
   my $job_count     = $ticket->job_count;
   my $action        = $ticket->ticket_type_name;
+  my $buttons       = $self->dom->create_element('div');
 
-  my $save_button   = {
-    'node_name'       => 'span',
-    'class'           => [qw(_ht sprite save_icon), $user && $owner_is_user ? 'sprite_disabled' : ()],
-    'title'           => $user ? $owner_is_user ? 'Already saved to account' : 'Save to account' : 'Login to save to account'
-  };
+  my ($save_button, $edit_button, $share_button, $delete_button, $expiring_warning);
 
-  $save_button      = {
-    'node_name'       => 'a',
-    'class'           => [ $user ? '_json_link' : 'modal_link' ],
-    'href'            => $user ? $hub->url('Json', {'type' => 'Tools', 'action' => $action, 'function' => 'save', 'tl' => $url_param}) : $hub->url({'type' => 'Account', 'action' => 'Login'}),
-    'children'        => [ $save_button ]
-  } unless $owner_is_user;
+  # buttons that should only be displayed if user or session owns the ticket
+  if ($is_owned_ticket) {
 
-  my $warning;
-  if ($ticket->status ne 'Current') {
-
-    my $life_left = $ticket->calculate_life_left($self->hub->species_defs->ENSEMBL_TICKETS_VALIDITY);
-       $life_left = sprintf '%d', $life_left / 86400;
-       $life_left = $life_left ? sprintf('after approximately %d day(s)', $life_left) : 'soon'; # less than 24 hours means 'soon'
-
-    $warning      = {
-      'node_name'   => 'span',
-      'class'       => [qw(ticket-expiring _ht)],
-      'title'       => "This ticket will get deleted $life_left. Please save it to your account to prevent it from getting deleted."
+    # Icon to save the ticket to user account
+    $save_button = {
+      'node_name' => 'span',
+      'class'     => [qw(_ht sprite save_icon), $user && $owner_is_user ? 'sprite_disabled' : ()],
+      'title'     => $user ? $owner_is_user ? 'Already saved to account' : 'Save to account' : 'Login to save to account'
     };
+    $save_button = {
+      'node_name' => 'a',
+      'class'     => [ $user ? '_json_link' : 'modal_link' ],
+      'href'      => $user ? $hub->url('Json', {'type' => 'Tools', 'action' => $action, 'function' => 'save', 'tl' => $url_param}) : $hub->url({'type' => 'Account', 'action' => 'Login'}),
+      'children'  => [ $save_button ]
+    } unless $owner_is_user;
+
+    # Red warning triangle if ticket is due to be deleted
+    if ($ticket->status ne 'Current') {
+
+      my $life_left = $ticket->calculate_life_left($self->hub->species_defs->ENSEMBL_TICKETS_VALIDITY);
+         $life_left = sprintf '%d', $life_left / 86400;
+         $life_left = $life_left ? sprintf('after approximately %d day(s)', $life_left) : 'soon'; # less than 24 hours means 'soon'
+
+      $expiring_warning = {
+        'node_name' => 'span',
+        'class'     => [qw(ticket-expiring _ht)],
+        'title'     => "This ticket will get deleted $life_left. Please save it to your account to prevent it from getting deleted."
+      };
+    }
+
+    # Share button
+    $share_button = {
+      'node_name'   => 'div',
+      'class'       => [qw(_ticket_share ticket-share-icon hidden sprite share_icon)],
+      'inner_HTML'  => sprintf('<form class="top-margin" action="%s">
+                          <p><label><input name="share" type="checkbox" value="1"%s />&nbsp;Share ticket via URL</label></p>
+                          <p class="_ticket_share_url%s"><input class="ticket-share-input" type="text" value="%s%s" /></p>
+                        </form>',
+                        $hub->url('Json', {'action' => $action, 'function' => 'share', 'tl' => $url_param}),
+                        $ticket->visibility eq 'public' ? ' checked="checked"' : '',
+                        $ticket->visibility eq 'public' ? '' : ' hidden',
+                        $hub->species_defs->ENSEMBL_BASE_URL,
+                        $hub->url($object->get_ticket_share_link($ticket))
+      )
+    };
+
+    # Icon to delete the ticket
+    $delete_button = {
+      'node_name'   => 'a',
+      'class'       => ['_json_link'],
+      'href'        => $hub->url('Json', {'action' => $action, 'function' => 'delete', 'tl' => $url_param}),
+      'children'    => [{
+        'node_name'   => 'span',
+        'class'       => [qw(_ht sprite delete_icon)],
+        'title'       => 'Delete ticket'
+      }, {
+        'node_name'   => 'span',
+        'class'       => [qw(hidden _confirm)],
+        'inner_HTML'  => $job_count == 1
+          ? sprintf("This will delete the following job permanently:\n%s", $object->get_job_description($ticket->job->[0]))
+          : sprintf('This will delete %s jobs for this ticket.', $job_count == 2 ? 'both' : "all $job_count")
+      }]
+    }
   }
 
-  my $buttons       = $self->dom->create_element('div', { 'children' => [ $save_button, {
-    'node_name'       => 'a',
-    'class'           => [qw(_ticket_edit _change_location)],
-    'href'            => $hub->url({'action' => $action, 'function' => 'Edit', 'tl' => $url_param}),
-    'children'        => [{
-      'node_name'       => 'span',
-      'class'           => [qw(_ht sprite edit_icon)],
-      'title'           => 'Edit &amp; resubmit ticket (create new ticket)'
+  # Edit icon
+  $edit_button = {
+    'node_name'     => 'a',
+    'class'         => [qw(_ticket_edit _change_location)],
+    'href'          => $hub->url({'action' => $action, 'function' => 'Edit', 'tl' => $url_param}),
+    'children'      => [{
+      'node_name'     => 'span',
+      'class'         => [qw(_ht sprite edit_icon)],
+      'title'         => 'Edit &amp; resubmit ticket (create new ticket)'
     }]
-  }, {
-    'node_name'       => 'a',
-    'class'           => ['_json_link'],
-    'href'            => $hub->url('Json', {'action' => $action, 'function' => 'delete', 'tl' => $url_param}),
-    'children'        => [{
-      'node_name'       => 'span',
-      'class'           => [qw(_ht sprite delete_icon)],
-      'title'           => 'Delete ticket'
-    }, {
-      'node_name'       => 'span',
-      'class'           => [qw(hidden _confirm)],
-      'inner_HTML'      => $job_count == 1
-        ? sprintf("This will delete the following job permanently:\n%s", $object->get_job_description($ticket->job->[0]))
-        : sprintf('This will delete %s jobs for this ticket.', $job_count == 2 ? 'both' : "all $job_count")
-    }]
-  }, $warning || () ]});
+  };
+
+  $buttons->append_children(grep $_, $save_button, $edit_button, $share_button, $delete_button, $expiring_warning);
 
   return $buttons;
 }
