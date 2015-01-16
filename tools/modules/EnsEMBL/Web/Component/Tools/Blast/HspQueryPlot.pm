@@ -22,7 +22,7 @@ use strict;
 use warnings;
 
 use EnsEMBL::Draw::DrawableContainer;
-use EnsEMBL::Web::Document::Image;
+use EnsEMBL::Web::Document::Image::GD;
 use EnsEMBL::Web::Container::HSPContainer;
 
 use EnsEMBL::Web::BlastConstants qw(BLAST_KARYOTYPE_POINTER);
@@ -40,7 +40,7 @@ sub content {
   return '' unless @$results;
 
   # Draw the HSP image
-  my $image                   = EnsEMBL::Web::Document::Image->new($hub);
+  my $image                   = EnsEMBL::Web::Document::Image::GD->new($hub);
   $image->drawable_container  = EnsEMBL::Draw::DrawableContainer->new(EnsEMBL::Web::Container::HSPContainer->new($object, $job, \@pointer_cols), $hub->get_imageconfig('hsp_query_plot'));
   $image->imagemap            = 'yes';
   $image->set_button('drag');
