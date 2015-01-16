@@ -85,6 +85,15 @@ sub render {
     <li><a href="/perf">Nightly local full page-load times</a></li>
     <li><a href="/arewestable">Live server error monitoring (BETA)</a></li>
   </ul>
+  <h1>Disk usage</h1>
+  <ul>
+    <li><a href="/disk_usage/compara.html">Compara</a></li>
+    <li><a href="/disk_usage/genebuild.html">Genebuild</a></li>
+    <li><a href="/disk_usage/production.html">Production</a></li>
+    <li><a href="/disk_usage/regulation.html">Regulation</a></li>
+    <li><a href="/disk_usage/variation.html">Variation</a></li>
+    <li><a href="/disk_usage/web.html">Web</a></li>
+  </ul>
 </div></div>);
 
 }
