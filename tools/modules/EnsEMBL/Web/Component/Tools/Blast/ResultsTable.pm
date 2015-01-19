@@ -60,31 +60,33 @@ sub content {
     my $job_data    = $job->job_data;
     my $species     = $job->species;
     my $source      = $job_data->{'source'};
-    my $table       = $self->new_table([ $source =~/latestgp/i
-      ? (
-          { 'key' => 'tid',     'title'=> 'Genomic Location', 'align' => 'left',  'sort' => 'string',         'help' => $glossary->{'Genomic Location (BLAST Results)'} },
-          { 'key' => 'tori',    'title'=> 'Orientation',      'align' => 'left',  'sort' => 'string',         'help' => $glossary->{'Orientation (BLAST Results)'}      },
-        )
-      : (
-          { 'key' => 'tid',     'title'=> 'Subject name',     'align' => 'left',  'sort' => 'string',         'help' => $glossary->{'Subject name (BLAST Results)'}     },
-          { 'key' => 'tstart',  'title'=> 'Subject start',    'align' => 'left',  'sort' => 'numeric',        'help' => $glossary->{'Subject start (BLAST Results)'}    },
-          { 'key' => 'tend',    'title'=> 'Subject end',      'align' => 'left',  'sort' => 'numeric',        'help' => $glossary->{'Subject end (BLAST Results)'}      },
-          { 'key' => 'tori',    'title'=> 'Subject ori',      'align' => 'left',  'sort' => 'string',         'help' => $glossary->{'Subject ori (BLAST Results)'}      },
-          { 'key' => 'gid',     'title'=> 'Genomic Location', 'align' => 'left',  'sort' => 'string',         'help' => $glossary->{'Genomic Location (BLAST Results)'} },
-          { 'key' => 'gori',    'title'=> 'Orientation',      'align' => 'left',  'sort' => 'string',         'help' => $glossary->{'Orientation (BLAST Results)'}      },
-        ),
-        (
-          { 'key' => 'qid',     'title'=> 'Query name',       'align' => 'left',  'sort' => 'string',         'help' => $glossary->{'Query name (BLAST Results)'}       },
-          { 'key' => 'qstart',  'title'=> 'Query start',      'align' => 'left',  'sort' => 'numeric',        'help' => $glossary->{'Query start (BLAST Results)'}      },
-          { 'key' => 'qend',    'title'=> 'Query end',        'align' => 'left',  'sort' => 'numeric',        'help' => $glossary->{'Query end (BLAST Results)'}        },
-          { 'key' => 'qori',    'title'=> 'Query ori',        'align' => 'left',  'sort' => 'string',         'help' => $glossary->{'Query ori (BLAST Results)'}        },
-          { 'key' => 'len',     'title'=> 'Length',           'align' => 'left',  'sort' => 'numeric',        'help' => $glossary->{'Length (BLAST Results)'}           },
-          { 'key' => 'score',   'title'=> 'Score',            'align' => 'left',  'sort' => 'numeric',        'help' => $glossary->{'Score (BLAST Results)'}            },
-          { 'key' => 'evalue',  'title'=> 'E-val',            'align' => 'left',  'sort' => 'numeric',        'help' => $glossary->{'E-val (BLAST Results)'}            },
-          { 'key' => 'pident',  'title'=> '%ID',              'align' => 'left',  'sort' => 'numeric_hidden', 'help' => $glossary->{'%ID (BLAST Results)'}              },
-        )
-      ], [], {'data_table' => 1, 'exportable' => 0, 'sorting' => ['score desc']}
-    );
+    my @columns     = ( $source =~/latestgp/i ? (
+      { 'key' => 'tid',     'title'=> 'Genomic Location', 'align' => 'left',  'sort' => 'string',         'help' => $glossary->{'Genomic Location (BLAST Results)'} },
+      { 'key' => 'tori',    'title'=> 'Orientation',      'align' => 'left',  'sort' => 'string',         'help' => $glossary->{'Orientation (BLAST Results)'}      }
+    ) : (
+      { 'key' => 'tid',     'title'=> 'Subject name',     'align' => 'left',  'sort' => 'string',         'help' => $glossary->{'Subject name (BLAST Results)'}     },
+      { 'key' => 'tstart',  'title'=> 'Subject start',    'align' => 'left',  'sort' => 'numeric',        'help' => $glossary->{'Subject start (BLAST Results)'}    },
+      { 'key' => 'tend',    'title'=> 'Subject end',      'align' => 'left',  'sort' => 'numeric',        'help' => $glossary->{'Subject end (BLAST Results)'}      },
+      { 'key' => 'tori',    'title'=> 'Subject ori',      'align' => 'left',  'sort' => 'string',         'help' => $glossary->{'Subject ori (BLAST Results)'}      },
+      { 'key' => 'gid',     'title'=> 'Genomic Location', 'align' => 'left',  'sort' => 'string',         'help' => $glossary->{'Genomic Location (BLAST Results)'} },
+      { 'key' => 'gori',    'title'=> 'Orientation',      'align' => 'left',  'sort' => 'string',         'help' => $glossary->{'Orientation (BLAST Results)'}      }
+    ), (
+      { 'key' => 'qid',     'title'=> 'Query name',       'align' => 'left',  'sort' => 'string',         'help' => $glossary->{'Query name (BLAST Results)'}       },
+      { 'key' => 'qstart',  'title'=> 'Query start',      'align' => 'left',  'sort' => 'numeric',        'help' => $glossary->{'Query start (BLAST Results)'}      },
+      { 'key' => 'qend',    'title'=> 'Query end',        'align' => 'left',  'sort' => 'numeric',        'help' => $glossary->{'Query end (BLAST Results)'}        },
+      { 'key' => 'qori',    'title'=> 'Query ori',        'align' => 'left',  'sort' => 'string',         'help' => $glossary->{'Query ori (BLAST Results)'}        },
+      { 'key' => 'len',     'title'=> 'Length',           'align' => 'left',  'sort' => 'numeric',        'help' => $glossary->{'Length (BLAST Results)'}           },
+      { 'key' => 'score',   'title'=> 'Score',            'align' => 'left',  'sort' => 'numeric',        'help' => $glossary->{'Score (BLAST Results)'}            },
+      { 'key' => 'evalue',  'title'=> 'E-val',            'align' => 'left',  'sort' => 'numeric',        'help' => $glossary->{'E-val (BLAST Results)'}            },
+      { 'key' => 'pident',  'title'=> '%ID',              'align' => 'left',  'sort' => 'numeric_hidden', 'help' => $glossary->{'%ID (BLAST Results)'}              }
+    ));
+
+    my $table = $self->new_table(\@columns, [], {
+      'data_table'      => 1,
+      'exportable'      => 0,
+      'sorting'         => ['score desc'],
+      'hidden_columns'  => [ grep { $columns[$_]->{'key'} eq 'qori' } 0..$#columns ]
+    });
 
     # Data for table rows
     for (@$results) {
