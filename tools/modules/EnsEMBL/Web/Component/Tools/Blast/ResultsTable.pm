@@ -85,7 +85,6 @@ sub content {
 
     my $table = $self->new_table(\@columns, [], {
       'data_table'      => 1,
-      'exportable'      => 0,
       'sorting'         => ['score desc'],
       'hidden_columns'  => [ grep { $columns[$_]->{'key'} eq 'qori' } 0..$#columns ]
     });
