@@ -360,7 +360,6 @@ sub get_result_urls {
   my $start   = $hit->{'gstart'} < $hit->{'gend'} ? $hit->{'gstart'} : $hit->{'gend'};
   my $end     = $hit->{'gstart'} > $hit->{'gend'} ? $hit->{'gstart'} : $hit->{'gend'};
   my $length  = $end - $start;
-  my $p_track = $self->parse_search_type($job->job_data->{'search_type'}, 'search_method') ne 'BLASTN' ? ',codon_seq=normal' : ''; # show translated track for any seach type other than dna vs dna
 
   # add 5% padding on both sides
   $start  = int($start - $length * 0.05);
@@ -373,7 +372,6 @@ sub get_result_urls {
     'type'              => 'Location',
     'action'            => 'View',
     'r'                 => sprintf('%s:%s-%s', $hit->{'gid'}, $start, $end),
-    'contigviewbottom'  => "blast=normal$p_track",
     'tl'                => $url_param
   };
 
