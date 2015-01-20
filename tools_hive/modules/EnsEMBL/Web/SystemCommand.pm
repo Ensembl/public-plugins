@@ -66,7 +66,7 @@ sub execute {
   system($command);
 
   $self->{'error_code'}     = $? >> 8;
-  $self->{'error_message'}  = $self->{'error_map'}->{$self->{'error_code'}} || '';
+  $self->{'error_message'}  = $self->{'error_map'}->{$self->{'error_code'}} || "Unkown error ($self->{'error_code'})";
   $self->{'runnable'}->warning("SystemCommand Error: ($self->{'error_code'}) $self->{'error_message'}") if $self->{'error_code'};
 
   return $self;

@@ -149,7 +149,7 @@ sub run {
     '2'   => 'Error in BLAST database',
     '3'   => 'Error in BLAST engine',
     '4'   => 'Out of memory',
-    '255' => 'Unknown error'
+    '139' => 'Out of memory'
   })->execute({'log_file' => $blast_log});
 
   # Throw exception if any error occurred during running the blast process
