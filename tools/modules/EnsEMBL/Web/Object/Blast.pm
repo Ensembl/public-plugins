@@ -343,6 +343,7 @@ sub get_result_urls {
   }
 
   # Genes url
+  $urls->{'gene'} = [];
   for (@{$self->get_genes_for_hit($job, $result)}) {
     my $label = $_->display_xref;
     push @{$urls->{'gene'}}, {
