@@ -312,116 +312,139 @@ sub get_all_hits_in_slice_region {
   } @{$self->get_all_hits($job, $sort)} ];
 }
 
-sub get_result_url {
-  ## Gets required url links for the result hit
-  ## @param Link type (either one of these: target, location, alignment, query_sequence, genomic_sequence)
+sub get_result_urls {
+  ## Gets url links for the result hit
   ## @param Job object
   ## @param Result object
-  ## @return Hashref as accepted by hub->url
-  my ($self, $link_type, $job, $result) = @_;
+  ## @return Hashref of keys as link types and values as hashrefs as accepted by hub->url (or arrayref of such hashrefs in case of genes)
+  my ($self, $job, $result) = @_;
 
   my $species     = $job->species;
   my $job_data    = $job->job_data;
-  my $result_data = $result->result_data;
+  my $source      = $job_data->{'source'};
+  my $hit         = $result->result_data;
   my $url_param   = $self->create_url_param({'job_id' => $job->job_id, 'result_id' => $result->result_id});
+  my $urls        = {};
 
-  if ($link_type eq 'target') {
+  # Target url (only for sources other than genmoic seq)
+  if ($source !~ /latestgp/i) {
+    my $target = $self->get_target_object($hit, $source);
+       $target = $target->transcript if $target->isa('Bio::EnsEMBL::Translation');
 
-    my ($param, $gene, $gene_url, $gene_display);
+    my $param  = $target->isa('Bio::EnsEMBL::PredictionTranscript') ? 'pt' : 't';
 
-    my $source  = $job_data->{'source'};
-    my $target  = $self->get_target_object($result_data, $source);
-
-    if ($target->isa('Bio::EnsEMBL::Translation')) {
-      $param  = 'p';
-      $target = $target->transcript;
-    }
-
-    if ($target->isa('Bio::EnsEMBL::PredictionTranscript')) {
-      $param  = 'pt';
-    } else { # Bio::EnsEMBL::Transcript
-      $param  = 't';
-      $gene   = $target->get_Gene;
-    }
-
-    if ($gene) {
-      $gene_url = {
-        'species' => $species,
-        'type'    => 'Gene',
-        'action'  => 'Summary',
-        'g'       => $gene->stable_id,
-        'tl'      => $url_param
-      };
-      $gene_display = $gene->display_xref;
-      $gene_display = $gene_display ? $gene_display->display_id : $gene->stable_id;
-    }
-
-    my $transcript_url = {
+    $urls->{'target'} = {
       'species' => $species,
       'type'    => 'Transcript',
       'action'  => $source =~/cdna|ncrna/i ? 'Summary' : 'ProteinSummary',
-      $param    => $result_data->{'tid'},
+      $param    => $hit->{'tid'},
       'tl'      => $url_param
     };
+  }
 
-    return wantarray ? ($transcript_url, $gene_url, $gene_display) : $transcript_url;
-
-  } elsif ($link_type eq 'location') {
-
-    my $start   = $result_data->{'gstart'} < $result_data->{'gend'} ? $result_data->{'gstart'} : $result_data->{'gend'};
-    my $end     = $result_data->{'gstart'} > $result_data->{'gend'} ? $result_data->{'gstart'} : $result_data->{'gend'};
-    my $length  = $end - $start;
-    my $p_track = $self->parse_search_type($job->job_data->{'search_type'}, 'search_method') ne 'BLASTN' ? ',codon_seq=normal' : ''; # show translated track for any seach type other than dna vs dna
-
-    # Add 5% padding on both sides
-    $start  = int($start - $length * 0.05);
-    $start  = 1 if $start < 1;
-    $end    = int($end + $length * 0.05);
-
-    return {
-      '__clear'           => 1,
-      'species'           => $species,
-      'type'              => 'Location',
-      'action'            => 'View',
-      'r'                 => sprintf('%s:%s-%s', $result_data->{'gid'}, $start, $end),
-      'contigviewbottom'  => "blast=normal$p_track",
-      'tl'                => $url_param
-    };
-
-  } elsif ($link_type eq 'alignment') {
-
-    return {
-      'species'   => $species,
-      'type'      => 'Tools',
-      'action'    => 'Blast',
-      'function'  => $self->get_alignment_component_name_for_job($job),
-      'tl'        => $url_param
-    };
-
-  } elsif ($link_type eq 'query_sequence') {
-
-    return {
-      'species'   => $species,
-      'type'      => 'Tools',
-      'action'    => 'Blast',
-      'function'  => 'QuerySeq',
-      'tl'        => $url_param
-    };
-
-  } elsif ($link_type eq 'genomic_sequence') {
-
-    return {
-      'species'   => $species,
-      'type'      => 'Tools',
-      'action'    => 'Blast',
-      'function'  => 'GenomicSeq',
-      'tl'        => $url_param
+  # Genes url
+  for (@{$self->get_genes_for_hit($job, $result)}) {
+    my $label = $_->display_xref;
+    push @{$urls->{'gene'}}, {
+      'species' => $species,
+      'type'    => 'Gene',
+      'action'  => 'Summary',
+      'g'       => $_->stable_id,
+      'tl'      => $url_param,
+      'label'   => $label ? $label->display_id : $_->stable_id
     };
   }
+
+  # Location url
+  my $start   = $hit->{'gstart'} < $hit->{'gend'} ? $hit->{'gstart'} : $hit->{'gend'};
+  my $end     = $hit->{'gstart'} > $hit->{'gend'} ? $hit->{'gstart'} : $hit->{'gend'};
+  my $length  = $end - $start;
+  my $p_track = $self->parse_search_type($job->job_data->{'search_type'}, 'search_method') ne 'BLASTN' ? ',codon_seq=normal' : ''; # show translated track for any seach type other than dna vs dna
+
+  # add 5% padding on both sides
+  $start  = int($start - $length * 0.05);
+  $start  = 1 if $start < 1;
+  $end    = int($end + $length * 0.05);
+
+  $urls->{'location'} = {
+    '__clear'           => 1,
+    'species'           => $species,
+    'type'              => 'Location',
+    'action'            => 'View',
+    'r'                 => sprintf('%s:%s-%s', $hit->{'gid'}, $start, $end),
+    'contigviewbottom'  => "blast=normal$p_track",
+    'tl'                => $url_param
+  };
+
+  # Alignment url
+  $urls->{'alignment'} = {
+    'species'   => $species,
+    'type'      => 'Tools',
+    'action'    => 'Blast',
+    'function'  => $self->get_alignment_component_name_for_job($job),
+    'tl'        => $url_param
+  };
+
+  # Query sequence url
+  $urls->{'query_sequence'} = {
+    'species'   => $species,
+    'type'      => 'Tools',
+    'action'    => 'Blast',
+    'function'  => 'QuerySeq',
+    'tl'        => $url_param
+  };
+
+  # Genomic sequence url
+  $urls->{'genomic_sequence'} = {
+    'species'   => $species,
+    'type'      => 'Tools',
+    'action'    => 'Blast',
+    'function'  => 'GenomicSeq',
+    'tl'        => $url_param
+  };
+
+  return $urls;
+}
+
+sub get_genes_for_hit {
+  ## Returns the gene objects linked to a blast hit
+  ## @param Job object
+  ## @param Blast result object
+  my ($self, $job, $result) = @_;
+
+  my $hit = $result->result_data;
+  my @genes;
+
+  if ($hit->{'genes'}) {
+
+    if (@{$hit->{'genes'}}) {
+      my $adaptor = $self->hub->get_adaptor("get_GeneAdaptor", 'core', $job->species);
+      @genes = map { $adaptor->fetch_by_stable_id($_) } @{$hit->{'genes'}};
+    }
+
+  } else {
+    my $source = $job->job_data->{'source'};
+
+    if ($source =~ /latestgp/i) {
+      @genes = @{$self->get_hit_genomic_slice($hit)->get_all_Genes};
+
+    } else {
+      my $target = $self->get_target_object($hit, $source);
+         $target = $target->transcript if $target->isa('Bio::EnsEMBL::Translation');
+
+      push @genes, $target->get_Gene || () unless $target->isa('Bio::EnsEMBL::PredictionTranscript');
+    }
+
+    # cache it in the db
+    $hit->{'genes'} = [ map $_->stable_id, @genes ];
+    $result->save;
+  }
+
+  return \@genes;
 }
 
 sub get_alignment_component_name_for_job {
-  ## Returns 'Alignment' or 'AlignmentProtein' () depending upon job object
+  ## Returns 'Alignment' or 'AlignmentProtein' depending upon job object
   my ($self, $job) = @_;
   return $job->job_data->{'db_type'} eq 'peptide' || $job->job_data->{'query_type'} eq 'peptide' ? 'AlignmentProtein' : 'Alignment';
 }
@@ -449,6 +472,7 @@ sub handle_download {
 sub get_hit_genomic_slice {
   ## Gets the genomic slice according to the coordinates returned in the blast results
   ## @param Result hit
+  ## @return Bio::EnsEMBL::Slice object
   my ($self, $hit, $flank5, $flank3) = @_;
   my $start   = $hit->{'gstart'} < $hit->{'gend'} ? $hit->{'gstart'} : $hit->{'gend'};
   my $end     = $hit->{'gstart'} > $hit->{'gend'} ? $hit->{'gstart'} : $hit->{'gend'};

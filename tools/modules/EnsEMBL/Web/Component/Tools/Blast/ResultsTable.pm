@@ -62,9 +62,11 @@ sub content {
     my $source      = $job_data->{'source'};
     my @columns     = ( $source =~/latestgp/i ? (
       { 'key' => 'tid',     'title'=> 'Genomic Location', 'align' => 'left',  'sort' => 'string',         'help' => $glossary->{'Genomic Location (BLAST Results)'} },
+      { 'key' => 'gene',    'title'=> 'Overlapping Genes','align' => 'left',  'sort' => 'string',         'help' => $glossary->{'Overlapping Genes (BLAST Results)'}},
       { 'key' => 'tori',    'title'=> 'Orientation',      'align' => 'left',  'sort' => 'string',         'help' => $glossary->{'Orientation (BLAST Results)'}      }
     ) : (
       { 'key' => 'tid',     'title'=> 'Subject name',     'align' => 'left',  'sort' => 'string',         'help' => $glossary->{'Subject name (BLAST Results)'}     },
+      { 'key' => 'gene',    'title'=> 'Gene hit',         'align' => 'left',  'sort' => 'string',         'help' => $glossary->{'Gene hit (BLAST Results)'}         },
       { 'key' => 'tstart',  'title'=> 'Subject start',    'align' => 'left',  'sort' => 'numeric',        'help' => $glossary->{'Subject start (BLAST Results)'}    },
       { 'key' => 'tend',    'title'=> 'Subject end',      'align' => 'left',  'sort' => 'numeric',        'help' => $glossary->{'Subject end (BLAST Results)'}      },
       { 'key' => 'tori',    'title'=> 'Subject ori',      'align' => 'left',  'sort' => 'string',         'help' => $glossary->{'Subject ori (BLAST Results)'}      },
@@ -93,29 +95,19 @@ sub content {
       my $result_id     = $_->result_id;
       my $result_data   = $_->result_data->raw;
       my $url_param     = $object->create_url_param({'result_id' => $result_id});
-      my $location_link = $self->location_link($job, $_);
+      my $urls          = $self->get_result_links($job, $_);
 
       $result_data->{'options'} = {'class' => "hsp_$result_id"};
 
-      # orientation
+      # orientation columns
       $result_data->{$_} = $result_data->{$_} == 1 ? 'Forward' : 'Reverse' for grep m/ori$/, keys %$result_data;
 
-      if ($source =~ /latestgp/i) {
-        $result_data->{'tid'} = $location_link;
-      } else {
-        $result_data->{'gid'} = $location_link;
-        $result_data->{'tid'} = $self->target_link($job, $_);
-      }
-
-      # add links to query name and pid columns
-      $result_data->{'qid'} = sprintf('<span>%s</span>&nbsp;<a href="%s" class="small _ht" title="View Query Sequence">[Sequence]</a>',
-        $result_data->{'qid'},
-        $hub->url($object->get_result_url('query_sequence', $job, $_))
-      );
-      $result_data->{'pident'} = sprintf('<span>%s</span>&nbsp;<a href="%s" class="small _ht" title="View Alignment">[Alignment]</a>',
-        $result_data->{'pident'},
-        $hub->url($object->get_result_url('alignment', $job, $_))
-      );
+      # columns with links
+      $result_data->{'gid'}     = $result_data->{'tid'} = qq($urls->{'location'}&nbsp;$urls->{'genomic_sequence'});
+      $result_data->{'tid'}     = $urls->{'target'} unless $source =~ /latestgp/i;
+      $result_data->{'gene'}    = $urls->{'gene'};
+      $result_data->{'qid'}     = sprintf('<span>%s</span>&nbsp;%s', $result_data->{'qid'}, $urls->{'query_sequence'});
+      $result_data->{'pident'}  = sprintf('<span>%s</span>&nbsp;%s', $result_data->{'pident'}, $urls->{'alignment'});
 
       $table->add_row($result_data);
     }
@@ -127,37 +119,22 @@ sub content {
   return $html;
 }
 
-sub target_link {
-  ## Gets the link for the target column
+sub get_result_links {
+  ## Gets the links for all required table columns
   my ($self, $job, $result) = @_;
 
-  my $hub = $self->hub;
+  my $hit   = $result->result_data;
+  my $hub   = $self->hub;
+  my $urls  = $self->object->get_result_urls($job, $result);
 
-  my ($target_url, $gene_url, $gene_label) = $self->object->get_result_url('target', $job, $result);
-
-  return sprintf('<a href="%s">%s</a>%s',
-    $hub->url($target_url),
-    $result->result_data->{'tid'},
-    $gene_url && $gene_label
-      ? sprintf(' (Gene: <a href="%s">%s</a>)', $hub->url($gene_url), $gene_label)
-      : ''
-  );
-}
-
-sub location_link {
-  ## Gets a link to the location view page for the given result
-  my ($self, $job, $result) = @_;
-
-  my $hub         = $self->hub;
-  my $result_data = $result->result_data;
-  my $url         = $self->object->get_result_url('location', $job, $result);
-  my $region      = sprintf '%s:%s-%s', $result_data->{'gid'}, $result_data->{'gstart'}, $result_data->{'gend'};
-
-  return sprintf('<a href="%s" class="_ht" title="Region in Detail">%s</a>&nbsp;<a href="%s" class="small _ht" title="View Genomic Sequence">[Sequence]</a>',
-    $hub->url($url),
-    $region,
-    $hub->url($self->object->get_result_url('genomic_sequence', $job, $result))
-  );
+  return {
+    'gene'              => join(', ', map { sprintf '<a href="%2$s">%1$s</a>', delete $_->{'label'}, $hub->url($_) } @{$urls->{'gene'}}) || '',
+    'target'            => $urls->{'target'} ? sprintf('<a href="%s">%s</a>', $hub->url($urls->{'target'}), $hit->{'tid'}) : '',
+    'location'          => sprintf('<a href="%s" class="_ht" title="Region in Detail">%s:%s-%s</a>', $hub->url($urls->{'location'}), $hit->{'gid'}, $hit->{'gstart'}, $hit->{'gend'}),
+    'genomic_sequence'  => sprintf('<a href="%s" class="small _ht" title="View Genomic Sequence">[Sequence]</a>', $hub->url($urls->{'genomic_sequence'})),
+    'query_sequence'    => sprintf('<a href="%s" class="small _ht" title="View Query Sequence">[Sequence]</a>', $hub->url($urls->{'query_sequence'})),
+    'alignment'         => sprintf('<a href="%s" class="small _ht" title="View Alignment">[Alignment]</a>', $hub->url($urls->{'alignment'}))
+  };
 }
 
 1;
