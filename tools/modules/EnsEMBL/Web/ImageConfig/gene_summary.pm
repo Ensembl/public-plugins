@@ -16,20 +16,17 @@ limitations under the License.
 
 =cut
 
-package EnsEMBL::Web::ImageConfig::contigviewbottom;
+package EnsEMBL::Web::ImageConfig::gene_summary;
 
-### Plugin to core EnsEMBL::Web::ImageConfig::contigviewbottom to add blast result tracks to the image
+### Plugin to core EnsEMBL::Web::ImageConfig::gene_summary to add blast result tracks to the image
 
 use strict;
 use warnings;
 
-use previous qw(initialize);
-
 sub initialize {
-  ## @plugin
-  ## Adds blast and VEP tracks to the config according the the ticket in the url
+  ## Adds blast track to the config
   my $self = shift;
-  $self->PREV::initialize(@_);
+  $self->SUPER::initialize(@_);
   $self->initialize_tools_tracks;
 }
 
