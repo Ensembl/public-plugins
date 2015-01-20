@@ -41,8 +41,6 @@ sub content {
     });
     last;
   }
-
-  $self->delete_entry_by_type('Genomic bp');
 }
 
 1;
