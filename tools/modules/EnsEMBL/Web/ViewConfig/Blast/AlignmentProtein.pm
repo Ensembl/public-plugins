@@ -31,7 +31,7 @@ sub init {
     display_width  => 60,
     align_display  => 'line',
     snp_display    => 'off',
-    line_numbering => 'no',
+    line_numbering => 'yes',
     exon_display   => 'yes',
   });
 }
