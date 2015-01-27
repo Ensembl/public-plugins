@@ -71,11 +71,13 @@ sub get_key {
   ## @override
   ## Adds the HSP key before calling the base class's method
   my ($self, $config) = @_;
+
+  my $type = $self->job->job_data->{query_type} eq 'peptide' ? 'residues' : 'bases';
   
   return $self->SUPER::get_key($config, {
     hsp => {
-      sel   => { class => 'hsp_sel',   order => 1, text => 'Matching bases for selected HSP' },
-      other => { class => 'hsp_other', order => 2, text => 'Matching bases for other HSPs in selected hit' }
+      sel   => { class => 'hsp_sel',   order => 1, text => "Matching $type for selected HSP" },
+      other => { class => 'hsp_other', order => 2, text => "Matching $type for other HSPs in selected hit" }
     }
   });
 }

@@ -35,7 +35,7 @@ sub init {
     exon_display   => 'core',
     exon_ori       => 'all',
     snp_display    => 'off',
-    line_numbering => 'off',
+    line_numbering => 'sequence',
     title_display  => 'yes',
   });
 }
