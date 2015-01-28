@@ -5,10 +5,10 @@ div.tree_label                                  { color: #ffffff; }
 div.layout_switch                               { background-image: url("/i/switch.png"); cursor: pointer; float: left; height: 16px; margin: 0 4px 2px; width: 16px; }
 div.tree_switch                                 { background-image: url("/i/tree.png"); cursor: pointer; float: left; height: 16px; margin: -1px 6px 2px; width: 16px; height: 21px; }
 div.filter_switch                               { background-image: url("/i/filter.png"); cursor: pointer; float: left; height: 16px; margin: 0 4px 2px; width: 16px; }
-div.js_tree div.image_resize_menu               { width: 145px; }
-div.js_tree div.image_resize_menu div           { font-weight: bold; border-width: 0px 1px 1px 0px; }
-div.js_tree div.image_resize_menu div.current   { background: url("/i/16/rev/check_grey.png") no-repeat scroll right center rgba(0, 0, 0, 0); color: grey; font-weight: bold; text-decoration: none; background-color: #eaeeff; }
-div.image_resize_menu div.header                { cursor: auto; }
+div.js_tree div.iexport_menu                    { width: 145px; }
+div.js_tree div.iexport_menu div                { font-weight: bold; border-width: 0px 1px 1px 0px; }
+div.js_tree div.iexport_menu div.current        { background: url("/i/16/rev/check_grey.png") no-repeat scroll right center rgba(0, 0, 0, 0); color: grey; font-weight: bold; text-decoration: none; background-color: #eaeeff; }
+div.iexport_menu div.header                     { cursor: auto; }
 div.tree_menu, div.resize_menu, div.filter_menu { display: none; }
 div.js_tree div.resize                          { background-image: url("/i/16/rev/image_resize.png"); cursor: pointer; float: left; height: 16px; margin: 0 4px 2px; width: 16px; }
 div .tnt_tooltip                                { background-color: #eaeeff; border: 1px solid #eaeeff; box-shadow: 5px 5px 15px #666; font-size: 10px; font-weight: bold; opacity: 0.94; padding: 0px; text-align: left; white-space: normal; width: 210px; position: absolute !important; }

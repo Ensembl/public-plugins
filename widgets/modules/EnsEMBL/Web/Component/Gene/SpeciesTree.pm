@@ -22,6 +22,7 @@ use strict;
 
 use Bio::EnsEMBL::Registry;
 use Bio::EnsEMBL::Compara::Utils::CAFETreeHash;
+use EnsEMBL::Web::Document::Image::WidgetImage;
 
 use JSON qw(to_json);
 
@@ -34,25 +35,31 @@ sub content {
   my $hub         = $self->hub;
   my $object      = $self->object;
   my $stable_id   = $hub->param('g');  
-  my $image_type  = $hub->session->get_data(type => 'image_type', code => $self->id) || {};
+  my $image_type  = $hub->session->get_data(type => 'image_type', code => $self->id) || {};  
   my $html        = '<input type="hidden" value="Widget" class="panel_type">';
    
   return $self->PREV::content(@_) if($image_type->{'static'} || $hub->param('static') || $hub->param('export') || !(grep $_->[0] eq 'SpeciesTree', @{$hub->components}));
   
-#  return if $self->_export_image($image);
+  #return if $self->_export_image($image);
 
-  my ($member, $tree, $node)            = $self->get_details($cdb);
+  my ($member, $tree, $node)            = $self->get_details($cdb);  
+  
   my ($species, $object_type, $db_type) = Bio::EnsEMBL::Registry->get_species_and_object_type($stable_id);  #get corresponding species for current gene
   my $species_name                      = $hub->species_defs->get_config(ucfirst($species), 'SPECIES_SCIENTIFIC_NAME');    
   my $hash                              = Bio::EnsEMBL::Compara::Utils::CAFETreeHash->convert($tree);
-  my $str                               = to_json($hash);    
+  my $str                               = to_json($hash);
+  
+  $html .= qq{
+    <input type="hidden" class="js_param" name="treeType" value="CafeTree" />
+    <input type="hidden" class="js_param" name="json" value='$str' />
+    <input type="hidden" class="js_param" name="species_name" value="$species_name" />
+  };  
+  
+  my $image = EnsEMBL::Web::Document::Image::WidgetImage->new($hub, $self->id);
+  $image->{'export_params'} = [['gene_name', $member->display_label],['align', 'tree']];
+  $image->{'data_export'}   = 'SpeciesTree';
 
-  $html .= "<div id='cafe_tree' class='js_tree ajax js_panel image_container ui-resizable'></div>
-            <script>
-              Ensembl.CafeTree.displayTree($str,\"$species_name\");
-            </script>";
-
-  return $html;
+  return $image->render($html);
 }
 
 1;

@@ -1,6 +1,7 @@
 Ensembl.SpeciesTree = {};
 
-Ensembl.SpeciesTree.displayTree = function(json) {
+Ensembl.SpeciesTree.displayTree = function(json, panel) {
+    this.panel = panel;
   var theme =  Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree(json);
   theme(tnt.tree(), document.getElementById("species_tree"));
 }
@@ -56,7 +57,7 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
 
       var tree_menu = d3.select("#species_tree")
           .append("div")
-          .attr("class", "image_resize_menu tree_menu");
+          .attr("class", "iexport_menu tree_menu");
 
       tree_menu.append("div")
           .attr("class", "header")
@@ -100,12 +101,12 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
               }
           });
 
-      d3.select("#species_tree").append("div").attr("class", "image_resize_menu resize_menu");
+      d3.select("#species_tree").append("div").attr("class", "iexport_menu resize_menu");
       draw_resize_menu(width);
       
       var filter_menu = d3.select("#species_tree")
           .append("div")
-          .attr("class", "image_resize_menu filter_menu");
+          .attr("class", "iexport_menu filter_menu");
 
       filter_menu.append("div")
           .attr("class", "header")
@@ -138,7 +139,7 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
           .on("click", function() {
               if(d3.select(".tree_menu").style("display") == 'none') {
                 //just making sure all other menu are closed
-                d3.selectAll(".image_resize_menu").each(function(d,i) {
+                d3.selectAll(".iexport_menu").each(function(d,i) {
                   d3.select(this).style("display", "none");
                 });
                 d3.select(".tree_menu").style("display", "block");
@@ -154,7 +155,7 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
           .on("click", function() {
             if(d3.select(".filter_menu").style("display") == 'none') {
               //just making sure all other menu are closed
-              d3.selectAll(".image_resize_menu").each(function(d,i) {
+              d3.selectAll(".iexport_menu").each(function(d,i) {
                 d3.select(this).style("display", "none");
               }); 
               
@@ -195,7 +196,7 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
             var current_width =  Math.floor(d3.select("#species_tree").style("width").replace(/px/g,'') / 100) * 100;
 
             //just making sure all other menu are closed
-            d3.selectAll(".image_resize_menu").each(function(d,i) {
+            d3.selectAll(".iexport_menu").each(function(d,i) {
               d3.select(this).style("display", "none");
             });
 
@@ -219,7 +220,7 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
           .on("click",function(){
             if(d3.select(".resize_menu").style("display") == 'none') {
               //just making sure all other menu are closed
-              d3.selectAll(".image_resize_menu").each(function(d,i) {
+              d3.selectAll(".iexport_menu").each(function(d,i) {
                 d3.select(this).style("display", "none");
               });
             

@@ -1,12 +1,12 @@
 Ensembl.CafeTree = {};
 
-Ensembl.CafeTree.displayTree = function(json,species_name) {
-  var tree_vis = tnt.tree();
+Ensembl.CafeTree.displayTree = function(json,species_name, panel) {
+  var tree_vis = tnt.tree();  
   var theme = Ensembl.CafeTree.tnt_theme_tree_cafe_tree()
                  .json_data(json)
                  .highlight(species_name);
-  theme(tree_vis, document.getElementById('cafe_tree'));
-}
+  theme(tree_vis, document.getElementById('widget'), panel);  
+};
 
 Ensembl.CafeTree.tnt_theme_tree_cafe_tree = function() {
     "use strict";
@@ -18,14 +18,13 @@ Ensembl.CafeTree.tnt_theme_tree_cafe_tree = function() {
     var min_n_members, max_n_members;
     var highlight;
     
-    var width = Math.floor(d3.select("#cafe_tree").style("width").replace(/px/g,'') / 100) * 100;
+    var width = Math.floor(d3.select("#widget").style("width").replace(/px/g,'') / 100) * 100;
     var pics_path = "/i/species/48/";
 
-    var theme = function (tree_vis, div) {
+    var theme = function (tree_vis, div, panel) {
     
-        var icons_classes = ["share popup", "tree_switch", "layout_switch vertical", "resize"];
-        var Tree = new Ensembl.NewTree("#cafe_tree");
-        Tree.imageToolbar("#cafe_tree", tree_vis, icons_classes);    //drawing the main toolbar and adding the icons, icons functionality below    
+        var icons_classes = ["tree_switch", "layout_switch vertical", "resize"];        
+        panel.imageToolbar(tree_vis, icons_classes);    //drawing the main toolbar and adding the icons, icons functionality below    
                 
         // Switch between full tree and minimal tree
         var tree_icon = d3.select(".tree_switch")          
@@ -33,17 +32,19 @@ Ensembl.CafeTree.tnt_theme_tree_cafe_tree = function() {
           .on("click", function() {
               if(d3.select(".tree_menu").style("display") == 'none') {
                 //just making sure all other menu are closed
-                d3.selectAll(".image_resize_menu").each(function(d,i) {
+                d3.selectAll(".iexport_menu").each(function(d,i) {
                   d3.select(this).style("display", "none");
+                  d3.select(".iexport_menu").style("display", "none");
+                  d3.select(".share_page").style("display", "none");
                 });
                 d3.select(".tree_menu").style("display", "block");
               } else {
                 d3.select(".tree_menu").style("display", "none");
               }
           });
-      var tree_menu = d3.select("#cafe_tree")
+      var tree_menu = d3.select("#widget")
           .append("div")
-          .attr("class", "image_resize_menu tree_menu");
+          .attr("class", "iexport_menu tree_menu d3_menu");
 
       tree_menu.append("div")
           .attr("class", "header")
@@ -133,12 +134,12 @@ Ensembl.CafeTree.tnt_theme_tree_cafe_tree = function() {
             return node.data().n_members;
           })
           .fontsize(14);
-          
-      var root = tnt.tree.node(json_data.tree);;
+        
+      var root = tnt.tree.node(json_data.tree);
       var max_width_text1 = d3.max(root.get_all_leaves(), function (node) {
           return node_label.width()(node);
       });          
-          
+      
       var species_label = tnt.tree.label.text()
           .color(function (node) {
             var d = node.data();
@@ -192,19 +193,36 @@ Ensembl.CafeTree.tnt_theme_tree_cafe_tree = function() {
 
 	    // TREE SIDE
 	    var deploy_vis = function (tree_obj) {
-            if (tree_obj.pvalue_avg > 0.5) {
-                d3.select(div)
+     
+            if (tree_obj.pvalue_avg > 0.05) {
+                d3.select(".image_panel")
+                    .insert("div",":first-child")
+                    .attr("class", "info")
+                    .append("h3")
+                    .html("Info");
+                    
+                d3.select(".info")
+                    .append("div")
+                    .attr("class", "message-pad")
                     .append("p")
                     .html("This gene family does not have any significant gene gain or loss events (<i>pvalue</i> for the gene family is <b>" + tree_obj.pvalue_avg + "</b>)");
             } else {
-                d3.select(div)
+                d3.select(".image_panel")
+                    .insert("div",":first-child")
+                    .attr("class", "info")
+                    .append("h3")
+                    .html("Info");
+                    
+                d3.select(".info")                    
+                    .append("div")
+                    .attr("class", "message-pad")
                     .append("p")
-                    .html("This gene family has significant gene gain or loss events");
+                    .html("This gene family has significant gene gain or loss events. Click the icons on the image blue bar to interact with the tree.");
             }
 
           var root = tnt.tree.node(tree_obj.tree);
           root.sort(function(node1, node2) { return node1.data().tax.id - node2.data().tax.id; }); //sorting the tree obj based on taxonid
-          
+                    
 	        tree_vis
 		        .data (root.data())
 		        .label (label)
