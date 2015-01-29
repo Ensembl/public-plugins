@@ -194,7 +194,7 @@ Ensembl.CafeTree.tnt_theme_tree_cafe_tree = function() {
 	    // TREE SIDE
 	    var deploy_vis = function (tree_obj) {
      
-            if (tree_obj.pvalue_avg > 0.05) {
+            if (tree_obj.pvalue_avg > 0.5) {
                 d3.select(".image_panel")
                     .insert("div",":first-child")
                     .attr("class", "info")

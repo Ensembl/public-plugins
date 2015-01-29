@@ -149,7 +149,6 @@ Ensembl.Panel.Widget = Ensembl.Panel.ImageMap.extend({
             .text(i + " px");
         if(i == new_width) { width_sel.classed("current", true); }
     };
-
   },    
   
   windowResize: function() {
@@ -160,7 +159,7 @@ Ensembl.Panel.Widget = Ensembl.Panel.ImageMap.extend({
     var  support = document.implementation.hasFeature("http://www.w3.org/TR/SVG11/feature#Shape", "1.1");
     return support ? 1 : 0;
 //return 0;
-  },  
+  }  
 });
   
  
