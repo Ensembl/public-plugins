@@ -19,17 +19,20 @@ limitations under the License.
 package EnsEMBL::Web::Tools::DHTMLmerge;
 
 use strict;
+use warnings;
 
-use previous qw(merge_all);
+use previous qw(get_filegroups);
 
-sub merge_all {
-  my $species_defs = $_[0];
-  my $dir          = [split 'modules', __FILE__]->[0] . 'htdocs';
-  
-  $species_defs->{'_storage'}{'SOLR_JS_NAME'}  = merge($species_defs, 'js',  $dir, 'solr');
-  $species_defs->{'_storage'}{'SOLR_CSS_NAME'} = merge($species_defs, 'css', $dir, 'solr');
+sub get_filegroups {
+  ## @override
+  my ($species_defs, $type) = @_;
 
-  PREV::merge_all(@_);
+  return PREV::get_filegroups($species_defs, $type), {
+    'group_name'  => 'solr',
+    'files'       => get_files_from_dir($species_defs, $type, 'solr'),
+    'condition'   => sub { ($_[0]->type || '') eq 'Search' },
+    'ordered'     => 0
+  };
 }
 
 1;

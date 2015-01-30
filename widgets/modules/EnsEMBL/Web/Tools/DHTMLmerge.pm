@@ -1,4 +1,3 @@
-#!/usr/local/bin/perl
 =head1 LICENSE
 
 Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
@@ -17,39 +16,23 @@ limitations under the License.
 
 =cut
 
-###############################################################################
-#   
-#   Name:        EnsEMBL::Web::Tools::DHTMLmerge
-#    
-#   Description: Populates templates for static content.
-#                Run at server startup
-#
-###############################################################################
-
 package EnsEMBL::Web::Tools::DHTMLmerge;
 
 use strict;
+use warnings;
 
-use previous qw(merge_all);
+use previous qw(get_filegroups);
 
-use EnsEMBL::Web::Tools::JavascriptOrderWidgets;
+sub get_filegroups {
+  ## @override
+  my ($species_defs, $type) = @_;
 
-sub merge_all {
-  my $species_defs = $_[0];
-  my $contents;
-  
-  {
-    local $/ = undef;
-  
-    foreach (EnsEMBL::Web::Tools::JavascriptOrderWidgets->new->get_files(1)) {
-      open I, $_;
-      $contents .= <I>;
-      close I;
-    }
-  }
-  $species_defs->{'_storage'}{'WIDGETS_JS_NAME'} = compress($species_defs, 'js', $contents);
-  
-  PREV::merge_all(@_);
+  return PREV::get_filegroups($species_defs, $type), $type eq 'js' ? {
+    'group_name'  => 'widgets',
+    'files'       => get_files_from_dir($species_defs, $type, 'widgets'),
+    'condition'   => sub { $_[0]->apache_handle->unparsed_uri =~ /speciestree\.html/ || ($_[0]->action || '') eq 'SpeciesTree'; },
+    'ordered'     => 0
+  } : ();
 }
 
 1;

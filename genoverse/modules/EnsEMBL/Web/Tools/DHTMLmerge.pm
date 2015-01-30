@@ -16,40 +16,66 @@ limitations under the License.
 
 =cut
 
-###############################################################################
-#   
-#   Name:        EnsEMBL::Web::Tools::DHTMLmerge
-#    
-#   Description: Populates templates for static content.
-#                Run at server startup
-#
-###############################################################################
-
 package EnsEMBL::Web::Tools::DHTMLmerge;
 
 use strict;
+use warnings;
 
-use previous qw(merge_all);
+use previous qw(get_filegroups);
 
-use EnsEMBL::Web::Tools::JavascriptOrder;
+sub get_filegroups {
+  ## @override
+  my ($species_defs, $type) = @_;
 
-sub merge_all {
-  my $species_defs = $_[0];
-  my $contents;
-  
-  {
-    local $/ = undef;
-  
-    foreach (EnsEMBL::Web::Tools::JavascriptOrder->new({ species_defs => $species_defs, absolute_path => 1 })->order) {
-      open I, $_;
-      $contents .= <I>;
-      close I;
+  my @groups = PREV::get_filegroups($species_defs, $type);
+
+  return @groups if $type eq 'css';
+
+  my $all_files = get_files_from_dir($species_defs, $type, 'genoverse');
+  my @ordered_files;
+
+  foreach my $file (@{genoverse_files_order()}) {
+    foreach my $path (grep -e, map "$_/genoverse/$file", reverse grep !m/biomart/, @{$species_defs->ENSEMBL_HTDOCS_DIRS || []}) {
+      if (-d $path) {
+        push @ordered_files, grep -f, map "$path/$_", sort { $a cmp $b } @{list_dir_contents($path, {'recursive' => 1})};
+      } else {
+        push @ordered_files, $path;
+      }
     }
   }
-  
-  $species_defs->{'_storage'}{'GENOVERSE_JS_NAME'} = compress($species_defs, 'js', $contents);
-  
-  PREV::merge_all(@_);
+
+  return @groups, {
+    'group_name'  => 'genoverse',
+    'files'       => \@ordered_files,
+    'condition'   => sub { return !!grep $_->[-1] eq 'genoverse', @{$_[0]->components}; },
+    'ordered'     => 1
+  };
 }
+
+sub genoverse_files_order {
+  return [
+    'Genoverse.js',
+    'Ensembl/Genoverse.js',
+    'Ensembl/GenoverseMobile.js',
+    'Track.js',
+    'Ensembl/Track.js',
+    'Track/Controller.js',
+    'Track/Model.js',
+    'Track/View.js',
+    'Ensembl/MVC.js',
+    'Track/library/File.js',
+    'Track/library/Static.js',
+    'Track/Controller/Stranded.js',
+    'Track/Model/Stranded.js',
+    'Track/Controller',
+    'Track/Model',
+    'Track/View',
+    'Track/library',
+    'lib',
+    'plugins',
+    'Ensembl',
+  ];
+}
+
 
 1;
