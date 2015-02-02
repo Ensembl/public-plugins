@@ -43,6 +43,7 @@ sub render {
   my ($top_toolbar, $bottom_toolbar) = $self->render_toolbar();
   
   my $html = sprintf('
+    <div class="info"></div>
     <input type="hidden" class="panel_type" value="Widget" />
     <div id="widget" class="image_container ui-resizable js_tree">
       %s

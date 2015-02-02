@@ -193,32 +193,28 @@ Ensembl.CafeTree.tnt_theme_tree_cafe_tree = function() {
 
 	    // TREE SIDE
 	    var deploy_vis = function (tree_obj) {
-     
-            if (tree_obj.pvalue_avg > 0.5) {
-                d3.select(".image_panel")
-                    .insert("div",":first-child")
-                    .attr("class", "info")
-                    .append("h3")
-                    .html("Info");
-                    
-                d3.select(".info")
-                    .append("div")
-                    .attr("class", "message-pad")
-                    .append("p")
-                    .html("This gene family does not have any significant gene gain or loss events (<i>pvalue</i> for the gene family is <b>" + tree_obj.pvalue_avg + "</b>)");
-            } else {
-                d3.select(".image_panel")
-                    .insert("div",":first-child")
-                    .attr("class", "info")
-                    .append("h3")
-                    .html("Info");
-                    
-                d3.select(".info")                    
-                    .append("div")
-                    .attr("class", "message-pad")
-                    .append("p")
-                    .html("This gene family has significant gene gain or loss events. Click the icons on the image blue bar to interact with the tree.");
-            }
+ 
+          if (tree_obj.pvalue_avg > 0.5) {
+              d3.select(".info")
+                  .append("h3")
+                  .html("Info");
+                  
+              d3.select(".info")
+                  .append("div")
+                  .attr("class", "message-pad")
+                  .append("p")
+                  .html("This gene family does not have any significant gene gain or loss events (<i>pvalue</i> for the gene family is <b>" + tree_obj.pvalue_avg + "</b>)");
+          } else {
+              d3.select(".info")
+                  .append("h3")
+                  .html("Info");
+                  
+              d3.select(".info")                    
+                  .append("div")
+                  .attr("class", "message-pad")
+                  .append("p")
+                  .html("This gene family has significant gene gain or loss events. Click the icons on the image blue bar to interact with the tree.");
+          }
 
           var root = tnt.tree.node(tree_obj.tree);
           root.sort(function(node1, node2) { return node1.data().tax.id - node2.data().tax.id; }); //sorting the tree obj based on taxonid
