@@ -59,11 +59,16 @@ sub short_caption {
     my $job       = $self->get_requested_job;
     my $ticket    = $job && $job->ticket;
     my $job_count = $ticket && $ticket->job_count;
-    return $job && $job->status eq 'done' ? sprintf('%s results', $ticket->ticket_type_name) : 'Jobs';
+    return $job && $job->status eq 'done' ? sprintf('%s results', $self->get_sub_object($ticket->ticket_type_name)->tab_caption) : 'Jobs';
   }
 
   my $sub_object = $self->get_sub_object;
-  return $global ? $sub_object->tool_type || 'Tools' : 'Web Tools'; # generic Tools page or Blast/VEP pages for tab, 'Web Tools' for menu heading
+  return $global ? $sub_object->tab_caption : 'Web Tools'; # generic Tools page or Blast/VEP pages for tab, 'Web Tools' for menu heading
+}
+
+sub tab_caption {
+  ## Caption for the tab (to be overridden by the child objects)
+  return shift->tool_type || 'Tools';
 }
 
 sub default_action {

@@ -33,6 +33,11 @@ use EnsEMBL::Web::BlastConstants qw(CONFIGURATION_FIELDS);
 
 use parent qw(EnsEMBL::Web::Object::Tools);
 
+sub tab_caption {
+  ## @override
+  return 'BLAST/BLAT';
+}
+
 sub get_current_tickets {
   ## @override
   ## Filters ticket on given ticket id instead of returning all tickets

@@ -88,7 +88,7 @@ sub set_hsps {
   my $slice_start   = $slice->start;
   my $slice_end     = $slice->end;
   my $slice_length  = $slice->length;
-  my $ori           = $self->hub->param('orientation'); # TODO provide a default value to this somewhere!
+  my $ori           = $self->hub->param('orientation') || ''; # TODO provide a default value to this somewhere!
   my $hits          = [];
 
   if ($config->{'hsp_display'} eq 'all') {
