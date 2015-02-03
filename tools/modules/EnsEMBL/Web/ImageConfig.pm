@@ -90,15 +90,13 @@ sub blast_glyphset_configs {
     my $jobs      = $ticket->job; # all jobs for the requested ticket
     my $selected  = $object->parse_url_param->{'job_id'}; # id of the selected job
 
-    return $tracks if @$jobs == 1; # we already have a track added for one job
-
     my @tracks = map {
 
       my @t = $_;
 
       if ($_->id eq 'blast') {
 
-        push @t, map { $_->job_id eq $selected ? () : $self->_clone_track($t[0]) } @$jobs;
+        push @t, $self->_clone_track($t[0]) for 1..$#$jobs;
 
         for (0..$#t) {
           my $desc    = $object->get_job_description($jobs->[$_]);
