@@ -35,53 +35,7 @@ sub initialize {
 
 sub glyphset_configs {
   ## This plugin adds multiple blast tracks depending upon the number of jobs we have in the current ticket
-  my $self    = shift;
-
-  if (!$self->{'_ordered_tracks_blast'}) {
-
-    my $tracks  = $self->SUPER::glyphset_configs(@_);
-
-    return $tracks unless ($self->has_tools_track || '') eq 'Blast';
-
-    my $object    = $self->hub->core_object('Tools');
-    my $ticket    = $object->get_requested_ticket;
-    my $jobs      = $ticket->job; # all jobs for the requested ticket
-    my $selected  = $object->parse_url_param->{'job_id'}; # id of the selected job
-
-    return $tracks if @$jobs == 1; # we already have a track added for one job
-
-    my @tracks = map {
-
-      my @t = $_;
-
-      if ($_->id eq 'blast') {
-
-        push @t, map { $_->job_id eq $selected ? () : $self->_clone_track($t[0]) } @$jobs;
-
-        for (0..$#t) {
-          my $desc    = $object->get_job_description($jobs->[$_]);
-          my $job_id  = $jobs->[$_]->job_id;
-
-          $t[$_]->set('job_id',           $job_id);
-          $t[$_]->set('main_blast_track', $selected eq $job_id);
-          $t[$_]->set('caption',          $desc);
-          $t[$_]->set('name',             sprintf '%s: %s', $t[$_]->get('name'), $desc);
-          $t[$_]->set('description',      $desc);
-          $t[$_]->set('sub_type',         sprintf 'blast_%s', $job_id);
-        }
-
-        @t = sort { $b->get('job_id') eq $selected ? 1 : 0 } @t; # bring the selected job closer to the contig
-        @t = reverse @t if $_->get('drawing_strand') eq 'f';
-      }
-
-      @t;
-
-    } @$tracks;
-
-    $self->{'_ordered_tracks_blast'} = \@tracks;
-  }
-
-  return $self->{'_ordered_tracks_blast'};
+  return shift->blast_glyphset_configs(@_);
 }
 
 1;

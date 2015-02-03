@@ -30,4 +30,9 @@ sub initialize {
   $self->initialize_tools_tracks;
 }
 
+sub glyphset_configs {
+  ## This plugin adds multiple blast tracks depending upon the number of jobs we have in the current ticket
+  return shift->blast_glyphset_configs(@_);
+}
+
 1;
