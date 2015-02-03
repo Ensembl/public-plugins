@@ -23,6 +23,12 @@ package EnsEMBL::Web::ImageConfig;
 use strict;
 use warnings;
 
+sub has_tools_track {
+  ## Tells what type of tool track is present if any
+  ## @return Type of tool track (Blast/VEP) or undef if no tool related track is present
+  return shift->{'_tools_track'};
+}
+
 sub initialize_tools_tracks {
   ## Adds the required extra tracks accoridng to the ticket in the url
   my $self = shift;
@@ -51,6 +57,8 @@ sub initialize_tools_tracks {
         'name'        => 'BLAST/BLAT Legend',
       });
 
+      $self->{'_tools_track'} = 'Blast';
+
     } elsif ($ticket_type eq 'VEP') {
       $self->add_track('sequence', 'vep_job', 'VEP result', 'VEPSequence', { # TODO - move it to variation menu
         'description' => 'Track displaying sequence variant for the VEP job',
@@ -59,6 +67,8 @@ sub initialize_tools_tracks {
         'colourset'   => 'variation',
         'sub_type'    => 'variant',
       });
+
+      $self->{'_tools_track'} = 'VEP';
     }
   }
 }
