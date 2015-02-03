@@ -87,8 +87,10 @@ sub blast_glyphset_configs {
 
     my $object    = $self->hub->core_object('Tools');
     my $ticket    = $object->get_requested_ticket;
-    my $jobs      = $ticket->job; # all jobs for the requested ticket
-    my $selected  = $object->parse_url_param->{'job_id'}; # id of the selected job
+    my $jobs      = $ticket->job;                                               # all jobs for the requested ticket
+    my $selected  = $object->parse_url_param->{'job_id'};                       # id of the selected job
+    my ($species) = map { $_->job_id eq $selected ? $_->species : () } @$jobs;  # species for the selected job
+    $jobs         = [ grep { $_->species eq $species } @$jobs ];                # show jobs with species same as the selected job
 
     my @tracks = map {
 
