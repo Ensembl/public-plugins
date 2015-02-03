@@ -277,7 +277,7 @@ sub get_all_hits {
     my $result_data = $_->result_data->raw;
 
     $result_data->{'result_id'} = $result_id;
-    $result_data->{'tl'}        = $self->create_url_param({'result_id' => $result_id});
+    $result_data->{'tl'}        = $self->create_url_param({'job_id' => $job->job_id, 'result_id' => $result_id});
 
     $result_data
 
