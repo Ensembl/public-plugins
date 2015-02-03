@@ -35,7 +35,8 @@ sub BLAST_KARYOTYPE_POINTER {
     'style'             => 'rharrow',
     'colour'            => 'gradient',
     'high_score_style'  => 'outbox',
-    'gradient'          => [qw(10 gold orange chocolate firebrick darkred)]
+    'gradient'          => [qw(10 gold orange chocolate firebrick darkred)],
+    'gradient_others'   => [qw(10 gray60 gray50 gray40 gray30 gray20)]
   };
 }
 

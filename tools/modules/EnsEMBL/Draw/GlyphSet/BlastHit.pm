@@ -223,7 +223,7 @@ sub render_normal {
 sub get_colour {
   my ($self, $percent) = @_;
 
-  my $scale = $self->{'_colour_scale'} ||= [ $self->{'config'}->colourmap->build_linear_gradient(@{BLAST_KARYOTYPE_POINTER->{'gradient'}}) ];
+  my $scale = $self->{'_colour_scale'} ||= [ $self->{'config'}->colourmap->build_linear_gradient(@{BLAST_KARYOTYPE_POINTER->{$self->my_config('main_blast_track') ? 'gradient' : 'gradient_others'}}) ];
 
   return $scale->[ sprintf '%.f', $percent * (scalar @$scale - 1) / 100 ];
 }
