@@ -80,7 +80,7 @@ sub features {
 
     my $btop;
 
-    if ($slice_length < 10000 && $method =~ /^blastn/i ) { # draw btop in this case
+    if ($slice_length < 10000 && ($method =~ /^blastn/i || $method =~ /^blat/i)) { # draw btop in this case
 
       $btop = $object->map_btop_to_genomic_coords($hit, $job);
 
