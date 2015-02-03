@@ -46,7 +46,7 @@ sub new {
   $self->{'_hit'}               = $self->{'_job'}->result->[0]->result_data->raw;
   $self->{'_hit'}{'result_id'}  = $self->{'_job'}->result->[0]->result_id;
 
-  push @{$self->{'key_types'}},  'hsp';
+  push @{$self->{'key_types'}},  'HSP';
   push @{$self->{'key_params'}}, 'hsp_display';
 
   return $self;
@@ -147,7 +147,7 @@ sub markup_hsp {
     $i++;
   }
 
-  $config->{'key'}{'hsp'}{$_} = 1 for keys %hsp_types;
+  $config->{'key'}{'HSP'}{$_} = 1 for keys %hsp_types;
 }
 
 sub class_to_style {

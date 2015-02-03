@@ -75,7 +75,7 @@ sub get_key {
   my $type = $self->job->job_data->{query_type} eq 'peptide' ? 'residues' : 'bases';
   
   return $self->SUPER::get_key($config, {
-    hsp => {
+    HSP => {
       sel   => { class => 'hsp_sel',   order => 1, text => "Matching $type for selected HSP" },
       other => { class => 'hsp_other', order => 2, text => "Matching $type for other HSPs in selected hit" }
     }
