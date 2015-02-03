@@ -51,7 +51,7 @@ sub initialize_tools_tracks {
         'sub_type'    => 'blast',
       });
 
-      $self->add_track('information', 'blast_legend', 'BLAST/BLAT Legend', 'HSP_legend', {
+      $self->add_track('information', 'blast_legend', 'BLAST/BLAT Legend', 'BlastHitLegend', {
         'display'     => 'normal',
         'strand'      => 'r',
         'name'        => 'BLAST/BLAT Legend',
