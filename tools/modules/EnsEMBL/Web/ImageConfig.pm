@@ -105,7 +105,6 @@ sub blast_glyphset_configs {
           $t[$_]->set('job_id',           $job_id);
           $t[$_]->set('main_blast_track', $selected eq $job_id);
           $t[$_]->set('caption',          $desc);
-          $t[$_]->set('name',             sprintf '%s: %s', $t[$_]->get('name'), $desc);
           $t[$_]->set('description',      $desc);
           $t[$_]->set('sub_type',         sprintf 'blast_%s', $job_id);
         }
