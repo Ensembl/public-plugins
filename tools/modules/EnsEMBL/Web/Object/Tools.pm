@@ -342,13 +342,14 @@ sub get_current_tickets {
 sub get_requested_ticket {
   ## Gets a ticket object from the database with param from the URL and caches it for subsequent requests
   ## @param Hashref with keys:
-  ##   - with_jobs: if on, will get all jobs linked to the ticket
+  ##   - with_jobs: (on by default) if on, will get all jobs linked to the ticket
   ##   - with_results: if on, will get all jobs and all results linked to the ticket
+  ##   - ticket_only: if on, will only get the required ticket without any linked jobs or results
   ## @return Ticket rose object, or undef if not found or if ticket does not belong to logged-in user or session
   my ($self, $params) = @_;
 
   $params ||= {};
-  my ($key) = (grep($params->{$_}, qw(with_results with_jobs)), 'ticket_only');
+  my ($key) = (grep($params->{$_}, qw(with_results ticket_only)), 'with_jobs');
 
   if (my $cached = $self->{'_requested_ticket'}) {
 
