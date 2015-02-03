@@ -341,34 +341,50 @@ sub get_current_tickets {
 
 sub get_requested_ticket {
   ## Gets a ticket object from the database with param from the URL and caches it for subsequent requests
+  ## @param Hashref with keys:
+  ##   - with_jobs: if on, will get all jobs linked to the ticket
+  ##   - with_results: if on, will get all jobs and all results linked to the ticket
   ## @return Ticket rose object, or undef if not found or if ticket does not belong to logged-in user or session
-  my $self = shift;
+  my ($self, $params) = @_;
 
-  unless (exists $self->{'_requested_ticket'}) {
-    my $hub         = $self->hub;
-    my $user        = $hub->user;
-    my $ticket_name = $self->parse_url_param->{'ticket_name'};
-    my $ticket;
+  $params ||= {};
+  my ($key) = (grep($params->{$_}, qw(with_results with_jobs)), 'ticket_only');
 
-    if ($ticket_name) {
-      my $ticket_type = $self->rose_manager(qw(Tools TicketType))->fetch_with_requested_ticket({
-        'site_type'     => $hub->species_defs->ENSEMBL_SITETYPE,
-        'ticket_name'   => $ticket_name,
-        'session_id'    => $hub->session->create_session_id,
-        'user_id'       => $user && $user->user_id,
-        'public_ok'     => 1
-      });
+  if (my $cached = $self->{'_requested_ticket'}) {
 
-      if ($ticket_type) {
-        $ticket = $ticket_type->ticket->[0];
-        $self->update_ticket_and_jobs($ticket);
-      }
-    }
+    my $ticket = $key ne 'with_results'
+      ? $key ne 'with_jobs'
+        ? $cached->{'ticket_only'} || $cached->{'with_jobs'} || $cached->{'with_results'}
+        : $cached->{'with_jobs'} || $cached->{'with_results'}
+      : $cached->{'with_results'}
+    ;
 
-    $self->{'_requested_ticket'} = $ticket;
+    return $ticket if $ticket;
   }
 
-  return $self->{'_requested_ticket'};
+  my $hub         = $self->hub;
+  my $user        = $hub->user;
+  my $ticket_name = $self->parse_url_param->{'ticket_name'};
+  my $ticket;
+
+  if ($ticket_name) {
+    my $ticket_type = $self->rose_manager(qw(Tools TicketType))->fetch_with_requested_ticket({
+      'site_type'     => $hub->species_defs->ENSEMBL_SITETYPE,
+      'ticket_name'   => $ticket_name,
+      'session_id'    => $hub->session->create_session_id,
+      'user_id'       => $user && $user->user_id,
+      'public_ok'     => 1,
+      'job_id'        => $key eq 'ticket_only'  ? undef : 'all',
+      'result_id'     => $key eq 'with_results' ? 'all' : undef,
+    });
+
+    if ($ticket_type) {
+      $ticket = $ticket_type->ticket->[0];
+      $self->update_ticket_and_jobs($ticket);
+    }
+  }
+
+  return $self->{'_requested_ticket'}{$key} = $ticket;
 }
 
 sub user_accessible_tickets {
