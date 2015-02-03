@@ -42,7 +42,8 @@ sub features {
   my $slice   = $self->{'container'};
   my $object  = $hub->core_object('Tools') or return;
      $object  = $object->get_sub_object('Blast');
-  my $job     = $object->get_requested_job({'with_all_results' => 1}) or return;
+  my $ticket  = $object->get_requested_ticket({'with_results' => 1}) or return;
+  my ($job)   = grep($_->job_id == $self->my_config('job_id'), @{$ticket->job}) or return;
   my $method  = $object->parse_search_type($job->job_data->{'search_type'}, 'search_method');
   my $strand  = $self->strand;
   my @hits    = grep $strand eq $_->{'gori'}, @{$object->get_all_hits_in_slice_region($job, $slice, sub { ($a->{'score'} || 0) <=> ($b->{'score'} || 0) })};
@@ -139,7 +140,7 @@ sub render_normal {
 
   $self->_init_bump(undef, $dep);
 
-  return $self->no_track_on_strand unless @$features;
+  return $self->my_config('main_blast_track') ? $self->no_track_on_strand : undef unless @$features;
 
   foreach my $feature (@$features) {
 
