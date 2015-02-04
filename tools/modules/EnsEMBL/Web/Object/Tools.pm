@@ -405,6 +405,19 @@ sub user_accessible_tickets {
   return grep { $_->owner_type eq 'user' ? $_->owner_id eq $user_id : $_->owner_id eq $session_id } @_;
 }
 
+sub get_tickets_list {
+  ## Gets the requested ticket or all current tickets according to the URL
+  ## @return Arrayref of ticket objects
+  my $self      = shift;
+  my $hub       = $self->hub;
+  my $function  = $hub->function || '';
+
+  return $function eq 'refresh_tickets' && ($hub->referer->{'ENSEMBL_FUNCTION'} || '') eq 'Ticket' || $function eq 'Ticket'
+    ? [ $self->get_requested_ticket(@_) || () ]
+    : $self->get_current_tickets(@_)
+  ;
+}
+
 sub get_ticket_share_link {
   ## Gets a link to be used to share tickets with other users
   ## @param Ticket object

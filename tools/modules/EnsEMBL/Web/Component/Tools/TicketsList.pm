@@ -32,7 +32,7 @@ sub content {
   my $class         = ref $self;
   my $hub           = $self->hub;
   my $object        = $self->object;
-  my $tickets       = $object->get_current_tickets;
+  my $tickets       = $object->get_tickets_list;
   my $tool_type     = $object->tool_type;
   my $owned_tickets = { map { $_->ticket_name => 1 } $object->user_accessible_tickets(@$tickets) };
 
