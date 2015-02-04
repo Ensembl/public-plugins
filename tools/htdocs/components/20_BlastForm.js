@@ -232,7 +232,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
             if (!(paramName in formInput)) {
               formInput[paramName] = [];
             }
-            formInput[paramName].push(jobsData[i][paramName]);
+            formInput[paramName].unshift(jobsData[i][paramName]);
           } else {
             formInput[paramName] = jobsData[i][paramName];
           }
