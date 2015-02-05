@@ -140,7 +140,7 @@ sub render_normal {
 
   $self->_init_bump(undef, $dep);
 
-  return $self->my_config('main_blast_track') ? $self->no_track_on_strand : undef unless @$features;
+  return $self->my_config('main_blast') ? $self->no_track_on_strand : undef unless @$features;
 
   foreach my $feature (@$features) {
 
@@ -223,7 +223,7 @@ sub render_normal {
 sub get_colour {
   my ($self, $percent) = @_;
 
-  my $scale = $self->{'_colour_scale'} ||= [ $self->{'config'}->colourmap->build_linear_gradient(@{BLAST_KARYOTYPE_POINTER->{$self->my_config('main_blast_track') ? 'gradient' : 'gradient_others'}}) ];
+  my $scale = $self->{'_colour_scale'} ||= [ $self->{'config'}->colourmap->build_linear_gradient(@{BLAST_KARYOTYPE_POINTER->{$self->my_config('main_blast') ? 'gradient' : 'gradient_others'}}) ];
 
   return $scale->[ sprintf '%.f', $percent * (scalar @$scale - 1) / 100 ];
 }

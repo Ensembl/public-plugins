@@ -25,12 +25,6 @@ use warnings;
 
 use previous qw(glyphset_configs);
 
-sub has_tools_track {
-  ## Tells what type of tool track is present if any
-  ## @return Type of tool track (Blast/VEP) or undef if no tool related track is present
-  return shift->{'_tools_track'};
-}
-
 sub initialize_tools_tracks {
   ## Adds the required extra tracks accoridng to the ticket in the url
   my $self = shift;
@@ -45,21 +39,33 @@ sub initialize_tools_tracks {
     my $ticket_type = $job->ticket->ticket_type_name;
 
     if ($ticket_type eq 'Blast') {
-      $self->add_track('sequence', 'blast', 'BLAST/BLAT hits', 'BlastHit', {
-        'description' => 'Track displaying BLAST/BLAT hits for the selected job',
-        'display'     => 'normal',
-        'strand'      => 'b',
-        'colourset'   => 'feature',
-        'sub_type'    => 'blast',
-      });
+
+      my $ticket    = $object->get_requested_ticket;
+      my $species   = $job->species;
+      my $jobs      = [ grep { $_->species eq $species && $_->job_id != $job->job_id } @{$ticket->job} ]; # all other jobs for the requested ticket with species same as the selected job
+
+      for ($job, @$jobs) {
+
+        my $desc    = $object->get_job_description($_);
+        my $job_id  = $_->job_id;
+
+        $self->add_track('sequence', "blast_$job_id", $desc, 'BlastHit', {
+          'description' => $desc,
+          'name'        => 'BLAST/BLAT Hit',
+          'display'     => 'normal',
+          'strand'      => 'b',
+          'colourset'   => 'feature',
+          'sub_type'    => 'blast',
+          'job_id'      => $job_id,
+          'main_blast'  => $_ eq $job ? 1 : 0,
+        });
+      }
 
       $self->add_track('information', 'blast_legend', 'BLAST/BLAT Legend', 'BlastHitLegend', {
         'display'     => 'normal',
         'strand'      => 'r',
         'name'        => 'BLAST/BLAT Legend',
       });
-
-      $self->{'_tools_track'} = 'Blast';
 
     } elsif ($ticket_type eq 'VEP') {
       $self->add_track('sequence', 'vep_job', 'VEP result', 'VEPSequence', { # TODO - move it to variation menu
@@ -70,59 +76,8 @@ sub initialize_tools_tracks {
         'sub_type'    => 'variant',
       });
 
-      $self->{'_tools_track'} = 'VEP';
     }
   }
-}
-
-sub blast_glyphset_configs {
-  ## This plugin adds multiple blast tracks depending upon the number of jobs we have in the current ticket
-  my $self = shift;
-
-  if (!$self->{'_ordered_tracks_blast'}) {
-
-    my $tracks  = $self->PREV::glyphset_configs(@_);
-
-    return $tracks unless ($self->has_tools_track || '') eq 'Blast';
-
-    my $object    = $self->hub->core_object('Tools');
-    my $ticket    = $object->get_requested_ticket;
-    my $jobs      = $ticket->job;                                               # all jobs for the requested ticket
-    my $selected  = $object->parse_url_param->{'job_id'};                       # id of the selected job
-    my ($species) = map { $_->job_id eq $selected ? $_->species : () } @$jobs;  # species for the selected job
-    $jobs         = [ grep { $_->species eq $species } @$jobs ];                # show jobs with species same as the selected job
-
-    my @tracks = map {
-
-      my @t = $_;
-
-      if ($_->id eq 'blast') {
-
-        push @t, $self->_clone_track($t[0]) for 1..$#$jobs;
-
-        for (0..$#t) {
-          my $desc    = $object->get_job_description($jobs->[$_]);
-          my $job_id  = $jobs->[$_]->job_id;
-
-          $t[$_]->set('job_id',           $job_id);
-          $t[$_]->set('main_blast_track', $selected eq $job_id);
-          $t[$_]->set('caption',          $desc);
-          $t[$_]->set('description',      $desc);
-          $t[$_]->set('sub_type',         sprintf 'blast_%s', $job_id);
-        }
-
-        @t = sort { $b->get('job_id') eq $selected ? 1 : 0 } @t; # bring the selected job closer to the contig
-        @t = reverse @t if $_->get('drawing_strand') eq 'f';
-      }
-
-      @t;
-
-    } @$tracks;
-
-    $self->{'_ordered_tracks_blast'} = \@tracks;
-  }
-
-  return $self->{'_ordered_tracks_blast'};
 }
 
 1;
