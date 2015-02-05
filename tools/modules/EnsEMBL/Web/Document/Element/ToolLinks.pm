@@ -28,7 +28,9 @@ sub links {
   my $hub   = $self->hub;
   my $links = $self->PREV::links(@_);
 
-  unshift @$links, 'blast', sprintf '<a class="constant" href="%s">BLAST/BLAT</a>', $hub->url({'species' => $hub->species || 'Multi', 'type' => 'Tools', 'action' => 'Blast'});
+  if ($hub->species_defs->ENSEMBL_BLAST_ENABLED) {
+    unshift @$links, 'blast', sprintf '<a class="constant" href="%s">BLAST/BLAT</a>', $hub->url({'species' => $hub->species || 'Multi', 'type' => 'Tools', 'action' => 'Blast'});
+  }
 
   return $links;
 }
