@@ -126,9 +126,11 @@ sub table_options {
   ## Returns options for rendering the results table
   ## @param Job object
   ## @return Hashref of table options as expected by new_table method
+  my ($self, $job) = @_;
   return {
-    'data_table'      => 1,
-    'sorting'         => ['score desc']
+    'id'          => sprintf('blast_results%s', $job->job_data->{'source'} =~ /latestgp/i ? '_1' : '_2'), # keep different session record for DataTable when saving sorting, hidden cols etc
+    'data_table'  => 1,
+    'sorting'     => ['score desc']
   };
 }
 
