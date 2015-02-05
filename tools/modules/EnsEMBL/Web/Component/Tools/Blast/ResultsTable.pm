@@ -91,7 +91,7 @@ sub table_columns {
     { 'key' => 'qstart',  'title'=> 'Query start',          'align' => 'left',  'sort' => 'numeric',        'help' => $glossary->{'Query start (BLAST Results)'}                },
     { 'key' => 'qend',    'title'=> 'Query end',            'align' => 'left',  'sort' => 'numeric',        'help' => $glossary->{'Query end (BLAST Results)'}                  },
     { 'key' => 'qori',    'title'=> 'Query ori',            'align' => 'left',  'sort' => 'string',         'help' => $glossary->{'Query ori (BLAST Results)'},  'hidden' => 1  },
-    { 'key' => 'len',     'title'=> 'Length',               'align' => 'left',  'sort' => 'numeric',        'help' => $glossary->{'Length (BLAST Results)'}                     },
+    { 'key' => 'len',     'title'=> 'Length',               'align' => 'left',  'sort' => 'numeric_hidden', 'help' => $glossary->{'Length (BLAST Results)'}                     },
     { 'key' => 'score',   'title'=> 'Score',                'align' => 'left',  'sort' => 'numeric',        'help' => $glossary->{'Score (BLAST Results)'}                      },
     { 'key' => 'evalue',  'title'=> 'E-val',                'align' => 'left',  'sort' => 'numeric',        'help' => $glossary->{'E-val (BLAST Results)'}                      },
     { 'key' => 'pident',  'title'=> '%ID',                  'align' => 'left',  'sort' => 'numeric_hidden', 'help' => $glossary->{'%ID (BLAST Results)'}                        }
@@ -116,7 +116,7 @@ sub table_row {
   $result_row->{'gid'}    = $result_row->{'tid'} = qq($urls->{'location'}&nbsp;$urls->{'genomic_sequence'});
   $result_row->{'tid'}    = $urls->{'target'} unless $job->job_data->{'source'} =~ /latestgp/i;
   $result_row->{'gene'}   = $urls->{'gene'};
-  $result_row->{'qid'}    = sprintf('<span>%s</span>&nbsp;%s', $result_row->{'qid'}, $urls->{'query_sequence'});
+  $result_row->{'len'}    = sprintf('<span>%s</span>&nbsp;%s', $result_row->{'len'}, $urls->{'query_sequence'});
   $result_row->{'pident'} = sprintf('<span>%s</span>&nbsp;%s', $result_row->{'pident'}, $urls->{'alignment'});
 
   return $result_row;
