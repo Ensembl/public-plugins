@@ -59,7 +59,7 @@ sub hsp {
   my ($start, $end) = $self->region($hsp);
   my $colour        = $colours->[int(((@$colours - 1) * $hsp->{'pident'} / 100) + 0.5)]; # round
   my $height        = 7;
-  my $glyph         = EnsEMBL::Draw::Glyph::Rect->new({
+  my $glyph         = $self->Rect({
     'x'               => $start - 1,
     'y'               => 0,
     'width'           => $end - $start + 1,
