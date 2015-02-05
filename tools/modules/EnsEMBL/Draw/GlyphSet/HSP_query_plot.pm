@@ -21,7 +21,7 @@ package EnsEMBL::Draw::GlyphSet::HSP_query_plot;
 use strict;
 use warnings;
 
-use Sanger::Graphics::Bump;
+use EnsEMBL::Draw::Utils::Bump;
 
 use parent qw(EnsEMBL::Draw::GlyphSet);
 
@@ -59,7 +59,7 @@ sub hsp {
   my ($start, $end) = $self->region($hsp);
   my $colour        = $colours->[int(((@$colours - 1) * $hsp->{'pident'} / 100) + 0.5)]; # round
   my $height        = 7;
-  my $glyph         = Sanger::Graphics::Glyph::Rect->new({
+  my $glyph         = EnsEMBL::Draw::Glyph::Rect->new({
     'x'               => $start - 1,
     'y'               => 0,
     'width'           => $end - $start + 1,
@@ -79,7 +79,7 @@ sub hsp {
      $bump_start          = 0 if $bump_start < 0;
   my $bump_end            = $bump_start + int($glyph->width() * $options->{'pix_per_bp'}) + 1;
      $bump_end            = $options->{'bitmap_length'} if $bump_end > $options->{'bitmap_length'};
-  my $row                 = &Sanger::Graphics::Bump::bump_row($bump_start, $bump_end, $options->{'bitmap_length'}, $options->{'bitmap'});
+  my $row                 = &EnsEMBL::Draw::Utils::Bump::bump_row($bump_start, $bump_end, $options->{'bitmap_length'}, $options->{'bitmap'});
 
   return if $options->{'dep'} != 0 && $row >= $options->{'dep'};
   $glyph->y($glyph->y() - (1.6 * $row * $height * $self->strand()));
