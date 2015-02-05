@@ -21,8 +21,6 @@ package EnsEMBL::Draw::GlyphSet::HSP_scalebar;
 use strict;
 use warnings;
 
-use Sanger::Graphics::Bump;
-
 use base qw(EnsEMBL::Draw::GlyphSet);
 
 sub _init {
