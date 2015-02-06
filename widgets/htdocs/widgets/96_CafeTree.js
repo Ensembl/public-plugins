@@ -109,7 +109,7 @@ Ensembl.CafeTree.tnt_theme_tree_cafe_tree = function() {
           .src(function(d) {
             if(d.is_leaf()) {
               var species_icon = d.data().name.replace(/\./g,'_').substring(0, 1).toUpperCase() + d.data().name.replace(/\./g,'_').substring(1);  //capitalize first letter
-              return pics_path + species_icon + ".png";
+              return d.is_collapsed() ? "" : pics_path + species_icon + ".png"; //don't return an img path for collapsed node as we dont have image for them
             }
           })
           .width(function() {
@@ -153,7 +153,7 @@ Ensembl.CafeTree.tnt_theme_tree_cafe_tree = function() {
           })
           .text(function (node) {
             if(node.is_leaf()) {
-              return node.data().tax.scientific_name;
+              return node.data().tax.alias_name;
             }
           })          
           .fontsize(14);
@@ -167,7 +167,7 @@ Ensembl.CafeTree.tnt_theme_tree_cafe_tree = function() {
 	        var node_data = node.data();
 	        var obj = {};
           obj.header = "Taxon: " + node_data.tax.alias_name + (node_data.tax.timetree_mya ? (" ~ " + node_data.tax.timetree_mya + " MYA " ) : " ") + "(" + node_data.tax.scientific_name + ")";
-	
+          
 	        obj.rows = [
 		        { label : "Node ID",
 		          value : node_data.id
@@ -186,15 +186,58 @@ Ensembl.CafeTree.tnt_theme_tree_cafe_tree = function() {
 		        },
 		        { label : "Scientific Name",
 		          value : node_data.tax.scientific_name
-		        }
+		        }          
 	        ];
+          if (node.is_collapsed()) {
+            obj.rows.push ({
+              label : 'Action',
+              link : function (node) {
+                node.toggle();
+                tree_vis.update();
+              },
+              obj : node,
+              value : "Expand subtree"
+            });
+          }
+          if (!node.is_leaf() && node.parent()) {
+            obj.rows.push ({
+              label : 'Action',
+              link : function (node) {
+                node.toggle();
+                tree_vis.update();
+              },
+              obj : node,
+              value : "Collapse subtree"
+            });
+            if (!tree_vis.has_focus (node)) {
+              obj.rows.push ({
+                label : "Action",
+                link : function (node) {
+                  tree_vis.focus_node(node).update();
+                  tree_vis.update();
+                },
+                obj : node,
+                value : "Focus on node"
+              });            
+            }
+          }
+          if (tree_vis.has_focus (node)) {
+            obj.rows.push ({
+              label : "Action",
+              link : function (node) {
+                tree_vis.release_focus();
+                tree_vis.update();
+              },
+              obj : node,
+              value : "Release focus"
+            });
+          }          
 	        tnt.tooltip.table().id(node.id()).width(210).call(this, obj);
 	    };
 
 	    // TREE SIDE
-	    var deploy_vis = function (tree_obj) {
- 
-          if (tree_obj.pvalue_avg > 0.5) {
+	    var deploy_vis = function (tree_obj) { 
+          if (tree_obj.tree.pvalue_avg > 0.5) {
               d3.select(".info")
                   .append("h3")
                   .html("Info");
@@ -215,17 +258,34 @@ Ensembl.CafeTree.tnt_theme_tree_cafe_tree = function() {
                   .append("p")
                   .html("This gene family has significant gene gain or loss events. Click the icons on the image blue bar to interact with the tree.");
           }
+          
+          var expanded_node = tnt.tree.node_display.circle()
+              .fill (function (node) {
+                var n_genes = node.property('n_members'); // get the number of genes for a given node
+                return n_genes === 0 ? "lightgrey" : color_grad(n_genes);
+              });
+              
+          var collapsed_node = tnt.tree.node_display.triangle()              
+              .fill (function (node) {
+                var n_genes = node.property('n_members'); // get the number of genes for a given node
+                return n_genes === 0 ? "lightgrey" : color_grad(n_genes);
+              });
 
+          var node_display = tnt.tree.node_display.cond()
+              .add("collapsed", function (node) {
+                return node.is_collapsed();
+              }, collapsed_node)
+              .add("rest", function () {
+                return true;
+              }, expanded_node);
+              
           var root = tnt.tree.node(tree_obj.tree);
           root.sort(function(node1, node2) { return node1.data().tax.id - node2.data().tax.id; }); //sorting the tree obj based on taxonid
                     
 	        tree_vis
+            .node_display(node_display)
 		        .data (root.data())
 		        .label (label)
-            .node_display(tree_vis.node_display().fill (function (node) {
-              var n_genes = node.property('n_members'); // get the number of genes for a given node
-              return n_genes === 0 ? "lightgrey" : color_grad(n_genes);
-            }))
             .on_click (cafe_tooltip)
 		        .link_color (function (from_node, to_node) {
 		            var target  = to_node.data();
@@ -270,7 +330,7 @@ Ensembl.CafeTree.tnt_theme_tree_cafe_tree = function() {
 
 	        tree_vis(div);
 	    }
-        
+
         deploy_vis(json_data);
         update_tree_label();
  
