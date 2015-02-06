@@ -23,7 +23,7 @@ Ensembl.Panel.VEPResults = Ensembl.Panel.ContentTools.extend({
     // Initialise ZMenus on table links
     this.el.find('a.zmenu').on('click', function(e) {
       e.preventDefault();
-      Ensembl.EventManager.trigger('makeZMenu', $(this).text().replace(/\W/g, '_'), { event: e, area: { a: this }});
+      Ensembl.EventManager.trigger('makeZMenu', $(this).text().replace(/\W/g, '_'), { event: e, area: { link: $(this) }});
     });
 
     // Edit icon and Cancel link for editing a filter

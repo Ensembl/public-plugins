@@ -320,7 +320,7 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
     this.elLk.previewDiv
       .find('a.zmenu').on('click', function(e) {
         e.preventDefault();
-        Ensembl.EventManager.trigger('makeZMenu', this.innerHTML.replace(/\W/g, '_'), { event: e, area: {a: this}});
+        Ensembl.EventManager.trigger('makeZMenu', this.innerHTML.replace(/\W/g, '_'), { event: e, area: {link: $(this)}});
       }).end()
       .find('._ht').helptip().end()
       .find('._close_button').on('click', function() { panel.elLk.previewDiv.empty(); });
