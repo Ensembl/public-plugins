@@ -28,7 +28,6 @@ use JSON qw(to_json);
 
 use previous qw(content);
 
-
 sub content {
   my $self        = shift;
   my $cdb         = shift || 'compara';

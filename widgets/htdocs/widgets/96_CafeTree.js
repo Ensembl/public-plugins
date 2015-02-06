@@ -237,7 +237,7 @@ Ensembl.CafeTree.tnt_theme_tree_cafe_tree = function() {
 
 	    // TREE SIDE
 	    var deploy_vis = function (tree_obj) { 
-          if (tree_obj.tree.pvalue_avg > 0.5) {
+          if (tree_obj.pvalue_avg > 0.5) {
               d3.select(".info")
                   .append("h3")
                   .html("Info");
@@ -246,7 +246,7 @@ Ensembl.CafeTree.tnt_theme_tree_cafe_tree = function() {
                   .append("div")
                   .attr("class", "message-pad")
                   .append("p")
-                  .html("This gene family does not have any significant gene gain or loss events (<i>pvalue</i> for the gene family is <b>" + tree_obj.pvalue_avg + "</b>)");
+                  .html("This gene family does not have any significant gene gain or loss events (<i>pvalue</i> for the gene family is <b>" + tree_obj.pvalue_avg + "</b>).Click the tree nodes or the icons on the image blue bar to interact with the tree.");
           } else {
               d3.select(".info")
                   .append("h3")
@@ -256,7 +256,7 @@ Ensembl.CafeTree.tnt_theme_tree_cafe_tree = function() {
                   .append("div")
                   .attr("class", "message-pad")
                   .append("p")
-                  .html("This gene family has significant gene gain or loss events. Click the icons on the image blue bar to interact with the tree.");
+                  .html("This gene family has significant gene gain or loss events. Click the tree nodes or the icons on the image blue bar to interact with the tree.");
           }
           
           var expanded_node = tnt.tree.node_display.circle()
