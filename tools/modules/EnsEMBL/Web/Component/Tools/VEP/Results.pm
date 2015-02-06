@@ -189,7 +189,7 @@ sub content {
   );
 
   my $ac_json = encode_entities($self->jsonify(\%ac));
-  $html .= '<input class="js_param" type="hidden" name="auto_values" value="'.$ac_json.'" />';
+  $html .= qq(<input class="js_param" type="hidden" name="auto_values" value="$ac_json" />);
 
 
   ## NAVIGATION

@@ -17,75 +17,60 @@
 Ensembl.Panel.VEPResults = Ensembl.Panel.ContentTools.extend({
   init: function () {
     var panel = this;
-    
+
     this.base();
-    
-    this.el.find('a.zmenu').on('click', this.zmenu);
-    
-    this.el.find('a.filter_toggle').on('click', this.filter_toggle);
-    
-    this.el.find('input.autocomplete').on('focus', {panel: this}, this.filter_autocomplete);
-    
+
+    // Initialise ZMenus on table links
+    this.el.find('a.zmenu').on('click', function(e) {
+      e.preventDefault();
+      Ensembl.EventManager.trigger('makeZMenu', $(this).text().replace(/\W/g, '_'), { event: e, area: { a: this }});
+    });
+
+    // Edit icon and Cancel link for editing a filter
+    this.el.find('a.filter_toggle').on('click', function(e) {
+      e.preventDefault();
+      panel.el.find('.' + this.rel).toggle();
+    });
+
+    // Autocomplete input box
+    this.el.find('input.autocomplete').on('focus', function() {
+      var fieldNum    = this.name.replace('field', '').replace('value', '');
+      var fieldName   = panel.el.find('select[name=field' + fieldNum + '] option:selected').val();
+      var fieldInp    = panel.el.find('input[name=value' + fieldNum + ']');
+      var autoValues  = $.parseJSON(panel.params['auto_values']);
+
+      if (autoValues[fieldName] && autoValues[fieldName].length) {
+
+        fieldInp.autocomplete({
+          minLength : 0,
+          source    : autoValues[fieldName]
+        });
+
+      } else if (fieldInp.hasClass('ui-autocomplete-input')) {
+        fieldInp.autocomplete('destroy');
+      }
+
+      fieldInp.attr('placeholder', fieldName === 'Location' ? 'chr:start-end' : 'defined');
+
+      fieldInp = null;
+    });
+
+    // refresh panel on form submit
     this.el.find('form._apply_filter').on('submit', function(e) {
       e.preventDefault();
 
-      var ajaxUrl   = $(this).find('input[name=ajax_url]').remove().val();
-      var urlParams = $.map($(this).serializeArray(), function(field) {
-        return field.name + '=' + field.value;
-      }).sort().join(';');
+      var forms     = $(this);
+      var ajaxUrl   = form.find('input[name=ajax_url]').remove().val();
+      var urlParams = $.map(form.serializeArray(), function(field) { return field.name + '=' + field.value; }).sort().join(';');
 
       panel.reload(window.location.href.split('?')[0] + '?' + urlParams, ajaxUrl + '?' + urlParams);
     });
 
+    // links to display n number of results in the table
     this.el.find('a._reload').on('click', function(e) {
       e.preventDefault();
       panel.reload(this.href, $(this).find('input').val());
     });
-  },
-  
-  zmenu: function(e){
-    var el = $(this);
-    Ensembl.EventManager.trigger('makeZMenu', el.text().replace(/\W/g, '_'), { event: e, area: {a: el}});
-    return false;
-  },
-  
-  filter_toggle: function(e){
-    e.preventDefault();
-    $("." + this.rel).each(function() {
-      this.style.display = (this.style.display == 'none' ? '' : 'none');
-    });
-  },
-  
-  filter_autocomplete: function(e){
-      var el = $(this);
-      var fieldNum = this.name.replace("field", "").replace("value", "");
-      var panel = e.data.panel;
-      
-      // find value and field input
-      var value = $("input[name='value" + fieldNum + "']");
-      var field = $("select[name='field" + fieldNum + "']");
-      
-      var autoValues = JSON.parse(panel.params['auto_values'].replace(/\'/g, '"'));
-      
-      if(autoValues[field[0].value] && autoValues[field[0].value].length) {
-        value.autocomplete({
-          minLength: 0,
-          source: autoValues[field[0].value]
-        });
-      }
-      else if(value.hasClass('ui-autocomplete-input')) {
-        value.autocomplete("destroy");
-      }
-      
-      // update placeholder
-      if(field[0].value == 'Location') {
-        value.attr("placeholder", "chr:start-end");
-      }
-      else {
-        value.attr("placeholder", "defined");
-      }
-      
-      return false;
   },
 
   reload: function(url, ajaxUrl) {
