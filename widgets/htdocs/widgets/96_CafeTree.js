@@ -336,15 +336,15 @@ Ensembl.CafeTree.tnt_theme_tree_cafe_tree = function() {
  
         // We add the legend
         d3.select(div)
-            .append("div")
-            .append("svg")
-            .attr("width", width)
-            .attr("height", 150)
-            .append("g")
-            .call(legend()
-                  .min(min_n_members)
-                  .max(max_n_members)
-                 );
+          .append("div")
+          .append("svg")
+          .attr("width", width)
+          .attr("height", 150)
+          .append("g")
+          .call(legend()
+                .min(min_n_members)
+                .max(max_n_members)
+               );
 
     }
 
@@ -387,7 +387,8 @@ Ensembl.CafeTree.tnt_theme_tree_cafe_tree = function() {
           .attr("x2", width)
           .attr("y2", 0)
           .attr("stroke", "black")
-          .attr("stroke-width", 0.5)
+          .attr("class", "legend-line")
+          .attr("stroke-width", 0.5);
         
         separator
           .append("text")

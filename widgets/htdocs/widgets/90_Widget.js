@@ -93,6 +93,7 @@ Ensembl.Panel.Widget = Ensembl.Panel.ImageMap.extend({
                     tree_obj.layout().width(new_width);
                     tree_obj.update();
                     d3.select("svg").attr("width", new_width + "px");
+                    d3.select(".legend-line").attr("x2", new_width-30);
                     d3El.style("width", new_width + "px");
                     d3.select(".tnt_groupDiv").style("width", new_width + "px");
                     d3.select(".resize_menu").style("display", "none");
