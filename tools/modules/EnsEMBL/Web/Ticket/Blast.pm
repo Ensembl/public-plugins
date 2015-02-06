@@ -99,15 +99,16 @@ sub _process_user_input {
 
   for my $species (@species) {
 
-    for my $sequence (@$sequences) {
+    my $assembly  = $sd->get_config($species, 'ASSEMBLY_VERSION');
+    my $summary   = sprintf('%s against %s %s (%s)', $search_method, $sd->get_config($species, 'SPECIES_COMMON_NAME'), $assembly, $source_types->{$params->{'source'}});
 
-      my $summary = sprintf('%s against %s (%s)', $search_method, $sd->get_config($species, 'SPECIES_COMMON_NAME'), $source_types->{$params->{'source'}});
+    for my $sequence (@$sequences) {
 
       push @$jobs, [ {
         'job_number'  => ++$job_num,
         'job_desc'    => $desc || $sequence->{'display_id'} || $summary,
         'species'     => $species,
-        'assembly'    => $sd->get_config($species, 'ASSEMBLY_VERSION'),
+        'assembly'    => $assembly,
         'job_data'    => {
           'output_file' => 'blast.out',
           'sequence'    => {

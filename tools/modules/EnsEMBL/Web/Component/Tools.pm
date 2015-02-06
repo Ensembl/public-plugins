@@ -170,6 +170,7 @@ sub job_details_table {
     ? sprintf('<img class="job-species" src="%sspecies/16/%s.png" alt="" height="16" width="16">%s', $self->img_url, $species, $sd->species_label($species, 1))
     : $species =~ s/_/ /rg
   );
+  $two_col->add_row('Assembly',     $job->assembly);
 
   return $two_col;
 }

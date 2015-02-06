@@ -53,6 +53,7 @@ sub job_details_table {
 
   $two_col->add_row('Job name',       $job_summary->render);
   $two_col->add_row('Species',        $sd->tools_valid_species($species) ? sprintf('<img class="job-species" src="%sspecies/16/%s.png" alt="" height="16" width="16">%s', $self->img_url, $species, $sd->species_label($species, 1)) : $species =~ s/_/ /rg);
+  $two_col->add_row('Assembly',       $job->assembly);
   $two_col->add_row('Search type',    $object->get_param_value_caption('search_type', $job_data->{'search_type'}));
   $two_col->add_row('Sequence',       sprintf('<div class="input-seq">&gt;%s</div>', join("\n", $sequence->{'display_id'} || '', ($sequence->{'sequence'} =~ /.{1,60}/g))));
   $two_col->add_row('Query type',     $object->get_param_value_caption('query_type', $job_data->{'query_type'}));
