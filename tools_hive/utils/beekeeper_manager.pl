@@ -99,7 +99,7 @@ if (!$config) {
 
 my $command = "perl $script_name -url mysql://$config->{'db'}{'user'}:$config->{'db'}{'pass'}\@$config->{'db'}{'host'}:$config->{'db'}{'port'}/$config->{'db'}{'name'}";
 
-if (my $pids = `pgrep -d ',' -f "$command"`) {
+if (my $pids = `pgrep -d ',' -f "$command "`) {
   if ($kill) {
     my $tries = 10;
     my $wait  = 4;
