@@ -25,9 +25,7 @@ use List::Util qw(first);
 use Bio::EnsEMBL::Variation::Utils::VEP qw(detect_format);
 
 use EnsEMBL::Web::Exceptions;
-use EnsEMBL::Web::Command::UserData;
-use EnsEMBL::Web::TmpFile::Text;
-use EnsEMBL::Web::Utils::FileHandler qw(file_get_contents);
+use EnsEMBL::Web::File::Tools;
 use EnsEMBL::Web::Job::VEP;
 
 use parent qw(EnsEMBL::Web::Ticket);
@@ -37,6 +35,8 @@ sub init_from_user_input {
   my $self      = shift;
   my $hub       = $self->hub;
   my $species   = $hub->param('species');
+
+  my $file = EnsEMBL::Web::File::Tools->new('hub' => $hub, 'tool' => 'VEP');
 
   my $method    = first { $hub->param($_) } qw(file url userdata text);
 
@@ -49,28 +49,23 @@ sub init_from_user_input {
   if ($method eq 'userdata') {
 
     $file_name    = $hub->param('userdata');
-    $description  = 'user data'
+    $description  = 'user data';
+
+    $file->init('file' => $file_name);
 
   # if new file, url or text, upload it to a temporary file location
   } else {
 
     $description = $hub->param('name') || ($method eq 'text' ? 'pasted data' : ($method eq 'url' ? 'data from URL' : sprintf("%s", $hub->param('file'))));
 
-    # upload from file/text/url
-    my $response = EnsEMBL::Web::Command::UserData->new({'object' => $self->object, 'hub' => $hub})->upload($method); # FIXME - upload method needs to be taken out of EnsEMBL::Web::Command::UserData
+    my $error = $file->upload('type' => 'no_attach');
+    throw exception('InputError', $error) if $error;
 
-    throw exception('InputError', $response && $response->{'error'} ? $response->{'error'} : "Upload failed: $response->{'filter_code'}") unless $response && $response->{'code'};
-
-    my $code      = $response->{'code'};
-    my $tempdata  = $hub->session->get_data('type' => 'upload', 'code' => $code);
-
-    throw exception('InputError', "Could not find file with code $code") unless $tempdata && $tempdata->{'filename'};
-
-    $file_name = $tempdata->{'filename'};
+    $file_name = $file->write_name;
   }
 
   # finalise input file path and description
-  $file_path    = EnsEMBL::Web::TmpFile::Text->new('filename' => $file_name)->{'full_path'}; # absolute path of the temporary input file
+  $file_path    = $file->write_location;
   $description  = "VEP analysis of $description in $species";
   $file_name    = "$file_name.txt" if $file_name !~ /\./ && -T $file_path;
   $file_name    = $file_name =~ s/.*\///r;
@@ -78,7 +73,7 @@ sub init_from_user_input {
   # detect file format
   my $detected_format;
   try {
-    first { m/^[^\#]/ && ($detected_format = detect_format($_)) } file_get_contents($file_path);
+    first { m/^[^\#]/ && ($detected_format = detect_format($_)) } $file->read->{'contents'};
   } catch {
     throw exception('InputError', "The input format is invalid: the format is not recognized or there is a formatting issue in the input");
   };
