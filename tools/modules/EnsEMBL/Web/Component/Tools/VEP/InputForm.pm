@@ -24,8 +24,7 @@ use warnings;
 use List::Util qw(first);
 use HTML::Entities qw(encode_entities);
 
-use EnsEMBL::Web::TmpFile::Text;
-use EnsEMBL::Web::Utils::FileHandler qw(file_get_contents);
+use EnsEMBL::Web::File::Tools;
 use EnsEMBL::Web::Exceptions;
 use EnsEMBL::Web::VEPConstants qw(INPUT_FORMATS CONFIG_SECTIONS);
 use Bio::EnsEMBL::Variation::Utils::Constants;
@@ -223,10 +222,10 @@ sub content {
 
     foreach my $file (@user_files) {
 
-      my $file_obj    = EnsEMBL::Web::TmpFile::Text->new('filename' => $file->{'filename'});
+      my $file_obj    = EnsEMBL::Web::File::Tools->new('hub' => $hub, 'tool' => 'VEP', 'file' => $file->{'file'});
       my @file_data;
       try {
-        @file_data    = file_get_contents($file_obj->full_path);
+        @file_data    = @{$file_obj->read_lines->{'content'}};
       } catch {};
 
       next unless @file_data;
