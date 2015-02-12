@@ -49,10 +49,10 @@ sub init_from_user_input {
   # if input is one of the existing files
   if ($method eq 'userdata') {
 
-    $file_name    = $hub->param('userdata');
+    my $session_data = $hub->session->get_data('type' => 'upload', 'code' => $hub->param('userdata'));
     $description  = 'user data';
 
-    $file->init('file' => $file_name);
+    $file->init('file' => $session_data->{'file'});
 
   # if new file, url or text, upload it to a temporary file location
   } else {
@@ -66,7 +66,7 @@ sub init_from_user_input {
   }
 
   # finalise input file path and description
-  $file_path    = $file->write_location;
+  $file_path    = $file->read_location;
   $description  = "VEP analysis of $description in $species";
   $file_name    = "$file_name.txt" if $file_name !~ /\./ && -T $file_path;
   $file_name    = $file_name =~ s/.*\///r;
@@ -74,7 +74,7 @@ sub init_from_user_input {
   # detect file format
   my $detected_format;
   try {
-    first { m/^[^\#]/ && ($detected_format = detect_format($_)) } file_get_contents($file->write_location); #  @{$file->read_lines->{'content'}};
+    first { m/^[^\#]/ && ($detected_format = detect_format($_)) } file_get_contents($file->read_location); #  @{$file->read_lines->{'content'}};
   } catch {
     throw exception('InputError', "The input format is invalid: the format is not recognized or there is a formatting issue in the input");
   };
