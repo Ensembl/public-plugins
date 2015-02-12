@@ -25,6 +25,7 @@ use List::Util qw(first);
 use Bio::EnsEMBL::Variation::Utils::VEP qw(detect_format);
 
 use EnsEMBL::Web::Exceptions;
+use EnsEMBL::Web::Utils::FileHandler qw(file_get_contents);
 use EnsEMBL::Web::File::Tools;
 use EnsEMBL::Web::Job::VEP;
 
@@ -73,10 +74,16 @@ sub init_from_user_input {
   # detect file format
   my $detected_format;
   try {
-    first { m/^[^\#]/ && ($detected_format = detect_format($_)) } $file->read->{'contents'};
+    first { m/^[^\#]/ && ($detected_format = detect_format($_)) } file_get_contents($file->write_location); #  @{$file->read_lines->{'content'}};
   } catch {
     throw exception('InputError', "The input format is invalid: the format is not recognized or there is a formatting issue in the input");
   };
+
+  ## Update session with detected format
+  my $session_data = $hub->session->get_data('code' => $file->code);
+  $session_data->{'format'} = $detected_format;
+  $hub->session->set_data(%$session_data);
+
   my $job_data = { map { my @val = $hub->param($_); $_ => @val > 1 ? \@val : $val[0] } grep { $_ !~ /^text/ && $_ ne 'file' } $hub->param };
 
   $job_data->{'species'}    = $species;
