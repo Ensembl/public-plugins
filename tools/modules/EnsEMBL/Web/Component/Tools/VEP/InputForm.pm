@@ -220,12 +220,12 @@ sub content {
   if (scalar @user_files) {
     my @to_form = { 'value' => '', 'caption' => '-- Select file --'};
 
-    foreach my $file (@user_files) {
+    foreach my $record (@user_files) {
 
-      my $file_obj    = EnsEMBL::Web::File::Tools->new('hub' => $hub, 'tool' => 'VEP', 'file' => $file->{'file'});
+      my $file = EnsEMBL::Web::File::Tools->new('hub' => $hub, 'tool' => 'VEP', 'file' => $record->{'file'});
       my @file_data;
       try {
-        @file_data    = @{$file_obj->read_lines->{'content'}};
+        @file_data    = @{$file->read_lines->{'content'}};
       } catch {};
 
       next unless @file_data;
@@ -234,11 +234,11 @@ sub content {
          $first_line  = substr($first_line, 0, 30).'&#8230;' if $first_line && length $first_line > 31;
 
       push @to_form, {
-        'value'   => $file->{'filename'},
+        'value'   => $record->{'code'},
         'caption' => sprintf('%s | %s | %s | %s',
-          $file->{'name'},
-          $allowed_formats{$file->{'format'}},
-          $sd->species_label($file->{'species'}, 1),
+          $file->read_name,
+          $allowed_formats{$record->{'format'}},
+          $sd->species_label($record->{'species'}, 1),
           $first_line || '-'
         )
       };
