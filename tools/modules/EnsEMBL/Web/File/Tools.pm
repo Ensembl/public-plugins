@@ -29,9 +29,11 @@ sub new {
   my ($class, %args) = @_;
 
   my $hub = $args{'hub'};
-  my $dir = $args{'dir'} || 'temporary';
+  $args{'base_dir'} = 'tools';
 
-  $args{'base_dir'} = join('/', $hub->species_defs->ENSEMBL_TOOLS_TMP_DIR, $dir, $args{'tool'}); 
+  my $dir = $args{'status'} || 'temporary';
+  $args{'base_extra'} = join('/', $dir, $args{'tool'}); 
+
   return $class->SUPER::new(%args);
 }
 
