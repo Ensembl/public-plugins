@@ -77,7 +77,7 @@ sub table_columns {
   return [ $job->job_data->{'source'} =~/latestgp/i ? (
     { 'key' => 'tid',     'title'=> 'Genomic Location',     'align' => 'left',  'sort' => 'string',         'help' => $glossary->{'Genomic Location (BLAST Results)'}           },
     { 'key' => 'gene',    'title'=> 'Overlapping Gene(s)',  'align' => 'left',  'sort' => 'string',         'help' => $glossary->{'Overlapping Genes (BLAST Results)'}          },
-    { 'key' => 'tori',    'title'=> 'Orientation',          'align' => 'left',  'sort' => 'string',         'help' => $glossary->{'Orientation (BLAST Results)'}                }
+    { 'key' => 'tori',    'title'=> 'Orientation',          'align' => 'left',  'sort' => 'string',         'help' => $glossary->{'Orientation (BLAST Results for genomic)'}    }
   ) : (
     { 'key' => 'tid',     'title'=> 'Subject name',         'align' => 'left',  'sort' => 'string',         'help' => $glossary->{'Subject name (BLAST Results)'}               },
     { 'key' => 'gene',    'title'=> 'Gene hit',             'align' => 'left',  'sort' => 'string',         'help' => $glossary->{'Gene hit (BLAST Results)'}                   },
@@ -85,7 +85,7 @@ sub table_columns {
     { 'key' => 'tend',    'title'=> 'Subject end',          'align' => 'left',  'sort' => 'numeric',        'help' => $glossary->{'Subject end (BLAST Results)'}                },
     { 'key' => 'tori',    'title'=> 'Subject ori',          'align' => 'left',  'sort' => 'string',         'help' => $glossary->{'Subject ori (BLAST Results)'}                },
     { 'key' => 'gid',     'title'=> 'Genomic Location',     'align' => 'left',  'sort' => 'string',         'help' => $glossary->{'Genomic Location (BLAST Results)'}           },
-    { 'key' => 'gori',    'title'=> 'Orientation',          'align' => 'left',  'sort' => 'string',         'help' => $glossary->{'Orientation (BLAST Results)'}                }
+    { 'key' => 'gori',    'title'=> 'Orientation',          'align' => 'left',  'sort' => 'string',         'help' => $glossary->{'Orientation (BLAST Results for cDNA/protein)'}}
   ), (
     { 'key' => 'qid',     'title'=> 'Query name',           'align' => 'left',  'sort' => 'string',         'help' => $glossary->{'Query name (BLAST Results)'}, 'hidden' => 1  },
     { 'key' => 'qstart',  'title'=> 'Query start',          'align' => 'left',  'sort' => 'numeric',        'help' => $glossary->{'Query start (BLAST Results)'}                },
