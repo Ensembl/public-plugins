@@ -54,7 +54,7 @@ sub render {
 
   # Hardcoded the newick tree details for now until compara has an API and db ready for this (ncbi tree is already available via API)
   my $ensembl_species_tree      = $species_tree_adaptor->fetch_by_method_link_species_set_id_label($mlss->dbID, 'ensembl')->root;
-  $tree_details->{'newick_tree'} = $ensembl_species_tree->newick_format('ryo', $format);
+  $tree_details->{'ensembl_tree'} = $ensembl_species_tree->newick_format('ryo', $format);
  
   for my $species (@{$ncbi_species_tree->get_all_nodes()}) {
      my $ncbi_taxon = $ncbiTaxonAdaptor->fetch_node_by_name($species->name);
