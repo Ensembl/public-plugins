@@ -161,8 +161,8 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
                   } else {          
                     d3.select(".filter_menu").selectAll("div").classed("current", false);   //remove current from the corresponding div
                     d3.select(this).classed("current", true);                
-                    var tree = d3.select(".tree_menu").select(".current").attr("class").match(/ensembl/g) ? tree = filter_class.match(/all_species/g) ? 'ensembl_tree_obj' : 'ensembl_'+ filter_class + "_tree_obj"
-                               : filter_class.match(/all_species/g) ? 'ncbi_tree_obj' : 'ncbi_'+ filter_class + "_tree_obj";
+                    var tree_type = d3.select(".tree_menu").select(".current").attr("class").replace(/current/g,'').replace(/tree_item/g,'').replace(/ /g,'');
+                    var tree = tree_type + (filter_class.match(/all_species/g) ? '' : ('_' + filter_class)) + "_tree_obj";
                     tree_vis.data(species_details[tree]);
                     tree_vis.update();
                     update_tree_label();
