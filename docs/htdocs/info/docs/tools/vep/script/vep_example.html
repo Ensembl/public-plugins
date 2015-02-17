@@ -62,11 +62,6 @@
   <pre class="code">perl variant_effect_predictor.pl -database -i hgvs.txt -o hgvs.vcf -refseq -convert vcf</pre>
     </li>
     <li>
-      Filter input file on consequence type to include only variants that
-      cause a coding sequence change, write output in original input format
-  <pre class="code">perl variant_effect_predictor.pl -cache -i variants.vcf -o variants_filtered.vcf -filter coding_change -original</pre>
-    </li>
-    <li>
       Add custom position-based phenotype annotation from remote BED file
   <pre class="code">perl variant_effect_predictor.pl -cache -i variants.vcf -custom ftp://ftp.myhost.org/data/phenotypes.bed.gz,phenotype</pre>
     </li>
