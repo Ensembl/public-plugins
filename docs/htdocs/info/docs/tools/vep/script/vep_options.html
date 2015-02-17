@@ -199,7 +199,7 @@ host          useastdb.ensembl.org</pre>
       <td>&nbsp;</td>
       <td>
         <a href="../vep_formats.html#input">Input file format</a> - one of
-        "ensembl", "vcf", "pileup", "hgvs", "id", "vep". By default, the
+        "ensembl", "vcf", "pileup", "hgvs", "id". By default, the
         script auto-detects the input file format. Using this option you
         can force the script to read the input file as Ensembl, VCF,
         pileup or HGVS format, a list of variant identifiers (e.g. rsIDs
@@ -767,16 +767,6 @@ host          useastdb.ensembl.org</pre>
         Writes output in GVF format. <i>Not used by default</i>
       </td>
     </tr>
-    <tr id="opt_original">
-      <td><pre>--original</pre></td>
-      <td>&nbsp;</td>
-      <td>
-        Writes output as a filtered set of the input. Must be used with
-        <a href="#opt_filter">--filter</a>. Input lines are unchanged -
-        consequences are calculated but not written to the output.
-        <i>Not used by default</i>
-      </td>
-    </tr>
     <tr id="opt_fields">
       <td><pre>--fields [list]</pre></td>
       <td>&nbsp;</td>
@@ -1030,47 +1020,6 @@ host          useastdb.ensembl.org</pre>
         variants that pass the frequency filter
       </td>
     </tr>    
-    <tr id="opt_filter">
-      <td><pre>--filter [filters]</pre></td>
-      <td>&nbsp;</td>
-      <td>
-        Filter the output on consequence type. Multiple allowed types
-        can be specified, separated by commas. SO terms should ideally
-        be used, although Ensembl and NCBI types are also allowed.
-        Consequence types can be excluded by adding "no_" to the start
-        of the filter name. Shortcuts to common groupings are available:
-        <p>
-          <table class="ss">
-            <tr>
-              <th>Shortcut name</th><th>Description</th>
-            </tr>
-            <tr>
-              <td>upstream</td><td>Any upstream variant</td>
-            </tr>
-            <tr>
-              <td>downstream</td><td>Any downstream variant</td>
-            </tr>
-            <tr>
-              <td>utr</td><td>Any UTR variant</td>
-            </tr>
-            <tr>
-              <td>splice</td><td>Any splicing region variants</td>
-            </tr>
-            <tr>
-              <td>coding</td><td>Any variant that falls in the coding region of a transcript</td>
-            </tr>
-            <tr>
-              <td>coding_change</td><td>Any variant that causes a coding change in the transcript</td>
-            </tr>
-            <tr>
-              <td>regulatory</td><td>Any variant that falls in a regulatory or binding motif feature</td>
-            </tr>
-          </table>
-        </p> To reproduce a filtered version of the input file, add the flag
-        <a href="#opt_original">--original</a><br/>
-        <i>Not used by default</i>
-      </td>
-    </tr>
     <tr id="opt_allow_non_variant">
       <td><pre>--allow_non_variant</pre></td>
       <td>&nbsp;</td>
