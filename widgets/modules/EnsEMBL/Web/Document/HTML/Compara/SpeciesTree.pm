@@ -52,6 +52,15 @@ sub render {
   my $ncbi_species_tree         = $species_tree_adaptor->fetch_by_method_link_species_set_id_label($mlss->dbID, 'ncbi')->root;
   $tree_details->{'ncbi_tree'}  = $ncbi_species_tree->newick_format('ryo', $format); #full tree
 
+  # The filters, e.g. 'Mammalia' => 'mammals (all kinds)'
+  # Filters are defined as MLSS tags like 'filter:Mammalia'
+  $tree_details->{'filters'} = {};
+  foreach my $tag ($mlss->get_all_tags()) {
+      if ($tag =~ m/^filter:(.*)$/) {
+          $tree_details->{'filters'}->{ucfirst $1} = $mlss->get_value_for_tag($tag);
+      }
+  }
+
   # Hardcoded the newick tree details for now until compara has an API and db ready for this (ncbi tree is already available via API)
   my $ensembl_species_tree      = $species_tree_adaptor->fetch_by_method_link_species_set_id_label($mlss->dbID, 'ensembl')->root;
   $tree_details->{'ensembl_tree'} = $ensembl_species_tree->newick_format('ryo', $format);

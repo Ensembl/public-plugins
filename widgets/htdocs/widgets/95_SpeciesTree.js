@@ -101,22 +101,12 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
           .attr("class", "header")
           .text("View tree for");
 
-      filter_menu.append("div")
-          .attr("class", "mammalia")
-          .text("Mammals")
+      for(var j in species_details['filters']) {
+        filter_menu.append("div")
+            .attr("class", j)
+            .text(species_details['filters'][j]);
+      }
 
-      filter_menu.append("div")
-          .attr("class", "sauria")
-          .text("Sauropsids");         
-
-      filter_menu.append("div")
-          .attr("class", "amniota")
-          .text("Amniotes");
-
-      filter_menu.append("div")
-          .attr("class", "neopterygii")
-          .text("Fish");
-          
       filter_menu.append("div")
           .attr("class", "all_species current ")
           .text("All species");         
@@ -306,10 +296,9 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
           root_node.sort(function(node1, node2) { return species_info[node1.node_name()]['taxon_id'] - species_info[node2.node_name()]['taxon_id']; }); //sorting the tree obj based on taxonid
           
           //populating the species_details obj with all possible trees
-          species_details[j.replace(/_tree/g,'')+'_mammalia_tree_obj']    = root_node.find_node_by_name('Mammalia').data();
-          species_details[j.replace(/_tree/g,'')+'_sauria_tree_obj']      = root_node.find_node_by_name('Sauria').data();
-          species_details[j.replace(/_tree/g,'')+'_amniota_tree_obj']     = root_node.find_node_by_name('Amniota').data();
-          species_details[j.replace(/_tree/g,'')+'_neopterygii_tree_obj'] = root_node.find_node_by_name('Neopterygii').data();
+          for(var k in species_details['filters']) {
+              species_details[j.replace(/_tree/g,'')+'_' + k + '_tree_obj']    = root_node.find_node_by_name(k).data();
+          }
           
           species_details[tree_key] = root_node.data();          
         }
