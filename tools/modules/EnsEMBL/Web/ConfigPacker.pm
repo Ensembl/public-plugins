@@ -33,6 +33,7 @@ sub munge_config_tree_multi {
   my $self = shift;
   $self->PREV::munge_config_tree_multi(@_);
   $self->_configure_blast_multi;
+  $self->_configure_vep;
 }
 
 sub _munge_file_formats {
@@ -97,6 +98,20 @@ sub _configure_blast_multi {
   $multi_tree->{'ENSEMBL_BLAST_DATASOURCES_ORDER'}  = $all_sources_order;
   $multi_tree->{'ENSEMBL_BLAST_DATASOURCES'}        = $all_sources;
   $multi_tree->{'ENSEMBL_BLAST_CONFIGS'}            = $search_types_ordered;
+}
+
+sub _configure_vep {
+  my $self = shift;
+  my $tree = $self->tree;
+  return unless defined($tree->{'ENSEMBL_VEP_PLUGINS'}) && defined($tree->{'ENSEMBL_VEP_PLUGINS'}->{'config'});
+  my $file = $tree->{'ENSEMBL_VEP_PLUGINS'}->{'config'};
+  
+  return unless -e $file;
+  open IN, $file or return;
+  my @content = <IN>;
+  close IN;
+  
+  $tree->{ENSEMBL_VEP_PLUGIN_CONFIG} = JSON->new->decode(join('', @content));
 }
 
 1;
