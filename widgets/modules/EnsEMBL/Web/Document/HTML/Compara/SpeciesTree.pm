@@ -48,9 +48,18 @@ sub render {
   my $format            = '%{^n}:%{d}';
   
   my $mlss              = $mlss_adaptor->fetch_by_method_link_type_species_set_name('SPECIES_TREE', 'collection-ensembl');
-  # Getting the different NCBI trees 
-  my $ncbi_species_tree         = $species_tree_adaptor->fetch_by_method_link_species_set_id_label($mlss->dbID, 'ncbi')->root;
-  $tree_details->{'ncbi_tree'}  = $ncbi_species_tree->newick_format('ryo', $format); #full tree
+  my $all_trees         = $species_tree_adaptor->fetch_all_by_method_link_species_set_id_label_pattern($mlss->dbID, '');
+
+  # Put all the trees from the database
+  # Each tree has a unique key based on its root_id
+  # The label is displayed in the menu and in the image heading
+  $tree_details->{'trees'} = {};
+  foreach my $tree (@$all_trees) {
+      $tree_details->{'trees'}->{"t".$tree->root_id()} = {
+          'label'   => $tree->label(),
+          'newick'  => $tree->root->newick_format('ryo', $format)
+      };
+  }
 
   # The filters, e.g. 'Mammalia' => 'mammals (all kinds)'
   # Filters are defined as MLSS tags like 'filter:Mammalia'
@@ -61,11 +70,13 @@ sub render {
       }
   }
 
-  # Hardcoded the newick tree details for now until compara has an API and db ready for this (ncbi tree is already available via API)
-  my $ensembl_species_tree      = $species_tree_adaptor->fetch_by_method_link_species_set_id_label($mlss->dbID, 'ensembl')->root;
-  $tree_details->{'ensembl_tree'} = $ensembl_species_tree->newick_format('ryo', $format);
+  # Which tree should be displayed by default (just pick a random one otherwise)
+  $tree_details->{'default_tree'} = $mlss->has_tag('default_tree') ? $mlss->get_value_for_tag('default_tree') : (keys %{$tree_details->{'trees'}})[0];
  
-  for my $species (@{$ncbi_species_tree->get_all_nodes()}) {
+  # Go through all the nodes of all the trees and get the tooltip info
+  foreach my $tree (@$all_trees) {
+   for my $species (@{$tree->root->get_all_nodes()}) {
+     next if $species_info{$species->name};
      my $ncbi_taxon = $ncbiTaxonAdaptor->fetch_node_by_name($species->name);
 
      my $sp = {};
@@ -80,6 +91,7 @@ sub render {
          $sp->{production_name} = ucfirst($genomeDB->name);
      }
      $species_info{$species->name} = $sp; 
+    }
   }
   $tree_details->{'species_tooltip'} = \%species_info;
   

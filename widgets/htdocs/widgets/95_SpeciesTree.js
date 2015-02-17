@@ -44,7 +44,7 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
       }
       
       function update_tree_label() {
-        var ensembl_ncbi  = d3.select(".tree_menu").select(".current").text().replace(/\sTree/g,'');
+        var ensembl_ncbi  = d3.select(".tree_menu").select(".current").text().replace(/\stree/g,'');
         var species_clade = d3.select(".filter_menu").select(".current").text().match(/All species/g) ? "Species" : d3.select(".filter_menu").select(".current").text();
         var new_label = ensembl_ncbi + " " + species_clade + " tree";
         d3.select(".tree_label").text(new_label);
@@ -68,27 +68,25 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
               d3.selectAll(".tree_item").classed("current", false);
               d3.select(".tree_item." + tree_name).classed("current", true);
               var species_type = d3.select(".filter_menu").select(".current").attr("class").replace(/\scurrent/g,'');
-              var tree_type    = tree_name + (species_type.match(/all_species/g) ? "" : "_" + species_type) + "_tree_obj";
-              tree_vis.data(species_details[tree_type]);
+              var tree_type    = (species_type.match(/all_species/g) ? "all" : species_type);
+              tree_vis.data(species_details['trees'][tree_name]['objects'][tree_type]);
               tree_vis.update();
               update_tree_label();
           }
           d3.select(".tree_menu").style("display", "none");
       };
 
-      tree_menu.append("div")
-          .attr("class", "tree_item ncbi")
-          .text("NCBI Taxonomy Tree")
-          .on("click", function() {
-              return update_tree_div("ncbi");
-          });
-
-      tree_menu.append("div")
-          .attr("class", "tree_item ensembl current")
-          .text("Ensembl Tree")
-          .on("click", function() {
-              return update_tree_div("ensembl");
-          });
+      function tree_item_click_handler(tree_name) {
+          return function() {
+              return update_tree_div(tree_name);
+          }
+      }
+      for(var j in species_details['trees']) {
+          tree_menu.append("div")
+              .attr("class", "tree_item " + j + (j == species_details['default_tree'] ? " current" : ""))
+              .text(species_details['trees'][j]['label'] + " tree")
+              .on("click", tree_item_click_handler(j));
+      }
 
       d3.select("#species_tree").append("div").attr("class", "iexport_menu resize_menu");
       draw_resize_menu(width);
@@ -114,7 +112,7 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
       var tree_icon = d3.select(".image_toolbar")
           .append("div")
           .attr("class", "tree_switch")
-          .attr("title", "switch between NCBI and Ensembl tree")
+          .attr("title", "switch between the various trees")
           .on("click", function() {
               if(d3.select(".tree_menu").style("display") == 'none') {
                 //just making sure all other menu are closed
@@ -152,8 +150,8 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
                     d3.select(".filter_menu").selectAll("div").classed("current", false);   //remove current from the corresponding div
                     d3.select(this).classed("current", true);                
                     var tree_type = d3.select(".tree_menu").select(".current").attr("class").replace(/current/g,'').replace(/tree_item/g,'').replace(/ /g,'');
-                    var tree = tree_type + (filter_class.match(/all_species/g) ? '' : ('_' + filter_class)) + "_tree_obj";
-                    tree_vis.data(species_details[tree]);
+                    var species_filter = (filter_class.match(/all_species/g) ? 'all' : filter_class);
+                    tree_vis.data(species_details['trees'][tree_type]['objects'][species_filter]);
                     tree_vis.update();
                     update_tree_label();
                     d3.select(".filter_menu").style("display", "none");  
@@ -288,25 +286,22 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
       };
       
       // the point of this code is to create tree obj for the different type of trees data and just use the obj key to get the data for the specific tree
-      for(var j in species_details) {
-        if(species_details.hasOwnProperty(j) && j.match(/_tree$/)) {
-          var tree_key = j + "_obj";      
-          var root_node = tnt.tree.node(tnt.tree.parse_newick(species_details[j])); //making the tree object for each tree
+      for(var j in species_details['trees']) {
+
+          var root_node = tnt.tree.node(tnt.tree.parse_newick(species_details['trees'][j]['newick'])); //making the tree object for each tree
           
           root_node.sort(function(node1, node2) { return species_info[node1.node_name()]['taxon_id'] - species_info[node2.node_name()]['taxon_id']; }); //sorting the tree obj based on taxonid
           
+          species_details['trees'][j]['objects'] = {'all': root_node.data()};
+
           //populating the species_details obj with all possible trees
           for(var k in species_details['filters']) {
-              species_details[j.replace(/_tree/g,'')+'_' + k + '_tree_obj']    = root_node.find_node_by_name(k).data();
+              species_details['trees'][j]['objects'][k] = root_node.find_node_by_name(k).data();
           }
           
-          species_details[tree_key] = root_node.data();          
-        }
-      }
+          var hash = {};
+          root_node.apply(function (node){
       
-
-    var hash = {};
-    tnt.tree.node(species_details['ensembl_tree_obj']).apply(function (node){
         if(hash[node.node_name()] == undefined ) { 
             hash[node.node_name()] = 1;
             node.property("unique_name", node.node_name());
@@ -314,14 +309,12 @@ Ensembl.SpeciesTree.tnt_theme_tree_simple_species_tree = function(species_detail
           node.property("unique_name", node.node_name() + "_" + hash[node.node_name()]);
           hash[node.node_name()]++;
         }
-      });
-      
-      tnt.tree.node(species_details['ncbi_tree_obj']).apply(function (node) {
-        node.property("unique_name", node.node_name());
-      });
 
-	    tree_vis
-	      .data(species_details['ensembl_tree_obj'])
+          });
+      }
+
+      tree_vis
+        .data(species_details['trees'][species_details['default_tree']]['objects']['all'])
         .id("unique_name")
         .label(joined_label)
         .node_display(tree_vis.node_display().size(4))
