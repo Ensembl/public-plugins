@@ -74,7 +74,7 @@ sub render {
      $sp->{timetree} = $ncbi_taxon->get_tagvalue('ensembl timetree mya');
      $sp->{ensembl_name} = $ncbi_taxon->ensembl_alias_name();
 
-     my $genomeDB =$genomeDBAdaptor->fetch_by_taxon_id($ncbi_taxon->taxon_id());
+     my $genomeDB = $species->genome_db();
      if (defined $genomeDB) {
          $sp->{assembly} = $genomeDB->assembly;
          $sp->{production_name} = ucfirst($genomeDB->name);
