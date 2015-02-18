@@ -101,7 +101,7 @@ sub save {
 }
 
 sub create_work_dir {
-  ## Creates the directory path for the job, and move it's input files to that directory
+  ## Creates the directory path for the job, and move its input files to that directory
   ## @param Hashref with following keys:
   ##  - ticket_type : Ticket type name
   ##  - ticket_name : Ticket name
