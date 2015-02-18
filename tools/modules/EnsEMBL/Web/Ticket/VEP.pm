@@ -66,7 +66,7 @@ sub init_from_user_input {
   }
 
   # finalise input file path and description
-  $file_path    = $file->read_location;
+  $file_path    = $file->absolute_read_path;
   $description  = "VEP analysis of $description in $species";
   $file_name    = "$file_name.txt" if $file_name !~ /\./ && -T $file_path;
   $file_name    = $file_name =~ s/.*\///r;
@@ -74,7 +74,7 @@ sub init_from_user_input {
   # detect file format
   my $detected_format;
   try {
-    first { m/^[^\#]/ && ($detected_format = detect_format($_)) } file_get_contents($file->absolute_read_path); #  @{$file->read_lines->{'content'}};
+    first { m/^[^\#]/ && ($detected_format = detect_format($_)) } file_get_contents($file_path); #  @{$file->read_lines->{'content'}};
   } catch {
     throw exception('InputError', "The input format is invalid: the format is not recognized or there is a formatting issue in the input");
   };
