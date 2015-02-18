@@ -67,7 +67,7 @@ sub init_from_user_input {
   }
 
   # finalise input file path and description
-  $file_path    = $file->write_location; 
+  $file_path    = $file->absolute_write_path; 
   $description  = "Assembly conversion of $description in $species";
   $file_name    .= '.'.lc($format) if $file_name !~ /\./ && -T $file_path;
   $file_name    = $file_name =~ s/.*\///r;
