@@ -282,6 +282,10 @@ EOF
           url => "/{species}/Gene/Variation_Gene/Table?g={id}",
           conditions => { "{feature_type}" => "^Gene\$" }
         },
+        { title => "Phenotypes",
+          url => "/{species}/Gene/Phenotype?g={id};db={database_type}",
+          conditions => { "{feature_type}" => "^Gene\$" }
+        },
         { title => "Location",
           url => "/{species}/Location/View?r={location};g={id};db={database_type}",
           conditions => { "{location}" => ".+" }
