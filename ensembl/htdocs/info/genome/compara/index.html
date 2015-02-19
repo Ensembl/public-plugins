@@ -35,7 +35,7 @@ We also analyze the gene gain and loss events using the <a href="http://sites.bi
 <ul>
 <li>
 <strong>Protein trees</strong> are constructed using a representative protein for every gene in Ensembl: proteins are clustered using <a href="http://treesoft.svn.sourceforge.net/viewvc/treesoft/branches/lh3/hcluster/">hcluster_sg</a> based on <a href="http://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&DOC_TYPE=Download">NCBI BLAST+</a> e-values, and each cluster of proteins is aligned using <a href="http://www.tcoffee.org/Projects_home_page/m_coffee_home_page.html">M-Coffee</a> or <a href="http://mafft.cbrc.jp/alignment/software/">Mafft</a>.
-Finally, <a href="https://github.com/muffato/treebest">TreeBeST</a> is used to produce a gene tree from each multiple alignment, reconciling it with the species tree to call duplication events.
+Finally, <a href="https://github.com/Ensembl/treebest">TreeBeST</a> is used to produce a gene tree from each multiple alignment, reconciling it with the species tree to call duplication events.
 <a href="homology_method.html">More information &rarr;</a>
 <a href="prot_tree_stats.html">Tree statistics &rarr;</a>
 </li>
@@ -43,7 +43,7 @@ Finally, <a href="https://github.com/muffato/treebest">TreeBeST</a> is used to p
 <li>
 <strong>ncRNA trees</strong> are constructed using gene families represented in <a href="http://rfam.janelia.org/">RFAM</a>, for which a specific covariance model is provided.
 For each gene family, we build several trees using secondary structure alignments with <a href="http://infernal.janelia.org/">INFERNAL</a> and genomic alignments with <a href="http://wasabiapp.org/software/prank/">PRANK</a>.
-All the trees are merged into a final tree using <a href="https://github.com/muffato/treebest">TreeBeST</a>.
+All the trees are merged into a final tree using <a href="https://github.com/Ensembl/treebest">TreeBeST</a>.
 <a href="ncRNA_methods.html">More information &rarr;</a>
 <a href="nc_tree_stats.html">Tree statistics &rarr;</a>
 
