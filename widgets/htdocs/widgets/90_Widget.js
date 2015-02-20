@@ -20,10 +20,6 @@ Ensembl.Panel.Widget = Ensembl.Panel.ImageMap.extend({
     
     var panel         = this;
     var id            = this.id.replace("tempId",'');
-    this.tree         = this.params.treeType;
-    this.json         = $.parseJSON(this.params.json);
-    this.species_name = this.params.species_name; 
-
 
     if(!this.supported()) {
       var url = this.params.updateURL.split('?'); 
@@ -32,24 +28,27 @@ Ensembl.Panel.Widget = Ensembl.Panel.ImageMap.extend({
       $('#' + this.id).html('<div class="ajax js_panel" id="' + id + '"><input type="hidden" class="ajax_load" value="' + url + '" /></div>');
       
       Ensembl.EventManager.register('ajaxComplete', this, function () { Ensembl.EventManager.remove(this.id); });
-    }
-    
-    Ensembl.CafeTree.displayTree(this.json, this.species_name, this);     
+    } else {
+      this.tree         = this.params.treeType;
+      this.json         = $.parseJSON(this.params.json);
+      this.species_name = this.params.species_name; 
+      Ensembl.CafeTree.displayTree(this.json, this.species_name, this);     
 
-/* these need to be initialised after tree is drawn */    
-    this.elLk.img     = $(".tnt_groupDiv", this.elLk.container);
-    this.elLk.d3_menu = $('.d3_menu', this.elLk.container);
-    this.d3Tree       = tnt.tree();  
-    
-    $('div._ht', this.elLk.toolbars).helptip({ track: false });  /* this has to be after the tree is drawn */        
-    
-    this.elLk.popupLinks.on('click', function () {
-      panel.elLk.d3_menu.hide();
-      return false;
-    });
+    /* these need to be initialised after tree is drawn */    
+      this.elLk.img     = $(".tnt_groupDiv", this.elLk.container);
+      this.elLk.d3_menu = $('.d3_menu', this.elLk.container);
+      this.d3Tree       = tnt.tree();  
+      
+      $('div._ht', this.elLk.toolbars).helptip({ track: false });  /* this has to be after the tree is drawn */        
+      
+      this.elLk.popupLinks.on('click', function () {
+        panel.elLk.d3_menu.hide();
+        return false;
+      });
+    }
   },
   
-  makeImageMap: function () { },
+//  makeImageMap: function () { },
   
   /*
     drawing the image toolbar, already have resize functionality if resize class pass through
@@ -158,8 +157,8 @@ Ensembl.Panel.Widget = Ensembl.Panel.ImageMap.extend({
   
   supported: function () {
     var  support = document.implementation.hasFeature("http://www.w3.org/TR/SVG11/feature#Shape", "1.1");
-    return support ? 1 : 0;
-//return 0;
+//    return support ? 1 : 0;
+return 0;
   }  
 });
   
