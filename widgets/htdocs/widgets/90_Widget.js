@@ -16,7 +16,6 @@
 
 Ensembl.Panel.Widget = Ensembl.Panel.ImageMap.extend({
   init: function () {
-    this.base();
     
     var panel         = this;
     var id            = this.id.replace("tempId",'');
@@ -27,8 +26,10 @@ Ensembl.Panel.Widget = Ensembl.Panel.ImageMap.extend({
 
       $('#' + this.id).html('<div class="ajax js_panel" id="' + id + '"><input type="hidden" class="ajax_load" value="' + url + '" /></div>');
       
+      this.base();
       Ensembl.EventManager.register('ajaxComplete', this, function () { Ensembl.EventManager.remove(this.id); });
     } else {
+      this.base();
       this.tree         = this.params.treeType;
       this.json         = $.parseJSON(this.params.json);
       this.species_name = this.params.species_name; 
@@ -157,8 +158,8 @@ Ensembl.Panel.Widget = Ensembl.Panel.ImageMap.extend({
   
   supported: function () {
     var  support = document.implementation.hasFeature("http://www.w3.org/TR/SVG11/feature#Shape", "1.1");
-//    return support ? 1 : 0;
-return 0;
+    return support ? 1 : 0;
+//return 0;
   }  
 });
   
