@@ -10,6 +10,120 @@
   
   <h1 id="top"><span style="color:#006">Variant Effect Predictor</span> <img src="/i/16/info.png"> <span style="color:#666">Other information</span></h1>
   <hr/>
+  <h2 id="faster">Getting VEP to run faster</h2>
+  
+  <p> Set up correctly, the VEP script is capable of processing around 3
+  million variants in 1 hour. There are a number of steps you can take to
+  make sure your VEP installation is running as fast as possible: </p>
+  
+  <ol>
+    <li>
+      <p> Make sure you have the <a href="vep_download.html">latest version</a> of
+      the VEP and Ensembl API. We regularly introduce optimisations, alongside the
+      new features and bug fixes of a typical new release. </p>
+    </li>
+    
+    <li>
+      <p> Download a <a href="vep_cache.html">cache file</a> for your species. If
+      you are using <a href="vep_options.html#opt_database">--database</a>, you
+      should consider using <a href="vep_options.html#opt_database">--cache</a> or
+      <a href="vep_options.html#opt_database">--offline</a> instead. Any time the
+      VEP has to access data from the database (even if you have a local copy),
+      it will be slower than accessing data in the cache on your local file system. </p>
+      
+      <p> Enabling <a href="vep_cache.html#limitations">certain flags</a>
+      forces the VEP to access the database, and the script will warn you at
+      startup that it will do this with e.g.:</p>
+      
+      <pre class="code">2011-06-16 16:24:51 - INFO: Database will be accessed when using --check_svs</pre>
+      
+      <p> Consider carefully whether you need to use these flags in your analysis.</p>
+    </li>
+    
+    <li>
+      <p> Download a <a href="vep_cache.html#fasta">FASTA file</a> if you use
+      <a href="vep_options.html#opt_hgvs">--hgvs</a> or <a
+      href="vep_options.html#opt_check_ref">--check_ref</a>. Again, this will prevent
+      the VEP accessing the database unnecessarily (in this case to retrieve genomic
+      sequence). </p>
+    </li>
+    
+    <li>
+      <p> If you use <a href="vep_options.html#opt_check_existing">--check_existing</a>
+      or any flags that invoke it (e.g. <a href="vep_options.html#opt_gmaf">--gmaf</a>,
+      <a href="vep_options.html#opt_maf_1kg">--maf_1kg</a>, <a
+      href="vep_options.html#opt_filter_common">--filter_common</a>, <a
+      href="vep_options.html#opt_everything">--everything</a>), <a
+      href="vep_cache.html#convert">tabix-convert</a> your cache file. Checking for known
+      variants using a converted cache is >100% faster than using the default format. </p>
+    </li>
+    
+    <li>
+      <p> Make sure your cache and FASTA files are stored on the fastest file system
+      or disk you have available. If you have a lot of memory in your machine, you can
+      even pre-copy the files to memory using <a
+      href="https://www.howtoforge.com/storing-files-directories-in-memory-with-tmpfs"
+      rel="external">tmpfs</a>. </p>
+    </li>
+    
+    <li id="forking">
+      <p> Using forking enables the VEP to run multiple parallel "threads", with
+      each thread processing a subset of your input. Most modern computers have
+      more than one processor core, so running the VEP with forking enabled can
+      give huge speed increases (3-4x faster in most cases). Even computers with a
+      single core will see speed benefits due to overheads associated with using
+      object-oriented code in Perl. </p>
+  
+      <p> To use forking, you must choose a number of forks to use with the <a
+      href="vep_options#opt_fork">--fork</a> flag. Most users should use 4 forks: </p>
+  
+      <pre class=code>perl variant_effect_predictor.pl -i my_input.vcf -fork 4 -offline</pre>
+  
+      <p> but depending on various factors specific to your setup you may see
+      faster performance with fewer or more forks. </p>
+      
+      <p> VEP users writing <a href="vep_plugins.html">plugins</a>
+      should be aware that while the VEP code attempts to preserve the state of
+      any plugin-specific cached data between separate forks, there may be
+      situations where data is lost. If you find this is the case, you should
+      disable forking in the new() method of your plugin by deleting the "fork"
+      key from the $config hash. </p>
+    </li>
+    
+    <li>
+      <p> Consider if you need to generate HGVS notations (<a
+      href="vep_options.html#opt_hgvs">--hgvs</a>); this is a complex annotation step
+      that can add ~50-80% to your runtime. Note also that --hgvs is switched on by
+      <a href="vep_options.html#opt_everything">--everything</a>.
+    </li>
+    
+    <li>
+      <p> Install the <a href="https://github.com/Ensembl/ensembl-xs" rel="external">
+      Ensembl::XS</a> package. This contains compiled versions of certain key
+      subroutines used in the VEP that will run faster than the default native Perl
+      equivalents. Using this should improve runtime by 5-10%. </p>
+    </li>
+    
+    <li>
+      <p> The VEP is optimised to run on input files that are sorted in
+      chromosomal order. Unsorted files will still work, albeit more slowly. </p>
+    </li>
+    
+    <li>
+      <p> For very large files (for example those from whole-genome sequencing),
+      the VEP process can be easily parallelised by dividing your file into chunks
+      (e.g. by chromosome). The VEP will also work with tabix-indexed, bgzipped
+      VCF files, and so the tabix utility could be used to divide the input file:
+      </p>
+  
+      <pre class="code"> tabix -h variants.vcf.gz 12:1000000-20000000 | perl variant_effect_predictor.pl -cache -vcf </pre>
+    </li>
+  </ol>
+  
+
+  
+  
+  <hr/>
   <h2 id="assembly">Species with multiple assemblies</h2>
   
   <p> With the arrival of GRCh38, Ensembl now supports two different assembly

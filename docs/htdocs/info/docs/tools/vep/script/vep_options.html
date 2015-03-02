@@ -507,6 +507,26 @@ host          useastdb.ensembl.org</pre>
         Don't URI escape HGVS strings. <i>Default = escape</i>
       </td>
     </tr>
+    <tr id="opt_keep_csq">
+      <td><pre>--keep_csq</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        Don't overwrite existing CSQ entry in
+        <a href="../vep_formats.html#vcfout">VCF INFO field</a>. <i>Overwrites
+        by default</i>
+      </td>
+    </tr>
+    <tr id="opt_vcf_info_field">
+      <td><pre>--vcf_info_field [CSQ|ANN|(other)]</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        Change the name of the INFO key that VEP write the consequences to
+        in its <a href="../vep_formats.html#vcfout">VCF output</a>. Use "ANN"
+        for compatibility with other tools such as <a
+        href="http://snpeff.sourceforge.net/" rel="external">snpEff</a>.
+        <i>Default: CSQ</i>
+      </td>
+    </tr>
     <tr id="opt_terms">
       <td><pre>--terms [ensembl<b>|</b>so]</pre></td>
       <td><pre>-t</pre></td>
@@ -1256,58 +1276,6 @@ host          useastdb.ensembl.org</pre>
       </td>
     </tr>
   </table>
-  
-  
-  <hr/>
-  <h2 id="performance">Performance</h2>
-  
-  <p> In optimal conditions, the VEP script is capable of processing >2
-  million variants in 1 hour. Run time is dependent on various factors, and is
-  especially affected by the chromosomal distribution of variants. Variants in
-  exonic regions naturally take longer to process than those in intronic or
-  intergenic regions. Due to the way transcript data is cached in memory, the
-  VEP will, for example, process a file containing 100 variants that fall in
-  one gene faster than it would a file containing 100 variants in 100
-  different genes. </p>
-  
-  <p> The VEP is also optimised to run on input files that are sorted in
-  chromosomal order. Unsorted files will still work, albeit more slowly. </p>
-  
-  <p> For very large files (for example those from whole-genome sequencing),
-  the VEP process can be easily parallelised by dividing your file into chunks
-  (e.g. by chromosome). The VEP will also work with tabix-indexed, bgzipped
-  VCF files, and so the tabix utility could be used to divide the input file:
-  </p>
-  
-  <pre class="code"> tabix -h variants.vcf.gz 12:1000000-20000000 | perl variant_effect_predictor.pl -cache -vcf </pre>
-  
-  <h4 id="forking"> Forking </h4>
-  
-  <p> Using forking enables the VEP to run multiple parallel "threads", with
-  each thread processing a subset of your input. Most modern computers have
-  more than one processor core, so running the VEP with forking enabled can
-  give huge speed increases (3-4x faster in most cases). Even computers with a
-  single core will see speed benefits due to overheads associated with using
-  object-oriented code in Perl. </p>
-  
-    <p> To use forking, you must choose a number of forks to use with the <a
-    href="#opt_fork">--fork</a> flag. Most users should use 4 forks: </p>
-  
-  <pre class=code>perl variant_effect_predictor.pl -i my_input.vcf -fork 4 -offline</pre>
-  
-  <p> but depending on various factors specific to your setup you may see
-  faster performance with fewer or more forks. </p>
-  
-  <p> <b>NB:</b> VEP users writing <a href="vep_plugins.html">plugins</a>
-  should be aware that while the VEP code attempts to preserve the state of
-  any plugin-specific cached data between separate forks, there may be
-  situations where data is lost. If you find this is the case, you should
-  disable forking in the new() method of your plugin by deleting the "fork"
-  key from the $config hash. </p>
-  
-  
-
-  
 </div>
 
 </body>

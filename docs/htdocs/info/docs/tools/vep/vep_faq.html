@@ -68,21 +68,53 @@ scenarios. It is up to you, the user, to interpret this information!</p>
 
 <h2 id="web">Web VEP questions</h2>
 
+<p style="font-weight:bold;"> Q: How can I make the VEP run faster? </p>
+
+<p> There are a number of factors that influence how fast the VEP runs. Have a look at our <a href="script/vep_other.html#faster">handy guide</a> for tips on improving VEP runtime. </p>
+
+<p>&nbsp;</p>
+
+<p style="font-weight:bold;"> Q: Why do I see "N" as the reference allele in my HGVS strings? </p>
+<p style="font-weight:bold;"> Q: Why do I see the following error (or similar) in my VEP output?</p>
+<pre class="code">substr outside of string at /nfs/users/nfs_w/wm2/Perl/ensembl-variation/modules/Bio/EnsEMBL/Variation/Utils/Sequence.pm line 511.
+Use of uninitialized value $ref_allele in string eq at /nfs/users/nfs_w/wm2/Perl/ensembl-variation/modules/Bio/EnsEMBL/Variation/Utils/Sequence.pm line 514.
+Use of uninitialized value in concatenation (.) or string at /nfs/users/nfs_w/wm2/Perl/ensembl-variation/modules/Bio/EnsEMBL/Variation/Utils/Sequence.pm line 643.</pre>
+
+<p> Both of these error types are usually seen when using a <a
+href="vep_cache.html#fasta">FASTA file</a> for retrieving sequence.
+There are a a couple of steps you can take to try to remedy them:</p>
+
+<ol>
+  <li>
+    The index alongside the FASTA can become corrupted. Delete
+    [fastafile].index and re-run VEP to regenerate it. By default
+    this file is located in your $HOME/.vep/[species]/[version]_[assembly]
+    directory.
+  </li>
+
+  <li>
+    The FASTA file itself may have been corrupted during download;
+    delete the fasta file and the index and re-download (you can use the
+    <a href="vep_download.html#install">VEP installer</a> to do this).
+  </li>
+
+  <li>
+    Older versions of BioPerl (1.2.3 in particular is known to have this)
+    cannot properly index large FASTA files. Make sure you are using a later
+    (>=1.6) version of BioPerl. The <a href="vep_download.html#install">VEP
+    installer</a> installs 1.6.1 for you.
+  </li>
+</ol>
+
+<p> If you still see problems after taking these steps, or if you were not
+using a FASTA file in the first place, please <a href="#top">contact us</a>. </p>
+
+<p>&nbsp;</p>
+
 <p style="font-weight:bold;"> Q: How do I access the web version of the Variant
 Effect Predictor? </p>
 
 <p> A: You can find the web VEP on the <a href="/info/docs/tools/index.html">Tools</a> page.</p>
-
-<p>&nbsp;</p>
-
-
-<p style="font-weight:bold;"> Q: I have selected a VCF file in the file upload
-field, but nothing happens when I click the blue "Next" button. Why? </p>
-
-<p> A: Ensure that you have selected VCF as the input file format, and that your
-VCF file is formatted <a
-rel="external" href="http://www.1000genomes.org/wiki/Analysis/Variant%20Call%20Format/vcf-variant-call-format-version-40"
-target="_blank">correctly</a>.</p>
 
 <p>&nbsp;</p>
 
@@ -146,8 +178,6 @@ href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Prote
 there are methods in the <a
 href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1TranscriptVariation.html">TranscriptVariationAllele</a>
 class that should help you (probably translation_start and translation_end).</p>
-
-<p>&nbsp;</p>
 
 </div>
 
