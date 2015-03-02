@@ -71,6 +71,9 @@ sub run {
   $options->{"--$_"}  = sprintf '"%s/%s"', $work_dir, delete $config->{$_} for qw(input_file output_file stats_file);
   $options->{"--$_"}  = $config->{$_} eq 'yes' ? '' : $config->{$_} for grep { defined $config->{$_} && $config->{$_} ne 'no' } keys %$config;
   $options->{"--dir"} = $self->param('cache_dir');
+  
+  # send warnings to STDERR
+  $options->{"--warning_file"} = "STDERR";
 
   # save the result file name for later use
   $self->param('result_file', $options->{'--output_file'} =~ s/(^\")|(\"$)//rg);
