@@ -8,15 +8,46 @@
 
 <h1>Linking in to Ensembl</h1>
 
-<h2>URL structure</h2>
+<h2>Linking on a stable ID</h2>
+
+<p>If you simply wish to link to a gene, transcript, protein or gene tree page, 
+particularly for automated links, you can do so using the following template:</p>
+
+<p><kbd>[site]/id/[stable id]</kbd></p>
+
+<p>For example, <a href="http://www.ensembl.org/id/ENSG00000139618">http://www.ensembl.org/id/ENSG00000139618</a>, or <a href="http://grch37.ensembl.org/id/ENSMUST00000103109">http://grch37.ensembl.org/id/ENSMUST00000103109</a>.</p>
+
+<p>As you can see, you don't need to know the name of the species that the ID belongs to;
+the website will work that out automatically based on the 3-6 letter prefix.</p>
+
+<p>Note however that you do have to use Ensembl stable IDs; you cannot substitute a 
+gene symbol such as FOXP2, as that is found in many species. To link on a gene symbol,
+see the <a href="#standard_url">standard URL structure</a> section, below.</p>
+
+<p><a href="/Help/Glossary?id=349">Find out more about stable IDs</a>.</p>
+
+<p>Valid ID types are:</p>
+
+<ul>
+<li>Gene: ENS[species code]<b>G</b>[number]</li>
+<li>Transcript: ENS[species code]<b>T</b>[number]</li>
+<li>Protein: ENS[species code]<b>P</b>[number]</li>
+<li>Gene tree: ENS[species code]<b>GT</b>[number]</li>
+</ul>
+
+<p>The only site this type of URL will not work with is 
+<a href="http://pre.ensembl.org">Ensembl Pre</a> since, by their nature,
+most preview species have no genebuild and thus no stable IDs.</p>
+
+<h2 id="standard_url">Standard URL structure</h2>
 
 <p>
   URLs for Ensembl views take the format:
 </p>
 
-<kbd>
+<p><kbd>
   http://www.ensembl.org/<em>species</em>/<em>section</em>/<em>page</em>?g=<em>gene</em>;t=<em>transcript</em>;r=<em>seq_region</em>:<em>start</em>-<em>end</em>
-</kbd>
+</kbd></p>
 
 <h3>Location-based views</h3>
 
