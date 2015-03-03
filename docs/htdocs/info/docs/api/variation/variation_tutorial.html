@@ -489,7 +489,7 @@ my $var = $var_adaptor->fetch_by_name('rs1421085');
 my $pf_adaptor = $registry->get_adaptor('homo_sapiens', 'variation', 'phenotypefeature');
 foreach my $pf (@{$pf_adaptor->fetch_all_by_Variation($var)}) {
 	print "Variation ", $pf->variation_names, " is associated with the phenotype '", $pf->phenotype->description,
-	      "' in source ", $pf->source;
+	      "' in source ", $pf->source_name;
 			
 	print " with a p-value of ",$pf->p_value if (defined($pf->p_value));
 	
@@ -896,7 +896,7 @@ print $sv->variation_name, " ",  $sv->var_class, " (SO term: ", $sv->class_SO_te
 
 # Get Study information
 if ($sv->study) {
-  print "This structural variation comes from the study ", $sv->source, "-", $sv->study->name, ": ", $sv->study->description, "\n";
+  print "This structural variation comes from the study ", $sv->source_name, "-", $sv->study->name, ": ", $sv->study->description, "\n";
 }
 </pre>
 <p>Like the variation, you can fetch the structural variations using a Slice.</p>
@@ -993,7 +993,7 @@ while ($somatic_iter-&gt;has_next()) {
     print $mutation-&gt;name(), "\n";
 }
 
-my $cosmic_iter = $va-&gt;fetch_Iterator_somatic()-&gt;grep(sub {$_-&gt;source eq 'COSMIC'});
+my $cosmic_iter = $va-&gt;fetch_Iterator_somatic()-&gt;grep(sub {$_-&gt;source_name eq 'COSMIC'});
 
 while ($cosmic_iter-&gt;has_next()) {
     print $cosmic_iter-&gt;next()-&gt;name(), "\n";
@@ -1005,7 +1005,7 @@ while ($name_iter-&gt;has_next()) {
     print $name_iter-&gt;next(), "\n";
 }
 
-my $cosmic_name_iter = $va-&gt;fetch_Iterator_somatic()-&gt;grep(sub {$_-&gt;source eq 'COSMIC'})-&gt;map(sub {$_-&gt;name});
+my $cosmic_name_iter = $va-&gt;fetch_Iterator_somatic()-&gt;grep(sub {$_-&gt;source_name eq 'COSMIC'})-&gt;map(sub {$_-&gt;name});
 
 while ($cosmic_name_iter-&gt;has_next()) {
     print $cosmic_name_iter-&gt;next(), "\n";
