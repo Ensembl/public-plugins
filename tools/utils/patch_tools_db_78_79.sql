@@ -14,3 +14,6 @@
 
 # ticket table patch
 ALTER TABLE `ticket` ADD `visibility` ENUM('private','public') NOT NULL DEFAULT 'public' AFTER `owner_type`;
+
+# job table patch
+ALTER TABLE `job` CHANGE `job_desc` `job_desc` VARCHAR(500);

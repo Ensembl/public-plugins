@@ -250,12 +250,10 @@ sub get_form_node {
     $fieldset->add_hidden({'name' => 'sensitivity_configs', 'value' => $self->jsonify($all_config_sets)});
   }
 
-
   $fieldset->add_field({
     'label'           => 'Description (optional):',
     'type'            => 'string',
     'name'            => 'description',
-    'size'            => '160',
   });
 
   # Advanced config options

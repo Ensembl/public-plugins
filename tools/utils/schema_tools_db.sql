@@ -57,7 +57,7 @@ CREATE TABLE `job` (
   `assembly` varchar(255) NOT NULL,
   `job_number` int(10) DEFAULT NULL,
   `job_data` text NOT NULL,
-  `job_desc` varchar(160) DEFAULT NULL,
+  `job_desc` varchar(500) DEFAULT NULL,
   `job_dir` varchar(255) DEFAULT NULL,
   `status` enum('awaiting_dispatcher_response','awaiting_user_response','done','deleted') NOT NULL DEFAULT 'awaiting_user_response',
   `dispatcher_class` varchar(255) DEFAULT NULL,
