@@ -37,6 +37,11 @@ sub prepare_to_dispatch {
   my $object      = $self->object;
   my @search_type = $object->parse_search_type(delete $job_data->{'search_type'});
 
+  if (!$job_data->{'source_file'}) {
+    $rose_object->job_message([{'display_message' => sprintf('Source file for running %s on %s is not available.', $search_type[1], $rose_object->species), 'fatal' => 0}]);
+    return;
+  }
+
   $job_data->{'blast_type'} = $search_type[0];
   $job_data->{'program'}    = lc $search_type[1];
   $job_data->{'work_dir'}   = $rose_object->job_dir;

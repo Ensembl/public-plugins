@@ -79,7 +79,8 @@ sub _get_NCBIBLAST_source_file {
 sub _get_BLAT_source_file {
   ## @private
   my ($self, $species, $source_type) = @_;
-  return join ':', $self->get_config($species, 'BLAT_DATASOURCES')->{$source_type}, $self->ENSEMBL_BLAT_TWOBIT_DIR;
+  my $server = $self->get_config($species, 'BLAT_DATASOURCES')->{$source_type};
+  return $server ? join ':', $server, $self->ENSEMBL_BLAT_TWOBIT_DIR : '';
 }
 
 1;
