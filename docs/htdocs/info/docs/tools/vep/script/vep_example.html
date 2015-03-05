@@ -74,6 +74,34 @@
     
   <hr/>
   
+  <h2 id="1kg_p3">1000 Genomes Phase 3 data</h2>
+  
+  <p> 1000 Genomes Phase 3 data is available from release 79 in GRCh37 cache files; simply use <a href="vep_options.html#opt_gmaf">--gmaf</a> and/or <a href="vep_options.html#opt_maf_1kg">--maf_1kg</a> to retrieve frequency data. Due to delays in the build process, this data is not available in release 79 for GRCh38, but there is a way to access the data from the VEP using <a href="vep_custom.html">custom annotations</a>: <p>
+  
+  <ol>
+    <li>Ensure your system is set up to access data from tabix-indexed VCF files (see <a href="vep_custom.html">documentation</a>)</li>
+    <li>Download this remapped VCF file and tabix index from Ensembl's FTP server:
+      <ul>
+        <li><a href="ftp://ftp.ensembl.org/pub/release-79/variation/VEP/1KG.phase3.GRCh38.vcf.gz">VCF</a></li>
+        <li><a href="ftp://ftp.ensembl.org/pub/release-79/variation/VEP/1KG.phase3.GRCh38.vcf.gz.tbi">tabix index</a></li>
+      </ul>
+    </li>
+    <li>
+      Run VEP with the following command (using the GRCh38 input example) to get locations and continental-level allele frequencies:
+      <pre class="code">perl variant_effect_predictor.pl -i example_GRCh38.vcf -cache -custom 1KG.phase3.GRCh38.vcf.gz,P3,vcf,exact,0,AF,AFR_AF,AMR_AF,EAS_AF,EUR_AF,SAS_AF</pre>
+      You will then see data under field names as described in the VEP output header:
+      <pre class="code">## P3 : 1KG.phase3.GRCh38.vcf.gz (exact)
+## P3_AF : AF field from 1KG.phase3.GRCh38.vcf.gz
+## P3_AFR_AF : AFR_AF field from 1KG.phase3.GRCh38.vcf.gz
+## P3_AMR_AF : AMR_AF field from 1KG.phase3.GRCh38.vcf.gz
+## P3_EAS_AF : EAS_AF field from 1KG.phase3.GRCh38.vcf.gz
+## P3_EUR_AF : EUR_AF field from 1KG.phase3.GRCh38.vcf.gz
+## P3_SAS_AF : SAS_AF field from 1KG.phase3.GRCh38.vcf.gz</pre>
+      where the P3 field contains the ID (or coordinates if no ID found) of the variant in the VCF file
+    </li>
+  </ol>
+    
+  <hr/>
   
   <h2 id="gerp">GERP / conservation scores</h2>
   
