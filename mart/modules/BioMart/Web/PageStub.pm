@@ -58,8 +58,8 @@ sub new {
    
     $page->javascript->add_source('/biomart/mview/js/martview.js');
     $page->body_javascript->add_inlinejs('addLoadEvent(setVisibleStatus)');
-    $page->stylesheet->add_sheet('all', '/biomart/mview/martview.css');
-    $page->stylesheet->add_sheet('all', '/martview-hacks.css');
+    $page->stylesheet->add_sheet('/biomart/mview/martview.css');
+    $page->stylesheet->add_sheet('/martview-hacks.css');
  
     foreach my $element (@order) {
       my $html_module = $elements->{$element};
