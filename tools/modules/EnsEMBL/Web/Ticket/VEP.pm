@@ -66,7 +66,7 @@ sub init_from_user_input {
   }
 
   # finalise input file path and description
-  $file_path    = $file->absolute_read_path;
+  $file_path    = $file->absolute_write_path;
   $description  = "VEP analysis of $description in $species";
   $file_name    = "$file_name.txt" if $file_name !~ /\./ && -T $file_path;
   $file_name    = $file_name =~ s/.*\///r;
