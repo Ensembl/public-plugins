@@ -48,24 +48,6 @@
       sequence). </p>
     </li>
     
-    <li>
-      <p> If you use <a href="vep_options.html#opt_check_existing">--check_existing</a>
-      or any flags that invoke it (e.g. <a href="vep_options.html#opt_gmaf">--gmaf</a>,
-      <a href="vep_options.html#opt_maf_1kg">--maf_1kg</a>, <a
-      href="vep_options.html#opt_filter_common">--filter_common</a>, <a
-      href="vep_options.html#opt_everything">--everything</a>), <a
-      href="vep_cache.html#convert">tabix-convert</a> your cache file. Checking for known
-      variants using a converted cache is >100% faster than using the default format. </p>
-    </li>
-    
-    <li>
-      <p> Make sure your cache and FASTA files are stored on the fastest file system
-      or disk you have available. If you have a lot of memory in your machine, you can
-      even pre-copy the files to memory using <a
-      href="https://www.howtoforge.com/storing-files-directories-in-memory-with-tmpfs"
-      rel="external">tmpfs</a>. </p>
-    </li>
-    
     <li id="forking">
       <p> Using forking enables the VEP to run multiple parallel "threads", with
       each thread processing a subset of your input. Most modern computers have
@@ -88,6 +70,24 @@
       situations where data is lost. If you find this is the case, you should
       disable forking in the new() method of your plugin by deleting the "fork"
       key from the $config hash. </p>
+    </li>
+    
+    <li>
+      <p> If you use <a href="vep_options.html#opt_check_existing">--check_existing</a>
+      or any flags that invoke it (e.g. <a href="vep_options.html#opt_gmaf">--gmaf</a>,
+      <a href="vep_options.html#opt_maf_1kg">--maf_1kg</a>, <a
+      href="vep_options.html#opt_filter_common">--filter_common</a>, <a
+      href="vep_options.html#opt_everything">--everything</a>), <a
+      href="vep_cache.html#convert">tabix-convert</a> your cache file. Checking for known
+      variants using a converted cache is >100% faster than using the default format. </p>
+    </li>
+    
+    <li>
+      <p> Make sure your cache and FASTA files are stored on the fastest file system
+      or disk you have available. If you have a lot of memory in your machine, you can
+      even pre-copy the files to memory using <a
+      href="https://www.howtoforge.com/storing-files-directories-in-memory-with-tmpfs"
+      rel="external">tmpfs</a>. </p>
     </li>
     
     <li>
