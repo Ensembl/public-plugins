@@ -88,7 +88,8 @@
     </li>
     <li>
       Run VEP with the following command (using the GRCh38 input example) to get locations and continental-level allele frequencies:
-      <pre class="code">perl variant_effect_predictor.pl -i example_GRCh38.vcf -cache -custom 1KG.phase3.GRCh38.vcf.gz,P3,vcf,exact,0,AF,AFR_AF,AMR_AF,EAS_AF,EUR_AF,SAS_AF</pre>
+      <pre class="code">perl variant_effect_predictor.pl -i example_GRCh38.vcf -cache \
+-custom 1KG.phase3.GRCh38.vcf.gz,P3,vcf,exact,0,AF,AFR_AF,AMR_AF,EAS_AF,EUR_AF,SAS_AF</pre>
       You will then see data under field names as described in the VEP output header:
       <pre class="code">## P3 : 1KG.phase3.GRCh38.vcf.gz (exact)
 ## P3_AF : AF field from 1KG.phase3.GRCh38.vcf.gz
