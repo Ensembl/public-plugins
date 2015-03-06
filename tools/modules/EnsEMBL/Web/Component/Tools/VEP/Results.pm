@@ -130,6 +130,7 @@ sub content {
     'SOMATIC'             => 'Somatic status',
     'PICK'                => 'Selected annotation',
     'SOURCE'              => 'Transcript source',
+    'IMPACT'              => 'Impact',
   );
   for (grep {/\_/} @$headers) {
     $header_titles{$_} ||= $_ =~ s/\_/ /gr;
@@ -164,6 +165,8 @@ sub content {
     'AMR_MAF'             => 'numeric',
     'ASN_MAF'             => 'numeric',
     'EUR_MAF'             => 'numeric',
+    'EAS_MAF'             => 'numeric',
+    'SAS_MAF'             => 'numeric',
     'AA_MAF'              => 'numeric',
     'EA_MAF'              => 'numeric',
     'DISTANCE'            => 'numeric',
