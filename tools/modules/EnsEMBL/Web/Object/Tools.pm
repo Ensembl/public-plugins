@@ -451,8 +451,9 @@ sub update_ticket_and_jobs {
   ## Updates the given tickets according to the validity and linked jobs according to the corresponding ones in the dispatcher
   ## @params List of Ticket objects to which jobs are linked
   ## @return No return value
-  my $self = shift;
-  my $jobs = {};
+  my $self  = shift;
+  my $jobs  = {};
+  my $sd    = $self->hub->species_defs;
 
   for (@_) {
 
@@ -461,7 +462,6 @@ sub update_ticket_and_jobs {
 
     # update ticket's status field acc. to it's validity
     if ($_->owner_type ne 'user') {
-      my $sd            = $self->hub->species_defs;
       my $life_left     = $_->calculate_life_left($sd->ENSEMBL_TICKETS_VALIDITY);
       my $warning_time  = $sd->ENSEMBL_TICKETS_VALIDITY_WARNING || 3 * 86400;
 
