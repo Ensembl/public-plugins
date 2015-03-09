@@ -78,9 +78,22 @@ sub run {
   # save the result file name for later use
   $self->param('result_file', $options->{'--output_file'} =~ s/(^\")|(\"$)//rg);
 
-  my $command = EnsEMBL::Web::SystemCommand->new($self, "$perl_bin $script", $options)->execute({'log_file' => $log_file});
+  my $command   = EnsEMBL::Web::SystemCommand->new($self, "$perl_bin $script", $options)->execute({'log_file' => $log_file});
+  my $m_type    = 'ERROR';
+  my $messages  = {$m_type => ['']};
 
-  throw exception('HiveException', join('', file_get_contents($log_file))) if $command->error_code;
+  for (file_get_contents($log_file)) {
+    if (m/^(ERROR|WARNING)\s*:\s*/) {
+      $m_type = $1;
+      push @{$messages->{$m_type}}, '';
+    }
+    $messages->{$m_type}[-1] .= $_;
+  }
+
+  # save any warnings to the log table
+  $self->tools_warning({ 'message' => $_, 'type' => 'VEPWarning' }) for @{$messages->{'WARNING'}};
+
+  throw exception('HiveException', $messages->{'ERROR'}[0]) if $command->error_code;
 
   return 1;
 }
