@@ -166,7 +166,7 @@ sub sync_log_messages {
         'display_message'   => delete $parsed->{'data'}{'display_message'} // $self->default_error_message,
         'fatal'             => delete $parsed->{'data'}{'fatal'} // 1,
         'data'              => delete $parsed->{'data'},
-        'exception'         => $_->{'is_error'} ? $parsed : 0,
+        'exception'         => $_->{'is_error'} ? $parsed : undef,
       }
       : {
         'display_message'   => $self->default_error_message,
