@@ -38,8 +38,9 @@ sub content {
 
   return '' if !$job || $job->status ne 'done';
 
-  my $job_data = $job->job_data;
-  my $species  = $job->species;
+  my $job_data  = $job->job_data;
+  my $species   = $job->species;
+  my @warnings  = grep { $_->data && ($_->data->{'type'} || '') eq 'VEPWarning' } @{$job->job_message};
 
   # this method reconstitutes the Tmpfile objects from the filenames
   my $output_file_obj = $object->result_files->{'output_file'};
@@ -178,6 +179,7 @@ sub content {
 
   $html .= '<div><h3>Results preview</h3>';
   $html .= '<input type="hidden" class="panel_type" value="VEPResults" />';
+  $html .= $self->_warning('Some errors occurred while running VEP', sprintf '<pre class="tools-warning">%s</pre>', join '', map $_->display_message, @warnings) if @warnings;
 
   # construct hash for autocomplete
   my $vdbc = $sd->get_config($species, 'databases')->{'DATABASE_VARIATION'};
