@@ -87,18 +87,18 @@ sub run {
   for (file_get_contents($log_file)) {
     if (m/^(ERROR|WARNING)\s*:\s*/) {
       $m_type = $1;
-      
+
       if($m_type eq 'WARNING' && $messages->{$m_type} && scalar @{$messages->{$m_type}} >= $max_msgs) {
         $w_count++;
         next;
       }
-      
+
       push @{$messages->{$m_type}}, '';
     }
     $messages->{$m_type}[-1] .= $_;
   }
-  
-  $messages->{'WARNING'}[-1] .= $w_count.' more warnings not shown' if $w_count;
+
+  push @{$messages->{'WARNING'}}, $w_count.' more warnings not shown' if $w_count;
 
   # save any warnings to the log table
   $self->tools_warning({ 'message' => $_, 'type' => 'VEPWarning' }) for @{$messages->{'WARNING'}};
