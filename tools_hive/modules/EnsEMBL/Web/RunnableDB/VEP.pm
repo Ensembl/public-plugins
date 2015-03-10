@@ -81,14 +81,24 @@ sub run {
   my $command   = EnsEMBL::Web::SystemCommand->new($self, "$perl_bin $script", $options)->execute({'log_file' => $log_file});
   my $m_type    = 'ERROR';
   my $messages  = {$m_type => ['']};
+  my $max_msgs  = 10;
+  my $w_count   = 0;
 
   for (file_get_contents($log_file)) {
     if (m/^(ERROR|WARNING)\s*:\s*/) {
       $m_type = $1;
+      
+      if($m_type eq 'WARNING' && $messages->{$m_type} && scalar @{$messages->{$m_type}} >= $max_msgs) {
+        $w_count++;
+        next;
+      }
+      
       push @{$messages->{$m_type}}, '';
     }
     $messages->{$m_type}[-1] .= $_;
   }
+  
+  $messages->{'WARNING'}[-1] .= $w_count.' more warnings not shown' if $w_count;
 
   # save any warnings to the log table
   $self->tools_warning({ 'message' => $_, 'type' => 'VEPWarning' }) for @{$messages->{'WARNING'}};
