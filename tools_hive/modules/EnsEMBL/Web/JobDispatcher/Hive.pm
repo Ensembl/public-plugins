@@ -157,9 +157,9 @@ sub sync_log_messages {
       try {
         $parsed = from_json($_->{'msg'});
       } catch {};
-
-      next if !$_->{'is_error'} && !$parsed; # warnings that are not in JSON format should be ignored
     }
+
+    next if !$_->{'is_error'} && !$parsed; # warnings that are not in JSON format should be ignored
 
     push(@messages, $parsed
       ? {
