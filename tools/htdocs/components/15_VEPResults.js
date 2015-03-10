@@ -59,7 +59,7 @@ Ensembl.Panel.VEPResults = Ensembl.Panel.ContentTools.extend({
     this.el.find('form._apply_filter').on('submit', function(e) {
       e.preventDefault();
 
-      var forms     = $(this);
+      var form      = $(this);
       var ajaxUrl   = form.find('input[name=ajax_url]').remove().val();
       var urlParams = $.map(form.serializeArray(), function(field) { return field.name + '=' + field.value; }).sort().join(';');
 
