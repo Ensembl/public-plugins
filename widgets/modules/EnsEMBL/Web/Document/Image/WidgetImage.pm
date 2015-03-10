@@ -28,7 +28,7 @@ sub new {
   my $args = {
     hub       => $hub,
     component => $component, 
-    export    => 'iexport',
+    export    => 'iexport no_text',
   };
   $args->{'toolbars'}{'top'}  = 1;
 
