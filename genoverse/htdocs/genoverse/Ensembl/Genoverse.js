@@ -212,10 +212,9 @@ Ensembl.Genoverse = Genoverse.extend({
     this.trackAutoHeight = false;
     
     this.base();
-    
-    this.panel.elLk.autoHeight.removeClass('off');
-    this.panel.changeControlTitle('autoHeight');
-    
+
+    this.panel.updateTrackHeightControl(true);
+
     for (var i = 0; i < this.tracks.length; i++) {
       track = this.tracks[i];
       
@@ -337,8 +336,7 @@ Ensembl.Genoverse = Genoverse.extend({
   
   toggleSelect: function (on) {
     this.base(on);
-    this.panel.elLk.dragging.removeClass('on off').addClass(this.dragAction === 'select' ? 'off' : 'on');
-    this.panel.changeControlTitle('dragging');
+    this.panel.updateToggleSelectControl(on);
   },
   
   keydown: function (e) {

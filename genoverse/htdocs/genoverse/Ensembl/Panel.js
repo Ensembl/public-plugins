@@ -86,7 +86,7 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
   initControls: function () {
     var panel     = this;
     var genoverse = this.genoverse;  
-    var buttons   = $('button', this.elLk.controls).on('mousedown', function () { genoverse.hideMessages(); });
+    var buttons   = $('button', this.elLk.controls).on('mousedown', function () { genoverse.hideMessages(); }).helptip();
     
     buttons.filter('button.scroll').on({
       mousedown : function () { genoverse.startDragScroll(); },
@@ -100,13 +100,17 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
     buttons.filter('button.zoom_out').on('click', function () { genoverse.zoomOut(); });
     
     this.elLk.dragging.on('click', function () {
-      genoverse.setDragAction(panel.elLk.dragging.toggleClass('on off').hasClass('on') ? 'scroll' : 'select');
-      panel.changeControlTitle('dragging');
+      if (!$(this).parent().hasClass('selected')) {
+        var on = $(this).hasClass('on');
+        panel.updateToggleSelectControl(on);
+        genoverse.setDragAction(on ? 'scroll' : 'select');
+      }
     });
     
     this.elLk.wheelZoom.on('click', function () {
-      genoverse.setWheelAction(panel.elLk.wheelZoom.toggleClass('on off').hasClass('on') ? 'zoom' : 'off');
-      panel.changeControlTitle('wheelZoom');
+      if (!$(this).parent().hasClass('selected')) {
+        genoverse.setWheelAction(panel.elLk.wheelZoom.parent().toggleClass('selected').filter('.selected').find('button').hasClass('on') ? 'zoom' : 'off');
+      }
     });
     
     this.elLk.resetHeight.on('click', function () {
@@ -115,27 +119,33 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
           url      : this.value,
           context  : panel.genoverse,
           success  : panel.genoverse.resetTrackHeights,
-          complete : function () { panel.resetTrackHeights = false; }
+          complete : function () {
+            panel.resetTrackHeights = false;
+            panel.updateTrackHeightControl(panel.genoverse.trackAutoHeight);
+          }
         });
       }
-      
-      panel.elLk.autoHeight.removeClass('off');
-      panel.changeControlTitle('autoHeight');
     });
     
     this.elLk.autoHeight.on('click', function () {
-      if (!panel.toggleAutoHeight) {
-        panel.toggleAutoHeight = $.ajax({
-          url      : this.value,
-          data     : { auto_height: panel.genoverse.trackAutoHeight ? 0 : 1 },
-          dataType : 'json',
-          context  : panel.genoverse,
-          success  : panel.genoverse.toggleAutoHeight,
-          complete : function () { panel.toggleAutoHeight = false; }
-        });
-        
-        panel.elLk.autoHeight[panel.genoverse.trackAutoHeight ? 'removeClass' : 'addClass']('off');
-        panel.changeControlTitle('autoHeight');
+      if (!$(this).parent().hasClass('selected') && !panel.toggleAutoHeight) { // ingore if button's already on, or ajax request already processing
+
+        var isAuto = $(this).hasClass('on');
+        panel.updateTrackHeightControl(isAuto);
+
+        if (panel.genoverse.trackAutoHeight !== isAuto) {
+          panel.toggleAutoHeight = $.ajax({
+            url      : this.value,
+            data     : { auto_height: isAuto ? 1 : 0 },
+            dataType : 'json',
+            context  : panel.genoverse,
+            success  : panel.genoverse.toggleAutoHeight,
+            complete : function () {
+              panel.toggleAutoHeight = false;
+              panel.updateTrackHeightControl(panel.genoverse.trackAutoHeight);
+            }
+          });
+        }
       }
     });
     
@@ -146,18 +156,18 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
       
       return false;
     }).not(':first').children();
-    
+
     buttons = null;
   },
-  
-  changeControlTitle: function (el) {
-    var title = {
-      dragging   : [ 'Scroll to a new region',           'Select a portion of this region' ],
-      wheelZoom  : [ 'Zoom in or out',                   'Scroll the browser window'       ],
-      autoHeight : [ 'Set tracks to auto-adjust height', 'Set tracks to fixed height'      ]
-    };
-    
-    this.elLk[el].attr('title', title[el][this.elLk[el].hasClass('off') ? 1 : 0]);
+
+  updateTrackHeightControl: function(isAuto) {
+    this.elLk.autoHeight.filter('.on').parent().toggleClass('selected', isAuto);
+    this.elLk.autoHeight.filter(':not(.on)').parent().toggleClass('selected', !isAuto);
+  },
+
+  updateToggleSelectControl: function(on) {
+    this.elLk.dragging.filter('.on').parent().toggleClass('selected', on);
+    this.elLk.dragging.filter(':not(.on)').parent().toggleClass('selected', !on);
   },
   
   hashChange: function () {

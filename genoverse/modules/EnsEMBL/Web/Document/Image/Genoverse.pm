@@ -133,36 +133,52 @@ sub render {
 }
 
 sub render_toolbar {
-  my $self           = shift;
-  my $hub            = $self->hub;
-  my $image_config   = $self->{'image_config'};
-  my $zoom           = $image_config->get_parameter('zoom') ne 'no';
-  my ($top, $bottom) = $self->SUPER::render_toolbar;
-  
+  my $self            = shift;
+  my $hub             = $self->hub;
+  my $image_config    = $self->{'image_config'};
+  my $zoom            = $image_config->get_parameter('zoom') ne 'no';
+  my ($top, $bottom)  = $self->SUPER::render_toolbar;
+  my $autoheight      = $image_config->get_option('auto_height');
+  my $autoheight_url  = { 'type' => 'Genoverse', 'action' => 'auto_track_heights',  'function' => '', 'image_config' => $image_config->{'type'}, 'auto_height' => 0 };
+  my $resetheight_url = { 'type' => 'Genoverse', 'action' => 'reset_track_heights', 'function' => '', 'image_config' => $image_config->{'type'} };
+
   my $controls = sprintf('
     <div class="genoverse_controls%s">
-      <span class="label">Scroll:</span>
-      <div class="left"><button class="scroll scroll_left" title="Scroll left"></button></div><div class="right"><button class="scroll scroll_right" title="Scroll right"></button></div>
-      %s
-      <span class="label">Track height:</span>
-      <div class="left"><button class="auto_height%s" title="%s" value="%s" ></button></div><div class="right"><button class="reset_height" title="Reset track heights" value="%s"></button></div>
-      <span class="label">Drag/Select:</span>
-      <div><button class="dragging on" title="Scroll to a new region"></button></div>
-      %s
+      <div>
+        <span class="label">Scroll:</span>
+        <div class="button"><button class="scroll scroll_left" title="Scroll left"></button></div>
+        <div class="right button"><button class="scroll scroll_right" title="Scroll right"></button></div>
+      </div>
+      <div class="%s">
+        <span class="label">Zoom:</span>
+        <div class="button"><button class="zoom_in" title="Zoom in"></button></div>
+        <div class="right button"><button class="zoom_out" title="Zoom out"></button></div>
+      </div>
+      <div>
+        <span class="label">Track height:</span>
+        <div class="button%s"><button class="auto_height" title="Fix track heights" value="%s"></button></div>
+        <div class="right button%s"><button class="auto_height on" title="Auto-adjust track heights" value="%s"></button></div>
+        <div class="right button"><button class="reset_height" title="Reset track heights" value="%s"></button></div>
+      </div>
+      <div>
+        <span class="label">Drag/Select:</span>
+        <div class="button selected"><button class="dragging on" title="Scroll to a region"></button></div>
+        <div class="right button"><button class="dragging" title="Select a region"></button></div>
+      </div>
+      <div class="%s">
+        <span class="label">Wheel:</span>
+        <div class="button selected"><button class="wheel_zoom" title="Scroll the browser window"></button></div>
+        <div class="right button"><button class="wheel_zoom on" title="Zoom in or out"></button></div>
+      </div>
     </div>',
     $self->{'image_width'} < 800 ? ' narrow' : '',
-    $zoom ? qq {
-      <span class="label">Zoom:</span>
-      <div class="left"><button class="zoom_in" title="Zoom in"></button></div><div class="right"><button class="zoom_out" title="Zoom out"></button></div>
-    } : '',
-    $image_config->get_option('auto_height') ? ' off' : '',
-    $image_config->get_option('auto_height') ? 'Set tracks to fixed height' : 'Set tracks to auto-adjust height',
-    $hub->url({ type => 'Genoverse', action => 'auto_track_heights',  function => undef, image_config => $image_config->{'type'} }),
-    $hub->url({ type => 'Genoverse', action => 'reset_track_heights', function => undef, image_config => $image_config->{'type'} }),
-    $zoom ? qq{
-      <span class="label">Wheel:</span>
-      <div><button class="wheel_zoom on" title="Zoom in or out"></button></div>
-    } : ''
+    $zoom       ? '' : 'hidden',
+    $autoheight ? '' : ' selected',
+    $hub->url($autoheight_url),
+    $autoheight ? ' selected' : '',
+    $hub->url($autoheight_url),
+    $hub->url($resetheight_url),
+    $zoom       ? '' : 'hidden',
   );
   
   $bottom = '' unless $self->{'toolbars'}{'bottom'}; # setting height as 1e9 in render_toolbar forces bottom to be created, but it may not be required

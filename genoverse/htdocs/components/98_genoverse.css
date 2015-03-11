@@ -80,33 +80,26 @@ body.mac .canvas_container .label_container li .handle   { cursor: ns-resize; }
 .canvas .image_toolbar.bottom                            { width: 100%; }
 
 .canvas .genoverse_controls                              { display: none; float: right; padding-right: 6px; }
-.canvas .genoverse_controls div                          {
-  position: relative; top: -2px; height: 18px; width: 26px; display: inline-block; vertical-align: top; border: 1px solid #333; border-radius: 6px;
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #EAEEFF), color-stop(1, #515F7C));
-  background: -moz-linear-gradient(center top, #EAEEFF 5%, #515F7C 100%);
-  background-color: #EAEEFF;
-}
-.canvas .genoverse_controls div:hover                    {
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #515F7C), color-stop(1, #EAEEFF));
-	background: -moz-linear-gradient(center top, #515F7C 5%, #EAEEFF 100%);
-	background-color: #9394C6;
-}
-.canvas .genoverse_controls div.left                     { border-radius: 5px 0 0 5px; border-right: none; }
-.canvas .genoverse_controls div.right                    { border-radius: 0 5px 5px 0; }
-.canvas .genoverse_controls button                       { position: absolute; top: 0; left: 50%; height: 17px; width: 16px; margin-left: -8px; border: 0; background: url(/i/controls.png); cursor: pointer; outline: 0; }
+.canvas .genoverse_controls div                          { display: inline-block; }
+.canvas .genoverse_controls div.hidden                   { display: none; }
+.canvas .genoverse_controls div.button                   { position: relative; top: -2px; height: 18px; width: 18px; vertical-align: top; border: 1px solid transparent; border-radius: 2px; margin-left: 2px; }
+.canvas .genoverse_controls div.right                    { margin-left: 0; }
+.canvas .genoverse_controls div.button:hover,
+.canvas .genoverse_controls div.selected                 { background-color: [[MH_BG]]; }
+.canvas .genoverse_controls button                       { position: absolute; top: 0; left: 50%; height: 17px; width: 16px; margin-left: -8px; border: 0; background: url(/i/controls_white.png); cursor: pointer; outline: 0; }
 .canvas .genoverse_controls button.scroll_left           { background-position:   0px   1px; }
 .canvas .genoverse_controls button.scroll_right          { background-position:   0px -17px; }
 .canvas .genoverse_controls button.zoom_in               { background-position: -17px   1px; }
 .canvas .genoverse_controls button.zoom_out              { background-position: -17px -17px; }
-.canvas .genoverse_controls button.auto_height           { background-position: -34px   1px; }
-.canvas .genoverse_controls button.auto_height.off       { background-position: -34px -17px; }
+.canvas .genoverse_controls button.auto_height.on        { background-position: -34px   1px; }
+.canvas .genoverse_controls button.auto_height           { background-position: -34px -17px; }
 .canvas .genoverse_controls button.reset_height          { background-position: -51px   1px; }
-.canvas .genoverse_controls button.dragging              { background-position: -68px   1px; }
-.canvas .genoverse_controls button.dragging.off          { background-position: -68px -17px; }
-.canvas .genoverse_controls button.wheel_zoom            { background-position: -85px   1px; }
-.canvas .genoverse_controls button.wheel_zoom.off        { background-position: -85px -16px; }
+.canvas .genoverse_controls button.dragging.on           { background-position: -68px   1px; }
+.canvas .genoverse_controls button.dragging              { background-position: -68px -17px; }
+.canvas .genoverse_controls button.wheel_zoom.on         { background-position: -85px   1px; }
+.canvas .genoverse_controls button.wheel_zoom            { background-position: -85px -16px; }
 
-.canvas .genoverse_controls .label                       { margin-left: 20px; padding-right: 6px; font-size: 15px; color: #FFF; line-height: 16px; }
+.canvas .genoverse_controls .label                       { margin-left: 16px; line-height: 16px; }
 
 .canvas .genoverse_controls.narrow div                   { margin-left: 8px; }
 .canvas .genoverse_controls.narrow div.right             { margin-left: 0; }
@@ -114,7 +107,7 @@ body.mac .canvas_container .label_container li .handle   { cursor: ns-resize; }
 
 .canvas .image_toolbar .genoverse_controls               { display: block; }
 
-.hover_label img.height                                  { height: 16px; width: 16px; display: inline-block; background: url(/i/controls.png) no-repeat -34px 0; cursor: pointer; }
+.hover_label img.height                                  { height: 16px; width: 16px; display: inline-block; background: url(/i/controls_white.png) no-repeat -34px 0; cursor: pointer; }
 .hover_label img.height.auto_height                      { background-position: -34px -18px; }
 .hover_label div.height .auto,
 .hover_label div.height.auto_height .fixed               { display: inherit!important; }
