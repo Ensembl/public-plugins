@@ -106,7 +106,7 @@ sub content_iterate {
        $opts    = join ' ', map { defined $opts->{$_} ? "$_ $opts->{$_}" : () } keys %$opts;
 
     # build the commandline
-    $fh_string .= sprintf("%s %s %s -filter '%s' -ontology -only_matched -start %i -limit %i 2>&1 | ", $perl, $script, $opts, $params->{'filter'}, $from, ($to - $from) + 1);
+    $fh_string .= sprintf("%s %s %s -filter '%s' -format vcf -ontology -only_matched -start %i -limit %i 2>&1 | ", $perl, $script, $opts, $params->{'filter'}, $from, ($to - $from) + 1);
   }
 
   my $all_headers;
