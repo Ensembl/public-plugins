@@ -31,7 +31,6 @@ sub get_filegroups {
 
   return @groups if $type eq 'css';
 
-  my $all_files = get_files_from_dir($species_defs, $type, 'genoverse');
   my @ordered_files;
 
   foreach my $file (@{genoverse_files_order()}) {
