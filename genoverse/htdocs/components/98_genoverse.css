@@ -130,7 +130,8 @@ body.mac .canvas_container .label_container li .handle   { cursor: ns-resize; }
 .image_update_buttons                                    { position: absolute; top: 16px; left: 50%; z-index: 101; width: 450px; margin-left: -225px; text-align: center; }
 .image_update_buttons .fbutton                           { margin: 0 16px; padding: 16px; }
 
-.image_toolbar .genoverse_switch                         { background-image: url(/i/switch.png); float: left; height: 16px; width: 16px; margin: 0 4px 2px; cursor: pointer; }
+.image_toolbar .genoverse_switch                         { background-image: url(/i/switch.png); float: left; height: 16px; width: 16px; margin: -2px 4px 2px 2px; border: 2px solid [[BUTTON_BG]]; border-radius: 2px; cursor: pointer; }
+.image_toolbar .genoverse_switch:hover                   { background-color: [[MH_BG]]; border-color: [[MH_BG]]; }
 
 .gv_file_drop                                            { position: absolute; background: #FFF; opacity: 0.7; border: 10px dashed #6F6F6F; border-radius: 11px; z-index: 20; right: 0; bottom: 0; top: 0; left: 0; }
 .gv_file_drop_total_overlay                              { position: absolute; top: 0; left: 0; height: 100%; width: 100%; z-index: 1000000; }
