@@ -209,7 +209,7 @@ sub config {
   }
 
   print to_json({
-    static => $SiteDefs::ENSEMBL_SOLR_CONFIG,
+    static => $self->solr_config(),
     spnames => $spnames,
     revspnames => $revspnames,
     user => {
@@ -219,6 +219,13 @@ sub config {
     },
   });
 
+}
+
+# separating the solar configuration, can be overwritten in plugins (no need to be in sitedefs)
+sub solr_config {
+  my $self = @_;
+
+  return $SiteDefs::ENSEMBL_SOLR_CONFIG;
 }
 
 sub echo { # XXX For table downloads, shouldn't be in search plugin
