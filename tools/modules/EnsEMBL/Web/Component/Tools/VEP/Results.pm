@@ -188,6 +188,7 @@ sub content {
     'Allele'        => [ 'A', 'C', 'G', 'T' ],
     'Feature_type'  => [ 'Transcript', @REG_FEAT_TYPES ],
     'Consequence'   => [ keys %OVERLAP_CONSEQUENCES ],
+    'IMPACT'        => [ keys %{{map {$_->impact => 1} values %OVERLAP_CONSEQUENCES}} ],
     'SIFT'          => $vdbc->{'SIFT_VALUES'},
     'PolyPhen'      => [ map {s/\s/\_/g; $_} @{$vdbc->{'POLYPHEN_VALUES'}} ],
     'BIOTYPE'       => $sd->get_config($species, 'databases')->{'DATABASE_CORE'}->{'tables'}{'transcript'}{'biotypes'},
