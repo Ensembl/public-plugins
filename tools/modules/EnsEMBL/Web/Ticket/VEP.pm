@@ -37,7 +37,7 @@ sub init_from_user_input {
   my $hub       = $self->hub;
   my $species   = $hub->param('species');
 
-  my $file = EnsEMBL::Web::File::Tools->new('hub' => $hub, 'tool' => 'VEP');
+  my $file = EnsEMBL::Web::File::Tools->new('hub' => $hub, 'tool' => 'VEP', 'empty' => 1);
 
   my $method    = first { $hub->param($_) } qw(file url userdata text);
 
@@ -59,6 +59,7 @@ sub init_from_user_input {
 
     $description = $hub->param('name') || ($method eq 'text' ? 'pasted data' : ($method eq 'url' ? 'data from URL' : sprintf("%s", $hub->param('file'))));
 
+    ## NB: no need to init the file object, as upload method will do this
     my $error = $file->upload('type' => 'no_attach');
     throw exception('InputError', $error) if $error;
 
