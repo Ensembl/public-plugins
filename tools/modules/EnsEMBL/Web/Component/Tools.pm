@@ -61,7 +61,7 @@ sub get_job_summary {
   my $hub               = $self->hub;
   my $object            = $self->object;
   my $job_id            = $job->job_id;
-  my ($job_message)     = sort { $a->exception ? -1 : 1 } @{$job->job_message}; # give priority to an exception
+  my ($job_message)     = sort { $a->fatal ? -1 : 1 } @{$job->job_message}; # give priority to a fatal exception
   my $job_status        = $job->status;
   my $dispatcher_status = $job->dispatcher_status;
   my $url_param         = $object->create_url_param({'job_id' => $job_id});
