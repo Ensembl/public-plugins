@@ -80,22 +80,26 @@ sub run {
 
   my $command   = EnsEMBL::Web::SystemCommand->new($self, "$perl_bin $script", $options)->execute({'log_file' => $log_file});
   my $m_type    = 'ERROR';
-  my $messages  = {$m_type => ['']};
+  my $messages  = {'ERROR' => ['Unknown error']};
   my $max_msgs  = 10;
   my $w_count   = 0;
 
-  for (file_get_contents($log_file)) {
-    if (m/^(ERROR|WARNING)\s*:\s*/) {
+  for (split /(?=\n(WARNING|ERROR)\s*\:)/, join '', file_get_contents($log_file)) {
+    if (/^(WARNING|ERROR)$/) {
       $m_type = $1;
-
-      if($m_type eq 'WARNING' && $messages->{$m_type} && scalar @{$messages->{$m_type}} >= $max_msgs) {
-        $w_count++;
-        next;
+    } else {
+      $messages->{$m_type} ||= [];
+      s/^\R+|\R+$//g;
+      s/\R+/\n/g;
+      if ($m_type eq 'WARNING') {
+        if ($messages->{$m_type} && @{$messages->{$m_type}} >= $max_msgs) {
+          $w_count++;
+          next;
+        }
+        ($_) = split "\n", $_; # keep only first line for warning
       }
-
-      push @{$messages->{$m_type}}, '';
+      push @{$messages->{$m_type}}, $_;
     }
-    $messages->{$m_type}[-1] .= $_;
   }
 
   push @{$messages->{'WARNING'}}, $w_count.' more warnings not shown' if $w_count;
@@ -103,7 +107,7 @@ sub run {
   # save any warnings to the log table
   $self->tools_warning({ 'message' => $_, 'type' => 'VEPWarning' }) for @{$messages->{'WARNING'}};
 
-  throw exception('HiveException', $messages->{'ERROR'}[0]) if $command->error_code;
+  throw exception('HiveException', $messages->{'ERROR'}[-1]) if $command->error_code; # consider last error only
 
   return 1;
 }
