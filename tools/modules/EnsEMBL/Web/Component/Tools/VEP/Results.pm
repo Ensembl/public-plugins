@@ -179,7 +179,7 @@ sub content {
 
   $html .= '<div><h3>Results preview</h3>';
   $html .= '<input type="hidden" class="panel_type" value="VEPResults" />';
-  $html .= $self->_warning('Some errors occurred while running VEP', sprintf '<pre class="tools-warning">%s</pre>', join '', map $_->display_message, @warnings) if @warnings;
+  $html .= $self->_warning('Some errors occurred while running VEP', sprintf '<pre class="tools-warning">%s</pre>', join "\n", map $_->display_message, @warnings) if @warnings;
 
   # construct hash for autocomplete
   my $vdbc = $sd->get_config($species, 'databases')->{'DATABASE_VARIATION'};
