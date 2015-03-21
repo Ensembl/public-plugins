@@ -80,11 +80,11 @@ sub run {
 
   my $command   = EnsEMBL::Web::SystemCommand->new($self, "$perl_bin $script", $options)->execute({'log_file' => $log_file});
   my $m_type    = 'ERROR';
-  my $messages  = {'ERROR' => ['Unknown error']};
+  my $messages  = {};
   my $max_msgs  = 10;
   my $w_count   = 0;
 
-  for (split /(?=\n(WARNING|ERROR)\s*\:)/, join '', file_get_contents($log_file)) {
+  for (split /(?=\n(WARNING|ERROR)\s*\:)/, join('', "Unknown error\n", file_get_contents($log_file))) {
     if (/^(WARNING|ERROR)$/) {
       $m_type = $1;
     } else {
