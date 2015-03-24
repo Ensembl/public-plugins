@@ -1,3 +1,5 @@
+.solr_page_p_page .cookie-message { position: fixed; z-index: 101 }
+
 .solr_page_p_side {
   position: fixed;
   left: 0px;
