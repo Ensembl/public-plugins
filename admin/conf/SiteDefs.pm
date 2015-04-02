@@ -41,6 +41,8 @@ sub update_conf {
     SpeciesAlias    => 'Modal',
     Webdata         => 'Modal',
     AttribType      => 'Modal',
+    Attrib          => 'Modal',
+    AttribSet       => 'Modal',
     ExternalDb      => 'Modal',
 
     HelpRecord      => 'Modal',
