@@ -61,6 +61,8 @@ sub render {
     <li><a href="/Biotype/Display">Biotypes</a></li>
     <li><a href="/Webdata/Display">Web Data</a></li>
     <li><a href="/AttribType/Display">AttribType</a></li>
+    <li><a href="/Attrib/Display">Attrib</a></li>
+    <li><a href="/AttribSet/Display">AttribSet</a></li>
     <li><a href="/ExternalDb/Display">ExternalDb</a></li>
   </ul>
   <h1>Help Database</h1>
