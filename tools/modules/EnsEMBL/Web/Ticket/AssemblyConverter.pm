@@ -38,7 +38,7 @@ sub init_from_user_input {
 
   $hub->param('text', $hub->param("text_$format"));
 
-  my $file = EnsEMBL::Web::File::Tools->new('hub' => $hub, 'tool' => 'AssemblyConverter');
+  my $file = EnsEMBL::Web::File::Tools->new('hub' => $hub, 'tool' => 'AssemblyConverter', 'empty' => 1);
 
   my $method    = first { $hub->param($_) } qw(file url userdata text);
 
@@ -60,7 +60,7 @@ sub init_from_user_input {
 
     $description = $hub->param('name') || ($method eq 'text' ? 'pasted data' : ($method eq 'url' ? 'data from URL' : sprintf("%s", $hub->param('file'))));
 
-    my $error = $file->upload('type' => 'no_attach');
+    my $error = $file->upload('type' => 'no_attach', 'description' => $description);
     throw exception('InputError', $error) if $error;
 
     $file_name = $file->write_name;
