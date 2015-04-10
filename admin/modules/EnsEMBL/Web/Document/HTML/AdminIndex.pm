@@ -84,6 +84,7 @@ sub render {
   </ul>
   <h1>Performance</h1>
   <ul>
+    <li><a href="/tools_graphs/index.html">Tools LSF queues load</a></li>
     <li><a href="/perf">Nightly local full page-load times</a></li>
     <li><a href="/arewestable">Live server error monitoring (BETA)</a></li>
   </ul>
