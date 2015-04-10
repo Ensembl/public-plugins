@@ -51,6 +51,7 @@ sub process {
     } else {
       my $error_id = random_string(8);
       warn "ERROR: $error_id\n";
+      warn $_;
       throw exception('ServerError', sprintf q(There was a problem with one of the tools servers. Please report this issue to %s, quoting error reference '%s'.), $self->hub->species_defs->ENSEMBL_HELPDESK_EMAIL, $error_id);
     }
   };
