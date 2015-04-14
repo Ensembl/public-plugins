@@ -110,21 +110,32 @@ sub prepare_to_dispatch {
   }
   
   # plugins
+  my $plugin_string = $self->_configure_plugins($job_data);
+  $vep_configs->{plugin} = $plugin_string if $plugin_string;
+
+  return { 'species' => $vep_configs->{'species'}, 'work_dir' => $rose_object->job_dir, 'config' => $vep_configs };
+}
+
+sub _configure_plugins {
+  my $self = shift;
+  my $job_data = shift;
+  
+  # get plugin config into a hash keyed on key
+  my $pl = $self->hub->species_defs->multi_val('ENSEMBL_VEP_PLUGIN_CONFIG');
+  return '' unless $pl;
+  my %plugin_config = map {$_->{key} => $_} @{$pl->{plugins} || []};
+  
   my $plugin_string = '';
   
-  use Data::Dumper;
-  $Data::Dumper::Maxdepth = 3;
-  warn Dumper $job_data;
-  
   foreach my $pl_key(grep {$_ =~ /^plugin\_/ && $job_data->{$_} eq $_} keys %$job_data) {
-  #foreach my $pl_key(grep {$_ =~ /^plugin\_/} keys %$job_data) {
+    
     $pl_key =~ s/^plugin\_//;
-    my $pl = $sd->ENSEMBL_VEP_PLUGIN_CONFIG->{$pl_key};
-    next unless $pl;
+    my $plugin = $plugin_config{$pl_key};
+    next unless $plugin;
     
     my @params;
     
-    foreach my $param(@{$pl->{params}}) {
+    foreach my $param(@{$plugin->{params}}) {
       
       # links to something in the form
       if($param =~ /^\@/) {
@@ -134,16 +145,18 @@ sub prepare_to_dispatch {
         
         # fuzzy match?
         if($param =~ /\*/) {
-          $param =~ s/\*/\.\+/;
-          @matched = grep {$_->{name} =~ /$param/} @{$pl->{form}};
+          $param =~ s/\*/\.\*/;
+          @matched = grep {$_->{name} =~ /$param/} @{$plugin->{form}};
         }
         
         else {
-          @matched = grep {$_->{name} eq $param} @{$pl->{form}};
+          @matched = grep {$_->{name} eq $param} @{$plugin->{form}};
         }
         
         foreach my $el(@matched) {
-          if(($job_data->{'plugin_'.$pl_key.'_'.$el->{name}} // '') eq $el->{name}) {
+          my $val = $job_data->{'plugin_'.$pl_key.'_'.$el->{name}};
+          
+          if(defined($val) && $val ne '' && $val ne 'no') {
             push @params, $job_data->{'plugin_'.$pl_key.'_'.$el->{name}};
           }
         }
@@ -161,9 +174,7 @@ sub prepare_to_dispatch {
   
   print STDERR "--plugin $plugin_string\n";
   
-  $vep_configs->{plugin} = $plugin_string if $plugin_string;
-
-  return { 'species' => $vep_configs->{'species'}, 'work_dir' => $rose_object->job_dir, 'config' => $vep_configs };
+  return $plugin_string;
 }
 
 sub get_dispatcher_class {

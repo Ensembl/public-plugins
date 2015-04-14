@@ -103,8 +103,8 @@ sub _configure_blast_multi {
 sub _configure_vep {
   my $self = shift;
   my $tree = $self->tree;
-  return unless defined($tree->{'ENSEMBL_VEP_PLUGINS'}) && defined($tree->{'ENSEMBL_VEP_PLUGINS'}->{'config'});
-  my $file = $tree->{'ENSEMBL_VEP_PLUGINS'}->{'config'};
+  return unless defined($tree->{'ENSEMBL_VEP_PLUGINS'}) && defined($tree->{'ENSEMBL_VEP_PLUGINS'}->{'CONFIG'});
+  my $file = $tree->{'ENSEMBL_VEP_PLUGINS'}->{'CONFIG'};
   
   return unless -e $file;
   open IN, $file or return;

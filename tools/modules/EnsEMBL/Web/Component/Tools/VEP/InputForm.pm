@@ -642,22 +642,40 @@ sub _build_plugins {
   my $hub = $self->hub;
   my $sd  = $hub->species_defs;
   my $pl  = $sd->multi_val('ENSEMBL_VEP_PLUGIN_CONFIG');
-  return unless $pl;
+  return unless $pl && $pl->{plugins};
   
   my $species   = $self->_species;
   my $fieldset  = $plugin_div->append_child($form->add_fieldset);
   
-  foreach my $pl_key(keys %$pl) {
-    my $plugin = $pl->{$pl_key};
+  foreach my $plugin(grep {$_->{available}} @{$pl->{plugins}}) {
+    my $pl_key = $plugin->{key};
     
+    # sort out which species to make this available for
+    # the config carries the species name and assembly
+    # the interface will only have one assembly per species, but need to check they match
+    # my $field_class = [];
+    # my $pl_species = $plugin->{species};
+    #
+    # if($pl_species && ref($pl_species) eq 'ARRAY') {
+    #   foreach my $sp_hash(@$pl_species) {
+    #     push @$field_class,
+    #       map {"_stt_".$_}
+    #       map {$_->{assembly} eq $sp_hash->{assembly} ? $_->{value} : $_->{value}.'_'.$_->{assembly}}
+    #       grep {$_->{value} eq ucfirst($sp_hash->{name})}
+    #       @$species;
+    #   }
+    # }
+    
+    my $field_class = (!$plugin->{species} || $plugin->{species} eq '*') ? [] : [map {"_stt_".ucfirst($_)} @{$plugin->{species} || []}];
+     
     $fieldset->add_field({
       'class' => "_stt",
-      'field_class' => [map {"_stt_".ucfirst($_)} @{$plugin->{species} || []}],
+      'field_class' => $field_class,
       'type' => 'dropdown',
-      'helptip' => $pl->{helptip},
+      'helptip' => $plugin->{helptip},
       'name' => 'plugin_'.$pl_key,
-      'label' => $pl->{label} || $pl_key,
-      'value' => 'no',
+      'label' => $plugin->{label} || $pl_key,
+      'value' => $plugin->{enabled} ? 'plugin_'.$pl_key : 'no',
       'values' => [
         { 'value' => 'no', 'caption' => 'Disabled' },
         { 'value' => 'plugin_'.$pl_key, 'caption' => 'Enabled' },
