@@ -675,7 +675,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     }
     if (config && !$.isEmptyObject(config)) {
       $.each(config, function(name, value) {
-        panel.elLk.form.find('[name=' + btype + '__' + name + ']').filter('input').prop('checked', !!value).end().filter('select').find('option[value=' + value + ']').prop('selected', true);
+        panel.elLk.form.find('[name=' + btype + '__' + name + ']').filter('input').prop('checked', !!value).end().filter('select').find('option[value="' + value + '"]').prop('selected', true);
       });
     }
     btype = ctype = config = null;
