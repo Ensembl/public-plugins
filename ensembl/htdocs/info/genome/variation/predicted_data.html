@@ -158,11 +158,11 @@ consequences for each allele and make their own severity judgement.
     <td>Stop lost</td>
   </tr>
   </tr>
-  <tr id="initiator_codon_variant">
-    <td style="padding:0px;margin:0px;background-color:#ffd700;border-top:1px solid #FFF"></td>    <td>initiator_codon_variant</td>
-    <td>A codon variant that changes at least one base of the first codon of a transcript</td>
-    <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001582">SO:0001582</a></td>
-    <td>Initiator codon variant</td>
+  <tr id="start_lost">
+    <td style="padding:0px;margin:0px;background-color:#ffd700;border-top:1px solid #FFF"></td>    <td>start_lost</td>
+    <td>A codon variant that changes at least one base of the canonical start codon</td>
+    <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0002012">SO:0002012</a></td>
+    <td>Start lost</td>
   </tr>
   </tr>
   <tr class="bg2" id="transcript_amplification">
@@ -186,168 +186,175 @@ consequences for each allele and make their own severity judgement.
     <td>Inframe deletion</td>
   </tr>
   </tr>
-  <tr id="missense_variant">
+  <tr id="protein_altering_variant">
+    <td style="padding:0px;margin:0px;background-color:#FF0080;border-top:1px solid #FFF"></td>    <td>protein_altering_variant</td>
+    <td>A sequence_variant which is predicted to change the protein encoded in the coding sequence</td>
+    <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001818">SO:0001818</a></td>
+    <td>protein altering variant</td>
+  </tr>
+  </tr>
+  <tr class="bg2" id="missense_variant">
     <td style="padding:0px;margin:0px;background-color:#ffd700;border-top:1px solid #FFF"></td>    <td>missense_variant</td>
     <td>A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001583">SO:0001583</a></td>
     <td>Missense variant</td>
   </tr>
   </tr>
-  <tr class="bg2" id="splice_region_variant">
+  <tr id="splice_region_variant">
     <td style="padding:0px;margin:0px;background-color:#ff7f50;border-top:1px solid #FFF"></td>    <td>splice_region_variant</td>
     <td>A sequence variant in which a change has occurred within the region of the splice site, either within 1-3 bases of the exon or 3-8 bases of the intron</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001630">SO:0001630</a></td>
     <td>Splice region variant</td>
   </tr>
   </tr>
-  <tr id="incomplete_terminal_codon_variant">
+  <tr class="bg2" id="incomplete_terminal_codon_variant">
     <td style="padding:0px;margin:0px;background-color:#ff00ff;border-top:1px solid #FFF"></td>    <td>incomplete_terminal_codon_variant</td>
     <td>A sequence variant where at least one base of the final codon of an incompletely annotated transcript is changed</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001626">SO:0001626</a></td>
     <td>Incomplete terminal codon variant</td>
   </tr>
   </tr>
-  <tr class="bg2" id="stop_retained_variant">
+  <tr id="stop_retained_variant">
     <td style="padding:0px;margin:0px;background-color:#76ee00;border-top:1px solid #FFF"></td>    <td>stop_retained_variant</td>
     <td>A sequence variant where at least one base in the terminator codon is changed, but the terminator remains</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001567">SO:0001567</a></td>
     <td>Stop retained variant</td>
   </tr>
   </tr>
-  <tr id="synonymous_variant">
+  <tr class="bg2" id="synonymous_variant">
     <td style="padding:0px;margin:0px;background-color:#76ee00;border-top:1px solid #FFF"></td>    <td>synonymous_variant</td>
     <td>A sequence variant where there is no resulting change to the encoded amino acid</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001819">SO:0001819</a></td>
     <td>Synonymous variant</td>
   </tr>
   </tr>
-  <tr class="bg2" id="coding_sequence_variant">
+  <tr id="coding_sequence_variant">
     <td style="padding:0px;margin:0px;background-color:#458b00;border-top:1px solid #FFF"></td>    <td>coding_sequence_variant</td>
     <td>A sequence variant that changes the coding sequence</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001580">SO:0001580</a></td>
     <td>Coding sequence variant</td>
   </tr>
   </tr>
-  <tr id="mature_miRNA_variant">
+  <tr class="bg2" id="mature_miRNA_variant">
     <td style="padding:0px;margin:0px;background-color:#458b00;border-top:1px solid #FFF"></td>    <td>mature_miRNA_variant</td>
     <td>A transcript variant located with the sequence of the mature miRNA</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001620">SO:0001620</a></td>
     <td>Mature miRNA variant</td>
   </tr>
   </tr>
-  <tr class="bg2" id="5_prime_UTR_variant">
+  <tr id="5_prime_UTR_variant">
     <td style="padding:0px;margin:0px;background-color:#7ac5cd;border-top:1px solid #FFF"></td>    <td>5_prime_UTR_variant</td>
     <td>A UTR variant of the 5' UTR</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001623">SO:0001623</a></td>
     <td>5 prime UTR variant</td>
   </tr>
   </tr>
-  <tr id="3_prime_UTR_variant">
+  <tr class="bg2" id="3_prime_UTR_variant">
     <td style="padding:0px;margin:0px;background-color:#7ac5cd;border-top:1px solid #FFF"></td>    <td>3_prime_UTR_variant</td>
     <td>A UTR variant of the 3' UTR</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001624">SO:0001624</a></td>
     <td>3 prime UTR variant</td>
   </tr>
   </tr>
-  <tr class="bg2" id="non_coding_transcript_exon_variant">
+  <tr id="non_coding_transcript_exon_variant">
     <td style="padding:0px;margin:0px;background-color:#32cd32;border-top:1px solid #FFF"></td>    <td>non_coding_transcript_exon_variant</td>
     <td>A sequence variant that changes non-coding exon sequence in a non-coding transcript</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001792">SO:0001792</a></td>
     <td>Non coding transcript exon variant</td>
   </tr>
   </tr>
-  <tr id="intron_variant">
+  <tr class="bg2" id="intron_variant">
     <td style="padding:0px;margin:0px;background-color:#02599c;border-top:1px solid #FFF"></td>    <td>intron_variant</td>
     <td>A transcript variant occurring within an intron</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001627">SO:0001627</a></td>
     <td>Intron variant</td>
   </tr>
   </tr>
-  <tr class="bg2" id="NMD_transcript_variant">
+  <tr id="NMD_transcript_variant">
     <td style="padding:0px;margin:0px;background-color:#ff4500;border-top:1px solid #FFF"></td>    <td>NMD_transcript_variant</td>
     <td>A variant in a transcript that is the target of NMD</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001621">SO:0001621</a></td>
     <td>NMD transcript variant</td>
   </tr>
   </tr>
-  <tr id="non_coding_transcript_variant">
+  <tr class="bg2" id="non_coding_transcript_variant">
     <td style="padding:0px;margin:0px;background-color:#32cd32;border-top:1px solid #FFF"></td>    <td>non_coding_transcript_variant</td>
     <td>A transcript variant of a non coding RNA gene</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001619">SO:0001619</a></td>
     <td>Non coding transcript variant</td>
   </tr>
   </tr>
-  <tr class="bg2" id="upstream_gene_variant">
+  <tr id="upstream_gene_variant">
     <td style="padding:0px;margin:0px;background-color:#a2b5cd;border-top:1px solid #FFF"></td>    <td>upstream_gene_variant</td>
     <td>A sequence variant located 5' of a gene</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001631">SO:0001631</a></td>
     <td>Upstream gene variant</td>
   </tr>
   </tr>
-  <tr id="downstream_gene_variant">
+  <tr class="bg2" id="downstream_gene_variant">
     <td style="padding:0px;margin:0px;background-color:#a2b5cd;border-top:1px solid #FFF"></td>    <td>downstream_gene_variant</td>
     <td>A sequence variant located 3' of a gene</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001632">SO:0001632</a></td>
     <td>Downstream gene variant</td>
   </tr>
   </tr>
-  <tr class="bg2" id="TFBS_ablation">
+  <tr id="TFBS_ablation">
     <td style="padding:0px;margin:0px;background-color:#a52a2a;border-top:1px solid #FFF"></td>    <td>TFBS_ablation</td>
     <td>A feature ablation whereby the deleted region includes a transcription factor binding site</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001895">SO:0001895</a></td>
     <td>TFBS ablation</td>
   </tr>
   </tr>
-  <tr id="TFBS_amplification">
+  <tr class="bg2" id="TFBS_amplification">
     <td style="padding:0px;margin:0px;background-color:#a52a2a;border-top:1px solid #FFF"></td>    <td>TFBS_amplification</td>
     <td>A feature amplification of a region containing a transcription factor binding site</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001892">SO:0001892</a></td>
     <td>TFBS amplification</td>
   </tr>
   </tr>
-  <tr class="bg2" id="TF_binding_site_variant">
+  <tr id="TF_binding_site_variant">
     <td style="padding:0px;margin:0px;background-color:#a52a2a;border-top:1px solid #FFF"></td>    <td>TF_binding_site_variant</td>
     <td>A sequence variant located within a transcription factor binding site</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001782">SO:0001782</a></td>
     <td>TF binding site</td>
   </tr>
   </tr>
-  <tr id="regulatory_region_ablation">
+  <tr class="bg2" id="regulatory_region_ablation">
     <td style="padding:0px;margin:0px;background-color:#a52a2a;border-top:1px solid #FFF"></td>    <td>regulatory_region_ablation</td>
     <td>A feature ablation whereby the deleted region includes a regulatory region</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001894">SO:0001894</a></td>
     <td>Regulatory region ablation</td>
   </tr>
   </tr>
-  <tr class="bg2" id="regulatory_region_amplification">
+  <tr id="regulatory_region_amplification">
     <td style="padding:0px;margin:0px;background-color:#a52a2a;border-top:1px solid #FFF"></td>    <td>regulatory_region_amplification</td>
     <td>A feature amplification of a region containing a regulatory region</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001891">SO:0001891</a></td>
     <td>Regulatory region amplification</td>
   </tr>
   </tr>
-  <tr id="regulatory_region_variant">
+  <tr class="bg2" id="regulatory_region_variant">
     <td style="padding:0px;margin:0px;background-color:#a52a2a;border-top:1px solid #FFF"></td>    <td>regulatory_region_variant</td>
     <td>A sequence variant located within a regulatory region</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001566">SO:0001566</a></td>
     <td>Regulatory region variant</td>
   </tr>
   </tr>
-  <tr class="bg2" id="feature_elongation">
+  <tr id="feature_elongation">
     <td style="padding:0px;margin:0px;background-color:#7f7f7f;border-top:1px solid #FFF"></td>    <td>feature_elongation</td>
     <td>A sequence variant that causes the extension of a genomic feature, with regard to the reference sequence</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001907">SO:0001907</a></td>
     <td>Feature elongation</td>
   </tr>
   </tr>
-  <tr id="feature_truncation">
+  <tr class="bg2" id="feature_truncation">
     <td style="padding:0px;margin:0px;background-color:#7f7f7f;border-top:1px solid #FFF"></td>    <td>feature_truncation</td>
     <td>A sequence variant that causes the reduction of a genomic feature, with regard to the reference sequence</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001906">SO:0001906</a></td>
     <td>Feature truncation</td>
   </tr>
   </tr>
-  <tr class="bg2" id="intergenic_variant">
+  <tr id="intergenic_variant">
     <td style="padding:0px;margin:0px;background-color:#636363;border-top:1px solid #FFF"></td>    <td>intergenic_variant</td>
     <td>A sequence variant located in the intergenic region, between genes</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001628">SO:0001628</a></td>
