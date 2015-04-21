@@ -39,7 +39,9 @@ sub content {
   my $stable_id   = $hub->param('g'); 
   my $species     = $hub->species;
   
-  $species        =~ s/_/ /gi;
+  $species        =~ s/_/ /gi; #GXA require the species with no underscore.
+
+  #this script tag has been kept here as it was easier to call the perl param within the script tag (the js file wasn't getting the param)
   my $html = qq{
     <script type="text/javascript">
       var instance = new Biojs.AtlasHeatmap ({
