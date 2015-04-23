@@ -316,6 +316,11 @@
   height: 25px;
 }
 
+body.mobile-page .scnarrow h1 {
+  height: 50px;
+}
+
+
 .scnarrow ul {
   list-style: none;
   padding-left: 0;
