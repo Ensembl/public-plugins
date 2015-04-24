@@ -70,7 +70,7 @@
 <h1>Ensembl Regulation (Funcgen) Schema Documentation</h1>
 <h2>Introduction</h2>
 <p>
-This document gives a describes the tables that make up the Ensembl Regulation schema. Tables are grouped logically by their function, and the purpose of each table is explained. This document refers to version 79 of the Ensembl Regulation schema.<br />
+This document gives a describes the tables that make up the Ensembl Regulation schema. Tables are grouped logically by their function, and the purpose of each table is explained. This document refers to version 80 of the Ensembl Regulation schema.<br />
 A simplified entity relationship diagram of the schema is available <a href="./trimmed_funcgen_schema.png">here</a>. Core, core like and some ancilliary tables have been omitted from the schema diagram.
 </p>
 
@@ -306,7 +306,7 @@ A simplified entity relationship diagram of the schema is available <a href="./t
 
       <tr>
         <td class="bg1"><b>stable_id</b></td>
-        <td class="bg1">mediumint(8)</td>
+        <td class="bg1">varchar(128)</td>
         <td class="bg1">NULL</td>
         <td class="bg1">Integer stable ID without ENSR prefix</td>
         <td class="bg1">key: <i>stable_id_idx</i></td>
@@ -1886,7 +1886,7 @@ A simplified entity relationship diagram of the schema is available <a href="./t
         <td class="bg1">int(10)</td>
         <td class="bg1">-</td>
         <td class="bg1">Primary key of linked dbfile entity e.g. <a href="#result_set" style="text-decoration:none">result_set</a> or <a href="#analysis" style="text-decoration:none">analysis</a></td>
-        <td class="bg1">primary key</td>
+        <td class="bg1">primary key<br />unique key: <i>table_id_name_path_idx</i></td>
       </tr>
 
       <tr>
@@ -1894,7 +1894,7 @@ A simplified entity relationship diagram of the schema is available <a href="./t
         <td class="bg2">varchar(32)</td>
         <td class="bg2">-</td>
         <td class="bg2">Name of linked table</td>
-        <td class="bg2">primary key</td>
+        <td class="bg2">primary key<br />unique key: <i>table_id_name_path_idx</i></td>
       </tr>
 
       <tr>
@@ -1902,7 +1902,7 @@ A simplified entity relationship diagram of the schema is available <a href="./t
         <td class="bg1">varchar(255)</td>
         <td class="bg1">-</td>
         <td class="bg1">Either a full filepath or a directory which the API will use to build the filepath</td>
-        <td class="bg1"></td>
+        <td class="bg1">unique key: <i>table_id_name_path_idx</i></td>
       </tr>
     </table>
   </div>
