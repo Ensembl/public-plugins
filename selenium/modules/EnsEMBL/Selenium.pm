@@ -166,6 +166,7 @@ sub ensembl_click_all_links {
     
     $i++;
     next if grep (/$link_text/, @$skip_link);
+    next if ($link_text eq 'home page');
   
     if ($rel eq 'external' || $link !~ /^$url/) {
       $self->open_ok($link);
