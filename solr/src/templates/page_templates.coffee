@@ -13,12 +13,13 @@
 # limitations under the License.
 
 # table_extras can be filled by subtemplates if they wish
-window.page_templates = 
+window.page_templates =
   page:
     template: """
       <div>
         <div class='solr_page_p_side'>
           <div class='solr_sidebar  ui-panel ui-panel-position-left ui-panel-display-reveal ui-body-c ui-panel-animate ui-panel-closed' data-role='panel'  id='search_nav'>
+            <a data-rel='close' href='#min_width_holder'><div id='close-div' alt='Close' class='modal_close'></div> </a>
             <div class='new_current_faceter'></div>
             <div class='faceters'></div>
             <div class='table_extras'></div>

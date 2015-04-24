@@ -317,8 +317,9 @@
 }
 
 body.mobile-page .scnarrow h1 {
-  height: 50px; 
+  height: 50px;
 }
+
 
 .scnarrow ul {
   list-style: none;
@@ -778,7 +779,6 @@ div.result-type-species-homepage div.preview_float {
 .result-hr {
   margin: 8px 0 4px 0;
 }
-
 .solr_page_p_side {
   position: fixed;
   left: 0px;
