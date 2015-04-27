@@ -28,9 +28,9 @@ use parent qw(
 
 sub job_summary_section {
   ## @override
-  my ($self, $ticket, $job, $hit_count) = @_;
+  my ($self, $ticket, $job, $hit_count) = splice @_, 0, 4;
 
-  my $summary = $self->SUPER::job_summary_section($ticket, $job, $hit_count);
+  my $summary = $self->SUPER::job_summary_section($ticket, $job, $hit_count, @_);
   my $desc    = $job->job_data->{'summary'};
 
   # remove result links if no hit found
