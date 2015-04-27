@@ -37,7 +37,7 @@ function loadCascaded(codes) {
 function initGraphs() {
   var types = ['Blast', 'Blat', 'VEP'];
   for (var i in types) {
-    loadCascaded(['/Ajax/tools_stats?type=' + types[i], function() { displayGraph(arguments[0]); }]);
+    loadCascaded(['/Ajax/tools_stats?type=' + types[i], function(t) { return function() { displayGraph($.extend({type: t}, arguments[0])); } }(types[i])]);
   }
 }
 

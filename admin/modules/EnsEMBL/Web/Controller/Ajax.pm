@@ -95,7 +95,7 @@ sub tools_stats {
 
   my %data = map { $_->[0] => $_->[1] } @$all_rows;
 
-  print to_json({type => $type, data => \%data, offset => $from_time});
+  print to_json({data => \%data, offset => $from_time});
 }
 
 1;
