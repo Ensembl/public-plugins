@@ -32,6 +32,12 @@ sub tools_stats {
   my $species_defs  = $hub->species_defs;
   my $db_confs      = $species_defs->multidb->{'DATABASE_WEB_HIVE'};
 
+  # user authorisation
+  if (!$hub->user->is_member_of($species_defs->ENSEMBL_WEBADMIN_ID)) {
+    print to_json({error => 'You are not authorised to view this data.'});
+    return;
+  }
+
   # if DB is not configured
   if (!$db_confs) {
     print to_json({error => 'No database found for DATABASE_WEB_HIVE'});
