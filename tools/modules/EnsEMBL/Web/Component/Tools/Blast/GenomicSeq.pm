@@ -82,7 +82,7 @@ sub get_key {
   my ($self, $config) = @_;
   
   return $self->SUPER::get_key($config, {
-    hsp => {
+    HSP => {
       sel   => { class => 'hsp_sel',   order => 1, text => 'Location of selected alignment' },
       other => { class => 'hsp_other', order => 2, text => 'Location of other alignments'   }
     }
