@@ -41,7 +41,7 @@ sub get_edit_jobs_data {
       $job_data->{"text"} = join('', file_get_contents($input_file));
     } else {
       $job_data->{'input_file_type'}  = 'text';
-      $job_data->{'input_file_url'}   = $hub->url('Download', {'type' => 'VEP', 'action' => '', 'function' => '', 'tl' => $self->create_url_param, 'input' => 1});
+      $job_data->{'input_file_url'}   = $hub->url('Download', {'type' => 'Tools', 'action' => 'VEP', 'function' => '', 'tl' => $self->create_url_param, 'input' => 1});
     }
   } else {
     $job_data->{'input_file_type'} = 'binary';
