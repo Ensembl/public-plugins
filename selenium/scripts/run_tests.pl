@@ -14,21 +14,29 @@
 
 #!/usr/local/bin/perl
 
-### Wrapper script for selenium tests. 
-### Takes two JSON configuration files:
-### - configure connection and select which tests are run in a particular batch
-### - configure species to test (optional)
+=pod
+ Wrapper script for selenium tests. 
+ Takes one argument (release number) plus two JSON configuration files:
+ - configure connection and select which tests are run in a particular batch
+ - configure species to test (optional)
 
-### The purpose of the latter file is to remove dependency on the web code.
-### Instead, a helper script is used to dump some useful parts of the
-### web configuration, which should then be eyeballed to ensure it looks OK.
+ The purpose of the latter file is to remove dependency on the web code.
+ Instead, a helper script is used to dump some useful parts of the
+ web configuration, which should then be eyeballed to ensure it looks OK.
+
+  Example of use:
+
+  perl run_tests.pl --release=80 --config=link_checker.conf --species=release_80_species.conf
+=cut
 
 use strict;
+use warnings;
+no warnings 'uninitialized';
 
 use FindBin qw($Bin);
 use Getopt::Long;
 use LWP::UserAgent;
-use JSON qw(from_json);
+use JSON;
 
 use vars qw( $SERVERROOT );
 
@@ -41,17 +49,30 @@ BEGIN {
   map{ unshift @INC, $_ } @SiteDefs::ENSEMBL_LIB_DIRS;    
 }
 
-my ($config, $species);
+my ($release, $config, $species);
 
 GetOptions(
+  'release=s' => \$release,
   'config=s'  => \$config,
   'species=s' => \$species,
 );
 
 die 'Please provide a configuration file!' unless $config;
 
-my $CONF    = from_json($config)  || {};
-my $SPECIES = from_json($species) || {};
+## Read configurations
+my ($conf_string, $spp_string);
+{
+  local $/;
+  my $fh;
+  open $fh, '<', "conf/$config";
+  $conf_string .= $_ for <$fh>;
+  close $fh;
+  open $fh, '<', "conf/$species";
+  $spp_string .= $_ for <$fh>;
+  close $fh;
+} 
+my $CONF          = $conf_string ? from_json($conf_string)  : {};
+my $SPECIES       = $spp_string ? from_json($spp_string) : {};
 
 ## Validate main configuration
 unless ($CONF->{'host'}) {
@@ -62,11 +83,12 @@ unless ($CONF->{'url'} && $CONF->{'url'} =~ /^http/) {
   die "You must specify a url to test against, eg. http://www.ensembl.org";
 }
 
-unless ($CONF->{'modules'} && scalar(@{$CONF->{'modules'}||[]})) {
+unless (($CONF->{'modules'} && scalar(@{$CONF->{'modules'}||[]}))
+        || ($CONF->{'modules'} && scalar(@{$CONF->{'modules'}||[]}))) {
   die "You must specify at least one test module, eg. ['Generic']";
 }
 
-unless ($CONF->{'modules'}[0]{'tests'} && scalar(@{$CONF->{'modules'}[0]{'tests'}||[]})) {
+unless (ref($CONF->{'modules'}[0]) eq 'HASH' && $CONF->{'modules'}[0]{'tests'} && scalar(@{$CONF->{'modules'}[0]{'tests'}||[]})) {
   die "You must specify at least one test method, eg. ['homepage']";
 }
 
@@ -77,6 +99,7 @@ my $port    = $CONF->{'port'}     || '4444';
 my $timeout = $CONF->{'timeout'}  || 50000;
 my $verbose = $CONF->{'verbose'}  || 0;
 
+=pod
 # check to see if the selenium server is online(URL returns OK if server is online).
 my $ua = LWP::UserAgent->new(keep_alive => 5, env_proxy => 1);
 $ua->timeout(10);
@@ -85,10 +108,7 @@ if($response->content ne 'OK') {
   print "\nSelenium Server is offline or IP Address is wrong !!!!\n";
   exit;
 }
-
-# hack: collect errors so that we can check for selenium failures
-our @errors;
-$SIG{'__DIE__'} = sub { push(@errors, $_[0]) };
+=cut
 
 ## Basic config for test modules
 my $test_config = {
@@ -97,27 +117,60 @@ my $test_config = {
                     port    => $port,
                     browser => $browser,
                     conf    => {
+                                release => $CONF->{'release'},
                                 timeout => $timeout,
                                 },
                     verbose => $verbose,  
                   };
 
-## Run any non-species-specific tests first 
-foreach my $module (@{$CONF->{'non_species'}{'modules'}}) {
-  foreach my $test_set (@{$CONF->{'non_species'}{'modules'}{$module}{'tests'}) {
-    run_test($module, $test_config, $test_set);    
+
+## Separate out the tests by species/non-species
+my $test_suite = {
+                  'non_species' => [],
+                  'species'     => {},
+                  };
+
+foreach my $module (@{$CONF->{'modules'}}) {
+  my $species = $module->{'species'} || [];
+  if ($species eq 'all') {
+  }
+  elsif (scalar(@$species)) {
+    foreach my $sp (@$species) {
+      if ($test_suite->{'species'}{$sp}) {
+        push @{$test_suite->{'species'}{$sp}}, $module;
+      }
+      else {
+        $test_suite->{'species'}{$sp} = [$module];
+      }
+    }
+  }
+  else {
+    push @{$test_suite->{'non_species'}}, $module,
   }
 }
 
-## Loop through the relevant tests
-foreach (sort keys %$SPECIES) {
-  foreach my $module (@{$CONF->{'species'}{'modules'}}) {
-    foreach my $test_set (@{$CONF->{'species'}{'modules'}{$module}{'tests'}) {
+## Run any non-species-specific tests first 
+foreach my $module (@{$test_suite->{'non_species'}}) {
+  my $module_name = $module->{'name'};
+  foreach my $test_set (@{$module->{'tests'}||[]}) {
+    run_test($module_name, $test_config, $test_set);    
+  }
+}
+
+## Loop through the relevant tests for each species
+foreach my $sp (keys %{$test_suite->{'species'}}) {
+  foreach my $module (@{$test_suite->{'species'}{$sp}}) {
+    my $module_name = $module->{'name'};
+    foreach my $test_set (@{$module->{'tests'}}) {
       $test_config->{'species'} = $species;
-      run_test($module, $test_config, $test_set);    
+      run_test($module_name, $test_config, $test_set);    
     }
   }
 }
+
+print "TEST RUN COMPLETED\n\n";
+
+################# SUBROUTINES #############################################
 
 sub run_test {
   my ($module, $config, $tests) = @_;
@@ -126,26 +179,34 @@ sub run_test {
   my $package = "EnsEMBL::Selenium::Test::$module";
   eval("use $package");
   if ($@) {
-    push @errors, "TEST FAILED: Couldn't use $package\n$@";
+    write_to_log("TEST FAILED: Couldn't use $package\n$@");
     return;
   }
   my @test_names = keys @{$tests||[]};
   unless (@test_names) {
-    push @errors, "TEST FAILED: No methods specified for test module $package";
+    write_to_log("TEST FAILED: No methods specified for test module $package");
     return;
   }
 
-  my $object = $package->new($config);
+  my $object = $package->new(%{$config||{}});
 
   ## Run the tests
   foreach my $name (@test_names) {
     my $method = 'test_'.$name;
-    my $error = $object->$method($tests->{$name});
-    if ($error) {
-      push @errors, $error;
+    if ($object->can($method)) {
+      my $error = $object->$method($tests->{$name});
+      write_to_log($error) if $error;
+    }
+    else {
+      write_to_log("TEST FAILED: No such method $method in package $package");
     }
   }
 }
 
-exit;
+sub write_to_log {
+  my $message = shift;
+  ## TODO Replace with proper logging
+  print "$message\n";
+}
+
 
