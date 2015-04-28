@@ -40,9 +40,8 @@ sub get_edit_jobs_data {
     if (-s $input_file <= 1024) {
       $job_data->{"text_$format"} = join('', file_get_contents($input_file));
     } else {
-      my $url_param   = $self->create_url_param({'ticket_name' => $ticket->ticket_name});
       $job_data->{'input_file_type'}  = 'text';
-      $job_data->{'input_file_url'}   = $hub->url('Download', {'type' => 'AssemblyConverter', 'action' => '', 'function' => '', 'tl' => $url_param, 'input' => 1});
+      $job_data->{'input_file_url'}   = $self->download_url($ticket, {'input' => 1});
     }
   } else {
     $job_data->{'input_file_type'} = 'binary';
@@ -91,6 +90,19 @@ sub handle_download {
     }
     else { warn ">>> PATH NOT RECOGNISED: $path"; }
   }
+}
+
+sub download_url {
+  my ($self, $ticket, $params) = @_;
+
+  return $self->hub->url('Download', {
+    'type'      => 'Tools',
+    'action'    => 'AssemblyConverter',
+    'function'  => '',
+    'tl'        => $self->create_url_param({'ticket_name' => $ticket->ticket_name}),
+    '__clear'   => 1,
+    %{$params || {}}
+  });
 }
 
 1;
