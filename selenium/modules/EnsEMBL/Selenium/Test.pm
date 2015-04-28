@@ -25,9 +25,6 @@ use EnsEMBL::Selenium;
 use Test::Exception;
 use Test::More "no_plan";
 
-use EnsEMBL::Web::Hub;
-use EnsEMBL::Web::DBSQL::WebsiteAdaptor;
-
 my $DEFAULTS = {timeout => 50000};
 my $TESTMORE_OUTPUT;
 
@@ -99,26 +96,32 @@ sub testmore_output {
 #Getting the database information from the hub
 sub database {
  my ($self, $db, $species) = @_;
- 
+  warn ">>> TESTS NOW INDEPENDENT OF WEB CODE";
+  return undef;
+=pod 
  my $hub  = EnsEMBL::Web::Hub->new; 
  my $database = $hub->database($db, $species);
  
  return $database;
+=cut
 }
 
 #getting species def from hub, can be used to check for species name, release version and other web related text
 sub get_species_def {
   my $self = shift;
+  warn ">>> TESTS NOW INDEPENDENT OF WEB CODE";
+  return undef;
+=pod
   my $hub = EnsEMBL::Web::Hub->new;
   my $SD = $hub->species_defs; 
  
   return $SD;
+=cut
 }
 
-#Gets the current URL in the window (to know which page is being tested)
-sub get_location {
+sub get_current_url {
+### Gets the current URL in the window (to know which page is being tested)
   my $self = shift;
-  
   my $location = $self->sel->get_location();
   return $location;
 }
