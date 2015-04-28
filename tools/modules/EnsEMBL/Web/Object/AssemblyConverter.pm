@@ -42,7 +42,7 @@ sub get_edit_jobs_data {
     } else {
       my $url_param   = $self->create_url_param({'ticket_name' => $ticket->ticket_name});
       $job_data->{'input_file_type'}  = 'text';
-      $job_data->{'input_file_url'}   = sprintf('/Download/AssemblyConverter?tl=%s;input=1', $url_param);
+      $job_data->{'input_file_url'}   = $hub->url('Download', {'type' => 'AssemblyConverter', 'action' => '', 'function' => '', 'tl' => $url_param, 'input' => 1});
     }
   } else {
     $job_data->{'input_file_type'} = 'binary';
