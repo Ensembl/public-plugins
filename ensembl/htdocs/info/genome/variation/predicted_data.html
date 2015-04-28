@@ -2,8 +2,12 @@
 <head>
 <meta name="order" content="1" />
 <title>Predicted Data</title>
+<script type="text/javascript">
+  // Function to display help popups
+  function load_helptip() {
+    $('.conhelp').helptip({'track': true});
+  };
 
-<script language="Javascript" type="text/javascript">
   // Function to highlight a line
   function highlight_line() {
     if(window.location.hash) {
@@ -108,6 +112,7 @@ is necessarily subjective and API and VEP users can always get the full set of
 consequences for each allele and make their own severity judgement.
 </p>
 <!-- consequences - start -->
+
 <table id="consequence_type_table" class="ss">
   <tr>
     <th style="width:5px;padding-left:0px;padding-right:0px;text-align:center">*</th>
@@ -115,12 +120,14 @@ consequences for each allele and make their own severity judgement.
     <th>SO description</th>
     <th>SO accession</th>
     <th>Display term</th>
+    <th><span class="_ht conhelp" title="Classification of the level of severity of the consequence type">IMPACT</span></th>
   </tr>
   <tr id="transcript_ablation">
     <td style="padding:0px;margin:0px;background-color:#ff0000"></td>    <td>transcript_ablation</td>
     <td>A feature ablation whereby the deleted region includes a transcript feature</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001893">SO:0001893</a></td>
     <td>Transcript ablation</td>
+    <td>HIGH</td>
   </tr>
   </tr>
   <tr class="bg2" id="splice_acceptor_variant">
@@ -128,6 +135,7 @@ consequences for each allele and make their own severity judgement.
     <td>A splice variant that changes the 2 base region at the 3' end of an intron</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001574">SO:0001574</a></td>
     <td>Splice acceptor variant</td>
+    <td>HIGH</td>
   </tr>
   </tr>
   <tr id="splice_donor_variant">
@@ -135,6 +143,7 @@ consequences for each allele and make their own severity judgement.
     <td>A splice variant that changes the 2 base region at the 5' end of an intron</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001575">SO:0001575</a></td>
     <td>Splice donor variant</td>
+    <td>HIGH</td>
   </tr>
   </tr>
   <tr class="bg2" id="stop_gained">
@@ -142,6 +151,7 @@ consequences for each allele and make their own severity judgement.
     <td>A sequence variant whereby at least one base of a codon is changed, resulting in a premature stop codon, leading to a shortened transcript</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001587">SO:0001587</a></td>
     <td>Stop gained</td>
+    <td>HIGH</td>
   </tr>
   </tr>
   <tr id="frameshift_variant">
@@ -149,6 +159,7 @@ consequences for each allele and make their own severity judgement.
     <td>A sequence variant which causes a disruption of the translational reading frame, because the number of nucleotides inserted or deleted is not a multiple of three</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001589">SO:0001589</a></td>
     <td>Frameshift variant</td>
+    <td>HIGH</td>
   </tr>
   </tr>
   <tr class="bg2" id="stop_lost">
@@ -156,6 +167,7 @@ consequences for each allele and make their own severity judgement.
     <td>A sequence variant where at least one base of the terminator codon (stop) is changed, resulting in an elongated transcript</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001578">SO:0001578</a></td>
     <td>Stop lost</td>
+    <td>HIGH</td>
   </tr>
   </tr>
   <tr id="start_lost">
@@ -163,6 +175,7 @@ consequences for each allele and make their own severity judgement.
     <td>A codon variant that changes at least one base of the canonical start codon</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0002012">SO:0002012</a></td>
     <td>Start lost</td>
+    <td>LOW</td>
   </tr>
   </tr>
   <tr class="bg2" id="transcript_amplification">
@@ -170,6 +183,7 @@ consequences for each allele and make their own severity judgement.
     <td>A feature amplification of a region containing a transcript</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001889">SO:0001889</a></td>
     <td>Transcript amplification</td>
+    <td>HIGH</td>
   </tr>
   </tr>
   <tr id="inframe_insertion">
@@ -177,6 +191,7 @@ consequences for each allele and make their own severity judgement.
     <td>An inframe non synonymous variant that inserts bases into in the coding sequence</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001821">SO:0001821</a></td>
     <td>Inframe insertion</td>
+    <td>MODERATE</td>
   </tr>
   </tr>
   <tr class="bg2" id="inframe_deletion">
@@ -184,20 +199,23 @@ consequences for each allele and make their own severity judgement.
     <td>An inframe non synonymous variant that deletes bases from the coding sequence</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001822">SO:0001822</a></td>
     <td>Inframe deletion</td>
+    <td>MODERATE</td>
   </tr>
   </tr>
-  <tr id="protein_altering_variant">
-    <td style="padding:0px;margin:0px;background-color:#FF0080;border-top:1px solid #FFF"></td>    <td>protein_altering_variant</td>
-    <td>A sequence_variant which is predicted to change the protein encoded in the coding sequence</td>
-    <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001818">SO:0001818</a></td>
-    <td>protein altering variant</td>
-  </tr>
-  </tr>
-  <tr class="bg2" id="missense_variant">
+  <tr id="missense_variant">
     <td style="padding:0px;margin:0px;background-color:#ffd700;border-top:1px solid #FFF"></td>    <td>missense_variant</td>
     <td>A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001583">SO:0001583</a></td>
     <td>Missense variant</td>
+    <td>MODERATE</td>
+  </tr>
+  </tr>
+  <tr class="bg2" id="protein_altering_variant">
+    <td style="padding:0px;margin:0px;background-color:#FF0080;border-top:1px solid #FFF"></td>    <td>protein_altering_variant</td>
+    <td>A sequence_variant which is predicted to change the protein encoded in the coding sequence</td>
+    <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001818">SO:0001818</a></td>
+    <td>protein altering variant</td>
+    <td>MODERATE</td>
   </tr>
   </tr>
   <tr id="splice_region_variant">
@@ -205,6 +223,7 @@ consequences for each allele and make their own severity judgement.
     <td>A sequence variant in which a change has occurred within the region of the splice site, either within 1-3 bases of the exon or 3-8 bases of the intron</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001630">SO:0001630</a></td>
     <td>Splice region variant</td>
+    <td>LOW</td>
   </tr>
   </tr>
   <tr class="bg2" id="incomplete_terminal_codon_variant">
@@ -212,6 +231,7 @@ consequences for each allele and make their own severity judgement.
     <td>A sequence variant where at least one base of the final codon of an incompletely annotated transcript is changed</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001626">SO:0001626</a></td>
     <td>Incomplete terminal codon variant</td>
+    <td>LOW</td>
   </tr>
   </tr>
   <tr id="stop_retained_variant">
@@ -219,6 +239,7 @@ consequences for each allele and make their own severity judgement.
     <td>A sequence variant where at least one base in the terminator codon is changed, but the terminator remains</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001567">SO:0001567</a></td>
     <td>Stop retained variant</td>
+    <td>LOW</td>
   </tr>
   </tr>
   <tr class="bg2" id="synonymous_variant">
@@ -226,6 +247,7 @@ consequences for each allele and make their own severity judgement.
     <td>A sequence variant where there is no resulting change to the encoded amino acid</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001819">SO:0001819</a></td>
     <td>Synonymous variant</td>
+    <td>LOW</td>
   </tr>
   </tr>
   <tr id="coding_sequence_variant">
@@ -233,6 +255,7 @@ consequences for each allele and make their own severity judgement.
     <td>A sequence variant that changes the coding sequence</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001580">SO:0001580</a></td>
     <td>Coding sequence variant</td>
+    <td>MODIFIER</td>
   </tr>
   </tr>
   <tr class="bg2" id="mature_miRNA_variant">
@@ -240,6 +263,7 @@ consequences for each allele and make their own severity judgement.
     <td>A transcript variant located with the sequence of the mature miRNA</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001620">SO:0001620</a></td>
     <td>Mature miRNA variant</td>
+    <td>MODIFIER</td>
   </tr>
   </tr>
   <tr id="5_prime_UTR_variant">
@@ -247,6 +271,7 @@ consequences for each allele and make their own severity judgement.
     <td>A UTR variant of the 5' UTR</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001623">SO:0001623</a></td>
     <td>5 prime UTR variant</td>
+    <td>MODIFIER</td>
   </tr>
   </tr>
   <tr class="bg2" id="3_prime_UTR_variant">
@@ -254,6 +279,7 @@ consequences for each allele and make their own severity judgement.
     <td>A UTR variant of the 3' UTR</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001624">SO:0001624</a></td>
     <td>3 prime UTR variant</td>
+    <td>MODIFIER</td>
   </tr>
   </tr>
   <tr id="non_coding_transcript_exon_variant">
@@ -261,6 +287,7 @@ consequences for each allele and make their own severity judgement.
     <td>A sequence variant that changes non-coding exon sequence in a non-coding transcript</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001792">SO:0001792</a></td>
     <td>Non coding transcript exon variant</td>
+    <td>MODIFIER</td>
   </tr>
   </tr>
   <tr class="bg2" id="intron_variant">
@@ -268,6 +295,7 @@ consequences for each allele and make their own severity judgement.
     <td>A transcript variant occurring within an intron</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001627">SO:0001627</a></td>
     <td>Intron variant</td>
+    <td>MODIFIER</td>
   </tr>
   </tr>
   <tr id="NMD_transcript_variant">
@@ -275,6 +303,7 @@ consequences for each allele and make their own severity judgement.
     <td>A variant in a transcript that is the target of NMD</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001621">SO:0001621</a></td>
     <td>NMD transcript variant</td>
+    <td>MODIFIER</td>
   </tr>
   </tr>
   <tr class="bg2" id="non_coding_transcript_variant">
@@ -282,6 +311,7 @@ consequences for each allele and make their own severity judgement.
     <td>A transcript variant of a non coding RNA gene</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001619">SO:0001619</a></td>
     <td>Non coding transcript variant</td>
+    <td>MODIFIER</td>
   </tr>
   </tr>
   <tr id="upstream_gene_variant">
@@ -289,6 +319,7 @@ consequences for each allele and make their own severity judgement.
     <td>A sequence variant located 5' of a gene</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001631">SO:0001631</a></td>
     <td>Upstream gene variant</td>
+    <td>MODIFIER</td>
   </tr>
   </tr>
   <tr class="bg2" id="downstream_gene_variant">
@@ -296,6 +327,7 @@ consequences for each allele and make their own severity judgement.
     <td>A sequence variant located 3' of a gene</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001632">SO:0001632</a></td>
     <td>Downstream gene variant</td>
+    <td>MODIFIER</td>
   </tr>
   </tr>
   <tr id="TFBS_ablation">
@@ -303,6 +335,7 @@ consequences for each allele and make their own severity judgement.
     <td>A feature ablation whereby the deleted region includes a transcription factor binding site</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001895">SO:0001895</a></td>
     <td>TFBS ablation</td>
+    <td>MODERATE</td>
   </tr>
   </tr>
   <tr class="bg2" id="TFBS_amplification">
@@ -310,13 +343,15 @@ consequences for each allele and make their own severity judgement.
     <td>A feature amplification of a region containing a transcription factor binding site</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001892">SO:0001892</a></td>
     <td>TFBS amplification</td>
+    <td>MODIFIER</td>
   </tr>
   </tr>
   <tr id="TF_binding_site_variant">
     <td style="padding:0px;margin:0px;background-color:#a52a2a;border-top:1px solid #FFF"></td>    <td>TF_binding_site_variant</td>
-    <td>A sequence variant located within a transcription factor binding site</td>
+	    <td>A sequence variant located within a transcription factor binding site</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001782">SO:0001782</a></td>
     <td>TF binding site</td>
+    <td>MODIFIER</td>
   </tr>
   </tr>
   <tr class="bg2" id="regulatory_region_ablation">
@@ -324,6 +359,7 @@ consequences for each allele and make their own severity judgement.
     <td>A feature ablation whereby the deleted region includes a regulatory region</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001894">SO:0001894</a></td>
     <td>Regulatory region ablation</td>
+    <td>MODERATE</td>
   </tr>
   </tr>
   <tr id="regulatory_region_amplification">
@@ -331,20 +367,23 @@ consequences for each allele and make their own severity judgement.
     <td>A feature amplification of a region containing a regulatory region</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001891">SO:0001891</a></td>
     <td>Regulatory region amplification</td>
+    <td>MODIFIER</td>
   </tr>
   </tr>
-  <tr class="bg2" id="regulatory_region_variant">
-    <td style="padding:0px;margin:0px;background-color:#a52a2a;border-top:1px solid #FFF"></td>    <td>regulatory_region_variant</td>
-    <td>A sequence variant located within a regulatory region</td>
-    <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001566">SO:0001566</a></td>
-    <td>Regulatory region variant</td>
-  </tr>
-  </tr>
-  <tr id="feature_elongation">
+  <tr class="bg2" id="feature_elongation">
     <td style="padding:0px;margin:0px;background-color:#7f7f7f;border-top:1px solid #FFF"></td>    <td>feature_elongation</td>
     <td>A sequence variant that causes the extension of a genomic feature, with regard to the reference sequence</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001907">SO:0001907</a></td>
     <td>Feature elongation</td>
+    <td>MODIFIER</td>
+  </tr>
+  </tr>
+  <tr id="regulatory_region_variant">
+    <td style="padding:0px;margin:0px;background-color:#a52a2a;border-top:1px solid #FFF"></td>    <td>regulatory_region_variant</td>
+    <td>A sequence variant located within a regulatory region</td>
+    <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001566">SO:0001566</a></td>
+    <td>Regulatory region variant</td>
+    <td>MODIFIER</td>
   </tr>
   </tr>
   <tr class="bg2" id="feature_truncation">
@@ -352,6 +391,7 @@ consequences for each allele and make their own severity judgement.
     <td>A sequence variant that causes the reduction of a genomic feature, with regard to the reference sequence</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001906">SO:0001906</a></td>
     <td>Feature truncation</td>
+    <td>MODIFIER</td>
   </tr>
   </tr>
   <tr id="intergenic_variant">
@@ -359,13 +399,14 @@ consequences for each allele and make their own severity judgement.
     <td>A sequence variant located in the intergenic region, between genes</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001628">SO:0001628</a></td>
     <td>Intergenic variant</td>
+    <td>MODIFIER</td>
   </tr>
 </table>
 <p><b>*</b> Corresponding colours for the Ensembl web displays.<p>
 <!-- consequences - end -->
 
 <script language="Javascript" type="text/javascript">
-  window.onload=highlight_line()
+  window.onload=load_helptip;highlight_line()
 </script>
 
 
