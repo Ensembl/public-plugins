@@ -42,7 +42,7 @@ sub job_summary_section {
                           'node_name'   => 'a',
                           'inner_HTML'  => "[Download results]",
                           'class'       => [qw(small left-margin)],
-                          'href'        => $self->object->download_url($ticket),
+                          'href'        => $self->object->download_url($ticket->ticket_name),
                   }, $_);
   }
   $_->parent_node->remove_child($_) for @{$summary->get_nodes_by_flag('job_results_link')};
@@ -60,7 +60,7 @@ sub ticket_buttons {
     $buttons->prepend_child({
                       'node_name'   => 'a',
                       'class'       => [qw(_download)],
-                      'href'        => $self->object->download_url($ticket),
+                      'href'        => $self->object->download_url($ticket->ticket_name),
                       'children'    => [{
                                         'node_name' => 'span',
                                         'class'     => [qw(_ht sprite download_icon)],

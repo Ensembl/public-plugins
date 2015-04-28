@@ -38,11 +38,7 @@ sub buttons {
   return {
     'class'     => 'export',
     'caption'   => 'Download results file',
-    'url'       => $hub->url('Download', {
-        '__clear'   => 1,
-        'function'  => '',
-        'tl'        => $object->create_url_param
-    })
+    'url'       => $object->download_url
   };
 }
 

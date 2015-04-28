@@ -578,6 +578,22 @@ sub handle_download {
   return $self->get_sub_object->handle_download(@_);
 }
 
+sub download_url {
+  ## Generates a download URL for a results file
+  ## @param Ticket name (optional - takes the ticket name from URL is not provided)
+  ## @param Hashref of any extra url params (optional)
+  my $self        = shift;
+  my $ticket_name = $_[0] && !ref($_[0]) ? shift : undef;
+  my $params      = $_[0] && (ref($_[0]) || '') eq 'HASH' ? shift : {};
+
+  return $self->hub->url('Download', {
+    'function'  => '',
+    '__clear'   => 1,
+    'tl'        => $self->create_url_param($ticket_name ? {'ticket_name' => $ticket_name} : ()),
+    %$params
+  });
+}
+
 sub get_time_now {
   # Gets the current time in a format that can be saved in the db
   my ($sec, $min, $hour, $day, $month, $year) = localtime;

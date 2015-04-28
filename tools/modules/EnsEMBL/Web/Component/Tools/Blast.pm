@@ -47,7 +47,7 @@ sub job_details_table {
   if ($result_link) {
     my $download_link = $result_link->clone_node;
     $download_link->inner_HTML('[Download results file]');
-    $download_link->set_attribute('href', $hub->url('Download', {'function' => '', 'tl' => $object->create_url_param}));
+    $download_link->set_attribute('href', $object->download_url);
     $result_link->parent_node->insert_after($download_link, $result_link);
   }
 

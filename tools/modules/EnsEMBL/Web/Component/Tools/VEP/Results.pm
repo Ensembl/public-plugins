@@ -464,13 +464,11 @@ sub content {
   $html .= '<div class="toolbox">';
   $html .= '<div class="toolbox-head"><img src="/i/16/download.png" style="vertical-align:top;"> Download</div><div style="padding:5px;">';
 
-  my $download_url = {'type' => 'VEP', 'action' => '', 'function' => '', 'tl' => $object->create_url_param};
-
   # all
   $html .= '<div><b>All</b><span style="float:right; margin-left:10px;">';
   $html .= sprintf(
     ' <a class="_ht" title="Download all results in %s format%s" href="%s">%s</a>',
-    $_, ($_ eq 'TXT' ? ' (best for Excel)' : ''), $hub->url('Download', { %$download_url, 'format' => lc $_ }), $_
+    $_, ($_ eq 'TXT' ? ' (best for Excel)' : ''), $object->download_url({ 'format' => lc $_ }), $_
   ) for qw(VCF VEP TXT);
   $html .= '</span></div>';
 
@@ -480,7 +478,7 @@ sub content {
     $html .= '<div><hr><b>Filtered</b><span style="float:right; margin-left:10px;">';
     $html .= sprintf(
       ' <a class="_ht" title="Download filtered results in %s format%s" href="%s">%s</a>',
-      $_, ($_ eq 'TXT' ? ' (best for Excel)' : ''), $hub->url('Download', { %$download_url, 'format' => lc $_, map {$_ => $content_args{$_}} grep {!/to|from/} keys %content_args }), $_
+      $_, ($_ eq 'TXT' ? ' (best for Excel)' : ''), $object->download_url({ 'format' => lc $_, map {$_ => $content_args{$_}} grep {!/to|from/} keys %content_args }), $_
     ) for qw(VCF VEP TXT);
     $html .= '</span></div>';
   }
