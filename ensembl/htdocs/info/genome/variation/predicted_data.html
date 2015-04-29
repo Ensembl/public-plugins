@@ -3,11 +3,6 @@
 <meta name="order" content="1" />
 <title>Predicted Data</title>
 <script type="text/javascript">
-  // Function to display help popups
-  function load_helptip() {
-    $('.conhelp').helptip({'track': true});
-  };
-
   // Function to highlight a line
   function highlight_line() {
     if(window.location.hash) {
@@ -406,7 +401,10 @@ consequences for each allele and make their own severity judgement.
 <!-- consequences - end -->
 
 <script language="Javascript" type="text/javascript">
-  window.onload=load_helptip;highlight_line()
+  window.onload = function() {
+    $('.conhelp').helptip({'track': true});
+    highlight_line();
+  };
 </script>
 
 
