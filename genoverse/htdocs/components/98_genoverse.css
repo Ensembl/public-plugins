@@ -55,13 +55,14 @@ body.dragging *                                          { cursor: n-resize!impo
 .canvas_container .resizer.shadow .handle                { position: relative; left: 5px }
 .canvas_container .resizer:hover,
 .canvas_container .resizer.ui-draggable-dragging         { box-shadow: -1px -3px 6px -3px #000000 inset!important; }
-.canvas_container .selector                              { position: absolute; height: 100%; top: 0; display: none; margin-left: -1px; background-color: rgba(229, 121, 5, 0.1); z-index: 10; pointer-events: none; }
-.canvas_container .selector                              { border: 1px dashed red; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; }
+.canvas_container .selector                              { position: absolute; height: 100%; top: 0; display: none; margin-left: -1px; z-index: 10; }
+.canvas_container .selector                              { border: 1px dashed red; border-width: 1px 0; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; }
 .canvas_container .selector.crosshair                    { border-width: 0 0 0 1px; }
-.canvas_container .selector.highlight                    { border-style: solid; background: 0; }
+.canvas_container .selector.highlight                    { border-style: solid; background: none; border-width: 1px; }
 .canvas_container .selector_controls                     { display: none!important; }
+.canvas_container .selector.crosshair div                { display: none; }
 
-.canvas_container .message_container                     { 
+.canvas_container .message_container                     {
   position: absolute; top: 0; left: -1px; display: none; background: #DDD; color: #000; border: 1px solid #999; padding: 5px; margin-bottom: 4px; z-index: 11;
   font-family: Verdana; font-size: 10px; font-weight: bold;
 }

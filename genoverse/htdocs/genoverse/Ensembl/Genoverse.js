@@ -280,18 +280,20 @@ Ensembl.Genoverse = Genoverse.extend({
   
   stopDragSelect: function (e) {
     if (this.base(e) !== false && !e.originalEvent.hasFeature) {
-      var left  = this.selector.position().left;
-      var start = Math.round(left / this.scale) + this.start;
-      var end   = Math.round((left + this.selector.outerWidth(true)) / this.scale) + this.start - 1;
-          end   = end <= start ? start : end;
-      
-      this.makeZMenu({ event: e, feature: {}, drag: { chr: this.chr, start: start, end: end, browser: this }, imageId: this.panel.id, onClose: function(e) {
-        this.cancelSelect();
-        this.moveSelector(e);
-      } }, 'zmenu_region_select');
-      
+      this.makeRegionZmenu(e, {left: this.selector.position().left, width: this.selector.outerWidth(true)});
       this.selectorStalled = true;
     }
+  },
+
+  makeRegionZmenu: function(e, coords) {
+    var start = Math.round(coords.left / this.scale) + this.start;
+    var end   = Math.round((coords.left + coords.width) / this.scale) + this.start - 1;
+        end   = end <= start ? start : end;
+
+    this.makeZMenu({ event: e, feature: {}, drag: { chr: this.chr, start: start, end: end, browser: this }, imageId: this.panel.id, onClose: function(e) {
+      this.cancelSelect();
+      this.moveSelector(e);
+    } }, 'zmenu_region_select');
   },
   
   makeZMenu: function (params, id, track) {

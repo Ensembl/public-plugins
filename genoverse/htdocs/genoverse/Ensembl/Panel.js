@@ -26,6 +26,7 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
     
     this.elLk.img         = this.genoverse.container;
     this.elLk.boundaries  = this.genoverse.labelContainer;
+    this.elLk.selector    = this.genoverse.selector;
     this.elLk.controls    = $('.genoverse_controls', this.elLk.container).each(function () { $(this).prev().append(this); });
     this.elLk.autoHeight  = $('.auto_height',        this.elLk.controls);
     this.elLk.resetHeight = $('.reset_height',       this.elLk.controls);
@@ -33,6 +34,7 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
     this.elLk.wheelZoom   = $('.wheel_zoom',         this.elLk.controls);
     
     this.initControls();
+    this.initSelector();
     
     Ensembl.EventManager.register('changeTrackOrder', this, this.externalOrder);
     Ensembl.EventManager.register('updatePanel',      this, this.update);
@@ -158,6 +160,16 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
     }).not(':first').children();
 
     buttons = null;
+  },
+
+  initSelector: function() {
+    this.elLk.selector.append('<div class="left-border"></div><div class="right-border"></div>');
+    this.dragRegion = {l: 0, r: this.genoverse.width - 1, a: { klass: {} }}; // required by activateSelector to find out the limits for the selector
+    this.activateSelector();
+  },
+
+  makeZMenu: function(e, coords, params) { // this only gets called for region ZMenus
+    this.genoverse.makeRegionZmenu(e, {left: coords.s, width: coords.r});
   },
 
   updateTrackHeightControl: function(isAuto) {
