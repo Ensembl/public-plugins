@@ -84,6 +84,8 @@ Ensembl.Panel.ImageMap = Ensembl.Panel.ImageMap.extend({
         this.elLk.overlay.prependTo(this.el).css({ width: this.elLk.container.outerWidth(), height: this.elLk.container.outerHeight() });
         this.elLk.container.append(this.elLk.updateButtons);
         this.elLk.container.resizable('disable');
+        this.selectArea(false);
+        this.removeZMenus();
       }
     } else {
       this.base.apply(this, arguments);
