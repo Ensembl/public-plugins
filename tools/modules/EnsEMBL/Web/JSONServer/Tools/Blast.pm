@@ -87,7 +87,7 @@ sub _possible_dbs {
   return qw(ENSEMBL)  if $id =~ /^ENS/;
   return qw(CCDS)     if $id =~ /^CCDS/ && exists $ext_dbs->{'CCDS'};
 
-  return qw(ENSEMBL PUBLIC);
+  return qw(REST ENSEMBL PUBLIC);
 }
 
 1;
