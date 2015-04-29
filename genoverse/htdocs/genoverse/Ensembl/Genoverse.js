@@ -46,8 +46,10 @@ Ensembl.Genoverse = Genoverse.extend({
       (this.updateEnsemblText = this.updateEnsemblText || $('h1.summary-heading, #masthead .location.long_tab a')).html(function (i, html) {
         return html.replace(/^(.+:\s?).+/, '$1' + text);
       });
-      Ensembl.images[this.panel.imageNumber+1][0][2] = location.start;
-      Ensembl.images[this.panel.imageNumber+1][0][3] = location.end;
+      if (Ensembl.images[this.panel.imageNumber+1]) {
+        Ensembl.images[this.panel.imageNumber+1][0][2] = location.start;
+        Ensembl.images[this.panel.imageNumber+1][0][3] = location.end;
+      }
     }
 
     Ensembl.EventManager.trigger('highlightAllImages');
