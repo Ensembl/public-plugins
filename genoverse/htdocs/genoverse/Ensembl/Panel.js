@@ -181,6 +181,7 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
   updateToggleSelectControl: function(on) {
     this.elLk.dragging.filter('.on').parent().toggleClass('selected', on);
     this.elLk.dragging.filter(':not(.on)').parent().toggleClass('selected', !on);
+    this.removeZMenus();
   },
   
   hashChange: function () {
