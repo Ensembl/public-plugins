@@ -106,8 +106,9 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
         var on = $(this).hasClass('on');
         panel.updateToggleSelectControl(on);
         genoverse.setDragAction(on ? 'scroll' : 'select');
+        Ensembl.cookie.set('ENSEMBL_GENOVERSE_SCROLL', on ? '1' : '0');
       }
-    });
+    }).filter(Ensembl.cookie.get('ENSEMBL_GENOVERSE_SCROLL') === '1' ? '.on' : ':not(.on)').trigger('click');
     
     this.elLk.wheelZoom.on('click', function () {
       if (!$(this).parent().hasClass('selected')) {
