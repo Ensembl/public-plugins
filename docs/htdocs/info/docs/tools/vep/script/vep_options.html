@@ -139,7 +139,8 @@ host          useastdb.ensembl.org</pre>
           <a href="#opt_gmaf">--gmaf</a>,
           <a href="#opt_maf_1kg">--maf_1kg</a>,
           <a href="#opt_maf_esp">--maf_esp</a>,
-          <a href="#opt_pubmed">--pubmed</a>
+          <a href="#opt_pubmed">--pubmed</a>,
+          <a href="#opt_variant_class">--variant_class</a>
         </ul>
       </td>
     </tr>
@@ -345,7 +346,7 @@ host          useastdb.ensembl.org</pre>
         used by default</i>
       </td>
     </tr>
-    <tr id="show_cache_info">
+    <tr id="opt_show_cache_info">
       <td><pre>--show_cache_info</pre></td>
       <td>&nbsp;</td>
       <td>
@@ -367,6 +368,15 @@ host          useastdb.ensembl.org</pre>
       <th width="20%">Flag</th>
       <th width="10%">Alternate</th>
       <th>Description</th>
+    </tr>
+    <tr id="opt_variant_class">
+      <td><pre>--variant_class</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        Output the Sequence Ontology <a
+        href="/info/genome/variation/data_description.html#classes">variant
+        class</a>. <i>Not used by default</i>
+      </td>
     </tr>
     <tr id="opt_sift">
       <td><pre>--sift [p<b>|</b>s<b>|</b>b]</pre></td>
@@ -575,6 +585,20 @@ host          useastdb.ensembl.org</pre>
         using <a href="#opt_cache">--cache</a> or <a
         href="#opt_offline">--offline</a> you must use a FASTA file and <a
         href="#opt_fasta">--fasta</a>. <i>Not used by default</i>
+      </td>
+    </tr>
+    <tr id="opt_shift_hgvs">
+      <td><pre>--shift_hgvs [0|1]</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        Enable or disable 3' shifting of HGVS notations. When enabled, this
+        causes ambiguous insertions or deletions (typically in repetetive
+        sequence tracts) to be "shifted" to their most 3' possible
+        coordinates (relative to the transcript sequence and strand) before
+        the HGVS notations are calculated; the flag HGVS_OFFSET is set to
+        the number of bases by which the variant has shifted, relative to
+        the input genomic coordinates. Disabling retains the original
+        input coordinates of the variant. <i>Default: 1 (shift)</i>
       </td>
     </tr>
     <tr id="opt_protein">
@@ -818,6 +842,22 @@ host          useastdb.ensembl.org</pre>
         prediction is carried out. <i>Not used by default</i>
       </td>
     </tr>
+    <tr id="opt_minimal">
+      <td><pre>--minimal</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        Convert alleles to their most minimal representation before
+        consequence calculation i.e. sequence that is identical between
+        each pair of reference and alternate alleles is trimmed off from
+        both ends, with coordinates adjusted accordingly. Note this may
+        lead to discrepancies between input coordinates and coordinates
+        reported by the VEP relative to transcript sequences; to avoid
+        issues, use <a href="#opt_allele_number">--allele_number</a>
+        and/or ensure that your input variants have unique identifiers.
+        The MINIMISED flag is set in the VEP output where relevant.
+        <i>Not used by default</i>
+      </td>
+    </tr>
   </table>
   
   
@@ -934,7 +974,7 @@ host          useastdb.ensembl.org</pre>
         Customise the order of criteria applied when choosing a block of
         annotation data with e.g. <a href="#opt_pick">--pick</a>. See
         <a href="vep_other.html#pick">this page</a> for the default order.
-        Valid criteria are: <i>canonical, tsl, biotype, rank, length</i>
+        Valid criteria are: <i>canonical,tsl,biotype,ccds,rank,length</i>
       </td>
     </tr>
     <tr id="opt_most_severe">

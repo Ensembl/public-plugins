@@ -70,6 +70,21 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
 	</div><hr/>
 	<h2 id="new">What's new</h2>
 	
+	<h4> New in version 80 <i>(May 2015)</i> </h4>
+	
+	<ul>
+    <li><a href="../vep_formats.html#output">Flag added</a> indicating if an overlapping known variant is associated with a phenotype, disease or trait</li>
+    <li>HGVS notations are now 3'-shifted by default (use <a href="vep_options.html#opt_shift_hgvs">--shift_hgvs</a> to force enable/disable)</li>
+    <li>Source version information added to caches; see output file headers or use <a href="vep_options.html#opt_show_cache_info">--show_cache_info</a></li>
+    <li>Get the variant class using <a href="vep_options.html#opt_variant_class">--variant_class</a></li>
+    <li>CCDS status added to categories used by <a href="vep_options.html#opt_pick">--pick</a> flag (and <a href="vep_other.html#pick">others</a>)</li>
+	</ul>
+	
+	<h4 id="history"> Previous version history: <a href="#history"
+	onclick="show_hide('history');"	id="a_history">Show</a> </h4>
+	
+	<div id="div_history" style="display: none;">	
+	
 	<h4> New in version 79 <i>(March 2015)</i> </h4>
 	
 	<ul>
@@ -80,11 +95,15 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     <li>Impact modifier added for each consequence type</li>
 	</ul>
 	
-	<h4 id="history"> Previous version history: <a href="#history"
-	onclick="show_hide('history');"	id="a_history">Show</a> </h4>
-	
-	<div id="div_history" style="display: none;">
-	
+  <h4> New in version 78 <i>(December 2014)</i> </h4>
+
+  <ul>
+    <li>Customise <a href="vep_options.html#opt_pick">--pick</a> using
+    <a href="vep_options.html#opt_pick_order">--pick_order</a></li>
+    <li>Get <a href="/Help/Glossary?id=492">transcript support level</a>
+    using <a href="vep_options.html#opt_tsl">--tsl</a></li>
+  </ul>
+  
 	<h4> New in version 77 <i>(October 2014)</i> </h4>
 	
 	<ul>

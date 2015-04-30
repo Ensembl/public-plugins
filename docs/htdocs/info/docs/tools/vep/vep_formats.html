@@ -72,7 +72,7 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     can be produced as an output format by many variant calling tools. </p>
     
     <p> Users using VCF should note a peculiarity in the difference between how
-    Ensembl and VCF describe unbalanced variations. For any unbalanced variant (i.e.
+    Ensembl and VCF describe unbalanced variants. For any unbalanced variant (i.e.
     insertion, deletion or unbalanced substitution), the VCF specification requires
     that the base immediately before the variant should be included in both the
     reference and variant alleles. This also affects the reported position i.e. the
@@ -255,16 +255,17 @@ LRG_1:g.10006G>T</pre>
         <li><strong>Gene</strong> - Ensembl stable ID of affected gene</li>
         <li><strong>Feature</strong> - Ensembl stable ID of feature</li>
         <li><strong>Feature type</strong> - type of feature. Currently one of Transcript, RegulatoryFeature, MotifFeature.</li>
-        <li><strong>Consequence</strong> - <a href="/info/genome/variation/predicted_data.html#consequences">consequence type</a> of this variation</li>
+        <li><strong>Consequence</strong> - <a href="/info/genome/variation/predicted_data.html#consequences">consequence type</a> of this variant</li>
         <li><strong>Position in cDNA</strong> - relative position of base pair in cDNA sequence</li>
         <li><strong>Position in CDS</strong> - relative position of base pair in coding sequence</li>
         <li><strong>Position in protein</strong> - relative position of amino acid in protein</li>
-        <li><strong>Amino acid change</strong> - only given if the variation affects the protein-coding sequence</li>
+        <li><strong>Amino acid change</strong> - only given if the variant affects the protein-coding sequence</li>
         <li><strong>Codon change</strong> - the alternative codons with the variant base in upper case</li>
-        <li><strong>Co-located variation</strong> - known identifier of existing variation</li>
+        <li><strong>Co-located variation</strong> - known identifier of existing variant</li>
         <li><strong>Extra</strong> - this column contains extra information as key=value pairs separated by ";". The keys are as follows:
             <ul>
                 <li><i>IMPACT</i> - the impact modifier for the consequence type</li>
+                <li><i>VARIANT_CLASS</i> - Sequence Ontology <a href="/info/genome/variation/data_description.html#classes">variant class</a></li>
                 <li><i>SYMBOL</i> - the gene symbol</li>
                 <li><i>SYMBOL_SOURCE</i> - the source of the gene symbol</li>
                 <li><i>STRAND</i> - the DNA strand (1 or -1) on which the transcript/feature lies</li>
@@ -274,6 +275,7 @@ LRG_1:g.10006G>T</pre>
                 <li><i>UNIPARC</i> - UniParc identifier of protein product</li>
                 <li><i>HGVSc</i> - the HGVS coding sequence name</li>
                 <li><i>HGVSp</i> - the HGVS protein sequence name</li>
+                <li><i>HGVS_OFFSET</i> - Indicates by how many bases the HGVS notations for this variant have been <a href="script/vep_options.html#opt_shift_hgvs">shifted</a></li>
                 <li><i>SIFT</i> - the SIFT prediction and/or score, with both given as prediction(score)</li>
                 <li><i>PolyPhen</i> - the PolyPhen prediction and/or score</li>
                 <li><i>MOTIF_NAME</i> - the source and identifier of a transcription factor binding profile aligned at this position</li>
@@ -291,21 +293,23 @@ LRG_1:g.10006G>T</pre>
                 <li><i>ZYG</i> - zygosity of individual genotype at this locus</li>
                 <li><i>SV</i> - IDs of overlapping structural variants</li>
                 <li><i>FREQS</i> - Frequencies of overlapping variants used in filtering</li>
-                <li><i>GMAF</i> - Non-reference allele and frequency of existing variation in 1000 Genomes</li>
-                <li><i>AFR_MAF</i> - Non-reference allele and frequency of existing variation in 1000 Genomes combined African population</li>
-                <li><i>AMR_MAF</i> - Non-reference allele and frequency of existing variation in 1000 Genomes combined American population</li>
-                <li><i>ASN_MAF</i> - Non-reference allele and frequency of existing variation in 1000 Genomes combined Asian population</li>
-                <li><i>EUR_MAF</i> - Non-reference allele and frequency of existing variation in 1000 Genomes combined European population</li>
-                <li><i>EAS_MAF</i> - Non-reference allele and frequency of existing variation in 1000 Genomes combined East Asian population</li>
-                <li><i>SAS_MAF</i> - Non-reference allele and frequency of existing variation in 1000 Genomes combined South Asian population</li>
+                <li><i>GMAF</i> - Non-reference allele and frequency of existing variant in 1000 Genomes</li>
+                <li><i>AFR_MAF</i> - Non-reference allele and frequency of existing variant in 1000 Genomes combined African population</li>
+                <li><i>AMR_MAF</i> - Non-reference allele and frequency of existing variant in 1000 Genomes combined American population</li>
+                <li><i>ASN_MAF</i> - Non-reference allele and frequency of existing variant in 1000 Genomes combined Asian population</li>
+                <li><i>EUR_MAF</i> - Non-reference allele and frequency of existing variant in 1000 Genomes combined European population</li>
+                <li><i>EAS_MAF</i> - Non-reference allele and frequency of existing variant in 1000 Genomes combined East Asian population</li>
+                <li><i>SAS_MAF</i> - Non-reference allele and frequency of existing variant in 1000 Genomes combined South Asian population</li>
                 <li><i>AA_MAF</i> - Non-reference allele and frequency of existing variant in NHLBI-ESP African American population</li>
                 <li><i>EA_MAF</i> - Non-reference allele and frequency of existing variant in NHLBI-ESP European American population</li>
                 <li><i>CLIN_SIG</i> - Clinical significance of variant from dbSNP</li>
                 <li><i>BIOTYPE</i> - Biotype of transcript or regulatory feature</li>
                 <li><i>TSL</i> - Transcript support level</li>
                 <li><i>PUBMED</i> - Pubmed ID(s) of publications that cite existing variant</li>
-                <li><i>SOMATIC</i> - Somatic status of existing variation(s)</li>
+                <li><i>SOMATIC</i> - Somatic status of existing variant(s)</li>
+                <li><i>PHENO</i> - Indicates if existing variant is associated with a phenotype, disease or trait</li>
                 <li><i>ALLELE_NUM</i> - Allele number from input; 0 is reference, 1 is first alternate etc</li>
+                <li><i>MINIMISED</i> - Alleles in this variant have been converted to minimal representation before consequence calculation</li>
                 <li><i>PICK</i> - indicates if this block of consequence data was picked by <a href="script/vep_options.html#opt_flag_pick">--flag_pick</a> or <a href="script/vep_options.html#opt_flag_pick_allele">--flag_pick_allele</a></li>
 
                 <li id="refseq_match"><i>REFSEQ_MATCH</i> - the RefSeq transcript match status; contains a number of flags indicating whether this RefSeq transcript matches the underlying reference sequence and/or an Ensembl transcript:
