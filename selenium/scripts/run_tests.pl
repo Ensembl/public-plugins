@@ -41,7 +41,9 @@ use JSON;
 use vars qw( $SERVERROOT );
 
 BEGIN {
+  $SCRIPT_ROOT = dirname($Bin);
   $SERVERROOT = "$Bin/../../..";
+  warn ">>> SERVER ROOT $SERVERROOT";
   unshift @INC,"$SERVERROOT/../public-plugins/selenium/modules";  
   unshift @INC, "$SERVERROOT/conf";
   eval{ require SiteDefs };
