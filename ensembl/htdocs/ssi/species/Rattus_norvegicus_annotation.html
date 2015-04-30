@@ -1,12 +1,38 @@
-<p>The Rat Rnor_5.0 assembly was annotated using the standard Ensembl 
-gene annotation system. To improve the gene set, we have incorporated 
-new data resources which have become available since the last RGSC 3.4 
-genebuild (December 2004), including an updated rat-specific repeat 
-library, additional RefSeq and UniProt protein sequence data for predicting 
-the coding regions of protein-coding genes, as well as new cDNAs for 
-annotating untranslated regions (UTRs) of protein-coding genes.</p> 
+<p>The Rat Rnor_6.0 assembly was annotated using a mixed approach, with the 
+standard Ensembl gene annotation system and the Ensembl RNASeq pipeline. 
+The RNASeq data set contains 12 samples: liver, muscle, brain, heart, thymus, 
+blood, testis, ovary, kidney, skin, spleen and lung. The HAVANA manual annotation 
+team at the <a href="http://www.sanger.ac.uk/">Sanger Institute</a> provided a 
+high quality gene set on gene clusters which are hard to annotate in an automated 
+pipeline. The final gene set contain 1,030 Ensembl-HAVANA merged genes, 30,893 Ensembl only genes and 585 HAVANA only genes.
+</p>
+
+<h3>RNAseq dataset</h3>
+
+<p>In addition to the main set, we have predicted gene models for each tissue type 
+using the RNASeq pipeline. We did a BLASTp of these models against UniProt proteins 
+of protein existence level 1 and 2, in order to confirm the open reading frame (ORF). 
+The best BLAST hit is displayed as a transcript supporting evidence.</p>
+
+<p>The tissue-specific sets of transcript models built using our RNAseq pipeline are as follows:</p>
+
+<table>
+<tr><td>blood</td><td>9146</td></tr>
+<tr><td>brain</td><td>12736</td></tr>
+<tr><td>heart</td><td>9047</td></tr>
+<tr><td>kidney</td><td>11612</td></tr>
+<tr><td>liver</td><td>9227</td></tr>
+<tr><td>lung</td><td>13374</td></tr>
+<tr><td>muscle</td><td>9255</td></tr>
+<tr><td>ovary</td><td>12866</td></tr>
+<tr><td>skin</td><td>12123</td></tr>
+<tr><td>spleen</td><td>11799</td></tr>
+<tr><td>testis</td><td>14653</td></tr>
+<tr><td>thymus</td><td>10865</td></tr>
+<tr><td>merged</td><td>22338</td></tr>
+</table>
 
 <ul>
-  <li><a href="/info/genome/genebuild/2012_04_rat_5_genebuild.pdf">Detailed information on genebuild</a> (PDF)</li>
+  <li><a href="/info/genome/genebuild/2015_05_rat_genebuild.pdf">Detailed information on genebuild</a> (PDF)</li>
 </ul>
 
