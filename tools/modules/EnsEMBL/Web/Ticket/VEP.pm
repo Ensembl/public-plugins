@@ -31,6 +31,8 @@ use EnsEMBL::Web::Job::VEP;
 
 use parent qw(EnsEMBL::Web::Ticket);
 
+use constant VEP_FORMAT_DOC => '/info/docs/tools/vep/vep_formats.html';
+
 sub init_from_user_input {
   ## Abstract method implementation
   my $self      = shift;
@@ -77,7 +79,7 @@ sub init_from_user_input {
   try {
     first { m/^[^\#]/ && ($detected_format = detect_format($_)) } file_get_contents($file_path); #  @{$file->read_lines->{'content'}};
   } catch {
-    throw exception('InputError', "The input format is invalid: the format is not recognized or there is a formatting issue in the input");
+    throw exception('InputError', sprintf(q(The input format is invalid or not recognised. Please <a href="%s" rel="external">click here</a> to find out about accepted data formats.), VEP_FORMAT_DOC), {'message_is_html' => 1});
   };
 
   ## Update session with detected format
