@@ -47,7 +47,7 @@ sub process {
   } catch {
 
     if ($_->type eq 'InputError') {
-      throw $_;
+      $self->{'_error'} = $_->message($_->data->{'message_is_html'});
     } else {
       my $error_id = random_string(8);
       warn "ERROR: $error_id\n";
