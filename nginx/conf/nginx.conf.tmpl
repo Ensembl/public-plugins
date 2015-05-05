@@ -75,6 +75,7 @@ http {
     }
  
     location / {
+      proxy_read_timeout 300;
       proxy_pass      [["$SiteDefs::ENSEMBL_PROTOCOL://$SiteDefs::ENSEMBL_SERVER:$SiteDefs::ENSEMBL_PORT"]];
     }
     
