@@ -16,15 +16,24 @@ limitations under the License.
 
 =cut
 
+package EnsEMBL::Web::Object::Gene;
+
+### Overwritting gxa_check function 
 use strict;
 
-package EnsEMBL::Widgets::SiteDefs;
+use JSON qw(from_json);
 
-sub update_conf { 
+sub gxa_check {
+  my $self = shift;
 
-  $SiteDefs::GXA_REST_URL = 'http://www.ebi.ac.uk/gxa/json/expressionData?geneId=';  
-  $SiteDefs::GXA_EBI_URL  = 'http://www.ebi.ac.uk';
+  my $ua    = LWP::UserAgent->new;
+  my $proxy = $self->hub->species_defs->ENSEMBL_WWW_PROXY;
+  $ua->proxy( 'http', $proxy ) if $proxy;
 
+  my $gxa_url   = $SiteDefs::GXA_REST_URL.$self->hub->param('g');
+  my $response  = $ua->get($gxa_url);
+
+  return (grep /true/, $response->{_content}) ? 1 : 0;
 }
 
 1;
