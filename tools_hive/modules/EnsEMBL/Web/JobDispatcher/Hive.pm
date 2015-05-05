@@ -182,7 +182,7 @@ sub sync_log_messages {
 sub DESTROY {
   ## Close the hive db connection when exiting
   my $self = shift;
-  $self->hive_dba->dbc->disconnect_when_inactive(1) if $self->hive_dba && $self->hive_dba->dbc;
+  $self->{'_hive_dba'}->dbc->disconnect_when_inactive(1) if $self->{'_hive_dba'} && $self->{'_hive_dba'}->dbc;
 }
 
 1;
