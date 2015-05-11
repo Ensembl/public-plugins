@@ -40,3 +40,8 @@ div.blast-configs div.row div.lhs                 { font-weight: normal; height:
 div.input-seq                                     { white-space: pre; max-height: 300px; overflow: auto; font-family: Courier; }
 
 div.file_upload_element                           { line-height: 32px; float: left; margin-right: 16px; }
+
+form.bgcolour div.form-field div.ff-right.gapopen-options    { padding-top: 0px; padding-bottom: 94px; }
+form.bgcolour div.form-field div.ff-right.gapopen-options select    { margin-top: 6px; }
+form.bgcolour div.form-field div.ff-right.gapopen-options:last-child      { padding-bottom: 100px; }
+

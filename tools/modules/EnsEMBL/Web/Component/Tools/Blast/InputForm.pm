@@ -247,6 +247,7 @@ sub get_form_node {
       'elements'    => \@sensitivity_elements,
       'field_class' => \@field_classes
     });
+
     $fieldset->add_hidden({'name' => 'sensitivity_configs', 'value' => $self->jsonify($all_config_sets)});
   }
 
@@ -261,7 +262,7 @@ sub get_form_node {
 
   my $config_fields   = CONFIGURATION_FIELDS;
   my $config_defaults = CONFIGURATION_DEFAULTS;
-
+   
   my @search_types    = map $_->{'value'}, @{$options->{'search_type'}};
   my %stt_classes     = map {$_ => "_stt_$_"} @search_types; # class names for selectToToggle
 
@@ -288,32 +289,47 @@ sub get_form_node {
     my $fieldset        = $config_wrapper->last_child->append_child($form->add_fieldset); # moving it from the form to the config div
     my %wrapper_class;
 
-    while (my ($element_name, $element_params) = splice @$config_field_group, 0, 2) {
-
+    while (my ($element_name, $element_params) = splice @$config_field_group, 0, 2) {    
       my $field_params = { map { exists $element_params->{$_} ? ($_ => delete $element_params->{$_}) : () } qw(field_class label helptip notes head_notes inline) };
       $field_params->{'elements'} = [];
 
       my %field_class;
 
       ## add one element for each with its own default value for each valid search type
-      foreach my $search_type_value (@search_types) {
-        for ($search_type_value, 'all') {
-          if (exists $config_defaults->{$_}{$element_name}) {
-            my $element_class = $stt_classes{$search_type_value};
-            push @{$field_params->{'elements'}}, {
-              %{$self->deepcopy($element_params)},
-              'name'          => "${search_type_value}__${element_name}",
-              'value'         => $config_defaults->{$_}{$element_name},
-              'element_class' => $element_class
-            };
-            $field_class{$element_class}    = 1; # adding same class to the field makes sure the field is only visible if at least one of the elements is visible
+      foreach my $search_type_value (@search_types) {        
+        for ($search_type_value, 'all') {            
+          if (exists $config_defaults->{$_}{$element_name}) {       
+            my $element_class = $stt_classes{$search_type_value};       
+            
+            if(defined $element_params->{elements}) {        
+              for my $el (@{$element_params->{elements}}) {
+                push @{$field_params->{'elements'}}, {
+                  'name'          => "${search_type_value}__$el->{name}",
+                  'values'        => $el->{values},                  
+                  'class'         => $el->{class},
+                  'value'         => $config_defaults->{$_}{$element_name},
+                  'element_class' => $el->{element_class}." $element_class",
+                  'type'          => $el->{type}
+                };
+              }              
+            } else { 
+              push @{$field_params->{'elements'}}, {
+                %{$self->deepcopy($element_params)},
+                'name'          => "${search_type_value}__${element_name}",
+                'value'         => $config_defaults->{$_}{$element_name},
+                'element_class' => $element_class
+              };
+            }
+           
+            $field_class{$element_class}    = 1; # adding same class to the field makes sure the field is only visible if at least one of the elements is visible            
             $wrapper_class{$element_class}  = 1; # adding same class to the config wrapper div makes sure the div is only visible if at least one of the field is visible
+
             last;
           }
         }
       }
 
-      my $field = $fieldset->add_field($field_params);
+      my $field = $fieldset->add_field($field_params);      
       $field->set_attribute('class', [ keys %field_class ]) unless keys %field_class == keys %stt_classes; # if all classes are there, this field is actually never hidden.
     }
 

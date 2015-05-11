@@ -42,6 +42,22 @@ sub prepare_to_dispatch {
     return;
   }
 
+  if(exists $job_data->{configs}->{gappenalty}) {
+    ($job_data->{configs}->{gapopen}, $job_data->{configs}->{gapextend}) = split(/n/,$job_data->{configs}->{gappenalty});
+    delete $job_data->{configs}->{gappenalty};
+  }
+  
+  if(exists $job_data->{configs}->{gap_dna}) {
+    ($job_data->{configs}->{gapopen}, $job_data->{configs}->{gapextend}) = split(/n/,$job_data->{configs}->{gap_dna});
+    delete $job_data->{configs}->{gap_dna};
+  }
+  
+  if(exists $job_data->{configs}->{score}) {
+    ($job_data->{configs}->{reward}, $job_data->{configs}->{penalty}) = split(/_/,$job_data->{configs}->{score});
+    $job_data->{configs}->{penalty} = "-".$job_data->{configs}->{penalty};   #penalty is always negative
+    delete $job_data->{configs}->{score};
+  }
+  
   $job_data->{'blast_type'} = $search_type[0];
   $job_data->{'program'}    = lc $search_type[1];
   $job_data->{'work_dir'}   = $rose_object->job_dir;

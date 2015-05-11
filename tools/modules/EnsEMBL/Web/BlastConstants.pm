@@ -41,6 +41,91 @@ sub BLAST_KARYOTYPE_POINTER {
 }
 
 sub CONFIGURATION_FIELDS {
+  
+  my $matrix = {
+      "BLOSUM45"  => ["14n2", "13n3", "12n3", "11n3", "10n3", "16n2", "15n2", "13n2", "12n2", "19n1", "18n1", "17n1", "16n1", "-1n-1", "-1n2", "14n-1", "16n-1", "15n-1", "13n-1",              "12n-1"  ],
+      "BLOSUM50"  => ["13n2", "13n3", "12n3", "11n3", "10n3", "9n3", "16n2", "15n2", "14n2", "12n2", "19n1", "18n1", "17n1", "16n1", "15n1", "-1n-1", "-1n2", "-1n3", "16n-1",              "15n-1", "14n-1", "12n-1"],
+      "BLOSUM62"  => ["11n1", "10n2", "9n2", "8n2", "7n2", "6n2", "16n2", "15n2", "13n2", "12n2", "13n1", "12n1", "10n1", "19n1", "-1n-1", "-1n1", "13n-1", "12n-1", "10n-1", "19n-1"               ],
+      "BLOSUM80"  => ["10n1", "25n2", "13n2", "9n2", "8n2", "7n2", "6n2", "11n1", "9n1", "-1n-1", "-1n1", "10n-1", "11n-1", "9n-1"],
+      "BLOSUM90"  => ["10n1", "7n2", "6n2", "5n2", "9n1", "8n1", "-1n-1", "-1n1", "10n-1", "9n-1", "8n-1"],
+      "PAM30"     => ["9n1", "7n2", "6n2", "5n2", "10n1", "8n1", "-1n-1", "-1n1", "9n-1", "10n-1", "8n-1"],
+      "PAM70"     => ["10n1", "8n2", "7n2", "6n2", "11n1", "9n1", "-1n-1", "10n-1", "-1n1", "9n-1"],
+      "PAM250"    => ["14n2", "15n3", "14n3", "13n3", "12n3", "11n3", "17n2", "16n2", "15n2", "13n2", "21n1", "20n1", "19n1", "18n1", "17n1", "-1n-1", "14n-1", "-1n2", "-1n3",             "17n-1","16n-1", "15n-1", "13n-1"]  
+  };  
+  my $reward_hash = {
+    "2_7"    =>  "2,-7",
+    "1_3"    =>  "1,-3",
+    "2_5"    =>  "2,-5",
+    "1_2"    =>  "1,-2",
+    "2_3"    =>  "2,-3",
+    "1_1"    =>  "1,-1",
+    "5_4"    =>  "5,-4",
+    "4_5"    =>  "4,-5"
+  };
+  my $reward = {
+      "2_7" => ["4n4", "2n4", "0n4", "4n2", "2n2", "-1n-1", "-1n4", "4n-1", "-1n2", "2n-1", "0n-1"],
+      "1_3" => ["5n2", "1n2", "0n2", "2n1", "1n1", "2n2", "-1n-1", "5n-1", "-1n2", "1n-1", "0n-1", "2n-1"],
+      "2_5" => ["4n4", "2n4", "0n4", "4n2", "2n2", "4n-1", "-1n4", "-1n-1", "-1n2", "2n-1", "0n-1"],
+      "1_2" => ["5n2", "1n2", "0n2", "3n1", "2n1", "1n1", "2n2", "-1n-1", "5n-1", "-1n2", "1n-1", "0n-1", "3n-1", "2n-1"],
+      "2_3" => ["5n5", "4n4", "2n4", "0n4", "3n3", "6n2", "5n2", "4n2", "2n2", "6n4", "-1n-1", "5n-1", "-1n5", "-1n2"],
+      "1_1" => ["5n2", "3n2", "2n2", "1n2", "0n2", "4n1", "3n1", "2n1", "4n2", "5n-1", "-1n-1", "-1n2", "3n-1", "2n-1", "1n-1", "0n-1"],
+      "5_4" => ["25n10", "10n6", "8n6", "-1n-1", "25n-1", "-1n10"],
+      "4_5" => ["12n8", "6n5", "5n5", "4n5", "3n5", "-1n-1", "12n-1", "-1n8"]
+  };   
+  
+  my $scoring = [       
+    'ungapped'            => {
+      'type'                => 'checklist',
+      'label'               => 'Disallow gaps in Alignment',
+      'values'              => [ { 'value' => '1' } ],
+      'commandline_type'    => 'flag',
+    },
+    
+    'comp_based_stats'    => {
+      'type'                => 'dropdown',
+      'label'               => 'Compositional adjustments',
+      'values'              => [
+                                { 'value' => '0', 'caption' => 'No adjustment' },
+                                { 'value' => '1', 'caption' => 'Composition-based statistics' },
+                                { 'value' => '2', 'caption' => 'Conditional compositional score matrix adjustment' },
+                                { 'value' => '3', 'caption' => 'Universal compositional score matrix adjustment' },
+      ],
+    },
+
+    'threshold'           => {
+      'type'                => 'dropdown',
+      'label'               => 'Minimium score to add a word to the BLAST lookup table',
+      'values'              => [ map { 'value' => $_, 'caption' => $_ }, 11..16,20,999 ]
+    }
+  ];
+  
+  unshift(@$scoring,   
+    'matrix'              => {
+        'type'                => 'dropdown',
+        'label'               => 'Scoring matrix to use',
+        'class'               => '_stt',
+        'values'              => [ map { 'value' => $_, 'caption' => $_ }, sort keys %$matrix ]
+    },
+
+    'score'              => {
+      'type'                => 'dropdown',
+      'label'               => 'Match/Mismatch scores',
+      'class'               => '_stt',
+      'values'              => [ map { 'value' => $_, 'caption' => $reward_hash->{$_}}, sort keys %$reward ]
+    },
+    
+    #this the same dropdown as Gap penalties for other BLAST but this is only used for BLASTN without scoring matrix
+    "gap_dna"           => {                                
+       'label'              => 'Gap penalties',
+       'elements'           =>  [map {{'name' => "gap_dna",  element_class => 'gapopen-options', 'class'   => "_stt_$_", 'type' => 'dropdown', 'values'  => [ map {'value' => $_, 'caption' => "Opening: ".(split(/n/,$_))[0].", Extension: ".(split(/n/,$_))[1] }, @{$reward->{$_}}] }}  keys %$reward]
+    },
+    
+    "gappenalty"          => {                                
+       'label'              => 'Gap penalties',
+       'elements'           =>  [map {{'name' => "gappenalty",  element_class => 'gapopen-options', 'class'   => "_stt_$_", 'type' => 'dropdown', 'values'  => [ map {'value' => $_, 'caption' => "Opening: ".(split(/n/,$_))[0].", Extension: ".(split(/n/,$_))[1] }, @{$matrix->{$_}} ] }}  keys %$matrix]
+    }
+  ); 
+    
   return [
     'general'             => [
 
@@ -70,63 +155,7 @@ sub CONFIGURATION_FIELDS {
       }
     ],
 
-    'scoring'             => [
-
-      'gapopen'             => {
-        'type'                => 'dropdown',
-        'label'               => 'Penalty for opening a gap',
-        'values'              => [ map { 'value' => $_, 'caption' => $_ }, 1..15 ]
-      },
-
-      'gapextend'           => {
-        'type'                => 'dropdown',
-        'label'               =>  'Penalty for extending a gap',
-        'values'              => [ map { 'value' => $_, 'caption' => $_ }, 1..15 ]
-      },
-
-      'ungapped'            => {
-        'type'                => 'checklist',
-        'label'               => 'Disallow gaps in Alignment',
-        'values'              => [ { 'value' => '1' } ],
-        'commandline_type'    => 'flag',
-      },
-
-      'reward'              => {
-        'type'                => 'dropdown',
-        'label'               => 'Match score',
-        'values'              => [ map { 'value' => $_, 'caption' => $_ }, 1..5 ]
-      },
-
-      'penalty'             => {
-        'type'                => 'dropdown',
-        'label'               => 'Mismatch score',
-        'values'              => [ reverse map { 'value' => $_, 'caption' => $_ }, -5..-1 ]
-      },
-
-      'matrix'              => {
-        'type'                => 'dropdown',
-        'label'               => 'Scoring matrix to use',
-        'values'              => [ map { 'value' => $_, 'caption' => $_ }, qw(PAM30 PAM70 PAM250 BLOSUM45 BLOSUM50 BLOSUM62 BLOSUM80 BLOSUM90) ]
-      },
-
-      'comp_based_stats'    => {
-        'type'                => 'dropdown',
-        'label'               => 'Compositional adjustments',
-        'values'              => [
-                                  { 'value' => '0', 'caption' => 'No adjustment' },
-                                  { 'value' => '1', 'caption' => 'Composition-based statistics' },
-                                  { 'value' => '2', 'caption' => 'Conditional compositional score matrix adjustment' },
-                                  { 'value' => '3', 'caption' => 'Universal compositional score matrix adjustment' },
-        ],
-      },
-
-      'threshold'           => {
-        'type'                => 'dropdown',
-        'label'               => 'Minimium score to add a word to the BLAST lookup table',
-        'values'              => [ map { 'value' => $_, 'caption' => $_ }, 11..16,20,999 ]
-      },
-
-    ],
+    'scoring'              => $scoring,
 
     'filters_and_masking'  => [
 
@@ -165,11 +194,9 @@ sub CONFIGURATION_DEFAULTS {
 
     'NCBIBLAST_BLASTN'        => {
       'word_size'               => '11',
-      'reward'                  => '2',
-      'penalty'                 => '-3',
+      'score'                  => '1_2',      
       'ungapped'                => '0',
-      'gapopen'                 => '5',
-      'gapextend'               => '2',
+      'gap_dna'                 => '5n2',
       'dust'                    => '1',
       'repeat_mask'             => '1',
       'culling_limit'           => '5',
@@ -179,8 +206,7 @@ sub CONFIGURATION_DEFAULTS {
       'word_size'               => '3',
       'ungapped'                => '0',
       'matrix'                  => 'BLOSUM62',
-      'gapopen'                 => '11',
-      'gapextend'               => '1',
+      'gappenalty'             => '11n1',
       'threshold'               => '11',
       'comp_based_stats'        => '2',
       'seg'                     => '1',
@@ -190,8 +216,7 @@ sub CONFIGURATION_DEFAULTS {
     'NCBIBLAST_BLASTX'        => {
       'word_size'               => '3',
       'matrix'                  => 'BLOSUM62',
-      'gapopen'                 => '11',
-      'gapextend'               => '1',
+      'gappenalty'              => '11n1',
       'threshold'               => '11',
       'seg'                     => '1',
       'repeat_mask'             => '1',
@@ -202,8 +227,7 @@ sub CONFIGURATION_DEFAULTS {
       'word_size'               => '3',
       'ungapped'                => '0',
       'matrix'                  => 'BLOSUM62',
-      'gapopen'                 => '11',
-      'gapextend'               => '1',
+      'gappenalty'              => '11n1',
       'threshold'               => '13',
       'comp_based_stats'        => '2',
       'seg'                     => '1',
@@ -229,54 +253,43 @@ sub CONFIGURATION_SETS {
         'word_size'   => 15,
         'dust'        => 1,
         'evalue'      => 10,
-        'reward'      => 1,
-        'penalty'     => -3,
-        'gapopen'     => 5,
-        'gapextend'   => 2
+        'score'       => "1_2",
+        'gap_dna'     => "5n2"
       },
       'near_oligo'  => {
         'word_size'   => 7,
         'dust'        => 0,
         'evalue'      => 1000,
-        'reward'      => 1,
-        'penalty'     => -3,
-        'gapopen'     => 5,
-        'gapextend'   => 2
+        'score'       => "1_2",
+        'gap_dna'     => "5n2"
       },
       'normal'      => {
         'word_size'   => 11,
         'dust'        => 1,
         'evalue'      => 10,
-        'reward'      => 1,
-        'penalty'     => -3,
-        'gapopen'     => 5,
-        'gapextend'   => 2
+        'score'       => "1_2",
+        'gap_dna'     => "5n2"
       },
       'distant'     => {
         'word_size'   => 9,
         'dust'        => 1,
         'evalue'      => 10,
-        'reward'      => 1,
-        'penalty'     => -1,
-        'gapopen'     => 2,
-        'gapextend'   => 1
+        'score'       => "1_3",
+        'gap_dna'     => "2n1"
       },
     },
     'protein'     => {
       'near'        => {
-        'matrix'      => 'BLOSUM90',
-        'gapopen'     => 10,
-        'gapextend'   => 1
+        'matrix'          => 'BLOSUM90',
+        'gappenalty'      => '10n1',
       },
       'normal'      => {
-        'matrix'      => 'BLOSUM62',
-        'gapopen'     => 11,
-        'gapextend'   => 1
+        'matrix'          => 'BLOSUM62',
+        'gappenalty'      => '11n1',
       },
       'distant'     => {
-        'matrix'      => 'BLOSUM45',
-        'gapopen'     => 14,
-        'gapextend'   => 2
+        'matrix'          => 'BLOSUM45',
+        'gappenalty'      => '14n2',
       },
     }
   };

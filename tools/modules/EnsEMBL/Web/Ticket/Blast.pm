@@ -142,17 +142,25 @@ sub _process_extra_configs {
   my $config_fields   = CONFIGURATION_FIELDS;
   my $config_defaults = CONFIGURATION_DEFAULTS;
   my $config_values   = {};
+  my $value_exist;
 
   while (my ($config_type, $config_field_group) = splice @$config_fields, 0, 2) {
 
-    while (my ($element_name, $element_params) = splice @$config_field_group, 0, 2) {
+    while (my ($element_name, $element_params) = splice @$config_field_group, 0, 2) {   
 
       for ($search_type_value, 'all') {
         if (exists $config_defaults->{$_}{$element_name}) {
-
           my $element_value = $hub->param("${search_type_value}__${element_name}") // '';
-
-          return unless grep {$_ eq $element_value} map($_->{'value'}, @{$element_params->{'values'}}), $element_params->{'type'} eq 'checklist' ? '' : (); # checklist is also allowed to have null value
+     
+          # checking value for arrays of elements (just a simple check to make sure the submitted value is part of the arrays of values)
+          if(exists $element_params->{elements}) {
+            for my $row (@{$element_params->{elements}}) {            
+              $value_exist = grep {$_ eq $element_value} map($_->{'value'}, @{$row->{'values'}});
+              last if($value_exist);
+            }
+          } 
+          
+          return unless $value_exist || grep {$_ eq $element_value} map($_->{'value'}, @{$element_params->{'values'}}), $element_params->{'type'} eq 'checklist' ? '' : (); # checklist is also allowed to have null value
 
           if (($element_params->{'commandline_type'} || '') eq 'flag') {
             $config_values->{$element_name} = '' if $element_value;

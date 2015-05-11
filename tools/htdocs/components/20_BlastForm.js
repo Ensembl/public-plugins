@@ -264,7 +264,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
         for (var name in formInput['configs']) {
           this.elLk.form.find('[name=' + formInput['search_type'] + '__' + name + ']')
             .filter('input[type=checkbox]').prop('checked', !!formInput['configs'][name]).end()
-            .filter('select').find('option[value=' + formInput['configs'][name] + ']').prop('selected', true);
+            .filter('select').find('option[value=' + formInput['configs'][name] + ']').prop('selected', true).end().selectToToggle('trigger');
         }
       }
     }
@@ -675,7 +675,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     }
     if (config && !$.isEmptyObject(config)) {
       $.each(config, function(name, value) {
-        panel.elLk.form.find('[name=' + btype + '__' + name + ']').filter('input').prop('checked', !!value).end().filter('select').find('option[value="' + value + '"]').prop('selected', true);
+        panel.elLk.form.find('[name=' + btype + '__' + name + ']').filter('input').prop('checked', !!value).end().filter('select').find('option[value="' + value + '"]').prop('selected', true).end().selectToToggle('trigger');
       });
     }
     btype = ctype = config = null;
