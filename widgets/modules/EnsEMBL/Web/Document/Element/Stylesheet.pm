@@ -33,7 +33,7 @@ sub content {
   
   my $main_css = $self->PREV::content(@_);
 
-  return $main_css unless $self->hub->action eq 'ExpressionAtlas'; #adding stylesheet only for gene expression atlas view
+  return $main_css unless $self->hub->action && $self->hub->action eq 'ExpressionAtlas'; #adding stylesheet only for gene expression atlas view
 
   $main_css .=  qq{
     <link rel="stylesheet" type="text/css" media="all" href="http://www.ebi.ac.uk/gxa/resources/css/atlas.css" />
