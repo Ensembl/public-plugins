@@ -26,6 +26,8 @@ use JSON qw(from_json);
 sub gxa_check {
   my $self = shift;
 
+  return unless $SiteDefs::GXA;
+
   my $ua    = LWP::UserAgent->new;
   my $proxy = $self->hub->species_defs->ENSEMBL_WWW_PROXY;
   $ua->proxy( 'http', $proxy ) if $proxy;
