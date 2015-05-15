@@ -42,7 +42,7 @@ sub createObjects {
        $variation_db->include_non_significant_phenotype_associations(0);
   
     # find VCF config
-    my $c = $self->species_defs->multi_val('ENSEMBL_VCF_COLLECTIONS');
+    my $c = $self->species_defs->ENSEMBL_VCF_COLLECTIONS;
 
     if($c) {
      # set config file via ENV variable
