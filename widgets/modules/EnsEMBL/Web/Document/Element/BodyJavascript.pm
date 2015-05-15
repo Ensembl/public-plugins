@@ -30,7 +30,7 @@ sub content {
 
   my $main_js = $self->PREV::content(@_);
 
-  return $main_js unless $self->hub->action eq 'ExpressionAtlas'; #adding js only for gxa view
+  return $main_js unless $self->hub->action && $self->hub->action eq 'ExpressionAtlas'; #adding js only for gxa view
 
   $main_js .=  qq{
   <script type="text/javascript"  src="http://cdnjs.cloudflare.com/ajax/libs/react/0.11.1/react.min.js"></script>
