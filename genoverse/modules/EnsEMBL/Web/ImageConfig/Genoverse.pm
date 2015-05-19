@@ -23,11 +23,12 @@ use strict;
 use parent qw(EnsEMBL::Web::ImageConfig);
 
 sub init_genoverse {
-  my $self = shift;
+  my $self  = shift;
+  my $hub   = $self->hub;
   
-  $self->set_parameter('component', $self->hub->viewconfig->component) if $self->hub->viewconfig;
+  $self->set_parameter('component', $hub->viewconfig->component) if $hub->viewconfig;
   $self->create_menus('options');
-  $self->add_option('auto_height', undef, undef, undef, 'off')->set('menu', 'no');
+  $self->add_option('auto_height', undef, undef, undef, $hub->species_defs->GENOVERSE_TRACK_AUTO_HEIGHT ? 'normal' : 'off')->set('menu', 'no');
   
   $self->modify_configs($self->{'transcript_types'},                        { genoverse => { type   => 'Gene'                                                     } });
   $self->modify_configs([ 'misc_feature'                                 ], { genoverse => { type   => 'Clone'                                                    } });

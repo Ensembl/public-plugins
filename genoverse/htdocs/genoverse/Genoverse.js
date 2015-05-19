@@ -15,7 +15,7 @@ var Genoverse = Base.extend({
   wheelAction        : 'off',    // options are: zoom, off
   genome             : undefined,
   autoHideMessages   : true,
-  trackAutoHeight    : false,
+  trackAutoHeight    : true,
   colors             : {
     background       : '#FFFFFF',
     majorGuideLine   : '#CCCCCC',

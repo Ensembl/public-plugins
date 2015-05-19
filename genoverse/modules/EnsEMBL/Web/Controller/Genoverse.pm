@@ -530,7 +530,7 @@ sub reset_track_heights {
     $track->set_user($_, undef) for qw(user_height auto_height);
   }
   
-  $image_config->get_node('auto_height')->set_user('display', 'off');
+  $image_config->get_node('auto_height')->set_user('display', $hub->species_defs->GENOVERSE_TRACK_AUTO_HEIGHT ? 'normal' : 'off');
   $image_config->altered('Genoverse');
   $hub->session->store;
 }
