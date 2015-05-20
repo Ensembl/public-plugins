@@ -602,12 +602,11 @@
         global: [
           function(data) {
             data.tp2_row.register(50, function() {
-              var base, url;
+              var url;
               url = data.tp2_row.best('domain_url');
               if (url) {
-                if (!(url != null ? url.match(/^http:\/\//) : void 0)) {
-                  base = $.parseJSON($('#solr_config .base').text()).url;
-                  url = base + "/" + url;
+                if (!(url != null ? url.match(/^\//) : void 0)) {
+                  url = "/" + url;
                 }
                 return data.tp2_row.candidate('url', url, 50);
               }

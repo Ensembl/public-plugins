@@ -74,9 +74,8 @@ window.page_templates =
           data.tp2_row.register 50, () ->
             url = data.tp2_row.best('domain_url')
             if url
-              if not url?.match(/^http:\/\//)
-                base = $.parseJSON($('#solr_config .base').text()).url
-                url = base + "/" + url
+              if not url?.match(/^\//)
+                url = "/" + url
               data.tp2_row.candidate('url',url,50)
 
           data.tp2_row.register 100, () ->
