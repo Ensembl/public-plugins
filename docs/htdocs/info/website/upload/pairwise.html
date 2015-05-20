@@ -18,7 +18,7 @@ pairwise interactions, as follows:</p>
 <ol>
 <li><b>First feature</b> - coordinates for the first feature and optional direction of interaction, separated by colons, commas or hyphens</li>
 <li><b>Second feature</b> - coordinates for the second feature and optional direction of interaction, separated by colons, commas or hyphens</li>
-<li><b>Score</b> - score for the interaction</li>
+<li><b>Score</b> - score for the interaction, or an RGB value (expressed as a comma-separated string e.g. 0,255,0)</li>
 </ol>
 
 <pre class="code">
@@ -40,16 +40,18 @@ there must be two lines per interaction, one for each feature.</p>
 <li><b>Chromosome</b> - chromosome of one feature in the interaction</li>
 <li><b>Start</b> - start of one feature in the interaction</li>
 <li><b>End</b> - end of one feature in the interaction</li>
-<li><b>Interaction</b> - coordinates of the interacting feature and an optional score</li>
+<li><b>Interaction</b> - coordinates of the interacting feature and an optional score*</li>
 <li><b>ID</b> - a unique ID for this feature</li>
 <li><b>Direction</b> - relative direction of the interaction</li>
 </ol>
 
+<p>* As with the simple format, the score can be an RGB value expressed as a comma-separated string (e.g. 0,255,0).</p>
+
 <pre class="code">
-chr1    111   222   chr1:333-444,66   1   .
-chr1    222   333   chr1:444-555,77   2   .
-chr1    333   444   chr1:111-222,66   3   .
-chr1    444   555   chr1:222-333,77   4   .
+chr1    111   222   chr1:333-444,255,0,0   1   .
+chr1    222   333   chr1:444-555,0,0,255   2   .
+chr1    333   444   chr1:111-222,255,0,0   3   .
+chr1    444   555   chr1:222-333,0,0,255   4   .
 </pre>
 
 <p>Data in this format must be attached to Ensembl via a URL - select 'Pairwise
