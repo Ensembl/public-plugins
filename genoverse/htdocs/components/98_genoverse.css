@@ -127,7 +127,7 @@ body.mac .canvas_container .label_container li .handle   { cursor: ns-resize; }
 .canvas_zoom.o .l.v                                      { left:   8px;  }
 .canvas_zoom.o .r.v                                      { right:  8px;  }
 
-.image_update_overlay                                    { position: absolute; background: #CCC; opacity: 0.9; z-index: 100; }
+.image_update_overlay                                    { position: absolute; background: #fff; opacity: 0.7; height: 100%; width: 100%; top: 0; bottom: 0; }
 .image_update_buttons                                    { position: absolute; top: 16px; left: 50%; z-index: 101; width: 450px; margin-left: -225px; text-align: center; }
 .image_update_buttons .fbutton                           { margin: 0 16px; padding: 16px; }
 

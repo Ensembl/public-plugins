@@ -57,6 +57,9 @@ Ensembl.Panel.ImageMap = Ensembl.Panel.ImageMap.extend({
       this.elLk.updateButtons = $('<div class="image_update_buttons">');
       
       $('<input class="fbutton update" type="button" value="Update this image" /><input class="fbutton reset" type="button" value="Reset scrollable image" />').appendTo(this.elLk.updateButtons).on('click', function () {
+
+        panel.elLk.overlay.add(panel.elLk.updateButtons).detach();
+
         if ($(this).hasClass('update')) {
           panel.params.updateURL = Ensembl.urlFromHash(panel.params.updateURL);
           panel.getContent();
@@ -65,7 +68,6 @@ Ensembl.Panel.ImageMap = Ensembl.Panel.ImageMap.extend({
           panel.resetGenoverse = true;
           
           Ensembl.EventManager.trigger('genoverseMove', location.start, location.end, true, true);
-          panel.elLk.overlay.add(panel.elLk.updateButtons).detach();
           panel.elLk.container.resizable('enable');
         }
       });
@@ -81,9 +83,7 @@ Ensembl.Panel.ImageMap = Ensembl.Panel.ImageMap.extend({
       var range = this.highlightRegions[0][0].region.range;
       
       if (range.start > Ensembl.location.start || range.end < Ensembl.location.end) {
-        this.elLk.overlay.prependTo(this.el).css({ width: this.elLk.container.outerWidth(), height: this.elLk.container.outerHeight() });
-        this.elLk.container.append(this.elLk.updateButtons);
-        this.elLk.container.resizable('disable');
+        this.elLk.container.append(this.elLk.overlay, this.elLk.updateButtons).resizable('disable');
         this.selectArea(false);
         this.removeZMenus();
       }
