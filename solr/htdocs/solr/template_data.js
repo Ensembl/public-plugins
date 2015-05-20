@@ -151,7 +151,7 @@
               }
             });
             data.tp2_row.register(1000, function() {
-              var db, ft, id, ref, sp;
+              var db, ft, has_alt_hack, id, ref, sp;
               sp = data.tp2_row.best('species');
               db = data.tp2_row.best('database_type');
               ref = data.tp2_row.best('ref_boost');
@@ -166,7 +166,8 @@
               if (db === 'vega' || id.match(/^OTT/)) {
                 data.tp2_row.add_value('bracketed-title', 'Havana', 250);
               }
-              if (((ref == null) || ref === 0) && ft === 'Gene') {
+              has_alt_hack = sp === 'Human' || sp === 'Mouse';
+              if (((ref == null) || ref === 0) && ft === 'Gene' && has_alt_hack) {
                 data.tp2_row.add_value('bracketed-title', 'Alternative sequence', 275);
                 return data.tp2_row.add_value('new-contents', '<i>Not a Primary Assembly Gene</i>', 200);
               }
