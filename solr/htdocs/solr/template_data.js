@@ -1854,7 +1854,7 @@
       }
     },
     noresultsnarrow: {
-      template: "<div class=\"scnarrow\">\n  <h1>No results for <em>thing</em> '<i class='search'>search</i>'</h1>\n  <ul>\n    <li class=\"wide\"><div>\n      You were searching the whole site, but still nothing was found.\n    </div></li>\n    <li class=\"narrow\"><div>\n      You were only searching <em>thing</em>.\n    </div></li>\n    <li class=\"narrow_any\"><div>\n      And there are <i class=\"count\">42</i> results in\n      <i class=\"all\">all</i> on the whole site.\n      <a href=\"#\">Search full site</a>.\n    </div></li>\n    <li class='narrow_none'><div>\n      But there are no results in\n      any category on the whole site, anyway.\n    </div></li>\n    <li><div class=\"roll_hidden\">\n      <a href=\"#\">More help on searching ...</a>\n      <div class=\"roll_hidden_text\">\n      </div>\n    </div></li>\n  </ul>\n</div>",
+      template: "<div class=\"scnarrow\">\n  <h1>No results for <em>thing</em> '<i class='search'>search</i>'</h1>\n  <ul>\n    <li class=\"wide\"><div>\n      You were searching the whole site, but still nothing was found.\n    </div></li>\n    <li class=\"narrow_rsid\"><div><strong>\n      You appear to have been searching for a variation rsid.\n      There may be new variants which have not yet been incorporated\n      into Ensembl. If this is the case, you may find information\n      about this variant on the\n      <a href=\"http://www.ncbi.nlm.nih.gov/sites/entrez\"\n      >NCBI website</a>\n    </strong></div></li>\n    <li class=\"narrow\"><div>\n      You were only searching <em>thing</em>.\n    </div></li>\n    <li class=\"narrow_any\"><div>\n      And there are <i class=\"count\">42</i> results in\n      <i class=\"all\">all</i> on the whole site.\n      <a href=\"#\">Search full site</a>.\n    </div></li>\n    <li class='narrow_none'><div>\n      But there are no results in\n      any category on the whole site, anyway.\n    </div></li>\n    <li><div class=\"roll_hidden\">\n      <a href=\"#\">More help on searching ...</a>\n      <div class=\"roll_hidden_text\">\n      </div>\n    </div></li>\n  </ul>\n</div>",
       directives: {
         'em': 'yoursearch',
         '.roll_hidden_text': 'noresults_help',
@@ -1875,6 +1875,9 @@
           'z<-narrow': {
             'em': 'yoursearch'
           }
+        },
+        '.narrow_rsid': {
+          'y<-rsid': {}
         }
       },
       decorate: {
@@ -1914,6 +1917,9 @@
           }
         }
         data.noresults_help = $.solr_config('static.ui.noresults_help');
+        if (data.q.match(/^rs(\d+)$/)) {
+          data.rsid = [true];
+        }
         return [spec, data];
       }
     }

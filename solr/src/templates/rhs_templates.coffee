@@ -461,6 +461,14 @@ window.rhs_templates =
           <li class="wide"><div>
             You were searching the whole site, but still nothing was found.
           </div></li>
+          <li class="narrow_rsid"><div><strong>
+            You appear to have been searching for a variation rsid.
+            There may be new variants which have not yet been incorporated
+            into Ensembl. If this is the case, you may find information
+            about this variant on the
+            <a href="http://www.ncbi.nlm.nih.gov/sites/entrez"
+            >NCBI website</a>
+          </strong></div></li>
           <li class="narrow"><div>
             You were only searching <em>thing</em>.
           </div></li>
@@ -493,6 +501,7 @@ window.rhs_templates =
       '.wide': 'w<-wide': {}
       '.narrow': 'z<-narrow':
         'em': 'yoursearch'
+      '.narrow_rsid': 'y<-rsid': {}
     decorate:
       '.narrow_any a': (els,data) =>
         els.click (e) =>
@@ -518,5 +527,7 @@ window.rhs_templates =
           data.all = list.join(", ")
           data.narrow_n = [true]
       data.noresults_help = $.solr_config('static.ui.noresults_help')
+      if data.q.match(/^rs(\d+)$/)
+        data.rsid = [true]
       [spec,data]
 
