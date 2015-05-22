@@ -253,28 +253,28 @@ sub CONFIGURATION_SETS {
         'word_size'   => 15,
         'dust'        => 1,
         'evalue'      => 10,
-        'score'       => "1_2",
+        'score'       => "1_3",
         'gap_dna'     => "5n2"
       },
       'near_oligo'  => {
         'word_size'   => 7,
         'dust'        => 0,
         'evalue'      => 1000,
-        'score'       => "1_2",
+        'score'       => "1_3",
         'gap_dna'     => "5n2"
       },
       'normal'      => {
         'word_size'   => 11,
         'dust'        => 1,
         'evalue'      => 10,
-        'score'       => "1_2",
+        'score'       => "1_3",
         'gap_dna'     => "5n2"
       },
       'distant'     => {
         'word_size'   => 9,
         'dust'        => 1,
         'evalue'      => 10,
-        'score'       => "1_3",
+        'score'       => "1_1",
         'gap_dna'     => "2n1"
       },
     },
