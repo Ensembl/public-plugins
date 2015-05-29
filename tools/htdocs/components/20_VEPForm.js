@@ -104,7 +104,7 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
 
       case "ensembl":
         var arr = this.previewInp.input.split(/\s+/);
-        url = this.previewInp.baseURL + '/region/' + arr[0] + ':' + arr[1] + '-' + arr[2] + ':' + (arr[4] && arr[4].match(/\-/) ? -1 : 1) + '/' + arr[3].replace(/[ACGTN-]\//, '');
+        url = this.previewInp.baseURL + '/region/' + arr[0] + ':' + arr[1] + '-' + arr[2] + ':' + (arr[4] && arr[4].match(/\-/) ? -1 : 1) + '/' + arr[3].replace(/[ACGTN-]+\//, '');
         break;
 
       case "vcf":
