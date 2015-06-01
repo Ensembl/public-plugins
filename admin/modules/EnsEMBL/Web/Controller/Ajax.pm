@@ -26,7 +26,7 @@ use JSON qw(to_json);
 use POSIX qw(strftime);
 use Date::Parse;
 
-sub tools_stats {
+sub ajax_tools_stats {
   my ($self, $hub) = @_;
 
   my $species_defs  = $hub->species_defs;
