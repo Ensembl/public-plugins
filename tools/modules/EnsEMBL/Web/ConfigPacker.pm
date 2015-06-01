@@ -111,7 +111,10 @@ sub _configure_vep {
   my @content = <IN>;
   close IN;
   
-  $tree->{ENSEMBL_VEP_PLUGIN_CONFIG} = JSON->new->decode(join('', @content));
+  my $VEP_PLUGIN_CONFIG = eval join('', @content);
+  die("eval failed: $@\n") if $@;
+  
+  $tree->{ENSEMBL_VEP_PLUGIN_CONFIG} = $VEP_PLUGIN_CONFIG;
 }
 
 1;
