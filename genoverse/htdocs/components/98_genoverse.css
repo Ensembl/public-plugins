@@ -58,7 +58,7 @@ body.dragging *                                          { cursor: n-resize!impo
 .canvas_container .selector                              { position: absolute; height: 100%; top: 0; display: none; margin-left: -1px; z-index: 10; }
 .canvas_container .selector                              { border: 1px dashed red; border-width: 1px 0; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; }
 .canvas_container .selector.crosshair                    { border-width: 0 0 0 1px; }
-.canvas_container .selector.highlight                    { border-style: solid; background: none; border-width: 1px; z-index: 9; }
+.canvas_container .selector.highlight                    { border-style: solid; background: none; border-width: 1px; z-index: 9; pointer-events: none; }
 .canvas_container .selector_controls                     { display: none!important; }
 .canvas_container .selector.crosshair div                { display: none; }
 
