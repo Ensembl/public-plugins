@@ -47,7 +47,7 @@ Ensembl.Panel.GenoverseMenu = Ensembl.Panel.ZMenu.extend({
     }, 300);
     
     this[this.drag ? 'populateRegion' : this.href ? 'populateAjax' : 'populate']();
-    
+
     if (this.drag) {
       $('a', this.el).on('click', function (e) {
         var cls = this.className.replace(' constant', '');
@@ -93,11 +93,12 @@ Ensembl.Panel.GenoverseMenu = Ensembl.Panel.ZMenu.extend({
   }, 
   
   populateRegion: function () {
-    var zoom = this.params.browser.wheelAction === false ? 'Jump' : 'Zoom';
-    
+    var zoom  = this.params.browser.wheelAction === false ? 'Jump' : 'Zoom';
+    var url   = this.baseURL.replace(/%s/, this.drag.chr + ':' + this.drag.start + '-' + this.drag.end);
+
     this.buildMenu(this.drag.end === this.drag.start
       ? [ '<a class="center constant" href="#">Centre here</a>' ]
-      : [ '<a class="' + zoom.toLowerCase() + 'Here constant" href="#">' + zoom + ' to region (' + (this.drag.end - this.drag.start + 1) + ' bp)</a>' ],
+      : [ '<a class="' + zoom.toLowerCase() + 'Here constant" href="' + url + '">' + zoom + ' to region (' + (this.drag.end - this.drag.start + 1) + ' bp)</a>' ],
       'Region: ' + this.drag.chr + ':' + this.drag.start + '-' + this.drag.end
     );
   }
