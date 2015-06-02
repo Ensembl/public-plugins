@@ -62,7 +62,6 @@ sub handle_download {
     my $ticket      = $self->get_requested_ticket or return;
     my $job         = $ticket->job->[0] or return;
     my $job_config  = $job->dispatcher_data->{'config'};
-    my $job_dir     = $job->job_dir;
 
     my $filename    = $hub->param('input') ? $job_config->{'input_file'} : $job_config->{'output_file'};
 
@@ -70,25 +69,13 @@ sub handle_download {
     if (!$hub->param('input') && ($job_config->{'format'} eq 'wig')) {
       $filename .= '.bgr';
     }
-    my $path        = $job_dir.'/'.$filename;
+    my $content     = join '', map { s/\R/\r\n/r } file_get_contents(join '/', $job->job_dir, $filename);
 
-    ## Strip double dots to prevent downloading of files outside tmp directory
-    $path =~ s/\.\.//g;
-    ## Remove any remaining illegal characters
-    $path =~ s/[^\w|-|\.|\/]//g;
+    $r->headers_out->add('Content-Type'         => 'text/plain');
+    $r->headers_out->add('Content-Length'       => length $content);
+    $r->headers_out->add('Content-Disposition'  => sprintf 'attachment; filename=%s', $filename);
 
-    my $tmpfile = EnsEMBL::Web::TmpFile::ToolsOutput->new('filename' => $path); 
-
-    if ($tmpfile->exists) {
-      my $content = $tmpfile->content;
-
-      $r->headers_out->add('Content-Type'         => 'text/plain');
-      $r->headers_out->add('Content-Length'       => length $content);
-      $r->headers_out->add('Content-Disposition'  => sprintf 'attachment; filename=%s', $filename);
-
-      print $content;
-    }
-    else { warn ">>> PATH NOT RECOGNISED: $path"; }
+    print $content;
   }
 }
 
