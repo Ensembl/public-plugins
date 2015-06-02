@@ -126,7 +126,7 @@ sub _check_server {
     Timeout   => 10
   );
 
-  $server->autoflush(1);
+  $server->autoflush(1) if $server;
 
   return !!$server;
 }
