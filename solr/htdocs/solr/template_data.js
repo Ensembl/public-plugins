@@ -605,7 +605,7 @@
               var url;
               url = data.tp2_row.best('domain_url');
               if (url) {
-                if (!(url != null ? url.match(/^\//) : void 0)) {
+                if (!(url != null ? url.match(/^\//) : void 0) && !(url != null ? url.match(/^https?\:/) : void 0)) {
                   url = "/" + url;
                 }
                 return data.tp2_row.candidate('url', url, 50);
