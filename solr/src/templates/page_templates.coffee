@@ -74,7 +74,7 @@ window.page_templates =
           data.tp2_row.register 50, () ->
             url = data.tp2_row.best('domain_url')
             if url
-              if not url?.match(/^\//)
+              if not url?.match(/^\//) and not url?.match(/^https?\:/)
                 url = "/" + url
               data.tp2_row.candidate('url',url,50)
 
