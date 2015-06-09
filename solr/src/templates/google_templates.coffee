@@ -267,7 +267,7 @@ window.google_templates =
     template: """
       <div class="solr_result_stmt">
         <span class="solr_result_count">0</span> results
-        match <span class="solr_result_query">X</span>
+        match <span class="solr_result_query">your search</span>
         <span class="solr_result_restricted">
           when restricted to
           <ul>
@@ -283,11 +283,11 @@ window.google_templates =
     """
     directives:
       '.solr_result_count': 'num'
-      '.solr_result_query': 'query'
+      #'.solr_result_query': 'query'
       '.solr_result_restricted':
         'fs<-facets':
           'li':
-            'f<-fs': 
+            'f<-fs':
               '.solr_result_fname': 'f.left'
               '.solr_result_fval': 'f.right'
               'a@href': 'f.href'
@@ -303,7 +303,7 @@ window.google_templates =
             href = el.attr('href')
             href = href.substring(href.indexOf('#')) # IE7, :-(
             state = { page: 1 }
-            state['facet_'+href.substring(1)] = '' 
+            state['facet_'+href.substring(1)] = ''
             $(document).trigger('update_state',[state])
             false
 
