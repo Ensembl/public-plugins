@@ -283,7 +283,8 @@ window.google_templates =
     """
     directives:
       '.solr_result_count': 'num'
-      #'.solr_result_query': 'query'
+      '.solr_result_query': (e) ->
+        $('<div/>').text(e.context.query).html()
       '.solr_result_restricted':
         'fs<-facets':
           'li':

@@ -282,6 +282,9 @@
       template: "<div class=\"solr_result_stmt\">\n  <span class=\"solr_result_count\">0</span> results\n  match <span class=\"solr_result_query\">your search</span>\n  <span class=\"solr_result_restricted\">\n    when restricted to\n    <ul>\n      <li>\n        <a href=\"#\">\n          <span class=\"solr_result_fname\">A</span>: \n          <span class=\"solr_result_fval\">AA</span>\n        </a>\n      </li>\n    </ul>\n  </span>\n</div>",
       directives: {
         '.solr_result_count': 'num',
+        '.solr_result_query': function(e) {
+          return $('<div/>').text(e.context.query).html();
+        },
         '.solr_result_restricted': {
           'fs<-facets': {
             'li': {
