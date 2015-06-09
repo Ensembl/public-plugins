@@ -184,7 +184,7 @@ class Part
       
   emit_directives: ->
     dirs = @component.emit_directives(@model_context,["."+@klass])
-    for s in @subs    
+    for s in @subs
       dirs[a] = b for a,b of s.emit_directives()
     dirs
 

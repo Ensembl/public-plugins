@@ -454,6 +454,7 @@
       var all_subs, out, root_comp, root_part, template;
       root_comp = this.registry_get(this.name, []);
       this.data = this.run_fixes(root_comp, this.data);
+      console.log(this.data);
       all_subs = root_comp.get_all_subs();
       root_part = root_comp.make_part(this, [], [], [], void 0);
       template = root_part.emit_template();
