@@ -19,10 +19,13 @@ limitations under the License.
 package EnsEMBL::Web::SpeciesDefs;
 
 use strict;
+use warnings;
 
-sub set_userdb_details_for_rose {
+use previous qw(register_orm_databases);
+
+sub register_orm_databases {
   my $self = shift;
-  
+
   $self->ENSEMBL_ORM_DATABASES->{'user'} = {
     'database'  => $self->ENSEMBL_USERDB_NAME,
     'host'      => $self->ENSEMBL_USERDB_HOST,
@@ -30,6 +33,8 @@ sub set_userdb_details_for_rose {
     'username'  => $self->ENSEMBL_USERDB_USER,
     'password'  => $self->ENSEMBL_USERDB_PASS
   };
+
+  return $self->PREV::register_orm_databases;
 }
 
 1;
