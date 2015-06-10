@@ -23,7 +23,7 @@ use strict;
 
 use JSON qw(from_json);
 
-sub gxa_check {
+sub gxa_check { return 1;
   my $self = shift;
 
   return unless $SiteDefs::GXA;
