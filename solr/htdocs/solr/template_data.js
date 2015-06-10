@@ -1793,6 +1793,7 @@
               }
               return _results;
             })()).join(" ");
+            yoursearch = $('<div/>').text(yoursearch).html();
             wholesite = cur_values.length === 0;
             templates = $(document).data('templates');
             return el.append(templates.generate('noresultsnarrow', {
@@ -1860,7 +1861,9 @@
       directives: {
         'em': 'yoursearch',
         '.roll_hidden_text': 'noresults_help',
-        '.search': 'q',
+        '.search': function(e) {
+          return $('<div/>').text(e.context.q).html();
+        },
         '.narrow_any': {
           'x<-narrow_n': {
             '.all': 'all',

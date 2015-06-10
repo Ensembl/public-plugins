@@ -411,6 +411,7 @@ window.rhs_templates =
                   name = $.solr_config('static.ui.facets.key=.text.plural',f)
                   othervalues.push({ entries, total, name, facet: f })
             yoursearch = (k[1] for k in cur_values).join(" ")
+            yoursearch = $('<div/>').text(yoursearch).html()
             wholesite = (cur_values.length == 0)
             templates = $(document).data('templates')
             el.append(templates.generate('noresultsnarrow',{
@@ -492,7 +493,8 @@ window.rhs_templates =
     directives:
       'em': 'yoursearch'
       '.roll_hidden_text': 'noresults_help'
-      '.search': 'q'
+      '.search': (e) ->
+        $('<div/>').text(e.context.q).html()
       '.narrow_any':
         'x<-narrow_n':
           '.all': 'all'
