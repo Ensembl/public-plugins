@@ -23,7 +23,7 @@ package EnsEMBL::Widgets::SiteDefs;
 sub update_conf { 
 
   $SiteDefs::GXA_REST_URL = 'http://www.ebi.ac.uk/gxa/json/expressionData?geneId=';  
-  $SiteDefs::GXA_EBI_URL  = 'http://www.ebi.ac.uk';
+  $SiteDefs::GXA_EBI_URL  = 'http://www.ebi.ac.uk/gxa/resources';
 
 }
 

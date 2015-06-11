@@ -33,34 +33,40 @@ sub content {
   return $main_js unless $self->hub->action && $self->hub->action eq 'ExpressionAtlas'; #adding js only for gxa view
 
   $main_js .=  qq{
-  <script type="text/javascript"  src="http://cdnjs.cloudflare.com/ajax/libs/react/0.11.1/react.min.js"></script>
-  <script type="text/javascript"  src="http://www.ebi.ac.uk/gxa/resources/js/jquery-ui-1.10.3.fix-8740.0520a49/dist/jquery-ui.min.js"></script>
-  <script type="text/javascript"  src="http://www.ebi.ac.uk/gxa/resources/js/jquery-migrate-1.2.0.min.js"></script>
-  
-  <script type="text/javascript"  src="http://code.highcharts.com/highcharts.js"></script>
-  <script type="text/javascript"  src="http://code.highcharts.com/highcharts-more.js"></script>
-  <script type="text/javascript"  src="http://code.highcharts.com/modules/exporting.js"></script>
+    <script language="JavaScript" type="text/javascript" src="$SiteDefs::GXA_EBI_URL/js/lib/react/react-0.11.1.min.js"></script>
+    <script language="JavaScript" type="text/javascript" src="$SiteDefs::GXA_EBI_URL/js/lib/jquery-1.9.1.min.js"></script>
 
-  <script type="text/javascript"  src="http://www.ebi.ac.uk/gxa/resources/jsx/factorTooltip.js"></script>
-  <script type="text/javascript"  src="http://www.ebi.ac.uk/gxa/resources/js/factorTooltipModule.js"></script>
-  <script type="text/javascript"  src="http://www.ebi.ac.uk/gxa/resources/jsx/contrastTooltip.js"></script>
-  <script type="text/javascript"  src="http://www.ebi.ac.uk/gxa/resources/js/contrastTooltipModule.js"></script>
-  <script type="text/javascript"  src="http://www.ebi.ac.uk/gxa/resources/js/helpTooltipsModule.js"></script>
-  <script type="text/javascript"  src="http://www.ebi.ac.uk/gxa/resources/js/genePropertiesTooltipModule.js"></script>
-  <script type="text/javascript"  src="http://www.ebi.ac.uk/gxa/resources/js/highlight.js"></script>
-  <script type="text/javascript"  src="http://www.ebi.ac.uk/gxa/resources/js/anatomogramModule.js"></script>
-  <script type="text/javascript"  src="http://www.ebi.ac.uk/gxa/resources/js/jquery.svg.package-1.4.5/jquery.svg.js"></script>
-  <script type="text/javascript"  src="http://www.ebi.ac.uk/gxa/resources/js/EventEmitter-4.2.7.js"></script>
+    <!--[if lte IE 9]>
+    <script language="JavaScript" type="text/javascript" src="$SiteDefs::GXA_EBI_URL/js/lib/jquery.xdomainrequest-1.0.3.min.js"></script>
+    <![endif]-->
 
-  <script type="text/javascript"  src="http://www.ebi.ac.uk/gxa/resources/jsx/cellBaselineVariance.js"></script>
+    <script language="JavaScript" type="text/javascript" src="$SiteDefs::GXA_EBI_URL/js/lib/jquery-migrate-1.2.0.min.js"></script>
 
-  <script type="text/javascript"  src="http://www.ebi.ac.uk/web_guidelines/js/libs/modernizr.minified.2.1.6.js"></script>
+    <script language="JavaScript" type="text/javascript" src="$SiteDefs::GXA_EBI_URL/js/lib/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>
 
-  <script type="text/javascript"  src="http://www.ebi.ac.uk/Tools/biojs/biojs/Biojs.js"></script>
-  <script type="text/javascript"  src="http://www.ebi.ac.uk/gxa/resources/biojs/AtlasHeatmapReact.js"></script>
+    <script language="JavaScript" type="text/javascript" src="$SiteDefs::GXA_EBI_URL/jsx/factorTooltip.js"></script>
+    <script language="JavaScript" type="text/javascript" src="$SiteDefs::GXA_EBI_URL/js/factorTooltipModule.js"></script>
+    <script language="JavaScript" type="text/javascript" src="$SiteDefs::GXA_EBI_URL/jsx/contrastTooltip.js"></script>
+    <script language="JavaScript" type="text/javascript" src="$SiteDefs::GXA_EBI_URL/js/contrastTooltipModule.js"></script>
+    <script language="JavaScript" type="text/javascript" src="$SiteDefs::GXA_EBI_URL/js/helpTooltipsModule.js"></script>
+    <script language="JavaScript" type="text/javascript" src="$SiteDefs::GXA_EBI_URL/js/genePropertiesTooltipModule.js"></script>
+    <script language="JavaScript" type="text/javascript" src="$SiteDefs::GXA_EBI_URL/js/lib/highlight.js"></script>
+    <script language="JavaScript" type="text/javascript" src="$SiteDefs::GXA_EBI_URL/js/anatomogramModule.js"></script>
 
-  <script type="text/javascript"  src="http://www.ebi.ac.uk/gxa/resources/jsx/heatmap.js"></script>
-  <script type="text/javascript"  src="http://www.ebi.ac.uk/gxa/resources/jsx/heatmapContainer.js"></script>
+    <script language="JavaScript" type="text/javascript" src="$SiteDefs::GXA_EBI_URL/js/lib/highcharts-4.1.5/js/highcharts.js"></script>
+    <script language="JavaScript" type="text/javascript" src="$SiteDefs::GXA_EBI_URL/js/lib/highcharts-4.1.5/js/highcharts-more.js"></script>
+    <script language="JavaScript" type="text/javascript" src="$SiteDefs::GXA_EBI_URL/js/lib/highcharts-4.1.5/js/modules/exporting.js"></script>
+
+    <script language="JavaScript" type="text/javascript" src="$SiteDefs::GXA_EBI_URL/jsx/cellBaselineVariance.js"></script>
+    <script language="JavaScript" type="text/javascript" src="$SiteDefs::GXA_EBI_URL/js/lib/jquery.svg.package-1.4.5/jquery.svg.js"></script>
+    <script language="JavaScript" type="text/javascript" src="$SiteDefs::GXA_EBI_URL/js/lib/EventEmitter-4.2.7.js"></script>
+
+    <script language="JavaScript" type="text/javascript" src="http://www.ebi.ac.uk/web_guidelines/js/libs/modernizr.minified.2.1.6.js"></script>
+
+    <script language="JavaScript" type="text/javascript" src="http://www.ebi.ac.uk/Tools/biojs/biojs/Biojs.js"></script>
+    <script language="JavaScript" type="text/javascript" src="$SiteDefs::GXA_EBI_URL/biojs/AtlasHeatmapReact.js"></script>
+    <script language="JavaScript" type="text/javascript" src="$SiteDefs::GXA_EBI_URL/jsx/heatmap.js"></script>
+    <script language="JavaScript" type="text/javascript" src="$SiteDefs::GXA_EBI_URL/jsx/heatmapContainer.js"></script>
   }; 
 
   return $main_js;

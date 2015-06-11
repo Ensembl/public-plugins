@@ -36,11 +36,10 @@ sub content {
   return $main_css unless $self->hub->action && $self->hub->action eq 'ExpressionAtlas'; #adding stylesheet only for gene expression atlas view
 
   $main_css .=  qq{
-    <link rel="stylesheet" type="text/css" media="all" href="http://www.ebi.ac.uk/gxa/resources/css/atlas.css" />
-    <link rel="stylesheet" type="text/css" media="all" href="http://www.ebi.ac.uk/gxa/resources/js/jquery-ui-1.10.2.custom/css/ui-lightness/jquery-ui-1.10.2.custom.min.css"/>
-
-    <link rel="stylesheet" type="text/css" media="all" href="http://www.ebi.ac.uk/gxa/resources/css/table-grid.css" />
-    <link rel="stylesheet" type="text/css" media="all" href="http://www.ebi.ac.uk/gxa/resources/css/heatmap-and-anatomogram.css" />
+    <link rel="stylesheet" type="text/css" href="$SiteDefs::GXA_EBI_URL/css/atlas.css">
+    <link rel="stylesheet" type="text/css" href="$SiteDefs::GXA_EBI_URL/css/table-grid.css">
+    <link rel="stylesheet" type="text/css" href="$SiteDefs::GXA_EBI_URL/css/heatmap-and-anatomogram.css">
+    <link rel="stylesheet" type="text/css" href="$SiteDefs::GXA_EBI_URL/js/lib/jquery-ui-1.11.4.custom/jquery-ui.min.css">
   };
 
   return  $main_css;
