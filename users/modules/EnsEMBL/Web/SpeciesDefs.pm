@@ -23,15 +23,30 @@ use warnings;
 
 use previous qw(register_orm_databases);
 
-sub register_orm_databases {
+sub accounts_db {
   my $self = shift;
+  my $db   = $self->multidb->{'DATABASE_ACCOUNTS'};
+
+  return {
+    'NAME'    => $db->{'NAME'},
+    'HOST'    => $db->{'HOST'},
+    'PORT'    => $db->{'PORT'},
+    'DRIVER'  => $db->{'DRIVER'}  || 'mysql',
+    'USER'    => $db->{'USER'}    || $self->DATABASE_WRITE_USER,
+    'PASS'    => $db->{'PASS'}    || $self->DATABASE_WRITE_PASS
+  };
+}
+
+sub register_orm_databases {
+  my $self  = shift;
+  my $db    = $self->accounts_db;
 
   $self->ENSEMBL_ORM_DATABASES->{'user'} = {
-    'database'  => $self->ENSEMBL_USERDB_NAME,
-    'host'      => $self->ENSEMBL_USERDB_HOST,
-    'port'      => $self->ENSEMBL_USERDB_PORT,
-    'username'  => $self->ENSEMBL_USERDB_USER,
-    'password'  => $self->ENSEMBL_USERDB_PASS
+    'database'  => $db->{'NAME'},
+    'host'      => $db->{'HOST'},
+    'port'      => $db->{'PORT'},
+    'username'  => $db->{'USER'},
+    'password'  => $db->{'PASS'}
   };
 
   return $self->PREV::register_orm_databases;
