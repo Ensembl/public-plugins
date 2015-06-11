@@ -32,10 +32,10 @@ sub content {
 
   return $main_js unless $self->hub->action && $self->hub->action eq 'ExpressionAtlas'; #adding js only for gxa view
 
+  # don't forget to remove their jquery lib as this will cause conflict with our one which is the latest one
   $main_js .=  qq{
     <script language="JavaScript" type="text/javascript" src="$SiteDefs::GXA_EBI_URL/js/lib/react/react-0.11.1.min.js"></script>
-    <script language="JavaScript" type="text/javascript" src="$SiteDefs::GXA_EBI_URL/js/lib/jquery-1.9.1.min.js"></script>
-
+    
     <!--[if lte IE 9]>
     <script language="JavaScript" type="text/javascript" src="$SiteDefs::GXA_EBI_URL/js/lib/jquery.xdomainrequest-1.0.3.min.js"></script>
     <![endif]-->
