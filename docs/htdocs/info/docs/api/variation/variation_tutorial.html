@@ -371,7 +371,6 @@ sub get_TranscriptVariations{
 </p>
 
 <pre class="code sh_perl">
-	
 use strict;
 use warnings;
 use Bio::EnsEMBL::Registry;
@@ -379,8 +378,8 @@ use Bio::EnsEMBL::Registry;
 my $registry = 'Bio::EnsEMBL::Registry';
 
 $registry-&gt;load_registry_from_db(
-    -host =&gt; 'ensembldb.ensembl.org',
-    -user =&gt; 'anonymous'
+  -host =&gt; 'ensembldb.ensembl.org',
+  -user =&gt; 'anonymous'
 );
 
 # Get the database adaptor for Slice objects for human
@@ -405,7 +404,6 @@ $vfs = $vf_adaptor-&gt;fetch_all_by_Slice($slice);
 
 # Count the number of variations returned, this number is likely to be higher than when failed variations were omitted
 print "There are " . scalar(@{$vfs}) . " variations in the " . $slice->display_id() . " region\n";
-
 </pre>
 
 <p>
@@ -414,24 +412,20 @@ print "There are " . scalar(@{$vfs}) . " variations in the " . $slice->display_i
 </p>
 
 <pre class="code sh_perl">
-	
 my $failed = 0;
 my %descriptions;
 foreach my $vf (@{$vfs}) {
-	
-	# Check whether the variation for this variation feature is failed
-	if ($vf->variation->is_failed()) {
-		$failed++;
-		
-		# Get the reason why the variation failed and count the number of variations failed for the same reason.
-		map {$descriptions{$_}++} @{$vf->variation->get_all_failed_descriptions()};
-	}
+  # Check whether the variation for this variation feature is failed
+  if ($vf->variation->is_failed()) {
+    $failed++;
+    # Get the reason why the variation failed and count the number of variations failed for the same reason.
+    map {$descriptions{$_}++} @{$vf->variation->get_all_failed_descriptions()};
+  }
 }
 
 # Print the results
 print "There are $failed variations on slice " . $slice->display_id() . " that have been flagged as failed:\n";
 map { print "\t" . $descriptions{$_} . " variations failed because " . $_ . "\n"; } keys(%descriptions);
-	
 </pre>
 
 <p>
@@ -447,9 +441,7 @@ map { print "\t" . $descriptions{$_} . " variations failed because " . $_ . "\n"
 </p>
 
 <pre class="code sh_perl">
-	
 foreach my $vf (@{$vfs}) {
-
   # Check whether the variation for this variation feature has failed alleles
   if ($vf->variation->has_failed_alleles()) {
     # Get all the alleles associated with the variation and check which ones have failed and why
@@ -468,7 +460,6 @@ foreach my $vf (@{$vfs}) {
     map { print "\t" . $_ . " has been flagged as failed because " . $failed_alleles{$_} . "\n"; } keys(%failed_alleles);
   }
 }
-	
 </pre>
 
 
@@ -581,7 +572,6 @@ $registry->load_registry_from_db(
 
 # Get a VariationSetAdaptor on the human variation database
 my $vs_adaptor = $registry->get_adaptor('human','variation','variationset');
-
 </pre>
 <p>
 	Next, we get the VariationSet objects from the adaptor. In order to display the hierarchical relationships between VariationSets, we fetch only the top level sets and for each set, recursively
@@ -1018,7 +1008,6 @@ my $cosmic_name_iter = $va-&gt;fetch_Iterator_somatic()-&gt;grep(sub {$_-&gt;sou
 while ($cosmic_name_iter-&gt;has_next()) {
   print $cosmic_name_iter-&gt;next(), "\n";
 }
-
 </pre>
 
 
