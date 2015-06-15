@@ -16,15 +16,24 @@ limitations under the License.
 
 =cut
 
+package EnsEMBL::Web::Hub;
+
 use strict;
+use warnings;
 
-package EnsEMBL::Widgets::SiteDefs;
+use EnsEMBL::Web::Tools::FailOver::GXA;
 
-sub update_conf { 
+# check to see if GXA is site is up or down
+# if $out that means site is up
+sub gxa_status {
 
-  $SiteDefs::GXA_REST_URL = 'http://www.ebi.ac.uk/gxa/json/expressionData?geneId=';
-  $SiteDefs::GXA_EBI_URL  = 'http://www.ebi.ac.uk/gxa/resources';
+  my $self = shift;
 
+  my $failover = EnsEMBL::Web::Tools::FailOver::GXA->new($self);
+  my $out      = $failover->get_cached;
+
+  return $out;
 }
 
 1;
+

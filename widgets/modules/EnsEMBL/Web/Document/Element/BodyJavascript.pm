@@ -29,8 +29,8 @@ sub content {
   my $self = shift;
 
   my $main_js = $self->PREV::content(@_);
-
-  return $main_js unless $self->hub->action && $self->hub->action eq 'ExpressionAtlas'; #adding js only for gxa view
+  
+  return $main_js unless $self->hub->action && $self->hub->action eq 'ExpressionAtlas' && $self->hub->gxa_status; #adding js only for gxa view and do not add them if their site is down
 
   # don't forget to remove their jquery lib as this will cause conflict with our one which is the latest one
   $main_js .=  qq{

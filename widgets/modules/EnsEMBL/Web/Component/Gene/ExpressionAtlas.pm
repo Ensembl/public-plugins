@@ -38,21 +38,26 @@ sub content {
   my $object      = $self->object;
   my $stable_id   = $hub->param('g'); 
   my $species     = $hub->species;
+  my $html;
   
-  $species        =~ s/_/ /gi; #GXA require the species with no underscore.
-
-  #this script tag has been kept here as it was easier to call the perl param within the script tag (the js file wasn't getting the param)
-  my $html = qq{
-    <script type="text/javascript">
-      var instance = new Biojs.AtlasHeatmap ({
-            getBaseUrl: "http://www.ebi.ac.uk/gxa",
-            params:'geneQuery=$stable_id&species=$species',
-            isMultiExperiment: true,
-            target : "expressionAtlas"
-      });
-    </script>  
-    <div id="expressionAtlas"></div>    
-  };
+  $species        =~ s/_/ /gi; #GXA require the species with no underscore.  
+  
+  if (!$hub->gxa_status) {
+    $html = $self->_info_panel("error", "Gene expression atlas site down!", "<p>The widget cannot be displayed as the gene expression atlas site is down. Please check again later.</p>");
+  } else {
+    #this script tag has been kept here as it was easier to call the perl param within the script tag (the js file wasn't getting the param)
+    $html = qq{
+      <script type="text/javascript">
+        var instance = new Biojs.AtlasHeatmap ({
+              getBaseUrl: "http://www.ebi.ac.uk/gxa",
+              params:'geneQuery=$stable_id&species=$species',
+              isMultiExperiment: true,
+              target : "expressionAtlas"
+        });
+      </script>  
+      <div id="expressionAtlas"></div>    
+    };
+  }
 
   return $html;
 }

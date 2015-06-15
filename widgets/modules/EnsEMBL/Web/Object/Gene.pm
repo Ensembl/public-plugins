@@ -28,14 +28,17 @@ sub gxa_check {
 
   return unless $SiteDefs::GXA;
 
-  my $ua    = LWP::UserAgent->new;
-  my $proxy = $self->hub->species_defs->ENSEMBL_WWW_PROXY;
-  $ua->proxy( 'http', $proxy ) if $proxy;
+  return 1; # not doing availability check anymore as it slows down the site, we are only checking if the site is up or down
 
-  my $gxa_url   = $SiteDefs::GXA_REST_URL.$self->hub->param('g');
-  my $response  = $ua->get($gxa_url);
+#  my $ua    = LWP::UserAgent->new;
+#  my $proxy = $self->hub->species_defs->ENSEMBL_WWW_PROXY;
+#  $ua->proxy( 'http', $proxy ) if $proxy;
+#  $ua->timeout(2);
 
-  return (grep /true/, $response->{_content}) ? 1 : 0;
+#  my $gxa_url   = $SiteDefs::GXA_REST_URL.$self->hub->param('g');
+#  my $response  = $ua->get($gxa_url);
+
+#  return (grep /true|timeout/, $response->{_content}) ? 1 : 0;
 }
 
 1;

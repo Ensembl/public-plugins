@@ -32,8 +32,12 @@ sub content {
   my $self = shift;
   
   my $main_css = $self->PREV::content(@_);
+  
+  #check if GXA site is up, if down do not add the css
+  my $failover = EnsEMBL::Web::Tools::FailOver::GXA->new($self->hub);
+  my $out      = $failover->get_cached;
 
-  return $main_css unless $self->hub->action && $self->hub->action eq 'ExpressionAtlas'; #adding stylesheet only for gene expression atlas view
+  return $main_css unless $self->hub->action && $self->hub->action eq 'ExpressionAtlas' && $self->hub->gxa_status;; #adding stylesheet only for gene expression atlas view
 
   $main_css .=  qq{
     <link rel="stylesheet" type="text/css" href="$SiteDefs::GXA_EBI_URL/css/atlas.css">
