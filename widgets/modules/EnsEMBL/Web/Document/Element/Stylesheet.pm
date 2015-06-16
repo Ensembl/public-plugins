@@ -31,7 +31,8 @@ use previous qw(content);
 sub content {
   my $self = shift;
   
-  my $main_css = $self->PREV::content(@_);
+  my $main_css      = $self->PREV::content(@_);
+  my $static_server = $self->static_server ? $self->static_server : '';
   
   #check if GXA site is up, if down do not add the css
   my $failover = EnsEMBL::Web::Tools::FailOver::GXA->new($self->hub);
@@ -44,6 +45,7 @@ sub content {
     <link rel="stylesheet" type="text/css" href="$SiteDefs::GXA_EBI_URL/css/table-grid.css">
     <link rel="stylesheet" type="text/css" href="$SiteDefs::GXA_EBI_URL/css/heatmap-and-anatomogram.css">
     <link rel="stylesheet" type="text/css" href="$SiteDefs::GXA_EBI_URL/js/lib/jquery-ui-1.11.4.custom/jquery-ui.min.css">
+    <link rel="stylesheet" type="text/css" href="$static_server/widgets/90_GXA.css"> 
   };
 
   return  $main_css;
