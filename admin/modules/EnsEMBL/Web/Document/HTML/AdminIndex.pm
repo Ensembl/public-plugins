@@ -75,7 +75,6 @@ sub render {
   </ul>
   <h1>Documents</h1>
   <ul>
-    <li><a href="/Documents/View/Relcodoc">Release Coordination</a></li>
     <li><a href="/Documents/View/Testcases">Healthcheck Testcases</a></li>
   </ul>
   <h1>User Directory</h1>
