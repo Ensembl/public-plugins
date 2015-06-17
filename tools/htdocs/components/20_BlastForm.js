@@ -302,7 +302,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
         if (numSeqs >= this.maxNumSequences) {
           break;
         }
-        this.sequences.splice(existingSequence && this.sequences.indexOf(existingSequence) + 1 || numSeqs, 0, new Ensembl.Panel.BlastForm.Sequence(parsedSeqs.sequences[indexParsedSeq], this, existingSequence || false));
+        this.sequences.splice(existingSequence && this.sequences.indexOf(existingSequence) + 1 || numSeqs, 0, new Ensembl.Class.BlastFormSequence(parsedSeqs.sequences[indexParsedSeq], this, existingSequence || false));
       }
       numSeqs = this.sequences.length;
     }
@@ -454,7 +454,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
       if (this.sequences.length >= this.maxNumSequences) {
         break;
       }
-      this.sequences.push(new Ensembl.Panel.BlastForm.Sequence({
+      this.sequences.push(new Ensembl.Class.BlastFormSequence({
         'string'      : editingJobSequences[i]['sequence'],
         'description' : '>' + (editingJobSequences[i]['display_id'] || ''),
         'type'        : type
@@ -682,7 +682,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
   }
 });
 
-Ensembl.Panel.BlastForm.Sequence = Ensembl.Panel.ToolsForm.SubElement.extend({
+Ensembl.Class.BlastFormSequence = Ensembl.Class.ToolsFormSubElement.extend({
 /*
  *  This represents a sequence box in the frontend
  */

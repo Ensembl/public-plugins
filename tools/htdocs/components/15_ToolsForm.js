@@ -194,7 +194,7 @@ Ensembl.Panel.ToolsForm = Ensembl.Panel.ContentTools.extend({
   }
 });
 
-Ensembl.Panel.ToolsForm.SubElement = Base.extend({
+Ensembl.Class.ToolsFormSubElement = Base.extend({
 /*
  * Base class for all sub elements
  */
