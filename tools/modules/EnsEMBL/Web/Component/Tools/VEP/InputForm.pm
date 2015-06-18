@@ -623,7 +623,7 @@ sub _build_extra {
         'name'          => "cell_type_$_",
         'values'        => [ {'value' => '', 'caption' => 'None'}, map { 'value' => $_->name, 'caption' => $_->name }, @{$hub->get_adaptor('get_CellTypeAdaptor', 'funcgen', $_)->fetch_all} ]
       }]
-    });
+    }) if $hub->get_adaptor('get_CellTypeAdaptor', 'funcgen', $_);
   }
 }
 
