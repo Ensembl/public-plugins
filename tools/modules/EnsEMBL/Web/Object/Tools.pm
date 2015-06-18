@@ -331,7 +331,7 @@ sub get_current_tickets {
 
     my $ticket_types  = $self->rose_manager(qw(Tools TicketType))->fetch_with_current_tickets({
       'site_type'       => $hub->species_defs->ENSEMBL_SITETYPE,
-      'session_id'      => $hub->session->create_session_id,
+      'session_id'      => $self->get_session_id,
       'user_id'         => $user && $user->user_id,
       'type'            => $tool_type
     });
@@ -377,7 +377,7 @@ sub get_requested_ticket {
     my $ticket_type = $self->rose_manager(qw(Tools TicketType))->fetch_with_requested_ticket({
       'site_type'     => $hub->species_defs->ENSEMBL_SITETYPE,
       'ticket_name'   => $ticket_name,
-      'session_id'    => $hub->session->create_session_id,
+      'session_id'    => $self->get_session_id,
       'user_id'       => $user && $user->user_id,
       'public_ok'     => 1,
       'job_id'        => $key eq 'ticket_only'  ? undef : 'all',
@@ -400,7 +400,7 @@ sub user_accessible_tickets {
   my $self        = shift;
   my $hub         = $self->hub;
   my $user_id     = $hub->user ? $hub->user->user_id : 0;
-  my $session_id  = $hub->session->create_session_id;
+  my $session_id  = $self->get_session_id;
 
   return grep { $_->owner_type eq 'user' ? $_->owner_id eq $user_id : $_->owner_id eq $session_id } @_;
 }
@@ -513,7 +513,7 @@ sub get_requested_job {
         'site_type'     => $hub->species_defs->ENSEMBL_SITETYPE,
         'ticket_name'   => $url_params->{'ticket_name'},
         'job_id'        => $job_id,
-        'session_id'    => $hub->session->create_session_id,
+        'session_id'    => $self->get_session_id,
         'user_id'       => $user && $user->user_id,
         'public_ok'     => 1,
         'type'          => $tool_type,
@@ -592,6 +592,11 @@ sub download_url {
     'tl'        => $self->create_url_param($ticket_name ? {'ticket_name' => $ticket_name} : ()),
     %$params
   });
+}
+
+sub get_session_id {
+  ## Gets the session id to retrieve/save the tools tickets against
+  return $_[0]->hub->session->create_session_id;
 }
 
 sub get_time_now {
