@@ -595,7 +595,7 @@ sub download_url {
 }
 
 sub get_session_id {
-  ## Gets the session id to retrieve/save the tools tickets against
+  ## Gets the session id to retrieve the tools tickets against
   return $_[0]->hub->session->create_session_id;
 }
 
