@@ -83,7 +83,7 @@ sub content {
           ($filter_string ? " $match " : ''),
           $params{"field$_"},
           $params{"operator$_"},
-          $params{"value$_"}
+          $params{"operator$_"} eq 'in' ? $params{"value_dd$_"} : $params{"value$_"}
         );
       }
     }
@@ -203,9 +203,9 @@ sub content {
 
   $html .= '<div class="toolbox">';
   $html .= '<div class="toolbox-head">';
-  $html .= '<img src="/i/16/eye.png" style="vertical-align:top;"> Navigation<span style="float:right">';
-  $html .= $self->helptip("Navigate through the results of your VEP job. By default the results for 5 variants are displayed; note that variants may have more than one result if they overlap multiple transcripts");
-  $html .= '</span></div>';
+  $html .= '<img src="/i/16/eye.png" style="vertical-align:top;"> ';
+  $html .= $self->helptip('Navigation', "Navigate through the results of your VEP job. By default the results for 5 variants are displayed; note that variants may have more than one result if they overlap multiple transcripts");
+  $html .= '</div>';
   $html .= "<div style='padding:5px;'>Showing $row_count results";
   $html .= $row_count ? " for variant".($from == $actual_to ? " $from" : "s $from\-$actual_to") : "";
   $html .= $filter_string ? "" : " of $output_lines";
@@ -295,7 +295,9 @@ sub content {
   #########
 
   $html .= '<div class="toolbox">';
-  $html .= '<div class="toolbox-head"><img src="/i/16/search.png" style="vertical-align:top;"> Filters<span style="float:right">'.$self->helptip("Filter your results to find interesting or significant data. You can apply several filters on any category of data in your results using a range of operators, add multiple filters, and edit active filters").'</span></div>';
+  $html .= '<div class="toolbox-head"><img src="/i/16/search.png" style="vertical-align:top;"> ';
+  $html .= $self->helptip('Filters', "Filter your results to find interesting or significant data. You can apply several filters on any category of data in your results using a range of operators, add multiple filters, and edit active filters");
+  $html .= '</div>';
   $html .= '<div style="padding:5px;">';
 
   my $form_url = $hub->url();
@@ -312,6 +314,7 @@ sub content {
     {'name' => 'gt',  'title' => '>'},
     {'name' => 'lte', 'title' => '<='},
     {'name' => 'gte', 'title' => '>='},
+    {'name' => 'in',  'title' => 'in file'},
   );
   my @non_numerical = @operators[0..2];
   my %operators = map {$_->{'name'} => $_->{'title'}} @operators;
@@ -322,6 +325,13 @@ sub content {
 
   my @filter_divs;
   my @location_divs;
+
+  my @user_files =
+    sort { $b->{'timestamp'} <=> $a->{'timestamp'} }
+    grep { $_->{'format'} && lc($_->{'format'}) eq 'gene_list' }
+    $hub->session->get_data('type' => 'upload'), $hub->user ? $hub->user->uploads : ();
+
+  my %file_display_name = map { $_->{file} => $_->{name} } @user_files;
 
   $html .= '<div>';
   foreach my $i (1..$max_filters) {
@@ -342,12 +352,13 @@ sub content {
         $i,
         $header_titles{$params{"field$i"}} || $params{"field$i"},
         $operators{$params{"operator$i"}},
-        $params{"value$i"} || 'defined',
+        $params{"operator$i"} eq 'in' ? $file_display_name{$params{"value_dd$i"}} : ($params{"value$i"} || 'defined'),
         $i,
         $self->reload_link('<img class="_ht" src="/i/close.png" title="Remove filter" style="height:16px; width:16px">', {
           "field$i"       => undef,
           "operator$i"    => undef,
           "value$i"       => undef,
+          "value_dd$i"    => undef,
           'update_panel'  => undef
         })
       );
@@ -367,7 +378,7 @@ sub content {
       $tmp_html .= '</select>';
 
       # operator
-      $tmp_html .= qq(<select name="operator$i">);
+      $tmp_html .= qq(<select name="operator$i" class="operator-dd">);
       $tmp_html .= sprintf(
         '<option value="%s" %s>%s</option>',
         $_->{'name'},
@@ -377,7 +388,36 @@ sub content {
       $tmp_html .= '</select>';
 
       # value and submit
-      $tmp_html .= sprintf qq(<input class="autocomplete" type="text" placeholder="defined" name="value$i" value="%s" />), $params{"value$i"};
+      $tmp_html .= sprintf(
+        qq(<input class="autocomplete value-switcher %s" type="text" placeholder="defined" name="value$i" value="%s" />),
+        $params{"operator$i"} eq 'in' ? 'hidden' : '',
+        $params{"value$i"}
+      );
+
+      # value (dropdown file selector)
+      $tmp_html .= sprintf(
+        '<span class="value-switcher %s">',
+        $params{"operator$i"} eq 'in' ? '' : 'hidden'
+      );
+      if(scalar @user_files) {
+        $tmp_html .= '<select name="value_dd'.$i.'">';
+        $tmp_html .= sprintf(
+          '<option value="%s" %s>%s</option>',
+          $_->{file},
+          $_->{file} eq $params{"value_dd$i"} ? 'selected="selected"' : '',
+          $_->{name}
+        ) for @user_files;
+        $tmp_html .= '</select>';
+      }
+      my $url = $hub->url({
+        type   => 'UserData',
+        action => 'SelectFile',
+        # format => 'GENE_LIST'
+      });
+      $tmp_html .= '<span class="small"> <a href="'.$url.'" class="modal_link data" rel="modal_user_data">Upload file</a> </span>';
+      $tmp_html .= '</span>';
+
+      # update/submit
       $tmp_html .= '<input value="Update" class="fbutton" type="submit" />';
 
       # add hidden fields
@@ -443,12 +483,29 @@ sub content {
   $html .= '</select>';
 
   # operator
-  $html .= '<select name="operator'.$filter_number.'">';
+  $html .= '<select class="operator-dd" name="operator'.$filter_number.'">';
   $html .= sprintf('<option value="%s" %s>%s</option>', $_->{name}, ($_->{name} eq 'is' ? 'selected="selected"' : ''), $_->{title}) for @operators;
   $html .= '</select>';
 
-  # value and submit
-  $html .= '<input class="autocomplete" type="text" placeholder="defined" name="value'.$filter_number.'">';
+  # value (text box)
+  $html .= '<input class="autocomplete value-switcher" type="text" placeholder="defined" name="value'.$filter_number.'">';
+
+  # value (dropdown file selector)
+  $html .= '<span class="value-switcher hidden">';
+  if(scalar @user_files) {
+    $html .= '<select name="value_dd'.$filter_number.'">';
+    $html .= sprintf('<option value="%s">%s</option>', $_->{file}, $_->{name}) for @user_files;
+    $html .= '</select>';
+  }
+  my $url = $hub->url({
+    type   => 'UserData',
+    action => 'SelectFile',
+    # format => 'GENE_LIST'
+  });
+  $html .= '<span class="small"> <a href="'.$url.'" class="modal_link data" rel="modal_user_data">Upload file</a> </span>';
+  $html .= '</span>';
+
+  # submit
   $html .= '<input value="Add" class="fbutton" type="submit">';
 
   # add hidden fields

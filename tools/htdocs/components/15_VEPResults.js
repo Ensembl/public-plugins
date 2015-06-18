@@ -71,6 +71,21 @@ Ensembl.Panel.VEPResults = Ensembl.Panel.ContentTools.extend({
       e.preventDefault();
       panel.reload(this.href, $(this).find('input').val());
     });
+
+    // switch textbox to dropdown for "in file" operator
+    this.el.find('select.operator-dd').on('change', function(e) {
+      var textbox = $(this).parent().find('input.value-switcher');
+      var dropdown = $(this).parent().find('span.value-switcher');
+
+      if(this.value === 'in') {
+        textbox.hide();
+        dropdown.show();
+      }
+      else {
+        textbox.show();
+        dropdown.hide();
+      }
+    });
   },
 
   reload: function(url, ajaxUrl) {

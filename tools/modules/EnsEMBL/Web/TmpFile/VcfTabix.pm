@@ -105,6 +105,12 @@ sub content_iterate {
     my $opts    = $species_defs->ENSEMBL_VEP_FILTER_SCRIPT_OPTIONS || {};
        $opts    = join ' ', map { defined $opts->{$_} ? "$_ $opts->{$_}" : () } keys %$opts;
 
+    # add tmp dir root to paths
+    if($params->{'filter'} =~ m/ in /) {
+      my $td = $species_defs->ENSEMBL_TMP_DIR;
+      $params->{'filter'} =~ s/( in )([a-z0-9]+)/$1 $td\/$2/g;
+    }
+
     # build the commandline
     $fh_string .= sprintf("%s %s %s -filter '%s' -format vcf -ontology -only_matched -start %i -limit %i 2>&1 | ", $perl, $script, $opts, $params->{'filter'}, $from, ($to - $from) + 1);
   }
