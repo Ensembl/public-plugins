@@ -45,7 +45,6 @@ sub new {
      
   return undef if $caller->isa('EnsEMBL::Web::Apache::Handlers')        && !$flags{'PLUGGABLE_PATHS'};
   return undef if $caller->isa('EnsEMBL::Web::Apache::SSI')             && !$flags{'STATIC_PAGES_CONTENT'};
-  return undef if $caller->isa('EnsEMBL::Web::DBSQL::UserDBConnection') && !$flags{'USER_DB_DATA'};
   return undef if $caller->isa('EnsEMBL::Web::DBSQL::WebDBConnection')  && !$flags{'WEBSITE_DB_DATA'};
   return undef if $caller->isa('EnsEMBL::Web::File::Driver::Memcached') && !$flags{'TMP_IMAGES'};
   return undef if $caller->isa('EnsEMBL::Web::Apache::Image')           && !$flags{'TMP_IMAGES'};
