@@ -697,6 +697,14 @@ foreach my $svf (@{$svfs}) {
 <br /><hr />
 <h2 id="ag" style="font-size:large">Alleles and Genotypes</h2>
 
+<div style="width:800px" class="info">
+  <h3>Requirement for 1000 Genomes data</h3>
+  <div class="message-pad">
+    <p>1000 Genomes project phase 3 data is accessed via VCF files stored on Ensembl's FTP server. The API makes this access seamless, though it requires you install some extra software dependencies detailed on the <a href="/info/docs/api/api_installation.html">API installation page</a>. See also this <a href="http://www.ensembl.info/blog/2015/06/18/1000-genomes-phase-3-frequencies-genotypes-and-ld-data/" rel="external">blog post</a>.
+    </p>
+  </div>
+</div>
+
 <h2 id="alleles">Alleles and frequencies</h2>
 
 <p>
@@ -729,6 +737,16 @@ foreach my $allele (@{$alleles}) {
 }
 </pre>
 
+<p>
+<b>NB:</b> to retrieve external data e.g. from the 1000 Genomes phase 3 in human, remember to add the following code before making a call to retrieve alleles, genotypes or LD data:
+</p>
+
+<pre class="code sh_perl">$registry-&gt;get_adaptor('human', 'variation')->use_vcf(1);</pre>
+
+<p>
+This instructs the API to integrate data fetched from VCF files alongside data from the Ensembl MySQL databases. No further configuration is required; the API is pre-configured to access indexed VCF files on the Ensembl FTP server.
+</p>
+
 
 <br />
 <h2 id="genotypes">Genotypes</h2>
@@ -752,6 +770,9 @@ $registry-&gt;load_registry_from_db(
 my $variation_adaptor = $registry-&gt;get_adaptor('homo_sapiens', 'variation', 'variation');
 
 my $variation = $variation_adaptor-&gt;fetch_by_name('rs1333049');
+
+# OPTIONAL: uncomment this line to retrieve 1000 genomes phase 3 data also
+# $variation_adaptor->db->use_vcf(1);
 
 my $genotypes = $variation-&gt;get_all_SampleGenotypes();
 

@@ -141,6 +141,54 @@ use lib "$ENV{HOME}/src/ensembl-funcgen/modules";
 
 </ol>
 
+<h2>Variation genotype and frequency data</h2>
+
+<p>
+  To retrieve genotype, frequency and linkage disequilibrium (LD) data for 1000 Genomes phase 3 variants, it is necessary to install a couple of extra dependencies:
+</p>
+
+<ol>
+  <li>
+    <p>Tabix utility and perl module:</p>
+    <pre>
+cd ~/src
+git clone git@github.com:samtools/tabix.git
+cd tabix
+make
+cd perl
+perl Makefile.PL PREFIX=${HOME}/src/
+make && make install</pre>
+    <p>Set up environment; use the path output from the "make && make install" command for the PERL5LIB variable, e.g.</p>
+    <pre>
+PERL5LIB=${PERL5LIB}:${HOME}/src/lib/perl/5.14.2/
+export PERL5LIB
+
+PATH=${PATH}:${HOME}/src/tabix/
+export PATH</pre>
+  </li>
+  <li>
+    <p>ensembl-io perl modules (only if you didn't use Git Ensembl tools to install the API):</p>
+    <pre>
+cd ~/src
+wget https://github.com/Ensembl/ensembl-io/archive/release/[[SPECIESDEFS::ENSEMBL_VERSION]].zip
+unzip [[SPECIESDEFS::ENSEMBL_VERSION]].zip
+mv ensembl-io-release-[[SPECIESDEFS::ENSEMBL_VERSION]] ensembl-io</pre>
+    <p>Add this to PERL5LIB.</p>
+    <ul>
+      <li>
+        <p>Under <kbd>bash</kbd>, <kbd>ksh</kbd>, or any <kbd>sh</kbd>-derived shell:</p>
+        <pre>
+PERL5LIB=${PERL5LIB}:${HOME}/src/ensembl-io/modules
+export PERL5LIB</pre>
+      </li>
+      <li>
+        <p>Under <kbd>csh</kbd> or <kbd>tcsh</kbd>:</p>
+        <pre>setenv PERL5LIB ${PERL5LIB}:${HOME}/src/ensembl-io/modules</pre>
+      </li>
+    </ul>
+  </li>
+</ol>
+
 <h2>Debugging an Installation</h2>
 
 <p>
