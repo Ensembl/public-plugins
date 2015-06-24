@@ -44,10 +44,10 @@ sub createObjects {
     # find VCF config
     my $c = $self->species_defs->ENSEMBL_VCF_COLLECTIONS;
 
-    if($c) {
-     # set config file via ENV variable
-     $ENV{ENSEMBL_VARIATION_VCF_CONFIG_FILE} = $c->{'CONFIG'};
-     $variation_db->use_vcf($c->{'ENABLED'}) if $variation_db->can('use_vcf');
+    if($c && $variation_db->can('use_vcf')) {
+      $variation_db->vcf_config_file($c->{'CONFIG'});
+      $variation_db->vcf_root_dir($self->hub->species_defs->DATAFILE_BASE_PATH);
+      $variation_db->use_vcf($c->{'ENABLED'});
     }
 
     return $self->problem('fatal', 'Database Error', 'Could not connect to the variation database.') unless $variation_db;
