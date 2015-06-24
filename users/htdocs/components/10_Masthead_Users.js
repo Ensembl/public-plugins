@@ -71,7 +71,7 @@ Ensembl.Panel.Masthead = Ensembl.Panel.Masthead.extend({
           
           this.elLk.accountDropdown = this.el.find('._accounts_dropdown').on({
             'click': function(event) {
-              if (event.target.nodeName !== 'A') {
+              if (event.target.nodeName !== 'A' && event.target.parentNode.nodeName !== 'A') {
                 event.stopPropagation();
               }
             }
