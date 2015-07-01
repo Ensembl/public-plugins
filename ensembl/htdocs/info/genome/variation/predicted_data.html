@@ -24,7 +24,7 @@
   <h1 style="margin-top:15px">Ensembl Variation - Predicted data</h1>
 
   <p>
-  Ensembl imports variation data from a variety of different sources, as
+  Ensembl imports variant data from a variety of different sources, as
   described on the <a href="data_description.html">Data description</a> page. Below we give more
   information about how Ensembl predicts the effects of variants. Ensembl calculates the:
   </p>
@@ -36,7 +36,7 @@
       </div>
     </td><td>  
       <ul style="padding-left:5px">
-        <li>Consequence of variations in transcripts (synonymous, missense,...), e.g. 
+        <li>Variants consequences in transcripts (synonymous, missense,...), e.g. 
           <a href="/Homo_sapiens/Variation/Mappings?v=rs699#ENST00000366667_6797_G_tablePanel">rs699</a>
         </li>
         <li>Protein function prediction (SIFT, PolyPhen), e.g. 
@@ -53,32 +53,32 @@
         <li>Linkage disequilibrium information, e.g. 
           <a href="/Homo_sapiens/Variation/HighLD?v=rs1333049">rs1333049</a>
         </li>
-        <li>Tagged variations</li>
+        <li>Tagged variants</li>
       </ul>
     </td></tr>
   </table>    
   <br />
 
-<h2 id="consequences">Calculated variation consequences</h2>
+<h2 id="consequences">Calculated variant consequences</h2>
 
 <p>
-For each variation that is mapped to the reference genome, we identify each
-Ensembl transcript that overlap the variation. We then use a rule-based approach to
-predict the effects that each allele of the variation may have on the transcript.
+For each variant that is mapped to the reference genome, we identify each
+Ensembl transcript that overlap the variant. We then use a rule-based approach to
+predict the effects that each allele of the variant may have on the transcript.
 The set of consequence terms, defined by the <a rel="external"
 href="http://www.sequenceontology.org">Sequence Ontology</a> (SO), that can be
 currently assigned to each combination of an allele and a transcript is shown
-in the table below. Note that each allele of each variation may have a different
+in the table below. Note that each allele of each variant may have a different
 effect in different transcripts. 
 </p>
 
 <p> 
-This approach is applied to all germline variations and somatic mutations
+This approach is applied to all germline variants and somatic mutations
 stored in the Ensembl variation databases (though we do not yet currently calculate
 consequences for structural variants). The resulting consequence type calls,
 along with information determined as part of the process, such as the cDNA and
 CDS coordinates, and the affected codons and amino acids in coding transcripts,
-are stored in the variation database and displayed on the website. You can use 
+are stored in the Ensembl Variation database and displayed on the website. You can use 
 this pipeline for your own data via the <a href="/info/docs/tools/vep">VEP</a>. 
 </p>
 
