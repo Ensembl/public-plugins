@@ -643,55 +643,101 @@ sub _build_plugins {
   my $sd  = $hub->species_defs;
   my $pl  = $sd->multi_val('ENSEMBL_VEP_PLUGIN_CONFIG');
   return unless $pl && $pl->{plugins};
+
+  my $ac_values;
   
   my $species   = $self->_species;
-  my $fieldset  = $plugin_div->append_child($form->add_fieldset);
-  
-  foreach my $plugin(grep {$_->{available}} @{$pl->{plugins}}) {
-    my $pl_key = $plugin->{key};
-    
-    # sort out which species to make this available for
-    # the config carries the species name and assembly
-    # the interface will only have one assembly per species, but need to check they match
-    # my $field_class = [];
-    # my $pl_species = $plugin->{species};
-    #
-    # if($pl_species && ref($pl_species) eq 'ARRAY') {
-    #   foreach my $sp_hash(@$pl_species) {
-    #     push @$field_class,
-    #       map {"_stt_".$_}
-    #       map {$_->{assembly} eq $sp_hash->{assembly} ? $_->{value} : $_->{value}.'_'.$_->{assembly}}
-    #       grep {$_->{value} eq ucfirst($sp_hash->{name})}
-    #       @$species;
-    #   }
-    # }
-    
-    my $field_class = (!$plugin->{species} || $plugin->{species} eq '*') ? [] : [map {"_stt_".ucfirst($_)} @{$plugin->{species} || []}];
-     
-    $fieldset->add_field({
-      'class' => "_stt",
-      'field_class' => $field_class,
-      'type' => 'dropdown',
-      'helptip' => $plugin->{helptip},
-      'name' => 'plugin_'.$pl_key,
-      'label' => $plugin->{label} || $pl_key,
-      'value' => $plugin->{enabled} ? 'plugin_'.$pl_key : 'no',
-      'values' => [
-        { 'value' => 'no', 'caption' => 'Disabled' },
-        { 'value' => 'plugin_'.$pl_key, 'caption' => 'Enabled' },
-      ],
-    });
-    
-    if($plugin->{form}) {
-      foreach my $el(@{$plugin->{form}}) {
-        $el->{field_class} = '_stt_plugin_'.$pl_key;
-        $el->{label} ||= $el->{name};
-        $el->{value} ||= $el->{name};
-        $el->{name}  = 'plugin_'.$pl_key.'_'.$el->{name};
-        
-        $fieldset->add_field($el);
+
+  # sections?
+  my @sections = grep {defined($_)} map {defined($_->{section}) ? $_->{section} : undef} @{$pl->{plugins}};
+
+  # unique sort in same order
+  my ($prev, @new);
+  for(@sections) {
+    if(!defined($prev) || $prev ne $_) {
+      push @new, $_;
+    }
+    $prev = $_;
+  }
+  @sections = @new;
+  push @sections, '';
+
+  foreach my $section(@sections) {
+    my $section_name = $section || (scalar @sections > 1 ? 'Other plugins' : 'Plugins');
+    my $fieldset  = $plugin_div->append_child($form->add_fieldset($section_name));
+
+    my @section_plugins;
+
+    if($section eq '') {
+      @section_plugins = grep {$_->{available} && !defined($_->{section})} @{$pl->{plugins}};
+    }
+    else {
+      @section_plugins = grep {$_->{available} && defined($_->{section}) && $_->{section} eq $section} @{$pl->{plugins}};
+    }
+
+    foreach my $plugin(@section_plugins) {
+      my $pl_key = $plugin->{key};
+      
+      # sort out which species to make this available for
+      # the config carries the species name and assembly
+      # the interface will only have one assembly per species, but need to check they match
+      # my $field_class = [];
+      # my $pl_species = $plugin->{species};
+      #
+      # if($pl_species && ref($pl_species) eq 'ARRAY') {
+      #   foreach my $sp_hash(@$pl_species) {
+      #     push @$field_class,
+      #       map {"_stt_".$_}
+      #       map {$_->{assembly} eq $sp_hash->{assembly} ? $_->{value} : $_->{value}.'_'.$_->{assembly}}
+      #       grep {$_->{value} eq ucfirst($sp_hash->{name})}
+      #       @$species;
+      #   }
+      # }
+      
+      my $field_class = (!$plugin->{species} || $plugin->{species} eq '*') ? [] : [map {"_stt_".ucfirst($_)} @{$plugin->{species} || []}];
+       
+      $fieldset->add_field({
+        'class'       => "_stt",
+        'field_class' => $field_class,
+        'type'        => 'dropdown',
+        'helptip'     => $plugin->{helptip},
+        'name'        => 'plugin_'.$pl_key,
+        'label'       => $plugin->{label} || $pl_key,
+        'value'       => $plugin->{enabled} ? 'plugin_'.$pl_key : 'no',
+        'values'      => [
+          { 'value' => 'no', 'caption' => 'Disabled' },
+          { 'value' => 'plugin_'.$pl_key, 'caption' => 'Enabled' },
+        ],
+      });
+      
+      if($plugin->{form}) {
+        foreach my $el(@{$plugin->{form}}) {
+          $el->{field_class} = '_stt_plugin_'.$pl_key;
+          $el->{label}     ||= $el->{name};
+          $el->{value}       = exists($el->{value}) ? $el->{value} : $el->{name};
+          $el->{name}        = 'plugin_'.$pl_key.'_'.$el->{name};
+
+          # get autocomplete values
+          if($el->{class} =~ /autocomplete/ && $el->{values}) {
+            $ac_values->{$el->{name}} = $el->{values};
+          }
+          
+          $fieldset->add_field($el);
+        }
       }
     }
+  }
+  
+  # add autocomplete values as a js_param hidden field
+  if($ac_values) {
+    my $ac_json = encode_entities($self->jsonify($ac_values));
+
+    $plugin_div->append_child('input', {
+      class => "js_param",
+      type => "hidden",
+      name => "plugin_auto_values",
+      value => $ac_json
+    });
   }
 }
 
