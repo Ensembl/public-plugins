@@ -27,6 +27,9 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
     this.exampleData = JSON.parse(this.params['example_data']);
     delete this.params['example_data'];
 
+    this.autocompleteData = JSON.parse(this.params['plugin_auto_values']);
+    delete this.params['plugin_auto_values'];
+
     var panel = this;
 
     // Change the input value on click of the examples link
@@ -71,6 +74,60 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
           panel.elLk.previewButton.toggleClass('disabled', !enablePrev).prop('disabled', !enablePrev);
         }
       }
+    });
+
+    // auto complete plugin stuff
+    this.elLk.form.find('input:text.autocomplete-multi, textarea.autocomplete-multi').on('focus', function() {
+
+      var name = this.name;
+
+      var acValues =
+        panel.autocompleteData.hasOwnProperty(name) ? 
+        panel.autocompleteData[name] : [];
+
+      function split( val ) {
+        return val.split( /,\s*/ );
+      }
+      function extractLast( term ) {
+        return split( term ).pop();
+      }
+ 
+      $(this)
+        // don't navigate away from the field on tab when selecting an item
+        .bind( "keydown", function( event ) {
+          if ( event.keyCode === $.ui.keyCode.TAB &&
+              $( this ).autocomplete( "instance" ).menu.active ) {
+            event.preventDefault();
+          }
+        })
+        .autocomplete({
+          minLength: 0,
+          source: function( request, response ) {
+            // delegate back to autocomplete, but extract the last term
+            response( $.ui.autocomplete.filter(
+              acValues, extractLast( request.term ) ) );
+          },
+          focus: function() {
+            // prevent value inserted on focus
+            return false;
+          },
+          select: function( event, ui ) {
+            var terms = split( this.value );
+            // remove the current input
+            terms.pop();
+            // add the selected item
+            terms.push( ui.item.value );
+            // add placeholder to get the comma-and-space at the end
+            terms.push( "" );
+            this.value = terms.join( "," );
+            return false;
+          }
+        });
+        // .autocomplete( "instance" )._renderItem = function( ul, item ) {
+        //   return $( "<li>" )
+        //     .append( "<a>" + item.label + "<br>" + item.desc + "</a>" )
+        //     .appendTo( ul );
+        // };
     });
 
     this.editExisting();
