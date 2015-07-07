@@ -718,7 +718,7 @@ sub _build_plugins {
           $el->{name}        = 'plugin_'.$pl_key.'_'.$el->{name};
 
           # get autocomplete values
-          if($el->{class} =~ /autocomplete/ && $el->{values}) {
+          if($el->{class} && $el->{values} && $el->{class} =~ /autocomplete/) {
             $ac_values->{$el->{name}} = $el->{values};
           }
           
