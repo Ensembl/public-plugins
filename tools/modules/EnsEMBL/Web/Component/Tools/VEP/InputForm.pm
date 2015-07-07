@@ -495,6 +495,14 @@ sub _build_identifiers {
         'value' => 'yes',
         'checked' => 1,
         'field_class'   => [qw(_stt_yes _stt_allele)],
+      }), $fieldset->add_field({
+        'type' => 'checkbox',
+        'name' => 'failed',
+        'label' => 'Include flagged variants',
+        'helptip' => 'The Ensembl QC pipeline flags some variants as failed; by default these are not included when searching for known variants',
+        'value' => 1,
+        'checked' => 0,
+        'field_class'   => [qw(_stt_yes _stt_allele)],
       })]
     });
   }
