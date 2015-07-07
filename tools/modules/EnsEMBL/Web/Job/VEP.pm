@@ -155,9 +155,12 @@ sub _configure_plugins {
         
         foreach my $el(@matched) {
           my $val = $job_data->{'plugin_'.$pl_key.'_'.$el->{name}};
+
+          # remove any spaces
+          $val =~ s/,\s+/,/g if $val && $val =~ /,/;
           
           if(defined($val) && $val ne '' && $val ne 'no') {
-            push @params, $job_data->{'plugin_'.$pl_key.'_'.$el->{name}};
+            push @params, $val;
           }
         }
       }
