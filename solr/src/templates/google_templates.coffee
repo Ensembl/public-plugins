@@ -157,10 +157,7 @@ window.google_templates =
             id = data.tp2_row.best('id')
             if db == 'vega' or id.match(/^OTT/)
               data.tp2_row.add_value('bracketed-title','Havana',250)
-
-            # See ENSWEB-1253
-            has_alt_hack = ( sp == 'Human' or sp == 'Mouse' )
-            if ((not ref?) or ref == 0) and ft == 'Gene' and has_alt_hack
+            if (ref? and ref == 0) and ft == 'Gene'
               data.tp2_row.add_value('bracketed-title','Alternative sequence',275)
               data.tp2_row.add_value('new-contents','<i>Not a Primary Assembly Gene</i>',200)
 
