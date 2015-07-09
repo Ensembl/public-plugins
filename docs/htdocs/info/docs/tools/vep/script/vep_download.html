@@ -76,7 +76,7 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
 	
 	<ul>
     <li>Fixes and improvements for sequence retrieval from FASTA files</li>
-    <li>Wider plugin support</li>
+    <li>Plugin registry means plugins can be installed from the <a href="#installer">VEP installer</a></li>
 	</ul>
 	
 	<h4 id="history"> Previous version history: <a href="#history"
@@ -358,7 +358,8 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     using the VEP. It will download and configure a minimal set of the Ensembl
     API for use by the VEP, and can also download and configure <a
     href="vep_cache.html#cache">cache</a> and <a
-    href="vep_cache.html#fasta">FASTA</a> files for use by the VEP. </p>
+    href="vep_cache.html#fasta">FASTA</a> files for use by the VEP, as well
+    as <a href="vep_plugins.html">plugins</a>. </p>
 	
 	<p> To use the VEP in Windows, see the <a
 	href="#windows">instructions for Windows users</a> </p>
@@ -369,12 +370,12 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
 	retrieving cache files. The API set installed by the script is local to the
 	VEP, and will not affect any other Ensembl API installations. </p>
 	
-    <p> The installer script is also useful for users whose systems do not have
-    all the modules required by the VEP, specifically DBI and DBI::mysql. After
-    configuration using the installer, users can then use the VEP in <a
-    href="vep_cache.html#offline">offline mode</a> with a cache, eliminating
-    dependency on an Ensembl database (with <a
-    href="vep_cache.html#limitations">limitations</a>). </p>
+  <p> The installer script is also useful for users whose systems do not have
+  all the modules required by the VEP, specifically DBI and DBI::mysql. After
+  configuration using the installer, users can then use the VEP in <a
+  href="vep_cache.html#offline">offline mode</a> with a cache, eliminating
+  dependency on an Ensembl database (with <a
+  href="vep_cache.html#limitations">limitations</a>). </p>
 	
 	<h2 id="run_install">Running the installer</h2>
 	
@@ -400,9 +401,9 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
 			<td><pre>--AUTO</pre></td>
 			<td><pre>-a</pre></td>
             <td>Run installer without user prompts. Use a (API), c (cache),
-            f (FASTA) to specify parts to install e.g. "-a ac" for API and
+            f (FASTA), p (plugins) to specify parts to install e.g. "-a ac" for API and
             cache. You will also need to specify at least one species (see
-            below).
+            below), and a list of plugins if specified.
 			</td>
 		</tr>
 		<tr>
@@ -426,6 +427,15 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
         assembly available on each software release; currently this is only
         required for <a href="vep_other.html#assembly">human on release 76</a>
         onwards.
+			</td>
+		</tr>
+		<tr>
+			<td><pre>--PLUGINS</pre></td>
+			<td><pre>-g</pre></td>
+      <td>
+        Comma-separated list of plugins to install when using --AUTO. To
+        install all available plugins, use "--PLUGINS all". To list available
+        plugins, use "perl INSTALL.pl -a p --PLUGINS list".
 			</td>
 		</tr>
     <tr>
