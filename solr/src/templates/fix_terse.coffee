@@ -33,6 +33,8 @@ window.fixes.fix_terse =
       (data) ->
         data.tp2_row.register 100, () -> # Subtypes for doucmentation
           url = data.tp2_row.best('domain_url')
+          url = url.replace(/https?:\/\/.*?\//,'/')
+          data.tp2_row.candidate('id',url,500)
           if url
             data.tp2_row.candidate('subtype','ID',10)
             m = url.match /Help\/([a-zA-z]+)/
