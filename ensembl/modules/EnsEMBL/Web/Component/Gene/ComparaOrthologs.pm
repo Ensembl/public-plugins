@@ -85,6 +85,7 @@ sub _species_sets {
         $species_sets->{$ss_name}{$k} += $v;
       }
       $species_sets->{$ss_name}{'none'}++ if $no_ortho;
+      $species_sets->{$ss_name}{'all'}++ if $species ne $self->hub->species;
     }
     $sets_by_species->{$species} = $sets;
   }
