@@ -178,7 +178,7 @@ We can divide the fetching methods of the ObjectAdaptors into two categories: th
 </p>
 
 <pre class="code sh_perl">
-my $this_genome_db = $genome_db_adaptor-&gt;fetch_by_name_assembly("Homo sapiens", "NCBI36");
+my $this_genome_db = $genome_db_adaptor-&gt;fetch_by_name_assembly("Homo sapiens"); # If the assembly name is missing, will select the current one
 </pre>
 
 <pre class="code sh_perl">
