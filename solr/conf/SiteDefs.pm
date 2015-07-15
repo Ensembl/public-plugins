@@ -374,6 +374,10 @@ EOF
           url => "/{species}/Transcript/Sequence_cDNA?t={id}&db={database_type}",
           conditions => { "{feature_type}" => "^Transcript\$" }
         },
+        { title => "Exons",
+          url => "/{species}/Transcript/Exons?t={id}&db={database_type}",
+          conditions => { "{feature_type}" => "^Transcript\$" }
+        },
         { title => "Variation table",
           url => "/{species}/Transcript/Variation_Transcript/Table?t={id}&db={database_type}",
           conditions => { "{feature_type}" => "^Transcript\$" }
