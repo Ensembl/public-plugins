@@ -23,7 +23,7 @@
   </tr>
   <tr class="bg1">
    <td>Bos taurus</td>
-   <td class="right">66.7</td>
+   <td class="right">84.0</td>
   </tr>
   <tr class="bg2">
    <td>Caenorhabditis elegans</td>
@@ -59,7 +59,7 @@
   </tr>
   <tr class="bg2">
    <td>Danio rerio</td>
-   <td class="right">23.4</td>
+   <td class="right">23.6</td>
   </tr>
   <tr class="bg1">
    <td>Dasypus novemcinctus</td>
@@ -111,7 +111,7 @@
   </tr>
   <tr class="bg1">
    <td>Homo sapiens</td>
-   <td class="right">261.0</td>
+   <td class="right">261.5</td>
   </tr>
   <tr class="bg2">
    <td>Ictidomys tridecemlineatus</td>
@@ -131,7 +131,7 @@
   </tr>
   <tr class="bg2">
    <td>Macaca mulatta</td>
-   <td class="right">9.2</td>
+   <td class="right">9.1</td>
   </tr>
   <tr class="bg1">
    <td>Macropus eugenii</td>
@@ -143,7 +143,7 @@
   </tr>
   <tr class="bg1">
    <td>Microcebus murinus</td>
-   <td class="right">5.4</td>
+   <td class="right">5.9</td>
   </tr>
   <tr class="bg2">
    <td>Monodelphis domestica</td>
@@ -151,7 +151,7 @@
   </tr>
   <tr class="bg1">
    <td>Mus musculus</td>
-   <td class="right">100.6</td>
+   <td class="right">103.0</td>
   </tr>
   <tr class="bg2">
    <td>Mustela putorius</td>
@@ -191,7 +191,7 @@
   </tr>
   <tr class="bg1">
    <td>Ovis aries</td>
-   <td class="right">49.0</td>
+   <td class="right">48.8</td>
   </tr>
   <tr class="bg2">
    <td>Pan troglodytes</td>
@@ -215,7 +215,7 @@
   </tr>
   <tr class="bg1">
    <td>Pongo abelii</td>
-   <td class="right">13.7</td>
+   <td class="right">13.8</td>
   </tr>
   <tr class="bg2">
    <td>Procavia capensis</td>
@@ -267,7 +267,7 @@
   </tr>
   <tr class="bg2">
    <td>Tursiops truncatus</td>
-   <td class="right">6.2</td>
+   <td class="right">6.3</td>
   </tr>
   <tr class="bg1">
    <td>Vicugna pacos</td>
@@ -283,7 +283,7 @@
   </tr>
   <tr>
    <th>Sub-total</th>
-   <th class="right">1027.0</th>
+   <th class="right">1047.8</th>
   </tr>
 
   <tr>
@@ -300,11 +300,11 @@
   </tr>
   <tr class="bg2">
    <td>Compara</td>
-   <td class="right">273.0</td>
+   <td class="right">269.5</td>
   </tr>
   <tr class="bg1">
    <td>Mart</td>
-   <td class="right">894.8</td>
+   <td class="right">851.0</td>
   </tr>
   <tr class="bg2">
    <td>Ontology</td>
@@ -316,15 +316,15 @@
   </tr>
   <tr class="bg2">
    <td>Stable</td>
-   <td class="right">3.1</td>
+   <td class="right">3.2</td>
   </tr>
   <tr class="bg1">
    <td>Website</td>
-   <td class="right">0.2</td>
+   <td class="right">0.1</td>
   </tr>
   <tr>
    <th>Total</th>
-   <th class="right">2246.2</th>
+   <th class="right">2219.6</th>
   </tr>
  </tbody>
 </table>
