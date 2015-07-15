@@ -387,7 +387,7 @@ EOF
           url => "/{species}/Transcript/Population?t={id}&db={database_type}",
           conditions => { "{feature_type}" => "^Transcript\$" }
         },
-        { title => "Protein",
+        { title => "Protein summary",
           url => "/{species}/Transcript/ProteinSummary?t={id}&db={database_type}",
           conditions => { "{feature_type}" => "^Transcript\$" },
           result_condition => 'protein:1',
