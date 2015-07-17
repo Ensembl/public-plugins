@@ -2717,6 +2717,9 @@
             var ft, m, url;
             url = data.tp2_row.best('domain_url');
             url = url.replace(/https?:\/\/.*?\//, '/');
+            if (url !== '' && url[0] !== '/') {
+              url = '/' + url;
+            }
             data.tp2_row.candidate('url', url, 500);
             ft = data.tp2_row.best('feature_type');
             if (url) {
