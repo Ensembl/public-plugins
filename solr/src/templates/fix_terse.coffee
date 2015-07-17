@@ -34,12 +34,17 @@ window.fixes.fix_terse =
         data.tp2_row.register 100, () -> # Subtypes for doucmentation
           url = data.tp2_row.best('domain_url')
           url = url.replace(/https?:\/\/.*?\//,'/')
-          data.tp2_row.candidate('id',url,500)
+          data.tp2_row.candidate('url',url,500)
+          ft = data.tp2_row.best('feature_type')
           if url
             data.tp2_row.candidate('subtype','ID',10)
             m = url.match /Help\/([a-zA-z]+)/
             if m?
               data.tp2_row.candidate('subtype',m[1],100)
+
+        data.tp2_row.register 150, () -> # Better IDs for doucmentation
+          if data.tp2_row.best('feature_type') == 'Documentation'
+            data.tp2_row.candidate('id',data.tp2_row.best('url'),100)
 
         data.tp2_row.register 300, () -> # Overly terse titles
           ft = data.tp2_row.best('feature_type')

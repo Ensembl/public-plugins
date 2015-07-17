@@ -2714,16 +2714,22 @@
       global: [
         function(data) {
           data.tp2_row.register(100, function() {
-            var m, url;
+            var ft, m, url;
             url = data.tp2_row.best('domain_url');
             url = url.replace(/https?:\/\/.*?\//, '/');
-            data.tp2_row.candidate('id', url, 500);
+            data.tp2_row.candidate('url', url, 500);
+            ft = data.tp2_row.best('feature_type');
             if (url) {
               data.tp2_row.candidate('subtype', 'ID', 10);
               m = url.match(/Help\/([a-zA-z]+)/);
               if (m != null) {
                 return data.tp2_row.candidate('subtype', m[1], 100);
               }
+            }
+          });
+          data.tp2_row.register(150, function() {
+            if (data.tp2_row.best('feature_type') === 'Documentation') {
+              return data.tp2_row.candidate('id', data.tp2_row.best('url'), 100);
             }
           });
           data.tp2_row.register(300, function() {
