@@ -55,12 +55,12 @@ sub content_test {
   
   $self->id($self->id . 'Test');
   
-  return qq{
+  return qq(
     <div class="js_panel">
       <input type="hidden" class="panel_type" value="GenoverseTest" />
       <input type="hidden" class="static_image" value="$image_type->{'static'}" />
     </div>
-  };
+  );
 }
 
 sub new_image {
