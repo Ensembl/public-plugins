@@ -215,14 +215,14 @@ sub map_result_hits_to_karyotype {
       'end'       => $hit->{'gend'},
       'p_value'   => 1 + $hit->{'pident'} / 100,
       'strand'    => $hit->{'gori'},
-      'href'      => $hub->url('ZMenu', {
+      'href'      => {
         'species'   => $species,
-        'type'      => 'Tools',
-        'action'    => 'Blast',
-        'function'  => '',
+        'type'      => 'ZMenu',
+        'action'    => 'Tools',
+        'function'  => 'Blast',
         'tl'        => $self->create_url_param,
         'hit'       => $hit_id
-      }),
+      },
       'html_id'   => "hsp_$hit_id"
     };
 
