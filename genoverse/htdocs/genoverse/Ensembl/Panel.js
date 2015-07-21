@@ -278,10 +278,10 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
       if (label.find('.name').length) {
 
         label.on({
-          'mouseenter': function (e) {
-            $(this).addClass('_hover_active');
+          'mouseenter': function () {
+            $(this).addClass('_hover_active').find('._dyna_load').removeClass('_dyna_load').dynaLoad(); // dynaload any track description too
           },
-          'mouseleave': function (e) {
+          'mouseleave': function () {
             $(this).removeClass('_hover_active hover');
           }
         });
