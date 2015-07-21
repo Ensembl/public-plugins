@@ -331,7 +331,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
         'data'    : { id: seqId },
         'spinner' : true,
         'update'  : function(json) {
-          this.toggleSpinner(true, 'Searching ' + json[0] + ' databases&#8230;');
+          this.toggleSpinner(true, 'Fetching sequence&#8230;');
         }
       });
       return true;
