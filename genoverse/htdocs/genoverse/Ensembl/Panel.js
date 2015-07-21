@@ -264,13 +264,11 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
   
   makeHoverLabels: function () {
     var panel = this;
-    
+
     if (this.genoverse.failed) {
       return;
     }
-    
-    this.base();
-    
+
     this.elLk.drag.off();
     
     $.each(this.genoverse.tracks, function () {
@@ -278,7 +276,17 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
       var label = this.prop('label');
       
       if (label.find('.name').length) {
-        this.hoverLabel = panel.elLk.hoverLabels.filter('.' + Ensembl.species + '_' + this.id);
+
+        label.on({
+          'mouseenter': function (e) {
+            $(this).addClass('_hover_active');
+          },
+          'mouseleave': function (e) {
+            $(this).removeClass('_hover_active hover');
+          }
+        });
+
+        this.hoverLabel = panel.elLk.hoverLabels.filter(':not(.allocated).' + this.id).first().addClass('allocated').appendTo(label).css({ left : label.find('.name').width(), top: 0 });
         
         if (this.resizable === true) {
           this.hoverLabel.find('img.height').on('click', function () {
@@ -303,77 +311,21 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
         } else {
           this.hoverLabel.find('img.height').hide();
         }
-        
-        label.find('.name').on({
-          mouseover: function () {
-            var offset   = panel.genoverse.container.offset();
-            var position = $(this.parentNode).position();
-            
-            position.left += offset.left + $(this).position().left;
-            position.top  += offset.top  + panel.genoverse.labelContainer.position().top;
-            
-            if (!track.hoverLabel.hasClass('active')) {
-              panel.elLk.hoverLabels.filter('.active').removeClass('active');
-              track.hoverLabel.addClass('active');
-            }
-            
-            clearTimeout(panel.hoverTimeout);
-            
-            panel.hoverTimeout = setTimeout(function () {
-              panel.elLk.hoverLabels.filter(':visible').hide().end().filter('.active').css({
-                left    : position.left,
-                top     : position.top,
-                display : 'block'
-              });
-            }, 100);
-          },
-          mouseleave: function (e) {
-            if (e.relatedTarget) {
-              var active = panel.elLk.hoverLabels.filter('.active');
-              
-              if (!active.has(e.relatedTarget).length) {
-                active.removeClass('active').hide();
-              }
-              
-              active = null;
-            }
-          }
-        });
       }
-    });
-    
-    $('a.config', this.elLk.hoverLabels).off().on('click', function () {
-      var config = this.rel;
-      var update = this.href.split(';').reverse()[0].split('='); // update = [ trackName, renderer ]
-      var fav    = '';
-      
-      if ($(this).hasClass('favourite')) {
-        fav = $(this).hasClass('selected') ? 'off' : 'on';
-        Ensembl.EventManager.trigger('changeFavourite', update[0], fav === 'on');
-      } else {
-        $(this).parents('.hover_label').width(function (i, value) {
-          return value > 100 ? value : 100;
-        }).find('.spinner').show().siblings('div').hide();
-      }
-      
-      $.ajax({
-        url      : this.href + fav,
-        dataType : 'json',
-        context  : this,
-        success  : function (json) {
-          if (json.updated) {
-            Ensembl.EventManager.trigger('hideHoverLabels'); // Hide labels and z menus on other ImageMap panels
-            Ensembl.EventManager.triggerSpecific('changeConfiguration', 'modal_config_' + config, update[0], update[1]);
-            
-            panel.updateTrackRenderer(update[0], update[1]);
-          }
-        }
+
+      label.find('.name').on('mouseenter mouseleave', function(e) {
+        $(this).parent().toggleClass('hover', e.type === 'mouseenter' || !!$(this.parentNode).hasClass('_hover_active'));
       });
-      
-      return false;
     });
+
+    this.initHoverLabels();
   },
-  
+
+  changeConfiguration: function (config, trackName, renderer) {
+    Ensembl.EventManager.triggerSpecific('changeConfiguration', 'modal_config_' + config, trackName, renderer);
+    this.updateTrackRenderer(trackName, renderer);
+  },
+
   updateTrackRenderer: function (trackName, renderer) {
     var track      = this.genoverse.tracksById[trackName];
     var otherTrack = track.prop('reverseTrack') || track.prop('forwardTrack');
