@@ -187,4 +187,16 @@ sub render_toolbar {
   return ($top, $bottom);
 }
 
+sub hover_label_tabs {
+  my $self  = shift;
+  my $label = $_[0];
+
+  my ($buttons, $contents) = $self->SUPER::hover_label_tabs(@_);
+
+  splice @$buttons, -3, 0, sprintf(qq(<div class="_hl_icon hl-icon _track_height"><a href="#height" class="height" rel="$label->{'component'}"></a></div>));
+  splice @$contents, -3, 0, qq(<div class="_hl_tab hl-tab _track_height"><p>Click on the icon to set track height to <span class="fixed_height">auto-adjust</span><span class="auto_height">fixed</span></p></div>);
+
+  return ($buttons, $contents);
+}
+
 1;

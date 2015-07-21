@@ -99,7 +99,7 @@ Genoverse.Track = Genoverse.Track.extend({
     var hoverLabel = this.prop('hoverLabel');
     
     if (hoverLabel) {
-      hoverLabel.children('.height')[this.prop('autoHeight') ? 'addClass' : 'removeClass']('auto_height');
+      hoverLabel.find('div._track_height').toggleClass('auto_height', this.prop('autoHeight'));
     }
     
     hoverLabel = null;

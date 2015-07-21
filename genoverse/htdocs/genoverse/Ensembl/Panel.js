@@ -289,27 +289,28 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
         this.hoverLabel = panel.elLk.hoverLabels.filter(':not(.allocated).' + this.id).first().addClass('allocated').appendTo(label).css({ left : label.find('.name').width(), top: 0 });
         
         if (this.resizable === true) {
-          this.hoverLabel.find('img.height').on('click', function () {
+          this.hoverLabel.find('a.height').on('click', function (e) {
+
+            e.preventDefault();
+
             var height;
-            
+
             if ((track.autoHeight = !track.autoHeight)) {
               track.heightBeforeToggle = track.height;
               height = track.prop('fullVisibleHeight');
             } else {
               height = track.heightBeforeToggle || track.initialHeight;
             }
-            
-            $(this).toggleClass('auto_height').children(':visible').hide().siblings().show();
-            
+
             track.controller.resize(height, true);
             track.updateHeightToggler();
           });
-          
+
           if (this.autoHeight) {
             this.updateHeightToggler();
           }
         } else {
-          this.hoverLabel.find('img.height').hide();
+          this.hoverLabel.find('._track_height').remove();
         }
       }
 

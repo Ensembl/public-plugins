@@ -110,12 +110,11 @@ body.mac .canvas_container .label_container li .handle   { cursor: ns-resize; }
 
 .canvas .image_toolbar .genoverse_controls               { display: block; }
 
-.hover_label img.height                                  { height: 16px; width: 16px; display: inline-block; background: url(/i/controls_white.png) no-repeat -34px 0; cursor: pointer; }
-.hover_label img.height.auto_height                      { background-position: -34px -18px; }
-.hover_label div.height .auto,
-.hover_label div.height.auto_height .fixed               { display: inherit!important; }
-.hover_label div.height .fixed,
-.hover_label div.height.auto_height .auto                { display: none!important; }
+.hover_label a.height                                    { height: 16px; width: 16px; display: inline-block; background: url(/i/controls_genoverse.png) no-repeat -34px 0; cursor: pointer; }
+.hover_label div.auto_height a.height                    { background-position: -34px -18px; }
+.hover_label div span.auto_height,
+.hover_label div.auto_height span.fixed_height           { display: none; }
+.hover_label div.auto_height span.auto_height            { display: inline; }
 
 .canvas_zoom                                             { position: absolute; display: none; z-index: 20; }
 .canvas_zoom.i                                           { height: 40px; width: 40px; }
