@@ -22,7 +22,7 @@ use strict;
 
 use JSON qw(to_json);
 
-use parent qw(EnsEMBL::Web::Document::Image);
+use parent qw(EnsEMBL::Web::Document::Image::GD);
 
 sub new {
   my ($class, $args) = @_;
@@ -185,61 +185,6 @@ sub render_toolbar {
   $_     .= $controls for grep $_, $top, $bottom;
   
   return ($top, $bottom);
-}
-
-sub hover_labels {
-  my $self    = shift;
-  my %filters = map { $_ => 1 } @_;
-  my $img_url = $self->{'species_defs'}->img_url;
-  my @labels  = values %{$self->{'image_config'}{'hover_labels'} || {}};
-     @labels  = grep $filters{$_->{'class'}}, @labels if scalar keys %filters;
-  my ($html, %done);
-  
-  foreach my $label (@labels) {
-    next if $done{$label->{'class'}};
-    
-    my $desc = join '', map "<p>$_</p>", split /; /, $label->{'desc'};
-    my $renderers;
-    
-    foreach (@{$label->{'renderers'}}) {
-      $renderers .= sprintf(qq(
-        <li class="$_->{'val'}%s">
-          <a href="$_->{'url'}" class="config constant" rel="$label->{'component'}">
-            <img src="${img_url}render/$_->{'val'}.gif" alt="$_->{'text'}" title="$_->{'text'}" />%s $_->{'text'}
-          </a>
-        </li>),
-        $_->{'current'} ? (' current', qq(<img src="${img_url}tick.png" class="tick" alt="Selected" title="Selected" />)) : ('', '')
-      );
-    }
-    
-    $html .= sprintf(qq(
-      <div class="hover_label floating_popup %s">
-        <p class="header">%s</p>
-        %s
-        %s
-        <img class="height" src="${img_url}blank.gif" alt="Height" title="" />
-        %s
-        <a href="$label->{'fav'}[1]" class="config constant favourite%s" rel="$label->{'component'}" title="Favourite track"></a>
-        <a href="$label->{'off'}" class="config constant" rel="$label->{'component'}"><img src="${img_url}16/cross.png" alt="Turn track off" title="Turn track off" /></a>
-        <div class="desc">%s</div>
-        <div class="config">%s</div>
-        <div class="height"><p class="auto">Set track to auto-adjust height</p><p class="fixed">Set track to fixed height</p></div>
-        <div class="url">%s</div>
-        <div class="spinner"></div>
-      </div>),
-      $label->{'class'},
-      $label->{'header'},
-      $label->{'desc'}     ? qq(<img class="desc" src="${img_url}16/info.png" alt="Info" title="Info" />)                                  : '',
-      $renderers           ? qq(<img class="config" src="${img_url}16/setting.png" alt="Change track style" title="Change track style" />) : '',
-      $label->{'conf_url'} ? qq(<img class="url" src="${img_url}16/link.png" alt="Link" title="URL to turn this track on" />)              : '',
-      $label->{'fav'}[0]   ? ' selected' : '',
-      $desc,
-      $renderers           ? qq(<p>Change track style:</p><ul>$renderers</ul>)                                                : '',
-      $label->{'conf_url'} ? qq(<p>Copy <a href="$label->{'conf_url'}">this link</a> to force this track to be turned on</p>) : ''
-    );
-  }
-  
-  return $html;
 }
 
 1;
