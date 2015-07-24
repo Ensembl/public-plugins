@@ -101,7 +101,7 @@ Ensembl.Panel.TextSequence = Ensembl.Panel.TextSequence.extend({
     }
 
     // sequence is possibly missing some bps if it contains dots
-    if (seq.match(/^\.+/)) {
+    if (seq && seq.match(/^\.+/)) {
       seq = '';
     }
 
