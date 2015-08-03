@@ -53,7 +53,6 @@ sub update_conf {
     Account         => 'Modal',
   };
 
-  $SiteDefs::ENSEMBL_BLAST_ENABLED  = 0;
   $SiteDefs::ENSEMBL_MART_ENABLED   = 0;
   $SiteDefs::ENSEMBL_MEMCACHED      = {};
 
