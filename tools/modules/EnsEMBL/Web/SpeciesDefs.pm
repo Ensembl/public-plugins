@@ -30,6 +30,27 @@ sub new {
   return $self;
 }
 
+sub tools_list {
+  ## Return a list of all tools that are enabled
+  ## @return Disguised hash in an array syntax (to maintain order) with keys as name of the tool and value as caption
+  my $self  = shift;
+  my @list  = @{$self->ENSEMBL_TOOLS_LIST};
+
+  for (0..$#list) {
+    next if $_ % 2;
+    if (
+      ($list[$_] eq 'Blast'             && !$self->ENSEMBL_BLAST_ENABLED) ||
+      ($list[$_] eq 'VEP'               && !$self->ENSEMBL_VEP_ENABLED) ||
+      ($list[$_] eq 'AssemblyConverter' && !$self->ENSEMBL_AC_ENABLED)
+    ) {
+      $list[$_]   = undef;
+      $list[$_+1] = undef;
+    }
+  }
+
+  return grep $_, @list;
+}
+
 sub tools_valid_species {
   ## Return a list of all valid species for tool
   ## If list of species is provided as argument, it returns the valid ones among the list

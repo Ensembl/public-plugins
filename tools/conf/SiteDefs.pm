@@ -28,7 +28,7 @@ sub update_conf {
   # Database key name for tools db as defined in MULTI.ini
   $SiteDefs::ENSEMBL_ORM_DATABASES->{'ticket'} = 'DATABASE_WEB_TOOLS';
 
-  # Entries as added to the tools db ticket_type_name table
+  # Entries as added to the tools db ticket_type_name table (only edit this in plugins if new tool is being added)
   $SiteDefs::ENSEMBL_TOOLS_LIST = [ 'Blast' => 'BLAST/BLAT', 'VEP' => 'Variant Effect Predictor', 'AssemblyConverter' => 'Assembly Converter' ];
 
   # Which dispatcher to be used for the jobs (provide the appropriate values in your plugins)

@@ -89,7 +89,7 @@ sub dropdown {
   }
 
   my $tools_divs = {};
-  my @tool_types = @{$sd->ENSEMBL_TOOLS_LIST};
+  my @tool_types = $sd->tools_list;
 
   for (@tool_types) {
     while (my ($key, $caption) = splice @tool_types, 0, 2) {

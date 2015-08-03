@@ -109,7 +109,7 @@ sub get_tool_caption {
 
   $tool_type      ||= $self->tool_type;
   my $sd            = $self->hub->species_defs;
-  my @ticket_types  = @{$sd->ENSEMBL_TOOLS_LIST};
+  my @ticket_types  = $sd->tools_list;
 
   for (@ticket_types) {
     while (my ($key, $caption) = splice @ticket_types, 0, 2) {

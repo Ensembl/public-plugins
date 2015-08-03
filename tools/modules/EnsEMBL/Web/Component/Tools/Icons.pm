@@ -32,7 +32,7 @@ sub _init {
 sub content {
   my $self        = shift;
   my $hub         = $self->hub;
-  my @tool_types  = @{$hub->species_defs->ENSEMBL_TOOLS_LIST};
+  my @tool_types  = $hub->species_defs->tools_list;
   my $html        = '';
 
   for (@tool_types) {
