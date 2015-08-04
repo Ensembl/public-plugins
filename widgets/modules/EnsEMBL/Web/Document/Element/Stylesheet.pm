@@ -38,8 +38,8 @@ sub content {
 
   $main_css .=  qq{
     <link rel="stylesheet" type="text/css" href="$SiteDefs::GXA_EBI_URL/css/atlas.css">
-    <link rel="stylesheet" type="text/css" href="$SiteDefs::GXA_EBI_URL/css/table-grid.css">
-    <link rel="stylesheet" type="text/css" href="$SiteDefs::GXA_EBI_URL/css/heatmap-and-anatomogram.css">
+    <link rel="stylesheet" type="text/css" href="$SiteDefs::GXA_EBI_URL/widget/201507/css/table-grid.css">
+    <link rel="stylesheet" type="text/css" href="$SiteDefs::GXA_EBI_URL/widget/201507/css/heatmap-and-anatomogram.css">
     <link rel="stylesheet" type="text/css" href="$SiteDefs::GXA_EBI_URL/js/lib/jquery-ui-1.11.4.custom/jquery-ui.min.css">
     <link rel="stylesheet" type="text/css" href="$static_server/widgets/90_GXA.css"> 
   };
