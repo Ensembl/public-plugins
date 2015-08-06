@@ -779,7 +779,7 @@ sub linkify {
   }
 
   # HGVS
-  elsif($field =~ /^hgvs/i && $value =~ /\w+/) {
+  elsif($field =~ /^(hgvs|csn)/i && $value =~ /\w+/) {
     $new_value = uri_unescape($value);
   }
 
