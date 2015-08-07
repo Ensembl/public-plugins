@@ -183,19 +183,29 @@ sub ajax_processingtime_tools_stats {
     return;
   }
 
+  # filter out some values so we only send a maximum of 1000 values per graph
   my @data      = map { $_->[0] } @$all_rows;
-  my $set_size  = 1 + sprintf '%d', @data / 1000; # don't need more than 1000 points on the graph
-
+  my $set_size  = 1 + sprintf '%d', @data / 1000;
   my @sampled_data;
-
   while (1) {
     last if @data < $set_size;
     my @set = splice @data, 0, $set_size;
     unshift @sampled_data, sprintf '%d', sum(@set) / $set_size / 1000; # 1000 is for msec to sec
   }
 
+  # group the same values
+  my @grouped_data;
+  while (@sampled_data) {
+    my $last_val = shift @sampled_data;
+    my $counter  = 1;
+    while (@sampled_data && $last_val eq $sampled_data[0]) {
+      shift @sampled_data;
+      $counter++;
+    }
+    push @grouped_data, $counter == 1 ? $last_val : [ $last_val, $counter ];
+  }
 
-  print to_json({data => \@sampled_data, offset => $from_time, setsize => $set_size});
+  print to_json({data => \@grouped_data, offset => $from_time, setsize => $set_size});
 }
 
 1;
