@@ -24,37 +24,49 @@ use warnings;
 use DBI;
 use JSON qw(to_json);
 use POSIX qw(strftime);
-use Date::Parse;
+use Date::Parse; # for str2time
+use List::Util qw(sum);
 
-sub ajax_tools_stats {
-  my ($self, $hub) = @_;
+use previous qw(process);
 
-  my $species_defs  = $hub->species_defs;
-  my $db_confs      = $species_defs->multidb->{'DATABASE_WEB_HIVE'};
+sub process {
+  my $self  = shift;
+  my $hub   = $self->hub;
+  my $sd    = $hub->species_defs;
 
-  # user authorisation
-  if (!$hub->user->is_member_of($species_defs->ENSEMBL_WEBADMIN_ID)) {
+  if (!$hub->user->is_member_of($sd->ENSEMBL_WEBADMIN_ID)) {
     print to_json({error => 'You are not authorised to view this data.'});
     return;
   }
 
-  # if DB is not configured
-  if (!$db_confs) {
-    print to_json({error => 'No database found for DATABASE_WEB_HIVE'});
-    return;
+  if ($hub->action =~ /tools_stats/) {
+    my $db_confs = $sd->multidb->{'DATABASE_WEB_HIVE'};
+
+    # if DB is not configured
+    if (!$db_confs) {
+      print to_json({error => 'No database found for DATABASE_WEB_HIVE'});
+      return;
+    }
+
+    $self->{'hive_dbh'} = DBI->connect(
+      "dbi:$db_confs->{'DRIVER'}:database=$db_confs->{'NAME'};host=$db_confs->{'HOST'};port=$db_confs->{'PORT'}",
+      $db_confs->{'USER'},
+      $db_confs->{'PASS'} || $sd->DATABASE_WRITE_PASS
+    );
+
+    # if could not connect to DB
+    if (!$self->{'hive_dbh'}) {
+      print to_json({error => 'Could not connect to database DATABASE_WEB_HIVE'});
+      return;
+    }
   }
 
-  my $dbh = DBI->connect(
-    "dbi:$db_confs->{'DRIVER'}:database=$db_confs->{'NAME'};host=$db_confs->{'HOST'};port=$db_confs->{'PORT'}",
-    $db_confs->{'USER'},
-    $db_confs->{'PASS'} || $species_defs->DATABASE_WRITE_PASS
-  );
+  $self->PREV::process(@_);
+}
 
-  # if could not connect to DB
-  if (!$dbh) {
-    print to_json({error => 'Could not connect to database DATABASE_WEB_HIVE'});
-    return;
-  }
+sub ajax_waittime_tools_stats {
+  my $self  = shift;
+  my $hub   = $self->hub;
 
   # Tools type
   my $type = $hub->param('type') || 'Blast';
@@ -71,7 +83,7 @@ sub ajax_tools_stats {
   }
 
   # Get type from DB
-  my $type_row = $dbh->selectall_arrayref("select `analysis_id` from `analysis_base` where `logic_name` = '$type' limit 1");
+  my $type_row = $self->{'hive_dbh'}->selectall_arrayref("select `analysis_id` from `analysis_base` where `logic_name` = '$type' limit 1");
   if (!@$type_row) {
     print to_json({error => "Type not found: $type"});
     return;
@@ -83,7 +95,7 @@ sub ajax_tools_stats {
   ($to_time, $from_time) = map strftime("%Y-%m-%d %H:%M:%S", localtime($_)), $to_time, $from_time;
 
   # get all data
-  my $all_rows = $dbh->selectall_arrayref("select `time`, `ready_job_count` from `analysis_stats_monitor` where `time` > '$from_time' and `time` < '$to_time' and `analysis_id` = $type_row order by `time` asc");
+  my $all_rows = $self->{'hive_dbh'}->selectall_arrayref("select `time`, `ready_job_count` from `analysis_stats_monitor` where `time` > '$from_time' and `time` < '$to_time' and `analysis_id` = $type_row order by `time` asc");
   if (!@$all_rows) {
     print to_json({error => "No data found for the given time"});
     return;
@@ -96,6 +108,94 @@ sub ajax_tools_stats {
   my %data = map { $_->[0] => $_->[1] } @$all_rows;
 
   print to_json({data => \%data, offset => $from_time});
+}
+
+sub ajax_processingtime_tools_stats {
+  my $self  = shift;
+  my $hub   = $self->hub;
+
+  # Tools type
+  my $type = $hub->param('type') || 'BLASTN';
+  if ($type !~ /^\w+$/) {
+    print to_json({error => "Invalid type: $type"});
+    return;
+  }
+
+  # Time to which graph is to be displayed
+  my $to_time = $hub->param('at') || time;
+  if ($to_time !~ /^\d+$/) {
+    print to_json({error => "Invalid time format: $to_time"});
+    return;
+  }
+
+  # Get type from DB
+  my $type_row = $self->{'hive_dbh'}->selectall_arrayref(sprintf "select `analysis_id` from `analysis_base` where `logic_name` = '%s' limit 1", $type =~ /BLAST/ ? 'Blast' : $type);
+  if (!@$type_row || ($type =~ /BLAST/ && !{ map { $_ => 1 } qw(BLASTN BLASTP BLASTX TBLASTN TBLASTX) }->{$type})) {
+    print to_json({error => "Type not found: $type"});
+    return;
+  }
+  $type_row = $type_row->[0][0];
+
+  # Get from and to time stamps
+  my $from_time = $to_time - 3600 * 24;
+  ($to_time, $from_time) = map strftime("%Y-%m-%d %H:%M:%S", localtime($_)), $to_time, $from_time;
+
+  my $sql;
+  if ($type =~ /BLAST/) {
+    $sql = sprintf q{
+            SELECT
+              `job`.`runtime_msec` AS `runtime`,
+              SUBSTRING_INDEX(SUBSTRING_INDEX(`analysis_data`.`data`, '"program" => "', -1), '"', 1) AS `tool_type`
+            FROM
+              `job`,
+              `analysis_data`
+            WHERE
+              `job`.`analysis_id` = %d AND
+              `job`.`status` = 'DONE' AND
+              `job`.`job_id` = `analysis_data`.`analysis_data_id` AND
+              `job`.`completed` > '%s' and `job`.`completed` < '%s'
+            HAVING
+              `tool_type` = '%s'
+            ORDER BY
+              `runtime` DESC
+          }, $type_row, $from_time, $to_time, lc $type;
+  } else {
+    $sql = sprintf q{
+            SELECT
+              `job`.`runtime_msec` AS `runtime`,
+              `analysis_base`.`logic_name` AS `tool_type`
+            FROM
+              `job`, `analysis_base`
+            WHERE
+              `job`.`analysis_id` = %d AND
+              `job`.`analysis_id` = `analysis_base`.`analysis_id` AND
+              `job`.`status` = 'DONE' AND
+              `job`.`completed` > '%s' and `job`.`completed` < '%s'
+            ORDER BY
+              `runtime` DESC
+          }, $type_row, $from_time, $to_time;
+  }
+
+  my $all_rows = $self->{'hive_dbh'}->selectall_arrayref($sql);
+
+  if (!@$all_rows) {
+    print to_json({error => "No data found for the given time"});
+    return;
+  }
+
+  my @data      = map { $_->[0] } @$all_rows;
+  my $set_size  = 1 + sprintf '%d', @data / 1000; # don't need more than 1000 points on the graph
+
+  my @sampled_data;
+
+  while (1) {
+    last if @data < $set_size;
+    my @set = splice @data, 0, $set_size;
+    unshift @sampled_data, sprintf '%d', sum(@set) / $set_size / 1000; # 1000 is for msec to sec
+  }
+
+
+  print to_json({data => \@sampled_data, offset => $from_time, setsize => $set_size});
 }
 
 1;

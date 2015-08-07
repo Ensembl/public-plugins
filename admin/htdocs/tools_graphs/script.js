@@ -15,7 +15,7 @@
  */
 
 window.onload = function() {
-  loadCascaded(['/highcharts/highcharts.js', '/highcharts/exporting.js', function() { initGraphs(); }]);
+  loadCascaded(['/highcharts/highcharts.js', '/highcharts/exporting.js', function() { initWaitTimeGraphs(); initProcessingTimeGraphs(); }]);
 }
 
 function loadCascaded(codes) {
@@ -34,16 +34,23 @@ function loadCascaded(codes) {
   });
 }
 
-function initGraphs() {
+function initWaitTimeGraphs() {
   var types = ['Blast', 'Blat', 'VEP'];
   for (var i in types) {
-    loadCascaded(['/Ajax/tools_stats?type=' + types[i], function(t) { return function() { displayGraph($.extend({type: t}, arguments[0])); } }(types[i])]);
+    loadCascaded(['/Ajax/waittime_tools_stats?type=' + types[i], function(t) { return function() { displayWaitTimeGraph($.extend({type: t}, arguments[0])); } }(types[i])]);
   }
 }
 
-function displayGraph(json) {
+function initProcessingTimeGraphs() {
+  var types = ['BLASTN', 'BLASTP', 'BLASTX', 'TBLASTN', 'TBLASTX', 'Blat', 'VEP'];
+  for (var i in types) {
+    loadCascaded(['/Ajax/processingtime_tools_stats?type=' + types[i], function(t) { return function() { displayProcessingTimeGraph($.extend({type: t}, arguments[0])); } }(types[i])]);
+  }
+}
 
-  var container = $('._tools_graph_' + json.type);
+function displayWaitTimeGraph(json) {
+
+  var container = $('._waittime_graph_' + json.type).find('div').first();
 
   if (json.error) {
     container.html('<div class="error"><h3>Data error</h3><div class="message-pad"><p>' + json.error + '</p></div></div>');
@@ -63,7 +70,7 @@ function displayGraph(json) {
       zoomType: 'x'
     },
     title: {
-      text: json.type.toUpperCase() + ' jobs',
+      text: null,
     },
     subtitle: {
       text: 'Number of jobs waiting in the queue',
@@ -109,6 +116,82 @@ function displayGraph(json) {
       pointInterval: 1000, // one second
       pointStart: json.offset * 1000, // 24 hours
       data: data
+    }]
+  });
+
+  data = json = null;
+}
+
+function displayProcessingTimeGraph(json) {
+
+  var container = $('._processingtime_graph_' + json.type).find('div').first();
+
+  if (json.error) {
+    container.html('<div class="error"><h3>Data error</h3><div class="message-pad"><p>' + json.error + '</p></div></div>');
+    return;
+  }
+
+  var data = [];
+  for (var i = 0; i < json.data.length; i++) {
+    data.push([i, parseInt(json.data[i])]);
+  }
+
+  container.highcharts({
+    chart: {
+      zoomType: 'x'
+    },
+    title: {
+      text: null,
+    },
+    subtitle: {
+      text: 'Processing time for ' + json.type.toUpperCase() + ' jobs (' + (json.setsize === 1 ? '1 job' : 'Set of ' + json.setsize + ' jobs') + ' at a point)',
+    },
+    xAxis: {
+      allowDecimals: false,
+    },
+    yAxis: {
+      title: {
+        text: 'Time taken'
+      },
+      formatter: function() {
+        return this.value / 1000;
+      }
+    },
+    legend: {
+      enabled: false
+    },
+    plotOptions: {
+      area: {
+        fillColor: {
+          linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1},
+          stops: [
+            [0, Highcharts.getOptions().colors[0]],
+            [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+          ]
+        },
+        marker: {
+          radius: 2
+        },
+        lineWidth: 1,
+        states: {
+          hover: {
+            lineWidth: 1
+          }
+        },
+        threshold: null
+      }
+    },
+
+    series: [{
+      type: 'area',
+      pointInterval: 1,
+      pointStart: 1,
+      data: data,
+      tooltip: {
+        pointFormatter: function () {
+          return 'Processing time: ' + (this.y < 3600 ? this.y < 60 ? this.y + ' seconds' : Math.round(this.y/60) + ' minutes' : Math.round(this.y/3600) + ' hours');
+        }
+      }
     }]
   });
 
