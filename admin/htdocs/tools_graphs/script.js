@@ -63,7 +63,17 @@ ToolsGraphs = {
     });
 
     this.contents.find('form._form').find('._datepicker').each(function () {
-      this.value  = $.datepicker.formatDate(ToolsGraphs.dateFormat, this.name === 'to' ? new Date(new Date().setDate(new Date().getDate() + 1)) : new Date())
+      var urlParams = {};
+      $.each(window.location.hash.substr(1).split(/\;|\&/), function (i, val) {
+        if (!val) {
+          return true;
+        }
+        val = val.split('=');
+        urlParams[val.shift()] = val.join('=');
+        return true;
+      });
+
+      this.value = urlParams[this.name] || $.datepicker.formatDate(ToolsGraphs.dateFormat, this.name === 'to' ? new Date(new Date().setDate(new Date().getDate() + 1)) : new Date());
     })
     .datepicker({ dateFormat: this.dateFormat }).end().on('submit', function (e) {
       e.preventDefault();
@@ -93,11 +103,15 @@ ToolsGraphs = {
 
       ToolsGraphs.loadedGraph[type] = true;
 
-      var data = {};
+      var data  = {};
+      var hash  = {};
 
       ToolsGraphs.contents.filter('._content_' + type).find('._datepicker').each(function () {
         data[this.name] = $.datepicker.formatDate('@', $.datepicker.parseDate(ToolsGraphs.dateFormat, this.value)) / 1000;
+        hash[this.name] = this.value;
       });
+
+      Ensembl.updateURL(hash);
 
       $.each(ToolsGraphs.graphDivs[type], function (toolType, el) {
         loadCascaded(['/Ajax/' + type + 'time_tools_stats?type=' + toolType, data, function(t1, t2) { return function() {
