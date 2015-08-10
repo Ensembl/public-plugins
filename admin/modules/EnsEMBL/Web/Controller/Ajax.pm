@@ -187,8 +187,7 @@ sub ajax_processingtime_tools_stats {
   my @data      = map { $_->[0] } @$all_rows;
   my $set_size  = 1 + sprintf '%d', @data / 1000;
   my @sampled_data;
-  while (1) {
-    last if @data < $set_size;
+  while (@data >= $set_size) {
     my @set = splice @data, 0, $set_size;
     unshift @sampled_data, sprintf '%d', sum(@set) / $set_size / 1000; # 1000 is for msec to sec
   }
@@ -196,9 +195,9 @@ sub ajax_processingtime_tools_stats {
   # group the same values
   my @grouped_data;
   while (@sampled_data) {
-    my $last_val = shift @sampled_data;
+    my $last_val = int shift @sampled_data;
     my $counter  = 1;
-    while (@sampled_data && $last_val eq $sampled_data[0]) {
+    while (@sampled_data && $last_val == $sampled_data[0]) {
       shift @sampled_data;
       $counter++;
     }
