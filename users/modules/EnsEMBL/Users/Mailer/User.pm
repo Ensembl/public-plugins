@@ -258,7 +258,12 @@ sub send_group_invitation_email_to_existing_user {
   my $url         = $self->url({
     'species'       => '',
     'type'          => 'Account',
-    'action'        => 'Preferences'
+    'action'        => 'Login',
+    'then'          => $hub->url({
+      'species'      => '',
+      'type'         => 'Account',
+      'action'       => 'Preferences'
+    })
   });
   my $to_name     = $invitee->name;
   my $user        = $self->hub->user;
