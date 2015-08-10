@@ -259,7 +259,7 @@ sub send_group_invitation_email_to_existing_user {
     'species'       => '',
     'type'          => 'Account',
     'action'        => 'Login',
-    'then'          => $hub->url({
+    'then'          => $self->hub->url({
       'species'      => '',
       'type'         => 'Account',
       'action'       => 'Preferences'
