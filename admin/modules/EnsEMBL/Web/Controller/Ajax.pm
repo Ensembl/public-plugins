@@ -121,12 +121,19 @@ sub ajax_processingtime_tools_stats {
     return;
   }
 
-  # Time to which graph is to be displayed
-  my $to_time = $hub->param('at') || time;
+  # Get from and to time stamps
+  my $from_time = $hub->param('from');
+  my $to_time   = $hub->param('to');
+  if ($from_time !~ /^\d+$/) {
+    print to_json({error => "Invalid time format: $from_time"});
+    return;
+  }
   if ($to_time !~ /^\d+$/) {
     print to_json({error => "Invalid time format: $to_time"});
     return;
   }
+
+  ($to_time, $from_time) = map strftime("%Y-%m-%d %H:%M:%S", localtime($_)), $to_time, $from_time;
 
   # Get type from DB
   my $type_row = $self->{'hive_dbh'}->selectall_arrayref(sprintf "select `analysis_id` from `analysis_base` where `logic_name` = '%s' limit 1", $type =~ /BLAST/ ? 'Blast' : $type);
@@ -135,10 +142,6 @@ sub ajax_processingtime_tools_stats {
     return;
   }
   $type_row = $type_row->[0][0];
-
-  # Get from and to time stamps
-  my $from_time = $to_time - 3600 * 24;
-  ($to_time, $from_time) = map strftime("%Y-%m-%d %H:%M:%S", localtime($_)), $to_time, $from_time;
 
   my $sql;
   if ($type =~ /BLAST/) {
@@ -204,7 +207,7 @@ sub ajax_processingtime_tools_stats {
     push @grouped_data, $counter == 1 ? $last_val : [ $last_val, $counter ];
   }
 
-  print to_json({data => \@grouped_data, offset => $from_time, setsize => $set_size});
+  print to_json({data => \@grouped_data, from => str2time($from_time), to => str2time($to_time), setsize => $set_size});
 }
 
 1;

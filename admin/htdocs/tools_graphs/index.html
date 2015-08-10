@@ -2,19 +2,41 @@
 <head>
 <title>Tools Stats</title>
 <script type="text/javascript" src="/tools_graphs/script.js"></script>
+<style type="text/css" src="/tools_graphs/style.css"></style>
 </head>
 <body>
-<h1>Queues waiting time</h1>
-<div class="_waittime_graph_Blast bottom-margin"><h2>BLAST jobs</h2><div>Loading BLAST...</div></div>
-<div class="_waittime_graph_Blat bottom-margin"><h2>BLAT jobs</h2><div>Loading BLAT...</div></div>
-<div class="_waittime_graph_VEP bottom-margin"><h2>VEP jobs</h2><div>Loading VEP...</div></div>
-<h1>Overall jobs processing time</h1>
-<div class="_processingtime_graph_BLASTN bottom-margin"><h2>BLASTN jobs</h2><div>Loading BLASTN...</div></div>
-<div class="_processingtime_graph_BLASTP bottom-margin"><h2>BLASTP jobs</h2><div>Loading BLASTP...</div></div>
-<div class="_processingtime_graph_BLASTX bottom-margin"><h2>BLASTX jobs</h2><div>Loading BLASTX...</div></div>
-<div class="_processingtime_graph_TBLASTN bottom-margin"><h2>TBLASTN jobs</h2><div>Loading TBLASTN...</div></div>
-<div class="_processingtime_graph_TBLASTX bottom-margin"><h2>TBLASTX jobs</h2><div>Loading TBLASTX...</div></div>
-<div class="_processingtime_graph_Blat bottom-margin"><h2>BLAT jobs</h2><div>Loading BLAT...</div></div>
-<div class="_processingtime_graph_VEP bottom-margin"><h2>VEP jobs</h2><div>Loading VEP...</div></div>
+<div class="tabs">
+  <div class="_tab active">Processing time</div>
+  <div class="_tab">Wait time</div>
+</div>
+<div class="content _content _content_processing active">
+<h1>Jobs processing time</h1>
+<div class="bottom-margin">
+  <form class="_form" action="#">From
+    <input name="from" class="_datepicker" type="text" /> to
+    <input name="to" class="_datepicker" type="text" />
+    <input type="submit" value="Go" />
+  </form>
+</div>
+<div class="_graph_BLASTN bottom-margin"><h2>BLASTN jobs</h2><div>Loading BLASTN...</div></div>
+<div class="_graph_BLASTP bottom-margin"><h2>BLASTP jobs</h2><div>Loading BLASTP...</div></div>
+<div class="_graph_BLASTX bottom-margin"><h2>BLASTX jobs</h2><div>Loading BLASTX...</div></div>
+<div class="_graph_TBLASTN bottom-margin"><h2>TBLASTN jobs</h2><div>Loading TBLASTN...</div></div>
+<div class="_graph_TBLASTX bottom-margin"><h2>TBLASTX jobs</h2><div>Loading TBLASTX...</div></div>
+<div class="_graph_Blat bottom-margin"><h2>BLAT jobs</h2><div>Loading BLAT...</div></div>
+<div class="_graph_VEP bottom-margin"><h2>VEP jobs</h2><div>Loading VEP...</div></div>
+</div>
+<div class="content _content _content_wait">
+<h1>Queues wait time (24 hours view)</h1>
+<div>
+  <form class="_form" action="#">24 hours prior to
+    <input name="at" class="_datepicker" type="text" />
+    <input type="submit" value="Go" />
+  </form>
+</div>
+<div class="_graph_Blast bottom-margin"><h2>BLAST jobs</h2><div>Loading BLAST...</div></div>
+<div class="_graph_Blat bottom-margin"><h2>BLAT jobs</h2><div>Loading BLAT...</div></div>
+<div class="_graph_VEP bottom-margin"><h2>VEP jobs</h2><div>Loading VEP...</div></div>
+</div>
 </body>
 </html>
