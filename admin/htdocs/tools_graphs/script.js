@@ -144,7 +144,7 @@ ToolsGraphs.displayWaitTimeGraph = function(json) {
 //    }
   }
 
-  container.before('<h2 class="_subhead top-margin">From ' + unixTimeToString(json.offset) + ' to ' + unixTimeToString(json.offset + 24 * 3600) + '</h2>').highcharts({
+  container.before('<h2 class="_subhead top-margin">From ' + unixTimeToString(json.offset) + ' GMT to ' + unixTimeToString(json.offset + 24 * 3600) + ' GMT</h2>').highcharts({
     chart: {
       zoomType: 'x'
     },
@@ -219,7 +219,7 @@ ToolsGraphs.displayProcessingTimeGraph = function (json) {
     }
   }
 
-  container.before('<h2 class="_subhead top-margin">From ' + unixTimeToString(json.from) + ' to ' + unixTimeToString(json.to) + '</h2>').highcharts({
+  container.before('<h2 class="_subhead top-margin">From ' + unixTimeToString(json.from) + ' GMT to ' + unixTimeToString(json.to) + ' GMT</h2>').highcharts({
     chart: {
       zoomType: 'x',
       type: 'column'
