@@ -73,7 +73,7 @@ ToolsGraphs = {
         return true;
       });
 
-      this.value = urlParams[this.name] || $.datepicker.formatDate(ToolsGraphs.dateFormat, this.name === 'to' ? new Date(new Date().setDate(new Date().getDate() + 1)) : new Date());
+      this.value = urlParams[this.name] || $.datepicker.formatDate(ToolsGraphs.dateFormat, this.name === 'from' ? new Date() : new Date(new Date().setDate(new Date().getDate() + 1)));
     })
     .datepicker({ dateFormat: this.dateFormat }).end().on('submit', function (e) {
       e.preventDefault();
