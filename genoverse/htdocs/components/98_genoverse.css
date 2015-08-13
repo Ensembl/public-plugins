@@ -37,7 +37,11 @@ body.dragging *                                          { cursor: n-resize!impo
 .canvas_container .height_toggler                        { display: none; }
 .canvas_container .label_container                       { position: relative; float: left; margin: 0; padding: 0; list-style: none; width: 134px; }
 .canvas_container .label_container li                    { position: relative; margin: 0; color: #000; font-size: 11px; list-style-image: none; cursor: pointer; white-space: nowrap; }
+.canvas_container .label_container li.focused,
+.canvas_container .label_container li.pinned,
 .canvas_container .label_container li.hover              { background-color: #ddd; }
+.canvas_container .label_container li.focused .hover_label,
+.canvas_container .label_container li.pinned .hover_label,
 .canvas_container .label_container li.hover .hover_label { display: block; }
 .canvas_container .label_container li .name              { position: relative; left: 5px; width: 90%; display: inline-block; overflow: hidden; vertical-align: top; text-overflow: ellipsis; }
 .canvas_container .label_container li.unsortable .name   { left: 15px; }

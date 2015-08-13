@@ -275,19 +275,16 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
       var track = this;
       var label = this.prop('label');
       
-      if (label.find('.name').length) {
-
-        label.on({
-          'mouseenter': function () {
-            $(this).addClass('_hover_active').find('._dyna_load').removeClass('_dyna_load').dynaLoad(); // dynaload any track description too
-          },
-          'mouseleave': function () {
-            $(this).removeClass('_hover_active hover');
-          }
-        });
+      if (label.find('.name:not(:empty)').length) {
 
         this.hoverLabel = panel.elLk.hoverLabels.filter(':not(.allocated).' + this.id).first().addClass('allocated').appendTo(label).css({ left : label.find('.name').width(), top: 0 });
-        
+
+        label.addClass('_label_layer').on('mouseleave', function () {
+          $(this).removeClass('hover');
+        }).children('.name, .hover_label').on('mouseenter', function () {
+          $(this.parentNode).addClass('hover').find('._dyna_load').removeClass('_dyna_load').dynaLoad(); // dynaload any track description too
+        });
+
         if (this.resizable === true) {
           this.hoverLabel.find('a.height').on('click', function (e) {
 
@@ -313,10 +310,6 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
           this.hoverLabel.find('._track_height').remove();
         }
       }
-
-      label.find('.name').on('mouseenter mouseleave', function(e) {
-        $(this).parent().toggleClass('hover', e.type === 'mouseenter' || !!$(this.parentNode).hasClass('_hover_active'));
-      });
     });
 
     this.initHoverLabels();
