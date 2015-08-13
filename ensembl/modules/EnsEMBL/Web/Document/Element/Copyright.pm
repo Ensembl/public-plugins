@@ -51,8 +51,8 @@ sub content {
     <div class="column-two left">
       <p>%s release %d - %s &copy;
         <span class="print_hide"><a href="http://www.sanger.ac.uk/" class="nowrap constant">WTSI</a> /
-        <a href="http://www.ebi.ac.uk/" class="nowrap constant">EBI</a></span>
-        <span class="screen_hide_inline">WTSI / EBI<br />http://%s</span>
+        <a href="http://www.ebi.ac.uk/" class="nowrap constant">EMBL-EBI</a></span>
+        <span class="screen_hide_inline">WTSI / EMBL-EBI<br />http://%s</span>
       </p>
     ),
     $sd->ENSEMBL_SITETYPE, $sd->ENSEMBL_VERSION,
