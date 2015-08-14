@@ -75,7 +75,32 @@ Ensembl.Panel.ImageMap = Ensembl.Panel.ImageMap.extend({
     
     Ensembl.EventManager.register('resetImageOffset', this, function () { delete this.imgOffset; });
   },
-  
+
+  makeImageMap: function () {
+    var panel = this;
+
+    this.base.apply(this, arguments);
+
+    if (this.draggables && this.draggables[0]) {
+
+      this.elLk.drag.on('mousemove.genoverseCrosshair', function(e) {
+
+        if (panel.dragging !== false) {
+          return;
+        }
+
+        var coords    = panel.getMapCoords(e);
+        var dragArea  = panel.getArea(coords, true);
+
+        if (!dragArea) {
+          return;
+        }
+
+        Ensembl.EventManager.trigger('updateCrosshair', dragArea.range.start + (coords.x - dragArea.l) * dragArea.range.scale);
+      });
+    }
+  },
+
   hashChange: function () {
     if (this.resetGenoverse) {
       this.resetGenoverse = false;

@@ -41,6 +41,7 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
     Ensembl.EventManager.register('imageResize',      this, this.resize);
     Ensembl.EventManager.register('changeWidth',      this, this.resize);
     Ensembl.EventManager.register('resetGenoverse',   this, function () { this.genoverse.resetConfig(); });
+    Ensembl.EventManager.register('updateCrosshair',  this, function (s) { this.genoverse.moveCrosshair(s); });
   },
   
   makeImageMap: function () {

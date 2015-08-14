@@ -370,13 +370,20 @@ Ensembl.Genoverse = Genoverse.extend({
     });
   },
 
+  moveCrosshair: function (rStart) {
+    if (this.dragAction === 'select' && this.selector.hasClass('crosshair')) {
+      this.selectorStalled = true; // prevent document.mousemove to change selector poisition to current mouse pageX
+      this.selector.css('left', (rStart - this.start) * this.scale);
+    }
+  },
+
   addUserEventHandlers: function() {
     var browser = this;
 
     this.base.apply(this, arguments);
 
     this.container.on('mouseenter mouseleave', function (e) {
-      browser.selectorStalled = e.type === 'mouseleave';
+      browser.selectorStalled = e.type === 'mouseleave' || !browser.selector.hasClass('crosshair');
     });
   },
 
