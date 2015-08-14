@@ -22,7 +22,8 @@ Ensembl.Genoverse = Genoverse.extend({
   init: function () {
     this.base();
     this.highlightRegion = $('<div class="selector highlight">').appendTo(this.wrapper);
-    
+    this.selectorStalled = true;
+
     Ensembl.EventManager.register('genoverseMove', this, this.moveTo);
     
     // Ensure that the popState function from Genoverse fires before the one from Ensembl, so that nothing happens when hashChange is triggered from using browser forward/back buttons
@@ -368,7 +369,17 @@ Ensembl.Genoverse = Genoverse.extend({
       data : { config: JSON.stringify(config), image_config: this.panel.imageConfig, track: track.id }
     });
   },
-  
+
+  addUserEventHandlers: function() {
+    var browser = this;
+
+    this.base.apply(this, arguments);
+
+    this.container.on('mouseenter mouseleave', function (e) {
+      browser.selectorStalled = e.type === 'mouseleave';
+    });
+  },
+
   die: function (error, el) {
     return this.base(error, el.parents('.js_panel:first'));
   }
