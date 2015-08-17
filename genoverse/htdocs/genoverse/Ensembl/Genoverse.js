@@ -23,6 +23,7 @@ Ensembl.Genoverse = Genoverse.extend({
     this.base();
     this.highlightRegion = $('<div class="selector highlight">').appendTo(this.wrapper);
     this.selectorStalled = true;
+    this.trackAutoHeight = false;
 
     Ensembl.EventManager.register('genoverseMove', this, this.moveTo);
     
