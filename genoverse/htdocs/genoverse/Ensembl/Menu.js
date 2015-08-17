@@ -50,9 +50,12 @@ Ensembl.Panel.GenoverseMenu = Ensembl.Panel.ZMenu.extend({
 
     if (this.drag) {
       $('a', this.el).on('click', function (e) {
-        var cls = this.className.replace(' constant', '');
-        
-        if (cls === 'jumpHere') {
+
+        if (this.className.match('_highlight_location')) {
+
+          Ensembl.highlightLocation(this.href);
+
+        } else if (this.className.match('jumpHere')) {
           var browser  = panel.params.browser;
           var position = browser.getSelectorPosition();
           
@@ -65,7 +68,7 @@ Ensembl.Panel.GenoverseMenu = Ensembl.Panel.ZMenu.extend({
           browser.cancelSelect();
           browser.moveSelector(e);
         } else {
-          $('.selector_controls .' + cls, '#' + panel.imageId).trigger('click');
+          $('.selector_controls .' + this.className.replace(' constant', ''), '#' + panel.imageId).trigger('click');
         }
         
         panel.el.hide();
@@ -95,10 +98,12 @@ Ensembl.Panel.GenoverseMenu = Ensembl.Panel.ZMenu.extend({
   populateRegion: function () {
     var zoom  = this.params.browser.wheelAction === false ? 'Jump' : 'Zoom';
     var url   = this.baseURL.replace(/%s/, this.drag.chr + ':' + this.drag.start + '-' + this.drag.end);
+    var hlUrl = Ensembl.updateURL({hlr: this.drag.chr + ':' + this.drag.start + '-' + this.drag.end}, window.location.href);
 
     this.buildMenu(this.drag.end === this.drag.start
       ? [ '<a class="center constant" href="#">Centre here</a>' ]
-      : [ '<a class="' + zoom.toLowerCase() + 'Here constant" href="' + url + '">' + zoom + ' to region (' + (this.drag.end - this.drag.start + 1) + ' bp)</a>' ],
+      : [ '<a class="_highlight_location loc-highlight-a constant" href="' + hlUrl + '"><span></span>Highlight region (' + (this.drag.end - this.drag.start + 1) + ' bp)</a>',
+          '<a class="' + zoom.toLowerCase() + 'Here constant" href="' + url + '">' + zoom + ' to region (' + (this.drag.end - this.drag.start + 1) + ' bp)</a>' ],
       'Region: ' + this.drag.chr + ':' + this.drag.start + '-' + this.drag.end
     );
   }
