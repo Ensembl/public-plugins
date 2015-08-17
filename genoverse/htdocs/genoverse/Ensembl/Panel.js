@@ -33,6 +33,7 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
     this.elLk.wheelZoom   = $('.wheel_zoom',         this.elLk.controls);
     
     this.initControls();
+    this.initLocationHighlight();
     
     Ensembl.EventManager.register('changeTrackOrder', this, this.externalOrder);
     Ensembl.EventManager.register('updatePanel',      this, this.update);
@@ -172,6 +173,22 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
     if (arg === false) {
       this.genoverse.cancelSelect();
     }
+  },
+
+  initLocationHighlight: function () {
+
+    this.highlightBoundary = {
+      range : {
+        chr   : this.genoverse.chr,
+        end   : this.genoverse.end,
+        start : this.genoverse.start,
+        scale : 1 / this.genoverse.scale
+      },
+      l : 0,
+      r : this.genoverse.wrapper.outerWidth(),
+      t : 0,
+      b : this.genoverse.wrapper.height()
+    };
   },
 
   makeZMenu: function(e, coords, params) { // this only gets called for region ZMenus
