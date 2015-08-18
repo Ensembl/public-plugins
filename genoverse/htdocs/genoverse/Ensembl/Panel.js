@@ -187,7 +187,7 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
       l : 0,
       r : this.genoverse.wrapper.outerWidth(),
       t : 0,
-      b : 0 // height is set by updateSelectorHeight method
+      b : $(this.elLk.highlightedLocation).css('height') || 0 // height is updated by updateSelectorHeight method
     };
   },
 
