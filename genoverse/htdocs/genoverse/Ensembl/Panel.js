@@ -170,7 +170,7 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
   },
 
   selectArea: function (arg) {
-    if (arg === false) {
+    if (arg === false && !this.genoverse.dragging) {
       this.genoverse.cancelSelect();
     }
   },
