@@ -187,8 +187,13 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
       l : 0,
       r : this.genoverse.wrapper.outerWidth(),
       t : 0,
-      b : this.genoverse.wrapper.height()
+      b : 0 // height is set by updateSelectorHeight method
     };
+  },
+
+  highlightLocation: function () {
+    this.base.apply(this, arguments);
+    this.genoverse.updateSelectorHeight();
   },
 
   makeZMenu: function(e, coords, params) { // this only gets called for region ZMenus
