@@ -52,6 +52,9 @@ Ensembl.Genoverse = Genoverse.extend({
         Ensembl.images[this.panel.imageNumber+1][0][2] = location.start;
         Ensembl.images[this.panel.imageNumber+1][0][3] = location.end;
       }
+
+      this.panel.initLocationHighlight();
+      this.panel.highlightLocation(Ensembl.highlightedLoc);
     }
 
     Ensembl.EventManager.trigger('highlightAllImages');
