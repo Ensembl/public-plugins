@@ -34,6 +34,7 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
     
     this.initControls();
     this.initLocationHighlight();
+    this.highlightLocation(Ensembl.highlightedLoc);
     
     Ensembl.EventManager.register('changeTrackOrder', this, this.externalOrder);
     Ensembl.EventManager.register('updatePanel',      this, this.update);
