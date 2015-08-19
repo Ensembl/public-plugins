@@ -58,13 +58,12 @@ Ensembl.Panel.GenoverseMenu = Ensembl.Panel.ZMenu.extend({
         } else if (this.className.match('jumpHere')) {
           var browser  = panel.params.browser;
           var position = browser.getSelectorPosition();
-          
+
+          browser.updateURL(position);
           browser.moveTo(position.start, position.end);
           
           Ensembl.EventManager.trigger('highlightImage', browser.panel.imageNumber + 1, 0, position.start, position.end);
-          
-          browser.updateURL(position);
-          
+
           browser.cancelSelect();
           browser.moveSelector(e);
         } else {

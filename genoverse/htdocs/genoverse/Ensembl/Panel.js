@@ -247,13 +247,14 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
       width--;
     }
     
-    // Used to keep highlight in same position during drags
-    this.genoverse.highlight_left = left;
-    this.genoverse.highlight_width = width;
-
     if (this.prevHighlight.start !== start || this.prevHighlight.end !== end) {
       this.prevHighlight = { start: start, end: end };
-      this.genoverse.highlightRegion.css({ left: left, width: width, display: 'block' });
+
+      if (!this.elLk.highlightRegion) {
+        this.elLk.highlightRegion = $('<div class="selector highlight">').appendTo(this.genoverse.wrapper);
+      }
+
+      this.elLk.highlightRegion.css({ left: left, width: width, display: 'block' });
     }
   },
   
