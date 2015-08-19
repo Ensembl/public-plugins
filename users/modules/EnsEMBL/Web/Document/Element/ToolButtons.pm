@@ -23,8 +23,6 @@ use warnings;
 
 use previous qw(label_classes init _has_data);
 
-use URI::Escape qw(uri_escape);
-
 sub label_classes {
   my $classes = shift->PREV::label_classes(@_);
 
@@ -43,16 +41,16 @@ sub init {
     'type'          => 'Account',
     'action'        => 'Bookmark/Add',
     '__clear'       => 1,
-    'name'          => uri_escape($title->get_short),
-    'description'   => uri_escape($title->get),
-    'url'           => uri_escape($hub->species_defs->ENSEMBL_BASE_URL . $hub->current_url)
+    'name'          => $title->get_short,
+    'description'   => $title->get,
+    'url'           => $hub->species_defs->ENSEMBL_BASE_URL . $hub->current_url
   });
 
   if (!$hub->user) {
     $url = $hub->url({
       'type'    => 'Account',
       'action'  => 'Login',
-      'then'    => uri_escape($url)
+      'then'    => $url
     });
   }
 
