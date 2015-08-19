@@ -25,7 +25,6 @@ use strict;
 ### TODO show bookmarks from current site only
 ### TODO order bookmarks by priority
 
-use URI::Escape qw(uri_escape);
 use HTML::Entities qw(encode_entities);
 
 sub init {
@@ -44,7 +43,7 @@ sub content {
   my $hub   = $self->hub;
 
   return sprintf('<div class="_account_holder"><div class="account-loading">Loading&hellip;</div><form action="/Ajax/accounts_dropdown">%s</form></div>', $hub->users_available && $hub->user
-    ? join('', map sprintf('<input type="hidden" name="%s" value="%s" />', $_, encode_entities(uri_escape($self->{'_bookmark_data'}{$_}))), keys %{$self->{'_bookmark_data'}})
+    ? join('', map sprintf('<input type="hidden" name="%s" value="%s" />', $_, encode_entities($self->{'_bookmark_data'}{$_})), keys %{$self->{'_bookmark_data'}})
     : ''
   );
 }
