@@ -175,7 +175,7 @@ sub _configure_plugins {
     $plugin_string .= join(",", ($pl_key, @params));
   }
   
-  print STDERR "--plugin $plugin_string\n";
+  # print STDERR "--plugin $plugin_string\n";
   
   return $plugin_string;
 }
