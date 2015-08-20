@@ -138,6 +138,14 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
         //     .appendTo( ul );
         // };
     });
+    
+    this.elLk.form.find('.plugin_enable').change(function() {
+
+      panel.elLk.form.find('.plugin-highlight').removeClass('plugin-highlight');
+
+      // find any sub-fields enabling this plugin shows
+      panel.elLk.form.find('._stt_' + this.name).addClass('plugin-highlight', 100, 'linear');
+    });
 
     this.editExisting();
   },
