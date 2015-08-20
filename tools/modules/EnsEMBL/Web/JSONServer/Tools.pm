@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -60,6 +60,14 @@ sub json_refresh_tickets {
   my ($tickets_new, $auto_refresh) = $self->object->get_tickets_data_for_sync;
 
   return $self->call_js_panel_method('updateTicketList', [ $tickets_old eq $tickets_new ? undef : $tickets_new, $auto_refresh ]);
+}
+
+sub json_share {
+  my $self        = shift;
+  my $object      = $self->object;
+  my $visibility  = $object->change_ticket_visibility($self->hub->param('share') ? 'public' : 'private');
+
+  return { 'shared' => $visibility eq 'public' ? 1 : 0 };
 }
 
 sub json_load_ticket {

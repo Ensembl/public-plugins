@@ -1,5 +1,5 @@
 /*
- * Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+ * Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -104,7 +104,7 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
 
       case "ensembl":
         var arr = this.previewInp.input.split(/\s+/);
-        url = this.previewInp.baseURL + '/region/' + arr[0] + ':' + arr[1] + '-' + arr[2] + ':' + (arr[4] && arr[4].match(/\-/) ? -1 : 1) + '/' + arr[3].replace(/[ACGTN-]\//, '');
+        url = this.previewInp.baseURL + '/region/' + arr[0] + ':' + arr[1] + '-' + arr[2] + ':' + (arr[4] && arr[4].match(/\-/) ? -1 : 1) + '/' + arr[3].replace(/[ACGTN-]+\//, '');
         break;
 
       case "vcf":
@@ -175,7 +175,7 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
       data[0].match(/(chr)?\w+/) &&
       data[1].match(/^\d+$/) &&
       data[3].match(/^[ACGTN\-\.]+$/i) &&
-      typeof data[4] != 'undefined' && data[4].match(/^([\.ACGTN\-]+\,?)+$|^(\<[A-Z]+\>)$/i)
+      typeof data[4] != 'undefined' && data[4].match(/^([\.ACGTN\-]+\,?)+$|^(\<\w+\>)$/i)
     ) {
       return 'vcf';
     }
@@ -320,7 +320,7 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
     this.elLk.previewDiv
       .find('a.zmenu').on('click', function(e) {
         e.preventDefault();
-        Ensembl.EventManager.trigger('makeZMenu', this.innerHTML.replace(/\W/g, '_'), { event: e, area: {a: this}});
+        Ensembl.EventManager.trigger('makeZMenu', this.innerHTML.replace(/\W/g, '_'), { event: e, area: {link: $(this)}});
       }).end()
       .find('._ht').helptip().end()
       .find('._close_button').on('click', function() { panel.elLk.previewDiv.empty(); });

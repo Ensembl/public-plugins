@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -37,12 +37,12 @@ sub job_summary_section {
   
   my $location = $self->hub->param('r') || $self->hub->species_defs->SAMPLE_DATA->{'LOCATION_PARAM'};
   foreach (@results_links) {
-    my $url = $self->_download_url($ticket);
+
     $summary->insert_before({
                           'node_name'   => 'a',
                           'inner_HTML'  => "[Download results]",
                           'class'       => [qw(small left-margin)],
-                          'href'        => $url,
+                          'href'        => $self->object->download_url($ticket->ticket_name),
                   }, $_);
   }
   $_->parent_node->remove_child($_) for @{$summary->get_nodes_by_flag('job_results_link')};
@@ -60,7 +60,7 @@ sub ticket_buttons {
     $buttons->prepend_child({
                       'node_name'   => 'a',
                       'class'       => [qw(_download)],
-                      'href'        => $self->_download_url($ticket),
+                      'href'        => $self->object->download_url($ticket->ticket_name),
                       'children'    => [{
                                         'node_name' => 'span',
                                         'class'     => [qw(_ht sprite download_icon)],
@@ -71,17 +71,6 @@ sub ticket_buttons {
   }
 
   return $buttons;
-}
-
-sub _download_url {
-  my ($self, $ticket) = @_;
-  my $url_param = $self->object->create_url_param({'ticket_name' => $ticket->ticket_name});
-  return $self->hub->url({
-                          'type'      => 'Download',
-                          'action'    => 'AssemblyConverter',
-                          'function'  => '',
-                          'tl'        => $url_param,
-                        });
 }
 
 1;

@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ use warnings;
 no warnings "uninitialized";
 
 use EnsEMBL::Web::Document::Table;
-use EnsEMBL::Web::Tools::Misc;
+use EnsEMBL::Web::File::Utils::URL qw(read_file);
 
 use parent qw(EnsEMBL::Web::Component::Variation);
 
@@ -60,7 +60,7 @@ sub content {
                     $lovd, $hub->species_defs->UCSC_GOLDEN_PATH, $region, $start;
     $search .= '_'.$end if ($end != $start);
 
-    my $response = get_url_content($search);
+    my $response = read_file($search, {'hub' => $hub, 'nice' => 1});
     if ($response->{'error'}) {
       #warn ">>> ERROR ".$response->{'error'};
       $html = '<p>Error fetching LOVD data</p>';

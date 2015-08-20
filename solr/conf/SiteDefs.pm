@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -282,6 +282,10 @@ EOF
           url => "/{species}/Gene/Variation_Gene/Table?g={id}",
           conditions => { "{feature_type}" => "^Gene\$" }
         },
+        { title => "Phenotypes",
+          url => "/{species}/Gene/Phenotype?g={id};db={database_type}",
+          conditions => { "{feature_type}" => "^Gene\$" }
+        },
         { title => "Location",
           url => "/{species}/Location/View?r={location};g={id};db={database_type}",
           conditions => { "{location}" => ".+" }
@@ -370,6 +374,10 @@ EOF
           url => "/{species}/Transcript/Sequence_cDNA?t={id}&db={database_type}",
           conditions => { "{feature_type}" => "^Transcript\$" }
         },
+        { title => "Exons",
+          url => "/{species}/Transcript/Exons?t={id}&db={database_type}",
+          conditions => { "{feature_type}" => "^Transcript\$" }
+        },
         { title => "Variation table",
           url => "/{species}/Transcript/Variation_Transcript/Table?t={id}&db={database_type}",
           conditions => { "{feature_type}" => "^Transcript\$" }
@@ -383,7 +391,7 @@ EOF
           url => "/{species}/Transcript/Population?t={id}&db={database_type}",
           conditions => { "{feature_type}" => "^Transcript\$" }
         },
-        { title => "Protein",
+        { title => "Protein summary",
           url => "/{species}/Transcript/ProteinSummary?t={id}&db={database_type}",
           conditions => { "{feature_type}" => "^Transcript\$" },
           result_condition => 'protein:1',

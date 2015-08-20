@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -24,8 +24,7 @@ use warnings;
 use List::Util qw(first);
 use HTML::Entities qw(encode_entities);
 
-use EnsEMBL::Web::TmpFile::Text;
-use EnsEMBL::Web::Utils::FileHandler qw(file_get_contents);
+use EnsEMBL::Web::File::Tools;
 use EnsEMBL::Web::Exceptions;
 use EnsEMBL::Web::VEPConstants qw(INPUT_FORMATS CONFIG_SECTIONS);
 use Bio::EnsEMBL::Variation::Utils::Constants;
@@ -221,12 +220,12 @@ sub content {
   if (scalar @user_files) {
     my @to_form = { 'value' => '', 'caption' => '-- Select file --'};
 
-    foreach my $file (@user_files) {
+    foreach my $record (@user_files) {
 
-      my $file_obj    = EnsEMBL::Web::TmpFile::Text->new('filename' => $file->{'filename'});
+      my $file = EnsEMBL::Web::File::Tools->new('hub' => $hub, 'tool' => 'VEP', 'file' => $record->{'file'});
       my @file_data;
       try {
-        @file_data    = file_get_contents($file_obj->full_path);
+        @file_data    = @{$file->read_lines->{'content'}};
       } catch {};
 
       next unless @file_data;
@@ -235,11 +234,11 @@ sub content {
          $first_line  = substr($first_line, 0, 30).'&#8230;' if $first_line && length $first_line > 31;
 
       push @to_form, {
-        'value'   => $file->{'filename'},
+        'value'   => $record->{'code'},
         'caption' => sprintf('%s | %s | %s | %s',
-          $file->{'name'},
-          $allowed_formats{$file->{'format'}},
-          $sd->species_label($file->{'species'}, 1),
+          $file->read_name,
+          $allowed_formats{$record->{'format'}},
+          $sd->species_label($record->{'species'}, 1),
           $first_line || '-'
         )
       };
@@ -496,6 +495,14 @@ sub _build_identifiers {
         'value' => 'yes',
         'checked' => 1,
         'field_class'   => [qw(_stt_yes _stt_allele)],
+      }), $fieldset->add_field({
+        'type' => 'checkbox',
+        'name' => 'failed',
+        'label' => 'Include flagged variants',
+        'helptip' => 'The Ensembl QC pipeline flags some variants as failed; by default these are not included when searching for known variants',
+        'value' => 1,
+        'checked' => 0,
+        'field_class'   => [qw(_stt_yes _stt_allele)],
       })]
     });
   }
@@ -624,7 +631,7 @@ sub _build_extra {
         'name'          => "cell_type_$_",
         'values'        => [ {'value' => '', 'caption' => 'None'}, map { 'value' => $_->name, 'caption' => $_->name }, @{$hub->get_adaptor('get_CellTypeAdaptor', 'funcgen', $_)->fetch_all} ]
       }]
-    });
+    }) if $hub->get_adaptor('get_CellTypeAdaptor', 'funcgen', $_);
   }
 }
 

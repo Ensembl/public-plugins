@@ -1,5 +1,5 @@
 /*
- * Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+ * Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -71,7 +71,7 @@ Ensembl.Panel.Masthead = Ensembl.Panel.Masthead.extend({
           
           this.elLk.accountDropdown = this.el.find('._accounts_dropdown').on({
             'click': function(event) {
-              if (event.target.nodeName !== 'A') {
+              if (event.target.nodeName !== 'A' && event.target.parentNode.nodeName !== 'A') {
                 event.stopPropagation();
               }
             }

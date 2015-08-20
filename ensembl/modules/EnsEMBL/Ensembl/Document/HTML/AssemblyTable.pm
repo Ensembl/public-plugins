@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -37,8 +37,16 @@ sub render {
   my $hub = EnsEMBL::Web::Hub->new;
 
   my $SD = $hub->species_defs;
-  my @spp = sort $SD->valid_species;
   my $this_release = $SD->ENSEMBL_VERSION;
+
+  ## Get current Ensembl species
+  my @valid_species = $SD->valid_species;
+  my $spp;
+
+  foreach my $sp (@valid_species) {
+    my $common  = $SD->get_config($sp, 'SPECIES_COMMON_NAME');
+    $spp->{$common} = $sp;
+  }
 
   ## get assembly info for each species
   my $adaptor = EnsEMBL::Web::DBSQL::ArchiveAdaptor->new($hub);
@@ -62,7 +70,7 @@ sub render {
 
   my $assemblies = $adaptor->fetch_archive_assemblies($first_archive);
 
-  $html .= render_assembly_table($split_releases->[0], \@spp, $assemblies, 1).render_assembly_table($split_releases->[1], \@spp, $assemblies, 2);
+  $html .= render_assembly_table($split_releases->[0], $spp, $assemblies, 1).render_assembly_table($split_releases->[1], $spp, $assemblies, 2);
   return $html;
 }
 
@@ -91,7 +99,8 @@ sub render_assembly_table {
   my @rows = ();
   my $c = { -1 => 'bg4', 1 => 'bg2', x => 1 }; # CSS class flip-flop for tds
 
-  foreach my $species (@$spp) {
+  foreach my $common (sort keys %$spp) {
+    my $species = $spp->{$common};
     my $info = $assemblies->{$species};
     my ($species_header, $assembly_name, $current_name);
     my $cells = {};
@@ -103,13 +112,16 @@ sub render_assembly_table {
       my $version = $release->{'id'};
       ## Create side header
       unless ($species_header) {
-        (my $display_name = $species) =~ s/_/ /g;
-        my $common = $info->{$version}{'common_name'};
-        my $name_string = "<i>$display_name</i>";
-        $name_string .= " ($common)" unless $common =~ /\./;
-        $species_header = sprintf('<th style="%s"><a href="/%s/"><i>%s</i></a>', $border, $species, $display_name);
-        $species_header .= " ($common)" unless $common =~ /\./;
-        $species_header .= '</th>';
+        my $display_name;
+        (my $scientific = $species) =~ s/_/ /g;
+        if ($common =~ /\./ || $common eq $scientific) { ## "Common" name is abbreviated scientific name
+          $display_name = sprintf('<i>%s</i>', $scientific);
+        }
+        else {
+          $display_name = $common;
+        }
+      
+        $species_header = sprintf('<th style="%s"><a href="/%s/">%s</a></th>', $border, $species, $display_name);
         $row .= $species_header;
       }
 

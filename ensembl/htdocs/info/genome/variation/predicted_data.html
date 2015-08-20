@@ -2,8 +2,7 @@
 <head>
 <meta name="order" content="1" />
 <title>Predicted Data</title>
-
-<script language="Javascript" type="text/javascript">
+<script type="text/javascript">
   // Function to highlight a line
   function highlight_line() {
     if(window.location.hash) {
@@ -25,18 +24,19 @@
   <h1 style="margin-top:15px">Ensembl Variation - Predicted data</h1>
 
   <p>
-  Ensembl imports variation data from a variety of different sources, as
+  Ensembl imports variant data from a variety of different sources, as
   described on the <a href="data_description.html">Data description</a> page. Below we give more
   information about how Ensembl predicts the effects of variants. Ensembl calculates the:
   </p>
   
   <table>
     <tr><td>
-      <a href="/Homo_sapiens/Variation/Mappings?v=rs699"><img src="/i/96/var_gene_transcript.png" class="portal" alt="Variation consequences and predictions of a variant, by gene and
-      transcript" title="Variation consequences and predictions of a variant, by gene and transcript"/></a>
+      <div class="portal" style="width:auto">
+        <a href="/Homo_sapiens/Variation/Mappings?v=rs699"><img src="/i/96/var_gene_transcript.png" class="ht" alt="Variation consequences and predictions of a variant, by gene and transcript" title="Variation consequences and predictions of a variant, by gene and transcript"/></a>
+      </div>
     </td><td>  
       <ul style="padding-left:5px">
-        <li>Consequence of variations in transcripts (synonymous, missense,...), e.g. 
+        <li>Variants consequences in transcripts (synonymous, missense,...), e.g. 
           <a href="/Homo_sapiens/Variation/Mappings?v=rs699#ENST00000366667_6797_G_tablePanel">rs699</a>
         </li>
         <li>Protein function prediction (SIFT, PolyPhen), e.g. 
@@ -45,38 +45,40 @@
       </ul>
     </td></tr>
     <tr><td>
-      <a href="/Homo_sapiens/Variation/HighLD?v=rs1333049"><img src="/i/96/var_linkage_disequilibrium.png" class="portal" alt="Linkage disequilibrium" title="Linkage disequilibrium"/></a>
-    </td><td>  
+      <div class="portal" style="width:auto">
+        <a href="/Homo_sapiens/Variation/HighLD?v=rs1333049"><img src="/i/96/var_linkage_disequilibrium.png" class="ht" alt="Linkage disequilibrium" title="Linkage disequilibrium"/></a>
+      </div>
+    </td><td>
       <ul style="padding-left:5px">
         <li>Linkage disequilibrium information, e.g. 
           <a href="/Homo_sapiens/Variation/HighLD?v=rs1333049">rs1333049</a>
         </li>
-        <li>Tagged variations</li>
+        <li>Tagged variants</li>
       </ul>
     </td></tr>
   </table>    
   <br />
 
-<h2 id="consequences">Calculated variation consequences</h2>
+<h2 id="consequences">Calculated variant consequences</h2>
 
 <p>
-For each variation that is mapped to the reference genome, we identify each
-Ensembl transcript that overlap the variation. We then use a rule-based approach to
-predict the effects that each allele of the variation may have on the transcript.
+For each variant that is mapped to the reference genome, we identify each
+Ensembl transcript that overlap the variant. We then use a rule-based approach to
+predict the effects that each allele of the variant may have on the transcript.
 The set of consequence terms, defined by the <a rel="external"
 href="http://www.sequenceontology.org">Sequence Ontology</a> (SO), that can be
 currently assigned to each combination of an allele and a transcript is shown
-in the table below. Note that each allele of each variation may have a different
+in the table below. Note that each allele of each variant may have a different
 effect in different transcripts. 
 </p>
 
 <p> 
-This approach is applied to all germline variations and somatic mutations
+This approach is applied to all germline variants and somatic mutations
 stored in the Ensembl variation databases (though we do not yet currently calculate
 consequences for structural variants). The resulting consequence type calls,
 along with information determined as part of the process, such as the cDNA and
 CDS coordinates, and the affected codons and amino acids in coding transcripts,
-are stored in the variation database and displayed on the website. You can use 
+are stored in the Ensembl Variation database and displayed on the website. You can use 
 this pipeline for your own data via the <a href="/info/docs/tools/vep">VEP</a>. 
 </p>
 
@@ -96,7 +98,7 @@ script</a> e.g. <br />
 See below a diagram showing the location of each display 
 term relative to the transcript structure:
 <br />
-<a rel="external" href="consequences.jpg">
+<a href="consequences.jpg" target="_blank">
   <img src="consequences.jpg" style="width:700px;height:250px" alt="consequence diagram" />
 </a>
 </p>
@@ -105,36 +107,43 @@ term relative to the transcript structure:
 The terms in the table below are <b>shown in order of severity</b> (more severe to less severe) as estimated by
 Ensembl, and this ordering is used on the website summary views. This ordering
 is necessarily subjective and API and VEP users can always get the full set of
-consequences for each allele and make their own severity judgement.
+consequences for each allele and make their own severity judgement. The IMPACT
+rating is a separate rating given for compatibility with other variant
+annotation tools (e.g. <a rel="external" href="http://snpeff.sourceforge.net/">snpEff</a>).
 </p>
 <!-- consequences - start -->
+
 <table id="consequence_type_table" class="ss">
   <tr>
     <th style="width:5px;padding-left:0px;padding-right:0px;text-align:center">*</th>
     <th>SO term</th>
     <th>SO description</th>
     <th>SO accession</th>
-    <th>Old Ensembl term</th>
+    <th>Display term</th>
+    <th><span class="_ht ht" title="Classification of the level of severity of the consequence type as agreed with other variant annotation tools">IMPACT</span></th>
   </tr>
   <tr id="transcript_ablation">
     <td style="padding:0px;margin:0px;background-color:#ff0000"></td>    <td>transcript_ablation</td>
     <td>A feature ablation whereby the deleted region includes a transcript feature</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001893">SO:0001893</a></td>
     <td>Transcript ablation</td>
+    <td>HIGH</td>
   </tr>
   </tr>
-  <tr class="bg2" id="splice_donor_variant">
-    <td style="padding:0px;margin:0px;background-color:#ff7f50;border-top:1px solid #FFF"></td>    <td>splice_donor_variant</td>
-    <td>A splice variant that changes the 2 base region at the 5' end of an intron</td>
-    <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001575">SO:0001575</a></td>
-    <td>Essential splice site</td>
-  </tr>
-  </tr>
-  <tr id="splice_acceptor_variant">
-    <td style="padding:0px;margin:0px;background-color:#ff7f50;border-top:1px solid #FFF"></td>    <td>splice_acceptor_variant</td>
+  <tr class="bg2" id="splice_acceptor_variant">
+    <td style="padding:0px;margin:0px;background-color:#FF581A;border-top:1px solid #FFF"></td>    <td>splice_acceptor_variant</td>
     <td>A splice variant that changes the 2 base region at the 3' end of an intron</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001574">SO:0001574</a></td>
-    <td>Essential splice site</td>
+    <td>Splice acceptor variant</td>
+    <td>HIGH</td>
+  </tr>
+  </tr>
+  <tr id="splice_donor_variant">
+    <td style="padding:0px;margin:0px;background-color:#FF581A;border-top:1px solid #FFF"></td>    <td>splice_donor_variant</td>
+    <td>A splice variant that changes the 2 base region at the 5' end of an intron</td>
+    <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001575">SO:0001575</a></td>
+    <td>Splice donor variant</td>
+    <td>HIGH</td>
   </tr>
   </tr>
   <tr class="bg2" id="stop_gained">
@@ -142,13 +151,15 @@ consequences for each allele and make their own severity judgement.
     <td>A sequence variant whereby at least one base of a codon is changed, resulting in a premature stop codon, leading to a shortened transcript</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001587">SO:0001587</a></td>
     <td>Stop gained</td>
+    <td>HIGH</td>
   </tr>
   </tr>
   <tr id="frameshift_variant">
-    <td style="padding:0px;margin:0px;background-color:#ff69b4;border-top:1px solid #FFF"></td>    <td>frameshift_variant</td>
+    <td style="padding:0px;margin:0px;background-color:#9400D3;border-top:1px solid #FFF"></td>    <td>frameshift_variant</td>
     <td>A sequence variant which causes a disruption of the translational reading frame, because the number of nucleotides inserted or deleted is not a multiple of three</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001589">SO:0001589</a></td>
-    <td>Frameshift coding</td>
+    <td>Frameshift variant</td>
+    <td>HIGH</td>
   </tr>
   </tr>
   <tr class="bg2" id="stop_lost">
@@ -156,13 +167,15 @@ consequences for each allele and make their own severity judgement.
     <td>A sequence variant where at least one base of the terminator codon (stop) is changed, resulting in an elongated transcript</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001578">SO:0001578</a></td>
     <td>Stop lost</td>
+    <td>HIGH</td>
   </tr>
   </tr>
-  <tr id="initiator_codon_variant">
-    <td style="padding:0px;margin:0px;background-color:#ffd700;border-top:1px solid #FFF"></td>    <td>initiator_codon_variant</td>
-    <td>A codon variant that changes at least one base of the first codon of a transcript</td>
-    <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001582">SO:0001582</a></td>
-    <td>Non synonymous coding</td>
+  <tr id="start_lost">
+    <td style="padding:0px;margin:0px;background-color:#ffd700;border-top:1px solid #FFF"></td>    <td>start_lost</td>
+    <td>A codon variant that changes at least one base of the canonical start codon</td>
+    <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0002012">SO:0002012</a></td>
+    <td>Start lost</td>
+    <td>LOW</td>
   </tr>
   </tr>
   <tr class="bg2" id="transcript_amplification">
@@ -170,167 +183,191 @@ consequences for each allele and make their own severity judgement.
     <td>A feature amplification of a region containing a transcript</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001889">SO:0001889</a></td>
     <td>Transcript amplification</td>
+    <td>HIGH</td>
   </tr>
   </tr>
   <tr id="inframe_insertion">
     <td style="padding:0px;margin:0px;background-color:#ff69b4;border-top:1px solid #FFF"></td>    <td>inframe_insertion</td>
     <td>An inframe non synonymous variant that inserts bases into in the coding sequence</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001821">SO:0001821</a></td>
-    <td>Non synonymous coding</td>
+    <td>Inframe insertion</td>
+    <td>MODERATE</td>
   </tr>
   </tr>
   <tr class="bg2" id="inframe_deletion">
     <td style="padding:0px;margin:0px;background-color:#ff69b4;border-top:1px solid #FFF"></td>    <td>inframe_deletion</td>
     <td>An inframe non synonymous variant that deletes bases from the coding sequence</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001822">SO:0001822</a></td>
-    <td>Non synonymous coding</td>
+    <td>Inframe deletion</td>
+    <td>MODERATE</td>
   </tr>
   </tr>
   <tr id="missense_variant">
     <td style="padding:0px;margin:0px;background-color:#ffd700;border-top:1px solid #FFF"></td>    <td>missense_variant</td>
     <td>A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001583">SO:0001583</a></td>
-    <td>Non synonymous coding</td>
+    <td>Missense variant</td>
+    <td>MODERATE</td>
   </tr>
   </tr>
-  <tr class="bg2" id="splice_region_variant">
+  <tr class="bg2" id="protein_altering_variant">
+    <td style="padding:0px;margin:0px;background-color:#FF0080;border-top:1px solid #FFF"></td>    <td>protein_altering_variant</td>
+    <td>A sequence_variant which is predicted to change the protein encoded in the coding sequence</td>
+    <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001818">SO:0001818</a></td>
+    <td>protein altering variant</td>
+    <td>MODERATE</td>
+  </tr>
+  </tr>
+  <tr id="splice_region_variant">
     <td style="padding:0px;margin:0px;background-color:#ff7f50;border-top:1px solid #FFF"></td>    <td>splice_region_variant</td>
     <td>A sequence variant in which a change has occurred within the region of the splice site, either within 1-3 bases of the exon or 3-8 bases of the intron</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001630">SO:0001630</a></td>
-    <td>Splice site</td>
+    <td>Splice region variant</td>
+    <td>LOW</td>
   </tr>
   </tr>
-  <tr id="incomplete_terminal_codon_variant">
+  <tr class="bg2" id="incomplete_terminal_codon_variant">
     <td style="padding:0px;margin:0px;background-color:#ff00ff;border-top:1px solid #FFF"></td>    <td>incomplete_terminal_codon_variant</td>
     <td>A sequence variant where at least one base of the final codon of an incompletely annotated transcript is changed</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001626">SO:0001626</a></td>
-    <td>Partial codon</td>
+    <td>Incomplete terminal codon variant</td>
+    <td>LOW</td>
   </tr>
   </tr>
-  <tr class="bg2" id="stop_retained_variant">
+  <tr id="stop_retained_variant">
     <td style="padding:0px;margin:0px;background-color:#76ee00;border-top:1px solid #FFF"></td>    <td>stop_retained_variant</td>
     <td>A sequence variant where at least one base in the terminator codon is changed, but the terminator remains</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001567">SO:0001567</a></td>
-    <td>Synonymous coding</td>
+    <td>Stop retained variant</td>
+    <td>LOW</td>
   </tr>
   </tr>
-  <tr id="synonymous_variant">
+  <tr class="bg2" id="synonymous_variant">
     <td style="padding:0px;margin:0px;background-color:#76ee00;border-top:1px solid #FFF"></td>    <td>synonymous_variant</td>
     <td>A sequence variant where there is no resulting change to the encoded amino acid</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001819">SO:0001819</a></td>
-    <td>Synonymous coding</td>
+    <td>Synonymous variant</td>
+    <td>LOW</td>
   </tr>
   </tr>
-  <tr class="bg2" id="coding_sequence_variant">
+  <tr id="coding_sequence_variant">
     <td style="padding:0px;margin:0px;background-color:#458b00;border-top:1px solid #FFF"></td>    <td>coding_sequence_variant</td>
     <td>A sequence variant that changes the coding sequence</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001580">SO:0001580</a></td>
-    <td>Coding unknown</td>
+    <td>Coding sequence variant</td>
+    <td>MODIFIER</td>
   </tr>
   </tr>
-  <tr id="mature_miRNA_variant">
+  <tr class="bg2" id="mature_miRNA_variant">
     <td style="padding:0px;margin:0px;background-color:#458b00;border-top:1px solid #FFF"></td>    <td>mature_miRNA_variant</td>
     <td>A transcript variant located with the sequence of the mature miRNA</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001620">SO:0001620</a></td>
-    <td>Within mature miRNA</td>
+    <td>Mature miRNA variant</td>
+    <td>MODIFIER</td>
   </tr>
   </tr>
-  <tr class="bg2" id="5_prime_UTR_variant">
+  <tr id="5_prime_UTR_variant">
     <td style="padding:0px;margin:0px;background-color:#7ac5cd;border-top:1px solid #FFF"></td>    <td>5_prime_UTR_variant</td>
     <td>A UTR variant of the 5' UTR</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001623">SO:0001623</a></td>
-    <td>5prime UTR</td>
+    <td>5 prime UTR variant</td>
+    <td>MODIFIER</td>
   </tr>
   </tr>
-  <tr id="3_prime_UTR_variant">
+  <tr class="bg2" id="3_prime_UTR_variant">
     <td style="padding:0px;margin:0px;background-color:#7ac5cd;border-top:1px solid #FFF"></td>    <td>3_prime_UTR_variant</td>
     <td>A UTR variant of the 3' UTR</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001624">SO:0001624</a></td>
-    <td>3prime UTR</td>
+    <td>3 prime UTR variant</td>
+    <td>MODIFIER</td>
   </tr>
   </tr>
-  <tr class="bg2" id="non_coding_transcript_exon_variant">
+  <tr id="non_coding_transcript_exon_variant">
     <td style="padding:0px;margin:0px;background-color:#32cd32;border-top:1px solid #FFF"></td>    <td>non_coding_transcript_exon_variant</td>
     <td>A sequence variant that changes non-coding exon sequence in a non-coding transcript</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001792">SO:0001792</a></td>
-    <td>Within non coding gene</td>
+    <td>Non coding transcript exon variant</td>
+    <td>MODIFIER</td>
   </tr>
   </tr>
-  <tr id="intron_variant">
+  <tr class="bg2" id="intron_variant">
     <td style="padding:0px;margin:0px;background-color:#02599c;border-top:1px solid #FFF"></td>    <td>intron_variant</td>
     <td>A transcript variant occurring within an intron</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001627">SO:0001627</a></td>
-    <td>Intronic</td>
+    <td>Intron variant</td>
+    <td>MODIFIER</td>
   </tr>
   </tr>
-  <tr class="bg2" id="NMD_transcript_variant">
+  <tr id="NMD_transcript_variant">
     <td style="padding:0px;margin:0px;background-color:#ff4500;border-top:1px solid #FFF"></td>    <td>NMD_transcript_variant</td>
     <td>A variant in a transcript that is the target of NMD</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001621">SO:0001621</a></td>
-    <td>NMD transcript</td>
+    <td>NMD transcript variant</td>
+    <td>MODIFIER</td>
   </tr>
   </tr>
-  <tr id="non_coding_transcript_variant">
+  <tr class="bg2" id="non_coding_transcript_variant">
     <td style="padding:0px;margin:0px;background-color:#32cd32;border-top:1px solid #FFF"></td>    <td>non_coding_transcript_variant</td>
     <td>A transcript variant of a non coding RNA gene</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001619">SO:0001619</a></td>
-    <td>Within non coding gene</td>
+    <td>Non coding transcript variant</td>
+    <td>MODIFIER</td>
   </tr>
   </tr>
-  <tr class="bg2" id="upstream_gene_variant">
+  <tr id="upstream_gene_variant">
     <td style="padding:0px;margin:0px;background-color:#a2b5cd;border-top:1px solid #FFF"></td>    <td>upstream_gene_variant</td>
     <td>A sequence variant located 5' of a gene</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001631">SO:0001631</a></td>
-    <td>Upstream</td>
+    <td>Upstream gene variant</td>
+    <td>MODIFIER</td>
   </tr>
   </tr>
-  <tr id="downstream_gene_variant">
+  <tr class="bg2" id="downstream_gene_variant">
     <td style="padding:0px;margin:0px;background-color:#a2b5cd;border-top:1px solid #FFF"></td>    <td>downstream_gene_variant</td>
     <td>A sequence variant located 3' of a gene</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001632">SO:0001632</a></td>
-    <td>Downstream</td>
+    <td>Downstream gene variant</td>
+    <td>MODIFIER</td>
   </tr>
   </tr>
-  <tr class="bg2" id="TFBS_ablation">
+  <tr id="TFBS_ablation">
     <td style="padding:0px;margin:0px;background-color:#a52a2a;border-top:1px solid #FFF"></td>    <td>TFBS_ablation</td>
     <td>A feature ablation whereby the deleted region includes a transcription factor binding site</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001895">SO:0001895</a></td>
-    <td>Tfbs ablation</td>
+    <td>TFBS ablation</td>
+    <td>MODERATE</td>
   </tr>
   </tr>
-  <tr id="TFBS_amplification">
+  <tr class="bg2" id="TFBS_amplification">
     <td style="padding:0px;margin:0px;background-color:#a52a2a;border-top:1px solid #FFF"></td>    <td>TFBS_amplification</td>
     <td>A feature amplification of a region containing a transcription factor binding site</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001892">SO:0001892</a></td>
-    <td>Tfbs amplification</td>
+    <td>TFBS amplification</td>
+    <td>MODIFIER</td>
   </tr>
   </tr>
-  <tr class="bg2" id="TF_binding_site_variant">
+  <tr id="TF_binding_site_variant">
     <td style="padding:0px;margin:0px;background-color:#a52a2a;border-top:1px solid #FFF"></td>    <td>TF_binding_site_variant</td>
-    <td>A sequence variant located within a transcription factor binding site</td>
+	    <td>A sequence variant located within a transcription factor binding site</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001782">SO:0001782</a></td>
-    <td>Regulatory region</td>
+    <td>TF binding site</td>
+    <td>MODIFIER</td>
   </tr>
   </tr>
-  <tr id="regulatory_region_ablation">
+  <tr class="bg2" id="regulatory_region_ablation">
     <td style="padding:0px;margin:0px;background-color:#a52a2a;border-top:1px solid #FFF"></td>    <td>regulatory_region_ablation</td>
     <td>A feature ablation whereby the deleted region includes a regulatory region</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001894">SO:0001894</a></td>
     <td>Regulatory region ablation</td>
+    <td>MODERATE</td>
   </tr>
   </tr>
-  <tr class="bg2" id="regulatory_region_amplification">
+  <tr id="regulatory_region_amplification">
     <td style="padding:0px;margin:0px;background-color:#a52a2a;border-top:1px solid #FFF"></td>    <td>regulatory_region_amplification</td>
     <td>A feature amplification of a region containing a regulatory region</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001891">SO:0001891</a></td>
     <td>Regulatory region amplification</td>
-  </tr>
-  </tr>
-  <tr id="regulatory_region_variant">
-    <td style="padding:0px;margin:0px;background-color:#a52a2a;border-top:1px solid #FFF"></td>    <td>regulatory_region_variant</td>
-    <td>A sequence variant located within a regulatory region</td>
-    <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001566">SO:0001566</a></td>
-    <td>Regulatory region</td>
+    <td>MODIFIER</td>
   </tr>
   </tr>
   <tr class="bg2" id="feature_elongation">
@@ -338,27 +375,41 @@ consequences for each allele and make their own severity judgement.
     <td>A sequence variant that causes the extension of a genomic feature, with regard to the reference sequence</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001907">SO:0001907</a></td>
     <td>Feature elongation</td>
+    <td>MODIFIER</td>
   </tr>
   </tr>
-  <tr id="feature_truncation">
+  <tr id="regulatory_region_variant">
+    <td style="padding:0px;margin:0px;background-color:#a52a2a;border-top:1px solid #FFF"></td>    <td>regulatory_region_variant</td>
+    <td>A sequence variant located within a regulatory region</td>
+    <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001566">SO:0001566</a></td>
+    <td>Regulatory region variant</td>
+    <td>MODIFIER</td>
+  </tr>
+  </tr>
+  <tr class="bg2" id="feature_truncation">
     <td style="padding:0px;margin:0px;background-color:#7f7f7f;border-top:1px solid #FFF"></td>    <td>feature_truncation</td>
     <td>A sequence variant that causes the reduction of a genomic feature, with regard to the reference sequence</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001906">SO:0001906</a></td>
     <td>Feature truncation</td>
+    <td>MODIFIER</td>
   </tr>
   </tr>
-  <tr class="bg2" id="intergenic_variant">
+  <tr id="intergenic_variant">
     <td style="padding:0px;margin:0px;background-color:#636363;border-top:1px solid #FFF"></td>    <td>intergenic_variant</td>
     <td>A sequence variant located in the intergenic region, between genes</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001628">SO:0001628</a></td>
-    <td>Intergenic</td>
+    <td>Intergenic variant</td>
+    <td>MODIFIER</td>
   </tr>
 </table>
 <p><b>*</b> Corresponding colours for the Ensembl web displays.<p>
 <!-- consequences - end -->
 
 <script language="Javascript" type="text/javascript">
-  window.onload=highlight_line()
+  window.onload = function() {
+    $('.ht').helptip({'track': true});
+    highlight_line();
+  };
 </script>
 
 
@@ -398,34 +449,25 @@ a score &lt; 0.05 are called 'deleterious' and all others are called 'tolerated'
 </p>
 
 <p>
-We ran <b>SIFT version <!-- sift_version - start -->5.0.2<!-- sift_version - end --></b> following the instructions from the authors and used SIFT
+We ran <b>SIFT version <!-- sift_version - start -->5.2.2<!-- sift_version - end --></b> following the instructions from the authors and used SIFT
 to choose homologous proteins rather than supplying them ourselves. We used all 
-protein sequences available from <!-- sift_protein_db_version - start -->UniRef90 (release 2012_11)<!-- sift_protein_db_version - end --> as the protein database. 
+protein sequences available from <!-- sift_protein_db_version - start -->UniRef90 (release 2014_11)<!-- sift_protein_db_version - end --> as the protein database. 
 </p>
 </div>
 <div style="border-top:1px dotted #CCC;background-color:#FAFAFA">
 <div style="padding:4px">
   <div style="float:left;margin-right:10px">List of species with SIFT data:</div>
   <!-- sift_species - start -->
-  <div style="float:left;font-style:italic">
-    <ul style="margin-bottom:0px">
-      <li style="margin-top:0px">Bos taurus</li>
-      <li>Canis familiaris</li>
-      <li>Danio rerio</li>
-      <li>Equus caballus</li>
-      <li>Gallus gallus</li>
-    </ul>
-  </div>
-  <div style="float:left;font-style:italic">
-    <ul style="margin-bottom:0px">
-      <li style="margin-top:0px">Homo sapiens</li>
-      <li>Mus musculus</li>
-      <li>Ovis aries</li>
-      <li>Rattus norvegicus</li>
-      <li>Sus scrofa</li>
-    </ul>
-  </div>
-   <!-- sift_species - end -->
+
+<div style="float:left;font-style:italic">
+  <ul style="margin-bottom:0px">    <li style="margin-top:0px">Bos taurus</li>    <li>Canis familiaris</li>    <li>Danio rerio</li>    <li>Equus caballus</li>  </ul>
+</div>
+<div style="float:left;font-style:italic">
+  <ul style="margin-bottom:0px">    <li style="margin-top:0px">Gallus gallus</li>    <li>Homo sapiens</li>    <li>Mus musculus</li>    <li>Ovis aries</li>  </ul>
+</div>
+<div style="float:left;font-style:italic">
+  <ul style="margin-bottom:0px">    <li style="margin-top:0px">Rattus norvegicus</li>    <li>Sus scrofa</li>  </ul>
+</div><!-- sift_species - end -->
   <div style="clear:both"></div>
 </div>
 </div>
@@ -466,39 +508,23 @@ and HumVar datasets. Both result sets are available through the variation API wh
   <div style="padding:4px">
     <div style="float:left;margin-right:10px">List of species with PolyPhen data:</div>
     <!-- polyphen_species - start -->
-    <div style="float:left;font-style:italic">
-      <ul style="margin-bottom:0px">
-        <li style="margin-top:0px">Homo sapiens</li>
-      </ul>
-    </div>
-    <!-- polyphen_species - end -->
+
+<div style="float:left;font-style:italic">
+  <ul style="margin-bottom:0px">    <li style="margin-top:0px">Homo sapiens</li>  </ul>
+</div><!-- polyphen_species - end -->
     <div style="clear:both"></div>  
   </div>
 </div>
 </div>
 <br />
 
-<div style="border:1px solid #CCC;padding:4px">
-<h2 id="condel">Condel</h2>
-
-<p>
-<a rel="external" href="http://bg.upf.edu/group/projects/condel.php">Condel</a> is
-a general method for calculating a consensus prediction from the output of tools
-designed to predict the effect of an amino acid substitution. It does so by calculating
-a weighted average score (WAS) of the scores of each component method. The Condel authors 
-provided us with a version specialised for finding a consensus between SIFT and 
-PolyPhen and we integrated this into a Variation Effect Predictor (VEP) 
-<a rel="external" href="https://github.com/ensembl-variation/VEP_plugins">plugin</a>. 
-Tests run by the authors 
-on the HumVar dataset (a test set curated by the PolyPhen team), show that Condel 
-can improve both the sensitivity and specificity of predictions compared to either 
-SIFT or PolyPhen used alone (please contact the authors for details). The Condel 
-score, along with a qualitative prediction (one of 'neutral' or 'deleterious'), 
-are available in the VEP plugin. The Condel score is the consensus probability 
-that a substitution is deleterious, so values nearer 1 are predicted with greater 
-confidence to affect protein function.
-</p>
+<div style="max-width:1000px" class="info">
+  <h3>Inconsistent predictions</h3>
+  <div class="message-pad">
+	  <p><b>PolyPhen</b> and <b>SIFT</b> results are heavily dependant on sequence conservation estimates derived from protein sequence alignments and using different versions of the protein databases can result in substantial variance in the predictions and scores obtained. Ensembl releases are not synchronised with updates to the SIFT and PolyPhen web servers, so <b>differences are to be expected</b>. Changes in calls will also be seen between some Ensembl releases due to updates in the software and databases used.</p>
+	</div>
 </div>
+
 <br />
 
 <h4 id="nsSNP_data_format">Prediction data format</h4>
@@ -523,8 +549,8 @@ in the database.
 </p>
 
 <p>
-<a rel="external" href="/img/protein_function_prediction_matrix.png">
-<img src="/img/protein_function_prediction_matrix.png" style="width:500px;heigth:143px" alt="protein function encoding"/>
+<a href="/img/protein_function_prediction_matrix.png" target="_blank">
+  <img src="/img/protein_function_prediction_matrix.png" style="width:500px;heigth:143px" alt="protein function encoding"/>
 </a>
 </p>
 
@@ -627,13 +653,6 @@ can then be extracted and the approach described above can be used to retrieve t
 A perl implementation of this scheme can be found in the <i>Bio::EnsEMBL::Variation::ProteinFunctionPredictionMatrix</i>
 module in the variation API and should hopefully inform attempts to reimplement this 
 scheme in other languages.
-</p>
-
-<p>
-Condel predictions are very fast to compute and so are not precomputed and stored in the
-database, instead we use the <i>get_condel_prediction</i> subroutine provided in the
-<i>Bio::EnsEMBL::Variation::Utils::Condel</i> module to calculate the Condel prediction from
-a precomputed SIFT and PolyPhen score on the fly.
 </p>
 
 

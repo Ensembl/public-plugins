@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -28,6 +28,27 @@ sub new {
   my $self = shift->PREV::new(@_);
   push @{$self->{'_core_params'}}, 'tl';
   return $self;
+}
+
+sub tools_list {
+  ## Return a list of all tools that are enabled
+  ## @return Disguised hash in an array syntax (to maintain order) with keys as name of the tool and value as caption
+  my $self  = shift;
+  my @list  = @{$self->ENSEMBL_TOOLS_LIST};
+
+  for (0..$#list) {
+    next if $_ % 2;
+    if (
+      ($list[$_] eq 'Blast'             && !$self->ENSEMBL_BLAST_ENABLED) ||
+      ($list[$_] eq 'VEP'               && !$self->ENSEMBL_VEP_ENABLED) ||
+      ($list[$_] eq 'AssemblyConverter' && !$self->ENSEMBL_AC_ENABLED)
+    ) {
+      $list[$_]   = undef;
+      $list[$_+1] = undef;
+    }
+  }
+
+  return grep $_, @list;
 }
 
 sub tools_valid_species {
@@ -79,7 +100,8 @@ sub _get_NCBIBLAST_source_file {
 sub _get_BLAT_source_file {
   ## @private
   my ($self, $species, $source_type) = @_;
-  return join ':', $self->get_config($species, 'BLAT_DATASOURCES')->{$source_type}, $self->ENSEMBL_BLAT_TWOBIT_DIR;
+  my $server = $self->get_config($species, 'BLAT_DATASOURCES')->{$source_type};
+  return $server ? join ':', $server, $self->ENSEMBL_BLAT_TWOBIT_DIR : '';
 }
 
 1;

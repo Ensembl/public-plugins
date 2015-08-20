@@ -1,5 +1,5 @@
 /*
- * Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+ * Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -57,6 +57,9 @@ Ensembl.Panel.ImageMap = Ensembl.Panel.ImageMap.extend({
       this.elLk.updateButtons = $('<div class="image_update_buttons">');
       
       $('<input class="fbutton update" type="button" value="Update this image" /><input class="fbutton reset" type="button" value="Reset scrollable image" />').appendTo(this.elLk.updateButtons).on('click', function () {
+
+        panel.elLk.overlay.add(panel.elLk.updateButtons).detach();
+
         if ($(this).hasClass('update')) {
           panel.params.updateURL = Ensembl.urlFromHash(panel.params.updateURL);
           panel.getContent();
@@ -65,7 +68,6 @@ Ensembl.Panel.ImageMap = Ensembl.Panel.ImageMap.extend({
           panel.resetGenoverse = true;
           
           Ensembl.EventManager.trigger('genoverseMove', location.start, location.end, true, true);
-          panel.elLk.overlay.add(panel.elLk.updateButtons).detach();
           panel.elLk.container.resizable('enable');
         }
       });
@@ -73,7 +75,32 @@ Ensembl.Panel.ImageMap = Ensembl.Panel.ImageMap.extend({
     
     Ensembl.EventManager.register('resetImageOffset', this, function () { delete this.imgOffset; });
   },
-  
+
+  makeImageMap: function () {
+    var panel = this;
+
+    this.base.apply(this, arguments);
+
+    if (this.draggables && this.draggables[0]) {
+
+      this.elLk.drag.on('mousemove.genoverseCrosshair', function(e) {
+
+        if (panel.dragging !== false) {
+          return;
+        }
+
+        var coords    = panel.getMapCoords(e);
+        var dragArea  = panel.getArea(coords, true);
+
+        if (!dragArea) {
+          return;
+        }
+
+        Ensembl.EventManager.trigger('updateCrosshair', dragArea.range.start + (coords.x - dragArea.l) * dragArea.range.scale);
+      });
+    }
+  },
+
   hashChange: function () {
     if (this.resetGenoverse) {
       this.resetGenoverse = false;
@@ -81,9 +108,9 @@ Ensembl.Panel.ImageMap = Ensembl.Panel.ImageMap.extend({
       var range = this.highlightRegions[0][0].region.range;
       
       if (range.start > Ensembl.location.start || range.end < Ensembl.location.end) {
-        this.elLk.overlay.prependTo(this.el).css({ width: this.elLk.container.outerWidth(), height: this.elLk.container.outerHeight() });
-        this.elLk.container.append(this.elLk.updateButtons);
-        this.elLk.container.resizable('disable');
+        this.elLk.container.append(this.elLk.overlay, this.elLk.updateButtons).resizable('disable');
+        this.selectArea(false);
+        this.removeZMenus();
       }
     } else {
       this.base.apply(this, arguments);

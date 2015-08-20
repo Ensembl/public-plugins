@@ -1,0 +1,48 @@
+.tabs {
+  overflow: hidden;
+  padding-left: 10px;
+}
+.tabs div {
+  background: #ccc none repeat scroll 0 0;
+  border: 1px solid #ccc;
+  border-radius: 8px 8px 0 0;
+  color: #fff;
+  float: left;
+  font-size: 14px;
+  line-height: 14px;
+  margin-left: 4px;
+  padding: 10px;
+  cursor: default;
+}
+
+.tabs div.active {
+  background-color: #fff;
+  border-bottom: medium none;
+  color: #555;
+  position: relative;
+  top: 1px;
+  z-index: 1;
+}
+
+.content {
+  display: none;
+  border: 1px solid #ccc;
+  padding: 16px;
+  position: relative;
+  top: -1px;
+}
+
+.content.active {
+  display: block;
+}
+
+.content .loading {
+  opacity: 0.5;
+}
+
+input[type=text] {
+  border: 1px solid #ccc;
+  margin: 0;
+  padding: 2px;
+  width: 90px;
+}

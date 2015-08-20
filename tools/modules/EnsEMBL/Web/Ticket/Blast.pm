@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -99,15 +99,16 @@ sub _process_user_input {
 
   for my $species (@species) {
 
-    for my $sequence (@$sequences) {
+    my $assembly  = $sd->get_config($species, 'ASSEMBLY_VERSION');
+    my $summary   = sprintf('%s against %s %s (%s)', $search_method, $sd->get_config($species, 'SPECIES_COMMON_NAME'), $assembly, $source_types->{$params->{'source'}});
 
-      my $summary = sprintf('%s against %s (%s)', $search_method, $sd->get_config($species, 'SPECIES_COMMON_NAME'), $source_types->{$params->{'source'}});
+    for my $sequence (@$sequences) {
 
       push @$jobs, [ {
         'job_number'  => ++$job_num,
         'job_desc'    => $desc || $sequence->{'display_id'} || $summary,
         'species'     => $species,
-        'assembly'    => $sd->get_config($species, 'ASSEMBLY_VERSION'),
+        'assembly'    => $assembly,
         'job_data'    => {
           'output_file' => 'blast.out',
           'sequence'    => {
@@ -141,17 +142,25 @@ sub _process_extra_configs {
   my $config_fields   = CONFIGURATION_FIELDS;
   my $config_defaults = CONFIGURATION_DEFAULTS;
   my $config_values   = {};
+  my $value_exist;
 
   while (my ($config_type, $config_field_group) = splice @$config_fields, 0, 2) {
 
-    while (my ($element_name, $element_params) = splice @$config_field_group, 0, 2) {
+    while (my ($element_name, $element_params) = splice @$config_field_group, 0, 2) {   
 
       for ($search_type_value, 'all') {
         if (exists $config_defaults->{$_}{$element_name}) {
-
           my $element_value = $hub->param("${search_type_value}__${element_name}") // '';
-
-          return unless grep {$_ eq $element_value} map($_->{'value'}, @{$element_params->{'values'}}), $element_params->{'type'} eq 'checklist' ? '' : (); # checklist is also allowed to have null value
+     
+          # checking value for arrays of elements (just a simple check to make sure the submitted value is part of the arrays of values)
+          if(exists $element_params->{elements}) {
+            for my $row (@{$element_params->{elements}}) {            
+              $value_exist = grep {$_ eq $element_value} map($_->{'value'}, @{$row->{'values'}});
+              last if($value_exist);
+            }
+          } 
+          
+          return unless $value_exist || grep {$_ eq $element_value} map($_->{'value'}, @{$element_params->{'values'}}), $element_params->{'type'} eq 'checklist' ? '' : (); # checklist is also allowed to have null value
 
           if (($element_params->{'commandline_type'} || '') eq 'flag') {
             $config_values->{$element_name} = '' if $element_value;

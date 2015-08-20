@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -66,7 +66,7 @@ sub execute {
   system($command);
 
   $self->{'error_code'}     = $? >> 8;
-  $self->{'error_message'}  = $self->{'error_map'}->{$self->{'error_code'}} || '';
+  $self->{'error_message'}  = $self->{'error_map'}->{$self->{'error_code'}} || "Unkown error ($self->{'error_code'})";
   $self->{'runnable'}->warning("SystemCommand Error: ($self->{'error_code'}) $self->{'error_message'}") if $self->{'error_code'};
 
   return $self;

@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -101,7 +101,7 @@ sub save {
 }
 
 sub create_work_dir {
-  ## Creates the directory path for the job, and move it's input files to that directory
+  ## Creates the directory path for the job, and move its input files to that directory
   ## @param Hashref with following keys:
   ##  - ticket_type : Ticket type name
   ##  - ticket_name : Ticket name

@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -25,18 +25,21 @@ use List::Util qw(first);
 use Bio::EnsEMBL::Variation::Utils::VEP qw(detect_format);
 
 use EnsEMBL::Web::Exceptions;
-use EnsEMBL::Web::Command::UserData;
-use EnsEMBL::Web::TmpFile::Text;
 use EnsEMBL::Web::Utils::FileHandler qw(file_get_contents);
+use EnsEMBL::Web::File::Tools;
 use EnsEMBL::Web::Job::VEP;
 
 use parent qw(EnsEMBL::Web::Ticket);
+
+use constant VEP_FORMAT_DOC => '/info/docs/tools/vep/vep_formats.html';
 
 sub init_from_user_input {
   ## Abstract method implementation
   my $self      = shift;
   my $hub       = $self->hub;
   my $species   = $hub->param('species');
+
+  my $file = EnsEMBL::Web::File::Tools->new('hub' => $hub, 'tool' => 'VEP', 'empty' => 1);
 
   my $method    = first { $hub->param($_) } qw(file url userdata text);
 
@@ -48,36 +51,41 @@ sub init_from_user_input {
   # if input is one of the existing files
   if ($method eq 'userdata') {
 
-    $file_name    = $hub->param('userdata');
-    $description  = 'user data'
+    my $session_data = $hub->session->get_data('type' => 'upload', 'code' => $hub->param('userdata'));
+    $description  = 'user data';
+
+    $file->init('file' => $session_data->{'file'});
 
   # if new file, url or text, upload it to a temporary file location
   } else {
 
     $description = $hub->param('name') || ($method eq 'text' ? 'pasted data' : ($method eq 'url' ? 'data from URL' : sprintf("%s", $hub->param('file'))));
 
-    # upload from file/text/url
-    my $response = EnsEMBL::Web::Command::UserData->new({'object' => $self->object, 'hub' => $hub})->upload($method); # FIXME - upload method needs to be taken out of EnsEMBL::Web::Command::UserData
+    ## NB: no need to init the file object, as upload method will do this
+    my $error = $file->upload('type' => 'no_attach');
+    throw exception('InputError', $error) if $error;
 
-    throw exception('InputError', $response && $response->{'error'} ? $response->{'error'} : "Upload failed: $response->{'filter_code'}") unless $response && $response->{'code'};
-
-    my $code      = $response->{'code'};
-    my $tempdata  = $hub->session->get_data('type' => 'upload', 'code' => $code);
-
-    throw exception('InputError', "Could not find file with code $code") unless $tempdata && $tempdata->{'filename'};
-
-    $file_name = $tempdata->{'filename'};
+    $file_name = $file->write_name;
   }
 
   # finalise input file path and description
-  $file_path    = EnsEMBL::Web::TmpFile::Text->new('filename' => $file_name)->{'full_path'}; # absolute path of the temporary input file
+  $file_path    = $file->absolute_write_path;
   $description  = "VEP analysis of $description in $species";
   $file_name    = "$file_name.txt" if $file_name !~ /\./ && -T $file_path;
   $file_name    = $file_name =~ s/.*\///r;
 
   # detect file format
   my $detected_format;
-  first { m/^[^\#]/ && ($detected_format = detect_format($_)) } file_get_contents($file_path);
+  try {
+    first { m/^[^\#]/ && ($detected_format = detect_format($_)) } file_get_contents($file_path); #  @{$file->read_lines->{'content'}};
+  } catch {
+    throw exception('InputError', sprintf(q(The input format is invalid or not recognised. Please <a href="%s" rel="external">click here</a> to find out about accepted data formats.), VEP_FORMAT_DOC), {'message_is_html' => 1});
+  };
+
+  ## Update session with detected format
+  my $session_data = $hub->session->get_data('code' => $file->code);
+  $session_data->{'format'} = $detected_format;
+  $hub->session->set_data(%$session_data);
 
   my $job_data = { map { my @val = $hub->param($_); $_ => @val > 1 ? \@val : $val[0] } grep { $_ !~ /^text/ && $_ ne 'file' } $hub->param };
 

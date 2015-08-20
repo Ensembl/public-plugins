@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -37,6 +37,27 @@ sub prepare_to_dispatch {
   my $object      = $self->object;
   my @search_type = $object->parse_search_type(delete $job_data->{'search_type'});
 
+  if (!$job_data->{'source_file'}) {
+    $rose_object->job_message([{'display_message' => sprintf('Source file for running %s on %s is not available.', $search_type[1], $rose_object->species), 'fatal' => 0}]);
+    return;
+  }
+
+  if(exists $job_data->{configs}->{gappenalty}) {
+    ($job_data->{configs}->{gapopen}, $job_data->{configs}->{gapextend}) = split(/n/,$job_data->{configs}->{gappenalty});
+    delete $job_data->{configs}->{gappenalty};
+  }
+  
+  if(exists $job_data->{configs}->{gap_dna}) {
+    ($job_data->{configs}->{gapopen}, $job_data->{configs}->{gapextend}) = split(/n/,$job_data->{configs}->{gap_dna});
+    delete $job_data->{configs}->{gap_dna};
+  }
+  
+  if(exists $job_data->{configs}->{score}) {
+    ($job_data->{configs}->{reward}, $job_data->{configs}->{penalty}) = split(/_/,$job_data->{configs}->{score});
+    $job_data->{configs}->{penalty} = "-".$job_data->{configs}->{penalty};   #penalty is always negative
+    delete $job_data->{configs}->{score};
+  }
+  
   $job_data->{'blast_type'} = $search_type[0];
   $job_data->{'program'}    = lc $search_type[1];
   $job_data->{'work_dir'}   = $rose_object->job_dir;

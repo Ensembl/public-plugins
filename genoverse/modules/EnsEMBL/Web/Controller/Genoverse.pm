@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ use JSON qw(to_json from_json);
 use List::Util qw(min);
 
 use EnsEMBL::Web::Hub;
-use EnsEMBL::Web::Document::GenoverseImage;
+use EnsEMBL::Web::Document::Image::Genoverse;
 
 use parent qw(EnsEMBL::Web::Controller);
 
@@ -472,7 +472,7 @@ sub update {
   my $species      = $hub->species;
   my $view_config  = $hub->get_viewconfig($hub->param('config'), undef, 'cache');
   my $image_config = $hub->get_imageconfig($view_config->image_config);
-  my $image        = new EnsEMBL::Web::Document::GenoverseImage({ hub => $hub, image_config => $image_config });
+  my $image        = new EnsEMBL::Web::Document::Image::Genoverse({ hub => $hub, image_config => $image_config });
   my $tracks       = $image->get_tracks;
   my %existing     = map { split '=' } split ',', $hub->param('existing');
   my (@add, @change, @order);
@@ -530,7 +530,7 @@ sub reset_track_heights {
     $track->set_user($_, undef) for qw(user_height auto_height);
   }
   
-  $image_config->get_node('auto_height')->set_user('display', 'off');
+  $image_config->get_node('auto_height')->set_user('display', $hub->species_defs->GENOVERSE_TRACK_AUTO_HEIGHT ? 'normal' : 'off');
   $image_config->altered('Genoverse');
   $hub->session->store;
 }

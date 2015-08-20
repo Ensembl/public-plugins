@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,6 +20,9 @@ use strict;
 
 package EnsEMBL::Genoverse::SiteDefs;
 
-sub update_conf { $SiteDefs::OBJECT_TO_SCRIPT->{'Genoverse'} = 'Genoverse'; }
+sub update_conf {
+  $SiteDefs::OBJECT_TO_SCRIPT->{'Genoverse'}  = 'Genoverse';
+  $SiteDefs::GENOVERSE_TRACK_AUTO_HEIGHT      = 1;
+}
 
 1;

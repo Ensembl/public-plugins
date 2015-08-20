@@ -1,0 +1,58 @@
+<html>
+<head>
+<meta name="order" content="2" />
+<title>File Formats for long-range interactions</title>
+</head>
+
+<body>
+
+<h1>Long-range Interactions formats</h1>
+
+<p>We are working to support the long-range interaction formats developed by
+WashU for their epigenomics browser.</p>
+
+<p>Please note that we are not currently able to display interactions between chromosomes, 
+thus data not on the current chromosome you are viewing will be ignored.</p>
+
+<h2>Plain text file</h2>
+
+<p>This is a very basic format that can be uploaded directly into the browser.</p>
+
+<ol>
+<li><strong>1st region</strong> - Coordinates as a comma-separated list</li>
+<li><strong>2nd region</strong> - Coordinates as a comma-separated list</li>
+<li><strong>Score</strong> - score for the interaction</li>
+</ol>
+
+<h3>Example data</h3>
+
+<p><pre>
+chr1,713605,715737     chr1,720589,722848      2
+chr1,717172,720090     chr1:761197-762811      2
+chr1,755977,758438     chr1:758539-760203      2
+</pre></p>
+
+<h2>Compressed data</h2>
+
+<p>For large datasets we recommend using a tabix-indexed file and attaching it via URL.</p>
+
+<ol>
+<li><strong>Chromosome</strong> - chromosome name of the nnn region</li>
+<li><strong>Start</strong> - start coordinate of the nnn region</li>
+<li><strong>End</strong> - end coordinate of the nnn region</li>
+<li><strong>Target</strong> - coordinates of the nnn region, with score</li>
+<li><strong>ID</strong> - unique non-negative integer</li>
+<li><strong>Direction</strong> - relative direction of the target region</li>
+</ol>
+
+<p>Note that each interaction requires two records, one for each locus.</p>
+
+<h3>Example data</h3>
+
+<p><pre>
+chr1   111   222   chr1:333-444,55   1   .
+chr1   333   444   chr1:111-222,55   2   .
+</pre></p>
+
+</body>
+</html>

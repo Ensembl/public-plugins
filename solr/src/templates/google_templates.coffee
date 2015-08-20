@@ -1,4 +1,4 @@
-# Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+# Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -157,9 +157,8 @@ window.google_templates =
             id = data.tp2_row.best('id')
             if db == 'vega' or id.match(/^OTT/)
               data.tp2_row.add_value('bracketed-title','Havana',250)
-
-            if ((not ref?) or ref == 0) and ft == 'Gene'
-              data.tp2_row.add_value('bracketed-title','Alternate sequence',275)
+            if (ref? and ref == 0) and ft == 'Gene'
+              data.tp2_row.add_value('bracketed-title','Alternative sequence',275)
               data.tp2_row.add_value('new-contents','<i>Not a Primary Assembly Gene</i>',200)
 
           data.tp2_row.register 10000, () ->
@@ -265,7 +264,7 @@ window.google_templates =
     template: """
       <div class="solr_result_stmt">
         <span class="solr_result_count">0</span> results
-        match <span class="solr_result_query">X</span>
+        match <span class="solr_result_query">your search</span>
         <span class="solr_result_restricted">
           when restricted to
           <ul>
@@ -281,11 +280,12 @@ window.google_templates =
     """
     directives:
       '.solr_result_count': 'num'
-      '.solr_result_query': 'query'
+      '.solr_result_query': (e) ->
+        $('<div/>').text(e.context.query).html()
       '.solr_result_restricted':
         'fs<-facets':
           'li':
-            'f<-fs': 
+            'f<-fs':
               '.solr_result_fname': 'f.left'
               '.solr_result_fval': 'f.right'
               'a@href': 'f.href'
@@ -301,7 +301,7 @@ window.google_templates =
             href = el.attr('href')
             href = href.substring(href.indexOf('#')) # IE7, :-(
             state = { page: 1 }
-            state['facet_'+href.substring(1)] = '' 
+            state['facet_'+href.substring(1)] = ''
             $(document).trigger('update_state',[state])
             false
 

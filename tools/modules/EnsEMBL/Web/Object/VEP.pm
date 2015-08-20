@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -41,7 +41,7 @@ sub get_edit_jobs_data {
       $job_data->{"text"} = join('', file_get_contents($input_file));
     } else {
       $job_data->{'input_file_type'}  = 'text';
-      $job_data->{'input_file_url'}   = $hub->url('Download', {'type' => 'VEP', 'action' => '', 'function' => '', 'tl' => $self->create_url_param, 'input' => 1});
+      $job_data->{'input_file_url'}   = $self->download_url({'input' => 1});
     }
   } else {
     $job_data->{'input_file_type'} = 'binary';
@@ -121,12 +121,15 @@ sub handle_download {
     my $location  = $hub->param('location') || '';
     my $filter    = $hub->param('filter')   || '';
     my $file      = $self->result_files->{'output_file'};
-    my $filename  = join('.', $job->ticket->ticket_name, $location || (), $filter || (), $format eq 'txt' ? () : $format, 'txt') =~ s/\s+/\_/gr;
+    my $filename  = join('.', $job->ticket->ticket_name, $location || (), $filter || (), $format eq 'txt' ? () : $format, $format eq 'vcf' ? 'vcf' : 'txt') =~ s/\s+/\_/gr;
 
     $r->headers_out->add('Content-Type'         => 'text/plain');
     $r->headers_out->add('Content-Disposition'  => sprintf 'attachment; filename=%s', $filename);
 
-    print $file->content('format' => $format, 'location' => $location, 'filter' => $filter);
+    $file->content_iterate({'format' => $format, 'location' => $location, 'filter' => $filter}, sub {
+      print "$_\r\n" for @_;
+      $r->rflush;
+    });
   }
 }
 

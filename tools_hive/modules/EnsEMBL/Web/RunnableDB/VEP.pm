@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -71,13 +71,43 @@ sub run {
   $options->{"--$_"}  = sprintf '"%s/%s"', $work_dir, delete $config->{$_} for qw(input_file output_file stats_file);
   $options->{"--$_"}  = $config->{$_} eq 'yes' ? '' : $config->{$_} for grep { defined $config->{$_} && $config->{$_} ne 'no' } keys %$config;
   $options->{"--dir"} = $self->param('cache_dir');
+  
+  # send warnings to STDERR
+  $options->{"--warning_file"} = "STDERR";
 
   # save the result file name for later use
   $self->param('result_file', $options->{'--output_file'} =~ s/(^\")|(\"$)//rg);
 
-  my $command = EnsEMBL::Web::SystemCommand->new($self, "$perl_bin $script", $options)->execute({'log_file' => $log_file});
+  my $command   = EnsEMBL::Web::SystemCommand->new($self, "$perl_bin $script", $options)->execute({'log_file' => $log_file});
+  my $m_type    = 'ERROR';
+  my $messages  = {};
+  my $max_msgs  = 10;
+  my $w_count   = 0;
 
-  throw exception('HiveException', join('', file_get_contents($log_file))) if $command->error_code;
+  for (split /(?=\n(WARNING|ERROR)\s*\:)/, join('', "Unknown error\n", file_get_contents($log_file))) {
+    if (/^(WARNING|ERROR)$/) {
+      $m_type = $1;
+    } else {
+      $messages->{$m_type} ||= [];
+      s/^\R+|\R+$//g;
+      s/\R+/\n/g;
+      if ($m_type eq 'WARNING') {
+        if ($messages->{$m_type} && @{$messages->{$m_type}} >= $max_msgs) {
+          $w_count++;
+          next;
+        }
+        ($_) = split "\n", $_; # keep only first line for warning
+      }
+      push @{$messages->{$m_type}}, $_;
+    }
+  }
+
+  push @{$messages->{'WARNING'}}, $w_count.' more warnings not shown' if $w_count;
+
+  # save any warnings to the log table
+  $self->tools_warning({ 'message' => $_, 'type' => 'VEPWarning' }) for @{$messages->{'WARNING'}};
+
+  throw exception('HiveException', $messages->{'ERROR'}[-1]) if $command->error_code; # consider last error only
 
   return 1;
 }

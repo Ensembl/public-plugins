@@ -72,7 +72,7 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     can be produced as an output format by many variant calling tools. </p>
     
     <p> Users using VCF should note a peculiarity in the difference between how
-    Ensembl and VCF describe unbalanced variations. For any unbalanced variant (i.e.
+    Ensembl and VCF describe unbalanced variants. For any unbalanced variant (i.e.
     insertion, deletion or unbalanced substitution), the VCF specification requires
     that the base immediately before the variant should be included in both the
     reference and variant alleles. This also affects the reported position i.e. the
@@ -229,6 +229,12 @@ NM_001025204.1:c.336G>A</pre>
     
     <pre class="code">ENSCAFP00000040171.1:p.Thr92Asn</pre>
     
+    <p> HGVS notations may also be given in <a href="http://www.lrg-sequence.org/LRG"
+    rel="external">LRG</a> coordinates: </p>
+    
+    <pre class="code">LRG_1t1:c.841G>T
+LRG_1:g.10006G>T</pre>
+    
     <h2 id="id">Variant identifiers</h2>
     
     <p> These should be e.g. dbSNP rsIDs, or any synonym for a variant present in
@@ -249,15 +255,17 @@ NM_001025204.1:c.336G>A</pre>
         <li><strong>Gene</strong> - Ensembl stable ID of affected gene</li>
         <li><strong>Feature</strong> - Ensembl stable ID of feature</li>
         <li><strong>Feature type</strong> - type of feature. Currently one of Transcript, RegulatoryFeature, MotifFeature.</li>
-        <li><strong>Consequence</strong> - <a href="/info/genome/variation/predicted_data.html#consequences">consequence type</a> of this variation</li>
+        <li><strong>Consequence</strong> - <a href="/info/genome/variation/predicted_data.html#consequences">consequence type</a> of this variant</li>
         <li><strong>Position in cDNA</strong> - relative position of base pair in cDNA sequence</li>
         <li><strong>Position in CDS</strong> - relative position of base pair in coding sequence</li>
         <li><strong>Position in protein</strong> - relative position of amino acid in protein</li>
-        <li><strong>Amino acid change</strong> - only given if the variation affects the protein-coding sequence</li>
+        <li><strong>Amino acid change</strong> - only given if the variant affects the protein-coding sequence</li>
         <li><strong>Codon change</strong> - the alternative codons with the variant base in upper case</li>
-        <li><strong>Co-located variation</strong> - known identifier of existing variation</li>
+        <li><strong>Co-located variation</strong> - known identifier of existing variant</li>
         <li><strong>Extra</strong> - this column contains extra information as key=value pairs separated by ";". The keys are as follows:
             <ul>
+                <li><i>IMPACT</i> - the impact modifier for the consequence type</li>
+                <li><i>VARIANT_CLASS</i> - Sequence Ontology <a href="/info/genome/variation/data_description.html#classes">variant class</a></li>
                 <li><i>SYMBOL</i> - the gene symbol</li>
                 <li><i>SYMBOL_SOURCE</i> - the source of the gene symbol</li>
                 <li><i>STRAND</i> - the DNA strand (1 or -1) on which the transcript/feature lies</li>
@@ -267,6 +275,7 @@ NM_001025204.1:c.336G>A</pre>
                 <li><i>UNIPARC</i> - UniParc identifier of protein product</li>
                 <li><i>HGVSc</i> - the HGVS coding sequence name</li>
                 <li><i>HGVSp</i> - the HGVS protein sequence name</li>
+                <li><i>HGVS_OFFSET</i> - Indicates by how many bases the HGVS notations for this variant have been <a href="script/vep_options.html#opt_shift_hgvs">shifted</a></li>
                 <li><i>SIFT</i> - the SIFT prediction and/or score, with both given as prediction(score)</li>
                 <li><i>PolyPhen</i> - the PolyPhen prediction and/or score</li>
                 <li><i>MOTIF_NAME</i> - the source and identifier of a transcription factor binding profile aligned at this position</li>
@@ -284,20 +293,39 @@ NM_001025204.1:c.336G>A</pre>
                 <li><i>ZYG</i> - zygosity of individual genotype at this locus</li>
                 <li><i>SV</i> - IDs of overlapping structural variants</li>
                 <li><i>FREQS</i> - Frequencies of overlapping variants used in filtering</li>
-                <li><i>GMAF</i> - Minor allele and frequency of existing variation in 1000 Genomes Phase 1</li>
-                <li><i>AFR_MAF</i> - Minor allele and frequency of existing variation in 1000 Genomes Phase 1 combined African population</li>
-                <li><i>AMR_MAF</i> - Minor allele and frequency of existing variation in 1000 Genomes Phase 1 combined American population</li>
-                <li><i>ASN_MAF</i> - Minor allele and frequency of existing variation in 1000 Genomes Phase 1 combined Asian population</li>
-                <li><i>EUR_MAF</i> - Minor allele and frequency of existing variation in 1000 Genomes Phase 1 combined European population</li>
-                <li><i>AA_MAF</i> - Minor allele and frequency of existing variant in NHLBI-ESP African American population</li>
-                <li><i>EA_MAF</i> - Minor allele and frequency of existing variant in NHLBI-ESP European American population</li>
+                <li><i>GMAF</i> - Non-reference allele and frequency of existing variant in 1000 Genomes</li>
+                <li><i>AFR_MAF</i> - Non-reference allele and frequency of existing variant in 1000 Genomes combined African population</li>
+                <li><i>AMR_MAF</i> - Non-reference allele and frequency of existing variant in 1000 Genomes combined American population</li>
+                <li><i>ASN_MAF</i> - Non-reference allele and frequency of existing variant in 1000 Genomes combined Asian population</li>
+                <li><i>EUR_MAF</i> - Non-reference allele and frequency of existing variant in 1000 Genomes combined European population</li>
+                <li><i>EAS_MAF</i> - Non-reference allele and frequency of existing variant in 1000 Genomes combined East Asian population</li>
+                <li><i>SAS_MAF</i> - Non-reference allele and frequency of existing variant in 1000 Genomes combined South Asian population</li>
+                <li><i>AA_MAF</i> - Non-reference allele and frequency of existing variant in NHLBI-ESP African American population</li>
+                <li><i>EA_MAF</i> - Non-reference allele and frequency of existing variant in NHLBI-ESP European American population</li>
                 <li><i>CLIN_SIG</i> - Clinical significance of variant from dbSNP</li>
                 <li><i>BIOTYPE</i> - Biotype of transcript or regulatory feature</li>
                 <li><i>TSL</i> - Transcript support level</li>
                 <li><i>PUBMED</i> - Pubmed ID(s) of publications that cite existing variant</li>
-                <li><i>SOMATIC</i> - Somatic status of existing variation(s)</li>
+                <li><i>SOMATIC</i> - Somatic status of existing variant(s)</li>
+                <li><i>PHENO</i> - Indicates if existing variant is associated with a phenotype, disease or trait</li>
                 <li><i>ALLELE_NUM</i> - Allele number from input; 0 is reference, 1 is first alternate etc</li>
+                <li><i>MINIMISED</i> - Alleles in this variant have been converted to minimal representation before consequence calculation</li>
                 <li><i>PICK</i> - indicates if this block of consequence data was picked by <a href="script/vep_options.html#opt_flag_pick">--flag_pick</a> or <a href="script/vep_options.html#opt_flag_pick_allele">--flag_pick_allele</a></li>
+
+                <li id="refseq_match"><i>REFSEQ_MATCH</i> - the RefSeq transcript match status; contains a number of flags indicating whether this RefSeq transcript matches the underlying reference sequence and/or an Ensembl transcript:
+                  <ul>
+                    <li><b>rseq_3p_mismatch:</b> signifies a mismatch between the underlying genomic sequence of the RefSeq transcript with the corresponding RefSeq mRNA sequence the model was built from. Specifically, there is a mismatch in the 3' UTR of the RefSeq model. </li>
+                    <li><b>rseq_5p_mismatch:</b> signifies a mismatch between the underlying genomic sequence of the RefSeq transcript with the corresponding RefSeq mRNA sequence the model was built from. Specifically, there is a mismatch in the 5' UTR of the RefSeq model. </li>
+                    <li><b>rseq_cds_mismatch:</b> signifies a mismatch between the underlying genomic sequence of the RefSeq transcript with the corresponding RefSeq mRNA sequence the model was built from. Specifically, there is a mismatch in the CDS of the RefSeq model. </li>
+                    <li><b>rseq_ens_match_cds:</b> signifies that for the RefSeq transcript there is an overlapping Ensembl model that is identical across the CDS region only. A CDS match is defined as follows: the CDS and peptide sequences are identical and the genomic coordinates of every translatable exon match. Useful related attributes are: rseq_ens_match_wt and rseq_ens_no_match.</li>
+                    <li><b>rseq_ens_match_wt:</b> signifies that for the RefSeq transcript there is an overlapping Ensembl model that is identical across the whole transcript. A whole transcript match is defined as follows: 1) In the case that both models are coding, the transcript, CDS and peptide sequences are all identical and the genomic coordinates of every exon match. 2) In the case that both transcripts are non-coding the transcript sequences and the genomic coordinates of every exon are identical. No comparison is made between a coding and a non-coding transcript. Useful related attributes are: rseq_ens_match_cds and rseq_ens_no_match.</li>
+                    <li><b>rseq_ens_no_match:</b> signifies that for the RefSeq transcript there is no overlapping Ensembl model that is identical across either the whole transcript or the CDS. This is caused by differences between the transcript, CDS or peptide sequences or between the exon genomic coordinates. Useful related attributes are: rseq_ens_match_wt and rseq_ens_match_cds.</li>
+                    <li><b>rseq_mrna_match:</b> signifies an exact match between the underlying genomic sequence of the RefSeq transcript with the corresponding RefSeq mRNA sequence the model was built from (based on a match between the transcript stable id and an accession in the RefSeq mRNA file). An exact match occurs when the underlying genomic sequence of the model can be perfectly aligned to the mRNA sequence post polyA clipping.</li>
+                    <li><b>rseq_mrna_nonmatch:</b> signifies a non-match between the underlying genomic sequence of the RefSeq transcript with the corresponding RefSeq mRNA sequence the model was built from. A non-match is deemed to have occurred if the underlying genomic sequence does not have a perfect alignment to the mRNA sequence post polyA clipping. It can also signify that no comparison was possible as the model stable id may not have had a corresponding entry in the RefSeq mRNA file (sometimes happens when accessions are retired or changed). When a non-match occurs one or several of the following transcript attributes will also be present to provide more detail on the nature of the non-match: rseq_5p_mismatch, rseq_cds_mismatch, rseq_3p_mismatch, rseq_nctran_mismatch, rseq_no_comparison</li>
+                    <li><b>rseq_nctran_mismatch:</b> signifies a mismatch between the underlying genomic sequence of the RefSeq transcript with the corresponding RefSeq mRNA sequence the model was built from. This is a comparison between the entire underlying genomic sequence of the RefSeq model to the mRNA in the case of RefSeq models that are non-coding. </li>
+                    <li><b>rseq_no_comparison:</b> signifies that no alignment was carried out between the underlying genomic sequence of RefSeq model and a corresponding RefSeq mRNA. The reason for this is generally that no corresponding, unversioned accession was found in the RefSeq mRNA file for the transcript stable id. This sometimes happens when accessions are retired or replaced. A second possibility is that the sequences were too long and problematic to align (though this is rare).</li>
+                  </ul>
+                </li>
             </ul>
         </li>
     </ol>
@@ -321,18 +349,30 @@ NM_001025204.1:c.336G>A</pre>
     
     <pre class="code">
 ## ENSEMBL VARIANT EFFECT PREDICTOR v[[SPECIESDEFS::ENSEMBL_VERSION]]
-## Output produced at 2014-08-01 16:09:38
+## Output produced at 2015-04-01 16:09:38
 ## Connected to homo_sapiens_core_[[SPECIESDEFS::ENSEMBL_VERSION]]_38 on ensembldb.ensembl.org
 ## Using API version [[SPECIESDEFS::ENSEMBL_VERSION]], DB version [[SPECIESDEFS::ENSEMBL_VERSION]]
+## sift version sift5.2.2
+## COSMIC version 71
+## ESP version 20140509
+## gencode version GENCODE 22
+## HGMD-PUBLIC version 20142
+## genebuild version 2014-07
+## regbuild version 13.0
+## assembly version GRCh38.p2
+## dbSNP version 138
+## ClinVar version 201410
 ## Extra column keys:
-## DISTANCE : Shortest distance from variant to transcript</pre>
+## IMPACT : Subjective impact classification
+## DISTANCE : Shortest distance from variant to transcript
+## STRAND : Strand of the feature (1/-1)</pre>
     
     <hr/>
     <h2 id="vcfout">VCF output</h2>
     
     <p> The VEP script can also generate VCF output using the <a href="script/vep_options.html#opt_vcf">--vcf</a> flag.
     Consequences are added in the INFO field of the VCF file, using the key
-    "CSQ". Data fields are encoded separated by "&#124;"; the order of fields is
+    "CSQ" (configure this using <a href="script/vep_options.html#opt_vcf_info_field">--vcf_info_field</a>). Data fields are encoded separated by "&#124;"; the order of fields is
     written in the VCF header. Output fields can be configured by using
     <a href="script/vep_options.html#opt_fields">--fields</a>. Unpopulated fields are
     represented by an empty string. </p>
@@ -344,7 +384,8 @@ NM_001025204.1:c.336G>A</pre>
     <p> If the input format was VCF, the file will remain unchanged save for the
     addition of the CSQ field and the header (unless using any filtering). If an
     existing CSQ field is found, it will be replaced by the one added by the
-    VEP.</p>
+    VEP (use <a href="script/vep_options.html#opt_keep_csq">--keep_csq</a> to
+    preserve it). </p>
     
     <p> Custom data added with <a
     href="script/vep_options.html#opt_custom">--custom</a> are added as separate
@@ -353,9 +394,9 @@ NM_001025204.1:c.336G>A</pre>
     <p> Commas in fields are replaced with ampersands (&amp;) to preserve VCF
     format. </p>
     
-    <pre class="code">##INFO=&lt;ID=CSQ,Number=.,Type=String,Description="Consequence type as predicted by VEP. Format: Allele|Gene|Feature|Feature_type|Consequence|cDNA_position|CDS_position|Protein_position|Amino_acids|Codons|Existing_variation|DISTANCE|SYMBOL|SIFT"&gt;
-#CHROM  POS     ID      REF     ALT     QUAL    FILTER  INFO
-21      26960070        rs116645811     G       A       .       .       CSQ=A|ENSG00000260583|ENST00000567517|Transcript|upstream_gene_variant|||||||4432|LINC00515|,A|ENSG00000154719|ENST00000352957|Transcript|intron_variant||||||||MRPL39|,A|ENSG00000154719|ENST00000307301|Transcript|missense_variant|1043|1001|334|T/M|aCg/aTg|||MRPL39|tolerated(0.06)</pre>
+    <pre class="code">##INFO=&lt;ID=CSQ,Number=.,Type=String,Description="Consequence annotations from Ensembl VEP. Format: Allele|Consequence|IMPACT|SYMBOL|Gene|Feature_type|Feature|BIOTYPE|EXON|INTRON|HGVSc|HGVSp|cDNA_position|CDS_position|Protein_position"&gt;
+#CHROM  POS       ID          REF  ALT  QUAL  FILTER  INFO
+21      26978790  rs75377686  T    C    .     .       CSQ=C|missense_variant|MODERATE|MRPL39|ENSG00000154719|Transcript|ENST00000419219|protein_coding|2/8||ENST00000419219.1:c.251A>G|ENSP00000404426.1:p.Asn84Ser|260|251|84</pre>
     
     
     <hr/>

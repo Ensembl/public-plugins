@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,8 +20,6 @@ package EnsEMBL::Draw::GlyphSet::HSP_scalebar;
 
 use strict;
 use warnings;
-
-use Sanger::Graphics::Bump;
 
 use base qw(EnsEMBL::Draw::GlyphSet);
 

@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -166,6 +166,7 @@ sub ensembl_click_all_links {
     
     $i++;
     next if grep (/$link_text/, @$skip_link);
+    next if ($link_text eq 'home page');
   
     if ($rel eq 'external' || $link !~ /^$url/) {
       $self->open_ok($link);

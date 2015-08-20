@@ -166,8 +166,8 @@
               if (db === 'vega' || id.match(/^OTT/)) {
                 data.tp2_row.add_value('bracketed-title', 'Havana', 250);
               }
-              if (((ref == null) || ref === 0) && ft === 'Gene') {
-                data.tp2_row.add_value('bracketed-title', 'Alternate sequence', 275);
+              if (((ref != null) && ref === 0) && ft === 'Gene') {
+                data.tp2_row.add_value('bracketed-title', 'Alternative sequence', 275);
                 return data.tp2_row.add_value('new-contents', '<i>Not a Primary Assembly Gene</i>', 200);
               }
             });
@@ -278,10 +278,12 @@
       }
     },
     'result_summary': {
-      template: "<div class=\"solr_result_stmt\">\n  <span class=\"solr_result_count\">0</span> results\n  match <span class=\"solr_result_query\">X</span>\n  <span class=\"solr_result_restricted\">\n    when restricted to\n    <ul>\n      <li>\n        <a href=\"#\">\n          <span class=\"solr_result_fname\">A</span>: \n          <span class=\"solr_result_fval\">AA</span>\n        </a>\n      </li>\n    </ul>\n  </span>\n</div>",
+      template: "<div class=\"solr_result_stmt\">\n  <span class=\"solr_result_count\">0</span> results\n  match <span class=\"solr_result_query\">your search</span>\n  <span class=\"solr_result_restricted\">\n    when restricted to\n    <ul>\n      <li>\n        <a href=\"#\">\n          <span class=\"solr_result_fname\">A</span>: \n          <span class=\"solr_result_fval\">AA</span>\n        </a>\n      </li>\n    </ul>\n  </span>\n</div>",
       directives: {
         '.solr_result_count': 'num',
-        '.solr_result_query': 'query',
+        '.solr_result_query': function(e) {
+          return $('<div/>').text(e.context.query).html();
+        },
         '.solr_result_restricted': {
           'fs<-facets': {
             'li': {
@@ -528,7 +530,7 @@
 
   window.page_templates = {
     page: {
-      template: "<div>\n  <div class='solr_page_p_side'>\n    <div class='solr_sidebar  ui-panel ui-panel-position-left ui-panel-display-reveal ui-body-c ui-panel-animate ui-panel-closed' data-role='panel'  id='search_nav'>\n      <div class='new_current_faceter'></div>\n      <div class='faceters'></div>\n      <div class='table_extras'></div>\n      <div class='sizer'></div>\n      <div class='layout_select'></div>\n      <div class='leftcars'><div class='sidecars'></div></div>\n      <div class='tips'></div>\n    </div>\n  </div>\n  <div class='solr_page_p_main'>\n    <div class='table'>\n    </div>\n  </div>\n</div>",
+      template: "<div>\n  <div class='solr_page_p_side'>\n    <div class='solr_sidebar  ui-panel ui-panel-position-left ui-panel-display-reveal ui-body-c ui-panel-animate ui-panel-closed' data-role='panel'  id='search_nav'>\n      <a data-rel='close' href='#min_width_holder'><div id='close-div' alt='Close' class='modal_close'></div> </a>\n      <div class='new_current_faceter'></div>\n      <div class='faceters'></div>\n      <div class='table_extras'></div>\n      <div class='sizer'></div>\n      <div class='layout_select'></div>\n      <div class='leftcars'><div class='sidecars'></div></div>\n      <div class='tips'></div>\n    </div>\n  </div>\n  <div class='solr_page_p_main'>\n    <div class='table'>\n    </div>\n  </div>\n</div>",
       sockets: {
         '.table_extras': 'sidebar_table_extra'
       },
@@ -601,12 +603,11 @@
         global: [
           function(data) {
             data.tp2_row.register(50, function() {
-              var base, url;
+              var url;
               url = data.tp2_row.best('domain_url');
               if (url) {
-                if (!(url != null ? url.match(/^http:\/\//) : void 0)) {
-                  base = $.parseJSON($('#solr_config .base').text()).url;
-                  url = base + "/" + url;
+                if (!(url != null ? url.match(/^\//) : void 0) && !(url != null ? url.match(/^https?\:/) : void 0)) {
+                  url = "/" + url;
                 }
                 return data.tp2_row.candidate('url', url, 50);
               }
@@ -1791,6 +1792,7 @@
               }
               return _results;
             })()).join(" ");
+            yoursearch = $('<div/>').text(yoursearch).html();
             wholesite = cur_values.length === 0;
             templates = $(document).data('templates');
             return el.append(templates.generate('noresultsnarrow', {
@@ -1854,11 +1856,13 @@
       }
     },
     noresultsnarrow: {
-      template: "<div class=\"scnarrow\">\n  <h1>No results for <em>thing</em> '<i class='search'>search</i>'</h1>\n  <ul>\n    <li class=\"wide\"><div>\n      You were searching the whole site, but still nothing was found.\n    </div></li>\n    <li class=\"narrow\"><div>\n      You were only searching <em>thing</em>.\n    </div></li>\n    <li class=\"narrow_any\"><div>\n      And there are <i class=\"count\">42</i> results in\n      <i class=\"all\">all</i> on the whole site.\n      <a href=\"#\">Search full site</a>.\n    </div></li>\n    <li class='narrow_none'><div>\n      But there are no results in\n      any category on the whole site, anyway.\n    </div></li>\n    <li><div class=\"roll_hidden\">\n      <a href=\"#\">More help on searching ...</a>\n      <div class=\"roll_hidden_text\">\n      </div>\n    </div></li>\n  </ul>\n</div>",
+      template: "<div class=\"scnarrow\">\n  <h1>No results for <em>thing</em> '<i class='search'>search</i>'</h1>\n  <ul>\n    <li class=\"wide\"><div>\n      You were searching the whole site, but still nothing was found.\n    </div></li>\n    <li class=\"narrow_rsid\"><div><strong>\n      You appear to have been searching for a variation rsid.\n      There may be new variants which have not yet been incorporated\n      into Ensembl. If this is the case, you may find information\n      about this variant on the\n      <a href=\"http://www.ncbi.nlm.nih.gov/sites/entrez\"\n      >NCBI website</a>\n    </strong></div></li>\n    <li class=\"narrow\"><div>\n      You were only searching <em>thing</em>.\n    </div></li>\n    <li class=\"narrow_any\"><div>\n      And there are <i class=\"count\">42</i> results in\n      <i class=\"all\">all</i> on the whole site.\n      <a href=\"#\">Search full site</a>.\n    </div></li>\n    <li class='narrow_none'><div>\n      But there are no results in\n      any category on the whole site, anyway.\n    </div></li>\n    <li><div class=\"roll_hidden\">\n      <a href=\"#\">More help on searching ...</a>\n      <div class=\"roll_hidden_text\">\n      </div>\n    </div></li>\n  </ul>\n</div>",
       directives: {
         'em': 'yoursearch',
         '.roll_hidden_text': 'noresults_help',
-        '.search': 'q',
+        '.search': function(e) {
+          return $('<div/>').text(e.context.q).html();
+        },
         '.narrow_any': {
           'x<-narrow_n': {
             '.all': 'all',
@@ -1875,6 +1879,9 @@
           'z<-narrow': {
             'em': 'yoursearch'
           }
+        },
+        '.narrow_rsid': {
+          'y<-rsid': {}
         }
       },
       decorate: {
@@ -1914,6 +1921,9 @@
           }
         }
         data.noresults_help = $.solr_config('static.ui.noresults_help');
+        if (data.q.match(/^rs(\d+)$/)) {
+          data.rsid = [true];
+        }
         return [spec, data];
       }
     }
@@ -2704,14 +2714,25 @@
       global: [
         function(data) {
           data.tp2_row.register(100, function() {
-            var m, url;
+            var ft, m, url;
             url = data.tp2_row.best('domain_url');
+            url = url.replace(/https?:\/\/.*?\//, '/');
+            if (url !== '' && url[0] !== '/') {
+              url = '/' + url;
+            }
+            data.tp2_row.candidate('url', url, 500);
+            ft = data.tp2_row.best('feature_type');
             if (url) {
               data.tp2_row.candidate('subtype', 'ID', 10);
               m = url.match(/Help\/([a-zA-z]+)/);
               if (m != null) {
                 return data.tp2_row.candidate('subtype', m[1], 100);
               }
+            }
+          });
+          data.tp2_row.register(150, function() {
+            if (data.tp2_row.best('feature_type') === 'Documentation') {
+              return data.tp2_row.candidate('id', data.tp2_row.best('url'), 100);
             }
           });
           data.tp2_row.register(300, function() {

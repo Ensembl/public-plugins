@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -61,6 +61,8 @@ sub render {
     <li><a href="/Biotype/Display">Biotypes</a></li>
     <li><a href="/Webdata/Display">Web Data</a></li>
     <li><a href="/AttribType/Display">AttribType</a></li>
+    <li><a href="/Attrib/Display">Attrib</a></li>
+    <li><a href="/AttribSet/Display">AttribSet</a></li>
     <li><a href="/ExternalDb/Display">ExternalDb</a></li>
   </ul>
   <h1>Help Database</h1>
@@ -73,7 +75,6 @@ sub render {
   </ul>
   <h1>Documents</h1>
   <ul>
-    <li><a href="/Documents/View/Relcodoc">Release Coordination</a></li>
     <li><a href="/Documents/View/Testcases">Healthcheck Testcases</a></li>
   </ul>
   <h1>User Directory</h1>
@@ -82,8 +83,18 @@ sub render {
   </ul>
   <h1>Performance</h1>
   <ul>
+    <li><a href="/tools_graphs/index.html">Tools LSF queues load</a></li>
     <li><a href="/perf">Nightly local full page-load times</a></li>
     <li><a href="/arewestable">Live server error monitoring (BETA)</a></li>
+  </ul>
+  <h1>Disk usage</h1>
+  <ul>
+    <li><a href="/disk_usage/compara.html">Compara</a></li>
+    <li><a href="/disk_usage/genebuild.html">Genebuild</a></li>
+    <li><a href="/disk_usage/production.html">Production</a></li>
+    <li><a href="/disk_usage/regulation.html">Regulation</a></li>
+    <li><a href="/disk_usage/variation.html">Variation</a></li>
+    <li><a href="/disk_usage/web.html">Web</a></li>
   </ul>
 </div></div>);
 

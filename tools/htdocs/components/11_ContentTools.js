@@ -1,5 +1,5 @@
 /*
- * Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+ * Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -170,7 +170,7 @@ Ensembl.Panel.ContentTools = Ensembl.Panel.Content.extend({
       case 500:
         // server error
         var exception = json.exception || {};
-        this.showError('There was a problem with one of the tools servers. Please report this issue to helpdesk@ensembl.org, giving your job ticket id if possible.', 'Server Error: ' + exception.type);
+        this.showError(exception.message, 'Server Error: ' + exception.type);
         return false;
       default:
         // not likely to come here, but anyway...

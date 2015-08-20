@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -42,7 +42,8 @@ sub features {
   my $slice   = $self->{'container'};
   my $object  = $hub->core_object('Tools') or return;
      $object  = $object->get_sub_object('Blast');
-  my $job     = $object->get_requested_job({'with_all_results' => 1}) or return;
+  my $ticket  = $object->get_requested_ticket({'with_results' => 1}) or return;
+  my ($job)   = grep($_->job_id == $self->my_config('job_id'), @{$ticket->job}) or return;
   my $method  = $object->parse_search_type($job->job_data->{'search_type'}, 'search_method');
   my $strand  = $self->strand;
   my @hits    = grep $strand eq $_->{'gori'}, @{$object->get_all_hits_in_slice_region($job, $slice, sub { ($a->{'score'} || 0) <=> ($b->{'score'} || 0) })};
@@ -79,7 +80,7 @@ sub features {
 
     my $btop;
 
-    if ($slice_length < 10000 && $method =~ /^blastn/i ) { # draw btop in this case
+    if ($slice_length < 10000 && ($method =~ /^blastn/i || $method =~ /^blat/i)) { # draw btop in this case
 
       $btop = $object->map_btop_to_genomic_coords($hit, $job);
 
@@ -139,7 +140,7 @@ sub render_normal {
 
   $self->_init_bump(undef, $dep);
 
-  return $self->no_track_on_strand unless @$features;
+  return $self->my_config('main_blast') ? $self->no_track_on_strand : undef unless @$features;
 
   foreach my $feature (@$features) {
 
@@ -222,7 +223,7 @@ sub render_normal {
 sub get_colour {
   my ($self, $percent) = @_;
 
-  my $scale = $self->{'_colour_scale'} ||= [ $self->{'config'}->colourmap->build_linear_gradient(@{BLAST_KARYOTYPE_POINTER->{'gradient'}}) ];
+  my $scale = $self->{'_colour_scale'} ||= [ $self->{'config'}->colourmap->build_linear_gradient(@{BLAST_KARYOTYPE_POINTER->{$self->my_config('main_blast') ? 'gradient' : 'gradient_others'}}) ];
 
   return $scale->[ sprintf '%.f', $percent * (scalar @$scale - 1) / 100 ];
 }

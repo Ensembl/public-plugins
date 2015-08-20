@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -32,6 +32,7 @@ use Scalar::Util qw(blessed);
 use Storable qw(nfreeze);
 
 use EnsEMBL::Web::Exceptions;
+use EnsEMBL::Web::ToolsWarning;
 use EnsEMBL::Web::Utils::FileSystem qw(copy_files);
 use EnsEMBL::Web::Utils::FileHandler qw(file_put_contents);
 
@@ -69,6 +70,13 @@ sub work_dir {
   throw exception('HiveException', 'Work directory could not be found.')  unless -d $work_dir;
 
   return $work_dir;
+}
+
+sub tools_warning {
+  ## An extension of the warning method to save the warnings as json that can be parsed by the web server
+  ## @param Hashred as expected by ToolsWarning
+  my ($self, $params) = @_;
+  $self->warning(EnsEMBL::Web::ToolsWarning->new($params)->to_string);
 }
 
 sub save_results {

@@ -1,4 +1,4 @@
-# Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+# Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 # 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -89,7 +89,7 @@ for (@sql) {
 
 print "DONE\nAdding ticket types\n";
 
-if (my @ticket_types = @{$sd->ENSEMBL_TOOLS_LIST}) {
+if (my @ticket_types = $sd->tools_list) {
   my $sth = $dbh->prepare('INSERT INTO `ticket_type` (`ticket_type_name`,`ticket_type_caption`) VALUES (?,?)');
   while (my ($key, $caption) = splice @ticket_types, 0, 2) {
     $sth->execute($key, $caption)

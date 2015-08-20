@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -27,13 +27,13 @@ use parent qw(
 );
 
 sub content_ticket {
-  my ($self, $ticket, $jobs) = @_;
+  my ($self, $ticket, $jobs, $is_owned_ticket) = @_;
   my $hub     = $self->hub;
   my $is_view = ($hub->function || '') eq 'View';
   my $table;
 
   for (@$jobs) {
-    $table = $self->job_details_table($_);
+    $table = $self->job_details_table($_, $is_owned_ticket);
     $table->set_attribute('class', $is_view ? 'plain-box' : 'toggleable hidden _ticket_details');
   }
 

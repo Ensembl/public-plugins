@@ -1,4 +1,4 @@
-# Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+# Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -184,7 +184,7 @@ class Part
       
   emit_directives: ->
     dirs = @component.emit_directives(@model_context,["."+@klass])
-    for s in @subs    
+    for s in @subs
       dirs[a] = b for a,b of s.emit_directives()
     dirs
 

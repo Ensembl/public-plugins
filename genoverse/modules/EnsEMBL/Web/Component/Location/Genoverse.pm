@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ package EnsEMBL::Web::Component::Location::Genoverse;
 
 use strict;
 
-use EnsEMBL::Web::Document::GenoverseImage;
+use EnsEMBL::Web::Document::Image::Genoverse;
 
 use parent qw(EnsEMBL::Web::Component::Location);
 
@@ -55,12 +55,12 @@ sub content_test {
   
   $self->id($self->id . 'Test');
   
-  return qq{
+  return qq(
     <div class="js_panel">
       <input type="hidden" class="panel_type" value="GenoverseTest" />
       <input type="hidden" class="static_image" value="$image_type->{'static'}" />
     </div>
-  };
+  );
 }
 
 sub new_image {
@@ -68,7 +68,7 @@ sub new_image {
   my $hub        = $self->hub;
   my $image_type = $hub->session->get_data(type => 'image_type', code => $self->id) || {};
   
-  return $image_type->{'static'} || $hub->param('static') || $hub->param('export') || !(grep $_->[-1] eq 'genoverse', @{$hub->components}) ? $self->SUPER::new_image(@_) : EnsEMBL::Web::Document::GenoverseImage->new({
+  return $image_type->{'static'} || $hub->param('static') || $hub->param('export') || !(grep $_->[-1] eq 'genoverse', @{$hub->components}) ? $self->SUPER::new_image(@_) : EnsEMBL::Web::Document::Image::Genoverse->new({
     hub          => $hub,
     slice        => $_[0],
     image_config => $_[1],

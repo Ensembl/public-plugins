@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -103,15 +103,16 @@ sub redirect_after_login {
   
   # return to login page if cookie not set
   return $self->redirect_login(MESSAGE_UNKNOWN_ERROR) unless $hub->user->authorise({'user' => $user, 'set_cookie' => 1});
-  
+
   my $site = $hub->species_defs->ENSEMBL_SITE_URL;
   my $then = $hub->param('then') || '';
   my $url  = $then =~ /^(\/|$site)/ ? $then : $site; # only redirect to an internal url or a relative url
-  
+
+  $url     = $hub->referer->{'absolute_url'} if(defined $hub->is_mobile_request && $hub->is_mobile_request); #mobile site has ajax request disable,use whole url for redirection
+
   # redirect
   if ($hub->is_ajax_request) {
     my $referer = $hub->referer;
-    
     if ($url eq $then && $url ne $referer->{'absolute_url'}) {
       $self->ajax_redirect($url, undef, undef, undef, $hub->param('modal_tab'));
     } else {

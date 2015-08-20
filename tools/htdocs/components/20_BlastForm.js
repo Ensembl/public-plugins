@@ -1,5 +1,5 @@
 /*
- * Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+ * Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -79,19 +79,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
       'finish': function() {
         this.value = this.value.trim();
         if (this.value && this.value !== this.defaultValue) {
-          if (this.value.match(/[0-9]+/) && this.value.match(/^[a-z]{1}[a-z0-9\.\-\_]{4,30}$/i)) { // accession/sequence id etc
-            panel.ajax({
-              'comet'   : true,
-              'url'     : panel.fetchSequenceURL,
-              'data'    : { id: this.value },
-              'spinner' : true,
-              'update'  : function(json) {
-                this.toggleSpinner(true, 'Searching ' + json[0] + ' databases&#8230;');
-              }
-            });
-          } else {
-            panel.addSequences(this.value);
-          }
+          panel.addSequenceByID(this.value) || panel.addSequences(this.value);
         } else {
           $(this).val(this.defaultValue).addClass('inactive');
         }
@@ -244,7 +232,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
             if (!(paramName in formInput)) {
               formInput[paramName] = [];
             }
-            formInput[paramName].push(jobsData[i][paramName]);
+            formInput[paramName].unshift(jobsData[i][paramName]);
           } else {
             formInput[paramName] = jobsData[i][paramName];
           }
@@ -260,7 +248,8 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
         this.addEditingJobSequences(formInput['sequence'], formInput['query_type']);
       } else {
         // in case sequence is recieved from 'BLAST this sequence' link, it doesn't have query_type
-        this.addSequences(formInput['sequence'][0]['sequence']);
+        // it could possible be a seq/accession id in that case
+        this.addSequenceByID(formInput['sequence'][0]['sequence']) || this.addSequences(formInput['sequence'][0]['sequence']);
       }
 
       // set db type, source and search type
@@ -275,7 +264,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
         for (var name in formInput['configs']) {
           this.elLk.form.find('[name=' + formInput['search_type'] + '__' + name + ']')
             .filter('input[type=checkbox]').prop('checked', !!formInput['configs'][name]).end()
-            .filter('select').find('option[value=' + formInput['configs'][name] + ']').prop('selected', true);
+            .filter('select').find('option[value=' + formInput['configs'][name] + ']').prop('selected', true).end().selectToToggle('trigger');
         }
       }
     }
@@ -313,7 +302,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
         if (numSeqs >= this.maxNumSequences) {
           break;
         }
-        this.sequences.splice(existingSequence && this.sequences.indexOf(existingSequence) + 1 || numSeqs, 0, new Ensembl.Panel.BlastForm.Sequence(parsedSeqs.sequences[indexParsedSeq], this, existingSequence || false));
+        this.sequences.splice(existingSequence && this.sequences.indexOf(existingSequence) + 1 || numSeqs, 0, new Ensembl.Class.BlastFormSequence(parsedSeqs.sequences[indexParsedSeq], this, existingSequence || false));
       }
       numSeqs = this.sequences.length;
     }
@@ -328,6 +317,26 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     parsedSeqs = duplicates = modifyingExisting = numParsedSeqs = numSeqs = indexSeq = null;
 
     return indexParsedSeq;
+  },
+
+  addSequenceByID: function(seqId) {
+  /* Fetches a sequence by seq id or accession id and then adds it to the textarea
+   * @param Seq id or accession id
+   * @return false it seq id or accession id is invalid, true otherwise
+   */
+    if (this.fetchSequenceURL && seqId.match(/[0-9]+/) && seqId.match(/^[a-z]{1}[a-z0-9\.\-\_]{4,30}$/i)) {
+      this.ajax({
+        'comet'   : true,
+        'url'     : this.fetchSequenceURL,
+        'data'    : { id: seqId },
+        'spinner' : true,
+        'update'  : function(json) {
+          this.toggleSpinner(true, 'Fetching sequence&#8230;');
+        }
+      });
+      return true;
+    }
+    return false;
   },
 
   parseRawSequences: function(rawText) {
@@ -445,7 +454,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
       if (this.sequences.length >= this.maxNumSequences) {
         break;
       }
-      this.sequences.push(new Ensembl.Panel.BlastForm.Sequence({
+      this.sequences.push(new Ensembl.Class.BlastFormSequence({
         'string'      : editingJobSequences[i]['sequence'],
         'description' : '>' + (editingJobSequences[i]['display_id'] || ''),
         'type'        : type
@@ -666,14 +675,14 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     }
     if (config && !$.isEmptyObject(config)) {
       $.each(config, function(name, value) {
-        panel.elLk.form.find('[name=' + btype + '__' + name + ']').filter('input').prop('checked', !!value).end().filter('select').find('option[value=' + value + ']').prop('selected', true);
+        panel.elLk.form.find('[name=' + btype + '__' + name + ']').filter('input').prop('checked', !!value).end().filter('select').find('option[value="' + value + '"]').prop('selected', true).end().selectToToggle('trigger');
       });
     }
     btype = ctype = config = null;
   }
 });
 
-Ensembl.Panel.BlastForm.Sequence = Ensembl.Panel.ToolsForm.SubElement.extend({
+Ensembl.Class.BlastFormSequence = Ensembl.Class.ToolsFormSubElement.extend({
 /*
  *  This represents a sequence box in the frontend
  */

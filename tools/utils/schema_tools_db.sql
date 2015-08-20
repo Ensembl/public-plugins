@@ -1,4 +1,4 @@
-# Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+# Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 # 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -32,6 +32,7 @@ CREATE TABLE `ticket` (
   `ticket_type_name` varchar(32) NOT NULL DEFAULT '',
   `owner_id` varchar(32) NOT NULL,
   `owner_type` enum('user','session') NOT NULL DEFAULT 'session',
+  `visibility` enum('private','public') NOT NULL DEFAULT 'public',
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `modified_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
   `status` enum('Current','Expiring','Expired','Deleted') NOT NULL DEFAULT 'Current',
@@ -56,7 +57,7 @@ CREATE TABLE `job` (
   `assembly` varchar(255) NOT NULL,
   `job_number` int(10) DEFAULT NULL,
   `job_data` text NOT NULL,
-  `job_desc` varchar(160) DEFAULT NULL,
+  `job_desc` varchar(500) DEFAULT NULL,
   `job_dir` varchar(255) DEFAULT NULL,
   `status` enum('awaiting_dispatcher_response','awaiting_user_response','done','deleted') NOT NULL DEFAULT 'awaiting_user_response',
   `dispatcher_class` varchar(255) DEFAULT NULL,

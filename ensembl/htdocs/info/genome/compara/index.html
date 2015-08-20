@@ -35,7 +35,7 @@ We also analyze the gene gain and loss events using the <a href="http://sites.bi
 <ul>
 <li>
 <strong>Protein trees</strong> are constructed using a representative protein for every gene in Ensembl: proteins are clustered using <a href="http://treesoft.svn.sourceforge.net/viewvc/treesoft/branches/lh3/hcluster/">hcluster_sg</a> based on <a href="http://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&DOC_TYPE=Download">NCBI BLAST+</a> e-values, and each cluster of proteins is aligned using <a href="http://www.tcoffee.org/Projects_home_page/m_coffee_home_page.html">M-Coffee</a> or <a href="http://mafft.cbrc.jp/alignment/software/">Mafft</a>.
-Finally, <a href="https://github.com/muffato/treebest">TreeBeST</a> is used to produce a gene tree from each multiple alignment, reconciling it with the species tree to call duplication events.
+Finally, <a href="https://github.com/Ensembl/treebest">TreeBeST</a> is used to produce a gene tree from each multiple alignment, reconciling it with the species tree to call duplication events.
 <a href="homology_method.html">More information &rarr;</a>
 <a href="prot_tree_stats.html">Tree statistics &rarr;</a>
 </li>
@@ -43,7 +43,7 @@ Finally, <a href="https://github.com/muffato/treebest">TreeBeST</a> is used to p
 <li>
 <strong>ncRNA trees</strong> are constructed using gene families represented in <a href="http://rfam.janelia.org/">RFAM</a>, for which a specific covariance model is provided.
 For each gene family, we build several trees using secondary structure alignments with <a href="http://infernal.janelia.org/">INFERNAL</a> and genomic alignments with <a href="http://wasabiapp.org/software/prank/">PRANK</a>.
-All the trees are merged into a final tree using <a href="https://github.com/muffato/treebest">TreeBeST</a>.
+All the trees are merged into a final tree using <a href="https://github.com/Ensembl/treebest">TreeBeST</a>.
 <a href="ncRNA_methods.html">More information &rarr;</a>
 <a href="nc_tree_stats.html">Tree statistics &rarr;</a>
 
@@ -128,7 +128,7 @@ The Compara pipelines use various species trees.
 	<li>The Protein-trees pipeline follows the <a href="http://www.ncbi.nlm.nih.gov/Taxonomy/taxonomyhome.html/">NCBI taxonomy</a>.</li>
 	<li>The ncRNA-trees pipeline uses the NCBI taxonomy as a base and flattens the three following sub-trees: <em>Eutheria</em>, <em>Sauria</em>, and <em>Clupeocephala</em>.</li>
 	<li>The CAFE pipelines (Gene Gain/Loss trees) also follows the NCBI taxonomy, and use <a href="http://www.timetree.org">the TimeTree database</a> for the branch lengths.</li>
-	<li>The Alignment pipelines follow a binary species tree that is maintained in-house (in accordance with the litterature). A Newick file representing this topology (without branch lengths) is on <a href="https://github.com/Ensembl/ensembl-compara/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/scripts/pipeline/species_tree.eukaryotes.topology.nw">GitHub</a>.</li>
+	<li>The Alignment pipelines follow a binary species tree that is maintained in-house (in accordance with the litterature). A Newick file representing this topology (without branch lengths) is on <a href="https://github.com/Ensembl/ensembl-compara/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/scripts/pipeline/species_tree.ensembl.topology.nw">GitHub</a>.</li>
 	<li>The Constrained Elements / Conservation Scores pipelines need branch lengths, and we compute branch lengths for 4 sub-trees of the previous tree by running phyloFit (part of the <a href="http://compgen.bscb.cornell.edu/phast/">PHAST</a> package) on our multiple alignments (see <a href="#seq_resource">above</a>). They are available in Newick format on GitHub:
 <a href="https://github.com/Ensembl/ensembl-compara/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/scripts/pipeline/species_tree.39mammals.branch_len.nw">mammals</a>,
 <a href="https://github.com/Ensembl/ensembl-compara/blob/release/[[SPECIESDEFS::ENSEMBL_VERSION]]/scripts/pipeline/species_tree.7sauropsids.branch_len.nw">sauropsids</a>,
@@ -145,7 +145,7 @@ The Compara pipelines use various species trees.
 
 <p>
 <strong>Data</strong> can be accessed using the <a href="/info/docs/api/compara/index.html">Compara Perl API</a>, 
-<a href="/info/data/biomart.html">BioMart</a>, or comparative genomics pages on the browser.
+<a href="/info/data/biomart/">BioMart</a>, or comparative genomics pages on the browser.
 Gene trees can be viewed from any 'Gene' page on the browser, and exported via the control panel and the Jalview plug-in
 in the pop-ups that appear when clicking on any part of the tree.
 </p>

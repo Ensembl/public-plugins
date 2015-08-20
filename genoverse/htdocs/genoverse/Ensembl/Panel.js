@@ -1,5 +1,5 @@
 /*
- * Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+ * Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,12 +33,15 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
     this.elLk.wheelZoom   = $('.wheel_zoom',         this.elLk.controls);
     
     this.initControls();
+    this.initLocationHighlight();
+    this.highlightLocation(Ensembl.highlightedLoc);
     
     Ensembl.EventManager.register('changeTrackOrder', this, this.externalOrder);
     Ensembl.EventManager.register('updatePanel',      this, this.update);
     Ensembl.EventManager.register('imageResize',      this, this.resize);
     Ensembl.EventManager.register('changeWidth',      this, this.resize);
     Ensembl.EventManager.register('resetGenoverse',   this, function () { this.genoverse.resetConfig(); });
+    Ensembl.EventManager.register('updateCrosshair',  this, function (s) { this.genoverse.moveCrosshair(s); });
   },
   
   makeImageMap: function () {
@@ -86,7 +89,7 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
   initControls: function () {
     var panel     = this;
     var genoverse = this.genoverse;  
-    var buttons   = $('button', this.elLk.controls).on('mousedown', function () { genoverse.hideMessages(); });
+    var buttons   = $('button', this.elLk.controls).on('mousedown', function () { genoverse.hideMessages(); }).helptip();
     
     buttons.filter('button.scroll').on({
       mousedown : function () { genoverse.startDragScroll(); },
@@ -100,13 +103,18 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
     buttons.filter('button.zoom_out').on('click', function () { genoverse.zoomOut(); });
     
     this.elLk.dragging.on('click', function () {
-      genoverse.setDragAction(panel.elLk.dragging.toggleClass('on off').hasClass('on') ? 'scroll' : 'select');
-      panel.changeControlTitle('dragging');
-    });
+      if (!$(this).parent().hasClass('selected')) {
+        var on = $(this).hasClass('on');
+        panel.updateToggleSelectControl(on);
+        genoverse.setDragAction(on ? 'scroll' : 'select');
+        Ensembl.cookie.set('ENSEMBL_GENOVERSE_SCROLL', on ? '1' : '0');
+      }
+    }).filter(Ensembl.cookie.get('ENSEMBL_GENOVERSE_SCROLL') === '1' ? '.on' : ':not(.on)').trigger('click');
     
     this.elLk.wheelZoom.on('click', function () {
-      genoverse.setWheelAction(panel.elLk.wheelZoom.toggleClass('on off').hasClass('on') ? 'zoom' : 'off');
-      panel.changeControlTitle('wheelZoom');
+      if (!$(this).parent().hasClass('selected')) {
+        genoverse.setWheelAction(panel.elLk.wheelZoom.parent().toggleClass('selected').filter('.selected').find('button').hasClass('on') ? 'zoom' : 'off');
+      }
     });
     
     this.elLk.resetHeight.on('click', function () {
@@ -115,27 +123,33 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
           url      : this.value,
           context  : panel.genoverse,
           success  : panel.genoverse.resetTrackHeights,
-          complete : function () { panel.resetTrackHeights = false; }
+          complete : function () {
+            panel.resetTrackHeights = false;
+            panel.updateTrackHeightControl(panel.genoverse.trackAutoHeight);
+          }
         });
       }
-      
-      panel.elLk.autoHeight.removeClass('off');
-      panel.changeControlTitle('autoHeight');
     });
     
     this.elLk.autoHeight.on('click', function () {
-      if (!panel.toggleAutoHeight) {
-        panel.toggleAutoHeight = $.ajax({
-          url      : this.value,
-          data     : { auto_height: panel.genoverse.trackAutoHeight ? 0 : 1 },
-          dataType : 'json',
-          context  : panel.genoverse,
-          success  : panel.genoverse.toggleAutoHeight,
-          complete : function () { panel.toggleAutoHeight = false; }
-        });
-        
-        panel.elLk.autoHeight[panel.genoverse.trackAutoHeight ? 'removeClass' : 'addClass']('off');
-        panel.changeControlTitle('autoHeight');
+      if (!$(this).parent().hasClass('selected') && !panel.toggleAutoHeight) { // ingore if button's already on, or ajax request already processing
+
+        var isAuto = $(this).hasClass('on');
+        panel.updateTrackHeightControl(isAuto);
+
+        if (panel.genoverse.trackAutoHeight !== isAuto) {
+          panel.toggleAutoHeight = $.ajax({
+            url      : this.value,
+            data     : { auto_height: isAuto ? 1 : 0 },
+            dataType : 'json',
+            context  : panel.genoverse,
+            success  : panel.genoverse.toggleAutoHeight,
+            complete : function () {
+              panel.toggleAutoHeight = false;
+              panel.updateTrackHeightControl(panel.genoverse.trackAutoHeight);
+            }
+          });
+        }
       }
     });
     
@@ -146,18 +160,56 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
       
       return false;
     }).not(':first').children();
-    
+
     buttons = null;
   },
-  
-  changeControlTitle: function (el) {
-    var title = {
-      dragging   : [ 'Scroll to a new region',           'Select a portion of this region' ],
-      wheelZoom  : [ 'Zoom in or out',                   'Scroll the browser window'       ],
-      autoHeight : [ 'Set tracks to auto-adjust height', 'Set tracks to fixed height'      ]
+
+  initSelector: function() {
+    this.elLk.selector = this.genoverse.selector.append('<div class="left-border"></div><div class="right-border"></div>');
+    this.dragRegion = {l: 0, r: this.genoverse.width - 1, a: { klass: {} }}; // required by activateSelector to find out the limits for the selector
+    this.activateSelector();
+  },
+
+  selectArea: function (arg) {
+    if (arg === false && !this.genoverse.dragging) {
+      this.genoverse.cancelSelect();
+    }
+  },
+
+  initLocationHighlight: function () {
+
+    this.highlightBoundary = {
+      range : {
+        chr   : this.genoverse.chr,
+        end   : this.genoverse.end,
+        start : this.genoverse.start,
+        scale : 1 / this.genoverse.scale
+      },
+      l : 0,
+      r : this.genoverse.wrapper.outerWidth(),
+      t : 0,
+      b : $(this.elLk.highlightedLocation).css('height') || 0 // height is updated by updateSelectorHeight method
     };
-    
-    this.elLk[el].attr('title', title[el][this.elLk[el].hasClass('off') ? 1 : 0]);
+  },
+
+  highlightLocation: function () {
+    this.base.apply(this, arguments);
+    this.genoverse.updateSelectorHeight();
+  },
+
+  makeZMenu: function(e, coords, params) { // this only gets called for region ZMenus
+    this.genoverse.makeRegionZmenu(e, {left: coords.s, width: coords.r});
+  },
+
+  updateTrackHeightControl: function(isAuto) {
+    this.elLk.autoHeight.filter('.on').parent().toggleClass('selected', isAuto);
+    this.elLk.autoHeight.filter(':not(.on)').parent().toggleClass('selected', !isAuto);
+  },
+
+  updateToggleSelectControl: function(on) {
+    this.elLk.dragging.filter('.on').parent().toggleClass('selected', on);
+    this.elLk.dragging.filter(':not(.on)').parent().toggleClass('selected', !on);
+    this.removeZMenus();
   },
   
   hashChange: function () {
@@ -240,116 +292,62 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
   
   makeHoverLabels: function () {
     var panel = this;
-    
+
     if (this.genoverse.failed) {
       return;
     }
-    
-    this.base();
-    
+
     this.elLk.drag.off();
     
     $.each(this.genoverse.tracks, function () {
       var track = this;
       var label = this.prop('label');
       
-      if (label.find('.name').length) {
-        this.hoverLabel = panel.elLk.hoverLabels.filter('.' + Ensembl.species + '_' + this.id);
-        
+      if (label.find('.name:not(:empty)').length) {
+
+        this.hoverLabel = panel.elLk.hoverLabels.filter(':not(.allocated).' + this.id).first().addClass('allocated').appendTo(label).css({ left : label.find('.name').width(), top: 0 });
+
+        label.addClass('_label_layer').on('mouseleave', function () {
+          $(this).removeClass('hover');
+        }).children('.name, .hover_label').on('mouseenter', function () {
+          $(this.parentNode).addClass('hover').find('._dyna_load').removeClass('_dyna_load').dynaLoad(); // dynaload any track description too
+        });
+
         if (this.resizable === true) {
-          this.hoverLabel.find('img.height').on('click', function () {
+          this.hoverLabel.find('a.height').on('click', function (e) {
+
+            e.preventDefault();
+
             var height;
-            
+
             if ((track.autoHeight = !track.autoHeight)) {
               track.heightBeforeToggle = track.height;
               height = track.prop('fullVisibleHeight');
             } else {
               height = track.heightBeforeToggle || track.initialHeight;
             }
-            
-            $(this).toggleClass('auto_height').children(':visible').hide().siblings().show();
-            
+
             track.controller.resize(height, true);
             track.updateHeightToggler();
           });
-          
+
           if (this.autoHeight) {
             this.updateHeightToggler();
           }
         } else {
-          this.hoverLabel.find('img.height').hide();
+          this.hoverLabel.find('._track_height').remove();
         }
-        
-        label.find('.name').on({
-          mouseover: function () {
-            var offset   = panel.genoverse.container.offset();
-            var position = $(this.parentNode).position();
-            
-            position.left += offset.left + $(this).position().left;
-            position.top  += offset.top  + panel.genoverse.labelContainer.position().top;
-            
-            if (!track.hoverLabel.hasClass('active')) {
-              panel.elLk.hoverLabels.filter('.active').removeClass('active');
-              track.hoverLabel.addClass('active');
-            }
-            
-            clearTimeout(panel.hoverTimeout);
-            
-            panel.hoverTimeout = setTimeout(function () {
-              panel.elLk.hoverLabels.filter(':visible').hide().end().filter('.active').css({
-                left    : position.left,
-                top     : position.top,
-                display : 'block'
-              });
-            }, 100);
-          },
-          mouseleave: function (e) {
-            if (e.relatedTarget) {
-              var active = panel.elLk.hoverLabels.filter('.active');
-              
-              if (!active.has(e.relatedTarget).length) {
-                active.removeClass('active').hide();
-              }
-              
-              active = null;
-            }
-          }
-        });
       }
     });
-    
-    $('a.config', this.elLk.hoverLabels).off().on('click', function () {
-      var config = this.rel;
-      var update = this.href.split(';').reverse()[0].split('='); // update = [ trackName, renderer ]
-      var fav    = '';
-      
-      if ($(this).hasClass('favourite')) {
-        fav = $(this).hasClass('selected') ? 'off' : 'on';
-        Ensembl.EventManager.trigger('changeFavourite', update[0], fav === 'on');
-      } else {
-        $(this).parents('.hover_label').width(function (i, value) {
-          return value > 100 ? value : 100;
-        }).find('.spinner').show().siblings('div').hide();
-      }
-      
-      $.ajax({
-        url      : this.href + fav,
-        dataType : 'json',
-        context  : this,
-        success  : function (json) {
-          if (json.updated) {
-            Ensembl.EventManager.trigger('hideHoverLabels'); // Hide labels and z menus on other ImageMap panels
-            Ensembl.EventManager.triggerSpecific('changeConfiguration', 'modal_config_' + config, update[0], update[1]);
-            
-            panel.updateTrackRenderer(update[0], update[1]);
-          }
-        }
-      });
-      
-      return false;
-    });
+
+    this.initHoverLabels();
   },
-  
+
+  changeConfiguration: function (config, trackName, renderer) {
+    Ensembl.EventManager.triggerSpecific('changeConfiguration', 'modal_config_' + config, trackName, renderer);
+    this.updateTrackRenderer(trackName, renderer);
+  },
+
   updateTrackRenderer: function (trackName, renderer) {
     var track      = this.genoverse.tracksById[trackName];
     var otherTrack = track.prop('reverseTrack') || track.prop('forwardTrack');

@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,6 +23,8 @@ package EnsEMBL::Web::Component::Tools::Blast::ResultsTable;
 use strict;
 use warnings;
 
+use EnsEMBL::Web::DBSQL::WebsiteAdaptor;
+
 use parent qw(EnsEMBL::Web::Component::Tools::Blast);
 
 sub buttons {
@@ -36,11 +38,7 @@ sub buttons {
   return {
     'class'     => 'export',
     'caption'   => 'Download results file',
-    'url'       => $hub->url('Download', {
-        '__clear'   => 1,
-        'function'  => '',
-        'tl'        => $object->create_url_param
-    })
+    'url'       => $object->download_url
   };
 }
 
@@ -53,112 +51,101 @@ sub content {
 
   if ($job && $job->status eq 'done' && @{$job->result}) {
 
-    my $results     = $job->result;
-    my $job_data    = $job->job_data;
-    my $species     = $job->species;
-    my $source      = $job_data->{'source'};
-    my $table       = $self->new_table($source =~/latestgp/i
-      ? [
-          { 'key' => 'tid',     'title'=> 'Genomic Location', 'align' => 'left',  'sort' => 'string'  },
-          { 'key' => 'tori',    'title'=> 'Orientation',      'align' => 'left',  'sort' => 'string'  },
-          { 'key' => 'qid',     'title'=> 'Query name',       'align' => 'left',  'sort' => 'string'  },
-          { 'key' => 'qstart',  'title'=> 'Query start',      'align' => 'left',  'sort' => 'numeric' },
-          { 'key' => 'qend',    'title'=> 'Query end',        'align' => 'left',  'sort' => 'numeric' },
-          { 'key' => 'qori',    'title'=> 'Query ori',        'align' => 'left',  'sort' => 'string'  },
-          { 'key' => 'len',     'title'=> 'Length',           'align' => 'left',  'sort' => 'numeric' },
-          { 'key' => 'score',   'title'=> 'Score',            'align' => 'left',  'sort' => 'numeric' },
-          { 'key' => 'evalue',  'title'=> 'E-val',            'align' => 'left',  'sort' => 'numeric' },
-          { 'key' => 'pident',  'title'=> '%ID',              'align' => 'left',  'sort' => 'numeric_hidden' },
-        ]
-      : [
-          { 'key' => 'tid',     'title'=> 'Subject name',     'align' => 'left',  'sort' => 'string'  },
-          { 'key' => 'tstart',  'title'=> 'Subject start',    'align' => 'left',  'sort' => 'numeric' },
-          { 'key' => 'tend',    'title'=> 'Subject end',      'align' => 'left',  'sort' => 'numeric' },
-          { 'key' => 'tori',    'title'=> 'Subject ori',      'align' => 'left',  'sort' => 'string'  },
-          { 'key' => 'gid',     'title'=> 'Genomic Location', 'align' => 'left',  'sort' => 'string'  },
-          { 'key' => 'gori',    'title'=> 'Orientation',      'align' => 'left',  'sort' => 'string'  },
-          { 'key' => 'qid',     'title'=> 'Query name',       'align' => 'left',  'sort' => 'string'  },
-          { 'key' => 'qstart',  'title'=> 'Query start',      'align' => 'left',  'sort' => 'numeric' },
-          { 'key' => 'qend',    'title'=> 'Query end',        'align' => 'left',  'sort' => 'numeric' },
-          { 'key' => 'qori',    'title'=> 'Query ori',        'align' => 'left',  'sort' => 'string'  },
-          { 'key' => 'len',     'title'=> 'Length',           'align' => 'left',  'sort' => 'numeric' },
-          { 'key' => 'score',   'title'=> 'Score',            'align' => 'left',  'sort' => 'numeric' },
-          { 'key' => 'evalue',  'title'=> 'E-val',            'align' => 'left',  'sort' => 'numeric' },
-          { 'key' => 'pident',  'title'=> '%ID',              'align' => 'left',  'sort' => 'numeric_hidden' },
-        ],
-      [], {'data_table' => 1, 'exportable' => 0, 'sorting' => ['score desc']}
-    );
-
-    # Data for table rows
-    for (@$results) {
-      my $result_id     = $_->result_id;
-      my $result_data   = $_->result_data->raw;
-      my $url_param     = $object->create_url_param({'result_id' => $result_id});
-      my $location_link = $self->location_link($job, $_);
-
-      $result_data->{'options'} = {'class' => "hsp_$result_id"};
-
-      # orientation
-      $result_data->{$_} = $result_data->{$_} == 1 ? 'Forward' : 'Reverse' for grep m/ori$/, keys %$result_data;
-
-      if ($source =~ /latestgp/i) {
-        $result_data->{'tid'} = $location_link;
-      } else {
-        $result_data->{'gid'} = $location_link;
-        $result_data->{'tid'} = $self->target_link($job, $_);
-      }
-
-      # add links to query name and pid columns
-      $result_data->{'qid'} = sprintf('<span>%s</span>&nbsp;<a href="%s" class="small _ht" title="View Query Sequence">[Sequence]</a>',
-        $result_data->{'qid'},
-        $hub->url($object->get_result_url('query_sequence', $job, $_))
-      );
-      $result_data->{'pident'} = sprintf('<span>%s</span>&nbsp;<a href="%s" class="small _ht" title="View Alignment">[Alignment]</a>',
-        $result_data->{'pident'},
-        $hub->url($object->get_result_url('alignment', $job, $_))
-      );
-
-      $table->add_row($result_data);
-    }
+    my $columns = $self->table_columns($job);
+    my @rows    = map $self->table_row($job, $_), @{$job->result};
+    my $options = $self->table_options($job);
 
     $html .= sprintf '<h3><a rel="_blast_results_table" class="toggle _slide_toggle set_cookie open" href="#">Results table</a></h3>
-      <div class="_blast_results_table toggleable">%s</div>', $table->render;
+      <div class="_blast_results_table toggleable">%s</div>', $self->new_table($columns, \@rows, $options)->render;
   }
 
   return $html;
 }
 
-sub target_link {
-  ## Gets the link for the target column
-  my ($self, $job, $result) = @_;
+sub table_columns {
+  ## Returns a list of columns for the results table
+  ## @param Job object
+  ## @return Arrayref of column as expected by new_table method
+  my ($self, $job) = @_;
 
-  my $hub = $self->hub;
+  my $glossary = EnsEMBL::Web::DBSQL::WebsiteAdaptor->new($self->hub)->fetch_glossary_lookup;
 
-  my ($target_url, $gene_url, $gene_label) = $self->object->get_result_url('target', $job, $result);
-
-  return sprintf('<a href="%s">%s</a>%s',
-    $hub->url($target_url),
-    $result->result_data->{'tid'},
-    $gene_url && $gene_label
-      ? sprintf(' (Gene: <a href="%s">%s</a>)', $hub->url($gene_url), $gene_label)
-      : ''
-  );
+  return [ $job->job_data->{'source'} =~/latestgp/i ? (
+    { 'key' => 'tid',     'title'=> 'Genomic Location',     'align' => 'left',  'sort' => 'string',         'help' => $glossary->{'Genomic Location (BLAST Results)'}           },
+    { 'key' => 'gene',    'title'=> 'Overlapping Gene(s)',  'align' => 'left',  'sort' => 'string',         'help' => $glossary->{'Overlapping Genes (BLAST Results)'}          },
+    { 'key' => 'tori',    'title'=> 'Orientation',          'align' => 'left',  'sort' => 'string',         'help' => $glossary->{'Orientation (BLAST Results for genomic)'}    }
+  ) : (
+    { 'key' => 'tid',     'title'=> 'Subject name',         'align' => 'left',  'sort' => 'string',         'help' => $glossary->{'Subject name (BLAST Results)'}               },
+    { 'key' => 'gene',    'title'=> 'Gene hit',             'align' => 'left',  'sort' => 'string',         'help' => $glossary->{'Gene hit (BLAST Results)'}                   },
+    { 'key' => 'tstart',  'title'=> 'Subject start',        'align' => 'left',  'sort' => 'numeric',        'help' => $glossary->{'Subject start (BLAST Results)'}              },
+    { 'key' => 'tend',    'title'=> 'Subject end',          'align' => 'left',  'sort' => 'numeric',        'help' => $glossary->{'Subject end (BLAST Results)'}                },
+    { 'key' => 'tori',    'title'=> 'Subject ori',          'align' => 'left',  'sort' => 'string',         'help' => $glossary->{'Subject ori (BLAST Results)'}                },
+    { 'key' => 'gid',     'title'=> 'Genomic Location',     'align' => 'left',  'sort' => 'string',         'help' => $glossary->{'Genomic Location (BLAST Results)'}           },
+    { 'key' => 'gori',    'title'=> 'Orientation',          'align' => 'left',  'sort' => 'string',         'help' => $glossary->{'Orientation (BLAST Results for cDNA/protein)'}}
+  ), (
+    { 'key' => 'qid',     'title'=> 'Query name',           'align' => 'left',  'sort' => 'string',         'help' => $glossary->{'Query name (BLAST Results)'}, 'hidden' => 1  },
+    { 'key' => 'qstart',  'title'=> 'Query start',          'align' => 'left',  'sort' => 'numeric',        'help' => $glossary->{'Query start (BLAST Results)'}                },
+    { 'key' => 'qend',    'title'=> 'Query end',            'align' => 'left',  'sort' => 'numeric',        'help' => $glossary->{'Query end (BLAST Results)'}                  },
+    { 'key' => 'qori',    'title'=> 'Query ori',            'align' => 'left',  'sort' => 'string',         'help' => $glossary->{'Query ori (BLAST Results)'},  'hidden' => 1  },
+    { 'key' => 'len',     'title'=> 'Length',               'align' => 'left',  'sort' => 'numeric_hidden', 'help' => $glossary->{'Length (BLAST Results)'}                     },
+    { 'key' => 'score',   'title'=> 'Score',                'align' => 'left',  'sort' => 'numeric',        'help' => $glossary->{'Score (BLAST Results)'}                      },
+    { 'key' => 'evalue',  'title'=> 'E-val',                'align' => 'left',  'sort' => 'numeric',        'help' => $glossary->{'E-val (BLAST Results)'}                      },
+    { 'key' => 'pident',  'title'=> '%ID',                  'align' => 'left',  'sort' => 'numeric_hidden', 'help' => $glossary->{'%ID (BLAST Results)'}                        }
+  ) ];
 }
 
-sub location_link {
-  ## Gets a link to the location view page for the given result
+sub table_row {
+  ## Returns one row per BLAST result to be added to the results table
   my ($self, $job, $result) = @_;
 
-  my $hub         = $self->hub;
-  my $result_data = $result->result_data;
-  my $url         = $self->object->get_result_url('location', $job, $result);
-  my $region      = sprintf '%s:%s-%s', $result_data->{'gid'}, $result_data->{'gstart'}, $result_data->{'gend'};
+  my $result_id     = $result->result_id;
+  my $result_row    = $result->result_data->raw;
+  my $url_param     = $self->object->create_url_param({'result_id' => $result_id});
+  my $urls          = $self->get_result_links($job, $result);
 
-  return sprintf('<a href="%s" class="_ht" title="Region in Detail">%s</a>&nbsp;<a href="%s" class="small _ht" title="View Genomic Sequence">[Sequence]</a>',
-    $hub->url($url),
-    $region,
-    $hub->url($self->object->get_result_url('genomic_sequence', $job, $result))
-  );
+  $result_row->{'options'} = {'class' => "hsp_$result_id"};
+
+  # orientation columns
+  $result_row->{$_} = $result_row->{$_} == 1 ? 'Forward' : 'Reverse' for grep m/ori$/, keys %$result_row;
+
+  # columns with links
+  $result_row->{'gid'}    = $result_row->{'tid'} = qq($urls->{'location'}&nbsp;$urls->{'genomic_sequence'});
+  $result_row->{'tid'}    = $urls->{'target'} unless $job->job_data->{'source'} =~ /latestgp/i;
+  $result_row->{'gene'}   = $urls->{'gene'};
+  $result_row->{'len'}    = sprintf('<span>%s</span>&nbsp;%s', $result_row->{'len'}, $urls->{'query_sequence'});
+  $result_row->{'pident'} = sprintf('<span>%s</span>&nbsp;%s', $result_row->{'pident'}, $urls->{'alignment'});
+
+  return $result_row;
+}
+
+sub table_options {
+  ## Returns options for rendering the results table
+  ## @param Job object
+  ## @return Hashref of table options as expected by new_table method
+  my ($self, $job) = @_;
+  return {
+    'id'          => sprintf('blast_results%s', $job->job_data->{'source'} =~ /latestgp/i ? '_1' : '_2'), # keep different session record for DataTable when saving sorting, hidden cols etc
+    'data_table'  => 1,
+    'sorting'     => ['score desc']
+  };
+}
+
+sub get_result_links {
+  ## Gets the links for all required table columns
+  my ($self, $job, $result) = @_;
+
+  my $hit   = $result->result_data;
+  my $hub   = $self->hub;
+  my $urls  = $self->object->get_result_urls($job, $result);
+
+  return {
+    'gene'              => join(', ', map { sprintf '<a href="%2$s">%1$s</a>', delete $_->{'label'}, $hub->url($_) } @{$urls->{'gene'}}) || '',
+    'target'            => $urls->{'target'} ? sprintf('<a href="%s">%s</a>', $hub->url($urls->{'target'}), $hit->{'tid'}) : '',
+    'location'          => sprintf('<a href="%s" class="_ht" title="Region in Detail">%s:%s-%s</a>', $hub->url($urls->{'location'}), $hit->{'gid'}, $hit->{'gstart'}, $hit->{'gend'}),
+    'genomic_sequence'  => sprintf('<a href="%s" class="small _ht" title="View Genomic Sequence">[Sequence]</a>', $hub->url($urls->{'genomic_sequence'})),
+    'query_sequence'    => sprintf('<a href="%s" class="small _ht" title="View Query Sequence">[Sequence]</a>', $hub->url($urls->{'query_sequence'})),
+    'alignment'         => sprintf('<a href="%s" class="small _ht" title="View Alignment">[Alignment]</a>', $hub->url($urls->{'alignment'}))
+  };
 }
 
 1;

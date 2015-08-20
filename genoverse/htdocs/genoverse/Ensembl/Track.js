@@ -1,5 +1,5 @@
 /*
- * Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+ * Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -99,7 +99,7 @@ Genoverse.Track = Genoverse.Track.extend({
     var hoverLabel = this.prop('hoverLabel');
     
     if (hoverLabel) {
-      hoverLabel.children('.height')[this.prop('autoHeight') ? 'addClass' : 'removeClass']('auto_height');
+      hoverLabel.find('div._track_height').toggleClass('auto_height', this.prop('autoHeight'));
     }
     
     hoverLabel = null;

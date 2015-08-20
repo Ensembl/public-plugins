@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -91,7 +91,7 @@ sub map_to_genome {
 
   } else {
 
-    my $feature_type  = $source_type =~ /abinitio/i ? 'PredictionTranscript' : $source_type =~ /cdna/i ? 'Transcript' : 'Translation';
+    my $feature_type  = $source_type =~ /abinitio/i ? 'PredictionTranscript' : $source_type =~ /pep/i ? 'Translation' : 'Transcript';
     my $mapper        = $source_type =~ /pep/i ? 'pep2genomic' : 'cdna2genomic';
     my $adaptor       = $dba->get_adaptor($feature_type);
     my $object        = $adaptor->fetch_by_stable_id($hit->{'tid'});

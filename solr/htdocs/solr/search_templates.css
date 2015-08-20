@@ -1,3 +1,8 @@
+#solr_content strong {
+    color: red;
+    font-weight: normal;
+}
+
 .g_spinner {
   background: url("/i/e-loader.gif") repeat scroll 0 0 transparent;
   height: 66px;
@@ -315,6 +320,11 @@
   margin: 0;
   height: 25px;
 }
+
+body.mobile-page .scnarrow h1 {
+  height: 50px;
+}
+
 
 .scnarrow ul {
   list-style: none;

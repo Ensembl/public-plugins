@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -51,8 +51,8 @@ sub content {
     <div class="column-two left">
       <p>%s release %d - %s &copy;
         <span class="print_hide"><a href="http://www.sanger.ac.uk/" class="nowrap constant">WTSI</a> /
-        <a href="http://www.ebi.ac.uk/" class="nowrap constant">EBI</a></span>
-        <span class="screen_hide_inline">WTSI / EBI<br />http://%s</span>
+        <a href="http://www.ebi.ac.uk/" class="nowrap constant">EMBL-EBI</a></span>
+        <span class="screen_hide_inline">WTSI / EMBL-EBI<br />http://%s</span>
       </p>
     ),
     $sd->ENSEMBL_SITETYPE, $sd->ENSEMBL_VERSION,
@@ -60,7 +60,15 @@ sub content {
     );
   
   $html .= '<p class="print_hide">'; 
+
   unless ($ENV{'ENSEMBL_TYPE'} =~ /Help|Account|UserData|Tools/) {
+
+    # if you are looking at www on a mobile/tablet device, add mobile site link
+    if($ENV{'MOBILE_DEVICE'}) {
+      # not using $you_are_here because not all pages are available on mobile site
+      $html .= qq{<a class="mobile_link" href="http://m.ensembl.org">Mobile site</a> - };
+    }
+
     $html .= qq{
         <a class="modal_link" id="p_link" href="/Help/Permalink?url=$stable_URL">Permanent link</a>
     };

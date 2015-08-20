@@ -1,4 +1,4 @@
-# Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+# Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -33,11 +33,20 @@ window.fixes.fix_terse =
       (data) ->
         data.tp2_row.register 100, () -> # Subtypes for doucmentation
           url = data.tp2_row.best('domain_url')
+          url = url.replace(/https?:\/\/.*?\//,'/')
+          if url != '' and url[0] != '/'
+            url = '/' + url
+          data.tp2_row.candidate('url',url,500)
+          ft = data.tp2_row.best('feature_type')
           if url
             data.tp2_row.candidate('subtype','ID',10)
             m = url.match /Help\/([a-zA-z]+)/
             if m?
               data.tp2_row.candidate('subtype',m[1],100)
+
+        data.tp2_row.register 150, () -> # Better IDs for doucmentation
+          if data.tp2_row.best('feature_type') == 'Documentation'
+            data.tp2_row.candidate('id',data.tp2_row.best('url'),100)
 
         data.tp2_row.register 300, () -> # Overly terse titles
           ft = data.tp2_row.best('feature_type')

@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -197,10 +197,10 @@ sub show_fields {
       'label'     => 'Does it have a mitochondrion?',
       'values'    => [{'value' => 'Y', 'caption' => 'Yes'}, {'value' => 'N', 'caption' => 'No'}, {'value' => 'changed', 'caption' => 'Changed'}]
     },
-    priority          => {
+    site_type         => {
       'type'      => 'dropdown',
-      'label'     => 'Priority',
-      'values'    => [{'value' => '1', 'caption' => 'Low'}, {'value' => '2', 'caption' => 'Normal'}, {'value' => '3', 'caption' => 'High'}, {'value' => '4', 'caption' => 'Very high'}]
+      'label'     => 'Site type',
+      'values'    => [{'value' => 'ensembl', 'caption' => 'Ensembl'}, {'value' => 'grch37', 'caption' => 'GRCh37'}, {'value' => 'pre', 'caption' => 'Pre'}]
     },
     category          => {
       'type'      => 'dropdown',
@@ -213,13 +213,18 @@ sub show_fields {
         {'value'    => 'web',        'caption' => 'New web displays &amp; tools'},
         {'value'    => 'schema',     'caption' => 'API schema changes'},
         {'value'    => 'retired',    'caption' => 'Retired data'},
-        {'value'    => 'other',      'caption' => 'Others'}
-      ]
+        {'value'    => 'other',      'caption' => 'Others'},
+      ],
     },
-    site_type         => {
+    priority          => {
       'type'      => 'dropdown',
-      'label'     => 'Site type',
-      'values'    => [{'value' => 'ensembl', 'caption' => 'Ensembl'}, {'value' => 'grch37', 'caption' => 'GRCh37'}, {'value' => 'pre', 'caption' => 'Pre'}]
+      'label'     => 'Headline position on homepage',
+      'values'    => [
+                      {'value' => '4', 'caption' => '1st'}, 
+                      {'value' => '3', 'caption' => '2nd'}, 
+                      {'value' => '2', 'caption' => '3rd'}, 
+                      {'value' => '1', 'caption' => 'Not a headline'},
+                    ],
     },
 
 

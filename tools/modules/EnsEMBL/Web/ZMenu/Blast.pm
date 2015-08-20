@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -49,7 +49,8 @@ sub add_hit_content {
 
   my $hub     = $self->hub;
   my $object  = $self->object->get_sub_object('Blast');
-  my $hit     = $result->result_data->raw;
+  my $hit     = $result->result_data;
+  my $urls    = $object->get_result_urls($job, $result);
 
   $self->caption($multiple ? sprintf '%s:%s-%s', $hit->{'gid'}, $hit->{'gstart'}, $hit->{'gend'} : "$blast_type hit");
   $self->highlight(sprintf 'hsp_%s', $result->result_id);
@@ -57,7 +58,7 @@ sub add_hit_content {
   $self->add_entry({
     'type'        => 'Genomic bp',
     'label_html'  => sprintf('%s:<wbr>%s-<wbr>%s', $hit->{'gid'}, $hit->{'gstart'}, $hit->{'gend'}),
-    'link'        => $hub->url($object->get_result_url('location', $job, $result))
+    'link'        => $hub->url($urls->{'location'})
   });
 
   $self->add_entry({
@@ -67,9 +68,14 @@ sub add_hit_content {
 
   $self->add_entry({
     'type'        => 'Target',
-    'label'       => $hit->{'tid'}, $hit->{'source'} !~/latest/i ? (
-    'link'        => $hub->url($object->get_result_url('target', $job, $result))) : ()
-  });
+    'label'       => $hit->{'tid'},
+    'link'        => $hub->url($urls->{'target'})
+  }) if $urls->{'target'};
+
+  $self->add_entry({
+    'type'        => $job->job_data->{'source'} =~/latestgp/i ? 'Overlapping Gene(s)' : 'Gene hit',
+    'label_html'  => join(', ', map { sprintf '<a href="%2$s">%1$s</a>', delete $_->{'label'}, $hub->url($_) } @{$urls->{'gene'}})
+  }) if @{$urls->{'gene'}};
 
   $self->add_entry({ 'type' => 'Score',   'label' => $hit->{'score'}  });
   $self->add_entry({ 'type' => 'E-value', 'label' => $hit->{'evalue'} });
@@ -78,7 +84,7 @@ sub add_hit_content {
 
   # Alignment and sequence links
   for (qw(alignment query_sequence genomic_sequence)) {
-    $self->add_entry({ 'label_html' => sprintf('<a href="%s" class="_ht">%s</a>', $hub->url($object->get_result_url($_, $job, $result)), ucfirst $_ =~ s/_/ /r) });
+    $self->add_entry({ 'label_html' => sprintf('<a href="%s" class="_ht">%s</a>', $hub->url($urls->{$_}), ucfirst $_ =~ s/_/ /r) });
   }
 }
 

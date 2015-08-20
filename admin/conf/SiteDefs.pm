@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -41,6 +41,8 @@ sub update_conf {
     SpeciesAlias    => 'Modal',
     Webdata         => 'Modal',
     AttribType      => 'Modal',
+    Attrib          => 'Modal',
+    AttribSet       => 'Modal',
     ExternalDb      => 'Modal',
 
     HelpRecord      => 'Modal',
@@ -51,7 +53,6 @@ sub update_conf {
     Account         => 'Modal',
   };
 
-  $SiteDefs::ENSEMBL_BLAST_ENABLED  = 0;
   $SiteDefs::ENSEMBL_MART_ENABLED   = 0;
   $SiteDefs::ENSEMBL_MEMCACHED      = {};
 

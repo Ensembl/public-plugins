@@ -1,4 +1,4 @@
-# Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+# Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 # 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -32,13 +32,6 @@ sub update_conf {
 
 #  $SiteDefs::ENSEMBL_TMP_DIR_BLAST          = $SiteDefs::ENSEMBL_SERVERROOT."/blastqueue";
 #  $SiteDefs::ENSEMBL_BLASTSCRIPT            = $SiteDefs::ENSEMBL_WEBROOT."/utils/runblast.pl";
-
-#  $SiteDefs::ENSEMBL_USERDB_NAME            = 'ensembl_web_user_db';
-#  $SiteDefs::ENSEMBL_USERDB_USER            = 'my_mysql_write_user';
-#  $SiteDefs::ENSEMBL_USERDB_HOST            = 'my_mysql.my_domain.org'
-#  $SiteDefs::ENSEMBL_USERDB_PORT            =  3306;
-#  $SiteDefs::ENSEMBL_USERDB_PASS            = 'my_mysql_write_pass';
-
 
 }
 

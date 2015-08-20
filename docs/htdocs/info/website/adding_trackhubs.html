@@ -1,14 +1,31 @@
 <html>
 <head>
 <meta name="order" content="2" />
-<title>Adding Trackhubs</title>
+<title>Adding Track Hubs</title>
 </head>
 
 <body>
 
-<h1>Adding Trackhubs to Ensembl</h1>
+<h1>Adding Track Hubs to Ensembl</h1>
 
-<p>You can add a trackhub (also known as a datahub) to Region in Detail for any species, as follows:  
+<h2>Programmatically attaching track hubs</h2>
+
+<p>If you wish to put a URL on your website which automatically attaches a hub to Ensembl, please use the following URL format:</p>
+
+<p>http://www.ensembl.org/Trackhub?url=http://www.coolgenomics.ac.uk/hub.txt</p>
+
+<p>For more precise configuration, you can add the following optional parameters, separated by semicolons:</p>
+
+<ul>
+<li>Species - binomial name with underscores, as used by Ensembl URLs. E.g. Homo_sapiens</li>
+<li>Location - coordinates as region:start-end, using parameter name 'r'</li>
+</ul>
+
+<p>e.g. http://www.ensembl.org/Trackhub?url=http://www.coolgenomics.ac.uk/hub.txt;species=Homo_sapiens;r=X:123456-123789</p>
+
+<h2>Manually attaching a track hub</h2>
+
+<p>You can add a track hub (also known as a datahub) to Region in Detail for any species, as follows:  
 </p> 
 
 <ol>
@@ -20,9 +37,9 @@
 </li>
 <li>Fill in the data form:
   <ol>
-    <li>Give your trackhub a name (optional - it will be parsed from the hub.txt file)</li>
+    <li>Give your track hub a name (optional - it will be parsed from the hub.txt file)</li>
     <li>The current species will be preselected - note that we now support multispecies hubs, so relevant data will be available on all appropriate species</li>
-    <li>The assembly is automatically set to the current assembly for the species you are on - if you wish to use a trackhub with data on older assemblies, you will need to use an <a href="/info/website/archives/">archive site</a> (not available for all Ensembl-powered websites)</li>
+    <li>The assembly is automatically set to the current assembly for the species you are on - if you wish to use a track hub with data on older assemblies, you will need to use an <a href="/info/website/archives/">archive site</a> (not available for all Ensembl-powered websites)</li>
     <li>Select "TrackHub" from the dropdown menu, and a text box will appear.</li>
   </ol>
 </li>
@@ -33,8 +50,16 @@
 </ol>
 
 <ul>
-<li><a href="/info/website/public_trackhubs.html">List of currently available public trackhubs</a></li>
+<li><a href="/info/website/public_trackhubs.html">List of currently available public track hubs</a></li>
 </ul>
+
+<p>For how to set up a hub, see the documentation provided by UCSC, the originators
+of this data service:</p>
+<ul>
+<li><a href="http://genome.ucsc.edu/goldenPath/help/hgTrackHubHelp.html" rel="external">Using UCSC Genome Browser Track Hubs</a></li>
+<li><a href="http://hgwdev-tdreszer.cse.ucsc.edu/goldenPath/help/trackDb/trackDbHub.html" rel="external">Hub Track Database Definition</a></li>
+</ul>
+
 
 </body>
 </html>

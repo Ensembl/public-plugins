@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -32,6 +32,7 @@ sub blast_method   { return $_[0]{'_blast_method'};               } ## @return B
 sub is_protein     { return $_[0]{'_is_protein'};                 } ## @return Flag whether the sequence is protein or not
 sub object         { return $_[0]->SUPER::object->get_sub_object; } ## Gets the actual blast object instead of the Tools object
 sub get_slice_name { return $_[1]->name;                          }
+sub blast_options  { return undef;                                } ## Don't display blast button for blast results
 
 sub new {
   ## @override
@@ -45,7 +46,7 @@ sub new {
   $self->{'_hit'}               = $self->{'_job'}->result->[0]->result_data->raw;
   $self->{'_hit'}{'result_id'}  = $self->{'_job'}->result->[0]->result_id;
 
-  push @{$self->{'key_types'}},  'hsp';
+  push @{$self->{'key_types'}},  'HSP';
   push @{$self->{'key_params'}}, 'hsp_display';
 
   return $self;
@@ -87,7 +88,7 @@ sub set_hsps {
   my $slice_start   = $slice->start;
   my $slice_end     = $slice->end;
   my $slice_length  = $slice->length;
-  my $ori           = $self->hub->param('orientation'); # TODO provide a default value to this somewhere!
+  my $ori           = $self->hub->param('orientation') || ''; # TODO provide a default value to this somewhere!
   my $hits          = [];
 
   if ($config->{'hsp_display'} eq 'all') {
@@ -146,7 +147,7 @@ sub markup_hsp {
     $i++;
   }
 
-  $config->{'key'}{'hsp'}{$_} = 1 for keys %hsp_types;
+  $config->{'key'}{'HSP'}{$_} = 1 for keys %hsp_types;
 }
 
 sub class_to_style {
@@ -160,8 +161,8 @@ sub class_to_style {
     my $styles  = $self->hub->species_defs->colour('sequence_markup');
     my $counter = scalar keys %{$self->{'class_to_style'}};
 
-    $self->{'class_to_style'}{'hsp_other'} = [ ++$counter, { 'font-weight' => 'bold', color => "#$styles->{'SEQ_HSP_OTHER'}{'default'}" }];
-    $self->{'class_to_style'}{'hsp_sel'}   = [ ++$counter, { 'font-weight' => 'bold', color => "#$styles->{'SEQ_HSP_SEL'}{'default'}"   }]; # selected is more important, so goes after other
+    $self->{'class_to_style'}{'hsp_other'} = [ ++$counter, { 'font-weight' => 'bold', 'color' => "#$styles->{'SEQ_HSP_OTHER'}{'default'}" }];
+    $self->{'class_to_style'}{'hsp_sel'}   = [ ++$counter, { 'font-weight' => 'bold', 'color' => "#$styles->{'SEQ_HSP_SEL'}{'default'}"   }]; # selected is more important, so goes after other
   }
 
   return $self->{'class_to_style'};

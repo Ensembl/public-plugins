@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -24,9 +24,7 @@ use warnings;
 use List::Util qw(first);
 
 use EnsEMBL::Web::Exceptions;
-use EnsEMBL::Web::Command::UserData;
-use EnsEMBL::Web::TmpFile::Text;
-use EnsEMBL::Web::Utils::FileHandler qw(file_get_contents);
+use EnsEMBL::Web::File::Tools;
 use EnsEMBL::Web::Job::AssemblyConverter;
 
 use parent qw(EnsEMBL::Web::Ticket);
@@ -40,6 +38,8 @@ sub init_from_user_input {
 
   $hub->param('text', $hub->param("text_$format"));
 
+  my $file = EnsEMBL::Web::File::Tools->new('hub' => $hub, 'tool' => 'AssemblyConverter', 'empty' => 1);
+
   my $method    = first { $hub->param($_) } qw(file url userdata text);
 
   # if no data entered
@@ -51,28 +51,23 @@ sub init_from_user_input {
   if ($method eq 'userdata') {
 
     $file_name    = $hub->param('userdata');
-    $description  = 'user data'
+    $description  = 'user data';
+
+    $file->init('file' => $file_name);
 
   # if new file, url or text, upload it to a temporary file location
   } else {
 
     $description = $hub->param('name') || ($method eq 'text' ? 'pasted data' : ($method eq 'url' ? 'data from URL' : sprintf("%s", $hub->param('file'))));
 
-    # upload from file/text/url
-    my $response = EnsEMBL::Web::Command::UserData->new({'object' => $self->object, 'hub' => $hub})->upload($method, 'no_attach'); # FIXME - upload method needs to be taken out of EnsEMBL::Web::Command::UserData
+    my $error = $file->upload('type' => 'no_attach', 'description' => $description);
+    throw exception('InputError', $error) if $error;
 
-    throw exception('InputError', $response && $response->{'error'} ? $response->{'error'} : "Upload failed: $response->{'filter_code'}") unless $response && $response->{'code'};
-
-    my $code      = $response->{'code'};
-    my $tempdata  = $hub->session->get_data('type' => 'upload', 'code' => $code);
-
-    throw exception('InputError', "Could not find file with code $code") unless $tempdata && $tempdata->{'filename'};
-
-    $file_name = $tempdata->{'filename'};
+    $file_name = $file->write_name;
   }
 
   # finalise input file path and description
-  $file_path    = EnsEMBL::Web::TmpFile::Text->new('filename' => $file_name)->{'full_path'}; # absolute path of the temporary input file
+  $file_path    = $file->absolute_write_path; 
   $description  = "Assembly conversion of $description in $species";
   $file_name    .= '.'.lc($format) if $file_name !~ /\./ && -T $file_path;
   $file_name    = $file_name =~ s/.*\///r;

@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -31,14 +31,14 @@ sub update_conf {
   $SiteDefs::ENSEMBL_LDAP_ENABLED           = 0; # this gets overridden in LDAP plugin
 
   # URL for secure pages (any pages that ask user to enter password)
-  $SiteDefs::ENSEMBL_LOGIN_URL            ||= $SiteDefs::ENSEMBL_SITE_URL; #'https://login.ensembl.org/';
+  $SiteDefs::ENSEMBL_LOGIN_URL            ||= defer { $SiteDefs::ENSEMBL_SITE_URL }; #'https://login.ensembl.org/';
 
   ## Arrayref of emails and display title that user can opt to subscribe at the time of registration eg. [ dev-join@ensembl.org => 'Ensembl Dev List' ] for dev@ensembl.org
   ## $SiteDefs::SUBSCRIPTION_EMAIL_LISTS  ||= ['announcement-join@example.com' => 'Mailing list for release related news']
   $SiteDefs::SUBSCRIPTION_EMAIL_LISTS     ||= [];
   
   ## Address to send verification emails from
-  $SiteDefs::ENSEMBL_NOREPLY_EMAIL        ||= $SiteDefs::ENSEMBL_HELPDESK_EMAIL; #Set this to something like 'no-reply@example.com'
+  $SiteDefs::ENSEMBL_NOREPLY_EMAIL        ||= defer { $SiteDefs::ENSEMBL_HELPDESK_EMAIL }; #Set this to something like 'no-reply@example.com'
   
   $SiteDefs::ENSEMBL_DEFAULT_USER_GROUPS  ||= [];
   

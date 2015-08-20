@@ -1,5 +1,5 @@
 /*
- * Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+ * Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,9 @@ Ensembl.Genoverse = Genoverse.extend({
   init: function () {
     this.base();
     this.highlightRegion = $('<div class="selector highlight">').appendTo(this.wrapper);
-    
+    this.selectorStalled = true;
+    this.trackAutoHeight = false;
+
     Ensembl.EventManager.register('genoverseMove', this, this.moveTo);
     
     // Ensure that the popState function from Genoverse fires before the one from Ensembl, so that nothing happens when hashChange is triggered from using browser forward/back buttons
@@ -46,9 +48,13 @@ Ensembl.Genoverse = Genoverse.extend({
       (this.updateEnsemblText = this.updateEnsemblText || $('h1.summary-heading, #masthead .location.long_tab a')).html(function (i, html) {
         return html.replace(/^(.+:\s?).+/, '$1' + text);
       });
-      console.log("location",location.start,location.end);
-      Ensembl.images[this.panel.imageNumber+1][0][2] = location.start;
-      Ensembl.images[this.panel.imageNumber+1][0][3] = location.end;
+      if (Ensembl.images[this.panel.imageNumber+1]) {
+        Ensembl.images[this.panel.imageNumber+1][0][2] = location.start;
+        Ensembl.images[this.panel.imageNumber+1][0][3] = location.end;
+      }
+
+      this.panel.initLocationHighlight();
+      this.panel.highlightLocation(Ensembl.highlightedLoc);
     }
 
     Ensembl.EventManager.trigger('highlightAllImages');
@@ -213,10 +219,9 @@ Ensembl.Genoverse = Genoverse.extend({
     this.trackAutoHeight = false;
     
     this.base();
-    
-    this.panel.elLk.autoHeight.removeClass('off');
-    this.panel.changeControlTitle('autoHeight');
-    
+
+    this.panel.updateTrackHeightControl(true);
+
     for (var i = 0; i < this.tracks.length; i++) {
       track = this.tracks[i];
       
@@ -270,7 +275,7 @@ Ensembl.Genoverse = Genoverse.extend({
       }
     }
     
-    this.selector.add(this.highlightRegion).css('height', height); // Do not use .height(height), because the box-sizing: border-box style causes height(height) to sets the height to be 2px too large 
+    this.selector.add(this.highlightRegion).add(this.panel.elLk.highlightedLocation).css('height', height); // Do not use .height(height), because the box-sizing: border-box style causes height(height) to sets the height to be 2px too large
   },
   
   makeMenu: function (feature, event, track) {
@@ -282,18 +287,20 @@ Ensembl.Genoverse = Genoverse.extend({
   
   stopDragSelect: function (e) {
     if (this.base(e) !== false && !e.originalEvent.hasFeature) {
-      var left  = this.selector.position().left;
-      var start = Math.round(left / this.scale) + this.start;
-      var end   = Math.round((left + this.selector.outerWidth(true)) / this.scale) + this.start - 1;
-          end   = end <= start ? start : end;
-      
-      this.makeZMenu({ event: e, feature: {}, drag: { chr: this.chr, start: start, end: end, browser: this }, imageId: this.panel.id, onClose: function(e) {
-        this.cancelSelect();
-        this.moveSelector(e);
-      } }, 'zmenu_region_select');
-      
+      this.makeRegionZmenu(e, {left: this.selector.position().left, width: this.selector.outerWidth(true)});
       this.selectorStalled = true;
     }
+  },
+
+  makeRegionZmenu: function(e, coords) {
+    var start = Math.round(coords.left / this.scale) + this.start;
+    var end   = Math.round((coords.left + coords.width) / this.scale) + this.start - 1;
+        end   = end <= start ? start : end;
+
+    this.makeZMenu({ event: e, feature: {}, drag: { chr: this.chr, start: start, end: end, browser: this }, imageId: this.panel.id, onClose: function(e) {
+      this.cancelSelect();
+      this.moveSelector(e);
+    } }, 'zmenu_region_select');
   },
   
   makeZMenu: function (params, id, track) {
@@ -338,8 +345,7 @@ Ensembl.Genoverse = Genoverse.extend({
   
   toggleSelect: function (on) {
     this.base(on);
-    this.panel.elLk.dragging.removeClass('on off').addClass(this.dragAction === 'select' ? 'off' : 'on');
-    this.panel.changeControlTitle('dragging');
+    this.panel.updateToggleSelectControl(on);
   },
   
   keydown: function (e) {
@@ -367,7 +373,24 @@ Ensembl.Genoverse = Genoverse.extend({
       data : { config: JSON.stringify(config), image_config: this.panel.imageConfig, track: track.id }
     });
   },
-  
+
+  moveCrosshair: function (rStart) {
+    if (this.dragAction === 'select' && this.selector.hasClass('crosshair')) {
+      this.selectorStalled = true; // prevent document.mousemove to change selector poisition to current mouse pageX
+      this.selector.css('left', (rStart - this.start) * this.scale);
+    }
+  },
+
+  addUserEventHandlers: function() {
+    var browser = this;
+
+    this.base.apply(this, arguments);
+
+    this.container.on('mouseenter mouseleave', function (e) {
+      browser.selectorStalled = e.type === 'mouseleave' || !browser.selector.hasClass('crosshair');
+    });
+  },
+
   die: function (error, el) {
     return this.base(error, el.parents('.js_panel:first'));
   }

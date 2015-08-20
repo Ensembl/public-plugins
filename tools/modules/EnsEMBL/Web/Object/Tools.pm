@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ use warnings;
 use Digest::MD5 qw(md5_hex);
 
 use EnsEMBL::Web::Exceptions;
-use EnsEMBL::Web::Tools::RandomString qw(random_string);
+use EnsEMBL::Web::Utils::RandomString qw(random_string);
 use EnsEMBL::Web::Utils::FileSystem qw(create_path remove_empty_path remove_directory copy_dir_contents);
 use EnsEMBL::Web::Utils::DynamicLoader qw(dynamic_require);
 
@@ -59,11 +59,16 @@ sub short_caption {
     my $job       = $self->get_requested_job;
     my $ticket    = $job && $job->ticket;
     my $job_count = $ticket && $ticket->job_count;
-    return $job && $job->status eq 'done' ? sprintf('%s results', $ticket->ticket_type_name) : 'Jobs';
+    return $job && $job->status eq 'done' ? sprintf('%s results', $self->get_sub_object($ticket->ticket_type_name)->tab_caption) : 'Jobs';
   }
 
   my $sub_object = $self->get_sub_object;
-  return $global ? $sub_object->tool_type || 'Tools' : 'Web Tools'; # generic Tools page or Blast/VEP pages for tab, 'Web Tools' for menu heading
+  return $global ? $sub_object->tab_caption : 'Web Tools'; # generic Tools page or Blast/VEP pages for tab, 'Web Tools' for menu heading
+}
+
+sub tab_caption {
+  ## Caption for the tab (to be overridden by the child objects)
+  return shift->tool_type || 'Tools';
 }
 
 sub default_action {
@@ -104,7 +109,7 @@ sub get_tool_caption {
 
   $tool_type      ||= $self->tool_type;
   my $sd            = $self->hub->species_defs;
-  my @ticket_types  = @{$sd->ENSEMBL_TOOLS_LIST};
+  my @ticket_types  = $sd->tools_list;
 
   for (@ticket_types) {
     while (my ($key, $caption) = splice @ticket_types, 0, 2) {
@@ -216,18 +221,20 @@ sub delete_ticket_or_job {
     if ($job) {
 
       # if there's only one job linked to a ticket, mark the ticket for removal
-      $ticket       = $job->ticket;
-      $ticket_type  = $ticket->ticket_type_name;
-      $ticket       = undef if $ticket->job_count > 1;
+      # skip if the ticket doesn't belong to the user
+      ($ticket)     = $self->user_accessible_tickets($job->ticket);
+      $ticket_type  = $ticket->ticket_type_name if $ticket;
+      $ticket       = undef if $ticket && $ticket->job_count > 1;
     }
 
   # if job_id is missing, but ticket_name is provided, it's a request to the ticket
   } elsif ($params->{'ticket_name'}) {
-    $ticket       = $self->get_requested_ticket;
+    ($ticket)     = $self->user_accessible_tickets($self->get_requested_ticket);
     $ticket_type  = $ticket->ticket_type_name if $ticket;
   }
 
-  return unless $ticket || $job;
+  # ticket type will be undef if no ticket/job was found with the given name/id that is owned by the user
+  return unless $ticket_type;
 
   # get the path of the related directory that needs to be removed
   ($job) = $ticket->job if !$job && $ticket;
@@ -258,7 +265,7 @@ sub save_ticket_to_account {
   my $self = shift;
   my $result;
 
-  if (my $ticket = $self->get_requested_ticket) {
+  if (my ($ticket) = $self->user_accessible_tickets($self->get_requested_ticket)) {
 
     my $ticket_type = $ticket->ticket_type_name;
     my %dirs;
@@ -324,9 +331,9 @@ sub get_current_tickets {
 
     my $ticket_types  = $self->rose_manager(qw(Tools TicketType))->fetch_with_current_tickets({
       'site_type'       => $hub->species_defs->ENSEMBL_SITETYPE,
-      'session_id'      => $hub->session->create_session_id, $user ? (
-      'user_id'         => $user->user_id ) : (), $tool_type ? ( # If object is Tools, show all tickets
-      'type'            => $tool_type) : ()
+      'session_id'      => $self->get_session_id,
+      'user_id'         => $user && $user->user_id,
+      'type'            => $tool_type
     });
 
     my @tickets = sort { $b->created_at <=> $a->created_at } map $_->ticket, @$ticket_types;
@@ -339,41 +346,114 @@ sub get_current_tickets {
 
 sub get_requested_ticket {
   ## Gets a ticket object from the database with param from the URL and caches it for subsequent requests
+  ## @param Hashref with keys:
+  ##   - with_jobs: (on by default) if on, will get all jobs linked to the ticket
+  ##   - with_results: if on, will get all jobs and all results linked to the ticket
+  ##   - ticket_only: if on, will only get the required ticket without any linked jobs or results
   ## @return Ticket rose object, or undef if not found or if ticket does not belong to logged-in user or session
-  my $self = shift;
+  my ($self, $params) = @_;
 
-  unless (exists $self->{'_requested_ticket'}) {
-    my $hub         = $self->hub;
-    my $user        = $hub->user;
-    my $ticket_name = $self->parse_url_param->{'ticket_name'};
-    my $ticket;
+  $params ||= {};
+  my ($key) = (grep($params->{$_}, qw(with_results ticket_only)), 'with_jobs');
 
-    if ($ticket_name) {
-      my $ticket_type = $self->rose_manager(qw(Tools TicketType))->fetch_with_current_tickets({
-        'site_type'     => $hub->species_defs->ENSEMBL_SITETYPE,
-        'ticket_name'   => $ticket_name,
-        'session_id'    => $hub->session->create_session_id, $user ? (
-        'user_id'       => $user->user_id ) : ()
-      });
+  if (my $cached = $self->{'_requested_ticket'}) {
 
-      if (@$ticket_type) {
-        $ticket = $ticket_type->[0]->ticket->[0];
-        $self->update_ticket_and_jobs($ticket);
-      }
-    }
+    my $ticket = $key ne 'with_results'
+      ? $key ne 'with_jobs'
+        ? $cached->{'ticket_only'} || $cached->{'with_jobs'} || $cached->{'with_results'}
+        : $cached->{'with_jobs'} || $cached->{'with_results'}
+      : $cached->{'with_results'}
+    ;
 
-    $self->{'_requested_ticket'} = $ticket;
+    return $ticket if $ticket;
   }
 
-  return $self->{'_requested_ticket'};
+  my $hub         = $self->hub;
+  my $user        = $hub->user;
+  my $ticket_name = $self->parse_url_param->{'ticket_name'};
+  my $ticket;
+
+  if ($ticket_name) {
+    my $ticket_type = $self->rose_manager(qw(Tools TicketType))->fetch_with_requested_ticket({
+      'site_type'     => $hub->species_defs->ENSEMBL_SITETYPE,
+      'ticket_name'   => $ticket_name,
+      'session_id'    => $self->get_session_id,
+      'user_id'       => $user && $user->user_id,
+      'public_ok'     => 1,
+      'job_id'        => $key eq 'ticket_only'  ? undef : 'all',
+      'result_id'     => $key eq 'with_results' ? 'all' : undef,
+    });
+
+    if ($ticket_type) {
+      $ticket = $ticket_type->ticket->[0];
+      $self->update_ticket_and_jobs($ticket);
+    }
+  }
+
+  return $self->{'_requested_ticket'}{$key} = $ticket;
+}
+
+sub user_accessible_tickets {
+  ## Filters a list of ticket objects to return only those that are owned by the user (either by user_id or session_id)
+  ## @param   List of ticket object
+  ## @return  List of ticket object
+  my $self        = shift;
+  my $hub         = $self->hub;
+  my $user_id     = $hub->user ? $hub->user->user_id : 0;
+  my $session_id  = $self->get_session_id;
+
+  return grep { $_->owner_type eq 'user' ? $_->owner_id eq $user_id : $_->owner_id eq $session_id } @_;
+}
+
+sub get_tickets_list {
+  ## Gets the requested ticket or all current tickets according to the URL
+  ## @return Arrayref of ticket objects
+  my $self      = shift;
+  my $hub       = $self->hub;
+  my $function  = $hub->function || '';
+
+  return $function eq 'refresh_tickets' && ($hub->referer->{'ENSEMBL_FUNCTION'} || '') eq 'Ticket' || $function eq 'Ticket'
+    ? [ $self->get_requested_ticket(@_) || () ]
+    : $self->get_current_tickets(@_)
+  ;
+}
+
+sub get_ticket_share_link {
+  ## Gets a link to be used to share tickets with other users
+  ## @param Ticket object
+  ## @return URL hashref as accepted by hub->url method
+  my ($self, $ticket) = @_;
+  return {
+    '__clear'   => 1,
+    'type'      => 'Tools',
+    'action'    => $ticket->ticket_type_name,
+    'function'  => 'Ticket',
+    'tl'        => $self->create_url_param({'ticket_name' => $ticket->ticket_name})
+  };
+}
+
+sub change_ticket_visibility {
+  ## Changes the 'visibility' column of the ticket according to the argument provided
+  ## @param private or public
+  my ($self, $visibility) = @_;
+
+  my $ticket = $self->get_requested_ticket;
+
+  if ($ticket->visibility ne $visibility) {
+    $ticket->visibility($visibility);
+    $ticket->save;
+  }
+
+  return $ticket->visibility;
 }
 
 sub update_ticket_and_jobs {
   ## Updates the given tickets according to the validity and linked jobs according to the corresponding ones in the dispatcher
   ## @params List of Ticket objects to which jobs are linked
   ## @return No return value
-  my $self = shift;
-  my $jobs = {};
+  my $self  = shift;
+  my $jobs  = {};
+  my $sd    = $self->hub->species_defs;
 
   for (@_) {
 
@@ -382,7 +462,6 @@ sub update_ticket_and_jobs {
 
     # update ticket's status field acc. to it's validity
     if ($_->owner_type ne 'user') {
-      my $sd            = $self->hub->species_defs;
       my $life_left     = $_->calculate_life_left($sd->ENSEMBL_TICKETS_VALIDITY);
       my $warning_time  = $sd->ENSEMBL_TICKETS_VALIDITY_WARNING || 3 * 86400;
 
@@ -430,13 +509,14 @@ sub get_requested_job {
           : ()
         );
 
-      my $ticket_type = $self->rose_manager(qw(Tools TicketType))->fetch_with_given_job({
+      my $ticket_type = $self->rose_manager(qw(Tools TicketType))->fetch_with_requested_ticket({
         'site_type'     => $hub->species_defs->ENSEMBL_SITETYPE,
         'ticket_name'   => $url_params->{'ticket_name'},
         'job_id'        => $job_id,
-        'session_id'    => $hub->session->create_session_id, $user ? (
-        'user_id'       => $user->user_id ) : (), $tool_type ? ( # If object is Tools, it could be any ticket being requested
-        'type'          => $tool_type) : (),
+        'session_id'    => $self->get_session_id,
+        'user_id'       => $user && $user->user_id,
+        'public_ok'     => 1,
+        'type'          => $tool_type,
         %results_key
       });
 
@@ -496,6 +576,27 @@ sub handle_download {
   ## Handles the download request, and calls the handle_download method of the required sub object
   my $self = shift;
   return $self->get_sub_object->handle_download(@_);
+}
+
+sub download_url {
+  ## Generates a download URL for a results file
+  ## @param Ticket name (optional - takes the ticket name from URL is not provided)
+  ## @param Hashref of any extra url params (optional)
+  my $self        = shift;
+  my $ticket_name = $_[0] && !ref($_[0]) ? shift : undef;
+  my $params      = $_[0] && (ref($_[0]) || '') eq 'HASH' ? shift : {};
+
+  return $self->hub->url('Download', {
+    'function'  => '',
+    '__clear'   => 1,
+    'tl'        => $self->create_url_param($ticket_name ? {'ticket_name' => $ticket_name} : ()),
+    %$params
+  });
+}
+
+sub get_session_id {
+  ## Gets the session id to retrieve the tools tickets against
+  return $_[0]->hub->session->create_session_id;
 }
 
 sub get_time_now {

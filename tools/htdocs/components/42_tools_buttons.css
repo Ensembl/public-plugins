@@ -1,1 +1,8 @@
 .tool_buttons .blast { background-image: url(/i/16/rev/blast.png); }
+
+body.sequence_selection *::selection                                  { background: transparent; }
+body.sequence_selection *::-moz-selection                             { background: transparent; }
+body.sequence_selection pre.text_sequence span._seq::selection,
+body.sequence_selection pre.text_sequence span._seq *::selection      { background: [[BUTTON_BG]]; color: #fff; }
+body.sequence_selection pre.text_sequence span._seq::-moz-selection,
+body.sequence_selection pre.text_sequence span._seq *::-moz-selection { background: [[BUTTON_BG]]; color: #fff; }

@@ -1,4 +1,4 @@
-# Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+# Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -411,6 +411,7 @@ window.rhs_templates =
                   name = $.solr_config('static.ui.facets.key=.text.plural',f)
                   othervalues.push({ entries, total, name, facet: f })
             yoursearch = (k[1] for k in cur_values).join(" ")
+            yoursearch = $('<div/>').text(yoursearch).html()
             wholesite = (cur_values.length == 0)
             templates = $(document).data('templates')
             el.append(templates.generate('noresultsnarrow',{
@@ -461,6 +462,14 @@ window.rhs_templates =
           <li class="wide"><div>
             You were searching the whole site, but still nothing was found.
           </div></li>
+          <li class="narrow_rsid"><div><strong>
+            You appear to have been searching for a variation rsid.
+            There may be new variants which have not yet been incorporated
+            into Ensembl. If this is the case, you may find information
+            about this variant on the
+            <a href="http://www.ncbi.nlm.nih.gov/sites/entrez"
+            >NCBI website</a>
+          </strong></div></li>
           <li class="narrow"><div>
             You were only searching <em>thing</em>.
           </div></li>
@@ -484,7 +493,8 @@ window.rhs_templates =
     directives:
       'em': 'yoursearch'
       '.roll_hidden_text': 'noresults_help'
-      '.search': 'q'
+      '.search': (e) ->
+        $('<div/>').text(e.context.q).html()
       '.narrow_any':
         'x<-narrow_n':
           '.all': 'all'
@@ -493,6 +503,7 @@ window.rhs_templates =
       '.wide': 'w<-wide': {}
       '.narrow': 'z<-narrow':
         'em': 'yoursearch'
+      '.narrow_rsid': 'y<-rsid': {}
     decorate:
       '.narrow_any a': (els,data) =>
         els.click (e) =>
@@ -518,5 +529,7 @@ window.rhs_templates =
           data.all = list.join(", ")
           data.narrow_n = [true]
       data.noresults_help = $.solr_config('static.ui.noresults_help')
+      if data.q.match(/^rs(\d+)$/)
+        data.rsid = [true]
       [spec,data]
 

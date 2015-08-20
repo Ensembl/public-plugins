@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -40,9 +40,8 @@ sub get_edit_jobs_data {
     if (-s $input_file <= 1024) {
       $job_data->{"text_$format"} = join('', file_get_contents($input_file));
     } else {
-      my $url_param   = $self->create_url_param({'ticket_name' => $ticket->ticket_name});
       $job_data->{'input_file_type'}  = 'text';
-      $job_data->{'input_file_url'}   = sprintf('/Download/AssemblyConverter?tl=%s;input=1', $url_param);
+      $job_data->{'input_file_url'}   = $self->download_url($ticket->ticket_name, {'input' => 1});
     }
   } else {
     $job_data->{'input_file_type'} = 'binary';
@@ -63,7 +62,6 @@ sub handle_download {
     my $ticket      = $self->get_requested_ticket or return;
     my $job         = $ticket->job->[0] or return;
     my $job_config  = $job->dispatcher_data->{'config'};
-    my $job_dir     = $job->job_dir;
 
     my $filename    = $hub->param('input') ? $job_config->{'input_file'} : $job_config->{'output_file'};
 
@@ -71,25 +69,13 @@ sub handle_download {
     if (!$hub->param('input') && ($job_config->{'format'} eq 'wig')) {
       $filename .= '.bgr';
     }
-    my $path        = $job_dir.'/'.$filename;
+    my $content     = join '', map { s/\R/\r\n/r } file_get_contents(join '/', $job->job_dir, $filename);
 
-    ## Strip double dots to prevent downloading of files outside tmp directory
-    $path =~ s/\.\.//g;
-    ## Remove any remaining illegal characters
-    $path =~ s/[^\w|-|\.|\/]//g;
+    $r->headers_out->add('Content-Type'         => 'text/plain');
+    $r->headers_out->add('Content-Length'       => length $content);
+    $r->headers_out->add('Content-Disposition'  => sprintf 'attachment; filename=%s', $filename);
 
-    my $tmpfile = EnsEMBL::Web::TmpFile::ToolsOutput->new('filename' => $path); 
-
-    if ($tmpfile->exists) {
-      my $content = $tmpfile->content;
-
-      $r->headers_out->add('Content-Type'         => 'text/plain');
-      $r->headers_out->add('Content-Length'       => length $content);
-      $r->headers_out->add('Content-Disposition'  => sprintf 'attachment; filename=%s', $filename);
-
-      print $content;
-    }
-    else { warn ">>> PATH NOT RECOGNISED: $path"; }
+    print $content;
   }
 }
 

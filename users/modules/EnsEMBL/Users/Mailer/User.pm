@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -258,7 +258,12 @@ sub send_group_invitation_email_to_existing_user {
   my $url         = $self->url({
     'species'       => '',
     'type'          => 'Account',
-    'action'        => 'Preferences'
+    'action'        => 'Login',
+    'then'          => $self->hub->url({
+      'species'      => '',
+      'type'         => 'Account',
+      'action'       => 'Preferences'
+    })
   });
   my $to_name     = $invitee->name;
   my $user        = $self->hub->user;

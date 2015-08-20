@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -200,23 +200,13 @@ sub _species {
     my @species;
     my $current_species = $hub->species;
 
-    ## Need to fetch chain file info from tools server somehow!
-    my @ok_species = qw(Bos_taurus Canis_familiaris Homo_sapiens Mus_musculus Rattus_norvegicus Saccharomyces_cerevisiae Sus_scrofa);
-    my $chain_files = {
-                      'Homo_sapiens' => ['GRCh37_to_GRCh38', 'NCBI36_to_GRCh38'],
-                      'Mus_musculus' => ['GRCm38_to_NCBIM36', 'GRCm38_to_NCBIM37',
-                                         'NCBIM36_to_GRCm38', 'NCBIM37_to_GRCm38'],
-                      'Rattus_norvegicus' => ['RGSC3.4_to_Rnor_5.0', 'Rnor_5.0_to_RGSC3.4'],
-                      'Canis_familiaris' => ['BROADD2_to_CanFam3.1',
-                                             'CanFam3.1_to_BROADD2'],
-                      'Bos_taurus' => ['Btau_4.0_to_UMD3.1', 'UMD3.1_to_Btau_4.0'],
-                      'Sus_scrofa' => ['Sscrofa10.2_to_Sscrofa9', 'Sscrofa9_to_Sscrofa10.2'],
-                      'Saccharomyces_cerevisiae' => ['EF1_to_R64-1-1', 'EF2_to_R64-1-1',
-                                                     'EF3_to_R64-1-1', 'R64-1-1_to_EF1',
-                                                     'R64-1-1_to_EF2', 'R64-1-1_to_EF3'],
-                      };
+    my $chain_files = {};
+    foreach ($sd->valid_species) {
+      my $files = $sd->get_config($_, 'ASSEMBLY_CONVERTER_FILES') || []; 
+      $chain_files->{$_} = $files if scalar(@$files);
+    }
 
-    for (sort {$sd->get_config($a, 'SPECIES_COMMON_NAME') cmp $sd->get_config($b, 'SPECIES_COMMON_NAME')} @ok_species) {
+    for (sort {$sd->get_config($a, 'SPECIES_COMMON_NAME') cmp $sd->get_config($b, 'SPECIES_COMMON_NAME')} keys %$chain_files) {
       
       my $mappings = [];
       foreach my $map (@{$chain_files->{$_}||[]}) {

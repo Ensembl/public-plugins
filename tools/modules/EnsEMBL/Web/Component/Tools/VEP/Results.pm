@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -38,8 +38,9 @@ sub content {
 
   return '' if !$job || $job->status ne 'done';
 
-  my $job_data = $job->job_data;
-  my $species  = $job->species;
+  my $job_data  = $job->job_data;
+  my $species   = $job->species;
+  my @warnings  = grep { $_->data && ($_->data->{'type'} || '') eq 'VEPWarning' } @{$job->job_message};
 
   # this method reconstitutes the Tmpfile objects from the filenames
   my $output_file_obj = $object->result_files->{'output_file'};
@@ -82,7 +83,7 @@ sub content {
           ($filter_string ? " $match " : ''),
           $params{"field$_"},
           $params{"operator$_"},
-          $params{"value$_"}
+          $params{"operator$_"} eq 'in' ? $params{"value_dd$_"} : $params{"value$_"}
         );
       }
     }
@@ -101,7 +102,8 @@ sub content {
     location  => $location
   );
 
-  my ($headers, $rows, $line_count) = @{$output_file_obj->parse_content($output_file_obj->content(%content_args))};
+  my ($headers, $rows, $line_count) = @{$output_file_obj->content_parsed(\%content_args)};
+
   my $actual_to = $from - 1 + ($line_count || 0);
   my $row_count = scalar @$rows;
 
@@ -129,6 +131,7 @@ sub content {
     'SOMATIC'             => 'Somatic status',
     'PICK'                => 'Selected annotation',
     'SOURCE'              => 'Transcript source',
+    'IMPACT'              => 'Impact',
   );
   for (grep {/\_/} @$headers) {
     $header_titles{$_} ||= $_ =~ s/\_/ /gr;
@@ -163,6 +166,8 @@ sub content {
     'AMR_MAF'             => 'numeric',
     'ASN_MAF'             => 'numeric',
     'EUR_MAF'             => 'numeric',
+    'EAS_MAF'             => 'numeric',
+    'SAS_MAF'             => 'numeric',
     'AA_MAF'              => 'numeric',
     'EA_MAF'              => 'numeric',
     'DISTANCE'            => 'numeric',
@@ -174,6 +179,7 @@ sub content {
 
   $html .= '<div><h3>Results preview</h3>';
   $html .= '<input type="hidden" class="panel_type" value="VEPResults" />';
+  $html .= $self->_warning('Some errors occurred while running VEP', sprintf '<pre class="tools-warning">%s</pre>', join "\n", map $_->display_message, @warnings) if @warnings;
 
   # construct hash for autocomplete
   my $vdbc = $sd->get_config($species, 'databases')->{'DATABASE_VARIATION'};
@@ -182,13 +188,14 @@ sub content {
     'Allele'        => [ 'A', 'C', 'G', 'T' ],
     'Feature_type'  => [ 'Transcript', @REG_FEAT_TYPES ],
     'Consequence'   => [ keys %OVERLAP_CONSEQUENCES ],
-    'SIFT'          => $vdbc->{'SIFT_VALUES'},
+    'IMPACT'        => [ keys %{{map {$_->impact => 1} values %OVERLAP_CONSEQUENCES}} ],
+    'SIFT'          => [ map {s/ /\_/g; s/\_\-\_/\_/g; $_} @{$vdbc->{'SIFT_VALUES'}} ],
     'PolyPhen'      => [ map {s/\s/\_/g; $_} @{$vdbc->{'POLYPHEN_VALUES'}} ],
     'BIOTYPE'       => $sd->get_config($species, 'databases')->{'DATABASE_CORE'}->{'tables'}{'transcript'}{'biotypes'},
   );
 
   my $ac_json = encode_entities($self->jsonify(\%ac));
-  $html .= '<input class="js_param" type="hidden" name="auto_values" value="'.$ac_json.'" />';
+  $html .= qq(<input class="js_param" type="hidden" name="auto_values" value="$ac_json" />);
 
 
   ## NAVIGATION
@@ -196,9 +203,9 @@ sub content {
 
   $html .= '<div class="toolbox">';
   $html .= '<div class="toolbox-head">';
-  $html .= '<img src="/i/16/eye.png" style="vertical-align:top;"> Navigation<span style="float:right">';
-  $html .= $self->helptip("Navigate through the results of your VEP job. By default the results for 5 variants are displayed; note that variants may have more than one result if they overlap multiple transcripts");
-  $html .= '</span></div>';
+  $html .= '<img src="/i/16/eye.png" style="vertical-align:top;"> ';
+  $html .= $self->helptip('Navigation', "Navigate through the results of your VEP job. By default the results for 5 variants are displayed; note that variants may have more than one result if they overlap multiple transcripts");
+  $html .= '</div>';
   $html .= "<div style='padding:5px;'>Showing $row_count results";
   $html .= $row_count ? " for variant".($from == $actual_to ? " $from" : "s $from\-$actual_to") : "";
   $html .= $filter_string ? "" : " of $output_lines";
@@ -288,7 +295,9 @@ sub content {
   #########
 
   $html .= '<div class="toolbox">';
-  $html .= '<div class="toolbox-head"><img src="/i/16/search.png" style="vertical-align:top;"> Filters<span style="float:right">'.$self->helptip("Filter your results to find interesting or significant data. You can apply several filters on any category of data in your results using a range of operators, add multiple filters, and edit active filters").'</span></div>';
+  $html .= '<div class="toolbox-head"><img src="/i/16/search.png" style="vertical-align:top;"> ';
+  $html .= $self->helptip('Filters', "Filter your results to find interesting or significant data. You can apply several filters on any category of data in your results using a range of operators, add multiple filters, and edit active filters");
+  $html .= '</div>';
   $html .= '<div style="padding:5px;">';
 
   my $form_url = $hub->url();
@@ -305,6 +314,7 @@ sub content {
     {'name' => 'gt',  'title' => '>'},
     {'name' => 'lte', 'title' => '<='},
     {'name' => 'gte', 'title' => '>='},
+    {'name' => 'in',  'title' => 'in file'},
   );
   my @non_numerical = @operators[0..2];
   my %operators = map {$_->{'name'} => $_->{'title'}} @operators;
@@ -315,6 +325,13 @@ sub content {
 
   my @filter_divs;
   my @location_divs;
+
+  my @user_files =
+    sort { $b->{'timestamp'} <=> $a->{'timestamp'} }
+    grep { $_->{'format'} && lc($_->{'format'}) eq 'gene_list' }
+    $hub->session->get_data('type' => 'upload'), $hub->user ? $hub->user->uploads : ();
+
+  my %file_display_name = map { $_->{file} => $_->{name} } @user_files;
 
   $html .= '<div>';
   foreach my $i (1..$max_filters) {
@@ -335,12 +352,13 @@ sub content {
         $i,
         $header_titles{$params{"field$i"}} || $params{"field$i"},
         $operators{$params{"operator$i"}},
-        $params{"value$i"} || 'defined',
+        $params{"operator$i"} eq 'in' ? $file_display_name{$params{"value_dd$i"}} : ($params{"value$i"} || 'defined'),
         $i,
         $self->reload_link('<img class="_ht" src="/i/close.png" title="Remove filter" style="height:16px; width:16px">', {
           "field$i"       => undef,
           "operator$i"    => undef,
           "value$i"       => undef,
+          "value_dd$i"    => undef,
           'update_panel'  => undef
         })
       );
@@ -360,7 +378,7 @@ sub content {
       $tmp_html .= '</select>';
 
       # operator
-      $tmp_html .= qq(<select name="operator$i">);
+      $tmp_html .= qq(<select name="operator$i" class="operator-dd">);
       $tmp_html .= sprintf(
         '<option value="%s" %s>%s</option>',
         $_->{'name'},
@@ -370,7 +388,36 @@ sub content {
       $tmp_html .= '</select>';
 
       # value and submit
-      $tmp_html .= sprintf qq(<input class="autocomplete" type="text" placeholder="defined" name="value$i" value="%s" />), $params{"value$i"};
+      $tmp_html .= sprintf(
+        qq(<input class="autocomplete value-switcher %s" type="text" placeholder="defined" name="value$i" value="%s" />),
+        $params{"operator$i"} eq 'in' ? 'hidden' : '',
+        $params{"value$i"}
+      );
+
+      # value (dropdown file selector)
+      $tmp_html .= sprintf(
+        '<span class="value-switcher %s">',
+        $params{"operator$i"} eq 'in' ? '' : 'hidden'
+      );
+      if(scalar @user_files) {
+        $tmp_html .= '<select name="value_dd'.$i.'">';
+        $tmp_html .= sprintf(
+          '<option value="%s" %s>%s</option>',
+          $_->{file},
+          $_->{file} eq $params{"value_dd$i"} ? 'selected="selected"' : '',
+          $_->{name}
+        ) for @user_files;
+        $tmp_html .= '</select>';
+      }
+      my $url = $hub->url({
+        type   => 'UserData',
+        action => 'SelectFile',
+        # format => 'GENE_LIST'
+      });
+      $tmp_html .= '<span class="small"> <a href="'.$url.'" class="modal_link data" rel="modal_user_data">Upload file</a> </span>';
+      $tmp_html .= '</span>';
+
+      # update/submit
       $tmp_html .= '<input value="Update" class="fbutton" type="submit" />';
 
       # add hidden fields
@@ -436,12 +483,29 @@ sub content {
   $html .= '</select>';
 
   # operator
-  $html .= '<select name="operator'.$filter_number.'">';
+  $html .= '<select class="operator-dd" name="operator'.$filter_number.'">';
   $html .= sprintf('<option value="%s" %s>%s</option>', $_->{name}, ($_->{name} eq 'is' ? 'selected="selected"' : ''), $_->{title}) for @operators;
   $html .= '</select>';
 
-  # value and submit
-  $html .= '<input class="autocomplete" type="text" placeholder="defined" name="value'.$filter_number.'">';
+  # value (text box)
+  $html .= '<input class="autocomplete value-switcher" type="text" placeholder="defined" name="value'.$filter_number.'">';
+
+  # value (dropdown file selector)
+  $html .= '<span class="value-switcher hidden">';
+  if(scalar @user_files) {
+    $html .= '<select name="value_dd'.$filter_number.'">';
+    $html .= sprintf('<option value="%s">%s</option>', $_->{file}, $_->{name}) for @user_files;
+    $html .= '</select>';
+  }
+  my $url = $hub->url({
+    type   => 'UserData',
+    action => 'SelectFile',
+    # format => 'GENE_LIST'
+  });
+  $html .= '<span class="small"> <a href="'.$url.'" class="modal_link data" rel="modal_user_data">Upload file</a> </span>';
+  $html .= '</span>';
+
+  # submit
   $html .= '<input value="Add" class="fbutton" type="submit">';
 
   # add hidden fields
@@ -457,13 +521,11 @@ sub content {
   $html .= '<div class="toolbox">';
   $html .= '<div class="toolbox-head"><img src="/i/16/download.png" style="vertical-align:top;"> Download</div><div style="padding:5px;">';
 
-  my $download_url = {'type' => 'VEP', 'action' => '', 'function' => '', 'tl' => $object->create_url_param};
-
   # all
   $html .= '<div><b>All</b><span style="float:right; margin-left:10px;">';
   $html .= sprintf(
     ' <a class="_ht" title="Download all results in %s format%s" href="%s">%s</a>',
-    $_, ($_ eq 'TXT' ? ' (best for Excel)' : ''), $hub->url('Download', { %$download_url, 'format' => lc $_ }), $_
+    $_, ($_ eq 'TXT' ? ' (best for Excel)' : ''), $object->download_url({ 'format' => lc $_ }), $_
   ) for qw(VCF VEP TXT);
   $html .= '</span></div>';
 
@@ -473,7 +535,7 @@ sub content {
     $html .= '<div><hr><b>Filtered</b><span style="float:right; margin-left:10px;">';
     $html .= sprintf(
       ' <a class="_ht" title="Download filtered results in %s format%s" href="%s">%s</a>',
-      $_, ($_ eq 'TXT' ? ' (best for Excel)' : ''), $hub->url('Download', { %$download_url, 'format' => lc $_, map {$_ => $content_args{$_}} grep {!/to|from/} keys %content_args }), $_
+      $_, ($_ eq 'TXT' ? ' (best for Excel)' : ''), $object->download_url({ 'format' => lc $_, map {$_ => $content_args{$_}} grep {!/to|from/} keys %content_args }), $_
     ) for qw(VCF VEP TXT);
     $html .= '</span></div>';
   }

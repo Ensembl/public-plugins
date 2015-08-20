@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -38,10 +38,23 @@ sub _species_sets {
     'all'       =>  {'title' => 'All', 'desc' => 'All species, including invertebrates', 'species' => []},
   };
 
+  # In addition to the following associations, the species are
+  # automatically added to the 'all' category
+  # The taxon names must be in sync with TAXON_ORDER
+  # Currently missing: Mammalia Amphibia Vertebrata Chordata Eukaryota
+  my $species_group_2_species_set = {
+      Primates          => ['primates', 'placental'],
+      Glires            => ['rodents', 'placental'],
+      Laurasiatheria    => ['laurasia', 'placental'],
+      Afrotheria        => ['placental'],
+      Xenarthra         => ['placental'],
+      Sauropsida        => ['sauria'],
+      Actinopterygii    => ['fish'],
+  };
+
   my $sets_by_species = {};
 
   my ($ortho_type);
-  my @A = keys %$orthologue_list;
 
   foreach my $species ($species_defs->valid_species) {
     next if $skipped->{$species};
@@ -57,62 +70,22 @@ sub _species_sets {
     foreach my $stable_id (keys %$orthologues) {
       my $orth_info = $orthologue_list->{$species}{$stable_id};
       my $orth_desc = ucfirst($orthologue_map{$orth_info->{'homology_desc'}} || $orth_info->{'homology_desc'});
-      $species_sets->{'all'}{$orth_desc}++;
       $ortho_type->{$species}{$orth_desc} = 1;
     }
 
     if ($species ne $self->hub->species && !$ortho_type->{$species}{'1-to-1'} && !$ortho_type->{$species}{'1-to-many'}
           && !$ortho_type->{$species}{'Many-to-many'}) {
       $no_ortho = 1;
-      $species_sets->{'all'}{'none'}++;
     }  
-    if ($group eq 'Primates') {
-      push @{$species_sets->{'primates'}{'species'}}, $species;
-      push @$sets, 'primates';
+
+    foreach my $ss_name (('all', @{$species_group_2_species_set->{$group}})) {
+      push @{$species_sets->{$ss_name}{'species'}}, $species;
+      push @$sets, $ss_name;
       while (my ($k, $v) = each (%{$ortho_type->{$species}})) {
-        $species_sets->{'primates'}{$k} += $v;
+        $species_sets->{$ss_name}{$k} += $v;
       }
-      $species_sets->{'primates'}{'none'}++ if $no_ortho;
-    }
-    if ($group eq 'Glires') {
-      push @$sets, 'rodents';
-      push @{$species_sets->{'rodents'}{'species'}}, $species;
-      while (my ($k, $v) = each (%{$ortho_type->{$species}})) {
-        $species_sets->{'rodents'}{$k} += $v;
-      }
-      $species_sets->{'rodents'}{'none'}++ if $no_ortho;
-    }
-    if ($group eq 'Laurasiatheria') {
-      push @$sets, 'laurasia';
-      push @{$species_sets->{'laurasia'}{'species'}}, $species;
-      while (my ($k, $v) = each (%{$ortho_type->{$species}})) {
-        $species_sets->{'laurasia'}{$k} += $v;
-      }
-      $species_sets->{'laurasia'}{'none'}++ if $no_ortho;
-    }
-    if ($group =~ /Primates|Euarchontoglires|Laurasiatheria|Xenarthra|Afrotheria/) {
-      push @$sets, 'placental';
-      push @{$species_sets->{'placental'}{'species'}}, $species;
-      while (my ($k, $v) = each (%{$ortho_type->{$species}})) {
-        $species_sets->{'placental'}{$k} += $v;
-      }
-      $species_sets->{'placental'}{'none'}++ if $no_ortho;
-    }
-    if ($group eq 'Sauropsida') {
-      push @$sets, 'sauria';
-      push @{$species_sets->{'sauria'}{'species'}}, $species;
-      while (my ($k, $v) = each (%{$ortho_type->{$species}})) {
-        $species_sets->{'sauria'}{$k} += $v;
-      }
-      $species_sets->{'sauria'}{'none'}++ if $no_ortho;
-    }
-    if ($group eq 'Actinopterygii') {
-      push @$sets, 'fish';
-      push @{$species_sets->{'fish'}{'species'}}, $species;
-      while (my ($k, $v) = each (%{$ortho_type->{$species}})) {
-        $species_sets->{'fish'}{$k} += $v;
-      }
-      $species_sets->{'fish'}{'none'}++ if $no_ortho;
+      $species_sets->{$ss_name}{'none'}++ if $no_ortho;
+      $species_sets->{$ss_name}{'all'}++ if $species ne $self->hub->species;
     }
     $sets_by_species->{$species} = $sets;
   }

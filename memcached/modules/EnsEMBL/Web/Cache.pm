@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -45,7 +45,6 @@ sub new {
      
   return undef if $caller->isa('EnsEMBL::Web::Apache::Handlers')        && !$flags{'PLUGGABLE_PATHS'};
   return undef if $caller->isa('EnsEMBL::Web::Apache::SSI')             && !$flags{'STATIC_PAGES_CONTENT'};
-  return undef if $caller->isa('EnsEMBL::Web::DBSQL::UserDBConnection') && !$flags{'USER_DB_DATA'};
   return undef if $caller->isa('EnsEMBL::Web::DBSQL::WebDBConnection')  && !$flags{'WEBSITE_DB_DATA'};
   return undef if $caller->isa('EnsEMBL::Web::File::Driver::Memcached') && !$flags{'TMP_IMAGES'};
   return undef if $caller->isa('EnsEMBL::Web::Apache::Image')           && !$flags{'TMP_IMAGES'};

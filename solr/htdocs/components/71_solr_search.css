@@ -97,7 +97,7 @@
 }
 
 .se_search .search_table_holder {
-  margin-top: 88px;
+  margin-top: 90px;
   padding: 8px;
 }
 
@@ -213,7 +213,7 @@
   text-decoration: underline;
 }
 
-.ui-menu-item, .search-ac-cat { list-style: none; list-style-image: none; font-size: 80%; }
+.search-ac-cat { list-style: none; list-style-image: none; font-size: 80%; }
 
 .search-ac em { font-size: 80%; color: #666; float: right; }
 .search-ac i { color: black; }

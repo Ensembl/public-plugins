@@ -91,7 +91,7 @@ can be listed using the flag --help: </p>
     <td><pre>--population [population]</pre></td>
     <td>&nbsp;</td>
     <td>
-      Name for population to which all individuals in the file belong.
+      Name for population to which all samples in the file belong.
       <i>Required (or use --panel)</i>
     </td>
   </tr>
@@ -136,9 +136,11 @@ can be listed using the flag --help: </p>
       Load configuration options from a config file. The config file
       should consist of whitespace-separated pairs of option names and
       settings e.g.: 
-<pre>species       mus_musculus
-ind_prefix    MYMICE_
-registry      ensembl.registry</pre>
+<pre>
+species       mus_musculus
+sample_prefix MYMICE_
+registry      ensembl.registry
+</pre>
     </td>
   </tr>
   <tr>
@@ -176,7 +178,7 @@ registry      ensembl.registry</pre>
     <td><pre>--population [population]</pre></td>
     <td>&nbsp;</td>
     <td>
-      Name for population to which all individuals in the file belong.
+      Name for population to which all samples in the file belong.
       <i>Required (or use --panel)</i>
     </td>
   </tr>
@@ -184,22 +186,22 @@ registry      ensembl.registry</pre>
     <td><pre>--panel [panel file]</pre></td>
     <td>&nbsp;</td>
     <td>
-      Panel file containing individual population membership. One or
+      Panel file containing sample population membership. One or
       more of --population or --panel is required. Frequencies are
-      calculated for each population specified. Individuals may belong
+      calculated for each population specified. Samples may belong
       to more than one population. Panel file is tab-delimited, with the
       format
-<pre>IND1    POP1
-IND2    POP1
-IND3    POP2
-IND4    POP3</pre> <i>Required (or use --population)</i>
+<pre>SAMPLE1    POP1
+SAMPLE2    POP1
+SAMPLE3    POP2
+SAMPLE4    POP3</pre> <i>Required (or use --population)</i>
     </td>
   </tr>
   <tr>
     <td><pre>--pedigree [pedigree file]</pre></td>
     <td>&nbsp;</td>
     <td>
-      Pedigree file containing family relationships and individual
+      Pedigree file containing family relationships and sample
             genders.
     </td>
   </tr>
@@ -217,15 +219,22 @@ IND4    POP3</pre> <i>Required (or use --population)</i>
     <td>&nbsp;</td>
     <td>
       Add global allele frequency data to variation table. "--gmaf ALL"
-      uses all individuals in the file; specifying any other population
+      uses all samples in the file; specifying any other population
       name will use the selected population for the GMAF.
+    </td>
+  </tr>
+  <tr class="bg2">
+    <td><pre>--sample_prefix [prefix]</pre></td>
+    <td>&nbsp;</td>
+    <td>
+      Add prefix to sample names.
     </td>
   </tr>
   <tr class="bg2">
     <td><pre>--ind_prefix [prefix]</pre></td>
     <td>&nbsp;</td>
     <td>
-      Add prefix to individual names.
+      Add prefix to individual names. <span style="color:red;font-weight:bold">This parameter is deprecated. Please use --sample_prefix instead.</span>
     </td>
   </tr>
   <tr>
@@ -388,11 +397,11 @@ IND4    POP3</pre> <i>Required (or use --population)</i>
 
 <h2 id="pop"> Populations and frequencies </h3>
 
-<p> If your VCF file contains individual data, these individuals must belong to
+<p> If your VCF file contains sample data, these samples must belong to
 at least one population. You may specify either one population that encompasses
-all individual entries in the file (using --population), or a panel file that
-contains individual population relationships (using --panel). If you use both,
-then individuals will be added to any populations specified in the panel file,
+all sample entries in the file (using --population), or a panel file that
+contains sample population relationships (using --panel). If you use both,
+then samples will be added to any populations specified in the panel file,
 as well as the "global" population specified with --population. </p>
 
 <p> Frequencies for alleles and genotypes are calculated and stored in the
@@ -414,8 +423,8 @@ know what you are doing, or for example are loading on top of an existing DB)
 populate the allele table, since it is assumed that each variation entry will
 have at least two corresponding alleles with entries in the allele table. </p>
 
-<p> Populations and individuals are only written once - if a population or
-individual is found with the same name as the one you have specified, this one
+<p> Populations and samples are only written once - if a population or
+sample is found with the same name as the one you have specified, this one
 is loaded and used, rather than a new one being created. </p>
 
 <p><a href="#top">[Back to top]</a></p>
@@ -436,7 +445,8 @@ following tables are populated by default: </p>
   <li>flanking_sequence</li>
   <li>genotype_code</li>
   <li>individual</li>
-  <li>individual_population</li>
+  <li>sample</li>
+  <li>sample_population</li>
   <li>meta_coord</li>
   <li>population</li>
   <li>population_genotype</li>
@@ -477,15 +487,15 @@ per-sample, per-genomic region style. Its contents duplicate that of the
 compressed_genotype_var table, but it is used in a different way. The table is
 used for resequencing views, and also for the calculation of LD data on the fly
 by the API. Currently the designation applies to all samples in the file, so if
-you have a file that contains individuals you don't want to be included for
+you have a file that contains samples you don't want to be included for
 either function then you should split it and import the two separately. </p>
 
 <p> For any data added to the compressed_genotype_region table, you will need to
 manually edit the entries in the sample table such that the display field
 indicates the relevant data type. If you intend the data to be used for LD
-calculation, you should change the <b>population</b> sample entry so that the
+calculation, you should change the <b>population</b> entry so that the
 display field is "LD". If you intend the data to be used as resequencing data,
-you should change the <b>individuals'</b> sample entries so that the display
+you should change the <b>samples'</b> entries so that the display
 field is one of "DEFAULT" (switched on the web display by default) or
 "DISPLAYABLE" (can be switched on using configure this page). You may also need
 to spoof read_coverage entries for any strains you have, unless you have genuine

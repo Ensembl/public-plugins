@@ -118,22 +118,6 @@ permissions.</p>
 and change $SiteDefs::ENSEMBL_ERRORS_TO to your email address. If you don't want errors mailed, set
 $SiteDefs::ENSEMBL_MAIL_ERRORS to 0.</p>
 
-<h4>User database - Database and cookie configuration</h4>
-<p>Change the values of the following to have the details for your web_user database</p>
-<pre class="code">
-  $SiteDefs::ENSEMBL_USERDB_NAME
-  $SiteDefs::ENSEMBL_USERDB_HOST
-  $SiteDefs::ENSEMBL_USERDB_USER
-  $SiteDefs::ENSEMBL_USERDB_PASS
-</pre>
-
-<p>Remember this database needs a user with update/insert/delete privileges. Additionally if you wish  
-to change the encryption keys used to "protect" the cookies, $SiteDefs::ENSEMBL_ENCRYPT_0 should
-be a six digit hex-number and $SiteDefs::ENSEMBL_ENCRYPT_1, _2 and _3 should each contain two alphanumeric
-characters. Unless you are particularly concerned about people changing cookies, the default values
-will probably do.</p>
-
-
 <h4>Temporary Files</h4>
 
 <p>There are three temporary file locations that can be configured:</p>
@@ -233,6 +217,21 @@ to match the name of the ensembl_compara database that you created.</p>
 DATABASE_GO = your_go_database_name
 </pre>
 <p>to the [databases] section along with DATABASE_COMPARA.</p>
+
+<h3>Session database</h3>
+<p>Change the values of the following to have the details for your web_user database</p>
+<pre class="code">
+[ENSEMBL_SESSION]
+HOST = sessiondb_host
+USER = sessiondb_user
+PASS = sessiondb_password
+</pre>
+
+<p>Remember this database needs a user with update/insert/delete privileges. Additionally if you wish
+to change the encryption keys used to "protect" the cookies, $SiteDefs::ENSEMBL_ENCRYPT_0 should
+be a six digit hex-number and $SiteDefs::ENSEMBL_ENCRYPT_1, _2 and _3 should each contain two alphanumeric
+characters. Unless you are particularly concerned about people changing cookies, the default values
+will probably do.</p>
 
 <h2>BLAST</h2>
 <p>BLAST is not installed by default.  You have to configure blast for a local installation. See documentation describing how to <a href="/info/docs/webcode/mirror/tools/index.html">configure BLAST</a>.</p>

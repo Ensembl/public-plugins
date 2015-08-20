@@ -82,7 +82,7 @@ tables that they've not used before.
 </p>
 
 <p>
-This document refers to version <span style="font-weight:bold;font-size:11pt;color:#000">78</span> of the EnsEMBL
+This document refers to version <span style="font-weight:bold;font-size:11pt;color:#000">81</span> of the EnsEMBL
 core schema.
 </p>
 
@@ -187,7 +187,7 @@ The core database schema is available in several diagrams (PDF format) here:
       </ul>
       </div>
     </div>
-  <div style="clear:both" />
+  <div style="clear:both"></div>
 </div>
 
 <div>
@@ -792,7 +792,7 @@ The core database schema is available in several diagrams (PDF format) here:
 
       <tr>
         <td class="bg2"><b>file_type</b></td>
-        <td class="bg2">ENUM:<ul style="margin-bottom:0px">  <li style="line-height:12px">BAM</li>  <li style="line-height:12px">BIGBED</li>  <li style="line-height:12px">BIGWIG</li>  <li style="line-height:12px">VCF</li></ul></td>
+        <td class="bg2">ENUM:<ul style="margin-bottom:0px">  <li style="line-height:12px">BAM</li>  <li style="line-height:12px">BAMCOV</li>  <li style="line-height:12px">BIGBED</li>  <li style="line-height:12px">BIGWIG</li>  <li style="line-height:12px">VCF</li></ul></td>
         <td class="bg2">NULL</td>
         <td class="bg2">Type of file e.g. BAM, BIGBED, BIGWIG and VCF</td>
         <td class="bg2">unique key: <i>df_unq_idx</i></td>
@@ -969,7 +969,7 @@ The core database schema is available in several diagrams (PDF format) here:
 
       <tr>
         <td class="bg1"><b>value</b></td>
-        <td class="bg1">INT(10)</td>
+        <td class="bg1">BIGINT(11)</td>
         <td class="bg1">'0'</td>
         <td class="bg1">Corresponding value of the statistics (count/length)</td>
         <td class="bg1"></td>
@@ -1770,7 +1770,7 @@ The core database schema is available in several diagrams (PDF format) here:
 
       <tr>
         <td class="bg1"><b>synonym</b></td>
-        <td class="bg1">VARCHAR(40)</td>
+        <td class="bg1">VARCHAR(50)</td>
         <td class="bg1">-</td>
         <td class="bg1">Alternative name for sequence region.</td>
         <td class="bg1">unique key: <i>syn_idx</i></td>
@@ -1811,6 +1811,7 @@ The core database schema is available in several diagrams (PDF format) here:
         <li style="font-style:italic">Ciona savignyi</li>
         <li style="font-style:italic">Danio rerio</li>
         <li style="font-style:italic">Dasypus novemcinctus</li>
+        <li style="font-style:italic">Drosophila melanogaster</li>
         <li style="font-style:italic">Equus caballus</li>
         <li style="font-style:italic">Felis catus</li>
         <li style="font-style:italic">Ficedula albicollis</li>
@@ -2382,14 +2383,12 @@ The core database schema is available in several diagrams (PDF format) here:
         <li style="font-style:italic">Ciona savignyi</li>
         <li style="font-style:italic">Danio rerio</li>
         <li style="font-style:italic">Dasypus novemcinctus</li>
-        <li style="font-style:italic">Dipodomys ordii</li>
         <li style="font-style:italic">Drosophila melanogaster</li>
         <li style="font-style:italic">Echinops telfairi</li>
         <li style="font-style:italic">Equus caballus</li>
         <li style="font-style:italic">Erinaceus europaeus</li>
         <li style="font-style:italic">Felis catus</li>
         <li style="font-style:italic">Ficedula albicollis</li>
-        <li style="font-style:italic">Gadus morhua</li>
         <li style="font-style:italic">Gallus gallus</li>
         <li style="font-style:italic">Gasterosteus aculeatus</li>
         <li style="font-style:italic">Gorilla gorilla</li>
@@ -2401,7 +2400,6 @@ The core database schema is available in several diagrams (PDF format) here:
         <li style="font-style:italic">Macaca mulatta</li>
         <li style="font-style:italic">Macropus eugenii</li>
         <li style="font-style:italic">Meleagris gallopavo</li>
-        <li style="font-style:italic">Microcebus murinus</li>
         <li style="font-style:italic">Monodelphis domestica</li>
         <li style="font-style:italic">Mus musculus</li>
         <li style="font-style:italic">Mustela putorius furo</li>
@@ -2418,10 +2416,8 @@ The core database schema is available in several diagrams (PDF format) here:
         <li style="font-style:italic">Papio anubis</li>
         <li style="font-style:italic">Pelodiscus sinensis</li>
         <li style="font-style:italic">Petromyzon marinus</li>
-        <li style="font-style:italic">Poecilia formosa</li>
         <li style="font-style:italic">Pongo abelii</li>
         <li style="font-style:italic">Procavia capensis</li>
-        <li style="font-style:italic">Pteropus vampyrus</li>
         <li style="font-style:italic">Rattus norvegicus</li>
         <li style="font-style:italic">Saccharomyces cerevisiae</li>
         <li style="font-style:italic">Sarcophilus harrisii</li>
@@ -3424,7 +3420,7 @@ The core database schema is available in several diagrams (PDF format) here:
 
       <tr>
         <td class="bg1"><b>dbprimary_acc</b></td>
-        <td class="bg1">VARCHAR(40)</td>
+        <td class="bg1">VARCHAR(50)</td>
         <td class="bg1">-</td>
         <td class="bg1">Primary accession number.</td>
         <td class="bg1">unique key: <i>id_index</i></td>
@@ -4213,6 +4209,7 @@ The core database schema is available in several diagrams (PDF format) here:
         <li style="font-style:italic">Anolis carolinensis</li>
         <li style="font-style:italic">Astyanax mexicanus</li>
         <li style="font-style:italic">Chlorocebus sabaeus</li>
+        <li style="font-style:italic">Danio rerio</li>
         <li style="font-style:italic">Dasypus novemcinctus</li>
         <li style="font-style:italic">Ficedula albicollis</li>
         <li style="font-style:italic">Lepisosteus oculatus</li>
@@ -4220,6 +4217,7 @@ The core database schema is available in several diagrams (PDF format) here:
         <li style="font-style:italic">Ovis aries</li>
         <li style="font-style:italic">Papio anubis</li>
         <li style="font-style:italic">Poecilia formosa</li>
+        <li style="font-style:italic">Rattus norvegicus</li>
       </ul>
     </div>
   </td></tr></table>
@@ -4773,6 +4771,7 @@ The core database schema is available in several diagrams (PDF format) here:
       <ul style="margin-top:1em">      <ul style="margin-top:1em">
         <li style="font-style:italic">Danio rerio</li>
         <li style="font-style:italic">Homo sapiens</li>
+        <li style="font-style:italic">Mus musculus</li>
         <li style="font-style:italic">Ovis aries</li>
       </ul>
     </div>
@@ -4858,6 +4857,7 @@ The core database schema is available in several diagrams (PDF format) here:
       <ul style="margin-top:1em">      <ul style="margin-top:1em">
         <li style="font-style:italic">Danio rerio</li>
         <li style="font-style:italic">Homo sapiens</li>
+        <li style="font-style:italic">Mus musculus</li>
         <li style="font-style:italic">Ovis aries</li>
       </ul>
     </div>
@@ -4919,6 +4919,7 @@ The core database schema is available in several diagrams (PDF format) here:
       <ul style="margin-top:1em">      <ul style="margin-top:1em">
         <li style="font-style:italic">Danio rerio</li>
         <li style="font-style:italic">Homo sapiens</li>
+        <li style="font-style:italic">Mus musculus</li>
         <li style="font-style:italic">Ovis aries</li>
       </ul>
     </div>
@@ -5882,7 +5883,6 @@ The core database schema is available in several diagrams (PDF format) here:
         <li style="font-style:italic">Danio rerio</li>
         <li style="font-style:italic">Dasypus novemcinctus</li>
         <li style="font-style:italic">Dipodomys ordii</li>
-        <li style="font-style:italic">Drosophila melanogaster</li>
         <li style="font-style:italic">Echinops telfairi</li>
         <li style="font-style:italic">Equus caballus</li>
         <li style="font-style:italic">Erinaceus europaeus</li>
@@ -6013,6 +6013,7 @@ The core database schema is available in several diagrams (PDF format) here:
         <li style="font-style:italic">Anolis carolinensis</li>
         <li style="font-style:italic">Astyanax mexicanus</li>
         <li style="font-style:italic">Chlorocebus sabaeus</li>
+        <li style="font-style:italic">Danio rerio</li>
         <li style="font-style:italic">Dasypus novemcinctus</li>
         <li style="font-style:italic">Ficedula albicollis</li>
         <li style="font-style:italic">Lepisosteus oculatus</li>
@@ -6020,6 +6021,7 @@ The core database schema is available in several diagrams (PDF format) here:
         <li style="font-style:italic">Ovis aries</li>
         <li style="font-style:italic">Papio anubis</li>
         <li style="font-style:italic">Poecilia formosa</li>
+        <li style="font-style:italic">Rattus norvegicus</li>
       </ul>
     </div>
   </td></tr></table>
@@ -6902,7 +6904,6 @@ The core database schema is available in several diagrams (PDF format) here:
         <li style="font-style:italic">Danio rerio</li>
         <li style="font-style:italic">Dasypus novemcinctus</li>
         <li style="font-style:italic">Dipodomys ordii</li>
-        <li style="font-style:italic">Drosophila melanogaster</li>
         <li style="font-style:italic">Echinops telfairi</li>
         <li style="font-style:italic">Equus caballus</li>
         <li style="font-style:italic">Erinaceus europaeus</li>
@@ -7867,7 +7868,6 @@ The core database schema is available in several diagrams (PDF format) here:
         <li style="font-style:italic">Danio rerio</li>
         <li style="font-style:italic">Dasypus novemcinctus</li>
         <li style="font-style:italic">Dipodomys ordii</li>
-        <li style="font-style:italic">Drosophila melanogaster</li>
         <li style="font-style:italic">Echinops telfairi</li>
         <li style="font-style:italic">Equus caballus</li>
         <li style="font-style:italic">Erinaceus europaeus</li>
@@ -8607,7 +8607,6 @@ The core database schema is available in several diagrams (PDF format) here:
         <li style="font-style:italic">Danio rerio</li>
         <li style="font-style:italic">Dasypus novemcinctus</li>
         <li style="font-style:italic">Dipodomys ordii</li>
-        <li style="font-style:italic">Drosophila melanogaster</li>
         <li style="font-style:italic">Echinops telfairi</li>
         <li style="font-style:italic">Equus caballus</li>
         <li style="font-style:italic">Erinaceus europaeus</li>
@@ -9746,6 +9745,7 @@ The core database schema is available in several diagrams (PDF format) here:
     <div id="sp_seq_region_mapping" style="display:none;">
       <ul style="margin-top:1em">      <ul style="margin-top:1em">
         <li style="font-style:italic">Homo sapiens</li>
+        <li style="font-style:italic">Mus musculus</li>
       </ul>
     </div>
   </td></tr></table>
@@ -10209,5 +10209,7 @@ The core database schema is available in several diagrams (PDF format) here:
     </td>
 </tr></table>
 
+    </div>
+  </div>
 </body>
 </html>

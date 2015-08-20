@@ -49,8 +49,11 @@
 	href="vep_download.html#installer">installer script</a>. <p>
   
   <p> Users interested in RefSeq transcripts may download an alternate cache
-  file; remember to specify <a href="vep_options.html#opt_refseq">--refseq</a>
-  when using this cache. </p>
+  file (eg homo_sapiens_refseq), or a merged file of RefSeq and Ensembl
+  transcripts (eg homo_sapiens_merged); remember to specify <a
+  href="vep_options.html#opt_refseq">--refseq</a> or <a
+  href="vep_options.html#opt_merged">--merged</a> when running the VEP to use
+  the relevant cache. </p>
     
     <p> Cache files for popular species: </p>
     
@@ -105,7 +108,7 @@ tar xfz homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]].tar.gz</pre>
 	<a href="http://lists.ensembl.org/mailman/listinfo/dev" rel="external">ensembl-dev</a> mailing list and we will
 	endeavour to add your species to the list of downloads. </p>
 	
-	<p> It is also possible to build your own <a href="#gtf">cache from a GTF
+	<p> It is also possible to build your own <a href="#gtf">cache from a GTF/GFF
 	file</a> and a FASTA file. </p>
 	
 	<p> It is possible to use any combination of cache and database; when using
@@ -114,35 +117,18 @@ tar xfz homo_sapiens_vep_[[SPECIESDEFS::ENSEMBL_VERSION]].tar.gz</pre>
 	
 	
 	<hr/>
-	<h2 id="gtf">Building a cache from a GTF file</h2>
+	<h2 id="gtf">Building a cache from a GTF or GFF file</h2>
 	
 	<p> For species that don't have a publicly available cache, or even an
 	Ensembl core database, it is possible to build a VEP cache using the
-	gtf2vep.pl script included alongside the main script. This requires a GTF
+	gtf2vep.pl script included alongside the main script. This requires a GTF or GFF
 	file and a FASTA file containing the reference sequence for the same
-	species. The GTF file have its features sorted in chromosomal order, and
-	must contain the following entry types and data: </p>
+	species. </p>
 	
-	<ul>
-		<li>"exon" feature lines must have "transcript_id", "gene_id" and
-		"exon_number" in the description field</li>
-		<li>"CDS" feature lines must correspond to coding exons, with
-		"transcript_id" and "exon_number" populated in the description
-		field, and the "frame" column populated with the read frame of the
-		exon</li>
-		<li>the "source" column of the GTF should indicate the biotype of the
-		exon/CDS - this should be "protein_coding" for protein coding
-		transcripts</li>
-	</ul>
-	
-	<p> For examples of these, see the GTF files made available by Ensembl on
-	the <a href="/info/data/ftp/index.html">Downloads</a> page </p>
-	
-	<p> The FASTA file should contain sequence for all values of the seqname
-	column in the GTF file. The first time you run the script, the
-	Bio::DB::Fasta module will create an index for the file that allows rapid
+	<p> The first time you run the script, the
+	Bio::DB::Fasta module will create an index for the FASTA file that allows rapid
 	random access to the sequences corresponding to the transcripts described in
-	the GTF file; this may take a few minutes to create. </p>
+	the GTF/GFF file; this may take a few minutes to create. </p>
 	
 	<p> The script is run as follows: </p>
 	
@@ -195,9 +181,9 @@ perl variant_effect_predictor.pl -offline -i my_species_variants.vcf -s my_speci
 	large (25GB for human). An example set of commands for setting up the data
 	for human follows: </p>
 	
-	<pre class="code">wget ftp://ftp.ensembl.org/pub/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.[[SPECIESDEFS::ENSEMBL_VERSION]].dna.primary_assembly.fa.gz
-gzip -d Homo_sapiens.GRCh38.[[SPECIESDEFS::ENSEMBL_VERSION]].dna.primary_assembly.fa.gz
-perl variant_effect_predictor.pl -i input.vcf --offline --hgvs --fasta Homo_sapiens.GRCh38.[[SPECIESDEFS::ENSEMBL_VERSION]].dna.primary_assembly.fa</pre>
+	<pre class="code">wget ftp://ftp.ensembl.org/pub/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz
+gzip -d Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz
+perl variant_effect_predictor.pl -i input.vcf --offline --hgvs --fasta Homo_sapiens.GRCh38.dna.primary_assembly.fa</pre>
 	
 	
 	<hr/>

@@ -2,6 +2,11 @@
 <head>
   <meta name="order" content="1" />
   <title>Data Description</title>
+  <script type="text/javascript">
+    window.onload = function() {
+      $('.ht').helptip({'track': true});
+    };
+  </script>
 </head>
 
 <body>
@@ -10,43 +15,41 @@
 
 <p>
   Below is a description of the data we store in the databases for Ensembl Variation.<br />For several different species in Ensembl, 
-  we import variation data (<span title="Single Nucleotide Polymorphisms">SNPs</span>, <span title="Copy Number Variations">CNVs</span>, allele frequencies, genotypes, etc) from a variety of 
+  we import variant data (<span class="ht" title="Single Nucleotide Polymorphisms">SNPs</span>, <span class="ht" title="Copy Number Variations">CNVs</span>, allele frequencies, genotypes, etc) from a variety of 
   <a href="sources_documentation.html">sources</a> (e.g. dbSNP). Imported variants and alleles are subjected to a <a href="#quality_control">quality control</a> process to flag suspect data.
   <br />We classify the variants into different
   <a href="#classes">classes</a> and calculate the <a href="predicted_data.html">predicted consequence(s)</a>
-  of the variant and we have also created variation <a href="#variation_sets">sets</a> to help people retrieve a specific
+  of the variant and we have also created variant <a href="#variation_sets">sets</a> to help people retrieve a specific
   group of variants from a particular dataset.<br />
   In human, we calculate the linkage disequilibrium for each variant, by <a href="#populations">population</a>.
 </p>
   
 <p>See some examples of imported data on the Ensembl website (Human):</p>
-<ul style="padding-left:0px;display:inline;list-style:none;margin-bottom:5px">
-  <li style="display:inline">
+<div class="portal" style="margin-bottom:5px;width:auto">
+  <div>
+    <a href="/Homo_sapiens/Variation/Context?v=rs1333049" title="Location of a variant in the genome"><img src="/i/96/var_genomic_context.png" alt="Location of a variant in the genome"/></a>
+  </div>
+  <div>
+    <a href="/Homo_sapiens/Variation/Population?v=rs699" title="Population genotypes and frequencies of a variant"><img src="/i/96/var_population_genetics.png" alt="Population genotypes and frequencies of a variant"/></a>
+  </div>
+  <div>
+    <a href="/Homo_sapiens/Variation/Sample?v=rs699" title="Sample genotypes of a variant"><img src="/i/96/var_sample_genotypes.png" alt="Sample genotypes of a variant"/></a>
+  </div>
+  <div>
+    <a href="/Homo_sapiens/Variation/Populations?v=COSM191228" title="Sample information and frequencies of a somatic variant"><img src="/i/96/var_sample_information.png" alt="Sample information and frequencies of a somatic variant"/></a>
+  </div>
+  <div>
+    <a href="/Homo_sapiens/Variation/Phenotype?v=rs1333049" title="Phenotype(s) associated with a variant"><img src="/i/96/var_phenotype_data.png"alt="Phenotype(s) associated with a variant"/></a>
+  </div>
+  <div>
+    <a href="/Homo_sapiens/Variation/Citations?v=rs1333049" title="Citations"><img src="/i/96/var_citations.png" alt="Citations"/></a>
+  </div>
 
-    <a href="/Homo_sapiens/Variation/Context?v=rs1333049"><img src="/i/96/var_genomic_context.png" class="portal" alt="Location of a variation in the genome" title="Location of a variation in the genome"/></a>
-  </li>
-  <li style="display:inline">
-    <a href="/Homo_sapiens/Variation/Population?v=rs699"><img src="/i/96/var_population_genetics.png" class="portal" alt="Population genotypes and frequencies of a variation" title="Population genotypes and frequencies of a variation"/></a>
-  </li>
-  <li style="display:inline">
-    <a href="/Homo_sapiens/Variation/Individual?v=rs699"><img src="/i/96/var_individual_genotypes.png" class="portal" alt="Individual genotypes of a variation" title="Individual genotypes of a variation"/></a>
-  </li>
-  <li style="display:inline">
-    <a href="/Homo_sapiens/Variation/Populations?v=COSM191228"><img src="/i/96/var_sample_information.png" class="portal" alt="Sample information and frequencies of a somatic variant" title="Sample information and frequencies of a somatic variant"/></a>
-  </li>
-  <li style="display:inline">
-    <a href="/Homo_sapiens/Variation/Phenotype?v=rs1333049"><img src="/i/96/var_phenotype_data.png" class="portal" alt="Phenotype(s) associated with a variation" title="Phenotype(s) associated with a variation"/></a>
-  </li>
-  <li style="display:inline">
-    <a href="/Homo_sapiens/Variation/Citations?v=rs1333049"><img src="/i/96/var_citations.png" class="portal" alt="Citations" title="Citations"/></a>
-  </li>
-  <li style="display:inline">
-
-</ul>
-
+</div>
+<div style="clear:both"></div>
 
 <br />
-<h2 id="sources">Variation species and data types</h2>
+<h2 id="sources">Variant species and data types</h2>
 
 <!-- Data types -->
 <p>
@@ -56,14 +59,14 @@ The Ensembl Variation database stores data imported from external sources and al
 <ul>
   <li><b>Data imported</b> from external sources (dbSNP, Sanger, DGVa, ...):
     <ul>
-      <li>Variations <i>(SNPs, in-dels, insertion, deletion, ...)</i></li>
-      <li>Structural variations <i>(copy number variation, tandem duplication, inversion, ...)</i></li>
+      <li>Variants <i>(SNPs, in-dels, insertion, deletion, ...)</i></li>
+      <li>Structural variants <i>(copy number variation, tandem duplication, inversion, ...)</i></li>
       <li>Probes for copy number variations</li>
-      <li>Locations for variations and structural variations</li>
+      <li>Locations for variants and structural variants</li>
       <li>Alleles</li>
       <li>Populations</li>
       <li>Genotypes</li>
-      <li>Phenotypes (e.g. <a href="/Homo_sapiens/Phenotype/All">list of phenotypes in human</a>)</li>
+      <li>Phenotypes (e.g. <a href="/Homo_sapiens/Phenotype/All">list of phenotypes in human</a>, <a href="sources_phenotype_documentation.html">list of phenotype sources</a>)</li>
       <li>Citations (extracted from dbSNP submissions and text mining performed by <a href="http://europepmc.org/" >EPMC</a> and <a href="http://text.soe.ucsc.edu/">UCSC</a>)</li>
     </ul>
   </li>
@@ -73,151 +76,55 @@ The Ensembl Variation database stores data imported from external sources and al
 <!-- Species list -->
 <br />
 <p>
-Ensembl stores variation data for the following species, but note that users can still use the 
+Ensembl stores variant data for the following species, but note that users can still use the 
 <a href="/info/docs/tools/vep/index.html">Variant Effect Predictor <img src="/i/vep_logo_sm.png" style="width:40px;height:19px;vertical-align:middle" alt="VEP" /></a> on species for which we do not currently have 
 a variation database.
 </p>
 <!-- Data sources - start -->
 <p style="padding-top:0px;margin-top:0px">There are currently <span style="font-weight:bold;font-size:1.1em;color:#000">22</span> variation databases in Ensembl:</p>
-<table class="ss" style="width:auto"><tr class="ss_header"><th>Species</th><th style="border-left:1px solid #DDD">Sequence variant count</th>
-                      <th style="border-left:1px solid #DDD">Structural variant</th><th style="border-left:1px solid #DDD">Genotype - Individual</th><th style="border-left:1px solid #DDD">Genotype - Population</th><th style="border-left:1px solid #DDD">Phenotype</th><th style="border-left:1px solid #DDD">Citation</th><th style="border-left:1px solid #DDD">SIFT</th><th style="border-left:1px solid #DDD">PolyPhen</th></tr>
-                     
-  <tr>
+
+  <table class="ss" style="width:auto">
+    <tr class="ss_header">
+      <th></th>
+      <th style="border-left:1px solid #DDD;text-align:center" colspan="3">Short variant</th>
+      <th style="border-left:1px solid #DDD;text-align:center" colspan="1">Long variant</th>
+      <th style="border-left:1px solid #DDD;text-align:center" colspan="2">Genotype</th>
+      <th style="border-left:1px solid #DDD;text-align:center" colspan="2">Association</th>
+      <th style="border-left:1px solid #DDD;text-align:center" colspan="2">Prediction</th>
+    </tr>
+    
+    <tr class="ss_header">
+      <th style="background-color:#BBB">Species</th>  
+      <th style="background-color:#BBB;border-left:1px solid #DDD">Sequence variant</th>
+      <th style="background-color:#BBB;padding-left:0px">
+        <span class="_ht ht" title="Sequence variant count difference with the previous Ensembl release (v.80)">
+          <small>(e!80 &rarr; e!81)</small>
+        </span>
+      </th>
+      <th style="background-color:#BBB;border-left:1px solid #DDD">Source(s)</th>
+      <th style="background-color:#BBB;border-left:1px solid #DDD">Structural variant</th><th style="background-color:#BBB;border-left:1px solid #DDD">Sample</th><th style="background-color:#BBB;border-left:1px solid #DDD">Population</th><th style="background-color:#BBB;border-left:1px solid #DDD">Phenotype</th><th style="background-color:#BBB;border-left:1px solid #DDD">Citation</th>
+      <th style="background-color:#BBB;border-left:1px solid #DDD">SIFT</th><th style="background-color:#BBB;border-left:1px solid #DDD">PolyPhen</th>
+    </tr>
+  <tr style="vertical-align:middle">
     <td>
       <div>
-        <div style="float:left;vertical-align:middle;margin-right:4px">
-          <a rel="external" href="/Bos_taurus/Info/Index" title="Bos taurus Ensembl Home page" style="vertical-align:middle">
-            <img src="/i/species/48/Bos_taurus.png" alt="Bos taurus" class="sp-thumb" style="vertical-align:middle;width:32px;height:32px" />
+        <div style="float:left">
+          <a href="/Felis_catus/Info/Index" title="Felis catus Ensembl Home page" style="vertical-align:middle" target="_blank">
+            <img src="/i/species/48/Felis_catus.png" alt="Felis catus" class="sp-thumb" style="vertical-align:middle;width:28px;height:28px" />
           </a>
-        </div>
-        <div style="float:left;margin-top:0px">
-          <div class="bigtext" style="font-style:italic;margin-bottom:2px">Bos taurus</div>
-          <div><a href="sources_documentation.html#bos_taurus" style="text-decoration:none" title="Bos taurus sources list">[sources]</a></div>
-        </div>
-        <div style="clear:both"></div>
-      </div>
+         </div>
+         <div style="float:left;margin-left:4px">
+           <div class="bigtext">Cat</div>
+           <div class="small" style="font-style:italic">Felis catus</div>
+         </div>
+         <div style="clear:both"></div>
+       </div>
     </td>
-    <td>> 73 million variants</td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center">-</td>
-  </tr>
-  <tr class="bg2">
-    <td>
-      <div>
-        <div style="float:left;vertical-align:middle;margin-right:4px">
-          <a rel="external" href="/Canis_familiaris/Info/Index" title="Canis familiaris Ensembl Home page" style="vertical-align:middle">
-            <img src="/i/species/48/Canis_familiaris.png" alt="Canis familiaris" class="sp-thumb" style="vertical-align:middle;width:32px;height:32px" />
-          </a>
-        </div>
-        <div style="float:left;margin-top:0px">
-          <div class="bigtext" style="font-style:italic;margin-bottom:2px">Canis familiaris</div>
-          <div><a href="sources_documentation.html#canis_familiaris" style="text-decoration:none" title="Canis familiaris sources list">[sources]</a></div>
-        </div>
-        <div style="clear:both"></div>
-      </div>
+    <td style="text-align:right"><span style="background-color:#006266;color:#FFF;border-radius:5px;padding:3px 3px 1px;cursor:help;white-space:nowrap" title="Over 327,000 variants">327,000+</span></td>
+    <td style="text-align:right">-</td>
+    <td style="text-align:right">
+      <a href="sources_documentation.html#felis_catus" class="ht _ht" style="text-decoration:none" title="dbSNP">1 source</a>
     </td>
-    <td>> 3 million variants</td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center">-</td>
-  </tr>
-  <tr>
-    <td>
-      <div>
-        <div style="float:left;vertical-align:middle;margin-right:4px">
-          <a rel="external" href="/Danio_rerio/Info/Index" title="Danio rerio Ensembl Home page" style="vertical-align:middle">
-            <img src="/i/species/48/Danio_rerio.png" alt="Danio rerio" class="sp-thumb" style="vertical-align:middle;width:32px;height:32px" />
-          </a>
-        </div>
-        <div style="float:left;margin-top:0px">
-          <div class="bigtext" style="font-style:italic;margin-bottom:2px">Danio rerio</div>
-          <div><a href="sources_documentation.html#danio_rerio" style="text-decoration:none" title="Danio rerio sources list">[sources]</a></div>
-        </div>
-        <div style="clear:both"></div>
-      </div>
-    </td>
-    <td>> 1 million variants</td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center">-</td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center">-</td>
-  </tr>
-  <tr class="bg2">
-    <td>
-      <div>
-        <div style="float:left;vertical-align:middle;margin-right:4px">
-          <a rel="external" href="/Drosophila_melanogaster/Info/Index" title="Drosophila melanogaster Ensembl Home page" style="vertical-align:middle">
-            <img src="/i/species/48/Drosophila_melanogaster.png" alt="Drosophila melanogaster" class="sp-thumb" style="vertical-align:middle;width:32px;height:32px" />
-          </a>
-        </div>
-        <div style="float:left;margin-top:0px">
-          <div class="bigtext" style="font-style:italic;margin-bottom:2px">Drosophila melanogaster</div>
-          <div><a href="sources_documentation.html#drosophila_melanogaster" style="text-decoration:none" title="Drosophila melanogaster sources list">[sources]</a></div>
-        </div>
-        <div style="clear:both"></div>
-      </div>
-    </td>
-    <td>> 6 million variants</td>
-    <td style="text-align:center">-</td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center">-</td>
-    <td style="text-align:center">-</td>
-    <td style="text-align:center">-</td>
-    <td style="text-align:center">-</td>
-  </tr>
-  <tr>
-    <td>
-      <div>
-        <div style="float:left;vertical-align:middle;margin-right:4px">
-          <a rel="external" href="/Equus_caballus/Info/Index" title="Equus caballus Ensembl Home page" style="vertical-align:middle">
-            <img src="/i/species/48/Equus_caballus.png" alt="Equus caballus" class="sp-thumb" style="vertical-align:middle;width:32px;height:32px" />
-          </a>
-        </div>
-        <div style="float:left;margin-top:0px">
-          <div class="bigtext" style="font-style:italic;margin-bottom:2px">Equus caballus</div>
-          <div><a href="sources_documentation.html#equus_caballus" style="text-decoration:none" title="Equus caballus sources list">[sources]</a></div>
-        </div>
-        <div style="clear:both"></div>
-      </div>
-    </td>
-    <td>> 4 million variants</td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center">-</td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center">-</td>
-  </tr>
-  <tr class="bg2">
-    <td>
-      <div>
-        <div style="float:left;vertical-align:middle;margin-right:4px">
-          <a rel="external" href="/Felis_catus/Info/Index" title="Felis catus Ensembl Home page" style="vertical-align:middle">
-            <img src="/i/species/48/Felis_catus.png" alt="Felis catus" class="sp-thumb" style="vertical-align:middle;width:32px;height:32px" />
-          </a>
-        </div>
-        <div style="float:left;margin-top:0px">
-          <div class="bigtext" style="font-style:italic;margin-bottom:2px">Felis catus</div>
-          <div><a href="sources_documentation.html#felis_catus" style="text-decoration:none" title="Felis catus sources list">[sources]</a></div>
-        </div>
-        <div style="clear:both"></div>
-      </div>
-    </td>
-    <td>> 327,000 variants</td>
     <td style="text-align:center">-</td>
     <td style="text-align:center">-</td>
     <td style="text-align:center">-</td>
@@ -226,22 +133,26 @@ a variation database.
     <td style="text-align:center">-</td>
     <td style="text-align:center">-</td>
   </tr>
-  <tr>
+  <tr class="bg2" style="vertical-align:middle">
     <td>
       <div>
-        <div style="float:left;vertical-align:middle;margin-right:4px">
-          <a rel="external" href="/Gallus_gallus/Info/Index" title="Gallus gallus Ensembl Home page" style="vertical-align:middle">
-            <img src="/i/species/48/Gallus_gallus.png" alt="Gallus gallus" class="sp-thumb" style="vertical-align:middle;width:32px;height:32px" />
+        <div style="float:left">
+          <a href="/Gallus_gallus/Info/Index" title="Gallus gallus Ensembl Home page" style="vertical-align:middle" target="_blank">
+            <img src="/i/species/48/Gallus_gallus.png" alt="Gallus gallus" class="sp-thumb" style="vertical-align:middle;width:28px;height:28px" />
           </a>
-        </div>
-        <div style="float:left;margin-top:0px">
-          <div class="bigtext" style="font-style:italic;margin-bottom:2px">Gallus gallus</div>
-          <div><a href="sources_documentation.html#gallus_gallus" style="text-decoration:none" title="Gallus gallus sources list">[sources]</a></div>
-        </div>
-        <div style="clear:both"></div>
-      </div>
+         </div>
+         <div style="float:left;margin-left:4px">
+           <div class="bigtext">Chicken</div>
+           <div class="small" style="font-style:italic">Gallus gallus</div>
+         </div>
+         <div style="clear:both"></div>
+       </div>
     </td>
-    <td>> 9 million variants</td>
+    <td style="text-align:right"><span style="background-color:#007;color:#FFF;border-radius:5px;padding:3px 3px 1px;cursor:help;white-space:nowrap" title="Over 9.5 million variants">9.5 million+</span></td>
+    <td style="text-align:right">-</td>
+    <td style="text-align:right">
+      <a href="sources_documentation.html#gallus_gallus" class="ht _ht" style="text-decoration:none" title="dbSNP">1 source</a>
+    </td>
     <td style="text-align:center">-</td>
     <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
     <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
@@ -250,214 +161,26 @@ a variation database.
     <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
     <td style="text-align:center">-</td>
   </tr>
-  <tr class="bg2">
+  <tr style="vertical-align:middle">
     <td>
       <div>
-        <div style="float:left;vertical-align:middle;margin-right:4px">
-          <a rel="external" href="/Homo_sapiens/Info/Index" title="Homo sapiens Ensembl Home page" style="vertical-align:middle">
-            <img src="/i/species/48/Homo_sapiens.png" alt="Homo sapiens" class="sp-thumb" style="vertical-align:middle;width:32px;height:32px" />
+        <div style="float:left">
+          <a href="/Pan_troglodytes/Info/Index" title="Pan troglodytes Ensembl Home page" style="vertical-align:middle" target="_blank">
+            <img src="/i/species/48/Pan_troglodytes.png" alt="Pan troglodytes" class="sp-thumb" style="vertical-align:middle;width:28px;height:28px" />
           </a>
-        </div>
-        <div style="float:left;margin-top:0px">
-          <div class="bigtext" style="font-style:italic;margin-bottom:2px">Homo sapiens</div>
-          <div><a href="sources_documentation.html#homo_sapiens" style="text-decoration:none" title="Homo sapiens sources list">[sources]</a></div>
-        </div>
-        <div style="clear:both"></div>
-      </div>
+         </div>
+         <div style="float:left;margin-left:4px">
+           <div class="bigtext">Chimpanzee</div>
+           <div class="small" style="font-style:italic">Pan troglodytes</div>
+         </div>
+         <div style="clear:both"></div>
+       </div>
     </td>
-    <td>> 65 million variants</td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-  </tr>
-  <tr>
-    <td>
-      <div>
-        <div style="float:left;vertical-align:middle;margin-right:4px">
-          <a rel="external" href="/Macaca_mulatta/Info/Index" title="Macaca mulatta Ensembl Home page" style="vertical-align:middle">
-            <img src="/i/species/48/Macaca_mulatta.png" alt="Macaca mulatta" class="sp-thumb" style="vertical-align:middle;width:32px;height:32px" />
-          </a>
-        </div>
-        <div style="float:left;margin-top:0px">
-          <div class="bigtext" style="font-style:italic;margin-bottom:2px">Macaca mulatta</div>
-          <div><a href="sources_documentation.html#macaca_mulatta" style="text-decoration:none" title="Macaca mulatta sources list">[sources]</a></div>
-        </div>
-        <div style="clear:both"></div>
-      </div>
+    <td style="text-align:right"><span style="background-color:#007;color:#FFF;border-radius:5px;padding:3px 3px 1px;cursor:help;white-space:nowrap" title="Over 1.6 million variants">1.6 million+</span></td>
+    <td style="text-align:right">-</td>
+    <td style="text-align:right">
+      <a href="sources_documentation.html#pan_troglodytes" class="ht _ht" style="text-decoration:none" title="dbSNP">1 source</a>
     </td>
-    <td>> 3 million variants</td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center">-</td>
-    <td style="text-align:center">-</td>
-    <td style="text-align:center">-</td>
-  </tr>
-  <tr class="bg2">
-    <td>
-      <div>
-        <div style="float:left;vertical-align:middle;margin-right:4px">
-          <a rel="external" href="/Meleagris_gallopavo/Info/Index" title="Meleagris gallopavo Ensembl Home page" style="vertical-align:middle">
-            <img src="/i/species/48/Meleagris_gallopavo.png" alt="Meleagris gallopavo" class="sp-thumb" style="vertical-align:middle;width:32px;height:32px" />
-          </a>
-        </div>
-        <div style="float:left;margin-top:0px">
-          <div class="bigtext" style="font-style:italic;margin-bottom:2px">Meleagris gallopavo</div>
-          <div><a href="sources_documentation.html#meleagris_gallopavo" style="text-decoration:none" title="Meleagris gallopavo sources list">[sources]</a></div>
-        </div>
-        <div style="clear:both"></div>
-      </div>
-    </td>
-    <td>> 9,000 variants</td>
-    <td style="text-align:center">-</td>
-    <td style="text-align:center">-</td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center">-</td>
-    <td style="text-align:center">-</td>
-    <td style="text-align:center">-</td>
-  </tr>
-  <tr>
-    <td>
-      <div>
-        <div style="float:left;vertical-align:middle;margin-right:4px">
-          <a rel="external" href="/Monodelphis_domestica/Info/Index" title="Monodelphis domestica Ensembl Home page" style="vertical-align:middle">
-            <img src="/i/species/48/Monodelphis_domestica.png" alt="Monodelphis domestica" class="sp-thumb" style="vertical-align:middle;width:32px;height:32px" />
-          </a>
-        </div>
-        <div style="float:left;margin-top:0px">
-          <div class="bigtext" style="font-style:italic;margin-bottom:2px">Monodelphis domestica</div>
-          <div><a href="sources_documentation.html#monodelphis_domestica" style="text-decoration:none" title="Monodelphis domestica sources list">[sources]</a></div>
-        </div>
-        <div style="clear:both"></div>
-      </div>
-    </td>
-    <td>> 1 million variants</td>
-    <td style="text-align:center">-</td>
-    <td style="text-align:center">-</td>
-    <td style="text-align:center">-</td>
-    <td style="text-align:center">-</td>
-    <td style="text-align:center">-</td>
-    <td style="text-align:center">-</td>
-    <td style="text-align:center">-</td>
-  </tr>
-  <tr class="bg2">
-    <td>
-      <div>
-        <div style="float:left;vertical-align:middle;margin-right:4px">
-          <a rel="external" href="/Mus_musculus/Info/Index" title="Mus musculus Ensembl Home page" style="vertical-align:middle">
-            <img src="/i/species/48/Mus_musculus.png" alt="Mus musculus" class="sp-thumb" style="vertical-align:middle;width:32px;height:32px" />
-          </a>
-        </div>
-        <div style="float:left;margin-top:0px">
-          <div class="bigtext" style="font-style:italic;margin-bottom:2px">Mus musculus</div>
-          <div><a href="sources_documentation.html#mus_musculus" style="text-decoration:none" title="Mus musculus sources list">[sources]</a></div>
-        </div>
-        <div style="clear:both"></div>
-      </div>
-    </td>
-    <td>> 71 million variants</td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center">-</td>
-  </tr>
-  <tr>
-    <td>
-      <div>
-        <div style="float:left;vertical-align:middle;margin-right:4px">
-          <a rel="external" href="/Nomascus_leucogenys/Info/Index" title="Nomascus leucogenys Ensembl Home page" style="vertical-align:middle">
-            <img src="/i/species/48/Nomascus_leucogenys.png" alt="Nomascus leucogenys" class="sp-thumb" style="vertical-align:middle;width:32px;height:32px" />
-          </a>
-        </div>
-        <div style="float:left;margin-top:0px">
-          <div class="bigtext" style="font-style:italic;margin-bottom:2px">Nomascus leucogenys</div>
-          <div><a href="sources_documentation.html#nomascus_leucogenys" style="text-decoration:none" title="Nomascus leucogenys sources list">[sources]</a></div>
-        </div>
-        <div style="clear:both"></div>
-      </div>
-    </td>
-    <td>> 1 million variants</td>
-    <td style="text-align:center">-</td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center">-</td>
-    <td style="text-align:center">-</td>
-    <td style="text-align:center">-</td>
-    <td style="text-align:center">-</td>
-    <td style="text-align:center">-</td>
-  </tr>
-  <tr class="bg2">
-    <td>
-      <div>
-        <div style="float:left;vertical-align:middle;margin-right:4px">
-          <a rel="external" href="/Ornithorhynchus_anatinus/Info/Index" title="Ornithorhynchus anatinus Ensembl Home page" style="vertical-align:middle">
-            <img src="/i/species/48/Ornithorhynchus_anatinus.png" alt="Ornithorhynchus anatinus" class="sp-thumb" style="vertical-align:middle;width:32px;height:32px" />
-          </a>
-        </div>
-        <div style="float:left;margin-top:0px">
-          <div class="bigtext" style="font-style:italic;margin-bottom:2px">Ornithorhynchus anatinus</div>
-          <div><a href="sources_documentation.html#ornithorhynchus_anatinus" style="text-decoration:none" title="Ornithorhynchus anatinus sources list">[sources]</a></div>
-        </div>
-        <div style="clear:both"></div>
-      </div>
-    </td>
-    <td>> 1 million variants</td>
-    <td style="text-align:center">-</td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center">-</td>
-    <td style="text-align:center">-</td>
-    <td style="text-align:center">-</td>
-    <td style="text-align:center">-</td>
-  </tr>
-  <tr>
-    <td>
-      <div>
-        <div style="float:left;vertical-align:middle;margin-right:4px">
-          <a rel="external" href="/Ovis_aries/Info/Index" title="Ovis aries Ensembl Home page" style="vertical-align:middle">
-            <img src="/i/species/48/Ovis_aries.png" alt="Ovis aries" class="sp-thumb" style="vertical-align:middle;width:32px;height:32px" />
-          </a>
-        </div>
-        <div style="float:left;margin-top:0px">
-          <div class="bigtext" style="font-style:italic;margin-bottom:2px">Ovis aries</div>
-          <div><a href="sources_documentation.html#ovis_aries" style="text-decoration:none" title="Ovis aries sources list">[sources]</a></div>
-        </div>
-        <div style="clear:both"></div>
-      </div>
-    </td>
-    <td>> 32 million variants</td>
-    <td style="text-align:center">-</td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center">-</td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center">-</td>
-  </tr>
-  <tr class="bg2">
-    <td>
-      <div>
-        <div style="float:left;vertical-align:middle;margin-right:4px">
-          <a rel="external" href="/Pan_troglodytes/Info/Index" title="Pan troglodytes Ensembl Home page" style="vertical-align:middle">
-            <img src="/i/species/48/Pan_troglodytes.png" alt="Pan troglodytes" class="sp-thumb" style="vertical-align:middle;width:32px;height:32px" />
-          </a>
-        </div>
-        <div style="float:left;margin-top:0px">
-          <div class="bigtext" style="font-style:italic;margin-bottom:2px">Pan troglodytes</div>
-          <div><a href="sources_documentation.html#pan_troglodytes" style="text-decoration:none" title="Pan troglodytes sources list">[sources]</a></div>
-        </div>
-        <div style="clear:both"></div>
-      </div>
-    </td>
-    <td>> 1 million variants</td>
     <td style="text-align:center">-</td>
     <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
     <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
@@ -466,94 +189,26 @@ a variation database.
     <td style="text-align:center">-</td>
     <td style="text-align:center">-</td>
   </tr>
-  <tr>
+  <tr class="bg2" style="vertical-align:middle">
     <td>
       <div>
-        <div style="float:left;vertical-align:middle;margin-right:4px">
-          <a rel="external" href="/Pongo_abelii/Info/Index" title="Pongo abelii Ensembl Home page" style="vertical-align:middle">
-            <img src="/i/species/48/Pongo_abelii.png" alt="Pongo abelii" class="sp-thumb" style="vertical-align:middle;width:32px;height:32px" />
+        <div style="float:left">
+          <a href="/Bos_taurus/Info/Index" title="Bos taurus Ensembl Home page" style="vertical-align:middle" target="_blank">
+            <img src="/i/species/48/Bos_taurus.png" alt="Bos taurus" class="sp-thumb" style="vertical-align:middle;width:28px;height:28px" />
           </a>
-        </div>
-        <div style="float:left;margin-top:0px">
-          <div class="bigtext" style="font-style:italic;margin-bottom:2px">Pongo abelii</div>
-          <div><a href="sources_documentation.html#pongo_abelii" style="text-decoration:none" title="Pongo abelii sources list">[sources]</a></div>
-        </div>
-        <div style="clear:both"></div>
-      </div>
+         </div>
+         <div style="float:left;margin-left:4px">
+           <div class="bigtext">Cow</div>
+           <div class="small" style="font-style:italic">Bos taurus</div>
+         </div>
+         <div style="clear:both"></div>
+       </div>
     </td>
-    <td>> 10 million variants</td>
-    <td style="text-align:center">-</td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center">-</td>
-    <td style="text-align:center">-</td>
-    <td style="text-align:center">-</td>
-    <td style="text-align:center">-</td>
-    <td style="text-align:center">-</td>
-  </tr>
-  <tr class="bg2">
-    <td>
-      <div>
-        <div style="float:left;vertical-align:middle;margin-right:4px">
-          <a rel="external" href="/Rattus_norvegicus/Info/Index" title="Rattus norvegicus Ensembl Home page" style="vertical-align:middle">
-            <img src="/i/species/48/Rattus_norvegicus.png" alt="Rattus norvegicus" class="sp-thumb" style="vertical-align:middle;width:32px;height:32px" />
-          </a>
-        </div>
-        <div style="float:left;margin-top:0px">
-          <div class="bigtext" style="font-style:italic;margin-bottom:2px">Rattus norvegicus</div>
-          <div><a href="sources_documentation.html#rattus_norvegicus" style="text-decoration:none" title="Rattus norvegicus sources list">[sources]</a></div>
-        </div>
-        <div style="clear:both"></div>
-      </div>
+    <td style="text-align:right"><span style="background-color:#800;color:#FFF;border-radius:5px;padding:3px 3px 1px;cursor:help;white-space:nowrap" title="Over 95 million variants">95 million+</span></td>
+    <td style="text-align:right"><span style="color:#090" title="Over 10 million more variants"><small>(+10 million)</small></span></td>
+    <td style="text-align:right">
+      <a href="sources_documentation.html#bos_taurus" class="ht _ht" style="text-decoration:none" title="dbSNP">1 source</a>
     </td>
-    <td>> 5 million variants</td>
-    <td style="text-align:center">-</td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center">-</td>
-  </tr>
-  <tr>
-    <td>
-      <div>
-        <div style="float:left;vertical-align:middle;margin-right:4px">
-          <a rel="external" href="/Saccharomyces_cerevisiae/Info/Index" title="Saccharomyces cerevisiae Ensembl Home page" style="vertical-align:middle">
-            <img src="/i/species/48/Saccharomyces_cerevisiae.png" alt="Saccharomyces cerevisiae" class="sp-thumb" style="vertical-align:middle;width:32px;height:32px" />
-          </a>
-        </div>
-        <div style="float:left;margin-top:0px">
-          <div class="bigtext" style="font-style:italic;margin-bottom:2px">Saccharomyces cerevisiae</div>
-          <div><a href="sources_documentation.html#saccharomyces_cerevisiae" style="text-decoration:none" title="Saccharomyces cerevisiae sources list">[sources]</a></div>
-        </div>
-        <div style="clear:both"></div>
-      </div>
-    </td>
-    <td>> 263,000 variants</td>
-    <td style="text-align:center">-</td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
-    <td style="text-align:center">-</td>
-    <td style="text-align:center">-</td>
-    <td style="text-align:center">-</td>
-    <td style="text-align:center">-</td>
-  </tr>
-  <tr class="bg2">
-    <td>
-      <div>
-        <div style="float:left;vertical-align:middle;margin-right:4px">
-          <a rel="external" href="/Sus_scrofa/Info/Index" title="Sus scrofa Ensembl Home page" style="vertical-align:middle">
-            <img src="/i/species/48/Sus_scrofa.png" alt="Sus scrofa" class="sp-thumb" style="vertical-align:middle;width:32px;height:32px" />
-          </a>
-        </div>
-        <div style="float:left;margin-top:0px">
-          <div class="bigtext" style="font-style:italic;margin-bottom:2px">Sus scrofa</div>
-          <div><a href="sources_documentation.html#sus_scrofa" style="text-decoration:none" title="Sus scrofa sources list">[sources]</a></div>
-        </div>
-        <div style="clear:both"></div>
-      </div>
-    </td>
-    <td>> 28 million variants</td>
     <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
     <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
     <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
@@ -562,22 +217,54 @@ a variation database.
     <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
     <td style="text-align:center">-</td>
   </tr>
-  <tr>
+  <tr style="vertical-align:middle">
     <td>
       <div>
-        <div style="float:left;vertical-align:middle;margin-right:4px">
-          <a rel="external" href="/Taeniopygia_guttata/Info/Index" title="Taeniopygia guttata Ensembl Home page" style="vertical-align:middle">
-            <img src="/i/species/48/Taeniopygia_guttata.png" alt="Taeniopygia guttata" class="sp-thumb" style="vertical-align:middle;width:32px;height:32px" />
+        <div style="float:left">
+          <a href="/Canis_familiaris/Info/Index" title="Canis familiaris Ensembl Home page" style="vertical-align:middle" target="_blank">
+            <img src="/i/species/48/Canis_familiaris.png" alt="Canis familiaris" class="sp-thumb" style="vertical-align:middle;width:28px;height:28px" />
           </a>
-        </div>
-        <div style="float:left;margin-top:0px">
-          <div class="bigtext" style="font-style:italic;margin-bottom:2px">Taeniopygia guttata</div>
-          <div><a href="sources_documentation.html#taeniopygia_guttata" style="text-decoration:none" title="Taeniopygia guttata sources list">[sources]</a></div>
-        </div>
-        <div style="clear:both"></div>
-      </div>
+         </div>
+         <div style="float:left;margin-left:4px">
+           <div class="bigtext">Dog</div>
+           <div class="small" style="font-style:italic">Canis familiaris</div>
+         </div>
+         <div style="clear:both"></div>
+       </div>
     </td>
-    <td>> 1 million variants</td>
+    <td style="text-align:right"><span style="background-color:#007;color:#FFF;border-radius:5px;padding:3px 3px 1px;cursor:help;white-space:nowrap" title="Over 3.2 million variants">3.2 million+</span></td>
+    <td style="text-align:right">-</td>
+    <td style="text-align:right">
+      <a href="sources_documentation.html#canis_familiaris" class="ht _ht" style="text-decoration:none" title="dbSNP">1 source</a>
+    </td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center">-</td>
+  </tr>
+  <tr class="bg2" style="vertical-align:middle">
+    <td>
+      <div>
+        <div style="float:left">
+          <a href="/Drosophila_melanogaster/Info/Index" title="Drosophila melanogaster Ensembl Home page" style="vertical-align:middle" target="_blank">
+            <img src="/i/species/48/Drosophila_melanogaster.png" alt="Drosophila melanogaster" class="sp-thumb" style="vertical-align:middle;width:28px;height:28px" />
+          </a>
+         </div>
+         <div style="float:left;margin-left:4px">
+           <div class="bigtext">Fruitfly</div>
+           <div class="small" style="font-style:italic">Drosophila melanogaster</div>
+         </div>
+         <div style="clear:both"></div>
+       </div>
+    </td>
+    <td style="text-align:right"><span style="background-color:#007;color:#FFF;border-radius:5px;padding:3px 3px 1px;cursor:help;white-space:nowrap" title="Over 6.7 million variants">6.7 million+</span></td>
+    <td style="text-align:right">-</td>
+    <td style="text-align:right">
+      <a href="sources_documentation.html#drosophila_melanogaster" class="ht _ht" style="text-decoration:none" title="DPGP">1 source</a>
+    </td>
     <td style="text-align:center">-</td>
     <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
     <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
@@ -586,31 +273,476 @@ a variation database.
     <td style="text-align:center">-</td>
     <td style="text-align:center">-</td>
   </tr>
-  <tr class="bg2">
+  <tr style="vertical-align:middle">
     <td>
       <div>
-        <div style="float:left;vertical-align:middle;margin-right:4px">
-          <a rel="external" href="/Tetraodon_nigroviridis/Info/Index" title="Tetraodon nigroviridis Ensembl Home page" style="vertical-align:middle">
-            <img src="/i/species/48/Tetraodon_nigroviridis.png" alt="Tetraodon nigroviridis" class="sp-thumb" style="vertical-align:middle;width:32px;height:32px" />
+        <div style="float:left">
+          <a href="/Nomascus_leucogenys/Info/Index" title="Nomascus leucogenys Ensembl Home page" style="vertical-align:middle" target="_blank">
+            <img src="/i/species/48/Nomascus_leucogenys.png" alt="Nomascus leucogenys" class="sp-thumb" style="vertical-align:middle;width:28px;height:28px" />
           </a>
-        </div>
-        <div style="float:left;margin-top:0px">
-          <div class="bigtext" style="font-style:italic;margin-bottom:2px">Tetraodon nigroviridis</div>
-          <div><a href="sources_documentation.html#tetraodon_nigroviridis" style="text-decoration:none" title="Tetraodon nigroviridis sources list">[sources]</a></div>
-        </div>
-        <div style="clear:both"></div>
-      </div>
+         </div>
+         <div style="float:left;margin-left:4px">
+           <div class="bigtext">Gibbon</div>
+           <div class="small" style="font-style:italic">Nomascus leucogenys</div>
+         </div>
+         <div style="clear:both"></div>
+       </div>
     </td>
-    <td>> 902,000 variants</td>
+    <td style="text-align:right"><span style="background-color:#007;color:#FFF;border-radius:5px;padding:3px 3px 1px;cursor:help;white-space:nowrap" title="Over 1.1 million variants">1.1 million+</span></td>
+    <td style="text-align:right">-</td>
+    <td style="text-align:right">
+      <a href="sources_documentation.html#nomascus_leucogenys" class="ht _ht" style="text-decoration:none" title="ENSEMBL">1 source</a>
+    </td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+  </tr>
+  <tr class="bg2" style="vertical-align:middle">
+    <td>
+      <div>
+        <div style="float:left">
+          <a href="/Equus_caballus/Info/Index" title="Equus caballus Ensembl Home page" style="vertical-align:middle" target="_blank">
+            <img src="/i/species/48/Equus_caballus.png" alt="Equus caballus" class="sp-thumb" style="vertical-align:middle;width:28px;height:28px" />
+          </a>
+         </div>
+         <div style="float:left;margin-left:4px">
+           <div class="bigtext">Horse</div>
+           <div class="small" style="font-style:italic">Equus caballus</div>
+         </div>
+         <div style="clear:both"></div>
+       </div>
+    </td>
+    <td style="text-align:right"><span style="background-color:#007;color:#FFF;border-radius:5px;padding:3px 3px 1px;cursor:help;white-space:nowrap" title="Over 4.9 million variants">4.9 million+</span></td>
+    <td style="text-align:right">-</td>
+    <td style="text-align:right">
+      <a href="sources_documentation.html#equus_caballus" class="ht _ht" style="text-decoration:none" title="dbSNP">1 source</a>
+    </td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center">-</td>
+  </tr>
+  <tr style="vertical-align:middle">
+    <td>
+      <div>
+        <div style="float:left">
+          <a href="/Homo_sapiens/Info/Index" title="Homo sapiens Ensembl Home page" style="vertical-align:middle" target="_blank">
+            <img src="/i/species/48/Homo_sapiens.png" alt="Homo sapiens" class="sp-thumb" style="vertical-align:middle;width:28px;height:28px" />
+          </a>
+         </div>
+         <div style="float:left;margin-left:4px">
+           <div class="bigtext">Human</div>
+           <div class="small" style="font-style:italic">Homo sapiens</div>
+         </div>
+         <div style="clear:both"></div>
+       </div>
+    </td>
+    <td style="text-align:right"><span style="background-color:#800;color:#FFF;border-radius:5px;padding:3px 3px 1px;cursor:help;white-space:nowrap" title="Over 115 million variants">115 million+</span></td>
+    <td style="text-align:right"><span style="color:#090" title="Over 11,000 more variants"><small>(+11,000)</small></span></td>
+    <td style="text-align:right">
+      <a href="sources_documentation.html#homo_sapiens" class="ht _ht" style="text-decoration:none" title="dbSNP , COSMIC , ClinVar , ESP , HGMD-PUBLIC , HumanCoreExome-12 , PhenCode">7 sources</a>
+    </td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+  </tr>
+  <tr class="bg2" style="vertical-align:middle">
+    <td>
+      <div>
+        <div style="float:left">
+          <a href="/Macaca_mulatta/Info/Index" title="Macaca mulatta Ensembl Home page" style="vertical-align:middle" target="_blank">
+            <img src="/i/species/48/Macaca_mulatta.png" alt="Macaca mulatta" class="sp-thumb" style="vertical-align:middle;width:28px;height:28px" />
+          </a>
+         </div>
+         <div style="float:left;margin-left:4px">
+           <div class="bigtext">Macaque</div>
+           <div class="small" style="font-style:italic">Macaca mulatta</div>
+         </div>
+         <div style="clear:both"></div>
+       </div>
+    </td>
+    <td style="text-align:right"><span style="background-color:#007;color:#FFF;border-radius:5px;padding:3px 3px 1px;cursor:help;white-space:nowrap" title="Over 3 million variants">3 million+</span></td>
+    <td style="text-align:right">-</td>
+    <td style="text-align:right">
+      <a href="sources_documentation.html#macaca_mulatta" class="ht _ht" style="text-decoration:none" title="dbSNP">1 source</a>
+    </td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+  </tr>
+  <tr style="vertical-align:middle">
+    <td>
+      <div>
+        <div style="float:left">
+          <a href="/Mus_musculus/Info/Index" title="Mus musculus Ensembl Home page" style="vertical-align:middle" target="_blank">
+            <img src="/i/species/48/Mus_musculus.png" alt="Mus musculus" class="sp-thumb" style="vertical-align:middle;width:28px;height:28px" />
+          </a>
+         </div>
+         <div style="float:left;margin-left:4px">
+           <div class="bigtext">Mouse</div>
+           <div class="small" style="font-style:italic">Mus musculus</div>
+         </div>
+         <div style="clear:both"></div>
+       </div>
+    </td>
+    <td style="text-align:right"><span style="background-color:#800;color:#FFF;border-radius:5px;padding:3px 3px 1px;cursor:help;white-space:nowrap" title="Over 80 million variants">80 million+</span></td>
+    <td style="text-align:right">-</td>
+    <td style="text-align:right">
+      <a href="sources_documentation.html#mus_musculus" class="ht _ht" style="text-decoration:none" title="dbSNP">1 source</a>
+    </td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center">-</td>
+  </tr>
+  <tr class="bg2" style="vertical-align:middle">
+    <td>
+      <div>
+        <div style="float:left">
+          <a href="/Monodelphis_domestica/Info/Index" title="Monodelphis domestica Ensembl Home page" style="vertical-align:middle" target="_blank">
+            <img src="/i/species/48/Monodelphis_domestica.png" alt="Monodelphis domestica" class="sp-thumb" style="vertical-align:middle;width:28px;height:28px" />
+          </a>
+         </div>
+         <div style="float:left;margin-left:4px">
+           <div class="bigtext">Opossum</div>
+           <div class="small" style="font-style:italic">Monodelphis domestica</div>
+         </div>
+         <div style="clear:both"></div>
+       </div>
+    </td>
+    <td style="text-align:right"><span style="background-color:#007;color:#FFF;border-radius:5px;padding:3px 3px 1px;cursor:help;white-space:nowrap" title="Over 1.1 million variants">1.1 million+</span></td>
+    <td style="text-align:right">-</td>
+    <td style="text-align:right">
+      <a href="sources_documentation.html#monodelphis_domestica" class="ht _ht" style="text-decoration:none" title="dbSNP">1 source</a>
+    </td>
     <td style="text-align:center">-</td>
     <td style="text-align:center">-</td>
     <td style="text-align:center">-</td>
     <td style="text-align:center">-</td>
     <td style="text-align:center">-</td>
     <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+  </tr>
+  <tr style="vertical-align:middle">
+    <td>
+      <div>
+        <div style="float:left">
+          <a href="/Pongo_abelii/Info/Index" title="Pongo abelii Ensembl Home page" style="vertical-align:middle" target="_blank">
+            <img src="/i/species/48/Pongo_abelii.png" alt="Pongo abelii" class="sp-thumb" style="vertical-align:middle;width:28px;height:28px" />
+          </a>
+         </div>
+         <div style="float:left;margin-left:4px">
+           <div class="bigtext">Orangutan</div>
+           <div class="small" style="font-style:italic">Pongo abelii</div>
+         </div>
+         <div style="clear:both"></div>
+       </div>
+    </td>
+    <td style="text-align:right"><span style="background-color:#800;color:#FFF;border-radius:5px;padding:3px 3px 1px;cursor:help;white-space:nowrap" title="Over 10 million variants">10 million+</span></td>
+    <td style="text-align:right">-</td>
+    <td style="text-align:right">
+      <a href="sources_documentation.html#pongo_abelii" class="ht _ht" style="text-decoration:none" title="dbSNP">1 source</a>
+    </td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+  </tr>
+  <tr class="bg2" style="vertical-align:middle">
+    <td>
+      <div>
+        <div style="float:left">
+          <a href="/Sus_scrofa/Info/Index" title="Sus scrofa Ensembl Home page" style="vertical-align:middle" target="_blank">
+            <img src="/i/species/48/Sus_scrofa.png" alt="Sus scrofa" class="sp-thumb" style="vertical-align:middle;width:28px;height:28px" />
+          </a>
+         </div>
+         <div style="float:left;margin-left:4px">
+           <div class="bigtext">Pig</div>
+           <div class="small" style="font-style:italic">Sus scrofa</div>
+         </div>
+         <div style="clear:both"></div>
+       </div>
+    </td>
+    <td style="text-align:right"><span style="background-color:#800;color:#FFF;border-radius:5px;padding:3px 3px 1px;cursor:help;white-space:nowrap" title="Over 52 million variants">52 million+</span></td>
+    <td style="text-align:right">-</td>
+    <td style="text-align:right">
+      <a href="sources_documentation.html#sus_scrofa" class="ht _ht" style="text-decoration:none" title="dbSNP , Pig SNP Consortium">2 sources</a>
+    </td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center">-</td>
+  </tr>
+  <tr style="vertical-align:middle">
+    <td>
+      <div>
+        <div style="float:left">
+          <a href="/Ornithorhynchus_anatinus/Info/Index" title="Ornithorhynchus anatinus Ensembl Home page" style="vertical-align:middle" target="_blank">
+            <img src="/i/species/48/Ornithorhynchus_anatinus.png" alt="Ornithorhynchus anatinus" class="sp-thumb" style="vertical-align:middle;width:28px;height:28px" />
+          </a>
+         </div>
+         <div style="float:left;margin-left:4px">
+           <div class="bigtext">Platypus</div>
+           <div class="small" style="font-style:italic">Ornithorhynchus anatinus</div>
+         </div>
+         <div style="clear:both"></div>
+       </div>
+    </td>
+    <td style="text-align:right"><span style="background-color:#007;color:#FFF;border-radius:5px;padding:3px 3px 1px;cursor:help;white-space:nowrap" title="Over 1.3 million variants">1.3 million+</span></td>
+    <td style="text-align:right">-</td>
+    <td style="text-align:right">
+      <a href="sources_documentation.html#ornithorhynchus_anatinus" class="ht _ht" style="text-decoration:none" title="dbSNP">1 source</a>
+    </td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+  </tr>
+  <tr class="bg2" style="vertical-align:middle">
+    <td>
+      <div>
+        <div style="float:left">
+          <a href="/Rattus_norvegicus/Info/Index" title="Rattus norvegicus Ensembl Home page" style="vertical-align:middle" target="_blank">
+            <img src="/i/species/48/Rattus_norvegicus.png" alt="Rattus norvegicus" class="sp-thumb" style="vertical-align:middle;width:28px;height:28px" />
+          </a>
+         </div>
+         <div style="float:left;margin-left:4px">
+           <div class="bigtext">Rat</div>
+           <div class="small" style="font-style:italic">Rattus norvegicus</div>
+         </div>
+         <div style="clear:both"></div>
+       </div>
+    </td>
+    <td style="text-align:right"><span style="background-color:#007;color:#FFF;border-radius:5px;padding:3px 3px 1px;cursor:help;white-space:nowrap" title="Over 5 million variants">5 million+</span></td>
+    <td style="text-align:right">-</td>
+    <td style="text-align:right">
+      <a href="sources_documentation.html#rattus_norvegicus" class="ht _ht" style="text-decoration:none" title="dbSNP">1 source</a>
+    </td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center">-</td>
+  </tr>
+  <tr style="vertical-align:middle">
+    <td>
+      <div>
+        <div style="float:left">
+          <a href="/Saccharomyces_cerevisiae/Info/Index" title="Saccharomyces cerevisiae Ensembl Home page" style="vertical-align:middle" target="_blank">
+            <img src="/i/species/48/Saccharomyces_cerevisiae.png" alt="Saccharomyces cerevisiae" class="sp-thumb" style="vertical-align:middle;width:28px;height:28px" />
+          </a>
+         </div>
+         <div style="float:left;margin-left:4px">
+           <div class="bigtext">S. cerevisiae</div>
+           <div class="small" style="font-style:italic">Saccharomyces cerevisiae</div>
+         </div>
+         <div style="clear:both"></div>
+       </div>
+    </td>
+    <td style="text-align:right"><span style="background-color:#006266;color:#FFF;border-radius:5px;padding:3px 3px 1px;cursor:help;white-space:nowrap" title="Over 263,000 variants">263,000+</span></td>
+    <td style="text-align:right">-</td>
+    <td style="text-align:right">
+      <a href="sources_documentation.html#saccharomyces_cerevisiae" class="ht _ht" style="text-decoration:none" title="SGRP">1 source</a>
+    </td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+  </tr>
+  <tr class="bg2" style="vertical-align:middle">
+    <td>
+      <div>
+        <div style="float:left">
+          <a href="/Ovis_aries/Info/Index" title="Ovis aries Ensembl Home page" style="vertical-align:middle" target="_blank">
+            <img src="/i/species/48/Ovis_aries.png" alt="Ovis aries" class="sp-thumb" style="vertical-align:middle;width:28px;height:28px" />
+          </a>
+         </div>
+         <div style="float:left;margin-left:4px">
+           <div class="bigtext">Sheep</div>
+           <div class="small" style="font-style:italic">Ovis aries</div>
+         </div>
+         <div style="clear:both"></div>
+       </div>
+    </td>
+    <td style="text-align:right"><span style="background-color:#800;color:#FFF;border-radius:5px;padding:3px 3px 1px;cursor:help;white-space:nowrap" title="Over 51 million variants">51 million+</span></td>
+    <td style="text-align:right">-</td>
+    <td style="text-align:right">
+      <a href="sources_documentation.html#ovis_aries" class="ht _ht" style="text-decoration:none" title="dbSNP , IlluminaOvineSNP50">2 sources</a>
+    </td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center">-</td>
+  </tr>
+  <tr style="vertical-align:middle">
+    <td>
+      <div>
+        <div style="float:left">
+          <a href="/Tetraodon_nigroviridis/Info/Index" title="Tetraodon nigroviridis Ensembl Home page" style="vertical-align:middle" target="_blank">
+            <img src="/i/species/48/Tetraodon_nigroviridis.png" alt="Tetraodon nigroviridis" class="sp-thumb" style="vertical-align:middle;width:28px;height:28px" />
+          </a>
+         </div>
+         <div style="float:left;margin-left:4px">
+           <div class="bigtext">Tetraodon</div>
+           <div class="small" style="font-style:italic">Tetraodon nigroviridis</div>
+         </div>
+         <div style="clear:both"></div>
+       </div>
+    </td>
+    <td style="text-align:right"><span style="background-color:#006266;color:#FFF;border-radius:5px;padding:3px 3px 1px;cursor:help;white-space:nowrap" title="Over 902,000 variants">902,000+</span></td>
+    <td style="text-align:right">-</td>
+    <td style="text-align:right">
+      <a href="sources_documentation.html#tetraodon_nigroviridis" class="ht _ht" style="text-decoration:none" title="dbSNP">1 source</a>
+    </td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+  </tr>
+  <tr class="bg2" style="vertical-align:middle">
+    <td>
+      <div>
+        <div style="float:left">
+          <a href="/Meleagris_gallopavo/Info/Index" title="Meleagris gallopavo Ensembl Home page" style="vertical-align:middle" target="_blank">
+            <img src="/i/species/48/Meleagris_gallopavo.png" alt="Meleagris gallopavo" class="sp-thumb" style="vertical-align:middle;width:28px;height:28px" />
+          </a>
+         </div>
+         <div style="float:left;margin-left:4px">
+           <div class="bigtext">Turkey</div>
+           <div class="small" style="font-style:italic">Meleagris gallopavo</div>
+         </div>
+         <div style="clear:both"></div>
+       </div>
+    </td>
+    <td style="text-align:right"><span style="background-color:#006266;color:#FFF;border-radius:5px;padding:3px 3px 1px;cursor:help;white-space:nowrap" title="Over 9,000 variants">9,000+</span></td>
+    <td style="text-align:right">-</td>
+    <td style="text-align:right">
+      <a href="sources_documentation.html#meleagris_gallopavo" class="ht _ht" style="text-decoration:none" title="dbSNP">1 source</a>
+    </td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+  </tr>
+  <tr style="vertical-align:middle">
+    <td>
+      <div>
+        <div style="float:left">
+          <a href="/Taeniopygia_guttata/Info/Index" title="Taeniopygia guttata Ensembl Home page" style="vertical-align:middle" target="_blank">
+            <img src="/i/species/48/Taeniopygia_guttata.png" alt="Taeniopygia guttata" class="sp-thumb" style="vertical-align:middle;width:28px;height:28px" />
+          </a>
+         </div>
+         <div style="float:left;margin-left:4px">
+           <div class="bigtext">Zebra Finch</div>
+           <div class="small" style="font-style:italic">Taeniopygia guttata</div>
+         </div>
+         <div style="clear:both"></div>
+       </div>
+    </td>
+    <td style="text-align:right"><span style="background-color:#007;color:#FFF;border-radius:5px;padding:3px 3px 1px;cursor:help;white-space:nowrap" title="Over 1.7 million variants">1.7 million+</span></td>
+    <td style="text-align:right">-</td>
+    <td style="text-align:right">
+      <a href="sources_documentation.html#taeniopygia_guttata" class="ht _ht" style="text-decoration:none" title="dbSNP">1 source</a>
+    </td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center">-</td>
+  </tr>
+  <tr class="bg2" style="vertical-align:middle">
+    <td>
+      <div>
+        <div style="float:left">
+          <a href="/Danio_rerio/Info/Index" title="Danio rerio Ensembl Home page" style="vertical-align:middle" target="_blank">
+            <img src="/i/species/48/Danio_rerio.png" alt="Danio rerio" class="sp-thumb" style="vertical-align:middle;width:28px;height:28px" />
+          </a>
+         </div>
+         <div style="float:left;margin-left:4px">
+           <div class="bigtext">Zebrafish</div>
+           <div class="small" style="font-style:italic">Danio rerio</div>
+         </div>
+         <div style="clear:both"></div>
+       </div>
+    </td>
+    <td style="text-align:right"><span style="background-color:#800;color:#FFF;border-radius:5px;padding:3px 3px 1px;cursor:help;white-space:nowrap" title="Over 17 million variants">17 million+</span></td>
+    <td style="text-align:right">-</td>
+    <td style="text-align:right">
+      <a href="sources_documentation.html#danio_rerio" class="ht _ht" style="text-decoration:none" title="dbSNP">1 source</a>
+    </td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
+    <td style="text-align:center">-</td>
+    <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
     <td style="text-align:center">-</td>
   </tr></table>
-<p style="padding-top:5px">The <b>full list of species</b> and their assembly versions in Ensembl is available <a href="/info/about/species.html">here</a>.</p>
+
+<span style="border:1px #DDD solid;padding:4px">
+  <span style="margin-right:5px;font-weight:bold">Colour legend: </span>
+  
+  <span style="margin-left:20px">
+    <span style="background-color:#800;color:#FFF;border-radius:5px;padding:0px 12px;white-space:nowrap;margin-right:5px"></span>
+    <span>From 10 million</span>
+  </span>  
+  <span style="margin-left:20px">
+    <span style="background-color:#007;color:#FFF;border-radius:5px;padding:0px 12px;white-space:nowrap;margin-right:5px"></span>
+    <span>From 1 million to 9.9 million</span>
+  </span>  
+  <span style="margin-left:20px">
+    <span style="background-color:#006266;color:#FFF;border-radius:5px;padding:0px 12px;white-space:nowrap;margin-right:5px"></span>
+    <span>From 1,000 to 999,999</span>
+  </span>  
+  <span style="margin-left:20px">
+    <span style="background-color:#070;color:#FFF;border-radius:5px;padding:0px 12px;white-space:nowrap;margin-right:5px"></span>
+    <span>From 1 to 999</span>
+  </span>
+</span>
+<p style="padding-top:15px">The <b>full list of species</b> with their assembly versions in Ensembl is available <a href="/info/about/species.html">here</a>.</p>
 <!-- Data sources - end -->
 <br />
 <p>
@@ -628,26 +760,26 @@ imported once it has been submitted to dbSNP.
 Ensembl also includes data from other <a href="sources_documentation.html">sources</a>. To view data from these sources in the
 browser go to a species Location page (e.g. <a href="/Homo_sapiens/Location/View?r=6:133017695-133161157">for human</a>), and click on
 the <i>'Configure this page'</i> link on the left-hand side. The <i>'Variation'</i> and <i>'Somatic mutations'</i> sections contain a track list  of
-all sources of variation data for that species.
+all sources of variant data for that species.
 </p>
 
 
 <br />
-<h2 id="displays">Variation displays</h2>
+<h2 id="displays">Variant displays</h2>
 
 <p>
-Variation data can be viewed in the browser through pages such as:
+Variant data can be viewed in the browser through pages such as:
 </p>
 
 <ul>
-<li><b>Gene:</b> Variation Table and Variation Image (for all variations in a gene) 
+<li><b>Gene:</b> Variation Table and Variation Image (for all variants in a gene) 
 e.g. <a href="/Homo_sapiens/Gene/Variation_Gene/Table?db=core;g=ENSG00000159197">for all variants in KCNE2</a>. 
 Structural Variation to see all structural variants overlapping the gene.</li>
 <li><b>Transcript:</b> Population comparison, Comparison
 image (for comparing variants in a transcript across different individual or strain
-sequences) e.g. <a href="/Mus_musculus/Transcript/Population/Image?g=ENSMUSG00000041143;r=4:138528820-138586500;t=ENSMUST00000084208"> compare Tmco4 in different mouse strains </a> </li>
+sequences) e.g. <a href="/Mus_musculus/Transcript/Population/Image?t=ENSMUST00000050949"> compare Tmco4 in different mouse strains </a> </li>
 <li><b>Transcript: </b> Sequence, protein: list of the coding variants in protein coordinates.</li>
-<li><b>Location:</b> Region in Detail (Variations can be
+<li><b>Location:</b> Region in Detail (Variants can be
 drawn using &quot;Configure this page&quot; at the left. The menu allows
 display of information in Ensembl databases along with external
 sources in DAS format such as <a rel="external"
@@ -656,22 +788,22 @@ href="http://projects.tcag.ca/variation/">DGV loci</a>.)</li>
 </ul>
 
 <p>
-Clicking on any variation on an Ensembl page will open a Variation tab
+Clicking on any variant on an Ensembl page will open a Variation tab
 with information about the flanking sequence and source for the
-selected variation. Links to linkage disequilibrium (LD) plots,
+selected variant. Links to linkage disequilibrium (LD) plots,
 phenotype information (for human) from EGA, OMIM and <a rel="external"
-href="http://www.genome.gov/">NHGRI</a> and Ensembl genes and
-transcripts that include the variation can be found at the left of
+href="https://www.ebi.ac.uk/gwas/">NHGRI-EBI</a> and Ensembl genes and
+transcripts that include the variant can be found at the left of
 this tab. You may also view multiple genome alignments of various
 species, highlighting the
-variation. <a href="/info/genome/compara/analyses.html#ancestral"
+variant. <a href="/info/genome/compara/analyses.html#ancestral"
 class="cp-external">Ancestral sequences</a> are included in this
 display. 
 </p>
 
 <p>
-Variation information can also be accessed
-using <a href="/info/data/biomart.html"
+Variant information can also be accessed
+using <a href="/info/data/biomart/"
 class="cp-external">BioMart</a> (gene or variation database), and
 the <a href="/info/docs/api/index.html" class="cp-external">Perl
 API</a> (<a href="/info/docs/api/variation/index.html"
@@ -680,16 +812,16 @@ class="cp-external">variation API</a>).
 
 
 <br />
-<h2 id="classes">Variation classes</h2>
+<h2 id="classes">Variant classes</h2>
 
 <p>
-We call the class of a variation according to its component alleles and its mapping 
+We call the class of a variant according to its component alleles and its mapping 
 to the reference genome, and then display this information on the website. Internally 
 we use <a href="http://www.sequenceontology.org/">Sequence Ontology</a> terms, but we 
 map these to our own 'display' terms where common usage differs from the SO 
 definition (e.g. our term SNP is closer to the SO term SNV). All the classes we call, 
 along with their equivalent SO term are shown in the table below. We also differentiate 
-somatic mutations from germline variations in the display term, prefixing the term with
+somatic mutations from germline variants in the display term, prefixing the term with
 'somatic'. API users can fetch either the SO term or the display term.
 </p>
 
@@ -707,256 +839,340 @@ somatic mutations from germline variations in the display term, prefixing the te
   </tr>
 
   <tr>
-    <td rowspan="2" style="padding:0px;margin:0px"></td>
-    <td rowspan="2">SNV</td>
+    <td rowspan="2" style="padding:0px;margin:0px;"></td>
+    <td rowspan="2" style="font-weight:bold">SNV</td>
     <td rowspan="2">SNVs are single nucleotide positions in genomic DNA at which different sequence alternatives exist.</td>
     <td rowspan="2"><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001483">SO:0001483</a></td>
     <td>SNP</td>
-    <td rowspan="2">Variation</td>
+    <td rowspan="2">
+      <ul style="margin:0px;padding-left:1em">
+        <li style="margin:0px">Variant</li>
+      </ul>
+    </td>
   </tr>
   <tr>
     <td>somatic_SNV</td>
   </tr>
 
   <tr class="bg2">
-    <td rowspan="2" style="padding:0px;margin:0px"></td>
-    <td rowspan="2">genetic_marker</td>
+    <td rowspan="2" style="padding:0px;margin:0px;"></td>
+    <td rowspan="2" style="font-weight:bold">genetic_marker</td>
     <td rowspan="2">A measurable sequence feature that varies within a population.</td>
     <td rowspan="2"><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001645">SO:0001645</a></td>
     <td>genetic_marker</td>
-    <td rowspan="2">Variation</td>
+    <td rowspan="2">
+      <ul style="margin:0px;padding-left:1em">
+        <li style="margin:0px">Variant</li>
+      </ul>
+    </td>
   </tr>
   <tr class="bg2">
     <td>somatic_genetic_marker</td>
   </tr>
 
   <tr>
-    <td rowspan="2" style="padding:0px;margin:0px"></td>
-    <td rowspan="2">indel</td>
-    <td rowspan="2">A sequence alteration which included an insertion and a deletion, affecting 2 or more bases.</td>
-    <td rowspan="2"><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:1000032">SO:1000032</a></td>
-    <td>indel</td>
-    <td rowspan="2">Variation</td>
-  </tr>
-  <tr>
-    <td>somatic_indel</td>
-  </tr>
-
-  <tr class="bg2">
-    <td rowspan="2" style="padding:0px;margin:0px"></td>
-    <td rowspan="2">substitution</td>
+    <td rowspan="2" style="padding:0px;margin:0px;"></td>
+    <td rowspan="2" style="font-weight:bold">substitution</td>
     <td rowspan="2">A sequence alteration where the length of the change in the variant is the same as that of the reference.</td>
     <td rowspan="2"><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:1000002">SO:1000002</a></td>
     <td>substitution</td>
-    <td rowspan="2">Variation</td>
+    <td rowspan="2">
+      <ul style="margin:0px;padding-left:1em">
+        <li style="margin:0px">Variant</li>
+      </ul>
+    </td>
   </tr>
-  <tr class="bg2">
+  <tr>
     <td>somatic_substitution</td>
   </tr>
 
-  <tr>
-    <td rowspan="2" style="padding:0px;margin:0px"></td>
-    <td rowspan="2">tandem_repeat</td>
-    <td rowspan="2">Two or more adjcent copies of a region (of length greater than 1).</td>
+  <tr class="bg2">
+    <td rowspan="2" style="padding:0px;margin:0px;"></td>
+    <td rowspan="2" style="font-weight:bold">tandem_repeat</td>
+    <td rowspan="2">Two or more adjacent copies of a region (of length greater than 1).</td>
     <td rowspan="2"><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0000705">SO:0000705</a></td>
     <td>tandem_repeat</td>
-    <td rowspan="2">Variation</td>
+    <td rowspan="2">
+      <ul style="margin:0px;padding-left:1em">
+        <li style="margin:0px">Variant</li>
+      </ul>
+    </td>
   </tr>
-  <tr>
+  <tr class="bg2">
     <td>somatic_tandem_repeat</td>
   </tr>
 
-  <tr class="bg2">
-    <td rowspan="2" style="padding:0px;margin:0px;background-color:#99CCFF;border-top:1px solid #FFF"></td>
-    <td rowspan="2">complex_structural_alteration</td>
+  <tr>
+    <td rowspan="2" style="padding:0px;margin:0px;;background-color:#007FFF;border-top:1px solid #FFF"></td>
+    <td rowspan="2" style="font-weight:bold">complex_structural_alteration</td>
     <td rowspan="2">A structural sequence alteration or rearrangement encompassing one or more genome fragments.</td>
     <td rowspan="2"><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001784">SO:0001784</a></td>
     <td>Complex</td>
-    <td rowspan="2">Structural variation</td>
+    <td rowspan="2">
+      <ul style="margin:0px;padding-left:1em">
+        <li style="margin:0px"><span class="_ht ht" title="Structural variant">SV</span></li>
+      </ul>
+    </td>
   </tr>
-  <tr class="bg2">
+  <tr>
     <td>somatic_Complex</td>
   </tr>
 
-  <tr>
-    <td rowspan="2" style="padding:0px;margin:0px;background-color:#0000CC;border-top:1px solid #FFF"></td>
-    <td rowspan="2">copy_number_gain</td>
+  <tr class="bg2">
+    <td rowspan="2" style="padding:0px;margin:0px;;background-color:#0000CC;border-top:1px solid #FFF"></td>
+    <td rowspan="2" style="font-weight:bold">copy_number_gain</td>
     <td rowspan="2">A sequence alteration whereby the copy number of a given regions is greater than the reference sequence.</td>
     <td rowspan="2"><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001742">SO:0001742</a></td>
     <td>Gain</td>
-    <td rowspan="2">Structural variation</td>
+    <td rowspan="2">
+      <ul style="margin:0px;padding-left:1em">
+        <li style="margin:0px"><span class="_ht ht" title="Structural variant">SV</span></li>
+      </ul>
+    </td>
   </tr>
-  <tr>
+  <tr class="bg2">
     <td>somatic_Gain</td>
   </tr>
 
-  <tr class="bg2">
-    <td rowspan="2" style="padding:0px;margin:0px;background-color:#CC0000;border-top:1px solid #FFF"></td>
-    <td rowspan="2">copy_number_loss</td>
+  <tr>
+    <td rowspan="2" style="padding:0px;margin:0px;;background-color:#CC0000;border-top:1px solid #FFF"></td>
+    <td rowspan="2" style="font-weight:bold">copy_number_loss</td>
     <td rowspan="2">A sequence alteration whereby the copy number of a given region is less than the reference sequence.</td>
     <td rowspan="2"><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001743">SO:0001743</a></td>
     <td>Loss</td>
-    <td rowspan="2">Structural variation</td>
+    <td rowspan="2">
+      <ul style="margin:0px;padding-left:1em">
+        <li style="margin:0px"><span class="_ht ht" title="Structural variant">SV</span></li>
+      </ul>
+    </td>
   </tr>
-  <tr class="bg2">
+  <tr>
     <td>somatic_Loss</td>
   </tr>
 
-  <tr>
-    <td rowspan="2" style="padding:0px;margin:0px;background-color:#000000;border-top:1px solid #FFF"></td>
-    <td rowspan="2">copy_number_variation</td>
+  <tr class="bg2">
+    <td rowspan="2" style="padding:0px;margin:0px;;background-color:#8601AF;border-top:1px solid #FFF"></td>
+    <td rowspan="2" style="font-weight:bold">copy_number_variation</td>
     <td rowspan="2">A variation that increases or decreases the copy number of a given region.</td>
     <td rowspan="2"><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001019">SO:0001019</a></td>
     <td>CNV</td>
-    <td rowspan="2">Structural variation</td>
+    <td rowspan="2">
+      <ul style="margin:0px;padding-left:1em">
+        <li style="margin:0px"><span class="_ht ht" title="Structural variant">SV</span></li>
+      </ul>
+    </td>
   </tr>
-  <tr>
+  <tr class="bg2">
     <td>somatic_CNV</td>
   </tr>
 
-  <tr class="bg2">
-    <td rowspan="2" style="padding:0px;margin:0px;background-color:#000000;border-top:1px solid #FFF"></td>
-    <td rowspan="2">duplication</td>
+  <tr>
+    <td rowspan="2" style="padding:0px;margin:0px;;background-color:#0000CC;border-top:1px solid #FFF"></td>
+    <td rowspan="2" style="font-weight:bold">duplication</td>
     <td rowspan="2">An insertion which derives from, or is identical in sequence to, nucleotides present at a known location in the genome.</td>
     <td rowspan="2"><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:1000035">SO:1000035</a></td>
     <td>Duplication</td>
-    <td rowspan="2">Structural variation</td>
+    <td rowspan="2">
+      <ul style="margin:0px;padding-left:1em">
+        <li style="margin:0px"><span class="_ht ht" title="Structural variant">SV</span></li>
+      </ul>
+    </td>
   </tr>
-  <tr class="bg2">
+  <tr>
     <td>somatic_Duplication</td>
   </tr>
 
-  <tr>
-    <td rowspan="2" style="padding:0px;margin:0px;background-color:#B2B2B2;border-top:1px solid #FFF"></td>
-    <td rowspan="2">interchromosomal_breakpoint</td>
+  <tr class="bg2">
+    <td rowspan="2" style="padding:0px;margin:0px;;background-color:#000000;border-top:1px solid #FFF"></td>
+    <td rowspan="2" style="font-weight:bold">interchromosomal_breakpoint</td>
     <td rowspan="2">A rearrangement breakpoint between two different chromosomes.</td>
     <td rowspan="2"><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001873">SO:0001873</a></td>
     <td>Interchromosomal breakpoint</td>
-    <td rowspan="2">Structural variation</td>
+    <td rowspan="2">
+      <ul style="margin:0px;padding-left:1em">
+        <li style="margin:0px"><span class="_ht ht" title="Structural variant">SV</span></li>
+      </ul>
+    </td>
   </tr>
-  <tr>
+  <tr class="bg2">
     <td>somatic_Interchromosomal breakpoint</td>
   </tr>
 
-  <tr class="bg2">
-    <td rowspan="2" style="padding:0px;margin:0px;background-color:#B2B2B2;border-top:1px solid #FFF"></td>
-    <td rowspan="2">intrachromosomal_breakpoint</td>
+  <tr>
+    <td rowspan="2" style="padding:0px;margin:0px;;background-color:#000000;border-top:1px solid #FFF"></td>
+    <td rowspan="2" style="font-weight:bold">intrachromosomal_breakpoint</td>
     <td rowspan="2">A rearrangement breakpoint within the same chromosome.</td>
     <td rowspan="2"><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001874">SO:0001874</a></td>
     <td>Intrachromosomal breakpoint</td>
-    <td rowspan="2">Structural variation</td>
+    <td rowspan="2">
+      <ul style="margin:0px;padding-left:1em">
+        <li style="margin:0px"><span class="_ht ht" title="Structural variant">SV</span></li>
+      </ul>
+    </td>
   </tr>
-  <tr class="bg2">
+  <tr>
     <td>somatic_Intrachromosomal breakpoint</td>
   </tr>
 
-  <tr>
-    <td rowspan="2" style="padding:0px;margin:0px;background-color:#9933FF;border-top:1px solid #FFF"></td>
-    <td rowspan="2">inversion</td>
+  <tr class="bg2">
+    <td rowspan="2" style="padding:0px;margin:0px;;background-color:#C530FF;border-top:1px solid #FFF"></td>
+    <td rowspan="2" style="font-weight:bold">inversion</td>
     <td rowspan="2">A continuous nucleotide sequence is inverted in the same position.</td>
     <td rowspan="2"><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:1000036">SO:1000036</a></td>
     <td>inversion</td>
-    <td rowspan="2">Structural variation</td>
+    <td rowspan="2">
+      <ul style="margin:0px;padding-left:1em">
+        <li style="margin:0px"><span class="_ht ht" title="Structural variant">SV</span></li>
+      </ul>
+    </td>
   </tr>
-  <tr>
+  <tr class="bg2">
     <td>somatic_inversion</td>
   </tr>
 
-  <tr class="bg2">
-    <td rowspan="2" style="padding:0px;margin:0px;background-color:#FFCC00;border-top:1px solid #FFF"></td>
-    <td rowspan="2">mobile_element_insertion</td>
+  <tr>
+    <td rowspan="2" style="padding:0px;margin:0px;;background-color:#000099;border-top:1px solid #FFF"></td>
+    <td rowspan="2" style="font-weight:bold">mobile_element_insertion</td>
     <td rowspan="2">A kind of insertion where the inserted sequence is a mobile element.</td>
     <td rowspan="2"><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001837">SO:0001837</a></td>
     <td>Mobile element insertion</td>
-    <td rowspan="2">Structural variation</td>
+    <td rowspan="2">
+      <ul style="margin:0px;padding-left:1em">
+        <li style="margin:0px"><span class="_ht ht" title="Structural variant">SV</span></li>
+      </ul>
+    </td>
   </tr>
-  <tr class="bg2">
+  <tr>
     <td>somatic_Mobile element insertion</td>
   </tr>
 
-  <tr>
-    <td rowspan="2" style="padding:0px;margin:0px;background-color:#FFCC00;border-top:1px solid #FFF"></td>
-    <td rowspan="2">novel_sequence_insertion</td>
+  <tr class="bg2">
+    <td rowspan="2" style="padding:0px;margin:0px;;background-color:#000099;border-top:1px solid #FFF"></td>
+    <td rowspan="2" style="font-weight:bold">novel_sequence_insertion</td>
     <td rowspan="2">An insertion the sequence of which cannot be mapped to the reference genome.</td>
     <td rowspan="2"><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001838">SO:0001838</a></td>
     <td>Novel sequence insertion</td>
-    <td rowspan="2">Structural variation</td>
+    <td rowspan="2">
+      <ul style="margin:0px;padding-left:1em">
+        <li style="margin:0px"><span class="_ht ht" title="Structural variant">SV</span></li>
+      </ul>
+    </td>
   </tr>
-  <tr>
+  <tr class="bg2">
     <td>somatic_Novel sequence insertion</td>
   </tr>
 
-  <tr class="bg2">
-    <td rowspan="2" style="padding:0px;margin:0px;background-color:#732E00;border-top:1px solid #FFF"></td>
-    <td rowspan="2">tandem_duplication</td>
+  <tr>
+    <td rowspan="2" style="padding:0px;margin:0px;;background-color:#732E00;border-top:1px solid #FFF"></td>
+    <td rowspan="2" style="font-weight:bold">tandem_duplication</td>
     <td rowspan="2">A duplication consisting of 2 identical adjacent regions.</td>
     <td rowspan="2"><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:1000173">SO:1000173</a></td>
     <td>Tandem duplication</td>
-    <td rowspan="2">Structural variation</td>
+    <td rowspan="2">
+      <ul style="margin:0px;padding-left:1em">
+        <li style="margin:0px"><span class="_ht ht" title="Structural variant">SV</span></li>
+      </ul>
+    </td>
   </tr>
-  <tr class="bg2">
+  <tr>
     <td>somatic_Tandem duplication</td>
   </tr>
 
-  <tr>
-    <td rowspan="2" style="padding:0px;margin:0px;background-color:#C3A4FF;border-top:1px solid #FFF"></td>
-    <td rowspan="2">translocation</td>
+  <tr class="bg2">
+    <td rowspan="2" style="padding:0px;margin:0px;;background-color:#C3A4FF;border-top:1px solid #FFF"></td>
+    <td rowspan="2" style="font-weight:bold">translocation</td>
     <td rowspan="2">A region of nucleotide sequence that has translocated to a new position.</td>
     <td rowspan="2"><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0000199">SO:0000199</a></td>
     <td>translocation</td>
-    <td rowspan="2">Structural variation</td>
+    <td rowspan="2">
+      <ul style="margin:0px;padding-left:1em">
+        <li style="margin:0px"><span class="_ht ht" title="Structural variant">SV</span></li>
+      </ul>
+    </td>
   </tr>
-  <tr>
+  <tr class="bg2">
     <td>somatic_translocation</td>
   </tr>
 
-  <tr class="bg2">
-    <td rowspan="2" style="padding:0px;margin:0px;background-color:#CC0000;border-top:1px solid #FFF"></td>
-    <td rowspan="2">deletion</td>
+  <tr>
+    <td rowspan="2" style="padding:0px;margin:0px;;background-color:#CC0000;border-top:1px solid #FFF"></td>
+    <td rowspan="2" style="font-weight:bold">deletion</td>
     <td rowspan="2">The point at which one or more contiguous nucleotides were excised.</td>
     <td rowspan="2"><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0000159">SO:0000159</a></td>
     <td>deletion</td>
-    <td rowspan="2">Variation<br />Structural variation</td>
+    <td rowspan="2">
+      <ul style="margin:0px;padding-left:1em">
+        <li style="margin:0px">Variant</li><li style="margin:4px 0px 0px"><span class="_ht ht" title="Structural variant">SV</span></li>
+      </ul>
+    </td>
   </tr>
-  <tr class="bg2">
+  <tr>
     <td>somatic_deletion</td>
   </tr>
 
+  <tr class="bg2">
+    <td rowspan="2" style="padding:0px;margin:0px;;background-color:gold;border-top:1px solid #FFF"></td>
+    <td rowspan="2" style="font-weight:bold">indel</td>
+    <td rowspan="2">A sequence alteration which included an insertion and a deletion, affecting 2 or more bases.</td>
+    <td rowspan="2"><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:1000032">SO:1000032</a></td>
+    <td>indel</td>
+    <td rowspan="2">
+      <ul style="margin:0px;padding-left:1em">
+        <li style="margin:0px">Variant</li><li style="margin:4px 0px 0px"><span class="_ht ht" title="Structural variant">SV</span></li>
+      </ul>
+    </td>
+  </tr>
+  <tr class="bg2">
+    <td>somatic_indel</td>
+  </tr>
+
   <tr>
-    <td rowspan="2" style="padding:0px;margin:0px;background-color:#FFCC00;border-top:1px solid #FFF"></td>
-    <td rowspan="2">insertion</td>
+    <td rowspan="2" style="padding:0px;margin:0px;;background-color:#000099;border-top:1px solid #FFF"></td>
+    <td rowspan="2" style="font-weight:bold">insertion</td>
     <td rowspan="2">The sequence of one or more nucleotides added between two adjacent nucleotides in the sequence.</td>
     <td rowspan="2"><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0000667">SO:0000667</a></td>
     <td>insertion</td>
-    <td rowspan="2">Variation<br />Structural variation</td>
+    <td rowspan="2">
+      <ul style="margin:0px;padding-left:1em">
+        <li style="margin:0px">Variant</li><li style="margin:4px 0px 0px"><span class="_ht ht" title="Structural variant">SV</span></li>
+      </ul>
+    </td>
   </tr>
   <tr>
     <td>somatic_insertion</td>
   </tr>
 
   <tr class="bg2">
-    <td rowspan="2" style="padding:0px;margin:0px;background-color:#B2B2B2;border-top:1px solid #FFF"></td>
-    <td rowspan="2">sequence_alteration</td>
+    <td rowspan="2" style="padding:0px;margin:0px;;background-color:#000000;border-top:1px solid #FFF"></td>
+    <td rowspan="2" style="font-weight:bold">sequence_alteration</td>
     <td rowspan="2">A sequence_alteration is a sequence_feature whose extent is the deviation from another sequence.</td>
     <td rowspan="2"><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0001059">SO:0001059</a></td>
     <td>sequence_alteration</td>
-    <td rowspan="2">Variation<br />Structural variation</td>
+    <td rowspan="2">
+      <ul style="margin:0px;padding-left:1em">
+        <li style="margin:0px">Variant</li><li style="margin:4px 0px 0px"><span class="_ht ht" title="Structural variant">SV</span></li>
+      </ul>
+    </td>
   </tr>
   <tr class="bg2">
     <td>somatic_sequence_alteration</td>
   </tr>
 
   <tr>
-    <td style="padding:0px;margin:0px;background-color:#4682B4;border-top:1px solid #FFF"></td>
-    <td>probe</td>
+    <td style="padding:0px;margin:0px;;background-color:#4682B4;border-top:1px solid #FFF"></td>
+    <td style="font-weight:bold">probe</td>
     <td>A DNA sequence used experimentally to detect the presence or absence of a complementary nucleic acid.</td>
     <td><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0000051">SO:0000051</a></td>
     <td>CNV_PROBE</td>
-    <td>CNV probe</td>
+    <td>
+      <ul style="margin:0px;padding-left:1em">
+        <li style="margin:0px">CNV probe</li>
+      </ul>
+    </td>
   </tr></table>
 
 <p>
-<b>*</b> Corresponding colours for the Ensembl web displays (only for Structural variations). 
+<b>*</b> Corresponding colours for the Ensembl web displays (only for Structural variants). 
 The colours are based on the <a rel="external" href="http://www.ncbi.nlm.nih.gov/dbvar/content/overview/">dbVar</a> displays.
 <p>
 
@@ -965,10 +1181,10 @@ The colours are based on the <a rel="external" href="http://www.ncbi.nlm.nih.gov
   <input class="graph_config" type="hidden" name="legendpos" value="'east'" />
   <input class="graph_dimensions" type="hidden" value="[90,80,80]" />
   
-  <input type="hidden" class="graph_data" value="[[56919487,'SNV'],[3587853,'insertion'],[3402524,'deletion'],[647515,'sequence_alteration'],[403710,'indel'],[113877,'substitution'],[6944,'genetic_marker'],[4822,'tandem_repeat']]" />
+  <input type="hidden" class="graph_data" value="[[104709117,'SNV'],[4754839,'deletion'],[3975666,'insertion'],[1364810,'sequence_alteration'],[293561,'substitution'],[28805,'indel'],[6949,'genetic_marker'],[4700,'tandem_repeat']]" />
   
   <div class="pie_chart_classes" title="classes" style="width:400px;height:220px;border:1px solid #CCC;border-radius:8px;box-shadow:0 1px 3px #666">
-     <h3 style="padding:10px 10px 5px">Human Variation class distribution - Ensembl 78</h4>
+     <h3 style="padding:10px 10px 5px">Human variant class distribution - Ensembl 81</h4>
      <div id="graphHolder0"></div>
   </div>
 </div>
@@ -1008,8 +1224,11 @@ Below we list the population names associated with the main genotyping projects 
 </p>
 
 <!-- Data populations - start -->
-<ul style="padding-left:1em;margin-left:2px"><li><h3>Populations from the <a href="http://www.1000genomes.org" target="_blank" style="text-decoration:none">1000 Genomes Project</a> (<i>Homo sapiens</i>)</h3></li></ul>
-<table id="1000_genomes" class="ss" style="margin-bottom:4px">
+
+  <ul style="padding-left:1em;margin-left:2px">
+    <li><h3>Populations from the <a href="http://www.1000genomes.org" target="_blank" style="text-decoration:none">1000 Genomes Project</a> (<i>Homo sapiens</i>)</h3></li>
+  </ul>
+  <table id="1000_genomes" class="ss" style="margin-bottom:4px">
   
   <tr>
     <th style="width:200px">Name</th>
@@ -1017,109 +1236,178 @@ Below we list the population names associated with the main genotyping projects 
     <th>Description</th>
   </tr>
 
+  <tr class="supergroup">
+    <td>1000GENOMES:phase_3:<b>ALL</b></td>
+    <td style="text-align:right">2504</td>
+    <td>All phase 3 individuals</td>
+  </tr>
+  <tr class="subgroup">
+    <td>1000GENOMES:phase_3:<b>AFR</b></td>
+    <td style="text-align:right">661</td>
+    <td>African</td>
+  </tr>
   <tr>
-    <td>1000GENOMES:<b>phase_1_ALL</b></td>
-    <td style="text-align:right">1092</td>
-    <td>All individuals from phase 1 of the 1000 Genomes Project</td>
+    <td><ul style="margin:0px"><li style="margin:0px">1000GENOMES:phase_3:<b>ACB</b></li></ul></td>
+    <td style="text-align:right">96</td>
+    <td>African Caribbean in Barbados</td>
   </tr>
   <tr class="bg2">
-    <td>1000GENOMES:<b>phase_1_AFR</b></td>
-    <td style="text-align:right">246</td>
-    <td>All African individuals from phase 1 of the 1000 Genomes Project (YRI, LWK, ASW)</td>
-  </tr>
-  <tr>
-    <td><ul style="margin:0px"><li style="margin:0px">1000GENOMES:<b>phase_1_ASW</b></li></ul></td>
+    <td><ul style="margin:0px"><li style="margin:0px">1000GENOMES:phase_3:<b>ASW</b></li></ul></td>
     <td style="text-align:right">61</td>
-    <td>Americans of African Ancestry in SW USA</td>
-  </tr>
-  <tr class="bg2">
-    <td><ul style="margin:0px"><li style="margin:0px">1000GENOMES:<b>phase_1_YRI</b></li></ul></td>
-    <td style="text-align:right">88</td>
-    <td>Yoruba in Ibadan, Nigera</td>
+    <td>African Ancestry in Southwest US</td>
   </tr>
   <tr>
-    <td><ul style="margin:0px"><li style="margin:0px">1000GENOMES:<b>phase_1_LWK</b></li></ul></td>
-    <td style="text-align:right">97</td>
+    <td><ul style="margin:0px"><li style="margin:0px">1000GENOMES:phase_3:<b>ESN</b></li></ul></td>
+    <td style="text-align:right">99</td>
+    <td>Esan in Nigeria</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px">1000GENOMES:phase_3:<b>LWK</b></li></ul></td>
+    <td style="text-align:right">99</td>
     <td>Luhya in Webuye, Kenya</td>
   </tr>
-  <tr class="bg2">
-    <td>1000GENOMES:<b>phase_1_AMR</b></td>
-    <td style="text-align:right">181</td>
-    <td>All American individuals from phase 1 of the 1000 Genomes Project</td>
-  </tr>
   <tr>
-    <td><ul style="margin:0px"><li style="margin:0px">1000GENOMES:<b>phase_1_CLM</b></li></ul></td>
-    <td style="text-align:right">60</td>
-    <td>Colombian from Medellin, Colombia</td>
+    <td><ul style="margin:0px"><li style="margin:0px">1000GENOMES:phase_3:<b>MAG</b></li></ul></td>
+    <td style="text-align:right">113</td>
+    <td>Mandinka in The Gambia</td>
   </tr>
   <tr class="bg2">
-    <td><ul style="margin:0px"><li style="margin:0px">1000GENOMES:<b>phase_1_PUR</b></li></ul></td>
-    <td style="text-align:right">55</td>
-    <td>Puerto Ricans from Puerto Rica</td>
+    <td><ul style="margin:0px"><li style="margin:0px">1000GENOMES:phase_3:<b>MSL</b></li></ul></td>
+    <td style="text-align:right">85</td>
+    <td>Mende in Sierra Leone</td>
   </tr>
   <tr>
-    <td><ul style="margin:0px"><li style="margin:0px">1000GENOMES:<b>phase_1_MXL</b></li></ul></td>
-    <td style="text-align:right">66</td>
-    <td>Mexican Ancestry from Los Angeles USA</td>
+    <td><ul style="margin:0px"><li style="margin:0px">1000GENOMES:phase_3:<b>YRI</b></li></ul></td>
+    <td style="text-align:right">108</td>
+    <td>Yoruba in Ibadan, Nigeria</td>
+  </tr>
+  <tr class="subgroup">
+    <td>1000GENOMES:phase_3:<b>AMR</b></td>
+    <td style="text-align:right">347</td>
+    <td>American</td>
+  </tr>
+  <tr>
+    <td><ul style="margin:0px"><li style="margin:0px">1000GENOMES:phase_3:<b>CLM</b></li></ul></td>
+    <td style="text-align:right">94</td>
+    <td>Colombian in Medellin, Colombia</td>
   </tr>
   <tr class="bg2">
-    <td>1000GENOMES:<b>phase_1_ASN</b></td>
-    <td style="text-align:right">286</td>
-    <td>All East Asian individuals from phase 1 of the 1000 Genomes Project (CHB, JPT, CHS)</td>
+    <td><ul style="margin:0px"><li style="margin:0px">1000GENOMES:phase_3:<b>MXL</b></li></ul></td>
+    <td style="text-align:right">64</td>
+    <td>Mexican Ancestry in Los Angeles, California</td>
   </tr>
   <tr>
-    <td><ul style="margin:0px"><li style="margin:0px">1000GENOMES:<b>phase_1_JPT</b></li></ul></td>
-    <td style="text-align:right">89</td>
+    <td><ul style="margin:0px"><li style="margin:0px">1000GENOMES:phase_3:<b>PEL</b></li></ul></td>
+    <td style="text-align:right">85</td>
+    <td>Peruvian in Lima, Peru</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px">1000GENOMES:phase_3:<b>PUR</b></li></ul></td>
+    <td style="text-align:right">104</td>
+    <td>Puerto Rican in Puerto Rico</td>
+  </tr>
+  <tr class="subgroup">
+    <td>1000GENOMES:phase_3:<b>EAS</b></td>
+    <td style="text-align:right">504</td>
+    <td>East Asian</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px">1000GENOMES:phase_3:<b>CDX</b></li></ul></td>
+    <td style="text-align:right">93</td>
+    <td>Chinese Dai in Xishuangbanna, China</td>
+  </tr>
+  <tr>
+    <td><ul style="margin:0px"><li style="margin:0px">1000GENOMES:phase_3:<b>CHB</b></li></ul></td>
+    <td style="text-align:right">103</td>
+    <td>Han Chinese in Bejing, China</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px">1000GENOMES:phase_3:<b>CHS</b></li></ul></td>
+    <td style="text-align:right">105</td>
+    <td>Southern Han Chinese, China</td>
+  </tr>
+  <tr>
+    <td><ul style="margin:0px"><li style="margin:0px">1000GENOMES:phase_3:<b>JPT</b></li></ul></td>
+    <td style="text-align:right">104</td>
     <td>Japanese in Tokyo, Japan</td>
   </tr>
   <tr class="bg2">
-    <td><ul style="margin:0px"><li style="margin:0px">1000GENOMES:<b>phase_1_CHB</b></li></ul></td>
-    <td style="text-align:right">97</td>
-    <td>Han Chinese in Bejing, China</td>
+    <td><ul style="margin:0px"><li style="margin:0px">1000GENOMES:phase_3:<b>KHV</b></li></ul></td>
+    <td style="text-align:right">99</td>
+    <td>Kinh in Ho Chi Minh City, Vietnam</td>
   </tr>
-  <tr>
-    <td><ul style="margin:0px"><li style="margin:0px">1000GENOMES:<b>phase_1_CHS</b></li></ul></td>
-    <td style="text-align:right">100</td>
-    <td>Southern Han Chinese</td>
+  <tr class="subgroup">
+    <td>1000GENOMES:phase_3:<b>EUR</b></td>
+    <td style="text-align:right">503</td>
+    <td>European</td>
   </tr>
   <tr class="bg2">
-    <td>1000GENOMES:<b>phase_1_EUR</b></td>
-    <td style="text-align:right">379</td>
-    <td>All European individuals from phase 1 of the 1000 Genomes Project (CEU, TSI, FIN, GBR, IBS)</td>
+    <td><ul style="margin:0px"><li style="margin:0px">1000GENOMES:phase_3:<b>CEU</b></li></ul></td>
+    <td style="text-align:right">99</td>
+    <td>Utah residents with Northern and Western European ancestry</td>
   </tr>
   <tr>
-    <td><ul style="margin:0px"><li style="margin:0px">1000GENOMES:<b>phase_1_FIN</b></li></ul></td>
-    <td style="text-align:right">93</td>
+    <td><ul style="margin:0px"><li style="margin:0px">1000GENOMES:phase_3:<b>FIN</b></li></ul></td>
+    <td style="text-align:right">99</td>
     <td>Finnish in Finland</td>
   </tr>
   <tr class="bg2">
-    <td><ul style="margin:0px"><li style="margin:0px">1000GENOMES:<b>phase_1_CEU</b></li></ul></td>
-    <td style="text-align:right">85</td>
-    <td>Utah Residents (CEPH) with Northern and Western European ancestry</td>
-  </tr>
-  <tr>
-    <td><ul style="margin:0px"><li style="margin:0px">1000GENOMES:<b>phase_1_TSI</b></li></ul></td>
-    <td style="text-align:right">98</td>
-    <td>Toscani in Italy</td>
-  </tr>
-  <tr class="bg2">
-    <td><ul style="margin:0px"><li style="margin:0px">1000GENOMES:<b>phase_1_GBR</b></li></ul></td>
-    <td style="text-align:right">89</td>
+    <td><ul style="margin:0px"><li style="margin:0px">1000GENOMES:phase_3:<b>GBR</b></li></ul></td>
+    <td style="text-align:right">91</td>
     <td>British in England and Scotland</td>
   </tr>
   <tr>
-    <td><ul style="margin:0px"><li style="margin:0px">1000GENOMES:<b>phase_1_IBS</b></li></ul></td>
-    <td style="text-align:right">14</td>
-    <td>Iberian population in Spain</td>
+    <td><ul style="margin:0px"><li style="margin:0px">1000GENOMES:phase_3:<b>IBS</b></li></ul></td>
+    <td style="text-align:right">107</td>
+    <td>Iberian populations in Spain</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px">1000GENOMES:phase_3:<b>TSI</b></li></ul></td>
+    <td style="text-align:right">107</td>
+    <td>Toscani in Italy</td>
+  </tr>
+  <tr class="subgroup">
+    <td>1000GENOMES:phase_3:<b>SAS</b></td>
+    <td style="text-align:right">489</td>
+    <td>South Asian</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px">1000GENOMES:phase_3:<b>BEB</b></li></ul></td>
+    <td style="text-align:right">86</td>
+    <td>Bengali in Bangladesh</td>
+  </tr>
+  <tr>
+    <td><ul style="margin:0px"><li style="margin:0px">1000GENOMES:phase_3:<b>GIH</b></li></ul></td>
+    <td style="text-align:right">103</td>
+    <td>Gujarati Indian in Houston, TX</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px">1000GENOMES:phase_3:<b>ITU</b></li></ul></td>
+    <td style="text-align:right">102</td>
+    <td>Indian Telugu in the UK</td>
+  </tr>
+  <tr>
+    <td><ul style="margin:0px"><li style="margin:0px">1000GENOMES:phase_3:<b>PJL</b></li></ul></td>
+    <td style="text-align:right">96</td>
+    <td>Punjabi in Lahore, Pakistan</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px">1000GENOMES:phase_3:<b>STU</b></li></ul></td>
+    <td style="text-align:right">102</td>
+    <td>Sri Lankan Tamil in the UK</td>
   </tr>
 </table>
+
 
 <p style="margin-bottom:35px">
 Variants which have been discovered in this project have the "evidence status" <a href="#evidence_status"><b>1000Genomes</b></a>.
 On the website this corresponds to the icon <a href="#evidence_status"><img class="_ht" src="/i/val/evidence_1000Genomes.png" title="1000Genomes" style="vertical-align:bottom"/></a>.
 </p>
-    <ul style="padding-left:1em;margin-left:2px"><li><h3>Populations from the <a href="http://hapmap.ncbi.nlm.nih.gov/index.html.en" target="_blank" style="text-decoration:none">HapMap Project</a> (<i>Homo sapiens</i>)</h3></li></ul>
-<table id="hapmap" class="ss" style="margin-bottom:4px">
+    
+  <ul style="padding-left:1em;margin-left:2px">
+    <li><h3>Populations from the <a href="http://hapmap.ncbi.nlm.nih.gov/index.html.en" target="_blank" style="text-decoration:none">HapMap Project</a> (<i>Homo sapiens</i>)</h3></li>
+  </ul>
+  <table id="hapmap" class="ss" style="margin-bottom:4px">
   
   <tr>
     <th style="width:200px">Name</th>
@@ -1189,12 +1477,16 @@ On the website this corresponds to the icon <a href="#evidence_status"><img clas
   </tr>
 </table>
 
+
 <p style="margin-bottom:35px">
 Variants which have been discovered in this project have the "evidence status" <a href="#evidence_status"><b>HapMap</b></a>.
 On the website this corresponds to the icon <a href="#evidence_status"><img class="_ht" src="/i/val/evidence_HapMap.png" title="HapMap" style="vertical-align:bottom"/></a>.
 </p>
-    <ul style="padding-left:1em;margin-left:2px"><li><h3>Populations from the <a href="http://evs.gs.washington.edu/EVS/" target="_blank" style="text-decoration:none">Exome Sequencing Project (ESP)</a> (<i>Homo sapiens</i>)</h3></li></ul>
-<table id="exome_sequencing_project_(esp)" class="ss" style="margin-bottom:4px">
+    
+  <ul style="padding-left:1em;margin-left:2px">
+    <li><h3>Populations from the <a href="http://evs.gs.washington.edu/EVS/" target="_blank" style="text-decoration:none">Exome Sequencing Project (ESP)</a> (<i>Homo sapiens</i>)</h3></li>
+  </ul>
+  <table id="exome_sequencing_project_(esp)" class="ss" style="margin-bottom:4px">
   
   <tr>
     <th style="width:200px">Name</th>
@@ -1214,12 +1506,16 @@ On the website this corresponds to the icon <a href="#evidence_status"><img clas
   </tr>
 </table>
 
-<p style="margin-bottom:30px">
+
+<p style="margin-bottom:35px">
 Variants which have been discovered in this project have the "evidence status" <a href="#evidence_status"><b>ESP</b></a>.
 On the website this corresponds to the icon <a href="#evidence_status"><img class="_ht" src="/i/val/evidence_ESP.png" title="ESP" style="vertical-align:bottom"/></a>.
 </p>
-    <ul style="padding-left:1em;margin-left:2px"><li><h3>Populations from the <a href="http://www.sanger.ac.uk/resources/mouse/genomes/" target="_blank" style="text-decoration:none">Mouse Genomes Project (MGP)</a> (<i>Mus musculus</i>)</h3></li></ul>
-<table id="mouse_genomes_project_(mgp)" class="ss" style="margin-bottom:4px">
+    
+  <ul style="padding-left:1em;margin-left:2px">
+    <li><h3>Population from the <a href="http://www.sanger.ac.uk/resources/mouse/genomes/" target="_blank" style="text-decoration:none">Mouse Genomes Project (MGP)</a> (<i>Mus musculus</i>)</h3></li>
+  </ul>
+  <table id="mouse_genomes_project_(mgp)" class="ss" style="margin-bottom:4px">
   
   <tr>
     <th style="width:200px">Name</th>
@@ -1228,34 +1524,80 @@ On the website this corresponds to the icon <a href="#evidence_status"><img clas
   </tr>
 
   <tr>
-    <td>Mouse_Genomes_Project</td>
+    <td><b>Mouse Genomes Project</b></td>
     <td style="text-align:right">18</td>
     <td>18 mouse strains whole-genome sequenced by the Mouse Genomes Project</td>
   </tr>
 </table>
 
+
+<div style="margin-bottom:35px"></div>
+
+  <ul style="padding-left:1em;margin-left:2px">
+    <li><h3>Populations from the <a href="http://projects.ensembl.org/nextgen/" target="_blank" style="text-decoration:none">NextGen Project - Sheep</a> (<i>Ovis aries</i>)</h3></li>
+  </ul>
+  <table id="nextgen_project_-_sheep" class="ss" style="margin-bottom:4px">
+  
+  <tr>
+    <th style="width:200px">Name</th>
+    <th style="width:36px">Size</th>
+    <th>Description</th>
+  </tr>
+
+  <tr>
+    <td>NextGen:<b>IROA</b></td>
+    <td style="text-align:right">20</td>
+    <td>Iranian Ovis aries (sheep) from the NextGen Project</td>
+  </tr>
+  <tr class="bg2">
+    <td>NextGen:<b>MOOA</b></td>
+    <td style="text-align:right">160</td>
+    <td>Moroccan Ovis aries (sheep) from the NextGen Project</td>
+  </tr>
+</table>
+
+
+<div style="margin-bottom:35px"></div>
+
+  <ul style="padding-left:1em;margin-left:2px">
+    <li><h3>Population from the <a href="http://projects.ensembl.org/nextgen/" target="_blank" style="text-decoration:none">NextGen Project - Cow</a> (<i>Bos taurus</i>)</h3></li>
+  </ul>
+  <table id="nextgen_project_-_cow" class="ss" style="margin-bottom:4px">
+  
+  <tr>
+    <th style="width:200px">Name</th>
+    <th style="width:36px">Size</th>
+    <th>Description</th>
+  </tr>
+
+  <tr>
+    <td>NextGen:<b>IRBT</b></td>
+    <td style="text-align:right">8</td>
+    <td>Iranian Bos taurus (cow) from the NextGen Project</td>
+  </tr>
+</table>
+
+
 <div style="margin-bottom:35px"></div>
 <!-- Data populations - end -->
 
 <br />
-<h2 id="variation_sets">Variation sets</h2>
+<h2 id="variation_sets">Variant sets</h2>
     
 <p>
-We use the concept of variation sets to group variations that share some property together. For example, we have grouped the variations identified in the three different
-1000 Genomes pilot studies into separate variation sets. The sets can be further subdivided into supersets and subsets to reflect hierarchical relationships between them. In the case
-of the 1000 Genomes phase 1 sets, these are divided into subsets based on population. For example, the set representing variations identified in the 1000 Genomes phase 1 study is named 
-'1000 Genomes - All' and has several subsets like: '1000 Genomes - AFR', '1000 Genomes - AMR', '1000 Genomes - ASN' and '1000 Genomes - EUR'. 
-The variation sets can be displayed as separate tracks on the location view. This behaviour is controlled from the 'Variation' section on the configuration panel which is accessed by 
+We use the concept of variant sets to group variants that share some property together. For example, we have grouped the variants identified in the 1000 Genomes phase 3 sets, these are divided into subsets based on population. For example, the set representing variants identified in the 1000 Genomes phase 3 study is named 
+'1000 Genomes 3 - All' and has several subsets like: '1000 Genomes 3 - AFR', '1000 Genomes 3 - AMR', '1000 Genomes 3 - EAS', '1000 Genomes 3 - EUR' and '1000 Genomes 3 - SAS'. 
+The variant sets can be displayed as separate tracks on the location view. This behaviour is controlled from the 'Variation' section on the configuration panel which is accessed by 
 clicking the 'Configure this page' link in the left hand side navigation.
 </p>
 
 <p>
 The sets are constructed during production and are stored in the database. The table below lists the available
-variation sets in the Ensembl variation database (subsets are indicated by bullet points).
+variant sets in the Ensembl variation database (subsets are indicated by bullet points).
 </p>
 
 <!-- Data variation_sets - start -->
-<h4>Variation sets common to all species</h4>
+<h4>Variant sets common to all species</h4>
 <table id="variation_set_table" class="ss">
 
   <tr>
@@ -1265,13 +1607,13 @@ variation sets in the Ensembl variation database (subsets are indicated by bulle
   </tr>
 
   <tr>
-    <td>All failed variations</td>
+    <td><b>All failed variations</b></td>
     <td>fail_all</td>
     <td>Variations that have failed the Ensembl QC checks</td>
   </tr>
 </table>
 <br />
-<h4>Variation sets specific to Human</h4>
+<h4>Variant sets specific to Human</h4>
 <table id="human_variation_set_table" class="ss">
 
   <tr>
@@ -1280,299 +1622,264 @@ variation sets in the Ensembl variation database (subsets are indicated by bulle
     <th>Description</th>
   </tr>
   <tr>
-    <td>1000 Genomes - All</td>
-    <td>1kg</td>
-    <td>Variants genotyped by the 1000 Genomes project (phase 1)</td>
+    <td><b>1000 Genomes 3 - All</b></td>
+    <td>1kg_3</td>
+    <td>Variants genotyped by the 1000 Genomes project (phase 3)</td>
   </tr>
   <tr class="bg2">
-    <td><ul style="margin:0px"><li style="margin:0px">1000 Genomes - AFR</li></ul></td>
-    <td>1kg_afr</td>
-    <td>Variants genotyped in African individuals by the 1000 Genomes project (phase 1)</td>
+    <td><ul style="margin:0px"><li style="margin:0px">1000 Genomes 3 - AFR</li></ul></td>
+    <td>1kg_3_afr</td>
+    <td>Variants genotyped in African individuals by the 1000 Genomes project (phase 3)</td>
   </tr>
   <tr>
-    <td><ul style="margin:0px"><li style="margin:0px">1000 Genomes - AFR - common</li></ul></td>
-    <td>1kg_afr_com</td>
-    <td>Variants genotyped in African individuals by the 1000 Genomes project (phase 1) with frequency of at least 1%</td>
+    <td><ul style="margin:0px"><li style="margin:0px">1000 Genomes 3 - AFR - common</li></ul></td>
+    <td>1kg_3_afr_com</td>
+    <td>Variants genotyped in African individuals by the 1000 Genomes project (phase 3) with frequency of at least 1%</td>
   </tr>
   <tr class="bg2">
-    <td><ul style="margin:0px"><li style="margin:0px">1000 Genomes - AMR</li></ul></td>
-    <td>1kg_amr</td>
-    <td>Variants genotyped in admixed American individuals by the 1000 Genomes project (phase 1)</td>
+    <td><ul style="margin:0px"><li style="margin:0px">1000 Genomes 3 - AMR</li></ul></td>
+    <td>1kg_3_amr</td>
+    <td>Variants genotyped in admixed American individuals by the 1000 Genomes project (phase 3)</td>
   </tr>
   <tr>
-    <td><ul style="margin:0px"><li style="margin:0px">1000 Genomes - AMR - common</li></ul></td>
-    <td>1kg_amr_com</td>
+    <td><ul style="margin:0px"><li style="margin:0px">1000 Genomes 3 - AMR - common</li></ul></td>
+    <td>1kg_3_amr_com</td>
     <td>Variants genotyped in admixed American individuals by the 1000 Genomes project (phase 1) with frequency of at least 1%</td>
   </tr>
   <tr class="bg2">
-    <td><ul style="margin:0px"><li style="margin:0px">1000 Genomes - ASN</li></ul></td>
-    <td>1kg_asn</td>
-    <td>Variants genotyped in East Asian individuals by the 1000 Genomes project (phase 1)</td>
+    <td><ul style="margin:0px"><li style="margin:0px">1000 Genomes 3 - All - common</li></ul></td>
+    <td>1kg_3_com</td>
+    <td>Variants genotyped by the 1000 Genomes project (phase 1) with frequency of at least 1%)</td>
   </tr>
   <tr>
-    <td><ul style="margin:0px"><li style="margin:0px">1000 Genomes - ASN - common</li></ul></td>
-    <td>1kg_asn_com</td>
+    <td><ul style="margin:0px"><li style="margin:0px">1000 Genomes 3 - EAS</li></ul></td>
+    <td>1kg_3_eas</td>
+    <td>Variants genotyped in East Asian individuals by the 1000 Genomes project (phase 3)</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px">1000 Genomes 3 - EAS - common</li></ul></td>
+    <td>1kg_3_eas_com</td>
     <td>Variants genotyped in East Asian individuals by the 1000 Genomes project (phase 1) with frequency of at least 1%</td>
   </tr>
-  <tr class="bg2">
-    <td><ul style="margin:0px"><li style="margin:0px">1000 Genomes - All - common</li></ul></td>
-    <td>1kg_com</td>
-    <td>Variants genotyped by the 1000 Genomes project (phase 1) with frequency of at least 1%</td>
-  </tr>
   <tr>
-    <td><ul style="margin:0px"><li style="margin:0px">1000 Genomes - EUR</li></ul></td>
-    <td>1kg_eur</td>
-    <td>Variants genotyped in European individuals by the 1000 Genomes project (phase 1)</td>
+    <td><ul style="margin:0px"><li style="margin:0px">1000 Genomes 3 - EUR</li></ul></td>
+    <td>1kg_3_eur</td>
+    <td>Variants genotyped in European individuals by the 1000 Genomes project (phase 3)</td>
   </tr>
   <tr class="bg2">
-    <td><ul style="margin:0px"><li style="margin:0px">1000 Genomes - EUR - common</li></ul></td>
-    <td>1kg_eur_com</td>
+    <td><ul style="margin:0px"><li style="margin:0px">1000 Genomes 3 - EUR - common</li></ul></td>
+    <td>1kg_3_eur_com</td>
     <td>Variants genotyped in European individuals by the 1000 Genomes project (phase 1) with frequency of at least 1%</td>
   </tr>
   <tr>
-    <td>1000 Genomes - High coverage - Trios</td>
-    <td>1kg_hct</td>
-    <td>Variations called by the 1000 Genomes project on high coverage sequence data from two family trios (Pilot 2)</td>
+    <td><ul style="margin:0px"><li style="margin:0px">1000 Genomes 3 - SAS</li></ul></td>
+    <td>1kg_3_sas</td>
+    <td>Variants genotyped in South Asian individuals by the 1000 Genomes project (phase 3)</td>
   </tr>
   <tr class="bg2">
-    <td>1000 Genomes - High quality</td>
-    <td>1kg_hq</td>
-    <td>Structural variants labelled as "High quality site" by the 1000 Genomes project (phase 1)</td>
+    <td><ul style="margin:0px"><li style="margin:0px">1000 Genomes 3 - SAS - common</li></ul></td>
+    <td>1kg_3_sas_com</td>
+    <td>Variants genotyped in East Asian individuals by the 1000 Genomes project (phase 1) with frequency of at least 1%</td>
   </tr>
   <tr>
-    <td>1000 Genomes - Low coverage</td>
-    <td>1kg_lc</td>
-    <td>Variations called by the 1000 Genomes project on low coverage sequence data from 179 unrelated individuals (Pilot 1)</td>
-  </tr>
-  <tr class="bg2">
-    <td>Genotyping chip variants</td>
-    <td>all_chips</td>
-    <td>Variants which have assays on commercial chips held in ensembl</td>
-  </tr>
-  <tr>
-    <td><ul style="margin:0px"><li style="margin:0px">Affy GeneChip 500K</li></ul></td>
-    <td>Affy_500K</td>
-    <td>Variants from the Affymetrix GeneChip Human Mapping 500K Array Set</td>
-  </tr>
-  <tr class="bg2">
-    <td><ul style="margin:0px"><li style="margin:0px">Affy GenomeWideSNP_6.0</li></ul></td>
-    <td>Affy_SNP6</td>
-    <td>Variants from the Affymetrix Genome-Wide Human SNP Array 6.0</td>
-  </tr>
-  <tr>
-    <td><ul style="margin:0px"><li style="margin:0px">HumanCoreExome-12</li></ul></td>
-    <td>HumanCoreExome</td>
-    <td>Variants from the Illumina HumanCoreExome-12 v1 genotyping chip.</td>
-  </tr>
-  <tr class="bg2">
-    <td><ul style="margin:0px"><li style="margin:0px">HumanOmniExpress</li></ul></td>
-    <td>HumanOmniExpress</td>
-    <td>Variants from the Illumina HumanOmniExpress 12v1-1_a whole genome genotyping array</td>
-  </tr>
-  <tr>
-    <td><ul style="margin:0px"><li style="margin:0px">Illumina_Cardio-Metabo_Chip</li></ul></td>
-    <td>Cardio-Metabo_Chip</td>
-    <td>Variants from the Illumina Cardio-Metabo_Chip genotyping array designed to target variants of interest for metabolic and cardiovascular disease traits</td>
-  </tr>
-  <tr class="bg2">
-    <td><ul style="margin:0px"><li style="margin:0px">Illumina_CytoSNP12v1</li></ul></td>
-    <td>Illumina_CytoSNP12v1</td>
-    <td>Variants from the Illumina Cyto SNP-12 v1 whole genome SNP genotyping chip designed for cytogenetic analysis</td>
-  </tr>
-  <tr>
-    <td><ul style="margin:0px"><li style="margin:0px">Illumina_ExomeChip</li></ul></td>
-    <td>ExomeChip</td>
-    <td>Variants from the Illumina ExomeChip genotyping array designed to target variants within exons</td>
-  </tr>
-  <tr class="bg2">
-    <td><ul style="margin:0px"><li style="margin:0px">Illumina_Human1M-duo</li></ul></td>
-    <td>Illumina_1M-duo</td>
-    <td>Variants from the Illumina Human1M-duo v3 whole genome genotyping array designed for association studies</td>
-  </tr>
-  <tr>
-    <td><ul style="margin:0px"><li style="margin:0px">Illumina_Human610_Quad</li></ul></td>
-    <td>Human610_Quad</td>
-    <td>Variants from the Illumina Human610_Quad v1_B whole genome genotyping array designed for association studies</td>
-  </tr>
-  <tr class="bg2">
-    <td><ul style="margin:0px"><li style="margin:0px">Illumina_Human660W-quad</li></ul></td>
-    <td>Illumina_660Q</td>
-    <td>Variants from the Illumina Human660W-quad whole genome genotyping array designed for association studies</td>
-  </tr>
-  <tr>
-    <td><ul style="margin:0px"><li style="margin:0px">Illumina_HumanHap550</li></ul></td>
-    <td>HumanHap550</td>
-    <td>Variants from the Illumina Human550 v3.0 whole genome genotyping array designed for association studies</td>
-  </tr>
-  <tr class="bg2">
-    <td><ul style="margin:0px"><li style="margin:0px">Illumina_HumanHap650Y</li></ul></td>
-    <td>HumanHap650Y</td>
-    <td>Variants from the Illumina HumanHap650Y v3.0 whole genome genotyping array designed for association studies</td>
-  </tr>
-  <tr>
-    <td><ul style="margin:0px"><li style="margin:0px">Illumina_HumanOmni1-Quad</li></ul></td>
-    <td>HumanOmni1-Quad</td>
-    <td>Variants from the Illumina HumanOmni1-Quad whole genome genotyping array designed for association studies</td>
-  </tr>
-  <tr class="bg2">
-    <td><ul style="margin:0px"><li style="margin:0px">Illumina_HumanOmni2.5</li></ul></td>
-    <td>HumanOmni2.5</td>
-    <td>Variants from the Illumina HumanOmni2.5 4v1 whole genome genotyping array designed for association studies</td>
-  </tr>
-  <tr>
-    <td><ul style="margin:0px"><li style="margin:0px">Illumina_HumanOmni5</li></ul></td>
-    <td>HumanOmni5</td>
-    <td>Variants from the Illumina HumanOmni5v1 whole genome genotyping array designed for association studies</td>
-  </tr>
-  <tr class="bg2">
-    <td><ul style="margin:0px"><li style="margin:0px">Illumina_ImmunoChip</li></ul></td>
-    <td>ImmunoChip</td>
-    <td>Variants from the Illumina ImmunoChip genotyping array designed to target variants of interest for autoimmune and inflammatory diseases</td>
-  </tr>
-  <tr>
-    <td>ESP_6500</td>
-    <td>esp_6500</td>
-    <td>Variants from the NHLBI Exome Sequencing Project (investigating heart, lung and blood disorders)</td>
-  </tr>
-  <tr class="bg2">
-    <td>All HapMap</td>
+    <td><b>All HapMap</b></td>
     <td>hapmap</td>
-    <td>Variations which have been assayed by The International HapMap Project [http://hapmap.ncbi.nlm.nih.gov/]</td>
+    <td>Variants which have been assayed by The International HapMap Project [http://hapmap.ncbi.nlm.nih.gov/]</td>
   </tr>
-  <tr>
+  <tr class="bg2">
     <td><ul style="margin:0px"><li style="margin:0px">HapMap - CEU</li></ul></td>
     <td>hapmap_ceu</td>
-    <td>Variations which have been assayed by The International HapMap Project from CEU individuals</td>
+    <td>Variants which have been assayed by The International HapMap Project from CEU individuals</td>
   </tr>
-  <tr class="bg2">
+  <tr>
     <td><ul style="margin:0px"><li style="margin:0px">HapMap - HCB</li></ul></td>
     <td>hapmap_hcb</td>
-    <td>Variations which have been assayed by The International HapMap Project from HCB individuals</td>
+    <td>Variants which have been assayed by The International HapMap Project from HCB individuals</td>
   </tr>
-  <tr>
+  <tr class="bg2">
     <td><ul style="margin:0px"><li style="margin:0px">HapMap - JPT</li></ul></td>
     <td>hapmap_jpt</td>
-    <td>Variations which have been assayed by The International HapMap Project from JPT individuals</td>
+    <td>Variants which have been assayed by The International HapMap Project from JPT individuals</td>
   </tr>
-  <tr class="bg2">
+  <tr>
     <td><ul style="margin:0px"><li style="margin:0px">HapMap - YRI</li></ul></td>
     <td>hapmap_yri</td>
-    <td>Variations which have been assayed by The International HapMap Project from YRI individuals</td>
-  </tr>
-  <tr>
-    <td>Anonymous Korean</td>
-    <td>ind_ak1</td>
-    <td>Variants genotyped in an anonymous Korean individual</td>
+    <td>Variants which have been assayed by The International HapMap Project from YRI individuals</td>
   </tr>
   <tr class="bg2">
-    <td>Misha Angrist</td>
-    <td>ind_angrist</td>
-    <td>Variants genotyped in Misha Angrist</td>
-  </tr>
-  <tr>
-    <td>Henry Louis Gates Jr</td>
-    <td>ind_gates_jr</td>
-    <td>Variants genotyped in Henry Louis Gates Jr</td>
-  </tr>
-  <tr class="bg2">
-    <td>Henry Louis Gates Sr</td>
-    <td>ind_gates_sr</td>
-    <td>Variants genotyped in Henry Louis Gates Sr</td>
-  </tr>
-  <tr>
-    <td>Rosalynn Gill</td>
-    <td>ind_gill</td>
-    <td>Variants genotyped in Rosalynn Gill</td>
-  </tr>
-  <tr class="bg2">
-    <td>Anonymous Irish Male</td>
-    <td>ind_irish</td>
-    <td>Variants genotyped in an anonymous Irish Male</td>
-  </tr>
-  <tr>
-    <td>Marjolein Kriek</td>
-    <td>ind_kriek</td>
-    <td>Variants genotyped in Marjolein Kriek</td>
-  </tr>
-  <tr class="bg2">
-    <td>Stephen Quake</td>
-    <td>ind_quake</td>
-    <td>Variants genotyped in Stephen Quake</td>
-  </tr>
-  <tr>
-    <td>Saqqaq</td>
-    <td>ind_saqqaq</td>
-    <td>Variants genotyped in a Palaeo-Eskimo Saqqaq individual</td>
-  </tr>
-  <tr class="bg2">
-    <td>Saqqaq HC</td>
-    <td>ind_saqqaq_hc</td>
-    <td>Variants genotyped in a Palaeo-Eskimo Saqqaq individual (high confidence SNPs)</td>
-  </tr>
-  <tr>
-    <td>Seong-Jin Kim</td>
-    <td>ind_sjk</td>
-    <td>Variants genotyped in Seong-Jin Kim</td>
-  </tr>
-  <tr class="bg2">
-    <td>ENSEMBL:Venter</td>
-    <td>ind_venter</td>
-    <td>Variants genotyped in Craig Venter</td>
-  </tr>
-  <tr>
-    <td>ENSEMBL:Watson</td>
-    <td>ind_watson</td>
-    <td>Variants genotyped in James Watson</td>
-  </tr>
-  <tr class="bg2">
-    <td>YanHang</td>
-    <td>ind_yh</td>
-    <td>Variants genotyped in a Han Chinese individual (YanHuang Project)</td>
-  </tr>
-  <tr>
-    <td>All phenotype-associated variants</td>
+    <td><b>All phenotype/disease-associated variants</b></td>
     <td>ph_variants</td>
-    <td>Variants that have been associated with a phenotype</td>
+    <td>Variants that have been associated with a phenotype or a disease</td>
   </tr>
-  <tr class="bg2">
+  <tr>
     <td><ul style="margin:0px"><li style="margin:0px">All ClinVar</li></ul></td>
     <td>ClinVar</td>
     <td>Variants with ClinVar annotation</td>
   </tr>
-  <tr>
+  <tr class="bg2">
     <td><ul style="margin:0px"><li style="margin:0px">COSMIC phenotype variants</li></ul></td>
     <td>ph_cosmic</td>
     <td>Phenotype annotations of somatic mutations found in human cancers from the COSMIC project</td>
   </tr>
-  <tr class="bg2">
+  <tr>
     <td><ul style="margin:0px"><li style="margin:0px">HGMD-PUBLIC variants</li></ul></td>
     <td>ph_hgmd_pub</td>
     <td>Variants annotated by HGMD</td>
   </tr>
-  <tr>
-    <td><ul style="margin:0px"><li style="margin:0px">NHGRI catalog phenotype variants</li></ul></td>
-    <td>ph_nhgri</td>
-    <td>Variants associated with phenotype data from the NHGRI GWAS catalog [http://www.genome.gov/gwastudies/]</td>
-  </tr>
   <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px">NHGRI-EBI catalog phenotype variants</li></ul></td>
+    <td>ph_nhgri</td>
+    <td>Variants associated with phenotype data from the NHGRI-EBI GWAS catalog [http://www.ebi.ac.uk/gwas/]</td>
+  </tr>
+  <tr>
     <td><ul style="margin:0px"><li style="margin:0px">OMIM phenotype variants</li></ul></td>
     <td>ph_omim</td>
     <td>Variations linked to entries in the Online Mendelian Inheritance in Man (OMIM) database</td>
   </tr>
-  <tr>
+  <tr class="bg2">
     <td><ul style="margin:0px"><li style="margin:0px">PhenCode</li></ul></td>
     <td>phencode</td>
     <td>Variants from the PhenCode Project</td>
   </tr>
-  <tr class="bg2">
+  <tr>
     <td><ul style="margin:0px"><li style="margin:0px">Uniprot phenotype variants</li></ul></td>
     <td>ph_uniprot</td>
     <td>Variations with phenotype annotations provided by Uniprot</td>
   </tr>
-  <tr>
+  <tr class="bg2">
     <td><ul style="margin:0px"><li style="margin:0px">clinically associated</li></ul></td>
     <td>clin_assoc</td>
     <td>Variants described by ClinVar as being probable-pathogenic, pathogenic, drug-response or histocompatibility</td>
+  </tr>
+  <tr>
+    <td><b>dbPEX</b></td>
+    <td>dbPEX</td>
+    <td>Variants from the PEX Gene Database</td>
+  </tr>
+  <tr class="bg2">
+    <td><b>ESP_6500</b></td>
+    <td>esp_6500</td>
+    <td>Variants from the NHLBI Exome Sequencing Project (investigating heart, lung and blood disorders)</td>
+  </tr>
+  <tr>
+    <td><b>Genotyping chip variants</b></td>
+    <td>all_chips</td>
+    <td>Variants which have assays on commercial chips held in ensembl</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px">Affy GeneChip 500K</li></ul></td>
+    <td>Affy_500K</td>
+    <td>Variants from the Affymetrix GeneChip Human Mapping 500K Array Set</td>
+  </tr>
+  <tr>
+    <td><ul style="margin:0px"><li style="margin:0px">Affy GenomeWideSNP_6.0</li></ul></td>
+    <td>Affy_SNP6</td>
+    <td>Variants from the Affymetrix Genome-Wide Human SNP Array 6.0</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px">HumanCoreExome-12</li></ul></td>
+    <td>HumanCoreExome</td>
+    <td>Variants from the Illumina HumanCoreExome-12 v1 genotyping chip.</td>
+  </tr>
+  <tr>
+    <td><ul style="margin:0px"><li style="margin:0px">HumanOmniExpress</li></ul></td>
+    <td>HumanOmniExpress</td>
+    <td>Variants from the Illumina HumanOmniExpress 12v1-1_a whole genome genotyping array</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px">Illumina_Cardio-Metabo_Chip</li></ul></td>
+    <td>Cardio-Metabo_Chip</td>
+    <td>Variants from the Illumina Cardio-Metabo_Chip genotyping array designed to target variants of interest for metabolic and cardiovascular disease traits</td>
+  </tr>
+  <tr>
+    <td><ul style="margin:0px"><li style="margin:0px">Illumina_CytoSNP12v1</li></ul></td>
+    <td>Illumina_CytoSNP12v1</td>
+    <td>Variants from the Illumina Cyto SNP-12 v1 whole genome SNP genotyping chip designed for cytogenetic analysis</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px">Illumina_ExomeChip</li></ul></td>
+    <td>ExomeChip</td>
+    <td>Variants from the Illumina ExomeChip genotyping array designed to target variants within exons</td>
+  </tr>
+  <tr>
+    <td><ul style="margin:0px"><li style="margin:0px">Illumina_Human1M-duo</li></ul></td>
+    <td>Illumina_1M-duo</td>
+    <td>Variants from the Illumina Human1M-duo v3 whole genome genotyping array designed for association studies</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px">Illumina_Human610_Quad</li></ul></td>
+    <td>Human610_Quad</td>
+    <td>Variants from the Illumina Human610_Quad v1_B whole genome genotyping array designed for association studies</td>
+  </tr>
+  <tr>
+    <td><ul style="margin:0px"><li style="margin:0px">Illumina_Human660W-quad</li></ul></td>
+    <td>Illumina_660Q</td>
+    <td>Variants from the Illumina Human660W-quad whole genome genotyping array designed for association studies</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px">Illumina_HumanHap550</li></ul></td>
+    <td>HumanHap550</td>
+    <td>Variants from the Illumina Human550 v3.0 whole genome genotyping array designed for association studies</td>
+  </tr>
+  <tr>
+    <td><ul style="margin:0px"><li style="margin:0px">Illumina_HumanHap650Y</li></ul></td>
+    <td>HumanHap650Y</td>
+    <td>Variants from the Illumina HumanHap650Y v3.0 whole genome genotyping array designed for association studies</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px">Illumina_HumanOmni1-Quad</li></ul></td>
+    <td>HumanOmni1-Quad</td>
+    <td>Variants from the Illumina HumanOmni1-Quad whole genome genotyping array designed for association studies</td>
+  </tr>
+  <tr>
+    <td><ul style="margin:0px"><li style="margin:0px">Illumina_HumanOmni2.5</li></ul></td>
+    <td>HumanOmni2.5</td>
+    <td>Variants from the Illumina HumanOmni2.5 4v1 whole genome genotyping array designed for association studies</td>
+  </tr>
+  <tr class="bg2">
+    <td><ul style="margin:0px"><li style="margin:0px">Illumina_HumanOmni5</li></ul></td>
+    <td>HumanOmni5</td>
+    <td>Variants from the Illumina HumanOmni5v1 whole genome genotyping array designed for association studies</td>
+  </tr>
+  <tr>
+    <td><ul style="margin:0px"><li style="margin:0px">Illumina_ImmunoChip</li></ul></td>
+    <td>ImmunoChip</td>
+    <td>Variants from the Illumina ImmunoChip genotyping array designed to target variants of interest for autoimmune and inflammatory diseases</td>
+  </tr>
+  <tr class="bg2">
+    <td><b>HbVar</b></td>
+    <td>HbVar</td>
+    <td>Variants for the Human Hemoglobin Variants and Thalassemias database</td>
+  </tr>
+  <tr>
+    <td><b>Infevers</b></td>
+    <td>Infevers</td>
+    <td>Variants from the registry of Hereditary Auto-inflammatory Disorders Mutations</td>
+  </tr>
+  <tr class="bg2">
+    <td><b>KAT6BDB</b></td>
+    <td>KAT6BDB</td>
+    <td>Variants from the K(lysine) acetyltransferase 6B database, BCM</td>
+  </tr>
+  <tr>
+    <td><b>LMDD</b></td>
+    <td>LMDD</td>
+    <td>Variants from the Leiden Muscular Dystrophy Database</td>
+  </tr>
+  <tr class="bg2">
+    <td><b>LSDB</b></td>
+    <td>LSDB</td>
+    <td>Variants dbSNP annotates as being from LSDBs</td>
+  </tr>
+  <tr>
+    <td><b>OIVD</b></td>
+    <td>OIVD</td>
+    <td>Variants from the Osteogenesis Imperfecta Variant Database</td>
+  </tr>
+  <tr class="bg2">
+    <td><b>PAHdb</b></td>
+    <td>PAHdb</td>
+    <td>Variants from the Phenylalanine hydroxylase database</td>
   </tr>
 </table>
 <!-- Data variation_sets - end -->
@@ -1587,18 +1894,18 @@ variation sets in the Ensembl variation database (subsets are indicated by bulle
 
 <table class="ss" style="width:auto">
     <tr><th><span class="_ht ht" title="Icons designed by Ensembl">Icon</span></th><th>Value</th><th style="border-left:1px solid #BBB">ClinVar example</th><th style="border-left:1px solid #BBB">DGVa example</th></tr>
-  <tr><td style="text-align:center"><img src="/i/val/clinsig_association.png" title="association"/></td><td>association</td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Explore?v=rs326">rs326</a></td><td style="border-left:1px solid #BBB">-</td></tr>
-  <tr class="bg2"><td style="text-align:center"><img src="/i/val/clinsig_benign.png" title="benign"/></td><td>benign</td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Explore?v=rs328">rs328</a></td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/StructuralVariation/Evidence?sv=nsv917974">nsv917974</a></td></tr>
+  <tr><td style="text-align:center"><img src="/i/val/clinsig_association.png" title="association"/></td><td>association</td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Explore?v=rs353612">rs353612</a></td><td style="border-left:1px solid #BBB">-</td></tr>
+  <tr class="bg2"><td style="text-align:center"><img src="/i/val/clinsig_benign.png" title="benign"/></td><td>benign</td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Explore?v=rs211037">rs211037</a></td><td style="border-left:1px solid #BBB">-</td></tr>
   <tr><td style="text-align:center"><img src="/i/val/clinsig_confers-sensitivity.png" title="confers sensitivity"/></td><td>confers sensitivity</td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Explore?v=rs1799853">rs1799853</a></td><td style="border-left:1px solid #BBB">-</td></tr>
-  <tr class="bg2"><td style="text-align:center"><img src="/i/val/clinsig_drug-response.png" title="drug response"/></td><td>drug response</td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Explore?v=rs671">rs671</a></td><td style="border-left:1px solid #BBB">-</td></tr>
-  <tr><td style="text-align:center"><img src="/i/val/clinsig_likely-benign.png" title="likely benign"/></td><td>likely benign</td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Explore?v=rs693">rs693</a></td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/StructuralVariation/Evidence?sv=nsv917620">nsv917620</a></td></tr>
-  <tr class="bg2"><td style="text-align:center"><img src="/i/val/clinsig_likely-pathogenic.png" title="likely pathogenic"/></td><td>likely pathogenic</td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Explore?v=rs140603">rs140603</a></td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/StructuralVariation/Evidence?sv=esv1791726">esv1791726</a></td></tr>
-  <tr><td style="text-align:center"><img src="/i/val/clinsig_not-provided.png" title="not provided"/></td><td>not provided</td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Explore?v=rs661">rs661</a></td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/StructuralVariation/Evidence?sv=nsv508007">nsv508007</a></td></tr>
-  <tr class="bg2"><td style="text-align:center"><img src="/i/val/clinsig_other.png" title="other"/></td><td>other</td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Explore?v=rs4220">rs4220</a></td><td style="border-left:1px solid #BBB">-</td></tr>
-  <tr><td style="text-align:center"><img src="/i/val/clinsig_pathogenic.png" title="pathogenic"/></td><td>pathogenic</td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Explore?v=rs268">rs268</a></td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/StructuralVariation/Evidence?sv=esv2830397">esv2830397</a></td></tr>
-  <tr class="bg2"><td style="text-align:center"><img src="/i/val/clinsig_protective.png" title="protective"/></td><td>protective</td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Explore?v=rs671">rs671</a></td><td style="border-left:1px solid #BBB">-</td></tr>
-  <tr><td style="text-align:center"><img src="/i/val/clinsig_risk-factor.png" title="risk factor"/></td><td>risk factor</td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Explore?v=rs333">rs333</a></td><td style="border-left:1px solid #BBB">-</td></tr>
-  <tr class="bg2"><td style="text-align:center"><img src="/i/val/clinsig_uncertain-significance.png" title="uncertain significance"/></td><td>uncertain significance</td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Explore?v=rs4746">rs4746</a></td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/StructuralVariation/Evidence?sv=esv2830426">esv2830426</a></td></tr>
+  <tr class="bg2"><td style="text-align:center"><img src="/i/val/clinsig_drug-response.png" title="drug response"/></td><td>drug response</td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Explore?v=rs713598">rs713598</a></td><td style="border-left:1px solid #BBB">-</td></tr>
+  <tr><td style="text-align:center"><img src="/i/val/clinsig_likely-benign.png" title="likely benign"/></td><td>likely benign</td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Explore?v=rs211037">rs211037</a></td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/StructuralVariation/Evidence?sv=nsv481639">nsv481639</a></td></tr>
+  <tr class="bg2"><td style="text-align:center"><img src="/i/val/clinsig_likely-pathogenic.png" title="likely pathogenic"/></td><td>likely pathogenic</td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Explore?v=rs214088">rs214088</a></td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/StructuralVariation/Evidence?sv=esv1791726">esv1791726</a></td></tr>
+  <tr><td style="text-align:center"><img src="/i/val/clinsig_not-provided.png" title="not provided"/></td><td>not provided</td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Explore?v=rs213965">rs213965</a></td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/StructuralVariation/Evidence?sv=nsv508007">nsv508007</a></td></tr>
+  <tr class="bg2"><td style="text-align:center"><img src="/i/val/clinsig_other.png" title="other"/></td><td>other</td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Explore?v=rs380589">rs380589</a></td><td style="border-left:1px solid #BBB">-</td></tr>
+  <tr><td style="text-align:center"><img src="/i/val/clinsig_pathogenic.png" title="pathogenic"/></td><td>pathogenic</td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Explore?v=rs363807">rs363807</a></td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/StructuralVariation/Evidence?sv=esv2830397">esv2830397</a></td></tr>
+  <tr class="bg2"><td style="text-align:center"><img src="/i/val/clinsig_protective.png" title="protective"/></td><td>protective</td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Explore?v=rs1045485">rs1045485</a></td><td style="border-left:1px solid #BBB">-</td></tr>
+  <tr><td style="text-align:center"><img src="/i/val/clinsig_risk-factor.png" title="risk factor"/></td><td>risk factor</td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Explore?v=rs231775">rs231775</a></td><td style="border-left:1px solid #BBB">-</td></tr>
+  <tr class="bg2"><td style="text-align:center"><img src="/i/val/clinsig_uncertain-significance.png" title="uncertain significance"/></td><td>uncertain significance</td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Explore?v=rs291102">rs291102</a></td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/StructuralVariation/Evidence?sv=esv2830426">esv2830426</a></td></tr>
 
 </table>
 <p>Further explanations about the clinical significance terms are available on the <a href="http://www.ncbi.nlm.nih.gov/clinvar/docs/clinsig/" target="_blank">ClinVar website</a>.</p>
@@ -1609,19 +1916,19 @@ variation sets in the Ensembl variation database (subsets are indicated by bulle
   <tr>
     <td><span class="_ht" title="not classified by submitter"><img style="vertical-align:top" src="/i/val/grey_star.png" alt="grey"/><img style="vertical-align:top" src="/i/val/grey_star.png" alt="grey"/><img style="vertical-align:top" src="/i/val/grey_star.png" alt="grey"/><img style="vertical-align:top" src="/i/val/grey_star.png" alt="grey"/></span></td>
     <td>not classified by submitter</td>
-    <td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Phenotype?v=rs398123721">rs398123721</a></td>
+    <td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Phenotype?v=rs193922184">rs193922184</a></td>
   </tr>  <tr class="bg2">
     <td><span class="_ht" title="classified by single submitter"><img style="vertical-align:top" src="/i/val/gold_star.png" alt="gold"/><img style="vertical-align:top" src="/i/val/grey_star.png" alt="grey"/><img style="vertical-align:top" src="/i/val/grey_star.png" alt="grey"/><img style="vertical-align:top" src="/i/val/grey_star.png" alt="grey"/></span></td>
     <td>classified by single submitter</td>
-    <td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Phenotype?v=rs398123833">rs398123833</a></td>
+    <td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Phenotype?v=rs111033202">rs111033202</a></td>
   </tr>  <tr>
     <td><span class="_ht" title="classified by multiple submitters"><img style="vertical-align:top" src="/i/val/gold_star.png" alt="gold"/><img style="vertical-align:top" src="/i/val/gold_star.png" alt="gold"/><img style="vertical-align:top" src="/i/val/grey_star.png" alt="grey"/><img style="vertical-align:top" src="/i/val/grey_star.png" alt="grey"/></span></td>
     <td>classified by multiple submitters</td>
-    <td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Phenotype?v=rs145304925">rs145304925</a></td>
+    <td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Phenotype?v=rs372731424">rs372731424</a></td>
   </tr>  <tr class="bg2">
     <td><span class="_ht" title="reviewed by expert panel"><img style="vertical-align:top" src="/i/val/gold_star.png" alt="gold"/><img style="vertical-align:top" src="/i/val/gold_star.png" alt="gold"/><img style="vertical-align:top" src="/i/val/gold_star.png" alt="gold"/><img style="vertical-align:top" src="/i/val/grey_star.png" alt="grey"/></span></td>
     <td>reviewed by expert panel</td>
-    <td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Phenotype?v=rs77101217">rs77101217</a></td>
+    <td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Phenotype?v=rs36210737">rs36210737</a></td>
   </tr>  <tr>
     <td><span class="_ht" title="reviewed by professional society"><img style="vertical-align:top" src="/i/val/gold_star.png" alt="gold"/><img style="vertical-align:top" src="/i/val/gold_star.png" alt="gold"/><img style="vertical-align:top" src="/i/val/gold_star.png" alt="gold"/><img style="vertical-align:top" src="/i/val/gold_star.png" alt="gold"/></span></td>
     <td>reviewed by professional society</td>
@@ -1635,42 +1942,49 @@ variation sets in the Ensembl variation database (subsets are indicated by bulle
 <p>
   We provide a simple summary of the evidence supporting a variant as a guide to its potential reliability
 </p>
-<table id="evidence_status_table" class="ss" style="width:850px">
-    <tr>
-        <th><span class="_ht ht" title="Icons designed by Ensembl">Icon</span></th>
-        <th>Name</th>
-        <th>Description</th>
-    </tr>
-    <tr>
-        <td style="text-align:center"><img src="/i/val/evidence_Multiple_observations.png"  title="Multiple_observations"/></td>
-        <td>Multiple_observations</td>
-        <td>The variant has multiple independent dbSNP submissions, i.e. submissions with a different submitter handles or different discovery samples </td>
-    </tr>
-    <tr class="bg2">
-        <td style="text-align:center"><img src="/i/val/evidence_Frequency.png"  title="Frequency"/></td>
-        <td>Frequency</td>
-        <td>The variant is reported to be polymorphic in at least one sample</td>
-    </tr>
-    <tr>
-        <td style="text-align:center"><img src="/i/val/evidence_HapMap.png"  title="HapMap"/></td>
-        <td>HapMap</td>
-        <td>The variant is polymorphic in at least one HapMap panel (human only)</td>
-    </tr>
-    <tr class="bg2">
-        <td style="text-align:center"><img src="/i/val/evidence_1000Genomes.png"  title="1000Genomes"/></td>
-        <td>1000 Genomes</td>
-        <td>The variant was discovered in the 1000 genomes project (human only)</td>
-    </tr>
-    <tr>
-        <td style="text-align:center"><img src="/i/val/evidence_Cited.png"  title="Cited"/></td>
-        <td>Cited</td>
-        <td>The variant is cited in a PubMed article.</td>
-    </tr>
-    <tr class="bg2">
-        <td style="text-align:center"><img src="/i/val/evidence_ESP.png"  title="ESP"/></td>
-        <td>ESP</td>
-        <td>The variant was discovered in the Exome Sequencing Project (human only).</td>
-    </tr>
+<table id="evidence_status_table" class="ss" >
+  <tr>
+    <th><span class="_ht conhelp" title="Icons designed by Ensembl">Icon</span></th>
+    <th class="set_min">Name</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td style="text-align:center"><img src="/i/val/evidence_Multiple_observations.png"  title="Multiple_observations"/></td>
+    <td>Multiple observations</td>
+    <td>The variant has multiple independent dbSNP submissions, i.e. submissions with a different submitter handles or different discovery samples </td>
+  </tr>
+  <tr class="bg2">
+    <td style="text-align:center"><img src="/i/val/evidence_Frequency.png"  title="Frequency"/></td>
+    <td>Frequency</td>
+    <td>The variant is reported to be polymorphic in at least one sample</td>
+  </tr>
+  <tr>
+    <td style="text-align:center"><img src="/i/val/evidence_Cited.png"  title="Cited"/></td>
+    <td>Cited</td>
+    <td>The variant is cited in a PubMed article.</td>
+  </tr>
+  <tr class="bg2">
+    <td style="text-align:center"><img src="/i/val/evidence_Phenotype_or_Disease.png"  title="Phenotype_or_Disease"/></td>
+    <td>Phenotype or Disease</td>
+    <td>The variant is associated with at least one phenotype or disease.</td>
+  </tr>
+  <!-- Separator -->
+  <tr><td colspan="3" style="border-bottom:2px dotted #CCC;padding:0px"></td></tr>
+  <tr>
+    <td style="text-align:center"><img src="/i/val/evidence_1000Genomes.png"  title="1000Genomes"/></td>
+    <td>1000 Genomes</td>
+    <td>The variant was discovered in the 1000 genomes project (human only)</td>
+  </tr>
+  <tr class="bg2">
+    <td style="text-align:center"><img src="/i/val/evidence_HapMap.png"  title="HapMap"/></td>
+    <td>HapMap</td>
+    <td>The variant is polymorphic in at least one HapMap panel (human only)</td>
+  </tr>
+  <tr>
+    <td style="text-align:center"><img src="/i/val/evidence_ESP.png"  title="ESP"/></td>
+    <td>ESP</td>
+    <td>The variant was discovered in the Exome Sequencing Project (human only).</td>
+  </tr>
 </table>
 
 
@@ -1678,10 +1992,10 @@ variation sets in the Ensembl variation database (subsets are indicated by bulle
 <h2 id="quality_control">Quality control </h2>
 
 <p>
-A quality control process is employed to check imported variation data. Suspect variations and alleles are flagged, but are not withheld from downstream annotation. Data failing the checks is available through the browser where failure reasons are prominently listed. The API does not extract failed data by default, unless the database adaptor is specifically configured to do so using 
+A quality control process is employed to check imported variant data. Suspect variants and alleles are flagged, but are not withheld from downstream annotation. Data failing the checks is available through the browser where failure reasons are prominently listed. The API does not extract failed data by default, unless the database adaptor is specifically configured to do so using 
 <a href ="http://www.ensembl.org/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1DBAdaptor.html#add8230ebca14116047cf7d17499f9e3b">Bio::EnsEMBL::Variation::DBSQL::DBAdaptor::include_failed_variations()</a>;
 <p>
- Variations for which dbSNP holds citations from PubMed are not submitted to the QC process so are not flagged as failed.
+ Variants for which dbSNP holds citations from PubMed are not submitted to the QC process so are not flagged as failed.
 </p>
 
 <h4>Failure reasons</h4>
@@ -1695,59 +2009,59 @@ A quality control process is employed to check imported variation data. Suspect 
 
   <tr>
     <td rowspan="4" style="background-color:#E5E5E5"><b>Mapping checks</b></td>
-    <td>Variation does not map to the genome </td>
-    <td> Variations with flanking sequences which do not map to reference or non-reference genomic sequences are flagged as failed.</td>
+    <td>Variant does not map to the genome </td>
+    <td>Variants with flanking sequences which do not map to reference or non-reference genomic sequences are flagged as failed.</td>
   </tr>
   <tr>
-    <td class="bg2">Variation maps to more than 1 location</td>
-    <td class="bg2"> For variations with flanking sequences mapping to a reference sequence, the number of mappings within all reference sequences is counted and those mapping more than once are flagged as failed. (Variants with a single mapping to both X and Y within a PAR region are not failed.)
-                     For variations with flanking sequences which do not map to a reference sequence, the number of mappings within all non-reference sequences is counted and those mapping more than once are flagged as failed. 
+    <td class="bg2">Variant maps to more than 1 location</td>
+    <td class="bg2">For variants with flanking sequences mapping to a reference sequence, the number of mappings within all reference sequences is counted and those mapping more than once are flagged as failed. (Variants with a single mapping to both X and Y within a PAR region are not failed.)
+                     For variants with flanking sequences which do not map to a reference sequence, the number of mappings within all non-reference sequences is counted and those mapping more than once are flagged as failed. 
     </td>
   </tr>
   <tr>
     <td>Mapped position is not compatible with reported alleles </td>
-    <td>The length of the reported alleles is compared to that expected given the coordinates specified for the variation. If none of the alleles match the expected length, the variation is flagged as failed. </td>
+    <td>The length of the reported alleles is compared to that expected given the coordinates specified for the variant. If none of the alleles match the expected length, the variant is flagged as failed. </td>
   </tr>
   <tr>
     <td class="bg2">None of the variant alleles match the reference allele </td>
-    <td class="bg2"> The sequence at the coordinates specified for the variation are extracted from the reference genome and compared to the dbSNP refSNP alleles. If the extracted sequence does not match the expected alleles, the variation is flagged as failed.</td>
+    <td class="bg2"> The sequence at the coordinates specified for the variant are extracted from the reference genome and compared to the dbSNP refSNP alleles. If the extracted sequence does not match the expected alleles, the variant is flagged as failed.</td>
   </tr>
   <tr><td colspan="3" style="background-color:#555;height:1px;padding:0px;margin:0px"></td></tr>
   <tr>
     <td rowspan="4" style="background-color:#E5E5E5"><b>Checks on the alleles of refSNPs</b></td>
     <td>Loci with no observed variant alleles in dbSNP   </td>
-    <td>Variations with dbSNP refSNP alleles reported as 'NOVARIATION' are flagged as failed.</td>
+    <td>Variants with dbSNP refSNP alleles reported as 'NOVARIATION' are flagged as failed.</td>
   </tr>
   <tr>
-    <td class="bg2">Variation has more than 3 different alleles </td>
-    <td class="bg2">Variations with all of A, T, G and C in the dbSNP refSNP alleles are flagged as failed.</td>
+    <td class="bg2">Variant has more than 3 different alleles </td>
+    <td class="bg2">Variants with all of A, T, G and C in the dbSNP refSNP alleles are flagged as failed.</td>
   </tr>
   <tr>
     <td>Alleles contain ambiguity codes  </td>
-    <td>Variations with a IUPAC ambiguity code (eg.  M, Y, R, etc ) in the dbSNP refSNP alleles are reported as failed. </td>
+    <td>Variants with a IUPAC ambiguity code (eg.  M, Y, R, etc ) in the dbSNP refSNP alleles are reported as failed. </td>
   </tr>
   <tr>
     <td class="bg2">Alleles contain non-nucleotide characters  </td>
-    <td class="bg2">Variations with unexpected characters in the dbSNP refSNP alleles are reported as failed.</td>
+    <td class="bg2">Variants with unexpected characters in the dbSNP refSNP alleles are reported as failed.</td>
   </tr>
   <tr><td colspan="3" style="background-color:#555;height:1px;padding:0px;margin:0px"></td></tr>
   <tr>
     <td rowspan="1" style="background-color:#E5E5E5"><b>Checks on the alleles in dbSNP submissions</b></td>
     <td> Additional submitted allele data from dbSNP does not agree with the dbSNP refSNP alleles </td>
-    <td> Alleles from dbSNP submissions ( primarily frequency submissions, but also variant discovery submissions which have been merged in the dbSNP pipeline with the pre-existing refSNP variation) are checked against the dbSNP refSNP alleles and discrepant sets flagged as failed.  Often this will highlight a strand error in the submission of frequency information for a known variation. Tradditionally, the failure would be flagged at the variation level, in new database builds it is flagged at the allele submission level.
+    <td> Alleles from dbSNP submissions ( primarily frequency submissions, but also variant discovery submissions which have been merged in the dbSNP pipeline with the pre-existing refSNP variant) are checked against the dbSNP refSNP alleles and discrepant sets flagged as failed.  Often this will highlight a strand error in the submission of frequency information for a known variant. Tradditionally, the failure would be flagged at the variant level, in new database builds it is flagged at the allele submission level.
     </td>
   </tr>
   <tr><td colspan="3" style="background-color:#555;height:1px;padding:0px;margin:0px"></td></tr>
   <tr>
     <td rowspan="1" style="background-color:#E5E5E5"><b>External failure classification</b></td>
     <td class="bg2"> Flagged as suspect by dbSNP </td>
-    <td class="bg2">Variations reported as being suspect by dbSNP due to being in probable paralogous regions are imported but flagged as failed (human only).</td>
+    <td class="bg2">Variants reported as being suspect by dbSNP due to being in probable paralogous regions are imported but flagged as failed (human only).</td>
   </tr>
   <tr><td colspan="3" style="background-color:#555;height:1px;padding:0px;margin:0px"></td></tr>
   <tr>
     <td rowspan="1" style="background-color:#E5E5E5"><b>New assembly</b></td>
-    <td>Variation can not be re-mapped to the current assembly</td>
-    <td>Variations that mapped to the previous assembly, but couldn't be remapped to the current assembly are flagged as failed.</td>
+    <td>Variant can not be re-mapped to the current assembly</td>
+    <td>Variants that mapped to the previous assembly, but couldn't be remapped to the current assembly are flagged as failed.</td>
   </tr>
 </table>
 <br />

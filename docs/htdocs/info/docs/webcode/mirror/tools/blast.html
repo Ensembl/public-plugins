@@ -47,5 +47,37 @@ $SiteDefs::ENSEMBL_REPEATMASK_BIN_PATH = '/path/to/RepeatMasker'; # path to Repe
 
 <!-- <h2>Setting up WU-BLAST</h2>-->
 
+<h2>Excluding data sources</h2>
+
+<p>By default, the BLAST interface shows all data sources used by Ensembl. If you do not
+have all these datasources for your species, you will need to make a copy of the ENSEMBL_BLAST_DATASOURCES_ALL
+code block in public-plugins/tools/conf/ini-files/MULTI.ini and edit it to your requirements. E.g.</p>
+<p>Original version in tools plugin:</p>
+<p><pre>
+[ENSEMBL_BLAST_DATASOURCES_ALL]
+ORDER           = [LATESTGP LATESTGP_MASKED LATESTGP_SOFT CDNA_ALL CDNA_ABINITIO NCRNA PEP_ALL PEP_ABINITIO] ; order preserved
+LATESTGP        = dna Genomic sequence
+LATESTGP_MASKED = dna Genomic sequence (hard masked)
+LATESTGP_SOFT   = dna Genomic sequence (soft masked)
+CDNA_ALL        = dna cDNAs (transcripts/splice variants)
+CDNA_ABINITIO   = dna Ab-initio cDNAs (Genscan/SNAP)
+NCRNA           = dna Ensembl Non-coding RNA genes
+PEP_ALL         = peptide Proteins (GENCODE/Ensembl)
+PEP_ABINITIO    = peptide Ab-initio Peptides (Genscan/SNAP)
+</pre></p>
+
+<p>Edited version in your plugin:</p>
+<p><pre>
+[ENSEMBL_BLAST_DATASOURCES_ALL]
+ORDER           = [LATESTGP LATESTGP_MASKED LATESTGP_SOFT CDNA_ALL PEP_ALL PEP_ABINITIO] ; order preserved
+LATESTGP        = dna Genomic sequence
+LATESTGP_MASKED = dna Genomic sequence (hard masked)
+LATESTGP_SOFT   = dna Genomic sequence (soft masked)
+CDNA_ALL        = dna cDNAs (transcripts/splice variants)
+PEP_ALL         = peptide Proteins (GENCODE/Ensembl)
+PEP_ABINITIO    = peptide Ab-initio Peptides (Genscan/SNAP)
+</pre></p>
+
+
 </body>
 </html>

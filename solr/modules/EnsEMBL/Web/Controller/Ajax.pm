@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -92,7 +92,7 @@ sub search_connect {
 }
 
 
-sub search {
+sub ajax_search {
   my ($self,$hub) = @_;
 
   my $failover = EnsEMBL::Web::Tools::FailOver::Solr->new($hub);
@@ -104,7 +104,7 @@ sub search {
   print $self->jsonify($out);
 }
 
-sub species {
+sub ajax_species {
   my ($self,$hub) = @_;
 
   my $out = [];
@@ -160,7 +160,7 @@ sub extra_bt_colour {
 }
 
 # XXX merge species and extra
-sub extra {
+sub ajax_extra {
   my ($self,$hub) = @_;
 
   my $queries = from_json($hub->param('queries'));
@@ -188,7 +188,7 @@ sub extra {
   print to_json(\%results);
 }
 
-sub config {
+sub ajax_config {
   my ($self,$hub) = @_;
 
   my @favs = map { $self->common($hub,$_) } @{$hub->get_favourite_species};
@@ -209,7 +209,7 @@ sub config {
   }
 
   print to_json({
-    static => $SiteDefs::ENSEMBL_SOLR_CONFIG,
+    static => $self->solr_config(),
     spnames => $spnames,
     revspnames => $revspnames,
     user => {
@@ -221,7 +221,14 @@ sub config {
 
 }
 
-sub echo { # XXX For table downloads, shouldn't be in search plugin
+# separating the solar configuration, can be overwritten in plugins (no need to be in sitedefs)
+sub solr_config {
+  my $self = @_;
+
+  return $SiteDefs::ENSEMBL_SOLR_CONFIG;
+}
+
+sub ajax_echo { # XXX For table downloads, shouldn't be in search plugin
   my ($self,$hub) = @_;
 
   print $hub->param('data'); 
@@ -286,7 +293,7 @@ sub _hgvs_to_vid {
   return \@out;
 }
 
-sub hgvs { # XXX extend beyond HGVS to other semi-psychic things
+sub ajax_hgvs { # XXX extend beyond HGVS to other semi-psychic things
   my ($self,$hub) = @_;
 
   my $id = $hub->param('id');
@@ -336,7 +343,7 @@ sub hgvs { # XXX extend beyond HGVS to other semi-psychic things
   print to_json({ id => $id, links => \@links });
 }
 
-sub psychic { # Invoke psychic via AJAX, to see if we need to redirect.
+sub ajax_psychic { # Invoke psychic via AJAX, to see if we need to redirect.
   my ($self,$hub) = @_;
 
   # XXX this is a horrible way to do it: we should somehow create a

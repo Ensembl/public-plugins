@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ package EnsEMBL::Web::ConfigPacker;
 use strict;
 use warnings;
 
-use previous qw(munge_config_tree munge_config_tree_multi);
+use previous qw(munge_config_tree munge_config_tree_multi _munge_file_formats);
 
 sub munge_config_tree {
   my $self = shift;
@@ -33,6 +33,19 @@ sub munge_config_tree_multi {
   my $self = shift;
   $self->PREV::munge_config_tree_multi(@_);
   $self->_configure_blast_multi;
+}
+
+sub _munge_file_formats {
+  my $self = shift;
+  $self->PREV::_munge_file_formats(@_);
+  
+  # add gene list format
+  push @{$self->tree->{'UPLOAD_FILE_FORMATS'}}, 'gene_list';
+  $self->tree->{'DATA_FORMAT_INFO'}->{'gene_list'} = {
+    'ext' => 'txt',
+    'label' => 'Gene or feature list',
+    'display' => 'feature',
+  };
 }
 
 sub _configure_blast {}

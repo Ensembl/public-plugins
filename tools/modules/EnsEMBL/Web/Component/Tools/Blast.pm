@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -29,11 +29,8 @@ use EnsEMBL::Web::BlastConstants qw(CONFIGURATION_FIELDS);
 use parent qw(EnsEMBL::Web::Component::Tools);
 
 sub job_details_table {
-  ## A two column layout displaying a job's details
-  ## @param Job object
-  ## @params Extra params as required by get_job_summary method
-  ## @return DIV node (as returned by new_twocol method)
-  my ($self, $job) = splice @_, 0, 2;
+  ## @override
+  my ($self, $job, $is_owned_ticket) = @_;
 
   my $object      = $self->object;
   my $hub         = $self->hub;
@@ -44,18 +41,19 @@ sub job_details_table {
   my $configs     = $self->_display_config($job_data->{'configs'});
   my $two_col     = $self->new_twocol;
   my $sequence    = $object->get_input_sequence_for_job($job);
-  my $job_summary = $self->get_job_summary($job, @_);
+  my $job_summary = $self->get_job_summary($job, $is_owned_ticket);
   my $result_link = $job_summary->get_nodes_by_flag('view_results_link')->[0];
 
   if ($result_link) {
     my $download_link = $result_link->clone_node;
     $download_link->inner_HTML('[Download results file]');
-    $download_link->set_attribute('href', $hub->url('Download', {'function' => '', 'tl' => $object->create_url_param}));
+    $download_link->set_attribute('href', $object->download_url);
     $result_link->parent_node->insert_after($download_link, $result_link);
   }
 
   $two_col->add_row('Job name',       $job_summary->render);
   $two_col->add_row('Species',        $sd->tools_valid_species($species) ? sprintf('<img class="job-species" src="%sspecies/16/%s.png" alt="" height="16" width="16">%s', $self->img_url, $species, $sd->species_label($species, 1)) : $species =~ s/_/ /rg);
+  $two_col->add_row('Assembly',       $job->assembly);
   $two_col->add_row('Search type',    $object->get_param_value_caption('search_type', $job_data->{'search_type'}));
   $two_col->add_row('Sequence',       sprintf('<div class="input-seq">&gt;%s</div>', join("\n", $sequence->{'display_id'} || '', ($sequence->{'sequence'} =~ /.{1,60}/g))));
   $two_col->add_row('Query type',     $object->get_param_value_caption('query_type', $job_data->{'query_type'}));

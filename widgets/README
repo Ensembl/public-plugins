@@ -1,6 +1,6 @@
 This plugin is for the new speciestree and CAFE tree view but keeping in mind it will be the home for all future interactive views (can also moved genoverse in here).
 
-The speciestree and CAFE tree view is using d3.js (no jquery).
+The speciestree and CAFE tree view is using d3.js
 
 htdocs/widgets/ holds js specific for the new trees and are only loaded on these views. 
 

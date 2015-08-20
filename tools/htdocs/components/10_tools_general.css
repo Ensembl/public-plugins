@@ -1,5 +1,5 @@
 /*
- * Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+ * Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,6 +52,10 @@ p span.job-sprites span.sprite    { float: none; }
 p:hover span.job-sprites          { display: inline-block; }
 table.ss tr.bg1 span.job-sprites  { background-color: [[PANEL_BG]];   }
 table.ss tr.bg2 span.job-sprites  { background-color: [[NEUTRAL_BG]]; }
+
+pre.tools-warning                 { max-height: 200px; overflow: auto; }
+
+div.ticket-share-icon *           { display: none; }
 
 /* Species icon for a job */
 img.job-species                   { border-radius: 2px; float: left; margin: 0 6px 0 0; }

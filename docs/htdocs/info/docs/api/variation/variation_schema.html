@@ -80,7 +80,7 @@ tables that they've not used before.
 <div>
   <div style="float:left">
     <p>
-      This document refers to version <span style="font-weight:bold;font-size:11pt;color:#000">78</span> of the Ensembl
+      This document refers to version <span style="font-weight:bold;font-size:11pt;color:#000">81</span> of the Ensembl
       variation schema. 
     </p>
     <p>
@@ -135,10 +135,10 @@ tables that they've not used before.
       <ul style="padding:0px 4px 0px 22px;margin-bottom:2px">
         <li style="margin-right:0px"><a href="#compressed_genotype_region" style="text-decoration:none;font-weight:bold">compressed_genotype_region</a></li>
         <li style="margin-right:0px"><a href="#compressed_genotype_var" style="text-decoration:none;font-weight:bold">compressed_genotype_var</a></li>
-        <li style="margin-right:0px"><a href="#individual_genotype_multiple_bp" style="text-decoration:none;font-weight:bold">individual_genotype_multiple_bp</a></li>
         <li style="margin-right:0px"><a href="#population_genotype" style="text-decoration:none;font-weight:bold">population_genotype</a></li>
         <li style="margin-right:0px"><a href="#read_coverage" style="text-decoration:none;font-weight:bold">read_coverage</a></li>
-        <li style="margin-right:0px"><a href="#tmp_individual_genotype_single_bp" style="text-decoration:none;font-weight:bold">tmp_individual_genotype_single_bp</a></li>
+        <li style="margin-right:0px"><a href="#sample_genotype_multiple_bp" style="text-decoration:none;font-weight:bold">sample_genotype_multiple_bp</a></li>
+        <li style="margin-right:0px"><a href="#tmp_sample_genotype_single_bp" style="text-decoration:none;font-weight:bold">tmp_sample_genotype_single_bp</a></li>
 
       </ul>
     </div>
@@ -154,7 +154,7 @@ tables that they've not used before.
 
       </ul>
     </div>
-  <div style="clear:both" />
+  <div style="clear:both"></div>
 </div>
 
 <div>
@@ -167,7 +167,6 @@ tables that they've not used before.
         <li style="margin-right:0px"><a href="#allele_code" style="text-decoration:none;font-weight:bold">allele_code</a></li>
         <li style="margin-right:0px"><a href="#coord_system" style="text-decoration:none;font-weight:bold">coord_system</a></li>
         <li style="margin-right:0px"><a href="#genotype_code" style="text-decoration:none;font-weight:bold">genotype_code</a></li>
-        <li style="margin-right:0px"><a href="#phenotype" style="text-decoration:none;font-weight:bold">phenotype</a></li>
         <li style="margin-right:0px"><a href="#seq_region" style="text-decoration:none;font-weight:bold">seq_region</a></li>
         <li style="margin-right:0px"><a href="#submitter_handle" style="text-decoration:none;font-weight:bold">submitter_handle</a></li>
         <li style="margin-right:0px"><a href="#subsnp_handle" style="text-decoration:none;font-weight:bold">subsnp_handle</a></li>
@@ -182,6 +181,7 @@ tables that they've not used before.
       <h2 style="margin-left:8px;display:inline;color:#000;vertical-align:middle">Phenotype tables</h2>
     </div>
       <ul style="padding:0px 4px 0px 22px;margin-bottom:2px">
+        <li style="margin-right:0px"><a href="#phenotype" style="text-decoration:none;font-weight:bold">phenotype</a></li>
         <li style="margin-right:0px"><a href="#phenotype_feature" style="text-decoration:none;font-weight:bold">phenotype_feature</a></li>
         <li style="margin-right:0px"><a href="#phenotype_feature_attrib" style="text-decoration:none;font-weight:bold">phenotype_feature_attrib</a></li>
 
@@ -195,6 +195,7 @@ tables that they've not used before.
     </div>
       <ul style="padding:0px 4px 0px 22px;margin-bottom:2px">
         <li style="margin-right:0px"><a href="#protein_function_predictions" style="text-decoration:none;font-weight:bold">protein_function_predictions</a></li>
+        <li style="margin-right:0px"><a href="#protein_function_predictions_attrib" style="text-decoration:none;font-weight:bold">protein_function_predictions_attrib</a></li>
         <li style="margin-right:0px"><a href="#translation_md5" style="text-decoration:none;font-weight:bold">translation_md5</a></li>
 
       </ul>
@@ -208,16 +209,17 @@ tables that they've not used before.
       <ul style="padding:0px 4px 0px 22px;margin-bottom:2px">
         <li style="margin-right:0px"><a href="#display_group" style="text-decoration:none;font-weight:bold">display_group</a></li>
         <li style="margin-right:0px"><a href="#individual" style="text-decoration:none;font-weight:bold">individual</a></li>
-        <li style="margin-right:0px"><a href="#individual_population" style="text-decoration:none;font-weight:bold">individual_population</a></li>
         <li style="margin-right:0px"><a href="#individual_synonym" style="text-decoration:none;font-weight:bold">individual_synonym</a></li>
         <li style="margin-right:0px"><a href="#individual_type" style="text-decoration:none;font-weight:bold">individual_type</a></li>
         <li style="margin-right:0px"><a href="#population" style="text-decoration:none;font-weight:bold">population</a></li>
         <li style="margin-right:0px"><a href="#population_structure" style="text-decoration:none;font-weight:bold">population_structure</a></li>
         <li style="margin-right:0px"><a href="#population_synonym" style="text-decoration:none;font-weight:bold">population_synonym</a></li>
+        <li style="margin-right:0px"><a href="#sample" style="text-decoration:none;font-weight:bold">sample</a></li>
+        <li style="margin-right:0px"><a href="#sample_population" style="text-decoration:none;font-weight:bold">sample_population</a></li>
 
       </ul>
     </div>
-  <div style="clear:both" />
+  <div style="clear:both"></div>
 </div>
 
 <div>
@@ -278,7 +280,7 @@ tables that they've not used before.
 
       </ul>
     </div>
-  <div style="clear:both" />
+  <div style="clear:both"></div>
 </div>
 
 <div>
@@ -358,14 +360,14 @@ tables that they've not used before.
       </tr>
     </table>
   </div>
-<div style="margin: 10px 0px"><p style="font-weight:bold">Example:</p><p style="padding-left:10px">See below the query to display a subset of the attrib entries: </p><pre style="display:inline;border:1px solid #555;padding:2px;margin-right:15px;margin-left:10px">SELECT * FROM attrib WHERE attrib_type_id IN (1,2,3) ORDER BY attrib_id LIMIT 21;</pre> 
+<div style="margin: 10px 0px"><p style="font-weight:bold">Example:</p><p style="padding-left:10px">See below the query to display a subset of the attrib entries: </p><pre style="display:inline;border:1px solid #555;padding:2px;margin-right:15px;margin-left:10px">SELECT * FROM attrib WHERE attrib_type_id IN (469,470,471) ORDER BY attrib_id LIMIT 21;</pre> 
   <a id="e_attrib" class="help-header" style="cursor:pointer;font-weight:bold;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px;box-shadow:1px 1px 2px #888" onclick="show_hide('attrib','query results')">
     <img src="/i/16/plus-button.png" style="width:12px;height:12px;position:relative;top:2px" alt="show"/> Show query results
   </a>
 
   <div id="ex_attrib" style="display:none;">
     <table class="ss" style="width:50%;margin-top:20px;margin-left:10px;border-spacing:2px">
-      <tr><th>attrib_id</th><th>attrib_type_id</th><th>value</th></tr>      <tr><td>1</td><td>1</td><td>SO:0001483</td></tr>      <tr class="bg2"><td>2</td><td>2</td><td>SNV</td></tr>      <tr><td>3</td><td>3</td><td>SNP</td></tr>      <tr class="bg2"><td>4</td><td>1</td><td>SO:1000002</td></tr>      <tr><td>5</td><td>2</td><td>substitution</td></tr>      <tr class="bg2"><td>6</td><td>1</td><td>SO:0001019</td></tr>      <tr><td>7</td><td>2</td><td>copy_number_variation</td></tr>      <tr class="bg2"><td>8</td><td>3</td><td>CNV</td></tr>      <tr><td>9</td><td>1</td><td>SO:0000667</td></tr>      <tr class="bg2"><td>10</td><td>2</td><td>insertion</td></tr>      <tr><td>11</td><td>1</td><td>SO:0000159</td></tr>      <tr class="bg2"><td>12</td><td>2</td><td>deletion</td></tr>      <tr><td>13</td><td>1</td><td>SO:1000032</td></tr>      <tr class="bg2"><td>14</td><td>2</td><td>indel</td></tr>      <tr><td>15</td><td>1</td><td>SO:0000705</td></tr>      <tr class="bg2"><td>16</td><td>2</td><td>tandem_repeat</td></tr>      <tr><td>17</td><td>1</td><td>SO:0001059</td></tr>      <tr class="bg2"><td>18</td><td>2</td><td>sequence_alteration</td></tr>      <tr><td>19</td><td>1</td><td>SO:0001628</td></tr>      <tr class="bg2"><td>20</td><td>2</td><td>intergenic_variant</td></tr>      <tr><td>21</td><td>3</td><td>INTERGENIC</td></tr>    </table>
+      <tr><th>attrib_id</th><th>attrib_type_id</th><th>value</th></tr>      <tr><td>1</td><td>469</td><td>SO:0001483</td></tr>      <tr class="bg2"><td>2</td><td>470</td><td>SNV</td></tr>      <tr><td>3</td><td>471</td><td>SNP</td></tr>      <tr class="bg2"><td>4</td><td>469</td><td>SO:1000002</td></tr>      <tr><td>5</td><td>470</td><td>substitution</td></tr>      <tr class="bg2"><td>6</td><td>469</td><td>SO:0001019</td></tr>      <tr><td>7</td><td>470</td><td>copy_number_variation</td></tr>      <tr class="bg2"><td>8</td><td>471</td><td>CNV</td></tr>      <tr><td>9</td><td>469</td><td>SO:0000667</td></tr>      <tr class="bg2"><td>10</td><td>470</td><td>insertion</td></tr>      <tr><td>11</td><td>469</td><td>SO:0000159</td></tr>      <tr class="bg2"><td>12</td><td>470</td><td>deletion</td></tr>      <tr><td>13</td><td>469</td><td>SO:1000032</td></tr>      <tr class="bg2"><td>14</td><td>470</td><td>indel</td></tr>      <tr><td>15</td><td>469</td><td>SO:0000705</td></tr>      <tr class="bg2"><td>16</td><td>470</td><td>tandem_repeat</td></tr>      <tr><td>17</td><td>469</td><td>SO:0001059</td></tr>      <tr class="bg2"><td>18</td><td>470</td><td>sequence_alteration</td></tr>      <tr><td>19</td><td>469</td><td>SO:0001628</td></tr>      <tr class="bg2"><td>20</td><td>470</td><td>intergenic_variant</td></tr>      <tr><td>21</td><td>471</td><td>INTERGENIC</td></tr>    </table>
   </div></div><table style="margin-top:20px;border:1px solid #BBB"><tr>    <td style="padding: 4px 25px 0px 2px">    <p style="font-weight:bold">See also:</p>
   <ul style="margin-bottom:0px";>
       <li><a href="#attrib_type" style="text-decoration:none">attrib_type</a></li>
@@ -542,14 +544,14 @@ tables that they've not used before.
       </tr>
     </table>
   </div>
-<div style="margin: 10px 0px"><p style="font-weight:bold">Example:</p><p style="padding-left:10px">See below the command to display a subset of the attrib_type entries: </p><pre style="display:inline;border:1px solid #555;padding:2px;margin-right:15px;margin-left:10px">SELECT * FROM attrib_type LIMIT 10;</pre> 
+<div style="margin: 10px 0px"><p style="font-weight:bold">Example:</p><p style="padding-left:10px">See below the command to display a subset of the attrib_type entries: </p><pre style="display:inline;border:1px solid #555;padding:2px;margin-right:15px;margin-left:10px">SELECT * FROM attrib_type WHERE attrib_type_id > 468 LIMIT 10;</pre> 
   <a id="e_attrib_type" class="help-header" style="cursor:pointer;font-weight:bold;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px;box-shadow:1px 1px 2px #888" onclick="show_hide('attrib_type','query results')">
     <img src="/i/16/plus-button.png" style="width:12px;height:12px;position:relative;top:2px" alt="show"/> Show query results
   </a>
 
   <div id="ex_attrib_type" style="display:none;">
     <table class="ss" style="width:50%;margin-top:20px;margin-left:10px;border-spacing:2px">
-      <tr><th>attrib_type_id</th><th>code</th><th>name</th><th>description</th></tr>      <tr><td>1</td><td>SO_accession</td><td></td><td>Sequence Ontology accession</td></tr>      <tr class="bg2"><td>2</td><td>SO_term</td><td></td><td>Sequence Ontology term</td></tr>      <tr><td>3</td><td>display_term</td><td></td><td>Ensembl display term</td></tr>      <tr class="bg2"><td>4</td><td>NCBI_term</td><td></td><td>NCBI term</td></tr>      <tr><td>5</td><td>feature_SO_term</td><td></td><td>Sequence Ontology term for the associated feature</td></tr>      <tr class="bg2"><td>6</td><td>rank</td><td></td><td>Relative severity of this variation consequence</td></tr>      <tr><td>7</td><td>polyphen_prediction</td><td></td><td>PolyPhen-2 prediction</td></tr>      <tr class="bg2"><td>8</td><td>sift_prediction</td><td></td><td>SIFT prediction</td></tr>      <tr><td>9</td><td>short_name</td><td>Short name</td><td>A shorter name for an instance, e.g. a VariationSet</td></tr>      <tr class="bg2"><td>10</td><td>dbsnp_clin_sig</td><td>dbSNP/ClinVar clinical significance</td><td>The clinical significance of a variant as reported by ClinVar and dbSNP</td></tr>    </table>
+      <tr><th>attrib_type_id</th><th>code</th><th>name</th><th>description</th></tr>      <tr><td>469</td><td>SO_accession</td><td>SO accession</td><td>Sequence Ontology accession</td></tr>      <tr class="bg2"><td>470</td><td>SO_term</td><td>SO term</td><td>Sequence Ontology term</td></tr>      <tr><td>471</td><td>display_term</td><td>display term</td><td>Ensembl display term</td></tr>      <tr class="bg2"><td>472</td><td>NCBI_term</td><td>NCBI term</td><td>NCBI term</td></tr>      <tr><td>473</td><td>feature_SO_term</td><td>feature SO term</td><td>Sequence Ontology term for the associated feature</td></tr>      <tr class="bg2"><td>474</td><td>rank</td><td>rank</td><td>Relative severity of this variation consequence</td></tr>      <tr><td>475</td><td>polyphen_prediction</td><td>polyphen prediction</td><td>PolyPhen-2 prediction</td></tr>      <tr class="bg2"><td>476</td><td>sift_prediction</td><td>sift prediction</td><td>SIFT prediction</td></tr>      <tr><td>477</td><td>short_name</td><td>Short name</td><td>A shorter name for an instance, e.g. a VariationSet</td></tr>      <tr class="bg2"><td>478</td><td>dbsnp_clin_sig</td><td>dbSNP/ClinVar clinical significance</td><td>The clinical significance of a variant as reported by ClinVar and dbSNP</td></tr>    </table>
   </div></div><table style="margin-top:20px;border:1px solid #BBB"><tr>    <td style="padding: 4px 25px 0px 2px">    <p style="font-weight:bold">See also:</p>
   <ul style="margin-bottom:0px";>
       <li><a href="#attrib" style="text-decoration:none">attrib</a></li>
@@ -926,7 +928,7 @@ tables that they've not used before.
   <div id="3" style="background-color:#FF8500;box-shadow:1px 1px 2px #888;padding:0px 8px;display:inline;vertical-align:top"></div>
   <h2 id="3" style="display:inline;color:#000;padding-top:0px;margin-left:6px">Genotype tables</h2>
 </div>
-<p style="width:800px">These tables define the genotype data at the individual and population levels.</p>
+<p style="width:800px">These tables define the genotype data at the sample and population levels.</p>
   <div id="compressed_genotype_region" style="width:850px;background-color:#F4F4F4;border-bottom:1px solid #BBB;margin-top:60px;margin-bottom:2px;padding:4px;border-top:1px solid #FF8500">
  
     <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
@@ -940,7 +942,7 @@ tables that they've not used before.
     </div>
     <div style="clear:both"></div>
   </div>
-  <p style="padding:5px 0px;margin-bottom:0px;width:800px">This table holds genotypes compressed using the pack() method in Perl. These genotypes are mapped to particular genomic locations rather than variation objects. The data have been compressed to reduce table size and increase the speed of the web code when retrieving strain slices and LD data. Only data from resequenced and individuals used for LD calculations are included in this table</p>
+  <p style="padding:5px 0px;margin-bottom:0px;width:800px">This table holds genotypes compressed using the pack() method in Perl. These genotypes are mapped to particular genomic locations rather than variation objects. The data have been compressed to reduce table size and increase the speed of the web code when retrieving strain slices and LD data. Only data from resequenced samples are used for LD calculations are included in this table</p>
 
   <div id="div_compressed_genotype_region" style="display:none">
     <table class="ss" style="border:1px solid #667aa6;min-width:1000px;max-width:1200px;border-spacing:2px">
@@ -953,11 +955,11 @@ tables that they've not used before.
       </tr>
 
       <tr>
-        <td class="bg1"><b>individual_id</b></td>
+        <td class="bg1"><b>sample_id</b></td>
         <td class="bg1">int(10)</td>
         <td class="bg1">-</td>
-        <td class="bg1">Foreign key references to the <a href="#individual" style="text-decoration:none">individual</a> table.</td>
-        <td class="bg1">key: <i>individual_idx</i></td>
+        <td class="bg1">Foreign key references to the <a href="#sample" style="text-decoration:none">sample</a> table.</td>
+        <td class="bg1">key: <i>sample_idx</i></td>
       </tr>
 
       <tr>
@@ -996,14 +998,14 @@ tables that they've not used before.
         <td class="bg2"><b>genotypes</b></td>
         <td class="bg2">blob</td>
         <td class="bg2">NULL</td>
-        <td class="bg2">Encoded representation of the genotype data:<br />Each row in the compressed table stores genotypes from one individual in one fixed-size region of the genome (arbitrarily defined as 100 Kb). The compressed string (using Perl's pack method) consisting of a repeating triplet of elements: a  <span style="color:#D00">distance</span> in base pairs from the previous genotype; a <span style="color:#090">variation dbID</span>; a <span style="color:#00D">genotype_code_id</span> identifier.<br />For example, a given row may have a start position of 1000, indicating the chromosomal position of the first genotype in this row. The unpacked genotypes field then may contain the following elements:<br /><b><span style="color:#D00">0</span>, <span style="color:#090">1</span>,  <span style="color:#00D">1</span>, <span style="color:#D00">20</span>, <span style="color:#090">2</span>, <span style="color:#00D">5</span>, <span style="color:#D00">35</span>, <span style="color:#090">3</span>, <span style="color:#00D">3</span>, ...</b><br />The first genotype ("<span style="color:#D00">0</span>,<span style="color:#090">1</span>,<span style="color:#00D">1</span>") has a position of 1000 + <span style="color:#D00">0</span> = 1000, and corresponds to the variation with the internal identifier <span style="color:#090">1</span> and genotype_code_id corresponding to the genotype A|G (internal ID <span style="color:#00D">1</span>).<br />The second genotype ("<span style="color:#D00">20</span>,<span style="color:#090">2</span>,<span style="color:#00D">5</span>") has a position of 1000 + <span style="color:#D00">20</span> = 1020, internal variation_id <span style="color:#090">2</span> and genotype_code_id corresponding to the genotype C|C ( internal ID <span style="color:#00D">5</span>).<br />The third genotype similarly has a position of 1055, and so on.</td>
+        <td class="bg2">Encoded representation of the genotype data:<br />Each row in the compressed table stores genotypes from one individual/sample in one fixed-size region of the genome (arbitrarily defined as 100 Kb). The compressed string (using Perl's pack method) consisting of a repeating triplet of elements: a  <span style="color:#D00">distance</span> in base pairs from the previous genotype; a <span style="color:#090">variation dbID</span>; a <span style="color:#00D">genotype_code_id</span> identifier.<br />For example, a given row may have a start position of 1000, indicating the chromosomal position of the first genotype in this row. The unpacked genotypes field then may contain the following elements:<br /><b><span style="color:#D00">0</span>, <span style="color:#090">1</span>,  <span style="color:#00D">1</span>, <span style="color:#D00">20</span>, <span style="color:#090">2</span>, <span style="color:#00D">5</span>, <span style="color:#D00">35</span>, <span style="color:#090">3</span>, <span style="color:#00D">3</span>, ...</b><br />The first genotype ("<span style="color:#D00">0</span>,<span style="color:#090">1</span>,<span style="color:#00D">1</span>") has a position of 1000 + <span style="color:#D00">0</span> = 1000, and corresponds to the variation with the internal identifier <span style="color:#090">1</span> and genotype_code_id corresponding to the genotype A|G (internal ID <span style="color:#00D">1</span>).<br />The second genotype ("<span style="color:#D00">20</span>,<span style="color:#090">2</span>,<span style="color:#00D">5</span>") has a position of 1000 + <span style="color:#D00">20</span> = 1020, internal variation_id <span style="color:#090">2</span> and genotype_code_id corresponding to the genotype C|C ( internal ID <span style="color:#00D">5</span>).<br />The third genotype similarly has a position of 1055, and so on.</td>
         <td class="bg2"></td>
       </tr>
     </table>
   </div>
 <table style="margin-top:20px;border:1px solid #BBB"><tr>    <td style="padding: 4px 25px 0px 2px">    <p style="font-weight:bold">See also:</p>
   <ul style="margin-bottom:0px";>
-      <li><a href="#individual" style="text-decoration:none">individual</a></li>
+      <li><a href="#sample" style="text-decoration:none">sample</a></li>
       <li><a href="#seq_region" style="text-decoration:none">seq_region</a></li>
       <li><a href="#variation" style="text-decoration:none">variation</a></li>
       <li><a href="#genotype_code" style="text-decoration:none">genotype_code</a></li>
@@ -1069,14 +1071,14 @@ tables that they've not used before.
         <td class="bg1"><b>genotypes</b></td>
         <td class="bg1">blob</td>
         <td class="bg1">NULL</td>
-        <td class="bg1">Encoded representation of the genotype data:<br />Each row in the compressed table stores genotypes from one subsnp of a variation (or one variation if no subsnp is defined). The compressed string (using Perl's pack method) consisting of a repeating pair of elements: an internal individual_id corresponding to an individual; a genotype_code_id identifier.</td>
+        <td class="bg1">Encoded representation of the genotype data:<br />Each row in the compressed table stores genotypes from one subsnp of a variation (or one variation if no subsnp is defined). The compressed string (using Perl's pack method) consisting of a repeating pair of elements: an internal sample_id corresponding to a sample; a genotype_code_id identifier.</td>
         <td class="bg1"></td>
       </tr>
     </table>
   </div>
 <table style="margin-top:20px;border:1px solid #BBB"><tr>    <td style="padding: 4px 25px 0px 2px">    <p style="font-weight:bold">See also:</p>
   <ul style="margin-bottom:0px";>
-      <li><a href="#individual" style="text-decoration:none">individual</a></li>
+      <li><a href="#sample" style="text-decoration:none">sample</a></li>
       <li><a href="#variation" style="text-decoration:none">variation</a></li>
       <li><a href="#genotype_code" style="text-decoration:none">genotype_code</a></li>
       <li><a href="#subsnp_handle" style="text-decoration:none">subsnp_handle</a></li>
@@ -1100,102 +1102,12 @@ tables that they've not used before.
         <li style="font-style:italic">Mus musculus</li>
         <li style="font-style:italic">Nomascus leucogenys</li>
         <li style="font-style:italic">Ornithorhynchus anatinus</li>
-        <li style="font-style:italic">Ovis aries</li>
         <li style="font-style:italic">Pan troglodytes</li>
         <li style="font-style:italic">Pongo abelii</li>
         <li style="font-style:italic">Rattus norvegicus</li>
         <li style="font-style:italic">Saccharomyces cerevisiae</li>
         <li style="font-style:italic">Sus scrofa</li>
         <li style="font-style:italic">Taeniopygia guttata</li>
-      </ul>
-    </div>
-  </td></tr></table>
-  <div id="individual_genotype_multiple_bp" style="width:850px;background-color:#F4F4F4;border-bottom:1px solid #BBB;margin-top:60px;margin-bottom:2px;padding:4px;border-top:1px solid #FF8500">
- 
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
-      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#FF8500;box-shadow:1px 1px 2px #888;vertical-align:middle"></span>individual_genotype_multiple_bp</div>
-    <div style="float:right;text-align:right;padding:2px 1px">
-  
-  <a id="a_individual_genotype_multiple_bp" class="help-header" style="cursor:pointer;font-weight:bold;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px;box-shadow:1px 1px 2px #888" onclick="show_hide('individual_genotype_multiple_bp','columns')">
-    <img src="/i/16/plus-button.png" style="width:12px;height:12px;position:relative;top:2px" alt="show"/> Show columns
-  </a>
-      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top" style="text-decoration:none">[Back to top]</a>
-    </div>
-    <div style="clear:both"></div>
-  </div>
-  <p style="padding:5px 0px;margin-bottom:0px;width:800px">This table holds uncompressed genotypes for given variations.</p>
-
-  <div id="div_individual_genotype_multiple_bp" style="display:none">
-    <table class="ss" style="border:1px solid #667aa6;min-width:1000px;max-width:1200px;border-spacing:2px">
-      <tr class="center">
-        <th style="background-color:#667aa6;color:#FFF;padding:2px">Column</th>
-        <th style="background-color:#667aa6;color:#FFF;padding:2px">Type</th>
-        <th style="background-color:#667aa6;color:#FFF;padding:2px;min-width:80px">Default value</th>
-        <th style="background-color:#667aa6;color:#FFF;padding:2px;min-width:500px">Description</th>
-        <th style="background-color:#667aa6;color:#FFF;padding:2px;min-width:100px">Index</th>
-      </tr>
-
-      <tr>
-        <td class="bg1"><b>variation_id</b></td>
-        <td class="bg1">int(10)</td>
-        <td class="bg1">-</td>
-        <td class="bg1">Primary key. Foreign key references to the <a href="#variation" style="text-decoration:none">variation</a> table.</td>
-        <td class="bg1">key: <i>variation_idx</i></td>
-      </tr>
-
-      <tr>
-        <td class="bg2"><b>subsnp_id</b></td>
-        <td class="bg2">int(15)</td>
-        <td class="bg2">NULL</td>
-        <td class="bg2">Foreign key references to the <a href="#subsnp_handle" style="text-decoration:none">subsnp_handle</a> table.</td>
-        <td class="bg2">key: <i>subsnp_idx</i></td>
-      </tr>
-
-      <tr>
-        <td class="bg1"><b>allele_1</b></td>
-        <td class="bg1">varchar(25000)</td>
-        <td class="bg1">NULL</td>
-        <td class="bg1">One of the alleles of the genotype, e.g. "TAG".</td>
-        <td class="bg1"></td>
-      </tr>
-
-      <tr>
-        <td class="bg2"><b>allele_2</b></td>
-        <td class="bg2">varchar(25000)</td>
-        <td class="bg2">NULL</td>
-        <td class="bg2">The other allele of the genotype.</td>
-        <td class="bg2"></td>
-      </tr>
-
-      <tr>
-        <td class="bg1"><b>individual_id</b></td>
-        <td class="bg1">int(10)</td>
-        <td class="bg1">NULL</td>
-        <td class="bg1">Foreign key references to the <a href="#individual" style="text-decoration:none">individual</a> table.</td>
-        <td class="bg1">key: <i>individual_idx</i></td>
-      </tr>
-    </table>
-  </div>
-<table style="margin-top:20px;border:1px solid #BBB"><tr>    <td style="padding: 4px 25px 0px 2px">    <p style="font-weight:bold">See also:</p>
-  <ul style="margin-bottom:0px";>
-      <li><a href="#individual" style="text-decoration:none">individual</a></li>
-      <li><a href="#variation" style="text-decoration:none">variation</a></li>
-      <li><a href="#subsnp_handle" style="text-decoration:none">subsnp_handle</a></li>
-      </ul>
-    </td>
-  <td style="margin:0px;padding:0px;width:1px;border-right:1px dotted #BBB"></td>
-  <td style="padding-top:4px;padding-left:25px"><p style="margin-bottom:0px"><span style="margin-right:10px;font-weight:bold">List of species with populated data:</span>
-  <a id="s_individual_genotype_multiple_bp" class="help-header" style="cursor:pointer;font-weight:bold;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px;box-shadow:1px 1px 2px #888" onclick="show_hide('individual_genotype_multiple_bp','species')">
-    <img src="/i/16/plus-button.png" style="width:12px;height:12px;position:relative;top:2px" alt="show"/> Show species
-  </a></p>
-    <div id="sp_individual_genotype_multiple_bp" style="display:none;">
-      <ul style="margin-top:1em">      <ul style="margin-top:1em">
-        <li style="font-style:italic">Bos taurus</li>
-        <li style="font-style:italic">Gallus gallus</li>
-        <li style="font-style:italic">Homo sapiens</li>
-        <li style="font-style:italic">Macaca mulatta</li>
-        <li style="font-style:italic">Mus musculus</li>
-        <li style="font-style:italic">Rattus norvegicus</li>
       </ul>
     </div>
   </td></tr></table>
@@ -1276,7 +1188,7 @@ tables that they've not used before.
         <td class="bg1"><b>count</b></td>
         <td class="bg1">int(10)</td>
         <td class="bg1">NULL</td>
-        <td class="bg1">Number of individuals who have this genotype, in this population.</td>
+        <td class="bg1">Number of individuals/samples who have this genotype, in this population.</td>
         <td class="bg1"></td>
       </tr>
     </table>
@@ -1329,7 +1241,7 @@ tables that they've not used before.
     </div>
     <div style="clear:both"></div>
   </div>
-  <p style="padding:5px 0px;margin-bottom:0px;width:800px">This table stores the read coverage in the resequencing of individuals. Each row contains an individual ID, chromosomal coordinates and a read coverage level.</p>
+  <p style="padding:5px 0px;margin-bottom:0px;width:800px">This table stores the read coverage of resequenced samples. Each row contains sample ID, chromosomal coordinates and a read coverage level.</p>
 
   <div id="div_read_coverage" style="display:none">
     <table class="ss" style="border:1px solid #667aa6;min-width:1000px;max-width:1200px;border-spacing:2px">
@@ -1374,17 +1286,17 @@ tables that they've not used before.
       </tr>
 
       <tr>
-        <td class="bg1"><b>individual_id</b></td>
+        <td class="bg1"><b>sample_id</b></td>
         <td class="bg1">int(10)</td>
         <td class="bg1">-</td>
-        <td class="bg1">Foreign key references to the <a href="#individual" style="text-decoration:none">individual</a> table.</td>
-        <td class="bg1"></td>
+        <td class="bg1">Foreign key references to the <a href="#sample" style="text-decoration:none">sample</a> table.</td>
+        <td class="bg1">key: <i>sample_idx</i></td>
       </tr>
     </table>
   </div>
 <table style="margin-top:20px;border:1px solid #BBB"><tr>    <td style="padding: 4px 25px 0px 2px">    <p style="font-weight:bold">See also:</p>
   <ul style="margin-bottom:0px";>
-      <li><a href="#individual" style="text-decoration:none">individual</a></li>
+      <li><a href="#sample" style="text-decoration:none">sample</a></li>
       <li><a href="#seq_region" style="text-decoration:none">seq_region</a></li>
       </ul>
     </td>
@@ -1396,20 +1308,109 @@ tables that they've not used before.
     <div id="sp_read_coverage" style="display:none;">
       <ul style="margin-top:1em">      <ul style="margin-top:1em">
         <li style="font-style:italic">Canis familiaris</li>
-        <li style="font-style:italic">Drosophila melanogaster</li>
         <li style="font-style:italic">Homo sapiens</li>
         <li style="font-style:italic">Mus musculus</li>
         <li style="font-style:italic">Rattus norvegicus</li>
       </ul>
     </div>
   </td></tr></table>
-  <div id="tmp_individual_genotype_single_bp" style="width:850px;background-color:#F4F4F4;border-bottom:1px solid #BBB;margin-top:60px;margin-bottom:2px;padding:4px;border-top:1px solid #FF8500">
+  <div id="sample_genotype_multiple_bp" style="width:850px;background-color:#F4F4F4;border-bottom:1px solid #BBB;margin-top:60px;margin-bottom:2px;padding:4px;border-top:1px solid #FF8500">
  
     <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
-      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#FF8500;box-shadow:1px 1px 2px #888;vertical-align:middle"></span>tmp_individual_genotype_single_bp</div>
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#FF8500;box-shadow:1px 1px 2px #888;vertical-align:middle"></span>sample_genotype_multiple_bp</div>
     <div style="float:right;text-align:right;padding:2px 1px">
   
-  <a id="a_tmp_individual_genotype_single_bp" class="help-header" style="cursor:pointer;font-weight:bold;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px;box-shadow:1px 1px 2px #888" onclick="show_hide('tmp_individual_genotype_single_bp','columns')">
+  <a id="a_sample_genotype_multiple_bp" class="help-header" style="cursor:pointer;font-weight:bold;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px;box-shadow:1px 1px 2px #888" onclick="show_hide('sample_genotype_multiple_bp','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;position:relative;top:2px" alt="show"/> Show columns
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top" style="text-decoration:none">[Back to top]</a>
+    </div>
+    <div style="clear:both"></div>
+  </div>
+  <p style="padding:5px 0px;margin-bottom:0px;width:800px">This table holds uncompressed genotypes for given variations.</p>
+
+  <div id="div_sample_genotype_multiple_bp" style="display:none">
+    <table class="ss" style="border:1px solid #667aa6;min-width:1000px;max-width:1200px;border-spacing:2px">
+      <tr class="center">
+        <th style="background-color:#667aa6;color:#FFF;padding:2px">Column</th>
+        <th style="background-color:#667aa6;color:#FFF;padding:2px">Type</th>
+        <th style="background-color:#667aa6;color:#FFF;padding:2px;min-width:80px">Default value</th>
+        <th style="background-color:#667aa6;color:#FFF;padding:2px;min-width:500px">Description</th>
+        <th style="background-color:#667aa6;color:#FFF;padding:2px;min-width:100px">Index</th>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>variation_id</b></td>
+        <td class="bg1">int(10)</td>
+        <td class="bg1">-</td>
+        <td class="bg1">Primary key. Foreign key references to the <a href="#variation" style="text-decoration:none">variation</a> table.</td>
+        <td class="bg1">key: <i>variation_idx</i></td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>subsnp_id</b></td>
+        <td class="bg2">int(15)</td>
+        <td class="bg2">NULL</td>
+        <td class="bg2">Foreign key references to the <a href="#subsnp_handle" style="text-decoration:none">subsnp_handle</a> table.</td>
+        <td class="bg2">key: <i>subsnp_idx</i></td>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>allele_1</b></td>
+        <td class="bg1">varchar(25000)</td>
+        <td class="bg1">NULL</td>
+        <td class="bg1">One of the alleles of the genotype, e.g. "TAG".</td>
+        <td class="bg1"></td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>allele_2</b></td>
+        <td class="bg2">varchar(25000)</td>
+        <td class="bg2">NULL</td>
+        <td class="bg2">The other allele of the genotype.</td>
+        <td class="bg2"></td>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>sample_id</b></td>
+        <td class="bg1">int(10)</td>
+        <td class="bg1">NULL</td>
+        <td class="bg1">Foreign key references to the <a href="#sample" style="text-decoration:none">sample</a> table.</td>
+        <td class="bg1">key: <i>sample_idx</i></td>
+      </tr>
+    </table>
+  </div>
+<table style="margin-top:20px;border:1px solid #BBB"><tr>    <td style="padding: 4px 25px 0px 2px">    <p style="font-weight:bold">See also:</p>
+  <ul style="margin-bottom:0px";>
+      <li><a href="#sample" style="text-decoration:none">sample</a></li>
+      <li><a href="#variation" style="text-decoration:none">variation</a></li>
+      <li><a href="#subsnp_handle" style="text-decoration:none">subsnp_handle</a></li>
+      </ul>
+    </td>
+  <td style="margin:0px;padding:0px;width:1px;border-right:1px dotted #BBB"></td>
+  <td style="padding-top:4px;padding-left:25px"><p style="margin-bottom:0px"><span style="margin-right:10px;font-weight:bold">List of species with populated data:</span>
+  <a id="s_sample_genotype_multiple_bp" class="help-header" style="cursor:pointer;font-weight:bold;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px;box-shadow:1px 1px 2px #888" onclick="show_hide('sample_genotype_multiple_bp','species')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;position:relative;top:2px" alt="show"/> Show species
+  </a></p>
+    <div id="sp_sample_genotype_multiple_bp" style="display:none;">
+      <ul style="margin-top:1em">      <ul style="margin-top:1em">
+        <li style="font-style:italic">Bos taurus</li>
+        <li style="font-style:italic">Gallus gallus</li>
+        <li style="font-style:italic">Homo sapiens</li>
+        <li style="font-style:italic">Macaca mulatta</li>
+        <li style="font-style:italic">Mus musculus</li>
+        <li style="font-style:italic">Rattus norvegicus</li>
+        <li style="font-style:italic">Sus scrofa</li>
+      </ul>
+    </div>
+  </td></tr></table>
+  <div id="tmp_sample_genotype_single_bp" style="width:850px;background-color:#F4F4F4;border-bottom:1px solid #BBB;margin-top:60px;margin-bottom:2px;padding:4px;border-top:1px solid #FF8500">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#FF8500;box-shadow:1px 1px 2px #888;vertical-align:middle"></span>tmp_sample_genotype_single_bp</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_tmp_sample_genotype_single_bp" class="help-header" style="cursor:pointer;font-weight:bold;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px;box-shadow:1px 1px 2px #888" onclick="show_hide('tmp_sample_genotype_single_bp','columns')">
     <img src="/i/16/plus-button.png" style="width:12px;height:12px;position:relative;top:2px" alt="show"/> Show columns
   </a>
       <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top" style="text-decoration:none">[Back to top]</a>
@@ -1418,7 +1419,7 @@ tables that they've not used before.
   </div>
   <p style="padding:5px 0px;margin-bottom:0px;width:800px">This table is only needed to create master schema when run healthcheck system. Needed for other species, but human, so keep it.</p>
 
-  <div id="div_tmp_individual_genotype_single_bp" style="display:none">
+  <div id="div_tmp_sample_genotype_single_bp" style="display:none">
     <table class="ss" style="border:1px solid #667aa6;min-width:1000px;max-width:1200px;border-spacing:2px">
       <tr class="center">
         <th style="background-color:#667aa6;color:#FFF;padding:2px">Column</th>
@@ -1461,28 +1462,36 @@ tables that they've not used before.
       </tr>
 
       <tr>
-        <td class="bg1"><b>individual_id</b></td>
+        <td class="bg1"><b>sample_id</b></td>
         <td class="bg1">int</td>
         <td class="bg1">NULL</td>
-        <td class="bg1">Foreign key references to the <a href="#individual" style="text-decoration:none">individual</a> table.</td>
-        <td class="bg1">key: <i>individual_idx</i></td>
+        <td class="bg1">Foreign key references to the <a href="#sample" style="text-decoration:none">sample</a> table.</td>
+        <td class="bg1">key: <i>sample_idx</i></td>
       </tr>
     </table>
   </div>
 <table style="margin-top:20px;border:1px solid #BBB"><tr>    <td style="padding: 4px 25px 0px 2px">    <p style="font-weight:bold">See also:</p>
   <ul style="margin-bottom:0px";>
-      <li><a href="#individual" style="text-decoration:none">individual</a></li>
+      <li><a href="#sample" style="text-decoration:none">sample</a></li>
       <li><a href="#variation" style="text-decoration:none">variation</a></li>
       <li><a href="#subsnp_handle" style="text-decoration:none">subsnp_handle</a></li>
       </ul>
     </td>
   <td style="margin:0px;padding:0px;width:1px;border-right:1px dotted #BBB"></td>
   <td style="padding-top:4px;padding-left:25px"><p style="margin-bottom:0px"><span style="margin-right:10px;font-weight:bold">List of species with populated data:</span>
-  <a id="s_tmp_individual_genotype_single_bp" class="help-header" style="cursor:pointer;font-weight:bold;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px;box-shadow:1px 1px 2px #888" onclick="show_hide('tmp_individual_genotype_single_bp','species')">
+  <a id="s_tmp_sample_genotype_single_bp" class="help-header" style="cursor:pointer;font-weight:bold;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px;box-shadow:1px 1px 2px #888" onclick="show_hide('tmp_sample_genotype_single_bp','species')">
     <img src="/i/16/plus-button.png" style="width:12px;height:12px;position:relative;top:2px" alt="show"/> Show species
   </a></p>
-    <div id="sp_tmp_individual_genotype_single_bp" style="display:none;">
+    <div id="sp_tmp_sample_genotype_single_bp" style="display:none;">
       <ul style="margin-top:1em">      <ul style="margin-top:1em">
+        <li style="font-style:italic">Bos taurus</li>
+        <li style="font-style:italic">Canis familiaris</li>
+        <li style="font-style:italic">Danio rerio</li>
+        <li style="font-style:italic">Drosophila melanogaster</li>
+        <li style="font-style:italic">Equus caballus</li>
+        <li style="font-style:italic">Gallus gallus</li>
+        <li style="font-style:italic">Macaca mulatta</li>
+        <li style="font-style:italic">Mus musculus</li>
         <li style="font-style:italic">Nomascus leucogenys</li>
         <li style="font-style:italic">Ornithorhynchus anatinus</li>
         <li style="font-style:italic">Ovis aries</li>
@@ -1849,7 +1858,17 @@ tables that they've not used before.
       <li><a href="#meta" style="text-decoration:none">meta</a></li>
       </ul>
     </td>
-</tr></table>
+  <td style="margin:0px;padding:0px;width:1px;border-right:1px dotted #BBB"></td>
+  <td style="padding-top:4px;padding-left:25px"><p style="margin-bottom:0px"><span style="margin-right:10px;font-weight:bold">List of species with populated data:</span>
+  <a id="s_coord_system" class="help-header" style="cursor:pointer;font-weight:bold;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px;box-shadow:1px 1px 2px #888" onclick="show_hide('coord_system','species')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;position:relative;top:2px" alt="show"/> Show species
+  </a></p>
+    <div id="sp_coord_system" style="display:none;">
+      <ul style="margin-top:1em">      <ul style="margin-top:1em">
+        <li style="font-style:italic">Drosophila melanogaster</li>
+      </ul>
+    </div>
+  </td></tr></table>
   <div id="genotype_code" style="width:850px;background-color:#F4F4F4;border-bottom:1px solid #BBB;margin-top:60px;margin-bottom:2px;padding:4px;border-top:1px solid #000">
  
     <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
@@ -1943,93 +1962,6 @@ tables that they've not used before.
         <li style="font-style:italic">Sus scrofa</li>
         <li style="font-style:italic">Taeniopygia guttata</li>
         <li style="font-style:italic">Tetraodon nigroviridis</li>
-      </ul>
-    </div>
-  </td></tr></table>
-  <div id="phenotype" style="width:850px;background-color:#F4F4F4;border-bottom:1px solid #BBB;margin-top:60px;margin-bottom:2px;padding:4px;border-top:1px solid #000">
- 
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
-      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#000;box-shadow:1px 1px 2px #888;vertical-align:middle"></span>phenotype</div>
-    <div style="float:right;text-align:right;padding:2px 1px">
-  
-  <a id="a_phenotype" class="help-header" style="cursor:pointer;font-weight:bold;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px;box-shadow:1px 1px 2px #888" onclick="show_hide('phenotype','columns')">
-    <img src="/i/16/plus-button.png" style="width:12px;height:12px;position:relative;top:2px" alt="show"/> Show columns
-  </a>
-      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top" style="text-decoration:none">[Back to top]</a>
-    </div>
-    <div style="clear:both"></div>
-  </div>
-  <p style="padding:5px 0px;margin-bottom:0px;width:800px">This table stores details of the phenotypes associated with phenotype_features.</p>
-
-  <div id="div_phenotype" style="display:none">
-    <table class="ss" style="border:1px solid #667aa6;min-width:1000px;max-width:1200px;border-spacing:2px">
-      <tr class="center">
-        <th style="background-color:#667aa6;color:#FFF;padding:2px">Column</th>
-        <th style="background-color:#667aa6;color:#FFF;padding:2px">Type</th>
-        <th style="background-color:#667aa6;color:#FFF;padding:2px;min-width:80px">Default value</th>
-        <th style="background-color:#667aa6;color:#FFF;padding:2px;min-width:500px">Description</th>
-        <th style="background-color:#667aa6;color:#FFF;padding:2px;min-width:100px">Index</th>
-      </tr>
-
-      <tr>
-        <td class="bg1"><b>phenotype_id</b></td>
-        <td class="bg1">int(10)</td>
-        <td class="bg1">-</td>
-        <td class="bg1">Primary key, internal identifier.</td>
-        <td class="bg1">primary key</td>
-      </tr>
-
-      <tr>
-        <td class="bg2"><b>stable_id</b></td>
-        <td class="bg2">varchar(255)</td>
-        <td class="bg2">NULL</td>
-        <td class="bg2">Ensembl stable identifier for the phenotype</td>
-        <td class="bg2">key: <i>stable_idx</i></td>
-      </tr>
-
-      <tr>
-        <td class="bg1"><b>name</b></td>
-        <td class="bg1">varchar(50)</td>
-        <td class="bg1">NULL</td>
-        <td class="bg1">Phenotype short name. e.g. "CAD".</td>
-        <td class="bg1">key: <i>name_idx</i></td>
-      </tr>
-
-      <tr>
-        <td class="bg2"><b>description</b></td>
-        <td class="bg2">varchar(255)</td>
-        <td class="bg2">NULL</td>
-        <td class="bg2">varchar		Phenotype long name. e.g. "Coronary Artery Disease".</td>
-        <td class="bg2">unique key: <i>desc_idx</i></td>
-      </tr>
-    </table>
-  </div>
-<table style="margin-top:20px;border:1px solid #BBB"><tr>    <td style="padding: 4px 25px 0px 2px">    <p style="font-weight:bold">See also:</p>
-  <ul style="margin-bottom:0px";>
-      <li><a href="#phenotype_feature" style="text-decoration:none">phenotype_feature</a></li>
-      </ul>
-    </td>
-  <td style="margin:0px;padding:0px;width:1px;border-right:1px dotted #BBB"></td>
-  <td style="padding-top:4px;padding-left:25px"><p style="margin-bottom:0px"><span style="margin-right:10px;font-weight:bold">List of species with populated data:</span>
-  <a id="s_phenotype" class="help-header" style="cursor:pointer;font-weight:bold;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px;box-shadow:1px 1px 2px #888" onclick="show_hide('phenotype','species')">
-    <img src="/i/16/plus-button.png" style="width:12px;height:12px;position:relative;top:2px" alt="show"/> Show species
-  </a></p>
-    <div id="sp_phenotype" style="display:none;">
-      <ul style="margin-top:1em">      <ul style="margin-top:1em">
-        <li style="font-style:italic">Bos taurus</li>
-        <li style="font-style:italic">Canis familiaris</li>
-        <li style="font-style:italic">Danio rerio</li>
-        <li style="font-style:italic">Equus caballus</li>
-        <li style="font-style:italic">Felis catus</li>
-        <li style="font-style:italic">Gallus gallus</li>
-        <li style="font-style:italic">Homo sapiens</li>
-        <li style="font-style:italic">Macaca mulatta</li>
-        <li style="font-style:italic">Meleagris gallopavo</li>
-        <li style="font-style:italic">Mus musculus</li>
-        <li style="font-style:italic">Ovis aries</li>
-        <li style="font-style:italic">Pan troglodytes</li>
-        <li style="font-style:italic">Rattus norvegicus</li>
-        <li style="font-style:italic">Sus scrofa</li>
       </ul>
     </div>
   </td></tr></table>
@@ -2346,6 +2278,93 @@ tables that they've not used before.
   <h2 id="6" style="display:inline;color:#000;padding-top:0px;margin-left:6px">Phenotype tables</h2>
 </div>
 <p style="width:800px">These tables store information linking entities (variants, genes, QTLs) with phenotypes and other annotations.</p>
+  <div id="phenotype" style="width:850px;background-color:#F4F4F4;border-bottom:1px solid #BBB;margin-top:60px;margin-bottom:2px;padding:4px;border-top:1px solid #22949b">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#22949b;box-shadow:1px 1px 2px #888;vertical-align:middle"></span>phenotype</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_phenotype" class="help-header" style="cursor:pointer;font-weight:bold;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px;box-shadow:1px 1px 2px #888" onclick="show_hide('phenotype','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;position:relative;top:2px" alt="show"/> Show columns
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top" style="text-decoration:none">[Back to top]</a>
+    </div>
+    <div style="clear:both"></div>
+  </div>
+  <p style="padding:5px 0px;margin-bottom:0px;width:800px">This table stores details of the phenotypes associated with phenotype_features.</p>
+
+  <div id="div_phenotype" style="display:none">
+    <table class="ss" style="border:1px solid #667aa6;min-width:1000px;max-width:1200px;border-spacing:2px">
+      <tr class="center">
+        <th style="background-color:#667aa6;color:#FFF;padding:2px">Column</th>
+        <th style="background-color:#667aa6;color:#FFF;padding:2px">Type</th>
+        <th style="background-color:#667aa6;color:#FFF;padding:2px;min-width:80px">Default value</th>
+        <th style="background-color:#667aa6;color:#FFF;padding:2px;min-width:500px">Description</th>
+        <th style="background-color:#667aa6;color:#FFF;padding:2px;min-width:100px">Index</th>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>phenotype_id</b></td>
+        <td class="bg1">int(10)</td>
+        <td class="bg1">-</td>
+        <td class="bg1">Primary key, internal identifier.</td>
+        <td class="bg1">primary key</td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>stable_id</b></td>
+        <td class="bg2">varchar(255)</td>
+        <td class="bg2">NULL</td>
+        <td class="bg2">Ensembl stable identifier for the phenotype</td>
+        <td class="bg2">key: <i>stable_idx</i></td>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>name</b></td>
+        <td class="bg1">varchar(50)</td>
+        <td class="bg1">NULL</td>
+        <td class="bg1">Phenotype short name. e.g. "CAD".</td>
+        <td class="bg1">key: <i>name_idx</i></td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>description</b></td>
+        <td class="bg2">varchar(255)</td>
+        <td class="bg2">NULL</td>
+        <td class="bg2">varchar  Phenotype long name. e.g. "Coronary Artery Disease".</td>
+        <td class="bg2">unique key: <i>desc_idx</i></td>
+      </tr>
+    </table>
+  </div>
+<table style="margin-top:20px;border:1px solid #BBB"><tr>    <td style="padding: 4px 25px 0px 2px">    <p style="font-weight:bold">See also:</p>
+  <ul style="margin-bottom:0px";>
+      <li><a href="#phenotype_feature" style="text-decoration:none">phenotype_feature</a></li>
+      </ul>
+    </td>
+  <td style="margin:0px;padding:0px;width:1px;border-right:1px dotted #BBB"></td>
+  <td style="padding-top:4px;padding-left:25px"><p style="margin-bottom:0px"><span style="margin-right:10px;font-weight:bold">List of species with populated data:</span>
+  <a id="s_phenotype" class="help-header" style="cursor:pointer;font-weight:bold;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px;box-shadow:1px 1px 2px #888" onclick="show_hide('phenotype','species')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;position:relative;top:2px" alt="show"/> Show species
+  </a></p>
+    <div id="sp_phenotype" style="display:none;">
+      <ul style="margin-top:1em">      <ul style="margin-top:1em">
+        <li style="font-style:italic">Bos taurus</li>
+        <li style="font-style:italic">Canis familiaris</li>
+        <li style="font-style:italic">Danio rerio</li>
+        <li style="font-style:italic">Equus caballus</li>
+        <li style="font-style:italic">Felis catus</li>
+        <li style="font-style:italic">Gallus gallus</li>
+        <li style="font-style:italic">Homo sapiens</li>
+        <li style="font-style:italic">Macaca mulatta</li>
+        <li style="font-style:italic">Meleagris gallopavo</li>
+        <li style="font-style:italic">Mus musculus</li>
+        <li style="font-style:italic">Ovis aries</li>
+        <li style="font-style:italic">Pan troglodytes</li>
+        <li style="font-style:italic">Rattus norvegicus</li>
+        <li style="font-style:italic">Sus scrofa</li>
+      </ul>
+    </div>
+  </td></tr></table>
   <div id="phenotype_feature" style="width:850px;background-color:#F4F4F4;border-bottom:1px solid #BBB;margin-top:60px;margin-bottom:2px;padding:4px;border-top:1px solid #22949b">
  
     <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
@@ -2655,6 +2674,90 @@ tables that they've not used before.
       </ul>
     </div>
   </td></tr></table>
+  <div id="protein_function_predictions_attrib" style="width:850px;background-color:#F4F4F4;border-bottom:1px solid #BBB;margin-top:60px;margin-bottom:2px;padding:4px;border-top:1px solid #1E90FF">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#1E90FF;box-shadow:1px 1px 2px #888;vertical-align:middle"></span>protein_function_predictions_attrib</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_protein_function_predictions_attrib" class="help-header" style="cursor:pointer;font-weight:bold;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px;box-shadow:1px 1px 2px #888" onclick="show_hide('protein_function_predictions_attrib','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;position:relative;top:2px" alt="show"/> Show columns
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top" style="text-decoration:none">[Back to top]</a>
+    </div>
+    <div style="clear:both"></div>
+  </div>
+  <p style="padding:5px 0px;margin-bottom:0px;width:800px">Contains information on the data use in protein function predictions</p>
+
+  <div id="div_protein_function_predictions_attrib" style="display:none">
+    <table class="ss" style="border:1px solid #667aa6;min-width:1000px;max-width:1200px;border-spacing:2px">
+      <tr class="center">
+        <th style="background-color:#667aa6;color:#FFF;padding:2px">Column</th>
+        <th style="background-color:#667aa6;color:#FFF;padding:2px">Type</th>
+        <th style="background-color:#667aa6;color:#FFF;padding:2px;min-width:80px">Default value</th>
+        <th style="background-color:#667aa6;color:#FFF;padding:2px;min-width:500px">Description</th>
+        <th style="background-color:#667aa6;color:#FFF;padding:2px;min-width:100px">Index</th>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>translation_md5_id</b></td>
+        <td class="bg1">int(11)</td>
+        <td class="bg1">-</td>
+        <td class="bg1">Identifies the MD5 hash corresponding to the protein sequence to which  these data use in prediction apply</td>
+        <td class="bg1">primary key</td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>analysis_attrib_id</b></td>
+        <td class="bg2">int(11)</td>
+        <td class="bg2">-</td>
+        <td class="bg2">Identifies the analysis (sift, polyphen etc.) that produced these values </td>
+        <td class="bg2">primary key</td>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>attrib_type_id</b></td>
+        <td class="bg1">int(11)</td>
+        <td class="bg1">-</td>
+        <td class="bg1">Key into the <a href="#attrib_type" style="text-decoration:none">attrib_type</a> table, identifies the type of this attribute</td>
+        <td class="bg1">primary key</td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>position_values</b></td>
+        <td class="bg2">blob</td>
+        <td class="bg2">NULL</td>
+        <td class="bg2">A compressed binary string containing data relevant to the quality of the predictions</td>
+        <td class="bg2"></td>
+      </tr>
+    </table>
+  </div>
+<table style="margin-top:20px;border:1px solid #BBB"><tr>    <td style="padding: 4px 25px 0px 2px">    <p style="font-weight:bold">See also:</p>
+  <ul style="margin-bottom:0px";>
+      <li><a href="#protein_function_predictions" style="text-decoration:none">protein_function_predictions</a></li>
+      <li><a href="#attrib_type" style="text-decoration:none">attrib_type</a></li>
+      </ul>
+    </td>
+  <td style="margin:0px;padding:0px;width:1px;border-right:1px dotted #BBB"></td>
+  <td style="padding-top:4px;padding-left:25px"><p style="margin-bottom:0px"><span style="margin-right:10px;font-weight:bold">List of species with populated data:</span>
+  <a id="s_protein_function_predictions_attrib" class="help-header" style="cursor:pointer;font-weight:bold;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px;box-shadow:1px 1px 2px #888" onclick="show_hide('protein_function_predictions_attrib','species')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;position:relative;top:2px" alt="show"/> Show species
+  </a></p>
+    <div id="sp_protein_function_predictions_attrib" style="display:none;">
+      <ul style="margin-top:1em">      <ul style="margin-top:1em">
+        <li style="font-style:italic">Bos taurus</li>
+        <li style="font-style:italic">Canis familiaris</li>
+        <li style="font-style:italic">Danio rerio</li>
+        <li style="font-style:italic">Equus caballus</li>
+        <li style="font-style:italic">Gallus gallus</li>
+        <li style="font-style:italic">Homo sapiens</li>
+        <li style="font-style:italic">Mus musculus</li>
+        <li style="font-style:italic">Ovis aries</li>
+        <li style="font-style:italic">Rattus norvegicus</li>
+        <li style="font-style:italic">Sus scrofa</li>
+      </ul>
+    </div>
+  </td></tr></table>
   <div id="translation_md5" style="width:850px;background-color:#F4F4F4;border-bottom:1px solid #BBB;margin-top:60px;margin-bottom:2px;padding:4px;border-top:1px solid #1E90FF">
  
     <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
@@ -2727,7 +2830,7 @@ tables that they've not used before.
   <div id="8" style="background-color:#FF8500;box-shadow:1px 1px 2px #888;padding:0px 8px;display:inline;vertical-align:top"></div>
   <h2 id="8" style="display:inline;color:#000;padding-top:0px;margin-left:6px">Sample tables</h2>
 </div>
-<p style="width:800px">These tables define the individual and population information.</p>
+<p style="width:800px">These tables define the sample, individual and population information.</p>
   <div id="display_group" style="width:850px;background-color:#F4F4F4;border-bottom:1px solid #BBB;margin-top:60px;margin-bottom:2px;padding:4px;border-top:1px solid #FF8500">
  
     <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
@@ -2790,8 +2893,10 @@ tables that they've not used before.
   </a></p>
     <div id="sp_display_group" style="display:none;">
       <ul style="margin-top:1em">      <ul style="margin-top:1em">
+        <li style="font-style:italic">Bos taurus</li>
         <li style="font-style:italic">Homo sapiens</li>
         <li style="font-style:italic">Mus musculus</li>
+        <li style="font-style:italic">Ovis aries</li>
       </ul>
     </div>
   </td></tr></table>
@@ -2875,38 +2980,13 @@ tables that they've not used before.
         <td class="bg1">Foreign key references to the <a href="#individual_type" style="text-decoration:none">individual_type</a> table.</td>
         <td class="bg1"></td>
       </tr>
-
-      <tr>
-        <td class="bg2"><b>display</b></td>
-        <td class="bg2">ENUM:<ul style="margin-bottom:0px">  <li style="line-height:12px">REFERENCE</li>  <li style="line-height:12px"> DEFAULT</li>  <li style="line-height:12px"> DISPLAYABLE</li>  <li style="line-height:12px"> UNDISPLAYABLE</li>  <li style="line-height:12px"> LD</li>  <li style="line-height:12px"> MARTDISPLAYABLE</li></ul></td>
-        <td class="bg2">'UNDISPLAYABLE'</td>
-        <td class="bg2">Information used by the website: individuals with little information are filtered from some web displays.</td>
-        <td class="bg2"></td>
-      </tr>
-
-      <tr>
-        <td class="bg1"><b>has_coverage</b></td>
-        <td class="bg1">tinyint(1)</td>
-        <td class="bg1">0</td>
-        <td class="bg1">Indicate if the individual has coverage data populated in the read coverage table</td>
-        <td class="bg1"></td>
-      </tr>
-
-      <tr>
-        <td class="bg2"><b>variation_set_id</b></td>
-        <td class="bg2">SET:<ul style="margin-bottom:0px">  <li style="line-height:12px">1</li>  <li style="line-height:12px">2</li>  <li style="line-height:12px">3</li>  <li style="line-height:12px">4</li>  <li style="line-height:12px">5</li>  <li style="line-height:12px">6</li>  <li style="line-height:12px">7</li>  <li style="line-height:12px">8</li>  <li style="line-height:12px">9</li>  <li style="line-height:12px">10</li>  <li style="line-height:12px">11</li>  <li style="line-height:12px">12</li>  <li style="line-height:12px">13</li>  <li style="line-height:12px">14</li>  <li style="line-height:12px">15</li>  <li style="line-height:12px">16</li>  <li style="line-height:12px">17</li>  <li style="line-height:12px">18</li>  <li style="line-height:12px">19</li>  <li style="line-height:12px">20</li>  <li style="line-height:12px">21</li>  <li style="line-height:12px">22</li>  <li style="line-height:12px">23</li>  <li style="line-height:12px">24</li>  <li style="line-height:12px">25</li>  <li style="line-height:12px">26</li>  <li style="line-height:12px">27</li>  <li style="line-height:12px">28</li>  <li style="line-height:12px">29</li>  <li style="line-height:12px">30</li>  <li style="line-height:12px">31</li>  <li style="line-height:12px">32</li>  <li style="line-height:12px">33</li>  <li style="line-height:12px">34</li>  <li style="line-height:12px">35</li>  <li style="line-height:12px">36</li>  <li style="line-height:12px">37</li>  <li style="line-height:12px">38</li>  <li style="line-height:12px">39</li>  <li style="line-height:12px">40</li>  <li style="line-height:12px">41</li>  <li style="line-height:12px">42</li>  <li style="line-height:12px">43</li>  <li style="line-height:12px">44</li>  <li style="line-height:12px">45</li>  <li style="line-height:12px">46</li>  <li style="line-height:12px">47</li>  <li style="line-height:12px">48</li>  <li style="line-height:12px">49</li>  <li style="line-height:12px">50</li>  <li style="line-height:12px">51</li>  <li style="line-height:12px">52</li>  <li style="line-height:12px">53</li>  <li style="line-height:12px">54</li>  <li style="line-height:12px">55</li>  <li style="line-height:12px">56</li>  <li style="line-height:12px">57</li>  <li style="line-height:12px">58</li>  <li style="line-height:12px">59</li>  <li style="line-height:12px">60</li>  <li style="line-height:12px">61</li>  <li style="line-height:12px">62</li>  <li style="line-height:12px">63</li>  <li style="line-height:12px">64</li></ul></td>
-        <td class="bg2">NULL</td>
-        <td class="bg2">Indicates the variation sets for which an individual has genotypes</td>
-        <td class="bg2"></td>
-      </tr>
     </table>
   </div>
 <table style="margin-top:20px;border:1px solid #BBB"><tr>    <td style="padding: 4px 25px 0px 2px">    <p style="font-weight:bold">See also:</p>
   <ul style="margin-bottom:0px";>
       <li><a href="#individual_synonym" style="text-decoration:none">individual_synonym</a></li>
       <li><a href="#individual_type" style="text-decoration:none">individual_type</a></li>
-      <li><a href="#individual_population" style="text-decoration:none">individual_population</a></li>
-      <li><a href="#individual_genotype_multiple_bp" style="text-decoration:none">individual_genotype_multiple_bp</a></li>
+      <li><a href="#sample" style="text-decoration:none">sample</a></li>
       </ul>
     </td>
   <td style="margin:0px;padding:0px;width:1px;border-right:1px dotted #BBB"></td>
@@ -2927,83 +3007,6 @@ tables that they've not used before.
         <li style="font-style:italic">Monodelphis domestica</li>
         <li style="font-style:italic">Mus musculus</li>
         <li style="font-style:italic">Nomascus leucogenys</li>
-        <li style="font-style:italic">Ornithorhynchus anatinus</li>
-        <li style="font-style:italic">Ovis aries</li>
-        <li style="font-style:italic">Pan troglodytes</li>
-        <li style="font-style:italic">Pongo abelii</li>
-        <li style="font-style:italic">Rattus norvegicus</li>
-        <li style="font-style:italic">Saccharomyces cerevisiae</li>
-        <li style="font-style:italic">Sus scrofa</li>
-        <li style="font-style:italic">Taeniopygia guttata</li>
-        <li style="font-style:italic">Tetraodon nigroviridis</li>
-      </ul>
-    </div>
-  </td></tr></table>
-  <div id="individual_population" style="width:850px;background-color:#F4F4F4;border-bottom:1px solid #BBB;margin-top:60px;margin-bottom:2px;padding:4px;border-top:1px solid #FF8500">
- 
-    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
-      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#FF8500;box-shadow:1px 1px 2px #888;vertical-align:middle"></span>individual_population</div>
-    <div style="float:right;text-align:right;padding:2px 1px">
-  
-  <a id="a_individual_population" class="help-header" style="cursor:pointer;font-weight:bold;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px;box-shadow:1px 1px 2px #888" onclick="show_hide('individual_population','columns')">
-    <img src="/i/16/plus-button.png" style="width:12px;height:12px;position:relative;top:2px" alt="show"/> Show columns
-  </a>
-      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top" style="text-decoration:none">[Back to top]</a>
-    </div>
-    <div style="clear:both"></div>
-  </div>
-  <p style="padding:5px 0px;margin-bottom:0px;width:800px">This table resolves the many-to-many relationship between the individual and population tables; i.e. individuals may belong to more than one population. Hence it is composed of rows of individual and population identifiers.</p>
-
-  <div id="div_individual_population" style="display:none">
-    <table class="ss" style="border:1px solid #667aa6;min-width:1000px;max-width:1200px;border-spacing:2px">
-      <tr class="center">
-        <th style="background-color:#667aa6;color:#FFF;padding:2px">Column</th>
-        <th style="background-color:#667aa6;color:#FFF;padding:2px">Type</th>
-        <th style="background-color:#667aa6;color:#FFF;padding:2px;min-width:80px">Default value</th>
-        <th style="background-color:#667aa6;color:#FFF;padding:2px;min-width:500px">Description</th>
-        <th style="background-color:#667aa6;color:#FFF;padding:2px;min-width:100px">Index</th>
-      </tr>
-
-      <tr>
-        <td class="bg1"><b>individual_id</b></td>
-        <td class="bg1">int(10)</td>
-        <td class="bg1">-</td>
-        <td class="bg1">Foreign key references to the <a href="#individual" style="text-decoration:none">individual</a> table.</td>
-        <td class="bg1">key: <i>individual_idx</i></td>
-      </tr>
-
-      <tr>
-        <td class="bg2"><b>population_id</b></td>
-        <td class="bg2">int(10)</td>
-        <td class="bg2">-</td>
-        <td class="bg2">Foreign key references to the <a href="#population" style="text-decoration:none">population</a> table.</td>
-        <td class="bg2">key: <i>population_idx</i></td>
-      </tr>
-    </table>
-  </div>
-<table style="margin-top:20px;border:1px solid #BBB"><tr>    <td style="padding: 4px 25px 0px 2px">    <p style="font-weight:bold">See also:</p>
-  <ul style="margin-bottom:0px";>
-      <li><a href="#individual" style="text-decoration:none">individual</a></li>
-      <li><a href="#population" style="text-decoration:none">population</a></li>
-      </ul>
-    </td>
-  <td style="margin:0px;padding:0px;width:1px;border-right:1px dotted #BBB"></td>
-  <td style="padding-top:4px;padding-left:25px"><p style="margin-bottom:0px"><span style="margin-right:10px;font-weight:bold">List of species with populated data:</span>
-  <a id="s_individual_population" class="help-header" style="cursor:pointer;font-weight:bold;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px;box-shadow:1px 1px 2px #888" onclick="show_hide('individual_population','species')">
-    <img src="/i/16/plus-button.png" style="width:12px;height:12px;position:relative;top:2px" alt="show"/> Show species
-  </a></p>
-    <div id="sp_individual_population" style="display:none;">
-      <ul style="margin-top:1em">      <ul style="margin-top:1em">
-        <li style="font-style:italic">Bos taurus</li>
-        <li style="font-style:italic">Canis familiaris</li>
-        <li style="font-style:italic">Danio rerio</li>
-        <li style="font-style:italic">Drosophila melanogaster</li>
-        <li style="font-style:italic">Equus caballus</li>
-        <li style="font-style:italic">Gallus gallus</li>
-        <li style="font-style:italic">Homo sapiens</li>
-        <li style="font-style:italic">Macaca mulatta</li>
-        <li style="font-style:italic">Monodelphis domestica</li>
-        <li style="font-style:italic">Mus musculus</li>
         <li style="font-style:italic">Ornithorhynchus anatinus</li>
         <li style="font-style:italic">Ovis aries</li>
         <li style="font-style:italic">Pan troglodytes</li>
@@ -3164,7 +3167,7 @@ tables that they've not used before.
 
   <div id="ex_individual_type" style="display:none;">
     <table class="ss" style="width:50%;margin-top:20px;margin-left:10px;border-spacing:2px">
-      <tr><th>individual_type_id</th><th>name</th><th>description</th></tr>      <tr><td>1</td><td>fully_inbred</td><td>multiple organisms have the same genome sequence</td></tr>      <tr class="bg2"><td>2</td><td>partly_inbred</td><td>single organisms have reduced genome variability due to human intervention</td></tr>      <tr><td>3</td><td>outbred</td><td>a single organism which breeds freely</td></tr>      <tr class="bg2"><td>4</td><td>mutant</td><td>a single or multiple organisms with the same genome sequence that have a natural or experimentally induced mutation</td></tr>    </table>
+      <tr><th>individual_type_id</th><th>name</th><th>description</th></tr>      <tr><td>1</td><td>fully_inbred</td><td>multiple organisms have the same genome sequence</td></tr>      <tr class="bg2"><td>2</td><td>partly_inbred</td><td>single organisms have reduced genome variability due to human intervention</td></tr>      <tr><td>3</td><td>outbred</td><td>a single organism which breeds freely</td></tr>      <tr class="bg2"><td>4</td><td>mutant</td><td>a single or multiple organisms with the same genome sequence that have a natural or experimentally induced mutation</td></tr>      <tr><td>5</td><td>fully_inbred</td><td>multiple organisms have the same genome sequence</td></tr>      <tr class="bg2"><td>6</td><td>partly_inbred</td><td>single organisms have reduced genome variability due to human intervention</td></tr>      <tr><td>7</td><td>outbred</td><td>a single organism which breeds freely</td></tr>      <tr class="bg2"><td>8</td><td>mutant</td><td>a single or multiple organisms with the same genome sequence that have a natural or experimentally induced mutation</td></tr>    </table>
   </div></div><table style="margin-top:20px;border:1px solid #BBB"><tr>    <td style="padding: 4px 25px 0px 2px">    <p style="font-weight:bold">See also:</p>
   <ul style="margin-bottom:0px";>
       <li><a href="#individual" style="text-decoration:none">individual</a></li>
@@ -3263,7 +3266,7 @@ tables that they've not used before.
         <td class="bg1"><b>collection</b></td>
         <td class="bg1">tinyint(1)</td>
         <td class="bg1">0</td>
-        <td class="bg1">Flag indicating if the population is defined based on geography (0) or a collection of individuals with respect to some other criteria (1).</td>
+        <td class="bg1">Flag indicating if the population is defined based on geography (0) or a collection of individuals/samples with respect to some other criteria (1).</td>
         <td class="bg1"></td>
       </tr>
 
@@ -3271,7 +3274,7 @@ tables that they've not used before.
         <td class="bg2"><b>freqs_from_gts</b></td>
         <td class="bg2">tinyint(1)</td>
         <td class="bg2">NULL</td>
-        <td class="bg2">Flag indicating if the population frequencies can be retrieved from the allele table (0) or from the individual genotypes (1).</td>
+        <td class="bg2">Flag indicating if the population frequencies can be retrieved from the allele table (0) or from the individual/sample genotypes (1).</td>
         <td class="bg2"></td>
       </tr>
 
@@ -3295,7 +3298,7 @@ tables that they've not used before.
 <table style="margin-top:20px;border:1px solid #BBB"><tr>    <td style="padding: 4px 25px 0px 2px">    <p style="font-weight:bold">See also:</p>
   <ul style="margin-bottom:0px";>
       <li><a href="#population_synonym" style="text-decoration:none">population_synonym</a></li>
-      <li><a href="#individual_population" style="text-decoration:none">individual_population</a></li>
+      <li><a href="#sample_population" style="text-decoration:none">sample_population</a></li>
       <li><a href="#population_structure" style="text-decoration:none">population_structure</a></li>
       <li><a href="#population_genotype" style="text-decoration:none">population_genotype</a></li>
       <li><a href="#allele" style="text-decoration:none">allele</a></li>
@@ -3500,6 +3503,215 @@ tables that they've not used before.
       </ul>
     </div>
   </td></tr></table>
+  <div id="sample" style="width:850px;background-color:#F4F4F4;border-bottom:1px solid #BBB;margin-top:60px;margin-bottom:2px;padding:4px;border-top:1px solid #FF8500">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#FF8500;box-shadow:1px 1px 2px #888;vertical-align:middle"></span>sample</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_sample" class="help-header" style="cursor:pointer;font-weight:bold;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px;box-shadow:1px 1px 2px #888" onclick="show_hide('sample','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;position:relative;top:2px" alt="show"/> Show columns
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top" style="text-decoration:none">[Back to top]</a>
+    </div>
+    <div style="clear:both"></div>
+  </div>
+  <p style="padding:5px 0px;margin-bottom:0px;width:800px">Stores information about a sample. A sample belongs to an individual. An individual can have multiple samples. A sample can belong only to one individual. A sample can be associated with a study. </p>
+
+  <div id="div_sample" style="display:none">
+    <table class="ss" style="border:1px solid #667aa6;min-width:1000px;max-width:1200px;border-spacing:2px">
+      <tr class="center">
+        <th style="background-color:#667aa6;color:#FFF;padding:2px">Column</th>
+        <th style="background-color:#667aa6;color:#FFF;padding:2px">Type</th>
+        <th style="background-color:#667aa6;color:#FFF;padding:2px;min-width:80px">Default value</th>
+        <th style="background-color:#667aa6;color:#FFF;padding:2px;min-width:500px">Description</th>
+        <th style="background-color:#667aa6;color:#FFF;padding:2px;min-width:100px">Index</th>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>sample_id</b></td>
+        <td class="bg1">int(10)</td>
+        <td class="bg1">-</td>
+        <td class="bg1">Primary key, internal identifier.</td>
+        <td class="bg1">primary key</td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>individual_id</b></td>
+        <td class="bg2">int(10)</td>
+        <td class="bg2">-</td>
+        <td class="bg2">Foreign key references to the <a href="#individual" style="text-decoration:none">individual</a> table.</td>
+        <td class="bg2">key: <i>individual_idx</i></td>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>name</b></td>
+        <td class="bg1">varchar(255)</td>
+        <td class="bg1">NULL</td>
+        <td class="bg1">Name of the sample.</td>
+        <td class="bg1"></td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>description</b></td>
+        <td class="bg2">text</td>
+        <td class="bg2">NULL</td>
+        <td class="bg2">Description of the sample.</td>
+        <td class="bg2"></td>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>study_id</b></td>
+        <td class="bg1">int(10)</td>
+        <td class="bg1">NULL</td>
+        <td class="bg1">Foreign key references to the <a href="#study" style="text-decoration:none">study</a> table.</td>
+        <td class="bg1">key: <i>study_idx</i></td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>display</b></td>
+        <td class="bg2">ENUM:<ul style="margin-bottom:0px">  <li style="line-height:12px">REFERENCE</li>  <li style="line-height:12px">DEFAULT</li>  <li style="line-height:12px">DISPLAYABLE</li>  <li style="line-height:12px">UNDISPLAYABLE</li>  <li style="line-height:12px">LD</li>  <li style="line-height:12px">MARTDISPLAYABLE</li></ul></td>
+        <td class="bg2">'UNDISPLAYABLE'</td>
+        <td class="bg2">Information used by the website: samples with little information are filtered from some web displays.</td>
+        <td class="bg2"></td>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>has_coverage</b></td>
+        <td class="bg1">tinyint(1)</td>
+        <td class="bg1">'0'</td>
+        <td class="bg1">Indicate if the sample has coverage data populated in the read coverage table</td>
+        <td class="bg1"></td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>variation_set_id</b></td>
+        <td class="bg2">SET:<ul style="margin-bottom:0px">  <li style="line-height:12px">1</li>  <li style="line-height:12px">2</li>  <li style="line-height:12px">3</li>  <li style="line-height:12px">4</li>  <li style="line-height:12px">5</li>  <li style="line-height:12px">6</li>  <li style="line-height:12px">7</li>  <li style="line-height:12px">8</li>  <li style="line-height:12px">9</li>  <li style="line-height:12px">10</li>  <li style="line-height:12px">11</li>  <li style="line-height:12px">12</li>  <li style="line-height:12px">13</li>  <li style="line-height:12px">14</li>  <li style="line-height:12px">15</li>  <li style="line-height:12px">16</li>  <li style="line-height:12px">17</li>  <li style="line-height:12px">18</li>  <li style="line-height:12px">19</li>  <li style="line-height:12px">20</li>  <li style="line-height:12px">21</li>  <li style="line-height:12px">22</li>  <li style="line-height:12px">23</li>  <li style="line-height:12px">24</li>  <li style="line-height:12px">25</li>  <li style="line-height:12px">26</li>  <li style="line-height:12px">27</li>  <li style="line-height:12px">28</li>  <li style="line-height:12px">29</li>  <li style="line-height:12px">30</li>  <li style="line-height:12px">31</li>  <li style="line-height:12px">32</li>  <li style="line-height:12px">33</li>  <li style="line-height:12px">34</li>  <li style="line-height:12px">35</li>  <li style="line-height:12px">36</li>  <li style="line-height:12px">37</li>  <li style="line-height:12px">38</li>  <li style="line-height:12px">39</li>  <li style="line-height:12px">40</li>  <li style="line-height:12px">41</li>  <li style="line-height:12px">42</li>  <li style="line-height:12px">43</li>  <li style="line-height:12px">44</li>  <li style="line-height:12px">45</li>  <li style="line-height:12px">46</li>  <li style="line-height:12px">47</li>  <li style="line-height:12px">48</li>  <li style="line-height:12px">49</li>  <li style="line-height:12px">50</li>  <li style="line-height:12px">51</li>  <li style="line-height:12px">52</li>  <li style="line-height:12px">53</li>  <li style="line-height:12px">54</li>  <li style="line-height:12px">55</li>  <li style="line-height:12px">56</li>  <li style="line-height:12px">57</li>  <li style="line-height:12px">58</li>  <li style="line-height:12px">59</li>  <li style="line-height:12px">60</li>  <li style="line-height:12px">61</li>  <li style="line-height:12px">62</li>  <li style="line-height:12px">63</li>  <li style="line-height:12px">64</li></ul></td>
+        <td class="bg2">NULL</td>
+        <td class="bg2">Indicates the variation sets for which a sample has genotypes</td>
+        <td class="bg2"></td>
+      </tr>
+    </table>
+  </div>
+<table style="margin-top:20px;border:1px solid #BBB"><tr>    <td style="padding: 4px 25px 0px 2px">    <p style="font-weight:bold">See also:</p>
+  <ul style="margin-bottom:0px";>
+      <li><a href="#individual" style="text-decoration:none">individual</a></li>
+      <li><a href="#study" style="text-decoration:none">study</a></li>
+      <li><a href="#sample_population" style="text-decoration:none">sample_population</a></li>
+      <li><a href="#sample_genotype_multiple_bp" style="text-decoration:none">sample_genotype_multiple_bp</a></li>
+      <li><a href="#read_coverage" style="text-decoration:none">read_coverage</a></li>
+      <li><a href="#compressed_genotype_region" style="text-decoration:none">compressed_genotype_region</a></li>
+      <li><a href="#compressed_genotype_var" style="text-decoration:none">compressed_genotype_var</a></li>
+      <li><a href="#variation_set" style="text-decoration:none">variation_set</a></li>
+      </ul>
+    </td>
+  <td style="margin:0px;padding:0px;width:1px;border-right:1px dotted #BBB"></td>
+  <td style="padding-top:4px;padding-left:25px"><p style="margin-bottom:0px"><span style="margin-right:10px;font-weight:bold">List of species with populated data:</span>
+  <a id="s_sample" class="help-header" style="cursor:pointer;font-weight:bold;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px;box-shadow:1px 1px 2px #888" onclick="show_hide('sample','species')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;position:relative;top:2px" alt="show"/> Show species
+  </a></p>
+    <div id="sp_sample" style="display:none;">
+      <ul style="margin-top:1em">      <ul style="margin-top:1em">
+        <li style="font-style:italic">Bos taurus</li>
+        <li style="font-style:italic">Canis familiaris</li>
+        <li style="font-style:italic">Danio rerio</li>
+        <li style="font-style:italic">Drosophila melanogaster</li>
+        <li style="font-style:italic">Equus caballus</li>
+        <li style="font-style:italic">Gallus gallus</li>
+        <li style="font-style:italic">Homo sapiens</li>
+        <li style="font-style:italic">Macaca mulatta</li>
+        <li style="font-style:italic">Monodelphis domestica</li>
+        <li style="font-style:italic">Mus musculus</li>
+        <li style="font-style:italic">Nomascus leucogenys</li>
+        <li style="font-style:italic">Ornithorhynchus anatinus</li>
+        <li style="font-style:italic">Ovis aries</li>
+        <li style="font-style:italic">Pan troglodytes</li>
+        <li style="font-style:italic">Pongo abelii</li>
+        <li style="font-style:italic">Rattus norvegicus</li>
+        <li style="font-style:italic">Saccharomyces cerevisiae</li>
+        <li style="font-style:italic">Sus scrofa</li>
+        <li style="font-style:italic">Taeniopygia guttata</li>
+        <li style="font-style:italic">Tetraodon nigroviridis</li>
+      </ul>
+    </div>
+  </td></tr></table>
+  <div id="sample_population" style="width:850px;background-color:#F4F4F4;border-bottom:1px solid #BBB;margin-top:60px;margin-bottom:2px;padding:4px;border-top:1px solid #FF8500">
+ 
+    <div style="float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px">
+      <span style="display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;background-color:#FF8500;box-shadow:1px 1px 2px #888;vertical-align:middle"></span>sample_population</div>
+    <div style="float:right;text-align:right;padding:2px 1px">
+  
+  <a id="a_sample_population" class="help-header" style="cursor:pointer;font-weight:bold;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px;box-shadow:1px 1px 2px #888" onclick="show_hide('sample_population','columns')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;position:relative;top:2px" alt="show"/> Show columns
+  </a>
+      <span style="margin-right:5px;border-right:1px solid #000"> </span> <a href="#top" style="text-decoration:none">[Back to top]</a>
+    </div>
+    <div style="clear:both"></div>
+  </div>
+  <p style="padding:5px 0px;margin-bottom:0px;width:800px">This table resolves the many-to-many relationship between the sample and population tables; i.e. samples may belong to more than one population. Hence it is composed of rows of sample and population identifiers.</p>
+
+  <div id="div_sample_population" style="display:none">
+    <table class="ss" style="border:1px solid #667aa6;min-width:1000px;max-width:1200px;border-spacing:2px">
+      <tr class="center">
+        <th style="background-color:#667aa6;color:#FFF;padding:2px">Column</th>
+        <th style="background-color:#667aa6;color:#FFF;padding:2px">Type</th>
+        <th style="background-color:#667aa6;color:#FFF;padding:2px;min-width:80px">Default value</th>
+        <th style="background-color:#667aa6;color:#FFF;padding:2px;min-width:500px">Description</th>
+        <th style="background-color:#667aa6;color:#FFF;padding:2px;min-width:100px">Index</th>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>sample_id</b></td>
+        <td class="bg1">int(10)</td>
+        <td class="bg1">-</td>
+        <td class="bg1">Foreign key references to the <a href="#sample" style="text-decoration:none">sample</a> table.</td>
+        <td class="bg1">key: <i>sample_idx</i></td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>population_id</b></td>
+        <td class="bg2">int(10)</td>
+        <td class="bg2">-</td>
+        <td class="bg2">Foreign key references to the <a href="#population" style="text-decoration:none">population</a> table.</td>
+        <td class="bg2">key: <i>population_idx</i></td>
+      </tr>
+    </table>
+  </div>
+<table style="margin-top:20px;border:1px solid #BBB"><tr>    <td style="padding: 4px 25px 0px 2px">    <p style="font-weight:bold">See also:</p>
+  <ul style="margin-bottom:0px";>
+      <li><a href="#sample" style="text-decoration:none">sample</a></li>
+      <li><a href="#population" style="text-decoration:none">population</a></li>
+      </ul>
+    </td>
+  <td style="margin:0px;padding:0px;width:1px;border-right:1px dotted #BBB"></td>
+  <td style="padding-top:4px;padding-left:25px"><p style="margin-bottom:0px"><span style="margin-right:10px;font-weight:bold">List of species with populated data:</span>
+  <a id="s_sample_population" class="help-header" style="cursor:pointer;font-weight:bold;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px;box-shadow:1px 1px 2px #888" onclick="show_hide('sample_population','species')">
+    <img src="/i/16/plus-button.png" style="width:12px;height:12px;position:relative;top:2px" alt="show"/> Show species
+  </a></p>
+    <div id="sp_sample_population" style="display:none;">
+      <ul style="margin-top:1em">      <ul style="margin-top:1em">
+        <li style="font-style:italic">Bos taurus</li>
+        <li style="font-style:italic">Canis familiaris</li>
+        <li style="font-style:italic">Danio rerio</li>
+        <li style="font-style:italic">Drosophila melanogaster</li>
+        <li style="font-style:italic">Equus caballus</li>
+        <li style="font-style:italic">Gallus gallus</li>
+        <li style="font-style:italic">Homo sapiens</li>
+        <li style="font-style:italic">Macaca mulatta</li>
+        <li style="font-style:italic">Monodelphis domestica</li>
+        <li style="font-style:italic">Mus musculus</li>
+        <li style="font-style:italic">Ornithorhynchus anatinus</li>
+        <li style="font-style:italic">Ovis aries</li>
+        <li style="font-style:italic">Pan troglodytes</li>
+        <li style="font-style:italic">Pongo abelii</li>
+        <li style="font-style:italic">Rattus norvegicus</li>
+        <li style="font-style:italic">Saccharomyces cerevisiae</li>
+        <li style="font-style:italic">Sus scrofa</li>
+        <li style="font-style:italic">Taeniopygia guttata</li>
+        <li style="font-style:italic">Tetraodon nigroviridis</li>
+      </ul>
+    </div>
+  </td></tr></table>
 
 <div style="background-color:#F4F4F4;padding:5px 4px;margin:75px 0px 5px;border-top:2px solid #7CFC00;border-bottom:1px solid #7CFC00">
   <div id="9" style="background-color:#7CFC00;box-shadow:1px 1px 2px #888;padding:0px 8px;display:inline;vertical-align:top"></div>
@@ -3671,6 +3883,7 @@ tables that they've not used before.
         <li style="font-style:italic">Gallus gallus</li>
         <li style="font-style:italic">Homo sapiens</li>
         <li style="font-style:italic">Mus musculus</li>
+        <li style="font-style:italic">Ovis aries</li>
         <li style="font-style:italic">Rattus norvegicus</li>
         <li style="font-style:italic">Sus scrofa</li>
       </ul>
@@ -3773,7 +3986,7 @@ tables that they've not used before.
 
   <div id="ex_source" style="display:none;">
     <table class="ss" style="width:50%;margin-top:20px;margin-left:10px;border-spacing:2px">
-      <tr><th>source_id</th><th>name</th><th>version</th><th>description</th><th>url</th><th>type</th><th>somatic_status</th><th>data_types</th></tr>      <tr><td>1</td><td>dbSNP</td><td>138</td><td>Variants (including SNPs and indels) imported from dbSNP (mapped to GRCh38)</td><td>http://www.ncbi.nlm.nih.gov/projects/SNP/</td><td></td><td>mixed</td><td>variation</td></tr>      <tr class="bg2"><td>2</td><td>Archive dbSNP</td><td>138</td><td>Former variants names imported from dbSNP</td><td>http://www.ncbi.nlm.nih.gov/projects/SNP/</td><td></td><td>mixed</td><td>variation_synonym</td></tr>      <tr><td>3</td><td>LSDB</td><td></td><td>Variants dbSNP annotates as being from LSDBs</td><td>http://www.ncbi.nlm.nih.gov/projects/SNP/</td><td></td><td>germline</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>4</td><td>PubMed</td><td>20140601</td><td>Variants with pubmed citations</td><td>http://www.ncbi.nlm.nih.gov/pubmed/</td><td></td><td>germline</td><td></td></tr>      <tr><td>6</td><td>PhenCode</td><td>20140430</td><td>PhenCode is a collaborative project to better understand the relationship between genotype and phenotype in humans</td><td>http://phencode.bx.psu.edu/</td><td></td><td></td><td>variation,variation_synonym</td></tr>      <tr class="bg2"><td>7</td><td>ESP</td><td>20140509</td><td>Data from NHLBI ESP version v.0.0.28. The goal of the NHLBI GO Exome Sequencing Project is to discover novel genes and mechanisms contributing to heart, lung and blood disorders by sequencing the protein coding regions of the human genome across diverse, </td><td>http://evs.gs.washington.edu/EVS/</td><td></td><td>germline</td><td>variation,variation_synonym</td></tr>      <tr><td>8</td><td>HGMD-PUBLIC</td><td>20142</td><td>Variants from HGMD-PUBLIC dataset June 2014 (mapped to GRCh38)</td><td>http://www.hgmd.cf.ac.uk/ac/index.php</td><td></td><td>germline</td><td>variation,phenotype_feature</td></tr>      <tr class="bg2"><td>9</td><td>dbPEX</td><td></td><td>dbPEX, PEX Gene Database</td><td>http://www.dbpex.org/home.php?select_db=PEX1</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr><td>10</td><td>KAT6BDB</td><td></td><td>K(lysine) acetyltransferase 6B database, BCM</td><td>https://grenada.lumc.nl/LOVD2/BCM/home.php?select_db=KAT6B</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>11</td><td>DGVa</td><td>201410</td><td>Database of Genomic Variants Archive</td><td>http://www.ebi.ac.uk/dgva/</td><td></td><td>mixed</td><td>structural_variation,phenotype_feature,study</td></tr>      <tr><td>13</td><td>NHGRI_GWAS_catalog</td><td>20141015</td><td>Variants associated with phenotype data from the NHGRI GWAS catalog</td><td>http://www.genome.gov/gwastudies/</td><td></td><td>germline</td><td>phenotype_feature,study</td></tr>      <tr class="bg2"><td>15</td><td>EGA</td><td>201410</td><td>Variants imported from the European Genome-phenome Archive with phenotype association</td><td>http://www.ebi.ac.uk/ega/</td><td></td><td>germline</td><td>study</td></tr>      <tr><td>16</td><td>Uniprot</td><td>20141001</td><td>Variants with protein annotation imported from Uniprot</td><td>http://www.uniprot.org/</td><td></td><td>mixed</td><td>variation_synonym,phenotype_feature,study</td></tr>      <tr class="bg2"><td>18</td><td>OMIM</td><td>20141016</td><td>Variations linked to entries in the Online Mendelian Inheritance in Man (OMIM) database</td><td>http://www.omim.org/</td><td></td><td>germline</td><td>phenotype_feature,study</td></tr>      <tr><td>20</td><td>Illumina_CytoSNP12v1</td><td>1</td><td>Variants from the Illumina Cyto SNP-12 v1 whole genome SNP genotyping chip designed for cytogenetic analysis</td><td>http://www.illumina.com/</td><td>chip</td><td>germline</td><td>structural_variation</td></tr>      <tr class="bg2"><td>21</td><td>Illumina_Human660W-quad</td><td></td><td>Variants from the Illumina Human 660W-Quad whole genome SNP genotyping chip designed for association studies</td><td>http://www.illumina.com/</td><td>chip</td><td>germline</td><td>structural_variation</td></tr>      <tr><td>22</td><td>Illumina_Human1M-duo</td><td>3</td><td>Variants from the Illumina Human 1M-Duo v3 whole genome SNP genotyping chip designed for association studies</td><td>http://www.illumina.com/</td><td>chip</td><td>germline</td><td>structural_variation</td></tr>      <tr class="bg2"><td>23</td><td>Affy GenomeWideSNP_6 CNV</td><td></td><td>Copy Number Variation (CNV) probes from the Affymetrix Genome-Wide Human SNP Array 6.0</td><td>http://www.affymetrix.com/</td><td>chip</td><td>germline</td><td>structural_variation</td></tr>      <tr><td>26</td><td>COSMIC</td><td>71</td><td>Somatic mutations found in human cancers from the COSMIC project</td><td>http://cancer.sanger.ac.uk/cancergenome/projects/cosmic/</td><td></td><td>somatic</td><td>variation,phenotype_feature</td></tr>      <tr class="bg2"><td>32</td><td>ClinVar</td><td>201410</td><td>Variants of clinical significance imported from ClinVar</td><td>http://www.ncbi.nlm.nih.gov/projects/SNP/</td><td></td><td>germline</td><td>variation,phenotype_feature</td></tr>      <tr><td>33</td><td>DDG2P</td><td>20140718</td><td>Developmental Disorders Genotype-to-Phenotype Database</td><td>http://decipher.sanger.ac.uk/</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr class="bg2"><td>34</td><td>GIANT</td><td>1</td><td>The Genetic Investigation of ANthropometric Traits (GIANT) consortium is an international collaboration that seeks to identify genetic loci that modulate human body size and shape, including height and measures of obesity.</td><td>http://www.broadinstitute.org/collaboration/giant/index.php/Main_Page</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr><td>35</td><td>OMIMGENE</td><td>20140602</td><td>Online Mendelian Inheritance in Man (OMIM) database</td><td>http://www.omim.org/</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr class="bg2"><td>36</td><td>Orphanet</td><td>20140625</td><td>The portal for rare diseases and drugs</td><td>http://www.orpha.net/</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr><td>37</td><td>MAGIC</td><td>1</td><td>MAGIC (the Meta-Analyses of Glucose and Insulin-related traits Consortium) represents a collaborative effort to combine data from multiple GWAS to identify additional loci that impact on glycemic and metabolic traits</td><td>http://www.magicinvestigators.org/</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr class="bg2"><td>39</td><td>HbVar</td><td></td><td>A Database of Human Hemoglobin Variants and Thalassemias</td><td>http://globin.bx.psu.edu/hbvar/menu.html</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr><td>40</td><td>LMDD</td><td></td><td>Leiden Muscular Dystrophy Database</td><td>http://www.dmd.nl/</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>41</td><td>OIVD</td><td></td><td>Osteogenesis Imperfecta Variant Database</td><td>https://oi.gene.le.ac.uk/home.php</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr><td>42</td><td>PAHdb</td><td></td><td>Phenylalanine hydroxylas database</td><td>http://www.pahdb.mcgill.ca/</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>43</td><td>Infevers</td><td></td><td>The registry of Hereditary Auto-inflammatory Disorders Mutations</td><td>http://fmf.igh.cnrs.fr/ISSAID/infevers/index.php</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr><td>46</td><td>dbGaP</td><td>201405</td><td>The database of Genotypes and Phenotypes.</td><td>http://www.ncbi.nlm.nih.gov/gap</td><td></td><td>germline</td><td>phenotype_feature,study</td></tr>      <tr class="bg2"><td>47</td><td>AMDGC</td><td>1</td><td>The AMD Gene consortium is an international collaboration that seeks to identify genetic loci associated with age-related macular degeneration .</td><td>http://www.sph.umich.edu/csg/abecasis/public/amdgene2012/</td><td></td><td>germline</td><td>phenotype_feature,study</td></tr>      <tr><td>48</td><td>GEFOS</td><td>1</td><td>The GEnetic Factors for OSteoporosis Consortium international collaboration that seeks to identify common risk gene variants for osteoporosis</td><td>http://www.gefos.org</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr class="bg2"><td>49</td><td>IIBDGC</td><td>1</td><td>International Inflammatory Bowel Disease Genetics Consortium</td><td>http://www.ibdgenetics.org/</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr><td>50</td><td>Teslovich</td><td>1</td><td>Biological, clinical and population relevance of 95 loci for blood lipids</td><td>http://www.sph.umich.edu/csg/abecasis/public/lipids2010/</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr class="bg2"><td>51</td><td>HumanCoreExome-12</td><td>1</td><td>Variants from the Illumina HumanCoreExome-12 v1 genotyping chip.</td><td>http://www.illumina.com/</td><td>chip</td><td>germline</td><td>variation</td></tr>    </table>
+      <tr><th>source_id</th><th>name</th><th>version</th><th>description</th><th>url</th><th>type</th><th>somatic_status</th><th>data_types</th></tr>      <tr><td>1</td><td>dbSNP</td><td>142</td><td>Variants (including SNPs and indels) imported from dbSNP</td><td>http://www.ncbi.nlm.nih.gov/projects/SNP/</td><td></td><td>mixed</td><td>variation</td></tr>      <tr class="bg2"><td>2</td><td>Archive dbSNP</td><td>142</td><td>Former variants names imported from dbSNP</td><td>http://www.ncbi.nlm.nih.gov/projects/SNP/</td><td></td><td>mixed</td><td>variation_synonym</td></tr>      <tr><td>3</td><td>LSDB</td><td></td><td>Variants dbSNP annotates as being from LSDBs</td><td>http://www.ncbi.nlm.nih.gov/projects/SNP/</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>6</td><td>PhenCode</td><td>20140430</td><td>PhenCode is a collaborative project to better understand the relationship between genotype and phenotype in humans</td><td>http://phencode.bx.psu.edu/</td><td></td><td></td><td>variation,variation_synonym</td></tr>      <tr><td>7</td><td>ESP</td><td>20141103</td><td>Data from NHLBI ESP version v.0.0.30. The goal of the NHLBI GO Exome Sequencing Project is to discover novel genes and mechanisms contributing to heart, lung and blood disorders by sequencing the protein coding regions of the human genome.</td><td>http://evs.gs.washington.edu/EVS/</td><td></td><td>germline</td><td>variation</td></tr>      <tr class="bg2"><td>8</td><td>HGMD-PUBLIC</td><td>20144</td><td>Variants from HGMD-PUBLIC dataset December 2014 (mapped to GRCh38)</td><td>http://www.hgmd.cf.ac.uk/ac/index.php</td><td></td><td>germline</td><td>variation,phenotype_feature</td></tr>      <tr><td>9</td><td>PAHdb</td><td></td><td>Phenylalanine hydroxylase database</td><td>http://www.pahdb.mcgill.ca/</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>10</td><td>KAT6BDB</td><td></td><td>K(lysine) acetyltransferase 6B database, BCM</td><td>https://grenada.lumc.nl/LOVD2/BCM/home.php?select_db=KAT6B</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr><td>11</td><td>DGVa</td><td>201505</td><td>Database of Genomic Variants Archive</td><td>http://www.ebi.ac.uk/dgva/</td><td></td><td>mixed</td><td>structural_variation,phenotype_feature,study</td></tr>      <tr class="bg2"><td>13</td><td>NHGRI-EBI GWAS catalog</td><td>20150525</td><td>Variants associated with phenotype data from the NHGRI-EBI GWAS catalog</td><td>http://www.ebi.ac.uk/gwas/</td><td></td><td>germline</td><td>phenotype_feature,study</td></tr>      <tr><td>15</td><td>EGA</td><td>201505</td><td>Variants imported from the European Genome-phenome Archive with phenotype association</td><td>http://www.ebi.ac.uk/ega/</td><td></td><td>germline</td><td>study</td></tr>      <tr class="bg2"><td>16</td><td>Uniprot</td><td>20150429</td><td>Variants with protein annotation imported from Uniprot</td><td>http://www.uniprot.org/</td><td></td><td>mixed</td><td>variation_synonym,phenotype_feature,study</td></tr>      <tr><td>18</td><td>OMIM</td><td>20150525</td><td>Variations linked to entries in the Online Mendelian Inheritance in Man (OMIM) database</td><td>http://www.omim.org/</td><td></td><td>germline</td><td>phenotype_feature,study</td></tr>      <tr class="bg2"><td>20</td><td>Illumina_CytoSNP12v1</td><td>1</td><td>Variants from the Illumina Cyto SNP-12 v1 whole genome SNP genotyping chip designed for cytogenetic analysis</td><td>http://www.illumina.com/</td><td>chip</td><td>germline</td><td>structural_variation</td></tr>      <tr><td>21</td><td>Illumina_Human660W-quad</td><td></td><td>Variants from the Illumina Human 660W-Quad whole genome SNP genotyping chip designed for association studies</td><td>http://www.illumina.com/</td><td>chip</td><td>germline</td><td>structural_variation</td></tr>      <tr class="bg2"><td>22</td><td>Illumina_Human1M-duo</td><td>3</td><td>Variants from the Illumina Human 1M-Duo v3 whole genome SNP genotyping chip designed for association studies</td><td>http://www.illumina.com/</td><td>chip</td><td>germline</td><td>structural_variation</td></tr>      <tr><td>23</td><td>Affy GenomeWideSNP_6 CNV</td><td></td><td>Copy Number Variation (CNV) probes from the Affymetrix Genome-Wide Human SNP Array 6.0</td><td>http://www.affymetrix.com/</td><td>chip</td><td>germline</td><td>structural_variation</td></tr>      <tr class="bg2"><td>26</td><td>COSMIC</td><td>71</td><td>Somatic mutations found in human cancers from the COSMIC project (mapped to GRCh38)</td><td>http://cancer.sanger.ac.uk/cancergenome/projects/cosmic/</td><td></td><td>somatic</td><td>variation,phenotype_feature</td></tr>      <tr><td>32</td><td>ClinVar</td><td>201505</td><td>Variants of clinical significance imported from ClinVar</td><td>http://www.ncbi.nlm.nih.gov/projects/SNP/</td><td></td><td>germline</td><td>variation,phenotype_feature</td></tr>      <tr class="bg2"><td>33</td><td>DDG2P</td><td>20141118</td><td>Developmental Disorders Genotype-to-Phenotype Database</td><td>https://decipher.sanger.ac.uk/ddd#ddgenes</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr><td>34</td><td>GIANT</td><td>1</td><td>The Genetic Investigation of ANthropometric Traits (GIANT) consortium is an international collaboration that seeks to identify genetic loci that modulate human body size and shape, including height and measures of obesity.</td><td>http://www.broadinstitute.org/collaboration/giant/index.php/Main_Page</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr class="bg2"><td>35</td><td>MIM disease</td><td>20150612</td><td>Online Mendelian Inheritance in Man (OMIM) database</td><td>http://www.omim.org/</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr><td>36</td><td>Orphanet</td><td>20140625</td><td>The portal for rare diseases and drugs</td><td>http://www.orpha.net/</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr class="bg2"><td>37</td><td>MAGIC</td><td>1</td><td>MAGIC (the Meta-Analyses of Glucose and Insulin-related traits Consortium) represents a collaborative effort to combine data from multiple GWAS to identify additional loci that impact on glycemic and metabolic traits</td><td>http://www.magicinvestigators.org/</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr><td>39</td><td>HbVar</td><td></td><td>A Database of Human Hemoglobin Variants and Thalassemias</td><td>http://globin.bx.psu.edu/hbvar/menu.html</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>40</td><td>LMDD</td><td></td><td>Leiden Muscular Dystrophy Database</td><td>http://www.dmd.nl/</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr><td>41</td><td>OIVD</td><td></td><td>Osteogenesis Imperfecta Variant Database</td><td>https://oi.gene.le.ac.uk/home.php</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>42</td><td>dbPEX</td><td></td><td>dbPEX, PEX Gene Database</td><td>http://www.dbpex.org/home.php?select_db=PEX1</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr><td>43</td><td>Infevers</td><td></td><td>The registry of Hereditary Auto-inflammatory Disorders Mutations </td><td>http://fmf.igh.cnrs.fr/ISSAID/infevers/index.php</td><td>lsdb</td><td>germline</td><td>variation_synonym</td></tr>      <tr class="bg2"><td>46</td><td>dbGaP</td><td>201405</td><td>The database of Genotypes and Phenotypes.</td><td>http://www.ncbi.nlm.nih.gov/gap</td><td></td><td>germline</td><td>phenotype_feature,study</td></tr>      <tr><td>47</td><td>AMDGC</td><td>1</td><td>The AMD Gene consortium is an international collaboration that seeks to identify genetic loci associated with age-related macular degeneration .</td><td>http://www.sph.umich.edu/csg/abecasis/public/amdgene2012/</td><td></td><td>germline</td><td>phenotype_feature,study</td></tr>      <tr class="bg2"><td>48</td><td>GEFOS</td><td>1</td><td>The GEnetic Factors for OSteoporosis Consortium international collaboration that seeks to identify common risk gene variants for osteoporosis</td><td>http://www.gefos.org</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr><td>49</td><td>IIBDGC</td><td>1</td><td>International Inflammatory Bowel Disease Genetics Consortium</td><td>http://www.ibdgenetics.org/</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr class="bg2"><td>50</td><td>Teslovich</td><td>1</td><td>Biological, clinical and population relevance of 95 loci for blood lipids</td><td>http://www.sph.umich.edu/csg/abecasis/public/lipids2010/</td><td></td><td>germline</td><td>phenotype_feature</td></tr>      <tr><td>51</td><td>HumanCoreExome-12</td><td>1</td><td>Variants from the Illumina HumanCoreExome-12 v1 genotyping chip.</td><td>http://www.illumina.com/</td><td>chip</td><td>germline</td><td>variation</td></tr>    </table>
   </div></div><table style="margin-top:20px;border:1px solid #BBB"><tr>    <td style="padding: 4px 25px 0px 2px">    <p style="font-weight:bold">See also:</p>
   <ul style="margin-bottom:0px";>
       <li><a href="#variation" style="text-decoration:none">variation</a></li>
@@ -3989,6 +4202,7 @@ tables that they've not used before.
         <li style="font-style:italic">Gallus gallus</li>
         <li style="font-style:italic">Homo sapiens</li>
         <li style="font-style:italic">Mus musculus</li>
+        <li style="font-style:italic">Ovis aries</li>
         <li style="font-style:italic">Rattus norvegicus</li>
         <li style="font-style:italic">Sus scrofa</li>
       </ul>
@@ -4038,7 +4252,7 @@ tables that they've not used before.
         <td class="bg2">varchar(255)</td>
         <td class="bg2">NULL</td>
         <td class="bg2">The external identifier or name of the variation. e.g. "esv9549".</td>
-        <td class="bg2">key: <i>name_idx</i></td>
+        <td class="bg2">unique: <i>variation_name</i></td>
       </tr>
 
       <tr>
@@ -4135,6 +4349,7 @@ tables that they've not used before.
         <li style="font-style:italic">Homo sapiens</li>
         <li style="font-style:italic">Macaca mulatta</li>
         <li style="font-style:italic">Mus musculus</li>
+        <li style="font-style:italic">Ovis aries</li>
         <li style="font-style:italic">Sus scrofa</li>
       </ul>
     </div>
@@ -4200,6 +4415,7 @@ tables that they've not used before.
         <li style="font-style:italic">Homo sapiens</li>
         <li style="font-style:italic">Macaca mulatta</li>
         <li style="font-style:italic">Mus musculus</li>
+        <li style="font-style:italic">Ovis aries</li>
         <li style="font-style:italic">Sus scrofa</li>
       </ul>
     </div>
@@ -4414,6 +4630,7 @@ tables that they've not used before.
         <li style="font-style:italic">Homo sapiens</li>
         <li style="font-style:italic">Macaca mulatta</li>
         <li style="font-style:italic">Mus musculus</li>
+        <li style="font-style:italic">Ovis aries</li>
         <li style="font-style:italic">Sus scrofa</li>
       </ul>
     </div>
@@ -4431,7 +4648,7 @@ tables that they've not used before.
     </div>
     <div style="clear:both"></div>
   </div>
-  <p style="padding:5px 0px;margin-bottom:0px;width:800px">This table stores individual and strain information for structural variants and their supporting evidences.</p>
+  <p style="padding:5px 0px;margin-bottom:0px;width:800px">This table stores sample and strain information for structural variants and their supporting evidences.</p>
 
   <div id="div_structural_variation_sample" style="display:none">
     <table class="ss" style="border:1px solid #667aa6;min-width:1000px;max-width:1200px;border-spacing:2px">
@@ -4460,26 +4677,19 @@ tables that they've not used before.
       </tr>
 
       <tr>
-        <td class="bg1"><b>individual_id</b></td>
+        <td class="bg1"><b>sample_id</b></td>
         <td class="bg1">int(10)</td>
         <td class="bg1">NULL</td>
-        <td class="bg1">Foreign key references to the <a href="#individual" style="text-decoration:none">individual</a> table. Defines the individual or sample name.</td>
-        <td class="bg1">key: <i>individual_idx</i></td>
-      </tr>
-
-      <tr>
-        <td class="bg2"><b>strain_id</b></td>
-        <td class="bg2">int(10)</td>
-        <td class="bg2">NULL</td>
-        <td class="bg2">Foreign key references to the <a href="#individual" style="text-decoration:none">individual</a> table. Defines the strain name.</td>
-        <td class="bg2">key: <i>strain_idx</i></td>
+        <td class="bg1">Foreign key references to the <a href="#sample" style="text-decoration:none">sample</a> table. Defines the individual or sample name.</td>
+        <td class="bg1">key: <i>sample_idx</i></td>
       </tr>
     </table>
   </div>
 <table style="margin-top:20px;border:1px solid #BBB"><tr>    <td style="padding: 4px 25px 0px 2px">    <p style="font-weight:bold">See also:</p>
   <ul style="margin-bottom:0px";>
       <li><a href="#structural_variation" style="text-decoration:none">structural_variation</a></li>
-      <li><a href="#individual" style="text-decoration:none">individual</a></li>
+      <li><a href="#sample" style="text-decoration:none">sample</a></li>
+      <li><a href="#individudal" style="text-decoration:none">individudal</a></li>
       </ul>
     </td>
   <td style="margin:0px;padding:0px;width:1px;border-right:1px dotted #BBB"></td>
@@ -4496,6 +4706,7 @@ tables that they've not used before.
         <li style="font-style:italic">Homo sapiens</li>
         <li style="font-style:italic">Macaca mulatta</li>
         <li style="font-style:italic">Mus musculus</li>
+        <li style="font-style:italic">Ovis aries</li>
         <li style="font-style:italic">Sus scrofa</li>
       </ul>
     </div>
@@ -4581,7 +4792,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>consequence_types</b></td>
-        <td class="bg1">SET:<ul style="margin-bottom:0px">  <li style="line-height:12px">splice_acceptor_variant</li>  <li style="line-height:12px">splice_donor_variant</li>  <li style="line-height:12px">stop_lost</li>  <li style="line-height:12px">coding_sequence_variant</li>  <li style="line-height:12px">missense_variant</li>  <li style="line-height:12px">stop_gained</li>  <li style="line-height:12px">synonymous_variant</li>  <li style="line-height:12px">frameshift_variant</li>  <li style="line-height:12px">non_coding_transcript_variant</li>  <li style="line-height:12px">non_coding_transcript_exon_variant</li>  <li style="line-height:12px">mature_miRNA_variant</li>  <li style="line-height:12px">NMD_transcript_variant</li>  <li style="line-height:12px">5_prime_UTR_variant</li>  <li style="line-height:12px">3_prime_UTR_variant</li>  <li style="line-height:12px">incomplete_terminal_codon_variant</li>  <li style="line-height:12px">intron_variant</li>  <li style="line-height:12px">splice_region_variant</li>  <li style="line-height:12px">downstream_gene_variant</li>  <li style="line-height:12px">upstream_gene_variant</li>  <li style="line-height:12px">initiator_codon_variant</li>  <li style="line-height:12px">stop_retained_variant</li>  <li style="line-height:12px">inframe_insertion</li>  <li style="line-height:12px">inframe_deletion</li>  <li style="line-height:12px">transcript_ablation</li>  <li style="line-height:12px">transcript_fusion</li>  <li style="line-height:12px">transcript_amplification</li>  <li style="line-height:12px">transcript_translocation</li>  <li style="line-height:12px">TF_binding_site_variant</li>  <li style="line-height:12px">TFBS_ablation</li>  <li style="line-height:12px">TFBS_fusion</li>  <li style="line-height:12px">TFBS_amplification</li>  <li style="line-height:12px">TFBS_translocation</li>  <li style="line-height:12px">regulatory_region_variant</li>  <li style="line-height:12px">regulatory_region_ablation</li>  <li style="line-height:12px">regulatory_region_fusion</li>  <li style="line-height:12px">regulatory_region_amplification</li>  <li style="line-height:12px">regulatory_region_translocation</li>  <li style="line-height:12px">feature_elongation</li>  <li style="line-height:12px">feature_truncation </li></ul></td>
+        <td class="bg1">SET:<ul style="margin-bottom:0px">  <li style="line-height:12px">TF_binding_site_variant</li>  <li style="line-height:12px">TFBS_ablation</li>  <li style="line-height:12px">TFBS_fusion</li>  <li style="line-height:12px">TFBS_amplification</li>  <li style="line-height:12px">TFBS_translocation </li></ul></td>
         <td class="bg1">NULL</td>
         <td class="bg1">The consequence(s) of the variant allele on this motif_feature.<br /> The list of consequence descriptions is available <a href="/info/genome/variation/predicted_data.html#consequences">here</a>.</td>
         <td class="bg1">key: <i>consequence_type_idx</i></td>
@@ -4589,7 +4800,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>motif_name</b></td>
-        <td class="bg2">text</td>
+        <td class="bg2">varchar(60)</td>
         <td class="bg2">NULL</td>
         <td class="bg2">The display label of the motif.</td>
         <td class="bg2"></td>
@@ -4720,7 +4931,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>consequence_types</b></td>
-        <td class="bg1">SET:<ul style="margin-bottom:0px">  <li style="line-height:12px">splice_acceptor_variant</li>  <li style="line-height:12px">splice_donor_variant</li>  <li style="line-height:12px">stop_lost</li>  <li style="line-height:12px">coding_sequence_variant</li>  <li style="line-height:12px">missense_variant</li>  <li style="line-height:12px">stop_gained</li>  <li style="line-height:12px">synonymous_variant</li>  <li style="line-height:12px">frameshift_variant</li>  <li style="line-height:12px">non_coding_transcript_variant</li>  <li style="line-height:12px">non_coding_transcript_exon_variant</li>  <li style="line-height:12px">mature_miRNA_variant</li>  <li style="line-height:12px">NMD_transcript_variant</li>  <li style="line-height:12px">5_prime_UTR_variant</li>  <li style="line-height:12px">3_prime_UTR_variant</li>  <li style="line-height:12px">incomplete_terminal_codon_variant</li>  <li style="line-height:12px">intron_variant</li>  <li style="line-height:12px">splice_region_variant</li>  <li style="line-height:12px">downstream_gene_variant</li>  <li style="line-height:12px">upstream_gene_variant</li>  <li style="line-height:12px">initiator_codon_variant</li>  <li style="line-height:12px">stop_retained_variant</li>  <li style="line-height:12px">inframe_insertion</li>  <li style="line-height:12px">inframe_deletion</li>  <li style="line-height:12px">transcript_ablation</li>  <li style="line-height:12px">transcript_fusion</li>  <li style="line-height:12px">transcript_amplification</li>  <li style="line-height:12px">transcript_translocation</li>  <li style="line-height:12px">TF_binding_site_variant</li>  <li style="line-height:12px">TFBS_ablation</li>  <li style="line-height:12px">TFBS_fusion</li>  <li style="line-height:12px">TFBS_amplification</li>  <li style="line-height:12px">TFBS_translocation</li>  <li style="line-height:12px">regulatory_region_variant</li>  <li style="line-height:12px">regulatory_region_ablation</li>  <li style="line-height:12px">regulatory_region_fusion</li>  <li style="line-height:12px">regulatory_region_amplification</li>  <li style="line-height:12px">regulatory_region_translocation</li>  <li style="line-height:12px">feature_elongation</li>  <li style="line-height:12px">feature_truncation </li></ul></td>
+        <td class="bg1">SET:<ul style="margin-bottom:0px">  <li style="line-height:12px">regulatory_region_variant</li>  <li style="line-height:12px">regulatory_region_ablation</li>  <li style="line-height:12px">regulatory_region_fusion</li>  <li style="line-height:12px">regulatory_region_amplification</li>  <li style="line-height:12px">regulatory_region_translocation </li></ul></td>
         <td class="bg1">NULL</td>
         <td class="bg1">The consequence(s) of the variant allele on this regulatory feature.<br /> The list of consequence descriptions is available <a href="/info/genome/variation/predicted_data.html#consequences">here</a>.</td>
         <td class="bg1">key: <i>consequence_type_idx</i></td>
@@ -4811,7 +5022,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg2"><b>consequence_types</b></td>
-        <td class="bg2">SET:<ul style="margin-bottom:0px">  <li style="line-height:12px">splice_acceptor_variant</li>  <li style="line-height:12px">splice_donor_variant</li>  <li style="line-height:12px">stop_lost</li>  <li style="line-height:12px">coding_sequence_variant</li>  <li style="line-height:12px">missense_variant</li>  <li style="line-height:12px">stop_gained</li>  <li style="line-height:12px">synonymous_variant</li>  <li style="line-height:12px">frameshift_variant</li>  <li style="line-height:12px">non_coding_transcript_variant</li>  <li style="line-height:12px">non_coding_transcript_exon_variant</li>  <li style="line-height:12px">mature_miRNA_variant</li>  <li style="line-height:12px">NMD_transcript_variant</li>  <li style="line-height:12px">5_prime_UTR_variant</li>  <li style="line-height:12px">3_prime_UTR_variant</li>  <li style="line-height:12px">incomplete_terminal_codon_variant</li>  <li style="line-height:12px">intron_variant</li>  <li style="line-height:12px">splice_region_variant</li>  <li style="line-height:12px">downstream_gene_variant</li>  <li style="line-height:12px">upstream_gene_variant</li>  <li style="line-height:12px">initiator_codon_variant</li>  <li style="line-height:12px">stop_retained_variant</li>  <li style="line-height:12px">inframe_insertion</li>  <li style="line-height:12px">inframe_deletion</li>  <li style="line-height:12px">transcript_ablation</li>  <li style="line-height:12px">transcript_fusion</li>  <li style="line-height:12px">transcript_amplification</li>  <li style="line-height:12px">transcript_translocation</li>  <li style="line-height:12px">TFBS_ablation</li>  <li style="line-height:12px">TFBS_fusion</li>  <li style="line-height:12px">TFBS_amplification</li>  <li style="line-height:12px">TFBS_translocation</li>  <li style="line-height:12px">regulatory_region_ablation</li>  <li style="line-height:12px">regulatory_region_fusion</li>  <li style="line-height:12px">regulatory_region_amplification</li>  <li style="line-height:12px">regulatory_region_translocation</li>  <li style="line-height:12px">feature_elongation</li>  <li style="line-height:12px">feature_truncation </li></ul></td>
+        <td class="bg2">SET:<ul style="margin-bottom:0px">  <li style="line-height:12px">splice_acceptor_variant</li>  <li style="line-height:12px">splice_donor_variant</li>  <li style="line-height:12px">stop_lost</li>  <li style="line-height:12px">coding_sequence_variant</li>  <li style="line-height:12px">missense_variant</li>  <li style="line-height:12px">stop_gained</li>  <li style="line-height:12px">synonymous_variant</li>  <li style="line-height:12px">frameshift_variant</li>  <li style="line-height:12px">non_coding_transcript_variant</li>  <li style="line-height:12px">non_coding_transcript_exon_variant</li>  <li style="line-height:12px">mature_miRNA_variant</li>  <li style="line-height:12px">NMD_transcript_variant</li>  <li style="line-height:12px">5_prime_UTR_variant</li>  <li style="line-height:12px">3_prime_UTR_variant</li>  <li style="line-height:12px">incomplete_terminal_codon_variant</li>  <li style="line-height:12px">intron_variant</li>  <li style="line-height:12px">splice_region_variant</li>  <li style="line-height:12px">downstream_gene_variant</li>  <li style="line-height:12px">upstream_gene_variant</li>  <li style="line-height:12px">start_lost</li>  <li style="line-height:12px">stop_retained_variant</li>  <li style="line-height:12px">inframe_insertion</li>  <li style="line-height:12px">inframe_deletion</li>  <li style="line-height:12px">transcript_ablation</li>  <li style="line-height:12px">transcript_fusion</li>  <li style="line-height:12px">transcript_amplification</li>  <li style="line-height:12px">transcript_translocation</li>  <li style="line-height:12px">TFBS_ablation</li>  <li style="line-height:12px">TFBS_fusion</li>  <li style="line-height:12px">TFBS_amplification</li>  <li style="line-height:12px">TFBS_translocation</li>  <li style="line-height:12px">regulatory_region_ablation</li>  <li style="line-height:12px">regulatory_region_fusion</li>  <li style="line-height:12px">regulatory_region_amplification</li>  <li style="line-height:12px">regulatory_region_translocation</li>  <li style="line-height:12px">feature_elongation</li>  <li style="line-height:12px">feature_truncation</li>  <li style="line-height:12px">protein_altering_variant </li></ul></td>
         <td class="bg2">NULL</td>
         <td class="bg2">The consequence(s) of the variant allele on this transcript.<br /> The list of consequence descriptions is available <a href="/info/genome/variation/predicted_data.html#consequences">here</a>. </td>
         <td class="bg2">key: <i>consequence_type_idx</i></td>
@@ -4931,7 +5142,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>sift_prediction</b></td>
-        <td class="bg1">ENUM:<ul style="margin-bottom:0px">  <li style="line-height:12px">tolerated</li>  <li style="line-height:12px"> deleterious</li></ul></td>
+        <td class="bg1">ENUM:<ul style="margin-bottom:0px">  <li style="line-height:12px">tolerated</li>  <li style="line-height:12px"> deleterious</li>  <li style="line-height:12px"> tolerated - low confidence</li>  <li style="line-height:12px"> deleterious - low confidence</li></ul></td>
         <td class="bg1">NULL</td>
         <td class="bg1">The SIFT prediction for the effect of this allele on the protein </td>
         <td class="bg1"></td>
@@ -5048,6 +5259,7 @@ tables that they've not used before.
         <li style="font-style:italic">Bos taurus</li>
         <li style="font-style:italic">Canis familiaris</li>
         <li style="font-style:italic">Danio rerio</li>
+        <li style="font-style:italic">Drosophila melanogaster</li>
         <li style="font-style:italic">Equus caballus</li>
         <li style="font-style:italic">Felis catus</li>
         <li style="font-style:italic">Gallus gallus</li>
@@ -5530,7 +5742,7 @@ tables that they've not used before.
         <td class="bg1"><b>count</b></td>
         <td class="bg1">int(11)</td>
         <td class="bg1">NULL</td>
-        <td class="bg1">Number of individuals in the population where this allele is found.</td>
+        <td class="bg1">Number of individuals/samples in the population where this allele is found.</td>
         <td class="bg1"></td>
       </tr>
 
@@ -5707,7 +5919,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>evidence_attribs</b></td>
-        <td class="bg1">SET:<ul style="margin-bottom:0px">  <li style="line-height:12px">367</li>  <li style="line-height:12px">368</li>  <li style="line-height:12px">369</li>  <li style="line-height:12px">370</li>  <li style="line-height:12px">371</li>  <li style="line-height:12px">372</li></ul></td>
+        <td class="bg1">SET:<ul style="margin-bottom:0px">  <li style="line-height:12px">367</li>  <li style="line-height:12px">368</li>  <li style="line-height:12px">369</li>  <li style="line-height:12px">370</li>  <li style="line-height:12px">371</li>  <li style="line-height:12px">372</li>  <li style="line-height:12px">418</li></ul></td>
         <td class="bg1">NULL</td>
         <td class="bg1">A summary of the evidence supporting a variant as a guide to its potential reliability. See the evidence descriptions <a href="/info/genome/variation/data_description.html#evidence_status">here</a>.</td>
         <td class="bg1"></td>
@@ -5728,7 +5940,7 @@ tables that they've not used before.
       <li><a href="#failed_variation" style="text-decoration:none">failed_variation</a></li>
       <li><a href="#variation_feature" style="text-decoration:none">variation_feature</a></li>
       <li><a href="#allele" style="text-decoration:none">allele</a></li>
-      <li><a href="#individual_genotype_multiple_bp" style="text-decoration:none">individual_genotype_multiple_bp</a></li>
+      <li><a href="#sample_genotype_multiple_bp" style="text-decoration:none">sample_genotype_multiple_bp</a></li>
       <li><a href="#compressed_genotype_var" style="text-decoration:none">compressed_genotype_var</a></li>
       <li><a href="#attrib" style="text-decoration:none">attrib</a></li>
       <li><a href="#source" style="text-decoration:none">source</a></li>
@@ -5800,11 +6012,11 @@ tables that they've not used before.
       </tr>
 
       <tr>
-        <td class="bg2"><b>attrib_type_id</b></td>
+        <td class="bg2"><b>attrib_id</b></td>
         <td class="bg2">INT(11)</td>
         <td class="bg2">NULL</td>
-        <td class="bg2">Foreign key references <a href="#attrib_type" style="text-decoration:none">attrib_type</a> table, describes the type of attribute</td>
-        <td class="bg2">key: <i>type_value_idx</i></td>
+        <td class="bg2">Foreign key references <a href="#attrib" style="text-decoration:none">attrib</a> table, describes the attribute</td>
+        <td class="bg2">key: <i>attrib_value_idx</i></td>
       </tr>
 
       <tr>
@@ -5812,14 +6024,14 @@ tables that they've not used before.
         <td class="bg1">VARCHAR(255)</td>
         <td class="bg1">NULL</td>
         <td class="bg1">Attribute value</td>
-        <td class="bg1">key: <i>type_value_idx</i></td>
+        <td class="bg1">key: <i>attrib_value_idx</i></td>
       </tr>
     </table>
   </div>
 <table style="margin-top:20px;border:1px solid #BBB"><tr>    <td style="padding: 4px 25px 0px 2px">    <p style="font-weight:bold">See also:</p>
   <ul style="margin-bottom:0px";>
       <li><a href="#variation" style="text-decoration:none">variation</a></li>
-      <li><a href="#attrib_type" style="text-decoration:none">attrib_type</a></li>
+      <li><a href="#attrib" style="text-decoration:none">attrib</a></li>
       </ul>
     </td>
 </tr></table>
@@ -5946,7 +6158,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>consequence_types</b></td>
-        <td class="bg1">SET:<ul style="margin-bottom:0px">  <li style="line-height:12px">intergenic_variant</li>  <li style="line-height:12px">splice_acceptor_variant</li>  <li style="line-height:12px">splice_donor_variant</li>  <li style="line-height:12px">stop_lost</li>  <li style="line-height:12px">coding_sequence_variant</li>  <li style="line-height:12px">missense_variant</li>  <li style="line-height:12px">stop_gained</li>  <li style="line-height:12px">synonymous_variant</li>  <li style="line-height:12px">frameshift_variant</li>  <li style="line-height:12px">non_coding_transcript_variant</li>  <li style="line-height:12px">non_coding_transcript_exon_variant</li>  <li style="line-height:12px">mature_miRNA_variant</li>  <li style="line-height:12px">NMD_transcript_variant</li>  <li style="line-height:12px">5_prime_UTR_variant</li>  <li style="line-height:12px">3_prime_UTR_variant</li>  <li style="line-height:12px">incomplete_terminal_codon_variant</li>  <li style="line-height:12px">intron_variant</li>  <li style="line-height:12px">splice_region_variant</li>  <li style="line-height:12px">downstream_gene_variant</li>  <li style="line-height:12px">upstream_gene_variant</li>  <li style="line-height:12px">initiator_codon_variant</li>  <li style="line-height:12px">stop_retained_variant</li>  <li style="line-height:12px">inframe_insertion</li>  <li style="line-height:12px">inframe_deletion</li>  <li style="line-height:12px">transcript_ablation</li>  <li style="line-height:12px">transcript_fusion</li>  <li style="line-height:12px">transcript_amplification</li>  <li style="line-height:12px">transcript_translocation</li>  <li style="line-height:12px">TFBS_ablation</li>  <li style="line-height:12px">TFBS_fusion</li>  <li style="line-height:12px">TFBS_amplification</li>  <li style="line-height:12px">TFBS_translocation</li>  <li style="line-height:12px">regulatory_region_ablation</li>  <li style="line-height:12px">regulatory_region_fusion</li>  <li style="line-height:12px">regulatory_region_amplification</li>  <li style="line-height:12px">regulatory_region_translocation</li>  <li style="line-height:12px">feature_elongation</li>  <li style="line-height:12px">feature_truncation</li>  <li style="line-height:12px">regulatory_region_variant</li>  <li style="line-height:12px">TF_binding_site_variant </li></ul></td>
+        <td class="bg1">SET:<ul style="margin-bottom:0px">  <li style="line-height:12px">intergenic_variant</li>  <li style="line-height:12px">splice_acceptor_variant</li>  <li style="line-height:12px">splice_donor_variant</li>  <li style="line-height:12px">stop_lost</li>  <li style="line-height:12px">coding_sequence_variant</li>  <li style="line-height:12px">missense_variant</li>  <li style="line-height:12px">stop_gained</li>  <li style="line-height:12px">synonymous_variant</li>  <li style="line-height:12px">frameshift_variant</li>  <li style="line-height:12px">non_coding_transcript_variant</li>  <li style="line-height:12px">non_coding_transcript_exon_variant</li>  <li style="line-height:12px">mature_miRNA_variant</li>  <li style="line-height:12px">NMD_transcript_variant</li>  <li style="line-height:12px">5_prime_UTR_variant</li>  <li style="line-height:12px">3_prime_UTR_variant</li>  <li style="line-height:12px">incomplete_terminal_codon_variant</li>  <li style="line-height:12px">intron_variant</li>  <li style="line-height:12px">splice_region_variant</li>  <li style="line-height:12px">downstream_gene_variant</li>  <li style="line-height:12px">upstream_gene_variant</li>  <li style="line-height:12px">start_lost</li>  <li style="line-height:12px">stop_retained_variant</li>  <li style="line-height:12px">inframe_insertion</li>  <li style="line-height:12px">inframe_deletion</li>  <li style="line-height:12px">transcript_ablation</li>  <li style="line-height:12px">transcript_fusion</li>  <li style="line-height:12px">transcript_amplification</li>  <li style="line-height:12px">transcript_translocation</li>  <li style="line-height:12px">TFBS_ablation</li>  <li style="line-height:12px">TFBS_fusion</li>  <li style="line-height:12px">TFBS_amplification</li>  <li style="line-height:12px">TFBS_translocation</li>  <li style="line-height:12px">regulatory_region_ablation</li>  <li style="line-height:12px">regulatory_region_fusion</li>  <li style="line-height:12px">regulatory_region_amplification</li>  <li style="line-height:12px">regulatory_region_translocation</li>  <li style="line-height:12px">feature_elongation</li>  <li style="line-height:12px">feature_truncation</li>  <li style="line-height:12px">regulatory_region_variant</li>  <li style="line-height:12px">TF_binding_site_variant</li>  <li style="line-height:12px">protein_altering_variant </li></ul></td>
         <td class="bg1">'intergenic_variant'</td>
         <td class="bg1">The SO term(s) of all unique observed consequence types of this variation feature.<br /> The list of consequence descriptions is available <a href="/info/genome/variation/predicted_data.html#consequences">here</a>.</td>
         <td class="bg1">key: <i>consequence_type_idx</i></td>
@@ -6010,7 +6222,7 @@ tables that they've not used before.
 
       <tr>
         <td class="bg1"><b>evidence_attribs</b></td>
-        <td class="bg1">SET:<ul style="margin-bottom:0px">  <li style="line-height:12px">367</li>  <li style="line-height:12px">368</li>  <li style="line-height:12px">369</li>  <li style="line-height:12px">370</li>  <li style="line-height:12px">371</li>  <li style="line-height:12px">372</li></ul></td>
+        <td class="bg1">SET:<ul style="margin-bottom:0px">  <li style="line-height:12px">367</li>  <li style="line-height:12px">368</li>  <li style="line-height:12px">369</li>  <li style="line-height:12px">370</li>  <li style="line-height:12px">371</li>  <li style="line-height:12px">372</li>  <li style="line-height:12px">418</li></ul></td>
         <td class="bg1">NULL</td>
         <td class="bg1">A summary of the evidence supporting a variant as a guide to its potential reliability. See the evidence descriptions <a href="/info/genome/variation/data_description.html#evidence_status">here</a>.</td>
         <td class="bg1"></td>
@@ -6180,5 +6392,7 @@ tables that they've not used before.
     </div>
   </td></tr></table>
 
+    </div>
+  </div>
 </body>
 </html>

@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ sub update_conf {
   # Database key name for tools db as defined in MULTI.ini
   $SiteDefs::ENSEMBL_ORM_DATABASES->{'ticket'} = 'DATABASE_WEB_TOOLS';
 
-  # Entries as added to the tools db ticket_type_name table
+  # Entries as added to the tools db ticket_type_name table (only edit this in plugins if new tool is being added)
   $SiteDefs::ENSEMBL_TOOLS_LIST = [ 'Blast' => 'BLAST/BLAT', 'VEP' => 'Variant Effect Predictor', 'AssemblyConverter' => 'Assembly Converter' ];
 
   # Which dispatcher to be used for the jobs (provide the appropriate values in your plugins)
@@ -42,11 +42,8 @@ sub update_conf {
   $SiteDefs::ENSEMBL_VEP_ENABLED    = 1;
   $SiteDefs::ENSEMBL_AC_ENABLED     = 1;
 
-  # Run all jobs locally by default
-  $SiteDefs::ENSEMBL_BLAST_RUN_LOCAL  = 1; 
-  $SiteDefs::ENSEMBL_BLAT_RUN_LOCAL   = 1; 
-  $SiteDefs::ENSEMBL_VEP_RUN_LOCAL    = 1; 
-  $SiteDefs::ENSEMBL_AC_RUN_LOCAL     = 1; 
+  # Leave it on if mechanism to fetch sequence by IDs is working
+  $SiteDefs::ENSEMBL_BLAST_BY_SEQID = 1;
 
   # Path to BLAT client
   $SiteDefs::ENSEMBL_BLAT_BIN_PATH = '/path/to/gfClient';

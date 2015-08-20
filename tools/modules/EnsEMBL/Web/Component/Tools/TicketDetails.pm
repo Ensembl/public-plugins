@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -45,12 +45,15 @@ sub content {
     : ''
   ;
 
-  return sprintf '<input type="hidden" class="panel_type" value="TicketDetails" />%s%s', @$jobs ? ($heading, $self->content_ticket($ticket, $jobs)) : ('', '');
+  return sprintf '<input type="hidden" class="panel_type" value="TicketDetails" />%s%s', @$jobs ? ($heading, $self->content_ticket($ticket, $jobs, scalar $object->user_accessible_tickets($ticket))) : ('', '');
 }
 
 sub content_ticket {
   ## @abstract method
-  ## Should return disaply html for the ticket
+  ## @param Ticket object
+  ## @param Arrayref if Job objects
+  ## @param Flag to tell whether user or session owns the ticket or not
+  ## @return HTML to be displayed
   throw exception('AbstractMethodNotImplemented');
 }
 

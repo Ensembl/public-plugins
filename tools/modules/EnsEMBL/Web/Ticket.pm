@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ use strict;
 use warnings;
 
 use EnsEMBL::Web::Exceptions;
+use EnsEMBL::Web::Utils::RandomString qw(random_string);
 
 sub hub         { return shift->{'_hub'};         }
 sub object      { return shift->{'_object'};      }
@@ -46,9 +47,12 @@ sub process {
   } catch {
 
     if ($_->type eq 'InputError') {
-      $self->{'_error'} = $_->message;
+      $self->{'_error'} = $_->message(($_->data || {})->{'message_is_html'});
     } else {
-      throw $_;
+      my $error_id = random_string(8);
+      warn "ERROR: $error_id\n";
+      warn $_;
+      throw exception('ServerError', sprintf q(There was a problem with one of the tools servers. Please report this issue to %s, quoting error reference '%s'.), $self->hub->species_defs->ENSEMBL_HELPDESK_EMAIL, $error_id);
     }
   };
 }
@@ -118,7 +122,21 @@ sub submit_to_toolsdb {
     'job'         => [ map { $_->rose_object } @$jobs ]
   });
 
-  $self->{'_rose_object'} = $tools_ticket if $ticket_type->save('changes_only' => 1);
+  # try to save ticket to the tools db, but if it fails, try for another three times before giving up (useful in case deadlocks)
+  foreach my $tries_left (reverse 0..3) {
+
+    try {
+      $ticket_type->save('changes_only' => 1);
+      $tries_left = -1;
+    } catch {
+      throw $_ unless $tries_left;
+      sleep 1;
+    };
+
+    last if $tries_left < 0;
+  }
+
+  $self->{'_rose_object'} = $tools_ticket;
 }
 
 sub dispatch_jobs {

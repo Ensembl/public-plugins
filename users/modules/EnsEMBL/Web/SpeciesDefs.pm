@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,17 +19,37 @@ limitations under the License.
 package EnsEMBL::Web::SpeciesDefs;
 
 use strict;
+use warnings;
 
-sub set_userdb_details_for_rose {
+use previous qw(register_orm_databases);
+
+sub accounts_db {
   my $self = shift;
-  
-  $self->ENSEMBL_ORM_DATABASES->{'user'} = {
-    'database'  => $self->ENSEMBL_USERDB_NAME,
-    'host'      => $self->ENSEMBL_USERDB_HOST,
-    'port'      => $self->ENSEMBL_USERDB_PORT,
-    'username'  => $self->ENSEMBL_USERDB_USER,
-    'password'  => $self->ENSEMBL_USERDB_PASS
+  my $db   = $self->multidb->{'DATABASE_ACCOUNTS'};
+
+  return {
+    'NAME'    => $db->{'NAME'},
+    'HOST'    => $db->{'HOST'},
+    'PORT'    => $db->{'PORT'},
+    'DRIVER'  => $db->{'DRIVER'}  || 'mysql',
+    'USER'    => $db->{'USER'}    || $self->DATABASE_WRITE_USER,
+    'PASS'    => $db->{'PASS'}    || $self->DATABASE_WRITE_PASS
   };
+}
+
+sub register_orm_databases {
+  my $self  = shift;
+  my $db    = $self->accounts_db;
+
+  $self->ENSEMBL_ORM_DATABASES->{'user'} = {
+    'database'  => $db->{'NAME'},
+    'host'      => $db->{'HOST'},
+    'port'      => $db->{'PORT'},
+    'username'  => $db->{'USER'},
+    'password'  => $db->{'PASS'}
+  };
+
+  return $self->PREV::register_orm_databases;
 }
 
 1;

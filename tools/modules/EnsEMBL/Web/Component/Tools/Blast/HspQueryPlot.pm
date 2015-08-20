@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ use strict;
 use warnings;
 
 use EnsEMBL::Draw::DrawableContainer;
-use EnsEMBL::Web::Document::Image;
+use EnsEMBL::Web::Document::Image::GD;
 use EnsEMBL::Web::Container::HSPContainer;
 
 use EnsEMBL::Web::BlastConstants qw(BLAST_KARYOTYPE_POINTER);
@@ -40,15 +40,15 @@ sub content {
   return '' unless @$results;
 
   # Draw the HSP image
-  my $image                   = EnsEMBL::Web::Document::Image->new($hub);
+  my $image                   = EnsEMBL::Web::Document::Image::GD->new($hub);
   $image->drawable_container  = EnsEMBL::Draw::DrawableContainer->new(EnsEMBL::Web::Container::HSPContainer->new($object, $job, \@pointer_cols), $hub->get_imageconfig('hsp_query_plot'));
   $image->imagemap            = 'yes';
   $image->set_button('drag');
 
   # final HTML
   return sprintf('
-    <h3><a rel="_blast_queryplot" class="toggle _slide_toggle set_cookie open" href="#">HSP distribution on query sequence:</a></h3>
-    <div class="_blast_queryplot toggleable">%s</div>',
+    <h3><a rel="_blast_queryplot" class="toggle _slide_toggle set_cookie closed" href="#">HSP distribution on query sequence:</a></h3>
+    <div class="_blast_queryplot toggleable hidden">%s</div>',
     $image->render,
   );
 }

@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -149,7 +149,7 @@ sub run {
     '2'   => 'Error in BLAST database',
     '3'   => 'Error in BLAST engine',
     '4'   => 'Out of memory',
-    '255' => 'Unknown error'
+    '139' => 'Out of memory'
   })->execute({'log_file' => $blast_log});
 
   # Throw exception if any error occurred during running the blast process
@@ -158,7 +158,7 @@ sub run {
     my ($error_details) = file_get_contents($blast_log);
     throw exception('HiveException', $error_code == 1
       ? ($error_message, {'display_message' => $error_details, 'fatal' => 0}) # input error -  user needs to change input sequence or configs
-      : ($error_details)                                                      # system error - user can't do anything
+      : ($error_details || $error_message)                                    # system error - user can't do anything
     );
   }
 

@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2014] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -65,9 +65,7 @@ sub update_jobs {
 
   foreach my $job (@$jobs) {
 
-    my $hive_job_id = $job->dispatcher_reference;
-    my $hive_dba    = $self->hive_dba;
-    my $hive_job    = $self->job_adaptor->fetch_by_dbID($hive_job_id);
+    my $hive_job = $self->job_adaptor->fetch_by_dbID($job->dispatcher_reference);
 
     if ($hive_job) {
       my $hive_job_status = $hive_job->status;
@@ -77,34 +75,14 @@ sub update_jobs {
         # job is done, no more actions required
         $job->status('done');
         $job->dispatcher_status('done');
+        $self->sync_log_messages($job, $hive_job); # sync any warnings
 
       } elsif ($hive_job_status =~ /^(FAILED|PASSED_ON)$/) {
 
         # job failed due to some reason, need user to look into it
         $job->status('awaiting_user_response');
         $job->dispatcher_status('failed');
-
-        # Get the log message and save it in the message column
-        my ($message) = map {$_->{'is_error'} && $_->{'msg'} || ()} @{$hive_dba->get_LogMessageAdaptor->fetch_all_by_job_id($hive_job_id)}; # ignore if msg is an empty string
-        if ($message && $message =~ /^{.*}$/) { # possibly json
-          try {
-            $message = from_json($message);
-          } catch {};
-        }
-
-        $job->job_message([ref $message
-          ? {
-            'display_message'   => delete $message->{'data'}{'display_message'} // $self->default_error_message,
-            'fatal'             => delete $message->{'data'}{'fatal'} // 1,
-            'data'              => delete $message->{'data'},
-            'exception'         => $message,
-          }
-          : {
-            'display_message'   => $self->default_error_message,
-            'exception'         => {'exception' => $message || 'Unknown error'},
-            'fatal'             => 1
-          }
-        ]);
+        $self->sync_log_messages($job, $hive_job); # sync error message and any warnings
 
       } elsif ($hive_job_status =~ /^(SEMAPHORED|CLAIMED|COMPILATION)$/) {
 
@@ -163,10 +141,48 @@ sub job_adaptor {
   return $self->{'_job_adaptor'} ||= $self->hive_dba->get_AnalysisJobAdaptor;
 }
 
+sub sync_log_messages {
+  ## @private
+  my ($self, $job, $hive_job) = @_;
+
+  my @messages;
+
+  for (@{$self->hive_dba->get_LogMessageAdaptor->fetch_all_by_job_id($hive_job->dbID)}) {
+
+    next unless $_->{'msg'}; # ignore if msg is an empty string
+
+    my $parsed;
+
+    if ($_->{'msg'} =~ /^{.*}$/) {
+      try {
+        $parsed = from_json($_->{'msg'});
+      } catch {};
+    }
+
+    next if !$_->{'is_error'} && !$parsed; # warnings that are not in JSON format should be ignored
+
+    push(@messages, $parsed
+      ? {
+        'display_message'   => delete $parsed->{'data'}{'display_message'} // $self->default_error_message,
+        'fatal'             => delete $parsed->{'data'}{'fatal'} // 1,
+        'data'              => delete $parsed->{'data'},
+        'exception'         => $_->{'is_error'} ? $parsed : undef,
+      }
+      : {
+        'display_message'   => $self->default_error_message,
+        'exception'         => {'exception' => $_->{'msg'} || 'Unknown error'},
+        'fatal'             => 1
+      }
+    );
+  }
+
+  $job->job_message(\@messages) if @messages;
+}
+
 sub DESTROY {
   ## Close the hive db connection when exiting
   my $self = shift;
-  $self->hive_dba->dbc->disconnect_when_inactive(1) if $self->hive_dba && $self->hive_dba->dbc;
+  $self->{'_hive_dba'}->dbc->disconnect_when_inactive(1) if $self->{'_hive_dba'} && $self->{'_hive_dba'}->dbc;
 }
 
 1;

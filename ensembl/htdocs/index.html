@@ -3,6 +3,18 @@
 <title>Ensembl Genome Browser</title>
 </head>
 <body>
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "WebSite",
+  "url": "http://www.ensembl.org/",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "http://www.ensembl.org/Multi/Search/Results?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
 <div class="column-wrapper">
   <div class="column-twothird">
     <div class="column-left">
@@ -21,11 +33,11 @@
                 <input type="hidden" class="panel_type" value="SpeciesList" />
                 [[SCRIPT::EnsEMBL::Web::Document::HTML::FavouriteSpecies]]
                 [[SCRIPT::EnsEMBL::Web::Document::HTML::SpeciesList]]
-                <p>Other species are available in <a href="http://pre.ensembl.org" rel="external">Ensembl&nbsp;<em>Pre<span class="red">!</span></em></a> and <a href="http://www.ensemblgenomes.org/" rel="external">EnsemblGenomes</a></p>
+                <p class="othersites">Other species are available in <a href="http://pre.ensembl.org" rel="external">Ensembl&nbsp;<em>Pre<span class="red">!</span></em></a> and <a href="http://www.ensemblgenomes.org/" rel="external">EnsemblGenomes</a></p>
               </div>
             </div>
             <div class="tinted-box datahubs">      		
-              <img src="/img/miniad/globe.gif" style="float:right;width:40px;height:40px;padding-bottom:4px"> Ensembl supports data from external projects through <a href="/info/website/public_trackhubs.html">Trackhubs</a>
+              <img src="/img/miniad/globe.gif" style="float:right;width:40px;height:40px;padding-bottom:4px"> Ensembl supports data from external projects through <a href="/info/website/public_trackhubs.html">Track hubs</a>
             </div>
           </div>
         </div>
