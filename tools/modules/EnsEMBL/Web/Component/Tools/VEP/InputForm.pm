@@ -166,8 +166,6 @@ sub content {
     ### Advanced config options
     my $sections = CONFIG_SECTIONS;
     foreach my $section (@$sections) {
-      next if $section->{'id'} eq 'plugins' and !$sd->ENSEMBL_VEP_PLUGIN_ENABLED;
-      
       my $method      = '_build_'.$section->{'id'};
       my $config_div  = $form->append_child('div', {
         'class'       => 'extra_configs_wrapper vep-configs',
@@ -309,8 +307,8 @@ sub content {
 }
 
 sub _build_filters {
-  my ($self, $form, $filter_div) = @_;
-  my $fieldset  = $filter_div->append_child($form->add_fieldset('Filters'));
+  my ($self, $form, $div) = @_;
+  my $fieldset  = $div->append_child($form->add_fieldset('Filters'));
 
   if (first { $_->{'value'} eq 'Homo_sapiens' } @{$self->_species}) {
 
@@ -399,11 +397,13 @@ sub _build_filters {
 }
 
 sub _build_identifiers {
-  my ($self, $form, $identifiers_div) = @_;
+  my ($self, $form, $div) = @_;
   my $hub       = $self->hub;
   my $species   = $self->_species;
 
-  my $fieldset  = $identifiers_div->append_child($form->add_fieldset('Identifiers'));
+  ## IDENTIFIERS
+  my $current_section = 'Identifiers';
+  my $fieldset = $self->_start_section($form, $div, $current_section);
 
   $fieldset->add_field({
     'type'        => 'checkbox',
@@ -447,8 +447,14 @@ sub _build_identifiers {
     'value'       => 'yes'
   });
 
+  $self->_end_section($div, $fieldset, $current_section);
+
+
+  ## FREQUENCY DATA
   # only for the species that have variants
-  if (first { $_->{'variation'} } @$species) {
+  $current_section = 'Frequency data';
+  if ((first { $_->{'variation'} } @$species) || scalar @{$self->_get_plugins_by_section($current_section)}) {
+    $fieldset = $self->_start_section($form, $div, $current_section);
 
     $fieldset->add_field({
       'field_class' => '_stt_var',
@@ -508,15 +514,31 @@ sub _build_identifiers {
         'field_class'   => [qw(_stt_yes _stt_allele)],
       })]
     });
+
+    $self->_end_section($div, $fieldset, $current_section);
   }
+
+  $div->append_child(
+    'div',
+    {
+      'children' => [{
+        'node_name' => 'p',
+        'class' => 'small',
+        'inner_HTML' => '* = functionality from <a href="/info/docs/tools/vep/script/vep_plugins.html">VEP plugin</a>'
+      }]
+    }        
+  ) if $self->_have_plugins;
 }
 
 sub _build_extra {
-  my ($self, $form, $extra_div) = @_;
+  my ($self, $form, $div) = @_;
   my $hub       = $self->hub;
   my $sd        = $hub->species_defs;
   my $species   = $self->_species;
-  my $fieldset  = $extra_div->append_child($form->add_fieldset);
+
+  ## MISCELLANEOUS SECTION
+  my $current_section = 'Miscellaneous';
+  my $fieldset  = $self->_start_section($form, $div, $current_section);
 
   $fieldset->add_field({
     'type'        => 'checkbox',
@@ -566,13 +588,23 @@ sub _build_extra {
     'checked'     => 0,
   });
 
+  $self->_end_section($div, $fieldset, $current_section);
+
+
+  ## PATHOGENICITY PREDICTIONS
+  $current_section = 'Pathogenicity predictions';
+  my $have_sift = first { $_->{'variation'}{'SIFT'} } @$species;
+  my $have_polyphen = first { $_->{'variation'}{'POLYPHEN'} } @$species;
+  my $have_plugins = scalar @{$self->_get_plugins_by_section($current_section)};
+  $fieldset = $self->_start_section($form, $div, $current_section) if $have_sift or $have_polyphen or $have_plugins;
+
   # sift
-  if (first { $_->{'variation'}{'SIFT'} } @$species) {
+  if ($have_sift) {
 
     $fieldset->add_field({
       'field_class' => '_stt_sift',
       'type'        => 'dropdown',
-      'label'       => 'SIFT predictions',
+      'label'       => 'SIFT',
       'helptip'     => 'Report SIFT scores and/or predictions for missense variants. SIFT is an algorithm to predict whether an amino acid substitution is likely to affect protein function',
       'name'        => 'sift',
       'value'       => 'both',
@@ -586,12 +618,12 @@ sub _build_extra {
   }
 
   # polyphen
-  if (first { $_->{'variation'}{'POLYPHEN'} } @$species) {
+  if ($have_polyphen) {
 
     $fieldset->add_field({
       'field_class' => '_stt_pphn',
       'type'        => 'dropdown',
-      'label'       => 'PolyPhen predictions',
+      'label'       => 'PolyPhen',
       'helptip'     => 'Report PolyPhen scores and/or predictions for missense variants. PolyPhen is an algorithm to predict whether an amino acid substitution is likely to affect protein function',
       'name'        => 'polyphen',
       'value'       => 'both',
@@ -604,8 +636,17 @@ sub _build_extra {
     });
   }
 
-  # regulatory
-  for (map { $_->{'regulatory'} ? $_->{'value'} : () } @$species) {
+  $self->_end_section($div, $fieldset, $current_section);
+
+
+  ## REGULATORY DATA
+  $current_section = 'Regulatory data';
+
+  my $have_plugins = scalar @{$self->_get_plugins_by_section($current_section)};
+  my @regu_species = map { $_->{'regulatory'} ? $_->{'value'} : () } grep {$hub->get_adaptor('get_CellTypeAdaptor', 'funcgen', $_)} @$species;
+  $fieldset = $self->_start_section($form, $div, $current_section) if scalar @regu_species or $have_plugins;
+
+  for (@regu_species) {
 
     $fieldset->add_field({
       'field_class'   => "_stt_$_",
@@ -634,98 +675,160 @@ sub _build_extra {
         'name'          => "cell_type_$_",
         'values'        => [ {'value' => '', 'caption' => 'None'}, map { 'value' => $_->name, 'caption' => $_->name }, @{$hub->get_adaptor('get_CellTypeAdaptor', 'funcgen', $_)->fetch_all} ]
       }]
-    }) if $hub->get_adaptor('get_CellTypeAdaptor', 'funcgen', $_);
+    });
   }
+
+  $self->_end_section($div, $fieldset, $current_section);
+
+
+  ## ANY OTHER SECTIONS CONFIGURED BY PLUGINS
+  foreach my $current_section(grep {!$self->{_done_sections}->{$_}} @{$self->_get_all_plugin_sections}) {
+    $fieldset = $self->_start_section($form, $div, $current_section);
+    $self->_end_section($div, $fieldset, $current_section);
+  }
+
+  $div->append_child(
+    'div',
+    {
+      'children' => [{
+        'node_name' => 'p',
+        'class' => 'small',
+        'inner_HTML' => '* = functionality from <a href="/info/docs/tools/vep/script/vep_plugins.html">VEP plugin</a>'
+      }]
+    }        
+  ) if $self->_have_plugins;
 }
 
-sub _build_plugins {
-  my ($self, $form, $plugin_div) = @_;
-  my $hub = $self->hub;
-  my $sd  = $hub->species_defs;
-  my $pl  = $sd->multi_val('ENSEMBL_VEP_PLUGIN_CONFIG');
-  return unless $pl && $pl->{plugins};
+sub _start_section {
+  my ($self, $form, $div, $section) = @_;
+  return $div->append_child($form->add_fieldset($section));
+}
 
-  my $ac_values;
-  
-  my $species   = $self->_species;
+sub _end_section {
+  my ($self, $div, $fieldset, $section) = @_;
+  $self->_add_plugins($div, $fieldset, $section) if @{$self->_get_plugins_by_section($section)};
+  $self->{_done_sections}->{$section} = 1;
+}
 
-  # sections?
-  my @sections = grep {defined($_)} map {defined($_->{section}) ? $_->{section} : undef} @{$pl->{plugins}};
+sub _have_plugins {
+  my $self = shift;
 
-  # unique sort in same order
-  my ($prev, @new);
-  for(@sections) {
-    if(!defined($prev) || $prev ne $_) {
-      push @new, $_;
-    }
-    $prev = $_;
-  }
-  @sections = @new;
-  push @sections, '';
-
-  foreach my $section(@sections) {
-    my $section_name = $section || (scalar @sections > 1 ? 'Other plugins' : 'Plugins');
-    my $fieldset  = $plugin_div->append_child($form->add_fieldset($section_name));
-
-    my @section_plugins;
-
-    if($section eq '') {
-      @section_plugins = grep {$_->{available} && !defined($_->{section})} @{$pl->{plugins}};
+  if(!exists($self->{_have_plugins})) {
+    my $sd  = $self->hub->species_defs;
+    if($sd->ENSEMBL_VEP_PLUGIN_ENABLED) {
+      my $pl = $sd->multi_val('ENSEMBL_VEP_PLUGIN_CONFIG');
+      $self->{_have_plugins} = $pl && $pl->{plugins} ? 1 : 0;
     }
     else {
-      @section_plugins = grep {$_->{available} && defined($_->{section}) && $_->{section} eq $section} @{$pl->{plugins}};
+      $self->{_have_plugins} = 0;
+    }
+  }
+
+  return $self->{_have_plugins};
+}
+
+sub _get_all_plugin_sections {
+  my $self = shift;
+  return [] unless $self->_have_plugins();
+  my $sd  = $self->hub->species_defs;
+  my $pl  = $sd->multi_val('ENSEMBL_VEP_PLUGIN_CONFIG');
+  return [grep {$_} map {$_->{section} || ''} grep {$_->{available}} @{$pl->{plugins}}];
+}
+
+sub _get_plugins_by_section {
+  my ($self, $section) = @_;
+
+  return [] unless $self->_have_plugins();
+
+  if(!exists($self->{_plugins_by_section}) || !exists($self->{_plugins_by_section}->{$section})) {
+    my $sd  = $self->hub->species_defs;
+    my $pl  = $sd->multi_val('ENSEMBL_VEP_PLUGIN_CONFIG');
+
+    my @matched;
+    if($section eq 'Miscellaneous') {
+      @matched = grep {$_->{available} && !defined($_->{section})} @{$pl->{plugins}};
+    }
+    else {
+      @matched = grep {$_->{available} && defined($_->{section}) && $_->{section} eq $section} @{$pl->{plugins}};
     }
 
-    foreach my $plugin(@section_plugins) {
-      my $pl_key = $plugin->{key};
-      
-      # sort out which species to make this available for
-      # the config carries the species name and assembly
-      # the interface will only have one assembly per species, but need to check they match
-      # my $field_class = [];
-      # my $pl_species = $plugin->{species};
-      #
-      # if($pl_species && ref($pl_species) eq 'ARRAY') {
-      #   foreach my $sp_hash(@$pl_species) {
-      #     push @$field_class,
-      #       map {"_stt_".$_}
-      #       map {$_->{assembly} eq $sp_hash->{assembly} ? $_->{value} : $_->{value}.'_'.$_->{assembly}}
-      #       grep {$_->{value} eq ucfirst($sp_hash->{name})}
-      #       @$species;
-      #   }
-      # }
-      
-      my $field_class = (!$plugin->{species} || $plugin->{species} eq '*') ? [] : [map {"_stt_".ucfirst($_)} @{$plugin->{species} || []}];
-       
+    $self->{_plugins_by_section}->{$section} = \@matched;
+  }
+
+  return $self->{_plugins_by_section}->{$section};
+}
+
+sub _add_plugins {
+  my ($self, $div, $fieldset, $section_name) = @_;
+
+  my $ac_values;
+  my $species = $self->_species;
+  my $sd  = $self->hub->species_defs;
+  my $pl  = $sd->multi_val('ENSEMBL_VEP_PLUGIN_CONFIG');
+
+  foreach my $plugin(@{$self->_get_plugins_by_section($section_name)}) {
+    my $pl_key = $plugin->{key};
+    
+    # sort out which species to make this available for
+    # the config carries the species name and assembly
+    # the interface will only have one assembly per species, but need to check they match
+    # my $field_class = [];
+    # my $pl_species = $plugin->{species};
+    #
+    # if($pl_species && ref($pl_species) eq 'ARRAY') {
+    #   foreach my $sp_hash(@$pl_species) {
+    #     push @$field_class,
+    #       map {"_stt_".$_}
+    #       map {$_->{assembly} eq $sp_hash->{assembly} ? $_->{value} : $_->{value}.'_'.$_->{assembly}}
+    #       grep {$_->{value} eq ucfirst($sp_hash->{name})}
+    #       @$species;
+    #   }
+    # }
+    
+    my $field_class = (!$plugin->{species} || $plugin->{species} eq '*') ? [] : [map {"_stt_".ucfirst($_)} @{$plugin->{species} || []}];
+    
+    if($plugin->{form}) {
+
       $fieldset->add_field({
-        'class'       => "_stt",
+        'class'       => "_stt plugin_enable",
         'field_class' => $field_class,
-        'type'        => 'dropdown',
+        'type'        => 'radiolist',
         'helptip'     => $plugin->{helptip},
         'name'        => 'plugin_'.$pl_key,
-        'label'       => $plugin->{label} || $pl_key,
+        'label'       => ($plugin->{label} || $pl_key).' *',
         'value'       => $plugin->{enabled} ? 'plugin_'.$pl_key : 'no',
         'values'      => [
           { 'value' => 'no', 'caption' => 'Disabled' },
           { 'value' => 'plugin_'.$pl_key, 'caption' => 'Enabled' },
         ],
       });
-      
-      if($plugin->{form}) {
-        foreach my $el(@{$plugin->{form}}) {
-          $el->{field_class} = '_stt_plugin_'.$pl_key;
-          $el->{label}     ||= $el->{name};
-          $el->{value}       = exists($el->{value}) ? $el->{value} : $el->{name};
-          $el->{name}        = 'plugin_'.$pl_key.'_'.$el->{name};
 
-          # get autocomplete values
-          if($el->{class} && $el->{values} && $el->{class} =~ /autocomplete/) {
-            $ac_values->{$el->{name}} = $el->{values};
-          }
-          
-          $fieldset->add_field($el);
+      foreach my $el(@{$plugin->{form}}) {
+        $el->{field_class} = '_stt_plugin_'.$pl_key;
+        $el->{label}     ||= $el->{name};
+        $el->{value}       = exists($el->{value}) ? $el->{value} : $el->{name};
+        $el->{name}        = 'plugin_'.$pl_key.'_'.$el->{name};
+
+        # get autocomplete values
+        if($el->{class} && $el->{values} && $el->{class} =~ /autocomplete/) {
+          $ac_values->{$el->{name}} = $el->{values};
         }
+        
+        $fieldset->add_field($el);
       }
+    }
+
+    else {
+      $fieldset->add_field({
+        'class'       => "_stt plugin_enable",
+        'field_class' => $field_class,
+        'type'        => 'checkbox',
+        'helptip'     => $plugin->{helptip},
+        'name'        => 'plugin_'.$pl_key,
+        'label'       => ($plugin->{label} || $pl_key).' *',
+        'value'       => 'plugin_'.$pl_key,
+        'checked'     => $plugin->{enabled} ? 1 : 0,
+      });
     }
   }
   
@@ -733,7 +836,7 @@ sub _build_plugins {
   if($ac_values) {
     my $ac_json = encode_entities($self->jsonify($ac_values));
 
-    $plugin_div->append_child('input', {
+    $div->append_child('input', {
       class => "js_param",
       type => "hidden",
       name => "plugin_auto_values",
