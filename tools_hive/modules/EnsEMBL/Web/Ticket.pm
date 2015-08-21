@@ -29,6 +29,21 @@ sub handle_exception {
   # is it a HiveError and do we have a better message to display for that?
   if ($exception->type eq 'HiveError' && (my $message = $self->hub->species_defs->ENSEMBL_HIVE_ERROR_MESSAGE)) {
     warn $exception->message(1);
+
+    try {
+
+      # add message to each job
+      foreach my $job (@{$self->jobs}) {
+        $job->rose_object->job_message([{
+          'display_message' => $message,
+          'exception'       => {'exception' => $exception->message(1)},
+          'fatal'           => 0
+        }]);
+        $job->save;
+      }
+
+    } catch {};
+
     $self->{'_error'} = {
       'heading' => 'Service unavailable',
       'stage'   => $stage,
