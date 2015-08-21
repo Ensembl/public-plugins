@@ -34,18 +34,29 @@ sub dispatch_job {
   ## Abstract method implementation
   my ($self, $logic_name, $job_data) = @_;
 
-  my $hive_dba    = $self->hive_dba;
-  my $job_adaptor = $self->job_adaptor;
+  my $hive_job_id;
 
-  $self->{'_analysis'}{$logic_name} ||= $hive_dba->get_AnalysisAdaptor->fetch_by_logic_name_or_url($logic_name);
+  try {
 
-  # Submit job to hive db
-  my $hive_job = Bio::EnsEMBL::Hive::AnalysisJob->new(
-		'analysis'  => $self->{'_analysis'}{$logic_name},
-		'input_id'  => $job_data
-  );
+    my $hive_dba    = $self->hive_dba;
+    my $job_adaptor = $self->job_adaptor;
 
-  my ($hive_job_id) = @{ $job_adaptor->store_jobs_and_adjust_counters( [ $hive_job ] ) };
+    $self->{'_analysis'}{$logic_name} ||= $hive_dba->get_AnalysisAdaptor->fetch_by_logic_name_or_url($logic_name);
+
+    # Submit job to hive db
+    my $hive_job = Bio::EnsEMBL::Hive::AnalysisJob->new(
+      'analysis'  => $self->{'_analysis'}{$logic_name},
+      'input_id'  => $job_data
+    );
+
+    ($hive_job_id) = @{ $job_adaptor->store_jobs_and_adjust_counters( [ $hive_job ] ) };
+
+  } catch {
+
+    # throw HiveError if anything goes wrong while submitting the job to the hive db
+    $_->type('HiveError');
+    throw $_;
+  };
 
   return $hive_job_id;
 }
