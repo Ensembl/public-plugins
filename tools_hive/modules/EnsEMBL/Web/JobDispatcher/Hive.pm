@@ -130,6 +130,9 @@ sub hive_dba {
     my $sd      = $self->hub->species_defs;
     my $hivedb  = $sd->multidb->{'DATABASE_WEB_HIVE'};
 
+    # if SiteDefs say db is not available, no need to check it further
+    throw exception('HiveError', 'ENSEMBL_HIVE_DB is not available') if $sd->ENSEMBL_HIVE_DB_NOT_AVAILABLE;
+
     $ENV{'EHIVE_ROOT_DIR'} ||= $sd->ENSEMBL_SERVERROOT.'/ensembl-hive/'; # used in hive API
 
     $self->{'_hive_dba'} = Bio::EnsEMBL::Hive::DBSQL::DBAdaptor->new('-url' => sprintf('mysql://%s:%s@%s:%s/%s',

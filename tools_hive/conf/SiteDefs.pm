@@ -29,6 +29,7 @@ use strict;
 sub update_conf {
 
   $SiteDefs::ENSEMBL_HIVE_ERROR_MESSAGE         = '';                                               # Error message to be displayed in case code throws a HiveError exception (can be HTML)
+  $SiteDefs::ENSEMBL_HIVE_DB_NOT_AVAILABLE      = 0;                                                # Flag if on, jobs will not get submitted to hive db (ENSEMBL_HIVE_ERROR_MESSAGE is displayed when submitting jobs)
 
   $SiteDefs::ENSEMBL_TOOLS_JOB_DISPATCHER       = { 
                                                     'Blast'             => 'Hive', 
