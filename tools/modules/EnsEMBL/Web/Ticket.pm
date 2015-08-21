@@ -46,14 +46,8 @@ sub process {
 
   } catch {
 
-    if ($_->type eq 'InputError') {
-      $self->{'_error'} = $_->message(($_->data || {})->{'message_is_html'});
-    } else {
-      my $error_id = random_string(8);
-      warn "ERROR: $error_id\n";
-      warn $_;
-      throw exception('ServerError', sprintf q(There was a problem with one of the tools servers. Please report this issue to %s, quoting error reference '%s'.), $self->hub->species_defs->ENSEMBL_HELPDESK_EMAIL, $error_id);
-    }
+    # ok, now deal with it
+    $self->handle_exception($_);
   };
 }
 
@@ -180,6 +174,20 @@ sub dispatch_jobs {
   }
 }
 
+sub handle_exception {
+  my ($self, $exception) = @_;
+
+  # InputError is thrown before the submission to tools db
+  if ($exception->type eq 'InputError') {
+    $self->{'_error'} = $exception->message(($exception->data || {})->{'message_is_html'});
+  } else {
+    my $error_id = random_string(8);
+    warn "ERROR: $error_id\n";
+    warn $exception;
+    throw exception('ServerError', sprintf q(There was a problem with one of the tools servers. Please report this issue to %s, quoting error reference '%s'.), $self->hub->species_defs->ENSEMBL_HELPDESK_EMAIL, $error_id);
+  }
+}
+
 sub add_job {
   ## Adds a job object to the jobs array
   ## @param EnsEMBL::Web::Job object
@@ -192,7 +200,5 @@ sub is_dir_needed {
   ## Override if required
   return 1;
 }
-
-
 
 1;

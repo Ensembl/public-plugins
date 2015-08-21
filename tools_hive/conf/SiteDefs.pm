@@ -28,6 +28,8 @@ use strict;
 
 sub update_conf {
 
+  $SiteDefs::ENSEMBL_HIVE_ERROR_MESSAGE         = '';                                               # Error message to be displayed in case code throws a HiveError exception (can be HTML)
+
   $SiteDefs::ENSEMBL_TOOLS_JOB_DISPATCHER       = { 
                                                     'Blast'             => 'Hive', 
                                                     'VEP'               => 'Hive', 
