@@ -129,7 +129,12 @@ sub get_haplotypes {
   
   print STDERR "Fetched ".(scalar @gts)." GTs\n";
   
-  return Bio::EnsEMBL::Variation::TranscriptHaplotypeContainer->new($tr, \@gts, $variation_db);
+  return Bio::EnsEMBL::Variation::TranscriptHaplotypeContainer->new(
+    -transcript => $tr,
+    -genotypes  => \@gts,
+    -samples    => [map {@{$_->get_all_Samples}} @{$vca->fetch_all}],
+    -db         => $variation_db
+  );
 }
 
 sub short_population_name {
