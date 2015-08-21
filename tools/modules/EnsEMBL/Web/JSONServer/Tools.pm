@@ -33,7 +33,10 @@ sub json_form_submit {
 
   $ticket->process;
 
-  return $self->call_js_panel_method('showError', [ $ticket->error, 'Invalid input' ]) if $ticket->error;
+  if (my $error = $ticket->error) {
+    return $self->call_js_panel_method('showError', [ $error->{'message'}, $error->{'heading'} || 'Invalid input' ]);
+  }
+
   return $self->call_js_panel_method('ticketSubmitted');
 }
 
