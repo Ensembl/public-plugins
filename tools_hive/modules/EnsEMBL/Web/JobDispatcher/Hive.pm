@@ -74,6 +74,15 @@ sub update_jobs {
   ## Abstract method implementation
   my ($self, $jobs) = @_;
 
+  my $hive_dba;
+
+  try {
+    $hive_dba = $self->hive_dba;
+  } catch {};
+
+  # don't do anything if hive db there's a problem connecting hive db
+  return unless $hive_dba;
+
   foreach my $job (@$jobs) {
 
     my $hive_job = $self->job_adaptor->fetch_by_dbID($job->dispatcher_reference);
