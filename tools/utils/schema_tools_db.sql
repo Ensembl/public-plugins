@@ -91,7 +91,7 @@ CREATE TABLE `result` (
 CREATE TABLE `job_message` (
   `job_message_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `job_id` int(10) unsigned NOT NULL,
-  `display_message` varchar(255) DEFAULT NULL,
+  `display_message` varchar(500) DEFAULT NULL,
   `exception` text,
   `data` text,
   `fatal` smallint(1) unsigned NOT NULL DEFAULT '1',
