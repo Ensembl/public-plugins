@@ -31,23 +31,27 @@ sub jobs        { return shift->{'_jobs'};        }
 sub error       { return shift->{'_error'};       }
 
 sub process {
-  my $self = shift;
+  my $self  = shift;
+  my $stage = '';
 
   try {
 
     # get input from form
+    $stage = 'input';
     $self->init_from_user_input;
 
     # submit ticket and jobs to the tools db
+    $stage = 'toolsdb';
     $self->submit_to_toolsdb;
 
     # dispatch the job(s) to job dispatcher
+    $stage = 'dispatcher';
     $self->dispatch_jobs;
 
   } catch {
 
     # ok, now deal with it
-    $self->handle_exception($_);
+    $self->handle_exception($_, $stage);
   };
 }
 
@@ -175,20 +179,22 @@ sub dispatch_jobs {
 }
 
 sub handle_exception {
-  my ($self, $exception) = @_;
+  my ($self, $exception, $stage) = @_;
 
   if ($exception->type eq 'InputError') {
     $self->{'_error'} = {
       'heading' => 'Invalid input',
+      'stage'   => $stage,
       'message' => $exception->message(($exception->data || {})->{'message_is_html'})
     };
   } else {
     my $error_id = random_string(8);
-    warn "ERROR: $error_id\n";
+    warn "ERROR: $error_id (stage: $stage)\n";
     warn $exception;
 
     $self->{'_error'} = {
       'heading' => 'Service unavailable',
+      'stage'   => $stage,
       'message' => sprintf(q(There was a problem with one of the tools servers. Please report this issue to %s, quoting error reference '%s'.), $self->hub->species_defs->ENSEMBL_HELPDESK_EMAIL, $error_id)
     };
   }

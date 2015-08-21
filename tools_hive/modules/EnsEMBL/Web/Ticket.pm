@@ -24,17 +24,18 @@ use warnings;
 use previous qw(handle_exception);
 
 sub handle_exception {
-  my ($self, $exception) = @_;
+  my ($self, $exception, $stage) = @_;
 
   # is it a HiveError and do we have a better message to display for that?
   if ($exception->type eq 'HiveError' && (my $message = $self->hub->species_defs->ENSEMBL_HIVE_ERROR_MESSAGE)) {
     warn $exception->message(1);
     $self->{'_error'} = {
       'heading' => 'Service unavailable',
+      'stage'   => $stage,
       'message' => $message
     };
   } else {
-    $self->PREV::handle_exception($exception);
+    $self->PREV::handle_exception($exception, $stage);
   }
 }
 
