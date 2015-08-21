@@ -64,7 +64,7 @@ sub dispatch_job {
 sub delete_jobs {
   ## Abstract method implementation
   my ($self, $logic_name, $job_ids) = @_;
-  my $hive_dba = $self->hive_dba;
+#  my $hive_dba = $self->hive_dba;
 
 #  $self->job_adaptor->remove_all(sprintf '`job_id` in (%s)', join(',', @$job_ids));
 #  $hive_dba->get_Queen->safe_synchronize_AnalysisStats($hive_dba->get_AnalysisAdaptor->fetch_by_logic_name_or_url($logic_name)->stats);
