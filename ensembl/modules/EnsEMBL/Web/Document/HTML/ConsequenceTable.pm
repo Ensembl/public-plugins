@@ -307,7 +307,7 @@ sub render {
     $row->{'desc'}    = $_->{'desc'};
 
     my $d_term = ucfirst($_->{'term'});
-    $d_term =~ s/_/ /;
+    $d_term =~ s/_/ /g;
     $row->{'d_term'}  = $d_term;
 
     my $link = sprintf('<a href="http://www.sequenceontology.org/miso/current_release/term/SO:%s">SO:%s</a>', $_->{'acc'}, $_->{'acc'});
