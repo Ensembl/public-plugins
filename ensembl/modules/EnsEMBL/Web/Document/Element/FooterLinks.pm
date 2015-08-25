@@ -22,25 +22,45 @@ package EnsEMBL::Web::Document::Element::FooterLinks;
 
 use strict;
 
+use URI::Escape qw(uri_escape);
+
 use parent qw(EnsEMBL::Web::Document::Element);
 
 sub content {
-  return qq(
-    <div class="column-two right print_hide">
-      <p>
-        <a href="http://www.ensembl.info/" class="media-icon"><img src="/i/wordpress.png" title="Ensembl blog" alt="[wordpress logo]" /></a>
-        <a href="http://www.facebook.com/Ensembl.org" class="media-icon"><img src="/i/facebook.png" title="Our Facebook page" alt="[Facebook logo]" /></a>
-        <a href="http://www.twitter.com/Ensembl" class="media-icon"><img src="/i/twitter.png" title="Follow us on Twitter!" alt="[twitter logo]" /></a>
-        <a href="/info/about/index.html" class="constant">About&nbsp;Ensembl</a> | 
-        <a href="/info/about/legal/privacy.html" class="constant">Privacy&nbsp;Policy</a> | 
-        <a href="/info/about/legal/" class="constant">Disclaimer</a> | 
-        <a href="/info/about/contact/" class="constant">Contact&nbsp;Us</a>
-      </p>
-    </div>
-    <div class="column-two right screen_hide_block">
-      <p>helpdesk\@ensembl.org</p>
-    </div>
-  );
+  my $self = shift;
+
+  my $html = qq(<div class="column-two right print_hide"><p>);
+
+  unless ($ENV{'ENSEMBL_TYPE'} =~ /Help|Account|UserData|Tools/) {
+
+    my $sd = $self->species_defs;
+
+    my $you_are_here = $ENV{'REQUEST_URI'};
+    my $stable_URL   = uri_escape('http://' . $sd->ARCHIVE_VERSION . '.archive.ensembl.org');
+
+    # if you are looking at www on a mobile/tablet device, add mobile site link
+    if($ENV{'MOBILE_DEVICE'}) {
+      # not using $you_are_here because not all pages are available on mobile site
+      $html .= qq{<a class="mobile_link" href="http://m.ensembl.org">Mobile site</a> - };
+    }
+
+    $html .= qq{
+        <a class="modal_link" id="p_link" href="/Help/Permalink?url=$stable_URL">Permanent link</a>
+    };
+
+    unless ($you_are_here =~ /html$/ && $you_are_here ne '/index.html') {
+      ## Omit archive links from static content, which tends to change a lot
+      $html .= ' - <a class="modal_link" id="a_link" href="/Help/ArchiveList">View in archive site</a>';
+    }
+
+    ## Hack to avoid replicating this entire module in our archive plugin just for one link!
+    if ($sd->ENSEMBL_SERVERNAME =~ /archive/) {
+      $html .= qq( - <a href="http://www.ensembl.org$you_are_here">View in current Ensembl</a>);
+    }
+  }
+
+  $html .= '</p></div>';
+  return $html;
 }
 
 1;
