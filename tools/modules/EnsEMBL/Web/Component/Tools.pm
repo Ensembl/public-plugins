@@ -272,7 +272,7 @@ sub job_status_tag {
       $css_class  = 'job-status-mismatch';
       $title      = sprintf 'The job was run on %s assembly for %s. ', $job->assembly, $self->hub->species_defs->get_config($job->species, 'SPECIES_COMMON_NAME');
       $title     .= $has_assembly_site && $job->ticket->owner_type ne 'user' ? sprintf('Please save this ticket to your account using the icon on the right to be able to view this job on %s site. ', $job->assembly) : '';
-      $title     .= sprintf q(To resubmit the job to %s assembly, please click on the 'Edit &amp; resubmit' icon.), $job->assembly, $assembly_mismatch;
+      $title     .= sprintf q(To resubmit the job to %s assembly, please click on the 'Edit &amp; resubmit' icon.), $assembly_mismatch;
     } elsif (defined $assembly_mismatch && $assembly_mismatch eq '0') {
       $css_class  = 'job-status-mismatch';
       $title      = sprintf q(The job was run on %s which does not exist on this site.), $job->species =~ s/_/ /gr;
