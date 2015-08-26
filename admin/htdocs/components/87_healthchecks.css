@@ -92,11 +92,9 @@ span.hc-new {
 .hc-notdone, .hc-notdone a {
   color: #aa0000;
 }
-tr.bg1 .hc-cell-highlight {
-  background-color: #ddf;
-}
+tr.bg1 .hc-cell-highlight,
 tr.bg2 .hc-cell-highlight {
-  background-color: #ccf;
+  background-color: #99a;
 }
 h3 a {
   margin-left: 10px;
