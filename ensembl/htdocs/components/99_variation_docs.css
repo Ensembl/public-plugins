@@ -1,5 +1,5 @@
 /* Count */
-.vdoc_dtype_count { color:#FFF;border-radius:5px;padding:2px 2px;cursor:help;white-space:nowrap;font-size:0.85em; }
+.vdoc_dtype_count { color:#FFF;border-radius:5px;padding:2px 2px;cursor:help;white-space:nowrap;font-size:0.85em;margin-right:4px; }
 .vdoc_new_version { background-color:#090; }
 .vdoc_new_source  { background-color:#00F; }
 .vdoc_million_1   { background-color:#800; }
@@ -11,11 +11,12 @@
 .vdoc_species_sci_name { font-style:italic;font-weight:normal;padding-left:8px;color:#555; }
 
 /* Table */
-th.vdoc_extra_column     { width:155px;text-align:center;border-left:1px solid #CCC;background-color:#BBB }
-div.vdoc_type_style_src  { float:left;width:65px;text-align:left; }
-div.vdoc_type_style_phen { float:left;width:55px;text-align:left; }
-div.vdoc_count_style     { float:left;width:60px;text-align:right;margin:0px 5px; }
-div.vdoc_example_style   { float:left;width:20px;text-align:center; }
+.vdoc_data_types       { width:155px; }
+th.vdoc_extra_column   { text-align:center;border-left:1px solid #CCC; }
+td.vdoc_extra_column   { border-left:1px solid #CCC; }
+div.vdoc_type_style    { float:left;width:43%;text-align:left; }
+div.vdoc_count_style   { float:left;width:45%;text-align:right; }
+div.vdoc_example_style { float:left;width:12%;text-align:center; }
 
 /* Right-hand side menu */
 div.vdoc_menu { margin: 2px 0px 16px 8px;padding-bottom:2px;background-color:#F9F9F9;color:#333; }

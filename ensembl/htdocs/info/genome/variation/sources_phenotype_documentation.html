@@ -284,11 +284,11 @@
         <div style="margin:6px 0px 30px">
       <table class="ss">
         <tr><th colspan="2">Source</th><th>Version</th><th style="max-width:800px">Description</th>
-     <th class="vdoc_extra_column">Phenotype/Disease/Trait
-       <div>
-         <div style="float:left;width:55px;text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Feature type association"><small>Type</small></span></div>
-         <div style="float:left;width:70px;text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Phenotype associations count"><small>Count</small></span></div>
-         <div style="float:left;width:20px;text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Example"><small>e.g.</small></span></div>
+     <th class="vdoc_data_types vdoc_extra_column" style="background-color:#BBB">Phenotype/Disease/Trait
+       <div class="vdoc_data_types">
+         <div class="vdoc_type_style" style="text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Feature type association"><small>Type</small></span></div>
+         <div class="vdoc_count_style" style="text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Phenotype associations count"><small>Count</small></span></div>
+         <div class="vdoc_example_style"><span class="_ht ht" style="border-color:#22949b" title="Example"><small>e.g.</small></span></div>
          <div style="clear:both"></div>
        </div>
      </th>
@@ -300,12 +300,13 @@
         <td style="font-weight:bold"><a href="http://www.sph.umich.edu/csg/abecasis/public/amdgene2012/" style="text-decoration:none" target="_blank">AMDGC</a></td>
         <td>1</td>
         <td style="max-width:800px">The AMD Gene consortium is an international collaboration that seeks to identify genetic loci associated with age-related macular degeneration .</td>
-        <td style="border-left:1px solid #CCC;padding:4px 2px">
-            <div class="vdoc_type_style_phen"><span class="_ht ht" title="Provides Variation phenotype association data">Variation</span></div>
-            <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_thousand" title="Over 3,000 variants">3,000+</span></div>
-            <div class="vdoc_example_style"><a href="/Homo_sapiens/Variation/Phenotype?v=rs2241394" target="_blank" title="See a Variation example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
-            <div style="clear:both"></div>
-          </div></td>
+        <td class="vdoc_extra_column">
+        <div class="vdoc_data_types">
+          <div class="vdoc_type_style"><span class="_ht ht" title="Provides Variation phenotype association data">Variation</span></div>
+          <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_thousand" title="Over 3,000 variants">3,000+</span></div>
+          <div class="vdoc_example_style"><a href="/Homo_sapiens/Variation/Phenotype?v=rs2241394" target="_blank" title="See a Variation example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
+          <div style="clear:both"></div>
+        </div></td>
   
       </tr>
       <tr class="bg2">
@@ -314,17 +315,19 @@
         <td style="font-weight:bold"><a href="http://www.ncbi.nlm.nih.gov/projects/SNP/" style="text-decoration:none" target="_blank">ClinVar</a></td>
         <td>05/2015</td>
         <td style="max-width:800px">Variants of clinical significance imported from ClinVar</td>
-        <td style="border-left:1px solid #CCC;padding:4px 2px">
-            <div class="vdoc_type_style_phen"><span class="_ht ht" title="Provides Structural Variation phenotype association data">SV</span></div>
-            <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_thousand" title="Over 14,000 variants">14,000+</span></div>
-            <div class="vdoc_example_style"><a href="/Homo_sapiens/StructuralVariation/Phenotype?v=nsv869553" target="_blank" title="See a Structural Variation example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
-            <div style="clear:both"></div>
-          </div>
-            <div class="vdoc_type_style_phen"><span class="_ht ht" title="Provides Variation phenotype association data">Variation</span></div>
-            <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_thousand" title="Over 156,000 variants">156,000+</span></div>
-            <div class="vdoc_example_style"><a href="/Homo_sapiens/Variation/Phenotype?v=rs104893852" target="_blank" title="See a Variation example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
-            <div style="clear:both"></div>
-          </div></td>
+        <td class="vdoc_extra_column">
+        <div class="vdoc_data_types">
+          <div class="vdoc_type_style"><span class="_ht ht" title="Provides Structural Variation phenotype association data">SV</span></div>
+          <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_thousand" title="Over 14,000 variants">14,000+</span></div>
+          <div class="vdoc_example_style"><a href="/Homo_sapiens/StructuralVariation/Phenotype?v=nsv869553" target="_blank" title="See a Structural Variation example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
+          <div style="clear:both"></div>
+        </div>
+        <div class="vdoc_data_types">
+          <div class="vdoc_type_style"><span class="_ht ht" title="Provides Variation phenotype association data">Variation</span></div>
+          <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_thousand" title="Over 156,000 variants">156,000+</span></div>
+          <div class="vdoc_example_style"><a href="/Homo_sapiens/Variation/Phenotype?v=rs104893852" target="_blank" title="See a Variation example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
+          <div style="clear:both"></div>
+        </div></td>
   
       </tr>
       <tr class="bg1">
@@ -333,12 +336,13 @@
         <td style="font-weight:bold"><a href="http://cancer.sanger.ac.uk/cancergenome/projects/cosmic/" style="text-decoration:none" target="_blank">COSMIC</a></td>
         <td>71</td>
         <td style="max-width:800px">Somatic mutations found in human cancers from the COSMIC project (mapped to GRCh38)</td>
-        <td style="border-left:1px solid #CCC;padding:4px 2px">
-            <div class="vdoc_type_style_phen"><span class="_ht ht" title="Provides Variation phenotype association data">Variation</span></div>
-            <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_million_2" title="Over 2.2 million variants">2.2 million+</span></div>
-            <div class="vdoc_example_style"><a href="/Homo_sapiens/Variation/Phenotype?v=COSM1627234" target="_blank" title="See a Variation example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
-            <div style="clear:both"></div>
-          </div></td>
+        <td class="vdoc_extra_column">
+        <div class="vdoc_data_types">
+          <div class="vdoc_type_style"><span class="_ht ht" title="Provides Variation phenotype association data">Variation</span></div>
+          <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_million_2" title="Over 2.2 million variants">2.2 million+</span></div>
+          <div class="vdoc_example_style"><a href="/Homo_sapiens/Variation/Phenotype?v=COSM1627234" target="_blank" title="See a Variation example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
+          <div style="clear:both"></div>
+        </div></td>
   
       </tr>
       <tr class="bg2">
@@ -347,12 +351,13 @@
         <td style="font-weight:bold"><a href="http://www.ncbi.nlm.nih.gov/gap" style="text-decoration:none" target="_blank">dbGaP</a></td>
         <td>05/2014</td>
         <td style="max-width:800px">The database of Genotypes and Phenotypes.</td>
-        <td style="border-left:1px solid #CCC;padding:4px 2px">
-            <div class="vdoc_type_style_phen"><span class="_ht ht" title="Provides Variation phenotype association data">Variation</span></div>
-            <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_thousand" title="Over 40,000 variants">40,000+</span></div>
-            <div class="vdoc_example_style"><a href="/Homo_sapiens/Variation/Phenotype?v=rs1877394" target="_blank" title="See a Variation example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
-            <div style="clear:both"></div>
-          </div></td>
+        <td class="vdoc_extra_column">
+        <div class="vdoc_data_types">
+          <div class="vdoc_type_style"><span class="_ht ht" title="Provides Variation phenotype association data">Variation</span></div>
+          <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_thousand" title="Over 40,000 variants">40,000+</span></div>
+          <div class="vdoc_example_style"><a href="/Homo_sapiens/Variation/Phenotype?v=rs1877394" target="_blank" title="See a Variation example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
+          <div style="clear:both"></div>
+        </div></td>
   
       </tr>
       <tr class="bg1">
@@ -361,12 +366,13 @@
         <td style="font-weight:bold"><a href="http://decipher.sanger.ac.uk/" style="text-decoration:none" target="_blank">DDG2P</a></td>
         <td>01/07/2015</td>
         <td style="max-width:800px">Developmental Disorders Genotype-to-Phenotype Database</td>
-        <td style="border-left:1px solid #CCC;padding:4px 2px">
-            <div class="vdoc_type_style_phen"><span class="_ht ht" title="Provides Gene phenotype association data">Gene</span></div>
-            <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_thousand" title="Over 1,000 variants">1,000+</span></div>
-            <div class="vdoc_example_style"><a href="/Homo_sapiens/Gene/Phenotype?g=ENSG00000134532" target="_blank" title="See a Gene example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
-            <div style="clear:both"></div>
-          </div></td>
+        <td class="vdoc_extra_column">
+        <div class="vdoc_data_types">
+          <div class="vdoc_type_style"><span class="_ht ht" title="Provides Gene phenotype association data">Gene</span></div>
+          <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_thousand" title="Over 1,000 variants">1,000+</span></div>
+          <div class="vdoc_example_style"><a href="/Homo_sapiens/Gene/Phenotype?g=ENSG00000134532" target="_blank" title="See a Gene example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
+          <div style="clear:both"></div>
+        </div></td>
   
       </tr>
       <tr class="bg2">
@@ -375,12 +381,13 @@
         <td style="font-weight:bold"><a href="http://www.ebi.ac.uk/dgva/" style="text-decoration:none" target="_blank">DGVa</a></td>
         <td>07/2015</td>
         <td style="max-width:800px">Database of Genomic Variants Archive</td>
-        <td style="border-left:1px solid #CCC;padding:4px 2px">
-            <div class="vdoc_type_style_phen"><span class="_ht ht" title="Provides Structural Variation phenotype association data">SV</span></div>
-            <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_thousand" title="Over 34,000 variants">34,000+</span></div>
-            <div class="vdoc_example_style"><a href="/Homo_sapiens/StructuralVariation/Phenotype?v=esv1913648" target="_blank" title="See a Structural Variation example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
-            <div style="clear:both"></div>
-          </div></td>
+        <td class="vdoc_extra_column">
+        <div class="vdoc_data_types">
+          <div class="vdoc_type_style"><span class="_ht ht" title="Provides Structural Variation phenotype association data">SV</span></div>
+          <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_thousand" title="Over 34,000 variants">34,000+</span></div>
+          <div class="vdoc_example_style"><a href="/Homo_sapiens/StructuralVariation/Phenotype?v=esv1913648" target="_blank" title="See a Structural Variation example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
+          <div style="clear:both"></div>
+        </div></td>
   
       </tr>
       <tr class="bg1">
@@ -389,12 +396,13 @@
         <td style="font-weight:bold"><a href="http://www.gefos.org" style="text-decoration:none" target="_blank">GEFOS</a></td>
         <td>1</td>
         <td style="max-width:800px">The GEnetic Factors for OSteoporosis Consortium international collaboration that seeks to identify common risk gene variants for osteoporosis</td>
-        <td style="border-left:1px solid #CCC;padding:4px 2px">
-            <div class="vdoc_type_style_phen"><span class="_ht ht" title="Provides Variation phenotype association data">Variation</span></div>
-            <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_thousand" title="Over 1,000 variants">1,000+</span></div>
-            <div class="vdoc_example_style"><a href="/Homo_sapiens/Variation/Phenotype?v=rs10411210" target="_blank" title="See a Variation example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
-            <div style="clear:both"></div>
-          </div></td>
+        <td class="vdoc_extra_column">
+        <div class="vdoc_data_types">
+          <div class="vdoc_type_style"><span class="_ht ht" title="Provides Variation phenotype association data">Variation</span></div>
+          <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_thousand" title="Over 1,000 variants">1,000+</span></div>
+          <div class="vdoc_example_style"><a href="/Homo_sapiens/Variation/Phenotype?v=rs10411210" target="_blank" title="See a Variation example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
+          <div style="clear:both"></div>
+        </div></td>
   
       </tr>
       <tr class="bg2">
@@ -403,12 +411,13 @@
         <td style="font-weight:bold"><a href="http://www.broadinstitute.org/collaboration/giant/index.php/Main_Page" style="text-decoration:none" target="_blank">GIANT</a></td>
         <td>1</td>
         <td style="max-width:800px">The Genetic Investigation of ANthropometric Traits (GIANT) consortium is an international collaboration that seeks to identify genetic loci that modulate human body size and shape, including height and measures of obesity.</td>
-        <td style="border-left:1px solid #CCC;padding:4px 2px">
-            <div class="vdoc_type_style_phen"><span class="_ht ht" title="Provides Variation phenotype association data">Variation</span></div>
-            <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_thousand" title="Over 7,000 variants">7,000+</span></div>
-            <div class="vdoc_example_style"><a href="/Homo_sapiens/Variation/Phenotype?v=rs2517525" target="_blank" title="See a Variation example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
-            <div style="clear:both"></div>
-          </div></td>
+        <td class="vdoc_extra_column">
+        <div class="vdoc_data_types">
+          <div class="vdoc_type_style"><span class="_ht ht" title="Provides Variation phenotype association data">Variation</span></div>
+          <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_thousand" title="Over 7,000 variants">7,000+</span></div>
+          <div class="vdoc_example_style"><a href="/Homo_sapiens/Variation/Phenotype?v=rs2517525" target="_blank" title="See a Variation example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
+          <div style="clear:both"></div>
+        </div></td>
   
       </tr>
       <tr class="bg1">
@@ -417,12 +426,13 @@
         <td style="font-weight:bold"><a href="http://www.hgmd.cf.ac.uk/ac/index.php" style="text-decoration:none" target="_blank">HGMD-PUBLIC</a></td>
         <td>2015.2</td>
         <td style="max-width:800px">Variants from HGMD-PUBLIC dataset June 2015 (mapped to GRCh38)</td>
-        <td style="border-left:1px solid #CCC;padding:4px 2px">
-            <div class="vdoc_type_style_phen"><span class="_ht ht" title="Provides Variation phenotype association data">Variation</span></div>
-            <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_thousand" title="Over 107,000 variants">107,000+</span></div>
-            <div class="vdoc_example_style"><a href="/Homo_sapiens/Variation/Phenotype?v=CM980001" target="_blank" title="See a Variation example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
-            <div style="clear:both"></div>
-          </div></td>
+        <td class="vdoc_extra_column">
+        <div class="vdoc_data_types">
+          <div class="vdoc_type_style"><span class="_ht ht" title="Provides Variation phenotype association data">Variation</span></div>
+          <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_thousand" title="Over 107,000 variants">107,000+</span></div>
+          <div class="vdoc_example_style"><a href="/Homo_sapiens/Variation/Phenotype?v=CM980001" target="_blank" title="See a Variation example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
+          <div style="clear:both"></div>
+        </div></td>
   
       </tr>
       <tr class="bg2">
@@ -431,12 +441,13 @@
         <td style="font-weight:bold"><a href="http://www.ibdgenetics.org/" style="text-decoration:none" target="_blank">IIBDGC</a></td>
         <td>1</td>
         <td style="max-width:800px">International Inflammatory Bowel Disease Genetics Consortium</td>
-        <td style="border-left:1px solid #CCC;padding:4px 2px">
-            <div class="vdoc_type_style_phen"><span class="_ht ht" title="Provides Variation phenotype association data">Variation</span></div>
-            <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_thousand" title="Over 10,000 variants">10,000+</span></div>
-            <div class="vdoc_example_style"><a href="/Homo_sapiens/Variation/Phenotype?v=rs2024092" target="_blank" title="See a Variation example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
-            <div style="clear:both"></div>
-          </div></td>
+        <td class="vdoc_extra_column">
+        <div class="vdoc_data_types">
+          <div class="vdoc_type_style"><span class="_ht ht" title="Provides Variation phenotype association data">Variation</span></div>
+          <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_thousand" title="Over 10,000 variants">10,000+</span></div>
+          <div class="vdoc_example_style"><a href="/Homo_sapiens/Variation/Phenotype?v=rs2024092" target="_blank" title="See a Variation example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
+          <div style="clear:both"></div>
+        </div></td>
   
       </tr>
       <tr class="bg1">
@@ -445,12 +456,13 @@
         <td style="font-weight:bold"><a href="http://www.magicinvestigators.org/" style="text-decoration:none" target="_blank">MAGIC</a></td>
         <td>1</td>
         <td style="max-width:800px">MAGIC (the Meta-Analyses of Glucose and Insulin-related traits Consortium) represents a collaborative effort to combine data from multiple GWAS to identify additional loci that impact on glycemic and metabolic traits</td>
-        <td style="border-left:1px solid #CCC;padding:4px 2px">
-            <div class="vdoc_type_style_phen"><span class="_ht ht" title="Provides Variation phenotype association data">Variation</span></div>
-            <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_thousand" title="Over 1,000 variants">1,000+</span></div>
-            <div class="vdoc_example_style"><a href="/Homo_sapiens/Variation/Phenotype?v=rs6101962" target="_blank" title="See a Variation example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
-            <div style="clear:both"></div>
-          </div></td>
+        <td class="vdoc_extra_column">
+        <div class="vdoc_data_types">
+          <div class="vdoc_type_style"><span class="_ht ht" title="Provides Variation phenotype association data">Variation</span></div>
+          <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_thousand" title="Over 1,000 variants">1,000+</span></div>
+          <div class="vdoc_example_style"><a href="/Homo_sapiens/Variation/Phenotype?v=rs6101962" target="_blank" title="See a Variation example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
+          <div style="clear:both"></div>
+        </div></td>
   
       </tr>
       <tr class="bg2">
@@ -459,12 +471,13 @@
         <td style="font-weight:bold"><a href="http://www.omim.org/" style="text-decoration:none" target="_blank">MIM disease</a></td>
         <td>09/08/2015</td>
         <td style="max-width:800px">Online Mendelian Inheritance in Man (OMIM) database</td>
-        <td style="border-left:1px solid #CCC;padding:4px 2px">
-            <div class="vdoc_type_style_phen"><span class="_ht ht" title="Provides Gene phenotype association data">Gene</span></div>
-            <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_thousand" title="Over 6,000 variants">6,000+</span></div>
-            <div class="vdoc_example_style"><a href="/Homo_sapiens/Gene/Phenotype?g=ENSG00000130948" target="_blank" title="See a Gene example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
-            <div style="clear:both"></div>
-          </div></td>
+        <td class="vdoc_extra_column">
+        <div class="vdoc_data_types">
+          <div class="vdoc_type_style"><span class="_ht ht" title="Provides Gene phenotype association data">Gene</span></div>
+          <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_thousand" title="Over 6,000 variants">6,000+</span></div>
+          <div class="vdoc_example_style"><a href="/Homo_sapiens/Gene/Phenotype?g=ENSG00000130948" target="_blank" title="See a Gene example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
+          <div style="clear:both"></div>
+        </div></td>
   
       </tr>
       <tr class="bg1">
@@ -473,12 +486,13 @@
         <td style="font-weight:bold"><a href="http://www.ebi.ac.uk/gwas/" style="text-decoration:none" target="_blank">NHGRI-EBI GWAS catalog</a></td>
         <td>09/08/2015</td>
         <td style="max-width:800px">Variants associated with phenotype data from the NHGRI-EBI GWAS catalog</td>
-        <td style="border-left:1px solid #CCC;padding:4px 2px">
-            <div class="vdoc_type_style_phen"><span class="_ht ht" title="Provides Variation phenotype association data">Variation</span></div>
-            <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_thousand" title="Over 22,000 variants">22,000+</span></div>
-            <div class="vdoc_example_style"><a href="/Homo_sapiens/Variation/Phenotype?v=rs4925295" target="_blank" title="See a Variation example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
-            <div style="clear:both"></div>
-          </div></td>
+        <td class="vdoc_extra_column">
+        <div class="vdoc_data_types">
+          <div class="vdoc_type_style"><span class="_ht ht" title="Provides Variation phenotype association data">Variation</span></div>
+          <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_thousand" title="Over 22,000 variants">22,000+</span></div>
+          <div class="vdoc_example_style"><a href="/Homo_sapiens/Variation/Phenotype?v=rs4925295" target="_blank" title="See a Variation example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
+          <div style="clear:both"></div>
+        </div></td>
   
       </tr>
       <tr class="bg2">
@@ -487,12 +501,13 @@
         <td style="font-weight:bold"><a href="http://www.omim.org/" style="text-decoration:none" target="_blank">OMIM</a></td>
         <td>20/07/2015</td>
         <td style="max-width:800px">Variations linked to entries in the Online Mendelian Inheritance in Man (OMIM) database</td>
-        <td style="border-left:1px solid #CCC;padding:4px 2px">
-            <div class="vdoc_type_style_phen"><span class="_ht ht" title="Provides Variation phenotype association data">Variation</span></div>
-            <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_thousand" title="Over 19,000 variants">19,000+</span></div>
-            <div class="vdoc_example_style"><a href="/Homo_sapiens/Variation/Phenotype?v=rs61754278" target="_blank" title="See a Variation example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
-            <div style="clear:both"></div>
-          </div></td>
+        <td class="vdoc_extra_column">
+        <div class="vdoc_data_types">
+          <div class="vdoc_type_style"><span class="_ht ht" title="Provides Variation phenotype association data">Variation</span></div>
+          <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_thousand" title="Over 19,000 variants">19,000+</span></div>
+          <div class="vdoc_example_style"><a href="/Homo_sapiens/Variation/Phenotype?v=rs61754278" target="_blank" title="See a Variation example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
+          <div style="clear:both"></div>
+        </div></td>
   
       </tr>
       <tr class="bg1">
@@ -501,12 +516,13 @@
         <td style="font-weight:bold"><a href="http://www.orpha.net/" style="text-decoration:none" target="_blank">Orphanet</a></td>
         <td>01/08/2015</td>
         <td style="max-width:800px">The portal for rare diseases and drugs</td>
-        <td style="border-left:1px solid #CCC;padding:4px 2px">
-            <div class="vdoc_type_style_phen"><span class="_ht ht" title="Provides Gene phenotype association data">Gene</span></div>
-            <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_thousand" title="Over 6,000 variants">6,000+</span></div>
-            <div class="vdoc_example_style"><a href="/Homo_sapiens/Gene/Phenotype?g=ENSG00000134532" target="_blank" title="See a Gene example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
-            <div style="clear:both"></div>
-          </div></td>
+        <td class="vdoc_extra_column">
+        <div class="vdoc_data_types">
+          <div class="vdoc_type_style"><span class="_ht ht" title="Provides Gene phenotype association data">Gene</span></div>
+          <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_thousand" title="Over 6,000 variants">6,000+</span></div>
+          <div class="vdoc_example_style"><a href="/Homo_sapiens/Gene/Phenotype?g=ENSG00000134532" target="_blank" title="See a Gene example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
+          <div style="clear:both"></div>
+        </div></td>
   
       </tr>
       <tr class="bg2">
@@ -515,12 +531,13 @@
         <td style="font-weight:bold"><a href="http://www.sph.umich.edu/csg/abecasis/public/lipids2010/" style="text-decoration:none" target="_blank">Teslovich</a></td>
         <td>1</td>
         <td style="max-width:800px">Biological, clinical and population relevance of 95 loci for blood lipids</td>
-        <td style="border-left:1px solid #CCC;padding:4px 2px">
-            <div class="vdoc_type_style_phen"><span class="_ht ht" title="Provides Variation phenotype association data">Variation</span></div>
-            <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_thousand" title="Over 7,000 variants">7,000+</span></div>
-            <div class="vdoc_example_style"><a href="/Homo_sapiens/Variation/Phenotype?v=rs2278236" target="_blank" title="See a Variation example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
-            <div style="clear:both"></div>
-          </div></td>
+        <td class="vdoc_extra_column">
+        <div class="vdoc_data_types">
+          <div class="vdoc_type_style"><span class="_ht ht" title="Provides Variation phenotype association data">Variation</span></div>
+          <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_thousand" title="Over 7,000 variants">7,000+</span></div>
+          <div class="vdoc_example_style"><a href="/Homo_sapiens/Variation/Phenotype?v=rs2278236" target="_blank" title="See a Variation example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
+          <div style="clear:both"></div>
+        </div></td>
   
       </tr>
       <tr class="bg1">
@@ -529,12 +546,13 @@
         <td style="font-weight:bold"><a href="http://www.uniprot.org/" style="text-decoration:none" target="_blank">Uniprot</a></td>
         <td>24/06/2015</td>
         <td style="max-width:800px">Variants with protein annotation imported from Uniprot</td>
-        <td style="border-left:1px solid #CCC;padding:4px 2px">
-            <div class="vdoc_type_style_phen"><span class="_ht ht" title="Provides Variation phenotype association data">Variation</span></div>
-            <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_thousand" title="Over 3,000 variants">3,000+</span></div>
-            <div class="vdoc_example_style"><a href="/Homo_sapiens/Variation/Phenotype?v=rs28935476" target="_blank" title="See a Variation example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
-            <div style="clear:both"></div>
-          </div></td>
+        <td class="vdoc_extra_column">
+        <div class="vdoc_data_types">
+          <div class="vdoc_type_style"><span class="_ht ht" title="Provides Variation phenotype association data">Variation</span></div>
+          <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_thousand" title="Over 3,000 variants">3,000+</span></div>
+          <div class="vdoc_example_style"><a href="/Homo_sapiens/Variation/Phenotype?v=rs28935476" target="_blank" title="See a Variation example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
+          <div style="clear:both"></div>
+        </div></td>
   
       </tr>
     </table>
@@ -557,11 +575,11 @@
         <div style="margin:6px 0px 30px">
       <table class="ss">
         <tr><th colspan="2">Source</th><th>Version</th><th style="max-width:800px">Description</th>
-     <th class="vdoc_extra_column">Phenotype/Disease/Trait
-       <div>
-         <div style="float:left;width:55px;text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Feature type association"><small>Type</small></span></div>
-         <div style="float:left;width:70px;text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Phenotype associations count"><small>Count</small></span></div>
-         <div style="float:left;width:20px;text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Example"><small>e.g.</small></span></div>
+     <th class="vdoc_data_types vdoc_extra_column" style="background-color:#BBB">Phenotype/Disease/Trait
+       <div class="vdoc_data_types">
+         <div class="vdoc_type_style" style="text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Feature type association"><small>Type</small></span></div>
+         <div class="vdoc_count_style" style="text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Phenotype associations count"><small>Count</small></span></div>
+         <div class="vdoc_example_style"><span class="_ht ht" style="border-color:#22949b" title="Example"><small>e.g.</small></span></div>
          <div style="clear:both"></div>
        </div>
      </th>
@@ -573,12 +591,13 @@
         <td style="font-weight:bold"><a href="http://omia.angis.org.au/home/" style="text-decoration:none" target="_blank">OMIA</a></td>
         <td>02/07/2015</td>
         <td style="max-width:800px">Online Mendelian Inheritance in Animals (OMIA) is a database of genes, inherited disorders and traits in more than 200 animal species (other than human and mouse)</td>
-        <td style="border-left:1px solid #CCC;padding:4px 2px">
-            <div class="vdoc_type_style_phen"><span class="_ht ht" title="Provides Gene phenotype association data">Gene</span></div>
-            <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_hundred" title="38 variants">38</span></div>
-            <div class="vdoc_example_style"><a href="/Felis_catus/Gene/Phenotype?g=ENSFCAG00000002804" target="_blank" title="See a Gene example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
-            <div style="clear:both"></div>
-          </div></td>
+        <td class="vdoc_extra_column">
+        <div class="vdoc_data_types">
+          <div class="vdoc_type_style"><span class="_ht ht" title="Provides Gene phenotype association data">Gene</span></div>
+          <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_hundred" title="38 variants">38</span></div>
+          <div class="vdoc_example_style"><a href="/Felis_catus/Gene/Phenotype?g=ENSFCAG00000002804" target="_blank" title="See a Gene example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
+          <div style="clear:both"></div>
+        </div></td>
   
       </tr>
     </table>
@@ -596,11 +615,11 @@
         <div style="margin:6px 0px 30px">
       <table class="ss">
         <tr><th colspan="2">Source</th><th>Version</th><th style="max-width:800px">Description</th>
-     <th class="vdoc_extra_column">Phenotype/Disease/Trait
-       <div>
-         <div style="float:left;width:55px;text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Feature type association"><small>Type</small></span></div>
-         <div style="float:left;width:70px;text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Phenotype associations count"><small>Count</small></span></div>
-         <div style="float:left;width:20px;text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Example"><small>e.g.</small></span></div>
+     <th class="vdoc_data_types vdoc_extra_column" style="background-color:#BBB">Phenotype/Disease/Trait
+       <div class="vdoc_data_types">
+         <div class="vdoc_type_style" style="text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Feature type association"><small>Type</small></span></div>
+         <div class="vdoc_count_style" style="text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Phenotype associations count"><small>Count</small></span></div>
+         <div class="vdoc_example_style"><span class="_ht ht" style="border-color:#22949b" title="Example"><small>e.g.</small></span></div>
          <div style="clear:both"></div>
        </div>
      </th>
@@ -612,12 +631,13 @@
         <td style="font-weight:bold"><a href="http://www.animalgenome.org/cgi-bin/QTLdb/index" style="text-decoration:none" target="_blank">Animal_QTLdb</a></td>
         <td>27/04/2015</td>
         <td style="max-width:800px">The Animal Quantitative Trait Loci (QTL) database (Animal QTLdb) is designed to house all publicly available QTL and association data on livestock animal species</td>
-        <td style="border-left:1px solid #CCC;padding:4px 2px">
-            <div class="vdoc_type_style_phen"><span class="_ht ht" title="Provides QTL phenotype association data">QTL</span></div>
-            <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_thousand" title="Over 4,000 variants">4,000+</span></div>
-            <div class="vdoc_example_style"><a href="/Gallus_gallus/Phenotype/Locations?ph=34" target="_blank" title="See a QTL example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
-            <div style="clear:both"></div>
-          </div></td>
+        <td class="vdoc_extra_column">
+        <div class="vdoc_data_types">
+          <div class="vdoc_type_style"><span class="_ht ht" title="Provides QTL phenotype association data">QTL</span></div>
+          <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_thousand" title="Over 4,000 variants">4,000+</span></div>
+          <div class="vdoc_example_style"><a href="/Gallus_gallus/Phenotype/Locations?ph=34" target="_blank" title="See a QTL example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
+          <div style="clear:both"></div>
+        </div></td>
   
       </tr>
       <tr class="bg2">
@@ -626,12 +646,13 @@
         <td style="font-weight:bold"><a href="http://omia.angis.org.au/home/" style="text-decoration:none" target="_blank">OMIA</a></td>
         <td>02/07/2015</td>
         <td style="max-width:800px">Online Mendelian Inheritance in Animals (OMIA) is a database of genes, inherited disorders and traits in more than 200 animal species (other than human, mouse and rat)</td>
-        <td style="border-left:1px solid #CCC;padding:4px 2px">
-            <div class="vdoc_type_style_phen"><span class="_ht ht" title="Provides Gene phenotype association data">Gene</span></div>
-            <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_hundred" title="40 variants">40</span></div>
-            <div class="vdoc_example_style"><a href="/Gallus_gallus/Gene/Phenotype?g=ENSGALG00000015433" target="_blank" title="See a Gene example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
-            <div style="clear:both"></div>
-          </div></td>
+        <td class="vdoc_extra_column">
+        <div class="vdoc_data_types">
+          <div class="vdoc_type_style"><span class="_ht ht" title="Provides Gene phenotype association data">Gene</span></div>
+          <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_hundred" title="40 variants">40</span></div>
+          <div class="vdoc_example_style"><a href="/Gallus_gallus/Gene/Phenotype?g=ENSGALG00000015433" target="_blank" title="See a Gene example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
+          <div style="clear:both"></div>
+        </div></td>
   
       </tr>
     </table>
@@ -649,11 +670,11 @@
         <div style="margin:6px 0px 30px">
       <table class="ss">
         <tr><th colspan="2">Source</th><th>Version</th><th style="max-width:800px">Description</th>
-     <th class="vdoc_extra_column">Phenotype/Disease/Trait
-       <div>
-         <div style="float:left;width:55px;text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Feature type association"><small>Type</small></span></div>
-         <div style="float:left;width:70px;text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Phenotype associations count"><small>Count</small></span></div>
-         <div style="float:left;width:20px;text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Example"><small>e.g.</small></span></div>
+     <th class="vdoc_data_types vdoc_extra_column" style="background-color:#BBB">Phenotype/Disease/Trait
+       <div class="vdoc_data_types">
+         <div class="vdoc_type_style" style="text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Feature type association"><small>Type</small></span></div>
+         <div class="vdoc_count_style" style="text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Phenotype associations count"><small>Count</small></span></div>
+         <div class="vdoc_example_style"><span class="_ht ht" style="border-color:#22949b" title="Example"><small>e.g.</small></span></div>
          <div style="clear:both"></div>
        </div>
      </th>
@@ -665,12 +686,13 @@
         <td style="font-weight:bold"><a href="http://omia.angis.org.au/home/" style="text-decoration:none" target="_blank">OMIA</a></td>
         <td>30/03/2015</td>
         <td style="max-width:800px">Online Mendelian Inheritance in Animals (OMIA) is a database of genes, inherited disorders and traits in more than 135 animal species (other than human and mouse)</td>
-        <td style="border-left:1px solid #CCC;padding:4px 2px">
-            <div class="vdoc_type_style_phen"><span class="_ht ht" title="Provides Gene phenotype association data">Gene</span></div>
-            <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_hundred" title="1 variants">1</span></div>
-            <div class="vdoc_example_style"><a href="/Pan_troglodytes/Gene/Phenotype?g=ENSPTRG00000021513" target="_blank" title="See a Gene example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
-            <div style="clear:both"></div>
-          </div></td>
+        <td class="vdoc_extra_column">
+        <div class="vdoc_data_types">
+          <div class="vdoc_type_style"><span class="_ht ht" title="Provides Gene phenotype association data">Gene</span></div>
+          <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_hundred" title="1 variants">1</span></div>
+          <div class="vdoc_example_style"><a href="/Pan_troglodytes/Gene/Phenotype?g=ENSPTRG00000021513" target="_blank" title="See a Gene example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
+          <div style="clear:both"></div>
+        </div></td>
   
       </tr>
     </table>
@@ -688,11 +710,11 @@
         <div style="margin:6px 0px 30px">
       <table class="ss">
         <tr><th colspan="2">Source</th><th>Version</th><th style="max-width:800px">Description</th>
-     <th class="vdoc_extra_column">Phenotype/Disease/Trait
-       <div>
-         <div style="float:left;width:55px;text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Feature type association"><small>Type</small></span></div>
-         <div style="float:left;width:70px;text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Phenotype associations count"><small>Count</small></span></div>
-         <div style="float:left;width:20px;text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Example"><small>e.g.</small></span></div>
+     <th class="vdoc_data_types vdoc_extra_column" style="background-color:#BBB">Phenotype/Disease/Trait
+       <div class="vdoc_data_types">
+         <div class="vdoc_type_style" style="text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Feature type association"><small>Type</small></span></div>
+         <div class="vdoc_count_style" style="text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Phenotype associations count"><small>Count</small></span></div>
+         <div class="vdoc_example_style"><span class="_ht ht" style="border-color:#22949b" title="Example"><small>e.g.</small></span></div>
          <div style="clear:both"></div>
        </div>
      </th>
@@ -704,12 +726,13 @@
         <td style="font-weight:bold"><a href="http://www.animalgenome.org/cgi-bin/QTLdb/index" style="text-decoration:none" target="_blank">Animal_QTLdb</a></td>
         <td>27/04/2015</td>
         <td style="max-width:800px">The Animal Quantitative Trait Loci (QTL) database (Animal QTLdb) is designed to house all publicly available QTL and association data on livestock animal species</td>
-        <td style="border-left:1px solid #CCC;padding:4px 2px">
-            <div class="vdoc_type_style_phen"><span class="_ht ht" title="Provides QTL phenotype association data">QTL</span></div>
-            <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_thousand" title="Over 17,000 variants">17,000+</span></div>
-            <div class="vdoc_example_style"><a href="/Bos_taurus/Phenotype/Locations?ph=592" target="_blank" title="See a QTL example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
-            <div style="clear:both"></div>
-          </div></td>
+        <td class="vdoc_extra_column">
+        <div class="vdoc_data_types">
+          <div class="vdoc_type_style"><span class="_ht ht" title="Provides QTL phenotype association data">QTL</span></div>
+          <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_thousand" title="Over 17,000 variants">17,000+</span></div>
+          <div class="vdoc_example_style"><a href="/Bos_taurus/Phenotype/Locations?ph=592" target="_blank" title="See a QTL example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
+          <div style="clear:both"></div>
+        </div></td>
   
       </tr>
       <tr class="bg2">
@@ -718,12 +741,13 @@
         <td style="font-weight:bold"><a href="http://omia.angis.org.au/home/" style="text-decoration:none" target="_blank">OMIA</a></td>
         <td>02/07/2015</td>
         <td style="max-width:800px">Online Mendelian Inheritance in Animals (OMIA) is a database of genes, inherited disorders and traits in more than 200 animal species (other than human and mouse)</td>
-        <td style="border-left:1px solid #CCC;padding:4px 2px">
-            <div class="vdoc_type_style_phen"><span class="_ht ht" title="Provides Gene phenotype association data">Gene</span></div>
-            <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_hundred" title="92 variants">92</span></div>
-            <div class="vdoc_example_style"><a href="/Bos_taurus/Gene/Phenotype?g=ENSBTAG00000034193" target="_blank" title="See a Gene example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
-            <div style="clear:both"></div>
-          </div></td>
+        <td class="vdoc_extra_column">
+        <div class="vdoc_data_types">
+          <div class="vdoc_type_style"><span class="_ht ht" title="Provides Gene phenotype association data">Gene</span></div>
+          <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_hundred" title="92 variants">92</span></div>
+          <div class="vdoc_example_style"><a href="/Bos_taurus/Gene/Phenotype?g=ENSBTAG00000034193" target="_blank" title="See a Gene example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
+          <div style="clear:both"></div>
+        </div></td>
   
       </tr>
     </table>
@@ -741,11 +765,11 @@
         <div style="margin:6px 0px 30px">
       <table class="ss">
         <tr><th colspan="2">Source</th><th>Version</th><th style="max-width:800px">Description</th>
-     <th class="vdoc_extra_column">Phenotype/Disease/Trait
-       <div>
-         <div style="float:left;width:55px;text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Feature type association"><small>Type</small></span></div>
-         <div style="float:left;width:70px;text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Phenotype associations count"><small>Count</small></span></div>
-         <div style="float:left;width:20px;text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Example"><small>e.g.</small></span></div>
+     <th class="vdoc_data_types vdoc_extra_column" style="background-color:#BBB">Phenotype/Disease/Trait
+       <div class="vdoc_data_types">
+         <div class="vdoc_type_style" style="text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Feature type association"><small>Type</small></span></div>
+         <div class="vdoc_count_style" style="text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Phenotype associations count"><small>Count</small></span></div>
+         <div class="vdoc_example_style"><span class="_ht ht" style="border-color:#22949b" title="Example"><small>e.g.</small></span></div>
          <div style="clear:both"></div>
        </div>
      </th>
@@ -757,12 +781,13 @@
         <td style="font-weight:bold"><a href="http://omia.angis.org.au/home/" style="text-decoration:none" target="_blank">OMIA</a></td>
         <td>26/05/2015</td>
         <td style="max-width:800px">Online Mendelian Inheritance in Animals (OMIA) is a database of genes, inherited disorders and traits in more than 135 animal species (other than human and mouse)</td>
-        <td style="border-left:1px solid #CCC;padding:4px 2px">
-            <div class="vdoc_type_style_phen"><span class="_ht ht" title="Provides Gene phenotype association data">Gene</span></div>
-            <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_hundred" title="159 variants">159</span></div>
-            <div class="vdoc_example_style"><a href="/Canis_familiaris/Gene/Phenotype?g=ENSCAFG00000008906" target="_blank" title="See a Gene example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
-            <div style="clear:both"></div>
-          </div></td>
+        <td class="vdoc_extra_column">
+        <div class="vdoc_data_types">
+          <div class="vdoc_type_style"><span class="_ht ht" title="Provides Gene phenotype association data">Gene</span></div>
+          <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_hundred" title="159 variants">159</span></div>
+          <div class="vdoc_example_style"><a href="/Canis_familiaris/Gene/Phenotype?g=ENSCAFG00000008906" target="_blank" title="See a Gene example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
+          <div style="clear:both"></div>
+        </div></td>
   
       </tr>
     </table>
@@ -780,11 +805,11 @@
         <div style="margin:6px 0px 30px">
       <table class="ss">
         <tr><th colspan="2">Source</th><th>Version</th><th style="max-width:800px">Description</th>
-     <th class="vdoc_extra_column">Phenotype/Disease/Trait
-       <div>
-         <div style="float:left;width:55px;text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Feature type association"><small>Type</small></span></div>
-         <div style="float:left;width:70px;text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Phenotype associations count"><small>Count</small></span></div>
-         <div style="float:left;width:20px;text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Example"><small>e.g.</small></span></div>
+     <th class="vdoc_data_types vdoc_extra_column" style="background-color:#BBB">Phenotype/Disease/Trait
+       <div class="vdoc_data_types">
+         <div class="vdoc_type_style" style="text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Feature type association"><small>Type</small></span></div>
+         <div class="vdoc_count_style" style="text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Phenotype associations count"><small>Count</small></span></div>
+         <div class="vdoc_example_style"><span class="_ht ht" style="border-color:#22949b" title="Example"><small>e.g.</small></span></div>
          <div style="clear:both"></div>
        </div>
      </th>
@@ -796,12 +821,13 @@
         <td style="font-weight:bold"><a href="http://www.animalgenome.org/cgi-bin/QTLdb/index" style="text-decoration:none" target="_blank">Animal_QTLdb</a></td>
         <td>27/04/2015</td>
         <td style="max-width:800px">The Animal Quantitative Trait Loci (QTL) database (Animal QTLdb) is designed to house all publicly available QTL and association data on livestock animal species</td>
-        <td style="border-left:1px solid #CCC;padding:4px 2px">
-            <div class="vdoc_type_style_phen"><span class="_ht ht" title="Provides QTL phenotype association data">QTL</span></div>
-            <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_thousand" title="Over 1,000 variants">1,000+</span></div>
-            <div class="vdoc_example_style"><a href="/Equus_caballus/Phenotype/Locations?ph=39" target="_blank" title="See a QTL example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
-            <div style="clear:both"></div>
-          </div></td>
+        <td class="vdoc_extra_column">
+        <div class="vdoc_data_types">
+          <div class="vdoc_type_style"><span class="_ht ht" title="Provides QTL phenotype association data">QTL</span></div>
+          <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_thousand" title="Over 1,000 variants">1,000+</span></div>
+          <div class="vdoc_example_style"><a href="/Equus_caballus/Phenotype/Locations?ph=39" target="_blank" title="See a QTL example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
+          <div style="clear:both"></div>
+        </div></td>
   
       </tr>
       <tr class="bg2">
@@ -810,12 +836,13 @@
         <td style="font-weight:bold"><a href="http://omia.angis.org.au/home/" style="text-decoration:none" target="_blank">OMIA</a></td>
         <td>02/07/2015</td>
         <td style="max-width:800px">Online Mendelian Inheritance in Animals (OMIA) is a database of genes, inherited disorders and traits in more than 200 animal species (other than human and mouse)</td>
-        <td style="border-left:1px solid #CCC;padding:4px 2px">
-            <div class="vdoc_type_style_phen"><span class="_ht ht" title="Provides Gene phenotype association data">Gene</span></div>
-            <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_hundred" title="35 variants">35</span></div>
-            <div class="vdoc_example_style"><a href="/Equus_caballus/Gene/Phenotype?g=ENSECAG00000014271" target="_blank" title="See a Gene example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
-            <div style="clear:both"></div>
-          </div></td>
+        <td class="vdoc_extra_column">
+        <div class="vdoc_data_types">
+          <div class="vdoc_type_style"><span class="_ht ht" title="Provides Gene phenotype association data">Gene</span></div>
+          <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_hundred" title="35 variants">35</span></div>
+          <div class="vdoc_example_style"><a href="/Equus_caballus/Gene/Phenotype?g=ENSECAG00000014271" target="_blank" title="See a Gene example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
+          <div style="clear:both"></div>
+        </div></td>
   
       </tr>
     </table>
@@ -833,11 +860,11 @@
         <div style="margin:6px 0px 30px">
       <table class="ss">
         <tr><th colspan="2">Source</th><th>Version</th><th style="max-width:800px">Description</th>
-     <th class="vdoc_extra_column">Phenotype/Disease/Trait
-       <div>
-         <div style="float:left;width:55px;text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Feature type association"><small>Type</small></span></div>
-         <div style="float:left;width:70px;text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Phenotype associations count"><small>Count</small></span></div>
-         <div style="float:left;width:20px;text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Example"><small>e.g.</small></span></div>
+     <th class="vdoc_data_types vdoc_extra_column" style="background-color:#BBB">Phenotype/Disease/Trait
+       <div class="vdoc_data_types">
+         <div class="vdoc_type_style" style="text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Feature type association"><small>Type</small></span></div>
+         <div class="vdoc_count_style" style="text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Phenotype associations count"><small>Count</small></span></div>
+         <div class="vdoc_example_style"><span class="_ht ht" style="border-color:#22949b" title="Example"><small>e.g.</small></span></div>
          <div style="clear:both"></div>
        </div>
      </th>
@@ -849,12 +876,13 @@
         <td style="font-weight:bold"><a href="http://omia.angis.org.au/home/" style="text-decoration:none" target="_blank">OMIA</a></td>
         <td>30/03/2015</td>
         <td style="max-width:800px">Online Mendelian Inheritance in Animals (OMIA) is a database of genes, inherited disorders and traits in more than 135 animal species (other than human and mouse)</td>
-        <td style="border-left:1px solid #CCC;padding:4px 2px">
-            <div class="vdoc_type_style_phen"><span class="_ht ht" title="Provides Gene phenotype association data">Gene</span></div>
-            <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_hundred" title="3 variants">3</span></div>
-            <div class="vdoc_example_style"><a href="/Macaca_mulatta/Gene/Phenotype?g=ENSMMUG00000017261" target="_blank" title="See a Gene example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
-            <div style="clear:both"></div>
-          </div></td>
+        <td class="vdoc_extra_column">
+        <div class="vdoc_data_types">
+          <div class="vdoc_type_style"><span class="_ht ht" title="Provides Gene phenotype association data">Gene</span></div>
+          <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_hundred" title="3 variants">3</span></div>
+          <div class="vdoc_example_style"><a href="/Macaca_mulatta/Gene/Phenotype?g=ENSMMUG00000017261" target="_blank" title="See a Gene example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
+          <div style="clear:both"></div>
+        </div></td>
   
       </tr>
     </table>
@@ -872,11 +900,11 @@
         <div style="margin:6px 0px 30px">
       <table class="ss">
         <tr><th colspan="2">Source</th><th>Version</th><th style="max-width:800px">Description</th>
-     <th class="vdoc_extra_column">Phenotype/Disease/Trait
-       <div>
-         <div style="float:left;width:55px;text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Feature type association"><small>Type</small></span></div>
-         <div style="float:left;width:70px;text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Phenotype associations count"><small>Count</small></span></div>
-         <div style="float:left;width:20px;text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Example"><small>e.g.</small></span></div>
+     <th class="vdoc_data_types vdoc_extra_column" style="background-color:#BBB">Phenotype/Disease/Trait
+       <div class="vdoc_data_types">
+         <div class="vdoc_type_style" style="text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Feature type association"><small>Type</small></span></div>
+         <div class="vdoc_count_style" style="text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Phenotype associations count"><small>Count</small></span></div>
+         <div class="vdoc_example_style"><span class="_ht ht" style="border-color:#22949b" title="Example"><small>e.g.</small></span></div>
          <div style="clear:both"></div>
        </div>
      </th>
@@ -888,12 +916,13 @@
         <td style="font-weight:bold"><a href="http://www.immunophenotyping.org/" style="text-decoration:none" target="_blank">3i</a></td>
         <td>16/06/2015</td>
         <td style="max-width:800px">Infection, Immunity and Immunophenotyping consortium</td>
-        <td style="border-left:1px solid #CCC;padding:4px 2px">
-            <div class="vdoc_type_style_phen"><span class="_ht ht" title="Provides Gene phenotype association data">Gene</span></div>
-            <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_hundred" title="506 variants">506</span></div>
-            <div class="vdoc_example_style"><a href="/Mus_musculus/Gene/Phenotype?g=ENSMUSG00000021669" target="_blank" title="See a Gene example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
-            <div style="clear:both"></div>
-          </div></td>
+        <td class="vdoc_extra_column">
+        <div class="vdoc_data_types">
+          <div class="vdoc_type_style"><span class="_ht ht" title="Provides Gene phenotype association data">Gene</span></div>
+          <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_hundred" title="506 variants">506</span></div>
+          <div class="vdoc_example_style"><a href="/Mus_musculus/Gene/Phenotype?g=ENSMUSG00000021669" target="_blank" title="See a Gene example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
+          <div style="clear:both"></div>
+        </div></td>
   
       </tr>
       <tr class="bg2">
@@ -902,12 +931,13 @@
         <td style="font-weight:bold"><a href="http://www.europhenome.org/" style="text-decoration:none" target="_blank">EuroPhenome</a></td>
         <td>16/06/2015</td>
         <td style="max-width:800px">EuroPhenome</td>
-        <td style="border-left:1px solid #CCC;padding:4px 2px">
-            <div class="vdoc_type_style_phen"><span class="_ht ht" title="Provides Gene phenotype association data">Gene</span></div>
-            <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_thousand" title="Over 2,000 variants">2,000+</span></div>
-            <div class="vdoc_example_style"><a href="/Mus_musculus/Gene/Phenotype?g=ENSMUSG00000029491" target="_blank" title="See a Gene example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
-            <div style="clear:both"></div>
-          </div></td>
+        <td class="vdoc_extra_column">
+        <div class="vdoc_data_types">
+          <div class="vdoc_type_style"><span class="_ht ht" title="Provides Gene phenotype association data">Gene</span></div>
+          <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_thousand" title="Over 2,000 variants">2,000+</span></div>
+          <div class="vdoc_example_style"><a href="/Mus_musculus/Gene/Phenotype?g=ENSMUSG00000029491" target="_blank" title="See a Gene example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
+          <div style="clear:both"></div>
+        </div></td>
   
       </tr>
       <tr class="bg1">
@@ -916,12 +946,13 @@
         <td style="font-weight:bold"><a href="http://www.mousephenotype.org/" style="text-decoration:none" target="_blank">IMPC</a></td>
         <td>16/06/2015</td>
         <td style="max-width:800px">International Mouse Phenotyping Consortium</td>
-        <td style="border-left:1px solid #CCC;padding:4px 2px">
-            <div class="vdoc_type_style_phen"><span class="_ht ht" title="Provides Gene phenotype association data">Gene</span></div>
-            <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_thousand" title="Over 5,000 variants">5,000+</span></div>
-            <div class="vdoc_example_style"><a href="/Mus_musculus/Gene/Phenotype?g=ENSMUSG00000025229" target="_blank" title="See a Gene example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
-            <div style="clear:both"></div>
-          </div></td>
+        <td class="vdoc_extra_column">
+        <div class="vdoc_data_types">
+          <div class="vdoc_type_style"><span class="_ht ht" title="Provides Gene phenotype association data">Gene</span></div>
+          <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_thousand" title="Over 5,000 variants">5,000+</span></div>
+          <div class="vdoc_example_style"><a href="/Mus_musculus/Gene/Phenotype?g=ENSMUSG00000025229" target="_blank" title="See a Gene example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
+          <div style="clear:both"></div>
+        </div></td>
   
       </tr>
       <tr class="bg2">
@@ -930,12 +961,13 @@
         <td style="font-weight:bold"><a href="http://www.sanger.ac.uk/resources/mouse/genomes/" style="text-decoration:none" target="_blank">MGP</a></td>
         <td>16/06/2015</td>
         <td style="max-width:800px">WTSI Mouse Genetics Project</td>
-        <td style="border-left:1px solid #CCC;padding:4px 2px">
-            <div class="vdoc_type_style_phen"><span class="_ht ht" title="Provides Gene phenotype association data">Gene</span></div>
-            <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_thousand" title="Over 1,000 variants">1,000+</span></div>
-            <div class="vdoc_example_style"><a href="/Mus_musculus/Gene/Phenotype?g=ENSMUSG00000039738" target="_blank" title="See a Gene example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
-            <div style="clear:both"></div>
-          </div></td>
+        <td class="vdoc_extra_column">
+        <div class="vdoc_data_types">
+          <div class="vdoc_type_style"><span class="_ht ht" title="Provides Gene phenotype association data">Gene</span></div>
+          <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_thousand" title="Over 1,000 variants">1,000+</span></div>
+          <div class="vdoc_example_style"><a href="/Mus_musculus/Gene/Phenotype?g=ENSMUSG00000039738" target="_blank" title="See a Gene example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
+          <div style="clear:both"></div>
+        </div></td>
   
       </tr>
     </table>
@@ -953,11 +985,11 @@
         <div style="margin:6px 0px 30px">
       <table class="ss">
         <tr><th colspan="2">Source</th><th>Version</th><th style="max-width:800px">Description</th>
-     <th class="vdoc_extra_column">Phenotype/Disease/Trait
-       <div>
-         <div style="float:left;width:55px;text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Feature type association"><small>Type</small></span></div>
-         <div style="float:left;width:70px;text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Phenotype associations count"><small>Count</small></span></div>
-         <div style="float:left;width:20px;text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Example"><small>e.g.</small></span></div>
+     <th class="vdoc_data_types vdoc_extra_column" style="background-color:#BBB">Phenotype/Disease/Trait
+       <div class="vdoc_data_types">
+         <div class="vdoc_type_style" style="text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Feature type association"><small>Type</small></span></div>
+         <div class="vdoc_count_style" style="text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Phenotype associations count"><small>Count</small></span></div>
+         <div class="vdoc_example_style"><span class="_ht ht" style="border-color:#22949b" title="Example"><small>e.g.</small></span></div>
          <div style="clear:both"></div>
        </div>
      </th>
@@ -969,12 +1001,13 @@
         <td style="font-weight:bold"><a href="http://www.animalgenome.org/cgi-bin/QTLdb/index" style="text-decoration:none" target="_blank">Animal_QTLdb</a></td>
         <td>27/04/2015</td>
         <td style="max-width:800px">The Animal Quantitative Trait Loci (QTL) database (Animal QTLdb) is designed to house all publicly available QTL and association data on livestock animal species</td>
-        <td style="border-left:1px solid #CCC;padding:4px 2px">
-            <div class="vdoc_type_style_phen"><span class="_ht ht" title="Provides QTL phenotype association data">QTL</span></div>
-            <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_thousand" title="Over 12,000 variants">12,000+</span></div>
-            <div class="vdoc_example_style"><a href="/Sus_scrofa/Phenotype/Locations?ph=1" target="_blank" title="See a QTL example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
-            <div style="clear:both"></div>
-          </div></td>
+        <td class="vdoc_extra_column">
+        <div class="vdoc_data_types">
+          <div class="vdoc_type_style"><span class="_ht ht" title="Provides QTL phenotype association data">QTL</span></div>
+          <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_thousand" title="Over 12,000 variants">12,000+</span></div>
+          <div class="vdoc_example_style"><a href="/Sus_scrofa/Phenotype/Locations?ph=1" target="_blank" title="See a QTL example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
+          <div style="clear:both"></div>
+        </div></td>
   
       </tr>
     </table>
@@ -992,11 +1025,11 @@
         <div style="margin:6px 0px 30px">
       <table class="ss">
         <tr><th colspan="2">Source</th><th>Version</th><th style="max-width:800px">Description</th>
-     <th class="vdoc_extra_column">Phenotype/Disease/Trait
-       <div>
-         <div style="float:left;width:55px;text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Feature type association"><small>Type</small></span></div>
-         <div style="float:left;width:70px;text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Phenotype associations count"><small>Count</small></span></div>
-         <div style="float:left;width:20px;text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Example"><small>e.g.</small></span></div>
+     <th class="vdoc_data_types vdoc_extra_column" style="background-color:#BBB">Phenotype/Disease/Trait
+       <div class="vdoc_data_types">
+         <div class="vdoc_type_style" style="text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Feature type association"><small>Type</small></span></div>
+         <div class="vdoc_count_style" style="text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Phenotype associations count"><small>Count</small></span></div>
+         <div class="vdoc_example_style"><span class="_ht ht" style="border-color:#22949b" title="Example"><small>e.g.</small></span></div>
          <div style="clear:both"></div>
        </div>
      </th>
@@ -1008,17 +1041,19 @@
         <td style="font-weight:bold"><a href="http://rgd.mcw.edu/" style="text-decoration:none" target="_blank">RGD</a></td>
         <td>07/08/2015</td>
         <td style="max-width:800px">QTLs from the Rat Genome Database (RGD)</td>
-        <td style="border-left:1px solid #CCC;padding:4px 2px">
-            <div class="vdoc_type_style_phen"><span class="_ht ht" title="Provides QTL phenotype association data">QTL</span></div>
-            <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_thousand" title="Over 2,000 variants">2,000+</span></div>
-            <div class="vdoc_example_style"><a href="/Rattus_norvegicus/Phenotype/Locations?ph=132" target="_blank" title="See a QTL example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
-            <div style="clear:both"></div>
-          </div>
-            <div class="vdoc_type_style_phen"><span class="_ht ht" title="Provides Gene phenotype association data">Gene</span></div>
-            <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_thousand" title="Over 31,000 variants">31,000+</span></div>
-            <div class="vdoc_example_style"><a href="/Rattus_norvegicus/Gene/Phenotype?g=ENSRNOG00000020035" target="_blank" title="See a Gene example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
-            <div style="clear:both"></div>
-          </div></td>
+        <td class="vdoc_extra_column">
+        <div class="vdoc_data_types">
+          <div class="vdoc_type_style"><span class="_ht ht" title="Provides QTL phenotype association data">QTL</span></div>
+          <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_thousand" title="Over 2,000 variants">2,000+</span></div>
+          <div class="vdoc_example_style"><a href="/Rattus_norvegicus/Phenotype/Locations?ph=132" target="_blank" title="See a QTL example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
+          <div style="clear:both"></div>
+        </div>
+        <div class="vdoc_data_types">
+          <div class="vdoc_type_style"><span class="_ht ht" title="Provides Gene phenotype association data">Gene</span></div>
+          <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_thousand" title="Over 31,000 variants">31,000+</span></div>
+          <div class="vdoc_example_style"><a href="/Rattus_norvegicus/Gene/Phenotype?g=ENSRNOG00000020035" target="_blank" title="See a Gene example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
+          <div style="clear:both"></div>
+        </div></td>
   
       </tr>
     </table>
@@ -1036,11 +1071,11 @@
         <div style="margin:6px 0px 30px">
       <table class="ss">
         <tr><th colspan="2">Source</th><th>Version</th><th style="max-width:800px">Description</th>
-     <th class="vdoc_extra_column">Phenotype/Disease/Trait
-       <div>
-         <div style="float:left;width:55px;text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Feature type association"><small>Type</small></span></div>
-         <div style="float:left;width:70px;text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Phenotype associations count"><small>Count</small></span></div>
-         <div style="float:left;width:20px;text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Example"><small>e.g.</small></span></div>
+     <th class="vdoc_data_types vdoc_extra_column" style="background-color:#BBB">Phenotype/Disease/Trait
+       <div class="vdoc_data_types">
+         <div class="vdoc_type_style" style="text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Feature type association"><small>Type</small></span></div>
+         <div class="vdoc_count_style" style="text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Phenotype associations count"><small>Count</small></span></div>
+         <div class="vdoc_example_style"><span class="_ht ht" style="border-color:#22949b" title="Example"><small>e.g.</small></span></div>
          <div style="clear:both"></div>
        </div>
      </th>
@@ -1052,12 +1087,13 @@
         <td style="font-weight:bold"><a href="http://www.animalgenome.org/cgi-bin/QTLdb/index" style="text-decoration:none" target="_blank">Animal_QTLdb</a></td>
         <td>27/04/2015</td>
         <td style="max-width:800px">The Animal Quantitative Trait Loci (QTL) database (Animal QTLdb) is designed to house all publicly available QTL and association data on livestock animal species</td>
-        <td style="border-left:1px solid #CCC;padding:4px 2px">
-            <div class="vdoc_type_style_phen"><span class="_ht ht" title="Provides QTL phenotype association data">QTL</span></div>
-            <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_hundred" title="791 variants">791</span></div>
-            <div class="vdoc_example_style"><a href="/Ovis_aries/Phenotype/Locations?ph=45" target="_blank" title="See a QTL example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
-            <div style="clear:both"></div>
-          </div></td>
+        <td class="vdoc_extra_column">
+        <div class="vdoc_data_types">
+          <div class="vdoc_type_style"><span class="_ht ht" title="Provides QTL phenotype association data">QTL</span></div>
+          <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_hundred" title="791 variants">791</span></div>
+          <div class="vdoc_example_style"><a href="/Ovis_aries/Phenotype/Locations?ph=45" target="_blank" title="See a QTL example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
+          <div style="clear:both"></div>
+        </div></td>
   
       </tr>
       <tr class="bg2">
@@ -1066,12 +1102,13 @@
         <td style="font-weight:bold"><a href="http://omia.angis.org.au/home/" style="text-decoration:none" target="_blank">OMIA</a></td>
         <td>27/04/2015</td>
         <td style="max-width:800px">Online Mendelian Inheritance in Animals (OMIA) is a database of genes, inherited disorders and traits in more than 135 animal species (other than human and mouse)</td>
-        <td style="border-left:1px solid #CCC;padding:4px 2px">
-            <div class="vdoc_type_style_phen"><span class="_ht ht" title="Provides Gene phenotype association data">Gene</span></div>
-            <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_hundred" title="36 variants">36</span></div>
-            <div class="vdoc_example_style"><a href="/Ovis_aries/Gene/Phenotype?g=ENSOARG00000000430" target="_blank" title="See a Gene example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
-            <div style="clear:both"></div>
-          </div></td>
+        <td class="vdoc_extra_column">
+        <div class="vdoc_data_types">
+          <div class="vdoc_type_style"><span class="_ht ht" title="Provides Gene phenotype association data">Gene</span></div>
+          <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_hundred" title="36 variants">36</span></div>
+          <div class="vdoc_example_style"><a href="/Ovis_aries/Gene/Phenotype?g=ENSOARG00000000430" target="_blank" title="See a Gene example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
+          <div style="clear:both"></div>
+        </div></td>
   
       </tr>
     </table>
@@ -1089,11 +1126,11 @@
         <div style="margin:6px 0px 30px">
       <table class="ss">
         <tr><th colspan="2">Source</th><th>Version</th><th style="max-width:800px">Description</th>
-     <th class="vdoc_extra_column">Phenotype/Disease/Trait
-       <div>
-         <div style="float:left;width:55px;text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Feature type association"><small>Type</small></span></div>
-         <div style="float:left;width:70px;text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Phenotype associations count"><small>Count</small></span></div>
-         <div style="float:left;width:20px;text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Example"><small>e.g.</small></span></div>
+     <th class="vdoc_data_types vdoc_extra_column" style="background-color:#BBB">Phenotype/Disease/Trait
+       <div class="vdoc_data_types">
+         <div class="vdoc_type_style" style="text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Feature type association"><small>Type</small></span></div>
+         <div class="vdoc_count_style" style="text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Phenotype associations count"><small>Count</small></span></div>
+         <div class="vdoc_example_style"><span class="_ht ht" style="border-color:#22949b" title="Example"><small>e.g.</small></span></div>
          <div style="clear:both"></div>
        </div>
      </th>
@@ -1105,12 +1142,13 @@
         <td style="font-weight:bold"><a href="http://omia.angis.org.au/home/" style="text-decoration:none" target="_blank">OMIA</a></td>
         <td>30/03/2015</td>
         <td style="max-width:800px">Online Mendelian Inheritance in Animals (OMIA) is a database of genes, inherited disorders and traits in more than 135 animal species (other than human and mouse)</td>
-        <td style="border-left:1px solid #CCC;padding:4px 2px">
-            <div class="vdoc_type_style_phen"><span class="_ht ht" title="Provides Gene phenotype association data">Gene</span></div>
-            <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_hundred" title="2 variants">2</span></div>
-            <div class="vdoc_example_style"><a href="/Meleagris_gallopavo/Gene/Phenotype?g=ENSMGAG00000016832" target="_blank" title="See a Gene example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
-            <div style="clear:both"></div>
-          </div></td>
+        <td class="vdoc_extra_column">
+        <div class="vdoc_data_types">
+          <div class="vdoc_type_style"><span class="_ht ht" title="Provides Gene phenotype association data">Gene</span></div>
+          <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_hundred" title="2 variants">2</span></div>
+          <div class="vdoc_example_style"><a href="/Meleagris_gallopavo/Gene/Phenotype?g=ENSMGAG00000016832" target="_blank" title="See a Gene example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
+          <div style="clear:both"></div>
+        </div></td>
   
       </tr>
     </table>
@@ -1128,11 +1166,11 @@
         <div style="margin:6px 0px 30px">
       <table class="ss">
         <tr><th colspan="2">Source</th><th>Version</th><th style="max-width:800px">Description</th>
-     <th class="vdoc_extra_column">Phenotype/Disease/Trait
-       <div>
-         <div style="float:left;width:55px;text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Feature type association"><small>Type</small></span></div>
-         <div style="float:left;width:70px;text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Phenotype associations count"><small>Count</small></span></div>
-         <div style="float:left;width:20px;text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Example"><small>e.g.</small></span></div>
+     <th class="vdoc_data_types vdoc_extra_column" style="background-color:#BBB">Phenotype/Disease/Trait
+       <div class="vdoc_data_types">
+         <div class="vdoc_type_style" style="text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Feature type association"><small>Type</small></span></div>
+         <div class="vdoc_count_style" style="text-align:center"><span class="_ht ht" style="border-color:#22949b" title="Phenotype associations count"><small>Count</small></span></div>
+         <div class="vdoc_example_style"><span class="_ht ht" style="border-color:#22949b" title="Example"><small>e.g.</small></span></div>
          <div style="clear:both"></div>
        </div>
      </th>
@@ -1144,12 +1182,13 @@
         <td style="font-weight:bold"><a href="http://omia.angis.org.au/home/" style="text-decoration:none" target="_blank">OMIA</a></td>
         <td>02/07/2015</td>
         <td style="max-width:800px">Online Mendelian Inheritance in Animals (OMIA) is a database of genes, inherited disorders and traits in more than 200 animal species (other than human and mouse)</td>
-        <td style="border-left:1px solid #CCC;padding:4px 2px">
-            <div class="vdoc_type_style_phen"><span class="_ht ht" title="Provides Gene phenotype association data">Gene</span></div>
-            <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_hundred" title="3 variants">3</span></div>
-            <div class="vdoc_example_style"><a href="/Danio_rerio/Gene/Phenotype?g=ENSDARG00000024771" target="_blank" title="See a Gene example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
-            <div style="clear:both"></div>
-          </div></td>
+        <td class="vdoc_extra_column">
+        <div class="vdoc_data_types">
+          <div class="vdoc_type_style"><span class="_ht ht" title="Provides Gene phenotype association data">Gene</span></div>
+          <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_hundred" title="3 variants">3</span></div>
+          <div class="vdoc_example_style"><a href="/Danio_rerio/Gene/Phenotype?g=ENSDARG00000024771" target="_blank" title="See a Gene example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
+          <div style="clear:both"></div>
+        </div></td>
   
       </tr>
       <tr class="bg2">
@@ -1158,12 +1197,13 @@
         <td style="font-weight:bold"><a href="http://www.zfin.org/" style="text-decoration:none" target="_blank">ZFIN</a></td>
         <td>11/08/2015</td>
         <td style="max-width:800px">The zebrafish model organism database</td>
-        <td style="border-left:1px solid #CCC;padding:4px 2px">
-            <div class="vdoc_type_style_phen"><span class="_ht ht" title="Provides Gene phenotype association data">Gene</span></div>
-            <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_thousand" title="Over 36,000 variants">36,000+</span></div>
-            <div class="vdoc_example_style"><a href="/Danio_rerio/Gene/Phenotype?g=ENSDARG00000003776" target="_blank" title="See a Gene example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
-            <div style="clear:both"></div>
-          </div></td>
+        <td class="vdoc_extra_column">
+        <div class="vdoc_data_types">
+          <div class="vdoc_type_style"><span class="_ht ht" title="Provides Gene phenotype association data">Gene</span></div>
+          <div class="vdoc_count_style"><span class="vdoc_dtype_count vdoc_thousand" title="Over 36,000 variants">36,000+</span></div>
+          <div class="vdoc_example_style"><a href="/Danio_rerio/Gene/Phenotype?g=ENSDARG00000003776" target="_blank" title="See a Gene example"><img src="/i/16/internal_link.png" alt="Link"/></a></div>
+          <div style="clear:both"></div>
+        </div></td>
   
       </tr>
     </table>
