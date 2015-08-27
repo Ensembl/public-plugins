@@ -64,7 +64,9 @@ Ensembl.Genoverse = Genoverse.extend({
         Ensembl.images[this.panel.imageNumber+1][0][2] = location.start;
         Ensembl.images[this.panel.imageNumber+1][0][3] = location.end;
       }
+    }
 
+    if (this.panel.genoverse) { // panel.genoverse may not exist if it gets called while the call it made through Genoverse's constructor
       this.panel.initLocationHighlight();
       this.panel.highlightLocation(Ensembl.highlightedLoc);
     }
