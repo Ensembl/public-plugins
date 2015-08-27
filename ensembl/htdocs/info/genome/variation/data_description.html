@@ -2048,7 +2048,7 @@ A quality control process is employed to check imported variant data. Suspect va
   <tr>
     <td rowspan="1" style="background-color:#E5E5E5"><b>Checks on the alleles in dbSNP submissions</b></td>
     <td> Additional submitted allele data from dbSNP does not agree with the dbSNP refSNP alleles </td>
-    <td> Alleles from dbSNP submissions ( primarily frequency submissions, but also variant discovery submissions which have been merged in the dbSNP pipeline with the pre-existing refSNP variant) are checked against the dbSNP refSNP alleles and discrepant sets flagged as failed.  Often this will highlight a strand error in the submission of frequency information for a known variant. Tradditionally, the failure would be flagged at the variant level, in new database builds it is flagged at the allele submission level.
+    <td> Alleles from all the dbSNP submissions for the rsID are checked against the dbSNP refSNP alleles. These alleles are primarily frequency submissions but can also bee from variant discovery submissions, and these are merged in the dbSNP pipeline with the pre-existing refSNP variant).  Discrepant sets of alleles are flagged as failed as this will often highlight a strand error in the submission of frequency information for a known variant. The failure is flagged at the allele submission level.
     </td>
   </tr>
   <tr><td colspan="3" style="background-color:#555;height:1px;padding:0px;margin:0px"></td></tr>
