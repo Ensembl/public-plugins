@@ -280,7 +280,7 @@ Ensembl.Genoverse = Genoverse.extend({
       }
     }
 
-    this.selector.add(this.highlightRegion).add(this.panel.elLk.highlightedLocation).css('height', height); // Do not use .height(height), because the box-sizing: border-box style causes height(height) to sets the height to be 2px too large
+    this.selector.add(this.panel.elLk.highlightRegion).add(this.panel.elLk.highlightedLocation).css('height', height); // Do not use .height(height), because the box-sizing: border-box style causes height(height) to sets the height to be 2px too large
   },
 
   makeMenu: function (feature, event, track) {

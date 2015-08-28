@@ -256,6 +256,8 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
 
       this.elLk.highlightRegion.css({ left: left, width: width, display: 'block' });
     }
+
+    this.genoverse.updateSelectorHeight();
   },
   
   externalOrder: function (label, order) {
