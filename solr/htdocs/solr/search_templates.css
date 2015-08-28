@@ -818,7 +818,6 @@ body.mobile-page.solr_page_p_page #wide-footer {
 /* making the masthead not fixed */
 body.mobile-page #masthead {
   position: relative;
-  z-index: 10000;
 }
 
 /* showing the search nav icon on the left */
