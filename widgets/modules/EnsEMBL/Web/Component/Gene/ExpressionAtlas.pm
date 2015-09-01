@@ -48,7 +48,8 @@ sub content {
     #this script tag has been kept here as it was easier to call the perl param within the script tag (the js file wasn't getting the param)
     $html = qq{
       <script type="text/javascript">
-        var instance = AtlasHeatmapModule.build ({
+        var AtlasHeatmapBuilder = window.exposed;
+        AtlasHeatmapBuilder ({
               gxaBaseUrl: "http://www.ebi.ac.uk/gxa/",
               params:'geneQuery=$stable_id&species=$species',
               isMultiExperiment: true,
