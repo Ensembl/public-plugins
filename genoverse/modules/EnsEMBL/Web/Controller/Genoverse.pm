@@ -145,7 +145,6 @@ sub fetch_features_generic {
   my @features;
   
   foreach (@{$glyphset->features}) {
-    my $colour_key = $glyphset->colour_key($_);
     my @tags       = grep ref $_ eq 'HASH' && $_->{'style'} ne 'join', $glyphset->tag($_);
     my $feature;
     
@@ -155,17 +154,37 @@ sub fetch_features_generic {
       $_->{'border'} = $colourmap->hex_by_name($_->{'border'}) if $_->{'border'};
     }
     
-    my $feature = {
-      start       => ($_->can('seq_region_start') ? $_->seq_region_start : $_->start) + 0,
-      end         => ($_->can('seq_region_end')   ? $_->seq_region_end   : $_->end)   + 0,
-      label       => $glyphset->feature_label($_),
-      decorations => \@tags,
-      $glyphset->genoverse_attributes($_),
-    };
-    
-    $feature->{'strand'}     ||= int $_->strand if $strand;
-    $feature->{'color'}      ||= $colourmap->hex_by_name($glyphset->my_colour($colour_key))          if $colour_key;
-    $feature->{'labelColor'} ||= $colourmap->hex_by_name($glyphset->my_colour($colour_key, 'label')) if $colour_key && $feature->{'label'};
+    my $feature;
+
+    if (ref($_) eq 'HASH') {
+      $feature = {
+        start       => $_->{'start'} + $slice->start,
+        end         => $_->{'end'}   + $slice->start,
+        color       => $_->{'colour'},
+        label       => $_->{'label'},
+        $glyphset->genoverse_attributes($_),
+      };
+      $feature->{'strand'}      = int $_->{'strand'} if $strand;
+      $feature->{'labelColor'}  = $_->{'label_colour'} if $_->{'label'};
+    }
+    else {
+      $feature = {
+        start       => ($_->can('seq_region_start') ? $_->seq_region_start : $_->start) + 0,
+        end         => ($_->can('seq_region_end')   ? $_->seq_region_end   : $_->end)   + 0,
+        label       => $glyphset->feature_label($_),
+        $glyphset->genoverse_attributes($_),
+      };
+      $feature->{'strand'} ||= int $_->strand if $strand;
+      my $colour_key = $glyphset->colour_key($_);
+      if ($colour_key) {
+        $feature->{'color'} ||= $colourmap->hex_by_name($glyphset->my_colour($colour_key));
+        if ($feature->{'label'}) {
+          $feature->{'labelColor'} ||= $colourmap->hex_by_name($glyphset->my_colour($colour_key, 'label'));
+        }
+      }
+    }
+
+    $feature->{'decorations'}  = \@tags;
     $feature->{'labelColor'}   = $feature->{'color'} eq '#000000' ? '#FFFFFF' : '#000000' if $feature->{'color'} eq $feature->{'labelColor'} && $glyphset->label_overlay;
     $feature->{'menu'}       ||= $glyphset->href($_);
     $feature->{'title'}      ||= $glyphset->title($_) unless $feature->{'menu'};
