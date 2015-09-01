@@ -16,7 +16,7 @@ limitations under the License.
 
 =cut
 
-package EnsEMBL::Draw::GlyphSet::_marker;
+package EnsEMBL::Draw::GlyphSet::marker;
 
 use strict;
 
