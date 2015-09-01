@@ -440,24 +440,16 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
     });
   },
 
-  updateExportMenu: function () {
-    var panel = this;
-    var extra;
+  getExportMenuExtra: function () {
+    var extra = this.base.apply(this, arguments);
 
-    this.base.apply(this, arguments);
+    if (extra && extra.highlight) {
+      extra.highlight.x += this.genoverse.labelWidth - 2;
+      delete extra.highlight.h;
+      delete extra.highlight.y;
+    }
 
-    this.elLk.exportMenu.find('a').attr('href', function() {
-      if (typeof extra === 'undefined') {
-        extra = $.parseJSON(decodeURIComponent((this.href.match(/[&;?]{1}extra=([^\=]+)/) || ['false']).pop()));
-        if (extra && extra.highlight) {
-          extra.highlight.x  += panel.genoverse.labelWidth - 2;
-          delete extra.highlight.h;
-          delete extra.highlight.y;
-          extra = encodeURIComponent(JSON.stringify(extra));
-        }
-      }
-      return Ensembl.updateURL({extra: extra}, this.href);
-    });
+    return extra;
   },
 
   resize: function (width) {
