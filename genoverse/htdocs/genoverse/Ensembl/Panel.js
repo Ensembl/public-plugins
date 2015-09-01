@@ -387,7 +387,8 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
         
         if (json.add.length) {
           genoverse.addTracks(json.add);
-          this.elLk.hoverLabels = this.elLk.hoverLabels.add($(json.labels.trim()).appendTo('body'));
+          this.elLk.hoverLabels.remove();
+          this.elLk.hoverLabels = $(json.labels.trim()).appendTo('body');
           this.makeHoverLabels();
         }
         
