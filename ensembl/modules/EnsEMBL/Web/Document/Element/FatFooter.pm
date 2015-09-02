@@ -30,9 +30,9 @@ sub content {
   $html .= qq(
               <div class="column-four left">
                 <h3>About Us</h3>
-                <p><a href="/info/about">About the Ensembl project</a></p>
+                <p><a href="/info/about">About us</a></p>
                 <p><a href="/info/about/contact/">Contact us</a></p>
-                <p><a href="/info/about/jobs/">Job vacancies</a></p>
+                <p><a href="/info/about/jobs.html">Job vacancies</a></p>
                 <p><a href="/info/about/legal/privacy.html">Privacy policy</a></p>
                 <p><a href="/info/about/legal/">Disclaimer</a></p>
               </div>
@@ -68,7 +68,7 @@ sub content {
               <div class="column-four left">
                 <h3>Get help</h3>
                 <p><a href="/info/website/">Using this website</a></p>
-                <p><a href="downloads.html">Downloading data</a></p>
+                <p><a href="/downloads.html">Downloading data</a></p>
                 <p><a href="/info/website/tutorials/">Video tutorials</a></p>
                 <p><a href="/info/docs/api">API documentation</a></p>
               </div>
