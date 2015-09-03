@@ -23,13 +23,17 @@ div.vdoc_menu { margin: 2px 0px 16px 8px;padding-bottom:2px;background-color:#F9
 div.vdoc_menu_header { padding:5px 5px 3px;font-weight:bold;color:#000;background-color:#FFF;margin-bottom:5px; }
 div.vdoc_menu_separator { border-top:1px dotted #22949b;height:1px;margin:2px 0px 6px; }
 div.vdoc_menu_left  { float:left;width:65%; }
-div.vdoc_menu_right { float:right;width:35%; } 
+div.vdoc_menu_right { float:right;width:35%;position:relative; } 
 
 div.vdoc_menu_src         { border-left:1px dotted #336;border-right:1px dotted #336;border-bottom:1px dotted #336; }
 div.vdoc_menu_header_src  { border-top:2px solid #336;border-bottom:1px solid #336; }
 div.vdoc_menu_phen        { border-left:1px dotted #22949b;border-right:1px dotted #22949b;border-bottom:1px dotted #22949b; }
 div.vdoc_menu_header_phen { border-top:2px solid #22949b;border-bottom:1px solid #22949b; }
-.vdoc_source_count  { display:inline-block;border-radius:8px;text-align:center;font-size:0.8em;color:#FFF;width:22px;height:12px;margin-left:4px;padding:1px 0px; } 
+
+span.vdoc_source_count    { display:inline-block;border-radius:8px;text-align:center;font-size:0.8em;color:#FFF;width:22px;height:12px;margin-left:4px;padding:1px 0px; }
+span.vdoc_new_version_count { position:absolute;top:1px;left:0px; }
+span.vdoc_new_source_count  { position:absolute;top:1px;left:26px; }
+
 
 /* Legend */
 .vdoc_source_legend { width:4px;height:25px;margin-left:9px; }
