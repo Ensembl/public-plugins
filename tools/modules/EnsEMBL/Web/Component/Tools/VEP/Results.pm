@@ -619,6 +619,18 @@ sub linkify {
   my $hub = $self->hub;
   my $sd = $hub->species_defs;
 
+  # work out core DB type
+  my $ticket   = $self->object->get_requested_ticket;
+  my $job      = $ticket ? $ticket->job->[0] : undef;
+  my $job_data = $job ? $job->{job_data} || {} : {};
+
+  my $db_type = 'core';
+  if(my $ct = $job_data->{core_type}) {
+    if($ct eq 'refseq' || ($value && $ct eq 'merged' && $value !~ /^ENS/)) {
+      $db_type = 'otherfeatures';
+    }
+  }
+
   return '-' unless defined $value && $value ne '';
 
   $value =~ s/\,/\, /g;
@@ -662,7 +674,8 @@ sub linkify {
       type    => 'ZMenu',
       action  => 'Transcript',
       t       => $value,
-      species => $species
+      species => $species,
+      db      => $db_type,
     });
 
     $new_value = sprintf('<a class="zmenu" href="%s">%s</a>', $url, $value);
@@ -683,10 +696,11 @@ sub linkify {
   # gene
   elsif($field eq 'Gene' && $value =~ /\w+/) {
     my $url = $hub->url({
-      type   => 'ZMenu',
-      action => 'Gene',
-      g      => $value,
-      species => $species
+      type    => 'ZMenu',
+      action  => 'Gene',
+      g       => $value,
+      species => $species,
+      db      => $db_type,
     });
 
     $new_value = sprintf('<a class="zmenu" href="%s">%s</a>', $url, $value);
