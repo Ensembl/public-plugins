@@ -21,9 +21,9 @@ package EnsEMBL::Draw::Renderer::png;
 use strict;
 use warnings;
 
-use previous qw(add_highlight_layer);
+use previous qw(add_location_marking_layer);
 
-sub add_highlight_layer {
+sub add_location_marking_layer {
   my ($self, $coords) = @_;
 
   if ($coords) {
@@ -31,7 +31,7 @@ sub add_highlight_layer {
     $coords->{'y'} //= 0;
     $coords->{'h'} //= $self->{'im_height'};
 
-    return $self->PREV::add_highlight_layer($coords);
+    return $self->PREV::add_location_marking_layer($coords);
   }
 }
 

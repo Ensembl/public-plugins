@@ -67,8 +67,8 @@ Ensembl.Genoverse = Genoverse.extend({
     }
 
     if (this.panel.genoverse) { // panel.genoverse may not exist if it gets called while the call it made through Genoverse's constructor
-      this.panel.initLocationHighlight();
-      this.panel.highlightLocation(Ensembl.highlightedLoc);
+      this.panel.initLocationMarking();
+      this.panel.markLocation(Ensembl.markedLocation);
     }
 
     Ensembl.EventManager.trigger('highlightAllImages');
@@ -280,7 +280,7 @@ Ensembl.Genoverse = Genoverse.extend({
       }
     }
 
-    this.selector.add(this.panel.elLk.highlightRegion).add(this.panel.elLk.highlightedLocation).css('height', height); // Do not use .height(height), because the box-sizing: border-box style causes height(height) to sets the height to be 2px too large
+    this.selector.add(this.panel.elLk.highlightRegion).add(this.panel.elLk.markedLocation).css('height', height); // Do not use .height(height), because the box-sizing: border-box style causes height(height) to sets the height to be 2px too large
   },
 
   makeMenu: function (feature, event, track) {
