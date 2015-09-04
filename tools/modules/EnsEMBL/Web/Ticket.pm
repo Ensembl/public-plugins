@@ -179,6 +179,10 @@ sub dispatch_jobs {
 }
 
 sub handle_exception {
+  ## Handles exceptions when thrown by the process method
+  ## Override it in the sub class or plugin to change its behaviour
+  ## @param EnsEMBL::Web::Exception object
+  ## @param Stage at which exception was thrown (String)
   my ($self, $exception, $stage) = @_;
 
   if ($exception->type eq 'InputError') {
