@@ -732,7 +732,17 @@ sub _get_all_plugin_sections {
   return [] unless $self->_have_plugins();
   my $sd  = $self->hub->species_defs;
   my $pl  = $sd->multi_val('ENSEMBL_VEP_PLUGIN_CONFIG');
-  return [grep {$_} map {$_->{section} || ''} grep {$_->{available}} @{$pl->{plugins}}];
+
+  my @list = grep {$_} map {$_->{section} || ''} grep {$_->{available}} @{$pl->{plugins}};
+  my %seen;
+  my @return = ();
+
+  foreach my $s(@list) {
+    push @return, $s unless $seen{$s};
+    $seen{$s} = 1;
+  }
+
+  return \@return;
 }
 
 sub _get_plugins_by_section {
