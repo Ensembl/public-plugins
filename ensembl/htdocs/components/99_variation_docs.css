@@ -6,6 +6,7 @@
 .vdoc_million_2   { background-color:#007; }
 .vdoc_thousand    { background-color:#006266; }
 .vdoc_hundred     { background-color:#070; }
+.vdoc_zero        { background-color:#CCC; }
 
 /* Species header */
 .vdoc_species_sci_name { font-style:italic;font-weight:normal;padding-left:8px;color:#555; }
@@ -37,5 +38,5 @@ span.vdoc_new_source_count  { position:absolute;top:1px;left:26px; }
 
 /* Legend */
 .vdoc_source_legend { width:4px;height:25px;margin-left:9px; }
-.vdoc_cound_legend  { color:#FFF;border-radius:5px;padding:1px 2px 1px 20px;cursor:default; }
+.vdoc_count_legend  { color:#FFF;border-radius:5px;padding:1px 2px 1px 20px;cursor:default; }
 
