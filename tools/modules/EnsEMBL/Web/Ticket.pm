@@ -21,6 +21,7 @@ package EnsEMBL::Web::Ticket;
 use strict;
 use warnings;
 
+use EnsEMBL::Web::Attributes;
 use EnsEMBL::Web::Exceptions;
 use EnsEMBL::Web::Utils::RandomString qw(random_string);
 
@@ -67,10 +68,9 @@ sub new {
   }, $class;
 }
 
-sub init_from_user_input {
+sub init_from_user_input :Abstract {
   ## @abstract method
   ## This method should read the raw form parameters, validate them and convert them into an array of EnsEMBL::Web::Job or sub class
-  throw exception('AbstractMethodNotImplemented');
 }
 
 sub submit_to_toolsdb {

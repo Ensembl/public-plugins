@@ -23,7 +23,7 @@ use warnings;
 
 use parent qw(EnsEMBL::Web::Component::Tools);
 
-use EnsEMBL::Web::Exceptions;
+use EnsEMBL::Web::Attributes;
 
 sub content {
   my $self      = shift;
@@ -48,13 +48,12 @@ sub content {
   return sprintf '<input type="hidden" class="panel_type" value="TicketDetails" />%s%s', @$jobs ? ($heading, $self->content_ticket($ticket, $jobs, scalar $object->user_accessible_tickets($ticket))) : ('', '');
 }
 
-sub content_ticket {
+sub content_ticket :Abstract {
   ## @abstract method
   ## @param Ticket object
   ## @param Arrayref if Job objects
   ## @param Flag to tell whether user or session owns the ticket or not
   ## @return HTML to be displayed
-  throw exception('AbstractMethodNotImplemented');
 }
 
 sub allowed_url_functions {
