@@ -21,9 +21,9 @@ Ensembl.Panel.VEPResults = Ensembl.Panel.ContentTools.extend({
     this.base();
 
     // Initialise ZMenus on table links
-    this.el.find('a.zmenu').on('click', function(e) {
+    this.el.find('a._zmenu').on('click', function(e) {
       e.preventDefault();
-      Ensembl.EventManager.trigger('makeZMenu', $(this).text().replace(/\W/g, '_'), { event: e, area: { link: $(this) }});
+      Ensembl.EventManager.trigger('makeZMenu', $(this).text().replace(/\W/g, '_'), { event: e, area: { link: $(this).siblings('._zmenu_link').remove() }});
     });
 
     // Edit icon and Cancel link for editing a filter

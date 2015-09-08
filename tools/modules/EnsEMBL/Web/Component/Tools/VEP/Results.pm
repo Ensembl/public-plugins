@@ -657,20 +657,37 @@ sub linkify {
   elsif($field eq 'Existing_variation' && $value =~ /\w+/) {
 
     foreach my $var(split /\,\s*/, $value) {
+
       my $url = $hub->url({
+        type    => 'Variation',
+        action  => 'Explore',
+        v       => $var,
+        species => $species
+      });
+
+      my $zmenu_url = $hub->url({
         type    => 'ZMenu',
         action  => 'Variation',
         v       => $var,
         species => $species
       });
 
-      $new_value .= ($new_value ? ', ' : '').sprintf('<a class="zmenu" href="%s">%s</a>', $url, $var);
+      $new_value .= ($new_value ? ', ' : '').$self->zmenu_link($url, $zmenu_url, $var);
     }
   }
 
   # transcript
   elsif($field eq 'Feature' && $value =~ /^ENS.{0,3}T\d+$/) {
+
     my $url = $hub->url({
+      type    => 'Transcript',
+      action  => 'Summary',
+      t       => $value,
+      species => $species,
+      db      => $db_type,
+    });
+
+    my $zmenu_url = $hub->url({
       type    => 'ZMenu',
       action  => 'Transcript',
       t       => $value,
@@ -678,24 +695,41 @@ sub linkify {
       db      => $db_type,
     });
 
-    $new_value = sprintf('<a class="zmenu" href="%s">%s</a>', $url, $value);
+    $new_value = $self->zmenu_link($url, $zmenu_url, $value);
   }
 
   # reg feat
   elsif($field eq 'Feature' && $value =~ /^ENS.{0,3}R\d+$/) {
+
     my $url = $hub->url({
+      type    => 'Regulation',
+      action  => 'Summary',
+      rf      => $value,
+      species => $species
+    });
+
+    my $zmenu_url = $hub->url({
       type    => 'ZMenu',
       action  => 'Regulation',
       rf      => $value,
       species => $species
     });
 
-    $new_value = sprintf('<a class="zmenu" href="%s">%s</a>', $url, $value);
+    $new_value = $self->zmenu_link($url, $zmenu_url, $value);
   }
 
   # gene
   elsif($field eq 'Gene' && $value =~ /\w+/) {
+
     my $url = $hub->url({
+      type    => 'Gene',
+      action  => 'Summary',
+      g       => $value,
+      species => $species,
+      db      => $db_type,
+    });
+
+    my $zmenu_url = $hub->url({
       type    => 'ZMenu',
       action  => 'Gene',
       g       => $value,
@@ -703,7 +737,7 @@ sub linkify {
       db      => $db_type,
     });
 
-    $new_value = sprintf('<a class="zmenu" href="%s">%s</a>', $url, $value);
+    $new_value = $self->zmenu_link($url, $zmenu_url, $value);
   }
 
   # Protein
@@ -783,6 +817,12 @@ sub reload_link {
     $self->ajax_url(undef, $url_params, undef, 1),
     $html
   );
+}
+
+sub zmenu_link {
+  my ($self, $url, $zmenu_url, $html) = @_;
+
+  return sprintf('<a class="_zmenu" href="%s">%s</a><a class="hidden _zmenu_link" href="%s"></a>', $url, $html, $zmenu_url);
 }
 
 1;
