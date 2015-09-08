@@ -175,7 +175,12 @@ sub content {
     'INTRON'              => 'hidden_position'
   );
 
-  my @table_headers = map {{ 'key' => $_, 'title' => $header_titles{$_} || $_, 'sort' => $table_sorts{$_} || 'string', 'help' => $COL_DESCS{$_} }} @$headers;
+  my @table_headers = map {{
+    'key' => $_,
+    'title' => ($header_titles{$_} || $_).($COL_DESCS{$_} ? '' : '*'),
+    'sort' => $table_sorts{$_} || 'string',
+    'help' => $COL_DESCS{$_}
+  }} @$headers;
 
   $html .= '<div><h3>Results preview</h3>';
   $html .= '<input type="hidden" class="panel_type" value="VEPResults" />';
@@ -352,7 +357,7 @@ sub content {
         $i,
         $header_titles{$params{"field$i"}} || $params{"field$i"},
         $operators{$params{"operator$i"}},
-        $params{"operator$i"} eq 'in' ? $file_display_name{$params{"value_dd$i"}} : ($params{"value$i"} || 'defined'),
+        $params{"operator$i"} eq 'in' ? $file_display_name{$params{"value_dd$i"}} : (defined($params{"value$i"}) ? $params{"value$i"} : 'defined'),
         $i,
         $self->reload_link('<img class="_ht" src="/i/close.png" title="Remove filter" style="height:16px; width:16px">', {
           "field$i"       => undef,
@@ -603,7 +608,7 @@ sub content {
 
   # render table
   my $table = $self->new_table(\@table_headers, $rows, { data_table => 1, sorting => [ 'Location asc' ], data_table_config => {bLengthChange => 'false', bFilter => 'false'}, });
-  $html .= '<div>'.$table->render.'</div>';
+  $html .= '<div>'.($table->render || '<div style="clear:both"><h3>No data</h3></div>').'</div>';
 
   $html .= '</div>';
 
