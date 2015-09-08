@@ -41,7 +41,7 @@ sub modify_page_elements {
 sub populate_tree {
   my $self  = shift;
   my $hub   = $self->hub;
-  my @menus = qw(Movie Movies FAQ FAQs View Pages Glossary Glossary);
+  my @menus = qw(Movie Movies FAQ FAQs View Pages Glossary Glossary Lookup Lookup);
   my @comps = qw(
     List      EnsEMBL::Admin::Component::HelpRecord::List         0
     Display   EnsEMBL::Admin::Component::HelpRecord::Display      0

@@ -26,11 +26,11 @@ use EnsEMBL::Web::Utils::FileSystem qw(create_path remove_directory remove_empty
 use parent qw(EnsEMBL::Web::Object::DbFrontend);
 
 sub record_type {
-  ## Gets the type of the record(s) requested for i.e. - glossary, view, movie, faq
+  ## Gets the type of the record(s) requested for i.e. - glossary, lookup, view, movie, faq
   my $self = shift;
 
   my $type = lc $self->hub->function;
-  return $type && grep({$type eq $_} qw(glossary view movie faq)) ? $type : undef;
+  return $type && grep({$type eq $_} qw(glossary lookup view movie faq)) ? $type : undef;
 }
 
 sub fetch_for_display {
@@ -41,7 +41,7 @@ sub fetch_for_display {
   $self->SUPER::fetch_for_display({'query' => ['type' => $type]}) if $type;
 
   my $rose_objects  = $self->rose_objects;
-  my $order_by_1    = {qw(glossary word view ensembl_object movie title faq category)}->{$type};
+  my $order_by_1    = {qw(glossary word lookup word view ensembl_object movie title faq category)}->{$type};
   my $order_by_2    = {qw(view ensembl_action faq question)}->{$type} || 0;
 
   $self->rose_objects([ sort { ($a->virtual_column_value($order_by_1) cmp $b->virtual_column_value($order_by_1)) || $order_by_2 && ($a->virtual_column_value($order_by_2) cmp $b->virtual_column_value($order_by_2))} @$rose_objects ]) if $rose_objects;
@@ -198,7 +198,7 @@ sub show_fields {
   my $type = $self->rose_object ? $self->rose_object->type : $self->record_type;
   my @datamap;
 
-  if ($type eq 'glossary') {
+  if ($type eq 'glossary' || $type eq 'lookup') {
     @datamap = (
       'word'           => {'label' => 'Word',            'type' => 'string'  },
       'expanded'       => {'label' => 'Expanded',        'type' => 'text',     'cols' => 60, 'rows' => 5},
@@ -261,6 +261,12 @@ sub show_columns {
       'expanded'            => {'title' => 'Expanded'},
     );
   }
+  elsif ($type eq 'lookup') {
+    @datamap = (
+      'word'                => {'title' => 'Word'},
+      'meaning'             => {'title' => 'Meaning'},
+    );
+  }
   elsif ($type eq 'view') {
     @datamap = (
       'help_links'          => {'title' => 'Help Links'}
@@ -290,7 +296,7 @@ sub show_columns {
 
 sub record_name {
   my $type  = shift->record_type;
-  return [ map {'singular' => "$_", 'plural' => "${_}s"}, {'movie' => 'Movie', 'faq' => 'FAQ', 'glossary' => 'Word', 'view' => 'Page view'}->{$type} ]->[0] if $type;
+  return [ map {'singular' => "$_", 'plural' => "${_}s"}, {'movie' => 'Movie', 'faq' => 'FAQ', 'glossary' => 'Word', 'lookup' => 'Word', 'view' => 'Page view'}->{$type} ]->[0] if $type;
   return {qw(singular Record plural Records)};
 }
 
