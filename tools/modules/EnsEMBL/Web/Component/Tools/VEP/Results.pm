@@ -102,7 +102,10 @@ sub content {
     location  => $location
   );
 
-  my ($headers, $rows, $line_count) = @{$output_file_obj->content_parsed(\%content_args)};
+  my ($header_hash, $rows, $line_count) = @{$output_file_obj->content_parsed(\%content_args)};
+
+  my $headers = $header_hash->{'combined'};
+  my $header_extra_descriptions = $header_hash->{'descriptions'} || {};
 
   my $actual_to = $from - 1 + ($line_count || 0);
   my $row_count = scalar @$rows;
@@ -179,7 +182,7 @@ sub content {
     'key' => $_,
     'title' => ($header_titles{$_} || $_).($COL_DESCS{$_} ? '' : '*'),
     'sort' => $table_sorts{$_} || 'string',
-    'help' => $COL_DESCS{$_}
+    'help' => $COL_DESCS{$_} || $header_extra_descriptions->{$_},
   }} @$headers;
 
   $html .= '<div><h3>Results preview</h3>';
