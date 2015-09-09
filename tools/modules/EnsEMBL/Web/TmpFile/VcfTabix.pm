@@ -93,7 +93,7 @@ sub content_iterate {
   my $loc  = $params->{'location'};
 
   # create commandline to read file
-  my $fh_string = defined $loc && $loc =~ /\w+/ ? "tabix -h $file $loc | " : "zcat -q $file | ";
+  my $fh_string = defined $loc && $loc =~ /\w+/ ? "tabix -h $file $loc | " : "gzip -dcq $file | ";
 
   # if filtering, pipe the output to the filter script
   if ($params->{'filter'}) {
@@ -159,6 +159,12 @@ sub content_iterate {
     } else { # vcf format requested
       $callback->($_);
     }
+  }
+
+  # if a filter returns 0 rows, $all_headers won't exist yet
+  if(($format_method || $params->{'parsed'}) && !$all_headers) {
+    $all_headers = $self->_parse_headers(\@header_lines);
+    $callback->($params->{'parsed'} ? $all_headers : @{$format_method->($self, $all_headers->{'combined'})});
   }
 
   close $fh;
