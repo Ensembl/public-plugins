@@ -175,24 +175,6 @@ sub job_details_table {
   return $two_col;
 }
 
-sub _results_link_params {
-  my ($self, $job, $url_param) = @_;
-  my $link_params = {
-      'class'       => [qw(small left-margin results-link)],
-      'flags'       => ['view_results_link'],
-      'inner_HTML'  => '[View results]',
-      'href'        => $self->hub->url({
-        'species'     => $job->species,
-        'type'        => 'Tools',
-        'action'      => $job->ticket->ticket_type_name,
-        'function'    => 'Results',
-        'tl'          => $url_param
-      })
-  };
-  return $link_params;
-}
-
-
 sub new_tool_form {
   ## Creates a new Form object with the information required by all Tools based form pages
   ## @param Tool type ('action' for the form submit URL)
