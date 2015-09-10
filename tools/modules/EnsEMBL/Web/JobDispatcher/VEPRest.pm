@@ -39,7 +39,7 @@ sub dispatch_job {
   my $output_file = join '/', $job_data->{'work_dir'}, $job_data->{'config'}{'output_file'};
   my $output_json = $output_file =~ s/\.[^\.]+$/.json/r;
   my $status_file = "$output_json.status";
-  my @variants    = map { s/\R//r } file_get_contents($input_file);
+  my @variants    = file_get_contents($input_file, sub { s/\R//r });
 
   my $response    = $self->_post($endpoint, to_json({'variants' => \@variants}));
 

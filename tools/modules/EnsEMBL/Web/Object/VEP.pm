@@ -38,7 +38,7 @@ sub get_edit_jobs_data {
 
   if (-T $input_file && $input_file !~ /\.gz$/ && $input_file !~ /\.zip$/) { # TODO - check if the file is binary!
     if (-s $input_file <= 1024) {
-      $job_data->{"text"} = join('', file_get_contents($input_file));
+      $job_data->{"text"} = file_get_contents($input_file);
     } else {
       $job_data->{'input_file_type'}  = 'text';
       $job_data->{'input_file_url'}   = $self->download_url({'input' => 1});
@@ -106,7 +106,7 @@ sub handle_download {
   if ($hub->param('input')) {
 
     my $filename  = $job->job_data->{'input_file'};
-    my $content   = join '', map { s/\R/\r\n/r } file_get_contents(join '/', $job->job_dir, $filename);
+    my $content   = file_get_contents(join('/', $job->job_dir, $filename), sub { s/\R/\r\n/r });
 
     $r->headers_out->add('Content-Type'         => 'text/plain');
     $r->headers_out->add('Content-Length'       => length $content);
