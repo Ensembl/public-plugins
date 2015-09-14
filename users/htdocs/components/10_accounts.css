@@ -33,6 +33,9 @@ div.openid-username div.form-field                { margin: 0; }
 div.openid-username div.form-field label.ff-label { width: auto; line-height: 16px; }
 div.openid-username div.form-field div.ff-right   { padding: 0; }
 
+/* email field on edit profile page */
+div.user-email div.ff-notes                       { padding-top: 0; padding-bottom: 0; }
+
 /* buttons on the accounts pages */
 div.buttons-inline p.accounts-button              { float: left; margin-right: 8px; }
 p.accounts-button a                               { display: inline-block; color: [[BUTTON_TEXT]]; text-decoration: none; padding: 4px 7px 4px 29px;
