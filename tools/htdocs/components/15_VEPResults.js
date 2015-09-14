@@ -83,6 +83,28 @@ Ensembl.Panel.VEPResults = Ensembl.Panel.ContentTools.extend({
         dropdown.hide();
       }
     });
+
+    // overlay horizontal scroll indicator over table
+    var hscrollInd = this.el.find('.hscroll-indicator');
+    var target = this.el.find('.hscroll-indicator-target').find('tbody');
+
+    if(hscrollInd.length && target.length) {
+      hscrollInd.css({
+        position: 'absolute',
+        top: target.position().top + 10,
+        left: $(window).width() - (hscrollInd.width() + 260)
+      });
+
+      // hide/fade it on click or horizontal scroll
+      hscrollInd.on('click', function() { $(this).fadeOut(); });
+
+      $(window).bind('scroll', function () {
+        // use 50 to allow for small "accidental" scroll e.g. with trackpad
+        if($(window).scrollLeft() > 50) {
+          $('.hscroll-indicator').fadeOut();
+        }
+      });
+    }
   },
 
   reload: function(url, ajaxUrl) {
