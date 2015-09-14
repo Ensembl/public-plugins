@@ -35,6 +35,11 @@ sub init {
   if($hub->type eq 'Tools') {
     $_->{'class'} = sprintf 'disabled %s', $_->{'class'} || '' for grep {$_->{'caption'} eq 'Share this page'} @{$self->entries};
   }
+
+  # dont allow users to think they can add data for VEP here
+  if($hub->action eq 'VEP' && ($hub->function || '') ne 'Results') {
+    $_->{'class'} = sprintf 'disabled %s', $_->{'class'} || '' for grep {$_->{'caption'} =~ /(Manage|Add) your data/} @{$self->entries};
+  }
 }
 
 1;
