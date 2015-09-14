@@ -41,6 +41,7 @@ sub content {
   my $current_species = $hub->species;
      $current_species = $hub->get_favourite_species->[0] if $current_species =~ /multi|common/i;
   my $input_formats   = INPUT_FORMATS;
+  my $fd              = $self->object->get_form_details;
 
   if (!$form) {
     $form = $self->new_tool_form('VEP');
@@ -128,33 +129,19 @@ sub content {
         'field_class'   => '_stt_rfq',
         'type'          => 'radiolist',
         'name'          => 'core_type',
-        'label'         => 'Transcript database to use',
-        'helptip'       =>
-          '<b>Gencode basic:</b> a subset of the Ensembl transcript set; partial and other low quality transcripts are removed<br/>'.
-          '<b>RefSeq:</b> aligned transcripts from NCBI RefSeq',
+        'label'         => $fd->{core_type}->{label},
+        'helptip'       => $fd->{core_type}->{helptip},
         'value'         => 'core',
         'class'         => '_stt',
-        'values'        => [{
-          'value'         => 'core',
-          'caption'       => 'Ensembl transcripts'
-        }, {
-          'value'         => 'gencode_basic',
-          'caption'       => 'Gencode basic transcripts'
-        }, {
-          'value'         => 'refseq',
-          'caption'       => 'RefSeq transcripts'
-        }, {
-          'value'         => 'merged',
-          'caption'       => 'Ensembl and RefSeq transcripts'
-        }]
+        'values'        => $fd->{core_type}->{values}
       });
       
       $input_fieldset->add_field({
         'field_class'   => '_stt_rfq _stt_merged _stt_refseq',
         'type'    => 'checkbox',
         'name'    => "all_refseq",
-        'label'   => 'Include additional EST and CCDS transcripts',
-        'helptip' => 'The RefSeq transcript set also contains aligned EST and CCDS transcripts that are excluded by default',
+        'label'   => $fd->{all_refseq}->{label},
+        'helptip' => $fd->{all_refseq}->{helptip},
         'value'   => 'yes',
         'checked' => 0
       });
@@ -309,42 +296,33 @@ sub content {
 sub _build_filters {
   my ($self, $form, $div) = @_;
   my $fieldset  = $div->append_child($form->add_fieldset('Filters'));
+  my $fd        = $self->object->get_form_details;
 
   if (first { $_->{'value'} eq 'Homo_sapiens' } @{$self->_species}) {
 
     $fieldset->add_field({
       'field_class'   => '_stt_Homo_sapiens',
-      'label'         => 'By frequency',
-      'helptip'       => 'Exclude common variants to remove input variants that overlap with known variants that have a minor allele frequency greater than 1% in the 1000 Genomes Phase 1 combined population. Use advanced filtering to change the population, frequency threshold and other parameters',
+      'label'         => $fd->{frequency}->{label},
+      'helptip'       => $fd->{frequency}->{helptip},
       'inline'        => 1,
       'elements'      => [{
         'type'          => 'radiolist',
         'name'          => 'frequency',
         'value'         => 'no',
         'class'         => '_stt',
-        'values'        => [
-          { 'value'       => 'no',        'caption' => 'No filtering'             },
-          { 'value'       => 'common',    'caption' => 'Exclude common variants'  },
-          { 'value'       => 'advanced',  'caption' => 'Advanced filtering'       }
-        ]
+        'values'        => $fd->{frequency}->{values},
       }, {
         'element_class' => '_stt_advanced',
         'type'          => 'dropdown',
         'name'          => 'freq_filter',
         'value'         => 'exclude',
-        'values'        => [
-          { 'value'       => 'exclude', 'caption' => 'Exclude'      },
-          { 'value'       => 'include', 'caption' => 'Include only' }
-        ]
+        'values'        => $fd->{freq_filter}->{values}
       }, {
         'element_class' => '_stt_advanced',
         'type'          => 'dropdown',
         'name'          => 'freq_gt_lt',
         'value'         => 'gt',
-        'values'        => [
-          { 'value'       => 'gt', 'caption' => 'variants with MAF greater than' },
-          { 'value'       => 'lt', 'caption' => 'variants with MAF less than'    },
-        ]
+        'values'        => $fd->{freq_gt_lt}->{values}
       }, {
         'element_class' => '_stt_advanced',
         'type'          => 'string',
@@ -356,15 +334,7 @@ sub _build_filters {
         'type'          => 'dropdown',
         'name'          => 'freq_pop',
         'value'         => '1kg_all',
-        'values'        => [
-          { 'value'       => '1kg_all', 'caption' => 'in 1000 genomes (1KG) combined population' },
-          { 'value'       => '1kg_afr', 'caption' => 'in 1KG African combined population'        },
-          { 'value'       => '1kg_amr', 'caption' => 'in 1KG American combined population'       },
-          { 'value'       => '1kg_asn', 'caption' => 'in 1KG Asian combined population'          },
-          { 'value'       => '1kg_eur', 'caption' => 'in 1KG European combined population'       },
-          { 'value'       => 'esp_aa',  'caption' => 'in ESP African-American population'        },
-          { 'value'       => 'esp_ea',  'caption' => 'in ESP European-American population'       },
-        ],
+        'values'        => $fd->{freq_pop}->{values}
       }]
     });
   }
@@ -372,8 +342,8 @@ sub _build_filters {
   $fieldset->add_field({
     'type'    => 'checkbox',
     'name'    => "coding_only",
-    'label'   => 'Return results for variants in coding regions only',
-    'helptip' => 'Exclude results in intronic and intergenic regions',
+    'label'   => $fd->{coding_only}->{label},
+    'helptip' => $fd->{coding_only}->{helptip},
     'value'   => 'yes',
     'checked' => 0
   });
@@ -400,6 +370,7 @@ sub _build_identifiers {
   my ($self, $form, $div) = @_;
   my $hub       = $self->hub;
   my $species   = $self->_species;
+  my $fd        = $self->object->get_form_details;
 
   ## IDENTIFIERS
   my $current_section = 'Identifiers';
@@ -408,8 +379,8 @@ sub _build_identifiers {
   $fieldset->add_field({
     'type'        => 'checkbox',
     'name'        => 'symbol',
-    'label'       => 'Gene symbol',
-    'helptip'     => 'Report the gene symbol (e.g. HGNC)',
+    'label'       => $fd->{symbol}->{label},
+    'helptip'     => $fd->{symbol}->{helptip},
     'value'       => 'yes',
     'checked'     => 1
   });
@@ -418,32 +389,32 @@ sub _build_identifiers {
     'field_class' => '_stt_core _stt_merged _stt_gencode_basic',
     'type'        => 'checkbox',
     'name'        => 'ccds',
-    'label'       => 'CCDS',
-    'helptip'     => 'Report the Consensus CDS identifier where applicable',
+    'label'       => $fd->{ccds}->{label},
+    'helptip'     => $fd->{ccds}->{helptip},
     'value'       => 'yes',
   });
 
   $fieldset->add_field({
     'type'        => 'checkbox',
     'name'        => 'protein',
-    'label'       => 'Protein',
-    'helptip'     => 'Report the Ensembl protein identifier',
+    'label'       => $fd->{protein}->{label},
+    'helptip'     => $fd->{protein}->{helptip},
     'value'       => 'yes'
   });
 
   $fieldset->add_field({
     'type'        => 'checkbox',
     'name'        => 'uniprot',
-    'label'       => 'Uniprot',
-    'helptip'     => 'Report identifiers from SWISSPROT, TrEMBL and UniParc',
+    'label'       => $fd->{uniprot}->{label},
+    'helptip'     => $fd->{uniprot}->{helptip},
     'value'       => 'yes'
   });
 
   $fieldset->add_field({
     'type'        => 'checkbox',
     'name'        => 'hgvs',
-    'label'       => 'HGVS',
-    'helptip'     => 'Report HGVSc (coding sequence) and HGVSp (protein) notations for your variants',
+    'label'       => $fd->{hgvs}->{label},
+    'helptip'     => $fd->{hgvs}->{helptip},
     'value'       => 'yes'
   });
 
@@ -458,17 +429,13 @@ sub _build_identifiers {
 
     $fieldset->add_field({
       'field_class' => '_stt_var',
-      'label'       => 'Find co-located known variants',
-      'helptip'     => "Report known variants from the Ensembl Variation database that are co-located with input. Use 'compare alleles' to only report co-located variants where none of the input variant's alleles are novel",
+      'label'       => $fd->{check_existing}->{label},
+      'helptip'     => $fd->{check_existing}->{helptip},
       'type'        => 'dropdown',
       'name'        => "check_existing",
       'value'       => 'yes',
       'class'       => '_stt',
-      'values'      => [
-        { 'value'     => 'no',      'caption' => 'No'                       },
-        { 'value'     => 'yes',     'caption' => 'Yes'                      },
-        { 'value'     => 'allele',  'caption' => 'Yes and compare alleles'  }
-      ]
+      'values'      => $fd->{check_existing}->{values}
     });
 
     $fieldset->append_child('div', {
@@ -479,36 +446,36 @@ sub _build_identifiers {
         'field_class'   => [qw(_stt_yes _stt_allele)],
         'values'        => [{
           'name'          => "gmaf",
-          'caption'       => '1000 Genomes global minor allele frequency',
-          'helptip'       => 'Report the minor allele frequency for the combined 1000 Genomes Project phase 1 population',
+          'caption'       => $fd->{gmaf}->{label},
+          'helptip'       => $fd->{gmaf}->{helptip},
           'value'         => 'yes',
           'checked'       => 1
         }, {
           'name'          => "maf_1kg",
-          'caption'       => '1000 Genomes continental allele frequencies',
-          'helptip'       => 'Report the allele frequencies for the combined 1000 Genomes Project phase 1 continental populations - AFR (African), AMR (American), ASN (Asian) and EUR (European)',
+          'caption'       => $fd->{maf_1kg}->{label},
+          'helptip'       => $fd->{maf_1kg}->{helptip},
           'value'         => 'yes',
           'checked'       => 0
         }, {
           'name'          => "maf_esp",
-          'caption'       => 'ESP allele frequencies',
-          'helptip'       => 'Report the allele frequencies for the NHLBI Exome Sequencing Project populations - AA (African American) and EA (European American)',
+          'caption'       => $fd->{maf_esp}->{label},
+          'helptip'       => $fd->{maf_esp}->{helptip},
           'value'         => 'yes',
           'checked'       => 0
         }]
       }), $fieldset->add_field({
         'type' => 'checkbox',
         'name' => 'pubmed',
-        'label' => 'PubMed IDs for citations of co-located variants',
-        'helptip' => 'Report the PubMed IDs of any publications that cite this variant',
+        'label' => $fd->{pubmed}->{label},
+        'helptip' => $fd->{pubmed}->{helptip},
         'value' => 'yes',
         'checked' => 1,
         'field_class'   => [qw(_stt_yes _stt_allele)],
       }), $fieldset->add_field({
         'type' => 'checkbox',
         'name' => 'failed',
-        'label' => 'Include flagged variants',
-        'helptip' => 'The Ensembl QC pipeline flags some variants as failed; by default these are not included when searching for known variants',
+        'label' => $fd->{failed}->{label},
+        'helptip' => $fd->{failed}->{helptip},
         'value' => 1,
         'checked' => 0,
         'field_class'   => [qw(_stt_yes _stt_allele)],
@@ -535,6 +502,7 @@ sub _build_extra {
   my $hub       = $self->hub;
   my $sd        = $hub->species_defs;
   my $species   = $self->_species;
+  my $fd        = $self->object->get_form_details;
 
   ## MISCELLANEOUS SECTION
   my $current_section = 'Miscellaneous';
@@ -543,8 +511,8 @@ sub _build_extra {
   $fieldset->add_field({
     'type'        => 'checkbox',
     'name'        => 'biotype',
-    'label'       => 'Transcript biotype',
-    'helptip'     => 'Report the biotype of overlapped transcripts, e.g. protein_coding, miRNA, psuedogene',
+    'label'       => $fd->{biotype}->{label},
+    'helptip'     => $fd->{biotype}->{helptip},
     'value'       => 'yes',
     'checked'     => 1
   });
@@ -553,8 +521,8 @@ sub _build_extra {
     'field_class' => '_stt_core _stt_gencode_basic _stt_merged',
     'type'        => 'checkbox',
     'name'        => 'domains',
-    'label'       => 'Protein domains',
-    'helptip'     => 'Report overlapping protein domains from Pfam, Prosite and InterPro',
+    'label'       => $fd->{domains}->{label},
+    'helptip'     => $fd->{domains}->{helptip},
     'value'       => 'yes',
     'checked'     => 0,
   });
@@ -562,8 +530,8 @@ sub _build_extra {
   $fieldset->add_field({
     'type'        => 'checkbox',
     'name'        => 'numbers',
-    'label'       => 'Exon and intron numbers',
-    'helptip'     => 'For variants that fall in the exon or intron, report the exon or intron number as NUMBER / TOTAL',
+    'label'       => $fd->{numbers}->{label},
+    'helptip'     => $fd->{numbers}->{helptip},
     'value'       => 'yes',
     'checked'     => 0
   });
@@ -572,8 +540,8 @@ sub _build_extra {
     'field_class' => '_stt_core _stt_gencode_basic _stt_merged',
     'type'        => 'checkbox',
     'name'        => 'tsl',
-    'label'       => 'Transcript support level',
-    'helptip'     => 'Report the transcript support level',
+    'label'       => $fd->{tsl}->{label},
+    'helptip'     => $fd->{tsl}->{helptip},
     'value'       => 'yes',
     'checked'     => 1,
   });
@@ -582,8 +550,8 @@ sub _build_extra {
     'field_class' => '_stt_core _stt_gencode_basic _stt_merged',
     'type'        => 'checkbox',
     'name'        => 'canonical',
-    'label'       => 'Identify canonical transcripts',
-    'helptip'     => 'Indicate if an affected transcript is the canonical transcript for the gene',
+    'label'       => $fd->{canonical}->{label},
+    'helptip'     => $fd->{canonical}->{helptip},
     'value'       => 'yes',
     'checked'     => 0,
   });
@@ -604,16 +572,11 @@ sub _build_extra {
     $fieldset->add_field({
       'field_class' => '_stt_sift',
       'type'        => 'dropdown',
-      'label'       => 'SIFT',
-      'helptip'     => 'Report SIFT scores and/or predictions for missense variants. SIFT is an algorithm to predict whether an amino acid substitution is likely to affect protein function',
+      'label'       => $fd->{sift}->{label},
+      'helptip'     => $fd->{sift}->{helptip},
       'name'        => 'sift',
       'value'       => 'both',
-      'values'      => [
-        { 'value'     => 'no',    'caption' => 'No'                   },
-        { 'value'     => 'both',  'caption' => 'Prediction and score' },
-        { 'value'     => 'pred',  'caption' => 'Prediction only'      },
-        { 'value'     => 'score', 'caption' => 'Score only'           }
-      ]
+      'values'      => $fd->{sift}->{values},
     });
   }
 
@@ -623,16 +586,11 @@ sub _build_extra {
     $fieldset->add_field({
       'field_class' => '_stt_pphn',
       'type'        => 'dropdown',
-      'label'       => 'PolyPhen',
-      'helptip'     => 'Report PolyPhen scores and/or predictions for missense variants. PolyPhen is an algorithm to predict whether an amino acid substitution is likely to affect protein function',
+      'label'       => $fd->{polyphen}->{label},
+      'helptip'     => $fd->{polyphen}->{helptip},
       'name'        => 'polyphen',
       'value'       => 'both',
-      'values'      => [
-        { 'value'     => 'no',    'caption' => 'No'                   },
-        { 'value'     => 'both',  'caption' => 'Prediction and score' },
-        { 'value'     => 'pred',  'caption' => 'Prediction only'      },
-        { 'value'     => 'score', 'caption' => 'Score only'           }
-      ]
+      'values'      => $fd->{polyphen}->{values},
     });
   }
 
@@ -650,8 +608,8 @@ sub _build_extra {
 
     $fieldset->add_field({
       'field_class'   => "_stt_$_",
-      'label'         => 'Get regulatory region consequences',
-      'helptip'       => 'Get consequences for variants that overlap regulatory features and transcription factor binding motifs',
+      'label'         => $fd->{regulatory}->{label},
+      'helptip'       => $fd->{regulatory}->{helptip},
       'elements'      => [{
         'type'          => 'dropdown',
         'name'          => "regulatory_$_",
@@ -664,14 +622,14 @@ sub _build_extra {
         ]
       }, {
         'type'          => 'noedit',
-        'caption'       => 'Select one or more cell types to limit regulatory feature results to. Hold Ctrl (Windows) or Cmd (Mac) to select multiple entries.',
+        'caption'       => $fd->{cell_type}->{helptip},
         'no_input'      => 1,
         'element_class' => "_stt_cell_$_"
       }, {
         'element_class' => "_stt_cell_$_",
         'type'          => 'dropdown',
         'multiple'      => 1,
-        'label'         => 'Limit to cell type(s)',
+        'label'         => $fd->{cell_type}->{label},
         'name'          => "cell_type_$_",
         'values'        => [ {'value' => '', 'caption' => 'None'}, map { 'value' => $_->name, 'caption' => $_->name }, @{$hub->get_adaptor('get_CellTypeAdaptor', 'funcgen', $_)->fetch_all} ]
       }]
