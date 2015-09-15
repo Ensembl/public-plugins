@@ -279,7 +279,6 @@ sub content {
   );
 
   return sprintf('
-    <script type="text/javascript" src="/components/bootstrap-tokenfield.min.js" charset="UTF-8"></script>
     %s<div class="hidden _tool_new">
       <p><a class="button _change_location" href="%s">New VEP job</a></p>
     </div>
