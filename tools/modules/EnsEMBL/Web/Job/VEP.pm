@@ -156,6 +156,8 @@ sub _configure_plugins {
         foreach my $el(@matched) {
           my $val = $job_data->{'plugin_'.$pl_key.'_'.$el->{name}};
 
+          $val = join(',', @$val) if $val && ref($val) eq 'ARRAY';
+
           # remove any spaces
           $val =~ s/,\s+/,/g if $val && $val =~ /,/;
           
