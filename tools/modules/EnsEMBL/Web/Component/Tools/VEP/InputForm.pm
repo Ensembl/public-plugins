@@ -728,7 +728,7 @@ sub _get_plugins_by_section {
 sub _add_plugins {
   my ($self, $div, $fieldset, $section_name) = @_;
 
-  my $ac_values;
+  my ($ac_values, %required);
   my $species = $self->_species;
   my $sd  = $self->hub->species_defs;
   my $pl  = $sd->multi_val('ENSEMBL_VEP_PLUGIN_CONFIG');
@@ -780,6 +780,11 @@ sub _add_plugins {
         if($el->{class} && $el->{values} && $el->{class} =~ /autocomplete/) {
           $ac_values->{$el->{name}} = $el->{values};
         }
+
+        # required?
+        if($el->{required}) {
+          push @{$required{'plugin_'.$pl_key}}, $el->{name};
+        }
         
         $fieldset->add_field($el);
       }
@@ -808,6 +813,15 @@ sub _add_plugins {
       type => "hidden",
       name => "plugin_auto_values",
       value => $ac_json
+    });
+  }
+
+  # add required params
+  if(scalar keys %required) {
+    $div->append_child('input', {
+      type => "hidden",
+      name => "required_params",
+      value => join(';', map {$_.'='.join(',', @{$required{$_}})} keys %required)
     });
   }
 }
