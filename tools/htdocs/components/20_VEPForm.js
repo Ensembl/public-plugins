@@ -84,6 +84,13 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
       panel.elLk.form.find('._stt_' + this.name).addClass('plugin-highlight', 100, 'linear');
     });
 
+    // also remove highlighting when option changes
+    this.elLk.form.find('.plugin_enable').each(function() {
+      panel.elLk.form.find('._stt_' + this.name).find(':input').change(function() {
+        panel.elLk.form.find('.plugin-highlight').removeClass('plugin-highlight');
+      });
+    });
+
     this.editExisting();
   },
 
