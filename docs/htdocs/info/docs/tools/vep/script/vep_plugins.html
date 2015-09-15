@@ -10,16 +10,26 @@
 	
 	<h1 id="top"><span style="color:#006">Variant Effect Predictor</span> <img src="/i/16/tool.png"> <span style="color:#666">Plugins</span></h1>
 	<hr/>
-		
         
-    <p> The VEP can use plugin modules written in Perl to add functionality to
-    the script. Plugins are a powerful way to extend, filter and manipulate the
-    output of the VEP.</p>
+  <p> The VEP can use plugin modules written in Perl to add functionality to
+  the software. Plugins are a powerful way to extend, filter and manipulate the
+  output of the VEP.</p>
 
-    <p> Plugins can be installed using the VEP's installer script, run the
-    following command to get a list of available plugins: </p>
+  <p> Example functionality: </p>
 
-    <pre class="code">perl INSTALL.pl -a p -g list</pre>
+  <ul>
+  	<li> Running additional Ensembl API code (<a rel="external" href="https://github.com/ensembl-variation/VEP_plugins/blob/master/Conservation.pm">Conservation</a>, <a rel="external" href="https://github.com/ensembl-variation/VEP_plugins/blob/master/LD.pm">LD</a>)</li>
+  	<li> Querying an external dataset or database (<a rel="external" href="https://github.com/ensembl-variation/VEP_plugins/blob/master/CADD.pm">CADD</a>, <a rel="external" href="https://github.com/ensembl-variation/VEP_plugins/blob/master/dbNSFP.pm">dbNSFP</a>, <a rel="external" href="https://github.com/ensembl-variation/VEP_plugins/blob/master/ExAC.pm">ExAC</a>)</li>
+  	<li> Running external algorithms (<a rel="external" href="https://github.com/ensembl-variation/VEP_plugins/blob/master/Condel.pm">Condel</a>, <a rel="external" href="https://github.com/ensembl-variation/VEP_plugins/blob/master/MaxEntScan.pm">MaxEntScan</a>)</li>
+  	<li> Filtering VEP output (<a rel="external" href="https://github.com/ensembl-variation/VEP_plugins/blob/master/RankFilter.pm">RankFilter</a>)</li>
+  </ul>
+
+  <p> Plugins can be installed using the VEP's installer script, run the
+  following command to get a list of available plugins: </p>
+
+  <pre class="code">perl INSTALL.pl -a p -g list</pre>
+
+  <p> Some plugins are also available to use via the <a href="/Tools/VEP">VEP web interface</a>. </p>
 	
 	<h2 id="plugins_examples">Examples</h2>
 	
