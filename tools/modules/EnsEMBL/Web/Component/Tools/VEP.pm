@@ -75,7 +75,7 @@ sub job_details_table {
   my (%skip, $have_plugins);
   
   # sort by label so at least it appears somewhat logical to user
-  foreach my $opt_key(sort {
+  OPT_KEY: foreach my $opt_key(sort {
     lc($form_data->{$a} && $form_data->{$a}->{label} ? $form_data->{$a}->{label} : $a)
     cmp
     lc($form_data->{$b} && $form_data->{$b}->{label} ? $form_data->{$b}->{label} : $b)
@@ -89,9 +89,12 @@ sub job_details_table {
     next unless $opt_data;
 
     # skip disabled plugins
-    if((grep {$_ =~ /$opt_key\_/} keys %skip) || ($opt_key =~ /^plugin\_/ && $job_data->{$opt_key} ne $opt_key)) {
+    if($opt_key =~ /^plugin\_/ && $job_data->{$opt_key} eq 'no') {
       $skip{$opt_key} = 1;
       next;
+    }
+    foreach my $sk(keys %skip) {
+      next OPT_KEY if $opt_key =~ /^$sk/;
     }
 
     $have_plugins = 1 if $opt_key =~ /^plugin/;
@@ -101,6 +104,14 @@ sub job_details_table {
     $values{yes} = 'Enabled';
     $values{no}  = 'Disabled';
 
+    # process value
+    my $value = $job_data->{$opt_key};
+    $value = join(', ', @$value) if ref($value) eq 'ARRAY';
+
+    # plugin checkboxes have a value the same as the key
+    $value = 'Enabled' if $value eq $opt_key;
+
+    # process label
     my $label = $opt_data->{label} || $opt_key;
     $label =~ s/\f/\&shy;/g;
 
@@ -112,8 +123,7 @@ sub job_details_table {
         $opt_key =~ /^plugin/ ? ' *' : '',
       ),
 
-      # plugin checkboxes have a value the same as the key
-      $values{$job_data->{$opt_key}} || ($job_data->{$opt_key} eq $opt_key ? 'Enabled' : $job_data->{$opt_key})
+      $values{$value} || $value
     );
   }
 
