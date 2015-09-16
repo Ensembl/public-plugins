@@ -40,154 +40,215 @@ sub content {
   my $form            = $cache ? $cache->get('VEPFORM') : undef;
   my $current_species = $hub->species;
      $current_species = $hub->get_favourite_species->[0] if $current_species =~ /multi|common/i;
-  my $input_formats   = INPUT_FORMATS;
-  my $fd              = $self->object->get_form_details;
 
+  # If cached form not found, generate a new form and save in cache to skip the form generation process next time
   if (!$form) {
-    $form = $self->new_tool_form('VEP');
-
-    # Placeholders for previous job json and species hidden inputs
-    $form->append_child('text', 'EDIT_JOB');
-    $form->append_child('text', 'SPECIES_INPUT');
-
-    my $input_fieldset = $form->add_fieldset({'legend' => 'Input', 'class' => '_stt_input', 'no_required_notes' => 1});
-
-    # Species dropdown list with stt classes to dynamically toggle other fields
-    $input_fieldset->add_field({
-      'label'         => 'Species',
-      'elements'      => [{
-        'type'          => 'speciesdropdown',
-        'name'          => 'species',
-        'value'         => $current_species,
-        'values'        => [ map {
-          'value'         => $_->{'value'},
-          'caption'       => $_->{'caption'},
-          'class'         => [  #selectToToggle classes for JavaScript
-            '_stt', '_sttmulti',
-            $_->{'variation'}             ? '_stt__var'   : '_stt__novar',
-            $_->{'refseq'}                ? '_stt__rfq'   : (),
-            $_->{'variation'}{'POLYPHEN'} ? '_stt__pphn'  : (),
-            $_->{'variation'}{'SIFT'}     ? '_stt__sift'  : ()
-          ]
-        }, @$species ]
-      }, {
-        'type'          => 'noedit',
-        'value'         => 'Assembly: '. join('', map { sprintf '<span class="_stt_%s _vep_assembly" rel="%s">%s</span>', $_->{'value'}, $_->{'assembly'}, $_->{'assembly'} } @$species),
-        'no_input'      => 1,
-        'is_html'       => 1
-      }]
-    });
-
-    $input_fieldset->add_field({
-      'type'          => 'string',
-      'name'          => 'name',
-      'label'         => 'Name for this data (optional)'
-    });
-
-    $input_fieldset->add_field({
-      'label'         => 'Either paste data',
-      'elements'      => [{
-        'type'          => 'text',
-        'name'          => 'text',
-      }, {
-        'type'          => 'noedit',
-        'noinput'       => 1,
-        'is_html'       => 1,
-        'caption'       => sprintf('<span class="small"><b>Examples:&nbsp;</b>%s</span>',
-          join(', ', map { sprintf('<a href="#" class="_example_input" rel="%s">%s</a>', $_->{'value'}, $_->{'caption'}) } @$input_formats)
-        )
-      }, {
-        'type'          => 'button',
-        'name'          => 'preview',
-        'class'         => 'hidden',
-        'value'         => 'Instant results for first variant &rsaquo;',
-        'helptip'       => 'See a quick preview of results for data pasted above',
-      }]
-    });
-
-    $input_fieldset->add_field({
-      'type'          => 'file',
-      'name'          => 'file',
-      'label'         => 'Or upload file',
-      'helptip'       => sprintf('File uploads are limited to %sMB in size. Files may be compressed using gzip or zip', $sd->ENSEMBL_TOOLS_CGI_POST_MAX->{'VEP'} / (1024 * 1024))
-    });
-
-    $input_fieldset->add_field({
-      'type'          => 'url',
-      'name'          => 'url',
-      'label'         => 'Or provide file URL',
-      'size'          => 30,
-      'class'         => 'url'
-    });
-
-    # Placeholder for previuos files select box
-    $input_fieldset->append_child('text', 'FILES_DROPDOWN');
-
-    # This field is shown only for the species having refseq data
-    if (first { $_->{'refseq'} } @$species) {
-      $input_fieldset->add_field({
-        'field_class'   => '_stt_rfq',
-        'type'          => 'radiolist',
-        'name'          => 'core_type',
-        'label'         => $fd->{core_type}->{label},
-        'helptip'       => $fd->{core_type}->{helptip},
-        'value'         => 'core',
-        'class'         => '_stt',
-        'values'        => $fd->{core_type}->{values}
-      });
-      
-      $input_fieldset->add_field({
-        'field_class'   => '_stt_rfq _stt_merged _stt_refseq',
-        'type'    => 'checkbox',
-        'name'    => "all_refseq",
-        'label'   => $fd->{all_refseq}->{label},
-        'helptip' => $fd->{all_refseq}->{helptip},
-        'value'   => 'yes',
-        'checked' => 0
-      });
-    }
-
-    ## Output options header
-    $form->add_fieldset('Output options');
-
-    ### Advanced config options
-    my $sections = CONFIG_SECTIONS;
-    foreach my $section (@$sections) {
-      my $method      = '_build_'.$section->{'id'};
-      my $config_div  = $form->append_child('div', {
-        'class'       => 'extra_configs_wrapper vep-configs',
-        'children'    => [{
-          'node_name'   => 'div',
-          'class'       => 'extra_configs_button',
-          'children'    => [{
-            'node_name'   => 'a',
-            'rel'         => '_vep'.$section->{'id'},
-            'class'       => [qw(toggle _slide_toggle set_cookie closed)],
-            'href'        => '#vep'.$section->{'id'},
-            'title'       => $section->{'caption'},
-            'inner_HTML'  => $section->{'title'}
-          }, {
-            'node_name'   => 'span',
-            'class'       => 'extra_configs_info',
-            'inner_HTML'  => $section->{'caption'}
-          }]
-        }, {
-          'node_name'   => 'div',
-          'class'       => ['extra_configs', 'toggleable', 'hidden', '_vep'.$section->{'id'}],
-        }]
-      });
-
-      $self->$method($form, $config_div->last_child); # add required fieldsets
-    }
-
-    # Placeholder for Run/Close buttons
-    $form->append_child('text', 'BUTTONS_FIELDSET');
-
-    $form = $form->render;
-
-    # Save in cache to skip the form generation process next time
+    $form = $self->get_cacheable_form_node->render;
     $cache->set('VEPFORM', $form) if $cache;
   }
+
+  # Replace any placeholders for non cacheable fields with actual HTML
+  $form = $self->add_non_cacheable_fields($form, $current_species);
+
+  # construct hash to pass to JS containing information needed to render preview
+  my %cons = map {$_->{SO_term} => {'description' => $_->{description}, 'rank' => $_->{rank}}} values %Bio::EnsEMBL::Variation::Utils::Constants::OVERLAP_CONSEQUENCES;
+
+  # add colours
+  $cons{$_}->{colour} = $hub->colourmap->hex_by_name($sd->colour('variation')->{lc $_}->{'default'}) for keys %cons;
+
+  # add example data
+  my $ex_data;
+
+  foreach my $sp(@$species) {
+    foreach my $key(grep {/^VEP/} keys %{$sp->{sample}}) {
+      my $value = $sp->{sample}->{$key};
+      $key =~ s/^VEP\_//;
+      $ex_data->{$sp->{value}}->{lc($key)} = $value;
+    }
+  }
+
+  # create input with data
+  my $panel_params = sprintf('<input class="js_param" type="hidden" name="preview_data" value="%s" /><input class="js_param" type="hidden" name="rest_server_url" value="%s"><input class="js_param" type="hidden" name="example_data" value="%s">',
+    encode_entities($self->jsonify(\%cons)),
+    encode_entities($sd->ENSEMBL_REST_URL),
+    encode_entities($self->jsonify($ex_data))
+  );
+
+  return sprintf('
+    %s<div class="hidden _tool_new">
+      <p><a class="button _change_location" href="%s">New VEP job</a></p>
+    </div>
+    <div class="hidden _tool_form_div">
+      <h2>New VEP job:</h2><input type="hidden" class="panel_type" value="VEPForm" />%s%s
+    </div>',
+    $panel_params,
+    $hub->url({'function' => ''}),
+    $self->species_specific_info($current_species, 'VEP', 'VEP'),
+    $form
+  );
+}
+
+sub get_cacheable_form_node {
+  ## Gets the form tree node
+  ## This method returns the form object that can be cached once and then used for all requests (ie. it does not contian species specific or user specific fields)
+  ## @return EnsEMBL::Web::Form object
+  my $self            = shift;
+  my $hub             = $self->hub;
+  my $sd              = $hub->species_defs;
+  my $species         = $self->_species;
+  my $form            = $self->new_tool_form('VEP');
+  my $fd              = $self->object->get_form_details;
+  my $input_formats   = INPUT_FORMATS;
+
+  # Placeholders for previous job json and species hidden inputs
+  $form->append_child('text', 'EDIT_JOB');
+  $form->append_child('text', 'SPECIES_INPUT');
+
+  my $input_fieldset = $form->add_fieldset({'legend' => 'Input', 'class' => '_stt_input', 'no_required_notes' => 1});
+
+  # Species dropdown list with stt classes to dynamically toggle other fields
+  $input_fieldset->add_field({
+    'label'         => 'Species',
+    'elements'      => [{
+      'type'          => 'speciesdropdown',
+      'name'          => 'species',
+      'values'        => [ map {
+        'value'         => $_->{'value'},
+        'caption'       => $_->{'caption'},
+        'class'         => [  #selectToToggle classes for JavaScript
+          '_stt', '_sttmulti',
+          $_->{'variation'}             ? '_stt__var'   : '_stt__novar',
+          $_->{'refseq'}                ? '_stt__rfq'   : (),
+          $_->{'variation'}{'POLYPHEN'} ? '_stt__pphn'  : (),
+          $_->{'variation'}{'SIFT'}     ? '_stt__sift'  : ()
+        ]
+      }, @$species ]
+    }, {
+      'type'          => 'noedit',
+      'value'         => 'Assembly: '. join('', map { sprintf '<span class="_stt_%s _vep_assembly" rel="%s">%s</span>', $_->{'value'}, $_->{'assembly'}, $_->{'assembly'} } @$species),
+      'no_input'      => 1,
+      'is_html'       => 1
+    }]
+  });
+
+  $input_fieldset->add_field({
+    'type'          => 'string',
+    'name'          => 'name',
+    'label'         => 'Name for this data (optional)'
+  });
+
+  $input_fieldset->add_field({
+    'label'         => 'Either paste data',
+    'elements'      => [{
+      'type'          => 'text',
+      'name'          => 'text',
+    }, {
+      'type'          => 'noedit',
+      'noinput'       => 1,
+      'is_html'       => 1,
+      'caption'       => sprintf('<span class="small"><b>Examples:&nbsp;</b>%s</span>',
+        join(', ', map { sprintf('<a href="#" class="_example_input" rel="%s">%s</a>', $_->{'value'}, $_->{'caption'}) } @$input_formats)
+      )
+    }, {
+      'type'          => 'button',
+      'name'          => 'preview',
+      'class'         => 'hidden',
+      'value'         => 'Instant results for first variant &rsaquo;',
+      'helptip'       => 'See a quick preview of results for data pasted above',
+    }]
+  });
+
+  $input_fieldset->add_field({
+    'type'          => 'file',
+    'name'          => 'file',
+    'label'         => 'Or upload file',
+    'helptip'       => sprintf('File uploads are limited to %sMB in size. Files may be compressed using gzip or zip', $sd->ENSEMBL_TOOLS_CGI_POST_MAX->{'VEP'} / (1024 * 1024))
+  });
+
+  $input_fieldset->add_field({
+    'type'          => 'url',
+    'name'          => 'url',
+    'label'         => 'Or provide file URL',
+    'size'          => 30,
+    'class'         => 'url'
+  });
+
+  # Placeholder for previuos files select box
+  $input_fieldset->append_child('text', 'FILES_DROPDOWN');
+
+  # This field is shown only for the species having refseq data
+  if (first { $_->{'refseq'} } @$species) {
+    $input_fieldset->add_field({
+      'field_class'   => '_stt_rfq',
+      'type'          => 'radiolist',
+      'name'          => 'core_type',
+      'label'         => $fd->{core_type}->{label},
+      'helptip'       => $fd->{core_type}->{helptip},
+      'value'         => 'core',
+      'class'         => '_stt',
+      'values'        => $fd->{core_type}->{values}
+    });
+    
+    $input_fieldset->add_field({
+      'field_class'   => '_stt_rfq _stt_merged _stt_refseq',
+      'type'    => 'checkbox',
+      'name'    => "all_refseq",
+      'label'   => $fd->{all_refseq}->{label},
+      'helptip' => $fd->{all_refseq}->{helptip},
+      'value'   => 'yes',
+      'checked' => 0
+    });
+  }
+
+  ## Output options header
+  $form->add_fieldset('Output options');
+
+  ### Advanced config options
+  my $sections = CONFIG_SECTIONS;
+  foreach my $section (@$sections) {
+    my $method      = '_build_'.$section->{'id'};
+    my $config_div  = $form->append_child('div', {
+      'class'       => 'extra_configs_wrapper vep-configs',
+      'children'    => [{
+        'node_name'   => 'div',
+        'class'       => 'extra_configs_button',
+        'children'    => [{
+          'node_name'   => 'a',
+          'rel'         => '_vep'.$section->{'id'},
+          'class'       => [qw(toggle _slide_toggle set_cookie closed)],
+          'href'        => '#vep'.$section->{'id'},
+          'title'       => $section->{'caption'},
+          'inner_HTML'  => $section->{'title'}
+        }, {
+          'node_name'   => 'span',
+          'class'       => 'extra_configs_info',
+          'inner_HTML'  => $section->{'caption'}
+        }]
+      }, {
+        'node_name'   => 'div',
+        'class'       => ['extra_configs', 'toggleable', 'hidden', '_vep'.$section->{'id'}],
+      }]
+    });
+
+    $self->$method($form, $config_div->last_child); # add required fieldsets
+  }
+
+  # Placeholder for Run/Close buttons
+  $form->append_child('text', 'BUTTONS_FIELDSET');
+
+  return $form;
+}
+
+sub add_non_cacheable_fields {
+  ## Replace placeholders for non-cacheable fields with actual HTML
+  ## @param Form HTML (string)
+  ## @param Current species name
+  ## @return Modified form HTML
+  my ($self, $form, $current_species) = @_;
+
+  my $hub           = $self->hub;
+  my $sd            = $hub->species_defs;
+  my $input_formats = INPUT_FORMATS;
 
   # Add the non-cacheable fields to this dummy form and replace the placeholders from the actual form HTML
   my $fieldset2 = $self->new_form->add_fieldset;
@@ -253,43 +314,7 @@ sub content {
   $form =~ s/FILES_DROPDOWN/$file_dropdown && $file_dropdown->render/e;
   $form =~ s/BUTTONS_FIELDSET/$buttons_fieldset->render/e;
 
-  # construct hash to pass to JS
-  # containing information needed to render preview
-  my %cons = map {$_->{SO_term} => {'description' => $_->{description}, 'rank' => $_->{rank}}} values %Bio::EnsEMBL::Variation::Utils::Constants::OVERLAP_CONSEQUENCES;
-  
-  # add colours
-  $cons{$_}->{colour} = $hub->colourmap->hex_by_name($sd->colour('variation')->{lc $_}->{'default'}) for keys %cons;
-  
-  # add example data
-  my $ex_data;
-  
-  foreach my $sp(@$species) {
-    foreach my $key(grep {/^VEP/} keys %{$sp->{sample}}) {
-      my $value = $sp->{sample}->{$key};
-      $key =~ s/^VEP\_//;
-      $ex_data->{$sp->{value}}->{lc($key)} = $value;
-    }
-  }
-
-  # create input with data
-  my $panel_params = sprintf('<input class="js_param" type="hidden" name="preview_data" value="%s" /><input class="js_param" type="hidden" name="rest_server_url" value="%s"><input class="js_param" type="hidden" name="example_data" value="%s">',
-    encode_entities($self->jsonify(\%cons)),
-    encode_entities($sd->ENSEMBL_REST_URL),
-    encode_entities($self->jsonify($ex_data))
-  );
-
-  return sprintf('
-    %s<div class="hidden _tool_new">
-      <p><a class="button _change_location" href="%s">New VEP job</a></p>
-    </div>
-    <div class="hidden _tool_form_div">
-      <h2>New VEP job:</h2><input type="hidden" class="panel_type" value="VEPForm" />%s%s
-    </div>',
-    $panel_params,
-    $hub->url({'function' => ''}),
-    $self->species_specific_info($current_species, 'VEP', 'VEP'),
-    $form
-  );
+  return $form;
 }
 
 sub _build_filters {
