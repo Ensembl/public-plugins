@@ -234,13 +234,13 @@ sub content {
 
   # render table
   my $table = $self->new_table(\@table_headers, $rows, { data_table => 1, sorting => [ 'Location asc' ], exportable => 0, data_table_config => {bLengthChange => 'false', bFilter => 'false'}, });
-  $html .= '<div class="hscroll-indicator-target" style="clear:both">'.($table->render || '<div style="clear:both"><h3>No data</h3></div>').'</div>';
+  $html .= '<div class="_hscroll_target hscroll-indicator-target">'.($table->render || '<div class="hscroll-indicator-nodata"><h3>No data</h3></div>').'</div>';
 
   # repeat navigation div under table
   $html .= '<div>'.$nav_html.'</div>';
 
   # add indicator showing there may be more columns
-  $html .= '<div class="hscroll-indicator" style="float: right; background-color: #333366; box-shadow: 5px 5px 15px #666; border-radius: 10px; color: #fff; padding: 10px; text-align: center;"><div style="font-size: 5em; font-weight: bold"> &gt; </div>More<br/>columns</div>';
+  $html .= '<div class="_hscroll_indicator hscroll-indicator"><div> &gt; </div>More<br/>columns</div>';
 
   $html .= '</div>';
 
@@ -486,7 +486,7 @@ sub _filters {
       $tmp_html .= '</select>';
 
       # operator
-      $tmp_html .= qq(<select name="operator$i" class="operator-dd">);
+      $tmp_html .= qq(<select name="operator$i" class="_operator_dd">);
       $tmp_html .= sprintf(
         '<option value="%s" %s>%s</option>',
         $_->{'name'},
@@ -497,14 +497,14 @@ sub _filters {
 
       # value and submit
       $tmp_html .= sprintf(
-        qq(<input class="autocomplete value-switcher %s" type="text" placeholder="defined" name="value$i" value="%s" />),
+        qq(<input class="autocomplete _value_switcher %s" type="text" placeholder="defined" name="value$i" value="%s" />),
         $params{"operator$i"} eq 'in' ? 'hidden' : '',
         $params{"value$i"}
       );
 
       # value (dropdown file selector)
       $tmp_html .= sprintf(
-        '<span class="value-switcher %s">',
+        '<span class="_value_switcher %s">',
         $params{"operator$i"} eq 'in' ? '' : 'hidden'
       );
       if(scalar @user_files) {
@@ -591,15 +591,15 @@ sub _filters {
   $html .= '</select>';
 
   # operator
-  $html .= '<select class="operator-dd" name="operator'.$filter_number.'">';
+  $html .= '<select class="_operator_dd" name="operator'.$filter_number.'">';
   $html .= sprintf('<option value="%s" %s>%s</option>', $_->{name}, ($_->{name} eq 'is' ? 'selected="selected"' : ''), $_->{title}) for @operators;
   $html .= '</select>';
 
   # value (text box)
-  $html .= '<input class="autocomplete value-switcher" type="text" placeholder="defined" name="value'.$filter_number.'">';
+  $html .= '<input class="autocomplete _value_switcher" type="text" placeholder="defined" name="value'.$filter_number.'">';
 
   # value (dropdown file selector)
-  $html .= '<span class="value-switcher hidden">';
+  $html .= '<span class="_value_switcher hidden">';
   if(scalar @user_files) {
     $html .= '<select name="value_dd'.$filter_number.'">';
     $html .= sprintf('<option value="%s">%s</option>', $_->{file}, $_->{name}) for @user_files;

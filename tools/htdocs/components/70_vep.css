@@ -14,5 +14,11 @@
  * limitations under the License.
  */
 
+/* job Option Summary table */
 div.vep-job div.row div.lhs { width: 334px; }
 div.vep-job div.row div.rhs { margin-left: 350px; }
+
+div.hscroll-indicator         { cursor: default; float: right; background-color: [[MH_BG]]; box-shadow: 5px 5px 15px #666; border-radius: 10px; color: [[PANEL_BG]]; padding: 10px; text-align: center; }
+div.hscroll-indicator div     { font-size: 5em; font-weight: bold; }
+div.hscroll-indicator-target,
+div.hscroll-indicator-nodata  { clear:both; }

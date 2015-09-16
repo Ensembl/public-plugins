@@ -70,23 +70,14 @@ Ensembl.Panel.VEPResults = Ensembl.Panel.ContentTools.extend({
     });
 
     // switch textbox to dropdown for "in file" operator
-    this.el.find('select.operator-dd').on('change', function(e) {
-      var textbox = $(this).parent().find('input.value-switcher');
-      var dropdown = $(this).parent().find('span.value-switcher');
-
-      if(this.value === 'in') {
-        textbox.hide();
-        dropdown.show();
-      }
-      else {
-        textbox.show();
-        dropdown.hide();
-      }
+    this.el.find('select._operator_dd').on('change', function(e) {
+      $(this).parent().find('input._value_switcher').toggle(this.value !== 'in');
+      $(this).parent().find('span._value_switcher').toggle(this.value === 'in');
     });
 
     // overlay horizontal scroll indicator over table
-    var hscrollInd = this.el.find('.hscroll-indicator');
-    var target = this.el.find('.hscroll-indicator-target').find('tbody');
+    var hscrollInd = this.el.find('._hscroll_indicator');
+    var target = this.el.find('._hscroll_target').find('tbody');
 
     if(hscrollInd.length && target.length) {
       hscrollInd.css({
@@ -101,7 +92,7 @@ Ensembl.Panel.VEPResults = Ensembl.Panel.ContentTools.extend({
       $(window).bind('scroll', function () {
         // use 50 to allow for small "accidental" scroll e.g. with trackpad
         if($(window).scrollLeft() > 50) {
-          $('.hscroll-indicator').fadeOut();
+          $('._hscroll_indicator').fadeOut();
         }
       });
     }
