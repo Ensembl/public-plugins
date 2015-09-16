@@ -16,27 +16,30 @@ limitations under the License.
 
 =cut
 
-package EnsEMBL::Web::Document::Element::ToolButtons;
+package EnsEMBL::Web::Controller::Share;
 
 use strict;
 use warnings;
 
-use previous qw(init);
+use previous qw(create);
 
-sub init {
-  my $self        = shift;
-  my $controller  = $_[0];
-  my $hub         = $controller->hub;
-  my $object      = $controller->object;
+sub create {
+  my $self  = shift;
+  my $hub   = $self->hub;
+  my $ref   = $hub->referer;
 
-  $self->PREV::init(@_);
+  if (($ref->{'ENSEMBL_TYPE'} || '') eq 'Tools' && $ref->{'ENSEMBL_ACTION'} && ($ref->{'ENSEMBL_FUNCTION'} || '') eq 'Results') {
 
-  # Disable 'Manage your data' for all tools page and 'Share this page' for all tools pages except Results pages
-  if ($hub->type eq 'Tools') {
-    for (grep {$_->{'caption'} =~ ($hub->function eq 'Results' ? qr/(Manage|Add) your data/ : qr/(Share this page|(Manage|Add) your data)/)} @{$self->entries}) {
-      $_->{'class'} = sprintf 'disabled %s', $_->{'class'} || '';
+    if (my $object = $self->new_object($ref->{'ENSEMBL_ACTION'}, {}, { _hub => $hub })) {
+
+      $hub->param('tl', @{$ref->{'params'}{'tl'} || []}); # get_requested_ticket only looks at current url param
+
+      # share link will only work if visibility is public
+      $object->change_ticket_visibility('public') if $object->get_requested_ticket;
     }
   }
+
+  return $self->PREV::create(@_);
 }
 
 1;
