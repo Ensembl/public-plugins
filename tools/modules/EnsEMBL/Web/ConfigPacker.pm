@@ -21,6 +21,8 @@ package EnsEMBL::Web::ConfigPacker;
 use strict;
 use warnings;
 
+use EnsEMBL::Web::Utils::FileHandler qw(file_get_contents);
+
 use previous qw(munge_config_tree munge_config_tree_multi _munge_file_formats);
 
 sub munge_config_tree {
@@ -33,6 +35,7 @@ sub munge_config_tree_multi {
   my $self = shift;
   $self->PREV::munge_config_tree_multi(@_);
   $self->_configure_blast_multi;
+  $self->_configure_vep_multi;
 }
 
 sub _munge_file_formats {
@@ -97,6 +100,21 @@ sub _configure_blast_multi {
   $multi_tree->{'ENSEMBL_BLAST_DATASOURCES_ORDER'}  = $all_sources_order;
   $multi_tree->{'ENSEMBL_BLAST_DATASOURCES'}        = $all_sources;
   $multi_tree->{'ENSEMBL_BLAST_CONFIGS'}            = $search_types_ordered;
+}
+
+sub _configure_vep_multi {
+  my $self = shift;
+  my $tree = $self->tree;
+  return unless defined($tree->{'ENSEMBL_VEP_PLUGINS'}) && defined($tree->{'ENSEMBL_VEP_PLUGINS'}->{'CONFIG'});
+  my $file = $tree->{'ENSEMBL_VEP_PLUGINS'}->{'CONFIG'};
+  
+  return unless -e $file;
+  my $content = file_get_contents($file);
+
+  my $VEP_PLUGIN_CONFIG = eval $content;
+  die("Failed to parse VEP config file $file: $@\n") if $@;
+
+  $tree->{'ENSEMBL_VEP_PLUGIN_CONFIG'} = $VEP_PLUGIN_CONFIG;
 }
 
 1;

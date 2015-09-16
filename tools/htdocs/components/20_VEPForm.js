@@ -27,6 +27,9 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
     this.exampleData = JSON.parse(this.params['example_data']);
     delete this.params['example_data'];
 
+    // this.autocompleteData = JSON.parse(this.params['plugin_auto_values']);
+    // delete this.params['plugin_auto_values'];
+
     var panel = this;
 
     // Change the input value on click of the examples link
@@ -71,6 +74,21 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
           panel.elLk.previewButton.toggleClass('disabled', !enablePrev).prop('disabled', !enablePrev);
         }
       }
+    });
+    
+    this.elLk.form.find('.plugin_enable').change(function() {
+
+      panel.elLk.form.find('.plugin-highlight').removeClass('plugin-highlight');
+
+      // find any sub-fields enabling this plugin shows
+      panel.elLk.form.find('._stt_' + this.name).addClass('plugin-highlight', 100, 'linear');
+    });
+
+    // also remove highlighting when option changes
+    this.elLk.form.find('.plugin_enable').each(function() {
+      panel.elLk.form.find('._stt_' + this.name).find(':input').change(function() {
+        panel.elLk.form.find('.plugin-highlight').removeClass('plugin-highlight');
+      });
     });
 
     this.editExisting();

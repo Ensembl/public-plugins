@@ -21,7 +21,9 @@ div.toolbox { background-color:#F2F2F2;color:#333; margin-bottom:5px; margin-rig
 div.toolbox-head { padding:5px;font-weight:bold;background-color:#cccccc; }
 div.toolbox-body { padding:5px; }
 
-div.filter-box { background-color:#667aa6; border-radius: 3px; color: white; margin: 3px; padding: 3px; }
+div.filter-box { background-color:#667aa6; border-radius: 3px; -webkit-border-radius: 3px; -moz-border-radius: 3px; color: white; margin: 3px; padding: 3px; }
 div.location-filter-box { background-color:#666666; }
+
+span.count-highlight { background-color:#667aa6; border-radius: 3px; -webkit-border-radius: 3px; -moz-border-radius: 3px; color: white; }
 
 .no-spinner .spinner { display:  none; }
