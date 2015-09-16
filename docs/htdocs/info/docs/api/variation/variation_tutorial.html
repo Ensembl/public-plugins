@@ -50,12 +50,13 @@ $registry-&gt;load_registry_from_db(
 );
 </pre>
 
-<h2 id="grch37"><span style="color:red;font-weight:bold">Connecting to the Ensembl Variation database for human GRCh37</span></h2>
-<p>
-If you are interested in data on the human GRCh37 assembly you need to set the port number to 3337:
-</p>
+<div style="background-color:#F0F0F0;border:1px solid #CCC;padding:5px;margin-bottom:20px">
+  <h2 id="grch37" style="color:red">Connecting to the Ensembl Variation database for human GRCh37</h2>
+  <p>
+  If you are interested in data on the human <b>GRCh37</b> assembly you need to set the port number to <span style="color:red;font-weight:bold">3337</span>:
+  </p>
 
-<pre class="code sh_perl">
+<pre class="code sh_perl" style="margin:2px 5px 5px">
 use Bio::EnsEMBL::Registry;
 
 my $registry = 'Bio::EnsEMBL::Registry';
@@ -66,6 +67,8 @@ $registry-&gt;load_registry_from_db(
   -port =&gt; 3337,
 );
 </pre>
+  
+</div>
 
 <p> The use of the registry ensures you will load the correct versions of the
 Ensembl databases for the software release it can find on a database instance.
@@ -87,7 +90,7 @@ $registry-&gt;load_registry_from_db(
 
 my $variation_adaptor = $registry-&gt;get_adaptor(
   'human',     # species
-  'variation', # database
+  'variation', # database type
   'variation'  # object type
 );
 
@@ -95,7 +98,7 @@ my $variation = $variation_adaptor-&gt;fetch_by_name('rs1333049');
 </pre>
 
 <p>
-	The get_adaptor method will automatically create a connection to the
+	The <b>get_adaptor</b> method will automatically create a connection to the
 	relevant database; in the example above, a connection will be made to the
 	Variation database for human. The three parameters passed specify the
 	species, database and object type you require. Below is a non exhaustive
@@ -117,6 +120,33 @@ my $variation = $variation_adaptor-&gt;fetch_by_name('rs1333049');
 <p>
 Only some of these adaptors will be used for illustration as part of this tutorial through commented perl scripts code.
 </p>
+<br />
+
+<p>
+The code below lists all the accessible adaptors for the Ensembl Variation API:
+</p>
+<pre class="code sh_perl">
+use Bio::EnsEMBL::Registry;
+
+my $registry = 'Bio::EnsEMBL::Registry';
+
+$registry->load_registry_from_db(
+  -host => 'ensembldb.ensembl.org',
+  -user => 'anonymous',
+);
+
+my $species = 'human';
+my $group = 'variation'; # database type
+
+my $dba = $registry->get_DBAdaptor($species,$group);
+
+my $available_adaptors = $dba->get_available_adaptors;
+
+# Display the list of adaptors available in the Ensembl Variation API
+foreach my $adaptor (sort(keys(%$available_adaptors))) {
+  print $available_adaptors->{$adaptor}."\n";
+}
+</pre>
 
 <br /><hr />
 <h2 id="variant" style="font-size:large">Variants</h2>
