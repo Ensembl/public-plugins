@@ -55,6 +55,9 @@ sub job_details_table {
   my $two_col = $self->SUPER::job_details_table($job, $is_owned_ticket);
   my $opt_two_col = $self->new_twocol({striped => 1});
 
+  # custom css class
+  $opt_two_col->set_attribute('class', 'vep-job');
+
   # fetch job data and input form field information
   my $job_data = $job->job_data;
   my $form_data = $self->object->get_form_details;
@@ -117,7 +120,7 @@ sub job_details_table {
 
     $opt_two_col->add_row(
       sprintf(
-        '<span %s>%s%s:</span>',
+        '<p><span %s>%s%s:</span></p>',
         $opt_data->{helptip} ? 'class="ht _ht" title="'.$opt_data->{helptip}.'"' : '',
         $label,
         $opt_key =~ /^plugin/ ? ' *' : '',
