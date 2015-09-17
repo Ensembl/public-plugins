@@ -75,27 +75,8 @@ Ensembl.Panel.VEPResults = Ensembl.Panel.ContentTools.extend({
       $(this).parent().find('span._value_switcher').toggle(this.value === 'in');
     });
 
-    // overlay horizontal scroll indicator over table
-    var hscrollInd = this.el.find('._hscroll_indicator');
-    var target = this.el.find('._hscroll_target').find('tbody');
-
-    if(hscrollInd.length && target.length) {
-      hscrollInd.css({
-        position: 'absolute',
-        top: target.position().top + 10,
-        left: $(window).width() - (hscrollInd.width() + 260)
-      });
-
-      // hide/fade it on click or horizontal scroll
-      hscrollInd.on('click', function() { $(this).fadeOut(); });
-
-      $(window).bind('scroll', function () {
-        // use 50 to allow for small "accidental" scroll e.g. with trackpad
-        if($(window).scrollLeft() > 50) {
-          $('._hscroll_indicator').fadeOut();
-        }
-      });
-    }
+    // activate horizontal scrolling on the table
+    this.el.find('.data_table').scrollyTable();
   },
 
   reload: function(url, ajaxUrl) {

@@ -234,13 +234,10 @@ sub content {
 
   # render table
   my $table = $self->new_table(\@table_headers, $rows, { data_table => 1, sorting => [ 'Location asc' ], exportable => 0, data_table_config => {bLengthChange => 'false', bFilter => 'false'}, });
-  $html .= '<div class="_hscroll_target hscroll-indicator-target">'.($table->render || '<div class="hscroll-indicator-nodata"><h3>No data</h3></div>').'</div>';
+  $html .= $table->render || '<h3>No data</h3>';
 
   # repeat navigation div under table
   $html .= '<div>'.$nav_html.'</div>';
-
-  # add indicator showing there may be more columns
-  $html .= '<div class="_hscroll_indicator hscroll-indicator"><div> &gt; </div>More<br/>columns</div>';
 
   $html .= '</div>';
 
