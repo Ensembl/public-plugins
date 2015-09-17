@@ -33,8 +33,8 @@ sub init {
 
   # Disable 'Manage your data' for all tools page and 'Share this page' for all tools pages except Results pages
   if ($hub->type eq 'Tools') {
-    for (grep {$_->{'caption'} =~ ($hub->function eq 'Results' ? qr/(Manage|Add) your data/ : qr/(Share this page|(Manage|Add) your data)/)} @{$self->entries}) {
-      $_->{'class'} = sprintf 'disabled %s', $_->{'class'} || '';
+    for (grep {$_->{'caption'} =~ (($hub->function || '') eq 'Results' ? qr/(Manage|Add) your data/ : qr/(Share this page|(Manage|Add) your data)/)} @{$self->entries}) {
+      $_->{'class'} = (sprintf 'disabled %s', $_->{'class'} || '') =~ s/modal_link//r;
     }
   }
 }
