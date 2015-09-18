@@ -123,7 +123,7 @@ sub job_details_table {
         '<p><span %s>%s%s:</span></p>',
         $opt_data->{helptip} ? 'class="ht _ht" title="'.$opt_data->{helptip}.'"' : '',
         $label,
-        $opt_key =~ /^plugin/ ? ' *' : '',
+        $opt_key =~ /^plugin/ ? '<sup style="color:grey">(p)</sup>' : '',
       ),
 
       $values{$value} || $value
@@ -132,7 +132,7 @@ sub job_details_table {
 
   $two_col->add_row(
     'Options summary',
-    $opt_two_col->render.($have_plugins ? '<p class="small">* = functionality from <a href="/info/docs/tools/vep/script/vep_plugins.html">VEP plugin</a></p>' : '')
+    $opt_two_col->render.($have_plugins ? '<p class="small"><sup style="color:grey">(p)</sup> = functionality from <a href="/info/docs/tools/vep/script/vep_plugins.html">VEP plugin</a></p>' : '')
   );
 
   return $two_col;

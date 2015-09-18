@@ -182,7 +182,7 @@ sub content {
 
   my @table_headers = map {{
     'key' => $_,
-    'title' => ($header_titles{$_} || $_).($COL_DESCS{$_} ? '' : '*'),
+    'title' => ($header_titles{$_} || $_).($COL_DESCS{$_} ? '' : '<sup style="color:grey">(p)</sup>'),
     'sort' => $table_sorts{$_} || 'string',
     'help' => $COL_DESCS{$_} || $header_extra_descriptions->{$_},
   }} @$headers;

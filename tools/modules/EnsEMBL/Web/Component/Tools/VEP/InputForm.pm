@@ -515,7 +515,7 @@ sub _build_identifiers {
       'children' => [{
         'node_name' => 'p',
         'class' => 'small',
-        'inner_HTML' => '* = functionality from <a href="/info/docs/tools/vep/script/vep_plugins.html">VEP plugin</a>'
+        'inner_HTML' => '<sup style="color:grey">(p)</sup> = functionality from <a href="/info/docs/tools/vep/script/vep_plugins.html">VEP plugin</a>'
       }]
     }        
   ) if $self->_have_plugins;
@@ -675,7 +675,7 @@ sub _build_extra {
       'children' => [{
         'node_name' => 'p',
         'class' => 'small',
-        'inner_HTML' => '* = functionality from <a href="/info/docs/tools/vep/script/vep_plugins.html">VEP plugin</a>'
+        'inner_HTML' => '<sup style="color:grey">(p)</sup> = functionality from <a href="/info/docs/tools/vep/script/vep_plugins.html">VEP plugin</a>'
       }]
     }        
   ) if $self->_have_plugins;
@@ -787,7 +787,7 @@ sub _add_plugins {
         'type'        => 'radiolist',
         'helptip'     => $plugin->{helptip},
         'name'        => 'plugin_'.$pl_key,
-        'label'       => ($plugin->{label} || $pl_key).' *',
+        'label'       => ($plugin->{label} || $pl_key).'<sup style="color:grey">(p)</sup>',
         'value'       => $plugin->{enabled} ? 'plugin_'.$pl_key : 'no',
         'values'      => [
           { 'value' => 'no', 'caption' => 'Disabled' },
@@ -822,7 +822,7 @@ sub _add_plugins {
         'type'        => 'checkbox',
         'helptip'     => $plugin->{helptip},
         'name'        => 'plugin_'.$pl_key,
-        'label'       => ($plugin->{label} || $pl_key).' *',
+        'label'       => ($plugin->{label} || $pl_key).'<sup style="color:grey">(p)</sup>',
         'value'       => 'plugin_'.$pl_key,
         'checked'     => $plugin->{enabled} ? 1 : 0,
       });
