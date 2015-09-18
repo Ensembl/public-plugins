@@ -49,6 +49,7 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
 	
 	<div id="div_versions" style="display:none;">
 	<ul>
+    <li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/80.zip">Download version 81</a> (Ensembl 81) </li>
     <li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/80.zip">Download version 80</a> (Ensembl 80) </li>
     <li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/79.zip">Download version 79</a> (Ensembl 79) </li>
 		<li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/78.zip">Download version 78</a> (Ensembl 78) </li>
@@ -72,6 +73,20 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
 	</div><hr/>
 	<h2 id="new">What's new</h2>
 
+  <h4> New in version 82 <i>(September 2015)</i> </h4>
+  
+  <ul>
+    <li><a href="#installer">Faster FASTA file access</a> using Faidx/htslib and bgzipped FASTA files</li>
+    <li><a href="vep_options.html#opt_gene_phenotype">Flag genes</a> with phenotype associations</li>
+    <li>Some plugins now available for use via the <a href="/Tools/VEP">web</a> and <a rel="external" href="http://rest.ensembl.org/#VEP">REST</a> interfaces</li>
+  </ul>
+  
+  
+  <h4 id="history"> Previous version history: <a href="#history"
+  onclick="show_hide('history');" id="a_history">Show</a> </h4>
+  
+  <div id="div_history" style="display: none;"> 
+
 	<h4> New in version 81 <i>(July 2015)</i> </h4>
 	
 	<ul>
@@ -79,11 +94,6 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     <li>GFF format now supported by VEP's <a href="vep_cache.html#gtf">cache converter</a></li>
     <li>Fixes and improvements for sequence retrieval from FASTA files</li>
 	</ul>
-	
-	<h4 id="history"> Previous version history: <a href="#history"
-	onclick="show_hide('history');"	id="a_history">Show</a> </h4>
-	
-	<div id="div_history" style="display: none;">	
 	
 	<h4> New in version 80 <i>(May 2015)</i> </h4>
 	
@@ -332,7 +342,8 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
 	<h2 id="requirements">Requirements</h2>
 	
 	<p>
-	Version [[SPECIESDEFS::ENSEMBL_VERSION]] of the script requires at least version [[SPECIESDEFS::ENSEMBL_VERSION]] of the Ensembl Core
+	Version [[SPECIESDEFS::ENSEMBL_VERSION]] of the script requires at least version
+  [[SPECIESDEFS::ENSEMBL_VERSION]] of the Ensembl Core
 	and Variation APIs and their relevant dependencies to be installed to use
 	the script. A minimal subset of these can be installed using the supplied <a
 	href="#installer">installer script</a>. </p>
@@ -341,8 +352,8 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
 	rel="external" href="/info/docs/api/index.html">instructions</a> for details. To analyse regulatory
 	features, the Ensembl Regulation API should also be installed. </p>
 	
-	<p> To use the <a href="vep_cache.html#cache">cache</a>, the gzip and zcat utilities are
-	required. </p>
+	<p> To use the <a href="vep_cache.html#cache">cache</a>, the gzip utility is
+	required (gzip is installed as standard on most Unix and Mac systems). </p>
 	
 	<p> To use the VEP in Windows, see the <a
 	href="#windows">instructions for Windows users</a> </p>
@@ -367,8 +378,15 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
 	<p> Users who already have the latest version of the API installed do not
 	need to run the script, although may find it useful for getting an
 	up-to-date API install (with post-release patches applied), and for
-	retrieving cache files. The API set installed by the script is local to the
+	retrieving cache and FASTA files. The API set installed by the script is local to the
 	VEP, and will not affect any other Ensembl API installations. </p>
+
+  <p> The script will also attempt to install a Perl::XS module,
+  <a rel="external" href="https://github.com/Ensembl/faidx_xs">Faidx</a>, for
+  rapid access to bgzipped FASTA files. If this fails, you may add the
+  --NO_HTSLIB flag when running the installer; VEP will fall back to using
+  Bio::DB::Fasta for this functionality (<a
+  href="vep_cache.html#fasta">more details</a>).</p>
 	
   <p> The installer script is also useful for users whose systems do not have
   all the modules required by the VEP, specifically DBI and DBI::mysql. After
@@ -400,10 +418,10 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
 		<tr>
 			<td><pre>--AUTO</pre></td>
 			<td><pre>-a</pre></td>
-            <td>Run installer without user prompts. Use a (API), c (cache),
-            f (FASTA), p (plugins) to specify parts to install e.g. "-a ac" for API and
-            cache. You will also need to specify at least one species (see
-            below), and a list of plugins if specified.
+      <td>
+        Run installer without user prompts. Use "a" (API + Faidx/htslib),
+        "l" (Faidx/htslib only), "c" (cache), "f" (FASTA), "p" (plugins) to specify
+        parts to install e.g. -a ac for API and cache
 			</td>
 		</tr>
 		<tr>
@@ -492,6 +510,11 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
 			<td><pre>-p</pre></td>
       <td>Use this if the installer fails with out of memory errors.</td>
 		</tr>
+    <tr>
+      <td><pre>--NO_HTSLIB</pre></td>
+      <td><pre>-l</pre></td>
+      <td>Don't attempt to install Faidx/htslib</td>
+    </tr>
 	</table>
 	
 	

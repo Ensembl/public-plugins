@@ -163,9 +163,27 @@ perl variant_effect_predictor.pl -offline -i my_species_variants.vcf -s my_speci
     use <a href="vep_options.html#opt_fasta">--fasta</a> to manually specify
     them. </p>
 	
-	<p> To enable this the VEP uses the <a
-	rel="external" href="http://search.cpan.org/~cjfields/BioPerl-1.6.901/Bio/DB/Fasta.pm"
-	target="_blank">Bio::DB::Fasta</a> module. The first time you run the script
+	<p> To enable this the VEP uses one of two modules: </p>
+
+  <ul>
+    <li>
+      The <a rel="external"
+      href="https://github.com/Ensembl/faidx_xs">Faidx/htslib</a> Perl XS
+      module. This module uses compiled C code and can access compressed
+      (bgzipped) or uncompressed FASTA files. It is set up by the VEP <a
+      href="vep_download.html#installer">installer</a>.
+    </li>
+    <li>
+      The <a rel="external"
+      href="http://search.cpan.org/~cjfields/BioPerl-1.6.901/Bio/DB/Fasta.pm">Bio::DB::Fasta</a>
+      module. This may be used on systems where installation of the Faidx
+      module has not been possible. It can access only uncompressed FASTA
+      files. It is also set up by the VEP installer
+      and comes as part of the BioPerl package.
+    </li>
+  </ul>
+
+  <p> The first time you run the script
 	with a specific FASTA file, an index will be built. This can take a few
 	minutes, depending on the size of the FASTA file and the speed of your
 	system. On subsequent runs the index does not need to be rebuilt (if the
@@ -174,16 +192,20 @@ perl variant_effect_predictor.pl -offline -i my_species_variants.vcf -s my_speci
 	
 	<p> Ensembl provides suitable reference FASTA files as downloads from its
 	FTP server. See the <a href="/info/data/ftp/index.html">Downloads</a> page
-	for details. In most cases it is best to download the single large
+	for details. You should preferably use the installer as described above to
+  fetch these files; manual instructions are provided for reference.
+  In most cases it is best to download the single large
 	"primary_assembly" file for your species. You should use the unmasked
 	(without "_rm" or "_sm" in the name) sequences. Note that the VEP requires
-	that the file be unzipped to run; when unzipped these files can be very
+	that the file be either unzipped (Bio::DB::Fasta) or unzipped and then
+  recompressed with bgzip (Faidx) to run; when unzipped these files can be very
 	large (25GB for human). An example set of commands for setting up the data
 	for human follows: </p>
 	
 	<pre class="code">wget ftp://ftp.ensembl.org/pub/release-[[SPECIESDEFS::ENSEMBL_VERSION]]/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz
 gzip -d Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz
-perl variant_effect_predictor.pl -i input.vcf --offline --hgvs --fasta Homo_sapiens.GRCh38.dna.primary_assembly.fa</pre>
+bgzip Homo_sapiens.GRCh38.dna.primary_assembly.fa
+perl variant_effect_predictor.pl -i input.vcf --offline --hgvs --fasta Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz</pre>
 	
 	
 	<hr/>
