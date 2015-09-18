@@ -625,7 +625,8 @@ sub _build_extra {
   $current_section = 'Regulatory data';
 
   $have_plugins = scalar @{$self->_get_plugins_by_section($current_section)};
-  my @regu_species = map { $_->{'value'} } grep {$hub->get_adaptor('get_CellTypeAdaptor', 'funcgen', $_->{'value'})} grep {$_->{'regulatory_'}} @$species;
+
+  my @regu_species = map { $_->{'value'} } grep {$hub->get_adaptor('get_CellTypeAdaptor', 'funcgen', $_->{'value'})} grep {$_->{'regulatory'}} @$species;
   $fieldset = $self->_start_section($form, $div, $current_section) if scalar @regu_species or $have_plugins;
 
   for (@regu_species) {
