@@ -105,14 +105,22 @@ sub _configure_blast_multi {
 sub _configure_vep_multi {
   my $self = shift;
   my $tree = $self->tree;
-  return unless defined($tree->{'ENSEMBL_VEP_PLUGINS'}) && defined($tree->{'ENSEMBL_VEP_PLUGINS'}->{'CONFIG'});
-  my $file = $tree->{'ENSEMBL_VEP_PLUGINS'}->{'CONFIG'};
-  
-  return unless -e $file;
-  my $content = file_get_contents($file);
+
+  # parse the base config file
+  my $base_file = $SiteDefs::ENSEMBL_VEP_PLUGIN_BASE_CONFIG;
+  return unless -e $base_file;
+  my $content = file_get_contents($base_file);
 
   my $VEP_PLUGIN_CONFIG = eval $content;
-  die("Failed to parse VEP config file $file: $@\n") if $@;
+  die("Failed to parse base VEP plugin config file $base_file: $@\n") if $@;
+
+  # now parse the web addon config
+  my $config_file = $SiteDefs::ENSEMBL_VEP_PLUGIN_WEB_CONFIG;
+  return unless -e $config_file;
+  $content = file_get_contents($config_file);
+
+  eval $content;
+  die("Failed to parse VEP web config file $config_file: $@\n") if $@;
 
   $tree->{'ENSEMBL_VEP_PLUGIN_CONFIG'} = $VEP_PLUGIN_CONFIG;
 }

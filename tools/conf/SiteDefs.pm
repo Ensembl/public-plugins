@@ -74,8 +74,7 @@ sub update_conf {
     '-pass'         => undef
   };
 
-  # Flag to enable/disable vep plugins
-  $SiteDefs::ENSEMBL_VEP_PLUGIN_ENABLED = 1;
+  $SiteDefs::ENSEMBL_VEP_PLUGIN_WEB_CONFIG = $SiteDefs::ENSEMBL_SERVERROOT.'/public-plugins/tools/conf/vep_plugins_web_config.txt';
 
   # Tickets will expire after 10 days, and user will warned when less than three days are left
   $SiteDefs::ENSEMBL_TICKETS_VALIDITY         = 10 * 24 * 60 * 60;
