@@ -1,0 +1,26 @@
+body.gv-dragging * {
+  cursor: n-resize!important;
+}
+
+.gv-resizer-plugin div.gv-resizer {
+  position: absolute!important;
+  bottom: 0;
+  opacity: 0.8;
+  height: 5px;
+  cursor: n-resize;
+  z-index: 2;
+}
+
+.gv-resizer-plugin .gv-canvas-container .gv-resizer .gv-handle {
+  background-color: #5A5A5A;
+  border: 1px solid white;
+  border-width: 1px 0;
+  height: 1px;
+  margin: 1px 48%;
+  width: 4%;
+}
+
+.gv-resizer-plugin .gv-canvas-container .gv-resizer:hover,
+.gv-resizer-plugin .gv-canvas-container .gv-resizer.ui-draggable-dragging {
+  box-shadow: -1px -3px 6px -3px #000000 inset !important;
+}
