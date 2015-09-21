@@ -47,6 +47,7 @@ sub fetch_input {
   # set up perl bin with the required library locations
   try {
     my @modules   = map { -d "$code_root/$_/modules" ? "-I $code_root/$_/modules" : () } @{list_dir_contents($code_root)};
+    push @modules, "-I ".$SiteDefs::ENSEMBL_VEP_PLUGIN_DIR if defined($SiteDefs::ENSEMBL_VEP_PLUGIN_DIR);
     my $perl_bin  = join ' ', $self->param_required('perl_bin'), '-I', $self->param_required('bioperl_dir'), '-I', $script_path, @modules;
     $self->param('perl_bin', $perl_bin);
   } catch {
