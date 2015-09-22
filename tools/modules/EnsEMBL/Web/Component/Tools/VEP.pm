@@ -132,7 +132,7 @@ sub job_details_table {
 
   $two_col->add_row(
     'Options summary',
-    $opt_two_col->render.($have_plugins ? '<p class="small"><sup style="color:grey">(p)</sup> = functionality from <a href="/info/docs/tools/vep/script/vep_plugins.html">VEP plugin</a></p>' : '')
+    $opt_two_col->render.($have_plugins ? '<p class="small"><sup style="color:grey">(p)</sup> = functionality from <a target="_blank" href="/info/docs/tools/vep/script/vep_plugins.html">VEP plugin</a></p>' : '')
   );
 
   return $two_col;
