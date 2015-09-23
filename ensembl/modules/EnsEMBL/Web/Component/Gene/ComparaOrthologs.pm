@@ -44,7 +44,7 @@ sub _species_sets {
   # Currently missing: Mammalia Amphibia Vertebrata Chordata Eukaryota
   my $species_group_2_species_set = {
       Primates          => ['primates', 'placental'],
-      Glires            => ['rodents', 'placental'],
+      Euarchontoglires  => ['rodents', 'placental'],
       Laurasiatheria    => ['laurasia', 'placental'],
       Afrotheria        => ['placental'],
       Xenarthra         => ['placental'],
