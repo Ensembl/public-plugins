@@ -237,12 +237,12 @@ sub get_form_details {
 
       tsl => {
         'label'   => 'Transcript support level',
-        'helptip' => 'Report the transcript support level',
+        'helptip' => $self->hub->glossary_lookup->{'TSL'} || '',
       },
 
       canonical => {
         'label'   => 'Identify canonical transcripts',
-        'helptip' => 'Indicate if an affected transcript is the canonical transcript for the gene',
+        'helptip' => $self->hub->glossary_lookup->{'Canonical transcript'} || '',
       },
 
       sift => {
