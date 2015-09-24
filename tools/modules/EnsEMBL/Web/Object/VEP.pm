@@ -21,6 +21,8 @@ package EnsEMBL::Web::Object::VEP;
 use strict;
 use warnings;
 
+use HTML::Entities  qw(encode_entities);
+
 use EnsEMBL::Web::TmpFile::ToolsOutput;
 use EnsEMBL::Web::TmpFile::VcfTabix;
 use EnsEMBL::Web::Utils::FileHandler qw(file_get_contents);
@@ -237,12 +239,12 @@ sub get_form_details {
 
       tsl => {
         'label'   => 'Transcript support level',
-        'helptip' => $self->hub->glossary_lookup->{'TSL'} || '',
+        'helptip' => encode_entities($self->hub->glossary_lookup->{'TSL'} || ''),
       },
 
       canonical => {
         'label'   => 'Identify canonical transcripts',
-        'helptip' => $self->hub->glossary_lookup->{'Canonical transcript'} || '',
+        'helptip' => encode_entities($self->hub->glossary_lookup->{'Canonical transcript'} || ''),
       },
 
       sift => {
