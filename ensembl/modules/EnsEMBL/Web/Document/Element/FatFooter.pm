@@ -38,6 +38,18 @@ sub content {
               </div>
   );
 
+
+ $html .= qq(
+              <div class="column-four left">
+                <h3>Get help</h3>
+                <p><a href="/info/website/">Using this website</a></p>
+                <p><a href="/info/website/upload">Adding custom tracks</a></p>
+                <p><a href="/downloads.html">Downloading data</a></p>
+                <p><a href="/info/website/tutorials/">Video tutorials</a></p>
+                <p><a href="/info/docs/tools/vep/">Variant Effect Predictor (VEP)</a></p>
+              </div>
+  );
+
   $html .= qq(
               <div class="column-four left">
                 <h3>Our sister sites</h3>
@@ -61,17 +73,6 @@ sub content {
                 <p><a class="media-icon" href="http://www.facebook.com/Ensembl.org">
                   <img alt="[Facebook logo]" title="Our Facebook page" src="/i/facebook.png"></a>
                   <a href="http://www.facebook.com/Ensembl.org">Facebook</a></p>
-              </div>
-  );
-
-  $html .= qq(
-              <div class="column-four left">
-                <h3>Get help</h3>
-                <p><a href="/info/website/">Using this website</a></p>
-                <p><a href="/info/website/upload">Adding custom tracks</a></p>
-                <p><a href="/downloads.html">Downloading data</a></p>
-                <p><a href="/info/website/tutorials/">Video tutorials</a></p>
-                <p><a href="/info/docs/tools/vep/">Variant Effect Predictor (VEP)</a></p>
               </div>
   );
 
