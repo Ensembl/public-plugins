@@ -56,6 +56,7 @@ sub update_conf {
     ensembl-webcode
     public-plugins
     sanger-plugins
+    VEP_plugins
   );
 
   $SiteDefs::ENSEMBL_TOOLS_PERL_BIN             = '/usr/bin/perl';                                  # Path to perl bin for machine running the job
@@ -92,9 +93,16 @@ sub update_conf {
     '--port'        => undef,                                                                       # Defaults to 5306
     '--fork'        => 4,                                                                           # Enable forking, using 4 forks
   };
+
+  $SiteDefs::ENSEMBL_VEP_PLUGIN_DATA_DIR        = "/path/to/vep/plugin_data";                       # path to vep plugin data files on the LSF host (or local machine if job running locally)
+  $SiteDefs::ENSEMBL_VEP_PLUGIN_DIR             = "VEP_plugins";                                    # path to vep plugin code (if does not start with '/', it's treated relative to ENSEMBL_HIVE_HOSTS_CODE_LOCATION)
+
   $SiteDefs::ENSEMBL_VEP_SCRIPT                 = 'ensembl-tools/scripts/variant_effect_predictor/variant_effect_predictor.pl';
                                                                                                     # location of the VEP script accessible to the local machine or LSF host running the job
   $SiteDefs::ENSEMBL_VEP_TO_WEB_SCRIPT          = 'public-plugins/tools/utils/vep_to_web.pl';       # location of the VEP script accessible to the local machine or LSF host to parse VCF results
+
+  push @{$SiteDefs::ENSEMBL_VEP_PLUGIN_CONFIG_FILES}, $SiteDefs::ENSEMBL_SERVERROOT.'/public-plugins/tools_hive/conf/vep_plugins_web_config.txt';
+                                                                                                    # add extra hive specific configs required to run vep plugins
 
   # Assembly Converter configs
   $SiteDefs::ENSEMBL_AC_RUN_LOCAL               = 1;                                                # Flag if on, will run AC jobs on LOCAL meadow
