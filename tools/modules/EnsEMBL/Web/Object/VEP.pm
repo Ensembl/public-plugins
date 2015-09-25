@@ -343,8 +343,7 @@ sub get_form_details {
 
     # add plugin stuff
     my $sd  = $self->hub->species_defs;
-    if($sd->ENSEMBL_VEP_PLUGIN_ENABLED) {
-      my $pl = $sd->multi_val('ENSEMBL_VEP_PLUGIN_CONFIG');
+    if(my $pl = $sd->multi_val('ENSEMBL_VEP_PLUGIN_CONFIG')) {
 
       foreach my $plugin(@{$pl->{plugins}}) {
 
