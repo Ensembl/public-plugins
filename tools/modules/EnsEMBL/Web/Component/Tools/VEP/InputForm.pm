@@ -698,8 +698,7 @@ sub _have_plugins {
 
   if(!exists($self->{_have_plugins})) {
     my $sd  = $self->hub->species_defs;
-    if($sd->ENSEMBL_VEP_PLUGIN_ENABLED) {
-      my $pl = $sd->multi_val('ENSEMBL_VEP_PLUGIN_CONFIG');
+    if(my $pl = $sd->multi_val('ENSEMBL_VEP_PLUGIN_CONFIG')) {
       $self->{_have_plugins} = $pl && $pl->{plugins} ? 1 : 0;
     }
     else {

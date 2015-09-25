@@ -34,8 +34,8 @@ sub munge_config_tree {
 sub munge_config_tree_multi {
   my $self = shift;
   $self->PREV::munge_config_tree_multi(@_);
-  $self->_configure_blast_multi;
-  $self->_configure_vep_multi;
+  $self->_configure_blast_multi if $SiteDefs::ENSEMBL_BLAST_ENABLED;
+  $self->_configure_vep_multi   if $SiteDefs::ENSEMBL_VEP_ENABLED;
 }
 
 sub _munge_file_formats {
@@ -105,16 +105,65 @@ sub _configure_blast_multi {
 sub _configure_vep_multi {
   my $self = shift;
   my $tree = $self->tree;
-  return unless defined($tree->{'ENSEMBL_VEP_PLUGINS'}) && defined($tree->{'ENSEMBL_VEP_PLUGINS'}->{'CONFIG'});
-  my $file = $tree->{'ENSEMBL_VEP_PLUGINS'}->{'CONFIG'};
-  
-  return unless -e $file;
-  my $content = file_get_contents($file);
 
-  my $VEP_PLUGIN_CONFIG = eval $content;
-  die("Failed to parse VEP config file $file: $@\n") if $@;
+  my @configs;
 
-  $tree->{'ENSEMBL_VEP_PLUGIN_CONFIG'} = $VEP_PLUGIN_CONFIG;
+  # parse the config files
+  foreach my $config_file (@{$SiteDefs::ENSEMBL_VEP_PLUGIN_CONFIG_FILES}) {
+    if (!-e $config_file) {
+      _vep_config_warning("Could not locate config file $config_file", 1);
+      return;
+    }
+
+    my $content = file_get_contents($config_file);
+    my $config  = eval $content;
+
+    if ($@) {
+      _vep_config_warning("Failed to parse config file $config_file", 1);
+      return;
+    }
+
+    if (ref $config ne 'HASH') {
+      _vep_config_warning("Config file $config_file did not return reference to a HASH", 1);
+      return;
+    }
+
+    push @configs, $config;
+  }
+
+  # merge configs
+  my $vep_configs = shift @configs;
+  foreach my $config (@configs) {
+    foreach my $key (keys %$config) {
+
+      my ($orig) = grep { $_->{'key'} eq $key } @{$vep_configs->{'plugins'}};
+
+      if (!$orig) {
+        _vep_config_warning("Key '$key' in not present in the base VEP plugins config file");
+        next;
+      }
+
+      $orig->{$_} = _resolve_sitedefs_vars($config->{$key}->{$_}) for keys %{$config->{$key}};
+    }
+  }
+
+  $tree->{'ENSEMBL_VEP_PLUGIN_CONFIG'} = $vep_configs;
+}
+
+sub _resolve_sitedefs_vars {
+  my $obj = shift;
+
+  return $obj unless $obj;
+  return $obj =~ s/\[\[(\w+)\]\]/eval("\$SiteDefs::$1") \/\/ _vep_config_warning("\$SiteDefs::$1 is used in one of the ENSEMBL_VEP_PLUGIN_CONFIG_FILES but not defined in SiteDefs") && ''/egr unless ref $obj;
+  return [ map { _resolve_sitedefs_vars($_) } @$obj ] if ref $obj eq 'ARRAY';
+  return { map { $_ => _resolve_sitedefs_vars($obj->{$_}) } keys %$obj } if ref $obj eq 'HASH';
+}
+
+sub _vep_config_warning {
+  my ($message, $fatal) = @_;
+
+  $message = $fatal ? "[ERROR] VEP Plugins are not configured: $message" : "[WARNING] $message";
+  warn $message." - thrown by ".__FILE__."\n";
 }
 
 1;

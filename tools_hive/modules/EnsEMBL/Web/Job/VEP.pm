@@ -35,6 +35,7 @@ sub prepare_to_dispatch {
   $data->{'script_options'} = { map { defined $options->{$_} ? ( $_ => $options->{$_} ) : () } keys %$options }; # filter out the undef values
   $data->{'code_root'}      = $sd->ENSEMBL_HIVE_HOSTS_CODE_LOCATION;
   $data->{'cache_dir'}      = $sd->ENSEMBL_VEP_CACHE_DIR;
+  $data->{'plugins_path'}   = $sd->ENSEMBL_VEP_PLUGIN_DIR || '';
 
   return $data;
 }
