@@ -94,7 +94,7 @@ sub render {
       'colour'  => 'ffd700', 
       'desc'    => 'A codon variant that changes at least one base of the canonical start codo', 
       'acc'     => '0002012', 
-      'impact'  => 'LOW',
+      'impact'  => 'HIGH',
     },
     {
       'term'    => 'transcript_amplification', 
