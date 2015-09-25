@@ -1,47 +1,47 @@
 {
   dbNSFP => {
     "params"  => [
-      $data_dir."/dbNSFP3.0a.gz",
+      "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/dbNSFP3.0a.gz",
       "@*"
     ]
   },
 
   Condel => {
     "params" => [
-      $data_dir."/Condel/config",
+      "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/Condel/config",
       "@*"
     ]
   },
 
   LoFtool => {
     "params" => [
-      $data_dir."/LoFtool_scores.txt"
+      "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/LoFtool_scores.txt"
     ]
   },
 
   dbscSNV => {
     "params"  => [
-      $data_dir."/dbscSNV.txt.gz"
+      "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/dbscSNV.txt.gz"
     ]
   },
 
   GeneSplicer => {
     "params" => [
-      $data_dir."/genesplicer/bin/linux/genesplicer",
-      $data_dir."/genesplicer/human",
+      "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/genesplicer/bin/linux/genesplicer",
+      "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/genesplicer/human",
       "@*"
     ]
   },
 
   MaxEntScan => {
     "params" => [
-      $data_dir."/maxentscan"
+      "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/maxentscan"
     ]
   },
 
   ExAC => {
     "params" => [
-      $data_dir."/ExAC.r0.3.sites.vep_CrossMapGRCh38.vcf.gz"
+      "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/ExAC.r0.3.sites.vep_CrossMapGRCh38.vcf.gz"
     ]
   }
 }
