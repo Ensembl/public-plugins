@@ -1,89 +1,49 @@
-my $data_dir = $SiteDefs::ENSEMBL_VEP_PLUGIN_DATA_DIR;
-
-my $web_config = {
+{
   dbNSFP => {
-    "available" => 1,
-    "params"  => [
-      $data_dir."/dbNSFP3.0a.gz",
-      "@*"
-    ],
+    "available" => 1
   },
-  
+
   Condel => {
-    "available" => 1,
-    "params" => [
-      $data_dir."/Condel/config",
-      "@*"
-    ],
+    "available" => 1
   },
 
   LoFtool => {
-    "available" => 1,
-    "params" => [
-      $data_dir."/LoFtool_scores.txt"
-    ]
+    "available" => 1
   },
 
   dbscSNV => {
-    "available" => 1,
-    "params"  => [
-      $data_dir."/dbscSNV.txt.gz"
-    ],
+    "available" => 1
   },
 
   GeneSplicer => {
-    "available" => 1,
-    "params" => [
-      $data_dir."/genesplicer/bin/linux/genesplicer",
-      $data_dir."/genesplicer/human",
-      "@*"
-    ]
+    "available" => 1
   },
 
   MaxEntScan => {
-    "available" => 1,
-    "params" => [
-      $data_dir."/maxentscan"
-    ]
+    "available" => 1
   },
 
   Blosum62 => {
-    "available" => 1,
+    "available" => 1
   },
 
   CSN => {
-    "available" => 1,
+    "available" => 1
   },
-  
+
   HGVSshift => {
-    "available" => 1,
+    "available" => 1
   },
 
   ExAC => {
-    "available" => 1,
-    "params" => [
-      $data_dir."/ExAC.r0.3.sites.vep_CrossMapGRCh38.vcf.gz"
-    ]
+    "available" => 1
   },
 
   miRNA => {
-    "available" => 1,
+    "available" => 1
   },
 
   UpDownDistance => {
-    "available" => 1,
-  },
-};
-
-
-# This bit of code merges this config with the base config
-# The base config is set as $SiteDefs::ENSEMBL_VEP_PLUGIN_BASE_CONFIG
-# Base: plugin_config.txt file as found in https://github.com/ensembl-variation/VEP_plugins
-foreach my $pl_key(%$web_config) {
-
-  my ($orig) = grep {$_->{key} eq $pl_key} @{$VEP_PLUGIN_CONFIG->{"plugins"}};
-
-  next unless $orig;
-
-  $orig->{$_} = $web_config->{$pl_key}->{$_} for keys %{$web_config->{$pl_key}};
+    "available" => 1
+  }
 }

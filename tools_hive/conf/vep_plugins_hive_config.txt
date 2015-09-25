@@ -1,0 +1,47 @@
+{
+  dbNSFP => {
+    "params"  => [
+      $data_dir."/dbNSFP3.0a.gz",
+      "@*"
+    ]
+  },
+
+  Condel => {
+    "params" => [
+      $data_dir."/Condel/config",
+      "@*"
+    ]
+  },
+
+  LoFtool => {
+    "params" => [
+      $data_dir."/LoFtool_scores.txt"
+    ]
+  },
+
+  dbscSNV => {
+    "params"  => [
+      $data_dir."/dbscSNV.txt.gz"
+    ]
+  },
+
+  GeneSplicer => {
+    "params" => [
+      $data_dir."/genesplicer/bin/linux/genesplicer",
+      $data_dir."/genesplicer/human",
+      "@*"
+    ]
+  },
+
+  MaxEntScan => {
+    "params" => [
+      $data_dir."/maxentscan"
+    ]
+  },
+
+  ExAC => {
+    "params" => [
+      $data_dir."/ExAC.r0.3.sites.vep_CrossMapGRCh38.vcf.gz"
+    ]
+  }
+}

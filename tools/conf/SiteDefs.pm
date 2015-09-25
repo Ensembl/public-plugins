@@ -76,7 +76,7 @@ sub update_conf {
 
   # Config files for VEP plugins (each file overrides the configs in the previous one in the list)
   $SiteDefs::ENSEMBL_VEP_PLUGIN_CONFIG_FILES  = [
-                                                  $SiteDefs::ENSEMBL_SERVERROOT.'/VEP_plugins/plugin_config.txt', # VEP_plugins is a cloned from github.com/ensembl-variation/VEP_plugins
+                                                  $SiteDefs::ENSEMBL_SERVERROOT.'/VEP_plugins/plugin_config.txt', # VEP_plugins is cloned from github.com/ensembl-variation/VEP_plugins
                                                   $SiteDefs::ENSEMBL_SERVERROOT.'/public-plugins/tools/conf/vep_plugins_web_config.txt'
                                                 ];
 
