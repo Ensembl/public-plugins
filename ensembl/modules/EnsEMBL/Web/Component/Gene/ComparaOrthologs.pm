@@ -59,7 +59,6 @@ sub _species_sets {
   foreach my $species ($species_defs->valid_species) {
     next if $skipped->{$species};
     my $group = $species_defs->get_config($species, 'SPECIES_GROUP');
-    push @{$species_sets->{'all'}{'species'}}, $species;
     my $sets = [];
     my $orthologues = $orthologue_list->{$species} || {};
     my $no_ortho = 0;
