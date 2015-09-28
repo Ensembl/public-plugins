@@ -123,7 +123,7 @@ sub handle_download {
     my $location  = $hub->param('location') || '';
     my $filter    = $hub->param('filter')   || '';
     my $file      = $self->result_files->{'output_file'};
-    my $filename  = join('.', $job->ticket->ticket_name, $location || (), $filter || (), $format eq 'txt' ? () : $format, $format eq 'vcf' ? 'vcf' : 'txt') =~ s/\s+/\_/gr;
+    my $filename  = join('.', $job->ticket->ticket_name, $location || (), $filter || (), $format eq 'txt' ? () : $format, $format eq 'vcf' ? '' : 'txt') =~ s/\s+/\_/gr;
 
     $r->headers_out->add('Content-Type'         => 'text/plain');
     $r->headers_out->add('Content-Disposition'  => sprintf 'attachment; filename=%s', $filename);
