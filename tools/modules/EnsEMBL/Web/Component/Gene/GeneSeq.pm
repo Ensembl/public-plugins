@@ -23,7 +23,7 @@ use warnings;
 
 sub blast_options {
   ## @override
-  return {'seq_id' => shift->hub->param('g')};
+  return {'seq_id' => shift->object->stable_id};
 }
 
 1;
