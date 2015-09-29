@@ -18,3 +18,6 @@
 .tool-box a           { display: block; height: 104px; text-align: center; }
 .tool-box a span      { display: block; margin: 8px 0; }
 .tool-box a span img  { max-width: 55%; }
+
+.trackhub-ad          { padding: 12px; line-height: 16px; }
+.trackhub-ad img      { float:right; width:40px; height:40px; }
