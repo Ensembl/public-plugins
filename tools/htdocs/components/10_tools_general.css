@@ -35,7 +35,7 @@ div.blast-popup a                 { background: [[BUTTON_BG]] url('/i/16/rev/bla
 
 /* Job  status for Activity Summary table */
 span.ticket-expiring              { height: 16px; width: 16px; float: left; margin: 2px 4px 0; background-image: url(/i/16/red-alert.png); }
-span.job-status                   { font-weight: bold; font-size: 80%; border-radius: 4px; color: [[PAGE_BG]]; padding: 2px 3px 1px; cursor: default; }
+span.job-status                   { font-weight: bold; font-size: 80%; border-radius: 4px; color: [[PAGE_BG]]; padding: 2px 3px 1px; cursor: default; white-space: nowrap; }
 span.job-status-not_submitted,
 span.job-status-failed,
 span.job-status-deleted           { background-color: [[ERROR_BG]]; }
