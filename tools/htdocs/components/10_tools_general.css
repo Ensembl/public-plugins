@@ -46,6 +46,11 @@ span.job-status-done              { background-color: #55AA55; }
 span.job-status-noresult          { background-color: #666666; }
 span.job-status-mismatch          { background-color: #5555AA; }
 
+/* Sprites on the end of ticket row */
+div.ticket-sprites                { min-width: 120px; text-align: right; }
+div.ticket-sprites .sprite,
+div.ticket-sprites a              { display: inline-block; float: none; }
+
 /* Sprites for individual jobs on Activity Summary table */
 p span.job-sprites                { position: absolute; display: none; }
 p span.job-sprites span.sprite    { float: none; }

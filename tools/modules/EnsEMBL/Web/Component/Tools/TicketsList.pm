@@ -254,7 +254,7 @@ sub ticket_buttons {
   my $url_param     = $object->create_url_param({'ticket_name' => $ticket->ticket_name});
   my $job_count     = $ticket->job_count;
   my $action        = $ticket->ticket_type_name;
-  my $buttons       = $self->dom->create_element('div');
+  my $buttons       = $self->dom->create_element('div', {'class' => 'ticket-sprites'});
 
   my ($save_button, $edit_button, $share_button, $delete_button, $expiring_warning);
 
