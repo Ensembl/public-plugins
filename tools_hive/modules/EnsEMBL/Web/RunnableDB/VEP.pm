@@ -66,8 +66,10 @@ sub run {
   my $config          = $self->param('config');
   my $options         = $self->param('script_options') || {};
   my $log_file        = "$work_dir/lsf_log.txt";
+  my $plugins_path    = $self->param('plugins_path');
+     $plugins_path    = $plugins_path ? $plugins_path =~ /^\// ? "-I $plugins_path" : sprintf('-I %s/%s', $self->param('code_root'), $plugins_path) : '';
 
-  $options->{"--$_"}  = '' for qw(force quiet vcf tabix stats_text cache); # we need these options set on always!
+  $options->{"--$_"}  = '' for qw(force quiet safe vcf tabix stats_text cache); # we need these options set on always!
   $options->{"--$_"}  = sprintf '"%s/%s"', $work_dir, delete $config->{$_} for qw(input_file output_file stats_file);
   $options->{"--$_"}  = $config->{$_} eq 'yes' ? '' : $config->{$_} for grep { defined $config->{$_} && $config->{$_} ne 'no' } keys %$config;
   $options->{"--dir"} = $self->param('cache_dir');
@@ -78,13 +80,13 @@ sub run {
   # save the result file name for later use
   $self->param('result_file', $options->{'--output_file'} =~ s/(^\")|(\"$)//rg);
 
-  my $command   = EnsEMBL::Web::SystemCommand->new($self, "$perl_bin $script", $options)->execute({'log_file' => $log_file});
+  my $command   = EnsEMBL::Web::SystemCommand->new($self, "$perl_bin $plugins_path $script", $options)->execute({'log_file' => $log_file});
   my $m_type    = 'ERROR';
   my $messages  = {};
   my $max_msgs  = 10;
   my $w_count   = 0;
 
-  for (split /(?=\n(WARNING|ERROR)\s*\:)/, join('', "Unknown error\n", file_get_contents($log_file))) {
+  for (split /(?=\n(WARNING|ERROR)\s*\:)/, "Unknown error\n".file_get_contents($log_file)) {
     if (/^(WARNING|ERROR)$/) {
       $m_type = $1;
     } else {
@@ -124,16 +126,10 @@ sub write_output {
 
   my $command = EnsEMBL::Web::SystemCommand->new($self, "$perl_bin $script $result_file")->execute({'output_file' => $result_web, 'log_file' => "$result_web.log"});
 
-  throw exception('HiveException', sprintf "Error reading the web results file:\n%s", join('', file_get_contents("$result_web.log"))) unless -r $result_web;
+  throw exception('HiveException', "Error reading the web results file:\n".file_get_contents("$result_web.log")) unless -r $result_web;
 
   my @result_keys = qw(chr start end allele_string strand variation_name consequence_type);
-  my @rows;
-
-  for (file_get_contents($result_web)) {
-    chomp;
-    my @cols = split /\t/, $_;
-    push @rows, { map { $result_keys[$_] => $cols[$_] } 0..$#result_keys };
-  };
+  my @rows        = file_get_contents($result_web, sub { chomp; my @cols = split /\t/, $_; return { map { $result_keys[$_] => $cols[$_] } 0..$#result_keys } });
 
   $self->save_results($job_id, {}, \@rows);
 

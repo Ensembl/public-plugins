@@ -127,7 +127,7 @@ sub get_input_sequence_for_job {
   my ($self, $job) = @_;
 
   my $sequence    = $job->job_data->raw->{'sequence'};
-  my @fasta_lines = map { chomp; $_ } file_get_contents(sprintf "%s/%s", $job->job_dir, delete $sequence->{'input_file'});
+  my @fasta_lines = file_get_contents(sprintf("%s/%s", $job->job_dir, delete $sequence->{'input_file'}), sub { chomp; $_; });
 
   $sequence->{'display_id'} = $fasta_lines[0] =~ s/^>// ? shift @fasta_lines : '';
   $sequence->{'sequence'}   = join("", @fasta_lines);
@@ -450,7 +450,7 @@ sub handle_download {
 
   # TODO - result file is missing, or temporarily not available if !-e $result_file
 
-  my $content = join '', map { s/\R/\r\n/r } file_get_contents($result_file);
+  my $content = file_get_contents($result_file, sub { s/\R/\r\n/r });
 
   $r->headers_out->add('Content-Type'         => 'text/plain');
   $r->headers_out->add('Content-Length'       => length $content);

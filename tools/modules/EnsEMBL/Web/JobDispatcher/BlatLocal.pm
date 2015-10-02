@@ -26,7 +26,7 @@ use warnings;
 use IO::Socket;
 
 use EnsEMBL::Web::Exceptions;
-use EnsEMBL::Web::Tools::FileHandler qw(file_get_contents);
+use EnsEMBL::Web::Utils::FileHandler qw(file_get_contents);
 
 use parent qw(EnsEMBL::Web::JobDispatcher);
 

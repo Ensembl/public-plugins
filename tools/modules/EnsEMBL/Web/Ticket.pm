@@ -21,6 +21,7 @@ package EnsEMBL::Web::Ticket;
 use strict;
 use warnings;
 
+use EnsEMBL::Web::Attributes;
 use EnsEMBL::Web::Exceptions;
 use EnsEMBL::Web::Utils::RandomString qw(random_string);
 
@@ -31,29 +32,27 @@ sub jobs        { return shift->{'_jobs'};        }
 sub error       { return shift->{'_error'};       }
 
 sub process {
-  my $self = shift;
+  my $self  = shift;
+  my $stage = '';
 
   try {
 
     # get input from form
+    $stage = 'input';
     $self->init_from_user_input;
 
     # submit ticket and jobs to the tools db
+    $stage = 'toolsdb';
     $self->submit_to_toolsdb;
 
     # dispatch the job(s) to job dispatcher
+    $stage = 'dispatcher';
     $self->dispatch_jobs;
 
   } catch {
 
-    if ($_->type eq 'InputError') {
-      $self->{'_error'} = $_->message(($_->data || {})->{'message_is_html'});
-    } else {
-      my $error_id = random_string(8);
-      warn "ERROR: $error_id\n";
-      warn $_;
-      throw exception('ServerError', sprintf q(There was a problem with one of the tools servers. Please report this issue to %s, quoting error reference '%s'.), $self->hub->species_defs->ENSEMBL_HELPDESK_EMAIL, $error_id);
-    }
+    # ok, now deal with it
+    $self->handle_exception($_, $stage);
   };
 }
 
@@ -69,10 +68,9 @@ sub new {
   }, $class;
 }
 
-sub init_from_user_input {
+sub init_from_user_input :Abstract {
   ## @abstract method
   ## This method should read the raw form parameters, validate them and convert them into an array of EnsEMBL::Web::Job or sub class
-  throw exception('AbstractMethodNotImplemented');
 }
 
 sub submit_to_toolsdb {
@@ -180,6 +178,32 @@ sub dispatch_jobs {
   }
 }
 
+sub handle_exception {
+  ## Handles exceptions when thrown by the process method
+  ## Override it in the sub class or plugin to change its behaviour
+  ## @param EnsEMBL::Web::Exception object
+  ## @param Stage at which exception was thrown (String)
+  my ($self, $exception, $stage) = @_;
+
+  if ($exception->type eq 'InputError') {
+    $self->{'_error'} = {
+      'heading' => 'Invalid input',
+      'stage'   => $stage,
+      'message' => $exception->message(($exception->data || {})->{'message_is_html'})
+    };
+  } else {
+    my $error_id = random_string(8);
+    warn "ERROR: $error_id (stage: $stage)\n";
+    warn $exception;
+
+    $self->{'_error'} = {
+      'heading' => 'Service unavailable',
+      'stage'   => $stage,
+      'message' => sprintf(q(There was a problem with one of the tools servers. Please report this issue to %s, quoting error reference '%s'.), $self->hub->species_defs->ENSEMBL_HELPDESK_EMAIL, $error_id)
+    };
+  }
+}
+
 sub add_job {
   ## Adds a job object to the jobs array
   ## @param EnsEMBL::Web::Job object
@@ -192,7 +216,5 @@ sub is_dir_needed {
   ## Override if required
   return 1;
 }
-
-
 
 1;

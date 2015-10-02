@@ -33,8 +33,8 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
     this.elLk.wheelZoom   = $('.wheel_zoom',         this.elLk.controls);
     
     this.initControls();
-    this.initLocationHighlight();
-    this.highlightLocation(Ensembl.highlightedLoc);
+    this.initLocationMarking();
+    this.markLocation(Ensembl.markedLocation);
     
     Ensembl.EventManager.register('changeTrackOrder', this, this.externalOrder);
     Ensembl.EventManager.register('updatePanel',      this, this.update);
@@ -176,9 +176,9 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
     }
   },
 
-  initLocationHighlight: function () {
+  initLocationMarking: function () {
 
-    this.highlightBoundary = {
+    this.locationMarkingArea = {
       range : {
         chr   : this.genoverse.chr,
         end   : this.genoverse.end,
@@ -188,11 +188,11 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
       l : 0,
       r : this.genoverse.wrapper.outerWidth(),
       t : 0,
-      b : $(this.elLk.highlightedLocation).css('height') || 0 // height is updated by updateSelectorHeight method
+      b : $(this.elLk.markedLocation).css('height') || 0 // height is updated by updateSelectorHeight method
     };
   },
 
-  highlightLocation: function () {
+  markLocation: function () {
     this.base.apply(this, arguments);
     this.genoverse.updateSelectorHeight();
   },
@@ -247,14 +247,17 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
       width--;
     }
     
-    // Used to keep highlight in same position during drags
-    this.genoverse.highlight_left = left;
-    this.genoverse.highlight_width = width;
-
     if (this.prevHighlight.start !== start || this.prevHighlight.end !== end) {
       this.prevHighlight = { start: start, end: end };
-      this.genoverse.highlightRegion.css({ left: left, width: width, display: 'block' });
+
+      if (!this.elLk.highlightRegion) {
+        this.elLk.highlightRegion = $('<div class="selector highlight">').appendTo(this.genoverse.wrapper);
+      }
+
+      this.elLk.highlightRegion.css({ left: left, width: width, display: 'block' });
     }
+
+    this.genoverse.updateSelectorHeight();
   },
   
   externalOrder: function (label, order) {
@@ -384,7 +387,8 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
         
         if (json.add.length) {
           genoverse.addTracks(json.add);
-          this.elLk.hoverLabels = this.elLk.hoverLabels.add($(json.labels.trim()).appendTo('body'));
+          this.elLk.hoverLabels.remove();
+          this.elLk.hoverLabels = $(json.labels.trim()).appendTo('body');
           this.makeHoverLabels();
         }
         
@@ -436,7 +440,19 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
       }
     });
   },
-  
+
+  getExportMenuExtra: function () {
+    var extra = this.base.apply(this, arguments);
+
+    if (extra && extra.mark) {
+      extra.mark.x += this.genoverse.labelWidth - 2;
+      delete extra.mark.h;
+      delete extra.mark.y;
+    }
+
+    return extra;
+  },
+
   resize: function (width) {
     width = width || Ensembl.width;
     

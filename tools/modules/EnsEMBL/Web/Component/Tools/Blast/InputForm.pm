@@ -44,39 +44,12 @@ sub content {
 
   # If cached form not found, generate a new form and save in cache to skip the form generation process next time
   if (!$form) {
-    $form = $self->get_form_node->render;
+    $form = $self->get_cacheable_form_node->render;
     $cache->set('BLASTFORM', $form) if $cache;
   }
 
-  # Add the non-cacheable fields to this dummy form and replace the placeholders from the actual form HTML
-  my $fieldset2 = $self->new_form->add_fieldset;
-
-  # Previous job params for JavaScript
-  my $edit_jobs = ($hub->function || '') eq 'Edit' ? $object->get_edit_jobs_data : [];
-  if (!@$edit_jobs && (my $existing_seq = $hub->param('query_sequence'))) { # If coming from "BLAST this sequence" link
-    $edit_jobs = [ {'sequence' => {'sequence' => $existing_seq}} ];
-    if (my $search_type = $hub->param('search_type')) {
-      $edit_jobs->[0]{'search_type'} = $search_type;
-    }
-    if (my $source = $hub->param('source')) {
-      $edit_jobs->[0]{'source'} = $source;
-    }
-  }
-  $edit_jobs = @$edit_jobs ? $fieldset2->add_hidden({ 'name' => 'edit_jobs', 'value' => $self->jsonify($edit_jobs) }) : '';
-
-  # Current species as hidden field
-  my $species_input = $fieldset2->add_hidden({'name' => 'default_species', 'value' => $species});
-
-  # Buttons in a new fieldset
-  my $buttons_fieldset = $self->add_buttons_fieldset($fieldset2->form, {'reset' => 'Clear', 'cancel' => 'Close form'});
-
-  # Add the render-time changes to the fields
-  $fieldset2->prepare_to_render;
-
-  # Regexp to replace all placeholders from cached form
-  $form =~ s/SPECIES_INPUT/$species_input->render/e;
-  $form =~ s/EDIT_JOB/$edit_jobs && $edit_jobs->render/e;
-  $form =~ s/BUTTONS_FIELDSET/$buttons_fieldset->render/e;
+  # Replace any placeholders for non cacheable fields with actual HTML
+  $form = $self->add_non_cacheable_fields($form, $species);
 
   return sprintf('<div class="hidden _tool_new"><p><a class="button _change_location" href="%s">New Search</a></p></div><div class="hidden _tool_form_div"><h2>Create new ticket:</h2><input type="hidden" class="panel_type" value="BlastForm" />%s%s</div>',
     $hub->url({'function' => ''}),
@@ -85,8 +58,9 @@ sub content {
   );
 }
 
-sub get_form_node {
+sub get_cacheable_form_node {
   ## Gets the form tree node
+  ## This method returns the form object that can be cached once and then used for all requests (ie. it does not contian species specific or user specific fields)
   ## @return EnsEMBL::Web::Form object
   my $self            = shift;
   my $hub             = $self->hub;
@@ -338,6 +312,49 @@ sub get_form_node {
 
   # Placeholder for Run/Close buttons
   $form->append_child('text', 'BUTTONS_FIELDSET');
+
+  return $form;
+}
+
+sub add_non_cacheable_fields {
+  ## Replace placeholders for non-cacheable fields with actual HTML
+  ## @param Form HTML (string)
+  ## @param Current species name
+  ## @return Modified form HTML
+  my ($self, $form, $current_species) = @_;
+
+  my $hub     = $self->hub;
+  my $object  = $self->object;
+
+  # Add the non-cacheable fields to this dummy form and replace the placeholders from the actual form HTML
+  my $fieldset2 = $self->new_form->add_fieldset;
+
+  # Previous job params for JavaScript
+  my $edit_jobs = ($hub->function || '') eq 'Edit' ? $object->get_edit_jobs_data : [];
+  if (!@$edit_jobs && (my $existing_seq = $hub->param('query_sequence'))) { # If coming from "BLAST this sequence" link
+    $edit_jobs = [ {'sequence' => {'sequence' => $existing_seq}} ];
+    if (my $search_type = $hub->param('search_type')) {
+      $edit_jobs->[0]{'search_type'} = $search_type;
+    }
+    if (my $source = $hub->param('source')) {
+      $edit_jobs->[0]{'source'} = $source;
+    }
+  }
+  $edit_jobs = @$edit_jobs ? $fieldset2->add_hidden({ 'name' => 'edit_jobs', 'value' => $self->jsonify($edit_jobs) }) : '';
+
+  # Current species as hidden field
+  my $species_input = $fieldset2->add_hidden({'name' => 'default_species', 'value' => $current_species});
+
+  # Buttons in a new fieldset
+  my $buttons_fieldset = $self->add_buttons_fieldset($fieldset2->form, {'reset' => 'Clear', 'cancel' => 'Close form'});
+
+  # Add the render-time changes to the fields
+  $fieldset2->prepare_to_render;
+
+  # Regexp to replace all placeholders from cached form
+  $form =~ s/SPECIES_INPUT/$species_input->render/e;
+  $form =~ s/EDIT_JOB/$edit_jobs && $edit_jobs->render/e;
+  $form =~ s/BUTTONS_FIELDSET/$buttons_fieldset->render/e;
 
   return $form;
 }

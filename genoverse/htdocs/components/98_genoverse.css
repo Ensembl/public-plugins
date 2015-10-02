@@ -67,7 +67,7 @@ body.dragging *                                          { cursor: n-resize!impo
 .canvas_container .selector.highlight                    { border-style: solid; background: none; border-width: 1px; z-index: 9; pointer-events: none; }
 .canvas_container .selector_controls                     { display: none!important; }
 .canvas_container .selector.crosshair div                { display: none; }
-.canvas_container .hlrselector                           { border: 1px dashed rgba(140, 100, 140, 0.5); }
+.canvas_container .mrselector                            { border: 1px dashed rgba(140, 100, 140, 0.5); }
 
 .canvas_container .message_container                     {
   position: absolute; top: 0; left: -1px; display: none; background: #DDD; color: #000; border: 1px solid #999; padding: 5px; margin-bottom: 4px; z-index: 11;

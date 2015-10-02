@@ -16,10 +16,23 @@ limitations under the License.
 
 =cut
 
-package EnsEMBL::Draw::GlyphSet::_marker;
+package EnsEMBL::Draw::Renderer::png;
 
 use strict;
+use warnings;
 
-sub genoverse_attributes { return ( id => $_[1]->{'drawing_id'} ); }
+use previous qw(add_location_marking_layer);
+
+sub add_location_marking_layer {
+  my ($self, $coords) = @_;
+
+  if ($coords) {
+
+    $coords->{'y'} //= 0;
+    $coords->{'h'} //= $self->{'im_height'};
+
+    return $self->PREV::add_location_marking_layer($coords);
+  }
+}
 
 1;

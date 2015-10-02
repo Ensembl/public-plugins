@@ -50,12 +50,13 @@ $registry-&gt;load_registry_from_db(
 );
 </pre>
 
-<h2 id="grch37"><span style="color:red;font-weight:bold">Connecting to the Ensembl Variation database for human GRCh37</span></h2>
-<p>
-If you are interested in data on the human GRCh37 assembly you need to set the port number to 3337:
-</p>
+<div style="background-color:#F0F0F0;border:1px solid #CCC;padding:5px;margin-bottom:20px">
+  <h2 id="grch37" style="color:red">Connecting to the Ensembl Variation database for human GRCh37</h2>
+  <p>
+  If you are interested in data on the human <b>GRCh37</b> assembly you need to set the port number to <span style="color:red;font-weight:bold">3337</span>:
+  </p>
 
-<pre class="code sh_perl">
+<pre class="code sh_perl" style="margin:2px 5px 5px">
 use Bio::EnsEMBL::Registry;
 
 my $registry = 'Bio::EnsEMBL::Registry';
@@ -66,14 +67,16 @@ $registry-&gt;load_registry_from_db(
   -port =&gt; 3337,
 );
 </pre>
+  
+</div>
 
 <p> The use of the registry ensures you will load the correct versions of the
 Ensembl databases for the software release it can find on a database instance.
 Using the registry object, you can then create any of number of database
 adaptors. Each of these adaptors is responsible for generating an object of one
-type. The Ensembl variation API uses a number of object types that relate to the
-data stored in the database. For example, in order to generate variation
-objects, you should first create a variation adaptor: </p>
+type. The Ensembl Variation API uses a number of object types that relate to the
+data stored in the database. For example, in order to generate Variation
+objects, you should first create a Variation adaptor: </p>
 
 <pre class="code sh_perl">
 use Bio::EnsEMBL::Registry;
@@ -87,7 +90,7 @@ $registry-&gt;load_registry_from_db(
 
 my $variation_adaptor = $registry-&gt;get_adaptor(
   'human',     # species
-  'variation', # database
+  'variation', # database type
   'variation'  # object type
 );
 
@@ -95,35 +98,64 @@ my $variation = $variation_adaptor-&gt;fetch_by_name('rs1333049');
 </pre>
 
 <p>
-	The get_adaptor method will automatically create a connection to the
+	The <b>get_adaptor</b> method will automatically create a connection to the
 	relevant database; in the example above, a connection will be made to the
-	variation database for human. The three parameters passed specify the
+	Variation database for human. The three parameters passed specify the
 	species, database and object type you require. Below is a non exhaustive
-	list of Ensembl variation adaptors that are most often used
+	list of Ensembl Variation adaptors that are most often used
 </p>
 
 <ul>
-<li>IndividualAdaptor to fetch Bio::EnsEMBL::Variation::Individual objects</li>
-<li>LDFeatureContainerAdaptor to fetch Bio::EnsEMBL::Variation::LDFeatureContainer objects</li>
-<li>PopulationAdaptor to fetch Bio::EnsEMBL::Variation::Population objects</li>
-<li>ReadCoverageAdaptor to fetch Bio::EnsEMBL::Variation::ReadCoverage objects</li>
-<li>TranscriptVariationAdaptor to fetch Bio::EnsEMBL::Variation::TranscriptVariation objects</li>
-<li>VariationAdaptor to fetch Bio::EnsEMBL::Variation::Variation objects</li>
-<li>VariationFeatureAdaptor to fetch Bio::EnsEMBL::Variation::VariationFeature objects</li>
+<li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1IndividualAdaptor.html">IndividualAdaptor</a> to fetch Bio::EnsEMBL::Variation::<a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Individual.html">Individual</a> objects</li>
+<li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1LDFeatureContainerAdaptor.html">LDFeatureContainerAdaptor</a> to fetch LDFeatureContainerAdaptor to fetch Bio::EnsEMBL::Variation::<a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1LDFeatureContainer.html">LDFeatureContainer</a> objects</li>
+<li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1PhenotypeFeatureAdaptor.html">PhenotypeFeatureAdaptor</a> to fetch Bio::EnsEMBL::Variation::<a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1PhenotypeFeature.html">PhenotypeFeature</a> objects</li>
+<li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1PopulationAdaptor.html">PopulationAdaptor</a> to fetch Bio::EnsEMBL::Variation::<a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Population.html">Population</a> objects</li>
+<li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1ReadCoverageAdaptor.html">ReadCoverageAdaptor</a> to fetch Bio::EnsEMBL::Variation::<a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1ReadCoverage.html">ReadCoverage</a> objects</li>
+<li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1SampleAdaptor.html">SampleAdaptor</a> to fetch Bio::EnsEMBL::Variation::<a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Sample.html">Sample</a> objects</li>
+<li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1TranscriptVariationAdaptor.html">TranscriptVariationAdaptor</a> to fetch Bio::EnsEMBL::Variation::<a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1TranscriptVariation.html">TranscriptVariation</a> objects</li>
+<li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1VariationAdaptor.html">VariationAdaptor</a> to fetch Bio::EnsEMBL::Variation::<a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Variation.html">Variation</a> objects</li>
+<li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1VariationFeatureAdaptor.html">VariationFeatureAdaptor</a> to fetch Bio::EnsEMBL::Variation::<a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1VariationFeature.html">VariationFeature</a> objects</li>
 </ul>
 
 <p>
 Only some of these adaptors will be used for illustration as part of this tutorial through commented perl scripts code.
 </p>
-
-<br /><hr />
-<h2 id="variation" style="font-size:large">Variations</h2>
-
-<h2 id="genome">Variations in the genome</h2>
+<br />
 
 <p>
-One of the most important uses for the variation database is to be able to get all variations in a certain region in the genome.
-Below is a simple commented perl script to illustrate how to get all variations in chromosome 25 in zebrafish.
+The code below lists all the accessible adaptors for the Ensembl Variation API:
+</p>
+<pre class="code sh_perl">
+use Bio::EnsEMBL::Registry;
+
+my $registry = 'Bio::EnsEMBL::Registry';
+
+$registry->load_registry_from_db(
+  -host => 'ensembldb.ensembl.org',
+  -user => 'anonymous',
+);
+
+my $species = 'human';
+my $group = 'variation'; # database type
+
+my $dba = $registry->get_DBAdaptor($species,$group);
+
+my $available_adaptors = $dba->get_available_adaptors;
+
+# Display the list of adaptors available in the Ensembl Variation API
+foreach my $adaptor (sort(keys(%$available_adaptors))) {
+  print $available_adaptors->{$adaptor}."\n";
+}
+</pre>
+
+<br /><hr />
+<h2 id="variant" style="font-size:large">Variants</h2>
+
+<h2 id="genome">Variants in the genome</h2>
+
+<p>
+One of the most important uses for the Variation database is to be able to get all variants in a certain region in the genome.
+Below is a simple commented perl script to illustrate how to get all variants in chromosome 25 in zebrafish.
 </p>
 
 <pre class="code sh_perl">
@@ -149,12 +181,30 @@ foreach my $vf (@{$vfs}){
         " in chromosome ", $slice-&gt;seq_region_name, " and position ", $vf-&gt;start, "-", $vf-&gt;end, "\n";
 }
 </pre>
+<div class="code sh_perl" style="margin-bottom:15px">
+  <div style="float:left;font-weight:bold">Used objects:</div>
+  <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
+    <span style="padding-left:0.9em">Adaptor objects</span>
+    <ul style="margin-bottom:0px">
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/core-api/classBio_1_1EnsEMBL_1_1DBSQL_1_1SliceAdaptor.html">SliceAdaptor</a> <i>(Core API)</i></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1VariationFeatureAdaptor.html">VariationFeatureAdaptor</a></li>
+    </ul>
+  </div>
+  <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
+    <span style="padding-left:0.9em">Main objects</span>
+    <ul style="margin-bottom:0px">
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/core-api/classBio_1_1EnsEMBL_1_1Slice.html">Slice</a> <i>(Core API)</i></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1VariationFeature.html">VariationFeature</a></li>
+    </ul>
+  </div>
+  <div style="clear:both"></div>
+</div>
 
 <br />
-<h2 id="Consequence">Consequence type of variations</h2>
+<h2 id="Consequence">Consequence type of variants</h2>
 
 <p>
-Another common use of the variation database is to retrieve the effects that
+Another common use of the Variation database is to retrieve the effects that
 variations have on a transcript. In human, Ensembl also provides <a
 href="http://sift.jcvi.org/" target="_blank">SIFT</a> and <a
 href="http://genetics.bwh.harvard.edu/pph/" target="_blank">PolyPhen</a>
@@ -178,8 +228,8 @@ href="/info/genome/variation/predicted_data.html#consequences">click here</a>.
 </ul>
 
 <p>
-In the example below, it is explained how to get all variations in a particular
-human transcript and see what is the effect of that variation in the transcript,
+In the example below, it is explained how to get all variants in a particular
+human transcript and see what is the effect of that variant in the transcript,
 including the PolyPhen and SIFT predictions. It is also shown how to retrieve
 the Sequence Ontology terms for the consequences.
 </p>
@@ -236,12 +286,33 @@ foreach my $tv (@{$trvs}) {
   }
 }
 </pre>
+<div class="code sh_perl" style="margin-bottom:15px">
+  <div style="float:left;font-weight:bold">Used objects:</div>
+  <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
+    <span style="padding-left:0.9em">Adaptor objects</span>
+    <ul style="margin-bottom:0px">
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/core-api/classBio_1_1EnsEMBL_1_1DBSQL_1_1TranscriptAdaptor.html">TranscriptAdaptor</a> <i>(Core API)</i></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1TranscriptVariationAdaptor.html">TranscriptVariationAdaptor</a></li>
+    </ul>
+  </div>
+  <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
+    <span style="padding-left:0.9em">Main objects</span>
+    <ul style="margin-bottom:0px">
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/core-api/classBio_1_1EnsEMBL_1_1Transcript.html">Transcript</a> <i>(Core API)</i></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1TranscriptVariation.html">TranscriptVariation</a></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1TranscriptVariationAllele.html">TranscriptVariationAllele</a></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1OverlapConsequence.html">OverlapConsequence</a></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1VariationFeature.html">VariationFeature</a></li>
+    </ul>
+  </div>
+  <div style="clear:both"></div>
+</div>
 
 <p>
-It is also possible to calculate consequence types for variations not currently in the database. In the example below, we create a VariationFeature object from scratch, given a slice and VariationFeatureAdaptor object, and use this to calculate the consequence of our new SNP. Here we use the aggregation methods in the TranscriptVariation object instead of retrieving each TranscriptVariationAllele and OverlapConsequence object.
+It is also possible to calculate consequence types for variants not currently in the database. In the example below, we create a VariationFeature object from scratch, given a slice and VariationFeatureAdaptor object, and use this to calculate the consequence of our new SNP. Here we use the aggregation methods in the TranscriptVariation object instead of retrieving each TranscriptVariationAllele and OverlapConsequence object.
 </p>
 <p>
-A script is also provided in ftp://ftp.ensembl.org/pub/misc-scripts/ that will calculate consequence types from a list of variations provided in an input file.
+A tool called <a href="/vep">Variant Effect Predictor (VEP)</a> is also available: this tool calculates consequence types from a list of variants provided in an input file.
 </p>
 
 <pre class="code sh_perl">
@@ -284,14 +355,34 @@ foreach my $con(@{$new_vf->get_all_TranscriptVariations}) {
   }
 }
 </pre>
+<div class="code sh_perl" style="margin-bottom:15px">
+  <div style="float:left;font-weight:bold">Used objects:</div>
+  <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
+    <span style="padding-left:0.9em">Adaptor objects</span>
+    <ul style="margin-bottom:0px">
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/core-api/classBio_1_1EnsEMBL_1_1DBSQL_1_1SliceAdaptor.html">SliceAdaptor</a> <i>(Core API)</i></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1VariationFeatureAdaptor.html">VariationFeatureAdaptor</a></li>
+    </ul>
+  </div>
+  <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
+    <span style="padding-left:0.9em">Main objects</span>
+    <ul style="margin-bottom:0px">
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/core-api/classBio_1_1EnsEMBL_1_1Slice.html">Slice</a> <i>(Core API)</i></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/core-api/classBio_1_1EnsEMBL_1_1Transcript.html">Transcript</a> <i>(Core API)</i></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1VariationFeature.html">VariationFeature</a></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1TranscriptVariation.html">TranscriptVariation</a></li>
+    </ul>
+  </div>
+  <div style="clear:both"></div>
+</div>
 
 
 <br />
 <h2 id="flanks">Variations, Flanking sequences and Genes</h2>
 
 <p>
-Below is a complete example on how to use the variation API to retrieve different data from the database. In this particular example, 
-we want to get, for a list of variation names, information about alleles, flanking sequences, locations, effects of variations
+Below is a complete example on how to use the Variation API to retrieve different data from the database. In this particular example, 
+we want to get, for a list of variant names, information about alleles, flanking sequences, locations, effects of variants
 in transcripts, position in the transcript (in case it has a coding effect) and genes containing the transcripts.
 </p>
 
@@ -307,7 +398,7 @@ $registry-&gt;load_registry_from_db(
     -user =&gt; 'anonymous'
 );
 
-my $va_adaptor = $registry-&gt;get_adaptor('human', 'variation', 'variation'); #get the different adaptors for the different objects needed
+my $va_adaptor = $registry-&gt;get_adaptor('human', 'variation', 'variation'); # get the different adaptors for the different objects needed
 my $vf_adaptor = $registry-&gt;get_adaptor('human', 'variation', 'variationfeature');
 my $gene_adaptor = $registry-&gt;get_adaptor('human', 'core', 'gene');
 
@@ -349,25 +440,45 @@ sub get_TranscriptVariations{
   print "\n";
 }
 </pre>
+<div class="code sh_perl" style="margin-bottom:15px">
+  <div style="float:left;font-weight:bold">Used objects:</div>
+  <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
+    <span style="padding-left:0.9em">Adaptor objects</span>
+    <ul style="margin-bottom:0px">
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/core-api/classBio_1_1EnsEMBL_1_1DBSQL_1_1GeneAdaptor.html">GeneAdaptor</a> <i>(Core API)</i></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1VariationAdaptor.html">VariationAdaptor</a></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1VariationFeatureAdaptor.html">VariationFeatureAdaptor</a></li>
+    </ul>
+  </div>
+  <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
+    <span style="padding-left:0.9em">Main objects</span>
+    <ul style="margin-bottom:0px">
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/core-api/classBio_1_1EnsEMBL_1_1Gene.html">Gene</a> <i>(Core API)</i></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/core-api/classBio_1_1EnsEMBL_1_1Transcript.html">Transcript</a> <i>(Core API)</i></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Variation.html">Variation</a></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1VariationFeature.html">VariationFeature</a></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1TranscriptVariation.html">TranscriptVariation</a></li>
+    </ul>
+  </div>
+  <div style="clear:both"></div>
+</div>
 
 
 <br />
-<h2 id="failed_variations">Failed variations</h2>
+<h2 id="failed_variants">Failed variants</h2>
 
 <p>
-	In the Variation pipeline, quality checks are performed in order to remove variations that contain errors or inconsistencies.
-	Prior to Ensembl release 61, much of the data related to these variations that failed the quality checks were deleted from the
-	database and no longer accessible. Starting from release 61, these variations are flagged as being failed but all related data
-	is kept in the database and can be retrieved via the API or the web interface.
+	In the Variation pipeline, quality checks are performed in order to remove variants that contain errors or inconsistencies.
+	These variants are flagged as being failed but all related data is kept in the database and can be retrieved via the API or the web interface.
 </p>
 <p>
-	The default API behaviour when fetching multiple objects is not to return data for variations that have been flagged as failed but
-	this can be modified in the Bio::EnsEMBL::Variation::DBSQL::DBAdaptor module by setting the include_failed_variations flag. This
+	The default API behaviour when fetching multiple objects is not to return data for variants that have been flagged as failed but
+	this can be modified in the Bio::EnsEMBL::Variation::DBSQL::DBAdaptor module by setting the <b>include_failed_variations</b> flag. This
 	will affect all adaptors that have been created	(and will be created) using the connection until the behaviour is explicitly changed
 	again (or the connection to the database is closed).
 </p>
 <p>
-	Below it is a simple commented perl script to illustrate how to get data related to variations that have been flagged as failed.
+	Below it is a simple commented perl script to illustrate how to get data related to variants that have been flagged as failed.
 </p>
 
 <pre class="code sh_perl">
@@ -390,25 +501,25 @@ my $slice = $slice_adaptor-&gt;fetch_by_region('chromosome','6',133017695,133161
 # Get adaptor to VariationFeature object
 my $vf_adaptor = $registry-&gt;get_adaptor('human', 'variation', 'variationfeature');
 
-# First, get all variations on the slice. The default behaviour is to exclude variations that have been flagged as failed
+# First, get all variations on the slice. The default behaviour is to exclude variants that have been flagged as failed
 my $vfs = $vf_adaptor-&gt;fetch_all_by_Slice($slice); 
 
-# Count the number of variations returned
-print "There are " . scalar(@{$vfs}) . " variations in the " . $slice->display_id() . " region\n";
+# Count the number of variants returned
+print "There are " . scalar(@{$vfs}) . " variants in the " . $slice->display_id() . " region\n";
 
 # Now, tell the DBAdaptor that we want the failed variations as well. We get the DBAdaptor via the db() subroutine in our adaptor
 $vf_adaptor->db->include_failed_variations(1);
 
-# Again, fetch all variations on the slice but this time include the failed variations
+# Again, fetch all variants on the slice but this time include the failed variants
 $vfs = $vf_adaptor-&gt;fetch_all_by_Slice($slice); 
 
-# Count the number of variations returned, this number is likely to be higher than when failed variations were omitted
-print "There are " . scalar(@{$vfs}) . " variations in the " . $slice->display_id() . " region\n";
+# Count the number of variants returned, this number is likely to be higher than when failed variants were omitted
+print "There are " . scalar(@{$vfs}) . " variants in the " . $slice->display_id() . " region\n";
 </pre>
 
 <p>
-	There are a few subroutines to query the failed status of a variation. In the code snippet below we loop over the
-	variations we got and find out how many are flagged as failed and why.
+	There are a few subroutines to query the failed status of a variant. In the code snippet below we loop over the
+	variants we got and find out how many are flagged as failed and why.
 </p>
 
 <pre class="code sh_perl">
@@ -424,19 +535,19 @@ foreach my $vf (@{$vfs}) {
 }
 
 # Print the results
-print "There are $failed variations on slice " . $slice->display_id() . " that have been flagged as failed:\n";
-map { print "\t" . $descriptions{$_} . " variations failed because " . $_ . "\n"; } keys(%descriptions);
+print "There are $failed variants on slice " . $slice->display_id() . " that have been flagged as failed:\n";
+map { print "\t" . $descriptions{$_} . " variants failed because " . $_ . "\n"; } keys(%descriptions);
 </pre>
 
 <p>
-	<span style="color:red;font-weight:bold">NOTE: </span>some fetch methods are unaffected by the include_failed_variations flag in DBAdaptor. These are methods that
-	return data related to specific variations, rather than a general batch fetch. For example, the fetch_by_dbID and
+	<span style="color:red;font-weight:bold">NOTE: </span>some fetch methods are unaffected by the <b>include_failed_variations</b> flag in DBAdaptor. These are methods that
+	return data related to specific variants, rather than a general batch fetch. For example, the fetch_by_dbID and
 	fetch_all_by_VariationFeatures methods in TranscriptVariationAdaptor will not be affected by the flag whereas the
 	fetch_all_by_Transcripts method will be.
 </p>
 <p>
-	Even though a variation has not been failed in the Variation pipeline, some of the alleles associated with it may have been. 
-	Variations having failed alleles are not themselves flagged as failed but we can query them to see if any associated alleles 
+	Even though a variant has not been failed in the Variation pipeline, some of the alleles associated with it may have been. 
+	Variants having failed alleles are not themselves flagged as failed but we can query them to see if any associated alleles 
 	have been flagged as failed.
 </p>
 
@@ -461,17 +572,35 @@ foreach my $vf (@{$vfs}) {
   }
 }
 </pre>
-
+<div class="code sh_perl" style="margin-bottom:15px">
+  <div style="float:left;font-weight:bold">Used objects:</div>
+  <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
+    <span style="padding-left:0.9em">Adaptor objects</span>
+    <ul style="margin-bottom:0px">
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/core-api/classBio_1_1EnsEMBL_1_1DBSQL_1_1SliceAdaptor.html">SliceAdaptor</a> <i>(Core API)</i></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1VariationFeatureAdaptor.html">VariationFeatureAdaptor</a></li>
+    </ul>
+  </div>
+  <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
+    <span style="padding-left:0.9em">Main objects</span>
+    <ul style="margin-bottom:0px">
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/core-api/classBio_1_1EnsEMBL_1_1Slice.html">Slice</a> <i>(Core API)</i></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1VariationFeature.html">VariationFeature</a></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Variation.html">Variation</a></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Allele.html">Allele</a></li>
+    </ul>
+  </div>
+  <div style="clear:both"></div>
+</div>
 
 <br />
 <h2 id="phenotype">Phenotype annotations</h2>
 
 <p>
-The Ensembl variation API provides some methods to retrieve phenotype data
+The Ensembl Variation API provides some methods to retrieve phenotype data
 associated with various Ensembl object types (variations, structural variations,
-genes, and QTLs). These data, stored into the Ensembl variation database, are
-imported from different sources (e.g. NHGRI GWAS catalog, OMIM, UniProt, Open
-Access GWAS Database, EGA, COSMIC, HGMD, ...).</p>
+genes, and QTLs). These data, stored into the Ensembl Variation database, are
+imported from different sources (e.g. NHGRI-EBI GWAS catalog, OMIM, UniProt, EGA, COSMIC, HGMD, ...).</p>
 <pre class="code sh_perl">
 use strict;
 use warnings;
@@ -506,12 +635,12 @@ foreach my $pf (@{$pf_adaptor->fetch_all_by_Variation($var)}) {
 description and an optional source name.</p>
 
 <pre class="code sh_perl">
-my $source_name = 'NHGRI_GWAS_catalog';
+my $source_name = 'NHGRI-EBI GWAS catalog';
 my $phenotype   = 'Cardiac hypertrophy';
 
 my $pf_adaptor = $registry->get_adaptor('homo_sapiens', 'variation', 'phenotypefeature');
  
-foreach my $pf (@{$pf_adaptor->fetch_all_by_phenotype_description_source_name($phenotype,$source_name)}) {
+foreach my $pf (@{$pf_adaptor->fetch_all_by_phenotype_description_source_name($phenotype, $source_name)}) {
   my $external_reference = $pf->external_reference;
   $external_reference =~ s/\// ID: /;
 
@@ -519,39 +648,48 @@ foreach my $pf (@{$pf_adaptor->fetch_all_by_phenotype_description_source_name($p
     "' in source ", $source_name," (", $external_reference,")\n";
 }		
 </pre>
-
-<p>By default, the API will only returns the variations with significant phenotype associations (low P value). 
-However the database stores also non significant phenotype associations.
-In order to fetch this data, an extra line in the code needs to be added after the creation of the adaptor:
-</p>  
-<pre class="code sh_perl">
-my $pf_adaptor = $registry->get_adaptor('homo_sapiens', 'variation', 'phenotypefeature');
-
-$pf_adaptor->db->include_non_significant_phenotype_associations(1); # Use the value 0 to revert to only significant associations.
-</pre>
+<div class="code sh_perl" style="margin-bottom:15px">
+  <div style="float:left;font-weight:bold">Used objects:</div>
+  <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
+    <span style="padding-left:0.9em">Adaptor objects</span>
+    <ul style="margin-bottom:0px">
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1VariationAdaptor.html">VariationAdaptor</a></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1PhenotypeFeatureAdaptor.html">PhenotypeFeatureAdaptor</a></li>
+    </ul>
+  </div>
+  <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
+    <span style="padding-left:0.9em">Main objects</span>
+    <ul style="margin-bottom:0px">
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Variation.html">Variation</a></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1PhenotypeFeature.html">PhenotypeFeature</a></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Phenotype.html">Phenotype</a></li>
+    </ul>
+  </div>
+  <div style="clear:both"></div>
+</div>
 
 
 <br />
-<h2 id="variation_sets">Variation sets</h2>
+<h2 id="variant_sets">Variant sets</h2>
 <p>
-	Variation sets <b>group variations that share some properties</b> i.e. from the same project/study, individual, phenotype, chip, to make it easier to retrieve these for analysis.<br />
-	<i>> For example, all the variations identified in the 1000 Genomes - phase 1 study have been grouped into one variation set ('1000 Genomes - All').</i>
+	Variant sets <b>group variants that share some properties</b> i.e. from the same project/study, individual, phenotype, chip, to make it easier to retrieve these for analysis.<br />
+	<i>> For example, all the variants identified in the 1000 Genomes - phase 3 study have been grouped into one variation set ('1000 Genomes 3 - All').</i>
 </p>
 <p>
 	Sets can be be part of supersets or divided into subsets depending on the  hierarchical relationships between them.<br />
-	<i>> For example, the set representing variations identified in the 1000 Genomes - phase 1 study is named 
-	'1000 genomes - All' and has 4 subsets based on population: '1000 Genomes - EUR', '1000 Genomes - ASN', '1000 Genomes - AMR', '1000 Genomes - AFR'.</i>
+	<i>> For example, the set representing variations identified in the 1000 Genomes - phase 3 study is named 
+	'1000 genomes 3 - All' and has 5 subsets based on population: '1000 Genomes 3 - EUR', '1000 Genomes 3 - EAS', '1000 Genomes 3 - SAS', '1000 Genomes 3 - AMR', '1000 Genomes 3 - AFR'.</i>
 </p>
+<p>A list of all the variant sets with their description is available on the <a href="/info/genome/variation/data_description.html#variation_sets">Variation Data Description</a> page.</p>
+
 <p>
-	A list of all the variation sets with their description is available on the <a href="/info/genome/variation/data_description.html#variation_sets">Variation Data Description</a> page.
-  <br /><span style="color:red;font-weight:bold">NOTE: </span>The variation sets and the populations are differents! e.g. The variation set associated with the European 1000 Genomes data
-	is "1000 Genomes - EUR", whereas the associated population is "1000GENOMES:phase_1_EUR".
+<span style="color:red;font-weight:bold">NOTE: </span>The variant sets and the populations are differents! e.g. The variant set associated with the European 1000 Genomes data is "1000 Genomes 3 - EUR", whereas the associated population is "1000GENOMES:phase_3:EUR".
 </p>
 
 <p>
-	In the Ensembl Variation API, variation sets are handled by the module <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1VariationSet.html">VariationSet</a>, and the accompanying 
+	In the Ensembl Variation API, variant sets are handled by the module <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1VariationSet.html">VariationSet</a>, and the accompanying 
 	adaptor module, <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1VariationSetAdaptor.html">VariationSetAdaptor</a>, that interfaces with the underlying database. A VariationSet has
-	a name attribute, a brief description and also a short name attribute. In the example below, we will connect to a human variation database, get a VariationSetAdaptor, fetch all available variation sets and 
+	a name attribute, a brief description and also a short name attribute. In the example below, we will connect to a Human Variation database, get a VariationSetAdaptor, fetch all available variant sets and 
 	print out their names and hierarchical relationships. 
 </p>
 <p>
@@ -570,7 +708,7 @@ $registry->load_registry_from_db(
   -user => 'anonymous'
 );
 
-# Get a VariationSetAdaptor on the human variation database
+# Get a VariationSetAdaptor on the Human Variation database
 my $vs_adaptor = $registry->get_adaptor('human','variation','variationset');
 </pre>
 <p>
@@ -581,7 +719,7 @@ my $vs_adaptor = $registry->get_adaptor('human','variation','variationset');
 # Get all top-level variation sets
 my $top_vss = $vs_adaptor->fetch_all_top_VariationSets();
 
-# Loop over the top level variation sets and recursively print the subsets
+# Loop over the top level variant sets and recursively print the subsets
 foreach my $top_vs (@{$top_vss}) {
   print_set($top_vs);
 }
@@ -603,18 +741,37 @@ sub print_set {
   }
 }
 </pre>
+<div class="code sh_perl" style="margin-bottom:15px">
+  <div style="float:left;font-weight:bold">Used objects:</div>
+  <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
+    <span style="padding-left:0.9em">Adaptor objects</span>
+    <ul style="margin-bottom:0px">
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1VariationSetAdaptor.html">VariationSetAdaptor</a></li>
+    </ul>
+  </div>
+  <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
+    <span style="padding-left:0.9em">Main objects</span>
+    <ul style="margin-bottom:0px">
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1VariationSet.html">VariationSet</a></li> 
+    </ul>
+  </div>
+  <div style="clear:both"></div>
+</div>
+
+
 <p>
-	Running the code in the example above on the human variation database produces a table similar to the one on
+	Running the code in the example above on the Human Variation database produces a table similar to the one on
 	the <a href="/info/genome/variation/data_description.html#variation_sets">Variation Data Description</a> page.
 </p>
 <p>
-	In order to get objects for the variations assigned to a variation set, we use the get_Variation_Iterator method. Note that rather than returning a reference to a list of all variation objects, this 
+	In order to get objects for the variants assigned to a variation set, we use the get_Variation_Iterator method. Note that rather than returning a reference to a list of all variation objects, this 
 	returns an <a href="/info/docs/Doxygen/core-api/classBio_1_1EnsEMBL_1_1Utils_1_1Iterator.html">Iterator</a> object. The Iterator allows you to iterate over large numbers of objects without trying to fit them all into
-	memory at once which could otherwise easily cause your script to crash. The main methods we will use on the iterator are the has_next() and next() methods. In the example below, we fetch a variation set that contains  
-	variations that have been linked to phenotypes and print the first 10 examples. Note that getting variations from a variation set that has subsets below it automatically returns the variations from the subsets.  
+	memory at once which could otherwise easily cause your script to crash. The main methods we will use on the iterator are the has_next() and next() methods. In the example below, we fetch a variant set that contains  
+	variants that have been linked to phenotypes and print the first 10 examples. Note that getting variants from a variant set that has subsets below it automatically returns the variants from the subsets.  
 </p>
+
 <pre class="code sh_perl">
-# Get the variation set for the phenotype-associated variants.
+# Get the variant set for the phenotype-associated variants.
 my $vs = $vs_adaptor->fetch_by_short_name('ph_variants');
 
 printf("\%s (\%s):\n\t\%s\n",$vs->name(),$vs->short_name(),$vs->description());
@@ -626,11 +783,11 @@ my $it = $vs->get_Variation_Iterator();
 # Get the first 10 examples and print some data from them
 while ($fetched &lt; $limit &amp;&amp; $it->has_next()) {
   
-  # Print the name of the variation
+  # Print the name of the variant
   my $var = $it->next();
   printf("\t\%s has been found to be associated with:\n",$var->name());
   
-  # Get the PhenotypeFeature objects for the variation
+  # Get the PhenotypeFeature objects for the variant
   my $pfs = $var->get_all_PhenotypeFeatures();
   
   # Loop over the annotations and print the phenotypes
@@ -645,13 +802,36 @@ while ($fetched &lt; $limit &amp;&amp; $it->has_next()) {
   $fetched++;
 }
 </pre>
+<div class="code sh_perl" style="margin-bottom:15px">
+  <div style="float:left;font-weight:bold">Used objects:</div>
+  <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
+    <span style="padding-left:0.9em">Adaptor objects</span>
+    <ul style="margin-bottom:0px">
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1VariationSetAdaptor.html">VariationSetAdaptor</a></li>
+    </ul>
+  </div>
+  <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
+    <span style="padding-left:0.9em">Main objects</span>
+    <ul style="margin-bottom:0px">
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Phenotype.html">Phenotype</a></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1PhenotypeFeature.html">PhenotypeFeature</a></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Study.html">Study</a></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Variation.html">Variation</a></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1VariationSet.html">VariationSet</a></li>
+      
+    </ul>
+  </div>
+  <div style="clear:both"></div>
+</div>
+
+
 <p>
-	You can also use Slices to retrieve VariationFeatures belonging to a desired variation set in a particular genomic region. 
-	In the example below, we fetch all VariationFeatures discovered by the third 1000 genomes pilot study on the RIC8A gene.
+	You can also use Slices to retrieve VariationFeatures belonging to a desired variant set in a particular genomic region. 
+	In the example below, we fetch all VariationFeatures discovered by the 1000 Genomes Phase 3 Project on the RIC8A gene.
 </p>
 <pre class="code sh_perl">
 # Get the variation set object
-$vs = $vs_adaptor->fetch_by_short_name('1kg_hct');
+my $vs = $vs_adaptor->fetch_by_short_name('1kg_3');
 
 # Get a gene adaptor and the gene object for the RIC8A gene
 my $gene_adaptor = $registry->get_adaptor('human','core','gene');
@@ -673,8 +853,32 @@ foreach my $vf (@{$vfs}) {
   print $vf->variation_name, ': ', join(', ', @hgvs_notations), "\n";
 }
 </pre>
+<div class="code sh_perl" style="margin-bottom:15px">
+  <div style="float:left;font-weight:bold">Used objects:</div>
+  <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
+    <span style="padding-left:0.9em">Adaptor objects</span>
+    <ul style="margin-bottom:0px">
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/core-api/classBio_1_1EnsEMBL_1_1DBSQL_1_1GeneAdaptor.html">GeneAdaptor</a> <i>(Core API)</i></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1VariationSetAdaptor.html">VariationSetAdaptor</a></li>
+    </ul>
+  </div>
+  <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
+    <span style="padding-left:0.9em">Main objects</span>
+    <ul style="margin-bottom:0px">
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/core-api/classBio_1_1EnsEMBL_1_1Gene.html">Gene</a> <i>(Core API)</i></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/core-api/classBio_1_1EnsEMBL_1_1Slice.html">Slice</a> <i>(Core API)</i></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1TranscriptVariation.html">TranscriptVariation</a></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1VariationFeature.html">VariationFeature</a></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1VariationSet.html">VariationSet</a></li>
+      
+    </ul>
+  </div>
+  <div style="clear:both"></div>
+</div>
+
+
 <p>
-The variation sets can also be retrieved from the structural variations.
+The variant sets can also be retrieved from the structural variants.
 </p>
 <pre class="code sh_perl">
 # Get the StructuralVariation object
@@ -684,7 +888,7 @@ my $sv = $sv_adaptor->fetch_by_name('esv2663683');
 # Get the structural variation features
 my $svfs = $sv->get_all_StructuralVariationFeatures();
 
-# Loop over the structural variation features and print the corresponding variation set(s)
+# Loop over the structural variation features and print the corresponding variant set(s)
 foreach my $svf (@{$svfs}) {
   my $vss = $svf->get_all_VariationSets();
   foreach my $vs (@{$vss}) {
@@ -692,6 +896,25 @@ foreach my $svf (@{$svfs}) {
   }
 }
 </pre>
+<div class="code sh_perl" style="margin-bottom:15px">
+  <div style="float:left;font-weight:bold">Used objects:</div>
+  <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
+    <span style="padding-left:0.9em">Adaptor objects</span>
+    <ul style="margin-bottom:0px">
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1StructuralVariationAdaptor.html">StructuralVariationAdaptor</a></li>
+    </ul>
+  </div>
+  <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
+    <span style="padding-left:0.9em">Main objects</span>
+    <ul style="margin-bottom:0px">
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1StructuralVariation.html">StructuralVariation</a></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1StructuralVariationFeature.html">StructuralVariationFeature</a></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1VariationSet.html">VariationSet</a></li>
+      
+    </ul>
+  </div>
+  <div style="clear:both"></div>
+</div>
 
 
 <br /><hr />
@@ -700,7 +923,7 @@ foreach my $svf (@{$svfs}) {
 <div style="width:800px" class="info">
   <h3>Requirement for 1000 Genomes data</h3>
   <div class="message-pad">
-    <p>1000 Genomes project phase 3 data is accessed via VCF files stored on Ensembl's FTP server. The API makes this access seamless, though it requires you install some extra software dependencies detailed on the <a href="/info/docs/api/api_installation.html">API installation page</a>. See also this <a href="http://www.ensembl.info/blog/2015/06/18/1000-genomes-phase-3-frequencies-genotypes-and-ld-data/" rel="external">blog post</a>.
+    <p>1000 Genomes Project Phase 3 data is accessed via VCF files stored on Ensembl's FTP server. The API makes this access seamless, though it requires you install some extra software dependencies detailed on the <a href="/info/docs/api/api_installation.html">API installation page</a>. See also this <a href="http://www.ensembl.info/blog/2015/06/18/1000-genomes-phase-3-frequencies-genotypes-and-ld-data/" rel="external">blog post</a>.
     </p>
   </div>
 </div>
@@ -708,7 +931,7 @@ foreach my $svf (@{$svfs}) {
 <h2 id="alleles">Alleles and frequencies</h2>
 
 <p>
-Most variations in the Ensembl Variation database have associated allele frequencies. Each allele object associated with a variation represents an observation of a variant allele in a given population, and may have an associated frequency. Populations are also represented as objects.
+Most variants in the Ensembl Variation database have associated allele frequencies. Each allele object associated with a variant represents an observation of a variant allele in a given population, and may have an associated frequency. Populations are also represented as objects.
 </p>
 
 <pre class="code sh_perl">
@@ -736,6 +959,23 @@ foreach my $allele (@{$alleles}) {
   printf("Allele %s has frequency: %s in population %s.\n", $allele_string, $frequency, $population_name);
 }
 </pre>
+<div class="code sh_perl" style="margin-bottom:15px">
+  <div style="float:left;font-weight:bold">Used objects:</div>
+  <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
+    <span style="padding-left:0.9em">Adaptor objects</span>
+    <ul style="margin-bottom:0px">
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1VariationAdaptor.html">VariationAdaptor</a></li>
+  </div>
+  <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
+    <span style="padding-left:0.9em">Main objects</span>
+    <ul style="margin-bottom:0px">
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Allele.html">Allele</a></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Population.html">Population</a></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Variation.html">Variation</a></li>
+    </ul>
+  </div>
+  <div style="clear:both"></div>
+</div>
 
 <p>
 <b>NB:</b> to retrieve external data e.g. from the 1000 Genomes phase 3 in human, remember to add the following code before making a call to retrieve alleles, genotypes or LD data:
@@ -749,10 +989,10 @@ This instructs the API to integrate data fetched from VCF files alongside data f
 
 
 <br />
-<h2 id="genotypes">Genotypes</h2>
+<h2 id="sample_genotypes">Sample genotypes</h2>
 
 <p>
-Many variations in the Ensembl Variation database, especially those genotyped in the HapMap or 1000 Genomes projects, have associated genotypes. Genotypes are stored per sample as SampleGenotype objects, and are associated with a Variation and Sample object. They can be retrieved from a SampleGenotypeAdaptor, or directly from a Variation object.
+Many variants in the Ensembl Variation database, especially those genotyped in the HapMap or 1000 Genomes projects, have associated genotypes. Genotypes are stored per sample as <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1SampleGenotype.html">SampleGenotype</a> objects, and are associated with a <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Variation.html">Variation</a> and <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Sample.html">Sample</a> object. They can be retrieved from a <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1SampleGenotypeAdaptor.html">SampleGenotypeAdaptor</a>, or directly from a <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Variation.html">Variation</a> object.
 </p>
 
 <pre class="code sh_perl">
@@ -780,6 +1020,74 @@ foreach my $genotype (@{$genotypes}) {
   print "Sample ", $genotype-&gt;sample->name, " has genotype ", $genotype-&gt;genotype_string, "\n";
 }
 </pre>
+<div class="code sh_perl" style="margin-bottom:15px">
+  <div style="float:left;font-weight:bold">Used objects:</div>
+  <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
+    <span style="padding-left:0.9em">Adaptor objects</span>
+    <ul style="margin-bottom:0px">
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1VariationAdaptor.html">VariationAdaptor</a></li>
+  </div>
+  <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
+    <span style="padding-left:0.9em">Main objects</span>
+    <ul style="margin-bottom:0px">
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Sample.html">Sample</a></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1SampleGenotype.html">SampleGenotype</a></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Variation.html">Variation</a></li>
+    </ul>
+  </div>
+  <div style="clear:both"></div>
+</div>
+
+
+<br />
+<h2 id="population_genotypes">Population genotypes</h2>
+
+<p>
+Many variants in the Ensembl Variation database, especially those genotyped in the HapMap or 1000 Genomes projects, have associated genotypes at the population level. Population genotypes are stored as <a href="/info/docs/Doxygen/variation-api/classBio_3_1EnsEMBL_1_1Variation_1_1PopulationGenotype.html">PopulationGenotype</a> objects, and are associated with a <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Variation.html">Variation</a> and a <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Population.html">Population</a> object. They can be retrieved from a <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1PopulationGenotypeAdaptor.html">PopulationGenotypeAdaptor</a>, or directly from a <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Variation.html">Variation</a> object.
+</p>
+
+<pre class="code sh_perl">
+use strict;
+use warnings;
+use Bio::EnsEMBL::Registry;
+
+my $registry = 'Bio::EnsEMBL::Registry';
+
+$registry-&gt;load_registry_from_db(
+    -host =&gt; 'ensembldb.ensembl.org',
+    -user =&gt; 'anonymous'
+);
+
+my $variation_adaptor = $registry-&gt;get_adaptor('homo_sapiens', 'variation', 'variation');
+
+my $variation = $variation_adaptor-&gt;fetch_by_name('rs1333049');
+
+# OPTIONAL: uncomment this line to retrieve 1000 genomes phase 3 data also
+# $variation_adaptor->db->use_vcf(1);
+
+my $genotypes = $variation-&gt;get_all_PopulationGenotypes();
+
+foreach my $genotype (@{$genotypes}) {
+  print "Population ", $genotype-&gt;population-&gt;name, " has genotype ", $genotype-&gt;genotype_string, " with the frequency ", $genotype-&gt;frequency, "\n";
+}
+</pre>
+<div class="code sh_perl" style="margin-bottom:15px">
+  <div style="float:left;font-weight:bold">Used objects:</div>
+  <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
+    <span style="padding-left:0.9em">Adaptor objects</span>
+    <ul style="margin-bottom:0px">
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1VariationAdaptor.html">VariationAdaptor</a></li>
+  </div>
+  <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
+    <span style="padding-left:0.9em">Main objects</span>
+    <ul style="margin-bottom:0px">
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Population.html">Population</a></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1PopulationGenotype.html">PopulationGenotype</a></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Variation.html">Variation</a></li>
+    </ul>
+  </div>
+  <div style="clear:both"></div>
+</div>
 
 <br />
 <h2 id="ld">LD calculation</h2>
@@ -829,14 +1137,35 @@ foreach my $r_square (@{$ldFeatureContainer-&gt;get_all_r_square_values}){
   }
 }
 </pre>
+<div class="code sh_perl" style="margin-bottom:15px">
+  <div style="float:left;font-weight:bold">Used objects:</div>
+  <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
+    <span style="padding-left:0.9em">Adaptor objects</span>
+    <ul style="margin-bottom:0px">
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/core-api/classBio_1_1EnsEMBL_1_1DBSQL_1_1SliceAdaptor.html">SliceAdaptor</a> <i>(Core API)</i></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1LDFeatureContainerAdaptor.html">LDFeatureContainerAdaptor</a></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1PopulationAdaptor.html">PopulationAdaptor</a></li>
+    </ul>
+  </div>
+  <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
+    <span style="padding-left:0.9em">Main objects</span>
+    <ul style="margin-bottom:0px">
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/core-api/classBio_1_1EnsEMBL_1_1Slice.html">Slice</a> <i>(Core API)</i></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1LDFeatureContainer.html">LDFeatureContainer</a></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Population.html">Population</a></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1VariationFeature.html">VariationFeature</a></li>
+    </ul>
+  </div>
+  <div style="clear:both"></div>
+</div>
 
 <p>
 Please note the following warning <code> MSG: variation features have no pairwise ld information </code> is returned when there is no data in the LDFeatureContainer structure for the specified pair of VariationFeature objects. Here are some reasons why this may happen:
 </p>
 <ul>
 <li>the LDFeatureContainer does not span the region contained by one or both VariationFeature objects specified</li>
-<li>there are no genotypes for one or both variations, meaning no LD can be calculated</li>
-<li>one or both variations is non-variant in the specified population (i.e. has a minor allele frequency of 0)</li>
+<li>there are no genotypes for one or both variants, meaning no LD can be calculated</li>
+<li>one or both variants is non-variant in the specified population (i.e. has a minor allele frequency of 0)</li>
 <li>the estimated r<sup>2</sup> value is lower than the cut-off threshold in the calculation software (the threshold is 0.05)</li>
 </ul>
 <p> Looking at other associated data will help to narrow down the reason. If there are variants in the region spanned by the LDFeatureContainer 
@@ -847,7 +1176,7 @@ with genotypes with a minor allele frequency greater than zero, then assume the 
 <h2 id="strains">Specific strain information</h2>
 
 <p>
-With the apparition of the new technologies, one of the new functionalities that the variation API has is the possibility to
+With the apparition of the new technologies, one of the new functionalities that the Ensembl Variation API has is the possibility to
 work with your specific strain as if it was the reference one, and compare it against others. In the example, we create a StrainSlice
 object for a region in the mouse strain A/J and compare it against the reference sequence.
 </p>
@@ -881,6 +1210,23 @@ foreach my $diff (@differences){
   print "Locus ", $diff-&gt;seq_region_start, "-", $diff-&gt;seq_region_end, ", A/J's alleles: ", $diff-&gt;allele_string, "\n";
 }
 </pre>
+<div class="code sh_perl" style="margin-bottom:15px">
+  <div style="float:left;font-weight:bold">Used objects:</div>
+  <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
+    <span style="padding-left:0.9em">Adaptor objects</span>
+    <ul style="margin-bottom:0px">
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/core-api/classBio_1_1EnsEMBL_1_1DBSQL_1_1SliceAdaptor.html">SliceAdaptor</a> <i>(Core API)</i></li>
+    </ul>
+  </div>
+  <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
+    <span style="padding-left:0.9em">Main objects</span>
+    <ul style="margin-bottom:0px">
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/core-api/classBio_1_1EnsEMBL_1_1Slice.html">Slice</a> <i>(Core API)</i></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1AlleleFeature.html">AlleleFeature</a></li>
+    </ul>
+  </div>
+  <div style="clear:both"></div>
+</div>
 
 
 <br /><hr />
@@ -888,7 +1234,7 @@ foreach my $diff (@differences){
 
 <h2 id="structural">Structural variations</h2>
 <p>
-The Ensembl variation database also stores information about structural variations. These data are imported from the DGVa (Database of Genomic Variants archive). Structural variants are remapped to the current genome assembly using the $slice->project() method from the Ensembl Core API, allowing for one gap in the resultant mapping.</p>
+The Ensembl Variation database also stores information about structural variants. These data are imported from the DGVa (Database of Genomic Variants archive). Structural variants are remapped to the current genome assembly using the $slice->project() method from the Ensembl Core API, allowing for one gap in the resultant mapping.</p>
 
 <pre class="code sh_perl">
 use strict;
@@ -915,7 +1261,7 @@ print $sv->variation_name, " ",  $sv->var_class, " (SO term: ", $sv->class_SO_te
 
 # Get Study information
 if ($sv->study) {
-  print "This structural variation comes from the study ", $sv->source_name, "-", $sv->study->name, ": ", $sv->study->description, "\n";
+  print "This structural variant comes from the study ", $sv->source_name, "-", $sv->study->name, ": ", $sv->study->description, "\n";
 }
 </pre>
 <p>Like the variation, you can fetch the structural variations using a Slice.</p>
@@ -938,7 +1284,7 @@ foreach my $svf (@$svfs) {
 You can also retrieve all the supporting evidences associated to a structural variant.
 </p>
 <pre class="code sh_perl">
-# Get adaptor to StructuralVariation object from variation
+# Get adaptor to StructuralVariation object from the Ensembl Variation API
 my $sva = $reg->get_adaptor("human", "variation", "structuralvariation");
 
 # Get the StructuralVariation object
@@ -951,6 +1297,27 @@ foreach my $ssv (@$ssvs) {
   print $ssv->variation_name, " ",  $ssv->var_class, " (SO term: ", $ssv-&gt;class_SO_term, ")\n";
 }
 </pre>
+<div class="code sh_perl" style="margin-bottom:15px">
+  <div style="float:left;font-weight:bold">Used objects:</div>
+  <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
+    <span style="padding-left:0.9em">Adaptor objects</span>
+    <ul style="margin-bottom:0px">
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/core-api/classBio_1_1EnsEMBL_1_1DBSQL_1_1SliceAdaptor.html">SliceAdaptor</a> <i>(Core API)</i></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1StructuralVariationAdaptor.html">StructuralVariationAdaptor</a></li>
+    </ul>
+  </div>
+  <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
+    <span style="padding-left:0.9em">Main objects</span>
+    <ul style="margin-bottom:0px">
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/core-api/classBio_1_1EnsEMBL_1_1Slice.html">Slice</a> <i>(Core API)</i></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Study.html">Study</a></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1StructuralVariation.html">StructuralVariation</a></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1StructuralVariationFeature.html">StructuralVariationFeature</a></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1SupportingStructuralVariation.html">SupportingStructuralVariation</a></li>
+    </ul>
+  </div>
+  <div style="clear:both"></div>
+</div>
 
 
 <br /><hr />
@@ -960,7 +1327,7 @@ foreach my $ssv (@$ssvs) {
 
 <p>
 Sometimes an adaptor method may return more objects than can fit into memory at once, and for such
-cases the variation API provides methods to fetch Iterator objects instead of the usual array reference.
+cases the Ensembl Variation API provides methods to fetch Iterator objects instead of the usual array reference.
 An Iterator is an object which allows you to iterate over the entire set of objects fetched by the 
 adaptor without loading them all into memory at once, by calling the next() method to fetch each object
 in turn. You can tell when you have finished iterating over the set of objects
@@ -975,7 +1342,7 @@ see the Iterator API documentation for full details.
 <p>
 Some example code using Iterators to fetch somatic mutations from the VariationAdaptor is listed below.
 After the first fetch_Iterator_somatic() call we just iterate over all somatic mutations found in the
-variation database, using next() to fetch each object, and has_next() to check when we are done. In the 
+Ensembl Variation database, using next() to fetch each object, and has_next() to check when we are done. In the 
 second call we filter the set of mutations down to only those which have
 a source of 'COSMIC' using the grep() method. To do this we pass an anonymous subroutine as the only 
 argument to grep() which checks each Variation object in turn (set to $_ for convenience in the 
@@ -1030,6 +1397,22 @@ while ($cosmic_name_iter-&gt;has_next()) {
   print $cosmic_name_iter-&gt;next(), "\n";
 }
 </pre>
+<div class="code sh_perl" style="margin-bottom:15px">
+  <div style="float:left;font-weight:bold">Used objects:</div>
+  <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
+    <span style="padding-left:0.9em">Adaptor objects</span>
+    <ul style="margin-bottom:0px">
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1VariationAdaptor.html">VariationAdaptor</a></li>
+    </ul>
+  </div>
+  <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
+    <span style="padding-left:0.9em">Main objects</span>
+    <ul style="margin-bottom:0px">
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Variation.html">Variation</a></li>
+    </ul>
+  </div>
+  <div style="clear:both"></div>
+</div>
 
 
 <br />
@@ -1050,6 +1433,25 @@ my @sv_features = @{$slice->get_all_StructuralVariationFeatures()};
 print "Number of variations: ", scalar @var_features, "\n";
 print "Number of structural variations: ", scalar @sv_features, "\n";
 </pre>
+<div class="code sh_perl" style="margin-bottom:15px">
+  <div style="float:left;font-weight:bold">Used objects:</div>
+  <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
+    <span style="padding-left:0.9em">Adaptor objects</span>
+    <ul style="margin-bottom:0px">
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/core-api/classBio_1_1EnsEMBL_1_1DBSQL_1_1SliceAdaptor.html">SliceAdaptor</a> <i>(Core API)</i></li>
+    </ul>
+  </div>
+  <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
+    <span style="padding-left:0.9em">Main objects</span>
+    <ul style="margin-bottom:0px">
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/core-api/classBio_1_1EnsEMBL_1_1Slice.html">Slice</a> <i>(Core API)</i></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1StructuralVariationFeature.html">StructuralVariationFeature</a></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1VariationFeature.html">VariationFeature</a></li>
+    </ul>
+  </div>
+  <div style="clear:both"></div>
+</div>
+
 <p>It is also possible to fetch all the variation features overlapping a structural variation feature, using a Slice through a structural variation feature object.</p>
 
 <pre class="code sh_perl">
@@ -1068,6 +1470,24 @@ foreach my $svf (@{$sv->get_all_StructuralVariationFeatures()}){
   print "Number of variations: ", scalar (@var_features), "\n";
 }
 </pre>
+<div class="code sh_perl" style="margin-bottom:15px">
+  <div style="float:left;font-weight:bold">Used objects:</div>
+  <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
+    <span style="padding-left:0.9em">Adaptor objects</span>
+    <ul style="margin-bottom:0px">
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1StructuralVariationAdaptor.html">StructuralVariationAdaptor</a></li>
+    </ul>
+  </div>
+  <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
+    <span style="padding-left:0.9em">Main objects</span>
+    <ul style="margin-bottom:0px">
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/core-api/classBio_1_1EnsEMBL_1_1Slice.html">Slice</a> <i>(Core API)</i></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1StructuralVariationFeature.html">StructuralVariationFeature</a></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1VariationFeature.html">VariationFeature</a></li>
+    </ul>
+  </div>
+  <div style="clear:both"></div>
+</div>
 
 <p>And you can do the same with the variation features, for example.</p>
 <pre class="code sh_perl">
@@ -1086,7 +1506,25 @@ foreach my $vf (@{$var->get_all_VariationFeatures()}){
   print "Number of structural variations: ", scalar (@svf_features), "\n";
 }
 </pre>
-
+<div class="code sh_perl" style="margin-bottom:15px">
+  <div style="float:left;font-weight:bold">Used objects:</div>
+  <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
+    <span style="padding-left:0.9em">Adaptor objects</span>
+    <ul style="margin-bottom:0px">
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1VariationAdaptor.html">VariationAdaptor</a></li>
+    </ul>
+  </div>
+  <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
+    <span style="padding-left:0.9em">Main objects</span>
+    <ul style="margin-bottom:0px">
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/core-api/classBio_1_1EnsEMBL_1_1Slice.html">Slice</a> <i>(Core API)</i></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1StructuralVariationFeature.html">StructuralVariationFeature</a></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Variation.html">Variation</a></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1VariationFeature.html">VariationFeature</a></li>
+    </ul>
+  </div>
+  <div style="clear:both"></div>
+</div>
 
 <br />
 <h2 id="help">Further help</h2>

@@ -28,6 +28,9 @@ use strict;
 
 sub update_conf {
 
+  $SiteDefs::ENSEMBL_HIVE_ERROR_MESSAGE         = '';                                               # Error message to be displayed in case code throws a HiveError exception (can be HTML)
+  $SiteDefs::ENSEMBL_HIVE_DB_NOT_AVAILABLE      = 0;                                                # Flag if on, jobs will not get submitted to hive db (ENSEMBL_HIVE_ERROR_MESSAGE is displayed when submitting jobs)
+
   $SiteDefs::ENSEMBL_TOOLS_JOB_DISPATCHER       = { 
                                                     'Blast'             => 'Hive', 
                                                     'VEP'               => 'Hive', 
@@ -36,6 +39,8 @@ sub update_conf {
   $SiteDefs::ENSEMBL_HIVE_HOSTS                 = [];                                               # For LOCAL, the machine that runs the beekeeper unless it's same as the web server
                                                                                                     # For LSF, list of hosts corresponding to the queues for all jobs plus the machine where
                                                                                                     # beekeeper is running unless it's same as the web server
+                                                                                                    # Leave it blank if code is located on a shared disk to share between the web server and the machine(s)
+                                                                                                    # running beekeeper
   $SiteDefs::ENSEMBL_HIVE_HOSTS_CODE_LOCATION   = $SiteDefs::ENSEMBL_SERVERROOT;                    # path from where hive hosts can access ensembl code (same as web root for jobs running on local machine)
   $SiteDefs::ENSEMBL_TOOLS_PIPELINE_PACKAGE     = 'EnsEMBL::Web::PipeConfig::Tools_conf';           # package read by init_pipeline.pl script from hive to create the hive database
   $ENV{'EHIVE_ROOT_DIR'}                        = $SiteDefs::ENSEMBL_SERVERROOT.'/ensembl-hive/';   # location from there hive scripts on the web server (not the hive hosts) can access the hive API
@@ -51,6 +56,7 @@ sub update_conf {
     ensembl-webcode
     public-plugins
     sanger-plugins
+    VEP_plugins
   );
 
   $SiteDefs::ENSEMBL_TOOLS_PERL_BIN             = '/usr/bin/perl';                                  # Path to perl bin for machine running the job
@@ -87,9 +93,16 @@ sub update_conf {
     '--port'        => undef,                                                                       # Defaults to 5306
     '--fork'        => 4,                                                                           # Enable forking, using 4 forks
   };
+
+  $SiteDefs::ENSEMBL_VEP_PLUGIN_DATA_DIR        = "/path/to/vep/plugin_data";                       # path to vep plugin data files on the LSF host (or local machine if job running locally)
+  $SiteDefs::ENSEMBL_VEP_PLUGIN_DIR             = "VEP_plugins";                                    # path to vep plugin code (if does not start with '/', it's treated relative to ENSEMBL_HIVE_HOSTS_CODE_LOCATION)
+
   $SiteDefs::ENSEMBL_VEP_SCRIPT                 = 'ensembl-tools/scripts/variant_effect_predictor/variant_effect_predictor.pl';
                                                                                                     # location of the VEP script accessible to the local machine or LSF host running the job
   $SiteDefs::ENSEMBL_VEP_TO_WEB_SCRIPT          = 'public-plugins/tools/utils/vep_to_web.pl';       # location of the VEP script accessible to the local machine or LSF host to parse VCF results
+
+  push @{$SiteDefs::ENSEMBL_VEP_PLUGIN_CONFIG_FILES}, $SiteDefs::ENSEMBL_SERVERROOT.'/public-plugins/tools_hive/conf/vep_plugins_hive_config.txt';
+                                                                                                    # add extra hive specific configs required to run vep plugins
 
   # Assembly Converter configs
   $SiteDefs::ENSEMBL_AC_RUN_LOCAL               = 1;                                                # Flag if on, will run AC jobs on LOCAL meadow

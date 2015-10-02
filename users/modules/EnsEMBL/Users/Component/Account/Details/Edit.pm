@@ -37,11 +37,12 @@ sub content {
   my $js_change_email = $self->JS_CLASS_CHANGE_EMAIL;
   my $email_note      = '';
 
-  $_->type eq 'local' && $_->identity eq $email and $email_note = sprintf('You use this email to login to %s.<br />', $self->site_name) and last for @{$user->logins};
+  $_->type eq 'local' && $_->identity eq $email and $email_note = sprintf('<p>You use this email to login to %s.</p>', $self->site_name) and last for @{$user->logins};
 
   $form->add_field({
+    'field_class'   => 'user-email',
     'label'         => 'Email Address',
-    'notes'         => qq(<div class="hidden $js_change_email">${email_note}An email will be sent to the new address for verification purposes if email address is changed.</div>),
+    'notes'         => qq(<div class="hidden $js_change_email">${email_note}<p>An email will be sent to the new address for verification purposes if email address is changed.</p></div>),
     'elements'      => [{
       'type'          => 'noedit',
       'element_class' => $js_change_email,

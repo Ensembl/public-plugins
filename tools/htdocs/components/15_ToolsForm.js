@@ -140,6 +140,16 @@ Ensembl.Panel.ToolsForm = Ensembl.Panel.ContentTools.extend({
     this.toggleForm(false, true);
   },
 
+  ticketNotSubmitted: function (error) {
+  /*
+   * Method called if ticket submission fails
+   */
+    this.showError(error.message, error.heading);
+    if (error.stage === 'dispatcher') {
+      Ensembl.EventManager.trigger('toolsRefreshActivitySummary', true, true, false);
+    }
+  },
+
   toggleForm: function(flag, toggleCloseButton) {
   /*
    * Shows/hides the form, and does the opposite to the 'add new' link

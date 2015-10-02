@@ -51,8 +51,8 @@ sub job_summary_section {
 }
 
 sub ticket_buttons {
-  my ($self, $ticket) = @_;
-  my $buttons = $self->SUPER::ticket_buttons($ticket);
+  my ($self, $ticket, $is_owned_ticket) = @_;
+  my $buttons = $self->SUPER::ticket_buttons($ticket, $is_owned_ticket);
   my ($job)   = $ticket && $ticket->job;
 
   if ($job && $job->dispatcher_status eq 'done') {

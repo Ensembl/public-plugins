@@ -368,6 +368,53 @@ enter your data and alter various options.</p>
 </div>
 
 <hr/>
+
+<h2 id="plugins"> Plugins </h2>
+
+<div class="column-wrapper">
+    <div class="column-two">
+        <div class="column-left">
+          <p>
+            The VEP can be extended beyond its core functionality using a
+            system of <a href="../script/vep_plugins.html">plugins</a>.
+            These are additional chunks of code that get executed during
+            the VEP job, and can be used to retrieve data, run
+            algorithms and modify the VEP's output in other ways.
+          </p>
+
+          <p>
+            A number of these plugins are available for use via the VEP's
+            web interface; <sup style="color:grey">(p)</sup> is used to
+            indicate these on the input form. Some plugins may require
+            you to select additional options; these options are revealed
+            on the form and highlighted when you enable the plugin.
+          </p>
+
+          <p>
+            Hover the mouse over a plugin's form label to see a summary
+            of its functionality.
+          </p>
+
+          <p>
+            Fields added by plugins appear after the VEP's "core" fields
+            in the results page, and can be filtered on in the same way.
+            Note that enabling some plugins can create more than one
+            output field; use the column hover-overs to see column
+            descriptions.
+          </p>
+        </div>
+    </div>
+      
+    <div class="column-two">
+      <div class="column-right" style="padding-left:2em">
+          <div class="plain-box" style="padding-bottom:1em">
+              <img src="/img/vep_web_plugins.png">
+          </div>
+      </div>
+    </div>
+</div>
+
+<hr/>
 <h2 id="jobs"> Jobs </h2>
 
 <div class="column-wrapper">
@@ -378,20 +425,30 @@ enter your data and alter various options.</p>
           session or account are shown in the &quot;Recent Tickets&quot; table.
           You may submit multiple jobs simultaneously.</p> <p>The
           &quot;Jobs&quot; column of the table shows the current status of the
-          job.</p> <ul>
+          job.</p>
+
+          <ul>
             <li><b>Queued</b> - your job is waiting to be submitted to the
-            system</li> <li><b>Running</b> - your job is currently running</li>
-            <li><b>Done</b> - your job is finished - click the ticket name to be
-            taken to the results page</li> <li><b>Failed</b> - there is a
-            problem with your job - click the ticket name to see more
-            details</li>
-          </ul> <p>You may delete a job by clicking the trash can icon <img
+            system</li>
+            <li><b>Running</b> - your job is currently running</li>
+            <li><b>Done</b> - your job is finished - click the [View results]
+            link to be taken to the results page</li>
+            <li><b>Failed</b> - there is a
+            problem with your job - click the magnifying glass icon <img
+            src="/i/16/search.png"> to see more details</li>
+          </ul>
+
+          <p>You may delete a job by clicking the trash can icon <img
           src="/i/16/trash.png">. If you are logged in to Ensembl, you can save
-          the job by clicking the save icon <img src="/i/16/save.png"></p>
+          the job by clicking the save icon <img src="/i/16/save.png">.</p>
           
           <p> You may also resubmit a job (for example, to re-run with the same
           data but change some parameters) by clicking the edit icon <img
-          src="/i/16/pencil.png"></p>
+          src="/i/16/pencil.png">.</p>
+
+          <p> You can see a summary of the options that you selected for your
+          VEP job by clicking on the magnifying glass icon <img
+          src="/i/16/search.png">.</p>
       </div>
     </div>
       

@@ -23,7 +23,7 @@ package EnsEMBL::Web::JobDispatcher;
 use strict;
 use warnings;
 
-use EnsEMBL::Web::Exceptions;
+use EnsEMBL::Web::Attributes;
 
 sub hub { return shift->{'_hub'}; }
 
@@ -33,35 +33,30 @@ sub new {
   return bless {'_hub' => $hub}, $class;
 }
 
-sub dispatch_job {
+sub dispatch_job :Abstract {
   ## @abstract
   ## Sends the jobs to the external (or internal) job processor, eg. hive or web services
   ## @param Ticket type name (string)
   ## @param Hashref of the job data to be dispatched
   ## @return ID/reference to be used to retrieve the submitted job in future
-  throw exception('AbstractMethodNotImplemented');
 }
 
-sub delete_jobs {
+sub delete_jobs :Abstract {
   ## @abstract
   ## Deletes the submitted jobs
   ## @param Ticket type name (string)
   ## @param Arrayref of Id/References for the submitted jobs to be removed
-  throw exception('AbstractMethodNotImplemented');
 }
 
-sub update_jobs {
+sub update_jobs :Abstract {
   ## @abstract
   ## Updates the tools job objects according to the recent status in dispatcher
   ## @param Arrayref of tools job objects to be updated
-  throw exception('AbstractMethodNotImplemented');
 }
 
 sub default_error_message {
   ## Default message to be displayed if the job has failed
   return 'An error occurred while running the job.';
 }
-
-
 
 1;

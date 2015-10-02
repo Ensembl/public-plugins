@@ -42,14 +42,6 @@ sub job_details_table {
   my $two_col     = $self->new_twocol;
   my $sequence    = $object->get_input_sequence_for_job($job);
   my $job_summary = $self->get_job_summary($job, $is_owned_ticket);
-  my $result_link = $job_summary->get_nodes_by_flag('view_results_link')->[0];
-
-  if ($result_link) {
-    my $download_link = $result_link->clone_node;
-    $download_link->inner_HTML('[Download results file]');
-    $download_link->set_attribute('href', $object->download_url);
-    $result_link->parent_node->insert_after($download_link, $result_link);
-  }
 
   $two_col->add_row('Job name',       $job_summary->render);
   $two_col->add_row('Species',        $sd->tools_valid_species($species) ? sprintf('<img class="job-species" src="%sspecies/16/%s.png" alt="" height="16" width="16">%s', $self->img_url, $species, $sd->species_label($species, 1)) : $species =~ s/_/ /rg);

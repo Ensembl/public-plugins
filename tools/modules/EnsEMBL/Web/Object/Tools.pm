@@ -26,6 +26,7 @@ use warnings;
 
 use Digest::MD5 qw(md5_hex);
 
+use EnsEMBL::Web::Attributes;
 use EnsEMBL::Web::Exceptions;
 use EnsEMBL::Web::Utils::RandomString qw(random_string);
 use EnsEMBL::Web::Utils::FileSystem qw(create_path remove_empty_path remove_directory copy_dir_contents);
@@ -533,11 +534,10 @@ sub get_requested_job {
   return $self->{$key};
 }
 
-sub get_edit_jobs_data {
+sub get_edit_jobs_data :Abstract {
   ## @abstract
   ## Gets the data needed by JS for populating the input form while editing a ticket
   ## @return Arrayref of hashes, each corresponding to one of the multiple jobs being edited
-  throw exception('AbstractMethodNotImplemented');
 }
 
 sub get_tickets_data_for_sync {

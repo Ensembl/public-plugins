@@ -93,7 +93,7 @@ sub content_iterate {
   my $loc  = $params->{'location'};
 
   # create commandline to read file
-  my $fh_string = defined $loc && $loc =~ /\w+/ ? "tabix -h $file $loc | " : "zcat -q $file | ";
+  my $fh_string = defined $loc && $loc =~ /\w+/ ? "tabix -h $file $loc | " : "gzip -dcq $file | ";
 
   # if filtering, pipe the output to the filter script
   if ($params->{'filter'}) {
@@ -101,7 +101,7 @@ sub content_iterate {
     # get perl binary, script path and command line options for the script
     my $script  = $species_defs->ENSEMBL_VEP_FILTER_SCRIPT or throw exception('VcfTabixError', 'No filter_vep.pl script defined (ENSEMBL_VEP_FILTER_SCRIPT)');
        $script  = join '/', $species_defs->ENSEMBL_SERVERROOT, $script;
-    my $perl    = join ' ', 'perl', map { $_ =~ /^\// && -e $_ ? ('-I', $_) : () } reverse @INC;
+    my $perl    = join ' ', 'perl', map { $_ =~ /^\// && -e $_ ? ('-I', $_) : () } @{$species_defs->ENSEMBL_LIB_DIRS};
     my $opts    = $species_defs->ENSEMBL_VEP_FILTER_SCRIPT_OPTIONS || {};
        $opts    = join ' ', map { defined $opts->{$_} ? "$_ $opts->{$_}" : () } keys %$opts;
 
@@ -148,7 +148,7 @@ sub content_iterate {
           push @header_lines, $_;
         } else {
           $all_headers = $self->_parse_headers(\@header_lines);
-          $callback->($params->{'parsed'} ? $all_headers->{'combined'} : @{$format_method->($self, $all_headers->{'combined'})});
+          $callback->($params->{'parsed'} ? $all_headers : @{$format_method->($self, $all_headers->{'combined'})});
         }
       }
 
@@ -159,6 +159,12 @@ sub content_iterate {
     } else { # vcf format requested
       $callback->($_);
     }
+  }
+
+  # if a filter returns 0 rows, $all_headers won't exist yet
+  if(($format_method || $params->{'parsed'}) && !$all_headers) {
+    $all_headers = $self->_parse_headers(\@header_lines);
+    $callback->($params->{'parsed'} ? $all_headers : @{$format_method->($self, $all_headers->{'combined'})});
   }
 
   close $fh;
@@ -176,7 +182,7 @@ sub _convert_to_txt {
       push @lines, join("\t", map { ($row->{$_} // '') ne '' ? $row->{$_} : '-' } @$headers);
     }
   } else {
-    push @lines, '#'.join("\t", map { s/^ID$/Uploaded_variation/r } @$headers);
+    push @lines, '#'.join("\t", map { s/^ID$/Uploaded_variation/r; } @$headers);
   }
 
   return \@lines;
@@ -218,7 +224,7 @@ sub _convert_to_vep {
       push @lines, join("\t", @fields, join(';', @extra));
     }
   } else {
-    push @lines, '#'.join("\t", map { s/^ID$/Uploaded_variation/r } @$headers[0..$existing_variation_index], 'Extra');
+    push @lines, '#'.join("\t", map { s/^ID$/Uploaded_variation/r; } @$headers[0..$existing_variation_index], 'Extra');
   }
 
   return \@lines;
@@ -278,7 +284,7 @@ sub _parse_headers {
   ## @private
   my ($self, $header_lines) = @_;
 
-  my (@combined_headers, @headers, @csq_headers);
+  my (@combined_headers, @headers, @csq_headers, %descriptions);
 
   # fields we don't want for combined headers
   my %exclude_fields = map { $_ => 1 } qw(CHROM POS REF ALT INFO QUAL FILTER);
@@ -296,13 +302,24 @@ sub _parse_headers {
       # don't include anything after the INFO field
       $_ eq 'INFO' and last or $exclude_fields{$_} = 1 for reverse @headers;
     }
+
+    # other headers, could be plugin descriptions
+    elsif(s/^#+//) {
+      m/(.+?)\=(.+)/;
+      my ($key, $value) = ($1, $2);
+
+      # remove "file /path/to/file"
+      $value =~ s/ file .+$//;
+
+      $descriptions{$key} = $value;
+    }
   }
 
   # exclude all unwanted fields from combined headers
   @combined_headers = grep !$exclude_fields{$_}, @headers, @csq_headers;
   splice @combined_headers, 1, 0, 'Location';
 
-  return { 'combined' => \@combined_headers, 'headers' => \@headers, 'csq' => \@csq_headers };
+  return { 'combined' => \@combined_headers, 'headers' => \@headers, 'csq' => \@csq_headers, 'descriptions' => \%descriptions };
 }
 
 1;

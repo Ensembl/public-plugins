@@ -32,6 +32,7 @@ sub prepare_to_dispatch {
   my $job_data    = $rose_object->job_data;
   my $species     = $job_data->{'species'};
   my $sp_details  = $self->_species_details($species);
+  my $sd          = $self->hub->species_defs;
   my $vep_configs = {};
 
   $vep_configs->{'format'}  = $job_data->{'format'};
@@ -107,8 +108,78 @@ sub prepare_to_dispatch {
   if ($vep_configs->{'most_severe'} || $vep_configs->{'summary'}) {
     delete $vep_configs->{$_} for(qw(coding_only protein symbol sift polyphen ccds canonical numbers domains biotype tsl));
   }
+  
+  # plugins
+  my $plugin_string = $self->_configure_plugins($job_data);
+  $vep_configs->{plugin} = $plugin_string if $plugin_string;
 
   return { 'species' => $vep_configs->{'species'}, 'work_dir' => $rose_object->job_dir, 'config' => $vep_configs };
+}
+
+sub _configure_plugins {
+  my $self = shift;
+  my $job_data = shift;
+  
+  # get plugin config into a hash keyed on key
+  my $pl = $self->hub->species_defs->multi_val('ENSEMBL_VEP_PLUGIN_CONFIG');
+  return '' unless $pl;
+  my %plugin_config = map {$_->{key} => $_} @{$pl->{plugins} || []};
+  
+  my $plugin_string = '';
+  
+  foreach my $pl_key(grep {$_ =~ /^plugin\_/ && $job_data->{$_} eq $_} keys %$job_data) {
+    
+    $pl_key =~ s/^plugin\_//;
+    my $plugin = $plugin_config{$pl_key};
+    next unless $plugin;
+    
+    my @params;
+    
+    foreach my $param(@{$plugin->{params}}) {
+      
+      # links to something in the form
+      if($param =~ /^\@/) {
+        $param =~ s/^\@//;
+        
+        my @matched = ();
+        
+        # fuzzy match?
+        if($param =~ /\*/) {
+          $param =~ s/\*/\.\*/;
+          @matched = grep {$_->{name} =~ /$param/} @{$plugin->{form}};
+        }
+        
+        else {
+          @matched = grep {$_->{name} eq $param} @{$plugin->{form}};
+        }
+        
+        foreach my $el(@matched) {
+          my $val = $job_data->{'plugin_'.$pl_key.'_'.$el->{name}};
+
+          $val = join(',', @$val) if $val && ref($val) eq 'ARRAY';
+
+          # remove any spaces
+          $val =~ s/,\s+/,/g if $val && $val =~ /,/;
+          
+          if(defined($val) && $val ne '' && $val ne 'no') {
+            push @params, $val;
+          }
+        }
+      }
+      
+      # otherwise just plain text
+      else {
+        push @params, $param;
+      }
+    }
+    
+    $plugin_string .= ' --plugin ' if $plugin_string;
+    $plugin_string .= join(",", ($pl_key, @params));
+  }
+  
+  # print STDERR "--plugin $plugin_string\n";
+  
+  return $plugin_string;
 }
 
 sub get_dispatcher_class {

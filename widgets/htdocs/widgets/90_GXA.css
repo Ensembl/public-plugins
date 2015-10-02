@@ -16,9 +16,9 @@
 
 /* Overwriting classes that might conflict with ensembl from the widget for example jquery ui tooltip in GXA */
 
-.ui-widget            { font-family: Luxi Sans,Helvetica,Arial,Geneva,sans-serif; font-size: 1em; }
-.ui-widget-content    { background: none; } 
-.ui-tooltip           { box-shadow: none; padding: 0px; border: 0px !important; }
+body#ensembl-webpage .ui-widget            { font-family: Luxi Sans,Helvetica,Arial,Geneva,sans-serif; font-size: 1em; }
+body#ensembl-webpage .ui-widget-content    { background: none; } 
+body#ensembl-webpage .ui-tooltip           { box-shadow: none; padding: 0px; border: 0px !important; }
 
 
 

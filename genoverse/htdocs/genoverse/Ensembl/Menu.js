@@ -49,35 +49,49 @@ Ensembl.Panel.GenoverseMenu = Ensembl.Panel.ZMenu.extend({
     this[this.drag ? 'populateRegion' : this.href ? 'populateAjax' : 'populate']();
 
     if (this.drag) {
-      $('a', this.el).on('click', function (e) {
-
-        if (this.className.match('_highlight_location')) {
-
-          Ensembl.highlightLocation(this.href);
-
-        } else if (this.className.match('jumpHere')) {
-          var browser  = panel.params.browser;
-          var position = browser.getSelectorPosition();
-          
-          browser.moveTo(position.start, position.end);
-          
-          Ensembl.EventManager.trigger('highlightImage', browser.panel.imageNumber + 1, 0, position.start, position.end);
-          
-          browser.updateURL(position);
-          
-          browser.cancelSelect();
-          browser.moveSelector(e);
-        } else {
-          $('.selector_controls .' + this.className.replace(' constant', ''), '#' + panel.imageId).trigger('click');
-        }
-        
-        panel.el.hide();
-        
-        return false;
+      this.el.find('a').on('click', function (e) {
+        e.preventDefault();
+        panel.menuLinkClick(this, e);
       });
     }
   },
-  
+
+  menuLinkClick: function (link, e) {
+
+    var action = (link.className.match(/_action_(\w+)/) || ['']).pop();
+
+    switch (action) {
+      case '':
+        break;
+
+      case 'mark':
+
+        Ensembl.markLocation(link.href);
+        break;
+
+      case 'jumpHere':
+
+        var browser  = this.params.browser;
+        var position = browser.getSelectorPosition();
+
+        browser.updateURL(position);
+        browser.moveTo(position.start, position.end);
+
+        Ensembl.EventManager.trigger('highlightImage', browser.panel.imageNumber + 1, 0, position.start, position.end);
+
+        browser.cancelSelect();
+        browser.moveSelector(e);
+        break;
+
+      default:
+
+        $('#' + this.imageId).find('.selector_controls .' + action).trigger('click');
+        break;
+    }
+
+    this.el.hide();
+  },
+
   show: function (loading) {
     this.base(loading);
     
@@ -96,14 +110,16 @@ Ensembl.Panel.GenoverseMenu = Ensembl.Panel.ZMenu.extend({
   }, 
   
   populateRegion: function () {
-    var zoom  = this.params.browser.wheelAction === false ? 'Jump' : 'Zoom';
-    var url   = this.baseURL.replace(/%s/, this.drag.chr + ':' + this.drag.start + '-' + this.drag.end);
-    var hlUrl = Ensembl.updateURL({hlr: this.drag.chr + ':' + this.drag.start + '-' + this.drag.end}, window.location.href);
+    var action  = this.params.browser.wheelAction === false ? 'Jump' : 'Zoom';
+    var cssCls  = action === 'Jump' ? 'loc-change' : 'loc-zoom';
+    var bps     = this.drag.end - this.drag.start + 1;
+    var url     = this.baseURL.replace(/%s/, this.drag.chr + ':' + this.drag.start + '-' + this.drag.end);
+    var mUrl    = Ensembl.updateURL({mr: this.drag.chr + ':' + this.drag.start + '-' + this.drag.end}, window.location.href);
 
     this.buildMenu(this.drag.end === this.drag.start
-      ? [ '<a class="center constant" href="#">Centre here</a>' ]
-      : [ '<a class="_highlight_location loc-highlight-a constant" href="' + hlUrl + '"><span></span>Highlight region (' + (this.drag.end - this.drag.start + 1) + ' bp)</a>',
-          '<a class="' + zoom.toLowerCase() + 'Here constant" href="' + url + '">' + zoom + ' to region (' + (this.drag.end - this.drag.start + 1) + ' bp)</a>' ],
+      ? [ '<a class="loc-icon-a constant _action_center" href="#"><span class="loc-icon loc-pin"></span>Centre here</a>' ]
+      : [ '<a class="loc-icon-a constant _action_mark" href="' + mUrl + '"><span class="loc-icon loc-mark"></span>Mark region (' + bps + ' bp)</a>',
+          '<a class="loc-icon-a constant _action_' + action.toLowerCase() + 'Here" href="' + url + '"><span class="loc-icon ' + cssCls + '"></span>' + action + ' to region (' + bps + ' bp)</a>' ],
       'Region: ' + this.drag.chr + ':' + this.drag.start + '-' + this.drag.end
     );
   }

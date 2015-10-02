@@ -1,0 +1,49 @@
+{
+  dbNSFP => {
+    "available" => 1
+  },
+
+  Condel => {
+    "available" => 1
+  },
+
+  LoFtool => {
+    "available" => 1
+  },
+
+  dbscSNV => {
+    "available" => 1
+  },
+
+  GeneSplicer => {
+    "available" => 1
+  },
+
+  MaxEntScan => {
+    "available" => 1
+  },
+
+  Blosum62 => {
+    "available" => 1
+  },
+
+  CSN => {
+    "available" => 1
+  },
+
+  HGVSshift => {
+    "available" => 1
+  },
+
+  ExAC => {
+    "available" => 1
+  },
+
+  miRNA => {
+    "available" => 1
+  },
+
+  UpDownDistance => {
+    "available" => 1
+  }
+}

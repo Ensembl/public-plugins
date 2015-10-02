@@ -89,6 +89,28 @@ sub init_from_user_input {
 
   my $job_data = { map { my @val = $hub->param($_); $_ => @val > 1 ? \@val : $val[0] } grep { $_ !~ /^text/ && $_ ne 'file' } $hub->param };
 
+  # check required
+  if(my $required_string = $job_data->{required_params}) {
+    my $fd = $self->object->get_form_details();
+
+    for(split(';', $required_string)) {
+      my ($main, @dependents) = split /\=|\,/;
+
+      if($job_data->{$main} && $job_data->{$main} eq $main) {
+
+        foreach my $dep(@dependents) {
+          throw exception(
+            'InputError',
+            sprintf(
+              'No value has been entered for the field "%s"',
+              defined($fd->{$dep}) ? ($fd->{$dep}->{label} || $dep) : $dep
+            )
+          ) unless defined($job_data->{$dep});
+        }
+      }
+    }
+  }
+
   $job_data->{'species'}    = $species;
   $job_data->{'input_file'} = $file_name;
   $job_data->{'format'}     = $detected_format;

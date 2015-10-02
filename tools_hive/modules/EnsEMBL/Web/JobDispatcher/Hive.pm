@@ -34,18 +34,29 @@ sub dispatch_job {
   ## Abstract method implementation
   my ($self, $logic_name, $job_data) = @_;
 
-  my $hive_dba    = $self->hive_dba;
-  my $job_adaptor = $self->job_adaptor;
+  my $hive_job_id;
 
-  $self->{'_analysis'}{$logic_name} ||= $hive_dba->get_AnalysisAdaptor->fetch_by_logic_name_or_url($logic_name);
+  try {
 
-  # Submit job to hive db
-  my $hive_job = Bio::EnsEMBL::Hive::AnalysisJob->new(
-		'analysis'  => $self->{'_analysis'}{$logic_name},
-		'input_id'  => $job_data
-  );
+    my $hive_dba    = $self->hive_dba;
+    my $job_adaptor = $self->job_adaptor;
 
-  my ($hive_job_id) = @{ $job_adaptor->store_jobs_and_adjust_counters( [ $hive_job ] ) };
+    $self->{'_analysis'}{$logic_name} ||= $hive_dba->get_AnalysisAdaptor->fetch_by_logic_name_or_url($logic_name);
+
+    # Submit job to hive db
+    my $hive_job = Bio::EnsEMBL::Hive::AnalysisJob->new(
+      'analysis'  => $self->{'_analysis'}{$logic_name},
+      'input_id'  => $job_data
+    );
+
+    ($hive_job_id) = @{ $job_adaptor->store_jobs_and_adjust_counters( [ $hive_job ] ) };
+
+  } catch {
+
+    # throw HiveError if anything goes wrong while submitting the job to the hive db
+    $_->type('HiveError');
+    throw $_;
+  };
 
   return $hive_job_id;
 }
@@ -53,7 +64,7 @@ sub dispatch_job {
 sub delete_jobs {
   ## Abstract method implementation
   my ($self, $logic_name, $job_ids) = @_;
-  my $hive_dba = $self->hive_dba;
+#  my $hive_dba = $self->hive_dba;
 
 #  $self->job_adaptor->remove_all(sprintf '`job_id` in (%s)', join(',', @$job_ids));
 #  $hive_dba->get_Queen->safe_synchronize_AnalysisStats($hive_dba->get_AnalysisAdaptor->fetch_by_logic_name_or_url($logic_name)->stats);
@@ -62,6 +73,15 @@ sub delete_jobs {
 sub update_jobs {
   ## Abstract method implementation
   my ($self, $jobs) = @_;
+
+  my $hive_dba;
+
+  try {
+    $hive_dba = $self->hive_dba;
+  } catch {};
+
+  # don't do anything if hive db there's a problem connecting hive db
+  return unless $hive_dba;
 
   foreach my $job (@$jobs) {
 
@@ -118,6 +138,9 @@ sub hive_dba {
   unless ($self->{'_hive_dba'}) {
     my $sd      = $self->hub->species_defs;
     my $hivedb  = $sd->multidb->{'DATABASE_WEB_HIVE'};
+
+    # if SiteDefs say db is not available, no need to check it further
+    throw exception('HiveError', 'ENSEMBL_HIVE_DB is not available') if $sd->ENSEMBL_HIVE_DB_NOT_AVAILABLE;
 
     $ENV{'EHIVE_ROOT_DIR'} ||= $sd->ENSEMBL_SERVERROOT.'/ensembl-hive/'; # used in hive API
 

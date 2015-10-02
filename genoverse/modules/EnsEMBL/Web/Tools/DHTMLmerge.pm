@@ -36,7 +36,7 @@ sub get_filegroups {
   foreach my $file (@{genoverse_files_order()}) {
     foreach my $path (grep -e, map "$_/genoverse/$file", reverse grep !m/biomart/, @{$species_defs->ENSEMBL_HTDOCS_DIRS || []}) {
       if (-d $path) {
-        push @ordered_files, grep -f, map "$path/$_", sort { lc $a cmp lc $b } @{list_dir_contents($path, {'recursive' => 1})};
+        push @ordered_files, grep -f, map { $_ =~ /\.js$/ ? "$path/$_" : () } sort { lc $a cmp lc $b } @{list_dir_contents($path, {'recursive' => 1})};
       } else {
         push @ordered_files, $path;
       }
