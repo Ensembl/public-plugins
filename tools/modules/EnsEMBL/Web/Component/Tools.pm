@@ -234,17 +234,19 @@ sub job_status_tag {
   ## @param Job object
   ## @param Dispatcher status (string)
   ## @param Number of results
+  ## @param URL for results page
   ## @param Current assembly for the job species if it's not the same as the one to which the job was originally submitted to, 0 if species doesn't exist on current site
   ## @param Flag kept on if the job can be viewed on a different assembly website (only applicable if assembly different)
-  my ($self, $job, $status, $result_count, $assembly_mismatch, $has_assembly_site) = @_;
+  my ($self, $job, $status, $result_count, $result_url, $assembly_mismatch, $has_assembly_site) = @_;
 
   my $css_class = "job-status-$status";
+  my $href      = '';
   my $title     = {
     'not_submitted' => q(This job could not be submitted due to some problems. Please click on the 'View details' icon for more information),
     'queued'        => q(Your job has been submitted and will be processed soon.),
     'submitted'     => q(Your job has been submitted and will be processed soon.),
     'running'       => q(Your job is currently being processed. The page will refresh once it's finished running.),
-    'done'          => q(This job is finished. Please click on 'View results' link to see the results),
+    'done'          => q(This job is finished.),
     'failed'        => q(This job has failed. Please click on the 'View details' icon for more information),
     'deleted'       => q(Your ticket has been deleted. This usually happens if the ticket is too old.)
   }->{$status};
@@ -258,13 +260,15 @@ sub job_status_tag {
     } elsif (defined $assembly_mismatch && $assembly_mismatch eq '0') {
       $css_class  = 'job-status-mismatch';
       $title      = sprintf q(The job was run on %s which does not exist on this site.), $job->species =~ s/_/ /gr;
+    } else {
+      $href       = $self->hub->url($result_url); # display link on the tag only if job's done and results are available of current assembly
     }
   }
 
   return {
-    'node_name'   => 'span',
     'class'       => [$css_class, qw(_ht job-status)],
     'title'       => $title,
+    'href'        => $href, 
     'inner_HTML'  => ucfirst $status =~ s/_/ /gr
   }
 }
@@ -293,6 +297,23 @@ sub species_specific_info {
     ),
   }
   return '';
+}
+
+sub result_url {
+  ## Get the url for the result page for a job
+  ## @param Ticket type name
+  ## @param Job species name
+  ## @param URL param for the result
+  my ($self, $ticket_type, $job_species, $url_param, $clear_extra_param) = @_;
+
+  return {
+    '__clear'     => $clear_extra_param,
+    'species'     => $job_species,
+    'type'        => 'Tools',
+    'action'      => $ticket_type,
+    'function'    => 'Results',
+    'tl'          => $url_param
+  };
 }
 
 sub format_date {
