@@ -26,6 +26,16 @@ use parent qw(
   EnsEMBL::Web::Component::Tools::TicketsList
 );
 
+sub job_status_tag {
+  ## @override
+  my $self  = shift;
+  my $tag   = $self->SUPER::job_status_tag(@_);
+
+  delete $tag->{'href'};
+
+  return $tag;
+}
+
 sub job_summary_section {
   ## @override
   my ($self, $ticket, $job, $hit_count) = @_;
