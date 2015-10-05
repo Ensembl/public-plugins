@@ -31,7 +31,8 @@ sub job_status_tag {
   my $self  = shift;
   my $tag   = $self->SUPER::job_status_tag(@_);
 
-  delete $tag->{'href'};
+  $tag->{'title'} = q(This job is finished. Please click on the 'Download&nbsp;results' link to download result file.);
+  $tag->{'href'}  = '';
 
   return $tag;
 }
