@@ -301,18 +301,16 @@ sub species_specific_info {
 
 sub result_url {
   ## Get the url for the result page for a job
-  ## @param Ticket type name
-  ## @param Job species name
-  ## @param URL param for the result
-  my ($self, $ticket_type, $job_species, $url_param, $clear_extra_param) = @_;
+  ## @param Ticket object
+  ## @param Job object
+  my ($self, $ticket, $job) = @_;
 
   return {
-    '__clear'     => $clear_extra_param,
-    'species'     => $job_species,
+    'species'     => $job->species,
     'type'        => 'Tools',
-    'action'      => $ticket_type,
+    'action'      => $ticket->ticket_type_name,
     'function'    => 'Results',
-    'tl'          => $url_param
+    'tl'          => $self->object->create_url_param({'ticket_name' => $ticket->ticket_name, 'job_id' => $job->job_id})
   };
 }
 

@@ -146,7 +146,7 @@ sub job_summary_section {
   my $switch_assembly   = $species_defs->get_config($job_species, 'SWITCH_ASSEMBLY') || '';
   my $assembly_site     = $assembly_mismatch && $switch_assembly eq $job_assembly ? 'http://'.$species_defs->get_config($job_species, 'SWITCH_ARCHIVE_URL') : '';
   my $job_description   = $object->get_job_description($job);
-  my $result_url        = $dispatcher_status eq 'done' ? $self->result_url($ticket->ticket_type_name, $job_species, $url_param) : undef;
+  my $result_url        = $dispatcher_status eq 'done' ? $self->result_url($ticket, $job) : undef;
 
   if ($result_url && $assembly_mismatch) {
     if ($assembly_site && $ticket->owner_type eq 'user' && $is_owned_ticket) { # if job is from another assembly and we do have a site for that assembly
