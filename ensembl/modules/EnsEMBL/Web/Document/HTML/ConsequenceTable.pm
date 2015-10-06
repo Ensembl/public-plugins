@@ -153,7 +153,7 @@ sub render {
       'impact'  => 'LOW',
     },
     {
-      'term'    => 'synonymous_varian', 
+      'term'    => 'synonymous_variant', 
       'colour'  => '76ee00', 
       'desc'    => 'A sequence variant where there is no resulting change to the encoded amino acid', 
       'acc'     => '0001819', 
@@ -188,7 +188,7 @@ sub render {
     },
     },
     {
-      'term'    => 'non_coding_transcript_exon_varian', 
+      'term'    => 'non_coding_transcript_exon_variant', 
       'colour'  => '32cd32', 
       'desc'    => 'A sequence variant that changes non-coding exon sequence in a non-coding transcript', 
       'acc'     => '0001792', 
@@ -244,7 +244,7 @@ sub render {
       'impact'  => 'MODIFIER',
     },
     {
-      'term'    => 'TF_binding_site_varian', 
+      'term'    => 'TF_binding_site_variant', 
       'colour'  => 'a52a2a', 
       'desc'    => 'A sequence variant located within a transcription factor binding site', 
       'acc'     => '0001782', 
