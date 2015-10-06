@@ -78,24 +78,35 @@ sub get_all_variants_in_slice_region {
   ## @return Array of result data hashrefs
   my ($self, $job, $slice) = @_;
 
-  my $s_name    = $slice->seq_region_name;
-  my $s_start   = $slice->start;
-  my $s_end     = $slice->end;
+  my $ticket_name = $job->ticket->ticket_name;
+  my $job_id      = $job->job_id;
+  my $s_name      = $slice->seq_region_name;
+  my $s_start     = $slice->start;
+  my $s_end       = $slice->end;
 
-  return [ grep {
+  my @variants;
 
-    my $chr   = $_->{'chr'};
-    my $start = $_->{'start'};
-    my $end   = $_->{'end'};
+  for ($job->result) {
 
-    $s_name eq $chr && (
+    my $var   = $_->result_data->raw;
+    my $chr   = $var->{'chr'};
+    my $start = $var->{'start'};
+    my $end   = $var->{'end'};
+
+    next unless $s_name eq $chr && (
       $start >= $s_start && $end <= $s_end ||
       $start < $s_start && $end <= $s_end && $end > $s_start ||
       $start >= $s_start && $start <= $s_end && $end > $s_end ||
       $start < $s_start && $end > $s_end && $start < $s_end
-    )
+    );
 
-  } map $_->result_data, $job->result ];
+    $var->{'tl'} = $self->create_url_param({'ticket_name' => $ticket_name, 'job_id' => $job_id, 'result_id' => $_->result_id});
+
+    push @variants, $var;
+
+  };
+
+  return \@variants;
 }
 
 sub handle_download {
