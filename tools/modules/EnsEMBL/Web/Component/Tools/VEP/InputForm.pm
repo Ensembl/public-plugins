@@ -57,7 +57,7 @@ sub content {
   $cons{$_}->{colour} = $hub->colourmap->hex_by_name($sd->colour('variation')->{lc $_}->{'default'}) for keys %cons;
 
   # add example data
-  my $ex_data;
+  my $ex_data = {};
 
   foreach my $sp(@$species) {
     foreach my $key(grep {/^VEP/} keys %{$sp->{sample}}) {
