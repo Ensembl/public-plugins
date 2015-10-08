@@ -44,7 +44,7 @@ sub _species_sets {
   # Currently missing: Mammalia Amphibia Vertebrata Chordata Eukaryota
   my $species_group_2_species_set = {
       Primates          => ['primates', 'placental'],
-      Glires            => ['rodents', 'placental'],
+      Euarchontoglires  => ['rodents', 'placental'],
       Laurasiatheria    => ['laurasia', 'placental'],
       Afrotheria        => ['placental'],
       Xenarthra         => ['placental'],
@@ -59,7 +59,6 @@ sub _species_sets {
   foreach my $species ($species_defs->valid_species) {
     next if $skipped->{$species};
     my $group = $species_defs->get_config($species, 'SPECIES_GROUP');
-    push @{$species_sets->{'all'}{'species'}}, $species;
     my $sets = [];
     my $orthologues = $orthologue_list->{$species} || {};
     my $no_ortho = 0;

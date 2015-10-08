@@ -57,7 +57,7 @@ sub content {
   $cons{$_}->{colour} = $hub->colourmap->hex_by_name($sd->colour('variation')->{lc $_}->{'default'}) for keys %cons;
 
   # add example data
-  my $ex_data;
+  my $ex_data = {};
 
   foreach my $sp(@$species) {
     foreach my $key(grep {/^VEP/} keys %{$sp->{sample}}) {
@@ -515,7 +515,7 @@ sub _build_identifiers {
       'children' => [{
         'node_name' => 'p',
         'class' => 'small',
-        'inner_HTML' => '<sup style="color:grey">(p)</sup> = functionality from <a href="/info/docs/tools/vep/script/vep_plugins.html">VEP plugin</a>'
+        'inner_HTML' => '<sup style="color:grey">(p)</sup> = functionality from <a target="_blank" href="/info/docs/tools/vep/script/vep_plugins.html">VEP plugin</a>'
       }]
     }        
   ) if $self->_have_plugins;
@@ -676,7 +676,7 @@ sub _build_extra {
       'children' => [{
         'node_name' => 'p',
         'class' => 'small',
-        'inner_HTML' => '<sup style="color:grey">(p)</sup> = functionality from <a href="/info/docs/tools/vep/script/vep_plugins.html">VEP plugin</a>'
+        'inner_HTML' => '<sup style="color:grey">(p)</sup> = functionality from <a target="_blank" href="/info/docs/tools/vep/script/vep_plugins.html">VEP plugin</a>'
       }]
     }        
   ) if $self->_have_plugins;
@@ -698,8 +698,7 @@ sub _have_plugins {
 
   if(!exists($self->{_have_plugins})) {
     my $sd  = $self->hub->species_defs;
-    if($sd->ENSEMBL_VEP_PLUGIN_ENABLED) {
-      my $pl = $sd->multi_val('ENSEMBL_VEP_PLUGIN_CONFIG');
+    if(my $pl = $sd->multi_val('ENSEMBL_VEP_PLUGIN_CONFIG')) {
       $self->{_have_plugins} = $pl && $pl->{plugins} ? 1 : 0;
     }
     else {

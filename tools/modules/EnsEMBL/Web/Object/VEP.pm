@@ -21,6 +21,8 @@ package EnsEMBL::Web::Object::VEP;
 use strict;
 use warnings;
 
+use HTML::Entities  qw(encode_entities);
+
 use EnsEMBL::Web::TmpFile::ToolsOutput;
 use EnsEMBL::Web::TmpFile::VcfTabix;
 use EnsEMBL::Web::Utils::FileHandler qw(file_get_contents);
@@ -76,24 +78,35 @@ sub get_all_variants_in_slice_region {
   ## @return Array of result data hashrefs
   my ($self, $job, $slice) = @_;
 
-  my $s_name    = $slice->seq_region_name;
-  my $s_start   = $slice->start;
-  my $s_end     = $slice->end;
+  my $ticket_name = $job->ticket->ticket_name;
+  my $job_id      = $job->job_id;
+  my $s_name      = $slice->seq_region_name;
+  my $s_start     = $slice->start;
+  my $s_end       = $slice->end;
 
-  return [ grep {
+  my @variants;
 
-    my $chr   = $_->{'chr'};
-    my $start = $_->{'start'};
-    my $end   = $_->{'end'};
+  for ($job->result) {
 
-    $s_name eq $chr && (
+    my $var   = $_->result_data->raw;
+    my $chr   = $var->{'chr'};
+    my $start = $var->{'start'};
+    my $end   = $var->{'end'};
+
+    next unless $s_name eq $chr && (
       $start >= $s_start && $end <= $s_end ||
       $start < $s_start && $end <= $s_end && $end > $s_start ||
       $start >= $s_start && $start <= $s_end && $end > $s_end ||
       $start < $s_start && $end > $s_end && $start < $s_end
-    )
+    );
 
-  } map $_->result_data, $job->result ];
+    $var->{'tl'} = $self->create_url_param({'ticket_name' => $ticket_name, 'job_id' => $job_id, 'result_id' => $_->result_id});
+
+    push @variants, $var;
+
+  };
+
+  return \@variants;
 }
 
 sub handle_download {
@@ -121,7 +134,7 @@ sub handle_download {
     my $location  = $hub->param('location') || '';
     my $filter    = $hub->param('filter')   || '';
     my $file      = $self->result_files->{'output_file'};
-    my $filename  = join('.', $job->ticket->ticket_name, $location || (), $filter || (), $format eq 'txt' ? () : $format, $format eq 'vcf' ? 'vcf' : 'txt') =~ s/\s+/\_/gr;
+    my $filename  = join('.', $job->ticket->ticket_name, $location || (), $filter || (), $format eq 'txt' ? () : $format, $format eq 'vcf' ? '' : 'txt') =~ s/\s+/\_/gr;
 
     $r->headers_out->add('Content-Type'         => 'text/plain');
     $r->headers_out->add('Content-Disposition'  => sprintf 'attachment; filename=%s', $filename);
@@ -237,12 +250,12 @@ sub get_form_details {
 
       tsl => {
         'label'   => 'Transcript support level',
-        'helptip' => 'Report the transcript support level',
+        'helptip' => encode_entities($self->hub->glossary_lookup->{'TSL'} || ''),
       },
 
       canonical => {
         'label'   => 'Identify canonical transcripts',
-        'helptip' => 'Indicate if an affected transcript is the canonical transcript for the gene',
+        'helptip' => encode_entities($self->hub->glossary_lookup->{'Canonical transcript'} || ''),
       },
 
       sift => {
@@ -341,8 +354,7 @@ sub get_form_details {
 
     # add plugin stuff
     my $sd  = $self->hub->species_defs;
-    if($sd->ENSEMBL_VEP_PLUGIN_ENABLED) {
-      my $pl = $sd->multi_val('ENSEMBL_VEP_PLUGIN_CONFIG');
+    if(my $pl = $sd->multi_val('ENSEMBL_VEP_PLUGIN_CONFIG')) {
 
       foreach my $plugin(@{$pl->{plugins}}) {
 

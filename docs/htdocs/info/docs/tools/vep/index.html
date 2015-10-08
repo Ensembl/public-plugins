@@ -35,14 +35,10 @@ coordinates of your variants and the nucleotide changes to find out the:</p>
 <li><b>SIFT</b> and <b>PolyPhen</b> scores for changes to protein sequence</li>
 <li>... And <a href="/info/docs/tools/vep/online/input.html#ident">more!</a></li>
 </ul>
-      <p class="center"><a
-      href="/[[SPECIESDEFS::ENSEMBL_PRIMARY_SPECIES]]/Tools/VEP" class="_ht"
-      title="Launch the web interface"><img src="/img/vep_launch.png" class="opaque-hover"></a></p>
-<!--      <div class="plain-box">-->
-<!--<h2>Sample output</h2>-->
-<!--<p><img src="/img/vep_output.jpg" title="Sample VEP results table" alt="screenshot" /></p>-->
-<!---->
-<!--      </div>-->
+      <p class="center">[[PERL::$_->species_defs->ENSEMBL_VEP_ENABLED
+      ? q(<a href="/Tools/VEP" class="_ht" title="Launch the web interface"><img src="/img/vep_launch.png" class="opaque-hover"></a>)
+      : q(<img src="/img/vep_launch.png" title="VEP is not available on this website">);
+    ]]</p>
     </div>
   </div>
   <div class="column-two">
@@ -50,9 +46,10 @@ coordinates of your variants and the nucleotide changes to find out the:</p>
 <!--<h2>How to access the Variant Effect Predictor</h2>-->
 
 <div class="tinted-box" style="padding-bottom:16px;">
-  <div style="float:left">
-    <a href="/[[SPECIESDEFS::ENSEMBL_PRIMARY_SPECIES]]/Tools/VEP" class="_ht" title="Launch the web interface"><img src="/img/vep_globe.png" style="padding:5px; border: 1px solid lightgrey; border-radius: 5px; background: white;"></a>
-  </div>
+  <div style="float:left">[[PERL::$_->species_defs->ENSEMBL_VEP_ENABLED
+      ? q(<a href="/Tools/VEP" class="_ht" title="Launch the web interface"><img src="/img/vep_globe.png" style="padding:5px; border: 1px solid lightgrey; border-radius: 5px; background: white;"></a>)
+      : q(<img src="/img/vep_globe.png" title="VEP is not available on this website" style="padding:5px; border: 1px solid lightgrey; border-radius: 5px; background: white;">);
+    ]]</div>
   <div style="float: left; margin-left:30px;">
     <div><h1>Web interface</h1></div>
     <div>
@@ -62,7 +59,7 @@ coordinates of your variants and the nucleotide changes to find out the:</p>
       </ul>
     </div>
     <div><img src="/i/16/documentation.png"> <a href="/info/docs/tools/vep/online/index.html">Documentation</a></div>
-    <div><img src="/i/16/globe.png"> <a href="/[[SPECIESDEFS::ENSEMBL_PRIMARY_SPECIES]]/Tools/VEP">Launch the web interface</a></div>
+    [[PERL::$_->species_defs->ENSEMBL_VEP_ENABLED ? q(<div><img src="/i/16/globe.png"> <a href="/Tools/VEP">Launch the web interface</a></div>) : ''; ]]
   </div>
 </div>
 

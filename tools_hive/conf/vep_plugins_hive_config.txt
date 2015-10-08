@@ -1,0 +1,47 @@
+{
+  dbNSFP => {
+    "params"  => [
+      "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/dbNSFP3.0a.gz",
+      "@*"
+    ]
+  },
+
+  Condel => {
+    "params" => [
+      "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/Condel/config",
+      "@*"
+    ]
+  },
+
+  LoFtool => {
+    "params" => [
+      "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/LoFtool_scores.txt"
+    ]
+  },
+
+  dbscSNV => {
+    "params"  => [
+      "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/dbscSNV.txt.gz"
+    ]
+  },
+
+  GeneSplicer => {
+    "params" => [
+      "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/genesplicer/bin/linux/genesplicer",
+      "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/genesplicer/human",
+      "@*"
+    ]
+  },
+
+  MaxEntScan => {
+    "params" => [
+      "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/maxentscan"
+    ]
+  },
+
+  ExAC => {
+    "params" => [
+      "[[ENSEMBL_VEP_PLUGIN_DATA_DIR]]/ExAC.r0.3.sites.vep_CrossMapGRCh38.vcf.gz"
+    ]
+  }
+}

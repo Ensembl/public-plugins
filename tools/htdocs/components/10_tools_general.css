@@ -35,7 +35,7 @@ div.blast-popup a                 { background: [[BUTTON_BG]] url('/i/16/rev/bla
 
 /* Job  status for Activity Summary table */
 span.ticket-expiring              { height: 16px; width: 16px; float: left; margin: 2px 4px 0; background-image: url(/i/16/red-alert.png); }
-span.job-status                   { font-weight: bold; font-size: 80%; border-radius: 4px; color: [[PAGE_BG]]; padding: 2px 3px 1px; cursor: default; }
+span.job-status                   { font-weight: bold; font-size: 80%; border-radius: 4px; color: [[PAGE_BG]]; padding: 2px 3px 1px; cursor: default; white-space: nowrap; }
 span.job-status-not_submitted,
 span.job-status-failed,
 span.job-status-deleted           { background-color: [[ERROR_BG]]; }
@@ -45,6 +45,11 @@ span.job-status-running           { background-color: #999999; }
 span.job-status-done              { background-color: #55AA55; }
 span.job-status-noresult          { background-color: #666666; }
 span.job-status-mismatch          { background-color: #5555AA; }
+span.job-status a                 { color: inherit; text-decoration: none; }
+/* Sprites on the end of ticket row */
+div.ticket-sprites                { min-width: 120px; text-align: right; }
+div.ticket-sprites .sprite,
+div.ticket-sprites a              { display: inline-block; float: none; }
 
 /* Sprites for individual jobs on Activity Summary table */
 p span.job-sprites                { position: absolute; display: none; }

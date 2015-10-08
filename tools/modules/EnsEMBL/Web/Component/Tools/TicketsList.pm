@@ -146,26 +146,29 @@ sub job_summary_section {
   my $switch_assembly   = $species_defs->get_config($job_species, 'SWITCH_ASSEMBLY') || '';
   my $assembly_site     = $assembly_mismatch && $switch_assembly eq $job_assembly ? 'http://'.$species_defs->get_config($job_species, 'SWITCH_ARCHIVE_URL') : '';
   my $job_description   = $object->get_job_description($job);
-
-  my $result_url = $dispatcher_status eq 'done' ? {
-    '__clear'     => !!$assembly_site, # remove extra params for the external site
-    'species'     => $job_species,
-    'type'        => 'Tools',
-    'action'      => $ticket->ticket_type_name,
-    'function'    => 'Results',
-    'tl'          => $url_param
-  } : undef;
+  my $result_url        = $dispatcher_status eq 'done' ? $self->result_url($ticket, $job) : undef;
 
   if ($result_url && $assembly_mismatch) {
     if ($assembly_site && $ticket->owner_type eq 'user' && $is_owned_ticket) { # if job is from another assembly and we do have a site for that assembly
       $result_url = { # result can only be seen by logged in user
-        'then'      => $hub->url($result_url),
+        'then'      => $hub->url({%$result_url, '__clear' => 1}), # remove extra params for the external site
         'type'      => 'Account',
         'action'    => 'Login',
       };
     } else { # if job is from another assembly and we do NOT have a site for that assembly
       $result_url = undef;
     }
+  }
+
+  # create the status tag
+  my $status_tag = $self->job_status_tag($job, $dispatcher_status, $result_count, $result_url, $assembly_mismatch && $current_assembly, !!$assembly_site);
+  $status_tag->{'node_name'} = 'span';
+  if ($status_tag->{'href'}) {
+    $status_tag->{'children'} = [{
+      'node_name'   => 'a',
+      'href'        => delete $status_tag->{'href'},
+      'inner_HTML'  => delete $status_tag->{'inner_HTML'},
+    }];
   }
 
   return $self->dom->create_element('p', {
@@ -185,7 +188,7 @@ sub job_summary_section {
       'flags'       => ['job_desc_span'],
       'inner_HTML'  => $job_description
     },
-    $self->job_status_tag($job, $dispatcher_status, $result_count, $assembly_mismatch && $current_assembly, !!$assembly_site),
+    $status_tag,
     $result_url ? {
       'node_name'   => 'a',
       'inner_HTML'  => $assembly_site ? "[View results on $job_assembly site]" : '[View results]',
@@ -254,7 +257,7 @@ sub ticket_buttons {
   my $url_param     = $object->create_url_param({'ticket_name' => $ticket->ticket_name});
   my $job_count     = $ticket->job_count;
   my $action        = $ticket->ticket_type_name;
-  my $buttons       = $self->dom->create_element('div');
+  my $buttons       = $self->dom->create_element('div', {'class' => 'ticket-sprites'});
 
   my ($save_button, $edit_button, $share_button, $delete_button, $expiring_warning);
 

@@ -66,7 +66,8 @@ sub features {
       'strand'            => $_->{'strand'},
       'allele_string'     => $_->{'allele_string'},
       'variation_name'    => $_->{'variation_name'},
-      'consequence_type'  => [ $_->{'consequence_type'} ]
+      'consequence_type'  => [ $_->{'consequence_type'} ],
+      'tl'                => $_->{'tl'}
     }, 'Bio::EnsEMBL::Variation::VariationFeature';
 
     push @features, $snp;
@@ -76,5 +77,20 @@ sub features {
 
   return $self->{'_cache'}{'features'} = \@features;
 }
+
+sub href {
+  my ($self, $f)  = @_;
+
+  return $self->_url({
+    species   => $self->species,
+    type      => 'Variation',
+    action    => 'VEP',
+    v         => $f->variation_name,
+    config    => $self->{'config'}{'type'},
+    track     => $self->type,
+    tl        => $f->{'tl'}
+  });
+}
+
 
 1;

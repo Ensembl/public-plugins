@@ -26,48 +26,53 @@ use parent qw(
   EnsEMBL::Web::Component::Tools::TicketsList
 );
 
+sub job_status_tag {
+  ## @override
+  ## Remove link from the status tag of finished jobs
+  my $self  = shift;
+  my $tag   = $self->SUPER::job_status_tag(@_);
+
+  $tag->{'title'} = q(This job is finished. Please click on the 'Download&nbsp;results' link to download result file.);
+  $tag->{'href'}  = '';
+
+  return $tag;
+}
+
 sub job_summary_section {
   ## @override
-  my ($self, $ticket, $job, $hit_count) = @_;
+  ## Change text and link of the results link
+  my $self      = shift;
+  my $ticket    = $_[0];
+  my $summary   = $self->SUPER::job_summary_section(@_);
 
-  my $summary = $self->SUPER::job_summary_section($ticket, $job, $hit_count);
-
-  ## Assembly converter doesn't have a results page - instead, attach this file to the browser
-  my @results_links = @{$summary->get_nodes_by_flag('job_results_link')||[]};
-  
-  my $location = $self->hub->param('r') || $self->hub->species_defs->SAMPLE_DATA->{'LOCATION_PARAM'};
-  foreach (@results_links) {
-
-    $summary->insert_before({
-                          'node_name'   => 'a',
-                          'inner_HTML'  => "[Download results]",
-                          'class'       => [qw(small left-margin)],
-                          'href'        => $self->object->download_url($ticket->ticket_name),
-                  }, $_);
+  foreach (@{$summary->get_nodes_by_flag('job_results_link') || []}) {
+    $_->inner_HTML('[Download results]');
+    $_->set_attribute('href', $self->object->download_url($ticket->ticket_name));
   }
-  $_->parent_node->remove_child($_) for @{$summary->get_nodes_by_flag('job_results_link')};
 
   return $summary;
 }
 
 sub ticket_buttons {
-  my ($self, $ticket) = @_;
-  my $buttons = $self->SUPER::ticket_buttons($ticket);
-  my ($job)   = $ticket && $ticket->job;
+  ## @override
+  ## Add an extra download icon for finished jobs
+  my $self      = shift;
+  my $ticket    = $_[0];
+  my $buttons   = $self->SUPER::ticket_buttons(@_);
+  my ($job)     = $ticket && $ticket->job;
 
   if ($job && $job->dispatcher_status eq 'done') {
 
     $buttons->prepend_child({
-                      'node_name'   => 'a',
-                      'class'       => [qw(_download)],
-                      'href'        => $self->object->download_url($ticket->ticket_name),
-                      'children'    => [{
-                                        'node_name' => 'span',
-                                        'class'     => [qw(_ht sprite download_icon)],
-                                        'title'     => 'Download output file'
-                                        }],
-   
-                      });
+      'node_name'   => 'a',
+      'class'       => [qw(_download)],
+      'href'        => $self->object->download_url($ticket->ticket_name),
+      'children'    => [{
+        'node_name'   => 'span',
+        'class'       => [qw(_ht sprite download_icon)],
+        'title'       => 'Download output file'
+      }]
+    });
   }
 
   return $buttons;

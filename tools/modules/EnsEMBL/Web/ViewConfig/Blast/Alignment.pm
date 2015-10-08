@@ -35,7 +35,7 @@ sub init {
     exon_display   => 'core',
     exon_ori       => 'all',
     snp_display    => 'off',
-    line_numbering => 'sequence',
+    line_numbering => 'slice',
     title_display  => 'yes',
   });
 }

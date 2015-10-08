@@ -182,7 +182,7 @@ sub _convert_to_txt {
       push @lines, join("\t", map { ($row->{$_} // '') ne '' ? $row->{$_} : '-' } @$headers);
     }
   } else {
-    push @lines, '#'.join("\t", map { s/^ID$/Uploaded_variation/; $_ } @$headers);
+    push @lines, '#'.join("\t", map { s/^ID$/Uploaded_variation/r; } @$headers);
   }
 
   return \@lines;
@@ -224,7 +224,7 @@ sub _convert_to_vep {
       push @lines, join("\t", @fields, join(';', @extra));
     }
   } else {
-    push @lines, '#'.join("\t", map { s/^ID$/Uploaded_variation/; $_ } @$headers[0..$existing_variation_index], 'Extra');
+    push @lines, '#'.join("\t", map { s/^ID$/Uploaded_variation/r; } @$headers[0..$existing_variation_index], 'Extra');
   }
 
   return \@lines;
