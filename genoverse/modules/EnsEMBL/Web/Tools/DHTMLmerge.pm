@@ -21,60 +21,82 @@ package EnsEMBL::Web::Tools::DHTMLmerge;
 use strict;
 use warnings;
 
+use EnsEMBL::Web::Utils::PluginInspector qw(current_plugin);
+
 use previous qw(get_filegroups);
+
+use constant GENOVERSE_VERSION => 'v2.3';
+
+my $GENOVERSE_FILES_ORDER = {
+  'css' => [qw(
+    controlPanel.css
+    fileDrop.css
+    font-awesome.css
+    fullscreen.css
+    genoverse.css
+    hoverLabels.css
+    karyotype.css
+    resizer.css
+    tooltips.css
+    trackControls.css
+  )],
+  'js' => [qw(
+    Genoverse.js
+    lib/jquery.mousehold.js
+    lib/jquery.mousewheel.js
+    lib/rtree.js
+    Track.js
+    Track/Model.js
+    Track/View.js
+    Track/Controller.js
+    Track/Model
+    Track/View
+    Track/Controller
+    Track/library
+    plugins
+  )]
+};
 
 sub get_filegroups {
   ## @override
+  ## For genoverse, the code inside genoverse plugin's dir htdocs/genoverse/vX.X is synced from the genoverse
+  ## repository without any changes. So in order to override some default genoverse functionality in Ensembl,
+  ## there's a different folder 'ensembl' inside genoverse plugin's htdocs/genoverse folder. To make sure the
+  ## code overrides the main genoverse one, it needs to be loaded after the genoverse code. Also if any other
+  ## plugin wants to override some behaviour from genoverse, it should be able to do that by overriding the
+  ## files in it's own 'ensembl' folder, but should not be allowed access to override the vX.X folder.
   my ($species_defs, $type) = @_;
 
-  my @groups = PREV::get_filegroups($species_defs, $type);
+  my @file_groups     = PREV::get_filegroups($species_defs, $type);
+  my $genoverse_path  = current_plugin->{'path'};
+     $genoverse_path  = sprintf '%s/genoverse/%s', grep(m/^$genoverse_path/, @{$species_defs->ENSEMBL_HTDOCS_DIRS || []}), GENOVERSE_VERSION;
 
-  return @groups if $type eq 'css';
+  my @files;
 
-  my @ordered_files;
+  push @files, @{_get_genoverse_files($genoverse_path, $type)};                         # first load genoverse core folder from genoverse plugin only
+  push @files, @{get_files_from_dir($species_defs, $type, "genoverse/ensembl/$type")};  # then load files to override the default genoverse files from all plugins
 
-  foreach my $file (@{genoverse_files_order()}) {
-    foreach my $path (grep -e, map "$_/genoverse/$file", reverse grep !m/biomart/, @{$species_defs->ENSEMBL_HTDOCS_DIRS || []}) {
-      if (-d $path) {
-        push @ordered_files, grep -f, map { $_ =~ /\.js$/ ? "$path/$_" : () } sort { lc $a cmp lc $b } @{list_dir_contents($path, {'recursive' => 1})};
-      } else {
-        push @ordered_files, $path;
-      }
-    }
-  }
-
-  return @groups, {
+  return @file_groups, {
     'group_name'  => 'genoverse',
-    'files'       => \@ordered_files,
+    'files'       => \@files,
     'condition'   => sub { return !!grep $_->[-1] eq 'genoverse', @{$_[0]->components}; },
     'ordered'     => 1
   };
 }
 
-sub genoverse_files_order {
-  return [
-    'Genoverse.js',
-    'Ensembl/Genoverse.js',
-    'Ensembl/GenoverseMobile.js',
-    'Track.js',
-    'Ensembl/Track.js',
-    'Track/Controller.js',
-    'Track/Model.js',
-    'Track/View.js',
-    'Ensembl/MVC.js',
-    'Track/library/File.js',
-    'Track/library/Static.js',
-    'Track/Controller/Stranded.js',
-    'Track/Model/Stranded.js',
-    'Track/Controller',
-    'Track/Model',
-    'Track/View',
-    'Track/library',
-    'lib',
-    'plugins',
-    'Ensembl',
-  ];
-}
+sub _get_genoverse_files {
+  ## @private
+  my ($genoverse_path, $type) = @_;
 
+  my %all_files = map { $_ => 0 } @{list_dir_contents("$genoverse_path/$type", {'recursive' => 1})};
+  my @order     = @{$GENOVERSE_FILES_ORDER->{$type}};
+  my %req_files = map { $_ => 1 } @order;
+
+  foreach my $file (sort keys %all_files) {
+    $all_files{$file} = ($req_files{$file} || !!grep { $file =~ /^$_/ } @order) && -f "$genoverse_path/$type/$file" ? 1 : 0;
+  }
+
+  return [ map { $all_files{$_} ? "$genoverse_path/$type/$_" : () } @order ];
+}
 
 1;
