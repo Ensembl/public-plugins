@@ -88,15 +88,11 @@ sub _get_genoverse_files {
   ## @private
   my ($genoverse_path, $type) = @_;
 
-  my %all_files = map { $_ => 0 } @{list_dir_contents("$genoverse_path/$type", {'recursive' => 1})};
-  my @order     = @{$GENOVERSE_FILES_ORDER->{$type}};
-  my %req_files = map { $_ => 1 } @order;
+  my $order = $GENOVERSE_FILES_ORDER->{$type};
+  my $ls    = list_dir_contents("$genoverse_path/$type", {'recursive' => 1, 'absolute_path' => 1});
+  my @files = map { my $path = "$genoverse_path/$type/$_"; -e $path ? -f $path ? $path : grep { $_ =~ /^$path\// && -f $_ } @$ls : (); } @$order;
 
-  foreach my $file (sort keys %all_files) {
-    $all_files{$file} = ($req_files{$file} || !!grep { $file =~ /^$_/ } @order) && -f "$genoverse_path/$type/$file" ? 1 : 0;
-  }
-
-  return [ map { $all_files{$_} ? "$genoverse_path/$type/$_" : () } @order ];
+  return \@files;
 }
 
 1;
