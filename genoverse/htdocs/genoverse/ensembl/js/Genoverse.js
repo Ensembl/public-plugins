@@ -19,6 +19,32 @@
 // TODO:  hide highlightRegion when new images are being made, and in other scenarios where it looks bad
 
 Ensembl.Genoverse = Genoverse.extend({
+  constructor: function () {
+    this.base.apply(this, arguments);
+
+    this.on('afterMoveTo', function () {
+      this.saveState();
+    });
+
+    this.on('afterSetRange afterPopState', function () {
+      this.updateEnsembl();
+    });
+
+    this.on('beforeResetTrackHeights beforeToggleAutoHeight beforeCheckTrackSize', function () {
+      this.resizingTracks = true;
+    });
+
+    this.on('afterResetTrackHeights afterToggleAutoHeight afterCheckTrackSize', function () {
+      this.resizingTracks = false;
+      this.updateSelectorHeight();
+    });
+
+    this.on('afterAddTracks afterRemoveTracks', function () {
+      Ensembl.EventManager.trigger('resetImageOffset');
+      this.updateSelectorHeight();
+    });
+  },
+
   init: function () {
     this.base.apply(this, arguments);
 
@@ -399,26 +425,4 @@ Ensembl.Genoverse = Genoverse.extend({
   die: function (error, el) {
     return this.base(error, el.parents('.js_panel:first'));
   }
-});
-
-Genoverse.on('afterMoveTo', function () {
-  this.saveState();
-});
-
-Genoverse.on('afterSetRange afterPopState', function () {
-  this.updateEnsembl();
-});
-
-Genoverse.on('beforeResetTrackHeights beforeToggleAutoHeight beforeCheckTrackSize', function () {
-  this.resizingTracks = true;
-});
-
-Genoverse.on('afterResetTrackHeights afterToggleAutoHeight afterCheckTrackSize', function () {
-  this.resizingTracks = false;
-  this.updateSelectorHeight();
-});
-
-Genoverse.on('afterAddTracks afterRemoveTracks', function () {
-  Ensembl.EventManager.trigger('resetImageOffset');
-  this.updateSelectorHeight();
 });
