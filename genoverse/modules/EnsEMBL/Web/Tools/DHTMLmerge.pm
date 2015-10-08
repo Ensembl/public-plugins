@@ -52,6 +52,7 @@ my $GENOVERSE_FILES_ORDER = {
     Track/Model
     Track/View
     Track/Controller
+    Track/library/Static.js
     Track/library
     plugins
   )]
