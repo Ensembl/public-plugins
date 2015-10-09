@@ -320,12 +320,12 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
     // add table columns from regulatory consequences
     if (results['regulatory_feature_consequences']) {
       $.merge(tableRows, $.map(results['regulatory_feature_consequences'], function(cons) {
-        return [
+        return [[
           '<b>' + renderZmenuLink(panel.previewInp.species, 'RegulatoryFeature', cons.regulatory_feature_id, cons.regulatory_feature_id) + '</b>'
             + '<br/><span class="small"><b>Type: </b>' + cons.biotype + '</span>',
           cons.consequence_terms.map(function(a) { return renderConsequence(a) }).join(', '),
           '-'
-        ];
+        ]];
       }));
     }
 
