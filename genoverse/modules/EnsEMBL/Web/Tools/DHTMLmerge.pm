@@ -29,11 +29,11 @@ use constant GENOVERSE_VERSION => 'v2.3';
 
 my $GENOVERSE_FILES_ORDER = {
   'css' => [qw(
+    genoverse.css
     controlPanel.css
     fileDrop.css
     font-awesome.css
     fullscreen.css
-    genoverse.css
     hoverLabels.css
     karyotype.css
     resizer.css
