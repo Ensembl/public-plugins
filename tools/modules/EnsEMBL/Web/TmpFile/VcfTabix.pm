@@ -265,6 +265,7 @@ sub _parse_line {
   # make ID
   $raw_data{'ID'} ||= sprintf '%s_%s_%s/%s', $raw_data{'CHROM'}, $start, $ref, $alt;
 
+  # create one row from each CSQ data field
   while (m/CSQ\=(.+?)(\;|$|\s)/g) {
     foreach my $csq (split '\,', $1) {
       $csq =~ s/\&/\,/g;
@@ -276,6 +277,9 @@ sub _parse_line {
       push @rows, \%data;
     }
   }
+
+  # if no CSQ data field found, return the raw data as a row
+  push @rows, \%raw_data unless @rows;
 
   return \@rows;
 }
