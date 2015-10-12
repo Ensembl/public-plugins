@@ -1,0 +1,71 @@
+/* Icons */
+img.sql_schema_icon { width:12px;height:12px;position:relative;top:2px; }
+
+/* Tables list - with header */
+div.sql_schema_table_group           { background-color:#F4F4F4;border-left:1px dotted #BBB;border-right:1px dotted #BBB;border-bottom:1px dotted #BBB;margin-bottom:15px;float:left;margin-right:20px;min-width:200px; }
+div.sql_schema_table_group_header    { background-color:#FFF;padding:2px 5px;border-top:2px solid #000;border-bottom:1px solid #000; }
+div.sql_schema_table_group_bullet    { box-shadow:1px 1px 2px #888;padding:0px 8px;display:inline;vertical-align:middle; }
+div.sql_schema_table_group_header h2 { margin-left:8px;display:inline;color:#000;vertical-align:middle; }
+ul.sql_schema_table_list             { padding:0px 4px 0px 22px;margin-bottom:2px; }
+ul.sql_schema_table_list li          { margin-right:0px; }
+
+/* Tables list - no header */
+div.sql_schema_table_list_nh       { background-color:#F4F4F4;border-radius:5px;margin-bottom:20px;float:left; }
+div.sql_schema_table_list_sub_nh   { padding:5px;background-color:#336;border-top-left-radius:5px;border-top-right-radius:5px; }
+div.sql_schema_table_list_nh h3    { display:inline;color:#FFF; }
+div.sql_schema_table_list_nh table { padding:0px 2px; }
+ul.sql_schema_table_list_nh        { padding-left:20px; }
+div.sql_schema_table_name_nh       {padding:0px;margin-left:0px;display:inline; }
+
+/* Group header */
+div.sql_schema_group_header    { background-color:#F4F4F4;padding:5px 4px;margin:75px 0px 5px;border-top:2px solid #000;border-bottom:1px solid #000; }
+div.sql_schema_group_bullet    { box-shadow:1px 1px 2px #888;padding:0px 8px;display:inline;vertical-align:top; }
+div.sql_schema_group_header h2 { display:inline;color:#000;padding-top:0px;margin-left:6px; }
+p.sql_schema_group_header_desc { width:800px; }
+
+/* SQL table header */
+div.sql_schema_table_header           { background-color:#F4F4F4;width:850px;border-bottom:1px solid #BBB;margin-top:60px;margin-bottom:2px;padding:4px;border-top:1px solid #000; }
+div.sql_schema_table_header_left      { float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px; }
+div.sql_schema_table_header_left span { display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;box-shadow:1px 1px 2px #888;vertical-align:middle; }
+div.sql_schema_table_header_right     { float:right;text-align:right;padding:2px 1px; }
+span.sql_schema_table_separator       { margin-right:5px;border-right:1px solid #000; }
+
+/* SQL table description */
+p.sql_schema_table_desc { padding:5px 0px;margin-bottom:0px;width:800px; }
+
+/* SQL table columns */
+table.sql_schema_table_column      { border:1px solid #667aa6;min-width:1000px;max-width:1200px;border-spacing:2px; }
+table.sql_schema_table_column th   { background-color:#667aa6;color:#FFF;padding:2px; }
+ul.sql_schema_table_column_type    { margin-bottom:0px; }
+ul.sql_schema_table_column_type li { line-height:12px; }
+
+/* SQL table examples */
+div.sql_schema_table_examples          { margin:10px 0px 15px; }
+p.sql_schema_table_example_header      { font-weight:bold;margin-bottom:10px; }
+div.sql_schema_table_example_content   { margin-left:10px; }
+div.sql_schema_table_example_query     { float:left;border:1px solid #555;padding:2px 4px;margin-right:15px;overflow:auto;max-width:800px;background-color:#FAFAFA; }
+div.sql_schema_table_example_query pre { margin-bottom:0px;color:#333; }
+div.sql_schema_table_example_button    { float:left; }
+table.sql_schema_table_example_result  { width:50%;margin-top:20px;margin-left:10px;border-spacing:2px; }
+div.sql_schema_table_example_error     { padding:5px;margin:10px;width:500px;font-weight:bold;border:2px solid red;color:red; }
+span.sql_schema_sql_highlight          { color:#00F; }
+
+/* SQL table extra info */
+table.sql_schema_extra         { margin-top:20px;border:1px solid #BBB; }
+table.sql_schema_extra a       { text-decoration:none; }
+td.sql_schema_extra_left       { padding: 4px 25px 0px 2px }
+td.sql_schema_extra_left ul    { margin-bottom:0px; }
+td.sql_schema_extra_right      { padding-top:4px; }
+td.sql_schema_extra_right p    { margin-bottom:0px; }
+td.sql_schema_extra_right span { margin-right:10px;font-weight:bold; }
+td.sql_schema_extra_right ul   { margin-top:1em; } 
+td.sql_schema_extra_separator  { margin:0px;padding:0px;width:1px;border-right:1px dotted #BBB; }
+.sql_schema_species_name       { font-style:italic; }
+
+/* Legend */
+.sql_schema_legend { width:25px;height:15px; }
+
+/* Links */
+a.sql_schema_link { text-decoration:none; }
+a.sql_schema_show_hide { cursor:pointer;font-weight:bold;border-radius:5px;background-color:#FFF;border:1px solid #667aa6;padding:1px 2px;margin-right:5px;vertical-align:middle;box-shadow:1px 1px 2px #888; }
+.sql_schema_legend { width:25px;height:15px;} 
