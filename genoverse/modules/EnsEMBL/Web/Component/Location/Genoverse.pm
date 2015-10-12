@@ -32,10 +32,16 @@ sub _init {
 }
 
 sub content {
-  my $self  = shift;
-  my $slice = shift || $self->object->slice;
-  my $hub   = $self->hub;
-  my $image = $self->new_image($slice, $hub->get_imageconfig($self->view_config->image_config));
+  my $self    = shift;
+  my $slice   = shift;
+  my $hub     = $self->hub;
+
+  unless ($slice) {
+    my $object  = $self->object || $hub->core_object('location');
+    $slice      = $object->slice;
+  }
+  my $vc      = $self->view_config('Location');
+  my $image   = $self->new_image($slice, $hub->get_imageconfig($vc->image_config));
   
   return if $self->_export_image($image);
   
