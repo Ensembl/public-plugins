@@ -24,10 +24,12 @@ div.sql_schema_group_header h2 { display:inline;color:#000;padding-top:0px;margi
 p.sql_schema_group_header_desc { width:800px; }
 
 /* SQL table header */
+div.sql_schema_table                  { max-width:90%;border-left:1px dotted #BBB;border-right:1px dotted #BBB;border-bottom:1px dotted #BBB; }
 div.sql_schema_table_header           { background-color:#F4F4F4;border-bottom:1px solid #BBB;margin-top:60px;padding:4px;border-top:1px solid #000; }
 div.sql_schema_table_header_left      { float:left;text-align:left;font-size:11pt;font-weight:bold;color:#000;padding:2px 1px; }
 div.sql_schema_table_header_left span { display:inline-block;height:10px;width:10px;border-radius:5px;margin-right:5px;box-shadow:1px 1px 2px #888;vertical-align:middle; }
 div.sql_schema_table_header_right     { float:right;text-align:right;padding:2px 1px;margin-right:8px; }
+div.sql_schema_table_content          { padding:10px; }
 span.sql_schema_table_separator       { margin-right:8px;border-right:1px solid #000; }
 
 /* SQL table description */
