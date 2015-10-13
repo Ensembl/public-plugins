@@ -146,7 +146,7 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
           a = a.length === 1 ? '-' : a.substring(1);
         }
 
-        url = this.previewInp.baseURL + '/region/' + c + ':' + s + '-' + e + ':' + 1 + '/' + a[0];
+        url = this.previewInp.baseURL + '/region/' + c + ':' + s + '-' + e + ':' + 1 + '/' + a;
         break;
 
       default:
