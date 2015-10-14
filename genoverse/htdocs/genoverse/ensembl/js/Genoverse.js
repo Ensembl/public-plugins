@@ -405,6 +405,14 @@ Ensembl.Genoverse = Genoverse.extend({
     });
   },
 
+  addDomElements: function () {
+  /*
+   * Remove default genoverse selector controls (we have our zmenu for that)
+   */
+    this.base.apply(this, arguments);
+    $(this.selectorControls).remove();
+  },
+
   moveCrosshair: function (rStart) {
     if (this.dragAction === 'select' && this.selector.hasClass('crosshair')) {
       this.selectorStalled = true; // prevent document.mousemove to change selector poisition to current mouse pageX

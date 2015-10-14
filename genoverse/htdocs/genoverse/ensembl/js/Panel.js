@@ -64,10 +64,6 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
     }
     
     this.genoverse.labelContainer.sortable('option', 'handle', '.handle');
-    
-    if (this.genoverse.wheelAction === false) {
-      this.genoverse.selectorControls.prepend('<button class="jumpHere">Jump here</button>');
-    }
   },
   
   setImageNumber: function () {
