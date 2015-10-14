@@ -32,26 +32,16 @@
   box-shadow: none;
   border-radius: 0;
   border: 0;
-  border-left: 1px solid #999;
+  border-left: 1px solid [[PANEL_BORDER]];
 }
 
 .gv-canvas-container .gv-message-container {
-  background: #ddd;
-  color: #000;
-  border: 1px solid #999;
-  border-radius: 0;
-  font-size: 10px;
+  background-color: [[BUTTON_BG]];
 }
 
-.gv-canvas-container .gv-message-container .gv-messages {
-  float: left;
-}
 
-.gv-canvas-container .gv-message-container .gv-control {
-  top: 50%;
-  right: 5px;
-  margin-top: -7px;
-  font-size: 11px;
+.gv-canvas-container .gv-message-container:hover {
+  background-color: [[BUTTON_BG_HOVER]];
 }
 
 .gv-label-container {
@@ -70,12 +60,31 @@
 .gv-label-container li .gv-handle {
   height: 100%;
   width: 11px;
-  border: 1px solid [[BUTTON_BG]];
-  border-left: 0;
-  background: [[TINT_BG]];
+  border: 1px solid #fff;
+  border-width: 1px 1px 0 0;
+  background: [[TINT_BG]] url("/i/track_grabber.png") repeat scroll 0 0;
   cursor: n-resize;
   top: 0;
   box-sizing: border-box;
+  opacity: 1;
+}
+
+.gv-label-container li .gv-handle:before, .gv-label-container li .gv-handle:after {
+  position: absolute;
+  background: [[TINT_BG]] none repeat scroll 0 0;
+  width: 100%;
+  content: "";
+  display: block;
+  height: 20%;
+  left: 0;
+  right: 0;
+  top: 0;
+  z-index: 0;
+}
+
+.gv-label-container li .gv-handle:after {
+  top: auto;
+  bottom: 0;
 }
 
 .gv-label-container li .gv-name {
@@ -83,6 +92,18 @@
   font-weight: normal;
   text-shadow: none;
   margin: 0;
+}
+
+.gv-canvas-container .gv-track-container-legend {
+  border-color: [[PANEL_BORDER]];
+}
+
+.gv-canvas-container .gv-track-border {
+  border-color: transparent !important;
+}
+
+.gv-canvas-container .gv-expander:hover {
+  box-shadow: 0 -5px 7px -3px #666 inset;
 }
 
 .gv-selector {
