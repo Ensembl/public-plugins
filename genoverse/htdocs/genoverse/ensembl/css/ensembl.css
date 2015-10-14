@@ -1,0 +1,302 @@
+/*
+ * Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+
+.gv-canvas-container .gv-label-container li.focused,
+.gv-canvas-container .gv-label-container li.pinned,
+.gv-canvas-container .gv-label-container li.hover {
+  background-color: #ddd;
+}
+
+.gv-canvas-container .gv-label-container li.focused .hover_label,
+.gv-canvas-container .gv-label-container li.pinned .hover_label,
+.gv-canvas-container .gv-label-container li.hover .hover_label {
+  display: block;
+}
+
+body.mac .gv-label-container li .gv-handle {
+  cursor: ns-resize;
+}
+
+.gv-label-container li.f .gv-handle {
+  background: #9ED4DC;
+}
+
+.gv-label-container li.r .gv-handle {
+  background: #F1D7A4;
+}
+
+.gv-label-container li .nohover:hover {
+  background: [[TINT_BG]]!important;
+}
+
+.gv-label-container li.f .nohover:hover {
+  background: #9ED4DC!important;
+}
+
+.gv-label-container li.r .nohover:hover {
+  background: #F1D7A4!important;
+}
+
+
+
+.gv-canvas-container .gv-selector.highlight {
+  border-style: solid;
+  background: none;
+  border-width: 1px;
+  z-index: 9;
+  pointer-events: none;
+}
+
+.gv-canvas-container .gv-selector.gv-crosshair div {
+  display: none;
+}
+
+.gv-canvas-container .mrselector {
+  border: 1px dashed rgba(140, 100, 140, 0.5);
+}
+
+.canvas .image_toolbar.bottom {
+  width: 100%;
+}
+
+.canvas .genoverse_controls {
+  display: none;
+  float: right;
+  padding-right: 6px;
+}
+
+.canvas .genoverse_controls div {
+  display: inline-block;
+}
+
+.canvas .genoverse_controls div.hidden {
+  display: none;
+}
+
+.canvas .genoverse_controls div.button {
+  position: relative;
+  top: -2px;
+  height: 18px;
+  width: 18px;
+  vertical-align: top;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  margin-left: 2px;
+}
+
+.canvas .genoverse_controls div.right {
+  margin-left: 0;
+}
+
+.canvas .genoverse_controls div.button:hover,
+.canvas .genoverse_controls div.selected {
+  background-color: [[BUTTON_BG_HOVER]];
+}
+
+.canvas .genoverse_controls button {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  height: 17px;
+  width: 16px;
+  margin-left: -8px;
+  border: 0;
+  background: url(/i/controls_white.png);
+  cursor: pointer;
+  outline: 0;
+}
+
+.canvas .genoverse_controls button.scroll_left {
+  background-position:   0px   1px;
+}
+
+.canvas .genoverse_controls button.scroll_right {
+  background-position:   0px -17px;
+}
+
+.canvas .genoverse_controls button.zoom_in {
+  background-position: -17px   1px;
+}
+
+.canvas .genoverse_controls button.zoom_out {
+  background-position: -17px -17px;
+}
+
+.canvas .genoverse_controls button.auto_height.on {
+  background-position: -34px   1px;
+}
+
+.canvas .genoverse_controls button.auto_height {
+  background-position: -34px -17px;
+}
+
+.canvas .genoverse_controls button.reset_height {
+  background-position: -51px   1px;
+}
+
+.canvas .genoverse_controls button.dragging.on {
+  background-position: -68px   1px;
+}
+
+.canvas .genoverse_controls button.dragging {
+  background-position: -68px -17px;
+}
+
+.canvas .genoverse_controls button.wheel_zoom.on {
+  background-position: -85px   1px;
+}
+
+.canvas .genoverse_controls button.wheel_zoom {
+  background-position: -85px -16px;
+}
+
+.canvas .genoverse_controls .label {
+  margin-left: 16px;
+  line-height: 16px;
+}
+
+.canvas .genoverse_controls.narrow div {
+  margin-left: 8px;
+}
+
+.canvas .genoverse_controls.narrow div.right {
+  margin-left: 0;
+}
+
+.canvas .genoverse_controls.narrow .label {
+  display: none;
+}
+
+.canvas .image_toolbar .genoverse_controls {
+  display: block;
+}
+
+.hover_label a.height {
+  height: 16px;
+  width: 16px;
+  display: inline-block;
+  background: url(/i/controls_genoverse.png) no-repeat -34px 0;
+  cursor: pointer;
+}
+
+.hover_label div.auto_height a.height {
+  background-position: -34px -18px;
+}
+
+.hover_label div span.auto_height,
+.hover_label div.auto_height span.fixed_height {
+  display: none;
+}
+
+.hover_label div.auto_height span.auto_height {
+  display: inline;
+}
+
+.canvas_zoom {
+  position: absolute;
+  display: none;
+  z-index: 20;
+}
+
+.canvas_zoom.i {
+  height: 40px;
+  width: 40px;
+}
+
+.canvas_zoom.o {
+  height: 80px;
+  width: 80px;
+}
+
+.canvas_zoom .h {
+  position: absolute;
+  height: 2px;
+  width: 10px;
+  background: red;
+}
+
+.canvas_zoom .v {
+  position: absolute;
+  height: 10px;
+  width: 2px;
+  background: red;
+}
+
+.canvas_zoom .r {
+  right:  0;
+}
+
+.canvas_zoom .b {
+  bottom: 0;
+}
+
+.canvas_zoom.o .t.h {
+  top:    10px;
+}
+
+.canvas_zoom.o .b.h {
+  bottom: 10px;
+}
+
+.canvas_zoom.o .l.v {
+  left:   8px;
+}
+
+.canvas_zoom.o .r.v {
+  right:  8px;
+}
+
+.image_update_overlay {
+  position: absolute;
+  background: #fff;
+  opacity: 0.7;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  bottom: 0;
+}
+
+.image_update_buttons {
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  z-index: 101;
+  width: 450px;
+  margin-left: -225px;
+  text-align: center;
+}
+
+.image_update_buttons .fbutton {
+  margin: 0 16px;
+  padding: 16px;
+}
+
+.image_toolbar .genoverse_switch {
+  background-image: url(/i/switch.png);
+  float: left;
+  height: 16px;
+  width: 16px;
+  margin: -2px 4px 2px 2px;
+  border: 2px solid [[BUTTON_BG]];
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.image_toolbar .genoverse_switch:hover {
+  background-color: [[BUTTON_BG_HOVER]];
+  border-color: [[BUTTON_BG_HOVER]];
+}
