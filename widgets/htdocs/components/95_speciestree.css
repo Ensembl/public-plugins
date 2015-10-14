@@ -1,14 +1,27 @@
 
+/* menu when you click on icon in the image top toolbar */
+div.toolbar_menu             { z-index: 1000; border-top: 1px solid [[TINT_BORDER]]; position: absolute; cursor: pointer; display: none; width: 120px;  }
+div.toolbar_menu div         { border: 1px solid #999999; border-top: 0; font-size: 12px; line-height: 16px; background-color: [[TINT_BG]]; color: [[CONTRAST_TEXT]]; text-align: left; padding: 0 4px; }
+div.toolbar_menu div.header  { background-color: [[TABLE_HEADER]]; color: #FFFFFF; font-weight: bold; }
+div.toolbar_menu div div     { display: inline-block; border: none; background: none; margin: 0; padding: 0; width: 60px; }
+div.toolbar_menu div a       { position: absolute; right: 6px; text-decoration: none; font-weight: bold; }
+div.toolbar_menu div a.help  { right: 42px; margin: 0; float: none; }
+div.toolbar_menu div a.view  { right: 24px; margin: 0; float: none; }
+div.toolbar_menu div a img   { float: none; margin: 0; }
+
+body.ie67 div.toolbar_menu a { margin-top: -16px; }
+
+
 div.js_tree div.image_toolbar                   { background-color: #667aa6; height: 20px; text-align: center; font-weight: bold;}
 div.js_tree div.image_container                 { margin-right: 20px; }
 div.tree_label                                  { color: #ffffff; }
 div.layout_switch                               { background-image: url("/i/switch.png"); cursor: pointer; float: left; height: 16px; margin: 0 4px 2px; width: 16px; }
 div.tree_switch                                 { background-image: url("/i/tree.png"); cursor: pointer; float: left; height: 16px; margin: -1px 6px 2px; width: 16px; height: 21px; }
 div.filter_switch                               { background-image: url("/i/filter.png"); cursor: pointer; float: left; height: 16px; margin: 0 4px 2px; width: 16px; }
-div.js_tree div.iexport_menu                    { width: 145px; }
-div.js_tree div.iexport_menu div                { font-weight: bold; border-width: 0px 1px 1px 0px; }
-div.js_tree div.iexport_menu div.current        { background: url("/i/16/rev/check_grey.png") no-repeat scroll right center rgba(0, 0, 0, 0); color: grey; font-weight: bold; text-decoration: none; background-color: #eaeeff; }
-div.iexport_menu div.header                     { cursor: auto; }
+div.js_tree div.toolbar_menu                    { width: 145px; }
+div.js_tree div.toolbar_menu div                { font-weight: bold; border-width: 0px 1px 1px 0px; }
+div.js_tree div.toolbar_menu div.current        { background: url("/i/16/rev/check_grey.png") no-repeat scroll right center rgba(0, 0, 0, 0); color: grey; font-weight: bold; text-decoration: none; background-color: #eaeeff; }
+div.toolbar_menu div.header                     { cursor: auto; }
 div.tree_menu, div.resize_menu, div.filter_menu { display: none; }
 div.js_tree div.resize                          { background-image: url("/i/16/rev/image_resize.png"); cursor: pointer; float: left; height: 16px; margin: 0 4px 2px; width: 16px; }
 div .tnt_tooltip                                { background-color: #eaeeff; border: 1px solid #eaeeff; box-shadow: 5px 5px 15px #666; font-size: 10px; font-weight: bold; opacity: 0.94; padding: 0px; text-align: left; white-space: normal; width: 210px; position: absolute !important; }
@@ -16,3 +29,4 @@ div .tnt_tooltip                                { background-color: #eaeeff; bor
 .tnt_zmenu_header                               { background-color: #667aa6; }
 .tnt_zmenu_header th                            { color: #ffffff; }
 .tnt_tree_node, .tnt_tree_label                 { cursor: pointer; }
+

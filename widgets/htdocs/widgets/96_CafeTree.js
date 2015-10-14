@@ -32,9 +32,9 @@ Ensembl.CafeTree.tnt_theme_tree_cafe_tree = function() {
           .on("click", function() {
               if(d3.select(".tree_menu").style("display") == 'none') {
                 //just making sure all other menu are closed
-                d3.selectAll(".iexport_menu").each(function(d,i) {
+                d3.selectAll(".toolbar_menu").each(function(d,i) {
                   d3.select(this).style("display", "none");
-                  d3.select(".iexport_menu").style("display", "none");
+                  d3.select(".toolbar_menu").style("display", "none");
                   d3.select(".share_page").style("display", "none");
                 });
                 d3.select(".tree_menu").style("display", "block");
@@ -44,7 +44,7 @@ Ensembl.CafeTree.tnt_theme_tree_cafe_tree = function() {
           });
       var tree_menu = d3.select("#widget")
           .append("div")
-          .attr("class", "iexport_menu tree_menu d3_menu");
+          .attr("class", "toolbar_menu tree_menu d3_menu");
 
       tree_menu.append("div")
           .attr("class", "header")

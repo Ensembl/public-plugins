@@ -67,7 +67,7 @@ Ensembl.Panel.Widget = Ensembl.Panel.ImageMap.extend({
     d3.select(".image_toolbar").append("div").attr("class", "tree_label"); 
     
     if($(".resize").length) {    
-      d3El.append("div").attr("class", "iexport_menu d3_menu resize_menu");
+      d3El.append("div").attr("class", "toolbar_menu d3_menu resize_menu");
       panel.drawResizeMenu(width);   
           
       d3.select(".resize")
@@ -75,9 +75,8 @@ Ensembl.Panel.Widget = Ensembl.Panel.ImageMap.extend({
         .on("click",function(){
           if(d3.select(".resize_menu").style("display") == 'none') {
             //just making sure all other menu are closed
-            d3.selectAll(".iexport_menu").each(function(d,i) {
+            d3.selectAll(".toolbar_menu").each(function(d,i) {
               d3.select(this).style("display", "none");
-              panel.elLk.exportMenu.hide();
               d3.select(".share_page").style("display", "none");
             });
           
@@ -117,9 +116,8 @@ Ensembl.Panel.Widget = Ensembl.Panel.ImageMap.extend({
           var current_width =  Math.floor(d3El.style("width").replace(/px/g,'') / 100) * 100;
 
           //just making sure all other menu are closed
-          d3.selectAll(".iexport_menu").each(function(d,i) {
+          d3.selectAll(".toolbar_menu").each(function(d,i) {
             d3.select(this).style("display", "none");
-            panel.elLk.exportMenu.hide();
             d3.select(".share_page").style("display", "none");
           });
 

@@ -71,8 +71,6 @@ sub render_toolbar {
   push @$icons, $self->add_image_export_icon;
   push @$icons, $self->add_export_icon;
   
-  $extra_html .= $self->add_image_export_menu;
-
   return $self->_render_toolbars($icons, $extra_html);
 }
 
