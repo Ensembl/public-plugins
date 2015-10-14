@@ -161,7 +161,7 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
   },
 
   initSelector: function() {
-    this.elLk.selector = this.genoverse.selector.append('<div class="left-border"></div><div class="right-border"></div>');
+    this.elLk.selector = this.genoverse.selector.append('<div class="left-border"></div><div class="right-border"></div>').addClass('selector');
     this.dragRegion = {l: 0, r: this.genoverse.width - 1, a: { klass: {} }}; // required by activateSelector to find out the limits for the selector
     this.activateSelector();
   },
