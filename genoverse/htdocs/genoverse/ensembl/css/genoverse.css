@@ -55,13 +55,15 @@
 .gv-label-container li {
   cursor: pointer;
   box-shadow: none !important;
+  overflow: visible;
+  color: [[PAGE_TEXT]];
 }
 
 .gv-label-container li .gv-handle {
   height: 100%;
-  width: 11px;
+  width: 10px;
   border: 1px solid #fff;
-  border-width: 1px 1px 0 0;
+  border-width: 1px 0 0;
   background: [[TINT_BG]] url("/i/track_grabber.png") repeat scroll 0 0;
   cursor: n-resize;
   top: 0;

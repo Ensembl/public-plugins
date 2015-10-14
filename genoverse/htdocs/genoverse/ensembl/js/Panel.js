@@ -302,13 +302,13 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
       var track = this;
       var label = this.prop('label');
       
-      if (label.find('.name:not(:empty)').length) {
+      if (label.find('.gv-name:not(:empty)').length) {
 
-        this.hoverLabel = panel.elLk.hoverLabels.filter(':not(.allocated).' + this.id).first().addClass('allocated').appendTo(label).css({ left : label.find('.name').width(), top: 0 });
+        this.hoverLabel = panel.elLk.hoverLabels.filter(':not(.allocated).' + this.id).first().addClass('allocated').appendTo(label).css({ left : label.find('.gv-name').width(), top: 0 });
 
         label.addClass('_label_layer').on('mouseleave', function () {
           $(this).removeClass('hover');
-        }).children('.name, .hover_label').on('mouseenter', function () {
+        }).children('.gv-name, .hover_label').on('mouseenter', function () {
           $(this.parentNode).addClass('hover').find('._dyna_load').removeClass('_dyna_load').dynaLoad(); // dynaload any track description too
         });
 
