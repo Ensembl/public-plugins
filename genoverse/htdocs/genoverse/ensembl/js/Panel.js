@@ -247,7 +247,7 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
       this.prevHighlight = { start: start, end: end };
 
       if (!this.elLk.highlightRegion) {
-        this.elLk.highlightRegion = $('<div class="selector highlight">').appendTo(this.genoverse.wrapper);
+        this.elLk.highlightRegion = $('<div class="gv-selector gv-highlight">').prependTo(this.genoverse.wrapper);
       }
 
       this.elLk.highlightRegion.css({ left: left, width: width, display: 'block' });

@@ -53,7 +53,7 @@ body.mac .gv-label-container li .gv-handle {
 
 
 
-.gv-canvas-container .gv-selector.highlight {
+.gv-canvas-container .gv-selector.gv-highlight {
   border-style: solid;
   background: none;
   border-width: 1px;
