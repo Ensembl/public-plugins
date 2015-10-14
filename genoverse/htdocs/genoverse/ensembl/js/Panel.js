@@ -437,7 +437,7 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
     });
   },
 
-  getExportMenuExtra: function () {
+  getExtraExportParam: function () {
     var extra = this.base.apply(this, arguments);
 
     if (extra && extra.mark) {
@@ -452,7 +452,7 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
   resize: function (width) {
     width = width || Ensembl.width;
     
-    this.elLk.exportMenu.add(this.elLk.resizeMenu).hide();
+    this.elLk.resizeMenu.hide();
     this.elLk.imageResize.html(function (i) { var w = (i - 3) * 100 + width; $(this.parentNode.parentNode)[w < 500 ? 'hide' : 'show'](); return w + ' px'; });
     this.elLk.controls[width < 800 ? 'addClass' : 'removeClass']('narrow');
     this.elLk.container.css({ width: width, height: '' }).resizable('option', 'maxWidth', $(window).width() - this.el.offset().left);

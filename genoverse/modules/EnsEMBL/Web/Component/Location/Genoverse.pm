@@ -32,13 +32,12 @@ sub _init {
 }
 
 sub content {
-  my $self  = shift;
+  my $self    = shift;
   my $slice = shift || $self->object->slice;
-  my $hub   = $self->hub;
-  my $image = $self->new_image($slice, $hub->get_imageconfig($self->view_config->image_config));
-  
-  return if $self->_export_image($image);
-  
+  my $hub     = $self->hub;
+
+  my $image = $self->new_image($slice, $hub->get_imageconfig($self->view_config->image_config)); 
+ 
   # Temporary message whilst view is still being beta-tested
   return $image->render . $self->_info('Feedback', '
     This view is currently under development and therefore has a limited number of configurable tracks. 
@@ -68,13 +67,11 @@ sub new_image {
   my $hub        = $self->hub;
   my $image_type = $hub->session->get_data(type => 'image_type', code => $self->id) || {};
   
-  return $image_type->{'static'} || $hub->param('static') || $hub->param('export') || !(grep $_->[-1] eq 'genoverse', @{$hub->components}) ? $self->SUPER::new_image(@_) : EnsEMBL::Web::Document::Image::Genoverse->new({
+  return $image_type->{'static'} || $hub->param('static') || !(grep $_->[-1] eq 'genoverse', @{$hub->components}) ? $self->SUPER::new_image(@_) : EnsEMBL::Web::Document::Image::Genoverse->new({
     hub          => $hub,
     slice        => $_[0],
     image_config => $_[1],
     image_width  => $self->image_width,
-    export       => 'iexport',
-    export_url   => $self->ajax_url . ';export=',
     component    => $self->id
   });
 }

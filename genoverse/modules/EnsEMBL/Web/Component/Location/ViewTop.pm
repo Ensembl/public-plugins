@@ -21,15 +21,32 @@ package EnsEMBL::Web::Component::Location::ViewTop;
 use strict;
 
 use previous qw(content);
+use EnsEMBL::Web::Component;
 
 use parent qw(EnsEMBL::Web::Component::Location::Genoverse);
 
 sub new_image {
   # The plugin system causes confusion as to what is inherited. Make sure the right function is called
-  return EnsEMBL::Web::Component::Location::Genoverse::new_image(@_);
+  my $self = shift;
+  if ($self->hub->param('export')) {
+    return EnsEMBL::Web::Component::new_image($self, @_);
+  }
+  else {
+    return EnsEMBL::Web::Component::Location::Genoverse::new_image($self, @_);
+  }
 }
 
-sub content      { return $_[0]->content_test;  }
+sub content      { 
+  my $self = shift;
+
+  if ($self->hub->param('export')) {
+    return $self->PREV::content;
+  }
+  else {
+    return $self->content_test; 
+  }
+}
+
 sub content_main { return $_[0]->PREV::content; }
 
 1;
