@@ -36,8 +36,8 @@ To upload and display data on a <a href="/Homo_sapiens/Location/Genome?r=6:13301
 
 <h3>Ways to add tracks to Ensembl</h3>
 <ol>
-<li>Upload a file to our servers (max 5MB), from either your own computer or a location on the web (URL-based data).</li>
-<li>Attach a URL, from which the file will be read each time you visit a page that has the track on.
+<li>Upload a file to our servers (max 20MB unzipped), from either your own computer or a location on the web (URL-based data). If uploaded from a URL, you can use the 'Reload' function in the 'Manage Your Data' table to refresh the file from the same location.</li>
+<li>Attach an indexed file such as BigWig, BigBed or BAM via a URL, from which the file will be read each time you visit a page that has the track on. Note that the tabix file must also be present in the directory and should have a matching extension, e.g. '.bam.bai' for a bam index.
   <ul>
   <li>either by using the Add your data link (or Manage your data if you already have custom data in Ensembl)</li>
   <li>or by <a href="/info/docs/webcode/linking.html#attachurl">creating a specific URL</a> for an Ensembl page that includes the location of your data file</li>
@@ -49,7 +49,6 @@ To upload and display data on a <a href="/Homo_sapiens/Location/Genome?r=6:13301
   <li><a href="/info/docs/webcode/linking.html#attachurl">Attach DAS via a URL</a></li>
   </ul>
   </li>
-<li>Attach a BAM file using a url, which will be read each time you visit an Ensembl page with that track turned on. Note: both the BAM file and its index file should be present on your webserver. The BAM file should have a ".bam" extension, and the index file should have a ".bam.bai" extension. E.g. Mydata.bam and Mydata.bam.bai</li>
 </ol>
 
 <h3>Coordinate Systems</h3>
