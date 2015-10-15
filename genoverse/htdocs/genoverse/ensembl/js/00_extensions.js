@@ -14,6 +14,13 @@
  * limitations under the License.
  */
 
+Ensembl.genoverseSupported = function () {
+  if (!('_genoverseSupported' in this)) {
+    this._genoverseSupported = (function () { var c = document.createElement('canvas');  return !!(c.getContext && c.getContext('2d') && Ensembl.locationURL === 'search'); })();
+  }
+  return this._genoverseSupported;
+}
+
 Ensembl.Panel.Content = Ensembl.Panel.Content.extend({
   init: function () {
     this.base();
@@ -40,18 +47,22 @@ Ensembl.Panel.ImageMap = Ensembl.Panel.ImageMap.extend({
     
     this.el.css('position', 'relative');
     
-    if (this.params.genoverseSwitch) {
-      var isStatic = panel.params.updateURL.match('static');
-      
-      $('<div class="genoverse_switch"></div>').appendTo($('.image_toolbar', this.el)).on('click', function () {
-        panel.params.updateURL = Ensembl.updateURL({ 'static': !isStatic }, panel.params.updateURL);
-        panel.getContent();
-        
-        $.ajax({
-          url  : '/' + Ensembl.species + '/Genoverse/switch_image',
-          data : { 'static' : isStatic ? 0 : 1, id : panel.id }
-        });
-      }).helptip({ content: 'Switch to ' + (isStatic ? 'scrollable' : 'static') + ' image' });
+    if (this.id === 'ViewTop') {
+      if (Ensembl.genoverseSupported()) {
+        var isGenoverse = this.panelType === 'Genoverse' ? 1 : 0;
+
+        $('<div class="genoverse_switch"></div>').appendTo(this.elLk.toolbars).on('click', function () {
+          panel.params.updateURL = Ensembl.updateURL({ genoverse: isGenoverse }, panel.params.updateURL);
+          panel.toggleLoading(true);
+
+          $.ajax({
+            url       : '/' + Ensembl.species + '/Genoverse/switch_image',
+            data      : { 'static' : isGenoverse, id : panel.id },
+            complete  : function () { panel.getContent(); }
+          });
+        }).helptip({ content: 'Switch to ' + (isGenoverse ? 'static' : 'scrollable') + ' image' });
+      }
+
     } else {
       this.elLk.overlay       = $('<div class="image_update_overlay">');
       this.elLk.updateButtons = $('<div class="image_update_buttons">');
@@ -106,7 +117,7 @@ Ensembl.Panel.ImageMap = Ensembl.Panel.ImageMap.extend({
   hashChange: function () {
     if (this.resetGenoverse) {
       this.resetGenoverse = false;
-    } else if (Ensembl.genoverseScroll && !this.params.genoverseSwitch) {
+    } else if (Ensembl.genoverseScroll && !this.params.genoverseSupported) {
       var range = this.highlightRegions[0][0].region.range;
       
       if (range.start > Ensembl.location.start || range.end < Ensembl.location.end) {

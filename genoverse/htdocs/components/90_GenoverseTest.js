@@ -14,26 +14,18 @@
  * limitations under the License.
  */
 
+/*
+ * This panel only gets initialised if the backend is not sure about what image should be displayed
+ * It just checks whether Genoverse is supported or not and adds an extra param 'genoverse' to the panel's updateURL
+ */
+
 Ensembl.Panel.GenoverseTest = Ensembl.Panel.Content.extend({
   init: function () {
-    var id  = this.id.replace('Test', '');
-    var url = this.params.updateURL.split('?');
-        url = url[0] + '/main?' + url[1] + (!!parseInt($('.static_image', this.el).val(), 10) || !this.supported() ? ';static=1' : '');
-    
-    $('#' + this.id).html('<div class="ajax js_panel" id="' + id + '"><input type="hidden" class="ajax_load" value="' + url + '" /></div>');
-    
-    this.base();
-    
-    Ensembl.EventManager.register('ajaxComplete', this, function () { Ensembl.EventManager.remove(this.id); });
-  },
-  
-  getContent: function (url, el, params, newContent) {
-    params = $.extend(params || this.params, { genoverseSwitch: this.supported() });
-    this.base(url, el, params, newContent);
-  },
-  
-  supported: function () {
-    var elem = document.createElement('canvas');
-    return !!(elem.getContext && elem.getContext('2d') && Ensembl.locationURL === 'search');
+
+    this.base.apply(this, arguments);
+
+    this.params.updateURL = Ensembl.updateURL({genoverse: Ensembl.genoverseSupported() ? 1 : 0}, this.params.updateURL);
+
+    this.getContent();
   }
 });
