@@ -99,7 +99,7 @@ sub get_filegroups {
   }
 
   # create a sort algo that gives priority to the files in top level dirs first (and alphabetically if level is same)
-  my $breadth_first_sort = sub { @{[$a =~ /\//g]} <=> @{[$b =~ /\//g]} || $a cmp $b };
+  my $breadth_first_sort = sub { @{[$a =~ /\//g]} <=> @{[$b =~ /\//g]} || lc $a cmp lc $b };
 
   # Now rearrange the files according to the required order
   my @files;
