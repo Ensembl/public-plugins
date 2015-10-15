@@ -135,6 +135,34 @@ sub job_details_table {
     $opt_two_col->render.($have_plugins ? '<p class="small"><sup style="color:grey">(p)</sup> = functionality from <a target="_blank" href="/info/docs/tools/vep/script/vep_plugins.html">VEP plugin</a></p>' : '')
   );
 
+  
+  ## create command line that users can cut and paste
+  my $command_string = 'perl variant_effect_predictor.pl';
+
+  my $config = $job->dispatcher_data->{config};
+
+  my %skip_opts = map {$_ => 1} qw(format stats_file input_file output_file);
+
+  for my $opt(grep { !$skip_opts{$_} && defined $config->{$_} && $config->{$_} ne 'no' } sort keys %$config) {
+    $command_string .= ' --'.$opt;
+
+    my $value = $config->{$opt};
+
+    unless($value eq 'yes') {
+
+      # get rid of any internal paths
+      $value =~ s/(\/\w+?)+\//\[path_to\]\//g;
+      $command_string .= ' '.$value;
+    }
+  }
+
+  $command_string .= ' --cache --input_file [input_data]';
+
+  $two_col->add_row(
+    '<span class="ht _ht" title="Copy and paste this to use it as a starting point for running this job on your command line">Command line equivalent</span>',
+    '<pre class="code">'.$command_string.'</pre>'
+  );
+
   return $two_col;
 }
 
