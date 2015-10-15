@@ -42,34 +42,53 @@ Ensembl.Panel.Content = Ensembl.Panel.Content.extend({
 Ensembl.Panel.ImageMap = Ensembl.Panel.ImageMap.extend({
   init: function () {
     var panel = this;
-    
+
     this.base();
-    
     this.el.css('position', 'relative');
-    
-    if (this.id === 'ViewTop') {
-      if (Ensembl.genoverseSupported()) {
-        var isGenoverse = this.panelType === 'Genoverse' ? 1 : 0;
 
-        $('<div class="genoverse_switch"></div>').appendTo(this.elLk.toolbars).on('click', function () {
-          panel.params.updateURL = Ensembl.updateURL({ genoverse: isGenoverse }, panel.params.updateURL);
-          panel.toggleLoading(true);
+    this.isViewTop    = this.id === 'ViewTop';
+    this.isGenoverse  = this.isViewTop && this.panelType === 'Genoverse';
 
-          $.ajax({
-            url       : '/' + Ensembl.species + '/Genoverse/switch_image',
-            data      : { 'static' : isGenoverse, id : panel.id },
-            complete  : function () { panel.getContent(); }
-          });
-        }).helptip({ content: 'Switch to ' + (isGenoverse ? 'static' : 'scrollable') + ' image' });
+    if (this.isViewTop && Ensembl.genoverseSupported()) {
+      this.addGenoverseSwitch();
+    }
+
+    Ensembl.EventManager.register('resetImageOffset', this, function () { delete this.imgOffset; });
+  },
+
+  addGenoverseSwitch: function () {
+    var panel = this;
+
+    $('<div class="genoverse_switch"></div>').appendTo(this.elLk.toolbars).on('click', function () {
+      panel.params.updateURL = Ensembl.updateURL({ genoverse: panel.isGenoverse ? 1 : 0 }, panel.params.updateURL);
+      panel.toggleLoading(true);
+
+      $.ajax({
+        url       : '/' + Ensembl.species + '/Genoverse/switch_image',
+        data      : { 'static' : panel.isGenoverse ? 1 : 0, id : panel.id },
+        complete  : function () { panel.getContent(); }
+      });
+    }).helptip({ content: 'Switch to ' + (panel.isGenoverse ? 'static' : 'scrollable') + ' image' });
+  },
+
+  toggleOverlayButtons: function (flag) {
+    var panel = this;
+
+    if (this.isViewTop) {
+      return;
+    }
+
+    if (!this.elLk.overlay) {
+      if (!flag) {
+        return;
       }
 
-    } else {
       this.elLk.overlay       = $('<div class="image_update_overlay">');
       this.elLk.updateButtons = $('<div class="image_update_buttons">');
-      
+
       $('<input class="fbutton update" type="button" value="Update this image" /><input class="fbutton reset" type="button" value="Reset scrollable image" />').appendTo(this.elLk.updateButtons).on('click', function () {
 
-        panel.elLk.overlay.add(panel.elLk.updateButtons).detach();
+        panel.toggleOverlayButtons(false);
 
         if ($(this).hasClass('update')) {
           panel.params.updateURL = Ensembl.urlFromHash(panel.params.updateURL);
@@ -85,8 +104,17 @@ Ensembl.Panel.ImageMap = Ensembl.Panel.ImageMap.extend({
         }
       });
     }
-    
-    Ensembl.EventManager.register('resetImageOffset', this, function () { delete this.imgOffset; });
+
+    if (flag) {
+      this.elLk.container.append(this.elLk.overlay, this.elLk.updateButtons);
+    } else {
+      this.elLk.overlay.add(this.elLk.updateButtons).detach();
+    }
+  },
+
+  toggleLoading: function () {
+    this.toggleOverlayButtons(false);
+    this.base.apply(this, arguments);
   },
 
   makeImageMap: function () {
@@ -121,7 +149,8 @@ Ensembl.Panel.ImageMap = Ensembl.Panel.ImageMap.extend({
       var range = this.highlightRegions[0][0].region.range;
       
       if (range.start > Ensembl.location.start || range.end < Ensembl.location.end) {
-        this.elLk.container.append(this.elLk.overlay, this.elLk.updateButtons).resizable('disable');
+        this.elLk.container.resizable('disable');
+        this.toggleOverlayButtons(true);
         this.selectArea(false);
         this.removeZMenus();
       }
