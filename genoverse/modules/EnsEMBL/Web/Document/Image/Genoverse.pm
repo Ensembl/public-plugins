@@ -137,7 +137,7 @@ sub render_toolbar {
   my $hub             = $self->hub;
   my $image_config    = $self->{'image_config'};
   my $zoom            = $image_config->get_parameter('zoom') ne 'no';
-  my ($top, $bottom)  = $self->SUPER::render_toolbar;
+  my ($top, $bottom)  = $self->SUPER::render_toolbar(@_);
   my $autoheight      = $image_config->get_option('auto_height');
   my $autoheight_url  = { 'type' => 'Genoverse', 'action' => 'auto_track_heights',  'function' => '', 'image_config' => $image_config->{'type'} };
   my $resetheight_url = { 'type' => 'Genoverse', 'action' => 'reset_track_heights', 'function' => '', 'image_config' => $image_config->{'type'} };
