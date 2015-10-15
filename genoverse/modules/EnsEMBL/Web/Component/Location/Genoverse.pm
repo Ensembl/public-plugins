@@ -50,6 +50,7 @@ sub new_image {
   return EnsEMBL::Web::Document::Image::Genoverse->new({
     hub          => $self->hub,
     slice        => $slice,
+    export       => 1,
     image_config => $image_config,
     image_width  => $self->image_width,
     component    => $self->id
