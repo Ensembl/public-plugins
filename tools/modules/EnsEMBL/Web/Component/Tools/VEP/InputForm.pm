@@ -303,7 +303,7 @@ sub add_non_cacheable_fields {
   }
 
   # Buttons
-  my $buttons_fieldset = $self->add_buttons_fieldset($fieldset2->form, {'reset' => 'Reset', 'cancel' => 'Close form'});
+  my $buttons_fieldset = $self->add_buttons_fieldset($fieldset2->form, {'reset' => 'Clear', 'cancel' => 'Close form'});
 
   # Add the render-time changes to the fields
   $fieldset2->prepare_to_render;
