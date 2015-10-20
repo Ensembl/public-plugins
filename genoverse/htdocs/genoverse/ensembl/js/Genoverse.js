@@ -240,7 +240,7 @@ Ensembl.Genoverse = Genoverse.extend({
     this.resetTrackHeights();
 
     for (var i = 0; i < this.tracks.length; i++) {
-      this.tracks[i].prop('messageContainer').attr('class', 'message_container expanded');
+      this.tracks[i].prop('messageContainer').attr('class', 'gv-message-container');
     }
   },
 
@@ -414,7 +414,7 @@ Ensembl.Genoverse = Genoverse.extend({
   },
 
   moveCrosshair: function (rStart) {
-    if (this.dragAction === 'select' && this.selector.hasClass('crosshair')) {
+    if (this.dragAction === 'select' && this.selector.hasClass('gv-crosshair')) {
       this.selectorStalled = true; // prevent document.mousemove to change selector poisition to current mouse pageX
       this.selector.css('left', (rStart - this.start) * this.scale);
     }
@@ -426,7 +426,7 @@ Ensembl.Genoverse = Genoverse.extend({
     this.base.apply(this, arguments);
 
     this.container.on('mouseenter mouseleave', function (e) {
-      browser.selectorStalled = e.type === 'mouseleave' || !browser.selector.hasClass('crosshair');
+      browser.selectorStalled = e.type === 'mouseleave' || !browser.selector.hasClass('gv-crosshair');
     });
   },
 

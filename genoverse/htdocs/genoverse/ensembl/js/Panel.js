@@ -63,7 +63,7 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
       return;
     }
     
-    this.genoverse.labelContainer.sortable('option', 'handle', '.handle');
+    this.genoverse.labelContainer.sortable('option', 'handle', '.gv-handle');
   },
   
   setImageNumber: function () {
