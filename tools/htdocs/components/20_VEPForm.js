@@ -19,7 +19,8 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
   init: function() {
     this.base();
 
-    this.resetSpecies(this.elLk.form.find('input[name=default_species]').remove().val());
+    this.defaultSpecies = this.elLk.form.find('input[name=default_species]').remove().val();
+    this.resetSpecies(this.defaultSpecies);
 
     this.previewData = JSON.parse(this.params['preview_data']);
     delete this.params['preview_data'];
@@ -367,7 +368,7 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
         this.elLk.speciesDropdown.find('input[type=radio]').first().click();
       }
 
-      this.resetSpecies();
+      this.resetSpecies(jobsData['species']);
 
       this.elLk.dataField.trigger('change');
     }
@@ -381,7 +382,7 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
     this.elLk.form.find('._download_link').remove();
     this.elLk.previewDiv.empty().hide();
     this.elLk.previewButton.hide();
-    this.resetSpecies();
+    this.resetSpecies(this.defaultSpecies);
     this.resetSelectToToggle();
   },
 
@@ -393,10 +394,7 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
       this.elLk.speciesDropdown = this.elLk.form.find('._sdd');
     }
 
-    if (species) {
-      this.elLk.speciesDropdown.find('input[value=' + species + ']').first().click();
-    }
-
+    this.elLk.speciesDropdown.find('input[value=' + species + ']').first().click();
     this.elLk.speciesDropdown.speciesDropdown({refresh: true});
   }
 });
