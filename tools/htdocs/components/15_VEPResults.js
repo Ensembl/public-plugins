@@ -76,7 +76,7 @@ Ensembl.Panel.VEPResults = Ensembl.Panel.ContentTools.extend({
     });
 
     // activate horizontal scrolling on the table
-    this.el.find('.data_table').scrollyTable();
+    this.el.find('.data_table').scrollyTable().parent().prev().css('position', 'relative').keepOnPage({ onfix : function () { $(this.firstChild).helptip('close'); }});
   },
 
   reload: function(url, ajaxUrl) {
