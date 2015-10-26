@@ -39,31 +39,6 @@ sub form_header_info {
   return $self->species_specific_info($self->current_species, 'VEP', 'VEP');
 }
 
-sub js_panel {
-  ## @override
-  return 'VEPForm';
-}
-
-sub js_params {
-  ## @override
-  my $self    = shift;
-  my $hub     = $self->hub;
-  my $object  = $self->object;
-  my $species = $object->species_list;
-  my $params  = $self->SUPER::js_params(@_);
-
-  # consequences data to be used for VEP preview
-  $params->{'consequences_data'} = $object->get_consequences_data;
-
-  # example data for each species
-  $params->{'example_data'} = { map { $_->{'value'} => delete $_->{'example'} } @$species };
-
-  # REST server address for VEP preview
-  $params->{'rest_server_url'} = $hub->species_defs->ENSEMBL_REST_URL;
-
-  return $params;
-}
-
 sub get_cacheable_form_node {
   ## Abstract method implementation
   my $self            = shift;
@@ -258,6 +233,31 @@ sub get_non_cacheable_fields {
   }
 
   return { FILES_DROPDOWN => $file_dropdown };
+}
+
+sub js_panel {
+  ## @override
+  return 'VEPForm';
+}
+
+sub js_params {
+  ## @override
+  my $self    = shift;
+  my $hub     = $self->hub;
+  my $object  = $self->object;
+  my $species = $object->species_list;
+  my $params  = $self->SUPER::js_params(@_);
+
+  # consequences data to be used for VEP preview
+  $params->{'consequences_data'} = $object->get_consequences_data;
+
+  # example data for each species
+  $params->{'example_data'} = { map { $_->{'value'} => delete $_->{'example'} } @$species };
+
+  # REST server address for VEP preview
+  $params->{'rest_server_url'} = $hub->species_defs->ENSEMBL_REST_URL;
+
+  return $params;
 }
 
 sub _build_filters {
