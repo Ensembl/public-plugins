@@ -31,7 +31,6 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     this.combinations         = this.params['valid_combinations'];
     this.missingSources       = this.params['missing_sources'];
     this.sensitivityConfigs   = this.params['sensitivity_configs'];
-    this.defaultSpecies       = this.params['species'];
     this.maxSequenceLength    = this.params['max_sequence_length'];
     this.maxNumSequences      = this.params['max_number_sequences'];
     this.dnaThresholdPercent  = this.params['dna_threshold_percent'];

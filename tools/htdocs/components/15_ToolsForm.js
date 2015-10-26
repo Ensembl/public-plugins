@@ -25,16 +25,16 @@ Ensembl.Panel.ToolsForm = Ensembl.Panel.ContentTools.extend({
 
     Ensembl.EventManager.register('toolsToggleForm', this, this.toggleForm);
     Ensembl.EventManager.register('toolsEditTicket', this, this.loadTicket);
-
-    // URL to load a ticket
-    this.loadTicketURL = this.params['load_ticket_url'];
   },
 
   init: function() {
 
     var panel = this;
 
-    this.base();
+    this.base.apply(this, arguments);
+
+    this.loadTicketURL  = this.params['load_ticket_url'];    // URL to load a ticket
+    this.defaultSpecies = this.params['species'];
 
     // 'Add new' button (make link visible by default)
     this.elLk.buttonDiv = this.el.find('._tool_new').show().on('click', 'a', function(e) {
