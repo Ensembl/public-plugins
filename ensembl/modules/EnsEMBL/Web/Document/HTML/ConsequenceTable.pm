@@ -179,13 +179,13 @@ sub render {
       'desc'    => "A UTR variant of the 5' UTR", 
       'acc'     => '0001623', 
       'impact'  => 'MODIFIER',
+    },
     {
       'term'    => '3_prime_UTR_variant', 
       'colour'  => '7ac5cd', 
       'desc'    => "A UTR variant of the 3' UTR", 
       'acc'     => '0001624', 
       'impact'  => 'MODIFIER',
-    },
     },
     {
       'term'    => 'non_coding_transcript_exon_variant', 
