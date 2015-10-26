@@ -19,16 +19,15 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
   init: function() {
     this.base();
 
-    this.defaultSpecies = this.elLk.form.find('input[name=default_species]').remove().val();
     this.resetSpecies(this.defaultSpecies);
 
-    this.previewData = JSON.parse(this.params['preview_data']);
-    delete this.params['preview_data'];
+    this.consequencesData = this.params['consequences_data'];
+    delete this.params['consequences_data'];
     
-    this.exampleData = JSON.parse(this.params['example_data']);
+    this.exampleData = this.params['example_data'];
     delete this.params['example_data'];
 
-    // this.autocompleteData = JSON.parse(this.params['plugin_auto_values']);
+    // this.autocompleteData = this.params['plugin_auto_values'];
     // delete this.params['plugin_auto_values'];
 
     var panel = this;
@@ -248,9 +247,9 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
     // function to render consequence type with colour and description HT
     var renderConsequence = function(con) {
       return $('<nobr>').append(
-        $('<span>').addClass('colour').css('background-color', panel.previewData[con]['colour']).html('&nbsp'),
+        $('<span>').addClass('colour').css('background-color', panel.consequencesData[con]['colour']).html('&nbsp'),
         $('<span>').html('&nbsp;'),
-        $('<span>').attr({'class': '_ht ht margin-left', title: panel.previewData[con]['description']}).html(con)
+        $('<span>').attr({'class': '_ht ht margin-left', title: panel.consequencesData[con]['description']}).html(con)
       ).wrap('<div>').parent().html();
     };
 
