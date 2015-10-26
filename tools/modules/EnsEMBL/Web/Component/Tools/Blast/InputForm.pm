@@ -48,7 +48,7 @@ sub get_cacheable_form_node {
   my $hub       = $self->hub;
   my $options   = $self->object->get_blast_form_options->{'options'};
   my $form      = $self->new_tool_form({'class' => 'blast-form'});
-  my $fieldset  = $form->fieldset;
+  my $fieldset  = $form->add_fieldset;
   my $has_seqid = $hub->species_defs->ENSEMBL_BLAST_BY_SEQID;
 
   my $query_seq_field = $fieldset->add_field({
@@ -251,6 +251,11 @@ sub get_cacheable_form_node {
   $self->add_buttons_fieldset($form, {'reset' => 'Clear', 'cancel' => 'Close form'});
 
   return $form;
+}
+
+sub get_non_cacheable_fields {
+  ## Abstract method implementation
+  return {};
 }
 
 sub js_panel {
