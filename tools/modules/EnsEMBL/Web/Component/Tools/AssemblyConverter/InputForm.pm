@@ -189,46 +189,4 @@ sub content {
   );
 }
 
-sub _species {
-  ## @private
-  my $self = shift;
-
-  if (!$self->{'_species'}) {
-    my $hub     = $self->hub;
-    my $sd      = $hub->species_defs;
-    my %fav     = map { $_ => 1 } @{$hub->get_favourite_species};
-    my @species;
-    my $current_species = $hub->species;
-
-    my $chain_files = {};
-    foreach ($sd->valid_species) {
-      my $files = $sd->get_config($_, 'ASSEMBLY_CONVERTER_FILES') || []; 
-      $chain_files->{$_} = $files if scalar(@$files);
-    }
-
-    for (sort {$sd->get_config($a, 'SPECIES_COMMON_NAME') cmp $sd->get_config($b, 'SPECIES_COMMON_NAME')} keys %$chain_files) {
-      
-      my $mappings = [];
-      foreach my $map (@{$chain_files->{$_}||[]}) {
-        (my $caption = $map) =~ s/_to_/ -> /;
-        push @$mappings, {'caption' => $caption, 'value' => $map};
-      }
-      my $db_config = $sd->get_config($_, 'databases');
-
-      push @species, {
-        'value'       => $_,
-        'caption'     => $sd->species_label($_, 1),
-        'mappings'    => $mappings,
-        'favourite'   => $fav{$_} || 0
-      };
-    }
-
-    @species = sort { ($a->{'favourite'} xor $b->{'favourite'}) ? $b->{'favourite'} || -1 : $a->{'caption'} cmp $b->{'caption'} } @species;
-
-    $self->{'_species'} = \@species;
-  }
-
-  return $self->{'_species'};
-}
-
 1;

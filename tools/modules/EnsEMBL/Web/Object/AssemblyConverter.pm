@@ -80,4 +80,45 @@ sub handle_download {
   }
 }
 
+sub species_list {
+  ## Returns a list of species with Assembly converter specific info
+  ## @return Arrayref of hashes with each hash having species specific info
+  my $self = shift;
+
+  if (!$self->{'_species_list'}) {
+    my $hub     = $self->hub;
+    my $sd      = $hub->species_defs;
+    my @species;
+
+    my $chain_files = {};
+    foreach ($sd->tools_valid_species) {
+      my $files = $sd->get_config($_, 'ASSEMBLY_CONVERTER_FILES') || [];
+      $chain_files->{$_} = $files if scalar(@$files);
+    }
+
+    for (keys %$chain_files) {
+
+      my $mappings = [];
+      foreach my $map (@{$chain_files->{$_}||[]}) {
+        (my $caption = $map) =~ s/_to_/ -> /;
+        push @$mappings, {'caption' => $caption, 'value' => $map};
+      }
+      my $db_config = $sd->get_config($_, 'databases');
+
+      push @species, {
+        'value'       => $_,
+        'caption'     => $sd->species_label($_, 1),
+        'mappings'    => $mappings,
+      };
+    }
+
+    @species = sort { $a->{'caption'} cmp $b->{'caption'} } @species;
+
+    $self->{'_species_list'} = \@species;
+  }
+
+  return $self->{'_species_list'};
+}
+
+
 1;
