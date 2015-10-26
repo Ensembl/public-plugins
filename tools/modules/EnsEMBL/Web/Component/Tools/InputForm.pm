@@ -37,13 +37,9 @@ sub get_cacheable_form_node :Abstract {
   ## @return EnsEMBL::Web::Form object
 }
 
-sub add_non_cacheable_fields {
+sub get_non_cacheable_fields :Abstract {
   ## Replace placeholders for non-cacheable fields with actual HTML
-  ## @param Form HTML (string) (possibly cached)
-  ## @return Modified form HTML (won't get cached)
-  my ($self, $form) = @_;
-
-  return $form;
+  ## @return Hashref with each key as a placeholder string in the cached form and value as a hashref to be passed to Fieldset::add_field method
 }
 
 sub cache_key {
@@ -168,7 +164,7 @@ sub content {
   }
 
   # Replace any placeholders for non cacheable fields with actual HTML
-  $form = $self->add_non_cacheable_fields($form);
+  $self->_add_non_cacheable_fields(\$form, $self->get_non_cacheable_fields);
 
   # Pass the js params to the panel
   my $js_params       = $self->js_params || {};
@@ -186,6 +182,23 @@ sub content {
     $self->form_header_info,
     $form
   );
+}
+
+sub _add_non_cacheable_fields {
+  my ($self, $form_ref, $fields) = @_;
+
+  # Add the non-cacheable fields to this dummy form and replace the placeholders from the actual form HTML
+  my $fieldset = $self->new_form->add_fieldset;
+
+  $fields->{$_} = $fieldset->add_field($fields->{$_}) for keys %$fields;
+
+  $fieldset->prepare_to_render;
+
+  # Regexp to replace all placeholders from cached form
+  for (keys %$fields) {
+    $fields->{$_} = $fields->{$_}->render;
+    $$form_ref =~ s/$_/$fields->{$_}/e;
+  }
 }
 
 1;
