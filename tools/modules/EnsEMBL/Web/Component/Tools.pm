@@ -175,60 +175,6 @@ sub job_details_table {
   return $two_col;
 }
 
-sub new_tool_form {
-  ## Creates a new Form object with the information required by all Tools based form pages
-  ## @param Tool type ('action' for the form submit URL)
-  ## @param Hashref as provided to Form constructor (optional)
-  my ($self, $action, $params) = @_;
-
-  $params ||= {};
-  $params->{'class'} = '_tool_form bgcolour '.($params->{'class'} || '');
-
-  my $form = $self->new_form({
-    'action'          => $self->hub->url('Json', {'type' => 'Tools', 'action' => $action, 'function' => 'form_submit'}),
-    'method'          => 'post',
-    'skip_validation' => 1,
-    %$params
-  });
-
-  $form->add_hidden({
-    'name'            => 'load_ticket_url',
-    'value'           => $self->hub->url('Json', {'function' => 'load_ticket', 'tl' => 'TICKET_NAME'})
-  });
-
-  return $form;
-}
-
-sub add_buttons_fieldset {
-  ## Adds the genetic buttons fieldset to the tools form
-  ## @param Form object
-  ## @param Hashref of keys as the name of the extra links needed ('reset' and 'cancel') and value their caption
-  ## @return The added fieldset object
-  my ($self, $form, $params) = @_;
-
-  my $url       = $self->hub->url({'function' => ''});
-  my $fieldset  = $form->add_fieldset;
-  my $field     = $fieldset->add_field({
-    'type'            => 'submit',
-    'value'           => 'Run &rsaquo;'
-  });
-  my @extras    = (exists $params->{'reset'} ? {
-    'node_name'       => 'a',
-    'href'            => $url,
-    'class'           => [qw(_tools_form_reset left-margin _change_location)],
-    'inner_HTML'      => $params->{'reset'}
-  } : (), exists $params->{'cancel'} ? {
-    'node_name'       => 'a',
-    'href'            => $url,
-    'class'           => [qw(_tools_form_cancel left-margin _change_location)],
-    'inner_HTML'      => $params->{'cancel'}
-  } : ());
-
-  $field->elements->[-1]->append_children(@extras) if @extras;
-
-  return $fieldset;
-}
-
 sub job_status_tag {
   ## Tag to be displayed next to each job in ticket list table, or job details page
   ## @param Job object
