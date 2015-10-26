@@ -26,6 +26,7 @@ use HTML::Entities  qw(encode_entities);
 use EnsEMBL::Web::TmpFile::ToolsOutput;
 use EnsEMBL::Web::TmpFile::VcfTabix;
 use EnsEMBL::Web::Utils::FileHandler qw(file_get_contents);
+use Bio::EnsEMBL::Variation::Utils::Constants;
 
 use parent qw(EnsEMBL::Web::Object::Tools);
 
@@ -378,6 +379,84 @@ sub get_form_details {
   }
 
   return $self->{_form_details};
+}
+
+sub get_consequences_data {
+  ## Gets overlap consequences information needed to render preview
+  ## @return Hashref with keys as consequence types
+  my $self  = shift;
+  my $hub   = $self->hub;
+  my $cm    = $hub->colourmap;
+  my $sd    = $hub->species_defs;
+
+  my %cons = map {$_->{'SO_term'} => {
+    'description' => $_->{'description'},
+    'rank'        => $_->{'rank'},
+    'colour'      => $cm->hex_by_name($sd->colour('variation')->{lc $_->{'SO_term'}}->{'default'})
+  }} values %Bio::EnsEMBL::Variation::Utils::Constants::OVERLAP_CONSEQUENCES;
+
+  return \%cons;
+}
+
+sub species_list {
+  ## Returns a list of species with VEP specific info
+  ## @return Arrayref of hashes with each hash having species specific info
+  my $self = shift;
+
+  if (!$self->{'_species_list'}) {
+    my $hub     = $self->hub;
+    my $sd      = $hub->species_defs;
+
+    # at the moment only human, chicken and mouse have RefSeqs in their otherfeatures DB
+    # there's no config for this currently so species are listed manually
+    my %refseq  = map { $_ => 1 } qw(
+      Anolis_carolinensis
+      Bos_taurus
+      Canis_familiaris
+      Ciona_intestinalis
+      Danio_rerio
+      Felis_catus
+      Gallus_gallus
+      Homo_sapiens
+      Mus_musculus
+      Oryctolagus_cuniculus
+      Ovis_aries
+      Pan_troglodytes
+      Papio_anubis
+      Rattus_norvegicus
+      Sus_scrofa
+    );
+
+    my @species;
+
+    for ($sd->tools_valid_species) {
+
+      my $db_config = $sd->get_config($_, 'databases');
+
+      # example data for each species
+      my $sample_data   = $sd->get_config($_, 'SAMPLE_DATA');
+      my $example_data  = {};
+      for (grep m/^VEP/, keys %$sample_data) {
+        $example_data->{lc s/^VEP\_//r} = $sample_data->{$_};
+      }
+
+      push @species, {
+        'value'       => $_,
+        'caption'     => $sd->species_label($_, 1),
+        'variation'   => $db_config->{'DATABASE_VARIATION'},
+        'refseq'      => $refseq{$_} && $db_config->{'DATABASE_OTHERFEATURES'},
+        'assembly'    => $sd->get_config($_, 'ASSEMBLY_NAME'),
+        'regulatory'  => $sd->get_config($_, 'REGULATORY_BUILD'),
+        'example'     => $example_data,
+      };
+    }
+
+    @species = sort { $a->{'caption'} cmp $b->{'caption'} } @species;
+
+    $self->{'_species_list'} = \@species;
+  }
+
+  return $self->{'_species_list'};
 }
 
 1;
