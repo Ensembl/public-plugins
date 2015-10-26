@@ -23,7 +23,10 @@ use warnings;
 
 use EnsEMBL::Web::BlastConstants qw(:all);
 
-use parent qw(EnsEMBL::Web::Component::Tools::Blast);
+use parent qw(
+  EnsEMBL::Web::Component::Tools::Blast
+  EnsEMBL::Web::Component::Tools::InputForm
+);
 
 sub _init {
   ## Make the Ajax request for loading this component via POST in case query_sequence is there.
@@ -32,90 +35,26 @@ sub _init {
   $self->ajaxable($self->hub->param('query_sequence') ? 'post' : 1);
 }
 
-sub content {
-  my $self            = shift;
-  my $hub             = $self->hub;
-  my $sd              = $hub->species_defs;
-  my $object          = $self->object;
-  my $cache           = $hub->cache;
-  my $form            = $cache ? $cache->get('BLASTFORM') : undef;
-  my $species         = $hub->species;
-     $species         = $hub->get_favourite_species->[0] if $species =~ /multi|common/i;
+sub form_header_info {
+  ## Abstract method implementation
+  my $self = shift;
 
-  # If cached form not found, generate a new form and save in cache to skip the form generation process next time
-  if (!$form) {
-    $form = $self->get_cacheable_form_node->render;
-    $cache->set('BLASTFORM', $form) if $cache;
-  }
-
-  # Replace any placeholders for non cacheable fields with actual HTML
-  $form = $self->add_non_cacheable_fields($form, $species);
-
-  return sprintf('<div class="hidden _tool_new"><p><a class="button _change_location" href="%s">New Search</a></p></div><div class="hidden _tool_form_div"><h2>Create new ticket:</h2><input type="hidden" class="panel_type" value="BlastForm" />%s%s</div>',
-    $hub->url({'function' => ''}),
-    $self->species_specific_info($species, 'BLAST/BLAT', 'Blast'),
-    $form
-  );
+  return $self->species_specific_info($self->current_species, 'BLAST/BLAT', 'Blast');
 }
 
 sub get_cacheable_form_node {
-  ## Gets the form tree node
-  ## This method returns the form object that can be cached once and then used for all requests (ie. it does not contian species specific or user specific fields)
-  ## @return EnsEMBL::Web::Form object
-  my $self            = shift;
-  my $hub             = $self->hub;
-  my $object          = $self->object;
-  my $form            = $self->new_tool_form('Blast', {'class' => 'blast-form'});
-  my $fieldset        = $form->fieldset;
-  my $form_params     = $object->get_blast_form_options;
-  my $blast_by_seqid  = $hub->species_defs->ENSEMBL_BLAST_BY_SEQID;
-  my $options         = delete $form_params->{'options'};
-  my $combinations    = delete $form_params->{'combinations'};
-  my $missing_sources = delete $form_params->{'missing_sources'};
-
-  # Placeholders for previous job json and species hidden input
-  $form->append_child('text', 'EDIT_JOB');
-  $form->append_child('text', 'SPECIES_INPUT');
-
-  $fieldset->add_hidden({
-    'name'            => 'valid_combinations',
-    'value'           => $combinations
-  });
-
-  $fieldset->add_hidden({
-    'name'            => 'missing_sources',
-    'value'           => $missing_sources
-  });
-
-  $fieldset->add_hidden({
-    'name'            => 'max_sequence_length',
-    'value'           => MAX_SEQUENCE_LENGTH,
-  });
-
-  $fieldset->add_hidden({
-    'name'            => 'dna_threshold_percent',
-    'value'           => DNA_THRESHOLD_PERCENT,
-  });
-
-  $fieldset->add_hidden({
-    'name'            => 'max_number_sequences',
-    'value'           => MAX_NUM_SEQUENCES,
-  });
-
-  $fieldset->add_hidden({
-    'name'            => 'read_file_url',
-    'value'           => $hub->url('Json', {'function' => 'read_file'})
-  });
-
-  $fieldset->add_hidden({
-    'name'            => 'fetch_sequence_url',
-    'value'           => $hub->url('Json', {'function' => 'fetch_sequence'})
-  }) if $blast_by_seqid;
+  ## Abstract method implementation
+  my $self      = shift;
+  my $hub       = $self->hub;
+  my $options   = $self->object->get_blast_form_options->{'options'};
+  my $form      = $self->new_tool_form({'class' => 'blast-form'});
+  my $fieldset  = $form->fieldset;
+  my $has_seqid = $hub->species_defs->ENSEMBL_BLAST_BY_SEQID;
 
   my $query_seq_field = $fieldset->add_field({
     'label'           => 'Sequence data',
     'field_class'     => '_adjustable_height',
-    'helptip'         => $blast_by_seqid
+    'helptip'         => $has_seqid
                             ? 'Enter sequence as plain text or in FASTA format, or enter a sequence ID or accession from EnsEMBL, EMBL, UniProt or RefSeq'
                             : 'Enter sequence as plain text or in FASTA format',
     'elements'        => [{
@@ -127,7 +66,7 @@ sub get_cacheable_form_node {
       'children'        => [{'node_name' => 'div', 'class' => 'query_sequence_wrapper'}]
     }, {
       'type'            => 'text',
-      'value'           =>  sprintf('Maximum of %s sequences (%s)', MAX_NUM_SEQUENCES, $blast_by_seqid ? 'type in plain text, FASTA or sequence ID' : 'type in plain text or FASTA'),
+      'value'           =>  sprintf('Maximum of %s sequences (%s)', MAX_NUM_SEQUENCES, $has_seqid ? 'type in plain text, FASTA or sequence ID' : 'type in plain text or FASTA'),
       'class'           => 'inactive query_sequence',
       'name'            => 'query_sequence',
     }, {
@@ -158,7 +97,7 @@ sub get_cacheable_form_node {
     'field_class'     => '_adjustable_height',
     'type'            => 'speciesdropdown',
     'name'            => 'species',
-    'values'          => delete $options->{'species'},
+    'values'          => $options->{'species'},
     'multiple'        => 1,
     'wrapper_class'   => '_species_dropdown',
     'filter_text'     => 'Type in to add a species&#8230;',
@@ -221,8 +160,6 @@ sub get_cacheable_form_node {
       'elements'    => \@sensitivity_elements,
       'field_class' => \@field_classes
     });
-
-    $fieldset->add_hidden({'name' => 'sensitivity_configs', 'value' => $self->jsonify($all_config_sets)});
   }
 
   $fieldset->add_field({
@@ -263,7 +200,7 @@ sub get_cacheable_form_node {
     my $fieldset        = $config_wrapper->last_child->append_child($form->add_fieldset); # moving it from the form to the config div
     my %wrapper_class;
 
-    while (my ($element_name, $element_params) = splice @$config_field_group, 0, 2) {    
+    while (my ($element_name, $element_params) = splice @$config_field_group, 0, 2) {
       my $field_params = { map { exists $element_params->{$_} ? ($_ => delete $element_params->{$_}) : () } qw(field_class label helptip notes head_notes inline) };
       $field_params->{'elements'} = [];
 
@@ -310,53 +247,48 @@ sub get_cacheable_form_node {
     $config_wrapper->set_attribute('class', [ keys %wrapper_class ]) unless scalar keys %wrapper_class == scalar keys %stt_classes; # if all classes are there, this wrapper div is actually never hidden.
   }
 
-  # Placeholder for Run/Close buttons
-  $form->append_child('text', 'BUTTONS_FIELDSET');
+  # Buttons in a new fieldset
+  $self->add_buttons_fieldset($form, {'reset' => 'Clear', 'cancel' => 'Close form'});
 
   return $form;
 }
 
-sub add_non_cacheable_fields {
-  ## Replace placeholders for non-cacheable fields with actual HTML
-  ## @param Form HTML (string)
-  ## @param Current species name
-  ## @return Modified form HTML
-  my ($self, $form, $current_species) = @_;
+sub js_panel {
+  ## Returns the name of the js panel to be used to initialise the JavaScript on this form
+  ## @return String
+  return 'BlastForm';
+}
 
+sub js_params {
+  ## @override
+  ## Add extra BLAST specific js params
+  my $self    = shift;
   my $hub     = $self->hub;
-  my $object  = $self->object;
+  my $params  = $self->SUPER::js_params(@_);
+  my $options = $self->object->get_blast_form_options;
 
-  # Add the non-cacheable fields to this dummy form and replace the placeholders from the actual form HTML
-  my $fieldset2 = $self->new_form->add_fieldset;
+  $params->{'valid_combinations'}     = $options->{'combinations'};
+  $params->{'missing_sources'}        = $options->{'missing_sources'};
+  $params->{'max_sequence_length'}    = MAX_SEQUENCE_LENGTH;
+  $params->{'dna_threshold_percent'}  = DNA_THRESHOLD_PERCENT;
+  $params->{'max_number_sequences'}   = MAX_NUM_SEQUENCES;
+  $params->{'read_file_url'}          = $hub->url('Json', {'function' => 'read_file'});
+  $params->{'fetch_sequence_url'}     = $hub->url('Json', {'function' => 'fetch_sequence'}) if $hub->species_defs->ENSEMBL_BLAST_BY_SEQID;
+  $params->{'sensitivity_configs'}    = [ CONFIGURATION_SETS ]->[1];
 
-  # Previous job params for JavaScript
-  my $edit_jobs = ($hub->function || '') eq 'Edit' ? $object->get_edit_jobs_data : [];
-  if (!@$edit_jobs && (my $existing_seq = $hub->param('query_sequence'))) { # If coming from "BLAST this sequence" link
-    $edit_jobs = [ {'sequence' => {'sequence' => $existing_seq}} ];
+  # Add a 'edit job' param if coming from "BLAST this sequence" link
+  if (my $existing_seq = $hub->param('query_sequence')) {
+    my $edit_job = {'sequence' => {'sequence' => $existing_seq}};
     if (my $search_type = $hub->param('search_type')) {
-      $edit_jobs->[0]{'search_type'} = $search_type;
+      $edit_job->{'search_type'} = $search_type;
     }
     if (my $source = $hub->param('source')) {
-      $edit_jobs->[0]{'source'} = $source;
+      $edit_job->{'source'} = $source;
     }
+    $params->{'edit_jobs'} = [ $edit_job ];
   }
-  $edit_jobs = @$edit_jobs ? $fieldset2->add_hidden({ 'name' => 'edit_jobs', 'value' => $self->jsonify($edit_jobs) }) : '';
 
-  # Current species as hidden field
-  my $species_input = $fieldset2->add_hidden({'name' => 'default_species', 'value' => $current_species});
-
-  # Buttons in a new fieldset
-  my $buttons_fieldset = $self->add_buttons_fieldset($fieldset2->form, {'reset' => 'Clear', 'cancel' => 'Close form'});
-
-  # Add the render-time changes to the fields
-  $fieldset2->prepare_to_render;
-
-  # Regexp to replace all placeholders from cached form
-  $form =~ s/SPECIES_INPUT/$species_input->render/e;
-  $form =~ s/EDIT_JOB/$edit_jobs && $edit_jobs->render/e;
-  $form =~ s/BUTTONS_FIELDSET/$buttons_fieldset->render/e;
-
-  return $form;
+  return $params;
 }
 
 1;
