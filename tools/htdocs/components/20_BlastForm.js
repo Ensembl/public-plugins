@@ -18,39 +18,25 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
   constructor: function () {
     this.base.apply(this, arguments);
 
-    this.sequences            = [];
-    this.combinations         = [];
-    this.missingSources       = {};
-    this.selectedQueryType    = false;
-    this.maxSequenceLength    = 0;
-    this.maxNumSequences      = 0;
-    this.dnaThresholdPercent  = 0;
-    this.sensitivityConfigs   = {};
-    this.defaultSpecies       = '';
+    this.sequences          = [];
+    this.selectedQueryType  = false;
   },
 
   init: function () {
-
-    this.base();
     var panel = this;
 
-    this.defaultSpecies       = this.elLk.form.find('input[name=default_species]').remove().val();
-    this.maxSequenceLength    = this.elLk.form.find('input[name=max_sequence_length]').remove().val();
-    this.maxNumSequences      = this.elLk.form.find('input[name=max_number_sequences]').remove().val();
-    this.dnaThresholdPercent  = this.elLk.form.find('input[name=dna_threshold_percent]').remove().val();
-    this.readFileURL          = this.elLk.form.find('input[name=read_file_url]').remove().val();
-    this.fetchSequenceURL     = this.elLk.form.find('input[name=fetch_sequence_url]').remove().val();
-    this.speciesTagImgSrc     = this.elLk.form.find('input[name=species_tag_image]').remove().val();
+    this.base.apply(this, arguments);
 
-    try {
-      // parse the combination JSON from the HTML - if this doesn't work, there is nothing we can do!
-      this.combinations       = $.parseJSON(this.elLk.form.find('input[name=valid_combinations]').remove().val());
-      this.missingSources     = $.parseJSON(this.elLk.form.find('input[name=missing_sources]').remove().val());
-      this.sensitivityConfigs = $.parseJSON(this.elLk.form.find('input[name=sensitivity_configs]').remove().val() || "{}");
-
-    } catch (ex) {
-      this.combinations = this.missingSources = false;
-    }
+    // Gets config values from js_params
+    this.combinations         = this.params['valid_combinations'];
+    this.missingSources       = this.params['missing_sources'];
+    this.sensitivityConfigs   = this.params['sensitivity_configs'];
+    this.defaultSpecies       = this.params['species'];
+    this.maxSequenceLength    = this.params['max_sequence_length'];
+    this.maxNumSequences      = this.params['max_number_sequences'];
+    this.dnaThresholdPercent  = this.params['dna_threshold_percent'];
+    this.readFileURL          = this.params['read_file_url'];
+    this.fetchSequenceURL     = this.params['fetch_sequence_url'];
 
     // nothing can be done if any of these is missing!
     if (!this.combinations || !this.maxSequenceLength || !this.dnaThresholdPercent || !this.maxNumSequences) {
@@ -59,8 +45,8 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
     }
 
     // sequence input fields
-    this.elLk.sequences         = this.elLk.form.find('div._sequence');
-    this.elLk.sequenceField     = this.elLk.form.find('div._sequence_field');
+    this.elLk.sequences     = this.elLk.form.find('div._sequence');
+    this.elLk.sequenceField = this.elLk.form.find('div._sequence_field');
 
     // provide event handlers to the textarea where sequence text is typed
     var sequenceInputEvent = function(e) { // add some delay to make sure the blur event actually gets fired after making sure some other event hasn't removed the input string
@@ -70,7 +56,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
         element = null;
       }, 100);
     };
-    this.elLk.sequenceInput =  this.elLk.form.find('textarea[name=query_sequence]').on({
+    this.elLk.sequenceInput = this.elLk.form.find('textarea[name=query_sequence]').on({
       'focus': function(e) {
         if (!this.value || this.value === this.defaultValue) {
           $(this).val('').removeClass('inactive');
