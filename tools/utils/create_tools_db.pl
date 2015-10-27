@@ -46,7 +46,7 @@ my $schema_file = "$Bin/schema_tools_db.sql";
 die "ERROR: Schema file does not exist in $Bin.\n" unless -e $schema_file;
 
 my $fh  = FileHandle->new("$schema_file", 'r') or die "ERROR: Can't open file ($schema_file) for reading\n";
-my @sql = split ';', join ' ', map { !m/^#/ && $_ || () } $fh->getlines;
+my @sql = map { s/^\s+|\s+$//gr || () } split ';', join ' ', map { !m/^#/ && $_ || () } $fh->getlines;
 
 $fh->close;
 
