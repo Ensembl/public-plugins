@@ -33,11 +33,6 @@ use EnsEMBL::Web::BlastConstants qw(CONFIGURATION_FIELDS);
 
 use parent qw(EnsEMBL::Web::Object::Tools);
 
-sub tab_caption {
-  ## @override
-  return 'BLAST/BLAT';
-}
-
 sub get_blast_form_options {
   ## Gets the list of options for dropdown fields in the blast input form
   my $self = shift;

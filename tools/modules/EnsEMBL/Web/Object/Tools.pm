@@ -69,7 +69,9 @@ sub short_caption {
 
 sub tab_caption {
   ## Caption for the tab (to be overridden by the child objects)
-  return shift->tool_type || 'Tools';
+  my $self  = shift;
+  my $tool  = $self->tool_type;
+  return $tool && { $self->hub->species_defs->tools_list }->{$tool} || 'Tools';
 }
 
 sub default_action {

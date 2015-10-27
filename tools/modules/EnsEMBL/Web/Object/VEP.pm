@@ -30,6 +30,11 @@ use Bio::EnsEMBL::Variation::Utils::Constants;
 
 use parent qw(EnsEMBL::Web::Object::Tools);
 
+sub tab_caption {
+  ## @override
+  return 'VEP';
+}
+
 sub get_edit_jobs_data {
   ## Abstract method implementation
   my $self        = shift;
