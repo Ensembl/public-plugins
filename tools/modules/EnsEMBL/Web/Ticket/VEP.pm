@@ -38,9 +38,7 @@ sub init_from_user_input {
   my $self      = shift;
   my $hub       = $self->hub;
   my $species   = $hub->param('species');
-
-  my $file = EnsEMBL::Web::File::Tools->new('hub' => $hub, 'tool' => 'VEP', 'empty' => 1);
-
+  my $file      = EnsEMBL::Web::File::Tools->new('hub' => $hub, 'tool' => 'VEP', 'empty' => 1);
   my $method    = first { $hub->param($_) } qw(file url userdata text);
 
   # if no data entered
