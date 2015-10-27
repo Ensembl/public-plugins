@@ -29,18 +29,24 @@ sub update_conf {
   $SiteDefs::ENSEMBL_ORM_DATABASES->{'ticket'} = 'DATABASE_WEB_TOOLS';
 
   # Entries as added to the tools db ticket_type_name table (only edit this in plugins if new tool is being added)
-  $SiteDefs::ENSEMBL_TOOLS_LIST = [ 'Blast' => 'BLAST/BLAT', 'VEP' => 'Variant Effect Predictor', 'AssemblyConverter' => 'Assembly Converter' ];
+  $SiteDefs::ENSEMBL_TOOLS_LIST = [
+    'Blast'             => 'BLAST/BLAT',
+    'VEP'               => 'Variant Effect Predictor',
+    'AssemblyConverter' => 'Assembly Converter',
+    'IDMapper'          => 'ID History Converter'
+  ];
 
   # Which dispatcher to be used for the jobs (provide the appropriate values in your plugins)
-  $SiteDefs::ENSEMBL_TOOLS_JOB_DISPATCHER = { 'Blast' => '', 'VEP' => '', 'AssemblyConverter' => '' };
+  $SiteDefs::ENSEMBL_TOOLS_JOB_DISPATCHER = { 'Blast' => '', 'VEP' => '', 'AssemblyConverter' => '', 'IDMapper' => '' };
 
   # tmp directory for jobs i/o files
   $SiteDefs::ENSEMBL_TMP_DIR_TOOLS = defer { $SiteDefs::ENSEMBL_TMP_DIR.'/tools' };
 
-  # Flag to enable/disable BLAST, VEP, Assembly Converter
+  # Flag to enable/disable tools
   $SiteDefs::ENSEMBL_BLAST_ENABLED  = 1;
   $SiteDefs::ENSEMBL_VEP_ENABLED    = 1;
   $SiteDefs::ENSEMBL_AC_ENABLED     = 1;
+  $SiteDefs::ENSEMBL_IDM_ENABLED    = 1;
 
   # Leave it on if mechanism to fetch sequence by IDs is working
   $SiteDefs::ENSEMBL_BLAST_BY_SEQID = 1;
@@ -57,10 +63,14 @@ sub update_conf {
   # Path to CrossMap
   $SiteDefs::ASSEMBLY_CONVERTER_BIN_PATH = '/path/to/CrossMap.py';
 
+  # Path to ID History converter script
+  $SiteDefs::IDMAPPER_BIN_PATH = '/path/to/IDmapper.pl';
+
   # Upload file size limits
   $SiteDefs::ENSEMBL_TOOLS_CGI_POST_MAX = {
     'VEP'               =>  50 * 1024 * 1024,
     'AssemblyConverter' =>  50 * 1024 * 1024,
+    'IDMapper'          =>  50 * 1024 * 1024,
   };
 
   # location of the VEP filter script accessible to the web machine for filtering Results pages output
