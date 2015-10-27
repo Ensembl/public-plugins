@@ -240,19 +240,20 @@ sub content {
 }
 
 sub _add_non_cacheable_fields {
+  ## @private
   my ($self, $form_ref, $fields) = @_;
 
   # Add the non-cacheable fields to this dummy form and replace the placeholders from the actual form HTML
   my $fieldset = $self->new_form->add_fieldset;
 
-  $fields->{$_} = $fieldset->add_field($fields->{$_}) for keys %$fields;
+  $fields->{$_} &&= $fieldset->add_field($fields->{$_}) for keys %$fields;
 
   $fieldset->prepare_to_render;
 
   # Regexp to replace all placeholders from cached form
   for (keys %$fields) {
-    $fields->{$_} = $fields->{$_}->render;
-    $$form_ref =~ s/$_/$fields->{$_}/e;
+    my $html = $fields->{$_} ? $fields->{$_}->render : '';
+    $$form_ref =~ s/$_/$html/e;
   }
 }
 
