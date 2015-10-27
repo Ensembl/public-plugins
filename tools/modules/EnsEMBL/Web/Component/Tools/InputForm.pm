@@ -20,6 +20,7 @@ package EnsEMBL::Web::Component::Tools::InputForm;
 
 ### Parent class for tools InputForm
 ### Shall be used with MI
+### If adding a new tool, only override the first few methods listed
 
 use strict;
 use warnings;
@@ -44,12 +45,6 @@ sub get_cacheable_form_node :Abstract {
 sub get_non_cacheable_fields :Abstract {
   ## Replace placeholders for non-cacheable fields with actual HTML
   ## @return Hashref with each key as a placeholder string in the cached form and value as a hashref to be passed to Fieldset::add_field method
-}
-
-sub cache_key {
-  ## Returns cache key to be used to save/retrieve form
-  ## @return String
-  return sprintf '%s::%s', shift->object->tool_type, 'FORM'
 }
 
 sub js_panel {
@@ -86,8 +81,16 @@ sub new_ticket_button_title {
   return 'New job';
 }
 
+sub cache_key {
+  ## Returns cache key to be used to save/retrieve form
+  ## @note Avoid overriding this in child class
+  ## @return String
+  return sprintf '%s::%s', shift->object->tool_type, 'FORM'
+}
+
 sub current_species {
   ## Gets the current species name for which the form should be displayed
+  ## @note Avoid overriding this in child class
   ## @return String species name
   my $self = shift;
 
@@ -105,6 +108,7 @@ sub current_species {
 sub new_tool_form {
   ## Creates a new Form object with the information required by all Tools based form pages
   ## Shall be called inside get_cacheable_form_node to get empty form node before adding more fields to it
+  ## @note Avoid overriding this in child class
   ## @param Hashref as provided to Form constructor (optional)
   my ($self, $params) = @_;
 
@@ -124,6 +128,7 @@ sub new_tool_form {
 sub add_buttons_fieldset {
   ## Adds the genetic buttons fieldset to the tools form
   ## Shall be called inside get_cacheable_form_node to add buttons to the form
+  ## @note Avoid overriding this in child class
   ## @param Form object
   ## @param Hashref of keys as the name of the extra links needed ('reset' and 'cancel') and value their caption
   ## @return The added fieldset object
@@ -205,7 +210,7 @@ sub files_dropdown {
 
 sub content {
   ## Returns the actual content of the component
-  ## @note It should not be required to override this in child classes
+  ## @note Avoid overriding this in child class
   my $self      = shift;
   my $hub       = $self->hub;
   my $cache     = $hub->cache;
