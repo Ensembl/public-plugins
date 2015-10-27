@@ -24,7 +24,11 @@ package EnsEMBL::Web::Component::Tools::InputForm;
 use strict;
 use warnings;
 
+use List::Util qw(first);
+
 use EnsEMBL::Web::Attributes;
+use EnsEMBL::Web::Exceptions;
+use EnsEMBL::Web::File::Tools;
 
 sub form_header_info :Abstract {
   ## Gets the HTML to be displayed above the form
@@ -146,6 +150,57 @@ sub add_buttons_fieldset {
   $field->elements->[-1]->append_children(@extras) if @extras;
 
   return $fieldset;
+}
+
+sub files_dropdown {
+  ## Gets params for the dropdown to select one of the previously uploaded files
+  ## @note Avoid overriding this in child class
+  ## @param Arrayref of required formats (each format as a hashref with value and caption for the format)
+  ## @return Hashref as accepted by Fieldset->add_field or undef if no files are found
+  my ($self, $formats) = @_;
+
+  my $hub     = $self->hub;
+  my $sd      = $hub->species_defs;
+  my %formats = map { $_->{'value'} => $_->{'caption'} } @$formats;
+  my @files   = sort { $b->{'timestamp'} <=> $a->{'timestamp'} } grep { $_->{'format'} && $formats{$_->{'format'}} } $hub->session->get_data('type' => 'upload'), $hub->user ? $hub->user->uploads : ();
+
+  return unless @files;
+
+  my @options = { 'value' => '', 'caption' => '-- Select file --'};
+
+  for (@files) {
+
+    my $file = EnsEMBL::Web::File::Tools->new('hub' => $hub, 'tool' => $self->object->tool_type, 'file' => $_->{'file'});
+    my @file_data;
+
+    try {
+      @file_data = @{$file->read_lines->{'content'}};
+    } catch {};
+
+    next unless @file_data;
+
+    my $first_line  = first { $_ !~ /^\#/ } @file_data;
+       $first_line  = substr($first_line, 0, 30).'&#8230;' if $first_line && length $first_line > 31;
+
+    push @options, {
+      'value'   => $_->{'code'},
+      'caption' => sprintf('%s | %s | %s | %s',
+        $file->read_name,
+        $formats{$_->{'format'}},
+        $sd->species_label($_->{'species'}, 1),
+        $first_line || '-'
+      )
+    };
+  }
+
+  return unless @options > 1;
+
+  return {
+    'type'    => 'dropdown',
+    'name'    => 'userdata',
+    'label'   => 'Or select previously uploaded file',
+    'values'  => \@options,
+  };
 }
 
 sub content {

@@ -23,8 +23,6 @@ use warnings;
 
 use List::Util qw(first);
 
-use EnsEMBL::Web::File::Tools;
-use EnsEMBL::Web::Exceptions;
 use EnsEMBL::Web::VEPConstants qw(INPUT_FORMATS CONFIG_SECTIONS);
 
 use parent qw(
@@ -186,53 +184,7 @@ sub get_cacheable_form_node {
 
 sub get_non_cacheable_fields {
   ## Abstract method implementation
-  my $self  = shift;
-  my $hub   = $self->hub;
-  my $sd    = $hub->species_defs;
-
-  # Previously uploaded files
-  my $file_dropdown   = '';
-  my %allowed_formats = map { $_->{'value'} => $_->{'caption'} } @{ INPUT_FORMATS() };
-  my @user_files      = sort { $b->{'timestamp'} <=> $a->{'timestamp'} } grep { $_->{'format'} && $allowed_formats{$_->{'format'}} } $hub->session->get_data('type' => 'upload'), $hub->user ? $hub->user->uploads : ();
-
-  if (scalar @user_files) {
-    my @to_form = { 'value' => '', 'caption' => '-- Select file --'};
-
-    foreach my $record (@user_files) {
-
-      my $file = EnsEMBL::Web::File::Tools->new('hub' => $hub, 'tool' => 'VEP', 'file' => $record->{'file'});
-      my @file_data;
-      try {
-        @file_data    = @{$file->read_lines->{'content'}};
-      } catch {};
-
-      next unless @file_data;
-
-      my $first_line  = first { $_ !~ /^\#/ } @file_data;
-         $first_line  = substr($first_line, 0, 30).'&#8230;' if $first_line && length $first_line > 31;
-
-      push @to_form, {
-        'value'   => $record->{'code'},
-        'caption' => sprintf('%s | %s | %s | %s',
-          $file->read_name,
-          $allowed_formats{$record->{'format'}},
-          $sd->species_label($record->{'species'}, 1),
-          $first_line || '-'
-        )
-      };
-    }
-
-    if (@to_form > 1) {
-      $file_dropdown = {
-        'type'    => 'dropdown',
-        'name'    => 'userdata',
-        'label'   => 'Or select previously uploaded file',
-        'values'  => \@to_form,
-      };
-    }
-  }
-
-  return { FILES_DROPDOWN => $file_dropdown };
+  return { FILES_DROPDOWN => shift->files_dropdown(INPUT_FORMATS()) };
 }
 
 sub js_panel {
