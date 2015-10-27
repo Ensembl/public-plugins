@@ -161,7 +161,7 @@ sub populate_tree {
       [qw(
         ac_input        EnsEMBL::Web::Component::Tools::AssemblyConverter::InputForm
         ac_details      EnsEMBL::Web::Component::Tools::AssemblyConverter::TicketDetails
-        tickets         EnsEMBL::Web::Component::Tools::TicketsList
+        tickets         EnsEMBL::Web::Component::Tools::AssemblyConverter::TicketsList
       )],
       { 'availability' => 1 }
     ));
