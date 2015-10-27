@@ -22,13 +22,13 @@ my $code_path = "$Bin/../../..";
 unshift @INC, "$code_path/ensembl-webcode/conf";
 eval {
   require SiteDefs;
+  unshift @INC, @{SiteDefs::ENSEMBL_LIB_DIRS};
+  require LoadPlugins;
+  LoadPlugins->import;
 };
 if ($@) {
   die "ERROR: Can't use SiteDefs - $@\n";
 }
-
-unshift @INC, reverse ("$code_path/public-plugins/tools/modules/", @{SiteDefs::ENSEMBL_LIB_DIRS});
-$ENV{'PERL5LIB'} = join ':', $ENV{'PERL5LIB'} || (), @INC;
 
 require EnsEMBL::Web::SpeciesDefs;
 
