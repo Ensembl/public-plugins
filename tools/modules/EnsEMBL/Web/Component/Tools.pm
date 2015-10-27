@@ -95,32 +95,6 @@ sub job_status_tag {
   }
 }
 
-sub species_specific_info {
-  ## Creates an info box alternative assembly info
-  ## @param Species
-  ## @param Tools type caption
-  ## @param Tool type url name
-  ## @return HTML for info box to be displayed
-  my ($self, $species, $caption, $tool_type) = @_;
-  my $hub   = $self->hub;
-  my $sd    = $hub->species_defs;
-  if (my $alt_assembly = $sd->get_config($species, 'SWITCH_ASSEMBLY')) {
-    my $alt_assembly_url    = $sd->get_config($species, 'SWITCH_ARCHIVE_URL');
-    my $species_common_name = $sd->get_config($species, 'SPECIES_COMMON_NAME');
-    return $self->info_panel(
-      sprintf('%s for %s %s', $caption, $species_common_name, $alt_assembly),
-      sprintf('If you are looking for %s for %s %s, please go to <a href="http://%s%s">%3$s website</a>.',
-        $caption,
-        $species_common_name,
-        $alt_assembly,
-        $alt_assembly_url,
-        $hub->url({'__clear' => 1, 'species' => $species, 'type' => 'Tools', 'action' => $tool_type })
-      )
-    ),
-  }
-  return '';
-}
-
 sub result_url {
   ## Get the url for the result page for a job
   ## @param Ticket object
