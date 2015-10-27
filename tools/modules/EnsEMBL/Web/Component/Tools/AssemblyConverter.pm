@@ -18,6 +18,8 @@ limitations under the License.
 
 package EnsEMBL::Web::Component::Tools::AssemblyConverter;
 
+### Parent class for all AssemblyConverter components
+
 use strict;
 use warnings;
 

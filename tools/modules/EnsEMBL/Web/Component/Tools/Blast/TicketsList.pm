@@ -70,6 +70,7 @@ sub job_status_tag {
 }
 
 sub analysis_caption {
+  ## @override
   my ($self, $ticket) = @_;
   return $self->object->get_sub_object('Blast')->parse_search_type($ticket->job->[0]->job_data->{'search_type'}, 'search_method');
 }

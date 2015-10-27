@@ -18,6 +18,8 @@ limitations under the License.
 
 package EnsEMBL::Web::Component::Tools::VEP;
 
+### Parent class for all VEP components
+
 use strict;
 use warnings;
 

@@ -130,6 +130,12 @@ sub content {
 }
 
 sub job_summary_section {
+  ## Gets HTML node for jobs column in the ticket list table for individual job
+  ## @param Ticket object
+  ## @param Job object
+  ## @param Number of results
+  ## @param Flag if on means user actually owns the ticket and it's not a share ticket from another user
+  ## @return P tag node
   my ($self, $ticket, $job, $result_count, $is_owned_ticket) = @_;
 
   my $hub               = $self->hub;
@@ -235,6 +241,10 @@ sub job_summary_section {
 }
 
 sub ticket_link {
+  ## Gets HTML for the ticket column containing the link to view ticket
+  ## @param Ticket object
+  ## @param Flag if on means user actually owns the ticket and it's not a share ticket from another user
+  ## @return HTML string
   my ($self, $ticket, $is_owned_ticket) = @_;
   my $ticket_name = $ticket->ticket_name;
 
@@ -249,6 +259,10 @@ sub ticket_link {
 }
 
 sub ticket_buttons {
+  ## Gets HTML node for the edit/delete etc button for each ticket
+  ## @param Ticket object
+  ## @param Flag if on means user actually owns the ticket and it's not a share ticket from another user
+  ## @return Div node
   my ($self, $ticket, $is_owned_ticket) = @_;
   my $hub           = $self->hub;
   my $object        = $self->object;
@@ -351,6 +365,7 @@ sub job_status_tag {
   ## @param URL for results page
   ## @param Current assembly for the job species if it's not the same as the one to which the job was originally submitted to, 0 if species doesn't exist on current site
   ## @param Flag kept on if the job can be viewed on a different assembly website (only applicable if assembly different)
+  ## @return Hashref as accepted by DOM::create_element
   my ($self, $job, $status, $result_count, $result_url, $assembly_mismatch, $has_assembly_site) = @_;
 
   my $css_class = "job-status-$status";
@@ -388,6 +403,8 @@ sub job_status_tag {
 }
 
 sub analysis_caption {
+  ## Gets html to be displayed in the Analysis column
+  ## @return String
   my ($self, $ticket) = @_;
   return $ticket->ticket_type->ticket_type_caption;
 }

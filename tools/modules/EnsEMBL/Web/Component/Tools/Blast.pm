@@ -18,7 +18,7 @@ limitations under the License.
 
 package EnsEMBL::Web::Component::Tools::Blast;
 
-### Base class for all Blast components
+### Parent class for all Blast components
 
 use strict;
 use warnings;

@@ -18,12 +18,26 @@ limitations under the License.
 
 package EnsEMBL::Web::Component::Tools::TicketDetails;
 
+### Parent class for tools TicketDetails
+### Shall be used with MI
+
 use strict;
 use warnings;
 
-use parent qw(EnsEMBL::Web::Component::Tools);
-
 use EnsEMBL::Web::Attributes;
+
+sub content_ticket :Abstract {
+  ## @abstract method
+  ## @param Ticket object
+  ## @param Arrayref if Job objects
+  ## @param Flag to tell whether user or session owns the ticket or not
+  ## @return HTML to be displayed
+}
+
+sub allowed_url_functions {
+  ## List of url function that can display ticket details (this is to enable dynamic behaviour of displaying ticket details)
+  return qw(View Results);
+}
 
 sub job_details_table {
   ## A two column layout displaying a job's details
@@ -150,6 +164,8 @@ sub get_job_summary {
 }
 
 sub content {
+  ## Actual method returning the content of the componet
+  ## @note Avoid overriding this in sub class
   my $self      = shift;
   my $object    = $self->object;
   my $hub       = $self->hub;
@@ -170,19 +186,6 @@ sub content {
   ;
 
   return sprintf '<input type="hidden" class="panel_type" value="TicketDetails" />%s%s', @$jobs ? ($heading, $self->content_ticket($ticket, $jobs, scalar $object->user_accessible_tickets($ticket))) : ('', '');
-}
-
-sub content_ticket :Abstract {
-  ## @abstract method
-  ## @param Ticket object
-  ## @param Arrayref if Job objects
-  ## @param Flag to tell whether user or session owns the ticket or not
-  ## @return HTML to be displayed
-}
-
-sub allowed_url_functions {
-  ## List of url function that can display ticket details (this is to enable dynamic behaviour of displaying ticket details)
-  return qw(View Results);
 }
 
 1;

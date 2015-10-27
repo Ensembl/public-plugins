@@ -27,6 +27,7 @@ use parent qw(
 );
 
 sub content_ticket {
+  ## Abstract method implementation
   my ($self, $ticket, $jobs, $is_owned_ticket) = @_;
   my $hub     = $self->hub;
   my $is_view = ($hub->function || '') eq 'View';
