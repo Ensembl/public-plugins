@@ -22,89 +22,32 @@ use strict;
 use warnings;
 
 use List::Util qw(first);
-use HTML::Entities qw(encode_entities);
 
-use EnsEMBL::Web::File::Tools;
-use EnsEMBL::Web::Exceptions;
 use EnsEMBL::Web::VEPConstants qw(INPUT_FORMATS CONFIG_SECTIONS);
-use Bio::EnsEMBL::Variation::Utils::Constants;
 
-use parent qw(EnsEMBL::Web::Component::Tools::VEP);
+use parent qw(
+  EnsEMBL::Web::Component::Tools::VEP
+  EnsEMBL::Web::Component::Tools::InputForm
+);
 
-sub content {
-  my $self            = shift;
-  my $hub             = $self->hub;
-  my $sd              = $hub->species_defs;
-  my $species         = $self->_species;
-  my $cache           = $hub->cache;
-  my $form            = $cache ? $cache->get('VEPFORM') : undef;
-  my $current_species = $hub->species;
-     $current_species = $hub->get_favourite_species->[0] if $current_species =~ /multi|common/i;
+sub form_header_info {
+  ## Abstract method implementation
+  my $self = shift;
 
-  # If cached form not found, generate a new form and save in cache to skip the form generation process next time
-  if (!$form) {
-    $form = $self->get_cacheable_form_node->render;
-    $cache->set('VEPFORM', $form) if $cache;
-  }
-
-  # Replace any placeholders for non cacheable fields with actual HTML
-  $form = $self->add_non_cacheable_fields($form, $current_species);
-
-  # construct hash to pass to JS containing information needed to render preview
-  my %cons = map {$_->{SO_term} => {'description' => $_->{description}, 'rank' => $_->{rank}}} values %Bio::EnsEMBL::Variation::Utils::Constants::OVERLAP_CONSEQUENCES;
-
-  # add colours
-  $cons{$_}->{colour} = $hub->colourmap->hex_by_name($sd->colour('variation')->{lc $_}->{'default'}) for keys %cons;
-
-  # add example data
-  my $ex_data = {};
-
-  foreach my $sp(@$species) {
-    foreach my $key(grep {/^VEP/} keys %{$sp->{sample}}) {
-      my $value = $sp->{sample}->{$key};
-      $key =~ s/^VEP\_//;
-      $ex_data->{$sp->{value}}->{lc($key)} = $value;
-    }
-  }
-
-  # create input with data
-  my $panel_params = sprintf('<input class="js_param" type="hidden" name="preview_data" value="%s" /><input class="js_param" type="hidden" name="rest_server_url" value="%s"><input class="js_param" type="hidden" name="example_data" value="%s">',
-    encode_entities($self->jsonify(\%cons)),
-    encode_entities($sd->ENSEMBL_REST_URL),
-    encode_entities($self->jsonify($ex_data))
-  );
-
-  return sprintf('
-    %s<div class="hidden _tool_new">
-      <p><a class="button _change_location" href="%s">New VEP job</a></p>
-    </div>
-    <div class="hidden _tool_form_div">
-      <h2>New VEP job:</h2><input type="hidden" class="panel_type" value="VEPForm" />%s%s
-    </div>',
-    $panel_params,
-    $hub->url({'function' => ''}),
-    $self->species_specific_info($current_species, 'VEP', 'VEP'),
-    $form
-  );
+  return $self->species_specific_info($self->current_species, 'VEP', 'VEP');
 }
 
 sub get_cacheable_form_node {
-  ## Gets the form tree node
-  ## This method returns the form object that can be cached once and then used for all requests (ie. it does not contian species specific or user specific fields)
-  ## @return EnsEMBL::Web::Form object
+  ## Abstract method implementation
   my $self            = shift;
   my $hub             = $self->hub;
+  my $object          = $self->object;
   my $sd              = $hub->species_defs;
-  my $species         = $self->_species;
-  my $form            = $self->new_tool_form('VEP');
-  my $fd              = $self->object->get_form_details;
+  my $species         = $object->species_list;
+  my $form            = $self->new_tool_form;
+  my $fd              = $object->get_form_details;
   my $input_formats   = INPUT_FORMATS;
-
-  # Placeholders for previous job json and species hidden inputs
-  $form->append_child('text', 'EDIT_JOB');
-  $form->append_child('text', 'SPECIES_INPUT');
-
-  my $input_fieldset = $form->add_fieldset({'legend' => 'Input', 'class' => '_stt_input', 'no_required_notes' => 1});
+  my $input_fieldset  = $form->add_fieldset({'no_required_notes' => 1});
 
   # Species dropdown list with stt classes to dynamically toggle other fields
   $input_fieldset->add_field({
@@ -233,96 +176,51 @@ sub get_cacheable_form_node {
     $self->$method($form, $config_div->last_child); # add required fieldsets
   }
 
-  # Placeholder for Run/Close buttons
-  $form->append_child('text', 'BUTTONS_FIELDSET');
+  # Run/Close buttons
+  $self->add_buttons_fieldset($form, {'reset' => 'Clear', 'cancel' => 'Close form'});
 
   return $form;
 }
 
-sub add_non_cacheable_fields {
-  ## Replace placeholders for non-cacheable fields with actual HTML
-  ## @param Form HTML (string)
-  ## @param Current species name
-  ## @return Modified form HTML
-  my ($self, $form, $current_species) = @_;
+sub get_non_cacheable_fields {
+  ## Abstract method implementation
+  return { FILES_DROPDOWN => shift->files_dropdown(INPUT_FORMATS()) };
+}
 
-  my $hub           = $self->hub;
-  my $sd            = $hub->species_defs;
-  my $input_formats = INPUT_FORMATS;
+sub js_panel {
+  ## @override
+  return 'VEPForm';
+}
 
-  # Add the non-cacheable fields to this dummy form and replace the placeholders from the actual form HTML
-  my $fieldset2 = $self->new_form->add_fieldset;
+sub js_params {
+  ## @override
+  my $self    = shift;
+  my $hub     = $self->hub;
+  my $object  = $self->object;
+  my $species = $object->species_list;
+  my $params  = $self->SUPER::js_params(@_);
 
-  # Previous job params for JavaScript
-  my $edit_job = ($hub->function || '') eq 'Edit' ? $self->object->get_edit_jobs_data : [];
-     $edit_job = @$edit_job ? $fieldset2->add_hidden({ 'name'  => 'edit_jobs', 'value' => $self->jsonify($edit_job) }) : '';
+  # consequences data to be used for VEP preview
+  $params->{'consequences_data'} = $object->get_consequences_data;
 
-  # Current species as hidden field
-  my $species_input = $fieldset2->add_hidden({'name' => 'default_species', 'value' => $current_species});
+  # example data for each species
+  $params->{'example_data'} = { map { $_->{'value'} => delete $_->{'example'} } @$species };
 
-  # Previously uploaded files
-  my $file_dropdown   = '';
-  my %allowed_formats = map { $_->{'value'} => $_->{'caption'} } @$input_formats;
-  my @user_files      = sort { $b->{'timestamp'} <=> $a->{'timestamp'} } grep { $_->{'format'} && $allowed_formats{$_->{'format'}} } $hub->session->get_data('type' => 'upload'), $hub->user ? $hub->user->uploads : ();
+  # REST server address for VEP preview
+  $params->{'rest_server_url'} = $hub->species_defs->ENSEMBL_REST_URL;
 
-  if (scalar @user_files) {
-    my @to_form = { 'value' => '', 'caption' => '-- Select file --'};
-
-    foreach my $record (@user_files) {
-
-      my $file = EnsEMBL::Web::File::Tools->new('hub' => $hub, 'tool' => 'VEP', 'file' => $record->{'file'});
-      my @file_data;
-      try {
-        @file_data    = @{$file->read_lines->{'content'}};
-      } catch {};
-
-      next unless @file_data;
-
-      my $first_line  = first { $_ !~ /^\#/ } @file_data;
-         $first_line  = substr($first_line, 0, 30).'&#8230;' if $first_line && length $first_line > 31;
-
-      push @to_form, {
-        'value'   => $record->{'code'},
-        'caption' => sprintf('%s | %s | %s | %s',
-          $file->read_name,
-          $allowed_formats{$record->{'format'}},
-          $sd->species_label($record->{'species'}, 1),
-          $first_line || '-'
-        )
-      };
-    }
-
-    if (@to_form > 1) {
-      $file_dropdown = $fieldset2->add_field({
-        'type'    => 'dropdown',
-        'name'    => 'userdata',
-        'label'   => 'Or select previously uploaded file',
-        'values'  => \@to_form,
-      });
-    }
-  }
-
-  # Buttons
-  my $buttons_fieldset = $self->add_buttons_fieldset($fieldset2->form, {'reset' => 'Clear', 'cancel' => 'Close form'});
-
-  # Add the render-time changes to the fields
-  $fieldset2->prepare_to_render;
-
-  # Regexp to replace all placeholders from cached form
-  $form =~ s/SPECIES_INPUT/$species_input->render/e;
-  $form =~ s/EDIT_JOB/$edit_job && $edit_job->render/e;
-  $form =~ s/FILES_DROPDOWN/$file_dropdown && $file_dropdown->render/e;
-  $form =~ s/BUTTONS_FIELDSET/$buttons_fieldset->render/e;
-
-  return $form;
+  return $params;
 }
 
 sub _build_filters {
   my ($self, $form, $div) = @_;
-  my $fieldset  = $div->append_child($form->add_fieldset('Filters'));
-  my $fd        = $self->object->get_form_details;
 
-  if (first { $_->{'value'} eq 'Homo_sapiens' } @{$self->_species}) {
+  my $object    = $self->object;
+  my $fd        = $object->get_form_details;
+  my $species   = $object->species_list;
+  my $fieldset  = $div->append_child($form->add_fieldset('Filters'));
+
+  if (first { $_->{'value'} eq 'Homo_sapiens' } @$species) {
 
     $fieldset->add_field({
       'field_class'   => '_stt_Homo_sapiens',
@@ -392,13 +290,15 @@ sub _build_filters {
 
 sub _build_identifiers {
   my ($self, $form, $div) = @_;
+
   my $hub       = $self->hub;
-  my $species   = $self->_species;
-  my $fd        = $self->object->get_form_details;
+  my $object    = $self->object;
+  my $species   = $object->species_list;
+  my $fd        = $object->get_form_details;
 
   ## IDENTIFIERS
   my $current_section = 'Identifiers';
-  my $fieldset = $self->_start_section($form, $div, $current_section);
+  my $fieldset        = $self->_start_section($form, $div, $current_section);
 
   $fieldset->add_field({
     'type'        => 'checkbox',
@@ -523,10 +423,12 @@ sub _build_identifiers {
 
 sub _build_extra {
   my ($self, $form, $div) = @_;
+
   my $hub       = $self->hub;
+  my $object    = $self->object;
   my $sd        = $hub->species_defs;
-  my $species   = $self->_species;
-  my $fd        = $self->object->get_form_details;
+  my $species   = $object->species_list;
+  my $fd        = $object->get_form_details;
 
   ## MISCELLANEOUS SECTION
   my $current_section = 'Miscellaneous';
@@ -754,9 +656,9 @@ sub _add_plugins {
   my ($self, $div, $fieldset, $section_name) = @_;
 
   my ($ac_values, %required);
-  my $species = $self->_species;
-  my $sd  = $self->hub->species_defs;
-  my $pl  = $sd->multi_val('ENSEMBL_VEP_PLUGIN_CONFIG');
+  my $species = $self->object->species_list;
+  my $sd      = $self->hub->species_defs;
+  my $pl      = $sd->multi_val('ENSEMBL_VEP_PLUGIN_CONFIG');
 
   foreach my $plugin(@{$self->_get_plugins_by_section($section_name)}) {
     my $pl_key = $plugin->{key};
@@ -849,61 +751,6 @@ sub _add_plugins {
       value => join(';', map {$_.'='.join(',', @{$required{$_}})} keys %required)
     });
   }
-}
-
-sub _species {
-  ## @private
-  my $self = shift;
-
-  if (!$self->{'_species'}) {
-    my $hub     = $self->hub;
-    my $sd      = $hub->species_defs;
-    my %fav     = map { $_ => 1 } @{$hub->get_favourite_species};
-
-    # at the moment only human, chicken and mouse have RefSeqs in their otherfeatures DB
-    # there's no config for this currently so species are listed manually
-    my %refseq  = map { $_ => 1 } qw(
-      Anolis_carolinensis
-      Bos_taurus
-      Canis_familiaris
-      Ciona_intestinalis
-      Danio_rerio
-      Felis_catus
-      Gallus_gallus
-      Homo_sapiens
-      Mus_musculus
-      Oryctolagus_cuniculus
-      Ovis_aries
-      Pan_troglodytes
-      Papio_anubis
-      Rattus_norvegicus
-      Sus_scrofa
-    );
-
-    my @species;
-
-    for ($sd->tools_valid_species) {
-
-      my $db_config = $sd->get_config($_, 'databases');
-
-      push @species, {
-        'value'       => $_,
-        'caption'     => $sd->species_label($_, 1),
-        'variation'   => $db_config->{'DATABASE_VARIATION'},
-        'refseq'      => $refseq{$_} && $db_config->{'DATABASE_OTHERFEATURES'},
-        'assembly'    => $sd->get_config($_, 'ASSEMBLY_NAME'),
-        'regulatory'  => $sd->get_config($_, 'REGULATORY_BUILD'),
-        'favourite'   => $fav{$_} || 0,
-        'sample'      => $sd->get_config($_, 'SAMPLE_DATA'),
-      };
-    }
-
-    @species = sort { ($a->{'favourite'} xor $b->{'favourite'}) ? $b->{'favourite'} || -1 : $a->{'caption'} cmp $b->{'caption'} } @species;
-
-    $self->{'_species'} = \@species;
-  }
-
-  return $self->{'_species'};
 }
 
 1;

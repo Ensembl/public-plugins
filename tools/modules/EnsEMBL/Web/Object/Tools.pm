@@ -605,19 +605,4 @@ sub get_time_now {
   return sprintf '%d-%02d-%02d %02d:%02d:%02d', $year + 1900, $month + 1, $day, $hour, $min, $sec;
 }
 
-sub format_date { ## TODO ??? move to root?
-  my ($self, $datetime) = @_;
-  return unless $datetime;
-
-  my @date = split(/-|T|:/, $datetime);
-  $datetime = sprintf('%s/%s/%s, %s:%s',
-    $date[2],
-    $date[1],
-    $date[0],
-    $date[3],
-    $date[4]
-  );
-  return $datetime;
-}
-
 1;

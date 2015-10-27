@@ -25,15 +25,16 @@ Ensembl.Panel.ToolsForm = Ensembl.Panel.ContentTools.extend({
 
     Ensembl.EventManager.register('toolsToggleForm', this, this.toggleForm);
     Ensembl.EventManager.register('toolsEditTicket', this, this.loadTicket);
-
-    this.loadTicketURL = '';
   },
 
   init: function() {
 
     var panel = this;
 
-    this.base();
+    this.base.apply(this, arguments);
+
+    this.loadTicketURL  = this.params['load_ticket_url'];    // URL to load a ticket
+    this.defaultSpecies = this.params['species'];
 
     // 'Add new' button (make link visible by default)
     this.elLk.buttonDiv = this.el.find('._tool_new').show().on('click', 'a', function(e) {
@@ -68,9 +69,6 @@ Ensembl.Panel.ToolsForm = Ensembl.Panel.ContentTools.extend({
       }
     });
 
-    // URL to load a ticket
-    this.loadTicketURL = this.elLk.form.find('input[name=load_ticket_url]').remove().val();
-
     // Reset & Cancel form buttons
     this.elLk.cancelButton = this.elLk.form.find('a._tools_form_reset, a._tools_form_cancel').on('click', function(e) {
       var isCancel = !!this.className.match(/cancel/);
@@ -98,10 +96,7 @@ Ensembl.Panel.ToolsForm = Ensembl.Panel.ContentTools.extend({
    * Checks and populates the form with existing job if job data present as a hidden input
    * @return true if existing job present, false otherwise
    */
-    var editingJobsData       = [];
-    try {
-      editingJobsData         = $.parseJSON(this.elLk.form.find('input[name=edit_jobs]').remove().val());
-    } catch (ex) {}
+    var editingJobsData = this.params['edit_jobs'];
     if (editingJobsData && editingJobsData.length) {
       this.populateForm(editingJobsData, noReset);
       return true;

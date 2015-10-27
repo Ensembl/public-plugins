@@ -22,8 +22,8 @@ use strict;
 use warnings;
 
 use parent qw(
-  EnsEMBL::Web::Component::Tools::ResultsSummary
   EnsEMBL::Web::Component::Tools::Blast
+  EnsEMBL::Web::Component::Tools::ResultsSummary
 );
 
 sub _init {

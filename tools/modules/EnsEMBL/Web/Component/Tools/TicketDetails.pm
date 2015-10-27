@@ -18,14 +18,154 @@ limitations under the License.
 
 package EnsEMBL::Web::Component::Tools::TicketDetails;
 
+### Parent class for tools TicketDetails
+### Shall be used with MI
+
 use strict;
 use warnings;
 
-use parent qw(EnsEMBL::Web::Component::Tools);
-
 use EnsEMBL::Web::Attributes;
 
+sub content_ticket :Abstract {
+  ## @abstract method
+  ## @param Ticket object
+  ## @param Arrayref if Job objects
+  ## @param Flag to tell whether user or session owns the ticket or not
+  ## @return HTML to be displayed
+}
+
+sub allowed_url_functions {
+  ## List of url function that can display ticket details (this is to enable dynamic behaviour of displaying ticket details)
+  return qw(View Results);
+}
+
+sub job_details_table {
+  ## A two column layout displaying a job's details
+  ## @param Job object
+  ## @param Flag to tell whether user or session owns the ticket or not
+  ## @return DIV node (as returned by new_twocol method)
+  my ($self, $job, $is_owned_ticket) = @_;
+
+  my $object    = $self->object;
+  my $job_data  = $job->job_data;
+  my $species   = $job->species;
+  my $sd        = $self->hub->species_defs;
+  my $two_col   = $self->new_twocol;
+
+  $two_col->add_row('Job summary',  $self->get_job_summary($job, $is_owned_ticket)->render);
+  $two_col->add_row('Species',      $sd->tools_valid_species($species)
+    ? sprintf('<img class="job-species" src="%sspecies/16/%s.png" alt="" height="16" width="16">%s', $self->img_url, $species, $sd->species_label($species, 1))
+    : $species =~ s/_/ /rg
+  );
+  $two_col->add_row('Assembly',     $job->assembly);
+
+  return $two_col;
+}
+
+sub get_job_summary {
+  ## Reads the job dispatcher_status field, and display status accordingly
+  ## @param Job object
+  ## @param Flag to tell whether user or session owns the ticket or not
+  ## @return DIV node
+  my ($self, $job, $is_owned_ticket) = @_;
+
+  my $hub               = $self->hub;
+  my $object            = $self->object;
+  my $job_id            = $job->job_id;
+  my ($job_message)     = sort { $a->fatal ? -1 : 1 } @{$job->job_message}; # give priority to a fatal exception
+  my $job_status        = $job->status;
+  my $dispatcher_status = $job->dispatcher_status;
+  my $url_param         = $object->create_url_param({'job_id' => $job_id});
+  my $job_status_div    = $self->dom->create_element('div', {
+    'children'            => [{
+      'node_name'           => 'p',
+      'inner_HTML'          => $object->get_job_description($job)
+    }, {
+      'node_name'           => 'p',
+      'class'               => 'job-icons'
+    }]
+  });
+
+  my $icons = {
+    'edit'    => {
+      'icon'    => 'edit_icon',
+      'title'   => 'Edit &amp; resubmit (create new ticket)',
+      'url'     => [{ 'function' => 'Edit', 'tl' => $url_param }],
+      'class'   => '_ticket_edit _change_location'
+    },
+    'delete'  => {
+      'icon'    => 'delete_icon',
+      'title'   => 'Delete',
+      'url'     => ['Json', {'function' => 'delete',  'tl' => $url_param  }],
+      'class'   => '_json_link',
+      'confirm' => 'This will delete this job permanently.'
+    }
+  };
+
+  my $margin_left_class = @{$job_status_div->last_child->child_nodes} ? 'left-margin' : ''; # set left margin only if required
+
+  foreach my $link ($is_owned_ticket ? qw(edit delete) : qw(edit)) {
+    if ($icons->{$link}) {
+      $job_status_div->last_child->append_child('a', {
+        'href'        => $hub->url(@{$icons->{$link}{'url'}}),
+        'class'       => $icons->{$link}{'class'},
+        'children'    => [{
+          'node_name'   => 'span',
+          'class'       => ['sprite', $icons->{$link}{'icon'}, '_ht', $margin_left_class || ()],
+          'title'       => $icons->{$link}{'title'}
+        }, $icons->{$link}{'confirm'} ? {
+          'node_name'   => 'span',
+          'class'       => ['hidden', '_confirm'],
+          'inner_HTML'  => $icons->{$link}{'confirm'}
+        } : () ]
+      });
+      $margin_left_class = '';
+    }
+  }
+
+  if ($job_status eq 'awaiting_user_response') {
+
+    my $display_message         = $job_message && $job_message->display_message || 'Unknown error';
+    my $exception_is_fatal      = $job_message ? $job_message->fatal : 1;
+    my $job_message_class       = "_job_message_$job_id";
+    my $error_div               = $job_status_div->append_child('div', {
+      'class'       => 'job-error-msg',
+      'children'    => [{
+        'node_name'   => 'p',
+        'inner_HTML'  => join('', $display_message, $exception_is_fatal ? sprintf(' <a class="toggle _slide_toggle closed" href="#more" rel="%s">Show details</a>', $job_message_class) : '')
+      }]
+    });
+
+    if ($exception_is_fatal) {
+      my $exception = $job_message ? $job_message->exception : {};
+      my $details   = $exception->{'message'} ? "Error with message: $exception->{'message'}\n" : "Error:\n";
+         $details  .= $exception->{'stack'}
+        ? join("\n", map(sprintf("Thrown by %s at %s (%s)", $_->[3], $_->[0], $_->[2]), @{$exception->{'stack'}}))
+        : $exception->{'exception'} || 'No details'
+      ;
+
+      my $helpdesk_details = sprintf 'This seems to be a problem with %s website code. Please contact our <a href="%s" class="modal_link">helpdesk</a> to report this problem.',
+        $hub->species_defs->ENSEMBL_SITETYPE,
+        $hub->url({'type' => 'Help', 'action' => 'Contact', 'subject' => 'Exception in Web Tools', 'message' => sprintf("\n\n\n%s with message (%s) (for job %s): %s", $exception->{'class'} || 'Exception', $display_message, $job_id, $details)})
+      ;
+
+      $error_div->append_children({
+        'node_name'   => 'div',
+        'class'       => [ $job_message_class, 'toggleable', 'hidden', 'job_error_message' ],
+        'inner_HTML'  => $details
+      }, {
+        'node_name'   => 'p',
+        'inner_HTML'  => $helpdesk_details
+      });
+    }
+  }
+
+  return $job_status_div;
+}
+
 sub content {
+  ## Actual method returning the content of the componet
+  ## @note Avoid overriding this in sub class
   my $self      = shift;
   my $object    = $self->object;
   my $hub       = $self->hub;
@@ -46,19 +186,6 @@ sub content {
   ;
 
   return sprintf '<input type="hidden" class="panel_type" value="TicketDetails" />%s%s', @$jobs ? ($heading, $self->content_ticket($ticket, $jobs, scalar $object->user_accessible_tickets($ticket))) : ('', '');
-}
-
-sub content_ticket :Abstract {
-  ## @abstract method
-  ## @param Ticket object
-  ## @param Arrayref if Job objects
-  ## @param Flag to tell whether user or session owns the ticket or not
-  ## @return HTML to be displayed
-}
-
-sub allowed_url_functions {
-  ## List of url function that can display ticket details (this is to enable dynamic behaviour of displaying ticket details)
-  return qw(View Results);
 }
 
 1;

@@ -101,7 +101,7 @@ sub content {
       'value'       => $auto_refresh
     }, {
       'node_name'   => 'h2',
-      'inner_HTML'  => $tool_type ? qq(<a rel="_activity_summary" class="toggle _slide_toggle set_cookie open" href="#">Recent $tool_type tickets:</a>) : 'Recent tickets:'
+      'inner_HTML'  => $tool_type ? qq(<a rel="_activity_summary" class="toggle _slide_toggle set_cookie open" href="#">Recent tickets:</a>) : 'Recent tickets:'
     }, {
       'node_name'   => 'div',
       'class'       => [qw(toggleable _activity_summary)],
@@ -130,6 +130,12 @@ sub content {
 }
 
 sub job_summary_section {
+  ## Gets HTML node for jobs column in the ticket list table for individual job
+  ## @param Ticket object
+  ## @param Job object
+  ## @param Number of results
+  ## @param Flag if on means user actually owns the ticket and it's not a share ticket from another user
+  ## @return P tag node
   my ($self, $ticket, $job, $result_count, $is_owned_ticket) = @_;
 
   my $hub               = $self->hub;
@@ -235,6 +241,10 @@ sub job_summary_section {
 }
 
 sub ticket_link {
+  ## Gets HTML for the ticket column containing the link to view ticket
+  ## @param Ticket object
+  ## @param Flag if on means user actually owns the ticket and it's not a share ticket from another user
+  ## @return HTML string
   my ($self, $ticket, $is_owned_ticket) = @_;
   my $ticket_name = $ticket->ticket_name;
 
@@ -249,6 +259,10 @@ sub ticket_link {
 }
 
 sub ticket_buttons {
+  ## Gets HTML node for the edit/delete etc button for each ticket
+  ## @param Ticket object
+  ## @param Flag if on means user actually owns the ticket and it's not a share ticket from another user
+  ## @return Div node
   my ($self, $ticket, $is_owned_ticket) = @_;
   my $hub           = $self->hub;
   my $object        = $self->object;
@@ -343,7 +357,54 @@ sub ticket_buttons {
   return $buttons;
 }
 
+sub job_status_tag {
+  ## Tag to be displayed next to each job in ticket list table, or job details page
+  ## @param Job object
+  ## @param Dispatcher status (string)
+  ## @param Number of results
+  ## @param URL for results page
+  ## @param Current assembly for the job species if it's not the same as the one to which the job was originally submitted to, 0 if species doesn't exist on current site
+  ## @param Flag kept on if the job can be viewed on a different assembly website (only applicable if assembly different)
+  ## @return Hashref as accepted by DOM::create_element
+  my ($self, $job, $status, $result_count, $result_url, $assembly_mismatch, $has_assembly_site) = @_;
+
+  my $css_class = "job-status-$status";
+  my $href      = '';
+  my $title     = {
+    'not_submitted' => q(This job could not be submitted due to some problems. Please click on the 'View details' icon for more information),
+    'queued'        => q(Your job has been submitted and will be processed soon.),
+    'submitted'     => q(Your job has been submitted and will be processed soon.),
+    'running'       => q(Your job is currently being processed. The page will refresh once it's finished running.),
+    'done'          => q(This job is finished.),
+    'failed'        => q(This job has failed. Please click on the 'View details' icon for more information),
+    'deleted'       => q(Your ticket has been deleted. This usually happens if the ticket is too old.)
+  }->{$status};
+
+  if ($status eq 'done') {
+    if ($assembly_mismatch) {
+      $css_class  = 'job-status-mismatch';
+      $title      = sprintf 'The job was run on %s assembly for %s. ', $job->assembly, $self->hub->species_defs->get_config($job->species, 'SPECIES_COMMON_NAME');
+      $title     .= $has_assembly_site && $job->ticket->owner_type ne 'user' ? sprintf('Please save this ticket to your account using the icon on the right to be able to view this job on %s site. ', $job->assembly) : '';
+      $title     .= sprintf q(To resubmit the job to %s assembly, please click on the 'Edit &amp; resubmit' icon.), $assembly_mismatch;
+    } elsif (defined $assembly_mismatch && $assembly_mismatch eq '0') {
+      $css_class  = 'job-status-mismatch';
+      $title      = sprintf q(The job was run on %s which does not exist on this site.), $job->species =~ s/_/ /gr;
+    } else {
+      $href       = $self->hub->url($result_url); # display link on the tag only if job's done and results are available of current assembly
+    }
+  }
+
+  return {
+    'class'       => [$css_class, qw(_ht job-status)],
+    'title'       => $title,
+    'href'        => $href,
+    'inner_HTML'  => ucfirst $status =~ s/_/ /gr
+  }
+}
+
 sub analysis_caption {
+  ## Gets html to be displayed in the Analysis column
+  ## @return String
   my ($self, $ticket) = @_;
   return $ticket->ticket_type->ticket_type_caption;
 }

@@ -26,11 +26,11 @@ our @EXPORT_OK = qw(INPUT_FORMATS);
 
 sub INPUT_FORMATS {
   return [
-    { 'value' => 'BED',  'caption' => 'BED',              'example' => qq() },
-    { 'value' => 'GFF',  'caption' => 'GFF',              'example' => qq() },
-    { 'value' => 'GTF',  'caption' => 'GTF',              'example' => qq() },
-    { 'value' => 'VCF',  'caption' => 'VCF',              'example' => qq() },
-    { 'value' => 'WIG',  'caption' => 'WIG',              'example' => qq() },
+    { 'value' => 'BED',  'caption' => 'BED',  'example' => qq() },
+    { 'value' => 'GFF',  'caption' => 'GFF',  'example' => qq() },
+    { 'value' => 'GTF',  'caption' => 'GTF',  'example' => qq() },
+    { 'value' => 'VCF',  'caption' => 'VCF',  'example' => qq() },
+    { 'value' => 'WIG',  'caption' => 'WIG',  'example' => qq() },
   ];
 }
 
