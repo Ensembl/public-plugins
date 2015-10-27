@@ -21,6 +21,8 @@ package EnsEMBL::Web::Component::Tools::Blast::TicketDetails;
 use strict;
 use warnings;
 
+use EnsEMBL::Web::BlastConstants qw(CONFIGURATION_FIELDS);
+
 use parent qw(
   EnsEMBL::Web::Component::Tools::Blast
   EnsEMBL::Web::Component::Tools::TicketDetails
@@ -74,6 +76,34 @@ sub job_details_table {
   $two_col->add_row('Configurations', $configs) if $configs;
 
   return $two_col;
+}
+
+sub _display_config {
+  ## @private
+  my ($self, $configs) = @_;
+  my $fields  = CONFIGURATION_FIELDS;
+  my $two_col = $self->new_twocol;
+
+  $two_col->set_attribute('class', 'blast-configs');
+
+  while (my ($config_type, $config_fields) = splice @$fields, 0, 2) {
+
+    my @rows = [ sprintf('<b>%s options</b>', ucfirst $config_type =~ s/_/ /gr), '' ];
+
+    while (my ($field_name, $field_details) = splice @$config_fields, 0, 2) {
+      if (exists $configs->{$field_name}) {
+        my ($value) = exists $field_details->{'commandline_values'}
+          ? ucfirst $configs->{$field_name} # since the value for this field is set according to 'commandline_values'
+          : map { $_->{'value'} eq $configs->{$field_name} ? $_->{'caption'} : () } @{$field_details->{'values'}} # otherwise choose the right 'caption' key from the 'values' arrayref that hash a matching 'value' key
+        ;
+        push @rows, [ $field_details->{'label'}, $value // '' ];
+      }
+    }
+
+    $two_col->add_rows(@rows) if @rows > 1;
+  }
+
+  return $two_col->is_empty ? '' : $two_col->render;
 }
 
 1;
