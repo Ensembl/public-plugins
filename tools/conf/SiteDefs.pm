@@ -63,9 +63,6 @@ sub update_conf {
   # Path to CrossMap
   $SiteDefs::ASSEMBLY_CONVERTER_BIN_PATH = '/path/to/CrossMap.py';
 
-  # Path to ID History converter script
-  $SiteDefs::IDMAPPER_BIN_PATH = '/path/to/IDmapper.pl';
-
   # Upload file size limits
   $SiteDefs::ENSEMBL_TOOLS_CGI_POST_MAX = {
     'VEP'               =>  50 * 1024 * 1024,
