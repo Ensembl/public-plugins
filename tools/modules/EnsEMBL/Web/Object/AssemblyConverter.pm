@@ -21,7 +21,6 @@ package EnsEMBL::Web::Object::AssemblyConverter;
 use strict;
 use warnings;
 
-use EnsEMBL::Web::TmpFile::ToolsOutput;
 use EnsEMBL::Web::Utils::FileHandler qw(file_get_contents);
 
 use parent qw(EnsEMBL::Web::Object::Tools);
