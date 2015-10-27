@@ -140,7 +140,7 @@ sub populate_tree {
       [qw(
         vepeffect       EnsEMBL::Web::Component::Tools::VEP::InputForm
         details         EnsEMBL::Web::Component::Tools::VEP::TicketDetails
-        tickets         EnsEMBL::Web::Component::Tools::TicketsList
+        tickets         EnsEMBL::Web::Component::Tools::VEP::TicketsList
       )],
       { 'availability' => 1, 'concise' => 'Variant Effect Predictor' }
     ));
