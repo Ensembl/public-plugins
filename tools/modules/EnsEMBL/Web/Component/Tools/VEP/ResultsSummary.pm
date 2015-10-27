@@ -25,8 +25,8 @@ use HTML::Entities qw(encode_entities);
 use Bio::EnsEMBL::Variation::Utils::Constants qw(%OVERLAP_CONSEQUENCES);
 
 use parent qw(
-  EnsEMBL::Web::Component::Tools::ResultsSummary
   EnsEMBL::Web::Component::Tools::VEP
+  EnsEMBL::Web::Component::Tools::ResultsSummary
 );
 
 sub content {

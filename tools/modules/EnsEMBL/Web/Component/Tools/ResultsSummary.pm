@@ -18,10 +18,11 @@ limitations under the License.
 
 package EnsEMBL::Web::Component::Tools::ResultsSummary;
 
+### Parent class for all ResultsSummary components
+### Shall be used with MI
+
 use strict;
 use warnings;
-
-use parent qw(EnsEMBL::Web::Component::Tools);
 
 sub content {
   my $self        = shift;
