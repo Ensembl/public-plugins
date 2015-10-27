@@ -343,6 +343,50 @@ sub ticket_buttons {
   return $buttons;
 }
 
+sub job_status_tag {
+  ## Tag to be displayed next to each job in ticket list table, or job details page
+  ## @param Job object
+  ## @param Dispatcher status (string)
+  ## @param Number of results
+  ## @param URL for results page
+  ## @param Current assembly for the job species if it's not the same as the one to which the job was originally submitted to, 0 if species doesn't exist on current site
+  ## @param Flag kept on if the job can be viewed on a different assembly website (only applicable if assembly different)
+  my ($self, $job, $status, $result_count, $result_url, $assembly_mismatch, $has_assembly_site) = @_;
+
+  my $css_class = "job-status-$status";
+  my $href      = '';
+  my $title     = {
+    'not_submitted' => q(This job could not be submitted due to some problems. Please click on the 'View details' icon for more information),
+    'queued'        => q(Your job has been submitted and will be processed soon.),
+    'submitted'     => q(Your job has been submitted and will be processed soon.),
+    'running'       => q(Your job is currently being processed. The page will refresh once it's finished running.),
+    'done'          => q(This job is finished.),
+    'failed'        => q(This job has failed. Please click on the 'View details' icon for more information),
+    'deleted'       => q(Your ticket has been deleted. This usually happens if the ticket is too old.)
+  }->{$status};
+
+  if ($status eq 'done') {
+    if ($assembly_mismatch) {
+      $css_class  = 'job-status-mismatch';
+      $title      = sprintf 'The job was run on %s assembly for %s. ', $job->assembly, $self->hub->species_defs->get_config($job->species, 'SPECIES_COMMON_NAME');
+      $title     .= $has_assembly_site && $job->ticket->owner_type ne 'user' ? sprintf('Please save this ticket to your account using the icon on the right to be able to view this job on %s site. ', $job->assembly) : '';
+      $title     .= sprintf q(To resubmit the job to %s assembly, please click on the 'Edit &amp; resubmit' icon.), $assembly_mismatch;
+    } elsif (defined $assembly_mismatch && $assembly_mismatch eq '0') {
+      $css_class  = 'job-status-mismatch';
+      $title      = sprintf q(The job was run on %s which does not exist on this site.), $job->species =~ s/_/ /gr;
+    } else {
+      $href       = $self->hub->url($result_url); # display link on the tag only if job's done and results are available of current assembly
+    }
+  }
+
+  return {
+    'class'       => [$css_class, qw(_ht job-status)],
+    'title'       => $title,
+    'href'        => $href,
+    'inner_HTML'  => ucfirst $status =~ s/_/ /gr
+  }
+}
+
 sub analysis_caption {
   my ($self, $ticket) = @_;
   return $ticket->ticket_type->ticket_type_caption;
