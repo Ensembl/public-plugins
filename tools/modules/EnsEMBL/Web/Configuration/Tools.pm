@@ -167,6 +167,18 @@ sub populate_tree {
     ));
   }
 
+  ## ID History converter specific node
+  if ($sd->ENSEMBL_IDM_ENABLED) {
+    $tools_node->append($self->create_subnode('IDMapper', 'ID History Converter',
+      [qw(
+        idhc_input      EnsEMBL::Web::Component::Tools::IDMapper::InputForm
+        idhc_details    EnsEMBL::Web::Component::Tools::IDMapper::TicketDetails
+        tickets         EnsEMBL::Web::Component::Tools::IDMapper::TicketsList
+      )],
+      { 'availability' => 1 }
+    ));
+  }
+
 }
 
 1;
