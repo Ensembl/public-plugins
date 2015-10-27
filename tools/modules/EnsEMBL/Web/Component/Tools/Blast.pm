@@ -25,9 +25,4 @@ use warnings;
 
 use parent qw(EnsEMBL::Web::Component::Tools);
 
-sub no_result_hit_found {
-  ## Default HTML to be displayed if no hit was found according to the URL params
-  return 'No result hit was found according to your request.';# TODO - display button to go back to summary page
-}
-
 1;
