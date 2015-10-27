@@ -49,6 +49,26 @@ sub job_summary_section {
   return $summary;
 }
 
+sub job_status_tag {
+  ## @override
+  ## Add info about number of hits found to the status tag if job's done
+  my ($self, $job, $status, $hits, $result_url, $assembly_mismatch, $has_assembly_site) = @_;
+
+  my $tag = $self->SUPER::job_status_tag($job, $status, $hits, $result_url, $assembly_mismatch, $has_assembly_site);
+
+  if ($status eq 'done') {
+    $tag->{'inner_HTML'} .= sprintf ': %s hit%s found', $hits || 'No', $hits == 1 ? '' : 's';
+
+    if (!$hits && !$assembly_mismatch) {
+      $tag->{'class'} = [ 'job-status-noresult', grep { $_ ne 'job-status-done' } @{$tag->{'class'}} ];
+      $tag->{'title'} = 'This job is finished, but no hits were found. If you believe that there should be a match to your query sequence please edit the job using the icon on the right to adjust the configuration parameters and resubmit the search.';
+      $tag->{'href'}  = '';
+    }
+  }
+
+  return $tag;
+}
+
 sub analysis_caption {
   my ($self, $ticket) = @_;
   return $self->object->get_sub_object('Blast')->parse_search_type($ticket->job->[0]->job_data->{'search_type'}, 'search_method');
