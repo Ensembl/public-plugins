@@ -17,8 +17,12 @@
 Ensembl.Panel.AssemblyConverterForm = Ensembl.Panel.ToolsForm.extend({
 
   init: function() {
-    this.base();
+    this.base.apply(this, arguments);
+
+    this.elLk.speciesDropdown = this.elLk.form.find('select[name=species]');
+
     this.editExisting();
+    this.resetSpecies();
   },
 
   populateForm: function(jobsData) {
@@ -40,6 +44,11 @@ Ensembl.Panel.AssemblyConverterForm = Ensembl.Panel.ToolsForm.extend({
 
   reset: function() {
     this.base.apply(this, arguments);
+    this.resetSpecies();
     this.elLk.form.find('._download_link').remove();
+  },
+
+  resetSpecies: function () {
+    this.elLk.speciesDropdown.find('option[value=' + this.defaultSpecies + ']').prop('selected', true).end().selectToToggle('trigger');
   }
 });
