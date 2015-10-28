@@ -25,6 +25,7 @@ use warnings;
 
 use EnsEMBL::Web::Exceptions;
 use EnsEMBL::Web::SystemCommand;
+use EnsEMBL::Web::Parsers::IDMapper;
 use EnsEMBL::Web::Utils::FileHandler qw(file_get_contents);
 
 use parent qw(EnsEMBL::Web::RunnableDB);
@@ -64,6 +65,16 @@ sub run {
     my ($error_details) = file_get_contents($log_file);
     throw exception('HiveException', $error_details);
   }
+
+  return 1;
+}
+
+sub write_output {
+  my $self        = shift;
+  my $job_id      = $self->param('job_id');
+  my $output_file = $self->param('__output_file');
+
+  $self->save_results($job_id, {}, EnsEMBL::Web::Parsers::IDMapper->new($self)->parse($output_file));
 
   return 1;
 }
