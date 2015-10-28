@@ -26,15 +26,4 @@ use parent qw(
   EnsEMBL::Web::Component::Tools::TicketDetails
 );
 
-sub content_ticket {
-  ## Abstract method implementation
-  my ($self, $ticket, $jobs, $is_owned_ticket) = @_;
-  my $hub     = $self->hub;
-  my $div     = $self->dom->create_element('div');
-
-  $div->append_child($self->job_details_table($_, $is_owned_ticket))->set_attribute('class', 'plain-box') for @$jobs;
-
-  return $div->render;
-}
-
 1;
