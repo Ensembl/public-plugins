@@ -18,7 +18,7 @@ limitations under the License.
 
 package EnsEMBL::Web::Job::IDMapper;
 
-### plugin to add extra parameters to VEP job before submitting it to Hive dispatcher
+### plugin to add extra parameters to job before submitting it to Hive dispatcher
 
 use strict;
 use warnings;
