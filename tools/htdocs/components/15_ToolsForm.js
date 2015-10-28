@@ -108,12 +108,12 @@ Ensembl.Panel.ToolsForm = Ensembl.Panel.ContentTools.extend({
   /*
    * Populate the input form from the given map of param name to value
    */
-    if (jobsData) {
+    if (jobsData && jobsData.length) {
       if (!noReset) {
         this.reset();
       }
-      for (var paramName in jobsData) {
-        var vals  = $.isArray(jobsData[paramName]) ? jobsData[paramName] : [ jobsData[paramName] ];
+      for (var paramName in jobsData[0]) {
+        var vals  = $.isArray(jobsData[0][paramName]) ? jobsData[0][paramName] : [ jobsData[0][paramName] ];
         var flag  = function() { return $.inArray(this.value, vals) >= 0; }
 
         this.elLk.form.find('[name=' + paramName + ']')
