@@ -50,6 +50,7 @@ sub init_from_user_input {
     'assembly'    => $hub->species_defs->get_config($species, 'ASSEMBLY_VERSION'),
     'job_data'    => {
       'species'     => $species,
+      'input'       => { 'type' => $method, 'url' => $hub->param('url') || '', 'file' => $hub->param('file') || '' }, # save this info to pre-populate fields when editing existing job
       'input_file'  => $file_name
     }
   }, {

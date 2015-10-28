@@ -32,7 +32,8 @@ sub prepare_to_dispatch {
   return {
     'work_dir'    => $rose_object->job_dir,
     'output_file' => "output.$job_data->{'input_file'}",
-     %{$job_data}
+    'input_file'  => $job_data->{'input_file'},
+    'species'     => $job_data->{'species'}
   };
 }
 
