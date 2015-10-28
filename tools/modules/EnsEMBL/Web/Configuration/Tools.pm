@@ -169,13 +169,22 @@ sub populate_tree {
 
   ## ID History converter specific node
   if ($sd->ENSEMBL_IDM_ENABLED) {
-    $tools_node->append($self->create_subnode('IDMapper', 'ID History Converter',
+    my $idmapper_node = $tools_node->append($self->create_subnode('IDMapper', 'ID History Converter',
       [qw(
         idhc_input      EnsEMBL::Web::Component::Tools::IDMapper::InputForm
         idhc_details    EnsEMBL::Web::Component::Tools::IDMapper::TicketDetails
         tickets         EnsEMBL::Web::Component::Tools::IDMapper::TicketsList
       )],
       { 'availability' => 1 }
+    ));
+
+    $idmapper_node->append($self->create_subnode('IDMapper/Results', $result_cap,
+      [qw(
+        details     EnsEMBL::Web::Component::Tools::IDMapper::TicketDetails
+        ressummary  EnsEMBL::Web::Component::Tools::IDMapper::ResultsSummary
+        results     EnsEMBL::Web::Component::Tools::IDMapper::Results
+      )],
+      { 'availability' => 1, 'concise' => 'ID History Converter results', 'no_menu_entry' => "$action/$function" ne 'IDMapper/Results' }
     ));
   }
 
