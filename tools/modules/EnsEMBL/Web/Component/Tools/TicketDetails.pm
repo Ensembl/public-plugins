@@ -24,16 +24,6 @@ package EnsEMBL::Web::Component::Tools::TicketDetails;
 use strict;
 use warnings;
 
-use EnsEMBL::Web::Attributes;
-
-sub content_ticket :Abstract {
-  ## @abstract method
-  ## @param Ticket object
-  ## @param Arrayref if Job objects
-  ## @param Flag to tell whether user or session owns the ticket or not
-  ## @return HTML to be displayed
-}
-
 sub allowed_url_functions {
   ## List of url function that can display ticket details (this is to enable dynamic behaviour of displaying ticket details)
   return qw(View Results);
@@ -161,6 +151,25 @@ sub get_job_summary {
   }
 
   return $job_status_div;
+}
+
+sub content_ticket {
+  ## @note Avoid overriding this in sub class
+  ## @param Ticket object
+  ## @param Arrayref if Job objects
+  ## @param Flag to tell whether user or session owns the ticket or not
+  ## @return HTML to be displayed
+  my ($self, $ticket, $jobs, $is_owned_ticket) = @_;
+  my $hub     = $self->hub;
+  my $is_view = ($hub->function || '') eq 'View';
+  my $table;
+
+  for (@$jobs) {
+    $table = $self->job_details_table($_, $is_owned_ticket);
+    $table->set_attribute('class', $is_view ? 'plain-box' : 'toggleable hidden _ticket_details');
+  }
+
+  return $table ? $table->render : '';
 }
 
 sub content {

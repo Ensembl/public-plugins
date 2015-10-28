@@ -16,14 +16,23 @@ limitations under the License.
 
 =cut
 
-package EnsEMBL::Web::Component::Tools::AssemblyConverter::TicketDetails;
+package EnsEMBL::Web::Job::IDMapper;
+
+### plugin to add extra parameters to VEP job before submitting it to Hive dispatcher
 
 use strict;
 use warnings;
 
-use parent qw(
-  EnsEMBL::Web::Component::Tools::AssemblyConverter
-  EnsEMBL::Web::Component::Tools::TicketDetails
-);
+use previous qw(prepare_to_dispatch);
+
+sub prepare_to_dispatch {
+  ## @plugin
+  my $self    = shift;
+  my $data    = $self->PREV::prepare_to_dispatch(@_);
+
+  $data->{'code_root'} = $self->hub->species_defs->ENSEMBL_HIVE_HOSTS_CODE_LOCATION;
+
+  return $data;
+}
 
 1;

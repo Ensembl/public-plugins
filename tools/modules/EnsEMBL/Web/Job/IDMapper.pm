@@ -16,14 +16,25 @@ limitations under the License.
 
 =cut
 
-package EnsEMBL::Web::Component::Tools::AssemblyConverter::TicketDetails;
+package EnsEMBL::Web::Job::IDMapper;
 
 use strict;
 use warnings;
 
-use parent qw(
-  EnsEMBL::Web::Component::Tools::AssemblyConverter
-  EnsEMBL::Web::Component::Tools::TicketDetails
-);
+use parent qw(EnsEMBL::Web::Job);
+
+sub prepare_to_dispatch {
+  ## @override
+  my $self        = shift;
+  my $rose_object = $self->rose_object;
+  my $job_data    = $rose_object->job_data;
+
+  return {
+    'work_dir'    => $rose_object->job_dir,
+    'output_file' => "output.$job_data->{'input_file'}",
+    'input_file'  => $job_data->{'input_file'},
+    'species'     => $job_data->{'species'}
+  };
+}
 
 1;

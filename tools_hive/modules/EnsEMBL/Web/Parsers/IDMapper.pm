@@ -16,14 +16,26 @@ limitations under the License.
 
 =cut
 
-package EnsEMBL::Web::Component::Tools::AssemblyConverter::TicketDetails;
+package EnsEMBL::Web::Parsers::IDMapper;
 
 use strict;
 use warnings;
 
-use parent qw(
-  EnsEMBL::Web::Component::Tools::AssemblyConverter
-  EnsEMBL::Web::Component::Tools::TicketDetails
-);
+use EnsEMBL::Web::Utils::FileHandler qw(file_get_contents);
+
+sub new {
+  my ($class, $runnable) = @_;
+  return bless { 'runnable'  => $runnable }, $class;
+}
+
+sub parse {
+  my ($self, $file) = @_;
+
+  my @results = map {'old' => $_->[0], 'new' => $_->[1], 'release' => $_->[2], 'score' => $_->[3]}, grep { $_->[0] && $_->[0] ne 'Old stable ID' } file_get_contents($file, sub {
+    return [ map s/^\s+|\s+$//gr, split ',', $_ ];
+  });
+
+  return \@results;
+}
 
 1;

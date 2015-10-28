@@ -22,13 +22,13 @@ my $code_path = "$Bin/../../..";
 unshift @INC, "$code_path/ensembl-webcode/conf";
 eval {
   require SiteDefs;
+  unshift @INC, @{SiteDefs::ENSEMBL_LIB_DIRS};
+  require LoadPlugins;
+  LoadPlugins->import;
 };
 if ($@) {
   die "ERROR: Can't use SiteDefs - $@\n";
 }
-
-unshift @INC, reverse ("$code_path/public-plugins/tools/modules/", @{SiteDefs::ENSEMBL_LIB_DIRS});
-$ENV{'PERL5LIB'} = join ':', $ENV{'PERL5LIB'} || (), @INC;
 
 require EnsEMBL::Web::SpeciesDefs;
 
@@ -46,7 +46,7 @@ my $schema_file = "$Bin/schema_tools_db.sql";
 die "ERROR: Schema file does not exist in $Bin.\n" unless -e $schema_file;
 
 my $fh  = FileHandle->new("$schema_file", 'r') or die "ERROR: Can't open file ($schema_file) for reading\n";
-my @sql = split ';', join ' ', map { !m/^#/ && $_ || () } $fh->getlines;
+my @sql = map { s/^\s+|\s+$//gr || () } split ';', join ' ', map { !m/^#/ && $_ || () } $fh->getlines;
 
 $fh->close;
 

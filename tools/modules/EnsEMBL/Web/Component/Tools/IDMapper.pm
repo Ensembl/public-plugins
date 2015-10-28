@@ -16,14 +16,13 @@ limitations under the License.
 
 =cut
 
-package EnsEMBL::Web::Component::Tools::AssemblyConverter::TicketDetails;
+package EnsEMBL::Web::Component::Tools::IDMapper;
+
+### Parent class for all IDMapper components
 
 use strict;
 use warnings;
 
-use parent qw(
-  EnsEMBL::Web::Component::Tools::AssemblyConverter
-  EnsEMBL::Web::Component::Tools::TicketDetails
-);
+use parent qw(EnsEMBL::Web::Component::Tools);
 
 1;

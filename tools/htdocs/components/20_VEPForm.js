@@ -354,7 +354,7 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
    */
     if (jobsData && jobsData.length) {
       jobsData = $.extend({}, jobsData[0].config, jobsData[0]);
-      this.base(jobsData);
+      this.base([jobsData]);
 
       if (jobsData['input_file_type']) {
         this.elLk.form.find('input[name=file]').parent().append('<p class="_download_link">' + ( jobsData['input_file_type'] === 'text'

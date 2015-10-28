@@ -26,21 +26,6 @@ use parent qw(
   EnsEMBL::Web::Component::Tools::TicketDetails
 );
 
-sub content_ticket {
-  ## Abstract method implementation
-  my ($self, $ticket, $jobs, $is_owned_ticket) = @_;
-  my $hub     = $self->hub;
-  my $is_view = ($hub->function || '') eq 'View';
-  my $table;
-
-  for (@$jobs) {
-    $table = $self->job_details_table($_, $is_owned_ticket);
-    $table->set_attribute('class', $is_view ? 'plain-box' : 'toggleable hidden _ticket_details');
-  }
-
-  return $table ? $table->render : '';
-}
-
 sub job_details_table {
   ## @override
   my ($self, $job, $is_owned_ticket) = @_;

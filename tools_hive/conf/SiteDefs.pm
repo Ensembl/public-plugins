@@ -32,9 +32,10 @@ sub update_conf {
   $SiteDefs::ENSEMBL_HIVE_DB_NOT_AVAILABLE      = 0;                                                # Flag if on, jobs will not get submitted to hive db (ENSEMBL_HIVE_ERROR_MESSAGE is displayed when submitting jobs)
 
   $SiteDefs::ENSEMBL_TOOLS_JOB_DISPATCHER       = { 
-                                                    'Blast'             => 'Hive', 
-                                                    'VEP'               => 'Hive', 
-                                                    'AssemblyConverter' => 'Hive', 
+                                                    'Blast'             => 'Hive',
+                                                    'VEP'               => 'Hive',
+                                                    'AssemblyConverter' => 'Hive',
+                                                    'IDMapper'          => 'Hive',
                                                   };                                                # Overriding tools plugin variable
   $SiteDefs::ENSEMBL_HIVE_HOSTS                 = [];                                               # For LOCAL, the machine that runs the beekeeper unless it's same as the web server
                                                                                                     # For LSF, list of hosts corresponding to the queues for all jobs plus the machine where
@@ -104,12 +105,20 @@ sub update_conf {
   push @{$SiteDefs::ENSEMBL_VEP_PLUGIN_CONFIG_FILES}, $SiteDefs::ENSEMBL_SERVERROOT.'/public-plugins/tools_hive/conf/vep_plugins_hive_config.txt';
                                                                                                     # add extra hive specific configs required to run vep plugins
 
+  # Path to ID History converter script
+  $SiteDefs::IDMAPPER_SCRIPT                    = 'ensembl-tools/scripts/id_history_converter/IDmapper.pl';
+
   # Assembly Converter configs
   $SiteDefs::ENSEMBL_AC_RUN_LOCAL               = 1;                                                # Flag if on, will run AC jobs on LOCAL meadow
   $SiteDefs::ENSEMBL_AC_QUEUE                   = 'toolsgeneral';                                   # LSF or LOCAL queue for AC jobs
   $SiteDefs::ENSEMBL_AC_LSF_TIMEOUT             = undef;                                            # Max timelimit an AC job is allowed to run on LSF
   $SiteDefs::ENSEMBL_AC_ANALYSIS_CAPACITY       = 4;                                                # Number of jobs that can be run parallel in the queue (LSF or LOCAL)
 
+  # ID History converter configs
+  $SiteDefs::ENSEMBL_IDM_RUN_LOCAL              = 1;                                                # Flag if on, will run ID mapper jobs on LOCAL meadow
+  $SiteDefs::ENSEMBL_IDM_QUEUE                  = 'toolsgeneral';                                   # LSF or LOCAL queue for ID mapper jobs
+  $SiteDefs::ENSEMBL_IDM_LSF_TIMEOUT            = undef;                                            # Max timelimit an ID mapper job is allowed to run on LSF
+  $SiteDefs::ENSEMBL_IDM_ANALYSIS_CAPACITY      = 4;                                                # Number of jobs that can be run parallel in the queue (LSF or LOCAL)
 }
 
 1;
