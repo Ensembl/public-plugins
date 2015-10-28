@@ -21,20 +21,27 @@ Ensembl.Panel.IDMapperForm = Ensembl.Panel.ToolsForm.extend({
 
     this.elLk.speciesDropdown = this.elLk.form.find('._sdd');
 
+    this.resetSpecies(this.defaultSpecies);
     this.editExisting();
-    this.resetSpecies();
   },
 
   reset: function() {
     this.base.apply(this, arguments);
-    this.resetSpecies();
+    this.resetSpecies(this.defaultSpecies);
   },
 
-  resetSpecies: function () {
+  populateForm: function(jobsData) {
+    if (jobsData && jobsData.length) {
+      this.base(jobsData);
+      this.resetSpecies(jobsData[0]['species']);
+    }
+  },
+
+  resetSpecies: function (species) {
   /*
    * Resets the species dropdown to select the given species or simply refresh the dropdown
    */
-    this.elLk.speciesDropdown.find('input[value=' + this.defaultSpecies + ']').first().click();
+    this.elLk.speciesDropdown.find('input[value=' + species + ']').first().click();
     this.elLk.speciesDropdown.speciesDropdown({refresh: true});
   }
 });
