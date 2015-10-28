@@ -34,7 +34,7 @@ use EnsEMBL::Web::Utils::DynamicLoader qw(dynamic_require);
 
 use parent qw(EnsEMBL::Web::Object);
 
-sub caption { return 'Tools'; } # override in child class
+sub caption { return ''; } # no generic prefix for all tools in the title tag
 
 sub long_caption {
   ## For customised heading of the page
