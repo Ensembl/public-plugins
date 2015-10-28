@@ -169,7 +169,7 @@ sub files_dropdown {
   my %formats = map { $_->{'value'} => $_->{'caption'} } @$formats;
   my @files   = sort { $b->{'timestamp'} <=> $a->{'timestamp'} } grep { $_->{'format'} && $formats{$_->{'format'}} } $hub->session->get_data('type' => 'upload'), $hub->user ? $hub->user->uploads : ();
 
-  return unless @files;
+  return '' unless @files;
 
   my @options = { 'value' => '', 'caption' => '-- Select file --'};
 
@@ -198,7 +198,7 @@ sub files_dropdown {
     };
   }
 
-  return unless @options > 1;
+  return '' unless @options > 1;
 
   return {
     'type'    => 'dropdown',
