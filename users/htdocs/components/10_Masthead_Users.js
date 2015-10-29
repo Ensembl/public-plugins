@@ -27,6 +27,8 @@ Ensembl.Panel.Masthead = Ensembl.Panel.Masthead.extend({
     this.base();
     
     this.elLk.accountHolder   = this.el.find('div._account_holder');
+
+    Ensembl.isLoggedInUser    = this.elLk.accountHolder.hasClass('_logged_in');
     
     this.accountsRefreshURL   = '';
     this.accountsBookmarkData = '';
