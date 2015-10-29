@@ -144,7 +144,7 @@ sub get_cacheable_form_node {
   }
 
   ## Output options header
-  $form->add_fieldset('Output options');
+  $form->add_fieldset;
 
   ### Advanced config options
   my $sections = CONFIG_SECTIONS;

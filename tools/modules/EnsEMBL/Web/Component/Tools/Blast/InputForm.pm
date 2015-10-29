@@ -169,7 +169,7 @@ sub get_cacheable_form_node {
   });
 
   # Advanced config options
-  $form->add_fieldset('Configuration options');
+  $form->add_fieldset;
 
   my $config_fields   = CONFIGURATION_FIELDS;
   my $config_defaults = CONFIGURATION_DEFAULTS;
