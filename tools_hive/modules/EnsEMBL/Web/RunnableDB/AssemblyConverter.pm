@@ -23,15 +23,13 @@ package EnsEMBL::Web::RunnableDB::AssemblyConverter;
 use strict;
 use warnings;
 
-use IO::Socket;
-
 use EnsEMBL::Web::Exceptions;
 use EnsEMBL::Web::SystemCommand;
 use EnsEMBL::Web::Utils::FileHandler qw(file_get_contents);
 
 use parent qw(EnsEMBL::Web::RunnableDB);
 
-sub setup_executables {
+sub fetch_input {
   ## @override
   my $self = shift;
 
@@ -80,25 +78,7 @@ sub run {
     throw exception('HiveException', $error_message, {'display_message' => $display_message, 'fatal' => 0});
   }
 
-
   return 1;
-}
-
-sub _check_server {
-  ## @private
-  my ($self, $host, $port) = @_;
-
-  my $server = IO::Socket::INET->new(
-    PeerAddr  => $host,
-    PeerPort  => $port,
-    Proto     => 'tcp',
-    Type      => SOCK_STREAM,
-    Timeout   => 10
-  );
-
-  $server->autoflush(1);
-
-  return !!$server;
 }
 
 1;
