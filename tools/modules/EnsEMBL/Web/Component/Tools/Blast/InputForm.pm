@@ -190,6 +190,10 @@ sub get_cacheable_form_node {
           'class'       => [qw(_slide_toggle toggle set_cookie closed)],
           'href'        => "#Configuration_$config_type",
           'inner_HTML'  => $config_title
+        }, {
+          'node_name'   => 'span',
+          'class'       => 'extra_configs_info',
+          'inner_HTML'  => $config_field_group->{'caption'}
         }]
       }, {
         'node_name'   => 'div',
@@ -200,7 +204,7 @@ sub get_cacheable_form_node {
     my $fieldset        = $config_wrapper->last_child->append_child($form->add_fieldset); # moving it from the form to the config div
     my %wrapper_class;
 
-    while (my ($element_name, $element_params) = splice @$config_field_group, 0, 2) {
+    while (my ($element_name, $element_params) = splice @{$config_field_group->{'fields'}}, 0, 2) {
       my $field_params = { map { exists $element_params->{$_} ? ($_ => delete $element_params->{$_}) : () } qw(field_class label helptip notes head_notes inline) };
       $field_params->{'elements'} = [];
 

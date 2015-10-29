@@ -127,60 +127,69 @@ sub CONFIGURATION_FIELDS {
   ); 
     
   return [
-    'general'             => [
+    'general'             => {
+      'caption'             => '',
+      'fields'              => [
 
-      'max_target_seqs'     => {
-        'type'                => 'dropdown',
-        'label'               => 'Maximum number of hits to report',
-        'values'              => [ map { 'value' => $_, 'caption' => $_ }, qw(10 50 100 250 500 1000 5000) ]
-      },
+        'max_target_seqs'     => {
+          'type'                => 'dropdown',
+          'label'               => 'Maximum number of hits to report',
+          'values'              => [ map { 'value' => $_, 'caption' => $_ }, qw(10 50 100 250 500 1000 5000) ]
+        },
 
-      'culling_limit'       => {
-        'type'                => 'dropdown',
-        'label'               => 'Culling limit',
-        'helptip'             => 'This will throw away hits that are enveloped by at least this many higher-scoring hits',
-        'values'              => [ map { 'value' => $_, 'caption' => $_ }, 1..10,15,20,999 ]
-      },
+        'culling_limit'       => {
+          'type'                => 'dropdown',
+          'label'               => 'Culling limit',
+          'helptip'             => 'This will throw away hits that are enveloped by at least this many higher-scoring hits',
+          'values'              => [ map { 'value' => $_, 'caption' => $_ }, 1..10,15,20,999 ]
+        },
 
-      'evalue'              => {
-        'type'                => 'dropdown',
-        'label'               => 'Maximum E-value for reported alignments',
-        'values'              => [ map { 'value' => $_, 'caption' => $_ }, qw(1e-200 1e-100 1e-50 1e-10 1e-5 1e-4 1e-3 1e-2 1e-1 1.0 10 100 1000 10000 100000) ]
-      },
+        'evalue'              => {
+          'type'                => 'dropdown',
+          'label'               => 'Maximum E-value for reported alignments',
+          'values'              => [ map { 'value' => $_, 'caption' => $_ }, qw(1e-200 1e-100 1e-50 1e-10 1e-5 1e-4 1e-3 1e-2 1e-1 1.0 10 100 1000 10000 100000) ]
+        },
 
-      'word_size'           => {
-        'type'                => 'dropdown',
-        'label'               => 'Word size for seeding alignments',
-        'values'              => [ map { 'value' => $_, 'caption' => $_ }, 2..15 ]
-      }
-    ],
+        'word_size'           => {
+          'type'                => 'dropdown',
+          'label'               => 'Word size for seeding alignments',
+          'values'              => [ map { 'value' => $_, 'caption' => $_ }, 2..15 ]
+        }
+      ]
+    },
 
-    'scoring'              => $scoring,
+    'scoring'             => {
+      'caption'             => '',
+      'fields'              => $scoring
+    },
 
-    'filters_and_masking'  => [
+    'filters_and_masking' => {
+      'caption'             => '',
+      'fields'              => [
 
-      'dust'                => {
-        'type'                => 'checklist',
-        'label'               => 'Filter low complexity regions',
-        'values'              => [ { 'value' => '1' } ],
-        'commandline_values'  => {'1' => 'yes', '' => 'no'}
-      },
+        'dust'                => {
+          'type'                => 'checklist',
+          'label'               => 'Filter low complexity regions',
+          'values'              => [ { 'value' => '1' } ],
+          'commandline_values'  => {'1' => 'yes', '' => 'no'}
+        },
 
-      'seg'                 => {
-        'type'                => 'checklist',
-        'label'               => 'Filter low complexity regions',
-        'values'              => [ { 'value' => '1' } ],
-        'commandline_values'  => {'1' => 'yes', '' => 'no'}
-      },
+        'seg'                 => {
+          'type'                => 'checklist',
+          'label'               => 'Filter low complexity regions',
+          'values'              => [ { 'value' => '1' } ],
+          'commandline_values'  => {'1' => 'yes', '' => 'no'}
+        },
 
-      'repeat_mask'         => {
-        'type'                => 'checklist',
-        'label'               => 'Filter query sequences using RepeatMasker',
-        'values'              => [ { 'value' => '1' } ]
-      }
+        'repeat_mask'         => {
+          'type'                => 'checklist',
+          'label'               => 'Filter query sequences using RepeatMasker',
+          'values'              => [ { 'value' => '1' } ]
+        }
 
-    ]
+      ]
 
+    }
   ];
 }
 
