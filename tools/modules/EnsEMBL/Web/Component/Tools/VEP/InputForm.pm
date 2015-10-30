@@ -144,36 +144,16 @@ sub get_cacheable_form_node {
   }
 
   ## Output options header
-  $form->add_fieldset;
+  $form->add_fieldset({'no_required_notes' => 1});
 
   ### Advanced config options
   my $sections = CONFIG_SECTIONS;
   foreach my $section (@$sections) {
-    my $method      = '_build_'.$section->{'id'};
-    my $config_div  = $form->append_child('div', {
-      'class'       => 'extra_configs_wrapper vep-configs',
-      'children'    => [{
-        'node_name'   => 'div',
-        'class'       => 'extra_configs_button',
-        'children'    => [{
-          'node_name'   => 'a',
-          'rel'         => '_vep'.$section->{'id'},
-          'class'       => [qw(toggle _slide_toggle set_cookie closed)],
-          'href'        => '#vep'.$section->{'id'},
-          'title'       => $section->{'caption'},
-          'inner_HTML'  => $section->{'title'}
-        }, {
-          'node_name'   => 'span',
-          'class'       => 'extra_configs_info',
-          'inner_HTML'  => $section->{'caption'}
-        }]
-      }, {
-        'node_name'   => 'div',
-        'class'       => ['extra_configs', 'toggleable', 'hidden', '_vep'.$section->{'id'}],
-      }]
-    });
 
-    $self->$method($form, $config_div->last_child); # add required fieldsets
+    $self->togglable_fieldsets($form, {
+      'title' => $section->{'title'},
+      'desc'  => $section->{'caption'}
+    }, $self->can('_build_'.$section->{'id'})->($self, $form));
   }
 
   # Run/Close buttons
@@ -213,12 +193,12 @@ sub js_params {
 }
 
 sub _build_filters {
-  my ($self, $form, $div) = @_;
+  my ($self, $form) = @_;
 
   my $object    = $self->object;
   my $fd        = $object->get_form_details;
   my $species   = $object->species_list;
-  my $fieldset  = $div->append_child($form->add_fieldset('Filters'));
+  my $fieldset  = $form->add_fieldset({'legend' => 'Filters', 'no_required_notes' => 1});
 
   if (first { $_->{'value'} eq 'Homo_sapiens' } @$species) {
 
@@ -286,19 +266,23 @@ sub _build_filters {
       { 'value' => 'most_severe', 'caption' => 'Show most severe consequence per variant' },
     ]
   });
+
+  return $fieldset;
 }
 
 sub _build_identifiers {
-  my ($self, $form, $div) = @_;
+  my ($self, $form) = @_;
 
   my $hub       = $self->hub;
   my $object    = $self->object;
   my $species   = $object->species_list;
   my $fd        = $object->get_form_details;
 
+  my @fieldsets;
+
   ## IDENTIFIERS
   my $current_section = 'Identifiers';
-  my $fieldset        = $self->_start_section($form, $div, $current_section);
+  my $fieldset        = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1});
 
   $fieldset->add_field({
     'type'        => 'checkbox',
@@ -342,14 +326,13 @@ sub _build_identifiers {
     'value'       => 'yes'
   });
 
-  $self->_end_section($div, $fieldset, $current_section);
-
+  $self->_end_section(\@fieldsets, $fieldset, $current_section);
 
   ## FREQUENCY DATA
   # only for the species that have variants
   $current_section = 'Frequency data';
   if ((first { $_->{'variation'} } @$species) || scalar @{$self->_get_plugins_by_section($current_section)}) {
-    $fieldset = $self->_start_section($form, $div, $current_section);
+    $fieldset = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1});
 
     $fieldset->add_field({
       'field_class' => '_stt_var',
@@ -406,23 +389,16 @@ sub _build_identifiers {
       })]
     });
 
-    $self->_end_section($div, $fieldset, $current_section);
+    $self->_end_section(\@fieldsets, $fieldset, $current_section);
   }
 
-  $div->append_child(
-    'div',
-    {
-      'children' => [{
-        'node_name' => 'p',
-        'class' => 'small',
-        'inner_HTML' => '<sup style="color:grey">(p)</sup> = functionality from <a target="_blank" href="/info/docs/tools/vep/script/vep_plugins.html">VEP plugin</a>'
-      }]
-    }        
-  ) if $self->_have_plugins;
+  $self->_plugin_footer($fieldset) if $self->_have_plugins;
+
+  return @fieldsets;
 }
 
 sub _build_extra {
-  my ($self, $form, $div) = @_;
+  my ($self, $form) = @_;
 
   my $hub       = $self->hub;
   my $object    = $self->object;
@@ -430,9 +406,11 @@ sub _build_extra {
   my $species   = $object->species_list;
   my $fd        = $object->get_form_details;
 
+  my @fieldsets;
+
   ## MISCELLANEOUS SECTION
   my $current_section = 'Miscellaneous';
-  my $fieldset  = $self->_start_section($form, $div, $current_section);
+  my $fieldset  = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1});
 
   $fieldset->add_field({
     'type'        => 'checkbox',
@@ -482,7 +460,7 @@ sub _build_extra {
     'checked'     => 0,
   });
 
-  $self->_end_section($div, $fieldset, $current_section);
+  $self->_end_section(\@fieldsets, $fieldset, $current_section);
 
 
   ## PATHOGENICITY PREDICTIONS
@@ -490,7 +468,7 @@ sub _build_extra {
   my $have_sift = first { $_->{'variation'}{'SIFT'} } @$species;
   my $have_polyphen = first { $_->{'variation'}{'POLYPHEN'} } @$species;
   my $have_plugins = scalar @{$self->_get_plugins_by_section($current_section)};
-  $fieldset = $self->_start_section($form, $div, $current_section) if $have_sift or $have_polyphen or $have_plugins;
+  $fieldset = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1}) if $have_sift or $have_polyphen or $have_plugins;
 
   # sift
   if ($have_sift) {
@@ -520,7 +498,7 @@ sub _build_extra {
     });
   }
 
-  $self->_end_section($div, $fieldset, $current_section);
+  $self->_end_section(\@fieldsets, $fieldset, $current_section);
 
 
   ## REGULATORY DATA
@@ -529,7 +507,7 @@ sub _build_extra {
   $have_plugins = scalar @{$self->_get_plugins_by_section($current_section)};
 
   my @regu_species = map { $_->{'value'} } grep {$hub->get_adaptor('get_CellTypeAdaptor', 'funcgen', $_->{'value'})} grep {$_->{'regulatory'}} @$species;
-  $fieldset = $self->_start_section($form, $div, $current_section) if scalar @regu_species or $have_plugins;
+  $fieldset = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1}) if scalar @regu_species or $have_plugins;
 
   for (@regu_species) {
 
@@ -563,35 +541,26 @@ sub _build_extra {
     });
   }
 
-  $self->_end_section($div, $fieldset, $current_section);
+  $self->_end_section(\@fieldsets, $fieldset, $current_section);
 
 
   ## ANY OTHER SECTIONS CONFIGURED BY PLUGINS
   foreach my $current_section(grep {!$self->{_done_sections}->{$_}} @{$self->_get_all_plugin_sections}) {
-    $fieldset = $self->_start_section($form, $div, $current_section);
-    $self->_end_section($div, $fieldset, $current_section);
+    $fieldset = $form->add_fieldset({'legend' => $current_section, 'no_required_notes' => 1});
+    $self->_end_section(\@fieldsets, $fieldset, $current_section);
   }
 
-  $div->append_child(
-    'div',
-    {
-      'children' => [{
-        'node_name' => 'p',
-        'class' => 'small',
-        'inner_HTML' => '<sup style="color:grey">(p)</sup> = functionality from <a target="_blank" href="/info/docs/tools/vep/script/vep_plugins.html">VEP plugin</a>'
-      }]
-    }        
-  ) if $self->_have_plugins;
-}
+  $self->_plugin_footer($fieldset) if $self->_have_plugins;
 
-sub _start_section {
-  my ($self, $form, $div, $section) = @_;
-  return $div->append_child($form->add_fieldset($section));
+  return @fieldsets;
 }
 
 sub _end_section {
-  my ($self, $div, $fieldset, $section) = @_;
-  $self->_add_plugins($div, $fieldset, $section) if @{$self->_get_plugins_by_section($section)};
+  my ($self, $fieldsets, $fieldset, $section) = @_;
+
+  push @$fieldsets, $fieldset;
+
+  $self->_add_plugins($fieldset, $section) if @{$self->_get_plugins_by_section($section)};
   $self->{_done_sections}->{$section} = 1;
 }
 
@@ -653,7 +622,7 @@ sub _get_plugins_by_section {
 }
 
 sub _add_plugins {
-  my ($self, $div, $fieldset, $section_name) = @_;
+  my ($self, $fieldset, $section_name) = @_;
 
   my ($ac_values, %required);
   my $species = $self->object->species_list;
@@ -735,9 +704,8 @@ sub _add_plugins {
   if($ac_values) {
     my $ac_json = encode_entities($self->jsonify($ac_values));
 
-    $div->append_child('input', {
+    $fieldset->add_hidden({
       class => "js_param",
-      type => "hidden",
       name => "plugin_auto_values",
       value => $ac_json
     });
@@ -745,12 +713,23 @@ sub _add_plugins {
 
   # add required params
   if(scalar keys %required) {
-    $div->append_child('input', {
-      type => "hidden",
+    $fieldset->add_hidden({
       name => "required_params",
       value => join(';', map {$_.'='.join(',', @{$required{$_}})} keys %required)
     });
   }
+}
+
+sub _plugin_footer {
+  my ($self, $fieldset) = @_;
+
+  $fieldset->append_child('div', {
+    'children' => [{
+      'node_name'   => 'p',
+      'class'       => 'small',
+      'inner_HTML'  => '<span style="color:grey">(p)</span> = functionality from <a target="_blank" href="/info/docs/tools/vep/script/vep_plugins.html">VEP plugin</a>'
+    }]
+  });
 }
 
 1;

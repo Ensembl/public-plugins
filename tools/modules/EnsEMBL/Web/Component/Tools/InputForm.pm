@@ -208,6 +208,47 @@ sub files_dropdown {
   };
 }
 
+sub togglable_fieldsets {
+  ## Adds a fieldset/group of fieldsets to a togglable div with a button on top that toggles it
+  ## @param Parent form object
+  ## @param Hashref with following keys
+  ##  - class Class attribute for the wrapping div
+  ##  - title Text displayed on the button
+  ##  - desc  Extra information displayed on the right side of the button
+  ## @params List of fieldsets to be added to the togglable div
+  ## @return Config wrapper div object
+  my ($self, $form, $options) = splice @_, 0, 3;
+
+  my $togglable_key = $options->{'title'} =~ s/\W+/_/gr;
+
+  my $wrapper = $form->append_child('div', {
+    'class'       => $options->{'class'} || [],
+    'children'    => [{
+      'node_name'   => 'div',
+      'class'       => 'extra_configs_button',
+      'children'    => [{
+        'node_name'   => 'a',
+        'rel'         => "__togg_$togglable_key",
+        'class'       => [qw(_slide_toggle toggle set_cookie closed)],
+        'href'        => "#$togglable_key",
+        'inner_HTML'  => $options->{'title'}
+      }, {
+        'node_name'   => 'span',
+        'class'       => 'extra_configs_info',
+        'inner_HTML'  => $options->{'desc'}
+      }]
+    }, {
+      'node_name'   => 'div',
+      'class'       => "extra_configs __togg_$togglable_key toggleable hidden",
+    }]
+  });
+
+  $wrapper->last_child->append_children(@_);
+  $wrapper->set_attribute('class', 'extra_configs_wrapper');
+
+  return $form->append_child($wrapper);
+}
+
 sub species_specific_info {
   ## Creates an info box alternative assembly info
   ## @param Species

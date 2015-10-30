@@ -178,30 +178,9 @@ sub get_cacheable_form_node {
   my %stt_classes     = map {$_ => "_stt_$_"} @search_types; # class names for selectToToggle
 
   while (my ($config_type, $config_field_group) = splice @$config_fields, 0, 2) {
-    my $config_title    = ucfirst "$config_type options:" =~ s/_/ /gr;
-    my $config_wrapper  = $form->append_child('div', {
-      'class'       => 'extra_configs_wrapper',
-      'children'    => [{
-        'node_name'   => 'div',
-        'class'       => 'extra_configs_button',
-        'children'    => [{
-          'node_name'   => 'a',
-          'rel'         => "_blast_configs_$config_type",
-          'class'       => [qw(_slide_toggle toggle set_cookie closed)],
-          'href'        => "#Configuration_$config_type",
-          'inner_HTML'  => $config_title
-        }, {
-          'node_name'   => 'span',
-          'class'       => 'extra_configs_info',
-          'inner_HTML'  => $config_field_group->{'caption'}
-        }]
-      }, {
-        'node_name'   => 'div',
-        'class'       => "extra_configs _blast_configs_$config_type toggleable hidden"
-      }]
-    });
 
-    my $fieldset        = $config_wrapper->last_child->append_child($form->add_fieldset); # moving it from the form to the config div
+    my $config_fieldset = $form->add_fieldset;
+
     my %wrapper_class;
 
     while (my ($element_name, $element_params) = splice @{$config_field_group->{'fields'}}, 0, 2) {
@@ -244,11 +223,15 @@ sub get_cacheable_form_node {
         }
       }
 
-      my $field = $fieldset->add_field($field_params);      
+      my $field = $config_fieldset->add_field($field_params);
       $field->set_attribute('class', [ keys %field_class ]) unless keys %field_class == keys %stt_classes; # if all classes are there, this field is actually never hidden.
     }
 
-    $config_wrapper->set_attribute('class', [ keys %wrapper_class ]) unless scalar keys %wrapper_class == scalar keys %stt_classes; # if all classes are there, this wrapper div is actually never hidden.
+    $self->togglable_fieldsets($form, {
+      'class' => scalar keys %wrapper_class == scalar keys %stt_classes ? [] : [ keys %wrapper_class ], # if all classes are there, the wrapper div is actually never hidden.
+      'title' => ucfirst "$config_type options" =~ s/_/ /gr,
+      'desc'  => $config_field_group->{'caption'}
+    }, $config_fieldset);
   }
 
   # Buttons in a new fieldset
