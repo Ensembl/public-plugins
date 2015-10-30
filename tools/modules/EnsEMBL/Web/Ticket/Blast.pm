@@ -146,7 +146,7 @@ sub _process_extra_configs {
 
   while (my ($config_type, $config_field_group) = splice @$config_fields, 0, 2) {
 
-    while (my ($element_name, $element_params) = splice @$config_field_group, 0, 2) {   
+    while (my ($element_name, $element_params) = splice @{$config_field_group->{'fields'}}, 0, 2) {
 
       for ($search_type_value, 'all') {
         if (exists $config_defaults->{$_}{$element_name}) {

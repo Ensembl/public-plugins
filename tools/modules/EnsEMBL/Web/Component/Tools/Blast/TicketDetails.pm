@@ -91,7 +91,7 @@ sub _display_config {
 
     my @rows = [ sprintf('<b>%s options</b>', ucfirst $config_type =~ s/_/ /gr), '' ];
 
-    while (my ($field_name, $field_details) = splice @$config_fields, 0, 2) {
+    while (my ($field_name, $field_details) = splice @{$config_fields->{'fields'}}, 0, 2) {
       if (exists $configs->{$field_name}) {
         my ($value) = exists $field_details->{'commandline_values'}
           ? ucfirst $configs->{$field_name} # since the value for this field is set according to 'commandline_values'

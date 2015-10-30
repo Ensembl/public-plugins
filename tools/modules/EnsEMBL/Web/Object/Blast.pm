@@ -101,7 +101,7 @@ sub get_edit_jobs_data {
 
   if (@$jobs) {
 
-    my %config_fields = map { @$_ } values %{{ @{CONFIGURATION_FIELDS()} }};
+    my %config_fields = map { @{$_->{'fields'}} } values %{{ @{CONFIGURATION_FIELDS()} }};
 
     for (@$jobs) {
       my $job_data = $_->job_data->raw;
