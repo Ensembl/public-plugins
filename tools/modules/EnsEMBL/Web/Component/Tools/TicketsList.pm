@@ -101,7 +101,7 @@ sub content {
       'value'       => $auto_refresh
     }, {
       'node_name'   => 'h2',
-      'inner_HTML'  => $tool_type ? qq(Recent jobs<a rel="_activity_summary" class="toggle _slide_toggle set_cookie open" href="#"></a>) : 'Recent jobs'
+      'inner_HTML'  => $tool_type ? qq(<a rel="_activity_summary" class="toggle _slide_toggle set_cookie open" href="#">Recent jobs</a>) : 'Recent jobs'
     }, {
       'node_name'   => 'div',
       'class'       => [qw(toggleable _activity_summary)],

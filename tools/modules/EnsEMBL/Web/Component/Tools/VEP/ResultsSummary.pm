@@ -40,7 +40,7 @@ sub content {
   my $ticket  = $object->get_requested_ticket;
   my $job     = $ticket ? $ticket->job->[0] : undef;
 
-  my $html = qq(<h3><a rel="job_stats" class="toggle set_cookie open" href="#">Summary statistics:</a></h3>);
+  my $html = qq(<h3><a rel="job_stats" class="toggle set_cookie open" href="#">Summary statistics</a></h3>);
   $html .= '<input type="hidden" class="panel_type" value="VEPResultsSummary" />';
   $html .= '<div class="job_stats"><div class="toggleable">';
 
