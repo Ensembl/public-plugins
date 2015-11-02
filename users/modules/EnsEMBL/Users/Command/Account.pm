@@ -108,8 +108,6 @@ sub redirect_after_login {
   my $then = $hub->param('then') || '';
   my $url  = $then =~ /^(\/|$site)/ ? $then : $site; # only redirect to an internal url or a relative url
 
-  $url     = $hub->referer->{'absolute_url'} if(defined $hub->is_mobile_request && $hub->is_mobile_request); #mobile site has ajax request disable,use whole url for redirection
-
   # redirect
   if ($hub->is_ajax_request) {
     my $referer = $hub->referer;
