@@ -36,6 +36,14 @@ sub sitename    :lvalue { $_[0]{'sitename'};   }
 sub content {
   my $self = shift;
   my $sd = $self->species_defs;
+  my $mobile_link;
+
+  # if you are looking at www on a mobile/tablet device, add mobile site link
+  if($ENV{'MOBILE_DEVICE'}) {
+    my $mobile_url = "http://".$SiteDefs::MOBILE_URL;
+    # not using $you_are_here because not all pages are available on mobile site
+    $mobile_link = qq{<a class="mobile-link" href="$mobile_url">View Mobile site</a><p></p>};
+  }
 
   return sprintf(
     q(
@@ -45,10 +53,12 @@ sub content {
         <a href="http://www.ebi.ac.uk/" class="nowrap constant">EMBL-EBI</a></span>
         <span class="screen_hide_inline">WTSI / EMBL-EBI<br />http://%s</span>
       </p>
+      %s
     </div>
     ),
     $sd->ENSEMBL_SITETYPE, $sd->ENSEMBL_VERSION,
     $sd->ENSEMBL_RELEASE_DATE, $sd->ENSEMBL_SERVERNAME,
+    $mobile_link,
     );
   
 }
