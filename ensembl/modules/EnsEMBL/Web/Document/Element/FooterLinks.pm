@@ -38,13 +38,6 @@ sub content {
     my $you_are_here = $ENV{'REQUEST_URI'};
     my $stable_URL   = uri_escape('http://' . $sd->ARCHIVE_VERSION . '.archive.ensembl.org');
 
-    # if you are looking at www on a mobile/tablet device, add mobile site link
-    if($ENV{'MOBILE_DEVICE'}) {
-      my $mobile_url = "http://".$SiteDefs::MOBILE_URL;
-      # not using $you_are_here because not all pages are available on mobile site
-      $html .= qq{<a href="$mobile_url">Mobile site</a> - };
-    }
-
     $html .= qq{
         <a class="modal_link" id="p_link" href="/Help/Permalink?url=$stable_URL">Permanent link</a>
     };
