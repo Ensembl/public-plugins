@@ -40,8 +40,9 @@ sub content {
 
     # if you are looking at www on a mobile/tablet device, add mobile site link
     if($ENV{'MOBILE_DEVICE'}) {
+      my $mobile_url = "http://".$SiteDefs::MOBILE_URL;
       # not using $you_are_here because not all pages are available on mobile site
-      $html .= qq{<a class="mobile_link" href="http://m.ensembl.org">Mobile site</a> - };
+      $html .= qq{<a href="$mobile_url">Mobile site</a> - };
     }
 
     $html .= qq{
