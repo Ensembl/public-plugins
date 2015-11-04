@@ -78,12 +78,12 @@ sub get_slice {
   my $object          = $self->object;
   my $job             = $self->job;
   my $hit             = $self->hit;
-  my $species         = $hit->{'species'};
   my $blast_method    = $self->blast_method;
-  my $query_seq       = $self->query_sequence($job, $hit, $blast_method, $species);
+  my $query_seq       = $self->query_sequence($job, $hit, $blast_method);
   my $hit_seq         = $query_seq;
+  my $hit_length      = $hit->{'len'};
   my $aln_summary     = $hit->{'aln'} =~ s/\s+//rg;
-  my $homology_string = '|' x $hit->{'len'};
+  my $homology_string = '|' x $hit_length;
 
   # take into account alignments that do not start with a match
   $aln_summary = $aln_summary =~ /^\d+/ ? $aln_summary : "0$aln_summary";
@@ -117,6 +117,10 @@ sub get_slice {
       }
     }
   }
+
+  # chop extra sequence strings on the right grown due to insertion of hyphens (gaps) into the original query sequence
+  $query_seq  = substr $query_seq, 0, $hit_length;
+  $hit_seq    = substr $hit_seq, 0, $hit_length;
 
   my $query_slice = $self->create_slice($hit->{'qid'}, $hit->{'qstart'}, $hit->{'qori'}, $query_seq);
   my $hit_slice   = $self->create_slice($hit->{'tid'}, $hit->{'tstart'}, $hit->{'tori'}, $hit_seq);
@@ -162,7 +166,6 @@ sub get_mapped_slice {
   my $hub               = $self->hub;
   my $hit               = $self->hit;
   my $job               = $self->job;
-  my $species           = $job->species;
   my $sr_name           = $reference_slice->seq_region_name;
   my $msc               = Bio::EnsEMBL::MappedSliceContainer->new(-SLICE => $reference_slice, -EXPANDED => 1);
   my $ms                = Bio::EnsEMBL::MappedSlice->new(-adaptor => $reference_slice->adaptor, -name => 'test_map', -container => $msc);
@@ -342,11 +345,10 @@ sub create_slice {
 }
 
 sub query_sequence {
-  my ($self, $job, $hit, $blast_method, $species) = @_;
+  my ($self, $job, $hit, $blast_method) = @_;
   my $sequence  = $self->object->get_input_sequence_for_job($job)->{'sequence'};
   my $seq_len   = length $sequence;
   my $offset    = $hit->{'qori'} == 1 ? $hit->{'qstart'} - 1 : $seq_len - $hit->{'qstart'};
-  my $length    = $hit->{'len'};
 
   # translate sequence if needed
   if ($blast_method =~ /blastx/i) {
@@ -363,7 +365,7 @@ sub query_sequence {
     $offset     = ($offset - $frame) / 3;
   }
 
-  return substr $sequence, $offset, $length;
+  return substr $sequence, $offset;
 }
 
 sub set_exons {
