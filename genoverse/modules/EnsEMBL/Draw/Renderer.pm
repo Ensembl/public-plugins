@@ -16,7 +16,7 @@ limitations under the License.
 
 =cut
 
-package EnsEMBL::Draw::Renderer::png;
+package EnsEMBL::Draw::Renderer;
 
 use strict;
 use warnings;
@@ -29,7 +29,7 @@ sub add_location_marking_layer {
   if ($coords) {
 
     $coords->{'y'} //= 0;
-    $coords->{'h'} //= $self->{'im_height'};
+    $coords->{'h'} //= $self->{'im_height'} || $self->{'image_height'} || $self->{'canvas'}{'im_height'};
 
     return $self->PREV::add_location_marking_layer($coords);
   }
