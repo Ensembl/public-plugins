@@ -25,8 +25,19 @@ Genoverse.Track = Genoverse.Track.extend({
     }
     
     this.base(config);
+
+    if (this.legend === true) {
+      this.addLegend();
+    }
   },
-  
+
+  addLegend: function (config, constructor) {
+    if (this.legendName) {
+      config = $.extend(config, {name: this.legendName});
+    }
+    this.base(config, constructor);
+  },
+
   setLengthMap: function () {
     this.base();
     
