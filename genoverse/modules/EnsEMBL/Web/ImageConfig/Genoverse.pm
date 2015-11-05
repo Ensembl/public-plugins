@@ -50,13 +50,8 @@ sub init_genoverse {
   my $info  = $self->get_node('information');
   my $order = 1e6;
   
-  # Super-horrible way of getting legend info from track ids
-  for (grep { $_->get('menu') ne 'no' && $_->id =~ /legend/ } $info ? $info->nodes : ()) {
-    (my $type = $_->id) =~ s/(fg_|_legend)//g;
-    $type =~ s/features$/feature/;
-    $type =~ s/_(\w)/uc $1/ge;
-    $_->set('genoverse', { type => 'Legend', featureType => ucfirst $type, order => $order++ });
-  }
+  # Remove all legends - Genoverse creates them by reading all track features
+  $_->remove for grep { $_->get('menu') ne 'no' && $_->id =~ /legend/ } $info ? $info->nodes : ();
 }
 
 # All functions from here on are generic modifications
