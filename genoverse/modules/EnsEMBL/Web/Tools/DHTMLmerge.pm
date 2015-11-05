@@ -29,7 +29,7 @@ sub get_filegroups {
 
   my @groups = PREV::get_filegroups($species_defs, $type);
 
-  return @groups if $type eq 'css';
+  return @groups if $type ne 'js';
 
   my @ordered_files;
 
