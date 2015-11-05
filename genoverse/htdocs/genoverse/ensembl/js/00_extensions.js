@@ -145,7 +145,7 @@ Ensembl.Panel.ImageMap = Ensembl.Panel.ImageMap.extend({
   hashChange: function () {
     if (this.resetGenoverse) {
       this.resetGenoverse = false;
-    } else if (Ensembl.genoverseScroll && !Ensembl.genoverseSupported()) {
+    } else if (Ensembl.genoverseScroll) {
       var range = this.highlightRegions[0][0].region.range;
       
       if (range.start > Ensembl.location.start || range.end < Ensembl.location.end) {
