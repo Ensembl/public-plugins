@@ -20,7 +20,7 @@ package EnsEMBL::Web::Configuration::Location;
 
 use strict;
 
-use previous qw(modify_tree);
+use previous qw(modify_tree get_configurable_components);
 
 sub modify_tree {
   my $self = shift;
@@ -34,10 +34,10 @@ sub modify_tree {
 sub get_configurable_components {
   my $self       = shift;
   my $node       = shift;
-  my $components = $self->SUPER::get_configurable_components($node, @_);
-  
-  push @{$components->[0]}, 'genoverse' if $node && $node->get('genoverse');
-  
+  my $components = $self->PREV::get_configurable_components($node, @_);
+
+  map { $_->[0] eq 'ViewTop' && push @$_, 'genoverse' } @$components if $node && $node->get('genoverse');
+
   return $components;
 }
 

@@ -19,34 +19,43 @@ limitations under the License.
 package EnsEMBL::Web::Component::Location::ViewTop;
 
 use strict;
+use warnings;
 
 use previous qw(content);
-use EnsEMBL::Web::Component;
 
-use parent qw(EnsEMBL::Web::Component::Location::Genoverse);
+use EnsEMBL::Web::Component::Location::Genoverse;
 
-sub new_image {
-  # The plugin system causes confusion as to what is inherited. Make sure the right function is called
-  my $self = shift;
-  if ($self->hub->param('export')) {
-    return EnsEMBL::Web::Component::new_image($self, @_);
+sub new {
+  ## @override
+  ## Returns the self object blessed with Genoverse class if its confirmed that we need a Genoverse image
+  my $self  = shift->SUPER::new(@_);
+  my $hub   = $self->hub;
+
+  # if genoverse request is confirmed, re-bless the object
+  if (!$self->force_static && $hub->param('genoverse')) {
+    $self = bless $self, 'EnsEMBL::Web::Component::Location::Genoverse';
+    $self->_init;
   }
-  else {
-    return EnsEMBL::Web::Component::Location::Genoverse::new_image($self, @_);
-  }
+
+  return $self;
 }
 
-sub content      { 
-  my $self = shift;
+sub force_static {
+  ## Confirms if the image needed is static ViewTop
+  ## @return Boolean
+  my $self  = shift;
+  my $hub   = $self->hub;
 
-  if ($self->hub->param('export')) {
-    return $self->PREV::content;
-  }
-  else {
-    return $self->content_test; 
-  }
+  return $self->{'_force_static'} //= ($hub->session->get_data(type => 'image_type', code => $self->id) || {})->{'static'} || $hub->param('export') || 0;
 }
 
-sub content_main { return $_[0]->PREV::content; }
+sub content {
+  ## @override
+  ## Returns the default ViewTop panel if it's confirmed that we need a static image, otherwise return JS panel to check if the browser supports Genoverse
+  ## This method does NOT get called if it's decided that we need a genoverse image
+  my $self = shift;
+
+  return $self->force_static ? $self->PREV::content(@_) : q(<div class="js_panel"><input type="hidden" class="panel_type" value="GenoverseTest" /></div>);
+}
 
 1;

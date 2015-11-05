@@ -14,18 +14,4 @@
  * limitations under the License.
  */
 
-/*
- * This panel only gets initialised if the backend is not sure about what image should be displayed
- * It just checks whether Genoverse is supported or not and adds an extra param 'genoverse' to the panel's updateURL
- */
-
-Ensembl.Panel.GenoverseTest = Ensembl.Panel.Content.extend({
-  init: function () {
-
-    this.base.apply(this, arguments);
-
-    this.params.updateURL = Ensembl.updateURL({genoverse: Ensembl.genoverseSupported() ? 1 : 0}, this.params.updateURL);
-
-    this.getContent();
-  }
-});
+Genoverse.Track.Legend.prototype.lockToTrack = false;

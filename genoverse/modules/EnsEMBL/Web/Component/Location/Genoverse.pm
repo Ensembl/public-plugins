@@ -18,7 +18,11 @@ limitations under the License.
 
 package EnsEMBL::Web::Component::Location::Genoverse;
 
+## Panel to display genoverse image
+## This panel only gets loaded if it's confirmed that we need a genoverse image
+
 use strict;
+use warnings;
 
 use EnsEMBL::Web::Document::Image::Genoverse;
 
@@ -32,45 +36,22 @@ sub _init {
 }
 
 sub content {
-  my $self    = shift;
+  my $self  = shift;
   my $slice = shift || $self->object->slice;
-  my $hub     = $self->hub;
+  my $hub   = $self->hub;
+  my $image = $self->new_image($slice, $hub->get_imageconfig($self->view_config->image_config));
 
-  my $image = $self->new_image($slice, $hub->get_imageconfig($self->view_config->image_config)); 
- 
-  # Temporary message whilst view is still being beta-tested
-  return $image->render . $self->_info('Feedback', '
-    This view is currently under development and therefore has a limited number of configurable tracks. 
-    If you would like to comment on current features or make suggestions, please 
-    <a href="http://www.ensembl.org/Help/Contact/?subject=Scrollable Region" class="popup">email us</a>.
-  ');
-}
-
-# Create a panel to test if Genoverse is supported, and fall back to the standard image if it isn't
-# Append Test to the id, so that the real panel can have the correct id which matches that in the configuration panel
-sub content_test {
-  my $self       = shift;
-  my $image_type = $self->hub->session->get_data(type => 'image_type', code => $self->id) || {};
-  
-  $self->id($self->id . 'Test');
-  
-  return qq(
-    <div class="js_panel">
-      <input type="hidden" class="panel_type" value="GenoverseTest" />
-      <input type="hidden" class="static_image" value="$image_type->{'static'}" />
-    </div>
-  );
+  return $image->render;
 }
 
 sub new_image {
-  my $self       = shift;
-  my $hub        = $self->hub;
-  my $image_type = $hub->session->get_data(type => 'image_type', code => $self->id) || {};
-  
-  return $image_type->{'static'} || $hub->param('static') || !(grep $_->[-1] eq 'genoverse', @{$hub->components}) ? $self->SUPER::new_image(@_) : EnsEMBL::Web::Document::Image::Genoverse->new({
-    hub          => $hub,
-    slice        => $_[0],
-    image_config => $_[1],
+  my ($self, $slice, $image_config) = @_;
+
+  return EnsEMBL::Web::Document::Image::Genoverse->new({
+    hub          => $self->hub,
+    slice        => $slice,
+    export       => 1,
+    image_config => $image_config,
     image_width  => $self->image_width,
     component    => $self->id
   });
