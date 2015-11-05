@@ -127,14 +127,20 @@ sub delete_by_tags {
 sub set {
   my ($self, $key, $value, $exptime, @tags) = @_;
   
+  return $self->set_raw(md5_hex($key),$value,$exptime,@tags);
+}
+
+sub set_raw {
+  my ($self, $key, $value, $exptime, @tags) = @_;
+
   return unless $value;
-  
+
   _warn("MEMCACHED->set($key)");
-  
-  my $result = $self->SUPER::set(md5_hex($key), $value, $exptime || $self->{'default_exptime'});
-  
+
+  my $result = $self->SUPER::set($key, $value, $exptime || $self->{'default_exptime'});
+
   $self->add_tags($key, $self->{'namespace'}, @tags) if $result;
-  
+
   return $result;
 }
 
