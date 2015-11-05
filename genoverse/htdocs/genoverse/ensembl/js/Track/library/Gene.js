@@ -16,6 +16,9 @@
 
 Genoverse.Track.Gene = Genoverse.Track.extend({
   height       : 50,
+  legendType   : 'GeneLegend', // this forces single gene legend for all Gene tracks
+  legendName   : 'Gene Legend',
+  legend       : true,
   lengthConfig : {
     1: {
       model : Genoverse.Track.Model.Gene.Transcript,
