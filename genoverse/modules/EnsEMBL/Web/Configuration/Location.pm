@@ -26,7 +26,7 @@ sub modify_tree {
   my $self = shift;
   my $view = $self->get_node('View');
   
-  $view->set('genoverse', 1);
+  $view->set('genoverse', 1) if($view);
   
   $self->PREV::modify_tree;
 }
