@@ -7,7 +7,9 @@ use Digest::MD5 qw(md5_hex);
 use SiteDefs;
 use EnsEMBL::Web::Cache;
 
-our $MEMD = EnsEMBL::Web::Cache->new;
+our $MEMD = EnsEMBL::Web::Cache->new(
+  namespace => $SiteDefs::ENSEMBL_STATIC_BASE_URL
+);
 
 sub static_cache_hook {
   my ($uri,$content) = @_;
