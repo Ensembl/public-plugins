@@ -64,7 +64,7 @@ self and non-self species) in a genome-wise manner</li>
 <li>Build a sparse graph of gene relations based on Blast e-values and generate clusters using hcluster_sg<a href="#fn2" class="fn-link">2</a>. Hcluster_sg has a little insight about the phylogeny of the species (namely: a list of outgroup species), which helps defining pertinent clusters for the ingroup species
 </li>
 
-<li>The largest clusters (more than 400 genes) are split using QuickTree<a href="#fn7" class="fn-link">7</a></li>
+<!--<li>The largest clusters (more than 400 genes) are split using QuickTree<a href="#fn7" class="fn-link">7</a></li>-->
 
 <li>For each cluster, build a multiple alignment based on the
 protein sequences using:
@@ -109,12 +109,12 @@ hcluster_sg<a href="#fn2" class="fn-link">2</a> performs hierarchical clustering
 Hcluster_sg also introduces an additional edge breaking rule: removes an edge between cluster A and B if the number of edges between A and B is smaller than |A|*|B|/10. This heuristic rule removes weak relations which are quite unlikely to be joined at a later step.
 </p>
 
-<p>
+<!--<p>
 As the pipeline has to complete in time for the Ensembl releases, we limit the size of the clusters to 400 genes.
 For larger clusters, we run Mafft<a href="#fn4" class="fn-link">4</a> and QuickTree<a href="#fn7" class="fn-link">7</a>.
 QuickTree is a very fast and efficient to build an unrooted phylogenetic tree. We then find the branch that best splits the cluster into two halves.
 We recursively follow this approach until each sub-cluster is smaller than 400 genes.
-</p>
+</p>-->
 
 <h2 id="treebest">Tree building</h2>
 
@@ -181,7 +181,6 @@ speciation event. We predict several descriptions of orthologues:</p>
 
 <ul>
 <li>same-species paralogies (<em>within_species_paralog</em>)</li>
-<li>across-tree paralogies (<em>other_paralog</em>)</li>
 <li>fragments of the same &dash;predicted&dash; gene (<em>gene_split</em>)</li>
 </ul>
 
@@ -209,11 +208,11 @@ The taxonomy level "times" the duplication
 event to the ancestor of <em>Euarchontoglires</em>.
 </p>
 
-<p>
+<!--<p>
 When paralogous genes are too distant to be in the same gene tree, but can still be related as part of a
 broader "super-family", they are labelled as <em>other_paralog</em> relationships.
 This happens if they were part of the same cluster from hcluster_sg, but has been separated by QuickTree.
-</p>
+</p>-->
 
 <p>
 We compute a <b>duplication confidence score</b> for each duplication node as the <a href="http://en.wikipedia.org/wiki/Jaccard_index">Jaccard index</a> of the sets of species under the two sub-trees.
@@ -321,12 +320,10 @@ The parameters can be found in <kbd>ensembl-compara/scripts/homology/codeml.ctl.
 
 </li>
 
-<li id="fn7">
+<!--<li id="fn7">
 <a href="http://www.sanger.ac.uk/resources/software/quicktree/">QuickTree</a>: Howe K, Bateman A and Durbin R, "QuickTree: building huge Neighbour-Joining trees of protein sequences." <a href="http://www.ncbi.nlm.nih.gov/pubmed/12424131">Bioinformatics (Oxford, England) 2002;18;11;1546-7</a><br/>
 QuickTree builds an unrooted tree and we recursively split the cluster by finding a branch that roughly holds half of the nodes on each side.
-</li>
-
-
+</li>-->
 
 
 </ol>
