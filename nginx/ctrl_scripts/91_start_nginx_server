@@ -31,19 +31,16 @@ die "nginx root '$SiteDefs::ENSEMBL_NGINX_ROOT' does not exists"
 die "file $SiteDefs::ENSEMBL_NGINX_ROOT/conf/nginx.conf does not exists"
   unless -e $SiteDefs::ENSEMBL_NGINX_ROOT . '/conf/nginx.conf';
 
-die "file $SiteDefs::ENSEMBL_NGINX_ROOT/sbin/nginx is not executable"
-  unless -x $SiteDefs::ENSEMBL_NGINX_ROOT . '/sbin/nginx';
-
 my $prefix = "$SiteDefs::ENSEMBL_NGINX_CMDPREFIX " || "";
 
 my @sources = (
   "$SiteDefs::ENSEMBL_NGINX_ROOT/sbin/nginx",
-  "/localsw/bin/nginx"
+  "/localsw/sbin/nginx"
 );
 
 my $exe;
 foreach my $source (@sources) {
-  if(-e $source) {
+  if(-x $source) {
     $exe = $source;
     last;
   }
