@@ -37,7 +37,7 @@ die "file $SiteDefs::ENSEMBL_NGINX_ROOT/sbin/nginx is not executable"
 my $prefix = "$SiteDefs::ENSEMBL_NGINX_CMDPREFIX " || "";
 
 my @sources = (
-  "$prefix$SiteDefs::ENSEMBL_NGINX_ROOT/sbin/nginx",
+  "$SiteDefs::ENSEMBL_NGINX_ROOT/sbin/nginx",
   "/localsw/bin/nginx"
 );
 
@@ -50,7 +50,7 @@ foreach my $source (@sources) {
 }
 die "Could not find nginx executable" unless $exe;
 
-my $cmd = "$exe -c $SiteDefs::ENSEMBL_NGINX_ROOT/conf/nginx.conf";
+my $cmd = "$prefix$exe -c $SiteDefs::ENSEMBL_NGINX_ROOT/conf/nginx.conf";
 
 system($cmd) == 0 or die " Could not start nginx server: $!.\n";
 
