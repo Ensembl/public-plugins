@@ -71,6 +71,10 @@ sub get_filegroups {
   my ($species_defs, $type) = @_;
 
   my @file_groups     = PREV::get_filegroups($species_defs, $type);
+
+  # ie7css, images, ...
+  return @file_groups unless $GENOVERSE_FILES_ORDER->{$type};
+
   my @files_order     = map { s/\/$//r } @{$GENOVERSE_FILES_ORDER->{$type}};
   my $current_plugin  = current_plugin;
   my $genoverse_path  = sprintf '%s/htdocs/genoverse/%s/%s', $current_plugin->{'path'}, GENOVERSE_VERSION, $type;
