@@ -308,7 +308,7 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
 
         label.addClass('_label_layer').on('mouseleave', function () {
           $(this).removeClass('hover');
-        }).children('.gv-name, .hover_label').on('mouseenter', function () {
+        }).children('.gv-name, .hover_label').removeAttr('title').on('mouseenter', function () {
           $(this.parentNode).addClass('hover').find('._dyna_load').removeClass('_dyna_load').dynaLoad(); // dynaload any track description too
         });
 
