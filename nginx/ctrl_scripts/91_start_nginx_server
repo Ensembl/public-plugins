@@ -33,21 +33,16 @@ die "file $SiteDefs::ENSEMBL_NGINX_ROOT/conf/nginx.conf does not exists"
 
 my $prefix = "$SiteDefs::ENSEMBL_NGINX_CMDPREFIX " || "";
 
-my @sources = (
-  "$SiteDefs::ENSEMBL_NGINX_ROOT/sbin/nginx",
-  "/localsw/sbin/nginx"
-);
+my $version_string = qx($SiteDefs::ENSEMBL_NGINX_EXE -v 2>&1);
+$version_string =~ m!nginx/(\S+)!;
+my $version = $1;
 
-my $exe;
-foreach my $source (@sources) {
-  if(-x $source) {
-    $exe = $source;
-    last;
-  }
+my $extra = "";
+if($version =~ /^1\./) {
+  system("ln -s $SiteDefs::ENSEMBL_LOGDIR $SiteDefs::ENSEMBL_LOGDIR/logs 2>/dev/null");
+  $extra .= "-p $SiteDefs::ENSEMBL_LOGDIR";
 }
-die "Could not find nginx executable" unless $exe;
-
-my $cmd = "$prefix$exe -c $SiteDefs::ENSEMBL_NGINX_ROOT/conf/nginx.conf";
+my $cmd = "$SiteDefs::ENSEMBL_NGINX_EXE -c $SiteDefs::ENSEMBL_NGINX_ROOT/conf/nginx.conf $extra";
 
 system($cmd) == 0 or die " Could not start nginx server: $!.\n";
 

@@ -2,10 +2,10 @@
 #user       [[ $SiteDefs::ENSEMBL_USER ]] [[ $SiteDefs::ENSEMBL_GROUP ]];
 
 worker_processes  10;
-error_log  [[$SiteDefs::ENSEMBL_LOGDIR]]/nginx.error.log;
+error_log  [[$SiteDefs::ENSEMBL_LOGDIR]]/nginx.error.log error;
 pid        [[$SiteDefs::ENSEMBL_LOGDIR]]/nginx.pid;
 worker_rlimit_nofile 8192;
- 
+
 events {
   worker_connections  4096;
 }
@@ -62,7 +62,7 @@ http {
  
     location ~* \.(jpg|jpeg|png|gif|js|css|txt|xml|csv|gff|fa|nh|gz|tar|zip|pdf|swf|jar|ico)$ {
       expires 30d;
-      set_md5 $md5_request_uri "[[$SiteDefs::ENSEMBL_STATIC_BASE_URL]]$request_uri";
+      [[ if($SiteDefs::ENSEMBL_NGINX_EXE =~ /sanger-plugins/) { "set" } else { "set_md5"; } ]] $md5_request_uri "[[$SiteDefs::ENSEMBL_STATIC_BASE_URL]]$request_uri";
       set $memcached_key "[[$SiteDefs::ENSEMBL_STATIC_BASE_URL]]nginx-$md5_request_uri";
       memcached_pass memcached_servers;
       error_page 404 502 = @fetch;

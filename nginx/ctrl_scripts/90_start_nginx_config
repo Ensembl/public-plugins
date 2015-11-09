@@ -43,6 +43,7 @@ use strict;
 use warnings;
 
 use SiteDefs;
+use List::Util qw(first);
 
 print "Writing nginx config... \n";
 
@@ -51,6 +52,15 @@ die "can't find nginx root, ENSEMBL_NGINX_ROOT is not defined"
 
 die "nginx root '$SiteDefs::ENSEMBL_NGINX_ROOT' does not exists"
   unless -d $SiteDefs::ENSEMBL_NGINX_ROOT;
+
+my @sources = (
+  "$SiteDefs::ENSEMBL_NGINX_ROOT/sbin/nginx",
+  "/localsw/sbin/nginx"
+);
+
+my $exe = first { -x $_ } @sources;
+die "Could not find nginx executable" unless $exe;
+$SiteDefs::ENSEMBL_NGINX_EXE = $exe;
 
 die "file $SiteDefs::ENSEMBL_NGINX_ROOT/conf/nginx.conf.tmpl does not exists"
   unless -e $SiteDefs::ENSEMBL_NGINX_ROOT . '/conf/nginx.conf.tmpl';
