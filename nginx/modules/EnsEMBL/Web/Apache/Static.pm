@@ -8,7 +8,7 @@ use SiteDefs;
 use EnsEMBL::Web::Cache;
 
 our $SMEMD = EnsEMBL::Web::Cache->new(
-  namespace => $SiteDefs::ENSEMBL_STATIC_BASE_URL
+  namespace => '', # nginx namespaces incompatible with perl namespaces
 );
 
 sub static_cache_hook {
