@@ -21,10 +21,11 @@ package EnsEMBL::Nginx::SiteDefs;
 use strict;
 
 sub update_conf {
-  $SiteDefs::_PORT_FIX = defer {
-    $SiteDefs::ENSEMBL_NGINX_PORT = $SiteDefs::ENSEMBL_PORT;
-    $SiteDefs::ENSEMBL_PORT       = $SiteDefs::ENSEMBL_NGINX_PORT + 5000;
-  };
+  $SiteDefs::ENSEMBL_NGINX_PORT = defer {
+    my $out = $SiteDefs::ENSEMBL_PORT;
+    $SiteDefs::ENSEMBL_PORT += 5000;
+    return $out;
+  };  
 
   $SiteDefs::ENSEMBL_NGINX_ROOT = $SiteDefs::ENSEMBL_SERVERROOT."/sanger-plugins/nginx";
 }
