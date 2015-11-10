@@ -42,7 +42,7 @@ if($version =~ /^1\./) {
   system("ln -s $SiteDefs::ENSEMBL_LOGDIR $SiteDefs::ENSEMBL_LOGDIR/logs 2>/dev/null");
   $extra .= "-p $SiteDefs::ENSEMBL_LOGDIR";
 }
-my $cmd = "$SiteDefs::ENSEMBL_NGINX_EXE -c $SiteDefs::ENSEMBL_NGINX_ROOT/conf/nginx.conf $extra";
+my $cmd = "$prefix $SiteDefs::ENSEMBL_NGINX_EXE -c $SiteDefs::ENSEMBL_NGINX_ROOT/conf/nginx.conf $extra";
 
 system($cmd) == 0 or die " Could not start nginx server: $!.\n";
 
