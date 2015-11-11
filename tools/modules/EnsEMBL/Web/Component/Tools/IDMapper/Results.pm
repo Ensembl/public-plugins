@@ -38,7 +38,8 @@ sub content {
     {'key' => 'score',    'title' => 'Mapping score', 'sort' => 'numeric' }
   ];
 
-  my @rows = map $_->result_data->raw, $job->result;
+  # html encode the values of each column in each row's hash
+  my @rows = map { my $row = $_; $row = { map { $_ => $self->html_encode($row->{$_}) } keys %$row } } map $_->result_data->raw, $job->result;
 
   return @rows ? $self->new_table($columns, \@rows, {'data_table' => 1})->render : $self->_warning('No results', 'No stable IDs mapped to the given IDs');
 }
