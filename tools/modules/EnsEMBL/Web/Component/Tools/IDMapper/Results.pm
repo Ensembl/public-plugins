@@ -29,6 +29,8 @@ sub content {
   my $object  = $self->object;
   my $job     = $object->get_requested_job({'with_all_results' => 1});
 
+  return '' unless $job;
+
   my $columns = [
     {'key' => 'old',      'title' => 'Old stable ID'  },
     {'key' => 'new',      'title' => 'New stable ID'  },
