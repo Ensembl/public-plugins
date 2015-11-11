@@ -40,7 +40,7 @@ sub content {
 
   my @rows = map $_->result_data->raw, $job->result;
 
-  return @rows ? $self->new_table($columns, \@rows, {'data_table' => 1})->render : '';
+  return @rows ? $self->new_table($columns, \@rows, {'data_table' => 1})->render : $self->_warning('No results', 'No stable IDs mapped to the given IDs');
 }
 
 1;
