@@ -23,17 +23,18 @@ use warnings;
 
 use EnsEMBL::Web::Utils::FileHandler qw(file_get_contents);
 
-sub new {
-  my ($class, $runnable) = @_;
-  return bless { 'runnable'  => $runnable }, $class;
-}
+use parent qw(EnsEMBL::Web::Parsers);
 
 sub parse {
   my ($self, $file) = @_;
 
-  my @results = map {'old' => $_->[0], 'new' => $_->[1], 'release' => $_->[2], 'score' => $_->[3]}, grep { $_->[0] && $_->[0] ne 'Old stable ID' } file_get_contents($file, sub {
-    return [ map s/^\s+|\s+$//gr, split ',', $_ ];
-  });
+  my %seen;
+
+  my @results = map  { 'old' => $_->[0], 'new' => $_->[1], 'release' => $_->[2] },                                      # create a hash for each filtered row
+                grep { !$seen{$_->[0]} && ($seen{$_->[0]} = 1) }                                                        # just keep one row for each id
+                sort { $b->[2] <=> $a->[2] || $b->[3] <=> $a->[3] }                                                     # move the latest release with max score on top
+                grep { $_->[0] && $_->[0] ne 'Old stable ID' && $_->[1] && $_->[1] ne '<retired>' && $_->[2] !~ /\D/ }  # exclude headers and rows with retired ids
+                file_get_contents($file, sub { return [ map s/^\s+|\s+$//gr, split ',', $_ ]; });                       # parse each row of CVS into an array
 
   return \@results;
 }
