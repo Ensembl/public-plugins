@@ -137,13 +137,6 @@ sub CONFIGURATION_FIELDS {
           'values'              => [ map { 'value' => $_, 'caption' => $_ }, qw(10 50 100 250 500 1000 5000) ]
         },
 
-        'culling_limit'       => {
-          'type'                => 'dropdown',
-          'label'               => 'Culling limit',
-          'helptip'             => 'This will throw away hits that are enveloped by at least this many higher-scoring hits',
-          'values'              => [ map { 'value' => $_, 'caption' => $_ }, 1..10,15,20,999 ]
-        },
-
         'evalue'              => {
           'type'                => 'dropdown',
           'label'               => 'Maximum E-value for reported alignments',
@@ -208,7 +201,6 @@ sub CONFIGURATION_DEFAULTS {
       'gap_dna'                 => '5n2',
       'dust'                    => '1',
       'repeat_mask'             => '1',
-      'culling_limit'           => '5',
     },
 
     'NCBIBLAST_BLASTP'        => {
@@ -219,7 +211,6 @@ sub CONFIGURATION_DEFAULTS {
       'threshold'               => '11',
       'comp_based_stats'        => '2',
       'seg'                     => '1',
-      'culling_limit'           => '5',
     },
 
     'NCBIBLAST_BLASTX'        => {
@@ -229,7 +220,6 @@ sub CONFIGURATION_DEFAULTS {
       'threshold'               => '11',
       'seg'                     => '1',
       'repeat_mask'             => '1',
-      'culling_limit'           => '5',
     },
 
     'NCBIBLAST_TBLASTN'       => {
@@ -240,7 +230,6 @@ sub CONFIGURATION_DEFAULTS {
       'threshold'               => '13',
       'comp_based_stats'        => '2',
       'seg'                     => '1',
-      'culling_limit'           => '5',
     },
 
     'NCBIBLAST_TBLASTX'       => {
@@ -249,7 +238,6 @@ sub CONFIGURATION_DEFAULTS {
       'matrix'                  => 'BLOSUM62',
       'threshold'               => '13',
       'seg'                     => '1',
-      'culling_limit'           => '5',
     }
   };
 }
