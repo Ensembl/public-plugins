@@ -35,13 +35,28 @@ sub content {
     {'key' => 'old',      'title' => 'Old stable ID'  },
     {'key' => 'new',      'title' => 'New stable ID'  },
     {'key' => 'release',  'title' => 'Release',       'sort' => 'numeric' },
-    {'key' => 'score',    'title' => 'Mapping score', 'sort' => 'numeric' }
   ];
 
-  # html encode the values of each column in each row's hash
-  my @rows = map { my $row = $_; $row = { map { $_ => $self->html_encode($row->{$_}) } keys %$row } } map $_->result_data->raw, $job->result;
+  # convert column value to displayable format for each column in each row's hash
+  my @rows = map { my $row = $_; $row = { map { $_ => $self->_decorate($row, $_) } keys %$row } } map $_->result_data->raw, $job->result;
 
   return @rows ? $self->new_table($columns, \@rows, {'data_table' => 1})->render : $self->_warning('No results', 'No stable IDs mapped to the given IDs');
+}
+
+sub _decorate {
+  my ($self, $row, $col) = @_;
+
+  my $val = $row->{$col};
+
+  if ($col eq 'new') {
+    my $url = $self->object->get_stable_id_link($val, $row->{'release'});
+    $val = $url ? sprintf '<a href="%s">%s</a>', $self->hub->url($url), $val : $val;
+
+  } else {
+    $val = $self->html_encode($val);
+  }
+
+  return $val;
 }
 
 1;
