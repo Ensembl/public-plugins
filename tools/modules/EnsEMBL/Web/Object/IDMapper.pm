@@ -107,6 +107,8 @@ sub get_stable_id_link {
   my $retired = $hub->species_defs->ENSEMBL_VERSION != $release;
   my ($species, $object_type, $db_type) = Bio::EnsEMBL::Registry->get_species_and_object_type($stable_id, undef, undef, undef, undef, 1);
 
+  $species = ucfirst $species;
+
   if ($object_type) {
     if ($object_type eq 'Gene') {
       $url = {
