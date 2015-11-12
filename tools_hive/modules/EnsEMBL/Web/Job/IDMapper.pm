@@ -29,8 +29,13 @@ sub prepare_to_dispatch {
   ## @plugin
   my $self    = shift;
   my $data    = $self->PREV::prepare_to_dispatch(@_);
+  my $sd      = $self->hub->species_defs;
 
-  $data->{'code_root'} = $self->hub->species_defs->ENSEMBL_HIVE_HOSTS_CODE_LOCATION;
+  $data->{'code_root'}  = $sd->ENSEMBL_HIVE_HOSTS_CODE_LOCATION;
+  $data->{'host'}       = $sd->DATABASE_HOST;
+  $data->{'port'}       = $sd->DATABASE_HOST_PORT;
+  $data->{'user'}       = $sd->DATABASE_WRITE_USER;
+  $data->{'pass'}       = $sd->DATABASE_WRITE_PASS;
 
   return $data;
 }
