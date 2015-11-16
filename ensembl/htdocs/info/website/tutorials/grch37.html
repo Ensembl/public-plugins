@@ -1,0 +1,62 @@
+<html>
+<head>
+<title>The GRCh37 assembly in Ensembl</title>
+<meta name="order" content="6" />
+</head>
+<body>
+
+<h1>The GRCh37 assembly in Ensembl</h1>
+
+<p>The human assembly GRCh37 (also known as hg19) in Ensembl is available 
+as a stable archive, so that you can continue to analyse your human data 
+on its previous sequence. To browse genes, variants and genomic regions 
+all assigned with the previous genomic coordinates, visit our 
+<a href="http://grch37.ensembl.org">GRCh37 dedicated site</a>.</p>
+
+<a href="http://grch37.ensembl.org"><img src="/img/go_to_grch37.png" class="float-right" /></a>
+
+<p><a href="http://grch37.ensembl.org/info/docs/tools/">Ensembl tools</a> 
+are also available for analyses using the old GRCh37 assembly. For example, 
+you can annotate your variants with VEP for human GRCh37, export Ensembl 
+annotation on GRCh37 with BioMart, and run BLAST/BLAT similarity searches 
+against the GRCh37 assembly.</p>
+
+<p>The data and annotation on GRCh37 can also be downloaded as MySQL databases 
+and file dumps from our <a href="ftp://ftp.ensembl.org/pub/grch37/">FTP site</a>. 
+You can also access Ensembl data on GRCh37 via the <a href="http://grch37.rest.ensembl.org">REST API</a>.</p>
+
+<p>This stable archive will be updated twice a year to incorporate new data such 
+as SNPs and phenotype from dbSNPs and NHGRI-EBI GWAS, in addition to a few other 
+datasets from different databases. Check our Ensembl blog for the news on the 
+<a href="http://www.ensembl.info/blog/category/releases/ensembl-grch37/">Ensembl GRCh37 updates</a>.</p>
+
+<p>The gene annotation on the GRCh37 archive is based on Ensembl data from release 75 
+and will not be updated. For the latest annotation of genes, variation, comparative genomics 
+and regulatory data, please use the main <a href="http://www.ensembl.org">Ensembl site</a>. 
+This site and its underlying databases are on GRCh38, the latest assembly of the human genome.</p>
+ 
+<p>GRCh38 is an improved representation of the human genome compared to GRCh37, where 
+many gaps were closed, sequencing errors corrected and centromere sequences modelled. 
+For the state-of-the-art of the human genome and its annotation, go to 
+<a href="http://www.ensembl.org/Homo_sapiens/Info/Index">GRCh38</a>.</p>
+
+<h2>Converting GRCh37 into GRCh38</h2>
+
+<p>If your data is in GRCh37, you can swiftly move to GRCh38 genomic coordinates:</p>
+<ul>
+<li>navigate from the GRCh37 site to the corresponding GRCh38 location 
+on our main website (see figure, below)</li>
+<li>convert GRCh37 to GRCh38 coordinates using our 
+<a href="http://rest.ensembl.org/documentation/info/assembly_map">assembly map endpoint</a> 
+on the REST API service</li>
+<li>use our <a href="http://www.ensembl.org/Homo_sapiens/Tools/AssemblyConverter">Assembly Converter tool</a> 
+to process multiple regions at a time.</li>
+</ul>
+ 
+<img src="/img/grch37_38_nav.png" class="screenshot" /> 
+
+<p>We anticipate that the majority of our users will be migrating to GRCh38, as it 
+contains the most updated and reliable annotation of the human genome.</p>
+
+</body>
+</html>
