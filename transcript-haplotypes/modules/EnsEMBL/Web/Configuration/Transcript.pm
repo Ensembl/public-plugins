@@ -36,6 +36,16 @@ sub modify_tree {
       { 'availability' => 'database:variation', 'concise' => 'Haplotypes' }
     )
   );
+  
+  $submenu->append(
+    $self->create_node(
+      'Haplotypes_new', 'Haplotypes_new', 
+      [ 
+        'haplo'    => 'EnsEMBL::Web::Component::Transcript::Haplotypes_new',
+      ], 
+      { 'availability' => 'database:variation', 'concise' => 'Haplotypes_new' }
+    )
+  );
 }
 
 1;
