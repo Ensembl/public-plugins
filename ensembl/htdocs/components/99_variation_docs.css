@@ -7,6 +7,7 @@
 .vdoc_thousand    { background-color:#006266; }
 .vdoc_hundred     { background-color:#070; }
 .vdoc_zero        { background-color:#CCC; }
+.vdoc_var_count   { color:#FFF;border-radius:5px;padding:3px 3px 1px;cursor:help;white-space:nowrap; }
 
 /* Species header */
 .vdoc_species_sci_name { font-style:italic;font-weight:normal;padding-left:8px;color:#555; }
