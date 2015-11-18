@@ -22,9 +22,7 @@ use strict;
 use warnings;
 no warnings 'uninitialized';
 
-use Time::HiRes qw(tv_interval gettimeofday);
-
-use Bio::EnsEMBL::Variation::TranscriptHaplotypeContainer;
+use HTML::Entities qw(encode_entities);
 
 use base qw(EnsEMBL::Web::Component::Transcript);
 
@@ -43,11 +41,7 @@ sub content {
   # tell JS what panel type this is
   $html .= '<input type="hidden" class="panel_type" value="TranscriptHaplotypes" />';
 
-  my $t0 = [gettimeofday];
-  
   my $c = $self->get_haplotypes;
-  
-  print STDERR "HAPLOTYPES ".tv_interval($t0, [gettimeofday])."\n";
   
   my $table = $self->new_table(
     [], [], {
@@ -84,14 +78,33 @@ sub content {
   );
   
   my @rows;
+  my $count = 0;
   
   foreach my $ph(@{$c->get_all_ProteinHaplotypes}) {    
     $table->add_row($self->render_protein_haplotype_row($ph));
+    # last if ++$count == 5;
   }
   
-  print STDERR "TOTAL ".tv_interval($t0, [gettimeofday])."\n";
-  
   $html .= $table->render;
+
+  # add alignment and sequence data to be picked up by JS
+  my $js_data = {};
+
+  foreach my $th(@{$c->get_all_TranscriptHaplotypes}) {
+    my $data = { seq => $th->seq };
+
+    my $aln = $th->get_formatted_alignment();
+    $data->{aln} = $aln if $aln;
+    $js_data->{$th->_hex} = $data;
+  }
+
+  $html .= sprintf(
+    '<input class="js_param" type="hidden" name="alignment_data" value="%s" />',
+    encode_entities($self->jsonify($js_data))
+  );
+
+  # add element for displaying alignment data
+  $html .= '<div><a name="alignment-view"/><pre class="code alignment-view hidden">&nbsp;</pre></div>';
 
   return $html;
 }
@@ -112,29 +125,9 @@ sub get_haplotypes {
    $variation_db->use_vcf($c->{'ENABLED'}) if $variation_db->can('use_vcf');
   }
   
-  my $vca = $variation_db->get_VCFCollectionAdaptor();
-  
-  # my @gts = map {@{$_->get_all_IndividualGenotypeFeatures_by_Slice($tr->feature_Slice, undef, 1)}} @{$vca->fetch_all};
-  
-  my @gts;
+  my $thca = $variation_db->get_TranscriptHaplotypeAdaptor();
 
-  my $t0 = [gettimeofday];
-
-  # we don't want variants in introns
-  foreach my $exon(@{$tr->get_all_Exons}) {
-    push @gts, map {@{$_->get_all_SampleGenotypeFeatures_by_Slice($exon->feature_Slice, undef, 1)}} @{$vca->fetch_all};
-  }
-  
-  print STDERR "GENOTYPES ".tv_interval($t0, [gettimeofday])."\n";
-  
-  print STDERR "Fetched ".(scalar @gts)." GTs\n";
-  
-  return Bio::EnsEMBL::Variation::TranscriptHaplotypeContainer->new(
-    -transcript => $tr,
-    -genotypes  => \@gts,
-    -samples    => [map {@{$_->get_all_Samples}} @{$vca->fetch_all}],
-    -db         => $variation_db
-  );
+  return $thca->get_TranscriptHaplotypeContainer_by_Transcript($tr);
 }
 
 sub short_population_name {
@@ -192,11 +185,11 @@ sub render_protein_haplotype_row {
   
   # create base row
   my $row = {
-    protein => $self->render_protein_haplotype_name($ph),
+    protein => $self->render_protein_haplotype_name($ph).' '.$self->alignment_links($ph),
     freq    => sprintf("%.3g (%i)", $ph->frequency, $ph->count),
     count   => $ph->count,
     cds     => join('<br/>',
-      map {$self->render_cds_haplotype_name($_).' ('.$_->count.')'}
+      map {$self->render_cds_haplotype_name($_).' ('.$_->count.')'.' '.$self->alignment_links($_)}
       sort {$b->count <=> $a->count}
       @{$ph->get_all_CDSHaplotypes}
     ),
@@ -341,6 +334,50 @@ sub render_cds_haplotype_name {
   }
   
   return $name;
+}
+
+sub alignment_links {
+  my $self = shift;
+  my $h = shift;
+  return sprintf(
+    '<span class="small">'.
+    '<a href="#alignment-view" class="_ht alignment-link" title="View alignment to reference sequence" rel="%s">[A]</a> '.
+    '<a href="#alignment-view" class="_ht sequence-link" title="View sequence" rel="%s">[S]</a>'.
+    '</span>',
+    $h->_hex, $h->_hex
+  ); 
+}
+
+sub _lzw_encode {
+  my $self = shift;
+  my $s = shift;
+
+  my %dict = ();
+  my @data = split("", $s);
+  my @out = ();
+
+  my $currChar;
+  my $phrase = $data[0];
+  my $code = 256;
+
+  for (my $i=1; $i<=$#data; $i++) {
+    $currChar = $data[$i];
+    if(exists($dict{$phrase.$currChar})) {
+      $phrase .= $currChar;
+    }
+    else {
+      push @out, (length($phrase) > 1 ? $dict{$phrase} : ord(substr($phrase, 0, 1)));
+      $dict{$phrase.$currChar} = $code;
+      $code++;
+      $phrase = $currChar;
+    }
+  }
+  
+  push @out, (length($phrase) > 1 ? $dict{$phrase} : ord(substr($phrase, 0, 1)));
+  for (my $i=0; $i<=$#out; $i++) {
+    $out[$i] = chr $out[$i];
+  }
+  return join("", @out);
 }
 
 1;
