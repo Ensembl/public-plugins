@@ -20,12 +20,26 @@ Ensembl.Panel.TranscriptHaplotypes = Ensembl.Panel.Content.extend({
 
     this.base();
 
+    // get data
+    this.alignmentData = JSON.parse(this.params['alignment_data']);
+    delete this.params['alignment_data'];
+
     // Initialise ZMenus on links
     this.el.find('a.zmenu').on('click', function(e) {
       e.preventDefault();
       Ensembl.EventManager.trigger('makeZMenu', $(this).text().replace(/\W/g, '_'), { event: e, area: { link: $(this) }});
     });
-    
-    console.log("hello world");
+
+    // activate alignment links
+    this.el.find('a.alignment-link').on('click', function(e) {
+      $('pre.alignment-view').show().empty().append(panel.alignmentData[this.rel]['aln']);
+    });
+
+    // activate sequence links
+    this.el.find('a.sequence-link').on('click', function(e) {
+      $('pre.alignment-view').show().empty().append(panel.alignmentData[this.rel]['seq'].match(/.{1,60}/g).join("\n"));
+    });
+
+    console.log(this.alignmentData);
   }
 });
