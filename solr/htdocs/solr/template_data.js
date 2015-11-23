@@ -530,7 +530,7 @@
 
   window.page_templates = {
     page: {
-      template: "<div>\n  <div class='solr_page_p_side'>\n    <div class='solr_sidebar  ui-panel ui-panel-position-left ui-panel-display-reveal ui-body-c ui-panel-animate ui-panel-closed' data-role='panel'  id='search_nav'>\n     <div class='new_current_faceter'></div>\n      <div class='faceters'></div>\n      <div class='table_extras'></div>\n      <div class='sizer'></div>\n      <div class='layout_select'></div>\n      <div class='leftcars'><div class='sidecars'></div></div>\n      <div class='tips'></div>\n    </div>\n  </div>\n  <div class='solr_page_p_main'>\n    <div class='table'>\n    </div>\n  </div>\n</div>",
+      template: "<div>\n  <div class='solr_page_p_side'>\n    <div class='solr_sidebar  ui-panel ui-panel-position-left ui-panel-display-reveal ui-body-c ui-panel-animate ui-panel-closed' data-role='panel'  id='search_nav'>\n      <div class='new_current_faceter'></div>\n      <div class='faceters'></div>\n      <div class='table_extras'></div>\n      <div class='sizer'></div>\n      <div class='layout_select'></div>\n      <div class='leftcars'><div class='sidecars'></div></div>\n      <div class='tips'></div>\n    </div>\n  </div>\n  <div class='solr_page_p_main'>\n    <div class='table'>\n    </div>\n  </div>\n</div>",
       sockets: {
         '.table_extras': 'sidebar_table_extra'
       },
@@ -690,7 +690,7 @@
               return data.tp2_row.best('description', '', 100000);
             });
             data.tp2_row.register(50000, function() {
-              var c, desc, k, vals, _i, _len;
+              var c, desc, k, tail, vals, _i, _len;
               vals = data.tp2_row.all_values('new-contents');
               vals = (function() {
                 var _i, _len, _ref, _results;
@@ -705,6 +705,7 @@
                 return _results;
               })();
               desc = [];
+              tail = "";
               for (_i = 0, _len = vals.length; _i < _len; _i++) {
                 c = vals[_i];
                 if (!c) {
@@ -717,11 +718,11 @@
                 c = c.charAt(0).toUpperCase() + c.substring(1);
                 desc.push(c);
                 if (!c.match(/\</)) {
-                  desc.push('.');
+                  tail = ".";
                 }
               }
               if (desc.length) {
-                data.tp2_row.candidate('description', desc.join(' '), 10000);
+                data.tp2_row.candidate('description', desc.join(' ') + tail, 10000);
               }
               return true;
             });

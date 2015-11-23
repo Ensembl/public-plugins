@@ -129,6 +129,7 @@ window.page_templates =
             vals = data.tp2_row.all_values('new-contents')
             vals = ( k.value for k in vals.sort((a,b) -> a.position - b.position) )
             desc = []
+            tail = ""
             for c in vals
               if not c then continue
               c = $.trim(c).replace(new RegExp("\\.$"),'')
@@ -136,9 +137,9 @@ window.page_templates =
                 c = c.toLowerCase()
               c = c.charAt(0).toUpperCase() + c.substring(1)
               desc.push(c)
-              if not c.match(/\</) then desc.push('.')
+              if not c.match(/\</) then tail = "."
             if desc.length
-              data.tp2_row.candidate('description',desc.join(' '),10000)
+              data.tp2_row.candidate('description',desc.join(' ')+tail,10000)
             true
 
           data.tp2_row.register 51000, () ->
