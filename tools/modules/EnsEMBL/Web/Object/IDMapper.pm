@@ -23,6 +23,7 @@ use warnings;
 
 use Bio::EnsEMBL::Registry;
 use Bio::EnsEMBL::DBSQL::DBAdaptor;
+use EnsEMBL::Web::DBSQL::ArchiveAdaptor;
 use EnsEMBL::Web::Utils::FileHandler qw(file_get_contents);
 
 use parent qw(EnsEMBL::Web::Object::Tools);
@@ -73,13 +74,26 @@ sub species_list {
   return $self->{'_species_list'};
 }
 
-sub get_stable_id_link {
-  ## Gets a url for the given id and release
+sub get_archive_link {
+  ## Gets an archive url for the given id and release
   ## @param Stable id
   ## @param Release number
-  ## @return Hashref as accepted by hub->url or undef if no link is available
+  ## @return URL string (possible full URL for archives)
   my ($self, $stable_id, $release) = @_;
 
+  # base url for the archive - returns undef if archive is not available
+  my $base = $self->_get_archive_base_url($release);
+  return unless defined $base;
+
+  # get stable id link for the given id
+  my $url = $self->_get_stable_id_url($stable_id);
+
+  return $url && $base.$url;
+}
+
+sub _get_stable_id_url {
+  ## @private
+  my ($self, $stable_id) = @_;
   my $hub = $self->hub;
 
   # we can only show link if stable id db is available
@@ -100,60 +114,71 @@ sub get_stable_id_link {
 
   return unless $self->{'_stable_id_db'};
 
-  # Remove versioning for stable ids
-  $stable_id =~ s/\.[0-9]+$//;
-
-  my $url;
-  my $retired = $hub->species_defs->ENSEMBL_VERSION != $release;
   my ($species, $object_type, $db_type) = Bio::EnsEMBL::Registry->get_species_and_object_type($stable_id, undef, undef, undef, undef, 1);
 
-  $species = ucfirst $species;
+  return unless $object_type;
 
-  if ($object_type) {
-    if ($object_type eq 'Gene') {
-      $url = {
-        'species' => $species,
-        'type'    => 'Gene',
-        'action'  => $retired ? 'Idhistory' : 'Summary',
-        'db'      => $db_type,
-        'g'       => $stable_id
-      };
-    } elsif ($object_type eq 'Transcript') {
-      $url = {
-        'species' => $species,
-        'type'    => 'Transcript',
-        'action'  => $retired ? 'Idhistory' : 'Summary',
-        'db'      => $db_type,
-        't'       => $stable_id
-      };
-    } elsif ($object_type eq 'Translation') {
-      $url = {
-        'species' => $species,
-        'type'    => 'Transcript',
-        'action'  => $retired ? 'Idhistory/Protein' : 'ProteinSummary',
-        'db'      => $db_type,
-        't'       => $stable_id
-      };
-    } elsif ($object_type eq 'GeneTree' && !$retired) {
-      $url = {
-        'species' => 'Multi',
-        'type'    => 'GeneTree',
-        'action'  => 'Image',
-        'db'      => $db_type,
-        'gt'      => $stable_id
-      };
-    } elsif ($object_type eq 'Family' && !$retired) {
-      $url = {
-        'species' => 'Multi',
-        'type'    => 'Family',
-        'action'  => 'Details',
-        'db'      => $db_type,
-        'fm'      => $stable_id
-      };
-    }
+  $species = ucfirst($species || '');
+
+  my $url;
+
+  if ($object_type eq 'Gene') {
+    $url = {
+      'species' => $species,
+      'type'    => 'Gene',
+      'action'  => 'Summary',
+      'db'      => $db_type,
+      'g'       => $stable_id
+    };
+  } elsif ($object_type eq 'Transcript') {
+    $url = {
+      'species' => $species,
+      'type'    => 'Transcript',
+      'action'  => 'Summary',
+      'db'      => $db_type,
+      't'       => $stable_id
+    };
+  } elsif ($object_type eq 'Translation') {
+    $url = {
+      'species' => $species,
+      'type'    => 'Transcript',
+      'action'  => 'ProteinSummary',
+      'db'      => $db_type,
+      't'       => $stable_id
+    };
+  } elsif ($object_type eq 'GeneTree') {
+    $url = {
+      'species' => 'Multi',
+      'type'    => 'GeneTree',
+      'action'  => 'Image',
+      'db'      => $db_type,
+      'gt'      => $stable_id
+    };
+  } elsif ($object_type eq 'Family') {
+    $url = {
+      'species' => 'Multi',
+      'type'    => 'Family',
+      'action'  => 'Details',
+      'db'      => $db_type,
+      'fm'      => $stable_id
+    };
   }
 
-  return $url;
+  return $url && $hub->url($url);
+}
+
+sub _get_archive_base_url {
+  ## @private
+  my ($self, $release) = @_;
+
+  my $hub = $self->hub;
+
+  return '' if $release eq $hub->species_defs->ENSEMBL_VERSION;
+
+  my $adaptor       = $self->{'_archive_adaptor'} ||= EnsEMBL::Web::DBSQL::ArchiveAdaptor->new($hub);
+  my $release_info  = $adaptor->fetch_release($release);
+
+  return $release_info && $release_info->{'archive'} && $release_info->{'online'} eq 'Y' ?  "http://$release_info->{'archive'}.archive.ensembl.org" : undef;
 }
 
 1;
