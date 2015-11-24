@@ -49,7 +49,8 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
 	
 	<div id="div_versions" style="display:none;">
 	<ul>
-    <li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/80.zip">Download version 81</a> (Ensembl 81) </li>
+    <li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/82.zip">Download version 82</a> (Ensembl 82) </li>
+    <li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/81.zip">Download version 81</a> (Ensembl 81) </li>
     <li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/80.zip">Download version 80</a> (Ensembl 80) </li>
     <li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/79.zip">Download version 79</a> (Ensembl 79) </li>
 		<li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/78.zip">Download version 78</a> (Ensembl 78) </li>
@@ -71,6 +72,29 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
 		<li><a href="https://github.com/Ensembl/ensembl-variation/archive/release/62.zip">Download version 2.0</a> (Ensembl 62 - ensembl-variation/scripts/examples) </li>
 	</ul>
 	</div><hr/>
+  <h2 id="new">What's new</h2>
+
+  <h4> New in version 83 <i>(December 2015)</i> </h4>
+  
+  <ul>
+    <li>
+      Speed:
+      <ul>
+        <li>Basic consequence calculations up to 2x faster than version 82</li>
+        <li>HGVS calculations up to 10x faster</li>
+        <li>FASTA sequence retrieval implements caching</li>
+      </ul>
+    </li>
+    <li>Add <a href="http://exac.broadinstitute.org/" rel="external">ExAC project</a> frequencies with <a href="vep_options.html#opt_maf_exac">--maf_exac</a></li>
+    <li><a href="/Help/Glossary?id=521">APPRIS</a> isoform annotations now available with <a href="vep_options.html#opt_appris">--appris</a> and used by <a href="vep_options.html#opt_pick">--pick</a> and others to prioritise VEP annotations</li>
+  </ul>
+  
+  
+  <h4 id="history"> Previous version history: <a href="#history"
+  onclick="show_hide('history');" id="a_history">Show</a> </h4>
+  
+  <div id="div_history" style="display: none;"> 
+
 	<h2 id="new">What's new</h2>
 
   <h4> New in version 82 <i>(September 2015)</i> </h4>
@@ -80,12 +104,6 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
     <li><a href="vep_options.html#opt_gene_phenotype">Flag genes</a> with phenotype associations</li>
     <li>Some plugins now available for use via the <a href="/Tools/VEP">web</a> and <a rel="external" href="http://rest.ensembl.org/#VEP">REST</a> interfaces</li>
   </ul>
-  
-  
-  <h4 id="history"> Previous version history: <a href="#history"
-  onclick="show_hide('history');" id="a_history">Show</a> </h4>
-  
-  <div id="div_history" style="display: none;"> 
 
 	<h4> New in version 81 <i>(July 2015)</i> </h4>
 	
