@@ -15,10 +15,6 @@
     "available" => 1
   },
 
-  GeneSplicer => {
-    "available" => 1
-  },
-
   MaxEntScan => {
     "available" => 1
   },
@@ -32,10 +28,6 @@
   },
 
   HGVSshift => {
-    "available" => 1
-  },
-
-  ExAC => {
     "available" => 1
   },
 
