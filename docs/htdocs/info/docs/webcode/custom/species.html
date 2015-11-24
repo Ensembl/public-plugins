@@ -6,7 +6,68 @@
 <body>
   <h1>Configuring your Ensembl species</h1>
 
-<h2 id="ini-file">Species ini files</h2>
+<p>Most of the time you will want to run your Ensembl mirror site with the same set
+of species as the equivalent public site. In this situation, you just need to set up
+all the required databases and configure the relevant plugin, e.g. 
+<kbd>public-plugins/ensembl</kbd> for the main Ensembl website (www.ensembl.org).</p> 
+
+<p>However if you wish to show only a subset of species, or perhaps add one of your
+own, you will need to do some extra manual configuration.</p>
+
+<h2>Removing species</h2>
+
+<p>It is obviously simpler to omit species from your Ensembl mirror 
+than to add new ones, so we'll look at this first.</p> 
+
+If you only want to omit a few species, simply add the
+required <kbd>delete</kbd> lines to the <kbd>update_conf</kbd> method in
+<kbd>/public-plugins/mirror/conf/SiteDefs.pm</kbd>:</p>
+
+<pre class="code">
+delete($SiteDefs::__species_aliases{'Mus_musculus'});
+delete($SiteDefs::__species_aliases{'Rattus_norvegicus'});
+</pre>
+
+<p>If on the other hand you want to omit most species and just use one or two of 
+the Ensembl species, it is more efficient to omit the entire species-related plugin
+(e.g. <kbd>public-plugins/ensembl</kbd>) and copy the relevant bits of code into
+your own plugin as if you were setting up new species (see below).</p> 
+
+<p><strong>Important note</strong>: the comparative genomics code in particular
+relies on the default primary and secondary comparison species being configured 
+in SiteDefs.pm (e.g. Human and Mouse for Ensembl Vertebrates). If you
+omit either of these species, you need to set others in their place or some
+pages will not work. E.g.</p>
+
+<pre class="code">
+$SiteDefs::ENSEMBL_SECONDARY_SPECIES  = 'Canis_familiaris'; 
+</pre>
+
+<h2>Adding new species</h2>
+
+<p>To add a species, you obviously need a complete Ensembl database
+in the same schema as the rest of your site, which is outside the 
+scope of this tutorial. However assuming you have the data already,
+the following changes will add it to the website (substituting the
+details of your own species for the ones in the examples, obviously!).</p>
+
+<h3>SiteDefs.pm</h3>
+
+<p>Firstly, add it to the species aliases in the <kbd>update_conf</kbd> 
+method in <kbd>/public-plugins/mirror/conf/SiteDefs.pm</kbd>:</p>
+
+<pre class="code">
+$SiteDefs::__species_aliases{'Canis_latrans'}           = [qw(cl coyote)];
+$SiteDefs::__species_aliases{'Geococcyx_californianus'} = [qw(gc roadrunner)];
+</pre>
+
+<p>Note that all aliases should be unique, so check in 
+<kbd>/public-plugins/ensembl/conf/SiteDefs.pm</kbd> to see which 
+are already in use. These aliases allow quick access to pages, so that users
+can type, e.g. www.ensembl.org/worm/Transcript?t=ZK792.7 instead of
+www.ensembl.org/Caenorhabditis_elegans/Transcript?t=ZK792.7</p>
+
+<h3 id="ini-file">Species ini files</h3>
 <p>
     The species configuration (database names, etc.) is
      kept in the conf/ini_files directory as an "ini" file. 
@@ -30,42 +91,35 @@ You can use "%" instead of the release number if it is idential to the &lt;ENSEM
 <li> If you want to configure additional data you can use an existing ini file from the <code>public-plugins/ensembl/conf/ini-files/</code> directory as a guide.
 </li>
 </ul>
-<h3 id="customise" class="boxed">Customising your species list</h3>
 
-<p>The default species for Ensembl are listed in this file:</p>
-<p><kbd>public-plugins/ensembl/conf/SiteDefs.pm</kbd></p>
-<p> in %__species_aliases.  These are automatically imported into the main conf/SiteDefs::ENSEMBL_SPECIES_ALIASES.
-In this distribution all the default species are enabled - to add or remove species from the list, 
-see our <a href="specieslist.html">documentation</a>.</p>
+<p>If your species has chromosomes, make sure you have the correct names
+in the array ENSEMBL_CHROMOSOMES, as this is used to draw karyotypes.</p>
 
-<h3 class="boxed">The Ensembl home page and site maps</h3>
+<p>If your new species lies in a taxonomic group outside the standard Ensembl
+eukaryote tree, or if you simply wish to alter the groupings in the dropdown
+species list on the home page, see the instructions on 
+<a href="specieslist.html">customising the species list on the home page</a>.</p>
 
-<p>If you have added or deleted species, you will needed to generate new species lists
-for the home page and new site maps (see below).</p>
+<h3>Static content</h3>
 
-<p>If you have added species, you will also need a thumbnail image of the species, for use on the 
-home page and main sitemap. The image <em>must</em> be 40x40px and called 
-<kbd>thumb_[Genus_species].png</kbd>. Save it in <kbd>public-plugins/mirror/htdocs/img/species/</kbd></p>
+<p><img src="/img/info/Canis_latrans.png" style="float:left;width:64px;height:64px;margin-right:10px" alt="Canis latrans" />
+Species home pages are now dynamically generated, so only a minimum of maintenance
+is required. Much of the content is now generated from the databases and ini files.</p>
 
-<h4>Species lists</h4>
+<p>By default, the species homepage links to a page called 'more information and statistics',
+which includes some optional text about the species. Examples of the kind of text used
+can be found in public-plugins/ensembl/htdocs/ssi/species.</p> 
 
-<p>As of Release 42, the main species list is generated automatically from config.packed when the site is started. 
-Only the pre species are manually edited - they are listed in <kbd>/public-plugins/ensembl/htdocs/ssi/species_reorder_footer.html</kbd></p>
+<p>Finally, if your new species is a eukaryote you may want to display a thumbnail image
+on the home page and in search menus, etc. If so, you will need a square image in the
+following sizes and file locations (inside your plugin):</p>
+<ul>
+<li>htdocs/i/species/16/ - 16 x 16 pixels</li> 
+<li>htdocs/i/species/48/ - 48 x 48 pixels</li> 
+<li>htdocs/i/species/64/ - 64 x 64 pixels</li> 
+</ul>
 
-<p>If you do not wish to have the links to the pre species (and the associated tabs), you can override them as follows (starting from your server root, and creating the destination directory if it doesn't already exist in your mirror plugin):</p>
-
-<p><kbd>cp htdocs/ssi/species_reorder* public-plugins/mirror/htdocs/ssi/</kbd></p>
-
-<h4>Site maps</h4>
-
-<p>These are generated quickly and easily by running <kbd>utils/static_content/sitemap.pl</kbd>. The script uses the 
-SEARCH_LINKS hash from the cached configuration to generate individual species site maps, and also
-walks the <kbd>/info</kbd> directory to produce a tree of links to site documentation.</p>
-
-<p>The script can be invoked with similar flags to homepage.pl, but does not need a release number.</p>
-
-<p>If you have extended Ensembl by adding new views, you can include them in the site map by editing
-the script - see the inline documentation  under 'TO ADD A NEW VIEW'.</p>
+<p>Each file should be named after the species, e.g. Canis_latrans.png</p>
 
 
 </body>
