@@ -136,10 +136,12 @@ host          useastdb.ensembl.org</pre>
           <a href="#opt_biotype">--biotype</a>,
           <a href="#opt_uniprot">--uniprot</a>,
           <a href="#opt_tsl">--tsl</a>,
+          <a href="#opt_appris">--appris</a>,
           <a href="#opt_gene_phenotype">--gene_phenotype</a>
           <a href="#opt_gmaf">--gmaf</a>,
           <a href="#opt_maf_1kg">--maf_1kg</a>,
           <a href="#opt_maf_esp">--maf_esp</a>,
+          <a href="#opt_maf_exac">--maf_esp</a>,
           <a href="#opt_pubmed">--pubmed</a>,
           <a href="#opt_variant_class">--variant_class</a>
         </ul>
@@ -259,6 +261,14 @@ host          useastdb.ensembl.org</pre>
         Generate an additional HTML version of the output file
         containing hyperlinks to Ensembl and other resources. File name
         of this file is [output_file].html
+      </td>
+    </tr>
+    <tr id="dont_skip">
+      <td><pre>--dont_skip</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        Don't skip input variants that fail validation, e.g. those that
+        fall on unrecognised sequences
       </td>
     </tr>
   </table>
@@ -654,6 +664,14 @@ host          useastdb.ensembl.org</pre>
         for this transcript to the output. <i>Not used by default</i>
       </td>
     </tr>
+    <tr id="opt_appris">
+      <td><pre>--appris</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        Adds the <a href="/Help/Glossary?id=521">APPRIS</a> isoform annotation
+        for this transcript to the output. <i>Not used by default</i>
+      </td>
+    </tr>
     <tr id="opt_canonical">
       <td><pre>--canonical</pre></td>
       <td>&nbsp;</td>
@@ -743,8 +761,8 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--maf_1kg</pre></td>
       <td>&nbsp;</td>
       <td>
-        Add allele frequency from continental populations (AFR,AMR,ASN,EUR) of 1000
-        Genomes Phase 1 to the output. Note the reported allele(s) and frequencies are for the non-reference allele from the original data, not necessarily the alternate allele from user input. Must be used with <a
+        Add allele frequency from continental populations (AFR,AMR,ASN,EUR) of <a href="http://www.1000genomes.org/" rel="external">1000
+        Genomes Phase 1</a> to the output. Note the reported allele(s) and frequencies are for the non-reference allele from the original data, not necessarily the alternate allele from user input. Must be used with <a
         href="#opt_cache">--cache</a> <i>Not used by default</i>
       </td>
     </tr>
@@ -752,8 +770,16 @@ host          useastdb.ensembl.org</pre>
       <td><pre>--maf_esp</pre></td>
       <td>&nbsp;</td>
       <td>
-        Include allele frequency from NHLBI-ESP populations. Note the reported allele(s) and frequencies are for the non-reference allele from the originial data, not necessarily the alternate allele from user input. Must be used with
-        <a href="#opt_cache">--cache</a> <i>Not used  by default</i>
+        Include allele frequency from <a href="http://evs.gs.washington.edu/EVS/" rel="external">NHLBI-ESP</a> populations. Note the reported allele(s) and frequencies are for the non-reference allele from the originial data, not necessarily the alternate allele from user input. Must be used with
+        <a href="#opt_cache">--cache</a> <i>Not used by default</i>
+      </td>
+    </tr>
+    <tr id="opt_maf_exac">
+      <td><pre>--maf_exac</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        Include allele frequency from <a href="http://exac.broadinstitute.org/" rel="external">ExAC project</a> populations. Note the reported allele(s) and frequencies are for the non-reference allele from the originial data, not necessarily the alternate allele from user input. Must be used with
+        <a href="#opt_cache">--cache</a> <i>Not used by default</i>
       </td>
     </tr>
     <tr id="opt_old_maf">
@@ -985,7 +1011,7 @@ host          useastdb.ensembl.org</pre>
         Customise the order of criteria applied when choosing a block of
         annotation data with e.g. <a href="#opt_pick">--pick</a>. See
         <a href="vep_other.html#pick">this page</a> for the default order.
-        Valid criteria are: <i>canonical,tsl,biotype,ccds,rank,length</i>
+        Valid criteria are: <i>canonical,appris,tsl,biotype,ccds,rank,length</i>
       </td>
     </tr>
     <tr id="opt_most_severe">

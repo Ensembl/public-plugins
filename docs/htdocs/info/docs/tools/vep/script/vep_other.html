@@ -98,10 +98,24 @@
     </li>
     
     <li>
+      <p> Install the <a
+      href="http://search.cpan.org/~benbooth/Set-IntervalTree/lib/Set/IntervalTree.pm"
+      rel="external">Set::Interval</a> tree perl package. This package speeds up
+      VEP's internals by changing how overlaps between variants and exons and introns
+      are calculated. </p>
+    </li>
+    
+    <li>
       <p> Install the <a href="https://github.com/Ensembl/ensembl-xs" rel="external">
       Ensembl::XS</a> package. This contains compiled versions of certain key
       subroutines used in the VEP that will run faster than the default native Perl
       equivalents. Using this should improve runtime by 5-10%. </p>
+    </li>
+    
+    <li>
+      <p> Add the <a href="vep_options.html#opt_no_stats">--no_stats</a> flag.
+      Calculating statistics adds some runtime to VEP and most users will not
+      need them. </p>
     </li>
     
     <li>
@@ -198,13 +212,18 @@ If using human GRCh37 add "--port 3337" to use the GRCh37 database, or --offline
     customised using <a href="vep_options.html#opt_pick_order">--pick_order</a>.
       <ol>
         <li>canonical status of transcript</li>
+        <li><a href="/Help/Glossary?id=521">APPRIS isoform annotation</a></li>
         <li><a href="/Help/Glossary?id=492">transcript support level</a></li>
         <li>biotype of transcript (protein_coding preferred)</li>
         <li>CCDS status of transcript</li>
-        <li>consequence rank according to<a href="/info/genome/variation/predicted_data.html#consequences">this table</a></li>
+        <li>consequence rank according to <a href="/info/genome/variation/predicted_data.html#consequences">this table</a></li>
         <li>transcript or feature length (longer preferred)</li>
       </ol>
     </li>
+
+    <p> Note that some categories may not be available for the species or cache
+    version that you are using; in these cases the category will be skipped and
+    the next in line used. </p>
     
     <li><b><a href="vep_options.html#opt_pick_allele">--pick_allele</a></b>: as above, but chooses one consequence block per variant allele. This can be useful for <a href="../vep_formats.html#vcf">VCF input files</a> with more than one ALT allele</li>
     
