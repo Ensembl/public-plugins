@@ -74,7 +74,7 @@ sub content {
     } else {
       for (keys %ids) {
         my ($latest_release) = reverse sort keys %{$ids{$_}};
-        $ids{$_}{$current} = delete $ids{$_}{$latest_release};
+        $ids{$_}{$current} = $ids{$_}{$latest_release};
       }
     }
 
