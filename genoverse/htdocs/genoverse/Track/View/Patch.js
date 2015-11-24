@@ -55,19 +55,23 @@ Genoverse.Track.View.Patch = Genoverse.Track.View.extend({
     }
     
     for (var i = 0; i < features.length; i++) {
-      this.drawFeature(
-        $.extend({}, features[i], {
-            x     : features[i].position[scale].X,
-            width : features[i].position[scale].width,
-            color : features[i].background,
-            label : false
-          },
-          reverse ?
-            { height: features[i].position[scale].Y, y: 0 } :
-            { height: context.canvas.height,         y: context.canvas.height === 1 ? 0 : features[i].position[scale].bottom - this.prop('margin') }
-        ),
-        context, false, scale
-      );
+
+      if (features[i].background) {
+
+        this.drawFeature(
+          $.extend({}, features[i], {
+              x     : features[i].position[scale].X,
+              width : features[i].position[scale].width,
+              color : features[i].background,
+              label : false
+            },
+            reverse ?
+              { height: features[i].position[scale].Y, y: 0 } :
+              { height: context.canvas.height,         y: context.canvas.height === 1 ? 0 : features[i].position[scale].bottom - this.prop('margin') }
+          ),
+          context, false, scale
+        );
+      }
     }
   }
 });
