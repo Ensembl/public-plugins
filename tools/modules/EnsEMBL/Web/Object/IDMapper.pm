@@ -74,6 +74,22 @@ sub species_list {
   return $self->{'_species_list'};
 }
 
+sub handle_download {
+  ## Method reached by url ensembl.org/Download/IDMapper/
+  my ($self, $r) = @_;
+  my $job = $self->get_requested_job;
+
+  my $result_file = sprintf '%s/%s', $job->job_dir, $job->dispatcher_data->{'output_file'};
+
+  my $content = file_get_contents($result_file, sub { s/\R/\r\n/r });
+
+  $r->headers_out->add('Content-Type'         => 'text/plain');
+  $r->headers_out->add('Content-Length'       => length $content);
+  $r->headers_out->add('Content-Disposition'  => sprintf 'attachment; filename=%s.idmapper.txt', $self->create_url_param);
+
+  print $content;
+}
+
 sub get_archive_link {
   ## Gets an archive url for the given id and release
   ## @param Stable id
