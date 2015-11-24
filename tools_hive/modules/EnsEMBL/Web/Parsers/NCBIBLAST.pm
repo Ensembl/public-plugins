@@ -22,29 +22,37 @@ use strict;
 use warnings;
 
 use Bio::EnsEMBL::DBSQL::DBAdaptor;
-use Bio::EnsEMBL::Utils::IO qw(iterate_file);
+use EnsEMBL::Web::Utils::FileHandler qw(file_get_contents);
+
+use parent qw(EnsEMBL::Web::Parsers);
 
 sub new {
-  my ($class, $runnable) = @_;
-  return bless {
-    'dba'       => Bio::EnsEMBL::DBSQL::DBAdaptor->new(%{$runnable->param('dba')}),
-    'runnable'  => $runnable
-  }, $class;
+  my $self = shift->SUPER::new(@_);
+  $self->{'dba'} = Bio::EnsEMBL::DBSQL::DBAdaptor->new(%{$self->runnable->param('dba')});
+  return $self;
+}
+
+sub disconnect_dbc {
+  my $self = shift;
+  $self->{'dba'}->dbc->disconnect_if_idle;
+}
+
+sub get_adapter {
+  my ($self, $feature_type) = @_;
+  return $self->{"_adaptor_$feature_type"} ||= $self->{'dba'}->get_adaptor($feature_type);
 }
 
 sub parse {
   my ($self, $file) = @_;
-  my $runnable      = $self->{'runnable'};
-  my $dba           = $self->{'dba'};
+  my $runnable      = $self->runnable;
   my $species       = $runnable->param('species');
   my $source_type   = $runnable->param('source');
 
-  my @results;
+  my @results       = file_get_contents($file, sub {
 
-  iterate_file($file, sub {
-    my ($line)    = @_;
+    chomp;
 
-    my @hit_data  = split (/\t/, $line);
+    my @hit_data  = split /\t/, $_;
     my $q_ori     = $hit_data[1] < $hit_data[2] ? 1 : -1;
     my $t_ori     = $hit_data[4] < $hit_data[5] ? 1 : -1;
 
@@ -69,16 +77,16 @@ sub parse {
       aln           => $hit_data[10],
     };
 
-    push @results, $self->map_to_genome($hit, $species, $source_type, $dba);
+    return $self->map_to_genome($hit, $species, $source_type);
   });
 
-  $dba->dbc->disconnect_if_idle;
+  $self->disconnect_dbc;
 
   return \@results;
 }
 
 sub map_to_genome {
-  my ($self, $hit, $species, $source_type, $dba) = @_;
+  my ($self, $hit, $species, $source_type) = @_;
 
   my ($g_id, $g_start, $g_end, $g_ori, $g_coords);
 
@@ -93,8 +101,7 @@ sub map_to_genome {
 
     my $feature_type  = $source_type =~ /abinitio/i ? 'PredictionTranscript' : $source_type =~ /pep/i ? 'Translation' : 'Transcript';
     my $mapper        = $source_type =~ /pep/i ? 'pep2genomic' : 'cdna2genomic';
-    my $adaptor       = $dba->get_adaptor($feature_type);
-    my $object        = $adaptor->fetch_by_stable_id($hit->{'tid'});
+    my $object        = $self->get_adapter($feature_type)->fetch_by_stable_id($hit->{'tid'});
 
     if ($object) {
 
