@@ -369,6 +369,12 @@ sub _build_identifiers {
           'helptip'       => $fd->{maf_esp}->{helptip},
           'value'         => 'yes',
           'checked'       => 0
+        }, {
+          'name'          => "maf_exac",
+          'caption'       => $fd->{maf_exac}->{label},
+          'helptip'       => $fd->{maf_exac}->{helptip},
+          'value'         => 'yes',
+          'checked'       => 0
         }]
       }), $fieldset->add_field({
         'type' => 'checkbox',
@@ -446,6 +452,16 @@ sub _build_extra {
     'name'        => 'tsl',
     'label'       => $fd->{tsl}->{label},
     'helptip'     => $fd->{tsl}->{helptip},
+    'value'       => 'yes',
+    'checked'     => 1,
+  });
+
+  $fieldset->add_field({
+    'field_class' => '_stt_core _stt_gencode_basic _stt_merged',
+    'type'        => 'checkbox',
+    'name'        => 'appris',
+    'label'       => $fd->{appris}->{label},
+    'helptip'     => $fd->{appris}->{helptip},
     'value'       => 'yes',
     'checked'     => 1,
   });

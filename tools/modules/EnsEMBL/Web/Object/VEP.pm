@@ -221,12 +221,17 @@ sub get_form_details {
 
       maf_1kg => {
         'label'   => '1000 Genomes continental allele frequencies',
-        'helptip' => 'Report the allele frequencies for the combined 1000 Genomes Project phase 1 continental populations - AFR (African), AMR (American), ASN (Asian) and EUR (European)',
+        'helptip' => 'Report allele frequencies for the combined 1000 Genomes Project phase 1 continental populations - AFR (African), AMR (American), EAS (East Asian), EUR (European) and SAS (South Asian)',
       },
 
       maf_esp => {
         'label'   => 'ESP allele frequencies',
-        'helptip' => 'Report the allele frequencies for the NHLBI Exome Sequencing Project populations - AA (African American) and EA (European American)',
+        'helptip' => 'Report allele frequencies for the NHLBI Exome Sequencing Project populations - AA (African American) and EA (European American)',
+      },
+
+      maf_exac => {
+        'label'   => 'ExAC allele frequencies',
+        'helptip' => 'Report allele frequencies from the Exome Aggregation Consortium',
       },
 
       pubmed => {
@@ -257,6 +262,11 @@ sub get_form_details {
       tsl => {
         'label'   => 'Transcript support level',
         'helptip' => encode_entities($self->hub->glossary_lookup->{'TSL'} || ''),
+      },
+
+      appris => {
+        'label'   => 'APPRIS',
+        'helptip' => encode_entities($self->hub->glossary_lookup->{'APPRIS'} || ''),
       },
 
       canonical => {

@@ -91,7 +91,7 @@ sub prepare_to_dispatch {
 
     # MAFs in human
     if ($species eq 'Homo_sapiens') {
-      ($job_data->{'gmaf'} // '') eq 'yes' and $vep_configs->{$_} = 'yes' for qw(gmaf maf_1kg maf_esp);
+      ($job_data->{'gmaf'} // '') eq 'yes' and $vep_configs->{$_} = 'yes' for qw(gmaf maf_1kg maf_esp maf_exac);
       $vep_configs->{'pubmed'} = $job_data->{'pubmed'} if $job_data->{'pubmed'};
     }
   }
@@ -102,11 +102,11 @@ sub prepare_to_dispatch {
   $vep_configs->{'stats_file'}  = 'stats.txt';
 
   # extra and identifiers
-  $job_data->{$_} and $vep_configs->{$_} = $job_data->{$_} for qw(numbers canonical domains biotype symbol ccds protein uniprot hgvs coding_only all_refseq tsl failed);
+  $job_data->{$_} and $vep_configs->{$_} = $job_data->{$_} for qw(numbers canonical domains biotype symbol ccds protein uniprot hgvs coding_only all_refseq tsl appris failed);
 
   # check for incompatibilities
   if ($vep_configs->{'most_severe'} || $vep_configs->{'summary'}) {
-    delete $vep_configs->{$_} for(qw(coding_only protein symbol sift polyphen ccds canonical numbers domains biotype tsl));
+    delete $vep_configs->{$_} for(qw(coding_only protein symbol sift polyphen ccds canonical numbers domains biotype tsl appris));
   }
   
   # plugins
