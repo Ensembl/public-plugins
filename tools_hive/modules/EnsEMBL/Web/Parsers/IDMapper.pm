@@ -31,12 +31,11 @@ sub parse {
   my %rows;
 
   for ( map  { 'old' => $_->[0] =~ s/\.[0-9]+$//r, 'new' => $_->[1], 'release' => $_->[2] },  # create a hash for each filtered row
-        sort { $b->[2] <=> $a->[2] || $b->[3] <=> $a->[3] || $b->[1] cmp $a->[1] }            # move the latest release with max score and latest id version on top
         grep { $_->[0] && $_->[0] ne 'Old stable ID' && $_->[1] && $_->[2] !~ /\D/ }          # exclude headers and rows with retired ids
         file_get_contents($file, sub { return [ map s/^\s+|\s+$//gr, split ',', $_ ]; })      # parse each row of CVS into an array
   ) {
-    $rows{$_->{'old'}}{'id'}              = $_->{'old'};
-    $rows{$_->{'old'}}{$_->{'release'}} ||= $_->{'new'};
+    $rows{$_->{'old'}}{'id'} = $_->{'old'};
+    push @{$rows{$_->{'old'}}{'mappings'}}, [ $_->{'release'}, $_->{'new'} ];
   }
 
   return [ values %rows ];
