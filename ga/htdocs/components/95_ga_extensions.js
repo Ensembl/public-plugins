@@ -235,3 +235,21 @@ Ensembl.Panel.Configurator = Ensembl.Panel.Configurator.extend({
     });
   }
 });
+
+Ensembl.DataTable.orig_DataTableInit = Ensembl.DataTable.dataTableInit;
+Ensembl.DataTable.dataTableInit = function() {
+
+  Ensembl.DataTable.orig_DataTableInit.apply(this, arguments);
+
+  Ensembl.GA.registerConfigs([
+
+    // Datatable CSV export icon on the RHS og datatable header
+    {
+      selector  : this.el.find('.dataTables_export a'),
+      event     : 'click',
+      category  : 'TableIcon',
+      action    : function () { return $(this.currentTarget).closest('.dataTables_top').parent().find('table.data_table').prop('id') || 'MissingTableID'; },
+      label     : function () { return this.currentTarget.innerHTML.match(/whole/) ? 'whole' : 'see'; }
+    }
+  ]);
+};
