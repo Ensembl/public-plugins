@@ -240,7 +240,10 @@ Ensembl.GA.EventConfig.destroy = function(obj) {
   obj = null;
 };
 
-// initialise ga on document load
-$(document).on('ready', function () {
-  Ensembl.GA.init();
+// initialise ga when Ensembl initializes
+Ensembl.extend({
+  initialize: function () {
+    Ensembl.GA.init();
+    this.base.apply(this, arguments);
+  }
 });
