@@ -138,7 +138,7 @@ Ensembl.Panel.Configurator = Ensembl.Panel.Configurator.extend({
         data      : { component: this.component },
         category  : 'Config-ViewConfig',
         action    : function () { return this.data.component + '-' + this.currentTarget.name; },
-        label     : function () { return this.currentTarget.value; }
+        label     : function () { return this.currentTarget.type === 'checkbox' ? this.currentTarget.checked ? 'true' : 'false' : this.currentTarget.value; }
       },
 
       // 'Find a track' input box
