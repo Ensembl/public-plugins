@@ -205,15 +205,6 @@ Ensembl.GA.eventConfigs.push(
     action          : function () { return this.currentTarget.className.match(/mr-reset/) ? 'MarkingOnOff' : this.getURL().replace(this.data.panelId, '').replace(/\/$/, ''); },
     label           : function () { return this.data.panelId; }
   }, {
-    id              : 'ImageToolbar-ExportMenu',
-    url             : /.+/,
-    selector        : '>div.iexport_menu a',
-    wrapper         : 'body',
-    event           : 'click',
-    category        : 'ImageToolbar',
-    action          : function () { return '/Export' + this.getURL().replace(/\/(Component|Web|main)/g, ''); },
-    label           : function () { return ($(this.currentTarget).prop('href').match(/export\=([^;&]+)/) || ['']).pop(); }
-  }, {
     id              : 'ImageToolbar-ResizeMenu',
     url             : /.+/,
     selector        : '>div.image_resize_menu a',
