@@ -921,9 +921,9 @@ foreach my $svf (@{$svfs}) {
 <h2 id="ag" style="font-size:large">Alleles and Genotypes</h2>
 
 <div style="width:800px" class="info">
-  <h3>Requirement for 1000 Genomes data</h3>
+  <h3>Requirement for 1000 Genomes data and other large genotyping projects</h3>
   <div class="message-pad">
-    <p>1000 Genomes Project Phase 3 data is accessed via VCF files stored on Ensembl's FTP server. The API makes this access seamless, though it requires you install some extra software dependencies detailed on the <a href="/info/docs/api/api_installation.html">API installation page</a>. See also this <a href="http://www.ensembl.info/blog/2015/06/18/1000-genomes-phase-3-frequencies-genotypes-and-ld-data/" rel="external">blog post</a>.
+    <p>1000 Genomes Project Phase 3 data is accessed via VCF files stored on Ensembl's FTP server. The API makes this access seamless, though it requires you install some extra software dependencies detailed on the <a href="/info/docs/api/api_installation.html#variation">API installation page</a>. See also this <a href="http://www.ensembl.info/blog/2015/06/18/1000-genomes-phase-3-frequencies-genotypes-and-ld-data/" rel="external">blog post</a>.
     </p>
   </div>
 </div>
@@ -977,15 +977,15 @@ foreach my $allele (@{$alleles}) {
   <div style="clear:both"></div>
 </div>
 
-<p>
-<b>NB:</b> to retrieve external data e.g. from the 1000 Genomes phase 3 in human, remember to add the following code before making a call to retrieve alleles, genotypes or LD data:
-</p>
-
-<pre class="code sh_perl">$registry-&gt;get_adaptor('human', 'variation')->use_vcf(1);</pre>
-
-<p>
-This instructs the API to integrate data fetched from VCF files alongside data from the Ensembl MySQL databases. No further configuration is required; the API is pre-configured to access indexed VCF files on the Ensembl FTP server.
-</p>
+<div class="info">
+  <h3>Retrieve external data (e.g. 1000 Genomes phase 3)</h3>
+  <div class="message-pad">
+    <p>To retrieve external data e.g. from the 1000 Genomes phase 3 in human, remember to add the following code before making a call to retrieve alleles, genotypes or LD data:</p>
+    <pre class="code sh_perl">$registry-&gt;get_adaptor('human', 'variation')->use_vcf(1);</pre>
+    <p>This instructs the API to integrate data fetched from VCF files alongside data from the Ensembl MySQL databases. No further configuration is required; the API is pre-configured to access indexed VCF files on the Ensembl FTP server.
+    </p>
+  </div>
+</div>
 
 
 <br />
