@@ -278,7 +278,7 @@ EOF
       # QUICK LINKS #
       ###############
       links => [
-        { title => "Variation table",
+        { title => "Variant table",
           url => "/{species}/Gene/Variation_Gene/Table?g={id}",
           conditions => { "{feature_type}" => "^Gene\$" }
         },
@@ -378,7 +378,7 @@ EOF
           url => "/{species}/Transcript/Exons?t={id}&db={database_type}",
           conditions => { "{feature_type}" => "^Transcript\$" }
         },
-        { title => "Variation table",
+        { title => "Variant table",
           url => "/{species}/Transcript/Variation_Transcript/Table?t={id}&db={database_type}",
           conditions => { "{feature_type}" => "^Transcript\$" }
         },
