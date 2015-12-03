@@ -74,15 +74,22 @@ sub content {
     } else {
       for (keys %ids) {
         my ($latest_release) = reverse sort keys %{$ids{$_}};
-        $ids{$_}{$current} = delete $ids{$_}{$latest_release};
+        $ids{$_}{$current} = $ids{$_}{$latest_release};
       }
     }
 
     foreach my $new_id (keys %ids) {
+      my $mapping_div = $self->dom->create_element('div', {'children' => [ map {
+        'node_name'   => 'p',
+        'inner_HTML'  => sprintf('<b>%s</b>: %s', $_, $self->_decorate($new_id, $ids{$new_id}{$_}, $_))
+      }, sort {$b <=> $a} keys %{$ids{$new_id}} ]});
+
+      $mapping_div->last_child->set_attribute('class', 'no-bottom-margin');
+
       push @rows, {
         'id'      => $self->html_encode($old_id->{'id'}),
         'new'     => $self->html_encode($new_id),
-        'release' => join '', map sprintf('<p><b>%s</b>: %s</p>', $_, $self->_decorate($new_id, $ids{$new_id}{$_}, $_)), sort {$b <=> $a} keys %{$ids{$new_id}}
+        'release' => $mapping_div->render
       };
     }
   }

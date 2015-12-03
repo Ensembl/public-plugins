@@ -54,7 +54,8 @@ Ensembl.Panel.Masthead = Ensembl.Panel.Masthead.extend({
         this.accountsBookmarkData = form.serialize();
       }
       
-      $.ajax(this.accountsRefreshURL, {
+      $.ajax({
+        'url': this.accountsRefreshURL,
         'context': this,
         'data': this.accountsBookmarkData,
         'type': 'POST',

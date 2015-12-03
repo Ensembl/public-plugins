@@ -19,7 +19,7 @@ advantage of code provided by the <a href="http://www.bioperl.org/wiki/Main_Page
 installation of the BioPerl package is included in these instructions. The Ensembl API is compatible with Perl version 5.10.
 </p>
 
-<h2>Video Tutorial</h2>
+<h2 id="video">Video Tutorial</h2>
 
 <p>
 Ensembl has produced a video tutorial about how to install the API. 
@@ -30,7 +30,7 @@ All commands in this video can be found from the following
 
 <p>[[MOVIE::481]]</p>
 
-<h2>Installation Procedure</h2>
+<h2 id="installation">Installation Procedure</h2>
 
 <p>
 There are two ways of installing the Perl API. You can <a href="/info/docs/api/api_git.html">clone it from GitHub using Git</a> 
@@ -141,7 +141,7 @@ use lib "$ENV{HOME}/src/ensembl-funcgen/modules";
 
 </ol>
 
-<h2>Variation genotype and frequency data</h2>
+<h2 id="variation">Variation genotype and frequency data</h2>
 
 <p>
   To retrieve genotype, frequency and linkage disequilibrium (LD) data for 1000 Genomes phase 3 variants, it is necessary to install a couple of extra dependencies:
@@ -152,7 +152,7 @@ use lib "$ENV{HOME}/src/ensembl-funcgen/modules";
     <p>Tabix utility and perl module:</p>
     <pre>
 cd ~/src
-git clone git@github.com:samtools/tabix.git
+git clone https://github.com/samtools/tabix.git
 cd tabix
 make
 cd perl
@@ -189,13 +189,13 @@ export PERL5LIB</pre>
   </li>
 </ol>
 
-<h2>Debugging an Installation</h2>
+<h2 id="debugging">Debugging an Installation</h2>
 
 <p>
 Sometimes installations can go wrong. You should follow our <a href='/info/docs/api/debug_installation_guide.html'>debugging installation guide</a> to help diagnose and resolve installation issues.
 </p>
 
-<h2>Tips for Windows and Mac Users</h2>
+<h2 id="tips">Tips for Windows and Mac Users</h2>
 
 <p>
 	Ensembl can be installed on both Windows and Mac machines however installation is not as straightforward as installing on Linux. We recommend you consult our two blog posts detailing how you can install Ensembl on <a href='http://www.ensembl.info/blog/2014/02/10/ensembl-api-on-windows/' rel="external">Windows</a> and on <a href='http://www.ensembl.info/blog/2013/09/09/installing-perl-dbdmysql-and-ensembl-on-osx/' rel="external">OSX</a>. The fastest way to get up and running with Ensembl on these operating systems is to use our <a href='/info/data/virtual_machine.html'>virtual machine</a>.

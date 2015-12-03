@@ -65,7 +65,7 @@ sub parse {
       qend          => $hit_data[2],
       qori          => $q_ori,
       qframe        => $hit_data[11],
-      tid           => $hit_data[3],
+      tid           => $hit_data[3] =~ s/\..+//r,
       tstart        => $tstart,
       tend          => $tend,
       tori          => $t_ori,
