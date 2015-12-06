@@ -25,8 +25,9 @@ use parent qw(EnsEMBL::Web::ImageConfig);
 sub init_genoverse {
   my $self  = shift;
   my $hub   = $self->hub;
-  
-  $self->set_parameter('component', $hub->viewconfig->component) if $hub->viewconfig;
+  my $vc    = $hub->get_viewconfig('ViewTop', 'Location', 1);
+
+  $self->set_parameter('component', $vc->component) if $vc;
   $self->create_menus('options');
   $self->add_option('auto_height', undef, undef, undef, $hub->species_defs->GENOVERSE_TRACK_AUTO_HEIGHT ? 'normal' : 'off')->set('menu', 'no');
   
