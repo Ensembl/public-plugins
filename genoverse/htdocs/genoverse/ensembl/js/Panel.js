@@ -342,10 +342,15 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
     this.initHoverLabels();
   },
 
+  handleConfigClick: function (link) {
+    this.base(link);
+    $(link).css('opacity', 0.5).addClass('clicked').parents('._label_layer').removeClass('hover_label_spinner');
+  },
+
   changeConfiguration: function (config, trackName, renderer) {
     Ensembl.EventManager.triggerSpecific('changeConfiguration', 'modal_config_' + config, trackName, renderer);
     this.updateTrackRenderer(trackName, renderer);
-    this.elLk.hoverLabels.filter('.' + trackName).closest('._label_layer').removeClass('hover_label_spinner');
+    this.elLk.hoverLabels.filter('.' + trackName).find('.clicked').css('opacity', 1);
   },
 
   updateTrackRenderer: function (trackName, renderer) {
