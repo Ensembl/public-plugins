@@ -345,6 +345,7 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
   changeConfiguration: function (config, trackName, renderer) {
     Ensembl.EventManager.triggerSpecific('changeConfiguration', 'modal_config_' + config, trackName, renderer);
     this.updateTrackRenderer(trackName, renderer);
+    this.elLk.hoverLabels.filter('.' + trackName).closest('._label_layer').removeClass('hover_label_spinner');
   },
 
   updateTrackRenderer: function (trackName, renderer) {
