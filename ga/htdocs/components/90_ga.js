@@ -243,6 +243,7 @@ Ensembl.GA.EventConfig.destroy = function(obj) {
 // initialise ga when Ensembl initializes
 Ensembl.extend({
   initialize: function () {
+    Ensembl.setSpecies();
     Ensembl.GA.init();
     this.base.apply(this, arguments);
   }
