@@ -69,16 +69,8 @@ sub colour { # some calls are made to this method while it's key may not be adde
   return shift->data->{'colour'};
 }
 
-sub label { # if this record is a das record, the webcode expects it to have this method
-  return shift->data->{'label'};
-}
-
 sub assembly { # We store assembly ID in an arbitrary field
   return shift->data->{'module_version'};
-}
-
-sub logic_name {  # if this record is a das record, the webcode expects it to have this method
-  return shift->data->{'logic_name'};
 }
 
 sub clone {

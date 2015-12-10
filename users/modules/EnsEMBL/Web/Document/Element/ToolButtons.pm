@@ -71,7 +71,7 @@ sub _has_data {
   my $hub  = $self->hub;
   my $user = $hub->user;
 
-  return !!($user && (grep $user->get_records($_), qw(uploads urls dases)))
+  return !!($user && (grep $user->get_records($_), qw(uploads urls)))
 }
 
 1;

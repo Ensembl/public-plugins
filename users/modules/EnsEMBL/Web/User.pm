@@ -24,7 +24,6 @@ use warnings;
 use HTML::Entities qw(encode_entities);
 
 use EnsEMBL::Web::Record;
-use EnsEMBL::Web::DASConfig;
 use EnsEMBL::Web::Exceptions;
 
 use ORM::EnsEMBL::DB::Accounts::Manager::User;
@@ -56,7 +55,6 @@ sub logins                { shift->_goto_rose_object('logins');             }
 sub records               { shift->_goto_rose_object('records');            }
 sub bookmarks             { shift->_goto_rose_object('bookmarks');          }
 sub annotations           { shift->_goto_rose_object('annotations');        }
-sub dases                 { shift->_goto_rose_object('dases');              }
 sub newsfilters           { shift->_goto_rose_object('newsfilters');        }
 sub specieslists          { shift->_goto_rose_object('specieslists');       }
 sub histories             { shift->_goto_rose_object('histories');          }
@@ -216,10 +214,6 @@ sub add_to_urls {
   return shift->_add_to_records('url', @_);
 }
 
-sub add_to_dases {
-  return shift->_add_to_records('das', @_);
-}
-
 sub _records {
   my ($self, $type, $id) = @_;
   return $self->rose_object ? $self->rose_object->find_records('query' => [ 'type' => $type, $id ? ('record_id' => $id) : () ]) : ();
@@ -227,44 +221,6 @@ sub _records {
 
 sub uploads { return shift->_records('upload', @_); }
 sub urls    { return shift->_records('url', @_); }
-
-sub get_all_das {
-  my $self    = shift;
-  my $species = shift || $ENV{'ENSEMBL_SPECIES'};
-
-  $species = '' if $species eq 'common';
-
-  my %by_name = ();
-  my %by_url  = ();
-  for my $das_record ( $self->get_records('dases') ) {
-    # Create new DAS source from value in database...
-    my $das = EnsEMBL::Web::DASConfig->new_from_hashref( $das_record->data );
-    $das->matches_species( $species ) || next;
-    $das->category( 'user' );
-    $by_name{ $das->logic_name } = $das;
-    $by_url { $das->full_url   } = $das;
-  }
-
-  return wantarray ? ( \%by_name, \%by_url ) : \%by_name;
-}
-
-sub add_das {
-  ## Adds a DAS config to user records
-  ## @param EnsEMBL::Web::DASConfig
-  ## @return Record for saved das config, undef if invalid DASConfig or saving unsuccessful
-  my ($self, $das) = @_;
-  my $das_record;
-
-  if ($das && ref $das && ref $das eq 'EnsEMBL::Web::DASConfig') {
-    $das->category('user');
-    $das->mark_altered();
-
-    $das_record = $self->create_record('das');
-    $das_record->data($das);
-    $das_record->save('user' => $self->rose_object);
-  }
-  return $das_record;
-}
 
 sub favourite_species {
   ## Gets all the species favourited by the user
