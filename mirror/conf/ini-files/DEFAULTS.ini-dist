@@ -22,35 +22,3 @@ DATABASE_DBPASS     =
 ; Default font-size for graphic text... (may need to change depending on fonts used above)
 ; GRAPHIC_FONTSIZE     = 8
 
-[ENSEMBL_INTERNAL_DAS_SOURCES]
-UniProt = 1
-Superfam  = 1
-Phenotypes = 1
-
-[UniProt]
-dsn         = aristotle
-description = Protein knowledgebase
-url         = http://www.ebi.ac.uk/das-srv/uniprot/das
-type        = uniprot/swissprot_acc
-authority   = http://www.uniprot.org
-on          = [ geneview protview ]
-col         = orchid4
-
-[Superfam]
-; dsn       = CHANGEME
-description = HMM library and genome assignments
-url         = http://supfam.cs.bris.ac.uk/SUPERFAMILY/cgi-bin/das
-type        = ensembl_peptide
-on          = [ protview ]
-col         = orchid1
-
-[Phenotypes]
-dsn         = phenotypes
-description = Associated directly or via orthologues or protein families
-url         = http://www.ebi.ac.uk/das-srv/genedas/das
-type        = ensembl_gene
-authority   =
-on          = [ geneview ]
-col         =
-
-[ENSEMBL_DICTIONARY] 
