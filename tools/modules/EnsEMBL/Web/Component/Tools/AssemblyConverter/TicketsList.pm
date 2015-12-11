@@ -29,11 +29,14 @@ use parent qw(
 sub job_status_tag {
   ## @override
   ## Remove link from the status tag of finished jobs
-  my $self  = shift;
-  my $tag   = $self->SUPER::job_status_tag(@_);
+  my $self    = shift;
+  my $status  = $_[1];
+  my $tag     = $self->SUPER::job_status_tag(@_);
 
-  $tag->{'title'} = q(This job is finished. Please click on the 'Download&nbsp;results' link to download result file.);
-  $tag->{'href'}  = '';
+  if ($status eq 'done') {
+    $tag->{'title'} = q(This job is finished. Please click on the 'Download&nbsp;results' link to download result file.);
+    $tag->{'href'}  = '';
+  }
 
   return $tag;
 }
