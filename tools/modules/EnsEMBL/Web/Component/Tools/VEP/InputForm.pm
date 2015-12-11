@@ -527,6 +527,12 @@ sub _build_extra {
 
   for (@regu_species) {
 
+    # get available cell types
+    my $aa = $hub->get_adaptor('get_AnalysisAdaptor', 'funcgen', $_);
+    my $analysis = $aa->fetch_by_logic_name('Regulatory_Build');
+    my $fsa = $hub->get_adaptor('get_FeatureSetAdaptor', 'funcgen', $_);
+    my @cell_types = map {$_->cell_type->name} @{$fsa->fetch_all_by_Analysis($analysis)};
+
     $fieldset->add_field({
       'field_class'   => "_stt_$_",
       'label'         => $fd->{regulatory}->{label},
@@ -552,7 +558,7 @@ sub _build_extra {
         'multiple'      => 1,
         'label'         => $fd->{cell_type}->{label},
         'name'          => "cell_type_$_",
-        'values'        => [ {'value' => '', 'caption' => 'None'}, map { 'value' => $_->name, 'caption' => $_->name }, @{$hub->get_adaptor('get_CellTypeAdaptor', 'funcgen', $_)->fetch_all} ]
+        'values'        => [ {'value' => '', 'caption' => 'None'}, map { 'value' => $_, 'caption' => $_ }, @cell_types ]
       }]
     });
   }
