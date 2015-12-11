@@ -15,9 +15,6 @@
   <li><a href="#apache">Apache and mod_perl</a> - Open source web server</li>
   <li><a href="#mysql">MySQL</a> - Open source database server</li>
   <li><a href="#sqlite">SQLite</a> - alternative open source database server for session information (if not installing MySQL)</li>
-  <!--
-  <li><a href="#dotter">Dotter</a> - Graphical alignment package</li>
-  -->
 </ul> 
 
 <p>These applications are not version-specific for Ensembl; that is, if you upgrade your Ensembl installation
@@ -221,9 +218,6 @@ make install
     <dd>A Graphics library
       <br />Note: may require additional modules. Please read install docs.</dd>
   
-    <dt>GraphViz</dt>
-    <dd>A wrapper for AT&T's Graphviz, used to create ontology graphs</dd>
-
     <dt>Hash::Merge</dt>
     <dd>Used to merge data from multiple configuration files</dd>
 
@@ -275,10 +269,6 @@ make install
     <dt>RTF::Writer</dt>
     <dd>Output web content in RTF format</dd>
  
-    <dt>SOAP::Lite</dt>
-    <dd>used by DAS to communicate with DAS sources
-      <br />Note: may require additional modules. Please read install docs.</dd>
-  
     <dt>Spreadsheet::WriteExcel</dt>
     <dd>used for exporting Excel spreadsheets</dd>
   
@@ -291,21 +281,6 @@ make install
     <dt>URI and URI::Escape</dt>
     <dd>Used extensively to percent-encode and percent-decode unsafe characters</dd>
 
-    <dt>XML::Parser</dt>
-    <dd><p>used by DAS to parse DAS sources
-    <br />Note: module is a wrapper around the expat library, which should be installed
-first:
-<br />Download the expat source from http://sourceforge.net/projects/expat/. Get the
-latest version (currently expat-1.95.8.tar.gz). Run the following commands:
-</p>
-<pre class="code">
-gunzip &lt; expat-1.95.8.tar.gz | tar xvf -
-cd expat-1.95.8
-./configure
-make
-make install
-</pre></dd>
-  
     <dt>XML::Atom</dt>
     <dd>Atom feed parser, used to embed Ensembl blog entries on home page</dd>
 
@@ -314,78 +289,5 @@ make install
 
 </dl>
  
-<!-- 
-<h3>Ensembl utilities</h3>
-
-<p>Utility scripts in /utils may need extra modules not used by the website itself.</p>
--->
-
-<h3>BlastView</h3>
-
-<p>The following are only needed for a local install of blastview within Ensembl:</p>
-
-<dl>
-    <dt>HTML::Template</dt>
-    <dd>Used by BlastView</dd>
-</dl>  
-
-<!--
-<h2 id="dotter">Dotter</h2>
-<p>The Ensembl website contains a page called DotterView which displays a graphical dotplot comparison
-of two sequences, using the application Dotter. If you wish to use this page on a local installation you
-will need a local Dotter binary:</p>
-<p>Dotter is part of the AceDB package available at:</p>
-<blockquote><a href="http://www.acedb.org/Software/Downloads/supported.shtml" rel="external">http://www.acedb.org/Software/Downloads/supported.shtml</a></blockquote>
-<p>Pre-built binaries are available for alpha/Tru64 unix and intel/linux. All other flavours will have to be built
-from sources.</p>
-<p>The acedb code makes use of the GTK graphics and GNU readline packages. If you don't have these
-on your system you can either install them yourself or use the copies distributed with the acedb source.</p>
-<p>To install them go to</p>
-  <a rel="external" href="http://www.gtk.org">www.gtk.org</a>
-<p>for the GTK package and</p>
-  <a href="ftp://ftp.cwru.edu/pub/bash/readline-4.3.tar.gz">ftp://ftp.cwru.edu/pub/bash/readline-4.3.tar.gz</a>
-<p>for readline.</p>
-<p>Follow the GTK and GNU instructions for installing these packages.</p>
-
-<p>If you want to use the versions distributed with the acedb source then follow the instructions for making
-them in the next section.</p>
-<p>Next ungzip/untar the acedb package into an temporary directory:</p>
-<pre class="code">mkdir acedb
-mv ACEDB-source.4_9l.tar.gz ./acedb/
-cd ./acedb
-gzip -d &lt; ACEDB-source.4_9l.tar.gz | tar xvf -
-</pre>
-<p>Set an environment variable to tell the build process what platform you are building on - one of:</p>
-<kbd>ALPHA_4 ALPHA_4_GCC ALPHA_4_GCC_OPT ALPHA_4_LINUX ALPHA_4_OLDSTYLE ALPHA_4_OPT ALPHA_5 ALPHA_CHRONO_4<br />
-DARWIN_4<br />
-FreeBSD<br />
-FUJITSU_4<br />
-HP_4 HP_4_GCC HP_4_OPT<br />
-IBM_4_3 IBM_4<br />
-IRIX4_4<br />
-LINUX_4 LINUX_MAC_4<br />
-MACOSX_4_DEF<br />
-NEC_4 NEC_4_R10 NEC_4_R11<br />
-NEXT_4<br />
-POSIX_4 POSIX_4_GCC<br />
-SGI_4 SGI_4_GCC SGI_4_IRIX5 SGI_4_PURE SGI_5_GCC SGI_65_GCC_DEF
-SOLARIS_4 SOLARIS_4_OPT SOLARIS_4_RELEASE SUN_4_DEF
-WIN32_4</kbd>
-<p>For example (in csh):</p>
-<pre class="code">setenv ACEDB_MACHINE SOLARIS_4</pre>
-<p>Consult the AceDB documentation if you need more help.</p>
-
-<p>If you wish to use the GTK/readline packages distributed with acedb you should build them before
-building any acedb code:</p>
-<pre class="code">make gnulibs</pre>
-<p>To build the dotter binary issue the command:</p>
-<pre class="code">make dotter</pre>
-<p>(If you just run "make" you will build the whole of AceDB - which is unnecessary).</p>
-<p>The build will place the executable at:</p>
-<pre class="code">./bin.${ACEDB_MACHINE}/dotter</pre>
-<p>Check that the binary runs properly and then copy it to your Ensembl shared binaries directory.
-DotterView should now work.</p>
--->
-
 </body>
 </html>
