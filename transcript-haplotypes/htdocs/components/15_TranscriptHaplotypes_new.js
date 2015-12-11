@@ -92,9 +92,9 @@ Ensembl.Panel.TranscriptHaplotypes_new = Ensembl.Panel.Content.extend({
       '<h2>Details of haplotype ' + haplotype.name.replace(/\,/g, ',&#8203;') + '</h2><div>';
 
     var sections = [
-      { 'id': 'cds', 'title': 'Observed CDS haplotypes', 'sub': 'cdsHaplotypes'   },
       { 'id': 'seq', 'title': 'Aligned sequence',        'sub': 'alignedSequence' },
-      { 'id': 'raw', 'title': 'Raw sequence',            'sub': 'rawSequence'     },
+      { 'id': 'cds', 'title': 'Observed CDS haplotypes', 'sub': 'cdsHaplotypes'   },
+      { 'id': 'raw', 'title': 'Translated sequence',     'sub': 'rawSequence'     },
       { 'id': 'pop', 'title': 'Population frequencies',  'sub': 'populationTable' },
       { 'id': 'sam', 'title': 'Sample data',             'sub': 'sampleTable'     }
     ];
@@ -132,22 +132,23 @@ Ensembl.Panel.TranscriptHaplotypes_new = Ensembl.Panel.Content.extend({
     for(var i in cdss) {
       var cds = cdss[i];
 
-      var row = '<span id="' + cds.hex + '"><b>' + cds.name.replace(/\,/g, ',&#8203;') + '</b> (' + cds.count + ')</span>';
+      var row = '<span id="' + cds.hex + '"><b>c.ALT' + (parseInt(i) + 1) + ':</b> ' + cds.name.replace(/\,/g, ',&#8203;') + '</span>';
 
       row = row +
-        '<br/><a href="#" class="toggle closed" rel="seq-' + cds.hex + '">Raw sequence</a>' +
-        ' | <a href="#" class="toggle closed" rel="pop-' + cds.hex + '">Population frequencies</a>' +
-        ' | <a href="#" class="toggle closed" rel="sam-' + cds.hex + '">Sample data</a>';
+        '<br/>Observed count: ' + cds.count +
+        ' | <a href="#" class="toggle closed" rel="seq-' + cds.hex + '">Show CDS sequence</a>';// +
+        // ' | <a href="#" class="toggle closed" rel="pop-' + cds.hex + '">Population frequencies</a>' +
+        // ' | <a href="#" class="toggle closed" rel="sam-' + cds.hex + '">Sample data</a>';
 
       row = row + '<div class="hidden" style="margin-top: 1em; display: none" id="seq-' + cds.hex + '">' + panel.rawSequence(cds) + '</div>';
-      row = row + '<div class="hidden" style="margin-top: 1em; display: none" id="pop-' + cds.hex + '">' + panel.populationTable(cds) + '</div>';
-      row = row + '<div class="hidden" style="margin-top: 1em; display: none" id="sam-' + cds.hex + '">' + panel.sampleTable(cds) + '</div>';
+      // row = row + '<div class="hidden" style="margin-top: 1em; display: none" id="pop-' + cds.hex + '">' + panel.populationTable(cds) + '</div>';
+      // row = row + '<div class="hidden" style="margin-top: 1em; display: none" id="sam-' + cds.hex + '">' + panel.sampleTable(cds) + '</div>';
 
       rows.push(row);
     }
 
     var html =
-      '<p><i>NB: More than one CDS sequence may encode the same protein sequence</i></p>' +
+      (rows.length > 1 ? '<p><i>NB: Each CDS sequence below encodes the same protein sequence</i></p>' : '') +
       '<ol>' + rows.map(function(a) {return '<li>' + a + '</li>'}).join("") + '</ol>';
 
     return html;
@@ -278,16 +279,17 @@ Ensembl.Panel.TranscriptHaplotypes_new = Ensembl.Panel.Content.extend({
 
     // initialise with refProt, altProt, refCDS
     var seqsInit = [
-      '<span><b>Protein</b>  REF ' + ' '.repeat(padName) + '</span>',
-      '<span style="border-bottom: 1px solid grey">         ALT ' + ' '.repeat(padName) + '</span>',
-      '<b>CDS</b>      REF ' + ' '.repeat(padName)];
+      '<b>Protein</b>  p.REF ' + ' '.repeat(padName),
+      '         p.ALT ' + ' '.repeat(padName),
+      '<b>CDS</b>      c.REF ' + ' '.repeat(padName)
+    ];
 
     // initialise seq strings for alt CDS's
     for (var i = 0; i < others.length; i++) {
       seqsInit.push(
         '         <a class="_ht" href="#' + others[i].hex +
         '" title="' + others[i].name.replace(/\,/g, ',&#8203;') + ' (' + others[i].count + ')' +
-        '">ALT' + (i + 1).toString() + '</a> ' +
+        '">c.ALT' + (i + 1).toString() + '</a> ' +
         ' '.repeat(padName - (i+1).toString().length) // pad
       );
     }
@@ -395,8 +397,8 @@ Ensembl.Panel.TranscriptHaplotypes_new = Ensembl.Panel.Content.extend({
       '</ul></dd>' +
 
       '<dt>Protein changes</dt><dd><ul>' +
-      '<li><span style="color: white; background-color:red">Deleterious/damaging</span></li>' +
-      '<li><span style="color: white; background-color:green">Tolerated/benign</span></li>' +
+      '<li><span style="color: white; background-color:red">Deleterious or damaging</span></li>' +
+      '<li><span style="color: white; background-color:green">Tolerated or benign</span></li>' +
       '<li><span style="color: white; background-color:#ff69b4">Insertion or deletion</span></li>' +
       '<li><span style="color: white; background-color:red">Stop gain or loss</span></li>' +
       '<li><span style="color: white; background-color:grey">Other</span></li>' +
