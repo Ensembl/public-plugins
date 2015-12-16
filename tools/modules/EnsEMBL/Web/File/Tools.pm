@@ -28,11 +28,10 @@ sub new {
 ### @constructor
   my ($class, %args) = @_;
 
-  my $hub = $args{'hub'};
-  $args{'base_dir'} = 'tools';
-
-  my $dir = $args{'status'} || 'temporary';
-  $args{'base_extra'} = join('/', $dir, $args{'tool'}); 
+  ## Set directory structure
+  $args{'base_dir'}     = 'tools';
+  $args{'category'}     = $args{'status'} || 'temporary';
+  $args{'subcategory'}  = $args{'tool'}; 
 
   return $class->SUPER::new(%args);
 }
