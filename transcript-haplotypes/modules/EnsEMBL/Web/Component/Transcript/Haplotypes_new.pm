@@ -70,8 +70,9 @@ sub content {
     sort keys %$pop_struct;
 
   $table->add_columns(
-    { key => 'protein', title => 'Protein haplotype', sort => 'none',    help => 'Haplotype names represent a comma-separated list of differences to the reference sequence'},
-    { key => 'freq',    title => 'Frequency (count)', sort => 'numeric', help => 'Combined frequency across all samples and observed count in parentheses'},
+    { key => 'protein', title => 'Protein haplotype', sort => 'none',         help => 'Haplotype names represent a comma-separated list of differences to the reference sequence'},
+    { key => 'flags',   title => 'Flags',             sort => 'html_numeric', help => 'Flags indicating features of interest for each haplotype'},
+    { key => 'freq',    title => 'Frequency (count)', sort => 'numeric',      help => 'Combined frequency across all samples and observed count in parentheses'},
     @pop_cols,
     { key => 'extra',   title => '',                  sort => 'none' }
   );
@@ -183,10 +184,28 @@ sub render_protein_haplotype_row {
   my $pop_objs = $self->population_objects();
   my $pop_struct = $self->population_structure;
   my %pop_descs = map {$_->name => $_->description} @$pop_objs;
+
+  my @flags = @{$ph->get_all_flags()};
+  my $flags_html;
+
+  my $score = 0;
+  my %scores = (
+    'deleterious_sift_or_polyphen' => 2,
+    'indel' => 3,
+    'stop_change' => 4,
+  );
+  $score += $scores{$_} || 1 for @flags;
+
+  $flags_html = sprintf(
+    '<span class="hidden">%i</span><div style="width: 6em">%s</div>',
+    $score,
+    join(" ", map {$self->render_flag($_)} sort {($scores{$b} || 1) <=> ($scores{$a} || 1)} @flags)
+  );
   
   # create base row
   my $row = {
     protein => $self->render_protein_haplotype_name($ph),
+    flags   => $flags_html,
     freq    => sprintf("%.3g (%i)", $ph->frequency, $ph->count),
   };
   
@@ -219,6 +238,29 @@ sub render_protein_haplotype_name {
   $name =~ s/\,/\,\&\#8203\;/g;
 
   return $name;
+}
+
+sub render_flag {
+  my $self = shift;
+  my $flag = shift;
+
+  my $char = uc(substr($flag, 0, 1));
+  my $tt = ucfirst($flag);
+  $tt =~ s/\_/ /g;
+
+  my %colours = (
+    D => ['yellow',  'black'],
+    S => ['red',     'white'],
+    I => ['#ff69b4', 'white'],
+  );
+
+  return sprintf(
+    '<div style="background-color:%s; color:%s; black; width: 1.5em; display: inline-block; font-weight: bold;" class="_ht score" title="%s">%s</div>',
+    $colours{$char}->[0],
+    $colours{$char}->[1],
+    $tt,
+    $char
+  );
 }
 
 1;
