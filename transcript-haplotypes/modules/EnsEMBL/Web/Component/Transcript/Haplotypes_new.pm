@@ -74,7 +74,6 @@ sub content {
     { key => 'flags',   title => 'Flags',             sort => 'html_numeric', help => 'Flags indicating features of interest for each haplotype'},
     { key => 'freq',    title => 'Frequency (count)', sort => 'numeric',      help => 'Combined frequency across all samples and observed count in parentheses'},
     @pop_cols,
-    { key => 'extra',   title => '',                  sort => 'none' }
   );
   
   my @rows;
@@ -219,11 +218,6 @@ sub render_protein_haplotype_row {
     $row->{$short_pop} = sprintf("%.3g (%i)", $pop_freqs->{$pop}, $pop_counts->{$pop});
   }
   
-  $row->{extra} = sprintf(
-    '<a href="#details-view" class="details-link" rel="%s" title="Show full details of this haplotype">Details</a>',
-    $ph->_hex
-  );
-  
   return $row;
 }
 
@@ -234,10 +228,29 @@ sub render_protein_haplotype_name {
   my $name = $ph->name;
   $name =~ s/^.+?://;
 
+  my $display_name = $name;
+  my $hidden = '';
+
+  if(length($display_name) > 50) { 
+    $display_name = substr($display_name, 0, 50);
+    $display_name =~ s/\,[^\,]+$// unless substr($display_name, 50, 1) eq ',';
+    $display_name .= '...';
+
+    $hidden = sprintf('<span class="hidden">%s</span>', $name);
+  }
+
   # introduce line-breaking zero-width spaces
   $name =~ s/\,/\,\&\#8203\;/g;
 
-  return $name;
+  my $title = "Details for ".($name eq 'REF' ? 'reference haplotype' : 'haplotype '.$name);
+
+  return sprintf(
+    '%s<span class="_ht" title="%s"><a href="#details-view" class="details-link" rel="%s">%s</a></span>',
+    $hidden,
+    $title,
+    $ph->_hex,
+    $display_name
+  );
 }
 
 sub render_flag {
