@@ -101,7 +101,7 @@ sub content_iterate {
     # get perl binary, script path and command line options for the script
     my $script  = $species_defs->ENSEMBL_VEP_FILTER_SCRIPT or throw exception('VcfTabixError', 'No filter_vep.pl script defined (ENSEMBL_VEP_FILTER_SCRIPT)');
        $script  = join '/', $species_defs->ENSEMBL_SERVERROOT, $script;
-    my $perl    = 'perl -I ' . $SiteDefs::ENSEMBL_SERVERROOT . '/ensembl/modules';
+    my $perl    = sprintf 'perl -I %s -I %s', $species_defs->ENSEMBL_SERVERROOT.'/ensembl/modules', $species_defs->BIOPERL_DIR;
     my $opts    = $species_defs->ENSEMBL_VEP_FILTER_SCRIPT_OPTIONS || {};
        $opts    = join ' ', map { defined $opts->{$_} ? "$_ $opts->{$_}" : () } keys %$opts;
 
