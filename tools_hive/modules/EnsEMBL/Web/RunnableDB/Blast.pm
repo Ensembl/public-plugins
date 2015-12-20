@@ -123,6 +123,9 @@ sub run {
   my $rm_binary     = $self->param_is_defined('__repeat_mask_bin') ? $self->param('__repeat_mask_bin') : '';
   my $configs       = $self->param_is_defined('configs') ? $self->param('configs') : {};
 
+  # 83 only fix for max hsps - don't pass this param to blast script but apply filter on final results
+  $self->param('__hspmax', delete $configs->{'max_target_seqs'} || 0);
+
   # RepeatMasking needed?
   if (delete $configs->{'repeat_mask'}) {
 
