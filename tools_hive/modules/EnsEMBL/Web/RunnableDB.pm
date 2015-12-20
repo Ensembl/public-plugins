@@ -135,10 +135,13 @@ sub save_results {
     my $ticket_dbh  = DBI->connect(sprintf('dbi:mysql:%s:%s:%s', $ticket_db->{'-dbname'}, $ticket_db->{'-host'}, $ticket_db->{'-port'}), $ticket_db->{'-user'}, $ticket_db->{'-pass'}, { 'PrintError' => 0 });
 
     if ($ticket_dbh) {
-      my $now = $self->_get_time_now;
-      my $sth = $ticket_dbh->prepare('INSERT INTO `result` (`job_id`, `result_data`, `created_at`) values ' . join(',', map {'(?,?,?)'} @$result_data));
+      my $now   = $self->_get_time_now;
+      my $sth   = $ticket_dbh->prepare('INSERT INTO `result` (`job_id`, `result_data`, `created_at`) values ' . join(',', map {'(?,?,?)'} @$result_data));
+      my $count = $sth->execute(map {($job_id, _to_ensorm_datastructure_string($_ || {}), $now)} @$result_data);
 
-      $sth->execute(map {($job_id, _to_ensorm_datastructure_string($_ || {}), $now)} @$result_data);
+      if (!$count || $count < 1) {
+        throw exception ('HiveException', "Ticket database: Results could not be saved to ticket database.");
+      }
     } else {
 
       throw exception ('HiveException', "Ticket database: Connection could not be created ($DBI::errstr)");
