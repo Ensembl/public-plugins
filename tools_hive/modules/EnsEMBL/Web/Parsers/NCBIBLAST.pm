@@ -47,7 +47,7 @@ sub parse {
   my $runnable      = $self->runnable;
   my $species       = $runnable->param('species');
   my $source_type   = $runnable->param('source');
-  my $hspmax        = $runnable->param('__hspmax');
+  my $max_hits      = $runnable->param('__max_hits');
 
   my @results       = file_get_contents($file, sub {
 
@@ -80,7 +80,7 @@ sub parse {
   });
 
   @results = sort { $a->{'evalue'} <=> $b->{'evalue'} } @results;
-  @results = splice @results, 0, $hspmax if $hspmax && @results > $hspmax;
+  @results = splice @results, 0, $max_hits if $max_hits && @results > $max_hits; # only keep the requested number of hits
   @results = map $self->map_to_genome($_, $species, $source_type), @results;
 
   $self->disconnect_dbc;
