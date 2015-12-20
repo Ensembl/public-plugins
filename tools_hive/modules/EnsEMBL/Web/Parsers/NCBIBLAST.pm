@@ -47,6 +47,7 @@ sub parse {
   my $runnable      = $self->runnable;
   my $species       = $runnable->param('species');
   my $source_type   = $runnable->param('source');
+  my $hspmax        = $runnable->param('__hspmax');
 
   my @results       = file_get_contents($file, sub {
 
@@ -59,7 +60,7 @@ sub parse {
     my $tstart    = $hit_data[4] < $hit_data[5] ? $hit_data[4] : $hit_data[5];
     my $tend      = $hit_data[4] < $hit_data[5] ? $hit_data[5] : $hit_data[4];
 
-    my $hit       = {
+    return {
       qid           => $hit_data[0],
       qstart        => $hit_data[1],
       qend          => $hit_data[2],
@@ -76,9 +77,11 @@ sub parse {
       len           => $hit_data[9],
       aln           => $hit_data[10],
     };
-
-    return $self->map_to_genome($hit, $species, $source_type);
   });
+
+  @results = sort { $a->{'evalue'} <=> $b->{'evalue'} } @results;
+  @results = splice @results, 0, $hspmax if $hspmax && @results > $hspmax;
+  @results = map $self->map_to_genome($_, $species, $source_type), @results;
 
   $self->disconnect_dbc;
 
