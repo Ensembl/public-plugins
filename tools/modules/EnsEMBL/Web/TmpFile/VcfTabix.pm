@@ -241,9 +241,9 @@ sub _parse_line {
   my @rows;
 
   my @split     = split /\s+/, $line;
-  my %raw_data  = map { $row_headers->[$_] => $split[$_] } 0..$#split;
+  my %raw_data  = map { $row_headers->[$_] => $split[$_] } 0..$#$row_headers;
 
-  if($raw_data{'CHROM'} !~ /^chr_/i) {
+  if ($raw_data{'CHROM'} !~ /^chr_/i) {
     $raw_data{'CHROM'} =~ s/^chr(om)?(osome)?//i;
   }
 
