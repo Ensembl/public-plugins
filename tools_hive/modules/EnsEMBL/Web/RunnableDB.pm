@@ -140,7 +140,11 @@ sub save_results {
       my $count = $sth->execute(map {($job_id, _to_ensorm_datastructure_string($_ || {}), $now)} @$result_data);
 
       if (!$count || $count < 1) {
-        throw exception ('HiveException', "Ticket database: Results could not be saved to ticket database.");
+        if (ref($self) =~ /VEP/) {
+          $self->tools_warning({ 'message' => 'Too may variants to be displayed on the location page', 'type' => 'VEPWarning' });
+        } else {
+          throw exception ('HiveException', "Ticket database: Results could not be saved to ticket database.");
+        }
       }
     } else {
 
