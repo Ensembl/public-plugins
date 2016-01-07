@@ -86,7 +86,7 @@ most preview species have no genebuild and thus no stable IDs.</p>
 <ul>
   <li>Configuring options for a page</li>
   <li>Configuring a panel/image (changing the way tracks are rendered)</li>
-  <li>Attaching external DAS or UCSC-style data without using the Control Panel</li>
+  <li>Attaching external data via URL, without using the Control Panel</li>
 </ul>
 
 <p>
@@ -94,25 +94,25 @@ most preview species have no genebuild and thus no stable IDs.</p>
   appended to the URL for the relevant page:
 </p>
 
-<kbd>
+<p><kbd>
   context=key=value
-</kbd>
+</kbd></p>
 
 <p>
   Or when setting multiple values:
 </p>
 
-<kbd>
+<p><kbd>
   context=key1=value1,key2=value2,key2=value2
-</kbd>
+</kbd></p>
 
 <p>
   Or when setting multiple different types of parameter:
 </p>
 
-<kbd>
+<p><kbd>
   context1=key1=value1,key2=value2,key2=value2;context2=key3=value3
-</kbd>
+</kbd></p>
 
 <h3>Global Page Settings</h3>
 
@@ -121,18 +121,18 @@ most preview species have no genebuild and thus no stable IDs.</p>
   example, to turn off the top image on Location &gt; Region in detail:
 </p>
 
-<kbd>
+<p><kbd>
   config=show_top_panel=no
-</kbd>
+</kbd></p>
 
 <p>
   Appending this to the URL for the <em>Region in detail</em> page, the final
   URL is:
 </p>
 
-<kbd>
+<p><kbd>
   <a href="http://www.ensembl.org/Homo_sapiens/Location/View?r=1:1000-2000;config=show_top_panel=no">http://www.ensembl.org/Homo_sapiens/Location/View?r=1:1000-2000;config=show_top_panel=no</a>
-</kbd>
+</kbd></p>
 
 <p>
   To link directly to the <em>Exon Intron markup</em> panel (Transcript &gt;
@@ -140,9 +140,9 @@ most preview species have no genebuild and thus no stable IDs.</p>
   to be 60bp wide:
 </p>
 
-<kbd>
+<p><kbd>
   <a href="http://www.ensembl.org/Homo_sapiens/Transcript/Exons?t=ENST00000309255;config=flanking=60,seq_cols=60,fullseq=yes">http://www.ensembl.org/Homo_sapiens/Transcript/Exons?t=ENST00000309255;config=flanking=60,seq_cols=60,fullseq=yes</a>
-</kbd>
+</kbd></p>
 
 <h3>Configuring Panels</h3>
 
@@ -174,9 +174,9 @@ most preview species have no genebuild and thus no stable IDs.</p>
   with Ensembl transcripts from the core Ensembl database:
 </p>
 
-<kbd>
+<p><kbd>
   transcript_core_ensembl
-</kbd>
+</kbd></p>
 
 <h4>Renderers</h4>
 
@@ -202,113 +202,61 @@ most preview species have no genebuild and thus no stable IDs.</p>
   gene AND turn off the top panel in <em>Location &gt; Region in detail</em>:
 </p>
 
-<kbd>
+<p><kbd>
   <a href="http://www.ensembl.org/Homo_sapiens/Location/View?g=ENSG00000012048;contigviewbottom=transcript_core_ensembl=collapsed_nolabel;config=show_top_panel=no">http://www.ensembl.org/Homo_sapiens/Location/View?g=ENSG00000012048;contigviewbottom=transcript_core_ensembl=collapsed_nolabel;config=show_top_panel=no</a>
-</kbd>
+</kbd></p>
 
 <h3>Attaching External Data</h3>
 
 <p>
-  To attach DAS or UCSC-style URL data, follow the procedure above for
+  To attach URL data, follow the procedure above for
   configuring the appropriate panel, using special track names to identify the
   data source. These special names are of the format:
 </p>
 
-<kbd>
-  type:source
-</kbd>
+<p><kbd>
+  url:source
+</kbd></p>
 
 <p>
-  Where <em>type</em> is either of <em>das</em> or <em>url</em>, and
-  <em>source</em> is the location of the external data.
+  where <em>source</em> is the location of the external data.
 </p>
+
+<div class="info-box">
+<p><strong>IMPORTANT:</strong> You <strong>must</strong> encode any = &amp; or ; characters in your URL for the attachment to work correctly.</p>
+</div>
 
 <h4>Renderers</h4>
 
 <p>
-  Renderers depend on the type of track:
+  Renderers are the same as for alignment tracks (see above), or for wiggle/graph data, either off or tiling.
 </p>
-
-<ul>
-  <li>URL data: the same as for alignment tracks (see above), or for wiggle/graph data, either off or tiling.</li>
-  <li>DAS tracks: <em>normal</em> (use the DAS server's stylesheet), <em>labels</em> (force display of labels),
-  <em>nolabels</em> (hide labels) and <em>off</em>.</li>
-</ul>
 
 <h4 id="attachurl">Examples - attach external data</h4>
 
 <p>To attach an example data file by URL and display the features with the default renderer:</p>
 
-<kbd>
+<p><kbd>
   <a href="http://www.ensembl.org/Homo_sapiens/Location/View?g=ENSG00000130544;contigviewbottom=url:http://www.ensembl.org/info/website/upload/sample_files/example.bed">
     http://www.ensembl.org/Homo_sapiens/Location/View?g=ENSG00000130544;contigviewbottom=url:http://www.ensembl.org/info/website/upload/sample_files/example.bed
   </a>
-</kbd>
+</kbd></p>
 
 <p>To attach an example data file by URL and display the features in a half_height style:</p>
 
-<kbd>
+<p><kbd>
   <a href="http://www.ensembl.org/Homo_sapiens/Location/View?g=ENSG00000130544;contigviewbottom=url:http://www.ensembl.org/info/website/upload/sample_files/example.bed=half-height">
     http://www.ensembl.org/Homo_sapiens/Location/View?g=ENSG00000130544;contigviewbottom=url:http://www.ensembl.org/info/website/upload/sample_files/example.bed=half_height
   </a>
-</kbd>
+</kbd></p>
 
 <p><strong>Note on bedGraph format</strong> If attaching a bedGraph file, please add the parameter 'format=bedGraph' to the URL, e.g.</p>
 
-<kbd>
+<p><kbd>
   <a href="http://www.ensembl.org/Homo_sapiens/Location/View?g=ENSG00000012048;contigviewbottom=url:http://www.ensembl.org/info/website/upload/sample_files/example.bed=ungrouped">
     http://www.ensembl.org/Homo_sapiens/Location/View?g=ENSG00000012048;contigviewbottom=url:http://www.abcd.edu/myprojects/data.bed=tiling;format=bedGraph
   </a>
-</kbd>
-
-<br />
-<br />
-<p style="color: red"><strong>IMPORTANT:</strong> You <strong>must</strong> encode any = & or ; characters in your URL for the attachment to work correctly.</p>
-<br />
-
-<p>
-  To attach the Ensembl transcripts DAS source and display the features according to the server's instructions (stylesheet):
-</p>
-
-<kbd>
-  <a href="http://www.ensembl.org/Mus_musculus/Location/View?g=ENSMUSG00000049878;r=4:120817978-120887689;contigviewbottom=das:http://das.sanger.ac.uk/das/ikmc_products=normal">
-    http://www.ensembl.org/Mus_musculus/Location/View?g=ENSMUSG00000049878;r=4:120817978-120887689;contigviewbottom=das:http://das.sanger.ac.uk/das/ikmc_products=normal
-  </a>
-</kbd>
-
-<p>To attach a DAS source from the DAS registry (in this case human SNPs from ASTD) and force the display of labels:</p>
-
-<kbd>
-  <a href="http://www.ensembl.org/Homo_sapiens/Location/View?g=ENSG00000012048;contigviewbottom=das:http://www.dasregistry.org/das/sources/DS_560=labels">
-    http://www.ensembl.org/Homo_sapiens/Location/View?g=ENSG00000012048;contigviewbottom=das:http://www.dasregistry.org/das/sources/DS_560=labels
-  </a>
-</kbd>
-
-<p>To attach a text-based DAS source (one which will not be displayed on an image):</p>
-
-<kbd>
-  <a href="http://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=ENSG00000139618;r=13:32889611-32973347;t=ENST00000380152;das=http://www.genenames.org/das/HGNC/">
-    http://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=ENSG00000139618;r=13:32889611-32973347;t=ENST00000380152;das=http://www.genenames.org/das/HGNC/
-  </a>
-</kbd>
-
-<h4>Important Note</h4>
-
-<p>
-  It is <strong>only</strong> possible to add a DAS track that is
-  self-configuring. That is, it provides all of the information Ensembl needs to
-  query it automatically via the <em>sources</em> or <em>dsn</em> command. This
-  behaviour is by design. See <a href="/info/docs/das/das_server.html">setting
-  up a DAS server</a> for more details.
-</p>
-
-<p>
-  Due to a limitation of the website, it is currently only possible to attach a
-  DAS source to a <em>panel</em> (i.e. a track on an image) and not to a <em>page</em>.
-  Thus non-positional (text-based) DAS sources such as those annotating genes
-  cannot be attached in this manner. For more information on the different types
-  of DAS source, see <a href="/info/data/ensembl_das.html">how Ensembl uses DAS</a>.
-</p>
+</kbd></p>
 
 </body>
 </html>

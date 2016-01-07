@@ -177,20 +177,10 @@ HOST=mysqlserver2
 PORT=4444
 </pre>
 
-<h3>DAS Proxy</h3>
-<p>If you wish to display external DAS sources on your ensembl installation, and are behind a firewall, then
-you will need to set a value for ENSEMBL_DAS_PROXY. This should probably be set in DEFAULTS.ini,
-as the proxy is likely to be the same for all species. The value should be your usual web proxy setting,
-e.g.</p>
-<pre class="code">
-ENSEMBL_DAS_PROXY = http://webproxy.mycompany.com:80
-</pre>
-
 <h3 id="fonts">Fonts</h3>
 <p>
-  For the past few releases Ensembl uses TrueType fonts in some of the images,
-  These need to be configured in the '[ENSEMBL_STYLE]' section of the DEFAULTS.ini
-  file.
+  Ensembl uses TrueType fonts in its images, so these need to be configured in 
+the '[ENSEMBL_STYLE]' section of the DEFAULTS.ini file.
 </p>
 <pre class="code">
 [ENSEMBL_STYLE]
