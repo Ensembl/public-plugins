@@ -33,17 +33,17 @@ sub modify_tree {
       [ 
         'haplo'    => 'EnsEMBL::Web::Component::Transcript::Haplotypes',
       ], 
-      { 'availability' => 'database:variation', 'concise' => 'Haplotypes' }
+      { 'availability' => 'database:variation translation', 'concise' => 'Haplotypes' }
     )
   );
   
   $submenu->append(
     $self->create_node(
-      'Haplotypes_new', 'Haplotypes_new', 
+      'Haplotypes_old', 'Haplotypes_old', 
       [ 
-        'haplo'    => 'EnsEMBL::Web::Component::Transcript::Haplotypes_new',
+        'haplo'    => 'EnsEMBL::Web::Component::Transcript::Haplotypes_old',
       ], 
-      { 'availability' => 'database:variation', 'concise' => 'Haplotypes_new' }
+      { 'availability' => 'database:variation translation', 'concise' => 'Haplotypes_old' }
     )
   );
 }

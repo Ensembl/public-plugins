@@ -23,6 +23,7 @@ use warnings;
 no warnings 'uninitialized';
 
 use HTML::Entities qw(encode_entities);
+use JSON;
 
 use base qw(EnsEMBL::Web::Component::Transcript);
 
@@ -48,14 +49,14 @@ sub content {
       data_table => 1,
       download_table => 1,
       sorting => [ 'freq desc' ],
-      data_table_config => {iDisplayLength => 10}, 
+      # data_table_config => {iDisplayLength => 10}, 
     }
   );
   
   my $total_counts = $c->total_population_counts();
   
-  my $pop_objs = $self->population_objects($total_counts);
-  my $pop_struct = $self->population_structure;
+  my $pop_objs = $c->get_all_Populations();
+  my $pop_struct = $self->population_structure($pop_objs);
   
   my %pop_descs = map {$_->name => $_->description} @$pop_objs;
   
@@ -64,17 +65,15 @@ sub content {
       key => $self->short_population_name($_),
       title => $self->short_population_name($_),
       sort => 'numeric',
-      help => sprintf('<b>%s: </b>%s', $_, $pop_descs{$_})
+      help => sprintf('Frequency in %s: %s population (count)', $_, $pop_descs{$_})
     }}
     sort keys %$pop_struct;
 
   $table->add_columns(
-    { key => 'protein', title => 'Protein haplotype', sort => 'none',    help => 'Haplotype names represent a comma-separated list of differences to the reference sequence'},
-    { key => 'freq',    title => 'Frequency',         sort => 'numeric', help => 'Combined frequency across all samples'},
-    { key => 'cds',     title => 'CDS haplotype(s)',  sort => 'none',    help => 'Haplotype names represent a comma-separated list of differences to the reference sequence'},
-    # { key => 'count',       title => 'Count',             sort => 'numeric' },
+    { key => 'protein', title => 'Protein haplotype', sort => 'none',         help => 'Haplotype names represent a comma-separated list of differences to the reference sequence'},
+    { key => 'flags',   title => 'Flags',             sort => 'html_numeric', help => 'Flags indicating features of interest for each haplotype'},
+    { key => 'freq',    title => 'Frequency (count)', sort => 'numeric',      help => 'Combined frequency across all samples and observed count in parentheses'},
     @pop_cols,
-    { key => 'extra',   title => '',                  sort => 'none' }
   );
   
   my @rows;
@@ -82,29 +81,34 @@ sub content {
   
   foreach my $ph(@{$c->get_all_ProteinHaplotypes}) {    
     $table->add_row($self->render_protein_haplotype_row($ph));
-    # last if ++$count == 5;
   }
   
   $html .= $table->render;
 
-  # add alignment and sequence data to be picked up by JS
-  my $js_data = {};
-
-  foreach my $th(@{$c->get_all_TranscriptHaplotypes}) {
-    my $data = { seq => $th->seq };
-
-    my $aln = $th->get_formatted_alignment();
-    $data->{aln} = $aln if $aln;
-    $js_data->{$th->_hex} = $data;
-  }
+  # send through JSON version of the container
+  my $json = JSON->new();
 
   $html .= sprintf(
-    '<input class="js_param" type="hidden" name="alignment_data" value="%s" />',
-    encode_entities($self->jsonify($js_data))
+    '<input class="js_param" type="hidden" name="haplotype_data" value="%s" />',
+    encode_entities($json->allow_blessed->convert_blessed->encode($c))
   );
 
-  # add element for displaying alignment data
-  $html .= '<div><a name="alignment-view"/><pre class="code alignment-view hidden">&nbsp;</pre></div>';
+  # and send population stuff
+  $html .= sprintf(
+    '<input class="js_param" type="hidden" name="population_info" value="%s" />',
+    encode_entities(
+      $self->jsonify(
+        {
+          population_structure => $pop_struct,
+          population_descriptions => {map {$_->name => $_->description} @$pop_objs},
+          sample_population_hash => $c->_get_sample_population_hash,
+        }
+      )
+    )
+  );
+
+  # add element for displaying details
+  $html .= '<div class="details-view" id="details-view"><a name="details-view"/>&nbsp;</div>';
 
   return $html;
 }
@@ -142,10 +146,9 @@ sub short_population_name {
 
 sub population_structure {
   my $self = shift;
+  my $pop_objs = shift;
   
   if(!exists($self->{_population_structure})) {
-    my $pop_objs = $self->population_objects;
-  
     my %pop_struct;
     foreach my $pop(@$pop_objs) {
       next if $pop->name =~ /:ALL$/;
@@ -182,17 +185,29 @@ sub render_protein_haplotype_row {
   my $pop_objs = $self->population_objects();
   my $pop_struct = $self->population_structure;
   my %pop_descs = map {$_->name => $_->description} @$pop_objs;
+
+  my @flags = @{$ph->get_all_flags()};
+  my $flags_html;
+
+  my $score = 0;
+  my %scores = (
+    'deleterious_sift_or_polyphen' => 2,
+    'indel' => 3,
+    'stop_change' => 4,
+  );
+  $score += $scores{$_} || 1 for @flags;
+
+  $flags_html = sprintf(
+    '<span class="hidden">%i</span><div style="width: 6em">%s</div>',
+    $score,
+    join(" ", map {$self->render_flag($_)} sort {($scores{$b} || 1) <=> ($scores{$a} || 1)} @flags)
+  );
   
   # create base row
   my $row = {
-    protein => $self->render_protein_haplotype_name($ph).' '.$self->alignment_links($ph),
+    protein => $self->render_protein_haplotype_name($ph),
+    flags   => $flags_html,
     freq    => sprintf("%.3g (%i)", $ph->frequency, $ph->count),
-    count   => $ph->count,
-    cds     => join('<br/>',
-      map {$self->render_cds_haplotype_name($_).' ('.$_->count.')'.' '.$self->alignment_links($_)}
-      sort {$b->count <=> $a->count}
-      @{$ph->get_all_CDSHaplotypes}
-    ),
   };
   
   # add per-population frequencies
@@ -203,42 +218,7 @@ sub render_protein_haplotype_row {
     my $short_pop = $self->short_population_name($pop);
     
     $row->{$short_pop} = sprintf("%.3g (%i)", $pop_freqs->{$pop}, $pop_counts->{$pop});
-    
-    # add sub-population frequencies
-    my $sub_html = '';
-    
-    foreach my $sub(sort @{$pop_struct->{$pop} || []}) {
-      $sub_html ||= '<table class="ss" style="width:auto; margin-top:0.5em;">';
-      
-      $sub_html .= sprintf(
-        '<tr><td><span class="ht _ht" title="<b>%s: </b>%s">%s</span></td><td>%.3g (%i)</tr>',
-        $sub,
-        $pop_descs{$sub},
-        $self->short_population_name($sub),
-        $pop_freqs->{$sub} || '0',
-        $pop_counts->{$sub} || '0'
-      );
-    }
-    
-    if($sub_html) {
-      
-      # close table
-      $sub_html .= '</table>';
-      
-      # create a cell_id from the population and hex
-      my $cell_id = $ph->_hex; #$short_pop.'_'.$ph->_hex;
-    
-      $row->{$short_pop} .= sprintf(
-        '<div class="%s"><div class="toggleable" style="display:none">%s</div></div>',
-        $cell_id, $sub_html
-      );
-    }
   }
-  
-  $row->{extra} = sprintf(
-    '<a class="toggle closed _slide_toggle _ht" href="#" rel="%s" title="Show sub-population frequencies">Expand</a>',
-    $ph->_hex
-  );
   
   return $row;
 }
@@ -249,135 +229,53 @@ sub render_protein_haplotype_name {
   
   my $name = $ph->name;
   $name =~ s/^.+?://;
-  
-  my $ref_protein_length = length($ph->container->transcript->{protein});
-  
-  foreach my $diff(@{$ph->get_all_diffs()}) {
-    my $sift_pred   = $diff->{sift_prediction};
-    my $poly_pred   = $diff->{polyphen_prediction};
-    my $diff_string = $diff->{diff};
-    
-    my ($desc, $colour, $tcolour) = ('', 'none', 'black');
-    
-    # STOP gained
-    if($diff_string =~ /\*$/) {
-      
-      # get truncated length relative to ref
-      # remember both ref and this pos are 1 longer than the actual sequence will be
-      if($diff_string =~ m/^(\d+)/) {
-        my $pos = $1;
-        $desc = sprintf(
-          '<b>%s: </b>stop_gained<br/><b>Truncated length: </b>%.1f%% (%i / %i aa)',
-          $diff_string,
-          100 * (($pos - 1) / ($ref_protein_length - 1)),
-          $pos - 1,
-          $ref_protein_length - 1
-        );
-        
-        $colour = 'red';
-        $tcolour = 'white';
-      }
-    }
-    
-    
-    # SIFT or PolyPhen
-    elsif($sift_pred || $poly_pred) {
-    # elsif(($sift_pred && $sift_pred eq 'deleterious') || ($poly_pred && $poly_pred eq 'probably_damaging')) {
-      $desc =
-        '<b>'.$diff_string.': </b>missense_variant<br/>'.
-        '<b>SIFT: </b>'.($sift_pred ? sprintf('%s (%.3f)', $sift_pred, $diff->{sift_score}) : 'no prediction').'<br/>'.
-        '<b>PolyPhen: </b>'.($poly_pred ? sprintf('%s (%.3f)', $poly_pred, $diff->{polyphen_score}) : 'no prediction');
-        
-      if(($sift_pred && $sift_pred eq 'deleterious') || ($poly_pred && $poly_pred eq 'probably damaging')) {
-        $colour = 'yellow';
-      }
-      
-      elsif($poly_pred && $poly_pred eq 'possibly damaging') {
-        $colour = 'blue';
-        $tcolour = 'white';
-      }
-      
-      else {
-        $colour = 'grey';
-        $tcolour = 'white';
-      }
-    }
-    
-    $name =~ s/($diff_string\*?)/<div style="background-color:$colour;color:$tcolour;display:inline-table" class="_ht score" title="$desc">$1<\/div>/ if $desc; 
+
+  my $display_name = $name;
+  my $hidden = '';
+
+  if(length($display_name) > 50) { 
+    $display_name = substr($display_name, 0, 50);
+    $display_name =~ s/\,[^\,]+$// unless substr($display_name, 50, 1) eq ',';
+    $display_name .= '...';
+
+    $hidden = sprintf('<span class="hidden">%s</span>', $name);
   }
-  
-  return $name;
-}
 
-sub render_cds_haplotype_name {
-  my $self = shift;
-  my $ch = shift;
-  
-  my $name = $ch->name;
-  $name =~ s/^.+?://;
-  
-  foreach my $diff(@{$ch->get_all_diffs()}) {
-    if(my $vf = $diff->{variation_feature}) {
-      my $diff_string = $diff->{diff};
-      
-      my $var = $vf->variation_name;
-      my $url = $self->hub->url({
-        type    => 'ZMenu',
-        action  => 'Variation',
-        v       => $var
-      });
+  # introduce line-breaking zero-width spaces
+  $name =~ s/\,/\,\&\#8203\;/g;
 
-      my $desc = sprintf('<a class="zmenu" href="%s">%s</a>', $url, $diff_string);;
-      
-      $name =~ s/($diff_string)/$desc/; 
-    }
-  }
-  
-  return $name;
-}
+  my $title = "Details for ".($name eq 'REF' ? 'reference haplotype' : 'haplotype '.$name);
 
-sub alignment_links {
-  my $self = shift;
-  my $h = shift;
   return sprintf(
-    '<span class="small">'.
-    '<a href="#alignment-view" class="_ht alignment-link" title="View alignment to reference sequence" rel="%s">[A]</a> '.
-    '<a href="#alignment-view" class="_ht sequence-link" title="View sequence" rel="%s">[S]</a>'.
-    '</span>',
-    $h->_hex, $h->_hex
-  ); 
+    '%s<span class="_ht" title="%s"><a href="#details-view" class="details-link" rel="%s">%s</a></span>',
+    $hidden,
+    $title,
+    $ph->_hex,
+    $display_name
+  );
 }
 
-sub _lzw_encode {
+sub render_flag {
   my $self = shift;
-  my $s = shift;
+  my $flag = shift;
 
-  my %dict = ();
-  my @data = split("", $s);
-  my @out = ();
+  my $char = uc(substr($flag, 0, 1));
+  my $tt = ucfirst($flag);
+  $tt =~ s/\_/ /g;
 
-  my $currChar;
-  my $phrase = $data[0];
-  my $code = 256;
+  my %colours = (
+    D => ['yellow',  'black'],
+    S => ['red',     'white'],
+    I => ['#ff69b4', 'white'],
+  );
 
-  for (my $i=1; $i<=$#data; $i++) {
-    $currChar = $data[$i];
-    if(exists($dict{$phrase.$currChar})) {
-      $phrase .= $currChar;
-    }
-    else {
-      push @out, (length($phrase) > 1 ? $dict{$phrase} : ord(substr($phrase, 0, 1)));
-      $dict{$phrase.$currChar} = $code;
-      $code++;
-      $phrase = $currChar;
-    }
-  }
-  
-  push @out, (length($phrase) > 1 ? $dict{$phrase} : ord(substr($phrase, 0, 1)));
-  for (my $i=0; $i<=$#out; $i++) {
-    $out[$i] = chr $out[$i];
-  }
-  return join("", @out);
+  return sprintf(
+    '<div style="background-color:%s; color:%s; black; width: 1.5em; display: inline-block; font-weight: bold;" class="_ht score" title="%s">%s</div>',
+    $colours{$char}->[0],
+    $colours{$char}->[1],
+    $tt,
+    $char
+  );
 }
 
 1;
