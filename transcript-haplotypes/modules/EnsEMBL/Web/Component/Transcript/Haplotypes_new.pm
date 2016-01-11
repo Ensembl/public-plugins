@@ -93,16 +93,18 @@ sub content {
     encode_entities($json->allow_blessed->convert_blessed->encode($c))
   );
 
-  # and send population structure
+  # and send population stuff
   $html .= sprintf(
-    '<input class="js_param" type="hidden" name="population_structure" value="%s" />',
-    encode_entities($self->jsonify($pop_struct))
-  );
-
-  # and population descriptions
-  $html .= sprintf(
-    '<input class="js_param" type="hidden" name="population_descriptions" value="%s" />',
-    encode_entities($self->jsonify({map {$_->name => $_->description} @$pop_objs}))
+    '<input class="js_param" type="hidden" name="population_info" value="%s" />',
+    encode_entities(
+      $self->jsonify(
+        {
+          population_structure => $pop_struct,
+          population_descriptions => {map {$_->name => $_->description} @$pop_objs},
+          sample_population_hash => $c->_get_sample_population_hash,
+        }
+      )
+    )
   );
 
   # add element for displaying details

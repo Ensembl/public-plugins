@@ -23,10 +23,13 @@ Ensembl.Panel.TranscriptHaplotypes_new = Ensembl.Panel.Content.extend({
     // get data
     this.haplotypeData = JSON.parse(this.params['haplotype_data']);
     delete this.params['haplotype_data'];
-    this.populationStructure = JSON.parse(this.params['population_structure']);
-    delete this.params['population_structure'];
-    this.populationDescriptions = JSON.parse(this.params['population_descriptions']);
-    delete this.params['population_descriptions'];
+
+    var popData = JSON.parse(this.params['population_info']);
+    delete this.params['population_info'];
+
+    this.populationStructure = popData.population_structure;
+    this.populationDescriptions = popData.population_descriptions;
+    this.samplePopulationHash = popData.sample_population_hash;
 
     // initialise details links
     this.el.find('a.details-link').on('click', function(e) {
@@ -221,14 +224,46 @@ Ensembl.Panel.TranscriptHaplotypes_new = Ensembl.Panel.Content.extend({
   sampleTable: function(haplotype) {
     var panel = this;
 
-    var html = '<table id="ind-table" class="ss" style="width:500px"><tr><th>Sample name</th><th>Haplotype copies / zygosity</th></tr>';
+    var html = '<table id="ind-table" class="ss" style="width:500px"><tr><th>Sample name</th><th>Population(s)</th><th>Haplotype copies / zygosity</th></tr>';
 
     var samples = Object.keys(haplotype.samples).sort();
+
+    var sampleHash = panel.samplePopulationHash;
+    var descs = panel.populationDescriptions;
+    var popStruct = panel.populationStructure;
+
+    var levels = {};
+
+    for(var i in popStruct) {
+      levels[i] = 1;
+
+      for(var j in popStruct[i]) {
+        levels[j] = 2;
+      }
+    }
+
+    var bgI = 0;
 
     for(var i in samples) {
       var sample = samples[i];
       var count = haplotype.samples[sample];
-      html = html + '<tr><td>' + panel.shortName(sample) + '</td><td>' + count + '</td></tr>';
+      html = html +
+        '<tr class="bg' + (bgI + 1) + '"><td>' + panel.shortName(sample) + '</td><td>' +
+        $.grep(
+          Object.keys(sampleHash[sample]),
+          function(p) { return p.match(/ALL/) },
+          1
+        ).sort(
+          function(a, b) {
+            return levels[a] < levels[b];
+          }
+        ).map(
+          function(p) {
+            return '<span class="ht _ht" title="' + descs[p] + '">' + panel.shortName(p) + '</span>'
+          }
+        ).join(', ') +
+        '</td><td>' + count + '</td></tr>';
+      bgI = 1 - bgI;
     }
 
     html = html + '</table>';
