@@ -41,6 +41,16 @@
 
 <p>Note that where the attributes contain Parent identifiers, these will be used by Ensembl to display the features as joined blocks.</p>
 
+<pre class="code">
+##gff-version 3
+ctg123 . mRNA            1300  9000  .  +  .  ID=mrna0001;Name=sonichedgehog
+ctg123 . exon            1300  1500  .  +  .  ID=exon00001;Parent=mrna0001
+ctg123 . exon            1050  1500  .  +  .  ID=exon00002;Parent=mrna0001
+ctg123 . exon            3000  3902  .  +  .  ID=exon00003;Parent=mrna0001
+ctg123 . exon            5000  5500  .  +  .  ID=exon00004;Parent=mrna0001
+ctg123 . exon            7000  9000  .  +  .  ID=exon00005;Parent=mrna0001
+</pre>
+
 <h2 id="moreinfo">More information</h2>
 
 <p>For more information about this file format, see the <a href="http://gmod.org/wiki/GFF3">documentation</a> on the GMOD wiki.</p>
