@@ -41,9 +41,9 @@ though we intend to implement as many as are appropriate to our displays.</p>
 <p>Note also that if you change the configuration of your hub, you will need to
 shift-reload the Ensembl page to load the new file.</p>
 
-<h2 id="bam-format">BAM format</h2>
-<p>BAM is a compressed version of the SAM (Sequence Alignment/Map) binary format. BAM uses an index file to give fast access to small sections of the file..</p>
-<p>Additional information about SAM/BAM is available at the <a href="http://samtools.sourceforge.net/">SAMtools development site</a>.
+<h2 id="bam-format">BAM and CRAM formats</h2>
+<p>BAM is a compressed version of the SAM (Sequence Alignment/Map) binary format. BAM uses an index file to give fast access to small sections of the file. CRAM is an improvement on BAM, offering significantly better lossless compression whilst maintaining backwards compatibility with BAM.</p>
+<p>Both formats use the new HTSLIB codebase - more information is available from the <a href="https://github.com/samtools">SAMtools project on github</a>.
 
 
 <h2 id="bb-format">bigBED format</h2>
