@@ -36,6 +36,8 @@
 <li><strong>attribute</strong> - A semicolon-separated list of tag-value pairs, providing additional information about each feature.</li>
 </ol>
 
+<p>Note that where the attributes contain identifiers that link the features together into a larger structure, these will be used by Ensembl to display the features as joined blocks.</p>
+
 <p>Sample GTF output from Ensembl data dump:</p>
 
 <pre class="code">
@@ -56,7 +58,9 @@ X	Ensembl	Variation	2413805	2413805	.	+	.
 
 <h2 id="tracklines">Track lines</h2>
 
-<p>Although not part of the formal GFF specification, Ensembl will use track lines to further configure sets of features. Track lines should be placed at the beginning of the list of features they are to affect.</p>
+<p>Although not part of the formal GFF specification, Ensembl uses track lines 
+to further configure sets of features (thus maintaining compatibility with UCSC). 
+Track lines should be placed at the beginning of the list of features they are to affect.</p>
 
 <p>The track line consists of the word 'track' followed by space-separated key=value pairs - see the example below. Valid parameters used by Ensembl are:</p>
 
