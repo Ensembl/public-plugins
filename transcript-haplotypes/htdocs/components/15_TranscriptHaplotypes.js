@@ -95,10 +95,10 @@ Ensembl.Panel.TranscriptHaplotypes = Ensembl.Panel.Content.extend({
       '<h2>Details of haplotype ' + haplotype.name.replace(/\,/g, ',&#8203;') + '</h2><div>';
 
     var sections = [
+      { 'id': 'pop', 'title': 'Population frequencies',  'sub': 'populationTable' },
       { 'id': 'seq', 'title': 'Aligned sequence',        'sub': 'alignedSequence' },
       { 'id': 'cds', 'title': 'Observed CDS haplotypes', 'sub': 'cdsHaplotypes'   },
       { 'id': 'raw', 'title': 'Translated sequence',     'sub': 'rawSequence'     },
-      { 'id': 'pop', 'title': 'Population frequencies',  'sub': 'populationTable' },
       { 'id': 'sam', 'title': 'Sample data',             'sub': 'sampleTable'     }
     ];
 
@@ -226,7 +226,6 @@ Ensembl.Panel.TranscriptHaplotypes = Ensembl.Panel.Content.extend({
 
     var html = '<table id="ind-table" class="ss" style="width:500px"><tr><th>Sample name</th><th>Population(s)</th><th>Haplotype copies</th></tr>';
 
-    var samples = Object.keys(haplotype.samples).sort();
 
     var sampleHash = panel.samplePopulationHash;
     var descs = panel.populationDescriptions;
@@ -238,9 +237,28 @@ Ensembl.Panel.TranscriptHaplotypes = Ensembl.Panel.Content.extend({
       levels[i] = 1;
 
       for(var j in popStruct[i]) {
-        levels[j] = 2;
+        levels[popStruct[i][j]] = 2;
       }
     }
+
+    var samples = Object.keys(haplotype.samples).sort(
+      function(a, b) {
+
+        var str1 =  $.grep(
+          Object.keys(sampleHash[a]),
+          function(p) { return p.match(/ALL/) },
+          1
+        ).map(panel.shortName).sort(function(c, d) {return levels[c] < levels[d]}).join('');
+
+        var str2 =  $.grep(
+          Object.keys(sampleHash[b]),
+          function(p) { return p.match(/ALL/) },
+          1
+        ).map(panel.shortName).sort(function(c, d) {return levels[c] < levels[d]}).join('');
+
+        return str1 < str2 ? -1 : str1 > str2;
+      }
+    );
 
     var bgI = 0;
 
