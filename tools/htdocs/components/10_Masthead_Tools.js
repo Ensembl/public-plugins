@@ -47,7 +47,11 @@ Ensembl.Panel.Masthead = Ensembl.Panel.Masthead.extend({
 
   populateToolsTab: function(response) {
 
-    if (!response.empty) {
+    if (response.empty) {
+
+      this.elLk.toolsTabs.find('a:not(:first-child)').remove().end().find('.dropdown').removeClass('dropdown');
+
+    } else {
 
       this.elLk.toolsTabs.filter(':not(.final)').addClass('final').find('a:first-child').html(response.caption).attr('href', response.url);
       this.elLk.toolsDropdown.find('ul.recent').remove().end().find('h4').first().html('Recent jobs').after($('<ul>').append($.map(response.tools, function(details, tool) {
