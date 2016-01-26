@@ -17,29 +17,33 @@
 Ensembl.extend({
   initialize: function () {
 
-    this.ajaxLoadTimerConfig = new Ensembl.GA.EventConfig({
-      category        : 'AjaxLoadTimer',
-      action          : function () { return this.getURL(); },
-      label           : function () {
-                                      var url = this.currentOptions.url.replace(/(;|&|\?)(_|time)=[0-9]+&?/g, '$1').replace(/(;|&|\?)$/, '');
-                                      if (url.match(/^http/)) {
-                                        url = url.replace(window.location.protocol + '//' + window.location.host, '');
-                                      }
-                                      return url;
-                                    },
-      nonInteraction  : true,
-      value           : function () { return new Date().getTime() - this.currentOptions._ensGA_StartTime; }
-    });
+    if (Ensembl.GA.logAjaxLoadTimes) {
 
-    $.ajaxPrefilter(function(options, originalOptions, jqXHR) {
-      options._ensGA_StartTime  = new Date().getTime();
-    });
+      this.ajaxLoadTimerConfig = new Ensembl.GA.EventConfig({
+        category        : 'AjaxLoadTimer',
+        action          : function () { return this.getURL(); },
+        label           : function () {
+                                        var url = this.currentOptions.url.replace(/(;|&|\?)(_|time)=[0-9]+&?/g, '$1').replace(/(;|&|\?)$/, '');
+                                        if (url.match(/^http/)) {
+                                          url = url.replace(window.location.protocol + '//' + window.location.host, '');
+                                        }
+                                        return url;
+                                      },
+        nonInteraction  : true,
+        value           : function () { return new Date().getTime() - this.currentOptions._ensGA_StartTime; }
+      });
 
-    $(document).ajaxComplete(function(e, jqXHR, ajaxOptions) {
-      if (ajaxOptions._ensGA_StartTime) {
-        Ensembl.GA.sendEvent(Ensembl.ajaxLoadTimerConfig, {currentOptions: ajaxOptions});
-      }
-    });
+      $.ajaxPrefilter(function(options, originalOptions, jqXHR) {
+        options._ensGA_StartTime  = new Date().getTime();
+      });
+
+      $(document).ajaxComplete(function(e, jqXHR, ajaxOptions) {
+        if (ajaxOptions._ensGA_StartTime) {
+          Ensembl.GA.sendEvent(Ensembl.ajaxLoadTimerConfig, {currentOptions: ajaxOptions});
+        }
+      });
+
+    }
 
     this.base.apply(this, arguments);
   }

@@ -31,6 +31,11 @@ Ensembl.GA = {
      * Setting it to true will console.log the event being sent
      */
 
+  logAjaxLoadTimes: true,
+    /*
+     * Setting it to false will disable logging AJAX load times
+     */
+
   code: function () {
     /*
      * Returns the ga code for the current domain
