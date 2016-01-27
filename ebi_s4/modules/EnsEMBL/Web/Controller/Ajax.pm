@@ -129,11 +129,15 @@ sub ajax_s4_gene {
       'notes'     => []
     };
 
-    push @{$response->{'notes'}}, 'Gene Information and Sequence', $info_notes;
-    push @{$response->{'notes'}}, 'Variations',   $var_notes  if $var_notes;
-    push @{$response->{'notes'}}, 'Orthologues',  $orth_notes if $orth_notes;
-    push @{$response->{'notes'}}, 'Paralogues',   $para_notes if $para_notes;
-    push @{$response->{'notes'}}, 'Regulation',   $reg_notes  if $reg_notes;
+    for (grep $_, $info_notes, $var_notes, $orth_notes, $para_notes, $reg_notes) {
+      $_ = [ map { 'type' => 'note', 'text' => $_ }, @$_ ];
+    }
+
+    push @{$response->{'notes'}}, {'type' => 'heading', 'text' => 'Gene Information and Sequence'}, @$info_notes;
+    push @{$response->{'notes'}}, {'type' => 'heading', 'text' => 'Variations'},   @$var_notes  if $var_notes;
+    push @{$response->{'notes'}}, {'type' => 'heading', 'text' => 'Orthologues'},  @$orth_notes if $orth_notes;
+    push @{$response->{'notes'}}, {'type' => 'heading', 'text' => 'Paralogues'},   @$para_notes if $para_notes;
+    push @{$response->{'notes'}}, {'type' => 'heading', 'text' => 'Regulation'},   @$reg_notes  if $reg_notes;
   }
 
   print to_json($response);
