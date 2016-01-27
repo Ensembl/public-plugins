@@ -63,8 +63,10 @@ Ensembl.GA = {
   },
 
   sendDimensions: function () {
-    ensGA('set', 'dimension1', Ensembl.species);
-    ensGA('set', 'dimension2', Ensembl.isLoggedInUser ? 'yes' : 'no');
+    if (this.initialised) {
+      ensGA('set', 'dimension1', Ensembl.species);
+      ensGA('set', 'dimension2', Ensembl.isLoggedInUser ? 'yes' : 'no');
+    }
   },
 
   filterURL: function (a) {
