@@ -41,10 +41,12 @@ sub new {
   my $self = { hub => $hub };
   
   bless $self, $class;
-  
+ 
+  $hub->qstore_open; 
   $r->content_type('text/plain');
   $self->$func if $self->can($func);
-  
+  $hub->qstore_close; 
+ 
   return $self;
 }
 
