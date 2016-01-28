@@ -193,6 +193,17 @@ Ensembl.GA.eventConfigs.push(
     label           : function () { return this.getText(); }
   },
 
+  // Links inside the text on /info pages
+  {
+    id              : 'InfoPageLink',
+    url             : /^http:\/\/[^\/]+\/info\//,
+    selector        : 'div#content a',
+    event           : 'click',
+    category        : 'PageLink',
+    action          : function () { return this.getURL(); },
+    label           : function () { return (this.getText() || '[No text]') + (this.action.match(/\/Help\/(Movie|View)/) ? ' - ' + (this.currentTarget.href.match(/id=([0-9]+)/) || ['']).pop() : ''); }
+  },
+
   // Icons above the dynamic image
   {
     id              : 'ImageToolbar-Button',
