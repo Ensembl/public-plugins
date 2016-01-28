@@ -57,7 +57,7 @@ Ensembl.GA.eventConfigs.push(
     url             : /^http:\/\/[^\/]+\/index.html/,
     selector        : 'div.static_favourite_species p.customise-species-list',
     event           : 'click',
-    category        : 'HomepageLink',
+    category        : 'PageLink',
     action          : 'SaveFavourites',
     label           : function () { return this.getText(); }
   },
@@ -68,7 +68,7 @@ Ensembl.GA.eventConfigs.push(
     url             : /^http:\/\/[^\/]+\/index.html/,
     selector        : 'div.static_all_species > p > a, div.trackhub-ad a, p.othersites a',
     event           : 'click',
-    category        : 'HomepageLink',
+    category        : 'PageLink',
     action          : function () { return this.getURL(); },
     label           : function () { return this.getText(); }
   },
@@ -166,7 +166,7 @@ Ensembl.GA.eventConfigs.push(
     url             : /^http:\/\/[^\/]+\/index.html/,
     selector        : 'div.whats-new a',
     event           : 'click',
-    category        : 'HomepageLink',
+    category        : 'PageLink',
     action          : function () { return this.currentTarget.hostname === window.location.hostname ? 'NewsLink' : 'BlogLink'; },
     label           : function () { return this.getText(); }
   },
@@ -177,7 +177,7 @@ Ensembl.GA.eventConfigs.push(
     url             : /.+/,
     selector        : 'div.footer-ack a',
     event           : 'click',
-    category        : 'HomepageLink',
+    category        : 'PageLink',
     action          : function () { return this.getURL(); },
     label           : function () { return this.getText() || ($(this.currentTarget).find('img').attr('alt') + ' (logo)'); }
   },
@@ -188,7 +188,7 @@ Ensembl.GA.eventConfigs.push(
     url             : /.+/,
     selector        : 'div#footer a, div#wide-footer a',
     event           : 'click',
-    category        : 'FooterLink',
+    category        : 'PageLink',
     action          : function () { return this.getURL(); },
     label           : function () { return this.getText(); }
   },
