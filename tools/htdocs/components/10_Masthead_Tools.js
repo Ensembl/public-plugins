@@ -25,7 +25,7 @@ Ensembl.Panel.Masthead = Ensembl.Panel.Masthead.extend({
     this.elLk.toolsDropdown = this.el.find('.dropdown.tools');
 
     this.recentJobs = $.makeArray(this.elLk.toolsDropdown.find('li a').map(function(i, el) { return (el.href.match(/tl\=([a-z0-9_\-]+)/i) || []).pop() || null; }));
-    this.fetchURL   ='/' + Ensembl.species + '/Ajax/tools_tab';
+    this.fetchURL   ='/' + (Ensembl.species || 'Multi') + '/Ajax/tools_tab';
 
     this.fetchToolsTab();
   },
