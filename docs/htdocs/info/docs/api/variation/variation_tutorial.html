@@ -980,8 +980,11 @@ foreach my $allele (@{$alleles}) {
 <div class="info">
   <h3>Retrieve external data (e.g. 1000 Genomes phase 3)</h3>
   <div class="message-pad">
-    <p>To retrieve external data e.g. from the 1000 Genomes phase 3 in human, remember to add the following code before making a call to retrieve alleles, genotypes or LD data:</p>
-    <pre class="code sh_perl">$registry-&gt;get_adaptor('human', 'variation')->use_vcf(1);</pre>
+    <p>To retrieve external data e.g. from the 1000 Genomes phase 3 in human, remember to set the flag <b>"use_vcf"</b> to <span style="color:#F00;font-weight:bold">1</span> before making a call to retrieve alleles, genotypes or LD data. See an example in the following code:</p>
+    <pre class="code sh_perl">my $variation_adaptor = $registry-&gt;get_adaptor("human", "variation", "variation");
+
+# Set a flag on the variation adaptor to use VCF files for genotype extraction as well as the MySQL database
+$variation_adaptor-&gt;db-&gt;use_vcf(1);</pre>
     <p>This instructs the API to integrate data fetched from VCF files alongside data from the Ensembl MySQL databases. No further configuration is required; the API is pre-configured to access indexed VCF files on the Ensembl FTP server.
     </p>
   </div>
@@ -1009,10 +1012,10 @@ $registry-&gt;load_registry_from_db(
 
 my $variation_adaptor = $registry-&gt;get_adaptor('homo_sapiens', 'variation', 'variation');
 
-my $variation = $variation_adaptor-&gt;fetch_by_name('rs1333049');
+# OPTIONAL: uncomment the following line to retrieve 1000 genomes phase 3 data also
+# $variation_adaptor-&gt;db-&gt;use_vcf(1);
 
-# OPTIONAL: uncomment this line to retrieve 1000 genomes phase 3 data also
-# $variation_adaptor->db->use_vcf(1);
+my $variation = $variation_adaptor-&gt;fetch_by_name('rs1333049');
 
 my $genotypes = $variation-&gt;get_all_SampleGenotypes();
 
@@ -1060,10 +1063,10 @@ $registry-&gt;load_registry_from_db(
 
 my $variation_adaptor = $registry-&gt;get_adaptor('homo_sapiens', 'variation', 'variation');
 
-my $variation = $variation_adaptor-&gt;fetch_by_name('rs1333049');
+# OPTIONAL: uncomment the following line to retrieve 1000 genomes phase 3 data also
+# $variation_adaptor-&gt;db-&gt;use_vcf(1);
 
-# OPTIONAL: uncomment this line to retrieve 1000 genomes phase 3 data also
-# $variation_adaptor->db->use_vcf(1);
+my $variation = $variation_adaptor-&gt;fetch_by_name('rs1333049');
 
 my $genotypes = $variation-&gt;get_all_PopulationGenotypes();
 
@@ -1129,6 +1132,8 @@ my $population_adaptor = $registry-&gt;get_adaptor('human', 'variation', 'popula
 my $population = $population_adaptor-&gt;fetch_by_name($population_name); #get population object from database
 
 my $ldFeatureContainerAdaptor = $registry-&gt;get_adaptor('human', 'variation', 'ldfeaturecontainer'); #get adaptor for LDFeatureContainer object
+# OPTIONAL: uncomment the following line to retrieve 1000 genomes phase 3 data also
+# $ldFeatureContainerAdaptor-&gt;db-&gt;use_vcf(1);
 my $ldFeatureContainer = $ldFeatureContainerAdaptor-&gt;fetch_by_Slice($slice,$population); #retrieve all LD values in the region
 
 foreach my $r_square (@{$ldFeatureContainer-&gt;get_all_r_square_values}){
