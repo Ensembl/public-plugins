@@ -30,6 +30,7 @@ sub ajax_s4_gene {
   my ($gene, $db) = $self->_fetch_gene($hub->species, $hub->param('g'));
   my $sd          = $hub->species_defs;
   my $sitename    = $sd->SITE_NAME || $sd->ENSEMBL_SITE_NAME_SHORT;
+  my $callback    = $hub->param('jsonpcallback');
   my $response    = {};
 
   if ($gene) {
@@ -140,7 +141,10 @@ sub ajax_s4_gene {
     push @{$response->{'notes'}}, {'type' => 'heading', 'text' => 'Regulation'},   @$reg_notes  if $reg_notes;
   }
 
-  print to_json($response);
+  # print response with required headers
+  $hub->apache_handle->headers_out->add('Access-Control-Allow-Origin', '*');
+  $hub->apache_handle->content_type($callback ? 'text/javascript; charset=utf-8' : 'application/json; charset=utf-8');
+  $hub->apache_handle->print($callback ? sprintf('%s(%s);', $callback, to_json($response)) : to_json($response));
 }
 
 sub _fetch_gene {
