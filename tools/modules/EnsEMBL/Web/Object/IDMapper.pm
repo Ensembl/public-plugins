@@ -40,7 +40,7 @@ sub get_edit_jobs_data {
   if ($input->{'type'} eq 'text') {
     $job_data->{'text'} = file_get_contents(sprintf '%s/%s', $job->job_dir, delete $job_data->{'input_file'});
   } else {
-    $input->{$_} and $job_data->{$_} = $input->{$_} for qw(url file);
+    $input->{'type'} eq $_ and $job_data->{$_} = $input->{$_} for qw(url file);
   }
 
   return [ $job_data ];
