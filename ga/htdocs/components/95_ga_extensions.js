@@ -245,14 +245,21 @@ Ensembl.Panel.Configurator = Ensembl.Panel.Configurator.extend({
 
     this.base(data, delayReload);
 
+    if (!this.configAppliedEventConfig) {
+      this.configAppliedEventConfig = {
+        trackStyle  : new Ensembl.GA.EventConfig({ category : 'Config-Applied-TrackStyle', nonInteraction: true }),
+        trackFav    : new Ensembl.GA.EventConfig({ category: 'Config-Applied-TrackFav',    nonInteraction: true })
+      };
+    }
+
     var imageConfig = $.parseJSON(data.image_config);
 
     $.each(imageConfig, function (track, config) {
       if ('renderer' in config) {
-        Ensembl.GA.sendEvent(new Ensembl.GA.EventConfig({category: 'Config-Applied-TrackStyle', action: panel.component + '-' + track, label: config.renderer, nonInteraction: true}));
+        Ensembl.GA.sendEvent(panel.configAppliedEventConfig.trackStyle, { action: panel.component + '-' + track, label: config.renderer });
       }
       if ('favourite' in config) {
-        Ensembl.GA.sendEvent(new Ensembl.GA.EventConfig({category: 'Config-Applied-TrackFav', action: panel.component + '-' + track, label: config.favourite ? 'On' : 'Off', nonInteraction: true}));
+        Ensembl.GA.sendEvent(panel.configAppliedEventConfig.trackFav, { action: panel.component + '-' + track, label: config.favourite ? 'On' : 'Off' });
       }
     });
   }
