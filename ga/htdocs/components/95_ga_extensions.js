@@ -242,8 +242,8 @@ Ensembl.Panel.Configurator = Ensembl.Panel.Configurator.extend({
 
     if (!this.configAppliedEventConfig) {
       this.configAppliedEventConfig = {
-        trackStyle  : new Ensembl.GA.EventConfig({ category : 'Config-Applied-TrackStyle', nonInteraction: true }),
-        trackFav    : new Ensembl.GA.EventConfig({ category: 'Config-Applied-TrackFav',    nonInteraction: true })
+        trackStyle  : new Ensembl.GA.EventConfig({ category: 'Config-Applied-TrackStyle', nonInteraction: true }),
+        trackFav    : new Ensembl.GA.EventConfig({ category: 'Config-Applied-TrackFav',   nonInteraction: true })
       };
     }
 
@@ -257,6 +257,31 @@ Ensembl.Panel.Configurator = Ensembl.Panel.Configurator.extend({
         Ensembl.GA.sendEvent(panel.configAppliedEventConfig.trackFav, { action: panel.component + '-' + track, label: config.favourite ? 'On' : 'Off' });
       }
     });
+  }
+});
+
+Ensembl.Panel.ImageExport = Ensembl.Panel.ImageExport.extend({
+  init: function () {
+    this.base.apply(this, arguments);
+
+    Ensembl.GA.registerConfigs([
+
+      // Radio buttons for selection
+      {
+        selector  : this.elLk.form.find('input[type=radio]'),
+        event     : 'click',
+        category  : 'ImageExportRadio',
+        action    : function () { return this.currentTarget.value; }
+
+      // Extra options for custom format
+      }, {
+        selector  : this.elLk.form.find('select, input[type=checkbox]'),
+        event     : 'change',
+        category  : 'ImageExportCustom',
+        action    : function () { return this.currentTarget.name; },
+        label     : function () { return this.currentTarget.nodeName === 'INPUT' ? this.currentTarget.checked ? 'On' : 'Off' : this.currentTarget.value; }
+      }
+    ]);
   }
 });
 
