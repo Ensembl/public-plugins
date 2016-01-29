@@ -58,13 +58,8 @@ Ensembl.Panel.ImageMap = Ensembl.Panel.ImageMap.extend({
         category        : 'ComparisonNavClick',
         action          : function () { return this.areaAttrs.alt; },
         label           : function () {
-                            var id      = (this.areaAttrs.href.match(/;id=([0-9]+)/) || []).pop() || 0;
-                            var species = { 0: this.areaAttrs.href.split('/')[1] };
-                            $.each(this.areaAttrs.href.match(/;s[0-9]+=[^;]+/g), function (i, match) {
-                              var sp = match.match(/s([0-9]+)=(.+)/);
-                              species[sp[1]] = sp[2];
-                            });
-                            return species[id] || 'no species';
+                            var id = parseInt((this.areaAttrs.href.match(/;id=([0-9]+)/) || []).pop() || 0);
+                            return id ? 'Secondary species - ' + id : 'Primary species';
                           },
         nonInteraction  : true
       });
