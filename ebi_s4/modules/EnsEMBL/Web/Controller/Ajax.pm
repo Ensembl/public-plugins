@@ -31,7 +31,7 @@ sub ajax_s4_gene {
   my $sd          = $hub->species_defs;
   my $sitename    = $sd->SITE_NAME || $sd->ENSEMBL_SITE_NAME_SHORT;
   my $callback    = $hub->param('jsonpcallback');
-  my $response    = {};
+  my $response    = { 'release' => { 'version' => $sd->ENSEMBL_VERSION, 'date' => $sd->ENSEMBL_RELEASE_DATE } };
 
   if ($gene) {
 
@@ -124,6 +124,7 @@ sub ajax_s4_gene {
 
     # Combine all notes and add other info
     $response = {
+      %$response,
       'desc'      => $desc || $name || $g,
       'url'       => $self->_full_url({'type' => 'Gene', 'action' => 'Summary', %$url_params}),
       'image_url' => $self->_full_url('Component', {'type' => 'Location', 'action' => 'Web', 'function' => 'MultiBottom', 'export' => 'png', 'i_width' => 750, %$url_params}),
