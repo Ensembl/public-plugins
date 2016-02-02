@@ -130,7 +130,7 @@ use Bio::EnsEMBL::Registry;
 
 my $registry = 'Bio::EnsEMBL::Registry';
 
-$registry->load_registry_from_db(
+$registry-&gt;load_registry_from_db(
   -host => 'ensembldb.ensembl.org',
   -user => 'anonymous',
 );
@@ -138,13 +138,13 @@ $registry->load_registry_from_db(
 my $species = 'human';
 my $group = 'variation'; # database type
 
-my $dba = $registry->get_DBAdaptor($species,$group);
+my $dba = $registry-&gt;get_DBAdaptor($species,$group);
 
-my $available_adaptors = $dba->get_available_adaptors;
+my $available_adaptors = $dba-&gt;get_available_adaptors;
 
 # Display the list of adaptors available in the Ensembl Variation API
 foreach my $adaptor (sort(keys(%$available_adaptors))) {
-  print $available_adaptors->{$adaptor}."\n";
+  print $available_adaptors-&gt;{$adaptor}."\n";
 }
 </pre>
 
@@ -321,16 +321,16 @@ use Bio::EnsEMBL::Registry;
 
 # get registry
 my $reg = 'Bio::EnsEMBL::Registry';
-$reg->load_registry_from_db(-host => 'ensembldb.ensembl.org', -user => 'anonymous');
+$reg-&gt;load_registry_from_db(-host => 'ensembldb.ensembl.org', -user => 'anonymous');
 
-my $vfa = $reg->get_adaptor('human', 'variation', 'variationfeature');
-my $sa = $reg->get_adaptor('human', 'core', 'slice');
+my $vfa = $reg-&gt;get_adaptor('human', 'variation', 'variationfeature');
+my $sa = $reg-&gt;get_adaptor('human', 'core', 'slice');
 
 # get a slice for the new feature to be attached to
-my $slice = $sa->fetch_by_region('chromosome', 13);
+my $slice = $sa-&gt;fetch_by_region('chromosome', 13);
 
 # create a new VariationFeature object
-my $new_vf = Bio::EnsEMBL::Variation::VariationFeature->new(
+my $new_vf = Bio::EnsEMBL::Variation::VariationFeature-&gt;new(
   -start => 114268626,
   -end => 114268626,
   -slice => $slice,           # the variation must be attached to a slice
@@ -342,16 +342,16 @@ my $new_vf = Bio::EnsEMBL::Variation::VariationFeature->new(
 );
 
 # get the consequence types
-my $cons = $new_vf->get_all_TranscriptVariations();
+my $cons = $new_vf-&gt;get_all_TranscriptVariations();
 
-foreach my $con(@{$new_vf->get_all_TranscriptVariations}) {
-  foreach my $string(@{$con->consequence_type}) {
+foreach my $con(@{$new_vf-&gt;get_all_TranscriptVariations}) {
+  foreach my $string(@{$con-&gt;consequence_type}) {
     print
-      "Variation ", $new_vf->variation_name,
-      " at position ", $new_vf->seq_region_start,
-      " on chromosome ", $new_vf->seq_region_name,
+      "Variation ", $new_vf-&gt;variation_name,
+      " at position ", $new_vf-&gt;seq_region_start,
+      " on chromosome ", $new_vf-&gt;seq_region_name,
       " has consequence ", $string,
-      " in transcript ", $con->transcript->stable_id, "\n";
+      " in transcript ", $con-&gt;transcript-&gt;stable_id, "\n";
   }
 }
 </pre>
@@ -505,16 +505,16 @@ my $vf_adaptor = $registry-&gt;get_adaptor('human', 'variation', 'variationfeatu
 my $vfs = $vf_adaptor-&gt;fetch_all_by_Slice($slice); 
 
 # Count the number of variants returned
-print "There are " . scalar(@{$vfs}) . " variants in the " . $slice->display_id() . " region\n";
+print "There are " . scalar(@{$vfs}) . " variants in the " . $slice-&gt;display_id() . " region\n";
 
 # Now, tell the DBAdaptor that we want the failed variations as well. We get the DBAdaptor via the db() subroutine in our adaptor
-$vf_adaptor->db->include_failed_variations(1);
+$vf_adaptor-&gt;db-&gt;include_failed_variations(1);
 
 # Again, fetch all variants on the slice but this time include the failed variants
 $vfs = $vf_adaptor-&gt;fetch_all_by_Slice($slice); 
 
 # Count the number of variants returned, this number is likely to be higher than when failed variants were omitted
-print "There are " . scalar(@{$vfs}) . " variants in the " . $slice->display_id() . " region\n";
+print "There are " . scalar(@{$vfs}) . " variants in the " . $slice-&gt;display_id() . " region\n";
 </pre>
 
 <p>
@@ -527,15 +527,15 @@ my $failed = 0;
 my %descriptions;
 foreach my $vf (@{$vfs}) {
   # Check whether the variation for this variation feature is failed
-  if ($vf->variation->is_failed()) {
+  if ($vf-&gt;variation-&gt;is_failed()) {
     $failed++;
     # Get the reason why the variation failed and count the number of variations failed for the same reason.
-    map {$descriptions{$_}++} @{$vf->variation->get_all_failed_descriptions()};
+    map {$descriptions{$_}++} @{$vf-&gt;variation-&gt;get_all_failed_descriptions()};
   }
 }
 
 # Print the results
-print "There are $failed variants on slice " . $slice->display_id() . " that have been flagged as failed:\n";
+print "There are $failed variants on slice " . $slice-&gt;display_id() . " that have been flagged as failed:\n";
 map { print "\t" . $descriptions{$_} . " variants failed because " . $_ . "\n"; } keys(%descriptions);
 </pre>
 
@@ -554,20 +554,20 @@ map { print "\t" . $descriptions{$_} . " variants failed because " . $_ . "\n"; 
 <pre class="code sh_perl">
 foreach my $vf (@{$vfs}) {
   # Check whether the variation for this variation feature has failed alleles
-  if ($vf->variation->has_failed_alleles()) {
+  if ($vf-&gt;variation-&gt;has_failed_alleles()) {
     # Get all the alleles associated with the variation and check which ones have failed and why
     my %failed_alleles;
 
-    foreach my $allele (@{$vf->variation->get_all_Alleles()}) {
+    foreach my $allele (@{$vf-&gt;variation-&gt;get_all_Alleles()}) {
       # Check if the allele is flagged as failed
-      if ($allele->is_failed()) {
+      if ($allele-&gt;is_failed()) {
         # Get the reason why
-        $failed_alleles{$allele->subsnp() . ":" . $allele->allele()} = $allele->failed_description();
+        $failed_alleles{$allele-&gt;subsnp() . ":" . $allele-&gt;allele()} = $allele-&gt;failed_description();
       }
     } 
 
     # Print the result
-    print "Variation " . $vf->variation_name() . " has the following failed alleles:\n";
+    print "Variation " . $vf-&gt;variation_name() . " has the following failed alleles:\n";
     map { print "\t" . $_ . " has been flagged as failed because " . $failed_alleles{$_} . "\n"; } keys(%failed_alleles);
   }
 }
@@ -608,26 +608,26 @@ use Bio::EnsEMBL::Registry;
 
 my $registry = 'Bio::EnsEMBL::Registry';
 
-$registry->load_registry_from_db(
+$registry-&gt;load_registry_from_db(
   -host => 'ensembldb.ensembl.org',
   -user => 'anonymous'
 );
 
 # Fetch a variation object
-my $var_adaptor = $registry->get_adaptor('human', 'variation', 'variation');
-my $var = $var_adaptor->fetch_by_name('rs1421085');
+my $var_adaptor = $registry-&gt;get_adaptor('human', 'variation', 'variation');
+my $var = $var_adaptor-&gt;fetch_by_name('rs1421085');
 
 # Fetch all the phenotype features associated with the variation
-my $pf_adaptor = $registry->get_adaptor('homo_sapiens', 'variation', 'phenotypefeature');
-foreach my $pf (@{$pf_adaptor->fetch_all_by_Variation($var)}) {
-  print "Variation ", $pf->variation_names, " is associated with the phenotype '", $pf->phenotype->description,
-    "' in source ", $pf->source_name;
+my $pf_adaptor = $registry-&gt;get_adaptor('homo_sapiens', 'variation', 'phenotypefeature');
+foreach my $pf (@{$pf_adaptor-&gt;fetch_all_by_Variation($var)}) {
+  print "Variation ", $pf-&gt;variation_names, " is associated with the phenotype '", $pf-&gt;phenotype-&gt;description,
+    "' in source ", $pf-&gt;source_name;
 
-  print " with a p-value of ",$pf->p_value if (defined($pf->p_value));
+  print " with a p-value of ",$pf-&gt;p_value if (defined($pf-&gt;p_value));
 
   print ".\n";
 
-  print "The risk allele is ", $pf->risk_allele, ".\n" if (defined($pf->risk_allele));
+  print "The risk allele is ", $pf-&gt;risk_allele, ".\n" if (defined($pf-&gt;risk_allele));
 }
 </pre>
 
@@ -638,13 +638,13 @@ description and an optional source name.</p>
 my $source_name = 'NHGRI-EBI GWAS catalog';
 my $phenotype   = 'Cardiac hypertrophy';
 
-my $pf_adaptor = $registry->get_adaptor('homo_sapiens', 'variation', 'phenotypefeature');
+my $pf_adaptor = $registry-&gt;get_adaptor('homo_sapiens', 'variation', 'phenotypefeature');
  
-foreach my $pf (@{$pf_adaptor->fetch_all_by_phenotype_description_source_name($phenotype, $source_name)}) {
-  my $external_reference = $pf->external_reference;
+foreach my $pf (@{$pf_adaptor-&gt;fetch_all_by_phenotype_description_source_name($phenotype, $source_name)}) {
+  my $external_reference = $pf-&gt;external_reference;
   $external_reference =~ s/\// ID: /;
 
-  print $pf->type, " ", $pf->object_id, " is associated with the phenotype '", $phenotype,
+  print $pf-&gt;type, " ", $pf-&gt;object_id, " is associated with the phenotype '", $phenotype,
     "' in source ", $source_name," (", $external_reference,")\n";
 }		
 </pre>
@@ -703,13 +703,13 @@ use Bio::EnsEMBL::Registry;
 my $registry = 'Bio::EnsEMBL::Registry';
 
 # Load the registry from db
-$registry->load_registry_from_db(
+$registry-&gt;load_registry_from_db(
   -host => 'ensembldb.ensembl.org',
   -user => 'anonymous'
 );
 
 # Get a VariationSetAdaptor on the Human Variation database
-my $vs_adaptor = $registry->get_adaptor('human','variation','variationset');
+my $vs_adaptor = $registry-&gt;get_adaptor('human','variation','variationset');
 </pre>
 <p>
 	Next, we get the VariationSet objects from the adaptor. In order to display the hierarchical relationships between VariationSets, we fetch only the top level sets and for each set, recursively
@@ -717,7 +717,7 @@ my $vs_adaptor = $registry->get_adaptor('human','variation','variationset');
 </p>
 <pre class="code sh_perl">
 # Get all top-level variation sets
-my $top_vss = $vs_adaptor->fetch_all_top_VariationSets();
+my $top_vss = $vs_adaptor-&gt;fetch_all_top_VariationSets();
 
 # Loop over the top level variant sets and recursively print the subsets
 foreach my $top_vs (@{$top_vss}) {
@@ -730,10 +730,10 @@ sub print_set {
   my $indent = shift || "";
 
   # Print the set attributes
-  printf("\%s\%s (\%s)\n",$indent,$set->name(),$set->short_name());
+  printf("\%s\%s (\%s)\n",$indent,$set-&gt;name(),$set-&gt;short_name());
 
   # Get the subsets that have the current set as immediate parent
-  my $subsets = $set->get_all_sub_VariationSets(1);
+  my $subsets = $set-&gt;get_all_sub_VariationSets(1);
 
   # Call the print subroutine for each of the subsets with an increased indentation
   foreach my $subset (@{$subsets}) {
@@ -772,31 +772,31 @@ sub print_set {
 
 <pre class="code sh_perl">
 # Get the variant set for the phenotype-associated variants.
-my $vs = $vs_adaptor->fetch_by_short_name('ph_variants');
+my $vs = $vs_adaptor-&gt;fetch_by_short_name('ph_variants');
 
-printf("\%s (\%s):\n\t\%s\n",$vs->name(),$vs->short_name(),$vs->description());
+printf("\%s (\%s):\n\t\%s\n",$vs-&gt;name(),$vs-&gt;short_name(),$vs-&gt;description());
 
 my $limit = 10;
 my $fetched = 0;
-my $it = $vs->get_Variation_Iterator();
+my $it = $vs-&gt;get_Variation_Iterator();
 
 # Get the first 10 examples and print some data from them
-while ($fetched &lt; $limit &amp;&amp; $it->has_next()) {
+while ($fetched &lt; $limit &amp;&amp; $it-&gt;has_next()) {
   
   # Print the name of the variant
-  my $var = $it->next();
-  printf("\t\%s has been found to be associated with:\n",$var->name());
+  my $var = $it-&gt;next();
+  printf("\t\%s has been found to be associated with:\n",$var-&gt;name());
   
   # Get the PhenotypeFeature objects for the variant
-  my $pfs = $var->get_all_PhenotypeFeatures();
+  my $pfs = $var-&gt;get_all_PhenotypeFeatures();
   
   # Loop over the annotations and print the phenotypes
   foreach my $pf (@{$pfs}) {
     my @output = ();
-    push @output, 'Desc: ' . $pf->phenotype->description;
-    push @output, 'p-value: ' . $pf->p_value if (defined $pf->p_value);
-    push @output, 'study_type: ' . $pf->study->type if (defined $pf->study && defined $pf->study->type);
-    push @output, 'study_name: ' . $pf->study->name if (defined $pf->study && defined $pf->study->name);
+    push @output, 'Desc: ' . $pf-&gt;phenotype-&gt;description;
+    push @output, 'p-value: ' . $pf-&gt;p_value if (defined $pf-&gt;p_value);
+    push @output, 'study_type: ' . $pf-&gt;study-&gt;type if (defined $pf-&gt;study && defined $pf-&gt;study-&gt;type);
+    push @output, 'study_name: ' . $pf-&gt;study-&gt;name if (defined $pf-&gt;study && defined $pf-&gt;study-&gt;name);
     print join(' ', @output), "\n";
   }
   $fetched++;
@@ -831,26 +831,26 @@ while ($fetched &lt; $limit &amp;&amp; $it->has_next()) {
 </p>
 <pre class="code sh_perl">
 # Get the variation set object
-my $vs = $vs_adaptor->fetch_by_short_name('1kg_3');
+my $vs = $vs_adaptor-&gt;fetch_by_short_name('1kg_3');
 
 # Get a gene adaptor and the gene object for the RIC8A gene
-my $gene_adaptor = $registry->get_adaptor('human','core','gene');
-my $gene = $gene_adaptor->fetch_by_display_label('RIC8A');
+my $gene_adaptor = $registry-&gt;get_adaptor('human','core','gene');
+my $gene = $gene_adaptor-&gt;fetch_by_display_label('RIC8A');
 
 # Get the variation features on the slice belonging to the variation set
-my $vfs = $vs->get_all_VariationFeatures_by_Slice($gene->feature_Slice());
+my $vfs = $vs-&gt;get_all_VariationFeatures_by_Slice($gene-&gt;feature_Slice());
 
 # Loop over the variation features and print the variation using HGVS notation relative to the canonical transcript
 foreach my $vf (@{$vfs}) {
-  my $tvs = $vf->get_all_TranscriptVariations([$gene->canonical_transcript()]);
-  my $tv = $tvs->[0];
+  my $tvs = $vf-&gt;get_all_TranscriptVariations([$gene-&gt;canonical_transcript()]);
+  my $tv = $tvs-&gt;[0];
   my @hgvs_notations = ();
   foreach my $hgvs_type (qw/hgvs_genomic hgvs_transcript hgvs_protein/) {
-    for my $hgvs_notation (values %{$tv->$hgvs_type}) {
+    for my $hgvs_notation (values %{$tv-&gt;$hgvs_type}) {
       push @hgvs_notations, ((defined $hgvs_notation) ? $hgvs_notation : "no $hgvs_type");
     }
   }
-  print $vf->variation_name, ': ', join(', ', @hgvs_notations), "\n";
+  print $vf-&gt;variation_name, ': ', join(', ', @hgvs_notations), "\n";
 }
 </pre>
 <div class="code sh_perl" style="margin-bottom:15px">
@@ -882,17 +882,17 @@ The variant sets can also be retrieved from the structural variants.
 </p>
 <pre class="code sh_perl">
 # Get the StructuralVariation object
-my $sv_adaptor  = $registry->get_adaptor( 'human', 'variation', 'structuralvariation' );
-my $sv = $sv_adaptor->fetch_by_name('esv2663683');
+my $sv_adaptor  = $registry-&gt;get_adaptor( 'human', 'variation', 'structuralvariation' );
+my $sv = $sv_adaptor-&gt;fetch_by_name('esv2663683');
 
 # Get the structural variation features
-my $svfs = $sv->get_all_StructuralVariationFeatures();
+my $svfs = $sv-&gt;get_all_StructuralVariationFeatures();
 
 # Loop over the structural variation features and print the corresponding variant set(s)
 foreach my $svf (@{$svfs}) {
-  my $vss = $svf->get_all_VariationSets();
+  my $vss = $svf-&gt;get_all_VariationSets();
   foreach my $vs (@{$vss}) {
-    print "The structural variation belongs to the set ", $vs->name, "\n";
+    print "The structural variation belongs to the set ", $vs-&gt;name, "\n";
   }
 }
 </pre>
@@ -1020,7 +1020,7 @@ my $variation = $variation_adaptor-&gt;fetch_by_name('rs1333049');
 my $genotypes = $variation-&gt;get_all_SampleGenotypes();
 
 foreach my $genotype (@{$genotypes}) {
-  print "Sample ", $genotype-&gt;sample->name, " has genotype ", $genotype-&gt;genotype_string, "\n";
+  print "Sample ", $genotype-&gt;sample-&gt;name, " has genotype ", $genotype-&gt;genotype_string, "\n";
 }
 </pre>
 <div class="code sh_perl" style="margin-bottom:15px">
@@ -1239,7 +1239,7 @@ foreach my $diff (@differences){
 
 <h2 id="structural">Structural variations</h2>
 <p>
-The Ensembl Variation database also stores information about structural variants. These data are imported from the DGVa (Database of Genomic Variants archive). Structural variants are remapped to the current genome assembly using the $slice->project() method from the Ensembl Core API, allowing for one gap in the resultant mapping.</p>
+The Ensembl Variation database also stores information about structural variants. These data are imported from the DGVa (Database of Genomic Variants archive). Structural variants are remapped to the current genome assembly using the $slice-&gt;project() method from the Ensembl Core API, allowing for one gap in the resultant mapping.</p>
 
 <pre class="code sh_perl">
 use strict;
@@ -1257,16 +1257,16 @@ $reg-&gt;load_registry_from_db(
 );
 
 # Get adaptor to StructuralVariation object
-my $sva = $reg->get_adaptor("human", "variation", "structuralvariation");
+my $sva = $reg-&gt;get_adaptor("human", "variation", "structuralvariation");
 
 # Get the StructuralVariation object
-my $sv = $sva->fetch_by_name('esv2663683');
+my $sv = $sva-&gt;fetch_by_name('esv2663683');
 
-print $sv->variation_name, " ",  $sv->var_class, " (SO term: ", $sv->class_SO_term, ")\n";
+print $sv-&gt;variation_name, " ",  $sv-&gt;var_class, " (SO term: ", $sv-&gt;class_SO_term, ")\n";
 
 # Get Study information
-if ($sv->study) {
-  print "This structural variant comes from the study ", $sv->source_name, "-", $sv->study->name, ": ", $sv->study->description, "\n";
+if ($sv-&gt;study) {
+  print "This structural variant comes from the study ", $sv-&gt;source_name, "-", $sv-&gt;study-&gt;name, ": ", $sv-&gt;study-&gt;description, "\n";
 }
 </pre>
 <p>Like the variation, you can fetch the structural variations using a Slice.</p>
@@ -1290,16 +1290,16 @@ You can also retrieve all the supporting evidences associated to a structural va
 </p>
 <pre class="code sh_perl">
 # Get adaptor to StructuralVariation object from the Ensembl Variation API
-my $sva = $reg->get_adaptor("human", "variation", "structuralvariation");
+my $sva = $reg-&gt;get_adaptor("human", "variation", "structuralvariation");
 
 # Get the StructuralVariation object
-my $sv = $sva->fetch_by_name('esv2663683');
+my $sv = $sva-&gt;fetch_by_name('esv2663683');
 
 # Get the supporting evidences associated to the structural variation
-my $ssvs = $sv->get_all_SupportingStructuralVariants();
+my $ssvs = $sv-&gt;get_all_SupportingStructuralVariants();
 
 foreach my $ssv (@$ssvs) {
-  print $ssv->variation_name, " ",  $ssv->var_class, " (SO term: ", $ssv-&gt;class_SO_term, ")\n";
+  print $ssv-&gt;variation_name, " ",  $ssv-&gt;var_class, " (SO term: ", $ssv-&gt;class_SO_term, ")\n";
 }
 </pre>
 <div class="code sh_perl" style="margin-bottom:15px">
@@ -1425,15 +1425,15 @@ while ($cosmic_name_iter-&gt;has_next()) {
 <p>Variation features and structural variation features can be fetched using a Slice object (from the <a href="/info/docs/api/core/core_tutorial.html#slices">Core API</a>).</p>
 <pre class="code sh_perl">
 # Slice adaptor
-my $slice_adaptor = $registry->get_adaptor( 'Human', 'Core', 'Slice' );
+my $slice_adaptor = $registry-&gt;get_adaptor( 'Human', 'Core', 'Slice' );
 # Slice object
-my $slice = $slice_adaptor->fetch_by_region('chromosome', 3, 125439614, 125462946, 1);
+my $slice = $slice_adaptor-&gt;fetch_by_region('chromosome', 3, 125439614, 125462946, 1);
 
 # Fetch the variation feature objects overlapping the Slice
-my @var_features = @{$slice->get_all_VariationFeatures()};
+my @var_features = @{$slice-&gt;get_all_VariationFeatures()};
 
 # Fetch the structural variation feature objects overlapping the Slice
-my @sv_features = @{$slice->get_all_StructuralVariationFeatures()};
+my @sv_features = @{$slice-&gt;get_all_StructuralVariationFeatures()};
 
 print "Number of variations: ", scalar @var_features, "\n";
 print "Number of structural variations: ", scalar @sv_features, "\n";
@@ -1461,17 +1461,17 @@ print "Number of structural variations: ", scalar @sv_features, "\n";
 
 <pre class="code sh_perl">
 # Structural variation adaptor
-my $sv_adaptor = $registry->get_adaptor( 'human', 'variation', 'structuralvariation' );
+my $sv_adaptor = $registry-&gt;get_adaptor( 'human', 'variation', 'structuralvariation' );
 # Structural variation object
-my $sv = $sv_adaptor->fetch_by_name('esv2663683');
+my $sv = $sv_adaptor-&gt;fetch_by_name('esv2663683');
 
 # Structural variation feature(s)
-foreach my $svf (@{$sv->get_all_StructuralVariationFeatures()}){
+foreach my $svf (@{$sv-&gt;get_all_StructuralVariationFeatures()}){
   # Corresponding Slice
-  my $slice = $svf->feature_Slice();
+  my $slice = $svf-&gt;feature_Slice();
 
   # Fetch the variation feature objects overlapping the Slice
-  my @var_features = @{$slice->get_all_VariationFeatures()};
+  my @var_features = @{$slice-&gt;get_all_VariationFeatures()};
   print "Number of variations: ", scalar (@var_features), "\n";
 }
 </pre>
@@ -1497,17 +1497,17 @@ foreach my $svf (@{$sv->get_all_StructuralVariationFeatures()}){
 <p>And you can do the same with the variation features, for example.</p>
 <pre class="code sh_perl">
 # Variation adaptor
-my $var_adaptor = $registry->get_adaptor( 'human', 'variation', 'variation' );
+my $var_adaptor = $registry-&gt;get_adaptor( 'human', 'variation', 'variation' );
 # Variation object
-my $var = $var_adaptor->fetch_by_name('rs1333049');
+my $var = $var_adaptor-&gt;fetch_by_name('rs1333049');
 
 # Variation feature(s)
-foreach my $vf (@{$var->get_all_VariationFeatures()}){
+foreach my $vf (@{$var-&gt;get_all_VariationFeatures()}){
   # Corresponding Slice
-  my $slice = $vf->feature_Slice();
+  my $slice = $vf-&gt;feature_Slice();
 
   # Fetch the structural variation feature objects overlapping the Slice
-  my @svf_features = @{$slice->get_all_StructuralVariationFeatures()};
+  my @svf_features = @{$slice-&gt;get_all_StructuralVariationFeatures()};
   print "Number of structural variations: ", scalar (@svf_features), "\n";
 }
 </pre>
