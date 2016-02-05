@@ -27,6 +27,8 @@ use warnings;
 use EnsEMBL::Web::SpeciesDefs;
 use EnsEMBL::Web::Exceptions;
 
+use Bio::EnsEMBL::Variation::Utils::VEP qw(@OUTPUT_COLS);
+
 use parent qw(EnsEMBL::Web::TmpFile::ToolsOutput);
 
 sub compress { return 1; }
@@ -194,29 +196,29 @@ sub _convert_to_vep {
 
   my @lines;
 
-  # find Existing_variation field
-  # this is the last one we want to print as a separate field
-  my ($existing_variation_index) = grep { $headers->[$_] eq 'Existing_variation' } 0..$#{$headers};
-
   if ($rows) {
 
     foreach my $row (@$rows) {
 
-      $row->{'Uploaded_variation'} ||= $row->{'ID'} if $row->{'ID'};
+      $row->{'Uploaded_variation'} ||= delete $row->{'ID'} if $row->{'ID'};
 
       my (@fields, @extra);
 
+      # get the "main" columns using @OUTPUT_COLS as defined in the VEP module
+      foreach my $h(grep {$_ ne 'Extra'} @OUTPUT_COLS) {
+        my $v = delete $row->{$h};
+        push @fields, ($v // '') ne '' ? $v : '-';
+      }
+
+      # now get the rest of them in order as defined in $headers
+      # and add them to the "Extra" field
       foreach my $i (0..$#{$headers}) {
 
         # get header and value
         my ($h, $v) = ($headers->[$i], $row->{$headers->[$i]});
 
-        # normal column
-        if ($i <= $existing_variation_index) {
-          push @fields, ($v // '') ne '' ? $v : '-';
-
         # extra column
-        } elsif (($v // '') ne '') {
+        if (($v // '') ne '') {
           push @extra, sprintf '%s=%s', $h, $v;
         }
       }
@@ -224,7 +226,7 @@ sub _convert_to_vep {
       push @lines, join("\t", @fields, join(';', @extra));
     }
   } else {
-    push @lines, '#'.join("\t", map { s/^ID$/Uploaded_variation/r; } @$headers[0..$existing_variation_index], 'Extra');
+    push @lines, '#'.join("\t", @OUTPUT_COLS);
   }
 
   return \@lines;
