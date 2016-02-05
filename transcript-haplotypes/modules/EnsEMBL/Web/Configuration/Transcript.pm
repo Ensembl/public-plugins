@@ -33,7 +33,7 @@ sub modify_tree {
       [ 
         'haplo'    => 'EnsEMBL::Web::Component::Transcript::Haplotypes',
       ], 
-      { 'availability' => 'database:variation translation', 'concise' => 'Haplotypes' }
+      { 'availability' => 'database:variation translation ref_slice', 'concise' => 'Haplotypes' }
     )
   );
   
@@ -43,7 +43,7 @@ sub modify_tree {
       [ 
         'haplo'    => 'EnsEMBL::Web::Component::Transcript::Haplotypes_old',
       ], 
-      { 'availability' => 'database:variation translation', 'concise' => 'Haplotypes_old' }
+      { 'availability' => 'database:variation translation ref_slice', 'concise' => 'Haplotypes_old' }
     )
   );
 }
