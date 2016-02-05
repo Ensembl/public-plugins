@@ -89,17 +89,19 @@ Ensembl.Panel.TranscriptHaplotypes = Ensembl.Panel.Content.extend({
       return 'Unable to display details';
     }
 
+    var type = haplotype.type;
+
     var html =
       '<hr/>' +
       '<span class="small" style="float:right;"><a href=#Haplotypes>Back to table</a></span>' +
       '<h2>Details of haplotype ' + haplotype.name.replace(/\,/g, ',&#8203;') + '</h2><div>';
 
     var sections = [
-      { 'id': 'pop', 'title': 'Population frequencies',  'sub': 'populationTable' },
-      { 'id': 'seq', 'title': 'Aligned sequence',        'sub': 'alignedSequence' },
-      { 'id': 'cds', 'title': 'Observed CDS haplotypes', 'sub': 'cdsHaplotypes'   },
-      { 'id': 'raw', 'title': 'Translated sequence',     'sub': 'rawSequence'     },
-      { 'id': 'sam', 'title': 'Sample data',             'sub': 'sampleTable'     }
+      { 'id': 'pop', 'title': 'Population frequencies',   'sub': 'populationTable'   },
+      { 'id': 'seq', 'title': 'Aligned sequence',         'sub': 'alignedSequence'   },
+      { 'id': 'raw', 'title': 'Sequence',                 'sub': 'rawSequence'       },
+      { 'id': 'cds', 'title': 'Corresponding haplotypes', 'sub': 'otherHaplotypes'   },
+      { 'id': 'sam', 'title': 'Sample data',              'sub': 'sampleTable'       }
     ];
 
     var navs = [];
@@ -125,27 +127,29 @@ Ensembl.Panel.TranscriptHaplotypes = Ensembl.Panel.Content.extend({
     return html;
   },
 
-  cdsHaplotypes: function(haplotype) {
+  otherHaplotypes: function(haplotype) {
     var panel = this;
 
-    var cdss = panel.getOtherHaplotypes(haplotype);
+    var others = panel.getOtherHaplotypes(haplotype);
 
     var rows = [];
 
-    for(var i in cdss) {
-      var cds = cdss[i];
+    var typeChar = haplotype.type.substring(0, 1);
 
-      var row = '<span id="' + cds.hex + '"><b>c.ALT' + (parseInt(i) + 1) + ':</b> ' + cds.name.replace(/\,/g, ',&#8203;') + '</span>';
+    for(var i in others) {
+      var ht = others[i];
+
+      var row = '<span id="' + ht.hex + '"><b>' + typeChar + '.ALT' + (parseInt(i) + 1) + ':</b> ' + ht.name.replace(/\,/g, ',&#8203;') + '</span>';
 
       row = row +
-        '<br/>Observed count: ' + cds.count +
-        ' | <a href="#" class="toggle closed" rel="seq-' + cds.hex + '">Show CDS sequence</a>';// +
-        // ' | <a href="#" class="toggle closed" rel="pop-' + cds.hex + '">Population frequencies</a>' +
-        // ' | <a href="#" class="toggle closed" rel="sam-' + cds.hex + '">Sample data</a>';
+        '<br/>Observed count: ' + ht.count +
+        ' | <a href="#" class="toggle closed" rel="seq-' + ht.hex + '">Show sequence</a>';// +
+        // ' | <a href="#" class="toggle closed" rel="pop-' + ht.hex + '">Population frequencies</a>' +
+        // ' | <a href="#" class="toggle closed" rel="sam-' + ht.hex + '">Sample data</a>';
 
-      row = row + '<div class="hidden" style="margin-top: 1em; display: none" id="seq-' + cds.hex + '">' + panel.rawSequence(cds) + '</div>';
-      // row = row + '<div class="hidden" style="margin-top: 1em; display: none" id="pop-' + cds.hex + '">' + panel.populationTable(cds) + '</div>';
-      // row = row + '<div class="hidden" style="margin-top: 1em; display: none" id="sam-' + cds.hex + '">' + panel.sampleTable(cds) + '</div>';
+      row = row + '<div class="hidden" style="margin-top: 1em; display: none" id="seq-' + ht.hex + '">' + panel.rawSequence(ht) + '</div>';
+      // row = row + '<div class="hidden" style="margin-top: 1em; display: none" id="pop-' + ht.hex + '">' + panel.populationTable(ht) + '</div>';
+      // row = row + '<div class="hidden" style="margin-top: 1em; display: none" id="sam-' + ht.hex + '">' + panel.sampleTable(ht) + '</div>';
 
       rows.push(row);
     }
@@ -233,6 +237,7 @@ Ensembl.Panel.TranscriptHaplotypes = Ensembl.Panel.Content.extend({
 
     var levels = {};
 
+    // get the "levels" from the population structure
     for(var i in popStruct) {
       levels[i] = 1;
 
@@ -241,6 +246,8 @@ Ensembl.Panel.TranscriptHaplotypes = Ensembl.Panel.Content.extend({
       }
     }
 
+    // we need to sort the samples by super then sub population
+    // either I'm dumb or sorting in JS is hard...
     var samples = Object.keys(haplotype.samples).sort(
       function(a, b) {
 
@@ -297,22 +304,33 @@ Ensembl.Panel.TranscriptHaplotypes = Ensembl.Panel.Content.extend({
       return new Array( num + 1 ).join( this );
     };
 
+    var proteinHaplotype;
+    var cdsHaplotypes;
+
+    if(haplotype.type === 'protein') {
+      proteinHaplotype = haplotype;
+      cdsHaplotypes = panel.getOtherHaplotypes(haplotype);
+    }
+    else {
+      proteinHaplotype = panel.getOtherHaplotypes(haplotype)[0];
+      cdsHaplotypes = [haplotype];
+    }
+
     // get protein stuff
-    var refProtein = haplotype.aligned_sequences[0];
-    var altProtein = haplotype.aligned_sequences[1];
+    var refProtein = proteinHaplotype.aligned_sequences[0];
+    var altProtein = proteinHaplotype.aligned_sequences[1];
     var longest = (refProtein.length >= altProtein.length ? refProtein.length : altProtein.length);
 
     // get diffs as a hash keyed on pos
-    var protDiffs = panel.parseDiffs(haplotype);
+    var protDiffs = panel.parseDiffs(proteinHaplotype);
 
     // get CDS stufff
-    var others = panel.getOtherHaplotypes(haplotype);
-    var refCDS = others[0].aligned_sequences[0].replace(/-/g, '');
-    var altCDSs = others.map(function(a) {
+    var refCDS = cdsHaplotypes[0].aligned_sequences[0].replace(/-/g, '');
+    var altCDSs = cdsHaplotypes.map(function(a) {
       return a.aligned_sequences[1].replace(/-/g, '');
     });
 
-    var cdsDiffs = others.map(function(a) {
+    var cdsDiffs = cdsHaplotypes.map(function(a) {
       return panel.parseDiffs(a);
     });
 
@@ -328,7 +346,7 @@ Ensembl.Panel.TranscriptHaplotypes = Ensembl.Panel.Content.extend({
     var cdsAlternator = 1;
 
     // work out padding
-    var padName = others.length.toString().length;
+    var padName = cdsHaplotypes.length.toString().length;
 
     // initialise with refProt, altProt, refCDS
     var seqsInit = [
@@ -338,10 +356,10 @@ Ensembl.Panel.TranscriptHaplotypes = Ensembl.Panel.Content.extend({
     ];
 
     // initialise seq strings for alt CDS's
-    for (var i = 0; i < others.length; i++) {
+    for (var i = 0; i < cdsHaplotypes.length; i++) {
       seqsInit.push(
-        '         <a class="_ht" href="#' + others[i].hex +
-        '" title="' + others[i].name.replace(/\,/g, ',&#8203;') + ' (' + others[i].count + ')' +
+        '         <a class="_ht" href="#' + cdsHaplotypes[i].hex +
+        '" title="' + cdsHaplotypes[i].name.replace(/\,/g, ',&#8203;') + ' (' + cdsHaplotypes[i].count + ')' +
         '">c.ALT' + (i + 1).toString() + '</a> ' +
         ' '.repeat(padName - (i+1).toString().length) // pad
       );
