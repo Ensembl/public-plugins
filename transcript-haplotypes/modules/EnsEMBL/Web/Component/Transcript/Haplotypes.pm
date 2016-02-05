@@ -69,19 +69,48 @@ sub content {
     }}
     sort keys %$pop_struct;
 
+  my $type = $self->hub->param('ht_type') || 'protein';
+  my %titles = (
+    'protein' => 'Protein',
+    'cds'     => 'CDS',
+  );
+  my $other_type = $type eq 'protein' ? 'cds' : 'protein';
+
   $table->add_columns(
-    { key => 'protein', title => 'Protein haplotype', sort => 'none',         help => 'Haplotype names represent a comma-separated list of differences to the reference sequence'},
-    { key => 'flags',   title => 'Flags',             sort => 'html_numeric', help => 'Flags indicating features of interest for each haplotype'},
-    { key => 'freq',    title => 'Frequency (count)', sort => 'numeric',      help => 'Combined frequency across all samples and observed count in parentheses'},
+    {
+      key   => 'haplotype',
+      title => $titles{$type}.' haplotype',
+      sort  => 'html_numeric',
+      help  => 'Haplotype names represent a comma-separated list of differences to the reference sequence'
+    },
+    {
+      key   => 'flags',
+      title => 'Flags',
+      sort  => 'html_numeric',
+      help  => 'Flags indicating features of interest for each haplotype'
+    },
+    {
+      key   => 'freq',
+      title => 'Frequency (count)',
+      sort  => 'numeric',
+      help  => 'Combined frequency across all samples and observed count in parentheses'
+    },
     @pop_cols,
   );
   
   my @rows;
   my $count = 0;
-  
-  foreach my $ph(@{$c->get_all_ProteinHaplotypes}) {    
-    $table->add_row($self->render_protein_haplotype_row($ph));
+  my $method = 'get_all_'.$titles{$type}.'Haplotypes';
+
+  foreach my $ht(@{$c->$method}) {    
+    $table->add_row($self->render_haplotype_row($ht));
   }
+
+  my $url = $self->hub->url({ht_type => lc($other_type)});
+  $html .= sprintf(
+    '<h4><a href="%s">Switch to %s view</a> <img src="/i/16/reload.png" height="12px"></h4>',
+    $url, $titles{$other_type}
+  );
   
   $html .= $table->render;
 
@@ -178,15 +207,15 @@ sub population_objects {
   return $self->{_population_objects};
 }
 
-sub render_protein_haplotype_row {
+sub render_haplotype_row {
   my $self = shift;
-  my $ph = shift;
+  my $ht = shift;
   
   my $pop_objs = $self->population_objects();
   my $pop_struct = $self->population_structure;
   my %pop_descs = map {$_->name => $_->description} @$pop_objs;
 
-  my @flags = @{$ph->get_all_flags()};
+  my @flags = $ht->can('get_all_flags') ? @{$ht->get_all_flags()} : ();
   my $flags_html;
 
   my $score = 0;
@@ -205,14 +234,14 @@ sub render_protein_haplotype_row {
   
   # create base row
   my $row = {
-    protein => $self->render_protein_haplotype_name($ph),
-    flags   => $flags_html,
-    freq    => sprintf("%.3g (%i)", $ph->frequency, $ph->count),
+    haplotype => $self->render_haplotype_name($ht),
+    flags     => $flags_html,
+    freq      => sprintf("%.3g (%i)", $ht->frequency, $ht->count),
   };
   
   # add per-population frequencies
-  my $pop_freqs = $ph->get_all_population_frequencies;
-  my $pop_counts = $ph->get_all_population_counts;
+  my $pop_freqs = $ht->get_all_population_frequencies;
+  my $pop_counts = $ht->get_all_population_counts;
   
   foreach my $pop(keys %$pop_counts) {
     my $short_pop = $self->short_population_name($pop);
@@ -223,11 +252,11 @@ sub render_protein_haplotype_row {
   return $row;
 }
 
-sub render_protein_haplotype_name {
+sub render_haplotype_name {
   my $self = shift;
-  my $ph = shift;
+  my $ht = shift;
   
-  my $name = $ph->name;
+  my $name = $ht->name;
   $name =~ s/^.+?://;
 
   my $display_name = $name;
@@ -250,7 +279,7 @@ sub render_protein_haplotype_name {
     '%s<span class="_ht" title="%s"><a href="#details-view" class="details-link" rel="%s">%s</a></span>',
     $hidden,
     $title,
-    $ph->_hex,
+    $ht->_hex,
     $display_name
   );
 }
