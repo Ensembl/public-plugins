@@ -28,6 +28,23 @@ use JSON qw(to_json);
 
 use previous qw(content);
 
+sub get_json {
+  my $self   = shift;
+  my $cdb    = shift;
+
+  my $object = shift || $self->object || $self->hub->core_object('gene');
+  my $member = $object->get_compara_Member($cdb);
+
+  return (undef, '<strong>Gene is not in the compara database</strong>') unless $member;
+
+  my $tree_json = $object->get_SpeciesTreeJSON($cdb);
+
+  return (undef, '<strong>Gene is not in a compara tree</strong>') unless $tree_json;
+
+  return ($member, $tree_json);
+}
+
+
 sub content {
   my $self        = shift;
   my $cdb         = shift || 'compara';
@@ -39,14 +56,10 @@ sub content {
    
   return $self->PREV::content(@_) if($image_type->{'static'} || $hub->param('static') || $hub->param('export') || !(grep $_->[0] eq 'SpeciesTree', @{$hub->components}));
   
-  #return if $self->_export_image($image);
-
-  my ($member, $tree, $node)            = $self->get_details($cdb);  
+  my ($member, $str)                    = $self->get_json($cdb);
   
   my ($species, $object_type, $db_type) = Bio::EnsEMBL::Registry->get_species_and_object_type($stable_id);  #get corresponding species for current gene
   my $species_name                      = $hub->species_defs->get_config(ucfirst($species), 'SPECIES_SCIENTIFIC_NAME');    
-  my $hash                              = Bio::EnsEMBL::Compara::Utils::CAFETreeHash->convert($tree);
-  my $str                               = to_json($hash);
   
   $html .= qq{
     <input type="hidden" class="js_param" name="treeType" value="CafeTree" />
