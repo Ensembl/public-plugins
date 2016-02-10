@@ -86,16 +86,17 @@ my $db  = {
   'trackable' => 0
 };
 
+my $sub_limit = 1000;
+my $counter   = 0;
+my $validity  = $sd->ENSEMBL_TICKETS_VALIDITY;
+
 print sprintf "INFO: Current time %s\n", scalar localtime;
-print sprintf "INFO: Deleting tickets created before %s\n", scalar localtime(time - $sd->ENSEMBL_TICKETS_VALIDITY);
+print sprintf "INFO: Deleting tickets created before %s\n", scalar localtime(time - $validity);
 print sprintf "INFO: Database %s\n", $db->{'database'};
 print sprintf "INFO: Host %s:%s\n", $db->{'host'}, $db->{'port'};
 
 # Register db with rose api
 ORM::EnsEMBL::Rose::DbConnection->register_database($db);
-
-my $sub_limit = 1000;
-my $counter   = 0;
 
 while ($limit) {
 
@@ -123,21 +124,26 @@ while ($limit) {
   # For all tickets that have no validity left, mark them as deleted and remove all the related dirs from the file system
   my $deleted = 0;
   while (my $ticket = $tickets_iterator->next) {
-    if (!$ticket->calculate_life_left($sd->ENSEMBL_TICKETS_VALIDITY)) {
-      $deleted++;
+    if (!$ticket->calculate_life_left($validity)) {
       print sprintf "INFO: Deleting ticket %s\n", $ticket->ticket_name;
-      if ($dry || $ticket->mark_deleted) {
-        for (grep $_->job_dir, $ticket->job) {
-          my @dir = File::Spec->splitdir($_->job_dir);
-          my $dir = File::Spec->catdir(splice @dir, 0, -1);
-          print "INFO: Removing $dir\n";
-          if (!$dry && -d $dir && !remove_empty_path($dir, { 'remove_contents' => 1, 'exclude' => [ $ticket->ticket_type_name ], 'no_exception' => 1 })) {
-            print "WARNING: Could not remove ticket directory $dir\n";
+      eval {
+        if ($dry || $ticket->mark_deleted) {
+          for (grep $_->job_dir, $ticket->job) {
+            my @dir = File::Spec->splitdir($_->job_dir);
+            my $dir = File::Spec->catdir(splice @dir, 0, -1);
+            print "INFO: Removing $dir\n";
+            if (!$dry && -d $dir && !remove_empty_path($dir, { 'remove_contents' => 1, 'exclude' => [ $ticket->ticket_type_name ], 'no_exception' => 1 })) {
+              print "WARNING: Could not remove ticket directory $dir\n";
+            }
+            last; # ticket dir removed, second attempt not required
           }
-          last; # ticket dir removed, second attempt not required
+          $deleted++;
+        } else {
+          print sprintf "WARNING: Could not mark ticket %s as deleted.\n", $ticket->ticket_name;
         }
-      } else {
-        print sprintf "WARNING: Could not mark ticket %s as deleted.\n", $ticket->ticket_name;
+      };
+      if ($@) { # some unknown error
+        print sprintf "WARNING: Could not mark ticket %s as deleted.\n%s\n%s\n", $ticket->ticket_name, $@, "-" x 50;
       }
     }
   }
