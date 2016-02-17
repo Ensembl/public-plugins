@@ -67,6 +67,8 @@
 </head>
 <body>
 
+<!--Replace [current release number] with appropriate digits and insert this HTML in the 'Introduction' section -->
+
 <h1 style="margin-top:15px">Ensembl Core - Schema documentation</h1>
 
 
@@ -80,7 +82,7 @@ tables that they've not used before.
 </p>
 
 <p>
-This document refers to version <span style="font-weight:bold;font-size:11pt;color:#000">82</span> of the EnsEMBL
+This document refers to version <span style="font-weight:bold;font-size:11pt;color:#000">84</span> of the EnsEMBL
 core schema.
 </p>
 
@@ -97,6 +99,10 @@ The core database schema is available in several diagrams (PDF format) here:
 <img border="0" src="xrefs_thumb.png" alt="External References Schema Diagram" style="margin-left:20px; margin-top:20px;" /></a>
 <a href="id_mapping_core.pdf" target="_blank">
 <img border="0" src="id_mapping_thumb.png" alt="ID Mapping Schema Diagram" style="margin-left:20px; margin-top:20px;" /></a>
+
+
+
+
 
 <h3 id="top">List of the tables:</h3>
 <div>
@@ -1730,7 +1736,7 @@ The core database schema is available in several diagrams (PDF format) here:
 
       <tr>
         <td class="bg1"><b>synonym</b></td>
-        <td class="bg1">VARCHAR(50)</td>
+        <td class="bg1">VARCHAR(250)</td>
         <td class="bg1">-</td>
         <td class="bg1">Alternative name for sequence region.</td>
         <td class="bg1">unique key: <i>syn_idx</i></td>
@@ -2001,7 +2007,6 @@ The core database schema is available in several diagrams (PDF format) here:
     <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show species
   </a></p>
     <div id="sp_dependent_xref" style="display:none;">      <ul>
-        <li class="sql_schema_species_name">Ailuropoda melanoleuca</li>
         <li class="sql_schema_species_name">Anas platyrhynchos</li>
         <li class="sql_schema_species_name">Anolis carolinensis</li>
         <li class="sql_schema_species_name">Astyanax mexicanus</li>
@@ -2011,12 +2016,9 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Canis familiaris</li>
         <li class="sql_schema_species_name">Cavia porcellus</li>
         <li class="sql_schema_species_name">Chlorocebus sabaeus</li>
-        <li class="sql_schema_species_name">Choloepus hoffmanni</li>
         <li class="sql_schema_species_name">Ciona intestinalis</li>
         <li class="sql_schema_species_name">Ciona savignyi</li>
         <li class="sql_schema_species_name">Danio rerio</li>
-        <li class="sql_schema_species_name">Dasypus novemcinctus</li>
-        <li class="sql_schema_species_name">Dipodomys ordii</li>
         <li class="sql_schema_species_name">Drosophila melanogaster</li>
         <li class="sql_schema_species_name">Echinops telfairi</li>
         <li class="sql_schema_species_name">Equus caballus</li>
@@ -2024,24 +2026,17 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Felis catus</li>
         <li class="sql_schema_species_name">Ficedula albicollis</li>
         <li class="sql_schema_species_name">Gadus morhua</li>
-        <li class="sql_schema_species_name">Gallus gallus</li>
         <li class="sql_schema_species_name">Gasterosteus aculeatus</li>
         <li class="sql_schema_species_name">Gorilla gorilla</li>
-        <li class="sql_schema_species_name">Homo sapiens</li>
         <li class="sql_schema_species_name">Ictidomys tridecemlineatus</li>
         <li class="sql_schema_species_name">Latimeria chalumnae</li>
         <li class="sql_schema_species_name">Lepisosteus oculatus</li>
-        <li class="sql_schema_species_name">Loxodonta africana</li>
         <li class="sql_schema_species_name">Macaca mulatta</li>
-        <li class="sql_schema_species_name">Macropus eugenii</li>
         <li class="sql_schema_species_name">Meleagris gallopavo</li>
-        <li class="sql_schema_species_name">Microcebus murinus</li>
         <li class="sql_schema_species_name">Monodelphis domestica</li>
-        <li class="sql_schema_species_name">Mus musculus</li>
         <li class="sql_schema_species_name">Mustela putorius furo</li>
         <li class="sql_schema_species_name">Myotis lucifugus</li>
         <li class="sql_schema_species_name">Nomascus leucogenys</li>
-        <li class="sql_schema_species_name">Ochotona princeps</li>
         <li class="sql_schema_species_name">Oreochromis niloticus</li>
         <li class="sql_schema_species_name">Ornithorhynchus anatinus</li>
         <li class="sql_schema_species_name">Oryctolagus cuniculus</li>
@@ -2049,13 +2044,10 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Otolemur garnettii</li>
         <li class="sql_schema_species_name">Ovis aries</li>
         <li class="sql_schema_species_name">Pan troglodytes</li>
-        <li class="sql_schema_species_name">Papio anubis</li>
         <li class="sql_schema_species_name">Pelodiscus sinensis</li>
         <li class="sql_schema_species_name">Petromyzon marinus</li>
         <li class="sql_schema_species_name">Poecilia formosa</li>
         <li class="sql_schema_species_name">Pongo abelii</li>
-        <li class="sql_schema_species_name">Procavia capensis</li>
-        <li class="sql_schema_species_name">Pteropus vampyrus</li>
         <li class="sql_schema_species_name">Rattus norvegicus</li>
         <li class="sql_schema_species_name">Saccharomyces cerevisiae</li>
         <li class="sql_schema_species_name">Sarcophilus harrisii</li>
@@ -2063,11 +2055,8 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Sus scrofa</li>
         <li class="sql_schema_species_name">Taeniopygia guttata</li>
         <li class="sql_schema_species_name">Takifugu rubripes</li>
-        <li class="sql_schema_species_name">Tarsius syrichta</li>
         <li class="sql_schema_species_name">Tetraodon nigroviridis</li>
         <li class="sql_schema_species_name">Tupaia belangeri</li>
-        <li class="sql_schema_species_name">Tursiops truncatus</li>
-        <li class="sql_schema_species_name">Vicugna pacos</li>
         <li class="sql_schema_species_name">Xenopus tropicalis</li>
         <li class="sql_schema_species_name">Xiphophorus maculatus</li>
       </ul>
@@ -3368,7 +3357,7 @@ The core database schema is available in several diagrams (PDF format) here:
       <tr>
         <td class="bg1"><b>version</b></td>
         <td class="bg1">VARCHAR(10)</td>
-        <td class="bg1">'0'</td>
+        <td class="bg1">NULL</td>
         <td class="bg1">Object version.</td>
         <td class="bg1">unique key: <i>id_index</i></td>
       </tr>
@@ -6913,7 +6902,7 @@ The core database schema is available in several diagrams (PDF format) here:
       <tr>
         <td class="bg1"><b>version</b></td>
         <td class="bg1">SMALLINT</td>
-        <td class="bg1">1</td>
+        <td class="bg1">NULL</td>
         <td class="bg1">Stable identifier version number.</td>
         <td class="bg1">key: <i>stable_id_idx</i></td>
       </tr>
@@ -7289,7 +7278,7 @@ The core database schema is available in several diagrams (PDF format) here:
       <tr>
         <td class="bg1"><b>version</b></td>
         <td class="bg1">SMALLINT</td>
-        <td class="bg1">1</td>
+        <td class="bg1">NULL</td>
         <td class="bg1">Stable identifier version number.</td>
         <td class="bg1">key: <i>stable_id_idx</i></td>
       </tr>
@@ -7792,7 +7781,7 @@ The core database schema is available in several diagrams (PDF format) here:
         <td class="bg2">INT(10)</td>
         <td class="bg2">-</td>
         <td class="bg2">Foreign key references to the <a href="#translation" class="sql_schema_link">translation</a> table.</td>
-        <td class="bg2">key: <i>translation_idx</i></td>
+        <td class="bg2">unique key: <i>aln_idx</i><br />key: <i>translation_idx</i></td>
       </tr>
 
       <tr>
@@ -7800,7 +7789,7 @@ The core database schema is available in several diagrams (PDF format) here:
         <td class="bg1">INT(10)</td>
         <td class="bg1">-</td>
         <td class="bg1">Sequence start position.</td>
-        <td class="bg1"></td>
+        <td class="bg1">unique key: <i>aln_idx</i></td>
       </tr>
 
       <tr>
@@ -7808,7 +7797,7 @@ The core database schema is available in several diagrams (PDF format) here:
         <td class="bg2">INT(10)</td>
         <td class="bg2">-</td>
         <td class="bg2">Sequence end position.</td>
-        <td class="bg2"></td>
+        <td class="bg2">unique key: <i>aln_idx</i></td>
       </tr>
 
       <tr>
@@ -7816,7 +7805,7 @@ The core database schema is available in several diagrams (PDF format) here:
         <td class="bg1">INT(10)</td>
         <td class="bg1">-</td>
         <td class="bg1">Alignment hit start position.</td>
-        <td class="bg1"></td>
+        <td class="bg1">unique key: <i>aln_idx</i></td>
       </tr>
 
       <tr>
@@ -7824,7 +7813,7 @@ The core database schema is available in several diagrams (PDF format) here:
         <td class="bg2">INT(10)</td>
         <td class="bg2">-</td>
         <td class="bg2">Alignment hit end position.</td>
-        <td class="bg2"></td>
+        <td class="bg2">unique key: <i>aln_idx</i></td>
       </tr>
 
       <tr>
@@ -7832,7 +7821,7 @@ The core database schema is available in several diagrams (PDF format) here:
         <td class="bg1">VARCHAR(40)</td>
         <td class="bg1">-</td>
         <td class="bg1">Alignment hit name.</td>
-        <td class="bg1">key: <i>hitname_idx</i></td>
+        <td class="bg1">unique key: <i>aln_idx</i><br />key: <i>hitname_idx</i></td>
       </tr>
 
       <tr>
@@ -8244,7 +8233,7 @@ The core database schema is available in several diagrams (PDF format) here:
       <tr>
         <td class="bg2"><b>version</b></td>
         <td class="bg2">SMALLINT</td>
-        <td class="bg2">1</td>
+        <td class="bg2">NULL</td>
         <td class="bg2">Stable identifier version number.</td>
         <td class="bg2">key: <i>stable_id_idx</i></td>
       </tr>
@@ -8697,7 +8686,7 @@ The core database schema is available in several diagrams (PDF format) here:
       <tr>
         <td class="bg2"><b>version</b></td>
         <td class="bg2">SMALLINT</td>
-        <td class="bg2">1</td>
+        <td class="bg2">NULL</td>
         <td class="bg2">Stable identifier version number.</td>
         <td class="bg2">key: <i>stable_id_idx</i></td>
       </tr>
@@ -9079,6 +9068,7 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Oryzias latipes</li>
         <li class="sql_schema_species_name">Otolemur garnettii</li>
         <li class="sql_schema_species_name">Pan troglodytes</li>
+        <li class="sql_schema_species_name">Papio anubis</li>
         <li class="sql_schema_species_name">Poecilia formosa</li>
         <li class="sql_schema_species_name">Pongo abelii</li>
         <li class="sql_schema_species_name">Procavia capensis</li>
@@ -9234,6 +9224,7 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Oryzias latipes</li>
         <li class="sql_schema_species_name">Otolemur garnettii</li>
         <li class="sql_schema_species_name">Pan troglodytes</li>
+        <li class="sql_schema_species_name">Papio anubis</li>
         <li class="sql_schema_species_name">Poecilia formosa</li>
         <li class="sql_schema_species_name">Pongo abelii</li>
         <li class="sql_schema_species_name">Procavia capensis</li>
@@ -9466,6 +9457,7 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Oryzias latipes</li>
         <li class="sql_schema_species_name">Otolemur garnettii</li>
         <li class="sql_schema_species_name">Pan troglodytes</li>
+        <li class="sql_schema_species_name">Papio anubis</li>
         <li class="sql_schema_species_name">Poecilia formosa</li>
         <li class="sql_schema_species_name">Pongo abelii</li>
         <li class="sql_schema_species_name">Procavia capensis</li>
@@ -9676,6 +9668,7 @@ The core database schema is available in several diagrams (PDF format) here:
         <li class="sql_schema_species_name">Oryzias latipes</li>
         <li class="sql_schema_species_name">Otolemur garnettii</li>
         <li class="sql_schema_species_name">Pan troglodytes</li>
+        <li class="sql_schema_species_name">Papio anubis</li>
         <li class="sql_schema_species_name">Poecilia formosa</li>
         <li class="sql_schema_species_name">Pongo abelii</li>
         <li class="sql_schema_species_name">Procavia capensis</li>
@@ -9790,7 +9783,7 @@ The core database schema is available in several diagrams (PDF format) here:
       <tr>
         <td class="bg1"><b>version</b></td>
         <td class="bg1">SMALLINT</td>
-        <td class="bg1">1</td>
+        <td class="bg1">NULL</td>
         <td class="bg1">Stable identifier version number.</td>
         <td class="bg1">key: <i>stable_id_idx</i></td>
       </tr>
@@ -9919,7 +9912,7 @@ The core database schema is available in several diagrams (PDF format) here:
       <tr>
         <td class="bg2"><b>version</b></td>
         <td class="bg2">SMALLINT</td>
-        <td class="bg2">1</td>
+        <td class="bg2">NULL</td>
         <td class="bg2">Stable identifier version number.</td>
         <td class="bg2">key: <i>stable_id_idx</i></td>
       </tr>
