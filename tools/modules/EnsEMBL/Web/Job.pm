@@ -110,8 +110,18 @@ sub create_work_dir {
   ## @return Absolute path to the work dir
   my ($self, $params) = @_;
 
+  my $sd    = $self->hub->species_defs;
   my $files = $self->{'_input_files'};
-  my $dir   = join '/', $self->hub->species_defs->ENSEMBL_TMP_DIR_TOOLS, ($params->{'persistent'} ? 'persistent' : 'temporary'), $params->{'ticket_type'}, ($params->{'ticket_name'} =~ /.{1,3}/g), $params->{'job_number'};
+  my $dir   = join '/',
+    $sd->ENSEMBL_TMP_DIR_TOOLS,
+    $params->{'persistent'} ? 'persistent' : 'temporary',
+    $sd->ENSEMBL_TMP_SUBDIR_TOOLS,
+    $params->{'ticket_type'},
+    ($params->{'ticket_name'} =~ m|^(.{1})(.{1})(.{1})(.+)$|),
+    $params->{'job_number'};
+
+  # clean grouped directory separators
+  $dir =~ s|/+|/|r;
 
   # Create the work directory
   create_path($dir);
