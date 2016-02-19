@@ -121,7 +121,7 @@ sub create_work_dir {
     $params->{'job_number'};
 
   # clean grouped directory separators
-  $dir =~ s|/+|/|r;
+  $dir =~ s|/+|/|;
 
   # Create the work directory
   create_path($dir);
