@@ -65,6 +65,7 @@ window.pedestrian_templates =
           state = { page: 1 }
           state['facet_'+href.substring(1)] = ''
           $(document).trigger('update_state',[state])
+          $(document).trigger('ga',['SrchFacetLHSOff',href.substring(1)])
           false
     postproc: (el,data) ->
       $('#main_holder').css('min-height',
@@ -73,8 +74,8 @@ window.pedestrian_templates =
   
   beak:
     config:
-      short_num: (data) -> 
-        return $.solr_config('static.ui.facets.key=.trunc',data.type)  
+      short_num: (data) ->
+        return $.solr_config('static.ui.facets.key=.trunc',data.type)
 
     template: """
       <div>
@@ -179,6 +180,7 @@ window.pedestrian_templates =
           state = { page: 1 }
           state["facet_#{data.key}"] = href.substring(1)
           $(document).trigger('update_state',[state])
+          $(document).trigger('ga',['SrchFacetLHSOn',data.key,href.substring(1)])
           false
       '.solr_beak_p': (els,data) =>
         els.on 'mouseleave', (e) =>
@@ -190,12 +192,14 @@ window.pedestrian_templates =
           state = {}
           state["fall_"+data.key] = '1'
           $(document).trigger('update_state',[state])
+          $(document).trigger('ga',['SrchFacetLHSMore',data.key])
           false
       '.solr_beak_p_less a': (els,data) ->
         els.click () ->
           state = {}
           state["fall_"+data.key] = ''
           $(document).trigger('update_state',[state])
+          $(document).trigger('ga',['SrchFacetLHSLess',data.key])
           false
     preproc: (spec,data) ->
       data.entries = []
@@ -301,6 +305,7 @@ window.pedestrian_templates =
           href = $(e.currentTarget).attr('href')
           href = href.substring(href.indexOf('#')) # IE7, :-(
           $(document).trigger('update_state',{ perpage: href.substring(1) })
+          $(document).trigger('ga',['SrchPerPage',data.key,href.substring(1)])
           false
     preproc: (spec,data) ->
       data.entries = []

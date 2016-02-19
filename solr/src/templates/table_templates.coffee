@@ -350,6 +350,9 @@ window.table_templates =
     # XXX makes non-portable
     # XXX cleaner intra-column formatting
     more_fixes: ['page','fix_g_variation','fix_regulation','fix_terse','fix_minor_types']
+    postproc: (el,data) ->
+      $('td a',el).click ->
+        $(document).trigger('ga',['SrchMainLink','table',$(this).text()])
     fixes:
       global: [
         (data) -> # Merge id_with_url back in

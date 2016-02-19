@@ -188,6 +188,7 @@ window.rhs_templates =
       
       '.sctophit': (el,data) ->
         el.on 'click', (e) =>
+          $(document).trigger('ga',['SrchBoxes','tophit',data.url])
           window.location.href = data.url
 
     preproc: (spec,data) ->
@@ -319,6 +320,7 @@ window.rhs_templates =
             state["facet_"+f.key] = ''
           state.q = href.substring(1)
           $(document).trigger('update_state',[state])
+          $(document).trigger('ga',['SrchSuggest','click',state.q])
           false
       '.scsug-main': (els,data) ->
         if data.someresults and data.mainflow

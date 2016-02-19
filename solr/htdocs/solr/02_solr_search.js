@@ -65,6 +65,7 @@
       var config_url,
         _this = this;
       config_url = "" + ($('#species_path').val()) + "/Ajax/config";
+      this.ga_init();
       $.when($.solr_config({
         url: config_url
       }), $.getScript('/pure/pure.js')).done(function() {
@@ -91,6 +92,26 @@
         return more(_this);
       });
     }
+
+    Hub.prototype.ga_init = function() {
+      if (Ensembl.GA) {
+        return this.ga = new Ensembl.GA.EventConfig({
+          category: (function() {
+            return this.category;
+          }),
+          action: (function() {
+            return this.action;
+          }),
+          label: (function() {
+            return this.label;
+          }),
+          value: (function() {
+            return this.value;
+          }),
+          nonInteraction: false
+        });
+      }
+    };
 
     Hub.prototype.code_select = function() {
       return code_select;
@@ -154,6 +175,23 @@
       }
       $(document).on('update_state', function(e, qps) {
         return _this.update_url(qps);
+      });
+      $(document).on('ga', function(e, category, action, label, value) {
+        if (label == null) {
+          label = '';
+        }
+        if (value == null) {
+          value = 1;
+        }
+        if (!_this.ga || !Ensembl.GA) {
+          return;
+        }
+        return Ensembl.GA.sendEvent(_this.ga, {
+          category: category,
+          action: action,
+          label: label,
+          value: value
+        });
       });
       $(document).on('update_state_incr', function(e, qps) {
         return rate_limiter(qps).then(function(data) {
