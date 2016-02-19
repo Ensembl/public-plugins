@@ -45,7 +45,7 @@ sub init_from_user_input {
   my $description = sprintf 'VEP analysis of %s in %s', ($hub->param('name') || ($method eq 'text' ? 'pasted data' : ($method eq 'url' ? 'data from URL' : sprintf("%s", $hub->param('file'))))), $species;
 
   # Get file content and name
-  my ($file_content, $file_name) = $method eq 'text' ? ($hub->param('text') || '', 'input.txt') : $self->get_input_file_content($method);
+  my ($file_content, $file_name) = $self->get_input_file_content($method);
 
   # detect file format
   my $detected_format;

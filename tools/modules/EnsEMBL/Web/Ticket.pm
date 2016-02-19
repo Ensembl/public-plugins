@@ -76,8 +76,8 @@ sub init_from_user_input :Abstract {
 }
 
 sub get_input_file_content {
-  ## Gets content from the uploaded file/remote file
-  ## @param Method used - upload|url
+  ## Gets content from the uploaded/remote file or text entered in the form
+  ## @param Method used - upload|url|text
   ## @param (optional) Name of the http param that contains file source (defaults to method)
   ## @return File content
   ## @return File name
@@ -98,6 +98,10 @@ sub get_input_file_content {
 
     $content  = file_get_contents($hub->input->tmpFileName($file));
     $name     = "$file"; # $file->asString
+
+  } elsif ($method eq 'text') {
+    $content  = $file;
+    $name     = 'input.txt';
   }
 
   return ($content, $name);
