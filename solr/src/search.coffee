@@ -1020,7 +1020,7 @@ class Renderer
           { label: 'Table',    key: 'table'    }
         ]
         title: 'Layout:'
-        select: ((k) => @hub.update_url { style: k })
+        select: ((k) => $(document).trigger('ga',['SrchLayout','switch',k]) ; @hub.update_url { style: k })
       table:
         table_ready: (el,data) => @table.collect_view_model(el,data)
         state: @state

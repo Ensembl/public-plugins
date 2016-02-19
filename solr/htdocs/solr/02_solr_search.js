@@ -1796,6 +1796,7 @@
           ],
           title: 'Layout:',
           select: (function(k) {
+            $(document).trigger('ga', ['SrchLayout', 'switch', k]);
             return _this.hub.update_url({
               style: k
             });
