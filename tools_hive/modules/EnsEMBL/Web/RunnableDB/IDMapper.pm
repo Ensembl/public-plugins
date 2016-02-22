@@ -58,7 +58,7 @@ sub run {
     '--host'      => $self->param('host'),
     '--user'      => $self->param('user'),
     '--port'      => $self->param('port'),
-    '--pass'      => $self->param('pass')
+    $self->param('pass') ? ('--pass'      => $self->param('pass')) : ()
   })->execute({
     'log_file'    => $log_file,
     'output_file' => $self->param('__output_file')
