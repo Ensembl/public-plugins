@@ -25,8 +25,6 @@ use List::Util qw(first);
 use Bio::EnsEMBL::Variation::Utils::VEP qw(detect_format);
 
 use EnsEMBL::Web::Exceptions;
-use EnsEMBL::Web::Utils::FileHandler qw(file_get_contents);
-use EnsEMBL::Web::File::Tools;
 use EnsEMBL::Web::Job::VEP;
 
 use parent qw(EnsEMBL::Web::Ticket);
@@ -38,52 +36,24 @@ sub init_from_user_input {
   my $self      = shift;
   my $hub       = $self->hub;
   my $species   = $hub->param('species');
-  my $file      = EnsEMBL::Web::File::Tools->new('hub' => $hub, 'tool' => 'VEP', 'empty' => 1);
-  my $method    = first { $hub->param($_) } qw(file url userdata text);
+  my $method    = first { $hub->param($_) } qw(file url text);
 
   # if no data entered
   throw exception('InputError', 'No input data has been entered') unless $method;
 
-  my ($file_name, $file_path, $description);
+  # build input file and data
+  my $description = sprintf 'VEP analysis of %s in %s', ($hub->param('name') || ($method eq 'text' ? 'pasted data' : ($method eq 'url' ? 'data from URL' : sprintf("%s", $hub->param('file'))))), $species;
 
-  # if input is one of the existing files
-  if ($method eq 'userdata') {
-
-    my $session_data = $hub->session->get_data('type' => 'upload', 'code' => $hub->param('userdata'));
-    $description  = 'user data';
-
-    $file->init('file' => $session_data->{'file'});
-
-  # if new file, url or text, upload it to a temporary file location
-  } else {
-
-    $description = $hub->param('name') || ($method eq 'text' ? 'pasted data' : ($method eq 'url' ? 'data from URL' : sprintf("%s", $hub->param('file'))));
-
-    ## NB: no need to init the file object, as upload method will do this
-    my $error = $file->upload('type' => 'no_attach');
-    throw exception('InputError', $error) if $error;
-
-    $file_name = $file->write_name;
-  }
-
-  # finalise input file path and description
-  $file_path    = $file->absolute_write_path;
-  $description  = "VEP analysis of $description in $species";
-  $file_name    = "$file_name.txt" if $file_name !~ /\./ && -T $file_path;
-  $file_name    = $file_name =~ s/.*\///r;
+  # Get file content and name
+  my ($file_content, $file_name) = $self->get_input_file_content($method);
 
   # detect file format
   my $detected_format;
   try {
-    first { m/^[^\#]/ && ($detected_format = detect_format($_)) } file_get_contents($file_path); #  @{$file->read_lines->{'content'}};
+    first { m/^[^\#]/ && ($detected_format = detect_format($_)) } $file_content;
   } catch {
     throw exception('InputError', sprintf(q(The input format is invalid or not recognised. Please <a href="%s" rel="external">click here</a> to find out about accepted data formats.), VEP_FORMAT_DOC), {'message_is_html' => 1});
   };
-
-  ## Update session with detected format
-  my $session_data = $hub->session->get_data('code' => $file->code);
-  $session_data->{'format'} = $detected_format;
-  $hub->session->set_data(%$session_data);
 
   my $job_data = { map { my @val = $hub->param($_); $_ => @val > 1 ? \@val : $val[0] } grep { $_ !~ /^text/ && $_ ne 'file' } $hub->param };
 
@@ -119,7 +89,7 @@ sub init_from_user_input {
     'assembly'    => $hub->species_defs->get_config($species, 'ASSEMBLY_VERSION'),
     'job_data'    => $job_data
   }, {
-    $file_name    => {'location' => $file_path}
+    $file_name    => {'content' => $file_content}
   }));
 }
 

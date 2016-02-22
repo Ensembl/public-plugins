@@ -24,6 +24,8 @@ use warnings;
 use EnsEMBL::Web::Attributes;
 use EnsEMBL::Web::Exceptions;
 use EnsEMBL::Web::Utils::RandomString qw(random_string);
+use EnsEMBL::Web::Utils::FileHandler qw(file_get_contents);
+use EnsEMBL::Web::File::Utils::URL qw(read_file);
 
 sub hub         { return shift->{'_hub'};         }
 sub object      { return shift->{'_object'};      }
@@ -71,6 +73,38 @@ sub new {
 sub init_from_user_input :Abstract {
   ## @abstract method
   ## This method should read the raw form parameters, validate them and convert them into an array of EnsEMBL::Web::Job or sub class
+}
+
+sub get_input_file_content {
+  ## Gets content from the uploaded/remote file or text entered in the form
+  ## @param Method used - upload|url|text
+  ## @param (optional) Name of the http param that contains file source (defaults to method)
+  ## @return File content
+  ## @return File name
+  my ($self, $method, $param) = @_;
+
+  my $hub     = $self->hub;
+  my $file    = $hub->param($param || $method);
+  my ($content, $name);
+
+  if ($method eq 'url') {
+
+    my $proxy = $hub->species_defs->ENSEMBL_WWW_PROXY;
+       $proxy = $proxy ? { 'proxy' => $proxy } : ();
+    $content  = read_file($file, $proxy);
+    $name     = $file =~ s/[^\?]+\/([^\/\?]+).*$/$1/r; # remove extra path from full file path
+
+  } elsif ($method eq 'file') {
+
+    $content  = file_get_contents($hub->input->tmpFileName($file));
+    $name     = "$file"; # $file->asString
+
+  } elsif ($method eq 'text') {
+    $content  = $file;
+    $name     = 'input.txt';
+  }
+
+  return ($content, $name);
 }
 
 sub submit_to_toolsdb {
