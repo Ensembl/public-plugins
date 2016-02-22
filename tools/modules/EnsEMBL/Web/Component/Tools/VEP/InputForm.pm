@@ -116,9 +116,6 @@ sub get_cacheable_form_node {
     'class'         => 'url'
   });
 
-  # Placeholder for previuos files select box
-  $input_fieldset->append_child('text', 'FILES_DROPDOWN');
-
   # This field is shown only for the species having refseq data
   if (first { $_->{'refseq'} } @$species) {
     $input_fieldset->add_field({
@@ -164,7 +161,7 @@ sub get_cacheable_form_node {
 
 sub get_non_cacheable_fields {
   ## Abstract method implementation
-  return { FILES_DROPDOWN => shift->files_dropdown(INPUT_FORMATS()) };
+  return {};
 }
 
 sub js_panel {
