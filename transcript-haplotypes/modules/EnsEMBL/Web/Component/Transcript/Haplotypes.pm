@@ -102,7 +102,9 @@ sub content {
   my $count = 0;
   my $method = 'get_all_'.$titles{$type}.'Haplotypes';
 
-  foreach my $ht(@{$c->$method}) {    
+  my $haplotypes = $c->$method;
+
+  foreach my $ht(@$haplotypes) {    
     $table->add_row($self->render_haplotype_row($ht));
   }
 
@@ -136,8 +138,11 @@ sub content {
     )
   );
 
+  # add anchors for every haplotype hex
+  $html .= join("", map {'<a name="'.$_->_hex().'"/>'} @$haplotypes);
+
   # add element for displaying details
-  $html .= '<div class="details-view" id="details-view"><a name="details-view"/>&nbsp;</div>';
+  $html .= '<div class="details-view" id="details-view">&nbsp;</div>';
 
   return $html;
 }
@@ -276,9 +281,10 @@ sub render_haplotype_name {
   my $title = "Details for ".($name eq 'REF' ? 'reference haplotype' : 'haplotype '.$name);
 
   return sprintf(
-    '%s<span class="_ht" title="%s"><a href="#details-view" class="details-link" rel="%s">%s</a></span>',
+    '%s<span class="_ht" title="%s"><a href="#%s" class="details-link" rel="%s">%s</a></span>',
     $hidden,
     $title,
+    $ht->_hex,
     $ht->_hex,
     $display_name
   );

@@ -33,30 +33,59 @@ Ensembl.Panel.TranscriptHaplotypes = Ensembl.Panel.Content.extend({
 
     // initialise details links
     this.el.find('a.details-link').on('click', function(e) {
-      var div = $('div.details-view');
+      panel.renderHaplotypePanel(this.rel);
+    });
 
-      div.show().empty().append(panel.detailsContent(this.rel));
+    // if we've landed on a page with a hash in the URL
+    // load that haplotype's panel and jump to it
+    if(window.location.hash) {
+      var hash = window.location.hash.replace(/^\#/, '');
+      var hex = hash.replace(/\_.+/, '');
 
-      div.find('._ht').helptip();
+      // only try and render if this is a valid hex for this page
+      if(panel.fetchHaplotypeByHex(hex)) {
 
-      div.find('.toggle').on('click', function(e) {
-        e.preventDefault();
-        panel.el.find('#' + this.rel).toggle();
+        // do the render
+        panel.renderHaplotypePanel(hex);
 
-        var link = $(this);
+        // jump to given location, this might be a sub-section
+        window.location.href = "#"+hash;
+      }
+    }
+  },
 
-        if(link.hasClass('closed')) {
-          link.removeClass('closed').addClass('open');
-        }
-        else {
-          link.removeClass('open').addClass('closed'); 
-        }
-      });
+  renderHaplotypePanel: function(hex) {
+    var panel = this;
 
-      div.find('a.zmenu').on('click', function(e) {
-        e.preventDefault();
-        Ensembl.EventManager.trigger('makeZMenu', $(this).text().replace(/\W/g, '_'), { event: e, area: { link: $(this) }});
-      });
+    var div = $('div.details-view');
+
+    // empty the div and fill with HTML from detailsContent()
+    div.show().empty().append(panel.detailsContent(hex));
+
+    // now initialise JS behaviours on the created HTML
+
+    // init helptips
+    div.find('._ht').helptip();
+
+    // init toggle links
+    div.find('.toggle').on('click', function(e) {
+      e.preventDefault();
+      panel.el.find('#' + this.rel).toggle();
+
+      var link = $(this);
+
+      if(link.hasClass('closed')) {
+        link.removeClass('closed').addClass('open');
+      }
+      else {
+        link.removeClass('open').addClass('closed'); 
+      }
+    });
+
+    // init zmenus
+    div.find('a.zmenu').on('click', function(e) {
+      e.preventDefault();
+      Ensembl.EventManager.trigger('makeZMenu', $(this).text().replace(/\W/g, '_'), { event: e, area: { link: $(this) }});
     });
   },
 
@@ -90,18 +119,20 @@ Ensembl.Panel.TranscriptHaplotypes = Ensembl.Panel.Content.extend({
     }
 
     var type = haplotype.type;
+    var titleType = type === 'cds' ? 'CDS' : 'protein';
+    var otherType = type === 'cds' ? 'protein' : 'CDS';
 
     var html =
       '<hr/>' +
-      '<span class="small" style="float:right;"><a href=#Haplotypes>Back to table</a></span>' +
-      '<h2>Details of haplotype ' + haplotype.name.replace(/\,/g, ',&#8203;') + '</h2><div>';
+      // '<span class="small" style="float:right;"><a href=#Haplotypes>Back to table</a></span>' +
+      '<h2>Details of ' + titleType + ' haplotype ' + haplotype.name.replace(/\,/g, ',&#8203;') + '</h2><div>';
 
     var sections = [
-      { 'id': 'pop', 'title': 'Population frequencies',   'sub': 'populationTable'   },
-      { 'id': 'seq', 'title': 'Aligned sequence',         'sub': 'alignedSequence'   },
-      { 'id': 'raw', 'title': 'Sequence',                 'sub': 'rawSequence'       },
-      { 'id': 'cds', 'title': 'Corresponding haplotypes', 'sub': 'otherHaplotypes'   },
-      { 'id': 'sam', 'title': 'Sample data',              'sub': 'sampleTable'       }
+      { 'id': 'pop', 'title': 'Population frequencies',                     'sub': 'populationTable'   },
+      { 'id': 'seq', 'title': 'Aligned sequence',                           'sub': 'alignedSequence'   },
+      { 'id': 'raw', 'title': 'Sequence',                                   'sub': 'rawSequence'       },
+      { 'id': 'cds', 'title': 'Corresponding ' + otherType + ' haplotypes', 'sub': 'otherHaplotypes'   },
+      { 'id': 'sam', 'title': 'Sample data',                                'sub': 'sampleTable'       }
     ];
 
     var navs = [];
@@ -111,15 +142,19 @@ Ensembl.Panel.TranscriptHaplotypes = Ensembl.Panel.Content.extend({
       var section = sections[i];
 
       // navigation
-      navs.push('<a href="#' + section.id + '">' + section.title + '</a>');
+      navs.push('<a href="#' + hex + '_' + section.id + '">' + section.title + '</a>');
 
       // section content
       section_html = section_html +
         '<hr style="border-top-color: lightgrey"/>' + 
-        '<div id="' + section.id + '">' +
-        '<span class="small" style="float:right;"><i>Back to: </i><a href=#details-view>Haplotype</a> | <a href="#Haplotypes">Table</a></span>' +
-        '<h3>' + section.title + '</h3>' +
-        panel[section.sub](haplotype);
+        '<div id="' + hex + '_' + section.id + '">' +
+          // '<span class="small" style="float:right;">' +
+          //   '<i>Back to: </i><a href=#' + hex + '>Haplotype</a>' +
+          //   // ' | <a href="#Haplotypes">Table</a>' +
+          // '</span>' +
+          '<h3>' + section.title + '</h3>' +
+          panel[section.sub](haplotype) +
+        '</div>';
     }
 
     html = html + '<div><i>Jump to: </i>' + navs.join(' | ') + '</div>' + section_html + '</div>';
@@ -134,12 +169,19 @@ Ensembl.Panel.TranscriptHaplotypes = Ensembl.Panel.Content.extend({
 
     var rows = [];
 
-    var typeChar = haplotype.type.substring(0, 1);
-
     for(var i in others) {
       var ht = others[i];
 
-      var row = '<span id="' + ht.hex + '"><b>' + typeChar + '.ALT' + (parseInt(i) + 1) + ':</b> ' + ht.name.replace(/\,/g, ',&#8203;') + '</span>';
+      var typeChar = ht.type.substring(0, 1);
+      var name = ht.name.replace(/\,/g, ',&#8203;');
+
+      var row =
+        '<span id="' + ht.hex + '">' +
+          '<b>' + typeChar + '.ALT' + (typeChar === 'p' ? '' : parseInt(i) + 1) + ':</b> ' +
+          '<a class="_ht" title="Details for ' + (name === 'REF' ? 'reference haplotype' : 'haplotype ' + name) +
+          '" href="' + window.location.href.replace(/\#.+/, '').replace(/\;?ht_type\=[a-z]+/, '') + ';ht_type=' + ht.type +
+          '#' + ht.hex + '">' + name + '</a>' +
+        '</span>';
 
       row = row +
         '<br/>Observed count: ' + ht.count +
@@ -156,7 +198,7 @@ Ensembl.Panel.TranscriptHaplotypes = Ensembl.Panel.Content.extend({
 
     var html =
       (rows.length > 1 ? '<p><i>NB: Each CDS sequence below encodes the same protein sequence</i></p>' : '') +
-      '<ol>' + rows.map(function(a) {return '<li>' + a + '</li>'}).join("") + '</ol>';
+      '<ul>' + rows.map(function(a) {return '<li>' + a + '</li>'}).join("") + '</ul>';
 
     return html;
   },
@@ -169,7 +211,9 @@ Ensembl.Panel.TranscriptHaplotypes = Ensembl.Panel.Content.extend({
 
     var maxWidth = 120;
 
-    var html = '<table class="ss" style="width:500px"><tr><th>Population group</th><th>Population</th><th style="width:' + (maxWidth + 100) + 'px">Frequency (count)</th></tr>';
+    var html = 
+      '<table class="ss" style="width:500px">' +
+      '<tr><th>Population group</th><th>Population</th><th style="width:' + (maxWidth + 100) + 'px">Frequency (count)</th></tr>';
 
     var superPops = Object.keys(popStruct).sort();
 
@@ -221,6 +265,8 @@ Ensembl.Panel.TranscriptHaplotypes = Ensembl.Panel.Content.extend({
     }
 
     html = html + '</table>';
+
+    html = html + '<p><b>Total count:</b> ' + haplotype.count + '</p>';
 
     return html;
   },
@@ -455,7 +501,7 @@ Ensembl.Panel.TranscriptHaplotypes = Ensembl.Panel.Content.extend({
 
   sequenceKey: function() {
     var html =
-      '<div class="adornment-key"><dl>' +
+      '<div class="adornment-key" style="position: static;"><dl>' +
 
       '<dt>Sequence</dt><dd><ul>' +
       '<li><span style="border: 1px solid lightgrey">.&nbsp;&nbsp;Match</span></li>' +
