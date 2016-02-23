@@ -152,18 +152,20 @@ sub get_haplotypes {
   
   my $tr = $self->object->Obj;
   
-  my $variation_db = $tr->adaptor->db->get_db_adaptor('variation');
+  my $vdb = $tr->adaptor->db->get_db_adaptor('variation');
   
   # find VCF config
-  my $c = $self->object->species_defs->multi_val('ENSEMBL_VCF_COLLECTIONS');
+  my $sd = $self->object->species_defs;
 
-  if($c) {
-   # set config file via ENV variable
-   $ENV{ENSEMBL_VARIATION_VCF_CONFIG_FILE} = $c->{'CONFIG'};
-   $variation_db->use_vcf($c->{'ENABLED'}) if $variation_db->can('use_vcf');
+  my $c = $sd->ENSEMBL_VCF_COLLECTIONS;
+
+  if($c && $vdb->can('use_vcf')) {
+    $vdb->vcf_config_file($c->{'CONFIG'});
+    $vdb->vcf_root_dir($sd->DATAFILE_BASE_PATH);
+    $vdb->use_vcf($c->{'ENABLED'});
   }
   
-  my $thca = $variation_db->get_TranscriptHaplotypeAdaptor();
+  my $thca = $vdb->get_TranscriptHaplotypeAdaptor();
 
   return $thca->get_TranscriptHaplotypeContainer_by_Transcript($tr);
 }
