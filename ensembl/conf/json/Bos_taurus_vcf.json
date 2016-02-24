@@ -1,0 +1,16 @@
+{
+  "collections": [
+    {
+      "id": "nextgen_cow_irbt",
+      "species": "bos_taurus",
+      "assembly": "UMD3.1",
+      "type": "local",
+      "filename_template": "/bos_taurus/UMD3.1/variation_genotype/IRBT.population_sites.UMD3_1.20140322_EVA_ss_IDs.vcf.gz",
+      "chromosomes": [
+        "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14",
+        "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "X"
+      ],
+      "population_prefix": "NextGen:"
+    }
+  ]
+}
