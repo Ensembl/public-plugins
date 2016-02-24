@@ -105,6 +105,18 @@ Ensembl.GA.eventConfigs.push(
     action          : function () { return this.getURL(); }
   },
 
+  //links in about this feature in summary panel (action and label should be the same as localcontext)
+  {
+    id              : 'DynamicPageLink',
+    url             : /.+/,
+    selector        : 'div.summary_panel a.dynamic-link',
+    event           : 'click',
+    data            : { url : function () { return this.getURL(); } },
+    category        : 'DynamicPageLink',
+    action          : function () { return this.data.url; },
+    label           : function () { return this.getText().replace(/\d/g,'').replace(/^(\s)/,''); } //need to replace the numbers and space
+  },
+
   // Local context links and the left hand side tools buttons
   {
     id              : 'LocalContext-LeftButton',
