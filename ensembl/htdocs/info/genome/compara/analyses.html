@@ -11,9 +11,9 @@
 
 <h1>Genomic alignments</h1>
 
-<h2 id="blastz_net">LastZ-net/Blastz-net Pairwise Alignment Analysis</h2>
+<h2 id="pairwise">Pairwise alignments and Synteny analysis</h2>
 
-<p><a href="http://www.bx.psu.edu/~rsharris/lastz/">LastZ</a> and its predecessor
+<p id="blastz_net"><a href="http://www.bx.psu.edu/~rsharris/lastz/">LastZ</a> and its predecessor
 BlastZ (<a href="http://www.genome.org/cgi/content/abstract/13/1/103">Schwartz
 S et al., Genome Res.;13(1):103-7</a>, <a href="http://www.pnas.org/cgi/content/full/100/20/11484">Kent
 WJ et al., Proc Natl Acad Sci U S A., 2003;100(20):11484-9</a>) are used to align
@@ -23,24 +23,33 @@ In the first step, original blocks are chained according to their
 location in both genomes. The netting process chooses for the reference
 species the best sub-chain in each region.</p>
 
-<p>Here is the list of all the pairwise alignments that are available,
+<p id="tblat">Translated blat (<a href="http://www.genome.org/cgi/content/abstract/12/4/656">Kent
+W, Genome Res., 2002;12(4):656-64</a>) can be used to look for
+homologous regions between more distantly related pairs of species.
+The rationale is that we
+expect to find homologies mainly in coding regions.
+The raw results are passed through
+a chain and netting procedure similar to that used for the LastZ-net analyses
+to produce the best sub-chain for the reference species.
+<em>There are no Translated Blat Net alignments in this release of Ensembl: we use (B)LastZ for all our pairs of species.</em>
+</p>
+
+<p id="self">
+In self-alignment analyses, the trivial alignments (i.e. regions against themselves) are removed, such that only the paralogous regions remain.
+</p>
+
+<p id="synteny">When both species have a chromosome-level assembly, we summarize
+the LastZ-net alignment blocks into syntenic regions. We look for
+stretches where the alignment blocks are in synteny. The search is run in
+two phases. In the first one, syntenic alignments that are closer than 200
+kbp are grouped. In the second phase, the groups that are in synteny are
+linked provided that no more than 2 non-syntenic groups are found between
+them and they are less than 3Mbp apart.</p>
+
+<p>Here is the list of all the pairwise analyses that are available,
 grouped by reference species:</p>
 
 [[SCRIPT::EnsEMBL::Web::Document::HTML::Compara::BlastZ]]
-
-<h2 id="tblat">Translated Blat Pairwise Alignment Analysis</h2>
-
-<p>Translated blat (<a href="http://www.genome.org/cgi/content/abstract/12/4/656">Kent
-W, Genome Res., 2002;12(4):656-64</a>) is used to look for
-homologous regions between more distantly related pairs of species. We
-expect to find homologies mainly in coding regions. There are 2 sets of
-translated blat analyses: a new set where the raw results were passed through 
-a chain and netting procedure similar to that used for the LastZ-net analyses
-to produce the best sub-chain for the reference species (Translated Blat Net).</p>
-
-<p>
-<em>There are no Translated Blat Net alignments in this release of Ensembl: we use LastZ Net for all our pairs of species.</em>
-</p>
 
 <!--
 <h3>Translated Blat Net</h3>
@@ -115,16 +124,8 @@ by all the extant species which eventually descended from that branch, as illust
 
 
 
-<h2 id="synteny">Synteny Analysis</h2>
 
-<p>We calculate syntenic regions using blastz-net alignments. We look for
-stretches where the alignment blocks are in synteny. The search is run in
-two phases. In the first one, syntenic alignments that are closer than 200
-kbp are grouped. In the second phase, the groups that are in synteny are
-linked provided that no more than 2 non-syntenic groups are found between
-them and they are less than 3Mbp apart.</p>
 
-[[SCRIPT::EnsEMBL::Web::Document::HTML::Compara::draw_stepped_table(SYNTENY)]]
 
 </body>
 </html>
