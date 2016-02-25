@@ -8,18 +8,25 @@
 
 <h1>Public Track Hubs</h1>
 
-<p>Ensembl now provides support for track hubs, 
-which are an alternative to DAS for sharing large quantities of annotation
-over the internet. We do not host these track hubs ourselves, but 
-the new Track Hub Registry lists many available hubs for a wide variety of
-species.</p>
+<p>Ensembl provides support for track hubs as a way of sharing large quantities of annotation
+over the internet. A list of public track hubs is available at the <a
+        href="http://beta.trackhubregistry.org/">Trackhub Registry</a> based at
+      EMBL-EBI.</p>
+<p>You can search this list from the Registry
+      itself, in which case you can use direct links that allow you to attach the Track hub
+      to Ensembl or UCSC. Track hubs on older assemblies have links to Ensembl
+      archives where this functionality is available.</p>
+
+[[SCRIPT::EnsEMBL::Web::Document::HTML::TrackHubRegistry]]
+
+<p>If you wish to use a track hub that is not in the Registry, please see our online
+<a href="adding_trackhubs.html">instructions on how to attach a hub</a>.</p>
+
 
 <div class="info-box">
-[[SCRIPT::EnsEMBL::Web::Document::HTML::TrackHubRegistry]]
+<p>Please note that the tracks turned on by default are defined by the Track hub
+        provider so if there are many of these then the hub may be slow to load or unavailable</b>.</p>
 </div>
-
-<p>If you wish to use a hub not listed in the registry, please see our
-<a href="adding_trackhubs.html">instructions on how to attach a hub</a>.</p>
 
 </body>
 </html>
