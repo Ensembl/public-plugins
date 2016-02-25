@@ -78,7 +78,7 @@ entirely in Java and also requires the installation of Exonerate.
 
 
 <p>The EPO 
-(Enredo, Pecan, Ortheus) <a href="/info/genome/compara/epo_anchors_info.html" class="bold">pipeline</a> is a three step pipeline for whole-genome
+(Enredo, Pecan, Ortheus) <a href="/info/genome/compara/epo_anchors_info.html">pipeline</a> is a three step pipeline for whole-genome
 multiple alignments. Enredo produces colinear segments from 
 extant genomes handling both rearrangements, deletions and duplications. 
 Pecan, as described above, is used to align these segments. Finally, Ortheus 
@@ -89,18 +89,6 @@ Further details on these methods can be found at:</p>
 <li><a href="http://dx.doi.org/10.1101/gr.076521.108">Genome-wide nucleotide-level mammalian ancestor reconstruction</a></li>
 </ul>
 
-<p>The high coverage eutherian mammal alignments were generated using the recent EPO (Enredo Pecan Ortheus) pipeline.  </p>
-
-<p>Each alignment set can be accessed using the <a href="/info/docs/Doxygen/compara-api/index.html"> Compara API</a> via the Bio::EnsEMBL::DBSQL::MethodLinkSpeciesSetAdaptor using the method_link_type and either the list of the species or the species_set_name. </p>
-
-
-[[SCRIPT::EnsEMBL::Web::Document::HTML::Compara::format_wga_list(EPO)]]
-
-<p>The full set of eutherian mammmal alignments were not generated using the EPO pipeline due to difficulties with running Ortheus on the low coverage genomes. Instead the low coverage genomes were projected on to the high coverage EPO eutherian mammal alignments using (B)lastZ-net alignments. </p>
-
-[[SCRIPT::EnsEMBL::Web::Document::HTML::Compara::format_wga_list(EPO_LOW_COVERAGE)]]
-
-
 <p id="ancestral"><strong>Ancestral sequences</strong> are inferred from the EPO multiple alignments 
 using Ortheus. Ortheus is a probabilistic method for the inference of ancestor, a.k.a tree, 
 alignments. The main contribution of Ortheus is the use of a phylogenetic model incorporating 
@@ -109,6 +97,14 @@ of the phylogenetic tree that relates the sequences. Each ancestral sequence is 
 according to the derived extant species. For example, a sequence named Hsap, Ptro, Mmul 
 corresponds to the ancestor of the <i>Homo sapiens</i>, <i>Pan troglodytes</i>, and 
 <i>Macaca mulatta</i> genomes.  </p>
+
+
+<p>Due to difficulties with running Ortheus on the low coverage genomes, we have two flavours of the pipeline. First, the plain EPO pipeline is available on the high coverage genomes:</p>
+[[SCRIPT::EnsEMBL::Web::Document::HTML::Compara::format_wga_list(EPO)]]
+
+<p>The low coverage genomes are then projected onto the high coverage EPO alignments using (B)lastZ-net alignments:</p>
+
+[[SCRIPT::EnsEMBL::Web::Document::HTML::Compara::format_wga_list(EPO_LOW_COVERAGE)]]
 
 <h2 id="age_of_base">Age of Base</h2>
 
