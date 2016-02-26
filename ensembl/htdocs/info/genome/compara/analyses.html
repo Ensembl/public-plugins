@@ -11,9 +11,9 @@
 
 <h1>Genomic alignments</h1>
 
-<h2 id="blastz_net">LastZ-net/Blastz-net Pairwise Alignment Analysis</h2>
+<h2 id="pairwise">Pairwise alignments and Synteny analysis</h2>
 
-<p><a href="http://www.bx.psu.edu/~rsharris/lastz/">LastZ</a> and its predecessor
+<p id="blastz_net"><a href="http://www.bx.psu.edu/~rsharris/lastz/">LastZ</a> and its predecessor
 BlastZ (<a href="http://www.genome.org/cgi/content/abstract/13/1/103">Schwartz
 S et al., Genome Res.;13(1):103-7</a>, <a href="http://www.pnas.org/cgi/content/full/100/20/11484">Kent
 WJ et al., Proc Natl Acad Sci U S A., 2003;100(20):11484-9</a>) are used to align
@@ -23,24 +23,33 @@ In the first step, original blocks are chained according to their
 location in both genomes. The netting process chooses for the reference
 species the best sub-chain in each region.</p>
 
-<p>Here is the list of all the pairwise alignments that are available,
+<p id="tblat">Translated blat (<a href="http://www.genome.org/cgi/content/abstract/12/4/656">Kent
+W, Genome Res., 2002;12(4):656-64</a>) can be used to look for
+homologous regions between more distantly related pairs of species.
+The rationale is that we
+expect to find homologies mainly in coding regions.
+The raw results are passed through
+a chain and netting procedure similar to that used for the LastZ-net analyses
+to produce the best sub-chain for the reference species.
+<em>There are no Translated Blat Net alignments in this release of Ensembl: we use (B)LastZ for all our pairs of species.</em>
+</p>
+
+<p id="self">
+In self-alignment analyses, the trivial alignments (i.e. regions against themselves) are removed, such that only the paralogous regions remain.
+</p>
+
+<p id="synteny">When both species have a chromosome-level assembly, we summarize
+the LastZ-net alignment blocks into syntenic regions. We look for
+stretches where the alignment blocks are in synteny. The search is run in
+two phases. In the first one, syntenic alignments that are closer than 200
+kbp are grouped. In the second phase, the groups that are in synteny are
+linked provided that no more than 2 non-syntenic groups are found between
+them and they are less than 3Mbp apart.</p>
+
+<p>Here is the list of all the pairwise analyses that are available,
 grouped by reference species:</p>
 
 [[SCRIPT::EnsEMBL::Web::Document::HTML::Compara::BlastZ]]
-
-<h2 id="tblat">Translated Blat Pairwise Alignment Analysis</h2>
-
-<p>Translated blat (<a href="http://www.genome.org/cgi/content/abstract/12/4/656">Kent
-W, Genome Res., 2002;12(4):656-64</a>) is used to look for
-homologous regions between more distantly related pairs of species. We
-expect to find homologies mainly in coding regions. There are 2 sets of
-translated blat analyses: a new set where the raw results were passed through 
-a chain and netting procedure similar to that used for the LastZ-net analyses
-to produce the best sub-chain for the reference species (Translated Blat Net).</p>
-
-<p>
-<em>There are no Translated Blat Net alignments in this release of Ensembl: we use LastZ Net for all our pairs of species.</em>
-</p>
 
 <!--
 <h3>Translated Blat Net</h3>
@@ -69,7 +78,7 @@ entirely in Java and also requires the installation of Exonerate.
 
 
 <p>The EPO 
-(Enredo, Pecan, Ortheus) <a href="/info/genome/compara/epo_anchors_info.html" class="bold">pipeline</a> is a three step pipeline for whole-genome
+(Enredo, Pecan, Ortheus) <a href="/info/genome/compara/epo_anchors_info.html">pipeline</a> is a three step pipeline for whole-genome
 multiple alignments. Enredo produces colinear segments from 
 extant genomes handling both rearrangements, deletions and duplications. 
 Pecan, as described above, is used to align these segments. Finally, Ortheus 
@@ -80,18 +89,6 @@ Further details on these methods can be found at:</p>
 <li><a href="http://dx.doi.org/10.1101/gr.076521.108">Genome-wide nucleotide-level mammalian ancestor reconstruction</a></li>
 </ul>
 
-<p>The high coverage eutherian mammal alignments were generated using the recent EPO (Enredo Pecan Ortheus) pipeline.  </p>
-
-<p>Each alignment set can be accessed using the <a href="/info/docs/Doxygen/compara-api/index.html"> Compara API</a> via the Bio::EnsEMBL::DBSQL::MethodLinkSpeciesSetAdaptor using the method_link_type and either the list of the species or the species_set_name. </p>
-
-
-[[SCRIPT::EnsEMBL::Web::Document::HTML::Compara::format_wga_list(EPO)]]
-
-<p>The full set of eutherian mammmal alignments were not generated using the EPO pipeline due to difficulties with running Ortheus on the low coverage genomes. Instead the low coverage genomes were projected on to the high coverage EPO eutherian mammal alignments using (B)lastZ-net alignments. </p>
-
-[[SCRIPT::EnsEMBL::Web::Document::HTML::Compara::format_wga_list(EPO_LOW_COVERAGE)]]
-
-
 <p id="ancestral"><strong>Ancestral sequences</strong> are inferred from the EPO multiple alignments 
 using Ortheus. Ortheus is a probabilistic method for the inference of ancestor, a.k.a tree, 
 alignments. The main contribution of Ortheus is the use of a phylogenetic model incorporating 
@@ -101,38 +98,33 @@ according to the derived extant species. For example, a sequence named Hsap, Ptr
 corresponds to the ancestor of the <i>Homo sapiens</i>, <i>Pan troglodytes</i>, and 
 <i>Macaca mulatta</i> genomes.  </p>
 
+
+<p>Due to difficulties with running Ortheus on the low coverage genomes, we have two flavours of the pipeline. First, the plain EPO pipeline is available on the high coverage genomes:</p>
+[[SCRIPT::EnsEMBL::Web::Document::HTML::Compara::format_wga_list(EPO)]]
+
+<p>The low coverage genomes are then projected onto the high coverage EPO alignments using (B)lastZ-net alignments:</p>
+
+[[SCRIPT::EnsEMBL::Web::Document::HTML::Compara::format_wga_list(EPO_LOW_COVERAGE)]]
+
 <h2 id="age_of_base">Age of Base</h2>
 
-<p>From these ancestral sequences, we infer the <b>age of a base</b>, i.e. 
-the timing of the most recent mutation for each base of the genome. Each position of the human genome
-is compared to its immediate inferred ancestor, then its ancestor, etc. until a difference is found. 
+<p>From those ancestral sequences, we infer the <b>age of a base</b>, i.e.
+the timing of the most recent mutation for each base of the genome. Each position of the genome
+is compared to its immediate inferred ancestor, then its ancestor, etc. until a difference is found.
 The inferred substitution event therefore occurred on a specific branch of the tree, which is identified
 by all the extant species which eventually descended from that branch, as illustrated below.</p>
 
-<img src="age_of_base.png" alt="Age of Base schema" width=400/>
+<img src="age_of_base.png" alt="Age of Base schema" width="300"/>
 
-<h2 id="conservation">Conservation Analysis</h2>
-
-<p>Additionally we use Gerp
-(<a href="http://www.genome.org/cgi/content/abstract/15/7/901">Cooper
-GM et al., Genome Res., 2005; 15:901-913</a>) to calculate conservation
-scores and call constrained elements on the PECAN and EPO_LOW_COVERAGE multiple alignments.
-Conservation scores are estimated on a column-by-column basis.
-Constrained elements are stretches of the multiple alignment where the
-sequences are highly conserved according to the previous score.</p>
+<p>
+This track is currently only available for the <a href="/Homo_sapiens/Location/View?db=core;g=ENSG00000139618;r=13:32889611-32973805#modal_config_viewbottom-compara-conservation">human</a> genome.
+</p>
 
 
 
-<h2 id="synteny">Synteny Analysis</h2>
 
-<p>We calculate syntenic regions using blastz-net alignments. We look for
-stretches where the alignment blocks are in synteny. The search is run in
-two phases. In the first one, syntenic alignments that are closer than 200
-kbp are grouped. In the second phase, the groups that are in synteny are
-linked provided that no more than 2 non-syntenic groups are found between
-them and they are less than 3Mbp apart.</p>
 
-[[SCRIPT::EnsEMBL::Web::Document::HTML::Compara::draw_stepped_table(SYNTENY)]]
+
 
 </body>
 </html>

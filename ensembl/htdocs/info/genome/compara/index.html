@@ -13,7 +13,8 @@
 <h1>Comparative Genomics</h1>
 
 <p>
-Ensembl Compara provides cross-species resources and analyses, at both the sequence level and the gene level. Below is a list of those resources.
+Ensembl Compara provides cross-species resources and analyses, at both the sequence level and the gene level.
+These resources are described in more details in <a href="http://dx.doi.org/10.1093/database/bav096">Herrero et al., Database, 2016</a>.
 </p>
 
 <br/>
@@ -105,8 +106,13 @@ is currently computed only for substitutions along the human lineage.
 <h3>Conservation scores and constrained elements</h3>
 
 <p>
-On the multiple alignments performed with the EPO and EPO-2X pipelines, we run <a href="http://mendel.stanford.edu/SidowLab/downloads/gerp/">GERP</a> to compute conservation scores and extract regions that are significantly conserved.
-<a href="analyses.html#conservation">More information &rarr;</a>
+Additionally we use <a href="http://mendel.stanford.edu/SidowLab/downloads/gerp/">Gerp</a>
+(<a href="http://www.genome.org/cgi/content/abstract/15/7/901">Cooper
+GM et al., Genome Res., 2005; 15:901-913</a>) to calculate conservation
+scores and call constrained elements on the Mercator/Pecan and EPO-2X multiple alignments.
+Conservation scores are estimated on a column-by-column basis.
+Constrained elements are stretches of the multiple alignment where the
+sequences are highly conserved according to the previous score.
 </p>
 
 <h3>Syntenies</h3>
