@@ -1,0 +1,88 @@
+<html>
+<head>
+  <title>Gene Families</title>
+  </head>
+
+  <body>
+
+  <h1>TreeFam HMM library</h1>
+
+  <p>
+  The TreeFam HMM library is based upon the Panther database (version 9) <a href="#ref1">[1]</a>.
+  In order to define a common and comprehensive set of HMMs to be used across all the Ensembl divisions we 
+  added extra families defined in the TreeFam database (version 9), and built new ones to model gene-families 
+  that were not previously described in either databases.
+  </p>
+  
+  <p>	
+  The gene models used in this study come from the version 82 of Ensembl, and version 29 of Ensembl Genomes. 
+  We selected all the genomes used in the protein-tree analysis of these databases to maximize the coverage 
+  of the tree of life. We used sequences from 708 species, of which 313 fungi, 130 protists, 41 plants, 119 
+  metazoans (incl. 64 chordates) and 105 bacteria.
+  </p>
+
+
+  <h2>The procedure to build the HMM library is described here:</h2>
+  
+  <p>
+  <ol>
+	<li>We first removed the redundancy between Panther 9 and TreeFam 9. This was done by:</li>
+	  <ol type="i">
+	  <li>Emitting consensus sequences from the 15,736 TreeFam 9 HMM profiles</li>
+	  <li>Classifying them against the 7,181 Panther 9 profiles with PantherScore
+			TreeFam 9 families that had a hit on the Panther 9 profiles were discarded from the overall library. 2,098 
+			TreeFam HMMs remained after this filter</li>
+	  </ol>
+	<li>We classified all the available sequences (8,488,481) according to their scores to these HMM profiles using PantherScore.</li>
+	<li>We used Mafft to align all these clusters</li>
+	<li>We used TrimAl and Notung to estimate the quality of the alignments, and also computed metrics such as the percentage of gaps in the alignment.</li>
+	<li>We identified a number of very large Panther families and decided to promote their sub-families HMMs (as defined in the Panther database) to the family rank in order to replace the Family HMM. After this step, the library is composed of 38,554 HMMs coming from Panther (5,103 from families, and 33,451 from sub-families).</li>
+	<li>We reclustered all the sequences against the new library</li>
+	<li>Sequences that did not match any of the profiles were then clustered together with hcluster_sg (a hierarchical clustering software for sparse graphs) using a blast all-vs-all approach [see Protein Tree <a href="http://www.ensembl.org/info/genome/compara/homology_method.html">documentation</a>].</li>
+	<li>We used Mafft to align all these clusters (404,108)</li>
+	<li>Given the large number of clusters we applied further filtering and quality-control checks. We used the following metrics and evaluated different thresholds</li>
+	<ol type="i">
+	  <li>Taxonomic coverage (ratio of taxa present in a particular HMM profile vs all the taxa in our species tree) for each member in all the clusters.</li>
+	  <li>Minimum number of genes</li>
+	  <li>Minimum number of species</li>
+	</ol>
+	<li>Overall, filtering the clusters by the number of different species per family and per division turned out to be the clearest way of discarding very small clusters. We used these thresholds:</li>
+	<ol type="i">
+	  <li>Clusters with at least 3 different species for protists division only</li>
+	  <li>Clusters with at least 5 different species for all other divisions</li>
+	</ol>
+	Out of the 404,108 clusters, only 128,233 passed these filters, of which 34,119 come from Panther 9 and 1,451 from Treefam 9
+	
+	<li>The new clusters (92,663) built with hcluster_sg that passed the filtering step were prefixed with TF6xxxxx in order to diferentiate them from previous TreeFam families.</li>
+	<li>We calibrated most of the profiles (the calibration of a few very big alignments has failed)</li>
+  </p>
+
+  <h2>Statistics</h2>
+  <p>
+    Total number of families before filtering: 404108<br \>
+    Total number of families after filtering: 128233<br \>
+  </p>
+  
+  Number of families breaking down by source:<br \>
+  PTHR: 34119<br \>
+  TF1: 8<br \>
+  TF2: 0<br \>
+  TF3: 1443<br \>
+  TF4: 0<br \>
+  TF5: 0<br \>
+  TF6: 92663<br \>
+
+  
+  <h2 id="References">References</h2>
+
+  <p>
+  <a name="ref1"><strong>1</strong></a> - PANTHER HMM scoring tools - Version 1.03
+  <br />
+  <a href="http://www.pantherdb.org/downloads/">http://www.pantherdb.org/downloads/</a>
+  <br />
+  4/10/2011
+  </p>
+  
+</body>
+</html>
+
