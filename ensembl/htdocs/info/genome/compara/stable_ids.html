@@ -1,23 +1,23 @@
 <html>
 <head>
-  <title>Family and GeneTree stable ID</title>
+  <title>GeneTree stable ID</title>
 </head>
 
 <body>
 
-<h1>Family and GeneTree stable ID in Compara</h1>
+<h1>GeneTree stable ID in Compara</h1>
 
 <h2 id="Introduction">Introduction</h2>
 
-<p>We provide Stable IDs for both Families and GeneTrees. The IDs are kept from one release to the other depending on the
-genes present in the Family or Gene Tree. In particular, we do not rely on the underlying alignment, the tree structure or
+<p>We provide Stable IDs for GeneTrees. The IDs are kept from one release to the other depending on the
+genes present in the Gene Tree. In particular, we do not rely on the underlying alignment, the tree structure or
 the resulting orthologs to assign stable IDs to GeneTrees.</p>
 
 <h2 id="Namespaces">Namespaces</h2>
 
-<p>The format of the Stable IDs are <b>ENSFMRRRRXXXXXXXXXX</b> and <b>ENSGTRRRRXXXXXXXXXX</b>
+<p>The format of the Stable IDs is <b>ENSGTRRRRXXXXXXXXXX</b>
 respectively, where RRRR corresponds to the Ensembl release number when the stable ID was first assigned and XXXXXXXXXX
-is a number. For instance, ENSFM00550000743120 is a family first described in Ensembl 55 and ENSGT00560000077204 is a GeneTree first
+is a number. For instance, ENSGT00560000077204 is a GeneTree first
 described in Ensembl 56.</p>
 
 
@@ -28,8 +28,8 @@ but we also use it to match Ensembl GeneTrees to TreeFam entries.
 </p>
 
 <p>
-The algorithm takes two different classification schemes (i.e. Families
-from the current release and Families from the forthcoming one) over a given
+The algorithm takes two different classification schemes (i.e. Gene-Trees
+from the current release and Gene-Trees from the forthcoming one) over a given
 set of members.  It is assumed that the classifications are somehow
 related, i.e. they tend to group members similarly. One is called
 <b>"old"</b> and the other <b>"new"</b>, given an order of succession.
@@ -39,26 +39,8 @@ related, i.e. they tend to group members similarly. One is called
 The comparison requires a common namespace for the members used in
 both classifications.  The algorithm then infers how the names of the
 classes in two different classifications are related.
+To compare the Gene-Trees, we use the ENSEMBL translation stable_ids.
 </p>
-
-<p>
-Member Namespaces:
-</p>
-
-<ul>
-<li>EnsemblCompara GeneTrees
-<ul>
-<li>Common ENSEMBL translation stable_ids (ENSEMBLPEP) from release to release</li>
-<li>Common ENSEMBL transcript stable_ids between GeneTrees and Treefam families</li>
-</ul>
-</li>
-
-<li>EnsemblCompara MCL Families
-<ul>
-<li>Common Compara ENSEMBLPEP, Uniprot/SWISSPROT and Uniprot/SPTREML ids from release to release</li>
-</ul>
-</li>
-</ul>
 
 <p>
 With respect to the two given classifications, we have three kinds of members:
