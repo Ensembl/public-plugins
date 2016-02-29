@@ -56,6 +56,7 @@ Ensembl.GA = {
       ensGA('set', 'page', this.filterURL(window.location));
       ensGA('set', 'dimension1', Ensembl.species);
       ensGA('set', 'dimension2', Ensembl.isLoggedInUser ? 'yes' : 'no');
+      ensGA('set', 'dimension3', window.location.pathname + window.location.search);
       ensGA('send', 'pageview');
       ensGA('require', 'linkid', 'linkid.js');
 
