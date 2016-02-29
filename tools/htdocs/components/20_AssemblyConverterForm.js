@@ -30,12 +30,11 @@ Ensembl.Panel.AssemblyConverterForm = Ensembl.Panel.ToolsForm.extend({
    * Populates the form according to the provided ticket data
    */
     if (jobsData && jobsData.length) {
-      jobsData = $.extend({}, jobsData[0].config, jobsData[0]);
       this.base(jobsData);
 
-      if (jobsData['input_file_type']) {
-        this.elLk.form.find('input[name=file]').parent().append('<p class="_download_link">' + ( jobsData['input_file_type'] === 'text'
-          ? 'Click <a href="' + jobsData['input_file_url'] + '">here</a> to download the previously uploaded file.'
+      if (jobsData[0]['input_file_type']) {
+        this.elLk.form.find('input[name=file]').parent().append('<p class="_download_link">' + ( jobsData[0]['input_file_type'] === 'text'
+          ? 'Click <a href="' + jobsData[0]['input_file_url'] + '">here</a> to download the previously uploaded file.'
           : 'You previously uploaded a compressed file to run this job.'
         ) + '</p>');
       }
