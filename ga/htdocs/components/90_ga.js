@@ -54,18 +54,13 @@ Ensembl.GA = {
 
       ensGA('create', this.code(), 'auto');
       ensGA('set', 'page', this.filterURL(window.location));
+      ensGA('set', 'dimension1', Ensembl.species);
+      ensGA('set', 'dimension2', Ensembl.isLoggedInUser ? 'yes' : 'no');
       ensGA('send', 'pageview');
       ensGA('require', 'linkid', 'linkid.js');
 
       this.initialised = true;
       this.registerConfigs(this.eventConfigs);
-    }
-  },
-
-  sendDimensions: function () {
-    if (this.initialised) {
-      ensGA('set', 'dimension1', Ensembl.species);
-      ensGA('set', 'dimension2', Ensembl.isLoggedInUser ? 'yes' : 'no');
     }
   },
 
@@ -254,8 +249,8 @@ Ensembl.GA.EventConfig.destroy = function(obj) {
 Ensembl.extend({
   initialize: function () {
     Ensembl.setSpecies();
+    Ensembl.setUserFlag();
     Ensembl.GA.init();
     this.base.apply(this, arguments);
-    Ensembl.GA.sendDimensions();
   }
 });
