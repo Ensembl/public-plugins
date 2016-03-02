@@ -219,8 +219,6 @@ sub fetch_transcript {
   my @features;
   my $data = $glyphset->features($display);
  
-  use Data::Dumper;
-  warn Dumper($data);
   foreach my $gene (@$data) {
     my $gene_id = $gene->{'stable_id'};
     foreach my $obj (@{$gene->{'transcripts'}||[$gene]}) {
@@ -239,7 +237,8 @@ sub fetch_transcript {
         labelColor => $colour,
         legend => $glyphset->my_colour($colour_key, 'text'),
         menu => $obj->{'href'},
-        group => scalar @{$gene->{'transcripts'}||[]}?1:0, 
+        group => scalar @{$gene->{'transcripts'}||[]}?1:0,
+        highlight => $obj->{'highlight'},
       };
       $feature->{'exons'} = [ map { {
         id => $_->{'_unique'},
