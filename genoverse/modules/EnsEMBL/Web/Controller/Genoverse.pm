@@ -41,10 +41,12 @@ sub new {
   my $self = { hub => $hub };
   
   bless $self, $class;
-  
+ 
+  $hub->qstore_open; 
   $r->content_type('text/plain');
   $self->$func if $self->can($func);
-  
+  $hub->qstore_close; 
+ 
   return $self;
 }
 
@@ -80,7 +82,6 @@ sub fetch_features {
   
   foreach (@{$self->cache_bins}) {
     my $f = $self->get_cached_content('features', $chr, @$_);
-    
     if ($f) {
       if ($slice->length == $slice->seq_region_length || $genoverse->{'all_features'}) {
         push @features, @$f;
@@ -216,45 +217,37 @@ sub fetch_transcript {
   });
   
   my @features;
-  my ($genes, $highlights, $transcripts, $exons) = $glyphset->features;
-  
-  foreach my $gene (@$genes) {
-    my $gene_id = $gene->stable_id;
-    
-    foreach ($transcripts->{$gene_id} ? @{$transcripts->{$gene_id}} : $gene) {
-      my $stable_id  = $_->stable_id;
-      my $transcript = $_->isa('Bio::EnsEMBL::Transcript') ? $_ : undef;
-      my $colour_key = $glyphset->colour_key($gene, $transcript);
-      my $feature    = {
-        id         => $_->dbID,
-        start      => $_->seq_region_start  + 0,
-        end        => $_->seq_region_end    + 0,
-        strand     => $_->seq_region_strand + 0,
-        label      => $no_label ? '' : $glyphset->feature_label($gene, $transcript),
-        color      => $colourmap->hex_by_name($glyphset->my_colour($colour_key)),
-        labelColor => $colourmap->hex_by_name($glyphset->my_colour($colour_key, 'label')),
-        legend     => $glyphset->my_colour($colour_key, 'text'),
-        menu       => $glyphset->href($gene, $transcript),
-        group      => scalar keys %$transcripts ? 1 : 0
+  my $data = $glyphset->features($display);
+ 
+  foreach my $gene (@$data) {
+    my $gene_id = $gene->{'stable_id'};
+    foreach my $obj (@{$gene->{'transcripts'}||[$gene]}) {
+      my $stable_id = $obj->{'stable_id'};
+      my $transcript = (exists $obj->{'exons'})?$obj:undef;
+      my $colour_key = $transcript->{'colour_key'}||$gene->{'colour_key'};
+      my $colour =
+        $colourmap->hex_by_name($glyphset->my_colour($colour_key));
+      my $feature = {
+        id => $obj->{'_unique'},
+        start => $slice->start+$obj->{'start'},
+        end => $slice->start+$obj->{'end'},
+        strand => $obj->{'strand'}+0,
+        label => $no_label?'':$obj->{'label'},
+        color => $colour,
+        labelColor => $colour,
+        legend => $glyphset->my_colour($colour_key, 'text'),
+        menu => $obj->{'href'},
+        group => scalar @{$gene->{'transcripts'}||[]}?1:0,
+        highlight => $obj->{'highlight'},
       };
-      
-      if ($exons->{$gene_id} && !($transcript && $stable_id eq $gene_id)) {
-        $feature->{'exons'} = [ map { id => $_->dbID, start => $_->seq_region_start + 0, end => $_->seq_region_end + 0 }, @{$exons->{$gene_id}} ];
-      } elsif ($transcript) {
-        foreach (@{$exons->{$stable_id}}) {
-          push @{$feature->{'exons'}}, { id => $_->[0]->dbID, start => $_->[0]->seq_region_start + 0,       end => $_->[0]->seq_region_end + 0, style => 'strokeRect' } if $_->[1] eq 'border';
-          push @{$feature->{'exons'}}, { id => $_->[0]->dbID, start => $_->[0]->seq_region_start + $_->[2], end => $_->[0]->seq_region_end + 0 - $_->[3]              } if $_->[1] eq 'fill';
-        }
-      }
-      
-      # save highlights which are not based on URL parameters (eg ccds transcripts in vega)
-      $feature->{'highlight'} = $colourmap->hex_by_name($highlights->{$stable_id}) if $highlights->{$stable_id} && $stable_id ne $g && $stable_id ne $t;
-      $feature->{'exons'}     = [ sort { $a->{'start'} <=> $b-> {'start'} || $a->{'end'} <=> $b-> {'end'} } @{$feature->{'exons'}} ] if $feature->{'exons'};
-       
-      push @features, $feature;
+      $feature->{'exons'} = [ map { {
+        id => $_->{'_unique'},
+        start => $slice->start+$_->{'start'},
+        end => $slice->start+$_->{'end'},
+      } } @{$obj->{'exons'}} ];
+      push @features,$feature;
     }
   }
-  
   return \@features;
 }
 
