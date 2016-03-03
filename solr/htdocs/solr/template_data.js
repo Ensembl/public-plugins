@@ -96,6 +96,12 @@
       postproc: function(el, data) {
         var tr,
           _this = this;
+        $('.table_toplink', el).click(function() {
+          return $(document).trigger('ga', ['SrchMainLink', 'standard', $(this).text()]);
+        });
+        $('.quick_links a', el).click(function() {
+          return $(document).trigger('ga', ['SrchQuickLink', $(this).text(), $(this).closest('.table_result').find('.table_toplink').text()]);
+        });
         tr = $('.table_result', el);
         $('html').on('resized', function() {
           if ($(window).width() < 1400 || $('#solr_content').hasClass('solr_useless_browser')) {
@@ -316,6 +322,7 @@
               };
               state['facet_' + href.substring(1)] = '';
               $(document).trigger('update_state', [state]);
+              $(document).trigger('ga', ['SrchGreenCross', href.substring(1)]);
               return false;
             });
           });
@@ -386,6 +393,7 @@
             q: (_ref = change.q) != null ? _ref : ''
           }, function(data) {
             if (data != null ? data.redirect : void 0) {
+              $(document).trigger('ga', ['SrchPsychic', 'redirect', data.url]);
               return window.location.href = data.url;
             }
           });
@@ -939,6 +947,7 @@
             };
             state['facet_' + href.substring(1)] = '';
             $(document).trigger('update_state', [state]);
+            $(document).trigger('ga', ['SrchFacetLHSOff', href.substring(1)]);
             return false;
           });
         }
@@ -1076,6 +1085,7 @@
             };
             state["facet_" + data.key] = href.substring(1);
             $(document).trigger('update_state', [state]);
+            $(document).trigger('ga', ['SrchFacetLHSOn', data.key, href.substring(1)]);
             return false;
           });
         },
@@ -1093,6 +1103,7 @@
             state = {};
             state["fall_" + data.key] = '1';
             $(document).trigger('update_state', [state]);
+            $(document).trigger('ga', ['SrchFacetLHSMore', data.key]);
             return false;
           });
         },
@@ -1102,6 +1113,7 @@
             state = {};
             state["fall_" + data.key] = '';
             $(document).trigger('update_state', [state]);
+            $(document).trigger('ga', ['SrchFacetLHSLess', data.key]);
             return false;
           });
         }
@@ -1219,6 +1231,7 @@
             $(document).trigger('update_state', {
               perpage: href.substring(1)
             });
+            $(document).trigger('ga', ['SrchPerPage', data.key, href.substring(1)]);
             return false;
           });
         }
@@ -1453,6 +1466,7 @@
         '.sctophit': function(el, data) {
           var _this = this;
           return el.on('click', function(e) {
+            $(document).trigger('ga', ['SrchBoxes', 'tophit', data.url]);
             return window.location.href = data.url;
           });
         }
@@ -1638,6 +1652,7 @@
             }
             state.q = href.substring(1);
             $(document).trigger('update_state', [state]);
+            $(document).trigger('ga', ['SrchSuggest', 'click', state.q]);
             return false;
           });
         },
@@ -2387,6 +2402,11 @@
         return [spec, data];
       },
       more_fixes: ['page', 'fix_g_variation', 'fix_regulation', 'fix_terse', 'fix_minor_types'],
+      postproc: function(el, data) {
+        return $('td a', el).click(function() {
+          return $(document).trigger('ga', ['SrchMainLink', 'table', $(this).text()]);
+        });
+      },
       fixes: {
         global: [
           function(data) {

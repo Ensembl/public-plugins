@@ -1,4 +1,4 @@
-# Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+# Copyright [1999-2016] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -102,6 +102,18 @@ window.google_templates =
       data.table_row = data.rows
       [spec,data]
     postproc: (el,data) ->
+      $('.table_toplink',el).click ->
+        $(document).trigger('ga',[
+            'SrchMainLink',
+            'standard',
+            $(this).text(),
+          ])
+      $('.quick_links a',el).click ->
+        $(document).trigger('ga',[
+            'SrchQuickLink',
+            $(this).text(),
+            $(this).closest('.table_result').find('.table_toplink').text()
+          ])
       # position sidecar holder
       tr = $('.table_result',el)
       $('html').on 'resized', () ->
@@ -303,6 +315,7 @@ window.google_templates =
             state = { page: 1 }
             state['facet_'+href.substring(1)] = ''
             $(document).trigger('update_state',[state])
+            $(document).trigger('ga',['SrchGreenCross',href.substring(1)]);
             false
 
     preproc: (spec,data) ->
@@ -355,6 +368,7 @@ window.google_templates =
       $(document).on 'maybe_update_state', (e,change,incr) ->
         $.getJSON "/Multi/Ajax/psychic",{ q: change.q ? '' }, (data) ->
           if data?.redirect
+            $(document).trigger('ga',['SrchPsychic','redirect',data.url])
             window.location.href = data.url
         $(document).trigger('update_state',change)
       $(document).on 'state_known', (e,state,update_seq) ->

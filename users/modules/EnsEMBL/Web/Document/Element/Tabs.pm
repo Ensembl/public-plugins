@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2016] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -33,22 +33,26 @@ sub new {
 }
 
 sub init_history {
-  my ($self, $hub, $builder) = @_;
+  my ($self, $hub) = @_;
   my $user         = $hub->user;
   my $species_defs = $hub->species_defs;
   my $type         = $hub->type;
   my $species      = $hub->species;
   my $servername   = $species_defs->ENSEMBL_SERVERNAME;
-  my (%history, %bookmarks);
+  my $entries      = $self->entries;
+
+  # set only required keys for history and bookmarks
+  my %history      = map { $_->{'dropdown'} ? ($_->{'type'} => []) : () } @$entries;
+  my %bookmarks    = map { $_ => [] } keys %history;
 
   for (@{$user->histories}) {
     my $object = $_->object;
-    push @{$history{$object}}, $_ if $object && $builder->object($object) && $_->url =~ /$servername/;
+    push @{$history{$object}}, $_ if $object && $history{$object} && $_->url =~ /$servername/;
   }
 
   for (@{$user->bookmarks}) {
     my $object = $_->object;
-    push @{$bookmarks{$object}}, $_ if $object && $_->url =~ /\/$object\// && $builder->object($object) && $_->url =~ /$servername/;
+    push @{$bookmarks{$object}}, $_ if $object && $bookmarks{$object} && $_->url =~ /\/$object\// && $_->url =~ /$servername/;
   }
 
   foreach my $t (keys %history) {

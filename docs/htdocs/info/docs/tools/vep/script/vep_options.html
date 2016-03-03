@@ -579,6 +579,15 @@ host          useastdb.ensembl.org</pre>
         "SO"</i>
       </td>
     </tr>
+    <tr id="opt_no_consequences">
+      <td><pre>--no_consequences</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        Skip consequence calculation; all variants are assigned the default
+        intergenic consequence type. This can be useful if you wish to just
+        run a plugin, for example. <i>Not used by default</i>
+      </td>
+    </tr>
   </table>
     
   
@@ -838,6 +847,14 @@ host          useastdb.ensembl.org</pre>
         key specified for each data file.<br/><br/> Commas in fields are
         replaced with ampersands (&amp;) to preserve VCF format.<br/><br/><i>Not
         used by default</i>
+      </td>
+    </tr>
+    <tr id="opt_tab">
+      <td><pre>--tab</pre></td>
+      <td>&nbsp;</td>
+      <td>
+        Writes output in <a href="../vep_formats.html#tab">tab-delimited format</a>.
+        <i>Not used by default</i>
       </td>
     </tr>
     <tr id="opt_json">

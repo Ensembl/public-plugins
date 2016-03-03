@@ -8,8 +8,23 @@
 
 <h1>Linking in to Ensembl</h1>
 
-<h2>Linking on a stable ID</h2>
+<div class="plain-box">
+<h2>Attaching a file via URL</h2>
+<p>You can quickly and easily attach any 
+<a href="/info/website/upload/index.html#formats">supported file format</a> 
+to Region in Detail using the following URL pattern:
 
+
+<p><kbd>http:/www.ensembl.org/[name_of_species]/Location/View?r=[coordinates];attach=[url_of_your_file]</kbd></p>
+
+<p>Note that if your file URL contains semicolons, ampersands (&amp;) or equals signs, these will need to be URL-encoded.</p>
+
+<p>For attaching data to other images or pages, see the <a href="#advanced">advanced customisation tips</a> below.</p>
+
+</div>
+
+<div class="plain-box">
+<h2>Linking on a stable ID</h2>
 <p>If you simply wish to link to a gene, transcript, protein or gene tree page, 
 particularly for automated links, you can do so using the following template:</p>
 
@@ -38,8 +53,10 @@ see the <a href="#standard_url">standard URL structure</a> section, below.</p>
 <p>The only site this type of URL will not work with is 
 <a href="http://pre.ensembl.org">Ensembl Pre</a> since, by their nature,
 most preview species have no genebuild and thus no stable IDs.</p>
+</div>
 
-<h2 id="standard_url">Standard URL structure</h2>
+<div class="plain-box">
+<h2 id="standard_url">More about Ensembl URLs</h2>
 
 <p>
   URLs for Ensembl views take the format:
@@ -73,7 +90,7 @@ most preview species have no genebuild and thus no stable IDs.</p>
 </ul>
 
 
-<h2>Customising via links</h2>
+<h2 id="advanced">Advanced link customisation</h2>
 
 <p>
   Many of the customisation options available to users of the website in the
@@ -229,7 +246,7 @@ most preview species have no genebuild and thus no stable IDs.</p>
 <h4>Renderers</h4>
 
 <p>
-  Renderers are the same as for alignment tracks (see above), or for wiggle/graph data, either off or tiling.
+  Renderers are the same as for alignment tracks (see above), or for wiggle/graph data, either 'off' or 'signal'.
 </p>
 
 <h4 id="attachurl">Examples - attach external data</h4>
@@ -254,9 +271,10 @@ most preview species have no genebuild and thus no stable IDs.</p>
 
 <p><kbd>
   <a href="http://www.ensembl.org/Homo_sapiens/Location/View?g=ENSG00000012048;contigviewbottom=url:http://www.ensembl.org/info/website/upload/sample_files/example.bed=ungrouped">
-    http://www.ensembl.org/Homo_sapiens/Location/View?g=ENSG00000012048;contigviewbottom=url:http://www.abcd.edu/myprojects/data.bed=tiling;format=bedGraph
+    http://www.ensembl.org/Homo_sapiens/Location/View?g=ENSG00000012048;contigviewbottom=url:http://www.abcd.edu/myprojects/data.bed=signal;format=bedGraph
   </a>
 </kbd></p>
+</div>
 
 </body>
 </html>

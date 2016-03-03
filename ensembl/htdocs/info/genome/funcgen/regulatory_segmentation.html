@@ -12,11 +12,11 @@
 <h1>Regulatory Segmentation</h1>
 
 <p>
-Segmentations partition the genome into regions such as predicted promoters, enhancers, and repressed (see table below). These are genomic regions of similar signal over a selected number of assays. Each defines a single-track summary of the functional architecture of the human genome in one of six cell types.
+Segmentations partition the genome into regions such as predicted promoters, enhancers, actively transcribed and repressed. These are genomic regions of similar signal over a selected number of assays. Each defines a single-track summary of the functional architecture of the genome.
 </p>
 
 <p>
-To build segmentations we currently use <b><a href="http://pmgenomics.ca/hoffmanlab/proj/segway/" rel="external">Segway</a></b> (<a href="http://dx.doi.org/10.1038/nmeth.1937" rel="external">Hoffman <i>et al.</i>, 2011</a>) a dynamic Bayesian network algorithm using real-valued signal data, trained over the ENCODE pilot regions (1% of the genome), and fitted over the whole genome.
+To build segmentations we currently use either <b><a href="http://compbio.mit.edu/ChromHMM" rel="external">ChromHMM</a></b> (<a href="http://www.ncbi.nlm.nih.gov/pubmed/21441907" rel="external">Ernst <i>et al.</i>, 2011</a>) or <b><a href="http://pmgenomics.ca/hoffmanlab/proj/segway/" rel="external">Segway</a></b> (<a href="http://dx.doi.org/10.1038/nmeth.1937" rel="external">Hoffman <i>et al.</i>, 2011</a>). <b><a href="http://compbio.mit.edu/ChromHMM" rel="external">ChromHMM</a></b> uses a multivariate hidden Markov Model, training on the binary presence or absence of signal for each assay in 200 base pair bins over the whole genome. <b><a href="http://pmgenomics.ca/hoffmanlab/proj/segway/" rel="external">Segway</a></b> runs a dynamic Bayesian network algorithm using real-valued signal data, trained over the ENCODE pilot regions (1% of the genome), and fitted over the whole genome.
   <!--
   <li><b>ChromHMM</b> (<a href="http://www.ncbi.nlm.nih.gov/pubmed/21441907" rel="external">Ernst <i>et al.</i>, 2011</a>)
     <p>
@@ -26,16 +26,17 @@ To build segmentations we currently use <b><a href="http://pmgenomics.ca/hoffman
   -->
 </p>
 
-<br>
 <p>
-Currently there is one set of human segmentations, performed on Segway with a 200bp resolution. The assays were generated in the ENCODE and Roadmap Epigenomic projects for A549, DND-41, GM12878, K562, H1-hESC, HepG2, HeLa-S3, HSMM, HSMMtube, HUVEC, IMR90, Monocytes-CD14+, NH-A, NHDF-AD, NHEK, Nhlf and Osteoblasts, and were chosen to maximise information content about the state of the genome. These assays (including control input sequencing) were coordinated across all cell lines and constituted from three classes of data:
+Currently there are two sets of human segmentations, one based on <b><a href="http://www.encodeproject.org" rel="external">ENCODE</a></b> (<a href=http://www.ncbi.nlm.nih.gov/pubmed/22955616 rel="external">ENCODE Project Consortium, 2012</a>) and <b><a href="http://www.roadmapepigenomics.org" rel="external">Roadmap Epigenomics</a></b> (<a href="http://www.ncbi.nlm.nih.gov/pubmed/25693563" rel="external">Roadmap Epigenomics Consortium, 2015</a>) data run using Segway, and one based on <b><a href="http://dcc.blueprint-epigenome.eu" rel = "external">BLUEPRINT</a></b> (<a href="http://www.blueprint-epigenome.eu" rel="external">http://www.blueprint-epigenome.eu</a>) data run using ChromHMM, and one mouse segmentation, based on <b><a href="http://www.encodeproject.org" rel="external">Mouse ENCODE</a></b> (<a href="http://www.ncbi.nlm.nih.gov/pubmed/22889292" rel="external">Mouse ENCODE Consortium, 2012</a>) data, run using ChromHMM, all fitting 25 epigenomic states with 200bp resolution. The assays were chosen to maximise information content about the state of the genome in each project. These assays (including control input sequencing) were coordinated across all cell lines and constituted from three classes of data, which differ across projects due to the available data:
 </p>
   
-<table class="ss tint" style="width:70%;" align="center">
-<tr><th>Input Data Class</th><th>Description</th></tr>
-<tr class="bg2"><td>Open chromatin</td><td>DNase1 hypersensitivity</td></tr>
-<tr><td>Transcription factors</td><td>CTCF</td></tr>
-<tr class="bg2"><td>Histone modifications</td><td>H3k4me1, H3k4me2, H3k4me3, H3k9ac, H3k27ac, H3k27me3, H3k36me3, H4k20me1</td></tr>
+<table class="ss tint" style="width:80%;" align="center">
+<tr><th>Segmentation<th>Input Data Class</th><th>Description</th></tr>
+<tr class="bg2"><th rowspan="3">Human ENCODE/Roadmap Segway</th><td>Open chromatin</td><td>DNase1 hypersensitivity</td></tr>
+<tr class="bg2"><td>Transcription factors</td><td>CTCF</td></tr>
+<tr class="bg2"><td>Histone modifications</td><td>H3K4me1, H3K4me2, H3K4me3, H3K9ac, H3K27ac, H3K27me3, H3K36me3, H4K20me1</td></tr>
+<tr><th>Human BLUEPRINT ChromHMM</th><td>Histone modifications</td><td>H3K4me1, H3K4me3, H3K9me3, H3K27ac, H3K27me3, H3K36me3</td></tr>
+<tr class="bg2"><th>Mouse ENCODE ChromHMM</th><td>Histone modifications</td><td>H3K4me1, H3K4me3, H3K9ac, H3K27ac, H3K27me3, H3K36me3</td></tr>
 </table>
 
 <br>
@@ -43,7 +44,7 @@ Currently there is one set of human segmentations, performed on Segway with a 20
 <h4>Regulatory Segmentation in the Browser</h4>
 
 
-<p>There is one segmentation track available for each of the cell types in the human Ensembl Regulatory Build. These tracks are on by default in most regulation views, but not in the Location tab. Once in the <a href="/Homo_sapiens/Location/View?r=6:133017695-133161157">Location tab</a>, you need to configure the page to turn on the Segmentation tracks as show below.</p>
+<p>There is one segmentation track available for each of the cell types in the Ensembl Regulatory Build. These tracks are on by default in most regulation views, but not in the Location tab. Once in the <a href="/Homo_sapiens/Location/View?r=6:133017695-133161157">Location tab</a>, you need to configure the page to turn on the Segmentation tracks as show below.</p>
 
 <img width=600 src="segmentation_tracks.jpg" alt="Selecting segmentation tracks">
 

@@ -1,4 +1,4 @@
-# Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+# Copyright [1999-2016] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -11,8 +11,16 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 #
+
+gi_direct = ->
+  if Ensembl.GA
+    return new Ensembl.GA.EventConfig({
+      category: (-> if this.ui.item.link.substr(0,13) == '/Multi/Search' then 'SrchAuto' else 'SrchDirect' ),
+      action: (-> if $(this.target).parents('#masthead').length then 'masthead' else 'results' ),
+      label: (-> this.ui.item.link ),
+      nonInteraction: false
+    })
 
 $.fn.getCursorPosition = () ->
   input = @get(0)
@@ -345,11 +353,17 @@ $.widget('custom.searchac',$.ui.autocomplete,{
       if window.hub and window.hub.code_select
         if ui.item.text
           $(e.target).val(ui.item.text)
+          ga_direct = gi_direct()
+          if Ensembl.GA and ga_direct
+            Ensembl.GA.sendEvent(ga_direct,{ target: e.target, ui: ui })
           window.hub.update_url({q: ui.item.text })
           return false
         else if ui.item.link
           window.hub.spin_up()
       if ui.item.link
+        ga_direct = gi_direct()
+        if Ensembl.GA and ga_direct
+          Ensembl.GA.sendEvent(ga_direct,{ target: e.target, ui: ui })
         window.location.href = ui.item.link
     focus: (e,ui) ->
       ghost = $(e.target).parent().find('input.solr_ghost')

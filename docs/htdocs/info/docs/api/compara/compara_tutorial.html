@@ -623,7 +623,7 @@ my $gene_member_adaptor = Bio::EnsEMBL::Registry-&gt;get_adaptor('Multi', 'compa
 my $gene_member = $gene_member_adaptor-&gt;fetch_by_stable_id('ENSG00000004059');
 
 my $family_adaptor = Bio::EnsEMBL::Registry-&gt;get_adaptor('Multi','compara','Family');
-my $families = $family_adaptor-&gt;fetch_all_by_Member($gene_member);
+my $families = $family_adaptor-&gt;fetch_all_by_GeneMember($gene_member);
 
 foreach my $family (@{$families}) {
     print join(" ", map { $family-&gt;$_ }  qw(description description_score))."\n";

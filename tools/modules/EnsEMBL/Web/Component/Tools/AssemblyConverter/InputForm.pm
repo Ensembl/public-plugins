@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2016] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -106,9 +106,6 @@ sub get_cacheable_form_node {
     'class'         => 'url'
   });
 
-  # Placeholder for previous files select box
-  $input_fieldset->append_child('text', 'FILES_DROPDOWN');
-
   $self->add_buttons_fieldset($form, {'reset' => 'Clear', 'cancel' => 'Close form'});
 
   return $form;
@@ -116,7 +113,7 @@ sub get_cacheable_form_node {
 
 sub get_non_cacheable_fields {
   ## Abstract method implementation
-  return { FILES_DROPDOWN => shift->files_dropdown(INPUT_FORMATS()) };
+  return {};
 }
 
 sub js_panel {

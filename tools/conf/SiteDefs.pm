@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2016] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -39,8 +39,9 @@ sub update_conf {
   # Which dispatcher to be used for the jobs (provide the appropriate values in your plugins)
   $SiteDefs::ENSEMBL_TOOLS_JOB_DISPATCHER = { 'Blast' => '', 'VEP' => '', 'AssemblyConverter' => '', 'IDMapper' => '' };
 
-  # tmp directory for jobs i/o files
-  $SiteDefs::ENSEMBL_TMP_DIR_TOOLS = defer { $SiteDefs::ENSEMBL_TMP_DIR.'/tools' };
+  # tmp directory for jobs i/o files - the final folder structure looks like ENSEMBL_TMP_DIR_TOOLS/temporary|persistent/ENSEMBL_TMP_SUBDIR_TOOLS/Blast|VEP
+  $SiteDefs::ENSEMBL_TMP_DIR_TOOLS    = defer { $SiteDefs::ENSEMBL_TMP_DIR }; # keeping the base dir same as the main tmp dir
+  $SiteDefs::ENSEMBL_TMP_SUBDIR_TOOLS = 'tools';
 
   # Flag to enable/disable tools
   $SiteDefs::ENSEMBL_BLAST_ENABLED  = 1;

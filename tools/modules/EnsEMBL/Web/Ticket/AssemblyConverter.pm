@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2016] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -38,39 +38,21 @@ sub init_from_user_input {
 
   $hub->param('text', $hub->param("text_$format"));
 
-  my $file = EnsEMBL::Web::File::Tools->new('hub' => $hub, 'tool' => 'AssemblyConverter', 'empty' => 1);
-
-  my $method    = first { $hub->param($_) } qw(file url userdata text);
+  my $method = first { $hub->param($_) } qw(file url text);
 
   # if no data entered
   throw exception('InputError', 'No input data has been entered') unless $method;
 
-  my ($file_name, $file_path, $description);
+  my $description = $hub->param('name') || ($method eq 'text' ? 'pasted data' : ($method eq 'url' ? 'data from URL' : sprintf("%s", $hub->param('file'))));
 
-  # if input is one of the existing files
-  if ($method eq 'userdata') {
+  my ($file_content, $file_name) = $self->get_input_file_content($method);
 
-    $file_name    = $hub->param('userdata');
-    $description  = 'user data';
+  # empty file
+  throw exception('InputError', 'No input data has been entered') unless $file_content;
 
-    $file->init('file' => $file_name);
-
-  # if new file, url or text, upload it to a temporary file location
-  } else {
-
-    $description = $hub->param('name') || ($method eq 'text' ? 'pasted data' : ($method eq 'url' ? 'data from URL' : sprintf("%s", $hub->param('file'))));
-
-    my $error = $file->upload('type' => 'no_attach', 'description' => $description);
-    throw exception('InputError', $error) if $error;
-
-    $file_name = $file->write_name;
-  }
-
-  # finalise input file path and description
-  $file_path    = $file->absolute_write_path; 
+  # finalise input file name and description
   $description  = "Assembly conversion of $description in $species";
-  $file_name    .= '.'.lc($format) if $file_name !~ /\./ && -T $file_path;
-  $file_name    = $file_name =~ s/.*\///r;
+  $file_name   .= '.'.lc($format) if $file_name !~ /\./;
 
   # check file format is matching
   ## TODO VEP can do this - need similar generic functionality in EnsEMBL::IO
@@ -123,7 +105,7 @@ sub init_from_user_input {
     'assembly'    => $hub->species_defs->get_config($species, 'ASSEMBLY_VERSION'),
     'job_data'    => $job_data
   }, {
-    $file_name    => {'location' => $file_path}
+    $file_name    => {'content' => $file_content}
   }));
 }
 

@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2016] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -51,20 +51,24 @@ sub long_caption {
 
 sub short_caption {
   ## Caption for the tab
-  ## @return Tab caption/menu heading according to the current page and tl param
+  ## @return Tab caption/menu heading according to the current page
   my ($self, $global) = @_;
   my $hub = $self->hub;
 
   # If page is not Tools related
-  if ($hub->type ne 'Tools' && $global && $global eq 'global') {
-    my $job       = $self->get_requested_job;
-    my $ticket    = $job && $job->ticket;
-    my $job_count = $ticket && $ticket->job_count;
-    return $job && $job->status eq 'done' ? sprintf('%s results', $self->get_sub_object($ticket->ticket_type_name)->tab_caption) : 'Jobs';
-  }
+  return 'Jobs' if $hub->type ne 'Tools' && $global && $global eq 'global';
 
   my $sub_object = $self->get_sub_object;
   return $global ? $sub_object->tab_caption : 'Web Tools'; # generic Tools page or Blast/VEP pages for tab, 'Web Tools' for menu heading
+}
+
+sub ajax_short_caption {
+  ## Caption for the tab when requested by ajax
+  ## @return Tab caption according to the current tl param
+  my $self      = shift;
+  my $job       = $self->get_requested_job;
+  my $ticket    = $job && $job->ticket;
+  return $job && $job->status eq 'done' ? sprintf('%s results', $self->get_sub_object($ticket->ticket_type_name)->tab_caption) : $self->short_caption('global');
 }
 
 sub tab_caption {
@@ -76,12 +80,16 @@ sub tab_caption {
 
 sub default_action {
   ## URL action part of the tools tab
-  ## @return Current action for all tools page, link to the Results page for external pages if the url contains a valid job id
+  ## @return Current action for all tools page
   my $self  = shift;
   my $hub   = $self->hub;
 
-  return join '/', $hub->action || 'Summary', $hub->function || () if $hub->type eq 'Tools';
+  return $hub->type eq 'Tools' ? join '/', $hub->action || 'Summary', $hub->function || () : 'Summary';
+}
 
+sub ajax_default_action {
+  ## URL action part of the tools tab according to the current job status
+  my $self  = shift;
   my $job   = $self->get_requested_job;
 
   return $job && $job->status eq 'done' ? sprintf '%s/%s', $job->ticket->ticket_type_name, 'Results' : 'Summary';

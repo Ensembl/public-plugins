@@ -1,5 +1,5 @@
 /*
- * Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+ * Copyright [1999-2016] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,12 +28,16 @@ Ensembl.Panel.IDMapperForm = Ensembl.Panel.ToolsForm.extend({
   reset: function() {
     this.base.apply(this, arguments);
     this.resetSpecies(this.defaultSpecies);
+    this.elLk.form.find('._previous_file').remove();
   },
 
   populateForm: function(jobsData) {
     if (jobsData && jobsData.length) {
       this.base(jobsData);
       this.resetSpecies(jobsData[0]['species']);
+      if (jobsData[0].file) {
+        this.elLk.form.find('input[name=file]').parent().append($('<p class="_previous_file">').html('You previously uploaded a file named ' + jobsData[0].file + ' to run this job.'));
+      }
     }
   },
 

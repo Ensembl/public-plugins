@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2016] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -24,7 +24,6 @@ use warnings;
 use List::Util qw(first);
 
 use EnsEMBL::Web::Exceptions;
-use EnsEMBL::Web::File::Tools;
 use EnsEMBL::Web::Job::IDMapper;
 
 use parent qw(EnsEMBL::Web::Ticket);
@@ -34,27 +33,26 @@ sub init_from_user_input {
   my $self      = shift;
   my $hub       = $self->hub;
   my $species   = $hub->param('species');
-  my $file      = EnsEMBL::Web::File::Tools->new('hub' => $hub, 'tool' => 'IDMapper', 'empty' => 1);
   my $method    = first { $hub->param($_) } qw(file url text);
-  my $desc      = $hub->param('name') || sprintf('ID mapping of %s', $method eq 'text' ? 'pasted data' : ($method eq 'url' ? 'data from URL' : sprintf("%s", $hub->param('file'))));
-  my $error     = $file->upload('type' => 'no_attach');
 
-  throw exception('InputError', $error) if $error;
+  # if no data entered
+  throw exception('InputError', 'No input data has been entered') unless $method;
 
-  my $file_name = $file->write_name;
-  my $file_path = $file->absolute_write_path;
+  my $description = $hub->param('name') || sprintf('ID mapping of %s', $method eq 'text' ? 'pasted data' : ($method eq 'url' ? 'data from URL' : sprintf("%s", $hub->param('file'))));
+
+  my ($file_content, $file_name) = $self->get_input_file_content($method);
 
   $self->add_job(EnsEMBL::Web::Job::IDMapper->new($self, {
-    'job_desc'    => $desc,
+    'job_desc'    => $description,
     'species'     => $species,
     'assembly'    => $hub->species_defs->get_config($species, 'ASSEMBLY_VERSION'),
     'job_data'    => {
       'species'     => $species,
-      'input'       => { 'type' => $method, 'url' => $hub->param('url') || '', 'file' => $hub->param('file') || '' }, # save this info to pre-populate fields when editing existing job
+      'input'       => { 'type' => $method, 'url' => $hub->param('url') || '', 'file' => $file_name }, # save this info to pre-populate fields when editing existing job
       'input_file'  => $file_name
     }
   }, {
-    $file_name    => {'location' => $file_path}
+    $file_name    => {'content' => $file_content}
   }));
 }
 

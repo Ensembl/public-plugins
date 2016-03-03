@@ -245,7 +245,7 @@ LRG_1:g.10006G>T</pre>
     <hr/>
     <h2 id="output">Output</h2>
     
-    <p> The output format from the web and script VEP is the same. The output
+    <p> The default output format ("VEP" format when downloading from the web interface) is a 14 column tab-delimited file. The output
     columns are:</p>
     
     <ol>
@@ -270,6 +270,13 @@ LRG_1:g.10006G>T</pre>
                 <li><i>SYMBOL_SOURCE</i> - the source of the gene symbol</li>
                 <li><i>STRAND</i> - the DNA strand (1 or -1) on which the transcript/feature lies</li>
                 <li><i>ENSP</i> - the Ensembl protein identifier of the affected transcript</li>
+                <li>
+                    <i>FLAGS</i> - transcript quality flags:
+                    <ul>
+                        <li><b>cds_start_NF:</b> CDS 5' incomplete</li>
+                        <li><b>cds_end_NF:</b> CDS 3' incomplete</li>
+                    </ul>
+                </li>
                 <li><i>SWISSPROT</i> - UniProtKB/Swiss-Prot identifier of protein product
                 <li><i>TREMBL</i> - UniProtKB/TrEMBL identifier of protein product</li>
                 <li><i>UNIPARC</i> - UniParc identifier of protein product</li>
@@ -376,6 +383,19 @@ LRG_1:g.10006G>T</pre>
 ## IMPACT : Subjective impact classification
 ## DISTANCE : Shortest distance from variant to transcript
 ## STRAND : Strand of the feature (1/-1)</pre>
+    
+    <hr/>
+    <h2 id="tab">Tab-delimited output</h2>
+
+    <p> The <a href="script/vep_options.html#opt_tab">--tab</a> flag instructs the VEP
+    to write output as a tab-delimited table. This differs from the default output format
+    in that each individual field from the "Extra" field is written to a separate
+    tab-delimited column. This makes the output more suitable for import into spreadsheet
+    programs such as Excel. This is also the format used when selecting the "TXT" option
+    on the VEP web interface. </p>
+
+    <p> The choice and order of columns in the output may be configured using
+    <a href="script/vep_options.html#opt_fields">--fields</a>. </p>
     
     <hr/>
     <h2 id="vcfout">VCF output</h2>

@@ -1,4 +1,4 @@
-# Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+# Copyright [1999-2016] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -48,6 +48,7 @@ class Hub
 
   constructor: (more) ->
     config_url = "#{ $('#species_path').val() }/Ajax/config"
+    @ga_init()
     $.when(
       $.solr_config({ url: config_url })
       $.getScript('/pure/pure.js')
@@ -66,6 +67,16 @@ class Hub
       $(document).on 'force_state_change', () =>
         $(document).trigger('state_change',[@params])
       more(@)
+
+  ga_init: ->
+    if Ensembl.GA
+      @ga = new Ensembl.GA.EventConfig({
+        category: (-> this.category),
+        action: (-> this.action),
+        label: (-> this.label),
+        value: (-> this.value),
+        nonInteraction: false
+      })
 
   code_select: -> code_select
 
@@ -100,6 +111,9 @@ class Hub
     if @useless_browser() then $('#solr_content').addClass('solr_useless_browser')
     $(document).on 'update_state', (e,qps) =>
       @update_url(qps)
+    $(document).on 'ga', (e,category,action,label='',value=1) =>
+      if not @ga or not Ensembl.GA then return
+      Ensembl.GA.sendEvent(@ga,{ category, action, label, value })
     $(document).on 'update_state_incr', (e,qps) =>
       rate_limiter(qps).then((data) => @update_url(data))
     @renderer.render_stage(more)
@@ -1006,7 +1020,7 @@ class Renderer
           { label: 'Table',    key: 'table'    }
         ]
         title: 'Layout:'
-        select: ((k) => @hub.update_url { style: k })
+        select: ((k) => $(document).trigger('ga',['SrchLayout','switch',k]) ; @hub.update_url { style: k })
       table:
         table_ready: (el,data) => @table.collect_view_model(el,data)
         state: @state

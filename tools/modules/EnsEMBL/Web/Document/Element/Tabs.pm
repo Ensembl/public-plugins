@@ -1,6 +1,6 @@
 =head1 LICENSE
 
-Copyright [1999-2015] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
+Copyright [1999-2016] Wellcome Trust Sanger Institute and the EMBL-European Bioinformatics Institute
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -25,10 +25,6 @@ use warnings;
 
 use previous qw(init dropdown);
 
-use EnsEMBL::Web::DOM;
-use EnsEMBL::Web::Exceptions;
-use EnsEMBL::Web::Utils::DynamicLoader qw(dynamic_require);
-
 sub init {
   my $self        = shift;
   my $controller  = $_[0];
@@ -37,119 +33,24 @@ sub init {
 
   $self->PREV::init(@_);
 
-  $self->{'_ticket_manager'} = dynamic_require('ORM::EnsEMBL::DB::Tools::Manager::Ticket', 1) or return;
+  my $entries = $self->entries;
 
-  # if tools tab is already there because of the tl param, force dropdown
-  if (my ($tools_tab) = grep {($_->{'type'} || '') eq 'Tools'} @{$self->entries}) {
-    $tools_tab->{'dropdown'} = 'tools';
+  # if tools tab is already there (because of the tl param or because hub type is Tools), force a dropdown add required classes
+  if (my ($tab) = grep {($_->{'type'} || '') eq 'Tools'} @$entries) {
+    $tab->{'dropdown'}  = 'tools';
+    $tab->{'class'}    .= ' hidden'.($hub->type eq 'Tools' ? ' final' : '');
 
   } else {
 
-    # if tl param is not present, but the user has some tickets, add tools tab now
-    try {
-      if ($self->{'_ticket_manager'}->count_current_tickets({
-        'site_type'   => $hub->species_defs->ENSEMBL_SITETYPE,
-        'session_id'  => $hub->session->create_session_id, $user ? (
-        'user_id'     => $user->user_id ) : ()
-      })) {
-
-        $self->add_entry({
-          'type'      => 'Tools',
-          'caption'   => 'Jobs',
-          'url'       => $hub->url({qw(type Tools action Summary __clear 1)}),
-          'class'     => 'tools',
-          'dropdown'  => 'tools'
-        });
-      }
-    } catch {
-      $self->{'_ticket_manager'} = undef;
-    };
+    # Add a tools tab, but keep it hidden. A future ajax request will decide its fate.
+    $self->add_entry({
+      'type'      => 'Tools',
+      'caption'   => 'Jobs',
+      'url'       => $hub->url({qw(type Tools action Summary __clear 1)}),
+      'class'     => 'tools hidden',
+      'dropdown'  => 'tools'
+    });
   }
-}
-
-sub dropdown {
-  ## we override this to display a custom dropdown for tools
-  my $self      = shift;
-  my $hub       = $self->hub;
-  my $sd        = $hub->species_defs;
-  my $dropdowns = $self->PREV::dropdown(@_);
-
-  return $dropdowns unless $self->{'_ticket_manager'};
-
-  my $div = EnsEMBL::Web::DOM->new->create_element('div', {'class' => 'dropdown tools', 'children' => [{'node_name' => 'h4', 'inner_HTML' => 'Recent jobs'}, {'node_name' => 'ul'}]});
-  my @jobs;
-
-  while (($dropdowns->{'tools'} || '') =~ m/(\?|;|\&)tl\=([a-z0-9\-_]+)/ig) {
-    my ($ticket_name, $job_id) = split /-/, "$2-";
-    push @jobs, {
-      'url_param'   => "$ticket_name-$job_id",
-      'ticket_name' => $ticket_name,
-      'job_id'      => $job_id
-    };
-  }
-
-  my $tools_divs = {};
-  my @tool_types = $sd->tools_list;
-
-  for (@tool_types) {
-    while (my ($key, $caption) = splice @tool_types, 0, 2) {
-      $tools_divs->{$key} = $div->last_child->append_child({
-        'node_name' => 'li',
-        'children'  => [{'node_name' => 'a', 'href' => $hub->url({'type' => 'Tools', 'action' => $key, 'function' => '', '__clear' => 1}), 'inner_HTML' => $caption}]
-      });
-    }
-  }
-
-  if (@jobs) {
-
-    my $recent_tickets = $self->{'_ticket_manager'}->get_objects('query' => ['ticket_name' => [ keys %{{ map { $_->{'ticket_name'} => 1 } @jobs }} ]]);
-
-    foreach my $job (@jobs) {
-      for (@$recent_tickets) {
-        if ($_->ticket_name eq $job->{'ticket_name'}) {
-          my $job_rose_object = shift @{$_->find_job('query' => [ 'job_id' => $job->{'job_id'} ])};
-          if ($job_rose_object && $job_rose_object->status eq 'done') {
-            $job->{'ticket_type'} = $_->ticket_type_name;
-            $job->{'species'}     = $job_rose_object->species;
-            $job->{'job_desc'}    = $job_rose_object->job_desc;
-          }
-        }
-      }
-    }
-
-    if (@jobs = sort {$a->{'ticket_type'} cmp $b->{'ticket_type'}} grep { $_->{'species'} } @jobs) {
-
-      my $ticket_type = '';
-      my $duplicates  = {};
-
-      for (@jobs) {
-
-        next if $duplicates->{$_->{'url_param'}};
-        $duplicates->{$_->{'url_param'}} = 1;
-
-        if ($_->{'ticket_type'} ne $ticket_type) {
-          $ticket_type  = $_->{'ticket_type'};
-          $tools_divs->{$ticket_type}->append_child('ul', {'class' => 'recent'}) unless $tools_divs->{$ticket_type}->last_child->node_name eq 'ul';
-        }
-        $tools_divs->{$ticket_type}->last_child->append_child('li', {'inner_HTML' => sprintf('<a href="%s" class="constant tools">%s: %s</a>', $hub->url({
-          '__clear'   => 1,
-          'species'   => $_->{'species'},
-          'type'      => 'Tools',
-          'action'    => $ticket_type,
-          'function'  => 'Results',
-          'tl' => $_->{'url_param'}
-        }), $sd->get_config($_->{'species'}, 'SPECIES_COMMON_NAME'), $_->{'job_desc'})});
-      }
-
-      $div->last_child->append_child('li', {
-        'inner_HTML' => sprintf('<a href="%s" class="constant clear_history bold">Clear history</a>', $hub->url({qw(type Account action ClearHistory object Tools)}))
-      });
-    }
-  }
-
-  $dropdowns->{'tools'} = $div->render;
-
-  return $dropdowns;
 }
 
 1;
