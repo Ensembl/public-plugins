@@ -245,9 +245,6 @@ sub fetch_transcript {
         start => $slice->start+$_->{'start'},
         end => $slice->start+$_->{'end'},
       } } @{$obj->{'exons'}} ];
-      if($display eq 'expanded_nolabel' or
-              $display eq 'expanded_label') {
-      }
       push @features,$feature;
     }
   }
