@@ -42,6 +42,9 @@ sub init_from_user_input {
 
   my ($file_content, $file_name) = $self->get_input_file_content($method);
 
+  # empty file
+  throw exception('InputError', 'No input data has been entered') unless $file_content;
+
   $self->add_job(EnsEMBL::Web::Job::IDMapper->new($self, {
     'job_desc'    => $description,
     'species'     => $species,
