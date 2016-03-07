@@ -47,10 +47,13 @@ sub init_from_user_input {
   # Get file content and name
   my ($file_content, $file_name) = $self->get_input_file_content($method);
 
+  # if no data found in file/url
+  throw exception('InputError', 'No input data is present') unless $file_content;
+
   # detect file format
   my $detected_format;
   try {
-    first { m/^[^\#]/ && ($detected_format = detect_format($_)) } $file_content;
+    first { m/^[^\#]/ && ($detected_format = detect_format($_)) } split /\R/, $file_content;
   } catch {
     throw exception('InputError', sprintf(q(The input format is invalid or not recognised. Please <a href="%s" rel="external">click here</a> to find out about accepted data formats.), VEP_FORMAT_DOC), {'message_is_html' => 1});
   };
