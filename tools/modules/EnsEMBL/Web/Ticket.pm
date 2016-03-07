@@ -24,8 +24,9 @@ use warnings;
 use EnsEMBL::Web::Attributes;
 use EnsEMBL::Web::Exceptions;
 use EnsEMBL::Web::Utils::RandomString qw(random_string);
-use EnsEMBL::Web::Utils::FileHandler qw(file_get_contents);
-use EnsEMBL::Web::File::Utils::URL qw(read_file);
+use EnsEMBL::Web::File::Utils qw(get_compression);
+use EnsEMBL::Web::File::Utils::URL;
+use EnsEMBL::Web::File::Utils::IO;
 
 sub hub         { return shift->{'_hub'};         }
 sub object      { return shift->{'_object'};      }
@@ -85,23 +86,30 @@ sub get_input_file_content {
 
   my $hub     = $self->hub;
   my $file    = $hub->param($param || $method);
-  my ($content, $name);
+  my ($content, $name, $cmprs);
 
   if ($method eq 'url') {
 
     my $proxy = $hub->species_defs->ENSEMBL_WWW_PROXY;
-       $proxy = $proxy ? { 'proxy' => $proxy } : ();
-    $content  = read_file($file, $proxy);
+       $proxy = $proxy ? { 'proxy' => $proxy } : {};
+       $cmprs = get_compression($file);
+    $content  = EnsEMBL::Web::File::Utils::URL::read_file($file, $proxy);
     $name     = $file =~ s/[^\?]+\/([^\/\?]+).*$/$1/r; # remove extra path from full file path
 
   } elsif ($method eq 'file') {
 
-    $content  = file_get_contents($hub->input->tmpFileName($file));
     $name     = "$file"; # $file->asString
+    $cmprs    = get_compression($name);
+    $content  = EnsEMBL::Web::File::Utils::IO::read_file($hub->input->tmpFileName($file), { 'compression' => $cmprs });
 
   } elsif ($method eq 'text') {
     $content  = $file;
     $name     = 'input.txt';
+  }
+
+  if ($cmprs) {
+    $name =~ s/\.$cmprs$// if $cmprs;
+    $name = "$name.txt" if $name !~ /\./;
   }
 
   return ($content, $name);
