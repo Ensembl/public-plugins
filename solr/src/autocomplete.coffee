@@ -262,7 +262,7 @@ sections = [
 $.widget('custom.searchac',$.ui.autocomplete,{
   _create: () ->
     $b = $('body')
-    if $b.hasClass('ie67') or $b.hasClass('ie8') or 
+    if $b.hasClass('ie67') or $b.hasClass('ie8') or
         $b.hasClass('ie9') or $b.hasClass('ie10')
       # XXX probably possible to get working in ie10
       @element.clone().addClass('solr_ghost').css('display','none')
