@@ -623,7 +623,7 @@
   $(function() {
     var form, url;
     form = $('#SpeciesSearch .search-form');
-    if (!form.hasClass('homepage-search-form')) {
+    if (!form.hasClass('no-sel')) {
       url = $('#q', form).parents("form").attr('action');
       if (url) {
         url = url.split('/')[1];
