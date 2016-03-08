@@ -43,7 +43,7 @@ Ensembl.Panel.Content = Ensembl.Panel.Content.extend({
         this.elLk.blastForm = $('<form>').appendTo(document.body).hide()
           .attr({action: this.elLk.blastButton.attr('href'), method: 'post'})
           .append($.map(Ensembl.coreParams, function(n, v) { return $('<input type="hidden" name="' + n + '" value="' + v + '" />'); }))
-          .append($('<input type="hidden" name="query_sequence" value="' + seq + '" />'));
+          .append($('<input type="hidden" name="query_sequence" value="' + this.filterBlastSeq(seq) + '" />'));
 
         this.blastButtonEnabled = true;
       }
@@ -55,9 +55,13 @@ Ensembl.Panel.Content = Ensembl.Panel.Content.extend({
   runBlastSeq: function(seq) {
     if (this.elLk.blastForm) {
       if (seq) {
-        this.elLk.blastForm.find('input[name=query_sequence]').val(seq);
+        this.elLk.blastForm.find('input[name=query_sequence]').val(this.filterBlastSeq(seq));
       }
       this.elLk.blastForm.submit();
     }
+  },
+
+  filterBlastSeq: function(seq) {
+    return seq.replace(/\[[^\]]+\]/g, '');
   }
 });
