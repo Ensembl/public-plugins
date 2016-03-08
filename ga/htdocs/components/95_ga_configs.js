@@ -409,7 +409,8 @@ Ensembl.GA.eventConfigs.push(
                         }
                         if($(this.currentTarget).parents()[1].className.match('use_cols')) {
                           var state = $(this.currentTarget).attr('class') ?  $(this.currentTarget).attr('class') : 'off';
-                          return $(this.currentTarget).find('div.coltab-text').html() + ": " + state;
+                          var name  = $(this.currentTarget).find('div.coltab-text').length ? $(this.currentTarget).find('div.coltab-text').html() : $(this.currentTarget).find('div.main').html()
+                          return name + ": " + state;
                         }
                         if(this.currentTarget.className.match('newtable_filtertype_more')) { //TODO selecting filter is not working
                           return "filter";
@@ -437,15 +438,13 @@ Ensembl.GA.eventConfigs.push(
                         } 
                         else if(!$(this.currentTarget).hasClass('unchanged')) {
                           var all='';
-                          $(this.currentTarget)
-                          .parentsUntil('div.m')
-                          .find('div.use_cols li.on div.coltab-text')
-                          .each(function () { 
+                          var element = $(this.currentTarget).parentsUntil('div.m').find('div.use_cols li.on div.coltab-text').length ? $(this.currentTarget).parentsUntil('div.m').find('div.use_cols li.on div.coltab-text') : $(this.currentTarget).parentsUntil('div.m').find('div.use_cols li.on div.main');
+                          element.each(function () { 
                                   if($(this).html()) {
                                     all += $(this).html()+","; 
                                   }
                           });
-                          return all.slice(0,-1);
+                          return all.slice(0,-1); //removing the last comma
                         }
                       },
     label           : function () { return $(this.currentTarget).parentsUntil('div.m').find('div.title').html(); }
