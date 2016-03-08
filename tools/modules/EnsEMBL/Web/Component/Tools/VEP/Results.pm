@@ -932,8 +932,8 @@ sub reload_link {
   my ($self, $html, $url_params) = @_;
 
   return sprintf('<a href="%s" class="_reload"><input type="hidden" value="%s" />%s</a>',
-    $self->hub->url($url_params, undef, 1),
-    $self->ajax_url(undef, $url_params, undef, 1),
+    $self->hub->url({%$url_params, 'update_panel' => undef}, undef, 1),
+    $self->ajax_url(undef, {%$url_params, 'update_panel' => 1}, undef, 1),
     $html
   );
 }
