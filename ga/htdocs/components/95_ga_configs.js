@@ -381,5 +381,74 @@ Ensembl.GA.eventConfigs.push(
     category        : 'SearchInput',
     action          : 'ExampleLink',
     label           : function () { return window.location.pathname.match(/Info/) ? 'SpeciesPage' : 'HomePage'; }
+  },
+
+
+  //variation table  tracking
+  {
+    id              : 'InpageConfig',
+    url             : /\/Variation_Gene\/Table/,
+    event           : 'click',
+    selector        : 'li.prec_pri',
+    wrapper         : 'div.initial_panel',
+    category        : function (e) { return e.target.offsetParent && e.target.offsetParent.className.match(/prec_pri/)  ? 'InpageConfig' : ''; },
+    action          : function () { return $(this.currentTarget).find("div[class*='newtable_filtertype']").not(":hidden").length ? 'Close' : 'Open' },
+    label           : function () { return $(this.currentTarget).find('div:nth-of-type(2) span').html() + ": " + $(this.currentTarget).find('div:nth-of-type(2) span:nth-of-type(2)').html(); }
+  },
+
+  {
+    id              : 'InpageConfigSelector',
+    url             : /\/Variation_Gene\/Table/,
+    event           : 'click',
+    selector        : 'div.baked, div.use_cols li, div.newtable_filtertype_more li',
+    wrapper         : 'div.initial_panel',
+    category        : "InpageConfigSelector",
+    action          : function (e) {
+                        if(this.currentTarget.className.match('baked')) {
+                          return $(this.currentTarget).find('li.disabled').html();
+                        }
+                        if($(this.currentTarget).parents()[1].className.match('use_cols')) {
+                          var state = $(this.currentTarget).attr('class') ?  $(this.currentTarget).attr('class') : 'off';
+                          return $(this.currentTarget).find('div.coltab-text').html() + ": " + state;
+                        }
+                        if(this.currentTarget.className.match('newtable_filtertype_more')) { //TODO selecting filter is not working
+                          return "filter";
+                        }
+                      },
+    label           : function () { return $(this.currentTarget).parentsUntil('div.m').find('div.title').html(); }
+  },
+
+  {
+    id              : 'InpageConfigApply',
+    url             : /\/Variation_Gene\/Table/,
+    event           : 'click',
+    selector        : 'li.apply, li.cancel',
+    wrapper         : 'div.initial_panel',
+    category        : function () { return this.currentTarget.className.match('cancel') ? 'InpageConfigCancel' : 'InpageConfigApply' }, 
+    action          : function () {
+                        if(this.currentTarget.className.match('cancel')) {
+                            return 'cancel';
+                        }
+                        if(!$(this.currentTarget).hasClass('unchanged') && $(this.currentTarget).parentsUntil('div.m').find('div.newtable_range').length) {
+                          return $(this.currentTarget).parentsUntil('div.m').find('div.slider_feedback').html();
+                        }
+                        if(!$(this.currentTarget).hasClass('unchanged') && $(this.currentTarget).parentsUntil('div.m').find('ul.bakery li.disabled').length) {
+                          return $(this.currentTarget).parentsUntil('div.m').find('ul.bakery li.disabled').html();
+                        } 
+                        else if(!$(this.currentTarget).hasClass('unchanged')) {
+                          var all='';
+                          $(this.currentTarget)
+                          .parentsUntil('div.m')
+                          .find('div.use_cols li.on div.coltab-text')
+                          .each(function () { 
+                                  if($(this).html()) {
+                                    all += $(this).html()+","; 
+                                  }
+                          });
+                          return all.slice(0,-1);
+                        }
+                      },
+    label           : function () { return $(this.currentTarget).parentsUntil('div.m').find('div.title').html(); }
   }
+
 );
