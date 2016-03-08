@@ -22,13 +22,6 @@ Ensembl.extend({
       this.ajaxLoadTimerConfig = new Ensembl.GA.EventConfig({
         category        : 'AjaxLoadTimer',
         action          : function () { return this.getURL(); },
-        label           : function () {
-                                        var url = this.currentOptions.url.replace(/(;|&|\?)(_|time)=[0-9]+&?/g, '$1').replace(/(;|&|\?)$/, '');
-                                        if (url.match(/^http/)) {
-                                          url = url.replace(window.location.protocol + '//' + window.location.host, '');
-                                        }
-                                        return url;
-                                      },
         nonInteraction  : true,
         value           : function () { return new Date().getTime() - this.currentOptions._ensGA_StartTime; }
       });
