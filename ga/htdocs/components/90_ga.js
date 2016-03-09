@@ -250,7 +250,9 @@ Ensembl.GA.EventConfig.destroy = function(obj) {
 Ensembl.extend({
   initialize: function () {
     Ensembl.setSpecies();
-    Ensembl.setUserFlag();
+    if (Ensembl.setUserFlag) {
+      Ensembl.setUserFlag();
+    }
     Ensembl.GA.init();
     this.base.apply(this, arguments);
   }
