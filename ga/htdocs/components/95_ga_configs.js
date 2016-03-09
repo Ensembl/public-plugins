@@ -409,14 +409,14 @@ Ensembl.GA.eventConfigs.push(
                         }
                         if($(this.currentTarget).parents()[1].className.match('use_cols')) {
                           var state = $(this.currentTarget).attr('class') ?  $(this.currentTarget).attr('class') : 'off';
-                          var name  = $(this.currentTarget).find('div.coltab-text').length ? $(this.currentTarget).find('div.coltab-text').html() : $(this.currentTarget).find('div.main').html()
+                          var name  = $(this.currentTarget).find('div.coltab-text').length ? $(this.currentTarget).find('div.coltab-text').text() : $(this.currentTarget).find('div.main').text()
                           return name + ": " + state;
                         }
                         if(this.currentTarget.className.match('newtable_filtertype_more')) { //TODO selecting filter is not working
                           return "filter";
                         }
                       },
-    label           : function () { return $(this.currentTarget).parentsUntil('div.m').find('div.title').html(); }
+    label           : function () { return $(this.currentTarget).parentsUntil('div.m').find('div.title').text(); }
   },
 
   {
@@ -441,7 +441,7 @@ Ensembl.GA.eventConfigs.push(
                           var element = $(this.currentTarget).parentsUntil('div.m').find('div.use_cols li.on div.coltab-text').length ? $(this.currentTarget).parentsUntil('div.m').find('div.use_cols li.on div.coltab-text') : $(this.currentTarget).parentsUntil('div.m').find('div.use_cols li.on div.main');
                           element.each(function () { 
                                   if($(this).html()) {
-                                    all += $(this).html()+","; 
+                                    all += $(this).text()+","; 
                                   }
                           });
                           return all.slice(0,-1); //removing the last comma
