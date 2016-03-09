@@ -14,6 +14,27 @@
  * limitations under the License.
  */
 
+Ensembl.LayoutManager.extend({
+  makeZMenu: function (id, params) {
+
+    if (window.location.match(/Transcript\/ProteinSummary/) && !params.area.a.attrs.href && params.area.a.attrs.title && params.imageId) { // restricting to ProteinSummary only atm
+
+      if (!this.nonAjaxZmenuGAEvent) {
+        this.nonAjaxZmenuGAEvent = new Ensembl.GA.EventConfig({ category: 'ZMenuOpen' });
+      }
+
+      var action  = params.area.a.attrs.title.split(/;/)[0].split(/:/)[0];
+      var label   = action ? $('#' + params.imageId).find('input.image_config').val() : '';
+
+      if (action && label) {
+        Ensembl.GA.sendEvent(this.nonAjaxZmenuGAEvent, { action: action, label: label });
+      }
+    }
+
+    return this.base(id, params);
+  }
+});
+
 Ensembl.Panel.ImageMap = Ensembl.Panel.ImageMap.extend({
   initHoverLabels: function () {
     this.base.apply(this, arguments);
