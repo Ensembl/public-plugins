@@ -15,10 +15,20 @@
  */
 
 Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
+  constructor: function() {
+
+    this.base.apply(this, arguments);
+
+    Ensembl.EventManager.register('changeTrackOrder', this, this.externalOrder);
+    Ensembl.EventManager.register('updatePanel',      this, this.update);
+    Ensembl.EventManager.register('imageResize',      this, this.resize);
+    Ensembl.EventManager.register('changeWidth',      this, this.resize);
+  },
+
   init: function () {
     this.prevHighlight = {};
     
-    this.base();
+    this.base.apply(this, arguments);
     
     if (this.genoverse.failed) {
       return;
@@ -31,15 +41,10 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
     this.elLk.resetHeight = $('.reset_height',       this.elLk.controls);
     this.elLk.dragging    = $('.dragging',           this.elLk.controls);
     this.elLk.wheelZoom   = $('.wheel_zoom',         this.elLk.controls);
-    
+
     this.initControls();
-    this.initLocationMarking();
-    this.markLocation(Ensembl.markedLocation);
-    
-    Ensembl.EventManager.register('changeTrackOrder', this, this.externalOrder);
-    Ensembl.EventManager.register('updatePanel',      this, this.update);
-    Ensembl.EventManager.register('imageResize',      this, this.resize);
-    Ensembl.EventManager.register('changeWidth',      this, this.resize);
+    this.genoverse.updateEnsembl();
+
     Ensembl.EventManager.register('resetGenoverse',   this, function () { this.genoverse.resetConfig(); });
     Ensembl.EventManager.register('updateCrosshair',  this, function (s) { this.genoverse.moveCrosshair(s); });
   },
