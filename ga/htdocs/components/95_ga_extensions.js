@@ -17,7 +17,7 @@
 Ensembl.LayoutManager.extend({
   makeZMenu: function (id, params) {
 
-    if (window.location.match(/Transcript\/ProteinSummary/) && !params.area.a.attrs.href && params.area.a.attrs.title && params.imageId) { // restricting to ProteinSummary only atm
+    if (window.location.href.match(/Transcript\/ProteinSummary/) && !params.area.a.attrs.href && params.area.a.attrs.title && params.imageId) { // restricting to ProteinSummary only atm
 
       if (!this.nonAjaxZmenuGAEvent) {
         this.nonAjaxZmenuGAEvent = new Ensembl.GA.EventConfig({ category: 'ZMenuOpen' });
