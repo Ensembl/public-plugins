@@ -66,7 +66,8 @@ sub parse {
       qend          => $hit_data[2],
       qori          => $q_ori,
       qframe        => $hit_data[11],
-      tid           => $hit_data[3] =~ s/\..+//r,
+      tid           => $hit_data[3] =~ s/\..+//r, # without any version info
+      v_tid         => $hit_data[3],              # possibly versioned
       tstart        => $tstart,
       tend          => $tend,
       tori          => $t_ori,
@@ -104,7 +105,11 @@ sub map_to_genome {
 
     my $feature_type  = $source_type =~ /abinitio/i ? 'PredictionTranscript' : $source_type =~ /pep/i ? 'Translation' : 'Transcript';
     my $mapper        = $source_type =~ /pep/i ? 'pep2genomic' : 'cdna2genomic';
-    my $object        = $self->get_adapter($feature_type)->fetch_by_stable_id($hit->{'tid'});
+    my $adaptor       = $self->get_adapter($feature_type);
+
+    # if object is not found against un-versioned id, try the one which looked like versioned and retain it as tid if object is found
+    my $object;
+    $object = $adaptor->fetch_by_stable_id($_) and $hit->{'tid'} = $_ and last for $hit->{'tid'}, $hit->{'v_tid'};
 
     if ($object) {
 
@@ -125,6 +130,8 @@ sub map_to_genome {
 
     }
   }
+
+  delete $hit->{'v_tid'}; # don't need this anymore
 
   $hit->{'gid'}       = $g_id;
   $hit->{'gstart'}    = $g_start;
