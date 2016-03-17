@@ -87,6 +87,11 @@ sub get_favourite_species {
   return @favourites ? \@favourites : $self->PREV::get_favourite_species;
 }
 
+sub users_plugin_available {
+  ## Checks if the user plugin is available
+  return 1;
+}
+
 sub users_available {
   ## Gets/Sets the flag to check whether users db is connected or not
   ## @param Flag value if setting
