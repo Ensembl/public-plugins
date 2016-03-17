@@ -37,14 +37,20 @@ sub new {
   my $cookie    = delete $args->{'user_cookie'};
   my $self      = $class->PREV::new($args);
 
-  if ($self->users_available && $cookie) { # always check users_available
-    try {
-      $self->user = EnsEMBL::Web::User->new($self, $cookie) if $cookie;
-    } catch {
-      throw $_ unless $_->type eq 'ORMException';
-      $self->log_userdb_error($_);
-      $self->users_available(0);
-    };
+  if ($cookie) { # there are some cases when hub gets created without a user cookie argument
+
+    if ($cookie->value && $self->users_available) { # if cookie value is present and user db is available, there's a possibility that EnsEMBL::Web::User throws an exception
+      try {
+        $self->user = EnsEMBL::Web::User->new($self, $cookie);
+      } catch {
+        throw $_ unless $_->type eq 'ORMException';
+        $self->log_userdb_error($_);
+        $self->users_available(0);
+      };
+
+    } else { # just create a dummy user to prevent breaking on any subroutine calls on hub->user
+      $self->user = EnsEMBL::Web::User->new($self, $cookie);
+    }
   }
 
   return $self;
@@ -85,6 +91,11 @@ sub get_favourite_species {
   my @favourites  = $user ? @{$user->favourite_species} : ();
 
   return @favourites ? \@favourites : $self->PREV::get_favourite_species;
+}
+
+sub users_plugin_available {
+  ## Checks if the user plugin is available
+  return 1;
 }
 
 sub users_available {
