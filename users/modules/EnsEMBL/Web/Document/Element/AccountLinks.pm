@@ -42,7 +42,7 @@ sub content {
   my $self  = shift;
   my $hub   = $self->hub;
 
-  return sprintf('<div class="_account_holder%s"><div class="account-loading">Loading&hellip;</div><form action="/Ajax/accounts_dropdown">%s</form></div>', $hub->users_available && $hub->user
+  return sprintf('<div class="_account_holder%s"><div class="account-loading">Loading&hellip;</div><form action="/Ajax/accounts_dropdown">%s</form></div>', $hub->user
     ? (' _logged_in', join('', map sprintf('<input type="hidden" name="%s" value="%s" />', $_, encode_entities($self->{'_bookmark_data'}{$_})), keys %{$self->{'_bookmark_data'}}))
     : ('', '')
   );
