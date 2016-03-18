@@ -69,10 +69,15 @@ Ensembl.Panel.GenoverseMenu = Ensembl.Panel.ZMenu.extend({
         Ensembl.markLocation(link.href);
         break;
 
+      case 'center':
       case 'jumpHere':
 
         var browser  = this.params.browser;
         var position = browser.getSelectorPosition();
+        var padding  = action === 'center' ? Math.round(Ensembl.location.length / 2) : 0;
+
+        position.start -= padding;
+        position.end   += padding;
 
         browser.updateURL(position);
         browser.moveTo(position.start, position.end);
