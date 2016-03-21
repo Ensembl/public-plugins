@@ -30,7 +30,7 @@ Ensembl.Panel.TextSequence = Ensembl.Panel.TextSequence.extend({
       return;
     }
 
-    this.el.find('span._seq').on({
+    this.el.find('span._seq').removeClass('_seq').filter(function() { return !$(this).text().match(/\.+/) }).addClass('_seq').on({
 
       'mousedown': function() {
         panel.blastSeq = '';
