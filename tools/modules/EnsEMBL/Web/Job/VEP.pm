@@ -203,10 +203,7 @@ sub _species_details {
     'sift'        => $db_config->{'DATABASE_VARIATION'}{'SIFT'},
     'polyphen'    => $db_config->{'DATABASE_VARIATION'}{'POLYPHEN'},
     'regulatory'  => $sd->get_config($species, 'REGULATORY_BUILD'),
-
-    # at the moment only human, chicken and mouse have RefSeqs in their otherfeatures DB
-    # there's no config for this currently so species are listed manually
-    'refseq'      => grep({ $_ eq $species } qw(Gallus_gallus Homo_sapiens Mus_musculus)) && $db_config->{'DATABASE_OTHERFEATURES'}
+    'refseq'      => $db_config->{'DATABASE_OTHERFEATURES'} && $sd->get_config($species, 'VEP_REFSEQ')
   };
 }
 

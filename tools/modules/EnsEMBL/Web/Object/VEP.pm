@@ -422,26 +422,6 @@ sub species_list {
     my $hub     = $self->hub;
     my $sd      = $hub->species_defs;
 
-    # at the moment only human, chicken and mouse have RefSeqs in their otherfeatures DB
-    # there's no config for this currently so species are listed manually
-    my %refseq  = map { $_ => 1 } qw(
-      Anolis_carolinensis
-      Bos_taurus
-      Canis_familiaris
-      Ciona_intestinalis
-      Danio_rerio
-      Felis_catus
-      Gallus_gallus
-      Homo_sapiens
-      Mus_musculus
-      Oryctolagus_cuniculus
-      Ovis_aries
-      Pan_troglodytes
-      Papio_anubis
-      Rattus_norvegicus
-      Sus_scrofa
-    );
-
     my @species;
 
     for ($sd->tools_valid_species) {
@@ -459,7 +439,7 @@ sub species_list {
         'value'       => $_,
         'caption'     => $sd->species_label($_, 1),
         'variation'   => $db_config->{'DATABASE_VARIATION'},
-        'refseq'      => $refseq{$_} && $db_config->{'DATABASE_OTHERFEATURES'},
+        'refseq'      => $db_config->{'DATABASE_OTHERFEATURES'} && $sd->get_config($_, 'VEP_REFSEQ'),
         'assembly'    => $sd->get_config($_, 'ASSEMBLY_NAME'),
         'regulatory'  => $sd->get_config($_, 'REGULATORY_BUILD'),
         'example'     => $example_data,
