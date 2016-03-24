@@ -194,6 +194,11 @@ sub run {
     throw exception('HiveException', $error_details);
   }
 
+  # Remove the unformatted file to free up the space
+  try {
+    unlink $results_file;
+  } catch {};
+
   return 1;
 }
 
