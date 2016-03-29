@@ -112,6 +112,9 @@ sub get_input_file_content {
     $name = "$name.txt" if $name !~ /\./;
   }
 
+  # just allow limited set of characters in the file name
+  $name =~ s/[^a-zA-Z0-9\-\_\.]+/_/g;
+
   return ($content, $name);
 }
 
