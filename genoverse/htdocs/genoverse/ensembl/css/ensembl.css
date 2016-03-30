@@ -51,14 +51,15 @@ body.mac .gv-label-container li .gv-handle {
   background: #F1D7A4!important;
 }
 
-
-
 .gv-canvas-container .gv-selector.gv-highlight {
   border-style: solid;
   background: none;
   border-width: 1px;
   z-index: 9;
   pointer-events: none;
+  box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  -webkit-box-sizing: content-box;
 }
 
 .gv-canvas-container .gv-selector.gv-crosshair div {
