@@ -25,6 +25,12 @@ use parent qw(EnsEMBL::Web::JSONServer);
 
 sub object_type { 'Tools' }
 
+sub call_js_panel_method {
+  # TODO - get rid of this - Let frontend decide what methods to call
+  my ($self, $method_name, $method_args) = @_;
+  return {'panelMethod' => [ $method_name, @{$method_args || []} ]};
+}
+
 sub json_form_submit {
   my $self      = shift;
   my $hub       = $self->hub;
