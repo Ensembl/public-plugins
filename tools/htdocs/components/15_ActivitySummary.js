@@ -36,6 +36,9 @@ Ensembl.Panel.ActivitySummary = Ensembl.Panel.ContentTools.extend({
     this.refreshURL         = this.el.find('input[name=_refresh_url]').remove().val();
     this.ticketsDataHash    = this.el.find('input[name=_tickets_data_hash]').remove().val();
 
+    // 'No jobs' message div
+    this.elLk.noJobsMessage = this.el.find('div._no_jobs');
+
     // Refresh button
     this.elLk.refreshButton = this.el.find('a._tickets_refresh').on('click', function(e) {
       e.preventDefault();
@@ -102,6 +105,7 @@ Ensembl.Panel.ActivitySummary = Ensembl.Panel.ContentTools.extend({
 
     this.pollCounter = !resetPollCount ? ignorePollCounter ? this.pollCounter : this.pollCounter + 1 : 0;
 
+    this.toggleLoadingMessage(true);
     this.updateRefreshButton('refreshing');
     this.ajax({
       'url'     :  this.refreshURL,
@@ -117,6 +121,9 @@ Ensembl.Panel.ActivitySummary = Ensembl.Panel.ContentTools.extend({
       'error'   : function() {
         this.updateRefreshButton('cleartimer');
         this.clearTimer();
+      },
+      'complete': function() {
+        this.toggleLoadingMessage(false);
       }
     });
   },
@@ -182,12 +189,22 @@ Ensembl.Panel.ActivitySummary = Ensembl.Panel.ContentTools.extend({
    */
     var tableWrapper  = this.el.find('div._ticket_table');
     var showTable     = !tableWrapper.find('.dataTables_empty').length;
-    
+
     tableWrapper.toggle(showTable);
-    this.el.find('div._no_jobs').toggle(!showTable);
+    this.elLk.noJobsMessage.toggle(!showTable);
     if (!showTable) {
       Ensembl.EventManager.trigger('toolsToggleForm', true, false);
     }
+  },
+
+  toggleLoadingMessage: function(flag) {
+  /*
+   * Toggles a message to the user when the jobs are refreshing (only when user has no existing jobs)
+   */
+    if (this.elLk.noJobsMessage.find('p').length === 1) {
+      this.elLk.noJobsMessage.append($('<p>Loading...</p>').hide());
+    }
+    this.elLk.noJobsMessage.find('p').each(function(i) { $(this).toggle(i === 0 ? !flag : flag); }); // Loading message is in the second <p>
   },
 
   clearTimer: function() {
