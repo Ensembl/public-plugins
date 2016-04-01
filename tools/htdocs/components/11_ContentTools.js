@@ -204,9 +204,9 @@ Ensembl.Panel.ContentTools = Ensembl.Panel.Content.extend({
    * Shows/hides the ensembl spinner on top of the panel according to the flag
    */
     if (!this.elLk.spinnerDivs) {
-      this.elLk.spinnerDivs = $('<div class="tools-overlay"></div><div class="overlay-spinner spinner"></div>').appendTo(document.body);
+      this.elLk.spinnerDivs = $('<div class="tools-overlay"></div><div class="overlay-spinner spinner"></div>').appendTo(this.el.css('position', 'relative'));
     }
-    this.elLk.spinnerDivs.css(flag ? $.extend({ 'height': this.el.height(), 'width': this.el.width() }, this.el.offset()) : {}).toggle(flag);
+    this.elLk.spinnerDivs.toggle(flag);
     this.elLk.spinnerDivs.last().empty().html(message ? '<div>' + message + '</div>' : '');
   },
 
