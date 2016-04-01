@@ -85,7 +85,8 @@ Ensembl.Panel.ContentTools = Ensembl.Panel.Content.extend({
    * Gets called before making the ajax request
    */
     if (settings.spinner) {
-      this.toggleSpinner(true);
+      settings.spinner = Math.random().toString().replace(/0\./, '');
+      this.toggleSpinner(true, '', settings.spinner);
     }
   },
 
@@ -141,7 +142,7 @@ Ensembl.Panel.ContentTools = Ensembl.Panel.Content.extend({
    * Gets called when the ajax request is complete
    */
     if (settings.spinner) {
-      this.toggleSpinner(false);
+      this.toggleSpinner(false, '', settings.spinner);
     }
   },
 
@@ -199,15 +200,24 @@ Ensembl.Panel.ContentTools = Ensembl.Panel.Content.extend({
     this.elLk.errorDiv.find('._error_heading').html(heading).end().find('._error_message').html(message).end().show();
   },
 
-  toggleSpinner: function(flag, message) {
+  toggleSpinner: function(flag, message, id) {
   /*
    * Shows/hides the ensembl spinner on top of the panel according to the flag
    */
     if (!this.elLk.spinnerDivs) {
       this.elLk.spinnerDivs = $('<div class="tools-overlay"></div><div class="overlay-spinner spinner"></div>').appendTo(this.el.css('position', 'relative'));
     }
-    this.elLk.spinnerDivs.toggle(flag);
-    this.elLk.spinnerDivs.last().empty().html(message ? '<div>' + message + '</div>' : '');
+    if (flag) {
+      if (id) {
+        this.elLk.spinnerDivs.addClass('_active_' + id);
+      }
+      this.elLk.spinnerDivs.show().last().empty().html(message ? '<div>' + message + '</div>' : '');
+    } else {
+      if (id) {
+        this.elLk.spinnerDivs.removeClass('_active_' + id);
+      }
+      this.elLk.spinnerDivs.filter(function() { return !this.className.match(/_active_/); }).hide();
+    }
   },
 
   hideError: function() {
