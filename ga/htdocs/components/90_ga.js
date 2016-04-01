@@ -60,7 +60,8 @@ Ensembl.GA = {
       ensGA('send', 'pageview');
       ensGA('require', 'linkid', 'linkid.js');
 
-      this.initialised = true;
+      this.urlSpeciesRegex  = new RegExp('/(' + ['Multi', Ensembl.species].concat($.map(window.location.href.match(/[\?\&\;]{1}s[0-9]+=[A-Za-z0-9_]+/g) || [], function (v) { return v.split('=')[1] })).join('|') + ')/');
+      this.initialised      = true;
       this.registerConfigs(this.eventConfigs);
     }
   },
@@ -72,7 +73,8 @@ Ensembl.GA = {
     if (typeof a === 'string') {
       a = $('<a>').attr('href', a)[0];
     }
-    return a.hostname === window.location.hostname ? '/' + (a.pathname.replace('/Multi/', '/').replace('/' + Ensembl.species + '/', '/').replace(/^\//, '') || 'index.html') : a.hostname;
+
+    return a.hostname === window.location.hostname ? '/' + (a.pathname.replace(this.urlSpeciesRegex, '/').replace(/^\/+/, '') || 'index.html') : a.hostname;
   },
 
   sendEvent: function (config, extra, e) {
