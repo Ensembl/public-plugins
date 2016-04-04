@@ -129,7 +129,7 @@ sub populate_tree {
       $blast_ticket_node->append($self->create_subnode("Blast/Results/$job_id", $object->get_job_description($_), [], {
         'availability'  => 1,
         'raw'           => 1,
-        'url'           => $hub->url({qw(type Tools action Blast function Results), 'tl' => $object->create_url_param({'job_id' => $job_id})})
+        'url'           => $hub->url({qw(type Tools action Blast function Results), 'species' => $_->species, 'tl' => $object->create_url_param({'job_id' => $job_id})})
       }));
     }
   }
