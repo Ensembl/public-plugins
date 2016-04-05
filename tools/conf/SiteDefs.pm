@@ -33,11 +33,12 @@ sub update_conf {
     'Blast'             => 'BLAST/BLAT',
     'VEP'               => 'Variant Effect Predictor',
     'AssemblyConverter' => 'Assembly Converter',
-    'IDMapper'          => 'ID History Converter'
+    'IDMapper'          => 'ID History Converter',
+    'FileChameleon'      => 'File Chameleon'
   ];
 
   # Which dispatcher to be used for the jobs (provide the appropriate values in your plugins)
-  $SiteDefs::ENSEMBL_TOOLS_JOB_DISPATCHER = { 'Blast' => '', 'VEP' => '', 'AssemblyConverter' => '', 'IDMapper' => '' };
+  $SiteDefs::ENSEMBL_TOOLS_JOB_DISPATCHER = { 'Blast' => '', 'VEP' => '', 'AssemblyConverter' => '', 'IDMapper' => '', 'FileChameleon' => '' };
 
   # tmp directory for jobs i/o files - the final folder structure looks like ENSEMBL_TMP_DIR_TOOLS/temporary|persistent/ENSEMBL_TMP_SUBDIR_TOOLS/Blast|VEP
   $SiteDefs::ENSEMBL_TMP_DIR_TOOLS    = defer { $SiteDefs::ENSEMBL_TMP_DIR }; # keeping the base dir same as the main tmp dir
@@ -48,6 +49,7 @@ sub update_conf {
   $SiteDefs::ENSEMBL_VEP_ENABLED    = 1;
   $SiteDefs::ENSEMBL_AC_ENABLED     = 1;
   $SiteDefs::ENSEMBL_IDM_ENABLED    = 1;
+  $SiteDefs::ENSEMBL_FC_ENABLED     = 1;
 
   # Leave it on if mechanism to fetch sequence by IDs is working
   $SiteDefs::ENSEMBL_BLAST_BY_SEQID = 1;
@@ -63,6 +65,9 @@ sub update_conf {
 
   # Path to CrossMap
   $SiteDefs::ASSEMBLY_CONVERTER_BIN_PATH = '/path/to/CrossMap.py';
+
+  # Path to File Chameleon script
+  $SiteDefs::FILE_CHAMELEON_BIN_PATH = '/path/to/format_transcriber.pl'; 
 
   # Upload file size limits
   $SiteDefs::ENSEMBL_TOOLS_CGI_POST_MAX = {

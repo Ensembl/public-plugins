@@ -188,6 +188,20 @@ sub populate_tree {
     ));
   }
 
+  ## Ensembl file modifier 
+  if ($sd->ENSEMBL_FC_ENABLED) {
+    my $idmapper_node = $tools_node->append($self->create_subnode('FileChameleon', 'File Chameleon',
+      [qw(
+        fc_input      EnsEMBL::Web::Component::Tools::FileChameleon::InputForm
+        fc_details    EnsEMBL::Web::Component::Tools::FileChameleon::TicketDetails
+        tickets       EnsEMBL::Web::Component::Tools::FileChameleon::TicketsList
+      )],
+      { 'availability' => 1 }
+    ));
+
+  }
+
+
 }
 
 1;
