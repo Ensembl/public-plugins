@@ -48,6 +48,7 @@ sub render {
     $spp->{$common} = $sp;
   }
 
+
   ## get assembly info for each species
   my $adaptor = EnsEMBL::Web::DBSQL::ArchiveAdaptor->new($hub);
 
@@ -136,7 +137,6 @@ sub render_assembly_table {
 
       $cells->{$order} ||= { name => $assembly_name, count => 0 };
       $cells->{$order}{'count'}++;
-    
     }
 
     # Don't print empty row
@@ -146,7 +146,7 @@ sub render_assembly_table {
     my $i = 0;
     my $one_border = 'style="border-style:solid;border-color:#ccc;border-width:0 0 1px 0"';
     my $two_borders = 'style="border-style:solid;border-color:#ccc;border-width:0 0 1px 1px"';
-    foreach my $td (sort keys %$cells) {
+    foreach my $td (sort {$a <=> $b} keys %$cells) {
       my $border = $i > 0 ? $two_borders : $one_border;
       if ($table_count == 1
             && $i == 0 
