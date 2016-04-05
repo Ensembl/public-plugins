@@ -28,26 +28,18 @@ sub accounts_db {
   my $db   = $self->multidb->{'DATABASE_ACCOUNTS'};
 
   return {
-    'NAME'    => $db->{'NAME'},
-    'HOST'    => $db->{'HOST'},
-    'PORT'    => $db->{'PORT'},
-    'DRIVER'  => $db->{'DRIVER'}  || 'mysql',
-    'USER'    => $db->{'USER'}    || $self->DATABASE_WRITE_USER,
-    'PASS'    => $db->{'PASS'}    || $self->DATABASE_WRITE_PASS
+    'database'  => $db->{'NAME'},
+    'host'      => $db->{'HOST'},
+    'port'      => $db->{'PORT'},
+    'username'  => $db->{'USER'}  || $self->DATABASE_WRITE_USER,
+    'password'  => $db->{'PASS'}  || $self->DATABASE_WRITE_PASS
   };
 }
 
 sub register_orm_databases {
-  my $self  = shift;
-  my $db    = $self->accounts_db;
+  my $self = shift;
 
-  $self->ENSEMBL_ORM_DATABASES->{'user'} = {
-    'database'  => $db->{'NAME'},
-    'host'      => $db->{'HOST'},
-    'port'      => $db->{'PORT'},
-    'username'  => $db->{'USER'},
-    'password'  => $db->{'PASS'}
-  };
+  $self->ENSEMBL_ORM_DATABASES->{'user'} = $self->accounts_db;
 
   return $self->PREV::register_orm_databases;
 }
