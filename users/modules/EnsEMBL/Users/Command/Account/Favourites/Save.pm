@@ -19,10 +19,14 @@ limitations under the License.
 package EnsEMBL::Users::Command::Account::Favourites::Save;
 
 use strict;
+use warnings;
 
-use parent qw(EnsEMBL::Users::Command::Account);
+use JSON;
 
 use EnsEMBL::Web::Document::HTML::FavouriteSpecies;
+use EnsEMBL::Web::Document::HTML::SpeciesList;
+
+use parent qw(EnsEMBL::Users::Command::Account);
 
 sub process {
   my $self    = shift;
@@ -35,7 +39,10 @@ sub process {
   $species_list->favourites($hub->param('favourites'));
   $species_list->save('user' => $r_user);
 
-  print EnsEMBL::Web::Document::HTML::FavouriteSpecies->new($hub)->render('fragment');
+  print to_json({
+    list      => EnsEMBL::Web::Document::HTML::FavouriteSpecies->new($hub)->render('fragment'),
+    dropdown  => EnsEMBL::Web::Document::HTML::SpeciesList->new($hub)->render('fragment'),
+  });
 
 }
 
