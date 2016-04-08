@@ -32,6 +32,11 @@ Ensembl.Panel.FileChameleonForm = Ensembl.Panel.ToolsForm.extend({
     
     // Add validate event to the form which gets triggered before submitting it
     this.elLk.form.on('validate', function(e) {
+      if (panel.elLk.form.find('input[name=url]').val() && !panel.elLk.form.find('input[name=url]').val().match(/^http/)) {
+        panel.showError('File should only be uploaded from http (web server)', 'Only http');
+        $(this).data('valid', false);
+        return;
+      }
       if (panel.elLk.form.find('input[name=url]').val() && !(panel.elLk.chr_filter.is(':checked')) && !(panel.elLk.add_transcript.is(':checked')) && !(panel.elLk.remap_patch.is(':checked'))) {
         panel.showError('Please choose one of the filter', 'No filter applied');
         $(this).data('valid', false);
@@ -57,7 +62,7 @@ Ensembl.Panel.FileChameleonForm = Ensembl.Panel.ToolsForm.extend({
       
       if (jobsData[0].chr_filter) {
         this.elLk.form.find('[name=chr_filter][value=' + jobsData[0].chr_filter + ']').prop('checked', true);
-        this.elLk.form.find('select[name=convert_to]').find('input[value=' + jobsData[0].convert_to + ']').first().click();
+        this.elLk.form.find('select[name=convert_to]').parents(':eq(1)').show().find('input[value=' + jobsData[0].convert_to + ']').first().click();
       }
       
       if (jobsData[0].add_transcript) {
