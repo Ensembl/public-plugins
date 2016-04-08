@@ -80,7 +80,7 @@ sub get_cacheable_form_node {
     'name'          => 'format',
     'label'         => 'Input file format',
     'values'        => $input_formats,
-    'class'         => '_stt format'
+    'class'         => 'format'
   });
     
   my $filter_fieldset  = $form->add_fieldset({'legend' => 'Filtering options',  'class' => 'tool_h2', 'no_required_notes' => 1});

@@ -77,8 +77,8 @@ sub run {
 
   # throw exception if process failed
   if (my $error_code = $command->error_code) {
-    my ($error_details) = file_get_contents($log_file);
-    throw exception('HiveException', $error_details);
+    my $error_details = join('', grep(/MSG/, file_get_contents($log_file)));
+    throw exception('HiveException', "\n".$error_details);
   }
 
   return 1;
