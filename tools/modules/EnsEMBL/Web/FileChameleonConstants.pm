@@ -22,15 +22,22 @@ use strict;
 use warnings;
 
 use Exporter qw(import);
-our @EXPORT_OK = qw(INPUT_FORMATS);
+our @EXPORT_OK = qw(INPUT_FORMATS STYLE_FORMATS);
 
 sub INPUT_FORMATS {
   return [
-    { 'value' => 'BED',   'caption' => 'BED',  'example' => qq() },
     { 'value' => 'GFF3',  'caption' => 'GFF3',  'example' => qq() },
     { 'value' => 'GTF',   'caption' => 'GTF',  'example' => qq() },
-    { 'value' => 'VCF',   'caption' => 'VCF',  'example' => qq() },
-    { 'value' => 'WIG',   'caption' => 'WIG',  'example' => qq() },
+  ];
+}
+
+sub STYLE_FORMATS {
+  return [
+    { 'value' => 'null',   'caption' => '',  'example' => qq() },
+    { 'value' => 'ensembl_to_ucsc',   'caption' => 'Ensembl to UCSC',  'example' => qq() },
+    { 'value' => 'ucsc_to_ensembl',   'caption' => 'UCSC to Ensembl',  'example' => qq() },
+    { 'value' => 'ensembl_to_insdc',  'caption' => 'Ensembl to INSDC', 'example' => qq() },
+    { 'value' => 'insdc_to_ensembl',  'caption' => 'INSDC to Ensembl', 'example' => qq() },
   ];
 }
 

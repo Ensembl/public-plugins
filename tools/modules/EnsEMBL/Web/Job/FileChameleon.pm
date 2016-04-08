@@ -34,18 +34,27 @@ sub prepare_to_dispatch {
   my $rose_object     = $self->rose_object;
   my $job_data        = $rose_object->job_data;
   my $format          = $job_data->{format};
-  my $source          = "chromosome|".lc($job_data->{species})."_ensembl_to_ucsc";
+  my $chr_filter      = $job_data->{chr_filter};
+  my $convert_to      = $job_data->{convert_to};
+  my $add_transcript  = $job_data->{add_transcript};
+  my $remap_patch     = $job_data->{remap_patch};
+
+  my $source;
+  my  $include  = [];
+
+  if($chr_filter) {
+    $source   = "chromosome|".lc($job_data->{species})."_".$convert_to;
+    push($include,"file:///localsw/FileChameleon/examples/chromosome.conf");
+  }
+  
+  push($include,"file:///localsw/FileChameleon/examples/transcript_id.conf") if($add_transcript);
+  push($include,"file:///localsw/FileChameleon/examples/remap.conf") if($remap_patch);
 
   my $config_content  = {
-    "input_filter" => { 
-        "source"      => $source,
-        "seqname"     => "callback",
-        "attributes"  => { 
-          "gene_name" => "callback" 
-        },
-        "sequence"    => "seq_callback" 
+    "input_filter" => {
+        "seqname" => $source,
     },
-    "include" => ["file:///localsw/FileChameleon/examples/chromosome_plus_callbacks.conf"]
+    "include" => $include
   };
 
   file_put_contents($rose_object->job_dir."/configuration.conf", to_json($config_content));

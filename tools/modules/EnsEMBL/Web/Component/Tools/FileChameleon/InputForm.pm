@@ -21,7 +21,7 @@ package EnsEMBL::Web::Component::Tools::FileChameleon::InputForm;
 use strict;
 use warnings;
 
-use EnsEMBL::Web::FileChameleonConstants qw(INPUT_FORMATS);
+use EnsEMBL::Web::FileChameleonConstants qw(INPUT_FORMATS STYLE_FORMATS);
 
 use parent qw(
   EnsEMBL::Web::Component::Tools::FileChameleon
@@ -39,6 +39,7 @@ sub get_cacheable_form_node {
   my $species         = $self->object->species_list;
   my $form            = $self->new_tool_form;
   my $input_formats   = INPUT_FORMATS;
+  my $style_formats   = STYLE_FORMATS;
   my $input_fieldset  = $form->add_fieldset({'no_required_notes' => 1});
 
   # Species dropdown list with stt classes to dynamically toggle other fields
@@ -81,7 +82,38 @@ sub get_cacheable_form_node {
     'values'        => $input_formats,
     'class'         => '_stt format'
   });
- 
+    
+  my $filter_fieldset  = $form->add_fieldset({'legend' => 'Filtering options',  'class' => 'tool_h2', 'no_required_notes' => 1});
+  $filter_fieldset->add_field({
+    'type'          => 'checklist',
+    'name'          => 'chr_filter',
+    'label'         => 'Filter chromosome',
+    'values'        => [ { 'value' => '1' } ],
+    'class'         => '_stt',    
+  });
+  
+  $filter_fieldset->add_field({
+    'type'          => 'dropdown',
+    'name'          => 'convert_to',
+    'label'         => 'Convert chromosome format from',
+    'values'        => $style_formats,
+    'field_class'   => 'hidden _stt_1'
+  });
+
+  $filter_fieldset->add_field({
+    'type'          => 'checklist',
+    'name'          => 'add_transcript',
+    'label'         => 'Add transcript ID',
+    'values'        => [ { 'value' => '1' } ],
+  });
+
+  $filter_fieldset->add_field({
+    'type'          => 'checklist',
+    'name'          => 'remap_patch',
+    'label'         => 'Remap patches',
+    'values'        => [ { 'value' => '1' } ],
+  });  
+  
   
   $self->add_buttons_fieldset($form, {'reset' => 'Clear', 'cancel' => 'Close form'});
 

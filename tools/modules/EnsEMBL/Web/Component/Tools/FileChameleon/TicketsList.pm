@@ -41,4 +41,45 @@ sub job_status_tag {
   return $tag;
 }
 
+sub job_summary_section {
+  ## @override
+  ## Change text and link of the results link
+  my $self      = shift;
+  my $ticket    = $_[0];
+  my $summary   = $self->SUPER::job_summary_section(@_);
+
+  foreach (@{$summary->get_nodes_by_flag('job_results_link') || []}) {
+    $_->inner_HTML('[Download results]');
+    $_->set_attribute('href', $self->object->download_url($ticket->ticket_name));
+  }
+
+  return $summary;
+}
+
+sub ticket_buttons {
+  ## @override
+  ## Add an extra download icon for finished jobs
+  my $self      = shift;
+  my $ticket    = $_[0];
+  my $buttons   = $self->SUPER::ticket_buttons(@_);
+  my ($job)     = $ticket && $ticket->job;
+
+  if ($job && $job->dispatcher_status eq 'done') {
+
+    $buttons->prepend_child({
+      'node_name'   => 'a',
+      'class'       => [qw(_download)],
+      'href'        => $self->object->download_url($ticket->ticket_name),
+      'children'    => [{
+        'node_name'   => 'span',
+        'class'       => [qw(_ht sprite download_icon)],
+        'title'       => 'Download output file'
+      }]
+    });
+  }
+
+  return $buttons;
+}
+
+
 1;

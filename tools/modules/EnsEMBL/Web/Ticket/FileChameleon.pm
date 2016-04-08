@@ -42,9 +42,13 @@ sub init_from_user_input {
     'species'     => $species,
     'assembly'    => $hub->species_defs->get_config($species, 'ASSEMBLY_VERSION'),
     'job_data'    => {
-      'species'     => $species,
-      'url'         => $hub->param('url'),  
-      'format'      => $hub->param('format'),
+      'species'         => $species,
+      'url'             => $hub->param('url'),  
+      'format'          => $hub->param('format'),
+      'chr_filter'      => $hub->param('chr_filter') ? 1 : '',
+      'convert_to'      => $hub->param('convert_to') ? $hub->param('convert_to') : '',
+      'add_transcript'  => $hub->param('add_transcript') ? 1 : '',
+      'remap_patch'     => $hub->param('remap_patch') ? 1 : '',
     }
   }));
 }

@@ -16,6 +16,8 @@
 
 /* Generic tools form CSS */
 
+fieldset.tool_h2 h2               { border-bottom: 1px solid #ccc; padding: 10px 0 3px 0; }
+
 div.extra_configs_wrapper         { margin-bottom: 8px; }
 div.extra_configs_button a        { display: inline-block; padding: 5px 16px 5px 5px; background-color: [[PAGE_BG]]; border: 1px solid [[PANEL_BORDER]]; background-position: right center; font-weight: bold;}
 div.extra_configs_button a.open   { border-bottom: none; }

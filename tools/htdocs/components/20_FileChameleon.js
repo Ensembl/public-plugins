@@ -17,12 +17,33 @@
 Ensembl.Panel.FileChameleonForm = Ensembl.Panel.ToolsForm.extend({
 
   init: function() {
+    var panel = this;
+    
     this.base.apply(this, arguments);
 
     this.elLk.speciesDropdown = this.elLk.form.find('._sdd');
+    this.elLk.formatDropdown  = this.elLk.form.find('select[name=format]');
+    this.elLk.chr_filter      = this.elLk.form.find('[name=chr_filter]');
+    this.elLk.add_transcript  = this.elLk.form.find('[name=add_transcript]')
+    this.elLk.remap_patch     = this.elLk.form.find('[name=remap_patch]')
 
     this.resetSpecies(this.defaultSpecies);
     this.editExisting();
+    
+    // Add validate event to the form which gets triggered before submitting it
+    this.elLk.form.on('validate', function(e) {
+      if (panel.elLk.form.find('input[name=url]').val() && !(panel.elLk.chr_filter.is(':checked')) && !(panel.elLk.add_transcript.is(':checked')) && !(panel.elLk.remap_patch.is(':checked'))) {
+        panel.showError('Please choose one of the filter', 'No filter applied');
+        $(this).data('valid', false);
+        return;
+      }
+      if(panel.elLk.chr_filter.is(':checked') && panel.elLk.form.find('[name=convert_to]').val() === 'null') {
+        panel.showError('Please choose chromosome format', 'No chromosome format conversion');
+        $(this).data('valid', false);
+        return;        
+      }
+    });
+    
   },
 
   populateForm: function(jobsData) {
@@ -31,7 +52,21 @@ Ensembl.Panel.FileChameleonForm = Ensembl.Panel.ToolsForm.extend({
       this.resetSpecies(jobsData[0]['species']);
       if (jobsData[0].url) {
         this.elLk.form.find('input[name=url]').html(jobsData[0].url);
+        this.elLk.formatDropdown.find('input[value=' + jobsData[0].format + ']').first().click();
       }
+      
+      if (jobsData[0].chr_filter) {
+        this.elLk.form.find('[name=chr_filter][value=' + jobsData[0].chr_filter + ']').prop('checked', true);
+        this.elLk.form.find('select[name=convert_to]').find('input[value=' + jobsData[0].convert_to + ']').first().click();
+      }
+      
+      if (jobsData[0].add_transcript) {
+        this.elLk.form.find('[name=add_transcript][value=' + jobsData[0].add_transcript + ']').prop('checked', true);        
+      }
+      
+      if (jobsData[0].remap_patch) {
+        this.elLk.form.find('[name=remap_patch][value=' + jobsData[0].remap_patch + ']').prop('checked', true);        
+      }      
     }
   },
   
