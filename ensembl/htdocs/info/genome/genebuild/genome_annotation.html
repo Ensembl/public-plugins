@@ -180,9 +180,9 @@ the EMBL/GenBank/DDBJ nucleotide set, UniProtKB/TrEMBL.
 <li>
 NCBI <a rel="external"
 href="http://www.ncbi.nlm.nih.gov/RefSeq/">RefSeq</a> aims to provide
-a comprehensive set of mRNA and proteins.  Manually annotated,
+a comprehensive set of mRNA and proteins. Manually annotated,
 reviewed proteins have an ID beginning with NP, known protein, while
-mRNAs in this category begin with NM.   Predicted proteins and mRNA
+mRNAs in this category begin with NM. Predicted proteins and mRNA
 transcripts are not used in the Ensembl annotation process, and begin with XP
 and XM, respectively.
 </li>
@@ -220,10 +220,10 @@ The list of gene name categories for human is as follows:
 <p>
 A new number follows each transcript name. If the number starts with
 '0', e.g. 001, 002, etc., this is a merged or manually curated transcript from
-Havana/Vega.  If the number starts with '2', such as 200, 201,...,
+Havana/Vega. If the number starts with '2', such as 200, 201,...,
 this is an automatically annotated transcript from Ensembl.  This does
 not take the place of the Ensembl gene ID, ENSG..., which is stable
-from release to release, and has not changed.  The goal is to be more
+from release to release, and has not changed. The goal is to be more
 consistent with the naming of our manually curated imports from
 Havana.
 </p>
@@ -255,22 +255,22 @@ have a match in miRBase for the same species.
 
 <h2 id="Other">Other transcripts</h2>
 <p>
-Ig segments, non-coding RNA and transient EST gene models are also
-automatically annotated by Ensembl.  The genes based on ESTs, or
+<a href="/info/genome/genebuild/ig_tcr.html">Annotation of Ig/Tcr Segment Genes</a>, non-coding RNA and transient EST gene models is also
+automatically performed by Ensembl. The genes based on ESTs, or
 Expressed Sequence Tags, can be a good starting point to determine new
-isoforms.  However, these models are not as robust as the known and
+isoforms. However, these models are not as robust as the known and
 novel protein-coding set, as ESTs have a high degree of error in their
-sequence.  This may not be the case for some human sets, but in the
+sequence. This may not be the case for some human sets, but in the
 majority, the mRNA and protein sequences used in the main gene set
-determination are more reliable.  EST genes have 'EST' in the
-identifier, such as 'ENSESTG' for a human Ensembl EST gene.  They can
+determination are more reliable. EST genes have 'EST' in the
+identifier, such as 'ENSESTG' for a human Ensembl EST gene. They can
 also be used to identify the presence of mRNA, as a confirmation that
 a transcript is expressed.
 </p>
 
 <p>
 Transcripts are scanned for pseudogene behaviour or false coding
-sequence.  A transcript is considered a <strong>pseudogene </strong>if
+sequence. A transcript is considered a <strong>pseudogene </strong>if
 1 of these 4 criteria are met:
 </p>
 
@@ -278,7 +278,7 @@ sequence.  A transcript is considered a <strong>pseudogene </strong>if
 <li>It is a single exon transcript and it matches a multi-exon
 transcript elsewhere in the genome.
 </li>
-<li>The transcript  is completely masked out by repeat masker.</li>
+<li>The transcript is completely masked out by repeat masker.</li>
 <li>The transcript contains no introns and multiple frameshifts.</li>
 <li>
 The transcript contains frameshifts and all of the introns are &gt;80%
