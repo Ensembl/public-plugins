@@ -16,7 +16,7 @@ curation, i.e. reviewed determination of transcripts on a case-by-case
 basis. Furthermore, Ensembl imports annotation from FlyBase, WormBase and SGD. 
 Ensembl transcripts displayed on our website are products of the 
 Ensembl automatic gene annotation system (a collection of gene annotation 
-pipelines), termed the Ensembl genebuild. All Ensembl transcripts are 
+pipelines), termed the Ensembl annotation process. All Ensembl transcripts are 
 based on experimental evidence and thus the automated pipeline relies on 
 the mRNAs and protein sequences deposited into public databases from the 
 scientific community. Manually-curated transcripts produced by the HAVANA 
@@ -27,7 +27,7 @@ group at the Welcome Trust Sanger Institute are displayed in a separate track on
 An Ensembl gene (with a unique ENSG... ID) includes any spliced 
 transcripts (ENST...) with overlapping coding sequence, with the 
 exception of manually annotated readthrough genes which are annotated 
-as a separate locus. Transcripts from the Ensembl genebuild (see below), 
+as a separate locus. Transcripts from the Ensembl annotation process (see below), 
 the Havana/Vega set and the Consensus Coding Sequence (<a href="ccds.html">CCDS</a>) set may all
 be clustered into the same gene. Transcripts that belong to the same
 gene ID may differ in splice events, exons, and can give rise to very
@@ -40,17 +40,17 @@ transcript sequences are defined, the gene and transcript names
 (<a href="#Names">see below</a>) are assigned.
 </p>
 
-<h2 id="Annotation">Genebuild</h2>
+<h2 id="Annotation">The Standard Ensembl annotation process</h2>
 <p>
-Standard Ensembl genebuilds are performed on high-coverage genomes and
-usually take at least four months to complete. While the genebuild
+Standard Ensembl annotation processes are performed on high-coverage genomes and
+usually take at least four months to complete. While the annotation
 process is tailored to each species according to the data that are
-available, the main steps followed in a standard genebuild are the
+available, the main steps followed in a standard annotation process are the
 same for every species.
 </p>
 
 <p>
-The initial set-up for a genebuild involves loading the assembly into
+The initial set-up for an Ensembl annotation process involves loading the assembly into
 an Ensembl schema datababase and then running several analyses across
 the genome including masking of repeats and <em>ab initio</em> gene
 predictions. The <em>ab initio</em> gene predictions are run for
@@ -59,30 +59,30 @@ for the gene structures displayed on our website.
 </p>
 
 <p>
-The first stage of the genebuild is known as the Targetted
+The first stage of the Ensembl annotation process is known as the Targeted
 stage. Here, species-specific proteins are aligned to the 
 genome and Genewise and/or Exonerate is used to build a 
 transcript structure for the protein on the genome.
 </p>
 
 <p>
-The Targetted stage is followed by the Similarity stage in which
+The Targeted stage is followed by the Similarity stage in which
 proteins from closely related species are used to build transcript
-structure in regions were a Targetted transcript structure is
+structure in regions were a Targeted transcript structure is
 absent. For those species having a lot of experimentally-generated
-protein sequences, the Targetted stage tends to contribute most of the
-gene structures in the genebuild. However, for species with fewer
+protein sequences, the Targeted stage tends to contribute most of the
+gene structures in the Ensembl annotation process. However, for species with fewer
 species-specific protein sequences the Similarity stage plays a much
 more important role in predicting gene structures.
 </p>
 
 <p>
-The next stage in the genebuild is to align species-specific cDNA and
+The next stage in the Ensembl annotation process is to align species-specific cDNA and
 EST sequences to the genome. Where cDNA alignments overlap transcripts
 predicted in the preceding stages, any non-translated region from the
 cDNA is spliced onto the transcript prediction as UTR. EST alignments
 are displayed on our website but are usually not used as supporting
-evidence in the genebuild.
+evidence in the Ensembl annotation process.
 </p>
 
 <p>
@@ -111,8 +111,8 @@ pseudogene prediction and cross-referencing to external databases.
 
 <h2 id="gencode">GENCODE</h2>
 <p>
-The human and mouse genebuilds involve additional steps not included 
-in the standard Ensembl build, to produce the GENCODE gene sets. Where 
+The human and mouse annotation processes involve additional steps not included 
+in the standard Ensembl annotation process, to produce the GENCODE gene sets. Where 
 manual curation is available for a transcript, the Ensembl and HAVANA 
 transcript models are compared and merged when their splicing structure 
 is identical. Merged models will be coloured gold in the browser. A 
@@ -134,8 +134,8 @@ tagged as being in the GENCODE Basic set, which is also available on our website
 </p>
 
 <p>
-The genebuild process for <a href="2x_genomes.html">low-coverage
-genomes</a> does not follow that of the standard Ensembl genebuild
+The Ensembl annotation process for <a href="2x_genomes.html">low-coverage
+genomes</a> does not follow that of the standard Ensembl annotation process
 described above. 
 </p>
 
@@ -183,7 +183,7 @@ href="http://www.ncbi.nlm.nih.gov/RefSeq/">RefSeq</a> aims to provide
 a comprehensive set of mRNA and proteins.  Manually annotated,
 reviewed proteins have an ID beginning with NP, known protein, while
 mRNAs in this category begin with NM.   Predicted proteins and mRNA
-transcripts are not used in the Ensembl Genebuild, and begin with XP
+transcripts are not used in the Ensembl annotation process, and begin with XP
 and XM, respectively.
 </li>
 
@@ -195,7 +195,7 @@ and XM, respectively.
 Most human genes have an associated HGNC symbol from
 the <a rel="external" href="http://www.genenames.org/">HUGO Gene
 Nomenclature Committee</a>. If the gene or transcript comes from the
-Ensembl Genebuild's automated pipeline only, the HGNC symbol will have
+Ensembl annotation process' automated pipeline only, the HGNC symbol will have
 HGNC automatic associated with it. If it is a manually curated
 transcript from Havana/Vega, it will have HGNC curated associated with
 it.
@@ -207,7 +207,7 @@ associated with an HGNC symbol and are either assigned by Ensembl or
 Havana, as above.
 </p>
 <p>
-The list of gene name catagories for human is as follows:
+The list of gene name categories for human is as follows:
 </p>
 
 <ol>
