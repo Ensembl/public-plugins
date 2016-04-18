@@ -1,11 +1,11 @@
 <html>
 <head>
-<title>Genome Annotation</title>
+<title>Ensembl annotation</title>
 </head>
 
 <body>
 
-<h1>Ensembl Gene Set</h1>
+<h1>Ensembl annotation</h1>
 
 <h2 id="Introduction">Introduction</h2>
 <p>
@@ -16,7 +16,7 @@ curation, i.e. reviewed determination of transcripts on a case-by-case
 basis. Furthermore, Ensembl imports annotation from FlyBase, WormBase and SGD. 
 Ensembl transcripts displayed on our website are products of the 
 Ensembl automatic gene annotation system (a collection of gene annotation 
-pipelines), termed the Ensembl genebuild. All Ensembl transcripts are 
+pipelines), termed the Ensembl annotation process. All Ensembl transcripts are 
 based on experimental evidence and thus the automated pipeline relies on 
 the mRNAs and protein sequences deposited into public databases from the 
 scientific community. Manually-curated transcripts produced by the HAVANA 
@@ -27,8 +27,8 @@ group at the Welcome Trust Sanger Institute are displayed in a separate track on
 An Ensembl gene (with a unique ENSG... ID) includes any spliced 
 transcripts (ENST...) with overlapping coding sequence, with the 
 exception of manually annotated readthrough genes which are annotated 
-as a separate locus. Transcripts from the Ensembl genebuild (see below), 
-the Havana/Vega set and the Consensus Coding Sequence (<a href="ccds.html">CCDS</a>) set may all
+as a separate locus. Transcripts from the Ensembl annotation process (see below), 
+the Havana/Vega set and the Consensus Coding Sequence (<a href="ccds.html">CCDS project</a>) set may all
 be clustered into the same gene. Transcripts that belong to the same
 gene ID may differ in splice events, exons, and can give rise to very
 different proteins. These are isoforms, arising from alternative
@@ -40,17 +40,17 @@ transcript sequences are defined, the gene and transcript names
 (<a href="#Names">see below</a>) are assigned.
 </p>
 
-<h2 id="Annotation">Genebuild</h2>
+<h2 id="Annotation">The Standard Ensembl annotation process</h2>
 <p>
-Standard Ensembl genebuilds are performed on high-coverage genomes and
-usually take at least four months to complete. While the genebuild
+Standard Ensembl annotation processes are performed on high-coverage genomes and
+usually take at least four months to complete. While the annotation
 process is tailored to each species according to the data that are
-available, the main steps followed in a standard genebuild are the
+available, the main steps followed in a standard annotation process are the
 same for every species.
 </p>
 
 <p>
-The initial set-up for a genebuild involves loading the assembly into
+The initial set-up for the Ensembl annotation process involves loading the assembly into
 an Ensembl schema datababase and then running several analyses across
 the genome including masking of repeats and <em>ab initio</em> gene
 predictions. The <em>ab initio</em> gene predictions are run for
@@ -59,35 +59,35 @@ for the gene structures displayed on our website.
 </p>
 
 <p>
-The first stage of the genebuild is known as the Targetted
+The first stage of the Ensembl annotation process is known as the Targeted
 stage. Here, species-specific proteins are aligned to the 
 genome and Genewise and/or Exonerate is used to build a 
 transcript structure for the protein on the genome.
 </p>
 
 <p>
-The Targetted stage is followed by the Similarity stage in which
+The Targeted stage is followed by the Similarity stage in which
 proteins from closely related species are used to build transcript
-structure in regions were a Targetted transcript structure is
+structure in regions were a Targeted transcript structure is
 absent. For those species having a lot of experimentally-generated
-protein sequences, the Targetted stage tends to contribute most of the
-gene structures in the genebuild. However, for species with fewer
+protein sequences, the Targeted stage tends to contribute most of the
+gene structures in the Ensembl annotation process. However, for species with fewer
 species-specific protein sequences the Similarity stage plays a much
 more important role in predicting gene structures.
 </p>
 
 <p>
-The next stage in the genebuild is to align species-specific cDNA and
+The next stage in the Ensembl annotation process is to align species-specific cDNA and
 EST sequences to the genome. Where cDNA alignments overlap transcripts
 predicted in the preceding stages, any non-translated region from the
 cDNA is spliced onto the transcript prediction as UTR. EST alignments
 are displayed on our website but are usually not used as supporting
-evidence in the genebuild.
+evidence in the Ensembl annotation process.
 </p>
 
 <p>
-Where available, we also align <a href="/info/genome/genebuild/rnaseq_annotation.html">RNA-seq</a> reads to the genome and build 
-RNA-seq based transcript models from these data. These models may also 
+Where available, we also align RNA-seq reads to the genome and build 
+RNA-seq-based transcript models from these data (see <a href="/info/genome/genebuild/rnaseq_annotation.html">RNASeq Genes</a> for more information). These models may also 
 be used to add new genes or transcript isoforms into the gene set, and 
 to add UTR to protein-coding models.
 </p>
@@ -111,8 +111,8 @@ pseudogene prediction and cross-referencing to external databases.
 
 <h2 id="gencode">GENCODE</h2>
 <p>
-The human and mouse genebuilds involve additional steps not included 
-in the standard Ensembl build, to produce the GENCODE gene sets. Where 
+The human and mouse annotation processes involve additional steps not included 
+in the standard Ensembl annotation process, to produce the GENCODE gene sets. Where 
 manual curation is available for a transcript, the Ensembl and HAVANA 
 transcript models are compared and merged when their splicing structure 
 is identical. Merged models will be coloured gold in the browser. A 
@@ -134,8 +134,8 @@ tagged as being in the GENCODE Basic set, which is also available on our website
 </p>
 
 <p>
-The genebuild process for <a href="2x_genomes.html">low-coverage
-genomes</a> does not follow that of the standard Ensembl genebuild
+The Ensembl annotation process for <a href="2x_genomes.html">low-coverage
+genomes</a> does not follow that of the standard Ensembl annotation process
 described above. 
 </p>
 
@@ -180,10 +180,10 @@ the EMBL/GenBank/DDBJ nucleotide set, UniProtKB/TrEMBL.
 <li>
 NCBI <a rel="external"
 href="http://www.ncbi.nlm.nih.gov/RefSeq/">RefSeq</a> aims to provide
-a comprehensive set of mRNA and proteins.  Manually annotated,
+a comprehensive set of mRNA and proteins. Manually annotated,
 reviewed proteins have an ID beginning with NP, known protein, while
-mRNAs in this category begin with NM.   Predicted proteins and mRNA
-transcripts are not used in the Ensembl Genebuild, and begin with XP
+mRNAs in this category begin with NM. Predicted proteins and mRNA
+transcripts are not used in the Ensembl annotation process, and begin with XP
 and XM, respectively.
 </li>
 
@@ -195,7 +195,7 @@ and XM, respectively.
 Most human genes have an associated HGNC symbol from
 the <a rel="external" href="http://www.genenames.org/">HUGO Gene
 Nomenclature Committee</a>. If the gene or transcript comes from the
-Ensembl Genebuild's automated pipeline only, the HGNC symbol will have
+Ensembl annotation process' automated pipeline only, the HGNC symbol will have
 HGNC automatic associated with it. If it is a manually curated
 transcript from Havana/Vega, it will have HGNC curated associated with
 it.
@@ -207,7 +207,7 @@ associated with an HGNC symbol and are either assigned by Ensembl or
 Havana, as above.
 </p>
 <p>
-The list of gene name catagories for human is as follows:
+The list of gene name categories for human is as follows:
 </p>
 
 <ol>
@@ -220,10 +220,10 @@ The list of gene name catagories for human is as follows:
 <p>
 A new number follows each transcript name. If the number starts with
 '0', e.g. 001, 002, etc., this is a merged or manually curated transcript from
-Havana/Vega.  If the number starts with '2', such as 200, 201,...,
+Havana/Vega. If the number starts with '2', such as 200, 201,...,
 this is an automatically annotated transcript from Ensembl.  This does
 not take the place of the Ensembl gene ID, ENSG..., which is stable
-from release to release, and has not changed.  The goal is to be more
+from release to release, and has not changed. The goal is to be more
 consistent with the naming of our manually curated imports from
 Havana.
 </p>
@@ -249,28 +249,28 @@ the Transcript tab.
 </p>
 
 <p>
-Known <a href="ncrna.html">miRNAs</a> must
+Known miRNAs from the annotation of <a href="ncrna.html">Non-coding RNAs</a> process must
 have a match in miRBase for the same species.
 </p>
 
 <h2 id="Other">Other transcripts</h2>
 <p>
-Ig segments, non-coding RNA and transient EST gene models are also
-automatically annotated by Ensembl.  The genes based on ESTs, or
+Annotation of <a href="/info/genome/genebuild/ig_tcr.html">Ig/Tcr Genes</a>, non-coding RNA and transient EST gene models is also
+automatically performed by Ensembl. The genes based on ESTs, or
 Expressed Sequence Tags, can be a good starting point to determine new
-isoforms.  However, these models are not as robust as the known and
+isoforms. However, these models are not as robust as the known and
 novel protein-coding set, as ESTs have a high degree of error in their
-sequence.  This may not be the case for some human sets, but in the
+sequence. This may not be the case for some human sets, but in the
 majority, the mRNA and protein sequences used in the main gene set
-determination are more reliable.  EST genes have 'EST' in the
-identifier, such as 'ENSESTG' for a human Ensembl EST gene.  They can
+determination are more reliable. EST genes have 'EST' in the
+identifier, such as 'ENSESTG' for a human Ensembl EST gene. They can
 also be used to identify the presence of mRNA, as a confirmation that
 a transcript is expressed.
 </p>
 
 <p>
 Transcripts are scanned for pseudogene behaviour or false coding
-sequence.  A transcript is considered a <strong>pseudogene </strong>if
+sequence. A transcript is considered a <strong>pseudogene </strong>if
 1 of these 4 criteria are met:
 </p>
 
@@ -278,7 +278,7 @@ sequence.  A transcript is considered a <strong>pseudogene </strong>if
 <li>It is a single exon transcript and it matches a multi-exon
 transcript elsewhere in the genome.
 </li>
-<li>The transcript  is completely masked out by repeat masker.</li>
+<li>The transcript is completely masked out by repeat masker.</li>
 <li>The transcript contains no introns and multiple frameshifts.</li>
 <li>
 The transcript contains frameshifts and all of the introns are &gt;80%
