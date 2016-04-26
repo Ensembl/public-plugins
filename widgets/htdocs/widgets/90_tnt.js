@@ -4013,7 +4013,7 @@ tnt.tree.diagonal.vertical = function () {
 	var src = pathData[0];
 	var mid = pathData[1];
 	var dst = pathData[2];
-	var radius = 200000; // Number long enough
+	var radius = (mid[1] - src[1]) * 2000; // Number long enough
 
 	return "M" + src + " A" + [radius,radius] + " 0 0,0 " + mid + "M" + mid + "L" + dst; 
 	
