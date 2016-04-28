@@ -19,12 +19,17 @@ limitations under the License.
 package EnsEMBL::Web::ImageConfig::contigviewtop;
 
 use strict;
+use warnings;
+
+use previous qw(init);
 
 use parent qw(EnsEMBL::Web::ImageConfig::Genoverse);
 
-sub modify {
+sub init {
   my $self = shift;
-  
+
+  $self->PREV::init(@_);
+
   $self->init_genoverse;
   $self->set_parameter('zoom', 'no');
 }
