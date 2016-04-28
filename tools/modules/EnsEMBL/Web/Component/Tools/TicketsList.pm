@@ -23,6 +23,8 @@ package EnsEMBL::Web::Component::Tools::TicketsList;
 use strict;
 use warnings;
 
+use DateTime;
+
 use EnsEMBL::Web::Utils::DynamicLoader qw(dynamic_require);
 
 use parent qw(EnsEMBL::Web::Component::Tools);
@@ -35,6 +37,7 @@ sub content {
   my $tickets       = $object->get_tickets_list;
   my $tool_type     = $object->tool_type;
   my $owned_tickets = { map { $_->ticket_name => 1 } $object->user_accessible_tickets(@$tickets) };
+  my $timezone      = DateTime->now->set_time_zone('Europe/London')->strftime('%c %z %Z'); # Display GMT or BST for submitted at
 
   my $table         =  $self->new_table([
     { 'key' => 'analysis',  'title' => 'Analysis',      'sort' => 'string'          },
@@ -66,7 +69,7 @@ sub content {
         'analysis'  => $self->analysis_caption($ticket),
         'ticket'    => $self->ticket_link($ticket, $owned_tickets->{$ticket_name}),
         'jobs'      => join('', @jobs_summary),
-        'created'   => sprintf('<span class="hidden">%d</span>%s', $created_at =~ s/[^\d]//gr, $self->format_date($created_at)),
+        'created'   => sprintf('<span class="hidden">%d</span>%s (%s)', $created_at =~ s/[^\d]//gr, $self->format_date($created_at), $timezone && $timezone =~ /BST/g ? "BST" : "GMT" ),
         'extras'    => $self->ticket_buttons($ticket, $owned_tickets->{$ticket_name})->render,
         'options'   => {'class' => "_ticket_$ticket_name"}
       });
