@@ -406,7 +406,7 @@ sub _filters {
   $html .= '<div style="padding:0px 5px 0px 5px;">';
 
   my $form_url = $hub->url();
-  my $ajax_url = $self->ajax_url(undef, {'__clear' => 1});
+  my $ajax_url = $self->ajax_url(undef, {'update_panel' => 1, '__clear' => 1});
 
   my $ajax_html .= qq(<form action="#" class="_apply_filter" style="margin: 0;"><input type="hidden" name="ajax_url" value="$ajax_url" />);
 
