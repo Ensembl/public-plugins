@@ -60,7 +60,7 @@ Ensembl.Panel.VEPResults = Ensembl.Panel.ContentTools.extend({
       var ajaxUrl   = form.find('input[name=ajax_url]').remove().val();
       var urlParams = $.map(form.serializeArray(), function(field) { return field.name + '=' + field.value; }).sort().join(';');
 
-      panel.reload(window.location.href.split('?')[0] + '?' + urlParams, ajaxUrl + '?' + urlParams);
+      panel.reload(window.location.href.split('?')[0] + '?' + urlParams, ajaxUrl + (ajaxUrl.match(/\?/) ? ';' : '?') + urlParams);
     });
 
     // links to display n number of results in the table
