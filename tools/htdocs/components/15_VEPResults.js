@@ -82,7 +82,7 @@ Ensembl.Panel.VEPResults = Ensembl.Panel.ContentTools.extend({
   reload: function(url, ajaxUrl) {
     this.toggleSpinner(true);
     this.updateLocation(url);
-    this.getContent(ajaxUrl, this.el.addClass('no-spinner'), null, true); // since we have our own spinner, we add this class to hide the Content panel's spinner
+    this.getContent(ajaxUrl, this.el.addClass('no-spinner'), null, true, { background: true }); // since we have our own spinner, we add this class to hide the Content panel's spinner
   },
 
   destructor: function() {
