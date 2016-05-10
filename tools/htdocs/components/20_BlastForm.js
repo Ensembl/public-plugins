@@ -249,7 +249,7 @@ Ensembl.Panel.BlastForm = Ensembl.Panel.ToolsForm.extend({
         for (var name in formInput['configs']) {
           this.elLk.form.find('[name=' + formInput['search_type'] + '__' + name + ']')
             .filter('input[type=checkbox]').prop('checked', !!formInput['configs'][name]).end()
-            .filter('select').find('option[value=' + formInput['configs'][name] + ']').prop('selected', true).end().selectToToggle('trigger');
+            .filter('select').find('option[value="' + formInput['configs'][name] + '"]').prop('selected', true).end().selectToToggle('trigger');
         }
       }
     }
