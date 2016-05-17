@@ -258,7 +258,7 @@ Ensembl.GA.eventConfigs.push(
   // Component tools bottons
   {
     id              : 'LocalButton',
-    url             : /\/(Sequence|Exon)/,
+    url             : /\/(Sequence|Exon|Compara_Alignments)/,
     selector        : 'div.component-tools > a',
     wrapper         : '.ajax.initial_panel',
     event           : 'click',

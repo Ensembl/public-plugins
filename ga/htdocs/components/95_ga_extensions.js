@@ -112,6 +112,7 @@ Ensembl.Panel.ModalContainer = Ensembl.Panel.ModalContainer.extend({
 
 Ensembl.Panel.ModalContent = Ensembl.Panel.ModalContent.extend({
   init: function () {
+    var panel = this;
     this.base.apply(this, arguments);
 
     Ensembl.GA.registerConfigs([
@@ -124,8 +125,68 @@ Ensembl.Panel.ModalContent = Ensembl.Panel.ModalContent.extend({
         category  : function (e) { return e.originalEvent ? 'Modal-LocalContext' : false; }, // returning false cancels the event logging
         action    : function () { return this.getURL(this.data.link[0]); },
         label     : function () { return this.data.link.html(); }
+      },
+    ]);
+
+    // Only when the form submit action is Text Alignments (exluding preview button actions in Text Alignmetns)
+    if (!this.textAlignmentEvent) {
+      this.textAlignmentEvent = {
+        format       : new Ensembl.GA.EventConfig({ category: 'TextAlignment-DownloadFormat', nonInteraction: true }),
+        compression : new Ensembl.GA.EventConfig({ category: 'TextAlignment-Compression', nonInteraction: true })
+      };
+    }
+  },
+
+  formSubmit: function(form, data) {
+    var panel = this;
+    this.base(form, data);
+
+    if ($(form).attr('action').match(/DataExport\/Output/)) {
+      var formData = form.serializeArray();
+      var formDataHash = {};
+      formData.forEach(function(obj) {
+        formDataHash[obj.name] = obj.value;
+      });
+
+      if (formDataHash.export_action && formDataHash.export_action == 'TextAlignments' && formDataHash.compression !== 'preview') {
+        Ensembl.GA.sendEvent(this.textAlignmentEvent.format, { action: formDataHash.component, label: formDataHash.format });
+        Ensembl.GA.sendEvent(this.textAlignmentEvent.compression, { action: formDataHash.component, label: formDataHash.compression  });
+      }
+    }
+    // Return false to stop multiple form submit
+    return false;
+  },
+
+  updateContent: function(json) {
+    var panel = this;
+    this.base(json);
+
+    Ensembl.GA.registerConfigs([
+      // Download button click (uncompressed) after preview
+      {
+        selector  : this.el.find('#DataExport_Results .export_buttons_div input[name="uncompressed"]'),
+        event     : 'click',
+        category  : this.textAlignmentEvent.format,
+        data      : { format: panel.getParam('format', panel.el.find('input[name="uncompressed"]:hidden').val()) },
+        action    : function () { return 'Compara_Alignments' },
+        label     : function () { return(this.data.format); }
+      },
+      {
+        selector  : this.el.find('#DataExport_Results .export_buttons_div input[name="uncompressed"]'),
+        event     : 'click',
+        category  : this.textAlignmentEvent.format,
+        data      : { compression: panel.getParam('compression', panel.el.find('input[name="uncompressed"]:hidden').val()) },
+        action    : function () { return 'Compara_Alignments' },
+        label     : function () { return(this.data.compression || 'uncompressed'); }
       }
     ]);
+  },
+
+  getParam: function(field, url='') {
+    url = url.replace(/;/g, '&');
+    var reg = new RegExp( '[?&]' + field + '=([^&#]*)', 'i' );
+    var string = reg.exec(url);
+    return string ? string[1] : null;
   }
 });
 
@@ -323,3 +384,26 @@ Ensembl.DataTable.dataTableInit = function() {
     }
   ]);
 };
+
+Ensembl.Panel.MultiSpeciesSelector = Ensembl.Panel.MultiSpeciesSelector.extend({
+  init: function () {
+    this.base.apply(this, arguments);
+  },
+
+  updateSelection: function (data, delayReload) {
+    var panel = this;
+    this.base();
+
+    if (!this.configAppliedEventConfig) {
+      this.configAppliedEventConfig = {
+        selectSpecies  : new Ensembl.GA.EventConfig({ category: 'SelectSpecies', nonInteraction: true }),
+      };
+    }
+    
+    if(this.selection.join(',') !== this.initialSelection) {
+      $(this.selection).each(function (i, species) {
+        Ensembl.GA.sendEvent(panel.configAppliedEventConfig.selectSpecies, { action: panel.panelType, label:  species});
+      });      
+    }
+  }
+});
