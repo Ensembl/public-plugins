@@ -112,8 +112,8 @@ Ensembl.Panel.ModalContainer = Ensembl.Panel.ModalContainer.extend({
 
 Ensembl.Panel.ModalContent = Ensembl.Panel.ModalContent.extend({
   init: function () {
+    var panel = this;
     this.base.apply(this, arguments);
-    this.textAlignmentEvent = null;
 
     Ensembl.GA.registerConfigs([
 
@@ -127,28 +127,31 @@ Ensembl.Panel.ModalContent = Ensembl.Panel.ModalContent.extend({
         label     : function () { return this.data.link.html(); }
       },
     ]);
+
+    // Only when the form submit action is Text Alignments (exluding preview button actions in Text Alignmetns)
+    if (!this.textAlignmentEvent) {
+      this.textAlignmentEvent = {
+        format       : new Ensembl.GA.EventConfig({ category: 'TextAlignment-DownloadFormat', nonInteraction: true }),
+        compression : new Ensembl.GA.EventConfig({ category: 'TextAlignment-Compression', nonInteraction: true })
+      };
+    }
   },
 
   formSubmit: function(form, data) {
     var panel = this;
     this.base(form, data);
 
-    var formData = form.serializeArray();
-    var formDataHash = {};
-    formData.forEach(function(obj) {
-      formDataHash[obj.name] = obj.value;
-    });
+    if ($(form).attr('action').match(/DataExport\/Output/)) {
+      var formData = form.serializeArray();
+      var formDataHash = {};
+      formData.forEach(function(obj) {
+        formDataHash[obj.name] = obj.value;
+      });
 
-    // Only when the form submit action is Text Alignments (exluding preview button actions in Text Alignmetns)
-    if (formDataHash.export_action && formDataHash.export_action == 'TextAlignments' && formDataHash.compression !== 'preview') {
-      if (!this.textAlignmentEvent) {
-        this.textAlignmentEvent = {
-          format       : new Ensembl.GA.EventConfig({ category: 'TextAlignment-DownloadFormat', nonInteraction: true }),
-          compression : new Ensembl.GA.EventConfig({ category: 'TextAlignment-Compression', nonInteraction: true })
-        };
+      if (formDataHash.export_action && formDataHash.export_action == 'TextAlignments' && formDataHash.compression !== 'preview') {
+        Ensembl.GA.sendEvent(this.textAlignmentEvent.format, { action: formDataHash.component, label: formDataHash.format });
+        Ensembl.GA.sendEvent(this.textAlignmentEvent.compression, { action: formDataHash.component, label: formDataHash.compression  });
       }
-      Ensembl.GA.sendEvent(this.textAlignmentEvent.format, { action: formDataHash.component, label: formDataHash.format });
-      Ensembl.GA.sendEvent(this.textAlignmentEvent.compression, { action: formDataHash.component, label: formDataHash.compression  });
     }
     // Return false to stop multiple form submit
     return false;
@@ -163,16 +166,16 @@ Ensembl.Panel.ModalContent = Ensembl.Panel.ModalContent.extend({
       {
         selector  : this.el.find('#DataExport_Results .export_buttons_div input[name="uncompressed"]'),
         event     : 'click',
-        category  : 'TextAlignment-DownloadFomat',
-        data      :  { format: panel.getParam('format', panel.el.find('input[name="uncompressed"]:hidden').val()) },
+        category  : this.textAlignmentEvent.format,
+        data      : { format: panel.getParam('format', panel.el.find('input[name="uncompressed"]:hidden').val()) },
         action    : function () { return 'Compara_Alignments' },
         label     : function () { return(this.data.format); }
       },
       {
         selector  : this.el.find('#DataExport_Results .export_buttons_div input[name="uncompressed"]'),
         event     : 'click',
-        category  : 'TextAlignment-Compression',
-        data      :  { compression: panel.getParam('compression', panel.el.find('input[name="uncompressed"]:hidden').val()) },
+        category  : this.textAlignmentEvent.format,
+        data      : { compression: panel.getParam('compression', panel.el.find('input[name="uncompressed"]:hidden').val()) },
         action    : function () { return 'Compara_Alignments' },
         label     : function () { return(this.data.compression || 'uncompressed'); }
       }
@@ -180,7 +183,7 @@ Ensembl.Panel.ModalContent = Ensembl.Panel.ModalContent.extend({
   },
 
   getParam: function(field, url='') {
-    url = url.replace(/;/g, '&')
+    url = url.replace(/;/g, '&');
     var reg = new RegExp( '[?&]' + field + '=([^&#]*)', 'i' );
     var string = reg.exec(url);
     return string ? string[1] : null;
