@@ -58,6 +58,9 @@ sub update_conf {
   $SiteDefs::__species_aliases{ 'Microcebus_murinus'                } = [qw(mmur lemur)];
   $SiteDefs::__species_aliases{ 'Monodelphis_domestica'             } = [qw(md mdom monodelphis opossum)];
   $SiteDefs::__species_aliases{ 'Mus_musculus'                      } = [qw(mm mmus mouse mus)];
+  $SiteDefs::__species_aliases{ 'Mus_musculus_129S1'                } = [qw(mm mmus mouse mus)];
+  $SiteDefs::__species_aliases{ 'Mus_musculus_CBA'                  } = [qw(mm mmus mouse mus)];
+
   $SiteDefs::__species_aliases{ 'Mustela_putorius_furo'             } = [qw(mp mput mustela ferret)];
   $SiteDefs::__species_aliases{ 'Myotis_lucifugus'                  } = [qw(ml mluc microbat myotis)];
   $SiteDefs::__species_aliases{ 'Nomascus_leucogenys'               } = [qw(nl nleu gibbon nomascus)];
