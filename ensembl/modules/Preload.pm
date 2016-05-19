@@ -6,8 +6,10 @@ use warnings;
 use EnsEMBL::Web::DBSQL::DBConnection;
 
 sub load_axa {
-  my $ad = EnsEMBL::Web::DBSQL::DBConnection->new('Homo_sapiens');
-  my $x = $ad->get_DBAdaptor('core', 'Homo_sapiens')->get_AssemblyExceptionFeatureAdaptor->fetch_all;
+  my $dbc = EnsEMBL::Web::DBSQL::DBConnection->new('Homo_sapiens');
+  my $ad  = $dbc->get_DBAdaptor('core', 'Homo_sapiens');
+  return unless $ad;
+  my $x = $ad->get_AssemblyExceptionFeatureAdaptor->fetch_all;
 }
 
 load_axa();
