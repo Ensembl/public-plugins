@@ -13,3 +13,5 @@ sub load_axa {
 }
 
 load_axa();
+
+1;
