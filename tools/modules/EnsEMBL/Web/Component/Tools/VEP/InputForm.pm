@@ -35,7 +35,7 @@ sub form_header_info {
   my $self = shift;
 
 #showing temporary message for grch37 vep (ensweb-2599), remove 2 lines below and uncomment last return
-  my $html = $SiteDefs::ENSEMBL_SUBTYPE && $SiteDefs::ENSEMBL_SUBTYPE eq 'GRCh37' ? $self->warning_panel("Important message", 'If you ran a VEP analysis against this site between 7/04/16 and 31/05/16 then your results may be incorrect.See our <a href="http://www.ensembl.info/contact-us/known-bugs/">known bugs</a> for more details.') : '';
+  my $html = $SiteDefs::ENSEMBL_SUBTYPE && $SiteDefs::ENSEMBL_SUBTYPE eq 'GRCh37' ? $self->warning_panel("Important message", 'If you ran a VEP analysis against this site between 7/04/16 and 31/05/16 then your results may have been incorrect.See our <a href="http://www.ensembl.info/contact-us/known-bugs/">known bugs</a> for more details.') : '';
   return $html.$self->species_specific_info($self->current_species, 'VEP', 'VEP');
 #  return $self->species_specific_info($self->current_species, 'VEP', 'VEP');
 }
