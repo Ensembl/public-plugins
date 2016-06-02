@@ -110,6 +110,26 @@ Ensembl.Panel.ModalContainer = Ensembl.Panel.ModalContainer.extend({
   }
 });
 
+Ensembl.Panel.Exporter = Ensembl.Panel.Exporter.extend({
+  init: function () {
+    var panel = this;
+    this.base.apply(this, arguments);
+
+    Ensembl.GA.registerConfigs([
+
+      // Which formats are users exporting? 
+      {
+        selector  : this.el.find('#export_configuration'),
+        event     : 'submit',
+        category  : 'Exporter',
+        action    : 'Export/Configure',
+        label     : function () { return $(this.currentTarget).find('select[name=output]').val(); },
+      }
+    ]);
+  }
+});
+
+
 Ensembl.Panel.ModalContent = Ensembl.Panel.ModalContent.extend({
   init: function () {
     var panel = this;
