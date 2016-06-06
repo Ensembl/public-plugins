@@ -151,7 +151,7 @@ Ensembl.Panel.ThousandGenomeForm = Ensembl.Panel.ToolsForm.extend({
     $.ajax({
       'type'    : "POST",      
       'url'     : panel.fileRestURL,
-      'data'    : JSON.stringify({'query':{'constant_score':{'filter':{'bool':{'must':[{'term':{'dataCollections':1}},{'term':{'dataType':'variants'}}]}}}}, 'size': '100'}), //need to remove the size once returning all is supported by the rest
+      'data'    : JSON.stringify({'query':{'constant_score':{'filter':{'bool':{'must':[{'term':{'dataCollections':collection}},{'term':{'dataType':'variants'}}]}}}}, 'size': '100'}), //need to remove the size once returning all is supported by the rest
       'beforeSend' : function() { panel.toggleSpinner(true); },
       'success' : function(data) {
         if(!data.hits || !data.hits.total) {
