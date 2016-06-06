@@ -37,6 +37,7 @@ sub update_conf {
                                                     'AssemblyConverter' => 'Hive',
                                                     'IDMapper'          => 'Hive',
                                                     'FileChameleon'     => 'Hive',
+                                                    'AlleleFrequency'   => 'Hive',
                                                   };                                                # Overriding tools plugin variable
   $SiteDefs::ENSEMBL_HIVE_HOSTS                 = [];                                               # For LOCAL, the machine that runs the beekeeper unless it's same as the web server
                                                                                                     # For LSF, list of hosts corresponding to the queues for all jobs plus the machine where
@@ -123,11 +124,14 @@ sub update_conf {
   $SiteDefs::ENSEMBL_IDM_ANALYSIS_CAPACITY      = 4;                                                # Number of jobs that can be run parallel in the queue (LSF or LOCAL)
 
   # File Chameleon configs
-  $SiteDefs::ENSEMBL_FC_RUN_LOCAL              = 1;                                                # Flag if on, will run ID mapper jobs on LOCAL meadow
   $SiteDefs::ENSEMBL_FC_QUEUE                  = 'toolsgeneral';                                   # LSF or LOCAL queue for ID mapper jobs
   $SiteDefs::ENSEMBL_FC_LSF_TIMEOUT            = undef;                                            # Max timelimit an ID mapper job is allowed to run on LSF
   $SiteDefs::ENSEMBL_FC_ANALYSIS_CAPACITY      = 4;                                                # Number of jobs that can be run parallel in the queue (LSF or LOCAL)
 
+  # Allele Frequency configs
+  $SiteDefs::ENSEMBL_AF_QUEUE                  = 'toolsgeneral';
+  $SiteDefs::ENSEMBL_AF_LSF_TIMEOUT            = '12:00';
+  $SiteDefs::ENSEMBL_AF_ANALYSIS_CAPACITY      = 4;
 }
 
 1;
