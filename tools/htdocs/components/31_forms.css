@@ -31,3 +31,5 @@ div.species-tag img               { display: block; float: left; margin: 2px 5px
 
 .plugin-highlight                 { border-left: 5px solid red; margin-left: -5px;}
 .plugin-subfield                  { padding-left: 50px; }
+
+select.tools_listbox              { border: 1px solid #cccccc; margin-top: -1px; max-height: 199px; overflow-x: hidden; overflow-y: auto; }
