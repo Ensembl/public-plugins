@@ -70,3 +70,6 @@ div.job-error-msg                 { background-color: #FFDDDD; padding: 8px 8px 
 p.job-icons                       { overflow: hidden; }
 
 a.edit-button                     { background-image: url("/i/16/rev/pencil.png"); background-position: 6px center; background-repeat: no-repeat; padding: 4px 4px 4px 29px !important; line-height: 16px; }
+
+/* ? icon next to label */
+span.tool_help_icon               { float: right; left: -20px; position: relative; }
