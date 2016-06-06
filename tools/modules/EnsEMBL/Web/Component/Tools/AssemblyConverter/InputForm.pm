@@ -70,7 +70,7 @@ sub get_cacheable_form_node {
   $input_fieldset->add_field({
     'type'          => 'string',
     'name'          => 'name',
-    'label'         => 'Name for this data (optional)'
+    'label'         => 'Name for this job (optional)'
   });
 
   $input_fieldset->add_field({
