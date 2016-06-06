@@ -416,7 +416,7 @@ Ensembl.Panel.MultiSpeciesSelector = Ensembl.Panel.MultiSpeciesSelector.extend({
 
     if (!this.configAppliedEventConfig) {
       this.configAppliedEventConfig = {
-        selectSpecies  : new Ensembl.GA.EventConfig({ category: 'SelectSpecies', nonInteraction: true }),
+        selectSpecies  : new Ensembl.GA.EventConfig({ category: 'SelectSpecies', nonInteraction: true })
       }
     }
     
