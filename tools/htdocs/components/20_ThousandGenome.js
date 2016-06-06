@@ -172,7 +172,7 @@ Ensembl.Panel.ThousandGenomeForm = Ensembl.Panel.ToolsForm.extend({
         panel.toggleSpinner(false);
         panel.elLk.form.find('span._span_url').html('<label class="invalid" style="display: inline;">File URL: There was an error in retrieving the file URL, please report the issue to <a href="mailto:helpdesk@ensembl.org">helpdesk@ensembl.org</a></label>');
         panel.elLk.form.find('input[name=generated_file_url]').val("");        
-      },
+      }
     });
   },  
   
