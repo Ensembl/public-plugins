@@ -123,7 +123,7 @@ Ensembl.Panel.Exporter = Ensembl.Panel.Exporter.extend({
         event     : 'submit',
         category  : 'Exporter',
         action    : 'Export/Configure',
-        label     : function () { return $(this.currentTarget).find('select[name=output]').val(); },
+        label     : function () { return $(this.currentTarget).find('select[name=output]').val(); }
       }
     ]);
   }
