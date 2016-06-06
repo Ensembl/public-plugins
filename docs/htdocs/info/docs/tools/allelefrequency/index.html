@@ -1,0 +1,271 @@
+<title>Allele Frequency</title>
+
+<h1>The Allele Frequency Calculator</h1>
+<p>
+VCF files of variant sites and genotypes, released by the 1000 Genomes Project, are usually annotated with allele frequencies (AF) at the global and continental super population levels. Many users also want the AF of certain variants for the specific populations of interest. The AF Calculator provides an interface to generate AF for variants in a given genomic interval for a given population. If no specific population is specified, the tool will calculate and output AF for every population in the input files.
+</p>
+
+<p>
+Input Files: 
+</p>
+
+<p>
+The AF Calculator takes a VCF file containing individual genotypes and a sample to population mapping file as input files. Both these files are released by the 1000 Genomes Project as part of their standard released on the project FTP site. The tool will also work with external files independent from the project, provided they are publicly visible. Local files can be used as input to the API Perl script of the Calculator.
+</p>
+
+<p>
+The VCF file format specifications can be found at <a href="http://samtools.github.io/hts-specs/" rel="external">the hts-specs website</a>.
+</p>
+
+<p>
+The VCF files must be indexed by tabix. All vcf files found on the 1000 Genomes FTP site are indexed using this method. The tabix software is available from <a href="http://sourceforge.net/projects/samtools/files/tabix/" rel="external">the SAMtools sourceforge project</a>.
+</p>
+
+<p>
+The sample to population mapping file is a tab-delimitated file; the first column is sample id; the second column is population. Additional columns will be ignored. An example can be found at the project ftp site in the phase1 integrated variant calls directory:
+</p>
+
+<p>
+<a href="ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase1/analysis_results/integrated_call_sets/integrated_call_samples.20101123.ALL.panel" rel="external">ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase1/analysis_results/integrated_call_sets/integrated_call_samples.20101123.ALL.panel</a>
+</p>
+
+<p>
+The calculator must be given a genomic interval to define which sites are to have their frequencies calculated. For the web-based tool we recommend an interval shorter than 5 Mbases to ensure the tool returns in a reasonable time frame.
+</p>
+
+<p>
+After you click the “Next” button, you may choose a population from a dropdown menu. If you choose “ALL” as population, the AF will be calculated for every population in the VCF file.
+</p>
+
+<p>
+Output:
+</p>
+
+<p>
+The output of the calculator can be previewed on the web page and an output file can be downloaded.
+</p>
+
+<p>
+Here are a few lines from an example of output file:
+</p>
+
+<p>
+<table>
+<tr>
+<th>POS</th>
+<th>ID</th>
+<th>REF</th>
+<th>ALT</th> 
+<th>TOTAL_CNT</th>
+<th>ALT_CNT</th>
+<th>FRQ</th>
+</tr>
+
+<tr>
+<td>22</td>
+<td>17004085</td>
+<td>rs182269758</td> 
+<td>A G</td>
+<td>170</td>
+<td>9</td>
+<td>0.05</td>
+</tr>
+
+<tr>
+<td>22</td>
+<td>17004141</td> 
+<td>rs192917218</td>
+<td>A G</td>
+<td>170</td>
+<td>2</td>
+<td>0.01</td>
+</tr>
+
+<tr>
+<td>22</td>
+<td>17004902</td> 
+<td>rs4010207</td> 
+<td>A G</td> 
+<td>170</td>
+<td>12</td>
+<td>0.07</td>
+</tr>
+
+<tr>
+<td>22</td>
+<td>17004113</td>
+<td>rs186630910</td>
+<td>A G</td>
+<td>170</td>
+<td>9</td>
+<td>0.05</td>
+</tr>
+
+<tr>
+<td>22</td>
+<td>17004057</td>
+<td>rs187809646</td>
+<td>A G</td>
+<td>170</td>
+<td>11</td>
+<td>0.06</td>
+</tr>
+
+<tr>
+<td>22</td>
+<td>17003679</td>
+<td>rs2890298</td> 
+<td>A G</td> 
+<td>170</td> 
+<td>12</td> 
+<td>0.07</td>
+</tr>
+
+<tr>
+<td>22</td> 
+<td>17004914</td> 
+<td>rs5992906</td> 
+<td>C T</td> 
+<td>170</td> 
+<td>66</td> 
+<td>0.39</td>
+</tr>
+
+<tr>
+<td>22</td> 
+<td>17004058</td> 
+<td>rs190038164</td> 
+<td>T C</td> 
+<td>170</td> 
+<td>4</td> 
+<td>0.02</td>
+</tr>
+
+<tr>
+<td>22</td> 
+<td>17004861</td> 
+<td>rs4010206</td> 
+<td>C T</td> 
+<td>170</td> 
+<td>0</td> 
+<td>0</td>
+</tr>
+
+<tr>
+<td>22</td> 
+<td>17004497</td> 
+<td>rs142081770</td>
+<td>G T</td> 
+<td>170</td> 
+<td>0</td> 
+<td>0</td>
+</tr>
+
+<tr>
+<td>22</td> 
+<td>17004071</td> 
+<td>rs9605433</td>
+<td>G A</td> 
+<td>170</td> 
+<td>17</td> 
+<td>0.1</td>
+</tr>
+
+<tr>
+<td>22</td> 
+<td>17004153</td> 
+<td>rs9680545</td> 
+<td>G A</td> 
+<td>170</td> 
+<td>16</td> 
+<td>0.09</td>
+</tr>
+
+<tr>
+<td>22</td> 
+<td>17004454</td> 
+<td>rs8135289</td>
+<td>T C</td> 
+<td>170</td> 
+<td>71</td> 
+<td>0.42</td>
+</tr>
+
+<tr>
+<td>22 </td>
+<td>17004348</td>
+<td>rs28417007</td>
+<td>T A</td>
+<td>170</td>
+<td>0</td> 
+<td>0</td>
+</tr>
+
+<tr>
+<td>22</td>
+<td>17003990</td>
+<td>rs146134165</td>
+<td>A C</td>
+<td>170</td>
+<td>28</td>
+<td>0.16</td>
+</tr>
+
+<tr>
+<td>22</td> 
+<td>17003695</td> 
+<td>rs56873984</td>
+<td>C T</td> 
+<td>170</td> 
+<td>17</td> 
+<td>0.1</td>
+</tr>
+
+<tr>
+<td>22</td> 
+<td>17004593</td> 
+<td>rs145217318</td> 
+<td>T A</td> 
+<td>170</td> 
+<td>0</td> 
+<td>0</td>
+</tr>
+
+<tr>
+<td>22</td> 
+<td>17003703</td> 
+<td>rs191454176</td>
+<td>G A</td>
+<td>170</td> 
+<td>0</td> 
+<td>0</td>
+</tr>
+
+<tr>
+<td>22</td> 
+<td>17003987</td> 
+<td>rs184186321</td> 
+<td>T A</td>
+<td>170</td>
+<td>11</td>
+<td>0.06</td>
+</tr>
+
+</table>
+</p>
+
+
+<p>
+The header is:
+</p>
+
+<p>
+CHR: Chromosome <br/>
+POS: Start position of the variant <br/>
+ID: Identification of the variant <br/>
+REF: Reference allele <br/>
+ALT: Alternative allele <br/>
+TOTAL_CNT: Total number of alleles in samples of the chosen population(s) <br/>
+ALT_CNT: Number of alternative alleles observed in samples of the chosen populations(s) <br/>
+FRQ: Ratio of ALT_CNT to TOTAL_CNT <br/>
+</p>
