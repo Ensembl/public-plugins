@@ -21,7 +21,7 @@ package EnsEMBL::Web::Document::Element::ToolButtons;
 use strict;
 use warnings;
 
-use previous qw(label_classes init _has_data);
+use previous qw(label_classes init);
 
 sub label_classes {
   my $classes = shift->PREV::label_classes(@_);
@@ -61,17 +61,6 @@ sub init {
     class   => 'modal_link',
     url     => $url
   });
-}
-
-sub _has_data {
-  my $self = shift;
-
-  return 1 if $self->PREV::_has_data;
-
-  my $hub  = $self->hub;
-  my $user = $hub->user;
-
-  return !!($user && (grep $user->get_records($_), qw(uploads urls)))
 }
 
 1;
