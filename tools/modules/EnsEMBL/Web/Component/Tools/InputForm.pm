@@ -113,7 +113,7 @@ sub new_tool_form {
   my ($self, $params) = @_;
 
   $params ||= {};
-  $params->{'class'} = '_tool_form bgcolour '.($params->{'class'} || '');
+  $params->{'class'} = '_tool_form bgcolour _check'.($params->{'class'} || '');
 
   my $form = $self->new_form({
     'action'          => $self->hub->url('Json', {'type' => 'Tools', 'action' => $self->object->tool_type, 'function' => 'form_submit'}),
