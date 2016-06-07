@@ -125,7 +125,7 @@ Ensembl.Panel.ModalContent = Ensembl.Panel.ModalContent.extend({
         category  : function (e) { return e.originalEvent ? 'Modal-LocalContext' : false; }, // returning false cancels the event logging
         action    : function () { return this.getURL(this.data.link[0]); },
         label     : function () { return this.data.link.html(); }
-      },
+      }
     ]);
 
     // Only when the form submit action is Text Alignments (exluding preview button actions in Text Alignmetns)
@@ -182,8 +182,8 @@ Ensembl.Panel.ModalContent = Ensembl.Panel.ModalContent.extend({
     ]);
   },
 
-  getParam: function(field, url='') {
-    url = url.replace(/;/g, '&');
+  getParam: function(field, url) {
+    url = (url || '').replace(/;/g, '&');
     var reg = new RegExp( '[?&]' + field + '=([^&#]*)', 'i' );
     var string = reg.exec(url);
     return string ? string[1] : null;
@@ -396,7 +396,7 @@ Ensembl.Panel.MultiSpeciesSelector = Ensembl.Panel.MultiSpeciesSelector.extend({
 
     if (!this.configAppliedEventConfig) {
       this.configAppliedEventConfig = {
-        selectSpecies  : new Ensembl.GA.EventConfig({ category: 'SelectSpecies', nonInteraction: true }),
+        selectSpecies  : new Ensembl.GA.EventConfig({ category: 'SelectSpecies', nonInteraction: true })
       };
     }
     
