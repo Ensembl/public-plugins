@@ -42,7 +42,7 @@ Ensembl.Panel.ThousandGenomeForm = Ensembl.Panel.ToolsForm.extend({
         return;
       }
       
-      if(((parseFloat(r[4].replace(/,/gi,"")) - parseFloat(r[2].replace(/,/gi,""))) + 1) >= 100000) {
+      if(((parseFloat(r[4].replace(/,/gi,"")) - parseFloat(r[2].replace(/,/gi,""))) + 1) >= 100000000) {
         panel.elLk.region.parent().find('label.invalid').remove(); //remove the warning its already there before appending
         panel.elLk.region.parent().append('<label class="invalid" for="raQLTnTw_9" style="display: inline;">Please note that with this size of genomic region, the job may take a long time (> 6h) to run</label>');
       } else {
@@ -55,19 +55,18 @@ Ensembl.Panel.ThousandGenomeForm = Ensembl.Panel.ToolsForm.extend({
       }
       
       //show sample population file url based on data collection selection (we have a specific file for human chrY)
-//      if(panel.elLk.speciesDropdown.find('input[name=species]:checked').val() === "Homo_sapiens") {      //commenting this out for now as we only have human as species
       if(panel.elLk.region.val().match(/y:/gi) && collection_value === 'phase3') {
         panel.updatePopulation("","_stt_phase3_male");
         panel.elLk.form.find('[class^="_sample_url_"]').hide();
         panel.elLk.form.find('span._sample_url_phase3_male').show();
       } else {
-        panel.elLk.form.find('div._stt_phase3_male').hide();
+        panel.elLk.form.find('span._stt_phase3_male').hide();
         if(collection_value != 'custom') {
-          panel.elLk.form.find('div._stt_'+collection_value).show();
+console.log(collection_value);
+          panel.elLk.form.find('span._stt_'+collection_value).show();
           panel.elLk.form.find('span._sample_url_phase3_male').hide();
         }
       }
-//      }
     });   
     
     panel.elLk.collection.change(function () {
@@ -155,22 +154,22 @@ Ensembl.Panel.ThousandGenomeForm = Ensembl.Panel.ToolsForm.extend({
       'beforeSend' : function() { panel.toggleSpinner(true); },
       'success' : function(data) {
         if(!data.hits || !data.hits.total) {
-          panel.elLk.form.find('span._span_url').html('<label class="invalid" style="display: inline;">File URL: There was an error in retrieving the file URL, please report the issue to <a href="mailto:helpdesk@ensembl.org" taget="_top">helpdesk@ensembl.org</a></label>');          
-          panel.elLk.form.find('input[name=generated_file_url]').val("");          
+          panel.elLk.form.find('span._span_url').html('<label class="invalid" style="display: inline;">Genotype file URL: There was an error in retrieving the file URL, please report the issue to <a href="mailto:helpdesk@ensembl.org" taget="_top">helpdesk@ensembl.org</a></label>');          
+          panel.elLk.form.find('input[name=generated_file_url]').val("");
         } else {
           $.each (data.hits.hits, function (index,el) {
             if(el._source.url && !el._source.url.match(/tbi$/gi) && el._source.url.match(new RegExp(region, 'i'))) {
               url = el._source.url;
             }
           });
-          panel.elLk.form.find('span._span_url').html("File URL: "+url);
+          panel.elLk.form.find('span._span_url').html("Genotype file URL: "+url);
           panel.elLk.form.find('input[name=generated_file_url]').val(url);
         }
       },
       'complete' :  function () { panel.toggleSpinner(false); },
       'error'     : function () {
         panel.toggleSpinner(false);
-        panel.elLk.form.find('span._span_url').html('<label class="invalid" style="display: inline;">File URL: There was an error in retrieving the file URL, please report the issue to <a href="mailto:helpdesk@ensembl.org">helpdesk@ensembl.org</a></label>');
+        panel.elLk.form.find('span._span_url').html('<label class="invalid" style="display: inline;">Genotype file URL: There was an error in retrieving the file URL, please report the issue to <a href="mailto:helpdesk@ensembl.org">helpdesk@ensembl.org</a></label>');
         panel.elLk.form.find('input[name=generated_file_url]').val("");        
       }
     });
@@ -207,14 +206,10 @@ Ensembl.Panel.ThousandGenomeForm = Ensembl.Panel.ToolsForm.extend({
         var population = this.elLk.form.find('input[name=region]').val().match(/y:/gi) && upload_type === "phase3" ? "phase3_male" : upload_type;
         this.elLk.form.find('select[name=collection_format] option').removeAttr("selected");
         this.elLk.form.find('select[name=collection_format]').find('option[value=' + upload_type + ']').prop('selected', true).end().selectToToggle('trigger');
-        this.elLk.form.find('span._span_url').html("File URL: " + jobsData[0].file_url);
+        this.elLk.form.find('span._span_url').html("Genotype file URL: " + jobsData[0].file_url);
         this.elLk.form.find('input[name=generated_file_url]').val(jobsData[0].file_url);
-        if(population === 'phase3_male') {
-          console.log(population);
-          //Because the phase3_male is not triggered by the collection_format toggle
-          this.elLk.form.find('[class^="_sample_url_"]').hide(); //just a sanity check to hide everything first so that nothing is shown by mistake        
-          this.elLk.form.find('span._sample_url_'+population).show();
-        }
+        this.elLk.form.find('[class^="_sample_url_"]').hide(); //just a sanity check to hide everything first so that nothing is shown by mistake
+        this.elLk.form.find('span._sample_url_'+population).show();
         this.updatePopulation("","_stt_"+population,jobsData[0].population);        
       }
     }
@@ -222,15 +217,12 @@ Ensembl.Panel.ThousandGenomeForm = Ensembl.Panel.ToolsForm.extend({
   
   reset: function() {
     this.base.apply(this, arguments);
-    //this.resetSpecies(this.defaultSpecies);
-  },
-  
-  resetSpecies: function (species) {
-  /*
-   * Resets the species dropdown to select the given species or simply refresh the dropdown
-   */
-    this.elLk.speciesDropdown.find('input[value=' + species + ']').first().click();
-    this.elLk.speciesDropdown.speciesDropdown({refresh: true});
+    
+    this.elLk.region.parent().find('label.invalid').remove();
+    this.elLk.form.find('div.population').hide();
+    this.elLk.form.find('select[name=collection_format]').find('option[value=phase3]').prop('selected', true).end().selectToToggle('trigger');
+	this.elLk.form.find('span._span_url').html('Genotype file URL: ').show();
+	this.elLk.form.find('input[name=generated_file_url]').val("");
   },
   
   updatePopulation: function(panel_url, panel_name, selected_value) {

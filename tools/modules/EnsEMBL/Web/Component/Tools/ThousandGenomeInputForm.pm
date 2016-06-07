@@ -25,6 +25,7 @@ use strict;
 use warnings;
 
 use EnsEMBL::Web::File::Utils::URL;
+use HTML::Entities  qw(encode_entities);
 
 use parent qw(EnsEMBL::Web::Component::Tools::InputForm);
 
@@ -53,9 +54,11 @@ sub common_form {
   my $form    = $self->new_tool_form;
   my $species = $object->species_list;
   my $file_format = $options->{'file_format'} if exists $options->{'file_format'};
-  
+  my $sample_tip  = encode_entities('<p>This file lists all the individuals and the population they come from.</p><p><a href="/info/docs/tools/allelefrequency/sample_panel.html"  class="popup">Find out more on what a panel file is.</a></p>');
+  my $vcf_tip     = encode_entities('<p>The genotype file should be VCF only.</p><p><a href="/info/website/upload/sample_files/Pulmonary_function.vcf.txt" class="popup"> Example VCF file </a></p>');
+
   my $collection_formats = [
-    { 'value' => 'custom',  'caption' => 'Provide file URL',  'example' => qq() },
+    { 'value' => 'custom',  'caption' => 'Provide file URLs',  'example' => qq() },
     { 'value' => 'phase1',  'caption' => 'Phase 1',  'example' => qq() },
     { 'value' => 'phase3',  'caption' => 'Phase 3',  'example' => qq(), 'selected' => 'true' },
   ];
@@ -110,7 +113,7 @@ sub common_form {
   }) if($file_format);
 
   $input_fieldset->add_field({
-    'label'         => 'Choose data collections or provide your own file URL',
+    'label'         => 'Choose data collections or provide your own file URLs',
     'elements'      => [{
       'type'          => 'dropdown',
       'name'          => 'collection_format',
@@ -118,12 +121,12 @@ sub common_form {
       'class'         => '_stt'      
     }, {
       'type'          => 'noedit',
-      'value'         => "<span class='_span_url _stt_phase3 _stt_phase1'>File URL:</span>",      
+      'value'         => "<span class='_span_url _stt_phase3 _stt_phase1'>Genotype File URL:</span>",
       'name'          => "generated_file_url",
       'is_html'       => 1
     }, {
       'type'          => 'noedit',
-      'value'         => "<span class='_sample_url_phase3 _stt_phase3'>Sample-population URL: $phase3_panel</span><span class='_sample_url_phase3 _stt_phase1'>Sample-population URL: $phase1_panel</span><span class='_sample_url_phase3_male _stt_phase3_male hidden'>Sample-population URL: $phase3_male_panel</span>",
+      'value'         => "<span class='_sample_url_phase3 _stt_phase3'>Sample-population file URL: $phase3_panel</span><span class='_sample_url_phase1 _stt_phase1'>Sample-population file URL: $phase1_panel</span><span class='_sample_url_phase3_male _stt_phase3_male hidden'>Sample-population file URL: $phase3_male_panel</span>",
       'no_input'      => 1,
       'is_html'       => 1
     }]
@@ -132,7 +135,7 @@ sub common_form {
   $input_fieldset->add_field({
     'type'          => 'url',
     'name'          => 'custom_file_url',
-    'label'         => 'Provide file URL (only <a href="/info/website/upload/sample_files/Pulmonary_function.vcf.txt" rel="external">VCF</a>)',
+    'label'         => qq{<span class="ht _ht"><span class="_ht_tip hidden">$vcf_tip</span>Provide genotype file URL</span>},
     'size'          => 30,
     'class'         => 'url',
     'field_class'   => 'hidden _stt_custom',
@@ -142,7 +145,7 @@ sub common_form {
   $input_fieldset->add_field({
     'type'          => 'url',
     'name'          => 'custom_sample_url',
-    'label'         => 'Sample-population mapping file URL <a href="/info/docs/tools/allelefrequency/sample_panel.html" class="popup"><span class="sprite tool_help_icon help_icon"></span></a>', #documentation is in docs/htdocs; move to help db if outreach want to control this
+    'label'         => qq{<span class="ht _ht"><span class="_ht_tip hidden">$sample_tip</span>Sample-population mapping file URL</span>}, #documentation is in docs/htdocs; move to help db if outreach want to control this
     'size'          => 30,
     'class'         => 'url',
     'notes'         => 'e.g: ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/integrated_call_samples_v3.20130502.ALL.panel',

@@ -28,7 +28,7 @@ use parent qw(
 
 sub form_header_info {
   my $self  = shift;
-  return $self->info_panel('info','This tool calculates population-wide allele frequency for sites within the chromosomal region defined from a VCF file and populations defined in a sample panel file. When no population is specified, allele frequencies will be calcuated for all populations in the VCF files, one at a time. The results are written to a file. The total allele count, alternate allele count for the population is also included in the output file.');
+  return $self->info_panel('info','This tool calculates population-wide allele frequency for sites within the chromosomal region defined from a VCF file and populations defined in a sample panel file. When no population is specified, allele frequencies will be calcuated for all populations in the VCF files. The results are written to a file. The total allele count, alternate allele count for the population is also included in the output file.');
 }
 
 sub get_cacheable_form_node {
