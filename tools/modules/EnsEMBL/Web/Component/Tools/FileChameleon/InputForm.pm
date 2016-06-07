@@ -21,7 +21,7 @@ package EnsEMBL::Web::Component::Tools::FileChameleon::InputForm;
 use strict;
 use warnings;
 
-use EnsEMBL::Web::FileChameleonConstants qw(INPUT_FORMATS STYLE_FORMATS);
+use EnsEMBL::Web::FileChameleonConstants qw(INPUT_FORMATS STYLE_FORMATS CONVERSION_FORMATS);
 
 use parent qw(
   EnsEMBL::Web::Component::Tools::FileChameleon
@@ -30,7 +30,7 @@ use parent qw(
 
 sub form_header_info {
   ## Abstract method implementation
-  return '';  
+  return '<p class="info">To use Ensembl data for your NGS analysis, download files formatted for your analysis tool with the File Chameleon.</p><p><b>Important Note:</b> File chameleon will not do file format conversion.</p>';
 }
 
 sub get_cacheable_form_node {
@@ -40,7 +40,8 @@ sub get_cacheable_form_node {
   my $form            = $self->new_tool_form;
   my $input_formats   = INPUT_FORMATS;
   my $style_formats   = STYLE_FORMATS;
-  my $input_fieldset  = $form->add_fieldset({'no_required_notes' => 1});
+  my $conversion      = CONVERSION_FORMATS
+  my $input_fieldset  = $form->add_fieldset({'legend' => '1. Choose Ensembl file',  'class' => 'tool_h2', 'no_required_notes' => 1});
 
   # Species dropdown list with stt classes to dynamically toggle other fields
   $input_fieldset->add_field({
@@ -57,9 +58,35 @@ sub get_cacheable_form_node {
       'type'          => 'noedit',
       'value'         => 'Assembly: '. join('', map { sprintf '<span class="_stt_%s" rel="%s">%s</span>', $_->{'value'}, $_->{'assembly'}, $_->{'assembly'} } @$species),
       'no_input'      => 1,
-      'is_html'       => 1
+      'is_html'       => 1      
     }]
   });
+  
+  $input_fieldset->add_field({
+    'type'          => 'dropdown',
+    'name'          => 'format',
+    'label'         => 'File format',
+    'values'        => $input_formats,
+    'class'         => 'format'
+  });
+  
+  $input_fieldset->add_field({
+    'type'          => 'dropdown',
+    'name'          => 'files_list',
+    'label'         => 'Files',
+    'values'        => [],
+    'size'          => '10',
+    'class'         => 'tools_listbox'
+  });  
+  
+  $input_fieldset->add_field({
+    'type'          => 'noedit',
+    'value'         => 'http://',
+    'label'         => 'File URL',
+    'no_input'      => 1,
+    'is_html'       => 1,
+    'class'         => '_file_url'
+  });  
 
   $input_fieldset->add_field({
     'type'          => 'string',
@@ -67,23 +94,15 @@ sub get_cacheable_form_node {
     'label'         => 'Name for this job (optional)'
   });
 
-  $input_fieldset->add_field({
-    'type'          => 'url',
-    'name'          => 'url',
-    'label'         => 'Provide file URL',
-    'size'          => 30,
-    'class'         => 'url'
-  });
-  
-  $input_fieldset->add_field({
+  my $format_fieldset  = $form->add_fieldset({'legend' => '2. Reformatting',  'class' => 'tool_h2', 'no_required_notes' => 1});
+  $format_fieldset->add_field({
     'type'          => 'dropdown',
-    'name'          => 'format',
-    'label'         => 'Input file format',
-    'values'        => $input_formats,
-    'class'         => 'format'
-  });
-    
-  my $filter_fieldset  = $form->add_fieldset({'legend' => 'Filtering options',  'class' => 'tool_h2', 'no_required_notes' => 1});
+    'name'          => 'conversion_format',
+    'label'         => 'Format suitable for:',
+    'values'        => $conversion,
+  });  
+  
+  my $filter_fieldset  = $form->add_fieldset();
   $filter_fieldset->add_field({
     'type'          => 'checklist',
     'name'          => 'chr_filter',
@@ -112,7 +131,12 @@ sub get_cacheable_form_node {
     'name'          => 'remap_patch',
     'label'         => 'Remap patches',
     'values'        => [ { 'value' => '1' } ],
-  });  
+  }); 
+
+  $self->togglable_fieldsets($form, {
+    'title' => "3. Customise",
+    'desc'  => "Customise options for reformatting"
+  }, $filter_fieldset);  
   
   
   $self->add_buttons_fieldset($form, {'reset' => 'Clear', 'cancel' => 'Close form'});

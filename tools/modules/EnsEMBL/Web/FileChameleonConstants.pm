@@ -22,12 +22,24 @@ use strict;
 use warnings;
 
 use Exporter qw(import);
-our @EXPORT_OK = qw(INPUT_FORMATS STYLE_FORMATS);
+our @EXPORT_OK = qw(INPUT_FORMATS STYLE_FORMATS CONVERSION_FORMATS);
 
 sub INPUT_FORMATS {
   return [
+    { 'value' => 'null',  'caption' => 'choose file format',  'example' => qq() },
     { 'value' => 'GFF3',  'caption' => 'GFF3',  'example' => qq() },
     { 'value' => 'GTF',   'caption' => 'GTF',  'example' => qq() },
+  ];
+}
+
+sub CONVERSION_FORMATS {
+  return [
+    { 'value' => 'bowtie',  'caption' => 'BOWTIE',  'example' => qq() },
+    { 'value' => 'bwa',   'caption' => 'BWA',  'example' => qq() },
+    { 'value' => 'bbmap',   'caption' => 'BBMap',  'example' => qq() },
+    { 'value' => 'bwa',   'caption' => 'BWA',  'example' => qq() },
+    { 'value' => 'start',   'caption' => 'STAR',  'example' => qq() },
+    { 'value' => 'custom',   'caption' => 'Customise options',  'example' => qq() },
   ];
 }
 

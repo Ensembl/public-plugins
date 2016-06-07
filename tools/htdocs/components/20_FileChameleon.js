@@ -28,6 +28,8 @@ Ensembl.Panel.FileChameleonForm = Ensembl.Panel.ToolsForm.extend({
     this.elLk.remap_patch     = this.elLk.form.find('[name=remap_patch]')
 
     this.resetSpecies(this.defaultSpecies);
+    this.populateFileListing();
+    this.displayFileURL();
     this.editExisting();
     
     // Add validate event to the form which gets triggered before submitting it
@@ -50,7 +52,7 @@ Ensembl.Panel.FileChameleonForm = Ensembl.Panel.ToolsForm.extend({
     });
     
   },
-
+  
   populateForm: function(jobsData) {
     if (jobsData && jobsData.length) {
       this.base(jobsData);
@@ -74,6 +76,44 @@ Ensembl.Panel.FileChameleonForm = Ensembl.Panel.ToolsForm.extend({
       }      
     }
   },
+  
+  populateFileListing: function() {
+    this.base.apply(this, arguments);
+    var panel = this;
+    
+    this.elLk.files_list = this.elLk.form.find('[name=files_list]');
+    var species          = "ailuropoda_melanoleuca";//this.elLk.speciesDropdown.val();
+    var format           =  "gff3";//this.elLk.formatDropdown.val();    
+    
+    $.ajax({
+      url: "http://ftp.ensembl.org/pub/current_"+format+"/"+species+"/",
+      dataType: "html",
+      beforeSend: function () {
+        //panel.toggleSpinner(true, '', Math.random().toString().replace(/0\./, ''));
+      },
+      success: function(data){        
+         var a_tag = data.replace(/<img(.*?)>/g); //removing img tag so that it doesnt complain about images not found
+         
+         $(a_tag).find("a:contains(."+format+")").each(function(){        
+            var file_name = $(this).attr("href");            
+            panel.elLk.files_list.append($("<option />").val(file_name).text(file_name));
+
+         });
+         panel.toggleSpinner(false, '', '');
+      },
+      error: function (jqXHR, status, err) {
+        panel.elLk.files_list.append($("<option />").val("error").text("Sorry the FTP site is down, please try later"));
+        panel.elLk.files_list.attr("disabled","disabled")
+        panel.toggleSpinner(false, '', '');
+      },
+    });    
+  },
+  
+  displayFileURL: function() {
+    this.base.apply(this, arguments);
+    var panel = this;
+    
+  },  
   
   reset: function() {
     this.base.apply(this, arguments);
