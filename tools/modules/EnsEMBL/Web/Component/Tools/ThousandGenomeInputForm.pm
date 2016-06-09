@@ -135,7 +135,7 @@ sub common_form {
   $input_fieldset->add_field({
     'type'          => 'url',
     'name'          => 'custom_file_url',
-    'label'         => qq{<span class="ht _ht"><span class="_ht_tip hidden">$vcf_tip</span>Provide genotype file URL</span>},
+    'label'         => qq{<span class="ht _ht"><span class="_ht_tip hidden">$vcf_tip</span>Genotype file URL</span>},
     'size'          => 30,
     'class'         => 'url',
     'field_class'   => 'hidden _stt_custom',
