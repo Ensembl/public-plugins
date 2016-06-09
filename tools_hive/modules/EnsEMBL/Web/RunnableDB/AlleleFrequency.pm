@@ -50,19 +50,25 @@ sub fetch_input {
   (my $shortname  = $1) =~ s/\.gz//g;
   
   # splitting the file based on the region using tabix
-  my $index_resp = EnsEMBL::Web::SystemCommand->new($self, "cd $work_dir;/localsw/bin/htslib-1.3/tabix -f -h -p vcf $input_file $region > $shortname;")->execute();    
+  my $index_resp = EnsEMBL::Web::SystemCommand->new($self, "cd $work_dir;/localsw/bin/htslib-1.3/tabix -f -h -p vcf $input_file $region > $shortname;")->execute();
   if ($index_resp->error_code) {
     my $exitcode = $? >>8;
     throw exception("Tabix error","Allele Frequency Calculation ERROR, TABIX: $exitcode") if $exitcode;
   }
   
   #gzipping the splitted files and deleting uncompress file to free up space after gzipping
-  my $gzip_cmd = EnsEMBL::Web::SystemCommand->new($self, "/localsw/bin/bgzip -c $work_dir/$shortname > $work_dir/$shortname.gz; rm $work_dir/$shortname")->execute();  
+  my $gzip_cmd = EnsEMBL::Web::SystemCommand->new($self, "/localsw/bin/bgzip -c $work_dir/$shortname > $work_dir/$shortname.gz; rm $work_dir/$shortname")->execute();
   if(!$gzip_cmd->error_code) {
     $trim_file  = $work_dir."/".$shortname.".gz";
     throw exception('HiveException', "Gzipping error: ".$gzip_cmd->error_code) unless -s $trim_file;
   }
   
+  #creating new index file based on splitted file but before removing original index file
+  my $index_resp = EnsEMBL::Web::SystemCommand->new($self, "rm $work_dir/$shortname.gz.tbi;cd $work_dir;/localsw/bin/htslib-1.3/tabix -f -p vcf $shortname.gz")->execute();
+  if($index_resp->error_code) {
+    throw exception('HiveException', "Index file error: ".$index_resp->error_code) unless -s $shortname.".gz.tbi";
+  }
+
   #downloading .tbi (index) file to work dir
   my $args        = {'no_exception' => 1 };
   $args->{proxy}  = $proxy ? $proxy : "";  
@@ -71,7 +77,7 @@ sub fetch_input {
 
   $self->param('__input_file', $input_file);
   $self->param('__trim_file', $trim_file);
-  $self->param('__region', $region =~ s/^.*://);
+  $self->param('__region', $region);
   $self->param('__population', $population);
   $self->param('__sample_panel', $sample_panel);
   $self->param('__output_file', sprintf('%s/%s', $work_dir, $output_file));
