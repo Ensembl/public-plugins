@@ -28,7 +28,7 @@ Ensembl.Panel.ThousandGenomeForm = Ensembl.Panel.ToolsForm.extend({
     this.elLk.file_url        = this.elLk.form.find('input[name=custom_file_url]');
     this.readSampleFile       = this.params['read_sample_file'];
     this.fileRestURL          = this.params['genome_file_rest_url'];
-    
+
     //this.resetSpecies(this.defaultSpecies);
     this.editExisting();
     
@@ -41,7 +41,7 @@ Ensembl.Panel.ThousandGenomeForm = Ensembl.Panel.ToolsForm.extend({
         $(panel.elLk.form).data('valid', false);
         return;
       }
-      
+
       if(((parseFloat(r[4].replace(/,/gi,"")) - parseFloat(r[2].replace(/,/gi,""))) + 1) >= 100000000) {
         panel.elLk.region.parent().find('label.invalid').remove(); //remove the warning its already there before appending
         panel.elLk.region.parent().append('<label class="invalid" for="raQLTnTw_9" style="display: inline;">Please note that with this size of genomic region, the job may take a long time (> 6h) to run</label>');
@@ -188,7 +188,7 @@ console.log(collection_value);
       if(jobsData[0].region) {
         var r = jobsData[0].region.match(/^([^:]+):\s?([0-9\,]+)(-|_|\.\.)([0-9\,]+)$/);
         
-        if(((parseFloat(r[4].replace(/,/gi,"")) - parseFloat(r[2].replace(/,/gi,""))) + 1) >= 100000) {
+        if(((parseFloat(r[4].replace(/,/gi,"")) - parseFloat(r[2].replace(/,/gi,""))) + 1) >= 100000000) {
           this.elLk.form.find('input[name=region]').parent().find('label.invalid').remove();
           this.elLk.form.find('input[name=region]').parent().append('<label class="invalid" style="display: inline;">Please note that with this size of genomic region, the job may take a long time (> 6h) to run</label>');
         } else {
