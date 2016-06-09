@@ -130,7 +130,7 @@ sub update_conf {
 
   # Allele Frequency configs
   $SiteDefs::ENSEMBL_AF_QUEUE                  = 'toolsgeneral';
-  $SiteDefs::ENSEMBL_AF_LSF_TIMEOUT            = '12:00';
+  $SiteDefs::ENSEMBL_AF_LSF_TIMEOUT            = '14:00';
   $SiteDefs::ENSEMBL_AF_ANALYSIS_CAPACITY      = 4;
 }
 
