@@ -140,7 +140,6 @@ console.log(collection_value);
   },
   
   getFileURL: function(region, collection) {
-    this.base.apply(this, arguments);
     var panel = this;     
     var url;
 
@@ -201,7 +200,7 @@ console.log(collection_value);
         this.elLk.form.find('select[name=collection_format]').find('option[value=custom]').prop('selected', true).end().selectToToggle('trigger');
         this.elLk.form.find('input[name=custom_file_url]').val(jobsData[0].file_url);
         this.elLk.form.find('input[name=custom_sample_url]').val(jobsData[0].sample_panel);
-        this.updatePopulation(jobsData[0].sample_panel,"custom_population", jobsData[0].population); //show population listbox      
+        this.updatePopulation(jobsData[0].sample_panel,"custom_population", jobsData[0].population); //show population listbox
       } else {
         var population = this.elLk.form.find('input[name=region]').val().match(/y:/gi) && upload_type === "phase3" ? "phase3_male" : upload_type;
         this.elLk.form.find('select[name=collection_format] option').removeAttr("selected");
@@ -221,13 +220,12 @@ console.log(collection_value);
     this.elLk.region.parent().find('label.invalid').remove();
     this.elLk.form.find('div.population').hide();
     this.elLk.form.find('select[name=collection_format]').find('option[value=phase3]').prop('selected', true).end().selectToToggle('trigger');
-	this.elLk.form.find('span._span_url').html('Genotype file URL: ').show();
-	this.elLk.form.find('input[name=generated_file_url]').val("");
+    this.elLk.form.find('span._span_url').html('Genotype file URL: ').show();
+    this.elLk.form.find('input[name=generated_file_url]').val("");
   },
   
   updatePopulation: function(panel_url, panel_name, selected_value) {
   //create population listbox from panel file url or show hidden population listbox
-    this.base.apply(this, arguments);
     var panel = this;
     
     if(!panel_url) {
