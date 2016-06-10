@@ -32,7 +32,7 @@ Ensembl.Panel.ThousandGenomeForm = Ensembl.Panel.ToolsForm.extend({
     //this.resetSpecies(this.defaultSpecies);
     this.editExisting();
     
-    panel.elLk.region.change(function () {
+    panel.elLk.region.on('change', function () {
       var collection_value = panel.elLk.collection.val();      
       var r = panel.elLk.region.val().match(/^([^:]+):\s?([0-9\,]+)(-|_|\.\.)([0-9\,]+)$/);
 
@@ -62,14 +62,13 @@ Ensembl.Panel.ThousandGenomeForm = Ensembl.Panel.ToolsForm.extend({
       } else {
         panel.elLk.form.find('span._stt_phase3_male').hide();
         if(collection_value != 'custom') {
-console.log(collection_value);
           panel.elLk.form.find('span._stt_'+collection_value).show();
           panel.elLk.form.find('span._sample_url_phase3_male').hide();
         }
       }
     });   
     
-    panel.elLk.collection.change(function () {
+    panel.elLk.collection.on('change', function () {
       var r = panel.elLk.region.val().match(/^([^:]+):\s?([0-9\,]+)(-|_|\.\.)([0-9\,]+)$/);      
       if(panel.elLk.collection.val() != 'custom') {
         panel.elLk.form.find('div.custom_population').hide();
@@ -95,7 +94,7 @@ console.log(collection_value);
 //      }      
     });
     
-    panel.elLk.sample_url.change(function () {
+    panel.elLk.sample_url.on('change', function () {
       var el = $(this);
       //validating for empty value before updating population url
       if (!panel.elLk.sample_url.val()) {
