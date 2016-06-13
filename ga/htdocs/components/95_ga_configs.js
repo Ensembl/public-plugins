@@ -225,8 +225,11 @@ Ensembl.GA.eventConfigs.push(
     event           : 'click',
     data            : { panelId: function () { return $(this.currentTarget).closest('.js_panel').prop('id'); } },
     category        : 'ImageToolbar',
-    action          : function () { return this.currentTarget.className.match(/mr-reset/) ? 'MarkingOnOff' : this.getURL().replace(this.data.panelId, '').replace(/\/$/, ''); },
-    label           : function () { return this.data.panelId; }
+    action          : function () { 
+                        return this.currentTarget.className.match(/mr-reset/) ? this.data.panelId + '-MarkingOnOff' : this.getURL().replace(this.data.panelId, '').replace(/\/$/, ''); },
+    label           : function () {
+                        return this.getURL(window.location.href);
+                      }
   }, {
     id              : 'ImageToolbar-ResizeMenu',
     url             : /.+/,
@@ -253,6 +256,118 @@ Ensembl.GA.eventConfigs.push(
     data            : { url: function () { return this.getURL(); } },
     action          : function () { return this.data.url.replace(/\/[^\/]+$/, ''); },
     label           : function () { return this.data.url.split('/').pop(); }
+  },
+
+  // Track menu clicks
+  {
+    id              : 'TrackMenu-Open',
+    url             : /.+/,
+    selector        : '._label_layer',
+    wrapper         : '.ajax.initial_panel',
+    event           : 'click',
+    category        : 'TrackMenu-Open',
+    action          : function () {
+                        var action;
+                        var panel = $(this.currentTarget).closest('.js_panel').attr('id');
+
+                        $($(this.currentTarget).children('.hover_label'))
+                          .attr('class')
+                          .split(/\s+/)
+                          .map(function (className) {
+                            var match = className.match(/^_track_(.*)/)
+                            if (match) {
+                              action = match[1];
+                            }
+                          })
+                        return $(this.currentTarget).children('.hover_label').css('display') === 'block' ? panel + '-' + action : '';
+                      },
+    label           : function () {
+                        return this.getURL(window.location.href);
+                      }
+  },
+
+  // Track menu highlight icon click
+  {
+    id              : 'TrackMenu-HighlightIcon-Click',
+    url             : /.+/,
+    selector        : '._label_layer .hover_label .hl-buttons a.hl-icon-highlight',
+    wrapper         : '.ajax.initial_panel',
+    event           : 'mousedown',
+    category        : 'TrackMenu-HighlightIcon-Click',
+    action          : function () {
+                        var panel = $(this.currentTarget).closest('.js_panel').attr('id');
+                        return panel + '-' + $(this.currentTarget).data('highlight-track');
+                      },
+    label           : function () {
+                        return this.getURL(window.location.href);
+                        
+                      }
+  },
+
+  // Track menu close button
+  {
+    id              : 'TrackMenu-Close',
+    url             : /.+/,
+    selector        : '._label_layer .hover_label .close',
+    wrapper         : '.ajax.initial_panel',
+    event           : 'mousedown',
+    category        : 'TrackMenu-Close',
+    action          : function () {
+                        var panel = $(this.currentTarget).closest('.js_panel').attr('id');
+                        return panel + '-' + $(this.currentTarget).siblings('.hl-buttons').find('.hl-icon-highlight').data('highlight-track');
+                      },
+    label           : function () {
+                        return this.getURL(window.location.href);
+                      }
+  },
+
+  // Track marked region selector box close button click
+  {
+    id              : 'MarkedBox',
+    url             : /.+/,
+    selector        : '.mrselector .mrselector-close',
+    wrapper         : '.ajax.initial_panel',
+    event           : 'mouseup', // as clicks and mouse downs are being prevented from top level
+    category        : 'MarkedBox',
+    action          : function () {
+                        var panel = $(this.currentTarget).closest('.js_panel').attr('id');
+                        return panel + '-MarkingOnOff';
+                      },
+    label           : function () {
+                        return this.getURL(window.location.href);
+                      }
+  },
+
+  // Track transcript table links
+  {
+    id              : 'TranscriptTableLink',
+    url             : /.+/,
+    selector        : '.transcripts_table a',
+    wrapper         : '.panel.js_panel',
+    event           : 'click',
+    category        : 'TranscriptTableLink',
+    action          : function () {
+                        return this.getURL();
+                      },
+    label           : function () {
+                        return this.getURL(window.location.href);
+                      }
+  },
+
+  // Track transcript table links
+  {
+    id              : 'ExonTableLink',
+    url             : /.+/,
+    selector        : '#ExonsSpreadsheet table a',
+    wrapper         : '.ajax.initial_panel',
+    event           : 'click',
+    category        : 'ExonTableLink',
+    action          : function () {
+                        return this.getURL();
+                      },
+    label           : function () {
+                        return this.getURL(window.location.href);
+                      }
   },
 
   // Component tools bottons
@@ -350,11 +465,21 @@ Ensembl.GA.eventConfigs.push(
   {
     id              : 'ZMenuLink',
     url             : /.+/,
-    event           : 'click',
-    selector        : '>div.zmenu_holder a',
+    event           : 'mouseup',
+    selector        : 'div.zmenu_holder .info_popup a',
     wrapper         : 'body',
     category        : 'ZMenuLink',
-    action          : function () { return this.currentTarget.className.match(/_location_mark|_action_mark/) ? 'MarkingOnOff' : this.getURL(); },
+    action          : function () {
+                        if(this.currentTarget.className.match(/_location_mark|_action_mark/)) {
+                          return 'MarkingOnOff';
+                        }
+                        else if(this.currentTarget.className.match(/_location_change/)) {
+                          return 'JumpToRegion';
+                        }
+                        else {
+                          return this.getURL();
+                        }
+                      },
     label           : function () { return this.getURL(Ensembl.PanelManager.panels[$(this.currentTarget).closest('.zmenu_holder').prop('id')].href); }
   },
 
