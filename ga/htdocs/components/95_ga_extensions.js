@@ -202,8 +202,8 @@ Ensembl.Panel.ModalContent = Ensembl.Panel.ModalContent.extend({
     ]);
   },
 
-  getParam: function(field, url='') {
-    url = url.replace(/;/g, '&');
+  getParam: function(field, url) {
+    url = (url || '').replace(/;/g, '&');
     var reg = new RegExp( '[?&]' + field + '=([^&#]*)', 'i' );
     var string = reg.exec(url);
     return string ? string[1] : null;
@@ -417,9 +417,9 @@ Ensembl.Panel.MultiSpeciesSelector = Ensembl.Panel.MultiSpeciesSelector.extend({
     if (!this.configAppliedEventConfig) {
       this.configAppliedEventConfig = {
         selectSpecies  : new Ensembl.GA.EventConfig({ category: 'SelectSpecies', nonInteraction: true })
-      }
+      };
     }
-    
+
     if(this.selection.join(',') !== this.initialSelection) {
       $(this.selection).each(function (i, species) {
         Ensembl.GA.sendEvent(panel.configAppliedEventConfig.selectSpecies, { action: panel.panelType, label:  species});
