@@ -35,15 +35,15 @@ sub prepare_to_dispatch {
   my $job_data        = $rose_object->job_data;
   my $format          = $job_data->{format};
   my $chr_filter      = $job_data->{chr_filter};
-  my $convert_to      = $job_data->{convert_to};
   my $add_transcript  = $job_data->{add_transcript};
   my $remap_patch     = $job_data->{remap_patch};
+  my $long_genes      = $job_data->{long_genes};  
 
   my $source;
   my  $include  = [];
 
   if($chr_filter) {
-    $source   = "chromosome|".lc($job_data->{species})."_".$convert_to;
+    $source   = "chromosome|".lc($job_data->{species})."_".$chr_filter;
     push($include,"file:///localsw/FileChameleon/examples/chromosome.conf");
   }
   
@@ -62,7 +62,7 @@ sub prepare_to_dispatch {
   return {
     'work_dir'    => $rose_object->job_dir,
     'output_file' => "FileChameleon_output.$format", #need to change the output file name to be the same as inputfile name with _converted
-    'input_file'  => $job_data->{'url'},
+    'input_file'  => $job_data->{'file_url'},
     'format'      => $format,
     'config'      => "/configuration.conf",
     'code_root'   => $self->hub->species_defs->ENSEMBL_HIVE_HOSTS_CODE_LOCATION

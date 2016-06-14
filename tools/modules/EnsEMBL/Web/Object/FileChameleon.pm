@@ -55,7 +55,8 @@ sub species_list {
       push @species, {
         'value'       => $_,
         'caption'     => $sd->species_label($_, 1),
-        'assembly'    => $sd->get_config($_, 'ASSEMBLY_NAME')
+        'assembly'    => $sd->get_config($_, 'ASSEMBLY_NAME'),
+        'chr_filter'  => $_ eq 'Homo_sapiens' ? 1 : $sd->get_config($_, 'FILE_CHAMELEON_CHR_FILTER'),
       };
     }
 
@@ -85,8 +86,7 @@ sub handle_download {
   $r->headers_out->add('Content-Length'       => length $content);
   $r->headers_out->add('Content-Disposition'  => sprintf 'attachment; filename=%s', $filename);
 
-  print $content;
-  
+  print $content; 
 
 }
 

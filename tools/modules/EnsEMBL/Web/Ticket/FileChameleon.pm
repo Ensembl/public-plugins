@@ -35,7 +35,7 @@ sub init_from_user_input {
   my $species   = $hub->param('species');
 
     # if no data found in file/url
-  throw exception('InputError', 'No input data is present') unless $hub->param('url');
+  throw exception('InputError', 'No input data is present') unless $hub->param('files_list');
   
   $self->add_job(EnsEMBL::Web::Job::FileChameleon->new($self, {
     'job_desc'    => $hub->param('name') ? $hub->param('name') : "data from URL",
@@ -43,12 +43,13 @@ sub init_from_user_input {
     'assembly'    => $hub->species_defs->get_config($species, 'ASSEMBLY_VERSION'),
     'job_data'    => {
       'species'         => $species,
-      'url'             => $hub->param('url'),  
-      'format'          => $hub->param('format'),
-      'chr_filter'      => $hub->param('chr_filter') ? 1 : '',
-      'convert_to'      => $hub->param('convert_to') ? $hub->param('convert_to') : '',
+      'file_url'        => $hub->param('files_list'),  
+      'format'          => $hub->param('format'),      
+      'chr_filter'      => $hub->param('chr_filter') != 'null' ? $hub->param('chr_filter') : '',
       'add_transcript'  => $hub->param('add_transcript') ? 1 : '',
       'remap_patch'     => $hub->param('remap_patch') ? 1 : '',
+      'long_genes'      => $hub->param('long_genes') != 'null' ? $hub->param('long_genes') : '',
+      'just_download'   => !$hub->param('remap_patch') && $hub->param('long_genes') eq 'null' && !$hub->param('add_transcript') && !$hub->param('chr_filter') eq 'null' ? 1 : '',
     }
   }));
 }

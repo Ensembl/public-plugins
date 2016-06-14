@@ -30,7 +30,7 @@ use parent qw(
 
 sub form_header_info {
   ## Abstract method implementation
-  return '<p class="info">To use Ensembl data for your NGS analysis, download files formatted for your analysis tool with the File Chameleon.</p><p><b>Important Note:</b> File chameleon will not do file format conversion.</p>';
+  return '<p class="info">To use Ensembl data for your genomic analysis, download files customised for your tool with file chameleon. If you would like us to support additional customisations please contact us at <a href="mailto:helpdesk@ensembl.org?Subject=File chameleon feedback" target="_top">helpdesk@ensembl.org</a></p><p><b>Important Note:</b> File chameleon will not do file format conversion.</p>';
 }
 
 sub get_cacheable_form_node {
@@ -41,8 +41,16 @@ sub get_cacheable_form_node {
   my $input_formats   = INPUT_FORMATS;
   my $style_formats   = STYLE_FORMATS;
   my $conversion      = CONVERSION_FORMATS
-  my $input_fieldset  = $form->add_fieldset({'legend' => '1. Choose Ensembl file',  'class' => 'tool_h2', 'no_required_notes' => 1});
+  my $input_fieldset  = $form->add_fieldset();
+  my $url             = $self->hub->url({'function' => ''});
+  my $release         = $self->hub->species_defs->ENSEMBL_VERSION;
 
+  $input_fieldset->add_field({
+    'type'          => 'string',
+    'name'          => 'name',
+    'label'         => 'Name for this job (optional)'
+  });
+  
   # Species dropdown list with stt classes to dynamically toggle other fields
   $input_fieldset->add_field({
     'label'         => 'Species',
@@ -52,93 +60,93 @@ sub get_cacheable_form_node {
       'values'        => [ map {
         'value'         => $_->{'value'},
         'caption'       => $_->{'caption'},
-        'class'         => '_stt'
+        'class'         => [
+          '_stt', '_sttmulti',
+          $_->{'chr_filter'}  ? '_stt__chr_filter'   : (),
+        ]
       }, @$species ]
     }, {
       'type'          => 'noedit',
       'value'         => 'Assembly: '. join('', map { sprintf '<span class="_stt_%s" rel="%s">%s</span>', $_->{'value'}, $_->{'assembly'}, $_->{'assembly'} } @$species),
       'no_input'      => 1,
-      'is_html'       => 1      
+      'is_html'       => 1
     }]
   });
   
-  $input_fieldset->add_field({
-    'type'          => 'dropdown',
+  
+  my $format_fieldset  = $form->add_fieldset();
+  $format_fieldset->add_field({
+    'type'          => 'radiolist',
     'name'          => 'format',
     'label'         => 'File format',
     'values'        => $input_formats,
-    'class'         => 'format'
+    'class'         => 'format _stt'
   });
   
-  $input_fieldset->add_field({
-    'type'          => 'dropdown',
-    'name'          => 'files_list',
-    'label'         => 'Files',
-    'values'        => [],
-    'size'          => '10',
-    'class'         => 'tools_listbox'
-  });  
-  
-  $input_fieldset->add_field({
-    'type'          => 'noedit',
-    'value'         => 'http://',
-    'label'         => 'File URL',
-    'no_input'      => 1,
-    'is_html'       => 1,
-    'class'         => '_file_url'
-  });  
-
-  $input_fieldset->add_field({
-    'type'          => 'string',
-    'name'          => 'name',
-    'label'         => 'Name for this job (optional)'
-  });
-
-  my $format_fieldset  = $form->add_fieldset({'legend' => '2. Reformatting',  'class' => 'tool_h2', 'no_required_notes' => 1});
   $format_fieldset->add_field({
-    'type'          => 'dropdown',
-    'name'          => 'conversion_format',
-    'label'         => 'Format suitable for:',
-    'values'        => $conversion,
-  });  
-  
-  my $filter_fieldset  = $form->add_fieldset();
-  $filter_fieldset->add_field({
-    'type'          => 'checklist',
-    'name'          => 'chr_filter',
-    'label'         => 'Filter chromosome',
-    'values'        => [ { 'value' => '1' } ],
-    'class'         => '_stt',    
+    'label'         => 'File',
+    'elements'      => [{
+      'type'          => 'noedit',      
+      'value'         => qq{<select class="fselect hidden" style="width: auto" name="files_list"><option value='null'></option></select><span class="_file_text"></span><span class="file_link hidden left-margin small"><a href=$url>Select a different file</a></span>},
+      'no_input'      => 1,
+      'is_html'       => 1,      
+    }]    
   });
   
+  $format_fieldset->add_field({
+    'type'          => 'string',
+    'name'          => 'release',
+    'value'         => $release,
+    'field_class'   => 'hidden'
+  });  
+  
+  $self->togglable_fieldsets($form, {
+    'title' => "File Listing",
+    'desc'  => "list the file formats and the files",
+    'open'  => 1,
+  }, $format_fieldset);
+  
+  my $filter_fieldset  = $form->add_fieldset({"notes" => "Testing..."});
   $filter_fieldset->add_field({
     'type'          => 'dropdown',
-    'name'          => 'convert_to',
-    'label'         => 'Convert chromosome format from',
-    'values'        => $style_formats,
-    'field_class'   => 'hidden _stt_1'
+    'name'          => 'chr_filter',
+    'label'         => '<span class="ht _ht"><span class="_ht_tip hidden">Select between Ensembl and UCSC naming styles</span>Chromosome naming style</span>',
+    'values'        => $style_formats, 
+    'field_class'   => '_stt_fasta _stt_gtf _stt_gff3 _stt_chr_filter hidden _filters',
   });
 
   $filter_fieldset->add_field({
     'type'          => 'checklist',
     'name'          => 'add_transcript',
-    'label'         => 'Add transcript ID',
+    'label'         => '<span class="ht _ht"><span class="_ht_tip hidden">Add transcript IDs to each line</span>Add transcript ID</span>',
     'values'        => [ { 'value' => '1' } ],
+    'field_class'   => '_stt_gtf _stt_gff3 hidden _filters',
   });
 
   $filter_fieldset->add_field({
     'type'          => 'checklist',
     'name'          => 'remap_patch',
-    'label'         => 'Remap patches',
+    'label'         => '<span class="ht _ht"><span class="_ht_tip hidden">Convert gene or transcript coordinates from the reference to the stand-alone patch</span>Remap patches</span>',
     'values'        => [ { 'value' => '1' } ],
-  }); 
+    'field_class'   => '_remap hidden _filters',
+  });
+
+  $filter_fieldset->add_field({
+    'type'          => 'dropdown',
+    'name'          => 'long_genes',
+    'label'         => '<span class="ht _ht"><span class="_ht_tip hidden">Remove genes longer than the value selected</span>Remove long genes</span>',
+    'values'        => [{ 'value' => 'null',   'caption' => '',  'example' => qq() },{ 'value' => '2',   'caption' => '2Mbp',  'example' => qq() },{ 'value' => '4',   'caption' => '4Mbp',  'example' => qq() }, {'value' => '6',   'caption' => '6Mbp',  'example' => qq() },{ 'value' => '8',   'caption' => '8Mbp',  'example' => qq() }],
+    'field_class'   => '_stt_gtf _stt_gff3 hidden _filters',    
+  });  
 
   $self->togglable_fieldsets($form, {
-    'title' => "3. Customise",
-    'desc'  => "Customise options for reformatting"
-  }, $filter_fieldset);  
+    'title' => "Custom Options",
+    'desc'  => "list the options to customise files",
+    'open'  => 1
+  }, $filter_fieldset);    
   
-  
+  $filter_fieldset->prepend_child("p", {"inner_HTML" => "No filters are available for your selections; you can only download the file by clicking Run below.", 'class' => 'nofilter_note hidden bold'});
+  $filter_fieldset->prepend_child("p", {"inner_HTML" => "<b>Note:</b> Do not choose any options if you want to just download the raw file.",});
   $self->add_buttons_fieldset($form, {'reset' => 'Clear', 'cancel' => 'Close form'});
 
   return $form;

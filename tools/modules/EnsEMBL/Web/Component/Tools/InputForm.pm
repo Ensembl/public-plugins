@@ -169,6 +169,8 @@ sub togglable_fieldsets {
   my ($self, $form, $options) = splice @_, 0, 3;
 
   my $togglable_key = $options->{'title'} =~ s/\W+/_/gr;
+  my $open          = $options->{'open'} ? "open" : "closed";
+  my $hidden        = $options->{'open'} ? "" : "hidden";
 
   my $wrapper = $form->append_child('div', {
     'class'       => $options->{'class'} || [],
@@ -178,7 +180,7 @@ sub togglable_fieldsets {
       'children'    => [{
         'node_name'   => 'a',
         'rel'         => "__togg_$togglable_key",
-        'class'       => [qw(_slide_toggle toggle set_cookie closed)],
+        'class'       => ["_slide_toggle", "toggle", "set_cookie", $open],
         'href'        => "#$togglable_key",
         'inner_HTML'  => $options->{'title'}
       }, {
@@ -188,7 +190,7 @@ sub togglable_fieldsets {
       }]
     }, {
       'node_name'   => 'div',
-      'class'       => "extra_configs __togg_$togglable_key toggleable hidden",
+      'class'       => "extra_configs __togg_$togglable_key toggleable $hidden",
     }]
   });
 

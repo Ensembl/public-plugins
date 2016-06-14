@@ -22,49 +22,95 @@ Ensembl.Panel.FileChameleonForm = Ensembl.Panel.ToolsForm.extend({
     this.base.apply(this, arguments);
 
     this.elLk.speciesDropdown = this.elLk.form.find('._sdd');
-    this.elLk.formatDropdown  = this.elLk.form.find('select[name=format]');
-    this.elLk.chr_filter      = this.elLk.form.find('[name=chr_filter]');
-    this.elLk.add_transcript  = this.elLk.form.find('[name=add_transcript]')
-    this.elLk.remap_patch     = this.elLk.form.find('[name=remap_patch]')
-
+    this.elLk.formatRadio     = this.elLk.form.find('input[name=format]');
+    this.elLk.fileList        = this.elLk.form.find('select[name=files_list]');
+    this.elLk.chr_filter      = this.elLk.form.find('input[name=chr_filter]');
+    this.elLk.add_transcript  = this.elLk.form.find('input[name=add_transcript]');
+    this.elLk.remap_patch     = this.elLk.form.find('input[name=remap_patch]');
+    this.elLk.release_version = this.elLk.form.find('input[name=release]');
+    
     this.resetSpecies(this.defaultSpecies);
-    this.populateFileListing();
-    this.displayFileURL();
-    this.editExisting();
+    this.editExisting();    
+    
+    this.elLk.speciesDropdown.on('change',function(){
+      panel.elLk.form.find('p.nofilter_note').hide();
+      panel.elLk.form.find('div._remap').hide();
+      
+      //if after choosing the format, user decide to change species, need to repopulate the file list
+      if(panel.elLk.formatRadio.is(":checked")) {
+        panel.elLk.fileList.hide();        
+        panel.populateFileListing();
+        //show no filters note only if format is selected
+        if(!panel.elLk.form.find('div._filters').is(":visible")) {
+          panel.elLk.form.find('p.nofilter_note').show();
+        }
+      } else {
+        panel.elLk.form.find('div._stt_fasta').hide(); //because whenever the species changes and if the format is not chosen, the chr_filter dropdown appears
+      }    
+    });
+
+    this.elLk.formatRadio.on('change',function(){
+      panel.elLk.fileList.hide();
+      panel.elLk.form.find('p.nofilter_note').hide();
+      panel.elLk.form.find('div._remap').hide();
+      panel.populateFileListing();
+      
+      if(!panel.elLk.speciesDropdown.find('input:checked').hasClass('_stt__chr_filter')) {  //because the chr_filter toggle needs to work on both species and format fasta
+        panel.elLk.form.find('div._stt_fasta').hide();
+      }
+      
+      //if no filters is available then show this note
+      if(!panel.elLk.form.find('div._filters').is(":visible")) {
+        panel.elLk.form.find('p.nofilter_note').show();
+      }
+    });
+ 
+ //show/hide file list dropdown by clicking on the link select a different file
+    this.elLk.form.find('span.file_link a').on('click', function(e){
+      e.preventDefault();
+      panel.elLk.form.find('span._file_text').hide();
+      panel.elLk.fileList.show().trigger('focus');
+      panel.elLk.form.find('span.file_link').hide();
+    });
+    
+    this.elLk.fileList.on('change', function(){ 
+      panel.elLk.fileList.hide();      
+      panel.elLk.fileList.find('option[value="' + this.value + '"]').prop('selected', true);
+      panel.elLk.form.find('span._file_text').html(panel.elLk.form.find('select[name=files_list] option:selected').text()).show();
+      panel.elLk.form.find('span.file_link').show();
+    });
+    
+//if user just clicks on link to change dropdown value but then decided not to
+    if(this.elLk.form.find('select[name=files_list]:visible')) {
+      panel.elLk.fileList.on('focusout', function(){
+        panel.elLk.fileList.hide();
+        panel.elLk.form.find('span._file_text').html(panel.elLk.form.find('select[name=files_list] option:selected').text()).show();
+        panel.elLk.form.find('span.file_link').show();
+      });
+    }
     
     // Add validate event to the form which gets triggered before submitting it
     this.elLk.form.on('validate', function(e) {
-      if (panel.elLk.form.find('input[name=url]').val() && !panel.elLk.form.find('input[name=url]').val().match(/^http/)) {
-        panel.showError('File should only be uploaded from http (web server)', 'Only http');
+      if (!(panel.elLk.formatRadio.is(':checked'))) {
+        panel.showError('Please choose a file format', 'No format choosen');
         $(this).data('valid', false);
         return;
-      }
-      if (panel.elLk.form.find('input[name=url]').val() && !(panel.elLk.chr_filter.is(':checked')) && !(panel.elLk.add_transcript.is(':checked')) && !(panel.elLk.remap_patch.is(':checked'))) {
-        panel.showError('Please choose one of the filter', 'No filter applied');
-        $(this).data('valid', false);
-        return;
-      }
-      if(panel.elLk.chr_filter.is(':checked') && panel.elLk.form.find('[name=convert_to]').val() === 'null') {
-        panel.showError('Please choose chromosome format', 'No chromosome format conversion');
-        $(this).data('valid', false);
-        return;        
       }
     });
-    
+    this.elLk.form.find('div._stt_fasta').hide(); //this is to hide the input on new job (all filters are hidden for new job)
   },
   
   populateForm: function(jobsData) {
     if (jobsData && jobsData.length) {
       this.base(jobsData);
       this.resetSpecies(jobsData[0]['species']);
-      if (jobsData[0].url) {
-        this.elLk.form.find('input[name=url]').html(jobsData[0].url);
-        this.elLk.formatDropdown.find('input[value=' + jobsData[0].format + ']').first().click();
+      if (jobsData[0].file_url) {        
+        this.elLk.formatRadio.filter('[value=' + jobsData[0].format + ']').prop('checked',true);
+        panel.populateFileListing(jobsData[0].file_url);
       }
       
-      if (jobsData[0].chr_filter) {
-        this.elLk.form.find('[name=chr_filter][value=' + jobsData[0].chr_filter + ']').prop('checked', true);
-        this.elLk.form.find('select[name=convert_to]').parents(':eq(1)').show().find('input[value=' + jobsData[0].convert_to + ']').first().click();
+      if (jobsData[0].chr_filter) {        
+        this.elLk.form.find('select[name=chr_filter]').show().find('input[value=' + jobsData[0].chr_filter + ']').first().click();
       }
       
       if (jobsData[0].add_transcript) {
@@ -72,53 +118,88 @@ Ensembl.Panel.FileChameleonForm = Ensembl.Panel.ToolsForm.extend({
       }
       
       if (jobsData[0].remap_patch) {
+        //panel.elLk.find('div._remap').show();
         this.elLk.form.find('[name=remap_patch][value=' + jobsData[0].remap_patch + ']').prop('checked', true);        
       }      
     }
   },
   
-  populateFileListing: function() {
-    this.base.apply(this, arguments);
+  populateFileListing: function(format,species,selected_file) {
     var panel = this;
     
-    this.elLk.files_list = this.elLk.form.find('[name=files_list]');
-    var species          = "ailuropoda_melanoleuca";//this.elLk.speciesDropdown.val();
-    var format           =  "gff3";//this.elLk.formatDropdown.val();    
+    var file_select      = panel.elLk.fileList.val();
+    var format           = format ? format : this.elLk.form.find("input[name=format]:checked").val().toLowerCase();
+    var file_extension   = format;
+    var species          = species ? species : panel.elLk.speciesDropdown.find('input:checked').val().toLowerCase();
+    var default_name;
+    var long_filename;
     
+    //different directory structure and file extension for fasta (current_fasta/species/dna/file.fa.gz)
+    if(format === 'fasta') {
+      species         += "/dna";
+      file_extension  = "fa";
+      default_name    = panel.elLk.speciesDropdown.find('input:checked').parent().find('label').html().replace(/\(.*\)/,"")+"genome assembly";
+      selected_file   = selected_file ? selected_file : "dna\\.toplevel\\.";
+    } else {      
+      default_name    = panel.elLk.speciesDropdown.find('input:checked').parent().find('label').html().replace(/\(.*\)/,"")+"gene set";      
+      selected_file   = selected_file ? selected_file : panel.elLk.release_version.val()+"\\."+format;
+    }
+    
+    var ftp_url = "http://ftp.ensembl.org/pub/current_"+format+"/"+species+"/";
     $.ajax({
-      url: "http://ftp.ensembl.org/pub/current_"+format+"/"+species+"/",
-      dataType: "html",
-      beforeSend: function () {
-        //panel.toggleSpinner(true, '', Math.random().toString().replace(/0\./, ''));
-      },
-      success: function(data){        
-         var a_tag = data.replace(/<img(.*?)>/g); //removing img tag so that it doesnt complain about images not found
-         
-         $(a_tag).find("a:contains(."+format+")").each(function(){        
-            var file_name = $(this).attr("href");            
-            panel.elLk.files_list.append($("<option />").val(file_name).text(file_name));
+      'url': ftp_url,
+      'dataType': "html",
+      'beforeSend': function () { panel.toggleSpinner(true); },
+      'success': function(data){
+        var a_tag = data.replace(/<img(.*?)>/g); //removing img tag so that it doesnt complain about images not found
+        var all_files="";
+        
+        $(a_tag).find("a:contains(."+file_extension+")").each(function(){
+          var file_name = $(this).attr("href");
+          //Because human and mouse fasta main toplevel are different
+          selected_file = format === 'fasta' && file_name.match(new RegExp("dna\\.primary_assembly", 'i')) && !selected_file ? "dna\\.primary_assembly" : selected_file;
 
-         });
-         panel.toggleSpinner(false, '', '');
+          selected      = selected_file && file_name.match(new RegExp(selected_file, 'i')) ? 'selected="selected"' : '';
+          long_filename = selected ? default_name + " (" + file_name + ")" : file_name.match(/chr_patch_hapl_scaff/i) ? default_name + " with patches (" + file_name + ")" : file_name;
+          all_files     += '<option value="' + ftp_url + file_name + '"' + selected +'>' + long_filename + '</option>';
+        });
+        
+        panel.elLk.fileList.html('').append(all_files);
+        panel.elLk.form.find('span._file_text').html(panel.elLk.form.find('select[name=files_list] option:selected').text()).show();
+        panel.elLk.form.find('span.file_link').show();
+        
+        //And show/hide remap patches filter if patch file is present (mainly for human and mouse); LEAVE this here because the check can only happen after the dropdown is populated
+        if(panel.elLk.fileList.find('option[value*="chr_patch_hapl_scaff"]').length) {
+          panel.elLk.form.find('div._remap').show();
+        } else {
+          panel.elLk.form.find('div._remap').hide();
+        }
+        //select default file to *chr_patch_hapl_scaff* if remap patch filter is ticked (small bug: doing the below twice)
+        panel.elLk.remap_patch.on('change', function (){
+          if(panel.elLk.form.find('div._remap').is(":visible") && panel.elLk.remap_patch.is(":checked")) {
+            panel.elLk.fileList.find('option[value*="chr_patch_hapl_scaff"]').prop('selected', true);
+            panel.elLk.form.find('span._file_text').html(panel.elLk.form.find('select[name=files_list] option:selected').text()).show();
+          } else {
+            var rollback_value = panel.elLk.release_version.val()+"\\."+format
+            panel.elLk.fileList.find('option[value*="' + rollback_value + '"]').prop('selected', true);
+            panel.elLk.form.find('span._file_text').html(panel.elLk.form.find('select[name=files_list] option:selected').text()).show();            
+          }
+        })
+
       },
-      error: function (jqXHR, status, err) {
-        panel.elLk.files_list.append($("<option />").val("error").text("Sorry the FTP site is down, please try later"));
-        panel.elLk.files_list.attr("disabled","disabled")
+      'complete' :  function () { panel.toggleSpinner(false); },
+      'error': function (jqXHR, status, err) {
+        panel.showError('Sorry the FTP site is down, please try again later', 'Ensembl FTP site is down');
+        $(panel.elLk.form).data('valid', false);        
         panel.toggleSpinner(false, '', '');
       },
-    });    
+    });
   },
-  
-  displayFileURL: function() {
-    this.base.apply(this, arguments);
-    var panel = this;
-    
-  },  
   
   reset: function() {
     this.base.apply(this, arguments);
     this.resetSpecies(this.defaultSpecies);
-    this.elLk.form.find('._previous_file').remove();
+    this.elLk.form.find('div._stt_gff3, div._stt_gtf, p.nofilter_note, span.file_link, span._file_text').hide(); // we hide all filters and text for new job
   },
   
   resetSpecies: function (species) {
