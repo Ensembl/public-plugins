@@ -219,6 +219,7 @@ Ensembl.Panel.ThousandGenomeForm = Ensembl.Panel.ToolsForm.extend({
     this.elLk.region.parent().find('label.invalid').remove();
     this.elLk.form.find('div.population').hide();
     this.elLk.form.find('select[name=collection_format]').find('option[value=phase3]').prop('selected', true).end().selectToToggle('trigger');
+    this.elLk.form.find('select[name=phase3_populations]').find('option[value=ALL]').prop('selected', true);
     this.elLk.form.find('span._span_url').html('Genotype file URL: ').show();
     this.elLk.form.find('input[name=generated_file_url]').val("");
   },
