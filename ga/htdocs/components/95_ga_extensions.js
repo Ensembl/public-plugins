@@ -427,3 +427,20 @@ Ensembl.Panel.MultiSpeciesSelector = Ensembl.Panel.MultiSpeciesSelector.extend({
     }
   }
 });
+
+Ensembl.Panel.TextSequence = Ensembl.Panel.TextSequence.extend({
+  init: function () {
+    this.base.apply(this, arguments);
+
+    Ensembl.GA.registerConfigs([
+
+      // Click full text alignment view
+      {
+        selector  : $(this.el).parent().prev('div.info').find('div.view_full_text_seq a'),
+        event     : 'click',
+        category  : 'FullTextAlignment',
+        action    : function () { return this.getURL(window.location.href); }
+      }
+    ]);
+  }
+});
