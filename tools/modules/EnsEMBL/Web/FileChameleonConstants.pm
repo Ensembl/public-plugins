@@ -46,8 +46,8 @@ sub CONVERSION_FORMATS {
 sub STYLE_FORMATS {
   return [
     { 'value' => 'null',   'caption' => '',  'example' => qq() },
-    { 'value' => 'ensembl_to_ucsc',   'caption' => 'Ensembl style',  'example' => qq() },
-    { 'value' => 'ucsc_to_ensembl',   'caption' => 'UCSC style',  'example' => qq() },
+    { 'value' => 'ensembl_to_ucsc',   'caption' => 'UCSC style',  'example' => qq() },
+    { 'value' => 'ucsc_to_ensembl',   'caption' => 'Ensembl style',  'example' => qq() },
   ];
 }
 

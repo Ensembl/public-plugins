@@ -30,7 +30,7 @@ use parent qw(
 
 sub form_header_info {
   ## Abstract method implementation
-  return '<p class="info">To use Ensembl data for your genomic analysis, download files customised for your tool with file chameleon. If you would like us to support additional customisations please contact us at <a href="mailto:helpdesk@ensembl.org?Subject=File chameleon feedback" target="_top">helpdesk@ensembl.org</a></p><p><b>Important Note:</b> File chameleon will not do file format conversion.</p>';
+  return '<p class="info">To use Ensembl data for your genomic analysis, download files customised for your tool with File Chameleon. If you would like us to support additional customisations please contact us at <a href="mailto:helpdesk@ensembl.org?Subject=File Chameleon feedback" target="_top">helpdesk@ensembl.org</a></p><p><b>Important Note:</b> File Chameleon does not convert between file formats.</p>';
 }
 
 sub get_cacheable_form_node {
@@ -106,19 +106,27 @@ sub get_cacheable_form_node {
     'open'  => 1,
   }, $format_fieldset);
   
-  my $filter_fieldset  = $form->add_fieldset({"notes" => "Testing..."});
+  my $filter_fieldset  = $form->add_fieldset();
   $filter_fieldset->add_field({
     'type'          => 'dropdown',
     'name'          => 'chr_filter',
-    'label'         => '<span class="ht _ht"><span class="_ht_tip hidden">Select between Ensembl and UCSC naming styles</span>Chromosome naming style</span>',
+    'label'         => '<span class="ht _ht"><span class="_ht_tip hidden">Select between Ensembl and UCSC naming styles</span>Change chromosome naming style</span>',
     'values'        => $style_formats, 
-    'field_class'   => '_stt_fasta _stt_gtf _stt_gff3 _stt_chr_filter hidden _filters',
+    'field_class'   => '_stt_fasta _stt_gtf _stt_gff3 _stt_chr_filter hidden _filters',    
+  });
+
+  $filter_fieldset->add_field({
+    'type'          => 'dropdown',
+    'name'          => 'long_genes',
+    'label'         => '<span class="ht _ht"><span class="_ht_tip hidden">Remove genes longer than the value selected</span>Remove long genes</span>',
+    'values'        => [{ 'value' => 'null',   'caption' => '',  'example' => qq() },{ 'value' => '2000000',   'caption' => '2Mbp',  'example' => qq() },{ 'value' => '4000000',   'caption' => '4Mbp',  'example' => qq() }, {'value' => '6000000',   'caption' => '6Mbp',  'example' => qq() },{ 'value' => '8000000',   'caption' => '8Mbp',  'example' => qq() }],
+    'field_class'   => '_stt_gtf _stt_gff3 hidden _filters',    
   });
 
   $filter_fieldset->add_field({
     'type'          => 'checklist',
     'name'          => 'add_transcript',
-    'label'         => '<span class="ht _ht"><span class="_ht_tip hidden">Add transcript IDs to each line</span>Add transcript ID</span>',
+    'label'         => '<span class="ht _ht"><span class="_ht_tip hidden">Add transcript IDs to each line</span>Add transcript IDs</span>',
     'values'        => [ { 'value' => '1' } ],
     'field_class'   => '_stt_gtf _stt_gff3 hidden _filters',
   });
@@ -131,14 +139,6 @@ sub get_cacheable_form_node {
     'field_class'   => '_remap hidden _filters',
   });
 
-  $filter_fieldset->add_field({
-    'type'          => 'dropdown',
-    'name'          => 'long_genes',
-    'label'         => '<span class="ht _ht"><span class="_ht_tip hidden">Remove genes longer than the value selected</span>Remove long genes</span>',
-    'values'        => [{ 'value' => 'null',   'caption' => '',  'example' => qq() },{ 'value' => '2',   'caption' => '2Mbp',  'example' => qq() },{ 'value' => '4',   'caption' => '4Mbp',  'example' => qq() }, {'value' => '6',   'caption' => '6Mbp',  'example' => qq() },{ 'value' => '8',   'caption' => '8Mbp',  'example' => qq() }],
-    'field_class'   => '_stt_gtf _stt_gff3 hidden _filters',    
-  });  
-
   $self->togglable_fieldsets($form, {
     'title' => "Custom Options",
     'desc'  => "list the options to customise files",
@@ -146,7 +146,7 @@ sub get_cacheable_form_node {
   }, $filter_fieldset);    
   
   $filter_fieldset->prepend_child("p", {"inner_HTML" => "No filters are available for your selections; you can only download the file by clicking Run below.", 'class' => 'nofilter_note hidden bold'});
-  $filter_fieldset->prepend_child("p", {"inner_HTML" => "<b>Note:</b> Do not choose any options if you want to just download the raw file.",});
+  $filter_fieldset->prepend_child("p", {"inner_HTML" => "<b>Note:</b> Do not choose any of the options below if you want to just download the unedited file.",});
   $self->add_buttons_fieldset($form, {'reset' => 'Clear', 'cancel' => 'Close form'});
 
   return $form;

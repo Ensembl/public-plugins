@@ -155,6 +155,19 @@ sub populate_tree {
     ));
   }
 
+  ## File Chameleon
+  if ($sd->ENSEMBL_FC_ENABLED) {
+    my $chameleon_node = $tools_node->append($self->create_subnode('FileChameleon', 'File Chameleon',
+      [qw(
+        fc_input      EnsEMBL::Web::Component::Tools::FileChameleon::InputForm
+        fc_details    EnsEMBL::Web::Component::Tools::FileChameleon::TicketDetails
+        tickets       EnsEMBL::Web::Component::Tools::FileChameleon::TicketsList
+      )],
+      { 'availability' => 1 }
+    ));
+
+  }
+
   ## Assembly converter specific node (doesn't need results page, just a download of file from ticket details)
   if ($sd->ENSEMBL_AC_ENABLED) {
     my $ac_node = $tools_node->append($self->create_subnode('AssemblyConverter', 'Assembly Converter',
@@ -186,19 +199,6 @@ sub populate_tree {
       )],
       { 'availability' => 1, 'concise' => 'ID History Converter results', 'no_menu_entry' => "$action/$function" ne 'IDMapper/Results' }
     ));
-  }
-
-  ## File Chameleon
-  if ($sd->ENSEMBL_FC_ENABLED) {
-    my $chameleon_node = $tools_node->append($self->create_subnode('FileChameleon', 'File Chameleon',
-      [qw(
-        fc_input      EnsEMBL::Web::Component::Tools::FileChameleon::InputForm
-        fc_details    EnsEMBL::Web::Component::Tools::FileChameleon::TicketDetails
-        tickets       EnsEMBL::Web::Component::Tools::FileChameleon::TicketsList
-      )],
-      { 'availability' => 1 }
-    ));
-
   }
 
   ## Allele frequency (1000 Genomes tool)

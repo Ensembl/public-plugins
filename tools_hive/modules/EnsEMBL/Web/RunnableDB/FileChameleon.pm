@@ -40,6 +40,7 @@ sub fetch_input {
   my $work_dir    = $self->param_required('work_dir');
   my $input_file  = $self->param_required('input_file');
   my $format      = $self->param_required('format');
+  my $download    = $self->param_required('just_download');
   my $code_root   = $self->param_required('code_root');
   my $script_path = "/localsw/FileChameleon/lib/";
   
@@ -48,7 +49,7 @@ sub fetch_input {
   # set up perl bin with the required library locations
   try {
     my @modules   = map { -d "$code_root/$_/modules" ? "-I $code_root/$_/modules" : () } @{list_dir_contents($code_root)};
-    my $perl_bin  = join ' ','-I', $script_path, @modules;
+    my $perl_bin  = join ' ','-I', $script_path, @modules;    
     $self->param('perl_bin', $perl_bin);
   } catch {
     throw exception('HiveException', $_->message(1));
@@ -58,31 +59,38 @@ sub fetch_input {
   $self->param('__output_file', sprintf('%s/%s', $work_dir, $output_file));
   $self->param('__log_file', sprintf('%s/%s.log', $work_dir, $output_file));
   $self->param('__config_file', "file://".sprintf('%s/%s', $work_dir, $config));
-  $self->param('__format', $format);  
+  $self->param('__format', $format);
+  $self->param('__download', $download);
 }
 
 sub run {
   my $self      = shift;
   my $log_file  = $self->param('__log_file');
+  my $download  = $self->param('__download');
 
-  my $command = EnsEMBL::Web::SystemCommand->new($self, sprintf('perl %s %s', $self->param('perl_bin'), $self->param('FC_bin_path')), {
-    '-i'      => $self->param('__input_file'),
-    '-o'      => $self->param('__output_file'),
-    '-c'      => $self->param('__config_file'),
-    '-format' => $self->param('__format')    
-  })->execute({
-    'log_file'    => $log_file,
-    'output_file' => $self->param('__output_file')
-  });
+  #no need to execute anything if it is just downloading raw file
+  if($download) {  
+    return 1;
+  } else {
+    my $command = EnsEMBL::Web::SystemCommand->new($self, sprintf('perl %s %s', $self->param('perl_bin'), $self->param('FC_bin_path')), {
+      '-i'      => $self->param('__input_file'),
+      '-o'      => $self->param('__output_file'),
+      '-c'      => $self->param('__config_file'),
+      '-format' => $self->param('__format')    
+    })->execute({
+      'log_file'    => $log_file,
+      'output_file' => $self->param('__output_file')
+    });
 
-  # throw exception if process failed
-  if (my $error_code = $command->error_code) {
-    my $error_details = join('', grep(/MSG/, file_get_contents($log_file)));
-    ($error_details) = file_get_contents($log_file) if(!$error_details);
-    throw exception('HiveException', "\n".$error_details);
+    # throw exception if process failed
+    if (my $error_code = $command->error_code) {
+      my $error_details = join('', grep(/MSG/, file_get_contents($log_file)));
+      ($error_details) = file_get_contents($log_file) if(!$error_details);
+      throw exception('HiveException', "\n".$error_details);
+    }
+
+    return 1;
   }
-
-  return 1;
 }
 
 

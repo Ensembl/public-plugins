@@ -101,6 +101,8 @@ Ensembl.Panel.FileChameleonForm = Ensembl.Panel.ToolsForm.extend({
   },
   
   populateForm: function(jobsData) {
+    var panel = this;
+    
     if (jobsData && jobsData.length) {
       this.base(jobsData);
       this.resetSpecies(jobsData[0]['species']);
@@ -108,10 +110,19 @@ Ensembl.Panel.FileChameleonForm = Ensembl.Panel.ToolsForm.extend({
         this.elLk.formatRadio.filter('[value=' + jobsData[0].format + ']').prop('checked',true);
         panel.populateFileListing(jobsData[0].file_url);
       }
+
+      //check whether to show chromosome naming style dropdown for species
+      if(!panel.elLk.speciesDropdown.find('input:checked').hasClass('_stt__chr_filter')) {
+        panel.elLk.form.find('div._stt_chr_filter').hide();
+      }
       
       if (jobsData[0].chr_filter) {        
-        this.elLk.form.find('select[name=chr_filter]').show().find('input[value=' + jobsData[0].chr_filter + ']').first().click();
+        this.elLk.form.find('select[name=chr_filter]').show().find('option[value=' + jobsData[0].chr_filter + ']').prop('selected', true);
       }
+      
+      if (jobsData[0].long_genes) {
+        this.elLk.form.find('select[name=long_genes]').find('option[value=' + jobsData[0].long_genes + ']').prop('selected', true);
+      }      
       
       if (jobsData[0].add_transcript) {
         this.elLk.form.find('[name=add_transcript][value=' + jobsData[0].add_transcript + ']').prop('checked', true);        
@@ -124,13 +135,17 @@ Ensembl.Panel.FileChameleonForm = Ensembl.Panel.ToolsForm.extend({
     }
   },
   
-  populateFileListing: function(format,species,selected_file) {
+  populateFileListing: function(selected_file,format,species) {
     var panel = this;
     
     var file_select      = panel.elLk.fileList.val();
     var format           = format ? format : this.elLk.form.find("input[name=format]:checked").val().toLowerCase();
     var file_extension   = format;
     var species          = species ? species : panel.elLk.speciesDropdown.find('input:checked').val().toLowerCase();
+    
+    //replace full path if selected_file is full path, we only need file name
+    selected_file = selected_file && selected_file.match(/(^http:\/\/.*\/)/gi) ? selected_file.replace(/(^http:\/\/.*\/)/gi,"") : selected_file; 
+
     var default_name;
     var long_filename;
     

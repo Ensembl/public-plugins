@@ -75,9 +75,11 @@ sub handle_download {
 ### Uses Controller::Download, via url /Download/FileChameleon/
 
   my ($self, $r) = @_;
-  my $hub     = $self->hub;
-  my $ticket  = $self->get_requested_ticket or return;
-  my $job     = $ticket->job->[0] or return;
+  my $hub      = $self->hub;
+  my $ticket   = $self->get_requested_ticket or return;
+  my $job      = $ticket->job->[0] or return;
+ 
+  return if $job->dispatcher_data->{'just_download'};
 
   my $filename    = $job->dispatcher_data->{'output_file'};
   my $content     = file_get_contents(join('/', $job->job_dir, $filename), sub { s/\R/\r\n/r });
@@ -86,8 +88,7 @@ sub handle_download {
   $r->headers_out->add('Content-Length'       => length $content);
   $r->headers_out->add('Content-Disposition'  => sprintf 'attachment; filename=%s', $filename);
 
-  print $content; 
-
+  print $content;
 }
 
 1;
