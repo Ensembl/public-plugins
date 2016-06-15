@@ -100,6 +100,13 @@ sub save {
   return $rose_job->save(@_);
 }
 
+sub different_tmp {
+  ## Returns location for storing jobs files if you want it to be different from ENSEMBL_TMP
+  ## Overwritten/Implemented in each tool Job.pm
+
+  return "";
+}
+
 sub create_work_dir {
   ## Creates the directory path for the job, and move its input files to that directory
   ## @param Hashref with following keys:
@@ -113,7 +120,7 @@ sub create_work_dir {
   my $sd    = $self->hub->species_defs;
   my $files = $self->{'_input_files'};
   my $dir   = join '/',
-    $sd->ENSEMBL_TMP_DIR_TOOLS,
+    $self->different_tmp ? $self->different_tmp : $sd->ENSEMBL_TMP_DIR_TOOLS,
     $params->{'persistent'} ? 'persistent' : 'temporary',
     $sd->ENSEMBL_TMP_SUBDIR_TOOLS,
     $params->{'ticket_type'},
