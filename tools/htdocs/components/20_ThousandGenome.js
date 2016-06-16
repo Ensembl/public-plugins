@@ -42,11 +42,12 @@ Ensembl.Panel.ThousandGenomeForm = Ensembl.Panel.ToolsForm.extend({
         return;
       }
 
-      if(((parseFloat(r[4].replace(/,/gi,"")) - parseFloat(r[2].replace(/,/gi,""))) + 1) >= 100000000) {
-        panel.elLk.region.parent().find('label.invalid').remove(); //remove the warning its already there before appending
-        panel.elLk.region.parent().append('<label class="invalid" for="raQLTnTw_9" style="display: inline;">Please note that with this size of genomic region, the job may take a long time (> 6h) to run</label>');
+      if(((parseFloat(r[4].replace(/,/gi,"")) - parseFloat(r[2].replace(/,/gi,""))) + 1) > 2500000) {
+        panel.showError('The region size is too big, maximum region size allowed is 2500000 ', 'Large region size');
+        $(panel.elLk.form).data('valid', false);
+        return;
       } else {
-        panel.elLk.region.parent().find('label.invalid').remove(); //just a precaution in case someone change the region again
+        $(panel.elLk.form).data('valid', true);
       }
 
       //getting the file url from 1KG rest if user input region and data collection is either phase1 or phase3
@@ -120,6 +121,13 @@ Ensembl.Panel.ThousandGenomeForm = Ensembl.Panel.ToolsForm.extend({
         panel.showError('Please enter a region', 'No region entered');
         $(this).data('valid', false);
         return;
+      } else {
+        var r = panel.elLk.region.val().match(/^([^:]+):\s?([0-9\,]+)(-|_|\.\.)([0-9\,]+)$/);
+        if(((parseFloat(r[4].replace(/,/gi,"")) - parseFloat(r[2].replace(/,/gi,""))) + 1) > 2500000) {
+          panel.showError('The region size is too big, maximum region size allowed is 2500000 ', 'Large region size');
+          $(panel.elLk.form).data('valid', false);
+          return;
+        }
       }
       
       if(panel.elLk.collection.val() === "custom") {
@@ -183,17 +191,6 @@ Ensembl.Panel.ThousandGenomeForm = Ensembl.Panel.ToolsForm.extend({
         this.elLk.form.find('input[name=name]').val(jobsData[0].job_desc);
       }
       
-      if(jobsData[0].region) {
-        var r = jobsData[0].region.match(/^([^:]+):\s?([0-9\,]+)(-|_|\.\.)([0-9\,]+)$/);
-        
-        if(((parseFloat(r[4].replace(/,/gi,"")) - parseFloat(r[2].replace(/,/gi,""))) + 1) >= 100000000) {
-          this.elLk.form.find('input[name=region]').parent().find('label.invalid').remove();
-          this.elLk.form.find('input[name=region]').parent().append('<label class="invalid" style="display: inline;">Please note that with this size of genomic region, the job may take a long time (> 6h) to run</label>');
-        } else {
-          this.elLk.form.find('input[name=region]').parent().find('label.invalid').remove(); //just a precaution in case someone change the region again
-        }
-      }
-      
       if (upload_type === 'custom') {
         this.elLk.form.find('select[name=collection_format] option').removeAttr("selected");
         this.elLk.form.find('select[name=collection_format]').find('option[value=custom]').prop('selected', true).end().selectToToggle('trigger');
@@ -214,9 +211,8 @@ Ensembl.Panel.ThousandGenomeForm = Ensembl.Panel.ToolsForm.extend({
   },
   
   reset: function() {
-    this.base.apply(this, arguments);
+    this.base.apply(this, arguments);    
     
-    this.elLk.region.parent().find('label.invalid').remove();
     this.elLk.form.find('div.population').hide();
     this.elLk.form.find('select[name=collection_format]').find('option[value=phase3]').prop('selected', true).end().selectToToggle('trigger');
     this.elLk.form.find('select[name=phase3_populations]').find('option[value=ALL]').prop('selected', true);
