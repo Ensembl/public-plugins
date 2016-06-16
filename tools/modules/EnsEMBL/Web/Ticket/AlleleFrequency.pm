@@ -57,7 +57,7 @@ sub init_from_user_input {
       'upload_type'     => $hub->param('collection_format'),
       'file_url'        => $hub->param('custom_file_url') ? $hub->param('custom_file_url') : $hub->param('generated_file_url'),
       'sample_panel'    => $hub->param('custom_sample_url') ? $hub->param('custom_sample_url') : $fix_sample_url,
-      'region'          => $hub->param('region'),
+      'region'          => uc($hub->param('region')),
       'population'      => $hub->param($population) ? join(',',$hub->param($population)) : 'ALL',
     }
   }));
