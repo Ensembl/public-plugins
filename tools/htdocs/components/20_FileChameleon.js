@@ -200,15 +200,14 @@ Ensembl.Panel.FileChameleonForm = Ensembl.Panel.ToolsForm.extend({
             panel.elLk.form.find('span._file_text').html(panel.elLk.form.find('select[name=files_list] option:selected').text()).show();            
           }
         })
-
       },
       'complete' :  function () { panel.toggleSpinner(false); },
       'error': function (jqXHR, status, err) {
         panel.showError('Sorry the FTP site is down, please try again later', 'Ensembl FTP site is down');
         $(panel.elLk.form).data('valid', false);        
         panel.toggleSpinner(false, '', '');
-      },
-    });
+      }
+    })
   },
   
   reset: function() {
