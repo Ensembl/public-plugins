@@ -24,7 +24,7 @@ use parent qw(EnsEMBL::Web::ViewConfig);
 
 sub init {
   my $self = shift;
-  $self->add_image_config('scrollable', 'nodas');
+  $self->image_config_type('scrollable', 'nodas');
   $self->title = 'Scrollable Region';
 }
 
