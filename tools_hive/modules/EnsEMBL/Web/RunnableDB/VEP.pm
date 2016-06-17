@@ -46,7 +46,7 @@ sub fetch_input {
 
   # set up perl bin with the required library locations
   try {
-    my @modules   = map { -d "$code_root/$_/modules" ? "-I $code_root/$_/modules" : () } @{list_dir_contents($code_root)};
+    my @modules   = map { -d "$code_root/$_/modules" ? "-I $code_root/$_/modules" : () } grep {/^ensembl/} @{list_dir_contents($code_root)};
     my $perl_bin  = join ' ', $self->param_required('perl_bin'), '-I', $self->param_required('bioperl_dir'), '-I', $script_path, @modules;
     $self->param('perl_bin', $perl_bin);
   } catch {
