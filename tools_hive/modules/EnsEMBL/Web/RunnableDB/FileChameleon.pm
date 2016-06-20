@@ -76,6 +76,7 @@ sub run {
       '-i'      => $self->param('__input_file'),
       '-o'      => $self->param('__output_file'),
       '-c'      => $self->param('__config_file'),
+      '-g'      => '',
       '-format' => $self->param('__format')    
     })->execute({
       'log_file'    => $log_file,

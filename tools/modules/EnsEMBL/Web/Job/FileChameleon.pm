@@ -86,7 +86,7 @@ sub prepare_to_dispatch {
 
   return {
     'work_dir'      => $rose_object->job_dir,
-    'output_file'   => "FileChameleon_output.$format", #need to change the output file name to be the same as inputfile name with _converted
+    'output_file'   => "FileChameleon_output.$format.gz", #need to change the output file name to be the same as inputfile name with _converted
     'input_file'    => $job_data->{'file_url'},
     'just_download' => $job_data->{'just_download'},
     'format'        => $format,

@@ -79,16 +79,12 @@ sub handle_download {
   my $ticket   = $self->get_requested_ticket or return;
   my $job      = $ticket->job->[0] or return;
  
-  return if $job->dispatcher_data->{'just_download'};
-
   my $filename    = $job->dispatcher_data->{'output_file'};
-  my $content     = file_get_contents(join('/', $job->job_dir, $filename), sub { s/\R/\r\n/r });
 
-  $r->headers_out->add('Content-Type'         => 'text/plain');
-  $r->headers_out->add('Content-Length'       => length $content);
+  $r->content_type('application/octet-stream');
   $r->headers_out->add('Content-Disposition'  => sprintf 'attachment; filename=%s', $filename);
 
-  print $content;
+  return $r->sendfile(join('/', $job->job_dir, $filename));  
 }
 
 1;
