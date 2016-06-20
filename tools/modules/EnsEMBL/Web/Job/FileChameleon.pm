@@ -73,7 +73,7 @@ sub prepare_to_dispatch {
   }
 
   if($chr_filter) {
-    $config_content->{input_filter}->{seqname} = "chromosome|".lc($job_data->{species})."_".$chr_filter;
+    $config_content->{input_filter}->{seqname} = "chromosome|".lc($job_data->{species})."|".$chr_filter;
     push($include,"file:///localsw/FileChameleon/examples/chromosome.conf");
   }
   
