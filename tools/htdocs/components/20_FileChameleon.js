@@ -77,6 +77,7 @@ Ensembl.Panel.FileChameleonForm = Ensembl.Panel.ToolsForm.extend({
       panel.elLk.fileList.hide();      
       panel.elLk.fileList.find('option[value="' + this.value + '"]').prop('selected', true);
       panel.elLk.form.find('span._file_text').html(panel.elLk.form.find('select[name=files_list] option:selected').text()).show();
+      panel.elLk.form.find('input[name=file_text]').val(panel.elLk.form.find('select[name=files_list] option:selected').text());
       panel.elLk.form.find('span.file_link').show();
     });
     
@@ -85,6 +86,7 @@ Ensembl.Panel.FileChameleonForm = Ensembl.Panel.ToolsForm.extend({
       panel.elLk.fileList.on('focusout', function(){
         panel.elLk.fileList.hide();
         panel.elLk.form.find('span._file_text').html(panel.elLk.form.find('select[name=files_list] option:selected').text()).show();
+        panel.elLk.form.find('input[name=file_text]').val(panel.elLk.form.find('select[name=files_list] option:selected').text());
         panel.elLk.form.find('span.file_link').show();
       });
     }
@@ -171,8 +173,8 @@ Ensembl.Panel.FileChameleonForm = Ensembl.Panel.ToolsForm.extend({
         
         $(a_tag).find("a:contains(."+file_extension+")").each(function(){
           var file_name = $(this).attr("href");
-          //Because human and mouse fasta main toplevel are different
-          selected_file = format === 'fasta' && file_name.match(new RegExp("dna\\.primary_assembly", 'i')) && !selected_file ? "dna\\.primary_assembly" : selected_file;
+          //Because human and mouse fasta main toplevel are different (should be the primary assembly file)
+          selected_file = format === 'fasta' && file_name.match(new RegExp("dna\\.primary_assembly", 'i')) && !selected_file.match(new RegExp("http", 'i'))? "dna\\.primary_assembly" : selected_file; //the last end is if it is not coming from database for edited job(selected_file will have http)
 
           selected      = selected_file && file_name.match(new RegExp(selected_file, 'i')) ? 'selected="selected"' : '';
           long_filename = selected ? default_name + " (" + file_name + ")" : file_name.match(/chr_patch_hapl_scaff/i) ? default_name + " with patches (" + file_name + ")" : file_name;
@@ -181,10 +183,11 @@ Ensembl.Panel.FileChameleonForm = Ensembl.Panel.ToolsForm.extend({
         
         panel.elLk.fileList.html('').append(all_files);
         panel.elLk.form.find('span._file_text').html(panel.elLk.form.find('select[name=files_list] option:selected').text()).show();
+        panel.elLk.form.find('input[name=file_text]').val(panel.elLk.form.find('select[name=files_list] option:selected').text());
         panel.elLk.form.find('span.file_link').show();
-        
+
         //And show/hide remap patches filter if patch file is present (mainly for human and mouse); LEAVE this here because the check can only happen after the dropdown is populated
-        if(panel.elLk.fileList.find('option[value*="chr_patch_hapl_scaff"]').length) {
+        if(panel.elLk.fileList.find('option[value*="chr_patch_hapl_scaff"]').length && format === 'gff3') {
           panel.elLk.form.find('div._remap').show();
         } else {
           panel.elLk.form.find('div._remap').hide();
@@ -194,10 +197,12 @@ Ensembl.Panel.FileChameleonForm = Ensembl.Panel.ToolsForm.extend({
           if(panel.elLk.form.find('div._remap').is(":visible") && panel.elLk.remap_patch.is(":checked")) {
             panel.elLk.fileList.find('option[value*="chr_patch_hapl_scaff"]').prop('selected', true);
             panel.elLk.form.find('span._file_text').html(panel.elLk.form.find('select[name=files_list] option:selected').text()).show();
+            panel.elLk.form.find('input[name=file_text]').val(panel.elLk.form.find('select[name=files_list] option:selected').text());
           } else {
             var rollback_value = panel.elLk.release_version.val()+"\\."+format
             panel.elLk.fileList.find('option[value*="' + rollback_value + '"]').prop('selected', true);
             panel.elLk.form.find('span._file_text').html(panel.elLk.form.find('select[name=files_list] option:selected').text()).show();            
+            panel.elLk.form.find('input[name=file_text]').val(panel.elLk.form.find('select[name=files_list] option:selected').text());
           }
         })
       },
