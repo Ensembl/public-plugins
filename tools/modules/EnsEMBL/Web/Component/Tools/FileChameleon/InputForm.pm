@@ -30,7 +30,7 @@ use parent qw(
 
 sub form_header_info {
   ## Abstract method implementation
-  return '<p class="info">To use Ensembl data for your genomic analysis, download files customised for your tool with File Chameleon. If you would like us to support additional customisations please contact us at <a href="mailto:helpdesk@ensembl.org?Subject=File Chameleon feedback" target="_top">helpdesk@ensembl.org</a></p><p><b>Important Note:</b> File Chameleon does not convert between file formats.</p>';
+  return shift->info_panel("BETA version",'<p class="info">To use Ensembl data for your genomic analysis, download files customised for your tool with File Chameleon. Note the File Chameleon Tool does not convert between file formats.</p><p class="info">This is a beta version; please <a href="/Help/Contact/" class="popup">contact us</a> if you spot any issues or if you would like us to support additional customisations.</p>');
 }
 
 sub get_cacheable_form_node {
@@ -95,6 +95,13 @@ sub get_cacheable_form_node {
   
   $format_fieldset->add_field({
     'type'          => 'string',
+    'name'          => 'file_text',
+    'value'         => '',
+    'field_class'   => 'hidden'
+  });  
+  
+  $format_fieldset->add_field({
+    'type'          => 'string',
     'name'          => 'release',
     'value'         => $release,
     'field_class'   => 'hidden'
@@ -110,7 +117,7 @@ sub get_cacheable_form_node {
   $filter_fieldset->add_field({
     'type'          => 'dropdown',
     'name'          => 'chr_filter',
-    'label'         => '<span class="ht _ht"><span class="_ht_tip hidden">Select between Ensembl and UCSC naming styles</span>Change chromosome naming style</span>',
+    'label'         => '<span class="ht _ht"><span class="_ht_tip hidden">Select UCSC naming style for the chromosomes</span>Change chromosome naming style</span>',
     'values'        => $style_formats, 
     'field_class'   => '_stt_fasta _stt_gtf _stt_gff3 _stt_chr_filter hidden _filters',    
   });
