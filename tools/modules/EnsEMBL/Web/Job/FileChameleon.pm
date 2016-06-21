@@ -34,17 +34,18 @@ sub prepare_to_dispatch {
   my $rose_object     = $self->rose_object;
   my $job_data        = $rose_object->job_data;
   my $format          = $job_data->{format};
-  my $chr_filter      = $job_data->{chr_filter};
+  my $chr_filter      = $job_data->{chr_filter};  
   my $add_transcript  = $job_data->{add_transcript};
   my $remap_patch     = $job_data->{remap_patch};
   my $long_genes      = $job_data->{long_genes};
+  (my $output_file    = $job_data->{file_url}) =~ s/(http.*\/)//gi;
   my $config_content;
 
   my  $include  = [];
   
   if($long_genes) {
   # this is taken from examples/gff3_filter_large.conf on faang github repo
-  # if this changes too often, get Matt Laird to move the fixed parts into a file on github (only length is editable)
+  # if this changes too often, get Matt Laird to move the fixed parts into a file on github (only length is editable) or move this to json file (same for all other config_content below)
   $config_content = {  
       "input_filter" => { "_pre" => "max_length", "_post" => "metoo_delete"},
       "output_filter" => { "_metadata" => "forward_ref" },
@@ -71,14 +72,23 @@ sub prepare_to_dispatch {
       }
     }
   }
-
+  
   if($chr_filter) {
-    $config_content->{input_filter}->{seqname} = "chromosome|".lc($job_data->{species})."|".$chr_filter;
+    if($format eq 'fasta') {
+      $config_content->{processing}->{header} = "fasta_header";
+      $config_content->{mapping}->{fasta_header}->{_callback}               = "run";
+      $config_content->{mapping}->{fasta_header}->{_module}                 = "Bio::FormatTranscriber::Callback::fasta_header";
+      $config_content->{mapping}->{fasta_header}->{_init}->{header_pattern} = "^(\\w+)";
+      $config_content->{mapping}->{fasta_header}->{_init}->{parameter_1}    = "[[chromosome|".lc($job_data->{species})."|".$chr_filter."]]";
+      $config_content->{mapping}->{fasta_header}->{_parameters}->{record}   = "{{record}}";
+    } else {
+      $config_content->{input_filter}->{seqname} = "chromosome|".lc($job_data->{species})."|".$chr_filter;      
+    }
     push($include,"file:///localsw/FileChameleon/examples/chromosome.conf");
   }
   
   push($include,"file:///localsw/FileChameleon/examples/transcript_id.conf") if($add_transcript);
-  push($include,"file:///localsw/FileChameleon/examples/remap.conf") if($remap_patch);  
+  push($include,"file:///localsw/FileChameleon/examples/remap_anyoffset.conf") if($remap_patch);  
 
   $config_content->{include} = $include;
 
@@ -86,7 +96,7 @@ sub prepare_to_dispatch {
 
   return {
     'work_dir'      => $rose_object->job_dir,
-    'output_file'   => "FileChameleon_output.$format.gz", #need to change the output file name to be the same as inputfile name with _converted
+    'output_file'   => "FC_".$output_file,
     'input_file'    => $job_data->{'file_url'},
     'just_download' => $job_data->{'just_download'},
     'format'        => $format,
