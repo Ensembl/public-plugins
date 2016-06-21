@@ -43,7 +43,8 @@ sub init_from_user_input {
     'assembly'    => $hub->species_defs->get_config($species, 'ASSEMBLY_VERSION'),
     'job_data'    => {
       'species'         => $species,
-      'file_url'        => $hub->param('files_list'),  
+      'file_url'        => $hub->param('files_list'), 
+      'file_text'       => $hub->param('file_text'), 
       'format'          => $hub->param('format'),      
       'chr_filter'      => $hub->param('chr_filter') ne 'null' ? $hub->param('chr_filter') : '',
       'add_transcript'  => $hub->param('add_transcript') ? 1 : '',
