@@ -38,6 +38,7 @@ sub update_conf {
                                                     'IDMapper'          => 'Hive',
                                                     'FileChameleon'     => 'Hive',
                                                     'AlleleFrequency'   => 'Hive',
+                                                    'VcftoPed'          => 'Hive',
                                                   };                                                # Overriding tools plugin variable
   $SiteDefs::ENSEMBL_HIVE_HOSTS                 = [];                                               # For LOCAL, the machine that runs the beekeeper unless it's same as the web server
                                                                                                     # For LSF, list of hosts corresponding to the queues for all jobs plus the machine where
@@ -130,8 +131,11 @@ sub update_conf {
 
   # Allele Frequency configs
   $SiteDefs::ENSEMBL_AF_QUEUE                  = 'toolsgeneral';
-  $SiteDefs::ENSEMBL_AF_LSF_TIMEOUT            = '14:00';
   $SiteDefs::ENSEMBL_AF_ANALYSIS_CAPACITY      = 4;
+
+  # Allele Frequency configs
+  $SiteDefs::ENSEMBL_VP_QUEUE                  = 'toolsgeneral';
+  $SiteDefs::ENSEMBL_VP_ANALYSIS_CAPACITY      = 4;
 }
 
 1;

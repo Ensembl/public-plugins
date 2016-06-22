@@ -35,11 +35,12 @@ sub update_conf {
     'AssemblyConverter' => 'Assembly Converter',
     'IDMapper'          => 'ID History Converter',
     'FileChameleon'     => 'File Chameleon',
-    'AlleleFrequency'   => 'Allele Frequency Calculator'
+    'AlleleFrequency'   => 'Allele Frequency Calculator',
+    'VcftoPed'          => 'VCF to PED Converter',
   ];
 
   # Which dispatcher to be used for the jobs (provide the appropriate values in your plugins)
-  $SiteDefs::ENSEMBL_TOOLS_JOB_DISPATCHER = { 'Blast' => '', 'VEP' => '', 'AssemblyConverter' => '', 'IDMapper' => '', 'FileChameleon' => '' , 'AlleleFrequency' => ''};
+  $SiteDefs::ENSEMBL_TOOLS_JOB_DISPATCHER = { 'Blast' => '', 'VEP' => '', 'AssemblyConverter' => '', 'IDMapper' => '', 'FileChameleon' => '' , 'AlleleFrequency' => '', 'VcftoPed' => ''};
 
   # tmp directory for jobs i/o files - the final folder structure looks like ENSEMBL_TMP_DIR_TOOLS/temporary|persistent/ENSEMBL_TMP_SUBDIR_TOOLS/Blast|VEP
   $SiteDefs::ENSEMBL_TMP_DIR_TOOLS    = defer { $SiteDefs::ENSEMBL_TMP_DIR }; # keeping the base dir same as the main tmp dir
@@ -72,6 +73,9 @@ sub update_conf {
 
   # Path to Allele Frequency script
   $SiteDefs::ALLELE_FREQUENCY_BIN_PATH = '/path/to/allele_frequency.pl';
+
+  # Path to VCF to PED script
+  $SiteDefs::VCF_PED_BIN_PATH = '/path/to/vcftoped.pl';
 
   # Upload file size limits
   $SiteDefs::ENSEMBL_TOOLS_CGI_POST_MAX = {

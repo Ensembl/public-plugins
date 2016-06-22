@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-Ensembl.Panel.ThousandGenomeForm = Ensembl.Panel.ToolsForm.extend({
+Ensembl.Panel.ThousandGenome = Ensembl.Panel.ToolsForm.extend({
 
   init: function() {
     var panel = this;
@@ -42,8 +42,9 @@ Ensembl.Panel.ThousandGenomeForm = Ensembl.Panel.ToolsForm.extend({
         return;
       }
 
-      if(((parseFloat(r[4].replace(/,/gi,"")) - parseFloat(r[2].replace(/,/gi,""))) + 1) > 2500000) {
-        panel.showError('The region size is too big, maximum region size allowed is 2500000 ', 'Large region size');
+      //The region size restriction is only available on some tool (allele frequency)
+      if(panel.elLk.form.find('input[name=region_check]').length && ((parseFloat(r[4].replace(/,/gi,"")) - parseFloat(r[2].replace(/,/gi,""))) + 1) > parseInt(panel.elLk.form.find('input[name=region_check]').val())) {
+        panel.showError('The region size is too big, maximum region size allowed is '+parseInt(panel.elLk.form.find('input[name=region_check]').val()), 'Large region size');
         $(panel.elLk.form).data('valid', false);
         return;
       } else {
@@ -122,11 +123,13 @@ Ensembl.Panel.ThousandGenomeForm = Ensembl.Panel.ToolsForm.extend({
         $(this).data('valid', false);
         return;
       } else {
-        var r = panel.elLk.region.val().match(/^([^:]+):\s?([0-9\,]+)(-|_|\.\.)([0-9\,]+)$/);
-        if(((parseFloat(r[4].replace(/,/gi,"")) - parseFloat(r[2].replace(/,/gi,""))) + 1) > 2500000) {
-          panel.showError('The region size is too big, maximum region size allowed is 2500000 ', 'Large region size');
-          $(panel.elLk.form).data('valid', false);
-          return;
+        if(panel.elLk.form.find('input[name=region_check]').length) { //The region size restriction is only available on some tool (allele frequency)
+          var r = panel.elLk.region.val().match(/^([^:]+):\s?([0-9\,]+)(-|_|\.\.)([0-9\,]+)$/);
+          if(((parseFloat(r[4].replace(/,/gi,"")) - parseFloat(r[2].replace(/,/gi,""))) + 1) > parseInt(panel.elLk.form.find('input[name=region_check]').val())) {
+            panel.showError('The region size is too big, maximum region size allowed is '+parseInt(panel.elLk.form.find('input[name=region_check]').val()), 'Large region size');
+            $(panel.elLk.form).data('valid', false);
+            return;
+          }
         }
       }
       
@@ -143,6 +146,12 @@ Ensembl.Panel.ThousandGenomeForm = Ensembl.Panel.ToolsForm.extend({
           return;
         }
       }
+      
+      if(!panel.elLk.form.find('select.tools_listbox').val()){
+          panel.showError('Please choose at least one population', 'No population');
+          $(this).data('valid', false);
+          return;       
+      }
     });   
   },
   
@@ -156,7 +165,7 @@ Ensembl.Panel.ThousandGenomeForm = Ensembl.Panel.ToolsForm.extend({
     $.ajax({
       'type'    : "POST",      
       'url'     : panel.fileRestURL,
-      'data'    : JSON.stringify({'query':{'constant_score':{'filter':{'bool':{'must':[{'term':{'dataCollections':collection}},{'term':{'dataType':'variants'}}]}}}}, 'size': '100'}), //need to remove the size once returning all is supported by the rest
+      'data'    : JSON.stringify({'query':{'constant_score':{'filter':{'bool':{'must':[{'term':{'dataCollections':collection}},{'term':{'dataType':'variants'}}]}}}}, 'size': '-1', '_source': ['url']}), //need to remove the size once returning all is supported by the rest
       'beforeSend' : function() { panel.toggleSpinner(true); },
       'success' : function(data) {
         if(!data.hits || !data.hits.total) {
@@ -182,6 +191,8 @@ Ensembl.Panel.ThousandGenomeForm = Ensembl.Panel.ToolsForm.extend({
   },  
   
   populateForm: function(jobsData) {
+    var panel = this;
+    
     if (jobsData && jobsData.length) {
       this.base(jobsData);
       //this.resetSpecies(jobsData[0]['species']);
@@ -207,6 +218,11 @@ Ensembl.Panel.ThousandGenomeForm = Ensembl.Panel.ToolsForm.extend({
         this.elLk.form.find('span._sample_url_'+population).show();
         this.updatePopulation("","_stt_"+population,jobsData[0].population);        
       }
+      
+      // Base format radio buttons are not available on all tool (only vcf to ped)
+      if(panel.elLk.form.find('input[name=base]').length && jobsData[0].base){
+        panel.elLk.form.find('input[name=base][value=' + jobsData[0].base + ']').prop('checked',true);
+      }
     }
   },
   
@@ -230,7 +246,9 @@ Ensembl.Panel.ThousandGenomeForm = Ensembl.Panel.ToolsForm.extend({
       if(selected_value) {
         var population_listbox = panel_name.replace("_stt_","") + "_populations";        
         this.elLk.form.find('select[name=' + population_listbox + '] option').removeAttr("selected");
-        this.elLk.form.find('select[name=' + population_listbox + ']').find('option[value=' + selected_value + ']').prop('selected', true).end();
+        $.each(selected_value.split(","), function(i,e){
+          panel.elLk.form.find('select[name=' + population_listbox + ']').find('option[value=' + e + ']').prop('selected', true);
+        });
       }
     } else {
       panel.ajax({
@@ -241,7 +259,7 @@ Ensembl.Panel.ThousandGenomeForm = Ensembl.Panel.ToolsForm.extend({
         'spinner' : true,
         'success' : function(json) {
           var listbox  ="";
-          var selected = "";
+          
           if(json.error) {
             panel.showError('The sample population url is either invalid or not reachable', 'Invalid sample population URL');
             $(panel.elLk.form).data('valid', false);
@@ -249,13 +267,17 @@ Ensembl.Panel.ThousandGenomeForm = Ensembl.Panel.ToolsForm.extend({
           } else {
             $.each (json.populations, function (index,el) {
               if(el.value) {
-                if(el.value.match(/sample/gi)) { next; } //skip if  there is a header
-                selected = selected_value && selected_value === el.value ? 'selected="selected"' : '';
-                listbox += '<option value="' + el.value + '"' + selected +'>' + el.caption + '</option>';
+                if(el.value.match(/sample/gi)) { next; } //skip if  there is a header          
+                listbox += '<option value="' + el.value + '">' + el.caption + '</option>';
               }
             });
             panel.elLk.form.find('div.custom_population').show();
-            panel.elLk.form.find('div.custom_population select').html('').append(listbox);            
+            panel.elLk.form.find('div.custom_population select').html('').append(listbox);
+            if(selected_value) {
+              $.each(selected_value.split(","), function(i,e){
+                panel.elLk.form.find('div.custom_population select').find('option[value=' + e + ']').prop('selected', true);
+              });
+            }
           }          
         }
       });

@@ -201,6 +201,27 @@ sub populate_tree {
     ));
   }
 
+  ## VCF to PED converter (1000 Genomes tool)
+  if ($sd->ENSEMBL_VP_ENABLED) {
+    my $af_node = $tools_node->append($self->create_subnode('VcftoPed', 'VCF to PED Converter',
+      [qw(
+        af_input      EnsEMBL::Web::Component::Tools::VcftoPed::InputForm
+        af_details    EnsEMBL::Web::Component::Tools::VcftoPed::TicketDetails
+        tickets       EnsEMBL::Web::Component::Tools::VcftoPed::TicketsList
+      )],
+      { 'availability' => 1 }
+    ));
+
+    $af_node->append($self->create_subnode('VcftoPed/Results', $result_cap,
+      [qw(
+        details     EnsEMBL::Web::Component::Tools::VcftoPed::TicketDetails
+        ressummary  EnsEMBL::Web::Component::Tools::VcftoPed::ResultsSummary
+        results     EnsEMBL::Web::Component::Tools::VcftoPed::Results
+      )],
+      { 'availability' => 1, 'concise' => 'VCF to PED Converter results', 'no_menu_entry' => "$action/$function" ne 'VcftoPed/Results' }
+    ));
+  }
+
   ## Allele frequency (1000 Genomes tool)
   if ($sd->ENSEMBL_AF_ENABLED) {
     my $af_node = $tools_node->append($self->create_subnode('AlleleFrequency', 'Allele Frequency Calculator',
