@@ -30,7 +30,7 @@ Ensembl.Panel.FileChameleonForm = Ensembl.Panel.ToolsForm.extend({
     this.elLk.release_version = this.elLk.form.find('input[name=release]');
     
     this.resetSpecies(this.defaultSpecies);
-    this.editExisting();    
+    this.editExisting();
     
     this.elLk.speciesDropdown.on('change',function(){
       panel.elLk.form.find('p.nofilter_note').hide();
@@ -89,7 +89,7 @@ Ensembl.Panel.FileChameleonForm = Ensembl.Panel.ToolsForm.extend({
         panel.elLk.form.find('input[name=file_text]').val(panel.elLk.form.find('select[name=files_list] option:selected').text());
         panel.elLk.form.find('span.file_link').show();
       });
-    }
+    }    
     
     // Add validate event to the form which gets triggered before submitting it
     this.elLk.form.on('validate', function(e) {
@@ -99,7 +99,11 @@ Ensembl.Panel.FileChameleonForm = Ensembl.Panel.ToolsForm.extend({
         return;
       }
     });
-    this.elLk.form.find('div._stt_fasta').hide(); //this is to hide the input on new job (all filters are hidden for new job)
+    
+    if(!panel.elLk.formatRadio.is(":checked")) {
+      this.elLk.form.find('div._stt_fasta').hide(); //this is to hide all the filters on new job (chr_filter dropdown is shown because human is selected by default)
+    }
+    
   },
   
   populateForm: function(jobsData) {
@@ -186,23 +190,30 @@ Ensembl.Panel.FileChameleonForm = Ensembl.Panel.ToolsForm.extend({
         panel.elLk.form.find('input[name=file_text]').val(panel.elLk.form.find('select[name=files_list] option:selected').text());
         panel.elLk.form.find('span.file_link').show();
 
-        //And show/hide remap patches filter if patch file is present (mainly for human and mouse); LEAVE this here because the check can only happen after the dropdown is populated
+        //And show/hide remap patches filter if patch file is present (mainly for human and mouse); can apply this filter on both chr_patch* or abinitio* file and is only available for gff3.
+        //LEAVE this here because the check can only happen after the dropdown is populated        
         if(panel.elLk.fileList.find('option[value*="chr_patch_hapl_scaff"]').length && format === 'gff3') {
           panel.elLk.form.find('div._remap').show();
         } else {
           panel.elLk.form.find('div._remap').hide();
         }
-        //select default file to *chr_patch_hapl_scaff* if remap patch filter is ticked (small bug: doing the below twice)
+        
+        if(panel.elLk.form.find('div._remap').is(":visible") && panel.elLk.remap_patch.is(":checked")) {
+          panel.elLk.fileList.find('option[value*="chr_patch_hapl_scaff"]').prop('selected', true);
+          panel.elLk.form.find('span._file_text').html(panel.elLk.form.find('select[name=files_list] option:selected').text()).show();
+          panel.elLk.form.find('input[name=file_text]').val(panel.elLk.form.find('select[name=files_list] option:selected').text());
+        }         
+        //select default file to *chr_patch_hapl_scaff* if remap patch filter is ticked (small bug: doing the below twice)        
         panel.elLk.remap_patch.on('change', function (){
           if(panel.elLk.form.find('div._remap').is(":visible") && panel.elLk.remap_patch.is(":checked")) {
             panel.elLk.fileList.find('option[value*="chr_patch_hapl_scaff"]').prop('selected', true);
-            panel.elLk.form.find('span._file_text').html(panel.elLk.form.find('select[name=files_list] option:selected').text()).show();
-            panel.elLk.form.find('input[name=file_text]').val(panel.elLk.form.find('select[name=files_list] option:selected').text());
+            panel.elLk.form.find('span._file_text').html(panel.elLk.form.find('select[name=files_list] option:selected').text()).show();            
+            panel.elLk.form.find('input[name=file_text]').val(panel.elLk.form.find('select[name=files_list] option:selected').text());            
           } else {
             var rollback_value = panel.elLk.release_version.val()+"\\."+format
             panel.elLk.fileList.find('option[value*="' + rollback_value + '"]').prop('selected', true);
             panel.elLk.form.find('span._file_text').html(panel.elLk.form.find('select[name=files_list] option:selected').text()).show();            
-            panel.elLk.form.find('input[name=file_text]').val(panel.elLk.form.find('select[name=files_list] option:selected').text());
+            panel.elLk.form.find('input[name=file_text]').val(panel.elLk.form.find('select[name=files_list] option:selected').text());            
           }
         })
       },

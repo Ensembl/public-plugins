@@ -78,27 +78,10 @@ sub get_cacheable_form_node {
   $format_fieldset->add_field({
     'type'          => 'radiolist',
     'name'          => 'format',
-    'label'         => 'File format',
+    'label'         => 'Format',
     'values'        => $input_formats,
     'class'         => 'format _stt'
   });
-  
-  $format_fieldset->add_field({
-    'label'         => 'File',
-    'elements'      => [{
-      'type'          => 'noedit',      
-      'value'         => qq{<select class="fselect hidden" style="width: auto" name="files_list"><option value='null'></option></select><span class="_file_text"></span><span class="file_link hidden left-margin small"><a href=$url>Select a different file</a></span>},
-      'no_input'      => 1,
-      'is_html'       => 1,      
-    }]    
-  });
-  
-  $format_fieldset->add_field({
-    'type'          => 'string',
-    'name'          => 'file_text',
-    'value'         => '',
-    'field_class'   => 'hidden'
-  });  
   
   $format_fieldset->add_field({
     'type'          => 'string',
@@ -108,8 +91,8 @@ sub get_cacheable_form_node {
   });  
   
   $self->togglable_fieldsets($form, {
-    'title' => "File Listing",
-    'desc'  => "list the file formats and the files",
+    'title' => "File Format",
+    'desc'  => "list the file formats",
     'open'  => 1,
   }, $format_fieldset);
   
@@ -117,7 +100,7 @@ sub get_cacheable_form_node {
   $filter_fieldset->add_field({
     'type'          => 'dropdown',
     'name'          => 'chr_filter',
-    'label'         => '<span class="ht _ht"><span class="_ht_tip hidden">Select UCSC naming style for the chromosomes</span>Change chromosome naming style</span>',
+    'label'         => '<span class="ht _ht"><span class="_ht_tip hidden">Select between Ensembl and UCSC naming styles</span>Change chromosome naming style</span>',
     'values'        => $style_formats, 
     'field_class'   => '_stt_fasta _stt_gtf _stt_gff3 _stt_chr_filter hidden _filters',    
   });
@@ -150,10 +133,29 @@ sub get_cacheable_form_node {
     'title' => "Custom Options",
     'desc'  => "list the options to customise files",
     'open'  => 1
-  }, $filter_fieldset);    
+  }, $filter_fieldset);
   
   $filter_fieldset->prepend_child("p", {"inner_HTML" => "No filters are available for your selections; you can only download the file by clicking Run below.", 'class' => 'nofilter_note hidden bold'});
   $filter_fieldset->prepend_child("p", {"inner_HTML" => "<b>Note:</b> Do not choose any of the options below if you want to just download the unedited file.",});
+  
+  my $file_fieldset  = $form->add_fieldset();
+  $file_fieldset->add_field({
+    'label'         => '<span class="ht _ht"><span class="_ht_tip hidden">The most suitable file is preselected based on your custom options. Click on "choose a different file" to select another</span>Source file</span>',
+    'field_class'   => 'file_div',
+    'elements'      => [{
+      'type'          => 'noedit',      
+      'value'         => qq{<select class="fselect hidden" style="width: auto" name="files_list"><option value='null'></option></select><span class="_file_text"></span><span class="file_link hidden"> or <a href=$url>choose a different file</a></span>},
+      'no_input'      => 1,
+      'is_html'       => 1,      
+    }]    
+  });
+  
+  $file_fieldset->add_field({
+    'type'          => 'string',
+    'name'          => 'file_text',
+    'value'         => '',
+    'field_class'   => 'hidden'
+  });  
   $self->add_buttons_fieldset($form, {'reset' => 'Clear', 'cancel' => 'Close form'});
 
   return $form;
