@@ -28,7 +28,7 @@ use parent qw(
 
 sub form_header_info {
   my $self  = shift;
-  return '<p class="info">This tool parses a vcf file to create a linkage pedigree file (ped) and a marker information file, which together may be loaded into ld visualization tools like Haploview.</p>';
+  return '<p class="info">This tool parses a vcf file to create a linkage pedigree file (PED) and a marker information file, which together may be loaded into LD visualization tools such as Haploview.</p>';
 }
 
 sub get_cacheable_form_node {
