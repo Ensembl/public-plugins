@@ -32,10 +32,20 @@ sub form_header_info {
 }
 
 sub get_cacheable_form_node {
-  ## Abstract method implementation
+  ## Overwriting parent ThousandGenomeInputForm by adding region_check hidden input
   my $self    = shift;
+
+  my $form      = $self->common_form;
+  my $fieldset  = $form->fieldsets->[0];
+
+  $fieldset->add_field({
+    'type'          => 'string',
+    'name'          => 'region_check',    
+    'value'        => '2500000',
+    'field_class'  => 'hidden',
+  });
   
-  return $self->common_form;
+  return $form;
 }
 
 sub get_non_cacheable_fields {
@@ -45,7 +55,7 @@ sub get_non_cacheable_fields {
 
 sub js_panel {
   ## use generic js for 1000genome form
-  return 'ThousandGenomeForm';
+  return 'ThousandGenome';
 }
 
 1;
