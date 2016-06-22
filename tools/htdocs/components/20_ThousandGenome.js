@@ -37,7 +37,7 @@ Ensembl.Panel.ThousandGenome = Ensembl.Panel.ToolsForm.extend({
       var r = panel.elLk.region.val().match(/^([^:]+):\s?([0-9\,]+)(-|_|\.\.)([0-9\,]+)$/);
 
       if (!r || r.length !== 5 || r[4] - r[2] < 0) {
-        panel.showError('Please enter a valid region for e.g: 1:1-50000', 'Invalid Region');
+        panel.showError('Please enter a valid region e.g: 1:1-50000', 'Invalid Region Lookup');
         $(panel.elLk.form).data('valid', false);
         return;
       }
@@ -123,8 +123,15 @@ Ensembl.Panel.ThousandGenome = Ensembl.Panel.ToolsForm.extend({
         $(this).data('valid', false);
         return;
       } else {
-        if(panel.elLk.form.find('input[name=region_check]').length) { //The region size restriction is only available on some tool (allele frequency)
-          var r = panel.elLk.region.val().match(/^([^:]+):\s?([0-9\,]+)(-|_|\.\.)([0-9\,]+)$/);
+        var r = panel.elLk.region.val().match(/^([^:]+):\s?([0-9\,]+)(-|_|\.\.)([0-9\,]+)$/);
+
+        if (!r || r.length !== 5 || r[4] - r[2] < 0) {
+          panel.showError('Please enter a valid region e.g: 1:1-50000', 'Invalid Region Lookup');
+          $(panel.elLk.form).data('valid', false);
+          return;
+        }
+        
+        if(panel.elLk.form.find('input[name=region_check]').length) { //The region size restriction is only available on some tool (allele frequency)        
           if(((parseFloat(r[4].replace(/,/gi,"")) - parseFloat(r[2].replace(/,/gi,""))) + 1) > parseInt(panel.elLk.form.find('input[name=region_check]').val())) {
             panel.showError('The region size is too big, maximum region size allowed is '+parseInt(panel.elLk.form.find('input[name=region_check]').val()), 'Large region size');
             $(panel.elLk.form).data('valid', false);
