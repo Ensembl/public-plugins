@@ -1,0 +1,38 @@
+<title>VCF to PED Converter</title>
+
+<h1>VCF to PED Converter</h1>
+<p>
+The <a href="/Homo_sapiens/Tools/VcftoPed">VCF to PED converter</a> allows users to parse a vcf file (<a href="http://vcftools.sourceforge.net/specs.html">specification</a>) to create a linkage pedigree file (ped) and a marker information file, which together may be loaded into ld visualization tools like <a href="http://www.broadinstitute.org/scientific-community/science/programs/medical-and-population-genetics/haploview/haploview">Haploview</a>. There is both an online version of this tool and a perl script
+</p>
+
+<p>Online version</p>
+<p>The documentation for the online version can be found by clicking on the <span class="sprite help_icon" style="float:none; margin-bottom: -3px;"></span> icon at the top of <a href="/Homo_sapiens/Tools/VcftoPed">VCF to PED converter</a>.</p>
+
+<p>API script</p>
+<p>
+A perl API script version of the <a href="ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/technical/browser/vcf_to_ped_converter/version_1.1/vcf_to_ped_convert.pl">converter tool</a> is available from the ftp site.
+</p>
+
+<p>
+This script converts locally or remotely accessible vcf files to linkage pedigree files. If the input file is only remotely accessible then it must be compressed by bgzip and indexed by tabix. There is no requirement to compress vcf files if they are held locally, but large files will be read more quickly using tabix. If the vcf file is compressed then you must have <a href="http://sourceforge.net/projects/samtools/files/tabix/">tabix</a> installed.
+</p>
+
+<p>The script is run from the command line and it takes the following arguments:</p>
+
+<p><b>-vcf</b> (required argument) Path to a locally or remotely accessible tabix indexed vcf file.</p>
+<p><b>-sample_panel_file</b> (required argument) Path to a locally or remotely accessible sample panel file, listing all individuals (first column)and their population (second column).</p>
+<p><b>-population</b> (required argument) A population name, which must appear in the second column of the sample panel file. Can be specified more than once for multiple populations.</p>
+<p><b>-tabix</b> (optional argument) Path to the tabix executable. If the vcf file is compressed and this argument is not specified, the default is to search PATH for ‘tabix’.</p>
+<p><b>-output_ped</b> (optional argument) Name of the output ped file. The default name is region.ped (e.g. 1_100000-100500.ped).</p>
+<p><b>-output_info</b> (optional argument) Name of the output info file (marker information file). The default name is region.info (e.g. 1_100000-100500.info).</p>
+<p><b>-output_dir</b> (optional argument) Name of a directory in which to put the output files.</p>
+<p><b>-base_format</b> (optional argument(number or letter)) Defaults to number; if letter is specified the genotypes will be expressed as ATGC rather than 0123, by default this script uses the old style of plink allele annotation which used A => 1, C => 2, G => 3 and T => 4</p>
+<p><b>-help</b> (optional argument) Print out the help documentation.</p>
+
+<p>Here is an example of a command line for running the script:</p>
+
+<pre>
+<code>
+perl vcf_to_ped_converter.pl -vcf ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20110521/ALL.chr13.phase1_integrated_calls.20101123.snps_indels_svs.genotypes.vcf.gz -sample_panel_file ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20110521/phase1_integrated_calls.20101123.ALL.sample_panel -region 13:32889611-32973805 -population GBR -population FIN
+</code>
+</pre>
