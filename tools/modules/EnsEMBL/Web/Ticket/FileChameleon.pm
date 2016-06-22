@@ -50,7 +50,7 @@ sub init_from_user_input {
       'add_transcript'  => $hub->param('add_transcript') ? 1 : '',
       'remap_patch'     => $hub->param('remap_patch') ? 1 : '',
       'long_genes'      => $hub->param('long_genes') ne 'null' ? $hub->param('long_genes') : '',
-      'just_download'   => !$hub->param('remap_patch') && $hub->param('long_genes') eq 'null' && !$hub->param('add_transcript') && $hub->param('chr_filter') eq 'null' ? 1 : '',
+      'just_download'   => !$hub->param('remap_patch') && $hub->param('long_genes') eq 'null' && !$hub->param('add_transcript') && ($hub->param('chr_filter') eq 'null' || $hub->param('chr_filter') eq 'ucsc_to_ensembl') ? 1 : '', #if user dont choose any filters or choose only ensembl style for chr filter then it means they only want to download the raw file; for now we are not doing anything with ensembl style chromosome (if we do in the FUTURE then remove the check 'ucsc_to_ensembl')
     }
   }));
 }

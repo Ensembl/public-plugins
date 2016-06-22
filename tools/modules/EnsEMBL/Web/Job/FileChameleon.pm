@@ -73,7 +73,7 @@ sub prepare_to_dispatch {
     }
   }
   
-  if($chr_filter) {
+  if($chr_filter && $chr_filter ne 'ucsc_to_ensembl') {
     if($format eq 'fasta') {
       $config_content->{processing}->{header} = "fasta_header";
       $config_content->{mapping}->{fasta_header}->{_callback}               = "run";
