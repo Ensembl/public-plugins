@@ -63,7 +63,7 @@ sub prepare_to_dispatch {
     'output_file'   => $output_file,
     'input_file'    => $file_url,
     'region'        => $job_data->{'region'},
-    'population'    => $population,   
+    'population'    => $job_data->{'population'},
     'sample_panel'  => $sample_file,
     'proxy'         => $self->hub->species_defs->ENSEMBL_WWW_PROXY,
     'code_root'     => $self->hub->species_defs->ENSEMBL_HIVE_HOSTS_CODE_LOCATION

@@ -44,7 +44,7 @@ sub job_details_table {
   $two_col->add_row('Region',         $job_data->{region});
   $two_col->add_row('File URL',       $job_data->{file_url});  
   $two_col->add_row('Sample population URL', $job_data->{sample_panel});
-  $two_col->add_row('Population',         $job_data->{population});
+  $two_col->add_row('Population(s)',         $job_data->{population});
   
   return $two_col;
 }

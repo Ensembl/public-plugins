@@ -69,12 +69,6 @@ sub fetch_input {
     throw exception('HiveException', "Index file error: ".$index_resp->error_code) unless -s $shortname.".gz.tbi";
   }
 
-  #downloading .tbi (index) file to work dir
-  my $args        = {'no_exception' => 1 };
-  $args->{proxy}  = $proxy ? $proxy : "";  
-  $args->{nice}   = 1;  
-  $args->{destination_path} = "$work_dir/";
-
   $self->param('__input_file', $input_file);
   $self->param('__trim_file', $trim_file);
   $self->param('__region', $region);
@@ -101,6 +95,13 @@ sub run {
   # throw exception if process failed
   if (my $error_code = $command->error_code) {
     my $error_details = join('', grep(/MSG/, file_get_contents($log_file)));
+
+    #PRECAUTIONARY MEASURE: do cleanup in case job failed for some other reason
+    my @del_files   = ($self->param('__log_file'), $self->param('__trim_file'), $self->param('__trim_file').".tbi", $self->param('__sample_panel'));
+    for my $file (@del_files) {
+      unlink $file if (-f $file);
+    }
+
     ($error_details) = file_get_contents($log_file) if(!$error_details);
     throw exception('HiveException', "\n".$error_details);
   }

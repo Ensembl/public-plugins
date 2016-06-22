@@ -30,7 +30,7 @@ sub resource_classes {
 
   return { $queue => {'LOCAL' => ''} } if $sd->ENSEMBL_AF_RUN_LOCAL;
 
-  my $lsf_timeout = $sd->ENSEMBL_FC_LSF_TIMEOUT;
+  my $lsf_timeout = $sd->ENSEMBL_AF_LSF_TIMEOUT;
   return {$queue => { 'LSF' => $lsf_timeout ? "-q $queue -W $lsf_timeout" : "-q $queue" }};
 }
 
