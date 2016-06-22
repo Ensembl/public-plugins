@@ -42,6 +42,7 @@ sub new {
     $sd->ENSEMBL_IDM_ENABLED   ? 'EnsEMBL::Web::ToolsPipeConfig::IDMapper' : (),
     $sd->ENSEMBL_FC_ENABLED    ? 'EnsEMBL::Web::ToolsPipeConfig::FileChameleon' : (),
     $sd->ENSEMBL_AF_ENABLED    ? 'EnsEMBL::Web::ToolsPipeConfig::AlleleFrequency' : (),
+    $sd->ENSEMBL_VP_ENABLED    ? 'EnsEMBL::Web::ToolsPipeConfig::VcftoPed' : (),
   ) ];
 
   return $self;
