@@ -33,6 +33,21 @@ sub form_header_info {
   return shift->info_panel("BETA version",'<p class="info">To use Ensembl data for your genomic analysis, download files customised for your tool with File Chameleon. Note the File Chameleon Tool does not convert between file formats.</p><p class="info">This is a beta version; please <a href="/Help/Contact/" class="popup">contact us</a> if you spot any issues or if you would like us to support additional customisations.</p>');
 }
 
+sub js_params {
+  ## Returns parameters to be passed to JavaScript panel
+  ## @return Hashref of keys to value - if value is hash or array, it gets passed as JSON object
+
+  my $self    = shift;
+  my $hub     = $self->hub;
+  my $params  = $self->SUPER::js_params(@_);
+
+  $params->{'ftp_url'}          = $SiteDefs::FTP_URL;
+  $params->{'release_version'}  = $hub->species_defs->ENSEMBL_VERSION;
+
+  return $params;
+}
+
+
 sub get_cacheable_form_node {
   ## Abstract method implementation
   my $self            = shift;
@@ -82,14 +97,7 @@ sub get_cacheable_form_node {
     'values'        => $input_formats,
     'class'         => 'format _stt'
   });
-  
-  $format_fieldset->add_field({
-    'type'          => 'string',
-    'name'          => 'release',
-    'value'         => $release,
-    'field_class'   => 'hidden'
-  });  
-  
+    
   $self->togglable_fieldsets($form, {
     'title' => "File Format",
     'desc'  => "list the file formats",

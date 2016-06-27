@@ -105,6 +105,9 @@ sub update_conf {
   $SiteDefs::ENSEMBL_TICKETS_VALIDITY         = 10 * 24 * 60 * 60;
   $SiteDefs::ENSEMBL_TICKETS_VALIDITY_WARNING = 3  * 24 * 60 * 60;
 
+  #Ensembl ftp site URL (used by file chameleon)
+  $SiteDefs::FTP_URL  = "http://ftp.ensembl.org/pub/current_";
+
   #1000Genome Rest URL
   $SiteDefs::GENOME_REST_FILE_URL  = "http://www.1000genomes.org/api/beta/file/_search";
 
