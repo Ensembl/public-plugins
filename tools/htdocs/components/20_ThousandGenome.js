@@ -154,7 +154,7 @@ Ensembl.Panel.ThousandGenome = Ensembl.Panel.ToolsForm.extend({
         }
       }
       
-      if(!panel.elLk.form.find('select.tools_listbox').val()){
+      if(!panel.elLk.form.find('select.tools_listbox:visible').val()){
           panel.showError('Please choose at least one population', 'No population');
           $(this).data('valid', false);
           return;       
@@ -234,7 +234,7 @@ Ensembl.Panel.ThousandGenome = Ensembl.Panel.ToolsForm.extend({
   },
   
   reset: function() {
-    this.base.apply(this, arguments);    
+    this.base.apply(this, arguments);
     
     this.elLk.form.find('div.population').hide();
     this.elLk.form.find('select[name=collection_format]').find('option[value=phase3]').prop('selected', true).end().selectToToggle('trigger');
@@ -269,6 +269,8 @@ Ensembl.Panel.ThousandGenome = Ensembl.Panel.ToolsForm.extend({
           
           if(json.error) {
             panel.showError('The sample population url is either invalid or not reachable', 'Invalid sample population URL');
+            panel.elLk.form.find('div.custom_population select').html(''); //Hiding population dropdown if its already there before by inputing a valid sample url
+            panel.elLk.form.find('div.population').hide();
             $(panel.elLk.form).data('valid', false);
             panel.ajax.spinner = 'false';            
           } else {
