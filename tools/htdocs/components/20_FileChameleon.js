@@ -28,7 +28,7 @@ Ensembl.Panel.FileChameleonForm = Ensembl.Panel.ToolsForm.extend({
     this.elLk.add_transcript  = this.elLk.form.find('input[name=add_transcript]');
     this.elLk.remap_patch     = this.elLk.form.find('input[name=remap_patch]');
     
-    this.release_version = this.params['release_version'];
+    this.release_version = this.params['release_version']; //not being used anymore (was used to determine the default file for gff3 and gtf) but keeping it in case it will be needed
     this.ftp_url         = this.params['ftp_url'];
 
     this.resetSpecies(this.defaultSpecies);
@@ -165,9 +165,9 @@ Ensembl.Panel.FileChameleonForm = Ensembl.Panel.ToolsForm.extend({
       selected_file   = selected_file ? selected_file : "dna\\.toplevel\\.";
     } else {      
       default_name    = panel.elLk.speciesDropdown.find('input:checked').parent().find('label').html().replace(/\(.*\)/,"")+"gene set";      
-      selected_file   = selected_file ? selected_file : panel.release_version+"\\."+format;
+      selected_file   = selected_file ? selected_file : "(\\d+)\\."+format;
     }
-    
+
     var ftp_url = panel.ftp_url + format + "/" + species + "/";
     $.ajax({
       'url': ftp_url,
@@ -212,7 +212,7 @@ Ensembl.Panel.FileChameleonForm = Ensembl.Panel.ToolsForm.extend({
             panel.elLk.form.find('span._file_text').html(panel.elLk.form.find('select[name=files_list] option:selected').text()).show();            
             panel.elLk.form.find('input[name=file_text]').val(panel.elLk.form.find('select[name=files_list] option:selected').text());            
           } else {
-            var rollback_value = panel.release_version+"\\."+format
+            var rollback_value = "(\\d+)\\."+format
             panel.elLk.fileList.find('option[value*="' + rollback_value + '"]').prop('selected', true);
             panel.elLk.form.find('span._file_text').html(panel.elLk.form.find('select[name=files_list] option:selected').text()).show();            
             panel.elLk.form.find('input[name=file_text]').val(panel.elLk.form.find('select[name=files_list] option:selected').text());            
