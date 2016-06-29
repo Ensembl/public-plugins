@@ -125,9 +125,9 @@ sub update_conf {
   $SiteDefs::ENSEMBL_IDM_ANALYSIS_CAPACITY      = 4;                                                # Number of jobs that can be run parallel in the queue (LSF or LOCAL)
 
   # File Chameleon configs
-  $SiteDefs::ENSEMBL_FC_QUEUE                  = 'toolsgeneral';                                   # LSF or LOCAL queue for ID mapper jobs
-  $SiteDefs::ENSEMBL_FC_LSF_TIMEOUT            = undef;                                            # Max timelimit an ID mapper job is allowed to run on LSF
-  $SiteDefs::ENSEMBL_FC_ANALYSIS_CAPACITY      = 4;                                                # Number of jobs that can be run parallel in the queue (LSF or LOCAL)
+  $SiteDefs::ENSEMBL_FC_QUEUE                  = 'toolsgeneral';                                   
+  $SiteDefs::ENSEMBL_FC_LSF_TIMEOUT            = undef;                                            
+  $SiteDefs::ENSEMBL_FC_ANALYSIS_CAPACITY      = 4;                                                
 
   # Allele Frequency configs
   $SiteDefs::ENSEMBL_AF_QUEUE                  = 'toolsgeneral';
