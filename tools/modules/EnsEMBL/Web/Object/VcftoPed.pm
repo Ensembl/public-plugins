@@ -80,15 +80,12 @@ sub handle_download {
   my $job     = $ticket->job->[0] or return;   
 
   my $filename    = $hub->param('info') ? $job->dispatcher_data->{'output_info'} : $job->dispatcher_data->{'output_ped'};
-  my $content     = file_get_contents(join('/', $job->job_dir, $filename), sub { s/\R/\r\n/r });
+  #my $content     = file_get_contents(join('/', $job->job_dir, $filename), sub { s/\R/\r\n/r });
 
   $r->headers_out->add('Content-Type'         => 'text/plain');
-  $r->headers_out->add('Content-Length'       => length $content);
   $r->headers_out->add('Content-Disposition'  => sprintf 'attachment; filename=%s', $filename);
-
-  print $content;
   
-
+  return $r->sendfile(join('/', $job->job_dir, $filename));
 }
 
 1;
