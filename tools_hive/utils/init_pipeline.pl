@@ -43,6 +43,6 @@ die "Could not find location of the $script_name script.\n"                     
 
 #system('perl', $script_name, $conf_package, '-hive_force_init', 1);
 system('perl', $script_name, $conf_package, '-hive_no_init', 1); #the hive_no_init flag will add new analysis (not updating existing one)
-#system('perl', $script_name, $conf_package);
+#system('perl', $script_name, $conf_package); #uncomment this line and comment the above if you want to create a new hive database
 
 1;
