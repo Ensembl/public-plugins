@@ -46,11 +46,12 @@ sub job_details_table {
   $two_col->add_row('Species',        $sd->tools_valid_species($species) ? sprintf('<img class="job-species" src="%sspecies/16/%s.png" alt="" height="16" width="16">%s', $self->img_url, $species, $sd->species_label($species, 1)) : $species =~ s/_/ /rg);
   $two_col->add_row('Assembly',       $job->assembly);
   $two_col->add_row('File format',    $job_data->{format});
-  $two_col->add_row('File',           $job_data->{file_text});
+  $two_col->add_row('Source file',    $job_data->{file_text});
   $two_col->add_row('Chromosome naming style', $filter_value[0]->{caption}) if($job_data->{chr_filter});
   $two_col->add_row('Remove long genes',       $job_data->{long_genes} =~ s/000/Mbp/gi) if($job_data->{long_genes});
   $two_col->add_row('Add transcript IDs',      "Y") if($job_data->{add_transcript});
   $two_col->add_row('Remap patches',           "Y") if($job_data->{remap_patch});
+  $two_col->add_row('Output file',    $job->dispatcher_data->{'output_file'}) if($job->dispatcher_data->{'output_file'});
 
   return $two_col;
 }
