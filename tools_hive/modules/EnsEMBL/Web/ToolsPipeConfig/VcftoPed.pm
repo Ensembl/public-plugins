@@ -38,7 +38,6 @@ sub pipeline_analyses {
   my ($class, $conf) = @_;
 
   my $sd = $conf->species_defs;
-warn ">>>".$sd->VCF_PED_BIN_PATH;
 
   return [{
     '-logic_name'           => 'VcftoPed',
