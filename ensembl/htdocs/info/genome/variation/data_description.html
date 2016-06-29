@@ -95,8 +95,8 @@ a variation database.
       <th style="background-color:#BBB">Species</th>  
       <th style="background-color:#BBB;border-left:1px solid #DDD">Sequence variant</th>
       <th style="background-color:#BBB;padding-left:0px">
-        <span class="_ht ht" title="Sequence variant count difference with the previous Ensembl release (v.83)">
-          <small>(e!83 &rarr; e!84)</small>
+        <span class="_ht ht" title="Sequence variant count difference with the previous Ensembl release (v.84)">
+          <small>(e!84 &rarr; e!85)</small>
         </span>
       </th>
       <th style="background-color:#BBB;border-left:1px solid #DDD">Source(s)</th>
@@ -203,7 +203,7 @@ a variation database.
        </div>
     </td>
     <td style="text-align:right"><span class="vdoc_var_count vdoc_million_1" title="Over 99 million variants">99 million+</span></td>
-    <td style="text-align:right"><span style="color:#090" title="Over 4.3 million more variants"><small>(+4.3 million)</small></span></td>
+    <td style="text-align:right">-</td>
     <td style="text-align:right">
       <a href="sources_documentation.html#bos_taurus" class="ht _ht" style="text-decoration:none" title="dbSNP">1 source</a>
     </td>
@@ -231,7 +231,7 @@ a variation database.
        </div>
     </td>
     <td style="text-align:right"><span class="vdoc_var_count vdoc_million_2" title="Over 5.9 million variants">5.9 million+</span></td>
-    <td style="text-align:right"><span style="color:#090" title="Over 2.6 million more variants"><small>(+2.6 million)</small></span></td>
+    <td style="text-align:right">-</td>
     <td style="text-align:right">
       <a href="sources_documentation.html#canis_familiaris" class="ht _ht" style="text-decoration:none" title="dbSNP">1 source</a>
     </td>
@@ -342,10 +342,10 @@ a variation database.
          <div style="clear:both"></div>
        </div>
     </td>
-    <td style="text-align:right"><span class="vdoc_var_count vdoc_million_1" title="Over 153 million variants">153 million+</span></td>
-    <td style="text-align:right"><span style="color:#090" title="Over 853,000 more variants"><small>(+853,000)</small></span></td>
+    <td style="text-align:right"><span class="vdoc_var_count vdoc_million_1" title="Over 157 million variants">157 million+</span></td>
+    <td style="text-align:right"><span style="color:#090" title="Over 3.7 million more variants"><small>(+3.7 million)</small></span></td>
     <td style="text-align:right">
-      <a href="sources_documentation.html#homo_sapiens" class="ht _ht" style="text-decoration:none" title="dbSNP , COSMIC , ClinVar , ESP , HGMD-PUBLIC , HumanCoreExome-12 , PhenCode">7 sources</a>
+      <a href="sources_documentation.html#homo_sapiens" class="ht _ht" style="text-decoration:none" title="dbSNP , COSMIC , ClinVar , ESP , HGMD-PUBLIC , PhenCode">6 sources</a>
     </td>
     <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
     <td style="text-align:center"><img src="/i/16/check.png" title="Data available" /></td>
@@ -399,7 +399,7 @@ a variation database.
        </div>
     </td>
     <td style="text-align:right"><span class="vdoc_var_count vdoc_million_1" title="Over 80 million variants">80 million+</span></td>
-    <td style="text-align:right">-</td>
+    <td style="text-align:right"><span style="color:#090" title="Over 14,000 more variants"><small>(+14,000)</small></span></td>
     <td style="text-align:right">
       <a href="sources_documentation.html#mus_musculus" class="ht _ht" style="text-decoration:none" title="dbSNP">1 source</a>
     </td>
@@ -483,7 +483,7 @@ a variation database.
        </div>
     </td>
     <td style="text-align:right"><span class="vdoc_var_count vdoc_million_1" title="Over 60 million variants">60 million+</span></td>
-    <td style="text-align:right"><span style="color:#090" title="Over 29,000 more variants"><small>(+29,000)</small></span></td>
+    <td style="text-align:right">-</td>
     <td style="text-align:right">
       <a href="sources_documentation.html#sus_scrofa" class="ht _ht" style="text-decoration:none" title="dbSNP , Axiom Genotyping Array , Pig SNP Consortium">3 sources</a>
     </td>
@@ -923,6 +923,22 @@ somatic mutations from germline variants in the display term, prefixing the term
   </tr>
 
   <tr>
+    <td rowspan="2" style="padding:0px;margin:0px;;background-color:#000080;border-top:1px solid #FFF"></td>
+    <td rowspan="2" style="font-weight:bold">Alu_insertion</td>
+    <td rowspan="2"></td>
+    <td rowspan="2"><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0002063">SO:0002063</a></td>
+    <td>Alu insertion</td>
+    <td rowspan="2">
+      <ul style="margin:0px;padding-left:1em">
+        <li style="margin:0px"><span class="_ht ht" title="Structural variant">SV</span></li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td>somatic_Alu insertion</td>
+  </tr>
+
+  <tr class="bg2">
     <td rowspan="2" style="padding:0px;margin:0px;;background-color:#007FFF;border-top:1px solid #FFF"></td>
     <td rowspan="2" style="font-weight:bold">complex_structural_alteration</td>
     <td rowspan="2">A structural sequence alteration or rearrangement encompassing one or more genome fragments.</td>
@@ -934,11 +950,11 @@ somatic mutations from germline variants in the display term, prefixing the term
       </ul>
     </td>
   </tr>
-  <tr>
+  <tr class="bg2">
     <td>somatic_Complex</td>
   </tr>
 
-  <tr class="bg2">
+  <tr>
     <td rowspan="2" style="padding:0px;margin:0px;;background-color:#007FFF;border-top:1px solid #FFF"></td>
     <td rowspan="2" style="font-weight:bold">complex_substitution</td>
     <td rowspan="2">When no simple or well defined DNA mutation event describes the observed DNA change, the keyword "complex" should be used. Usually there are multiple equally plausible explanations for the change.</td>
@@ -950,11 +966,11 @@ somatic mutations from germline variants in the display term, prefixing the term
       </ul>
     </td>
   </tr>
-  <tr class="bg2">
+  <tr>
     <td>somatic_Complex substitution</td>
   </tr>
 
-  <tr>
+  <tr class="bg2">
     <td rowspan="2" style="padding:0px;margin:0px;;background-color:#0000CC;border-top:1px solid #FFF"></td>
     <td rowspan="2" style="font-weight:bold">copy_number_gain</td>
     <td rowspan="2">A sequence alteration whereby the copy number of a given regions is greater than the reference sequence.</td>
@@ -966,11 +982,11 @@ somatic mutations from germline variants in the display term, prefixing the term
       </ul>
     </td>
   </tr>
-  <tr>
+  <tr class="bg2">
     <td>somatic_Gain</td>
   </tr>
 
-  <tr class="bg2">
+  <tr>
     <td rowspan="2" style="padding:0px;margin:0px;;background-color:#CC0000;border-top:1px solid #FFF"></td>
     <td rowspan="2" style="font-weight:bold">copy_number_loss</td>
     <td rowspan="2">A sequence alteration whereby the copy number of a given region is less than the reference sequence.</td>
@@ -982,11 +998,11 @@ somatic mutations from germline variants in the display term, prefixing the term
       </ul>
     </td>
   </tr>
-  <tr class="bg2">
+  <tr>
     <td>somatic_Loss</td>
   </tr>
 
-  <tr>
+  <tr class="bg2">
     <td rowspan="2" style="padding:0px;margin:0px;;background-color:#8601AF;border-top:1px solid #FFF"></td>
     <td rowspan="2" style="font-weight:bold">copy_number_variation</td>
     <td rowspan="2">A variation that increases or decreases the copy number of a given region.</td>
@@ -998,11 +1014,11 @@ somatic mutations from germline variants in the display term, prefixing the term
       </ul>
     </td>
   </tr>
-  <tr>
+  <tr class="bg2">
     <td>somatic_CNV</td>
   </tr>
 
-  <tr class="bg2">
+  <tr>
     <td rowspan="2" style="padding:0px;margin:0px;;background-color:#0000CC;border-top:1px solid #FFF"></td>
     <td rowspan="2" style="font-weight:bold">duplication</td>
     <td rowspan="2">An insertion which derives from, or is identical in sequence to, nucleotides present at a known location in the genome.</td>
@@ -1014,11 +1030,11 @@ somatic mutations from germline variants in the display term, prefixing the term
       </ul>
     </td>
   </tr>
-  <tr class="bg2">
+  <tr>
     <td>somatic_Duplication</td>
   </tr>
 
-  <tr>
+  <tr class="bg2">
     <td rowspan="2" style="padding:0px;margin:0px;;background-color:#000000;border-top:1px solid #FFF"></td>
     <td rowspan="2" style="font-weight:bold">interchromosomal_breakpoint</td>
     <td rowspan="2">A rearrangement breakpoint between two different chromosomes.</td>
@@ -1030,14 +1046,14 @@ somatic mutations from germline variants in the display term, prefixing the term
       </ul>
     </td>
   </tr>
-  <tr>
+  <tr class="bg2">
     <td>somatic_Interchromosomal breakpoint</td>
   </tr>
 
-  <tr class="bg2">
+  <tr>
     <td rowspan="2" style="padding:0px;margin:0px;;background-color:#C3A4FF;border-top:1px solid #FFF"></td>
     <td rowspan="2" style="font-weight:bold">interchromosomal_translocation</td>
-    <td rowspan="2">A translocation where the regions involved are from different chromosomes.</td>
+    <td rowspan="2"></td>
     <td rowspan="2"><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0002060">SO:0002060</a></td>
     <td>Interchromosomal translocation</td>
     <td rowspan="2">
@@ -1046,11 +1062,11 @@ somatic mutations from germline variants in the display term, prefixing the term
       </ul>
     </td>
   </tr>
-  <tr class="bg2">
+  <tr>
     <td>somatic_Interchromosomal translocation</td>
   </tr>
 
-  <tr>
+  <tr class="bg2">
     <td rowspan="2" style="padding:0px;margin:0px;;background-color:#000000;border-top:1px solid #FFF"></td>
     <td rowspan="2" style="font-weight:bold">intrachromosomal_breakpoint</td>
     <td rowspan="2">A rearrangement breakpoint within the same chromosome.</td>
@@ -1062,14 +1078,14 @@ somatic mutations from germline variants in the display term, prefixing the term
       </ul>
     </td>
   </tr>
-  <tr>
+  <tr class="bg2">
     <td>somatic_Intrachromosomal breakpoint</td>
   </tr>
 
-  <tr class="bg2">
+  <tr>
     <td rowspan="2" style="padding:0px;margin:0px;;background-color:#C3A4FF;border-top:1px solid #FFF"></td>
     <td rowspan="2" style="font-weight:bold">intrachromosomal_translocation</td>
-    <td rowspan="2">A translocation where the regions involved are from the same chromosome.</td>
+    <td rowspan="2"></td>
     <td rowspan="2"><a rel="external" href="http://www.sequenceontology.org/miso/current_release/term/SO:0002061">SO:0002061</a></td>
     <td>Intrachromosomal translocation</td>
     <td rowspan="2">
@@ -1078,11 +1094,11 @@ somatic mutations from germline variants in the display term, prefixing the term
       </ul>
     </td>
   </tr>
-  <tr class="bg2">
+  <tr>
     <td>somatic_Intrachromosomal translocation</td>
   </tr>
 
-  <tr>
+  <tr class="bg2">
     <td rowspan="2" style="padding:0px;margin:0px;;background-color:#C530FF;border-top:1px solid #FFF"></td>
     <td rowspan="2" style="font-weight:bold">inversion</td>
     <td rowspan="2">A continuous nucleotide sequence is inverted in the same position.</td>
@@ -1094,11 +1110,11 @@ somatic mutations from germline variants in the display term, prefixing the term
       </ul>
     </td>
   </tr>
-  <tr>
+  <tr class="bg2">
     <td>somatic_inversion</td>
   </tr>
 
-  <tr class="bg2">
+  <tr>
     <td rowspan="2" style="padding:0px;margin:0px;;background-color:#000080;border-top:1px solid #FFF"></td>
     <td rowspan="2" style="font-weight:bold">mobile_element_insertion</td>
     <td rowspan="2">A kind of insertion where the inserted sequence is a mobile element.</td>
@@ -1110,11 +1126,11 @@ somatic mutations from germline variants in the display term, prefixing the term
       </ul>
     </td>
   </tr>
-  <tr class="bg2">
+  <tr>
     <td>somatic_Mobile element insertion</td>
   </tr>
 
-  <tr>
+  <tr class="bg2">
     <td rowspan="2" style="padding:0px;margin:0px;;background-color:#000080;border-top:1px solid #FFF"></td>
     <td rowspan="2" style="font-weight:bold">novel_sequence_insertion</td>
     <td rowspan="2">An insertion the sequence of which cannot be mapped to the reference genome.</td>
@@ -1126,11 +1142,11 @@ somatic mutations from germline variants in the display term, prefixing the term
       </ul>
     </td>
   </tr>
-  <tr>
+  <tr class="bg2">
     <td>somatic_Novel sequence insertion</td>
   </tr>
 
-  <tr class="bg2">
+  <tr>
     <td rowspan="2" style="padding:0px;margin:0px;;background-color:#732E00;border-top:1px solid #FFF"></td>
     <td rowspan="2" style="font-weight:bold">tandem_duplication</td>
     <td rowspan="2">A duplication consisting of 2 identical adjacent regions.</td>
@@ -1142,11 +1158,11 @@ somatic mutations from germline variants in the display term, prefixing the term
       </ul>
     </td>
   </tr>
-  <tr class="bg2">
+  <tr>
     <td>somatic_Tandem duplication</td>
   </tr>
 
-  <tr>
+  <tr class="bg2">
     <td rowspan="2" style="padding:0px;margin:0px;;background-color:#C3A4FF;border-top:1px solid #FFF"></td>
     <td rowspan="2" style="font-weight:bold">translocation</td>
     <td rowspan="2">A region of nucleotide sequence that has translocated to a new position.</td>
@@ -1158,11 +1174,11 @@ somatic mutations from germline variants in the display term, prefixing the term
       </ul>
     </td>
   </tr>
-  <tr>
+  <tr class="bg2">
     <td>somatic_translocation</td>
   </tr>
 
-  <tr class="bg2">
+  <tr>
     <td rowspan="2" style="padding:0px;margin:0px;;background-color:#CC0000;border-top:1px solid #FFF"></td>
     <td rowspan="2" style="font-weight:bold">deletion</td>
     <td rowspan="2">The point at which one or more contiguous nucleotides were excised.</td>
@@ -1174,11 +1190,11 @@ somatic mutations from germline variants in the display term, prefixing the term
       </ul>
     </td>
   </tr>
-  <tr class="bg2">
+  <tr>
     <td>somatic_deletion</td>
   </tr>
 
-  <tr>
+  <tr class="bg2">
     <td rowspan="2" style="padding:0px;margin:0px;;background-color:gold;border-top:1px solid #FFF"></td>
     <td rowspan="2" style="font-weight:bold">indel</td>
     <td rowspan="2">A sequence alteration which included an insertion and a deletion, affecting 2 or more bases.</td>
@@ -1190,11 +1206,11 @@ somatic mutations from germline variants in the display term, prefixing the term
       </ul>
     </td>
   </tr>
-  <tr>
+  <tr class="bg2">
     <td>somatic_indel</td>
   </tr>
 
-  <tr class="bg2">
+  <tr>
     <td rowspan="2" style="padding:0px;margin:0px;;background-color:#000099;border-top:1px solid #FFF"></td>
     <td rowspan="2" style="font-weight:bold">insertion</td>
     <td rowspan="2">The sequence of one or more nucleotides added between two adjacent nucleotides in the sequence.</td>
@@ -1206,11 +1222,11 @@ somatic mutations from germline variants in the display term, prefixing the term
       </ul>
     </td>
   </tr>
-  <tr class="bg2">
+  <tr>
     <td>somatic_insertion</td>
   </tr>
 
-  <tr>
+  <tr class="bg2">
     <td rowspan="2" style="padding:0px;margin:0px;;background-color:#000000;border-top:1px solid #FFF"></td>
     <td rowspan="2" style="font-weight:bold">sequence_alteration</td>
     <td rowspan="2">A sequence_alteration is a sequence_feature whose extent is the deviation from another sequence.</td>
@@ -1222,11 +1238,11 @@ somatic mutations from germline variants in the display term, prefixing the term
       </ul>
     </td>
   </tr>
-  <tr>
+  <tr class="bg2">
     <td>somatic_sequence_alteration</td>
   </tr>
 
-  <tr class="bg2">
+  <tr>
     <td style="padding:0px;margin:0px;;background-color:#4682B4;border-top:1px solid #FFF"></td>
     <td style="font-weight:bold">probe</td>
     <td>A DNA sequence used experimentally to detect the presence or absence of a complementary nucleic acid.</td>
@@ -1249,10 +1265,10 @@ The colours are based on the <a rel="external" href="http://www.ncbi.nlm.nih.gov
   <input class="graph_config" type="hidden" name="legendpos" value="'east'" />
   <input class="graph_dimensions" type="hidden" value="[90,80,80]" />
   
-  <input type="hidden" class="graph_data" value="[[136438676,'SNV'],[7392642,'deletion'],[5084671,'insertion'],[4245626,'sequence_alteration'],[229756,'substitution'],[157604,'indel'],[6949,'genetic_marker'],[4709,'tandem_repeat']]" />
+  <input type="hidden" class="graph_data" value="[[139506084,'SNV'],[7479671,'deletion'],[5121526,'insertion'],[4826087,'sequence_alteration'],[230074,'substitution'],[170155,'indel'],[6949,'genetic_marker'],[4731,'tandem_repeat']]" />
   
   <div class="pie_chart_classes" title="classes" style="width:400px;height:220px;border:1px solid #CCC;border-radius:8px;box-shadow:0 1px 3px #666">
-     <h3 style="padding:10px 10px 5px">Human variant class distribution - Ensembl 84</h4>
+     <h3 style="padding:10px 10px 5px">Human variant class distribution - Ensembl 85</h4>
      <div id="graphHolder0"></div>
   </div>
 </div>
@@ -1491,7 +1507,7 @@ On the website this corresponds to the icon <a href="#evidence_status"><img clas
   </tr>
   <tr class="bg2">
     <td>CSHL-HAPMAP:<b>HAPMAP-CHB</b></td>
-    <td style="text-align:right">58</td>
+    <td style="text-align:right">90</td>
     <td>Han Chinese in Beijing, China. CHB is one of the 11 populations in HapMap phase 3.</td>
   </tr>
   <tr>
@@ -1526,29 +1542,29 @@ On the website this corresponds to the icon <a href="#evidence_status"><img clas
   </tr>
   <tr>
     <td>CSHL-HAPMAP:<b>HapMap-CEU</b></td>
-    <td style="text-align:right">113</td>
+    <td style="text-align:right">185</td>
     <td>Utah residents with Northern and Western European ancestry from the CEPH collection. CEU is one of the 11 populations in HapMap phase 3.</td>
   </tr>
   <tr class="bg2">
     <td>CSHL-HAPMAP:<b>HapMap-HCB</b></td>
-    <td style="text-align:right">13</td>
+    <td style="text-align:right">48</td>
     <td>45 unrelated Han Chinese in Beijing, China, representing one of the populations studied in the International HapMap project (<a href="http://www.hapmap.org"> http://www.hapmap.org</a>). See <a href="http://www.hapmap.org/citinghapmap.html.en">http://www.hapmap.org/citinghapmap.html.en</a> for further information about,this population and others studied in the project. <a href="http://www.hapmap.org/hapmappopulations.html.en">http://www.hapmap.org/hapmappopulations.html.en</a>,also has relevant information.</td>
   </tr>
   <tr>
     <td>CSHL-HAPMAP:<b>HapMap-JPT</b></td>
-    <td style="text-align:right">59</td>
+    <td style="text-align:right">93</td>
     <td>Japanese in Tokyo, Japan. JPT is one of the 11 populations in HapMap phase 3.</td>
   </tr>
   <tr class="bg2">
     <td>CSHL-HAPMAP:<b>HapMap-YRI</b></td>
-    <td style="text-align:right">117</td>
+    <td style="text-align:right">185</td>
     <td>Yoruba in Ibadan, Nigeria. YRI is one of the 11 populations in HapMap phase 3.</td>
   </tr>
 </table>
 
 
 <p style="margin-bottom:35px">
-Variants which have been genotyped in this project have the "evidence status" <a href="#evidence_status"><b>HapMap</b></a>.
+Variants which have been discovered in this project have the "evidence status" <a href="#evidence_status"><b>HapMap</b></a>.
 On the website this corresponds to the icon <a href="#evidence_status"><img class="_ht" src="/i/val/evidence_HapMap.png" title="HapMap" style="vertical-align:bottom"/></a>.
 </p>
     
@@ -1714,12 +1730,12 @@ variant sets in the Ensembl variation database (subsets are indicated by bullet 
   <tr>
     <td><ul style="margin:0px"><li style="margin:0px">1000 Genomes 3 - AMR - common</li></ul></td>
     <td>1kg_3_amr_com</td>
-    <td>Variants genotyped in admixed American individuals by the 1000 Genomes project (phase 3) with frequency of at least 1%</td>
+    <td>Variants genotyped in admixed American individuals by the 1000 Genomes project (phase 1) with frequency of at least 1%</td>
   </tr>
   <tr class="bg2">
     <td><ul style="margin:0px"><li style="margin:0px">1000 Genomes 3 - All - common</li></ul></td>
     <td>1kg_3_com</td>
-    <td>Variants genotyped by the 1000 Genomes project (phase 3) with frequency of at least 1%)</td>
+    <td>Variants genotyped by the 1000 Genomes project (phase 1) with frequency of at least 1%)</td>
   </tr>
   <tr>
     <td><ul style="margin:0px"><li style="margin:0px">1000 Genomes 3 - EAS</li></ul></td>
@@ -1729,7 +1745,7 @@ variant sets in the Ensembl variation database (subsets are indicated by bullet 
   <tr class="bg2">
     <td><ul style="margin:0px"><li style="margin:0px">1000 Genomes 3 - EAS - common</li></ul></td>
     <td>1kg_3_eas_com</td>
-    <td>Variants genotyped in East Asian individuals by the 1000 Genomes project (phase 3) with frequency of at least 1%</td>
+    <td>Variants genotyped in East Asian individuals by the 1000 Genomes project (phase 1) with frequency of at least 1%</td>
   </tr>
   <tr>
     <td><ul style="margin:0px"><li style="margin:0px">1000 Genomes 3 - EUR</li></ul></td>
@@ -1739,7 +1755,7 @@ variant sets in the Ensembl variation database (subsets are indicated by bullet 
   <tr class="bg2">
     <td><ul style="margin:0px"><li style="margin:0px">1000 Genomes 3 - EUR - common</li></ul></td>
     <td>1kg_3_eur_com</td>
-    <td>Variants genotyped in European individuals by the 1000 Genomes project (phase 3) with frequency of at least 1%</td>
+    <td>Variants genotyped in European individuals by the 1000 Genomes project (phase 1) with frequency of at least 1%</td>
   </tr>
   <tr>
     <td><ul style="margin:0px"><li style="margin:0px">1000 Genomes 3 - SAS</li></ul></td>
@@ -1749,7 +1765,7 @@ variant sets in the Ensembl variation database (subsets are indicated by bullet 
   <tr class="bg2">
     <td><ul style="margin:0px"><li style="margin:0px">1000 Genomes 3 - SAS - common</li></ul></td>
     <td>1kg_3_sas_com</td>
-    <td>Variants genotyped in East Asian individuals by the 1000 Genomes project (phase 3) with frequency of at least 1%</td>
+    <td>Variants genotyped in East Asian individuals by the 1000 Genomes project (phase 1) with frequency of at least 1%</td>
   </tr>
   <tr>
     <td><b>All HapMap</b></td>
@@ -1975,18 +1991,18 @@ variant sets in the Ensembl variation database (subsets are indicated by bullet 
 
 <table class="ss" style="width:auto">
     <tr><th><span class="_ht ht" title="Icons designed by Ensembl">Icon</span></th><th>Value</th><th style="border-left:1px solid #BBB">ClinVar example</th><th style="border-left:1px solid #BBB">DGVa example</th></tr>
-  <tr><td style="text-align:center"><img src="/i/val/clinsig_association.png" title="association"/></td><td>association</td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Explore?v=rs326">rs326</a></td><td style="border-left:1px solid #BBB">-</td></tr>
-  <tr class="bg2"><td style="text-align:center"><img src="/i/val/clinsig_benign.png" title="benign"/></td><td>benign</td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Explore?v=rs328">rs328</a></td><td style="border-left:1px solid #BBB">-</td></tr>
+  <tr><td style="text-align:center"><img src="/i/val/clinsig_association.png" title="association"/></td><td>association</td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Explore?v=rs6742078">rs6742078</a></td><td style="border-left:1px solid #BBB">-</td></tr>
+  <tr class="bg2"><td style="text-align:center"><img src="/i/val/clinsig_benign.png" title="benign"/></td><td>benign</td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Explore?v=rs6622333">rs6622333</a></td><td style="border-left:1px solid #BBB">-</td></tr>
   <tr><td style="text-align:center"><img src="/i/val/clinsig_confers-sensitivity.png" title="confers sensitivity"/></td><td>confers sensitivity</td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Explore?v=rs1799853">rs1799853</a></td><td style="border-left:1px solid #BBB">-</td></tr>
-  <tr class="bg2"><td style="text-align:center"><img src="/i/val/clinsig_drug-response.png" title="drug response"/></td><td>drug response</td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Explore?v=rs6165">rs6165</a></td><td style="border-left:1px solid #BBB">-</td></tr>
-  <tr><td style="text-align:center"><img src="/i/val/clinsig_likely-benign.png" title="likely benign"/></td><td>likely benign</td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Explore?v=rs693">rs693</a></td><td style="border-left:1px solid #BBB">-</td></tr>
-  <tr class="bg2"><td style="text-align:center"><img src="/i/val/clinsig_likely-pathogenic.png" title="likely pathogenic"/></td><td>likely pathogenic</td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Explore?v=rs9384">rs9384</a></td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/StructuralVariation/Evidence?sv=esv1791726">esv1791726</a></td></tr>
-  <tr><td style="text-align:center"><img src="/i/val/clinsig_not-provided.png" title="not provided"/></td><td>not provided</td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Explore?v=rs661">rs661</a></td><td style="border-left:1px solid #BBB">-</td></tr>
-  <tr class="bg2"><td style="text-align:center"><img src="/i/val/clinsig_other.png" title="other"/></td><td>other</td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Explore?v=rs334">rs334</a></td><td style="border-left:1px solid #BBB">-</td></tr>
-  <tr><td style="text-align:center"><img src="/i/val/clinsig_pathogenic.png" title="pathogenic"/></td><td>pathogenic</td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Explore?v=rs268">rs268</a></td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/StructuralVariation/Evidence?sv=esv2830397">esv2830397</a></td></tr>
-  <tr class="bg2"><td style="text-align:center"><img src="/i/val/clinsig_protective.png" title="protective"/></td><td>protective</td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Explore?v=rs333">rs333</a></td><td style="border-left:1px solid #BBB">-</td></tr>
-  <tr><td style="text-align:center"><img src="/i/val/clinsig_risk-factor.png" title="risk factor"/></td><td>risk factor</td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Explore?v=rs333">rs333</a></td><td style="border-left:1px solid #BBB">-</td></tr>
-  <tr class="bg2"><td style="text-align:center"><img src="/i/val/clinsig_uncertain-significance.png" title="uncertain significance"/></td><td>uncertain significance</td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Explore?v=rs4746">rs4746</a></td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/StructuralVariation/Evidence?sv=esv2830426">esv2830426</a></td></tr>
+  <tr class="bg2"><td style="text-align:center"><img src="/i/val/clinsig_drug-response.png" title="drug response"/></td><td>drug response</td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Explore?v=rs9923231">rs9923231</a></td><td style="border-left:1px solid #BBB">-</td></tr>
+  <tr><td style="text-align:center"><img src="/i/val/clinsig_likely-benign.png" title="likely benign"/></td><td>likely benign</td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Explore?v=rs6641078">rs6641078</a></td><td style="border-left:1px solid #BBB">-</td></tr>
+  <tr class="bg2"><td style="text-align:center"><img src="/i/val/clinsig_likely-pathogenic.png" title="likely pathogenic"/></td><td>likely pathogenic</td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Explore?v=rs6929137">rs6929137</a></td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/StructuralVariation/Evidence?sv=esv1791726">esv1791726</a></td></tr>
+  <tr><td style="text-align:center"><img src="/i/val/clinsig_not-provided.png" title="not provided"/></td><td>not provided</td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Explore?v=rs6675281">rs6675281</a></td><td style="border-left:1px solid #BBB">-</td></tr>
+  <tr class="bg2"><td style="text-align:center"><img src="/i/val/clinsig_other.png" title="other"/></td><td>other</td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Explore?v=rs6594646">rs6594646</a></td><td style="border-left:1px solid #BBB">-</td></tr>
+  <tr><td style="text-align:center"><img src="/i/val/clinsig_pathogenic.png" title="pathogenic"/></td><td>pathogenic</td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Explore?v=rs6711223">rs6711223</a></td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/StructuralVariation/Evidence?sv=esv2830397">esv2830397</a></td></tr>
+  <tr class="bg2"><td style="text-align:center"><img src="/i/val/clinsig_protective.png" title="protective"/></td><td>protective</td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Explore?v=rs8177374">rs8177374</a></td><td style="border-left:1px solid #BBB">-</td></tr>
+  <tr><td style="text-align:center"><img src="/i/val/clinsig_risk-factor.png" title="risk factor"/></td><td>risk factor</td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Explore?v=rs7076156">rs7076156</a></td><td style="border-left:1px solid #BBB">-</td></tr>
+  <tr class="bg2"><td style="text-align:center"><img src="/i/val/clinsig_uncertain-significance.png" title="uncertain significance"/></td><td>uncertain significance</td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Explore?v=rs6706924">rs6706924</a></td><td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/StructuralVariation/Evidence?sv=esv2830426">esv2830426</a></td></tr>
 
 </table>
 <p>Further explanations about the clinical significance terms are available on the <a href="http://www.ncbi.nlm.nih.gov/clinvar/docs/clinsig/" target="_blank">ClinVar website</a>.</p>
@@ -1997,19 +2013,19 @@ variant sets in the Ensembl variation database (subsets are indicated by bullet 
   <tr>
     <td><span class="_ht" title="not classified by submitter"><img style="vertical-align:top" src="/i/val/grey_star.png" alt="grey"/><img style="vertical-align:top" src="/i/val/grey_star.png" alt="grey"/><img style="vertical-align:top" src="/i/val/grey_star.png" alt="grey"/><img style="vertical-align:top" src="/i/val/grey_star.png" alt="grey"/></span></td>
     <td>not classified by submitter</td>
-    <td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Phenotype?v=rs63750671">rs63750671</a></td>
+    <td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Phenotype?v=rs267606900">rs267606900</a></td>
   </tr>  <tr class="bg2">
     <td><span class="_ht" title="classified by single submitter"><img style="vertical-align:top" src="/i/val/gold_star.png" alt="gold"/><img style="vertical-align:top" src="/i/val/grey_star.png" alt="grey"/><img style="vertical-align:top" src="/i/val/grey_star.png" alt="grey"/><img style="vertical-align:top" src="/i/val/grey_star.png" alt="grey"/></span></td>
     <td>classified by single submitter</td>
-    <td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Phenotype?v=rs121909574">rs121909574</a></td>
+    <td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Phenotype?v=rs121908140">rs121908140</a></td>
   </tr>  <tr>
     <td><span class="_ht" title="classified by multiple submitters"><img style="vertical-align:top" src="/i/val/gold_star.png" alt="gold"/><img style="vertical-align:top" src="/i/val/gold_star.png" alt="gold"/><img style="vertical-align:top" src="/i/val/grey_star.png" alt="grey"/><img style="vertical-align:top" src="/i/val/grey_star.png" alt="grey"/></span></td>
     <td>classified by multiple submitters</td>
-    <td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Phenotype?v=rs104894398">rs104894398</a></td>
+    <td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Phenotype?v=rs121918166">rs121918166</a></td>
   </tr>  <tr class="bg2">
     <td><span class="_ht" title="reviewed by expert panel"><img style="vertical-align:top" src="/i/val/gold_star.png" alt="gold"/><img style="vertical-align:top" src="/i/val/gold_star.png" alt="gold"/><img style="vertical-align:top" src="/i/val/gold_star.png" alt="gold"/><img style="vertical-align:top" src="/i/val/grey_star.png" alt="grey"/></span></td>
     <td>reviewed by expert panel</td>
-    <td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Phenotype?v=rs144848">rs144848</a></td>
+    <td style="border-left:1px solid #BBB"><a href="/Homo_sapiens/Variation/Phenotype?v=rs387906378">rs387906378</a></td>
   </tr>  <tr>
     <td><span class="_ht" title="practice guideline"><img style="vertical-align:top" src="/i/val/gold_star.png" alt="gold"/><img style="vertical-align:top" src="/i/val/gold_star.png" alt="gold"/><img style="vertical-align:top" src="/i/val/gold_star.png" alt="gold"/><img style="vertical-align:top" src="/i/val/gold_star.png" alt="gold"/></span></td>
     <td>practice guideline</td>
