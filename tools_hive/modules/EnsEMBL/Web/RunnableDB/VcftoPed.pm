@@ -86,6 +86,15 @@ sub run {
     } 
   }
   
+  #Compressing output PED file
+  my $ped_file = join('/', $work_dir, $self->param('__output_ped'));
+  if($ped_file && -s $ped_file) {
+    my $bg_cmd = EnsEMBL::Web::SystemCommand->new($self, "/localsw/bin/bgzip -c $ped_file > $ped_file.gz; rm $ped_file")->execute();
+    if($bg_cmd && $bg_cmd->error_code) {
+      throw exception('HiveException', "Error in compressing output file: ".$bg_cmd->error_code);
+    }   
+  }
+  
   # throw exception if process failed
   if (my $error_code = $command->error_code) {
     my $error_details = join('', grep(/MSG/, file_get_contents($log_file)));
