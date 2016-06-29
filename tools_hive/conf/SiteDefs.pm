@@ -133,7 +133,7 @@ sub update_conf {
   $SiteDefs::ENSEMBL_AF_QUEUE                  = 'toolsgeneral';
   $SiteDefs::ENSEMBL_AF_ANALYSIS_CAPACITY      = 4;
 
-  # Allele Frequency configs
+  # VCF to PED configs
   $SiteDefs::ENSEMBL_VP_QUEUE                  = 'toolsgeneral';
   $SiteDefs::ENSEMBL_VP_ANALYSIS_CAPACITY      = 4;
 }
