@@ -37,35 +37,34 @@ Ensembl.Panel.ThousandGenome = Ensembl.Panel.ToolsForm.extend({
       var r = panel.elLk.region.val().match(/^([^:]+):\s?([0-9\,]+)(-|_|\.\.)([0-9\,]+)$/);
 
       if (!r || r.length !== 5 || r[4] - r[2] < 0) {
-        panel.showError('Please enter a valid region e.g: 1:1-50000', 'Invalid Region Lookup');
-        $(panel.elLk.form).data('valid', false);
-        return;
-      }
+//don't do anything here, error message is in validation
 
-      //The region size restriction is only available on some tool (allele frequency)
-      if(panel.elLk.form.find('input[name=region_check]').length && ((parseFloat(r[4].replace(/,/gi,"")) - parseFloat(r[2].replace(/,/gi,""))) + 1) > parseInt(panel.elLk.form.find('input[name=region_check]').val())) {
-        panel.showError('The region size is too big, maximum region size allowed is '+parseInt(panel.elLk.form.find('input[name=region_check]').val()), 'Large region size');
-        $(panel.elLk.form).data('valid', false);
-        return;
-      } else {
-        $(panel.elLk.form).data('valid', true);
-      }
+      } else { //only if it is a valid region then do the below      
+        //The region size restriction is only available on some tool (allele frequency)
+        if(panel.elLk.form.find('input[name=region_check]').length && ((parseFloat(r[4].replace(/,/gi,"")) - parseFloat(r[2].replace(/,/gi,""))) + 1) > parseInt(panel.elLk.form.find('input[name=region_check]').val())) {
+          panel.showError('The region size is too big, maximum region size allowed is '+parseInt(panel.elLk.form.find('input[name=region_check]').val()), 'Large region size');
+          $(panel.elLk.form).data('valid', false);
+          return;
+        } else {
+          $(panel.elLk.form).data('valid', true);
+        }
 
-      //getting the file url from 1KG rest if user input region and data collection is either phase1 or phase3
-      if(collection_value != 'custom') {
-        panel.getFileURL(r[1],collection_value);
-      }
-      
-      //show sample population file url based on data collection selection (we have a specific file for human chrY)
-      if(panel.elLk.region.val().match(/y:/gi) && collection_value === 'phase3') {
-        panel.updatePopulation("","_stt_phase3_male");
-        panel.elLk.form.find('[class^="_sample_url_"]').hide();
-        panel.elLk.form.find('span._sample_url_phase3_male').show();
-      } else {
-        panel.elLk.form.find('span._stt_phase3_male').hide();
+        //getting the file url from 1KG rest if user input region and data collection is either phase1 or phase3
         if(collection_value != 'custom') {
-          panel.elLk.form.find('span._stt_'+collection_value).show();
-          panel.elLk.form.find('span._sample_url_phase3_male').hide();
+          panel.getFileURL(r[1],collection_value);
+        }
+        
+        //show sample population file url based on data collection selection (we have a specific file for human chrY)
+        if(panel.elLk.region.val().match(/y:/gi) && collection_value === 'phase3') {
+          panel.updatePopulation("","_stt_phase3_male");
+          panel.elLk.form.find('[class^="_sample_url_"]').hide();
+          panel.elLk.form.find('span._sample_url_phase3_male').show();
+        } else {
+          panel.elLk.form.find('span._stt_phase3_male').hide();
+          if(collection_value != 'custom') {
+            panel.elLk.form.find('span._stt_'+collection_value).show();
+            panel.elLk.form.find('span._sample_url_phase3_male').hide();
+          }
         }
       }
     });   
