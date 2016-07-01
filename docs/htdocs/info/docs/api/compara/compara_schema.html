@@ -79,6 +79,7 @@ available: <a target="_blank" href="./diagrams/genomic_schema.png">Genomic align
 </p>
 
 
+
 <h3 id="top">List of the tables:</h3>
 <div>
 
@@ -98,9 +99,16 @@ available: <a target="_blank" href="./diagrams/genomic_schema.png">Genomic align
         <li><a href="#method_link" class="sql_schema_link" style="font-weight:bold">method_link</a></li>
         <li><a href="#method_link_species_set" class="sql_schema_link" style="font-weight:bold">method_link_species_set</a></li>
         <li><a href="#method_link_species_set_tag" class="sql_schema_link" style="font-weight:bold">method_link_species_set_tag</a></li>
+        <li><a href="#method_link_species_set_attr" class="sql_schema_link" style="font-weight:bold">method_link_species_set_attr</a></li>
         <li><a href="#species_tree_node" class="sql_schema_link" style="font-weight:bold">species_tree_node</a></li>
         <li><a href="#species_tree_root" class="sql_schema_link" style="font-weight:bold">species_tree_root</a></li>
         <li><a href="#species_tree_node_tag" class="sql_schema_link" style="font-weight:bold">species_tree_node_tag</a></li>
+        <li><a href="#species_tree_node_attr" class="sql_schema_link" style="font-weight:bold">species_tree_node_attr</a></li>
+
+      </ul>
+      </div>
+      <div style="float:left">
+      <ul class="sql_schema_table_list">
 
       </ul>
     </div>
@@ -150,7 +158,9 @@ available: <a target="_blank" href="./diagrams/genomic_schema.png">Genomic align
       </div>
       <div style="float:left">
       <ul class="sql_schema_table_list">
+        <li><a href="#gene_tree_root_attr" class="sql_schema_link" style="font-weight:bold">gene_tree_root_attr</a></li>
         <li><a href="#gene_tree_node_attr" class="sql_schema_link" style="font-weight:bold">gene_tree_node_attr</a></li>
+        <li><a href="#gene_tree_object_store" class="sql_schema_link" style="font-weight:bold">gene_tree_object_store</a></li>
         <li><a href="#hmm_profile" class="sql_schema_link" style="font-weight:bold">hmm_profile</a></li>
         <li><a href="#hmm_annot" class="sql_schema_link" style="font-weight:bold">hmm_annot</a></li>
         <li><a href="#hmm_curated_annot" class="sql_schema_link" style="font-weight:bold">hmm_curated_annot</a></li>
@@ -246,7 +256,7 @@ available: <a target="_blank" href="./diagrams/genomic_schema.png">Genomic align
       
   <div id="ex_meta" style="display:none;">
     <table class="ss sql_schema_table_example_result">
-      <tr><th>meta_id</th><th>species_id</th><th>meta_key</th><th>meta_value</th></tr>      <tr><td>1</td><td></td><td>schema_version</td><td>83</td></tr>    </table>
+      <tr><th>meta_id</th><th>species_id</th><th>meta_key</th><th>meta_value</th></tr>      <tr><td>1</td><td></td><td>schema_version</td><td>85</td></tr>    </table>
   </div></div></div></div></div><div class="sql_schema_table">
   <div id="ncbi_taxa_node"class="sql_schema_table_header" style="border-top-color:#3CB371">
     <div class="sql_schema_table_header_left"><span style="background-color:#3CB371"></span>ncbi_taxa_node</div>
@@ -342,7 +352,7 @@ available: <a target="_blank" href="./diagrams/genomic_schema.png">Genomic align
       
   <div id="ex_ncbi_taxa_node" style="display:none;">
     <table class="ss sql_schema_table_example_result">
-      <tr><th>n2.taxon_id</th><th>n2.parent_id</th><th>na.name</th><th>n2.rank</th><th>n2.left_index</th><th>n2.right_index</th></tr>      <tr><td>1</td><td>0</td><td>root</td><td>no rank</td><td>1</td><td>2725432</td></tr>      <tr class="bg2"><td>131567</td><td>1</td><td>cellular organisms</td><td>no rank</td><td>2</td><td>2416347</td></tr>      <tr><td>2759</td><td>131567</td><td>Eukaryota</td><td>superkingdom</td><td>21969</td><td>1591712</td></tr>      <tr class="bg2"><td>33154</td><td>2759</td><td>Opisthokonta</td><td>no rank</td><td>365508</td><td>1514415</td></tr>      <tr><td>33208</td><td>33154</td><td>Metazoa</td><td>kingdom</td><td>365829</td><td>1261650</td></tr>      <tr class="bg2"><td>6072</td><td>33208</td><td>Eumetazoa</td><td>no rank</td><td>366100</td><td>1255963</td></tr>      <tr><td>33213</td><td>6072</td><td>Bilateria</td><td>no rank</td><td>366361</td><td>1241200</td></tr>      <tr class="bg2"><td>33511</td><td>33213</td><td>Deuterostomia</td><td>no rank</td><td>1067890</td><td>1225435</td></tr>      <tr><td>7711</td><td>33511</td><td>Chordata</td><td>phylum</td><td>1075003</td><td>1225434</td></tr>      <tr class="bg2"><td>89593</td><td>7711</td><td>Craniata</td><td>subphylum</td><td>1075008</td><td>1224327</td></tr>      <tr><td>7742</td><td>89593</td><td>Vertebrata</td><td>no rank</td><td>1075009</td><td>1224326</td></tr>      <tr class="bg2"><td>7776</td><td>7742</td><td>Gnathostomata</td><td>no rank</td><td>1075014</td><td>1224039</td></tr>      <tr><td>117570</td><td>7776</td><td>Teleostomi</td><td>no rank</td><td>1075015</td><td>1220874</td></tr>      <tr class="bg2"><td>117571</td><td>117570</td><td>Euteleostomi</td><td>no rank</td><td>1075016</td><td>1220873</td></tr>      <tr><td>8287</td><td>117571</td><td>Sarcopterygii</td><td>no rank</td><td>1075017</td><td>1159996</td></tr>      <tr class="bg2"><td>1338369</td><td>8287</td><td>Dipnotetrapodomorpha</td><td>no rank</td><td>1075030</td><td>1159995</td></tr>      <tr><td>32523</td><td>1338369</td><td>Tetrapoda</td><td>no rank</td><td>1075083</td><td>1159994</td></tr>      <tr class="bg2"><td>32524</td><td>32523</td><td>Amniota</td><td>no rank</td><td>1075084</td><td>1143313</td></tr>      <tr><td>40674</td><td>32524</td><td>Mammalia</td><td>class</td><td>1123701</td><td>1143312</td></tr>      <tr class="bg2"><td>32525</td><td>40674</td><td>Theria</td><td>no rank</td><td>1123728</td><td>1143301</td></tr>      <tr><td>9347</td><td>32525</td><td>Eutheria</td><td>no rank</td><td>1123729</td><td>1142202</td></tr>      <tr class="bg2"><td>1437010</td><td>9347</td><td>Boreoeutheria</td><td>no rank</td><td>1123748</td><td>1141729</td></tr>      <tr><td>314146</td><td>1437010</td><td>Euarchontoglires</td><td>superorder</td><td>1123749</td><td>1133300</td></tr>      <tr class="bg2"><td>9443</td><td>314146</td><td>Primates</td><td>order</td><td>1131616</td><td>1133299</td></tr>      <tr><td>376913</td><td>9443</td><td>Haplorrhini</td><td>suborder</td><td>1131617</td><td>1132824</td></tr>      <tr class="bg2"><td>314293</td><td>376913</td><td>Simiiformes</td><td>infraorder</td><td>1131644</td><td>1132823</td></tr>      <tr><td>9526</td><td>314293</td><td>Catarrhini</td><td>parvorder</td><td>1131645</td><td>1132352</td></tr>      <tr class="bg2"><td>314295</td><td>9526</td><td>Hominoidea</td><td>superfamily</td><td>1132204</td><td>1132351</td></tr>      <tr><td>9604</td><td>314295</td><td>Hominidae</td><td>family</td><td>1132205</td><td>1132266</td></tr>      <tr class="bg2"><td>207598</td><td>9604</td><td>Homininae</td><td>subfamily</td><td>1132220</td><td>1132265</td></tr>      <tr><td>9605</td><td>207598</td><td>Homo</td><td>genus</td><td>1132221</td><td>1132230</td></tr>      <tr class="bg2"><td>9606</td><td>9605</td><td>Homo sapiens</td><td>species</td><td>1132222</td><td>1132227</td></tr>    </table>
+      <tr><th>n2.taxon_id</th><th>n2.parent_id</th><th>na.name</th><th>n2.rank</th><th>n2.left_index</th><th>n2.right_index</th></tr>      <tr><td>1</td><td>0</td><td>root</td><td>no rank</td><td>1</td><td>2946708</td></tr>      <tr class="bg2"><td>131567</td><td>1</td><td>cellular organisms</td><td>no rank</td><td>334636</td><td>2946707</td></tr>      <tr><td>2759</td><td>131567</td><td>Eukaryota</td><td>superkingdom</td><td>1243695</td><td>2946706</td></tr>      <tr class="bg2"><td>33154</td><td>2759</td><td>Opisthokonta</td><td>no rank</td><td>1614336</td><td>2879319</td></tr>      <tr><td>33208</td><td>33154</td><td>Metazoa</td><td>kingdom</td><td>1884671</td><td>2878996</td></tr>      <tr class="bg2"><td>6072</td><td>33208</td><td>Eumetazoa</td><td>no rank</td><td>1891206</td><td>2878709</td></tr>      <tr><td>33213</td><td>6072</td><td>Bilateria</td><td>no rank</td><td>1907163</td><td>2878708</td></tr>      <tr class="bg2"><td>33511</td><td>33213</td><td>Deuterostomia</td><td>no rank</td><td>2714042</td><td>2877945</td></tr>      <tr><td>7711</td><td>33511</td><td>Chordata</td><td>phylum</td><td>2720993</td><td>2877378</td></tr>      <tr class="bg2"><td>89593</td><td>7711</td><td>Craniata</td><td>subphylum</td><td>2722132</td><td>2877363</td></tr>      <tr><td>7742</td><td>89593</td><td>Vertebrata</td><td>no rank</td><td>2722133</td><td>2877362</td></tr>      <tr class="bg2"><td>7776</td><td>7742</td><td>Gnathostomata</td><td>no rank</td><td>2722134</td><td>2877059</td></tr>      <tr><td>117570</td><td>7776</td><td>Teleostomi</td><td>no rank</td><td>2725475</td><td>2877058</td></tr>      <tr class="bg2"><td>117571</td><td>117570</td><td>Euteleostomi</td><td>no rank</td><td>2725476</td><td>2877057</td></tr>      <tr><td>8287</td><td>117571</td><td>Sarcopterygii</td><td>no rank</td><td>2790137</td><td>2877056</td></tr>      <tr class="bg2"><td>1338369</td><td>8287</td><td>Dipnotetrapodomorpha</td><td>no rank</td><td>2790150</td><td>2877055</td></tr>      <tr><td>32523</td><td>1338369</td><td>Tetrapoda</td><td>no rank</td><td>2790203</td><td>2877054</td></tr>      <tr class="bg2"><td>32524</td><td>32523</td><td>Amniota</td><td>no rank</td><td>2807440</td><td>2877053</td></tr>      <tr><td>40674</td><td>32524</td><td>Mammalia</td><td>class</td><td>2857119</td><td>2877052</td></tr>      <tr class="bg2"><td>32525</td><td>40674</td><td>Theria</td><td>no rank</td><td>2857142</td><td>2877037</td></tr>      <tr><td>9347</td><td>32525</td><td>Eutheria</td><td>no rank</td><td>2858273</td><td>2877036</td></tr>      <tr class="bg2"><td>1437010</td><td>9347</td><td>Boreoeutheria</td><td>no rank</td><td>2858796</td><td>2877017</td></tr>      <tr><td>314146</td><td>1437010</td><td>Euarchontoglires</td><td>superorder</td><td>2867337</td><td>2877016</td></tr>      <tr class="bg2"><td>9443</td><td>314146</td><td>Primates</td><td>order</td><td>2867410</td><td>2869119</td></tr>      <tr><td>376913</td><td>9443</td><td>Haplorrhini</td><td>suborder</td><td>2867885</td><td>2869118</td></tr>      <tr class="bg2"><td>314293</td><td>376913</td><td>Simiiformes</td><td>infraorder</td><td>2867886</td><td>2869087</td></tr>      <tr><td>9526</td><td>314293</td><td>Catarrhini</td><td>parvorder</td><td>2868377</td><td>2869086</td></tr>      <tr class="bg2"><td>314295</td><td>9526</td><td>Hominoidea</td><td>superfamily</td><td>2868938</td><td>2869085</td></tr>      <tr><td>9604</td><td>314295</td><td>Hominidae</td><td>family</td><td>2869023</td><td>2869084</td></tr>      <tr class="bg2"><td>207598</td><td>9604</td><td>Homininae</td><td>subfamily</td><td>2869024</td><td>2869069</td></tr>      <tr><td>9605</td><td>207598</td><td>Homo</td><td>genus</td><td>2869059</td><td>2869068</td></tr>      <tr class="bg2"><td>9606</td><td>9605</td><td>Homo sapiens</td><td>species</td><td>2869060</td><td>2869065</td></tr>    </table>
   </div></div></div><table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#ncbi_taxa_name">ncbi_taxa_name</a></li>
@@ -383,7 +393,7 @@ available: <a target="_blank" href="./diagrams/genomic_schema.png">Genomic align
       <tr>
         <td class="bg2"><b>name</b></td>
         <td class="bg2">varchar(255)</td>
-        <td class="bg2">NULL</td>
+        <td class="bg2">-</td>
         <td class="bg2">Information assigned to this taxon_id</td>
         <td class="bg2">key: <i>name</i></td>
       </tr>
@@ -391,7 +401,7 @@ available: <a target="_blank" href="./diagrams/genomic_schema.png">Genomic align
       <tr>
         <td class="bg1"><b>name_class</b></td>
         <td class="bg1">varchar(50)</td>
-        <td class="bg1">NULL</td>
+        <td class="bg1">-</td>
         <td class="bg1">Type of information. e.g. common name, genbank_synonym, scientif name, etc.</td>
         <td class="bg1">key: <i>name_class</i></td>
       </tr>
@@ -729,7 +739,7 @@ available: <a target="_blank" href="./diagrams/genomic_schema.png">Genomic align
         <td class="bg1">int(10)</td>
         <td class="bg1">-</td>
         <td class="bg1">External reference to species_set_id in the <a href="#species_set" class="sql_schema_link">species_set</a> table</td>
-        <td class="bg1">unique key: <i>tag_species_set_id</i></td>
+        <td class="bg1">primary key</td>
       </tr>
 
       <tr>
@@ -737,13 +747,13 @@ available: <a target="_blank" href="./diagrams/genomic_schema.png">Genomic align
         <td class="bg2">varchar(50)</td>
         <td class="bg2">-</td>
         <td class="bg2">Tag name</td>
-        <td class="bg2">unique key: <i>tag_species_set_id</i></td>
+        <td class="bg2">primary key<br />key: <i>tag</i></td>
       </tr>
 
       <tr>
         <td class="bg1"><b>value</b></td>
         <td class="bg1">mediumtext</td>
-        <td class="bg1">NULL</td>
+        <td class="bg1">-</td>
         <td class="bg1">Tag value</td>
         <td class="bg1"></td>
       </tr>
@@ -971,13 +981,13 @@ available: <a target="_blank" href="./diagrams/genomic_schema.png">Genomic align
         <td class="bg2">varchar(50)</td>
         <td class="bg2">-</td>
         <td class="bg2">Tag name</td>
-        <td class="bg2">primary key</td>
+        <td class="bg2">primary key<br />key: <i>tag</i></td>
       </tr>
 
       <tr>
         <td class="bg1"><b>value</b></td>
         <td class="bg1">mediumtext</td>
-        <td class="bg1">NULL</td>
+        <td class="bg1">-</td>
         <td class="bg1">Tag value</td>
         <td class="bg1"></td>
       </tr>
@@ -986,6 +996,134 @@ available: <a target="_blank" href="./diagrams/genomic_schema.png">Genomic align
 <table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#method_link_species_set">method_link_species_set</a></li>
+      </ul>
+    </td>
+</tr></table></div></div><div class="sql_schema_table">
+  <div id="method_link_species_set_attr"class="sql_schema_table_header" style="border-top-color:#3CB371">
+    <div class="sql_schema_table_header_left"><span style="background-color:#3CB371"></span>method_link_species_set_attr</div>
+    <div class="sql_schema_table_header_right">
+  
+  <a id="a_method_link_species_set_attr" class="help-header sql_schema_show_hide" onclick="show_hide('method_link_species_set_attr','columns')">
+    <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
+  </a>
+      <span class="sql_schema_table_separator"> </span> <a href="#top" class="sql_schema_link">[Back to top]</a>
+    </div>
+    <div style="clear:both"></div>
+  </div>
+<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">This table contains the distribution of the gene order conservation scores </p>
+
+  <div id="div_method_link_species_set_attr" style="display:none">
+    <table class="ss sql_schema_table_column">
+      <tr class="center">
+        <th>Column</th>
+        <th>Type</th>
+        <th class="val">Default value</th>
+        <th class="desc">Description</th>
+        <th class="index">Index</th>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>method_link_species_set_id</b></td>
+        <td class="bg1">int(10)</td>
+        <td class="bg1">-</td>
+        <td class="bg1">internal unique ID for the orthologs</td>
+        <td class="bg1">primary key</td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>n_goc_null</b></td>
+        <td class="bg2">int</td>
+        <td class="bg2">NULL</td>
+        <td class="bg2">the number of orthologs for with no neighbors</td>
+        <td class="bg2"></td>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>n_goc_0</b></td>
+        <td class="bg1">int</td>
+        <td class="bg1">NULL</td>
+        <td class="bg1">the number of orthologs with no gene order conservation among their neighbours</td>
+        <td class="bg1"></td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>n_goc_25</b></td>
+        <td class="bg2">int</td>
+        <td class="bg2">NULL</td>
+        <td class="bg2">the number of orthologs with 25% gene order conservation among their neighbours</td>
+        <td class="bg2"></td>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>n_goc_50</b></td>
+        <td class="bg1">int</td>
+        <td class="bg1">NULL</td>
+        <td class="bg1">the number of orthologs with 50% gene order conservation among their neighbours</td>
+        <td class="bg1"></td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>n_goc_75</b></td>
+        <td class="bg2">int</td>
+        <td class="bg2">NULL</td>
+        <td class="bg2">the number of orthologs with 75% gene order conservation among their neighbours</td>
+        <td class="bg2"></td>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>n_goc_100</b></td>
+        <td class="bg1">int</td>
+        <td class="bg1">NULL</td>
+        <td class="bg1">the number of orthologs with 100% gene order conservation among their neighbours</td>
+        <td class="bg1"></td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>perc_orth_above_goc_thresh</b></td>
+        <td class="bg2">float</td>
+        <td class="bg2">NULL</td>
+        <td class="bg2">the percentage of orthologs above the goc threshold </td>
+        <td class="bg2"></td>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>goc_quality_threshold</b></td>
+        <td class="bg1">int</td>
+        <td class="bg1">NULL</td>
+        <td class="bg1">the chosen threshold for "high quality" orthologs based on gene order conservation</td>
+        <td class="bg1"></td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>wga_quality_threshold</b></td>
+        <td class="bg2">int</td>
+        <td class="bg2">NULL</td>
+        <td class="bg2">the chosen threshold for "high quality" orthologs based on the whole genome alignments coverage of homologous pairs</td>
+        <td class="bg2"></td>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>perc_orth_above_wga_thresh</b></td>
+        <td class="bg1">float</td>
+        <td class="bg1">NULL</td>
+        <td class="bg1">the percentage of orthologs above the wga threshold</td>
+        <td class="bg1"></td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>threshold_on_ds</b></td>
+        <td class="bg2">int</td>
+        <td class="bg2">NULL</td>
+        <td class="bg2">the threshold_on_ds</td>
+        <td class="bg2"></td>
+      </tr>
+    </table>
+  </div>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+  <ul>
+      <li><a href="#method_link_species_set">method_link_species_set</a></li>
+      <li><a href="#ortholog_goc_metric">ortholog_goc_metric</a></li>
+      <li><a href="#homology">homology</a></li>
       </ul>
     </td>
 </tr></table></div></div><div class="sql_schema_table">
@@ -1088,6 +1226,7 @@ available: <a target="_blank" href="./diagrams/genomic_schema.png">Genomic align
 <table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#species_tree_node_tag">species_tree_node_tag</a></li>
+      <li><a href="#species_tree_node_attr">species_tree_node_attr</a></li>
       <li><a href="#species_tree_root">species_tree_root</a></li>
       <li><a href="#CAFE_gene_family">CAFE_gene_family</a></li>
       <li><a href="#CAFE_species_gene">CAFE_species_gene</a></li>
@@ -1164,7 +1303,7 @@ available: <a target="_blank" href="./diagrams/genomic_schema.png">Genomic align
       
   <div id="ex_species_tree_root" style="display:none;">
     <table class="ss sql_schema_table_example_result">
-      <tr><th>root_id</th><th>method_link_species_set_id</th><th>label</th><th>species_tree</th></tr>      <tr><td>647000</td><td>647</td><td>default</td><td>(((Gallus_gallus:0.0414,Meleagris_gallopavo:0.0414):0.1242,Taeniopygia_guttata:0.1715):0.3044,Anolis_carolinensis:0.4989):0;</td></tr>      <tr class="bg2"><td>664000</td><td>664</td><td>default</td><td>(((((Gallus_gallus:0.0414,Meleagris_gallopavo:0.0414):0.0414,Anas_platyrhynchos:0.0828):0.0828,(Taeniopygia_guttata:0.0858,Ficedula_albicollis:0.0858):0.0858):0.1992,Pelodiscus_sinensis:0.4892):0.1051,Anolis_carolinensis:0.4989):0;</td></tr>      <tr><td>756000</td><td>756</td><td>default</td><td>(((((Homo_sapiens:0.0059,Pan_troglodytes:0.0064):0.0019,Gorilla_gorilla:0.0086):0.0080,Pongo_abelii:0.017):0.0121,((Papio_anubis:0.0088,Macaca_mulatta:0.0088):0.0132,Chlorocebus_sabaeus:0.0132):0.0132):0.0147,Callithrix_jacchus:0.0687):0;</td></tr>      <tr class="bg2"><td>768000</td><td>768</td><td>default</td><td>((((Gasterosteus_aculeatus:0.14,Tetraodon_nigroviridis:0.1907):0.068,Oryzias_latipes:0.2212):0.0985,Danio_rerio:0.2706):0.107,Lepisosteus_oculatus:0.107):0;</td></tr>      <tr><td>780000</td><td>780</td><td>default</td><td>((((Mus_musculus:0.0765,Rattus_norvegicus:0.0834):0.2797,Oryctolagus_cuniculus:0.221):0.0095,(((((Homo_sapiens:0.0059,Pan_troglodytes:0.0064):0.0019,Gorilla_gorilla:0.0086):0.0080,Pongo_abelii:0.017):0.0121,((Papio_anubis:0.0088,Macaca_mulatta:0.0088):0.0132,Chlorocebus_sabaeus:0.0132):0.0132):0.0147,Callithrix_jacchus:0.0687):0.0795):0.0199,(((Felis_catus:0.0889,Canis_familiaris:0.0993):0.0505,Equus_caballus:0.0981):0.0067,((Bos_taurus:0.0261,Ovis_aries:0.0313):0.1104,Sus_scrofa:0.117):0.0318):0.0315):0;</td></tr>      <tr class="bg2"><td>781000</td><td>781</td><td>default</td><td>(((((((((Ailuropoda_melanoleuca:0.0629,Mustela_putorius_furo:0.0928):0.0233,Canis_familiaris:0.0837):0.0156,Felis_catus:0.0889):0.0505,Equus_caballus:0.0981):0.0053,(Pteropus_vampyrus:0.1122,Myotis_lucifugus:0.1269):0.0253):0.0014,((((Bos_taurus:0.0261,Ovis_aries:0.0313):0.0877,Tursiops_truncatus:0.0712):0.0127,Vicugna_pacos:0.1197):0.01,Sus_scrofa:0.117):0.0318):0.0128,(Erinaceus_europaeus:0.2392,Sorex_araneus:0.2565):0.0341):0.0187,((((((((((Homo_sapiens:0.0059,Pan_troglodytes:0.0064):0.0019,Gorilla_gorilla:0.0086):0.008,Pongo_abelii:0.017):0.0026,Nomascus_leucogenys:0.0191):0.0095,((Papio_anubis:0.0088,Macaca_mulatta:0.0088):0.0132,Chlorocebus_sabaeus:0.0132):0.0132):0.0147,Callithrix_jacchus:0.0687):0.0565,Tarsius_syrichta:0.1392):0.0083,(Microcebus_murinus:0.0849,Otolemur_garnettii:0.132):0.0359):0.0116,Tupaia_belangeri:0.1962):0.0031,(((((Mus_musculus:0.0765,Rattus_norvegicus:0.0834):0.2377,Dipodomys_ordii:0.236):0.0171,Ictidomys_tridecemlineatus:0.1728):0.0041,Cavia_porcellus:0.2403):0.0208,(Oryctolagus_cuniculus:0.1333,Ochotona_princeps:0.2054):0.0877):0.0095):0.0199):0.0117,(((Loxodonta_africana:0.0854,Procavia_capensis:0.162):0.0288,Echinops_telfairi:0.2362):0.0459,(Choloepus_hoffmanni:0.1086,Dasypus_novemcinctus:0.1249):0.0537):0.0117):0;</td></tr>      <tr><td>788000</td><td>788</td><td>default</td><td>(((((((Mus_musculus:0.0845,Rattus_norvegicus:0.0916):0.2567,Oryctolagus_cuniculus:0.2157):0.0153,((((Papio_anubis:0.01875,Macaca_mulatta:0.01875):0.009375,Chlorocebus_sabaeus:0.009375):0.009375,(((Pan_troglodytes:0.0067,Homo_sapiens:0.0067):0.0022,Gorilla_gorilla:0.0088):0.0097,Pongo_abelii:0.0183):0.0143):0.022,Callithrix_jacchus:0.0661):0.0891):0.0206,(((Felis_catus:0.0986,Canis_familiaris:0.1025):0.0498,Equus_caballus:0.1094):0.0107,((Bos_taurus:0.0618,Ovis_aries:0.0618):0.0869,Sus_scrofa:0.1073):0.0403):0.0329):0.2584,Monodelphis_domestica:0.3408):0.0717,Ornithorhynchus_anatinus:0.4566):0.1095,(((Gallus_gallus:0.0414,Meleagris_gallopavo:0.0414):0.1242,Taeniopygia_guttata:0.1715):0.3044,Anolis_carolinensis:0.4989):0.17):0;</td></tr>      <tr class="bg2"><td>793000</td><td>793</td><td>default</td><td>((((((((Xiphophorus_maculatus:0.10185,Poecilia_formosa:0.10185):0.10185,Oryzias_latipes:0.14):0.0483,Gasterosteus_aculeatus:0.1836):0.001,Oreochromis_niloticus:0.1728):0.0319,(Takifugu_rubripes:0.1096,Tetraodon_nigroviridis:0.1227):0.136):0.0411,Gadus_morhua:0.1965):0.0574,(Astyanax_mexicanus:0.1487,Danio_rerio:0.2053):0.0653):0.107,Lepisosteus_oculatus:0.107):0;</td></tr>      <tr><td>40102221</td><td>60003</td><td>Ensembl</td><td>((((9,8)7,((((((((((23,24)22,25)21,(20,19)18)17,26)16,27)15,(((((((45,44)43,((((50,51)49,52)48,53)47,54)46)42,(((((((((73,72)71,74)70,75)69,76)68,((66,65)64,67)63)62,77)61,78)60,(58,59)57)56,79)55)41,((((((102,103)101,104)100,105)99,106)98,(((((94,93)92,95)91,96)90,97)89,(88,87)86)85)84,(83,82)81)80)40,((38,39)37,((35,34)33,36)32)31)30,((110,109)108,111)107)29,112)28)14,113)13,114)12,(((118,119)117,((((((129,130)128,131)127,132)126,133)125,(123,124)122)121,134)120)116,135)115)11,136)10)6,(5,4)3)2,137)1;</td></tr>      <tr class="bg2"><td>40102358</td><td>60003</td><td>NCBI Taxonomy</td><td>((((((((((((9361,9358)9348,((((30608,30611)376911,((((((9598,9606,9595)207598,9601)9604,61853)314295,(9555,9544,60711)9528)9526,9483)314293,9478)376913)9443,((9986,9978)9975,(((10116,10090)39107,10020,43179)33553,10141)9989)314147,37347)314146,(((9646,9615,9669)379584,9685)33554,(59463,132908)9397,(42254,9365)9362,((9940,9913)9895,9823,30538,9739)91561,9796)314145)1437010,(9371,9813,9785)311790)9347,(9305,9315,13616)9263)32525,9258)40674,(((((9103,9031)9005,8839)1549675,(59894,59729)9126)8825,13735)1329799,28377)32561)32524,8364)32523,7897)8287,(((7955,7994)186626,(((((8083,48698)586240,8090)1489913,8128)1489908,((31033,99883)31031,69293)1489922)1489872,8049)123368)186625,7918)41665)117571,7757)7742,(7719,51511)7718)7711,(6239,7227)1206794)33213,4932)33154;</td></tr>      <tr><td>40102000</td><td>40102</td><td>default</td><td>(((6239,7227)1206794,(((((((((9315,9305,13616)9263,(9813,10020,9940,30538,10141,9478,9598,30611,9606,43179,30608,132908,60711,61853,9615,10090,9669,9371,9913,9685,9555,59463,9646,42254,9978,9823,9358,9595,9796,9785,9365,9483,37347,9601,9739,9986,9361,9544,10116)9347)32525,9258)40674,(8839,9103,9031,13735,59729,59894,28377)32561)32524,8364)32523,7897)8287,((31033,8049,8083,7994,99883,69293,7955,8090,48698,8128)186625,7918)41665)117571,7757)7742,(51511,7719)7718)7711)33213,4932)33154;</td></tr>      <tr class="bg2"><td>40102086</td><td>40102</td><td>full_species_tree</td><td>((((((((((((9361,9358)9348,((((30611,30608)376911,((((((9606,9598,9595)207598,9601)9604,61853)314295,(60711,9544,9555)9528)9526,9483)314293,9478)376913)9443,((((10116,10090)39107,10020,43179)33553,10141)9989,(9986,9978)9975)314147,37347)314146,((59463,132908)9397,((9646,9615,9669)379584,9685)33554,(42254,9365)9362,((9913,9940)9895,30538,9823,9739)91561,9796)314145)1437010,(9371,9813,9785)311790)9347,(9315,9305,13616)9263)32525,9258)40674,(((((9031,9103)9005,8839)1549675,(59894,59729)9126)8825,13735)1329799,28377)32561)32524,8364)32523,7897)8287,(((7955,7994)186626,((((31033,99883)31031,69293)1489922,(((8083,48698)586240,8090)1489913,8128)1489908)1489872,8049)123368)186625,7918)41665)117571,7757)7742,(51511,7719)7718)7711,(6239,7227)1206794)33213,4932)33154;</td></tr>      <tr><td>40102210</td><td>40102</td><td>cafe</td><td>(((((pan.troglodytes:9,homo.sapiens:9)Homininae:35,callithrix.jacchus:44)Simiiformes:52,mus.musculus:96)Euarchontoglires:213,taeniopygia.guttata:309)Amniota:145,danio.rerio:454)Euteleostomi:94;</td></tr>      <tr class="bg2"><td>40101000</td><td>40101</td><td>default</td><td>(((((((((((((((30611,30608)376911,((((((9606,9598,9595)207598,9601)9604,61853)314295,(9544,60711,9555)9528)9526,9483)314293,9478)376913)9443,((9978,9986)9975,(((10116,10090)39107,10020,43179)33553,10141)9989)314147,37347)314146,(((9646,9615,9669)379584,9685)33554,(59463,132908)9397,(42254,9365)9362,((9913,9940)9895,9823,30538,9739)91561,9796)314145)1437010,(9361,9358)9348,(9371,9785,9813)311790)9347,(9305,9315,13616)9263)32525,9258)40674,(((((9103,9031)9005,8839)1549675,(59894,59729)9126)8825,13735)1329799,28377)32561)32524,8364)32523,7897)8287,(((7955,7994)186626,(((((48698,8083)586240,8090)1489913,8128)1489908,((31033,99883)31031,69293)1489922)1489872,8049)123368)186625,7918)41665)117571,7757)7742,(7719,51511)7718)7711,(6239,7227)1206794)33213,4932)33154;</td></tr>      <tr><td>40101124</td><td>40101</td><td>cafe</td><td>(((drosophila.melanogaster:936,caenorhabditis.elegans:936)Ecdysozoa:12,(((((((((((meleagris.gallopavo:44,gallus.gallus:44)Phasianidae:37,anas.platyrhynchos:81)Galloanserae:23,(taeniopygia.guttata:39,ficedula.albicollis:39)Passeriformes:65)Neognathae:140,pelodiscus.sinensis:244)Archelosauria:32,anolis.carolinensis:276)Sauria:31,((((((((((erinaceus.europaeus:65,sorex.araneus:65)Insectivora:26,equus.caballus:91)Laurasiatheria.dup3:3,((((ovis.aries:30,bos.taurus:30)Bovidae:33,tursiops.truncatus:63)Cetartiodactyla.dup3:1,vicugna.pacos:64)Cetartiodactyla.dup4:1,sus.scrofa:65)Cetartiodactyla:29)Laurasiatheria.dup4:1,(myotis.lucifugus:60,pteropus.vampyrus:60)Chiroptera:35)Laurasiatheria.dup5:1,(((ailuropoda.melanoleuca:45,mustela.putorius.furo:45)Caniformia.dup3:1,canis.familiaris:46)Caniformia:10,felis.catus:56)Carnivora:40)Laurasiatheria:12,((((((dipodomys.ordii:74,ictidomys.tridecemlineatus:74)Sciurognathi.dup3:1,(mus.musculus:25,rattus.norvegicus:25)Murinae:50)Sciurognathi:3,cavia.porcellus:78)Rodentia:9,(oryctolagus.cuniculus:51,ochotona.princeps:51)Lagomorpha:36)Glires:6,tupaia.belangeri:93)Euarchontoglires.dup3:2,((((((((pan.troglodytes:8,gorilla.gorilla:8)Homininae.dup3:1,homo.sapiens:9)Homininae:7,pongo.abelii:16)Hominidae:5,nomascus.leucogenys:21)Hominoidea:10,((papio.anubis:11,macaca.mulatta:11)Cercopithecinae.dup3:1,chlorocebus.sabaeus:12)Cercopithecinae:19)Catarrhini:13,callithrix.jacchus:44)Simiiformes:23,tarsius.syrichta:67)Haplorrhini:9,(otolemur.garnettii:57,microcebus.murinus:57)Strepsirrhini:19)Primates:19)Euarchontoglires:13)Boreoeutheria:4,(dasypus.novemcinctus:64,choloepus.hoffmanni:64)Xenarthra:48)Eutheria.dup3:2,((loxodonta.africana:81,procavia.capensis:81)Afrotheria.dup3:1,echinops.telfairi:82)Afrotheria:32)Eutheria:59,((macropus.eugenii:86,sarcophilus.harrisii:86)Marsupialia.dup3:1,monodelphis.domestica:87)Marsupialia:86)Theria:5,ornithorhynchus.anatinus:178)Mammalia:129)Amniota:75,xenopus.tropicalis:382)Tetrapoda:43,latimeria.chalumnae:425)Sarcopterygii:27,((((((tetraodon.nigroviridis:69,takifugu.rubripes:69)Tetraodontidae:55,gasterosteus.aculeatus:124)Eupercaria:1,(((xiphophorus.maculatus:40,poecilia.formosa:40)Poeciliinae:60,oryzias.latipes:100)Atherinomorphae:3,oreochromis.niloticus:103)Ovalentaria:22)Percomorphaceae:40,gadus.morhua:165)Acanthomorphata:100,(astyanax.mexicanus:152,danio.rerio:152)Otophysa:113)Clupeocephala:68,lepisosteus.oculatus:333)Neopterygii:119)Euteleostomi:94,petromyzon.marinus:546)Vertebrata:187,(ciona.intestinalis:100,ciona.savignyi:100)Ciona:633)Chordata:215)Bilateria:278,saccharomyces.cerevisiae:1226)root:0;</td></tr>    </table>
+      <tr><th>root_id</th><th>method_link_species_set_id</th><th>label</th><th>species_tree</th></tr>      <tr><td>647000</td><td>647</td><td>default</td><td>(((Gallus_gallus:0.0414,Meleagris_gallopavo:0.0414):0.1242,Taeniopygia_guttata:0.1715):0.3044,Anolis_carolinensis:0.4989):0;</td></tr>      <tr class="bg2"><td>664000</td><td>664</td><td>default</td><td>(((((Gallus_gallus:0.0414,Meleagris_gallopavo:0.0414):0.0414,Anas_platyrhynchos:0.0828):0.0828,(Taeniopygia_guttata:0.0858,Ficedula_albicollis:0.0858):0.0858):0.1992,Pelodiscus_sinensis:0.4892):0.1051,Anolis_carolinensis:0.4989):0;</td></tr>      <tr><td>756000</td><td>756</td><td>default</td><td>(((((Homo_sapiens:0.0059,Pan_troglodytes:0.0064):0.0019,Gorilla_gorilla:0.0086):0.0080,Pongo_abelii:0.017):0.0121,((Papio_anubis:0.0088,Macaca_mulatta:0.0088):0.0132,Chlorocebus_sabaeus:0.0132):0.0132):0.0147,Callithrix_jacchus:0.0687):0;</td></tr>      <tr class="bg2"><td>768000</td><td>768</td><td>default</td><td>((((Gasterosteus_aculeatus:0.14,Tetraodon_nigroviridis:0.1907):0.068,Oryzias_latipes:0.2212):0.0985,Danio_rerio:0.2706):0.107,Lepisosteus_oculatus:0.107):0;</td></tr>      <tr><td>780000</td><td>780</td><td>default</td><td>((((Mus_musculus:0.0765,Rattus_norvegicus:0.0834):0.2797,Oryctolagus_cuniculus:0.221):0.0095,(((((Homo_sapiens:0.0059,Pan_troglodytes:0.0064):0.0019,Gorilla_gorilla:0.0086):0.0080,Pongo_abelii:0.017):0.0121,((Papio_anubis:0.0088,Macaca_mulatta:0.0088):0.0132,Chlorocebus_sabaeus:0.0132):0.0132):0.0147,Callithrix_jacchus:0.0687):0.0795):0.0199,(((Felis_catus:0.0889,Canis_familiaris:0.0993):0.0505,Equus_caballus:0.0981):0.0067,((Bos_taurus:0.0261,Ovis_aries:0.0313):0.1104,Sus_scrofa:0.117):0.0318):0.0315):0;</td></tr>      <tr class="bg2"><td>781000</td><td>781</td><td>default</td><td>(((((((((Ailuropoda_melanoleuca:0.0629,Mustela_putorius_furo:0.0928):0.0233,Canis_familiaris:0.0837):0.0156,Felis_catus:0.0889):0.0505,Equus_caballus:0.0981):0.0053,(Pteropus_vampyrus:0.1122,Myotis_lucifugus:0.1269):0.0253):0.0014,((((Bos_taurus:0.0261,Ovis_aries:0.0313):0.0877,Tursiops_truncatus:0.0712):0.0127,Vicugna_pacos:0.1197):0.01,Sus_scrofa:0.117):0.0318):0.0128,(Erinaceus_europaeus:0.2392,Sorex_araneus:0.2565):0.0341):0.0187,((((((((((Homo_sapiens:0.0059,Pan_troglodytes:0.0064):0.0019,Gorilla_gorilla:0.0086):0.008,Pongo_abelii:0.017):0.0026,Nomascus_leucogenys:0.0191):0.0095,((Papio_anubis:0.0088,Macaca_mulatta:0.0088):0.0132,Chlorocebus_sabaeus:0.0132):0.0132):0.0147,Callithrix_jacchus:0.0687):0.0565,Tarsius_syrichta:0.1392):0.0083,(Microcebus_murinus:0.0849,Otolemur_garnettii:0.132):0.0359):0.0116,Tupaia_belangeri:0.1962):0.0031,(((((Mus_musculus:0.0765,Rattus_norvegicus:0.0834):0.2377,Dipodomys_ordii:0.236):0.0171,Ictidomys_tridecemlineatus:0.1728):0.0041,Cavia_porcellus:0.2403):0.0208,(Oryctolagus_cuniculus:0.1333,Ochotona_princeps:0.2054):0.0877):0.0095):0.0199):0.0117,(((Loxodonta_africana:0.0854,Procavia_capensis:0.162):0.0288,Echinops_telfairi:0.2362):0.0459,(Choloepus_hoffmanni:0.1086,Dasypus_novemcinctus:0.1249):0.0537):0.0117):0;</td></tr>      <tr><td>788000</td><td>788</td><td>default</td><td>(((((((Mus_musculus:0.0845,Rattus_norvegicus:0.0916):0.2567,Oryctolagus_cuniculus:0.2157):0.0153,((((Papio_anubis:0.01875,Macaca_mulatta:0.01875):0.009375,Chlorocebus_sabaeus:0.009375):0.009375,(((Pan_troglodytes:0.0067,Homo_sapiens:0.0067):0.0022,Gorilla_gorilla:0.0088):0.0097,Pongo_abelii:0.0183):0.0143):0.022,Callithrix_jacchus:0.0661):0.0891):0.0206,(((Felis_catus:0.0986,Canis_familiaris:0.1025):0.0498,Equus_caballus:0.1094):0.0107,((Bos_taurus:0.0618,Ovis_aries:0.0618):0.0869,Sus_scrofa:0.1073):0.0403):0.0329):0.2584,Monodelphis_domestica:0.3408):0.0717,Ornithorhynchus_anatinus:0.4566):0.1095,(((Gallus_gallus:0.0414,Meleagris_gallopavo:0.0414):0.1242,Taeniopygia_guttata:0.1715):0.3044,Anolis_carolinensis:0.4989):0.17):0;</td></tr>      <tr class="bg2"><td>793000</td><td>793</td><td>default</td><td>((((((((Xiphophorus_maculatus:0.10185,Poecilia_formosa:0.10185):0.10185,Oryzias_latipes:0.14):0.0483,Gasterosteus_aculeatus:0.1836):0.001,Oreochromis_niloticus:0.1728):0.0319,(Takifugu_rubripes:0.1096,Tetraodon_nigroviridis:0.1227):0.136):0.0411,Gadus_morhua:0.1965):0.0574,(Astyanax_mexicanus:0.1487,Danio_rerio:0.2053):0.0653):0.107,Lepisosteus_oculatus:0.107):0;</td></tr>      <tr><td>40104100</td><td>60003</td><td>Ensembl</td><td>(((((((((((((130,129)128,131)127,132)126,133)125,(123,124)122)121,134)120,(118,119)117)116,135)115,((((((((((((((93,94)92,95)91,96)90,97)89,(88,87)86)85,((((103,102)101,104)100,105)99,106)98)84,(82,83)81)80,((((((51,50)49,52)48,53)47,54)46,(45,44)43)42,(((58,59)57,(((((((72,73)71,74)70,75)69,76)68,((66,65)64,67)63)62,77)61,78)60)56,79)55)41)40,(((35,34)33,36)32,(38,39)37)31)30,((109,110)108,111)107)29,112)28,((((19,20)18,((24,23)22,25)21)17,26)16,27)15)14,113)13,114)12)11,136)10,(8,9)7)6,(4,5)3)2,137)1;</td></tr>      <tr class="bg2"><td>40104237</td><td>60003</td><td>NCBI Taxonomy</td><td>(((((((((((9315,9305,13616)9263,((9361,9358)9348,(((((((((9606,9598,9595)207598,9601)9604,61853)314295,(9544,9555,60711)9528)9526,9483)314293,9478)376913,(30608,30611)376911)9443,((((10116,10090)39107,10020,43179)33553,10141)9989,(9978,9986)9975)314147,37347)314146,((9365,42254)9362,((9646,9615,9669)379584,9685)33554,(59463,132908)9397,((9940,9913)9895,9823,30538,9739)91561,9796)314145)1437010,(9785,9813,9371)311790)9347)32525,9258)40674,(((((9103,9031)9005,8839)1549675,(59894,59729)9126)8825,13735)1329799,28377)32561)32524,8364)32523,7897)8287,(((7955,7994)186626,(((((48698,8083)586240,8090)1489913,8128)1489908,((31033,99883)31031,69293)1489922)1489872,8049)123368)186625,7918)41665)117571,7757)7742,(7719,51511)7718)7711,(6239,7227)1206794)33213,4932)33154;</td></tr>      <tr><td>40102000</td><td>40102</td><td>default</td><td>(((6239,7227)1206794,(((((((((9305,9315,13616)9263,(43179,10116,9813,10141,9371,59463,42254,9544,9595,9823,9598,61853,10090,9913,30538,37347,9739,30611,9555,9483,9601,30608,9796,9615,9978,9940,9358,9365,9646,9606,60711,9986,10020,132908,9669,9361,9478,9685,9785)9347)32525,9258)40674,(9031,8839,59894,59729,13735,9103,28377)32561)32524,8364)32523,7897)8287,((8128,69293,8049,99883,8083,8090,7955,48698,31033,7994)186625,7918)41665)117571,7757)7742,(51511,7719)7718)7711)33213,4932)33154;</td></tr>      <tr class="bg2"><td>40102086</td><td>40102</td><td>full_species_tree</td><td>(((6239,7227)1206794,(((((((((9315,9305,13616)9263,(((((9986,9978)9975,(((10116,10090)39107,10020,43179)33553,10141)9989)314147,(((((((9598,9606,9595)207598,9601)9604,61853)314295,(60711,9544,9555)9528)9526,9483)314293,9478)376913,(30611,30608)376911)9443,37347)314146,(((9646,9615,9669)379584,9685)33554,(42254,9365)9362,(59463,132908)9397,((9913,9940)9895,9823,30538,9739)91561,9796)314145)1437010,(9361,9358)9348,(9785,9813,9371)311790)9347)32525,9258)40674,((((59894,59729)9126,((9031,9103)9005,8839)1549675)8825,13735)1329799,28377)32561)32524,8364)32523,7897)8287,(((7955,7994)186626,(((((48698,8083)586240,8090)1489913,8128)1489908,((99883,31033)31031,69293)1489922)1489872,8049)123368)186625,7918)41665)117571,7757)7742,(7719,51511)7718)7711)33213,4932)33154;</td></tr>      <tr><td>40102210</td><td>40102</td><td>cafe</td><td>(((((Homo sapiens:9,Pan troglodytes:9)Homininae:35,Callithrix jacchus:44)Simiiformes:52,Mus musculus:96)Euarchontoglires:211,Taeniopygia guttata:307)Amniota:145,Danio rerio:452)Euteleostomi:94;</td></tr>      <tr class="bg2"><td>40101000</td><td>40101</td><td>default</td><td>(((6239,7227)1206794,((((((((((9361,9358)9348,(((((((((9598,9606,9595)207598,9601)9604,61853)314295,(9555,9544,60711)9528)9526,9483)314293,9478)376913,(30611,30608)376911)9443,((((10116,10090)39107,10020,43179)33553,10141)9989,(9978,9986)9975)314147,37347)314146,((59463,132908)9397,((9646,9615,9669)379584,9685)33554,(9365,42254)9362,((9940,9913)9895,9823,30538,9739)91561,9796)314145)1437010,(9813,9371,9785)311790)9347,(9305,9315,13616)9263)32525,9258)40674,((((59894,59729)9126,((9031,9103)9005,8839)1549675)8825,13735)1329799,28377)32561)32524,8364)32523,7897)8287,(((7955,7994)186626,((((31033,99883)31031,69293)1489922,(((8083,48698)586240,8090)1489913,8128)1489908)1489872,8049)123368)186625,7918)41665)117571,7757)7742,(51511,7719)7718)7711)33213,4932)33154;</td></tr>      <tr><td>40101124</td><td>40101</td><td>cafe</td><td>(((Drosophila melanogaster:936,Caenorhabditis elegans:936)Ecdysozoa:14,(((((((((((Meleagris gallopavo:44,Gallus gallus:44)Phasianidae:37,Anas platyrhynchos:81)Galloanserae:23,(Taeniopygia guttata:39,Ficedula albicollis:39)Passeriformes:65)Neognathae:140,Pelodiscus sinensis:244)Archelosauria:32,Anolis carolinensis:276)Sauria:33,((((((((((((Vicugna pacos:63,Sus scrofa:63)Cetartiodactyla.dup3:1,(Bos taurus:30,Ovis aries:30)Bovidae:34)Cetartiodactyla.dup4:1,Tursiops truncatus:65)Cetartiodactyla:28,Equus caballus:93)Laurasiatheria.dup3:1,(Myotis lucifugus:60,Pteropus vampyrus:60)Chiroptera:34)Laurasiatheria.dup4:2,(((Canis lupus familiaris:45,Ailuropoda melanoleuca:45)Caniformia.dup3:1,Mustela putorius furo:46)Caniformia:10,Felis catus:56)Carnivora:40)Laurasiatheria.dup5:1,(Sorex araneus:65,Erinaceus europaeus:65)Insectivora:32)Laurasiatheria:13,(((((((Mus musculus:25,Rattus norvegicus:25)Murinae:49,Ictidomys tridecemlineatus:74)Sciurognathi.dup3:1,Dipodomys ordii:75)Sciurognathi:3,Cavia porcellus:78)Rodentia:9,(Oryctolagus cuniculus:51,Ochotona princeps:51)Lagomorpha:36)Glires:8,((((((((Homo sapiens:8,Gorilla gorilla gorilla:8)Homininae.dup3:1,Pan troglodytes:9)Homininae:7,Pongo abelii:16)Hominidae:5,Nomascus leucogenys:21)Hominoidea:10,((Chlorocebus sabaeus:11,Papio anubis:11)Cercopithecinae.dup3:1,Macaca mulatta:12)Cercopithecinae:19)Catarrhini:13,Callithrix jacchus:44)Simiiformes:23,Tarsius syrichta:67)Haplorrhini:9,(Microcebus murinus:57,Otolemur garnettii:57)Strepsirrhini:19)Primates:19)Euarchontoglires.dup3:1,Tupaia belangeri:96)Euarchontoglires:14)Boreoeutheria:5,((Echinops telfairi:81,Procavia capensis:81)Afrotheria.dup3:1,Loxodonta africana:82)Afrotheria:33)Eutheria.dup3:1,(Dasypus novemcinctus:64,Choloepus hoffmanni:64)Xenarthra:52)Eutheria:59,((Monodelphis domestica:86,Macropus eugenii:86)Marsupialia.dup3:1,Sarcophilus harrisii:87)Marsupialia:88)Theria:5,Ornithorhynchus anatinus:180)Mammalia:129)Amniota:75,Xenopus tropicalis:384)Tetrapoda:43,Latimeria chalumnae:427)Sarcopterygii:27,((((((Takifugu rubripes:69,Tetraodon nigroviridis:69)Tetraodontidae:55,Gasterosteus aculeatus:124)Eupercaria:1,(((Poecilia formosa:40,Xiphophorus maculatus:40)Poeciliinae:60,Oryzias latipes:100)Atherinomorphae:3,Oreochromis niloticus:103)Ovalentaria:22)Percomorphaceae:40,Gadus morhua:165)Acanthomorphata:100,(Danio rerio:152,Astyanax mexicanus:152)Otophysi:113)Clupeocephala:68,Lepisosteus oculatus:333)Neopterygii:121)Euteleostomi:94,Petromyzon marinus:548)Vertebrata:187,(Ciona intestinalis:100,Ciona savignyi:100)Ciona:635)Chordata:215)Bilateria:278,Saccharomyces cerevisiae:1228)root:0;</td></tr>    </table>
   </div></div></div><table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#species_tree_node">species_tree_node</a></li>
@@ -1200,7 +1339,7 @@ available: <a target="_blank" href="./diagrams/genomic_schema.png">Genomic align
         <td class="bg1">int(10)</td>
         <td class="bg1">-</td>
         <td class="bg1">Internal unique ID</td>
-        <td class="bg1">key: <i>node_id_tag</i><br />key: <i>tag_node_id</i><br />key: <i>node_id</i></td>
+        <td class="bg1">key: <i>node_id_tag</i></td>
       </tr>
 
       <tr>
@@ -1208,7 +1347,7 @@ available: <a target="_blank" href="./diagrams/genomic_schema.png">Genomic align
         <td class="bg2">varchar(50)</td>
         <td class="bg2">-</td>
         <td class="bg2">Tag name for the tag/value pair</td>
-        <td class="bg2">key: <i>node_id_tag</i><br />key: <i>tag_node_id</i><br />key: <i>tag</i></td>
+        <td class="bg2">key: <i>node_id_tag</i><br />key: <i>tag</i></td>
       </tr>
 
       <tr>
@@ -1224,6 +1363,248 @@ available: <a target="_blank" href="./diagrams/genomic_schema.png">Genomic align
   <ul>
       <li><a href="#species_tree_node">species_tree_node</a></li>
       <li><a href="#species_tree_root">species_tree_root</a></li>
+      </ul>
+    </td>
+</tr></table></div></div><div class="sql_schema_table">
+  <div id="species_tree_node_attr"class="sql_schema_table_header" style="border-top-color:#3CB371">
+    <div class="sql_schema_table_header_left"><span style="background-color:#3CB371"></span>species_tree_node_attr</div>
+    <div class="sql_schema_table_header_right">
+  
+  <a id="a_species_tree_node_attr" class="help-header sql_schema_show_hide" onclick="show_hide('species_tree_node_attr','columns')">
+    <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
+  </a>
+      <span class="sql_schema_table_separator"> </span> <a href="#top" class="sql_schema_link">[Back to top]</a>
+    </div>
+    <div style="clear:both"></div>
+  </div>
+<div class="sql_schema_table_content">  <p class="sql_schema_table_desc"></p>
+
+  <div id="div_species_tree_node_attr" style="display:none">
+    <table class="ss sql_schema_table_column">
+      <tr class="center">
+        <th>Column</th>
+        <th>Type</th>
+        <th class="val">Default value</th>
+        <th class="desc">Description</th>
+        <th class="index">Index</th>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>node_id</b></td>
+        <td class="bg1">int(10)</td>
+        <td class="bg1">-</td>
+        <td class="bg1">Internal unique ID</td>
+        <td class="bg1">primary key</td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>nb_long_genes</b></td>
+        <td class="bg2">int</td>
+        <td class="bg2">NULL</td>
+        <td class="bg2">the number of genes longer than the avg length of their orthologs</td>
+        <td class="bg2"></td>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>nb_short_genes</b></td>
+        <td class="bg1">int</td>
+        <td class="bg1">NULL</td>
+        <td class="bg1">the number of genes shorter than the avg length of their orthologs</td>
+        <td class="bg1"></td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>avg_dupscore</b></td>
+        <td class="bg2">float</td>
+        <td class="bg2">NULL</td>
+        <td class="bg2">the average duplication score</td>
+        <td class="bg2"></td>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>avg_dupscore_nondub</b></td>
+        <td class="bg1">float</td>
+        <td class="bg1">NULL</td>
+        <td class="bg1">avg_dupscore_nondub</td>
+        <td class="bg1"></td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>nb_dubious_nodes</b></td>
+        <td class="bg2">int</td>
+        <td class="bg2">NULL</td>
+        <td class="bg2">nb_dubious_nodes</td>
+        <td class="bg2"></td>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>nb_dup_nodes</b></td>
+        <td class="bg1">int</td>
+        <td class="bg1">NULL</td>
+        <td class="bg1">nb_dup_nodes</td>
+        <td class="bg1"></td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>nb_genes</b></td>
+        <td class="bg2">int</td>
+        <td class="bg2">NULL</td>
+        <td class="bg2">the number of genes</td>
+        <td class="bg2"></td>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>nb_genes_in_tree</b></td>
+        <td class="bg1">int</td>
+        <td class="bg1">NULL</td>
+        <td class="bg1">the number of genes in the tree </td>
+        <td class="bg1"></td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>nb_genes_in_tree_multi_species</b></td>
+        <td class="bg2">int</td>
+        <td class="bg2">NULL</td>
+        <td class="bg2">nb_genes_in_tree_multi_species</td>
+        <td class="bg2"></td>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>nb_genes_in_tree_single_species</b></td>
+        <td class="bg1">int</td>
+        <td class="bg1">NULL</td>
+        <td class="bg1">nb_genes_in_tree_single_species</td>
+        <td class="bg1"></td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>nb_nodes</b></td>
+        <td class="bg2">int</td>
+        <td class="bg2">NULL</td>
+        <td class="bg2">the number of nodes</td>
+        <td class="bg2"></td>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>nb_orphan_genes</b></td>
+        <td class="bg1">int</td>
+        <td class="bg1">NULL</td>
+        <td class="bg1">nb_orphan_genes</td>
+        <td class="bg1"></td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>nb_seq</b></td>
+        <td class="bg2">int</td>
+        <td class="bg2">NULL</td>
+        <td class="bg2">the number of sequences</td>
+        <td class="bg2"></td>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>nb_spec_nodes</b></td>
+        <td class="bg1">int</td>
+        <td class="bg1">NULL</td>
+        <td class="bg1">nb_spec_nodes</td>
+        <td class="bg1"></td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>nb_gene_splits</b></td>
+        <td class="bg2">int</td>
+        <td class="bg2">NULL</td>
+        <td class="bg2">the number of split gene events</td>
+        <td class="bg2"></td>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>nb_split_genes</b></td>
+        <td class="bg1">int</td>
+        <td class="bg1">NULL</td>
+        <td class="bg1">the number of split genes</td>
+        <td class="bg1"></td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>root_avg_gene</b></td>
+        <td class="bg2">float</td>
+        <td class="bg2">NULL</td>
+        <td class="bg2">root_avg_gene</td>
+        <td class="bg2"></td>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>root_avg_gene_per_spec</b></td>
+        <td class="bg1">float</td>
+        <td class="bg1">NULL</td>
+        <td class="bg1">root_avg_gene_per_spec</td>
+        <td class="bg1"></td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>root_avg_spec</b></td>
+        <td class="bg2">float</td>
+        <td class="bg2">NULL</td>
+        <td class="bg2">root_avg_spec</td>
+        <td class="bg2"></td>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>root_max_gene</b></td>
+        <td class="bg1">int</td>
+        <td class="bg1">NULL</td>
+        <td class="bg1">root_max_gene</td>
+        <td class="bg1"></td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>root_max_spec</b></td>
+        <td class="bg2">int</td>
+        <td class="bg2">NULL</td>
+        <td class="bg2">root_max_spec</td>
+        <td class="bg2"></td>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>root_min_gene</b></td>
+        <td class="bg1">int</td>
+        <td class="bg1">NULL</td>
+        <td class="bg1">root_min_gene</td>
+        <td class="bg1"></td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>root_min_spec</b></td>
+        <td class="bg2">int</td>
+        <td class="bg2">NULL</td>
+        <td class="bg2">root_min_spec</td>
+        <td class="bg2"></td>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>root_nb_genes</b></td>
+        <td class="bg1">int</td>
+        <td class="bg1">NULL</td>
+        <td class="bg1">root_nb_genes</td>
+        <td class="bg1"></td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>root_nb_trees</b></td>
+        <td class="bg2">int</td>
+        <td class="bg2">NULL</td>
+        <td class="bg2">root_nb_trees</td>
+        <td class="bg2"></td>
+      </tr>
+    </table>
+  </div>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+  <ul>
+      <li><a href="#species_tree_node">species_tree_node</a></li>
+      <li><a href="#species_tree_root">species_tree_root</a></li>
+      <li><a href="#QC_split_genes">QC_split_genes</a></li>
+      <li><a href="#short_orth_genes">short_orth_genes</a></li>
+      <li><a href="#long_orth_genes">long_orth_genes</a></li>
       </ul>
     </td>
 </tr></table></div></div>
@@ -1352,7 +1733,7 @@ available: <a target="_blank" href="./diagrams/genomic_schema.png">Genomic align
       <tr>
         <td class="bg1"><b>coord_system_name</b></td>
         <td class="bg1">varchar(40)</td>
-        <td class="bg1">NULL</td>
+        <td class="bg1">''</td>
         <td class="bg1">Refers to the coord system in which this dnafrag has been defined</td>
         <td class="bg1"></td>
       </tr>
@@ -1548,7 +1929,7 @@ available: <a target="_blank" href="./diagrams/genomic_schema.png">Genomic align
       <tr>
         <td class="bg1"><b>length</b></td>
         <td class="bg1">int(10)</td>
-        <td class="bg1">NULL</td>
+        <td class="bg1">-</td>
         <td class="bg1">Total length of the alignment</td>
         <td class="bg1"></td>
       </tr>
@@ -1801,7 +2182,7 @@ available: <a target="_blank" href="./diagrams/genomic_schema.png">Genomic align
       <tr>
         <td class="bg2"><b>cigar_line</b></td>
         <td class="bg2">mediumtext</td>
-        <td class="bg2">NULL</td>
+        <td class="bg2">-</td>
         <td class="bg2">Internal description of the aligned sequence</td>
         <td class="bg2"></td>
       </tr>
@@ -1991,7 +2372,7 @@ available: <a target="_blank" href="./diagrams/genomic_schema.png">Genomic align
       <tr>
         <td class="bg1"><b>dnafrag_strand</b></td>
         <td class="bg1">int(2)</td>
-        <td class="bg1">NULL</td>
+        <td class="bg1">-</td>
         <td class="bg1">Strand of the constrained element</td>
         <td class="bg1"></td>
       </tr>
@@ -2109,7 +2490,15 @@ available: <a target="_blank" href="./diagrams/genomic_schema.png">Genomic align
         <td class="bg1">longtext</td>
         <td class="bg1">-</td>
         <td class="bg1">The actual sequence</td>
-        <td class="bg1">key: <i>sequence</i></td>
+        <td class="bg1"></td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>md5sum</b></td>
+        <td class="bg2">CHAR(32)</td>
+        <td class="bg2">-</td>
+        <td class="bg2">md5sum</td>
+        <td class="bg2">key: <i>md5sum</i></td>
       </tr>
     </table>
   </div>
@@ -2304,7 +2693,7 @@ available: <a target="_blank" href="./diagrams/genomic_schema.png">Genomic align
       
   <div id="ex_gene_member" style="display:none;">
     <table class="ss sql_schema_table_example_result">
-      <tr><th>gene_member_id</th><th>stable_id</th><th>version</th><th>source_name</th><th>taxon_id</th><th>genome_db_id</th><th>canonical_member_id</th><th>description</th><th>dnafrag_id</th><th>dnafrag_start</th><th>dnafrag_end</th><th>dnafrag_strand</th><th>display_label</th><th>families</th><th>gene_trees</th><th>gene_gain_loss_trees</th><th>orthologues</th><th>paralogues</th><th>homoeologues</th></tr>      <tr><td>9268126</td><td>ENSG00000176105</td><td>0</td><td>ENSEMBLGENE</td><td>9606</td><td>150</td><td>9637066</td><td>YES proto-oncogene 1, Src family tyrosine kinase [Source:HGNC Symbol;Acc:HGNC:12841]</td><td>13955525</td><td>721588</td><td>812546</td><td>-1</td><td>YES1</td><td>1</td><td>1</td><td>1</td><td>66</td><td>12</td><td>0</td></tr>    </table>
+      <tr><th>gene_member_id</th><th>stable_id</th><th>version</th><th>source_name</th><th>taxon_id</th><th>genome_db_id</th><th>canonical_member_id</th><th>description</th><th>dnafrag_id</th><th>dnafrag_start</th><th>dnafrag_end</th><th>dnafrag_strand</th><th>display_label</th><th>families</th><th>gene_trees</th><th>gene_gain_loss_trees</th><th>orthologues</th><th>paralogues</th><th>homoeologues</th></tr>      <tr><td>1323362</td><td>ENSG00000176105</td><td>0</td><td>ENSEMBLGENE</td><td>9606</td><td>150</td><td>1722312</td><td>YES proto-oncogene 1, Src family tyrosine kinase [Source:HGNC Symbol;Acc:HGNC:12841]</td><td>13955525</td><td>721588</td><td>812546</td><td>-1</td><td>YES1</td><td>1</td><td>1</td><td>1</td><td>66</td><td>12</td><td>0</td></tr>    </table>
   </div></div></div><table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#sequence">sequence</a></li>
@@ -2465,7 +2854,7 @@ available: <a target="_blank" href="./diagrams/genomic_schema.png">Genomic align
       
   <div id="ex_seq_member" style="display:none;">
     <table class="ss sql_schema_table_example_result">
-      <tr><th>seq_member_id</th><th>stable_id</th><th>version</th><th>source_name</th><th>taxon_id</th><th>genome_db_id</th><th>sequence_id</th><th>gene_member_id</th><th>description</th><th>dnafrag_id</th><th>dnafrag_start</th><th>dnafrag_end</th><th>dnafrag_strand</th><th>display_label</th></tr>      <tr><td>9637067</td><td>ENSP00000324740</td><td>0</td><td>ENSEMBLPEP</td><td>9606</td><td>150</td><td>2688480</td><td>9268126</td><td></td><td>13955525</td><td>721748</td><td>812238</td><td>-1</td><td>YES1-003</td></tr>    </table>
+      <tr><th>seq_member_id</th><th>stable_id</th><th>version</th><th>source_name</th><th>taxon_id</th><th>genome_db_id</th><th>sequence_id</th><th>gene_member_id</th><th>description</th><th>dnafrag_id</th><th>dnafrag_start</th><th>dnafrag_end</th><th>dnafrag_strand</th><th>display_label</th></tr>      <tr><td>1722314</td><td>ENSP00000324740</td><td>0</td><td>ENSEMBLPEP</td><td>9606</td><td>150</td><td>579411</td><td>1323362</td><td></td><td>13955525</td><td>721748</td><td>812238</td><td>-1</td><td>YES1-003</td></tr>    </table>
   </div></div></div><table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#sequence">sequence</a></li>
@@ -2810,7 +3199,7 @@ available: <a target="_blank" href="./diagrams/genomic_schema.png">Genomic align
       <tr>
         <td class="bg1"><b>evalue</b></td>
         <td class="bg1">double</td>
-        <td class="bg1">NULL</td>
+        <td class="bg1">-</td>
         <td class="bg1">Blast evalue for this HSP</td>
         <td class="bg1"></td>
       </tr>
@@ -2818,7 +3207,7 @@ available: <a target="_blank" href="./diagrams/genomic_schema.png">Genomic align
       <tr>
         <td class="bg2"><b>align_length</b></td>
         <td class="bg2">int(10)</td>
-        <td class="bg2">NULL</td>
+        <td class="bg2">-</td>
         <td class="bg2">Alignment length of HSP</td>
         <td class="bg2"></td>
       </tr>
@@ -2826,7 +3215,7 @@ available: <a target="_blank" href="./diagrams/genomic_schema.png">Genomic align
       <tr>
         <td class="bg1"><b>identical_matches</b></td>
         <td class="bg1">int(10)</td>
-        <td class="bg1">NULL</td>
+        <td class="bg1">-</td>
         <td class="bg1">Blast HSP match score</td>
         <td class="bg1"></td>
       </tr>
@@ -2834,7 +3223,7 @@ available: <a target="_blank" href="./diagrams/genomic_schema.png">Genomic align
       <tr>
         <td class="bg2"><b>perc_ident</b></td>
         <td class="bg2">int(10)</td>
-        <td class="bg2">NULL</td>
+        <td class="bg2">-</td>
         <td class="bg2">Percent identical matches in the HSP length</td>
         <td class="bg2"></td>
       </tr>
@@ -2842,7 +3231,7 @@ available: <a target="_blank" href="./diagrams/genomic_schema.png">Genomic align
       <tr>
         <td class="bg1"><b>positive_matches</b></td>
         <td class="bg1">int(10)</td>
-        <td class="bg1">NULL</td>
+        <td class="bg1">-</td>
         <td class="bg1">Blast HSP positive score</td>
         <td class="bg1"></td>
       </tr>
@@ -2850,7 +3239,7 @@ available: <a target="_blank" href="./diagrams/genomic_schema.png">Genomic align
       <tr>
         <td class="bg2"><b>perc_pos</b></td>
         <td class="bg2">int(10)</td>
-        <td class="bg2">NULL</td>
+        <td class="bg2">-</td>
         <td class="bg2">Percent positive matches in the HSP length</td>
         <td class="bg2"></td>
       </tr>
@@ -2858,7 +3247,7 @@ available: <a target="_blank" href="./diagrams/genomic_schema.png">Genomic align
       <tr>
         <td class="bg1"><b>hit_rank</b></td>
         <td class="bg1">int(10)</td>
-        <td class="bg1">NULL</td>
+        <td class="bg1">-</td>
         <td class="bg1">Rank in blast result</td>
         <td class="bg1"></td>
       </tr>
@@ -2886,7 +3275,7 @@ available: <a target="_blank" href="./diagrams/genomic_schema.png">Genomic align
       
   <div id="ex_peptide_align_feature1" style="display:none;">
     <table class="ss sql_schema_table_example_result">
-      <tr><th>peptide_align_feature_id</th><th>qmember_id</th><th>hmember_id</th><th>qgenome_db_id</th><th>hgenome_db_id</th><th>qstart</th><th>qend</th><th>hstart</th><th>hend</th><th>score</th><th>evalue</th><th>align_length</th><th>identical_matches</th><th>perc_ident</th><th>positive_matches</th><th>perc_pos</th><th>hit_rank</th><th>cigar_line</th></tr>      <tr><td>15000014722</td><td>9600844</td><td>7005839</td><td>150</td><td>111</td><td>56</td><td>816</td><td>41</td><td>776</td><td>2156.0000</td><td>0</td><td>761</td><td>422</td><td>55</td><td>556</td><td>73</td><td>1</td><td>263M2I379M23I94M</td></tr>    </table>
+      <tr><th>peptide_align_feature_id</th><th>qmember_id</th><th>hmember_id</th><th>qgenome_db_id</th><th>hgenome_db_id</th><th>qstart</th><th>qend</th><th>hstart</th><th>hend</th><th>score</th><th>evalue</th><th>align_length</th><th>identical_matches</th><th>perc_ident</th><th>positive_matches</th><th>perc_pos</th><th>hit_rank</th><th>cigar_line</th></tr>      <tr><td>15000000074</td><td>1687615</td><td>183005</td><td>150</td><td>111</td><td>2</td><td>19</td><td>626</td><td>643</td><td>92.0000</td><td>2e-06</td><td>18</td><td>18</td><td>100</td><td>18</td><td>100</td><td>1</td><td>18M</td></tr>    </table>
   </div></div></div><div class="sql_schema_table_examples"><p class="sql_schema_table_example_header">Example 2:</p><div class="sql_schema_table_example_content"><p>The following query corresponds to a particular hit found between a Homo sapiens protein and a Anolis carolinensis protein: </p>
       <div>
         <div class="sql_schema_table_example_query">
@@ -2901,7 +3290,7 @@ available: <a target="_blank" href="./diagrams/genomic_schema.png">Genomic align
       
   <div id="ex_peptide_align_feature2" style="display:none;">
     <table class="ss sql_schema_table_example_result">
-      <tr><th>qgenome</th><th>qstable_id</th><th>hgenome</th><th>hstable_id</th><th>score</th><th>evalue</th></tr>      <tr><td>homo_sapiens</td><td>ENSP00000437790</td><td>anolis_carolinensis</td><td>ENSACAP00000012848</td><td>2156.0000</td><td>0</td></tr>    </table>
+      <tr><th>qgenome</th><th>qstable_id</th><th>hgenome</th><th>hstable_id</th><th>score</th><th>evalue</th></tr>      <tr><td>homo_sapiens</td><td>ENSP00000456586</td><td>anolis_carolinensis</td><td>ENSACAP00000007881</td><td>92.0000</td><td>2e-06</td></tr>    </table>
   </div></div></div><table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#seq_member">seq_member</a></li>
@@ -2966,10 +3355,10 @@ available: <a target="_blank" href="./diagrams/genomic_schema.png">Genomic align
 
       <tr>
         <td class="bg1"><b>description</b></td>
-        <td class="bg1">varchar(255)</td>
+        <td class="bg1">TEXT</td>
         <td class="bg1">NULL</td>
         <td class="bg1">Description of the family as found using the Longest Common String (LCS) of the descriptions of the member proteins.</td>
-        <td class="bg1">key: <i>description</i></td>
+        <td class="bg1">key: <i>description(255)</i></td>
       </tr>
 
       <tr>
@@ -2984,7 +3373,7 @@ available: <a target="_blank" href="./diagrams/genomic_schema.png">Genomic align
 <div class="sql_schema_table_examples"><p class="sql_schema_table_example_header">Example:</p><div class="sql_schema_table_example_content"><p>The following query retrieves families with "CATHELICIDIN" description and description_score of 100 </p>
       <div>
         <div class="sql_schema_table_example_query">
-          <pre><span class="sql_schema_sql_highlight">SELECT</span> * <span class="sql_schema_sql_highlight">FROM</span> family <span class="sql_schema_sql_highlight">WHERE</span> descripti<span class="sql_schema_sql_highlight">ON</span> like '%CATHELICIDIN%' <span class="sql_schema_sql_highlight">AND</span> description_score = 100;</pre>
+          <pre><span class="sql_schema_sql_highlight">SELECT</span> * <span class="sql_schema_sql_highlight">FROM</span> family <span class="sql_schema_sql_highlight">WHERE</span> descripti<span class="sql_schema_sql_highlight">ON</span> like '%HISTONE%' <span class="sql_schema_sql_highlight">AND</span> description_score = 100;</pre>
         </div>
         <div class="sql_schema_table_example_button">
   <a id="e_family" class="help-header sql_schema_show_hide" onclick="show_hide('family','query results')">
@@ -2995,7 +3384,7 @@ available: <a target="_blank" href="./diagrams/genomic_schema.png">Genomic align
       
   <div id="ex_family" style="display:none;">
     <table class="ss sql_schema_table_example_result">
-      <tr><th>family_id</th><th>stable_id</th><th>version</th><th>method_link_species_set_id</th><th>description</th><th>description_score</th></tr>      <tr><td>47373</td><td>ENSFM00350000109081</td><td>2</td><td>30047</td><td>CATHELICIDIN</td><td>100</td></tr>      <tr class="bg2"><td>51429</td><td>ENSFM00710001442147</td><td>2</td><td>30047</td><td>CATHELICIDIN PRECURSOR CATH FOWLICIDIN</td><td>100</td></tr>      <tr><td>65120</td><td>ENSFM00520000549325</td><td>1</td><td>30047</td><td>CATHELICIDIN</td><td>100</td></tr>      <tr class="bg2"><td>77887</td><td>ENSFM00540000722157</td><td>1</td><td>30047</td><td>CATHELICIDIN RELATED PEPTIDE PRECURSOR CATHELICIDIN RELATED ANTIMICROBIAL PEPTIDE</td><td>100</td></tr>      <tr><td>125943</td><td>ENSFM00500000314317</td><td>1</td><td>30047</td><td>CATHELICIDIN ANTIMICROBIAL PEPTIDE</td><td>100</td></tr>      <tr class="bg2"><td>145970</td><td>ENSFM00500000451410</td><td>4</td><td>30047</td><td>CATHELICIDIN FRAGMENT</td><td>100</td></tr>      <tr><td>174308</td><td>ENSFM00640001106201</td><td>2</td><td>30047</td><td>CATHELICIDIN 3 FRAGMENT</td><td>100</td></tr>      <tr class="bg2"><td>177485</td><td>ENSFM00310000089953</td><td>1</td><td>30047</td><td>CATHELICIDIN B1 PRECURSOR CATH B1</td><td>100</td></tr>      <tr><td>221374</td><td>ENSFM00500000376284</td><td>1</td><td>30047</td><td>CATHELICIDIN 3 FRAGMENT</td><td>100</td></tr>      <tr class="bg2"><td>221375</td><td>ENSFM00550000766356</td><td>1</td><td>30047</td><td>CATHELICIDIN</td><td>100</td></tr>      <tr><td>221376</td><td>ENSFM00730001529592</td><td>1</td><td>30047</td><td>CATHELICIDIN ANTIMICROBIAL PEPTIDE</td><td>100</td></tr>      <tr class="bg2"><td>224517</td><td>ENSFM00750001650204</td><td>1</td><td>30047</td><td>CATHELICIDIN</td><td>100</td></tr>      <tr><td>304023</td><td>ENSFM00660001176414</td><td>1</td><td>30047</td><td>CATHELICIDIN ANTIMICROBIAL PEPTIDE</td><td>100</td></tr>      <tr class="bg2"><td>561210</td><td>ENSFM00760001750198</td><td>1</td><td>30047</td><td>CATHELICIDIN 2 FRAGMENT</td><td>100</td></tr>      <tr><td>561211</td><td>ENSFM00720001501210</td><td>1</td><td>30047</td><td>CATHELICIDIN ANTIMICROBIAL PEPTIDE</td><td>100</td></tr>      <tr class="bg2"><td>589469</td><td>ENSFM00800002016908</td><td>1</td><td>30047</td><td>CATHELICIDIN 2 FRAGMENT</td><td>100</td></tr>      <tr><td>593343</td><td>ENSFM00760001752539</td><td>1</td><td>30047</td><td>CATHELICIDIN</td><td>100</td></tr>      <tr class="bg2"><td>594504</td><td>ENSFM00830002255676</td><td>1</td><td>30047</td><td>CATHELICIDIN DM</td><td>100</td></tr>      <tr><td>594505</td><td>ENSFM00690001368966</td><td>1</td><td>30047</td><td>CATHELICIDIN AL</td><td>100</td></tr>      <tr class="bg2"><td>601247</td><td>ENSFM00700001405472</td><td>1</td><td>30047</td><td>CATHELICIDIN 1 FRAGMENT</td><td>100</td></tr>      <tr><td>608650</td><td>ENSFM00780001914357</td><td>1</td><td>30047</td><td>CATHELICIDIN B1 FRAGMENT</td><td>100</td></tr>      <tr class="bg2"><td>868738</td><td>ENSFM00660001186067</td><td>1</td><td>30047</td><td>CATHELICIDIN</td><td>100</td></tr>      <tr><td>991880</td><td>ENSFM00830002356856</td><td>1</td><td>30047</td><td>CATHELICIDIN DERIVED ANTIMICROBIAL PEPTIDE 1 AM</td><td>100</td></tr>      <tr class="bg2"><td>1056890</td><td>ENSFM00760001768299</td><td>1</td><td>30047</td><td>CATHELICIDIN  PEPTIDE SHORT 1</td><td>100</td></tr>    </table>
+      <tr><th>family_id</th><th>stable_id</th><th>version</th><th>method_link_species_set_id</th><th>description</th><th>description_score</th></tr>      <tr><td>9</td><td>PTHR11426</td><td>1</td><td>30047</td><td>HISTONE H3</td><td>100</td></tr>      <tr class="bg2"><td>57</td><td>PTHR23428</td><td>1</td><td>30047</td><td>HISTONE H2B</td><td>100</td></tr>      <tr><td>444</td><td>PTHR23430_SF19</td><td>1</td><td>30047</td><td>HISTONE H2A</td><td>100</td></tr>      <tr class="bg2"><td>993</td><td>PTHR10625_SF102</td><td>1</td><td>30047</td><td>HISTONE DEACETYLASE EC_3.5.1.98</td><td>100</td></tr>      <tr><td>1025</td><td>PTHR10625_SF109</td><td>1</td><td>30047</td><td>HISTONE DEACETYLASE EC_3.5.1.98</td><td>100</td></tr>      <tr class="bg2"><td>1031</td><td>PTHR10615_SF93</td><td>1</td><td>30047</td><td>HISTONE ACETYLTRANSFERASE EC_2.3.1.48</td><td>100</td></tr>      <tr><td>1160</td><td>PTHR12040</td><td>1</td><td>30047</td><td>HISTONE CHAPERONE ANTI SILENCING FUNCTION 1</td><td>100</td></tr>      <tr class="bg2"><td>1179</td><td>PTHR23430_SF24</td><td>1</td><td>30047</td><td>HISTONE H2A</td><td>100</td></tr>      <tr><td>1332</td><td>PTHR21451</td><td>1</td><td>30047</td><td>HISTONE LYSINE N METHYLTRANSFERASE H3 LYSINE 79 SPECIFIC EC_2.1.1.43 HISTONE H3 K79 METHYLTRANSFERASE H3 K79 HMTASE</td><td>100</td></tr>      <tr class="bg2"><td>1769</td><td>PTHR22880_SF120</td><td>1</td><td>30047</td><td>HISTONE ACETYLTRANSFERASE GCN5 EC_2.3.1.48</td><td>100</td></tr>      <tr><td>1919</td><td>PTHR12046</td><td>1</td><td>30047</td><td>HISTONE ACETYLTRANSFERASE TYPE B CATALYTIC SUBUNIT EC_2.3.1.48</td><td>100</td></tr>      <tr class="bg2"><td>3095</td><td>PTHR10615_SF98</td><td>1</td><td>30047</td><td>HISTONE ACETYLTRANSFERASE EC_2.3.1.48</td><td>100</td></tr>      <tr><td>3544</td><td>PTHR10625_SF104</td><td>1</td><td>30047</td><td>HISTONE DEACETYLASE EC_3.5.1.98</td><td>100</td></tr>      <tr class="bg2"><td>3810</td><td>PTHR10615_SF99</td><td>1</td><td>30047</td><td>HISTONE ACETYLTRANSFERASE SAS2 EC_2.3.1.48 SOMETHING ABOUT SILENCING 2</td><td>100</td></tr>      <tr><td>3988</td><td>PTHR11085_SF7</td><td>1</td><td>30047</td><td>NAD DEPENDENT HISTONE DEACETYLASE HST3 EC_3.5.1.- HOMOLOGOUS TO SIR2 3 REGULATORY SIR2 HOMOLOG 3</td><td>100</td></tr>      <tr class="bg2"><td>4129</td><td>PTHR23123_SF12</td><td>1</td><td>30047</td><td>JMJC DOMAIN CONTAINING HISTONE DEMETHYLATION 1 EC_1.14.11.27 [HISTONE H3] LYSINE 36 DEMETHYLASE 1</td><td>100</td></tr>      <tr><td>4180</td><td>PTHR22884_SF289</td><td>1</td><td>30047</td><td>HISTONE LYSINE N METHYLTRANSFERASE H3 LYSINE 36 SPECIFIC EC_2.1.1.43 SET DOMAIN CONTAINING 2</td><td>100</td></tr>      <tr class="bg2"><td>4280</td><td>PTHR23430_SF34</td><td>1</td><td>30047</td><td>HISTONE H2A</td><td>100</td></tr>      <tr><td>5266</td><td>PTHR22884_SF237</td><td>1</td><td>30047</td><td>HISTONE LYSINE N METHYLTRANSFERASE E Z EC_2.1.1.43 LYSINE N METHYLTRANSFERASE 6 ENHANCER OF ZESTE</td><td>100</td></tr>      <tr class="bg2"><td>5442</td><td>PTHR22884_SF24</td><td>1</td><td>30047</td><td>HISTONE LYSINE N METHYLTRANSFERASE H3 LYSINE 9 SPECIFIC DIM 5 EC_2.1.1.43 HISTONE H3 K9 METHYLTRANSFERASE DIM 5 H3 K9 HMTASE DIM 5 HKMT</td><td>100</td></tr>      <tr><td>5865</td><td>PTHR23430_SF45</td><td>1</td><td>30047</td><td>HISTONE H2A</td><td>100</td></tr>      <tr class="bg2"><td>6132</td><td>PTHR11467_SF20</td><td>1</td><td>30047</td><td>HISTONE H1</td><td>100</td></tr>      <tr><td>6440</td><td>PTHR10615_SF28</td><td>1</td><td>30047</td><td>HISTONE ACETYLTRANSFERASE KAT7 EC_2.3.1.48 HISTONE ACETYLTRANSFERASE BINDING TO ORC1 LYSINE ACETYLTRANSFERASE 7 MOZ YBF2/SAS3 SAS2 AND TIP60 2 MYST 2</td><td>100</td></tr>      <tr class="bg2"><td>6513</td><td>PTHR22884_SF287</td><td>1</td><td>30047</td><td>HISTONE LYSINE N METHYLTRANSFERASE EZH2 EC_2.1.1.43 ENHANCER OF ZESTE HOMOLOG 2</td><td>100</td></tr>      <tr><td>6922</td><td>PTHR10625_SF112</td><td>1</td><td>30047</td><td>HISTONE DEACETYLASE 11 HD11 EC_3.5.1.98</td><td>100</td></tr>      <tr class="bg2"><td>6987</td><td>PTHR23430_SF27</td><td>1</td><td>30047</td><td>HISTONE H2A TYPE 1</td><td>100</td></tr>      <tr><td>7185</td><td>PTHR22980_SF0</td><td>1</td><td>30047</td><td>MHF HISTONE FOLD COMPLEX SUBUNIT 1</td><td>100</td></tr>      <tr class="bg2"><td>7315</td><td>PTHR11006_SF54</td><td>1</td><td>30047</td><td>ARGININE N METHYLTRANSFERASE 1 EC_2.1.1.319 HISTONE ARGININE N METHYLTRANSFERASE PRMT1</td><td>100</td></tr>      <tr><td>7357</td><td>PTHR21964_SF11</td><td>1</td><td>30047</td><td>SIN3 HISTONE DEACETYLASE COREPRESSOR COMPLEX COMPONENT SDS3 SUPPRESSOR OF DEFECTIVE SILENCING 3 HOMOLOG</td><td>100</td></tr>      <tr class="bg2"><td>7488</td><td>PTHR23430_SF17</td><td>1</td><td>30047</td><td>HISTONE H2A TYPE</td><td>100</td></tr>      <tr><td>7610</td><td>PTHR11006_SF10</td><td>1</td><td>30047</td><td>HISTONE ARGININE METHYLTRANSFERASE CARMER EC_2.1.1.319</td><td>100</td></tr>      <tr class="bg2"><td>7827</td><td>PTHR22884_SF305</td><td>1</td><td>30047</td><td>HISTONE LYSINE N METHYLTRANSFERASE 2C LYSINE N METHYLTRANSFERASE 2C EC_2.1.1.43 MYELOID/LYMPHOID OR MIXED LINEAGE LEUKEMIA 3</td><td>100</td></tr>      <tr><td>7954</td><td>PTHR11006_SF52</td><td>1</td><td>30047</td><td>ARGININE N METHYLTRANSFERASE 2 EC_2.1.1.319 HISTONE ARGININE N METHYLTRANSFERASE PRMT2</td><td>100</td></tr>      <tr class="bg2"><td>8344</td><td>PTHR22884_SF324</td><td>1</td><td>30047</td><td>HISTONE LYSINE N METHYLTRANSFERASE 2D LYSINE N METHYLTRANSFERASE 2D EC_2.1.1.43 ALL1 RELATED MYELOID/LYMPHOID OR MIXED LINEAGE LEUKEMIA 2</td><td>100</td></tr>      <tr><td>8554</td><td>PTHR16286_SF10</td><td>1</td><td>30047</td><td>HISTONE DEACETYLASE COMPLEX SUBUNIT CTI6 CYC8 TUP1 INTERACTING 6 TRANSCRIPTIONAL REGULATORY CTI6</td><td>100</td></tr>      <tr class="bg2"><td>8592</td><td>PTHR22884_SF290</td><td>1</td><td>30047</td><td>HISTONE LYSINE N METHYLTRANSFERASE EHMT1 EC_2.1.1.- EC_2.1.1.43 EUCHROMATIC HISTONE LYSINE N METHYLTRANSFERASE 1 EU HMTASE1 G9A  1 GLP GLP1 LYSINE N METHYLTRANSFERASE 1D</td><td>100</td></tr>      <tr><td>8604</td><td>PTHR13497</td><td>1</td><td>30047</td><td>HISTONE DEACETYLASE COMPLEX SUBUNIT SAP130.130 KDA SIN3 ASSOCIATED POLYPEPTIDE SIN3 ASSOCIATED POLYPEPTIDE P130</td><td>100</td></tr>      <tr class="bg2"><td>8613</td><td>PTHR10625_SF58</td><td>1</td><td>30047</td><td>HISTONE DEACETYLASE 7 HD7 EC_3.5.1.98 HISTONE DEACETYLASE 7A HD7A</td><td>100</td></tr>      <tr><td>8796</td><td>PTHR17408_SF0</td><td>1</td><td>30047</td><td>HISTONE RNA HAIRPIN BINDING HISTONE STEM LOOP BINDING</td><td>100</td></tr>      <tr class="bg2"><td>8813</td><td>PTHR22884_SF318</td><td>1</td><td>30047</td><td>HISTONE LYSINE N METHYLTRANSFERASE EC_2.1.1.43</td><td>100</td></tr>      <tr><td>8863</td><td>PTHR22884_SF325</td><td>1</td><td>30047</td><td>HISTONE LYSINE N METHYLTRANSFERASE SETMAR EC_2.1.1.43 SET DOMAIN MARINER TRANSPOSASE FUSION</td><td>100</td></tr>      <tr class="bg2"><td>8904</td><td>PTHR10615_SF73</td><td>1</td><td>30047</td><td>HISTONE ACETYLTRANSFERASE KAT6B EC_2.3.1.48 MOZ YBF2/SAS3 SAS2 AND TIP60 4 MYST 4</td><td>100</td></tr>      <tr><td>8919</td><td>PTHR12346_SF2</td><td>1</td><td>30047</td><td>PAIRED AMPHIPATHIC HELIX SIN3A HISTONE DEACETYLASE COMPLEX SUBUNIT SIN3A TRANSCRIPTIONAL COREPRESSOR SIN3A</td><td>100</td></tr>      <tr class="bg2"><td>9148</td><td>PTHR12802_SF3</td><td>1</td><td>30047</td><td>HISTONE H2A DEUBIQUITINASE MYSM1 2A DUB EC_3.4.19.- MYB  SWIRM AND MPN DOMAIN CONTAINING 1</td><td>100</td></tr>      <tr><td>9166</td><td>PTHR10694_SF17</td><td>1</td><td>30047</td><td>LYSINE SPECIFIC DEMETHYLASE 5A EC_1.14.11.- HISTONE DEMETHYLASE JARID1A JUMONJI/ARID DOMAIN CONTAINING 1A RETINOBLASTOMA BINDING 2 RBBP 2</td><td>100</td></tr>      <tr class="bg2"><td>9213</td><td>PTHR22884_SF312</td><td>1</td><td>30047</td><td>HISTONE LYSINE N METHYLTRANSFERASE H3 LYSINE 36 AND H4 LYSINE 20 SPECIFIC EC_2.1.1.43 H3 K36 HMTASE H4 K20 HMTASE NUCLEAR RECEPTOR BINDING SET DOMAIN CONTAINING 1 NR BINDING SET DOMAIN CONTAINING</td><td>100</td></tr>      <tr><td>9296</td><td>PTHR10625_SF107</td><td>1</td><td>30047</td><td>HISTONE DEACETYLASE 4 EC_3.5.1.98</td><td>100</td></tr>      <tr class="bg2"><td>9357</td><td>PTHR10625_SF100</td><td>1</td><td>30047</td><td>HISTONE DEACETYLASE 4 HD4 EC_3.5.1.98</td><td>100</td></tr>      <tr><td>9975</td><td>PTHR22880_SF116</td><td>1</td><td>30047</td><td>HISTONE ACETYLTRANSFERASE KAT2B EC_2.3.1.48 HISTONE ACETYLTRANSFERASE PCAF HISTONE ACETYLASE PCAF LYSINE ACETYLTRANSFERASE 2B P300/CBP ASSOCIATED FACTOR P/CAF</td><td>100</td></tr>      <tr class="bg2"><td>10033</td><td>PTHR12977_SF10</td><td>1</td><td>30047</td><td>HISTONE LYSINE N METHYLTRANSFERASE KMT5B EC_2.1.1.43 LYSINE SPECIFIC METHYLTRANSFERASE 5B SUPPRESSOR OF VARIEGATION 4 20 HOMOLOG 1 SU VAR 4 20 HOMOLOG 1 SUV4 20H1</td><td>100</td></tr>    </table>
   </div></div></div><table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#method_link_species_set">method_link_species_set</a></li>
@@ -3050,10 +3439,10 @@ available: <a target="_blank" href="./diagrams/genomic_schema.png">Genomic align
       </tr>
     </table>
   </div>
-<div class="sql_schema_table_examples"><p class="sql_schema_table_example_header">Example:</p><div class="sql_schema_table_example_content"><p>The following query refers to the members of the protein family ENSFM00500000300962. The proteins can be retieved using the member_ids. The multiple alignment can be restored using the cigar_lines. </p>
+<div class="sql_schema_table_examples"><p class="sql_schema_table_example_header">Example:</p><div class="sql_schema_table_example_content"><p>The following query refers to the members of the protein family PTHR24240. The proteins can be retieved using the member_ids. The multiple alignment can be restored using the cigar_lines. </p>
       <div>
         <div class="sql_schema_table_example_query">
-          <pre><span class="sql_schema_sql_highlight">SELECT</span> family_member.* <span class="sql_schema_sql_highlight">FROM</span> family_member <span class="sql_schema_sql_highlight">JOIN</span> family <span class="sql_schema_sql_highlight">USING</span> (family_id) <span class="sql_schema_sql_highlight">WHERE</span> stable_id = "ENSFM00500000300962";</pre>
+          <pre><span class="sql_schema_sql_highlight">SELECT</span> family_member.* <span class="sql_schema_sql_highlight">FROM</span> family_member <span class="sql_schema_sql_highlight">JOIN</span> family <span class="sql_schema_sql_highlight">USING</span> (family_id) <span class="sql_schema_sql_highlight">WHERE</span> stable_id = "PTHR24240";</pre>
         </div>
         <div class="sql_schema_table_example_button">
   <a id="e_family_member" class="help-header sql_schema_show_hide" onclick="show_hide('family_member','query results')">
@@ -3064,7 +3453,7 @@ available: <a target="_blank" href="./diagrams/genomic_schema.png">Genomic align
       
   <div id="ex_family_member" style="display:none;">
     <table class="ss sql_schema_table_example_result">
-      <tr><th>family_id</th><th>seq_member_id</th><th>cigar_line</th></tr>      <tr><td>42933</td><td>8555714</td><td>49D225MD</td></tr>      <tr class="bg2"><td>42933</td><td>200706349</td><td>49D225MD</td></tr>      <tr><td>42933</td><td>200846105</td><td>49D225MD</td></tr>      <tr class="bg2"><td>42933</td><td>200977587</td><td>49D225MD</td></tr>      <tr><td>42933</td><td>201456538</td><td>49D225MD</td></tr>      <tr class="bg2"><td>42933</td><td>201471940</td><td>49D225MD</td></tr>      <tr><td>42933</td><td>201622725</td><td>49D225MD</td></tr>      <tr class="bg2"><td>42933</td><td>201642378</td><td>49D225MD</td></tr>      <tr><td>42933</td><td>201706021</td><td>49D225MD</td></tr>      <tr class="bg2"><td>42933</td><td>201860346</td><td>49D225MD</td></tr>      <tr><td>42933</td><td>201943783</td><td>49D225MD</td></tr>      <tr class="bg2"><td>42933</td><td>202201529</td><td>49D225MD</td></tr>      <tr><td>42933</td><td>202336109</td><td>49D225MD</td></tr>      <tr class="bg2"><td>42933</td><td>202412500</td><td>49D225MD</td></tr>      <tr><td>42933</td><td>202474282</td><td>49D225MD</td></tr>      <tr class="bg2"><td>42933</td><td>202520503</td><td>49D225MD</td></tr>      <tr><td>42933</td><td>202724799</td><td>49D225MD</td></tr>      <tr class="bg2"><td>42933</td><td>202783785</td><td>49D225MD</td></tr>      <tr><td>42933</td><td>203134534</td><td>49D225MD</td></tr>      <tr class="bg2"><td>42933</td><td>203372527</td><td>49D225MD</td></tr>      <tr><td>42933</td><td>203474421</td><td>49D225MD</td></tr>      <tr class="bg2"><td>42933</td><td>203519599</td><td>49D225MD</td></tr>      <tr><td>42933</td><td>203616398</td><td>274MD</td></tr>      <tr class="bg2"><td>42933</td><td>203702684</td><td>49D225MD</td></tr>      <tr><td>42933</td><td>203783953</td><td>49D225MD</td></tr>      <tr class="bg2"><td>42933</td><td>203846124</td><td>49D225MD</td></tr>      <tr><td>42933</td><td>204022148</td><td>49D225MD</td></tr>      <tr class="bg2"><td>42933</td><td>204406532</td><td>49D225MD</td></tr>      <tr><td>42933</td><td>204408797</td><td>49D225MD</td></tr>      <tr class="bg2"><td>42933</td><td>204420042</td><td>49D225MD</td></tr>      <tr><td>42933</td><td>204487329</td><td>49D207M19D</td></tr>      <tr class="bg2"><td>42933</td><td>204496894</td><td>49D225MD</td></tr>      <tr><td>42933</td><td>204629919</td><td>49D225MD</td></tr>      <tr class="bg2"><td>42933</td><td>204634935</td><td>49D225MD</td></tr>      <tr><td>42933</td><td>204657747</td><td>49D8M3D215M</td></tr>      <tr class="bg2"><td>42933</td><td>204676892</td><td>49D8M3D48MD31MD133MD</td></tr>      <tr><td>42933</td><td>204770213</td><td>49D225MD</td></tr>      <tr class="bg2"><td>42933</td><td>204810861</td><td>49D225MD</td></tr>      <tr><td>42933</td><td>204813385</td><td>49D225MD</td></tr>      <tr class="bg2"><td>42933</td><td>204988137</td><td>49D225MD</td></tr>      <tr><td>42933</td><td>205056716</td><td>49D225MD</td></tr>      <tr class="bg2"><td>42933</td><td>205067912</td><td>49D8M3D48MD164M2D</td></tr>      <tr><td>42933</td><td>205206484</td><td>49D225MD</td></tr>      <tr class="bg2"><td>42933</td><td>205222236</td><td>49D225MD</td></tr>      <tr><td>42933</td><td>205328566</td><td>92M6D3M72D2M38D3M59D</td></tr>      <tr class="bg2"><td>42933</td><td>205337180</td><td>49D225MD</td></tr>      <tr><td>42933</td><td>205388495</td><td>49D225MD</td></tr>      <tr class="bg2"><td>42933</td><td>205391075</td><td>49D225MD</td></tr>      <tr><td>42933</td><td>205403909</td><td>49D225MD</td></tr>      <tr class="bg2"><td>42933</td><td>205539286</td><td>49D225MD</td></tr>    </table>
+      <tr><th>family_id</th><th>seq_member_id</th><th>cigar_line</th></tr>      <tr><td>13</td><td>2295</td><td>965D3M50DM157DMD3M258D5M261D3M22D6M105D2M22D3M45DM81D3M32D2M163D2MD3M49D2M10DM194D2M64DM54DM11D4M98DM20DM128D2M64D2M89D4M31DM48D2M67D4M3D2M8DM22DM15DM92D2M37DM19DM12DM14DMDM13DM6DM12D2M28DMD2M27D3M14D2M53DMDM12D3M10D2M7D3M20DM3DM41DM11DM17DM15D2M12DM48DM21D2M7DM38D2M65DM68DM24DM48D4M47DM19DM4DM66DM23D2M8D2M7DM62D3M42D3M35DM7D2M12D2M8D2M33DM36D2M7D2M8D2M35DM2DM15D2M40D2M34DM66D3M39D2MDMD2M4DM5D3M61DM6DM29D3M6DM49DM10DM54DM40DM76DM72DM22DM3DM5D2M3D3M31D3M3DM57DM10DM5D3M8DM67DM49D2M44D2M19D2M4DM18DM2D2M18DM4DMD2M12D2M9DM6DM28D2MDM20D2M35DM69DM48D2M52DM39DM44DM175D2M45DM137DM10DM6DM5D2M5240D</td></tr>      <tr class="bg2"><td>13</td><td>2767</td><td>425D2M171D4M363DM208D3MD3M659D3M71DM81D2M32D4M21DM68D2M28D2M39D2MD3M49D2M10DM194D2M64DM54DM11D4M98DM20DM128D2M64D2M89D4M31DM48D2M67D4M3D2M8DM22DM15DM92D2M37DM19DM12DM14DMDM13DM6DM12D2M28DMD2M27D3M14D2M53DMDM12D3M10D2M7D2M17DM3DM3DM41DM11DM17DM15D2M12DM48DM21D2M7DM38D2M65DM68DM24DM48D3M48DM19DM4D2M65DM23D2M8D2M7DM62D3M42D3M35DM7D2M12D2M9DM33DM7DM28D2M7D2M8D2M35DM2DM15D2M40D2M34DM66D3M39D2MDMD2M4DM5D3M61DM6DM29D3M6DM49DM10DM54DM40DM76DM72DM22DM3DM5D2M3D3M31D3M3DM57DM10DM5DM10DM67DM5D2M39D2MD2M44D2M19D2M4DM18DM2D2M18DM4DMD2M12D2M9DM6DM28D2MDM20D2M35DM69DM48D2M52DM39DM44DM175D2M45DM137DM10DM64D2M64D3M49DM70DM150DM15DM46DM46DM34DM29DM107DM14D2M18DM23DM16DM22DM80DM9DM9DM49DM18DM14D2M18D2M29D3M7D2M56D2M9D2M16DM4DM52D7M32DM152D2M12D2M93D2M22DM31DM11DM8DM10DMDM19DM17DM66D2M20D3M38DM17D4M67DM6DM91D2M8DM21D2M20DM71DM55DM42DM51DM168DM16DM37D2M84DM80DM72DM172D2M46DM170D3M162D2M39DM15DM353D3M49DM238DM243D2MD2M1081D</td></tr>      <tr><td>13</td><td>3133</td><td>966D2M50D2MD5M139D12MD2M136DM122D4M396D17M9D7M35D2M4D20M42D16M4D3M32D4M21D4M5D2M40D5M7D8M62D9MD3M49D2M10DM194D2M64DM54DM11D4M98DM20DM128D2M64D2M89D4M31DM48D2M67D4M3D2M8DM22DM15DM92D2M37DM19DM12DM14DMDM13DM6DM12D2M28DMD2M27D3M14D2M53DMDM12D3M10D2M7D3M20DM3DM41D2M10DM17DM15DM13DM48DM21D2M7DM38D2M65DM68DM24DM48D4M67DM4D2M65DM23D2M8D2M7DM62D3M42D3M35DM7D2M12D2M8D2M33DM7DM28D2M7D2M8D2M35DM2DM93DM66D3M39D2MDMD2M4DM5D3M61DM6DM29D3M6DM49DM10DM54DM40DM76DM72DM22DM3DM5D2M3D3M31D3M3DM57DM10DM5DM84D2M39D2MD2M44D2M19D2M4DM18DM2D2M18DM4DMD2M12D2M9DM6DM28D2MDM20D2M35DM69DM48D2M52DM39DM44DM175D2M45DM137DM10DM64D2M64D3M49DM221DM15DM46DM46DM34DM29DM10D4M7DM85DM14D2M18DM23DM16DM22DM80DM9DM9DM49DM18DM14D2M18D2M29D3M7D2M56D2M9D2M16DM4DM52D7M32DM152D2M12D2M93D2M22DM31DM11DM8DM10DMDM19DM17DM66D2M20D3M38DM17D4M67DM6DM91D2M8DM21D2M20DM71DM55DM42DM51DM168DM16DM37D2M84D5M74D3M4D10MD7M26D8M16D5M168D2M46D2M61DM28D3M25D2M9D3M37D3M162D2M39DM15D2M34DM112DM24D2M178D3M49DM235D12M52D4M182D2M311D2M277D4M152D12M168D8M5D2M140D</td></tr>      <tr class="bg2"><td>13</td><td>3408</td><td>965D3M50DM157DMD3M258D5M261D3M22D5M107DM22D3M45DM81D3M32D3M161D3MD3M49D2M10DM194D2M64DM54DM11D4M98DM20DM128D2M64D2M89D4M31DM48D2M67D4M3D2M8DM22DM15DM92D2M37DM19DM12DM14DMDM13DM6DM12D2M28DMD2M27D3M14D2M53DMDM12D3M10D2M7D3M20DM3DM41DM11DM17DM15D2M12DM48DM21D2M7DM38D2M65DM68DM24DM48D4M47DM19DM4DM66DM23D2M8D2M7DM62D3M42D3M35DM7D2M12D2M8D2M33DM36D2M7D2M8D2M35DM2DM15D2M40D2M34DM66D3M39D2MDMD2M4DM5D3M61DM6DM29D3M6DM49DM10DM54DM40DM76DM72DM22DM3DM5D2M3D3M31D3M3DM57DM10DM5D3M8DM67DM49D2M44D2M19D2M4DM18DM2D2M18DM4DMD2M12D2M9DM6DM28D2MDM20D2M35DM69DM48D2M52DM39DM44DM175D2M45DM137DM10DM6DM5D2M117D2M49DM221DM15DM46DM46DM34DM29DM122D2M18DM23DM16DM22DM80DM9DM9DM49DM18DM14D2M18D2M29D3M7D2M56D2M9D2M16DM4DM52D7M32DM152D2M12D2M93D2M22DM31DM11DM8DM10DMDM19DM17DM66D2M20D3M38DM17D4M67DM6DM91D2M8DM21D2M20DM71D2M54DM94DM168DM16DM37D2M84DM79D2M245D2M382D2M39DM15D2M173D3M176D3M49D3M64D2M166D9M57D3MD2M7D4M12D5M11D5MD2M131D3M311D2MDM33DM164D3M23D3M44D6MDM152D7M174D6M148D</td></tr>      <tr><td>13</td><td>3658</td><td>964D4M50D2M894DM80D3M32D4M21D3M60D8M69D2MD3M49D2M10DM194D2M64DM54DM11D4M98DM20DM128D2M64D2M89D4M31DM48D2M67D4M3D2M8DM22DM15DM92D2M37DM19DM12DM14DMDM13DM6DM12D2M28DMD2M27D3M14D2M53DMDM12D3M10D3M6D2M21DM3DM41DM11DM17DM15D2M12DM48DM21D2M7DM38D2M114DM19DM24DM48D3M48DM18D2M4DM66DM23D2M8D2M7DM62D3M42D3M35DM7D2M12D2M9DM33DM7DM28D2M7D2M8D2M35DM2DM15D2M40D2M34DM66D3M39D2MDMD2M4DM5D3M61DM6DM29D3M6DM49DM10DM54DM40DM76DM72DM22DM3DM5D2M3D3M31D3M3DM57DM15D4M8DM67DM49D2M44D2M19D2M4DM18DM2D2M18DM4DMD2M12D2M9DM6DM28D2MDM20D2M35DM69DM48D2M52DM39DM44DM175D2M45DM137DM10DM6DM5DM51D2M64D3M49DM70DM150DM15DM46DM46DM34DM29DM107DM14D2M18DM23DM16DM22DM80DM9DM9DM49DM18DM14D2M18D2M29D3M7D2M56D2M9D2M16DM4DM52D7M32DM152D2M12D2M93D2M22DM31DM11DM8DM10DMDM19DM17DM66D2M20D3M38DM17D4M67DM6DM91D2M8DM21D2M20DM71DM55DM42DM51DM168DM16DM37D2M84D2M79DM72D4M389D2M162D2M39DM15D2M352D3M285D6M533DM22D3MDM33DM64D3M173D3M489D</td></tr>      <tr class="bg2"><td>13</td><td>8911</td><td>965D3M871D5M20D4M45D2M60D3M17D3M32D4M21D2M139DMD3M49D2M126DM78D2M64DM54DM11D4M98DM20DM128D2M64D2M89D4M31DM48D2M67D4M3D2M8DM22DM15DM91D3M37DM19DM27DMDM13DM6DM12D2M28DMD2M27D3M14D2M53DMDM12D3M10D2M7D2M17DM3DM3DM41DM11DM17DM15D2M12DM48DM21D2M7DM38D2M65DM65D4M24DM48D3M99DM40DM23D2M8D2M7DM62D3M42D3M35DM7D2M12D2MDMD2M3D2M37D2M50D2M35DM2DM15D2M40D2M34DM66D3M39D2MDMD2M4DM5D3M61DM6DM29D3M6DM49DM10DM54DM40DM76DM72DM22DM3DM5D2M3D3M31D3M3DM57DM10DM5DM4DM5DM67DM5DM40D2MD2M44D2M19D2M4DM18DM2D2M18DM4DMD2M12D2M9DM6DM28D2MDM20D2M35DM69DM48D2M52DM39DM44DM175D2M45DM137DM10DM131D2M49DM70D3M144D2MD2M15DM46D2M45DMDM62D2M106DM14D2M18DM23DM16DM58DM44DM9DM9DM49DM18DM14D2M18D2M29D3M7D2M56D2M9D2M16DM4DM52D6M142D4M54D2M93D2M22DM31DM11DM8DM10DMDM19DM17DM66D2M20D3M38DM17D4M67DM6DM33DM57D2M30D3M91DM540D5M44D5MD2M190D2M46DM170D3M162D2M181DM32DM134D6M55D2M49D3M480D7M1079D</td></tr>      <tr><td>13</td><td>10978</td><td>600D2M364D2M50D2MDM153D2MD3M135DM122D4M398D2M71DM80D3M34D2M21DM68D2M28D2M39D2MD3M49D2M10DM194D2M64DM54DM11D4M98DM20DM128D2M64D2M89D4M31DM48D2M67D4M3D2M8DM22DM15DM92D2M37DM19DM12DM14DMDM13DM6DM12D2M28DMD2M27D3M14D2M53DMDM12D3M10D2M7D2M17DM3DM3DM41DM11DM17DM15D2M12DM48DM21D2M7DM38D2M65DM68DM24DM48D3M48DM19DM4D2M65DM23D2M8D2M7DM62D3M42D3M35DM7D2M12D2M9DM33DM7DM28D2M7D2M8D2M35DM2DM15D2M40D2M34DM66D3M39D2MDMD2M4DM5D3M61DM6DM29D3M6DM49DM10DM54DM40DM76DM72DM22DM3DM5D2M3D3M31D3M3DM57DM10DM5DM10DM67DM5D2M39D2MD2M44D2M19D2M4DM18DM2D2M18DM4DMD2M12D2M9DM6DM28D2MDM20D2M35DM69DM48D2M52DM39DM44DM175D2M45DM137DM10DM64D2M64D3M49DM70DM150DM15DM46DM46DM34DM29DM107DM14D2M18DM23DM16DM22DM80DM9DM9DM49DM18DM14D2M18D2M29D3M7D2M56D2M9D2M16DM4DM52D7M32DM152D2M12D2M93D2M22DM31DM11DM8DM10DMDM19DM17DM66D2M20D3M38DM17D4M67DM6DM91D2M8DM21D2M20DM71DM55DM42DM51DM168DM16DM37D2M84DM153DM172D2M46DM170D3M162D2M39DM15DM35DM138DM120DM57D3M49DM66DM169D3M243DM1085D</td></tr>      <tr class="bg2"><td>13</td><td>10980</td><td>42D3M71D2M77DM117DM32D6M64D9M176DM363D3M50D2MDM153D2MD3M135DM122D4M398D2M71DM80D3M34D2M21DM68D2M28D2M39D2MD3M49D2M10DM194D2M64DM54DM11D4M98DM20DM128D2M64D2M89D4M31DM48D2M67D4M3D2M8DM22DM15DM92D2M37DM19DM12DM14DMDM13DM6DM12D2M28DMD2M27D3M14D2M53DMDM12D3M10D2M7D2M17DM3DM3DM41DM11DM17DM15D2M12DM48DM21D2M7DM38D2M65DM68DM24DM48D3M48DM19DM4D2M65DM23D2M8D2M7DM62D3M42D3M35DM7D2M12D2M9DM33DM7DM28D2M7D2M8D2M35DM2DM15D2M40D2M34DM66D3M39D2MDMD2M4DM5D3M61DM6DM29D3M6DM49DM10DM54DM40DM76DM72DM22DM3DM5D2M3D3M31D3M3DM57DM10DM5DM10DM67DM5D2M39D2MD2M44D2M19D2M4DM18DM2D2M18DM4DMD2M12D2M9DM6DM28D2MDM20D2M35DM69DM48D2M52DM39DM44DM175D2M45DM137DM10DM64D2M64D3M49DM70DM150DM15DM46DM46DM34DM29DM107DM14D2M18DM23DM16DM22DM80DM9DM9DM49DM18DM14D2M18D2M29D3M7D2M56D2M9D2M16DM4DM52D7M32DM152D2M12D2M93D2M22DM31DM11DM8DM10DMDM19DM17DM66D2M20D3M38DM17D4M67DM6DM91D2M8DM21D2M20DM71DM55DM42DM51DM168DM16DM37D2M84DM153DM2588D</td></tr>      <tr><td>13</td><td>10982</td><td>422D3M176DM363D3M50D2MDM153D2MD3M135DM122D4M398D2M71DM80D3M34D2M21DM68D2M28D2M39D2MD3M49D2M10DM194D2M64DM54DM11D4M98DM20DM128D2M64D2M89D4M31DM48D2M67D4M3D2M8DM22DM15DM92D2M37DM19DM12DM14DMDM13DM6DM12D2M28DMD2M27D3M14D2M53DMDM12D3M10D2M7D2M17DM3DM3DM41DM11DM17DM15D2M12DM48DM21D2M7DM38D2M65DM68DM24DM48D3M48DM19DM4D2M65DM23D2M8D2M7DM62D3M42D3M35DM7D2M12D2M9DM33DM7DM28D2M7D2M8D2M35DM2DM15D2M40D2M34DM66D3M39D2MDMD2M4DM5D3M61DM6DM29D3M6DM49DM10DM54DM40DM76DM72DM22DM3DM5D2M3D3M31D3M3DM57DM10DM5DM10DM67DM5D2M39D2MD2M44D2M19D2M4DM18DM2D2M18DM4DMD2M12D2M9DM6DM28D2MDM20D2M35DM69DM48D2M52DM39DM44DM175D2M45DM137DM10DM64D2M64D3M49DM70DM150DM15DM46DM46DM34DM29DM107DM14D2M18DM23DM16DM22DM80DM9DM9DM49DM18DM14D2M18D2M29D3M7D2M56D2M9D2M16DM4DM52D7M32DM152D2M12D2M93D2M22DM31DM11DM8DM10DMDM19DM17DM66D2M20D3M38DM17D4M67DM6DM91D2M8DM21D2M20DM71DM55DM42DM51DM168DM16DM37D2M84DM153DM172D2M46DM170D3M162D2M39DM15DM35DM138DM120DM57D3M49DM66DM169D3M243DM1085D</td></tr>      <tr class="bg2"><td>13</td><td>10984</td><td>422D4M172D2MDM363D3M50D2MDM153D2MD3M135DM122D4M398D2M71DM80D3M34D2M21DM68D2M28D2M39D2MD3M49D2M10DM194D2M64DM54DM11D4M98DM20DM128D2M64D2M89D4M31DM48D2M67D4M3D2M8DM22DM15DM92D2M37DM19DM12DM14DMDM13DM6DM12D2M28DMD2M27D3M14D2M53DMDM12D3M10D2M7D2M17DM3DM3DM41DM11DM17DM15D2M12DM48DM21D2M7DM38D2M65DM68DM24DM48D3M48DM19DM4D2M65DM23D2M8D2M7DM62D3M42D3M35DM7D2M12D2M9DM33DM7DM28D2M7D2M8D2M35DM2DM15D2M40D2M34DM66D3M39D2MDMD2M4DM5D3M61DM6DM29D3M6DM49DM10DM54DM40DM76DM72DM22DM3DM5D2M3D3M31D3M3DM57DM10DM5DM10DM67DM5D2M39D2MD2M44D2M19D2M4DM18DM2D2M18DM4DMD2M12D2M9DM6DM28D2MDM20D2M35DM69DM48D2M52DM39DM44DM175D2M45DM137DM10DM64D2M64D3M49DM70DM150DM15DM46DM46DM34DM29DM107DM14D2M18DM23DM16DM22DM80DM9DM9DM49DM18DM14D2M18D2M29D3M7D2M56D2M9D2M16DM4DM52D7M32DM152D2M12D2M93D2M22DM31DM11DM8DM10DMDM19DM17DM66D2M20D3M38DM17D4M67DM6DM91D2M8DM21D2M20DM71DM55DM42DM51DM168DM16DM37D2M84DM153DM172D2M46DM170D3M162D2M39DM15DM35DM138DM120DM57D3M49DM66DM169D3M243DM1085D</td></tr>      <tr><td>13</td><td>12837</td><td>599D3M52D3M307D4M50D2MD2M152D2M735D2M80D3M281DM52DM46DM37D2M35D6M64DM54DM11D3M98D2M20DM50DM44D2M31D2M64D2M92DM31DM48D2M67D4M13DM14DM6D2M15DM92D2M37DM19DM12DM14DMDM13DM6DM12D2M28DMD2M27D3M14D2M53DMDM11D3M11D3M7DM17DM3DM3DM41DM11DM32D3M12DM48DM21D2M7DM10DM28DM65DM68DM24DM48D3M48DM19DM4D2M65DM23D2M8D2M7DM62D3M42D3M35DM7D2M12DM44DM7DM26D4M7D4M6D2M38DM15D2M40D2M34DM66D3M39D2MDMD2M4DM5D3M61DM6DM29D3M6DM49DM10DM54DM40DM76DM72DM22DM3DM5D2M3DM31D5M3DM36DM31DM5DM10DM67DM5D3M41D2M45DM19D2M4DM18D5M18DM4DM15D2M9DM6DM28D2MDM20D2M35DM69DM48D3M91DM44DM174DMDM45D3M27DM45DM61DM10DM64D2M187D2M147D2M16D2M10DM33D5M45D2M31DM29D2M20DM85DM14D2M18DM23DM16DM22DM90DM9DM49DM18D2M13D2M18D2M29D3M7D2M56D2M9D2M16DM4DM53D4M33D2M149D2M9DM2DM2D2M93D2M22DM31DM11DM18D2MDM19DM17DM66D2M20D3M38DM17D4M67DM6DM33DM57DM31D3M19DM71DM55DM42DM51DM168D3M52D3M59DMD3M19D2M79DM177D4M63D3M46D2M165D7M70DM91D4M37DM15D3M172D6M112D4M55D5M49DM65D5M24D5M107D4M21D11M60D6M2D7M13D6M7D7MD12M9D3M40D4M60D5M153D2M132D4M13D6MD5M34D3M39DM8DM14D5M25D18M41D3MD10M41D13M16D6M37D5M51DM61D9M60D6M46D6M6D4M42D6MDM5D3M139D</td></tr>      <tr class="bg2"><td>13</td><td>12840</td><td>965D3M50D2MD2M152D2M735D2M80D3M281DM52DM46DM37D2M35D6M64DM54DM11D3M98D2M20DM50DM44D2M31D2M64D2M92DM31DM48D2M67D4M13DM14DM6D2M15DM92D2M37DM19DM12DM14DMDM13DM6DM12D2M28DMD2M27DM357DM65DM68DM24DM48D3M48DM19DM4D2M65DM23D2M8D2M7DM62D3M42D3M35DM7D2M12DM44DM7DM26D4M7D4M6D2M38DM15D2M40D2M34DM66D3M39D2MDMD2M4DM5D3M61DM6DM29D3M6DM49DM10DM54DM40DM76DM72DM22DM3DM5D2M3DM31D5M3DM36DM31DM5DM10DM67DM5D3M41D2M45DM19D2M4DM18D5M18DM4DM15D2M9DM6DM28D2MDM20D2M35DM69DM48D3M91DM44DM174DMDM45D3M27DM45DM61DM10DM64D2M187D2M147D2M16D2M10DM33D5M45D2M31DM29D2M20DM85DM14D2M18DM23DM16DM22DM90DM9DM49DM18D2M13D2M18D2M29D3M7D2M56D2M9D2M16DM4DM53D4M33D2M149DM112DM22DM31DM11DM18D2M1490D3M219D3M172D6M112DM427D3M34D5M1212D</td></tr>      <tr><td>13</td><td>14133</td><td>967DM50D2MD4M137D5M8D2M138D4M120DM295D3M101D4M69D2M80D3M29D2M2D2M167D2MDM19D6M15D5M3D2M9DM12DM2DM52DM46DM37D2M35D6M64DM54DM11D3M98D2M20DM50DM44D2M31D2M64D2M92DM31DM48D2M67D4M4DM11DM11DM7DM15DM92D2M37DM19DM12DM14DMDM13DM6DM12D2M28DMD2M27D3M14D2M53DMDM11D3M11D3M7DM17DM3DM3DM41DM11DM32D3M12DM48DM21D2M7DM10DM28DM65DM68DM24DM48D3M48DM19DM4D2M65DM23D2M8D2M7DM62D3M42D3M35DM7D2M12DM44DM7DM26D4M7D4M6D2M38DM15D2M40D2M34DM66D3M39D2MDMD2M4DM5D3M61DM6DM29D3M6DM49DM10DM54DM40DM76DM72DM22DM3DM5D2M3DM31D5M3DM36DM31DM5DM10DM67DM5D3M41D2M45DM19D2M4DM18D5M18DM4DM15D2M9DM6DM28D2MDM20D2M35DM69DM48D3M91DM44DM174DMDM45D3M27DM45DM61DM10DM64D2M187D2M147D3M16DM10DM33D4M44DMD2M31DM29D2M20DM85DM14D2M18DM23DM16DM22DM90DM9DM49DM18D2M13D2M18D2M29D3M7D2M56D2M9D2M16DM4DM53D4M33D2M149D2M9DM2DM2D2M93D2M22DM31DM11DM18D2MDM19DM17DM66D2M20D3M38DM17D4M67DM6DM33DM57DM31D3M19DM71DM55DM42DM51DM168D3M52D3M59DMD3M19D2M79DM177D4M63D3M46D2M166D6M70DM91D4M37DM15D3M172DM79DMD5M31D4M55D5M49DM65DM142DM25D8M60D3M2D3MD4M15D3M42D3M13D5M18D5M60D8M3D2M140D2MD4M132D3M3D4M7D12M34D3M39DM58D4MD6M53D4M41D8M19D8M38D4M112D12M4D9M44D5M48D8M46D9M150D</td></tr>      <tr class="bg2"><td>13</td><td>18517</td><td>965D3M50D2MD2M152D2M735D2M80D3M281DM52DM46DM37D2M35D6M64DM54DM11D3M98D2M20DM50DM44D2M31D2M64D2M92DM31DM48D2M67D4M13DM14DM6D2M15DM92D2M37DM19DM12DM14DMDM13DM6DM12D2M28DMD2M27D3M14D2M53DMDM11D3M11D3M7DM17DM3DM3DM41DM11DM32D3M12DM48DM21D2M7DM10DM28DM65DM68DM24DM48D3M48DM19DM4D2M65DM23D2M8D2M7DM62D3M42D3M35DM7D2M12DM44DM7DM26D4M7D4M6D2M38DM15D2M40D2M34DM66D3M39D2MDMD2M4DM5D3M61DM6DM29D3M6DM49DM10DM54DM40DM76DM72DM22DM3DM5D2M3DM31D5M3DM36DM31DM5DM10DM67DM5D3M41D2M45DM19D2M4DM18D5M18DM4DM15D2M9DM6DM28D2MDM20D2M35DM69DM48D3M91DM44DM174DMDM45D3M27DM45DM61DM10DM64D2M187D2M147D2M16D2M10DM33D5M45D2M31DM29D2M20DM85DM14D2M18DM23DM16DM22DM90DM9DM49DM18D2M13D2M18D2M29D3M7D2M56D2M9D2M16DM4DM53D4M33D2M149D2M9DM2DM2D2M93D2M22DM31DM11DM18D2MDM19DM17DM66D2M20D3M38DM17D4M67DM6DM33DM57DM31D3M19DM71DM55DM42DM51DM168D3M52D3M59DMD3M19D2M79DM177D4M63D3M46DM166D7M70DM91D4M37DM15D3M172D6M112D4M55D5M49DM65D2M167D8M60D6M2D7M13D6M7D7MD9MD2M9D3M104D5M153D2M132D4M13D6MD5M34D3M39DM8DM14D5M25D20M37D5MD10M41D13M16D6M37D5M51DM61D9M60D6M46D6M6D4M42D6MDM5D6M115D2MD2M4DM11D</td></tr>      <tr><td>13</td><td>19679</td><td>4054DM68D2M3D2M65DM23D2M8D2M69D4M42D3M35DM7D2M12D2M42D2M7DM28D3M6DM8D2M39DM15D2M40D2M34DM54DM11D2M40D2MDMD2M4DM5D3M61DM6DM29D3M6DM49DM10DM54DM40DM76DM72DM22DM3DM6D2MD2M33D3M3DM57DM10DM5D3M75D2M5D4M86D2M19D2M4DM18D5M18DM4DM15D2M9DM6DM28D2MDM20D2M35DM69DM48DM52D2M39DM44D3M220DM137DM9D2M12DM119DMDM47DM219D3M15D2M10DM116DM29D2M105D3M13D2M18DM23DM16DM22DM80D2M8DM9DM49DM33D2M18D2M29D3M7D2M56D2M9D2M16DM4DM52D7M185DM10DM97D2M22DM31DM11DM8DM9D2MDM19DM17DM66D2M20D3M38DM17D4M67DM6DM91D2M8DM22D2M19DM71DM55DM42DM51DM168D3M138D3M78DM2661D</td></tr>      <tr class="bg2"><td>13</td><td>20210</td><td>1021D4M145D7M262D5M551D3M200D3M61DM15DM99DM75D5M64DM54DM11D3M99DM20DM49D2M44D2M31D2M64D2M92DM31DM48D2M67D4M3D2M8DM22DM15DM92D2M37DM19DM12DM14DMDM13DM6DM12D2M28DMD2M27D3M14D2M53DM13D4M10D2M7D2M64D4M11DM4D2MDM8D2M14DMDM12DM48DM21D2M44D4M65DM68DM24DM48D3M68D2M3D2M65DM23D2M8D2M69D4M42D3M35DM7D2M12D2M42D2M7DM28D3M6DM8D2M36DM2DM15D2M40D2M34DM54DM11D2M40D2MDMD2M4DM5D3M61DM6DM29D3M6DM49DM10DM54DM40DM76DM72DM22DM3DM6D2MD2M33D3M3DM57DM10DM5D3M75D2M5D4M86D2M19D2M4DM18D5M18DM4DM15D2M9DM6DM28D2MDM20D2M35DM69DM48DM52D2M39DM44D3M220DM137DM9D2M12DM119DMDM47DM219D3M15D2M10DM116DM29D2M105D3M13D2M18DM23DM16DM22DM80D2M8DM9DM49DM33D2M18D2M29D3M7D2M56D2M9D2M16DM4DM52D7M185DM10DM97D2M22DM31DM11DM8DM9D2MDM19DM17DM66D2M20D3M38DM17D4M67DM6DM91D2M8DM22D2M19DM71DM55DM42DM51DM168D3M138D3M78DM177D4M63D3M162D7M26DM17D7M67DM94D4M54D3M170D2M11DM105DM8D11M41D3MD2M46D5M61DM29D2M41DM46D3M49D8M235D5MD6M305D2M769D</td></tr>      <tr><td>13</td><td>20366</td><td>965D3M871D5M20D4M45D2M60D3M17D3M32D4M21D2M139DMD3M49D2M126DM78D2M64DM54DM11D4M98DM20DM128D2M64D2M89D4M31DM48D2M67D4M3D2M8DM22DM15DM91D3M37DM19DM27DMDM13DM6DM12D2M28DMD2M27D3M14D2M53DMDM12D3M10D2M7D2M17DM3DM3DM41DM11DM17DM15D2M12DM48DM21D2M7DM38D2M65DM65D4M24DM48D3M99DM40DM23D2M8D2M7DM62D3M42D3M35DM7D2M12D2MDMD2M3D2M37D2M50D2M35DM2DM15D2M40D2M34DM66D3M39D2MDMD2M4DM5D3M61DM6DM29D3M6DM49DM10DM54DM40DM76DM72DM22DM3DM5D2M3D3M31D3M3DM57DM10DM5DM4DM5DM67DM5DM40D2MD2M44D2M19D2M4DM18DM2D2M18DM4DMD2M12D2M9DM6DM28D2MDM20D2M35DM69DM48D2M52DM39DM44DM175D2M45DM137DM10DM131D2M49DM70D3M144D2MD2M15DM46D2M45DMDM62D2M106DM14D2M18DM23DM16DM58DM44DM9DM9DM49DM18DM14D2M18D2M29D3M7D2M56D2M9D2M16DM4DM52D6M142D4M54D2M93D2M22DM31DM11DM8DM10DMDM19DM17DM66D2M20D3M38DM17D4M67DM6DM33DM57D2M30D3M91DM540D5M44D5MD2M190D2M46DM170D3M162D2M181DM32DM134D6M55D2M49D3M480D9M281D3M305DM152D13M2D2M123D3M192D</td></tr>      <tr class="bg2"><td>13</td><td>20370</td><td>965D3M871D5M20D4M45D2M60D3M17D3M32D4M21D2M139DMD3M49D2M126DM78D2M64DM54DM11D4M98DM20DM128D2M64D2M89D4M31DM48D2M67D4M3D2M8DM22DM15DM91D3M37DM19DM27DMDM13DM6DM12D2M28DMD2M27D3M14D2M53DMDM12D3M10D2M7D2M17DM3DM3DM41DM11DM17DM15D2M12DM48DM21D2M7DM38D2M65DM65D4M24DM48D3M99DM40DM23D2M8D2M7DM62D3M42D3M35DM7D2M12D2MDMD2M3D2M37D3M48D3M35DM2DM15D2M40D2M34DM66D3M39D2MDMD2M4DM5D3M61DM6DM29D3M6DM49DM10DM54DM40DM76DM72DM22DM3DM5D2M3D3M31D3M3DM57DM10DM5DM4DM5DM67DM5DM40D2MD2M44D2M19D2M4DM18DM2D2M18DM4DMD2M12D2M9DM6DM28D2MDM20D2M35DM69DM48D2M52DM39DM44DM175D2M45DM137DM10DM131D2M49DM70D3M144D2MD2M15DM46D2M45DMDM62D2M106DM14D2M18DM23DM16DM58DM44DM9DM9DM49DM18DM14D2M18D2M29D3M7D2M56D2M9D2M16DM4DM52D6M142D4M54D2M93D2M22DM31DM11DM8DM10DMDM19DM17DM66D2M20D3M38DM17D4M67DM6DM33DM57D2M30D3M91DM540D5M44D5MD2M190D2M46DM170D3M162D2M181DM32DM134D6M55D2M49D3M480D9M281D3M793D</td></tr>      <tr><td>13</td><td>20998</td><td>599D3M363DM52DM2DM152D3MD3M659D3M71DM81D2M32D4M21DM68D2M28D2M39D2MD3M49D2M10DM194D2M64DM54DM11D4M98DM20DM128D2M64D2M89D4M31DM48D2M67D4M3D2M8DM22DM15DM92D2M37DM19DM12DM14DMDM13DM6DM12D2M28DMD2M27D3M14D2M53DMDM12D3M10D2M7D2M17DM3DM3DM41DM11DM17DM15D2M12DM48DM21D2M7DM38D2M65DM68DM24DM48D3M48DM19DM4D2M65DM23D2M8D2M7DM62D3M42D3M35DM7D2M12D2M9DM33DM7DM28D2M7D2M8D2M35DM2DM15D2M40D2M34DM66D3M39D2MDMD2M4DM5D3M61DM6DM29D3M6DM49DM10DM54DM40DM76DM72DM22DM3DM5D2M3D3M31D3M3DM57DM10DM5DM10DM67DM5D2M39D2MD2M44D2M19D2M4DM18DM2D2M18DM4DMD2M12D2M9DM6DM28D2MDM20D2M35DM69DM48D2M52DM39DM44DM175D2M45DM137DM10DM64D2M64D3M49DM70DM150DM15DM46DM46DM34DM29DM107DM14D2M18DM23DM16DM22DM80DM9DM9DM49DM18DM14D2M18D2M29D3M7D2M56D2M9D2M16DM4DM52D7M32DM152D2M12D2M93D2M22DM31DM11DM8DM10DMDM19DM17DM66D2M20D3M38DM17D4M67DM6DM91D2M8DM21D2M20DM71DM55DM42DM51DM168DM16DM37D2M84DM80DM72DM172D2M46DM170D3M162D2M39DM15D2M34DM317D3M49DM66DM169D3M243D2MD2M311D2M277D2M489D</td></tr>      <tr class="bg2"><td>13</td><td>21293</td><td>2764DM44D2M31D2M64D2M92DM31DM48D2M67D4M3D2M8DM22DM15DM92D2M37DM19DM12DM14DMDM13DM6DM12D2M28DMD2M27D3M14D2M53DM13D4M915DM6DM8D2M36DM2DM15D2M40D2M34DM54DM11D2M40D2MDMD2M4DM5D3M61DM6DM29D3M6DM49DM10DM54DM40DM76DM72DM22DM3DM6D2MD2M33D3M3DM57DM10DM5D3M75D2M5D4M86D2M19D2M4DM18D5M18DM4DM15D2M9DM6DM28D2MDM20D2M35DM69DM48DM52D2M39DM44D3M220DM137DM9D2M12DM119DMDM47DM219D3M15D2M10DM116DM29D2M105D3M13D2M18DM23DM16DM22DM80D2M8DM9DM49DM33D2M18D2M29D3M7D2M56D2M9D2M16DM4DM52D7M185DM10DM97D2M22DM31DM11DM8DM9D2MDM19DM17DM66D2M20D3M38DM17D4M67DM6DM3421D</td></tr>      <tr><td>13</td><td>21477</td><td>965D2M203D7M528D3M22DM110D2M22D3M46DM17DM42DM9D2M44D3M21DM68D2M28DM40D2MD3M49D2M10DM194D2M64DM54DM11D4M98DM20DM128D2M64D2M89D4M31DM48D2M67D4M3D2M8DM22DM15DM92D2M37DM19DM12DM14DMDM13DM6DM12D2M28DMD2M27D3M14D2M53DMDM12D3M10D2M7D2M17DM3DM3DM41DM11DM17DM15D2M12DM48DM21D2M7DM38D2M65DM68DM24DM48D3M48DM19DM4D2M65DM23D2M8D2M7DM62D3M42D3M35DM7D2M12D2M9DM33DM7DM28D2M7D2M8D2M35DM2DM15D2M40D2M34DM66D3M39D2MDMD2M4DM5D3M61DM6DM29D3M6DM49DM10DM54DM40DM76DM72DM22DM3DM5D2M3D3M31D3M3DM57DM10DM5DM10DM67DM5D2M42D2M44D2M19D2M4DM18DM2D2M18DM4DMD2M12D2M9DM6DM28D2MDM20D2M35DM69DM48D2M52DM39DM44DM175D2M45DM137DM10DM64DM66D2M49DM70DM150DM15DM46DM46DM34DM29DM107DM14D2M18DM23DM16DM22DM80DM9DM9DM49DM18DM14D2M18D2M29D3M7D2M56D2M9D2M16DM4DM52D7M32DM152D2M12D2M93D2M22DM31DM11DM8DM10DMDM19DM17DM66D2M20D3M38DM17D4M67DM6DM91D2M8DM21D2M20DM71DM55DM42DM51DM168DM16DM37D2M84D2M79DM72D2MD2M100D4M64D2M46D2M61DM28D3M57D3M13D2MD3M162D2M39DM15D2M34DM137D2M120D8M48DMD3M49DM7D5M35D6M11D3M120D2M47D4M837D2M489D</td></tr>      <tr class="bg2"><td>13</td><td>21727</td><td>1174D3M262D2M555D2M202DM61DM15DM99DM38D2M34D6M64DM54DM9D5M99DM20DM50DM44D2M31D2M64D2M92DM31DM48D2M67D4M3D2M8DM22DM15DM92D2M37DM19DM12DM14DMDM13DM6DM12D2M28DMD2M27D3M14D2M53DM13D4M10D2M7D2M17DM3DM3DM41DM10D2M32DMDM12DM48DM21D2M7DM38D2M65DM68DM24DM48D3M68D2M3D2M65DM23D2M8D2M69D4M42D3M35DM7D2M12D2M42D2M7DM28D3M13DMD2M36DM2DM15D2M40D2M34DM54DM11D2M40D2MDMD2M4DM5D3M61DM6DM29D3M6DM49DM10DM54DM40DM76DM72DM22DM3DM5D3MD2M33D3M3DM57DM10DM5D3M75D2M5D4M86D2M19D2M4DM18D5M18DM4DM15D2M9DM6DM28D2MDM20D2M35DM69DM48DM52D2M39DM44D3M220DM137DM9D2M12DM119DMDM552D2M13D2M42DM16DMD3MD10M7DM80D2M8DM9DM49DM33D2M18D2M29D3M7D2M56D2M9D2M16DM4DM52D7M185D3M8DM97D2M22DM31DM11DM8DM9D2MDM19DM17DM66D2M20D3M38DM17D4M67DM6DM91D2M8DM22D2M19DM71DM55DM42DM51D8M161D3M138D3M27D3M4D8M36DM179D2M63D4M45DM115D7M26D3M20D2M67DM94D4M37DM15D4M170D2M11DM20D3M82D19M24D8M10D3MD2M46D5M181D6M41D12M240D8M305D3M100D4M171D4M154D7M328D</td></tr>      <tr><td>13</td><td>21756</td><td>1175D2M948DM50D5M9D7MD3M49D2M10DM194D2M64DM54DM11D4M98DM20DM128D2M64D2M89D4M31DM48D2M67D4M3D2M8DM22DM15DM92D2M37DM19DM12DM14DMDM13DM6DM12D2M28DMD2M27D3M14D2M53DMDM12D3M10D2M7D3M20DM3DM41D2M10DM17DM15DM13DM48DM21D2M7DM38D2M65DM68DM24DM48D4M67DM4D2M65DM23D2M8D2M7DM62D3M42D3M35DM7D2M12D2M8D2M33DM7DM28D2M7D2M8D2M35DM2DM93DM66D3M39D2MDMD2M4DM5D3M61DM6DM29D3M6DM49DM10DM54DM40DM76DM72DM22DM3DM5D2M3D3M31D3M3DM57DM10DM5DM84D2M39D2MD2M44D2M19D2M4DM18DM2D2M18DM4DMD2M12D2M9DM6DM28D2MDM20D2M35DM69DM48D2M52DM39DM44DM175D2M45DM137DM10DM64D2M64D3M49DM221DM15DM46DM46DM34DM29DM10D4M7DM85DM14D2M18DM23DM16DM22DM80DM9DM9DM49DM18DM14D2M18D2M29D3M7D2M56D2M9D2M16DM4DM52D7M32DM152D2M12D2M93D2M22DM31DM11DM8DM10DMDM19DM17DM66D2M20D3M38DM17D4M67DM6DM91D2M8DM21D2M20DM71DM55DM42DM51DM168DM16DM37D2M84D7M70D5M4D10MD7M26D10M14D5M168D2M46D2M61DM28D3M25D2M9D3M37D3M162D2M39DM15D2M34DM112DM24D2M178D3M49DM234D8M244DM311D2M277D2M489D</td></tr>      <tr class="bg2"><td>13</td><td>22570</td><td>1172D5M932D2M7D8M53D3M5D10MD3M49D2M10DM194D2M64DM54DM11D4M98DM20DM128D2M64D2M89D4M31DM48D2M67D4M3D2M8DM22DM15DM92D2M37DM19DM12DM14DMDM13DM6DM12DM29DMD2M27D3M14D2M53DMDM12D3M10D2M7D3M20DM3DM41D2M10DM17DM15DM13DM48DM21D2M7DM38D2M65DM68DM24DM48D4M67DM4D2M65DM23D2M8D2M7DM62D3M42D3M35DM7D2M12D2M8D2M33DM7DM28D2M7D2M8D2M35DM2DM93DM66D3M39D2MDMD2M4DM5D3M61DM6DM29D3M6DM49DM10DM54DM40DM76DM72DM22DM3DM5D2M3D3M31D3M3DM57DM10DM5DM84D2M39D2MD2M44D2M19D2M4DM18DM2D2M18DM4DMD2M12D2M9DM6DM28D2MDM20D2M35DM69DM48D2M52DM39DM44DM175D2M45DM137DM10DM64D2M64D3M49DM221DM15DM46DM46DM34DM29DM10D4M7DM85DM14D2M18DM23DM16DM22DM80DM9DM9DM49DM18DM14D2M18D2M29D3M7D2M56D2M9D2M16DM4DM52D7M32DM152D2M12D2M93D2M22DM31DM11DM8DM10DMDM19DM17DM66D2M20D3M38DM17D4M67DM6DM91D2M8DM21D2M20DM71DM55DM42DM51DM168DM16DM37D2M84D5M74D3M4D10MD7M26D8M16D5M168D2M46D2M61DM28D3M25D2M9D3M37D3M162D2M39DM15D2M34DM112DM24D2M178D3M49DM235D7M244DM311D2M277D2M489D</td></tr>      <tr><td>13</td><td>24976</td><td>600D2M52D3M82DMD5M214D8M50D2M144D3M8D2MDM135D5M123D6M287D3M101D5M67D3M80D3M29D2M194D5M17D9M9DM12DM2DM52DM46DM37D2M35D6M64DM54DM11D3M98D2M20DM50DM44D2M31D2M64D2M92DM31DM48D2M67D4M4DM11DM11DM7DM15DM92D2M37DM19DM12DM14DMDM13DM6DM12D2M28DMD2M27D3M14D2M53DMDM11D3M11D3M7DM17DM3DM3DM41DM11DM32D3M12DM48DM21D2M7DM10DM28DM65DM68DM24DM48D3M48DM19DM4D2M65DM23D2M8D2M7DM62D3M42D3M35DM7D2M12DM44DM7DM26D4M7D4M6D2M38DM15D2M40D2M34DM66D3M39D2MDMD2M4DM5D3M61DM6DM29D3M6DM49DM10DM54DM40DM76DM72DM22DM3DM5D2M3DM31D5M3DM36DM31DM5DM10DM67DM5D3M41D2M45DM19D2M4DM18D5M18DM4DM15D2M9DM6DM28D2MDM20D2M35DM69DM48D3M91DM44DM174DMDM45D3M27DM45DM61DM10DM64D2M187D2M147D3M16DM10DM33D4M44DMD2M31DM29D2M20DM85DM14D2M18DM23DM16DM22DM90DM9DM49DM18D2M13D2M18D2M29D3M7D2M56D2M9D2M16DM4DM53D4M33D2M149D2M9DM2DM2D2M93D2M22DM31DM11DM18D2MDM19DM17DM66D2M20D3M38DM17D4M67DM6DM33DM57DM31D3M19DM71DM55DM42DM51DM168D3M52D3M59DMD3M19D2M79DM177D4M63D3M46D2M166D6M70DM91D4M37DM15D3M172D3M56DM20DMD5M31D4M55D5M49DM65DM142DM26D7M60D7M3D3M15D4M14D2MD9M14D2M19DM18D5M60D8M3D2M140DM161D6M34D3M39DM58DM138D5M38D5M446D</td></tr>      <tr class="bg2"><td>13</td><td>26864</td><td>1997DM32D4M21D2M139DMD3M49D2M126DM78D2M64DM54DM11D4M98DM20DM128D2M64D2M89D4M31DM48D2M67D4M3D2M8DM22DM15DM91D3M37DM19DM27DMDM13DM6DM12D2M28DMD2M27D3M14D2M53DMDM12D3M10D2M7D2M17DM3DM3DM41DM11DM17DM15D2M12DM48DM21D2M7DM38D2M65DM65D4M24DM48D3M99DM40DM23D2M8D2M7DM62D3M42D3M35DM7D2M12D4MD2M3D2M37DM51D2M35DM2DM15D2M40D2M34DM66D3M39D2MDMD2M4DM5D3M61DM6DM29D3M6DM49DM10DM54DM40DM76DM72DM22DM3DM5D2M3D3M31D3M3DM57DM10DM5DM4DM5DM67DM5DM40D2MD2M44D2M19D2M4DM18DM2D2M18DM4DMD2M12D2M9DM6DM28D2MDM20D2M35DM69DM48D2M52DM39DM44DM175D2M45DM137DM10DM131D2M49DM70D3M144DM2D2M15DM93DMD2M61D2M121D2M18DM23DM16DM22DM80DM9DM9DM49DM18DM14D2M18D2M29D3M7D2M56D2M9D2M16DM4DM52D7M32DM108D4M54D2M93D2M22DM31DM11DM8DM10DMDM19DM17DM66D2M20D3M38DM17D4M67DM6DM3421D</td></tr>      <tr><td>13</td><td>26879</td><td>1996D2M32D4M21DM536D2M98DM20DM128D2M64D2M89D4M31DM48D2M67D4M3D2M8DM22DM15DM91D3M37DM19DM27DMDM13DM6DM12D2M28DMD2M27D3M14D2M53DMDM12D3M10D2M7D2M17DM3DM3DM41DM11DM17DM15D2M12DM48DM21D2M7DM38D2M65DM65D4M24DM48D3M99DM40DM23D2M8D2M7DM62D3M42D3M35DM7D2M12D2M9DM37D5M28D2M17D2M35DM2DM15D2M40D2M34DM66D3M39D2MDMD2M4DM5D3M61DM6DM29D3M6DM49DM10DM54DM40DM76DM72DM22DM3DM5D2M3D3M31D3M3DM57DM10DM5DM4DM5DM67DM47DMD2M44D2M19D2M4DM18DM2D2M18DM4DMD2M12D2M9DM6DM28D2MDM20D2M35DM69DM48D2M52DM39DM44DM175D2M45DM137DM10DM131D2M49DM70D3M144DM2D2M15DM46D2M45DMD2M61D2M121D2M18DM23DM16DM22DM80DM9DM9DM49DM18DM14D2M18D2M29D3M7D2M56D2M9D2M16DM4DM52D7M142D3M54D2M93D2M22DM31DM11DM8DM10DMDM19DM17DM66D2M20D3M38DM17D4M67DM6DM33DM57D2M30D3M91DM55D2M41DM220D2M53D2M2827D</td></tr>      <tr class="bg2"><td>13</td><td>26886</td><td>1997DM32D4M21DM536D2M98DM20DM128D2M64D2M89D4M31DM48D2M67D4M3D2M8DM22DM15DM91D3M37DM19DM27DMDM13DM6DM12D2M28DMD2M27D3M14D2M53DMDM12D3M10D2M7D2M17DM3DM3DM41DM11DM17DM15D2M12DM48DM21D2M7DM38D2M65DM65D4M24DM48D3M99DM40DM23D2M8D2M7DM62D3M42D3M35DM7D2M12D2M9DM37D5M28D2M17D2M35DM2DM15D2M40D2M34DM66D3M39D2MDMD2M4DM5D3M61DM6DM29D3M6DM49DM10DM54DM40DM76DM72DM22DM3DM5D2M3D3M31D3M3DM57DM10DM5DM4DM5DM67DM47DMD2M44D2M19D2M4DM18DM2D2M18DM4DMD2M12D2M9DM6DM28D2MDM20D2M35DM69DM48D2M52DM39DM44DM175D2M45DM137DM10DM131D2M49DM70D2M324D2M121D2M18DM23DM16DM22D8M28DM44DM9DM9DM49DM18DM14D2M18D2M29D3M7D2M56D2M9D2M16DM4DM52D7M142D3M54D2M93D2M22DM31DM11DM8DM10DMDM19DM17DM66D2M20D3M38DM17D4M67DM6DM33DM57D2M30D3M19D2M33DM12D14M3D8M55D2M41DM220D2M53D2M1147D2M1678D</td></tr>      <tr><td>13</td><td>27486</td><td>2692DM20DM49D2M44D2M31D2M64D2M92DM31DM48D2M67D4M3D2M8DM22DM15DM92D2M37DM19DM12DM14DMDM13DM6DM12D2M28DMD2M27D3M14D2M53DM13D4M10D2M7D2M17DM3DM3DM41DM11DM17DM14DMDM12DM48DM21D2M7DM38D2M65DM68DM24DM48D3M68D2M3D2M65DM23D2M8D2M69D4M42D3M35DM7D2M12D2M42D2M7DM28D3M6DM8D2M36DM2DM15D2M40D2M34DM54DM11D2M40D2MDMD2M4DM5D3M61DM6DM29D3M6DM49DM10DM54DM40DM76DM72DM22DM3DM6D2MD2M33D3M3DM57DM10DM5D2M77DM5D4M86D2M19D2M4DM18D5M18DM4DM15D2M9DM6DM28D2MDM20D2M35DM69DM48DM52D2M39DM44D3M220DM137DM9D2M132DMDM47DM219D3M15D2M10DM116DM29D2M105D3M13D2M18DM23DM16DM22DM80D2M8DM9DM49DM33D2M18D2M29D3M7D2M56D2M9D2M16DM4DM52D7M185D3M8DM97D2M22DM31DM11DM8DM9D2MDM19DM17DM66D2M20D3M38DM17D4M67DM6DM91D2M8DM22D2M19DM71DM55DM42DM51DM168D3M138D3M78DM179D2M63D4M45DM338DM37DM15D4M170D2M58DM119D3MD2M46DM1568D</td></tr>      <tr class="bg2"><td>13</td><td>29765</td><td>600D2M363D2M203D7M528D3M22DM393D2M30DM36D4MD3M49D2M10DM194D2M64DM54DM11D4M98DM20DM128D2M64D2M89D4M31DM48D2M67D4M3D2M8DM22DM15DM92D2M37DM19DM12DM14DMDM13DM6DM12D2M28DMD2M27D3M14D2M53DMDM12D3M10D2M7D2M17DM3DM3DM41DM11DM17DM15D2M12DM48DM21D2M7DM38D2M65DM68DM24DM48D3M48DM19DM4D2M65DM23D2M8D2M7DM62D3M42D3M35DM7D2M12D2M9DM33DM7DM28D2M7D2M8D2M35DM2DM15D2M40D2M34DM66D3M39D2MDMD2M4DM5D3M61DM6DM29D3M6DM49DM10DM54DM40DM76DM72DM22DM3DM5D2M3D3M31D3M3DM57DM10DM5DM10DM67DM5D2M42D2M44D2M19D2M4DM18DM2D2M18DM4DMD2M12D2M9DM6DM28D2MDM20D2M35DM69DM48D2M52DM39DM44DM175D2M45DM137DM10DM61D5M64D3M49DM237DM46DM46DM34DM29DM107DM14D2M18DM23DM16DM22DM80DM9DM9DM49DM18DM14D2M18D2M29D3M7D2M56D2M9D2M16DM4DM52D7M32DM152D2M12D2M93D2M22DM31DM11DM8DM10DMDM19DM17DM66D2M20D3M38DM17D4M67DM6DM91D2M8DM21D4M17D2M71DM55DM42DM51DM168DM16DM37D2M84D2M79DM72DM172D2M46D2M61DM28D2M75DMDMDM162D2M39DM15D2M34DM137D2M120D2M56D3M286D4M837D2M489D</td></tr>      <tr><td>13</td><td>30463</td><td>1174D3M262D2M555D2M200DMDM61DM15DM99DM38D2M34D6M64DM54DM9D5M99DM20DM50DM44D2M31D2M64D2M92DM31DM48D2M67D4M3D2M8DM22DM15DM92D2M37DM19DM12DM14DMDM13DM6DM12D2M28DMD2M27D3M14D2M53DM13D4M10D2M7D2M17DM3DM3DM41DM10D2M32DMDM12DM48DM21D2M7DM38D2M65DM68DM24DM48D3M68D2M3D2M65DM23D2M8D2M69D4M42D3M35DM7D2M12D2M42D2M7DM28D3M13DMD2M36DM2DM15D2M40D2M34DM54DM11D2M40D2MDMD2M4DM5D3M61DM6DM29D3M6DM49DM10DM54DM40DM76DM72DM22DM3DM5D3MD2M33D3M3DM57DM10DM5D3M75D2M5D4M86D2M19D2M4DM18D5M18DM4DM15D2M9DM6DM28D2MDM20D2M35DM69DM48DM52D2M39DM44D3M220DM137DM9D2M12DM119DMDM552D2M13D2M42DM16DMD3MD10M7DM80D2M8DM9DM49DM33D2M18D2M29D3M7D2M56D2M9D2M16DM4DM52D7M185D3M8DM97D2M22DM31DM11DM8DM9D2MDM19DM17DM66D2M20D3M38DM17D4M67DM6DM91D2M8DM22D2M19DM71DM55DM42DM51D6M3047D</td></tr>      <tr class="bg2"><td>13</td><td>30694</td><td>965D2M208D2M735D2M80D3M281DM52DM46DM37D2M35D6M64DM54DM11D3M98D2M20DM50DM44D2M31D2M64D2M92DM31DM48D2M67D4M35D2M15DM92D2M37DM19DM12DM14DMDM13DM6DM12D2M28DMD2M27D3M14D2M53DMDM11D3M11D3M7DM17DM3DM3DM41DM11DM32D3M12DM48DM21D2M7DM10DM28DM65DM68DM24DM48D3M48DM19DM4D2M65DM23D2M8D2M7DM62D3M42D3M35DM7D2M12DM44DM7DM26D4M7D4M6D2M38DM15D2M40D2M34DM66D3M39D2MDMD2M4DM5D3M61DM6DM29D3M6DM49DM10DM54DM40DM76DM72DM22DM3DM5D2M3DM31D5M3DM36DM31DM5DM10DM67DM5D3M41D2M45DM19D2M4DM18D5M18DM4DM15D2M9DM6DM28D2MDM20D2M35DM69DM48D3M91DM44DM174DMDM45D3M27DM45DM61DM10DM64D2M187D2M147D2M16D2M10DM33D5M45D2M31DM29D2M20DM85DM14D2M18DM23DM16DM22DM90DM9DM49DM18D2M13D2M18D2M29D3M7D2M56D2M9D2M16DM4DM53D4M33D2M149D2M9DM2DM2D2M93D2M22DM31DM11DM18D2MDM19DM17DM66D2M20D3M38DM17D4M67DM6DM33DM57DM31D3M19DM71DM55DM42DM51DM168D3M52D3M59DMD3M19D2M79DM177D4M63D3M46DM166D7M70DM91D4M37DM15D3M172D6M52D2M58D4M55D5M49DM65DM168DM1333D</td></tr>      <tr><td>13</td><td>30705</td><td>208D3M299D6M53D8M24DM52D3M304D6M208D2M735D2M80D3M281DM52DM46DM37D2M35D6M64DM54DM11D3M98D2M20DM50DM44D2M31D2M64D2M92DM31DM48D2M67D4M13DM14DM6D2M15DM92D2M37DM19DM12DM14DMDM13DM6DM12D2M28DMD2M27D3M14D2M53DMDM11D3M11D3M7DM17DM3DM3DM41DM11DM32D3M12DM48DM21D2M7DM10DM28DM65DM68DM24DM48D3M48DM19DM4D2M65DM23D2M8D2M7DM62D3M42D3M35DM7D2M12DM44DM7DM26D4M7D4M6D2M38DM15D2M40D2M34DM66D3M39D2MDMD2M4DM5D3M61DM6DM29D3M6DM49DM10DM54DM40DM183DM3DM31D5M3DM36DM31DM5DM10DM67DM5D3M41D2M45DM19D2M4DM18D5M18DM4DM15D2M9DM6DM28D2MDM20D2M35DM69DM48D3M91DM44DM174DMDM45D3M27DM45DM61DM10DM64D2M187D2M147D2M113DM31DM29D2M20DM85DM14D2M18DM23DM16DM22DM90DM9DM49DM18D2M13D2M18D2M29D3M7D2M56D2M4162D</td></tr>      <tr class="bg2"><td>13</td><td>32153</td><td>965D3M871D5M20D4M45D2M60D3M17D3M32D4M21D2M139DMD3M49D2M126DM78D2M64DM54DM11D4M98DM20DM128D2M64D2M89D4M31DM48D2M67D4M3D2M8DM22DM15DM91D3M37DM19DM27DMDM13DM6DM12D2M28DMD2M27D3M14D2M53DMDM12D3M10D2M7D2M17DM3DM3DM41DM11DM17DM15D2M12DM48DM21D2M7DM38D2M65DM65D4M24DM48D3M99DM40DM23D2M8D2M7DM62D3M42D3M35DM7D2M12D2MDMD2M3D2M37D2M50D2M35DM2DM15D2M40D2M34DM66D3M39D2MDMD2M4DM5D3M61DM6DM29D3M6DM49DM10DM54DM40DM76DM72DM22DM3DM5D2M3D3M31D3M3DM57DM10DM5DM4DM5DM67DM5DM40D2MD2M44D2M19D2M4DM18DM2D2M18DM4DMD2M12D2M9DM6DM28D2MDM20D2M35DM69DM48D2M52DM39DM44DM175D2M45DM137DM10DM131D2M49DM70D3M144D2MD2M15DM46D2M45DMDM62D2M106DM14D2M18DM23DM16DM22D37M44DM9DM9DM49DM18DM14D2M18D2M29D3M7D2M56D2M9D2M16DM4DM52D6M142D4M54D2M93D2M22DM31DM11DM8DM10DMDM19DM17DM66D2M20D3M38DM17D4M67DM6DM33DM57D2M30D3M91DM540D5M44D5M2609D</td></tr>      <tr><td>13</td><td>32368</td><td>965D3M50D2MDM153D2MD3M135DM122D4M398D2M71DM80D3M34D2M21DM68D2M28D2M39D2MD3M49D2M10DM194D2M64DM54DM11D4M98DM20DM128D2M64D2M89D4M31DM48D2M67D4M3D2M8DM22DM15DM92D2M37DM19DM12DM14DMDM13DM6DM12D2M28DMD2M27D3M14D2M53DMDM12D3M10D2M7D2M17DM3DM3DM41DM11DM17DM15D2M12DM48DM21D2M7DM38D2M65DM68DM24DM48D3M48DM19DM4D2M65DM23D2M8D2M7DM62D3M42D3M35DM7D2M12D2M9DM33DM7DM28D2M7D2M8D2M35DM2DM15D2M40D2M34DM66D3M39D2MDMD2M4DM5D3M61DM6DM29D3M6DM49DM10DM54DM40DM76DM72DM22DM3DM5D2M3D3M31D3M3DM57DM10DM5DM10DM67DM5D2M39D2MD2M44D2M19D2M4DM18DM2D2M18DM4DMD2M12D2M9DM6DM28D2MDM20D2M35DM69DM48D2M52DM39DM44DM175D2M45DM137DM10DM64D2M64D3M49DM70DM150DM15DM46DM46DM34DM29DM107DM14D2M18DM23DM16DM22DM80DM9DM9DM49DM18DM14D2M18D2M29D3M7D2M56D2M9D2M16DM4DM52D7M32DM152D2M12D2M93D2M22DM31DM11DM8DM10DMDM19DM17DM66D2M20D3M38DM17D4M67DM6DM91D2M8DM21D2M20DM71DM55DM42DM51DM168DM16DM37D2M84D2M79DM72DM172D2M46DM167D2M3DM162D2M39DM15D2M34DM138DM178D3M49DM66DM169D3M243D2MD2M311D2M277D2M489D</td></tr>      <tr class="bg2"><td>13</td><td>32595</td><td>2843DM64D2M89D4M31DM48D2M67D4M3D2M8DM22DM15DM91D3M37DM19DM27DMDM13DM6DM12D2M28DMD2M27D3M14D2M53DMDM12D3M10D2M7D2M17DM3DM3DM41DM11DM17DM15D2M12DM48DM21D2M7DM38D2M65DM65D4M24DM48D3M99DM40DM23D2M8D2M7DM62D3M42D3M35DM7D2M12D2M9DM37D5M28D2M17D2M35DM2DM15D2M40D2M34DM66D3M39D2MDMD2M4DM5D3M61DM6DM29D3M6DM49DM10DM54DM40DM76DM72DM22DM3DM5D2M3D3M31D3M3DM57DM10DM5DM4DM5DM67DM5DM40D2MD2M44D2M19D2M4DM18DM2D2M18DM4DMD2M12D2M9DM6DM28D2MDM20D2M35DM69DM48D2M52DM39DM44DM175D2M45DM137DM10DM131D2M49DM70D3M144DM2D2M15DM46D2M45DMD2M61D2M121D2M18DM23DM16DM22DM80DM9DM9DM49DM18DM14D2M18D2M29D3M7D2M56D2M9D2M16DM4DM52D7M142D3M54D2M93D2M22DM31DM11DM8DM10DMDM19DM17DM66D2M20D3M38DM17D4M67DM6DM33DM57D2M30D3M91DM55D2M41DM220D2M53D2M84DM79D3MDM44D8M190D2M46DM170D3M162DM182DM32DM11D5M1799D</td></tr>      <tr><td>13</td><td>33062</td><td>965D3M50D2MDM153D2MD3M135DM122D4M398D2M71DM80D3M34D2M21DM68D2M28D2M39D2MD3M49D2M10DM194D2M64DM54DM11D4M98DM20DM128D2M64D2M89D4M31DM48D2M67D4M3D2M8DM22DM15DM92D2M37DM19DM12DM14DMDM13DM6DM12D2M28DMD2M27D3M14D2M53DMDM12D3M10D2M7D2M17DM3DM3DM41DM11DM17DM15D2M12DM48DM21D2M7DM38D2M65DM68DM24DM48D3M48DM19DM4D2M65DM23D2M8D2M7DM62D3M42D3M35DM7D2M12D2M9DM33DM7DM28D2M7D2M8D2M35DM2DM15D2M40D2M34DM66D3M39D2MDMD2M4DM5D3M61DM6DM29D3M6DM49DM10DM54DM40DM76DM72DM22DM3DM5D2M3D3M31D3M3DM57DM10DM5DM10DM67DM5D2M39D2MD2M44D2M19D2M4DM18DM2D2M18DM4DMD2M12D2M9DM6DM28D2MDM20D2M35DM69DM48D2M52DM39DM44DM175D2M45DM137DM10DM64D2M64D3M49DM70DM150DM15DM46DM46DM34DM29DM107DM14D2M18DM23DM16DM22DM80DM9DM9DM49DM18DM14D2M18D2M29D3M7D2M56D2M9D2M16DM4DM52D7M32DM152D2M12D2M93D2M22DM31DM11DM8DM10DMDM19DM17DM66D2M20D3M38DM17D4M67DM6DM91D2M8DM21D2M20DM71DM55DM42DM51DM168DM16DM37D2M84D2M79DM72DM172D2M46DM167D2M3DM162D2M39DM15DM35DM138DM120DM57D3M49DM66DM169D3M243D2MD2M311D2M277D2M489D</td></tr>      <tr class="bg2"><td>13</td><td>34844</td><td>1174D3M262D2M555D2M200DMDM61DM15DM99DM38D2M34D6M64DM54DM9D5M99DM20DM50DM44D2M31D2M64D2M92DM31DM48D2M67D4M3D2M8DM22DM15DM92D2M37DM19DM12DM14DMDM13DM6DM12D2M28DMD2M27D3M14D2M53DM13D4M10D2M7D2M17DM3DM3DM41DM10D2M32DMDM12DM48DM21D2M7DM38D2M65DM68DM24DM48D3M68D2M3D2M65DM23D2M8D2M69D4M42D3M35DM7D2M12D2M42D2M7DM28D3M13DMD2M36DM2DM15D2M40D2M34DM54DM11D2M40D2MDMD2M4DM5D3M61DM6DM29D3M6DM49DM10DM54DM40DM76DM72DM22DM3DM5D3MD2M33D3M3DM57DM10DM5D3M75D2M5D4M86D2M19D2M4DM18D5M18DM4DM15D2M9DM6DM28D2MDM20D2M35DM69DM48DM52D2M39DM44D3M220DM137DM9D2M12DM119DMDM552D2M13D2M42DM16DMD3MD10M7DM80D2M8DM9DM49DM33D2M18D2M29D3M7D2M56D2M9D2M16DM4DM52D7M185D3M8DM97D2M22DM31DM11DM8DM9D2MDM19DM17DM66D2M20D3M38DM17D4M67DM6DM91D2M8DM22D2M19DM71DM55DM42DM51D8M161D3M138D3M27D3M4D8M480D4M11D2M2D5M67DM94D4M37DM15D4M170D2M34DM82D17MDM24D3M1636D</td></tr>      <tr><td>13</td><td>36164</td><td>965D3M50D2MD3M139D4M8D2M138D4M120D2M264D3M25D6M99D5M69D2M80D3M33D4M164D3MDM21D3M18D8M9DM12DM2DM52DM46DM37D2M35D6M64DM54DM11D3M98D2M20DM50DM44D2M31D2M64D2M92DM31DM48D2M67D4M4DM11DM11DM7DM15DM92D2M37DM19DM12DM14DMDM13DM6DM12D2M28DMD2M27D3M14D2M53DMDM11D3M11D3M7DM17DM3DM3DM41DM11DM32D3M12DM48DM21D2M7DM10DM28DM65DM68DM24DM48D3M48DM19DM4D2M65DM23D2M8D2M7DM62D3M42D3M35DM7D2M12DM44DM7DM26D4M7D4M6D2M38DM15D2M40D2M34DM66D3M39D2MDMD2M4DM5D3M61DM6DM29D3M6DM49DM10DM54DM40DM76DM72DM22DM3DM5D2M3DM31D5M3DM36DM31DM5DM10DM67DM5D3M41D2M45DM19D2M4DM18D5M18DM4DM15D2M9DM6DM28D2MDM20D2M35DM69DM48D3M91DM44DM174DMDM45D3M27DM45DM61DM414D2M15D2M10DM33D6M42D4M31DM29D2M20DM85DM14D2M18DM23DM16DM22DM90DM9DM49DM18D2M13D2M18D2M29D3M7D2M56D2M9D2M16DM4DM53D4M33D2M149D2M9DM2DM2D2M93D2M22DM31DM11DM18D2MDM19DM17DM66D2M20D3M38DM17D4M67DM6DM33DM57DM31D3M19DM71DM55DM42DM51DM168D3M52D3M59DMD3M19D2M79DM177D4M63D3M46D2M166D6M70DM91D4M37DM15D3M172D6M53D3M24DM31D4M55D5M49DM65DM142DM26D7M65D8M15D4M12D4M2D8M14D2M19DM18D5M60D8M3DM557D2M25D4M63DM93D4M328D</td></tr>      <tr class="bg2"><td>13</td><td>37228</td><td>965D3M50D2MD4M143D9MDM526D3M22D6M103D4M71DM80D3M32D4M21DM68D2M28D2M39D2MD3M49D2M10DM194D2M64DM54DM11D4M98DM20DM128D2M64D2M89D4M31DM48D2M67D4M3D2M8DM22DM15DM92D2M37DM19DM12DM14DMDM13DM6DM12D2M28DMD2M27D3M14D2M53DMDM12D3M10D2M7D2M17DM3DM3DM41DM11DM17DM15D2M12DM48DM21D2M7DM38D2M65DM68DM24DM48D3M48DM19DM4D2M65DM23D2M8D2M7DM62D3M42D3M35DM7D2M12D2M9DM33DM7DM28D2M7D2M8D2M35DM2DM15D2M40D2M34DM66D3M39D2MDMD2M4DM5D3M61DM6DM29D3M6DM49DM10DM54DM40DM76DM72DM22DM3DM5D2M3D3M31D3M3DM57DM10DM5DM10DM67DM5D2M39D2MD2M44D2M19D2M4DM18DM2D2M18DM4DMD2M12D2M9DM6DM28D2MDM20D2M35DM69DM48D2M52DM39DM44DM175D2M45DM137DM10DM64D2M64D3M49DM70DM150DM15DM46DM46DM34DM29DM107DM14D2M18DM23DM16DM22DM80DM9DM9DM49DM18DM14D2M18D2M29D3M7D2M56D2M9D2M16DM4DM52D7M32DM152D2M12D2M93D2M22DM31DM11DM8DM10DMDM19DM17DM66D2M20D3M38DM17D4M67DM6DM91D2M8DM21D2M20DM71DM55DM42DM51DM168DM16DM37D2M84DM153DM172D2M46DM168DM2D2M162D2M39DM15DM174DM120DM57D3M49DM66DM169D3M243DM3DM311D2M277D2M489D</td></tr>      <tr><td>13</td><td>38416</td><td>1172D5M663D3M154DM32D4M21D2M52D3M6D8M53D3M9D6MD3M49D2M10DM194D2M64DM54DM11D4M98DM20DM128D2M64D2M89D4M31DM48D2M67D4M3D2M8DM22DM15DM92D2M37DM19DM12DM14DMDM13DM6DM12D2M28DMD2M27D3M14D2M53DMDM12D3M10D2M7D3M20DM3DM41D2M10DM17DM15DM13DM48DM21D2M7DM38D2M65DM68DM24DM48D4M67DM4D2M65DM23D2M8D2M7DM62D3M42D3M35DM7D2M12D2M8D2M33DM7DM28D2M7D2M8D2M35DM2DM93DM66D3M39D2MDMD2M4DM5D3M61DM6DM29D3M6DM49DM10DM54DM40DM76DM72DM22DM3DM5D2M3D3M31D3M3DM57DM10DM5DM84D2M39D2MD2M44D2M19D2M4DM18DM2D2M18DM4DMD2M12D2M9DM6DM28D2MDM20D2M35DM69DM48D2M52DM39DM44DM175D2M45DM137DM10DM64D2M64D3M49DM221DM15DM46DM46DM34DM29DM10D4M7DM85DM14D2M18DM23DM16DM22DM80DM9DM9DM49DM18DM14D2M18D2M29D3M7D2M56D2M9D2M16DM4DM52D7M32DM152D2M12D2M93D2M22DM31DM11DM8DM10DMDM19DM17DM66D2M20D3M38DM17D4M67DM6DM91D2M8DM21D2M20DM71DM55DM42DM51DM168DM16DM37D2M84D5M74D3M4D10MD7M26D8M16D5M168D2M46D2M61DM28D3M25D2M9D3M37D3M162D2M39DM15D2M34DM112DM24D2M178D3M49DM235D7M244DM311D2M277D2M489D</td></tr>      <tr class="bg2"><td>13</td><td>38426</td><td>1172D5M663D3M154DM32D4M21D2M52D3M6D8M62D9MD3M49D2M10DM194D2M64DM54DM11D4M98DM20DM128D2M64D2M89D4M31DM48D2M67D4M3D2M8DM22DM15DM92D2M37DM19DM12DM14DMDM13DM6DM12D2M28DMD2M27D3M14D2M53DMDM12D3M10D2M7D3M20DM3DM41D2M10DM17DM15DM13DM48DM21D2M7DM38D2M65DM68DM24DM48D4M67DM4D2M286D2M33DM7DM28D2M7D2M8D2M35DM2DM93DM3656DM20DM71DM55DM42DM3104D</td></tr>      <tr><td>13</td><td>38427</td><td>967DM50DM976D3M32D4M21DM68D2M28D3M38D2MD3M49D2M10DM194D2M64DM54DM11D4M98DM20DM128D2M64D2M89D4M31DM48D2M67D4M3D2M8DM22DM15DM92D2M37DM19DM12DM14DMDM13DM6DM12D2M28DMD2M27D3M14D2M53DMDM12D3M10D2M7D2M17DM3DM3DM41DM11DM17DM15D2M12DM48DM21D2M7DM38D2M65DM68DM24DM48D3M48DM19DM4D2M65DM23D2M8D2M7DM62D3M42D3M35DM7D2M12D2M9DM33DM7DM28D2M7D2M8D2M35DM2DM15D2M40D2M34DM66D3M39D2MDMD2M4DM5D3M61DM6DM29D3M6DM49DM10DM54DM40DM75D2M95DM3DM5D2M3DM6372D</td></tr>      <tr class="bg2"><td>13</td><td>39476</td><td>1174D3M262D2M555D2M200D3M61DM15DM99DM38D2M34D6M64DM54DM9D5M99DM20DM22DM72D2M31D2M64D2M92DM31DM48D2M67D4M3D2M8DM22DM15DM92D2M37DM19DM12DM14DMDM13DM6DM12D2M28DMD2M27D3M14D2M53DM13D4M10D2M7D2M17DM3DM3DM41DM10D2M32DMDM12DM48DM21D2M7DM38D2M65DM68DM24DM48D3M68D2M3D2M65DM23D2M8D2M69D4M42D3M35DM7D2M12D2M42D2M7DM28D3M13DMD2M36DM2DM15D2M40D2M34DM54DM11D2M40D2MDMD2M4DM5D3M61DM6DM29D3M6DM49DM10DM54DM40DM76DM72DM22DM3DM5D3MD2M33D3M3DM57DM10DM5D3M75D2M5D4M86D2M19D2M4DM18D5M18DM4DM15D2M9DM6DM28D2MDM20D2M35DM69DM48DM52D2M39DM44D3M220DM137DM9D2M12DM119DMDM552D2M13D2M42DM16DMD3MD10M7DM80D2M8DM9DM49DM33D2M18D2M29D3M7D2M56D2M9D2M16DM4DM52D7M185D3M8DM97D2M22DM31DM11DM8DM9D2MDM19DM17DM66D2M20D3M38DM17D4M67DM6DM91D2M8DM22D2M19DM71DM55DM42DM51D5M3048D</td></tr>      <tr><td>13</td><td>41730</td><td>2250D3M9DM12DM2DM52DM46DM37D2M35D6M64DM54DM11D3M98D2M20DM50DM44D2M31D2M64D2M92DM31DM48D2M67D4M4DM11DM11DM7DM15DM92D2M37DM19DM12DM14DMDM13DM6DM12D2M28DMD2M27D3M14D2M53DMDM11D3M11D3M7DM17DM3DM3DM41DM11DM32D3M12DM48DM21D2M7DM10DM28DM65DM68DM24DM48D3M48DM19DM4D2M65DM23D2M8D2M7DM62D3M42D3M35DM7D2M12DM44DM7DM26D4M7D4M6D2M38DM15D2M40D2M34DM66D3M39D2MDMD2M4DM5D3M61DM6DM29D3M6DM49DM10DM54DM40DM76DM72DM22DM3DM5D2M3DM31D5M3DM36DM31DM5DM10DM67DM5D3M41D2M45DM19D2M4DM18D5M18DM4DM15D2M9DM6DM28D2MDM20D2M35DM69DM48D3M91DM44DM174DMDM45D3M27DM45DM61DM10DM64D2M187D2M147D3M15D2M10DM33D4M44DMD2M31DM29D2M20DM85DM14D2M18DM23DM16DM22DM90DM9DM49DM18D2M13D2M18D2M29D3M7D2M56D2M9D2M16DM4DM53D4M33D2M149D2M9DM2DM2D2M93D2M22DM31DM11DM18D2MDM19DM17DM66D2M20D3M38DM17D4M67DM6DM33DM57DM31D3M19DM71DM55DM42DM51DM168D3M52D3M59DMD3M19D2M79DM177D4M63D3M46D3M164D7M70DM91D4M37DM15D3M172DMDM56D3M20D5M31D4M55D5M49DM65DM142DM26D7M61D7MD4M15D4M14D2MD8M36DM18D5M60D8M3D2M140DM935D</td></tr>      <tr class="bg2"><td>13</td><td>45479</td><td>1174D3M262D2M555D2M200DMDM61DM15DM99DM38D2M34D6M64DM54DM9D5M99DM20DM50DM44D2M31D2M64D2M92DM31DM48D2M67D4M3D2M8DM22DM15DM92D2M37DM19DM12DM14DMDM13DM6DM12D2M28DMD2M27D3M14D2M53DM13D4M10D2M7D2M17DM3DM3DM41DM10D2M32DMDM12DM48DM21D2M7DM38D2M65DM68DM24DM48D3M68D2M3D2M65DM23D2M8D2M69D4M42D3M35DM7D2M12D2M42D2M7DM28D3M13DMD2M36DM2DM15D2M40D2M34DM54DM11D2M40D2MDMD2M4DM5D3M61DM6DM29D3M6DM49DM10DM54DM40DM76DM72DM22DM3DM5D3MD2M33D3M3DM57DM10DM5D3M75D2M5D4M86D2M19D2M4DM18D5M18DM4DM15D2M9DM6DM28D2MDM20D2M35DM69DM48DM52D2M39DM44D3M220DM137DM9D2M12DM119DMDM552D2M13D2M42DM16DMD3MD10M7DM80D2M8DM9DM49DM33D2M18D2M29D3M7D2M56D2M9D2M16DM4DM52D7M185D3M8DM97D2M22DM31DM11DM8DM9D2MDM19DM17DM66D2M20D3M38DM17D4M67DM6DM91D2M8DM22D2M19DM71DM55DM42DM51D6M3047D</td></tr>      <tr><td>13</td><td>51209</td><td>2198D3M49D2M10DM194D2M64DM54DM11D4M98DM20DM128D2M64D2M89D4M31DM48D2M67D4M3D2M8DM22DM15DM92D2M37DM19DM12DM14DMDM13DM6DM12D2M28DMD2M27D3M14D2M53DMDM12D3M10D2M7D3M20DM3DM41D2M10DM17DM15DM13DM48DM21D2M7DM38D2M65DM68DM24DM48D4M67DM4D2M65DM23D2M8D2M7DM62D3M42D3M35DM7D2M12D2M8D2M33DM7DM28D2M7D2M8D2M35DM2DM93DM66D3M39D2MDMD2M4DM5D3M61DM6DM29D3M6DM49DM10DM54DM40DM76DM72DM22DM3DM5D2M3D3M31D3M3DM57DM10DM5DM84D2M39D2MD2M44D2M19D2M4DM18DM2D2M18DM4DMD2M12D2M9DM6DM28D2MDM20D2M35DM69DM48D2M52DM39DM44DM175D2M45DM137DM10DM64D2M337D2M15DM46DM46DM34DM29D2M4D9M7DM85DM14D2M18DM23DM16DM22DM80DM9DM9DM49DM18DM14D2M18D2M29D3M7D2M56D2M9D2M16DM4DM52D7M32DM152D2M12D2M93D2M22DM31DM11DM8DM10DMDM19DM17DM66D2M20D3M38DM17D4M67DM6DM91D2M8DM21D2M20DM71DM55DM42DM51DM168DM16DM37D2M84D5M74D3M4D10MD7M26D8M16D5M168D2M46D2M61DM28D3M25D2M9D3M37D3M162D2M39DM15D2M34DM112DM24D2M178D3M49DM235D8M243D3M309DM769D</td></tr>      <tr class="bg2"><td>13</td><td>53464</td><td>962D6M50D2MD3M146D7MD3M135DM122D2M554D3M32D3M161D3MD3M49D2M10DM194D2M64DM54DM11D4M98DM20DM128D2M64D2M89D4M31DM48D2M67D4M3D2M8DM22DM15DM92D2M37DM19DM12DM14DMDM13DM6DM12D2M28DMD2M27D3M14D2M53DMDM12D3M10D2M7D3M20DM3DM41DM11DM17DM15D2M12DM48DM21D2M7DM38D2M65DM68DM24DM48D4M47DM19DM4DM66DM23D2M8D2M7DM62D3M42D3M35DM7D2M12D2M8D2M33DM36D2M7D2M8D2M35DM2DM15D2M40D2M34DM66D3M39D2MDMD2M4DM5D3M61DM6DM29D3M6DM49DM10DM54DM40DM76DM72DM22DM3DM5D2M3D3M31D3M3DM57DM10DM5D3M8DM67DM49D2M44D2M19D2M4DM18DM2D2M18DM4DMD2M12D2M9DM6DM28D2MDM20D2M35DM69DM48D2M52DM39DM44DM175D2M45DM137DM10DM64D2M64D3M49DM221DM15DM46DM46DM34DM29DM122D2M18DM23DM16DM22DM80DM9DM9DM49DM18DM14D2M18D2M29D3M7D2M56D2M9D2M16DM4DM52D7M32DM152D2M12D2M93D2M22DM31DM11DM8DM10DMDM19DM17DM66D2M20D3M38DM17D4M67DM6DM91D2M8DM21D2M20DM71D2M3202D</td></tr>      <tr><td>13</td><td>53905</td><td>965D3M50D2MD4M143D9MDM526D3M22D6M103D4M71DM80D3M32D4M21DM68D2M28D2M39D2MD3M49D2M10DM194D2M64DM54DM11D5MD2M93D2M20DM128D2M64D2M89D3M81D2M67D4M3D2M8DM22DM15DM92D2M37DM19DM12DM14DMDM13DM6DM12D2M28DMD2M29DM14D2M53DMDM12D3M10D3M6D2M17DM3DM3DM41DM11DM17DM15D2M12DM48DM21D2M7DM38D2M65DM68DM24DM48DMDM48DM19DM4D2M65DM23D2M8D2M7DM62D3M42D3M35DM7D2M12D2M9DM33DM7DM28D2M7D2M8D2M35DM2DM15D2M40D2M34DM66D3M39D2MDMD2M4DM5D3M61DM6DM29D3M6DM49DM10DM54DM40DM76DM72DM22DM3DM5D2M3D3M31D3M3DM57DM10DM5DM10DM67DM5D2M39D2MD2M44D2M19D2M4DM18DM2D2M18DM4DMD2M12D2M9DM6DM28D2MDM20D2M35DM69DM48D2M52DM39DM44DM175D2M45DM137DM10DM64D2M64D3M49DM70DM150DM15DM46DM46DM34DM29DM107DM14D2M18DM23DM16DM22DM80DM9DM9DM49DM18DM14D2M18D2M29D3M7D2M56D2M9D2M16DM4DM52D7M32DM152D2M12D2M93D2M22DM31DM11DM8DM10DMDM19DM17DM66D2M20D3M38DM17D4M67DM6DM91D2M8DM21D2M20DM71DM55DM42DM51DM168DM16DM37D2M84DM153DM172D2M46DM168DM2D2M162D2M39DM15DM174DM120DM57D3M49DM66DM169D3M243DM3DM311D2M277D2M489D</td></tr>      <tr class="bg2"><td>13</td><td>53913</td><td>4769DM61DM6DM29D3M6DM49DM10DM54DM40DM76DM72DM22DM3DM5D2M3D3M31D3M3DM57DM10DM5DM10DM67DM5D2M39D2MD2M44D2M19D2M4DM18DM2D2M18DM4DMD2M12D2M9DM6DM28D2MDM20D2M35DM69DM48D2M52DM39DM44DM175D2M45DM137DM10DM64D2M64D3M49DM70DM150DM15DM46DM46DM34DM29DM107DM14D2M18DM23DM16DM22DM80DM9DM9DM49DM18DM14D2M18D2M29D3M7D2M56D2M9D2M16DM4DM52D7M32DM152D2M12D2M93D2M22DM31DM11DM8DM10DMDM19DM17DM66D2M20D3M38DM17D4M67DM6DM91D2M8DM21D2M20DM71DM55DM42DM51DM168DM16DM37D2M84DM153DM172D2M46DM168DM2D2M162D2M39DM15DM174DM120DM57D3M49DM66DM169D3M243DM3DM311D2M277D2M489D</td></tr>    </table>
   </div></div></div><table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#family">family</a></li>
@@ -3285,7 +3674,7 @@ available: <a target="_blank" href="./diagrams/genomic_schema.png">Genomic align
       
   <div id="ex_gene_tree_node" style="display:none;">
     <table class="ss sql_schema_table_example_result">
-      <tr><th>gtn.node_id</th></tr>      <tr><td>2</td></tr>      <tr class="bg2"><td>1297</td></tr>      <tr><td>2580</td></tr>      <tr class="bg2"><td>3831</td></tr>      <tr><td>5062</td></tr>      <tr class="bg2"><td>6248</td></tr>      <tr><td>7424</td></tr>      <tr class="bg2"><td>8584</td></tr>      <tr><td>9711</td></tr>      <tr class="bg2"><td>10817</td></tr>    </table>
+      <tr><th>gtn.node_id</th></tr>      <tr><td>2</td></tr>      <tr class="bg2"><td>1301</td></tr>      <tr><td>2557</td></tr>      <tr class="bg2"><td>3783</td></tr>      <tr><td>4990</td></tr>      <tr class="bg2"><td>6188</td></tr>      <tr><td>7359</td></tr>      <tr class="bg2"><td>8504</td></tr>      <tr><td>9648</td></tr>      <tr class="bg2"><td>10787</td></tr>    </table>
   </div></div></div><table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#gene_tree_root">gene_tree_root</a></li>
@@ -3405,7 +3794,7 @@ available: <a target="_blank" href="./diagrams/genomic_schema.png">Genomic align
       
   <div id="ex_gene_tree_root1" style="display:none;">
     <table class="ss sql_schema_table_example_result">
-      <tr><th>root_id</th><th>member_type</th><th>tree_type</th><th>clusterset_id</th><th>method_link_species_set_id</th><th>gene_align_id</th><th>ref_root_id</th><th>stable_id</th><th>version</th></tr>      <tr><td>100000001</td><td>ncrna</td><td>clusterset</td><td>default</td><td>40102</td><td></td><td></td><td></td><td></td></tr>      <tr class="bg2"><td>100204623</td><td>ncrna</td><td>clusterset</td><td>pg_it_nj</td><td>40102</td><td></td><td></td><td></td><td></td></tr>      <tr><td>100204624</td><td>ncrna</td><td>clusterset</td><td>ml_it_10</td><td>40102</td><td></td><td></td><td></td><td></td></tr>      <tr class="bg2"><td>100204625</td><td>ncrna</td><td>clusterset</td><td>pg_it_phyml</td><td>40102</td><td></td><td></td><td></td><td></td></tr>      <tr><td>100204626</td><td>ncrna</td><td>clusterset</td><td>ss_it_s16</td><td>40102</td><td></td><td></td><td></td><td></td></tr>      <tr class="bg2"><td>100204627</td><td>ncrna</td><td>clusterset</td><td>ss_it_s6a</td><td>40102</td><td></td><td></td><td></td><td></td></tr>      <tr><td>100204628</td><td>ncrna</td><td>clusterset</td><td>ss_it_s16a</td><td>40102</td><td></td><td></td><td></td><td></td></tr>      <tr class="bg2"><td>100204629</td><td>ncrna</td><td>clusterset</td><td>ss_it_s6b</td><td>40102</td><td></td><td></td><td></td><td></td></tr>      <tr><td>100204630</td><td>ncrna</td><td>clusterset</td><td>ss_it_s16b</td><td>40102</td><td></td><td></td><td></td><td></td></tr>      <tr class="bg2"><td>100204631</td><td>ncrna</td><td>clusterset</td><td>ss_it_s6c</td><td>40102</td><td></td><td></td><td></td><td></td></tr>      <tr><td>100204632</td><td>ncrna</td><td>clusterset</td><td>ss_it_s6d</td><td>40102</td><td></td><td></td><td></td><td></td></tr>      <tr class="bg2"><td>100204633</td><td>ncrna</td><td>clusterset</td><td>ss_it_s6e</td><td>40102</td><td></td><td></td><td></td><td></td></tr>      <tr><td>100204634</td><td>ncrna</td><td>clusterset</td><td>ss_it_s7a</td><td>40102</td><td></td><td></td><td></td><td></td></tr>      <tr class="bg2"><td>100204635</td><td>ncrna</td><td>clusterset</td><td>ss_it_s7b</td><td>40102</td><td></td><td></td><td></td><td></td></tr>      <tr><td>100204636</td><td>ncrna</td><td>clusterset</td><td>ss_it_s7c</td><td>40102</td><td></td><td></td><td></td><td></td></tr>      <tr class="bg2"><td>100204637</td><td>ncrna</td><td>clusterset</td><td>ss_it_s7d</td><td>40102</td><td></td><td></td><td></td><td></td></tr>      <tr><td>100204638</td><td>ncrna</td><td>clusterset</td><td>ss_it_s7e</td><td>40102</td><td></td><td></td><td></td><td></td></tr>      <tr class="bg2"><td>100204639</td><td>ncrna</td><td>clusterset</td><td>ss_it_s7f</td><td>40102</td><td></td><td></td><td></td><td></td></tr>      <tr><td>100204640</td><td>ncrna</td><td>clusterset</td><td>ft_it_ml</td><td>40102</td><td></td><td></td><td></td><td></td></tr>      <tr class="bg2"><td>100204641</td><td>ncrna</td><td>clusterset</td><td>ft_it_nj</td><td>40102</td><td></td><td></td><td></td><td></td></tr>      <tr><td>100204642</td><td>ncrna</td><td>clusterset</td><td>ftga_it_ml</td><td>40102</td><td></td><td></td><td></td><td></td></tr>      <tr class="bg2"><td>100204643</td><td>ncrna</td><td>clusterset</td><td>ftga_it_nj</td><td>40102</td><td></td><td></td><td></td><td></td></tr>      <tr><td>1</td><td>protein</td><td>clusterset</td><td>default</td><td>40101</td><td></td><td></td><td></td><td></td></tr>      <tr class="bg2"><td>1262598</td><td>protein</td><td>clusterset</td><td>treebest</td><td>40101</td><td></td><td></td><td></td><td></td></tr>      <tr><td>1262599</td><td>protein</td><td>clusterset</td><td>phyml-aa</td><td>40101</td><td></td><td></td><td></td><td></td></tr>      <tr class="bg2"><td>1262600</td><td>protein</td><td>clusterset</td><td>phyml-nt</td><td>40101</td><td></td><td></td><td></td><td></td></tr>      <tr><td>1262601</td><td>protein</td><td>clusterset</td><td>nj-dn</td><td>40101</td><td></td><td></td><td></td><td></td></tr>      <tr class="bg2"><td>1262602</td><td>protein</td><td>clusterset</td><td>nj-ds</td><td>40101</td><td></td><td></td><td></td><td></td></tr>      <tr><td>1262603</td><td>protein</td><td>clusterset</td><td>nj-mm</td><td>40101</td><td></td><td></td><td></td><td></td></tr>      <tr class="bg2"><td>1262604</td><td>protein</td><td>clusterset</td><td>raxml</td><td>40101</td><td></td><td></td><td></td><td></td></tr>      <tr><td>1262605</td><td>protein</td><td>clusterset</td><td>raxml_parsimony</td><td>40101</td><td></td><td></td><td></td><td></td></tr>      <tr class="bg2"><td>1262606</td><td>protein</td><td>clusterset</td><td>raxml_bl</td><td>40101</td><td></td><td></td><td></td><td></td></tr>      <tr><td>1262607</td><td>protein</td><td>clusterset</td><td>notung</td><td>40101</td><td></td><td></td><td></td><td></td></tr>      <tr class="bg2"><td>1262608</td><td>protein</td><td>clusterset</td><td>copy</td><td>40101</td><td></td><td></td><td></td><td></td></tr>      <tr><td>1262609</td><td>protein</td><td>clusterset</td><td>raxml_update</td><td>40101</td><td></td><td></td><td></td><td></td></tr>    </table>
+      <tr><th>root_id</th><th>member_type</th><th>tree_type</th><th>clusterset_id</th><th>method_link_species_set_id</th><th>gene_align_id</th><th>ref_root_id</th><th>stable_id</th><th>version</th></tr>      <tr><td>100000001</td><td>ncrna</td><td>clusterset</td><td>default</td><td>40102</td><td></td><td></td><td></td><td></td></tr>      <tr class="bg2"><td>100180013</td><td>ncrna</td><td>clusterset</td><td>pg_it_nj</td><td>40102</td><td></td><td></td><td></td><td></td></tr>      <tr><td>100180014</td><td>ncrna</td><td>clusterset</td><td>ml_it_10</td><td>40102</td><td></td><td></td><td></td><td></td></tr>      <tr class="bg2"><td>100180015</td><td>ncrna</td><td>clusterset</td><td>pg_it_phyml</td><td>40102</td><td></td><td></td><td></td><td></td></tr>      <tr><td>100180016</td><td>ncrna</td><td>clusterset</td><td>ss_it_s16</td><td>40102</td><td></td><td></td><td></td><td></td></tr>      <tr class="bg2"><td>100180017</td><td>ncrna</td><td>clusterset</td><td>ss_it_s6a</td><td>40102</td><td></td><td></td><td></td><td></td></tr>      <tr><td>100180018</td><td>ncrna</td><td>clusterset</td><td>ss_it_s16a</td><td>40102</td><td></td><td></td><td></td><td></td></tr>      <tr class="bg2"><td>100180019</td><td>ncrna</td><td>clusterset</td><td>ss_it_s6b</td><td>40102</td><td></td><td></td><td></td><td></td></tr>      <tr><td>100180020</td><td>ncrna</td><td>clusterset</td><td>ss_it_s16b</td><td>40102</td><td></td><td></td><td></td><td></td></tr>      <tr class="bg2"><td>100180021</td><td>ncrna</td><td>clusterset</td><td>ss_it_s6c</td><td>40102</td><td></td><td></td><td></td><td></td></tr>      <tr><td>100180022</td><td>ncrna</td><td>clusterset</td><td>ss_it_s6d</td><td>40102</td><td></td><td></td><td></td><td></td></tr>      <tr class="bg2"><td>100180023</td><td>ncrna</td><td>clusterset</td><td>ss_it_s6e</td><td>40102</td><td></td><td></td><td></td><td></td></tr>      <tr><td>100180024</td><td>ncrna</td><td>clusterset</td><td>ss_it_s7a</td><td>40102</td><td></td><td></td><td></td><td></td></tr>      <tr class="bg2"><td>100180025</td><td>ncrna</td><td>clusterset</td><td>ss_it_s7b</td><td>40102</td><td></td><td></td><td></td><td></td></tr>      <tr><td>100180026</td><td>ncrna</td><td>clusterset</td><td>ss_it_s7c</td><td>40102</td><td></td><td></td><td></td><td></td></tr>      <tr class="bg2"><td>100180027</td><td>ncrna</td><td>clusterset</td><td>ss_it_s7d</td><td>40102</td><td></td><td></td><td></td><td></td></tr>      <tr><td>100180028</td><td>ncrna</td><td>clusterset</td><td>ss_it_s7e</td><td>40102</td><td></td><td></td><td></td><td></td></tr>      <tr class="bg2"><td>100180029</td><td>ncrna</td><td>clusterset</td><td>ss_it_s7f</td><td>40102</td><td></td><td></td><td></td><td></td></tr>      <tr><td>100180030</td><td>ncrna</td><td>clusterset</td><td>ft_it_ml</td><td>40102</td><td></td><td></td><td></td><td></td></tr>      <tr class="bg2"><td>100180031</td><td>ncrna</td><td>clusterset</td><td>ft_it_nj</td><td>40102</td><td></td><td></td><td></td><td></td></tr>      <tr><td>100180032</td><td>ncrna</td><td>clusterset</td><td>ftga_it_ml</td><td>40102</td><td></td><td></td><td></td><td></td></tr>      <tr class="bg2"><td>100180033</td><td>ncrna</td><td>clusterset</td><td>ftga_it_nj</td><td>40102</td><td></td><td></td><td></td><td></td></tr>      <tr><td>1</td><td>protein</td><td>clusterset</td><td>default</td><td>40101</td><td></td><td></td><td></td><td></td></tr>      <tr class="bg2"><td>1263578</td><td>protein</td><td>clusterset</td><td>treebest</td><td>40101</td><td></td><td></td><td></td><td></td></tr>      <tr><td>1263579</td><td>protein</td><td>clusterset</td><td>phyml-aa</td><td>40101</td><td></td><td></td><td></td><td></td></tr>      <tr class="bg2"><td>1263580</td><td>protein</td><td>clusterset</td><td>phyml-nt</td><td>40101</td><td></td><td></td><td></td><td></td></tr>      <tr><td>1263581</td><td>protein</td><td>clusterset</td><td>nj-dn</td><td>40101</td><td></td><td></td><td></td><td></td></tr>      <tr class="bg2"><td>1263582</td><td>protein</td><td>clusterset</td><td>nj-ds</td><td>40101</td><td></td><td></td><td></td><td></td></tr>      <tr><td>1263583</td><td>protein</td><td>clusterset</td><td>nj-mm</td><td>40101</td><td></td><td></td><td></td><td></td></tr>      <tr class="bg2"><td>1263584</td><td>protein</td><td>clusterset</td><td>raxml</td><td>40101</td><td></td><td></td><td></td><td></td></tr>      <tr><td>1263585</td><td>protein</td><td>clusterset</td><td>raxml_parsimony</td><td>40101</td><td></td><td></td><td></td><td></td></tr>      <tr class="bg2"><td>1263586</td><td>protein</td><td>clusterset</td><td>raxml_bl</td><td>40101</td><td></td><td></td><td></td><td></td></tr>      <tr><td>1263587</td><td>protein</td><td>clusterset</td><td>notung</td><td>40101</td><td></td><td></td><td></td><td></td></tr>      <tr class="bg2"><td>1263588</td><td>protein</td><td>clusterset</td><td>copy</td><td>40101</td><td></td><td></td><td></td><td></td></tr>      <tr><td>1263589</td><td>protein</td><td>clusterset</td><td>raxml_update</td><td>40101</td><td></td><td></td><td></td><td></td></tr>    </table>
   </div></div></div><div class="sql_schema_table_examples"><p class="sql_schema_table_example_header">Example 2:</p><div class="sql_schema_table_example_content"><p>To get the number of trees of each type </p>
       <div>
         <div class="sql_schema_table_example_query">
@@ -3420,7 +3809,7 @@ available: <a target="_blank" href="./diagrams/genomic_schema.png">Genomic align
       
   <div id="ex_gene_tree_root2" style="display:none;">
     <table class="ss sql_schema_table_example_result">
-      <tr><th>member_type</th><th>tree_type</th><th>COUNT(*)</th></tr>      <tr><td>protein</td><td>clusterset</td><td>13</td></tr>      <tr class="bg2"><td>protein</td><td>tree</td><td>93252</td></tr>      <tr><td>ncrna</td><td>clusterset</td><td>22</td></tr>      <tr class="bg2"><td>ncrna</td><td>supertree</td><td>25</td></tr>      <tr><td>ncrna</td><td>tree</td><td>18226</td></tr>    </table>
+      <tr><th>member_type</th><th>tree_type</th><th>COUNT(*)</th></tr>      <tr><td>protein</td><td>clusterset</td><td>13</td></tr>      <tr class="bg2"><td>protein</td><td>tree</td><td>94302</td></tr>      <tr><td>ncrna</td><td>clusterset</td><td>22</td></tr>      <tr class="bg2"><td>ncrna</td><td>supertree</td><td>25</td></tr>      <tr><td>ncrna</td><td>tree</td><td>13945</td></tr>    </table>
   </div></div></div><table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#gene_tree_node">gene_tree_node</a></li>
@@ -3459,7 +3848,7 @@ available: <a target="_blank" href="./diagrams/genomic_schema.png">Genomic align
         <td class="bg1">int(10)</td>
         <td class="bg1">-</td>
         <td class="bg1">External reference to node_id in the <a href="#gene_tree_node" class="sql_schema_link">gene_tree_node</a> table</td>
-        <td class="bg1">key: <i>node_id_tag</i><br />key: <i>node_id</i></td>
+        <td class="bg1">key: <i>node_id_tag</i></td>
       </tr>
 
       <tr>
@@ -3467,7 +3856,7 @@ available: <a target="_blank" href="./diagrams/genomic_schema.png">Genomic align
         <td class="bg2">varchar(50)</td>
         <td class="bg2">-</td>
         <td class="bg2">Tag name for the tag/value pair</td>
-        <td class="bg2">key: <i>node_id_tag</i></td>
+        <td class="bg2">key: <i>node_id_tag</i><br />key: <i>tag</i></td>
       </tr>
 
       <tr>
@@ -3522,7 +3911,7 @@ available: <a target="_blank" href="./diagrams/genomic_schema.png">Genomic align
         <td class="bg2">varchar(50)</td>
         <td class="bg2">-</td>
         <td class="bg2">Tag name for the tag/value pair</td>
-        <td class="bg2">key: <i>root_id_tag</i></td>
+        <td class="bg2">key: <i>root_id_tag</i><br />key: <i>tag</i></td>
       </tr>
 
       <tr>
@@ -3537,6 +3926,237 @@ available: <a target="_blank" href="./diagrams/genomic_schema.png">Genomic align
 <table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#gene_tree_root">gene_tree_root</a></li>
+      </ul>
+    </td>
+</tr></table></div></div><div class="sql_schema_table">
+  <div id="gene_tree_root_attr"class="sql_schema_table_header" style="border-top-color:#1E90FF">
+    <div class="sql_schema_table_header_left"><span style="background-color:#1E90FF"></span>gene_tree_root_attr</div>
+    <div class="sql_schema_table_header_right">
+  
+  <a id="a_gene_tree_root_attr" class="help-header sql_schema_show_hide" onclick="show_hide('gene_tree_root_attr','columns')">
+    <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
+  </a>
+      <span class="sql_schema_table_separator"> </span> <a href="#top" class="sql_schema_link">[Back to top]</a>
+    </div>
+    <div style="clear:both"></div>
+  </div>
+<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">This table contains several gene tree attributes data attached to root_ids</p>
+
+  <div id="div_gene_tree_root_attr" style="display:none">
+    <table class="ss sql_schema_table_column">
+      <tr class="center">
+        <th>Column</th>
+        <th>Type</th>
+        <th class="val">Default value</th>
+        <th class="desc">Description</th>
+        <th class="index">Index</th>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>root_id</b></td>
+        <td class="bg1">INT(10)</td>
+        <td class="bg1">-</td>
+        <td class="bg1">External reference to root_id in the <a href="#gene_tree_root" class="sql_schema_link">gene_tree_root</a> table.</td>
+        <td class="bg1">primary key</td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>aln_after_filter_length</b></td>
+        <td class="bg2">INT(10)</td>
+        <td class="bg2">NULL</td>
+        <td class="bg2">Alignment length after filtering.</td>
+        <td class="bg2"></td>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>aln_length</b></td>
+        <td class="bg1">INT(10)</td>
+        <td class="bg1">NULL</td>
+        <td class="bg1">Alignment length before filtering.</td>
+        <td class="bg1"></td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>aln_num_residues</b></td>
+        <td class="bg2">INT(10)</td>
+        <td class="bg2">NULL</td>
+        <td class="bg2">Total number of residues in the whole alignment.</td>
+        <td class="bg2"></td>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>aln_percent_identity</b></td>
+        <td class="bg1">FLOAT(5)</td>
+        <td class="bg1">NULL</td>
+        <td class="bg1">Alignment identity.</td>
+        <td class="bg1"></td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>best_fit_model_family</b></td>
+        <td class="bg2">VARCHAR(10)</td>
+        <td class="bg2">NULL</td>
+        <td class="bg2">Best Amino Acid replacement evolution model (WAG, JTT, etc).</td>
+        <td class="bg2"></td>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>best_fit_model_parameter</b></td>
+        <td class="bg1">VARCHAR(5)</td>
+        <td class="bg1">NULL</td>
+        <td class="bg1">Best paremeters used in the model (I, G, IG, IGF, etc).</td>
+        <td class="bg1"></td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>gene_count</b></td>
+        <td class="bg2">INT(10)</td>
+        <td class="bg2">NULL</td>
+        <td class="bg2">Number of sequences present in the alignment.</td>
+        <td class="bg2"></td>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>k_score</b></td>
+        <td class="bg1">FLOAT(5)</td>
+        <td class="bg1">NULL</td>
+        <td class="bg1">Tree distance metric.</td>
+        <td class="bg1"></td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>k_score_rank</b></td>
+        <td class="bg2">INT(10)</td>
+        <td class="bg2">NULL</td>
+        <td class="bg2">Rank of the tree in the comparison.</td>
+        <td class="bg2"></td>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>mcoffee_scores_gene_align_id</b></td>
+        <td class="bg1">INT(10)</td>
+        <td class="bg1">NULL</td>
+        <td class="bg1">Gene alignment ID, used to fetch the mcoffee scores used in the alignment.</td>
+        <td class="bg1"></td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>aln_n_removed_columns</b></td>
+        <td class="bg2">INT(10)</td>
+        <td class="bg2">NULL</td>
+        <td class="bg2">Number of colunms that were removed by the alignment filtering process.</td>
+        <td class="bg2"></td>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>aln_num_of_patterns</b></td>
+        <td class="bg1">INT(10)</td>
+        <td class="bg1">NULL</td>
+        <td class="bg1">Number of different patterns present in the alignment (used by ExaML).</td>
+        <td class="bg1"></td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>aln_shrinking_factor</b></td>
+        <td class="bg2">FLOAT(2)</td>
+        <td class="bg2">NULL</td>
+        <td class="bg2">Factor used to measure how much the alignments were filtered (factor: 0..1).</td>
+        <td class="bg2"></td>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>spec_count</b></td>
+        <td class="bg1">INT(10)</td>
+        <td class="bg1">NULL</td>
+        <td class="bg1">Number of different species present in the cluster</td>
+        <td class="bg1"></td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>tree_max_branch</b></td>
+        <td class="bg2">FLOAT</td>
+        <td class="bg2">NULL</td>
+        <td class="bg2">Maximum branch length.</td>
+        <td class="bg2"></td>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>tree_max_length</b></td>
+        <td class="bg1">FLOAT(5)</td>
+        <td class="bg1">NULL</td>
+        <td class="bg1">Maximum tree length.</td>
+        <td class="bg1"></td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>tree_num_dup_nodes</b></td>
+        <td class="bg2">INT(10)</td>
+        <td class="bg2">NULL</td>
+        <td class="bg2">Number of duplication nodes.</td>
+        <td class="bg2"></td>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>tree_num_leaves</b></td>
+        <td class="bg1">INT(10)</td>
+        <td class="bg1">NULL</td>
+        <td class="bg1">Number of leaves in a tree.</td>
+        <td class="bg1"></td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>tree_num_spec_nodes</b></td>
+        <td class="bg2">INT(10)</td>
+        <td class="bg2">NULL</td>
+        <td class="bg2">Number of speciation events.</td>
+        <td class="bg2"></td>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>lca_node_id</b></td>
+        <td class="bg1">INT(10)</td>
+        <td class="bg1">NULL</td>
+        <td class="bg1">Lowest common ancestor (species_tree node_id).</td>
+        <td class="bg1">key: <i>lca_node_id</i></td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>taxonomic_coverage</b></td>
+        <td class="bg2">FLOAT(5)</td>
+        <td class="bg2">NULL</td>
+        <td class="bg2">Taxonomic coverage of the species present in the gene tree over all the species for that particular node on the species tree.</td>
+        <td class="bg2"></td>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>ratio_species_genes</b></td>
+        <td class="bg1">FLOAT(5)</td>
+        <td class="bg1">NULL</td>
+        <td class="bg1">Ration of the number of species over the number of genes in a tree.</td>
+        <td class="bg1"></td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>model_name</b></td>
+        <td class="bg2">VARCHAR(40)</td>
+        <td class="bg2">NULL</td>
+        <td class="bg2">HMM model name (cluster table_id).</td>
+        <td class="bg2"></td>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>division</b></td>
+        <td class="bg1">VARCHAR(10)</td>
+        <td class="bg1">NULL</td>
+        <td class="bg1">Division name (e.g.: treefam, ensembl).</td>
+        <td class="bg1"></td>
+      </tr>
+    </table>
+  </div>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+  <ul>
+      <li><a href="#gene_tree_root">gene_tree_root</a></li>
+      <li><a href="#gene_tree_root_tag">gene_tree_root_tag</a></li>
       </ul>
     </td>
 </tr></table></div></div><div class="sql_schema_table">
@@ -3608,6 +4228,60 @@ available: <a target="_blank" href="./diagrams/genomic_schema.png">Genomic align
   <ul>
       <li><a href="#gene_tree_node">gene_tree_node</a></li>
       <li><a href="#gene_tree_node_tag">gene_tree_node_tag</a></li>
+      </ul>
+    </td>
+</tr></table></div></div><div class="sql_schema_table">
+  <div id="gene_tree_object_store"class="sql_schema_table_header" style="border-top-color:#1E90FF">
+    <div class="sql_schema_table_header_left"><span style="background-color:#1E90FF"></span>gene_tree_object_store</div>
+    <div class="sql_schema_table_header_right">
+  
+  <a id="a_gene_tree_object_store" class="help-header sql_schema_show_hide" onclick="show_hide('gene_tree_object_store','columns')">
+    <img src="/i/16/plus-button.png" class="sql_schema_icon" alt="show"/> Show columns
+  </a>
+      <span class="sql_schema_table_separator"> </span> <a href="#top" class="sql_schema_link">[Back to top]</a>
+    </div>
+    <div style="clear:both"></div>
+  </div>
+<div class="sql_schema_table_content">  <p class="sql_schema_table_desc">This table contains arbitrary data related to gene-trees. Commonly used for precomputed tracks / layers</p>
+
+  <div id="div_gene_tree_object_store" style="display:none">
+    <table class="ss sql_schema_table_column">
+      <tr class="center">
+        <th>Column</th>
+        <th>Type</th>
+        <th class="val">Default value</th>
+        <th class="desc">Description</th>
+        <th class="index">Index</th>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>root_id</b></td>
+        <td class="bg1">INT(10)</td>
+        <td class="bg1">-</td>
+        <td class="bg1">External reference to root_id in the <a href="#gene_tree_root" class="sql_schema_link">gene_tree_root</a> table</td>
+        <td class="bg1">primary key</td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>data_label</b></td>
+        <td class="bg2">VARCHAR(255)</td>
+        <td class="bg2">-</td>
+        <td class="bg2">A label that uniquely identifies the data (for a given root_id)</td>
+        <td class="bg2">primary key</td>
+      </tr>
+
+      <tr>
+        <td class="bg1"><b>compressed_data</b></td>
+        <td class="bg1">MEDIUMBLOB</td>
+        <td class="bg1">-</td>
+        <td class="bg1">The data, compressed with ZLib. Can be uncompressed with MySQL's UNCOMPRESS</td>
+        <td class="bg1"></td>
+      </tr>
+    </table>
+  </div>
+<table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
+  <ul>
+      <li><a href="#gene_tree_root">gene_tree_root</a></li>
       </ul>
     </td>
 </tr></table></div></div><div class="sql_schema_table">
@@ -3920,6 +4594,22 @@ available: <a target="_blank" href="./diagrams/genomic_schema.png">Genomic align
         <td class="bg2">The root_id of the gene tree from which the homology is derived</td>
         <td class="bg2">key: <i>gene_tree_root_id</i></td>
       </tr>
+
+      <tr>
+        <td class="bg1"><b>goc_score</b></td>
+        <td class="bg1">tinyint</td>
+        <td class="bg1">NULL</td>
+        <td class="bg1">The max goc score for the ortholog</td>
+        <td class="bg1"></td>
+      </tr>
+
+      <tr>
+        <td class="bg2"><b>wga_coverage</b></td>
+        <td class="bg2">DEC(5,2)</td>
+        <td class="bg2">NULL</td>
+        <td class="bg2">it's a simple distribution of the size of the alignment blocks</td>
+        <td class="bg2"></td>
+      </tr>
     </table>
   </div>
 <div class="sql_schema_table_examples"><p class="sql_schema_table_example_header">Example 1:</p><div class="sql_schema_table_example_content"><p>The following query defines a pair of paralogous xenopous genes. See <a href="#homology_member" class="sql_schema_link">homology_member</a> for more details </p>
@@ -3936,7 +4626,7 @@ available: <a target="_blank" href="./diagrams/genomic_schema.png">Genomic align
       
   <div id="ex_homology1" style="display:none;">
     <table class="ss sql_schema_table_example_result">
-      <tr><th>homology_id</th><th>method_link_species_set_id</th><th>description</th><th>is_tree_compliant</th><th>dn</th><th>ds</th><th>n</th><th>s</th><th>lnl</th><th>species_tree_node_id</th><th>gene_tree_node_id</th><th>gene_tree_root_id</th></tr>      <tr><td>100001924</td><td>27763</td><td>within_species_paralog</td><td>1</td><td></td><td></td><td></td><td></td><td></td><td>40102072</td><td>101229679</td><td>100194341</td></tr>    </table>
+      <tr><th>homology_id</th><th>method_link_species_set_id</th><th>description</th><th>is_tree_compliant</th><th>dn</th><th>ds</th><th>n</th><th>s</th><th>lnl</th><th>species_tree_node_id</th><th>gene_tree_node_id</th><th>gene_tree_root_id</th><th>goc_score</th><th>wga_coverage</th></tr>      <tr><td>100000336</td><td>27763</td><td>other_paralog</td><td>1</td><td></td><td></td><td></td><td></td><td></td><td>40102005</td><td>100128209</td><td>100128209</td><td></td><td></td></tr>    </table>
   </div></div></div><div class="sql_schema_table_examples"><p class="sql_schema_table_example_header">Example 2:</p><div class="sql_schema_table_example_content"><p>See species_names that participate in this particular homology entry </p>
       <div>
         <div class="sql_schema_table_example_query">
@@ -3951,7 +4641,7 @@ available: <a target="_blank" href="./diagrams/genomic_schema.png">Genomic align
       
   <div id="ex_homology2" style="display:none;">
     <table class="ss sql_schema_table_example_result">
-      <tr><th>homology_id</th><th>description</th><th>species</th></tr>      <tr><td>1</td><td>ortholog_one2one</td><td>pongo_abelii,homo_sapiens</td></tr>      <tr class="bg2"><td>2</td><td>ortholog_one2one</td><td>macaca_mulatta,homo_sapiens</td></tr>      <tr><td>3</td><td>ortholog_one2one</td><td>macaca_mulatta,pongo_abelii</td></tr>      <tr class="bg2"><td>4</td><td>ortholog_one2one</td><td>macaca_mulatta,mustela_putorius_furo</td></tr>    </table>
+      <tr><th>homology_id</th><th>description</th><th>species</th></tr>      <tr><td>11</td><td>ortholog_one2one</td><td>astyanax_mexicanus,danio_rerio</td></tr>      <tr class="bg2"><td>12</td><td>ortholog_one2one</td><td>gadus_morhua,poecilia_formosa</td></tr>      <tr><td>13</td><td>ortholog_one2one</td><td>gadus_morhua,danio_rerio</td></tr>      <tr class="bg2"><td>14</td><td>ortholog_one2one</td><td>gadus_morhua,astyanax_mexicanus</td></tr>    </table>
   </div></div></div><table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#homology_member">homology_member</a></li>
@@ -4016,7 +4706,7 @@ available: <a target="_blank" href="./diagrams/genomic_schema.png">Genomic align
 
       <tr>
         <td class="bg1"><b>perc_cov</b></td>
-        <td class="bg1">tinyint</td>
+        <td class="bg1">float</td>
         <td class="bg1">0</td>
         <td class="bg1">Defines the percentage of the peptide which has been aligned</td>
         <td class="bg1"></td>
@@ -4024,7 +4714,7 @@ available: <a target="_blank" href="./diagrams/genomic_schema.png">Genomic align
 
       <tr>
         <td class="bg2"><b>perc_id</b></td>
-        <td class="bg2">tinyint</td>
+        <td class="bg2">float</td>
         <td class="bg2">0</td>
         <td class="bg2">Defines the percentage of identity between both homologues</td>
         <td class="bg2"></td>
@@ -4032,7 +4722,7 @@ available: <a target="_blank" href="./diagrams/genomic_schema.png">Genomic align
 
       <tr>
         <td class="bg1"><b>perc_pos</b></td>
-        <td class="bg1">tinyint</td>
+        <td class="bg1">float</td>
         <td class="bg1">0</td>
         <td class="bg1">Defines the percentage of positivity (similarity) between both homologues</td>
         <td class="bg1"></td>
@@ -4053,7 +4743,7 @@ available: <a target="_blank" href="./diagrams/genomic_schema.png">Genomic align
       
   <div id="ex_homology_member" style="display:none;">
     <table class="ss sql_schema_table_example_result">
-      <tr><th>homology_id</th><th>gene_member_id</th><th>seq_member_id</th><th>cigar_line</th><th>perc_cov</th><th>perc_id</th><th>perc_pos</th></tr>      <tr><td>100001924</td><td>100050116</td><td>100050116</td><td>71M</td><td>100</td><td>99</td><td>99</td></tr>      <tr class="bg2"><td>100001924</td><td>100050123</td><td>100050123</td><td>71M</td><td>100</td><td>99</td><td>99</td></tr>    </table>
+      <tr><th>homology_id</th><th>gene_member_id</th><th>seq_member_id</th><th>cigar_line</th><th>perc_cov</th><th>perc_id</th><th>perc_pos</th></tr>      <tr><td>100000336</td><td>100275946</td><td>100286863</td><td>104M3D4M</td><td>74.0741</td><td>57.4074</td><td>57.4074</td></tr>      <tr class="bg2"><td>100000336</td><td>100275949</td><td>100286866</td><td>9D39M6D40M10D4M3D</td><td>96.3855</td><td>74.6988</td><td>74.6988</td></tr>    </table>
   </div></div></div><table class="sql_schema_extra"><tr>    <td class="sql_schema_extra_left"">    <p style="font-weight:bold">See also:</p>
   <ul>
       <li><a href="#gene_member">gene_member</a></li>
@@ -4317,7 +5007,7 @@ available: <a target="_blank" href="./diagrams/genomic_schema.png">Genomic align
         <td class="bg1">int(10)</td>
         <td class="bg1">-</td>
         <td class="bg1">External reference to cafe_gene_family_id in the <a href="#CAFE_gene_family" class="sql_schema_link">CAFE_gene_family</a> table.</td>
-        <td class="bg1">key: <i>cafe_gene_family_id</i></td>
+        <td class="bg1">primary key</td>
       </tr>
 
       <tr>
@@ -4325,7 +5015,7 @@ available: <a target="_blank" href="./diagrams/genomic_schema.png">Genomic align
         <td class="bg2">int(10)</td>
         <td class="bg2">-</td>
         <td class="bg2">External reference to node_id in the <a href="#species_tree_node" class="sql_schema_link">species_tree_node</a> table</td>
-        <td class="bg2"></td>
+        <td class="bg2">primary key</td>
       </tr>
 
       <tr>
