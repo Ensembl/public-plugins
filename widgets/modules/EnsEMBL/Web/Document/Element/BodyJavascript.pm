@@ -35,7 +35,7 @@ sub content {
   # don't forget to remove their jquery lib as this will cause conflict with our one which is the latest one
   $main_js .=  qq{
     <script language="JavaScript" type="text/javascript" src="$SiteDefs::GXA_EBI_URL/js-bundles/vendorCommons.bundle.js"></script>
-    <script language="JavaScript" type="text/javascript" src="$SiteDefs::GXA_EBI_URL/js-bundles/expressionAtlasHeatmap.bundle.js"></script>
+    <script language="JavaScript" type="text/javascript" src="$SiteDefs::GXA_EBI_URL/js-bundles/expressionAtlasHeatmapHighcharts.bundle.js"></script>
   }; 
 
   return $main_js;

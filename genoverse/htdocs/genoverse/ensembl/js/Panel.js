@@ -311,11 +311,29 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
 
         this.hoverLabel = panel.elLk.hoverLabels.filter(':not(.allocated).' + this.id).first().addClass('allocated').appendTo(label).css({ left : label.find('.gv-name').width(), top: 0 });
 
-        label.addClass('_label_layer').on('mouseleave', function () {
-          $(this).removeClass('hover');
-        }).children('.gv-name, .hover_label').removeAttr('title').on('mouseenter', function () {
-          $(this.parentNode).addClass('hover').find('._dyna_load').removeClass('_dyna_load').dynaLoad(); // dynaload any track description too
-        });
+        label.addClass('_label_layer').children('.gv-name, .hover_label').removeAttr('title')
+              .on('click', function (e) {
+                // Hide all open menus on clicking new menu except the pinned ones.
+                $(this.parentNode).siblings().not('.pinned').find('.hover_label').hide();
+                // siblings() doesnt return the current clicked element
+                // So check if the current element is pinned.
+                if ($(this.parentNode).hasClass('pinned')) {
+                  return;
+                }
+                // show label
+                $(this.parentNode).find('.hover_label').toggle();
+                $(this.parentNode).find('._dyna_load').removeClass('_dyna_load').dynaLoad(); // dynaload any track description too
+                e.stopPropagation && e.stopPropagation();
+              })
+              .find('.close').on ({
+                click: function(e) {
+                  $(this).parent().hide();
+                  // Remove pinned class
+                  $(this).siblings('._hl_pin').removeClass('on')
+                         .closest('._label_layer').removeClass('pinned');
+                  e.stopPropagation && e.stopPropagation();
+                }
+              });
 
         if (this.resizable === true) {
           this.hoverLabel.find('a.height').on('click', function (e) {
@@ -341,7 +359,21 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
         } else {
           this.hoverLabel.find('._track_height').remove();
         }
+
+        // On highlight icon click toggle highlight
+        $(label).find('.hl-icon-highlight').on('click', function(e) {
+          panel.toggleHighlight(track.controller.container);
+        });
       }
+    });
+
+    $(document).on('click', function(e) {
+      // Hide all unpinned hover labels
+      panel.elLk.hoverLabels.each(function(i, hl) {
+        if(!$(hl.parentNode).hasClass('pinned')) {
+          $(hl).hide();
+        }
+      })
     });
 
     this.initHoverLabels();

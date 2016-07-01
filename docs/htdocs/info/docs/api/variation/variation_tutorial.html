@@ -1105,7 +1105,7 @@ foreach my $genotype (@{$genotypes}) {
 </div>
 
 <p>
-In the example below, it calculates the LD in a region in human chromosome 6 for a HAPMAP population, but only prints when there is a high LD
+In the example below, it calculates the LD in a region in human chromosome 6 for a 1000 Genomes project population, but only prints when there is a high LD
 </p>
 
 <pre class="code sh_perl">
@@ -1123,7 +1123,7 @@ $registry-&gt;load_registry_from_db(
 my $chr = 6;  #defining the region in chromosome 6
 my $start = 25_834_000;
 my $end = 25_854_000;
-my $population_name = 'CSHL-HAPMAP:HapMap-CEU'; #we only want LD in this population
+my $population_name = '1000GENOMES:phase_3:CEU'; #we only want LD in this population
 
 my $slice_adaptor = $registry-&gt;get_adaptor('human', 'core', 'slice'); #get adaptor for Slice object
 my $slice = $slice_adaptor-&gt;fetch_by_region('chromosome',$chr,$start,$end); #get slice of the region
@@ -1132,8 +1132,8 @@ my $population_adaptor = $registry-&gt;get_adaptor('human', 'variation', 'popula
 my $population = $population_adaptor-&gt;fetch_by_name($population_name); #get population object from database
 
 my $ldFeatureContainerAdaptor = $registry-&gt;get_adaptor('human', 'variation', 'ldfeaturecontainer'); #get adaptor for LDFeatureContainer object
-# OPTIONAL: uncomment the following line to retrieve 1000 genomes phase 3 data also
-# $ldFeatureContainerAdaptor-&gt;db-&gt;use_vcf(1);
+# Retrieve 1000 genomes phase 3 data from VCF file
+$ldFeatureContainerAdaptor-&gt;db-&gt;use_vcf(1);
 my $ldFeatureContainer = $ldFeatureContainerAdaptor-&gt;fetch_by_Slice($slice,$population); #retrieve all LD values in the region
 
 foreach my $r_square (@{$ldFeatureContainer-&gt;get_all_r_square_values}){

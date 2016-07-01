@@ -17,14 +17,28 @@
 
 .gv-canvas-container .gv-label-container li.focused,
 .gv-canvas-container .gv-label-container li.pinned,
-.gv-canvas-container .gv-label-container li.hover {
-  background-color: #ddd;
+.gv-canvas-container .gv-label-container li {
+  /*background-color: #ddd;*/
 }
 
 .gv-canvas-container .gv-label-container li.focused .hover_label,
 .gv-canvas-container .gv-label-container li.pinned .hover_label,
 .gv-canvas-container .gv-label-container li.hover .hover_label {
-  display: block;
+  /*display: block;*/
+}
+
+.gv-canvas-container .gv-label-container li:not(.gv-unsortable):hover:before,
+.gv-canvas-container .gv-label-container li.hover:not(.gv-unsortable):before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.15;
+  border-top: 1px solid [[TRACK_HIGHLIGHT_BORDER]];
+  border-bottom: 1px solid [[TRACK_HIGHLIGHT_BORDER]];
+  background: [[TRACK_HIGHLIGHT_BG]];
 }
 
 body.mac .gv-label-container li .gv-handle {

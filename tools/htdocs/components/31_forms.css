@@ -16,6 +16,8 @@
 
 /* Generic tools form CSS */
 
+fieldset.tool_h2 h2               { border-bottom: 1px solid #ccc; padding: 10px 0 3px 0; }
+
 div.extra_configs_wrapper         { margin-bottom: 8px; }
 div.extra_configs_button a        { display: inline-block; padding: 5px 16px 5px 5px; background-color: [[PAGE_BG]]; border: 1px solid [[PANEL_BORDER]]; background-position: right center; font-weight: bold;}
 div.extra_configs_button a.open   { border-bottom: none; }
@@ -29,3 +31,5 @@ div.species-tag img               { display: block; float: left; margin: 2px 5px
 
 .plugin-highlight                 { border-left: 5px solid red; margin-left: -5px;}
 .plugin-subfield                  { padding-left: 50px; }
+
+select.tools_listbox              { border: 1px solid #cccccc; margin-top: -1px; max-height: 199px; overflow-x: hidden; overflow-y: auto; }

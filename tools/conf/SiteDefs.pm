@@ -33,11 +33,14 @@ sub update_conf {
     'Blast'             => 'BLAST/BLAT',
     'VEP'               => 'Variant Effect Predictor',
     'AssemblyConverter' => 'Assembly Converter',
-    'IDMapper'          => 'ID History Converter'
+    'IDMapper'          => 'ID History Converter',
+    'FileChameleon'     => 'File Chameleon',
+    'AlleleFrequency'   => 'Allele Frequency Calculator',
+    'VcftoPed'          => 'VCF to PED Converter',
   ];
 
   # Which dispatcher to be used for the jobs (provide the appropriate values in your plugins)
-  $SiteDefs::ENSEMBL_TOOLS_JOB_DISPATCHER = { 'Blast' => '', 'VEP' => '', 'AssemblyConverter' => '', 'IDMapper' => '' };
+  $SiteDefs::ENSEMBL_TOOLS_JOB_DISPATCHER = { 'Blast' => '', 'VEP' => '', 'AssemblyConverter' => '', 'IDMapper' => '', 'FileChameleon' => '' , 'AlleleFrequency' => '', 'VcftoPed' => ''};
 
   # tmp directory for jobs i/o files - the final folder structure looks like ENSEMBL_TMP_DIR_TOOLS/temporary|persistent/ENSEMBL_TMP_SUBDIR_TOOLS/Blast|VEP
   $SiteDefs::ENSEMBL_TMP_DIR_TOOLS    = defer { $SiteDefs::ENSEMBL_TMP_DIR }; # keeping the base dir same as the main tmp dir
@@ -48,6 +51,7 @@ sub update_conf {
   $SiteDefs::ENSEMBL_VEP_ENABLED    = 1;
   $SiteDefs::ENSEMBL_AC_ENABLED     = 1;
   $SiteDefs::ENSEMBL_IDM_ENABLED    = 1;
+  $SiteDefs::ENSEMBL_FC_ENABLED     = 1;
 
   # Leave it on if mechanism to fetch sequence by IDs is working
   $SiteDefs::ENSEMBL_BLAST_BY_SEQID = 1;
@@ -63,6 +67,15 @@ sub update_conf {
 
   # Path to CrossMap
   $SiteDefs::ASSEMBLY_CONVERTER_BIN_PATH = '/path/to/CrossMap.py';
+
+  # Path to File Chameleon script
+  $SiteDefs::FILE_CHAMELEON_BIN_PATH = '/path/to/format_transcriber.pl'; 
+
+  # Path to Allele Frequency script
+  $SiteDefs::ALLELE_FREQUENCY_BIN_PATH = '/path/to/allele_frequency.pl';
+
+  # Path to VCF to PED script
+  $SiteDefs::VCF_PED_BIN_PATH = '/path/to/vcftoped.pl';
 
   # Upload file size limits
   $SiteDefs::ENSEMBL_TOOLS_CGI_POST_MAX = {
@@ -91,6 +104,15 @@ sub update_conf {
   # Tickets will expire after 10 days, and user will warned when less than three days are left
   $SiteDefs::ENSEMBL_TICKETS_VALIDITY         = 10 * 24 * 60 * 60;
   $SiteDefs::ENSEMBL_TICKETS_VALIDITY_WARNING = 3  * 24 * 60 * 60;
+
+  #1000Genome Rest URL
+  $SiteDefs::GENOME_REST_FILE_URL  = "http://www.1000genomes.org/api/beta/file/_search";
+
+  #1000Genome tool variables
+  $SiteDefs::PHASE1_PANEL_URL   = "ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20110521/phase1_integrated_calls.20101123.ALL.panel";
+  $SiteDefs::PHASE3_PANEL_URL   = "ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/integrated_call_samples_v3.20130502.ALL.panel";
+  $SiteDefs::PHASE3_MALE_URL    = "ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/integrated_call_male_samples_v3.20130502.ALL.panel";
+
 }
 
 1;

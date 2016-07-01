@@ -41,12 +41,16 @@ sub content {
 
   my $image_config  = $hub->get_imageconfig('Vkaryoblast');
   my $image         = $self->new_karyotype_image($image_config);
+  $image->{'export'} = 1;
+
   my $pointers      = $self->get_hit_pointers($job, $image);
 
   $image->caption   = 'Click on the image above to jump to a chromosome, or click and drag to select a region';
   $image->imagemap  = 'yes';
   $image->set_button('drag', 'title' => 'Click on a chromosome');
   $image->karyotype($hub, $object, $pointers, 'Vkaryoblast');
+
+  return if $self->_export_image($image,'no_text');
 
   return sprintf('
     <h3><a rel ="_blast_karyotype" class="toggle _slide_toggle set_cookie open" href="#">HSP distribution on genome</a></h3>

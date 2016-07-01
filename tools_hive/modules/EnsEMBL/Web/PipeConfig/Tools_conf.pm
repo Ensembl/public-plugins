@@ -40,6 +40,9 @@ sub new {
     $sd->ENSEMBL_VEP_ENABLED   ? 'EnsEMBL::Web::ToolsPipeConfig::VEP' : (),
     $sd->ENSEMBL_AC_ENABLED    ? 'EnsEMBL::Web::ToolsPipeConfig::AssemblyConverter' : (),
     $sd->ENSEMBL_IDM_ENABLED   ? 'EnsEMBL::Web::ToolsPipeConfig::IDMapper' : (),
+    $sd->ENSEMBL_FC_ENABLED    ? 'EnsEMBL::Web::ToolsPipeConfig::FileChameleon' : (),
+    $sd->ENSEMBL_AF_ENABLED    ? 'EnsEMBL::Web::ToolsPipeConfig::AlleleFrequency' : (),
+    $sd->ENSEMBL_VP_ENABLED    ? 'EnsEMBL::Web::ToolsPipeConfig::VcftoPed' : (),
   ) ];
 
   return $self;

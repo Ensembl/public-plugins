@@ -113,6 +113,16 @@ dynamically set to the server hostname by default.</p>
 web server to run as. Usually, for security, this is a special user (such as "nobody") who has very few
 permissions.</p>
 
+<h4>Configuration of hubCheck (optional)</h4>
+
+<p>If you have <a href="/info/docs/webcode/mirror/install/non-ensembl-code.html#hubCheck">installed hubCheck</a>, 
+you need to add the location of the binary file to SiteDefs as follows:</p>
+<pre class="code">
+  $SiteDefs::HUBCHECK_BIN = '/path/to/hubCheck';
+</pre>
+
+<p>If this path is not configured, track hubs can still be attached but hubCheck will not be run to validate them.</p>
+
 <h4>Mail configuration - error messages</h4>
 <p>If you want errors to be automatically emailed to you, change $SiteDefs::ENSEMBL_MAIL_ERRORS to the value 1,
 and change $SiteDefs::ENSEMBL_ERRORS_TO to your email address. If you don't want errors mailed, set

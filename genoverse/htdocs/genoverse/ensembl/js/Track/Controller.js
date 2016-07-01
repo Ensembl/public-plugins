@@ -39,6 +39,16 @@ Genoverse.Track.Controller = Genoverse.Track.Controller.extend({
     this.browser.updateSelectorHeight();
   },
 
+  addDomElements: function () {
+    this.base.apply(this, arguments);
+
+    this.label.add(this.container).not('.gv-unsortable').on('mouseenter mouseleave', {els: this.label.add(this.container)}, function (e) {
+      e.data.els.filter(function() {
+        return e.currentTarget !== this;
+      }).toggleClass('hover', e.type === 'mouseenter');
+    });
+  },
+
   click: function () {
     if (this.browser.panel.elLk.container.hasClass('ui-resizable-resizing')) {
       return false;

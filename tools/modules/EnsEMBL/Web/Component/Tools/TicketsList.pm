@@ -23,6 +23,8 @@ package EnsEMBL::Web::Component::Tools::TicketsList;
 use strict;
 use warnings;
 
+use DateTime;
+
 use EnsEMBL::Web::Utils::DynamicLoader qw(dynamic_require);
 
 use parent qw(EnsEMBL::Web::Component::Tools);
@@ -62,11 +64,26 @@ sub content {
       my @jobs_summary  = map $self->job_summary_section($ticket, $_, $_->result_count, $owned_tickets->{$ticket_name})->render, $ticket->job;
       my $created_at    = $ticket->created_at;
 
+#Determin timezone when ticket was created
+      my ($date, $time) = split /T/, $created_at;
+      my ($year, $month, $day) = split /-/, $date;
+      my ($hour, $min, $sec) = split /:/, $time;
+      my $timezone      = DateTime->new(
+        'year'    => $year,
+        'month'   => $month,
+        'day'     => $day,
+        'hour'    => $hour,
+        'minute'  => $min,
+        'second'  => $sec,
+        time_zone =>  'Europe/London',
+      )->strftime('%c %z %Z');
+
+
       $table->add_row({
         'analysis'  => $self->analysis_caption($ticket),
         'ticket'    => $self->ticket_link($ticket, $owned_tickets->{$ticket_name}),
         'jobs'      => join('', @jobs_summary),
-        'created'   => sprintf('<span class="hidden">%d</span>%s', $created_at =~ s/[^\d]//gr, $self->format_date($created_at)),
+        'created'   => sprintf('<span class="hidden">%d</span>%s (%s)', $created_at =~ s/[^\d]//gr, $self->format_date($created_at), $timezone && $timezone =~ /BST/g ? "BST" : "GMT" ),
         'extras'    => $self->ticket_buttons($ticket, $owned_tickets->{$ticket_name})->render,
         'options'   => {'class' => "_ticket_$ticket_name"}
       });
