@@ -21,7 +21,7 @@ use strict;
 
 package EnsEMBL::Solr::SiteDefs;
 sub update_conf {
-  $SiteDefs::OBJECT_TO_SCRIPT->{'Search'} = "AltPage";
+  $SiteDefs::OBJECT_TO_SCRIPT->{'Search'} = "Page";
 
   $SiteDefs::ENSEMBL_SOLR_CONFIG = {
     ui => {

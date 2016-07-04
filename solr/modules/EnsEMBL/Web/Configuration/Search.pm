@@ -23,6 +23,8 @@ use strict;
 
 use base qw(EnsEMBL::Web::Configuration);
 
+sub default_template { 'Legacy::AltNav' }
+
 sub modify_tree {
   my $self   = shift;
 
