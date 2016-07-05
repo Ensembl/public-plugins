@@ -49,6 +49,7 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
 
 	<div id="div_versions" style="display:none;">
 	<ul>
+    <li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/82.zip">Download version 84</a> (Ensembl 84) </li>
     <li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/82.zip">Download version 83</a> (Ensembl 83) </li>
     <li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/82.zip">Download version 82</a> (Ensembl 82) </li>
     <li><a href="https://github.com/Ensembl/ensembl-tools/archive/release/81.zip">Download version 81</a> (Ensembl 81) </li>
@@ -75,12 +76,11 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
 	</div><hr/>
   <h2 id="new">What's new</h2>
 
-  <h4> New in version 84 <i>(March 2016)</i> </h4>
+  <h4> New in version 85 <i>(July 2016)</i> </h4>
 
   <ul>
-    <li>Add <a href="/info/docs/tools/vep/vep_formats.html#tab">tab-delimited</a> output option</li>
-    <li>Add <a href="/info/docs/tools/vep/vep_formats.html#output">transcript flags</a> indicating if the transcript is 5'- or 3'-incomplete</li>
-    <li>Improve annotation of long variants where invariant parts of the alternate allele overlap splice regions</li>
+    <li><a href="vep_options.html#opt_pick">--pick</a> now uses translated length instead of genomic transcript length</li>
+    <li>Support for epigenomes in regulatory features</li>
   </ul>
 
 
@@ -88,6 +88,14 @@ tr:nth-child(odd) {background-color: #f0f0f0;}
   onclick="show_hide('history');" id="a_history">Show</a> </h4>
 
   <div id="div_history" style="display: none;">
+
+  <h4> New in version 84 <i>(March 2016)</i> </h4>
+
+  <ul>
+    <li>Add <a href="/info/docs/tools/vep/vep_formats.html#tab">tab-delimited</a> output option</li>
+    <li>Add <a href="/info/docs/tools/vep/vep_formats.html#output">transcript flags</a> indicating if the transcript is 5'- or 3'-incomplete</li>
+    <li>Improve annotation of long variants where invariant parts of the alternate allele overlap splice regions</li>
+  </ul>
 
   <h4> New in version 83 <i>(December 2015)</i> </h4>
 
