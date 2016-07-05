@@ -39,7 +39,7 @@ sub prepare_to_dispatch {
   my $add_transcript  = $job_data->{add_transcript};
   my $remap_patch     = $job_data->{remap_patch};
   my $long_genes      = $job_data->{long_genes};
-  (my $output_file    = $job_data->{file_url}) =~ s/(http.*\/)//gi;
+  my $output_file     = $job_data->{species}.".".$format.".gz";
   my $config_content;
 
   my  $include  = [];
@@ -97,7 +97,7 @@ sub prepare_to_dispatch {
 
   return {
     'work_dir'      => $rose_object->job_dir,
-    'output_file'   => "FC_".$output_file,
+    'output_file'   => $output_file,
     'input_file'    => $job_data->{'file_url'},
     'just_download' => $job_data->{'just_download'},
     'format'        => $format,
