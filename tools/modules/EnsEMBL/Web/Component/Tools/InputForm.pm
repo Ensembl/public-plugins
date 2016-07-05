@@ -114,13 +114,11 @@ sub new_tool_form {
   my ($self, $params) = @_;
 
   $params ||= {};  
-  my $validate_class = $params->{'skip_validation'} ? '' : '_check '; #class for generic validation for ensembl
-  $params->{'class'} = '_tool_form bgcolour '.$validate_class.($params->{'class'} || '');
+  $params->{'class'} = '_tool_form bgcolour '.($params->{'class'} || '');
 
   my $form = $self->new_form({
     'action'          => $self->hub->url('Json', {'type' => 'Tools', 'action' => $self->object->tool_type, 'function' => 'form_submit'}),
     'method'          => 'post',
-    'skip_validation' => 1,
     %$params
   });
 
