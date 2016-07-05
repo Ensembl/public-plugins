@@ -46,7 +46,7 @@ sub initialize {
   }
 
   $config->{'slices'}     = $slices || $self->get_slice($config);
-  $config->{'end_number'} = $config->{'number'} = 1 if $config->{'line_numbering'};
+  $config->{'number'} = 1 if $config->{'line_numbering'};
 
   if (!$config->{'align_display'}) {
     splice @{$config->{'slices'}}, 1, 1;

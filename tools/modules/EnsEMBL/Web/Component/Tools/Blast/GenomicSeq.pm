@@ -42,7 +42,6 @@ sub initialize {
   $config->{'slices'} = [{ slice => $slice || $self->get_slice, name => $species }];
   
   if ($config->{'line_numbering'}) {
-    $config->{'end_number'} = 1;
     $config->{'number'}     = 1;
   }
   
