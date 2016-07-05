@@ -1043,6 +1043,94 @@ foreach my $genotype (@{$genotypes}) {
 
 
 <br />
+
+<h2 id="sample_genotype_features">Sample genotype features</h2>
+<p>
+The <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1SampleGenotypeFeatureAdaptor.html">SampleGenotypeFeatureAdaptor</a> provides methods for retrieving <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1SampleGenotypeFeature.html">SampleGenotypeFeature</a> objects in a genomic region. A <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1SampleGenotypeFeature.html">SampleGenotypeFeature</a> stores information about the <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1SampleGenotype.html">SampleGenotype</a> and the genomic location of the <a href="/info/docs/Doxygen/variation-api/">SampleGenotype</a> which can be accessed through the <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1VariationFeature.html">VariationFeature</a> object that is stored in a <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1SampleGenotypeFeature.html">SampleGenotypeFeature</a> object. The <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1SampleGenotypeFeatureAdaptor.html">SampleGenotypeFeatureAdaptor</a> provides methods for retrieving only unique genotypes for a given <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Sample.html">Sample</a> and <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Population.html">Population</a> and a method that returns all <a href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1SampleGenotypeFeature.html">SampleGenotypeFeatures</a> in a region and also stores genotypes for samples that differ from the given sample's genotype and are also different from the reference. 
+</p>
+
+<pre class="code sh_perl">
+use strict;
+use warnings;
+use Bio::EnsEMBL::Registry;
+
+my $registry = 'Bio::EnsEMBL::Registry';
+
+$registry-&gt;load_registry_from_db(
+  -host =&gt; 'ensembldb.ensembl.org',
+  -user =&gt; 'anonymous'
+);
+
+my $sgfa = $registry-&gt;get_adaptor('mouse', 'variation', 'samplegenotypefeature');
+$sgfa-&gt;db-&gt;use_vcf(1);
+
+my $slice_adaptor = $registry-&gt;get_adaptor('mouse', 'core', 'slice');
+my $chr = 18;
+my $start = 68_260_187;
+my $end = 68_300_333;
+my $slice = $slice_adaptor-&gt;fetch_by_region('chromosome', $chr, $start, $end);
+
+my $pa = $registry-&gt;get_adaptor('mouse', 'variation', 'population');
+my $sa = $registry-&gt;get_adaptor('mouse', 'variation', 'sample');
+
+my $population = $pa-&gt;fetch_by_name('Mouse Genomes Project');
+my $samples = $sa-&gt;fetch_all_by_name('MGP:CAST/EiJ');
+my $sample = $samples-&gt;[0];
+
+my $unique_sgfs = $sgfa-&gt;fetch_all_unique_by_Slice($slice, $sample, $population);
+foreach my $sgf (@$unique_sgfs) {
+  my $genotype_string = $sgf-&gt;genotype_string;
+  my $vf = $sgf-&gt;variation_feature;
+  my $variation_name = $vf-&gt;variation_name;
+  my $seq_region_name = $vf-&gt;seq_region_name;
+  my $seq_region_start = $vf-&gt;seq_region_start;
+  my $seq_region_end = $vf-&gt;seq_region_end;
+  my $allele_string = $vf-&gt;allele_string;
+  print "$variation_name $genotype_string $allele_string $seq_region_name $seq_region_start $seq_region_end\n";
+}
+
+my $differences_sgfs = $sgfa-&gt;fetch_all_differences_by_Slice($slice, $sample, $population);
+foreach my $sgf (@$differences_sgfs) {
+  my $genotype_string = $sgf-&gt;genotype_string;
+  my $vf = $sgf-&gt;variation_feature;
+  my $variation_name = $vf-&gt;variation_name;
+  my $seq_region_name = $vf-&gt;seq_region_name;
+  my $seq_region_start = $vf-&gt;seq_region_start;
+  my $seq_region_end = $vf-&gt;seq_region_end;
+  my $allele_string = $vf-&gt;allele_string;
+  print "$variation_name $genotype_string $allele_string $seq_region_name $seq_region_start $seq_region_end\n";
+
+  my $differences = $sgf-&gt;differences;
+  foreach my $sample_name (keys %$differences) {
+    my $genotype = $differences-&gt;{$sample_name};
+    print "   $sample_name $genotype\n";
+  }
+}
+</pre>
+<div class="code sh_perl" style="margin-bottom:15px">
+  <div style="float:left;font-weight:bold">Used objects:</div>
+  <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
+    <span style="padding-left:0.9em">Adaptor objects</span>
+    <ul style="margin-bottom:0px">
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1SampleGenotypeFeatureAdaptor.html">SampleGenotypeFeatureAdaptor</a></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1SampleAdaptor.html">SampleAdaptor</a></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1DBSQL_1_1PopulationAdaptor.html">PopulationAdaptor</a></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/core-api/classBio_1_1EnsEMBL_1_1DBSQL_1_1SliceAdaptor.html">SliceAdaptor</a> <i>(Core API)</i></li>
+    </ul>
+  </div>
+  <div style="float:left;margin-left:10px;border-left:1px dotted #CCC">
+    <span style="padding-left:0.9em">Main objects</span>
+    <ul style="margin-bottom:0px">
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1SampleGenotypeFeature.html">SampleGenotypeFeature</a></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Sample.html">Sample</a></li>
+      <li><a style="text-decoration:none" href="/info/docs/Doxygen/variation-api/classBio_1_1EnsEMBL_1_1Variation_1_1Population.html">Population</a></li>
+    </ul>
+  </div>
+  <div style="clear:both"></div>
+</div>
+
+<br />
+
 <h2 id="population_genotypes">Population genotypes</h2>
 
 <p>
