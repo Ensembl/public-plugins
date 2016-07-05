@@ -80,7 +80,7 @@ sub search_connect {
     my $response = $ua->get($url);
 
     if($response->is_success) {
-      $result = from_json($response->decoded_content);
+      $result = from_json($response->content);
     } else {
       $error = "Server returned status ".$response->code." ".$response->message;
     }     
