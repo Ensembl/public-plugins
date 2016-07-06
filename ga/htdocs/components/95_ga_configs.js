@@ -431,7 +431,7 @@ Ensembl.GA.eventConfigs.push(
     url             : 'Gene/Summary',
     selector        : '.navbar a',
     wrapper         : '.panel.js_panel',
-    event           : 'click', // bxslider doesn't let any click event trigger on slider ui element, so using mousedown
+    event           : 'click',
     category        : 'ExploreIcon',
     action          : function () { return this.getURL(); },
   }, {
@@ -439,7 +439,7 @@ Ensembl.GA.eventConfigs.push(
     url             : 'Gene/Summary',
     selector        : '.navbar a.no-visit',
     wrapper         : '.panel.js_panel',
-    event           : 'click', // bxslider doesn't let any click event trigger on slider ui element, so using mousedown
+    event           : 'click',
     category        : 'NavLink',
     action          : function () { return this.getURL(); },
     label           : function () { return this.getText(); }
