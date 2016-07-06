@@ -115,7 +115,7 @@ Ensembl.GA.eventConfigs.push(
     data            : { url : function () { return this.getURL(); } },
     category        : 'DynamicPageLink',
     action          : function () { return this.data.url; },
-    label           : function () { return this.getText().replace(/\d/g,'').replace(/^(\s)/,''); } //need to replace the numbers and space
+    label           : function () { return this.getText().replace(/\d|:|,|-/g,'').replace(/^(\s+)|(\s+)$/,''); } //need to replace the numbers and space
   },
 
   // Local context links and the left hand side tools buttons
@@ -423,6 +423,26 @@ Ensembl.GA.eventConfigs.push(
     event           : 'mousedown', // bxslider doesn't let any click event trigger on slider ui element, so using mousedown
     category        : 'NavBar',
     action          : function () { return this.currentTarget.className.match('slider') ? 'slider' : this.currentTarget.className.replace(/constant|disabled/g, '').trim(); }
+  },
+
+  // Region in detail navigation on gene page
+  {
+    id              : 'NavBar-ExploreIcon',
+    url             : 'Gene/Summary',
+    selector        : '.navbar a',
+    wrapper         : '.panel.js_panel',
+    event           : 'click', // bxslider doesn't let any click event trigger on slider ui element, so using mousedown
+    category        : 'ExploreIcon',
+    action          : function () { return this.getURL(); },
+  }, {
+    id              : 'NavBar-Link',
+    url             : 'Gene/Summary',
+    selector        : '.navbar a.no-visit',
+    wrapper         : '.panel.js_panel',
+    event           : 'click', // bxslider doesn't let any click event trigger on slider ui element, so using mousedown
+    category        : 'NavLink',
+    action          : function () { return this.getURL(); },
+    label           : function () { return this.getText(); }
   },
 
   // Explore icons
