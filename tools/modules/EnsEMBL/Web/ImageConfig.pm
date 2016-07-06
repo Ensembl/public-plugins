@@ -28,10 +28,18 @@ use previous qw(glyphset_configs);
 
 sub initialize_tools_tracks {
   ## Adds the required extra tracks accoridng to the ticket in the url
-  my $self = shift;
+  my $self    = shift;
+  my $hub     = $self->hub;
+  my $object  = $hub->core_object('Tools');
+
+  # create the required Tools object if it's not created by default
+  if (!$object && $hub->param('tl')) {
+    $object = $hub->new_object('Tools', {}, {'_hub' => $hub});
+    $hub->builder->object('Tools', $object);
+  }
 
   # display the tools related track if required
-  if (my $object = $self->hub->core_object('Tools')) {
+  if ($object) {
     my $job     = $object->get_requested_job({'with_all_results' => 1});
     my $results = $job && $job->result || [];
 
