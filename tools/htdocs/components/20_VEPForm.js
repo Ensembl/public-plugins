@@ -286,11 +286,11 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
 
     // function to render consequence type with colour and description HT
     var renderConsequence = function(con) {
-      return $('<nobr>').append(
+      return panel.consequencesData[con] ? $('<nobr>').append(
         $('<span>').addClass('colour').css('background-color', panel.consequencesData[con]['colour']).html('&nbsp'),
         $('<span>').html('&nbsp;'),
         $('<span>').attr({'class': '_ht ht margin-left', title: panel.consequencesData[con]['description']}).html(con)
-      ).wrap('<div>').parent().html();
+      ).wrap('<div>').parent().html() : '';
     };
 
     // function to render link as ZMenu link
