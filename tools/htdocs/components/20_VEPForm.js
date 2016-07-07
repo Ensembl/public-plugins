@@ -303,9 +303,14 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
       '<div class="hint">' +
         '<h3><img src="/i/close.png" alt="Hide" class="_close_button" title="">Instant results for ' + this.previewInp.input + '</h3>' +
         '<div class="message-pad">' +
-          '<p class="small"><b>Note:</b> the below is a preview of results using the <i>' +
-            this.previewInp.species.replace('_', ' ') +
-            '</i> Ensembl transcript database and does not include all data fields present in the full results set. To obtain these please close this preview window and submit the job using the <b>Run</b> button below.</p>' +
+          '<div class="warning">' +
+            '<h3>Instant VEP</h3>' +
+            '<div class="message-pad">' +
+              '<p>The below is a preview of results using the <i>' + this.previewInp.species.replace('_', ' ') +
+              '</i> Ensembl transcript database and does not include all data fields present in the full results set. ' +
+              'To obtain these please close this preview window and submit the job using the <b>Run</b> button below.</p>' +
+            '</div>' +
+          '</div>' +
           '<p><b>Most severe consequence:</b> ' + renderConsequence(results['most_severe_consequence']) + '</p>' +
           ( results['colocated_variants']
             ? '<p><b>Colocated variants:</b> ' + $.map(results['colocated_variants'], function(variant) {
