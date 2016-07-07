@@ -105,7 +105,7 @@ sub users_available {
   ## @param Flag value if setting
   ## @return 0 or 1 accordingly
   my $self = shift;
-  
+
   $self->{'_users_available'} = shift if @_;
 
   unless (exists $self->{'_users_available'}) {
@@ -125,7 +125,7 @@ sub log_userdb_error {
   ## Logs the error thrown by userdb in case the connection could not be created
   ## @param Exception object
   my ($self, $exception) = @_;
-  warn $exception;
+  warn $exception->message(1);
 }
 
 1;
