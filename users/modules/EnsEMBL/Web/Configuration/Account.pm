@@ -36,6 +36,15 @@ sub set_default_action {
   $self->{'_data'}{'default'} = $hub->users_available ? $hub->user ? 'Preferences' : 'Login' : 'Down';
 }
 
+sub get_valid_action {
+  ## @override
+  ## Don't show 404, go to default action instead
+  my $self    = shift;
+  my $node_id = $self->SUPER::get_valid_action(@_);
+
+  return $node_id eq 'Unknown' ? $self->default_action : $node_id;
+}
+
 sub user_tree { return 1; }
 
 sub user_populate_tree {}
