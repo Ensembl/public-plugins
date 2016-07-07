@@ -50,6 +50,7 @@ sub new {
       };
 
     } else { # just create a dummy user to prevent breaking on any subroutine calls on hub->user
+      $cookie->value(0);
       $self->user = EnsEMBL::Web::User->new($self, $cookie);
     }
   }
