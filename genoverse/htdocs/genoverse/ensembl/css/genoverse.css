@@ -27,6 +27,7 @@
 
 .gv-canvas-container {
   position: relative;
+  cursor: default;
 }
 
 .gv-canvas-container .gv-wrapper {
