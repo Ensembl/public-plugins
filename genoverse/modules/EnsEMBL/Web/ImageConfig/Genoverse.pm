@@ -78,7 +78,7 @@ sub glyphset_configs {
 }
 
 # Don't reset auto height setting
-sub reset {
+sub reset_genoverse {
   my $self = shift;
   
   if ($self->hub->input->param('reset') ne 'track_order') {
@@ -93,6 +93,10 @@ sub reset {
   }
   
   $self->SUPER::reset;
+}
+
+sub reset {
+  return shift->reset_genoverse(@_);
 }
 
 1;

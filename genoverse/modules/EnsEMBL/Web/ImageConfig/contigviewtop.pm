@@ -35,6 +35,8 @@ sub init {
   $self->set_parameter('zoom', 'no');
 }
 
-sub reset { EnsEMBL::Web::ImageConfig::Genoverse::reset(@_); }
+sub reset {
+  shift->reset_genoverse(@_);
+}
 
 1;
