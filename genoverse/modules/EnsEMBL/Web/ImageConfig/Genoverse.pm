@@ -49,11 +49,11 @@ sub init_genoverse {
   $self->modify_configs([ map "${_}structural_variation", '', 'somatic_' ], { genoverse => { type   => 'StructuralVariation',                  threshold => 5e6   } });
   $self->modify_configs([ 'scalebar', 'ruler', 'draggable', 'info'       ], { genoverse => { remove => 1                                                          } });
   $self->modify_configs([ 'gencode'                                      ], { genoverse => { type   => 'Gene'                                                     } });  
-  my $info  = $self->get_node('information');
-  my $order = 1e6;
-  
-  # Remove all legends - Genoverse creates them by reading all track features
-  $_->remove for grep { $_->get('menu') ne 'no' && $_->id =~ /legend/ } $info ? $info->nodes : ();
+
+  my $info = $self->get_node('information');
+
+  # Remove all information tracks including legends (Genoverse creates them by reading all track features) but keep 'options'.
+  $_->remove for grep $_->data->{'node_type'} ne 'option', $info ? $info->nodes : ();
 }
 
 # All functions from here on are generic modifications
