@@ -55,7 +55,7 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
     });
 
     // Preview div
-    this.elLk.previewDiv = $('<div class="vep-preview-div">').appendTo($(document.body)).hide();
+    this.elLk.previewDiv = $('<div class="vep-preview-div">').appendTo($(document.body));
 
     // show hide preview button acc to the text in the input field
     this.elLk.dataField = this.elLk.form.find('textarea[name=text]').on({
@@ -140,7 +140,7 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
     }
 
     // reset preview div
-    this.elLk.previewDiv.show().empty().removeClass('active').css(position);
+    this.elLk.previewDiv.empty().removeClass('active').addClass('loading').css(position);
 
     // get input, format and species
     this.previewInp = {};
@@ -299,7 +299,7 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
     };
 
     // HTML for preview content
-    this.elLk.previewDiv.html(
+    this.elLk.previewDiv.removeClass('loading').html(
       '<div class="hint">' +
         '<h3><img src="/i/close.png" alt="Hide" class="_close_button" title="">Instant results for ' + this.previewInp.input + '</h3>' +
         '<div class="message-pad">' +
@@ -400,7 +400,7 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
   /*
    * Show error regarding the vep preview in an alert box
    */
-    this.elLk.previewDiv.hide();
+    this.elLk.previewDiv.removeClass('active loading');
     this.enablePreviewButton();
     alert("Unable to generate preview:\n" + message);
   },
@@ -448,7 +448,7 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
     this.base.apply(this, arguments);
     this.elLk.form.find('._download_link').remove();
     this.elLk.dataField.removeClass('focused');
-    this.elLk.previewDiv.empty().hide();
+    this.elLk.previewDiv.empty().removeClass('active loading');
     this.elLk.previewButton.hide();
     this.resetSpecies(this.defaultSpecies);
     this.resetSelectToToggle();
