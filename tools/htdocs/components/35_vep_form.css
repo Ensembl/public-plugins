@@ -21,7 +21,8 @@ form.vep-form input.quick-vep-button                { position: absolute; margin
 
 div.vep-preview-div                                 { position: absolute; height: 20px; width: 20px; overflow: hidden; display: none; margin: 0; }
 div.vep-preview-div.loading                         { display: block; }
-div.vep-preview-div.active                          { width: 1000px; height: auto; left: 50% !important; margin-left: -500px; display: block; }
+div.vep-preview-div.active                          { width: 1000px; height: auto; left: 50% !important; margin-left: -500px; display: block; border-radius: 8px; box-shadow: 5px 5px 15px #666; }
+div.vep-preview-div.active > div                    { margin: 0; }
 div.vep-preview-div.active div                      { width: auto !important; }
 div.vep-preview-div.active div div                  { background-color: [[PANEL_BG]]; }
 div.vep-preview-div div.vep-preview-table           { overflow: auto; max-height: 500px; margin-bottom: 1em; }
