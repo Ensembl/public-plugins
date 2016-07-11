@@ -42,7 +42,10 @@ sub tools_list {
     if (
       ($list[$_] eq 'Blast'             && !$self->ENSEMBL_BLAST_ENABLED) ||
       ($list[$_] eq 'VEP'               && !$self->ENSEMBL_VEP_ENABLED) ||
-      ($list[$_] eq 'AssemblyConverter' && !$self->ENSEMBL_AC_ENABLED)
+      ($list[$_] eq 'AssemblyConverter' && !$self->ENSEMBL_AC_ENABLED)  ||
+      ($list[$_] eq 'FileChameleon'     && !$self->ENSEMBL_FC_ENABLED)  ||
+      ($list[$_] eq 'AlleleFrequency'   && !$self->ENSEMBL_AF_ENABLED)  ||
+      ($list[$_] eq 'VcftoPed'          && !$self->ENSEMBL_VP_ENABLED)
     ) {
       $list[$_]   = undef;
       $list[$_+1] = undef;
