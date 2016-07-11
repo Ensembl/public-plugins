@@ -126,15 +126,18 @@ sub update_conf {
   $SiteDefs::ENSEMBL_IDM_ANALYSIS_CAPACITY      = 4;                                                # Number of jobs that can be run parallel in the queue (LSF or LOCAL)
 
   # File Chameleon configs
+  $SiteDefs::ENSEMBL_FC_RUN_LOCAL              = 1;
   $SiteDefs::ENSEMBL_FC_QUEUE                  = 'toolsgeneral';                                   
   $SiteDefs::ENSEMBL_FC_LSF_TIMEOUT            = undef;                                            
   $SiteDefs::ENSEMBL_FC_ANALYSIS_CAPACITY      = 4;                                                
 
   # Allele Frequency configs
+  $SiteDefs::ENSEMBL_AF_RUN_LOCAL              = 1;
   $SiteDefs::ENSEMBL_AF_QUEUE                  = 'toolsgeneral';
   $SiteDefs::ENSEMBL_AF_ANALYSIS_CAPACITY      = 4;
 
   # VCF to PED configs
+  $SiteDefs::ENSEMBL_VP_RUN_LOCAL              = 1;
   $SiteDefs::ENSEMBL_VP_QUEUE                  = 'toolsgeneral';
   $SiteDefs::ENSEMBL_VP_ANALYSIS_CAPACITY      = 4;
 }
