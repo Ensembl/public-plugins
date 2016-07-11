@@ -31,7 +31,7 @@ sub get_filegroups {
   return PREV::get_filegroups($species_defs, $type), $type eq 'js' ? {
     'group_name'  => 'widgets',
     'files'       => get_files_from_dir($species_defs, $type, 'widgets'),
-    'condition'   => sub { $_[0]->apache_handle->unparsed_uri =~ /speciestree\.html/ || ($_[0]->action || '') eq 'SpeciesTree'; },
+    'condition'   => sub { $_[0]->apache_handle->unparsed_uri =~ /speciestree\.html/ || ($_[0]->action || '') =~ /SpeciesTree|ExpressionAtlas/; },
     'ordered'     => 0
   } : ();
 }
