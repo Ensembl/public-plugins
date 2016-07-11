@@ -308,7 +308,7 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
             '<div class="message-pad">' +
               '<p>The below is a preview of results using the <i>' + this.previewInp.species.replace('_', ' ') +
               '</i> Ensembl transcript database and does not include all data fields present in the full results set. ' +
-              'To obtain these please close this preview window and submit the job using the <b>Run</b> button below.</p>' +
+              'To obtain these please <b>close this preview window and submit the job using the <a class="button">Run</a> button below</b>.</p>' +
             '</div>' +
           '</div>' +
           '<p><b>Most severe consequence:</b> ' + renderConsequence(results['most_severe_consequence']) + '</p>' +
