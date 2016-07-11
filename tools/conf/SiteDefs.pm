@@ -33,9 +33,9 @@ sub update_conf {
   $SiteDefs::ENSEMBL_TOOLS_LIST = [
     'Blast'             => 'BLAST/BLAT',
     'VEP'               => 'Variant Effect Predictor',
+    'FileChameleon'     => 'File Chameleon',
     'AssemblyConverter' => 'Assembly Converter',
     'IDMapper'          => 'ID History Converter',
-    'FileChameleon'     => 'File Chameleon',
     'AlleleFrequency'   => 'Allele Frequency Calculator',
     'VcftoPed'          => 'VCF to PED Converter',
   ];
