@@ -34,6 +34,7 @@ Ensembl.Panel.FileChameleonForm = Ensembl.Panel.ToolsForm.extend({
 
     this.resetSpecies(this.defaultSpecies);
     this.editExisting();
+    this.populateFileListing();
     
     this.elLk.speciesDropdown.on('change',function(){
       panel.elLk.form.find('p.nofilter_note').hide();
@@ -232,7 +233,8 @@ Ensembl.Panel.FileChameleonForm = Ensembl.Panel.ToolsForm.extend({
   reset: function() {
     this.base.apply(this, arguments);
     this.resetSpecies(this.defaultSpecies);
-    this.elLk.form.find('div._stt_gff3, div._stt_gtf, p.nofilter_note, span.file_link, span._file_text').hide(); // we hide all filters and text for new job
+    this.elLk.form.find('input[name="format"]').selectToToggle('trigger');
+    this.elLk.form.find('p.nofilter_note').hide(); // we hide some filters and text for new job
   },
   
   resetSpecies: function (species) {

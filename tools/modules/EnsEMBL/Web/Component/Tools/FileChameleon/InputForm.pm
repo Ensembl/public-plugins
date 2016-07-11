@@ -118,7 +118,7 @@ sub get_cacheable_form_node {
     'type'          => 'dropdown',
     'name'          => 'long_genes',
     'label'         => '<span class="ht _ht"><span class="_ht_tip hidden">Remove genes longer than the value selected</span>Remove long genes</span>',
-    'values'        => [{ 'value' => 'null',   'caption' => '',  'example' => qq() },{ 'value' => '2000000',   'caption' => '2Mbp',  'example' => qq() },{ 'value' => '4000000',   'caption' => '4Mbp',  'example' => qq() }, {'value' => '6000000',   'caption' => '6Mbp',  'example' => qq() },{ 'value' => '8000000',   'caption' => '8Mbp',  'example' => qq() }],
+    'values'        => [{ 'value' => 'null',   'caption' => 'No',  'example' => qq() },{ 'value' => '2000000',   'caption' => '>2Mbp',  'example' => qq() },{ 'value' => '4000000',   'caption' => '>4Mbp',  'example' => qq() }, {'value' => '6000000',   'caption' => '>6Mbp',  'example' => qq() },{ 'value' => '8000000',   'caption' => '>8Mbp',  'example' => qq() }],
     'field_class'   => '_stt_gtf _stt_gff3 hidden _filters',    
   });
 
@@ -145,7 +145,7 @@ sub get_cacheable_form_node {
   }, $filter_fieldset);
   
   $filter_fieldset->prepend_child("p", {"inner_HTML" => "No filters are available for your selections; you can only download the file by clicking Run below.", 'class' => 'nofilter_note hidden bold'});
-  $filter_fieldset->prepend_child("p", {"inner_HTML" => "<b>Note:</b> Do not choose any of the options below if you want to just download the unedited file.",});
+  $filter_fieldset->prepend_child("p", {"inner_HTML" => "<b>Note:</b> Do not change any of the options below if you want to just download the unedited file.",});
   
   my $file_fieldset  = $form->add_fieldset();
   $file_fieldset->add_field({

@@ -41,6 +41,7 @@ sub job_details_table {
   my $species       = $job->species;
   my $two_col       = $self->new_twocol;
   my $job_summary   = $self->get_job_summary($job, $is_owned_ticket);
+  (my $long_genes   = $job_data->{long_genes}) =~ s/(0+)/Mbp/gi if($job_data->{long_genes});
   my @filter_value  = grep {$_->{value} eq $job_data->{chr_filter}} @$style_formats; #getting the matching caption for the chromosome naming style value
 
   $two_col->add_row('Job name',       $job_summary->render);
@@ -49,7 +50,7 @@ sub job_details_table {
   $two_col->add_row('File format',    $job_data->{format});
   $two_col->add_row('Source file',    $job_data->{file_text});
   $two_col->add_row('Chromosome naming style', $filter_value[0]->{caption}) if($job_data->{chr_filter});
-  $two_col->add_row('Remove long genes',       $job_data->{long_genes} =~ s/000/Mbp/gi) if($job_data->{long_genes});
+  $two_col->add_row('Remove long genes',       ">$long_genes") if($job_data->{long_genes});
   $two_col->add_row('Add transcript IDs',      "Y") if($job_data->{add_transcript});
   $two_col->add_row('Remap patches',           "Y") if($job_data->{remap_patch});
   $two_col->add_row('Output file',    $job->dispatcher_data->{'output_file'}) if($job->dispatcher_data->{'output_file'});

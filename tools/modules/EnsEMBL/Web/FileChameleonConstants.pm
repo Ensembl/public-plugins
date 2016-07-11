@@ -27,7 +27,7 @@ our @EXPORT_OK = qw(INPUT_FORMATS STYLE_FORMATS CONVERSION_FORMATS);
 
 sub INPUT_FORMATS {
   return [
-    { 'value' => 'gff3',  'caption' => 'GFF3', 'example' => qq() },
+    { 'value' => 'gff3',  'caption' => 'GFF3', 'example' => qq(), 'checked' => "checked" },
     { 'value' => 'gtf',   'caption' => 'GTF',  'example' => qq() },
     { 'value' => 'fasta', 'caption' => 'FASTA','example' => qq() },
   ];
@@ -46,9 +46,8 @@ sub CONVERSION_FORMATS {
 
 sub STYLE_FORMATS {
   return [
-    { 'value' => 'null',   'caption' => '',  'example' => qq() },
     { 'value' => 'ensembl_to_ucsc',   'caption' => 'UCSC style',  'example' => qq() },
-    { 'value' => 'ucsc_to_ensembl',   'caption' => 'Ensembl style',  'example' => qq() },
+    { 'value' => 'ucsc_to_ensembl',   'caption' => 'Ensembl style',  'example' => qq(), 'selected' => 'selected' },
   ];
 }
 
