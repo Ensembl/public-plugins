@@ -12,7 +12,10 @@ use previous qw(import);
 
 sub import {
   PREV::import();
+  preload_capture_stderr;
   load_axa();
+  preload_release_stderr;
+  moan;
 }
 
 sub load_axa {
