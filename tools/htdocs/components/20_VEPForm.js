@@ -91,6 +91,7 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
    */
     var panel = this;
     var value = this.elLk.dataField[0].value;
+    var bgPos = Ensembl.browser.webkit ? 13 : 15;
 
     this.elLk.dataField.removeClass('focused');
     this.elLk.previewButton.hide();
@@ -122,10 +123,10 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
         var curr  = value.substr(0, pos).replace(/.+[\r\n]/g, '') + value.substr(pos).replace(/[\r\n].+/g, '');
 
         if (curr.length) {
-          var height = this.elLk.fakeDataField.html(value.substr(0, pos) + 'x').show().height() - 15 - this.elLk.dataField.scrollTop();
+          var height = this.elLk.fakeDataField.html(value.substr(0, pos) + 'x').show().height() - bgPos - this.elLk.dataField.scrollTop();
           this.elLk.fakeDataField.hide();
           this.elLk.dataField.addClass('focused').css('background-position', '0 ' + height + 'px');
-          this.elLk.previewButton.show().css('margin-top', Math.max(Math.min(height, this.dataFieldHeight - 15), 0) + 1).data('currentVal', curr);
+          this.elLk.previewButton.show().css('margin-top', Math.max(Math.min(height, this.dataFieldHeight - bgPos), 0) + 1).data('currentVal', curr);
         }
       }
     }
