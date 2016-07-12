@@ -30,7 +30,7 @@ Ensembl.Panel.GXA = Ensembl.Panel.Content.extend({
         if (json[this.params.geneId]) {
           this.insertWidget();
         } else {
-          this.showError('No expression found for ' + this.params.geneId);
+          this.showError('Expression Atlas does not contain baseline expression data for ' + this.params.geneId);
         }
       },
       error: function() {
