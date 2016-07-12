@@ -184,12 +184,17 @@ window.google_templates =
             values = ( k.value for k in data.tp2_row.all_values('facet') ? [])
             data.tp2_row.send('facets',' '+values.join(' '))
 
+          data.tp2_row.register 20000, () ->
+            bracketed = data.tp2_row.all_values('bracketed-title')
+            if bracketed?
+              vals = ( k.value for k in bracketed.sort((a,b) -> a.position - b.position) )
+              data.tp2_row.candidate('bracketed',vals.join(' '),10)
+
           data.tp2_row.register 50000, () ->
             title = data.tp2_row.best('main-title')
-            bracketed = data.tp2_row.all_values('bracketed-title')
-            if bracketed? 
-              vals = ( k.value for k in bracketed.sort((a,b) -> a.position - b.position) )
-              title += " (" + vals.join(' ') + ")"
+            bracketed = data.tp2_row.best('bracketed')
+            if bracketed?
+              title += " (" + bracketed + ")"
             data.tp2_row.send('title',title)
             data.tp2_row.send('location_url',data.tp2_row.best('location_url'))
       ] 
