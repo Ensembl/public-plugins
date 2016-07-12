@@ -433,7 +433,7 @@ Ensembl.GA.eventConfigs.push(
     wrapper         : '.panel.js_panel',
     event           : 'click',
     category        : 'ExploreIcon',
-    action          : function () { return this.getURL(); },
+    action          : function () { return this.getURL(); }
   }, {
     id              : 'NavBar-Link',
     url             : 'Gene/Summary',
