@@ -24,6 +24,8 @@ package EnsEMBL::Web::ImageConfig;
 use strict;
 use warnings;
 
+use EnsEMBL::Web::BlastConstants qw(BLAST_TRACK_PATTERN);
+
 use previous qw(glyphset_configs);
 
 sub initialize_tools_tracks {
@@ -67,6 +69,7 @@ sub initialize_tools_tracks {
           'sub_type'    => 'blast',
           'job_id'      => $job_id,
           'main_blast'  => $_ eq $job ? 1 : 0,
+          'pattern'     => BLAST_TRACK_PATTERN,
         });
       }
 
@@ -74,6 +77,7 @@ sub initialize_tools_tracks {
         'display'     => 'normal',
         'strand'      => 'r',
         'name'        => 'BLAST/BLAT Legend',
+        'pattern'     => BLAST_TRACK_PATTERN,
       });
 
     } elsif ($ticket_type eq 'VEP') {

@@ -29,17 +29,20 @@ use parent qw(EnsEMBL::Draw::GlyphSet::legend);
 sub _init {
   my $self      = shift;
   my $colourmap = $self->{'config'}->hub->colourmap;
+  my $pattern   = $self->{'my_config'}->data->{'pattern'};
 
   $self->init_legend(2);
 
   $self->add_to_legend({
     'legend' => '% ID on blast hits (selected job)',
     'colour' => [ $colourmap->build_linear_gradient(@{BLAST_KARYOTYPE_POINTER->{'gradient'}}) ],
+    'stripe' => $pattern,
   });
 
   $self->add_to_legend({
     'legend' => '% ID on blast hits (other jobs in this region)',
     'colour' => [ $colourmap->build_linear_gradient(@{BLAST_KARYOTYPE_POINTER->{'gradient_others'}}) ],
+    'stripe' => $pattern,
   });
 
 }
