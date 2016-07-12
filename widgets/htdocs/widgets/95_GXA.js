@@ -40,12 +40,16 @@ Ensembl.Panel.GXA = Ensembl.Panel.Content.extend({
   },
 
   insertWidget: function() {
+    var panel = this;
     if ('expressionAtlasHeatmapHighcharts' in window) {
       try {
         expressionAtlasHeatmapHighcharts.render({
           params:'geneQuery=' + this.params.geneId + '&species=' + this.params.species,
           isMultiExperiment: true,
-          target : this.elLk.target.attr('id')
+          target : this.elLk.target.attr('id'),
+          fail: function() {
+            panel.showError();
+          }
         });
       } catch (ex) {
         console.log(ex);
