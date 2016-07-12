@@ -129,7 +129,7 @@ sub get_cacheable_form_node {
       'class'         => '_stt',
       'values'        => $fd->{core_type}->{values}
     });
-    
+
     $input_fieldset->add_field({
       'field_class'   => '_stt_rfq _stt_merged _stt_refseq',
       'type'    => 'checkbox',
@@ -651,7 +651,7 @@ sub _add_plugins {
 
   foreach my $plugin(@{$self->_get_plugins_by_section($section_name)}) {
     my $pl_key = $plugin->{key};
-    
+
     # sort out which species to make this available for
     # the config carries the species name and assembly
     # the interface will only have one assembly per species, but need to check they match
@@ -667,9 +667,9 @@ sub _add_plugins {
     #       @$species;
     #   }
     # }
-    
+
     my $field_class = (!$plugin->{species} || $plugin->{species} eq '*') ? [] : [map {"_stt_".ucfirst($_)} @{$plugin->{species} || []}];
-    
+
     if($plugin->{form}) {
 
       $fieldset->add_field({
@@ -698,10 +698,10 @@ sub _add_plugins {
         }
 
         # required?
-        if($el->{required}) {
+        if(delete $el->{required}) {
           push @{$required{'plugin_'.$pl_key}}, $el->{name};
         }
-        
+
         $fieldset->add_field($el);
       }
     }
@@ -719,7 +719,7 @@ sub _add_plugins {
       });
     }
   }
-  
+
   # add autocomplete values as a js_param hidden field
   if($ac_values) {
     my $ac_json = encode_entities($self->jsonify($ac_values));
