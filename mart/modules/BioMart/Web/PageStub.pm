@@ -165,7 +165,7 @@ sub render_end {
         <div id="wide-footer">
           <div style="font-size:150%;font-weight:bold">
             <p>Datasets -&gt; Filters (filtering and inputs) -&gt; Attributes (desired output) -&gt; Results</p>
-            <p><a href="/info/data/biomart/index.html">BioMart tutorial</a> | <a href="https://www.youtube.com/watch?v=QvGT2G0-hYA">YouTube</a> | <a href="http://v.youku.com/v_show/id_XMjQ2MjkwMTg0.html">YouKu</a></p>
+            <p><a href="/info/data/biomart/index.html">BioMart tutorial</a> | <a href="https://www.youtube.com/watch?v=QvGT2G0-hYA">YouTube</a> | <a href="http://v.youku.com/v_show/id_XMTUwNDIyNTMwNA">YouKu</a></p>
           </div>
           $content->{'copyright'}
           $content->{'footerlinks'}
