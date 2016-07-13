@@ -217,20 +217,22 @@ sub get_populations {
   my $html        = EnsEMBL::Web::File::Utils::URL::read_file($population_url, $args);
    
   my $sample_pop; 
-  
+
   if ( $html ){
     foreach (split("\n",$html)){
       next if(!$_ || $_ =~ /sample/gi); #skip if empty or skip header if there is one
       my ($sam, $pop, $plat) = split(/\t/, $_);
       $sample_pop->{$pop} ||= [];
-      push @{$sample_pop->{$pop}}, $sam;    
+      push @{$sample_pop->{$pop}}, $sam;
     }
-  }  
-  push @$pops, { caption =>'ALL', value=>'ALL', selected=>'1'};
-  for my $population (sort {$a cmp $b} keys %{$sample_pop}) {
-    push @{$pops}, { value => $population,  caption => $population };
-  }
-    
+    push @$pops, { caption =>'ALL', value=>'ALL', selected=>'1'};
+    for my $population (sort {$a cmp $b} keys %{$sample_pop}) {
+      push @{$pops}, { value => $population,  caption => $population };
+    }    
+  } else {
+    push @$pops, { caption =>'ERROR', value=>'null', selected=>'1'};   
+  } 
+
   return $pops;  
 }
 
