@@ -83,6 +83,7 @@ sub prepare_to_dispatch {
       $config_content->{mapping}->{fasta_header}->{_init}->{parameter_1}    = "[[chromosome|".lc($job_data->{species})."|".$chr_filter."]]";
       $config_content->{mapping}->{fasta_header}->{_parameters}->{record}   = "{{record}}";
     } else {
+      $config_content->{input_filter}->{_metadata} = "gff3_metadata" if($format eq 'gff3');
       $config_content->{input_filter}->{seqname} = "chromosome|".lc($job_data->{species})."|".$chr_filter;      
     }
     push($include,"file:///localsw/FileChameleon/examples/chromosome.conf");
