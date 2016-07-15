@@ -38,7 +38,7 @@ window.fixes.fix_minor_types =
 
         data.tp2_row.register 300, () ->
           ft = data.tp2_row.best('feature_type')
-          if ft == 'Protein Domain' or ft == 'Family'
+          if ft == 'Family'
             inner_desc = undefined
             main_desc = data.tp2_row.best('description')
             main_desc = main_desc.replace /\[(.*?)\]/g, (g0,g1) ->

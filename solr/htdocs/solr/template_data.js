@@ -201,7 +201,6 @@
             });
             data.tp2_row.register(20000, function() {
               var bracketed, k, vals;
-              console.log("20000", data.tp2_row.candidates.species);
               bracketed = data.tp2_row.all_values('bracketed-title');
               if (bracketed != null) {
                 vals = (function() {
@@ -2497,7 +2496,7 @@
           data.tp2_row.register(300, function() {
             var desc, ft, id, inner_desc, k, m, main_desc, type, v;
             ft = data.tp2_row.best('feature_type');
-            if (ft === 'Protein Domain' || ft === 'Family') {
+            if (ft === 'Family') {
               inner_desc = void 0;
               main_desc = data.tp2_row.best('description');
               main_desc = main_desc.replace(/\[(.*?)\]/g, function(g0, g1) {
