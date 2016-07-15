@@ -44,6 +44,7 @@ sub initialize {
   if ($config->{'line_numbering'}) {
     $config->{'number'}     = 1;
   }
+  $config->{'genomic'} = 1; # For styles
   
   my ($sequence, $markup) = $self->get_sequence_data($config->{'slices'}, $config);
   
@@ -74,19 +75,6 @@ sub get_slice {
   }
 
   return $slice;
-}
-
-sub get_key {
-  ## @override
-  ## Adds the HSP key before calling the base class's method
-  my ($self, $config) = @_;
-  
-  return $self->SUPER::get_key($config, {
-    HSP => {
-      sel   => { class => 'hsp_sel',   order => 1, text => 'Location of selected alignment' },
-      other => { class => 'hsp_other', order => 2, text => 'Location of other alignments'   }
-    }
-  });
 }
 
 1;

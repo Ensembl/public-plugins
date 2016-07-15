@@ -47,6 +47,8 @@ sub initialize {
   $self->markup_hsp($sequence, $markup, $config) if $config->{'hsp_display'};
   $self->markup_line_numbers($sequence, $config) if $config->{'line_numbering'};
   
+  $config->{'type_name'} = $self->job->job_data->{query_type} eq 'peptide' ? 'residues' : 'bases';
+
   return ($sequence, $config);
 }
 
@@ -67,20 +69,5 @@ sub get_slice {
 }
 
 sub get_slice_name { return join ':', $_[1]->seq_region_name, $_[1]->start, $_[1]->end, $_[1]->strand; }
-
-sub get_key {
-  ## @override
-  ## Adds the HSP key before calling the base class's method
-  my ($self, $config) = @_;
-
-  my $type = $self->job->job_data->{query_type} eq 'peptide' ? 'residues' : 'bases';
-  
-  return $self->SUPER::get_key($config, {
-    HSP => {
-      sel   => { class => 'hsp_sel',   order => 1, text => "Matching $type for selected HSP" },
-      other => { class => 'hsp_other', order => 2, text => "Matching $type for other HSPs in selected hit" }
-    }
-  });
-}
 
 1;

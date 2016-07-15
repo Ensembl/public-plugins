@@ -27,6 +27,9 @@ use parent qw(
   EnsEMBL::Web::Component::Tools::Blast
 );
 
+use EnsEMBL::Web::TextSequence::Output::WebSubslice;
+use EnsEMBL::Web::TextSequence::View::BLAST;
+
 sub job            { return $_[0]{'_job'};                        } ## @return The cached requested job object
 sub hit            { return $_[0]{'_hit'};                        } ## @return Result hit (hashref)
 sub blast_method   { return $_[0]{'_blast_method'};               } ## @return Blast method chosen for the given job
@@ -142,31 +145,13 @@ sub markup_hsp {
       my $type  = $types{'sel'} ? 'sel' : 'other'; # Both types are denoted by foreground colour, so only mark the more important type
 
       $seq->[$_]{'class'} = join ' ', "hsp_$type", $seq->[$_]{'class'} || () unless ($seq->[$_]{'class'} || '') =~ /\bhsp_$type\b/;
-      $hsp_types{$type}   = 1;
+      $hsp_types{"hsp_$type"}   = 1;
     }
 
     $i++;
   }
 
   $config->{'key'}{'HSP'}{$_} = 1 for keys %hsp_types;
-}
-
-sub class_to_style {
-  ## @override
-  ## Add two more styles for HSPs
-  my $self = shift;
-
-  if (!$self->{'class_to_style'}) {
-    $self->SUPER::class_to_style(@_); # this will set $self->{'class_to_style'}
-
-    my $styles  = $self->hub->species_defs->colour('sequence_markup');
-    my $counter = scalar keys %{$self->{'class_to_style'}};
-
-    $self->{'class_to_style'}{'hsp_other'} = [ ++$counter, { 'font-weight' => 'bold', 'color' => "#$styles->{'SEQ_HSP_OTHER'}{'default'}" }];
-    $self->{'class_to_style'}{'hsp_sel'}   = [ ++$counter, { 'font-weight' => 'bold', 'color' => "#$styles->{'SEQ_HSP_SEL'}{'default'}"   }]; # selected is more important, so goes after other
-  }
-
-  return $self->{'class_to_style'};
 }
 
 sub content {
@@ -178,14 +163,14 @@ sub content {
   if ($length >= $self->{'subslice_length'}) {
     $html .= $self->chunked_content($length, $self->{'subslice_length'}, { length => $length, name => $slice->name });
   } else {
-    $html .= $self->content_sub_slice($slice); # Direct call if the sequence length is short enough
+    $html .= $self->content_sub_slice($slice,1); # Direct call if the sequence length is short enough
   }
 
   return $html;
 }
 
 sub content_sub_slice {
-  my ($self, $slice) = @_;
+  my ($self, $slice,$fake) = @_;
   my $hub     = $self->hub;
   my $start   = $hub->param('subslice_start') || 0;
   my $end     = $hub->param('subslice_end');
@@ -194,20 +179,23 @@ sub content_sub_slice {
   my $name    = $self->get_slice_name($slice);
      $slice   = $slice->sub_Slice($start, $end) if $start && $end;
 
+  $self->view->output(EnsEMBL::Web::TextSequence::Output::WebSubslice->new) unless $fake;
+
   my ($sequence, $config) = $self->initialize($slice, $start, $end);
 
-  my $template = '<pre class="text_sequence%s">%s%%s</pre><p class="invisible">.</p>';
-
-  $config->{'html_template'} = sprintf $template, ($start == 1) || ($end && $end != $length) ? ' no-bottom-margin' : '', $start == 1 || !$start ? "&gt;$name\n" : '';
+  my $metatemplate = '<pre class="text_sequence%s">%s%%s</pre><p class="invisible">.</p>';
+  my $template = sprintf $metatemplate, ($start == 1) || ($end && $end != $length) ? ' no-bottom-margin' : '', $start == 1 || !$start ? "&gt;$name\n" : '';
+  $self->view->output->template($template);
 
   $self->id('');
 
   return $self->build_sequence($sequence, $config);
 }
 
-sub content_rtf {
-  my $self = shift;
-  return $self->export_sequence($self->initialize);
+sub make_view {
+  my ($self) = @_;
+
+  return EnsEMBL::Web::TextSequence::View::BLAST->new($self->hub);
 }
 
 1;
