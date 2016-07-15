@@ -83,6 +83,9 @@ Ensembl.Panel.VEPForm = Ensembl.Panel.ToolsForm.extend({
     });
 
     this.editExisting();
+
+    // initialise the selectToToggle fields ie. show or hide the ones as needed
+    this.resetSelectToToggle();
   },
 
   dataFieldInteraction: function(eventType) {
