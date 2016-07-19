@@ -37,7 +37,7 @@ sub initialize_tools_tracks {
   # create the required Tools object if it's not created by default
   if (!$object && $hub->param('tl')) {
     $object = $hub->new_object('Tools', {}, {'_hub' => $hub});
-    $hub->builder->object('Tools', $object);
+    $hub->builder->object('Tools', $object) if $object && $hub->builder;
   }
 
   # display the tools related track if required
