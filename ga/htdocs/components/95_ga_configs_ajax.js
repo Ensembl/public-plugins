@@ -32,7 +32,7 @@ Ensembl.extend({
       });
 
       $(document).ajaxComplete(function(e, jqXHR, ajaxOptions) {
-        if (ajaxOptions._ensGA_StartTime && !ajaxOptions.url.match(/\.js$/)) {
+        if (ajaxOptions._ensGA_StartTime && !ajaxOptions.url.match(/\.js(\?|$)/)) {
           Ensembl.GA.sendEvent(Ensembl.ajaxLoadTimerConfig, {currentOptions: ajaxOptions});
         }
       });
