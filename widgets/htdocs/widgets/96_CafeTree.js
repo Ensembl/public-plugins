@@ -238,7 +238,7 @@ Ensembl.CafeTree.tnt_theme_tree_cafe_tree = function() {
 	    // TREE SIDE
 	    var deploy_vis = function (tree_obj) { 
 
-          var header_msg = "This gene family " + (tree_obj.pvalue_avg > 0.5 ? "does not have any" : "has") + " significant gene gain or loss events (<i>p</i>-value for the gene family is <b>" + tree_obj.pvalue_avg + "</b>).Click the tree nodes or the icons on the image blue bar to interact with the tree.";
+          var header_msg = "This gene family " + (tree_obj.pvalue_avg > 0.5 ? "does not have any" : "has") + " significant gene gain or loss events (<i>p</i>-value for the gene family is <b>" + tree_obj.pvalue_avg + "</b>, as computed by <a href='http://dx.doi.org/10.1093/bioinformatics/btl097' rel='external'>CAFE</a>). Click the tree nodes or the icons on the image blue bar to interact with the tree.";
           d3.select(".info")
               .append("h3")
               .html("Info");
