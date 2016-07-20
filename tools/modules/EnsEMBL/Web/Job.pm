@@ -140,6 +140,19 @@ sub create_work_dir {
   # Copy files if temporary file location was provided
   copy_files({ map { $files->{$_}{'location'} ? ($files->{$_}{'location'} => "$dir/$_") : () } keys %$files }) if keys %$files;
 
+  # add an info file in the dir containing some extra debug info
+  my $db = $self->rose_object->init_db;
+  file_put_contents(
+    sprintf('%s/info.%s', $dir, $params->{'ticket_name'}),
+    sprintf("Ticket: %s\n", $params->{'ticket_name'}),
+    sprintf("Species: %s\n", $self->get_param('species')),
+    sprintf("Assembly: %s\n", $self->get_param('assembly')),
+    sprintf("Database: %s@%s:%s\n", $db->database, $db->host, $db->port),
+    sprintf("Website: %s\n", $sd->ENSEMBL_SERVERNAME),
+    sprintf("Release: %s\n", $sd->ENSEMBL_VERSION),
+    sprintf("Server time: %s\n", $self->object->get_time_now)
+  );
+
   return $dir;
 }
 
