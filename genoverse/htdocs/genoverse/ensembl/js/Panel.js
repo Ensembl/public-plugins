@@ -368,15 +368,6 @@ Ensembl.Panel.Genoverse = Ensembl.Panel.ImageMap.extend({
       }
     });
 
-    $(document).on('click', function(e) {
-      // Hide all unpinned hover labels
-      panel.elLk.hoverLabels.each(function(i, hl) {
-        if(!$(hl.parentNode).hasClass('pinned')) {
-          $(hl).hide();
-        }
-      })
-    });
-
     this.initHoverLabels();
   },
 
