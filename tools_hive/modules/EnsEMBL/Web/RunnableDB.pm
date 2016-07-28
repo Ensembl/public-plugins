@@ -142,7 +142,7 @@ sub save_results {
 
       if (!$count || $count < 1) {
         if (ref($self) =~ /VEP/) {
-          $self->tools_warning({ 'message' => 'Too may variants to be displayed on the location page', 'type' => 'VEPWarning' });
+          $self->tools_warning({ 'message' => 'Too many variants to be displayed on the location page', 'type' => 'VEPWarning' });
         } else {
           throw exception ('HiveException', "Ticket database: Results could not be saved to ticket database.");
         }
