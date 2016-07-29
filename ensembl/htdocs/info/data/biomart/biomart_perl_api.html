@@ -27,14 +27,12 @@ The BioMart Perl script can be downloaded from the BioMart result page accessibl
 
 <a name="downloadbiomartperlapi"></a>
 <h2>Download the BioMart PERL API</h2>
-<p>To run the BioMart Perl script, you will need to download the BioMart API (<a href="http://www.biomart.org/other/install-overview.html">Complete documentation can be found on the biomart.org website</a>), to do this you can follow the command below:</p>
+<p>To run the BioMart Perl script, you will need to download the BioMart API
+      from our GitHub Repository (<a
+        href="http://www.biomart.org/other/install-overview.html">Complete
+        documentation can be found on the biomart.org website</a>). To to do this you can follow the command below:</p>
 <pre class="code">
-cvs -d :pserver:cvsuser@cvs.sanger.ac.uk:/cvsroot/biomart login
-</pre>
-<p>The cvs command will prompt you for a password, just type "CVSUSER" and press enter. Then, run the following commands:</p>
-<pre class="code">
-cvs -d :pserver:cvsuser@cvs.sanger.ac.uk:/cvsroot/biomart \
-co -r release-0_7 biomart-perl
+$ git clone --branch cvs/release-0_7 https://github.com/biomart/biomart-perl
 </pre>
 
 <a name="biomartperlapi"></a>
